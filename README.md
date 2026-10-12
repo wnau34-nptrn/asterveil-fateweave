@@ -1,3 +1,119 @@
 # Asterveil: Rise Beyond
 
-Independent Fateweave browser-game project.
+A small, genuinely playable **Fateweave tactical reaction combat** prototype. This is an independent browser-first project in `wnau34-nptrn/asterveil-fateweave`. The original Godot project is not a dependency and no code, assets, or history are imported from it.
+
+## Stack and prerequisites
+
+- Node.js **24.x** (validated on 24.19.0), npm 11.x, Git, a modern browser with Canvas/WebGL.
+- Phaser **4.2.1**, TypeScript **5.9.3** in strict mode, Vite **8.3.4**, Vitest **5.0.4**, ESLint **10.12.0**.
+- Playwright **1.64.0** is a development-only browser test dependency.
+
+Stable versions and engine requirements were checked against npm before installation. TypeScript 7.0.2 was available, but `typescript-eslint@8.71.1` supports TypeScript `<6.1`; the project pins the verified compatible 5.9.3 compiler. Node 24 satisfies the selected Vite, Vitest, and ESLint requirements. Exact versions and `package-lock.json` make installs reproducible.
+
+## Install and run (including Windows)
+
+Install Node.js 24 LTS and Git for Windows, then open PowerShell or a terminal:
+
+```powershell
+git clone https://github.com/wnau34-nptrn/asterveil-fateweave.git
+cd asterveil-fateweave
+git switch feature/fateweave-initial-prototype
+npm ci
+npm run dev
+```
+
+Open **http://localhost:5173**. Stop the server with Ctrl+C. There are no environment variables, API keys, backend, or account requirements. To test on another device on your LAN, use Vite's printed Network URL and permit the local port through your Windows firewall.
+
+## Commands
+
+```sh
+npm run dev          # Vite development server
+npm run typecheck    # strict TypeScript, including test/config files
+npm run lint         # ESLint
+npm test             # Node-only rules and storage tests
+npm run test:watch   # Vitest watch mode
+npm run build        # typecheck + production build in dist/
+npm run preview      # serve the production build locally
+```
+
+Optional browser tests:
+
+```sh
+npx playwright install chromium
+npm run test:browser
+```
+
+An installed system Chromium can be used without downloading a browser. Linux:
+
+```sh
+PLAYWRIGHT_CHROMIUM_EXECUTABLE=/usr/bin/chromium npm run test:browser
+```
+
+PowerShell equivalent (adjust to your Chromium path):
+
+```powershell
+$env:PLAYWRIGHT_CHROMIUM_EXECUTABLE = 'C:\path\to\chrome.exe'
+npm run test:browser
+```
+
+## How to play
+
+1. Click **Start encounter**. A previous local battle resumes automatically if available.
+2. Read the single current **Enemy Intent**: source, target, damage, attack type, and redirectability.
+3. Select a living hero using their card or character in the arena.
+4. Select an action and a valid target. Disabled actions/targets explain their requirements.
+5. Review the exact **player action and enemy response**, including HP, Counter, barrier, canceled intent, and predicted battle outcome.
+6. Click **Confirm action** to commit, or **Cancel** / Esc to reconsider. Selecting an action or target never commits it.
+7. Continue until **Victory** or **Defeat**. **Restart** / **Play again** starts a fresh encounter and replaces the saved battle.
+
+There is one manually chosen primary action per beat. No timer, QTE, random damage, battle movement, or automatic reaction chain.
+
+### Prototype rules
+
+| Entity/action | Implemented rule |
+|---|---|
+| Aegis / Guardian | 64 HP; Attack 10; Guard |
+| Lyra / Tracer | 44 HP; Attack 16; Mark; +6 against Marked/Exposed enemies, consumes both statuses |
+| Eira / Weaver | 42 HP; Attack 11; Redirect |
+| Veil Raider | 38 HP; physical Slash 9, not redirectable |
+| Rift Brute | 90 HP; energy Rift Bolt 18, redirectable; physical Crushing Blow 22, not redirectable |
+| Guard | Protect the announced target. Aegis intercepts and takes 35% of announced damage, rounded up; existing barrier absorbs afterward. Survive to earn 1 Counter, cap 2. |
+| Mark | One enemy marked for 3 beats including the committed beat. Marking again refreshes duration. |
+| Redirect | Spend 1 Counter; only the current redirectable energy attack. Target a living Marked enemy (including the source) or charged Crystal. |
+| Redirect to enemy | Exact announced damage, consumes Mark, exposes target through the next beat. No additional reaction is triggered. |
+| Energy Crystal | 1 charge. Absorbs the entire redirected energy attack, grants 8 barrier to each living hero. Barrier does not stack and persists until absorbed. |
+
+The encounter intent pattern is Raider Slash → Brute Bolt → Raider Slash → Brute Crush. Dead sources are skipped **when announcing the next event**. If a preferred hero is already down, a living hero is selected at announcement. The displayed event never changes after confirmation; killing its source cancels it.
+
+Try **Guard Lyra on beat 1 → Eira Redirect to Crystal on beat 2**. An attack-only route can also win: focus Raider, then Brute; use Lyra while alive, then Eira. You are not forced to use Redirect.
+
+## Architecture
+
+```text
+src/core/battle/          Pure serializable state, commands, validation, resolution, preview, replay
+src/core/save/            Versioned command-replay persistence, injected storage port
+src/content/heroes/       Typed hero definitions
+src/content/enemies/      Typed enemy definitions
+src/content/encounters/   Encounter intent pattern, crystal and numeric rules
+src/game/scenes/          Thin Phaser rendering/input adapter and short effects
+src/game/visuals/         Renderer palette tokens
+src/ui/                  Accessible DOM controls, preview/log, responsive CSS
+src/platform/            Safe browser-storage adapter
+tests/                   Rules and save tests; browser/ contains Playwright gameplay tests
+public/assets/           Original lightweight favicon; characters and ruins use runtime geometry
+docs/                    Direction, integration plan, roadmap, validation
+.github/workflows/       Install → typecheck → lint → test → build; no deployment
+```
+
+`resolveCommand` is authoritative and immutable. `previewCommand` calls that same resolver; rendering cannot affect its result. Commands carry a beat number to reject stale previews. Simulation has no Phaser, DOM, clock, or random-number dependency and runs under Node. State commits and saves immediately, before the short presentation lock. Hidden tabs release that lock without advancing the battle. Saves contain versioned encounter IDs and commands and are validated by replay; corrupt or incompatible saves start fresh. Unavailable/quota-limited storage leaves the session playable. Saves support up to 5,000 commands; no cross-device syncing is provided.
+
+## Current limitations
+
+- One encounter, original geometric chibi placeholders and lightweight VFX. No final art, music, or sound.
+- The three concept images named in the handoff were not attached at implementation time; direction is based on their written descriptions. Supplied reference images are not committed.
+- World exploration, progression, equipment, backend, multiplayer, billing, online challenges, and Capacitor are future work, not implemented.
+- Full Phaser runtime is approximately 1.37 MB minified / 357 KB gzip; Vite reports a large-chunk warning. Optimization needs measurement before a mobile release.
+- Automated browser validation is Chromium on Linux with software WebGL and emulated touch viewports. This is **not** real Windows/Android/iOS device or Safari validation.
+- Local save is tied to this origin and encounter content version. Increment the content version when rules change.
+
+See [validation](docs/VALIDATION.md), [gameplay direction](docs/GAMEPLAY_DIRECTION.md), [art direction](docs/ART_DIRECTION.md), and [roadmap](docs/DEVELOPMENT_ROADMAP.md).
