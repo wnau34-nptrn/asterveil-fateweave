@@ -20,7 +20,11 @@ it('handles absent and denied storage without crashing', () => {
     expect(loadBattle(storage, data)).toEqual({ state: createBattle(data), restored: false });
   }
 });
-it.each(['{bad', '{}', '{"version":2}', '{"version":1,"encounterId":"crystal-rift","contentVersion":1,"commands":[null]}',
-  '{"version":1,"encounterId":"crystal-rift","contentVersion":1,"commands":[{"beat":1,"heroId":"weaver","action":"redirect","targetId":"brute"}]}'])('discards invalid saves: %s', raw => {
+it('starts fresh instead of replaying a previous balance version under new damage rules', () => {
+  const raw = JSON.stringify({ version: 1, encounterId: data.id, contentVersion: data.version - 1, commands: [{ beat: 1, heroId: 'guardian', action: 'guard', targetId: 'tracer' }] });
+  expect(loadBattle({ getItem: () => raw, setItem: () => {} }, data)).toEqual({ state: createBattle(data), restored: false });
+});
+it.each(['{bad', '{}', '{"version":2}', '{"version":1,"encounterId":"crystal-rift","contentVersion":2,"commands":[null]}',
+  '{"version":1,"encounterId":"crystal-rift","contentVersion":2,"commands":[{"beat":1,"heroId":"weaver","action":"redirect","targetId":"brute"}]}'])('discards invalid saves: %s', raw => {
   expect(loadBattle({ getItem: () => raw, setItem: () => {} }, data).restored).toBe(false);
 });

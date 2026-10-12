@@ -29,7 +29,7 @@ jobs:
       - name: Verify production gameplay under the Pages subpath
         env:
           PLAYWRIGHT_PAGES: 'true'
-        run: npm run test:browser -- --grep 'real canvas|mobile touch'
+        run: npm run test:browser
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

@@ -16,7 +16,7 @@ Work only in `asterveil-fateweave`. Never modify, reset, merge, push to, or impo
 
 1. Keep exactly one primary action per combat beat. Freeze the announced event; if its source dies, cancel that event, then announce the next.
 2. Add new rules to the pure resolver and content before wiring UI. Preview must use the same resolver, not duplicate arithmetic.
-3. Use meaningful tests for HP boundaries, restrictions, Guard/Counter, Mark/Redirect, environment interactions, outcomes, preview equality and deterministic replay. Keep a winning offensive route and a viable defensive intervention.
+3. Use meaningful tests for HP boundaries, restrictions, Guard/Counter, Mark/Redirect, environment interactions, outcomes, preview equality and deterministic replay. Keep a winning offensive route and viable defensive interventions. The balance regression suite compares blind Raider-first attacks, Brute-priority offense, Guard/Mark, Crystal defense and marked-enemy Redirect; choices must have visible consequences without forcing one fixed combo.
 4. State is independent of animation. Restart, resize and tab suspension must never change the committed command outcome.
 5. Validate all targets and actions again at commit. Downed actors cannot act; reject stale beats.
 6. If encounter data or rule semantics change, bump `EncounterDefinition.version`; saves from the old version must be rejected safely.

@@ -23,6 +23,18 @@ export function createBattle(data: EncounterDefinition): BattleState {
   return state;
 }
 
+// Planning information only: future targets/sources assume the current actors
+// survive. The current announced intent is never modified by this projection.
+export function plannedIntents(state: BattleState, data: EncounterDefinition, count = 2): Intent[] {
+  if (state.outcome !== 'active') return [];
+  const planned: Intent[] = [];
+  for (let offset = 1; offset <= count; offset++) {
+    const intent = announce({ ...state, beat: state.beat + offset }, data);
+    if (intent) planned.push(intent);
+  }
+  return planned;
+}
+
 export function actionReason(state: BattleState, data: EncounterDefinition, heroId: string, action: ActionId): string {
   if (state.outcome !== 'active') return 'The encounter has ended.';
   if (!state.heroes.some(h => h.id === heroId && h.hp > 0)) return 'This hero is down.';

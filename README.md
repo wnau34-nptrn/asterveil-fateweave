@@ -6,7 +6,7 @@ A small, genuinely playable **Fateweave tactical reaction combat** prototype. Th
 
 GitHub Pages target: **https://wnau34-nptrn.github.io/asterveil-fateweave/**. Availability depends on a successful **Publish playable prototype** workflow deployment. Click Start encounter; choose a hero, action and target; review the predicted outcome; confirm when ready. No installation or account is required to play the published static game.
 
-Public Pages publication was explicitly requested after the initial prototype. The workflow builds and tests the production subpath before uploading `dist/`, then deploys with GitHub's official Pages actions. It publishes the current prototype branch and `main`; no automatic merge is performed. If Pages cannot be enabled by Actions, a repository administrator must choose **Settings → Pages → Build and deployment → Source: GitHub Actions**.
+Public Pages publication was explicitly requested after the initial prototype. The workflow builds and tests the full browser gameplay suite on the production subpath before uploading `dist/`, then deploys with GitHub's official Pages actions. It publishes the current prototype branch and `main`; no automatic merge is performed. If Pages cannot be enabled by Actions, a repository administrator must choose **Settings → Pages → Build and deployment → Source: GitHub Actions**.
 
 ## Stack and prerequisites
 
@@ -66,12 +66,12 @@ npm run test:browser
 ## How to play
 
 1. Click **Start encounter**. A previous local battle resumes automatically if available.
-2. Read the single current **Enemy Intent**: source, target, damage, attack type, and redirectability.
+2. Read the current **Enemy Intent**: source, target, damage, attack type, and redirectability. The next two planned beats help you prepare; they assume the current actors survive and are recalculated when an actor falls.
 3. Select a living hero using their card or character in the arena.
 4. Select an action and a valid target. Disabled actions/targets explain their requirements.
-5. Review the exact **player action and enemy response**, including HP, Counter, barrier, canceled intent, and predicted battle outcome.
+5. Review the exact **player action and enemy response**, including HP, Counter, barrier, canceled intent, lethal-hit warnings and the next announced intent after this choice.
 6. Click **Confirm action** to commit, or **Cancel** / Esc to reconsider. Selecting an action or target never commits it.
-7. Continue until **Victory** or **Defeat**. **Restart** / **Play again** starts a fresh encounter and replaces the saved battle.
+7. Continue until **Victory** or **Defeat**. Any surviving hero can win, but the optional challenge is to keep all three standing. The result reports survivors, party HP and **Party intact** or **Costly victory**. **Restart** / **Play again** starts a fresh encounter and replaces the saved battle.
 
 There is one manually chosen primary action per beat. No timer, QTE, random damage, battle movement, or automatic reaction chain.
 
@@ -80,10 +80,10 @@ There is one manually chosen primary action per beat. No timer, QTE, random dama
 | Entity/action | Implemented rule |
 |---|---|
 | Aegis / Guardian | 64 HP; Attack 10; Guard |
-| Lyra / Tracer | 44 HP; Attack 16; Mark; +6 against Marked/Exposed enemies, consumes both statuses |
+| Lyra / Tracer | 44 HP; Attack 16; Mark; +22 against Marked/Exposed enemies (38 damage total), consumes both statuses |
 | Eira / Weaver | 42 HP; Attack 11; Redirect |
 | Veil Raider | 38 HP; physical Slash 9, not redirectable |
-| Rift Brute | 90 HP; energy Rift Bolt 18, redirectable; physical Crushing Blow 22, not redirectable |
+| Rift Brute | 90 HP; energy Rift Bolt 30, redirectable; physical Crushing Blow 22, not redirectable |
 | Guard | Protect the announced target. Aegis intercepts and takes 35% of announced damage, rounded up; existing barrier absorbs afterward. Survive to earn 1 Counter, cap 2. |
 | Mark | One enemy marked for 3 beats including the committed beat. Marking again refreshes duration. |
 | Redirect | Spend 1 Counter; only the current redirectable energy attack. Target a living Marked enemy (including the source) or charged Crystal. |
@@ -92,7 +92,9 @@ There is one manually chosen primary action per beat. No timer, QTE, random dama
 
 The encounter intent pattern is Raider Slash → Brute Bolt → Raider Slash → Brute Crush. Dead sources are skipped **when announcing the next event**. If a preferred hero is already down, a living hero is selected at announcement. The displayed event never changes after confirmation; killing its source cancels it.
 
-Try **Guard Lyra on beat 1 → Eira Redirect to Crystal on beat 2**. An attack-only route can also win: focus Raider, then Brute; use Lyra while alive, then Eira. You are not forced to use Redirect.
+Try **Guard Lyra on beat 1 → Eira Redirect to Crystal on beat 2** to see a defensive intervention. The balance update makes blind Raider-first attacks lose. An offensive route remains viable by prioritizing Brute, but loses a hero. Guard/Mark, Crystal defense and marked-enemy Redirect each have tested nine-beat routes that keep the whole party standing. Mark is now worth its setup: Mark → Lyra Attack eliminates a full-HP Raider in two beats, while two unmarked attacks leave 6 HP. Crystal is optional; killing a source or intercepting its hit are useful alternatives. See [balance validation](docs/BALANCE_VALIDATION.md) for concrete route comparisons.
+
+Encounter content version is now **2**. Saved version-1 battles start fresh rather than replaying old choices under new damage rules. Refresh the published page and start a new encounter to play the update.
 
 ## Architecture
 

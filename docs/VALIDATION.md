@@ -86,3 +86,16 @@ PLAYWRIGHT_PAGES=true PLAYWRIGHT_CHROMIUM_EXECUTABLE=/usr/bin/chromium npm run t
 ```
 
 The preview server is started with the matching `--base=/asterveil-fateweave/`. This verifies production asset paths, actual Phaser canvas interaction, confirmation/cancel, Guard/Crystal Redirect, reload/restart, and responsive touch controls without console errors. Public availability must be confirmed by the Pages deployment; preparing a working build alone is not evidence that the public URL is live. The environment's direct GitHub Pages administration API request was denied, so the workflow attempts automatic enablement using official `configure-pages`. If its token lacks the required permission, a repository administrator must select GitHub Actions as the Pages source in repository Settings before retrying deployment.
+
+## Tactical balance update — encounter content version 2
+
+After player feedback that Attack spam dominated, increased Rift Bolt from 18 to 30 and Tracer's Mark/Exposed bonus from 6 to 22 (38 total damage). Added two planned future intents, exact next-intent preview, lethal-hit warnings and a survivors/HP result summary. Victory still requires defeating enemies with at least one hero alive; keeping all three is an optional challenge. Existing battle rules and Crystal's one-charge/+8 barrier behavior remain unchanged. Version-1 saves restart safely. Detailed strategy routes and comparisons are in `BALANCE_VALIDATION.md`.
+
+Local checks passed `npm run typecheck`, `npm run lint`, `npm test` (37 tests across 3 files), `npm run build:pages` and `git diff --check`. The full production suite was then run with:
+
+```sh
+PLAYWRIGHT_PAGES=true PLAYWRIGHT_CHROMIUM_EXECUTABLE=/usr/bin/chromium npm run test:browser
+# PASS: all 8 tests (2.4 minutes), production /asterveil-fateweave/ subpath
+```
+
+Verified real UI results: Raider-first Attack policy loses; Brute-priority Attack wins with 2/3 heroes and displays Costly victory; a nine-beat Guard/Mark/Crystal route wins with 3/3 heroes, 88 party HP and Party intact. Core strategy regression tests additionally verify nine-beat Guard/Mark wins without Redirect and marked-enemy Redirect wins without Crystal, with exact replay and preview equality. Inspected screenshots of the lethal Attack preview, Crystal choice, whole-party victory and mobile controls/forecast. Browser tests reported no page exceptions or console errors. The Pages publication workflow now gates deployment on all eight production browser tests. No new real-device/Safari evidence or claim of final human-tested balance is added.

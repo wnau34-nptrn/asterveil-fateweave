@@ -41,7 +41,7 @@ test('real canvas, cancel, Guard, crystal Redirect, reload, restart and keyboard
   await expect(page.locator('#hero-tracer')).toContainText('44 / 44 HP');
   await choose(page, 'weaver', 'redirect', 'energy-crystal');
   await expect(page.locator('#target-brute')).toBeDisabled();
-  await expect(page.locator('#preview')).toContainText('entire 18-damage attack');
+  await expect(page.locator('#preview')).toContainText('entire 30-damage attack');
   await page.screenshot({ path: info.outputPath('desktop-preview.png'), fullPage: true });
   await commit(page);
   await expect(page.locator('#hero-weaver')).toContainText('8 barrier');
@@ -69,14 +69,14 @@ test('Mark and Redirect to a marked enemy are playable through actual controls',
   await choose(page, 'tracer', 'mark', 'brute'); await commit(page);
   await choose(page, 'guardian', 'attack', 'brute'); await commit(page);
   await choose(page, 'weaver', 'redirect', 'brute');
-  await expect(page.locator('#preview')).toContainText('takes 18 damage');
+  await expect(page.locator('#preview')).toContainText('takes 30 damage');
   await commit(page);
-  await expect(page.locator('#target-brute')).toContainText('62/90 HP');
+  await expect(page.locator('#target-brute')).toContainText('50/90 HP');
   await expect(page.locator('#target-brute')).toContainText('EXPOSED');
   expect(errors).toEqual([]);
 });
 
-test('attack-only play earns a genuine Victory and can restart', async ({ page }, info) => {
+test('attack-only Brute priority earns a costly Victory and warns of a lethal choice', async ({ page }, info) => {
   const errors = await start(page);
   for (let beat = 0; beat < 25; beat++) {
     if (await page.getByRole('heading', { name: 'Victory', exact: true }).count()) break;
@@ -84,13 +84,61 @@ test('attack-only play earns a genuine Victory and can restart', async ({ page }
     for (const id of ['tracer', 'weaver', 'guardian']) if (await page.locator(`#hero-${id}`).isEnabled()) { hero = id; break; }
     await page.locator(`#hero-${hero}`).click();
     await page.locator('#action-attack').click();
-    const target = await page.locator('#target-raider').isEnabled() ? 'raider' : 'brute';
-    await page.locator(`#target-${target}`).click(); await commit(page);
+    const target = await page.locator('#target-brute').isEnabled() ? 'brute' : 'raider';
+    await page.locator(`#target-${target}`).click();
+    if (beat === 7) {
+      await expect(page.locator('#intent')).toContainText('Lyra will fall');
+      await expect(page.locator('#preview')).toContainText('Lyra will fall with this choice');
+      await page.screenshot({ path: info.outputPath('lethal-attack-preview.png'), fullPage: true });
+    }
+    await commit(page);
   }
   await expect(page.getByRole('heading', { name: 'Victory', exact: true })).toBeVisible();
+  await expect(page.locator('#start-screen')).toContainText('2 / 3 heroes standing');
+  await expect(page.locator('#start-screen')).toContainText('COSTLY VICTORY');
   await page.screenshot({ path: info.outputPath('victory.png'), fullPage: true });
   await page.getByRole('button', { name: 'Play again' }).click();
   await expect(page.locator('#beat-status')).toContainText('BEAT 01');
+  expect(errors).toEqual([]);
+});
+
+test('blind Raider-first attacks lose instead of rewarding target-independent spam', async ({ page }) => {
+  const errors = await start(page);
+  for (let beat = 0; beat < 20; beat++) {
+    if (await page.getByRole('heading', { name: 'Defeat', exact: true }).count()) break;
+    const hero = await page.locator('#hero-tracer').isEnabled() ? 'tracer' : await page.locator('#hero-weaver').isEnabled() ? 'weaver' : 'guardian';
+    await page.locator(`#hero-${hero}`).click();
+    await page.locator('#action-attack').click();
+    const target = await page.locator('#target-raider').isEnabled() ? 'raider' : 'brute';
+    await page.locator(`#target-${target}`).click(); await commit(page);
+  }
+  await expect(page.getByRole('heading', { name: 'Defeat', exact: true })).toBeVisible();
+  expect(errors).toEqual([]);
+});
+
+test('Mark, Guard and Crystal keep the party intact through a genuine full battle', async ({ page }, info) => {
+  test.setTimeout(90000);
+  const errors = await start(page);
+  await expect(page.locator('#forecast')).toContainText('30 damage');
+  await expect(page.locator('#reason-mark')).toContainText('38');
+  const moves = [
+    ['tracer', 'mark', 'brute'], ['guardian', 'guard', 'guardian'], ['tracer', 'attack', 'brute'],
+    ['tracer', 'mark', 'brute'], ['tracer', 'attack', 'brute'], ['weaver', 'redirect', 'energy-crystal'],
+    ['tracer', 'attack', 'brute'], ['tracer', 'mark', 'raider'], ['tracer', 'attack', 'raider'],
+  ];
+  for (const [hero, action, target] of moves) {
+    await choose(page, hero!, action!, target!);
+    if (action === 'redirect') {
+      await expect(page.locator('#preview')).toContainText('entire 30-damage attack');
+      await page.screenshot({ path: info.outputPath('tactical-crystal-choice.png'), fullPage: true });
+    }
+    await commit(page);
+  }
+  await expect(page.getByRole('heading', { name: 'Victory', exact: true })).toBeVisible();
+  await expect(page.locator('#start-screen')).toContainText('3 / 3 heroes standing');
+  await expect(page.locator('#start-screen')).toContainText('88 party HP');
+  await expect(page.locator('#start-screen')).toContainText('PARTY INTACT');
+  await page.screenshot({ path: info.outputPath('party-intact-victory.png'), fullPage: true });
   expect(errors).toEqual([]);
 });
 

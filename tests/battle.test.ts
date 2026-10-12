@@ -36,13 +36,13 @@ describe('Fateweave deterministic rules', () => {
     expect(s.heroes[0]!.hp).toBe(60);
     expect(s.heroes[1]!.hp).toBe(44);
     expect(s.counter).toBe(1);
-    expect(s.intent).toMatchObject({ sourceId: 'brute', kind: 'energy', damage: 18 });
+    expect(s.intent).toMatchObject({ sourceId: 'brute', kind: 'energy', damage: 30 });
   });
   it('caps Counter and allows self Guard', () => {
     let s = guarded(); s.counter = data.rules.counterCap;
     s = act(s, 'guardian', 'guard', 'guardian').state;
     expect(s.counter).toBe(2);
-    expect(s.heroes[0]!.hp).toBe(53);
+    expect(s.heroes[0]!.hp).toBe(49);
   });
   it('does not award Counter when the guarding hero falls', () => {
     const s = start(); s.heroes[0]!.hp = 1;
@@ -67,7 +67,7 @@ describe('Fateweave deterministic rules', () => {
   it('Tracer benefits from a mark and consumes it', () => {
     const s = act(start(), 'tracer', 'mark', 'brute').state;
     const r = act(s, 'tracer', 'attack', 'brute').state;
-    expect(r.enemies[1]!.hp).toBe(68); expect(r.enemies[1]!.markedUntil).toBe(0);
+    expect(r.enemies[1]!.hp).toBe(52); expect(r.enemies[1]!.markedUntil).toBe(0);
   });
   it('rejects Mark on a down or unknown enemy', () => {
     const s = start(); s.enemies[0]!.hp = 0;
@@ -104,14 +104,14 @@ describe('Fateweave deterministic rules', () => {
   it('redirects exact announced damage to a marked source and exposes it', () => {
     const s = guarded(); s.enemies[1]!.markedUntil = 5;
     const r = act(s, 'weaver', 'redirect', 'brute').state;
-    expect(r.enemies[1]).toMatchObject({ hp: 72, markedUntil: 0, exposedUntil: 4 });
+    expect(r.enemies[1]).toMatchObject({ hp: 60, markedUntil: 0, exposedUntil: 4 });
     expect(r.heroes[0]!.hp).toBe(60); expect(r.counter).toBe(0);
-    expect(act(r, 'tracer', 'attack', 'brute').state.enemies[1]!.hp).toBe(50);
+    expect(act(r, 'tracer', 'attack', 'brute').state.enemies[1]!.hp).toBe(22);
   });
   it('can redirect damage onto the other enemy without an unlimited reaction chain', () => {
     const s = guarded(); s.enemies[0]!.markedUntil = 5;
     const r = act(s, 'weaver', 'redirect', 'raider');
-    expect(r.state.enemies[0]!.hp).toBe(20);
+    expect(r.state.enemies[0]!.hp).toBe(8);
     expect(r.events.filter(e => e.type === 'damage')).toHaveLength(1);
   });
   it('cancels the announced attack when Attack kills its source', () => {
@@ -152,7 +152,7 @@ describe('Fateweave deterministic rules', () => {
     let s = start(); const commands: Command[] = [];
     while (s.outcome === 'active' && commands.length < 30) {
       const h = ['tracer', 'weaver', 'guardian'].find(id => s.heroes.some(a => a.id === id && a.hp > 0))!;
-      const target = s.enemies.find(e => e.hp > 0)!;
+      const target = ['brute', 'raider'].map(id => s.enemies.find(e => e.id === id && e.hp > 0)).find(e => e)!;
       const c = command(s, h, 'attack', target.id); commands.push(c);
       s = resolveCommand(s, data, c).state;
     }

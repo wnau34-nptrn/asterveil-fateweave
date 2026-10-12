@@ -11,20 +11,26 @@ There is no timer, reflex check, random damage, battle movement grid or automati
 ## Three hero identities
 
 - **Guardian / Aegis:** Attack or intercept the announced target with Guard. Guard reduces damage 65%, rounds remaining damage up, and redirects the reduced hit to Aegis. A surviving defensive action gains 1 Counter (cap 2).
-- **Tracer / Lyra:** Attack or Mark. Attack gains +6 on Marked or Exposed enemies and consumes both statuses. Mark costs the primary action and lasts 3 beats including its application beat.
+- **Tracer / Lyra:** Attack 16 or Mark. Attack gains +22 on Marked or Exposed enemies (38 total) and consumes both statuses. Mark costs the primary action and lasts 3 beats including its application beat. The 38-HP Raider can therefore be eliminated in two beats with Mark/Attack, compared with three unmarked attacks.
 - **Weaver / Eira:** Attack or Redirect. Redirect costs 1 Counter; only currently announced redirectable energy attacks qualify. Choose a living marked enemy (source included) or the charged Crystal. Physical attacks do not qualify.
 
 These are prototype values, not final progression or balance decisions. Values live in `src/content/encounters/crystal-rift.ts` and typed actor definitions.
 
 ## Intent and environment principles
 
-Enemy attacks announce source, target, type, exact damage and redirectability. One enemy event occurs per beat. At next-event announcement, dead sources are skipped and a downed preferred target is replaced by a living hero. Never secretly substitute a pending event after confirmation. Killing the announced source cancels that attack.
+Enemy attacks announce source, target, type, exact damage and redirectability. One enemy event occurs per beat. At next-event announcement, dead sources are skipped and a downed preferred target is replaced by a living hero. Never secretly substitute a pending event after confirmation. Killing the announced source cancels that attack. A separate two-beat planning strip assumes the current actors survive; it is not a replacement for the frozen current intent. The preview also shows the exact next announced event after the proposed action and enemy response.
 
 Redirected damage equals announced damage. A marked recipient loses Mark and becomes Exposed through the next beat, enabling Lyra's bonus. This effect ends without triggering another attack or reaction chain.
 
 The **Energy Crystal** is a genuine entity with stable ID, one charge and target validation. It absorbs the entire redirected energy attack and grants 8 barrier to every living hero. Barrier is non-stacking and persists until damage absorbs it. It cannot receive physical attacks or ordinary hero Attack. Preview shows absorption, cost and barrier gain before commitment.
 
-Attack is independently useful: an automated real-browser test wins by focusing Raider then Brute using Attack only. Defensive intervention is demonstrated by Guard on beat 1, followed by Crystal Redirect on beat 2. Marked-enemy Redirect is also exercised through the real UI; no universal fixed combo is required.
+## Tactical balance update
+
+The initial encounter allowed the same Raider-first attack policy to win without reading intent, while Mark's +6 bonus did not repay its setup action. After player feedback, Rift Bolt increases from 18 to 30 and the Tracer status bonus from 6 to 22. Enemy HP, basic attacks, Guard, Counter, Crystal charges/barrier, reaction limits and victory conditions remain unchanged. Content version advances to 2 so existing saves reset safely.
+
+Blind Raider-first attacks now lose. Prioritizing Brute still supports an attack-only win in nine beats, with two heroes standing. Guard/Mark without Redirect, Crystal defense and marked-enemy Redirect each support nine-beat wins with all three heroes standing. Thus Redirect is useful without being a required universal combo; target priority and defensive timing change the outcome.
+
+The UI warns when an unprotected hit or the proposed command will down a hero, shows upcoming planned threats, explains Mark's 38-damage follow-up, and reports survivors/remaining HP with Party intact or Costly victory. Keeping all three heroes is an optional challenge, not a new resource, reward or altered victory rule. See `BALANCE_VALIDATION.md` for reproducible command routes and their outcomes. Human enjoyment still needs continued playtesting; simulator results demonstrate concrete choice consequences, not final balance quality.
 
 ## Open design questions (future, not implemented)
 
