@@ -4,7 +4,7 @@ A small, genuinely playable **Fateweave tactical reaction combat** prototype. Th
 
 ## Play in your browser
 
-GitHub Pages target: **https://wnau34-nptrn.github.io/asterveil-fateweave/**. Availability depends on a successful **Publish playable prototype** workflow deployment. Click Start encounter; choose a hero, action and target; review the predicted outcome; confirm when ready. No installation or account is required to play the published static game.
+GitHub Pages target: **https://wnau34-nptrn.github.io/asterveil-fateweave/**. Availability depends on a successful **Publish playable prototype** workflow deployment. The interface is in Thai. Click **เริ่มต่อสู้**; follow the four numbered steps to choose a hero, action and target; review the predicted outcome; click **ยืนยันคำสั่งนี้** when ready. No installation or account is required to play the published static game.
 
 Public Pages publication was explicitly requested after the initial prototype. The workflow builds and tests the full browser gameplay suite on the production subpath before uploading `dist/`, then deploys with GitHub's official Pages actions. It publishes the current prototype branch and `main`; no automatic merge is performed. If Pages cannot be enabled by Actions, a repository administrator must choose **Settings → Pages → Build and deployment → Source: GitHub Actions**.
 
@@ -67,13 +67,23 @@ npm run test:browser
 
 ## How to play
 
-1. Click **Start encounter**. A previous local battle resumes automatically if available.
-2. Read the current **Enemy Intent**: source, target, damage, attack type, and redirectability. The next two planned beats help you prepare; they assume the current actors survive and are recalculated when an actor falls.
-3. Select a living hero using their card or character in the arena.
-4. Select an action and a valid target. Disabled actions/targets explain their requirements.
-5. Review the exact **player action and enemy response**, including HP, Counter, barrier, canceled intent, lethal-hit warnings and the next announced intent after this choice.
-6. Click **Confirm action** to commit, or **Cancel** / Esc to reconsider. Selecting an action or target never commits it.
-7. Continue until **Victory** or **Defeat**. Any surviving hero can win, but the optional challenge is to keep all three standing. The result reports survivors, party HP and **Party intact** or **Costly victory**. **Restart** / **Play again** starts a fresh encounter and replaces the saved battle.
+1. กด **เริ่มต่อสู้** หรือเล่นต่อจากการบันทึกบนเครื่องนี้โดยอัตโนมัติ
+2. อ่านแถบเหนือสนาม: **ศัตรูจะทำอะไรหลังยืนยัน** เล็งใคร พลังโจมตีเท่าไร และเบี่ยงทิศได้หรือไม่ เปิด “ดูแผนโจมตีอีก 2 จังหวะข้างหน้า” เมื่อต้องการวางแผนต่อ
+3. ทำตามขั้น **1–3** ทางขวาของสนาม (มือถืออยู่ใต้สนาม): เลือกฮีโร่ → คำสั่ง → เป้าหมาย แต่ละฮีโร่แสดงเฉพาะ 2 คำสั่งของตัวเอง คำสั่งที่ใช้ไม่ได้บอกเหตุผลภาษาไทย
+4. ขั้น **4** แยกผล **คำสั่งของคุณ** กับ **ศัตรูและผลต่อทีม** พร้อมเลือด โล่ แต้มเบี่ยงพลัง และการโจมตีถัดไปที่คำนวณจากตัวเลือกจริง หากเพื่อนจะล้มจะมีคำเตือน
+5. กด **ยืนยันคำสั่งนี้** เพื่อเดินจังหวะ หรือ **ยกเลิก** / Esc เพื่อเปลี่ยนใจ การเลือกเป้าหมายยังไม่ออกคำสั่ง
+6. เล่นจน **ชนะแล้ว** หรือ **แพ้แล้ว** เป้าหมายเสริมคือรักษาทีมครบ 3 คน กด **เริ่มใหม่** / **เล่นอีกครั้ง** เพื่อเริ่มใหม่และแทนที่การบันทึกเดิม
+
+| ชื่อในเกม | ความหมาย |
+|---|---|
+| โจมตี / Attack | ทำความเสียหายทันที กำจัดผู้โจมตีได้ก็หยุดการโจมตีของมัน |
+| ตั้งรับ / Guard · เอกิส | รับแทนเพื่อน ลดความเสียหาย 65% รอดแล้วได้ 1 แต้มเบี่ยงพลัง |
+| ติดตรา / Mark · ไลรา | เตรียมศัตรูให้ไลราโจมตี 38 หรือไอราเบี่ยงพลังใส่ จังหวะติดตรายังไม่ทำความเสียหาย |
+| เบี่ยงพลัง / Redirect · ไอรา | ใช้ 1 แต้ม ส่งการโจมตีพลังงานไปยังศัตรูติดตราหรือผลึก |
+| แต้มเบี่ยงพลัง / Counter | ทรัพยากรจากการตั้งรับสำเร็จ เก็บได้ 2 แต้ม |
+| ผลึกพลังงาน / Energy Crystal | ใช้ได้ครั้งเดียว รับการโจมตีพลังงานทั้งหมดแล้วให้โล่ 8 แก่ฮีโร่ที่ยังยืนอยู่ทุกคน |
+
+ข้อมูลผลึกแสดงใต้สนามเสมอ คำอธิบายละเอียดอยู่ใน **วิธีเล่น** และเหตุการณ์ย้อนหลังอยู่ใน **บันทึกการต่อสู้** หน้าจอใช้ฟอนต์ภาษาไทยที่มีในเครื่อง ไม่โหลดฟอนต์ภายนอก การจัดหน้า/ภาษาไม่เปลี่ยนกฎการต่อสู้หรือเวอร์ชันข้อมูล 2 จึงเล่นต่อจากเซฟเดิมได้
 
 There is one manually chosen primary action per beat. No timer, QTE, random damage, battle movement, or automatic reaction chain.
 

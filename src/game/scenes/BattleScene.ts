@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import type { BattleEvent, BattleState, EncounterDefinition } from '../../core/battle/types';
+import { actorName, thaiFont } from '../../ui/th';
 import { palette } from '../visuals/palette';
 import { drawRiftBackdrop } from '../visuals/rift-backdrop';
 
@@ -46,12 +47,12 @@ export class BattleScene extends Phaser.Scene {
     this.encounter.heroes.forEach((hero, i) => {
       const y = compact ? 67 + i * 94 : 98 + i * 100;
       platform(hx, y + 20, compact ? 48 : 100);
-      this.actor(hero.id, hero.role, hx, y, hero.color, this.view!.state.heroes[i]!.hp, hero.maxHp, false, compact);
+      this.actor(hero.id, actorName(hero.id, this.encounter), hx, y, hero.color, this.view!.state.heroes[i]!.hp, hero.maxHp, false, compact);
     });
     this.encounter.enemies.forEach((enemy, i) => {
       const y = compact ? 105 + i * 135 : 140 + i * 135;
       platform(ex, y + 25, compact ? 51 : 112);
-      this.actor(enemy.id, enemy.name, ex, y, enemy.color, this.view!.state.enemies[i]!.hp, enemy.maxHp, true, compact);
+      this.actor(enemy.id, actorName(enemy.id, this.encounter), ex, y, enemy.color, this.view!.state.enemies[i]!.hp, enemy.maxHp, true, compact);
     });
     const cx = w / 2; const cy = compact ? 154 : h * 0.48;
     this.positions.set(this.encounter.crystal.id, { x: cx, y: cy });
@@ -69,7 +70,7 @@ export class BattleScene extends Phaser.Scene {
     crystal.lineBetween(cx - 19, cy - 9, cx - 25, cy + 27);
     crystal.lineBetween(cx + 19, cy - 9, cx + 25, cy + 27);
     crystal.strokeEllipse(cx, cy + 30, 53, 15);
-    const crystalLabel = this.add.text(cx, cy + 61, compact ? 'CRYSTAL' : 'ENERGY CRYSTAL', { fontFamily: 'sans-serif', fontSize: compact ? '10px' : '12px', color: '#9ae7ef', stroke: '#101c36', strokeThickness: 3 }).setOrigin(0.5);
+    const crystalLabel = this.add.text(cx, cy + 61, compact ? 'ผลึก' : 'ผลึกพลังงาน', { fontFamily: thaiFont, fontSize: compact ? '12px' : '13px', color: '#9ae7ef', stroke: '#101c36', strokeThickness: 3 }).setOrigin(0.5);
     this.layer.add(crystalLabel);
     const hit = this.add.zone(cx, cy, 65, 85).setInteractive({ useHandCursor: true });
     hit.on('pointerdown', () => this.choose(this.encounter.crystal.id)); this.layer.add(hit);
@@ -128,7 +129,7 @@ export class BattleScene extends Phaser.Scene {
       g.fillTriangle(15, -3, 34, -13, 28, 18);
       g.setScale(1.2);
     }
-    const label = this.add.text(0, 40, name, { fontFamily: 'sans-serif', fontSize: compact ? '11px' : '13px', color: '#f0f5ff', stroke: '#101c36', strokeThickness: 3 }).setOrigin(0.5);
+    const label = this.add.text(0, 40, name, { fontFamily: thaiFont, fontSize: compact ? '12px' : '14px', color: '#f0f5ff', stroke: '#101c36', strokeThickness: 3 }).setOrigin(0.5);
     // Hero HP sits beside the silhouette so the next hero cannot cover it.
     const hpX = enemy ? 0 : compact ? 57 : 76;
     const hpY = enemy ? 69 : 7;
@@ -136,12 +137,12 @@ export class BattleScene extends Phaser.Scene {
     const barWidth = enemy ? 70 : 52;
     const bar = this.add.graphics(); bar.fillStyle(0x101c36); bar.fillRoundedRect(hpX - barWidth / 2, barY, barWidth, 5, 2);
     bar.fillStyle(color); bar.fillRoundedRect(hpX - barWidth / 2, barY, barWidth * hp / maxHp, 5, 2);
-    const hpLabel = this.add.text(hpX, hpY, `${hp} / ${maxHp}`, { fontFamily: 'sans-serif', fontSize: '10px', color: '#d4e6f7', stroke: '#101c36', strokeThickness: 3 }).setOrigin(0.5);
+    const hpLabel = this.add.text(hpX, hpY, `${hp} / ${maxHp}`, { fontFamily: thaiFont, fontSize: '10px', color: '#d4e6f7', stroke: '#101c36', strokeThickness: 3 }).setOrigin(0.5);
     body.add([label, bar, hpLabel]);
     const hit = this.add.zone(0, 0, 78, 100).setInteractive({ useHandCursor: true });
     hit.on('pointerdown', () => this.choose(id)); body.add(hit);
     if (this.view!.state.intent?.sourceId === id && hp > 0) {
-      const warning = this.add.text(35, -38, '◆', { fontFamily: 'sans-serif', fontSize: '15px', color: '#fdbdcf' }).setOrigin(0.5);
+      const warning = this.add.text(35, -38, '◆', { fontFamily: thaiFont, fontSize: '15px', color: '#fdbdcf' }).setOrigin(0.5);
       body.add(warning);
     }
   }
@@ -153,7 +154,7 @@ export class BattleScene extends Phaser.Scene {
       if (event.type === 'damage') {
         const ring = this.add.circle(position.x, position.y, 25, 0xffffff, 0.15).setStrokeStyle(2, palette.gold);
         this.tweens.add({ targets: ring, radius: 55, alpha: 0, duration: 420, onComplete: () => ring.destroy() });
-        const text = this.add.text(position.x, position.y - 20, `−${event.amount}`, { fontFamily: 'sans-serif', fontSize: '23px', color: '#ffe0a6', stroke: '#101c36', strokeThickness: 4 }).setOrigin(0.5);
+        const text = this.add.text(position.x, position.y - 20, `−${event.amount}`, { fontFamily: thaiFont, fontSize: '23px', color: '#ffe0a6', stroke: '#101c36', strokeThickness: 4 }).setOrigin(0.5);
         this.tweens.add({ targets: text, y: position.y - 65, alpha: 0, duration: 650, delay: index * 40, onComplete: () => text.destroy() });
       }
       if (event.type === 'redirect' || event.type === 'barrier') {
