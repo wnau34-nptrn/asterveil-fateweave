@@ -9,6 +9,10 @@
   --cyan:#61dbea;
   --purple:#b59aff;
   --danger:#f3a2ba;
+  --ornament:#bfa375;
+  --sky:#315a7b;
+  --ruin:#557590;
+  --ruin-light:#b6cbd7;
   font-family:'Trebuchet MS',Verdana,sans-serif;
   background:#0d1629;
   color:var(--text);
@@ -198,11 +202,19 @@ main {
   color:var(--cyan);
   border-color:#3d7482;
 }
+#intent:has(.intent-rule:not(.weavable)) {
+  background:linear-gradient(95deg,#402939,#202540);
+  border-color:#a56676;
+  border-left-color:var(--danger);
+}
+#intent:has(.intent-rule:not(.weavable)) .intent-icon {
+  color:var(--danger);
+}
 .arena {
   height:420px;
   position:relative;
   overflow:hidden;
-  border:1px solid var(--line);
+  border:1px solid var(--ornament);
   border-top:0;
   border-radius:0 0 8px 8px;
 }
@@ -356,7 +368,7 @@ main {
   display:grid;
   grid-template-columns:1.1fr 1fr;
   background:var(--panel);
-  border:1px solid var(--line);
+  border:1px solid #786c5b;
   border-radius:8px;
   overflow:hidden;
 }
@@ -402,6 +414,49 @@ main {
   border:1px solid #426080;
   border-radius:5px;
   padding:10px 4px;
+  box-shadow:inset 0 0 0 3px #101c3650;
+}
+.action::before {
+  display:block;
+  font-size:22px;
+  line-height:1;
+  margin-bottom:8px;
+}
+#action-attack {
+  background:linear-gradient(150deg,#402735,#1d263b);
+  border-color:#a56676;
+}
+#action-attack::before {
+  content:'⚔';
+  color:#f3a2ba;
+}
+#action-guard {
+  background:linear-gradient(150deg,#25476a,#1a2947);
+  border-color:#609cc4;
+}
+#action-guard::before {
+  content:'♜';
+  color:var(--cyan);
+}
+#action-mark {
+  background:linear-gradient(150deg,#36314f,#1e2942);
+  border-color:#8775b5;
+}
+#action-mark::before {
+  content:'◇';
+  color:var(--purple);
+}
+#action-redirect {
+  background:linear-gradient(150deg,#484031,#242b42);
+  border-color:#bfa375;
+}
+#action-redirect::before {
+  content:'✧';
+  color:var(--gold);
+}
+.action.selected {
+  border-color:var(--gold)!important;
+  box-shadow:inset 0 0 0 1px #ffcc7270,0 0 15px #ffcc7212;
 }
 .action.selected,.target.selected {
   border-color:var(--gold);

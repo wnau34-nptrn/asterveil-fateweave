@@ -13,7 +13,7 @@ npm install --save-dev --save-exact @types/node@24.19.2
 
 The completed lockfile was then verified from scratch with `npm ci`.
 
-## Final local quality checks
+## Initial prototype checks (commit 0ac2a38)
 
 | Command | Result |
 |---|---|
@@ -54,5 +54,22 @@ Screenshot artifacts (ignored by Git) are under `test-results/`: desktop battle,
 - Browser tests used the Vite development server; production build correctness was checked by the compiler/bundler, not a separate production-server browser suite.
 - Tab/background behavior commits and saves before animation and releases its UI lock on visibility change, but OS-level suspension was not tested on a mobile device.
 - World exploration, backend, online challenges, progression and mobile packaging are unimplemented future work.
-- No supplied concept image files were available or committed. Current characters/environment are original geometric placeholders.
+- At the initial prototype check, reference images were not available. Battle/World references have since been inspected as described below; none are committed. Current characters/environment remain original geometric placeholders.
 - No public deployment, access-permission changes or automatic merge occurred.
+
+## Supplied-reference visual update — 2026-10-12
+
+Directly inspected the two subsequently supplied images: Battle (C) first, World Exploration (B) second. Updated art direction and README to record actual observations; Key Art (A) remains unavailable. Images are not added to repository assets. Original 2D scenery now includes pale portal ruins, bridges, static waterfall ribbons, greenery, decorative tiles and purple rift shards. Heroes gain clearer role silhouettes and the Crystal/HUD use gold framing and action-specific colors. Hero HP was moved beside each silhouette to prevent overlap. Combat data, rules, commands and saves are unchanged.
+
+Follow-up commands and results:
+
+```sh
+npm run typecheck                 # PASS
+npm run lint                      # PASS
+npm run build                     # PASS, same non-fatal Phaser chunk warning
+git diff --check                  # PASS
+PLAYWRIGHT_CHROMIUM_EXECUTABLE=/usr/bin/chromium npm run test:browser -- --grep 'real canvas|mobile touch'
+# PASS: 2 targeted browser tests (desktop normal motion and mobile touch/reduced motion)
+```
+
+Inspected the updated desktop Crystal preview and mobile Guard preview screenshots. Checked actor/HP/intent separation, scenery and text contrast, gold frames, canvas selection, explicit confirmation/cancel, Guard/Redirect, persistence/restart and responsive touch/orientation behavior. The unchanged full six-test combat suite and 30 Node tests were validated for the initial prototype; this visual follow-up reruns the two affected browser paths rather than claiming a new full six-test run. Application output is 27.18 KB JS / 10.04 KB gzip and 12.12 KB CSS / 3.37 KB gzip; Phaser output is unchanged. No real-device or Safari testing was added.

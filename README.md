@@ -110,7 +110,7 @@ docs/                    Direction, integration plan, roadmap, validation
 ## Current limitations
 
 - One encounter, original geometric chibi placeholders and lightweight VFX. No final art, music, or sound.
-- The three concept images named in the handoff were not attached at implementation time; direction is based on their written descriptions. Supplied reference images are not committed.
+- The supplied Battle (C) and World Exploration (B) images guide the original ruins/waterfalls, blue/gold Crystal and navy/gold HUD foundation. Key Art (A) has not been supplied. Reference images are not committed or used as production assets.
 - World exploration, progression, equipment, backend, multiplayer, billing, online challenges, and Capacitor are future work, not implemented.
 - Full Phaser runtime is approximately 1.37 MB minified / 357 KB gzip; Vite reports a large-chunk warning. Optimization needs measurement before a mobile release.
 - Automated browser validation is Chromium on Linux with software WebGL and emulated touch viewports. This is **not** real Windows/Android/iOS device or Safari validation.
