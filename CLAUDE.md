@@ -1,6 +1,6 @@
 # Fateweave development instructions
 
-Work only in `asterveil-fateweave`. Never modify, reset, merge, push to, or import private code/assets/history from `asterveil-rise-beyond`. Preserve existing target-repository work. Never commit secrets or supplied concept images without explicit authorization. Do not deploy or change repository visibility/permissions as part of prototype work.
+Work only in `asterveil-fateweave`. Never modify, reset, merge, push to, or import private code/assets/history from `asterveil-rise-beyond`. Preserve existing target-repository work. Never commit secrets or supplied concept images without explicit authorization. The user explicitly authorized GitHub Pages publication after the initial prototype; the Pages workflow is within that scope. Do not change repository visibility/access permissions, configure other hosting or automatically merge without separate authorization.
 
 ## Current architecture
 

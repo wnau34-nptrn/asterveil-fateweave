@@ -2,6 +2,12 @@
 
 A small, genuinely playable **Fateweave tactical reaction combat** prototype. This is an independent browser-first project in `wnau34-nptrn/asterveil-fateweave`. The original Godot project is not a dependency and no code, assets, or history are imported from it.
 
+## Play in your browser
+
+GitHub Pages target: **https://wnau34-nptrn.github.io/asterveil-fateweave/**. Availability depends on a successful **Publish playable prototype** workflow deployment. Click Start encounter; choose a hero, action and target; review the predicted outcome; confirm when ready. No installation or account is required to play the published static game.
+
+Public Pages publication was explicitly requested after the initial prototype. The workflow builds and tests the production subpath before uploading `dist/`, then deploys with GitHub's official Pages actions. It publishes the current prototype branch and `main`; no automatic merge is performed. If Pages cannot be enabled by Actions, a repository administrator must choose **Settings → Pages → Build and deployment → Source: GitHub Actions**.
+
 ## Stack and prerequisites
 
 - Node.js **24.x** (validated on 24.19.0), npm 11.x, Git, a modern browser with Canvas/WebGL.
@@ -33,6 +39,7 @@ npm run lint         # ESLint
 npm test             # Node-only rules and storage tests
 npm run test:watch   # Vitest watch mode
 npm run build        # typecheck + production build in dist/
+npm run build:pages  # production build for /asterveil-fateweave/ hosting
 npm run preview      # serve the production build locally
 ```
 
@@ -102,7 +109,7 @@ src/platform/            Safe browser-storage adapter
 tests/                   Rules and save tests; browser/ contains Playwright gameplay tests
 public/assets/           Original lightweight favicon; characters and ruins use runtime geometry
 docs/                    Direction, integration plan, roadmap, validation
-.github/workflows/       Install → typecheck → lint → test → build; no deployment
+.github/workflows/       Quality CI and user-authorized GitHub Pages build/test/deployment
 ```
 
 `resolveCommand` is authoritative and immutable. `previewCommand` calls that same resolver; rendering cannot affect its result. Commands carry a beat number to reject stale previews. Simulation has no Phaser, DOM, clock, or random-number dependency and runs under Node. State commits and saves immediately, before the short presentation lock. Hidden tabs release that lock without advancing the battle. Saves contain versioned encounter IDs and commands and are validated by replay; corrupt or incompatible saves start fresh. Unavailable/quota-limited storage leaves the session playable. Saves support up to 5,000 commands; no cross-device syncing is provided.

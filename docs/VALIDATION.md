@@ -51,11 +51,11 @@ Screenshot artifacts (ignored by Git) are under `test-results/`: desktop battle,
 - This is browser automation with actual interactive gameplay, not human balance/replayability validation.
 - No real Windows, Android, iPhone or iPad was available. Mobile emulation does not prove iOS Safari behavior.
 - Firefox and Safari/WebKit were not tested. Canvas fallback and GPU/context-loss behavior need a later device matrix.
-- Browser tests used the Vite development server; production build correctness was checked by the compiler/bundler, not a separate production-server browser suite.
+- The initial browser tests used the Vite development server. The later GitHub Pages preparation additionally tests the production server under the repository subpath.
 - Tab/background behavior commits and saves before animation and releases its UI lock on visibility change, but OS-level suspension was not tested on a mobile device.
 - World exploration, backend, online challenges, progression and mobile packaging are unimplemented future work.
 - At the initial prototype check, reference images were not available. Battle/World references have since been inspected as described below; none are committed. Current characters/environment remain original geometric placeholders.
-- No public deployment, access-permission changes or automatic merge occurred.
+- No public deployment occurred during the initial prototype/reference update. The user subsequently authorized GitHub Pages publication. Repository visibility/access and merge state remain unchanged.
 
 ## Supplied-reference visual update — 2026-10-12
 
@@ -73,3 +73,16 @@ PLAYWRIGHT_CHROMIUM_EXECUTABLE=/usr/bin/chromium npm run test:browser -- --grep 
 ```
 
 Inspected the updated desktop Crystal preview and mobile Guard preview screenshots. Checked actor/HP/intent separation, scenery and text contrast, gold frames, canvas selection, explicit confirmation/cancel, Guard/Redirect, persistence/restart and responsive touch/orientation behavior. The unchanged full six-test combat suite and 30 Node tests were validated for the initial prototype; this visual follow-up reruns the two affected browser paths rather than claiming a new full six-test run. Application output is 27.18 KB JS / 10.04 KB gzip and 12.12 KB CSS / 3.37 KB gzip; Phaser output is unchanged. No real-device or Safari testing was added.
+
+## User-authorized GitHub Pages preparation — 2026-10-12
+
+Added `build:pages` for `/asterveil-fateweave/`, a base-aware favicon path, and a production mode in Playwright. The GitHub Pages workflow gates deployment on lint, all Node tests, typechecked production build and the two affected desktop/mobile browser scenarios. It uploads only `dist/` and uses official GitHub Pages actions. Publication was explicitly requested by the user; no automatic PR merge or repository visibility/access changes are included.
+
+Local validation passed `npm run lint`, `npm test` (30 tests), `npm run build:pages`, `git diff --check`, and:
+
+```sh
+PLAYWRIGHT_PAGES=true PLAYWRIGHT_CHROMIUM_EXECUTABLE=/usr/bin/chromium npm run test:browser -- --grep 'real canvas|mobile touch'
+# PASS: 2 tests against the production server at /asterveil-fateweave/
+```
+
+The preview server is started with the matching `--base=/asterveil-fateweave/`. This verifies production asset paths, actual Phaser canvas interaction, confirmation/cancel, Guard/Crystal Redirect, reload/restart, and responsive touch controls without console errors. Public availability must be confirmed by the Pages deployment; preparing a working build alone is not evidence that the public URL is live. The environment's direct GitHub Pages administration API request was denied, so the workflow attempts automatic enablement using official `configure-pages`. If its token lacks the required permission, a repository administrator must select GitHub Actions as the Pages source in repository Settings before retrying deployment.
