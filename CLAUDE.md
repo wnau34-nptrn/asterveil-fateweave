@@ -10,7 +10,7 @@ Work only in `asterveil-fateweave`. Never modify, reset, merge, push to, or impo
 - `BattleScene` adapts state into disposable shapes/text, pointer selection and VFX. No damage or resource mutations in scenes or tweens.
 - `BattleUI` owns temporary selection, confirmation and presentation lock; it commits once, saves immediately and projects state into DOM. Never allow selection alone or background/resume to confirm a command.
 - `core/save` accepts an injected storage port and validates saves by command replay. `platform/browser-storage` handles browser API access.
-- CSS and numeric Phaser palette tokens form the visual foundation; original lightweight geometry is intentional placeholder art.
+- CSS tokens define the modern navy/gold HUD; Phaser uses original generated unit and backdrop atlases with code-native input, HP/status labels and short VFX. Generated artwork and asset frame mapping live in `game/visuals`; HUD text and controls must remain DOM-native.
 
 ## Development rules
 

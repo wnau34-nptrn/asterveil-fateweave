@@ -3,16 +3,22 @@ import type { BattleEvent, BattleState, EncounterDefinition } from '../../core/b
 import { actorName, thaiFont } from '../../ui/th';
 import { palette } from '../visuals/palette';
 import { drawRiftBackdrop } from '../visuals/rift-backdrop';
+import { actorFrames, artUrl } from '../visuals/assets';
 
 export interface SceneView { state: BattleState; heroId: string; targetId: string | null }
 export class BattleScene extends Phaser.Scene {
   private view: SceneView | undefined;
   private layer: Phaser.GameObjects.Container | undefined;
-  private backdrop: Phaser.GameObjects.Graphics | undefined;
+  private backdrop: Phaser.GameObjects.Image | undefined;
   private backdropSize = '';
   private positions = new Map<string, { x: number; y: number }>();
   private ready = false;
-  constructor(private readonly encounter: EncounterDefinition, private readonly choose: (id: string) => void) { super('battle'); }
+  constructor(private readonly encounter: EncounterDefinition, private readonly choose: (id: string) => void, private readonly onReady: () => void) { super('battle'); }
+  get isReady(): boolean { return this.ready; }
+  preload(): void {
+    this.load.image('rift-ruins', artUrl('ruins'));
+    this.load.spritesheet('battle-units', artUrl('units'), { frameWidth: 512, frameHeight: 512 });
+  }
   create(): void {
     this.ready = true;
     this.scale.on('resize', this.paint, this);
@@ -21,6 +27,7 @@ export class BattleScene extends Phaser.Scene {
       this.ready = false; this.backdropSize = ''; this.backdrop = undefined;
     });
     this.paint();
+    this.onReady();
   }
   sync(view: SceneView): void { this.view = view; if (this.ready) this.paint(); }
   private paint(): void {
@@ -32,8 +39,8 @@ export class BattleScene extends Phaser.Scene {
     const compact = w < 900;
     const short = w < 900 || h < 360;
     const portrait = w < 900 && h >= 280;
-    const stageTop = short ? portrait ? 80 : 60 : 135;
-    const stageHeight = Math.max(80, h - (portrait ? 120 : 35) - stageTop);
+    const stageTop = short ? portrait ? 110 : 60 : 135;
+    const stageHeight = Math.max(80, h - (portrait ? 20 : 35) - stageTop);
     if (this.backdropSize !== `${w}:${h}`) {
       this.backdrop?.destroy();
       this.backdrop = drawRiftBackdrop(this, w, h);
@@ -66,57 +73,22 @@ export class BattleScene extends Phaser.Scene {
       const dx = target.x - source.x; const dy = target.y - source.y;
       for (let t = 0.15; t < 0.8; t += 0.09) bg.lineBetween(source.x + dx * t, source.y + dy * t, source.x + dx * (t + 0.04), source.y + dy * (t + 0.04));
     }
+    this.layer.sort('depth');
   }
   private actor(id: string, name: string, x: number, y: number, color: number, hp: number, maxHp: number, enemy: boolean, compact: boolean): void {
     this.positions.set(id, { x, y });
     const body = this.add.container(x, y); this.layer!.add(body);
+    const info = this.add.container(x, y).setDepth(10); this.layer!.add(info);
     if (hp <= 0) body.setAlpha(0.28);
+    if (hp <= 0) info.setAlpha(0.4);
     const g = this.add.graphics(); body.add(g);
     const short = compact;
     const portrait = this.scale.width < 900 && this.scale.height >= 280;
     const selected = this.view!.heroId === id || this.view!.targetId === id;
     if (selected && hp > 0) { g.lineStyle(2, palette.gold); g.strokeEllipse(0, 25, 68, 22); }
-    // Chibi silhouette: large head, small body, distinct equipment.
-    if (id === 'tracer') {
-      g.fillStyle(0xc95168); g.fillTriangle(-9, -4, -40, -9, -24, 24);
-    }
-    if (id === 'weaver') {
-      g.fillStyle(0xddd6f5); g.fillRoundedRect(-23, -28, 46, 34, 13);
-    }
-    g.fillStyle(color); g.fillRoundedRect(-17, -2, 34, 30, 10);
-    g.fillStyle(0x11233d); g.fillRoundedRect(-15, 18, 12, 11, 3); g.fillRoundedRect(3, 18, 12, 11, 3);
-    g.fillStyle(enemy ? color : 0xffe1ba); g.fillCircle(0, -19, enemy && id === 'brute' ? 23 : 19);
-    g.fillStyle(enemy ? 0x423153 : color); g.fillEllipse(0, -30, 39, 18);
-    if (!enemy) {
-      g.fillStyle(id === 'weaver' ? 0xf2e9ff : id === 'guardian' ? 0xd6a366 : id === 'healer' ? 0xa47b55 : 0x643a35);
-      g.fillTriangle(-18, -32, 10, -34, -8, -21);
-      if (id === 'weaver') {
-        g.fillStyle(0x263254); g.fillTriangle(-14, -28, 3, -45, 20, -28);
-        g.fillEllipse(0, -28, 50, 7);
-        g.lineStyle(2, palette.gold); g.lineBetween(-13, -29, 16, -29);
-      }
-    }
-    if (enemy) {
-      g.fillTriangle(-19, -24, -27, -46, -5, -31); g.fillTriangle(19, -24, 27, -46, 5, -31);
-    }
-    g.fillStyle(enemy ? 0xfed5ff : 0x24314c); g.fillCircle(-6, -18, 2); g.fillCircle(6, -18, 2);
-    if (id === 'guardian') {
-      g.fillStyle(0xcee9ff); g.fillRoundedRect(-29, -1, 19, 28, 5);
-      g.lineStyle(2, palette.gold); g.strokeRoundedRect(-29, -1, 19, 28, 5); g.lineBetween(-20, 1, -20, 22);
-    } else if (id === 'tracer' || id === 'raider') {
-      g.lineStyle(4, palette.gold); g.lineBetween(19, 16, 34, -14);
-    } else {
-      g.lineStyle(3, enemy ? 0x6b507f : palette.gold); g.lineBetween(24, 27, 24, -28);
-      g.fillStyle(color); g.fillCircle(24, -31, 6);
-      if (id === 'healer') { g.lineStyle(3, palette.gold); g.lineBetween(17, -32, 31, -32); g.lineBetween(24, -39, 24, -25); }
-    }
-    if (id === 'brute') {
-      g.fillStyle(palette.corruption, 0.5);
-      g.fillTriangle(-15, -3, -34, -13, -28, 18);
-      g.fillTriangle(15, -3, 34, -13, 28, 18);
-      g.setScale(short ? 0.86 : 1.9);
-    }
-    if (id !== 'brute') g.setScale(short ? 0.68 : enemy ? 1.05 : 1.25);
+    const size = short ? id === 'brute' ? 110 : 80 : id === 'brute' ? 215 : enemy ? 142 : 145;
+    const sprite = this.add.image(0, short ? 15 : id === 'brute' ? 55 : 39, 'battle-units', actorFrames[id]!).setOrigin(0.5, 1).setDisplaySize(size, size);
+    body.add(sprite);
     const label = this.add.text(0, short ? 20 : enemy && id === 'brute' ? 70 : 51, name, { fontFamily: thaiFont, fontSize: compact ? '12px' : '14px', color: '#f0f5ff', stroke: '#101c36', strokeThickness: 3 }).setOrigin(0.5);
     // Hero HP sits beside the silhouette so the next hero cannot cover it.
     const hpX = enemy ? 0 : short ? portrait ? 0 : 42 : 90;
@@ -126,17 +98,19 @@ export class BattleScene extends Phaser.Scene {
     const bar = this.add.graphics(); bar.fillStyle(0x101c36); bar.fillRoundedRect(hpX - barWidth / 2, barY, barWidth, 5, 2);
     bar.fillStyle(color); bar.fillRoundedRect(hpX - barWidth / 2, barY, barWidth * hp / maxHp, 5, 2);
     const hpLabel = this.add.text(hpX, hpY, `${hp} / ${maxHp}`, { fontFamily: thaiFont, fontSize: '10px', color: '#d4e6f7', stroke: '#101c36', strokeThickness: 3 }).setOrigin(0.5);
-    body.add([label, bar, hpLabel]);
-    const hit = this.add.zone(0, 0, 78, short ? 64 : 100).setInteractive({ useHandCursor: true });
+    // Compact hero cards carry exact HP; keep canvas rows clear for artwork.
+    hpLabel.setVisible(enemy || !portrait);
+    info.add([label, bar, hpLabel]);
+    const hit = this.add.zone(0, sprite.y, Math.max(64, size * 0.7), size).setOrigin(0.5, 1).setInteractive({ useHandCursor: true });
     hit.on('pointerdown', () => this.choose(id)); body.add(hit);
     const status = this.view!.state.enemies.find(e => e.id === id);
     if (status && (status.markedUntil > this.view!.state.beat)) {
       const icon = this.add.text(-30, -20, '◇', { fontFamily: thaiFont, fontSize: '18px', color: '#e6b7ff', stroke: '#101c36', strokeThickness: 3 }).setOrigin(0.5);
-      body.add(icon);
+      info.add(icon);
     }
     if (this.view!.state.intent?.sourceId === id && hp > 0) {
       const warning = this.add.text(35, -38, '◆', { fontFamily: thaiFont, fontSize: '15px', color: '#fdbdcf' }).setOrigin(0.5);
-      body.add(warning);
+      info.add(warning);
     }
   }
   play(events: BattleEvent[]): void {

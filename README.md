@@ -93,7 +93,7 @@ The former Crystal, Redirect and Counter systems are removed. No MP, initiative 
 
 Raider has 64 HP, Brute 164. The repeating intent pattern is physical Slash 12 → energy Bolt 28 → physical Slash 12 → physical Crush 26 → energy Shadow Knife 14 → energy Bolt 28. Dead sources are skipped when announcing the next event. Forecasts assume currently living actors remain alive; the preview shows the exact next event after the proposed decision.
 
-The full-width field and lower command dock follow the supplied Brave Frontier layout reference. Front/back now describe actual physical targeting rules. Four original hero portraits select the actor, and only that class's three commands appear. Phones use a compact 2×2 roster. Preview is a native dialog on all screen sizes; results scroll independently of confirmation/cancel. Closing, backdrop taps and Esc cancel without advancing; rotation preserves a pending choice. After confirmation, selection advances to the next living member in roster order; reload reconstructs that selection from the last committed command. Battle outcomes keep the final actor selected. Help, forecasts and history remain disclosures below the dock. Thai fonts use installed system fallbacks.
+The full-width field and lower command dock follow the supplied Brave Frontier layout reference. Front/back now describe actual physical targeting rules. Four original hero portraits select the actor, and only that class's three commands appear. The modern classic-JRPG HUD places two true enemy HP bars and the frozen intent below the illustrated battlefield. Four illustrated hero cards use a 2×2 grid with class/lane, HP/barrier and actual skill readiness. Phones stack the card grid above the three skill buttons and portrait targets; desktop places team and commands beside each other. Expanded tactics and history sit inside the help disclosure. Preview is a native dialog on all screen sizes; results scroll independently of confirmation/cancel. Closing, backdrop taps and Esc cancel without advancing; rotation preserves a pending choice. After confirmation, selection advances to the next living member in roster order; reload reconstructs that selection from the last committed command. Battle outcomes keep the final actor selected. Help, forecasts and history remain disclosures below the dock. Thai fonts use installed system fallbacks.
 
 Both tested basic-attack priorities lose. An 11-beat offensive plan and a 16-beat defensive plan each use all four classes and win with all four standing. These are regression examples, not a claim of final balance; see [balance validation](docs/BALANCE_VALIDATION.md).
 
@@ -112,7 +112,7 @@ src/game/visuals/         Renderer palette tokens
 src/ui/                  Accessible DOM controls, preview/log, responsive CSS
 src/platform/            Safe browser-storage adapter
 tests/                   Rules and save tests; browser/ contains Playwright gameplay tests
-public/assets/           Original favicon and six SVG HUD portraits; characters/ruins use runtime geometry
+public/assets/           Original favicon and three generated WebP art files (unit/portrait atlases and ruins backdrop)
 docs/                    Direction, integration plan, roadmap, validation
 .github/workflows/       Quality CI and user-authorized GitHub Pages build/test/deployment
 ```
@@ -121,11 +121,11 @@ docs/                    Direction, integration plan, roadmap, validation
 
 ## Current limitations
 
-- One encounter, original geometric chibi placeholders, original SVG HUD portraits and lightweight VFX. No final art, music, or sound.
+- One encounter with original generated chibi artwork, six portrait/unit frames, a static ruin backdrop and lightweight VFX. No music, sound or animated character states. WebP art is approximately 1.53 MiB combined; original concept/reference screenshots are not runtime UI.
 - The supplied Battle (C) and World Exploration (B) images guide the original ruins/waterfalls, blue/gold lighting and navy/gold HUD foundation. Key Art (A) has not been supplied. Reference images are not committed or used as production assets.
 - World exploration, progression, equipment, backend, multiplayer, billing, online challenges, and Capacitor are future work, not implemented.
 - Full Phaser runtime is approximately 1.37 MB minified / 357 KB gzip; Vite reports a large-chunk warning. Optimization needs measurement before a mobile release.
 - Automated browser validation is Chromium on Linux with software WebGL and emulated touch viewports. This is **not** real Windows/Android/iOS device or Safari validation.
 - Local save is tied to this origin and encounter content version. Increment the content version when rules change.
 
-See [validation](docs/VALIDATION.md), [gameplay direction](docs/GAMEPLAY_DIRECTION.md), [art direction](docs/ART_DIRECTION.md), and [roadmap](docs/DEVELOPMENT_ROADMAP.md).
+See [modern HUD spec](docs/UI_DESIGN.md), [validation](docs/VALIDATION.md), [gameplay direction](docs/GAMEPLAY_DIRECTION.md), [art direction](docs/ART_DIRECTION.md), and [roadmap](docs/DEVELOPMENT_ROADMAP.md).

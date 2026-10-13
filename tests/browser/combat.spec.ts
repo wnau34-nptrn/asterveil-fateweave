@@ -26,6 +26,29 @@ async function reachable(page: Page, selector: string): Promise<void> {
   }, viewport)).toEqual({ touchSize: true, inViewport: true, hit: true });
 }
 
+test('Start waits for the production unit atlas before enabling battle input', async ({ page }) => {
+  let release!: () => void;
+  let requested = false;
+  const gate = new Promise<void>(resolve => { release = resolve; });
+  await page.route('**/assets/art/units.webp', async route => {
+    requested = true; await gate; await route.continue();
+  });
+  const errors: string[] = []; page.on('pageerror', e => errors.push(e.message));
+  page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
+  try {
+    await page.goto('./', { waitUntil: 'domcontentloaded' });
+    await expect.poll(() => requested).toBe(true);
+    await expect(page.locator('#start')).toBeDisabled();
+    await expect(page.locator('#start')).toContainText('กำลังเตรียมสนาม');
+    await expect(page.locator('#hero-tracer')).toBeDisabled();
+    release();
+    await expect(page.locator('#start')).toBeEnabled(); await page.locator('#start').click();
+    await expect(page.locator('#hero-tracer')).toBeEnabled();
+    await page.locator('#target-raider').click(); await expect(page.locator('#confirm')).toBeVisible();
+    await page.locator('#cancel').click(); expect(errors).toEqual([]);
+  } finally { release(); }
+});
+
 for (const viewport of [{ width: 1366, height: 1000 }, { width: 390, height: 844 }]) {
   test(`auto-select next hero at ${viewport.width}px, wrap, cancel and reload`, async ({ browser }, info) => {
     const context = await browser.newContext({ viewport, hasTouch: true, reducedMotion: 'reduce' });
@@ -44,7 +67,7 @@ for (const viewport of [{ width: 1366, height: 1000 }, { width: 390, height: 844
       await expect(page.locator('#selected-hero')).toContainText(role!);
       await expect(page.locator(`#action-${skill}`)).toBeVisible();
       await expect(page.locator('#action-attack')).toHaveAttribute('aria-pressed', 'true');
-      await expect(page.locator('.hero-slot img')).toHaveAttribute('src', new RegExp(`${next}\\.svg$`));
+      await expect(page.locator('.hero-slot .portrait')).toHaveAttribute('data-actor', next!);
       await expect(page.locator('#mobile-preview')).not.toBeVisible();
       if (next === 'healer') {
         await page.reload(); await expect(page.locator('#hero-healer')).toHaveAttribute('aria-pressed', 'true');
@@ -107,10 +130,47 @@ test('four classes, 2 front/2 back, three owned commands each, and no Crystal in
   expect(errors).toEqual([]);
 });
 
+test('modern phone HUD keeps enemy HP and every class skill status in sync', async ({ browser }, info) => {
+  const context = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true, reducedMotion: 'reduce' });
+  const page = await context.newPage(); const errors = await start(page);
+  await expect(page.locator('#hero-healer [data-skill="heal"]')).toContainText('เลือดเต็ม');
+  const cards = await page.locator('.hero-card').evaluateAll(elements => elements.map(el => {
+    const r = el.getBoundingClientRect(); return { x: r.x, y: r.y, width: r.width };
+  }));
+  expect(cards[0]!.y).toBe(cards[1]!.y); expect(cards[0]!.x).toBeLessThan(cards[1]!.x);
+  expect(cards[2]!.y).toBeGreaterThan(cards[0]!.y); expect(cards[2]!.x).toBe(cards[0]!.x);
+  await expect.poll(() => page.locator('.hero-card .portrait img').evaluateAll(images => images.every(img => (img as HTMLImageElement).complete && (img as HTMLImageElement).naturalWidth === 1024))).toBe(true);
+  const arena = (await page.locator('.arena').boundingBox())!;
+  const enemies = (await page.locator('#enemy-roster').boundingBox())!;
+  const intent = (await page.locator('#intent').boundingBox())!;
+  expect(enemies.y).toBeGreaterThanOrEqual(arena.y + arena.height);
+  expect(intent.y).toBeGreaterThan(enemies.y); expect(cards[0]!.y).toBeGreaterThan(intent.y);
+  await choose(page, 'weaver', 'bolt', 'brute'); await commit(page);
+  await expect(page.locator('[data-enemy="brute"]')).toContainText('138 / 164');
+  await expect(page.locator('#hero-weaver [data-skill="bolt"]')).toContainText('รอ 2 จังหวะ');
+  await expect(page.locator('#hero-healer [data-skill="heal"]')).toContainText('พร้อมใช้');
+  await expect(page.locator('#hero-tracer')).toContainText('44 / 56');
+  await expect(page.locator('#hero-healer')).toHaveAttribute('aria-pressed', 'true');
+  await choose(page, 'weaver', 'ward', 'guardian'); await commit(page);
+  await expect(page.locator('#hero-guardian .barrier-info')).toHaveText('โล่ 14');
+  expect(await page.locator('#hero-guardian .barrier-info').evaluate(el => {
+    const r = el.getBoundingClientRect(); const card = el.closest('.hero-card')!.getBoundingClientRect();
+    return r.x >= card.x && r.right <= card.right && r.bottom <= card.bottom;
+  })).toBe(true);
+  await page.locator('#hero-weaver').tap();
+  await expect(page.locator('#action-bolt')).toBeDisabled();
+  await page.locator('.help-panel > summary').tap();
+  await expect(page.locator('#formation-info')).toBeVisible();
+  await page.locator('.help-panel > summary').tap();
+  await page.screenshot({ path: info.outputPath('modern-hud-cooldown.png'), fullPage: true });
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  expect(errors).toEqual([]); await context.close();
+});
+
 test('real canvas selection, Guard preview/cancel/Escape, save, reload and restart', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'no-preference' }); const errors = await start(page);
   const canvas = page.locator('#game canvas'); const b = (await canvas.boundingBox())!;
-  await canvas.click({ position: { x:b.width*.31, y:135+(b.height-170)*.20 } });
+  await canvas.click({ position: { x:b.width*.31, y:135+(b.height-170)*.20-70 } });
   await expect(page.locator('#hero-guardian')).toHaveAttribute('aria-pressed','true');
   await page.locator('#action-guard').click();
   await canvas.click({ position: { x:b.width*.31, y:135+(b.height-170)*.82 } });
@@ -212,7 +272,7 @@ test('four-class mobile battle, back-row canvas selection and rotation keep pend
   const context=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true,reducedMotion:'reduce'});
   const page=await context.newPage();const errors=await start(page);
   const canvas=page.locator('#game canvas');const b=(await canvas.boundingBox())!;
-  await canvas.tap({position:{x:b.width*.12,y:80+(b.height-200)*.82}});
+  await canvas.tap({position:{x:b.width*.12,y:110+(b.height-130)*.82-45}});
   await expect(page.locator('#hero-healer')).toHaveAttribute('aria-pressed','true');
   await choose(page,'tracer','mark','brute');
   await page.setViewportSize({width:844,height:390});await reachable(page,'#confirm');
@@ -227,7 +287,7 @@ test('four-class mobile battle, back-row canvas selection and rotation keep pend
 });
 
 test('old three-member saves restart safely, and denied storage stays playable',async({page})=>{
-  await page.addInitScript(()=>localStorage.setItem('asterveil.fateweave.battle.v1',JSON.stringify({version:1,encounterId:'crystal-rift',contentVersion:2,commands:[{beat:1,heroId:'tracer',action:'mark',targetId:'brute'}]})));
+  await page.addInitScript(()=>{try{localStorage.setItem('asterveil.fateweave.battle.v1',JSON.stringify({version:1,encounterId:'crystal-rift',contentVersion:2,commands:[{beat:1,heroId:'tracer',action:'mark',targetId:'brute'}]}));}catch{/* The denied-storage variant may run its init script first. */}});
   const errors=await start(page);await expect(page.locator('.hero-card')).toHaveCount(4);await expect(page.locator('#beat-status')).toContainText('จังหวะ 1');
   await page.addInitScript(()=>Object.defineProperty(window,'localStorage',{get:()=>{throw new Error('Denied');}}));
   await page.reload();await page.locator('#start').click();await choose(page,'guardian','guard','tracer');await commit(page);
