@@ -1,44 +1,57 @@
-# Tactical balance update — content version 2
+# Four-class balance validation — encounter version 3
 
-Player feedback: the initial encounter rewarded attack spam and did not give enough reason to read intent or use the other actions. This update changes two prototype values, not the rules architecture:
+The user requested removing the Crystal system and replacing the party with two front and two back heroes, each with its own class and skills. The encounter now uses class cooldowns, interception, physical interruption, Mark follow-ups, ally barriers and healing. These are prototype values, not final progression or exhaustive balance.
 
-| Value | Before | Now | Decision consequence |
-|---|---|---|---|
-| Rift Bolt | 18 damage | 30 damage | Repeated Brute energy hits can down the Guardian; source priority, interception and redirection matter |
-| Tracer Mark/Exposed bonus | +6 | +22 (38 total) | A two-action Mark/Attack investment beats two unmarked hits; a full-HP Raider can fall in two beats |
+## Reproducible policies
 
-Basic attacks and HP, Guard 65%, Counter cap/cost, Crystal one charge/+8 barrier and bounded reaction rules are unchanged. The current intent is still frozen. The next two planned intents assume actors survive and use the same announcement rules; preview shows the exact next announced intent after the complete proposed beat. Lethal warnings use authoritative HP/barrier and preview results. Party intact / Costly victory summarizes existing state, with no score currency, reward or new victory condition.
+`tests/fixtures/party-routes.ts` owns the winning command sequences. `tests/balance.test.ts` checks outcomes, whole-party survival, exact preview equality and deterministic replay. Browser tests execute both routes through the actual controls, and separately play both basic-attack policies to defeat.
 
-## Reproducible strategy comparisons
+| Strategy | Decisions | Outcome | Survivors | Final HP [Aegis, Lyra, Eira, Seren] |
+|---|---|---|---|---|
+| Basic attacks, Raider first, highest-damage living hero | 11 | Defeat | 0 | [0, 0, 0, 0] |
+| Basic attacks, Brute first, highest-damage living hero | 15 | Defeat | 0 | [0, 0, 0, 0] |
+| Offensive class-skill route | 11 | Victory | 4 | [62, 42, 2, 28] |
+| Defensive interception/barrier/healing route | 16 | Victory | 4 | [18, 32, 26, 18] |
 
-Every route runs through the authoritative resolver from the normal initial state. `tests/balance.test.ts` checks replay and preview equality as well as outcomes. All winning routes below use nine decisions.
+### Offensive route
 
-| Strategy | Outcome | Living heroes | HP [Aegis, Lyra, Eira] |
-|---|---|---|---|
-| Attack Raider first; highest-damage living hero | Defeat | 0 | [0, 0, 0] |
-| Attack Brute first, then Raider; Lyra then Eira | Costly victory | 2 | [34, 0, 24] |
-| Guard + Mark, no Redirect | Party intact | 3 | [49, 4, 24] |
-| Crystal defense | Party intact | 3 | [53, 3, 32] plus Aegis's 8 barrier |
-| Marked-enemy Redirect offense | Party intact | 3 | [45, 17, 24] |
+1. Lyra Mark Brute
+2. Lyra Precision Strike Brute
+3. Eira Arcane Bolt Brute
+4. Aegis Shield Bash Brute
+5. Lyra Precision Strike Brute
+6. Seren Prayer Party
+7. Aegis Shield Bash Brute
+8. Lyra Precision Strike Brute
+9. Lyra Mark Raider
+10. Eira Arcane Bolt Raider
+11. Lyra Precision Strike Raider
 
-These are verified examples, not exhaustive optimal strategies or a claim of final balance. A player can still choose an offensive victory; keeping the entire party requires a different plan. Crystal and enemy redirection offer alternatives and neither is compulsory.
+Prayer before beat 6's energy hit keeps Eira alive; damage skills rotate through cooldowns. Final party HP is 134. Shield Bash on an energy beat deals damage without interrupting the Bolt. Killing the announced source still cancels its attack normally.
 
-### Guard/Mark without Redirect
+### Defensive route
 
-Lyra Mark Brute → Aegis Guard Aegis → Lyra Attack Brute → Lyra Mark Brute → Lyra Attack Brute → Lyra Attack Brute → Lyra Mark Raider → Aegis Guard Lyra → Lyra Attack Raider.
+1. Lyra Mark Brute
+2. Aegis Guard Eira
+3. Lyra Precision Strike Brute
+4. Aegis Guard Lyra
+5. Eira Arcane Bolt Brute
+6. Eira Ward Eira
+7. Aegis Shield Bash Raider
+8. Seren Heal Aegis
+9. Lyra Precision Strike Brute
+10. Aegis Shield Bash Brute
+11. Eira Arcane Bolt Brute
+12. Aegis Guard Eira
+13. Lyra Precision Strike Brute
+14. Seren Heal Eira
+15. Lyra Mark Raider
+16. Lyra Precision Strike Raider
 
-### Crystal defense
+Interceptions redirect reduced damage into the durable Knight; Ward absorbs before HP, while Heal restores selected allies before the enemy responds. Physical Shield Bash prevents the corresponding announced hit. This longer example wins with 94 party HP and a different health distribution. It demonstrates another viable policy rather than promising that defense always yields more total HP.
 
-Lyra Mark Brute → Aegis Guard Aegis → Lyra Attack Brute → Lyra Mark Brute → Lyra Attack Brute → Eira Redirect Crystal → Lyra Attack Brute → Lyra Mark Raider → Lyra Attack Raider.
+## Bounds and publication
 
-At beat 6, attacking can cancel the Bolt by killing Brute, while Crystal absorbs the Bolt and prepares barriers for the following Raider attacks. The defensive plan preserves Lyra without a later Guard; this is a real tradeoff using existing rules.
+Basic-attack results describe two concrete tested policies, not an exhaustive proof that every possible Attack-only sequence loses. Human playtesting and further encounters remain future work. Combat has no random damage or timing advantage.
 
-### Marked-enemy Redirect
-
-Lyra Mark Brute → Aegis Guard Aegis → Lyra Attack Brute → Aegis Guard Lyra → Lyra Mark Brute → Eira Redirect Brute → Lyra Attack Brute → Lyra Mark Raider → Lyra Attack Raider.
-
-Counter preparation and an unconsumed Mark enable the 30-damage reflection. Exposed then boosts Lyra's follow-up. This route leaves the Crystal unused.
-
-## Save compatibility and publication
-
-Encounter version increments from 1 to 2. Version-1 command logs are not replayed under the new damage values; the game starts a fresh encounter safely. The Pages workflow builds and runs the full production browser suite before deployment. See `VALIDATION.md` for actual check results and browser/device limits.
+The encounter is `veil-siege`, version 3. Old three-member saves restart safely. Current automated evidence is 32 Node tests and 14 production browser tests; `VALIDATION.md` records the checks and device limits. GitHub Pages deploys only after the full production suite passes.

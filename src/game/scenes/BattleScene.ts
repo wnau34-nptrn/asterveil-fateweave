@@ -46,8 +46,9 @@ export class BattleScene extends Phaser.Scene {
       bg.lineStyle(1, palette.gold, 0.25); bg.strokeEllipse(x, y + 9, rx * 2 - 6, short ? 10 : 20);
     };
     this.encounter.heroes.forEach((hero, i) => {
-      const x = w * (hero.id === 'weaver' ? (compact ? 0.12 : 0.14) : (compact ? 0.34 : 0.31));
-      const ratio = hero.id === 'guardian' ? 0.20 : hero.id === 'tracer' ? 0.82 : 0.51;
+      const x = w * (hero.lane === 'back' ? (compact ? 0.12 : 0.14) : (compact ? 0.34 : 0.31));
+      const laneIndex = this.encounter.heroes.filter(h => h.lane === hero.lane).findIndex(h => h.id === hero.id);
+      const ratio = laneIndex === 0 ? 0.20 : 0.82;
       const y = stageTop + stageHeight * ratio;
       platform(x, y + (short ? 20 : 39), short ? 32 : 75);
       this.actor(hero.id, actorName(hero.id, this.encounter), x, y, hero.color, this.view!.state.heroes[i]!.hp, hero.maxHp, false, short);
@@ -58,32 +59,10 @@ export class BattleScene extends Phaser.Scene {
       platform(x, y + (short ? 21 : enemy.id === 'brute' ? 55 : 35), short ? 38 : enemy.id === 'brute' ? 108 : 72);
       this.actor(enemy.id, actorName(enemy.id, this.encounter), x, y, enemy.color, this.view!.state.enemies[i]!.hp, enemy.maxHp, true, short);
     });
-    const cx = w * 0.54; const cy = stageTop + stageHeight * 0.52;
-    this.positions.set(this.encounter.crystal.id, { x: cx, y: cy });
-    platform(cx, cy + (short ? 28 : 40), short ? 24 : 50);
-    const crystal = this.add.graphics(); this.layer.add(crystal);
-    const charged = this.view.state.crystal.charges > 0;
-    crystal.fillStyle(charged ? palette.cyan : palette.stone, 0.15); crystal.fillCircle(cx, cy, compact ? 27 : 45);
-    crystal.lineStyle(2, charged ? palette.cyan : palette.mist, 0.8);
-    crystal.fillStyle(charged ? palette.cyan : palette.stone);
-    const crystalHeight = short ? 20 : 28;
-    const points = [[cx, cy - crystalHeight], [cx + 14, cy], [cx, cy + crystalHeight], [cx - 14, cy]].map(([x, y]) => new Phaser.Math.Vector2(x, y));
-    crystal.fillPoints(points, true);
-    crystal.strokePoints(points, true);
-    crystal.lineStyle(1, 0xffffff, 0.65); crystal.lineBetween(cx, cy - 28, cx + 3, cy + 18);
-    crystal.lineStyle(3, palette.gold, charged ? 0.8 : 0.25);
-    crystal.lineBetween(cx - 19, cy - 9, cx - 25, cy + 27);
-    crystal.lineBetween(cx + 19, cy - 9, cx + 25, cy + 27);
-    crystal.strokeEllipse(cx, cy + 30, 53, 15);
-    const crystalLabel = this.add.text(cx - (portrait ? 14 : 0), cy + (short ? 43 : 61), compact ? 'ผลึก' : 'ผลึกพลังงาน', { fontFamily: thaiFont, fontSize: compact ? '12px' : '13px', color: '#9ae7ef', stroke: '#101c36', strokeThickness: 3 }).setOrigin(0.5);
-    this.layer.add(crystalLabel);
-    const hit = this.add.zone(cx, cy, 65, 85).setInteractive({ useHandCursor: true });
-    hit.on('pointerdown', () => this.choose(this.encounter.crystal.id)); this.layer.add(hit);
-    if (this.view.targetId === this.encounter.crystal.id) { crystal.lineStyle(2, palette.gold); crystal.strokeCircle(cx, cy, 33); }
     const intent = this.view.state.intent;
     if (intent) {
       const source = this.positions.get(intent.sourceId)!; const target = this.positions.get(intent.targetId)!;
-      bg.lineStyle(2, intent.redirectable ? palette.corruption : 0xf08da1, 0.4);
+      bg.lineStyle(2, intent.kind === 'energy' ? palette.corruption : 0xf08da1, 0.4);
       const dx = target.x - source.x; const dy = target.y - source.y;
       for (let t = 0.15; t < 0.8; t += 0.09) bg.lineBetween(source.x + dx * t, source.y + dy * t, source.x + dx * (t + 0.04), source.y + dy * (t + 0.04));
     }
@@ -109,7 +88,7 @@ export class BattleScene extends Phaser.Scene {
     g.fillStyle(enemy ? color : 0xffe1ba); g.fillCircle(0, -19, enemy && id === 'brute' ? 23 : 19);
     g.fillStyle(enemy ? 0x423153 : color); g.fillEllipse(0, -30, 39, 18);
     if (!enemy) {
-      g.fillStyle(id === 'weaver' ? 0xf2e9ff : id === 'guardian' ? 0xd6a366 : 0x643a35);
+      g.fillStyle(id === 'weaver' ? 0xf2e9ff : id === 'guardian' ? 0xd6a366 : id === 'healer' ? 0xa47b55 : 0x643a35);
       g.fillTriangle(-18, -32, 10, -34, -8, -21);
       if (id === 'weaver') {
         g.fillStyle(0x263254); g.fillTriangle(-14, -28, 3, -45, 20, -28);
@@ -129,6 +108,7 @@ export class BattleScene extends Phaser.Scene {
     } else {
       g.lineStyle(3, enemy ? 0x6b507f : palette.gold); g.lineBetween(24, 27, 24, -28);
       g.fillStyle(color); g.fillCircle(24, -31, 6);
+      if (id === 'healer') { g.lineStyle(3, palette.gold); g.lineBetween(17, -32, 31, -32); g.lineBetween(24, -39, 24, -25); }
     }
     if (id === 'brute') {
       g.fillStyle(palette.corruption, 0.5);
@@ -150,8 +130,8 @@ export class BattleScene extends Phaser.Scene {
     const hit = this.add.zone(0, 0, 78, short ? 64 : 100).setInteractive({ useHandCursor: true });
     hit.on('pointerdown', () => this.choose(id)); body.add(hit);
     const status = this.view!.state.enemies.find(e => e.id === id);
-    if (status && (status.markedUntil > this.view!.state.beat || status.exposedUntil > this.view!.state.beat)) {
-      const icon = this.add.text(-30, -20, status.markedUntil > this.view!.state.beat ? '◇' : '✧', { fontFamily: thaiFont, fontSize: '18px', color: '#e6b7ff', stroke: '#101c36', strokeThickness: 3 }).setOrigin(0.5);
+    if (status && (status.markedUntil > this.view!.state.beat)) {
+      const icon = this.add.text(-30, -20, '◇', { fontFamily: thaiFont, fontSize: '18px', color: '#e6b7ff', stroke: '#101c36', strokeThickness: 3 }).setOrigin(0.5);
       body.add(icon);
     }
     if (this.view!.state.intent?.sourceId === id && hp > 0) {
@@ -170,7 +150,7 @@ export class BattleScene extends Phaser.Scene {
         const text = this.add.text(position.x, position.y - 20, `−${event.amount}`, { fontFamily: thaiFont, fontSize: '23px', color: '#ffe0a6', stroke: '#101c36', strokeThickness: 4 }).setOrigin(0.5);
         this.tweens.add({ targets: text, y: position.y - 65, alpha: 0, duration: 650, delay: index * 40, onComplete: () => text.destroy() });
       }
-      if (event.type === 'redirect' || event.type === 'barrier') {
+      if (event.type === 'heal' || event.type === 'barrier') {
         const circle = this.add.circle(position.x, position.y, 18).setStrokeStyle(3, palette.cyan);
         this.tweens.add({ targets: circle, scale: 3, alpha: 0, duration: 650, onComplete: () => circle.destroy() });
       }

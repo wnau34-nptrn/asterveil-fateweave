@@ -22,7 +22,7 @@ export function loadBattle(storage: StoragePort | undefined, data: EncounterDefi
     const commands: Command[] = saved.commands.map((value: unknown) => {
       if (!value || typeof value !== 'object' || !('beat' in value) || !Number.isInteger(value.beat) ||
         !('heroId' in value) || typeof value.heroId !== 'string' || !('targetId' in value) || typeof value.targetId !== 'string' ||
-        !('action' in value) || !['attack', 'guard', 'mark', 'redirect'].includes(String(value.action))) throw new Error('Invalid command');
+        !('action' in value) || !Object.hasOwn(data.skills, String(value.action))) throw new Error('Invalid command');
       return { beat: value.beat as number, heroId: value.heroId, targetId: value.targetId, action: value.action as Command['action'] };
     });
     return { state: replay(data, commands), restored: commands.length > 0 };

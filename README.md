@@ -1,6 +1,6 @@
 # Asterveil: Rise Beyond
 
-A small, genuinely playable **Fateweave tactical reaction combat** prototype. This is an independent browser-first project in `wnau34-nptrn/asterveil-fateweave`. The original Godot project is not a dependency and no code, assets, or history are imported from it.
+A small, playable **Fateweave tactical reaction combat** prototype. This is an independent browser-first project in `wnau34-nptrn/asterveil-fateweave`. The original Godot project is not a dependency and no code, assets, or history are imported from it.
 
 ## Play in your browser
 
@@ -67,51 +67,37 @@ npm run test:browser
 
 ## How to play
 
-1. กด **เริ่มต่อสู้** หรือเล่นต่อจากการบันทึกบนเครื่องนี้โดยอัตโนมัติ
-2. อ่านแถบเหนือสนาม: **ศัตรูจะทำอะไรหลังยืนยัน** เล็งใคร พลังโจมตีเท่าไร และเบี่ยงทิศได้หรือไม่ เปิด “ดูแผนโจมตีอีก 2 จังหวะข้างหน้า” เมื่อต้องการวางแผนต่อ
-3. ใช้แผงใต้สนาม: เลือกสมาชิกทีม → คำสั่ง → เป้าหมาย แต่ละฮีโร่แสดงเฉพาะ 2 คำสั่งของตัวเอง คำสั่งที่ใช้ไม่ได้บอกเหตุผลภาษาไทย
-4. หน้าต่างผลล่วงหน้าแยกผล **คำสั่งของคุณ** กับ **ศัตรูและผลต่อทีม** พร้อมเลือด โล่ แต้มเบี่ยงพลัง และการโจมตีถัดไปที่คำนวณจากตัวเลือกจริง หากเพื่อนจะล้มจะมีคำเตือน
-5. กด **ยืนยันคำสั่งนี้** เพื่อเดินจังหวะ หรือ **ยกเลิก** / Esc เพื่อเปลี่ยนใจ การเลือกเป้าหมายยังไม่ออกคำสั่ง
-6. เล่นจน **ชนะแล้ว** หรือ **แพ้แล้ว** เป้าหมายเสริมคือรักษาทีมครบ 3 คน กด **เริ่มใหม่** / **เล่นอีกครั้ง** เพื่อเริ่มใหม่และแทนที่การบันทึกเดิม
+1. กด **เริ่มต่อสู้** หรือเล่นต่อจากเซฟที่รองรับเวอร์ชันปัจจุบัน
+2. อ่านแถบ **ศัตรูจะทำอะไรหลังยืนยัน**: ผู้โจมตี เป้าหมาย ประเภท และความเสียหาย เปิดแผนอีก 2 จังหวะเมื่อต้องการวางแผน
+3. เลือกฮีโร่ → คำสั่ง → เป้าหมาย ทุกคนมีโจมตีพื้นฐานและสกิลเฉพาะ 2 อย่าง ปุ่มแสดงเหตุผลเมื่อใช้ไม่ได้และจำนวนจังหวะที่เหลือของคูลดาวน์
+4. ตรวจผลล่วงหน้า: แยกคำสั่งของคุณกับการตอบโต้ของศัตรู แสดงเลือด/โล่ที่เปลี่ยน คำเตือนเพื่อนล้ม และการโจมตีถัดไปจริง
+5. กด **ยืนยันคำสั่งนี้** เพื่อเดิน 1 จังหวะ หรือ **ยกเลิก** / Esc เพื่อเลือกใหม่ การเลือกเป้าหมายยังไม่ออกคำสั่ง
+6. กำจัดศัตรูทั้งสองโดยมีฮีโร่เหลืออย่างน้อย 1 คน เป้าหมายเสริมคือรอดครบ **4 คน** กด **เล่นอีกครั้ง** เพื่อเริ่มใหม่
 
-| ชื่อในเกม | ความหมาย |
-|---|---|
-| โจมตี / Attack | ทำความเสียหายทันที กำจัดผู้โจมตีได้ก็หยุดการโจมตีของมัน |
-| ตั้งรับ / Guard · เอกิส | รับแทนเพื่อน ลดความเสียหาย 65% รอดแล้วได้ 1 แต้มเบี่ยงพลัง |
-| ติดตรา / Mark · ไลรา | เตรียมศัตรูให้ไลราโจมตี 38 หรือไอราเบี่ยงพลังใส่ จังหวะติดตรายังไม่ทำความเสียหาย |
-| เบี่ยงพลัง / Redirect · ไอรา | ใช้ 1 แต้ม ส่งการโจมตีพลังงานไปยังศัตรูติดตราหรือผลึก |
-| แต้มเบี่ยงพลัง / Counter | ทรัพยากรจากการตั้งรับสำเร็จ เก็บได้ 2 แต้ม |
-| ผลึกพลังงาน / Energy Crystal | ใช้ได้ครั้งเดียว รับการโจมตีพลังงานทั้งหมดแล้วให้โล่ 8 แก่ฮีโร่ที่ยังยืนอยู่ทุกคน |
+### Four classes, front 2 / back 2
 
-หน้าจอใช้รูปแบบสนามเต็มความกว้างและแผงคำสั่งด้านล่างตามภาพอ้างอิงการต่อสู้แนว Brave Frontier ไทม์ไลน์ด้านบนเริ่มจากฮีโร่ที่คุณเลือก ตามด้วยการโจมตีศัตรูที่ประกาศไว้และแผนอีกสองจังหวะ ภาพและเลือดของฮีโร่ที่เลือกอยู่ซ้ายของแผง ปุ่มคำสั่ง/เป้าหมายอยู่กลาง และรูปสมาชิกทีม 3 คนอยู่ขวา มือถือแนวตั้งจัดข้อมูลฮีโร่กับทีมเหนือคำสั่ง ส่วนแนวนอนใช้แผงสามส่วนใต้สนาม
+| Hero / อาชีพ | Lane | HP / basic attack | Two class skills |
+|---|---|---|---|
+| Aegis / เอกิส · อัศวิน | Front | 76 / 10 | ตั้งรับแทน: รับการโจมตีแทนคนที่ศัตรูเล็ง ลดความเสียหาย 65%; กระแทกโล่: 18 และหยุดการโจมตีกายภาพจากเป้าหมายในจังหวะนี้ |
+| Lyra / ไลรา · นักดาบ | Front | 56 / 16 | ติดตรา: 3 จังหวะรวมจังหวะนี้; ฟันเจาะจุด: 28 หรือ 50 เมื่อเป้าหมายติดตรา |
+| Eira / ไอรา · จอมเวท | Back | 48 / 11 | ศรเวท: 26; โล่เวท: โล่ 14 ให้เพื่อน 1 คน |
+| Seren / เซเรน · นักบวช | Back | 46 / 8 | รักษา: ฟื้น 20 ให้เพื่อน 1 คน; พรฟื้นฟู: ฟื้นคนละ 10 ให้ทั้งทีม |
 
-แตะ **วิธีใช้คำสั่ง** เพื่ออ่านรายละเอียด เลือกเป้าหมายแล้วผลล่วงหน้าจะเปิดเป็นหน้าต่างบนทั้งมือถือและคอม เลื่อนอ่านผลได้โดยปุ่ม **ยืนยันคำสั่งนี้** / **ยกเลิก** อยู่กับที่ กดยกเลิก, ✕, พื้นที่นอกหน้าต่าง หรือ Esc เพื่อกลับไปเลือกโดยไม่เดินจังหวะ การหมุนจอจะเก็บตัวเลือกที่ยังไม่ยืนยันไว้ แนวหน้า/แนวหลังเป็นการจัดภาพตัวละคร ทุกคนยังถูกเลือกเป็นเป้าหมายตามการโจมตีที่ประกาศ
+- Physical attacks target a living front hero first; once both front heroes fall, back heroes become eligible. Energy attacks can target the back row. Preferred targets and any fallback are frozen when announced. Killing the announced attacker cancels its event.
+- Guard applies 65% reduction, rounds the remaining damage up, then uses Aegis's barrier before HP. Shield Bash interrupts only the current **physical** attack if its source is the chosen target; an energy attack continues unless its source dies.
+- Mark adds 22 to Lyra's next basic attack (38 total) or Precision Strike (50 total), then is consumed. Other heroes do not consume it. Mark itself deals no damage.
+- Shield Bash, Precision Strike, Arcane Bolt, Ward and Heal have a 3-beat cooldown: used on beat 1, available on beat 4. Prayer has 4 beats. Basic Attack, Guard and Mark have no cooldown. Cooldowns advance with committed battle beats, not time, and survive reload.
+- Ward gives a non-stacking 14-point barrier that persists until absorbed. Healing happens before the enemy response, cannot exceed maximum HP, and never revives downed heroes. A fully healthy target/party cannot be healed.
 
+The former Crystal, Redirect and Counter systems are removed. No MP, initiative queue, reserve switching or movement grid is implemented. There is exactly one manually chosen hero action and at most one frozen enemy response per beat.
 
-ข้อมูลผลึกแสดงใต้สนามเสมอ คำอธิบายละเอียดอยู่ใน **วิธีเล่น** และเหตุการณ์ย้อนหลังอยู่ใน **บันทึกการต่อสู้** หน้าจอใช้ฟอนต์ภาษาไทยที่มีในเครื่อง ไม่โหลดฟอนต์ภายนอก การจัดหน้า/ภาษาไม่เปลี่ยนกฎการต่อสู้หรือเวอร์ชันข้อมูล 2 จึงเล่นต่อจากเซฟเดิมได้
+Raider has 64 HP, Brute 164. The repeating intent pattern is physical Slash 12 → energy Bolt 28 → physical Slash 12 → physical Crush 26 → energy Shadow Knife 14 → energy Bolt 28. Dead sources are skipped when announcing the next event. Forecasts assume currently living actors remain alive; the preview shows the exact next event after the proposed decision.
 
-There is one manually chosen primary action per beat. No timer, QTE, random damage, battle movement, or automatic reaction chain.
+The full-width field and lower command dock follow the supplied Brave Frontier layout reference. Front/back now describe actual physical targeting rules. Four original hero portraits select the actor, and only that class's three commands appear. Phones use a compact 2×2 roster. Preview is a native dialog on all screen sizes; results scroll independently of confirmation/cancel. Closing, backdrop taps and Esc cancel without advancing; rotation preserves a pending choice. Help, forecasts and history remain disclosures below the dock. Thai fonts use installed system fallbacks.
 
-### Prototype rules
+Both tested basic-attack priorities lose. An 11-beat offensive plan and a 16-beat defensive plan each use all four classes and win with all four standing. These are regression examples, not a claim of final balance; see [balance validation](docs/BALANCE_VALIDATION.md).
 
-| Entity/action | Implemented rule |
-|---|---|
-| Aegis / Guardian | 64 HP; Attack 10; Guard |
-| Lyra / Tracer | 44 HP; Attack 16; Mark; +22 against Marked/Exposed enemies (38 damage total), consumes both statuses |
-| Eira / Weaver | 42 HP; Attack 11; Redirect |
-| Veil Raider | 38 HP; physical Slash 9, not redirectable |
-| Rift Brute | 90 HP; energy Rift Bolt 30, redirectable; physical Crushing Blow 22, not redirectable |
-| Guard | Protect the announced target. Aegis intercepts and takes 35% of announced damage, rounded up; existing barrier absorbs afterward. Survive to earn 1 Counter, cap 2. |
-| Mark | One enemy marked for 3 beats including the committed beat. Marking again refreshes duration. |
-| Redirect | Spend 1 Counter; only the current redirectable energy attack. Target a living Marked enemy (including the source) or charged Crystal. |
-| Redirect to enemy | Exact announced damage, consumes Mark, exposes target through the next beat. No additional reaction is triggered. |
-| Energy Crystal | 1 charge. Absorbs the entire redirected energy attack, grants 8 barrier to each living hero. Barrier does not stack and persists until absorbed. |
-
-The encounter intent pattern is Raider Slash → Brute Bolt → Raider Slash → Brute Crush. Dead sources are skipped **when announcing the next event**. If a preferred hero is already down, a living hero is selected at announcement. The displayed event never changes after confirmation; killing its source cancels it.
-
-Try **Guard Lyra on beat 1 → Eira Redirect to Crystal on beat 2** to see a defensive intervention. The balance update makes blind Raider-first attacks lose. An offensive route remains viable by prioritizing Brute, but loses a hero. Guard/Mark, Crystal defense and marked-enemy Redirect each have tested nine-beat routes that keep the whole party standing. Mark is now worth its setup: Mark → Lyra Attack eliminates a full-HP Raider in two beats, while two unmarked attacks leave 6 HP. Crystal is optional; killing a source or intercepting its hit are useful alternatives. See [balance validation](docs/BALANCE_VALIDATION.md) for concrete route comparisons.
-
-Encounter content version is now **2**. Saved version-1 battles start fresh rather than replaying old choices under new damage rules. Refresh the published page and start a new encounter to play the update.
+Encounter ID is **veil-siege**, content version **3**. Old three-member saves restart safely instead of replaying commands under the new party and rules. Refresh the published page to load this update.
 
 ## Architecture
 
@@ -120,13 +106,13 @@ src/core/battle/          Pure serializable state, commands, validation, resolut
 src/core/save/            Versioned command-replay persistence, injected storage port
 src/content/heroes/       Typed hero definitions
 src/content/enemies/      Typed enemy definitions
-src/content/encounters/   Encounter intent pattern, crystal and numeric rules
+src/content/encounters/   Encounter intent pattern, skills, cooldowns and numeric rules
 src/game/scenes/          Thin Phaser rendering/input adapter and short effects
 src/game/visuals/         Renderer palette tokens
 src/ui/                  Accessible DOM controls, preview/log, responsive CSS
 src/platform/            Safe browser-storage adapter
 tests/                   Rules and save tests; browser/ contains Playwright gameplay tests
-public/assets/           Original favicon and five SVG HUD portraits; characters/ruins use runtime geometry
+public/assets/           Original favicon and six SVG HUD portraits; characters/ruins use runtime geometry
 docs/                    Direction, integration plan, roadmap, validation
 .github/workflows/       Quality CI and user-authorized GitHub Pages build/test/deployment
 ```
@@ -136,7 +122,7 @@ docs/                    Direction, integration plan, roadmap, validation
 ## Current limitations
 
 - One encounter, original geometric chibi placeholders, original SVG HUD portraits and lightweight VFX. No final art, music, or sound.
-- The supplied Battle (C) and World Exploration (B) images guide the original ruins/waterfalls, blue/gold Crystal and navy/gold HUD foundation. Key Art (A) has not been supplied. Reference images are not committed or used as production assets.
+- The supplied Battle (C) and World Exploration (B) images guide the original ruins/waterfalls, blue/gold lighting and navy/gold HUD foundation. Key Art (A) has not been supplied. Reference images are not committed or used as production assets.
 - World exploration, progression, equipment, backend, multiplayer, billing, online challenges, and Capacitor are future work, not implemented.
 - Full Phaser runtime is approximately 1.37 MB minified / 357 KB gzip; Vite reports a large-chunk warning. Optimization needs measurement before a mobile release.
 - Automated browser validation is Chromium on Linux with software WebGL and emulated touch viewports. This is **not** real Windows/Android/iOS device or Safari validation.

@@ -1,4 +1,6 @@
-# Prototype validation — 2026-10-12
+# Prototype validation history
+
+Current encounter is version 3 with four classes. Earlier sections below describe previous implementations and their checks; they are historical evidence, not current rules. The latest section records current validation.
 
 ## Environment and installation
 
@@ -139,3 +141,20 @@ Validation passed ESLint, strict typecheck, all 37 Node tests, `build:pages` and
 Inspected desktop and portrait/landscape screenshots for field/controls separation, hero columns, data consistency, and target/HP legibility. Inspection caught overlapping HP/Crystal labels in narrow formations; actors and HP labels were separated. A final 14px adjustment separates the narrow Crystal caption from the Brute caption. The affected narrow-phone, compact-canvas and reference-layout tests were rerun against the final build: **all 3 passed (15.4 seconds)**. Inspected the final narrow screenshot to confirm caption separation.
 
 The tested short-landscape field fits entirely in 844×390. Confirmation/cancel remain inside the viewport, at least 44×44px and physically hit-testable while results scroll independently. Browser tests reported no page exceptions or console errors. Evidence remains Linux Chromium/software WebGL with emulated touch; real devices, Safari and physical notch behavior are unverified. Characters and portraits are original prototype artwork, not the reference's finished illustrations. The non-fatal Phaser bundle warning remains.
+
+
+## Four classes, front 2 / back 2 — 2026-10-13
+
+Removed Crystal, Redirect, Counter and Exposed from authoritative state, actions, render/input and UI. Added front Knight/Duelist and back Mage/Priest, each with Attack and two owned skills. Formation now governs physical targeting; energy reaches back heroes. Class skills implement physical interruption, exact-beat cooldowns, non-stacking barriers and bounded pre-response healing without revival. Encounter ID/version change to `veil-siege` / 3 rejects older three-member saves. Cooldowns are reconstructed by command replay.
+
+Local checks passed strict typecheck, ESLint, all **32 Node tests across 3 files**, `build:pages`, and `git diff --check`. All **14 production browser tests passed (2.4 minutes)** against `/asterveil-fateweave/`:
+
+- Four classes, actual lane/roster data, three owned commands per class and absence of Crystal/resource controls.
+- Actual canvas selection, Guard, exact previews, cancel/Escape/focus return, saved reload and restart.
+- Mage cooldown restoration and exact availability, Ward absorbing a same-beat hit, bounded Heal, and multi-ally Prayer before the enemy response.
+- Offensive 11-beat and defensive 16-beat routes through real controls, each preserving 4/4 heroes with respectively 134 and 94 HP. Both tested basic-attack priorities reach defeat.
+- Touch controls and confirmation at 320×568, 390×844, 600×800 and 844×390, including 44px hit areas, center-point reachability, disabled cooldowns, scrolling preview footers and no horizontal overflow.
+- A full phone victory, selection of the bottom back-row Priest on the actual canvas, and pending-command preservation through portrait/landscape/desktop rotation.
+- Incompatible old saves start fresh; denied browser storage leaves play functional.
+
+Inspected actual desktop, narrow portrait, short landscape, Priest party-healing preview and four-survivor victory screenshots. The scene shows two heroes in each lane, distinct green Priest art and six original SVG portraits; the phone roster is 2×2. Confirmation/cancel remain separate from independently scrolling results. Browser tests report no page exceptions or runtime console errors. Evidence is Linux Chromium with software WebGL and emulated touch, not real Android/iOS or Safari. The existing non-fatal Phaser bundle-size warning remains.

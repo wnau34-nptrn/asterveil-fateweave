@@ -4,7 +4,7 @@ Only milestone 1 is implemented in this change. All later milestones are proposa
 
 | Milestone | Status | Deliverable / exit criteria |
 |---|---|---|
-| 1. Initial Combat Prototype | Implemented | Independent Phaser 4 + TypeScript app; three heroes/two enemies; deterministic Attack/Guard/Mark/Redirect, Crystal, preview, outcomes, restart, replay saves, automated tests and CI |
+| 1. Initial Combat Prototype | Implemented | Independent Phaser 4 + TypeScript app; four class heroes (2 Front / 2 Back)/two enemies; deterministic class skills, cooldowns, physical screening, barriers/healing, preview, outcomes, restart, replay saves, automated tests and CI |
 | 2. Combat Refinement | Proposed next | Human feedback and balance tuning; clearer intent teaching; additional data-driven encounter; approved visual-reference review; real Android/iOS Safari checks |
 | 3. World Exploration Implementation | Proposed | Large 2D square-tile Open Board; free four-direction one-tile hops; optional Auto-Hop; fog, Threat, Veil Surge, Danger Zones, Camps and Events after numerical rules are approved |
 | 4. Combat + World Integration | Proposed | Enter battle from an encounter request; return typed outcomes into expedition state and resume exploration; versioned combined save |

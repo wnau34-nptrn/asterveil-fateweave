@@ -1,11 +1,11 @@
 import Phaser from 'phaser';
-import { crystalRift } from './content/encounters/crystal-rift';
+import { veilSiege } from './content/encounters/veil-siege';
 import { BattleScene } from './game/scenes/BattleScene';
 import { BattleUI } from './ui/battle-ui';
 import './ui/styles.css';
 
-const ui = new BattleUI(document.querySelector<HTMLElement>('#app')!, crystalRift);
-const scene = new BattleScene(crystalRift, id => ui.choose(id));
+const ui = new BattleUI(document.querySelector<HTMLElement>('#app')!, veilSiege);
+const scene = new BattleScene(veilSiege, id => ui.choose(id));
 ui.attach(scene);
 new Phaser.Game({
   type: Phaser.AUTO,

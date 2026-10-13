@@ -1,408 +1,165 @@
 import { expect, test, type Page } from '@playwright/test';
-
+import { offensive, defensive } from '../fixtures/party-routes';
 async function start(page: Page): Promise<string[]> {
-  const errors: string[] = [];
-  page.on('pageerror', e => errors.push(e.message));
+  const errors: string[] = []; page.on('pageerror', e => errors.push(e.message));
   page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
-  await page.goto('./');
-  await expect(page.locator('#game canvas')).toBeVisible();
-  await page.getByRole('button', { name: 'เริ่มต่อสู้ →' }).click();
-  return errors;
-}
-async function commit(page: Page): Promise<void> {
-  await page.locator('#confirm').click();
-  await expect(page.locator('#beat-status')).not.toContainText('กำลังแสดงผล');
+  await page.goto('./'); await expect(page.locator('#game canvas')).toBeVisible();
+  await page.locator('#start').click(); return errors;
 }
 async function choose(page: Page, hero: string, action: string, target: string): Promise<void> {
-  await page.locator(`#hero-${hero}`).click();
-  await page.locator(`#action-${action}`).click();
-  await page.locator(`#target-${target}`).click();
+  await page.locator(`#hero-${hero}`).click(); await page.locator(`#action-${action}`).click(); await page.locator(`#target-${target}`).click();
 }
-
-test('real canvas, cancel, Guard, crystal Redirect, reload, restart and keyboard', async ({ page }, info) => {
-  await page.emulateMedia({ reducedMotion: 'no-preference' });
-  const errors = await start(page);
-  const arena = await page.locator('#game canvas').boundingBox();
-  expect(arena).not.toBeNull();
-  await page.locator('#game canvas').click({ position: { x: arena!.width * 0.31, y: 135 + (arena!.height - 170) * 0.20 } });
-  await expect(page.locator('#hero-guardian')).toHaveAttribute('aria-pressed', 'true');
-  await page.locator('#action-guard').click();
-  await page.locator('#game canvas').click({ position: { x: arena!.width * 0.31, y: 135 + (arena!.height - 170) * 0.82 } });
-  await expect(page.locator('#beat-status')).toContainText('จังหวะ 1');
-  await expect(page.locator('#preview')).toContainText('เอกิส เสียเลือด 4');
-  await page.locator('#cancel').click();
-  await expect(page.locator('#confirm')).toHaveCount(0);
-  await expect(page.locator('#beat-status')).toContainText('จังหวะ 1');
-  await page.locator('#target-tracer').click();
-  await page.keyboard.press('Escape');
-  await expect(page.locator('#confirm')).toHaveCount(0);
-  await page.locator('#target-tracer').click(); await commit(page);
-  await expect(page.locator('#hero-guardian')).toContainText('60 / 64');
-  await expect(page.locator('#hero-tracer')).toContainText('44 / 44');
-  await choose(page, 'weaver', 'redirect', 'energy-crystal');
-  await expect(page.locator('#target-brute')).toBeDisabled();
-  await expect(page.locator('#preview')).toContainText('ผลึกรับการโจมตี 30 ทั้งหมด');
-  await page.screenshot({ path: info.outputPath('desktop-preview.png'), fullPage: true });
-  await commit(page);
-  await expect(page.locator('#hero-weaver')).toContainText('โล่ 8');
-  await expect(page.locator('#crystal-info')).toContainText('ใช้ไปแล้ว');
-  await page.reload();
-  await expect(page.locator('#beat-status')).toContainText('จังหวะ 3');
-  await expect(page.locator('#hero-weaver')).toContainText('โล่ 8');
-  await expect(page.locator('#start')).toHaveCount(0);
-  await page.locator('#restart').click();
-  await expect(page.locator('#beat-status')).toContainText('จังหวะ 1');
-  await expect(page.locator('#hero-guardian')).toContainText('64 / 64');
-  await page.screenshot({ path: info.outputPath('desktop-battle.png'), fullPage: true });
-  expect(errors).toEqual([]);
-});
-
-test('Mark and Redirect to a marked enemy are playable through actual controls', async ({ page }) => {
-  const errors = await start(page);
-  await choose(page, 'guardian', 'guard', 'tracer'); await commit(page);
-  await choose(page, 'tracer', 'mark', 'brute'); await commit(page);
-  await choose(page, 'guardian', 'guard', 'weaver'); await commit(page);
-  // Beat 4 is physical: transparent restriction, no universal Redirect.
-  await page.locator('#hero-weaver').click();
-  await expect(page.locator('#action-redirect')).toBeDisabled();
-  await expect(page.locator('#reason-redirect')).toContainText('พลังงาน');
-  await choose(page, 'tracer', 'mark', 'brute'); await commit(page);
-  await choose(page, 'guardian', 'attack', 'brute'); await commit(page);
-  await choose(page, 'weaver', 'redirect', 'brute');
-  await expect(page.locator('#preview')).toContainText('เสียเลือด 30');
-  await commit(page);
-  await expect(page.locator('#target-brute')).toContainText('50 / 90');
-  await expect(page.locator('#target-brute')).toContainText('เปิดช่องให้ไลรา');
-  expect(errors).toEqual([]);
-});
-
-test('attack-only Brute priority earns a costly Victory and warns of a lethal choice', async ({ page }, info) => {
-  const errors = await start(page);
-  for (let beat = 0; beat < 25; beat++) {
-    if (await page.getByRole('heading', { name: 'ชนะแล้ว', exact: true }).count()) break;
-    let hero = 'guardian';
-    for (const id of ['tracer', 'weaver', 'guardian']) if (await page.locator(`#hero-${id}`).isEnabled()) { hero = id; break; }
-    await page.locator(`#hero-${hero}`).click();
-    await page.locator('#action-attack').click();
-    const target = await page.locator('#target-brute').isEnabled() ? 'brute' : 'raider';
-    await page.locator(`#target-${target}`).click();
-    if (beat === 7) {
-      await expect(page.locator('#intent')).toContainText('ไลรา จะล้ม');
-      await expect(page.locator('#preview')).toContainText('ไลรา จะล้มถ้าใช้คำสั่งนี้');
-      await page.screenshot({ path: info.outputPath('lethal-attack-preview.png'), fullPage: true });
-    }
-    await commit(page);
-  }
-  await expect(page.getByRole('heading', { name: 'ชนะแล้ว', exact: true })).toBeVisible();
-  await expect(page.locator('#start-screen')).toContainText('ยืนอยู่ 2 / 3 คน');
-  await expect(page.locator('#start-screen')).toContainText('ชนะ แต่เสียสมาชิกในทีม');
-  await page.screenshot({ path: info.outputPath('victory.png'), fullPage: true });
-  await page.getByRole('button', { name: 'เล่นอีกครั้ง ↻' }).click();
-  await expect(page.locator('#beat-status')).toContainText('จังหวะ 1');
-  expect(errors).toEqual([]);
-});
-
-test('blind Raider-first attacks lose instead of rewarding target-independent spam', async ({ page }) => {
-  const errors = await start(page);
-  for (let beat = 0; beat < 20; beat++) {
-    if (await page.getByRole('heading', { name: 'แพ้แล้ว', exact: true }).count()) break;
-    const hero = await page.locator('#hero-tracer').isEnabled() ? 'tracer' : await page.locator('#hero-weaver').isEnabled() ? 'weaver' : 'guardian';
-    await page.locator(`#hero-${hero}`).click();
-    await page.locator('#action-attack').click();
-    const target = await page.locator('#target-raider').isEnabled() ? 'raider' : 'brute';
-    await page.locator(`#target-${target}`).click(); await commit(page);
-  }
-  await expect(page.getByRole('heading', { name: 'แพ้แล้ว', exact: true })).toBeVisible();
-  expect(errors).toEqual([]);
-});
-
-test('Mark, Guard and Crystal keep the party intact through a genuine full battle', async ({ page }, info) => {
-  test.setTimeout(90000);
-  const errors = await start(page);
-  await page.locator('#forecast-details summary').click();
-  await expect(page.locator('#forecast')).toBeVisible();
-  await expect(page.locator('#forecast')).toContainText('พลังโจมตี 30');
-  await page.locator('#forecast-details summary').click();
-  await expect(page.locator('#reason-mark')).toContainText('38');
-  const moves = [
-    ['tracer', 'mark', 'brute'], ['guardian', 'guard', 'guardian'], ['tracer', 'attack', 'brute'],
-    ['tracer', 'mark', 'brute'], ['tracer', 'attack', 'brute'], ['weaver', 'redirect', 'energy-crystal'],
-    ['tracer', 'attack', 'brute'], ['tracer', 'mark', 'raider'], ['tracer', 'attack', 'raider'],
-  ];
-  for (const [hero, action, target] of moves) {
-    await choose(page, hero!, action!, target!);
-    if (action === 'redirect') {
-      await expect(page.locator('#preview')).toContainText('ผลึกรับการโจมตี 30 ทั้งหมด');
-      await page.screenshot({ path: info.outputPath('tactical-crystal-choice.png'), fullPage: true });
-    }
-    await commit(page);
-  }
-  await expect(page.getByRole('heading', { name: 'ชนะแล้ว', exact: true })).toBeVisible();
-  await expect(page.locator('#start-screen')).toContainText('ยืนอยู่ 3 / 3 คน');
-  await expect(page.locator('#start-screen')).toContainText('เลือดทีม 88');
-  await expect(page.locator('#start-screen')).toContainText('รักษาทีมครบทุกคน');
-  await page.screenshot({ path: info.outputPath('party-intact-victory.png'), fullPage: true });
-  expect(errors).toEqual([]);
-});
-
-test('poor decisions produce genuine Defeat without a scripted outcome', async ({ page }, info) => {
-  test.setTimeout(90000);
-  const errors = await start(page);
-  for (let beat = 0; beat < 35; beat++) {
-    if (await page.getByRole('heading', { name: 'แพ้แล้ว', exact: true }).count()) break;
-    if (await page.locator('#hero-tracer').isEnabled()) await choose(page, 'tracer', 'mark', 'brute');
-    else if (await page.locator('#hero-guardian').isEnabled()) {
-      await page.locator('#hero-guardian').click(); await page.locator('#action-guard').click();
-      await page.locator('.target:not([disabled])').first().click();
-    } else await choose(page, 'weaver', 'attack', 'brute');
-    await commit(page);
-  }
-  await expect(page.getByRole('heading', { name: 'แพ้แล้ว', exact: true })).toBeVisible();
-  await page.screenshot({ path: info.outputPath('defeat.png'), fullPage: true });
-  expect(errors).toEqual([]);
-});
-
-test('mobile touch controls, responsive layout and reduced motion', async ({ browser }, info) => {
-  const context = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, reducedMotion: 'reduce' });
-  const page = await context.newPage(); const errors = await start(page);
-  await page.locator('#hero-guardian').tap(); await page.locator('#action-guard').tap(); await page.locator('#target-tracer').tap();
-  await page.screenshot({ path: info.outputPath('mobile-preview.png'), fullPage: true });
-  await page.locator('#confirm').tap();
-  await expect(page.locator('#beat-status')).not.toContainText('กำลังแสดงผล');
-  await expect(page.locator('#hero-guardian')).toContainText('60 / 64');
-  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
-  await page.setViewportSize({ width: 844, height: 390 });
-  await expect(page.locator('#game canvas')).toBeVisible();
-  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
-  expect(errors).toEqual([]); await context.close();
-});
-
-test('unavailable browser storage leaves a playable session', async ({ page }) => {
-  await page.addInitScript(() => {
-    Object.defineProperty(window, 'localStorage', { get: () => { throw new Error('Storage unavailable'); } });
-  });
-  const errors = await start(page);
-  await choose(page, 'guardian', 'guard', 'tracer'); await commit(page);
-  await expect(page.locator('#save-status')).toContainText('เล่นได้ แต่บันทึกบนเครื่องนี้ไม่ได้');
-  await expect(page.locator('#beat-status')).toContainText('จังหวะ 2');
-  expect(errors).toEqual([]);
-});
-
-
-test('Thai steps show only each hero’s actions and readable restrictions at narrow and tablet widths', async ({ page }, info) => {
-  const errors = await start(page);
-  await expect(page.locator('html')).toHaveAttribute('lang', 'th');
-  await expect(page.locator('.step-heading')).toHaveCount(4);
-  await expect(page.locator('.actions button')).toHaveCount(2);
-  await expect(page.locator('#action-mark')).toBeVisible();
-  await page.locator('#hero-weaver').click();
-  await expect(page.locator('.actions button')).toHaveCount(2);
-  await expect(page.locator('#action-redirect')).toBeDisabled();
-  await expect(page.locator('#reason-redirect')).toContainText('พลังงาน');
-  await page.locator('.field-notes summary').click();
-  await expect(page.locator('#rules')).toBeVisible();
-  await expect(page.locator('#rules')).toContainText('ติดตรา (Mark)');
-  await page.locator('.field-notes summary').click();
-  for (const width of [320, 768]) {
-    await page.setViewportSize({ width, height: 900 });
-    await choose(page, 'guardian', 'guard', 'tracer');
-    await expect(page.locator('.player-outcome')).toContainText('รับการโจมตีแทนไลรา');
-    await expect(page.locator('.enemy-outcome')).toContainText('เอกิส เสียเลือด 4');
-    await expect(page.locator('.predictions')).toContainText('64 → 60');
-    await expect(page.locator('#beat-status')).toContainText('จังหวะ 1');
-    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
-    for (const selector of ['#hero-guardian', '#action-guard', '#target-tracer', '#confirm']) {
-      const box = await page.locator(selector).boundingBox();
-      expect(box!.height).toBeGreaterThanOrEqual(44);
-      expect(box!.width).toBeGreaterThanOrEqual(44);
-    }
-    await page.screenshot({ path: info.outputPath(`thai-layout-${width}.png`), fullPage: true });
-    await page.locator('#cancel').click();
-  }
-  expect(errors).toEqual([]);
-});
-
+async function commit(page: Page): Promise<void> {
+  await page.locator('#confirm').click(); await expect(page.locator('#beat-status')).not.toContainText('กำลังแสดงผล');
+}
 async function reachable(page: Page, selector: string): Promise<void> {
-  const box = await page.locator(selector).boundingBox();
-  const viewport = page.viewportSize()!;
-  expect(box).not.toBeNull();
-  expect(box!.width).toBeGreaterThanOrEqual(44);
-  expect(box!.height).toBeGreaterThanOrEqual(44);
-  expect(box!.x).toBeGreaterThanOrEqual(0);
-  expect(box!.y).toBeGreaterThanOrEqual(0);
-  expect(box!.x + box!.width).toBeLessThanOrEqual(viewport.width);
-  expect(box!.y + box!.height).toBeLessThanOrEqual(viewport.height);
-  expect(await page.locator(selector).evaluate(el => {
-    const r = el.getBoundingClientRect();
-    return el.contains(document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2));
-  })).toBe(true);
+  const box = (await page.locator(selector).boundingBox())!; const v = page.viewportSize()!;
+  expect(box.width).toBeGreaterThanOrEqual(44); expect(box.height).toBeGreaterThanOrEqual(44);
+  expect(box.x).toBeGreaterThanOrEqual(0); expect(box.y).toBeGreaterThanOrEqual(0);
+  expect(box.x+box.width).toBeLessThanOrEqual(v.width); expect(box.y+box.height).toBeLessThanOrEqual(v.height);
+  expect(await page.locator(selector).evaluate(el => { const r = el.getBoundingClientRect(); return el.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)); })).toBe(true);
 }
 
-for (const viewport of [{ width: 320, height: 568 }, { width: 390, height: 844 }, { width: 600, height: 800 }, { width: 844, height: 390 }]) {
-  test(`phone ${viewport.width}x${viewport.height}: reachable preview, cancel, Guard and Crystal touch flow`, async ({ browser }, info) => {
-    const context = await browser.newContext({ viewport, isMobile: true, hasTouch: true, reducedMotion: viewport.width === 390 ? 'no-preference' : 'reduce' });
-    const page = await context.newPage();
-    const errors: string[] = [];
-    page.on('pageerror', e => errors.push(e.message));
-    page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
-    await page.goto('./');
-    await expect(page.locator('#game canvas')).toBeVisible();
-    await reachable(page, '#start');
-    await page.locator('#start').tap();
-    await expect(page.locator('#app')).toHaveClass(/mobile-layout/);
-    const field = (await page.locator('.arena').boundingBox())!;
-    expect(field.width).toBeGreaterThan(viewport.width - 48);
-    expect(field.height).toBeGreaterThanOrEqual(180);
-    expect(field.height).toBeLessThanOrEqual(430);
-    if (viewport.width === 844) await expect(page.locator('.arena')).toBeInViewport({ ratio: 1 });
-    await page.screenshot({ path: info.outputPath('phone-choices.png') });
-    await page.locator('#hero-guardian').tap();
-    await page.locator('#action-guard').tap();
-    await page.locator('#target-tracer').scrollIntoViewIfNeeded();
-    await expect(page.locator('#intent')).toBeInViewport({ ratio: 1 });
-    await page.screenshot({ path: info.outputPath('phone-guard-choices.png') });
-    await page.locator('#target-tracer').tap();
-    await expect(page.locator('#mobile-preview')).toBeVisible();
-    await expect(page.locator('#preview-heading')).toBeFocused();
-    await expect(page.locator('#beat-status')).toContainText('จังหวะ 1');
-    await expect(page.locator('#mobile-preview')).toContainText('64 → 60');
-    await reachable(page, '#confirm');
-    await reachable(page, '#cancel');
-    await page.keyboard.press('Tab');
-    await expect(page.locator('.sheet-close')).toBeFocused();
-    await page.locator('#cancel').tap();
-    await expect(page.locator('#mobile-preview')).not.toBeVisible();
-    await expect(page.locator('#target-tracer')).toBeFocused();
-    await expect(page.locator('#hero-guardian')).toContainText('64 / 64');
-    await expect(page.locator('body')).not.toHaveClass(/mobile-preview-open/);
-    // Native Escape and a backdrop tap both dismiss without committing.
-    await page.locator('#target-tracer').tap(); await page.keyboard.press('Escape');
-    await expect(page.locator('#mobile-preview')).not.toBeVisible();
-    await page.locator('#target-tracer').tap(); await page.touchscreen.tap(2, 2);
-    await expect(page.locator('#mobile-preview')).not.toBeVisible();
-    await expect(page.locator('#beat-status')).toContainText('จังหวะ 1');
-    await page.locator('#target-tracer').tap(); await commit(page);
-    await expect(page.locator('#hero-guardian')).toContainText('60 / 64');
-    await page.locator('#hero-weaver').tap(); await page.locator('#action-redirect').tap(); await page.locator('#target-energy-crystal').tap();
-    await expect(page.locator('#mobile-preview')).toContainText('โล่ 0 → 8');
-    await reachable(page, '#confirm');
-    const before = await page.locator('#confirm').boundingBox();
-    await page.locator('.preview-content').evaluate(el => { el.scrollTop = el.scrollHeight; });
-    await reachable(page, '#confirm');
-    expect((await page.locator('#confirm').boundingBox())!.y).toBe(before!.y);
-    await page.locator('.preview-content').evaluate(el => { el.scrollTop = 0; });
-    await page.screenshot({ path: info.outputPath('phone-crystal-sheet.png') });
-    await commit(page);
-    await expect(page.locator('#beat-status')).toContainText('จังหวะ 3');
-    await expect(page.locator('#mobile-preview')).not.toBeVisible();
-    await expect(page.locator('#hero-weaver')).toContainText('โล่ 8');
-    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
-    await page.reload();
-    await expect(page.locator('#beat-status')).toContainText('จังหวะ 3');
-    await expect(page.locator('#mobile-preview')).not.toBeVisible();
-    await expect(page.locator('body')).not.toHaveClass(/mobile-preview-open/);
+test('four classes, 2 front/2 back, three owned commands each, and no Crystal interface', async ({ page }, info) => {
+  const errors = await start(page);
+  await expect(page.locator('.hero-card')).toHaveCount(4);
+  await expect(page.locator('.hero-card[data-lane="front"]')).toHaveCount(2);
+  await expect(page.locator('.hero-card[data-lane="back"]')).toHaveCount(2);
+  await expect(page.locator('body')).not.toContainText('ผลึก');
+  await expect(page.locator('body')).not.toContainText('แต้มเบี่ยงพลัง');
+  const classes = [['guardian','อัศวิน','bash'],['tracer','นักดาบ','execute'],['weaver','จอมเวท','ward'],['healer','นักบวช','prayer']];
+  for (const [id, role, skill] of classes) {
+    await page.locator(`#hero-${id}`).click(); await expect(page.locator('#selected-hero')).toContainText(role!);
+    await expect(page.locator('.actions button')).toHaveCount(3); await expect(page.locator(`#action-${skill}`)).toBeVisible();
+  }
+  await page.locator('#action-heal').click(); await expect(page.locator('#target-guardian')).toBeDisabled();
+  await expect(page.locator('#commands')).toContainText('เลือดเต็มแล้ว');
+  await page.locator('#hero-guardian').click(); await page.screenshot({ path: info.outputPath('four-class-desktop.png'), fullPage: true });
+  expect(errors).toEqual([]);
+});
+
+test('real canvas selection, Guard preview/cancel/Escape, save, reload and restart', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'no-preference' }); const errors = await start(page);
+  const canvas = page.locator('#game canvas'); const b = (await canvas.boundingBox())!;
+  await canvas.click({ position: { x:b.width*.31, y:135+(b.height-170)*.20 } });
+  await expect(page.locator('#hero-guardian')).toHaveAttribute('aria-pressed','true');
+  await page.locator('#action-guard').click();
+  await canvas.click({ position: { x:b.width*.31, y:135+(b.height-170)*.82 } });
+  await expect(page.locator('#preview')).toContainText('เอกิส เสียเลือด 5');
+  await page.locator('#cancel').click(); await expect(page.locator('#target-tracer')).toBeFocused();
+  await page.locator('#target-tracer').click(); await page.keyboard.press('Escape');
+  await expect(page.locator('#beat-status')).toContainText('จังหวะ 1');
+  await page.locator('#target-tracer').click(); await commit(page);
+  await expect(page.locator('#hero-guardian')).toContainText('71 / 76');
+  await expect(page.locator('.next-slot')).toHaveAttribute('aria-label','จังหวะ 2 อสูรรอยแยก โจมตีไอรา พลังโจมตี 28');
+  await page.reload(); await expect(page.locator('#start')).toHaveCount(0);
+  await expect(page.locator('#beat-status')).toContainText('จังหวะ 2');
+  await page.locator('#restart').click(); await expect(page.locator('#hero-healer')).toContainText('46 / 46');
+  expect(errors).toEqual([]);
+});
+
+test('Mage cooldown survives reload and becomes ready on its exact beat', async ({ page }) => {
+  const errors = await start(page); await choose(page,'weaver','bolt','brute'); await commit(page);
+  await page.locator('#hero-weaver').click(); await expect(page.locator('#action-bolt')).toBeDisabled();
+  await expect(page.locator('#reason-bolt')).toContainText('พร้อมใน 2 จังหวะ');
+  await page.reload(); await page.locator('#hero-weaver').click();
+  await expect(page.locator('#reason-bolt')).toContainText('พร้อมใน 2 จังหวะ');
+  await choose(page,'guardian','guard','weaver'); await commit(page);
+  await page.locator('#hero-weaver').click(); await expect(page.locator('#reason-bolt')).toContainText('พร้อมใน 1 จังหวะ');
+  await choose(page,'healer','heal','tracer'); await commit(page);
+  await page.locator('#hero-weaver').click(); await expect(page.locator('#action-bolt')).toBeEnabled();
+  expect(errors).toEqual([]);
+});
+
+test('Ward, Heal and Prayer have real same-beat effects with clear previews', async ({ page }, info) => {
+  const errors = await start(page);
+  await choose(page,'weaver','ward','tracer');
+  await expect(page.locator('#preview')).toContainText('โล่รับไว้ 12');
+  await expect(page.locator('#preview')).toContainText('โล่ 0 → 2'); await commit(page);
+  await choose(page,'guardian','guard','weaver'); await commit(page);
+  await choose(page,'healer','heal','guardian');
+  await expect(page.locator('.player-outcome')).toContainText('เอกิส ฟื้นเลือด 10');
+  await expect(page.locator('.enemy-outcome')).toContainText('เอกิส เสียเลือด 12'); await commit(page);
+  await choose(page,'weaver','ward','tracer'); await commit(page);
+  await choose(page,'healer','prayer','party');
+  await expect(page.locator('.player-outcome')).toContainText('ไลรา ฟื้นเลือด 10');
+  await page.screenshot({path:info.outputPath('healer-party-preview.png'),fullPage:true});
+  await commit(page); await expect(page.locator('#hero-tracer')).toContainText('54 / 56');
+  expect(errors).toEqual([]);
+});
+
+for (const [name,moves,hp] of [['offensive',offensive,134],['defensive',defensive,94]] as const) {
+  test(`four-class ${name} route wins with all four standing`, async ({ page }, info) => {
+    test.setTimeout(90000); const errors = await start(page);
+    for (const [hero,action,target] of moves) { await choose(page,hero,action,target); await commit(page); }
+    await expect(page.getByRole('heading',{name:'ชนะแล้ว',exact:true})).toBeVisible();
+    await expect(page.locator('#start-screen')).toContainText('ยืนอยู่ 4 / 4 คน');
+    await expect(page.locator('#start-screen')).toContainText(`เลือดทีม ${hp}`);
+    await page.screenshot({path:info.outputPath(`${name}-victory.png`),fullPage:true});
     expect(errors).toEqual([]);
-    await context.close();
+  });
+}
+for (const first of ['raider','brute']) {
+  test(`basic attack spam against ${first} still loses`, async ({ page }) => {
+    const errors = await start(page);
+    for (let i=0;i<30;i++) {
+      if (await page.getByRole('heading',{name:'แพ้แล้ว',exact:true}).count()) break;
+      let hero='healer'; for(const id of ['tracer','weaver','guardian','healer']) if(await page.locator(`#hero-${id}`).isEnabled()){hero=id;break;}
+      await page.locator(`#hero-${hero}`).click(); await page.locator('#action-attack').click();
+      const second=first==='raider'?'brute':'raider'; const target=await page.locator(`#target-${first}`).isEnabled()?first:second;
+      await page.locator(`#target-${target}`).click(); await commit(page);
+    }
+    await expect(page.getByRole('heading',{name:'แพ้แล้ว',exact:true})).toBeVisible(); expect(errors).toEqual([]);
+  });
+}
+for(const viewport of [{width:320,height:568},{width:390,height:844},{width:600,height:800},{width:844,height:390}]){
+  test(`mobile ${viewport.width}x${viewport.height}: four-member roster, touch skills and reachable confirmation`,async({browser},info)=>{
+    const context=await browser.newContext({viewport,isMobile:true,hasTouch:true,reducedMotion:'reduce'});
+    const page=await context.newPage(); const errors=await start(page);
+    await expect(page.locator('.hero-card')).toHaveCount(4);
+    await page.locator('#hero-guardian').tap(); await page.locator('#action-bash').tap();
+    const member=(await page.locator('#hero-healer').boundingBox())!; expect(member.width).toBeGreaterThanOrEqual(44);expect(member.height).toBeGreaterThanOrEqual(44);
+    await page.screenshot({path:info.outputPath('mobile-four-jobs.png'),fullPage:true});
+    await page.locator('#target-raider').tap(); await reachable(page,'#confirm'); await reachable(page,'#cancel');
+    await expect(page.locator('#preview')).toContainText('กระแทกโล่หยุด');
+    await page.locator('#cancel').tap(); await expect(page.locator('#beat-status')).toContainText('จังหวะ 1');
+    await page.locator('#target-raider').tap(); await page.touchscreen.tap(2,2);
+    await expect(page.locator('#mobile-preview')).not.toBeVisible();
+    await page.locator('#target-raider').tap(); await commit(page);
+    await page.locator('#hero-guardian').tap(); await expect(page.locator('#action-bash')).toBeDisabled();
+    await page.locator('#hero-weaver').tap(); await page.locator('#action-ward').tap(); await page.locator('#target-weaver').tap();
+    await reachable(page,'#confirm');
+    await page.locator('.preview-content').evaluate(el=>{el.scrollTop=el.scrollHeight;}); await reachable(page,'#confirm');
+    await page.screenshot({path:info.outputPath('mobile-ward-preview.png')}); await commit(page);
+    await expect(page.locator('#hero-weaver')).toContainText('34 / 48');
+    expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBe(true);
+    expect(errors).toEqual([]); await context.close();
   });
 }
 
-test('pending mobile preview survives rotation and desktop resize without advancing combat', async ({ page }, info) => {
-  await page.setViewportSize({ width: 390, height: 844 });
-  const errors = await start(page);
-  await choose(page, 'guardian', 'guard', 'tracer');
-  await expect(page.locator('#mobile-preview')).toBeVisible();
-  await page.setViewportSize({ width: 844, height: 390 });
-  await reachable(page, '#confirm');
-  await expect(page.locator('#preview')).toContainText('64 → 60');
-  await page.screenshot({ path: info.outputPath('landscape-pending.png') });
-  await page.setViewportSize({ width: 1366, height: 900 });
-  await expect(page.locator('#mobile-preview')).toBeVisible();
-  await expect(page.locator('#mobile-preview #confirm')).toHaveCount(1);
-  await expect(page.locator('#preview')).toContainText('64 → 60');
-  await expect(page.locator('body')).toHaveClass(/mobile-preview-open/);
-  await expect(page.locator('#beat-status')).toContainText('จังหวะ 1');
-  await page.setViewportSize({ width: 390, height: 844 });
-  await expect(page.locator('#mobile-preview')).toBeVisible();
-  await reachable(page, '#confirm');
-  await expect(page.locator('#confirm')).toHaveCount(1);
-  await commit(page);
-  await expect(page.locator('#beat-status')).toContainText('จังหวะ 2');
-  await expect(page.locator('#mobile-preview')).not.toBeVisible();
-  expect(errors).toEqual([]);
-});
-
-test('phone full tactical battle: selection returns after each confirmation and result stays reachable', async ({ browser }, info) => {
+test('four-class mobile battle, back-row canvas selection and rotation keep pending commands',async({browser},info)=>{
   test.setTimeout(90000);
-  const context = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, reducedMotion: 'reduce' });
-  const page = await context.newPage(); const errors = await start(page);
-  const moves = [
-    ['tracer', 'mark', 'brute'], ['guardian', 'guard', 'guardian'], ['tracer', 'attack', 'brute'],
-    ['tracer', 'mark', 'brute'], ['tracer', 'attack', 'brute'], ['weaver', 'redirect', 'energy-crystal'],
-    ['tracer', 'attack', 'brute'], ['tracer', 'mark', 'raider'], ['tracer', 'attack', 'raider'],
-  ];
-  for (const [hero, action, target] of moves) {
-    await page.locator(`#hero-${hero}`).tap(); await page.locator(`#action-${action}`).tap(); await page.locator(`#target-${target}`).tap();
-    await reachable(page, '#confirm');
-    await commit(page);
-    await expect(page.locator('#mobile-preview')).not.toBeVisible();
-  }
-  await expect(page.getByRole('heading', { name: 'ชนะแล้ว', exact: true })).toBeVisible();
-  await expect(page.locator('#start-screen')).toContainText('ยืนอยู่ 3 / 3 คน');
-  await expect(page.locator('#start-screen')).toContainText('เลือดทีม 88');
-  await reachable(page, '.result-card button');
-  await page.screenshot({ path: info.outputPath('phone-victory.png') });
-  await page.locator('.result-card button').tap();
+  const context=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true,reducedMotion:'reduce'});
+  const page=await context.newPage();const errors=await start(page);
+  const canvas=page.locator('#game canvas');const b=(await canvas.boundingBox())!;
+  await canvas.tap({position:{x:b.width*.12,y:80+(b.height-200)*.82}});
+  await expect(page.locator('#hero-healer')).toHaveAttribute('aria-pressed','true');
+  await choose(page,'tracer','mark','brute');
+  await page.setViewportSize({width:844,height:390});await reachable(page,'#confirm');
+  await page.setViewportSize({width:1366,height:900});await expect(page.locator('#confirm')).toHaveCount(1);
   await expect(page.locator('#beat-status')).toContainText('จังหวะ 1');
-  await expect(page.locator('#hero-tracer')).toBeEnabled();
-  expect(errors).toEqual([]); await context.close();
+  await page.setViewportSize({width:390,height:844});await reachable(page,'#confirm');await commit(page);
+  for(const[hero,action,target]of offensive.slice(1)){await choose(page,hero,action,target);await commit(page);}
+  await expect(page.locator('#start-screen')).toContainText('ยืนอยู่ 4 / 4 คน');
+  await reachable(page,'.result-card button');await page.screenshot({path:info.outputPath('mobile-four-survivors.png')});
+  await page.locator('.result-card button').tap();await expect(page.locator('#beat-status')).toContainText('จังหวะ 1');
+  expect(errors).toEqual([]);await context.close();
 });
 
-test('phone compact canvas keeps all three heroes and Crystal touch targets aligned', async ({ browser }) => {
-  const context = await browser.newContext({ viewport: { width: 320, height: 568 }, isMobile: true, hasTouch: true, reducedMotion: 'reduce' });
-  const page = await context.newPage(); const errors = await start(page);
-  const canvas = page.locator('#game canvas');
-  await expect(canvas).toBeInViewport({ ratio: 1 });
-  const bounds = (await canvas.boundingBox())!;
-  await canvas.tap({ position: { x: bounds.width * 0.34, y: 80 + (bounds.height - 200) * 0.20 } });
-  await expect(page.locator('#hero-guardian')).toHaveAttribute('aria-pressed', 'true');
-  await page.locator('#action-guard').tap();
-  await canvas.tap({ position: { x: bounds.width * 0.34, y: 80 + (bounds.height - 200) * 0.82 } });
-  await expect(page.locator('#mobile-preview')).toBeVisible();
-  await expect(page.locator('#preview')).toContainText('รับการโจมตีแทนไลรา');
-  await commit(page);
-  await canvas.tap({ position: { x: bounds.width * 0.12, y: 80 + (bounds.height - 200) * 0.51 } });
-  await expect(page.locator('#hero-weaver')).toHaveAttribute('aria-pressed', 'true');
-  await page.locator('#action-redirect').tap();
-  await canvas.tap({ position: { x: bounds.width * 0.54, y: 80 + (bounds.height - 200) * 0.52 } });
-  await expect(page.locator('#preview')).toContainText('ผลึกรับการโจมตี 30 ทั้งหมด');
-  await reachable(page, '#confirm');
-  await commit(page);
-  await expect(page.locator('#hero-weaver')).toContainText('โล่ 8');
-  expect(errors).toEqual([]); await context.close();
-});
-
-
-test('reference battle layout keeps the field above the command dock and reflects real timeline/hero data', async ({ page }, info) => {
-  const errors = await start(page);
-  const field = (await page.locator('.arena').boundingBox())!;
-  const dock = (await page.locator('.decision-panel').boundingBox())!;
-  expect(dock.y).toBeGreaterThanOrEqual(field.y + field.height - 1);
-  expect(Math.abs(field.width - dock.width)).toBeLessThanOrEqual(2);
-  expect(field.width).toBeGreaterThan(1200);
-  await expect(page.locator('.timeline-slot')).toHaveCount(4);
-  await expect(page.locator('.next-slot')).toHaveAttribute('aria-label', 'จังหวะ 1 นักจู่โจม โจมตีไลรา พลังโจมตี 9');
-  await page.locator('#hero-guardian').click();
-  await expect(page.locator('#selected-hero')).toContainText('เอกิส');
-  await expect(page.locator('#selected-hero')).toContainText('64 / 64');
-  await expect(page.locator('#selected-hero img')).toHaveAttribute('src', /guardian.svg$/);
-  await page.locator('#action-guard').click();
-  await page.screenshot({ path: info.outputPath('reference-game-layout.png'), fullPage: true });
-  await page.locator('#target-tracer').click();
-  await expect(page.locator('#mobile-preview')).toBeVisible();
-  await expect(page.locator('#preview')).toContainText('64 → 60');
-  await expect(page.locator('#beat-status')).toContainText('จังหวะ 1');
-  await commit(page);
-  await expect(page.locator('#selected-hero')).toContainText('60 / 64');
-  await expect(page.locator('.next-slot')).toHaveAttribute('aria-label', 'จังหวะ 2 อสูรรอยแยก โจมตีเอกิส พลังโจมตี 30');
-  expect(errors).toEqual([]);
+test('old three-member saves restart safely, and denied storage stays playable',async({page})=>{
+  await page.addInitScript(()=>localStorage.setItem('asterveil.fateweave.battle.v1',JSON.stringify({version:1,encounterId:'crystal-rift',contentVersion:2,commands:[{beat:1,heroId:'tracer',action:'mark',targetId:'brute'}]})));
+  const errors=await start(page);await expect(page.locator('.hero-card')).toHaveCount(4);await expect(page.locator('#beat-status')).toContainText('จังหวะ 1');
+  await page.addInitScript(()=>Object.defineProperty(window,'localStorage',{get:()=>{throw new Error('Denied');}}));
+  await page.reload();await page.locator('#start').click();await choose(page,'guardian','guard','tracer');await commit(page);
+  await expect(page.locator('#save-status')).toContainText('บันทึกบนเครื่องนี้ไม่ได้');expect(errors).toEqual([]);
 });

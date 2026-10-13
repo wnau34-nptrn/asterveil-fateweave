@@ -1,163 +1,137 @@
 import { describe, expect, it } from 'vitest';
-import { actionReason, createBattle, previewCommand, replay, resolveCommand, targetOptions, validateCommand } from '../src/core/battle/engine';
+import { actionReason, createBattle, plannedIntents, previewCommand, replay, resolveCommand, targetOptions, validateCommand } from '../src/core/battle/engine';
 import type { ActionId, BattleState, Command } from '../src/core/battle/types';
-import { crystalRift as data } from '../src/content/encounters/crystal-rift';
-
+import { veilSiege as data } from '../src/content/encounters/veil-siege';
 const start = () => createBattle(data);
 const command = (s: BattleState, heroId: string, action: ActionId, targetId: string): Command => ({ beat: s.beat, heroId, action, targetId });
-const act = (s: BattleState, heroId: string, action: ActionId, targetId: string) => resolveCommand(s, data, command(s, heroId, action, targetId));
-const guarded = () => act(start(), 'guardian', 'guard', 'tracer').state;
-
-describe('Fateweave deterministic rules', () => {
-  it('initializes independent state with all actors and a frozen announced intent', () => {
+const act = (s: BattleState, hero: string, action: ActionId, target: string) => resolveCommand(s, data, command(s, hero, action, target));
+describe('four-class deterministic combat', () => {
+  it('has two front/two back heroes, independent state and no environmental resource', () => {
     const a = start(); const b = start();
-    expect(a.heroes.map(h => h.hp)).toEqual([64, 44, 42]);
-    expect(a.enemies.map(e => e.hp)).toEqual([38, 90]);
-    expect(a.intent).toMatchObject({ sourceId: 'raider', targetId: 'tracer', damage: 9, beat: 1 });
-    a.heroes[0]!.hp = 1;
-    expect(b.heroes[0]!.hp).toBe(64);
+    expect(data.heroes.map(h => h.lane)).toEqual(['front', 'front', 'back', 'back']);
+    expect(a.heroes.map(h => h.hp)).toEqual([76, 56, 48, 46]);
+    expect(a).not.toHaveProperty('crystal'); expect(a).not.toHaveProperty('counter');
+    a.heroes[0]!.cooldowns.bash = 99; expect(b.heroes[0]!.cooldowns).toEqual({});
   });
-  it('deals deterministic damage without mutating the input', () => {
-    const s = start(); const before = structuredClone(s);
-    const r = act(s, 'tracer', 'attack', 'brute');
-    expect(s).toEqual(before);
-    expect(r.state.enemies[1]!.hp).toBe(74);
-    expect(r.state.heroes[1]!.hp).toBe(35);
-    expect(r.state.commands).toHaveLength(1);
+  it('uses three owned commands for each distinct class', () => {
+    expect(new Set(data.heroes.map(h => h.role)).size).toBe(4);
+    for (const h of data.heroes) expect(h.actions).toHaveLength(3);
+    expect(actionReason(start(), data, 'weaver', 'heal')).toContain('does not have');
   });
-  it('clamps HP and reports actual damage on overkill', () => {
-    const s = start(); s.enemies[0]!.hp = 2;
-    const r = act(s, 'tracer', 'attack', 'raider');
-    expect(r.state.enemies[0]!.hp).toBe(0);
-    expect(r.events.find(e => e.targetId === 'raider' && e.type === 'damage')?.amount).toBe(2);
+  it('deals exact damage without changing the input or announced target', () => {
+    const s = start(); const original = structuredClone(s); const r = act(s, 'tracer', 'attack', 'brute');
+    expect(s).toEqual(original); expect(r.state.enemies[1]!.hp).toBe(148);
+    expect(r.state.heroes[1]!.hp).toBe(44); expect(r.state.intent?.targetId).toBe('weaver');
   });
-  it('intercepts for the teammate, mitigates, and generates one Counter', () => {
-    const s = guarded();
-    expect(s.heroes[0]!.hp).toBe(60);
-    expect(s.heroes[1]!.hp).toBe(44);
-    expect(s.counter).toBe(1);
-    expect(s.intent).toMatchObject({ sourceId: 'brute', kind: 'energy', damage: 30 });
+  it('intercepts for front/back targets and rounds Guard upward', () => {
+    let s = act(start(), 'guardian', 'guard', 'tracer').state;
+    expect(s.heroes[0]!.hp).toBe(71); expect(s.heroes[1]!.hp).toBe(56);
+    s = act(s, 'guardian', 'guard', 'weaver').state;
+    expect(s.heroes[0]!.hp).toBe(61); expect(s.heroes[2]!.hp).toBe(48);
+    expect(() => act(start(), 'guardian', 'guard', 'healer')).toThrow('announced target');
   });
-  it('caps Counter and allows self Guard', () => {
-    let s = guarded(); s.counter = data.rules.counterCap;
+  it('blocks physical access to back rows while a front hero survives', () => {
+    const changed = { ...data, intents: data.intents.map(i => ({ ...i, targetId: 'healer' })) };
+    const s = createBattle(changed); expect(s.intent?.targetId).toBe('guardian');
+    expect(plannedIntents(s, changed)[0]?.targetId).toBe('healer');
+    s.heroes[0]!.hp = 0; s.heroes[1]!.hp = 0;
+    expect(plannedIntents(s, changed)[1]?.targetId).toBe('healer');
+  });
+  it('reassigns physical targeting to the remaining front hero after a down', () => {
+    const s = start(); s.heroes[1]!.hp = 1;
+    const n = act(s, 'tracer', 'mark', 'brute').state;
+    expect(n.heroes[1]!.hp).toBe(0); expect(plannedIntents(n, data)[0]?.targetId).toBe('guardian');
+  });
+  it('Bash interrupts only the current physical source', () => {
+    const s = start(); const r = act(s, 'guardian', 'bash', 'raider');
+    expect(r.state.enemies[0]!.hp).toBe(46); expect(r.state.heroes[1]!.hp).toBe(56);
+    expect(r.events.find(e => e.type === 'cancel')?.cause).toBe('interrupted');
+    expect(act(s, 'guardian', 'bash', 'brute').state.heroes[1]!.hp).toBe(44);
+    const energy = act(s, 'tracer', 'mark', 'brute').state;
+    expect(act(energy, 'guardian', 'bash', 'brute').state.heroes[2]!.hp).toBe(20);
+  });
+  it('tracks per-hero cooldowns and permits reuse exactly at the ready beat', () => {
+    let s = act(start(), 'weaver', 'bolt', 'brute').state;
+    expect(s.heroes[2]!.cooldowns.bolt).toBe(4);
+    expect(actionReason(s, data, 'weaver', 'bolt')).toBe('Cooldown: 2');
+    expect(() => act(s, 'weaver', 'bolt', 'brute')).toThrow('Cooldown');
+    s = act(s, 'guardian', 'guard', 'weaver').state;
+    expect(actionReason(s, data, 'weaver', 'bolt')).toBe('Cooldown: 1');
     s = act(s, 'guardian', 'guard', 'guardian').state;
-    expect(s.counter).toBe(2);
-    expect(s.heroes[0]!.hp).toBe(49);
+    expect(actionReason(s, data, 'weaver', 'bolt')).toBe('');
+    expect(act(s, 'weaver', 'bolt', 'brute').state.heroes[2]!.cooldowns.bolt).toBe(7);
   });
-  it('does not award Counter when the guarding hero falls', () => {
-    const s = start(); s.heroes[0]!.hp = 1;
-    const r = act(s, 'guardian', 'guard', 'tracer').state;
-    expect(r.counter).toBe(0); expect(r.heroes[0]!.hp).toBe(0);
+  it('Mark enables a 50-damage precision strike and is consumed', () => {
+    const s = act(start(), 'tracer', 'mark', 'brute').state;
+    const r = act(s, 'tracer', 'execute', 'brute').state;
+    expect(r.enemies[1]!.hp).toBe(114); expect(r.enemies[1]!.markedUntil).toBe(0);
+    expect(act(s, 'tracer', 'attack', 'brute').state.enemies[1]!.hp).toBe(126);
   });
-  it('rejects Guard on a teammate outside the incoming intent', () => {
-    expect(() => act(start(), 'guardian', 'guard', 'weaver')).toThrow('announced target');
-  });
-  it('restricts actions by hero and rejects stale commands', () => {
-    const s = start();
-    expect(actionReason(s, data, 'weaver', 'mark')).toContain('does not have');
-    expect(validateCommand(s, data, { beat: 0, heroId: 'tracer', action: 'attack', targetId: 'brute' })).toContain('stale');
-  });
-  it('marks an enemy for three beats including the committed beat', () => {
+  it('expires Mark after three beats including application', () => {
     let s = act(start(), 'tracer', 'mark', 'brute').state;
-    expect(s.enemies[1]!.markedUntil).toBe(4);
-    s = act(s, 'guardian', 'attack', 'brute').state;
-    s = act(s, 'guardian', 'attack', 'brute').state;
+    s = act(s, 'guardian', 'guard', 'weaver').state;
+    s = act(s, 'guardian', 'guard', 'guardian').state;
     expect(s.beat).toBe(4); expect(s.enemies[1]!.markedUntil).toBe(0);
   });
-  it('Tracer benefits from a mark and consumes it', () => {
-    const s = act(start(), 'tracer', 'mark', 'brute').state;
-    const r = act(s, 'tracer', 'attack', 'brute').state;
-    expect(r.enemies[1]!.hp).toBe(52); expect(r.enemies[1]!.markedUntil).toBe(0);
+  it('Ward absorbs the same-beat hit and reports actual absorption', () => {
+    const r = act(start(), 'weaver', 'ward', 'tracer');
+    expect(r.state.heroes[1]).toMatchObject({ hp: 56, barrier: 2 });
+    expect(r.events.find(e => e.type === 'damage')).toMatchObject({ amount: 0, absorbed: 12 });
+    expect(r.events.find(e => e.type === 'barrier')?.amount).toBe(14);
   });
-  it('rejects Mark on a down or unknown enemy', () => {
-    const s = start(); s.enemies[0]!.hp = 0;
-    expect(() => act(s, 'tracer', 'mark', 'raider')).toThrow('down');
-    expect(() => act(s, 'tracer', 'mark', 'unknown')).toThrow('Invalid target');
+  it('Ward does not stack, and Guard reduces before using barrier', () => {
+    const s = start(); s.heroes[0]!.barrier = 10;
+    const r = act(s, 'guardian', 'guard', 'tracer').state;
+    expect(r.heroes[0]).toMatchObject({ hp: 76, barrier: 5 });
+    s.heroes[2]!.barrier = 14;
+    expect(targetOptions(s, data, 'weaver', 'ward').find(t => t.id === 'weaver')?.valid).toBe(false);
   });
-  it('requires Counter for Redirect and disallows physical attacks', () => {
-    const s = act(start(), 'tracer', 'attack', 'brute').state;
-    expect(() => act(s, 'weaver', 'redirect', 'energy-crystal')).toThrow('Counter');
-    const physical = start(); physical.counter = 1;
-    expect(() => act(physical, 'weaver', 'redirect', 'energy-crystal')).toThrow('energy');
+  it('heals before the announced hit and clamps at max HP', () => {
+    const s = start(); s.heroes[1]!.hp = 10;
+    expect(act(s, 'healer', 'heal', 'tracer').state.heroes[1]!.hp).toBe(18);
+    s.heroes[0]!.hp = 73;
+    expect(act(s, 'healer', 'heal', 'guardian').events.find(e => e.type === 'heal')?.amount).toBe(3);
   });
-  it('only marked enemies and charged crystals are valid Redirect targets', () => {
-    const s = guarded();
-    const targets = targetOptions(s, data, 'weaver', 'redirect');
-    expect(targets.filter(t => t.valid).map(t => t.id)).toEqual(['energy-crystal']);
-    expect(() => act(s, 'weaver', 'redirect', 'brute')).toThrow('Mark');
-    expect(() => act(s, 'weaver', 'redirect', 'guardian')).toThrow('Invalid target');
-    s.crystal.charges = 0;
-    expect(actionReason(s, data, 'weaver', 'redirect')).toContain('marked enemy');
+  it('Prayer heals all living injured allies, never resurrects, and has a four-beat cooldown', () => {
+    const s = start(); s.heroes[0]!.hp = 60; s.heroes[1]!.hp = 40; s.heroes[2]!.hp = 0;
+    const r = act(s, 'healer', 'prayer', 'party');
+    expect(r.state.heroes.map(h => h.hp)).toEqual([70, 38, 0, 46]);
+    expect(r.events.filter(e => e.type === 'heal')).toHaveLength(2);
+    expect(r.state.heroes[3]!.cooldowns.prayer).toBe(5);
+    expect(() => act(s, 'healer', 'heal', 'weaver')).toThrow('down');
+    expect(() => act(start(), 'healer', 'prayer', 'party')).toThrow('full health');
   });
-  it('redirects to the crystal, spends Counter, and grants real barriers', () => {
-    const s = guarded(); const r = act(s, 'weaver', 'redirect', 'energy-crystal').state;
-    expect(r.counter).toBe(0); expect(r.crystal.charges).toBe(0);
-    expect(r.heroes.map(h => h.barrier)).toEqual([8, 8, 8]);
-    expect(r.heroes[0]!.hp).toBe(s.heroes[0]!.hp);
-    const hit = act(r, 'tracer', 'attack', 'brute').state;
-    expect(hit.heroes[2]!.hp).toBe(41); expect(hit.heroes[2]!.barrier).toBe(0);
+  it('rejects unavailable targets, stale commands and foreign encounter IDs', () => {
+    const s = start(); expect(() => act(s, 'healer', 'heal', 'guardian')).toThrow('full health');
+    expect(() => act(s, 'weaver', 'bolt', 'party')).toThrow('Invalid target');
+    expect(validateCommand(s, data, { ...command(s, 'tracer', 'attack', 'brute'), beat: 0 })).toContain('stale');
+    expect(validateCommand({ ...s, encounterId: 'other' }, data, command(s, 'tracer', 'attack', 'brute'))).toContain('mismatch');
   });
-  it('rejects an exhausted crystal even if another Redirect target exists', () => {
-    const s = guarded(); s.crystal.charges = 0; s.enemies[1]!.markedUntil = 5;
-    expect(() => act(s, 'weaver', 'redirect', 'energy-crystal')).toThrow('no charge');
+  it('clamps overkill and cancels the defeated source instead of substituting', () => {
+    const s = start(); s.enemies[0]!.hp = 2;
+    const r = act(s, 'weaver', 'bolt', 'raider');
+    expect(r.events.find(e => e.type === 'damage')?.amount).toBe(2);
+    expect(r.events.find(e => e.type === 'cancel')?.cause).toBe('defeated');
+    expect(r.state.heroes[1]!.hp).toBe(56);
   });
-  it('redirects exact announced damage to a marked source and exposes it', () => {
-    const s = guarded(); s.enemies[1]!.markedUntil = 5;
-    const r = act(s, 'weaver', 'redirect', 'brute').state;
-    expect(r.enemies[1]).toMatchObject({ hp: 60, markedUntil: 0, exposedUntil: 4 });
-    expect(r.heroes[0]!.hp).toBe(60); expect(r.counter).toBe(0);
-    expect(act(r, 'tracer', 'attack', 'brute').state.enemies[1]!.hp).toBe(22);
+  it('produces genuine Victory/Defeat and rejects commands after the end', () => {
+    const s = start(); s.enemies[0]!.hp = 1; s.enemies[1]!.hp = 0;
+    const won = act(s, 'tracer', 'attack', 'raider').state;
+    expect(won.outcome).toBe('victory'); expect(won.intent).toBeNull();
+    expect(() => act(won, 'tracer', 'attack', 'raider')).toThrow('ended');
+    const loss = start(); loss.heroes.forEach(h => { h.hp = h.id === 'tracer' ? 1 : 0; });
+    expect(act(loss, 'tracer', 'mark', 'brute').state.outcome).toBe('defeat');
   });
-  it('can redirect damage onto the other enemy without an unlimited reaction chain', () => {
-    const s = guarded(); s.enemies[0]!.markedUntil = 5;
-    const r = act(s, 'weaver', 'redirect', 'raider');
-    expect(r.state.enemies[0]!.hp).toBe(8);
-    expect(r.events.filter(e => e.type === 'damage')).toHaveLength(1);
-  });
-  it('cancels the announced attack when Attack kills its source', () => {
-    const s = start(); s.enemies[0]!.hp = 10;
-    const r = act(s, 'tracer', 'attack', 'raider');
-    expect(r.state.heroes[1]!.hp).toBe(44);
-    expect(r.events.some(e => e.type === 'cancel')).toBe(true);
-    expect(r.state.intent?.sourceId).toBe('brute');
-  });
-  it('finishes Victory immediately and rejects further commands', () => {
-    const s = start(); s.enemies[1]!.hp = 0; s.enemies[0]!.hp = 1;
-    const r = act(s, 'tracer', 'attack', 'raider').state;
-    expect(r.outcome).toBe('victory'); expect(r.intent).toBeNull();
-    expect(() => act(r, 'guardian', 'attack', 'raider')).toThrow('ended');
-  });
-  it('clamps hero HP at zero and ends Defeat after the last hero falls', () => {
-    const s = start(); s.heroes.forEach(h => { h.hp = h.id === 'tracer' ? 1 : 0; });
-    const r = act(s, 'tracer', 'mark', 'brute').state;
-    expect(r.outcome).toBe('defeat'); expect(r.intent).toBeNull();
-    expect(r.heroes.every(h => h.hp === 0)).toBe(true);
-  });
-  it('does not secretly change an announced target, then announces a living target next beat', () => {
-    const s = start(); s.heroes[1]!.hp = 1;
-    const r = act(s, 'tracer', 'mark', 'brute');
-    expect(r.events.find(e => e.type === 'damage')?.targetId).toBe('tracer');
-    expect(r.state.intent?.targetId).toBe('guardian');
-  });
-  it('all legal initial previews match committed results and leave source untouched', () => {
-    for (const s of [start(), guarded()]) for (const h of data.heroes) for (const a of h.actions) {
-      for (const target of targetOptions(s, data, h.id, a).filter(t => t.valid)) {
-        const c = command(s, h.id, a, target.id); const before = structuredClone(s);
-        expect(previewCommand(s, data, c)).toEqual(resolveCommand(s, data, c));
-        expect(s).toEqual(before);
-      }
+  it('previews every legal action exactly and replays cooldowns without mutating the source', () => {
+    const injured = start(); injured.heroes.forEach(h => { h.hp -= 10; });
+    const fresh = start();
+    for (const s of [fresh, injured]) for (const h of data.heroes) for (const action of h.actions) for (const t of targetOptions(s, data, h.id, action).filter(t => t.valid)) {
+      const c = command(s, h.id, action, t.id); const before = structuredClone(s);
+      const result = resolveCommand(s, data, c);
+      expect(previewCommand(s, data, c)).toEqual(result); expect(s).toEqual(before);
+      if (s === fresh) expect(replay(data, result.state.commands)).toEqual(result.state);
     }
-  });
-  it('supports a winning attack-only route and exact deterministic replay', () => {
-    let s = start(); const commands: Command[] = [];
-    while (s.outcome === 'active' && commands.length < 30) {
-      const h = ['tracer', 'weaver', 'guardian'].find(id => s.heroes.some(a => a.id === id && a.hp > 0))!;
-      const target = ['brute', 'raider'].map(id => s.enemies.find(e => e.id === id && e.hp > 0)).find(e => e)!;
-      const c = command(s, h, 'attack', target.id); commands.push(c);
-      s = resolveCommand(s, data, c).state;
-    }
-    expect(s.outcome).toBe('victory');
-    expect(replay(data, commands)).toEqual(s);
-    expect(replay(data, commands)).toEqual(replay(data, commands));
+    const cast = act(start(), 'weaver', 'bolt', 'brute').state;
+    expect(replay(data, cast.commands)).toEqual(cast);
   });
 });
