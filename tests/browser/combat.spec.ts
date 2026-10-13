@@ -9,8 +9,9 @@ async function start(page: Page): Promise<string[]> {
 async function choose(page: Page, hero: string, action: string, target: string): Promise<void> {
   await page.locator(`#hero-${hero}`).click(); await page.locator(`#action-${action}`).click(); await page.locator(`#target-${target}`).click();
 }
-async function commit(page: Page): Promise<void> {
-  await page.locator('#confirm').click(); await page.locator('#skip-turn').click();
+// Target selection already commits. This helper only skips the presentation.
+async function finishTurn(page: Page): Promise<void> {
+  await page.locator('#skip-turn').click();
   await expect(page.locator('#beat-status')).not.toContainText('กำลังแสดงผล');
 }
 async function reachable(page: Page, selector: string): Promise<void> {
@@ -18,6 +19,22 @@ async function reachable(page: Page, selector: string): Promise<void> {
   // Measure size, viewport bounds and hit testing together after layout settles.
   const viewport = page.viewportSize()!;
   await expect.poll(() => page.locator(selector).evaluate((el, v) => {
+    const r = el.getBoundingClientRect();
+    return {
+      touchSize: r.width >= 44 && r.height >= 44,
+      inViewport: r.x >= 0 && r.y >= 0 && r.right <= v.width && r.bottom <= v.height,
+      hit: el.contains(document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2)),
+    };
+  }, viewport)).toEqual({ touchSize: true, inViewport: true, hit: true });
+}
+
+// Center targets as a player scrolling the dock would. Playwright's minimal
+// scroll can leave a fractional bottom edge clipped on the smallest viewport.
+// Read the current element after media-query rerenders, not a detached old node.
+async function targetReachable(page: Page, selector: string): Promise<void> {
+  const viewport = page.viewportSize()!;
+  await expect.poll(() => page.locator(selector).evaluate((el, v) => {
+    el.scrollIntoView({ block: 'center', behavior: 'instant' });
     const r = el.getBoundingClientRect();
     return {
       touchSize: r.width >= 44 && r.height >= 44,
@@ -45,8 +62,9 @@ test('Start waits for the production unit atlas before enabling battle input', a
     release();
     await expect(page.locator('#start')).toBeEnabled(); await page.locator('#start').click();
     await expect(page.locator('#hero-tracer')).toBeEnabled();
-    await page.locator('#target-raider').click(); await expect(page.locator('#confirm')).toBeVisible();
-    await page.locator('#cancel').click(); expect(errors).toEqual([]);
+    await page.locator('#target-raider').click();
+    await expect(page.locator('#turn-phase')).toHaveAttribute('data-phase', 'hero');
+    await expect(page.locator('dialog')).toHaveCount(0); await finishTurn(page); expect(errors).toEqual([]);
   } finally { release(); }
 });
 
@@ -54,7 +72,7 @@ test('normal turns show hero damage first, then the frozen enemy response', asyn
   await page.clock.install({ time: new Date('2026-10-13T00:00:00Z') });
   await page.emulateMedia({ reducedMotion: 'no-preference' }); const errors = await start(page);
   await page.clock.pauseAt(new Date('2026-10-13T01:00:00Z'));
-  await choose(page, 'weaver', 'bolt', 'brute'); await page.locator('#confirm').click();
+  await choose(page, 'weaver', 'bolt', 'brute');
   await expect(page.locator('#turn-phase')).toHaveAttribute('data-phase', 'hero');
   await expect(page.locator('#turn-phase')).toHaveAttribute('data-actor', 'weaver');
   await expect(page.locator('[data-enemy="brute"]')).toContainText('138 / 164');
@@ -84,7 +102,7 @@ test('phone reduced-motion turns show interrupted response and accurate canvas i
   const context = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, reducedMotion: 'reduce' });
   const page = await context.newPage(); await page.clock.install({ time: new Date('2026-10-13T00:00:00Z') }); const errors = await start(page);
   await page.clock.pauseAt(new Date('2026-10-13T01:00:00Z'));
-  await choose(page, 'guardian', 'bash', 'raider'); await page.locator('#confirm').tap();
+  await choose(page, 'guardian', 'bash', 'raider');
   await expect(page.locator('#turn-phase')).toHaveAttribute('data-phase', 'hero');
   await expect(page.locator('[data-enemy="raider"]')).toContainText('46 / 64');
   await expect(page.locator('#hero-tracer')).toContainText('56 / 56');
@@ -111,18 +129,18 @@ test('phone reduced-motion turns show interrupted response and accurate canvas i
 
 test('skip, restart, mid-turn reload and hidden-tab completion never replay a command', async ({ page }) => {
   const errors = await start(page);
-  await choose(page, 'weaver', 'bolt', 'brute'); await page.locator('#confirm').click();
+  await choose(page, 'weaver', 'bolt', 'brute');
   await page.locator('#restart').click();
   await page.waitForTimeout(2100);
   await expect(page.locator('#beat-status')).toContainText('จังหวะ 1');
   await expect(page.locator('[data-enemy="brute"]')).toContainText('164 / 164');
-  await choose(page, 'weaver', 'ward', 'tracer'); await page.locator('#confirm').click();
+  await choose(page, 'weaver', 'ward', 'tracer');
   await expect(page.locator('#hero-tracer .barrier-info')).toHaveText('โล่ 14');
   await page.reload();
   await expect(page.locator('#turn-phase')).toHaveAttribute('data-phase', 'choice');
   await expect(page.locator('#hero-tracer .barrier-info')).toHaveText('โล่ 2');
   await expect(page.locator('#beat-status')).toContainText('จังหวะ 2');
-  await choose(page, 'guardian', 'guard', 'weaver'); await page.locator('#confirm').click();
+  await choose(page, 'guardian', 'guard', 'weaver');
   await page.evaluate(() => {
     Object.defineProperty(document, 'hidden', { configurable: true, get: () => true });
     document.dispatchEvent(new Event('visibilitychange'));
@@ -144,7 +162,7 @@ test('victory waits for turn presentation and the defeated enemy never attacks',
   })), offensive.slice(0, -1));
   await page.reload();
   await page.clock.pauseAt(new Date('2026-10-13T01:00:00Z'));
-  await choose(page, 'tracer', 'execute', 'raider'); await page.locator('#confirm').click();
+  await choose(page, 'tracer', 'execute', 'raider');
   await expect(page.locator('#turn-phase')).toHaveAttribute('data-phase', 'hero');
   await expect(page.locator('.result-card')).toHaveCount(0);
   await page.clock.runFor(1000);
@@ -158,11 +176,12 @@ test('victory waits for turn presentation and the defeated enemy never attacks',
 });
 
 for (const viewport of [{ width: 1366, height: 1000 }, { width: 390, height: 844 }]) {
-  test(`auto-select next hero at ${viewport.width}px, wrap, cancel and reload`, async ({ browser }, info) => {
+  test(`auto-select next hero at ${viewport.width}px, wrap, free selection and reload`, async ({ browser }, info) => {
     const context = await browser.newContext({ viewport, hasTouch: true, reducedMotion: 'reduce' });
     const page = await context.newPage(); const errors = await start(page);
     await page.locator('#hero-guardian').tap();
-    await page.locator('#target-brute').tap(); await page.locator('#cancel').tap();
+    await page.locator('#action-bash').tap(); await page.locator('#action-attack').tap();
+    await expect(page.locator('#beat-status')).toContainText('จังหวะ 1');
     await expect(page.locator('#hero-guardian')).toHaveAttribute('aria-pressed', 'true');
     const turns = [
       ['guardian', 'tracer', 'นักดาบ', 'execute'], ['tracer', 'weaver', 'จอมเวท', 'bolt'],
@@ -170,13 +189,13 @@ for (const viewport of [{ width: 1366, height: 1000 }, { width: 390, height: 844
     ];
     for (const [actor, next, role, skill] of turns) {
       await expect(page.locator(`#hero-${actor}`)).toHaveAttribute('aria-pressed', 'true');
-      await page.locator('#target-brute').tap(); await commit(page);
+      await page.locator('#target-brute').tap(); await finishTurn(page);
       await expect(page.locator(`#hero-${next}`)).toHaveAttribute('aria-pressed', 'true');
       await expect(page.locator('#selected-hero')).toContainText(role!);
       await expect(page.locator(`#action-${skill}`)).toBeVisible();
       await expect(page.locator('#action-attack')).toHaveAttribute('aria-pressed', 'true');
       await expect(page.locator('.hero-slot .portrait')).toHaveAttribute('data-actor', next!);
-      await expect(page.locator('#mobile-preview')).not.toBeVisible();
+      await expect(page.locator('dialog')).toHaveCount(0);
       if (next === 'healer') {
         await page.reload(); await expect(page.locator('#hero-healer')).toHaveAttribute('aria-pressed', 'true');
         await expect(page.locator('#beat-status')).toContainText('จังหวะ 4');
@@ -202,18 +221,18 @@ test('auto-selection skips fallen heroes after commit and saved reload', async (
   await page.reload();
   await expect(page.locator('#hero-weaver')).toBeDisabled();
   await expect(page.locator('#hero-tracer')).toHaveAttribute('aria-pressed', 'true');
-  await page.locator('#target-brute').click(); await commit(page);
+  await page.locator('#target-brute').click(); await finishTurn(page);
   await expect(page.locator('#hero-healer')).toHaveAttribute('aria-pressed', 'true');
   await page.reload(); await expect(page.locator('#hero-healer')).toHaveAttribute('aria-pressed', 'true');
   for (const next of ['guardian', 'tracer', 'healer', 'guardian', 'healer', 'healer']) {
-    await page.locator('#target-brute').click(); await commit(page);
+    await page.locator('#target-brute').click(); await finishTurn(page);
     await expect(page.locator(`#hero-${next}`)).toHaveAttribute('aria-pressed', 'true');
   }
   await expect(page.locator('#hero-tracer')).toBeDisabled();
   await expect(page.locator('#hero-guardian')).toBeDisabled();
   await page.reload();
   await expect(page.locator('#hero-healer')).toHaveAttribute('aria-pressed', 'true');
-  await page.locator('#target-brute').click(); await commit(page);
+  await page.locator('#target-brute').click(); await finishTurn(page);
   await expect(page.getByRole('heading', { name: 'แพ้แล้ว', exact: true })).toBeVisible();
   await expect(page.locator('#hero-healer')).toHaveAttribute('aria-pressed', 'true');
   await page.reload(); await expect(page.locator('#hero-healer')).toHaveAttribute('aria-pressed', 'true');
@@ -253,13 +272,13 @@ test('modern phone HUD keeps enemy HP and every class skill status in sync', asy
   const intent = (await page.locator('#intent').boundingBox())!;
   expect(enemies.y).toBeGreaterThanOrEqual(arena.y + arena.height);
   expect(intent.y).toBeGreaterThan(enemies.y); expect(cards[0]!.y).toBeGreaterThan(intent.y);
-  await choose(page, 'weaver', 'bolt', 'brute'); await commit(page);
+  await choose(page, 'weaver', 'bolt', 'brute'); await finishTurn(page);
   await expect(page.locator('[data-enemy="brute"]')).toContainText('138 / 164');
   await expect(page.locator('#hero-weaver [data-skill="bolt"]')).toContainText('รอ 2 จังหวะ');
   await expect(page.locator('#hero-healer [data-skill="heal"]')).toContainText('พร้อมใช้');
   await expect(page.locator('#hero-tracer')).toContainText('44 / 56');
   await expect(page.locator('#hero-healer')).toHaveAttribute('aria-pressed', 'true');
-  await choose(page, 'weaver', 'ward', 'guardian'); await commit(page);
+  await choose(page, 'weaver', 'ward', 'guardian'); await finishTurn(page);
   await expect(page.locator('#hero-guardian .barrier-info')).toHaveText('โล่ 14');
   expect(await page.locator('#hero-guardian .barrier-info').evaluate(el => {
     const r = el.getBoundingClientRect(); const card = el.closest('.hero-card')!.getBoundingClientRect();
@@ -275,60 +294,67 @@ test('modern phone HUD keeps enemy HP and every class skill status in sync', asy
   expect(errors).toEqual([]); await context.close();
 });
 
-test('real canvas selection, Guard preview/cancel/Escape, save, reload and restart', async ({ page }) => {
+test('canvas target executes Guard once; keyboard target works with no modal or extra confirmation', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'no-preference' }); const errors = await start(page);
   const canvas = page.locator('#game canvas'); const b = (await canvas.boundingBox())!;
   await canvas.click({ position: { x:b.width*.31, y:135+(b.height-170)*.20-70 } });
   await expect(page.locator('#hero-guardian')).toHaveAttribute('aria-pressed','true');
   await page.locator('#action-guard').click();
-  await canvas.click({ position: { x:b.width*.31, y:135+(b.height-170)*.82 } });
-  await expect(page.locator('#preview')).toContainText('เอกิส เสียเลือด 5');
-  await page.locator('#cancel').click(); await expect(page.locator('#target-tracer')).toBeFocused();
-  await page.locator('#target-tracer').click(); await page.keyboard.press('Escape');
   await expect(page.locator('#beat-status')).toContainText('จังหวะ 1');
-  await page.locator('#target-tracer').click(); await commit(page);
-  await expect(page.locator('#hero-guardian')).toContainText('71 / 76');
+  await expect(page.locator('#target-weaver')).toBeDisabled();
+  await canvas.click({ position: { x:b.width*.31, y:135+(b.height-170)*.82 } });
+  await expect(page.locator('#turn-phase')).toHaveAttribute('data-phase','hero');
+  await expect(page.locator('dialog, #confirm, #preview')).toHaveCount(0);
+  // A second queued click on the newly disabled target cannot issue another command.
+  await page.locator('#target-tracer').evaluate(el => el.dispatchEvent(new MouseEvent('click', { bubbles: true })));
+  expect(await page.evaluate(() => JSON.parse(localStorage.getItem('asterveil.fateweave.battle.v1')!).commands.length)).toBe(1);
+  await finishTurn(page); await expect(page.locator('#hero-guardian')).toContainText('71 / 76');
+  await expect(page.locator('#event-log')).toContainText('เอกิส เสียเลือด 5');
   await expect(page.locator('.next-slot')).toHaveAttribute('aria-label','จังหวะ 2 อสูรรอยแยก โจมตีไอรา พลังโจมตี 28');
   await page.reload(); await expect(page.locator('#start')).toHaveCount(0);
   await expect(page.locator('#beat-status')).toContainText('จังหวะ 2');
+  await page.locator('#target-brute').focus(); await page.keyboard.press('Enter'); await finishTurn(page);
+  await expect(page.locator('#beat-status')).toContainText('จังหวะ 3');
   await page.locator('#restart').click(); await expect(page.locator('#hero-healer')).toContainText('46 / 46');
   expect(errors).toEqual([]);
 });
 
 test('Mage cooldown survives reload and becomes ready on its exact beat', async ({ page }) => {
-  const errors = await start(page); await choose(page,'weaver','bolt','brute'); await commit(page);
+  const errors = await start(page); await choose(page,'weaver','bolt','brute'); await finishTurn(page);
   await page.locator('#hero-weaver').click(); await expect(page.locator('#action-bolt')).toBeDisabled();
   await expect(page.locator('#reason-bolt')).toContainText('พร้อมใน 2 จังหวะ');
   await page.reload(); await page.locator('#hero-weaver').click();
   await expect(page.locator('#reason-bolt')).toContainText('พร้อมใน 2 จังหวะ');
-  await choose(page,'guardian','guard','weaver'); await commit(page);
+  await choose(page,'guardian','guard','weaver'); await finishTurn(page);
   await page.locator('#hero-weaver').click(); await expect(page.locator('#reason-bolt')).toContainText('พร้อมใน 1 จังหวะ');
-  await choose(page,'healer','heal','tracer'); await commit(page);
+  await choose(page,'healer','heal','tracer'); await finishTurn(page);
   await page.locator('#hero-weaver').click(); await expect(page.locator('#action-bolt')).toBeEnabled();
   expect(errors).toEqual([]);
 });
 
-test('Ward, Heal and Prayer have real same-beat effects with clear previews', async ({ page }, info) => {
+test('Ward, Heal and Prayer execute immediately with real stage effects', async ({ page }, info) => {
   const errors = await start(page);
   await choose(page,'weaver','ward','tracer');
-  await expect(page.locator('#preview')).toContainText('โล่รับไว้ 12');
-  await expect(page.locator('#preview')).toContainText('โล่ 0 → 2'); await commit(page);
-  await choose(page,'guardian','guard','weaver'); await commit(page);
+  await expect(page.locator('#hero-tracer .barrier-info')).toHaveText('โล่ 14'); await finishTurn(page);
+  await expect(page.locator('#event-log')).toContainText('โล่รับไว้ 12');
+  await expect(page.locator('#hero-tracer .barrier-info')).toHaveText('โล่ 2');
+  await choose(page,'guardian','guard','weaver'); await finishTurn(page);
   await choose(page,'healer','heal','guardian');
-  await expect(page.locator('.player-outcome')).toContainText('เอกิส ฟื้นเลือด 10');
-  await expect(page.locator('.enemy-outcome')).toContainText('เอกิส เสียเลือด 12'); await commit(page);
-  await choose(page,'weaver','ward','tracer'); await commit(page);
-  await choose(page,'healer','prayer','party');
-  await expect(page.locator('.player-outcome')).toContainText('ไลรา ฟื้นเลือด 10');
-  await page.screenshot({path:info.outputPath('healer-party-preview.png'),fullPage:true});
-  await commit(page); await expect(page.locator('#hero-tracer')).toContainText('54 / 56');
+  await expect(page.locator('#hero-guardian')).toContainText('76 / 76'); await finishTurn(page);
+  await expect(page.locator('#event-log')).toContainText('เอกิส ฟื้นเลือด 10');
+  await expect(page.locator('#hero-guardian')).toContainText('64 / 76');
+  await choose(page,'weaver','ward','tracer'); await finishTurn(page);
+  await choose(page,'healer','prayer','party'); await finishTurn(page);
+  await expect(page.locator('#event-log')).toContainText('ไลรา ฟื้นเลือด 10');
+  await expect(page.locator('#hero-tracer')).toContainText('54 / 56');
+  await page.screenshot({path:info.outputPath('healer-party-result.png'),fullPage:true});
   expect(errors).toEqual([]);
 });
 
 for (const [name,moves,hp] of [['offensive',offensive,134],['defensive',defensive,94]] as const) {
   test(`four-class ${name} route wins with all four standing`, async ({ page }, info) => {
     test.setTimeout(90000); const errors = await start(page);
-    for (const [hero,action,target] of moves) { await choose(page,hero,action,target); await commit(page); }
+    for (const [hero,action,target] of moves) { await choose(page,hero,action,target); await finishTurn(page); }
     await expect(page.getByRole('heading',{name:'ชนะแล้ว',exact:true})).toBeVisible();
     await expect(page.locator('#start-screen')).toContainText('ยืนอยู่ 4 / 4 คน');
     await expect(page.locator('#start-screen')).toContainText(`เลือดทีม ${hp}`);
@@ -345,49 +371,57 @@ for (const first of ['raider','brute']) {
       let hero='healer'; for(const id of ['tracer','weaver','guardian','healer']) if(await page.locator(`#hero-${id}`).isEnabled()){hero=id;break;}
       await page.locator(`#hero-${hero}`).click(); await page.locator('#action-attack').click();
       const second=first==='raider'?'brute':'raider'; const target=await page.locator(`#target-${first}`).isEnabled()?first:second;
-      await page.locator(`#target-${target}`).click(); await commit(page);
+      await page.locator(`#target-${target}`).click(); await finishTurn(page);
     }
     await expect(page.getByRole('heading',{name:'แพ้แล้ว',exact:true})).toBeVisible(); expect(errors).toEqual([]);
   });
 }
 for(const viewport of [{width:320,height:568},{width:390,height:844},{width:600,height:800},{width:844,height:390}]){
-  test(`mobile ${viewport.width}x${viewport.height}: four-member roster, touch skills and reachable confirmation`,async({browser},info)=>{
+  test(`mobile ${viewport.width}x${viewport.height}: direct touch casts, optional help and reachable targets`,async({browser},info)=>{
     const context=await browser.newContext({viewport,isMobile:true,hasTouch:true,reducedMotion:'reduce'});
     const page=await context.newPage(); const errors=await start(page);
     await expect(page.locator('.hero-card')).toHaveCount(4);
     await page.locator('#hero-guardian').tap(); await page.locator('#action-bash').tap();
+    await page.locator('.action-help > summary').tap();
+    await expect(page.locator('.action-description')).toContainText('หยุดการโจมตีกายภาพ');
+    await expect(page.locator('#beat-status')).toContainText('จังหวะ 1');
+    await page.locator('.action-help > summary').tap();
     const member=(await page.locator('#hero-healer').boundingBox())!; expect(member.width).toBeGreaterThanOrEqual(44);expect(member.height).toBeGreaterThanOrEqual(44);
     await page.screenshot({path:info.outputPath('mobile-four-jobs.png'),fullPage:true});
-    await page.locator('#target-raider').tap(); await reachable(page,'#confirm'); await reachable(page,'#cancel');
-    await expect(page.locator('#preview')).toContainText('กระแทกโล่หยุด');
-    await page.locator('#cancel').tap(); await expect(page.locator('#beat-status')).toContainText('จังหวะ 1');
-    await page.locator('#target-raider').tap(); await page.touchscreen.tap(2,2);
-    await expect(page.locator('#mobile-preview')).not.toBeVisible();
-    await page.locator('#target-raider').tap(); await commit(page);
+    await targetReachable(page,'#target-raider');
+    await page.locator('#target-raider').tap();
+    await expect(page.locator('dialog, #confirm, #preview')).toHaveCount(0);
+    await expect(page.locator('#turn-phase')).toHaveAttribute('data-phase','hero'); await finishTurn(page);
+    await expect(page.locator('#event-log')).toContainText('กระแทกโล่หยุด');
     await page.locator('#hero-guardian').tap(); await expect(page.locator('#action-bash')).toBeDisabled();
-    await page.locator('#hero-weaver').tap(); await page.locator('#action-ward').tap(); await page.locator('#target-weaver').tap();
-    await reachable(page,'#confirm');
-    await page.locator('.preview-content').evaluate(el=>{el.scrollTop=el.scrollHeight;}); await reachable(page,'#confirm');
-    await page.screenshot({path:info.outputPath('mobile-ward-preview.png')}); await commit(page);
+    await page.locator('#hero-weaver').tap(); await page.locator('#action-ward').tap();
+    await targetReachable(page,'#target-weaver');
+    await page.locator('#target-weaver').tap(); await finishTurn(page);
     await expect(page.locator('#hero-weaver')).toContainText('34 / 48');
+    await page.locator('.command-dock').scrollIntoViewIfNeeded();
+    await page.screenshot({path:info.outputPath('mobile-direct-result.png'),fullPage:true});
     expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBe(true);
     expect(errors).toEqual([]); await context.close();
   });
 }
 
-test('four-class mobile battle, back-row canvas selection and rotation keep pending commands',async({browser},info)=>{
+test('four-class mobile battle, back-row canvas selection and rotation preserve an uncast skill',async({browser},info)=>{
   test.setTimeout(90000);
   const context=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true,reducedMotion:'reduce'});
   const page=await context.newPage();const errors=await start(page);
   const canvas=page.locator('#game canvas');const b=(await canvas.boundingBox())!;
   await canvas.tap({position:{x:b.width*.12,y:110+(b.height-130)*.82-45}});
   await expect(page.locator('#hero-healer')).toHaveAttribute('aria-pressed','true');
-  await choose(page,'tracer','mark','brute');
-  await page.setViewportSize({width:844,height:390});await reachable(page,'#confirm');
-  await page.setViewportSize({width:1366,height:900});await expect(page.locator('#confirm')).toHaveCount(1);
-  await expect(page.locator('#beat-status')).toContainText('จังหวะ 1');
-  await page.setViewportSize({width:390,height:844});await reachable(page,'#confirm');await commit(page);
-  for(const[hero,action,target]of offensive.slice(1)){await choose(page,hero,action,target);await commit(page);}
+  await page.locator('#hero-tracer').tap(); await page.locator('#action-mark').tap();
+  for (const viewport of [{width:844,height:390},{width:1366,height:900},{width:390,height:844}]) {
+    await page.setViewportSize(viewport);
+    await expect(page.locator('#action-mark')).toHaveAttribute('aria-pressed','true');
+    await expect(page.locator('#beat-status')).toContainText('จังหวะ 1');
+    await expect(page.locator('dialog')).toHaveCount(0);
+  }
+  await targetReachable(page,'#target-brute');
+  await page.locator('#target-brute').tap(); await finishTurn(page);
+  for(const[hero,action,target]of offensive.slice(1)){await choose(page,hero,action,target);await finishTurn(page);}
   await expect(page.locator('#start-screen')).toContainText('ยืนอยู่ 4 / 4 คน');
   await reachable(page,'.result-card button');await page.screenshot({path:info.outputPath('mobile-four-survivors.png')});
   await page.locator('.result-card button').tap();await expect(page.locator('#beat-status')).toContainText('จังหวะ 1');
@@ -398,6 +432,6 @@ test('old three-member saves restart safely, and denied storage stays playable',
   await page.addInitScript(()=>{try{localStorage.setItem('asterveil.fateweave.battle.v1',JSON.stringify({version:1,encounterId:'crystal-rift',contentVersion:2,commands:[{beat:1,heroId:'tracer',action:'mark',targetId:'brute'}]}));}catch{/* The denied-storage variant may run its init script first. */}});
   const errors=await start(page);await expect(page.locator('.hero-card')).toHaveCount(4);await expect(page.locator('#beat-status')).toContainText('จังหวะ 1');
   await page.addInitScript(()=>Object.defineProperty(window,'localStorage',{get:()=>{throw new Error('Denied');}}));
-  await page.reload();await page.locator('#start').click();await choose(page,'guardian','guard','tracer');await commit(page);
+  await page.reload();await page.locator('#start').click();await choose(page,'guardian','guard','tracer');await finishTurn(page);
   await expect(page.locator('#save-status')).toContainText('บันทึกบนเครื่องนี้ไม่ได้');expect(errors).toEqual([]);
 });

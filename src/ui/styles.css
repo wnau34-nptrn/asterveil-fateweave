@@ -155,10 +155,6 @@ main { max-width: 1240px; margin: auto; padding: 0 max(16px, env(safe-area-inset
 .target-reason { font-size: 9px; color: #d89aa9; display: block; margin-top: 3px; }
 .target-reason:empty { display: none; }
 .targets:has(#target-party) { grid-template-columns: 1fr; }
-#preview-home { border-top: 1px solid #d9bf8650; }
-#preview-home .step-heading, #preview-home .preview-empty > span, #preview-home .preview-empty p { display: none; }
-#preview-home .preview-empty { text-align: center; padding: 8px 12px; }
-#preview-home .preview-empty h3 { font-size: 10px; font-weight: 400; color: #91aac8; }
 .help-panel { margin-top: 9px; border: 1px solid #355170; border-radius: 8px; background: #0b192b; }
 .help-panel > summary { font-size: 11px; }
 .battle-notes { padding: 0 9px 9px; display: grid; grid-template-columns: 1.3fr 1fr 1fr 1fr; gap: 8px; margin-top: 9px; }
@@ -178,32 +174,6 @@ summary { min-height: 44px; padding: 11px 10px; cursor: pointer; color: #b2c7e1;
 #rules > p { margin-top: 10px; color: var(--muted); }
 #event-log { font-size: 11px; padding: 0 10px 10px 25px; margin: 0; max-height: 230px; overflow-y: auto; }
 footer { display: flex; justify-content: space-between; gap: 10px; font-size: 10px; color: #839bb9; margin-top: 9px; }
-#mobile-preview { color: #eaf0fa; background: #102039; padding: 0; border: 1px solid #d9bf8699; border-radius: 14px; width: calc(100% - 20px); max-width: 560px; inset: auto 0 10px; margin: 0 auto; max-height: calc(100dvh - env(safe-area-inset-top) - 22px); overflow: hidden; }
-#mobile-preview::backdrop { background: #020a17c4; }
-.mobile-preview-open { overflow: hidden; }
-#mobile-preview #preview { display: flex; flex-direction: column; max-height: calc(100dvh - env(safe-area-inset-top) - 24px); }
-.preview-header { display: flex; align-items: center; gap: 8px; flex-shrink: 0; padding: 9px 12px; border-bottom: 1px solid #d9bf8660; }
-.preview-header .step-heading { flex: 1; margin: 0; font-size: 15px; color: #eed6a6; }
-.sheet-close { width: 44px; height: 44px; padding: 0; font-size: 18px; }
-.preview-content { min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 12px 14px; }
-.preview-footer { flex-shrink: 0; padding: 10px max(14px, env(safe-area-inset-right)) max(10px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left)); border-top: 1px solid #d9bf8660; background: #152942; }
-.chosen-command { font-size: 14px; color: var(--gold); margin-bottom: 10px; }
-.outcome-group { border: 1px solid #68bda055; border-radius: 8px; padding: 9px 12px; margin-top: 7px; background: #18382f; }
-.enemy-outcome { border-color: #c48da044; background: #33283c; }
-.outcome-group h3 { font-size: 12px; color: #b8e8d2; font-weight: 500; }
-.enemy-outcome h3 { color: #edbed1; }
-.outcome-group ul { font-size: 13px; padding-left: 17px; margin: 4px 0 0; }
-.outcome-group li + li { margin-top: 3px; }
-.predictions { margin-top: 10px; }
-.prediction-row { display: flex; justify-content: space-between; gap: 10px; border-bottom: 1px solid #38506a; padding: 6px 0; font-size: 13px; }
-.prediction-row > b { font-weight: 500; color: #b8e6c7; text-align: right; }
-.prediction-row.health-loss > b { color: #ffb4bd; }
-.prediction-row small { display: block; color: #a6ddf7; }
-.next-intent { padding: 9px; margin-top: 10px; background: #19374d; border-radius: 5px; font-size: 12px; color: #b2d6f5; }
-.predicted-outcome { color: #f5daa4; margin-top: 8px; }
-.confirmation { display: flex; gap: 8px; }
-.confirmation .primary { flex: 1; }
-.confirmation-note { text-align: center; font-size: 10px; color: var(--muted); margin-top: 5px; }
 @media (max-width: 900px) {
   .masthead { min-height: 57px; gap: 10px; padding: max(7px, env(safe-area-inset-top)) 8px 7px; }
   .brand { font-size: 20px; gap: 4px; letter-spacing: 1.5px; }
@@ -293,7 +263,6 @@ footer { display: flex; justify-content: space-between; gap: 10px; font-size: 10
   .start-card h2, .result-card h2 { font-size: 25px; }
   .start-card > p:not(.eyebrow), .result-card > p:not(.eyebrow) { font-size: 12px; }
 }
-.mobile-layout #mobile-preview { bottom: 0; width: 100%; border-radius: 15px 15px 0 0; }
 @media (max-width: 360px) {
   .brand { font-size: 17px; }
   .brand-mark { font-size: 24px; }
@@ -392,3 +361,5 @@ footer { display: flex; justify-content: space-between; gap: 10px; font-size: 10
   .phase-flow { font-size: 8px; }
 }
 .turn-phase[data-canceled="true"] { --phase-accent: #d9bf86; background: linear-gradient(105deg, #302c35, #162137); border-color: #ad9570; }
+
+.target-hint { font-size: 11px; color: #b6d6ed; margin: 0 0 8px; }

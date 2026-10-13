@@ -1,4 +1,4 @@
-import { actionReason, createBattle, plannedIntents, previewCommand, resolveCommand, targetOptions } from '../core/battle/engine';
+import { actionReason, createBattle, plannedIntents, resolveCommand, targetOptions } from '../core/battle/engine';
 import type { ActionId, BattleState, Command, EncounterDefinition, Resolution } from '../core/battle/types';
 import { loadBattle, saveBattle } from '../core/save/battle-save';
 import { browserStorage } from '../platform/browser-storage';
@@ -13,7 +13,6 @@ export class BattleUI {
   state: BattleState;
   private heroId = 'tracer';
   private action: ActionId = 'attack';
-  private targetId: string | null = null;
   private started: boolean;
   private busy = false;
   private presentation: { phase: 'hero' | 'enemy'; command: Command; resolution: Resolution; frame: BattleState; heroLogEnd: number } | undefined;
@@ -54,7 +53,6 @@ export class BattleUI {
             <div class="team-section"><div class="team-heading"><h2 class="step-heading">ทีมของคุณ</h2><small>แตะการ์ดเพื่อเลือกฮีโร่</small></div><div id="party" class="party" aria-label="เลือกฮีโร่"></div></div>
             <div class="command-dock"><div id="selected-hero" aria-live="polite"></div><div id="commands" class="step-section"></div></div>
           </section>
-          <div id="preview-home"><div id="preview" class="step-section" aria-live="polite"></div></div>
         </div>
         <details class="help-panel"><summary>วิธีเล่น · แผนศัตรู · บันทึกการต่อสู้</summary><div class="battle-notes">
           <div id="formation-info" class="formation-info"></div>
@@ -62,9 +60,8 @@ export class BattleUI {
           <details class="field-notes"><summary>อาชีพ · สกิลและแนวหน้า/หลัง</summary><div id="rules"></div></details>
           <details class="combat-history"><summary>บันทึกการต่อสู้</summary><ol id="event-log" role="log" aria-live="polite"></ol></details>
         </div></details>
-        <footer><span>เลือกฮีโร่ → คำสั่ง → เป้าหมาย → ดูผลก่อนยืนยัน</span><span id="save-status"></span></footer>
-      </main>
-      <dialog id="mobile-preview" aria-labelledby="preview-heading"><div id="mobile-preview-host"></div></dialog>`;
+        <footer><span>เลือกฮีโร่ → เลือกสกิล → แตะเป้าหมายเพื่อใช้ทันที</span><span id="save-status"></span></footer>
+      </main>`;
     root.addEventListener('click', e => {
       const button = (e.target as HTMLElement).closest<HTMLButtonElement>('button[data-ui]');
       if (!button || button.disabled) return;
@@ -72,22 +69,11 @@ export class BattleUI {
       switch (button.dataset.ui) {
         case 'start': this.started = true; this.render(); break;
         case 'hero': if (value) this.selectHero(value); break;
-        case 'action': if (value) { this.action = value as ActionId; this.targetId = null; this.render(); } break;
+        case 'action': if (value) { this.action = value as ActionId; this.render(); } break;
         case 'target': if (value) this.choose(value); break;
-        case 'confirm': this.confirm(); break;
-        case 'cancel': this.cancelPreview(); break;
         case 'skip-turn': this.finishPresentation(); break;
         case 'restart': this.restart(); break;
       }
-    });
-    window.addEventListener('keydown', e => {
-      if (e.key === 'Escape' && this.targetId) { e.preventDefault(); this.cancelPreview(); }
-    });
-    const dialog = root.querySelector<HTMLDialogElement>('#mobile-preview')!;
-    dialog.addEventListener('cancel', e => { e.preventDefault(); this.cancelPreview(); });
-    dialog.addEventListener('click', e => {
-      const bounds = dialog.getBoundingClientRect();
-      if (e.target === dialog && (e.clientX < bounds.left || e.clientX > bounds.right || e.clientY < bounds.top || e.clientY > bounds.bottom)) this.cancelPreview();
     });
     this.mobile.addEventListener('change', () => this.render());
     document.addEventListener('visibilitychange', () => {
@@ -111,18 +97,16 @@ export class BattleUI {
   }
 
   choose(id: string): void {
-    if (!this.started || this.busy || this.state.outcome !== 'active') return;
+    if (!this.scene?.isReady || !this.started || this.busy || this.state.outcome !== 'active') return;
     const target = targetOptions(this.state, this.data, this.heroId, this.action).find(t => t.id === id);
     if (target?.valid) {
-      this.targetId = id;
-      this.render();
-
+      this.execute(id);
     } else if (this.data.heroes.some(h => h.id === id)) this.selectHero(id);
   }
 
   private selectHero(id: string): void {
     if (this.busy || !this.state.heroes.some(h => h.id === id && h.hp > 0)) return;
-    this.heroId = id; this.action = 'attack'; this.targetId = null; this.render();
+    this.heroId = id; this.action = 'attack'; this.render();
   }
 
   private nextHeroId(afterId: string): string {
@@ -135,38 +119,13 @@ export class BattleUI {
     return afterId;
   }
 
-  private proposed(): Command | null {
-    return this.targetId ? { beat: this.state.beat, heroId: this.heroId, action: this.action, targetId: this.targetId } : null;
-  }
-
-  private cancelPreview(): void {
-    const returnFocus = this.targetId ? `target-${this.targetId}` : `action-${this.action}`;
-    this.targetId = null;
-    this.render();
-    this.root.querySelector<HTMLElement>(`#${returnFocus}`)?.focus({ preventScroll: true });
-  }
-
-  private syncPreview(disabled: boolean): void {
-    const dialog = this.root.querySelector<HTMLDialogElement>('#mobile-preview')!;
-    const preview = this.root.querySelector<HTMLElement>('#preview')!;
-    const show = !!this.proposed() && !disabled;
-    const host = this.root.querySelector(show ? '#mobile-preview-host' : '#preview-home')!;
-    if (!show && dialog.open) dialog.close();
-    if (preview.parentElement !== host) host.append(preview);
-    document.body.classList.toggle('mobile-preview-open', show);
-    if (show && !dialog.open) {
-      dialog.showModal();
-      this.root.querySelector<HTMLElement>('#preview-heading')?.focus({ preventScroll: true });
-    }
-  }
-
-  private confirm(): void {
-    const command = this.proposed();
-    if (!this.started || this.busy || !command || this.state.outcome !== 'active') return;
+  private execute(targetId: string): void {
+    if (!this.scene?.isReady || !this.started || this.busy || this.state.outcome !== 'active') return;
+    const command: Command = { beat: this.state.beat, heroId: this.heroId, action: this.action, targetId };
     const before = this.state;
     const result = resolveCommand(before, this.data, command);
     // Commit and persist immediately; animations never decide combat results.
-    this.state = result.state; this.targetId = null; this.busy = true;
+    this.state = result.state; this.busy = true;
     const logStart = this.messages.length;
     this.messages.push(`จังหวะ ${command.beat} · เทิร์นฮีโร่ · ${actorName(command.heroId, this.data)} ${this.data.skills[command.action].name}`,
       ...result.stages.hero.events.map(event => eventThai(event, result.state, this.data)),
@@ -179,7 +138,7 @@ export class BattleUI {
     const arena = this.root.querySelector<HTMLElement>('.arena')!;
     const banner = this.root.querySelector<HTMLElement>('#turn-phase')!;
     // A sticky banner's current rect may already be at the viewport top.
-    // Anchor to the non-sticky arena so confirming from the lower dock reveals combat.
+    // Anchor to the non-sticky arena so a cast from the lower dock reveals combat.
     window.scrollTo({ top: window.scrollY + arena.getBoundingClientRect().top - banner.offsetHeight - 8, behavior: 'instant' });
     const delay = 1000;
     this.timer = setTimeout(() => {
@@ -202,7 +161,7 @@ export class BattleUI {
 
   private restart(): void {
     clearTimeout(this.timer); this.timer = undefined; this.scene?.stopEffects(); this.presentation = undefined; this.busy = false; this.state = createBattle(this.data);
-    this.heroId = 'tracer'; this.action = 'attack'; this.targetId = null; this.started = true;
+    this.heroId = 'tracer'; this.action = 'attack'; this.started = true;
     this.messages = ['เริ่มการต่อสู้ใหม่แล้ว'];
     this.saved = saveBattle(this.storage, this.state, this.data); this.render();
     if (this.mobile.matches) this.root.querySelector('.arena')?.scrollIntoView({ block: 'nearest', behavior: 'auto' });
@@ -222,7 +181,7 @@ export class BattleUI {
     const actor = this.actingActor ?? (p?.phase === 'enemy' ? p.frame.intent?.sourceId : this.heroId);
     const title = !this.started ? 'เตรียมต่อสู้' : p?.phase === 'hero' ? `เทิร์นฮีโร่ · ${actorName(actor, d)}` : p?.phase === 'enemy' ? canceled ? 'เทิร์นศัตรูถูกหยุด' : `เทิร์นศัตรู · ${actorName(actor, d)}` : s.outcome !== 'active' ? `จบการต่อสู้ · ${s.outcome === 'victory' ? 'ชนะแล้ว' : 'แพ้แล้ว'}` : `เทิร์นของคุณ · ${actorName(this.heroId, d)}`;
     const events = p?.resolution.stages[p.phase].events.filter(e => e.type !== 'outcome');
-    const detail = p?.phase === 'hero' ? `${d.skills[p.command.action].name} → ${actorName(p.command.targetId, d)}` : p?.phase === 'enemy' ? canceled ? 'ศัตรูไม่ได้โจมตีในจังหวะนี้' : `${intentName(p.frame.intent!)} → ${actorName(this.actingTarget, d)}` : s.outcome !== 'active' ? 'กดเล่นอีกครั้งเพื่อลองแผนใหม่' : 'เลือกสกิลและเป้าหมาย แล้วดูผลก่อนยืนยัน';
+    const detail = p?.phase === 'hero' ? `${d.skills[p.command.action].name} → ${actorName(p.command.targetId, d)}` : p?.phase === 'enemy' ? canceled ? 'ศัตรูไม่ได้โจมตีในจังหวะนี้' : `${intentName(p.frame.intent!)} → ${actorName(this.actingTarget, d)}` : s.outcome !== 'active' ? 'กดเล่นอีกครั้งเพื่อลองแผนใหม่' : 'เลือกสกิล แล้วแตะเป้าหมายเพื่อใช้ทันที';
     const summary = events?.slice(0, 2).map(e => eventThai(e, this.state, d)).join(' · ') ?? '';
     const phaseRoot = this.root.querySelector<HTMLElement>('#turn-phase')!;
     phaseRoot.dataset.phase = mode; phaseRoot.dataset.actor = actor ?? '';
@@ -259,13 +218,13 @@ export class BattleUI {
       const recipient = hit?.targetId ?? intent.targetId;
       const target = s.heroes.find(h => h.id === recipient)!;
       const lethal = !this.presentation && intent.damage >= target.hp + target.barrier;
-      const heading = canceled ? 'การตอบโต้ถูกยกเลิกแล้ว' : response ? 'ศัตรูกำลังลงมือในเทิร์นนี้' : this.presentation ? 'ศัตรูรอตอบโต้หลังเทิร์นฮีโร่' : 'ศัตรูจะทำสิ่งนี้หลังคุณยืนยันคำสั่ง';
+      const heading = canceled ? 'การตอบโต้ถูกยกเลิกแล้ว' : response ? 'ศัตรูกำลังลงมือในเทิร์นนี้' : this.presentation ? 'ศัตรูรอตอบโต้หลังเทิร์นฮีโร่' : 'ศัตรูจะตอบโต้หลังฮีโร่ลงมือ';
       this.set('intent', `<div class="intent-icon">${icon(intent.kind === 'energy' ? 'bolt' : 'attack')}</div><div class="intent-copy"><p class="eyebrow">${heading}</p><h2>${actorName(intent.sourceId, d)} <span>→</span> ${actorName(recipient, d)}</h2><p>${intentName(intent)} · ${intent.kind === 'energy' ? 'พลังงาน' : 'กายภาพ'} <span class="intent-rule">${intent.kind === 'physical' ? 'แนวหน้ารับก่อน' : 'ถึงแนวหลังได้'}</span></p>${lethal ? `<p class="lethal-warning">⚠ ${actorName(intent.targetId, d)} จะล้มหากรับการโจมตีนี้โดยไม่มีการป้องกัน</p>` : ''}</div><div class="intent-damage"><strong>${canceled ? '—' : hit ? hit.amount : intent.damage}</strong><small>${hit ? 'เสียเลือด' : 'พลังโจมตี'}</small></div>`);
     } else this.set('intent', `<div class="intent-icon">✧</div><div class="intent-copy"><p class="eyebrow">การต่อสู้จบแล้ว</p><h2>${s.outcome === 'victory' ? 'คุณปิดรอยแยกได้แล้ว' : 'ทีมของคุณล้มทั้งหมด'}</h2><p>กดเริ่มใหม่เพื่อลองแผนอื่น</p></div>`);
     this.root.querySelector<HTMLElement>('#forecast-details')!.hidden = s.outcome !== 'active';
-    this.set('forecast', plannedIntents(s, d).map(next => `<div><b>จังหวะ ${next.beat} · ${intentName(next)}</b><small>${actorName(next.targetId, d)} · พลังโจมตี ${next.damage} · ${next.kind === 'energy' ? 'พลังงาน' : 'กายภาพ'}</small></div>`).join('') + (s.outcome === 'active' ? '<p>แผนนี้สมมติว่าตัวละครยังอยู่ เปลี่ยนได้เมื่อมีใครล้ม การโจมตีจังหวะปัจจุบันจะไม่ถูกเปลี่ยนหลังยืนยัน</p>' : ''));
+    this.set('forecast', plannedIntents(s, d).map(next => `<div><b>จังหวะ ${next.beat} · ${intentName(next)}</b><small>${actorName(next.targetId, d)} · พลังโจมตี ${next.damage} · ${next.kind === 'energy' ? 'พลังงาน' : 'กายภาพ'}</small></div>`).join('') + (s.outcome === 'active' ? '<p>แผนนี้สมมติว่าตัวละครยังอยู่ เปลี่ยนได้เมื่อมีใครล้ม การโจมตีจังหวะปัจจุบันจะไม่ถูกเปลี่ยนหลังใช้สกิล</p>' : ''));
     this.set('formation-info', '<div><strong>แนวหน้า 2 · แนวหลัง 2</strong><p>กายภาพโจมตีแนวหน้าก่อน · พลังงานถึงแนวหลังได้ · สกิลเฉพาะมีคูลดาวน์</p></div>');
-    this.set('start-screen', !this.started ? `<div class="start-card"><p class="eyebrow">การต่อสู้แบบวางแผน</p><h2>อ่านอันตราย<br>เลือกเปลี่ยนผลลัพธ์</h2><p>แต่ละจังหวะใช้ฮีโร่ 1 คน ออกคำสั่ง 1 ครั้ง<br>ดูผลล่วงหน้าได้ ยังไม่มีอะไรเกิดขึ้นจนกดยืนยัน</p><button data-ui="start" id="start" class="primary" ${!this.scene?.isReady ? 'disabled' : ''}>${this.scene?.isReady ? 'เริ่มต่อสู้ →' : 'กำลังเตรียมสนาม…'}</button></div>` : s.outcome !== 'active' ? `<div class="result-card" role="status"><p class="eyebrow">${s.outcome === 'victory' ? 'ปิดรอยแยกสำเร็จ' : 'ลองวางแผนใหม่'}</p><h2>${s.outcome === 'victory' ? 'ชนะแล้ว' : 'แพ้แล้ว'}</h2><p>ยืนอยู่ ${s.heroes.filter(h => h.hp > 0).length} / ${s.heroes.length} คน · เลือดทีม ${s.heroes.reduce((hp, h) => hp + h.hp, 0)}<br>ใช้ ${s.commands.length} คำสั่ง</p>${s.outcome === 'victory' ? `<strong class="party-result">${s.heroes.every(h => h.hp > 0) ? 'รักษาทีมครบทุกคน' : 'ชนะ แต่เสียสมาชิกในทีม'}</strong>` : ''}<button data-ui="restart" class="primary">เล่นอีกครั้ง ↻</button></div>` : '');
+    this.set('start-screen', !this.started ? `<div class="start-card"><p class="eyebrow">การต่อสู้แบบวางแผน</p><h2>อ่านอันตราย<br>เลือกเปลี่ยนผลลัพธ์</h2><p>แต่ละจังหวะใช้ฮีโร่ 1 คน ออกคำสั่ง 1 ครั้ง<br>เลือกสกิล แล้วแตะเป้าหมายเพื่อใช้ทันที</p><button data-ui="start" id="start" class="primary" ${!this.scene?.isReady ? 'disabled' : ''}>${this.scene?.isReady ? 'เริ่มต่อสู้ →' : 'กำลังเตรียมสนาม…'}</button></div>` : s.outcome !== 'active' ? `<div class="result-card" role="status"><p class="eyebrow">${s.outcome === 'victory' ? 'ปิดรอยแยกสำเร็จ' : 'ลองวางแผนใหม่'}</p><h2>${s.outcome === 'victory' ? 'ชนะแล้ว' : 'แพ้แล้ว'}</h2><p>ยืนอยู่ ${s.heroes.filter(h => h.hp > 0).length} / ${s.heroes.length} คน · เลือดทีม ${s.heroes.reduce((hp, h) => hp + h.hp, 0)}<br>ใช้ ${s.commands.length} คำสั่ง</p>${s.outcome === 'victory' ? `<strong class="party-result">${s.heroes.every(h => h.hp > 0) ? 'รักษาทีมครบทุกคน' : 'ชนะ แต่เสียสมาชิกในทีม'}</strong>` : ''}<button data-ui="restart" class="primary">เล่นอีกครั้ง ↻</button></div>` : '');
   }
 
   private renderParty(disabled: boolean): void {
@@ -290,25 +249,11 @@ export class BattleUI {
     this.set('commands', `<h2 class="step-heading"><span>2</span>${heroText[this.heroId]!.role} · เลือกคำสั่ง</h2><div class="actions">${hero.actions.map(action => {
       const text = d.skills[action]; const reason = actionReason(s, d, this.heroId, action);
       return `<div class="action-option"><button id="action-${action}" data-ui="action" data-value="${action}" class="action ${action} ${this.action === action ? 'selected' : ''}" aria-pressed="${this.action === action}" aria-describedby="reason-${action}" ${disabled || reason ? 'disabled' : ''}>${icon(action)}<strong>${text.name}</strong><small>${text.english}</small><span class="skill-value">${action === 'attack' ? `พลัง ${hero.attack}` : action === 'mark' ? `โบนัส +${d.rules.markedBonus}` : action === 'guard' ? `ลด ${d.rules.guardReduction * 100}%` : `พลัง ${text.power}`}</span></button><p id="reason-${action}" class="${reason ? 'unavailable-reason' : ''}">${escapeHtml(reason ? reasonThai(reason) : text.cooldown ? `คูลดาวน์ ${text.cooldown} จังหวะ` : 'ใช้ได้ทุกจังหวะ')}</p></div>`;
-    }).join('')}</div><details class="action-help"><summary>วิธีใช้${d.skills[this.action].name}</summary><p class="action-description">${skillDescription(this.action, this.heroId, d)}</p></details><h2 class="step-heading target-heading"><span>3</span>${this.action === 'prayer' ? 'ฟื้นฟูทีม' : allyAction ? 'เลือกเพื่อน' : 'เลือกศัตรู'}</h2><div class="targets ${allyAction ? 'ally-targets' : ''}">${targets.map(t => {
+    }).join('')}</div><details class="action-help"><summary>วิธีใช้${d.skills[this.action].name}</summary><p class="action-description">${skillDescription(this.action, this.heroId, d)}</p></details><h2 class="step-heading target-heading"><span>3</span>${this.action === 'prayer' ? 'ฟื้นฟูทีม' : allyAction ? 'เลือกเพื่อน' : 'เลือกศัตรู'}</h2><p class="target-hint">แตะเป้าหมายเพื่อใช้${d.skills[this.action].name}ทันที</p><div class="targets ${allyAction ? 'ally-targets' : ''}">${targets.map(t => {
       const enemy = s.enemies.find(e => e.id === t.id); const ally = s.heroes.find(h => h.id === t.id);
       const info = enemy ? `เลือด ${enemy.hp} / ${d.enemies.find(e => e.id === t.id)!.maxHp}${enemy.markedUntil > s.beat ? ' · ติดตรา' : ''}` : ally ? `เลือด ${ally.hp} / ${d.heroes.find(h => h.id === t.id)!.maxHp}${s.intent?.targetId === t.id ? ' · ศัตรูเล็ง' : ''}` : 'ทุกคนที่ยังยืนอยู่';
-      return `<div class="target-option"><button id="target-${t.id}" data-ui="target" data-value="${t.id}" aria-pressed="${this.targetId === t.id}" aria-describedby="target-reason-${t.id}" class="target ${this.targetId === t.id ? 'selected' : ''}" ${disabled || !t.valid ? 'disabled' : ''}>${t.id !== 'party' ? this.portrait(t.id) : icon('prayer')}<span><strong>${actorName(t.id, d)}</strong><small>${info}</small></span></button><small id="target-reason-${t.id}" class="target-reason">${escapeHtml(reasonThai(t.reason))}</small></div>`;
+      return `<div class="target-option"><button id="target-${t.id}" data-ui="target" data-value="${t.id}" aria-label="ใช้${d.skills[this.action].name}กับ${actorName(t.id, d)}" aria-describedby="target-reason-${t.id}" class="target" ${disabled || !t.valid ? 'disabled' : ''}>${t.id !== 'party' ? this.portrait(t.id) : icon('prayer')}<span><strong>${actorName(t.id, d)}</strong><small>${info}</small></span></button><small id="target-reason-${t.id}" class="target-reason">${escapeHtml(reasonThai(t.reason))}</small></div>`;
     }).join('')}</div>`);
-  }
-
-  private renderPreview(result: Resolution, command: Command, disabled: boolean): void {
-    const before = this.state; const after = result.state; const d = this.data;
-    const playerEvents = result.stages.hero.events;
-    const responseEvents = result.stages.enemy.events;
-    const fallen = before.heroes.filter(h => h.hp > 0 && after.heroes.find(next => next.id === h.id)!.hp === 0);
-    const changes = [
-      ...before.heroes.map(h => { const next = after.heroes.find(n => n.id === h.id)!; return { id: h.id, hp: h.hp, nextHp: next.hp, barrier: h.barrier, nextBarrier: next.barrier, ally: true }; }),
-      ...before.enemies.map(e => { const next = after.enemies.find(n => n.id === e.id)!; return { id: e.id, hp: e.hp, nextHp: next.hp, barrier: 0, nextBarrier: 0, ally: false }; }),
-    ].filter(c => c.hp !== c.nextHp || c.barrier !== c.nextBarrier);
-    const eventsHtml = (events: Resolution['events']) => events.map(event => `<li>${escapeHtml(eventThai(event, after, d))}</li>`).join('');
-    const next = after.intent;
-    this.set('preview', `<div class="preview-header"><h2 id="preview-heading" class="step-heading" tabindex="-1"><span>4</span>ดูผลก่อนกดยืนยัน</h2><button class="sheet-close quiet" data-ui="cancel" aria-label="กลับไปเลือกคำสั่ง">✕</button></div><div class="preview-content"><div class="chosen-command">${actorName(command.heroId, d)} · ${this.data.skills[command.action].name} → ${actorName(command.targetId, d)}</div>${fallen.length ? `<p class="lethal-warning">⚠ ${fallen.map(h => actorName(h.id, d)).join(', ')} จะล้มถ้าใช้คำสั่งนี้</p>` : ''}<div class="outcome-group player-outcome"><h3>คำสั่งของคุณ</h3><ul>${eventsHtml(playerEvents)}</ul></div><div class="outcome-group enemy-outcome"><h3>ศัตรูและผลต่อทีม</h3><ul>${eventsHtml(responseEvents)}</ul></div><div class="predictions">${changes.map(c => `<div class="prediction-row ${c.ally && c.hp > c.nextHp ? 'health-loss' : ''}"><span>${actorName(c.id, d)}</span><b>เลือด ${c.hp} → ${c.nextHp}${c.barrier !== c.nextBarrier ? `<small>โล่ ${c.barrier} → ${c.nextBarrier}</small>` : ''}</b></div>`).join('')}</div>${after.outcome !== 'active' ? `<p class="predicted-outcome">ผลที่คาด: ${after.outcome === 'victory' ? 'ชนะ' : 'แพ้'}</p>` : ''}${next ? `<p class="next-intent">จังหวะถัดไป: ${intentName(next)} → ${actorName(next.targetId, d)} · พลังโจมตี ${next.damage}</p>` : ''}</div><div class="preview-footer"><div class="confirmation"><button id="confirm" data-ui="confirm" class="primary" ${disabled ? 'disabled' : ''}>ยืนยันคำสั่งนี้ →</button><button id="cancel" data-ui="cancel" class="quiet">ยกเลิก</button></div><p class="confirmation-note">${this.mobile.matches ? 'เลื่อนอ่านผลได้ · ยกเลิกเพื่อเปลี่ยนคำสั่ง' : 'เปลี่ยนใจได้ก่อนยืนยัน · กด Esc เพื่อยกเลิก'}</p></div>`);
   }
 
   private render(): void {
@@ -316,15 +261,11 @@ export class BattleUI {
     const s = this.state; const d = this.data; const disabled = !this.scene?.isReady || !this.started || this.busy || s.outcome !== 'active';
     this.root.classList.toggle('mobile-layout', this.mobile.matches);
     this.renderPhase(); this.renderSituation(); this.renderSelectedHero(); this.renderParty(disabled); this.renderCommands(disabled);
-    const command = this.proposed();
-    if (command && s.outcome === 'active') this.renderPreview(previewCommand(s, d, command), command, disabled);
-    else this.set('preview', `<h2 class="step-heading"><span>4</span>ดูผลก่อนกดยืนยัน</h2><div class="preview-empty"><span aria-hidden="true">✧</span><h3>${this.busy ? 'กำลังแสดงผล…' : s.outcome !== 'active' ? 'การต่อสู้จบแล้ว' : !this.started ? 'กดเริ่มต่อสู้ก่อน' : 'เลือกเป้าหมายเพื่อดูผล'}</h3><p>${s.outcome !== 'active' ? 'กดเริ่มใหม่เพื่อลองแผนอื่น' : 'คุณจะเห็นทั้งคำสั่งของตัวเองและการตอบโต้ของศัตรู ยังไม่มีอะไรเกิดขึ้นจนกดยืนยัน'}</p></div>`);
-    this.set('rules', `<h3>4 อาชีพ · แนวหน้า 2 / หลัง 2</h3><p>แนวหน้าที่ยังยืนอยู่รับการโจมตีกายภาพก่อน พลังงานโจมตีแนวหลังได้ เมื่อแนวหน้าล้มหมด กายภาพจะถึงแนวหลัง การโจมตีที่ประกาศไว้ไม่เปลี่ยนหลังยืนยัน</p>${d.heroes.map(hero => `<h3>${heroText[hero.id]!.name} · ${heroText[hero.id]!.role} · ${hero.lane === 'front' ? 'แนวหน้า' : 'แนวหลัง'}</h3><dl>${hero.actions.map(action => `<dt>${d.skills[action].name} (${d.skills[action].english})</dt><dd>${skillDescription(action, hero.id, d)}</dd>`).join('')}</dl>`).join('')}<p>แต่ละจังหวะใช้ 1 คำสั่ง สกิลคูลดาวน์ 3 จังหวะที่ใช้ในจังหวะ 1 จะพร้อมอีกครั้งในจังหวะ 4 การรักษาไม่ชุบชีวิต โล่เวทไม่ซ้อนกัน เป้าหมายเสริมคือชนะโดยรักษาทีมครบ 4 คน</p>`);
+    this.set('rules', `<h3>4 อาชีพ · แนวหน้า 2 / หลัง 2</h3><p>แนวหน้าที่ยังยืนอยู่รับการโจมตีกายภาพก่อน พลังงานโจมตีแนวหลังได้ เมื่อแนวหน้าล้มหมด กายภาพจะถึงแนวหลัง การโจมตีที่ประกาศไว้ไม่เปลี่ยนหลังใช้สกิล</p>${d.heroes.map(hero => `<h3>${heroText[hero.id]!.name} · ${heroText[hero.id]!.role} · ${hero.lane === 'front' ? 'แนวหน้า' : 'แนวหลัง'}</h3><dl>${hero.actions.map(action => `<dt>${d.skills[action].name} (${d.skills[action].english})</dt><dd>${skillDescription(action, hero.id, d)}</dd>`).join('')}</dl>`).join('')}<p>แต่ละจังหวะใช้ 1 คำสั่ง สกิลคูลดาวน์ 3 จังหวะที่ใช้ในจังหวะ 1 จะพร้อมอีกครั้งในจังหวะ 4 การรักษาไม่ชุบชีวิต โล่เวทไม่ซ้อนกัน เป้าหมายเสริมคือชนะโดยรักษาทีมครบ 4 คน</p>`);
     const shownMessages = this.presentation?.phase === 'hero' ? this.messages.slice(0, this.presentation.heroLogEnd) : this.messages;
     this.set('event-log', shownMessages.slice(-30).map(message => `<li>${escapeHtml(message)}</li>`).join(''));
     this.set('save-status', this.saved && this.storage ? 'บันทึกบนเครื่องนี้อัตโนมัติ' : 'เล่นได้ แต่บันทึกบนเครื่องนี้ไม่ได้');
-    this.scene?.sync({ state: this.displayState, heroId: this.heroId, targetId: this.targetId, phase: this.presentation?.phase, activeActorId: this.actingActor, activeTargetId: this.actingTarget });
-    this.syncPreview(disabled);
+    this.scene?.sync({ state: this.displayState, heroId: this.heroId, targetId: null, phase: this.presentation?.phase, activeActorId: this.actingActor, activeTargetId: this.actingTarget });
     if (focus) this.root.querySelector<HTMLElement>(`#${focus}`)?.focus({ preventScroll: true });
   }
 }

@@ -12,7 +12,7 @@ The supplied classic JRPG screenshots guide a portrait battle screen: arena abov
 - Native DOM bands: brand/beat/restart → sticky turn phase → canvas + existing event timeline and lane labels → two enemy HP cards → frozen enemy intent → four hero cards → selected class/commands/targets → one help disclosure containing tactics/history. Desktop places team and commands beside each other; phones stack them. Short landscape retains a compact arena and two-column dock; its timeline occupies the free space between hero and enemy columns, preserving hero faces.
 - Four hero cards, exactly 2×2 at all sizes. Each has an illustrated portrait, class/lane, numeric HP and bar, optional barrier, and two real skill statuses. Selection is a gold outline plus text. Downed actors fade and cannot act.
 - Three real owned commands for the selected class. Original English names accompany Thai labels and powers. Enemy/ally target buttons show the corresponding portrait and true HP.
-- The existing native preview dialog remains code-native: player effects, enemy response, HP/barrier ledger, next intent, stationary confirmation/cancel footer, scrolling results and modal focus.
+- Valid target taps immediately cast the selected skill. Optional **วิธีใช้…** exposes skill rules; the announced intent remains visible. No predicted-outcome ledger or confirmation dialog covers the field.
 
 ## Assets and implementation boundaries
 
@@ -24,7 +24,7 @@ Intentional constraints relative to generated concept: Thai names, skills, HP, c
 
 ## Interaction contract
 
-Selecting a card updates commands and canvas/timeline highlight. Selecting a legal target previews without committing. Confirm commits one beat, presents hero then enemy stages, and selects the next living hero when presentation finishes; cancel and rotation retain/cancel choices as before. Existing exact resolver and replay remain authoritative. Skill statuses derive from actor cooldowns and legal targets: healing at full HP is visibly unavailable, not presented as ready.
+Selecting a card updates commands and canvas/timeline highlight. Selecting a hero or skill does not commit. Tapping a legal target commits one beat immediately, presents hero then enemy stages, and selects the next living hero when presentation finishes. Rotation preserves an uncast skill; native target buttons also support keyboard activation. Existing exact resolver and replay remain authoritative. Skill statuses derive from actor cooldowns and legal targets: healing at full HP is visibly unavailable, not presented as ready.
 
 Browser validation uses existing Playwright production-subpath tests because Browser plugin is not available. Physical devices and Safari remain separate validation work.
 
@@ -40,7 +40,7 @@ Compared the generated concept with final actual browser screenshots using `view
 | Portrait/field assets | Original generated six-cell atlases replace geometric placeholders. Faces have consistent crops; sprites share frame/feet anchors, and pointer zones include their visible heads. |
 | Icons and states | One custom line-icon family modernizes the illustrated icon motifs. Active class tones, gold selection and muted unavailable actions remain consistent; readiness reflects targets/cooldowns. |
 | Spacing and layering | Compact ally HP numbers live on large cards. Shield values have their own line. Enemy/status labels render above overlapping sprites; short-landscape timeline moves off the Mage's face. |
-| Interaction/preview | Selecting a hero/skill/target uses actual engine data; the native dialog separates effects and keeps confirm/cancel reachable while results scroll. Rotation, saves and automatic next-hero selection persist. |
+| Direct interaction | Selecting a hero/skill uses actual engine data; tapping a valid target casts immediately. Optional skill help explains rules without advancing a beat. Rotation, saves and automatic next-hero selection persist. |
 
 Above-the-fold copy review: brand, four real names/classes, formation, true enemy/hero HP, actual skills/powers and current beat are retained. The prototype's skill aliases, dummy readiness dots and Battle 1/1 are replaced with authoritative content as declared above. Functional selection/help/readiness labels are part of the implementation inventory. No currencies, item counts, AUTO, Ultimate or reward claims were added. Phones scroll naturally to the target row and help instead of shrinking all copy to reproduce a fixed-height screenshot. These are intentional adaptations to the actual game and responsive constraints, rather than unresolved rendering defects.
 
@@ -50,4 +50,8 @@ Each beat presents a cyan hero stage followed by a pink enemy stage, one second 
 
 The authoritative resolver provides independent render-only snapshots after the hero and after the enemy, both retaining the original beat/intent. All visible HP/barrier values use the current snapshot; the next intent, final result card and automatic next hero appear only at completion. The log reveals hero events before enemy events. The final state commits/saves once before presentation; snapshots never enter replay. Skip/hidden-tab completion use that committed result; restart cancels both timers and effects. Controls remain locked until completion.
 
-Confirming from a scrolled dock anchors the non-sticky arena below the banner, so both the turn label and battlefield are visible on phones. Merely scrolling a sticky banner into view would leave the field above the viewport. Canvas pointer bounds refresh on touch/pointer start to preserve selection after this scroll. The skip button remains at least 44px tall. These are presentation changes within the existing one-hero/one-enemy beat, not a four-hero initiative round or a balance/content-version change.
+Casting from a scrolled dock anchors the non-sticky arena below the banner, so both the turn label and battlefield are visible on phones. Merely scrolling a sticky banner into view would leave the field above the viewport. Canvas pointer bounds refresh on touch/pointer start to preserve selection after this scroll. The skip button remains at least 44px tall. These are presentation changes within the existing one-hero/one-enemy beat, not a four-hero initiative round or a balance/content-version change.
+
+## Direct casting — 2026-10-13
+
+User feedback removed the recurring complete-outcome preview and confirmation sheet. Target buttons explicitly say to tap to cast the selected skill and have skill/recipient accessible names. The canvas uses the same legal-target path; hero cards always select the actor. Invalid targets, downed actors, unavailable skills and scene loading remain blocked. The two-second presentation lock rejects repeated input, and the selected next hero defaults to Attack when it finishes. Optional skill help stays in the dock, with enemy intent and forecasts available for planning. No combat math, scene artwork or content/save version changes.

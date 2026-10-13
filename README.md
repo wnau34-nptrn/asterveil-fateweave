@@ -4,7 +4,7 @@ A small, playable **Fateweave tactical reaction combat** prototype. This is an i
 
 ## Play in your browser
 
-GitHub Pages target: **https://wnau34-nptrn.github.io/asterveil-fateweave/**. Availability depends on a successful **Publish playable prototype** workflow deployment. The interface is in Thai. Click **เริ่มต่อสู้**; use the lower command dock to choose a hero, action and target; review the predicted outcome; click **ยืนยันคำสั่งนี้** when ready. No installation or account is required to play the published static game.
+GitHub Pages target: **https://wnau34-nptrn.github.io/asterveil-fateweave/**. Availability depends on a successful **Publish playable prototype** workflow deployment. The interface is in Thai. Click **เริ่มต่อสู้**; use the lower command dock to choose a hero and skill, then tap a valid target to cast immediately. Read **วิธีใช้…** for optional skill details. No installation or account is required to play the published static game.
 
 Public Pages publication was explicitly requested after the initial prototype. The workflow builds and tests the full browser gameplay suite on the production subpath before uploading `dist/`, then deploys with GitHub's official Pages actions. It publishes the current prototype branch and `main`; no automatic merge is performed. If Pages cannot be enabled by Actions, a repository administrator must choose **Settings → Pages → Build and deployment → Source: GitHub Actions**.
 
@@ -68,10 +68,10 @@ npm run test:browser
 ## How to play
 
 1. กด **เริ่มต่อสู้** หรือเล่นต่อจากเซฟที่รองรับเวอร์ชันปัจจุบัน
-2. อ่านแถบ **ศัตรูจะทำอะไรหลังยืนยัน**: ผู้โจมตี เป้าหมาย ประเภท และความเสียหาย เปิดแผนอีก 2 จังหวะเมื่อต้องการวางแผน
-3. เลือกฮีโร่ → คำสั่ง → เป้าหมาย ทุกคนมีโจมตีพื้นฐานและสกิลเฉพาะ 2 อย่าง ปุ่มแสดงเหตุผลเมื่อใช้ไม่ได้และจำนวนจังหวะที่เหลือของคูลดาวน์
-4. ตรวจผลล่วงหน้า: แยกคำสั่งของคุณกับการตอบโต้ของศัตรู แสดงเลือด/โล่ที่เปลี่ยน คำเตือนเพื่อนล้ม และการโจมตีถัดไปจริง
-5. กด **ยืนยันคำสั่งนี้** เพื่อเดิน 1 จังหวะ แสดง **เทิร์นฮีโร่ (สีฟ้า) → เทิร์นศัตรู (สีชมพู) → เลือกสมาชิกคนถัดไป** เลือด/โล่เปลี่ยนตามช่วงที่เกิดผล หากหยุดศัตรูได้จะขึ้นว่าศัตรูไม่ได้โจมตี กด **ดูผลทันที** เพื่อข้ามการแสดงผล เกมจะเลือกสมาชิกคนถัดไปอัตโนมัติ วน เอกิส → ไลรา → ไอรา → เซเรน และข้ามคนที่ล้มแล้ว แตะเลือกคนอื่นเองได้ **ยกเลิก** / Esc ไม่เปลี่ยนตัวหรือเดินจังหวะ การเลือกเป้าหมายยังไม่ออกคำสั่ง
+2. อ่านแถบ **ศัตรูจะตอบโต้หลังฮีโร่ลงมือ**: ผู้โจมตี เป้าหมาย ประเภท และความเสียหาย เปิดแผนอีก 2 จังหวะเมื่อต้องการวางแผน
+3. เลือกฮีโร่และสกิล ทุกคนมีโจมตีพื้นฐานและสกิลเฉพาะ 2 อย่าง ปุ่มแสดงเหตุผลเมื่อใช้ไม่ได้และจำนวนจังหวะที่เหลือของคูลดาวน์
+4. เปิด **วิธีใช้…** เมื่อต้องการอ่านคำอธิบายสกิล การเลือกฮีโร่ เปลี่ยนสกิล หรืออ่านข้อมูลยังไม่เดินจังหวะ
+5. **แตะเป้าหมายเพื่อใช้สกิลทันที** ได้ทั้งปุ่มเป้าหมายและตัวละครในสนาม ไม่มีหน้าต่างยืนยัน แสดง **เทิร์นฮีโร่ (สีฟ้า) → เทิร์นศัตรู (สีชมพู) → เลือกสมาชิกคนถัดไป** เลือด/โล่เปลี่ยนตามช่วงที่เกิดผล หากหยุดศัตรูได้จะขึ้นว่าศัตรูไม่ได้โจมตี กด **ดูผลทันที** เพื่อข้ามการแสดงผล เกมวน เอกิส → ไลรา → ไอรา → เซเรน และข้ามคนที่ล้มแล้ว แตะเลือกคนอื่นเองได้
 6. กำจัดศัตรูทั้งสองโดยมีฮีโร่เหลืออย่างน้อย 1 คน เป้าหมายเสริมคือรอดครบ **4 คน** กด **เล่นอีกครั้ง** เพื่อเริ่มใหม่
 
 ### Four classes, front 2 / back 2
@@ -91,9 +91,9 @@ npm run test:browser
 
 The former Crystal, Redirect and Counter systems are removed. No MP, initiative queue, reserve switching or movement grid is implemented. There is exactly one manually chosen hero action and at most one frozen enemy response per beat.
 
-Raider has 64 HP, Brute 164. The repeating intent pattern is physical Slash 12 → energy Bolt 28 → physical Slash 12 → physical Crush 26 → energy Shadow Knife 14 → energy Bolt 28. Dead sources are skipped when announcing the next event. Forecasts assume currently living actors remain alive; the preview shows the exact next event after the proposed decision.
+Raider has 64 HP, Brute 164. The repeating intent pattern is physical Slash 12 → energy Bolt 28 → physical Slash 12 → physical Crush 26 → energy Shadow Knife 14 → energy Bolt 28. Dead sources are skipped when announcing the next event. Forecasts assume currently living actors remain alive; the actual next event appears after the current beat finishes.
 
-The full-width field and lower command dock follow the supplied Brave Frontier layout reference. Front/back now describe actual physical targeting rules. Four original hero portraits select the actor, and only that class's three commands appear. The modern classic-JRPG HUD places two true enemy HP bars and the frozen intent below the illustrated battlefield. Four illustrated hero cards use a 2×2 grid with class/lane, HP/barrier and actual skill readiness. Phones stack the card grid above the three skill buttons and portrait targets; desktop places team and commands beside each other. Expanded tactics and history sit inside the help disclosure. Preview is a native dialog on all screen sizes; results scroll independently of confirmation/cancel. Closing, backdrop taps and Esc cancel without advancing; rotation preserves a pending choice. After confirmation, the field shows the hero action and then its frozen enemy response for one second each, with distinct phase colors and actor/recipient highlights. Only the current stage’s HP/barriers/log appear; controls wait until both stages finish, or the player chooses **ดูผลทันที**. Confirming from the lower dock reveals the field below the sticky phase banner. Selection then advances to the next living member in roster order; reload reconstructs that selection from the last committed command. Battle outcomes keep the final actor selected. Help, forecasts and history remain disclosures below the dock. Thai fonts use installed system fallbacks.
+The full-width field and lower command dock follow the supplied Brave Frontier layout reference. Front/back now describe actual physical targeting rules. Four original hero portraits select the actor, and only that class's three commands appear. The modern classic-JRPG HUD places two true enemy HP bars and the frozen intent below the illustrated battlefield. Four illustrated hero cards use a 2×2 grid with class/lane, HP/barrier and actual skill readiness. Phones stack the card grid above the three skill buttons and portrait targets; desktop places team and commands beside each other. Expanded tactics and history sit inside the help disclosure. There is no confirmation dialog or complete outcome preview. Selecting a hero or skill and opening optional skill help never advances a beat; selecting a valid target immediately commits the skill. Rotation preserves an uncast skill. After a cast, the field shows the hero action and then its frozen enemy response for one second each, with distinct phase colors and actor/recipient highlights. Only the current stage’s HP/barriers/log appear; controls wait until both stages finish, or the player chooses **ดูผลทันที**. Casting from the lower dock reveals the field below the sticky phase banner. Selection then advances to the next living member in roster order; reload reconstructs that selection from the last committed command. Battle outcomes keep the final actor selected. Help, forecasts and history remain disclosures below the dock. Thai fonts use installed system fallbacks.
 
 Both tested basic-attack priorities lose. An 11-beat offensive plan and a 16-beat defensive plan each use all four classes and win with all four standing. These are regression examples, not a claim of final balance; see [balance validation](docs/BALANCE_VALIDATION.md).
 
@@ -109,7 +109,7 @@ src/content/enemies/      Typed enemy definitions
 src/content/encounters/   Encounter intent pattern, skills, cooldowns and numeric rules
 src/game/scenes/          Thin Phaser rendering/input adapter and short effects
 src/game/visuals/         Renderer palette tokens
-src/ui/                  Accessible DOM controls, preview/log, responsive CSS
+src/ui/                  Accessible DOM controls, optional skill help/log, responsive CSS
 src/platform/            Safe browser-storage adapter
 tests/                   Rules and save tests; browser/ contains Playwright gameplay tests
 public/assets/           Original favicon and three generated WebP art files (unit/portrait atlases and ruins backdrop)
@@ -117,7 +117,7 @@ docs/                    Direction, integration plan, roadmap, validation
 .github/workflows/       Quality CI and user-authorized GitHub Pages build/test/deployment
 ```
 
-`resolveCommand` is authoritative and immutable. `previewCommand` calls that same resolver; rendering cannot affect its result. Commands carry a beat number to reject stale previews. Simulation has no Phaser, DOM, clock, or random-number dependency and runs under Node. State commits and saves once immediately, before the presentation lock. Resolver-provided hero/enemy snapshots are render-only and keep the original beat/intent until presentation finishes. Skipping or hiding the tab displays the already committed result; restart cancels queued presentation timers. Reload replays the saved command once. Reduced motion retains static one-second phase labels while suppressing effects. Saves contain versioned encounter IDs and commands and are validated by replay; corrupt or incompatible saves start fresh. Unavailable/quota-limited storage leaves the session playable. Saves support up to 5,000 commands; no cross-device syncing is provided.
+`resolveCommand` is authoritative and immutable. `previewCommand` remains a pure simulation API used by rules tests; the UI does not show complete predicted outcomes. Rendering cannot affect combat results. Commands carry a beat number to reject stale commands. Simulation has no Phaser, DOM, clock, or random-number dependency and runs under Node. State commits and saves once immediately, before the presentation lock. Resolver-provided hero/enemy snapshots are render-only and keep the original beat/intent until presentation finishes. Skipping or hiding the tab displays the already committed result; restart cancels queued presentation timers. Reload replays the saved command once. Reduced motion retains static one-second phase labels while suppressing effects. Saves contain versioned encounter IDs and commands and are validated by replay; corrupt or incompatible saves start fresh. Unavailable/quota-limited storage leaves the session playable. Saves support up to 5,000 commands; no cross-device syncing is provided.
 
 ## Current limitations
 
