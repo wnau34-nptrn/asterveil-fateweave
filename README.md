@@ -6,6 +6,8 @@ A small, playable **Fateweave tactical reaction combat** prototype. This is an i
 
 GitHub Pages target: **https://wnau34-nptrn.github.io/asterveil-fateweave/**. Availability depends on a successful **Publish playable prototype** workflow deployment. The interface is in Thai. Click **เริ่มต่อสู้**; use the lower command dock to choose a hero and skill, then tap a marked character on the battlefield to cast immediately. Read **วิธีใช้…** for optional skill details. No installation or account is required to play the published static game.
 
+Characters stand on the courtyard in staggered front/back pairs, with contact shadows at their feet. The formation and character touch areas resize with the field, including single-screen portrait mobile play.
+
 Public Pages publication was explicitly requested after the initial prototype. The workflow builds and tests the full browser gameplay suite on the production subpath before uploading `dist/`, then deploys with GitHub's official Pages actions. It publishes the current prototype branch and `main`; no automatic merge is performed. If Pages cannot be enabled by Actions, a repository administrator must choose **Settings → Pages → Build and deployment → Source: GitHub Actions**.
 
 Set the Pages source to **GitHub Actions**, even if an older branch-based/Jekyll site is already enabled. Otherwise GitHub's separate Jekyll workflow can publish raw Vite source and overwrite the tested game build. The publishing token can deploy artifacts but GitHub rejects changing this administration setting (`403`), so the owner must select the source once in Settings. The game publishing workflow does not attempt that privileged operation.

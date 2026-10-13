@@ -3,7 +3,7 @@ import type { BattleEvent, BattleState, EncounterDefinition } from '../../core/b
 import { actorName, thaiFont } from '../../ui/th';
 import { palette } from '../visuals/palette';
 import { drawRiftBackdrop } from '../visuals/rift-backdrop';
-import { actorFrames, artUrl } from '../visuals/assets';
+import { actorFootOrigins, actorFrames, artUrl } from '../visuals/assets';
 
 export interface ActorTarget { x: number; y: number; width: number; height: number }
 export interface SceneView { state: BattleState; heroId: string; targetId: string | null; phase?: 'hero' | 'enemy'; activeActorId?: string; activeTargetId?: string }
@@ -47,35 +47,30 @@ export class BattleScene extends Phaser.Scene {
     this.layer = this.add.container(0, 0);
     this.positions.clear(); this.actorTargets.clear();
     const { width: w, height: h } = this.scale;
-    const compact = w < 900;
     const short = w < 900 || h < 360;
     const phone = window.matchMedia('(max-width: 600px) and (orientation: portrait)').matches;
-    const portrait = phone || w < 900 && h >= 280;
-    const stageTop = short ? portrait ? 110 : 60 : 135;
-    const stageHeight = Math.max(80, h - (portrait ? 20 : 35) - stageTop);
     if (this.backdropSize !== `${w}:${h}`) {
       this.backdrop?.destroy();
       this.backdrop = drawRiftBackdrop(this, w, h);
       this.backdropSize = `${w}:${h}`;
     }
     const bg = this.add.graphics(); this.layer.add(bg);
-    const platform = (x: number, y: number, rx: number) => {
-      bg.fillStyle(0x07131f, 0.48); bg.fillEllipse(x, y + 8, rx * 2, short ? 13 : 24);
-      bg.lineStyle(1, palette.cyan, 0.4); bg.strokeEllipse(x, y + 9, rx * 2, short ? 13 : 24);
-      bg.lineStyle(1, palette.gold, 0.25); bg.strokeEllipse(x, y + 9, rx * 2 - 6, short ? 10 : 20);
+    // These are sole positions on the courtyard, not image centers. Each
+    // front fighter steps diagonally past its back-row partner; the second
+    // pair is offset again so faces and touch targets stay unobstructed.
+    const formation: Record<string, { x: number; y: number }> = {
+      weaver: { x: .14, y: .48 }, guardian: { x: .35, y: .59 },
+      healer: { x: .18, y: .77 }, tracer: { x: .39, y: .90 },
+      raider: { x: .85, y: .51 }, brute: { x: .70, y: .81 },
     };
     this.encounter.heroes.forEach((hero, i) => {
-      const x = w * (hero.lane === 'back' ? (compact ? 0.12 : 0.14) : (compact ? 0.34 : 0.31));
-      const laneIndex = this.encounter.heroes.filter(h => h.lane === hero.lane).findIndex(h => h.id === hero.id);
-      const ratio = laneIndex === 0 ? 0.20 : 0.82;
-      const y = phone ? Math.max(48, h * (laneIndex === 0 ? .36 : .80)) : stageTop + stageHeight * ratio;
-      platform(x, y + (short ? 20 : 39), short ? 32 : 75);
+      const x = w * formation[hero.id]!.x;
+      const y = Math.min(h * formation[hero.id]!.y, h - (phone ? 16 : 42));
       this.actor(hero.id, actorName(hero.id, this.encounter), x, y, hero.color, this.view!.state.heroes[i]!.hp, hero.maxHp, false, short);
     });
     this.encounter.enemies.forEach((enemy, i) => {
-      const x = w * (portrait ? enemy.id === 'brute' ? 0.68 : 0.88 : enemy.id === 'brute' ? 0.84 : 0.73);
-      const y = phone ? Math.max(48, h * (enemy.id === 'brute' ? .72 : .34)) : stageTop + stageHeight * (enemy.id === 'brute' ? 0.70 : 0.22);
-      platform(x, y + (short ? 21 : enemy.id === 'brute' ? 55 : 35), short ? 38 : enemy.id === 'brute' ? 108 : 72);
+      const x = w * formation[enemy.id]!.x;
+      const y = Math.min(h * formation[enemy.id]!.y, h - 40);
       this.actor(enemy.id, actorName(enemy.id, this.encounter), x, y, enemy.color, this.view!.state.enemies[i]!.hp, enemy.maxHp, true, short);
     });
     const intent = this.view.state.intent;
@@ -90,9 +85,10 @@ export class BattleScene extends Phaser.Scene {
   }
   private actor(id: string, name: string, x: number, y: number, color: number, hp: number, maxHp: number, enemy: boolean, compact: boolean): void {
     this.positions.set(id, { x, y });
-    const body = this.add.container(x, y); this.layer!.add(body);
+    // Sort bodies by their feet rather than roster insertion order.
+    const body = this.add.container(x, y).setDepth(y); this.layer!.add(body);
     this.bodies.set(id, body);
-    const info = this.add.container(x, y).setDepth(10); this.layer!.add(info);
+    const info = this.add.container(x, y).setDepth(this.scale.height + 1); this.layer!.add(info);
     const involved = !this.view!.activeActorId || id === this.view!.activeActorId || id === this.view!.activeTargetId;
     body.setAlpha(hp <= 0 ? 0.28 : involved ? 1 : 0.55);
     info.setAlpha(hp <= 0 ? 0.4 : involved ? 1 : 0.75);
@@ -101,22 +97,23 @@ export class BattleScene extends Phaser.Scene {
     const phone = window.matchMedia('(max-width: 600px) and (orientation: portrait)').matches;
     const portrait = phone || this.scale.width < 900 && this.scale.height >= 280;
     const selected = this.view!.heroId === id || this.view!.targetId === id;
-    if (selected && hp > 0) { g.lineStyle(2, palette.gold); g.strokeEllipse(0, phone ? 8 : 25, phone ? 48 : 68, phone ? 12 : 22); }
+    const size = Math.max(44, Math.min(phone ? id === 'brute' ? 120 : 100 : short ? id === 'brute' ? 110 : 80 : id === 'brute' ? 215 : 145, this.scale.width * (id === 'brute' ? .32 : .25), this.scale.height * (id === 'brute' ? .36 : .30)));
+    // A contact shadow and selection ring share the same foot anchor.
+    g.fillStyle(0x07131f, .65); g.fillEllipse(0, 0, size * .65, size * .12);
+    if (selected && hp > 0) { g.lineStyle(2, palette.gold); g.strokeEllipse(0, 0, size * .68, size * .14); }
     if (id === this.view!.activeActorId && hp > 0) {
-      g.lineStyle(3, enemy ? 0xf19b9f : palette.cyan); g.strokeEllipse(0, phone ? 8 : 24, phone ? 50 : short ? 78 : 115, phone ? 14 : short ? 26 : 33);
+      g.lineStyle(3, enemy ? 0xf19b9f : palette.cyan); g.strokeEllipse(0, 0, size * .72, size * .16);
     }
-    const size = phone ? Math.min(id === 'brute' ? 120 : 100, Math.max(44, this.scale.height * (id === 'brute' ? .40 : .30))) : short ? id === 'brute' ? 110 : 80 : id === 'brute' ? 215 : enemy ? 142 : 145;
-    const sprite = this.add.image(0, phone ? 0 : short ? 15 : id === 'brute' ? 55 : 39, 'battle-units', actorFrames[id]!).setOrigin(0.5, 1).setDisplaySize(size, size);
+    const sprite = this.add.image(0, 0, 'battle-units', actorFrames[id]!).setOrigin(0.5, actorFootOrigins[id] ?? 1).setDisplaySize(size, size);
     body.add(sprite);
     const hitWidth = Math.max(44, Math.min(72, size * .7));
     const hitHeight = Math.max(44, size * .9);
     this.actorTargets.set(id, { x: x - hitWidth / 2, y: y + sprite.y - hitHeight, width: hitWidth, height: hitHeight });
-    const label = this.add.text(0, short ? 20 : enemy && id === 'brute' ? 70 : 51, name, { fontFamily: thaiFont, fontSize: phone ? '10px' : compact ? '12px' : '14px', color: '#f0f5ff', stroke: '#101c36', strokeThickness: 3 }).setOrigin(0.5);
+    const label = this.add.text(0, 14, name, { fontFamily: thaiFont, fontSize: phone ? '10px' : compact ? '12px' : '14px', color: '#f0f5ff', stroke: '#101c36', strokeThickness: 3 }).setOrigin(0.5);
     label.setVisible(!phone || enemy);
-    // Hero HP sits beside the silhouette so the next hero cannot cover it.
-    const hpX = enemy ? 0 : short ? portrait ? 0 : 42 : 90;
-    const hpY = phone ? 32 : enemy ? short ? 43 : id === 'brute' ? 99 : 80 : short && portrait ? 39 : 7;
-    const barY = phone ? enemy ? 23 : 10 : enemy ? short ? 34 : id === 'brute' ? 86 : 65 : short && portrait ? 28 : 20;
+    const hpX = 0;
+    const hpY = 35;
+    const barY = phone && !enemy ? 8 : 24;
     const barWidth = phone ? enemy ? Math.min(65, this.scale.width * .17) : 35 : enemy ? 70 : 52;
     const bar = this.add.graphics(); bar.fillStyle(0x101c36); bar.fillRoundedRect(hpX - barWidth / 2, barY, barWidth, 5, 2);
     bar.fillStyle(color); bar.fillRoundedRect(hpX - barWidth / 2, barY, barWidth * hp / maxHp, 5, 2);

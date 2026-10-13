@@ -1,4 +1,4 @@
-import { expect, test, type Page } from '@playwright/test';
+import { errors, expect, test, type Page } from '@playwright/test';
 import { offensive, defensive } from '../fixtures/party-routes';
 async function start(page: Page, beforeStart?: () => Promise<void>): Promise<string[]> {
   const errors: string[] = []; page.on('pageerror', e => errors.push(e.message));
@@ -12,7 +12,13 @@ async function choose(page: Page, hero: string, action: string, target: string):
 }
 // Target selection already commits. This helper only skips the presentation.
 async function finishTurn(page: Page): Promise<void> {
-  await page.locator('#skip-turn').click();
+  const skip = page.locator('#skip-turn');
+  try { await skip.click({ timeout: 2500 }); }
+  catch (error) {
+    // Scrolling/stability can outlast the two-second presentation. Accept
+    // natural completion only when the skip button has actually disappeared.
+    if (!(error instanceof errors.TimeoutError) || await skip.count() !== 0) throw error;
+  }
   await expect(page.locator('#beat-status')).not.toContainText('กำลังแสดงผล');
 }
 async function reachable(page: Page, selector: string): Promise<void> {
@@ -123,7 +129,7 @@ test('phone reduced-motion turns show interrupted response and accurate canvas i
   await page.clock.resume();
   const canvas = page.locator('#game canvas'); await canvas.scrollIntoViewIfNeeded();
   const b = (await canvas.boundingBox())!;
-  await canvas.tap({ position: { x: b.width * .12, y: b.height * .80 - 20 } });
+  await canvas.tap({ position: { x: b.width * .18, y: b.height * .77 - 45 } });
   await expect(page.locator('#hero-healer')).toHaveAttribute('aria-pressed', 'true');
   expect(errors).toEqual([]); await context.close();
 });
@@ -297,12 +303,13 @@ test('modern phone HUD keeps enemy HP and every class skill status in sync', asy
 test('canvas target executes Guard once; keyboard target works with no modal or extra confirmation', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'no-preference' }); const errors = await start(page);
   const canvas = page.locator('#game canvas'); const b = (await canvas.boundingBox())!;
-  await canvas.click({ position: { x:b.width*.31, y:135+(b.height-170)*.20-70 } });
+  await canvas.click({ position: { x:b.width*.35, y:b.height*.59-70 } });
   await expect(page.locator('#hero-guardian')).toHaveAttribute('aria-pressed','true');
   await page.locator('#action-guard').click();
   await expect(page.locator('#beat-status')).toContainText('จังหวะ 1');
   await expect(page.locator('#target-weaver')).toBeDisabled();
-  await page.mouse.click(b.x+b.width*.31, b.y+135+(b.height-170)*.82);
+  const target = (await page.locator('#target-tracer').boundingBox())!;
+  await page.mouse.click(target.x + target.width / 2, target.y + target.height / 2);
   await expect(page.locator('#turn-phase')).toHaveAttribute('data-phase','hero');
   await expect(page.locator('dialog[open], #confirm, #preview')).toHaveCount(0);
   // A second queued click on the newly disabled target cannot issue another command.
@@ -412,7 +419,7 @@ test('four-class mobile battle, back-row canvas selection and rotation preserve 
   const context=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true,reducedMotion:'reduce'});
   const page=await context.newPage();const errors=await start(page);
   const canvas=page.locator('#game canvas');const b=(await canvas.boundingBox())!;
-  await canvas.tap({position:{x:b.width*.12,y:b.height*.80-20}});
+  await canvas.tap({position:{x:b.width*.18,y:b.height*.77-45}});
   await expect(page.locator('#hero-healer')).toHaveAttribute('aria-pressed','true');
   await page.locator('#hero-tracer').tap(); await page.locator('#action-mark').tap();
   for (const viewport of [{width:844,height:390},{width:1366,height:900},{width:390,height:844}]) {
@@ -456,6 +463,24 @@ for (const viewport of [{ width:320,height:568 }, { width:390,height:640 }, { wi
     // Four ally targets, barrier text and unavailable healing cannot grow the dock.
     await page.locator('#hero-weaver').tap(); await page.locator('#action-ward').tap();
     for (const id of ['guardian','tracer','weaver','healer']) await reachable(page,`#target-${id}`);
+    // Feet belong to the courtyard; staggered rows keep each face/tap area
+    // separate even when the narrow field shrinks the illustrated bodies.
+    const field = (await page.locator('#game canvas').boundingBox())!;
+    const actors = await page.locator('#field-targets button').evaluateAll(els => els.map(el => {
+      const r = el.getBoundingClientRect();
+      return { id: el.getAttribute('data-actor'), x: r.x, y: r.y, right: r.right, bottom: r.bottom };
+    }));
+    for (const actor of actors) {
+      expect(actor.bottom).toBeGreaterThan(field.y + field.height * .4);
+      expect(actor.bottom).toBeLessThan(field.y + field.height);
+      for (const other of actors.filter(a => a.id !== actor.id)) {
+        expect(actor.right <= other.x || other.right <= actor.x || actor.bottom <= other.y || other.bottom <= actor.y).toBe(true);
+      }
+    }
+    for (const [back, front] of [['weaver','guardian'], ['healer','tracer']]) {
+      const a = actors.find(actor => actor.id === back)!; const b = actors.find(actor => actor.id === front)!;
+      expect(b.x).toBeGreaterThan(a.x); expect(b.bottom).toBeGreaterThan(a.bottom);
+    }
     await page.locator('#target-weaver').tap(); await reachable(page,'#skip-turn'); await finishTurn(page);
     await fits(); await page.locator('#hero-healer').tap(); await page.locator('#action-heal').tap();
     for (const id of ['guardian','tracer','weaver','healer']) await reachable(page,`#target-${id}`);

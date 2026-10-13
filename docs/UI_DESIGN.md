@@ -67,3 +67,11 @@ The game wordmark is removed from the gameplay header. Portrait phones show the 
 ## Field character targets — 2026-10-13
 
 Phaser supplies a six-actor rectangle map from its actual rendered positions/sizes. A transparent DOM target layer in the arena uses those bounds, refreshed after every paint/resize. Legal targets carry a restrained cyan outline and a circular selected-skill marker; unavailable/busy targets are disabled and unmarked. Native buttons preserve keyboard/focus and accessible actor/skill/HP labels. Hero cards still select the acting class. Enemy skills target enemies; support skills target marked allies; Prayer marks living allies and maps every valid tap to the existing party target. Target feedback stays on the characters, and no separate target-card row occupies the dock.
+
+## Grounded, staggered formation — 2026-10-13
+
+The camera frames the ruin courtyard horizon at 27% of the field, leaving floor beneath all six actors. Positions refer to soles rather than image centers: Mage/Knight and Priest/Duelist form two diagonal pairs, and the second pair shifts sideways again. Enemies occupy separate diagonal positions. Original atlas frames remain unchanged; enemy foot origins exclude transparent bottom padding. Contact shadows and selected/active rings share those sole anchors, replacing detached platform ellipses.
+
+Bodies sort by foot depth, while status labels stay above the artwork. Sprite sizes are constrained by both field height and width so portrait controls and rear faces remain accessible at 320px. Native field targets use the resized body anchors; the 44px minimum hit area, single-screen portrait layout, front/back mechanics and save format are unchanged.
+
+Outside phone portrait mode, the timeline occupies the free upper center and lane labels align above the staggered hero columns, keeping them off the rear actor artwork.
