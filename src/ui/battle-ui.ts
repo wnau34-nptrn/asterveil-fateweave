@@ -201,7 +201,11 @@ export class BattleUI {
     const banner = this.root.querySelector<HTMLElement>('#turn-phase')!;
     // A sticky banner's current rect may already be at the viewport top.
     // Anchor to the non-sticky arena so a cast from the lower dock reveals combat.
-    if (!this.portraitLayout.matches) window.scrollTo({ top: window.scrollY + arena.getBoundingClientRect().top - banner.offsetHeight - 8, behavior: 'instant' });
+    if (!this.portraitLayout.matches) {
+      const coach = this.root.querySelector<HTMLElement>('#battle-coach')!;
+      const teachingSpace = coach.hidden ? 0 : coach.offsetHeight + 8;
+      window.scrollTo({ top: window.scrollY + arena.getBoundingClientRect().top - banner.offsetHeight - teachingSpace - 8, behavior: 'instant' });
+    }
     const delay = 1000;
     this.timer = setTimeout(() => {
       if (this.presentation !== playback) return;

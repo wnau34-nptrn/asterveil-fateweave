@@ -301,7 +301,7 @@ test('modern phone HUD keeps enemy HP and every class skill status in sync', asy
   expect(errors).toEqual([]); await context.close();
 });
 
-test('canvas target executes Guard once; keyboard target works with no modal or extra confirmation', async ({ page }) => {
+test('canvas target executes Guard once; keyboard target works with no modal or extra confirmation', async ({ page }, info) => {
   await page.emulateMedia({ reducedMotion: 'no-preference' }); const errors = await start(page);
   const canvas = page.locator('#game canvas'); const b = (await canvas.boundingBox())!;
   await canvas.click({ position: { x:b.width*.35, y:b.height*.59-70 } });
@@ -317,6 +317,11 @@ test('canvas target executes Guard once; keyboard target works with no modal or 
   await page.locator('#target-tracer').evaluate(el => el.dispatchEvent(new MouseEvent('click', { bubbles: true })));
   expect(await page.evaluate(() => JSON.parse(localStorage.getItem('asterveil.fateweave.battle.v1')!).commands.length)).toBe(1);
   await finishTurn(page); await expect(page.locator('#hero-guardian')).toContainText('71 / 76');
+  await expect.poll(()=>page.locator('#battle-coach').evaluate(el=>{
+    const r=el.getBoundingClientRect(), phase=document.querySelector('#turn-phase')!.getBoundingClientRect();
+    return r.top>=phase.bottom && !!document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)?.closest('#battle-coach');
+  })).toBe(true);
+  await page.screenshot({path:info.outputPath('desktop-coach-after-cast.png')});
   await expect(page.locator('#event-log')).toContainText('เอกิส เสียเลือด 5');
   await expect(page.locator('.next-slot')).toHaveAttribute('aria-label','จังหวะ 2 อสูรรอยแยก โจมตีไอรา พลังโจมตี 28');
   await page.reload(); await expect(page.locator('#start')).toHaveCount(0);
