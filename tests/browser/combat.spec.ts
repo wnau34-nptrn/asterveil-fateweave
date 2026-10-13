@@ -13,11 +13,17 @@ async function commit(page: Page): Promise<void> {
   await page.locator('#confirm').click(); await expect(page.locator('#beat-status')).not.toContainText('กำลังแสดงผล');
 }
 async function reachable(page: Page, selector: string): Promise<void> {
-  const box = (await page.locator(selector).boundingBox())!; const v = page.viewportSize()!;
-  expect(box.width).toBeGreaterThanOrEqual(44); expect(box.height).toBeGreaterThanOrEqual(44);
-  expect(box.x).toBeGreaterThanOrEqual(0); expect(box.y).toBeGreaterThanOrEqual(0);
-  expect(box.x+box.width).toBeLessThanOrEqual(v.width); expect(box.y+box.height).toBeLessThanOrEqual(v.height);
-  expect(await page.locator(selector).evaluate(el => { const r = el.getBoundingClientRect(); return el.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)); })).toBe(true);
+  // Rotation dispatches layout/media events after setViewportSize resolves.
+  // Measure size, viewport bounds and hit testing together after layout settles.
+  const viewport = page.viewportSize()!;
+  await expect.poll(() => page.locator(selector).evaluate((el, v) => {
+    const r = el.getBoundingClientRect();
+    return {
+      touchSize: r.width >= 44 && r.height >= 44,
+      inViewport: r.x >= 0 && r.y >= 0 && r.right <= v.width && r.bottom <= v.height,
+      hit: el.contains(document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2)),
+    };
+  }, viewport)).toEqual({ touchSize: true, inViewport: true, hit: true });
 }
 
 for (const viewport of [{ width: 1366, height: 1000 }, { width: 390, height: 844 }]) {
