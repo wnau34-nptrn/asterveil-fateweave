@@ -5,13 +5,15 @@ import { palette } from '../visuals/palette';
 import { drawRiftBackdrop } from '../visuals/rift-backdrop';
 import { actorFrames, artUrl } from '../visuals/assets';
 
-export interface SceneView { state: BattleState; heroId: string; targetId: string | null }
+export interface SceneView { state: BattleState; heroId: string; targetId: string | null; phase?: 'hero' | 'enemy'; activeActorId?: string; activeTargetId?: string }
 export class BattleScene extends Phaser.Scene {
   private view: SceneView | undefined;
   private layer: Phaser.GameObjects.Container | undefined;
   private backdrop: Phaser.GameObjects.Image | undefined;
   private backdropSize = '';
   private positions = new Map<string, { x: number; y: number }>();
+  private bodies = new Map<string, Phaser.GameObjects.Container>();
+  private effects: Phaser.GameObjects.Container | undefined;
   private ready = false;
   constructor(private readonly encounter: EncounterDefinition, private readonly choose: (id: string) => void, private readonly onReady: () => void) { super('battle'); }
   get isReady(): boolean { return this.ready; }
@@ -21,8 +23,14 @@ export class BattleScene extends Phaser.Scene {
   }
   create(): void {
     this.ready = true;
+    // Turn banners and scrolling move the canvas without resizing its texture.
+    const updateInputBounds = () => this.scale.updateBounds();
+    this.game.canvas.addEventListener('pointerdown', updateInputBounds, { capture: true, passive: true });
+    this.game.canvas.addEventListener('touchstart', updateInputBounds, { capture: true, passive: true });
     this.scale.on('resize', this.paint, this);
     this.events.once('shutdown', () => {
+      this.game.canvas.removeEventListener('pointerdown', updateInputBounds, true);
+      this.game.canvas.removeEventListener('touchstart', updateInputBounds, true);
       this.scale.off('resize', this.paint, this);
       this.ready = false; this.backdropSize = ''; this.backdrop = undefined;
     });
@@ -32,6 +40,7 @@ export class BattleScene extends Phaser.Scene {
   sync(view: SceneView): void { this.view = view; if (this.ready) this.paint(); }
   private paint(): void {
     if (!this.view) return;
+    this.stopEffects(); this.bodies.clear();
     this.layer?.destroy();
     this.layer = this.add.container(0, 0);
     this.positions.clear();
@@ -67,9 +76,10 @@ export class BattleScene extends Phaser.Scene {
       this.actor(enemy.id, actorName(enemy.id, this.encounter), x, y, enemy.color, this.view!.state.enemies[i]!.hp, enemy.maxHp, true, short);
     });
     const intent = this.view.state.intent;
-    if (intent) {
-      const source = this.positions.get(intent.sourceId)!; const target = this.positions.get(intent.targetId)!;
-      bg.lineStyle(2, intent.kind === 'energy' ? palette.corruption : 0xf08da1, 0.4);
+    const source = this.positions.get(this.view.phase ? this.view.activeActorId ?? '' : intent?.sourceId ?? '');
+    const target = this.positions.get(this.view.phase ? this.view.activeTargetId ?? '' : intent?.targetId ?? '');
+    if (source && target) {
+      bg.lineStyle(2, this.view.phase === 'hero' ? palette.cyan : intent?.kind === 'energy' ? palette.corruption : 0xf08da1, 0.55);
       const dx = target.x - source.x; const dy = target.y - source.y;
       for (let t = 0.15; t < 0.8; t += 0.09) bg.lineBetween(source.x + dx * t, source.y + dy * t, source.x + dx * (t + 0.04), source.y + dy * (t + 0.04));
     }
@@ -78,14 +88,19 @@ export class BattleScene extends Phaser.Scene {
   private actor(id: string, name: string, x: number, y: number, color: number, hp: number, maxHp: number, enemy: boolean, compact: boolean): void {
     this.positions.set(id, { x, y });
     const body = this.add.container(x, y); this.layer!.add(body);
+    this.bodies.set(id, body);
     const info = this.add.container(x, y).setDepth(10); this.layer!.add(info);
-    if (hp <= 0) body.setAlpha(0.28);
-    if (hp <= 0) info.setAlpha(0.4);
+    const involved = !this.view!.activeActorId || id === this.view!.activeActorId || id === this.view!.activeTargetId;
+    body.setAlpha(hp <= 0 ? 0.28 : involved ? 1 : 0.55);
+    info.setAlpha(hp <= 0 ? 0.4 : involved ? 1 : 0.75);
     const g = this.add.graphics(); body.add(g);
     const short = compact;
     const portrait = this.scale.width < 900 && this.scale.height >= 280;
     const selected = this.view!.heroId === id || this.view!.targetId === id;
     if (selected && hp > 0) { g.lineStyle(2, palette.gold); g.strokeEllipse(0, 25, 68, 22); }
+    if (id === this.view!.activeActorId && hp > 0) {
+      g.lineStyle(3, enemy ? 0xf19b9f : palette.cyan); g.strokeEllipse(0, 24, short ? 78 : 115, short ? 26 : 33);
+    }
     const size = short ? id === 'brute' ? 110 : 80 : id === 'brute' ? 215 : enemy ? 142 : 145;
     const sprite = this.add.image(0, short ? 15 : id === 'brute' ? 55 : 39, 'battle-units', actorFrames[id]!).setOrigin(0.5, 1).setDisplaySize(size, size);
     body.add(sprite);
@@ -113,20 +128,40 @@ export class BattleScene extends Phaser.Scene {
       info.add(warning);
     }
   }
+  stopEffects(): void {
+    for (const body of this.bodies.values()) this.tweens.killTweensOf(body);
+    if (this.effects) {
+      for (const child of this.effects.list) this.tweens.killTweensOf(child);
+      this.effects.destroy(); this.effects = undefined;
+    }
+  }
   play(events: BattleEvent[]): void {
     if (!this.ready || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    this.effects = this.add.container(0, 0).setDepth(20);
+    const source = this.view?.activeActorId ? this.bodies.get(this.view.activeActorId) : undefined;
+    const target = this.view?.activeTargetId ? this.positions.get(this.view.activeTargetId) : undefined;
+    if (source && target && events.some(event => event.type === 'damage')) {
+      this.tweens.add({ targets: source, x: source.x + Math.sign(target.x - source.x) * 16, duration: 160, yoyo: true, ease: 'Sine.Out' });
+    }
     for (const [index, event] of events.entries()) {
       const position = event.targetId ? this.positions.get(event.targetId) : undefined;
       if (!position) continue;
       if (event.type === 'damage') {
         const ring = this.add.circle(position.x, position.y, 25, 0xffffff, 0.15).setStrokeStyle(2, palette.gold);
+        this.effects.add(ring);
         this.tweens.add({ targets: ring, radius: 55, alpha: 0, duration: 420, onComplete: () => ring.destroy() });
-        const text = this.add.text(position.x, position.y - 20, `−${event.amount}`, { fontFamily: thaiFont, fontSize: '23px', color: '#ffe0a6', stroke: '#101c36', strokeThickness: 4 }).setOrigin(0.5);
+        const label = event.amount ? `−${event.amount}` : event.absorbed ? `โล่รับ ${event.absorbed}` : 'ป้องกันได้';
+        const text = this.add.text(position.x, position.y - 20, label, { fontFamily: thaiFont, fontSize: '23px', color: this.view?.phase === 'enemy' ? '#ffb6b8' : '#ffe0a6', stroke: '#101c36', strokeThickness: 4 }).setOrigin(0.5);
+        this.effects.add(text);
         this.tweens.add({ targets: text, y: position.y - 65, alpha: 0, duration: 650, delay: index * 40, onComplete: () => text.destroy() });
       }
       if (event.type === 'heal' || event.type === 'barrier') {
         const circle = this.add.circle(position.x, position.y, 18).setStrokeStyle(3, palette.cyan);
+        this.effects.add(circle);
         this.tweens.add({ targets: circle, scale: 3, alpha: 0, duration: 650, onComplete: () => circle.destroy() });
+        const label = this.add.text(position.x, position.y - 20, `${event.type === 'heal' ? '+' : 'โล่ +'}${event.amount}`, { fontFamily: thaiFont, fontSize: '20px', color: event.type === 'heal' ? '#85e5be' : '#8addf5', stroke: '#101c36', strokeThickness: 4 }).setOrigin(0.5);
+        this.effects.add(label);
+        this.tweens.add({ targets: label, y: position.y - 65, alpha: 0, duration: 650, onComplete: () => label.destroy() });
       }
     }
   }

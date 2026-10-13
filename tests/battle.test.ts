@@ -23,6 +23,31 @@ describe('four-class deterministic combat', () => {
     expect(s).toEqual(original); expect(r.state.enemies[1]!.hp).toBe(148);
     expect(r.state.heroes[1]!.hp).toBe(44); expect(r.state.intent?.targetId).toBe('weaver');
   });
+  it('separates hero and enemy results before advancing the frozen intent', () => {
+    const initial = start(); const r = act(initial, 'weaver', 'bolt', 'brute');
+    expect(r.stages.hero.state.enemies[1]!.hp).toBe(138);
+    expect(r.stages.hero.state.heroes[1]!.hp).toBe(56);
+    expect(r.stages.enemy.state.heroes[1]!.hp).toBe(44);
+    expect(r.stages.hero.state.intent).toEqual(initial.intent);
+    expect(r.stages.enemy.state.intent).toEqual(initial.intent);
+    expect(r.stages.enemy.state.beat).toBe(1); expect(r.state.beat).toBe(2);
+    expect(r.state.intent?.sourceId).toBe('brute');
+    expect(r.stages.hero.events.map(e => e.sourceId)).toEqual(['weaver']);
+    expect(r.stages.enemy.events.map(e => e.sourceId)).toEqual(['raider']);
+    r.stages.hero.state.enemies[1]!.hp = 0;
+    expect(r.stages.enemy.state.enemies[1]!.hp).toBe(138); expect(r.state.enemies[1]!.hp).toBe(138);
+    expect(initial.enemies[1]!.hp).toBe(164);
+  });
+  it('shows restoration before damage and cancellation instead of another enemy attack', () => {
+    const s = start(); s.heroes[1]!.hp = 10;
+    const r = act(s, 'healer', 'heal', 'tracer');
+    expect(r.stages.hero.state.heroes[1]!.hp).toBe(30);
+    expect(r.stages.enemy.state.heroes[1]!.hp).toBe(18);
+    expect(r.stages.hero.events.every(e => e.type === 'heal')).toBe(true);
+    const stopped = act(start(), 'guardian', 'bash', 'raider');
+    expect(stopped.stages.enemy.events).toMatchObject([{ type: 'cancel', cause: 'interrupted' }]);
+    expect(stopped.stages.enemy.state.heroes[1]!.hp).toBe(56);
+  });
   it('intercepts for front/back targets and rounds Guard upward', () => {
     let s = act(start(), 'guardian', 'guard', 'tracer').state;
     expect(s.heroes[0]!.hp).toBe(71); expect(s.heroes[1]!.hp).toBe(56);
@@ -129,6 +154,7 @@ describe('four-class deterministic combat', () => {
       const c = command(s, h.id, action, t.id); const before = structuredClone(s);
       const result = resolveCommand(s, data, c);
       expect(previewCommand(s, data, c)).toEqual(result); expect(s).toEqual(before);
+      expect([...result.stages.hero.events, ...result.stages.enemy.events]).toEqual(result.events);
       if (s === fresh) expect(replay(data, result.state.commands)).toEqual(result.state);
     }
     const cast = act(start(), 'weaver', 'bolt', 'brute').state;

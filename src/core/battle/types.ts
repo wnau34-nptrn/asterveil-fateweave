@@ -27,5 +27,8 @@ export interface BattleEvent {
   type: 'damage' | 'guard' | 'mark' | 'barrier' | 'heal' | 'cancel' | 'down' | 'outcome';
   text: string; sourceId?: string; targetId?: string; amount?: number; absorbed?: number; cause?: 'defeated' | 'interrupted';
 }
-export interface Resolution { state: BattleState; events: BattleEvent[] }
+// Render-only snapshots retain the current beat/intent until both sides finish.
+// Only Resolution.state is the committed, saveable battle state.
+export interface ResolutionStage { state: BattleState; events: BattleEvent[] }
+export interface Resolution { state: BattleState; events: BattleEvent[]; stages: { hero: ResolutionStage; enemy: ResolutionStage } }
 export interface TargetOption { id: string; name: string; valid: boolean; reason: string }

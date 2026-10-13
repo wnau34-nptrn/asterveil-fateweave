@@ -351,3 +351,44 @@ footer { display: flex; justify-content: space-between; gap: 10px; font-size: 10
   .party-result { font-size: 11px; }
 }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
+
+/* Actual turn presentation; the resolver owns all numbers and snapshots. */
+.turn-phase { --phase-accent: #74d4ef; position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; display: flex; align-items: center; gap: 10px; min-height: 82px; padding: 8px 12px; margin-bottom: 8px; border: 1px solid #4a789c; border-radius: 10px; background: linear-gradient(105deg, #123248, #102139); box-shadow: 0 5px 16px #0004; }
+.turn-phase[data-phase="enemy"] { --phase-accent: #f0a1a8; background: linear-gradient(105deg, #40232f, #1e1d34); border-color: #b16f82; }
+.turn-phase[data-phase="finished"] { --phase-accent: #85e5be; }
+.phase-portrait { width: 38px; flex: 0 0 38px; }
+.phase-portrait .portrait { border: 1px solid var(--phase-accent); }
+.phase-copy { flex: 1; min-width: 0; }
+.phase-flow { display: flex; align-items: center; gap: 6px; color: #879ebc; font-size: 10px; white-space: nowrap; }
+.phase-flow .current { color: var(--phase-accent); font-weight: 600; }
+.phase-flow .complete { color: #b0c9d9; }
+.phase-flow small { font-size: 9px; margin-left: 7px; }
+.phase-copy h2 { font-size: 16px; font-weight: 600; line-height: 1.35; color: var(--phase-accent); }
+.phase-copy > p { font-size: 11px; color: #d1dcef; }
+.phase-result { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; font-size: 10px; color: #c2d5de; }
+#skip-turn { min-height: 44px; flex: 0 0 78px; font-size: 10px; padding: 6px; border-color: #748daf; }
+.hero-card.active-actor { border-color: #74d4ef; box-shadow: inset 0 0 0 1px #74d4ef77, 0 0 12px #74d4ef22; }
+.hero-card.active-actor .selected-tag { color: #74d4ef; }
+.enemy-card.active-actor { border-color: #f0a1a8; background: #302135; }
+.timeline-slot.acting .portrait { border-color: #74d4ef; box-shadow: 0 0 10px #74d4ef66; }
+.timeline-slot.enemy-acting .portrait { border-color: #f0a1a8; box-shadow: 0 0 10px #f0a1a866; }
+.timeline-slot.acting small { color: #74d4ef; }
+.timeline-slot.enemy-acting small { color: #f0a1a8; }
+@media (max-width: 600px) {
+  .turn-phase { gap: 7px; padding: 7px 8px; }
+  .phase-portrait { width: 31px; flex-basis: 31px; }
+  .phase-copy h2 { font-size: 13px; }
+  .phase-copy > p { font-size: 10px; }
+  .phase-flow { font-size: 8px; gap: 4px; }
+  .phase-flow small { font-size: 8px; margin-left: 3px; }
+  .phase-result { font-size: 9px; }
+  #skip-turn { flex-basis: 64px; font-size: 9px; }
+}
+@media (min-width: 601px) and (max-width: 960px) and (max-height: 540px) {
+  .turn-phase { min-height: 65px; padding: 5px 10px; }
+  .phase-portrait { width: 32px; flex-basis: 32px; }
+  .phase-copy h2 { font-size: 13px; }
+  .phase-copy > p, .phase-result { font-size: 10px; }
+  .phase-flow { font-size: 8px; }
+}
+.turn-phase[data-canceled="true"] { --phase-accent: #d9bf86; background: linear-gradient(105deg, #302c35, #162137); border-color: #ad9570; }

@@ -114,6 +114,7 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
     case 'prayer': for (const h of state.heroes) heal(h.id, skill.power); break;
   }
   if (skill.cooldown) actor.cooldowns[command.action] = state.beat + skill.cooldown;
+  const heroStage = { state: structuredClone(state), events: structuredClone(events) };
   const intent = state.intent;
   if (intent) {
     if (!state.enemies.some(e => e.id === intent.sourceId && e.hp > 0) || interrupted) {
@@ -128,6 +129,7 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
       if (!recipient.hp) emit({ type: 'down', targetId: recipient.id, text: 'Hero falls.' });
     }
   }
+  const enemyStage = { state: structuredClone(state), events: events.slice(heroStage.events.length) };
   state.commands.push({ ...command });
   if (state.enemies.every(e => e.hp === 0)) state.outcome = 'victory';
   else if (state.heroes.every(h => h.hp === 0)) state.outcome = 'defeat';
@@ -138,7 +140,8 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
     for (const e of state.enemies) if (e.markedUntil <= state.beat) e.markedUntil = 0;
     state.intent = announce(state, data);
   }
-  return { state, events };
+  enemyStage.events = structuredClone(events.slice(heroStage.events.length));
+  return { state, events, stages: { hero: heroStage, enemy: enemyStage } };
 }
 export const previewCommand = resolveCommand;
 export function replay(data: EncounterDefinition, commands: readonly Command[]): BattleState {
