@@ -29,8 +29,11 @@ export class BattleScene extends Phaser.Scene {
     this.layer = this.add.container(0, 0);
     this.positions.clear();
     const { width: w, height: h } = this.scale;
-    const compact = w < 600;
-    const short = h < 300;
+    const compact = w < 900;
+    const short = w < 900 || h < 360;
+    const portrait = w < 900 && h >= 280;
+    const stageTop = short ? portrait ? 80 : 60 : 135;
+    const stageHeight = Math.max(80, h - (portrait ? 120 : 35) - stageTop);
     if (this.backdropSize !== `${w}:${h}`) {
       this.backdrop?.destroy();
       this.backdrop = drawRiftBackdrop(this, w, h);
@@ -38,32 +41,33 @@ export class BattleScene extends Phaser.Scene {
     }
     const bg = this.add.graphics(); this.layer.add(bg);
     const platform = (x: number, y: number, rx: number) => {
-      bg.fillStyle(palette.stone); bg.fillEllipse(x, y + 15, rx * 2, short ? 24 : 42);
-      bg.fillTriangle(x - rx + 8, y + 16, x + rx - 8, y + 16, x - 12, y + (short ? 34 : 62));
-      bg.fillStyle(palette.grass); bg.fillEllipse(x, y + 7, rx * 2, 25);
-      bg.lineStyle(1, palette.cyan, 0.25); bg.strokeEllipse(x, y + 7, rx * 2, 25);
-      bg.lineStyle(1, palette.gold, 0.4); bg.strokeEllipse(x, y + 9, rx * 2 - 6, 22);
+      bg.fillStyle(0x07131f, 0.48); bg.fillEllipse(x, y + 8, rx * 2, short ? 13 : 24);
+      bg.lineStyle(1, palette.cyan, 0.4); bg.strokeEllipse(x, y + 9, rx * 2, short ? 13 : 24);
+      bg.lineStyle(1, palette.gold, 0.25); bg.strokeEllipse(x, y + 9, rx * 2 - 6, short ? 10 : 20);
     };
-    const hx = compact ? Math.min(66, w * 0.19) : w * 0.23; const ex = compact ? w - hx : w * 0.78;
     this.encounter.heroes.forEach((hero, i) => {
-      const y = short ? 38 + i * (h - 78) / 2 : compact ? 67 + i * 94 : 98 + i * 100;
-      platform(hx, y + 20, compact ? 48 : 100);
-      this.actor(hero.id, actorName(hero.id, this.encounter), hx, y, hero.color, this.view!.state.heroes[i]!.hp, hero.maxHp, false, compact);
+      const x = w * (hero.id === 'weaver' ? (compact ? 0.12 : 0.14) : (compact ? 0.34 : 0.31));
+      const ratio = hero.id === 'guardian' ? 0.20 : hero.id === 'tracer' ? 0.82 : 0.51;
+      const y = stageTop + stageHeight * ratio;
+      platform(x, y + (short ? 20 : 39), short ? 32 : 75);
+      this.actor(hero.id, actorName(hero.id, this.encounter), x, y, hero.color, this.view!.state.heroes[i]!.hp, hero.maxHp, false, short);
     });
     this.encounter.enemies.forEach((enemy, i) => {
-      const y = short ? 50 + i * (h - 124) : compact ? 105 + i * 135 : 140 + i * 135;
-      platform(ex, y + 25, compact ? 51 : 112);
-      this.actor(enemy.id, actorName(enemy.id, this.encounter), ex, y, enemy.color, this.view!.state.enemies[i]!.hp, enemy.maxHp, true, compact);
+      const x = w * (portrait ? enemy.id === 'brute' ? 0.68 : 0.88 : enemy.id === 'brute' ? 0.84 : 0.73);
+      const y = stageTop + stageHeight * (enemy.id === 'brute' ? 0.70 : 0.22);
+      platform(x, y + (short ? 21 : enemy.id === 'brute' ? 55 : 35), short ? 38 : enemy.id === 'brute' ? 108 : 72);
+      this.actor(enemy.id, actorName(enemy.id, this.encounter), x, y, enemy.color, this.view!.state.enemies[i]!.hp, enemy.maxHp, true, short);
     });
-    const cx = w / 2; const cy = short ? h * 0.47 : compact ? 154 : h * 0.48;
+    const cx = w * 0.54; const cy = stageTop + stageHeight * 0.52;
     this.positions.set(this.encounter.crystal.id, { x: cx, y: cy });
-    platform(cx, cy + 40, compact ? 33 : 50);
+    platform(cx, cy + (short ? 28 : 40), short ? 24 : 50);
     const crystal = this.add.graphics(); this.layer.add(crystal);
     const charged = this.view.state.crystal.charges > 0;
     crystal.fillStyle(charged ? palette.cyan : palette.stone, 0.15); crystal.fillCircle(cx, cy, compact ? 27 : 45);
     crystal.lineStyle(2, charged ? palette.cyan : palette.mist, 0.8);
     crystal.fillStyle(charged ? palette.cyan : palette.stone);
-    const points = [[cx, cy - 28], [cx + 14, cy], [cx, cy + 28], [cx - 14, cy]].map(([x, y]) => new Phaser.Math.Vector2(x, y));
+    const crystalHeight = short ? 20 : 28;
+    const points = [[cx, cy - crystalHeight], [cx + 14, cy], [cx, cy + crystalHeight], [cx - 14, cy]].map(([x, y]) => new Phaser.Math.Vector2(x, y));
     crystal.fillPoints(points, true);
     crystal.strokePoints(points, true);
     crystal.lineStyle(1, 0xffffff, 0.65); crystal.lineBetween(cx, cy - 28, cx + 3, cy + 18);
@@ -71,7 +75,7 @@ export class BattleScene extends Phaser.Scene {
     crystal.lineBetween(cx - 19, cy - 9, cx - 25, cy + 27);
     crystal.lineBetween(cx + 19, cy - 9, cx + 25, cy + 27);
     crystal.strokeEllipse(cx, cy + 30, 53, 15);
-    const crystalLabel = this.add.text(cx, cy + 61, compact ? 'ผลึก' : 'ผลึกพลังงาน', { fontFamily: thaiFont, fontSize: compact ? '12px' : '13px', color: '#9ae7ef', stroke: '#101c36', strokeThickness: 3 }).setOrigin(0.5);
+    const crystalLabel = this.add.text(cx - (portrait ? 14 : 0), cy + (short ? 43 : 61), compact ? 'ผลึก' : 'ผลึกพลังงาน', { fontFamily: thaiFont, fontSize: compact ? '12px' : '13px', color: '#9ae7ef', stroke: '#101c36', strokeThickness: 3 }).setOrigin(0.5);
     this.layer.add(crystalLabel);
     const hit = this.add.zone(cx, cy, 65, 85).setInteractive({ useHandCursor: true });
     hit.on('pointerdown', () => this.choose(this.encounter.crystal.id)); this.layer.add(hit);
@@ -89,7 +93,8 @@ export class BattleScene extends Phaser.Scene {
     const body = this.add.container(x, y); this.layer!.add(body);
     if (hp <= 0) body.setAlpha(0.28);
     const g = this.add.graphics(); body.add(g);
-    const short = this.scale.height < 300;
+    const short = compact;
+    const portrait = this.scale.width < 900 && this.scale.height >= 280;
     const selected = this.view!.heroId === id || this.view!.targetId === id;
     if (selected && hp > 0) { g.lineStyle(2, palette.gold); g.strokeEllipse(0, 25, 68, 22); }
     // Chibi silhouette: large head, small body, distinct equipment.
@@ -129,14 +134,14 @@ export class BattleScene extends Phaser.Scene {
       g.fillStyle(palette.corruption, 0.5);
       g.fillTriangle(-15, -3, -34, -13, -28, 18);
       g.fillTriangle(15, -3, 34, -13, 28, 18);
-      g.setScale(short ? 0.94 : 1.2);
+      g.setScale(short ? 0.86 : 1.9);
     }
-    if (short && id !== 'brute') g.setScale(0.78);
-    const label = this.add.text(0, short ? 26 : 40, name, { fontFamily: thaiFont, fontSize: compact ? '12px' : '14px', color: '#f0f5ff', stroke: '#101c36', strokeThickness: 3 }).setOrigin(0.5);
+    if (id !== 'brute') g.setScale(short ? 0.68 : enemy ? 1.05 : 1.25);
+    const label = this.add.text(0, short ? 20 : enemy && id === 'brute' ? 70 : 51, name, { fontFamily: thaiFont, fontSize: compact ? '12px' : '14px', color: '#f0f5ff', stroke: '#101c36', strokeThickness: 3 }).setOrigin(0.5);
     // Hero HP sits beside the silhouette so the next hero cannot cover it.
-    const hpX = enemy ? 0 : short ? 52 : compact ? 57 : 76;
-    const hpY = enemy ? short ? 45 : 69 : 7;
-    const barY = enemy ? short ? 37 : 53 : 20;
+    const hpX = enemy ? 0 : short ? portrait ? 0 : 42 : 90;
+    const hpY = enemy ? short ? 43 : id === 'brute' ? 99 : 80 : short && portrait ? 39 : 7;
+    const barY = enemy ? short ? 34 : id === 'brute' ? 86 : 65 : short && portrait ? 28 : 20;
     const barWidth = enemy ? 70 : 52;
     const bar = this.add.graphics(); bar.fillStyle(0x101c36); bar.fillRoundedRect(hpX - barWidth / 2, barY, barWidth, 5, 2);
     bar.fillStyle(color); bar.fillRoundedRect(hpX - barWidth / 2, barY, barWidth * hp / maxHp, 5, 2);
@@ -144,6 +149,11 @@ export class BattleScene extends Phaser.Scene {
     body.add([label, bar, hpLabel]);
     const hit = this.add.zone(0, 0, 78, short ? 64 : 100).setInteractive({ useHandCursor: true });
     hit.on('pointerdown', () => this.choose(id)); body.add(hit);
+    const status = this.view!.state.enemies.find(e => e.id === id);
+    if (status && (status.markedUntil > this.view!.state.beat || status.exposedUntil > this.view!.state.beat)) {
+      const icon = this.add.text(-30, -20, status.markedUntil > this.view!.state.beat ? '◇' : '✧', { fontFamily: thaiFont, fontSize: '18px', color: '#e6b7ff', stroke: '#101c36', strokeThickness: 3 }).setOrigin(0.5);
+      body.add(icon);
+    }
     if (this.view!.state.intent?.sourceId === id && hp > 0) {
       const warning = this.add.text(35, -38, '◆', { fontFamily: thaiFont, fontSize: '15px', color: '#fdbdcf' }).setOrigin(0.5);
       body.add(warning);

@@ -53,15 +53,36 @@ export function drawRiftBackdrop(scene: Phaser.Scene, width: number, height: num
   });
 
   // A perspective tiled terrace suggests ancient ruins without a battle grid.
-  const floor = height * 0.68;
-  g.fillStyle(palette.stone, 0.22);
+  const floor = height * 0.39;
+  g.fillStyle(palette.stone, 0.42);
   g.fillRect(0, floor, width, height - floor);
   g.lineStyle(1, palette.mist, 0.11);
-  for (let i = 0; i < 7; i++) g.lineBetween(0, floor + i * 25, width, floor + i * 25);
+  for (let i = 0; i < 10; i++) g.lineBetween(0, floor + height * (i / 10) ** 1.7, width, floor + height * (i / 10) ** 1.7);
   const divisions = compact ? 7 : 14;
   for (let i = -1; i <= divisions; i++) {
     const x = width * i / divisions;
     g.lineBetween(width / 2 + (x - width / 2) * 0.72, floor, x, height);
+  }
+  // Original foreground masonry frames an open battle courtyard.
+  for (const side of [0, 1]) {
+    const x = side ? width - width * 0.055 : 0;
+    const wallWidth = width * 0.055;
+    g.fillStyle(0x142338, 0.82);
+    g.fillRect(x, 0, wallWidth, height * 0.67);
+    g.fillTriangle(x, height * 0.67, x + wallWidth, height * 0.67, side ? width : 0, height * 0.91);
+    g.lineStyle(1, palette.mist, 0.22);
+    for (let row = 0; row < 8; row++) {
+      const y = height * row / 12;
+      g.lineBetween(x, y, x + wallWidth, y + 3);
+      g.lineBetween(x + wallWidth * (row % 2 ? 0.35 : 0.7), y, x + wallWidth * (row % 2 ? 0.35 : 0.7), y + height / 12);
+    }
+  }
+  for (const fraction of [0.21, 0.64]) {
+    const x = width * fraction;
+    const y = height * 0.08;
+    g.lineStyle(2, palette.gold, 0.35); g.lineBetween(x, y, x, height * 0.37);
+    g.fillStyle(0x8d3046, 0.44); g.fillRect(x + 3, y + 7, width * 0.024, height * 0.14);
+    g.fillTriangle(x + 3, y + height * 0.14, x + width * 0.024, y + height * 0.14, x + width * 0.011, y + height * 0.18);
   }
   // Purple rift shards stay at the enemy edge, away from controls and labels.
   for (let i = 0; i < 4; i++) {

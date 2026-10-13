@@ -4,7 +4,7 @@ A small, genuinely playable **Fateweave tactical reaction combat** prototype. Th
 
 ## Play in your browser
 
-GitHub Pages target: **https://wnau34-nptrn.github.io/asterveil-fateweave/**. Availability depends on a successful **Publish playable prototype** workflow deployment. The interface is in Thai. Click **เริ่มต่อสู้**; follow the four numbered steps to choose a hero, action and target; review the predicted outcome; click **ยืนยันคำสั่งนี้** when ready. No installation or account is required to play the published static game.
+GitHub Pages target: **https://wnau34-nptrn.github.io/asterveil-fateweave/**. Availability depends on a successful **Publish playable prototype** workflow deployment. The interface is in Thai. Click **เริ่มต่อสู้**; use the lower command dock to choose a hero, action and target; review the predicted outcome; click **ยืนยันคำสั่งนี้** when ready. No installation or account is required to play the published static game.
 
 Public Pages publication was explicitly requested after the initial prototype. The workflow builds and tests the full browser gameplay suite on the production subpath before uploading `dist/`, then deploys with GitHub's official Pages actions. It publishes the current prototype branch and `main`; no automatic merge is performed. If Pages cannot be enabled by Actions, a repository administrator must choose **Settings → Pages → Build and deployment → Source: GitHub Actions**.
 
@@ -69,8 +69,8 @@ npm run test:browser
 
 1. กด **เริ่มต่อสู้** หรือเล่นต่อจากการบันทึกบนเครื่องนี้โดยอัตโนมัติ
 2. อ่านแถบเหนือสนาม: **ศัตรูจะทำอะไรหลังยืนยัน** เล็งใคร พลังโจมตีเท่าไร และเบี่ยงทิศได้หรือไม่ เปิด “ดูแผนโจมตีอีก 2 จังหวะข้างหน้า” เมื่อต้องการวางแผนต่อ
-3. ทำตามขั้น **1–3** ทางขวาของสนาม (มือถืออยู่ใต้สนาม): เลือกฮีโร่ → คำสั่ง → เป้าหมาย แต่ละฮีโร่แสดงเฉพาะ 2 คำสั่งของตัวเอง คำสั่งที่ใช้ไม่ได้บอกเหตุผลภาษาไทย
-4. ขั้น **4** แยกผล **คำสั่งของคุณ** กับ **ศัตรูและผลต่อทีม** พร้อมเลือด โล่ แต้มเบี่ยงพลัง และการโจมตีถัดไปที่คำนวณจากตัวเลือกจริง หากเพื่อนจะล้มจะมีคำเตือน
+3. ใช้แผงใต้สนาม: เลือกสมาชิกทีม → คำสั่ง → เป้าหมาย แต่ละฮีโร่แสดงเฉพาะ 2 คำสั่งของตัวเอง คำสั่งที่ใช้ไม่ได้บอกเหตุผลภาษาไทย
+4. หน้าต่างผลล่วงหน้าแยกผล **คำสั่งของคุณ** กับ **ศัตรูและผลต่อทีม** พร้อมเลือด โล่ แต้มเบี่ยงพลัง และการโจมตีถัดไปที่คำนวณจากตัวเลือกจริง หากเพื่อนจะล้มจะมีคำเตือน
 5. กด **ยืนยันคำสั่งนี้** เพื่อเดินจังหวะ หรือ **ยกเลิก** / Esc เพื่อเปลี่ยนใจ การเลือกเป้าหมายยังไม่ออกคำสั่ง
 6. เล่นจน **ชนะแล้ว** หรือ **แพ้แล้ว** เป้าหมายเสริมคือรักษาทีมครบ 3 คน กด **เริ่มใหม่** / **เล่นอีกครั้ง** เพื่อเริ่มใหม่และแทนที่การบันทึกเดิม
 
@@ -83,7 +83,10 @@ npm run test:browser
 | แต้มเบี่ยงพลัง / Counter | ทรัพยากรจากการตั้งรับสำเร็จ เก็บได้ 2 แต้ม |
 | ผลึกพลังงาน / Energy Crystal | ใช้ได้ครั้งเดียว รับการโจมตีพลังงานทั้งหมดแล้วให้โล่ 8 แก่ฮีโร่ที่ยังยืนอยู่ทุกคน |
 
-บนมือถือ สนามสูง 224 พิกเซลและแถบการโจมตีศัตรูติดอยู่ด้านบนขณะเลื่อน ตัวเลือกฮีโร่/คำสั่งกระชับขึ้น แตะ **วิธีใช้คำสั่ง** เพื่ออ่านรายละเอียด เมื่อเลือกเป้าหมาย ผลล่วงหน้าจะเปิดเป็นแผงด้านล่าง: เลื่อนอ่านผลได้โดยปุ่ม **ยืนยันคำสั่งนี้** / **ยกเลิก** อยู่กับที่ กดยกเลิก, ✕, พื้นที่นอกแผง หรือ Esc เพื่อกลับไปเลือกโดยไม่เดินจังหวะ หน้าจอแนวนอนวางสนามกับตัวเลือกข้างกัน การหมุนจอหรือขยายไปเดสก์ท็อปจะเก็บตัวเลือกที่ยังไม่ยืนยันไว้
+หน้าจอใช้รูปแบบสนามเต็มความกว้างและแผงคำสั่งด้านล่างตามภาพอ้างอิงการต่อสู้แนว Brave Frontier ไทม์ไลน์ด้านบนเริ่มจากฮีโร่ที่คุณเลือก ตามด้วยการโจมตีศัตรูที่ประกาศไว้และแผนอีกสองจังหวะ ภาพและเลือดของฮีโร่ที่เลือกอยู่ซ้ายของแผง ปุ่มคำสั่ง/เป้าหมายอยู่กลาง และรูปสมาชิกทีม 3 คนอยู่ขวา มือถือแนวตั้งจัดข้อมูลฮีโร่กับทีมเหนือคำสั่ง ส่วนแนวนอนใช้แผงสามส่วนใต้สนาม
+
+แตะ **วิธีใช้คำสั่ง** เพื่ออ่านรายละเอียด เลือกเป้าหมายแล้วผลล่วงหน้าจะเปิดเป็นหน้าต่างบนทั้งมือถือและคอม เลื่อนอ่านผลได้โดยปุ่ม **ยืนยันคำสั่งนี้** / **ยกเลิก** อยู่กับที่ กดยกเลิก, ✕, พื้นที่นอกหน้าต่าง หรือ Esc เพื่อกลับไปเลือกโดยไม่เดินจังหวะ การหมุนจอจะเก็บตัวเลือกที่ยังไม่ยืนยันไว้ แนวหน้า/แนวหลังเป็นการจัดภาพตัวละคร ทุกคนยังถูกเลือกเป็นเป้าหมายตามการโจมตีที่ประกาศ
+
 
 ข้อมูลผลึกแสดงใต้สนามเสมอ คำอธิบายละเอียดอยู่ใน **วิธีเล่น** และเหตุการณ์ย้อนหลังอยู่ใน **บันทึกการต่อสู้** หน้าจอใช้ฟอนต์ภาษาไทยที่มีในเครื่อง ไม่โหลดฟอนต์ภายนอก การจัดหน้า/ภาษาไม่เปลี่ยนกฎการต่อสู้หรือเวอร์ชันข้อมูล 2 จึงเล่นต่อจากเซฟเดิมได้
 
@@ -123,7 +126,7 @@ src/game/visuals/         Renderer palette tokens
 src/ui/                  Accessible DOM controls, preview/log, responsive CSS
 src/platform/            Safe browser-storage adapter
 tests/                   Rules and save tests; browser/ contains Playwright gameplay tests
-public/assets/           Original lightweight favicon; characters and ruins use runtime geometry
+public/assets/           Original favicon and five SVG HUD portraits; characters/ruins use runtime geometry
 docs/                    Direction, integration plan, roadmap, validation
 .github/workflows/       Quality CI and user-authorized GitHub Pages build/test/deployment
 ```
@@ -132,7 +135,7 @@ docs/                    Direction, integration plan, roadmap, validation
 
 ## Current limitations
 
-- One encounter, original geometric chibi placeholders and lightweight VFX. No final art, music, or sound.
+- One encounter, original geometric chibi placeholders, original SVG HUD portraits and lightweight VFX. No final art, music, or sound.
 - The supplied Battle (C) and World Exploration (B) images guide the original ruins/waterfalls, blue/gold Crystal and navy/gold HUD foundation. Key Art (A) has not been supplied. Reference images are not committed or used as production assets.
 - World exploration, progression, equipment, backend, multiplayer, billing, online challenges, and Capacitor are future work, not implemented.
 - Full Phaser runtime is approximately 1.37 MB minified / 357 KB gzip; Vite reports a large-chunk warning. Optimization needs measurement before a mobile release.

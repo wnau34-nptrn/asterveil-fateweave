@@ -30,27 +30,33 @@ export class BattleUI {
     root.innerHTML = `
       <header class="masthead">
         <a class="brand" href="./" aria-label="หน้าหลัก Asterveil"><span class="brand-mark">✧</span><span>ASTERVEIL<small>RISE BEYOND</small></span></a>
-        <span class="build-tag">FATEWEAVE · ต้นแบบการต่อสู้</span>
-        <button id="restart" data-ui="restart" class="quiet">↻ เริ่มใหม่</button>
+        <div class="encounter-heading"><p class="eyebrow">FATEWEAVE · การต่อสู้ 01</p><h1>รอยแยกผลึก</h1></div>
+        <div id="beat-status"></div><button id="restart" data-ui="restart" class="quiet" aria-label="เริ่มการต่อสู้ใหม่">↻</button>
       </header>
       <main>
-        <div class="encounter-heading"><div><p class="eyebrow">การต่อสู้ 01 · ซากลอยฟ้า</p><h1>รอยแยกผลึก</h1></div><div id="beat-status"></div></div>
         <div class="battle-layout">
           <section class="battle-board" aria-label="สถานการณ์การต่อสู้">
-            <section id="intent" aria-label="ศัตรูกำลังจะทำอะไร"></section>
-            <details id="forecast-details" class="forecast-panel"><summary>ดูแผนโจมตีอีก 2 จังหวะข้างหน้า</summary><div id="forecast" class="forecast"></div></details>
-            <section class="arena" aria-label="สนามต่อสู้ กดฮีโร่หรือเป้าหมายได้"><div id="game"></div><div id="start-screen"></div><span class="arena-note">ภาพตัวละครต้นแบบ · กดเพื่อเลือกได้</span></section>
-            <div id="crystal-info" class="crystal-info"></div>
-            <details class="field-notes"><summary>วิธีเล่น · ติดตราและเบี่ยงพลังคืออะไร?</summary><div id="rules"></div></details>
+            <section class="arena" aria-label="สนามต่อสู้ กดฮีโร่หรือเป้าหมายได้">
+              <div id="game"></div><div id="turn-order" aria-label="ลำดับเหตุการณ์"></div>
+              <div class="formation-labels" aria-hidden="true"><span class="back-label">แนวหลัง</span><span class="front-label">แนวหน้า</span></div>
+              <section id="intent" aria-label="ศัตรูกำลังจะทำอะไร"></section>
+              <div id="start-screen"></div>
+            </section>
           </section>
-          <section class="decision-panel" aria-label="เลือกคำสั่งและตรวจผล">
-            <div class="step-section"><h2 class="step-heading"><span>1</span>เลือกฮีโร่ที่จะลงมือ</h2><div id="party" class="party" aria-label="เลือกฮีโร่"></div></div>
+          <section class="decision-panel" aria-label="เลือกฮีโร่ คำสั่ง และเป้าหมาย">
+            <div id="selected-hero" aria-live="polite"></div>
             <div id="commands" class="step-section"></div>
-            <div id="preview-home"><div id="preview" class="step-section" aria-live="polite"></div></div>
+            <div class="team-section"><h2 class="step-heading"><span>1</span>ทีมของคุณ</h2><div id="party" class="party" aria-label="เลือกฮีโร่"></div></div>
           </section>
+          <div id="preview-home"><div id="preview" class="step-section" aria-live="polite"></div></div>
         </div>
-        <details class="combat-history"><summary>บันทึกการต่อสู้</summary><ol id="event-log" role="log" aria-live="polite"></ol></details>
-        <footer><span>หนึ่งจังหวะ · หนึ่งคำสั่ง · ไม่จำกัดเวลา</span><span id="save-status"></span></footer>
+        <div class="battle-notes">
+          <div id="crystal-info" class="crystal-info"></div>
+          <details id="forecast-details" class="forecast-panel"><summary>ดูแผนโจมตีอีก 2 จังหวะข้างหน้า</summary><div id="forecast" class="forecast"></div></details>
+          <details class="field-notes"><summary>วิธีเล่น · ติดตราและเบี่ยงพลังคืออะไร?</summary><div id="rules"></div></details>
+          <details class="combat-history"><summary>บันทึกการต่อสู้</summary><ol id="event-log" role="log" aria-live="polite"></ol></details>
+        </div>
+        <footer><span>เลือกฮีโร่ → คำสั่ง → เป้าหมาย → ดูผลก่อนยืนยัน</span><span id="save-status"></span></footer>
       </main>
       <dialog id="mobile-preview" aria-labelledby="preview-heading"><div id="mobile-preview-host"></div></dialog>`;
     root.addEventListener('click', e => {
@@ -91,7 +97,7 @@ export class BattleUI {
     if (target?.valid) {
       this.targetId = id;
       this.render();
-      if (!this.mobile.matches && window.matchMedia('(max-width: 1040px)').matches) this.root.querySelector('#preview')?.scrollIntoView({ block: 'nearest', behavior: 'auto' });
+
     } else if (this.data.heroes.some(h => h.id === id)) this.selectHero(id);
   }
 
@@ -114,7 +120,7 @@ export class BattleUI {
   private syncPreview(disabled: boolean): void {
     const dialog = this.root.querySelector<HTMLDialogElement>('#mobile-preview')!;
     const preview = this.root.querySelector<HTMLElement>('#preview')!;
-    const show = this.mobile.matches && !!this.proposed() && !disabled;
+    const show = !!this.proposed() && !disabled;
     const host = this.root.querySelector(show ? '#mobile-preview-host' : '#preview-home')!;
     if (!show && dialog.open) dialog.close();
     if (preview.parentElement !== host) host.append(preview);
@@ -150,8 +156,26 @@ export class BattleUI {
 
   private set(id: string, content: string): void { this.root.querySelector(`#${id}`)!.innerHTML = content; }
 
+  private portrait(id: string): string {
+    return `<img src="${import.meta.env.BASE_URL}assets/portraits/${id}.svg" alt="" width="80" height="80">`;
+  }
+
+  private renderSelectedHero(): void {
+    const def = this.data.heroes.find(h => h.id === this.heroId)!;
+    const hero = this.state.heroes.find(h => h.id === this.heroId)!;
+    const text = heroText[this.heroId]!;
+    this.set('selected-hero', `<div class="selected-portrait ${this.heroId}">${this.portrait(this.heroId)}</div><div class="selected-info"><p class="eyebrow">ฮีโร่ที่เลือก · ${text.role}</p><h2>${text.name}</h2><div class="selected-hp">เลือด <strong>${hero.hp} / ${def.maxHp}</strong></div><div class="hp-track"><span style="width:${hero.hp / def.maxHp * 100}%"></span></div><p class="selected-resource">${hero.barrier ? `✧ โล่ ${hero.barrier} · ` : ''}พลังโจมตี ${def.attack}</p><p class="hero-specialty">${text.help}</p></div>`);
+  }
+
+  private renderTimeline(): void {
+    const s = this.state;
+    const intents = [s.intent, ...plannedIntents(s, this.data)].filter(i => i !== null);
+    this.set('turn-order', `<p>ลำดับเหตุการณ์ <small>เลือก 1 คำสั่งต่อจังหวะ</small></p><ol><li class="timeline-slot hero-slot">${this.portrait(this.heroId)}<small>คุณเลือก</small></li>${intents.map((i, index) => `<li class="timeline-slot ${index === 0 ? 'next-slot' : ''}" aria-label="จังหวะ ${i.beat} ${actorName(i.sourceId, this.data)} โจมตี${actorName(i.targetId, this.data)} พลังโจมตี ${i.damage}">${this.portrait(i.sourceId)}<small>${index === 0 ? 'ถัดไป' : `จังหวะ ${i.beat}`}</small></li>`).join('')}</ol>`);
+  }
+
   private renderSituation(): void {
     const s = this.state; const d = this.data; const intent = s.intent;
+    this.renderTimeline();
     this.set('beat-status', `<span class="beat-chip">${this.busy ? 'กำลังแสดงผล…' : s.outcome === 'active' ? `จังหวะ ${s.beat}` : s.outcome === 'victory' ? 'ชนะแล้ว' : 'แพ้แล้ว'}</span><span class="counter-chip">✦ แต้มเบี่ยงพลัง <strong>${s.counter}</strong> / ${d.rules.counterCap}<small>สะสมจากการตั้งรับสำเร็จ</small></span>`);
     if (intent) {
       const target = s.heroes.find(h => h.id === intent.targetId)!;
@@ -168,7 +192,7 @@ export class BattleUI {
     const s = this.state;
     this.set('party', this.data.heroes.map((h, i) => {
       const hero = s.heroes[i]!; const text = heroText[h.id]!; const selected = h.id === this.heroId;
-      return `<button id="hero-${h.id}" data-ui="hero" data-value="${h.id}" class="hero-card ${h.id} ${selected ? 'selected' : ''}" aria-pressed="${selected}" ${disabled || hero.hp <= 0 ? 'disabled' : ''}><span class="hero-emblem" aria-hidden="true">${text.icon}</span><strong>${text.name}</strong><small>${text.help}</small><span class="hp-track"><span style="width:${hero.hp / h.maxHp * 100}%"></span></span><span class="hero-hp">เลือด ${hero.hp} / ${h.maxHp}${hero.barrier ? `<br>โล่ ${hero.barrier}` : ''}${hero.hp <= 0 ? ' · ล้มแล้ว' : ''}</span>${selected ? '<span class="selected-tag">เลือกอยู่</span>' : ''}</button>`;
+      return `<button id="hero-${h.id}" data-ui="hero" data-value="${h.id}" class="hero-card ${h.id} ${selected ? 'selected' : ''}" aria-pressed="${selected}" ${disabled || hero.hp <= 0 ? 'disabled' : ''}><span class="hero-emblem" aria-hidden="true">${this.portrait(h.id)}</span><strong>${text.name}</strong><small>${text.help}</small><span class="hp-track"><span style="width:${hero.hp / h.maxHp * 100}%"></span></span><span class="hero-hp"><span class="hp-label">เลือด</span> ${hero.hp} / ${h.maxHp}${hero.barrier ? `<br>โล่ ${hero.barrier}` : ''}${hero.hp <= 0 ? ' · ล้มแล้ว' : ''}</span>${selected ? '<span class="selected-tag">เลือกอยู่</span>' : ''}</button>`;
     }).join(''));
   }
 
@@ -190,10 +214,10 @@ export class BattleUI {
     };
     const targetHeading: Record<ActionId, string> = { attack: 'เลือกศัตรูที่จะโจมตี', guard: 'เลือกคนที่จะปกป้อง', mark: 'เลือกศัตรูที่จะติดตรา', redirect: 'เลือกว่าจะส่งพลังไปที่ไหน' };
     const targets = targetOptions(s, d, this.heroId, this.action);
-    this.set('commands', `<h2 class="step-heading"><span>2</span>เลือกคำสั่งของ${actorName(this.heroId, d)}</h2><div class="actions">${hero.actions.map(action => {
+    this.set('commands', `<h2 class="step-heading"><span>2</span>คำสั่งของ${actorName(this.heroId, d)}</h2><div class="actions">${hero.actions.map(action => {
       const text = actionText[action]; const reason = actionReason(s, d, this.heroId, action);
-      return `<div class="action-option ${this.action === action ? 'current-action' : ''}"><button id="action-${action}" data-ui="action" data-value="${action}" class="action ${this.action === action ? 'selected' : ''}" aria-pressed="${this.action === action}" aria-describedby="reason-${action}" ${disabled || reason ? 'disabled' : ''}><span aria-hidden="true">${text.icon}</span><strong>${text.name}</strong><small>${text.english}</small></button><p id="reason-${action}" class="${reason ? 'unavailable-reason' : ''}">${escapeHtml(reason ? reasonThai(reason, d) : hints[action])}</p></div>`;
-    }).join('')}</div><details class="action-help" ${this.mobile.matches ? '' : 'open'}><summary>วิธีใช้${actionText[this.action].name}</summary><p class="action-description">${descriptions[this.action]}</p></details><h2 class="step-heading target-heading"><span>3</span>${targetHeading[this.action]}</h2><div class="targets ${this.action === 'guard' ? 'guard-targets' : ''}">${targets.map(t => {
+      return `<div class="action-option ${this.action === action ? 'current-action' : ''}"><button id="action-${action}" data-ui="action" data-value="${action}" class="action ${action} ${this.action === action ? 'selected' : ''}" aria-pressed="${this.action === action}" aria-describedby="reason-${action}" ${disabled || reason ? 'disabled' : ''}><span aria-hidden="true">${text.icon}</span><strong>${text.name}</strong><small>${text.english}</small></button><p id="reason-${action}" class="${reason ? 'unavailable-reason' : ''}">${escapeHtml(reason ? reasonThai(reason, d) : hints[action])}</p></div>`;
+    }).join('')}</div><details class="action-help"><summary>วิธีใช้${actionText[this.action].name}</summary><p class="action-description">${descriptions[this.action]}</p></details><h2 class="step-heading target-heading"><span>3</span>${targetHeading[this.action]}</h2><div class="targets ${this.action === 'guard' ? 'guard-targets' : ''}">${targets.map(t => {
       const enemy = s.enemies.find(e => e.id === t.id); const definition = d.enemies.find(e => e.id === t.id);
       const ally = s.heroes.find(h => h.id === t.id);
       const info = enemy ? `เลือด ${enemy.hp} / ${definition!.maxHp}${enemy.markedUntil > s.beat ? ` · ติดตราอีก ${enemy.markedUntil - s.beat} จังหวะ` : ''}${enemy.exposedUntil > s.beat ? ' · เปิดช่องให้ไลรา' : ''}` : t.id === d.crystal.id ? `${s.crystal.charges} ครั้ง · ให้โล่ ${d.crystal.barrier} ทุกคน` : `เลือด ${ally!.hp}${s.intent?.targetId === t.id ? ' · ศัตรูเล็งคนนี้' : ''}`;
@@ -219,11 +243,11 @@ export class BattleUI {
     const focus = document.activeElement instanceof HTMLElement ? document.activeElement.id : '';
     const s = this.state; const d = this.data; const disabled = !this.started || this.busy || s.outcome !== 'active';
     this.root.classList.toggle('mobile-layout', this.mobile.matches);
-    this.renderSituation(); this.renderParty(disabled); this.renderCommands(disabled);
+    this.renderSituation(); this.renderSelectedHero(); this.renderParty(disabled); this.renderCommands(disabled);
     const command = this.proposed();
     if (command && s.outcome === 'active') this.renderPreview(previewCommand(s, d, command), command, disabled);
     else this.set('preview', `<h2 class="step-heading"><span>4</span>ดูผลก่อนกดยืนยัน</h2><div class="preview-empty"><span aria-hidden="true">✧</span><h3>${this.busy ? 'กำลังแสดงผล…' : s.outcome !== 'active' ? 'การต่อสู้จบแล้ว' : !this.started ? 'กดเริ่มต่อสู้ก่อน' : 'เลือกเป้าหมายเพื่อดูผล'}</h3><p>${s.outcome !== 'active' ? 'กดเริ่มใหม่เพื่อลองแผนอื่น' : 'คุณจะเห็นทั้งคำสั่งของตัวเองและการตอบโต้ของศัตรู ยังไม่มีอะไรเกิดขึ้นจนกดยืนยัน'}</p></div>`);
-    this.set('rules', `<h3>คำสั่งหลัก</h3><dl><dt>โจมตี (Attack)</dt><dd>ทำดาเมจทันที กำจัดผู้โจมตีได้ก็หยุดการโจมตีของมันในจังหวะนี้</dd><dt>ตั้งรับ (Guard) · เอกิส</dt><dd>รับแทนคนที่ศัตรูเล็ง ลดความเสียหาย ${d.rules.guardReduction * 100}% ปัดดาเมจที่เหลือขึ้น หากยังยืนอยู่ได้ 1 แต้มเบี่ยงพลัง เก็บได้ ${d.rules.counterCap} แต้ม</dd><dt>ติดตรา (Mark) · ไลรา</dt><dd>ยังไม่ทำดาเมจ แต่ติดตรา ${d.rules.markDuration} จังหวะรวมจังหวะนี้ เพื่อให้ไลราโจมตีแรงขึ้น ${d.rules.tracerBonus} หรือเปิดให้ไอราเบี่ยงพลังใส่ศัตรูตัวนั้น</dd><dt>เบี่ยงพลัง (Redirect) · ไอรา</dt><dd>ใช้ ${d.rules.redirectCost} แต้ม ส่งการโจมตีพลังงานไปที่ศัตรูติดตราหรือผลึก ศัตรูรับดาเมจเต็มและเปิดช่องให้ไลราโจมตีแรงในจังหวะถัดไป</dd><dt>ผลึกและโล่</dt><dd>ผลึกใช้ ${d.crystal.charges} ครั้ง รับพลังงานทั้งหมดแล้วให้โล่ ${d.crystal.barrier} แก่ทุกคนที่ยังยืน โล่รับดาเมจก่อนเลือด ไม่เพิ่มเลือดและไม่ซ้อนกัน</dd></dl><p>แต่ละจังหวะใช้ 1 คำสั่ง ไม่มีเวลานับถอยหลัง ศัตรูที่ถูกกำจัดจะถูกข้ามในจังหวะต่อไป ตัวที่เหลือยังโจมตีต่อได้ เป้าหมายเสริมคือชนะโดยรักษาทีมครบ 3 คน</p>`);
+    this.set('rules', `<h3>คำสั่งหลัก</h3><dl><dt>โจมตี (Attack)</dt><dd>ทำดาเมจทันที กำจัดผู้โจมตีได้ก็หยุดการโจมตีของมันในจังหวะนี้</dd><dt>ตั้งรับ (Guard) · เอกิส</dt><dd>รับแทนคนที่ศัตรูเล็ง ลดความเสียหาย ${d.rules.guardReduction * 100}% ปัดดาเมจที่เหลือขึ้น หากยังยืนอยู่ได้ 1 แต้มเบี่ยงพลัง เก็บได้ ${d.rules.counterCap} แต้ม</dd><dt>ติดตรา (Mark) · ไลรา</dt><dd>ยังไม่ทำดาเมจ แต่ติดตรา ${d.rules.markDuration} จังหวะรวมจังหวะนี้ เพื่อให้ไลราโจมตีแรงขึ้น ${d.rules.tracerBonus} หรือเปิดให้ไอราเบี่ยงพลังใส่ศัตรูตัวนั้น</dd><dt>เบี่ยงพลัง (Redirect) · ไอรา</dt><dd>ใช้ ${d.rules.redirectCost} แต้ม ส่งการโจมตีพลังงานไปที่ศัตรูติดตราหรือผลึก ศัตรูรับดาเมจเต็มและเปิดช่องให้ไลราโจมตีแรงในจังหวะถัดไป</dd><dt>ผลึกและโล่</dt><dd>ผลึกใช้ ${d.crystal.charges} ครั้ง รับพลังงานทั้งหมดแล้วให้โล่ ${d.crystal.barrier} แก่ทุกคนที่ยังยืน โล่รับดาเมจก่อนเลือด ไม่เพิ่มเลือดและไม่ซ้อนกัน</dd></dl><p>แนวหน้า/แนวหลังเป็นการจัดภาพตัวละคร ทุกคนยังถูกเลือกเป็นเป้าหมายตามการโจมตีที่ประกาศ แต่ละจังหวะใช้ 1 คำสั่ง ไม่มีเวลานับถอยหลัง ศัตรูที่ถูกกำจัดจะถูกข้ามในจังหวะต่อไป ตัวที่เหลือยังโจมตีต่อได้ เป้าหมายเสริมคือชนะโดยรักษาทีมครบ 3 คน</p>`);
     this.set('event-log', this.messages.slice(-30).map(message => `<li>${escapeHtml(message)}</li>`).join(''));
     this.set('save-status', this.saved && this.storage ? 'บันทึกบนเครื่องนี้อัตโนมัติ' : 'เล่นได้ แต่บันทึกบนเครื่องนี้ไม่ได้');
     this.scene?.sync({ state: s, heroId: this.heroId, targetId: this.targetId });
