@@ -35,7 +35,6 @@ export class BattleUI {
     this.messages = [loaded.restored ? 'กลับมาต่อสู้จากจังหวะที่บันทึกไว้' : 'อ่านการโจมตีของศัตรู แล้วเลือกคำสั่งของคุณ'];
     root.innerHTML = `
       <header class="masthead">
-        <a class="brand" href="./" aria-label="หน้าหลัก Asterveil"><span class="brand-mark">✧</span><span>ASTERVEIL<small>RISE BEYOND</small></span></a>
         <div class="encounter-heading"><p class="eyebrow">FATEWEAVE · การต่อสู้ 01</p><h1>ศึกปิดรอยแยก</h1></div>
         <div id="beat-status"></div><button id="battle-info" aria-haspopup="dialog" aria-controls="game-info" data-ui="info" class="quiet" aria-label="ข้อมูลสกิลและวิธีเล่น">ⓘ</button><button id="restart" data-ui="restart" class="quiet" aria-label="เริ่มการต่อสู้ใหม่">${icon('restart')}</button>
       </header>
