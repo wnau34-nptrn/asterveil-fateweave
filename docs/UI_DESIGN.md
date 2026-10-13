@@ -75,3 +75,11 @@ The camera frames the ruin courtyard horizon at 27% of the field, leaving floor 
 Bodies sort by foot depth, while status labels stay above the artwork. Sprite sizes are constrained by both field height and width so portrait controls and rear faces remain accessible at 320px. Native field targets use the resized body anchors; the 44px minimum hit area, single-screen portrait layout, front/back mechanics and save format are unchanged.
 
 Outside phone portrait mode, the timeline occupies the free upper center and lane labels align above the staggered hero columns, keeping them off the rear actor artwork.
+
+## Optional three-turn teaching — 2026-10-13
+
+A compact strip between the phase banner and field appears during the first three turns of an active battle. It teaches announced targets and Guard interception, Mark without immediate damage, then consuming the Mark through a ready Duelist strike on that same enemy. It reads legal targets, marks and cooldowns from real battle state. Existing marks prompt a strike immediately; a cooling Precision Strike prompts basic Attack; an unmarked third turn describes applying a Mark for a later hit without claiming its bonus is already active.
+
+A static dashed gold outline follows the next suggested hero card, owned skill or field target; the first lesson also outlines current enemy intent. All alternative choices and automatic next-hero selection remain available. During presentation the strip shows the actual hero/enemy stage event instead of another command. It disappears at beat 4 and after outcomes. × dismisses it; optional help includes a toggle for beats 1–3. The independent `asterveil.fateweave.tutorial.v1` preference persists dismissal and tolerates unavailable storage. Replay determines the current lesson, with no tutorial commands, forced confirmation or save-version migration.
+
+Portrait teaching uses a 48px strip with 11px heading, 10px copy and a 44px dismiss button. The adaptive field reserves room for it without main-page scrolling. Enemy label foot margins include the complete HP text on the smallest teaching field. Closing the strip filters residual canvas touch as the field moves upward. The optional help toggle retains keyboard focus inside its dialog.

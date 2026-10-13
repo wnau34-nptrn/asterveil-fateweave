@@ -19,6 +19,11 @@ export class BattleScene extends Phaser.Scene {
   private ready = false;
   constructor(private readonly encounter: EncounterDefinition, private readonly choose: (id: string) => void, private readonly onReady: () => void, private readonly onLayout: () => void) { super('battle'); }
   get isReady(): boolean { return this.ready; }
+  refreshLayout(): void {
+    // DOM teaching strips change the field without a window resize. Refresh
+    // immediately so sprites and targets cannot remain clipped in the old size.
+    if (this.ready && this.scale.getParentBounds()) this.scale.refresh();
+  }
   preload(): void {
     this.load.image('rift-ruins', artUrl('ruins'));
     this.load.spritesheet('battle-units', artUrl('units'), { frameWidth: 512, frameHeight: 512 });
@@ -60,7 +65,7 @@ export class BattleScene extends Phaser.Scene {
     // pair is offset again so faces and touch targets stay unobstructed.
     const formation: Record<string, { x: number; y: number }> = {
       weaver: { x: .14, y: .48 }, guardian: { x: .35, y: .59 },
-      healer: { x: .18, y: .77 }, tracer: { x: .39, y: .90 },
+      healer: { x: .16, y: .77 }, tracer: { x: .39, y: .90 },
       raider: { x: .85, y: .51 }, brute: { x: .70, y: .81 },
     };
     this.encounter.heroes.forEach((hero, i) => {
@@ -70,7 +75,7 @@ export class BattleScene extends Phaser.Scene {
     });
     this.encounter.enemies.forEach((enemy, i) => {
       const x = w * formation[enemy.id]!.x;
-      const y = Math.min(h * formation[enemy.id]!.y, h - 40);
+      const y = Math.min(h * formation[enemy.id]!.y, h - 46);
       this.actor(enemy.id, actorName(enemy.id, this.encounter), x, y, enemy.color, this.view!.state.enemies[i]!.hp, enemy.maxHp, true, short);
     });
     const intent = this.view.state.intent;

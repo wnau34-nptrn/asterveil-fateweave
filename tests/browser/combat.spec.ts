@@ -1,5 +1,5 @@
 import { errors, expect, test, type Page } from '@playwright/test';
-import { offensive, defensive } from '../fixtures/party-routes';
+import { offensive, defensive, guided } from '../fixtures/party-routes';
 async function start(page: Page, beforeStart?: () => Promise<void>): Promise<string[]> {
   const errors: string[] = []; page.on('pageerror', e => errors.push(e.message));
   page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
@@ -458,8 +458,17 @@ for (const viewport of [{ width:320,height:568 }, { width:390,height:640 }, { wi
       for (const selector of ['#battle-info','#restart','#action-attack']) await reachable(page,selector);
       const field = await page.locator('#game canvas').boundingBox();
       expect(field!.height).toBeGreaterThanOrEqual(120);
+      await expect.poll(()=>page.locator('#game canvas').evaluate(el=>{
+        const r=el.getBoundingClientRect(), a=document.querySelector('.arena')!.getBoundingClientRect();
+        return r.top>=a.top && r.bottom<=a.bottom+1;
+      })).toBe(true);
     };
     await fits();
+    await reachable(page, '#coach-dismiss');
+    expect(await page.locator('#coach-copy').evaluate(el => {
+      const r = el.getBoundingClientRect(), box = document.querySelector('#battle-coach')!.getBoundingClientRect();
+      return r.top >= box.top && r.bottom <= box.bottom && el.scrollWidth <= el.clientWidth;
+    })).toBe(true);
     // Four ally targets, barrier text and unavailable healing cannot grow the dock.
     await page.locator('#hero-weaver').tap(); await page.locator('#action-ward').tap();
     for (const id of ['guardian','tracer','weaver','healer']) await reachable(page,`#target-${id}`);
@@ -531,4 +540,110 @@ test('touch targets sit on the actors; invalid healing does not change hero and 
   expect(await page.evaluate(()=>JSON.parse(localStorage.getItem('asterveil.fateweave.battle.v1')!).commands.map((c:{targetId:string})=>c.targetId))).toEqual(['brute','tracer','party']);
   expect(await page.evaluate(()=>({x:scrollX,y:scrollY}))).toEqual({x:0,y:0});
   expect(errors).toEqual([]);await context.close();
+});
+
+test('three-turn coach teaches Guard and same-target Mark, survives reload and leads to a four-hero victory', async ({ browser }, info) => {
+  test.setTimeout(90000);
+  const context = await browser.newContext({viewport:{width:390,height:844},hasTouch:true,isMobile:true,reducedMotion:'reduce'});
+  const page = await context.newPage(); await page.clock.install({time:new Date('2026-10-13T00:00:00Z')});
+  const errors = await start(page); await page.clock.pauseAt(new Date('2026-10-13T01:00:00Z'));
+  await expect(page.locator('#battle-coach')).toHaveAttribute('data-lesson','1');
+  await expect(page.locator('#coach-copy')).toContainText('12 → 5');
+  await expect(page.locator('#intent, #hero-guardian')).toHaveClass([/coach-focus/, /coach-focus/]);
+  await expect(page.locator('#hero-tracer')).toHaveAttribute('aria-pressed','true');
+  await page.locator('#hero-guardian').tap(); await expect(page.locator('#action-guard')).toHaveClass(/coach-focus/);
+  await page.locator('#action-guard').tap(); await expect(page.locator('#target-tracer')).toHaveClass(/coach-focus/);
+  await page.screenshot({path:info.outputPath('coach-guard.png')});
+  await page.locator('#target-tracer').tap();
+  await expect(page.locator('#turn-phase')).toHaveAttribute('data-phase','hero');
+  await expect(page.locator('#coach-copy')).toContainText('ลดความเสียหาย 65%');
+  await expect(page.locator('#hero-guardian')).toContainText('76 / 76');
+  await page.clock.runFor(1000);
+  await expect(page.locator('#coach-copy')).toContainText('เสียเลือด 5');
+  await expect(page.locator('#coach-copy')).toContainText('รับแทนไลรา');
+  await expect(page.locator('#hero-guardian')).toContainText('71 / 76');
+  await expect(page.locator('#hero-tracer')).toContainText('56 / 56');
+  await finishTurn(page); await page.clock.resume(); await page.reload();
+  await expect(page.locator('#battle-coach')).toHaveAttribute('data-lesson','2');
+  await expect(page.locator('#hero-tracer')).toHaveAttribute('aria-pressed','true');
+  await expect(page.locator('#action-mark')).toHaveClass(/coach-focus/);
+  await page.locator('#action-mark').tap(); await expect(page.locator('#target-brute')).toHaveClass(/coach-focus/);
+  await page.screenshot({path:info.outputPath('coach-mark.png')});
+  await page.locator('#target-brute').tap();
+  await expect(page.locator('#coach-copy')).toContainText('ครั้งถัดไป +22');
+  await expect(page.locator('[data-enemy="brute"]')).toContainText('164 / 164');
+  await finishTurn(page);
+  await expect(page.locator('#battle-coach')).toHaveAttribute('data-lesson','3');
+  await expect(page.locator('#coach-copy')).toContainText('28 + 22 = 50');
+  await expect(page.locator('#hero-weaver')).toHaveAttribute('aria-pressed','true');
+  await expect(page.locator('#hero-tracer')).toHaveClass(/coach-focus/);
+  await page.locator('#hero-tracer').tap(); await expect(page.locator('#action-execute')).toHaveClass(/coach-focus/);
+  await page.locator('#action-execute').tap(); await expect(page.locator('#target-brute')).toHaveClass(/coach-focus/);
+  await page.screenshot({path:info.outputPath('coach-combo.png')});
+  await page.locator('#target-brute').tap(); await finishTurn(page);
+  await expect(page.locator('#battle-coach')).toBeHidden();
+  await expect(page.locator('.coach-focus')).toHaveCount(0);
+  await expect(page.locator('[data-enemy="brute"]')).toContainText('114 / 164');
+  expect(await page.evaluate(()=>JSON.parse(localStorage.getItem('asterveil.fateweave.battle.v1')!).commands.length)).toBe(3);
+  for(const [hero,action,target] of guided.slice(3)){await choose(page,hero,action,target);await finishTurn(page);}
+  await expect(page.getByRole('heading',{name:'ชนะแล้ว',exact:true})).toBeVisible();
+  await expect(page.locator('#start-screen')).toContainText('ยืนอยู่ 4 / 4 คน');
+  await expect(page.locator('#start-screen')).toContainText('เลือดทีม 117');
+  await page.screenshot({path:info.outputPath('guided-victory.png')});
+  expect(errors).toEqual([]); await context.close();
+});
+
+test('coach dismissal persists without issuing a command; advice can be reopened and other plans stay playable', async ({ browser }, info) => {
+  const context = await browser.newContext({viewport:{width:320,height:568},isMobile:true,hasTouch:true,reducedMotion:'reduce'});
+  const page = await context.newPage(); const errors = await start(page);
+  await reachable(page,'#coach-dismiss');
+  await page.screenshot({path:info.outputPath('coach-narrow.png')});
+  await page.locator('#coach-dismiss').tap(); await page.waitForTimeout(350);
+  await expect(page.locator('#battle-coach')).toBeHidden(); await expect(page.locator('.coach-focus')).toHaveCount(0);
+  expect(await page.evaluate(()=>localStorage.getItem('asterveil.fateweave.battle.v1'))).toBeNull();
+  await page.reload(); await page.locator('#start').tap(); await expect(page.locator('#battle-coach')).toBeHidden();
+  await page.locator('#battle-info').tap(); await page.locator('#coach-toggle').tap();
+  await expect(page.locator('#coach-toggle')).toHaveAttribute('aria-pressed','true');
+  await page.waitForTimeout(100); await expect(page.locator('#coach-toggle')).toBeFocused();
+  await page.locator('[data-ui=info-close]').tap(); await page.waitForTimeout(300);
+  await expect(page.locator('#battle-coach')).toHaveAttribute('data-lesson','1');
+  // Ignore Guard and mark a different enemy: the advice follows that real mark.
+  await choose(page,'tracer','mark','raider'); await finishTurn(page);
+  await expect(page.locator('#coach-copy')).toContainText('ฟันเจาะจุด → นักจู่โจม');
+  await expect(page.locator('#coach-copy')).toContainText('28 + 22 = 50');
+  await choose(page,'tracer','execute','raider'); await finishTurn(page);
+  await expect(page.locator('#coach-copy')).toContainText('แล้วไลราตีเป้าเดิม');
+  await expect(page.locator('#coach-copy')).not.toContainText('= 50');
+  await choose(page,'healer','heal','tracer'); await finishTurn(page);
+  await expect(page.locator('#hero-tracer')).toContainText('56 / 56');
+  await expect(page.locator('#battle-coach')).toBeHidden();
+  expect(await page.evaluate(()=>({x:scrollX,y:scrollY,overflow:document.documentElement.scrollHeight>innerHeight+1}))).toEqual({x:0,y:0,overflow:false});
+  expect(await page.evaluate(()=>JSON.parse(localStorage.getItem('asterveil.fateweave.battle.v1')!).commands.map((c:{action:string})=>c.action))).toEqual(['mark','execute','heal']);
+  expect(errors).toEqual([]); await context.close();
+});
+
+test('saved coach uses a ready attack when Precision Strike is cooling, and never claims an unmarked bonus', async ({ page }, info) => {
+  const errors = await start(page);
+  await page.evaluate(()=>localStorage.setItem('asterveil.fateweave.battle.v1',JSON.stringify({version:1,encounterId:'veil-siege',contentVersion:3,commands:[
+    {beat:1,heroId:'tracer',action:'execute',targetId:'brute'}, {beat:2,heroId:'tracer',action:'mark',targetId:'raider'},
+  ]})));
+  await page.reload(); await expect(page.locator('#battle-coach')).toHaveAttribute('data-lesson','3');
+  await expect(page.locator('#coach-copy')).toContainText('โจมตี → นักจู่โจม');
+  await expect(page.locator('#coach-copy')).toContainText('16 + 22 = 38');
+  await page.locator('#hero-tracer').click(); await expect(page.locator('#action-execute')).toBeDisabled();
+  await expect(page.locator('#target-raider')).toHaveClass(/coach-focus/);
+  await page.locator('#target-raider').click(); await finishTurn(page);
+  await expect(page.locator('[data-enemy="raider"]')).toContainText('26 / 64');
+  await expect(page.locator('#battle-coach')).toBeHidden();
+  await page.locator('#restart').click();
+  await expect(page.locator('#battle-coach')).toHaveAttribute('data-lesson','1');
+  await choose(page,'guardian','attack','brute'); await finishTurn(page);
+  await choose(page,'guardian','attack','brute'); await finishTurn(page);
+  await expect(page.locator('#coach-copy')).toContainText('ติดตรา → อสูรรอยแยก');
+  await expect(page.locator('#coach-copy')).not.toContainText('= 50');
+  await page.screenshot({path:info.outputPath('coach-unmarked.png'),fullPage:true});
+  await choose(page,'tracer','mark','brute'); await finishTurn(page);
+  await expect(page.locator('[data-enemy="brute"]')).toContainText('ติดตรา');
+  await expect(page.locator('#battle-coach')).toBeHidden();
+  expect(errors).toEqual([]);
 });

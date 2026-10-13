@@ -54,4 +54,8 @@ Interceptions redirect reduced damage into the durable Knight; Ward absorbs befo
 
 Basic-attack results describe two concrete tested policies, not an exhaustive proof that every possible Attack-only sequence loses. Human playtesting and further encounters remain future work. Combat has no random damage or timing advantage.
 
-The encounter is `veil-siege`, version 3. Old three-member saves restart safely. Current automated evidence is 34 Node tests and 28 production browser scenarios; `VALIDATION.md` records the checks and device limits. GitHub Pages deploys only after the full production suite passes.
+The encounter is `veil-siege`, version 3. Old three-member saves restart safely. Current automated coverage is 34 Node tests and 31 production browser scenarios; `VALIDATION.md` records the checks and device limits. GitHub Pages deploys only after the full production suite passes.
+
+## Optional teaching opening
+
+The first three hints suggest Knight Guard protecting Lyra, Mark on Brute, then a marked Precision Strike on that same target. This is advice rather than a required script. The `guided` route in `tests/fixtures/party-routes.ts` continues that opening with class skills and wins in 14 beats with all four heroes standing: [47, 20, 22, 28], total 117 HP. Browser coverage plays the route through actual controls and verifies interception at 5 damage, no immediate Mark damage, the 50-power marked strike, and the full victory. Existing offensive/defensive routes and both basic-attack defeats retain their original outcomes.

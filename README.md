@@ -8,6 +8,8 @@ GitHub Pages target: **https://wnau34-nptrn.github.io/asterveil-fateweave/**. Av
 
 Characters stand on the courtyard in staggered front/back pairs, with contact shadows at their feet. The formation and character touch areas resize with the field, including single-screen portrait mobile play.
 
+The first three turns offer optional Thai hints for reading enemy intent, using Knight Guard, and consuming a Duelist Mark on the same target. A dashed gold outline points to the next suggested hero, skill or field target. Hints adapt to existing marks and cooldowns, show actual stage results and disappear after turn 3. Close them with ×; toggle them again in optional help (ⓘ on phones). Other commands stay available, and the separate hint preference does not change battle saves.
+
 Public Pages publication was explicitly requested after the initial prototype. The workflow builds and tests the full browser gameplay suite on the production subpath before uploading `dist/`, then deploys with GitHub's official Pages actions. It publishes the current prototype branch and `main`; no automatic merge is performed. If Pages cannot be enabled by Actions, a repository administrator must choose **Settings → Pages → Build and deployment → Source: GitHub Actions**.
 
 Set the Pages source to **GitHub Actions**, even if an older branch-based/Jekyll site is already enabled. Otherwise GitHub's separate Jekyll workflow can publish raw Vite source and overwrite the tested game build. The publishing token can deploy artifacts but GitHub rejects changing this administration setting (`403`), so the owner must select the source once in Settings. The game publishing workflow does not attempt that privileged operation.
