@@ -53,6 +53,7 @@ async function targetReachable(page: Page, selector: string): Promise<void> {
 }
 
 test('Start waits for the production unit atlas before enabling battle input', async ({ page }) => {
+  await page.clock.install({ time: new Date('2026-10-13T00:00:00Z') });
   let release!: () => void;
   let requested = false;
   const gate = new Promise<void>(resolve => { release = resolve; });
@@ -70,6 +71,9 @@ test('Start waits for the production unit atlas before enabling battle input', a
     release();
     await expect(page.locator('#start')).toBeEnabled(); await page.locator('#start').click();
     await expect(page.locator('#hero-tracer')).toBeEnabled();
+    // Asset gating and committing are the contract here; cold rendering must
+    // not race the one-second hero stage before its assertion can run.
+    await page.clock.pauseAt(new Date('2026-10-13T01:00:00Z'));
     await page.locator('#target-raider').click();
     await expect(page.locator('#turn-phase')).toHaveAttribute('data-phase', 'hero');
     await expect(page.locator('dialog[open]')).toHaveCount(0); await finishTurn(page); expect(errors).toEqual([]);
