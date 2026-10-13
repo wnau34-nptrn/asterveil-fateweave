@@ -25,6 +25,8 @@ export class BattleUI {
     const loaded = loadBattle(this.storage, data);
     this.state = loaded.state;
     this.started = loaded.restored;
+    const lastCommand = this.state.commands.at(-1);
+    if (lastCommand) this.heroId = this.state.outcome === 'active' ? this.nextHeroId(lastCommand.heroId) : lastCommand.heroId;
     if (!this.state.heroes.some(h => h.id === this.heroId && h.hp > 0)) this.heroId = this.state.heroes.find(h => h.hp > 0)?.id ?? this.heroId;
     this.messages = [loaded.restored ? 'กลับมาต่อสู้จากจังหวะที่บันทึกไว้' : 'อ่านการโจมตีของศัตรู แล้วเลือกคำสั่งของคุณ'];
     root.innerHTML = `
@@ -106,6 +108,16 @@ export class BattleUI {
     this.heroId = id; this.action = 'attack'; this.targetId = null; this.render();
   }
 
+  private nextHeroId(afterId: string): string {
+    const order = this.data.heroes;
+    const previous = order.findIndex(h => h.id === afterId);
+    for (let offset = 1; offset <= order.length; offset++) {
+      const next = order[(previous + offset) % order.length]!;
+      if (this.state.heroes.some(h => h.id === next.id && h.hp > 0)) return next.id;
+    }
+    return afterId;
+  }
+
   private proposed(): Command | null {
     return this.targetId ? { beat: this.state.beat, heroId: this.heroId, action: this.action, targetId: this.targetId } : null;
   }
@@ -140,7 +152,7 @@ export class BattleUI {
     this.state = result.state; this.targetId = null; this.busy = true;
     this.messages.push(`จังหวะ ${command.beat} · ${actorName(command.heroId, this.data)} ${this.data.skills[command.action].name}`, ...result.events.map(event => eventThai(event, result.state, this.data)));
     this.saved = saveBattle(this.storage, this.state, this.data);
-    if (!this.state.heroes.some(h => h.id === this.heroId && h.hp > 0)) this.heroId = this.state.heroes.find(h => h.hp > 0)?.id ?? this.heroId;
+    if (this.state.outcome === 'active') this.heroId = this.nextHeroId(command.heroId);
     this.action = 'attack'; this.render(); this.scene?.play(result.events);
     if (this.mobile.matches && this.state.outcome !== 'active') this.root.querySelector('.arena')?.scrollIntoView({ block: 'center', behavior: 'auto' });
     this.timer = setTimeout(() => { this.busy = false; this.render(); }, window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 120 : 720);

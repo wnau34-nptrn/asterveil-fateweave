@@ -20,6 +20,69 @@ async function reachable(page: Page, selector: string): Promise<void> {
   expect(await page.locator(selector).evaluate(el => { const r = el.getBoundingClientRect(); return el.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)); })).toBe(true);
 }
 
+for (const viewport of [{ width: 1366, height: 1000 }, { width: 390, height: 844 }]) {
+  test(`auto-select next hero at ${viewport.width}px, wrap, cancel and reload`, async ({ browser }, info) => {
+    const context = await browser.newContext({ viewport, hasTouch: true, reducedMotion: 'reduce' });
+    const page = await context.newPage(); const errors = await start(page);
+    await page.locator('#hero-guardian').tap();
+    await page.locator('#target-brute').tap(); await page.locator('#cancel').tap();
+    await expect(page.locator('#hero-guardian')).toHaveAttribute('aria-pressed', 'true');
+    const turns = [
+      ['guardian', 'tracer', 'นักดาบ', 'execute'], ['tracer', 'weaver', 'จอมเวท', 'bolt'],
+      ['weaver', 'healer', 'นักบวช', 'heal'], ['healer', 'guardian', 'อัศวิน', 'guard'],
+    ];
+    for (const [actor, next, role, skill] of turns) {
+      await expect(page.locator(`#hero-${actor}`)).toHaveAttribute('aria-pressed', 'true');
+      await page.locator('#target-brute').tap(); await commit(page);
+      await expect(page.locator(`#hero-${next}`)).toHaveAttribute('aria-pressed', 'true');
+      await expect(page.locator('#selected-hero')).toContainText(role!);
+      await expect(page.locator(`#action-${skill}`)).toBeVisible();
+      await expect(page.locator('#action-attack')).toHaveAttribute('aria-pressed', 'true');
+      await expect(page.locator('.hero-slot img')).toHaveAttribute('src', new RegExp(`${next}\\.svg$`));
+      await expect(page.locator('#mobile-preview')).not.toBeVisible();
+      if (next === 'healer') {
+        await page.reload(); await expect(page.locator('#hero-healer')).toHaveAttribute('aria-pressed', 'true');
+        await expect(page.locator('#beat-status')).toContainText('จังหวะ 4');
+      }
+    }
+    await page.screenshot({ path: info.outputPath('next-hero.png'), fullPage: true });
+    await page.locator('#hero-weaver').tap();
+    await expect(page.locator('#hero-weaver')).toHaveAttribute('aria-pressed', 'true');
+    await page.locator('#restart').click();
+    await expect(page.locator('#hero-tracer')).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.locator('#beat-status')).toContainText('จังหวะ 1');
+    expect(errors).toEqual([]); await context.close();
+  });
+}
+
+test('auto-selection skips fallen heroes after commit and saved reload', async ({ page }) => {
+  test.setTimeout(60000);
+  const errors = await start(page);
+  await page.evaluate(() => localStorage.setItem('asterveil.fateweave.battle.v1', JSON.stringify({
+    version: 1, encounterId: 'veil-siege', contentVersion: 3,
+    commands: Array.from({ length: 6 }, (_, i) => ({ beat: i + 1, heroId: 'guardian', action: 'attack', targetId: 'brute' })),
+  })));
+  await page.reload();
+  await expect(page.locator('#hero-weaver')).toBeDisabled();
+  await expect(page.locator('#hero-tracer')).toHaveAttribute('aria-pressed', 'true');
+  await page.locator('#target-brute').click(); await commit(page);
+  await expect(page.locator('#hero-healer')).toHaveAttribute('aria-pressed', 'true');
+  await page.reload(); await expect(page.locator('#hero-healer')).toHaveAttribute('aria-pressed', 'true');
+  for (const next of ['guardian', 'tracer', 'healer', 'guardian', 'healer', 'healer']) {
+    await page.locator('#target-brute').click(); await commit(page);
+    await expect(page.locator(`#hero-${next}`)).toHaveAttribute('aria-pressed', 'true');
+  }
+  await expect(page.locator('#hero-tracer')).toBeDisabled();
+  await expect(page.locator('#hero-guardian')).toBeDisabled();
+  await page.reload();
+  await expect(page.locator('#hero-healer')).toHaveAttribute('aria-pressed', 'true');
+  await page.locator('#target-brute').click(); await commit(page);
+  await expect(page.getByRole('heading', { name: 'แพ้แล้ว', exact: true })).toBeVisible();
+  await expect(page.locator('#hero-healer')).toHaveAttribute('aria-pressed', 'true');
+  await page.reload(); await expect(page.locator('#hero-healer')).toHaveAttribute('aria-pressed', 'true');
+  expect(errors).toEqual([]);
+});
+
 test('four classes, 2 front/2 back, three owned commands each, and no Crystal interface', async ({ page }, info) => {
   const errors = await start(page);
   await expect(page.locator('.hero-card')).toHaveCount(4);
@@ -95,6 +158,7 @@ for (const [name,moves,hp] of [['offensive',offensive,134],['defensive',defensiv
     await expect(page.getByRole('heading',{name:'ชนะแล้ว',exact:true})).toBeVisible();
     await expect(page.locator('#start-screen')).toContainText('ยืนอยู่ 4 / 4 คน');
     await expect(page.locator('#start-screen')).toContainText(`เลือดทีม ${hp}`);
+    await expect(page.locator('#hero-tracer')).toHaveAttribute('aria-pressed', 'true');
     await page.screenshot({path:info.outputPath(`${name}-victory.png`),fullPage:true});
     expect(errors).toEqual([]);
   });

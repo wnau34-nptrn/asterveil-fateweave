@@ -158,3 +158,12 @@ Local checks passed strict typecheck, ESLint, all **32 Node tests across 3 files
 - Incompatible old saves start fresh; denied browser storage leaves play functional.
 
 Inspected actual desktop, narrow portrait, short landscape, Priest party-healing preview and four-survivor victory screenshots. The scene shows two heroes in each lane, distinct green Priest art and six original SVG portraits; the phone roster is 2×2. Confirmation/cancel remain separate from independently scrolling results. Browser tests report no page exceptions or runtime console errors. Evidence is Linux Chromium with software WebGL and emulated touch, not real Android/iOS or Safari. The existing non-fatal Phaser bundle-size warning remains.
+
+
+## Automatic next-hero selection — 2026-10-13
+
+Confirmed active commands now select the next living roster member, wrapping Aegis → Lyra → Eira → Seren and skipping fallen actors. The action resets to Attack, and the portrait, class commands, timeline and canvas selection update together. Cancel does not change selection. Manual hero choice remains available. Reload derives the next actor from the last committed command; battle completion keeps the final actor selected. No core mechanics, encounter version or save format change. Existing version-3 saves continue.
+
+Strict typecheck, ESLint, all 32 Node tests, production Pages build and whitespace checks passed. The production browser suite passed 16 scenarios on its first run; one new fallen-hero fixture initially expected a casualty on the wrong scheduled beat. Corrected the fixture to follow actual frozen intents and reran that case successfully (15.6 seconds). Thus all 17 scenarios passed across the full run and corrected targeted rerun, with no implementation change between them. The publication workflow runs all 17 together before deployment.
+
+New coverage checks automatic progression through all four heroes and wraparound on desktop and 390px touch, class/action/timeline consistency, cancellation, manual override, restart and saved reload. A valid replay reaches fallen members, skips them, falls back to the sole survivor, and retains the final actor after defeat/reload. Existing full victories verify that ending the battle does not advance the selected hero. Inspected actual desktop and phone screenshots after the four-command cycle. Evidence remains Linux Chromium/software WebGL with emulated touch, not physical Safari/iPhone validation.

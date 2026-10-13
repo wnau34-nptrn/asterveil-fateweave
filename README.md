@@ -71,7 +71,7 @@ npm run test:browser
 2. อ่านแถบ **ศัตรูจะทำอะไรหลังยืนยัน**: ผู้โจมตี เป้าหมาย ประเภท และความเสียหาย เปิดแผนอีก 2 จังหวะเมื่อต้องการวางแผน
 3. เลือกฮีโร่ → คำสั่ง → เป้าหมาย ทุกคนมีโจมตีพื้นฐานและสกิลเฉพาะ 2 อย่าง ปุ่มแสดงเหตุผลเมื่อใช้ไม่ได้และจำนวนจังหวะที่เหลือของคูลดาวน์
 4. ตรวจผลล่วงหน้า: แยกคำสั่งของคุณกับการตอบโต้ของศัตรู แสดงเลือด/โล่ที่เปลี่ยน คำเตือนเพื่อนล้ม และการโจมตีถัดไปจริง
-5. กด **ยืนยันคำสั่งนี้** เพื่อเดิน 1 จังหวะ หรือ **ยกเลิก** / Esc เพื่อเลือกใหม่ การเลือกเป้าหมายยังไม่ออกคำสั่ง
+5. กด **ยืนยันคำสั่งนี้** เพื่อเดิน 1 จังหวะ เกมจะเลือกสมาชิกคนถัดไปอัตโนมัติ วน เอกิส → ไลรา → ไอรา → เซเรน และข้ามคนที่ล้มแล้ว แตะเลือกคนอื่นเองได้ **ยกเลิก** / Esc ไม่เปลี่ยนตัวหรือเดินจังหวะ การเลือกเป้าหมายยังไม่ออกคำสั่ง
 6. กำจัดศัตรูทั้งสองโดยมีฮีโร่เหลืออย่างน้อย 1 คน เป้าหมายเสริมคือรอดครบ **4 คน** กด **เล่นอีกครั้ง** เพื่อเริ่มใหม่
 
 ### Four classes, front 2 / back 2
@@ -93,7 +93,7 @@ The former Crystal, Redirect and Counter systems are removed. No MP, initiative 
 
 Raider has 64 HP, Brute 164. The repeating intent pattern is physical Slash 12 → energy Bolt 28 → physical Slash 12 → physical Crush 26 → energy Shadow Knife 14 → energy Bolt 28. Dead sources are skipped when announcing the next event. Forecasts assume currently living actors remain alive; the preview shows the exact next event after the proposed decision.
 
-The full-width field and lower command dock follow the supplied Brave Frontier layout reference. Front/back now describe actual physical targeting rules. Four original hero portraits select the actor, and only that class's three commands appear. Phones use a compact 2×2 roster. Preview is a native dialog on all screen sizes; results scroll independently of confirmation/cancel. Closing, backdrop taps and Esc cancel without advancing; rotation preserves a pending choice. Help, forecasts and history remain disclosures below the dock. Thai fonts use installed system fallbacks.
+The full-width field and lower command dock follow the supplied Brave Frontier layout reference. Front/back now describe actual physical targeting rules. Four original hero portraits select the actor, and only that class's three commands appear. Phones use a compact 2×2 roster. Preview is a native dialog on all screen sizes; results scroll independently of confirmation/cancel. Closing, backdrop taps and Esc cancel without advancing; rotation preserves a pending choice. After confirmation, selection advances to the next living member in roster order; reload reconstructs that selection from the last committed command. Battle outcomes keep the final actor selected. Help, forecasts and history remain disclosures below the dock. Thai fonts use installed system fallbacks.
 
 Both tested basic-attack priorities lose. An 11-beat offensive plan and a 16-beat defensive plan each use all four classes and win with all four standing. These are regression examples, not a claim of final balance; see [balance validation](docs/BALANCE_VALIDATION.md).
 
