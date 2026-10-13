@@ -15,9 +15,10 @@ async function finishTurn(page: Page): Promise<void> {
   const skip = page.locator('#skip-turn');
   try { await skip.click({ timeout: 2500 }); }
   catch (error) {
-    // Scrolling/stability can outlast the two-second presentation. Accept
-    // natural completion only when the skip button has actually disappeared.
-    if (!(error instanceof errors.TimeoutError) || await skip.count() !== 0) throw error;
+    // Cold rendering/scrolling can outlast the click budget. Retry the actual
+    // completion assertion; a still-running turn must fail, not be dismissed.
+    if (!(error instanceof errors.TimeoutError)) throw error;
+    await expect(skip).toHaveCount(0);
   }
   await expect(page.locator('#beat-status')).not.toContainText('กำลังแสดงผล');
 }
