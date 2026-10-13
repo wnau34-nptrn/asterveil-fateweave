@@ -197,15 +197,6 @@ export class BattleUI {
     const playback = { phase: 'hero' as 'hero' | 'enemy', command, resolution: result, frame: result.stages.hero.state, heroLogEnd: logStart + 1 + result.stages.hero.events.length };
     this.presentation = playback; this.render(); this.scene?.play(result.stages.hero.events);
     this.root.querySelector<HTMLElement>('#skip-turn')?.focus({ preventScroll: true });
-    const arena = this.root.querySelector<HTMLElement>('.arena')!;
-    const banner = this.root.querySelector<HTMLElement>('#turn-phase')!;
-    // A sticky banner's current rect may already be at the viewport top.
-    // Anchor to the non-sticky arena so a cast from the lower dock reveals combat.
-    if (!this.portraitLayout.matches) {
-      const coach = this.root.querySelector<HTMLElement>('#battle-coach')!;
-      const teachingSpace = coach.hidden ? 0 : coach.offsetHeight + 8;
-      window.scrollTo({ top: window.scrollY + arena.getBoundingClientRect().top - banner.offsetHeight - teachingSpace - 8, behavior: 'instant' });
-    }
     const delay = 1000;
     this.timer = setTimeout(() => {
       if (this.presentation !== playback) return;
@@ -222,7 +213,6 @@ export class BattleUI {
     this.heroId = this.state.outcome === 'active' ? this.nextHeroId(playback.command.heroId) : playback.command.heroId;
     this.action = 'attack'; this.render();
     if (this.state.outcome === 'active') this.root.querySelector<HTMLElement>('#action-attack')?.focus({ preventScroll: true });
-    if (this.mobile.matches && !this.portraitLayout.matches) this.root.querySelector(this.state.outcome === 'active' ? '.command-dock' : '.arena')?.scrollIntoView({ block: this.state.outcome === 'active' ? 'nearest' : 'center', behavior: 'auto' });
   }
 
   private restart(): void {
@@ -230,7 +220,6 @@ export class BattleUI {
     this.heroId = 'tracer'; this.action = 'attack'; this.started = true;
     this.messages = ['เริ่มการต่อสู้ใหม่แล้ว'];
     this.saved = saveBattle(this.storage, this.state, this.data); this.render();
-    if (this.mobile.matches && !this.portraitLayout.matches) this.root.querySelector('.arena')?.scrollIntoView({ block: 'nearest', behavior: 'auto' });
   }
 
   private set(id: string, content: string): void { this.root.querySelector(`#${id}`)!.innerHTML = content; }
@@ -341,8 +330,8 @@ export class BattleUI {
     this.root.classList.toggle('mobile-layout', this.mobile.matches);
     const dialog = this.root.querySelector<HTMLDialogElement>('#game-info')!;
     const help = this.root.querySelector<HTMLDetailsElement>('.help-panel')!;
-    const host = this.root.querySelector(this.portraitLayout.matches ? '#info-host' : '#help-home')!;
-    if (help.parentElement !== host) { if (dialog.open) dialog.close(); host.append(help); help.open = this.portraitLayout.matches; }
+    const host = this.root.querySelector('#info-host')!;
+    if (help.parentElement !== host) { if (dialog.open) dialog.close(); host.append(help); help.open = true; }
     this.set('info-skill', `<h3>${d.skills[this.action].name} · ${heroText[this.heroId]!.name}</h3><p>${skillDescription(this.action, this.heroId, d)}</p>`);
     this.set('tutorial-settings', `<strong>คำใบ้ 3 เทิร์นแรก</strong><p>อ่านแผนศัตรู · ตั้งรับ · ติดตราแล้วตีเป้าเดิม</p><button id="coach-toggle" data-ui="coach-toggle" class="quiet" aria-pressed="${this.hintsEnabled}">${this.hintsEnabled ? 'ปิดคำใบ้' : 'เปิดคำใบ้'} · จังหวะ 1–3</button>`);
     this.renderPhase(); this.renderSituation(); this.renderSelectedHero(); this.renderParty(disabled); this.renderCommands(disabled);

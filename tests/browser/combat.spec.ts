@@ -410,10 +410,9 @@ for(const viewport of [{width:320,height:568},{width:390,height:844},{width:600,
     await expect(page.locator('.hero-card')).toHaveCount(4);
     await page.locator('#hero-guardian').tap(); await page.locator('#action-bash').tap();
     const portrait = viewport.width <= 600 && viewport.height > viewport.width;
-    if (portrait) { await page.locator('#battle-info').tap(); await expect(page.locator('#info-skill')).toContainText('หยุดการโจมตีกายภาพ'); }
-    else { await page.locator('.action-help > summary').tap(); await expect(page.locator('.action-description')).toContainText('หยุดการโจมตีกายภาพ'); }
+    await page.locator('#battle-info').tap(); await expect(page.locator('#info-skill')).toContainText('หยุดการโจมตีกายภาพ');
     await expect(page.locator('#beat-status')).toContainText('จังหวะ 1');
-    if (portrait) { await page.locator('[data-ui=info-close]').tap(); await expect(page.locator('#beat-status')).toContainText('จังหวะ 1'); } else await page.locator('.action-help > summary').tap();
+    await page.locator('[data-ui=info-close]').tap(); await expect(page.locator('#beat-status')).toContainText('จังหวะ 1');
     const member=(await page.locator('#hero-healer').boundingBox())!; expect(member.width).toBeGreaterThanOrEqual(44);expect(member.height).toBeGreaterThanOrEqual(44);
     await page.screenshot({path:info.outputPath('mobile-four-jobs.png'),fullPage:true});
     expect(await page.evaluate(() => {const save=localStorage.getItem('asterveil.fateweave.battle.v1'); return save?JSON.parse(save).commands.length:0;})).toBe(0);
@@ -667,3 +666,30 @@ test('saved coach uses a ready attack when Precision Strike is cooling, and neve
   await expect(page.locator('#battle-coach')).toBeHidden();
   expect(errors).toEqual([]);
 });
+
+for (const viewport of [{width:1920,height:1080},{width:1366,height:768},{width:1280,height:720},{width:1366,height:640},{width:1024,height:768},{width:768,height:1024},{width:844,height:390}]) {
+  test(`single-screen ${viewport.width}x${viewport.height}: field, party and commands remain reachable throughout combat`, async ({browser},info) => {
+    const context=await browser.newContext({viewport,reducedMotion:'reduce'});
+    const page=await context.newPage(); const errors=await start(page);
+    const fits=async()=>{
+      expect(await page.evaluate(()=>({x:scrollX,y:scrollY,overflow:document.documentElement.scrollHeight>innerHeight}))).toEqual({x:0,y:0,overflow:false});
+      for(const selector of ['#battle-info','#restart','#hero-guardian','#hero-tracer','#hero-weaver','#hero-healer','#action-attack']) await reachable(page,selector);
+      await expect.poll(()=>page.locator('#game canvas').evaluate(el=>{
+        const r=el.getBoundingClientRect(),arena=el.parentElement!.parentElement!.getBoundingClientRect();
+        return r.height>=120 && r.left>=arena.left && r.right<=arena.right && r.top>=arena.top && r.bottom<=arena.bottom && r.bottom<=innerHeight;
+      })).toBe(true);
+    };
+    await fits(); await reachable(page,'#coach-dismiss');
+    await page.screenshot({path:info.outputPath('single-screen.png')});
+    await page.locator('#battle-info').click(); await expect(page.locator('#game-info')).toBeVisible();
+    await page.locator('#coach-toggle').click(); await page.locator('[data-ui=info-close]').click();
+    await expect(page.locator('#battle-coach')).toBeHidden(); await fits();
+    await page.locator('#hero-guardian').click(); await page.locator('#action-guard').click();
+    await reachable(page,'#target-tracer'); await page.locator('#target-tracer').click();
+    await reachable(page,'#skip-turn'); await finishTurn(page); await fits();
+    await expect(page.locator('#hero-guardian')).toContainText('71 / 76');
+    for(const [hero,action,target] of guided.slice(1)) { await choose(page,hero,action,target); await finishTurn(page); }
+    await expect(page.locator('.result-card')).toContainText('ชนะ'); await reachable(page,'.result-card button');
+    await fits(); expect(errors).toEqual([]); await context.close();
+  });
+}
