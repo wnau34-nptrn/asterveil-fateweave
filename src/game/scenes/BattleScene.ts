@@ -5,6 +5,7 @@ import { palette } from '../visuals/palette';
 import { drawRiftBackdrop } from '../visuals/rift-backdrop';
 import { actorFrames, artUrl } from '../visuals/assets';
 
+export interface ActorTarget { x: number; y: number; width: number; height: number }
 export interface SceneView { state: BattleState; heroId: string; targetId: string | null; phase?: 'hero' | 'enemy'; activeActorId?: string; activeTargetId?: string }
 export class BattleScene extends Phaser.Scene {
   private view: SceneView | undefined;
@@ -12,10 +13,11 @@ export class BattleScene extends Phaser.Scene {
   private backdrop: Phaser.GameObjects.Image | undefined;
   private backdropSize = '';
   private positions = new Map<string, { x: number; y: number }>();
+  readonly actorTargets = new Map<string, ActorTarget>();
   private bodies = new Map<string, Phaser.GameObjects.Container>();
   private effects: Phaser.GameObjects.Container | undefined;
   private ready = false;
-  constructor(private readonly encounter: EncounterDefinition, private readonly choose: (id: string) => void, private readonly onReady: () => void) { super('battle'); }
+  constructor(private readonly encounter: EncounterDefinition, private readonly choose: (id: string) => void, private readonly onReady: () => void, private readonly onLayout: () => void) { super('battle'); }
   get isReady(): boolean { return this.ready; }
   preload(): void {
     this.load.image('rift-ruins', artUrl('ruins'));
@@ -43,7 +45,7 @@ export class BattleScene extends Phaser.Scene {
     this.stopEffects(); this.bodies.clear();
     this.layer?.destroy();
     this.layer = this.add.container(0, 0);
-    this.positions.clear();
+    this.positions.clear(); this.actorTargets.clear();
     const { width: w, height: h } = this.scale;
     const compact = w < 900;
     const short = w < 900 || h < 360;
@@ -84,7 +86,7 @@ export class BattleScene extends Phaser.Scene {
       const dx = target.x - source.x; const dy = target.y - source.y;
       for (let t = 0.15; t < 0.8; t += 0.09) bg.lineBetween(source.x + dx * t, source.y + dy * t, source.x + dx * (t + 0.04), source.y + dy * (t + 0.04));
     }
-    this.layer.sort('depth');
+    this.layer.sort('depth'); this.onLayout();
   }
   private actor(id: string, name: string, x: number, y: number, color: number, hp: number, maxHp: number, enemy: boolean, compact: boolean): void {
     this.positions.set(id, { x, y });
@@ -106,6 +108,9 @@ export class BattleScene extends Phaser.Scene {
     const size = phone ? Math.min(id === 'brute' ? 120 : 100, Math.max(44, this.scale.height * (id === 'brute' ? .40 : .30))) : short ? id === 'brute' ? 110 : 80 : id === 'brute' ? 215 : enemy ? 142 : 145;
     const sprite = this.add.image(0, phone ? 0 : short ? 15 : id === 'brute' ? 55 : 39, 'battle-units', actorFrames[id]!).setOrigin(0.5, 1).setDisplaySize(size, size);
     body.add(sprite);
+    const hitWidth = Math.max(44, Math.min(72, size * .7));
+    const hitHeight = Math.max(44, size * .9);
+    this.actorTargets.set(id, { x: x - hitWidth / 2, y: y + sprite.y - hitHeight, width: hitWidth, height: hitHeight });
     const label = this.add.text(0, short ? 20 : enemy && id === 'brute' ? 70 : 51, name, { fontFamily: thaiFont, fontSize: phone ? '10px' : compact ? '12px' : '14px', color: '#f0f5ff', stroke: '#101c36', strokeThickness: 3 }).setOrigin(0.5);
     label.setVisible(!phone || enemy);
     // Hero HP sits beside the silhouette so the next hero cannot cover it.

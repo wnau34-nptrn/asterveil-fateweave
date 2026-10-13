@@ -302,7 +302,7 @@ test('canvas target executes Guard once; keyboard target works with no modal or 
   await page.locator('#action-guard').click();
   await expect(page.locator('#beat-status')).toContainText('จังหวะ 1');
   await expect(page.locator('#target-weaver')).toBeDisabled();
-  await canvas.click({ position: { x:b.width*.31, y:135+(b.height-170)*.82 } });
+  await page.mouse.click(b.x+b.width*.31, b.y+135+(b.height-170)*.82);
   await expect(page.locator('#turn-phase')).toHaveAttribute('data-phase','hero');
   await expect(page.locator('dialog[open], #confirm, #preview')).toHaveCount(0);
   // A second queued click on the newly disabled target cannot issue another command.
@@ -479,3 +479,31 @@ for (const viewport of [{ width:320,height:568 }, { width:390,height:640 }, { wi
     expect(errors).toEqual([]); await context.close();
   });
 }
+
+test('touch targets sit on the actors; invalid healing does not change hero and Prayer casts through any living ally', async ({ browser }, info) => {
+  const context=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true,reducedMotion:'reduce'});
+  const page=await context.newPage();const errors=await start(page);
+  await expect(page.locator('#commands [data-ui=target]')).toHaveCount(0);
+  await page.locator('#hero-weaver').tap();await page.locator('#action-bolt').tap();
+  const field=page.locator('#game canvas');const b=(await field.boundingBox())!;
+  await expect(page.locator('#target-brute')).toHaveClass(/valid-target/);
+  await reachable(page,'#target-brute');
+  const rect=(await page.locator('#target-brute').boundingBox())!;
+  expect(rect.x).toBeGreaterThanOrEqual(b.x);expect(rect.y).toBeGreaterThanOrEqual(b.y);
+  expect(rect.x+rect.width).toBeLessThanOrEqual(b.x+b.width);expect(rect.y+rect.height).toBeLessThanOrEqual(b.y+b.height);
+  await page.screenshot({path:info.outputPath('field-enemy-targets.png')});
+  await page.touchscreen.tap(rect.x+rect.width/2,rect.y+rect.height/2);await finishTurn(page);
+  await page.locator('#hero-healer').tap();await page.locator('#action-heal').tap();
+  await expect(page.locator('#target-guardian')).toBeDisabled();
+  await page.locator('#target-guardian').evaluate(el=>el.dispatchEvent(new MouseEvent('click',{bubbles:true})));
+  await expect(page.locator('#hero-healer')).toHaveAttribute('aria-pressed','true');
+  await expect(page.locator('#action-heal')).toHaveAttribute('aria-pressed','true');
+  await expect(page.locator('#target-tracer')).toHaveClass(/valid-target/);
+  await page.locator('#target-tracer').tap();await finishTurn(page);
+  await page.locator('#hero-healer').tap();await page.locator('#action-prayer').tap();
+  await page.screenshot({path:info.outputPath('field-party-targets.png')});
+  await page.locator('#target-party-guardian').tap();await finishTurn(page);
+  expect(await page.evaluate(()=>JSON.parse(localStorage.getItem('asterveil.fateweave.battle.v1')!).commands.map((c:{targetId:string})=>c.targetId))).toEqual(['brute','tracer','party']);
+  expect(await page.evaluate(()=>({x:scrollX,y:scrollY}))).toEqual({x:0,y:0});
+  expect(errors).toEqual([]);await context.close();
+});

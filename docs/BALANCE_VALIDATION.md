@@ -54,4 +54,4 @@ Interceptions redirect reduced damage into the durable Knight; Ward absorbs befo
 
 Basic-attack results describe two concrete tested policies, not an exhaustive proof that every possible Attack-only sequence loses. Human playtesting and further encounters remain future work. Combat has no random damage or timing advantage.
 
-The encounter is `veil-siege`, version 3. Old three-member saves restart safely. Current automated evidence is 34 Node tests and 27 production browser scenarios; `VALIDATION.md` records the checks and device limits. GitHub Pages deploys only after the full production suite passes.
+The encounter is `veil-siege`, version 3. Old three-member saves restart safely. Current automated evidence is 34 Node tests and 28 production browser scenarios; `VALIDATION.md` records the checks and device limits. GitHub Pages deploys only after the full production suite passes.

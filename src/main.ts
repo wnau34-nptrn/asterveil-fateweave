@@ -5,7 +5,7 @@ import { BattleUI } from './ui/battle-ui';
 import './ui/styles.css';
 
 const ui = new BattleUI(document.querySelector<HTMLElement>('#app')!, veilSiege);
-const scene = new BattleScene(veilSiege, id => ui.choose(id, 'canvas'), () => ui.sceneReady());
+const scene = new BattleScene(veilSiege, id => ui.choose(id, 'canvas'), () => ui.sceneReady(), () => ui.fieldLayoutChanged());
 ui.attach(scene);
 new Phaser.Game({
   type: Phaser.AUTO,
