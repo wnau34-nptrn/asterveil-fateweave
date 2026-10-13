@@ -47,7 +47,8 @@ export class BattleScene extends Phaser.Scene {
     const { width: w, height: h } = this.scale;
     const compact = w < 900;
     const short = w < 900 || h < 360;
-    const portrait = w < 900 && h >= 280;
+    const phone = window.matchMedia('(max-width: 600px) and (orientation: portrait)').matches;
+    const portrait = phone || w < 900 && h >= 280;
     const stageTop = short ? portrait ? 110 : 60 : 135;
     const stageHeight = Math.max(80, h - (portrait ? 20 : 35) - stageTop);
     if (this.backdropSize !== `${w}:${h}`) {
@@ -65,13 +66,13 @@ export class BattleScene extends Phaser.Scene {
       const x = w * (hero.lane === 'back' ? (compact ? 0.12 : 0.14) : (compact ? 0.34 : 0.31));
       const laneIndex = this.encounter.heroes.filter(h => h.lane === hero.lane).findIndex(h => h.id === hero.id);
       const ratio = laneIndex === 0 ? 0.20 : 0.82;
-      const y = stageTop + stageHeight * ratio;
+      const y = phone ? Math.max(48, h * (laneIndex === 0 ? .36 : .80)) : stageTop + stageHeight * ratio;
       platform(x, y + (short ? 20 : 39), short ? 32 : 75);
       this.actor(hero.id, actorName(hero.id, this.encounter), x, y, hero.color, this.view!.state.heroes[i]!.hp, hero.maxHp, false, short);
     });
     this.encounter.enemies.forEach((enemy, i) => {
       const x = w * (portrait ? enemy.id === 'brute' ? 0.68 : 0.88 : enemy.id === 'brute' ? 0.84 : 0.73);
-      const y = stageTop + stageHeight * (enemy.id === 'brute' ? 0.70 : 0.22);
+      const y = phone ? Math.max(48, h * (enemy.id === 'brute' ? .72 : .34)) : stageTop + stageHeight * (enemy.id === 'brute' ? 0.70 : 0.22);
       platform(x, y + (short ? 21 : enemy.id === 'brute' ? 55 : 35), short ? 38 : enemy.id === 'brute' ? 108 : 72);
       this.actor(enemy.id, actorName(enemy.id, this.encounter), x, y, enemy.color, this.view!.state.enemies[i]!.hp, enemy.maxHp, true, short);
     });
@@ -95,21 +96,23 @@ export class BattleScene extends Phaser.Scene {
     info.setAlpha(hp <= 0 ? 0.4 : involved ? 1 : 0.75);
     const g = this.add.graphics(); body.add(g);
     const short = compact;
-    const portrait = this.scale.width < 900 && this.scale.height >= 280;
+    const phone = window.matchMedia('(max-width: 600px) and (orientation: portrait)').matches;
+    const portrait = phone || this.scale.width < 900 && this.scale.height >= 280;
     const selected = this.view!.heroId === id || this.view!.targetId === id;
-    if (selected && hp > 0) { g.lineStyle(2, palette.gold); g.strokeEllipse(0, 25, 68, 22); }
+    if (selected && hp > 0) { g.lineStyle(2, palette.gold); g.strokeEllipse(0, phone ? 8 : 25, phone ? 48 : 68, phone ? 12 : 22); }
     if (id === this.view!.activeActorId && hp > 0) {
-      g.lineStyle(3, enemy ? 0xf19b9f : palette.cyan); g.strokeEllipse(0, 24, short ? 78 : 115, short ? 26 : 33);
+      g.lineStyle(3, enemy ? 0xf19b9f : palette.cyan); g.strokeEllipse(0, phone ? 8 : 24, phone ? 50 : short ? 78 : 115, phone ? 14 : short ? 26 : 33);
     }
-    const size = short ? id === 'brute' ? 110 : 80 : id === 'brute' ? 215 : enemy ? 142 : 145;
-    const sprite = this.add.image(0, short ? 15 : id === 'brute' ? 55 : 39, 'battle-units', actorFrames[id]!).setOrigin(0.5, 1).setDisplaySize(size, size);
+    const size = phone ? Math.min(id === 'brute' ? 120 : 100, Math.max(44, this.scale.height * (id === 'brute' ? .40 : .30))) : short ? id === 'brute' ? 110 : 80 : id === 'brute' ? 215 : enemy ? 142 : 145;
+    const sprite = this.add.image(0, phone ? 0 : short ? 15 : id === 'brute' ? 55 : 39, 'battle-units', actorFrames[id]!).setOrigin(0.5, 1).setDisplaySize(size, size);
     body.add(sprite);
-    const label = this.add.text(0, short ? 20 : enemy && id === 'brute' ? 70 : 51, name, { fontFamily: thaiFont, fontSize: compact ? '12px' : '14px', color: '#f0f5ff', stroke: '#101c36', strokeThickness: 3 }).setOrigin(0.5);
+    const label = this.add.text(0, short ? 20 : enemy && id === 'brute' ? 70 : 51, name, { fontFamily: thaiFont, fontSize: phone ? '10px' : compact ? '12px' : '14px', color: '#f0f5ff', stroke: '#101c36', strokeThickness: 3 }).setOrigin(0.5);
+    label.setVisible(!phone || enemy);
     // Hero HP sits beside the silhouette so the next hero cannot cover it.
     const hpX = enemy ? 0 : short ? portrait ? 0 : 42 : 90;
-    const hpY = enemy ? short ? 43 : id === 'brute' ? 99 : 80 : short && portrait ? 39 : 7;
-    const barY = enemy ? short ? 34 : id === 'brute' ? 86 : 65 : short && portrait ? 28 : 20;
-    const barWidth = enemy ? 70 : 52;
+    const hpY = phone ? 32 : enemy ? short ? 43 : id === 'brute' ? 99 : 80 : short && portrait ? 39 : 7;
+    const barY = phone ? enemy ? 23 : 10 : enemy ? short ? 34 : id === 'brute' ? 86 : 65 : short && portrait ? 28 : 20;
+    const barWidth = phone ? enemy ? Math.min(65, this.scale.width * .17) : 35 : enemy ? 70 : 52;
     const bar = this.add.graphics(); bar.fillStyle(0x101c36); bar.fillRoundedRect(hpX - barWidth / 2, barY, barWidth, 5, 2);
     bar.fillStyle(color); bar.fillRoundedRect(hpX - barWidth / 2, barY, barWidth * hp / maxHp, 5, 2);
     const hpLabel = this.add.text(hpX, hpY, `${hp} / ${maxHp}`, { fontFamily: thaiFont, fontSize: '10px', color: '#d4e6f7', stroke: '#101c36', strokeThickness: 3 }).setOrigin(0.5);

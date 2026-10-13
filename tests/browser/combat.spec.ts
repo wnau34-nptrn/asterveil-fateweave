@@ -1,9 +1,10 @@
 import { expect, test, type Page } from '@playwright/test';
 import { offensive, defensive } from '../fixtures/party-routes';
-async function start(page: Page): Promise<string[]> {
+async function start(page: Page, beforeStart?: () => Promise<void>): Promise<string[]> {
   const errors: string[] = []; page.on('pageerror', e => errors.push(e.message));
   page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
   await page.goto('./'); await expect(page.locator('#game canvas')).toBeVisible();
+  if (beforeStart) { await expect(page.locator('#start')).toBeEnabled(); await beforeStart(); }
   await page.locator('#start').click(); return errors;
 }
 async function choose(page: Page, hero: string, action: string, target: string): Promise<void> {
@@ -64,7 +65,7 @@ test('Start waits for the production unit atlas before enabling battle input', a
     await expect(page.locator('#hero-tracer')).toBeEnabled();
     await page.locator('#target-raider').click();
     await expect(page.locator('#turn-phase')).toHaveAttribute('data-phase', 'hero');
-    await expect(page.locator('dialog')).toHaveCount(0); await finishTurn(page); expect(errors).toEqual([]);
+    await expect(page.locator('dialog[open]')).toHaveCount(0); await finishTurn(page); expect(errors).toEqual([]);
   } finally { release(); }
 });
 
@@ -122,7 +123,7 @@ test('phone reduced-motion turns show interrupted response and accurate canvas i
   await page.clock.resume();
   const canvas = page.locator('#game canvas'); await canvas.scrollIntoViewIfNeeded();
   const b = (await canvas.boundingBox())!;
-  await canvas.tap({ position: { x: b.width * .12, y: 110 + (b.height - 130) * .82 - 45 } });
+  await canvas.tap({ position: { x: b.width * .12, y: b.height * .80 - 20 } });
   await expect(page.locator('#hero-healer')).toHaveAttribute('aria-pressed', 'true');
   expect(errors).toEqual([]); await context.close();
 });
@@ -195,7 +196,7 @@ for (const viewport of [{ width: 1366, height: 1000 }, { width: 390, height: 844
       await expect(page.locator(`#action-${skill}`)).toBeVisible();
       await expect(page.locator('#action-attack')).toHaveAttribute('aria-pressed', 'true');
       await expect(page.locator('.hero-slot .portrait')).toHaveAttribute('data-actor', next!);
-      await expect(page.locator('dialog')).toHaveCount(0);
+      await expect(page.locator('dialog[open]')).toHaveCount(0);
       if (next === 'healer') {
         await page.reload(); await expect(page.locator('#hero-healer')).toHaveAttribute('aria-pressed', 'true');
         await expect(page.locator('#beat-status')).toContainText('จังหวะ 4');
@@ -268,10 +269,9 @@ test('modern phone HUD keeps enemy HP and every class skill status in sync', asy
   expect(cards[2]!.y).toBeGreaterThan(cards[0]!.y); expect(cards[2]!.x).toBe(cards[0]!.x);
   await expect.poll(() => page.locator('.hero-card .portrait img').evaluateAll(images => images.every(img => (img as HTMLImageElement).complete && (img as HTMLImageElement).naturalWidth === 1024))).toBe(true);
   const arena = (await page.locator('.arena').boundingBox())!;
-  const enemies = (await page.locator('#enemy-roster').boundingBox())!;
   const intent = (await page.locator('#intent').boundingBox())!;
-  expect(enemies.y).toBeGreaterThanOrEqual(arena.y + arena.height);
-  expect(intent.y).toBeGreaterThan(enemies.y); expect(cards[0]!.y).toBeGreaterThan(intent.y);
+  expect(intent.y).toBeGreaterThanOrEqual(arena.y + arena.height);
+  expect(cards[0]!.y).toBeGreaterThan(intent.y);
   await choose(page, 'weaver', 'bolt', 'brute'); await finishTurn(page);
   await expect(page.locator('[data-enemy="brute"]')).toContainText('138 / 164');
   await expect(page.locator('#hero-weaver [data-skill="bolt"]')).toContainText('รอ 2 จังหวะ');
@@ -286,9 +286,9 @@ test('modern phone HUD keeps enemy HP and every class skill status in sync', asy
   })).toBe(true);
   await page.locator('#hero-weaver').tap();
   await expect(page.locator('#action-bolt')).toBeDisabled();
-  await page.locator('.help-panel > summary').tap();
+  await page.locator('#battle-info').tap();
   await expect(page.locator('#formation-info')).toBeVisible();
-  await page.locator('.help-panel > summary').tap();
+  await page.locator('[data-ui=info-close]').tap();
   await page.screenshot({ path: info.outputPath('modern-hud-cooldown.png'), fullPage: true });
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
   expect(errors).toEqual([]); await context.close();
@@ -304,7 +304,7 @@ test('canvas target executes Guard once; keyboard target works with no modal or 
   await expect(page.locator('#target-weaver')).toBeDisabled();
   await canvas.click({ position: { x:b.width*.31, y:135+(b.height-170)*.82 } });
   await expect(page.locator('#turn-phase')).toHaveAttribute('data-phase','hero');
-  await expect(page.locator('dialog, #confirm, #preview')).toHaveCount(0);
+  await expect(page.locator('dialog[open], #confirm, #preview')).toHaveCount(0);
   // A second queued click on the newly disabled target cannot issue another command.
   await page.locator('#target-tracer').evaluate(el => el.dispatchEvent(new MouseEvent('click', { bubbles: true })));
   expect(await page.evaluate(() => JSON.parse(localStorage.getItem('asterveil.fateweave.battle.v1')!).commands.length)).toBe(1);
@@ -382,20 +382,22 @@ for(const viewport of [{width:320,height:568},{width:390,height:844},{width:600,
     const page=await context.newPage(); const errors=await start(page);
     await expect(page.locator('.hero-card')).toHaveCount(4);
     await page.locator('#hero-guardian').tap(); await page.locator('#action-bash').tap();
-    await page.locator('.action-help > summary').tap();
-    await expect(page.locator('.action-description')).toContainText('หยุดการโจมตีกายภาพ');
+    const portrait = viewport.width <= 600 && viewport.height > viewport.width;
+    if (portrait) { await page.locator('#battle-info').tap(); await expect(page.locator('#info-skill')).toContainText('หยุดการโจมตีกายภาพ'); }
+    else { await page.locator('.action-help > summary').tap(); await expect(page.locator('.action-description')).toContainText('หยุดการโจมตีกายภาพ'); }
     await expect(page.locator('#beat-status')).toContainText('จังหวะ 1');
-    await page.locator('.action-help > summary').tap();
+    if (portrait) { await page.locator('[data-ui=info-close]').tap(); await expect(page.locator('#beat-status')).toContainText('จังหวะ 1'); } else await page.locator('.action-help > summary').tap();
     const member=(await page.locator('#hero-healer').boundingBox())!; expect(member.width).toBeGreaterThanOrEqual(44);expect(member.height).toBeGreaterThanOrEqual(44);
     await page.screenshot({path:info.outputPath('mobile-four-jobs.png'),fullPage:true});
-    await targetReachable(page,'#target-raider');
+    expect(await page.evaluate(() => {const save=localStorage.getItem('asterveil.fateweave.battle.v1'); return save?JSON.parse(save).commands.length:0;})).toBe(0);
+    if (portrait) await reachable(page,'#target-raider'); else await targetReachable(page,'#target-raider');
     await page.locator('#target-raider').tap();
-    await expect(page.locator('dialog, #confirm, #preview')).toHaveCount(0);
+    await expect(page.locator('dialog[open], #confirm, #preview')).toHaveCount(0);
     await expect(page.locator('#turn-phase')).toHaveAttribute('data-phase','hero'); await finishTurn(page);
     await expect(page.locator('#event-log')).toContainText('กระแทกโล่หยุด');
     await page.locator('#hero-guardian').tap(); await expect(page.locator('#action-bash')).toBeDisabled();
     await page.locator('#hero-weaver').tap(); await page.locator('#action-ward').tap();
-    await targetReachable(page,'#target-weaver');
+    if (portrait) await reachable(page,'#target-weaver'); else await targetReachable(page,'#target-weaver');
     await page.locator('#target-weaver').tap(); await finishTurn(page);
     await expect(page.locator('#hero-weaver')).toContainText('34 / 48');
     await page.locator('.command-dock').scrollIntoViewIfNeeded();
@@ -410,14 +412,14 @@ test('four-class mobile battle, back-row canvas selection and rotation preserve 
   const context=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true,reducedMotion:'reduce'});
   const page=await context.newPage();const errors=await start(page);
   const canvas=page.locator('#game canvas');const b=(await canvas.boundingBox())!;
-  await canvas.tap({position:{x:b.width*.12,y:110+(b.height-130)*.82-45}});
+  await canvas.tap({position:{x:b.width*.12,y:b.height*.80-20}});
   await expect(page.locator('#hero-healer')).toHaveAttribute('aria-pressed','true');
   await page.locator('#hero-tracer').tap(); await page.locator('#action-mark').tap();
   for (const viewport of [{width:844,height:390},{width:1366,height:900},{width:390,height:844}]) {
     await page.setViewportSize(viewport);
     await expect(page.locator('#action-mark')).toHaveAttribute('aria-pressed','true');
     await expect(page.locator('#beat-status')).toContainText('จังหวะ 1');
-    await expect(page.locator('dialog')).toHaveCount(0);
+    await expect(page.locator('dialog[open]')).toHaveCount(0);
   }
   await targetReachable(page,'#target-brute');
   await page.locator('#target-brute').tap(); await finishTurn(page);
@@ -435,3 +437,45 @@ test('old three-member saves restart safely, and denied storage stays playable',
   await page.reload();await page.locator('#start').click();await choose(page,'guardian','guard','tracer');await finishTurn(page);
   await expect(page.locator('#save-status')).toContainText('บันทึกบนเครื่องนี้ไม่ได้');expect(errors).toEqual([]);
 });
+
+for (const viewport of [{ width:320,height:568 }, { width:390,height:640 }, { width:390,height:844 }, { width:600,height:800 }]) {
+  test(`portrait ${viewport.width}x${viewport.height}: complete battle controls fit without page scrolling`, async ({ browser }, info) => {
+    const context = await browser.newContext({ viewport, isMobile:true, hasTouch:true, reducedMotion:'reduce' });
+    const page = await context.newPage(); const errors = await start(page, async () => {
+      await reachable(page,'#start');
+      expect(await page.locator('#start').evaluate(el => {const r=el.getBoundingClientRect(), a=document.querySelector('.arena')!.getBoundingClientRect(); return r.top>=a.top && r.bottom<=a.bottom;})).toBe(true);
+    });
+    const fits = async () => {
+      expect(await page.evaluate(() => ({x:scrollX,y:scrollY,overflow:document.documentElement.scrollHeight>innerHeight+1 || document.documentElement.scrollWidth>innerWidth}))).toEqual({x:0,y:0,overflow:false});
+      for (const id of ['guardian','tracer','weaver','healer']) await reachable(page,`#hero-${id}`);
+      for (const selector of ['#battle-info','#restart','#action-attack']) await reachable(page,selector);
+      const field = await page.locator('#game canvas').boundingBox();
+      expect(field!.height).toBeGreaterThanOrEqual(120);
+    };
+    await fits();
+    // Four ally targets, barrier text and unavailable healing cannot grow the dock.
+    await page.locator('#hero-weaver').tap(); await page.locator('#action-ward').tap();
+    for (const id of ['guardian','tracer','weaver','healer']) await reachable(page,`#target-${id}`);
+    await page.locator('#target-weaver').tap(); await reachable(page,'#skip-turn'); await finishTurn(page);
+    await fits(); await page.locator('#hero-healer').tap(); await page.locator('#action-heal').tap();
+    for (const id of ['guardian','tracer','weaver','healer']) await reachable(page,`#target-${id}`);
+    await page.screenshot({path:info.outputPath('single-screen.png')});
+    // Reading optional information changes no command and returns to the same screen.
+    await page.locator('#battle-info').tap(); await expect(page.locator('#game-info')).toBeVisible();
+    await page.keyboard.press('Escape'); await expect(page.locator('dialog[open]')).toHaveCount(0);
+    await fits();
+    await page.evaluate(() => window.scrollTo(0,1000)); await page.mouse.wheel(0,1000); await fits();
+    if (viewport.height === 640) {
+      await page.addStyleTag({content:'#app { padding-top:20px; padding-bottom:34px; }'});
+      await page.setViewportSize({width:390,height:700}); await fits();
+      await page.setViewportSize(viewport); await fits();
+      await page.locator('#target-tracer').tap(); await finishTurn(page); await fits();
+    }
+    expect(await page.evaluate(() => JSON.parse(localStorage.getItem('asterveil.fateweave.battle.v1')!).commands.length)).toBe(viewport.height === 640 ? 2 : 1);
+    if (viewport.height === 640) {
+      await page.evaluate(() => localStorage.setItem('asterveil.fateweave.battle.v1', JSON.stringify({version:1,encounterId:'veil-siege',contentVersion:3,commands:Array.from({length:6},(_,i)=>({beat:i+1,heroId:'guardian',action:'attack',targetId:'brute'}))})));
+      await page.reload(); await expect(page.locator('#hero-weaver')).toBeDisabled(); await fits();
+    }
+    expect(errors).toEqual([]); await context.close();
+  });
+}

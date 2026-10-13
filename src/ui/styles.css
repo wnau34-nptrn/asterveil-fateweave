@@ -363,3 +363,102 @@ footer { display: flex; justify-content: space-between; gap: 10px; font-size: 10
 .turn-phase[data-canceled="true"] { --phase-accent: #d9bf86; background: linear-gradient(105deg, #302c35, #162137); border-color: #ad9570; }
 
 .target-hint { font-size: 11px; color: #b6d6ed; margin: 0 0 8px; }
+
+#battle-info { display: none; flex: 0 0 44px; padding: 0; font-size: 22px; }
+#game-info { width: min(560px, calc(100% - 16px)); max-height: calc(100dvh - 16px); padding: 0; color: #eef4ff; background: #102039; border: 1px solid #718ba7; border-radius: 12px; }
+#game-info::backdrop { background: #020a17ce; }
+.info-header { display: flex; align-items: center; justify-content: space-between; padding: 6px 10px; border-bottom: 1px solid #355170; }
+.info-header h2 { font-size: 16px; }
+.info-header button { width: 44px; padding: 0; }
+.info-content { max-height: calc(100dvh - 90px); overflow-y: auto; padding: 10px; }
+#info-skill { font-size: 13px; padding: 10px; border: 1px solid #355170; border-radius: 8px; }
+#info-skill h3 { color: #e4ca93; font-size: 14px; margin-bottom: 5px; }
+#info-host .battle-notes { display: block; }
+#info-host .battle-notes > * { margin-top: 6px; }
+
+/* Portrait gameplay occupies the visible viewport; only optional information scrolls. */
+@media (max-width: 600px) and (orientation: portrait) {
+  html, body { height: 100%; overflow: hidden; overscroll-behavior: none; }
+  #app { height: 100svh; height: 100dvh; display: flex; flex-direction: column; padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px); }
+  .masthead { width: 100%; min-height: 44px; height: 44px; flex: 0 0 44px; padding: 0 6px; gap: 6px; }
+  .brand { font-size: 18px; }
+  .brand-mark { font-size: 23px; }
+  .brand small { font-size: 6px; letter-spacing: 2px; }
+  #beat-status { min-width: 0; }
+  .beat-chip { font-size: 9px; }
+  .formation-chip { display: none; }
+  #battle-info { display: block; }
+  #restart { width: 44px; height: 44px; }
+  main { width: 100%; flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 4px; padding: 4px 6px 6px; }
+  .turn-phase { position: relative; top: auto; min-height: 44px; height: 44px; flex: 0 0 44px; margin: 0; padding: 3px 6px; gap: 6px; border-radius: 8px; box-shadow: none; }
+  .phase-portrait { width: 27px; flex-basis: 27px; }
+  .phase-flow, .phase-result { display: none; }
+  .phase-copy h2 { font-size: 12px; line-height: 1.35; }
+  .phase-copy > p { font-size: 9px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #skip-turn { height: 44px; border: 0; background: transparent; }
+  .battle-layout { flex: 1; min-height: 0; display: flex; flex-direction: column; box-shadow: none; }
+  .battle-board { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+  .arena { flex: 1; height: auto; min-height: 0; }
+  #turn-order, .formation-labels, #enemy-roster { display: none; }
+  #intent { flex: 0 0 38px; height: 38px; min-height: 38px; padding: 2px 6px; gap: 6px; }
+  .intent-icon svg { width: 18px; height: 18px; }
+  .intent-copy .eyebrow, .intent-rule, .intent-copy .lethal-warning { display: none; }
+  .intent-copy h2 { font-size: 11px; line-height: 1.25; }
+  .intent-copy > p:not(.eyebrow) { font-size: 9px; line-height: 1.25; }
+  .intent-damage { padding-left: 5px; min-width: 28px; }
+  .intent-damage strong { font-size: 19px; }
+  .intent-damage small { font-size: 7px; }
+  .decision-panel { flex: 0 0 auto; display: block; }
+  .team-section { padding: 4px; }
+  .team-heading, .hero-skills, .hero-class b { display: none; }
+  .party { gap: 4px; }
+  .hero-card { height: 44px; min-height: 44px; padding: 3px 5px; grid-template-columns: 30px minmax(0, 1fr); gap: 5px; border-radius: 7px; }
+  .hero-copy > strong { font-size: 12px; line-height: 1.25; }
+  .hero-class { position: absolute; right: 5px; top: 4px; font-size: 8px; line-height: 1.25; }
+  .hero-hp { font-size: 10px; line-height: 1.25; }
+  .hero-hp .hp-label, .selected-tag { display: none; }
+  .barrier-info { position: absolute; bottom: 3px; right: 5px; font-size: 8px; }
+  .hero-card .hp-track { height: 3px; margin: 2px 28px 0 0; }
+  .command-dock { padding: 3px 5px 5px; }
+  #selected-hero { height: 20px; padding: 0; margin: 0 0 3px; border: 0; }
+  .selected-info h2 { font-size: 12px; }
+  .selected-info h2 > span { font-size: 9px; }
+  .selected-resource { display: none; }
+  .selection-state { font-size: 8px; }
+  #commands { gap: 3px; }
+  .actions { gap: 4px; }
+  .action { height: 54px; min-height: 54px; padding: 2px; gap: 0; }
+  .action svg { width: 18px; height: 18px; margin-bottom: 0; }
+  .action strong { font-size: 11px; line-height: 1.3; }
+  .action small { display: none; }
+  .action .skill-value { font-size: 9px; line-height: 1.2; }
+  .action-option > p { font-size: 8px; line-height: 1.3; min-height: 11px; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .action-help, .target-heading { display: none; }
+  .target-hint { grid-row: 2; grid-column: 1 / -1; margin: 0; font-size: 9px; line-height: 1.3; }
+  .targets { grid-row: 3; gap: 4px; }
+  .targets.ally-targets { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .targets.ally-targets:has(#target-party) { grid-template-columns: 1fr; }
+  .target { height: 44px; min-height: 44px; padding: 2px 4px; gap: 4px; border-radius: 6px; }
+  .target .portrait { width: 25px; flex-basis: 25px; }
+  .target strong { font-size: 10px; }
+  .target small { font-size: 8px; line-height: 1.25; margin: 0; }
+  .ally-targets .target .portrait { display: none; }
+  .ally-targets .target { text-align: center; justify-content: center; padding: 2px; }
+  .target-reason, #help-home, footer { display: none; }
+  .start-card h2, .result-card h2 { font-size: 21px; margin: 3px 0 5px; }
+  .start-card > p:not(.eyebrow), .result-card > p:not(.eyebrow) { font-size: 10px; }
+  .start-card .primary, .result-card .primary { min-height: 44px; margin-top: 7px; }
+  .party-result { font-size: 10px; margin-top: 2px; }
+}
+
+@media (max-width: 600px) and (orientation: portrait) {
+  .hero-card[data-lane="front"] .hero-class::before { content: "หน้า · "; color: #e4ca93; }
+  .hero-card[data-lane="back"] .hero-class::before { content: "หลัง · "; color: #91d6ef; }
+}
+@media (max-width: 600px) and (orientation: portrait) {
+  #start-screen:not(:empty) { padding: 6px; }
+  .start-card > .eyebrow, .result-card > .eyebrow { display: none; }
+  .start-card h2 { font-size: 18px; line-height: 1.2; }
+  .start-card > p:not(.eyebrow), .result-card > p:not(.eyebrow) { line-height: 1.3; }
+  .start-card .primary, .result-card .primary { margin-top: 5px; }
+}

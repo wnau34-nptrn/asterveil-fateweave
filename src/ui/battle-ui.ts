@@ -15,12 +15,14 @@ export class BattleUI {
   private action: ActionId = 'attack';
   private started: boolean;
   private busy = false;
+  private canvasInputAfterInfo = 0;
   private presentation: { phase: 'hero' | 'enemy'; command: Command; resolution: Resolution; frame: BattleState; heroLogEnd: number } | undefined;
   private timer: ReturnType<typeof setTimeout> | undefined;
   private storage = browserStorage();
   private saved = true;
   private messages: string[];
   private scene: BattleScene | undefined;
+  private readonly portraitLayout = window.matchMedia('(max-width: 600px) and (orientation: portrait)');
   private readonly mobile = window.matchMedia('(max-width: 600px), (max-width: 960px) and (max-height: 540px)');
 
   constructor(private readonly root: HTMLElement, private readonly data: EncounterDefinition) {
@@ -35,7 +37,7 @@ export class BattleUI {
       <header class="masthead">
         <a class="brand" href="./" aria-label="หน้าหลัก Asterveil"><span class="brand-mark">✧</span><span>ASTERVEIL<small>RISE BEYOND</small></span></a>
         <div class="encounter-heading"><p class="eyebrow">FATEWEAVE · การต่อสู้ 01</p><h1>ศึกปิดรอยแยก</h1></div>
-        <div id="beat-status"></div><button id="restart" data-ui="restart" class="quiet" aria-label="เริ่มการต่อสู้ใหม่">${icon('restart')}</button>
+        <div id="beat-status"></div><button id="battle-info" aria-haspopup="dialog" aria-controls="game-info" data-ui="info" class="quiet" aria-label="ข้อมูลสกิลและวิธีเล่น">ⓘ</button><button id="restart" data-ui="restart" class="quiet" aria-label="เริ่มการต่อสู้ใหม่">${icon('restart')}</button>
       </header>
       <main>
         <section id="turn-phase" class="turn-phase" role="status" aria-live="polite" aria-label="เทิร์นการต่อสู้"></section>
@@ -54,19 +56,21 @@ export class BattleUI {
             <div class="command-dock"><div id="selected-hero" aria-live="polite"></div><div id="commands" class="step-section"></div></div>
           </section>
         </div>
-        <details class="help-panel"><summary>วิธีเล่น · แผนศัตรู · บันทึกการต่อสู้</summary><div class="battle-notes">
+        <div id="help-home"><details class="help-panel"><summary>วิธีเล่น · แผนศัตรู · บันทึกการต่อสู้</summary><div class="battle-notes">
           <div id="formation-info" class="formation-info"></div>
           <details id="forecast-details" class="forecast-panel"><summary>ดูแผนโจมตีอีก 2 จังหวะข้างหน้า</summary><div id="forecast" class="forecast"></div></details>
           <details class="field-notes"><summary>อาชีพ · สกิลและแนวหน้า/หลัง</summary><div id="rules"></div></details>
           <details class="combat-history"><summary>บันทึกการต่อสู้</summary><ol id="event-log" role="log" aria-live="polite"></ol></details>
-        </div></details>
+        </div></details></div>
         <footer><span>เลือกฮีโร่ → เลือกสกิล → แตะเป้าหมายเพื่อใช้ทันที</span><span id="save-status"></span></footer>
-      </main>`;
+      </main><dialog id="game-info" aria-labelledby="info-title"><div class="info-header"><h2 id="info-title">ข้อมูลการต่อสู้</h2><button data-ui="info-close" class="quiet" aria-label="ปิดข้อมูล">✕</button></div><div class="info-content"><section id="info-skill"></section><div id="info-host"></div></div></dialog>`;
     root.addEventListener('click', e => {
       const button = (e.target as HTMLElement).closest<HTMLButtonElement>('button[data-ui]');
       if (!button || button.disabled) return;
       const value = button.dataset.value;
       switch (button.dataset.ui) {
+        case 'info': this.root.querySelector<HTMLDialogElement>('#game-info')!.showModal(); break;
+        case 'info-close': this.root.querySelector<HTMLDialogElement>('#game-info')!.close(); break;
         case 'start': this.started = true; this.render(); break;
         case 'hero': if (value) this.selectHero(value); break;
         case 'action': if (value) { this.action = value as ActionId; this.render(); } break;
@@ -75,7 +79,14 @@ export class BattleUI {
         case 'restart': this.restart(); break;
       }
     });
+    const infoDialog = root.querySelector<HTMLDialogElement>('#game-info')!;
+    // Phaser can process the closing touch on its next input frame.
+    const blockClosingTouch = () => { this.canvasInputAfterInfo = performance.now() + 250; };
+    infoDialog.addEventListener('close', blockClosingTouch);
+    infoDialog.addEventListener('cancel', blockClosingTouch);
+    root.querySelector('[data-ui=info-close]')!.addEventListener('pointerdown', blockClosingTouch);
     this.mobile.addEventListener('change', () => this.render());
+    this.portraitLayout.addEventListener('change', () => this.render());
     document.addEventListener('visibilitychange', () => {
       if (document.hidden && this.busy) this.finishPresentation();
     });
@@ -96,7 +107,8 @@ export class BattleUI {
     return p?.phase === 'hero' ? p.command.targetId : p?.resolution.stages.enemy.events.find(e => e.type === 'damage')?.targetId;
   }
 
-  choose(id: string): void {
+  choose(id: string, source: 'target' | 'canvas' = 'target'): void {
+    if (this.root.querySelector<HTMLDialogElement>('#game-info')!.open || source === 'canvas' && performance.now() < this.canvasInputAfterInfo) return;
     if (!this.scene?.isReady || !this.started || this.busy || this.state.outcome !== 'active') return;
     const target = targetOptions(this.state, this.data, this.heroId, this.action).find(t => t.id === id);
     if (target?.valid) {
@@ -139,7 +151,7 @@ export class BattleUI {
     const banner = this.root.querySelector<HTMLElement>('#turn-phase')!;
     // A sticky banner's current rect may already be at the viewport top.
     // Anchor to the non-sticky arena so a cast from the lower dock reveals combat.
-    window.scrollTo({ top: window.scrollY + arena.getBoundingClientRect().top - banner.offsetHeight - 8, behavior: 'instant' });
+    if (!this.portraitLayout.matches) window.scrollTo({ top: window.scrollY + arena.getBoundingClientRect().top - banner.offsetHeight - 8, behavior: 'instant' });
     const delay = 1000;
     this.timer = setTimeout(() => {
       if (this.presentation !== playback) return;
@@ -156,7 +168,7 @@ export class BattleUI {
     this.heroId = this.state.outcome === 'active' ? this.nextHeroId(playback.command.heroId) : playback.command.heroId;
     this.action = 'attack'; this.render();
     if (this.state.outcome === 'active') this.root.querySelector<HTMLElement>('#action-attack')?.focus({ preventScroll: true });
-    if (this.mobile.matches) this.root.querySelector(this.state.outcome === 'active' ? '.command-dock' : '.arena')?.scrollIntoView({ block: this.state.outcome === 'active' ? 'nearest' : 'center', behavior: 'auto' });
+    if (this.mobile.matches && !this.portraitLayout.matches) this.root.querySelector(this.state.outcome === 'active' ? '.command-dock' : '.arena')?.scrollIntoView({ block: this.state.outcome === 'active' ? 'nearest' : 'center', behavior: 'auto' });
   }
 
   private restart(): void {
@@ -164,7 +176,7 @@ export class BattleUI {
     this.heroId = 'tracer'; this.action = 'attack'; this.started = true;
     this.messages = ['เริ่มการต่อสู้ใหม่แล้ว'];
     this.saved = saveBattle(this.storage, this.state, this.data); this.render();
-    if (this.mobile.matches) this.root.querySelector('.arena')?.scrollIntoView({ block: 'nearest', behavior: 'auto' });
+    if (this.mobile.matches && !this.portraitLayout.matches) this.root.querySelector('.arena')?.scrollIntoView({ block: 'nearest', behavior: 'auto' });
   }
 
   private set(id: string, content: string): void { this.root.querySelector(`#${id}`)!.innerHTML = content; }
@@ -260,6 +272,11 @@ export class BattleUI {
     const focus = document.activeElement instanceof HTMLElement ? document.activeElement.id : '';
     const s = this.state; const d = this.data; const disabled = !this.scene?.isReady || !this.started || this.busy || s.outcome !== 'active';
     this.root.classList.toggle('mobile-layout', this.mobile.matches);
+    const dialog = this.root.querySelector<HTMLDialogElement>('#game-info')!;
+    const help = this.root.querySelector<HTMLDetailsElement>('.help-panel')!;
+    const host = this.root.querySelector(this.portraitLayout.matches ? '#info-host' : '#help-home')!;
+    if (help.parentElement !== host) { if (dialog.open) dialog.close(); host.append(help); help.open = this.portraitLayout.matches; }
+    this.set('info-skill', `<h3>${d.skills[this.action].name} · ${heroText[this.heroId]!.name}</h3><p>${skillDescription(this.action, this.heroId, d)}</p>`);
     this.renderPhase(); this.renderSituation(); this.renderSelectedHero(); this.renderParty(disabled); this.renderCommands(disabled);
     this.set('rules', `<h3>4 อาชีพ · แนวหน้า 2 / หลัง 2</h3><p>แนวหน้าที่ยังยืนอยู่รับการโจมตีกายภาพก่อน พลังงานโจมตีแนวหลังได้ เมื่อแนวหน้าล้มหมด กายภาพจะถึงแนวหลัง การโจมตีที่ประกาศไว้ไม่เปลี่ยนหลังใช้สกิล</p>${d.heroes.map(hero => `<h3>${heroText[hero.id]!.name} · ${heroText[hero.id]!.role} · ${hero.lane === 'front' ? 'แนวหน้า' : 'แนวหลัง'}</h3><dl>${hero.actions.map(action => `<dt>${d.skills[action].name} (${d.skills[action].english})</dt><dd>${skillDescription(action, hero.id, d)}</dd>`).join('')}</dl>`).join('')}<p>แต่ละจังหวะใช้ 1 คำสั่ง สกิลคูลดาวน์ 3 จังหวะที่ใช้ในจังหวะ 1 จะพร้อมอีกครั้งในจังหวะ 4 การรักษาไม่ชุบชีวิต โล่เวทไม่ซ้อนกัน เป้าหมายเสริมคือชนะโดยรักษาทีมครบ 4 คน</p>`);
     const shownMessages = this.presentation?.phase === 'hero' ? this.messages.slice(0, this.presentation.heroLogEnd) : this.messages;
