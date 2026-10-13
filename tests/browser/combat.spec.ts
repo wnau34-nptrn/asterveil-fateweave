@@ -309,8 +309,18 @@ test('canvas target executes Guard once; keyboard target works with no modal or 
   await page.locator('#action-guard').click();
   await expect(page.locator('#beat-status')).toContainText('จังหวะ 1');
   await expect(page.locator('#target-weaver')).toBeDisabled();
-  const target = (await page.locator('#target-tracer').boundingBox())!;
-  await page.mouse.click(target.x + target.width / 2, target.y + target.height / 2);
+  let targetPoint: {x:number;y:number} | null = null;
+  await expect.poll(async()=>{
+    // Scrolling can refresh field controls between protocol calls. Resolve
+    // readiness, the current rectangle and real hit testing in one DOM read.
+    targetPoint = await page.locator('#target-tracer').evaluate(el=>{
+      if (!(el instanceof HTMLButtonElement) || !el.isConnected || el.disabled) return null;
+      const r=el.getBoundingClientRect(), x=r.x+r.width/2, y=r.y+r.height/2;
+      return r.width>=44 && r.height>=44 && x>=0 && y>=0 && x<=innerWidth && y<=innerHeight && el.contains(document.elementFromPoint(x,y)) ? {x,y} : null;
+    });
+    return !!targetPoint;
+  }).toBe(true);
+  await page.mouse.click(targetPoint!.x, targetPoint!.y);
   await expect(page.locator('#turn-phase')).toHaveAttribute('data-phase','hero');
   await expect(page.locator('dialog[open], #confirm, #preview')).toHaveCount(0);
   // A second queued click on the newly disabled target cannot issue another command.
