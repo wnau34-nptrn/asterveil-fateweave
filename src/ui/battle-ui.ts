@@ -19,6 +19,7 @@ export class BattleUI {
   private saved = true;
   private messages: string[];
   private scene: BattleScene | undefined;
+  private readonly mobile = window.matchMedia('(max-width: 600px), (max-width: 960px) and (max-height: 540px)');
 
   constructor(private readonly root: HTMLElement, private readonly data: EncounterDefinition) {
     const loaded = loadBattle(this.storage, data);
@@ -45,12 +46,13 @@ export class BattleUI {
           <section class="decision-panel" aria-label="เลือกคำสั่งและตรวจผล">
             <div class="step-section"><h2 class="step-heading"><span>1</span>เลือกฮีโร่ที่จะลงมือ</h2><div id="party" class="party" aria-label="เลือกฮีโร่"></div></div>
             <div id="commands" class="step-section"></div>
-            <div id="preview" class="step-section" aria-live="polite"></div>
+            <div id="preview-home"><div id="preview" class="step-section" aria-live="polite"></div></div>
           </section>
         </div>
         <details class="combat-history"><summary>บันทึกการต่อสู้</summary><ol id="event-log" role="log" aria-live="polite"></ol></details>
         <footer><span>หนึ่งจังหวะ · หนึ่งคำสั่ง · ไม่จำกัดเวลา</span><span id="save-status"></span></footer>
-      </main>`;
+      </main>
+      <dialog id="mobile-preview" aria-labelledby="preview-heading"><div id="mobile-preview-host"></div></dialog>`;
     root.addEventListener('click', e => {
       const button = (e.target as HTMLElement).closest<HTMLButtonElement>('button[data-ui]');
       if (!button || button.disabled) return;
@@ -61,13 +63,20 @@ export class BattleUI {
         case 'action': if (value) { this.action = value as ActionId; this.targetId = null; this.render(); } break;
         case 'target': if (value) this.choose(value); break;
         case 'confirm': this.confirm(); break;
-        case 'cancel': this.targetId = null; this.render(); break;
+        case 'cancel': this.cancelPreview(); break;
         case 'restart': this.restart(); break;
       }
     });
     window.addEventListener('keydown', e => {
-      if (e.key === 'Escape') { this.targetId = null; this.render(); }
+      if (e.key === 'Escape' && this.targetId) { e.preventDefault(); this.cancelPreview(); }
     });
+    const dialog = root.querySelector<HTMLDialogElement>('#mobile-preview')!;
+    dialog.addEventListener('cancel', e => { e.preventDefault(); this.cancelPreview(); });
+    dialog.addEventListener('click', e => {
+      const bounds = dialog.getBoundingClientRect();
+      if (e.target === dialog && (e.clientX < bounds.left || e.clientX > bounds.right || e.clientY < bounds.top || e.clientY > bounds.bottom)) this.cancelPreview();
+    });
+    this.mobile.addEventListener('change', () => this.render());
     document.addEventListener('visibilitychange', () => {
       if (document.hidden && this.busy) { clearTimeout(this.timer); this.busy = false; this.render(); }
     });
@@ -82,7 +91,7 @@ export class BattleUI {
     if (target?.valid) {
       this.targetId = id;
       this.render();
-      if (window.matchMedia('(max-width: 1040px)').matches) this.root.querySelector('#preview')?.scrollIntoView({ block: 'nearest', behavior: 'auto' });
+      if (!this.mobile.matches && window.matchMedia('(max-width: 1040px)').matches) this.root.querySelector('#preview')?.scrollIntoView({ block: 'nearest', behavior: 'auto' });
     } else if (this.data.heroes.some(h => h.id === id)) this.selectHero(id);
   }
 
@@ -93,6 +102,27 @@ export class BattleUI {
 
   private proposed(): Command | null {
     return this.targetId ? { beat: this.state.beat, heroId: this.heroId, action: this.action, targetId: this.targetId } : null;
+  }
+
+  private cancelPreview(): void {
+    const returnFocus = this.targetId ? `target-${this.targetId}` : `action-${this.action}`;
+    this.targetId = null;
+    this.render();
+    this.root.querySelector<HTMLElement>(`#${returnFocus}`)?.focus({ preventScroll: true });
+  }
+
+  private syncPreview(disabled: boolean): void {
+    const dialog = this.root.querySelector<HTMLDialogElement>('#mobile-preview')!;
+    const preview = this.root.querySelector<HTMLElement>('#preview')!;
+    const show = this.mobile.matches && !!this.proposed() && !disabled;
+    const host = this.root.querySelector(show ? '#mobile-preview-host' : '#preview-home')!;
+    if (!show && dialog.open) dialog.close();
+    if (preview.parentElement !== host) host.append(preview);
+    document.body.classList.toggle('mobile-preview-open', show);
+    if (show && !dialog.open) {
+      dialog.showModal();
+      this.root.querySelector<HTMLElement>('#preview-heading')?.focus({ preventScroll: true });
+    }
   }
 
   private confirm(): void {
@@ -106,6 +136,7 @@ export class BattleUI {
     this.saved = saveBattle(this.storage, this.state, this.data);
     if (!this.state.heroes.some(h => h.id === this.heroId && h.hp > 0)) this.heroId = this.state.heroes.find(h => h.hp > 0)?.id ?? this.heroId;
     this.action = 'attack'; this.render(); this.scene?.play(result.events);
+    if (this.mobile.matches && this.state.outcome !== 'active') this.root.querySelector('.arena')?.scrollIntoView({ block: 'center', behavior: 'auto' });
     this.timer = setTimeout(() => { this.busy = false; this.render(); }, window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 120 : 720);
   }
 
@@ -114,6 +145,7 @@ export class BattleUI {
     this.heroId = 'tracer'; this.action = 'attack'; this.targetId = null; this.started = true;
     this.messages = ['เริ่มการต่อสู้ใหม่แล้ว'];
     this.saved = saveBattle(this.storage, this.state, this.data); this.render();
+    if (this.mobile.matches) this.root.querySelector('.arena')?.scrollIntoView({ block: 'nearest', behavior: 'auto' });
   }
 
   private set(id: string, content: string): void { this.root.querySelector(`#${id}`)!.innerHTML = content; }
@@ -128,7 +160,7 @@ export class BattleUI {
     } else this.set('intent', `<div class="intent-icon">✧</div><div class="intent-copy"><p class="eyebrow">การต่อสู้จบแล้ว</p><h2>${s.outcome === 'victory' ? 'คุณปิดรอยแยกได้แล้ว' : 'ทีมของคุณล้มทั้งหมด'}</h2><p>กดเริ่มใหม่เพื่อลองแผนอื่น</p></div>`);
     this.root.querySelector<HTMLElement>('#forecast-details')!.hidden = s.outcome !== 'active';
     this.set('forecast', plannedIntents(s, d).map(next => `<div><b>จังหวะ ${next.beat} · ${intentName(next)}</b><small>${actorName(next.targetId, d)} · พลังโจมตี ${next.damage} · ${next.kind === 'energy' ? 'พลังงาน' : 'กายภาพ'}</small></div>`).join('') + (s.outcome === 'active' ? '<p>แผนนี้สมมติว่าตัวละครยังอยู่ เปลี่ยนได้เมื่อมีใครล้ม การโจมตีจังหวะปัจจุบันจะไม่ถูกเปลี่ยนหลังยืนยัน</p>' : ''));
-    this.set('crystal-info', `<span class="crystal-icon">✧</span><div><strong>ผลึกพลังงาน · ${s.crystal.charges ? `ใช้ได้อีก ${s.crystal.charges} ครั้ง` : 'ใช้ไปแล้ว'}</strong><p>ไอราเบี่ยงพลังใส่ผลึก → รับการโจมตีแทนทีม → ทุกคนที่ยังยืนอยู่ได้โล่ ${d.crystal.barrier}</p></div>`);
+    this.set('crystal-info', `<span class="crystal-icon">✧</span><div><strong>ผลึกพลังงาน · ${s.crystal.charges ? `ใช้ได้อีก ${s.crystal.charges} ครั้ง` : 'ใช้ไปแล้ว'}</strong><p>${this.mobile.matches ? `เบี่ยงพลังใส่ผลึก → รับการโจมตีแทนทีม + โล่ ${d.crystal.barrier} ทุกคนที่ยังยืน` : `ไอราเบี่ยงพลังใส่ผลึก → รับการโจมตีแทนทีม → ทุกคนที่ยังยืนอยู่ได้โล่ ${d.crystal.barrier}`}</p></div>`);
     this.set('start-screen', !this.started ? `<div class="start-card"><p class="eyebrow">การต่อสู้แบบวางแผน</p><h2>อ่านอันตราย<br>เลือกเปลี่ยนผลลัพธ์</h2><p>แต่ละจังหวะใช้ฮีโร่ 1 คน ออกคำสั่ง 1 ครั้ง<br>ดูผลล่วงหน้าได้ ยังไม่มีอะไรเกิดขึ้นจนกดยืนยัน</p><button data-ui="start" id="start" class="primary">เริ่มต่อสู้ →</button></div>` : s.outcome !== 'active' ? `<div class="result-card" role="status"><p class="eyebrow">${s.outcome === 'victory' ? 'ปิดรอยแยกสำเร็จ' : 'ลองวางแผนใหม่'}</p><h2>${s.outcome === 'victory' ? 'ชนะแล้ว' : 'แพ้แล้ว'}</h2><p>ยืนอยู่ ${s.heroes.filter(h => h.hp > 0).length} / ${s.heroes.length} คน · เลือดทีม ${s.heroes.reduce((hp, h) => hp + h.hp, 0)}<br>ใช้ ${s.commands.length} คำสั่ง</p>${s.outcome === 'victory' ? `<strong class="party-result">${s.heroes.every(h => h.hp > 0) ? 'รักษาทีมครบทุกคน' : 'ชนะ แต่เสียสมาชิกในทีม'}</strong>` : ''}<button data-ui="restart" class="primary">เล่นอีกครั้ง ↻</button></div>` : '');
   }
 
@@ -160,12 +192,12 @@ export class BattleUI {
     const targets = targetOptions(s, d, this.heroId, this.action);
     this.set('commands', `<h2 class="step-heading"><span>2</span>เลือกคำสั่งของ${actorName(this.heroId, d)}</h2><div class="actions">${hero.actions.map(action => {
       const text = actionText[action]; const reason = actionReason(s, d, this.heroId, action);
-      return `<div class="action-option"><button id="action-${action}" data-ui="action" data-value="${action}" class="action ${this.action === action ? 'selected' : ''}" aria-pressed="${this.action === action}" aria-describedby="reason-${action}" ${disabled || reason ? 'disabled' : ''}><span aria-hidden="true">${text.icon}</span><strong>${text.name}</strong><small>${text.english}</small></button><p id="reason-${action}" class="${reason ? 'unavailable-reason' : ''}">${escapeHtml(reason ? reasonThai(reason, d) : hints[action])}</p></div>`;
-    }).join('')}</div><p class="action-description">${descriptions[this.action]}</p><h2 class="step-heading target-heading"><span>3</span>${targetHeading[this.action]}</h2><div class="targets">${targets.map(t => {
+      return `<div class="action-option ${this.action === action ? 'current-action' : ''}"><button id="action-${action}" data-ui="action" data-value="${action}" class="action ${this.action === action ? 'selected' : ''}" aria-pressed="${this.action === action}" aria-describedby="reason-${action}" ${disabled || reason ? 'disabled' : ''}><span aria-hidden="true">${text.icon}</span><strong>${text.name}</strong><small>${text.english}</small></button><p id="reason-${action}" class="${reason ? 'unavailable-reason' : ''}">${escapeHtml(reason ? reasonThai(reason, d) : hints[action])}</p></div>`;
+    }).join('')}</div><details class="action-help" ${this.mobile.matches ? '' : 'open'}><summary>วิธีใช้${actionText[this.action].name}</summary><p class="action-description">${descriptions[this.action]}</p></details><h2 class="step-heading target-heading"><span>3</span>${targetHeading[this.action]}</h2><div class="targets ${this.action === 'guard' ? 'guard-targets' : ''}">${targets.map(t => {
       const enemy = s.enemies.find(e => e.id === t.id); const definition = d.enemies.find(e => e.id === t.id);
       const ally = s.heroes.find(h => h.id === t.id);
       const info = enemy ? `เลือด ${enemy.hp} / ${definition!.maxHp}${enemy.markedUntil > s.beat ? ` · ติดตราอีก ${enemy.markedUntil - s.beat} จังหวะ` : ''}${enemy.exposedUntil > s.beat ? ' · เปิดช่องให้ไลรา' : ''}` : t.id === d.crystal.id ? `${s.crystal.charges} ครั้ง · ให้โล่ ${d.crystal.barrier} ทุกคน` : `เลือด ${ally!.hp}${s.intent?.targetId === t.id ? ' · ศัตรูเล็งคนนี้' : ''}`;
-      return `<div class="target-option ${t.id === d.crystal.id ? 'crystal-target' : ''}"><button id="target-${t.id}" data-ui="target" data-value="${t.id}" aria-pressed="${this.targetId === t.id}" aria-describedby="target-reason-${t.id}" class="target ${this.targetId === t.id ? 'selected' : ''}" ${disabled || !t.valid ? 'disabled' : ''}><strong>${actorName(t.id, d)}</strong><small>${info}</small></button><small id="target-reason-${t.id}" class="target-reason">${escapeHtml(reasonThai(t.reason, d))}</small></div>`;
+      return `<div class="target-option ${t.id === d.crystal.id ? 'crystal-target' : ''}"><button id="target-${t.id}" data-ui="target" data-value="${t.id}" aria-pressed="${this.targetId === t.id}" aria-describedby="target-reason-${t.id}" class="target ${this.targetId === t.id ? 'selected' : ''}" ${disabled || !t.valid ? 'disabled' : ''}><strong>${actorName(t.id, d)}</strong><small>${info}</small></button><small id="target-reason-${t.id}" class="target-reason">${escapeHtml(this.mobile.matches && t.reason === 'Guard must protect the announced target.' ? 'ศัตรูไม่ได้เล็งคนนี้' : reasonThai(t.reason, d))}</small></div>`;
     }).join('')}</div>`);
   }
 
@@ -180,12 +212,13 @@ export class BattleUI {
     ].filter(c => c.hp !== c.nextHp || c.barrier !== c.nextBarrier);
     const eventsHtml = (events: Resolution['events']) => events.map(event => `<li>${escapeHtml(eventThai(event, before, after, d))}</li>`).join('');
     const next = after.intent;
-    this.set('preview', `<h2 class="step-heading"><span>4</span>ดูผลก่อนกดยืนยัน</h2><div class="chosen-command">${actorName(command.heroId, d)} · ${actionText[command.action].name} → ${actorName(command.targetId, d)}</div>${fallen.length ? `<p class="lethal-warning">⚠ ${fallen.map(h => actorName(h.id, d)).join(', ')} จะล้มถ้าใช้คำสั่งนี้</p>` : ''}<div class="outcome-group player-outcome"><h3>คำสั่งของคุณ</h3><ul>${eventsHtml(playerEvents)}</ul></div><div class="outcome-group enemy-outcome"><h3>ศัตรูและผลต่อทีม</h3><ul>${eventsHtml(responseEvents)}</ul></div><div class="predictions">${changes.map(c => `<div class="prediction-row ${c.ally && c.hp > c.nextHp ? 'health-loss' : ''}"><span>${actorName(c.id, d)}</span><b>เลือด ${c.hp} → ${c.nextHp}${c.barrier !== c.nextBarrier ? `<small>โล่ ${c.barrier} → ${c.nextBarrier}</small>` : ''}</b></div>`).join('')}${before.counter !== after.counter ? `<div class="prediction-row"><span>แต้มเบี่ยงพลัง</span><b>${before.counter} → ${after.counter}</b></div>` : ''}${before.crystal.charges !== after.crystal.charges ? `<div class="prediction-row"><span>จำนวนครั้งใช้ผลึก</span><b>${before.crystal.charges} → ${after.crystal.charges}</b></div>` : ''}</div>${after.outcome !== 'active' ? `<p class="predicted-outcome">ผลที่คาด: ${after.outcome === 'victory' ? 'ชนะ' : 'แพ้'}</p>` : ''}${next ? `<p class="next-intent">จังหวะถัดไป: ${intentName(next)} → ${actorName(next.targetId, d)} · พลังโจมตี ${next.damage}</p>` : ''}<div class="confirmation"><button id="confirm" data-ui="confirm" class="primary" ${disabled ? 'disabled' : ''}>ยืนยันคำสั่งนี้ →</button><button id="cancel" data-ui="cancel" class="quiet">ยกเลิก</button></div><p class="confirmation-note">เปลี่ยนใจได้ก่อนยืนยัน · กด Esc เพื่อยกเลิก</p>`);
+    this.set('preview', `<div class="preview-header"><h2 id="preview-heading" class="step-heading" tabindex="-1"><span>4</span>ดูผลก่อนกดยืนยัน</h2><button class="sheet-close quiet" data-ui="cancel" aria-label="กลับไปเลือกคำสั่ง">✕</button></div><div class="preview-content"><div class="chosen-command">${actorName(command.heroId, d)} · ${actionText[command.action].name} → ${actorName(command.targetId, d)}</div>${fallen.length ? `<p class="lethal-warning">⚠ ${fallen.map(h => actorName(h.id, d)).join(', ')} จะล้มถ้าใช้คำสั่งนี้</p>` : ''}<div class="outcome-group player-outcome"><h3>คำสั่งของคุณ</h3><ul>${eventsHtml(playerEvents)}</ul></div><div class="outcome-group enemy-outcome"><h3>ศัตรูและผลต่อทีม</h3><ul>${eventsHtml(responseEvents)}</ul></div><div class="predictions">${changes.map(c => `<div class="prediction-row ${c.ally && c.hp > c.nextHp ? 'health-loss' : ''}"><span>${actorName(c.id, d)}</span><b>เลือด ${c.hp} → ${c.nextHp}${c.barrier !== c.nextBarrier ? `<small>โล่ ${c.barrier} → ${c.nextBarrier}</small>` : ''}</b></div>`).join('')}${before.counter !== after.counter ? `<div class="prediction-row"><span>แต้มเบี่ยงพลัง</span><b>${before.counter} → ${after.counter}</b></div>` : ''}${before.crystal.charges !== after.crystal.charges ? `<div class="prediction-row"><span>จำนวนครั้งใช้ผลึก</span><b>${before.crystal.charges} → ${after.crystal.charges}</b></div>` : ''}</div>${after.outcome !== 'active' ? `<p class="predicted-outcome">ผลที่คาด: ${after.outcome === 'victory' ? 'ชนะ' : 'แพ้'}</p>` : ''}${next ? `<p class="next-intent">จังหวะถัดไป: ${intentName(next)} → ${actorName(next.targetId, d)} · พลังโจมตี ${next.damage}</p>` : ''}</div><div class="preview-footer"><div class="confirmation"><button id="confirm" data-ui="confirm" class="primary" ${disabled ? 'disabled' : ''}>ยืนยันคำสั่งนี้ →</button><button id="cancel" data-ui="cancel" class="quiet">ยกเลิก</button></div><p class="confirmation-note">${this.mobile.matches ? 'เลื่อนอ่านผลได้ · ยกเลิกเพื่อเปลี่ยนคำสั่ง' : 'เปลี่ยนใจได้ก่อนยืนยัน · กด Esc เพื่อยกเลิก'}</p></div>`);
   }
 
   private render(): void {
     const focus = document.activeElement instanceof HTMLElement ? document.activeElement.id : '';
     const s = this.state; const d = this.data; const disabled = !this.started || this.busy || s.outcome !== 'active';
+    this.root.classList.toggle('mobile-layout', this.mobile.matches);
     this.renderSituation(); this.renderParty(disabled); this.renderCommands(disabled);
     const command = this.proposed();
     if (command && s.outcome === 'active') this.renderPreview(previewCommand(s, d, command), command, disabled);
@@ -194,6 +227,7 @@ export class BattleUI {
     this.set('event-log', this.messages.slice(-30).map(message => `<li>${escapeHtml(message)}</li>`).join(''));
     this.set('save-status', this.saved && this.storage ? 'บันทึกบนเครื่องนี้อัตโนมัติ' : 'เล่นได้ แต่บันทึกบนเครื่องนี้ไม่ได้');
     this.scene?.sync({ state: s, heroId: this.heroId, targetId: this.targetId });
+    this.syncPreview(disabled);
     if (focus) this.root.querySelector<HTMLElement>(`#${focus}`)?.focus({ preventScroll: true });
   }
 }

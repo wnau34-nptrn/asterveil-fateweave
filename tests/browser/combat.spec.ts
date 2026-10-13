@@ -221,3 +221,159 @@ test('Thai steps show only each hero’s actions and readable restrictions at na
   }
   expect(errors).toEqual([]);
 });
+
+async function reachable(page: Page, selector: string): Promise<void> {
+  const box = await page.locator(selector).boundingBox();
+  const viewport = page.viewportSize()!;
+  expect(box).not.toBeNull();
+  expect(box!.width).toBeGreaterThanOrEqual(44);
+  expect(box!.height).toBeGreaterThanOrEqual(44);
+  expect(box!.x).toBeGreaterThanOrEqual(0);
+  expect(box!.y).toBeGreaterThanOrEqual(0);
+  expect(box!.x + box!.width).toBeLessThanOrEqual(viewport.width);
+  expect(box!.y + box!.height).toBeLessThanOrEqual(viewport.height);
+  expect(await page.locator(selector).evaluate(el => {
+    const r = el.getBoundingClientRect();
+    return el.contains(document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2));
+  })).toBe(true);
+}
+
+for (const viewport of [{ width: 320, height: 568 }, { width: 390, height: 844 }, { width: 600, height: 800 }, { width: 844, height: 390 }]) {
+  test(`phone ${viewport.width}x${viewport.height}: reachable preview, cancel, Guard and Crystal touch flow`, async ({ browser }, info) => {
+    const context = await browser.newContext({ viewport, isMobile: true, hasTouch: true, reducedMotion: viewport.width === 390 ? 'no-preference' : 'reduce' });
+    const page = await context.newPage();
+    const errors: string[] = [];
+    page.on('pageerror', e => errors.push(e.message));
+    page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
+    await page.goto('./');
+    await expect(page.locator('#game canvas')).toBeVisible();
+    await reachable(page, '#start');
+    await page.locator('#start').tap();
+    await expect(page.locator('#app')).toHaveClass(/mobile-layout/);
+    await expect(page.locator('.arena')).toHaveCSS('height', '224px');
+    if (viewport.width === 844) await expect(page.locator('.arena')).toBeInViewport({ ratio: 1 });
+    await page.screenshot({ path: info.outputPath('phone-choices.png') });
+    await page.locator('#hero-guardian').tap();
+    await page.locator('#action-guard').tap();
+    await page.locator('#target-tracer').scrollIntoViewIfNeeded();
+    await expect(page.locator('#intent')).toBeInViewport({ ratio: 1 });
+    await page.screenshot({ path: info.outputPath('phone-guard-choices.png') });
+    await page.locator('#target-tracer').tap();
+    await expect(page.locator('#mobile-preview')).toBeVisible();
+    await expect(page.locator('#preview-heading')).toBeFocused();
+    await expect(page.locator('#beat-status')).toContainText('จังหวะ 1');
+    await expect(page.locator('#mobile-preview')).toContainText('64 → 60');
+    await reachable(page, '#confirm');
+    await reachable(page, '#cancel');
+    await page.keyboard.press('Tab');
+    await expect(page.locator('.sheet-close')).toBeFocused();
+    await page.locator('#cancel').tap();
+    await expect(page.locator('#mobile-preview')).not.toBeVisible();
+    await expect(page.locator('#target-tracer')).toBeFocused();
+    await expect(page.locator('#hero-guardian')).toContainText('64 / 64');
+    await expect(page.locator('body')).not.toHaveClass(/mobile-preview-open/);
+    // Native Escape and a backdrop tap both dismiss without committing.
+    await page.locator('#target-tracer').tap(); await page.keyboard.press('Escape');
+    await expect(page.locator('#mobile-preview')).not.toBeVisible();
+    await page.locator('#target-tracer').tap(); await page.touchscreen.tap(2, 2);
+    await expect(page.locator('#mobile-preview')).not.toBeVisible();
+    await expect(page.locator('#beat-status')).toContainText('จังหวะ 1');
+    await page.locator('#target-tracer').tap(); await commit(page);
+    await expect(page.locator('#hero-guardian')).toContainText('60 / 64');
+    await page.locator('#hero-weaver').tap(); await page.locator('#action-redirect').tap(); await page.locator('#target-energy-crystal').tap();
+    await expect(page.locator('#mobile-preview')).toContainText('โล่ 0 → 8');
+    await reachable(page, '#confirm');
+    const before = await page.locator('#confirm').boundingBox();
+    await page.locator('.preview-content').evaluate(el => { el.scrollTop = el.scrollHeight; });
+    await reachable(page, '#confirm');
+    expect((await page.locator('#confirm').boundingBox())!.y).toBe(before!.y);
+    await page.locator('.preview-content').evaluate(el => { el.scrollTop = 0; });
+    await page.screenshot({ path: info.outputPath('phone-crystal-sheet.png') });
+    await commit(page);
+    await expect(page.locator('#beat-status')).toContainText('จังหวะ 3');
+    await expect(page.locator('#mobile-preview')).not.toBeVisible();
+    await expect(page.locator('#hero-weaver')).toContainText('โล่ 8');
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+    await page.reload();
+    await expect(page.locator('#beat-status')).toContainText('จังหวะ 3');
+    await expect(page.locator('#mobile-preview')).not.toBeVisible();
+    await expect(page.locator('body')).not.toHaveClass(/mobile-preview-open/);
+    expect(errors).toEqual([]);
+    await context.close();
+  });
+}
+
+test('pending mobile preview survives rotation and desktop resize without advancing combat', async ({ page }, info) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  const errors = await start(page);
+  await choose(page, 'guardian', 'guard', 'tracer');
+  await expect(page.locator('#mobile-preview')).toBeVisible();
+  await page.setViewportSize({ width: 844, height: 390 });
+  await reachable(page, '#confirm');
+  await expect(page.locator('#preview')).toContainText('64 → 60');
+  await page.screenshot({ path: info.outputPath('landscape-pending.png') });
+  await page.setViewportSize({ width: 1366, height: 900 });
+  await expect(page.locator('#mobile-preview')).not.toBeVisible();
+  await expect(page.locator('#preview-home #confirm')).toHaveCount(1);
+  await expect(page.locator('#preview')).toContainText('64 → 60');
+  await expect(page.locator('body')).not.toHaveClass(/mobile-preview-open/);
+  await expect(page.locator('#beat-status')).toContainText('จังหวะ 1');
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(page.locator('#mobile-preview')).toBeVisible();
+  await reachable(page, '#confirm');
+  await expect(page.locator('#confirm')).toHaveCount(1);
+  await commit(page);
+  await expect(page.locator('#beat-status')).toContainText('จังหวะ 2');
+  await expect(page.locator('#mobile-preview')).not.toBeVisible();
+  expect(errors).toEqual([]);
+});
+
+test('phone full tactical battle: selection returns after each confirmation and result stays reachable', async ({ browser }, info) => {
+  test.setTimeout(90000);
+  const context = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, reducedMotion: 'reduce' });
+  const page = await context.newPage(); const errors = await start(page);
+  const moves = [
+    ['tracer', 'mark', 'brute'], ['guardian', 'guard', 'guardian'], ['tracer', 'attack', 'brute'],
+    ['tracer', 'mark', 'brute'], ['tracer', 'attack', 'brute'], ['weaver', 'redirect', 'energy-crystal'],
+    ['tracer', 'attack', 'brute'], ['tracer', 'mark', 'raider'], ['tracer', 'attack', 'raider'],
+  ];
+  for (const [hero, action, target] of moves) {
+    await page.locator(`#hero-${hero}`).tap(); await page.locator(`#action-${action}`).tap(); await page.locator(`#target-${target}`).tap();
+    await reachable(page, '#confirm');
+    await commit(page);
+    await expect(page.locator('#mobile-preview')).not.toBeVisible();
+  }
+  await expect(page.getByRole('heading', { name: 'ชนะแล้ว', exact: true })).toBeVisible();
+  await expect(page.locator('#start-screen')).toContainText('ยืนอยู่ 3 / 3 คน');
+  await expect(page.locator('#start-screen')).toContainText('เลือดทีม 88');
+  await reachable(page, '.result-card button');
+  await page.screenshot({ path: info.outputPath('phone-victory.png') });
+  await page.locator('.result-card button').tap();
+  await expect(page.locator('#beat-status')).toContainText('จังหวะ 1');
+  await expect(page.locator('#hero-tracer')).toBeEnabled();
+  expect(errors).toEqual([]); await context.close();
+});
+
+test('phone compact canvas keeps all three heroes and Crystal touch targets aligned', async ({ browser }) => {
+  const context = await browser.newContext({ viewport: { width: 320, height: 568 }, isMobile: true, hasTouch: true, reducedMotion: 'reduce' });
+  const page = await context.newPage(); const errors = await start(page);
+  const canvas = page.locator('#game canvas');
+  await expect(canvas).toHaveJSProperty('clientHeight', 222);
+  const bounds = (await canvas.boundingBox())!;
+  await canvas.tap({ position: { x: bounds.width * 0.19, y: 38 } });
+  await expect(page.locator('#hero-guardian')).toHaveAttribute('aria-pressed', 'true');
+  await page.locator('#action-guard').tap();
+  await canvas.tap({ position: { x: bounds.width * 0.19, y: 38 + (bounds.height - 78) / 2 } });
+  await expect(page.locator('#mobile-preview')).toBeVisible();
+  await expect(page.locator('#preview')).toContainText('รับการโจมตีแทนไลรา');
+  await commit(page);
+  await canvas.tap({ position: { x: bounds.width * 0.19, y: bounds.height - 40 } });
+  await expect(page.locator('#hero-weaver')).toHaveAttribute('aria-pressed', 'true');
+  await page.locator('#action-redirect').tap();
+  await canvas.tap({ position: { x: bounds.width / 2, y: bounds.height * 0.47 } });
+  await expect(page.locator('#preview')).toContainText('ผลึกรับการโจมตี 30 ทั้งหมด');
+  await reachable(page, '#confirm');
+  await commit(page);
+  await expect(page.locator('#hero-weaver')).toContainText('โล่ 8');
+  expect(errors).toEqual([]); await context.close();
+});

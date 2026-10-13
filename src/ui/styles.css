@@ -11,6 +11,7 @@
 * { box-sizing: border-box; }
 body { margin: 0; background: radial-gradient(ellipse at 15% 0, #243451 0, transparent 55%), #0b1427; }
 button, a, summary { -webkit-tap-highlight-color: transparent; }
+button, summary { touch-action: manipulation; }
 button { font: inherit; color: inherit; cursor: pointer; border: 1px solid var(--line); border-radius: 9px; background: #18273f; min-height: 44px; padding: 10px 14px; }
 button:hover:not(:disabled) { background: #233754; border-color: #8197b7; }
 button:disabled { cursor: default; color: #a6b2c7; background: #131d30; }
@@ -150,48 +151,108 @@ footer { display: flex; gap: 10px; justify-content: space-between; margin-top: 1
   .hero-card { padding: 10px 8px 21px; }
   .step-section { padding: 18px; }
 }
-@media (max-width: 540px) {
-  .masthead { padding: max(14px, env(safe-area-inset-top)) 12px 8px; gap: 8px; }
-  .brand { font-size: 19px; letter-spacing: 2px; gap: 5px; }
-  .brand-mark { font-size: 32px; }
-  .brand small { font-size: 8px; letter-spacing: 3px; }
-  #restart { font-size: 12px; padding: 8px 10px; }
-  main { padding: 12px 12px max(18px, env(safe-area-inset-bottom)); }
-  .encounter-heading { align-items: flex-start; margin-bottom: 12px; gap: 8px; }
-  h1 { font-size: 22px; }
-  .eyebrow { font-size: 11px; }
-  #beat-status { display: block; text-align: right; }
-  .beat-chip { display: inline-block; font-size: 12px; padding: 3px 10px; }
-  .counter-chip { display: block; font-size: 11px; margin-top: 4px; }
-  .counter-chip strong { font-size: 16px; }
-  .counter-chip small { font-size: 10px; }
-  #intent { padding: 12px 10px; gap: 8px; align-items: flex-start; }
-  .intent-icon { font-size: 22px; }
-  .intent-copy h2 { font-size: 16px; }
-  .intent-copy > p:not(.eyebrow) { font-size: 12px; }
-  .intent-copy .eyebrow { font-size: 10px; }
-  .intent-damage { min-width: 40px; }
-  .intent-damage strong { font-size: 27px; }
-  .intent-damage small { font-size: 10px; }
-  .forecast { grid-template-columns: 1fr; }
-  .crystal-info { padding: 10px; gap: 8px; }
-  .crystal-info strong { font-size: 13px; }
-  .crystal-info p { font-size: 12px; }
-  .step-section { padding: 14px; }
-  .party { gap: 6px; }
-  .hero-card > small { min-height: 36px; font-size: 11px; }
-  .hero-hp { font-size: 11px; }
-  .hero-card { padding: 9px 4px 20px; }
-  .actions { gap: 8px; }
-  .action { padding: 9px; }
-  .action strong { font-size: 14px; }
-  .target { padding: 9px; }
-  .target strong { font-size: 13px; }
-  .target small { font-size: 11px; }
-  .start-card h2, .result-card h2 { font-size: 27px; }
-  .start-card > p:not(.eyebrow), .result-card > p:not(.eyebrow) { font-size: 13px; }
-  footer { display: block; }
-  footer span { display: block; }
+/* Phones use a compact board and a modal preview with its own scroll area. */
+#preview-home { border-top: 1px solid var(--line); }
+.action-help > summary, .sheet-close { display: none; }
+#mobile-preview { padding: 0; background: #132139; color: #e9eff9; border: 1px solid #64718a; border-radius: 18px 18px 0 0; width: 100%; max-width: 600px; margin: 0 auto; inset: auto 0 0; max-height: calc(100vh - 12px); max-height: calc(100dvh - env(safe-area-inset-top) - 12px); overflow: hidden; }
+#mobile-preview::backdrop { background: #070e20b8; }
+#mobile-preview-host { min-height: 0; }
+.mobile-preview-open { overflow: hidden; }
+#mobile-preview #preview { display: flex; flex-direction: column; padding: 0; max-height: calc(100vh - 14px); max-height: calc(100dvh - env(safe-area-inset-top) - 14px); }
+#mobile-preview .preview-header { display: flex; align-items: center; gap: 8px; padding: 8px 12px; flex-shrink: 0; border-bottom: 1px solid var(--line); }
+#mobile-preview .step-heading { margin: 0; flex: 1; font-size: 14px; }
+#mobile-preview .sheet-close { display: block; width: 44px; height: 44px; padding: 0; font-size: 18px; }
+#mobile-preview .preview-content { overflow-y: auto; min-height: 0; overscroll-behavior: contain; padding: 12px 14px; }
+#mobile-preview .preview-footer { flex-shrink: 0; padding: 10px max(14px, env(safe-area-inset-right)) max(10px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left)); border-top: 1px solid var(--line); background: #172841; }
+#mobile-preview .confirmation { margin: 0; }
+#mobile-preview .confirmation-note { font-size: 11px; margin-top: 4px; }
+#mobile-preview .chosen-command { margin-bottom: 6px; }
+#mobile-preview .outcome-group { margin-top: 6px; }
+.mobile-layout .masthead { padding: max(8px, env(safe-area-inset-top)) max(10px, env(safe-area-inset-right)) 4px max(10px, env(safe-area-inset-left)); gap: 8px; }
+.mobile-layout .brand { font-size: 18px; letter-spacing: 2px; gap: 5px; }
+.mobile-layout .brand-mark { font-size: 30px; }
+.mobile-layout .brand small { font-size: 8px; letter-spacing: 3px; }
+.mobile-layout #restart { font-size: 12px; padding: 8px 10px; }
+.mobile-layout main { padding: 6px max(10px, env(safe-area-inset-right)) max(14px, env(safe-area-inset-bottom)) max(10px, env(safe-area-inset-left)); }
+.mobile-layout .encounter-heading { align-items: center; margin-bottom: 8px; gap: 8px; }
+.mobile-layout .encounter-heading .eyebrow, .mobile-layout .counter-chip small { display: none; }
+.mobile-layout h1 { font-size: 18px; }
+.mobile-layout #beat-status { display: block; text-align: right; }
+.mobile-layout .beat-chip { display: inline-block; font-size: 12px; padding: 1px 9px; }
+.mobile-layout .counter-chip { display: block; font-size: 12px; margin-top: 2px; }
+.mobile-layout .counter-chip strong { font-size: 16px; }
+.mobile-layout .battle-layout { gap: 8px; }
+.mobile-layout .battle-board { display: contents; }
+.mobile-layout #intent { order: 0; position: sticky; top: env(safe-area-inset-top); z-index: 10; padding: 9px 10px; gap: 8px; align-items: flex-start; box-shadow: 0 5px 10px #0b142788; }
+.mobile-layout .intent-icon { font-size: 22px; }
+.mobile-layout .intent-copy h2 { font-size: 16px; }
+.mobile-layout .intent-copy > p:not(.eyebrow) { font-size: 12px; }
+.mobile-layout .intent-copy .eyebrow { font-size: 11px; }
+.mobile-layout .intent-damage { min-width: 40px; }
+.mobile-layout .intent-damage strong { font-size: 27px; }
+.mobile-layout .intent-damage small { font-size: 10px; }
+.mobile-layout .arena { order: 1; height: 224px; }
+.mobile-layout .arena-note { font-size: 9px; right: 6px; bottom: 3px; }
+.mobile-layout .crystal-info { order: 2; margin: 0; padding: 7px 10px; gap: 8px; }
+.mobile-layout .crystal-icon { font-size: 24px; }
+.mobile-layout .crystal-info strong { font-size: 13px; }
+.mobile-layout .crystal-info p { font-size: 12px; }
+.mobile-layout .decision-panel { order: 3; }
+.mobile-layout .forecast-panel { order: 4; margin: 0; }
+.mobile-layout .field-notes { order: 5; margin: 0; }
+.mobile-layout .forecast { grid-template-columns: 1fr; }
+.mobile-layout .step-section { padding: 10px; }
+.mobile-layout .step-heading { font-size: 13px; gap: 7px; margin-bottom: 7px; }
+.mobile-layout .step-heading > span { flex-basis: 22px; height: 22px; }
+.mobile-layout .party { gap: 6px; }
+.mobile-layout .hero-card { padding: 3px 4px; min-height: 56px; }
+.mobile-layout .hero-emblem, .mobile-layout .hero-card > small, .mobile-layout .selected-tag { display: none; }
+.mobile-layout .hero-card strong { font-size: 14px; }
+.mobile-layout .hero-hp { font-size: 12px; }
+.mobile-layout .hp-track { height: 3px; margin: 2px 3px; }
+.mobile-layout .actions { gap: 8px; }
+.mobile-layout .action { padding: 6px 9px; min-height: 52px; }
+.mobile-layout .action strong { font-size: 14px; }
+.mobile-layout .action-option > p { display: none; }
+.mobile-layout .action-option > p.unavailable-reason { display: block; font-size: 12px; }
+.mobile-layout .action-help { font-size: 12px; }
+.mobile-layout .action-help > summary { display: list-item; padding: 8px 3px; }
+.mobile-layout .action-description { padding: 0 3px 10px; font-size: 12px; }
+.mobile-layout .target-heading { margin-top: 0; }
+.mobile-layout .target { padding: 8px; }
+.mobile-layout .target strong { font-size: 13px; }
+.mobile-layout .target small { font-size: 12px; }
+.mobile-layout .guard-targets { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.mobile-layout .guard-targets .target { padding: 8px 5px; }
+.mobile-layout .target-reason { font-size: 12px; }
+.mobile-layout #preview-home .step-heading, .mobile-layout .preview-empty > span, .mobile-layout .preview-empty > p { display: none; }
+.mobile-layout .preview-empty { padding: 0; border: 0; }
+.mobile-layout .preview-empty h3 { margin: 0; font-size: 12px; color: #b8cce5; }
+.mobile-layout .start-card h2, .mobile-layout .result-card h2 { font-size: 22px; margin: 2px 0 5px; }
+.mobile-layout .start-card .eyebrow, .mobile-layout .result-card .eyebrow { font-size: 11px; }
+.mobile-layout .start-card > p:not(.eyebrow), .mobile-layout .result-card > p:not(.eyebrow) { font-size: 12px; }
+.mobile-layout .start-card .primary, .mobile-layout .result-card .primary { margin-top: 8px; }
+.mobile-layout .party-result { font-size: 12px; margin-top: 3px; }
+.mobile-layout .combat-history { margin-top: 8px; }
+.mobile-layout footer { display: block; margin-top: 8px; }
+.mobile-layout footer span { display: block; }
+@media (min-width: 360px) and (max-width: 600px) {
+  .mobile-layout #beat-status { display: flex; gap: 8px; align-items: center; }
+  .mobile-layout .counter-chip { font-size: 11px; margin: 0; }
+}
+@media (min-width: 601px) and (max-width: 960px) and (max-height: 540px) {
+  .mobile-layout .masthead { padding-top: max(4px, env(safe-area-inset-top)); padding-bottom: 0; }
+  .mobile-layout main { padding-top: 2px; }
+  .mobile-layout .brand small { display: none; }
+  .mobile-layout .encounter-heading { margin-bottom: 0; line-height: 1.2; }
+  .mobile-layout #beat-status { display: flex; gap: 8px; }
+  .mobile-layout .counter-chip { margin-top: 0; }
+  .mobile-layout .battle-layout { grid-template-columns: minmax(0, 0.95fr) minmax(0, 1fr); }
+  .mobile-layout #intent { grid-column: 1 / -1; }
+  .mobile-layout .arena { grid-column: 1; grid-row: 2; position: sticky; top: calc(90px + env(safe-area-inset-top)); }
+  .mobile-layout .crystal-info { grid-column: 1; grid-row: 3; }
+  .mobile-layout .decision-panel { grid-column: 2; grid-row: 2 / span 2; }
+  .mobile-layout .forecast-panel, .mobile-layout .field-notes { grid-column: 1 / -1; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation: none !important; transition: none !important; }

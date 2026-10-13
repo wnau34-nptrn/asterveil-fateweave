@@ -30,6 +30,7 @@ export class BattleScene extends Phaser.Scene {
     this.positions.clear();
     const { width: w, height: h } = this.scale;
     const compact = w < 600;
+    const short = h < 300;
     if (this.backdropSize !== `${w}:${h}`) {
       this.backdrop?.destroy();
       this.backdrop = drawRiftBackdrop(this, w, h);
@@ -37,24 +38,24 @@ export class BattleScene extends Phaser.Scene {
     }
     const bg = this.add.graphics(); this.layer.add(bg);
     const platform = (x: number, y: number, rx: number) => {
-      bg.fillStyle(palette.stone); bg.fillEllipse(x, y + 15, rx * 2, 42);
-      bg.fillTriangle(x - rx + 8, y + 16, x + rx - 8, y + 16, x - 12, y + 62);
+      bg.fillStyle(palette.stone); bg.fillEllipse(x, y + 15, rx * 2, short ? 24 : 42);
+      bg.fillTriangle(x - rx + 8, y + 16, x + rx - 8, y + 16, x - 12, y + (short ? 34 : 62));
       bg.fillStyle(palette.grass); bg.fillEllipse(x, y + 7, rx * 2, 25);
       bg.lineStyle(1, palette.cyan, 0.25); bg.strokeEllipse(x, y + 7, rx * 2, 25);
       bg.lineStyle(1, palette.gold, 0.4); bg.strokeEllipse(x, y + 9, rx * 2 - 6, 22);
     };
-    const hx = compact ? 66 : w * 0.23; const ex = compact ? w - 66 : w * 0.78;
+    const hx = compact ? Math.min(66, w * 0.19) : w * 0.23; const ex = compact ? w - hx : w * 0.78;
     this.encounter.heroes.forEach((hero, i) => {
-      const y = compact ? 67 + i * 94 : 98 + i * 100;
+      const y = short ? 38 + i * (h - 78) / 2 : compact ? 67 + i * 94 : 98 + i * 100;
       platform(hx, y + 20, compact ? 48 : 100);
       this.actor(hero.id, actorName(hero.id, this.encounter), hx, y, hero.color, this.view!.state.heroes[i]!.hp, hero.maxHp, false, compact);
     });
     this.encounter.enemies.forEach((enemy, i) => {
-      const y = compact ? 105 + i * 135 : 140 + i * 135;
+      const y = short ? 50 + i * (h - 124) : compact ? 105 + i * 135 : 140 + i * 135;
       platform(ex, y + 25, compact ? 51 : 112);
       this.actor(enemy.id, actorName(enemy.id, this.encounter), ex, y, enemy.color, this.view!.state.enemies[i]!.hp, enemy.maxHp, true, compact);
     });
-    const cx = w / 2; const cy = compact ? 154 : h * 0.48;
+    const cx = w / 2; const cy = short ? h * 0.47 : compact ? 154 : h * 0.48;
     this.positions.set(this.encounter.crystal.id, { x: cx, y: cy });
     platform(cx, cy + 40, compact ? 33 : 50);
     const crystal = this.add.graphics(); this.layer.add(crystal);
@@ -88,6 +89,7 @@ export class BattleScene extends Phaser.Scene {
     const body = this.add.container(x, y); this.layer!.add(body);
     if (hp <= 0) body.setAlpha(0.28);
     const g = this.add.graphics(); body.add(g);
+    const short = this.scale.height < 300;
     const selected = this.view!.heroId === id || this.view!.targetId === id;
     if (selected && hp > 0) { g.lineStyle(2, palette.gold); g.strokeEllipse(0, 25, 68, 22); }
     // Chibi silhouette: large head, small body, distinct equipment.
@@ -127,19 +129,20 @@ export class BattleScene extends Phaser.Scene {
       g.fillStyle(palette.corruption, 0.5);
       g.fillTriangle(-15, -3, -34, -13, -28, 18);
       g.fillTriangle(15, -3, 34, -13, 28, 18);
-      g.setScale(1.2);
+      g.setScale(short ? 0.94 : 1.2);
     }
-    const label = this.add.text(0, 40, name, { fontFamily: thaiFont, fontSize: compact ? '12px' : '14px', color: '#f0f5ff', stroke: '#101c36', strokeThickness: 3 }).setOrigin(0.5);
+    if (short && id !== 'brute') g.setScale(0.78);
+    const label = this.add.text(0, short ? 26 : 40, name, { fontFamily: thaiFont, fontSize: compact ? '12px' : '14px', color: '#f0f5ff', stroke: '#101c36', strokeThickness: 3 }).setOrigin(0.5);
     // Hero HP sits beside the silhouette so the next hero cannot cover it.
-    const hpX = enemy ? 0 : compact ? 57 : 76;
-    const hpY = enemy ? 69 : 7;
-    const barY = enemy ? 53 : 20;
+    const hpX = enemy ? 0 : short ? 52 : compact ? 57 : 76;
+    const hpY = enemy ? short ? 45 : 69 : 7;
+    const barY = enemy ? short ? 37 : 53 : 20;
     const barWidth = enemy ? 70 : 52;
     const bar = this.add.graphics(); bar.fillStyle(0x101c36); bar.fillRoundedRect(hpX - barWidth / 2, barY, barWidth, 5, 2);
     bar.fillStyle(color); bar.fillRoundedRect(hpX - barWidth / 2, barY, barWidth * hp / maxHp, 5, 2);
     const hpLabel = this.add.text(hpX, hpY, `${hp} / ${maxHp}`, { fontFamily: thaiFont, fontSize: '10px', color: '#d4e6f7', stroke: '#101c36', strokeThickness: 3 }).setOrigin(0.5);
     body.add([label, bar, hpLabel]);
-    const hit = this.add.zone(0, 0, 78, 100).setInteractive({ useHandCursor: true });
+    const hit = this.add.zone(0, 0, 78, short ? 64 : 100).setInteractive({ useHandCursor: true });
     hit.on('pointerdown', () => this.choose(id)); body.add(hit);
     if (this.view!.state.intent?.sourceId === id && hp > 0) {
       const warning = this.add.text(35, -38, '◆', { fontFamily: thaiFont, fontSize: '15px', color: '#fdbdcf' }).setOrigin(0.5);
