@@ -1,0 +1,22 @@
+/* Import after tokens.css. Effects are opt-in visual layers, never game-state timers. */
+.lv-hop{animation:veil-hop var(--hop-ms) var(--ease-out);transform-origin:50% 90%}
+.lv-step-hint{animation:veil-hint var(--hint-ms) var(--ease-soft) infinite}
+.lv-danger-rise{animation:danger-rise var(--danger-rise-ms) var(--ease-out) 1;transform-origin:left center}
+.lv-critical-hp{animation:critical-hp var(--critical-ms) var(--ease-soft) infinite}
+.lv-grass{animation:grass-sway var(--grass-ms) var(--ease-soft) infinite;transform-origin:50% 100%}
+.lv-water{animation:water-shimmer var(--water-ms) var(--ease-soft) infinite}
+.lv-rift{animation:rift-pulse var(--rift-ms) var(--ease-soft) infinite}
+.lv-mote{animation:veil-mote var(--motes-ms) linear infinite;pointer-events:none}
+.lv-step-dust{animation-fill-mode:forwards;background-repeat:no-repeat;width:var(--tile-size,48px);height:var(--tile-size,48px);background-image:url(/assets/world/step_dust.webp);background-size:400% 100%;animation:dust-frames var(--hop-ms) steps(4) 1 forwards;pointer-events:none}
+@keyframes dust-frames{from{opacity:1}to{background-position:133.333% 0;opacity:0}}
+.lv-heal-sparkle{position:absolute;left:var(--spark-x,50%);top:var(--spark-y,50%);width:6px;height:6px;background:var(--hp-mint);clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%);animation:camp-sparkle var(--camp-ms) var(--ease-out) 1;pointer-events:none}
+.lv-encounter-flash{position:absolute;inset:0;background:var(--veil-cyan);animation:encounter-flash var(--flash-ms) var(--ease-out) 1;pointer-events:none}
+.lv-veil-shatter{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.lv-veil-shatter>i{position:absolute;width:12%;height:24%;left:var(--shard-left);top:var(--shard-top);background:linear-gradient(130deg,#bdf3ff80,#9454d660);clip-path:polygon(10% 5%,90% 25%,50% 95%);animation:veil-shard calc(var(--veil-ms) - var(--shard-delay-ms)) var(--ease-out) var(--shard-delay-ms) 1 both}
+.lv-boss-reveal{animation:boss-reveal var(--boss-ms) var(--ease-out) 1}
+.lv-gate-open{animation:gate-open var(--gate-ms) var(--ease-out) 1}
+.lv-sheet{animation:sheet-in var(--sheet-ms) var(--ease-out) 1}
+@media(prefers-reduced-motion:reduce){
+ .lv-hop,.lv-step-hint,.lv-danger-rise,.lv-critical-hp,.lv-grass,.lv-water,.lv-rift,.lv-mote,.lv-step-dust,.lv-heal-sparkle,.lv-encounter-flash,.lv-veil-shatter>i,.lv-boss-reveal,.lv-gate-open,.lv-sheet{animation:none!important;transform:none}
+ .lv-step-dust,.lv-heal-sparkle,.lv-encounter-flash,.lv-veil-shatter,.lv-mote{display:none}
+}

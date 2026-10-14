@@ -5,6 +5,10 @@ import { BattleScene } from './game/scenes/BattleScene';
 import { BattleUI } from './ui/battle-ui';
 import { GameShell } from './ui/game-shell';
 import './ui/styles.css';
+import './ui/tokens.css';
+import './ui/effects.css';
+import './ui/world.css';
+import './ui/battle-skin.css';
 
 const app = document.querySelector<HTMLElement>('#app')!;
 app.innerHTML = '<section id="title-view" class="view title-view"></section><section id="world-view" class="view world-view" hidden></section><section id="battle-view" class="view battle-view view-off"></section>';
@@ -24,6 +28,9 @@ const game = new Phaser.Game({
   render: { antialias: true, roundPixels: true },
 });
 const shell = new GameShell(app, chapterOne, encounterById, ui, views);
+// Web fonts and DOM strips can resize the arena without a window resize; re-measure the canvas.
+new ResizeObserver(() => scene.refreshLayout()).observe(document.querySelector('#game')!);
+void document.fonts?.ready.then(() => scene.refreshLayout());
 // Pause the battle renderer while exploring; resume and re-measure on entry.
 shell.setBattleVisibilityListener(visible => {
   battleVisible = visible;

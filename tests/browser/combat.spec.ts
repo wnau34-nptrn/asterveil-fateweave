@@ -155,13 +155,13 @@ for(const [index,route]of routes.entries()){
   expect(issues).toEqual([]);await context.close();
  });
 }
-for(const viewport of [{width:320,height:568},{width:390,height:640},{width:390,height:844},{width:600,height:800},{width:768,height:1024},{width:844,height:390},{width:1024,height:768},{width:1280,height:720},{width:1366,height:640},{width:1366,height:768},{width:1920,height:1080}]){
+for(const viewport of [{width:320,height:568},{width:360,height:640},{width:375,height:812},{width:390,height:844},{width:414,height:896},{width:430,height:932},{width:844,height:390},{width:768,height:1024},{width:1024,height:768},{width:1366,height:768},{width:1920,height:1080}]){
  test(`viewport ${viewport.width}x${viewport.height}: timeline, popup and controls fit without scroll`,async({browser},info)=>{
   const context=await browser.newContext({viewport,hasTouch:viewport.width<900,reducedMotion:'reduce'}),page=await context.newPage(),issues=await start(page);
   const fits=async(actions=['mark','execute'])=>{
    expect(await page.evaluate(()=>({x:scrollX,y:scrollY,overflow:document.documentElement.scrollHeight>innerHeight}))).toEqual({x:0,y:0,overflow:false});
    for(const s of ['#battle-info','#action-attack',...actions.map(a=>'#action-'+a)])await reachable(page,s);
-   await expect.poll(()=>page.locator('#game canvas').evaluate(el=>{const r=el.getBoundingClientRect(),a=el.parentElement!.parentElement!.getBoundingClientRect();return r.height>=120&&r.left>=a.left&&r.right<=a.right&&r.top>=a.top&&r.bottom<=a.bottom;})).toBe(true);
+   await expect.poll(()=>page.locator('#game canvas').evaluate(el=>{const r=el.getBoundingClientRect(),a=el.parentElement!.parentElement!.getBoundingClientRect();return r.height>=120&&r.left>=a.left-1&&r.right<=a.right+1&&r.top>=a.top-1&&r.bottom<=a.bottom+1;/* canvas backing size is whole pixels; arena may be fractional */})).toBe(true);
    await expect(page.locator('#turn-order')).toBeVisible();expect(await page.locator('.turn-slot:visible').count()).toBe(viewport.width<=600||viewport.height<=700?4:6);
    expect(await page.locator('#turn-order').evaluate(el=>{const r=el.getBoundingClientRect();return r.left>=0&&r.top>=0&&r.right<=innerWidth&&r.bottom<=innerHeight&&el.scrollWidth<=el.clientWidth;})).toBe(true);
   };
@@ -195,8 +195,10 @@ test('a fallen upcoming hero is skipped on commit, reload and continued input',a
 test('denied storage keeps the battle playable in the tab and says progress is not saved',async({browser})=>{
  const context=await browser.newContext({viewport:{width:320,height:568},hasTouch:true,reducedMotion:'reduce'});await context.addInitScript(()=>Object.defineProperty(window,'localStorage',{get:()=>{throw new Error('Denied');}}));
  const page=await context.newPage();const issues:string[]=[];page.on('pageerror',e=>issues.push(e.message));await page.goto('./');
- await expect(page.locator('#title-view')).toContainText('ไม่อนุญาตให้บันทึก');await page.locator('#new-game').click();await expect(page.locator('#world-save')).toContainText('บันทึกบนเครื่องนี้ไม่ได้');
- await page.locator('#move-left').click();await expect(page.locator('#world-view')).toBeVisible();expect(issues).toEqual([]);await context.close();
+ await expect(page.locator('#title-view')).toContainText('ไม่อนุญาตให้บันทึก');await page.locator('#new-game').click();await page.locator('#world-info-button').click();await expect(page.locator('#world-save')).toContainText('บันทึกบนเครื่องนี้ไม่ได้');await page.keyboard.press('Escape');
+ await page.locator('#move-left').click();
+ // A first step can legitimately roll the tutorial encounter; either way the move is kept in memory.
+ await expect(page.locator('#world-view:not([hidden]), #battle-view:not(.view-off)').first()).toBeVisible();expect(issues).toEqual([]);await context.close();
 });
 for(const invalid of ['old-content','foreign-owner','malformed','wrong-map']){
  test(`save ${invalid}: discarded safely and a new expedition starts`,async({page})=>{

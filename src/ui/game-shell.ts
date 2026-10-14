@@ -4,7 +4,7 @@ import type { Direction, ExpeditionState, MapDefinition, WorldEvent } from '../c
 import { finishBattle, move, newExpedition, recordBattle, rest, type EncounterLookup } from '../core/world/world';
 import { browserStorage } from '../platform/browser-storage';
 import type { BattleUI } from './battle-ui';
-import { WorldUI } from './world-ui';
+import { WorldUI, type WorldBanner } from './world-ui';
 
 // Owns the authoritative expedition state and switches between title, world and
 // battle views. Every world or battle commit is saved before anything animates.
@@ -14,7 +14,8 @@ export class GameShell {
   private saved = true;
   private message = '';
   private locked = false;
-  private banner: { eyebrow: string; title: string; detail: string } | undefined;
+  private banner: WorldBanner | undefined;
+  private effect: 'rest' | undefined;
   private world: WorldUI;
   private onBattleVisibility: (visible: boolean) => void = () => {};
   private readonly reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -49,10 +50,10 @@ export class GameShell {
   }
   private showTitle(): void {
     const s = this.state;
-    this.views.title.innerHTML = `<div class="title-card"><p class="eyebrow">บันทึกการเดินทาง</p><h1>Asterveil · Fateweave</h1><p class="title-copy">นำทีมสี่คนข้ามชายแดนม่านเวล เดินทีละช่อง อ่านแผนศัตรู และไปให้ถึงประตูรอยแยก</p>
-      ${s ? `<p class="title-save">${s.completed ? 'การเดินทางนี้สำเร็จแล้ว' : `เดินแล้ว ${s.steps} ก้าว · ชนะ ${s.wins} ศึก${s.battle ? ' · ค้างอยู่ในศึก' : ''}`}</p><button id="continue" data-title="continue" class="primary">เล่นต่อ →</button>` : ''}
-      <button id="new-game" data-title="new" class="${s ? 'quiet' : 'primary'}">เริ่มการเดินทางใหม่</button>
-      ${this.storage ? '' : '<p class="title-save">เบราว์เซอร์นี้ไม่อนุญาตให้บันทึก เล่นได้แต่จะไม่จำความคืบหน้า</p>'}</div>`;
+    this.views.title.innerHTML = `<div class="title-card"><h1 class="title-logo"><img src="${import.meta.env.BASE_URL}assets/title/logo.svg" alt="Asterveil · Fateweave" width="700" height="224"></h1><p class="title-copy">ข้ามม่านเวล · ถักทอโชคชะตา</p>
+      <div class="title-actions">${s ? `<p class="title-save">${s.completed ? 'การเดินทางนี้สำเร็จแล้ว' : `เดินแล้ว ${s.steps} ก้าว · ชนะ ${s.wins} ศึก${s.battle ? ' · ค้างอยู่ในศึก' : ''}`}</p><button id="continue" data-title="continue" class="primary">เล่นต่อ →</button>` : ''}
+      <button id="new-game" data-title="new" class="${s ? 'secondary' : 'primary'}">เริ่มการเดินทางใหม่</button>
+      ${this.storage ? '' : '<p class="title-warning">เบราว์เซอร์นี้ไม่อนุญาตให้บันทึก เล่นได้แต่จะไม่จำความคืบหน้า</p>'}</div><p class="title-footer">ชายแดนม่านเวล</p></div>`;
     this.show('title');
     this.views.title.querySelector<HTMLElement>(s ? '#continue' : '#new-game')?.focus({ preventScroll: true });
   }
@@ -61,7 +62,7 @@ export class GameShell {
     // Seed only chooses future rolls; rules never read the clock.
     this.state = newExpedition(this.map, this.lookup, (Date.now() ^ Math.floor(Math.random() * 0xffffffff)) >>> 0);
     this.persist(); this.banner = undefined; this.locked = false;
-    this.message = 'เริ่มเดินทางจากค่ายชายแดน · ใช้ลูกศรหรือแตะช่องติดกันเพื่อเดิน';
+    this.message = 'แตะช่องที่ไฮไลต์หรือใช้ลูกศรเพื่อเดิน';
     this.renderWorld();
   }
   private resume(): void {
@@ -73,11 +74,12 @@ export class GameShell {
   }
   private renderWorld(): void {
     this.show('world');
-    this.world.render({ state: this.state!, message: this.message, locked: this.locked, saved: this.saved && !!this.storage, banner: this.banner });
+    this.world.render({ state: this.state!, message: this.message, locked: this.locked, saved: this.saved && !!this.storage, banner: this.banner, effect: this.effect });
+    this.effect = undefined;
   }
   private completedBanner() {
     const s = this.state!;
-    return { eyebrow: 'สำเร็จการเดินทาง', title: 'ประตูรอยแยกปิดลงแล้ว', detail: `เดิน ${s.steps} ก้าว · ชนะ ${s.wins} ศึก · แพ้ ${s.defeats} ครั้ง` };
+    return { kind: 'complete' as const, eyebrow: 'สำเร็จการเดินทาง', title: 'ประตูรอยแยกปิดลงแล้ว', detail: `เดิน ${s.steps} ก้าว · ชนะ ${s.wins} ศึก · แพ้ ${s.defeats} ครั้ง` };
   }
 
   private move(dir: Direction): void {
@@ -90,9 +92,11 @@ export class GameShell {
     if (result.event.type === 'encounter') {
       const data = this.lookup(result.event.encounterId)!;
       this.locked = true;
-      this.banner = { eyebrow: result.event.kind === 'boss' ? 'บอส' : result.event.kind === 'tutorial' ? 'ศึกแรก' : 'พบศัตรู!', title: data.name, detail: data.enemies.map(e => e.displayName ?? e.name).join(' · ') };
+      const kind = result.event.kind === 'random' ? 'encounter' : result.event.kind;
+      this.banner = { kind, eyebrow: kind === 'boss' ? 'บอส · รอยแยกกำลังตื่นขึ้น' : kind === 'tutorial' ? 'ศึกแรก' : 'พบศัตรู!', title: data.name, detail: data.enemies.map(e => e.displayName ?? e.name).join(' · ') };
       this.renderWorld();
-      setTimeout(() => { this.banner = undefined; this.openBattle(); }, this.reducedMotion.matches ? 250 : 750);
+      // Veil-shatter presentation (720 ms, 100 ms crossfade under reduced motion); the battle is already saved.
+      setTimeout(() => { this.banner = undefined; this.openBattle(); }, this.reducedMotion.matches ? 100 : 720);
       return;
     }
     this.renderWorld();
@@ -103,6 +107,7 @@ export class GameShell {
     if (result.event.type !== 'rested') return;
     this.state = result.state; this.persist();
     this.message = 'พักที่แคมป์แล้ว · ทุกคนเลือดเต็ม ชุบคนที่ล้ม และบันทึกแคมป์นี้เป็นจุดกลับเมื่อแพ้';
+    this.effect = 'rest';
     this.renderWorld();
   }
   private describe(event: WorldEvent): string {

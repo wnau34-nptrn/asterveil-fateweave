@@ -2,73 +2,101 @@ import type { HeroDefinition } from '../core/battle/types';
 import type { Direction, ExpeditionState, MapDefinition, Point } from '../core/world/types';
 import { canRest, encounterChance, isRevealed, tileAt, zoneOf } from '../core/world/world';
 import { actorFrames, artUrl } from '../game/visuals/assets';
+import { SOURCE_TILE, decorAt, floorFrame, fogLayers, landmarkAt, tileSizeFor, tileset, worldArtUrl, type Landmark } from '../game/visuals/world-art';
 import { heroText } from './th';
 import { icon } from './icons';
 
 export interface WorldHost { move(dir: Direction): void; rest(): void; newExpedition(): void }
-export interface WorldView { state: ExpeditionState; message: string; locked: boolean; saved: boolean; banner?: { eyebrow: string; title: string; detail: string } }
+export interface WorldBanner { kind: 'encounter' | 'boss' | 'tutorial' | 'complete'; eyebrow: string; title: string; detail: string }
+export interface WorldView { state: ExpeditionState; message: string; locked: boolean; saved: boolean; banner?: WorldBanner; effect?: 'rest' }
 
 const keyDirections: Record<string, Direction> = { ArrowUp: 'up', ArrowDown: 'down', ArrowLeft: 'left', ArrowRight: 'right', w: 'up', s: 'down', a: 'left', d: 'right', W: 'up', S: 'down', A: 'left', D: 'right' };
 const dirLabel: Record<Direction, string> = { up: 'เดินขึ้น', down: 'เดินลง', left: 'เดินซ้าย', right: 'เดินขวา' };
+const offsets: Record<Direction, Point> = { up: { x: 0, y: -1 }, down: { x: 0, y: 1 }, left: { x: -1, y: 0 }, right: { x: 1, y: 0 } };
+const shards: readonly [string, string, string, string, string][] = [
+  ['8%', '14%', '-60px', '-35px', '-18deg'], ['30%', '10%', '-25px', '-55px', '24deg'], ['55%', '12%', '25px', '-55px', '-22deg'], ['78%', '18%', '60px', '-30px', '30deg'],
+  ['10%', '66%', '-60px', '40px', '22deg'], ['32%', '70%', '-25px', '55px', '-26deg'], ['58%', '68%', '25px', '55px', '18deg'], ['80%', '60%', '60px', '40px', '-28deg'],
+];
 
 export function portrait(id: string): string {
   const frame = actorFrames[id]!;
   return `<span class="portrait" data-actor="${id}" style="--portrait-x:${frame % 2};--portrait-y:${Math.floor(frame / 2)}" aria-hidden="true"><img src="${artUrl('portraits')}" alt="" width="1024" height="1536" draggable="false"></span>`;
 }
+const goals = (s: ExpeditionState) => [
+  { done: s.tutorialDone, label: 'ผ่านการปะทะครั้งแรก' }, { done: !!s.camp, label: 'พักที่แคมป์' },
+  { done: s.bossDefeated, label: 'ชนะผู้คุมรอยแยก' }, { done: s.completed, label: 'ไปถึงประตูรอยแยก' },
+];
 
-// DOM renderer for the pure expedition state. It owns no rules: every input is
-// forwarded to the host, which commits and saves before the view updates.
+// Full-screen DOM renderer for the pure expedition state (Luminous Veil R2).
+// It owns no rules: every input is forwarded to the host, which commits and
+// saves before the view updates. Animations only decorate committed state.
 export class WorldUI {
   private view: WorldView | undefined;
+  private previous: { position: Point; chance: number; revealed: string; boss: boolean; done: boolean } | undefined;
   private lastKey = 0;
   private confirmNew = false;
+  private tile = 48;
   private readonly width: number;
+  private readonly reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
   constructor(private readonly root: HTMLElement, private readonly map: MapDefinition, private readonly heroes: readonly HeroDefinition[], private readonly host: WorldHost) {
     this.width = map.rows[0]!.length;
     root.innerHTML = `
-      <header class="world-bar">
-        <div class="world-heading"><p class="eyebrow">${map.name}</p><h1 id="zone-name"></h1></div>
-        <span id="danger-chip" class="danger-chip" role="status"></span>
-        <button id="world-info-button" data-world="info" class="quiet" aria-haspopup="dialog" aria-controls="world-info" aria-label="ข้อมูลการเดินทางและวิธีเล่น">ⓘ</button>
-      </header>
-      <div class="world-main">
-        <section class="map-viewport" id="map-viewport" aria-label="แผนที่ แตะช่องติดกันหรือใช้ปุ่มลูกศรเพื่อเดิน">
-          <div class="map-grid" id="map-grid" style="--cols:${this.width};--rows:${map.rows.length}" aria-hidden="true">${map.rows.map((row, y) => [...row].map((_, x) => this.cell({ x, y })).join('')).join('')}<div class="party-token" id="party-token">${portrait('guardian')}</div></div>
-          <div id="world-banner" class="world-banner" role="status" hidden></div>
-        </section>
-        <aside class="world-side" aria-label="ทีมและการควบคุม">
-          <div id="world-party" class="world-party" aria-label="เลือดทีม"></div>
-          <section id="world-goal" class="world-goal" aria-label="เป้าหมายการเดินทาง"></section>
-          <div class="world-controls">
-            <p id="world-message" class="world-message" aria-live="polite"></p>
-            <div class="dpad" role="group" aria-label="เดินทีละช่อง">
-              ${(['up', 'left', 'right', 'down'] as Direction[]).map(d => `<button id="move-${d}" data-world="move" data-dir="${d}" class="dpad-${d}" aria-label="${dirLabel[d]}">${icon(d)}</button>`).join('')}
-              <button id="rest" data-world="rest" class="dpad-center" aria-label="พักที่แคมป์ ฟื้นเลือดและชุบทุกคน">${icon('camp')}<small>พัก</small></button>
-            </div>
+      <section class="map-view" id="map-viewport" aria-label="แผนที่ ใช้ปุ่มลูกศรหรือแตะช่องที่ไฮไลต์เพื่อเดินทีละช่อง">
+        <div class="map-grid" id="map-grid" aria-hidden="true" style="--cols:${this.width};--rows:${map.rows.length}">
+          <div class="floor-layer">${this.floorCells()}</div>
+          <div class="sprite-layer" id="sprite-layer">${this.staticSprites()}<div class="party-token" id="party-token"><span class="token-portrait">${portrait('guardian')}</span></div></div>
+          <div class="fog-layer" id="fog-layer"></div>
+          <div class="hint-layer" id="hint-layer"></div>
+        </div>
+        <div class="map-vignette"></div>
+        <div class="world-motes" aria-hidden="true">${Array.from({ length: 6 }, (_, i) => `<i style="left:${12 + i * 15}%;top:${22 + (i * 37) % 60}%;animation-delay:${i * -700}ms"></i>`).join('')}</div>
+        <div class="world-fx" id="world-fx" aria-hidden="true"></div>
+      </section>
+      <div class="world-hud">
+        <div class="hud-location glass-capsule"><span class="location-mark">${icon('map')}</span><div><p class="eyebrow">${map.name}</p><h1 id="zone-name"></h1></div></div>
+        <div class="hud-top-right">
+          <div id="danger-chip" class="hud-danger glass-capsule" role="status" aria-live="polite"></div>
+          <button id="world-info-button" data-world="info" class="hud-info round-glass" aria-haspopup="dialog" aria-controls="world-info" aria-label="ข้อมูลการเดินทางและวิธีเล่น">${icon('info')}</button>
+        </div>
+        <div class="hud-party" id="world-party" aria-label="เลือดทีม"></div>
+        <button id="objective-button" data-world="goals" class="hud-objective glass-capsule" aria-haspopup="dialog" aria-controls="world-goals"></button>
+        <p id="world-message" class="hud-event glass-capsule" role="status" aria-live="polite"></p>
+        <div class="hud-movement">
+          <div class="ghost-dpad" role="group" aria-label="เดินทีละช่อง">
+            ${(['up', 'left', 'right', 'down'] as Direction[]).map(d => `<button id="move-${d}" data-world="move" data-dir="${d}" class="dpad-${d}" aria-label="${dirLabel[d]}">${icon(d)}</button>`).join('')}
+            <span class="dpad-centre" aria-hidden="true">${icon('footprints')}</span>
           </div>
-          <p id="world-save" class="world-save"></p>
-        </aside>
+          <span class="movement-caption">เดินทีละ 1 ช่อง</span>
+        </div>
+        <div class="hud-action">
+          <button id="rest" data-world="rest" class="interact-button"></button>
+          <span id="action-caption" class="context-caption"></span>
+        </div>
       </div>
-      <dialog id="world-info" aria-labelledby="world-info-title"><div class="info-header"><h2 id="world-info-title">การเดินทาง</h2><button data-world="info-close" class="quiet" aria-label="ปิดข้อมูล">✕</button></div><div class="info-content" id="world-info-content"></div></dialog>`;
+      <div id="world-banner" class="world-banner" role="status" hidden></div>
+      <dialog id="world-goals" class="world-dialog" aria-labelledby="world-goals-title"><div class="info-header"><h2 id="world-goals-title">เป้าหมายการเดินทาง</h2><button data-world="goals-close" class="quiet" aria-label="ปิดเป้าหมาย">${icon('close')}</button></div><div class="info-content" id="world-goals-content"></div></dialog>
+      <dialog id="world-info" class="world-dialog" aria-labelledby="world-info-title"><div class="info-header"><h2 id="world-info-title">ข้อมูลการเดินทาง</h2><button data-world="info-close" class="quiet" aria-label="ปิดข้อมูล">${icon('close')}</button></div><div class="info-content" id="world-info-content"></div></dialog>`;
     root.addEventListener('click', e => {
       const el = e.target as HTMLElement;
       const button = el.closest<HTMLButtonElement>('button[data-world]');
       if (button && !button.disabled) {
+        const dialog = (id: string) => root.querySelector<HTMLDialogElement>(id)!;
         switch (button.dataset.world) {
           case 'move': this.input(button.dataset.dir as Direction); break;
           case 'rest': if (!this.view?.locked) this.host.rest(); break;
-          case 'info': this.renderInfo(); root.querySelector<HTMLDialogElement>('#world-info')!.showModal(); break;
-          case 'info-close': root.querySelector<HTMLDialogElement>('#world-info')!.close(); break;
+          case 'info': this.confirmNew = false; this.renderInfo(); dialog('#world-info').showModal(); break;
+          case 'info-close': dialog('#world-info').close(); break;
+          case 'goals': this.renderGoals(); dialog('#world-goals').showModal(); break;
+          case 'goals-close': dialog('#world-goals').close(); break;
+          case 'new': this.confirmNew = true; this.renderInfo(); root.querySelector<HTMLElement>('#confirm-new')?.focus(); break;
+          case 'cancel-new': this.confirmNew = false; this.renderInfo(); root.querySelector<HTMLElement>('#new-expedition')?.focus(); break;
+          case 'confirm-new': this.confirmNew = false; dialog('#world-info').close(); this.host.newExpedition(); break;
           case 'new-now': this.host.newExpedition(); break;
-          case 'new': if (this.confirmNew) { this.confirmNew = false; root.querySelector<HTMLDialogElement>('#world-info')!.close(); this.host.newExpedition(); } else { this.confirmNew = true; this.renderInfo(); root.querySelector<HTMLElement>('#new-expedition')?.focus(); } break;
         }
         return;
       }
-      const tile = el.closest<HTMLElement>('.tile.adjacent');
-      if (tile && this.view) {
-        const x = Number(tile.dataset.x), y = Number(tile.dataset.y); const p = this.view.state.position;
-        this.input(x > p.x ? 'right' : x < p.x ? 'left' : y > p.y ? 'down' : 'up');
-      }
+      const hint = el.closest<HTMLElement>('.step-hint');
+      if (hint?.dataset.dir) this.input(hint.dataset.dir as Direction);
     });
     root.querySelector('#world-info')!.addEventListener('close', () => { this.confirmNew = false; });
     document.addEventListener('keydown', e => {
@@ -84,74 +112,181 @@ export class WorldUI {
 
   private input(dir: Direction): void { if (this.view && !this.view.locked && !this.view.state.completed) this.host.move(dir); }
 
-  private cell(p: Point): string {
-    const tile = tileAt(this.map, p)!;
-    const content = tile.kind === 'camp' ? icon('camp') : tile.kind === 'goal' ? icon('goal') : tile.kind === 'start' ? icon('flag') : tile.kind === 'boss' ? `<span class="boss-mark">${portrait('brute')}</span>` : '';
-    return `<div class="tile t-${tile.kind} z-${tile.zoneId || 'none'} fog" data-x="${p.x}" data-y="${p.y}">${content}</div>`;
+  private floorCells(): string {
+    let html = '';
+    for (let y = 0; y < this.map.rows.length; y++) for (let x = 0; x < this.width; x++) {
+      const frame = tileset[floorFrame(this.map, { x, y })]!;
+      html += `<div class="tile t-${tileAt(this.map, { x, y })!.kind}" style="--x:${x};--y:${y};--fx:${frame.x / SOURCE_TILE};--fy:${frame.y / SOURCE_TILE}"></div>`;
+    }
+    return html;
+  }
+  // Decor and landmarks are built once; visibility follows fog and variants follow flags.
+  private staticSprites(): string {
+    let html = '';
+    for (let y = 0; y < this.map.rows.length; y++) for (let x = 0; x < this.width; x++) {
+      const prop = decorAt(this.map, { x, y });
+      if (prop) html += `<span class="decor sprite" data-cell="${x},${y}" style="--x:${x};--y:${y};--fx:${prop.x / SOURCE_TILE};--fy:${prop.y / SOURCE_TILE};z-index:${y * 3 + 1}"></span>`;
+      const kind = tileAt(this.map, { x, y })!.kind;
+      if (['camp', 'start', 'goal', 'boss'].includes(kind)) html += `<span class="landmark sprite" data-cell="${x},${y}" data-kind="${kind}" style="--x:${x};--y:${y};z-index:${y * 3 + 1}">${kind === 'boss' ? '<span class="boss-unit"></span>' : ''}</span>`;
+    }
+    return html;
   }
 
   render(view: WorldView): void {
-    this.view = view; const s = view.state;
+    const s = view.state; const prev = this.previous;
+    this.view = view;
     const tile = tileAt(this.map, s.position)!; const zone = zoneOf(this.map, tile.zoneId);
     this.root.querySelector('#zone-name')!.textContent = tile.kind === 'camp' ? 'แคมป์พักแรม' : zone?.name ?? '';
-    const chance = encounterChance(s, this.map);
-    const chip = this.root.querySelector<HTMLElement>('#danger-chip')!;
-    chip.dataset.level = chance === 0 ? 'safe' : chance < 15 ? 'low' : chance < 30 ? 'mid' : 'high';
-    chip.innerHTML = chance === 0 ? `${icon('safe')}<span>พื้นที่ปลอดภัย</span>` : `${icon('danger')}<span>โอกาสพบศัตรู <b>${chance}%</b></span>`;
-    chip.setAttribute('aria-label', chance === 0 ? 'พื้นที่ปลอดภัย ไม่พบศัตรู' : `โอกาสพบศัตรูในก้าวถัดไปประมาณ ${chance} เปอร์เซ็นต์`);
-    const grid = this.root.querySelector<HTMLElement>('#map-grid')!;
-    grid.querySelectorAll<HTMLElement>('.tile').forEach(el => {
-      const p = { x: Number(el.dataset.x), y: Number(el.dataset.y) };
-      el.classList.toggle('fog', !isRevealed(s, this.map, p));
-      el.classList.toggle('adjacent', !view.locked && !s.completed && Math.abs(p.x - s.position.x) + Math.abs(p.y - s.position.y) === 1 && tileAt(this.map, p)!.kind !== 'wall');
-      if (el.classList.contains('t-boss')) el.classList.toggle('cleared', s.bossDefeated);
-    });
-    grid.querySelector<HTMLElement>('#party-token')!.style.setProperty('--x', String(s.position.x));
-    grid.querySelector<HTMLElement>('#party-token')!.style.setProperty('--y', String(s.position.y));
-    this.root.querySelector('#world-party')!.innerHTML = this.heroes.map(h => {
-      const hp = s.hp[h.id] ?? 0; const text = heroText[h.id]!;
-      return `<div class="world-hero ${hp <= 0 ? 'fallen' : ''}" id="world-hero-${h.id}">${portrait(h.id)}<span><b>${text.name}</b><small>${hp <= 0 ? 'ล้มแล้ว' : `HP ${hp}/${h.maxHp}`}</small><span class="hp-track"><span style="width:${hp / h.maxHp * 100}%"></span></span></span></div>`;
-    }).join('');
-    this.root.querySelector('#world-goal')!.innerHTML = `<h2>เป้าหมาย</h2><ul>
-      <li class="${s.tutorialDone ? 'done' : ''}">ผ่านการปะทะครั้งแรก</li>
-      <li class="${s.camp ? 'done' : ''}">พักที่แคมป์ ${icon('camp')}</li>
-      <li class="${s.bossDefeated ? 'done' : ''}">ชนะผู้คุมรอยแยก</li>
-      <li class="${s.completed ? 'done' : ''}">ไปถึงประตูรอยแยก ${icon('goal')}</li></ul>
-      <p>เดิน ${s.steps} ก้าว · ชนะ ${s.wins} · แพ้ ${s.defeats}</p>`;
-    const message = this.root.querySelector('#world-message')!;
+    this.root.dataset.zone = tile.kind === 'camp' ? 'camp' : tile.zoneId;
+    this.renderDanger(encounterChance(s, this.map), prev?.chance);
+    this.renderParty(s);
+    const done = goals(s).filter(g => g.done).length; const next = goals(s).find(g => !g.done);
+    this.root.querySelector('#objective-button')!.innerHTML = `<span class="objective-symbol">${icon('goal')}</span><span class="objective-text">${next ? next.label : 'สำเร็จการเดินทาง'}</span><span class="objective-count">${done}/4</span>${icon('right')}`;
+    this.root.querySelector('#objective-button')!.setAttribute('aria-label', `เป้าหมาย ${done} จาก 4 · ${next ? `ถัดไป ${next.label}` : 'สำเร็จแล้ว'} · เปิดรายการ`);
+    const message = this.root.querySelector<HTMLElement>('#world-message')!;
     if (message.textContent !== view.message) message.textContent = view.message;
+    message.hidden = !view.message;
+    message.classList.toggle('rest-feedback', view.effect === 'rest');
     for (const d of ['up', 'down', 'left', 'right'] as Direction[]) this.root.querySelector<HTMLButtonElement>(`#move-${d}`)!.disabled = view.locked || s.completed;
-    const restButton = this.root.querySelector<HTMLButtonElement>('#rest')!;
-    restButton.disabled = view.locked || !canRest(s, this.map);
-    restButton.classList.toggle('ready', !restButton.disabled);
-    this.root.querySelector('#world-save')!.textContent = view.saved ? 'บันทึกอัตโนมัติบนเครื่องนี้' : 'เล่นได้ แต่บันทึกบนเครื่องนี้ไม่ได้';
-    const banner = this.root.querySelector<HTMLElement>('#world-banner')!;
-    banner.hidden = !view.banner;
-    banner.innerHTML = view.banner ? `<div class="banner-card"><p class="eyebrow">${view.banner.eyebrow}</p><h2>${view.banner.title}</h2><p>${view.banner.detail}</p>${s.completed ? '<button data-world="new-now" id="new-expedition-banner" class="primary">เริ่มการเดินทางใหม่</button>' : ''}</div>` : '';
+    const available = !view.locked && canRest(s, this.map);
+    const action = this.root.querySelector<HTMLButtonElement>('#rest')!;
+    action.disabled = !available; action.classList.toggle('available', available);
+    action.innerHTML = `${icon('talk')}<span>${available ? 'พัก' : 'โต้ตอบ'}</span>${available ? '<i class="context-dot"></i>' : ''}`;
+    action.setAttribute('aria-label', available ? 'พักที่แคมป์ ฟื้นเลือดเต็มและชุบทุกคน' : 'โต้ตอบ · ยังไม่มีจุดให้โต้ตอบ ยืนบนแคมป์เพื่อพัก');
+    this.root.querySelector('#action-caption')!.textContent = available ? 'ฟื้นเลือดและชุบทุกคน' : 'ยืนบนแคมป์เพื่อพัก';
+    if (!prev || prev.revealed !== s.revealed) this.renderFog(s);
+    this.renderSprites(s, prev);
+    this.renderHints(s, view.locked);
+    this.renderBanner(view);
+    if (view.effect === 'rest' && !this.reduced.matches) this.sparkle();
+    this.previous = { position: { ...s.position }, chance: encounterChance(s, this.map), revealed: s.revealed, boss: s.bossDefeated, done: s.completed };
     this.layout();
   }
 
-  // Camera: keep the party centred, clamped to the map edges.
+  private renderDanger(chance: number, before: number | undefined): void {
+    const chip = this.root.querySelector<HTMLElement>('#danger-chip')!;
+    const level = chance === 0 ? 'safe' : chance < 15 ? 'low' : chance < 30 ? 'mid' : 'high';
+    chip.dataset.level = level;
+    const fill = level === 'safe' ? 1 : Math.min(1, chance / 40);
+    chip.innerHTML = `<span class="danger-label">${icon(level === 'safe' ? 'safe' : 'danger')}<span>${level === 'safe' ? 'ปลอดภัย' : 'ก้าวถัดไป'}</span><strong>${chance}%</strong></span><span class="gauge"><span style="width:${fill * 100}%"></span></span>`;
+    chip.setAttribute('aria-label', level === 'safe' ? 'พื้นที่ปลอดภัย โอกาสพบศัตรู 0 เปอร์เซ็นต์' : `โอกาสพบศัตรูในก้าวถัดไป ${chance} เปอร์เซ็นต์`);
+    if (before !== undefined && chance > before && !this.reduced.matches) { chip.classList.remove('rise'); void chip.offsetWidth; chip.classList.add('rise'); }
+  }
+
+  private renderParty(s: ExpeditionState): void {
+    this.root.querySelector('#world-party')!.innerHTML = this.heroes.map(h => {
+      const hp = s.hp[h.id] ?? 0; const ratio = hp / h.maxHp; const text = heroText[h.id]!;
+      const state = hp <= 0 ? 'fallen' : ratio < .25 ? 'critical' : ratio < .6 ? 'hurt' : 'healthy';
+      return `<div class="world-hero ${state}" id="world-hero-${h.id}" aria-label="${text.name} ${hp <= 0 ? 'ล้มแล้ว' : `เลือด ${hp} จาก ${h.maxHp}`}">${portrait(h.id)}<span class="hero-copy"><b>${text.name}</b><small>${hp <= 0 ? 'ล้มแล้ว' : `${hp}/${h.maxHp}`}</small><span class="hp"><span style="width:${ratio * 100}%"></span></span></span></div>`;
+    }).join('');
+  }
+
+  private renderFog(s: ExpeditionState): void {
+    let html = '';
+    for (let y = 0; y < this.map.rows.length; y++) for (let x = 0; x < this.width; x++) {
+      const layers = fogLayers(this.map, s, { x, y });
+      if (layers.length) html += `<div class="fog-cell${layers[0] === 'fog_tile' ? ' opaque' : ''}" style="--x:${x};--y:${y};background-image:${layers.map(l => `url(${worldArtUrl(l)})`).join(',')}"></div>`;
+    }
+    this.root.querySelector('#fog-layer')!.innerHTML = html;
+    this.root.querySelectorAll<HTMLElement>('.sprite[data-cell]').forEach(el => {
+      const [x, y] = el.dataset.cell!.split(',').map(Number); el.hidden = !isRevealed(s, this.map, { x: x!, y: y! });
+    });
+  }
+
+  private renderSprites(s: ExpeditionState, prev: WorldUI['previous']): void {
+    this.root.querySelectorAll<HTMLElement>('.landmark').forEach(el => {
+      const [x, y] = el.dataset.cell!.split(',').map(Number);
+      const art = landmarkAt(this.map, s, { x: x!, y: y! }) as Landmark;
+      if (el.dataset.art === art) return;
+      const changed = !!el.dataset.art; el.dataset.art = art;
+      el.style.backgroundImage = `url(${worldArtUrl(art)})`;
+      el.classList.toggle('has-boss', art === 'boss_pedestal');
+      if (changed && !this.reduced.matches) { el.classList.remove('lv-gate-open'); void el.offsetWidth; el.classList.add('lv-gate-open'); }
+    });
+    const token = this.root.querySelector<HTMLElement>('#party-token')!;
+    token.style.setProperty('--x', String(s.position.x)); token.style.setProperty('--y', String(s.position.y));
+    token.style.zIndex = String(s.position.y * 3 + 2);
+    const moved = prev && (prev.position.x !== s.position.x || prev.position.y !== s.position.y);
+    const hop = moved && Math.abs(prev!.position.x - s.position.x) + Math.abs(prev!.position.y - s.position.y) === 1;
+    token.classList.toggle('instant', !!moved && !hop);
+    if (hop && !this.reduced.matches) {
+      token.classList.remove('lv-hop'); void token.offsetWidth; token.classList.add('lv-hop');
+      const dust = document.createElement('span');
+      dust.className = 'step-dust sprite'; dust.style.setProperty('--x', String(prev!.position.x)); dust.style.setProperty('--y', String(prev!.position.y));
+      dust.style.zIndex = String(prev!.position.y * 3 + 2);
+      dust.addEventListener('animationend', () => dust.remove());
+      this.root.querySelector('#sprite-layer')!.append(dust);
+    }
+  }
+
+  // Only legal neighbours get a hint; a boss tile is a legal step that starts its fight.
+  private renderHints(s: ExpeditionState, locked: boolean): void {
+    const layer = this.root.querySelector('#hint-layer')!;
+    if (locked || s.completed) { layer.innerHTML = ''; return; }
+    layer.innerHTML = (Object.entries(offsets) as [Direction, Point][]).map(([dir, o]) => {
+      const p = { x: s.position.x + o.x, y: s.position.y + o.y }; const t = tileAt(this.map, p);
+      if (!t || t.kind === 'wall') return '';
+      return `<span class="step-hint${t.kind === 'boss' && !s.bossDefeated ? ' boss' : ''}" data-dir="${dir}" style="--x:${p.x};--y:${p.y}"><i>${icon(dir)}</i></span>`;
+    }).join('');
+  }
+
+  private renderBanner(view: WorldView): void {
+    const banner = this.root.querySelector<HTMLElement>('#world-banner')!; const b = view.banner;
+    banner.hidden = !b; banner.dataset.kind = b?.kind ?? '';
+    if (!b) { banner.innerHTML = ''; return; }
+    const key = `${b.kind}:${b.title}`;
+    if (banner.dataset.key === key) return;
+    banner.dataset.key = key;
+    const transition = b.kind !== 'complete' && !this.reduced.matches;
+    const headIcon = b.kind === 'boss' ? 'boss' : b.kind === 'complete' ? 'star' : 'danger';
+    banner.innerHTML = `${transition ? `<div class="lv-encounter-flash"></div><div class="lv-veil-shatter">${shards.map(([l, t, x, y, a]) => `<i style="--shard-left:${l};--shard-top:${t};--shard-x:${x};--shard-y:${y};--shard-angle:${a}"></i>`).join('')}</div>` : ''}<div class="banner-card ${b.kind === 'boss' ? 'lv-boss-reveal' : 'lv-sheet'}"><p class="eyebrow">${icon(headIcon)}<span>${b.eyebrow}</span></p><h2>${b.title}</h2><p>${b.detail}</p>${b.kind === 'complete' ? '<button data-world="new-now" id="new-expedition-banner" class="primary">เริ่มการเดินทางใหม่</button>' : ''}</div>`;
+  }
+
+  private sparkle(): void {
+    const fx = this.root.querySelector('#world-fx')!; const token = this.root.querySelector<HTMLElement>('#party-token')!.getBoundingClientRect();
+    const host = this.root.querySelector<HTMLElement>('#map-viewport')!.getBoundingClientRect();
+    [[20, 55], [35, 40], [50, 65], [65, 45], [80, 55], [50, 30]].forEach(([x, y], i) => {
+      const s = document.createElement('span'); s.className = 'lv-heal-sparkle';
+      s.style.left = `${token.left - host.left + token.width * x! / 100}px`; s.style.top = `${token.top - host.top + token.height * y! / 100}px`;
+      s.style.animationDelay = `${i * 40}ms`; s.addEventListener('animationend', () => s.remove()); fx.append(s);
+    });
+  }
+
+  // Camera: centre the party in the open area between the top HUD and the lower controls.
   private layout(): void {
     const viewport = this.root.querySelector<HTMLElement>('#map-viewport')!; const grid = this.root.querySelector<HTMLElement>('#map-grid')!;
     if (!this.view || !viewport.clientWidth) return;
     const w = viewport.clientWidth, h = viewport.clientHeight;
-    const size = Math.max(36, Math.min(64, Math.floor(Math.min(w, h) / 7)));
-    grid.style.setProperty('--tile', `${size}px`);
-    const mapW = this.width * size, mapH = this.map.rows.length * size; const p = this.view.state.position;
-    const clamp = (v: number, view: number, total: number) => total <= view ? (view - total) / 2 : Math.max(view - total, Math.min(0, v));
-    grid.style.transform = `translate(${clamp(w / 2 - (p.x + .5) * size, w, mapW)}px, ${clamp(h / 2 - (p.y + .5) * size, h, mapH)}px)`;
+    this.tile = tileSizeFor(w, h); const t = this.tile;
+    this.root.style.setProperty('--t', `${t}px`);
+    const band = (r: DOMRect) => r.width > 0 && r.right > w / 2 - 1.5 * t && r.left < w / 2 + 1.5 * t;
+    const rect = (sel: string) => this.root.querySelector<HTMLElement>(sel)?.getBoundingClientRect();
+    let top = 0, bottom = h;
+    for (const sel of ['.hud-location', '.hud-top-right', '.hud-party', '.hud-objective']) { const r = rect(sel); if (r && band(r)) top = Math.max(top, r.bottom); }
+    for (const sel of ['.hud-movement', '.hud-action', '#world-message']) { const r = rect(sel); if (r && band(r) && !(sel === '#world-message' && this.root.querySelector<HTMLElement>(sel)!.hidden)) bottom = Math.min(bottom, r.top); }
+    const focusY = bottom - top >= 3 * t ? (top + bottom) / 2 : h / 2;
+    const p = this.view.state.position;
+    const ox = Math.round(w / 2 - (p.x + .5) * t), oy = Math.round(focusY - (p.y + .5) * t);
+    grid.style.transform = `translate(${ox}px, ${oy}px)`;
+    viewport.style.setProperty('--ox', `${ox}px`); viewport.style.setProperty('--oy', `${oy}px`);
+  }
+
+  private renderGoals(): void {
+    const s = this.view?.state; if (!s) return;
+    this.root.querySelector('#world-goals-content')!.innerHTML = `<ul class="goal-list">${goals(s).map(g => `<li class="${g.done ? 'done' : ''}">${icon(g.done ? 'check' : 'circle')}<span>${g.label}</span></li>`).join('')}</ul><p class="world-stats">เดินแล้ว ${s.steps} ก้าว · ชนะ ${s.wins} ศึก · แพ้ ${s.defeats} ครั้ง</p>`;
   }
 
   private renderInfo(): void {
     const s = this.view?.state;
     this.root.querySelector('#world-info-content')!.innerHTML = `
-      <section class="world-rules"><h3>เดินทีละช่อง</h3><p>แตะช่องที่อยู่ติดกัน ใช้ปุ่มลูกศร หรือแป้น ←↑↓→ / WASD ทุกก้าวในพื้นที่อันตรายมีโอกาสพบศัตรู ตัวเลขบนแถบด้านบนคือโอกาสของก้าวถัดไป ยิ่งเดินโดยไม่เจอ โอกาสยิ่งเพิ่ม และกลับไปต่ำสุดเมื่อพบศัตรูหรือพักที่แคมป์</p>
+      <section class="world-rules"><h3>เดินทีละช่อง</h3><p>แตะช่องที่ไฮไลต์ ใช้ปุ่มลูกศรมุมซ้ายล่าง หรือแป้น ←↑↓→ / WASD ทุกก้าวในพื้นที่อันตรายมีโอกาสพบศัตรู ตัวเลขมุมขวาบนคือโอกาสของก้าวถัดไป ยิ่งเดินโดยไม่เจอ โอกาสยิ่งเพิ่ม และกลับไปต่ำสุดเมื่อพบศัตรูหรือพักที่แคมป์</p>
       <h3>เลือดติดตัว</h3><p>จบศึกแล้วเลือดไม่ฟื้นเอง สมาชิกที่ล้มยังล้มอยู่จนกว่าจะพักที่แคมป์ ศึกถัดไปเริ่มด้วยเลือดที่เหลือ</p>
-      <h3>แคมป์ ${icon('camp')}</h3><p>ยืนบนแคมป์แล้วกด “พัก” เพื่อฟื้นเลือดเต็มและชุบทุกคน แคมป์ที่พักล่าสุดคือจุดกลับเมื่อแพ้ เกมบันทึกทุกก้าวอัตโนมัติ</p>
+      <h3>${icon('camp')} แคมป์</h3><p>ยืนบนแคมป์แล้วกดปุ่ม “พัก” มุมขวาล่าง เพื่อฟื้นเลือดเต็มและชุบทุกคน แคมป์ที่พักล่าสุดคือจุดกลับเมื่อแพ้</p>
       <h3>เมื่อแพ้</h3><p>ทีมกลับแคมป์ที่พักล่าสุด (หรือจุดเริ่ม) และฟื้นเลือดเต็ม ศัตรูที่ชนะคุณไม่ตามมา</p>
-      <h3>ผู้คุมรอยแยก ${portrait('brute')}</h3><p>บอสเฝ้าทางเดียวไปประตูรอยแยก ${icon('goal')} เดินชนบอสเพื่อเริ่มศึก ชนะแล้วเดินไปที่ประตูเพื่อจบการเดินทาง</p></section>
+      <h3>${icon('boss')} ผู้คุมรอยแยก</h3><p>บอสเฝ้าทางเดียวไปประตูรอยแยก เดินชนบอสเพื่อเริ่มศึก ชนะแล้วเดินไปที่ประตูเพื่อจบการเดินทาง</p></section>
       ${s ? `<p class="world-stats">เดินแล้ว ${s.steps} ก้าว · ชนะ ${s.wins} ศึก · แพ้ ${s.defeats} ครั้ง</p>` : ''}
-      <button data-world="new" id="new-expedition" class="${this.confirmNew ? 'danger-button' : 'quiet'}">${this.confirmNew ? 'ยืนยัน: ลบการเดินทางนี้แล้วเริ่มใหม่' : 'เริ่มการเดินทางใหม่'}</button>`;
+      <p id="world-save" class="world-save">${this.view?.saved ? 'บันทึกอัตโนมัติบนเครื่องนี้ทุกก้าว' : 'เล่นได้ แต่บันทึกบนเครื่องนี้ไม่ได้'}</p>
+      ${this.confirmNew ? `<div class="confirm-new" role="group" aria-labelledby="confirm-new-copy"><p id="confirm-new-copy">ความคืบหน้าของการเดินทางนี้จะถูกแทนที่</p><div class="confirm-actions"><button data-world="confirm-new" id="confirm-new" class="danger-button">ยืนยันเริ่มใหม่</button><button data-world="cancel-new" id="cancel-new" class="secondary">เดินทางต่อ</button></div></div>`
+        : '<button data-world="new" id="new-expedition" class="danger-button">เริ่มการเดินทางใหม่</button>'}`;
   }
 }

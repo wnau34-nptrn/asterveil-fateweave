@@ -85,3 +85,7 @@ Save history: none before this. Version 1 is new; earlier practice saves are int
   - No page scrolling at the 11 tested viewports.
 - **Battle:** the existing HUD. The header shows the battle kind (ศึกสอน / พบศัตรู / บอส) and name. There is no restart or battle picker. The result button returns to the map, retreats to camp, or retries the teaching battle.
 - **Renderer:** the battle view keeps its layout while hidden, so Phaser never sizes to zero, and the Phaser loop sleeps while exploring.
+
+## Visual integration (ART-UI-WORLD-001 R2)
+
+The exploration map is full screen, with a floating HUD and no sidebar. It uses the accepted tile, decor, landmark, fog and token art. Intake results, accepted and deferred files, budget and screenshots are in `docs/validation/art-ui-world-001/INTAKE.md`. The art never changes rules: hints mark only legal neighbours, the lower-right action is enabled only by `canRest`, and every number comes from `ExpeditionState`.

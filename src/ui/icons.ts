@@ -1,26 +1,38 @@
 import type { ActionId } from '../core/battle/types';
-export type IconName = ActionId | 'restart' | 'up' | 'down' | 'left' | 'right' | 'camp' | 'flag' | 'goal' | 'danger' | 'safe';
-const paths: Record<IconName, string> = {
-  attack: '<path d="m5 19 3-3m-2-2 4 4M8 14l9-10 3 0 0 3-10 9M4 7l4 4m8 5 4 4m-4-1 3-3"/>',
-  guard: '<path d="M12 3 4 6v6c0 5 8 9 8 9s8-4 8-9V6Z"/><path d="M12 7v9m-4-5h8"/>',
-  bash: '<path d="M11 4 4 7v5c0 4 7 8 7 8s6-3 6-7V7Z"/><path d="m18 3 2 2m0 4h3m-4 4 2 2"/>',
-  mark: '<path d="m12 3 6 9-6 9-6-9Z"/><path d="M3 9v6m18-6v6M9 12h6"/>',
-  execute: '<path d="m5 19 13-14 2 1-1 2-12 13M3 13l8 8M4 4h5m-2 3 4 0"/>',
-  bolt: '<path d="m13 3-7 10h6l-1 8 8-12h-6Z"/><path d="M3 4v3m-1-1h3M20 17v4m-2-2h4"/>',
-  ward: '<path d="m12 3 8 5v8l-8 5-8-5V8Z"/><path d="m12 7 4 5-4 5-4-5Z"/>',
-  heal: '<path d="M9 4h6v5h5v6h-5v5H9v-5H4V9h5Z"/>',
-  prayer: '<path d="M12 3v8m-4-4h8M5 13v7m-3-4h6m11-3v7m-3-4h6"/><path d="M9 18h6"/>',
-  restart: '<path d="M4 10a8 8 0 1 1 1 8M4 4v6h6"/>',
-  up: '<path d="m6 14 6-6 6 6"/>',
-  down: '<path d="m6 10 6 6 6-6"/>',
-  left: '<path d="m14 6-6 6 6 6"/>',
-  right: '<path d="m10 6 6 6-6 6"/>',
-  camp: '<path d="M3 20h18M12 4 4 20m8-16 8 16M12 13l-3 7m3-7 3 7"/>',
-  flag: '<path d="M6 21V4m0 1h11l-2 4 2 4H6"/>',
-  goal: '<path d="m12 3 2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.4 6.7 19.4l1.2-6L3.4 9.3l6-.7Z"/>',
-  danger: '<path d="M12 4 2.5 20h19Z"/><path d="M12 10v4m0 3v.5"/>',
-  safe: '<path d="M12 3 4 6v6c0 5 8 9 8 9s8-4 8-9V6Z"/><path d="m8.5 12 2.5 2.5 4.5-5"/>',
-};
+import attack from './svg/attack.svg?raw';
+import guard from './svg/guard.svg?raw';
+import bash from './svg/bash.svg?raw';
+import mark from './svg/mark.svg?raw';
+import execute from './svg/precision-strike.svg?raw';
+import bolt from './svg/arcane-bolt.svg?raw';
+import ward from './svg/ward.svg?raw';
+import heal from './svg/heal.svg?raw';
+import prayer from './svg/prayer.svg?raw';
+import up from './svg/up.svg?raw';
+import down from './svg/down.svg?raw';
+import left from './svg/left.svg?raw';
+import right from './svg/right.svg?raw';
+import camp from './svg/camp.svg?raw';
+import rest from './svg/rest.svg?raw';
+import flag from './svg/flag.svg?raw';
+import goal from './svg/gate.svg?raw';
+import star from './svg/star.svg?raw';
+import danger from './svg/danger.svg?raw';
+import safe from './svg/safe-shield.svg?raw';
+import talk from './svg/talk.svg?raw';
+import info from './svg/info.svg?raw';
+import map from './svg/map.svg?raw';
+import boss from './svg/boss.svg?raw';
+import check from './svg/check.svg?raw';
+import circle from './svg/circle.svg?raw';
+import close from './svg/close.svg?raw';
+import footprints from './svg/footprints.svg?raw';
+
+// Original ART-UI-WORLD-001 line icons (24px viewBox, currentColor). Inlined so they inherit state colour.
+const svgs = { attack, guard, bash, mark, execute, bolt, ward, heal, prayer, up, down, left, right, camp, rest, flag, goal, star, danger, safe, talk, info, map, boss, check, circle, close, footprints } as const;
+const restartPath = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10a8 8 0 1 1 1 8M4 4v6h6"/></svg>';
+export type IconName = ActionId | keyof typeof svgs | 'restart';
 export function icon(name: IconName): string {
-  return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths[name]}</svg>`;
+  const svg = name === 'restart' ? restartPath : svgs[name];
+  return svg.replace('<svg ', '<svg class="icon" aria-hidden="true" focusable="false" ');
 }

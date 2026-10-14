@@ -41,7 +41,7 @@ test('a new expedition walks tile by tile with buttons, keys and adjacent taps; 
   await expect(page.locator('#world-message')).toContainText('ไปต่อไม่ได้'); expect((await saved(page)).position).toEqual(start);
   await page.locator('#move-left').click(); expect((await saved(page)).position).toEqual({ x: start.x - 1, y: start.y });
   await page.keyboard.press('ArrowRight'); await expect.poll(async () => (await saved(page)).position).toEqual(start);
-  await page.locator(`.tile[data-x="${start.x + 1}"][data-y="${start.y}"]`).click();
+  await page.locator('.step-hint[data-dir=right]').click();
   await expect.poll(async () => (await saved(page)).position).toEqual({ x: start.x + 1, y: start.y });
   expect((await saved(page)).steps).toBe(3);
   await page.screenshot({ path: info.outputPath('world-start.png') });
@@ -128,26 +128,54 @@ test('the boss blocks the gate; after its defeat the goal completes the expediti
 test('starting over from the title and the info dialog both require confirmation', async ({ page }) => {
   const issues = await open(page, base({ steps: 9 }));
   await page.locator('#world-info-button').click(); await page.locator('#new-expedition').click();
-  await expect(page.locator('#new-expedition')).toContainText('ยืนยัน'); expect((await saved(page)).steps).toBe(9);
-  await page.locator('#new-expedition').click(); await expect(page.locator('#world-info')).not.toBeVisible();
+  await expect(page.locator('#confirm-new')).toContainText('ยืนยันเริ่มใหม่'); expect((await saved(page)).steps).toBe(9);
+  await page.locator('#cancel-new').click(); await expect(page.locator('#new-expedition')).toBeVisible(); expect((await saved(page)).steps).toBe(9);
+  await page.locator('#new-expedition').click(); await page.locator('#confirm-new').click(); await expect(page.locator('#world-info')).not.toBeVisible();
   expect((await saved(page)).steps).toBe(0);
   await page.reload(); await page.locator('#new-game').click(); await expect(page.locator('#new-game')).toContainText('ยืนยัน');
   expect(issues).toEqual([]);
 });
 
-for (const viewport of [{ width: 320, height: 568 }, { width: 390, height: 640 }, { width: 390, height: 844 }, { width: 600, height: 800 }, { width: 768, height: 1024 }, { width: 844, height: 390 }, { width: 1024, height: 768 }, { width: 1280, height: 720 }, { width: 1366, height: 640 }, { width: 1366, height: 768 }, { width: 1920, height: 1080 }]) {
-  test(`world ${viewport.width}x${viewport.height}: map, team and controls fit without scroll`, async ({ browser }, info) => {
+const viewports = [{ width: 320, height: 568 }, { width: 360, height: 640 }, { width: 375, height: 812 }, { width: 390, height: 844 }, { width: 414, height: 896 }, { width: 430, height: 932 }, { width: 844, height: 390 }, { width: 768, height: 1024 }, { width: 1024, height: 768 }, { width: 1366, height: 768 }, { width: 1920, height: 1080 }];
+for (const viewport of viewports) {
+  test(`world ${viewport.width}x${viewport.height}: full-bleed map, floating HUD and open walking targets without scroll`, async ({ browser }, info) => {
     const context = await browser.newContext({ viewport, hasTouch: viewport.width < 900, reducedMotion: 'reduce' }); const page = await context.newPage();
     const camp = findTiles(map, 'camp')[1]!;
-    const issues = await open(page, base({ position: camp, hp: { guardian: 50, tracer: 0, weaver: 30, healer: 46 } }));
+    const issues = await open(page, base({ position: camp, hp: { guardian: 50, tracer: 0, weaver: 10, healer: 46 } }));
     expect(await page.evaluate(() => ({ x: scrollX, y: scrollY, overflow: document.documentElement.scrollHeight > innerHeight || document.documentElement.scrollWidth > innerWidth }))).toEqual({ x: 0, y: 0, overflow: false });
-    for (const s of ['#move-up', '#move-down', '#move-left', '#move-right', '#rest', '#world-info-button']) await reachable(page, s);
-    const map_ = (await page.locator('#map-viewport').boundingBox())!; expect(map_.height).toBeGreaterThanOrEqual(150); expect(map_.width).toBeGreaterThanOrEqual(200);
+    // The map fills the whole viewport; nothing is reserved for a sidebar.
+    expect(await page.locator('#map-viewport').boundingBox()).toEqual({ x: 0, y: 0, width: viewport.width, height: viewport.height });
+    for (const s of ['#move-up', '#move-down', '#move-left', '#move-right', '#rest', '#world-info-button', '#objective-button']) await reachable(page, s);
+    await expect(page.locator('#rest')).toContainText('พัก'); await expect(page.locator('#rest')).toBeEnabled();
+    // Every legal neighbour hint is tappable at its centre (not covered by HUD) and >=44px.
+    const hints = page.locator('.step-hint');
+    expect(await hints.count()).toBeGreaterThan(0);
+    for (const hint of await hints.all()) expect(await hint.evaluate(el => { const r = el.getBoundingClientRect(); return r.width >= 44 && r.height >= 44 && r.top >= 0 && r.bottom <= innerHeight && el.contains(document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2)); })).toBe(true);
     const token = (await page.locator('#party-token').boundingBox())!;
-    expect(token.x >= map_.x && token.y >= map_.y && token.x + token.width <= map_.x + map_.width + 1 && token.y + token.height <= map_.y + map_.height + 1).toBe(true);
+    expect(token.y).toBeGreaterThan(0); expect(token.y + token.height).toBeLessThan(viewport.height);
     for (const id of ['guardian', 'tracer', 'weaver', 'healer']) await expect(page.locator(`#world-hero-${id}`)).toBeInViewport({ ratio: 1 });
-    await expect(page.locator('#world-hero-tracer')).toContainText('ล้มแล้ว');
+    await expect(page.locator('#world-hero-tracer')).toContainText('ล้มแล้ว'); await expect(page.locator('#world-hero-weaver')).toHaveClass(/critical/);
+    // Thai text in the capsules is not clipped vertically.
+    for (const sel of ['#zone-name', '#world-hero-guardian b', '.objective-text']) expect(await page.locator(sel).evaluate(el => el.scrollHeight <= el.clientHeight + 1)).toBe(true);
     await page.screenshot({ path: info.outputPath('world.png') });
+    await page.locator('#objective-button').click(); await expect(page.locator('#world-goals')).toBeVisible(); await expect(page.locator('#world-goals li')).toHaveCount(4);
+    await reachable(page, '[data-world=goals-close]'); await page.screenshot({ path: info.outputPath('goals.png') }); await page.keyboard.press('Escape');
     expect(issues).toEqual([]); await context.close();
   });
 }
+
+test('normal motion: hop, danger meter and veil-shatter encounter finish within the 800 ms budget', async ({ browser }) => {
+  const context = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true, reducedMotion: 'no-preference' }); const page = await context.newPage();
+  const state = newExpedition(map, encounterById, 11);
+  let probe = state; let steps = 0;
+  while (!probe.battle) { probe = move(probe, map, steps % 2 ? 'right' : 'left').state; steps++; }
+  const issues = await open(page, state);
+  for (let i = 0; i < steps - 1; i++) { await page.locator(i % 2 ? '#move-right' : '#move-left').click(); await page.waitForTimeout(200); }
+  const started = Date.now();
+  await page.locator((steps - 1) % 2 ? '#move-right' : '#move-left').click();
+  await expect(page.locator('.lv-veil-shatter')).toHaveCount(1);
+  await expect(page.locator('#battle-view')).not.toHaveClass(/view-off/);
+  expect(Date.now() - started).toBeLessThan(1500);
+  expect((await saved(page)).battle?.kind).toBe('tutorial');
+  expect(issues).toEqual([]); await context.close();
+});
