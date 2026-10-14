@@ -1,8 +1,9 @@
 import { expect, it } from 'vitest';
-import { createBattle, resolveCommand } from '../src/core/battle/engine';
+import { createBattle, currentHeroId, resolveCommand } from '../src/core/battle/engine';
 import { battleSaveKey, loadBattle, loadSelectedEncounter, rememberEncounter, saveBattle, type StoragePort } from '../src/core/save/battle-save';
 import { battles, rearAmbush, riftWarden } from '../src/content/encounters/catalog';
 import { veilSiege as data } from '../src/content/encounters/veil-siege';
+import { guided } from './fixtures/party-routes';
 
 function memory(): StoragePort {
   const values = new Map<string, string>();
@@ -32,14 +33,14 @@ it.each(['{bad', '{}', '{"version":2}', '{"version":1,"encounterId":"crystal-rif
 
 it('replays a new class skill and its cooldown when restoring', () => {
   const storage = memory();
-  let state = resolveCommand(createBattle(data), data, { beat: 1, heroId: 'guardian', action: 'guard', targetId: 'tracer' }).state;
-  state = resolveCommand(state, data, { beat: 2, heroId: 'healer', action: 'heal', targetId: 'guardian' }).state;
-  saveBattle(storage, state, data);
-  expect(loadBattle(storage, data)).toEqual({ state, restored: true });
-  expect(state.heroes[3]!.cooldowns.heal).toBe(5);
+  let state=createBattle(data);
+  for(const [heroId,action,targetId] of guided.slice(0,4)) state=resolveCommand(state,data,{beat:state.beat,heroId,action,targetId}).state;
+  saveBattle(storage,state,data);expect(loadBattle(storage,data)).toEqual({state,restored:true});
+  expect(currentHeroId(loadBattle(storage,data).state,data)).toBe('guardian');
+  expect(state.heroes[3]!.cooldowns.heal).toBe(7);
 });
-it('rejects a save that reuses a cooling-down skill', () => {
-  const commands = [1,2].map(beat => ({ beat, heroId: 'weaver', action: 'bolt', targetId: 'brute' }));
+it('rejects a save containing a foreign-owner command even with the current version', () => {
+  const commands = [1,2].map(beat => ({ beat, heroId: 'guardian', action: 'bash', targetId: 'brute' }));
   const raw = JSON.stringify({ version: 1, encounterId: data.id, contentVersion: data.version, commands });
   expect(loadBattle({ getItem: () => raw, setItem: () => {} }, data)).toEqual({ state: createBattle(data), restored: false });
 });
@@ -47,8 +48,8 @@ it('rejects a save that reuses a cooling-down skill', () => {
 it('retains independent replays and restarts only the selected battle', () => {
   const storage=memory();
   const states=battles.map(({data},i)=>resolveCommand(createBattle(data),data,
-    i===0?{beat:1,heroId:'tracer',action:'mark',targetId:'brute'}:
-      i===1?{beat:1,heroId:'weaver',action:'ward',targetId:'weaver'}:
+    i===0?{beat:1,heroId:'guardian',action:'guard',targetId:'tracer'}:
+      i===1?{beat:1,heroId:'guardian',action:'guard',targetId:'weaver'}:
         {beat:1,heroId:'guardian',action:'bash',targetId:'brute'}).state);
   battles.forEach(({data},i)=>expect(saveBattle(storage,states[i]!,data)).toBe(true));
   battles.forEach(({data},i)=>expect(loadBattle(storage,data)).toEqual({state:states[i],restored:true}));
@@ -72,7 +73,7 @@ it('restores only a catalogued selection and tolerates missing, invalid and deni
 });
 it('rejects foreign or outdated content in one save slot without affecting the other battle', () => {
   const storage=memory();
-  const state=resolveCommand(createBattle(data),data,{beat:1,heroId:'tracer',action:'mark',targetId:'brute'}).state;
+  const state=resolveCommand(createBattle(data),data,{beat:1,heroId:'guardian',action:'attack',targetId:'brute'}).state;
   saveBattle(storage,state,data);
   storage.setItem(battleSaveKey(rearAmbush),storage.getItem(battleSaveKey(data))!);
   expect(loadBattle(storage,rearAmbush).restored).toBe(false);

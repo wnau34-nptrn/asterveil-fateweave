@@ -2,7 +2,7 @@ import type { EncounterDefinition } from '../../core/battle/types';
 import { heroes } from '../heroes/team';
 import { enemies } from '../enemies/veilbound';
 export const veilSiege: EncounterDefinition = {
-  id: 'veil-siege', version: 3, name: 'Veil Siege', heroes,
+  id: 'veil-siege', version: 4, name: 'Veil Siege', heroes,
   enemies,
   intents: [
     { sourceId: 'raider', targetId: 'tracer', name: 'Raking Slash', damage: 12, kind: 'physical' },
@@ -23,5 +23,5 @@ export const veilSiege: EncounterDefinition = {
     heal: { name: 'รักษา', english: 'Heal', icon: '✚', power: 20, cooldown: 3 },
     prayer: { name: 'พรฟื้นฟู', english: 'Prayer', icon: '❋', power: 10, cooldown: 4 },
   },
-  rules: { guardReduction: 0.65, markDuration: 3, markedBonus: 22 },
+  rules: { guardReduction: 0.65, markDuration: 5, markedBonus: 22 },
 };

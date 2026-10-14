@@ -1,80 +1,28 @@
-# Four-class balance validation — encounter version 3
+# Balance validation — fixed hero ownership
 
-The user requested removing the Crystal system and replacing the party with two front and two back heroes, each with its own class and skills. The encounter now uses class cooldowns, interception, physical interruption, Mark follow-ups, ally barriers and healing. These are prototype values, not final progression or exhaustive balance.
+The current versions are `veil-siege` / 4, `rear-ambush` / 2 and `rift-warden` / 2. Every move must belong to the next living hero in Knight → Duelist → Mage → Priest order. Old free-selection fixtures were replaced with legal rotation plans; the original encounter's incoming damage is unchanged. New encounter powers were tuned for this rotation. Hero HP/attack, Guard, skill powers and cooldowns remain unchanged. Mark now lasts 5 beats to remain usable on the next Duelist turn.
 
 ## Reproducible policies
 
-`tests/fixtures/party-routes.ts` owns the winning command sequences. `tests/balance.test.ts` checks outcomes, whole-party survival, exact preview equality and deterministic replay. Browser tests execute both routes through the actual controls, and separately play both basic-attack policies to defeat.
+`party-routes.ts` and `encounter-routes.ts` own the command sequences. Core tests compare exact HP, previews, render stages, source immutability and replay; browser cases execute all seven winning routes with actual controls, reload and restart. The forced-turn Attack-only policy always uses the current owner and a fixed enemy priority; it cannot choose a higher-damage hero out of turn.
 
-| Strategy | Decisions | Outcome | Survivors | Final HP [Aegis, Lyra, Eira, Seren] |
+| Encounter / plan | Beats | Survivors | Final HP [Knight, Duelist, Mage, Priest] | Total |
 |---|---|---|---|---|
-| Basic attacks, Raider first, highest-damage living hero | 11 | Defeat | 0 | [0, 0, 0, 0] |
-| Basic attacks, Brute first, highest-damage living hero | 15 | Defeat | 0 | [0, 0, 0, 0] |
-| Offensive class-skill route | 11 | Victory | 4 | [62, 42, 2, 28] |
-| Defensive interception/barrier/healing route | 16 | Victory | 4 | [18, 32, 26, 18] |
+| Original · offense | 13 | 4 | [52, 6, 4, 18] | 80 |
+| Original · sustain | 14 | 4 | [72, 14, 18, 38] | 142 |
+| Original · guided Guard/Mark/Mage opening | 14 | 4 | [57, 16, 14, 28] | 115 |
+| Rear ambush · combo | 14 | 4 | [70, 51, 7, 5] | 133 |
+| Rear ambush · barrier/healing | 15 | 4 | [76, 56, 1, 5] | 138 |
+| Boss · Mark/strike and physical interruption | 14 | 4 | [70, 36, 2, 30] | 138 |
+| Boss · unmarked strikes, Ward/healing | 15 | 4 | [60, 26, 6, 20] | 112 |
+| Original · Attack, Raider first | 12 | 0 | [0, 0, 0, 0] | 0 |
+| Original · Attack, Brute first | 14 | 0 | [0, 0, 0, 0] | 0 |
+| Rear ambush · Attack, Hunter first | 15 | 0 | [0, 0, 0, 0] | 0 |
+| Rear ambush · Attack, Channeler first | 16 | 0 | [0, 0, 0, 0] | 0 |
+| Boss · Attack | 13 | 0 | [0, 0, 0, 0] | 0 |
 
-### Offensive route
+A Mark on beat 2 stays active through Mage, Priest and Knight turns. A marked Precision Strike on beat 6 deals 50 and consumes it; the Mage's intervening Bolt does not consume it. If Lyra chooses another action on beat 6, the old Mark expires as beat 7 starts. When only a few heroes survive, cooldowns still reject early reuse despite skipped turns. Foreign-owner commands are rejected by the same resolver used for preview and save restoration.
 
-1. Lyra Mark Brute
-2. Lyra Precision Strike Brute
-3. Eira Arcane Bolt Brute
-4. Aegis Shield Bash Brute
-5. Lyra Precision Strike Brute
-6. Seren Prayer Party
-7. Aegis Shield Bash Brute
-8. Lyra Precision Strike Brute
-9. Lyra Mark Raider
-10. Eira Arcane Bolt Raider
-11. Lyra Precision Strike Raider
+All three encounters have at least two concrete four-survivor plans, with different healing/barrier/damage decisions. The sustained plans do not promise greater health in every encounter. Attack-only results cover the stated policies, not every possible targeting strategy. Human feedback, physical-device verification and final balance remain open.
 
-Prayer before beat 6's energy hit keeps Eira alive; damage skills rotate through cooldowns. Final party HP is 134. Shield Bash on an energy beat deals damage without interrupting the Bolt. Killing the announced source still cancels its attack normally.
-
-### Defensive route
-
-1. Lyra Mark Brute
-2. Aegis Guard Eira
-3. Lyra Precision Strike Brute
-4. Aegis Guard Lyra
-5. Eira Arcane Bolt Brute
-6. Eira Ward Eira
-7. Aegis Shield Bash Raider
-8. Seren Heal Aegis
-9. Lyra Precision Strike Brute
-10. Aegis Shield Bash Brute
-11. Eira Arcane Bolt Brute
-12. Aegis Guard Eira
-13. Lyra Precision Strike Brute
-14. Seren Heal Eira
-15. Lyra Mark Raider
-16. Lyra Precision Strike Raider
-
-Interceptions redirect reduced damage into the durable Knight; Ward absorbs before HP, while Heal restores selected allies before the enemy responds. Physical Shield Bash prevents the corresponding announced hit. This longer example wins with 94 party HP and a different health distribution. It demonstrates another viable policy rather than promising that defense always yields more total HP.
-
-## Bounds and publication
-
-Basic-attack results describe two concrete tested policies, not an exhaustive proof that every possible Attack-only sequence loses. Human playtesting and further encounters remain future work. Combat has no random damage or timing advantage.
-
-The encounter is `veil-siege`, version 3. Old three-member saves restart safely. Current automated coverage is 47 Node tests and 44 production browser scenarios; `VALIDATION.md` records the checks and device limits. GitHub Pages deploys only after the full production suite passes.
-
-## Optional teaching opening
-
-The first three hints suggest Knight Guard protecting Lyra, Mark on Brute, then a marked Precision Strike on that same target. This is advice rather than a required script. The `guided` route in `tests/fixtures/party-routes.ts` continues that opening with class skills and wins in 14 beats with all four heroes standing: [47, 20, 22, 28], total 117 HP. Browser coverage plays the route through actual controls and verifies interception at 5 damage, no immediate Mark damage, the 50-power marked strike, and the full victory. Existing offensive/defensive routes and both basic-attack defeats retain their original outcomes.
-
-
-## Two additional encounters
-
-All new values are content definitions using the existing immutable resolver. `tests/fixtures/encounter-routes.ts` owns these reproducible commands; `tests/encounters.test.ts` checks every preview/stage, exact HP, all four participating heroes and deterministic replay. Four production browser cases execute the same routes, including reload, outcome and restarting the selected encounter.
-
-| Encounter / plan | Beats | Survivors | Final HP [Knight, Duelist, Mage, Priest] | Total HP |
-|---|---|---|---|---|
-| Rear ambush · Ward then Mark/strike | 11 | 4 | [76, 20, 4, 8] | 108 |
-| Rear ambush · interception/barrier/healing | 16 | 4 | [55, 20, 2, 8] | 85 |
-| Rift Warden · Mark/strike and physical interruption | 14 | 4 | [30, 14, 6, 8] | 58 |
-| Rift Warden · unmarked strikes and sustain | 16 | 4 | [7, 14, 4, 8] | 33 |
-| Rear ambush · basic attacks, Hunter first | 14 | 0 | [0, 0, 0, 0] | 0 |
-| Rear ambush · basic attacks, Channeler first | 14 | 0 | [0, 0, 0, 0] | 0 |
-| Rift Warden · basic attacks | 10 | 0 | [0, 0, 0, 0] | 0 |
-
-The rear ambush opens with an 18-power energy attack through a healthy front line. Ward absorbs 14 before HP, leaving the Mage at 44/48; Bash deals damage but cannot cancel this energy hit. Its sustained route protects the Priest's low HP with timed Guard and restores the Mage before subsequent hits. Against the boss, opening Bash leaves 232/250 HP and cancels its physical response; the following energy attack still reaches the Mage. The boss sustain route wins without using Mark, demonstrating another viable choice rather than one mandatory combo.
-
-Both offensive examples follow the available opening hints. The sustained examples take longer and end with less total HP; they establish viability, not a promise that defense always maximizes health. Tested spam policies use the highest-attack living hero and one fixed enemy priority. Other policies and final balance still need human feedback. No new combat rule, random damage, progression or character-stat change was introduced. Original version-3 outcomes and saves are unchanged; new IDs start at content version 1.
+Current automated coverage is 45 Node cases and 44 production browser cases. GitHub Pages uploads/deploys only after the complete production suite passes. `VALIDATION.md` records each change's evidence and limitations.

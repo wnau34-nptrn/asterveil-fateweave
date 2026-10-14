@@ -1,163 +1,127 @@
-import { describe, expect, it } from 'vitest';
-import { actionReason, createBattle, plannedIntents, previewCommand, replay, resolveCommand, targetOptions, validateCommand } from '../src/core/battle/engine';
-import type { ActionId, BattleState, Command } from '../src/core/battle/types';
+import { describe,expect,it } from 'vitest';
+import { actionReason,createBattle,currentHeroId,plannedIntents,previewCommand,replay,resolveCommand,targetOptions,validateCommand } from '../src/core/battle/engine';
+import type { ActionId,BattleState,Command } from '../src/core/battle/types';
 import { veilSiege as data } from '../src/content/encounters/veil-siege';
-const start = () => createBattle(data);
-const command = (s: BattleState, heroId: string, action: ActionId, targetId: string): Command => ({ beat: s.beat, heroId, action, targetId });
-const act = (s: BattleState, hero: string, action: ActionId, target: string) => resolveCommand(s, data, command(s, hero, action, target));
-describe('four-class deterministic combat', () => {
-  it('has two front/two back heroes, independent state and no environmental resource', () => {
-    const a = start(); const b = start();
-    expect(data.heroes.map(h => h.lane)).toEqual(['front', 'front', 'back', 'back']);
-    expect(a.heroes.map(h => h.hp)).toEqual([76, 56, 48, 46]);
-    expect(a).not.toHaveProperty('crystal'); expect(a).not.toHaveProperty('counter');
-    a.heroes[0]!.cooldowns.bash = 99; expect(b.heroes[0]!.cooldowns).toEqual({});
-  });
-  it('uses three owned commands for each distinct class', () => {
-    expect(new Set(data.heroes.map(h => h.role)).size).toBe(4);
-    for (const h of data.heroes) expect(h.actions).toHaveLength(3);
-    expect(actionReason(start(), data, 'weaver', 'heal')).toContain('does not have');
-  });
-  it('deals exact damage without changing the input or announced target', () => {
-    const s = start(); const original = structuredClone(s); const r = act(s, 'tracer', 'attack', 'brute');
-    expect(s).toEqual(original); expect(r.state.enemies[1]!.hp).toBe(148);
-    expect(r.state.heroes[1]!.hp).toBe(44); expect(r.state.intent?.targetId).toBe('weaver');
-  });
-  it('separates hero and enemy results before advancing the frozen intent', () => {
-    const initial = start(); const r = act(initial, 'weaver', 'bolt', 'brute');
-    expect(r.stages.hero.state.enemies[1]!.hp).toBe(138);
-    expect(r.stages.hero.state.heroes[1]!.hp).toBe(56);
-    expect(r.stages.enemy.state.heroes[1]!.hp).toBe(44);
-    expect(r.stages.hero.state.intent).toEqual(initial.intent);
-    expect(r.stages.enemy.state.intent).toEqual(initial.intent);
-    expect(r.stages.enemy.state.beat).toBe(1); expect(r.state.beat).toBe(2);
-    expect(r.state.intent?.sourceId).toBe('brute');
-    expect(r.stages.hero.events.map(e => e.sourceId)).toEqual(['weaver']);
-    expect(r.stages.enemy.events.map(e => e.sourceId)).toEqual(['raider']);
-    r.stages.hero.state.enemies[1]!.hp = 0;
-    expect(r.stages.enemy.state.enemies[1]!.hp).toBe(138); expect(r.state.enemies[1]!.hp).toBe(138);
-    expect(initial.enemies[1]!.hp).toBe(164);
-  });
-  it('shows restoration before damage and cancellation instead of another enemy attack', () => {
-    const s = start(); s.heroes[1]!.hp = 10;
-    const r = act(s, 'healer', 'heal', 'tracer');
-    expect(r.stages.hero.state.heroes[1]!.hp).toBe(30);
-    expect(r.stages.enemy.state.heroes[1]!.hp).toBe(18);
-    expect(r.stages.hero.events.every(e => e.type === 'heal')).toBe(true);
-    const stopped = act(start(), 'guardian', 'bash', 'raider');
-    expect(stopped.stages.enemy.events).toMatchObject([{ type: 'cancel', cause: 'interrupted' }]);
-    expect(stopped.stages.enemy.state.heroes[1]!.hp).toBe(56);
-  });
-  it('intercepts for front/back targets and rounds Guard upward', () => {
-    let s = act(start(), 'guardian', 'guard', 'tracer').state;
-    expect(s.heroes[0]!.hp).toBe(71); expect(s.heroes[1]!.hp).toBe(56);
-    s = act(s, 'guardian', 'guard', 'weaver').state;
-    expect(s.heroes[0]!.hp).toBe(61); expect(s.heroes[2]!.hp).toBe(48);
-    expect(() => act(start(), 'guardian', 'guard', 'healer')).toThrow('announced target');
-  });
-  it('blocks physical access to back rows while a front hero survives', () => {
-    const changed = { ...data, intents: data.intents.map(i => ({ ...i, targetId: 'healer' })) };
-    const s = createBattle(changed); expect(s.intent?.targetId).toBe('guardian');
-    expect(plannedIntents(s, changed)[0]?.targetId).toBe('healer');
-    s.heroes[0]!.hp = 0; s.heroes[1]!.hp = 0;
-    expect(plannedIntents(s, changed)[1]?.targetId).toBe('healer');
-  });
-  it('reassigns physical targeting to the remaining front hero after a down', () => {
-    const s = start(); s.heroes[1]!.hp = 1;
-    const n = act(s, 'tracer', 'mark', 'brute').state;
-    expect(n.heroes[1]!.hp).toBe(0); expect(plannedIntents(n, data)[0]?.targetId).toBe('guardian');
-  });
-  it('Bash interrupts only the current physical source', () => {
-    const s = start(); const r = act(s, 'guardian', 'bash', 'raider');
-    expect(r.state.enemies[0]!.hp).toBe(46); expect(r.state.heroes[1]!.hp).toBe(56);
-    expect(r.events.find(e => e.type === 'cancel')?.cause).toBe('interrupted');
-    expect(act(s, 'guardian', 'bash', 'brute').state.heroes[1]!.hp).toBe(44);
-    const energy = act(s, 'tracer', 'mark', 'brute').state;
-    expect(act(energy, 'guardian', 'bash', 'brute').state.heroes[2]!.hp).toBe(20);
-  });
-  it('tracks per-hero cooldowns and permits reuse exactly at the ready beat', () => {
-    let s = act(start(), 'weaver', 'bolt', 'brute').state;
-    expect(s.heroes[2]!.cooldowns.bolt).toBe(4);
-    expect(actionReason(s, data, 'weaver', 'bolt')).toBe('Cooldown: 2');
-    expect(() => act(s, 'weaver', 'bolt', 'brute')).toThrow('Cooldown');
-    s = act(s, 'guardian', 'guard', 'weaver').state;
-    expect(actionReason(s, data, 'weaver', 'bolt')).toBe('Cooldown: 1');
-    s = act(s, 'guardian', 'guard', 'guardian').state;
-    expect(actionReason(s, data, 'weaver', 'bolt')).toBe('');
-    expect(act(s, 'weaver', 'bolt', 'brute').state.heroes[2]!.cooldowns.bolt).toBe(7);
-  });
-  it('Mark enables a 50-damage precision strike and is consumed', () => {
-    const s = act(start(), 'tracer', 'mark', 'brute').state;
-    const r = act(s, 'tracer', 'execute', 'brute').state;
-    expect(r.enemies[1]!.hp).toBe(114); expect(r.enemies[1]!.markedUntil).toBe(0);
-    expect(act(s, 'tracer', 'attack', 'brute').state.enemies[1]!.hp).toBe(126);
-  });
-  it('expires Mark after three beats including application', () => {
-    let s = act(start(), 'tracer', 'mark', 'brute').state;
-    s = act(s, 'guardian', 'guard', 'weaver').state;
-    s = act(s, 'guardian', 'guard', 'guardian').state;
-    expect(s.beat).toBe(4); expect(s.enemies[1]!.markedUntil).toBe(0);
-  });
-  it('Ward absorbs the same-beat hit and reports actual absorption', () => {
-    const r = act(start(), 'weaver', 'ward', 'tracer');
-    expect(r.state.heroes[1]).toMatchObject({ hp: 56, barrier: 2 });
-    expect(r.events.find(e => e.type === 'damage')).toMatchObject({ amount: 0, absorbed: 12 });
-    expect(r.events.find(e => e.type === 'barrier')?.amount).toBe(14);
-  });
-  it('Ward does not stack, and Guard reduces before using barrier', () => {
-    const s = start(); s.heroes[0]!.barrier = 10;
-    const r = act(s, 'guardian', 'guard', 'tracer').state;
-    expect(r.heroes[0]).toMatchObject({ hp: 76, barrier: 5 });
-    s.heroes[2]!.barrier = 14;
-    expect(targetOptions(s, data, 'weaver', 'ward').find(t => t.id === 'weaver')?.valid).toBe(false);
-  });
-  it('heals before the announced hit and clamps at max HP', () => {
-    const s = start(); s.heroes[1]!.hp = 10;
-    expect(act(s, 'healer', 'heal', 'tracer').state.heroes[1]!.hp).toBe(18);
-    s.heroes[0]!.hp = 73;
-    expect(act(s, 'healer', 'heal', 'guardian').events.find(e => e.type === 'heal')?.amount).toBe(3);
-  });
-  it('Prayer heals all living injured allies, never resurrects, and has a four-beat cooldown', () => {
-    const s = start(); s.heroes[0]!.hp = 60; s.heroes[1]!.hp = 40; s.heroes[2]!.hp = 0;
-    const r = act(s, 'healer', 'prayer', 'party');
-    expect(r.state.heroes.map(h => h.hp)).toEqual([70, 38, 0, 46]);
-    expect(r.events.filter(e => e.type === 'heal')).toHaveLength(2);
-    expect(r.state.heroes[3]!.cooldowns.prayer).toBe(5);
-    expect(() => act(s, 'healer', 'heal', 'weaver')).toThrow('down');
-    expect(() => act(start(), 'healer', 'prayer', 'party')).toThrow('full health');
-  });
-  it('rejects unavailable targets, stale commands and foreign encounter IDs', () => {
-    const s = start(); expect(() => act(s, 'healer', 'heal', 'guardian')).toThrow('full health');
-    expect(() => act(s, 'weaver', 'bolt', 'party')).toThrow('Invalid target');
-    expect(validateCommand(s, data, { ...command(s, 'tracer', 'attack', 'brute'), beat: 0 })).toContain('stale');
-    expect(validateCommand({ ...s, encounterId: 'other' }, data, command(s, 'tracer', 'attack', 'brute'))).toContain('mismatch');
-  });
-  it('clamps overkill and cancels the defeated source instead of substituting', () => {
-    const s = start(); s.enemies[0]!.hp = 2;
-    const r = act(s, 'weaver', 'bolt', 'raider');
-    expect(r.events.find(e => e.type === 'damage')?.amount).toBe(2);
-    expect(r.events.find(e => e.type === 'cancel')?.cause).toBe('defeated');
-    expect(r.state.heroes[1]!.hp).toBe(56);
-  });
-  it('produces genuine Victory/Defeat and rejects commands after the end', () => {
-    const s = start(); s.enemies[0]!.hp = 1; s.enemies[1]!.hp = 0;
-    const won = act(s, 'tracer', 'attack', 'raider').state;
-    expect(won.outcome).toBe('victory'); expect(won.intent).toBeNull();
-    expect(() => act(won, 'tracer', 'attack', 'raider')).toThrow('ended');
-    const loss = start(); loss.heroes.forEach(h => { h.hp = h.id === 'tracer' ? 1 : 0; });
-    expect(act(loss, 'tracer', 'mark', 'brute').state.outcome).toBe('defeat');
-  });
-  it('previews every legal action exactly and replays cooldowns without mutating the source', () => {
-    const injured = start(); injured.heroes.forEach(h => { h.hp -= 10; });
-    const fresh = start();
-    for (const s of [fresh, injured]) for (const h of data.heroes) for (const action of h.actions) for (const t of targetOptions(s, data, h.id, action).filter(t => t.valid)) {
-      const c = command(s, h.id, action, t.id); const before = structuredClone(s);
-      const result = resolveCommand(s, data, c);
-      expect(previewCommand(s, data, c)).toEqual(result); expect(s).toEqual(before);
-      expect([...result.stages.hero.events, ...result.stages.enemy.events]).toEqual(result.events);
-      if (s === fresh) expect(replay(data, result.state.commands)).toEqual(result.state);
-    }
-    const cast = act(start(), 'weaver', 'bolt', 'brute').state;
-    expect(replay(data, cast.commands)).toEqual(cast);
-  });
+const act=(s:BattleState,heroId:string,action:ActionId,targetId:string)=>resolveCommand(s,data,{beat:s.beat,heroId,action,targetId});
+const at=(id:string)=>{let s=createBattle(data);while(currentHeroId(s,data)!==id)s=act(s,currentHeroId(s,data)!,'attack','raider').state;return s;};
+describe('owned sequential hero turns',()=>{
+ it('starts with Knight, keeps independent states and has four classes/front-back formation',()=>{
+  const a=createBattle(data),b=createBattle(data);expect(currentHeroId(a,data)).toBe('guardian');
+  expect(data.heroes.map(h=>h.lane)).toEqual(['front','front','back','back']);
+  expect(new Set(data.heroes.map(h=>h.role)).size).toBe(4);data.heroes.forEach(h=>expect(h.actions).toHaveLength(3));
+  expect(a.heroes.map(h=>h.hp)).toEqual([76,56,48,46]);expect(a).not.toHaveProperty('crystal');
+  a.heroes[0]!.cooldowns.bash=99;expect(b.heroes[0]!.cooldowns).toEqual({});
+ });
+ it('rejects every other living hero at commit, preview and target selection without mutation',()=>{
+  const s=createBattle(data),before=structuredClone(s);
+  for(const hero of data.heroes.slice(1)) {
+   const c={beat:1,heroId:hero.id,action:'attack' as const,targetId:'brute'};
+   expect(validateCommand(s,data,c)).toContain('turn');expect(()=>resolveCommand(s,data,c)).toThrow('turn');
+   expect(()=>previewCommand(s,data,c)).toThrow('turn');expect(targetOptions(s,data,hero.id,'attack').every(t=>!t.valid)).toBe(true);
+  }
+  expect(s).toEqual(before);expect(actionReason(s,data,'guardian','heal')).toContain('does not have');
+ });
+ it('advances only after one committed command, wraps and reconstructs the owner by replay',()=>{
+  let s=createBattle(data);const owners=[];
+  for(let i=0;i<5;i++){const heroId=currentHeroId(s,data)!;owners.push(heroId);s=act(s,heroId,'attack','brute').state;expect(replay(data,s.commands)).toEqual(s);}
+  expect(owners).toEqual(['guardian','tracer','weaver','healer','guardian']);expect(currentHeroId(s,data)).toBe('tracer');
+ });
+ it('skips a hero killed by the response and advances after an acting Knight falls intercepting',()=>{
+  let s=createBattle(data);s.heroes[1]!.hp=1;s=act(s,'guardian','attack','brute').state;
+  expect(s.heroes[1]!.hp).toBe(0);expect(currentHeroId(s,data)).toBe('weaver');
+  const guard=createBattle(data);guard.heroes[0]!.hp=1;const r=act(guard,'guardian','guard','tracer');
+  expect(r.state.heroes[0]!.hp).toBe(0);expect(r.state.heroes[1]!.hp).toBe(56);expect(currentHeroId(r.state,data)).toBe('tracer');
+ });
+ it('keeps stage snapshots independent and frozen while final state advances owner/intent',()=>{
+  const s=createBattle(data),before=structuredClone(s),r=act(s,'guardian','bash','brute');
+  expect(r.stages.hero.state.enemies[1]!.hp).toBe(146);expect(r.stages.hero.state.heroes[1]!.hp).toBe(56);
+  expect(r.stages.enemy.state.heroes[1]!.hp).toBe(44);expect(r.stages.hero.state.intent).toEqual(s.intent);expect(r.stages.enemy.state.intent).toEqual(s.intent);
+  expect(r.stages.enemy.state.beat).toBe(1);expect(r.state.beat).toBe(2);expect(currentHeroId(r.state,data)).toBe('tracer');
+  r.stages.hero.state.enemies[1]!.hp=0;expect(r.stages.enemy.state.enemies[1]!.hp).toBe(146);expect(r.state.enemies[1]!.hp).toBe(146);expect(s).toEqual(before);
+ });
+ it('Guard intercepts the announced front or rear target and rounds before barrier absorption',()=>{
+  const s=createBattle(data);s.heroes[0]!.barrier=10;const r=act(s,'guardian','guard','tracer');
+  expect(r.state.heroes[0]).toMatchObject({hp:76,barrier:5});expect(r.state.heroes[1]!.hp).toBe(56);
+  expect(r.stages.enemy.events[0]).toMatchObject({amount:0,absorbed:5});
+  const rear={...data,intents:data.intents.map(i=>({...i,kind:'energy' as const,targetId:'weaver',damage:28}))};
+  const n=resolveCommand(createBattle(rear),rear,{beat:1,heroId:'guardian',action:'guard',targetId:'weaver'}).state;
+  expect(n.heroes[0]!.hp).toBe(66);expect(n.heroes[2]!.hp).toBe(48);
+  expect(()=>act(createBattle(data),'guardian','guard','healer')).toThrow('announced target');
+ });
+ it('physical front screening changes after front heroes fall; energy reaches the rear',()=>{
+  const d={...data,intents:data.intents.map(i=>({...i,targetId:'healer'}))};const s=createBattle(d);
+  expect(s.intent?.targetId).toBe('guardian');expect(plannedIntents(s,d)[0]?.targetId).toBe('healer');
+  s.heroes[0]!.hp=0;s.heroes[1]!.hp=0;expect(plannedIntents(s,d)[1]?.targetId).toBe('healer');
+ });
+ it('Bash cancels only the announced physical source',()=>{
+  const s=createBattle(data),r=act(s,'guardian','bash','raider');expect(r.state.enemies[0]!.hp).toBe(46);
+  expect(r.stages.enemy.events[0]).toMatchObject({type:'cancel',cause:'interrupted'});
+  expect(act(s,'guardian','bash','brute').state.heroes[1]!.hp).toBe(44);
+  const d={...data,intents:data.intents.map(i=>({...i,kind:'energy' as const}))};
+  const energy=resolveCommand(createBattle(d),d,{beat:1,heroId:'guardian',action:'bash',targetId:'raider'});
+  expect(energy.stages.enemy.events.some(e=>e.type==='cancel')).toBe(false);
+ });
+ it('cooldowns still reject early reuse when only one living hero remains',()=>{
+  const s=createBattle(data);s.heroes.slice(1).forEach(h=>{h.hp=0;});let n=act(s,'guardian','bash','raider').state;
+  expect(currentHeroId(n,data)).toBe('guardian');expect(actionReason(n,data,'guardian','bash')).toBe('Cooldown: 2');
+  expect(()=>act(n,'guardian','bash','raider')).toThrow('Cooldown');n=act(n,'guardian','attack','brute').state;
+  expect(actionReason(n,data,'guardian','bash')).toBe('Cooldown: 1');n=act(n,'guardian','guard','guardian').state;
+  expect(actionReason(n,data,'guardian','bash')).toBe('');expect(act(n,'guardian','bash','raider').state.heroes[0]!.cooldowns.bash).toBe(7);
+ });
+ it('Mark survives the three intervening hero turns and is consumed by the next Duelist',()=>{
+  let s=act(at('tracer'),'tracer','mark','brute').state;expect(s.enemies[1]!.markedUntil).toBe(7);
+  s=act(s,'weaver','attack','raider').state;s=act(s,'healer','heal','weaver').state;s=act(s,'guardian','guard','healer').state;
+  expect(currentHeroId(s,data)).toBe('tracer');expect(s.enemies[1]!.markedUntil).toBe(7);
+  const r=act(s,'tracer','execute','brute');expect(r.stages.hero.events[0]).toMatchObject({amount:50});expect(r.state.enemies[1]!.markedUntil).toBe(0);
+  expect(act(s,'tracer','attack','brute').stages.hero.events[0]).toMatchObject({amount:38});
+ });
+ it('an unused Mark expires after the next Duelist turn, without other classes consuming it',()=>{
+  let s=act(at('tracer'),'tracer','mark','brute').state;
+  s=act(s,'weaver','ward','weaver').state;expect(s.enemies[1]!.markedUntil).toBe(7);
+  s=act(s,'healer','heal','tracer').state;s=act(s,'guardian','guard','healer').state;s=act(s,'tracer','mark','raider').state;
+  expect(s.beat).toBe(7);expect(s.enemies[1]!.markedUntil).toBe(0);expect(s.enemies[0]!.markedUntil).toBe(11);
+ });
+ it('Mage Ward absorbs the current hit before HP and never stacks a full barrier',()=>{
+  const s=at('weaver');const r=act(s,'weaver','ward','guardian');
+  expect(r.state.heroes[0]).toMatchObject({hp:76,barrier:2});expect(r.stages.enemy.events[0]).toMatchObject({amount:0,absorbed:12});
+  s.heroes[2]!.barrier=14;expect(targetOptions(s,data,'weaver','ward').find(t=>t.id==='weaver')?.valid).toBe(false);
+ });
+ it('Priest Heal occurs before the response and clamps at maximum HP',()=>{
+  const s=at('healer');s.heroes[1]!.hp=10;const r=act(s,'healer','heal','tracer');
+  expect(r.stages.hero.state.heroes[1]!.hp).toBe(30);expect(r.stages.enemy.state.heroes[1]!.hp).toBe(4);
+  s.heroes[0]!.hp=73;expect(act(s,'healer','heal','guardian').stages.hero.events[0]).toMatchObject({amount:3});
+ });
+ it('Prayer heals living injured allies only, retains cooldown and refuses a full-health party',()=>{
+  const s=at('healer');s.heroes[0]!.hp=60;s.heroes[1]!.hp=40;s.heroes[2]!.hp=0;
+  const r=act(s,'healer','prayer','party');expect(r.state.heroes.map(h=>h.hp)).toEqual([70,24,0,46]);
+  expect(r.stages.hero.events).toHaveLength(2);expect(r.state.heroes[3]!.cooldowns.prayer).toBe(8);
+  expect(()=>act(s,'healer','heal','weaver')).toThrow('down');
+  const full=at('healer');full.heroes.forEach((h,i)=>{h.hp=data.heroes[i]!.maxHp;});expect(()=>act(full,'healer','prayer','party')).toThrow('full health');
+ });
+ it('rejects stale beats, foreign encounter IDs, downed actors and invalid targets',()=>{
+  const s=createBattle(data),c:Command={beat:1,heroId:'guardian',action:'attack',targetId:'brute'};
+  expect(validateCommand(s,data,{...c,beat:0})).toContain('stale');expect(validateCommand({...s,encounterId:'other'},data,c)).toContain('mismatch');
+  expect(()=>act(s,'guardian','attack','party')).toThrow('Invalid target');s.heroes[0]!.hp=0;expect(()=>act(s,'guardian','attack','brute')).toThrow('down');
+ });
+ it('overkill clamps and killing the frozen source cancels its response',()=>{
+  const s=createBattle(data);s.enemies[0]!.hp=2;const r=act(s,'guardian','attack','raider');
+  expect(r.stages.hero.events[0]).toMatchObject({amount:2});expect(r.stages.enemy.events[0]).toMatchObject({type:'cancel',cause:'defeated'});
+  expect(r.state.heroes[1]!.hp).toBe(56);
+ });
+ it('real outcomes stop ownership and future commands',()=>{
+  const s=createBattle(data);s.enemies[0]!.hp=1;s.enemies[1]!.hp=0;const win=act(s,'guardian','attack','raider').state;
+  expect(win.outcome).toBe('victory');expect(currentHeroId(win,data)).toBeUndefined();expect(()=>act(win,'guardian','attack','raider')).toThrow('ended');
+  const loss=createBattle(data);loss.heroes.forEach(h=>{h.hp=h.id==='guardian'?1:0;});loss.intent={...loss.intent!,targetId:'guardian'};
+  const n=act(loss,'guardian','attack','brute').state;expect(n.outcome).toBe('defeat');expect(currentHeroId(n,data)).toBeUndefined();
+ });
+ it('previews every legal owned skill exactly and replay matches unmodified legal prefixes',()=>{
+  for(const hero of data.heroes)for(const injured of [false,true]){
+   const s=at(hero.id);if(injured)s.heroes.forEach(h=>{h.hp=Math.max(1,h.hp-5);});
+   for(const action of hero.actions)for(const target of targetOptions(s,data,hero.id,action).filter(t=>t.valid)){
+    const c={beat:s.beat,heroId:hero.id,action,targetId:target.id},before=structuredClone(s);const r=resolveCommand(s,data,c);
+    expect(previewCommand(s,data,c)).toEqual(r);expect(s).toEqual(before);expect([...r.stages.hero.events,...r.stages.enemy.events]).toEqual(r.events);
+    if(!injured)expect(replay(data,r.state.commands)).toEqual(r.state);
+   }
+  }
+ });
 });

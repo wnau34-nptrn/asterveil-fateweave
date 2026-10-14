@@ -545,3 +545,15 @@ main { width: 100%; max-width: 1600px; flex: 1; min-height: 0; display: flex; fl
 .target-hint { grid-column: 1 / -1; grid-row: 3; }
 
 @media (max-width: 600px) and (orientation: portrait) { .target-hint { grid-row: 2; } }
+
+/* Skill explanations float above the dock without changing viewport geometry. */
+#skill-popover { position: fixed; inset: auto; margin: 0; width: min(350px, calc(100vw - 16px)); max-height: calc(100dvh - 100px); overflow-y: auto; padding: 10px 12px; border: 1px solid #a7c9e2; border-radius: 12px; background: #10253af5; color: #eef4ff; box-shadow: 0 12px 36px #0009; }
+.skill-popover-heading { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+.skill-popover-heading h2 { flex: 1; min-width: 0; font-size: 14px; color: var(--gold); }
+.skill-popover-heading button { width: 44px; height: 44px; flex: 0 0 44px; padding: 0; }
+#skill-copy { font-size: 12px; line-height: 1.5; }
+#skill-availability { margin-top: 7px; font-size: 11px; color: var(--cyan); }
+#skill-popover > small { display: block; margin-top: 5px; font-size: 10px; color: var(--muted); }
+.hero-card.waiting-turn { opacity: .68; }
+.action[data-unavailable="true"] { background: #101d2f; border-color: #344963; }
+.action[data-unavailable="true"] svg { opacity: .5; }

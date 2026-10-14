@@ -1,23 +1,24 @@
 import type { ActionId } from '../../src/core/battle/types';
 export type Move = readonly [string, ActionId, string];
-// Follow the optional opening, then rotate class skills to keep all four alive.
+// Every command belongs to the next living hero in roster order.
 export const guided: readonly Move[] = [
-  ['guardian','guard','tracer'], ['tracer','mark','brute'], ['tracer','execute','brute'],
-  ['guardian','bash','brute'], ['weaver','bolt','brute'], ['healer','prayer','party'],
-  ['tracer','execute','brute'], ['guardian','guard','weaver'], ['weaver','bolt','brute'],
-  ['tracer','execute','brute'], ['healer','heal','weaver'], ['tracer','mark','raider'],
-  ['tracer','execute','raider'], ['weaver','bolt','raider'],
+  ['guardian','guard','tracer'], ['tracer','mark','brute'], ['weaver','bolt','brute'],
+  ['healer','heal','weaver'], ['guardian','bash','brute'], ['tracer','execute','brute'],
+  ['weaver','bolt','brute'], ['healer','heal','weaver'], ['guardian','bash','brute'],
+  ['tracer','execute','brute'], ['weaver','bolt','raider'], ['healer','prayer','party'],
+  ['guardian','bash','raider'], ['tracer','execute','raider'],
 ];
 export const offensive: readonly Move[] = [
-  ['tracer','mark','brute'], ['tracer','execute','brute'], ['weaver','bolt','brute'],
-  ['guardian','bash','brute'], ['tracer','execute','brute'], ['healer','prayer','party'],
-  ['guardian','bash','brute'], ['tracer','execute','brute'], ['tracer','mark','raider'],
-  ['weaver','bolt','raider'], ['tracer','execute','raider'],
+  ['guardian','bash','raider'], ['tracer','execute','brute'], ['weaver','bolt','brute'],
+  ['healer','heal','weaver'], ['guardian','bash','brute'], ['tracer','mark','brute'],
+  ['weaver','bolt','brute'], ['healer','heal','weaver'], ['guardian','bash','brute'],
+  ['tracer','execute','brute'], ['weaver','bolt','raider'], ['healer','attack','raider'],
+  ['guardian','bash','raider'],
 ];
 export const defensive: readonly Move[] = [
-  ['tracer','mark','brute'], ['guardian','guard','weaver'], ['tracer','execute','brute'],
-  ['guardian','guard','tracer'], ['weaver','bolt','brute'], ['weaver','ward','weaver'],
-  ['guardian','bash','raider'], ['healer','heal','guardian'], ['tracer','execute','brute'],
-  ['guardian','bash','brute'], ['weaver','bolt','brute'], ['guardian','guard','weaver'],
-  ['tracer','execute','brute'], ['healer','heal','weaver'], ['tracer','mark','raider'], ['tracer','execute','raider'],
+  ['guardian','bash','brute'], ['tracer','execute','brute'], ['weaver','ward','weaver'],
+  ['healer','heal','weaver'], ['guardian','bash','brute'], ['tracer','execute','brute'],
+  ['weaver','bolt','brute'], ['healer','prayer','party'], ['guardian','bash','brute'],
+  ['tracer','execute','brute'], ['weaver','bolt','raider'], ['healer','prayer','party'],
+  ['guardian','bash','raider'], ['tracer','execute','raider'],
 ];

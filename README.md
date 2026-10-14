@@ -4,11 +4,11 @@ A small, playable **Fateweave tactical reaction combat** prototype. This is an i
 
 ## Play in your browser
 
-GitHub Pages target: **https://wnau34-nptrn.github.io/asterveil-fateweave/**. Availability depends on a successful **Publish playable prototype** workflow deployment. The interface is in Thai. Click **เริ่มต่อสู้**; use the lower command dock to choose a hero and skill, then tap a marked character on the battlefield to cast immediately. Open **ⓘ** for optional skill details. The **ศึก 1/3 ▾** button selects among three independent battles; each keeps its own progress on this device. No installation or account is required to play the published static game.
+GitHub Pages target: **https://wnau34-nptrn.github.io/asterveil-fateweave/**. Availability depends on a successful **Publish playable prototype** workflow deployment. The interface is in Thai. Click **เริ่มต่อสู้**; use the current hero’s skill buttons to read a floating explanation, then tap a marked character on the battlefield to cast immediately. Turns follow Knight → Duelist → Mage → Priest; other heroes cannot issue commands. Open **ⓘ** for optional skill details. The **ศึก 1/3 ▾** button selects among three independent battles; each keeps its own progress on this device. No installation or account is required to play the published static game.
 
 Characters stand on the courtyard in staggered front/back pairs, with contact shadows at their feet. The formation and character touch areas resize with the field, including single-screen desktop, tablet and mobile play.
 
-The first three turns offer optional Thai hints for reading enemy intent, protecting or interrupting the opening attack, and consuming a Duelist Mark on the same target. The original opening suggests Guard, the rear ambush suggests Mage Ward, and the boss suggests Shield Bash. A dashed gold outline points to the next suggested hero, skill or field target. Hints adapt to existing marks and cooldowns, show actual stage results and disappear after turn 3. Close them with ×; toggle them again in optional help (ⓘ). Other commands stay available, and the separate hint preference does not change battle saves.
+The first three turns offer optional Thai hints for reading enemy intent, protecting or interrupting the opening attack, and preserving a Duelist Mark for the next Duelist turn. Knight opens with Guard (or boss Bash), then Duelist Mark and a legal Mage skill. Hints never suggest commanding another hero. A dashed gold outline points to the next suggested hero, skill or field target. Hints adapt to existing marks and cooldowns, show actual stage results and disappear after turn 3. Close them with ×; toggle them again in optional help (ⓘ). Other commands stay available, and the separate hint preference does not change battle saves.
 
 Public Pages publication was explicitly requested after the initial prototype. The workflow builds and tests the full browser gameplay suite on the production subpath before uploading `dist/`, then deploys with GitHub's official Pages actions. It publishes the current prototype branch and `main`; no automatic merge is performed. If Pages cannot be enabled by Actions, a repository administrator must choose **Settings → Pages → Build and deployment → Source: GitHub Actions**.
 
@@ -73,9 +73,9 @@ npm run test:browser
 
 1. กด **เริ่มต่อสู้** หรือเล่นต่อจากเซฟที่รองรับเวอร์ชันปัจจุบัน
 2. อ่านแถบ **ศัตรูจะตอบโต้หลังฮีโร่ลงมือ**: ผู้โจมตี เป้าหมาย ประเภท และความเสียหาย เปิดแผนอีก 2 จังหวะเมื่อต้องการวางแผน
-3. เลือกฮีโร่และสกิล ทุกคนมีโจมตีพื้นฐานและสกิลเฉพาะ 2 อย่าง ปุ่มแสดงเหตุผลเมื่อใช้ไม่ได้และจำนวนจังหวะที่เหลือของคูลดาวน์
-4. เปิด **วิธีใช้…** เมื่อต้องการอ่านคำอธิบายสกิล การเลือกฮีโร่ เปลี่ยนสกิล หรืออ่านข้อมูลยังไม่เดินจังหวะ
-5. **แตะตัวละครในสนามเพื่อใช้สกิลทันที** เครื่องหมายแสดงตัวที่ใช้สกิลได้ ไม่มีแถวปุ่มเป้าหมายด้านล่าง สกิลพรฟื้นฟูแตะฮีโร่ที่ยังยืนอยู่คนไหนก็ได้เพื่อฟื้นฟูทั้งทีม ไม่มีหน้าต่างยืนยัน แสดง **เทิร์นฮีโร่ (สีฟ้า) → เทิร์นศัตรู (สีชมพู) → เลือกสมาชิกคนถัดไป** เลือด/โล่เปลี่ยนตามช่วงที่เกิดผล หากหยุดศัตรูได้จะขึ้นว่าศัตรูไม่ได้โจมตี กด **ดูผลทันที** เพื่อข้ามการแสดงผล เกมวน เอกิส → ไลรา → ไอรา → เซเรน และข้ามคนที่ล้มแล้ว แตะเลือกคนอื่นเองได้
+3. ใช้สกิลของฮีโร่เจ้าของเทิร์นเท่านั้น ทุกคนมีโจมตีพื้นฐานและสกิลเฉพาะ 2 อย่าง ปุ่มแสดงเหตุผลเมื่อใช้ไม่ได้และจำนวนจังหวะที่เหลือของคูลดาวน์
+4. กดสกิลเพื่อเปิดหน้าต่างลอยอธิบายความสามารถ ปิดด้วย × หรือ Escape หรือแตะเป้าหมายในสนามเพื่อใช้สกิล การเปลี่ยนสกิลหรืออ่านข้อมูลยังไม่เดินจังหวะ
+5. **แตะตัวละครในสนามเพื่อใช้สกิลทันที** เครื่องหมายแสดงตัวที่ใช้สกิลได้ ไม่มีแถวปุ่มเป้าหมายด้านล่าง สกิลพรฟื้นฟูแตะฮีโร่ที่ยังยืนอยู่คนไหนก็ได้เพื่อฟื้นฟูทั้งทีม ไม่มีหน้าต่างยืนยัน แสดง **เทิร์นฮีโร่ (สีฟ้า) → เทิร์นศัตรู (สีชมพู) → เทิร์นสมาชิกคนถัดไป** เลือด/โล่เปลี่ยนตามช่วงที่เกิดผล หากหยุดศัตรูได้จะขึ้นว่าศัตรูไม่ได้โจมตี กด **ดูผลทันที** เพื่อข้ามการแสดงผล เกมวน เอกิส → ไลรา → ไอรา → เซเรน และข้ามคนที่ล้มแล้ว สั่งการคนอื่นไม่ได้ แต่ยังแตะเพื่อนเป็นเป้าหมายสกิลสนับสนุนได้
 6. กำจัดศัตรูทั้งสองโดยมีฮีโร่เหลืออย่างน้อย 1 คน เป้าหมายเสริมคือรอดครบ **4 คน** กด **เล่นอีกครั้ง** เพื่อเริ่มใหม่
 
 ### Four classes, front 2 / back 2
@@ -83,7 +83,7 @@ npm run test:browser
 | Hero / อาชีพ | Lane | HP / basic attack | Two class skills |
 |---|---|---|---|
 | Aegis / เอกิส · อัศวิน | Front | 76 / 10 | ตั้งรับแทน: รับการโจมตีแทนคนที่ศัตรูเล็ง ลดความเสียหาย 65%; กระแทกโล่: 18 และหยุดการโจมตีกายภาพจากเป้าหมายในจังหวะนี้ |
-| Lyra / ไลรา · นักดาบ | Front | 56 / 16 | ติดตรา: 3 จังหวะรวมจังหวะนี้; ฟันเจาะจุด: 28 หรือ 50 เมื่อเป้าหมายติดตรา |
+| Lyra / ไลรา · นักดาบ | Front | 56 / 16 | ติดตรา: 5 จังหวะรวมจังหวะนี้; ฟันเจาะจุด: 28 หรือ 50 เมื่อเป้าหมายติดตรา |
 | Eira / ไอรา · จอมเวท | Back | 48 / 11 | ศรเวท: 26; โล่เวท: โล่ 14 ให้เพื่อน 1 คน |
 | Seren / เซเรน · นักบวช | Back | 46 / 8 | รักษา: ฟื้น 20 ให้เพื่อน 1 คน; พรฟื้นฟู: ฟื้นคนละ 10 ให้ทั้งทีม |
 
@@ -93,29 +93,29 @@ npm run test:browser
 - Shield Bash, Precision Strike, Arcane Bolt, Ward and Heal have a 3-beat cooldown: used on beat 1, available on beat 4. Prayer has 4 beats. Basic Attack, Guard and Mark have no cooldown. Cooldowns advance with committed battle beats, not time, and survive reload.
 - Ward gives a non-stacking 14-point barrier that persists until absorbed. Healing happens before the enemy response, cannot exceed maximum HP, and never revives downed heroes. A fully healthy target/party cannot be healed.
 
-The former Crystal, Redirect and Counter systems are removed. No MP, initiative queue, reserve switching or movement grid is implemented. There is exactly one manually chosen hero action and at most one frozen enemy response per beat.
+The former Crystal, Redirect and Counter systems are removed. No MP, initiative queue, reserve switching or movement grid is implemented. There is exactly one action by the current hero and at most one frozen enemy response per beat.
 
 In the original battle, Raider has 64 HP and Brute 164. The repeating intent pattern is physical Slash 12 → energy Bolt 28 → physical Slash 12 → physical Crush 26 → energy Shadow Knife 14 → energy Bolt 28. Dead sources are skipped when announcing the next event. Forecasts assume currently living actors remain alive; the actual next event appears after the current beat finishes.
 
-The modern classic-JRPG HUD fits the visible viewport without page scrolling. Desktop and short landscape put the battlefield on the left and the 2×2 hero roster plus three owned commands on the right. Portrait tablets keep a flexible battlefield above a two-column team/command dock. Portrait phones up to 600px retain the compact stacked layout, 44px hero cards and 54px skills. Enemy names/HP stay on the field; larger layouts also show enemy HP cards. The frozen enemy intent, current turn and optional three-turn coach remain visible. Only optional skill explanations, rules, forecasts and history scroll inside the ⓘ dialog.
+The modern classic-JRPG HUD fits the visible viewport without page scrolling. Desktop and short landscape put the battlefield on the left and the 2×2 hero roster plus three owned commands on the right. Portrait tablets keep a flexible battlefield above a two-column team/command dock. Portrait phones up to 600px retain the compact stacked layout, 44px hero cards and 54px skills. Enemy names/HP stay on the field; larger layouts also show enemy HP cards. The frozen enemy intent, current turn and optional three-turn coach remain visible. Skill details float without changing the field layout. Optional rules, forecasts and history scroll inside the ⓘ dialog.
 
-Front/back describe actual targeting rules. Selecting a hero or skill never advances a beat; tapping a valid marked field character immediately commits that skill. There is no confirmation dialog or complete outcome preview. Rotation preserves an uncast skill. A cast shows the hero action and then its frozen enemy response for one second each, with distinct colors and actor/recipient highlights. Only the current stage’s HP/barriers/log appear; controls wait until both stages finish or the player chooses **ดูผลทันที**. The screen stays stationary through casting, completion and restart. Selection advances to the next living member in roster order; reload reconstructs that selection from the last committed command. Battle outcomes keep the final actor selected. Thai fonts use installed system fallbacks.
+Front/back describe actual targeting rules. Selecting or reading a skill never advances a beat; tapping a valid marked field character immediately commits that skill. There is no confirmation dialog or complete outcome preview. Rotation preserves an uncast skill. A cast shows the hero action and then its frozen enemy response for one second each, with distinct colors and actor/recipient highlights. Only the current stage’s HP/barriers/log appear; controls wait until both stages finish or the player chooses **ดูผลทันที**. The screen stays stationary through casting, completion and restart. The engine enforces the next living member in roster order; reload reconstructs that selection from the last committed command. Battle outcomes keep the final actor selected. Thai fonts use installed system fallbacks.
 
-Both tested basic-attack priorities lose. An 11-beat offensive plan and a 16-beat defensive plan each use all four classes and win with all four standing. These are regression examples, not a claim of final balance; see [balance validation](docs/BALANCE_VALIDATION.md).
+Both tested basic-attack priorities lose. A 13-beat offensive plan and a 14-beat defensive plan each use all four classes and win with all four standing. These are regression examples, not a claim of final balance; see [balance validation](docs/BALANCE_VALIDATION.md).
 
-The original encounter remains **veil-siege**, content version **3**. New encounters are **rear-ambush** and **rift-warden**, both content version **1**. Old three-member saves restart safely instead of replaying commands under the new party and rules. Refresh the published page to load this update.
+Encounter versions are **veil-siege / 4**, **rear-ambush / 2**, and **rift-warden / 2**. Previous free-selection saves restart safely under the new turn rules. Old three-member saves restart safely instead of replaying commands under the new party and rules. Refresh the published page to load this update.
 
 ## Three battles
 
 | Battle | Threat | Tested alternatives |
 |---|---|---|
 | ศึกปิดรอยแยก | Raider 64 HP + Brute 164 HP; mixed attacks | Original offensive and defensive class-skill routes |
-| ศึกเงาล่าแนวหลัง | Shadow Hunter 72 HP + Channeler 148 HP; five of six attacks reach the back row | Ward opening followed by Mark/strike; longer interception, barrier and healing route |
+| ศึกเงาล่าแนวหลัง | Shadow Hunter 72 HP + Channeler 148 HP; five of six attacks reach the back row | Owned-turn combo; a longer interception, barrier and healing route |
 | ศึกผู้คุมรอยแยก | One 250-HP boss alternating physical and energy attacks | Mark/strike combo with physical interruptions; sustain route using unmarked strikes, Ward and healing |
 
 Two example routes per encounter win with all four heroes alive. The tested highest-damage-hero basic-attack policies lose for both target priorities in the two-enemy battles and against the boss; these are concrete policies, not an exhaustive balance claim. The selector is a combat practice menu; no expedition, stage unlocking, rewards or progression are implemented.
 
-Each battle has a separate validated command-replay save. The original storage key and version-3 saves remain compatible. Selecting another battle restores its progress; restarting resets only that selected battle. Refresh returns to the last selected valid battle. The selector waits until turn presentation finishes; optional selection does not cast a skill. Missing or denied storage leaves all three playable, and switching retains each battle within the current tab; refreshing cannot retain those unsaved sessions.
+Each battle has a separate validated command-replay save. The original storage key is retained, but old content versions start fresh because actor ownership and Mark duration changed. Selecting another battle restores its progress; restarting resets only that selected battle. Refresh returns to the last selected valid battle. The selector waits until turn presentation finishes; optional selection does not cast a skill. Missing or denied storage leaves all three playable, and switching retains each battle within the current tab; refreshing cannot retain those unsaved sessions.
 
 ## Architecture
 
@@ -147,3 +147,6 @@ docs/                    Direction, integration plan, roadmap, validation
 - Local save is tied to this origin and encounter content version. Increment the content version when rules change.
 
 See [modern HUD spec](docs/UI_DESIGN.md), [validation](docs/VALIDATION.md), [gameplay direction](docs/GAMEPLAY_DIRECTION.md), [art direction](docs/ART_DIRECTION.md), and [roadmap](docs/DEVELOPMENT_ROADMAP.md).
+
+
+Skills open a nonmodal floating window automatically. It shows the selected owner's ability, power/conditions, cooldown and target availability. Close with × or Escape, or tap a legal field target directly; there is no extra confirmation step. Cooling skills can be inspected but have no valid cast target. Allies can receive support skills while their own command cards remain disabled. The popup fits the viewport and does not move the arena or scroll the game.

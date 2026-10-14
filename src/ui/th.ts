@@ -36,6 +36,7 @@ export function reasonThai(reason: string): string {
   return ({
     'The encounter has ended.': 'การต่อสู้จบแล้ว',
     'This hero is down.': 'ฮีโร่คนนี้ล้มแล้ว',
+    'It is not this hero’s turn.': 'ยังไม่ถึงเทิร์นฮีโร่คนนี้',
     'This hero does not have this action.': 'อาชีพนี้ไม่มีสกิลนี้',
     'This enemy is down.': 'ศัตรูตัวนี้ถูกกำจัดแล้ว',
     'Guard must protect the announced target.': 'ศัตรูไม่ได้เล็งคนนี้',

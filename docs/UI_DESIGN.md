@@ -1,5 +1,7 @@
 # Modern battle HUD design spec
 
+Dated sections record earlier presentation work; the final owned-turn section defines the current rules and save behavior.
+
 The supplied classic JRPG screenshots guide a portrait battle screen: arena above enemy HP, two-column hero cards below, and skills/targets at the bottom. The user's requested modernization retains that recognizable skeleton with restrained framing, larger readable type, clear class colors and touch-friendly controls.
 
 ## Design system and inventory
@@ -10,7 +12,7 @@ The supplied classic JRPG screenshots guide a portrait battle screen: arena abov
 - Installed Thai system font stack for game labels; no remote font dependency. Mobile names 14–16px, actions 11px, captions 8–10px (compact readiness names 8.5px at 320px); desktop names/actions larger.
 - Original consistent 24×24 SVG line icons for Attack, Guard, Bash, Mark, Precision Strike, Bolt, Ward, Heal, Prayer and Restart. Skill icons share class colors; disabled states retain readable reasons.
 - Native DOM bands: encounter/beat/info/restart → turn phase → canvas + existing event timeline and lane labels → two enemy HP cards → frozen enemy intent → four hero cards → selected class/commands/targets → one help disclosure containing tactics/history. Desktop and short landscape place the battlefield beside the team/command panel. Portrait tablets use a flexible arena above adjacent team/command sections; portrait phones retain compact stacked bands. All gameplay layouts fit the viewport; optional help lives in the ⓘ dialog.
-- Four hero cards, exactly 2×2 at all sizes. Each has an illustrated portrait, class/lane, numeric HP and bar, optional barrier, and two real skill statuses. Selection is a gold outline plus text. Downed actors fade and cannot act.
+- Four hero cards, exactly 2×2 at all sizes. Each has an illustrated portrait, class/lane, numeric HP and bar, optional barrier, and two real skill statuses. The owner is a gold outline plus text; other actors cannot be selected. Downed actors fade and cannot act.
 - Three real owned commands for the selected class. Original English names accompany Thai labels and powers. Enemy/ally target controls sit directly over their battlefield characters with subtle outlines and a skill marker; accessible labels include true HP.
 - Valid target taps immediately cast the selected skill. Optional **วิธีใช้…** exposes skill rules; the announced intent remains visible. No predicted-outcome ledger or confirmation dialog covers the field.
 
@@ -20,7 +22,7 @@ Image Gen produced a full phone concept and separate original six-frame portrait
 
 Concept source in the session: `/workspace/generated_images/exec-9b0e746e-73b4-4e17-9815-749accca238e.png`. This session-local file is not a runtime dependency. The published originals are `public/assets/art/{units,portraits,ruins}.webp`; generated artwork is not copied from Brave Frontier. No screenshot is used as interactive UI. Controls wait for Phaser asset readiness on first load. Pointer zones follow the unit image feet/height anchors and include the face; status labels render above sprite artwork to remain readable at narrow widths.
 
-Intentional constraints relative to generated concept: Thai names, skills, HP, cooldowns and beat labels follow real encounter data. Knight/Duelist remain the front column and Mage/Priest the back column, matching actual formation mechanics. Generated concept's invented skill names, extra timeline slots, generic Battle 1/1 and dummy readiness dots are replaced by actual labels and available/unavailable states. Two-enemy HP bars supplement the frozen intent; they do not add a new encounter, Break/Ultimate/Overdrive, inventory, AUTO or currency. Original generated characters retain class identity without copying the reference game's cast. Existing mechanics and version-3 saves remain unchanged. On compact fields ally HP numbers move to the large roster cards so lower character artwork cannot cover labels; name and small HP bar remain on the field.
+Intentional constraints relative to generated concept: Thai names, skills, HP, cooldowns and beat labels follow real encounter data. Knight/Duelist remain the front column and Mage/Priest the back column, matching actual formation mechanics. Generated concept's invented skill names, extra timeline slots, generic Battle 1/1 and dummy readiness dots are replaced by actual labels and available/unavailable states. Two-enemy HP bars supplement the frozen intent; they do not add a new encounter, Break/Ultimate/Overdrive, inventory, AUTO or currency. Original generated characters retain class identity without copying the reference game's cast. Original artwork remains unchanged; current turn/save rules are described in the owned-turn section below. On compact fields ally HP numbers move to the large roster cards so lower character artwork cannot cover labels; name and small HP bar remain on the field.
 
 ## Interaction contract
 
@@ -54,7 +56,7 @@ All layouts now remain stationary during casts; the field and turn label fit tog
 
 ## Direct casting — 2026-10-13
 
-User feedback removed the recurring complete-outcome preview and confirmation sheet. Field targets have skill/recipient/HP accessible names and markers, while the command hint says to tap the character in the field. The canvas uses the same legal-target path; hero cards always select the actor. Invalid targets, downed actors, unavailable skills and scene loading remain blocked. The two-second presentation lock rejects repeated input, and the selected next hero defaults to Attack when it finishes. Optional skill help stays in the dock, with enemy intent and forecasts available for planning. No combat math, scene artwork or content/save version changes.
+User feedback removed the recurring complete-outcome preview and confirmation sheet. Field targets have skill/recipient/HP accessible names and markers, while the command hint says to tap the character in the field. The canvas uses the same legal-target path; hero cards always show the current owner. Invalid targets, downed actors, unavailable skills and scene loading remain blocked. The two-second presentation lock rejects repeated input, and the selected next hero defaults to Attack when it finishes. Optional skill help stays in the dock, with enemy intent and forecasts available for planning. No combat math, scene artwork or content/save version changes.
 
 ## Portrait gameplay on one screen — 2026-10-13
 
@@ -78,9 +80,9 @@ Outside phone portrait mode, the timeline occupies the free upper center and lan
 
 ## Optional three-turn teaching — 2026-10-13
 
-A compact strip between the phase banner and field appears during the first three turns of an active battle. It teaches announced targets and Guard interception, Mark without immediate damage, then consuming the Mark through a ready Duelist strike on that same enemy. It reads legal targets, marks and cooldowns from real battle state. Existing marks prompt a strike immediately; a cooling Precision Strike prompts basic Attack; an unmarked third turn describes applying a Mark for a later hit without claiming its bonus is already active.
+A compact strip between the phase banner and field appears during the first three turns of an active battle. It teaches announced targets and Knight Guard (or boss Bash), Duelist Mark without immediate damage, then a legal Mage Bolt/Ward while saving the Mark for the next Duelist turn. It reads legal targets, marks and cooldowns from real battle state and never suggests using a different actor.
 
-A static dashed gold outline follows the next suggested hero card, owned skill or field target; the first lesson also outlines current enemy intent. All alternative choices and automatic next-hero selection remain available. During presentation the strip shows the actual hero/enemy stage event instead of another command. It disappears at beat 4 and after outcomes. × dismisses it; optional help includes a toggle for beats 1–3. The independent `asterveil.fateweave.tutorial.v1` preference persists dismissal and tolerates unavailable storage. Replay determines the current lesson, with no tutorial commands, forced confirmation or save-version migration.
+A static dashed gold outline follows the current owner’s suggested skill or field target; the first lesson also outlines current enemy intent. Owned skill/target alternatives remain available; the next living hero is enforced. During presentation the strip shows the actual hero/enemy stage event instead of another command. It disappears at beat 4 and after outcomes. × dismisses it; optional help includes a toggle for beats 1–3. The independent `asterveil.fateweave.tutorial.v1` preference persists dismissal and tolerates unavailable storage. Replay determines the current lesson, with no tutorial commands, forced confirmation or save-version migration.
 
 Portrait teaching uses a 48px strip with 11px heading, 10px copy and a 44px dismiss button. The adaptive field reserves room for it without main-page scrolling. Enemy label foot margins include the complete HP text on the smallest teaching field. Closing the strip filters residual canvas touch as the field moves upward. The optional help toggle retains keyboard focus inside its dialog.
 
@@ -98,4 +100,11 @@ Optional rules, selected-skill explanations, forecasts, tutorial settings and hi
 
 A 44px header button shows the selected battle number and opens a native selection dialog. Its three Thai choices explain each threat and show saved resume/outcome status. It consumes no additional gameplay row; all prior viewport layouts still fit one screen. The selector is disabled during turn presentation. Closing or selecting filters residual canvas touches; optional dialogs make background combat inert. Keyboard Escape returns focus to the selector.
 
-Independent battle definitions update the scene's enemies, HP, labels, timeline and valid targets; the solo boss leaves no stale Raider actor/control. Its enemy HP card spans the available width. Generated art and grounded staggered formation are reused. New opening coaching suggests Ward against rear-reaching energy and Bash against the boss's physical hit, using actual targets and powers. Existing class selection, owned skills and direct character targeting remain unchanged.
+Independent battle definitions update the scene's enemies, HP, labels, timeline and valid targets; the solo boss leaves no stale Raider actor/control. Its enemy HP card spans the available width. Generated art and grounded staggered formation are reused. Opening coaching suggests Knight Guard against rear-reaching energy and Bash against the boss's physical hit, using actual targets and powers. Existing class selection, owned skills and direct character targeting remain unchanged.
+
+
+## Owned turns and floating skill explanations
+
+Only the current hero's card/three owned skills are actionable. Other hero cards remain readable but disabled and dim; field clicks cannot change the actor. The owner starts with Knight and rotates through Duelist/Mage/Priest, skipping fallen heroes. Support markers still target allies regardless of whether their command card is disabled.
+
+Clicking a skill selects it and opens a nonmodal floating panel with Thai ability rules, power, cooldown and actual availability. It stays above the dock on wide screens and below the header on portrait phones, clamped to the viewport. It does not resize the arena or add document scrolling. ×/Escape returns focus to the selected skill; a legal field target can cast without confirmation and closes the explanation. Popup touches cannot leak into delayed canvas input. Cooling skills remain inspectable, with disabled targets and enforced resolver validation. Both skill buttons and the floating close control expose accessible labels/44px hit sizes.

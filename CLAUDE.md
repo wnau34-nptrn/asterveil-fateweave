@@ -8,7 +8,7 @@ Work only in `asterveil-fateweave`. Never modify, reset, merge, push to, or impo
 - `src/core/battle` owns serializable authoritative state, stable IDs, beat-stamped commands, legal targets, deterministic resolution, preview and replay. No Phaser/browser imports or clocks/random damage in rules.
 - Typed `src/content` definitions own actor values, announced intent schedule, hero lanes, class skills, cooldowns and tunable numeric rules.
 - `BattleScene` adapts state into disposable shapes/text, pointer selection and VFX. No damage or resource mutations in scenes or tweens.
-- `BattleUI` owns temporary selection, confirmation and presentation lock; it commits once, saves immediately and projects state into DOM. Never allow selection alone or background/resume to confirm a command.
+- `BattleUI` owns temporary skill selection, floating explanations and presentation lock; it commits once, saves immediately and projects state into DOM. Never allow selection alone or background/resume to confirm a command.
 - `core/save` accepts an injected storage port and validates saves by command replay. `platform/browser-storage` handles browser API access.
 - CSS tokens define the modern navy/gold HUD; Phaser uses original generated unit and backdrop atlases with code-native input, HP/status labels and short VFX. Generated artwork and asset frame mapping live in `game/visuals`; HUD text and controls must remain DOM-native.
 
@@ -32,6 +32,15 @@ The approved map is a **2D square-tile Open Board Expedition** with free four-di
 
 ## Encounter catalog and independent combat saves
 
-`src/content/encounters/catalog.ts` contains the original version-3 Veil Siege and two version-1 battles: rear energy pressure and a single boss alternating physical/energy attacks. All reuse the same hero/skill/rule definitions; keep the original encounter's balance and save key compatible. Additional encounters own separate validated replay keys, and a separate validated preference remembers the selected catalog entry. Restart resets only that battle. An in-tab snapshot cache retains committed battle states when storage is unavailable; never cache presentation snapshots. No expedition, unlocking or progression is implemented by the practice selector.
+`src/content/encounters/catalog.ts` contains the version-4 Veil Siege and two version-2 battles: rear energy pressure and a single boss alternating physical/energy attacks. All reuse the same hero/skill/rule definitions; keep the original encounter's damage schedule and save key; reject earlier content versions under the new turn rules. Additional encounters own separate validated replay keys, and a separate validated preference remembers the selected catalog entry. Restart resets only that battle. An in-tab snapshot cache retains committed battle states when storage is unavailable; never cache presentation snapshots. No expedition, unlocking or progression is implemented by the practice selector.
 
 `BattleUI` selects/restores the current definition; `BattleScene.setEncounter` swaps only rendering data and clears obsolete targets/effects. Never transfer stale actors, timers, hero selection or commands between battles. Lock the selector during turn presentation; optional native dialogs must block background casting and filter residual closing touches. Preserve the single-screen gameplay layout and ≥44px header/field controls. Regression fixtures cover two four-survivor routes per encounter and concrete basic-attack defeats, without claiming exhaustive or final balance.
+
+
+## Enforced hero turns and skill popup
+
+`currentHeroId` reconstructs the next living actor from committed commands and roster order. `actionReason` enforces ownership before cooldown/target validation; preview and replay must reject foreign actors too. Start/restart with the Knight and skip fallen heroes. During presentation show the original actor, but allow the next owner only on completion. Teammates are valid support targets, never alternative actors.
+
+Mark lasts 5 global beats so a Duelist Mark remains until the next Duelist turn after three intervening heroes. Cooldowns remain global beats and still matter when heroes are skipped. Changing these rules bumped all content versions; earlier saves start fresh. Preserve multiple legal winning routes and explicit Attack-only policy defeats.
+
+Owned skill buttons open a nonmodal native floating popover with real descriptions/availability. Opening, switching, closing or escaping never commits. Cooling skills can be read but cannot cast. Both responsive layouts and the field geometry stay fixed. Retain keyboard focus return, closing-touch filtering, stage locks and native ≥44px field targeting.

@@ -26,11 +26,22 @@ export function plannedIntents(state: BattleState, data: EncounterDefinition, co
   if (state.outcome !== 'active') return [];
   return Array.from({ length: count }, (_, i) => announce({ ...state, beat: state.beat + i + 1 }, data)).filter(i => i !== null);
 }
+// Turn ownership is reconstructed from committed commands, including replay.
+export function currentHeroId(state: BattleState, data: EncounterDefinition): string | undefined {
+  if (state.outcome !== 'active') return;
+  const previous = state.commands.at(-1)?.heroId;
+  const index = previous ? data.heroes.findIndex(hero => hero.id === previous) : -1;
+  for (let offset = 1; offset <= data.heroes.length; offset++) {
+    const hero = data.heroes[(index + offset) % data.heroes.length]!;
+    if (state.heroes.some(actor => actor.id === hero.id && actor.hp > 0)) return hero.id;
+  }
+}
 export function actionReason(state: BattleState, data: EncounterDefinition, heroId: string, action: ActionId): string {
   if (state.outcome !== 'active') return 'The encounter has ended.';
   const actor = state.heroes.find(h => h.id === heroId);
   if (!actor || actor.hp <= 0) return 'This hero is down.';
   if (!data.heroes.find(h => h.id === heroId)?.actions.includes(action)) return 'This hero does not have this action.';
+  if (currentHeroId(state, data) !== heroId) return 'It is not this hero’s turn.';
   const remaining = (actor.cooldowns[action] ?? 0) - state.beat;
   if (remaining > 0) return `Cooldown: ${remaining}`;
   return '';
