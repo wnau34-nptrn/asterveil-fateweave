@@ -1,0 +1,153 @@
+import { expect, test, type Page } from '@playwright/test';
+import { encounterById } from '../../src/content/encounters/catalog';
+import { chapterOne as map } from '../../src/content/world/chapter1';
+import { createBattle, currentHeroId, resolveCommand } from '../../src/core/battle/engine';
+import type { ExpeditionState } from '../../src/core/world/types';
+import { findTiles, move, newExpedition, reveal } from '../../src/core/world/world';
+import { battleLesson } from '../../src/ui/tutorial';
+
+const key = 'asterveil.fateweave.expedition.v1';
+const full = { guardian: 76, tracer: 56, weaver: 48, healer: 46 };
+function base(patch: Partial<ExpeditionState> = {}): ExpeditionState {
+  const state = { ...newExpedition(map, encounterById, 77), tutorialDone: true, ...patch }; reveal(state, map); return state;
+}
+async function seed(page: Page, state: ExpeditionState) {
+  await page.addInitScript(({ raw, key }) => { if (sessionStorage.getItem('playtest-seeded')) return; localStorage.setItem(key, raw); sessionStorage.setItem('playtest-seeded', 'yes'); }, { raw: JSON.stringify({ version: 1, state }), key });
+}
+async function open(page: Page, state?: ExpeditionState) {
+  const issues: string[] = []; page.on('pageerror', e => issues.push(e.message)); page.on('console', m => { if (m.type() === 'error') issues.push(m.text()); });
+  if (state) await seed(page, state);
+  await page.goto('./');
+  await page.locator(state ? '#continue' : '#new-game').click();
+  return issues;
+}
+const saved = (page: Page): Promise<ExpeditionState> => page.evaluate(k => JSON.parse(localStorage.getItem(k)!).state, key);
+async function reachable(page: Page, selector: string) {
+  await expect.poll(() => page.locator(selector).evaluate(el => { const r = el.getBoundingClientRect(); return r.width >= 44 && r.height >= 44 && r.left >= 0 && r.top >= 0 && r.right <= innerWidth && r.bottom <= innerHeight && el.contains(document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2)); })).toBe(true);
+}
+async function finishPlayback(page: Page) {
+  const skip = page.locator('#skip-turn'); if (await skip.count()) await skip.click().catch(() => {});
+  await expect(page.locator('#beat-status')).not.toContainText('กำลังแสดงผล');
+}
+
+test('a new expedition walks tile by tile with buttons, keys and adjacent taps; walls block; reload resumes', async ({ page }, info) => {
+  // Pick a seed whose first three steps stay quiet so the walk is deterministic.
+  let seedValue = 1; const quiet = (seed: number) => { let t = newExpedition(map, encounterById, seed); for (const d of ['left', 'right', 'right'] as const) { t = move(t, map, d).state; if (t.battle) return false; } return true; };
+  while (!quiet(seedValue)) seedValue++;
+  const issues = await open(page, newExpedition(map, encounterById, seedValue));
+  await expect(page.locator('#world-view')).toBeVisible();
+  const start = (await saved(page)).position;
+  await page.locator('#move-up').click();
+  await expect(page.locator('#world-message')).toContainText('ไปต่อไม่ได้'); expect((await saved(page)).position).toEqual(start);
+  await page.locator('#move-left').click(); expect((await saved(page)).position).toEqual({ x: start.x - 1, y: start.y });
+  await page.keyboard.press('ArrowRight'); await expect.poll(async () => (await saved(page)).position).toEqual(start);
+  await page.locator(`.tile[data-x="${start.x + 1}"][data-y="${start.y}"]`).click();
+  await expect.poll(async () => (await saved(page)).position).toEqual({ x: start.x + 1, y: start.y });
+  expect((await saved(page)).steps).toBe(3);
+  await page.screenshot({ path: info.outputPath('world-start.png') });
+  await page.reload(); await expect(page.locator('#title-view')).toContainText('เดินแล้ว 3 ก้าว'); await page.locator('#continue').click();
+  await expect(page.locator('#party-token')).toHaveCSS('--x', String(start.x + 1));
+  expect(issues).toEqual([]);
+});
+
+test('walking until the first encounter opens the tutorial battle in place', async ({ page }) => {
+  const state = newExpedition(map, encounterById, 11);
+  let probe = state; let steps = 0;
+  while (!probe.battle) { probe = move(probe, map, steps % 2 ? 'right' : 'left').state; steps++; }
+  const issues = await open(page, state);
+  for (let i = 0; i < steps; i++) await page.locator(i % 2 ? '#move-right' : '#move-left').click();
+  await expect(page.locator('#world-banner')).toContainText('การปะทะครั้งแรก');
+  await expect(page.locator('#battle-view')).not.toHaveClass(/view-off/);
+  await expect(page.locator('#encounter-kind')).toContainText('ศึกสอน');
+  expect((await saved(page)).position).toEqual(probe.position);
+  expect(issues).toEqual([]);
+});
+
+test('victory returns to the same tile with the surviving HP; fallen heroes stay down until a camp rest', async ({ page }, info) => {
+  const data = encounterById('shadow-stalker')!; const hp = { guardian: 40, tracer: 20, weaver: 30, healer: 4 };
+  const camp = findTiles(map, 'camp')[1]!; const where = { x: camp.x, y: camp.y + 1 };
+  const state = base({ position: where, hp, battle: { kind: 'random', encounterId: data.id, entry: hp, commands: [] } });
+  let b = createBattle(data, { hp }); const moves: [string, string, string][] = [];
+  while (b.outcome === 'active') { const l = battleLesson(b, data)!; moves.push([l.heroId, l.action, l.targetId]); b = resolveCommand(b, data, { beat: b.beat, heroId: l.heroId, action: l.action, targetId: l.targetId }).state; }
+  expect(b.outcome).toBe('victory');
+  const issues = await open(page, state); await page.locator('#start').click();
+  for (const [hero, action, target] of moves) {
+    await expect(page.locator(`#hero-${hero}`)).toHaveAttribute('aria-pressed', 'true');
+    await page.locator(`#action-${action}`).click(); await page.locator('[data-ui=skill-close]').click();
+    await page.locator(`#target-${action === 'prayer' ? 'party' : target}`).click(); await finishPlayback(page);
+  }
+  await expect(page.locator('.result-card')).toContainText('ชนะแล้ว'); await page.locator('#leave-battle').click();
+  await expect(page.locator('#world-view')).toBeVisible();
+  const after = await saved(page);
+  expect(after.position).toEqual(where); expect(after.battle).toBeNull();
+  expect(after.hp).toEqual(Object.fromEntries(b.heroes.map(h => [h.id, h.hp])));
+  for (const h of b.heroes) await expect(page.locator(`#world-hero-${h.id}`)).toContainText(h.hp > 0 ? `${h.hp}/` : 'ล้มแล้ว');
+  await page.screenshot({ path: info.outputPath('after-victory.png') });
+  await page.locator('#move-up').click(); await expect(page.locator('#rest')).toBeEnabled();
+  await page.locator('#rest').click();
+  await expect(page.locator('#world-message')).toContainText('พักที่แคมป์แล้ว');
+  expect((await saved(page)).hp).toEqual(full); expect((await saved(page)).camp).toEqual(camp);
+  expect(issues).toEqual([]);
+});
+
+test('defeat retreats to the last rested camp with a recovered party', async ({ page }) => {
+  const data = encounterById('veil-siege')!; const hp = { guardian: 6, tracer: 4, weaver: 3, healer: 2 };
+  const camp = findTiles(map, 'camp')[1]!;
+  let b = createBattle(data, { hp }); const commands = [];
+  while (b.outcome === 'active') { const c = { beat: b.beat, heroId: currentHeroId(b, data)!, action: 'attack' as const, targetId: b.enemies.find(e => e.hp > 0)!.id }; const next = resolveCommand(b, data, c).state; if (next.outcome !== 'active') break; commands.push(c); b = next; }
+  const last = { heroId: currentHeroId(b, data)!, targetId: b.enemies.find(e => e.hp > 0)!.id };
+  const state = base({ position: { x: camp.x - 1, y: camp.y }, camp, hp, battle: { kind: 'random', encounterId: data.id, entry: hp, commands } });
+  const issues = await open(page, state);
+  await page.locator('#action-attack').click(); await page.locator('[data-ui=skill-close]').click(); await page.locator(`#target-${last.targetId}`).click();
+  await finishPlayback(page);
+  await expect(page.locator('.result-card')).toContainText('แพ้แล้ว'); await expect(page.locator('#leave-battle')).toContainText('กลับแคมป์');
+  await page.locator('#leave-battle').click();
+  const after = await saved(page);
+  expect(after.position).toEqual(camp); expect(after.hp).toEqual(full); expect(after.defeats).toBe(1);
+  await expect(page.locator('#world-message')).toContainText('ถอยกลับ'); await expect(page.locator('#rest')).toBeEnabled();
+  expect(issues).toEqual([]);
+});
+
+test('the boss blocks the gate; after its defeat the goal completes the expedition', async ({ page }, info) => {
+  const [boss] = findTiles(map, 'boss');
+  const issues = await open(page, base({ position: { x: boss!.x, y: boss!.y + 1 }, bossDefeated: false }));
+  await page.locator('#move-up').click();
+  await expect(page.locator('#encounter-kind')).toContainText('บอส');
+  expect((await saved(page)).battle?.kind).toBe('boss');
+  await page.reload(); await page.locator('#continue').click(); await expect(page.locator('#encounter-title')).toContainText('ผู้คุมรอยแยก');
+  await page.evaluate(k => { const s = JSON.parse(localStorage.getItem(k)!); s.state.battle = null; s.state.bossDefeated = true; localStorage.setItem(k, JSON.stringify(s)); }, key);
+  await page.reload(); await page.locator('#continue').click();
+  for (let i = 0; i < 3; i++) await page.locator('#move-up').click();
+  await expect(page.locator('#world-banner')).toContainText('ประตูรอยแยกปิดลงแล้ว');
+  expect((await saved(page)).completed).toBe(true); await expect(page.locator('#move-up')).toBeDisabled();
+  await reachable(page, '#new-expedition-banner'); await page.screenshot({ path: info.outputPath('expedition-complete.png') });
+  await page.locator('#new-expedition-banner').click(); expect((await saved(page)).completed).toBe(false);
+  expect(issues).toEqual([]);
+});
+
+test('starting over from the title and the info dialog both require confirmation', async ({ page }) => {
+  const issues = await open(page, base({ steps: 9 }));
+  await page.locator('#world-info-button').click(); await page.locator('#new-expedition').click();
+  await expect(page.locator('#new-expedition')).toContainText('ยืนยัน'); expect((await saved(page)).steps).toBe(9);
+  await page.locator('#new-expedition').click(); await expect(page.locator('#world-info')).not.toBeVisible();
+  expect((await saved(page)).steps).toBe(0);
+  await page.reload(); await page.locator('#new-game').click(); await expect(page.locator('#new-game')).toContainText('ยืนยัน');
+  expect(issues).toEqual([]);
+});
+
+for (const viewport of [{ width: 320, height: 568 }, { width: 390, height: 640 }, { width: 390, height: 844 }, { width: 600, height: 800 }, { width: 768, height: 1024 }, { width: 844, height: 390 }, { width: 1024, height: 768 }, { width: 1280, height: 720 }, { width: 1366, height: 640 }, { width: 1366, height: 768 }, { width: 1920, height: 1080 }]) {
+  test(`world ${viewport.width}x${viewport.height}: map, team and controls fit without scroll`, async ({ browser }, info) => {
+    const context = await browser.newContext({ viewport, hasTouch: viewport.width < 900, reducedMotion: 'reduce' }); const page = await context.newPage();
+    const camp = findTiles(map, 'camp')[1]!;
+    const issues = await open(page, base({ position: camp, hp: { guardian: 50, tracer: 0, weaver: 30, healer: 46 } }));
+    expect(await page.evaluate(() => ({ x: scrollX, y: scrollY, overflow: document.documentElement.scrollHeight > innerHeight || document.documentElement.scrollWidth > innerWidth }))).toEqual({ x: 0, y: 0, overflow: false });
+    for (const s of ['#move-up', '#move-down', '#move-left', '#move-right', '#rest', '#world-info-button']) await reachable(page, s);
+    const map_ = (await page.locator('#map-viewport').boundingBox())!; expect(map_.height).toBeGreaterThanOrEqual(150); expect(map_.width).toBeGreaterThanOrEqual(200);
+    const token = (await page.locator('#party-token').boundingBox())!;
+    expect(token.x >= map_.x && token.y >= map_.y && token.x + token.width <= map_.x + map_.width + 1 && token.y + token.height <= map_.y + map_.height + 1).toBe(true);
+    for (const id of ['guardian', 'tracer', 'weaver', 'healer']) await expect(page.locator(`#world-hero-${id}`)).toBeInViewport({ ratio: 1 });
+    await expect(page.locator('#world-hero-tracer')).toContainText('ล้มแล้ว');
+    await page.screenshot({ path: info.outputPath('world.png') });
+    expect(issues).toEqual([]); await context.close();
+  });
+}

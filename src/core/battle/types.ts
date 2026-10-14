@@ -17,6 +17,8 @@ export interface EncounterDefinition {
 export interface HeroState { id: string; hp: number; barrier: number; cooldowns: Partial<Record<ActionId, number>> }
 export interface EnemyState { id: string; hp: number; markedUntil: number; interruptedRound?: number }
 export interface Intent extends IntentDefinition { beat: number; round: number }
+// Party condition carried in from the expedition. Missing ids start at max HP.
+export interface BattleEntry { hp: Readonly<Record<string, number>> }
 export interface Command { beat: number; heroId: string; action: ActionId; targetId: string }
 export interface BattleState {
   encounterId: string; beat: number; round: number; order: string[]; turnIndex: number; outcome: Outcome;

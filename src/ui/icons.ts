@@ -1,5 +1,6 @@
 import type { ActionId } from '../core/battle/types';
-const paths: Record<ActionId | 'restart', string> = {
+export type IconName = ActionId | 'restart' | 'up' | 'down' | 'left' | 'right' | 'camp' | 'flag' | 'goal' | 'danger' | 'safe';
+const paths: Record<IconName, string> = {
   attack: '<path d="m5 19 3-3m-2-2 4 4M8 14l9-10 3 0 0 3-10 9M4 7l4 4m8 5 4 4m-4-1 3-3"/>',
   guard: '<path d="M12 3 4 6v6c0 5 8 9 8 9s8-4 8-9V6Z"/><path d="M12 7v9m-4-5h8"/>',
   bash: '<path d="M11 4 4 7v5c0 4 7 8 7 8s6-3 6-7V7Z"/><path d="m18 3 2 2m0 4h3m-4 4 2 2"/>',
@@ -10,7 +11,16 @@ const paths: Record<ActionId | 'restart', string> = {
   heal: '<path d="M9 4h6v5h5v6h-5v5H9v-5H4V9h5Z"/>',
   prayer: '<path d="M12 3v8m-4-4h8M5 13v7m-3-4h6m11-3v7m-3-4h6"/><path d="M9 18h6"/>',
   restart: '<path d="M4 10a8 8 0 1 1 1 8M4 4v6h6"/>',
+  up: '<path d="m6 14 6-6 6 6"/>',
+  down: '<path d="m6 10 6 6 6-6"/>',
+  left: '<path d="m14 6-6 6 6 6"/>',
+  right: '<path d="m10 6 6 6-6 6"/>',
+  camp: '<path d="M3 20h18M12 4 4 20m8-16 8 16M12 13l-3 7m3-7 3 7"/>',
+  flag: '<path d="M6 21V4m0 1h11l-2 4 2 4H6"/>',
+  goal: '<path d="m12 3 2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.4 6.7 19.4l1.2-6L3.4 9.3l6-.7Z"/>',
+  danger: '<path d="M12 4 2.5 20h19Z"/><path d="M12 10v4m0 3v.5"/>',
+  safe: '<path d="M12 3 4 6v6c0 5 8 9 8 9s8-4 8-9V6Z"/><path d="m8.5 12 2.5 2.5 4.5-5"/>',
 };
-export function icon(name: ActionId | 'restart'): string {
+export function icon(name: IconName): string {
   return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths[name]}</svg>`;
 }

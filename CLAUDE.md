@@ -1,6 +1,6 @@
 # Fateweave development instructions
 
-Work only in `asterveil-fateweave`. Never modify, reset, merge, push to, or import private code/assets/history from `asterveil-rise-beyond`. Preserve existing target-repository work. Never commit secrets or supplied concept images without explicit authorization. The user explicitly authorized GitHub Pages publication after the initial prototype; the Pages workflow is within that scope. Do not change repository visibility/access permissions, configure other hosting or automatically merge without separate authorization.
+Work only in `asterveil-fateweave`. Never modify, reset, merge, push to, or import private code/assets/history from `asterveil-rise-beyond` (reading its design documents for concept adaptation was approved by the owner on 2026-10-14). Preserve existing target-repository work. Never commit secrets or supplied concept images without explicit authorization. The user explicitly authorized GitHub Pages publication after the initial prototype; the Pages workflow is within that scope. Do not change repository visibility/access permissions, configure other hosting or automatically merge without separate authorization.
 
 ## Current architecture
 
@@ -23,19 +23,18 @@ Work only in `asterveil-fateweave`. Never modify, reset, merge, push to, or impo
 7. Keep DOM text/controls responsive, touch targets >=44px, readable unavailable-action reasons, immediate casting on a valid marked character, reduced-motion support and keyboard focus.
 8. Run `npm run typecheck`, `npm run lint`, `npm test`, `npm run build`. For UI/input changes also run relevant Playwright gameplay tests and inspect screenshots of real canvas content.
 9. Report tested browsers/devices honestly. Chromium touch emulation does not verify iOS Safari or real devices.
-10. Do not add empty architecture folders, new gameplay systems, backend, accounts, shop, cards, formation switching, skill trees or final asset production without a scoped task.
+10. Do not add empty architecture folders, backend, accounts, cards, formation switching, skill trees or final asset production without a scoped task. Expedition systems follow the approved phase plan in `docs/EXPEDITION_DESIGN.md`; their draft numbers still need owner approval.
 
-## Future world integration
+## Expedition (single game, no practice mode)
 
-The approved map is a **2D square-tile Open Board Expedition** with free four-direction one-tile hops. Do not replace it with linear nodes, dice, cards, auto-forced movement or room selection. Integrate a future pure world simulation through a typed encounter request and battle result boundary. Fog, Threat, Veil Surge, Danger Zones, Camps, Events and optional Auto-Hop belong to that future simulation; their unresolved numeric rules remain open. See `docs/DEVELOPMENT_ROADMAP.md`.
+The game is one expedition on a **2D square-tile board** with free four-direction one-tile hops (buttons, arrow keys/WASD, adjacent taps). Never add path-finding auto-movement, linear nodes, dice, cards or room selection. The owner approved adapting Rise Beyond's non-combat *concepts* (Threat-style encounter chance, camps, carried HP, loot/equipment, events, elites, quests); never import its code, data, names or art. Rules and phase status: `docs/EXPEDITION_DESIGN.md`.
 
-
-## Encounter catalog and independent combat saves
-
-`src/content/encounters/catalog.ts` contains the version-5 Veil Siege and two version-3 battles: rear energy pressure and a single boss alternating physical/energy attacks. All reuse the same hero/skill/rule definitions; keep the original encounter's damage schedule and save key; reject earlier content versions under the new turn rules. Additional encounters own separate validated replay keys, and a separate validated preference remembers the selected catalog entry. Restart resets only that battle. An in-tab snapshot cache retains committed battle states when storage is unavailable; never cache presentation snapshots. No expedition, unlocking or progression is implemented by the practice selector.
-
-`BattleUI` selects/restores the current definition; `BattleScene.setEncounter` swaps only rendering data and clears obsolete targets/effects. Never transfer stale actors, timers, hero selection or commands between battles. Lock the selector during turn presentation; optional native dialogs must block background casting and filter residual closing touches. Preserve the single-screen gameplay layout and ≥44px header/field controls. Regression fixtures cover two four-survivor routes per encounter and concrete basic-attack defeats, without claiming exhaustive or final balance.
-
+- `src/core/world` is the pure, serializable expedition simulation (move, encounter chance from `(seed, rolls)`, fog, rest, finish battle). No DOM, Phaser, clocks or `Math.random` in rules. `src/content/world` owns maps/zones/pools.
+- Battles start from a `BattleEntry` (per-hero HP; 0 = down and out of the queue). The world stores only the entry and hero commands and derives results by replay. World rules decide camps, defeat and rewards; battle rules never change for the world. Choosing not to fight happens before a battle.
+- `core/save/expedition-save.ts` owns the single versioned save (`asterveil.fateweave.expedition.v1`), validates every field and replays an active battle; incompatible data starts a new expedition. Finished battles are applied in the same write as their last command. Practice keys are deleted, never read. Follow save-version rules when changing the state shape.
+- `GameShell` switches title/world/battle views; `WorldUI` renders the board as DOM tiles; `BattleUI.open(session)` runs one battle and commits through the session. Teaching advice runs only in the `first-clash` tutorial battle. The battle view stays laid out while hidden and the Phaser loop sleeps while exploring.
+- Encounter enemies must use ids `raider`/`brute` (the two illustrated frames). Bump an encounter's version when its content changes. Keep the advisor-wins-from-60%-HP regression and the full-expedition run in `tests/world.test.ts` passing; numbers are drafts until playtested.
+- World and battle views must fit every tested viewport without document scrolling, with ≥44px controls.
 
 ## SPD rounds and floating skill popup
 

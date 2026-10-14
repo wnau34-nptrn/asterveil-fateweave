@@ -1,14 +1,12 @@
-# Asterveil: Rise Beyond
+# Asterveil · Fateweave
 
-A small, playable **Fateweave tactical reaction combat** prototype. This is an independent browser-first project in `wnau34-nptrn/asterveil-fateweave`. The original Godot project is not a dependency and no code, assets, or history are imported from it.
+A small, playable **2D tile expedition with Fateweave SPD combat**. This is an independent browser-first project in `wnau34-nptrn/asterveil-fateweave`. The original Godot project is not a dependency and no code, assets, or history are imported from it.
 
 ## Play in your browser
 
-GitHub Pages target: **https://wnau34-nptrn.github.io/asterveil-fateweave/**. Availability depends on a successful **Publish playable prototype** workflow deployment. The interface is in Thai. Click **เริ่มต่อสู้**; use the current hero’s skill buttons to read a floating explanation, then tap a marked character on the battlefield to cast immediately. Turns follow Knight → Duelist → Mage → Priest; other heroes cannot issue commands. Open **ⓘ** for optional skill details. The **ศึก 1/3 ▾** button selects among three independent battles; each keeps its own progress on this device. No installation or account is required to play the published static game.
+GitHub Pages target: **https://wnau34-nptrn.github.io/asterveil-fateweave/**. Availability depends on a successful **Publish playable prototype** workflow deployment. The interface is in Thai.
 
-Characters stand on the courtyard in staggered front/back pairs, with contact shadows at their feet. The formation and character touch areas resize with the field, including single-screen desktop, tablet and mobile play.
-
-The first three hero commands offer optional Thai advice: Duelist Mark, a legal Mage Bolt/Ward, then Knight Guard (or physical boss Bash). Hints use the current SPD owner and never suggest a different actor. They show actual turn feedback during presentation, can be dismissed/reopened independently, and disappear after three committed hero commands.
+Start with **เริ่มการเดินทางใหม่** (or **เล่นต่อ**). Walk one tile at a time with the arrow buttons, the arrow keys/WASD, or by tapping a tile next to the party. Every step in a dangerous zone shows the chance of meeting enemies. A battle starts with the party's remaining HP, and fallen heroes stay down until you rest at a camp (**พัก**). In battle, use the current hero's skill buttons to read a floating explanation, then tap a marked character to cast. Losing returns the party to the last camp. Defeat the Rift Warden to open the gate and finish the expedition. The first battle teaches each class's skills. Progress saves automatically on this device. Rules: `docs/EXPEDITION_DESIGN.md`.
 
 Public Pages publication was explicitly requested after the initial prototype. The workflow builds and tests the full browser gameplay suite on the production subpath before uploading `dist/`, then deploys with GitHub's official Pages actions. It publishes the current prototype branch and `main`; no automatic merge is performed. If Pages cannot be enabled by Actions, a repository administrator must choose **Settings → Pages → Build and deployment → Source: GitHub Actions**.
 
@@ -108,7 +106,7 @@ Combat commits and saves the hero action plus any following consecutive automati
 
 Seven concrete routes win with all four heroes. The five tested fixed-priority, current-owner Attack-only policies lose; these examples are not an exhaustive or final balance claim. See [balance validation](docs/BALANCE_VALIDATION.md).
 
-Encounter versions are **veil-siege / 5**, **rear-ambush / 3**, and **rift-warden / 3**. Earlier turn-system saves safely start fresh. Keys/envelope stay stable; each battle has independent validated command replay and selected-only restart. The selector is practice, without expedition/progression/rewards. Denied storage retains switching progress in the current tab, but cannot survive refresh.
+Encounter versions are **veil-siege / 5**, **rear-ambush / 3**, and **rift-warden / 3**. Expedition encounters are listed in `docs/EXPEDITION_DESIGN.md`. Battle progress lives inside the single expedition save (`asterveil.fateweave.expedition.v1`), validated by replay; the former practice selector and its save slots are removed. Denied storage keeps the game playable in the current tab, but progress cannot survive refresh.
 
 ## Architecture
 
@@ -128,7 +126,7 @@ docs/                    Direction, integration plan, roadmap, validation
 .github/workflows/       Quality CI and user-authorized GitHub Pages build/test/deployment
 ```
 
-`resolveCommand` is authoritative and immutable. `previewCommand` remains a pure simulation API used by rules tests; the UI does not show complete predicted outcomes. Rendering cannot affect combat results. Commands carry a beat number to reject stale commands. Simulation has no Phaser, DOM, clock, or random-number dependency and runs under Node. State commits and saves once immediately, before the presentation lock. Resolver-provided snapshots contain each actual actor turn in order; only the final state is authoritative and saved. Skipping or hiding the tab displays the already committed result; restart cancels queued presentation timers. Reload replays the saved command once. Reduced motion retains static one-second phase labels while suppressing effects. Saves contain versioned encounter IDs and commands and are validated by replay; corrupt or incompatible saves start fresh. Unavailable/quota-limited storage leaves the session playable. Saves support up to 5,000 commands; no cross-device syncing is provided.
+`resolveCommand` is authoritative and immutable. `previewCommand` remains a pure simulation API used by rules tests; the UI does not show complete predicted outcomes. Rendering cannot affect combat results. Commands carry a beat number to reject stale commands. Simulation has no Phaser, DOM, clock, or random-number dependency and runs under Node. State commits and saves once immediately, before the presentation lock. Resolver-provided snapshots contain each actual actor turn in order; only the final state is authoritative and saved. Skipping or hiding the tab displays the already committed result. Reload replays the saved command once. Reduced motion retains static one-second phase labels while suppressing effects. The expedition save contains the active battle's encounter ID, entry HP and commands and is validated by replay; corrupt or incompatible saves start fresh. Unavailable/quota-limited storage leaves the session playable. Saves support up to 5,000 commands; no cross-device syncing is provided.
 
 ## Current limitations
 

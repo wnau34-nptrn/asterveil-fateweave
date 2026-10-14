@@ -1,6 +1,8 @@
 import type { EncounterDefinition } from '../../core/battle/types';
 import { veilSiege } from './veil-siege';
 
+// Every encounter reuses the four-hero party, skills and numeric rules.
+// Enemy ids stay `raider`/`brute`: they select the two illustrated enemy frames.
 export const rearAmbush: EncounterDefinition = {
   ...veilSiege, id: 'rear-ambush', version: 3, name: 'ศึกเงาล่าแนวหลัง',
   enemies: [
@@ -30,9 +32,69 @@ export const riftWarden: EncounterDefinition = {
   ],
 };
 
-export interface BattleChoice { data: EncounterDefinition; title: string; description: string }
-export const battles: readonly BattleChoice[] = [
-  { data: veilSiege, title: 'ศึกปิดรอยแยก', description: 'ฝึกอ่านแผนศัตรู ตั้งรับ และติดตราเพื่อทำคอมโบ' },
-  { data: rearAmbush, title: rearAmbush.name, description: 'พลังงานถึงแนวหลัง · ใช้โล่เวทและรักษาให้ทัน หรือกำจัดผู้โจมตี' },
-  { data: riftWarden, title: riftWarden.name, description: 'บอสสลับกายภาพกับพลังงาน · เลือกจังหวะขัดการโจมตี ตั้งรับ และทำคอมโบ' },
-];
+// One-time teaching battle. Each scheduled move gives one class skill a reason to exist:
+// R1 Mark → physical hit on Lyra → Ward/Guard the energy blast → Heal; R2 consume Mark → Bash the physical.
+export const firstClash: EncounterDefinition = {
+  ...veilSiege, id: 'first-clash', version: 1, name: 'การปะทะครั้งแรก',
+  enemies: [
+    { id: 'raider', speed: 110, name: 'Veil Scout', displayName: 'หน่วยสอดแนมเวล', maxHp: 56, color: 0xee80bd },
+    { id: 'brute', speed: 70, name: 'Young Brute', displayName: 'อสูรหนุ่ม', maxHp: 100, color: 0x9785f2 },
+  ],
+  intents: [
+    { sourceId: 'raider', targetId: 'tracer', name: 'Raking Slash', damage: 10, kind: 'physical' },
+    { sourceId: 'brute', targetId: 'weaver', name: 'Rift Bolt', damage: 16, kind: 'energy' },
+    { sourceId: 'raider', targetId: 'guardian', name: 'Raking Slash', damage: 10, kind: 'physical' },
+    { sourceId: 'brute', targetId: 'tracer', name: 'Crushing Blow', damage: 14, kind: 'physical' },
+    { sourceId: 'raider', targetId: 'healer', name: 'Shadow Knife', damage: 12, kind: 'energy' },
+    { sourceId: 'brute', targetId: 'weaver', name: 'Rift Bolt', damage: 16, kind: 'energy' },
+  ],
+};
+
+export const scoutPatrol: EncounterDefinition = {
+  ...veilSiege, id: 'scout-patrol', version: 1, name: 'หน่วยลาดตระเวน',
+  enemies: [{ id: 'raider', speed: 110, name: 'Veil Patrol', displayName: 'หน่วยลาดตระเวน', maxHp: 64, color: 0xee80bd }],
+  intents: [
+    { sourceId: 'raider', targetId: 'tracer', name: 'Raking Slash', damage: 11, kind: 'physical' },
+    { sourceId: 'raider', targetId: 'healer', name: 'Shadow Knife', damage: 12, kind: 'energy' },
+    { sourceId: 'raider', targetId: 'guardian', name: 'Raking Slash', damage: 11, kind: 'physical' },
+  ],
+};
+
+export const riftWhelp: EncounterDefinition = {
+  ...veilSiege, id: 'rift-whelp', version: 1, name: 'ลูกอสูรรอยแยก',
+  enemies: [{ id: 'brute', speed: 70, name: 'Rift Whelp', displayName: 'ลูกอสูรรอยแยก', maxHp: 120, color: 0x9785f2 }],
+  intents: [
+    { sourceId: 'brute', targetId: 'weaver', name: 'Rift Bolt', damage: 18, kind: 'energy' },
+    { sourceId: 'brute', targetId: 'guardian', name: 'Crushing Blow', damage: 16, kind: 'physical' },
+    { sourceId: 'brute', targetId: 'healer', name: 'Rift Bolt', damage: 18, kind: 'energy' },
+  ],
+};
+
+export const thicketAmbush: EncounterDefinition = {
+  ...veilSiege, id: 'thicket-ambush', version: 1, name: 'ซุ่มโจมตีในพงหนาม',
+  enemies: [
+    { id: 'raider', speed: 110, name: 'Thicket Lurker', displayName: 'ผู้ซุ่มพงหนาม', maxHp: 66, color: 0xee80bd },
+    { id: 'brute', speed: 70, name: 'Thorn Brute', displayName: 'อสูรพงหนาม', maxHp: 140, color: 0x9785f2 },
+  ],
+  intents: [
+    { sourceId: 'raider', targetId: 'tracer', name: 'Raking Slash', damage: 12, kind: 'physical' },
+    { sourceId: 'brute', targetId: 'healer', name: 'Rift Bolt', damage: 20, kind: 'energy' },
+    { sourceId: 'raider', targetId: 'weaver', name: 'Shadow Knife', damage: 14, kind: 'energy' },
+    { sourceId: 'brute', targetId: 'tracer', name: 'Crushing Blow', damage: 20, kind: 'physical' },
+    { sourceId: 'raider', targetId: 'guardian', name: 'Raking Slash', damage: 12, kind: 'physical' },
+    { sourceId: 'brute', targetId: 'weaver', name: 'Rift Bolt', damage: 22, kind: 'energy' },
+  ],
+};
+
+export const shadowStalker: EncounterDefinition = {
+  ...veilSiege, id: 'shadow-stalker', version: 1, name: 'เงาตามล่า',
+  enemies: [{ id: 'raider', speed: 110, name: 'Shadow Stalker', displayName: 'เงาตามล่า', maxHp: 96, color: 0xee80bd }],
+  intents: [
+    { sourceId: 'raider', targetId: 'healer', name: 'Shadow Knife', damage: 18, kind: 'energy' },
+    { sourceId: 'raider', targetId: 'tracer', name: 'Raking Slash', damage: 16, kind: 'physical' },
+    { sourceId: 'raider', targetId: 'weaver', name: 'Shadow Knife', damage: 18, kind: 'energy' },
+  ],
+};
+
+export const encounters: readonly EncounterDefinition[] = [firstClash, scoutPatrol, riftWhelp, thicketAmbush, shadowStalker, veilSiege, rearAmbush, riftWarden];
+export const encounterById = (id: string): EncounterDefinition | undefined => encounters.find(e => e.id === id);

@@ -1,7 +1,6 @@
-import { actionReason, beginBattle, createBattle, currentHeroId, plannedIntents, resolveCommand, targetOptions, upcomingTurns } from '../core/battle/engine';
-import type { ActionId, BattleState, Command, EncounterDefinition, Resolution, TurnStage } from '../core/battle/types';
-import { loadBattle, loadSelectedEncounter, rememberEncounter, saveBattle } from '../core/save/battle-save';
-import type { BattleChoice } from '../content/encounters/catalog';
+import { actionReason, beginBattle, createBattle, currentHeroId, plannedIntents, replay, resolveCommand, targetOptions, upcomingTurns } from '../core/battle/engine';
+import type { ActionId, BattleEntry, BattleState, Command, EncounterDefinition, Outcome, Resolution, TurnStage } from '../core/battle/types';
+import type { BattleKind } from '../core/world/types';
 import { browserStorage } from '../platform/browser-storage';
 import type { BattleScene } from '../game/scenes/BattleScene';
 import { actorName, eventThai, heroText, intentName, reasonThai, skillDescription } from './th';
@@ -10,6 +9,15 @@ import { icon } from './icons';
 import { battleLesson } from './tutorial';
 
 const tutorialKey = 'asterveil.fateweave.tutorial.v1';
+
+// The expedition owns persistence: every commit is handed to the session before playback.
+export interface BattleSession {
+  kind: BattleKind; data: EncounterDefinition; entry: BattleEntry; commands: readonly Command[];
+  commit(state: BattleState): boolean;
+  leaveLabel(outcome: Outcome): string;
+  leave(): void;
+}
+const kindLabel: Record<BattleKind, string> = { tutorial: 'ศึกสอน', random: 'พบศัตรู', boss: 'บอส' };
 
 const escapeHtml = (s: string) => s.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
 
@@ -27,26 +35,21 @@ export class BattleUI {
   private saved = true;
   private messages: string[];
   private scene: BattleScene | undefined;
-  private readonly sessionBattles = new Map<string, BattleState>();
+  private session: BattleSession | undefined;
   private data: EncounterDefinition;
   private readonly portraitLayout = window.matchMedia('(max-width: 600px) and (orientation: portrait)');
   private readonly mobile = window.matchMedia('(max-width: 600px), (max-width: 960px) and (max-height: 540px)');
 
-  constructor(private readonly root: HTMLElement, private readonly catalog: readonly BattleChoice[]) {
-    const data = loadSelectedEncounter(this.storage, catalog.map(choice => choice.data));
+  constructor(private readonly root: HTMLElement, data: EncounterDefinition) {
     this.data = data;
     try { this.hintsEnabled = this.storage?.getItem(tutorialKey) !== 'off'; } catch { /* Advice still works without storage. */ }
-    const loaded = loadBattle(this.storage, data);
-    this.state = loaded.state;
-    this.started = loaded.restored;
-    const lastCommand = this.state.commands.at(-1);
-    this.heroId = currentHeroId(this.state, data) ?? lastCommand?.heroId ?? data.heroes[0]!.id;
-    if (!this.state.heroes.some(h => h.id === this.heroId && h.hp > 0)) this.heroId = this.state.heroes.find(h => h.hp > 0)?.id ?? this.heroId;
-    this.messages = [loaded.restored ? 'กลับมาต่อสู้จากจังหวะที่บันทึกไว้' : 'อ่านการโจมตีของศัตรู แล้วเลือกคำสั่งของคุณ'];
+    this.state = createBattle(data);
+    this.started = false;
+    this.messages = [];
     root.innerHTML = `
       <header class="masthead">
-        <div class="encounter-heading"><p class="eyebrow">การต่อสู้แบบวางแผน</p><h1 id="encounter-title"></h1></div>
-        <div id="beat-status"></div><button id="battle-select" aria-haspopup="dialog" aria-controls="encounter-picker" data-ui="battle-select" class="quiet"></button><button id="battle-info" aria-haspopup="dialog" aria-controls="game-info" data-ui="info" class="quiet" aria-label="ข้อมูลสกิลและวิธีเล่น">ⓘ</button><button id="restart" data-ui="restart" class="quiet" aria-label="เริ่มการต่อสู้ใหม่">${icon('restart')}</button>
+        <div class="encounter-heading"><p class="eyebrow" id="encounter-kind">การต่อสู้</p><h1 id="encounter-title"></h1></div>
+        <div id="beat-status"></div><button id="battle-info" aria-haspopup="dialog" aria-controls="game-info" data-ui="info" class="quiet" aria-label="ข้อมูลสกิลและวิธีเล่น">ⓘ</button>
       </header>
       <main>
         <section id="turn-phase" class="turn-phase" role="status" aria-live="polite" aria-label="เทิร์นการต่อสู้"></section>
@@ -75,7 +78,7 @@ export class BattleUI {
         </div></details></div>
         <footer><span>เจ้าของเทิร์น → เลือกสกิล → แตะเป้าหมายในสนาม</span><span id="save-status"></span></footer>
       </main><dialog id="game-info" aria-labelledby="info-title"><div class="info-header"><h2 id="info-title">ข้อมูลการต่อสู้</h2><button data-ui="info-close" class="quiet" aria-label="ปิดข้อมูล">✕</button></div><div class="info-content"><section id="info-skill"></section><div id="info-host"></div></div></dialog>
-      <dialog id="encounter-picker" aria-labelledby="picker-title"><div class="info-header"><h2 id="picker-title">เลือกศึก</h2><button data-ui="picker-close" class="quiet" aria-label="ปิดการเลือกศึก">✕</button></div><div class="info-content"><p class="picker-copy">เลือกฝึกได้ทุกศึก · กลับมาเล่นศึกเดิมต่อได้</p><div id="encounter-choices"></div></div></dialog>
+
       <section id="skill-popover" popover="manual" role="dialog" aria-modal="false" aria-labelledby="skill-title" aria-describedby="skill-copy skill-availability" tabindex="-1"><div class="skill-popover-heading"><h2 id="skill-title"></h2><button data-ui="skill-close" class="quiet" aria-label="ปิดคำอธิบายสกิล">✕</button></div><p id="skill-copy"></p><p id="skill-availability"></p><small>อ่านแล้วแตะเป้าหมายในสนามเพื่อใช้สกิล</small></section>`;
     root.addEventListener('click', e => {
       const button = (e.target as HTMLElement).closest<HTMLButtonElement>('button[data-ui]');
@@ -86,18 +89,15 @@ export class BattleUI {
       if (modal && !modal.contains(button)) return;
       const value = button.dataset.value;
       switch (button.dataset.ui) {
-        case 'battle-select': this.renderPicker(); this.root.querySelector<HTMLDialogElement>('#encounter-picker')!.showModal(); break;
-        case 'picker-close': this.root.querySelector<HTMLDialogElement>('#encounter-picker')!.close(); break;
-        case 'encounter': if (value) this.switchBattle(value); break;
         case 'info': this.root.querySelector<HTMLDialogElement>('#game-info')!.showModal(); break;
         case 'info-close': this.root.querySelector<HTMLDialogElement>('#game-info')!.close(); break;
-        case 'start': this.started = true; this.present(beginBattle(this.data)); break;
+        case 'start': if (this.session && !this.started) { this.started = true; this.present(beginBattle(this.data, this.session.entry)); } break;
         case 'hero': if (value) this.selectHero(value); break;
         case 'action': if (value && !this.busy && this.started && this.state.outcome === 'active' && this.data.heroes.find(h => h.id === currentHeroId(this.state, this.data))?.actions.includes(value as ActionId)) { this.action = value as ActionId; this.render(); this.showSkill(); } break;
         case 'skill-close': this.closeSkill(true); break;
         case 'target': if (value) this.choose(value); break;
         case 'skip-turn': this.finishPresentation(); break;
-        case 'restart': this.restart(); break;
+        case 'leave': if (!this.busy && this.state.outcome !== 'active') this.session?.leave(); break;
         case 'coach-dismiss': this.setHints(false); break;
         case 'coach-toggle': this.setHints(!this.hintsEnabled); break;
       }
@@ -108,10 +108,6 @@ export class BattleUI {
     infoDialog.addEventListener('close', blockClosingTouch);
     infoDialog.addEventListener('cancel', blockClosingTouch);
     root.querySelector('[data-ui=info-close]')!.addEventListener('pointerdown', blockClosingTouch);
-    const picker = root.querySelector<HTMLDialogElement>('#encounter-picker')!;
-    picker.addEventListener('close', () => { blockClosingTouch(); root.querySelector<HTMLElement>('#battle-select')?.focus({ preventScroll: true }); });
-    picker.addEventListener('cancel', blockClosingTouch);
-    root.querySelector('[data-ui=picker-close]')!.addEventListener('pointerdown', blockClosingTouch);
     root.querySelector('#skill-popover')!.addEventListener('pointerdown', blockClosingTouch);
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape' && root.querySelector('#skill-popover:popover-open')) { e.preventDefault(); this.closeSkill(true); }
@@ -126,10 +122,24 @@ export class BattleUI {
   }
 
   attach(scene: BattleScene): void { this.scene = scene; this.render(); }
+  // Starts or resumes a battle from the expedition's recorded entry and commands.
+  open(session: BattleSession): void {
+    clearTimeout(this.timer); this.timer = undefined; this.scene?.stopEffects(); this.presentation = undefined; this.busy = false;
+    this.closeSkill(); this.session = session; this.action = 'attack';
+    this.canvasInputAfterInfo = performance.now() + 250;
+    if (this.data !== session.data) { this.scene?.setEncounter(session.data); this.data = session.data; }
+    this.state = replay(session.data, session.commands, session.entry);
+    this.started = session.commands.length > 0;
+    this.heroId = currentHeroId(this.state, this.data) ?? this.state.heroes.find(h => h.hp > 0)?.id ?? this.data.heroes[0]!.id;
+    this.messages = [this.started ? 'กลับมาต่อสู้จากจังหวะที่บันทึกไว้' : `${kindLabel[session.kind]} · ${session.data.name}`];
+    this.saved = true;
+    this.render(); this.scene?.refreshLayout();
+  }
+  private get teaching(): boolean { return this.session?.kind === 'tutorial' && this.hintsEnabled; }
   get encounter(): EncounterDefinition { return this.data; }
   sceneReady(): void { this.render(); }
   fieldLayoutChanged(): void { this.renderFieldTargets(); this.renderTutorial(); }
-  private get displayState(): BattleState { return this.presentation?.frame ?? (!this.started ? beginBattle(this.data).initial : this.state); }
+  private get displayState(): BattleState { return this.presentation?.frame ?? (!this.started ? beginBattle(this.data, this.session?.entry).initial : this.state); }
   private get stage(): TurnStage | undefined { return this.presentation?.resolution.turns[this.presentation.index]; }
   private get actingActor(): string | undefined { return this.stage?.events.some(e => e.type === 'cancel') ? undefined : this.stage?.actorId; }
   private get actingTarget(): string | undefined { return this.stage?.targetId; }
@@ -156,13 +166,13 @@ export class BattleUI {
     try { this.storage?.setItem(tutorialKey, enabled ? 'on' : 'off'); } catch { /* Preference is optional. */ }
     this.render();
     const focus = this.root.querySelector<HTMLDialogElement>('#game-info')!.open ? '#coach-toggle' :
-      enabled && this.started && this.state.commands.length < 3 ? '#coach-dismiss' : this.portraitLayout.matches ? '#battle-info' : '#restart';
+      enabled && this.started && this.state.outcome === 'active' ? '#coach-dismiss' : '#battle-info';
     this.root.querySelector<HTMLElement>(focus)?.focus({ preventScroll: true });
   }
 
   private renderTutorial(): void {
     const coach = this.root.querySelector<HTMLElement>('#battle-coach')!;
-    const lesson = this.started && this.hintsEnabled ? battleLesson(this.presentation?.resolution.initial ?? this.displayState, this.data) : undefined;
+    const lesson = this.started && this.teaching ? battleLesson(this.presentation?.resolution.initial ?? this.displayState, this.data) : undefined;
     const resized = coach.hidden !== !lesson;
     coach.hidden = !lesson;
     this.root.querySelectorAll('.coach-focus').forEach(el => el.classList.remove('coach-focus'));
@@ -181,7 +191,7 @@ export class BattleUI {
       this.root.querySelector(next)?.classList.add('coach-focus');
       if (lesson.step === 1) this.root.querySelector('#intent')?.classList.add('coach-focus');
     }
-    const heading = `ฝึก ${lesson.step}/3 · ${title}`;
+    const heading = `ศึกสอน ${lesson.step} · ${title}`;
     const titleNode = this.root.querySelector('#coach-title')!; const copyNode = this.root.querySelector('#coach-copy')!;
     // Layout-only updates retain settings focus and avoid repeating live copy.
     if (titleNode.textContent !== heading) titleNode.textContent = heading;
@@ -230,7 +240,7 @@ export class BattleUI {
     this.closeSkill();
     // Commit every actual actor turn before presentation. Reload never repeats damage.
     this.state = result.state;
-    this.saved = saveBattle(this.storage, this.state, this.data);
+    this.saved = this.session?.commit(this.state) ?? false;
     const logEnds = result.turns.map(turn => {
       this.messages.push(`รอบ ${turn.round} · เทิร์น${turn.side === 'hero' ? 'ฮีโร่' : 'ศัตรู'} · ${actorName(turn.actorId, this.data)}${turn.action ? ` ${this.data.skills[turn.action].name}` : ''}`,
         ...turn.events.map(event => eventThai(event, result.state, this.data)));
@@ -266,51 +276,6 @@ export class BattleUI {
     if (this.state.outcome === 'active') this.root.querySelector<HTMLElement>('#action-attack')?.focus({ preventScroll: true });
   }
 
-  private restart(): void {
-    clearTimeout(this.timer); this.timer = undefined; this.scene?.stopEffects(); this.presentation = undefined; this.busy = false;
-    this.closeSkill(); this.action = 'attack'; this.started = true;
-    this.messages = ['เริ่มการต่อสู้ใหม่แล้ว'];
-    this.heroId = currentHeroId(createBattle(this.data), this.data) ?? this.data.heroes[0]!.id;
-    this.present(beginBattle(this.data));
-  }
-
-  private battleProgress(data: EncounterDefinition): { state: BattleState; restored: boolean } {
-    const state = this.sessionBattles.get(data.id);
-    return state ? { state, restored: state.commands.length > 0 } : loadBattle(this.storage, data);
-  }
-
-  private renderPicker(): void {
-    this.set('encounter-choices', this.catalog.map((choice, i) => {
-      const loaded = this.battleProgress(choice.data);
-      const status = choice.data.id === this.data.id ? 'กำลังเลือกศึกนี้' : loaded.restored ?
-        loaded.state.outcome === 'active' ? `เล่นต่อ · รอบ ${loaded.state.round}` : loaded.state.outcome === 'victory' ? 'ชนะแล้ว · ลองแผนอื่นได้' : 'แพ้แล้ว · ลองอีกครั้งได้' : 'เริ่มศึกใหม่';
-      return `<button id="encounter-${choice.data.id}" data-ui="encounter" data-value="${choice.data.id}" class="encounter-choice" aria-pressed="${choice.data.id === this.data.id}"><span class="battle-number">${i + 1}</span><span><strong>${escapeHtml(choice.title)}</strong><small>${escapeHtml(choice.description)}</small><span class="encounter-status">${status}</span></span></button>`;
-    }).join(''));
-  }
-
-  private switchBattle(id: string): void {
-    const choice = this.catalog.find(c => c.data.id === id);
-    if (!choice || this.busy) return;
-    this.root.querySelector<HTMLDialogElement>('#encounter-picker')!.close();
-    if (choice.data.id === this.data.id) return;
-    // Immutable committed snapshots also support switching when storage is denied.
-    this.sessionBattles.set(this.data.id, this.state);
-    this.canvasInputAfterInfo = performance.now() + 250;
-    clearTimeout(this.timer); this.timer = undefined; this.presentation = undefined;
-    this.scene?.setEncounter(choice.data); this.data = choice.data;
-    const loaded = this.battleProgress(this.data);
-    this.state = loaded.state; this.started = true; this.action = 'attack';
-    const last = this.state.commands.at(-1);
-    this.heroId = currentHeroId(this.state, this.data) ?? last?.heroId ?? this.data.heroes[0]!.id;
-    if (!this.state.heroes.some(h => h.id === this.heroId && h.hp > 0)) this.heroId = this.state.heroes.find(h => h.hp > 0)?.id ?? this.heroId;
-    this.messages = [loaded.restored ? 'กลับมาต่อศึกนี้จากจังหวะที่บันทึกไว้' : `เริ่ม${choice.title} · ${choice.description}`];
-    rememberEncounter(this.storage, this.data);
-    if (loaded.restored) { this.saved = saveBattle(this.storage, this.state, this.data); this.render(); }
-    else this.present(beginBattle(this.data));
-    this.scene?.refreshLayout();
-    this.root.querySelector<HTMLElement>('#battle-select')?.focus({ preventScroll: true });
-  }
-
   private set(id: string, content: string): void { this.root.querySelector(`#${id}`)!.innerHTML = content; }
 
   private portrait(id: string): string {
@@ -324,7 +289,7 @@ export class BattleUI {
     const mode = turn?.side ?? (s.outcome !== 'active' ? 'finished' : 'choice');
     const actor = turn?.actorId ?? this.heroId;
     const title = !this.started ? 'เรียงเทิร์นตามความเร็ว' : turn ? canceled ? `${actorName(actor, d)} · ถูกขัดจังหวะ` : `เทิร์น${turn.side === 'hero' ? 'ฮีโร่' : 'ศัตรู'} · ${actorName(actor, d)}` : s.outcome !== 'active' ? `จบการต่อสู้ · ${s.outcome === 'victory' ? 'ชนะแล้ว' : 'แพ้แล้ว'}` : `เทิร์นของคุณ · ${actorName(actor, d)}`;
-    const detail = turn ? canceled ? 'ศัตรูเสียเทิร์นนี้' : `${turn.action ? d.skills[turn.action].name : turn.intent ? intentName(turn.intent) : 'ลงมือ'} → ${actorName(turn.targetId, d)}` : s.outcome !== 'active' ? 'กดเล่นอีกครั้งเพื่อลองแผนใหม่' : 'SPD มากเริ่มก่อน · คนละ 1 ครั้งต่อรอบ';
+    const detail = turn ? canceled ? 'ศัตรูเสียเทิร์นนี้' : `${turn.action ? d.skills[turn.action].name : turn.intent ? intentName(turn.intent) : 'ลงมือ'} → ${actorName(turn.targetId, d)}` : s.outcome !== 'active' ? 'กดปุ่มด้านล่างเพื่อไปต่อ' : 'SPD มากเริ่มก่อน · คนละ 1 ครั้งต่อรอบ';
     const phaseRoot = this.root.querySelector<HTMLElement>('#turn-phase')!;
     phaseRoot.dataset.phase = mode; phaseRoot.dataset.actor = actor; phaseRoot.dataset.canceled = String(!!canceled);
     this.set('turn-phase', `<div class="phase-head"><div class="phase-portrait">${this.portrait(actor)}</div><div class="phase-copy"><h2>${escapeHtml(title)}</h2><p>${escapeHtml(detail)}</p></div>${turn ? '<button id="skip-turn" data-ui="skip-turn" class="quiet">ดูผลทันที</button>' : ''}</div><div id="turn-order" aria-label="ลำดับเทิร์นตามความเร็ว"></div>`);
@@ -365,11 +330,12 @@ export class BattleUI {
       const lethal = !this.presentation && !canceled && intent.damage >= target.hp + target.barrier;
       const heading = canceled ? 'การโจมตีนี้ถูกขัดจังหวะ' : response ? 'ศัตรูกำลังลงมือ' : `การโจมตีศัตรูถัดไป · รอบ ${intent.round}`;
       this.set('intent', `<div class="intent-icon">${icon(intent.kind === 'energy' ? 'bolt' : 'attack')}</div><div class="intent-copy"><p class="eyebrow">${heading}</p><h2>${actorName(intent.sourceId, d)} <span>→</span> ${actorName(recipient, d)}</h2><p>${intentName(intent)} · ${intent.kind === 'energy' ? 'พลังงาน' : 'กายภาพ'} <span class="intent-rule">${intent.kind === 'physical' ? 'แนวหน้ารับก่อน' : 'ถึงแนวหลังได้'}</span></p>${lethal ? `<p class="lethal-warning">⚠ ${actorName(intent.targetId, d)} จะล้มหากรับการโจมตีนี้โดยไม่มีการป้องกัน</p>` : ''}</div><div class="intent-damage"><strong>${canceled ? '—' : hit ? hit.amount : intent.damage}</strong><small>${hit ? 'เสียเลือด' : 'พลังโจมตี'}</small></div>`);
-    } else this.set('intent', `<div class="intent-icon">✧</div><div class="intent-copy"><p class="eyebrow">การต่อสู้จบแล้ว</p><h2>${s.outcome === 'victory' ? 'คุณปิดรอยแยกได้แล้ว' : 'ทีมของคุณล้มทั้งหมด'}</h2><p>กดเริ่มใหม่เพื่อลองแผนอื่น</p></div>`);
+    } else this.set('intent', `<div class="intent-icon">✧</div><div class="intent-copy"><p class="eyebrow">การต่อสู้จบแล้ว</p><h2>${s.outcome === 'victory' ? 'ศัตรูถูกกำจัดแล้ว' : 'ทีมของคุณล้มทั้งหมด'}</h2><p>${s.outcome === 'victory' ? 'เลือดที่เหลือติดตัวไปศึกถัดไป' : 'ทีมจะถอยกลับไปฟื้นตัว'}</p></div>`);
     this.root.querySelector<HTMLElement>('#forecast-details')!.hidden = s.outcome !== 'active';
     this.set('forecast', plannedIntents(s, d).map(next => `<div><b>รอบ ${next.round} · ${actorName(next.sourceId, d)} · ${intentName(next)}</b><small>${actorName(next.targetId, d)} · พลังโจมตี ${next.damage} · ${next.kind === 'energy' ? 'พลังงาน' : 'กายภาพ'}</small></div>`).join('') + (s.outcome === 'active' ? '<p>แผนนี้สมมติว่าตัวละครยังอยู่ เปลี่ยนได้เมื่อมีใครล้ม เป้าหมายจะถูกกำหนดจริงเมื่อถึงเทิร์นศัตรู</p>' : ''));
     this.set('formation-info', '<div><strong>แนวหน้า 2 · แนวหลัง 2</strong><p>กายภาพโจมตีแนวหน้าก่อน · พลังงานถึงแนวหลังได้ · สกิลเฉพาะมีคูลดาวน์</p></div>');
-    this.set('start-screen', !this.started ? `<div class="start-card"><p class="eyebrow">การต่อสู้แบบวางแผน</p><h2>อ่านอันตราย<br>เลือกเปลี่ยนผลลัพธ์</h2><p>สั่งได้เฉพาะฮีโร่เจ้าของเทิร์น<br>กดสกิลอ่านความสามารถ แล้วแตะเป้าหมายในสนาม</p><button data-ui="start" id="start" class="primary" ${!this.scene?.isReady ? 'disabled' : ''}>${this.scene?.isReady ? 'เริ่มต่อสู้ →' : 'กำลังเตรียมสนาม…'}</button></div>` : !this.presentation && s.outcome !== 'active' ? `<div class="result-card" role="status"><p class="eyebrow">${s.outcome === 'victory' ? 'ปิดรอยแยกสำเร็จ' : 'ลองวางแผนใหม่'}</p><h2>${s.outcome === 'victory' ? 'ชนะแล้ว' : 'แพ้แล้ว'}</h2><p>ยืนอยู่ ${s.heroes.filter(h => h.hp > 0).length} / ${s.heroes.length} คน · เลือดทีม ${s.heroes.reduce((hp, h) => hp + h.hp, 0)}<br>ใช้ ${s.commands.length} คำสั่ง</p>${s.outcome === 'victory' ? `<strong class="party-result">${s.heroes.every(h => h.hp > 0) ? 'รักษาทีมครบทุกคน' : 'ชนะ แต่เสียสมาชิกในทีม'}</strong>` : ''}<button data-ui="restart" class="primary">เล่นอีกครั้ง ↻</button></div>` : '');
+    const k = this.session?.kind ?? 'random'; const fallen = s.heroes.filter(h => h.hp <= 0).length;
+    this.set('start-screen', !this.started ? `<div class="start-card"><p class="eyebrow">${kindLabel[k]}</p><h2>${escapeHtml(d.name)}</h2><p>${k === 'tutorial' ? 'ศึกแรกของการเดินทาง · คำแนะนำจะพาใช้สกิลของทุกอาชีพ' : k === 'boss' ? 'ผู้คุมรอยแยกสลับโจมตีกายภาพและพลังงาน · อ่านแผนแล้วป้องกันให้ทัน' : 'ศัตรูขวางทาง · เลือดที่เหลือติดตัวเข้าศึกนี้'}${fallen ? `<br>${fallen} คนล้มอยู่และไม่ได้ลงมือในศึกนี้` : ''}</p><button data-ui="start" id="start" class="primary" ${!this.scene?.isReady ? 'disabled' : ''}>${this.scene?.isReady ? 'เริ่มต่อสู้ →' : 'กำลังเตรียมสนาม…'}</button></div>` : !this.presentation && s.outcome !== 'active' ? `<div class="result-card" role="status"><p class="eyebrow">${s.outcome === 'victory' ? 'ชนะศึก' : k === 'tutorial' ? 'ลองอีกครั้งได้' : 'ถอยกลับไปตั้งหลัก'}</p><h2>${s.outcome === 'victory' ? 'ชนะแล้ว' : 'แพ้แล้ว'}</h2><p>ยืนอยู่ ${s.heroes.filter(h => h.hp > 0).length} / ${s.heroes.length} คน · เลือดทีม ${s.heroes.reduce((hp, h) => hp + h.hp, 0)}<br>ใช้ ${s.commands.length} คำสั่ง</p>${s.outcome === 'victory' ? `<strong class="party-result">${s.heroes.every(h => h.hp > 0) ? 'รักษาทีมครบทุกคน' : 'ชนะ แต่สมาชิกที่ล้มต้องรอพักที่แคมป์'}</strong>` : ''}<button data-ui="leave" id="leave-battle" class="primary">${escapeHtml(this.session?.leaveLabel(s.outcome) ?? 'ไปต่อ')}</button></div>` : '');
   }
 
   private renderParty(disabled: boolean): void {
@@ -417,19 +383,16 @@ export class BattleUI {
   private render(): void {
     const focus = document.activeElement instanceof HTMLElement ? document.activeElement.id : '';
     const s = this.state; const d = this.data; const disabled = !this.scene?.isReady || !this.started || this.busy || s.outcome !== 'active';
-    const choiceIndex = this.catalog.findIndex(c => c.data.id === d.id);
-    this.set('encounter-title', escapeHtml(this.catalog[choiceIndex]!.title));
-    const pickerButton = this.root.querySelector<HTMLButtonElement>('#battle-select')!;
-    pickerButton.textContent = `ศึก ${choiceIndex + 1}/${this.catalog.length} ▾`;
-    pickerButton.setAttribute('aria-label', `เลือกศึก · ${this.catalog[choiceIndex]!.title}`);
-    pickerButton.disabled = !this.scene?.isReady || this.busy;
+    this.set('encounter-title', escapeHtml(d.name));
+    this.set('encounter-kind', kindLabel[this.session?.kind ?? 'random']);
     this.root.classList.toggle('mobile-layout', this.mobile.matches);
     const dialog = this.root.querySelector<HTMLDialogElement>('#game-info')!;
     const help = this.root.querySelector<HTMLDetailsElement>('.help-panel')!;
     const host = this.root.querySelector('#info-host')!;
     if (help.parentElement !== host) { if (dialog.open) dialog.close(); host.append(help); help.open = true; }
     this.set('info-skill', `<h3>${d.skills[this.action].name} · ${heroText[this.heroId]!.name}</h3><p>${skillDescription(this.action, this.heroId, d)}</p>`);
-    this.set('tutorial-settings', `<strong>คำใบ้ 3 คำสั่งแรก</strong><p>อ่านแผนศัตรู · ตั้งรับ · ติดตราแล้วตีเป้าเดิม</p><button id="coach-toggle" data-ui="coach-toggle" class="quiet" aria-pressed="${this.hintsEnabled}">${this.hintsEnabled ? 'ปิดคำใบ้' : 'เปิดคำใบ้'} · คำสั่ง 1–3</button>`);
+    this.root.querySelector<HTMLElement>('#tutorial-settings')!.hidden = this.session?.kind !== 'tutorial';
+    this.set('tutorial-settings', `<strong>คำแนะนำศึกสอน</strong><p>อ่านแผนศัตรู · ตั้งรับ · ติดตราแล้วตีเป้าเดิม · ขัดจังหวะ · รักษา</p><button id="coach-toggle" data-ui="coach-toggle" class="quiet" aria-pressed="${this.hintsEnabled}">${this.hintsEnabled ? 'ปิดคำแนะนำ' : 'เปิดคำแนะนำ'}</button>`);
     this.renderPhase(); this.renderSituation(); this.renderSelectedHero(); this.renderParty(disabled); this.renderCommands(disabled);
     this.set('rules', `<h3>4 อาชีพ · แนวหน้า 2 / หลัง 2</h3><p>รวมฮีโร่และศัตรูเรียง SPD มากไปน้อยเมื่อเริ่มรอบ คนละ 1 ครั้งต่อรอบ ข้ามตัวที่ล้ม SPD เท่ากันใช้ลำดับรายชื่อฮีโร่ก่อน ตามด้วยศัตรู</p><p>แนวหน้าที่ยังยืนอยู่รับการโจมตีกายภาพก่อน พลังงานโจมตีแนวหลังได้ เมื่อแนวหน้าล้มหมด กายภาพจะถึงแนวหลัง แผนโจมตีเป็นการคาดการณ์ตามคนที่ยังยืนอยู่ เมื่อถึงเทิร์นศัตรูจึงกำหนดเป้าหมายจริง</p>${d.heroes.map(hero => `<h3>${heroText[hero.id]!.name} · ${heroText[hero.id]!.role} · SPD ${hero.speed} · ${hero.lane === 'front' ? 'แนวหน้า' : 'แนวหลัง'}</h3><dl>${hero.actions.map(action => `<dt>${d.skills[action].name} (${d.skills[action].english})</dt><dd>${skillDescription(action, hero.id, d)}</dd>`).join('')}</dl>`).join('')}<p>แต่ละตัวลงมือ 1 ครั้งต่อรอบ สกิลคูลดาวน์ 2 รอบที่ใช้ในรอบ 1 จะพร้อมในรอบ 3 พรฟื้นฟูคูลดาวน์ 3 รอบ ${d.enemies.map(e => `${actorName(e.id, d)} SPD ${e.speed}`).join(' · ')} การรักษาไม่ชุบชีวิต โล่เวทไม่ซ้อนกัน เป้าหมายเสริมคือชนะโดยรักษาทีมครบ 4 คน</p>`);
     const shownMessages = this.presentation ? this.messages.slice(0, this.presentation.logEnds[this.presentation.index]) : this.messages;

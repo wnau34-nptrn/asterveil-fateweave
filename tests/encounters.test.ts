@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest';
-import { battles, rearAmbush, riftWarden } from '../src/content/encounters/catalog';
+import { encounters, firstClash, rearAmbush, riftWarden } from '../src/content/encounters/catalog';
 import { createBattle, currentHeroId, previewCommand, replay, resolveCommand } from '../src/core/battle/engine';
 import { battleLesson } from '../src/ui/tutorial';
 import { encounterRoutes } from './fixtures/encounter-routes';
@@ -29,13 +29,19 @@ it('boss has exactly one turn per round and alternates physical/energy by round'
  let s=createBattle(riftWarden);const intents=[];
  while(s.round<4){const id=currentHeroId(s,riftWarden)!;const r=resolveCommand(s,riftWarden,{beat:s.beat,heroId:id,action:'attack',targetId:'brute'});
   intents.push(...r.turns.filter(t=>t.side==='enemy').map(t=>[t.round,t.intent!.kind]));s=r.state;}
- expect(intents).toEqual([[1,'physical'],[2,'energy'],[3,'physical']]);expect(new Set(battles.map(b=>b.data.id)).size).toBe(3);
+ expect(intents).toEqual([[1,'physical'],[2,'energy'],[3,'physical']]);expect(new Set(encounters.map(e=>e.id)).size).toBe(encounters.length);
 });
-it('opening hints follow SPD owners and never steal another hero’s turn',()=>{
- for(const {data}of battles){let s=createBattle(data);
-  for(let i=0;i<3;i++){const before=structuredClone(s),lesson=battleLesson(s,data)!;expect(lesson.heroId).toBe(currentHeroId(s,data));expect(s).toEqual(before);
-   expect(lesson.action).toBe(i===0?'mark':i===1?(data===riftWarden?'bolt':'ward'):data===riftWarden?'bash':'guard');
-   s=resolveCommand(s,data,{beat:s.beat,heroId:lesson.heroId,action:lesson.action,targetId:lesson.targetId}).state;}
-  expect(currentHeroId(s,data)).toBe('healer');expect(battleLesson(s,data)).toBeUndefined();
- }
+it('teaching advice follows SPD owners, uses every class skill and wins the first clash with all four',()=>{
+ let s=createBattle(firstClash);const used=new Set<string>();
+ while(s.outcome==='active'){const before=structuredClone(s),lesson=battleLesson(s,firstClash)!;expect(lesson.heroId).toBe(currentHeroId(s,firstClash));expect(s).toEqual(before);
+  used.add(lesson.action);s=resolveCommand(s,firstClash,{beat:s.beat,heroId:lesson.heroId,action:lesson.action,targetId:lesson.targetId}).state;}
+ expect(s.outcome).toBe('victory');expect(s.heroes.every(h=>h.hp>0)).toBe(true);
+ for(const a of ['mark','execute','ward','guard','bash','heal','bolt'])expect(used).toContain(a);
+ expect(s.commands.slice(0,7).map(c=>c.action)).toEqual(['mark','ward','guard','heal','execute','bolt','bash']);
+ expect(battleLesson(s,firstClash)).toBeUndefined();
+});
+it.each(encounters.map(data=>({data})))('$data.id: the advisor wins from 60% HP and replays deterministically',({data})=>{
+ const entry={hp:Object.fromEntries(data.heroes.map(h=>[h.id,Math.round(h.maxHp*.6)]))};let s=createBattle(data,entry);
+ while(s.outcome==='active'&&s.commands.length<200){const l=battleLesson(s,data)!;s=resolveCommand(s,data,{beat:s.beat,heroId:l.heroId,action:l.action,targetId:l.targetId}).state;}
+ expect(s.outcome).toBe('victory');expect(replay(data,s.commands,entry)).toEqual(s);
 });

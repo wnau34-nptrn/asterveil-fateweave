@@ -169,3 +169,26 @@ describe('round-based class skills and outcomes', () => {
     }
   });
 });
+
+describe('expedition party entry', () => {
+  it('starts with carried HP, keeps fallen heroes out of the queue and replays from the same entry', () => {
+    const entry = { hp: { guardian: 40, tracer: 0, weaver: 12, healer: 46 } };
+    const opening = beginBattle(data, entry);
+    expect(opening.initial.heroes.map(h => h.hp)).toEqual([40, 0, 12, 46]);
+    expect(opening.initial.order).toEqual(['raider', 'weaver', 'guardian', 'brute', 'healer']);
+    // Without Lyra the Raider opens: one real enemy turn before the first hero.
+    expect(opening.turns.map(t => t.actorId)).toEqual(['raider']);
+    const s = opening.state;
+    expect(currentHeroId(s, data)).toBe('weaver');
+    const next = resolveCommand(s, data, { beat: s.beat, heroId: 'weaver', action: 'bolt', targetId: 'brute' }).state;
+    expect(replay(data, next.commands, entry)).toEqual(next);
+    expect(() => resolveCommand(next, data, { beat: next.beat, heroId: 'healer', action: 'heal', targetId: 'tracer' })).toThrow();
+  });
+  it('rejects impossible entries and keeps the full-HP default unchanged', () => {
+    expect(() => createBattle(data, { hp: { guardian: 0, tracer: 0, weaver: 0, healer: 0 } })).toThrow();
+    expect(() => createBattle(data, { hp: { guardian: 77 } })).toThrow();
+    expect(() => createBattle(data, { hp: { stranger: 5 } })).toThrow();
+    expect(() => createBattle(data, { hp: { guardian: 1.5 } })).toThrow();
+    expect(createBattle(data, { hp: {} })).toEqual(createBattle(data));
+  });
+});

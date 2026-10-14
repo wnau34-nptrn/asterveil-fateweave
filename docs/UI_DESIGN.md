@@ -119,3 +119,12 @@ Enemies execute only on their own queue slots. Consecutive heroes have one-stage
 The short portrait field reserves ≥46px vertical spacing between same-column ally sole anchors while preserving staggered front/back offsets. Targets retain their 44px minimum, independent hit regions and floor contact. Existing floating explanations preserve the arena's size and use the same keyboard/touch guards. Advice follows the first three hero commands under SPD, retaining the original lesson throughout playback to avoid changing field height between its actor stages. Original artwork is unchanged.
 
 Interrupted enemy slots use a dashed border and “หยุด” label before their canceled turn. Short non-phone fields keep an 8px rear/front floor offset, and show exact hero HP in roster cards rather than colliding canvas number labels. Enemy HP and hero names/bars remain on the field.
+
+
+## Expedition views (latest, authoritative)
+
+The practice selector and restart button described above are removed. The app has three views: title (Continue / New expedition), world and battle.
+- **World:** a 44–52px bar with zone, encounter-chance chip and ⓘ. A map viewport with a camera that follows the party. The four HP cards, a goal checklist on large screens, the last message, and a 3×3 D-pad whose centre is the camp **พัก** button.
+- **Battle:** the existing single-screen HUD with the battle kind/name header and ⓘ only. The result card's button returns to the map, retreats to camp, or retries the teaching battle.
+
+Both views fit all 11 tested viewports without document scrolling; controls are ≥44px. Details: `EXPEDITION_DESIGN.md`.

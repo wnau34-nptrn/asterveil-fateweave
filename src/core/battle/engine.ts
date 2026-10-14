@@ -1,4 +1,4 @@
-import type { ActionId, BattleEvent, BattleState, Command, EncounterDefinition, Intent, Resolution, TargetOption, TurnSlot, TurnStage } from './types';
+import type { ActionId, BattleEntry, BattleEvent, BattleState, Command, EncounterDefinition, Intent, Resolution, TargetOption, TurnSlot, TurnStage } from './types';
 
 const living = (state: BattleState, id: string) => [...state.heroes, ...state.enemies].some(a => a.id === id && a.hp > 0);
 const definitions = (data: EncounterDefinition) => [...data.heroes, ...data.enemies];
@@ -89,10 +89,21 @@ function automaticTurns(state: BattleState, data: EncounterDefinition, turns: Tu
     turns.push({ actorId, side: 'enemy', beat, round, intent, targetId: events.find(e => e.type === 'damage')?.targetId ?? intent?.targetId, state: frame, events });
   }
 }
-export function beginBattle(data: EncounterDefinition): Resolution {
+export function entryReason(data: EncounterDefinition, entry?: BattleEntry): string {
+  if (!entry) return '';
+  if (!entry.hp || typeof entry.hp !== 'object') return 'Invalid party entry.';
+  for (const [id, hp] of Object.entries(entry.hp)) {
+    const hero = data.heroes.find(h => h.id === id);
+    if (!hero || !Number.isInteger(hp) || hp < 0 || hp > hero.maxHp) return 'Invalid party entry.';
+  }
+  return data.heroes.some(h => (entry.hp[h.id] ?? h.maxHp) > 0) ? '' : 'The whole party is down.';
+}
+// Heroes entering at 0 HP start down: they never join the queue or receive targets.
+export function beginBattle(data: EncounterDefinition, entry?: BattleEntry): Resolution {
+  const invalid = entryReason(data, entry); if (invalid) throw new Error(invalid);
   const state: BattleState = {
     encounterId: data.id, beat: 1, round: 1, turnIndex: 0, order: [], outcome: 'active', guard: null,
-    heroes: data.heroes.map(h => ({ id: h.id, hp: h.maxHp, barrier: 0, cooldowns: {} })),
+    heroes: data.heroes.map(h => ({ id: h.id, hp: entry?.hp[h.id] ?? h.maxHp, barrier: 0, cooldowns: {} })),
     enemies: data.enemies.map(e => ({ id: e.id, hp: e.maxHp, markedUntil: 0 })), intent: null, commands: [],
   };
   state.order = roundOrder(state, data); refreshIntent(state, data);
@@ -100,7 +111,7 @@ export function beginBattle(data: EncounterDefinition): Resolution {
   automaticTurns(state, data, turns);
   return { initial, state, turns, events: turns.flatMap(t => t.events) };
 }
-export const createBattle = (data: EncounterDefinition): BattleState => beginBattle(data).state;
+export const createBattle = (data: EncounterDefinition, entry?: BattleEntry): BattleState => beginBattle(data, entry).state;
 export function actionReason(state: BattleState, data: EncounterDefinition, heroId: string, action: ActionId): string {
   if (state.outcome !== 'active') return 'The encounter has ended.';
   const actor = state.heroes.find(h => h.id === heroId);
@@ -188,6 +199,6 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
   return { initial, state, turns, events: turns.flatMap(t => t.events) };
 }
 export const previewCommand = resolveCommand;
-export function replay(data: EncounterDefinition, commands: readonly Command[]): BattleState {
-  return commands.reduce((state, command) => resolveCommand(state, data, command).state, createBattle(data));
+export function replay(data: EncounterDefinition, commands: readonly Command[], entry?: BattleEntry): BattleState {
+  return commands.reduce((state, command) => resolveCommand(state, data, command).state, createBattle(data, entry));
 }
