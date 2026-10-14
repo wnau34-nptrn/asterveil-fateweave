@@ -1,6 +1,7 @@
 import { actionReason, createBattle, plannedIntents, resolveCommand, targetOptions } from '../core/battle/engine';
 import type { ActionId, BattleState, Command, EncounterDefinition, Resolution } from '../core/battle/types';
-import { loadBattle, saveBattle } from '../core/save/battle-save';
+import { loadBattle, loadSelectedEncounter, rememberEncounter, saveBattle } from '../core/save/battle-save';
+import type { BattleChoice } from '../content/encounters/catalog';
 import { browserStorage } from '../platform/browser-storage';
 import type { BattleScene } from '../game/scenes/BattleScene';
 import { actorName, eventThai, heroText, intentName, reasonThai, skillDescription } from './th';
@@ -26,10 +27,14 @@ export class BattleUI {
   private saved = true;
   private messages: string[];
   private scene: BattleScene | undefined;
+  private readonly sessionBattles = new Map<string, BattleState>();
+  private data: EncounterDefinition;
   private readonly portraitLayout = window.matchMedia('(max-width: 600px) and (orientation: portrait)');
   private readonly mobile = window.matchMedia('(max-width: 600px), (max-width: 960px) and (max-height: 540px)');
 
-  constructor(private readonly root: HTMLElement, private readonly data: EncounterDefinition) {
+  constructor(private readonly root: HTMLElement, private readonly catalog: readonly BattleChoice[]) {
+    const data = loadSelectedEncounter(this.storage, catalog.map(choice => choice.data));
+    this.data = data;
     try { this.hintsEnabled = this.storage?.getItem(tutorialKey) !== 'off'; } catch { /* Advice still works without storage. */ }
     const loaded = loadBattle(this.storage, data);
     this.state = loaded.state;
@@ -40,8 +45,8 @@ export class BattleUI {
     this.messages = [loaded.restored ? 'กลับมาต่อสู้จากจังหวะที่บันทึกไว้' : 'อ่านการโจมตีของศัตรู แล้วเลือกคำสั่งของคุณ'];
     root.innerHTML = `
       <header class="masthead">
-        <div class="encounter-heading"><p class="eyebrow">FATEWEAVE · การต่อสู้ 01</p><h1>ศึกปิดรอยแยก</h1></div>
-        <div id="beat-status"></div><button id="battle-info" aria-haspopup="dialog" aria-controls="game-info" data-ui="info" class="quiet" aria-label="ข้อมูลสกิลและวิธีเล่น">ⓘ</button><button id="restart" data-ui="restart" class="quiet" aria-label="เริ่มการต่อสู้ใหม่">${icon('restart')}</button>
+        <div class="encounter-heading"><p class="eyebrow">การต่อสู้แบบวางแผน</p><h1 id="encounter-title"></h1></div>
+        <div id="beat-status"></div><button id="battle-select" aria-haspopup="dialog" aria-controls="encounter-picker" data-ui="battle-select" class="quiet"></button><button id="battle-info" aria-haspopup="dialog" aria-controls="game-info" data-ui="info" class="quiet" aria-label="ข้อมูลสกิลและวิธีเล่น">ⓘ</button><button id="restart" data-ui="restart" class="quiet" aria-label="เริ่มการต่อสู้ใหม่">${icon('restart')}</button>
       </header>
       <main>
         <section id="turn-phase" class="turn-phase" role="status" aria-live="polite" aria-label="เทิร์นการต่อสู้"></section>
@@ -69,12 +74,18 @@ export class BattleUI {
           <details class="combat-history"><summary>บันทึกการต่อสู้</summary><ol id="event-log" role="log" aria-live="polite"></ol></details>
         </div></details></div>
         <footer><span>เลือกฮีโร่ → เลือกสกิล → แตะตัวละครในสนาม</span><span id="save-status"></span></footer>
-      </main><dialog id="game-info" aria-labelledby="info-title"><div class="info-header"><h2 id="info-title">ข้อมูลการต่อสู้</h2><button data-ui="info-close" class="quiet" aria-label="ปิดข้อมูล">✕</button></div><div class="info-content"><section id="info-skill"></section><div id="info-host"></div></div></dialog>`;
+      </main><dialog id="game-info" aria-labelledby="info-title"><div class="info-header"><h2 id="info-title">ข้อมูลการต่อสู้</h2><button data-ui="info-close" class="quiet" aria-label="ปิดข้อมูล">✕</button></div><div class="info-content"><section id="info-skill"></section><div id="info-host"></div></div></dialog>
+      <dialog id="encounter-picker" aria-labelledby="picker-title"><div class="info-header"><h2 id="picker-title">เลือกศึก</h2><button data-ui="picker-close" class="quiet" aria-label="ปิดการเลือกศึก">✕</button></div><div class="info-content"><p class="picker-copy">เลือกฝึกได้ทุกศึก · กลับมาเล่นศึกเดิมต่อได้</p><div id="encounter-choices"></div></div></dialog>`;
     root.addEventListener('click', e => {
       const button = (e.target as HTMLElement).closest<HTMLButtonElement>('button[data-ui]');
       if (!button || button.disabled) return;
+      const modal = root.querySelector('dialog[open]');
+      if (modal && !modal.contains(button)) return;
       const value = button.dataset.value;
       switch (button.dataset.ui) {
+        case 'battle-select': this.renderPicker(); this.root.querySelector<HTMLDialogElement>('#encounter-picker')!.showModal(); break;
+        case 'picker-close': this.root.querySelector<HTMLDialogElement>('#encounter-picker')!.close(); break;
+        case 'encounter': if (value) this.switchBattle(value); break;
         case 'info': this.root.querySelector<HTMLDialogElement>('#game-info')!.showModal(); break;
         case 'info-close': this.root.querySelector<HTMLDialogElement>('#game-info')!.close(); break;
         case 'start': this.started = true; this.render(); break;
@@ -93,6 +104,10 @@ export class BattleUI {
     infoDialog.addEventListener('close', blockClosingTouch);
     infoDialog.addEventListener('cancel', blockClosingTouch);
     root.querySelector('[data-ui=info-close]')!.addEventListener('pointerdown', blockClosingTouch);
+    const picker = root.querySelector<HTMLDialogElement>('#encounter-picker')!;
+    picker.addEventListener('close', () => { blockClosingTouch(); root.querySelector<HTMLElement>('#battle-select')?.focus({ preventScroll: true }); });
+    picker.addEventListener('cancel', blockClosingTouch);
+    root.querySelector('[data-ui=picker-close]')!.addEventListener('pointerdown', blockClosingTouch);
     this.mobile.addEventListener('change', () => this.render());
     this.portraitLayout.addEventListener('change', () => this.render());
     document.addEventListener('visibilitychange', () => {
@@ -102,6 +117,7 @@ export class BattleUI {
   }
 
   attach(scene: BattleScene): void { this.scene = scene; this.render(); }
+  get encounter(): EncounterDefinition { return this.data; }
   sceneReady(): void { this.render(); }
   fieldLayoutChanged(): void { this.renderFieldTargets(); this.renderTutorial(); }
   private get displayState(): BattleState { return this.presentation?.frame ?? this.state; }
@@ -117,7 +133,7 @@ export class BattleUI {
   }
 
   choose(id: string, source: 'target' | 'canvas' = 'target'): void {
-    if (this.root.querySelector<HTMLDialogElement>('#game-info')!.open || source === 'canvas' && performance.now() < this.canvasInputAfterInfo) return;
+    if (this.root.querySelector('dialog[open]') || source === 'canvas' && performance.now() < this.canvasInputAfterInfo) return;
     if (!this.scene?.isReady || !this.started || this.busy || this.state.outcome !== 'active') return;
     const actualTarget = this.action === 'prayer' && this.state.heroes.some(h => h.id === id && h.hp > 0) ? 'party' : id;
     const target = targetOptions(this.state, this.data, this.heroId, this.action).find(t => t.id === actualTarget);
@@ -220,6 +236,42 @@ export class BattleUI {
     this.heroId = 'tracer'; this.action = 'attack'; this.started = true;
     this.messages = ['เริ่มการต่อสู้ใหม่แล้ว'];
     this.saved = saveBattle(this.storage, this.state, this.data); this.render();
+  }
+
+  private battleProgress(data: EncounterDefinition): { state: BattleState; restored: boolean } {
+    const state = this.sessionBattles.get(data.id);
+    return state ? { state, restored: state.commands.length > 0 } : loadBattle(this.storage, data);
+  }
+
+  private renderPicker(): void {
+    this.set('encounter-choices', this.catalog.map((choice, i) => {
+      const loaded = this.battleProgress(choice.data);
+      const status = choice.data.id === this.data.id ? 'กำลังเลือกศึกนี้' : loaded.restored ?
+        loaded.state.outcome === 'active' ? `เล่นต่อ · จังหวะ ${loaded.state.beat}` : loaded.state.outcome === 'victory' ? 'ชนะแล้ว · ลองแผนอื่นได้' : 'แพ้แล้ว · ลองอีกครั้งได้' : 'เริ่มศึกใหม่';
+      return `<button id="encounter-${choice.data.id}" data-ui="encounter" data-value="${choice.data.id}" class="encounter-choice" aria-pressed="${choice.data.id === this.data.id}"><span class="battle-number">${i + 1}</span><span><strong>${escapeHtml(choice.title)}</strong><small>${escapeHtml(choice.description)}</small><span class="encounter-status">${status}</span></span></button>`;
+    }).join(''));
+  }
+
+  private switchBattle(id: string): void {
+    const choice = this.catalog.find(c => c.data.id === id);
+    if (!choice || this.busy) return;
+    this.root.querySelector<HTMLDialogElement>('#encounter-picker')!.close();
+    if (choice.data.id === this.data.id) return;
+    // Immutable committed snapshots also support switching when storage is denied.
+    this.sessionBattles.set(this.data.id, this.state);
+    this.canvasInputAfterInfo = performance.now() + 250;
+    clearTimeout(this.timer); this.timer = undefined; this.presentation = undefined;
+    this.scene?.setEncounter(choice.data); this.data = choice.data;
+    const loaded = this.battleProgress(this.data);
+    this.state = loaded.state; this.started = true; this.action = 'attack';
+    const last = this.state.commands.at(-1);
+    this.heroId = last ? this.state.outcome === 'active' ? this.nextHeroId(last.heroId) : last.heroId : 'tracer';
+    if (!this.state.heroes.some(h => h.id === this.heroId && h.hp > 0)) this.heroId = this.state.heroes.find(h => h.hp > 0)?.id ?? this.heroId;
+    this.messages = [loaded.restored ? 'กลับมาต่อศึกนี้จากจังหวะที่บันทึกไว้' : `เริ่ม${choice.title} · ${choice.description}`];
+    rememberEncounter(this.storage, this.data);
+    this.saved = saveBattle(this.storage, this.state, this.data);
+    this.render(); this.scene?.refreshLayout();
+    this.root.querySelector<HTMLElement>('#battle-select')?.focus({ preventScroll: true });
   }
 
   private set(id: string, content: string): void { this.root.querySelector(`#${id}`)!.innerHTML = content; }
@@ -327,6 +379,12 @@ export class BattleUI {
   private render(): void {
     const focus = document.activeElement instanceof HTMLElement ? document.activeElement.id : '';
     const s = this.state; const d = this.data; const disabled = !this.scene?.isReady || !this.started || this.busy || s.outcome !== 'active';
+    const choiceIndex = this.catalog.findIndex(c => c.data.id === d.id);
+    this.set('encounter-title', escapeHtml(this.catalog[choiceIndex]!.title));
+    const pickerButton = this.root.querySelector<HTMLButtonElement>('#battle-select')!;
+    pickerButton.textContent = `ศึก ${choiceIndex + 1}/${this.catalog.length} ▾`;
+    pickerButton.setAttribute('aria-label', `เลือกศึก · ${this.catalog[choiceIndex]!.title}`);
+    pickerButton.disabled = !this.scene?.isReady || this.busy;
     this.root.classList.toggle('mobile-layout', this.mobile.matches);
     const dialog = this.root.querySelector<HTMLDialogElement>('#game-info')!;
     const help = this.root.querySelector<HTMLDetailsElement>('.help-panel')!;

@@ -1,5 +1,6 @@
 import { errors, expect, test, type Page } from '@playwright/test';
 import { offensive, defensive, guided } from '../fixtures/party-routes';
+import { encounterRoutes } from '../fixtures/encounter-routes';
 async function start(page: Page, beforeStart?: () => Promise<void>): Promise<string[]> {
   const errors: string[] = []; page.on('pageerror', e => errors.push(e.message));
   page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
@@ -474,7 +475,7 @@ for (const viewport of [{ width:320,height:568 }, { width:390,height:640 }, { wi
     const fits = async () => {
       expect(await page.evaluate(() => ({x:scrollX,y:scrollY,overflow:document.documentElement.scrollHeight>innerHeight+1 || document.documentElement.scrollWidth>innerWidth}))).toEqual({x:0,y:0,overflow:false});
       for (const id of ['guardian','tracer','weaver','healer']) await reachable(page,`#hero-${id}`);
-      for (const selector of ['#battle-info','#restart','#action-attack']) await reachable(page,selector);
+      for (const selector of ['#battle-select','#battle-info','#restart','#action-attack']) await reachable(page,selector);
       const field = await page.locator('#game canvas').boundingBox();
       expect(field!.height).toBeGreaterThanOrEqual(120);
       await expect.poll(()=>page.locator('#game canvas').evaluate(el=>{
@@ -673,7 +674,7 @@ for (const viewport of [{width:1920,height:1080},{width:1366,height:768},{width:
     const page=await context.newPage(); const errors=await start(page);
     const fits=async()=>{
       expect(await page.evaluate(()=>({x:scrollX,y:scrollY,overflow:document.documentElement.scrollHeight>innerHeight}))).toEqual({x:0,y:0,overflow:false});
-      for(const selector of ['#battle-info','#restart','#hero-guardian','#hero-tracer','#hero-weaver','#hero-healer','#action-attack']) await reachable(page,selector);
+      for(const selector of ['#battle-select','#battle-info','#restart','#hero-guardian','#hero-tracer','#hero-weaver','#hero-healer','#action-attack']) await reachable(page,selector);
       await expect.poll(()=>page.locator('#game canvas').evaluate(el=>{
         const r=el.getBoundingClientRect(),arena=el.parentElement!.parentElement!.getBoundingClientRect();
         return r.height>=120 && r.left>=arena.left && r.right<=arena.right && r.top>=arena.top && r.bottom<=arena.bottom && r.bottom<=innerHeight;
@@ -693,3 +694,99 @@ for (const viewport of [{width:1920,height:1080},{width:1366,height:768},{width:
     await fits(); expect(errors).toEqual([]); await context.close();
   });
 }
+
+
+async function pickBattle(page:Page,id:string):Promise<void> {
+  await page.locator('#battle-select').click();
+  await page.locator(`#encounter-${id}`).click();
+  await expect(page.locator('#encounter-picker')).not.toBeVisible();
+}
+for(const [index,route] of encounterRoutes.entries()) {
+  const viewport=index===0?{width:390,height:844}:index===3?{width:320,height:568}:{width:1366,height:768};
+  test(`encounter ${route.name}: actual controls win with all four heroes and correct encounter HP`,async({browser},info)=>{
+    const context=await browser.newContext({viewport,reducedMotion:'reduce',hasTouch:index===0||index===3});
+    const page=await context.newPage(); const errors=await start(page);
+    await reachable(page,'#battle-select'); await pickBattle(page,route.data.id);
+    await expect(page.locator('#enemy-roster .enemy-card')).toHaveCount(route.data.enemies.length);
+    await expect(page.locator('#encounter-title')).toHaveText(route.data.name);
+    await expect(page.locator('#beat-status')).toContainText('จังหวะ 1');
+    await expect(page.locator('#coach-copy')).toContainText(route.data.id==='rear-ambush'?'โล่รับ 14':'หยุดการตอบโต้');
+    if(route.data.id==='rift-warden') await expect(page.locator('#target-raider')).toHaveCount(0);
+    await page.screenshot({path:info.outputPath('encounter-start.png')});
+    for(const [i,[hero,action,target]] of route.moves.entries()) {
+      await choose(page,hero,action,target); await finishTurn(page);
+      if(i===0) {
+        await expect(page.locator('#hero-weaver')).toContainText(route.data.id==='rear-ambush'?'44 / 48':'48 / 48');
+        await page.reload(); await expect(page.locator('#start')).toHaveCount(0);
+        await expect(page.locator('#battle-select')).toContainText(route.data.id==='rear-ambush'?'ศึก 2/3':'ศึก 3/3');
+        await expect(page.locator('#beat-status')).toContainText('จังหวะ 2');
+      }
+    }
+    await expect(page.locator('.result-card')).toContainText('ยืนอยู่ 4 / 4 คน');
+    await expect(page.locator('.result-card')).toContainText(`เลือดทีม ${route.hp.reduce((total,hp)=>total+hp,0)}`);
+    for(const [i,hero] of route.data.heroes.entries()) await expect(page.locator(`#hero-${hero.id}`)).toContainText(`${route.hp[i]} / ${hero.maxHp}`);
+    await reachable(page,'.result-card button'); await reachable(page,'#battle-select');
+    expect(await page.evaluate(()=>({scroll:scrollY,overflow:document.documentElement.scrollHeight>innerHeight}))).toEqual({scroll:0,overflow:false});
+    await page.screenshot({path:info.outputPath('encounter-victory.png')});
+    await page.locator('.result-card button').click();
+    await expect(page.locator('#beat-status')).toContainText('จังหวะ 1');
+    await expect(page.locator('#battle-select')).toContainText(route.data.id==='rear-ambush'?'ศึก 2/3':'ศึก 3/3');
+    for(const e of route.data.enemies) await expect(page.locator(`[data-enemy=${e.id}]`)).toContainText(`${e.maxHp} / ${e.maxHp}`);
+    expect(errors).toEqual([]); await context.close();
+  });
+}
+
+test('encounter selection preserves independent replays, locks during presentation and restores the selected battle',async({page},info)=>{
+  await page.clock.install({time:new Date('2026-10-14T00:00:00Z')});
+  const errors=await start(page); await page.clock.pauseAt(new Date('2026-10-14T01:00:00Z'));
+  await choose(page,'tracer','mark','brute'); await expect(page.locator('#battle-select')).toBeDisabled();
+  await finishTurn(page); await expect(page.locator('[data-enemy=brute]')).toContainText('ติดตรา');
+  await pickBattle(page,'rear-ambush'); await choose(page,'weaver','ward','weaver'); await finishTurn(page);
+  await expect(page.locator('#hero-weaver')).toContainText('44 / 48');
+  await pickBattle(page,'rift-warden'); await choose(page,'guardian','bash','brute');
+  await expect(page.locator('#battle-select')).toBeDisabled();
+  await page.reload(); await expect(page.locator('#battle-select')).toContainText('ศึก 3/3');
+  await expect(page.locator('#beat-status')).toContainText('จังหวะ 2');
+  await expect(page.locator('[data-enemy=brute]')).toContainText('232 / 250');
+  await expect(page.locator('#target-raider')).toHaveCount(0);
+  await page.locator('#battle-select').click(); await expect(page.locator('#encounter-rear-ambush')).toContainText('เล่นต่อ · จังหวะ 2');
+  await page.keyboard.press('Escape'); await expect(page.locator('#battle-select')).toBeFocused();
+  await pickBattle(page,'veil-siege'); await expect(page.locator('[data-enemy=brute]')).toContainText('164 / 164');
+  await expect(page.locator('[data-enemy=brute]')).toContainText('ติดตรา');
+  await expect(page.locator('#beat-status')).toContainText('จังหวะ 2');
+  await page.locator('#restart').click(); await expect(page.locator('#beat-status')).toContainText('จังหวะ 1');
+  await pickBattle(page,'rear-ambush'); await expect(page.locator('#hero-weaver')).toContainText('44 / 48');
+  await expect(page.locator('#beat-status')).toContainText('จังหวะ 2');
+  await page.screenshot({path:info.outputPath('resumed-encounter.png')});
+  const counts=await page.evaluate(()=>['veil-siege','rear-ambush','rift-warden'].map(id=>{
+    const key='asterveil.fateweave.battle.v1'+(id==='veil-siege'?'':'.'+id); return JSON.parse(localStorage.getItem(key)!).commands.length;
+  }));
+  expect(counts).toEqual([0,1,1]); expect(errors).toEqual([]);
+});
+
+test('narrow encounter picker stays reachable, blocks hidden field input and new battles work without storage',async({browser},info)=>{
+  const context=await browser.newContext({viewport:{width:320,height:568},hasTouch:true,isMobile:true,reducedMotion:'reduce'});
+  await context.addInitScript(()=>{Object.defineProperty(window,'localStorage',{get:()=>{throw new Error('Denied');}});});
+  const page=await context.newPage(); const errors=await start(page);
+  for(const selector of ['#battle-select','#battle-info','#restart']) await reachable(page,selector);
+  await page.locator('#battle-select').tap();
+  for(const id of ['veil-siege','rear-ambush','rift-warden']) await reachable(page,`#encounter-${id}`);
+  await page.screenshot({path:info.outputPath('encounter-picker.png')});
+  await page.locator('#target-brute').evaluate(el=>el.dispatchEvent(new MouseEvent('click',{bubbles:true})));
+  await page.keyboard.press('Escape'); await expect(page.locator('#beat-status')).toContainText('จังหวะ 1');
+  await pickBattle(page,'rear-ambush'); await choose(page,'weaver','ward','weaver'); await finishTurn(page);
+  await expect(page.locator('#hero-weaver')).toContainText('44 / 48');
+  await expect(page.locator('#save-status')).toContainText('บันทึกบนเครื่องนี้ไม่ได้');
+  await pickBattle(page,'rift-warden'); await expect(page.locator('#target-raider')).toHaveCount(0);
+  await choose(page,'guardian','bash','brute'); await finishTurn(page);
+  await expect(page.locator('[data-enemy=brute]')).toContainText('232 / 250');
+  await page.screenshot({path:info.outputPath('narrow-boss.png')});
+  await pickBattle(page,'rear-ambush');
+  await expect(page.locator('#beat-status')).toContainText('จังหวะ 2');
+  await expect(page.locator('#hero-weaver')).toContainText('44 / 48');
+  await expect(page.locator('#enemy-roster .enemy-card')).toHaveCount(2);
+  await page.locator('#hero-weaver').tap(); await expect(page.locator('#action-ward')).toBeDisabled();
+  await reachable(page,'#battle-select'); await reachable(page,'#action-attack');
+  expect(await page.evaluate(()=>({x:scrollX,y:scrollY,overflow:document.documentElement.scrollHeight>innerHeight}))).toEqual({x:0,y:0,overflow:false});
+  expect(errors).toEqual([]); await context.close();
+});

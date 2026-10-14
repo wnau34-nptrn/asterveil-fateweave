@@ -20,7 +20,7 @@ Work only in `asterveil-fateweave`. Never modify, reset, merge, push to, or impo
 4. State is independent of animation. Restart, resize and tab suspension must never change the committed command outcome.
 5. Validate all targets and actions again at commit. Downed actors cannot act; reject stale beats.
 6. If encounter data or rule semantics change, bump `EncounterDefinition.version`; saves from the old version must be rejected safely.
-7. Keep DOM text/controls responsive, touch targets >=44px, readable unavailable-action reasons, explicit confirmation, reduced-motion support and keyboard focus.
+7. Keep DOM text/controls responsive, touch targets >=44px, readable unavailable-action reasons, immediate casting on a valid marked character, reduced-motion support and keyboard focus.
 8. Run `npm run typecheck`, `npm run lint`, `npm test`, `npm run build`. For UI/input changes also run relevant Playwright gameplay tests and inspect screenshots of real canvas content.
 9. Report tested browsers/devices honestly. Chromium touch emulation does not verify iOS Safari or real devices.
 10. Do not add empty architecture folders, new gameplay systems, backend, accounts, shop, cards, formation switching, skill trees or final asset production without a scoped task.
@@ -28,3 +28,10 @@ Work only in `asterveil-fateweave`. Never modify, reset, merge, push to, or impo
 ## Future world integration
 
 The approved map is a **2D square-tile Open Board Expedition** with free four-direction one-tile hops. Do not replace it with linear nodes, dice, cards, auto-forced movement or room selection. Integrate a future pure world simulation through a typed encounter request and battle result boundary. Fog, Threat, Veil Surge, Danger Zones, Camps, Events and optional Auto-Hop belong to that future simulation; their unresolved numeric rules remain open. See `docs/DEVELOPMENT_ROADMAP.md`.
+
+
+## Encounter catalog and independent combat saves
+
+`src/content/encounters/catalog.ts` contains the original version-3 Veil Siege and two version-1 battles: rear energy pressure and a single boss alternating physical/energy attacks. All reuse the same hero/skill/rule definitions; keep the original encounter's balance and save key compatible. Additional encounters own separate validated replay keys, and a separate validated preference remembers the selected catalog entry. Restart resets only that battle. An in-tab snapshot cache retains committed battle states when storage is unavailable; never cache presentation snapshots. No expedition, unlocking or progression is implemented by the practice selector.
+
+`BattleUI` selects/restores the current definition; `BattleScene.setEncounter` swaps only rendering data and clears obsolete targets/effects. Never transfer stale actors, timers, hero selection or commands between battles. Lock the selector during turn presentation; optional native dialogs must block background casting and filter residual closing touches. Preserve the single-screen gameplay layout and ≥44px header/field controls. Regression fixtures cover two four-survivor routes per encounter and concrete basic-attack defeats, without claiming exhaustive or final balance.

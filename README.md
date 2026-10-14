@@ -4,11 +4,11 @@ A small, playable **Fateweave tactical reaction combat** prototype. This is an i
 
 ## Play in your browser
 
-GitHub Pages target: **https://wnau34-nptrn.github.io/asterveil-fateweave/**. Availability depends on a successful **Publish playable prototype** workflow deployment. The interface is in Thai. Click **เริ่มต่อสู้**; use the lower command dock to choose a hero and skill, then tap a marked character on the battlefield to cast immediately. Read **วิธีใช้…** for optional skill details. No installation or account is required to play the published static game.
+GitHub Pages target: **https://wnau34-nptrn.github.io/asterveil-fateweave/**. Availability depends on a successful **Publish playable prototype** workflow deployment. The interface is in Thai. Click **เริ่มต่อสู้**; use the lower command dock to choose a hero and skill, then tap a marked character on the battlefield to cast immediately. Open **ⓘ** for optional skill details. The **ศึก 1/3 ▾** button selects among three independent battles; each keeps its own progress on this device. No installation or account is required to play the published static game.
 
 Characters stand on the courtyard in staggered front/back pairs, with contact shadows at their feet. The formation and character touch areas resize with the field, including single-screen desktop, tablet and mobile play.
 
-The first three turns offer optional Thai hints for reading enemy intent, using Knight Guard, and consuming a Duelist Mark on the same target. A dashed gold outline points to the next suggested hero, skill or field target. Hints adapt to existing marks and cooldowns, show actual stage results and disappear after turn 3. Close them with ×; toggle them again in optional help (ⓘ on phones). Other commands stay available, and the separate hint preference does not change battle saves.
+The first three turns offer optional Thai hints for reading enemy intent, protecting or interrupting the opening attack, and consuming a Duelist Mark on the same target. The original opening suggests Guard, the rear ambush suggests Mage Ward, and the boss suggests Shield Bash. A dashed gold outline points to the next suggested hero, skill or field target. Hints adapt to existing marks and cooldowns, show actual stage results and disappear after turn 3. Close them with ×; toggle them again in optional help (ⓘ). Other commands stay available, and the separate hint preference does not change battle saves.
 
 Public Pages publication was explicitly requested after the initial prototype. The workflow builds and tests the full browser gameplay suite on the production subpath before uploading `dist/`, then deploys with GitHub's official Pages actions. It publishes the current prototype branch and `main`; no automatic merge is performed. If Pages cannot be enabled by Actions, a repository administrator must choose **Settings → Pages → Build and deployment → Source: GitHub Actions**.
 
@@ -95,7 +95,7 @@ npm run test:browser
 
 The former Crystal, Redirect and Counter systems are removed. No MP, initiative queue, reserve switching or movement grid is implemented. There is exactly one manually chosen hero action and at most one frozen enemy response per beat.
 
-Raider has 64 HP, Brute 164. The repeating intent pattern is physical Slash 12 → energy Bolt 28 → physical Slash 12 → physical Crush 26 → energy Shadow Knife 14 → energy Bolt 28. Dead sources are skipped when announcing the next event. Forecasts assume currently living actors remain alive; the actual next event appears after the current beat finishes.
+In the original battle, Raider has 64 HP and Brute 164. The repeating intent pattern is physical Slash 12 → energy Bolt 28 → physical Slash 12 → physical Crush 26 → energy Shadow Knife 14 → energy Bolt 28. Dead sources are skipped when announcing the next event. Forecasts assume currently living actors remain alive; the actual next event appears after the current beat finishes.
 
 The modern classic-JRPG HUD fits the visible viewport without page scrolling. Desktop and short landscape put the battlefield on the left and the 2×2 hero roster plus three owned commands on the right. Portrait tablets keep a flexible battlefield above a two-column team/command dock. Portrait phones up to 600px retain the compact stacked layout, 44px hero cards and 54px skills. Enemy names/HP stay on the field; larger layouts also show enemy HP cards. The frozen enemy intent, current turn and optional three-turn coach remain visible. Only optional skill explanations, rules, forecasts and history scroll inside the ⓘ dialog.
 
@@ -103,7 +103,19 @@ Front/back describe actual targeting rules. Selecting a hero or skill never adva
 
 Both tested basic-attack priorities lose. An 11-beat offensive plan and a 16-beat defensive plan each use all four classes and win with all four standing. These are regression examples, not a claim of final balance; see [balance validation](docs/BALANCE_VALIDATION.md).
 
-Encounter ID is **veil-siege**, content version **3**. Old three-member saves restart safely instead of replaying commands under the new party and rules. Refresh the published page to load this update.
+The original encounter remains **veil-siege**, content version **3**. New encounters are **rear-ambush** and **rift-warden**, both content version **1**. Old three-member saves restart safely instead of replaying commands under the new party and rules. Refresh the published page to load this update.
+
+## Three battles
+
+| Battle | Threat | Tested alternatives |
+|---|---|---|
+| ศึกปิดรอยแยก | Raider 64 HP + Brute 164 HP; mixed attacks | Original offensive and defensive class-skill routes |
+| ศึกเงาล่าแนวหลัง | Shadow Hunter 72 HP + Channeler 148 HP; five of six attacks reach the back row | Ward opening followed by Mark/strike; longer interception, barrier and healing route |
+| ศึกผู้คุมรอยแยก | One 250-HP boss alternating physical and energy attacks | Mark/strike combo with physical interruptions; sustain route using unmarked strikes, Ward and healing |
+
+Two example routes per encounter win with all four heroes alive. The tested highest-damage-hero basic-attack policies lose for both target priorities in the two-enemy battles and against the boss; these are concrete policies, not an exhaustive balance claim. The selector is a combat practice menu; no expedition, stage unlocking, rewards or progression are implemented.
+
+Each battle has a separate validated command-replay save. The original storage key and version-3 saves remain compatible. Selecting another battle restores its progress; restarting resets only that selected battle. Refresh returns to the last selected valid battle. The selector waits until turn presentation finishes; optional selection does not cast a skill. Missing or denied storage leaves all three playable, and switching retains each battle within the current tab; refreshing cannot retain those unsaved sessions.
 
 ## Architecture
 
@@ -127,7 +139,7 @@ docs/                    Direction, integration plan, roadmap, validation
 
 ## Current limitations
 
-- One encounter with original generated chibi artwork, six portrait/unit frames, a static ruin backdrop and lightweight VFX. No music, sound or animated character states. WebP art is approximately 1.53 MiB combined; original concept/reference screenshots are not runtime UI.
+- Three independently selectable encounters using original generated chibi artwork, six portrait/unit frames, a static ruin backdrop and lightweight VFX. No music, sound or animated character states. WebP art is approximately 1.53 MiB combined; original concept/reference screenshots are not runtime UI.
 - The supplied Battle (C) and World Exploration (B) images guide the original ruins/waterfalls, blue/gold lighting and navy/gold HUD foundation. Key Art (A) has not been supplied. Reference images are not committed or used as production assets.
 - World exploration, progression, equipment, backend, multiplayer, billing, online challenges, and Capacitor are future work, not implemented.
 - Full Phaser runtime is approximately 1.37 MB minified / 357 KB gzip; Vite reports a large-chunk warning. Optimization needs measurement before a mobile release.

@@ -351,6 +351,18 @@ footer { display: flex; justify-content: space-between; gap: 10px; font-size: 10
 #info-skill h3 { color: #e4ca93; font-size: 14px; margin-bottom: 5px; }
 #info-host .battle-notes { display: block; }
 #info-host .battle-notes > * { margin-top: 6px; }
+#battle-select { flex: 0 0 auto; height: 44px; padding: 0 9px; font-size: 11px; white-space: nowrap; }
+#encounter-picker { width: min(560px, calc(100% - 16px)); max-height: calc(100dvh - 16px); padding: 0; color: #eef4ff; background: #102039; border: 1px solid #718ba7; border-radius: 12px; }
+#encounter-picker::backdrop { background: #020a17ce; }
+.picker-copy { color: var(--muted); font-size: 12px; margin-bottom: 10px; }
+#encounter-choices { display: grid; gap: 8px; }
+.encounter-choice { display: flex; align-items: center; gap: 12px; text-align: left; padding: 12px; }
+.encounter-choice[aria-pressed="true"] { border-color: var(--gold); background: #263448; }
+.battle-number { display: grid; place-items: center; flex: 0 0 34px; height: 34px; border-radius: 50%; color: var(--gold); border: 1px solid #d9bf8670; }
+.encounter-choice strong { display: block; font-size: 15px; color: #efcf8a; }
+.encounter-choice small { display: block; font-size: 11px; color: #c7d7e8; }
+.encounter-status { display: block; font-size: 10px; color: var(--mint); margin-top: 5px; }
+#enemy-roster:has(> :only-child) { grid-template-columns: minmax(0, 1fr); }
 
 /* Every gameplay layout fits the visible viewport. Optional reading stays in the dialog. */
 html, body { height: 100%; overflow: hidden; overscroll-behavior: none; }

@@ -1,4 +1,4 @@
-# Fateweave gameplay direction — four-class encounter, version 3
+# Fateweave gameplay direction — three four-class encounters
 
 Asterveil: Rise Beyond is a browser-first Fantasy Expedition RPG with Tactical Reaction Combat. Read the announced danger, choose a class skill, and tap a legal target to cast immediately. The user requested replacing the Crystal system with four heroes, front 2 / back 2, each with an individual class and skills.
 
@@ -27,7 +27,7 @@ Ward is non-stacking, persists until absorbed and can act before the same-beat h
 
 Physical attacks select a living front hero; the back row becomes eligible after the front row falls. Energy attacks can reach a preferred back hero. Announcing an event selects its living source and eligible target once. Never substitute the frozen target after a cast. Forecasts project the next two beats assuming current actors survive; the actual next intent appears when the current beat finishes.
 
-Crystal, Redirect, Counter and Exposed are removed from state, commands and rendering. No environmental target or separate reaction resource remains. Values live in typed hero/enemy definitions and `src/content/encounters/veil-siege.ts`.
+Crystal, Redirect, Counter and Exposed are removed from state, commands and rendering. No environmental target or separate reaction resource remains. Values live in typed hero/enemy definitions, `src/content/encounters/veil-siege.ts` and the encounter catalog.
 
 ## Strategy and presentation
 
@@ -39,8 +39,19 @@ Victory requires all enemies down and at least one hero alive. Keeping the whole
 
 ## Portrait phone viewport
 
-At widths up to 600px in portrait orientation, the main game fills the dynamic visible viewport and never scrolls or automatically moves after a command. The arena adapts to remaining height; actor sizes, positions and input zones follow it. A compact phase strip, current intent, four hero/HP cards, three owned skills and legal targets remain visible together. All target taps occur on the field; the bottom target row is removed. Enemy HP remains on the field; duplicated HP/timeline/skill panels are hidden in this mode. Class and front/back labels remain on the cards. Optional skill rules, forecasts and history open from ⓘ without submitting a command. The information dialog may scroll its reading content; closing it blocks residual canvas touches while allowing explicit field-target casts. Desktop/landscape retain their existing layouts.
+At widths up to 600px in portrait orientation, the main game fills the dynamic visible viewport and never scrolls or automatically moves after a command. The arena adapts to remaining height; actor sizes, positions and input zones follow it. A compact phase strip, current intent, four hero/HP cards, three owned skills and legal targets remain visible together. All target taps occur on the field; the bottom target row is removed. Enemy HP remains on the field; duplicated HP/timeline/skill panels are hidden in this mode. Class and front/back labels remain on the cards. Optional skill rules, forecasts and history open from ⓘ without submitting a command. The information dialog may scroll its reading content; closing it blocks residual canvas touches while allowing explicit field-target casts. Desktop/landscape also fit one viewport, with the field beside the roster/commands; only optional reading dialogs scroll.
 
 ## Target characters on the field
 
 The chosen skill determines which actors are marked and tappable. Native accessible target controls follow the actual Phaser sprite bounds and resize/rotate with them; pointer and keyboard activation resolve through the same legal-target path. Invalid/dead/full-health/full-barrier targets cannot cast. Tapping an invalid ally while using support skills leaves the chosen hero/skill intact. Prayer may be cast by tapping any living hero, and records the existing `party` command target; it still heals all living heroes once. No bottom target list, extra confirmation, new numeric rule or save-version change.
+
+
+## Encounter variation and selection
+
+`catalog.ts` defines the unchanged `veil-siege` / 3, `rear-ambush` / 1 and `rift-warden` / 1. All share the same four heroes, class skills and resolver rules. The rear ambush has 72/148-HP enemies: energy 18 to Mage → energy 20 to Priest → energy 18 to Priest → physical 18 to Duelist → energy 22 to Mage → energy 18 to Mage. The single 250-HP boss alternates physical 30 to Duelist → energy 26 to Mage → physical 34 to Knight → energy 24 to Priest → physical 22 to Duelist → energy 30 to Mage. Dead sources and physical front screening still use the existing announcement rules.
+
+Optional hints read the current opening: Mage Ward for energy reaching the rear, or Knight Bash against the lone boss's physical opening; the original Guard opening is unchanged. Second/third hints continue to read legal Mark targets and cooldowns. No action is forced.
+
+The header selector opens a native, keyboard-accessible practice menu with Thai titles, threat descriptions and resume status. Selecting a different battle restores that battle's replay; selecting the same battle leaves its action/selection intact. The selector is locked during hero/enemy presentation. Rendering swaps definitions and disposes the previous actors without reloading art. Both dialogs block background combat input and filter closing canvas touches. The main screen remains stationary with ≥44px controls.
+
+The original save key remains compatible. New battles own separate save keys with the same versioned/replayed envelope. A validated separate preference remembers the chosen encounter. Restart affects only that slot. With unavailable storage, immutable committed snapshots retain each battle within the current tab; they are not persistent across refresh. This is independent combat practice, not world exploration, unlock progression or persistent expedition HP.

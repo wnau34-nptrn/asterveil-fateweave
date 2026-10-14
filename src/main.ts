@@ -1,11 +1,11 @@
 import Phaser from 'phaser';
-import { veilSiege } from './content/encounters/veil-siege';
+import { battles } from './content/encounters/catalog';
 import { BattleScene } from './game/scenes/BattleScene';
 import { BattleUI } from './ui/battle-ui';
 import './ui/styles.css';
 
-const ui = new BattleUI(document.querySelector<HTMLElement>('#app')!, veilSiege);
-const scene = new BattleScene(veilSiege, id => ui.choose(id, 'canvas'), () => ui.sceneReady(), () => ui.fieldLayoutChanged());
+const ui = new BattleUI(document.querySelector<HTMLElement>('#app')!, battles);
+const scene = new BattleScene(ui.encounter, id => ui.choose(id, 'canvas'), () => ui.sceneReady(), () => ui.fieldLayoutChanged());
 ui.attach(scene);
 new Phaser.Game({
   type: Phaser.AUTO,

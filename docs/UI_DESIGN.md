@@ -92,3 +92,10 @@ The phase banner and teaching strip reserve their own viewport space at all size
 The viewport-height shell and safe-area padding now apply to every gameplay layout, using `100dvh` with `100svh` fallback. The phase and teaching strips reserve fixed space; the remaining field flexes rather than imposing a minimum canvas height. Desktop content uses available width up to 1600px: field/enemy intent on the left, team/owned commands on the right. Portrait tablets use adjacent team/command sections below the field. Short landscape compresses the roster to 44px cards and skills to 54px controls, keeping optional detail in ⓘ. Portrait-phone controls remain unchanged.
 
 Optional rules, selected-skill explanations, forecasts, tutorial settings and history stay inside the same native dialog on every screen. Its reading area may scroll; the gameplay document cannot scroll. Casting, completing a turn and restarting no longer call page scrolling APIs. Formation, combat timing, authoritative rules, saves and original assets are unchanged.
+
+
+## Three-battle practice selector
+
+A 44px header button shows the selected battle number and opens a native selection dialog. Its three Thai choices explain each threat and show saved resume/outcome status. It consumes no additional gameplay row; all prior viewport layouts still fit one screen. The selector is disabled during turn presentation. Closing or selecting filters residual canvas touches; optional dialogs make background combat inert. Keyboard Escape returns focus to the selector.
+
+Independent battle definitions update the scene's enemies, HP, labels, timeline and valid targets; the solo boss leaves no stale Raider actor/control. Its enemy HP card spans the available width. Generated art and grounded staggered formation are reused. New opening coaching suggests Ward against rear-reaching energy and Bash against the boss's physical hit, using actual targets and powers. Existing class selection, owned skills and direct character targeting remain unchanged.

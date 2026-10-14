@@ -20,6 +20,13 @@ export function battleLesson(state: BattleState, data: EncounterDefinition): Les
       copy: `${actorName(heroId, data)} → ${data.skills[action].name} → ${actorName(targetId, data)} · ${detail}` };
   };
   if (state.beat === 1 && state.intent) {
+    if (state.intent.kind === 'energy') {
+      return make('weaver', 'ward', state.intent.targetId, 'ป้องกันพลังงานถึงแนวหลัง',
+        `โล่รับ ${Math.min(data.skills.ward.power, state.intent.damage)} · เลือดเสีย ${Math.max(0, state.intent.damage - data.skills.ward.power)}`);
+    }
+    if (data.enemies.length === 1) {
+      return make('guardian', 'bash', state.intent.sourceId, 'ขัดจังหวะโจมตีกายภาพ', 'กระแทกผู้โจมตีเพื่อหยุดการตอบโต้จังหวะนี้');
+    }
     const damage = Math.ceil(state.intent.damage * (1 - data.rules.guardReduction));
     return make('guardian', 'guard', state.intent.targetId, 'อ่านแผนศัตรู', `รับแทนและลดพลัง ${state.intent.damage} → ${damage}`);
   }

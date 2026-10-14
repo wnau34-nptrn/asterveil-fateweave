@@ -8,7 +8,7 @@ export const heroText: Record<string, { name: string; role: string; help: string
 };
 const names: Record<string, string> = { guardian: 'เอกิส', tracer: 'ไลรา', weaver: 'ไอรา', healer: 'เซเรน', raider: 'นักจู่โจม', brute: 'อสูรรอยแยก', party: 'ทั้งทีม' };
 export function actorName(id: string | undefined, data: EncounterDefinition): string {
-  return id ? names[id] ?? data.heroes.find(h => h.id === id)?.name ?? data.enemies.find(e => e.id === id)?.name ?? 'เป้าหมาย' : 'ทีม';
+  return id ? data.enemies.find(e => e.id === id)?.displayName ?? names[id] ?? data.heroes.find(h => h.id === id)?.name ?? data.enemies.find(e => e.id === id)?.name ?? 'เป้าหมาย' : 'ทีม';
 }
 export function intentName(intent: Intent): string {
   return ({ 'Raking Slash': 'ฟันกวาด', 'Rift Bolt': 'ลำแสงรอยแยก', 'Crushing Blow': 'ทุบหนัก', 'Shadow Knife': 'มีดเงา' } as Record<string, string>)[intent.name] ?? intent.name;

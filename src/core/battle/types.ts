@@ -5,7 +5,7 @@ export interface HeroDefinition {
   id: string; name: string; role: string; lane: 'front' | 'back'; maxHp: number; attack: number;
   actions: readonly ActionId[]; color: number; empoweredByStatuses?: boolean;
 }
-export interface EnemyDefinition { id: string; name: string; maxHp: number; color: number }
+export interface EnemyDefinition { id: string; name: string; displayName?: string; maxHp: number; color: number }
 export interface IntentDefinition {
   sourceId: string; targetId: string; name: string; damage: number; kind: 'physical' | 'energy';
 }

@@ -17,8 +17,12 @@ export class BattleScene extends Phaser.Scene {
   private bodies = new Map<string, Phaser.GameObjects.Container>();
   private effects: Phaser.GameObjects.Container | undefined;
   private ready = false;
-  constructor(private readonly encounter: EncounterDefinition, private readonly choose: (id: string) => void, private readonly onReady: () => void, private readonly onLayout: () => void) { super('battle'); }
+  constructor(private encounter: EncounterDefinition, private readonly choose: (id: string) => void, private readonly onReady: () => void, private readonly onLayout: () => void) { super('battle'); }
   get isReady(): boolean { return this.ready; }
+  setEncounter(data: EncounterDefinition): void {
+    this.stopEffects(); this.encounter = data; this.view = undefined;
+    this.actorTargets.clear();
+  }
   refreshLayout(): void {
     // DOM teaching strips change the field without a window resize. Refresh
     // immediately so sprites and targets cannot remain clipped in the old size.
