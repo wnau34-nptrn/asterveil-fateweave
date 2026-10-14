@@ -1,44 +1,37 @@
-# Fateweave gameplay direction — owned hero turns
+# Fateweave gameplay direction — SPD rounds
 
-Asterveil: Rise Beyond is a browser-first Fantasy Expedition RPG with Tactical Reaction Combat. The player reads the frozen enemy intent, inspects one of the current hero's skills, and taps a legal field target to cast.
+The independent four-class prototype uses a deterministic combined hero/enemy initiative queue. World integration remains a separate future scope.
 
-## Implemented loop
+## Turn rules
 
-Start with Aegis → Lyra → Eira → Seren → Aegis, skipping fallen heroes. One primary hero action is followed by at most one frozen enemy response per beat. The next hero may act only after that presentation ends or is skipped. The engine reconstructs the owner from committed commands and surviving actors, rejects every other actor at commit/preview/replay, and has no clock, random damage or automatic player action.
+At round start, sort living heroes and enemies by descending SPD. Ties use permanent definition order (hero list followed by enemy list). Freeze the queue for that round; each actor takes one turn, skipped if defeated. Re-sort survivors when the queue ends. No speed-changing skill is shipped; changes to configured speed are picked up at a round boundary, never by rearranging an in-progress queue.
 
-Portrait cards for other heroes are disabled. Clicking their field sprites cannot change the acting hero. Allies remain legal recipients of Guard, Ward, Heal and Prayer; choosing an ally as a target does not let that ally issue a command. Restart starts with the Knight; reload/switching reconstruct the correct living owner. Victory/Defeat have no further acting owner.
+Default order is Lyra 120 → Raider/Hunter 110 → Eira 100 → Aegis 80 → Brute/Channeler/Warden 70 → Seren 60. A faster enemy can open before heroes: `beginBattle` resolves those automatic turns and exposes their presentation frames; replay includes them exactly once. The player can command only the current hero. Enemy turns automatically execute when reached, never after every hero action. Several heroes or enemies may occur consecutively.
 
-## Party and skills
+`round` advances once the queue is exhausted; `beat` is an internal actor-turn serial for stale-command rejection. Save only hero commands and replay deterministic automatic enemies. One command commits all following enemy turns up to the next living hero or outcome, and exposes separate render-only frames/events for each actor. UI presentation cannot affect results.
 
-| Hero | Position | Role | Owned actions |
-|---|---|---|---|
-| Aegis / เอกิส | Front | Knight | Attack 10; Guard intercept with 65% reduction; Shield Bash 18 interrupts the announced physical source |
-| Lyra / ไลรา | Front | Duelist | Attack 16; Mark for 5 beats including application; Precision Strike 28 |
-| Eira / ไอรา | Back | Mage | Attack 11; Arcane Bolt 26; Ward 14 to one living ally |
-| Seren / เซเรน | Back | Priest | Attack 8; Heal 20 to one ally; Prayer 10 to all living allies |
+## Skills and targeting
 
-Mark costs an action and deals no damage. It adds +22 to Lyra's next Attack or Precision Strike on that target and is consumed; other classes leave it intact. Five beats let a Mark on turn 2 survive Mage/Priest/Knight actions until Lyra's next turn 6. An unused Mark expires when turn 7 begins. Cooldowns remain global beats: most special skills use 3, Prayer 4; Attack, Guard and Mark have none. The owner usually returns after 4 beats, but skips can make a skill still cooling. Cooling skills may be inspected; legal-target validation prevents using them.
+Hero HP/Attack/powers remain Knight 76/10, Duelist 56/16, Mage 48/11, Priest 46/8. Knight/Duelist are front, Mage/Priest back. Physical targets screen the back while a front hero survives; energy can reach the rear. Enemy plans select their own template by `(round - 1) % ownMoves.length`. Forecasts assume current survivors remain; targets are determined when the enemy's turn starts.
 
-Guard protects only the announced target, redirecting the hit into Aegis. Round reduced damage up, then absorb with his barrier. Bash interrupts only the announced physical attacker; energy continues unless that attacker is defeated. Killing a frozen source cancels its response without substituting another attacker. Ward does not stack; it persists until absorbed. Healing occurs before the response, clamps at maximum HP and never revives. Full-health/full-barrier targets cannot receive an unavailable restoration.
+Guard protects the displayed next attack's target/source until that enemy acts or the Knight returns. It redirects damage to the Knight, applies 65% reduction rounded up, then barrier/HP. Bash deals 18 and cancels the selected enemy's next physical turn, even if that enemy already acted this round; energy cannot be interrupted. A defeated enemy is skipped without a phantom hit.
 
-## Formation and presentation
+Mark lasts 2 rounds including application, adding +22 to the Duelist's next Attack (38) or Strike (50) on that enemy. Other classes do not consume it. A round-1 Mark remains usable in round 2 and expires entering round 3. Bash/Strike/Bolt/Ward/Heal cooldowns are 2 rounds; Prayer is 3. No cooldown on Attack/Guard/Mark. Ward is non-stacking 14 and persists until absorbed; Heal is 20, Prayer is 10 per living ally. Healing clamps and cannot revive.
 
-Physical attacks prefer living front heroes; rear heroes become eligible once the front falls. Energy reaches the preferred rear hero. The source/target freezes at announcement and is not retargeted after a skill. Forecasts assume currently living actors survive; the real next intent appears on completion.
+## HUD and lifecycle
 
-The Thai HUD fits one viewport on desktop, tablet and mobile. Figures stand in staggered pairs on the courtyard; ≥44px native targets follow their bodies. The current hero's three skills remain visible. Clicking a skill selects it and opens a nonmodal floating explanation with actual power, rules, cooldown and availability. It does not commit, preview full outcomes or require confirmation. Close/Escape returns focus to the selected skill; a valid field target can cast directly. The popup does not change arena geometry or scroll the game. Optional ⓘ contains rules, forecasts and history.
+The persistent phase/order band shows six slots on larger screens or four on compact phones/short screens, including both sides. Each slot exposes actor, SPD, now/next and round boundaries. It remains visible without document scrolling. Distinct cyan/pink phases show the actual acting side; each actor gets one second, including an interrupted enemy's canceled turn. Adjacent heroes have no invented retaliation. Skills/cards/selector lock during playback. Skip, hidden-tab completion and reload retain exactly the already committed outcome; restart cancels pending timers/effects.
 
-A cast commits/saves once, then shows the hero stage (cyan, 1 second) and frozen enemy stage (pink or gold cancellation, 1 second). HP/barriers/log display only actual effects of that stage. All commands lock during presentation, including the battle selector. Skip/hidden-tab completion use the committed result; restart cancels timers and effects. Reduced motion keeps static stage labels. The next living hero is enforced, not a freely changeable selection aid.
+Skill clicks open the existing nonmodal floating Thai explanation without casting or moving the field. Legal character targets still cast immediately. Support recipients never become alternative actors. Cooling skills remain inspectable but have no legal cast targets. Original art remains grounded/staggered; short portrait fields reserve nonoverlapping ≥44px ally zones. Optional rules, enemy forecasts, logs and advice controls live in ⓘ.
 
-## Three encounters and saves
+Opening advice follows the first three hero commands: Mark → Mage Bolt/Ward → Knight Guard/Bash. During presentation it reads the command's original lesson and shows that actor's actual event, avoiding coach layout changes between hero/enemy frames. Dismissal preference stays separate from saves.
 
-The original `veil-siege` is now version 4; `rear-ambush` and `rift-warden` are version 2. Old free-selection saves start fresh instead of replaying under different rules. Storage keys and envelope version remain stable; each battle keeps its own validated command replay, and a separate validated preference selects the battle. In-tab committed snapshots retain switching progress without storage, but cannot survive refresh. Restart affects only the selected battle.
+## Content and persistence
 
-- Original: enemies 64/164 HP; intent powers 12 physical → 28 energy → 12 physical → 26 physical → 14 energy → 28 energy, unchanged.
-- Rear ambush: enemies 72/148 HP; Mage energy 15 → Priest energy 16 → Priest energy 15 → Duelist physical 15 → Mage energy 18 → Mage energy 15.
-- Rift Warden: one 250-HP boss; Duelist physical 23 → Mage energy 20 → Knight physical 26 → Priest energy 18 → Duelist physical 17 → Mage energy 23.
+Versions: veil-siege / 5, rear-ambush / 3, rift-warden / 3. Prior rotation saves start fresh; keys/envelope stay stable. Independent replays and selected-only restart remain; denied storage retains committed progress in-tab only.
 
-The new encounters' incoming damage was tuned for enforced rotation. All hero values and skill powers remain unchanged apart from the longer Mark duration. Two tested plans per encounter preserve all four heroes, while the tested fixed-priority Attack-only policies lose. See `BALANCE_VALIDATION.md`; these are regression examples rather than exhaustive or final balance.
+- Original enemies 78/200 HP, SPD 110/70. Raider own round cycle: physical 12 → physical 12 → energy 14. Brute: energy 28 → physical 26 → energy 28. Incoming powers unchanged.
+- Rear enemies 90/180 HP, SPD 110/70. Hunter: Priest energy 24 → Duelist physical 23 → Mage energy 23. Channeler: Mage energy 23 → Priest energy 23 → Mage energy 27.
+- Boss 350 HP / SPD 70: Duelist physical 29 → Mage energy 25 → Knight physical 33 → Priest energy 23 → Duelist physical 21 → Mage energy 29.
 
-Optional hints cover only the current owner's first three turns: Knight Guard (or boss Bash), Duelist Mark, then a legal Mage Bolt/Ward. They never suggest stealing another hero's turn. They can be dismissed/reopened independently of battle saves.
-
-The selector is independent combat practice. Crystal/Redirect/Counter, expedition progression, unlocks, rewards, equipment and persistent expedition HP are not implemented.
+Enemy HP and the two later encounters' powers are tuned for one enemy turn per round and round cooldowns. Seven tested plans preserve all four heroes; five specific blind Attack policies lose. These are regression examples, not exhaustive balance or physical-device proof. No Crystal/Redirect/Counter, world progression, equipment, reserves or new speed-buff skill is implemented.

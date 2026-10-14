@@ -72,9 +72,19 @@ export class BattleScene extends Phaser.Scene {
       healer: { x: .16, y: .77 }, tracer: { x: .39, y: .90 },
       raider: { x: .85, y: .51 }, brute: { x: .70, y: .81 },
     };
+    // Reserve independent 44px ally targets on the shortest portrait fields.
+    // Upper and lower pairs stay staggered; all sole anchors remain on the floor.
+    if (phone && h < 170) {
+      const rearTop = h * .48;
+      const frontTop = Math.min(h * .59, h - 16 - 46);
+      formation.weaver!.y = rearTop / h;
+      formation.guardian!.y = frontTop / h;
+      formation.healer!.y = Math.min(h - 16, Math.max(h * .77, rearTop + 46)) / h;
+      formation.tracer!.y = Math.min(h - 16, Math.max(h * .90, frontTop + 46)) / h;
+    }
     this.encounter.heroes.forEach((hero, i) => {
       const x = w * formation[hero.id]!.x;
-      const y = Math.min(h * formation[hero.id]!.y, h - (phone ? 16 : 42));
+      const y = Math.min(h * formation[hero.id]!.y, h - (phone ? 16 : hero.lane === 'back' ? 50 : 42));
       this.actor(hero.id, actorName(hero.id, this.encounter), x, y, hero.color, this.view!.state.heroes[i]!.hp, hero.maxHp, false, short);
     });
     this.encounter.enemies.forEach((enemy, i) => {
@@ -128,12 +138,12 @@ export class BattleScene extends Phaser.Scene {
     bar.fillStyle(color); bar.fillRoundedRect(hpX - barWidth / 2, barY, barWidth * hp / maxHp, 5, 2);
     const hpLabel = this.add.text(hpX, hpY, `${hp} / ${maxHp}`, { fontFamily: thaiFont, fontSize: '10px', color: '#d4e6f7', stroke: '#101c36', strokeThickness: 3 }).setOrigin(0.5);
     // Compact hero cards carry exact HP; keep canvas rows clear for artwork.
-    hpLabel.setVisible(enemy || !portrait);
+    hpLabel.setVisible(enemy || !portrait && this.scale.height >= 280);
     info.add([label, bar, hpLabel]);
     const hit = this.add.zone(0, sprite.y, Math.max(64, size * 0.7), size).setOrigin(0.5, 1).setInteractive({ useHandCursor: true });
     hit.on('pointerdown', () => this.choose(id)); body.add(hit);
     const status = this.view!.state.enemies.find(e => e.id === id);
-    if (status && (status.markedUntil > this.view!.state.beat)) {
+    if (status && (status.markedUntil > this.view!.state.round)) {
       const icon = this.add.text(-30, -20, '◇', { fontFamily: thaiFont, fontSize: '18px', color: '#e6b7ff', stroke: '#101c36', strokeThickness: 3 }).setOrigin(0.5);
       info.add(icon);
     }

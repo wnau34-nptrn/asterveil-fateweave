@@ -16,12 +16,12 @@ export function intentName(intent: Intent): string {
 export function skillDescription(action: ActionId, heroId: string, data: EncounterDefinition): string {
   const skill = data.skills[action];
   const hero = data.heroes.find(h => h.id === heroId)!;
-  const cooldown = skill.cooldown ? ` ใช้แล้วพร้อมอีกครั้งใน ${skill.cooldown} จังหวะ` : '';
+  const cooldown = skill.cooldown ? ` ใช้แล้วพร้อมอีกครั้งใน ${skill.cooldown} รอบ` : '';
   const text: Record<ActionId, string> = {
     attack: `โจมตีศัตรู ${hero.attack}${hero.empoweredByStatuses ? ` หรือ ${hero.attack + data.rules.markedBonus} เมื่อเป้าหมายติดตรา (ใช้ตราหมด)` : ''} กำจัดผู้โจมตีได้ก็หยุดการโจมตีของมัน`,
-    guard: `เอกิสรับการโจมตีแทนคนที่ศัตรูเล็ง ลดความเสียหาย ${data.rules.guardReduction * 100}% ปัดความเสียหายที่เหลือขึ้น แล้วใช้โล่ก่อนเลือด`,
-    bash: `โจมตี ${skill.power} และหยุดการโจมตีกายภาพจังหวะนี้ หากเป้าหมายคือศัตรูที่กำลังโจมตี พลังงานยังโจมตีต่อได้`,
-    mark: `ยังไม่ทำความเสียหาย ติดตรา ${data.rules.markDuration} จังหวะรวมจังหวะนี้ เพื่อให้ไลราโจมตีหรือฟันเจาะจุดแรงขึ้น ${data.rules.markedBonus} (ใช้ตราหมดเมื่อโจมตี)`,
+    guard: `เอกิสรับการโจมตีแทนคนที่ศัตรูเล็ง ลดความเสียหาย ${data.rules.guardReduction * 100}% ปัดความเสียหายที่เหลือขึ้น แล้วใช้โล่ก่อนเลือด ป้องกันการโจมตีศัตรูถัดไปที่แสดงไว้ หมดเมื่อรับการโจมตีหรือถึงเทิร์นเอกิสอีกครั้ง`,
+    bash: `โจมตี ${skill.power} และหยุดเทิร์นถัดไปของเป้าหมายหากการโจมตีนั้นเป็นกายภาพ พลังงานยังโจมตีต่อได้`,
+    mark: `ยังไม่ทำความเสียหาย ติดตรา ${data.rules.markDuration} รอบรวมรอบนี้ เพื่อให้ไลราโจมตีหรือฟันเจาะจุดแรงขึ้น ${data.rules.markedBonus} (ใช้ตราหมดเมื่อโจมตี)`,
     execute: `ฟันเจาะจุด ${skill.power} หรือ ${skill.power + data.rules.markedBonus} เมื่อเป้าหมายติดตรา ใช้ตราหมด`,
     bolt: `ยิงศรเวทสร้างความเสียหาย ${skill.power} ให้ศัตรูหนึ่งตัว`,
     ward: `ให้โล่ ${skill.power} แก่เพื่อนที่ยังยืนอยู่ 1 คน โล่รับความเสียหายก่อนเลือด ไม่ซ้อนกัน อยู่จนถูกใช้หมด`,
@@ -32,7 +32,7 @@ export function skillDescription(action: ActionId, heroId: string, data: Encount
 }
 export function reasonThai(reason: string): string {
   if (!reason) return '';
-  if (reason.startsWith('Cooldown: ')) return `คูลดาวน์ · พร้อมใน ${reason.slice(10)} จังหวะ`;
+  if (reason.startsWith('Cooldown: ')) return `คูลดาวน์ · พร้อมใน ${reason.slice(10)} รอบ`;
   return ({
     'The encounter has ended.': 'การต่อสู้จบแล้ว',
     'This hero is down.': 'ฮีโร่คนนี้ล้มแล้ว',
@@ -52,9 +52,10 @@ export function eventThai(event: BattleEvent, after: BattleState, data: Encounte
   switch (event.type) {
     case 'damage': return `${target} เสียเลือด ${event.amount ?? 0}${event.absorbed ? ` (โล่รับไว้ ${event.absorbed})` : ''}`;
     case 'guard': return `${source}${event.sourceId === event.targetId ? 'ตั้งรับ' : `รับการโจมตีแทน${target}`} ลดความเสียหาย ${data.rules.guardReduction * 100}%`;
-    case 'mark': return `${target} ติดตรา ${data.rules.markDuration} จังหวะ รวมจังหวะนี้`;
+    case 'mark': return `${target} ติดตรา ${data.rules.markDuration} รอบ รวมรอบนี้`;
     case 'barrier': return `${target} ได้รับโล่เพิ่ม ${event.amount}`;
     case 'heal': return `${target} ฟื้นเลือด ${event.amount}`;
+    case 'interrupt': return `${target} จะเสียเทิร์นโจมตีกายภาพครั้งถัดไป`;
     case 'cancel': return event.cause === 'interrupted' ? 'กระแทกโล่หยุดการโจมตีกายภาพของศัตรูได้' : 'กำจัดผู้โจมตีได้ การโจมตีของมันถูกยกเลิก';
     case 'down': return `${target}${data.heroes.some(h => h.id === event.targetId) ? 'ล้มแล้ว' : 'ถูกกำจัดแล้ว'}`;
     case 'outcome': return after.outcome === 'victory' ? 'ชนะแล้ว! รอยแยกสงบลง' : 'แพ้แล้ว ลองจัดแผนใหม่';

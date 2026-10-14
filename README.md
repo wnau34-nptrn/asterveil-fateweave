@@ -8,7 +8,7 @@ GitHub Pages target: **https://wnau34-nptrn.github.io/asterveil-fateweave/**. Av
 
 Characters stand on the courtyard in staggered front/back pairs, with contact shadows at their feet. The formation and character touch areas resize with the field, including single-screen desktop, tablet and mobile play.
 
-The first three turns offer optional Thai hints for reading enemy intent, protecting or interrupting the opening attack, and preserving a Duelist Mark for the next Duelist turn. Knight opens with Guard (or boss Bash), then Duelist Mark and a legal Mage skill. Hints never suggest commanding another hero. A dashed gold outline points to the next suggested hero, skill or field target. Hints adapt to existing marks and cooldowns, show actual stage results and disappear after turn 3. Close them with ×; toggle them again in optional help (ⓘ). Other commands stay available, and the separate hint preference does not change battle saves.
+The first three hero commands offer optional Thai advice: Duelist Mark, a legal Mage Bolt/Ward, then Knight Guard (or physical boss Bash). Hints use the current SPD owner and never suggest a different actor. They show actual turn feedback during presentation, can be dismissed/reopened independently, and disappear after three committed hero commands.
 
 Public Pages publication was explicitly requested after the initial prototype. The workflow builds and tests the full browser gameplay suite on the production subpath before uploading `dist/`, then deploys with GitHub's official Pages actions. It publishes the current prototype branch and `main`; no automatic merge is performed. If Pages cannot be enabled by Actions, a repository administrator must choose **Settings → Pages → Build and deployment → Source: GitHub Actions**.
 
@@ -71,51 +71,44 @@ npm run test:browser
 
 ## How to play
 
-1. กด **เริ่มต่อสู้** หรือเล่นต่อจากเซฟที่รองรับเวอร์ชันปัจจุบัน
-2. อ่านแถบ **ศัตรูจะตอบโต้หลังฮีโร่ลงมือ**: ผู้โจมตี เป้าหมาย ประเภท และความเสียหาย เปิดแผนอีก 2 จังหวะเมื่อต้องการวางแผน
-3. ใช้สกิลของฮีโร่เจ้าของเทิร์นเท่านั้น ทุกคนมีโจมตีพื้นฐานและสกิลเฉพาะ 2 อย่าง ปุ่มแสดงเหตุผลเมื่อใช้ไม่ได้และจำนวนจังหวะที่เหลือของคูลดาวน์
-4. กดสกิลเพื่อเปิดหน้าต่างลอยอธิบายความสามารถ ปิดด้วย × หรือ Escape หรือแตะเป้าหมายในสนามเพื่อใช้สกิล การเปลี่ยนสกิลหรืออ่านข้อมูลยังไม่เดินจังหวะ
-5. **แตะตัวละครในสนามเพื่อใช้สกิลทันที** เครื่องหมายแสดงตัวที่ใช้สกิลได้ ไม่มีแถวปุ่มเป้าหมายด้านล่าง สกิลพรฟื้นฟูแตะฮีโร่ที่ยังยืนอยู่คนไหนก็ได้เพื่อฟื้นฟูทั้งทีม ไม่มีหน้าต่างยืนยัน แสดง **เทิร์นฮีโร่ (สีฟ้า) → เทิร์นศัตรู (สีชมพู) → เทิร์นสมาชิกคนถัดไป** เลือด/โล่เปลี่ยนตามช่วงที่เกิดผล หากหยุดศัตรูได้จะขึ้นว่าศัตรูไม่ได้โจมตี กด **ดูผลทันที** เพื่อข้ามการแสดงผล เกมวน เอกิส → ไลรา → ไอรา → เซเรน และข้ามคนที่ล้มแล้ว สั่งการคนอื่นไม่ได้ แต่ยังแตะเพื่อนเป็นเป้าหมายสกิลสนับสนุนได้
-6. กำจัดศัตรูทั้งสองโดยมีฮีโร่เหลืออย่างน้อย 1 คน เป้าหมายเสริมคือรอดครบ **4 คน** กด **เล่นอีกครั้ง** เพื่อเริ่มใหม่
+1. กด **เริ่มต่อสู้** แล้วดูแถบลำดับเทิร์นด้านบน: **ตอนนี้ → ถัดไป** พร้อมรูปตัวละครและ SPD
+2. เมื่อเริ่มแต่ละรอบ ฮีโร่และศัตรูที่ยังยืนอยู่เรียง **SPD มากไปน้อย** คนละ 1 ครั้งต่อรอบ ความเร็วเท่ากันใช้ลำดับรายชื่อฮีโร่ก่อน ตามด้วยศัตรู ลำดับรอบปัจจุบันคงที่และข้ามตัวที่ล้ม
+3. สั่งได้เฉพาะฮีโร่เจ้าของเทิร์น กดสกิลเพื่ออ่านหน้าต่างลอย แล้ว **แตะตัวละครในสนามเพื่อใช้ทันที** ปิดด้วย × หรือ Escape การอ่านหรือเปลี่ยนสกิลไม่เดินเทิร์น
+4. ศัตรูโจมตีเมื่อถึงเทิร์นตัวเอง บางครั้งฮีโร่ลงมือติดกันได้ ดูแถบ **การโจมตีศัตรูถัดไป** เพื่อวางแผนป้องกัน การคาดการณ์เปลี่ยนได้เมื่อมีคนล้ม
+5. แสดงผลของแต่ละตัว 1 วินาที สีฟ้าสำหรับฮีโร่ สีชมพูสำหรับศัตรู ปุ่ม **ดูผลทันที** ข้ามการแสดงผล จากนั้นเกมเลือกฮีโร่ถัดไปเอง สั่งการคนอื่นไม่ได้ แต่ยังเลือกเพื่อนเป็นเป้าสกิลรักษา/ป้องกันได้
+6. กำจัดศัตรูทุกตัวโดยมีฮีโร่เหลืออย่างน้อย 1 คน เป้าหมายเสริมคือรอดครบ **4 คน** กด **เล่นอีกครั้ง** เพื่อเริ่มศึกเดิมใหม่
 
 ### Four classes, front 2 / back 2
 
-| Hero / อาชีพ | Lane | HP / basic attack | Two class skills |
-|---|---|---|---|
-| Aegis / เอกิส · อัศวิน | Front | 76 / 10 | ตั้งรับแทน: รับการโจมตีแทนคนที่ศัตรูเล็ง ลดความเสียหาย 65%; กระแทกโล่: 18 และหยุดการโจมตีกายภาพจากเป้าหมายในจังหวะนี้ |
-| Lyra / ไลรา · นักดาบ | Front | 56 / 16 | ติดตรา: 5 จังหวะรวมจังหวะนี้; ฟันเจาะจุด: 28 หรือ 50 เมื่อเป้าหมายติดตรา |
-| Eira / ไอรา · จอมเวท | Back | 48 / 11 | ศรเวท: 26; โล่เวท: โล่ 14 ให้เพื่อน 1 คน |
-| Seren / เซเรน · นักบวช | Back | 46 / 8 | รักษา: ฟื้น 20 ให้เพื่อน 1 คน; พรฟื้นฟู: ฟื้นคนละ 10 ให้ทั้งทีม |
+| Hero / อาชีพ | Lane | SPD | HP / Attack | Class skills |
+|---|---|---|---|---|
+| Aegis / เอกิส · อัศวิน | Front | 80 | 76 / 10 | Guard รับแทนเป้าที่ศัตรูถัดไปเล็ง ลด 65%; Bash 18 หยุดเทิร์นกายภาพถัดไปของเป้าหมาย |
+| Lyra / ไลรา · นักดาบ | Front | 120 | 56 / 16 | Mark อยู่ 2 รอบรวมรอบนี้; Precision Strike 28 หรือ 50 เมื่อเป้าหมายติดตรา |
+| Eira / ไอรา · จอมเวท | Back | 100 | 48 / 11 | Bolt 26; Ward โล่ 14 ให้เพื่อน 1 คน |
+| Seren / เซเรน · นักบวช | Back | 60 | 46 / 8 | Heal 20 ให้เพื่อน 1 คน; Prayer ฟื้นคนละ 10 ให้ทั้งทีม |
 
-- Physical attacks target a living front hero first; once both front heroes fall, back heroes become eligible. Energy attacks can target the back row. Preferred targets and any fallback are frozen when announced. Killing the announced attacker cancels its event.
-- Guard applies 65% reduction, rounds the remaining damage up, then uses Aegis's barrier before HP. Shield Bash interrupts only the current **physical** attack if its source is the chosen target; an energy attack continues unless its source dies.
-- Mark adds 22 to Lyra's next basic attack (38 total) or Precision Strike (50 total), then is consumed. Other heroes do not consume it. Mark itself deals no damage.
-- Shield Bash, Precision Strike, Arcane Bolt, Ward and Heal have a 3-beat cooldown: used on beat 1, available on beat 4. Prayer has 4 beats. Basic Attack, Guard and Mark have no cooldown. Cooldowns advance with committed battle beats, not time, and survive reload.
-- Ward gives a non-stacking 14-point barrier that persists until absorbed. Healing happens before the enemy response, cannot exceed maximum HP, and never revives downed heroes. A fully healthy target/party cannot be healed.
+- Default two-enemy initiative is **Lyra 120 → Raider 110 → Eira 100 → Aegis 80 → Brute 70 → Seren 60**. The solo boss uses SPD 70. SPD is content-defined; no speed-changing skill is currently included. The resolver re-sorts surviving actors at each round boundary and preserves the current round's queue.
+- Enemy moves cycle by that enemy's round, once per round. Physical attacks screen the back row while a front hero survives; energy can reach the rear. Forecast targets assume current survivors remain alive; the real target is fixed at the start of the enemy's actual turn. A defeated enemy is removed from the queue without attacking.
+- Guard covers the displayed next enemy attack until it occurs or Aegis's next turn begins. It redirects only that attacker/target, reduces damage by 65%, rounds up, then absorbs through Aegis's barrier. Bash deals damage and interrupts the chosen enemy's next turn only if its scheduled attack is physical; energy is not interrupted.
+- Mark deals no damage, lasts through the next round and expires as the following round begins. Lyra's next Attack/Strike on that target consumes it for +22. Other heroes leave the Mark intact.
+- Bash, Strike, Bolt, Ward and Heal cool down for **2 rounds**: used in round 1, ready in round 3. Prayer takes 3 rounds. Attack, Guard and Mark have no cooldown. Cooldowns and expiry advance by round boundaries, never animations or elapsed time.
+- Ward gives a persistent, non-stacking 14-point barrier. Healing clamps to maximum HP and never revives fallen heroes. Prayer can be cast by tapping any living ally; its saved target is the whole party.
 
-The former Crystal, Redirect and Counter systems are removed. No MP, initiative queue, reserve switching or movement grid is implemented. There is exactly one action by the current hero and at most one frozen enemy response per beat.
+The HUD fits the viewport without document scrolling. The persistent phase/order band shows four upcoming actor slots on compact screens and six on larger screens, with current/next labels, SPD and next-round labels. Native skill explanations float without resizing the field. Optional rules, enemy forecasts and history stay in ⓘ. Original art and ground contact/staggered formation remain; the smallest fields reserve separate ≥44px ally targets.
 
-In the original battle, Raider has 64 HP and Brute 164. The repeating intent pattern is physical Slash 12 → energy Bolt 28 → physical Slash 12 → physical Crush 26 → energy Shadow Knife 14 → energy Bolt 28. Dead sources are skipped when announcing the next event. Forecasts assume currently living actors remain alive; the actual next event appears after the current beat finishes.
-
-The modern classic-JRPG HUD fits the visible viewport without page scrolling. Desktop and short landscape put the battlefield on the left and the 2×2 hero roster plus three owned commands on the right. Portrait tablets keep a flexible battlefield above a two-column team/command dock. Portrait phones up to 600px retain the compact stacked layout, 44px hero cards and 54px skills. Enemy names/HP stay on the field; larger layouts also show enemy HP cards. The frozen enemy intent, current turn and optional three-turn coach remain visible. Skill details float without changing the field layout. Optional rules, forecasts and history scroll inside the ⓘ dialog.
-
-Front/back describe actual targeting rules. Selecting or reading a skill never advances a beat; tapping a valid marked field character immediately commits that skill. There is no confirmation dialog or complete outcome preview. Rotation preserves an uncast skill. A cast shows the hero action and then its frozen enemy response for one second each, with distinct colors and actor/recipient highlights. Only the current stage’s HP/barriers/log appear; controls wait until both stages finish or the player chooses **ดูผลทันที**. The screen stays stationary through casting, completion and restart. The engine enforces the next living member in roster order; reload reconstructs that selection from the last committed command. Battle outcomes keep the final actor selected. Thai fonts use installed system fallbacks.
-
-Both tested basic-attack priorities lose. A 13-beat offensive plan and a 14-beat defensive plan each use all four classes and win with all four standing. These are regression examples, not a claim of final balance; see [balance validation](docs/BALANCE_VALIDATION.md).
-
-Encounter versions are **veil-siege / 4**, **rear-ambush / 2**, and **rift-warden / 2**. Previous free-selection saves restart safely under the new turn rules. Old three-member saves restart safely instead of replaying commands under the new party and rules. Refresh the published page to load this update.
+Combat commits and saves the hero action plus any following consecutive automatic enemy turns once, then presents one snapshot per actual actor in sequence. Adjacent hero turns have no invented enemy response. The next owner becomes actionable only after presentation finishes or is skipped. Reload reconstructs the same round/queue/HP/cooldowns without repeating damage. Restart cancels presentation timers. The game screen stays stationary.
 
 ## Three battles
 
-| Battle | Threat | Tested alternatives |
+| Battle | Enemies / threat | Tested alternatives |
 |---|---|---|
-| ศึกปิดรอยแยก | Raider 64 HP + Brute 164 HP; mixed attacks | Original offensive and defensive class-skill routes |
-| ศึกเงาล่าแนวหลัง | Shadow Hunter 72 HP + Channeler 148 HP; five of six attacks reach the back row | Owned-turn combo; a longer interception, barrier and healing route |
-| ศึกผู้คุมรอยแยก | One 250-HP boss alternating physical and energy attacks | Mark/strike combo with physical interruptions; sustain route using unmarked strikes, Ward and healing |
+| ศึกปิดรอยแยก | Raider 78 HP / SPD 110 + Brute 200 HP / SPD 70; original attack powers preserved | Mark combo; unmarked strikes and sustain; guided opening |
+| ศึกเงาล่าแนวหลัง | Hunter 90 HP / SPD 110 + Channeler 180 HP / SPD 70; rear energy pressure | Mark/Ward/Guard route; unmarked strikes/healing |
+| ศึกผู้คุมรอยแยก | One 350-HP / SPD 70 boss, physical/energy alternating by round | Mark combo/interruption; unmarked strikes/healing |
 
-Two example routes per encounter win with all four heroes alive. The tested highest-damage-hero basic-attack policies lose for both target priorities in the two-enemy battles and against the boss; these are concrete policies, not an exhaustive balance claim. The selector is a combat practice menu; no expedition, stage unlocking, rewards or progression are implemented.
+Seven concrete routes win with all four heroes. The five tested fixed-priority, current-owner Attack-only policies lose; these examples are not an exhaustive or final balance claim. See [balance validation](docs/BALANCE_VALIDATION.md).
 
-Each battle has a separate validated command-replay save. The original storage key is retained, but old content versions start fresh because actor ownership and Mark duration changed. Selecting another battle restores its progress; restarting resets only that selected battle. Refresh returns to the last selected valid battle. The selector waits until turn presentation finishes; optional selection does not cast a skill. Missing or denied storage leaves all three playable, and switching retains each battle within the current tab; refreshing cannot retain those unsaved sessions.
+Encounter versions are **veil-siege / 5**, **rear-ambush / 3**, and **rift-warden / 3**. Earlier turn-system saves safely start fresh. Keys/envelope stay stable; each battle has independent validated command replay and selected-only restart. The selector is practice, without expedition/progression/rewards. Denied storage retains switching progress in the current tab, but cannot survive refresh.
 
 ## Architecture
 
@@ -135,7 +128,7 @@ docs/                    Direction, integration plan, roadmap, validation
 .github/workflows/       Quality CI and user-authorized GitHub Pages build/test/deployment
 ```
 
-`resolveCommand` is authoritative and immutable. `previewCommand` remains a pure simulation API used by rules tests; the UI does not show complete predicted outcomes. Rendering cannot affect combat results. Commands carry a beat number to reject stale commands. Simulation has no Phaser, DOM, clock, or random-number dependency and runs under Node. State commits and saves once immediately, before the presentation lock. Resolver-provided hero/enemy snapshots are render-only and keep the original beat/intent until presentation finishes. Skipping or hiding the tab displays the already committed result; restart cancels queued presentation timers. Reload replays the saved command once. Reduced motion retains static one-second phase labels while suppressing effects. Saves contain versioned encounter IDs and commands and are validated by replay; corrupt or incompatible saves start fresh. Unavailable/quota-limited storage leaves the session playable. Saves support up to 5,000 commands; no cross-device syncing is provided.
+`resolveCommand` is authoritative and immutable. `previewCommand` remains a pure simulation API used by rules tests; the UI does not show complete predicted outcomes. Rendering cannot affect combat results. Commands carry a beat number to reject stale commands. Simulation has no Phaser, DOM, clock, or random-number dependency and runs under Node. State commits and saves once immediately, before the presentation lock. Resolver-provided snapshots contain each actual actor turn in order; only the final state is authoritative and saved. Skipping or hiding the tab displays the already committed result; restart cancels queued presentation timers. Reload replays the saved command once. Reduced motion retains static one-second phase labels while suppressing effects. Saves contain versioned encounter IDs and commands and are validated by replay; corrupt or incompatible saves start fresh. Unavailable/quota-limited storage leaves the session playable. Saves support up to 5,000 commands; no cross-device syncing is provided.
 
 ## Current limitations
 

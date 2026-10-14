@@ -557,3 +557,36 @@ main { width: 100%; max-width: 1600px; flex: 1; min-height: 0; display: flex; fl
 .hero-card.waiting-turn { opacity: .68; }
 .action[data-unavailable="true"] { background: #101d2f; border-color: #344963; }
 .action[data-unavailable="true"] svg { opacity: .5; }
+
+/* A single persistent phase/order band, including compact portrait layouts. */
+#turn-phase { display: flex; flex-direction: column; align-items: stretch; height: 88px; min-height: 88px; flex-basis: 88px; padding: 4px 8px; gap: 3px; }
+.phase-head { display: flex; align-items: center; gap: 8px; min-height: 44px; }
+.phase-head .phase-copy { flex: 1; min-width: 0; }
+.phase-head .phase-copy h2 { font-size: 14px; }
+.phase-head .phase-copy > p { font-size: 10px; }
+#turn-phase #turn-order { display: block; position: static; transform: none; border: 0; background: transparent; padding: 0; margin: 0; width: 100%; }
+#turn-phase #turn-order ol { display: flex; list-style: none; padding: 0; margin: 0; gap: 5px; }
+.turn-slot { display: flex; flex: 1; min-width: 0; align-items: center; gap: 5px; padding: 2px 5px; border: 1px solid #56738366; border-radius: 6px; background: #0a1825; }
+.turn-slot .portrait { width: 24px; height: 24px; flex: 0 0 24px; border-radius: 4px; }
+.turn-slot > span:last-child { min-width: 0; }
+.turn-slot b, .turn-slot small { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.turn-slot b { font-size: 10px; line-height: 1.2; font-weight: 500; }
+.turn-slot small { font-size: 8px; color: var(--muted); line-height: 1.2; }
+.turn-slot.enemy { border-color: #d5748844; }
+.turn-slot.current-turn.hero { border-color: #7ddaf4; background: #17384a; }
+.turn-slot.current-turn.enemy { border-color: #f4a5b6; background: #482533; }
+.turn-slot.current-turn small { color: #eef4ff; }
+@media (max-width: 600px), (max-height: 700px) {
+  #turn-phase { height: 82px; min-height: 82px; flex-basis: 82px; padding: 3px 6px; }
+  .phase-head { gap: 6px; }
+  .phase-head .phase-copy h2 { font-size: 12px; }
+  .phase-head .phase-copy > p { font-size: 9px; }
+  #turn-phase #turn-order ol { gap: 3px; }
+  .turn-slot { padding: 2px 3px; gap: 3px; }
+  .turn-slot .portrait { width: 20px; height: 20px; flex-basis: 20px; }
+  .turn-slot:nth-child(n+5) { display: none; }
+  .turn-slot b { font-size: 8px; }
+  .turn-slot small { font-size: 7px; }
+}
+
+.turn-slot.blocked-turn { border-style: dashed; opacity: .8; }

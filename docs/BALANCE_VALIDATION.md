@@ -1,28 +1,24 @@
-# Balance validation — fixed hero ownership
+# Balance validation — SPD initiative
 
-The current versions are `veil-siege` / 4, `rear-ambush` / 2 and `rift-warden` / 2. Every move must belong to the next living hero in Knight → Duelist → Mage → Priest order. Old free-selection fixtures were replaced with legal rotation plans; the original encounter's incoming damage is unchanged. New encounter powers were tuned for this rotation. Hero HP/attack, Guard, skill powers and cooldowns remain unchanged. Mark now lasts 5 beats to remain usable on the next Duelist turn.
+Versions are veil-siege / 5, rear-ambush / 3, rift-warden / 3. All moves belong to the current SPD owner. Each surviving hero/enemy acts once per round. Original incoming powers and all hero stats/powers stay unchanged; enemy HP and later encounters' powers are tuned for fewer enemy turns and round-based cooldowns. Mark lasts 2 rounds; specials cool down for 2, Prayer for 3.
 
-## Reproducible policies
+`party-routes.ts` and `encounter-routes.ts` hold legal plans. Core tests compare exact HP, pure previews, individual turn events and deterministic replay. Browser tests play all seven through actual controls, reload their first committed command and restart that selected battle. Attack-only always uses the current owner and a fixed target priority.
 
-`party-routes.ts` and `encounter-routes.ts` own the command sequences. Core tests compare exact HP, previews, render stages, source immutability and replay; browser cases execute all seven winning routes with actual controls, reload and restart. The forced-turn Attack-only policy always uses the current owner and a fixed enemy priority; it cannot choose a higher-damage hero out of turn.
+| Plan | Hero commands | Final round | Survivors | HP [Knight, Duelist, Mage, Priest] | Total |
+|---|---|---|---|---|---|
+| Original · combo | 18 | 5 | 4 | [76, 28, 12, 46] | 162 |
+| Original · unmarked strikes/sustain | 19 | 5 | 4 | [66, 54, 40, 32] | 192 |
+| Original · guided Mark/Ward/Guard | 21 | 6 | 4 | [76, 54, 36, 42] | 208 |
+| Rear · Mark/Ward/Guard | 21 | 6 | 4 | [76, 53, 42, 15] | 186 |
+| Rear · unmarked strikes/healing | 18 | 5 | 4 | [76, 56, 5, 46] | 183 |
+| Boss · Mark/interruption | 21 | 6 | 4 | [76, 56, 43, 23] | 198 |
+| Boss · unmarked strikes/healing | 23 | 6 | 4 | [76, 56, 43, 43] | 218 |
+| Original · Attack, Raider first | 23 | 9 | 0 | [0, 0, 0, 0] | 0 |
+| Original · Attack, Brute first | 24 | 10 | 0 | [0, 0, 0, 0] | 0 |
+| Rear · Attack, Hunter first | 20 | 9 | 0 | [0, 0, 0, 0] | 0 |
+| Rear · Attack, Channeler first | 16 | 7 | 0 | [0, 0, 0, 0] | 0 |
+| Boss · Attack | 31 | 10 | 0 | [0, 0, 0, 0] | 0 |
 
-| Encounter / plan | Beats | Survivors | Final HP [Knight, Duelist, Mage, Priest] | Total |
-|---|---|---|---|---|
-| Original · offense | 13 | 4 | [52, 6, 4, 18] | 80 |
-| Original · sustain | 14 | 4 | [72, 14, 18, 38] | 142 |
-| Original · guided Guard/Mark/Mage opening | 14 | 4 | [57, 16, 14, 28] | 115 |
-| Rear ambush · combo | 14 | 4 | [70, 51, 7, 5] | 133 |
-| Rear ambush · barrier/healing | 15 | 4 | [76, 56, 1, 5] | 138 |
-| Boss · Mark/strike and physical interruption | 14 | 4 | [70, 36, 2, 30] | 138 |
-| Boss · unmarked strikes, Ward/healing | 15 | 4 | [60, 26, 6, 20] | 112 |
-| Original · Attack, Raider first | 12 | 0 | [0, 0, 0, 0] | 0 |
-| Original · Attack, Brute first | 14 | 0 | [0, 0, 0, 0] | 0 |
-| Rear ambush · Attack, Hunter first | 15 | 0 | [0, 0, 0, 0] | 0 |
-| Rear ambush · Attack, Channeler first | 16 | 0 | [0, 0, 0, 0] | 0 |
-| Boss · Attack | 13 | 0 | [0, 0, 0, 0] | 0 |
+A round-1 Mark survives to the next Duelist turn in round 2; Strike deals 50 and consumes it. If unused it expires entering round 3. Round-1 special cooldowns stay unavailable throughout round 2 and become ready in round 3, even if other actors die. Guard and interruption can survive intervening actor turns but never grant the player another actor or invent an enemy response.
 
-A Mark on beat 2 stays active through Mage, Priest and Knight turns. A marked Precision Strike on beat 6 deals 50 and consumes it; the Mage's intervening Bolt does not consume it. If Lyra chooses another action on beat 6, the old Mark expires as beat 7 starts. When only a few heroes survive, cooldowns still reject early reuse despite skipped turns. Foreign-owner commands are rejected by the same resolver used for preview and save restoration.
-
-All three encounters have at least two concrete four-survivor plans, with different healing/barrier/damage decisions. The sustained plans do not promise greater health in every encounter. Attack-only results cover the stated policies, not every possible targeting strategy. Human feedback, physical-device verification and final balance remain open.
-
-Current automated coverage is 45 Node cases and 44 production browser cases. GitHub Pages uploads/deploys only after the complete production suite passes. `VALIDATION.md` records each change's evidence and limitations.
+Plans differ in targets, Mark use, Ward, Guard, healing and damage choices. Some sustain plans have more ending HP; this is not promised for every route. Attack-only results cover five stated policies, not every possible targeting strategy. Human feedback and physical mobile/Safari checks remain open. The publication workflow requires the complete production browser suite before artifact deployment. `VALIDATION.md` records final counts/evidence.

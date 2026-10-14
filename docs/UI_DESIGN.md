@@ -1,6 +1,6 @@
 # Modern battle HUD design spec
 
-Dated sections record earlier presentation work; the final owned-turn section defines the current rules and save behavior.
+Dated sections record earlier presentation work; the final SPD-round section defines the current rules and save behavior.
 
 The supplied classic JRPG screenshots guide a portrait battle screen: arena above enemy HP, two-column hero cards below, and skills/targets at the bottom. The user's requested modernization retains that recognizable skeleton with restrained framing, larger readable type, clear class colors and touch-friendly controls.
 
@@ -108,3 +108,14 @@ Independent battle definitions update the scene's enemies, HP, labels, timeline 
 Only the current hero's card/three owned skills are actionable. Other hero cards remain readable but disabled and dim; field clicks cannot change the actor. The owner starts with Knight and rotates through Duelist/Mage/Priest, skipping fallen heroes. Support markers still target allies regardless of whether their command card is disabled.
 
 Clicking a skill selects it and opens a nonmodal floating panel with Thai ability rules, power, cooldown and actual availability. It stays above the dock on wide screens and below the header on portrait phones, clamped to the viewport. It does not resize the arena or add document scrolling. ×/Escape returns focus to the selected skill; a legal field target can cast without confirmation and closes the explanation. Popup touches cannot leak into delayed canvas input. Cooling skills remain inspectable, with disabled targets and enforced resolver validation. Both skill buttons and the floating close control expose accessible labels/44px hit sizes.
+
+
+## SPD-round queue — 2026-10-14
+
+The old arena-only timeline is replaced by a persistent combined actor queue inside the existing phase band. Six slots appear on larger screens, four on compact phones/short-height layouts. Each uses original portrait art, real actor name, SPD and now/next/next-round copy, with cyan hero and pink enemy borders. Only the actual current slot has an active frame; the queue removes fallen actors and re-sorts at round boundaries. It remains visible in portrait mode and does not add document scrolling. The phase head explains SPD and shows the real acting actor/skill or canceled enemy turn.
+
+Enemies execute only on their own queue slots. Consecutive heroes have one-stage casts; following enemy turns are presented individually. HP, barriers and log reveal only the current actor frame. The next hero's commands become available after the actual sequence finishes or is skipped. Forecasts explain that future targets can change with surviving actors. ⓘ includes both heroes' and enemies' real SPD values and deterministic tie rules.
+
+The short portrait field reserves ≥46px vertical spacing between same-column ally sole anchors while preserving staggered front/back offsets. Targets retain their 44px minimum, independent hit regions and floor contact. Existing floating explanations preserve the arena's size and use the same keyboard/touch guards. Advice follows the first three hero commands under SPD, retaining the original lesson throughout playback to avoid changing field height between its actor stages. Original artwork is unchanged.
+
+Interrupted enemy slots use a dashed border and “หยุด” label before their canceled turn. Short non-phone fields keep an 8px rear/front floor offset, and show exact hero HP in roster cards rather than colliding canvas number labels. Enemy HP and hero names/bars remain on the field.

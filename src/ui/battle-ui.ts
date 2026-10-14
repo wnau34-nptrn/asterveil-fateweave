@@ -1,5 +1,5 @@
-import { actionReason, createBattle, currentHeroId, plannedIntents, resolveCommand, targetOptions } from '../core/battle/engine';
-import type { ActionId, BattleState, Command, EncounterDefinition, Resolution } from '../core/battle/types';
+import { actionReason, beginBattle, createBattle, currentHeroId, plannedIntents, resolveCommand, targetOptions, upcomingTurns } from '../core/battle/engine';
+import type { ActionId, BattleState, Command, EncounterDefinition, Resolution, TurnStage } from '../core/battle/types';
 import { loadBattle, loadSelectedEncounter, rememberEncounter, saveBattle } from '../core/save/battle-save';
 import type { BattleChoice } from '../content/encounters/catalog';
 import { browserStorage } from '../platform/browser-storage';
@@ -20,7 +20,7 @@ export class BattleUI {
   private started: boolean;
   private busy = false;
   private canvasInputAfterInfo = 0;
-  private presentation: { phase: 'hero' | 'enemy'; command: Command; resolution: Resolution; frame: BattleState; heroLogEnd: number } | undefined;
+  private presentation: { phase: 'hero' | 'enemy'; index: number; resolution: Resolution; frame: BattleState; logEnds: number[] } | undefined;
   private timer: ReturnType<typeof setTimeout> | undefined;
   private storage = browserStorage();
   private hintsEnabled = true;
@@ -54,7 +54,7 @@ export class BattleUI {
         <div class="battle-layout">
           <section class="battle-board" aria-label="สถานการณ์การต่อสู้">
             <section class="arena" aria-label="สนามต่อสู้ แตะเป้าหมายเพื่อใช้สกิล">
-              <div id="game"></div><div id="field-targets" aria-label="แตะตัวละครในสนามเพื่อใช้สกิล"></div><div id="turn-order" aria-label="ลำดับเหตุการณ์"></div>
+              <div id="game"></div><div id="field-targets" aria-label="แตะตัวละครในสนามเพื่อใช้สกิล"></div>
               <div class="formation-labels" aria-hidden="true"><span class="back-label">แนวหลัง</span><span class="front-label">แนวหน้า</span></div>
               <div id="start-screen"></div>
             </section>
@@ -69,7 +69,7 @@ export class BattleUI {
         <div id="help-home"><details class="help-panel"><summary>วิธีเล่น · แผนศัตรู · บันทึกการต่อสู้</summary><div class="battle-notes">
           <div id="formation-info" class="formation-info"></div>
           <section id="tutorial-settings" class="tutorial-settings" aria-label="ตั้งค่าคำใบ้สอนเล่น"></section>
-          <details id="forecast-details" class="forecast-panel"><summary>ดูแผนโจมตีอีก 2 จังหวะข้างหน้า</summary><div id="forecast" class="forecast"></div></details>
+          <details id="forecast-details" class="forecast-panel"><summary>ดูการโจมตีของศัตรู 2 เทิร์นถัดไป</summary><div id="forecast" class="forecast"></div></details>
           <details class="field-notes"><summary>อาชีพ · สกิลและแนวหน้า/หลัง</summary><div id="rules"></div></details>
           <details class="combat-history"><summary>บันทึกการต่อสู้</summary><ol id="event-log" role="log" aria-live="polite"></ol></details>
         </div></details></div>
@@ -91,7 +91,7 @@ export class BattleUI {
         case 'encounter': if (value) this.switchBattle(value); break;
         case 'info': this.root.querySelector<HTMLDialogElement>('#game-info')!.showModal(); break;
         case 'info-close': this.root.querySelector<HTMLDialogElement>('#game-info')!.close(); break;
-        case 'start': this.started = true; this.render(); break;
+        case 'start': this.started = true; this.present(beginBattle(this.data)); break;
         case 'hero': if (value) this.selectHero(value); break;
         case 'action': if (value && !this.busy && this.started && this.state.outcome === 'active' && this.data.heroes.find(h => h.id === currentHeroId(this.state, this.data))?.actions.includes(value as ActionId)) { this.action = value as ActionId; this.render(); this.showSkill(); } break;
         case 'skill-close': this.closeSkill(true); break;
@@ -129,17 +129,10 @@ export class BattleUI {
   get encounter(): EncounterDefinition { return this.data; }
   sceneReady(): void { this.render(); }
   fieldLayoutChanged(): void { this.renderFieldTargets(); this.renderTutorial(); }
-  private get displayState(): BattleState { return this.presentation?.frame ?? this.state; }
-  private get actingActor(): string | undefined {
-    const p = this.presentation;
-    if (!p) return undefined;
-    if (p.phase === 'hero') return p.command.heroId;
-    return p.resolution.stages.enemy.events.some(e => e.type === 'cancel') ? undefined : p.frame.intent?.sourceId;
-  }
-  private get actingTarget(): string | undefined {
-    const p = this.presentation;
-    return p?.phase === 'hero' ? p.command.targetId : p?.resolution.stages.enemy.events.find(e => e.type === 'damage')?.targetId;
-  }
+  private get displayState(): BattleState { return this.presentation?.frame ?? (!this.started ? beginBattle(this.data).initial : this.state); }
+  private get stage(): TurnStage | undefined { return this.presentation?.resolution.turns[this.presentation.index]; }
+  private get actingActor(): string | undefined { return this.stage?.events.some(e => e.type === 'cancel') ? undefined : this.stage?.actorId; }
+  private get actingTarget(): string | undefined { return this.stage?.targetId; }
 
   choose(id: string, source: 'target' | 'canvas' = 'target'): void {
     if (this.root.querySelector('dialog[open]') || source === 'canvas' && performance.now() < this.canvasInputAfterInfo) return;
@@ -163,13 +156,13 @@ export class BattleUI {
     try { this.storage?.setItem(tutorialKey, enabled ? 'on' : 'off'); } catch { /* Preference is optional. */ }
     this.render();
     const focus = this.root.querySelector<HTMLDialogElement>('#game-info')!.open ? '#coach-toggle' :
-      enabled && this.started && this.state.beat <= 3 ? '#coach-dismiss' : this.portraitLayout.matches ? '#battle-info' : '#restart';
+      enabled && this.started && this.state.commands.length < 3 ? '#coach-dismiss' : this.portraitLayout.matches ? '#battle-info' : '#restart';
     this.root.querySelector<HTMLElement>(focus)?.focus({ preventScroll: true });
   }
 
   private renderTutorial(): void {
     const coach = this.root.querySelector<HTMLElement>('#battle-coach')!;
-    const lesson = this.started && this.hintsEnabled ? battleLesson(this.displayState, this.data) : undefined;
+    const lesson = this.started && this.hintsEnabled ? battleLesson(this.presentation?.resolution.initial ?? this.displayState, this.data) : undefined;
     const resized = coach.hidden !== !lesson;
     coach.hidden = !lesson;
     this.root.querySelectorAll('.coach-focus').forEach(el => el.classList.remove('coach-focus'));
@@ -178,11 +171,11 @@ export class BattleUI {
     const p = this.presentation;
     let title = lesson.title; let copy = lesson.copy;
     if (p) {
-      const event = p.resolution.stages[p.phase].events.find(e => e.type !== 'outcome');
-      title = p.phase === 'hero' ? 'ฮีโร่ลงมือก่อน' : 'ศัตรูตอบโต้ทีหลัง';
+      lesson.step = p.resolution.initial.commands.length + 1;
+      const event = this.stage!.events.find(e => e.type !== 'outcome');
+      title = p.phase === 'hero' ? 'เทิร์นฮีโร่ตามความเร็ว' : 'ถึงเทิร์นศัตรู';
       copy = event ? eventThai(event, this.displayState, this.data) : 'การตอบโต้จังหวะนี้ถูกยกเลิก';
-      if (p.phase === 'hero' && p.command.action === 'mark') copy = `${actorName(p.command.targetId, this.data)} ติดตราแล้ว · ไลราตีเป้านี้ครั้งถัดไป +${this.data.rules.markedBonus}`;
-      if (p.phase === 'enemy' && p.command.action === 'guard' && event?.type === 'damage') copy += ` · รับแทน${actorName(p.command.targetId, this.data)}`;
+      if (p.phase === 'hero' && this.stage?.action === 'mark') copy = `${actorName(this.stage!.targetId, this.data)} ติดตราแล้ว · ไลราตีเป้านี้ครั้งถัดไป +${this.data.rules.markedBonus}`;
     } else {
       const next = this.heroId !== lesson.heroId ? `#hero-${lesson.heroId}` : this.action !== lesson.action ? `#action-${lesson.action}` : `#target-${lesson.targetId}`;
       this.root.querySelector(next)?.classList.add('coach-focus');
@@ -230,43 +223,55 @@ export class BattleUI {
   private execute(targetId: string): void {
     if (!this.scene?.isReady || !this.started || this.busy || this.state.outcome !== 'active') return;
     const command: Command = { beat: this.state.beat, heroId: this.heroId, action: this.action, targetId };
-    const before = this.state;
-    const result = resolveCommand(before, this.data, command);
+    this.present(resolveCommand(this.state, this.data, command));
+  }
+
+  private present(result: Resolution): void {
     this.closeSkill();
-    // Commit and persist immediately; animations never decide combat results.
-    this.state = result.state; this.busy = true;
-    const logStart = this.messages.length;
-    this.messages.push(`จังหวะ ${command.beat} · เทิร์นฮีโร่ · ${actorName(command.heroId, this.data)} ${this.data.skills[command.action].name}`,
-      ...result.stages.hero.events.map(event => eventThai(event, result.state, this.data)),
-      `จังหวะ ${command.beat} · เทิร์นศัตรู · ${actorName(before.intent?.sourceId, this.data)}`,
-      ...result.stages.enemy.events.map(event => eventThai(event, result.state, this.data)));
+    // Commit every actual actor turn before presentation. Reload never repeats damage.
+    this.state = result.state;
     this.saved = saveBattle(this.storage, this.state, this.data);
-    const playback = { phase: 'hero' as 'hero' | 'enemy', command, resolution: result, frame: result.stages.hero.state, heroLogEnd: logStart + 1 + result.stages.hero.events.length };
-    this.presentation = playback; this.render(); this.scene?.play(result.stages.hero.events);
+    const logEnds = result.turns.map(turn => {
+      this.messages.push(`รอบ ${turn.round} · เทิร์น${turn.side === 'hero' ? 'ฮีโร่' : 'ศัตรู'} · ${actorName(turn.actorId, this.data)}${turn.action ? ` ${this.data.skills[turn.action].name}` : ''}`,
+        ...turn.events.map(event => eventThai(event, result.state, this.data)));
+      return this.messages.length;
+    });
+    if (!result.turns.length) { this.busy = false; this.heroId = currentHeroId(this.state, this.data) ?? this.heroId; this.render(); return; }
+    this.busy = true;
+    const first = result.turns[0]!;
+    this.presentation = { phase: first.side, index: 0, resolution: result, frame: first.state, logEnds };
+    this.showStage();
     this.root.querySelector<HTMLElement>('#skip-turn')?.focus({ preventScroll: true });
-    const delay = 1000;
+  }
+
+  private showStage(): void {
+    const playback = this.presentation; if (!playback) return;
+    const turn = playback.resolution.turns[playback.index]!;
+    playback.phase = turn.side; playback.frame = turn.state;
+    if (turn.side === 'hero') this.heroId = turn.actorId;
+    this.render(); this.scene?.play(turn.events);
     this.timer = setTimeout(() => {
       if (this.presentation !== playback) return;
-      playback.phase = 'enemy'; playback.frame = result.stages.enemy.state;
-      this.render(); this.scene?.play(result.stages.enemy.events);
-      this.timer = setTimeout(() => { if (this.presentation === playback) this.finishPresentation(); }, delay);
-    }, delay);
+      if (++playback.index < playback.resolution.turns.length) this.showStage();
+      else this.finishPresentation();
+    }, 1000);
   }
 
   private finishPresentation(): void {
-    const playback = this.presentation; if (!playback) return;
+    if (!this.presentation) return;
     clearTimeout(this.timer); this.timer = undefined; this.scene?.stopEffects();
     this.presentation = undefined; this.busy = false;
-    this.heroId = currentHeroId(this.state, this.data) ?? playback.command.heroId;
+    this.heroId = currentHeroId(this.state, this.data) ?? this.heroId;
     this.action = 'attack'; this.render();
     if (this.state.outcome === 'active') this.root.querySelector<HTMLElement>('#action-attack')?.focus({ preventScroll: true });
   }
 
   private restart(): void {
-    clearTimeout(this.timer); this.timer = undefined; this.scene?.stopEffects(); this.presentation = undefined; this.busy = false; this.state = createBattle(this.data);
-    this.closeSkill(); this.heroId = currentHeroId(this.state, this.data)!; this.action = 'attack'; this.started = true;
+    clearTimeout(this.timer); this.timer = undefined; this.scene?.stopEffects(); this.presentation = undefined; this.busy = false;
+    this.closeSkill(); this.action = 'attack'; this.started = true;
     this.messages = ['เริ่มการต่อสู้ใหม่แล้ว'];
-    this.saved = saveBattle(this.storage, this.state, this.data); this.render();
+    this.heroId = currentHeroId(createBattle(this.data), this.data) ?? this.data.heroes[0]!.id;
+    this.present(beginBattle(this.data));
   }
 
   private battleProgress(data: EncounterDefinition): { state: BattleState; restored: boolean } {
@@ -278,7 +283,7 @@ export class BattleUI {
     this.set('encounter-choices', this.catalog.map((choice, i) => {
       const loaded = this.battleProgress(choice.data);
       const status = choice.data.id === this.data.id ? 'กำลังเลือกศึกนี้' : loaded.restored ?
-        loaded.state.outcome === 'active' ? `เล่นต่อ · จังหวะ ${loaded.state.beat}` : loaded.state.outcome === 'victory' ? 'ชนะแล้ว · ลองแผนอื่นได้' : 'แพ้แล้ว · ลองอีกครั้งได้' : 'เริ่มศึกใหม่';
+        loaded.state.outcome === 'active' ? `เล่นต่อ · รอบ ${loaded.state.round}` : loaded.state.outcome === 'victory' ? 'ชนะแล้ว · ลองแผนอื่นได้' : 'แพ้แล้ว · ลองอีกครั้งได้' : 'เริ่มศึกใหม่';
       return `<button id="encounter-${choice.data.id}" data-ui="encounter" data-value="${choice.data.id}" class="encounter-choice" aria-pressed="${choice.data.id === this.data.id}"><span class="battle-number">${i + 1}</span><span><strong>${escapeHtml(choice.title)}</strong><small>${escapeHtml(choice.description)}</small><span class="encounter-status">${status}</span></span></button>`;
     }).join(''));
   }
@@ -300,8 +305,9 @@ export class BattleUI {
     if (!this.state.heroes.some(h => h.id === this.heroId && h.hp > 0)) this.heroId = this.state.heroes.find(h => h.hp > 0)?.id ?? this.heroId;
     this.messages = [loaded.restored ? 'กลับมาต่อศึกนี้จากจังหวะที่บันทึกไว้' : `เริ่ม${choice.title} · ${choice.description}`];
     rememberEncounter(this.storage, this.data);
-    this.saved = saveBattle(this.storage, this.state, this.data);
-    this.render(); this.scene?.refreshLayout();
+    if (loaded.restored) { this.saved = saveBattle(this.storage, this.state, this.data); this.render(); }
+    else this.present(beginBattle(this.data));
+    this.scene?.refreshLayout();
     this.root.querySelector<HTMLElement>('#battle-select')?.focus({ preventScroll: true });
   }
 
@@ -313,56 +319,57 @@ export class BattleUI {
   }
 
   private renderPhase(): void {
-    const p = this.presentation; const d = this.data; const s = this.displayState;
-    const canceled = p?.phase === 'enemy' && p.resolution.stages.enemy.events.some(e => e.type === 'cancel');
-    const mode = p?.phase ?? (s.outcome !== 'active' ? 'finished' : 'choice');
-    const actor = this.actingActor ?? (p?.phase === 'enemy' ? p.frame.intent?.sourceId : this.heroId);
-    const title = !this.started ? 'เตรียมต่อสู้' : p?.phase === 'hero' ? `เทิร์นฮีโร่ · ${actorName(actor, d)}` : p?.phase === 'enemy' ? canceled ? 'เทิร์นศัตรูถูกหยุด' : `เทิร์นศัตรู · ${actorName(actor, d)}` : s.outcome !== 'active' ? `จบการต่อสู้ · ${s.outcome === 'victory' ? 'ชนะแล้ว' : 'แพ้แล้ว'}` : `เทิร์นของคุณ · ${actorName(this.heroId, d)}`;
-    const events = p?.resolution.stages[p.phase].events.filter(e => e.type !== 'outcome');
-    const detail = p?.phase === 'hero' ? `${d.skills[p.command.action].name} → ${actorName(p.command.targetId, d)}` : p?.phase === 'enemy' ? canceled ? 'ศัตรูไม่ได้โจมตีในจังหวะนี้' : `${intentName(p.frame.intent!)} → ${actorName(this.actingTarget, d)}` : s.outcome !== 'active' ? 'กดเล่นอีกครั้งเพื่อลองแผนใหม่' : 'กดสกิลอ่านความสามารถ แล้วแตะเป้าหมายในสนาม';
-    const summary = events?.slice(0, 2).map(e => eventThai(e, this.state, d)).join(' · ') ?? '';
+    const turn = this.stage; const d = this.data; const s = this.displayState;
+    const canceled = turn?.events.some(e => e.type === 'cancel');
+    const mode = turn?.side ?? (s.outcome !== 'active' ? 'finished' : 'choice');
+    const actor = turn?.actorId ?? this.heroId;
+    const title = !this.started ? 'เรียงเทิร์นตามความเร็ว' : turn ? canceled ? `${actorName(actor, d)} · ถูกขัดจังหวะ` : `เทิร์น${turn.side === 'hero' ? 'ฮีโร่' : 'ศัตรู'} · ${actorName(actor, d)}` : s.outcome !== 'active' ? `จบการต่อสู้ · ${s.outcome === 'victory' ? 'ชนะแล้ว' : 'แพ้แล้ว'}` : `เทิร์นของคุณ · ${actorName(actor, d)}`;
+    const detail = turn ? canceled ? 'ศัตรูเสียเทิร์นนี้' : `${turn.action ? d.skills[turn.action].name : turn.intent ? intentName(turn.intent) : 'ลงมือ'} → ${actorName(turn.targetId, d)}` : s.outcome !== 'active' ? 'กดเล่นอีกครั้งเพื่อลองแผนใหม่' : 'SPD มากเริ่มก่อน · คนละ 1 ครั้งต่อรอบ';
     const phaseRoot = this.root.querySelector<HTMLElement>('#turn-phase')!;
-    phaseRoot.dataset.phase = mode; phaseRoot.dataset.actor = actor ?? '';
-    phaseRoot.dataset.canceled = String(!!canceled);
-    this.set('turn-phase', `<div class="phase-portrait">${actor ? this.portrait(actor) : icon('guard')}</div><div class="phase-copy"><div class="phase-flow"><span class="${mode === 'hero' || mode === 'choice' ? 'current' : 'complete'}" aria-current="${mode === 'hero' || mode === 'choice' ? 'step' : 'false'}">1 · ฮีโร่</span><span class="flow-arrow" aria-hidden="true">→</span><span class="${mode === 'enemy' ? 'current' : ''}" aria-current="${mode === 'enemy' ? 'step' : 'false'}">2 · ศัตรู</span><small>จังหวะ ${s.beat}</small></div><h2>${escapeHtml(title)}</h2><p>${escapeHtml(detail)}</p>${summary ? `<small class="phase-result">${escapeHtml(summary)}</small>` : ''}</div>${p ? '<button id="skip-turn" data-ui="skip-turn" class="quiet">ดูผลทันที</button>' : ''}`);
+    phaseRoot.dataset.phase = mode; phaseRoot.dataset.actor = actor; phaseRoot.dataset.canceled = String(!!canceled);
+    this.set('turn-phase', `<div class="phase-head"><div class="phase-portrait">${this.portrait(actor)}</div><div class="phase-copy"><h2>${escapeHtml(title)}</h2><p>${escapeHtml(detail)}</p></div>${turn ? '<button id="skip-turn" data-ui="skip-turn" class="quiet">ดูผลทันที</button>' : ''}</div><div id="turn-order" aria-label="ลำดับเทิร์นตามความเร็ว"></div>`);
   }
 
   private renderSelectedHero(): void {
     const def = this.data.heroes.find(h => h.id === this.heroId)!;
     const hero = this.displayState.heroes.find(h => h.id === this.heroId)!;
     const text = heroText[this.heroId]!;
-    this.set('selected-hero', `<div class="selected-info"><h2>${text.name}<span>${text.role} · ${def.lane === 'front' ? 'แนวหน้า' : 'แนวหลัง'}</span></h2><p class="selected-resource">เลือด ${hero.hp}/${def.maxHp}${hero.barrier ? ` · โล่ ${hero.barrier}` : ''} · พลังโจมตี ${def.attack}</p></div><span class="selection-state">${hero.hp <= 0 ? 'ล้มแล้ว' : this.presentation?.phase === 'hero' ? 'กำลังลงมือ' : this.presentation ? 'รอศัตรู' : 'ถึงเทิร์น'}</span>`);
+    this.set('selected-hero', `<div class="selected-info"><h2>${text.name}<span>${text.role} · ${def.lane === 'front' ? 'แนวหน้า' : 'แนวหลัง'}</span></h2><p class="selected-resource">เลือด ${hero.hp}/${def.maxHp}${hero.barrier ? ` · โล่ ${hero.barrier}` : ''} · พลังโจมตี ${def.attack} · SPD ${def.speed}</p></div><span class="selection-state">${hero.hp <= 0 ? 'ล้มแล้ว' : this.presentation?.phase === 'hero' ? 'กำลังลงมือ' : this.presentation ? 'รอศัตรู' : 'ถึงเทิร์น'}</span>`);
   }
 
   private renderTimeline(): void {
-    const s = this.displayState;
-    const intents = [s.intent, ...plannedIntents(s, this.data)].filter(i => i !== null);
-    this.set('turn-order', `<p>ลำดับเหตุการณ์ <small>ฮีโร่ → ศัตรู</small></p><ol><li class="timeline-slot hero-slot ${this.presentation?.phase === 'hero' ? 'acting' : ''}">${this.portrait(this.heroId)}<small>${this.presentation?.phase === 'hero' ? 'ลงมือ' : 'ถึงเทิร์น'}</small></li>${intents.map((i, index) => `<li class="timeline-slot ${index === 0 ? 'next-slot' : ''} ${index === 0 && this.presentation?.phase === 'enemy' && this.actingActor ? 'acting enemy-acting' : ''}" aria-label="จังหวะ ${i.beat} ${actorName(i.sourceId, this.data)} โจมตี${actorName(i.targetId, this.data)} พลังโจมตี ${i.damage}">${this.portrait(i.sourceId)}<small>${index === 0 ? this.presentation?.phase === 'enemy' ? this.actingActor ? 'ลงมือ' : 'ถูกหยุด' : 'ถัดไป' : `จังหวะ ${i.beat}`}</small></li>`).join('')}</ol>`);
+    const s = this.displayState; const slots = upcomingTurns(s, this.data);
+    this.set('turn-order', slots.length ? `<ol>${slots.map((slot, index) => {
+      const blocked = slot.side === 'enemy' && (s.enemies.find(e => e.id === slot.actorId)?.interruptedRound === slot.round ||
+        index === 0 && this.stage?.events.some(e => e.type === 'cancel'));
+      const label = blocked ? 'หยุด' : index === 0 ? 'ตอนนี้' : slot.round > s.round ? `รอบ ${slot.round}` : index === 1 ? 'ถัดไป' : 'รอ';
+      return `<li class="turn-slot ${slot.side} ${blocked ? 'blocked-turn' : ''} ${index === 0 ? 'current-turn' : ''}" data-actor="${slot.actorId}" data-round="${slot.round}" ${index === 0 ? 'aria-current="step"' : ''} aria-label="${index === 0 ? 'ตอนนี้' : `ลำดับ ${index + 1}`} ${actorName(slot.actorId, this.data)} ความเร็ว ${slot.speed} รอบ ${slot.round}${blocked ? ' ถูกขัดจังหวะ' : ''}">${this.portrait(slot.actorId)}<span><b>${actorName(slot.actorId, this.data)}</b><small>${label} · ${slot.speed}</small></span></li>`;
+    }).join('')}</ol>` : '<p>จบการต่อสู้แล้ว</p>');
   }
 
   private renderSituation(): void {
-    const s = this.displayState; const d = this.data; const intent = s.intent;
+    const s = this.displayState; const d = this.data; const intent = this.stage?.side === 'enemy' ? this.stage.intent : s.intent;
     this.renderTimeline();
     this.set('enemy-roster', d.enemies.map(e => {
       const enemy = s.enemies.find(v => v.id === e.id)!;
-      return `<div class="enemy-card ${enemy.hp <= 0 ? 'fallen' : ''} ${this.actingActor === e.id ? 'active-actor' : ''}" data-enemy="${e.id}">${this.portrait(e.id)}<div><strong>${actorName(e.id, d)}</strong><span class="enemy-hp">HP <b>${enemy.hp} / ${e.maxHp}</b>${enemy.markedUntil > s.beat ? ' · ติดตรา' : enemy.hp <= 0 ? ' · กำจัดแล้ว' : ''}</span><span class="hp-track"><span style="width:${enemy.hp / e.maxHp * 100}%"></span></span></div></div>`;
+      return `<div class="enemy-card ${enemy.hp <= 0 ? 'fallen' : ''} ${this.actingActor === e.id ? 'active-actor' : ''}" data-enemy="${e.id}">${this.portrait(e.id)}<div><strong>${actorName(e.id, d)}</strong><span class="enemy-hp">HP <b>${enemy.hp} / ${e.maxHp}</b>${enemy.markedUntil > s.round ? ' · ติดตรา' : enemy.hp <= 0 ? ' · กำจัดแล้ว' : ''}</span><span class="hp-track"><span style="width:${enemy.hp / e.maxHp * 100}%"></span></span></div></div>`;
     }).join(''));
     const living = s.heroes.filter(h => h.hp > 0);
-    this.set('beat-status', `<span class="beat-chip">${this.busy ? 'กำลังแสดงผล…' : s.outcome === 'active' ? `จังหวะ ${s.beat}` : s.outcome === 'victory' ? 'ชนะแล้ว' : 'แพ้แล้ว'}</span><span class="formation-chip">หน้า ${living.filter(h => d.heroes.find(v => v.id === h.id)!.lane === 'front').length} · หลัง ${living.filter(h => d.heroes.find(v => v.id === h.id)!.lane === 'back').length}</span>`);
+    this.set('beat-status', `<span class="beat-chip">${this.busy ? 'กำลังแสดงผล…' : s.outcome === 'active' ? `รอบ ${s.round}` : s.outcome === 'victory' ? 'ชนะแล้ว' : 'แพ้แล้ว'}</span><span class="formation-chip">หน้า ${living.filter(h => d.heroes.find(v => v.id === h.id)!.lane === 'front').length} · หลัง ${living.filter(h => d.heroes.find(v => v.id === h.id)!.lane === 'back').length}</span>`);
     if (intent) {
       const response = this.presentation?.phase === 'enemy';
-      const hit = response ? this.presentation?.resolution.stages.enemy.events.find(e => e.type === 'damage') : undefined;
-      const canceled = response && this.presentation?.resolution.stages.enemy.events.some(e => e.type === 'cancel');
+      const hit = response ? this.stage?.events.find(e => e.type === 'damage') : undefined;
+      const canceled = response ? this.stage?.events.some(e => e.type === 'cancel') : s.enemies.find(e => e.id === intent.sourceId)?.interruptedRound === intent.round;
       const recipient = hit?.targetId ?? intent.targetId;
       const target = s.heroes.find(h => h.id === recipient)!;
-      const lethal = !this.presentation && intent.damage >= target.hp + target.barrier;
-      const heading = canceled ? 'การตอบโต้ถูกยกเลิกแล้ว' : response ? 'ศัตรูกำลังลงมือในเทิร์นนี้' : this.presentation ? 'ศัตรูรอตอบโต้หลังเทิร์นฮีโร่' : 'ศัตรูจะตอบโต้หลังฮีโร่ลงมือ';
+      const lethal = !this.presentation && !canceled && intent.damage >= target.hp + target.barrier;
+      const heading = canceled ? 'การโจมตีนี้ถูกขัดจังหวะ' : response ? 'ศัตรูกำลังลงมือ' : `การโจมตีศัตรูถัดไป · รอบ ${intent.round}`;
       this.set('intent', `<div class="intent-icon">${icon(intent.kind === 'energy' ? 'bolt' : 'attack')}</div><div class="intent-copy"><p class="eyebrow">${heading}</p><h2>${actorName(intent.sourceId, d)} <span>→</span> ${actorName(recipient, d)}</h2><p>${intentName(intent)} · ${intent.kind === 'energy' ? 'พลังงาน' : 'กายภาพ'} <span class="intent-rule">${intent.kind === 'physical' ? 'แนวหน้ารับก่อน' : 'ถึงแนวหลังได้'}</span></p>${lethal ? `<p class="lethal-warning">⚠ ${actorName(intent.targetId, d)} จะล้มหากรับการโจมตีนี้โดยไม่มีการป้องกัน</p>` : ''}</div><div class="intent-damage"><strong>${canceled ? '—' : hit ? hit.amount : intent.damage}</strong><small>${hit ? 'เสียเลือด' : 'พลังโจมตี'}</small></div>`);
     } else this.set('intent', `<div class="intent-icon">✧</div><div class="intent-copy"><p class="eyebrow">การต่อสู้จบแล้ว</p><h2>${s.outcome === 'victory' ? 'คุณปิดรอยแยกได้แล้ว' : 'ทีมของคุณล้มทั้งหมด'}</h2><p>กดเริ่มใหม่เพื่อลองแผนอื่น</p></div>`);
     this.root.querySelector<HTMLElement>('#forecast-details')!.hidden = s.outcome !== 'active';
-    this.set('forecast', plannedIntents(s, d).map(next => `<div><b>จังหวะ ${next.beat} · ${intentName(next)}</b><small>${actorName(next.targetId, d)} · พลังโจมตี ${next.damage} · ${next.kind === 'energy' ? 'พลังงาน' : 'กายภาพ'}</small></div>`).join('') + (s.outcome === 'active' ? '<p>แผนนี้สมมติว่าตัวละครยังอยู่ เปลี่ยนได้เมื่อมีใครล้ม การโจมตีจังหวะปัจจุบันจะไม่ถูกเปลี่ยนหลังใช้สกิล</p>' : ''));
+    this.set('forecast', plannedIntents(s, d).map(next => `<div><b>รอบ ${next.round} · ${actorName(next.sourceId, d)} · ${intentName(next)}</b><small>${actorName(next.targetId, d)} · พลังโจมตี ${next.damage} · ${next.kind === 'energy' ? 'พลังงาน' : 'กายภาพ'}</small></div>`).join('') + (s.outcome === 'active' ? '<p>แผนนี้สมมติว่าตัวละครยังอยู่ เปลี่ยนได้เมื่อมีใครล้ม เป้าหมายจะถูกกำหนดจริงเมื่อถึงเทิร์นศัตรู</p>' : ''));
     this.set('formation-info', '<div><strong>แนวหน้า 2 · แนวหลัง 2</strong><p>กายภาพโจมตีแนวหน้าก่อน · พลังงานถึงแนวหลังได้ · สกิลเฉพาะมีคูลดาวน์</p></div>');
-    this.set('start-screen', !this.started ? `<div class="start-card"><p class="eyebrow">การต่อสู้แบบวางแผน</p><h2>อ่านอันตราย<br>เลือกเปลี่ยนผลลัพธ์</h2><p>สั่งได้เฉพาะฮีโร่เจ้าของเทิร์น<br>กดสกิลอ่านความสามารถ แล้วแตะเป้าหมายในสนาม</p><button data-ui="start" id="start" class="primary" ${!this.scene?.isReady ? 'disabled' : ''}>${this.scene?.isReady ? 'เริ่มต่อสู้ →' : 'กำลังเตรียมสนาม…'}</button></div>` : s.outcome !== 'active' ? `<div class="result-card" role="status"><p class="eyebrow">${s.outcome === 'victory' ? 'ปิดรอยแยกสำเร็จ' : 'ลองวางแผนใหม่'}</p><h2>${s.outcome === 'victory' ? 'ชนะแล้ว' : 'แพ้แล้ว'}</h2><p>ยืนอยู่ ${s.heroes.filter(h => h.hp > 0).length} / ${s.heroes.length} คน · เลือดทีม ${s.heroes.reduce((hp, h) => hp + h.hp, 0)}<br>ใช้ ${s.commands.length} คำสั่ง</p>${s.outcome === 'victory' ? `<strong class="party-result">${s.heroes.every(h => h.hp > 0) ? 'รักษาทีมครบทุกคน' : 'ชนะ แต่เสียสมาชิกในทีม'}</strong>` : ''}<button data-ui="restart" class="primary">เล่นอีกครั้ง ↻</button></div>` : '');
+    this.set('start-screen', !this.started ? `<div class="start-card"><p class="eyebrow">การต่อสู้แบบวางแผน</p><h2>อ่านอันตราย<br>เลือกเปลี่ยนผลลัพธ์</h2><p>สั่งได้เฉพาะฮีโร่เจ้าของเทิร์น<br>กดสกิลอ่านความสามารถ แล้วแตะเป้าหมายในสนาม</p><button data-ui="start" id="start" class="primary" ${!this.scene?.isReady ? 'disabled' : ''}>${this.scene?.isReady ? 'เริ่มต่อสู้ →' : 'กำลังเตรียมสนาม…'}</button></div>` : !this.presentation && s.outcome !== 'active' ? `<div class="result-card" role="status"><p class="eyebrow">${s.outcome === 'victory' ? 'ปิดรอยแยกสำเร็จ' : 'ลองวางแผนใหม่'}</p><h2>${s.outcome === 'victory' ? 'ชนะแล้ว' : 'แพ้แล้ว'}</h2><p>ยืนอยู่ ${s.heroes.filter(h => h.hp > 0).length} / ${s.heroes.length} คน · เลือดทีม ${s.heroes.reduce((hp, h) => hp + h.hp, 0)}<br>ใช้ ${s.commands.length} คำสั่ง</p>${s.outcome === 'victory' ? `<strong class="party-result">${s.heroes.every(h => h.hp > 0) ? 'รักษาทีมครบทุกคน' : 'ชนะ แต่เสียสมาชิกในทีม'}</strong>` : ''}<button data-ui="restart" class="primary">เล่นอีกครั้ง ↻</button></div>` : '');
   }
 
   private renderParty(disabled: boolean): void {
@@ -371,9 +378,9 @@ export class BattleUI {
       const hero = s.heroes[i]!; const text = heroText[h.id]!; const selected = h.id === this.heroId; const waiting = s.outcome === 'active' && !selected;
       const skills = h.actions.filter(a => a !== 'attack');
       return `<button id="hero-${h.id}" data-ui="hero" data-value="${h.id}" data-lane="${h.lane}" class="hero-card ${h.id} ${hero.hp <= 0 ? 'fallen' : ''} ${selected ? 'selected' : 'waiting-turn'} ${this.actingActor === h.id ? 'active-actor' : ''}" aria-pressed="${selected}" ${disabled || hero.hp <= 0 || waiting ? 'disabled' : ''}><span class="hero-emblem">${this.portrait(h.id)}</span><span class="hero-copy"><span class="hero-class"><b>${h.lane === 'front' ? 'FRONT' : 'BACK'}</b> ${text.role}</span><strong>${text.name}</strong><span class="hero-hp"><span class="hp-amount"><span class="hp-label">HP</span> ${hero.hp} / ${h.maxHp}</span>${hero.barrier ? `<small class="barrier-info">โล่ ${hero.barrier}</small>` : ''}${hero.hp <= 0 ? ' · ล้มแล้ว' : ''}</span><span class="hp-track"><span style="width:${hero.hp / h.maxHp * 100}%"></span></span></span><span class="hero-skills">${skills.map(action => {
-        const remaining = Math.max(0, (hero.cooldowns[action] ?? 0) - s.beat);
+        const remaining = Math.max(0, (hero.cooldowns[action] ?? 0) - s.round);
         const available = targetOptions(s, d, h.id, action).some(t => t.valid);
-        const status = hero.hp <= 0 ? 'ล้มแล้ว' : s.outcome !== 'active' ? 'จบแล้ว' : waiting ? 'รอเทิร์น' : remaining ? `รอ ${remaining} จังหวะ` : available ? 'พร้อมใช้' : action === 'heal' || action === 'prayer' ? 'เลือดเต็ม' : 'โล่เต็ม';
+        const status = hero.hp <= 0 ? 'ล้มแล้ว' : s.outcome !== 'active' ? 'จบแล้ว' : waiting ? 'รอเทิร์น' : remaining ? `รอ ${remaining} รอบ` : available ? 'พร้อมใช้' : action === 'heal' || action === 'prayer' ? 'เลือดเต็ม' : 'โล่เต็ม';
         return `<span class="skill-status ${available ? 'ready' : 'cooling'}" data-skill="${action}">${icon(action)}<span>${d.skills[action].name}<small>${status}</small></span></span>`;
       }).join('')}</span>${selected ? `<span class="selected-tag">${this.presentation?.phase === 'hero' ? 'ลงมือ' : this.presentation ? 'รอ' : 'ถึงเทิร์น'}</span>` : ''}</button>`;
     }).join(''));
@@ -387,7 +394,7 @@ export class BattleUI {
 
     this.set('commands', `<h2 class="step-heading"><span>2</span>${heroText[this.heroId]!.role} · เลือกคำสั่ง</h2><div class="actions">${hero.actions.map(action => {
       const text = d.skills[action]; const reason = actionReason(s, d, this.heroId, action);
-      return `<div class="action-option"><button id="action-${action}" data-ui="action" data-value="${action}" aria-haspopup="dialog" aria-controls="skill-popover" aria-expanded="false" class="action ${action} ${this.action === action ? 'selected' : ''}" aria-pressed="${this.action === action}" aria-describedby="reason-${action}" ${disabled ? 'disabled' : ''} data-unavailable="${!!reason}">${icon(action)}<strong>${text.name}</strong><small>${text.english}</small><span class="skill-value">${action === 'attack' ? `พลัง ${hero.attack}` : action === 'mark' ? `โบนัส +${d.rules.markedBonus}` : action === 'guard' ? `ลด ${d.rules.guardReduction * 100}%` : `พลัง ${text.power}`}</span></button><p id="reason-${action}" class="${reason ? 'unavailable-reason' : ''}">${escapeHtml(reason ? reasonThai(reason) : text.cooldown ? `คูลดาวน์ ${text.cooldown} จังหวะ` : 'ใช้ได้ทุกจังหวะ')}</p></div>`;
+      return `<div class="action-option"><button id="action-${action}" data-ui="action" data-value="${action}" aria-haspopup="dialog" aria-controls="skill-popover" aria-expanded="false" class="action ${action} ${this.action === action ? 'selected' : ''}" aria-pressed="${this.action === action}" aria-describedby="reason-${action}" ${disabled ? 'disabled' : ''} data-unavailable="${!!reason}">${icon(action)}<strong>${text.name}</strong><small>${text.english}</small><span class="skill-value">${action === 'attack' ? `พลัง ${hero.attack}` : action === 'mark' ? `โบนัส +${d.rules.markedBonus}` : action === 'guard' ? `ลด ${d.rules.guardReduction * 100}%` : `พลัง ${text.power}`}</span></button><p id="reason-${action}" class="${reason ? 'unavailable-reason' : ''}">${escapeHtml(reason ? reasonThai(reason) : text.cooldown ? `คูลดาวน์ ${text.cooldown} รอบ` : 'ใช้ได้ทุกเทิร์น')}</p></div>`;
     }).join('')}</div><details class="action-help"><summary>วิธีใช้${d.skills[this.action].name}</summary><p class="action-description">${skillDescription(this.action, this.heroId, d)}</p></details><p class="target-hint">${noTarget || (this.action === 'prayer' ? 'แตะฮีโร่ในสนามเพื่อฟื้นฟูทั้งทีม' : ['guard','ward','heal'].includes(this.action) ? 'แตะเพื่อนในสนามที่มีเครื่องหมาย' : 'แตะศัตรูในสนามที่มีเครื่องหมาย')}</p>`);
   }
 
@@ -422,10 +429,10 @@ export class BattleUI {
     const host = this.root.querySelector('#info-host')!;
     if (help.parentElement !== host) { if (dialog.open) dialog.close(); host.append(help); help.open = true; }
     this.set('info-skill', `<h3>${d.skills[this.action].name} · ${heroText[this.heroId]!.name}</h3><p>${skillDescription(this.action, this.heroId, d)}</p>`);
-    this.set('tutorial-settings', `<strong>คำใบ้ 3 เทิร์นแรก</strong><p>อ่านแผนศัตรู · ตั้งรับ · ติดตราแล้วตีเป้าเดิม</p><button id="coach-toggle" data-ui="coach-toggle" class="quiet" aria-pressed="${this.hintsEnabled}">${this.hintsEnabled ? 'ปิดคำใบ้' : 'เปิดคำใบ้'} · จังหวะ 1–3</button>`);
+    this.set('tutorial-settings', `<strong>คำใบ้ 3 คำสั่งแรก</strong><p>อ่านแผนศัตรู · ตั้งรับ · ติดตราแล้วตีเป้าเดิม</p><button id="coach-toggle" data-ui="coach-toggle" class="quiet" aria-pressed="${this.hintsEnabled}">${this.hintsEnabled ? 'ปิดคำใบ้' : 'เปิดคำใบ้'} · คำสั่ง 1–3</button>`);
     this.renderPhase(); this.renderSituation(); this.renderSelectedHero(); this.renderParty(disabled); this.renderCommands(disabled);
-    this.set('rules', `<h3>4 อาชีพ · แนวหน้า 2 / หลัง 2</h3><p>สั่งได้เฉพาะเจ้าของเทิร์น เอกิส → ไลรา → ไอรา → เซเรน และข้ามตัวที่ล้ม</p><p>แนวหน้าที่ยังยืนอยู่รับการโจมตีกายภาพก่อน พลังงานโจมตีแนวหลังได้ เมื่อแนวหน้าล้มหมด กายภาพจะถึงแนวหลัง การโจมตีที่ประกาศไว้ไม่เปลี่ยนหลังใช้สกิล</p>${d.heroes.map(hero => `<h3>${heroText[hero.id]!.name} · ${heroText[hero.id]!.role} · ${hero.lane === 'front' ? 'แนวหน้า' : 'แนวหลัง'}</h3><dl>${hero.actions.map(action => `<dt>${d.skills[action].name} (${d.skills[action].english})</dt><dd>${skillDescription(action, hero.id, d)}</dd>`).join('')}</dl>`).join('')}<p>แต่ละจังหวะใช้ 1 คำสั่ง สกิลคูลดาวน์ 3 จังหวะที่ใช้ในจังหวะ 1 จะพร้อมอีกครั้งในจังหวะ 4 การรักษาไม่ชุบชีวิต โล่เวทไม่ซ้อนกัน เป้าหมายเสริมคือชนะโดยรักษาทีมครบ 4 คน</p>`);
-    const shownMessages = this.presentation?.phase === 'hero' ? this.messages.slice(0, this.presentation.heroLogEnd) : this.messages;
+    this.set('rules', `<h3>4 อาชีพ · แนวหน้า 2 / หลัง 2</h3><p>รวมฮีโร่และศัตรูเรียง SPD มากไปน้อยเมื่อเริ่มรอบ คนละ 1 ครั้งต่อรอบ ข้ามตัวที่ล้ม SPD เท่ากันใช้ลำดับรายชื่อฮีโร่ก่อน ตามด้วยศัตรู</p><p>แนวหน้าที่ยังยืนอยู่รับการโจมตีกายภาพก่อน พลังงานโจมตีแนวหลังได้ เมื่อแนวหน้าล้มหมด กายภาพจะถึงแนวหลัง แผนโจมตีเป็นการคาดการณ์ตามคนที่ยังยืนอยู่ เมื่อถึงเทิร์นศัตรูจึงกำหนดเป้าหมายจริง</p>${d.heroes.map(hero => `<h3>${heroText[hero.id]!.name} · ${heroText[hero.id]!.role} · SPD ${hero.speed} · ${hero.lane === 'front' ? 'แนวหน้า' : 'แนวหลัง'}</h3><dl>${hero.actions.map(action => `<dt>${d.skills[action].name} (${d.skills[action].english})</dt><dd>${skillDescription(action, hero.id, d)}</dd>`).join('')}</dl>`).join('')}<p>แต่ละตัวลงมือ 1 ครั้งต่อรอบ สกิลคูลดาวน์ 2 รอบที่ใช้ในรอบ 1 จะพร้อมในรอบ 3 พรฟื้นฟูคูลดาวน์ 3 รอบ ${d.enemies.map(e => `${actorName(e.id, d)} SPD ${e.speed}`).join(' · ')} การรักษาไม่ชุบชีวิต โล่เวทไม่ซ้อนกัน เป้าหมายเสริมคือชนะโดยรักษาทีมครบ 4 คน</p>`);
+    const shownMessages = this.presentation ? this.messages.slice(0, this.presentation.logEnds[this.presentation.index]) : this.messages;
     this.set('event-log', shownMessages.slice(-30).map(message => `<li>${escapeHtml(message)}</li>`).join(''));
     this.set('save-status', this.saved && this.storage ? 'บันทึกบนเครื่องนี้อัตโนมัติ' : 'เล่นได้ แต่บันทึกบนเครื่องนี้ไม่ได้');
     this.scene?.sync({ state: this.displayState, heroId: this.heroId, targetId: null, phase: this.presentation?.phase, activeActorId: this.actingActor, activeTargetId: this.actingTarget });

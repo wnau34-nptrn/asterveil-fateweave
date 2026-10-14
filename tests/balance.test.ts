@@ -1,8 +1,8 @@
 import { expect, it } from 'vitest';
 import { createBattle, currentHeroId, previewCommand, replay, resolveCommand } from '../src/core/battle/engine';
 import { veilSiege as data } from '../src/content/encounters/veil-siege';
-import { offensive, defensive } from './fixtures/party-routes';
-it.each([{ moves: offensive, hp: [52,6,4,18] }, { moves: defensive, hp: [72,14,18,38] }])('supports a genuine four-survivor route with exact previews/replay: $hp', ({ moves, hp }) => {
+import { partyRoutes } from './fixtures/party-routes';
+it.each(partyRoutes)('supports a genuine four-survivor route with exact previews/replay: $hp', ({ moves, hp }) => {
   let state = createBattle(data);
   for (const [heroId, action, targetId] of moves) {
     const command = { beat: state.beat, heroId, action, targetId };
