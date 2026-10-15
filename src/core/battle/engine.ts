@@ -5,15 +5,19 @@ const definitions = (data: EncounterDefinition) => [...data.heroes, ...data.enem
 export function roundOrder(state: BattleState, data: EncounterDefinition, round = state.round): string[] {
   // Explicit original index breaks SPD ties, including ties across the two sides.
   // Enemies delayed for this round (archer's hindering shot) act after everyone else.
-  const delayed = (id: string) => state.enemies.some(e => e.id === id && e.delayedRound === round) ? 1 : 0;
+  // Heroes hasted for this round (alchemist's tonic) act before everyone else.
+  const tier = (id: string) => state.enemies.some(e => e.id === id && e.delayedRound === round) ? 1 : state.heroes.some(h => h.id === id && h.hastedRound === round) ? -1 : 0;
   return definitions(data).map((actor, index) => ({ actor, index })).filter(({ actor }) => living(state, actor.id))
-    .sort((a, b) => delayed(a.actor.id) - delayed(b.actor.id) || b.actor.speed - a.actor.speed || a.index - b.index).map(({ actor }) => actor.id);
+    .sort((a, b) => tier(a.actor.id) - tier(b.actor.id) || b.actor.speed - a.actor.speed || a.index - b.index).map(({ actor }) => actor.id);
 }
 export function currentActorId(state: BattleState): string | undefined { return state.outcome === 'active' ? state.order[state.turnIndex] : undefined; }
 export function currentHeroId(state: BattleState, data: EncounterDefinition): string | undefined {
   const id = currentActorId(state); return data.heroes.some(h => h.id === id) ? id : undefined;
 }
 // Forecast order assumes today's survivors remain alive. Current-round order is frozen.
+// Every hero hit on a corroded enemy gains the flat corrode bonus.
+export const corrodeBonus = (state: BattleState, data: EncounterDefinition, enemyId: string): number =>
+  (state.enemies.find(e => e.id === enemyId)?.corrodedUntil ?? 0) > state.round ? data.rules.corrodeBonus : 0;
 // Skill power as cast by this hero (stars add a percentage).
 export function skillPower(data: EncounterDefinition, heroId: string, action: ActionId): number {
   const bonus = data.heroes.find(h => h.id === heroId)?.skillBonus ?? 0;
@@ -95,7 +99,7 @@ function automaticTurns(state: BattleState, data: EncounterDefinition, turns: Tu
         // A braced spear answers the first physical hit on any front-lane ally while it stands.
         const brace = state.counter;
         if (brace && intent.kind === 'physical' && living(state, brace.heroId) && data.heroes.find(h => h.id === recipient.id)!.lane === 'front') {
-          const power = skillPower(data, brace.heroId, 'brace'); const hit = Math.min(enemy.hp, power); enemy.hp -= hit;
+          const power = skillPower(data, brace.heroId, 'brace') + corrodeBonus(state, data, actorId); const hit = Math.min(enemy.hp, power); enemy.hp -= hit;
           events.push({ type: 'counter', sourceId: brace.heroId, targetId: actorId, amount: hit, text: 'Braced spear counters.' });
           if (!enemy.hp) events.push({ type: 'down', targetId: actorId, text: 'Enemy falls.' });
           state.counter = null;
@@ -157,6 +161,11 @@ export function targetOptions(state: BattleState, data: EncounterDefinition, her
     const reason = unavailable || (state.counter?.heroId === heroId ? 'Already braced.' : '');
     return [{ id: heroId, name: data.heroes.find(h => h.id === heroId)?.name ?? heroId, valid: !reason, reason }];
   }
+  if (action === 'haste') return data.heroes.map(h => {
+    const ally = state.heroes.find(s => s.id === h.id)!;
+    const reason = unavailable || (ally.hp <= 0 ? 'This hero is down.' : ally.hastedRound === state.round + 1 ? 'Already hasted.' : '');
+    return { id: h.id, name: h.name, valid: !reason, reason };
+  });
   if (['guard', 'ward', 'heal'].includes(action)) return data.heroes.map(h => {
     const actor = state.heroes.find(s => s.id === h.id)!;
     const reason = unavailable || (actor.hp <= 0 ? 'This hero is down.' :
@@ -186,7 +195,7 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
   const base = data.skills[command.action]; const enemy = state.enemies.find(e => e.id === command.targetId);
   const skill = { ...base, power: skillPower(data, hero.id, command.action) };
   const damage = (power: number) => {
-    const amount = Math.min(enemy!.hp, power); enemy!.hp -= amount;
+    const amount = Math.min(enemy!.hp, power + corrodeBonus(state, data, enemy!.id)); enemy!.hp -= amount;
     events.push({ type: 'damage', sourceId: hero.id, targetId: enemy!.id, amount, text: 'Hero attacks.' });
     if (!enemy!.hp) events.push({ type: 'down', targetId: enemy!.id, text: 'Enemy falls.' });
   };
@@ -216,9 +225,18 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
       if (enemy!.hp > 0) { enemy!.delayedRound = state.round + 1; events.push({ type: 'delay', sourceId: hero.id, targetId: enemy!.id, text: 'Enemy acts last next round.' }); }
       break;
     }
+    case 'acid':
+      // The flask's own hit lands before the corrosion takes hold.
+      damage(skill.power);
+      if (enemy!.hp > 0) { enemy!.corrodedUntil = state.round + data.rules.corrodeDuration; events.push({ type: 'corrode', sourceId: hero.id, targetId: enemy!.id, amount: data.rules.corrodeBonus, text: 'Enemy corroded.' }); }
+      break;
+    case 'haste': {
+      const ally = state.heroes.find(h => h.id === command.targetId)!; ally.hastedRound = state.round + 1;
+      events.push({ type: 'haste', sourceId: hero.id, targetId: ally.id, text: 'Ally acts first next round.' }); break;
+    }
     case 'volley':
       for (const foe of state.enemies.filter(e => e.hp > 0)) {
-        const amount = Math.min(foe.hp, skill.power); foe.hp -= amount;
+        const amount = Math.min(foe.hp, skill.power + corrodeBonus(state, data, foe.id)); foe.hp -= amount;
         events.push({ type: 'damage', sourceId: hero.id, targetId: foe.id, amount, text: 'Volley hits every enemy.' });
         if (!foe.hp) events.push({ type: 'down', targetId: foe.id, text: 'Enemy falls.' });
       }

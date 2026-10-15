@@ -6,11 +6,12 @@ export const heroText: Record<string, { name: string; role: string; help: string
   guardian: { name: 'เอกิส', role: 'อัศวิน', help: 'รับแทนเพื่อนและหยุดการโจมตี', icon: '♜' },
   garran: { name: 'การ์แรน', role: 'ทหารหอก', help: 'ตั้งทวนแทงสวนการโจมตีกายภาพ', icon: '⟋' },
   mira: { name: 'มิร่า', role: 'นักธนู', help: 'ยิงสกัดให้ศัตรูไปลงมือท้ายสุด', icon: '➶' },
+  toma: { name: 'โทมะ', role: 'นักเล่นแร่', help: 'กรดกัดกร่อนและยาเร่งให้เพื่อนลงมือก่อน', icon: '⚗' },
   tracer: { name: 'ไลรา', role: 'นักดาบ', help: 'ติดตราแล้วฟันเจาะจุด', icon: '➶' },
   weaver: { name: 'ไอรา', role: 'จอมเวท', help: 'ศรเวทและโล่ป้องกัน', icon: '✧' },
   healer: { name: 'เซเรน', role: 'นักบวช', help: 'รักษาคนเดียวหรือฟื้นฟูทั้งทีม', icon: '✚' },
 };
-const names: Record<string, string> = { mira: 'มิร่า', garran: 'การ์แรน', guardian: 'เอกิส', tracer: 'ไลรา', weaver: 'ไอรา', healer: 'เซเรน', raider: 'นักจู่โจม', brute: 'อสูรรอยแยก', party: 'ทั้งทีม' };
+const names: Record<string, string> = { toma: 'โทมะ', mira: 'มิร่า', garran: 'การ์แรน', guardian: 'เอกิส', tracer: 'ไลรา', weaver: 'ไอรา', healer: 'เซเรน', raider: 'นักจู่โจม', brute: 'อสูรรอยแยก', party: 'ทั้งทีม' };
 export function actorName(id: string | undefined, data: EncounterDefinition): string {
   return id ? data.enemies.find(e => e.id === id)?.displayName ?? names[id] ?? data.heroes.find(h => h.id === id)?.name ?? data.enemies.find(e => e.id === id)?.name ?? 'เป้าหมาย' : 'ทีม';
 }
@@ -35,6 +36,8 @@ export function skillDescription(action: ActionId, heroId: string, data: Encount
     pierce: `แทงทะลวงสร้างความเสียหาย ${skill.power} ให้ศัตรูหนึ่งตัว`,
     hinder: `ยิงสกัด ${skill.power} และเป้าหมายจะไปลงมือท้ายสุดในรอบถัดไป (ลำดับรอบนี้ไม่เปลี่ยน) ใช้ขวางศัตรูที่เร็วก่อนที่มันจะได้ตีก่อนทีม`,
     volley: `ยิงห่าธนูใส่ศัตรูทุกตัว ตัวละ ${skill.power}`,
+    acid: `ปาขวดกรด ${skill.power} แล้วเป้าหมายถูกกัดกร่อน ${data.rules.corrodeDuration} รอบรวมรอบนี้ ทุกการโจมตีของทีมใส่ตัวนี้แรงขึ้น +${data.rules.corrodeBonus}`,
+    haste: `ให้ยาเร่งเพื่อนที่ยังยืนอยู่ 1 คน (รวมตัวเอง) รอบถัดไปคนนั้นได้ลงมือก่อนทุกคน รอบนี้ลำดับไม่เปลี่ยน`,
   };
   return text[action] + cooldown;
 }
@@ -53,6 +56,7 @@ export function reasonThai(reason: string): string {
     'This ally already has this barrier.': 'มีโล่เวทเต็มแล้ว',
     'Invalid target.': 'เลือกเป้าหมายใหม่',
     'Already braced.': 'ตั้งทวนอยู่แล้ว',
+    'Already hasted.': 'ได้ยาเร่งสำหรับรอบหน้าแล้ว',
     'The preview is stale. Select an action again.': 'จังหวะเปลี่ยนแล้ว กรุณาเลือกใหม่',
   } as Record<string, string>)[reason] ?? 'คำสั่งนี้ยังใช้ไม่ได้ กรุณาเลือกใหม่';
 }
@@ -69,6 +73,8 @@ export function eventThai(event: BattleEvent, after: BattleState, data: Encounte
     case 'down': return `${target}${data.heroes.some(h => h.id === event.targetId) ? 'ล้มแล้ว' : 'ถูกกำจัดแล้ว'}`;
     case 'brace': return `${source}ตั้งทวน · ศัตรูที่ตีแนวหน้าด้วยกายภาพจะโดนสวน ${event.amount}`;
     case 'counter': return `${source}แทงสวน${target} ${event.amount}`;
+    case 'corrode': return `${target}ถูกกัดกร่อน · ทุกการโจมตีของทีม +${event.amount}`;
+    case 'haste': return `${target}จะลงมือก่อนทุกคนในรอบถัดไป`;
     case 'delay': return `${target}จะลงมือท้ายสุดในรอบถัดไป`;
     case 'outcome': return after.outcome === 'victory' ? 'ชนะแล้ว! รอยแยกสงบลง' : 'แพ้แล้ว ลองจัดแผนใหม่';
   }

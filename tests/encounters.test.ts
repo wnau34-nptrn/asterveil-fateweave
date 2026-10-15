@@ -60,3 +60,10 @@ it.each(encounters.map(data=>({data})))('$data.id: Mira can replace either back-
   expect(s.outcome,`${data.id} without ${out}`).toBe('victory');expect(s.commands.some(c=>c.action==='hinder'||c.action==='volley')).toBe(true);
  }
 });
+it.each(encounters.map(data=>({data})))('$data.id: Toma can replace either back-liner and the advisor still wins from full HP',({data})=>{
+ for(const out of ['weaver','healer']){
+  const d=withParty(data,data.heroes.map(h=>h.id===out?mercenaries.find(m=>m.id==='toma')!:h));let s=createBattle(d);
+  while(s.outcome==='active'&&s.commands.length<200){const l=battleLesson(s,d)!;s=resolveCommand(s,d,{beat:s.beat,heroId:l.heroId,action:l.action,targetId:l.targetId}).state;}
+  expect(s.outcome,`${data.id} without ${out}`).toBe('victory');expect(s.commands.some(c=>c.action==='acid'||c.action==='haste')).toBe(true);
+ }
+});

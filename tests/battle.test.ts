@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { actionReason, beginBattle, skillPower, withParty, createBattle, currentHeroId, enemyIntent, plannedIntents, previewCommand, replay, resolveCommand, targetOptions, upcomingTurns, validateCommand } from '../src/core/battle/engine';
+import { actionReason, beginBattle, corrodeBonus, skillPower, withParty, createBattle, currentHeroId, enemyIntent, plannedIntents, previewCommand, replay, resolveCommand, targetOptions, upcomingTurns, validateCommand } from '../src/core/battle/engine';
 import type { ActionId, BattleState } from '../src/core/battle/types';
 import { veilSiege as data } from '../src/content/encounters/veil-siege';
 import { encounterById } from '../src/content/encounters/catalog';
@@ -90,6 +90,44 @@ describe('archer (Mira)', () => {
     }
     expect(s.commands.some(c => c.action === 'volley' || c.action === 'hinder')).toBe(true);
     expect(replay(party, s.commands)).toEqual(s);
+  });
+});
+
+describe('alchemist (Toma)', () => {
+  const toma = mercenaries.find(m => m.id === 'toma')!; const [guardian, tracer, , healer] = data.heroes;
+  const party = withParty(data, [guardian!, tracer!, toma, healer!]);
+  it('acid hits, then every hero hit on the target gains the corrode bonus for 2 rounds including this one', () => {
+    let s = createBattle(party);
+    // R1 order: Lyra 120, Raider 110, Toma 95, Aegis 80, Brute 70, Seren 60.
+    expect(s.order).toEqual(['tracer', 'raider', 'toma', 'guardian', 'brute', 'healer']);
+    s = act(s, 'attack', 'raider', party).state;
+    const r = act(s, 'acid', 'brute', party);
+    expect(r.events.find(e => e.type === 'damage')).toMatchObject({ targetId: 'brute', amount: 8 });
+    expect(r.events.find(e => e.type === 'corrode')).toMatchObject({ targetId: 'brute', amount: 6 });
+    const aegis = act(r.state, 'attack', 'brute', party);
+    expect(aegis.events.find(e => e.type === 'damage' && e.sourceId === 'guardian')).toMatchObject({ amount: 16 }); // 10 + 6
+    let t = aegis.state; while (t.round < 3) t = act(t, 'attack', 'raider', party).state;
+    expect(t.enemies.find(e => e.id === 'brute')!.corrodedUntil).toBe(3);
+    expect(corrodeBonus(t, party, 'brute')).toBe(0);
+  });
+  it('haste makes an ally act before everyone next round only, and cannot be stacked', () => {
+    let s = createBattle(party); s = act(s, 'attack', 'raider', party).state;
+    const r = act(s, 'haste', 'guardian', party);
+    expect(r.events.some(e => e.type === 'haste')).toBe(true);
+    expect(targetOptions(r.state, party, 'toma', 'haste').find(t => t.id === 'guardian')?.valid ?? false).toBe(false);
+    let t = r.state; while (t.round < 2) t = act(t, 'attack', 'raider', party).state;
+    expect(t.order[0]).toBe('guardian');
+    while (t.round < 3) t = act(t, 'attack', 'raider', party).state;
+    expect(t.order[0]).toBe('tracer');
+  });
+  it('replays and previews identically', () => {
+    let s = createBattle(party);
+    for (const [action, target] of [['attack', 'raider'], ['acid', 'brute'], ['attack', 'brute'], ['attack', 'brute'], ['attack', 'brute'], ['haste', 'tracer']] as [ActionId, string][]) {
+      const command = { beat: s.beat, heroId: currentHeroId(s, party)!, action, targetId: target };
+      if (validateCommand(s, party, command)) continue;
+      expect(previewCommand(s, party, command)).toEqual(resolveCommand(s, party, command)); s = resolveCommand(s, party, command).state;
+    }
+    expect(s.commands.some(c => c.action === 'acid')).toBe(true); expect(replay(party, s.commands)).toEqual(s);
   });
 });
 

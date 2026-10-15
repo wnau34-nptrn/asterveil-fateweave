@@ -18,7 +18,7 @@ Approved 2026-10-14, re-planned 2026-10-15 for the mercenary roster.
 | 2C-1. Company | Hiring board, duplicates, star upgrades (stats), dismissal | **Implemented** (moved to the lobby in L1) |
 | L1. Lobby | Home → Lobby → Map; persistent profile (company ≤ 20, bank, board); choose the 4 + 4; withdraw/complete/wipe settle home | **Implemented** |
 | L2. Character creation | Commander (non-combat) name, crest and banner colour, once, between Home and Lobby | **Implemented** |
-| 2C-2. New classes | Six new mercenaries (ART-CHAR-MERC-ENEMY-001), one class mechanic at a time; ★3 skill and ★5 passive per class | **In progress**: 2/6 (Garran spear, Mira archer) |
+| 2C-2. New classes | Six new mercenaries (ART-CHAR-MERC-ENEMY-001), one class mechanic at a time; ★3 skill and ★5 passive per class | **In progress**: 3/6 (Garran spear, Mira archer, Toma alchemist) |
 | 2D. Equipment and level | Equipment (weapon by class, body, accessory; rarity and affixes; bad-luck protection), shared EXP/level, consumables on the map | Planned |
 | 3. Choices and content | Events with fight/avoid choices, elites, mini boss, puzzles (rune order, push stone, lever), secrets, map quest "2 of 3" and side quests | Planned |
 | 4. Economy and wrap-up | Local gold and shop, salvage, fast travel between camps, elite respawn on rest, defeat penalty, whole-map balance simulation, completion screen | Planned |
@@ -214,6 +214,19 @@ Elites (phase 3) will add guaranteed seals.
 - **Evidence:** the advisor wins every encounter with Mira replacing either back-liner. Delay order, frozen current round, volley, and replay/preview equality are covered in tests.
 - **Art is a placeholder:** the Duelist frame tinted forest green.
 - **Version bumps:** veil-siege 8, rear-ambush 6, rift-warden 6, the rest 4.
+
+**3. Toma — Alchemist (back, SPD 95, HP 48, Attack 9).** His mechanic is corrosion plus haste.
+- **ขวดกรด (Acid Flask)**, cooldown 2: 8 damage.
+  - A survivor is corroded for `corrodeDuration` = 2 rounds, including the current one (same rule as Mark).
+  - While corroded, every hero hit on it gains a flat `corrodeBonus` (+6). That includes attacks, skills, volley and the spear counter, and it stacks with the Mark bonus. The flask's own hit does not get the bonus.
+- **ยาเร่ง (Haste Tonic)**, cooldown 3: any living ally, including Toma, acts before everyone else next round (`hastedRound`).
+  - The current round stays frozen, and the SPD forecast shows the change.
+  - It cannot be re-applied to an ally who is already hasted.
+- **Turn order with both effects:** hasted heroes first, then everyone by SPD, then enemies delayed by Mira.
+- **Advisor:** acid on the main target when it is not corroded; otherwise haste the hardest-hitting standing ally.
+- **Evidence:** the advisor wins every encounter with Toma replacing either back-liner. Tests cover the corrosion window and bonus, haste ordering for one round only, the no-stacking rule, and replay/preview equality.
+- **Art is a placeholder:** the Mage frame tinted amber.
+- **Version bumps:** veil-siege 9, rear-ambush 7, rift-warden 7, the rest 5.
 
 ## L2 rules: commander creation
 

@@ -237,6 +237,27 @@ test('Mira (archer) volleys every enemy by tapping any of them, and the SPD queu
   expect(issues).toEqual([]);
 });
 
+test('Toma (alchemist) hastes an ally by tapping them; the SPD queue puts that ally first next round', async ({ page }, info) => {
+  const roster = { deployed: ['guardian', 'tracer', 'toma', 'healer'], reserve: [] as string[] };
+  const members = Object.fromEntries(roster.deployed.map(id => [id, { stars: 1, dupes: 0 }]));
+  const run = { ...newExpedition(map, encounterById, 33, { roster, members }, true) }; reveal(run, map);
+  run.battle = { kind: 'random', encounterId: 'veil-siege', entry: { ...run.hp }, commands: [] };
+  const profile = { ...newProfile(map, 5), tutorialDone: true, commander, company: ['guardian', 'tracer', 'weaver', 'healer', 'toma'], members: { ...newProfile(map, 5).members, toma: { stars: 1, dupes: 0 } }, party: roster };
+  await seed(page, run, profile);
+  const issues: string[] = []; page.on('pageerror', e => issues.push(e.message));
+  await page.goto('./'); await page.locator('#continue').click(); await page.locator('#start').click();
+  await page.locator('#action-attack').click(); await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-raider').click(); await finishPlayback(page);
+  await expect(page.locator('#hero-toma')).toHaveAttribute('aria-pressed', 'true');
+  await page.locator('#action-haste').click(); await expect(page.locator('#skill-popover')).toContainText('ลงมือก่อนทุกคน');
+  await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-healer').click(); await finishPlayback(page);
+  // Rest of round 1 (Aegis, Brute, Seren), then round 2 opens with the hasted Seren.
+  const order = await page.locator('.turn-slot').evaluateAll(els => els.map(e => (e as HTMLElement).dataset.actor));
+  expect(order.slice(0, 4)).toEqual(['guardian', 'brute', 'healer', 'healer']);
+  await page.screenshot({ path: info.outputPath('toma-haste.png') });
+  expect((await saved(page)).battle!.commands.map(c => c.action)).toEqual(['attack', 'haste']);
+  expect(issues).toEqual([]);
+});
+
 test('losing every brought member fails the expedition: back to the lobby with half the ore', async ({ page }) => {
   const data = encounterById('veil-siege')!; const hp = { guardian: 6, tracer: 4, weaver: 3, healer: 2 };
   const camp = findTiles(map, 'camp')[1]!;

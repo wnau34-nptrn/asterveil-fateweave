@@ -1,4 +1,4 @@
-export type ActionId = 'attack' | 'guard' | 'bash' | 'mark' | 'execute' | 'bolt' | 'ward' | 'heal' | 'prayer' | 'brace' | 'pierce' | 'hinder' | 'volley';
+export type ActionId = 'attack' | 'guard' | 'bash' | 'mark' | 'execute' | 'bolt' | 'ward' | 'heal' | 'prayer' | 'brace' | 'pierce' | 'hinder' | 'volley' | 'acid' | 'haste';
 export type Outcome = 'active' | 'victory' | 'defeat';
 export interface SkillDefinition { name: string; english: string; icon: string; power: number; cooldown: number }
 export interface HeroDefinition {
@@ -15,12 +15,14 @@ export interface EncounterDefinition {
   id: string; version: number; name: string;
   heroes: readonly HeroDefinition[]; enemies: readonly EnemyDefinition[]; intents: readonly IntentDefinition[];
   skills: Record<ActionId, SkillDefinition>;
-  rules: { guardReduction: number; markDuration: number; markedBonus: number };
+  // corrode*: alchemist acid adds a flat bonus to every hero hit on the target for corrodeDuration rounds.
+  rules: { guardReduction: number; markDuration: number; markedBonus: number; corrodeDuration: number; corrodeBonus: number };
 }
 // Expiry/cooldown values are absolute round numbers, never animation time.
-export interface HeroState { id: string; hp: number; barrier: number; cooldowns: Partial<Record<ActionId, number>> }
+// `hastedRound`: an alchemist's haste makes this hero act before everyone in that round.
+export interface HeroState { id: string; hp: number; barrier: number; cooldowns: Partial<Record<ActionId, number>>; hastedRound?: number }
 // `delayedRound`: an archer's hindering shot sends this enemy to the end of that round's queue.
-export interface EnemyState { id: string; hp: number; markedUntil: number; interruptedRound?: number; delayedRound?: number }
+export interface EnemyState { id: string; hp: number; markedUntil: number; interruptedRound?: number; delayedRound?: number; corrodedUntil?: number }
 export interface Intent extends IntentDefinition { targetId: string; beat: number; round: number }
 // Party condition carried in from the expedition. Missing ids start at max HP.
 export interface BattleEntry { hp: Readonly<Record<string, number>> }
@@ -33,7 +35,7 @@ export interface BattleState {
   counter: { heroId: string } | null;
 }
 export interface BattleEvent {
-  type: 'damage' | 'guard' | 'mark' | 'barrier' | 'heal' | 'interrupt' | 'cancel' | 'down' | 'outcome' | 'brace' | 'counter' | 'delay';
+  type: 'damage' | 'guard' | 'mark' | 'barrier' | 'heal' | 'interrupt' | 'cancel' | 'down' | 'outcome' | 'brace' | 'counter' | 'delay' | 'corrode' | 'haste';
   text: string; sourceId?: string; targetId?: string; amount?: number; absorbed?: number; cause?: 'defeated' | 'interrupted';
 }
 // One frame per real actor turn. Only Resolution.state is committed/saved.

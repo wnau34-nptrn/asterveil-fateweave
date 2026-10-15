@@ -2,7 +2,7 @@ import type { EncounterDefinition } from '../../core/battle/types';
 import { heroes } from '../heroes/team';
 import { enemies } from '../enemies/veilbound';
 export const veilSiege: EncounterDefinition = {
-  id: 'veil-siege', version: 8, name: 'ศึกปิดรอยแยก', heroes,
+  id: 'veil-siege', version: 9, name: 'ศึกปิดรอยแยก', heroes,
   enemies,
   intents: [
     { sourceId: 'raider', targetSlot: 1, name: 'Raking Slash', damage: 12, kind: 'physical' },
@@ -28,6 +28,9 @@ export const veilSiege: EncounterDefinition = {
     // Archer (2C-2): hinder delays the target to the end of next round's queue; volley hits all.
     hinder: { name: 'ยิงสกัด', english: 'Hindering Shot', icon: '⇥', power: 12, cooldown: 2 },
     volley: { name: 'ห่าธนู', english: 'Volley', icon: '⇶', power: 10, cooldown: 3 },
+    // Alchemist (2C-2): acid corrodes (every hero hit +corrodeBonus); haste makes an ally act first next round.
+    acid: { name: 'ขวดกรด', english: 'Acid Flask', icon: '⚗', power: 8, cooldown: 2 },
+    haste: { name: 'ยาเร่ง', english: 'Haste Tonic', icon: '⇡', power: 0, cooldown: 3 },
   },
-  rules: { guardReduction: 0.65, markDuration: 2, markedBonus: 22 },
+  rules: { guardReduction: 0.65, markDuration: 2, markedBonus: 22, corrodeDuration: 2, corrodeBonus: 6 },
 };

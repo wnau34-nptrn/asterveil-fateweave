@@ -152,7 +152,7 @@ export class BattleUI {
     const target = targetOptions(this.state, this.data, this.heroId, this.action).find(t => t.id === actualTarget);
     if (target?.valid) {
       this.execute(actualTarget);
-    } else if (!['guard','ward','heal','prayer','brace'].includes(this.action) && this.data.heroes.some(h => h.id === id)) this.selectHero(id);
+    } else if (!['guard','ward','heal','prayer','brace','haste'].includes(this.action) && this.data.heroes.some(h => h.id === id)) this.selectHero(id);
   }
 
   private selectHero(id: string): void {
@@ -359,7 +359,7 @@ export class BattleUI {
     this.set('commands', `<h2 class="step-heading"><span>2</span>${heroText[this.heroId]!.role} · เลือกคำสั่ง</h2><div class="actions">${hero.actions.map(action => {
       const text = d.skills[action]; const reason = actionReason(s, d, this.heroId, action);
       return `<div class="action-option"><button id="action-${action}" data-ui="action" data-value="${action}" aria-haspopup="dialog" aria-controls="skill-popover" aria-expanded="false" class="action ${action} ${this.action === action ? 'selected' : ''}" aria-pressed="${this.action === action}" aria-describedby="reason-${action}" ${disabled ? 'disabled' : ''} data-unavailable="${!!reason}">${icon(action)}<strong>${text.name}</strong><small>${text.english}</small><span class="skill-value">${action === 'attack' ? `พลัง ${hero.attack}` : action === 'mark' ? `โบนัส +${d.rules.markedBonus}` : action === 'guard' ? `ลด ${d.rules.guardReduction * 100}%` : `พลัง ${skillPower(d, this.heroId, action)}`}</span></button><p id="reason-${action}" class="${reason ? 'unavailable-reason' : ''}">${escapeHtml(reason ? reasonThai(reason) : text.cooldown ? `คูลดาวน์ ${text.cooldown} รอบ` : 'ใช้ได้ทุกเทิร์น')}</p></div>`;
-    }).join('')}</div><details class="action-help"><summary>วิธีใช้${d.skills[this.action].name}</summary><p class="action-description">${skillDescription(this.action, this.heroId, d)}</p></details><p class="target-hint">${noTarget || (this.action === 'prayer' ? 'แตะฮีโร่ในสนามเพื่อฟื้นฟูทั้งทีม' : this.action === 'volley' ? 'แตะศัตรูตัวใดก็ได้เพื่อยิงทุกตัว' : this.action === 'brace' ? 'แตะตัวเองในสนามเพื่อตั้งทวน' : ['guard','ward','heal'].includes(this.action) ? 'แตะเพื่อนในสนามที่มีเครื่องหมาย' : 'แตะศัตรูในสนามที่มีเครื่องหมาย')}</p>`);
+    }).join('')}</div><details class="action-help"><summary>วิธีใช้${d.skills[this.action].name}</summary><p class="action-description">${skillDescription(this.action, this.heroId, d)}</p></details><p class="target-hint">${noTarget || (this.action === 'prayer' ? 'แตะฮีโร่ในสนามเพื่อฟื้นฟูทั้งทีม' : this.action === 'volley' ? 'แตะศัตรูตัวใดก็ได้เพื่อยิงทุกตัว' : this.action === 'brace' ? 'แตะตัวเองในสนามเพื่อตั้งทวน' : ['guard','ward','heal','haste'].includes(this.action) ? 'แตะเพื่อนในสนามที่มีเครื่องหมาย' : 'แตะศัตรูในสนามที่มีเครื่องหมาย')}</p>`);
   }
 
   private renderFieldTargets(): void {

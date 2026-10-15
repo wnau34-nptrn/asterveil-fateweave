@@ -22,6 +22,12 @@ export function battleLesson(state:BattleState,data:EncounterDefinition):Lesson|
   if(intent)return make('guard',intent.targetId,'อ่านแผนศัตรู',`รับแทนและลดพลัง ${intent.damage} → ${Math.ceil(intent.damage*(1-data.rules.guardReduction))}`)??attack();
   return attack();
  }
+ if(heroId==='toma'){
+  if(!(target.corrodedUntil&&target.corrodedUntil>state.round)){const a=make('acid',target.id,'กรดกัดกร่อนเป้าหลัก',`ทุกการโจมตีของทีม +${data.rules.corrodeBonus}`);if(a)return a;}
+  // Haste the hardest-hitting standing ally so it strikes first next round.
+  const ally=[...data.heroes].filter(h=>h.id!==heroId&&state.heroes.some(s=>s.id===h.id&&s.hp>0)).sort((a,b)=>b.attack-a.attack)[0];
+  return (ally&&make('haste',ally.id,'ยาเร่งเพื่อนตัวแรง',`${actorName(ally.id,data)} ลงมือก่อนทุกคนรอบหน้า`))??attack();
+ }
  if(heroId==='mira'){
   const living2=state.enemies.filter(e=>e.hp>0);
   if(living2.length>1){const v=make('volley','enemies','ห่าธนูโดนทุกตัว',`ตัวละ ${skillPower(data,heroId,'volley')}`);if(v)return v;}
