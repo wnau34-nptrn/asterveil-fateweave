@@ -1,0 +1,134 @@
+{
+  "merc_spear_sit": {
+    "x": 0,
+    "y": 0,
+    "w": 512,
+    "h": 512,
+    "footY": 496,
+    "seatY": 365
+  },
+  "merc_spear_cheer": {
+    "x": 512,
+    "y": 0,
+    "w": 512,
+    "h": 512,
+    "footY": 496
+  },
+  "merc_spear_idle_alt": {
+    "x": 1024,
+    "y": 0,
+    "w": 512,
+    "h": 512,
+    "footY": 496
+  },
+  "merc_archer_sit": {
+    "x": 0,
+    "y": 512,
+    "w": 512,
+    "h": 512,
+    "footY": 496,
+    "seatY": 360
+  },
+  "merc_archer_cheer": {
+    "x": 512,
+    "y": 512,
+    "w": 512,
+    "h": 512,
+    "footY": 496
+  },
+  "merc_archer_idle_alt": {
+    "x": 1024,
+    "y": 512,
+    "w": 512,
+    "h": 512,
+    "footY": 496
+  },
+  "merc_alchemist_sit": {
+    "x": 0,
+    "y": 1024,
+    "w": 512,
+    "h": 512,
+    "footY": 496,
+    "seatY": 378
+  },
+  "merc_alchemist_cheer": {
+    "x": 512,
+    "y": 1024,
+    "w": 512,
+    "h": 512,
+    "footY": 496
+  },
+  "merc_alchemist_idle_alt": {
+    "x": 1024,
+    "y": 1024,
+    "w": 512,
+    "h": 512,
+    "footY": 496
+  },
+  "merc_scout_sit": {
+    "x": 0,
+    "y": 1536,
+    "w": 512,
+    "h": 512,
+    "footY": 496,
+    "seatY": 380
+  },
+  "merc_scout_cheer": {
+    "x": 512,
+    "y": 1536,
+    "w": 512,
+    "h": 512,
+    "footY": 496
+  },
+  "merc_scout_idle_alt": {
+    "x": 1024,
+    "y": 1536,
+    "w": 512,
+    "h": 512,
+    "footY": 496
+  },
+  "merc_warden_sit": {
+    "x": 0,
+    "y": 2048,
+    "w": 512,
+    "h": 512,
+    "footY": 496,
+    "seatY": 386
+  },
+  "merc_warden_cheer": {
+    "x": 512,
+    "y": 2048,
+    "w": 512,
+    "h": 512,
+    "footY": 496
+  },
+  "merc_warden_idle_alt": {
+    "x": 1024,
+    "y": 2048,
+    "w": 512,
+    "h": 512,
+    "footY": 496
+  },
+  "merc_bard_sit": {
+    "x": 0,
+    "y": 2560,
+    "w": 512,
+    "h": 512,
+    "footY": 496,
+    "seatY": 370
+  },
+  "merc_bard_cheer": {
+    "x": 512,
+    "y": 2560,
+    "w": 512,
+    "h": 512,
+    "footY": 496
+  },
+  "merc_bard_idle_alt": {
+    "x": 1024,
+    "y": 2560,
+    "w": 512,
+    "h": 512,
+    "footY": 496
+  }
+}
