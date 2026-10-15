@@ -30,6 +30,14 @@ jobs:
         env:
           PLAYWRIGHT_PAGES: 'true'
         run: npm run test:browser
+      # Keep failure screenshots and page snapshots so a CI-only failure can be diagnosed.
+      - name: Upload browser test evidence on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-results
+          path: test-results
+          retention-days: 7
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
