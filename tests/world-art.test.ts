@@ -45,6 +45,6 @@ describe('world art selection', () => {
     expect(landmarkAt(map, s, findTiles(map, 'camp')[0]!)).toBe('landmark_camp');
   });
   it('tile size follows the responsive contract', () => {
-    expect([tileSizeFor(320, 568), tileSizeFor(390, 844), tileSizeFor(844, 390), tileSizeFor(768, 1024), tileSizeFor(1366, 768)]).toEqual([36, 48, 44, 56, 64]);
+    expect([tileSizeFor(320, 568), tileSizeFor(390, 844), tileSizeFor(844, 390), tileSizeFor(768, 1024), tileSizeFor(1366, 768), tileSizeFor(1920, 1080)]).toEqual([49, 60, 46, 96, 90, 96]);
   });
 });

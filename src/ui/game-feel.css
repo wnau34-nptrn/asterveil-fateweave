@@ -272,3 +272,32 @@ button:active:not(:disabled) { transform: scale(.97); }
 @media (prefers-reduced-motion: reduce) { .lobby-sheet { animation: none !important; } }
 .hire-cost { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; margin: 6px 2px 8px; font-size: 13px; color: var(--text-muted); }
 .hire-cost .icon { width: 15px; height: 15px; color: var(--veil-cyan); }
+
+/* ================= P4: the map as a world, not a board ================= */
+/* Kept cheap on purpose: the encounter transition must stay inside its time budget on phones,
+   so no blur filters, blend modes or per-cell transforms over the large map layers. */
+/* Beyond the map edge: a deep night gradient instead of a flat repeated fog texture. */
+.map-view { background: radial-gradient(ellipse 80% 70% at 50% 45%, #13233a, #0a1422 60%, #050b14 100%); }
+.map-grid { transition: transform 280ms var(--ease-out); }
+/* Unexplored ground: cold haze, a shade lighter than the night, softened by the existing edge textures. */
+.fog-cell.opaque { box-shadow: none; background-color: #16263d; }
+.map-vignette { box-shadow: none; background: radial-gradient(ellipse 75% 70% at 50% 52%, transparent 55%, #050b14b8 100%), linear-gradient(180deg, #050b1499 0%, transparent 16%, transparent 78%, #050b14b3 100%); }
+
+/* Party: round portraits with an HP bar, floating over the land instead of boxed cards. */
+.world-hero { background: none; border: 0; box-shadow: none; padding: 2px 4px; gap: 6px; }
+.world-hero .portrait { width: 42px; height: 42px; flex: 0 0 42px; border-radius: 50%; border: 2px solid #68e5b6cc; box-shadow: 0 2px 8px #000c, 0 0 0 2px #08121fcc; }
+.world-hero.hurt .portrait { border-color: #ecd49ccc; } .world-hero.critical .portrait { border-color: #ed927f; box-shadow: 0 0 12px #ed927f99, 0 0 0 2px #08121fcc; }
+.world-hero.critical { border: 0; }
+.world-hero b { text-shadow: 0 1px 6px #000; font-size: 14px; } .world-hero small { color: #e6edf6; text-shadow: 0 1px 4px #000; }
+.world-hero .hp { height: 5px; background: #08121fb3; box-shadow: 0 0 0 1px #000a; }
+@media (max-width: 600px) and (orientation: portrait) {
+  .hud-party .world-hero { flex-direction: row; align-items: center; gap: 4px; padding: 0; }
+  .hud-party .world-hero .portrait { width: 30px; height: 30px; flex-basis: 30px; border-width: 2px; } .world-hero b { font-size: 12px; } .world-hero small { font-size: 11px; }
+}
+/* Portraits stay visible on every screen (earlier compact rules hid them). */
+.hud-party .world-hero { display: flex; border-radius: 0; }
+.hud-party .world-hero .portrait { display: block; }
+@media (orientation: landscape) and (max-height: 500px) {
+  .hud-party .world-hero { flex-direction: row; align-items: center; gap: 5px; }
+  .hud-party .world-hero .portrait { width: 30px; height: 30px; flex-basis: 30px; border-width: 2px; }
+}

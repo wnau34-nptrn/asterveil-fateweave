@@ -79,11 +79,9 @@ export function fogLayers(map: MapDefinition, state: ExpeditionState, p: Point):
   return layers;
 }
 
-// Display tile size per viewport class (STYLE_GUIDE responsive contract).
+// Display tile size (P4): the camera sits close, about 6.5 tiles across a portrait screen and
+// 8.5 tiles down a landscape one, clamped to 40–96 px so taps stay ≥44 px wide on every phone.
 export function tileSizeFor(width: number, height: number): number {
-  if (height <= 500 && width > height) return 44;
-  if (width <= 360) return 36;
-  if (width <= 600) return 48;
-  if (width <= 1100) return 56;
-  return 64;
+  const t = width > height ? height / 8.5 : width / 6.5;
+  return Math.round(Math.min(96, Math.max(44, t)));
 }
