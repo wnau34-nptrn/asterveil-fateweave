@@ -161,7 +161,18 @@ incoming/ART-CHAR-MERC-ENEMY-001/
   review/  lineup-mercs.png  lineup-foes.png  silhouettes.png  in-arena.png  on-map.png
 ```
 
-Open a **draft PR** from `art/art-char-merc-enemy-001` into `feature/fateweave-initial-prototype`. The PR body should include the review sheets and the checklist. Do not merge.
+**Git steps (required):**
+
+1. Create the branch `art/art-char-merc-enemy-001` from the latest `feature/fateweave-initial-prototype`.
+2. Add files **only** under `incoming/ART-CHAR-MERC-ENEMY-001/`.
+3. Commit with the message `art: add ART-CHAR-MERC-ENEMY-001 mercenary and enemy art`.
+4. Push the branch to `origin`.
+5. Open a **draft pull request** into `feature/fateweave-initial-prototype`.
+   - Title: `[ART-CHAR-MERC-ENEMY-001] Mercenaries and new enemies`.
+   - Body: embed the review sheets, include the ticked checklist and the runtime byte total, and end with the line **"Ready for Claude Asset Intake Review."**
+6. **Do not merge, do not deploy, and do not push to any other branch.**
+
+**Game context, updated 2026-10-15.** Every party member is a hired mercenary, including the existing four. Each mercenary is one unique character with one portrait; the art is not a class skin. Star ranks are shown live in HTML; do not paint stars into any image.
 
 After you return, the developer runs an Asset Intake Review: style match, scale and anchors, readability at gameplay size, budget and provenance.
 
