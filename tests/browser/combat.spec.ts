@@ -6,6 +6,7 @@ import type { BattleEntry, EncounterDefinition } from '../../src/core/battle/typ
 import { createBattle, currentHeroId, replay, resolveCommand } from '../../src/core/battle/engine';
 import { encounterById } from '../../src/content/encounters/catalog';
 import { newExpedition } from '../../src/core/world/world';
+import { newProfile } from '../../src/core/world/profile';
 import type { BattleKind } from '../../src/core/world/types';
 import { offensive, guided, partyRoutes, type Move } from '../fixtures/party-routes';
 import { encounterRoutes } from '../fixtures/encounter-routes';
@@ -293,4 +294,27 @@ test('pulsing target rings stay centred on their fighters with motion enabled',a
   for(const r of rings)expect(Math.abs(r.ring-r.button)).toBeLessThanOrEqual(4);
  }
  expect(issues).toEqual([]);await context.close();
+});
+
+// ★3 members bring a fourth command; ★5 passives show in the skill description.
+test('★3/★5 members: four command buttons fit phones and the ★3 skill casts',async({browser},info)=>{
+ for(const [width,height] of [[390,844],[320,568]] as const){
+  const context=await browser.newContext({viewport:{width,height},hasTouch:true,isMobile:true});const page=await context.newPage();watchPage(page);
+  const state=newExpedition(chapterOne,encounterById,1234);state.tutorialDone=true;
+  for(const id of Object.keys(state.members))state.members[id]={stars:5,dupes:0};
+  const data=encounterById('veil-siege')!;
+  state.battle={kind:'random',encounterId:data.id,entry:{...state.hp},commands:[]};
+  const profile={...newProfile(chapterOne,5),commander:{name:'อารี',crest:'star',color:'gold'}};for(const id of Object.keys(state.members))profile.members[id]={stars:5,dupes:0};
+  await page.addInitScript(({raw,key})=>{localStorage.setItem(key,raw);},{raw:JSON.stringify({version:6,profile,run:state}),key});
+  await page.goto('./');await resume(page);if(await page.locator('#start').count())await page.locator('#start').click();
+  await owner(page,'tracer');
+  const buttons=page.locator('.actions .action');await expect(buttons).toHaveCount(4);
+  for(const b of await buttons.all()){const r=(await b.boundingBox())!;expect(r.width).toBeGreaterThanOrEqual(44);expect(r.height).toBeGreaterThanOrEqual(44);expect(r.x+r.width).toBeLessThanOrEqual(width);}
+  expect(await page.evaluate(()=>document.scrollingElement!.scrollHeight<=innerHeight)).toBe(true);
+  await page.locator('#action-mark').click();await expect(page.locator('#skill-popover')).toContainText('ตาเหยี่ยว');await page.locator('[data-ui=skill-close]').click();
+  await page.screenshot({path:info.outputPath(`star-skills-${width}.png`)});
+  await page.locator('#action-finisher').click();await page.locator('[data-ui=skill-close]').click();await page.locator('#target-raider').click();await finish(page);
+  await expect(page.locator('[data-enemy=raider]')).not.toContainText('78 / 78');
+  await context.close();
+ }
 });

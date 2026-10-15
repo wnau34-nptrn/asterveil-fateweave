@@ -1,6 +1,6 @@
-import type { ActionId, BattleEvent, BattleState, EncounterDefinition, Intent } from '../core/battle/types';
+import type { ActionId, PassiveId, BattleEvent, BattleState, EncounterDefinition, Intent } from '../core/battle/types';
 import type { ResourceId, Resources } from '../core/world/types';
-import { skillPower } from '../core/battle/engine';
+import { skillPower, songPower } from '../core/battle/engine';
 export const thaiFont = '"Noto Sans Thai", "Leelawadee UI", Tahoma, sans-serif';
 export const heroText: Record<string, { name: string; role: string; help: string; icon: string }> = {
   guardian: { name: 'เอกิส', role: 'อัศวิน', help: 'รับแทนเพื่อนและหยุดการโจมตี', icon: '♜' },
@@ -46,12 +46,36 @@ export function skillDescription(action: ActionId, heroId: string, data: Encount
     evade: `ก้าวเงาเตรียมหลบ การโจมตีของศัตรูครั้งแรกที่โดนเซฟา (กายภาพหรือพลังงาน) จะพลาดทั้งหมด อยู่จนหลบแล้วหรือถึงเทิร์นของตัวเองอีกครั้ง`,
     taunt: `ยั่วยุศัตรูทุกตัว ตั้งแต่ตอนนี้จนถึงเทิร์นถัดไปของแบรนน์ การโจมตีของศัตรูทุกครั้ง (กายภาพหรือพลังงาน) จะเล็งมาที่แบรนน์ และเขารับเบาลง ${data.rules.tauntReduction * 100}% แผนโจมตีศัตรูจะแสดงเป้าใหม่ทันที`,
     slam: `ทุบค้อนรูนสร้างความเสียหาย ${skill.power} ให้ศัตรูหนึ่งตัว`,
-    valor: `บรรเลงเพลงกล้าค้างไว้ ทุกการโจมตีของทีมแรงขึ้น +${skill.power} (รวมสกิลและการสวน) จนกว่าจะเปลี่ยนเพลงหรือลิโอล้ม เล่นได้ทีละเพลง`,
-    mend: `บรรเลงเพลงฟื้นค้างไว้ ทุกคนที่ยังยืนอยู่ฟื้นเลือด ${skill.power} เมื่อเริ่มแต่ละรอบใหม่ จนกว่าจะเปลี่ยนเพลงหรือลิโอล้ม เล่นได้ทีละเพลง`,
+    valor: `บรรเลงเพลงกล้าค้างไว้ ทุกการโจมตีของทีมแรงขึ้น +${songPower(data, heroId, 'valor')} (รวมสกิลและการสวน) จนกว่าจะเปลี่ยนเพลงหรือลิโอล้ม เล่นได้ทีละเพลง`,
+    mend: `บรรเลงเพลงฟื้นค้างไว้ ทุกคนที่ยังยืนอยู่ฟื้นเลือด ${songPower(data, heroId, 'mend')} เมื่อเริ่มแต่ละรอบใหม่ จนกว่าจะเปลี่ยนเพลงหรือลิโอล้ม เล่นได้ทีละเพลง`,
     haste: `ให้ยาเร่งเพื่อนที่ยังยืนอยู่ 1 คน (รวมตัวเอง) รอบถัดไปคนนั้นได้ลงมือก่อนทุกคน รอบนี้ลำดับไม่เปลี่ยน`,
+    rally: `ตั้งรับหมู่ เพื่อนทุกคนที่ยังยืนอยู่ (รวมเอกิส) ลดความเสียหาย ${data.rules.rallyReduction * 100}% จากการโจมตีครั้งแรกที่โดน จนถึงเทิร์นถัดไปของเอกิส`,
+    finisher: `ปลิดชีพ ${skill.power} หรือ ${skill.power * 2} ถ้าเลือดศัตรูต่ำกว่า ${data.rules.finisherThreshold * 100}% ไม่ใช้ตรา`,
+    sigil: `ตรึงเวท ${skill.power} และยกเลิกท่าพลังงานครั้งถัดไปของเป้าหมาย ท่ากายภาพยังโจมตีตามปกติ (กระแทกโล่ใช้หยุดกายภาพ)`,
+    sanctuary: `อวยพรเพื่อนที่ยังยืนอยู่ 1 คน (รวมตัวเอง) เลือดจะไม่ลดต่ำกว่า 1 จนถึงเทิร์นถัดไปของเซเรน`,
+    spearwall: `ตั้งกำแพงทวน ทุกครั้งที่ศัตรูโจมตีกายภาพใส่เพื่อนแนวหน้า (รวมตัวเอง) จะโดนแทงสวน ${skill.power} จนถึงเทิร์นถัดไปของการ์แรน`,
+    weakshot: `ยิงศรจุดอ่อน ${skill.power} หรือ ${skill.power + data.rules.weakshotBonus} ถ้าเป้าหมายถูกยิงสกัดเลื่อนเทิร์นอยู่`,
+    bomb: `ปาขวดระเบิดใส่ศัตรูทุกตัว ตัวละ ${skill.power} ตัวที่ถูกกัดกร่อนอยู่โดนแรงขึ้นตามโบนัสกรด`,
+    backstab: `ลอบแทง ${skill.power} ใส่ศัตรูที่ไม่ได้เล็งเซฟาในท่าถัดไป (ดูเป้าที่ศัตรูประกาศ)`,
+    quake: `ทุบปฐพี ${skill.power} หรือ ${skill.power + data.rules.quakeBonus} ถ้าท่าถัดไปของเป้าหมายเล็งแบรนน์อยู่ (เข้าคู่กับยั่วยุ)`,
+    finale: `จบเพลงที่บรรเลงอยู่แล้วปล่อยพลังทันที: เพลงกล้า = โจมตีศัตรูทุกตัว ${skill.power} · เพลงฟื้น = ฟื้นเลือดทุกคน ${Math.round(data.rules.finaleHeal * (100 + (hero.skillBonus ?? 0)) / 100)} ต้องมีเพลงของลิโอเล่นอยู่`,
   };
-  return text[action] + cooldown;
+  const passive = hero.passive && passiveText[hero.passive].actions.includes(action) ? ` · ★5 ${passiveText[hero.passive].name}: ${passiveText[hero.passive].help(data)}` : '';
+  return text[action] + passive + cooldown;
 }
+// ★5 passives (always on): name, short effect, and the skills they change.
+export const passiveText: Record<PassiveId, { name: string; actions: readonly ActionId[]; help: (data: EncounterDefinition) => string }> = {
+  stand: { name: 'ยืนหยัด', actions: ['guard', 'rally'], help: () => 'ครั้งแรกในศึกที่การโจมตีซึ่งเอกิสป้องกัน (ตั้งรับแทนหรือตั้งรับหมู่) จะทำให้ล้ม จะเหลือเลือด 1 แทน' },
+  keeneye: { name: 'ตาเหยี่ยว', actions: ['mark'], help: d => `ตราที่ไลราติดอยู่ได้ ${d.rules.markDuration + 1} รอบ` },
+  echo: { name: 'โล่ตอบสนอง', actions: ['ward'], help: d => `โล่เวทหนาขึ้น ${d.rules.echoBonus * 100}% เมื่อใส่ให้คนที่ศัตรูประกาศว่าจะโจมตี` },
+  afterglow: { name: 'แสงอุ่น', actions: ['heal', 'prayer', 'finale'], help: d => `การรักษาที่เกินเลือดเต็มกลายเป็นโล่ สูงสุด ${d.rules.afterglowCap}` },
+  heavycounter: { name: 'สวนหนัก', actions: ['brace'], help: d => `ตั้งทวนแทงสวนแรงขึ้น ${d.rules.heavyCounter * 100}%` },
+  tailwind: { name: 'ลมใต้ปีก', actions: ['volley'], help: d => `ห่าธนูพร้อมใช้อีกครั้งใน ${d.skills.volley.cooldown - 1} รอบ` },
+  potent: { name: 'สูตรเข้มข้น', actions: ['acid', 'bomb'], help: d => `กรดกัดกร่อนอยู่ได้ ${d.rules.corrodeDuration + 1} รอบ` },
+  shadowcounter: { name: 'เงาสวน', actions: ['evade'], help: d => `หลบได้แล้วแทงสวนผู้โจมตี ${d.rules.shadowCounter}` },
+  stoneskin: { name: 'ผิวหิน', actions: ['taunt'], help: d => `ยั่วยุลดความเสียหายที่รับ ${d.rules.stoneskinReduction * 100}%` },
+  resound: { name: 'เพลงก้อง', actions: ['valor', 'mend'], help: d => `ผลของเพลงแรงขึ้น ${d.rules.resound * 100}%` },
+};
 export function reasonThai(reason: string): string {
   if (!reason) return '';
   if (reason.startsWith('Cooldown: ')) return `คูลดาวน์ · พร้อมใน ${reason.slice(10)} รอบ`;
@@ -69,6 +93,8 @@ export function reasonThai(reason: string): string {
     'Already braced.': 'ตั้งทวนอยู่แล้ว',
     'Already playing this song.': 'กำลังบรรเลงเพลงนี้อยู่แล้ว',
     'Already hasted.': 'ได้ยาเร่งสำหรับรอบหน้าแล้ว',
+    'No song is playing.': 'ต้องบรรเลงเพลงอยู่ก่อน',
+    'This enemy is aiming at the scout.': 'ศัตรูตัวนี้เล็งเซฟาอยู่',
     'The preview is stale. Select an action again.': 'จังหวะเปลี่ยนแล้ว กรุณาเลือกใหม่',
   } as Record<string, string>)[reason] ?? 'คำสั่งนี้ยังใช้ไม่ได้ กรุณาเลือกใหม่';
 }
@@ -81,9 +107,14 @@ export function eventThai(event: BattleEvent, after: BattleState, data: Encounte
     case 'barrier': return `${target} ได้รับโล่เพิ่ม ${event.amount}`;
     case 'heal': return `${target} ฟื้นเลือด ${event.amount}`;
     case 'interrupt': return `${target} จะเสียเทิร์นโจมตีกายภาพครั้งถัดไป`;
-    case 'cancel': return event.cause === 'interrupted' ? 'กระแทกโล่หยุดการโจมตีกายภาพของศัตรูได้' : 'กำจัดผู้โจมตีได้ การโจมตีของมันถูกยกเลิก';
+    case 'cancel': return event.cause === 'sealed' ? 'ตรึงเวทยกเลิกท่าพลังงานของศัตรูได้' : event.cause === 'interrupted' ? 'กระแทกโล่หยุดการโจมตีกายภาพของศัตรูได้' : 'กำจัดผู้โจมตีได้ การโจมตีของมันถูกยกเลิก';
     case 'down': return `${target}${data.heroes.some(h => h.id === event.targetId) ? 'ล้มแล้ว' : 'ถูกกำจัดแล้ว'}`;
-    case 'brace': return `${source}ตั้งทวน · ศัตรูที่ตีแนวหน้าด้วยกายภาพจะโดนสวน ${event.amount}`;
+    case 'brace': return after.counter?.wall || event.text.startsWith('Spear wall') ? `${source}ตั้งกำแพงทวน · ทุกการตีกายภาพใส่แนวหน้าจะโดนสวน ${event.amount}` : `${source}ตั้งทวน · ศัตรูที่ตีแนวหน้าด้วยกายภาพจะโดนสวน ${event.amount}`;
+    case 'rally': return `${source}ตั้งรับหมู่ · การโจมตีครั้งแรกที่ทุกคนโดนเบาลง ${data.rules.rallyReduction * 100}%`;
+    case 'sigil': return `${target}ถูกตรึงเวท · ท่าพลังงานครั้งถัดไปจะถูกยกเลิก`;
+    case 'sanctuary': return event.text.startsWith('Sanctuary keeps') ? `พรคุ้มภัยทำให้${target}ยังยืนอยู่ด้วยเลือด 1` : `${target}ได้รับพรคุ้มภัย · เลือดไม่ต่ำกว่า 1 จนถึงเทิร์นถัดไปของ${source}`;
+    case 'stand': return `${source}ยืนหยัด · ${target}รอดด้วยเลือด 1`;
+    case 'finale': return `${source}บรรเลงบทสุดท้าย · ${event.text === 'Finale of valor.' ? 'โจมตีศัตรูทุกตัว' : 'ฟื้นเลือดทั้งทีม'}`;
     case 'counter': return `${source}แทงสวน${target} ${event.amount}`;
     case 'corrode': return `${target}ถูกกัดกร่อน · ทุกการโจมตีของทีม +${event.amount}`;
     case 'haste': return `${target}จะลงมือก่อนทุกคนในรอบถัดไป`;

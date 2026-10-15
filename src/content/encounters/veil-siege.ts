@@ -2,7 +2,7 @@ import type { EncounterDefinition } from '../../core/battle/types';
 import { heroes } from '../heroes/team';
 import { enemies } from '../enemies/veilbound';
 export const veilSiege: EncounterDefinition = {
-  id: 'veil-siege', version: 12, name: 'ศึกปิดรอยแยก', heroes,
+  id: 'veil-siege', version: 13, name: 'ศึกปิดรอยแยก', heroes,
   enemies,
   intents: [
     { sourceId: 'raider', targetSlot: 1, name: 'Raking Slash', damage: 12, kind: 'physical' },
@@ -41,6 +41,19 @@ export const veilSiege: EncounterDefinition = {
     // mending heals every standing ally by its power as each new round begins.
     valor: { name: 'เพลงกล้า', english: 'Song of Valor', icon: '♪', power: 4, cooldown: 2 },
     mend: { name: 'เพลงฟื้น', english: 'Song of Mending', icon: '♫', power: 5, cooldown: 2 },
+    // ★3 skills (draft numbers; docs/EXPEDITION_DESIGN.md "Star unlocks").
+    rally: { name: 'ตั้งรับหมู่', english: 'Rally Guard', icon: '♜', power: 0, cooldown: 3 },
+    finisher: { name: 'ปลิดชีพ', english: 'Finishing Lunge', icon: '➶', power: 16, cooldown: 2 },
+    sigil: { name: 'ตรึงเวท', english: 'Sigil Bind', icon: '✧', power: 8, cooldown: 3 },
+    sanctuary: { name: 'พรคุ้มภัย', english: 'Sanctuary', icon: '✚', power: 0, cooldown: 3 },
+    spearwall: { name: 'กำแพงทวน', english: 'Spear Wall', icon: '⟋', power: 8, cooldown: 3 },
+    weakshot: { name: 'ศรจุดอ่อน', english: 'Weak-point Shot', icon: '➶', power: 16, cooldown: 2 },
+    bomb: { name: 'ขวดระเบิด', english: 'Blast Flask', icon: '⚗', power: 10, cooldown: 3 },
+    backstab: { name: 'ลอบแทง', english: 'Backstab', icon: '↯', power: 20, cooldown: 2 },
+    quake: { name: 'ทุบปฐพี', english: 'Earthshaker', icon: '⚒', power: 14, cooldown: 2 },
+    finale: { name: 'บทสุดท้าย', english: 'Finale', icon: '♪', power: 16, cooldown: 3 },
   },
-  rules: { guardReduction: 0.65, markDuration: 2, markedBonus: 22, corrodeDuration: 2, corrodeBonus: 6, ambushBonus: 12, tauntReduction: 0.35 },
+  rules: { guardReduction: 0.65, markDuration: 2, markedBonus: 22, corrodeDuration: 2, corrodeBonus: 6, ambushBonus: 12, tauntReduction: 0.35,
+    rallyReduction: 0.35, finisherThreshold: 0.4, echoBonus: 0.5, afterglowCap: 8, heavyCounter: 0.5,
+    weakshotBonus: 12, quakeBonus: 10, shadowCounter: 8, stoneskinReduction: 0.5, resound: 0.5, finaleHeal: 12 },
 };

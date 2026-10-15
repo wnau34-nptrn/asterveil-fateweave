@@ -521,3 +521,14 @@ test('phone portrait centres the D-pad with the action in its middle for one-han
     expect(issues).toEqual([]); await context.close();
   }
 });
+
+test('lobby member panel shows the ★3 skill and ★5 passive, unlocked by stars', async ({ page }, info) => {
+  const profile = { ...newProfile(map, 5), tutorialDone: true, commander }; profile.members.guardian = { stars: 3, dupes: 0 };
+  await seed(page, null, profile);
+  await page.goto('./'); await page.locator('#continue').click();
+  await page.locator('#lobby-tab-team').click(); await page.locator('#lobby-member-guardian').click();
+  const rows = page.locator('.member-unlocks li'); await expect(rows).toHaveCount(2);
+  await expect(rows.nth(0)).toHaveClass(/unlocked/); await expect(rows.nth(0)).toContainText('ตั้งรับหมู่'); await expect(rows.nth(0)).toContainText('ปลดล็อกแล้ว');
+  await expect(rows.nth(1)).toHaveClass(/locked/); await expect(rows.nth(1)).toContainText('ยืนหยัด'); await expect(rows.nth(1)).toContainText('ปลดล็อกที่ ★5');
+  await page.screenshot({ path: info.outputPath('lobby-unlocks.png') });
+});

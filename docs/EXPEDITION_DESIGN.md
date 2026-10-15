@@ -18,7 +18,7 @@ Approved 2026-10-14, re-planned 2026-10-15 for the mercenary roster.
 | 2C-1. Company | Hiring board, duplicates, star upgrades (stats), dismissal | **Implemented** (moved to the lobby in L1) |
 | L1. Lobby | Home → Lobby → Map; persistent profile (company ≤ 20, bank, board); choose the 4 + 4; withdraw/complete/wipe settle home | **Implemented** |
 | L2. Character creation | Commander (non-combat) name, crest and banner colour, once, between Home and Lobby | **Implemented** |
-| 2C-2. New classes | Six new mercenaries (ART-CHAR-MERC-ENEMY-001), one class mechanic at a time; ★3 skill and ★5 passive per class | **In progress**: all 6 base classes done (Garran spear, Mira archer, Toma alchemist, Sefa scout, Brann warden, Lio bard); the ★3 skill and ★5 passive per class remain |
+| 2C-2. New classes | Six new mercenaries (ART-CHAR-MERC-ENEMY-001), one class mechanic at a time; ★3 skill and ★5 passive per class | **Implemented**: all 6 base classes (Garran spear, Mira archer, Toma alchemist, Sefa scout, Brann warden, Lio bard) and the ★3 skill + ★5 passive for all 10 classes (see Star unlocks) |
 | 2D. Equipment and level | Equipment (weapon by class, body, accessory; rarity and affixes; bad-luck protection), shared EXP/level, consumables on the map | Planned |
 | 3. Choices and content | Events with fight/avoid choices, elites, mini boss, puzzles (rune order, push stone, lever), secrets, map quest "2 of 3" and side quests | Planned |
 | 4. Economy and wrap-up | Local gold and shop, salvage, fast travel between camps, elite respawn on rest, defeat penalty, whole-map balance simulation, completion screen | Planned |
@@ -202,7 +202,6 @@ Elites (phase 3) will add guaranteed seals.
 - **แทงทะลวง (Piercing Thrust)**, cooldown 2: 22 damage to one enemy.
 - **Evidence:** the advisor wins every catalogued encounter with Garran replacing either the Knight or the Duelist (`tests/encounters.test.ts`). Brace counter, consumption, expiry, the energy exception and replay/preview equality are covered in `tests/battle.test.ts`.
 - **Art:** his own frame and portrait from ART-CHAR-MERC-ENEMY-001 (`units_mercs`/`portraits_mercs`, mapped in `game/visuals/assets.ts`). Skill icons are code-drawn line icons.
-- **Not yet built:** the ★3 skill and ★5 passive. They come after the six base classes.
 - **Version bumps (skills added to shared encounter content):** veil-siege 7, rear-ambush 5, rift-warden 5, the rest 3.
 
 **2. Mira — Archer (back, SPD 105, HP 50, Attack 13).** Her mechanic is delaying enemy turns.
@@ -306,7 +305,7 @@ Elites (phase 3) will add guaranteed seals.
 
 **Stars.**
 - Each star above ★1 adds 8% to max HP and Attack (rounded) and +8% skill power via `HeroDefinition.skillBonus`, which the resolver, previews and skill text all read through `skillPower`. SPD never changes, so stars never reorder turns.
-- The ★3 skill and ★5 passive unlocks are not implemented yet. They need per-class designs and arrive with the class work in 2C-2.
+- ★3 adds each class's third skill and ★5 switches on its passive (world `starred`); see Star unlocks.
 
 **Hiring board.**
 - At a camp, the "จ้าง" tab shows three distinct offers from the hero catalog, derived from `(seed, camp position, wins)`. A reload cannot re-roll them, and every won battle refreshes the board. Only the taken offer indexes are saved (`board`).
@@ -392,3 +391,23 @@ Save history:
 ## Visual integration (ART-UI-WORLD-001 R2)
 
 The exploration map is full screen, with a floating HUD and no sidebar. It uses the accepted tile, decor, landmark, fog and token art. Intake results, accepted and deferred files, budget and screenshots are in `docs/validation/art-ui-world-001/INTAKE.md`. The art never changes rules: hints mark only legal neighbours, the lower-right action is enabled only by `canRest`, and every number comes from `ExpeditionState`.
+
+## Star unlocks (★3 skill, ★5 passive; approved 2026-10-15, draft numbers)
+
+Every class (the starting four included) gains one battle skill at ★3 and one always-on passive at ★5. `starred` appends the skill to the member's actions and sets `passive`; the resolver reads both from the deployed hero definition, so ★1–2 members and old battles are unchanged. Numbers live in `veil-siege.ts` skills and rules.
+
+| Class | ★3 skill | ★5 passive |
+|---|---|---|
+| Aegis (Knight) | **Rally Guard** `rally` (cd 3): until Aegis's next turn, each living ally's first enemy hit is reduced 35% (after Guard/taunt) | **Stand** `stand`: once per battle, a hit Aegis reduced (Guard or Rally) that would down its recipient leaves them at 1 HP |
+| Lyra (Duelist) | **Finishing Lunge** `finisher` 16 (cd 2): double below 40% enemy HP; does not use Mark | **Keen Eye** `keeneye`: her Marks last one round longer |
+| Eira (Mage) | **Sigil Bind** `sigil` 8 (cd 3): cancels the target's next *energy* move (Bash covers physical) | **Echo** `echo`: Ward +50% on the hero the enemy has announced it will strike |
+| Seren (Priest) | **Sanctuary** `sanctuary` (cd 3): one ally cannot drop below 1 HP until Seren's next turn | **Afterglow** `afterglow`: healing beyond full HP becomes a barrier (≤8, not stacking) |
+| Garran (Spear) | **Spear Wall** `spearwall` 8 (cd 3): counters *every* physical hit on the front lane until his next turn | **Heavy Counter** `heavycounter`: Brace counters +50% |
+| Mira (Archer) | **Weak-point Shot** `weakshot` 16 (cd 2): +12 on a hindered (delayed) enemy | **Tailwind** `tailwind`: Volley cooldown 2 |
+| Toma (Alchemist) | **Blast Flask** `bomb` 10 (cd 3): every enemy; corrosion adds as usual | **Potent** `potent`: corrosion lasts one round longer |
+| Sefa (Scout) | **Backstab** `backstab` 20 (cd 2): only an enemy whose next move is not aimed at Sefa | **Shadow Counter** `shadowcounter`: a dodged hit is answered for 8 |
+| Brann (Warden) | **Earthshaker** `quake` 14 (cd 2): +10 if the target's next move aims at Brann | **Stoneskin** `stoneskin`: Challenge reduces hits 50% (not 35%) |
+| Lio (Bard) | **Finale** `finale` (cd 3): ends Lio's song and releases it: valor = 16 to every enemy, mending = heal every ally 12 | **Resound** `resound`: songs +50% (valor and mending) |
+
+- UI: a ★3 member has four command buttons (one row, ≥44 px at 320 px wide); passives appear in the affected skill's description; the lobby member panel lists both unlocks with their state.
+- Tests: `tests/stars.test.ts` (each skill and passive, unlock gating, ★5 parties win veil-siege with their ★3 skills) and browser tests for the four-button row and the lobby panel.

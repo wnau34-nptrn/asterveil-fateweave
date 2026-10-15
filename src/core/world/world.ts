@@ -61,7 +61,10 @@ export function starred(base: HeroDefinition, stars: number, map: MapDefinition)
   const bonus = (stars - 1) * map.company.starStatPercent;
   if (!bonus) return base;
   const scale = (n: number) => Math.round(n * (100 + bonus) / 100);
-  return { ...base, maxHp: scale(base.maxHp), attack: scale(base.attack), skillBonus: bonus };
+  // ★3 adds the class's third skill; ★5 switches on its passive.
+  const skill = stars >= 3 && base.unlocks && !base.actions.includes(base.unlocks.skill) ? [base.unlocks.skill] : [];
+  return { ...base, maxHp: scale(base.maxHp), attack: scale(base.attack), skillBonus: bonus, actions: [...base.actions, ...skill],
+    ...(stars >= 5 && base.unlocks ? { passive: base.unlocks.passive } : {}) };
 }
 export function memberDef(lookup: EncounterLookup, map: MapDefinition, members: ExpeditionState['members'], id: string): HeroDefinition | undefined {
   const base = heroDef(lookup, map, id);

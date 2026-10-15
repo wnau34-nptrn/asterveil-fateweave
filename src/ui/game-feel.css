@@ -369,3 +369,18 @@ html, body { background: #0a1422; }
   /* Event toasts float above the control cluster. */
   .hud-event { bottom: calc(var(--pad-bottom) + 3 * var(--pad) + 2 * var(--pad-gap) + 14px); }
 }
+
+/* ================= ★3 skills: four command buttons ================= */
+/* A ★3 member has Attack + three skills; the row takes four equal columns and tightens its type. */
+#battle-view .actions:has(> .action-option:nth-child(4)) { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 5px; }
+#battle-view .actions:has(> .action-option:nth-child(4)) .action { padding-left: 2px; padding-right: 2px; font-size: 13px; }
+#battle-view .actions:has(> .action-option:nth-child(4)) .action .icon { width: 22px; height: 22px; }
+/* Lobby member panel: the ★3 skill and ★5 passive, dimmed until unlocked. */
+.member-unlocks { list-style: none; margin: 6px 0 8px; padding: 0; display: grid; gap: 4px; }
+.member-unlocks li { display: grid; grid-template-columns: auto auto 1fr; grid-template-rows: auto auto; column-gap: 6px; align-items: center; padding: 5px 8px; border-radius: 10px; background: #08121f99; border: 1px solid #e8f5ff1f; }
+.member-unlocks li .icon { width: 18px; height: 18px; grid-row: 1; }
+.member-unlocks li b { font-size: 13px; }
+.member-unlocks li small { grid-column: 1 / -1; font-size: 11px; color: var(--text-muted, #b9c8d8); line-height: 1.35; }
+.member-unlocks .unlock-star { font-size: 11px; font-weight: 700; color: var(--gold-light, #f2d596); }
+.member-unlocks li.locked { opacity: .62; }
+.member-unlocks li.unlocked { border-color: #f2d59666; }
