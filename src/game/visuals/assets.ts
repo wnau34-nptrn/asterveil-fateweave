@@ -1,13 +1,17 @@
-export const actorFrames: Readonly<Record<string, number>> = {
-  guardian: 0, tracer: 1, weaver: 2, healer: 3, raider: 4, brute: 5,
-  // PLACEHOLDER until ART-CHAR-MERC-ENEMY-001 is accepted: Garran borrows the Knight frame,
-  // tinted teal on the canvas and hue-shifted in DOM portraits so he never reads as Aegis.
-  garran: 0,
-  mira: 1, // PLACEHOLDER: the Duelist frame tinted forest green.
-  toma: 2, // PLACEHOLDER: the Mage frame tinted brass/amber.
+// Each actor's full-body frame and portrait live in one 2×3 atlas of 512 px cells:
+// the original cast in `units`/`portraits`, mercenaries in `units_mercs`/`portraits_mercs`
+// (ART-CHAR-MERC-ENEMY-001). Both atlas pairs share the same frame order.
+export type ArtSheet = 'units' | 'mercs';
+export const actorArt: Readonly<Record<string, { sheet: ArtSheet; frame: number }>> = {
+  guardian: { sheet: 'units', frame: 0 }, tracer: { sheet: 'units', frame: 1 }, weaver: { sheet: 'units', frame: 2 },
+  healer: { sheet: 'units', frame: 3 }, raider: { sheet: 'units', frame: 4 }, brute: { sheet: 'units', frame: 5 },
+  garran: { sheet: 'mercs', frame: 0 }, mira: { sheet: 'mercs', frame: 1 }, toma: { sheet: 'mercs', frame: 2 },
+  // Frames 3–5 are delivered for Sefa (scout), Brann (warden) and Lio (bard); map them when each class ships.
 };
-export const actorTints: Readonly<Record<string, number>> = { garran: 0x8fe8d6, mira: 0xa8e6a0, toma: 0xffd28a };
-export const actorHues: Readonly<Record<string, number>> = { garran: 150, mira: 95, toma: 200 };
-// Anchor the illustrated soles, excluding transparent padding below enemies.
-export const actorFootOrigins: Readonly<Record<string, number>> = { raider: 493 / 512, brute: 496 / 512 };
-export const artUrl = (name: 'units' | 'portraits' | 'ruins'): string => `${import.meta.env.BASE_URL}assets/art/${name}.webp`;
+// Anchor the illustrated soles, excluding transparent padding below the feet.
+const mercSoles = 497 / 512;
+export const actorFootOrigins: Readonly<Record<string, number>> = { raider: 493 / 512, brute: 496 / 512, garran: mercSoles, mira: mercSoles, toma: mercSoles };
+type ArtName = 'units' | 'portraits' | 'ruins' | 'units_mercs' | 'portraits_mercs';
+export const artUrl = (name: ArtName): string => `${import.meta.env.BASE_URL}assets/art/${name}.webp`;
+export const unitsUrl = (sheet: ArtSheet): string => artUrl(sheet === 'units' ? 'units' : 'units_mercs');
+export const portraitsUrl = (sheet: ArtSheet): string => artUrl(sheet === 'units' ? 'portraits' : 'portraits_mercs');

@@ -194,7 +194,7 @@ test('lobby: hire a duplicate, upgrade a star, pick the team, depart, and withdr
   expect(issues).toEqual([]);
 });
 
-test('Garran (spear) fights from the front slot: brace targets himself and the placeholder art is tinted', async ({ page }, info) => {
+test('Garran (spear) fights from the front slot: brace targets himself, drawn with his own mercenary art', async ({ page }, info) => {
   const roster = { deployed: ['garran', 'tracer', 'weaver', 'healer'], reserve: [] as string[] };
   const members = Object.fromEntries(roster.deployed.map(id => [id, { stars: 1, dupes: 0 }]));
   const run = { ...newExpedition(map, encounterById, 31, { roster, members }, true) }; reveal(run, map);
@@ -211,6 +211,7 @@ test('Garran (spear) fights from the front slot: brace targets himself and the p
   await expect(page.locator('#action-brace')).toContainText('ตั้งทวน'); await expect(page.locator('#action-pierce')).toContainText('แทงทะลวง');
   await page.locator('#action-brace').click(); await expect(page.locator('#skill-popover')).toContainText('แทงสวนกลับ 14');
   await page.locator('[data-ui=skill-close]').click(); await page.screenshot({ path: info.outputPath('garran-battle.png') });
+  await expect(page.locator('#hero-garran .portrait img')).toHaveAttribute('src', /portraits_mercs\.webp$/);
   await page.locator('#target-garran').click(); await finishPlayback(page);
   expect((await saved(page)).battle!.commands.map(c => c.action)).toEqual(['attack', 'attack', 'brace']);
   expect(issues).toEqual([]);

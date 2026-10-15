@@ -2,7 +2,7 @@ import type { HeroDefinition } from '../core/battle/types';
 import type { Direction, ExpeditionState, MapDefinition, Point } from '../core/world/types';
 import { atCamp, atMuster, canOpenChest, canRest, canRevive, chestAt, encounterChance, isRevealed, rosterIds, starred, tileAt, zoneOf } from '../core/world/world';
 import { PARTY_SLOTS, RESERVE_SLOTS } from '../core/world/types';
-import { actorFrames, actorHues, artUrl } from '../game/visuals/assets';
+import { actorArt, portraitsUrl } from '../game/visuals/assets';
 import { SOURCE_TILE, chestFrame, decorAt, itemFrame, floorFrame, fogLayers, landmarkAt, tileSizeFor, tileset, worldArtUrl, type Landmark } from '../game/visuals/world-art';
 import { heroText, resourceOrder, resourceText } from './th';
 import { icon } from './icons';
@@ -29,9 +29,8 @@ export function starRow(n: number, max: number): string {
   return `<span class="star-row" role="img" aria-label="${n} ดาว">${icon('starBadge').repeat(n)}${icon('starBadgeEmpty').replace('class="icon"', 'class="icon empty"').repeat(max - n)}</span>`;
 }
 export function portrait(id: string): string {
-  const frame = actorFrames[id]!;
-  const hue = actorHues[id] !== undefined ? `;filter:hue-rotate(${actorHues[id]}deg) saturate(1.2)` : '';
-  return `<span class="portrait" data-actor="${id}" style="--portrait-x:${frame % 2};--portrait-y:${Math.floor(frame / 2)}${hue}" aria-hidden="true"><img src="${artUrl('portraits')}" alt="" width="1024" height="1536" draggable="false"></span>`;
+  const { sheet, frame } = actorArt[id]!;
+  return `<span class="portrait" data-actor="${id}" style="--portrait-x:${frame % 2};--portrait-y:${Math.floor(frame / 2)}" aria-hidden="true"><img src="${portraitsUrl(sheet)}" alt="" width="1024" height="1536" draggable="false"></span>`;
 }
 const goals = (s: ExpeditionState) => [
   { done: s.tutorialDone, label: 'ผ่านการปะทะครั้งแรก' }, { done: !!s.camp, label: 'ไปถึงแคมป์' },

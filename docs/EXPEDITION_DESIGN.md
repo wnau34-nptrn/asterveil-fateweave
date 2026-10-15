@@ -199,7 +199,7 @@ Elites (phase 3) will add guaranteed seals.
   - Previews, replay and the advisor use the same resolver (`state.counter`).
 - **แทงทะลวง (Piercing Thrust)**, cooldown 2: 22 damage to one enemy.
 - **Evidence:** the advisor wins every catalogued encounter with Garran replacing either the Knight or the Duelist (`tests/encounters.test.ts`). Brace counter, consumption, expiry, the energy exception and replay/preview equality are covered in `tests/battle.test.ts`.
-- **Art is a placeholder** until ART-CHAR-MERC-ENEMY-001 is accepted: the Knight frame tinted teal on the canvas and hue-shifted in DOM portraits (`game/visuals/assets.ts`). Skill icons are code-drawn line icons.
+- **Art:** his own frame and portrait from ART-CHAR-MERC-ENEMY-001 (`units_mercs`/`portraits_mercs`, mapped in `game/visuals/assets.ts`). Skill icons are code-drawn line icons.
 - **Not yet built:** the ★3 skill and ★5 passive. They come after the six base classes.
 - **Version bumps (skills added to shared encounter content):** veil-siege 7, rear-ambush 5, rift-warden 5, the rest 3.
 
@@ -212,7 +212,7 @@ Elites (phase 3) will add guaranteed seals.
   - Its target is `enemies`; in the UI, tapping any living enemy casts it.
 - **Advisor:** volley while two or more enemies live; otherwise hinder the fastest enemy.
 - **Evidence:** the advisor wins every encounter with Mira replacing either back-liner. Delay order, frozen current round, volley, and replay/preview equality are covered in tests.
-- **Art is a placeholder:** the Duelist frame tinted forest green.
+- **Art:** her own frame and portrait from ART-CHAR-MERC-ENEMY-001.
 - **Version bumps:** veil-siege 8, rear-ambush 6, rift-warden 6, the rest 4.
 
 **3. Toma — Alchemist (back, SPD 95, HP 48, Attack 9).** His mechanic is corrosion plus haste.
@@ -225,7 +225,7 @@ Elites (phase 3) will add guaranteed seals.
 - **Turn order with both effects:** hasted heroes first, then everyone by SPD, then enemies delayed by Mira.
 - **Advisor:** acid on the main target when it is not corroded; otherwise haste the hardest-hitting standing ally.
 - **Evidence:** the advisor wins every encounter with Toma replacing either back-liner. Tests cover the corrosion window and bonus, haste ordering for one round only, the no-stacking rule, and replay/preview equality.
-- **Art is a placeholder:** the Mage frame tinted amber.
+- **Art:** his own frame and portrait from ART-CHAR-MERC-ENEMY-001.
 - **Version bumps:** veil-siege 9, rear-ambush 7, rift-warden 7, the rest 5.
 
 ## L2 rules: commander creation

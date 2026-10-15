@@ -2,7 +2,7 @@ import type { HeroDefinition } from '../core/battle/types';
 import { boardOffers, dismissReason, groupOf, hireReason, upgradeCost, upgradeReason, type Group } from '../core/world/profile';
 import { COMPANY_CAP, PARTY_SLOTS, RESERVE_SLOTS, type MapDefinition, type Profile } from '../core/world/types';
 import { starred, type EncounterLookup } from '../core/world/world';
-import { actorFrames, actorHues, artUrl } from '../game/visuals/assets';
+import { actorArt, actorFootOrigins, unitsUrl } from '../game/visuals/assets';
 import { icon } from './icons';
 import { commanderBadge } from './commander-ui';
 import { heroText } from './th';
@@ -82,11 +82,13 @@ export class LobbyUI {
   // Warm camp scene: the brought team gathers around the fire. Interim art uses the existing
   // full-body frames (idle only) until ART-UI-LOBBY-001 delivers the lobby painting and poses.
   private scene(p: Profile): string {
-    const ids = [...p.party.deployed, ...p.party.reserve].filter(id => actorFrames[id] !== undefined);
+    const ids = [...p.party.deployed, ...p.party.reserve].filter(id => actorArt[id] !== undefined);
     const spots = [[18, 0, 1], [33, 1, .92], [67, 1, .92], [82, 0, 1], [8, 2, .78], [43, 2, .74], [57, 2, .74], [92, 2, .78]] as const;
     const units = ids.slice(0, spots.length).map((id, i) => {
-      const [x, depth, scale] = spots[i]!; const f = actorFrames[id]!;
-      return `<span class="lobby-unit" data-depth="${depth}" style="--ux:${x}%;--us:${scale};--fx:${(f % 2) * 100}%;--fy:${Math.floor(f / 2) * 50}%;--flip:${x > 50 ? -1 : 1};animation-delay:${i * -620}ms"><i style="background-image:url(${artUrl('units')})${actorHues[id] !== undefined ? `;filter:hue-rotate(${actorHues[id]}deg) saturate(1.2)` : ''}"></i></span>`;
+      const [x, depth, scale] = spots[i]!; const { sheet, frame: f } = actorArt[id]!;
+      // Frames with padding under the soles drop by that padding so every pair of feet shares the ground line.
+      const sole = (1 - (actorFootOrigins[id] ?? 1)) * 100;
+      return `<span class="lobby-unit" data-depth="${depth}" style="--ux:${x}%;--us:${scale};--fx:${(f % 2) * 100}%;--fy:${Math.floor(f / 2) * 50}%;--flip:${x > 50 ? -1 : 1};--sole:${sole.toFixed(2)}%;animation-delay:${i * -620}ms"><i style="background-image:url(${unitsUrl(sheet)})"></i></span>`;
     }).join('');
     return `<div class="lobby-scene" aria-hidden="true"><div class="lobby-fire"><i></i><i></i><i></i></div>${units}<div class="lobby-embers">${'<i></i>'.repeat(7)}</div></div>`;
   }

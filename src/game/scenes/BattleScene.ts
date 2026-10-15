@@ -3,7 +3,7 @@ import type { BattleEvent, BattleState, EncounterDefinition } from '../../core/b
 import { actorName, thaiFont } from '../../ui/th';
 import { palette } from '../visuals/palette';
 import { drawRiftBackdrop } from '../visuals/rift-backdrop';
-import { actorFootOrigins, actorFrames, actorTints, artUrl } from '../visuals/assets';
+import { actorArt, actorFootOrigins, artUrl, unitsUrl } from '../visuals/assets';
 
 export interface ActorTarget { x: number; y: number; width: number; height: number }
 export interface SceneView { state: BattleState; heroId: string; targetId: string | null; phase?: 'hero' | 'enemy'; activeActorId?: string; activeTargetId?: string }
@@ -30,7 +30,7 @@ export class BattleScene extends Phaser.Scene {
   }
   preload(): void {
     this.load.image('rift-ruins', artUrl('ruins'));
-    this.load.spritesheet('battle-units', artUrl('units'), { frameWidth: 512, frameHeight: 512 });
+    for (const sheet of ['units', 'mercs'] as const) this.load.spritesheet(`battle-${sheet}`, unitsUrl(sheet), { frameWidth: 512, frameHeight: 512 });
   }
   create(): void {
     this.ready = true;
@@ -127,9 +127,8 @@ export class BattleScene extends Phaser.Scene {
     if (id === this.view!.activeActorId && hp > 0) {
       g.lineStyle(3, enemy ? 0xf19b9f : palette.cyan); g.strokeEllipse(0, 0, size * .72, size * .16);
     }
-    const sprite = this.add.image(0, 0, 'battle-units', actorFrames[id]!).setOrigin(0.5, actorFootOrigins[id] ?? 1).setDisplaySize(size, size);
-    // Placeholder art for mercenaries whose frames are not delivered yet (marked in assets.ts).
-    if (actorTints[id] !== undefined) sprite.setTint(actorTints[id]!);
+    const art = actorArt[id]!;
+    const sprite = this.add.image(0, 0, `battle-${art.sheet}`, art.frame).setOrigin(0.5, actorFootOrigins[id] ?? 1).setDisplaySize(size, size);
     body.add(sprite);
     const hitWidth = Math.max(44, Math.min(72, size * .7));
     const hitHeight = Math.max(44, size * .9);

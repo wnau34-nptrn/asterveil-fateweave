@@ -5,7 +5,8 @@ import { createBattle, currentHeroId, resolveCommand, skillPower } from '../src/
 import { clearLegacySaves, expeditionKey, legacyKeys, loadGame, parseGame, saveGame, type StoragePort } from '../src/core/save/expedition-save';
 import { boardOffers, commanderReason, createCommander, departure, dismiss, dismissReason, groupOf, hire, hireReason, newProfile, placeMember, settle, upgrade, upgradeCost, upgradeReason } from '../src/core/world/profile';
 import type { Direction, ExpeditionState, Point, Profile } from '../src/core/world/types';
-import { atMuster, battleData, battleState, canOpenChest, memberDef, moveMember, swapMembers, canRest, canRevive, chestAt, encounterChance, findTiles, finishBattle, isRevealed, move, newExpedition, openChest, recordBattle, rest, revive, rollPercent, startOf, tileAt } from '../src/core/world/world';
+import { atMuster, heroCatalog, battleData, battleState, canOpenChest, memberDef, moveMember, swapMembers, canRest, canRevive, chestAt, encounterChance, findTiles, finishBattle, isRevealed, move, newExpedition, openChest, recordBattle, rest, revive, rollPercent, startOf, tileAt } from '../src/core/world/world';
+import { actorArt } from '../src/game/visuals/assets';
 import { battleLesson } from '../src/ui/tutorial';
 
 const lookup = encounterById;
@@ -417,5 +418,14 @@ describe('game save', () => {
     const loaded = parseGame(v6(s), map, lookup);
     expect(loaded.run).toBeNull(); expect(loaded.profile.last).toMatchObject({ outcome: 'wiped', ore: 4 }); expect(loaded.profile.bank.ore).toBe(4);
     for (const data of encounters) expect(() => createBattle(data, { hp: { guardian: 0, tracer: 0, weaver: 0, healer: 1 } })).not.toThrow();
+  });
+});
+
+describe('character art', () => {
+  it('maps every hireable mercenary and every encounter enemy to its own illustrated frame', () => {
+    const ids = [...heroCatalog(lookup, map).map(h => h.id), ...encounters.flatMap(e => e.enemies.map(x => x.id))];
+    for (const id of new Set(ids)) expect(actorArt[id], id).toBeDefined();
+    const used = Object.values(actorArt).map(a => `${a.sheet}:${a.frame}`);
+    expect(new Set(used).size).toBe(used.length);
   });
 });

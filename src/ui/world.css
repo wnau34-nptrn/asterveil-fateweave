@@ -394,7 +394,7 @@ h1, h2, h3, .primary, .secondary { font-family: var(--font-heading); font-weight
   background: radial-gradient(ellipse at 50% 80%, #fff3c4, #ffc04d 35%, #ff7a2e 65%, #ff7a2e00 72%); filter: blur(.5px); transform-origin: 50% 100%; }
 .lobby-fire i:nth-child(2) { width: 50%; height: 70%; left: 34%; background: radial-gradient(ellipse at 50% 80%, #fff8de, #ffd36b 40%, #ff9a3c00 72%); }
 .lobby-fire i:nth-child(3) { width: 45%; height: 60%; left: 66%; }
-.lobby-unit { position: absolute; left: var(--ux); bottom: 12%; width: calc(clamp(84px, 21vh, 210px) * var(--us)); aspect-ratio: 1; transform: translateX(-50%); z-index: 2; }
+.lobby-unit { position: absolute; left: var(--ux); bottom: 12%; width: calc(clamp(84px, 21vh, 210px) * var(--us)); aspect-ratio: 1; transform: translate(-50%, var(--sole, 0%)); z-index: 2; }
 .lobby-unit[data-depth="0"] { z-index: 4; bottom: 6%; } .lobby-unit[data-depth="2"] { bottom: 22%; filter: brightness(.82) saturate(.9); }
 .lobby-unit i { position: absolute; inset: 0; background-repeat: no-repeat; background-size: 200% 300%; background-position: var(--fx) var(--fy);
   transform: scaleX(var(--flip)); filter: drop-shadow(0 6px 6px #0a0606aa) drop-shadow(calc(var(--flip) * 6px) 0 10px #ff9a4a33); }
