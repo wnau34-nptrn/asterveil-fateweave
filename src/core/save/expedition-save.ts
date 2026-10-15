@@ -1,7 +1,7 @@
-import { entryReason } from '../battle/engine';
+import { entryReason, withParty } from '../battle/engine';
 import type { ActionId, Command } from '../battle/types';
 import { COMPANY_CAP, PARTY_SLOTS, RESERVE_SLOTS, type ActiveBattle, type ExpeditionState, type MapDefinition, type Point, type Profile, type Roster, type RunOutcome } from '../world/types';
-import { battleState, finishBattle, fullParty, heroDef, rosterIds, tileAt, type EncounterLookup } from '../world/world';
+import { battleState, finishBattle, fullParty, heroDef, memberDef, rosterIds, tileAt, type EncounterLookup } from '../world/world';
 import { commanderReason, newProfile, settle } from '../world/profile';
 import type { MemberProgress } from '../world/types';
 
@@ -19,7 +19,7 @@ export const legacyKeys = ['asterveil.fateweave.battle.v1', 'asterveil.fateweave
 // v5 → v6 (L2): the profile gains `commander` (null until created; v5 migrates as null).
 const SAVE_VERSION = 6;
 export interface Game { profile: Profile; run: ExpeditionState | null }
-const actions: readonly ActionId[] = ['attack', 'guard', 'bash', 'mark', 'execute', 'bolt', 'ward', 'heal', 'prayer'];
+const actions: readonly ActionId[] = ['attack', 'guard', 'bash', 'mark', 'execute', 'bolt', 'ward', 'heal', 'prayer', 'brace', 'pierce'];
 
 // One key for profile and run, so settling an expedition is a single atomic write.
 export function saveGame(storage: StoragePort | undefined, game: Game): boolean {
@@ -106,7 +106,8 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
     if (!['tutorial', 'random', 'boss'].includes(b.kind as string) || !data) throw new Error('Invalid battle');
     if (!Array.isArray(b.commands) || b.commands.length > 5000) throw new Error('Invalid battle');
     const entry = hpRecord(b.entry, lookup, map, roster.deployed, members);
-    if (entryReason(data, { hp: entry })) throw new Error('Invalid entry');
+    // Validate against the encounter as fought by this run's deployed party (stars included).
+    if (entryReason(withParty(data, roster.deployed.map(id => memberDef(lookup, map, members, id)!)), { hp: entry })) throw new Error('Invalid entry');
     battle = { kind: b.kind as ActiveBattle['kind'], encounterId: data.id, entry, commands: b.commands.map(command) };
   }
   const state: ExpeditionState = {

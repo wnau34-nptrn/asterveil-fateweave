@@ -58,7 +58,7 @@ function finishOrAdvance(state: BattleState, data: EncounterDefinition, events: 
   if (state.enemies.every(e => e.hp <= 0)) state.outcome = 'victory';
   else if (state.heroes.every(h => h.hp <= 0)) state.outcome = 'defeat';
   if (state.outcome !== 'active') {
-    state.intent = null; state.guard = null; events.push({ type: 'outcome', text: state.outcome }); return;
+    state.intent = null; state.guard = null; state.counter = null; events.push({ type: 'outcome', text: state.outcome }); return;
   }
   state.beat++;
   do {
@@ -69,6 +69,7 @@ function finishOrAdvance(state: BattleState, data: EncounterDefinition, events: 
     }
   } while (!living(state, state.order[state.turnIndex]!));
   if (state.guard && (!living(state, state.guard.heroId) || !living(state, state.guard.sourceId) || currentActorId(state) === state.guard.heroId)) state.guard = null;
+  if (state.counter && (!living(state, state.counter.heroId) || currentActorId(state) === state.counter.heroId)) state.counter = null;
   refreshIntent(state, data);
 }
 function automaticTurns(state: BattleState, data: EncounterDefinition, turns: TurnStage[]): void {
@@ -89,6 +90,14 @@ function automaticTurns(state: BattleState, data: EncounterDefinition, turns: Tu
         const amount = Math.min(recipient.hp, incoming - absorbed); recipient.hp -= amount;
         events.push({ type: 'damage', sourceId: actorId, targetId: recipient.id, amount, absorbed, text: 'Enemy attacks on its own turn.' });
         if (!recipient.hp) events.push({ type: 'down', targetId: recipient.id, text: 'Hero falls.' });
+        // A braced spear answers the first physical hit on any front-lane ally while it stands.
+        const brace = state.counter;
+        if (brace && intent.kind === 'physical' && living(state, brace.heroId) && data.heroes.find(h => h.id === recipient.id)!.lane === 'front') {
+          const power = skillPower(data, brace.heroId, 'brace'); const hit = Math.min(enemy.hp, power); enemy.hp -= hit;
+          events.push({ type: 'counter', sourceId: brace.heroId, targetId: actorId, amount: hit, text: 'Braced spear counters.' });
+          if (!enemy.hp) events.push({ type: 'down', targetId: actorId, text: 'Enemy falls.' });
+          state.counter = null;
+        }
       }
       if (state.guard?.sourceId === actorId) state.guard = null;
     }
@@ -112,7 +121,7 @@ export function entryReason(data: EncounterDefinition, entry?: BattleEntry): str
 export function beginBattle(data: EncounterDefinition, entry?: BattleEntry): Resolution {
   const invalid = entryReason(data, entry); if (invalid) throw new Error(invalid);
   const state: BattleState = {
-    encounterId: data.id, beat: 1, round: 1, turnIndex: 0, order: [], outcome: 'active', guard: null,
+    encounterId: data.id, beat: 1, round: 1, turnIndex: 0, order: [], outcome: 'active', guard: null, counter: null,
     heroes: data.heroes.map(h => ({ id: h.id, hp: entry?.hp[h.id] ?? h.maxHp, barrier: 0, cooldowns: {} })),
     enemies: data.enemies.map(e => ({ id: e.id, hp: e.maxHp, markedUntil: 0 })), intent: null, commands: [],
   };
@@ -137,6 +146,10 @@ export function targetOptions(state: BattleState, data: EncounterDefinition, her
     const injured = state.heroes.some(h => h.hp > 0 && h.hp < data.heroes.find(d => d.id === h.id)!.maxHp);
     const reason = unavailable || (!injured ? 'The living party is at full health.' : '');
     return [{ id: 'party', name: 'Party', valid: !reason, reason }];
+  }
+  if (action === 'brace') {
+    const reason = unavailable || (state.counter?.heroId === heroId ? 'Already braced.' : '');
+    return [{ id: heroId, name: data.heroes.find(h => h.id === heroId)?.name ?? heroId, valid: !reason, reason }];
   }
   if (['guard', 'ward', 'heal'].includes(action)) return data.heroes.map(h => {
     const actor = state.heroes.find(s => s.id === h.id)!;
@@ -191,7 +204,8 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
       }
       break;
     }
-    case 'bolt': damage(skill.power); break;
+    case 'bolt': case 'pierce': damage(skill.power); break;
+    case 'brace': state.counter = { heroId: hero.id }; events.push({ type: 'brace', sourceId: hero.id, targetId: hero.id, amount: skill.power, text: 'Spear braced until its next turn.' }); break;
     case 'mark': enemy!.markedUntil = state.round + data.rules.markDuration; events.push({ type: 'mark', sourceId: hero.id, targetId: enemy!.id, text: 'Enemy marked.' }); break;
     case 'guard': state.guard = { heroId: hero.id, targetId: command.targetId, sourceId: state.intent!.sourceId }; events.push({ type: 'guard', sourceId: hero.id, targetId: command.targetId, text: 'Guard until announced attacker acts or Knight returns.' }); break;
     case 'ward': {

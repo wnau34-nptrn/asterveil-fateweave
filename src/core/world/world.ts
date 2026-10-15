@@ -45,10 +45,11 @@ export function reveal(state: ExpeditionState, map: MapDefinition): void {
   }
   state.revealed = cells.join('');
 }
-// Hero definitions available to the roster. Until hiring exists (2C) the catalog is the
-// teaching encounter's party; a test can supply a larger one through the lookup.
+// Hero definitions available to the company: the teaching encounter's party plus the map's
+// hireable mercenaries (a test can also extend the teaching party through the lookup).
 export function heroCatalog(lookup: EncounterLookup, map: MapDefinition): readonly HeroDefinition[] {
-  return lookup(map.tutorialEncounterId)!.heroes;
+  const base = lookup(map.tutorialEncounterId)!.heroes;
+  return [...base, ...map.mercenaries.filter(m => !base.some(h => h.id === m.id))];
 }
 export function heroDef(lookup: EncounterLookup, map: MapDefinition, id: string): HeroDefinition | undefined {
   return heroCatalog(lookup, map).find(h => h.id === id);

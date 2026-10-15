@@ -4,7 +4,7 @@ import type { BattleKind } from '../core/world/types';
 import { browserStorage } from '../platform/browser-storage';
 import type { BattleScene } from '../game/scenes/BattleScene';
 import { actorName, eventThai, heroText, intentName, reasonThai, skillDescription } from './th';
-import { actorFrames, artUrl } from '../game/visuals/assets';
+import { portrait } from './world-ui';
 import { icon } from './icons';
 import { battleLesson } from './tutorial';
 
@@ -151,7 +151,7 @@ export class BattleUI {
     const target = targetOptions(this.state, this.data, this.heroId, this.action).find(t => t.id === actualTarget);
     if (target?.valid) {
       this.execute(actualTarget);
-    } else if (!['guard','ward','heal','prayer'].includes(this.action) && this.data.heroes.some(h => h.id === id)) this.selectHero(id);
+    } else if (!['guard','ward','heal','prayer','brace'].includes(this.action) && this.data.heroes.some(h => h.id === id)) this.selectHero(id);
   }
 
   private selectHero(id: string): void {
@@ -278,10 +278,7 @@ export class BattleUI {
 
   private set(id: string, content: string): void { this.root.querySelector(`#${id}`)!.innerHTML = content; }
 
-  private portrait(id: string): string {
-    const frame = actorFrames[id]!;
-    return `<span class="portrait" data-actor="${id}" style="--portrait-x:${frame % 2};--portrait-y:${Math.floor(frame / 2)}" aria-hidden="true"><img src="${artUrl('portraits')}" alt="" width="1024" height="1536" draggable="false"></span>`;
-  }
+  private portrait(id: string): string { return portrait(id); }
 
   private renderPhase(): void {
     const turn = this.stage; const d = this.data; const s = this.displayState;

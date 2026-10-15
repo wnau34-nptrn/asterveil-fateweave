@@ -2,7 +2,7 @@ import type { HeroDefinition } from '../core/battle/types';
 import { boardOffers, dismissReason, groupOf, hireReason, upgradeCost, upgradeReason, type Group } from '../core/world/profile';
 import { COMPANY_CAP, PARTY_SLOTS, RESERVE_SLOTS, type MapDefinition, type Profile } from '../core/world/types';
 import { starred, type EncounterLookup } from '../core/world/world';
-import { actorFrames, artUrl } from '../game/visuals/assets';
+import { actorFrames, actorHues, artUrl } from '../game/visuals/assets';
 import { icon } from './icons';
 import { commanderBadge } from './commander-ui';
 import { heroText } from './th';
@@ -86,7 +86,7 @@ export class LobbyUI {
     const spots = [[18, 0, 1], [33, 1, .92], [67, 1, .92], [82, 0, 1], [8, 2, .78], [43, 2, .74], [57, 2, .74], [92, 2, .78]] as const;
     const units = ids.slice(0, spots.length).map((id, i) => {
       const [x, depth, scale] = spots[i]!; const f = actorFrames[id]!;
-      return `<span class="lobby-unit" data-depth="${depth}" style="--ux:${x}%;--us:${scale};--fx:${(f % 2) * 100}%;--fy:${Math.floor(f / 2) * 50}%;--flip:${x > 50 ? -1 : 1};animation-delay:${i * -620}ms"><i style="background-image:url(${artUrl('units')})"></i></span>`;
+      return `<span class="lobby-unit" data-depth="${depth}" style="--ux:${x}%;--us:${scale};--fx:${(f % 2) * 100}%;--fy:${Math.floor(f / 2) * 50}%;--flip:${x > 50 ? -1 : 1};animation-delay:${i * -620}ms"><i style="background-image:url(${artUrl('units')})${actorHues[id] !== undefined ? `;filter:hue-rotate(${actorHues[id]}deg) saturate(1.2)` : ''}"></i></span>`;
     }).join('');
     return `<div class="lobby-scene" aria-hidden="true"><div class="lobby-fire"><i></i><i></i><i></i></div>${units}<div class="lobby-embers">${'<i></i>'.repeat(7)}</div></div>`;
   }

@@ -22,6 +22,11 @@ export function battleLesson(state:BattleState,data:EncounterDefinition):Lesson|
   if(intent)return make('guard',intent.targetId,'อ่านแผนศัตรู',`รับแทนและลดพลัง ${intent.damage} → ${Math.ceil(intent.damage*(1-data.rules.guardReduction))}`)??attack();
   return attack();
  }
+ if(heroId==='garran'){
+  const front=intent?.kind==='physical'&&data.heroes.find(h=>h.id===intent.targetId)?.lane==='front';
+  if(front)return make('brace',heroId,'ตั้งทวนรอสวน',`${actorName(intent!.sourceId,data)} จะโดนแทงสวน ${skillPower(data,heroId,'brace')}`)??make('pierce',target.id,'แทงทะลวง',`พลัง ${skillPower(data,heroId,'pierce')}`)??attack();
+  return make('pierce',target.id,'แทงทะลวง',`พลัง ${skillPower(data,heroId,'pierce')}`)??attack();
+ }
  if(heroId==='tracer'){
   if(target.markedUntil>state.round)return make('execute',target.id,'ตีเป้าเดิมเพื่อใช้ตรา',`พลัง ${skillPower(data,heroId,'execute')+data.rules.markedBonus}`)??make('attack',target.id,'ตีเป้าเดิมเพื่อใช้ตรา',`เพิ่มพลัง +${data.rules.markedBonus}`);
   return make('mark',target.id,'ติดตราไว้ใช้รอบถัดไป',`ยังไม่ทำความเสียหาย · ตราอยู่ ${data.rules.markDuration} รอบ`)??attack();

@@ -1,4 +1,4 @@
-export type ActionId = 'attack' | 'guard' | 'bash' | 'mark' | 'execute' | 'bolt' | 'ward' | 'heal' | 'prayer';
+export type ActionId = 'attack' | 'guard' | 'bash' | 'mark' | 'execute' | 'bolt' | 'ward' | 'heal' | 'prayer' | 'brace' | 'pierce';
 export type Outcome = 'active' | 'victory' | 'defeat';
 export interface SkillDefinition { name: string; english: string; icon: string; power: number; cooldown: number }
 export interface HeroDefinition {
@@ -28,9 +28,11 @@ export interface BattleState {
   encounterId: string; beat: number; round: number; order: string[]; turnIndex: number; outcome: Outcome;
   heroes: HeroState[]; enemies: EnemyState[]; intent: Intent | null; commands: Command[];
   guard: { heroId: string; targetId: string; sourceId: string } | null;
+  // Spear brace (2C-2): the next physical enemy hit on a front-lane ally is countered.
+  counter: { heroId: string } | null;
 }
 export interface BattleEvent {
-  type: 'damage' | 'guard' | 'mark' | 'barrier' | 'heal' | 'interrupt' | 'cancel' | 'down' | 'outcome';
+  type: 'damage' | 'guard' | 'mark' | 'barrier' | 'heal' | 'interrupt' | 'cancel' | 'down' | 'outcome' | 'brace' | 'counter';
   text: string; sourceId?: string; targetId?: string; amount?: number; absorbed?: number; cause?: 'defeated' | 'interrupted';
 }
 // One frame per real actor turn. Only Resolution.state is committed/saved.

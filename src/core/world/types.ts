@@ -1,4 +1,4 @@
-import type { Command } from '../battle/types';
+import type { Command, HeroDefinition } from '../battle/types';
 
 export type Direction = 'up' | 'down' | 'left' | 'right';
 export interface Point { x: number; y: number }
@@ -35,6 +35,8 @@ export interface MapDefinition {
   camp: { restHealPercent: number; reviveHpPercent: number };
   // Hero ids that join free at ★1, deployed in this slot order.
   startingRoster: readonly string[];
+  // Hireable mercenaries beyond the teaching party (the hero catalog is both together).
+  mercenaries: readonly HeroDefinition[];
   company: CompanyRules;
 }
 // Mercenary company rules (draft numbers). starCosts[i] upgrades ★(i+1) → ★(i+2).

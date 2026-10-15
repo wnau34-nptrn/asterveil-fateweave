@@ -392,6 +392,17 @@ describe('game save', () => {
     const done = parseGame(JSON.stringify({ version: 4, state: { ...fresh(8), completed: true, resources: { ore: 20, ember: 1, seal: 1 } } }), map, lookup);
     expect(done.run).toBeNull(); expect(done.profile.bank).toEqual({ ore: 20, seal: 1 }); expect(done.profile.last?.outcome).toBe('complete');
   });
+  it('round-trips an active battle fought by a hired mercenary in a non-default slot', () => {
+    const roster = { deployed: ['garran', 'tracer', 'weaver', 'healer'], reserve: ['guardian'] };
+    const members = Object.fromEntries([...roster.deployed, ...roster.reserve].map(id => [id, { stars: id === 'garran' ? 2 : 1, dupes: 0 }]));
+    let s = newExpedition(map, lookup, 6, { roster, members }, true);
+    s.battle = { kind: 'random', encounterId: 'veil-siege', entry: Object.fromEntries(roster.deployed.map(id => [id, s.hp[id]!])), commands: [] };
+    const data = battleData(s, map, lookup)!; let b = battleState(s, map, lookup)!;
+    b = resolveCommand(b, data, { beat: b.beat, heroId: 'tracer', action: 'attack', targetId: 'brute' }).state; s = recordBattle(s, map, lookup, b.commands);
+    const profile = { ...newProfile(map, 4), company: ['guardian', 'tracer', 'weaver', 'healer', 'garran'], members, party: roster };
+    expect(parseGame(v6(s, profile), map, lookup)).toEqual({ profile, run: s });
+    expect(s.hp.garran).toBe(76);
+  });
   it('tolerates absent or denied storage and clears practice-mode slots', () => {
     const denied: StoragePort = { getItem: () => { throw new Error('Denied'); }, setItem: () => { throw new Error('Denied'); } };
     expect(saveGame(undefined, game())).toBe(false); expect(saveGame(denied, game())).toBe(false);

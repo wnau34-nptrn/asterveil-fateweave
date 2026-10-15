@@ -1,13 +1,59 @@
 import { describe, expect, it } from 'vitest';
-import { actionReason, beginBattle, withParty, createBattle, currentHeroId, enemyIntent, plannedIntents, previewCommand, replay, resolveCommand, targetOptions, upcomingTurns, validateCommand } from '../src/core/battle/engine';
+import { actionReason, beginBattle, skillPower, withParty, createBattle, currentHeroId, enemyIntent, plannedIntents, previewCommand, replay, resolveCommand, targetOptions, upcomingTurns, validateCommand } from '../src/core/battle/engine';
 import type { ActionId, BattleState } from '../src/core/battle/types';
 import { veilSiege as data } from '../src/content/encounters/veil-siege';
+import { encounterById } from '../src/content/encounters/catalog';
+import { mercenaries } from '../src/content/heroes/mercenaries';
 const act = (s: BattleState, action: ActionId, targetId: string, d = data) => resolveCommand(s, d, { beat: s.beat, heroId: currentHeroId(s, d)!, action, targetId });
 const at = (id: string, d = data) => {
   let s = createBattle(d);
   while (currentHeroId(s, d) !== id) s = act(s, 'attack', 'brute', d).state;
   return s;
 };
+describe('spear brace (Garran)', () => {
+  const garran = mercenaries[0]!; const [, tracer, weaver, healer] = data.heroes;
+  const party = withParty(data, [garran, tracer!, weaver!, healer!]);
+  const run = (d: typeof party, moves: [string, string][]) => {
+    let s = createBattle(d); const events: string[] = [];
+    for (const [action, target] of moves) { const r = act(s, action as ActionId, target, d); events.push(...r.events.map(e => e.type)); s = r.state; }
+    return { s, events };
+  };
+  it('counters the first physical hit on a front-lane ally, then is consumed; energy never triggers it', () => {
+    // Order: Lyra, Raider, Eira, Garran, Brute, Seren. R1 Raider slashes Lyra before Garran braces.
+    const { s: braced, events } = run(party, [['attack', 'brute'], ['attack', 'brute'], ['brace', 'garran']]);
+    expect(braced.counter).toEqual({ heroId: 'garran' }); expect(events).toContain('brace');
+    expect(events).not.toContain('counter'); // Brute's Rift Bolt is energy
+    const raiderBefore = braced.enemies.find(e => e.id === 'raider')!.hp;
+    // R2: Lyra acts, then the Raider's physical slash at slot 0 (Garran) is countered.
+    const r = act(act(braced, 'attack', 'brute', party).state, 'attack', 'brute', party);
+    const counter = r.events.find(e => e.type === 'counter')!;
+    expect(counter).toMatchObject({ sourceId: 'garran', targetId: 'raider', amount: 14 });
+    expect(r.state.enemies.find(e => e.id === 'raider')!.hp).toBe(raiderBefore - 14);
+    expect(r.state.counter).toBeNull();
+  });
+  it('expires when Garran acts again, cannot be stacked, and stars raise the counter', () => {
+    const whelp = withParty(encounterById('rift-whelp')!, [garran, tracer!, weaver!, healer!]);
+    let s = createBattle(whelp);
+    while (currentHeroId(s, whelp) !== 'garran') s = act(s, 'attack', 'brute', whelp).state;
+    s = act(s, 'brace', 'garran', whelp).state;
+    expect(targetOptions(s, whelp, 'garran', 'brace')[0]!.valid).toBe(false);
+    while (currentHeroId(s, whelp) !== 'garran') s = act(s, 'attack', 'brute', whelp).state;
+    expect(s.counter).toBeNull();
+    const starred = withParty(data, [{ ...garran, skillBonus: 16 }, tracer!, weaver!, healer!]);
+    expect(skillPower(starred, 'garran', 'brace')).toBe(16);
+  });
+  it('replays and previews identically', () => {
+    const moves: [string, string][] = [['attack', 'brute'], ['attack', 'brute'], ['brace', 'garran'], ['attack', 'raider'], ['pierce', 'raider']];
+    let s = createBattle(party);
+    for (const [action, target] of moves) {
+      const command = { beat: s.beat, heroId: currentHeroId(s, party)!, action: action as ActionId, targetId: target };
+      if (validateCommand(s, party, command)) break;
+      expect(previewCommand(s, party, command)).toEqual(resolveCommand(s, party, command)); s = resolveCommand(s, party, command).state;
+    }
+    expect(replay(party, s.commands)).toEqual(s);
+  });
+});
+
 describe('party slots', () => {
   it('enemy moves aim at a slot, so whoever is deployed there becomes the target', () => {
     const [guardian, tracer, weaver, healer] = data.heroes as typeof data.heroes[number][];

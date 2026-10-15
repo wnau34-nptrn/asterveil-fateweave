@@ -1,6 +1,7 @@
 import { expect, it } from 'vitest';
 import { encounters, firstClash, rearAmbush, riftWarden } from '../src/content/encounters/catalog';
-import { createBattle, currentHeroId, previewCommand, replay, resolveCommand } from '../src/core/battle/engine';
+import { createBattle, currentHeroId, previewCommand, replay, resolveCommand, withParty } from '../src/core/battle/engine';
+import { mercenaries } from '../src/content/heroes/mercenaries';
 import { battleLesson } from '../src/ui/tutorial';
 import { encounterRoutes } from './fixtures/encounter-routes';
 it.each(encounterRoutes)('$name wins with all four heroes, exact staged previews and deterministic replay', ({data,moves,hp}) => {
@@ -44,4 +45,11 @@ it.each(encounters.map(data=>({data})))('$data.id: the advisor wins from 60% HP 
  const entry={hp:Object.fromEntries(data.heroes.map(h=>[h.id,Math.round(h.maxHp*.6)]))};let s=createBattle(data,entry);
  while(s.outcome==='active'&&s.commands.length<200){const l=battleLesson(s,data)!;s=resolveCommand(s,data,{beat:s.beat,heroId:l.heroId,action:l.action,targetId:l.targetId}).state;}
  expect(s.outcome).toBe('victory');expect(replay(data,s.commands,entry)).toEqual(s);
+});
+it.each(encounters.map(data=>({data})))('$data.id: Garran can replace either front-liner and the advisor still wins from full HP',({data})=>{
+ for(const out of ['guardian','tracer']){
+  const d=withParty(data,data.heroes.map(h=>h.id===out?mercenaries[0]!:h));let s=createBattle(d);
+  while(s.outcome==='active'&&s.commands.length<200){const l=battleLesson(s,d)!;s=resolveCommand(s,d,{beat:s.beat,heroId:l.heroId,action:l.action,targetId:l.targetId}).state;}
+  expect(s.outcome,`${data.id} without ${out}`).toBe('victory');expect(s.commands.some(c=>c.action==='brace'||c.action==='pierce')).toBe(true);
+ }
 });

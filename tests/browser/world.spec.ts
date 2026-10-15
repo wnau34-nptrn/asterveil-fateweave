@@ -180,6 +180,28 @@ test('lobby: hire a duplicate, upgrade a star, pick the team, depart, and withdr
   expect(issues).toEqual([]);
 });
 
+test('Garran (spear) fights from the front slot: brace targets himself and the placeholder art is tinted', async ({ page }, info) => {
+  const roster = { deployed: ['garran', 'tracer', 'weaver', 'healer'], reserve: [] as string[] };
+  const members = Object.fromEntries(roster.deployed.map(id => [id, { stars: 1, dupes: 0 }]));
+  const run = { ...newExpedition(map, encounterById, 31, { roster, members }, true) }; reveal(run, map);
+  run.battle = { kind: 'random', encounterId: 'veil-siege', entry: { ...run.hp }, commands: [] };
+  const profile = { ...newProfile(map, 5), tutorialDone: true, commander, company: ['guardian', 'tracer', 'weaver', 'healer', 'garran'], members: { ...newProfile(map, 5).members, garran: { stars: 1, dupes: 0 } }, party: roster };
+  await seed(page, run, profile);
+  const issues: string[] = []; page.on('pageerror', e => issues.push(e.message));
+  await page.goto('./'); await page.locator('#continue').click(); await page.locator('#start').click();
+  for (const hero of ['tracer', 'weaver']) {
+    await expect(page.locator(`#hero-${hero}`)).toHaveAttribute('aria-pressed', 'true');
+    await page.locator('#action-attack').click(); await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-brute').click(); await finishPlayback(page);
+  }
+  await expect(page.locator('#hero-garran')).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator('#action-brace')).toContainText('ตั้งทวน'); await expect(page.locator('#action-pierce')).toContainText('แทงทะลวง');
+  await page.locator('#action-brace').click(); await expect(page.locator('#skill-popover')).toContainText('แทงสวนกลับ 14');
+  await page.locator('[data-ui=skill-close]').click(); await page.screenshot({ path: info.outputPath('garran-battle.png') });
+  await page.locator('#target-garran').click(); await finishPlayback(page);
+  expect((await saved(page)).battle!.commands.map(c => c.action)).toEqual(['attack', 'attack', 'brace']);
+  expect(issues).toEqual([]);
+});
+
 test('losing every brought member fails the expedition: back to the lobby with half the ore', async ({ page }) => {
   const data = encounterById('veil-siege')!; const hp = { guardian: 6, tracer: 4, weaver: 3, healer: 2 };
   const camp = findTiles(map, 'camp')[1]!;

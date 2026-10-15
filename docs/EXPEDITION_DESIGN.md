@@ -18,7 +18,7 @@ Approved 2026-10-14, re-planned 2026-10-15 for the mercenary roster.
 | 2C-1. Company | Hiring board, duplicates, star upgrades (stats), dismissal | **Implemented** (moved to the lobby in L1) |
 | L1. Lobby | Home → Lobby → Map; persistent profile (company ≤ 20, bank, board); choose the 4 + 4; withdraw/complete/wipe settle home | **Implemented** |
 | L2. Character creation | Commander (non-combat) name, crest and banner colour, once, between Home and Lobby | **Implemented** |
-| 2C-2. New classes | Six new mercenaries (ART-CHAR-MERC-ENEMY-001), one class mechanic at a time; ★3 skill and ★5 passive per class | Planned |
+| 2C-2. New classes | Six new mercenaries (ART-CHAR-MERC-ENEMY-001), one class mechanic at a time; ★3 skill and ★5 passive per class | **In progress**: 1/6 (Garran, spear) |
 | 2D. Equipment and level | Equipment (weapon by class, body, accessory; rarity and affixes; bad-luck protection), shared EXP/level, consumables on the map | Planned |
 | 3. Choices and content | Events with fight/avoid choices, elites, mini boss, puzzles (rune order, push stone, lever), secrets, map quest "2 of 3" and side quests | Planned |
 | 4. Economy and wrap-up | Local gold and shop, salvage, fast travel between camps, elite respawn on rest, defeat penalty, whole-map balance simulation, completion screen | Planned |
@@ -181,6 +181,27 @@ Elites (phase 3) will add guaranteed seals.
 - The 2B "free rescue" rule is removed. A defeat with any brought member standing still retreats to the last camp (or the entrance) with the fallen down.
 
 **Lobby look.** A warm dusk camp band shows the brought team around a code-drawn fire, using the existing idle frames with gentle breathing and embers, all off under reduced motion. This is interim until `docs/handoffs/ART-UI-LOBBY-001.md` (scene layers and sit/cheer/idle_alt poses) is delivered.
+
+## 2C-2 rules: new classes, one at a time (draft numbers)
+
+**Infrastructure.**
+- The hero catalog is the teaching party plus `map.mercenaries` (`src/content/heroes/mercenaries.ts`). New mercenaries appear on the Lobby hiring board automatically.
+- Battle field spots follow party slots and lanes, not hero ids:
+  - front-lane members take the two front spots in slot order, back-lane members the two back spots;
+  - overflow uses the other row.
+- Placement rules for art are in `docs/handoffs/ART-PLACEMENT-RULES.md`.
+- **Save fix:** an active battle is now validated against the run's own deployed party, stars included. Before this, a save from a battle that included a hired mercenary was wrongly rejected.
+
+**1. Garran — Spear (front, SPD 90, HP 70, Attack 12).**
+- **ตั้งทวน (Brace)**, cooldown 2, targets himself.
+  - Until Garran's next turn, the **first physical enemy hit on any front-lane ally** (himself included, Guard redirects included) is answered after the hit with a counter for the brace power (14, +stars). This can defeat the attacker.
+  - Energy hits never trigger it. It cannot be stacked, and it ends if Garran falls.
+  - Previews, replay and the advisor use the same resolver (`state.counter`).
+- **แทงทะลวง (Piercing Thrust)**, cooldown 2: 22 damage to one enemy.
+- **Evidence:** the advisor wins every catalogued encounter with Garran replacing either the Knight or the Duelist (`tests/encounters.test.ts`). Brace counter, consumption, expiry, the energy exception and replay/preview equality are covered in `tests/battle.test.ts`.
+- **Art is a placeholder** until ART-CHAR-MERC-ENEMY-001 is accepted: the Knight frame tinted teal on the canvas and hue-shifted in DOM portraits (`game/visuals/assets.ts`). Skill icons are code-drawn line icons.
+- **Not yet built:** the ★3 skill and ★5 passive. They come after the six base classes.
+- **Version bumps (skills added to shared encounter content):** veil-siege 7, rear-ambush 5, rift-warden 5, the rest 3.
 
 ## L2 rules: commander creation
 

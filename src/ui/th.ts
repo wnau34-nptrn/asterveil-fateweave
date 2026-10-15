@@ -4,11 +4,12 @@ import { skillPower } from '../core/battle/engine';
 export const thaiFont = '"Noto Sans Thai", "Leelawadee UI", Tahoma, sans-serif';
 export const heroText: Record<string, { name: string; role: string; help: string; icon: string }> = {
   guardian: { name: 'เอกิส', role: 'อัศวิน', help: 'รับแทนเพื่อนและหยุดการโจมตี', icon: '♜' },
+  garran: { name: 'การ์แรน', role: 'ทหารหอก', help: 'ตั้งทวนแทงสวนการโจมตีกายภาพ', icon: '⟋' },
   tracer: { name: 'ไลรา', role: 'นักดาบ', help: 'ติดตราแล้วฟันเจาะจุด', icon: '➶' },
   weaver: { name: 'ไอรา', role: 'จอมเวท', help: 'ศรเวทและโล่ป้องกัน', icon: '✧' },
   healer: { name: 'เซเรน', role: 'นักบวช', help: 'รักษาคนเดียวหรือฟื้นฟูทั้งทีม', icon: '✚' },
 };
-const names: Record<string, string> = { guardian: 'เอกิส', tracer: 'ไลรา', weaver: 'ไอรา', healer: 'เซเรน', raider: 'นักจู่โจม', brute: 'อสูรรอยแยก', party: 'ทั้งทีม' };
+const names: Record<string, string> = { garran: 'การ์แรน', guardian: 'เอกิส', tracer: 'ไลรา', weaver: 'ไอรา', healer: 'เซเรน', raider: 'นักจู่โจม', brute: 'อสูรรอยแยก', party: 'ทั้งทีม' };
 export function actorName(id: string | undefined, data: EncounterDefinition): string {
   return id ? data.enemies.find(e => e.id === id)?.displayName ?? names[id] ?? data.heroes.find(h => h.id === id)?.name ?? data.enemies.find(e => e.id === id)?.name ?? 'เป้าหมาย' : 'ทีม';
 }
@@ -29,6 +30,8 @@ export function skillDescription(action: ActionId, heroId: string, data: Encount
     ward: `ให้โล่ ${skill.power} แก่เพื่อนที่ยังยืนอยู่ 1 คน โล่รับความเสียหายก่อนเลือด ไม่ซ้อนกัน อยู่จนถูกใช้หมด`,
     heal: `ฟื้นเลือด ${skill.power} ให้เพื่อนที่ยังยืนอยู่ 1 คน ไม่เกินเลือดสูงสุด`,
     prayer: `ฟื้นเลือดคนละ ${skill.power} ให้ทุกคนที่ยังยืนอยู่ ไม่เกินเลือดสูงสุด ไม่ชุบชีวิต`,
+    brace: `ตั้งทวนรอ เมื่อศัตรูโจมตีกายภาพใส่เพื่อนแนวหน้าคนใดก็ได้ (รวมตัวเอง) ครั้งแรก จะแทงสวนกลับ ${skill.power} หลังโดนตี อยู่จนสวนแล้วหรือถึงเทิร์นของตัวเองอีกครั้ง พลังงานไม่ทำให้สวน`,
+    pierce: `แทงทะลวงสร้างความเสียหาย ${skill.power} ให้ศัตรูหนึ่งตัว`,
   };
   return text[action] + cooldown;
 }
@@ -46,6 +49,7 @@ export function reasonThai(reason: string): string {
     'The living party is at full health.': 'ทีมที่ยังยืนอยู่มีเลือดเต็มแล้ว',
     'This ally already has this barrier.': 'มีโล่เวทเต็มแล้ว',
     'Invalid target.': 'เลือกเป้าหมายใหม่',
+    'Already braced.': 'ตั้งทวนอยู่แล้ว',
     'The preview is stale. Select an action again.': 'จังหวะเปลี่ยนแล้ว กรุณาเลือกใหม่',
   } as Record<string, string>)[reason] ?? 'คำสั่งนี้ยังใช้ไม่ได้ กรุณาเลือกใหม่';
 }
@@ -60,13 +64,15 @@ export function eventThai(event: BattleEvent, after: BattleState, data: Encounte
     case 'interrupt': return `${target} จะเสียเทิร์นโจมตีกายภาพครั้งถัดไป`;
     case 'cancel': return event.cause === 'interrupted' ? 'กระแทกโล่หยุดการโจมตีกายภาพของศัตรูได้' : 'กำจัดผู้โจมตีได้ การโจมตีของมันถูกยกเลิก';
     case 'down': return `${target}${data.heroes.some(h => h.id === event.targetId) ? 'ล้มแล้ว' : 'ถูกกำจัดแล้ว'}`;
+    case 'brace': return `${source}ตั้งทวน · ศัตรูที่ตีแนวหน้าด้วยกายภาพจะโดนสวน ${event.amount}`;
+    case 'counter': return `${source}แทงสวน${target} ${event.amount}`;
     case 'outcome': return after.outcome === 'victory' ? 'ชนะแล้ว! รอยแยกสงบลง' : 'แพ้แล้ว ลองจัดแผนใหม่';
   }
 }
 export const resourceText: Record<ResourceId, { name: string; use: string }> = {
-  ore: { name: 'แร่ดาว', use: 'ใช้จ้างและอัปดาวทหารรับจ้างที่แคมป์ (เปิดในช่วงถัดไป)' },
+  ore: { name: 'แร่ดาว', use: 'พากลับค่าย ใช้จ้างและอัปดาวทหารรับจ้าง' },
   ember: { name: 'ถ่านม่านเวล', use: 'ชุบสมาชิกที่ล้ม 1 คนที่แคมป์' },
-  seal: { name: 'ตราสัญญา', use: 'ใช้แทนตัวซ้ำ 1 ชิ้นเมื่ออัปดาว (เปิดในช่วงถัดไป)' },
+  seal: { name: 'ตราสัญญา', use: 'พากลับค่าย ใช้แทนตัวซ้ำ 1 ชิ้นเมื่ออัปดาว' },
 };
 export const resourceOrder: readonly ResourceId[] = ['ore', 'ember', 'seal'];
 export function lootThai(loot: Resources): string {

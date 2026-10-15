@@ -2,7 +2,7 @@ import type { EncounterDefinition } from '../../core/battle/types';
 import { heroes } from '../heroes/team';
 import { enemies } from '../enemies/veilbound';
 export const veilSiege: EncounterDefinition = {
-  id: 'veil-siege', version: 6, name: 'ศึกปิดรอยแยก', heroes,
+  id: 'veil-siege', version: 7, name: 'ศึกปิดรอยแยก', heroes,
   enemies,
   intents: [
     { sourceId: 'raider', targetSlot: 1, name: 'Raking Slash', damage: 12, kind: 'physical' },
@@ -22,6 +22,9 @@ export const veilSiege: EncounterDefinition = {
     ward: { name: 'โล่เวท', english: 'Ward', icon: '⬡', power: 14, cooldown: 2 },
     heal: { name: 'รักษา', english: 'Heal', icon: '✚', power: 20, cooldown: 2 },
     prayer: { name: 'พรฟื้นฟู', english: 'Prayer', icon: '❋', power: 10, cooldown: 3 },
+    // Spear (2C-2): brace power is the counter damage.
+    brace: { name: 'ตั้งทวน', english: 'Brace', icon: '⟋', power: 14, cooldown: 2 },
+    pierce: { name: 'แทงทะลวง', english: 'Piercing Thrust', icon: '➹', power: 22, cooldown: 2 },
   },
   rules: { guardReduction: 0.65, markDuration: 2, markedBonus: 22 },
 };

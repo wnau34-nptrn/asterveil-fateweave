@@ -3,7 +3,7 @@ import type { BattleEvent, BattleState, EncounterDefinition } from '../../core/b
 import { actorName, thaiFont } from '../../ui/th';
 import { palette } from '../visuals/palette';
 import { drawRiftBackdrop } from '../visuals/rift-backdrop';
-import { actorFootOrigins, actorFrames, artUrl } from '../visuals/assets';
+import { actorFootOrigins, actorFrames, actorTints, artUrl } from '../visuals/assets';
 
 export interface ActorTarget { x: number; y: number; width: number; height: number }
 export interface SceneView { state: BattleState; heroId: string; targetId: string | null; phase?: 'hero' | 'enemy'; activeActorId?: string; activeTargetId?: string }
@@ -67,20 +67,24 @@ export class BattleScene extends Phaser.Scene {
     // These are sole positions on the courtyard, not image centers. Each
     // front fighter steps diagonally past its back-row partner; the second
     // pair is offset again so faces and touch targets stay unobstructed.
-    const formation: Record<string, { x: number; y: number }> = {
-      weaver: { x: .14, y: .48 }, guardian: { x: .35, y: .59 },
-      healer: { x: .16, y: .77 }, tracer: { x: .39, y: .90 },
-      raider: { x: .85, y: .51 }, brute: { x: .70, y: .81 },
-    };
+    const spots = { back0: { x: .14, y: .48 }, front0: { x: .35, y: .59 }, back1: { x: .16, y: .77 }, front1: { x: .39, y: .90 } };
     // Reserve independent 44px ally targets on the shortest portrait fields.
     // Upper and lower pairs stay staggered; all sole anchors remain on the floor.
     if (phone && h < 170) {
       const rearTop = h * .48;
       const frontTop = Math.min(h * .59, h - 16 - 46);
-      formation.weaver!.y = rearTop / h;
-      formation.guardian!.y = frontTop / h;
-      formation.healer!.y = Math.min(h - 16, Math.max(h * .77, rearTop + 46)) / h;
-      formation.tracer!.y = Math.min(h - 16, Math.max(h * .90, frontTop + 46)) / h;
+      spots.back0.y = rearTop / h;
+      spots.front0.y = frontTop / h;
+      spots.back1.y = Math.min(h - 16, Math.max(h * .77, rearTop + 46)) / h;
+      spots.front1.y = Math.min(h - 16, Math.max(h * .90, frontTop + 46)) / h;
+    }
+    // Field spots follow party slots and lanes, not hero ids: front-lane members take the
+    // front spots in slot order, back-lane members the back spots; overflow uses the other row.
+    const formation: Record<string, { x: number; y: number }> = { raider: { x: .85, y: .51 }, brute: { x: .70, y: .81 } };
+    const free = { front: [spots.front0, spots.front1], back: [spots.back0, spots.back1] };
+    for (const hero of this.encounter.heroes) {
+      const own = free[hero.lane]; const other = free[hero.lane === 'front' ? 'back' : 'front'];
+      formation[hero.id] = own.shift() ?? other.shift()!;
     }
     this.encounter.heroes.forEach((hero, i) => {
       const x = w * formation[hero.id]!.x;
@@ -124,6 +128,8 @@ export class BattleScene extends Phaser.Scene {
       g.lineStyle(3, enemy ? 0xf19b9f : palette.cyan); g.strokeEllipse(0, 0, size * .72, size * .16);
     }
     const sprite = this.add.image(0, 0, 'battle-units', actorFrames[id]!).setOrigin(0.5, actorFootOrigins[id] ?? 1).setDisplaySize(size, size);
+    // Placeholder art for mercenaries whose frames are not delivered yet (marked in assets.ts).
+    if (actorTints[id] !== undefined) sprite.setTint(actorTints[id]!);
     body.add(sprite);
     const hitWidth = Math.max(44, Math.min(72, size * .7));
     const hitHeight = Math.max(44, size * .9);
