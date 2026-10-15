@@ -284,6 +284,31 @@ test('Sefa (scout) steps aside: the announced slash at her misses and the intent
   expect(issues).toEqual([]);
 });
 
+test('Brann (warden) challenges: the announced hit and the forecast turn to him, and it lands lighter', async ({ page }, info) => {
+  const roster = { deployed: ['brann', 'tracer', 'weaver', 'healer'], reserve: [] as string[] };
+  const members = Object.fromEntries(roster.deployed.map(id => [id, { stars: 1, dupes: 0 }]));
+  const run = { ...newExpedition(map, encounterById, 36, { roster, members }, true) }; reveal(run, map);
+  run.battle = { kind: 'random', encounterId: 'veil-siege', entry: { ...run.hp }, commands: [] };
+  const profile = { ...newProfile(map, 5), tutorialDone: true, commander, company: ['guardian', 'tracer', 'weaver', 'healer', 'brann'], members: { ...newProfile(map, 5).members, brann: { stars: 1, dupes: 0 } }, party: roster };
+  await seed(page, run, profile);
+  const issues: string[] = []; page.on('pageerror', e => issues.push(e.message));
+  await page.goto('./'); await page.locator('#continue').click(); await page.locator('#start').click();
+  // R1: Lyra, then Eira (the Raider acts between them), then the Brute, then Brann.
+  for (const hero of ['tracer', 'weaver']) {
+    await expect(page.locator(`#hero-${hero}`)).toHaveAttribute('aria-pressed', 'true');
+    await page.locator('#action-attack').click(); await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-brute').click(); await finishPlayback(page);
+  }
+  await expect(page.locator('#hero-brann')).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator('#hero-brann .portrait img')).toHaveAttribute('src', /portraits_mercs\.webp$/);
+  await page.locator('#action-taunt').click(); await expect(page.locator('#skill-popover')).toContainText('รับเบาลง 35%');
+  await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-brann').click(); await finishPlayback(page);
+  await expect(page.locator('#intent h2')).toContainText('แบรนน์');
+  await expect(page.locator('#hero-brann')).toContainText('ยั่วยุ');
+  await page.screenshot({ path: info.outputPath('brann-taunt.png') });
+  expect((await saved(page)).battle!.commands.map(c => c.action)).toEqual(['attack', 'attack', 'taunt']);
+  expect(issues).toEqual([]);
+});
+
 test('new Veil Frontier foes fight with their own art: Mycon and the elite Thorn Matriarch', async ({ page }, info) => {
   const run = { ...newExpedition(map, encounterById, 35, undefined, true) }; reveal(run, map);
   run.battle = { kind: 'random', encounterId: 'thicket-ambush', entry: { ...run.hp }, commands: [] };

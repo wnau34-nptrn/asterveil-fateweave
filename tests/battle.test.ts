@@ -200,6 +200,48 @@ describe('scout (Sefa)', () => {
   });
 });
 
+describe('hammer warden (Brann)', () => {
+  const brann = mercenaries.find(m => m.id === 'brann')!; const [, tracer, weaver, healer] = data.heroes;
+  const party = withParty(data, [brann, tracer!, weaver!, healer!]);
+  const toBrann = () => {
+    let s = createBattle(party);
+    // R1 order: Lyra 120, Raider 110, Eira 100, Brute 70, Brann 65, Seren 60.
+    expect(s.order).toEqual(['tracer', 'raider', 'weaver', 'brute', 'brann', 'healer']);
+    while (currentHeroId(s, party) !== 'brann') s = act(s, 'attack', 'brute', party).state;
+    return s;
+  };
+  it('challenge pulls every enemy move onto Brann until his next turn, 35% lighter, and the forecast shows it', () => {
+    const s = toBrann();
+    const before = plannedIntents(s, party, 4).map(i => i.targetId);
+    const r = act(s, 'taunt', 'brann', party);
+    expect(r.events.some(e => e.type === 'taunt')).toBe(true);
+    // Round 2: Raider and Brute act before Brann, so both aim at him; round 3 is back to the slots.
+    const after = plannedIntents(r.state, party, 4);
+    expect(after.map(i => [i.round, i.sourceId, i.targetId])).toEqual([[2, 'raider', 'brann'], [2, 'brute', 'brann'], [3, 'raider', before[2]], [3, 'brute', before[3]]]);
+    let t = r.state; const hits: number[] = [];
+    while (currentHeroId(t, party) !== 'brann') {
+      const step = act(t, 'attack', 'brute', party);
+      hits.push(...step.events.filter(e => e.type === 'damage' && e.targetId === 'brann').map(e => e.amount!)); t = step.state;
+    }
+    // Raking Slash 12 → 8, Crushing Blow 26 (aimed at Lyra's slot) → 17.
+    expect(hits).toEqual([8, 17]); expect(t.taunt).toBeNull();
+  });
+  it('cannot be stacked and ends with the battle; replays and previews identically', () => {
+    let s = toBrann();
+    const command = { beat: s.beat, heroId: 'brann', action: 'taunt' as ActionId, targetId: 'brann' };
+    expect(previewCommand(s, party, command)).toEqual(resolveCommand(s, party, command));
+    s = resolveCommand(s, party, command).state;
+    for (let i = 0; i < 100 && s.outcome === 'active'; i++) {
+      const hero = currentHeroId(s, party)!; const foe = s.enemies.find(e => e.hp > 0)!.id;
+      const options: [ActionId, string][] = hero === 'brann' ? [['slam', foe], ['taunt', 'brann'], ['attack', foe]] : [['attack', foe]];
+      const use = options.map(([action, targetId]) => ({ beat: s.beat, heroId: hero, action, targetId })).find(c => !validateCommand(s, party, c))!;
+      expect(previewCommand(s, party, use)).toEqual(resolveCommand(s, party, use)); s = resolveCommand(s, party, use).state;
+    }
+    expect(s.outcome).not.toBe('active'); expect(s.taunt).toBeNull();
+    expect(s.commands.some(c => c.action === 'slam')).toBe(true); expect(replay(party, s.commands)).toEqual(s);
+  });
+});
+
 describe('party slots', () => {
   it('enemy moves aim at a slot, so whoever is deployed there becomes the target', () => {
     const [guardian, tracer, weaver, healer] = data.heroes as typeof data.heroes[number][];

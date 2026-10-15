@@ -18,7 +18,7 @@ Approved 2026-10-14, re-planned 2026-10-15 for the mercenary roster.
 | 2C-1. Company | Hiring board, duplicates, star upgrades (stats), dismissal | **Implemented** (moved to the lobby in L1) |
 | L1. Lobby | Home → Lobby → Map; persistent profile (company ≤ 20, bank, board); choose the 4 + 4; withdraw/complete/wipe settle home | **Implemented** |
 | L2. Character creation | Commander (non-combat) name, crest and banner colour, once, between Home and Lobby | **Implemented** |
-| 2C-2. New classes | Six new mercenaries (ART-CHAR-MERC-ENEMY-001), one class mechanic at a time; ★3 skill and ★5 passive per class | **In progress**: 4/6 (Garran spear, Mira archer, Toma alchemist, Sefa scout) |
+| 2C-2. New classes | Six new mercenaries (ART-CHAR-MERC-ENEMY-001), one class mechanic at a time; ★3 skill and ★5 passive per class | **In progress**: 5/6 (Garran spear, Mira archer, Toma alchemist, Sefa scout, Brann warden) |
 | 2D. Equipment and level | Equipment (weapon by class, body, accessory; rarity and affixes; bad-luck protection), shared EXP/level, consumables on the map | Planned |
 | 3. Choices and content | Events with fight/avoid choices, elites, mini boss, puzzles (rune order, push stone, lever), secrets, map quest "2 of 3" and side quests | Planned |
 | 4. Economy and wrap-up | Local gold and shop, salvage, fast travel between camps, elite respawn on rest, defeat penalty, whole-map balance simulation, completion screen | Planned |
@@ -240,6 +240,18 @@ Elites (phase 3) will add guaranteed seals.
 - **Evidence:** the advisor wins every encounter with Sefa replacing either front-liner. Tests cover the ambush bonus window (including a slower scout), the dodge, the lapse, the kept spear counter, and replay/preview equality.
 - **Art:** her own frame and portrait from ART-CHAR-MERC-ENEMY-001.
 - **Version bumps** (with the new foes below): veil-siege 10, rear-ambush 8, rift-warden 8, the rest 6; crystal-stampede is new at 1.
+
+**5. Brann — Hammer warden (front, SPD 65, HP 92, Attack 11).** His mechanic is drawing every attack onto himself.
+- **ยั่วยุ (Challenge)**, cooldown 3, targets himself.
+  - From the cast until Brann's next turn, every enemy move aims at him, physical or energy (`state.taunt`).
+  - This is applied when the intent is decided, so the announced target, the SPD forecast and Guard all show Brann. Later turns already show the original slots again.
+  - Hits he takes while taunting are reduced by `tauntReduction` (35%, rounded up, after Guard).
+  - It ends at his next turn, if he falls, or when the battle ends. It cannot be stacked.
+- **ทุบค้อนรูน (Rune Slam)**, cooldown 2: 18 damage.
+- **Advisor:** challenge when the announced hit aims at someone else; otherwise slam.
+- **Evidence:** the advisor wins every encounter with Brann replacing either front-liner. Tests cover the redirected forecast, the reduced hits (12 → 8, 26 → 17), the expiry, and replay/preview equality.
+- **Art:** his own frame and portrait from ART-CHAR-MERC-ENEMY-001.
+- **Version bumps:** veil-siege 11, rear-ambush 9, rift-warden 9, crystal-stampede 2, the rest 7.
 
 ## Veil Frontier foes in battle (ART-CHAR-MERC-ENEMY-001)
 

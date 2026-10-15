@@ -1,4 +1,4 @@
-export type ActionId = 'attack' | 'guard' | 'bash' | 'mark' | 'execute' | 'bolt' | 'ward' | 'heal' | 'prayer' | 'brace' | 'pierce' | 'hinder' | 'volley' | 'acid' | 'haste' | 'ambush' | 'evade';
+export type ActionId = 'attack' | 'guard' | 'bash' | 'mark' | 'execute' | 'bolt' | 'ward' | 'heal' | 'prayer' | 'brace' | 'pierce' | 'hinder' | 'volley' | 'acid' | 'haste' | 'ambush' | 'evade' | 'taunt' | 'slam';
 export type Outcome = 'active' | 'victory' | 'defeat';
 export interface SkillDefinition { name: string; english: string; icon: string; power: number; cooldown: number }
 export interface HeroDefinition {
@@ -18,7 +18,7 @@ export interface EncounterDefinition {
   skills: Record<ActionId, SkillDefinition>;
   // corrode*: alchemist acid adds a flat bonus to every hero hit on the target for corrodeDuration rounds.
   // ambushBonus: scout ambush adds this when the target has not acted yet this round.
-  rules: { guardReduction: number; markDuration: number; markedBonus: number; corrodeDuration: number; corrodeBonus: number; ambushBonus: number };
+  rules: { guardReduction: number; markDuration: number; markedBonus: number; corrodeDuration: number; corrodeBonus: number; ambushBonus: number; tauntReduction: number };
 }
 // Expiry/cooldown values are absolute round numbers, never animation time.
 // `hastedRound`: an alchemist's haste makes this hero act before everyone in that round.
@@ -36,9 +36,11 @@ export interface BattleState {
   guard: { heroId: string; targetId: string; sourceId: string } | null;
   // Spear brace (2C-2): the next physical enemy hit on a front-lane ally is countered.
   counter: { heroId: string } | null;
+  // Hammer warden taunt (2C-2): from the cast until the warden's next turn, every enemy move aims at him.
+  taunt: { heroId: string; round: number } | null;
 }
 export interface BattleEvent {
-  type: 'damage' | 'guard' | 'mark' | 'barrier' | 'heal' | 'interrupt' | 'cancel' | 'down' | 'outcome' | 'brace' | 'counter' | 'delay' | 'corrode' | 'haste' | 'evade' | 'dodge';
+  type: 'damage' | 'guard' | 'mark' | 'barrier' | 'heal' | 'interrupt' | 'cancel' | 'down' | 'outcome' | 'brace' | 'counter' | 'delay' | 'corrode' | 'haste' | 'evade' | 'dodge' | 'taunt';
   text: string; sourceId?: string; targetId?: string; amount?: number; absorbed?: number; cause?: 'defeated' | 'interrupted';
 }
 // One frame per real actor turn. Only Resolution.state is committed/saved.

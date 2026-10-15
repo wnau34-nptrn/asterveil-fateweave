@@ -35,6 +35,11 @@ export function battleLesson(state:BattleState,data:EncounterDefinition):Lesson|
   const fast=[...living2].sort((a,b)=>data.enemies.find(e=>e.id===b.id)!.speed-data.enemies.find(e=>e.id===a.id)!.speed)[0];
   return (fast&&make('hinder',fast.id,'ยิงสกัดศัตรูที่เร็วที่สุด',`${actorName(fast.id,data)} จะลงมือท้ายสุดรอบหน้า`))??attack();
  }
+ if(heroId==='brann'){
+  // Draw the announced hit away from an ally (reduced on him); otherwise slam the main target.
+  if(intent&&intent.targetId!==heroId){const t=make('taunt',heroId,'ยั่วยุดึงการโจมตี',`${actorName(intent.sourceId,data)} จะตีแบรนน์แทน${actorName(intent.targetId,data)} และเบาลง ${data.rules.tauntReduction*100}%`);if(t)return t;}
+  return make('slam',target.id,'ทุบค้อนรูน',`พลัง ${skillPower(data,heroId,'slam')}`)??attack();
+ }
  if(heroId==='sefa'){
   // Step aside from the announced hit; otherwise ambush an enemy that still has to act this round.
   if(intent?.targetId===heroId){const e=make('evade',heroId,'ก้าวเงาหลบการโจมตี',`${actorName(intent.sourceId,data)} จะตีพลาด`);if(e)return e;}

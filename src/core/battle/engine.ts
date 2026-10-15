@@ -46,6 +46,15 @@ export function upcomingTurns(state: BattleState, data: EncounterDefinition, cou
   }
   return slots;
 }
+// A warden's taunt covers enemy turns from the cast until the warden's own next turn, so forecasts
+// for later turns already show the original targets again.
+function taunted(state: BattleState, data: EncounterDefinition, enemyId: string, round: number): string | undefined {
+  const t = state.taunt; if (!t || !living(state, t.heroId)) return undefined;
+  if (round === t.round) return t.heroId;
+  if (round !== t.round + 1) return undefined;
+  const order = round === state.round ? state.order : roundOrder(state, data, round);
+  return order.indexOf(enemyId) < order.indexOf(t.heroId) ? t.heroId : undefined;
+}
 export function enemyIntent(state: BattleState, data: EncounterDefinition, id: string, round: number): Intent | null {
   const moves = data.intents.filter(i => i.sourceId === id);
   const template = moves[(round - 1) % moves.length];
@@ -54,7 +63,8 @@ export function enemyIntent(state: BattleState, data: EncounterDefinition, id: s
   const front = alive.filter(h => data.heroes.find(d => d.id === h.id)!.lane === 'front');
   const allowed = template.kind === 'physical' && front.length ? front : alive;
   const target = allowed.find(h => h.id === data.heroes[template.targetSlot]?.id) ?? allowed[0];
-  return target ? { ...template, targetId: target.id, beat: state.beat, round } : null;
+  const warden = taunted(state, data, id, round);
+  return target ? { ...template, targetId: warden ?? target.id, beat: state.beat, round } : null;
 }
 export function plannedIntents(state: BattleState, data: EncounterDefinition, count = 2): Intent[] {
   return upcomingTurns(state, data, (data.heroes.length + data.enemies.length) * (count + 1))
@@ -67,7 +77,7 @@ function finishOrAdvance(state: BattleState, data: EncounterDefinition, events: 
   if (state.enemies.every(e => e.hp <= 0)) state.outcome = 'victory';
   else if (state.heroes.every(h => h.hp <= 0)) state.outcome = 'defeat';
   if (state.outcome !== 'active') {
-    state.intent = null; state.guard = null; state.counter = null; events.push({ type: 'outcome', text: state.outcome }); return;
+    state.intent = null; state.guard = null; state.counter = null; state.taunt = null; events.push({ type: 'outcome', text: state.outcome }); return;
   }
   state.beat++;
   do {
@@ -79,6 +89,7 @@ function finishOrAdvance(state: BattleState, data: EncounterDefinition, events: 
   } while (!living(state, state.order[state.turnIndex]!));
   if (state.guard && (!living(state, state.guard.heroId) || !living(state, state.guard.sourceId) || currentActorId(state) === state.guard.heroId)) state.guard = null;
   if (state.counter && (!living(state, state.counter.heroId) || currentActorId(state) === state.counter.heroId)) state.counter = null;
+  if (state.taunt && (!living(state, state.taunt.heroId) || currentActorId(state) === state.taunt.heroId)) state.taunt = null;
   for (const h of state.heroes) if (h.evading && (h.hp <= 0 || currentActorId(state) === h.id)) delete h.evading;
   refreshIntent(state, data);
 }
@@ -114,7 +125,11 @@ function automaticTurns(state: BattleState, data: EncounterDefinition, turns: Tu
           // A scout's shadow step: the whole hit misses, so nothing is absorbed and no counter triggers.
           delete recipient.evading;
           events.push({ type: 'dodge', sourceId: actorId, targetId: recipient.id, amount: 0, text: 'The attack misses the evading scout.' });
-        } else hit(state, data, enemy, intent, recipient, guard ? Math.ceil(intent.damage * (1 - data.rules.guardReduction)) : intent.damage, events);
+        } else {
+          // A taunting warden braces for the hits he draws: each one is reduced (after Guard, if any).
+          const guarded = guard ? Math.ceil(intent.damage * (1 - data.rules.guardReduction)) : intent.damage;
+          hit(state, data, enemy, intent, recipient, state.taunt?.heroId === recipient.id ? Math.ceil(guarded * (1 - data.rules.tauntReduction)) : guarded, events);
+        }
       }
       if (state.guard?.sourceId === actorId) state.guard = null;
     }
@@ -138,7 +153,7 @@ export function entryReason(data: EncounterDefinition, entry?: BattleEntry): str
 export function beginBattle(data: EncounterDefinition, entry?: BattleEntry): Resolution {
   const invalid = entryReason(data, entry); if (invalid) throw new Error(invalid);
   const state: BattleState = {
-    encounterId: data.id, beat: 1, round: 1, turnIndex: 0, order: [], outcome: 'active', guard: null, counter: null,
+    encounterId: data.id, beat: 1, round: 1, turnIndex: 0, order: [], outcome: 'active', guard: null, counter: null, taunt: null,
     heroes: data.heroes.map(h => ({ id: h.id, hp: entry?.hp[h.id] ?? h.maxHp, barrier: 0, cooldowns: {} })),
     enemies: data.enemies.map(e => ({ id: e.id, hp: e.maxHp, markedUntil: 0 })), intent: null, commands: [],
   };
@@ -168,7 +183,7 @@ export function targetOptions(state: BattleState, data: EncounterDefinition, her
     const reason = unavailable || (!state.enemies.some(e => e.hp > 0) ? 'This enemy is down.' : '');
     return [{ id: 'enemies', name: 'Enemies', valid: !reason, reason }];
   }
-  if (action === 'brace' || action === 'evade') {
+  if (action === 'brace' || action === 'evade' || action === 'taunt') {
     // Both are self-only; a shadow step always lapses at the scout's own turn, so it cannot stack either.
     const reason = unavailable || (action === 'brace' && state.counter?.heroId === heroId ? 'Already braced.' : '');
     return [{ id: heroId, name: data.heroes.find(h => h.id === heroId)?.name ?? heroId, valid: !reason, reason }];
@@ -233,6 +248,10 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
     }
     case 'bolt': case 'pierce': damage(skill.power); break;
     case 'ambush': damage(skill.power + ambushBonus(state, data, enemy!.id)); break;
+    case 'slam': damage(skill.power); break;
+    case 'taunt':
+      state.taunt = { heroId: hero.id, round: state.round };
+      events.push({ type: 'taunt', sourceId: hero.id, targetId: hero.id, text: 'Every enemy attack aims at the warden until his next turn.' }); break;
     case 'evade': actor.evading = true; events.push({ type: 'evade', sourceId: hero.id, targetId: hero.id, text: 'Scout evades the next hit until its next turn.' }); break;
     case 'hinder': {
       damage(skill.power);

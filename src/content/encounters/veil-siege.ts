@@ -2,7 +2,7 @@ import type { EncounterDefinition } from '../../core/battle/types';
 import { heroes } from '../heroes/team';
 import { enemies } from '../enemies/veilbound';
 export const veilSiege: EncounterDefinition = {
-  id: 'veil-siege', version: 10, name: 'ศึกปิดรอยแยก', heroes,
+  id: 'veil-siege', version: 11, name: 'ศึกปิดรอยแยก', heroes,
   enemies,
   intents: [
     { sourceId: 'raider', targetSlot: 1, name: 'Raking Slash', damage: 12, kind: 'physical' },
@@ -34,6 +34,9 @@ export const veilSiege: EncounterDefinition = {
     // Scout (2C-2): ambush hits harder before the target acts this round; shadow step dodges the next hit.
     ambush: { name: 'จู่โจมก่อน', english: 'Ambush', icon: '⚔', power: 12, cooldown: 2 },
     evade: { name: 'ก้าวเงา', english: 'Shadow Step', icon: '↯', power: 0, cooldown: 3 },
+    // Hammer warden (2C-2): taunt pulls every enemy move onto him (reduced) until his next turn; slam is plain damage.
+    taunt: { name: 'ยั่วยุ', english: 'Challenge', icon: '⛨', power: 0, cooldown: 3 },
+    slam: { name: 'ทุบค้อนรูน', english: 'Rune Slam', icon: '⚒', power: 18, cooldown: 2 },
   },
-  rules: { guardReduction: 0.65, markDuration: 2, markedBonus: 22, corrodeDuration: 2, corrodeBonus: 6, ambushBonus: 12 },
+  rules: { guardReduction: 0.65, markDuration: 2, markedBonus: 22, corrodeDuration: 2, corrodeBonus: 6, ambushBonus: 12, tauntReduction: 0.35 },
 };

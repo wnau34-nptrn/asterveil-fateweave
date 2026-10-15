@@ -10,5 +10,7 @@ export const mercenaries: readonly HeroDefinition[] = [
   { id: 'toma', speed: 95, name: 'Toma', role: 'Alchemist', lane: 'back', maxHp: 48, attack: 9, actions: ['attack', 'acid', 'haste'], color: 0xd9a441 },
   // Scout: ambush gains a bonus on an enemy that has not acted yet this round; shadow step dodges the next hit.
   { id: 'sefa', speed: 115, name: 'Sefa', role: 'Scout', lane: 'front', maxHp: 54, attack: 12, actions: ['attack', 'ambush', 'evade'], color: 0x6f8fb3 },
+  // Hammer warden: challenge draws every enemy move onto him (35% less) until his next turn; rune slam is damage.
+  { id: 'brann', speed: 65, name: 'Brann', role: 'Warden', lane: 'front', maxHp: 92, attack: 11, actions: ['attack', 'taunt', 'slam'], color: 0x899098 },
   { id: 'garran', speed: 90, name: 'Garran', role: 'Spear', lane: 'front', maxHp: 70, attack: 12, actions: ['attack', 'brace', 'pierce'], color: 0x4fc3b4 },
 ];
