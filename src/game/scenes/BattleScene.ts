@@ -4,6 +4,9 @@ import { actorName, thaiFont } from '../../ui/th';
 import { palette } from '../visuals/palette';
 import { actorArt, actorFootOrigins, artOf, artUrl, unitsUrl } from '../visuals/assets';
 
+// Device pixels per CSS pixel for the canvas buffer (capped: 3x covers current phones).
+export const pixelRatio = (): number => Math.min(3, Math.max(1, window.devicePixelRatio || 1));
+
 export interface ActorTarget { x: number; y: number; width: number; height: number }
 export interface SceneView { state: BattleState; heroId: string; targetId: string | null; phase?: 'hero' | 'enemy'; activeActorId?: string; activeTargetId?: string }
 export class BattleScene extends Phaser.Scene {
@@ -14,6 +17,11 @@ export class BattleScene extends Phaser.Scene {
   private bodies = new Map<string, Phaser.GameObjects.Container>();
   private effects: Phaser.GameObjects.Container | undefined;
   private ready = false;
+  // Logical (CSS pixel) field size. The canvas itself renders at devicePixelRatio and the
+  // camera zooms by the same ratio, so layout, targets and input stay in CSS pixels.
+  private viewW = 0;
+  private viewH = 0;
+  private dpr = 1;
   constructor(private encounter: EncounterDefinition, private readonly choose: (id: string) => void, private readonly onReady: () => void, private readonly onLayout: () => void) { super('battle'); }
   get isReady(): boolean { return this.ready; }
   setEncounter(data: EncounterDefinition): void {
@@ -23,7 +31,24 @@ export class BattleScene extends Phaser.Scene {
   refreshLayout(): void {
     // DOM teaching strips change the field without a window resize. Refresh
     // immediately so sprites and targets cannot remain clipped in the old size.
-    if (this.ready && this.scale.getParentBounds()) this.scale.refresh();
+    if (this.ready) this.fit();
+  }
+  // Size the canvas to its parent at the screen's pixel density (sharp art on 2x/3x phones).
+  // clientWidth/Height ignore CSS transforms, so view transitions never resize the buffer.
+  private fit(force = false): void {
+    const parent = this.game.canvas.parentElement; if (!parent) return;
+    const w = parent.clientWidth, h = parent.clientHeight; if (!w || !h) return;
+    const dpr = pixelRatio();
+    if (!force && w === this.viewW && h === this.viewH && dpr === this.dpr) return;
+    this.viewW = w; this.viewH = h; this.dpr = dpr;
+    this.cameras.main.setZoom(dpr).setOrigin(0, 0);
+    this.scale.resize(Math.round(w * dpr), Math.round(h * dpr)); // emits 'resize' → paint
+    Object.assign(this.game.canvas.style, { width: `${w}px`, height: `${h}px` });
+    this.cameras.main.setZoom(dpr).setOrigin(0, 0);
+    this.scale.updateBounds();
+  }
+  private text(x: number, y: number, value: string, style: Phaser.Types.GameObjects.Text.TextStyle): Phaser.GameObjects.Text {
+    return this.add.text(x, y, value, { ...style, resolution: this.dpr });
   }
   preload(): void {
     this.load.image('rift-ruins', artUrl('ruins'));
@@ -36,6 +61,7 @@ export class BattleScene extends Phaser.Scene {
     this.game.canvas.addEventListener('pointerdown', updateInputBounds, { capture: true, passive: true });
     this.game.canvas.addEventListener('touchstart', updateInputBounds, { capture: true, passive: true });
     this.scale.on('resize', this.paint, this);
+    this.fit(true);
     this.events.once('shutdown', () => {
       this.game.canvas.removeEventListener('pointerdown', updateInputBounds, true);
       this.game.canvas.removeEventListener('touchstart', updateInputBounds, true);
@@ -52,7 +78,7 @@ export class BattleScene extends Phaser.Scene {
     this.layer?.destroy();
     this.layer = this.add.container(0, 0);
     this.positions.clear(); this.actorTargets.clear();
-    const { width: w, height: h } = this.scale;
+    const w = this.viewW, h = this.viewH;
     const short = w < 900 || h < 360;
     const phone = window.matchMedia('(max-width: 600px) and (orientation: portrait)').matches;
     const bg = this.add.graphics(); this.layer.add(bg);
@@ -103,16 +129,16 @@ export class BattleScene extends Phaser.Scene {
     // Sort bodies by their feet rather than roster insertion order.
     const body = this.add.container(x, y).setDepth(y); this.layer!.add(body);
     this.bodies.set(id, body);
-    const info = this.add.container(x, y).setDepth(this.scale.height + 1); this.layer!.add(info);
+    const info = this.add.container(x, y).setDepth(this.viewH + 1); this.layer!.add(info);
     const involved = !this.view!.activeActorId || id === this.view!.activeActorId || id === this.view!.activeTargetId;
     body.setAlpha(hp <= 0 ? 0.28 : involved ? 1 : 0.55);
     info.setAlpha(hp <= 0 ? 0.4 : involved ? 1 : 0.75);
     const g = this.add.graphics(); body.add(g);
     const short = compact;
     const phone = window.matchMedia('(max-width: 600px) and (orientation: portrait)').matches;
-    const portrait = phone || this.scale.width < 900 && this.scale.height >= 280;
+    const portrait = phone || this.viewW < 900 && this.viewH >= 280;
     const selected = this.view!.heroId === id || this.view!.targetId === id;
-    const size = Math.max(44, Math.min(phone ? id === 'brute' ? 120 : 100 : short ? id === 'brute' ? 110 : 80 : id === 'brute' ? 215 : 145, this.scale.width * (id === 'brute' ? .32 : .25), this.scale.height * (id === 'brute' ? .36 : .30)));
+    const size = Math.max(44, Math.min(phone ? id === 'brute' ? 120 : 100 : short ? id === 'brute' ? 110 : 80 : id === 'brute' ? 215 : 145, this.viewW * (id === 'brute' ? .32 : .25), this.viewH * (id === 'brute' ? .36 : .30)));
     // A contact shadow and selection ring share the same foot anchor.
     g.fillStyle(0x07131f, .65); g.fillEllipse(0, 0, size * .65, size * .12);
     if (selected && hp > 0) { g.lineStyle(2, palette.gold); g.strokeEllipse(0, 0, size * .68, size * .14); }
@@ -125,27 +151,27 @@ export class BattleScene extends Phaser.Scene {
     const hitWidth = Math.max(44, Math.min(72, size * .7));
     const hitHeight = Math.max(44, size * .9);
     this.actorTargets.set(id, { x: x - hitWidth / 2, y: y + sprite.y - hitHeight, width: hitWidth, height: hitHeight });
-    const label = this.add.text(0, 14, name, { fontFamily: thaiFont, fontSize: phone ? '10px' : compact ? '12px' : '14px', color: '#f0f5ff', stroke: '#101c36', strokeThickness: 3 }).setOrigin(0.5);
+    const label = this.text(0, 14, name, { fontFamily: thaiFont, fontSize: phone ? '10px' : compact ? '12px' : '14px', color: '#f0f5ff', stroke: '#101c36', strokeThickness: 3 }).setOrigin(0.5);
     label.setVisible(!phone || enemy);
     const hpX = 0;
     const hpY = 35;
     const barY = phone && !enemy ? 8 : 24;
-    const barWidth = phone ? enemy ? Math.min(65, this.scale.width * .17) : 35 : enemy ? 70 : 52;
+    const barWidth = phone ? enemy ? Math.min(65, this.viewW * .17) : 35 : enemy ? 70 : 52;
     const bar = this.add.graphics(); bar.fillStyle(0x101c36); bar.fillRoundedRect(hpX - barWidth / 2, barY, barWidth, 5, 2);
     bar.fillStyle(color); bar.fillRoundedRect(hpX - barWidth / 2, barY, barWidth * hp / maxHp, 5, 2);
-    const hpLabel = this.add.text(hpX, hpY, `${hp} / ${maxHp}`, { fontFamily: thaiFont, fontSize: '10px', color: '#d4e6f7', stroke: '#101c36', strokeThickness: 3 }).setOrigin(0.5);
+    const hpLabel = this.text(hpX, hpY, `${hp} / ${maxHp}`, { fontFamily: thaiFont, fontSize: '10px', color: '#d4e6f7', stroke: '#101c36', strokeThickness: 3 }).setOrigin(0.5);
     // Compact hero cards carry exact HP; keep canvas rows clear for artwork.
-    hpLabel.setVisible(enemy || !portrait && this.scale.height >= 280);
+    hpLabel.setVisible(enemy || !portrait && this.viewH >= 280);
     info.add([label, bar, hpLabel]);
     const hit = this.add.zone(0, sprite.y, Math.max(64, size * 0.7), size).setOrigin(0.5, 1).setInteractive({ useHandCursor: true });
     hit.on('pointerdown', () => this.choose(id)); body.add(hit);
     const status = this.view!.state.enemies.find(e => e.id === id);
     if (status && (status.markedUntil > this.view!.state.round)) {
-      const icon = this.add.text(-30, -20, '◇', { fontFamily: thaiFont, fontSize: '18px', color: '#e6b7ff', stroke: '#101c36', strokeThickness: 3 }).setOrigin(0.5);
+      const icon = this.text(-30, -20, '◇', { fontFamily: thaiFont, fontSize: '18px', color: '#e6b7ff', stroke: '#101c36', strokeThickness: 3 }).setOrigin(0.5);
       info.add(icon);
     }
     if (this.view!.state.intent?.sourceId === id && hp > 0) {
-      const warning = this.add.text(35, -38, '◆', { fontFamily: thaiFont, fontSize: '15px', color: '#fdbdcf' }).setOrigin(0.5);
+      const warning = this.text(35, -38, '◆', { fontFamily: thaiFont, fontSize: '15px', color: '#fdbdcf' }).setOrigin(0.5);
       info.add(warning);
     }
   }
@@ -175,7 +201,7 @@ export class BattleScene extends Phaser.Scene {
         this.effects.add(ring);
         this.tweens.add({ targets: ring, radius: 55, alpha: 0, duration: 420, onComplete: () => ring.destroy() });
         const label = event.amount ? `−${event.amount}` : event.absorbed ? `โล่รับ ${event.absorbed}` : 'ป้องกันได้';
-        const text = this.add.text(position.x, position.y - 20, label, { fontFamily: thaiFont, fontSize: event.amount ? '32px' : '23px', fontStyle: 'bold', color: this.view?.phase === 'enemy' ? '#ffb6b8' : '#ffe0a6', stroke: '#101c36', strokeThickness: 5 }).setOrigin(0.5).setScale(.6);
+        const text = this.text(position.x, position.y - 20, label, { fontFamily: thaiFont, fontSize: event.amount ? '32px' : '23px', fontStyle: 'bold', color: this.view?.phase === 'enemy' ? '#ffb6b8' : '#ffe0a6', stroke: '#101c36', strokeThickness: 5 }).setOrigin(0.5).setScale(.6);
         this.effects.add(text);
         // Numbers pop in large, then rise and fade.
         this.tweens.add({ targets: text, scale: 1.15, duration: 110, ease: 'Back.Out', yoyo: false, onComplete: () => this.tweens.add({ targets: text, scale: 1, y: position.y - 70, alpha: 0, duration: 620, delay: 120 + index * 40, onComplete: () => text.destroy() }) });
@@ -185,7 +211,7 @@ export class BattleScene extends Phaser.Scene {
         if (sprite && event.amount) { sprite.setTint(0xffffff).setTintMode(Phaser.TintModes.FILL); this.time.delayedCall(90, () => { if (sprite.active) sprite.clearTint().setTintMode(Phaser.TintModes.MULTIPLY); }); }
       }
       if (event.type === 'dodge') {
-        const text = this.add.text(position.x, position.y - 20, 'หลบ!', { fontFamily: thaiFont, fontSize: '22px', color: '#a9d4ff', stroke: '#101c36', strokeThickness: 4 }).setOrigin(0.5);
+        const text = this.text(position.x, position.y - 20, 'หลบ!', { fontFamily: thaiFont, fontSize: '22px', color: '#a9d4ff', stroke: '#101c36', strokeThickness: 4 }).setOrigin(0.5);
         this.effects.add(text);
         this.tweens.add({ targets: text, x: position.x - 24, y: position.y - 60, alpha: 0, duration: 650, onComplete: () => text.destroy() });
       }
@@ -193,7 +219,7 @@ export class BattleScene extends Phaser.Scene {
         const circle = this.add.circle(position.x, position.y, 18).setStrokeStyle(3, palette.cyan);
         this.effects.add(circle);
         this.tweens.add({ targets: circle, scale: 3, alpha: 0, duration: 650, onComplete: () => circle.destroy() });
-        const label = this.add.text(position.x, position.y - 20, `${event.type === 'heal' ? '+' : 'โล่ +'}${event.amount}`, { fontFamily: thaiFont, fontSize: '20px', color: event.type === 'heal' ? '#85e5be' : '#8addf5', stroke: '#101c36', strokeThickness: 4 }).setOrigin(0.5);
+        const label = this.text(position.x, position.y - 20, `${event.type === 'heal' ? '+' : 'โล่ +'}${event.amount}`, { fontFamily: thaiFont, fontSize: '20px', color: event.type === 'heal' ? '#85e5be' : '#8addf5', stroke: '#101c36', strokeThickness: 4 }).setOrigin(0.5);
         this.effects.add(label);
         this.tweens.add({ targets: label, y: position.y - 65, alpha: 0, duration: 650, onComplete: () => label.destroy() });
       }

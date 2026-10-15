@@ -57,7 +57,7 @@ button:active:not(:disabled) { transform: scale(.97); }
 @keyframes lobby-toast { 0% { opacity: 0; transform: translate(-50%, -10px) scale(.96); } 8% { opacity: 1; transform: translate(-50%, 0) scale(1); } 88% { opacity: 1; } 100% { opacity: 0; visibility: hidden; } }
 .lobby-shell { position: relative; }
 /* Sits over the lower part of the camp scene, clear of the header. */
-.lobby-result { position: absolute; z-index: 30; left: 50%; top: calc(max(12px, env(safe-area-inset-top)) + clamp(120px, 20vh, 220px)); transform: translateX(-50%); width: max-content; max-width: min(92%, 560px);
+.lobby-result { position: absolute; z-index: 30; left: 50%; top: calc(max(12px, var(--safe-top)) + clamp(120px, 20vh, 220px)); transform: translateX(-50%); width: max-content; max-width: min(92%, 560px);
   margin: 0; padding: 10px 18px; font-family: var(--font-heading); font-weight: 600; font-size: 15px; border-color: #ffc98a80 !important;
   box-shadow: 0 10px 30px rgba(0, 5, 15, .55), 0 0 22px rgba(255, 170, 90, .25); pointer-events: none; }
 .lobby-result.toast-new { animation: lobby-toast 7s var(--ease-out) both; }
@@ -215,11 +215,11 @@ button:active:not(:disabled) { transform: scale(.97); }
 #lobby-view .lobby-unit[data-depth="2"] { bottom: calc(var(--ground) + 7vh); }
 #lobby-view .lobby-embers i { bottom: calc(var(--ground) + 8vh); }
 #lobby-view .lobby-fg { background-position: 50% 72%; }
-.lobby-hud { position: absolute; inset: 0; z-index: 10; pointer-events: none; padding: max(12px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left)); }
+.lobby-hud { position: absolute; inset: 0; z-index: 10; pointer-events: none; padding: max(12px, var(--safe-top)) max(14px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left)); }
 .lobby-hud > * { pointer-events: auto; }
 
 /* Top: commander on the left, resources on the right. */
-.lobby-top { position: absolute; top: max(12px, env(safe-area-inset-top)); left: max(14px, env(safe-area-inset-left)); right: max(14px, env(safe-area-inset-right)); display: flex; align-items: center; gap: 10px; }
+.lobby-top { position: absolute; top: max(12px, var(--safe-top)); left: max(14px, env(safe-area-inset-left)); right: max(14px, env(safe-area-inset-right)); display: flex; align-items: center; gap: 10px; }
 .lobby-who { flex: 1; min-width: 0; }
 .lobby-who .eyebrow { color: var(--gold-light); font-size: 12px; text-shadow: 0 1px 6px #000; }
 .lobby-who h1 { font-size: 22px; line-height: 1.35; color: #fff6e0; text-shadow: 0 2px 10px #000; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -245,7 +245,7 @@ button:active:not(:disabled) { transform: scale(.97); }
 /* The sheet floats between the top and bottom HUD: a right drawer on wide screens, a bottom sheet on phones. */
 @keyframes sheet-from-right { from { transform: translateX(24px); opacity: 0; } to { transform: none; opacity: 1; } }
 @keyframes sheet-from-bottom { from { transform: translateY(24px); opacity: 0; } to { transform: none; opacity: 1; } }
-.lobby-sheet { position: absolute; z-index: 20; right: max(14px, env(safe-area-inset-right)); top: calc(max(12px, env(safe-area-inset-top)) + 64px); bottom: calc(max(12px, env(safe-area-inset-bottom)) + 80px);
+.lobby-sheet { position: absolute; z-index: 20; right: max(14px, env(safe-area-inset-right)); top: calc(max(12px, var(--safe-top)) + 64px); bottom: calc(max(12px, env(safe-area-inset-bottom)) + 80px);
   width: min(560px, 46vw); display: flex; flex-direction: column; padding: 12px 14px; border-radius: 22px;
   background: linear-gradient(180deg, #14243ae6, #0b1626ee); border: 1px solid #f2d59640; box-shadow: 0 18px 50px #000c, inset 0 1px 0 #ffffff1a; backdrop-filter: blur(14px);
   animation: sheet-from-right .24s var(--ease-out) both; }
@@ -267,7 +267,7 @@ button:active:not(:disabled) { transform: scale(.97); }
 }
 @media (orientation: landscape) and (max-height: 500px) {
   #lobby-view .lobby-scene { --unit: min(36vh, 22vw); --ground: 18vh; }
-  .lobby-sheet { top: calc(max(8px, env(safe-area-inset-top)) + 54px); bottom: max(8px, env(safe-area-inset-bottom)); width: min(460px, 56vw); padding: 8px 10px; }
+  .lobby-sheet { top: calc(max(8px, var(--safe-top)) + 54px); bottom: max(8px, env(safe-area-inset-bottom)); width: min(460px, 56vw); padding: 8px 10px; }
   .lobby-bottom { right: auto; flex-direction: column; align-items: flex-start; }
   .lobby-sheet ~ .lobby-bottom #lobby-depart { margin-left: 0; }
   .lobby-menu-button { width: 56px; height: 56px; } #lobby-depart { min-height: 52px; font-size: 16px; margin-left: 0; }
@@ -335,3 +335,15 @@ button:active:not(:disabled) { transform: scale(.97); }
 #battle-view .start-card, #battle-view .result-card { background: linear-gradient(180deg, #0f2036e6, #08121fee); border-color: #f2d59666; box-shadow: 0 18px 50px #000c, 0 0 30px #f2d59626; }
 /* Start and result overlays dim softly toward the centre card, with no box edge on the scene. */
 #battle-view #start-screen:not(:empty) { background: radial-gradient(ellipse 70% 65% at 50% 50%, #07111dd9 0%, #07111d8c 45%, #07111d00 80%); }
+
+/* ================= Viewport fit (platform/viewport.ts) ================= */
+/* The app is pinned to the live layout viewport instead of 100dvh, which iOS 26 Safari can
+   resolve shorter than the visible page; the top inset falls back when Safari reports none
+   while drawing under the status bar. The battle scene colour also fills any browser overscroll. */
+:root { --safe-top: max(env(safe-area-inset-top, 0px), var(--safe-top-fallback, 0px)); }
+html, body { background: #0a1422; }
+#app { position: fixed; left: 0; top: 0; width: 100%; height: var(--app-h, 100dvh); padding: 0; }
+@media (max-width: 600px) and (orientation: portrait) { #app { height: var(--app-h, 100dvh); padding: 0; } }
+/* The battle scene reaches every screen edge; only its HUD keeps clear of the insets.
+   (Map, lobby, commander and title are fixed full-screen views with their own insets.) */
+#battle-view { padding: var(--safe-top) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px); }

@@ -261,3 +261,20 @@ test('defeating a queued enemy removes its turn immediately and never damages th
  await expect(page.locator('.turn-slot[data-actor=raider]')).toHaveCount(0);await expect(page.locator('[data-enemy=raider]')).toContainText('0 / 78');
  expect((await savedState(page)).heroes.map(h=>h.hp)).toEqual(before.heroes.map(h=>h.hp));await page.screenshot({path:info.outputPath('defeated-enemy-queue.png')});expect(issues).toEqual([]);
 });
+
+// iPhone portrait at 3x: the canvas renders at device pixels for sharp art, the app fills the
+// whole layout viewport (no empty band under a short 100dvh), and when Safari reports no top
+// inset while the page spans the full screen, the HUD still clears the status bar.
+test('iPhone 3x portrait: sharp canvas, full-height layout and HUD clear of the status bar',async({browser},info)=>{
+ const context=await browser.newContext({viewport:{width:430,height:932},screen:{width:430,height:932},deviceScaleFactor:3,hasTouch:true,isMobile:true,
+  userAgent:'Mozilla/5.0 (iPhone; CPU iPhone OS 26_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.0 Mobile/15E148 Safari/604.1'});
+ const page=await context.newPage();watchPage(page);const issues=await start(page);
+ const m=await page.evaluate(()=>{const box=(s:string)=>document.querySelector(s)!.getBoundingClientRect();const c=document.querySelector<HTMLCanvasElement>('#game canvas')!;
+  return {masthead:box('#battle-view .masthead').top,view:box('#battle-view'),dock:box('.command-dock').bottom,canvas:[c.width,c.height],css:[box('#game canvas').width,box('#game canvas').height],scroll:document.scrollingElement!.scrollHeight};});
+ expect(m.masthead).toBeGreaterThanOrEqual(44);expect(m.view.top).toBe(0);expect(m.view.bottom).toBe(932);
+ expect(m.dock).toBeGreaterThan(932-20);expect(m.dock).toBeLessThanOrEqual(932);expect(m.scroll).toBeLessThanOrEqual(932);
+ expect(m.canvas[0]).toBe(Math.round(m.css[0]!*3));expect(m.canvas[1]).toBe(Math.round(m.css[1]!*3));
+ // Field targets keep working in CSS pixels on the 3x buffer.
+ await cast(page,'tracer','attack','raider');await finish(page);await expect(page.locator('[data-enemy=raider]')).not.toContainText('78 / 78');
+ await page.screenshot({path:info.outputPath('iphone-3x-battle.png')});expect(issues).toEqual([]);await context.close();
+});
