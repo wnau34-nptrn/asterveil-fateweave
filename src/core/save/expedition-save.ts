@@ -2,7 +2,7 @@ import { entryReason } from '../battle/engine';
 import type { ActionId, Command } from '../battle/types';
 import { COMPANY_CAP, PARTY_SLOTS, RESERVE_SLOTS, type ActiveBattle, type ExpeditionState, type MapDefinition, type Point, type Profile, type Roster, type RunOutcome } from '../world/types';
 import { battleState, finishBattle, fullParty, heroDef, rosterIds, tileAt, type EncounterLookup } from '../world/world';
-import { newProfile, settle } from '../world/profile';
+import { commanderReason, newProfile, settle } from '../world/profile';
 import type { MemberProgress } from '../world/types';
 
 export interface StoragePort { getItem(key: string): string | null; setItem(key: string, value: string): void; removeItem?(key: string): void }
@@ -16,7 +16,8 @@ export const legacyKeys = ['asterveil.fateweave.battle.v1', 'asterveil.fateweave
 // v4 → v5 (lobby L1): the envelope becomes { version, profile, run }. A v1–v4 `state` becomes the
 // run (its camp board is dropped) and a profile is built from its roster with an empty bank;
 // a run that had already reached the goal is settled into the profile at once.
-const SAVE_VERSION = 5;
+// v5 → v6 (L2): the profile gains `commander` (null until created; v5 migrates as null).
+const SAVE_VERSION = 6;
 export interface Game { profile: Profile; run: ExpeditionState | null }
 const actions: readonly ActionId[] = ['attack', 'guard', 'bash', 'mark', 'execute', 'bolt', 'ward', 'heal', 'prayer'];
 
@@ -121,7 +122,7 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
   if (battle && battleState(state, map, lookup)!.outcome !== 'active') return finishBattle(state, map, lookup).state;
   return state;
 }
-function parseProfile(v: unknown, map: MapDefinition, lookup: EncounterLookup): Profile {
+function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: EncounterLookup): Profile {
   const p = obj(v);
   if (!isInt(p.seed, 0, 0xffffffff) || !isInt(p.returns) || !isInt(p.expeditions) || !isInt(p.completes) || typeof p.tutorialDone !== 'boolean') throw new Error('Invalid profile');
   const company = p.company;
@@ -139,7 +140,14 @@ function parseProfile(v: unknown, map: MapDefinition, lookup: EncounterLookup): 
     if (!['complete', 'withdrawn', 'wiped'].includes(l.outcome as string) || !isInt(l.ore) || !isInt(l.seal) || !isInt(l.steps) || !isInt(l.wins)) throw new Error('Invalid result');
     last = { outcome: l.outcome as RunOutcome, ore: l.ore, seal: l.seal, steps: l.steps, wins: l.wins };
   }
-  return { seed: p.seed, returns: p.returns, tutorialDone: p.tutorialDone, company: [...company as string[]], members, party,
+  let commander: Profile['commander'] = null;
+  if (p.commander !== null && p.commander !== undefined) {
+    const c = obj(p.commander);
+    if (Object.keys(c).length !== 3 || typeof c.name !== 'string' || typeof c.crest !== 'string' || typeof c.color !== 'string') throw new Error('Invalid commander');
+    commander = { name: c.name, crest: c.crest, color: c.color };
+    if (commanderReason(commander)) throw new Error('Invalid commander');
+  } else if (p.commander === undefined && version >= 6) throw new Error('Invalid commander');
+  return { seed: p.seed, returns: p.returns, tutorialDone: p.tutorialDone, commander, company: [...company as string[]], members, party,
     bank: { ore: bank.ore as number, seal: bank.seal as number }, taken: [...p.taken as number[]], expeditions: p.expeditions, completes: p.completes, last };
 }
 // A run that already reached the goal or lost every brought member is settled on load.
@@ -151,15 +159,15 @@ function settleFinished(game: Game): Game {
 }
 export function parseGame(raw: string, map: MapDefinition, lookup: EncounterLookup): Game {
   const envelope = obj(JSON.parse(raw)); const version = envelope.version as number;
-  if (![1, 2, 3, 4, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
-  if (version < SAVE_VERSION) {
+  if (![1, 2, 3, 4, 5, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
+  if (version < 5) {
     const run = parseRun(envelope.state, version, map, lookup);
     const profile = newProfile(map, (run.seed ^ 0x5bd1e995) >>> 0);
     profile.company = rosterIds(run); profile.members = structuredClone(run.members); profile.party = structuredClone(run.roster);
     profile.tutorialDone = run.tutorialDone;
     return settleFinished({ profile, run });
   }
-  const profile = parseProfile(envelope.profile, map, lookup);
+  const profile = parseProfile(envelope.profile, version, map, lookup);
   const run = envelope.run === null ? null : parseRun(envelope.run, version, map, lookup);
   if (run && rosterIds(run).some(id => !profile.company.includes(id))) throw new Error('Run member left the company');
   return settleFinished({ profile, run });

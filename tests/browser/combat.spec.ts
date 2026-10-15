@@ -198,7 +198,7 @@ test('a fallen upcoming hero is skipped on commit, reload and continued input',a
 test('denied storage keeps the battle playable in the tab and says progress is not saved',async({browser})=>{
  const context=await browser.newContext({viewport:{width:320,height:568},hasTouch:true,reducedMotion:'reduce'});await context.addInitScript(()=>Object.defineProperty(window,'localStorage',{get:()=>{throw new Error('Denied');}}));
  const page=await context.newPage();const issues:string[]=[];page.on('pageerror',e=>issues.push(e.message));await page.goto('./');
- await expect(page.locator('#title-view')).toContainText('ไม่อนุญาตให้บันทึก');await page.locator('#new-game').click();await page.locator('#lobby-depart').click();await page.locator('#world-info-button').click();await expect(page.locator('#world-save')).toContainText('บันทึกบนเครื่องนี้ไม่ได้');await page.keyboard.press('Escape');
+ await expect(page.locator('#title-view')).toContainText('ไม่อนุญาตให้บันทึก');await page.locator('#new-game').click();await page.locator('#commander-name').fill('Ari');await page.locator('#commander-create').click();await page.locator('#lobby-depart').click();await page.locator('#world-info-button').click();await expect(page.locator('#world-save')).toContainText('บันทึกบนเครื่องนี้ไม่ได้');await page.keyboard.press('Escape');
  await page.locator('#move-left').click();
  // A first step can legitimately roll the tutorial encounter; either way the move is kept in memory.
  await expect(page.locator('#world-view:not([hidden]), #battle-view:not(.view-off)').first()).toBeVisible();expect(issues).toEqual([]);await context.close();
@@ -210,7 +210,7 @@ for(const invalid of ['old-content','foreign-owner','malformed','wrong-map']){
    invalid==='old-content'?JSON.stringify({...good,state:{...good.state,battle:{...good.state.battle,encounterId:'crystal-rift'}}}):
    JSON.stringify({...good,state:{...good.state,battle:{...good.state.battle,commands:[{beat:1,heroId:'guardian',action:'attack',targetId:'brute'}]}}});
   await seedRaw(page,raw);const issues:string[]=[];page.on('pageerror',e=>issues.push(e.message));await page.goto('./');
-  await expect(page.locator('#continue')).toHaveCount(0);await page.locator('#new-game').click();await expect(page.locator('#lobby-view')).toBeVisible();
+  await expect(page.locator('#continue')).toHaveCount(0);await page.locator('#new-game').click();await page.locator('#commander-name').fill('Ari');await page.locator('#commander-create').click();await expect(page.locator('#lobby-view')).toBeVisible();
   await page.locator('#lobby-depart').click();await expect(page.locator('#world-view')).toBeVisible();
   await expect(page.locator('#world-hero-tracer')).toContainText('56/56');expect((await saved(page)).battle).toBeNull();expect(issues).toEqual([]);
  });

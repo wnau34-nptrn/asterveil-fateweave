@@ -50,8 +50,11 @@ export interface Company { roster: Roster; members: Record<string, MemberProgres
 export const COMPANY_CAP = 20;
 export type RunOutcome = 'complete' | 'withdrawn' | 'wiped';
 export interface Bank { ore: number; seal: number }
+// The player's commander (non-combat leader of the company), created once (L2).
+export interface Commander { name: string; crest: string; color: string }
 export interface Profile {
   seed: number; returns: number; tutorialDone: boolean;
+  commander: Commander | null;
   // Every owned mercenary in display order, with stars and stored duplicates.
   company: string[]; members: Record<string, MemberProgress>;
   // The 4 + 4 chosen for the next expedition (subset of `company`).
@@ -65,6 +68,7 @@ export interface Profile {
 export type ProfileEvent =
   | { type: 'blocked'; reason: string }
   | { type: 'party' }
+  | { type: 'commander' }
   | { type: 'hired'; heroId: string; duplicate: boolean }
   | { type: 'upgraded'; heroId: string; stars: number }
   | { type: 'dismissed'; heroId: string };

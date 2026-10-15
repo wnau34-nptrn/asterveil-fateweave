@@ -1,4 +1,4 @@
-import type { ExpeditionState, MapDefinition, Profile, ProfileResult, RunOutcome } from './types';
+import type { Commander, ExpeditionState, MapDefinition, Profile, ProfileResult, RunOutcome } from './types';
 import { COMPANY_CAP, PARTY_SLOTS, RESERVE_SLOTS } from './types';
 import { heroCatalog, newExpedition, rollPercent, type EncounterLookup } from './world';
 
@@ -6,13 +6,31 @@ import { heroCatalog, newExpedition, rollPercent, type EncounterLookup } from '.
 // team chosen for the next expedition, and settling a finished expedition back home.
 export function newProfile(map: MapDefinition, seed: number): Profile {
   return {
-    seed: seed >>> 0, returns: 0, tutorialDone: false,
+    seed: seed >>> 0, returns: 0, tutorialDone: false, commander: null,
     company: [...map.startingRoster], members: Object.fromEntries(map.startingRoster.map(id => [id, { stars: 1, dupes: 0 }])),
     party: { deployed: [...map.startingRoster], reserve: [] },
     bank: { ore: 0, seal: 0 }, taken: [], expeditions: 0, completes: 0, last: null,
   };
 }
 const blocked = (profile: Profile, reason: string): ProfileResult => ({ profile, event: { type: 'blocked', reason } });
+
+// Commander: a name (1–20 code points after trimming, Thai marks included, no control characters) plus one crest
+// and one banner colour from fixed lists. The commander leads the company but never fights.
+export const COMMANDER_CRESTS = ['star', 'guard', 'flag', 'bolt', 'heal', 'mark'] as const;
+export const COMMANDER_COLORS = ['gold', 'cyan', 'violet', 'coral', 'mint', 'rose'] as const;
+export const NAME_MAX = 20;
+export const normalizeName = (name: string): string => name.normalize('NFC').replace(/\s+/g, ' ').trim();
+export function commanderReason(c: Commander): string {
+  const name = normalizeName(c.name);
+  if (!name) return 'name';
+  if ([...name].length > NAME_MAX || /[<>]/.test(name) || [...name].some(ch => ch.charCodeAt(0) < 32 || ch.charCodeAt(0) === 127)) return 'name';
+  if (!(COMMANDER_CRESTS as readonly string[]).includes(c.crest)) return 'crest';
+  return (COMMANDER_COLORS as readonly string[]).includes(c.color) ? '' : 'color';
+}
+export function createCommander(initial: Profile, c: Commander): ProfileResult {
+  const reason = commanderReason(c); if (reason) return blocked(initial, reason);
+  return { profile: { ...structuredClone(initial), commander: { name: normalizeName(c.name), crest: c.crest, color: c.color } }, event: { type: 'commander' } };
+}
 
 // The board is derived from (seed, returns): reloads cannot re-roll it and it refreshes
 // every time an expedition comes home. Company members can be offered (duplicates).

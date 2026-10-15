@@ -3,7 +3,7 @@ import { encounterById, encounters } from '../src/content/encounters/catalog';
 import { chapterOne as map } from '../src/content/world/chapter1';
 import { createBattle, currentHeroId, resolveCommand, skillPower } from '../src/core/battle/engine';
 import { clearLegacySaves, expeditionKey, legacyKeys, loadGame, parseGame, saveGame, type StoragePort } from '../src/core/save/expedition-save';
-import { boardOffers, departure, dismiss, dismissReason, groupOf, hire, hireReason, newProfile, placeMember, settle, upgrade, upgradeCost, upgradeReason } from '../src/core/world/profile';
+import { boardOffers, commanderReason, createCommander, departure, dismiss, dismissReason, groupOf, hire, hireReason, newProfile, placeMember, settle, upgrade, upgradeCost, upgradeReason } from '../src/core/world/profile';
 import type { Direction, ExpeditionState, Point, Profile } from '../src/core/world/types';
 import { atMuster, battleData, battleState, canOpenChest, memberDef, moveMember, swapMembers, canRest, canRevive, chestAt, encounterChance, findTiles, finishBattle, isRevealed, move, newExpedition, openChest, recordBattle, rest, revive, rollPercent, startOf, tileAt } from '../src/core/world/world';
 import { battleLesson } from '../src/ui/tutorial';
@@ -203,6 +203,26 @@ describe('expedition rules', () => {
   });
 });
 
+describe('commander', () => {
+  it('validates the name, crest and colour and stores a normalised name', () => {
+    const p = newProfile(map, 1); expect(p.commander).toBeNull();
+    expect(commanderReason({ name: '', crest: 'star', color: 'gold' })).toBe('name');
+    expect(commanderReason({ name: 'ก'.repeat(21), crest: 'star', color: 'gold' })).toBe('name');
+    expect(commanderReason({ name: '<b>', crest: 'star', color: 'gold' })).toBe('name');
+    expect(commanderReason({ name: 'อารี', crest: 'dragon', color: 'gold' })).toBe('crest');
+    expect(commanderReason({ name: 'อารี', crest: 'star', color: 'teal' })).toBe('color');
+    const r = createCommander(p, { name: '  ผู้กอง   อารี ', crest: 'guard', color: 'cyan' });
+    expect(r.event).toEqual({ type: 'commander' }); expect(r.profile.commander).toEqual({ name: 'ผู้กอง อารี', crest: 'guard', color: 'cyan' });
+    expect(createCommander(p, { name: '', crest: 'guard', color: 'cyan' }).event.type).toBe('blocked');
+  });
+  it('migrates a v5 profile without a commander and round-trips one with a commander', () => {
+    const p5: Partial<Profile> = newProfile(map, 4); delete p5.commander;
+    expect(parseGame(JSON.stringify({ version: 5, profile: p5, run: null }), map, lookup).profile.commander).toBeNull();
+    const withCommander = createCommander(newProfile(map, 4), { name: 'Ari', crest: 'flag', color: 'rose' }).profile;
+    expect(parseGame(JSON.stringify({ version: 6, profile: withCommander, run: null }), map, lookup).profile).toEqual(withCommander);
+  });
+});
+
 describe('lobby profile', () => {
   const rich = (patch: Partial<Profile> = {}): Profile => ({ ...newProfile(map, 21), bank: { ore: 500, seal: 0 }, ...patch });
   it('stars scale max HP, Attack and skill power by 8% each but never SPD', () => {
@@ -312,7 +332,7 @@ describe('resources and chests', () => {
 
 describe('game save', () => {
   const game = (run: ExpeditionState | null = fresh(), profile = newProfile(map, 4)) => ({ profile, run });
-  const v5 = (run: unknown, profile: unknown = newProfile(map, 4)) => JSON.stringify({ version: 5, profile, run });
+  const v6 = (run: unknown, profile: unknown = newProfile(map, 4)) => JSON.stringify({ version: 6, profile, run });
   it('round-trips the profile and an in-progress battle by replay', () => {
     const storage = memory(); let s = fresh(3);
     while (!s.battle) s = move(s, map, s.steps % 2 ? 'right' : 'left').state;
@@ -326,31 +346,34 @@ describe('game save', () => {
   });
   it.each([
     ['malformed', () => '{bad'],
-    ['wrong version', (s: ExpeditionState) => JSON.stringify({ version: 6, profile: newProfile(map, 4), run: s })],
-    ['old map version', (s: ExpeditionState) => v5({ ...s, mapVersion: 0 })],
-    ['wall position', (s: ExpeditionState) => v5({ ...s, position: { x: 0, y: 0 } })],
-    ['hp above max', (s: ExpeditionState) => v5({ ...s, hp: { ...s.hp, tracer: 99 } })],
-    ['foreign owner command', (s: ExpeditionState) => v5({ ...s, battle: { kind: 'random', encounterId: 'veil-siege', entry: s.hp, commands: [{ beat: 1, heroId: 'guardian', action: 'attack', targetId: 'brute' }] } })],
-    ['unknown encounter', (s: ExpeditionState) => v5({ ...s, battle: { kind: 'random', encounterId: 'crystal-rift', entry: s.hp, commands: [] } })],
-    ['negative ore', (s: ExpeditionState) => v5({ ...s, resources: { ore: -1, ember: 0, seal: 0 } })],
-    ['extra resource', (s: ExpeditionState) => v5({ ...s, resources: { ore: 1, ember: 0, seal: 0, gold: 5 } })],
-    ['unknown chest', (s: ExpeditionState) => v5({ ...s, openedChests: ['vault'] })],
-    ['repeated chest', (s: ExpeditionState) => v5({ ...s, openedChests: ['meadow-west', 'meadow-west'] })],
-    ['missing campfire flag', (s: ExpeditionState) => v5({ ...s, restReady: 'yes' })],
-    ['unknown roster member', (s: ExpeditionState) => v5({ ...s, roster: { deployed: ['guardian', 'ghost'], reserve: [] } })],
-    ['duplicate roster member', (s: ExpeditionState) => v5({ ...s, roster: { deployed: ['guardian', 'tracer', 'weaver', 'healer'], reserve: ['healer'] } })],
-    ['empty deployment', (s: ExpeditionState) => v5({ ...s, roster: { deployed: [], reserve: ['guardian', 'tracer', 'weaver', 'healer'] } })],
-    ['hp for a non-member', (s: ExpeditionState) => v5({ ...s, roster: { deployed: ['guardian', 'tracer', 'weaver'], reserve: [] } })],
-    ['star above max', (s: ExpeditionState) => v5({ ...s, members: { ...s.members, guardian: { stars: 6, dupes: 0 } } })],
-    ['member missing progress', (s: ExpeditionState) => v5({ ...s, members: { guardian: { stars: 1, dupes: 0 } } })],
-    ['bad fog', (s: ExpeditionState) => v5({ ...s, revealed: 'x' })],
-    ['run member outside the company', (s: ExpeditionState) => v5(s, { ...newProfile(map, 4), company: ['guardian', 'tracer', 'weaver'], party: { deployed: ['guardian'], reserve: [] },
+    ['wrong version', (s: ExpeditionState) => JSON.stringify({ version: 7, profile: newProfile(map, 4), run: s })],
+    ['old map version', (s: ExpeditionState) => v6({ ...s, mapVersion: 0 })],
+    ['wall position', (s: ExpeditionState) => v6({ ...s, position: { x: 0, y: 0 } })],
+    ['hp above max', (s: ExpeditionState) => v6({ ...s, hp: { ...s.hp, tracer: 99 } })],
+    ['foreign owner command', (s: ExpeditionState) => v6({ ...s, battle: { kind: 'random', encounterId: 'veil-siege', entry: s.hp, commands: [{ beat: 1, heroId: 'guardian', action: 'attack', targetId: 'brute' }] } })],
+    ['unknown encounter', (s: ExpeditionState) => v6({ ...s, battle: { kind: 'random', encounterId: 'crystal-rift', entry: s.hp, commands: [] } })],
+    ['negative ore', (s: ExpeditionState) => v6({ ...s, resources: { ore: -1, ember: 0, seal: 0 } })],
+    ['extra resource', (s: ExpeditionState) => v6({ ...s, resources: { ore: 1, ember: 0, seal: 0, gold: 5 } })],
+    ['unknown chest', (s: ExpeditionState) => v6({ ...s, openedChests: ['vault'] })],
+    ['repeated chest', (s: ExpeditionState) => v6({ ...s, openedChests: ['meadow-west', 'meadow-west'] })],
+    ['missing campfire flag', (s: ExpeditionState) => v6({ ...s, restReady: 'yes' })],
+    ['unknown roster member', (s: ExpeditionState) => v6({ ...s, roster: { deployed: ['guardian', 'ghost'], reserve: [] } })],
+    ['duplicate roster member', (s: ExpeditionState) => v6({ ...s, roster: { deployed: ['guardian', 'tracer', 'weaver', 'healer'], reserve: ['healer'] } })],
+    ['empty deployment', (s: ExpeditionState) => v6({ ...s, roster: { deployed: [], reserve: ['guardian', 'tracer', 'weaver', 'healer'] } })],
+    ['hp for a non-member', (s: ExpeditionState) => v6({ ...s, roster: { deployed: ['guardian', 'tracer', 'weaver'], reserve: [] } })],
+    ['star above max', (s: ExpeditionState) => v6({ ...s, members: { ...s.members, guardian: { stars: 6, dupes: 0 } } })],
+    ['member missing progress', (s: ExpeditionState) => v6({ ...s, members: { guardian: { stars: 1, dupes: 0 } } })],
+    ['bad fog', (s: ExpeditionState) => v6({ ...s, revealed: 'x' })],
+    ['run member outside the company', (s: ExpeditionState) => v6(s, { ...newProfile(map, 4), company: ['guardian', 'tracer', 'weaver'], party: { deployed: ['guardian'], reserve: [] },
       members: { guardian: { stars: 1, dupes: 0 }, tracer: { stars: 1, dupes: 0 }, weaver: { stars: 1, dupes: 0 } } })],
-    ['party outside the company', (s: ExpeditionState) => v5(s, { ...newProfile(map, 4), party: { deployed: ['guardian-b'], reserve: [] } })],
-    ['company over the cap', (s: ExpeditionState) => v5(s, { ...newProfile(map, 4), company: Array.from({ length: 21 }, () => 'guardian') })],
-    ['negative bank', (s: ExpeditionState) => v5(s, { ...newProfile(map, 4), bank: { ore: -5, seal: 0 } })],
-    ['board index out of range', (s: ExpeditionState) => v5(s, { ...newProfile(map, 4), taken: [7] })],
-    ['unknown result', (s: ExpeditionState) => v5(s, { ...newProfile(map, 4), last: { outcome: 'fled', ore: 0, seal: 0, steps: 0, wins: 0 } })],
+    ['party outside the company', (s: ExpeditionState) => v6(s, { ...newProfile(map, 4), party: { deployed: ['guardian-b'], reserve: [] } })],
+    ['company over the cap', (s: ExpeditionState) => v6(s, { ...newProfile(map, 4), company: Array.from({ length: 21 }, () => 'guardian') })],
+    ['negative bank', (s: ExpeditionState) => v6(s, { ...newProfile(map, 4), bank: { ore: -5, seal: 0 } })],
+    ['board index out of range', (s: ExpeditionState) => v6(s, { ...newProfile(map, 4), taken: [7] })],
+    ['commander with an unknown crest', (s: ExpeditionState) => v6(s, { ...newProfile(map, 4), commander: { name: 'Ari', crest: 'dragon', color: 'gold' } })],
+    ['commander with an empty name', (s: ExpeditionState) => v6(s, { ...newProfile(map, 4), commander: { name: '   ', crest: 'star', color: 'gold' } })],
+    ['commander missing from a v6 profile', (s: ExpeditionState) => { const p: Partial<Profile> = newProfile(map, 4); delete p.commander; return v6(s, p); }],
+    ['unknown result', (s: ExpeditionState) => v6(s, { ...newProfile(map, 4), last: { outcome: 'fled', ore: 0, seal: 0, steps: 0, wins: 0 } })],
   ])('rejects %s', (_, make) => {
     expect(() => parseGame(make(fresh()), map, lookup)).toThrow();
     expect(loadGame({ getItem: () => make(fresh()), setItem: () => {} }, map, lookup)).toBeUndefined();
@@ -380,7 +403,7 @@ describe('game save', () => {
     const s = { ...fresh(4), tutorialDone: true, hp: { guardian: 0, tracer: 0, weaver: 0, healer: 1 }, resources: { ore: 9, ember: 2, seal: 0 } };
     s.battle = { kind: 'random', encounterId: 'scout-patrol', entry: { ...s.hp }, commands: [] };
     expect(battleState(s, map, lookup)!.outcome).toBe('defeat');
-    const loaded = parseGame(v5(s), map, lookup);
+    const loaded = parseGame(v6(s), map, lookup);
     expect(loaded.run).toBeNull(); expect(loaded.profile.last).toMatchObject({ outcome: 'wiped', ore: 4 }); expect(loaded.profile.bank.ore).toBe(4);
     for (const data of encounters) expect(() => createBattle(data, { hp: { guardian: 0, tracer: 0, weaver: 0, healer: 1 } })).not.toThrow();
   });

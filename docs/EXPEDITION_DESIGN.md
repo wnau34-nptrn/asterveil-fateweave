@@ -17,7 +17,7 @@ Approved 2026-10-14, re-planned 2026-10-15 for the mercenary roster.
 | 2B. Roster of 8 | 4 deployed + 4 reserve, swapped at camp; enemies target party slots instead of hero ids; defeat rule for the roster | **Implemented** |
 | 2C-1. Company | Hiring board, duplicates, star upgrades (stats), dismissal | **Implemented** (moved to the lobby in L1) |
 | L1. Lobby | Home → Lobby → Map; persistent profile (company ≤ 20, bank, board); choose the 4 + 4; withdraw/complete/wipe settle home | **Implemented** |
-| L2. Character creation | Commander (non-combat) name and look, once, between Home and Lobby | Planned |
+| L2. Character creation | Commander (non-combat) name, crest and banner colour, once, between Home and Lobby | **Implemented** |
 | 2C-2. New classes | Six new mercenaries (ART-CHAR-MERC-ENEMY-001), one class mechanic at a time; ★3 skill and ★5 passive per class | Planned |
 | 2D. Equipment and level | Equipment (weapon by class, body, accessory; rarity and affixes; bad-luck protection), shared EXP/level, consumables on the map | Planned |
 | 3. Choices and content | Events with fight/avoid choices, elites, mini boss, puzzles (rune order, push stone, lever), secrets, map quest "2 of 3" and side quests | Planned |
@@ -182,6 +182,23 @@ Elites (phase 3) will add guaranteed seals.
 
 **Lobby look.** A warm dusk camp band shows the brought team around a code-drawn fire, using the existing idle frames with gentle breathing and embers, all off under reduced motion. This is interim until `docs/handoffs/ART-UI-LOBBY-001.md` (scene layers and sit/cheer/idle_alt poses) is delivered.
 
+## L2 rules: commander creation
+
+**Flow.**
+- **New game:** Home → "เริ่มเกม" → create commander → Lobby.
+- **Old save without a commander:** "เข้าค่าย" opens the creation screen once.
+- **Replacing a save:** starting a new game over an existing save needs the title's second press. The old save is only replaced when the commander is confirmed; backing out keeps it.
+
+**Commander.**
+- The commander leads the company from the camp and never fights. This keeps "no fixed heroes"; mercenaries remain the only fighters.
+- The commander has a **name**, a **crest** and a **banner colour**:
+  - Name: 1–20 code points after whitespace is collapsed; Thai marks count; `<`, `>` and control characters are refused.
+  - Crest: one of 6 (ดาวนำทาง, โล่พิทักษ์, ธงศึก, ศรเวท, แสงเยียวยา, ตราล่า).
+  - Banner colour: one of 6 Luminous Veil tones.
+- The Lobby header shows the crest and the name.
+- It cannot be changed in this version.
+- The crest uses the shipped line icons; there is no commander portrait art yet.
+
 ## Phase 2C-1 rules (draft numbers; now applied in the Lobby)
 
 **Stars.**
@@ -231,7 +248,7 @@ veil-siege / 5, rear-ambush / 3 and rift-warden / 3 keep their content and versi
 
 ## Save
 
-Key `asterveil.fateweave.expedition.v1`, envelope `{ version: 5, profile, run }` (run = the expedition below, or null). State fields:
+Key `asterveil.fateweave.expedition.v1`, envelope `{ version: 6, profile, run }` (run = the expedition below, or null). State fields:
 - map id/version, seed, roll counter;
 - position, steps, pressure, fog string;
 - roster `{ deployed, reserve }`, `members` (stars/duplicates per brought member), HP for every brought member, last camp;
@@ -245,6 +262,7 @@ The practice keys (`asterveil.fateweave.battle.v1`, `.rear-ambush`, `.rift-warde
 
 Save history:
 - Version 1 (phase 1) was new; earlier practice saves were intentionally dropped.
+- Version 6 (L2) adds `profile.commander` (`null` until created). v5 profiles migrate with `null`. A v6 profile must contain the field, and an invalid name, crest or colour is rejected.
 - Version 5 (lobby L1) splits the envelope into `profile` and `run`.
   - A v1–v4 `state` becomes the run; its camp board is dropped.
   - The profile is built from the run's roster and stars, with an empty bank.

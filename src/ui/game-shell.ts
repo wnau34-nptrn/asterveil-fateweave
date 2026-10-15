@@ -1,11 +1,12 @@
 import type { BattleState, Outcome } from '../core/battle/types';
 import { clearLegacySaves, loadGame, saveGame, type Game } from '../core/save/expedition-save';
-import { departure, dismiss, hire, newProfile, placeMember, settle, upgrade, canWithdraw } from '../core/world/profile';
+import { createCommander, departure, dismiss, hire, newProfile, placeMember, settle, upgrade, canWithdraw } from '../core/world/profile';
 import type { Direction, ExpeditionState, MapDefinition, ProfileResult, RunOutcome, WorldEvent } from '../core/world/types';
 import { battleData, finishBattle, heroCatalog, move, moveMember, openChest, recordBattle, rest, revive, swapMembers, type EncounterLookup } from '../core/world/world';
 import { browserStorage } from '../platform/browser-storage';
 import type { BattleUI } from './battle-ui';
 import { heroText, lootThai } from './th';
+import { CommanderUI } from './commander-ui';
 import { LobbyUI } from './lobby-ui';
 import { WorldUI, type WorldBanner } from './world-ui';
 
@@ -16,6 +17,8 @@ export class GameShell {
   private get state(): ExpeditionState | undefined { return this.game?.run ?? undefined; }
   private set state(run: ExpeditionState | undefined) { if (this.game) this.game = { ...this.game, run: run ?? null }; }
   private lobby: LobbyUI;
+  private commander: CommanderUI;
+  private replacing = false;
   private lobbyMessage = '';
   private readonly storage = browserStorage();
   private saved = true;
@@ -28,7 +31,7 @@ export class GameShell {
   private readonly reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
   constructor(private readonly root: HTMLElement, private readonly map: MapDefinition, private readonly lookup: EncounterLookup, private readonly battle: BattleUI,
-    private readonly views: { title: HTMLElement; lobby: HTMLElement; world: HTMLElement; battle: HTMLElement }) {
+    private readonly views: { title: HTMLElement; commander: HTMLElement; lobby: HTMLElement; world: HTMLElement; battle: HTMLElement }) {
     clearLegacySaves(this.storage);
     this.game = loadGame(this.storage, map, lookup);
     this.world = new WorldUI(views.world, map, heroCatalog(lookup, map), {
@@ -40,21 +43,22 @@ export class GameShell {
       dismiss: id => this.profileChange(dismiss(this.game!.profile, map, id)), place: (id, group, other) => this.profileChange(placeMember(this.game!.profile, id, group, other)),
       depart: () => this.depart(), home: () => this.showTitle(),
     });
+    this.commander = new CommanderUI(views.commander, { create: c => this.createCommander(c), back: () => { this.replacing = false; this.showTitle(); } });
     views.title.addEventListener('click', e => {
       const button = (e.target as HTMLElement).closest<HTMLButtonElement>('button[data-title]');
       if (!button) return;
-      if (button.dataset.title === 'continue' && this.game) { if (this.state) this.resume(); else this.showLobby(); }
+      if (button.dataset.title === 'continue' && this.game) { if (this.state) this.resume(); else if (!this.game.profile.commander) this.showCommander(false); else this.showLobby(); }
       if (button.dataset.title === 'new') {
         if (this.game && button.dataset.confirm !== 'yes') { button.dataset.confirm = 'yes'; button.textContent = 'ยืนยัน: ลบค่ายและทีมทั้งหมดแล้วเริ่มใหม่'; return; }
-        this.newGame();
+        this.showCommander(true);
       }
     });
     this.showTitle();
   }
   setBattleVisibilityListener(listener: (visible: boolean) => void): void { this.onBattleVisibility = listener; }
 
-  private show(view: 'title' | 'lobby' | 'world' | 'battle'): void {
-    this.views.title.hidden = view !== 'title'; this.views.world.hidden = view !== 'world'; this.views.lobby.hidden = view !== 'lobby';
+  private show(view: 'title' | 'commander' | 'lobby' | 'world' | 'battle'): void {
+    this.views.title.hidden = view !== 'title'; this.views.commander.hidden = view !== 'commander'; this.views.world.hidden = view !== 'world'; this.views.lobby.hidden = view !== 'lobby';
     // The battle view keeps its layout while hidden so Phaser never sizes to zero.
     this.views.battle.classList.toggle('view-off', view !== 'battle');
     this.views.battle.inert = view !== 'battle';
@@ -74,9 +78,13 @@ export class GameShell {
   private persist(): void { if (this.game) this.saved = saveGame(this.storage, this.game); }
   // Seeds only choose future rolls; rules never read the clock.
   private freshSeed(): number { return (Date.now() ^ Math.floor(Math.random() * 0xffffffff)) >>> 0; }
-  private newGame(): void {
-    this.game = { profile: newProfile(this.map, this.freshSeed()), run: null };
-    this.lobbyMessage = 'ยินดีต้อนรับสู่ค่าย · เลือกทีมแล้วออกเดินทางได้เลย';
+  // Home → create commander → Lobby. A new game replaces the save only on confirmation.
+  private showCommander(replacing: boolean): void { this.replacing = replacing; this.show('commander'); this.commander.open(); }
+  private createCommander(c: Parameters<typeof createCommander>[1]): void {
+    const base = this.replacing || !this.game ? newProfile(this.map, this.freshSeed()) : this.game.profile;
+    const result = createCommander(base, c); if (result.event.type !== 'commander') return;
+    this.game = { profile: result.profile, run: this.replacing ? null : this.game?.run ?? null }; this.replacing = false;
+    this.lobbyMessage = `ยินดีต้อนรับ ผู้บัญชาการ${result.profile.commander!.name} · เลือกทีมแล้วออกเดินทางได้เลย`;
     this.persist(); this.showLobby();
   }
   private showLobby(): void {

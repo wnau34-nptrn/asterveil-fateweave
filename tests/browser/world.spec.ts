@@ -5,7 +5,8 @@ import { createBattle, currentHeroId, resolveCommand } from '../../src/core/batt
 import type { ExpeditionState } from '../../src/core/world/types';
 import { findTiles, move, newExpedition, reveal } from '../../src/core/world/world';
 import { boardOffers, newProfile } from '../../src/core/world/profile';
-import type { Profile } from '../../src/core/world/types';
+import type { Commander, Profile } from '../../src/core/world/types';
+const commander: Commander = { name: 'อารี', crest: 'star', color: 'gold' };
 import { battleLesson } from '../../src/ui/tutorial';
 
 const key = 'asterveil.fateweave.expedition.v1';
@@ -13,8 +14,8 @@ const full = { guardian: 76, tracer: 56, weaver: 48, healer: 46 };
 function base(patch: Partial<ExpeditionState> = {}): ExpeditionState {
   const state = { ...newExpedition(map, encounterById, 77), tutorialDone: true, ...patch }; reveal(state, map); return state;
 }
-async function seed(page: Page, state: ExpeditionState | null, profile: Profile = { ...newProfile(map, 5), tutorialDone: true }) {
-  await page.addInitScript(({ raw, key }) => { if (sessionStorage.getItem('playtest-seeded')) return; localStorage.setItem(key, raw); sessionStorage.setItem('playtest-seeded', 'yes'); }, { raw: JSON.stringify({ version: 5, profile, run: state }), key });
+async function seed(page: Page, state: ExpeditionState | null, profile: Profile = { ...newProfile(map, 5), tutorialDone: true, commander }) {
+  await page.addInitScript(({ raw, key }) => { if (sessionStorage.getItem('playtest-seeded')) return; localStorage.setItem(key, raw); sessionStorage.setItem('playtest-seeded', 'yes'); }, { raw: JSON.stringify({ version: 6, profile, run: state }), key });
 }
 async function open(page: Page, state?: ExpeditionState) {
   const issues: string[] = []; page.on('pageerror', e => issues.push(e.message)); page.on('console', m => { if (m.type() === 'error') issues.push(m.text()); });
@@ -148,7 +149,7 @@ test('the camp team tab benches and redeploys members; the party row follows the
 });
 
 test('lobby: hire a duplicate, upgrade a star, pick the team, depart, and withdraw at the entrance', async ({ page }, info) => {
-  const profile = { ...newProfile(map, 5), tutorialDone: true, bank: { ore: 120, seal: 0 } };
+  const profile = { ...newProfile(map, 5), tutorialDone: true, commander, bank: { ore: 120, seal: 0 } };
   const offer = boardOffers(profile, map, encounterById)[0]!;
   await seed(page, null, profile);
   const issues: string[] = []; page.on('pageerror', e => issues.push(e.message));
@@ -216,7 +217,12 @@ test('starting a new game from the title requires confirmation and resets the co
   const issues = await open(page, base({ steps: 9 }));
   await page.reload(); await expect(page.locator('#continue')).toContainText('เดินทางต่อ');
   await page.locator('#new-game').click(); await expect(page.locator('#new-game')).toContainText('ยืนยัน'); expect((await saved(page)).steps).toBe(9);
-  await page.locator('#new-game').click(); await expect(page.locator('#lobby-view')).toBeVisible();
+  await page.locator('#new-game').click(); await expect(page.locator('#commander-view')).toBeVisible();
+  // Backing out keeps the old save; confirming a commander replaces it.
+  await page.locator('[data-cmd=back]').click(); expect((await saved(page)).steps).toBe(9);
+  await page.locator('#new-game').click(); await page.locator('#new-game').click();
+  await page.locator('#commander-name').fill('ผู้กองใหม่'); await page.locator('#commander-create').click();
+  await expect(page.locator('#lobby-view')).toBeVisible(); await expect(page.locator('#lobby-commander')).toHaveText('ผู้กองใหม่');
   expect(await saved(page)).toBeNull(); expect((await savedProfile(page)).expeditions).toBe(0);
   expect(issues).toEqual([]);
 });
@@ -261,10 +267,33 @@ for (const viewport of viewports) {
   });
 }
 
+test('home → create commander → lobby: the name is required, crest and colour are chosen, and the lobby shows them', async ({ page }, info) => {
+  const issues: string[] = []; page.on('pageerror', e => issues.push(e.message));
+  await page.goto('./'); await page.locator('#new-game').click();
+  await expect(page.locator('#commander-view')).toBeVisible(); await expect(page.locator('#commander-name')).toBeFocused();
+  await page.locator('#commander-create').click();
+  await expect(page.locator('#commander-name')).toHaveAttribute('aria-invalid', 'true'); await expect(page.locator('#commander-view')).toBeVisible();
+  expect(await page.evaluate(k => localStorage.getItem(k), key)).toBeNull();
+  await page.locator('#commander-name').fill('ผู้กอง อารี'); await page.locator('#crest-guard').click(); await page.locator('#color-violet').click();
+  await expect(page.locator('#commander-preview-name')).toHaveText('ผู้กอง อารี'); await page.screenshot({ path: info.outputPath('commander.png') });
+  await page.locator('#commander-name').press('Enter');
+  await expect(page.locator('#lobby-view')).toBeVisible(); await expect(page.locator('#lobby-commander')).toHaveText('ผู้กอง อารี');
+  expect((await savedProfile(page)).commander).toEqual({ name: 'ผู้กอง อารี', crest: 'guard', color: 'violet' });
+  await page.reload(); await page.locator('#continue').click(); await expect(page.locator('#lobby-view')).toBeVisible();
+  expect(issues).toEqual([]);
+});
+
 for (const viewport of viewports) {
+  test(`commander ${viewport.width}x${viewport.height}: creation fits without page scroll`, async ({ browser }, info) => {
+    const context = await browser.newContext({ viewport, hasTouch: viewport.width < 900, reducedMotion: 'reduce' }); const page = await context.newPage();
+    await page.goto('./'); await page.locator('#new-game').click(); await expect(page.locator('#commander-view')).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollHeight > innerHeight || document.documentElement.scrollWidth > innerWidth)).toBe(false);
+    for (const sel of ['#commander-name', '#crest-star', '#crest-mark', '#color-gold', '#color-rose', '#commander-create']) { await page.locator(sel).scrollIntoViewIfNeeded(); await reachable(page, sel); }
+    await page.screenshot({ path: info.outputPath('commander.png') }); await context.close();
+  });
   test(`lobby ${viewport.width}x${viewport.height}: team, hire and depart fit without page scroll`, async ({ browser }, info) => {
     const context = await browser.newContext({ viewport, hasTouch: viewport.width < 900, reducedMotion: 'reduce' }); const page = await context.newPage();
-    await seed(page, null, { ...newProfile(map, 5), tutorialDone: true, bank: { ore: 45, seal: 1 } });
+    await seed(page, null, { ...newProfile(map, 5), tutorialDone: true, commander, bank: { ore: 45, seal: 1 } });
     const issues: string[] = []; page.on('pageerror', e => issues.push(e.message));
     await page.goto('./'); await page.locator('#continue').click(); await expect(page.locator('#lobby-view')).toBeVisible();
     const noScroll = () => page.evaluate(() => document.documentElement.scrollHeight > innerHeight || document.documentElement.scrollWidth > innerWidth);

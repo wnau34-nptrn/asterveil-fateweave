@@ -4,6 +4,7 @@ import { COMPANY_CAP, PARTY_SLOTS, RESERVE_SLOTS, type MapDefinition, type Profi
 import { starred, type EncounterLookup } from '../core/world/world';
 import { actorFrames, artUrl } from '../game/visuals/assets';
 import { icon } from './icons';
+import { commanderBadge } from './commander-ui';
 import { heroText } from './th';
 import { portrait } from './world-ui';
 
@@ -43,6 +44,7 @@ export class LobbyUI {
     if (this.picked && !view.profile.company.includes(this.picked)) this.picked = undefined;
     this.draw();
   }
+  private escape(text: string): string { return text.replace(/[&<>"]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[ch]!); }
   private focus(sel: string): void { this.root.querySelector<HTMLElement>(sel)?.focus({ preventScroll: true }); }
   // Tap a member, then a member or an empty slot in another group to swap or move.
   private pick(id: string | undefined, group: Group): void {
@@ -62,7 +64,7 @@ export class LobbyUI {
     const ready = p.party.deployed.length > 0;
     this.root.innerHTML = `<div class="lobby-shell">
       <header class="lobby-header glass-capsule"><button data-lobby="home" class="round-glass" aria-label="กลับหน้าแรก">${icon('left')}</button>
-        <div><p class="eyebrow">ค่ายทหารรับจ้าง</p><h1>เตรียมทีมก่อนออกเดินทาง</h1></div>
+        ${p.commander ? commanderBadge(p.commander) : ''}<div><p class="eyebrow">ค่ายทหารรับจ้าง · ผู้บัญชาการ</p><h1 id="lobby-commander">${p.commander ? this.escape(p.commander.name) : 'เตรียมทีมก่อนออกเดินทาง'}</h1></div>
         <div class="lobby-bank" aria-label="คลัง แร่ดาว ${p.bank.ore} ตราสัญญา ${p.bank.seal}"><span>${icon('ore')}<b>${p.bank.ore}</b></span><span>${icon('seal')}<b>${p.bank.seal}</b></span></div></header>
       ${this.scene(p)}
       ${last ? `<p class="lobby-result glass-capsule" data-outcome="${last.outcome}" role="status">${icon(last.outcome === 'wiped' ? 'danger' : last.outcome === 'complete' ? 'star' : 'camp')}<span><b>${outcomeText[last.outcome]}</b> · เดิน ${last.steps} ก้าว ชนะ ${last.wins} ศึก · ได้แร่ดาว ${last.ore}${last.seal ? ` ตราสัญญา ${last.seal}` : ''}${last.outcome === 'wiped' ? ' (เก็บได้ครึ่งเดียว)' : ''}</span></p>`
