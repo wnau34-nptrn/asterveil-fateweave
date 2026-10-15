@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="th">
+<html lang="th" style="background:#0a1422">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
@@ -10,6 +10,29 @@
   </head>
   <body>
     <div id="app"></div>
+    <script>
+      // Boot guard: if the game bundle fails to load or throws before startup (for example while
+      // GitHub Pages briefly serves an unbuilt copy), show a readable message instead of a blank page.
+      (function () {
+        var shown = false;
+        function show(text) {
+          if (shown || window.__fateweaveReady) return; shown = true;
+          var box = document.createElement('div');
+          box.setAttribute('role', 'alert');
+          box.style.cssText = 'position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;padding:24px;background:#0a1422;color:#eef4ff;font:16px/1.6 system-ui,sans-serif;text-align:center;white-space:pre-line';
+          box.textContent = text;
+          document.body.appendChild(box);
+        }
+        window.addEventListener('error', function (event) {
+          var el = event.target;
+          // Uncaught script errors, or the game's own script/stylesheet failing to load (not images).
+          if (el && el !== window && el.tagName !== 'SCRIPT' && el.tagName !== 'LINK') return;
+          var detail = event.message || (el && (el.src || el.href)) || '';
+          show('เปิดเกมไม่สำเร็จ\n' + detail + '\n\nรอสักครู่แล้วรีโหลดหน้านี้');
+        }, true);
+        setTimeout(function () { show('ยังโหลดเกมไม่เสร็จ\nอาจกำลังอัปเดตเวอร์ชันใหม่ รอสักครู่แล้วรีโหลดหน้านี้'); }, 10000);
+      })();
+    </script>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

@@ -44,3 +44,5 @@ shell.setBattleVisibilityListener(visible => {
   if (!scene.isReady) return;
   if (visible) { game.loop.wake(); scene.refreshLayout(); } else game.loop.sleep();
 });
+// Startup finished: index.html's boot guard stands down.
+(window as unknown as { __fateweaveReady?: boolean }).__fateweaveReady = true;
