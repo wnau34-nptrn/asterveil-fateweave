@@ -22,6 +22,13 @@ export function battleLesson(state:BattleState,data:EncounterDefinition):Lesson|
   if(intent)return make('guard',intent.targetId,'อ่านแผนศัตรู',`รับแทนและลดพลัง ${intent.damage} → ${Math.ceil(intent.damage*(1-data.rules.guardReduction))}`)??attack();
   return attack();
  }
+ if(heroId==='mira'){
+  const living2=state.enemies.filter(e=>e.hp>0);
+  if(living2.length>1){const v=make('volley','enemies','ห่าธนูโดนทุกตัว',`ตัวละ ${skillPower(data,heroId,'volley')}`);if(v)return v;}
+  // Hinder the fastest living enemy so it acts last next round.
+  const fast=[...living2].sort((a,b)=>data.enemies.find(e=>e.id===b.id)!.speed-data.enemies.find(e=>e.id===a.id)!.speed)[0];
+  return (fast&&make('hinder',fast.id,'ยิงสกัดศัตรูที่เร็วที่สุด',`${actorName(fast.id,data)} จะลงมือท้ายสุดรอบหน้า`))??attack();
+ }
  if(heroId==='garran'){
   const front=intent?.kind==='physical'&&data.heroes.find(h=>h.id===intent.targetId)?.lane==='front';
   if(front)return make('brace',heroId,'ตั้งทวนรอสวน',`${actorName(intent!.sourceId,data)} จะโดนแทงสวน ${skillPower(data,heroId,'brace')}`)??make('pierce',target.id,'แทงทะลวง',`พลัง ${skillPower(data,heroId,'pierce')}`)??attack();

@@ -2,10 +2,12 @@ import type { ActionId, BattleEntry, HeroDefinition, BattleEvent, BattleState, C
 
 const living = (state: BattleState, id: string) => [...state.heroes, ...state.enemies].some(a => a.id === id && a.hp > 0);
 const definitions = (data: EncounterDefinition) => [...data.heroes, ...data.enemies];
-export function roundOrder(state: BattleState, data: EncounterDefinition): string[] {
+export function roundOrder(state: BattleState, data: EncounterDefinition, round = state.round): string[] {
   // Explicit original index breaks SPD ties, including ties across the two sides.
+  // Enemies delayed for this round (archer's hindering shot) act after everyone else.
+  const delayed = (id: string) => state.enemies.some(e => e.id === id && e.delayedRound === round) ? 1 : 0;
   return definitions(data).map((actor, index) => ({ actor, index })).filter(({ actor }) => living(state, actor.id))
-    .sort((a, b) => b.actor.speed - a.actor.speed || a.index - b.index).map(({ actor }) => actor.id);
+    .sort((a, b) => delayed(a.actor.id) - delayed(b.actor.id) || b.actor.speed - a.actor.speed || a.index - b.index).map(({ actor }) => actor.id);
 }
 export function currentActorId(state: BattleState): string | undefined { return state.outcome === 'active' ? state.order[state.turnIndex] : undefined; }
 export function currentHeroId(state: BattleState, data: EncounterDefinition): string | undefined {
@@ -26,7 +28,7 @@ export function upcomingTurns(state: BattleState, data: EncounterDefinition, cou
   if (state.outcome !== 'active') return [];
   const slots: TurnSlot[] = [];
   for (let round = state.round; slots.length < count; round++) {
-    const order = round === state.round ? state.order.slice(state.turnIndex) : roundOrder(state, data);
+    const order = round === state.round ? state.order.slice(state.turnIndex) : roundOrder(state, data, round);
     if (!order.length) break;
     for (const id of order) {
       if (!living(state, id)) continue;
@@ -147,6 +149,10 @@ export function targetOptions(state: BattleState, data: EncounterDefinition, her
     const reason = unavailable || (!injured ? 'The living party is at full health.' : '');
     return [{ id: 'party', name: 'Party', valid: !reason, reason }];
   }
+  if (action === 'volley') {
+    const reason = unavailable || (!state.enemies.some(e => e.hp > 0) ? 'This enemy is down.' : '');
+    return [{ id: 'enemies', name: 'Enemies', valid: !reason, reason }];
+  }
   if (action === 'brace') {
     const reason = unavailable || (state.counter?.heroId === heroId ? 'Already braced.' : '');
     return [{ id: heroId, name: data.heroes.find(h => h.id === heroId)?.name ?? heroId, valid: !reason, reason }];
@@ -205,6 +211,18 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
       break;
     }
     case 'bolt': case 'pierce': damage(skill.power); break;
+    case 'hinder': {
+      damage(skill.power);
+      if (enemy!.hp > 0) { enemy!.delayedRound = state.round + 1; events.push({ type: 'delay', sourceId: hero.id, targetId: enemy!.id, text: 'Enemy acts last next round.' }); }
+      break;
+    }
+    case 'volley':
+      for (const foe of state.enemies.filter(e => e.hp > 0)) {
+        const amount = Math.min(foe.hp, skill.power); foe.hp -= amount;
+        events.push({ type: 'damage', sourceId: hero.id, targetId: foe.id, amount, text: 'Volley hits every enemy.' });
+        if (!foe.hp) events.push({ type: 'down', targetId: foe.id, text: 'Enemy falls.' });
+      }
+      break;
     case 'brace': state.counter = { heroId: hero.id }; events.push({ type: 'brace', sourceId: hero.id, targetId: hero.id, amount: skill.power, text: 'Spear braced until its next turn.' }); break;
     case 'mark': enemy!.markedUntil = state.round + data.rules.markDuration; events.push({ type: 'mark', sourceId: hero.id, targetId: enemy!.id, text: 'Enemy marked.' }); break;
     case 'guard': state.guard = { heroId: hero.id, targetId: command.targetId, sourceId: state.intent!.sourceId }; events.push({ type: 'guard', sourceId: hero.id, targetId: command.targetId, text: 'Guard until announced attacker acts or Knight returns.' }); break;

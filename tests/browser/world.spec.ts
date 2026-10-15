@@ -150,8 +150,20 @@ test('the camp team tab benches and redeploys members; the party row follows the
   expect(issues).toEqual([]);
 });
 
+test('lobby: hiring a new mercenary adds them to the reserve with full roster data', async ({ page }) => {
+  let seedValue = 5; while (boardOffers(newProfile(map, seedValue), map, encounterById)[0] !== 'mira') seedValue++;
+  await seed(page, null, { ...newProfile(map, seedValue), tutorialDone: true, commander, bank: { ore: 30, seal: 0 } });
+  await page.goto('./'); await page.locator('#continue').click(); await page.locator('#lobby-tab-hire').click();
+  await expect(page.locator('#hire-0')).toContainText('จ้าง · 30'); await page.locator('#hire-0').click();
+  const p = await savedProfile(page);
+  expect(p.members.mira).toEqual({ stars: 1, dupes: 0 }); expect(p.party.reserve).toEqual(['mira']); expect(p.company).toContain('mira');
+  await page.locator('#lobby-tab-team').click(); await expect(page.locator('#lobby-member-mira')).toContainText('มิร่า');
+});
+
 test('lobby: hire a duplicate, upgrade a star, pick the team, depart, and withdraw at the entrance', async ({ page }, info) => {
-  const profile = { ...newProfile(map, 5), tutorialDone: true, commander, bank: { ore: 120, seal: 0 } };
+  // Pick a profile seed whose first offer is a duplicate of a starting member (the board also offers new mercenaries).
+  let seedValue = 5; while (!map.startingRoster.includes(boardOffers(newProfile(map, seedValue), map, encounterById)[0]!)) seedValue++;
+  const profile = { ...newProfile(map, seedValue), tutorialDone: true, commander, bank: { ore: 120, seal: 0 } };
   const offer = boardOffers(profile, map, encounterById)[0]!;
   await seed(page, null, profile);
   const issues: string[] = []; page.on('pageerror', e => issues.push(e.message));
@@ -201,6 +213,27 @@ test('Garran (spear) fights from the front slot: brace targets himself and the p
   await page.locator('[data-ui=skill-close]').click(); await page.screenshot({ path: info.outputPath('garran-battle.png') });
   await page.locator('#target-garran').click(); await finishPlayback(page);
   expect((await saved(page)).battle!.commands.map(c => c.action)).toEqual(['attack', 'attack', 'brace']);
+  expect(issues).toEqual([]);
+});
+
+test('Mira (archer) volleys every enemy by tapping any of them, and the SPD queue shows the hindered foe last', async ({ page }, info) => {
+  const roster = { deployed: ['guardian', 'tracer', 'mira', 'healer'], reserve: [] as string[] };
+  const members = Object.fromEntries(roster.deployed.map(id => [id, { stars: 1, dupes: 0 }]));
+  const run = { ...newExpedition(map, encounterById, 32, { roster, members }, true) }; reveal(run, map);
+  run.battle = { kind: 'random', encounterId: 'veil-siege', entry: { ...run.hp }, commands: [] };
+  const profile = { ...newProfile(map, 5), tutorialDone: true, commander, company: ['guardian', 'tracer', 'weaver', 'healer', 'mira'], members: { ...newProfile(map, 5).members, mira: { stars: 1, dupes: 0 } }, party: roster };
+  await seed(page, run, profile);
+  const issues: string[] = []; page.on('pageerror', e => issues.push(e.message));
+  await page.goto('./'); await page.locator('#continue').click(); await page.locator('#start').click();
+  await page.locator('#action-attack').click(); await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-brute').click(); await finishPlayback(page);
+  await expect(page.locator('#hero-mira')).toHaveAttribute('aria-pressed', 'true');
+  await page.locator('#action-hinder').click(); await expect(page.locator('#skill-popover')).toContainText('ท้ายสุดในรอบถัดไป');
+  await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-raider').click(); await finishPlayback(page);
+  // The next six turns (rest of round 1, then round 2) no longer include the Raider: it acts last in round 2.
+  const order = await page.locator('.turn-slot').evaluateAll(els => els.map(e => (e as HTMLElement).dataset.actor));
+  expect(order).toEqual(['guardian', 'brute', 'healer', 'tracer', 'mira', 'guardian']);
+  await page.screenshot({ path: info.outputPath('mira-hinder.png') });
+  expect((await saved(page)).battle!.commands.map(c => c.action)).toEqual(['attack', 'hinder']);
   expect(issues).toEqual([]);
 });
 

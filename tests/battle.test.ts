@@ -11,7 +11,7 @@ const at = (id: string, d = data) => {
   return s;
 };
 describe('spear brace (Garran)', () => {
-  const garran = mercenaries[0]!; const [, tracer, weaver, healer] = data.heroes;
+  const garran = mercenaries.find(m => m.id === 'garran')!; const [, tracer, weaver, healer] = data.heroes;
   const party = withParty(data, [garran, tracer!, weaver!, healer!]);
   const run = (d: typeof party, moves: [string, string][]) => {
     let s = createBattle(d); const events: string[] = [];
@@ -50,6 +50,45 @@ describe('spear brace (Garran)', () => {
       if (validateCommand(s, party, command)) break;
       expect(previewCommand(s, party, command)).toEqual(resolveCommand(s, party, command)); s = resolveCommand(s, party, command).state;
     }
+    expect(replay(party, s.commands)).toEqual(s);
+  });
+});
+
+describe('archer (Mira)', () => {
+  const mira = mercenaries.find(m => m.id === 'mira')!; const [guardian, tracer, , healer] = data.heroes;
+  const party = withParty(data, [guardian!, tracer!, mira, healer!]);
+  it('hindering shot damages and sends the target to the end of the NEXT round only; the current round stays frozen', () => {
+    let s = createBattle(party);
+    // R1 order: Lyra 120, Raider 110, Mira 105, Aegis 80, Brute 70, Seren 60.
+    expect(s.order).toEqual(['tracer', 'raider', 'mira', 'guardian', 'brute', 'healer']);
+    s = act(s, 'attack', 'brute', party).state;
+    const frozen = [...s.order];
+    const r = act(s, 'hinder', 'raider', party);
+    expect(r.events.find(e => e.type === 'damage')).toMatchObject({ targetId: 'raider', amount: 12 });
+    expect(r.events.some(e => e.type === 'delay')).toBe(true);
+    expect(r.state.order).toEqual(frozen);
+    expect(upcomingTurns(r.state, party, 12).filter(t => t.round === 2).map(t => t.actorId)).toEqual(['tracer', 'mira', 'guardian', 'brute', 'healer', 'raider']);
+    let t = r.state; while (t.round < 2) t = act(t, 'attack', 'brute', party).state;
+    expect(t.order).toEqual(['tracer', 'mira', 'guardian', 'brute', 'healer', 'raider']);
+    while (t.round < 3) t = act(t, 'attack', 'brute', party).state;
+    expect(t.order[1]).toBe('raider'); // back to its SPD place
+  });
+  it('volley hits every living enemy and can finish several at once', () => {
+    let s = createBattle(party); s = act(s, 'attack', 'brute', party).state;
+    expect(targetOptions(s, party, 'mira', 'volley')).toEqual([{ id: 'enemies', name: 'Enemies', valid: true, reason: '' }]);
+    const r = act(s, 'volley', 'enemies', party);
+    expect(r.events.filter(e => e.type === 'damage' && e.sourceId === 'mira').map(e => [e.targetId, e.amount])).toEqual([['raider', 10], ['brute', 10]]);
+    const weak = structuredClone(s); for (const e of weak.enemies) e.hp = 5;
+    expect(act(weak, 'volley', 'enemies', party).state.outcome).toBe('victory');
+  });
+  it('replays and previews identically', () => {
+    let s = createBattle(party);
+    for (const [action, target] of [['attack', 'brute'], ['hinder', 'raider'], ['attack', 'brute'], ['attack', 'brute'], ['attack', 'brute'], ['volley', 'enemies']] as [ActionId, string][]) {
+      const command = { beat: s.beat, heroId: currentHeroId(s, party)!, action, targetId: target };
+      if (validateCommand(s, party, command)) continue;
+      expect(previewCommand(s, party, command)).toEqual(resolveCommand(s, party, command)); s = resolveCommand(s, party, command).state;
+    }
+    expect(s.commands.some(c => c.action === 'volley' || c.action === 'hinder')).toBe(true);
     expect(replay(party, s.commands)).toEqual(s);
   });
 });

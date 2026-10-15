@@ -18,7 +18,7 @@ Approved 2026-10-14, re-planned 2026-10-15 for the mercenary roster.
 | 2C-1. Company | Hiring board, duplicates, star upgrades (stats), dismissal | **Implemented** (moved to the lobby in L1) |
 | L1. Lobby | Home → Lobby → Map; persistent profile (company ≤ 20, bank, board); choose the 4 + 4; withdraw/complete/wipe settle home | **Implemented** |
 | L2. Character creation | Commander (non-combat) name, crest and banner colour, once, between Home and Lobby | **Implemented** |
-| 2C-2. New classes | Six new mercenaries (ART-CHAR-MERC-ENEMY-001), one class mechanic at a time; ★3 skill and ★5 passive per class | **In progress**: 1/6 (Garran, spear) |
+| 2C-2. New classes | Six new mercenaries (ART-CHAR-MERC-ENEMY-001), one class mechanic at a time; ★3 skill and ★5 passive per class | **In progress**: 2/6 (Garran spear, Mira archer) |
 | 2D. Equipment and level | Equipment (weapon by class, body, accessory; rarity and affixes; bad-luck protection), shared EXP/level, consumables on the map | Planned |
 | 3. Choices and content | Events with fight/avoid choices, elites, mini boss, puzzles (rune order, push stone, lever), secrets, map quest "2 of 3" and side quests | Planned |
 | 4. Economy and wrap-up | Local gold and shop, salvage, fast travel between camps, elite respawn on rest, defeat penalty, whole-map balance simulation, completion screen | Planned |
@@ -202,6 +202,18 @@ Elites (phase 3) will add guaranteed seals.
 - **Art is a placeholder** until ART-CHAR-MERC-ENEMY-001 is accepted: the Knight frame tinted teal on the canvas and hue-shifted in DOM portraits (`game/visuals/assets.ts`). Skill icons are code-drawn line icons.
 - **Not yet built:** the ★3 skill and ★5 passive. They come after the six base classes.
 - **Version bumps (skills added to shared encounter content):** veil-siege 7, rear-ambush 5, rift-warden 5, the rest 3.
+
+**2. Mira — Archer (back, SPD 105, HP 50, Attack 13).** Her mechanic is delaying enemy turns.
+- **ยิงสกัด (Hindering Shot)**, cooldown 2: 12 damage. A survivor gets `delayedRound = round + 1`.
+  - In that round, `roundOrder` places it after every other actor; its relative order with other delayed enemies is unchanged.
+  - The current round's frozen order never changes. The round after, it returns to its SPD place.
+  - The SPD forecast (`upcomingTurns`) shows the delay.
+- **ห่าธนู (Volley)**, cooldown 3: 10 damage to every living enemy.
+  - Its target is `enemies`; in the UI, tapping any living enemy casts it.
+- **Advisor:** volley while two or more enemies live; otherwise hinder the fastest enemy.
+- **Evidence:** the advisor wins every encounter with Mira replacing either back-liner. Delay order, frozen current round, volley, and replay/preview equality are covered in tests.
+- **Art is a placeholder:** the Duelist frame tinted forest green.
+- **Version bumps:** veil-siege 8, rear-ambush 6, rift-warden 6, the rest 4.
 
 ## L2 rules: commander creation
 

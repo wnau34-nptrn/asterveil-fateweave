@@ -147,7 +147,8 @@ export class BattleUI {
   choose(id: string, source: 'target' | 'canvas' = 'target'): void {
     if (this.root.querySelector('dialog[open]') || source === 'canvas' && performance.now() < this.canvasInputAfterInfo) return;
     if (!this.scene?.isReady || !this.started || this.busy || this.state.outcome !== 'active') return;
-    const actualTarget = this.action === 'prayer' && this.state.heroes.some(h => h.id === id && h.hp > 0) ? 'party' : id;
+    const actualTarget = this.action === 'prayer' && this.state.heroes.some(h => h.id === id && h.hp > 0) ? 'party'
+      : this.action === 'volley' && this.state.enemies.some(e => e.id === id && e.hp > 0) ? 'enemies' : id;
     const target = targetOptions(this.state, this.data, this.heroId, this.action).find(t => t.id === actualTarget);
     if (target?.valid) {
       this.execute(actualTarget);
@@ -358,7 +359,7 @@ export class BattleUI {
     this.set('commands', `<h2 class="step-heading"><span>2</span>${heroText[this.heroId]!.role} · เลือกคำสั่ง</h2><div class="actions">${hero.actions.map(action => {
       const text = d.skills[action]; const reason = actionReason(s, d, this.heroId, action);
       return `<div class="action-option"><button id="action-${action}" data-ui="action" data-value="${action}" aria-haspopup="dialog" aria-controls="skill-popover" aria-expanded="false" class="action ${action} ${this.action === action ? 'selected' : ''}" aria-pressed="${this.action === action}" aria-describedby="reason-${action}" ${disabled ? 'disabled' : ''} data-unavailable="${!!reason}">${icon(action)}<strong>${text.name}</strong><small>${text.english}</small><span class="skill-value">${action === 'attack' ? `พลัง ${hero.attack}` : action === 'mark' ? `โบนัส +${d.rules.markedBonus}` : action === 'guard' ? `ลด ${d.rules.guardReduction * 100}%` : `พลัง ${skillPower(d, this.heroId, action)}`}</span></button><p id="reason-${action}" class="${reason ? 'unavailable-reason' : ''}">${escapeHtml(reason ? reasonThai(reason) : text.cooldown ? `คูลดาวน์ ${text.cooldown} รอบ` : 'ใช้ได้ทุกเทิร์น')}</p></div>`;
-    }).join('')}</div><details class="action-help"><summary>วิธีใช้${d.skills[this.action].name}</summary><p class="action-description">${skillDescription(this.action, this.heroId, d)}</p></details><p class="target-hint">${noTarget || (this.action === 'prayer' ? 'แตะฮีโร่ในสนามเพื่อฟื้นฟูทั้งทีม' : ['guard','ward','heal'].includes(this.action) ? 'แตะเพื่อนในสนามที่มีเครื่องหมาย' : 'แตะศัตรูในสนามที่มีเครื่องหมาย')}</p>`);
+    }).join('')}</div><details class="action-help"><summary>วิธีใช้${d.skills[this.action].name}</summary><p class="action-description">${skillDescription(this.action, this.heroId, d)}</p></details><p class="target-hint">${noTarget || (this.action === 'prayer' ? 'แตะฮีโร่ในสนามเพื่อฟื้นฟูทั้งทีม' : this.action === 'volley' ? 'แตะศัตรูตัวใดก็ได้เพื่อยิงทุกตัว' : this.action === 'brace' ? 'แตะตัวเองในสนามเพื่อตั้งทวน' : ['guard','ward','heal'].includes(this.action) ? 'แตะเพื่อนในสนามที่มีเครื่องหมาย' : 'แตะศัตรูในสนามที่มีเครื่องหมาย')}</p>`);
   }
 
   private renderFieldTargets(): void {
@@ -366,13 +367,14 @@ export class BattleUI {
     const s = this.displayState; const d = this.data;
     const disabled = !this.scene.isReady || !this.started || this.busy || s.outcome !== 'active';
     const options = targetOptions(s, d, this.heroId, this.action);
-    const targets = this.action === 'prayer' ? d.heroes.map(h => ({ ...options[0]!, id:h.id, valid:options[0]!.valid && s.heroes.some(v => v.id===h.id && v.hp>0) })) : options;
+    const targets = this.action === 'prayer' ? d.heroes.map(h => ({ ...options[0]!, id:h.id, valid:options[0]!.valid && s.heroes.some(v => v.id===h.id && v.hp>0) }))
+      : this.action === 'volley' ? d.enemies.map(e => ({ ...options[0]!, id:e.id, valid:options[0]!.valid && s.enemies.some(v => v.id===e.id && v.hp>0) })) : options;
     this.set('field-targets', targets.map(t => {
       const position = this.scene!.actorTargets.get(t.id); if (!position) return '';
       const hero = s.heroes.find(h => h.id===t.id); const enemy = s.enemies.find(e => e.id===t.id);
       const maxHp = d.heroes.find(h => h.id===t.id)?.maxHp ?? d.enemies.find(e => e.id===t.id)?.maxHp;
-      const label = `ใช้${d.skills[this.action].name}กับ${this.action==='prayer' ? 'ทั้งทีม โดยแตะ' : ''}${actorName(t.id,d)} · เลือด ${hero?.hp ?? enemy?.hp}/${maxHp}${!t.valid ? ` · ${reasonThai(t.reason)}` : ''}`;
-      const buttonId = this.action==='prayer' ? t.id===this.heroId ? 'party' : `party-${t.id}` : t.id;
+      const label = `ใช้${d.skills[this.action].name}กับ${this.action==='prayer' ? 'ทั้งทีม โดยแตะ' : this.action==='volley' ? 'ศัตรูทุกตัว โดยแตะ' : ''}${actorName(t.id,d)} · เลือด ${hero?.hp ?? enemy?.hp}/${maxHp}${!t.valid ? ` · ${reasonThai(t.reason)}` : ''}`;
+      const buttonId = this.action==='prayer' ? t.id===this.heroId ? 'party' : `party-${t.id}` : this.action==='volley' ? `enemies-${t.id}` : t.id;
       return `<button id="target-${buttonId}" data-ui="target" data-value="${t.id}" data-actor="${t.id}" class="field-target ${disabled || !t.valid ? '' : 'valid-target'}" style="left:${position.x}px;top:${position.y}px;width:${position.width}px;height:${position.height}px" aria-label="${escapeHtml(label)}" ${disabled || !t.valid ? 'disabled' : ''}><span class="field-marker" aria-hidden="true">${icon(this.action)}</span></button>`;
     }).join(''));
   }
