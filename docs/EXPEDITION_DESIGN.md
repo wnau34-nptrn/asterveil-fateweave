@@ -18,7 +18,7 @@ Approved 2026-10-14, re-planned 2026-10-15 for the mercenary roster.
 | 2C-1. Company | Hiring board, duplicates, star upgrades (stats), dismissal | **Implemented** (moved to the lobby in L1) |
 | L1. Lobby | Home → Lobby → Map; persistent profile (company ≤ 20, bank, board); choose the 4 + 4; withdraw/complete/wipe settle home | **Implemented** |
 | L2. Character creation | Commander (non-combat) name, crest and banner colour, once, between Home and Lobby | **Implemented** |
-| 2C-2. New classes | Six new mercenaries (ART-CHAR-MERC-ENEMY-001), one class mechanic at a time; ★3 skill and ★5 passive per class | **In progress**: 5/6 (Garran spear, Mira archer, Toma alchemist, Sefa scout, Brann warden) |
+| 2C-2. New classes | Six new mercenaries (ART-CHAR-MERC-ENEMY-001), one class mechanic at a time; ★3 skill and ★5 passive per class | **In progress**: all 6 base classes done (Garran spear, Mira archer, Toma alchemist, Sefa scout, Brann warden, Lio bard); the ★3 skill and ★5 passive per class remain |
 | 2D. Equipment and level | Equipment (weapon by class, body, accessory; rarity and affixes; bad-luck protection), shared EXP/level, consumables on the map | Planned |
 | 3. Choices and content | Events with fight/avoid choices, elites, mini boss, puzzles (rune order, push stone, lever), secrets, map quest "2 of 3" and side quests | Planned |
 | 4. Economy and wrap-up | Local gold and shop, salvage, fast travel between camps, elite respawn on rest, defeat penalty, whole-map balance simulation, completion screen | Planned |
@@ -252,6 +252,16 @@ Elites (phase 3) will add guaranteed seals.
 - **Evidence:** the advisor wins every encounter with Brann replacing either front-liner. Tests cover the redirected forecast, the reduced hits (12 → 8, 26 → 17), the expiry, and replay/preview equality.
 - **Art:** his own frame and portrait from ART-CHAR-MERC-ENEMY-001.
 - **Version bumps:** veil-siege 11, rear-ambush 9, rift-warden 9, crystal-stampede 2, the rest 7.
+
+**6. Lio — Bard (back, SPD 85, HP 50, Attack 9).** His mechanic is a persistent song (`state.song`).
+- Only one song plays at a time. It lasts until Lio switches songs, falls or the battle ends.
+- Starting the same song again is refused ("กำลังบรรเลงเพลงนี้อยู่แล้ว"). Each song has its own cooldown (2).
+- **เพลงกล้า (Song of Valor):** every hero hit gains +4. That covers attacks, skills, volley and the spear counter (`hitBonus`), and it stacks with corrosion and Mark.
+- **เพลงฟื้น (Song of Mending):** as each new round begins, every standing ally heals 5. It never exceeds max HP and never revives the fallen.
+- **Advisor:** mending once any standing ally is below half HP; otherwise valor if no song plays; otherwise attack.
+- **Evidence:** the advisor wins every encounter with Lio replacing either back-liner. Tests cover the valor bonus and switching, mending caps, the song stopping when Lio falls, and replay/preview equality.
+- **Art:** his own frame and portrait from ART-CHAR-MERC-ENEMY-001.
+- **Version bumps:** veil-siege 12, rear-ambush 10, rift-warden 10, crystal-stampede 3, the rest 8.
 
 ## Veil Frontier foes in battle (ART-CHAR-MERC-ENEMY-001)
 

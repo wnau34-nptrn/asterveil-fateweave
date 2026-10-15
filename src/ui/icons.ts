@@ -22,6 +22,8 @@ import ambush from './svg/ambush.svg?raw';
 import evade from './svg/evade.svg?raw';
 import taunt from './svg/taunt.svg?raw';
 import slam from './svg/slam.svg?raw';
+import valor from './svg/valor.svg?raw';
+import mend from './svg/mend.svg?raw';
 import up from './svg/up.svg?raw';
 import down from './svg/down.svg?raw';
 import left from './svg/left.svg?raw';
@@ -53,7 +55,7 @@ import starBadge from './svg/star_badge.svg?raw';
 import starBadgeEmpty from './svg/star_badge_empty.svg?raw';
 
 // Original ART-UI-WORLD-001 line icons (24px viewBox, currentColor). Inlined so they inherit state colour.
-const svgs = { attack, guard, bash, mark, execute, bolt, ward, heal, prayer, brace, pierce, hinder, volley, acid, haste, ambush, evade, taunt, slam, up, down, left, right, camp, rest, flag, goal, star, danger, safe, talk, info, map, boss, check, circle, close, footprints, chest, chestOpen, ore, ember, seal, pack, starFilled, starBadge, starBadgeEmpty } as const;
+const svgs = { attack, guard, bash, mark, execute, bolt, ward, heal, prayer, brace, pierce, hinder, volley, acid, haste, ambush, evade, taunt, slam, valor, mend, up, down, left, right, camp, rest, flag, goal, star, danger, safe, talk, info, map, boss, check, circle, close, footprints, chest, chestOpen, ore, ember, seal, pack, starFilled, starBadge, starBadgeEmpty } as const;
 const restartPath = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10a8 8 0 1 1 1 8M4 4v6h6"/></svg>';
 export type IconName = ActionId | keyof typeof svgs | 'restart';
 export function icon(name: IconName): string {

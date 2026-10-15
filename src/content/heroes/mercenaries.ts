@@ -12,5 +12,7 @@ export const mercenaries: readonly HeroDefinition[] = [
   { id: 'sefa', speed: 115, name: 'Sefa', role: 'Scout', lane: 'front', maxHp: 54, attack: 12, actions: ['attack', 'ambush', 'evade'], color: 0x6f8fb3 },
   // Hammer warden: challenge draws every enemy move onto him (35% less) until his next turn; rune slam is damage.
   { id: 'brann', speed: 65, name: 'Brann', role: 'Warden', lane: 'front', maxHp: 92, attack: 11, actions: ['attack', 'taunt', 'slam'], color: 0x899098 },
+  // Bard: a persistent song - valor (+4 to every hero hit) or mending (allies heal 5 each new round).
+  { id: 'lio', speed: 85, name: 'Lio', role: 'Bard', lane: 'back', maxHp: 50, attack: 9, actions: ['attack', 'valor', 'mend'], color: 0xed927f },
   { id: 'garran', speed: 90, name: 'Garran', role: 'Spear', lane: 'front', maxHp: 70, attack: 12, actions: ['attack', 'brace', 'pierce'], color: 0x4fc3b4 },
 ];

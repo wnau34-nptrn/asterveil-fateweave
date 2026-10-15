@@ -31,13 +31,10 @@ Date: 2026-10-15 · Source: [PR #4](https://github.com/wnau34-nptrn/asterveil-fa
 
 ## Integrated later (same day)
 
-- **Sefa** (frame 3) and **Brann** (frame 4) shipped with their classes.
+- **Sefa**, **Brann** and **Lio** (frames 3–5) shipped with their classes. All six mercenary frames are now in use.
 - **The 9 foes:** `public/assets/art/units_foes.webp` (q80, 568,786 B) and `portraits_foes.webp` (q72, 431,008 B), each 1024×2560 in table order. The Matriarch's frame and portrait are mirrored (tech fix). Encounters choose them through `EnemyDefinition.art`; see "Veil Frontier foes in battle" in `docs/EXPEDITION_DESIGN.md`.
 - **Total runtime art from this package:** 1,601,238 B (budget 2.0 MB).
 
-## Not integrated yet
-
-- Lio (frame 5) waits for the bard class.
 - **The review mock** was a single large composition, not the real phone and desktop sizes. The real sizes were checked in-game instead (screenshots in this folder).
 - **Optional attack and hit poses:** not delivered.
 

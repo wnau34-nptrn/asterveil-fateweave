@@ -309,6 +309,31 @@ test('Brann (warden) challenges: the announced hit and the forecast turn to him,
   expect(issues).toEqual([]);
 });
 
+test('Lio (bard) plays a song of valor: it stays on his card and the next ally hit is stronger', async ({ page }, info) => {
+  const roster = { deployed: ['guardian', 'tracer', 'lio', 'healer'], reserve: [] as string[] };
+  const members = Object.fromEntries(roster.deployed.map(id => [id, { stars: 1, dupes: 0 }]));
+  const run = { ...newExpedition(map, encounterById, 37, { roster, members }, true) }; reveal(run, map);
+  run.battle = { kind: 'random', encounterId: 'veil-siege', entry: { ...run.hp }, commands: [] };
+  const profile = { ...newProfile(map, 5), tutorialDone: true, commander, company: ['guardian', 'tracer', 'weaver', 'healer', 'lio'], members: { ...newProfile(map, 5).members, lio: { stars: 1, dupes: 0 } }, party: roster };
+  await seed(page, run, profile);
+  const issues: string[] = []; page.on('pageerror', e => issues.push(e.message));
+  await page.goto('./'); await page.locator('#continue').click(); await page.locator('#start').click();
+  await page.locator('#action-attack').click(); await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-brute').click(); await finishPlayback(page);
+  await expect(page.locator('#hero-lio')).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator('#hero-lio .portrait img')).toHaveAttribute('src', /portraits_mercs\.webp$/);
+  await page.locator('#action-mend').click(); await expect(page.locator('#skill-popover')).toContainText('เมื่อเริ่มแต่ละรอบใหม่');
+  await page.locator('#action-valor').click(); await expect(page.locator('#skill-popover')).toContainText('+4');
+  await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-lio').click(); await finishPlayback(page);
+  await expect(page.locator('#hero-lio')).toContainText('เพลงกล้า');
+  // Aegis attacks for 10 + 4.
+  await expect(page.locator('#hero-guardian')).toHaveAttribute('aria-pressed', 'true');
+  await page.locator('#action-attack').click(); await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-brute').click(); await finishPlayback(page);
+  await page.screenshot({ path: info.outputPath('lio-valor.png') });
+  const s = await saved(page); expect(s.battle!.commands.map(c => c.action)).toEqual(['attack', 'valor', 'attack']);
+  await expect(page.locator('[data-enemy=brute]')).toContainText(`${200 - 16 - 14} / 200`);
+  expect(issues).toEqual([]);
+});
+
 test('new Veil Frontier foes fight with their own art: Mycon and the elite Thorn Matriarch', async ({ page }, info) => {
   const run = { ...newExpedition(map, encounterById, 35, undefined, true) }; reveal(run, map);
   run.battle = { kind: 'random', encounterId: 'thicket-ambush', entry: { ...run.hp }, commands: [] };

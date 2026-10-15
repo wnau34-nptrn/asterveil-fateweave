@@ -242,6 +242,53 @@ describe('hammer warden (Brann)', () => {
   });
 });
 
+describe('bard (Lio)', () => {
+  const lio = mercenaries.find(m => m.id === 'lio')!; const [guardian, tracer, , healer] = data.heroes;
+  const party = withParty(data, [guardian!, tracer!, lio, healer!]);
+  // R1 order: Lyra 120, Raider 110, Lio 85, Aegis 80, Brute 70, Seren 60. The Brute's opening bolt aims at slot 2 (Lio).
+  const toLio = (entry?: Parameters<typeof createBattle>[1]) => {
+    let s = createBattle(party, entry); while (currentHeroId(s, party) !== 'lio') s = act(s, 'attack', 'brute', party).state; return s;
+  };
+  it('valor adds its power to every hero hit until he switches songs; one song at a time', () => {
+    const r = act(toLio(), 'valor', 'lio', party);
+    expect(r.state.song).toEqual({ heroId: 'lio', action: 'valor' });
+    expect(actionReason(r.state, party, 'guardian', 'attack')).toBe('');
+    const aegis = act(r.state, 'attack', 'brute', party);
+    expect(aegis.events.find(e => e.sourceId === 'guardian' && e.type === 'damage')).toMatchObject({ amount: 14 }); // 10 + 4
+    let t = aegis.state; while (currentHeroId(t, party) !== 'lio') t = act(t, 'attack', 'brute', party).state;
+    expect(targetOptions(t, party, 'lio', 'valor')[0]!.valid).toBe(false); // valor is cooling down
+    t = act(t, 'mend', 'lio', party).state;
+    expect(t.song).toEqual({ heroId: 'lio', action: 'mend' });
+    const after = act(t, 'attack', 'brute', party);
+    expect(after.events.find(e => e.sourceId === 'guardian' && e.type === 'damage')).toMatchObject({ amount: 10 });
+  });
+  it('mending heals every standing ally as each new round begins, never above max or the fallen', () => {
+    // Aegis is 2 below max and nothing hits him in round 1; Seren starts down.
+    const s = toLio({ hp: { guardian: 74, tracer: 40, lio: 50, healer: 0 } });
+    let t = act(s, 'mend', 'lio', party).state; let heals: string[] = [];
+    while (t.round === 1) { const r = act(t, 'attack', 'brute', party); heals = r.events.filter(e => e.type === 'heal').map(e => `${e.targetId}:${e.amount}`); t = r.state; }
+    expect(heals).toEqual(['guardian:2', 'tracer:5', 'lio:5']);
+    expect(t.heroes.find(h => h.id === 'guardian')!.hp).toBe(76); expect(t.heroes.find(h => h.id === 'healer')!.hp).toBe(0);
+  });
+  it('the song stops when Lio falls', () => {
+    // At 1 HP Lio falls to the Brute's opening bolt (after Aegis's turn), right after starting his song.
+    const r = act(toLio({ hp: { guardian: 76, tracer: 56, lio: 1, healer: 46 } }), 'valor', 'lio', party);
+    expect(r.state.song).toEqual({ heroId: 'lio', action: 'valor' });
+    const after = act(r.state, 'attack', 'brute', party);
+    expect(after.state.heroes.find(h => h.id === 'lio')!.hp).toBe(0); expect(after.state.song).toBeNull();
+  });
+  it('replays and previews identically', () => {
+    let s = createBattle(party);
+    for (let i = 0; i < 100 && s.outcome === 'active'; i++) {
+      const hero = currentHeroId(s, party)!; const foe = s.enemies.find(e => e.hp > 0)!.id;
+      const options: [ActionId, string][] = hero === 'lio' ? [['valor', 'lio'], ['mend', 'lio'], ['attack', foe]] : [['attack', foe]];
+      const use = options.map(([action, targetId]) => ({ beat: s.beat, heroId: hero, action, targetId })).find(c => !validateCommand(s, party, c))!;
+      expect(previewCommand(s, party, use)).toEqual(resolveCommand(s, party, use)); s = resolveCommand(s, party, use).state;
+    }
+    expect(s.commands.some(c => c.action === 'mend')).toBe(true); expect(replay(party, s.commands)).toEqual(s);
+  });
+});
+
 describe('party slots', () => {
   it('enemy moves aim at a slot, so whoever is deployed there becomes the target', () => {
     const [guardian, tracer, weaver, healer] = data.heroes as typeof data.heroes[number][];

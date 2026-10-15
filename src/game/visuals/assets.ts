@@ -10,8 +10,7 @@ export const actorArt: Readonly<Record<string, { sheet: ArtSheet; frame: number 
   guardian: { sheet: 'units', frame: 0 }, tracer: { sheet: 'units', frame: 1 }, weaver: { sheet: 'units', frame: 2 },
   healer: { sheet: 'units', frame: 3 }, raider: { sheet: 'units', frame: 4 }, brute: { sheet: 'units', frame: 5 },
   garran: { sheet: 'mercs', frame: 0 }, mira: { sheet: 'mercs', frame: 1 }, toma: { sheet: 'mercs', frame: 2 },
-  sefa: { sheet: 'mercs', frame: 3 }, brann: { sheet: 'mercs', frame: 4 },
-  // Frame 5 is delivered for Lio (bard); map it when the class ships.
+  sefa: { sheet: 'mercs', frame: 3 }, brann: { sheet: 'mercs', frame: 4 }, lio: { sheet: 'mercs', frame: 5 },
   foe_tusker: { sheet: 'foes', frame: 0 }, foe_sprite: { sheet: 'foes', frame: 1 }, foe_stalker: { sheet: 'foes', frame: 2 },
   foe_mycon: { sheet: 'foes', frame: 3 }, foe_golem: { sheet: 'foes', frame: 4 }, foe_riftweaver: { sheet: 'foes', frame: 5 },
   foe_matriarch: { sheet: 'foes', frame: 6 }, foe_juggernaut: { sheet: 'foes', frame: 7 }, foe_sentinel: { sheet: 'foes', frame: 8 },

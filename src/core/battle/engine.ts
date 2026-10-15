@@ -18,6 +18,9 @@ export function currentHeroId(state: BattleState, data: EncounterDefinition): st
 // Every hero hit on a corroded enemy gains the flat corrode bonus.
 export const corrodeBonus = (state: BattleState, data: EncounterDefinition, enemyId: string): number =>
   (state.enemies.find(e => e.id === enemyId)?.corrodedUntil ?? 0) > state.round ? data.rules.corrodeBonus : 0;
+// Every hero hit adds the target's corrosion and the bard's song of valor while it plays.
+export const hitBonus = (state: BattleState, data: EncounterDefinition, enemyId: string): number =>
+  corrodeBonus(state, data, enemyId) + (state.song?.action === 'valor' ? skillPower(data, state.song.heroId, 'valor') : 0);
 // A scout's ambush strikes harder at an enemy that still has its turn ahead in the current round.
 export const ambushBonus = (state: BattleState, data: EncounterDefinition, enemyId: string): number =>
   state.order.indexOf(enemyId) > state.turnIndex ? data.rules.ambushBonus : 0;
@@ -77,7 +80,7 @@ function finishOrAdvance(state: BattleState, data: EncounterDefinition, events: 
   if (state.enemies.every(e => e.hp <= 0)) state.outcome = 'victory';
   else if (state.heroes.every(h => h.hp <= 0)) state.outcome = 'defeat';
   if (state.outcome !== 'active') {
-    state.intent = null; state.guard = null; state.counter = null; state.taunt = null; events.push({ type: 'outcome', text: state.outcome }); return;
+    state.intent = null; state.guard = null; state.counter = null; state.taunt = null; state.song = null; events.push({ type: 'outcome', text: state.outcome }); return;
   }
   state.beat++;
   do {
@@ -85,11 +88,20 @@ function finishOrAdvance(state: BattleState, data: EncounterDefinition, events: 
     if (state.turnIndex >= state.order.length) {
       state.round++; state.order = roundOrder(state, data); state.turnIndex = 0;
       for (const e of state.enemies) if (e.markedUntil <= state.round) e.markedUntil = 0;
+      // A song of mending heals every standing ally as each new round begins.
+      if (state.song?.action === 'mend' && living(state, state.song.heroId)) {
+        const power = skillPower(data, state.song.heroId, 'mend');
+        for (const h of state.heroes) {
+          const amount = h.hp > 0 ? Math.min(power, data.heroes.find(d => d.id === h.id)!.maxHp - h.hp) : 0;
+          if (amount) { h.hp += amount; events.push({ type: 'heal', sourceId: state.song.heroId, targetId: h.id, amount, text: 'The song mends the party.' }); }
+        }
+      }
     }
   } while (!living(state, state.order[state.turnIndex]!));
   if (state.guard && (!living(state, state.guard.heroId) || !living(state, state.guard.sourceId) || currentActorId(state) === state.guard.heroId)) state.guard = null;
   if (state.counter && (!living(state, state.counter.heroId) || currentActorId(state) === state.counter.heroId)) state.counter = null;
   if (state.taunt && (!living(state, state.taunt.heroId) || currentActorId(state) === state.taunt.heroId)) state.taunt = null;
+  if (state.song && !living(state, state.song.heroId)) state.song = null;
   for (const h of state.heroes) if (h.evading && (h.hp <= 0 || currentActorId(state) === h.id)) delete h.evading;
   refreshIntent(state, data);
 }
@@ -102,7 +114,7 @@ function hit(state: BattleState, data: EncounterDefinition, enemy: EnemyState, i
   // A braced spear answers the first physical hit on any front-lane ally while it stands.
   const brace = state.counter;
   if (brace && intent.kind === 'physical' && living(state, brace.heroId) && data.heroes.find(h => h.id === recipient.id)!.lane === 'front') {
-    const power = skillPower(data, brace.heroId, 'brace') + corrodeBonus(state, data, actorId); const dealt = Math.min(enemy.hp, power); enemy.hp -= dealt;
+    const power = skillPower(data, brace.heroId, 'brace') + hitBonus(state, data, actorId); const dealt = Math.min(enemy.hp, power); enemy.hp -= dealt;
     events.push({ type: 'counter', sourceId: brace.heroId, targetId: actorId, amount: dealt, text: 'Braced spear counters.' });
     if (!enemy.hp) events.push({ type: 'down', targetId: actorId, text: 'Enemy falls.' });
     state.counter = null;
@@ -153,7 +165,7 @@ export function entryReason(data: EncounterDefinition, entry?: BattleEntry): str
 export function beginBattle(data: EncounterDefinition, entry?: BattleEntry): Resolution {
   const invalid = entryReason(data, entry); if (invalid) throw new Error(invalid);
   const state: BattleState = {
-    encounterId: data.id, beat: 1, round: 1, turnIndex: 0, order: [], outcome: 'active', guard: null, counter: null, taunt: null,
+    encounterId: data.id, beat: 1, round: 1, turnIndex: 0, order: [], outcome: 'active', guard: null, counter: null, taunt: null, song: null,
     heroes: data.heroes.map(h => ({ id: h.id, hp: entry?.hp[h.id] ?? h.maxHp, barrier: 0, cooldowns: {} })),
     enemies: data.enemies.map(e => ({ id: e.id, hp: e.maxHp, markedUntil: 0 })), intent: null, commands: [],
   };
@@ -183,9 +195,10 @@ export function targetOptions(state: BattleState, data: EncounterDefinition, her
     const reason = unavailable || (!state.enemies.some(e => e.hp > 0) ? 'This enemy is down.' : '');
     return [{ id: 'enemies', name: 'Enemies', valid: !reason, reason }];
   }
-  if (action === 'brace' || action === 'evade' || action === 'taunt') {
-    // Both are self-only; a shadow step always lapses at the scout's own turn, so it cannot stack either.
-    const reason = unavailable || (action === 'brace' && state.counter?.heroId === heroId ? 'Already braced.' : '');
+  if (action === 'brace' || action === 'evade' || action === 'taunt' || action === 'valor' || action === 'mend') {
+    // Self-only stances. Shadow step and challenge lapse at the actor's own turn, so they cannot stack either.
+    const reason = unavailable || (action === 'brace' && state.counter?.heroId === heroId ? 'Already braced.' :
+      (action === 'valor' || action === 'mend') && state.song?.heroId === heroId && state.song.action === action ? 'Already playing this song.' : '');
     return [{ id: heroId, name: data.heroes.find(h => h.id === heroId)?.name ?? heroId, valid: !reason, reason }];
   }
   if (action === 'haste') return data.heroes.map(h => {
@@ -222,7 +235,7 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
   const base = data.skills[command.action]; const enemy = state.enemies.find(e => e.id === command.targetId);
   const skill = { ...base, power: skillPower(data, hero.id, command.action) };
   const damage = (power: number) => {
-    const amount = Math.min(enemy!.hp, power + corrodeBonus(state, data, enemy!.id)); enemy!.hp -= amount;
+    const amount = Math.min(enemy!.hp, power + hitBonus(state, data, enemy!.id)); enemy!.hp -= amount;
     events.push({ type: 'damage', sourceId: hero.id, targetId: enemy!.id, amount, text: 'Hero attacks.' });
     if (!enemy!.hp) events.push({ type: 'down', targetId: enemy!.id, text: 'Enemy falls.' });
   };
@@ -249,6 +262,9 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
     case 'bolt': case 'pierce': damage(skill.power); break;
     case 'ambush': damage(skill.power + ambushBonus(state, data, enemy!.id)); break;
     case 'slam': damage(skill.power); break;
+    case 'valor': case 'mend':
+      state.song = { heroId: hero.id, action: command.action };
+      events.push({ type: 'song', sourceId: hero.id, targetId: hero.id, amount: skill.power, text: command.action === 'valor' ? 'Song of valor: every hero hit is stronger.' : 'Song of mending: the party heals each round.' }); break;
     case 'taunt':
       state.taunt = { heroId: hero.id, round: state.round };
       events.push({ type: 'taunt', sourceId: hero.id, targetId: hero.id, text: 'Every enemy attack aims at the warden until his next turn.' }); break;
@@ -269,7 +285,7 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
     }
     case 'volley':
       for (const foe of state.enemies.filter(e => e.hp > 0)) {
-        const amount = Math.min(foe.hp, skill.power + corrodeBonus(state, data, foe.id)); foe.hp -= amount;
+        const amount = Math.min(foe.hp, skill.power + hitBonus(state, data, foe.id)); foe.hp -= amount;
         events.push({ type: 'damage', sourceId: hero.id, targetId: foe.id, amount, text: 'Volley hits every enemy.' });
         if (!foe.hp) events.push({ type: 'down', targetId: foe.id, text: 'Enemy falls.' });
       }

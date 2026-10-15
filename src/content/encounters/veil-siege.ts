@@ -2,7 +2,7 @@ import type { EncounterDefinition } from '../../core/battle/types';
 import { heroes } from '../heroes/team';
 import { enemies } from '../enemies/veilbound';
 export const veilSiege: EncounterDefinition = {
-  id: 'veil-siege', version: 11, name: 'ศึกปิดรอยแยก', heroes,
+  id: 'veil-siege', version: 12, name: 'ศึกปิดรอยแยก', heroes,
   enemies,
   intents: [
     { sourceId: 'raider', targetSlot: 1, name: 'Raking Slash', damage: 12, kind: 'physical' },
@@ -37,6 +37,10 @@ export const veilSiege: EncounterDefinition = {
     // Hammer warden (2C-2): taunt pulls every enemy move onto him (reduced) until his next turn; slam is plain damage.
     taunt: { name: 'ยั่วยุ', english: 'Challenge', icon: '⛨', power: 0, cooldown: 3 },
     slam: { name: 'ทุบค้อนรูน', english: 'Rune Slam', icon: '⚒', power: 18, cooldown: 2 },
+    // Bard (2C-2): one song plays until switched or the bard falls. Valor adds power to every hero hit;
+    // mending heals every standing ally by its power as each new round begins.
+    valor: { name: 'เพลงกล้า', english: 'Song of Valor', icon: '♪', power: 4, cooldown: 2 },
+    mend: { name: 'เพลงฟื้น', english: 'Song of Mending', icon: '♫', power: 5, cooldown: 2 },
   },
   rules: { guardReduction: 0.65, markDuration: 2, markedBonus: 22, corrodeDuration: 2, corrodeBonus: 6, ambushBonus: 12, tauntReduction: 0.35 },
 };

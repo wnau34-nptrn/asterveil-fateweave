@@ -35,6 +35,14 @@ export function battleLesson(state:BattleState,data:EncounterDefinition):Lesson|
   const fast=[...living2].sort((a,b)=>data.enemies.find(e=>e.id===b.id)!.speed-data.enemies.find(e=>e.id===a.id)!.speed)[0];
   return (fast&&make('hinder',fast.id,'ยิงสกัดศัตรูที่เร็วที่สุด',`${actorName(fast.id,data)} จะลงมือท้ายสุดรอบหน้า`))??attack();
  }
+ if(heroId==='lio'){
+  // Keep one song playing: mending once the party is worn down, otherwise valor; then attack.
+  const song=state.song?.heroId===heroId?state.song.action:undefined;
+  const worn=state.heroes.some(h=>h.hp>0&&h.hp<data.heroes.find(d=>d.id===h.id)!.maxHp*.5);
+  if(worn&&song!=='mend'){const m=make('mend',heroId,'เพลงฟื้นทั้งทีม',`ทุกคนฟื้น ${skillPower(data,heroId,'mend')} ทุกต้นรอบ`);if(m)return m;}
+  if(!song){const v=make('valor',heroId,'เพลงกล้าเพิ่มพลังทีม',`ทุกการโจมตี +${skillPower(data,heroId,'valor')}`);if(v)return v;}
+  return attack();
+ }
  if(heroId==='brann'){
   // Draw the announced hit away from an ally (reduced on him); otherwise slam the main target.
   if(intent&&intent.targetId!==heroId){const t=make('taunt',heroId,'ยั่วยุดึงการโจมตี',`${actorName(intent.sourceId,data)} จะตีแบรนน์แทน${actorName(intent.targetId,data)} และเบาลง ${data.rules.tauntReduction*100}%`);if(t)return t;}
