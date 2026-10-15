@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { encounterById, encounters } from '../src/content/encounters/catalog';
 import { chapterOne as map } from '../src/content/world/chapter1';
-import { createBattle, currentHeroId, resolveCommand } from '../src/core/battle/engine';
+import { createBattle, currentHeroId, resolveCommand, skillPower } from '../src/core/battle/engine';
 import { clearLegacySaves, expeditionKey, legacyKeys, loadExpedition, parseExpedition, saveExpedition, type StoragePort } from '../src/core/save/expedition-save';
 import type { Direction, ExpeditionState, Point } from '../src/core/world/types';
-import { battleData, battleState, canOpenChest, moveMember, swapMembers, canRest, canRevive, chestAt, encounterChance, findTiles, finishBattle, isRevealed, move, newExpedition, openChest, recordBattle, rest, revive, rollPercent, startOf, tileAt } from '../src/core/world/world';
+import { battleData, battleState, boardOffers, canOpenChest, companyOf, dismiss, dismissReason, hire, hireReason, memberDef, moveMember, swapMembers, takenOffers, upgrade, upgradeCost, upgradeReason, canRest, canRevive, chestAt, encounterChance, findTiles, finishBattle, isRevealed, move, newExpedition, openChest, recordBattle, rest, revive, rollPercent, startOf, tileAt } from '../src/core/world/world';
 import { battleLesson } from '../src/ui/tutorial';
 
 const lookup = encounterById;
@@ -201,6 +201,82 @@ describe('expedition rules', () => {
   });
 });
 
+describe('mercenary company', () => {
+  const camp = findTiles(map, 'camp')[1]!;
+  const atCampWith = (patch: Partial<ExpeditionState> = {}, l = lookup): ExpeditionState => ({ ...newExpedition(map, l, 21), position: camp, camp, ...patch });
+  it('stars scale max HP, Attack and skill power by 8% each but never SPD', () => {
+    const s = atCampWith({ members: { guardian: { stars: 3, dupes: 0 }, tracer: { stars: 1, dupes: 0 }, weaver: { stars: 1, dupes: 0 }, healer: { stars: 1, dupes: 0 } } });
+    const g = memberDef(lookup, map, s.members, 'guardian')!;
+    expect([g.maxHp, g.attack, g.speed, g.skillBonus]).toEqual([88, 12, 80, 16]);
+    s.battle = { kind: 'random', encounterId: 'veil-siege', entry: { guardian: 88, tracer: 56, weaver: 48, healer: 46 }, commands: [] };
+    const data = battleData(s, map, lookup)!;
+    expect(skillPower(data, 'guardian', 'bash')).toBe(21); expect(skillPower(data, 'tracer', 'execute')).toBe(28);
+  });
+  it('offers a fixed board per camp and win count; hiring a roster member stores a duplicate', () => {
+    let s = atCampWith({ resources: { ore: 100, ember: 0, seal: 0 } });
+    const offers = boardOffers(s, map, lookup);
+    expect(offers).toHaveLength(3); expect(new Set(offers).size).toBe(3);
+    expect(boardOffers(s, map, lookup)).toEqual(offers);
+    expect(hireReason({ ...s, position: startOf(map) }, map, lookup, 0)).toBe('camp');
+    const r = hire(s, map, lookup, 0);
+    expect(r.event).toEqual({ type: 'hired', heroId: offers[0], duplicate: true });
+    s = r.state; expect(s.members[offers[0]!]!.dupes).toBe(1); expect(s.resources.ore).toBe(70); expect(takenOffers(s)).toEqual([0]);
+    expect(hireReason(s, map, lookup, 0)).toBe('taken');
+    expect(hireReason({ ...s, resources: { ore: 29, ember: 0, seal: 0 } }, map, lookup, 1)).toBe('ore');
+    // A victory changes the key, so the board refreshes and nothing is taken.
+    expect(takenOffers({ ...s, wins: s.wins + 1 })).toEqual([]);
+  });
+  it('a new mercenary joins the reserve at full HP; the roster stops at 4 + 4', () => {
+    let s = atCampWith({ resources: { ore: 999, ember: 0, seal: 0 } }, rosterLookup);
+    const fresh = () => boardOffers(s, map, rosterLookup).findIndex(id => !s.members[id]);
+    let guard = 0;
+    while (s.roster.reserve.length < 4 && guard++ < 40) {
+      const i = fresh();
+      if (i < 0 || takenOffers(s).includes(i)) { s = { ...s, wins: s.wins + 1 }; continue; }
+      const id = boardOffers(s, map, rosterLookup)[i]!;
+      s = hire(s, map, rosterLookup, i).state;
+      expect(s.roster.reserve.at(-1)).toBe(id); expect(s.hp[id]).toBe(memberDef(rosterLookup, map, s.members, id)!.maxHp);
+    }
+    expect(s.roster.reserve).toHaveLength(4);
+    const big = { ...s, roster: { deployed: s.roster.deployed, reserve: s.roster.reserve } };
+    expect(Object.keys(big.members)).toHaveLength(8);
+  });
+  it('upgrades with duplicates and ore, lets one seal replace one duplicate, and caps at ★5', () => {
+    let s = atCampWith({ resources: { ore: 500, ember: 0, seal: 1 } });
+    expect(upgradeReason(s, map, 'guardian')).toBe(''); // seal stands in for the 1 duplicate
+    expect(upgradeCost(s, map, 'guardian')).toEqual({ dupes: 0, seals: 1, ore: 20 });
+    s = { ...s, hp: { ...s.hp, guardian: 50 } };
+    const r = upgrade(s, map, lookup, 'guardian');
+    expect(r.event).toEqual({ type: 'upgraded', heroId: 'guardian', stars: 2 });
+    s = r.state; expect(s.resources).toEqual({ ore: 480, ember: 0, seal: 0 }); expect(s.hp.guardian).toBe(56); // +6 max HP
+    expect(upgradeReason(s, map, 'guardian')).toBe('dupes'); // ★3 needs 2 duplicates, no seal left
+    s.members.guardian!.dupes = 1; s.resources.seal = 1;
+    expect(upgradeCost(s, map, 'guardian')).toEqual({ dupes: 1, seals: 1, ore: 40 });
+    s = upgrade(s, map, lookup, 'guardian').state; expect(s.members.guardian).toEqual({ stars: 3, dupes: 0 });
+    s.members.guardian = { stars: 5, dupes: 9 }; expect(upgradeReason(s, map, 'guardian')).toBe('maxed');
+    expect(hireReason({ ...s, resources: { ore: 99, ember: 0, seal: 0 } }, map, lookup, boardOffers(s, map, lookup).indexOf('guardian'))).toMatch(/maxed|taken/);
+    const fallen = upgrade({ ...atCampWith({ resources: { ore: 99, ember: 0, seal: 1 } }), hp: { guardian: 0, tracer: 56, weaver: 48, healer: 46 } }, map, lookup, 'guardian').state;
+    expect(fallen.hp.guardian).toBe(0);
+  });
+  it('dismissing loses progress, refunds half the hire cost and never empties the deployment', () => {
+    let s = atCampWith({ members: { guardian: { stars: 2, dupes: 1 }, tracer: { stars: 1, dupes: 0 }, weaver: { stars: 1, dupes: 0 }, healer: { stars: 1, dupes: 0 } } });
+    s = dismiss(s, map, 'guardian').state;
+    expect(s.roster.deployed).toEqual(['tracer', 'weaver', 'healer']); expect(s.members.guardian).toBeUndefined(); expect(s.hp.guardian).toBeUndefined();
+    expect(s.resources.ore).toBe(15);
+    s = dismiss(dismiss(s, map, 'tracer').state, map, 'weaver').state;
+    expect(dismissReason(s, map, 'healer')).toBe('last');
+  });
+  it('a new expedition keeps the company and resets HP, resources and the map', () => {
+    const s = atCampWith({ members: { guardian: { stars: 2, dupes: 1 }, tracer: { stars: 1, dupes: 0 }, weaver: { stars: 1, dupes: 0 }, healer: { stars: 1, dupes: 0 } },
+      roster: { deployed: ['tracer', 'guardian', 'weaver'], reserve: ['healer'] }, resources: { ore: 80, ember: 2, seal: 1 }, hp: { guardian: 3, tracer: 0, weaver: 10, healer: 5 }, steps: 40 });
+    const next = newExpedition(map, lookup, 99, companyOf(s));
+    expect(next.roster).toEqual(s.roster); expect(next.members).toEqual(s.members);
+    expect(next.hp).toEqual({ tracer: 56, guardian: 82, weaver: 48, healer: 46 });
+    expect(next.resources).toEqual({ ore: 0, ember: 0, seal: 0 }); expect(next.steps).toBe(0); expect(next.position).toEqual(startOf(map));
+    expect(parseExpedition(JSON.stringify({ version: 4, state: next }), map, lookup)).toEqual(next);
+  });
+});
+
 describe('resources and chests', () => {
   it('places every chest on a reachable floor tile with a unique id', () => {
     expect(new Set(map.chests.map(c => c.id)).size).toBe(map.chests.length);
@@ -250,23 +326,27 @@ describe('expedition save', () => {
   });
   it.each([
     ['malformed', () => '{bad'],
-    ['wrong version', (s: ExpeditionState) => JSON.stringify({ version: 4, state: s })],
-    ['old map version', (s: ExpeditionState) => JSON.stringify({ version: 3, state: { ...s, mapVersion: 0 } })],
-    ['wall position', (s: ExpeditionState) => JSON.stringify({ version: 3, state: { ...s, position: { x: 0, y: 0 } } })],
-    ['hp above max', (s: ExpeditionState) => JSON.stringify({ version: 3, state: { ...s, hp: { ...s.hp, tracer: 99 } } })],
-    ['all down outside battle', (s: ExpeditionState) => JSON.stringify({ version: 3, state: { ...s, hp: { guardian: 0, tracer: 0, weaver: 0, healer: 0 } } })],
-    ['foreign owner command', (s: ExpeditionState) => JSON.stringify({ version: 3, state: { ...s, battle: { kind: 'random', encounterId: 'veil-siege', entry: s.hp, commands: [{ beat: 1, heroId: 'guardian', action: 'attack', targetId: 'brute' }] } } })],
-    ['unknown encounter', (s: ExpeditionState) => JSON.stringify({ version: 3, state: { ...s, battle: { kind: 'random', encounterId: 'crystal-rift', entry: s.hp, commands: [] } } })],
-    ['negative ore', (s: ExpeditionState) => JSON.stringify({ version: 3, state: { ...s, resources: { ore: -1, ember: 0, seal: 0 } } })],
-    ['extra resource', (s: ExpeditionState) => JSON.stringify({ version: 3, state: { ...s, resources: { ore: 1, ember: 0, seal: 0, gold: 5 } } })],
-    ['unknown chest', (s: ExpeditionState) => JSON.stringify({ version: 3, state: { ...s, openedChests: ['vault'] } })],
-    ['repeated chest', (s: ExpeditionState) => JSON.stringify({ version: 3, state: { ...s, openedChests: ['meadow-west', 'meadow-west'] } })],
-    ['missing campfire flag', (s: ExpeditionState) => JSON.stringify({ version: 3, state: { ...s, restReady: 'yes' } })],
-    ['unknown roster member', (s: ExpeditionState) => JSON.stringify({ version: 3, state: { ...s, roster: { deployed: ['guardian', 'ghost'], reserve: [] } } })],
-    ['duplicate roster member', (s: ExpeditionState) => JSON.stringify({ version: 3, state: { ...s, roster: { deployed: ['guardian', 'tracer', 'weaver', 'healer'], reserve: ['healer'] } } })],
-    ['empty deployment', (s: ExpeditionState) => JSON.stringify({ version: 3, state: { ...s, roster: { deployed: [], reserve: ['guardian', 'tracer', 'weaver', 'healer'] } } })],
-    ['hp for a non-member', (s: ExpeditionState) => JSON.stringify({ version: 3, state: { ...s, roster: { deployed: ['guardian', 'tracer', 'weaver'], reserve: [] } } })],
-    ['bad fog', (s: ExpeditionState) => JSON.stringify({ version: 3, state: { ...s, revealed: 'x' } })],
+    ['wrong version', (s: ExpeditionState) => JSON.stringify({ version: 5, state: s })],
+    ['old map version', (s: ExpeditionState) => JSON.stringify({ version: 4, state: { ...s, mapVersion: 0 } })],
+    ['wall position', (s: ExpeditionState) => JSON.stringify({ version: 4, state: { ...s, position: { x: 0, y: 0 } } })],
+    ['hp above max', (s: ExpeditionState) => JSON.stringify({ version: 4, state: { ...s, hp: { ...s.hp, tracer: 99 } } })],
+    ['all down outside battle', (s: ExpeditionState) => JSON.stringify({ version: 4, state: { ...s, hp: { guardian: 0, tracer: 0, weaver: 0, healer: 0 } } })],
+    ['foreign owner command', (s: ExpeditionState) => JSON.stringify({ version: 4, state: { ...s, battle: { kind: 'random', encounterId: 'veil-siege', entry: s.hp, commands: [{ beat: 1, heroId: 'guardian', action: 'attack', targetId: 'brute' }] } } })],
+    ['unknown encounter', (s: ExpeditionState) => JSON.stringify({ version: 4, state: { ...s, battle: { kind: 'random', encounterId: 'crystal-rift', entry: s.hp, commands: [] } } })],
+    ['negative ore', (s: ExpeditionState) => JSON.stringify({ version: 4, state: { ...s, resources: { ore: -1, ember: 0, seal: 0 } } })],
+    ['extra resource', (s: ExpeditionState) => JSON.stringify({ version: 4, state: { ...s, resources: { ore: 1, ember: 0, seal: 0, gold: 5 } } })],
+    ['unknown chest', (s: ExpeditionState) => JSON.stringify({ version: 4, state: { ...s, openedChests: ['vault'] } })],
+    ['repeated chest', (s: ExpeditionState) => JSON.stringify({ version: 4, state: { ...s, openedChests: ['meadow-west', 'meadow-west'] } })],
+    ['missing campfire flag', (s: ExpeditionState) => JSON.stringify({ version: 4, state: { ...s, restReady: 'yes' } })],
+    ['unknown roster member', (s: ExpeditionState) => JSON.stringify({ version: 4, state: { ...s, roster: { deployed: ['guardian', 'ghost'], reserve: [] } } })],
+    ['duplicate roster member', (s: ExpeditionState) => JSON.stringify({ version: 4, state: { ...s, roster: { deployed: ['guardian', 'tracer', 'weaver', 'healer'], reserve: ['healer'] } } })],
+    ['empty deployment', (s: ExpeditionState) => JSON.stringify({ version: 4, state: { ...s, roster: { deployed: [], reserve: ['guardian', 'tracer', 'weaver', 'healer'] } } })],
+    ['hp for a non-member', (s: ExpeditionState) => JSON.stringify({ version: 4, state: { ...s, roster: { deployed: ['guardian', 'tracer', 'weaver'], reserve: [] } } })],
+    ['star above max', (s: ExpeditionState) => JSON.stringify({ version: 4, state: { ...s, members: { ...s.members, guardian: { stars: 6, dupes: 0 } } } })],
+    ['member missing progress', (s: ExpeditionState) => JSON.stringify({ version: 4, state: { ...s, members: { guardian: { stars: 1, dupes: 0 } } } })],
+    ['bad board', (s: ExpeditionState) => JSON.stringify({ version: 4, state: { ...s, board: { key: 'x', taken: [0] } } })],
+    ['board offer out of range', (s: ExpeditionState) => JSON.stringify({ version: 4, state: { ...s, board: { key: '10,16:0', taken: [7] } } })],
+    ['bad fog', (s: ExpeditionState) => JSON.stringify({ version: 4, state: { ...s, revealed: 'x' } })],
   ])('rejects %s', (_, make) => {
     expect(() => parseExpedition(make(fresh()), map, lookup)).toThrow();
     expect(loadExpedition({ getItem: () => make(fresh()), setItem: () => {} }, map, lookup)).toBeUndefined();

@@ -35,7 +35,18 @@ export interface MapDefinition {
   camp: { restHealPercent: number; reviveHpPercent: number };
   // Hero ids that join free at ★1, deployed in this slot order.
   startingRoster: readonly string[];
+  company: CompanyRules;
 }
+// Mercenary company rules (draft numbers). starCosts[i] upgrades ★(i+1) → ★(i+2).
+export interface CompanyRules {
+  hireCost: number; dismissRefund: number; offers: number; maxStars: number; starStatPercent: number;
+  starCosts: readonly { dupes: number; ore: number }[];
+}
+export interface MemberProgress { stars: number; dupes: number }
+// The hiring board is derived from (seed, camp, wins); only taken offers are stored.
+export interface BoardState { key: string; taken: number[] }
+// Carried from one expedition to the next.
+export interface Company { roster: Roster; members: Record<string, MemberProgress> }
 // Up to 4 deployed (slot order = enemy target slots) and 4 in reserve, swapped at camps.
 export const PARTY_SLOTS = 4;
 export const RESERVE_SLOTS = 4;
@@ -47,7 +58,8 @@ export interface ExpeditionState {
   mapId: string; mapVersion: number; seed: number; rolls: number;
   position: Point; steps: number; pressure: number;
   // `hp` covers every roster member; the battle entry covers the deployed ones.
-  revealed: string; roster: Roster; hp: Record<string, number>; camp: Point | null;
+  revealed: string; roster: Roster; members: Record<string, MemberProgress>; board: BoardState | null;
+  hp: Record<string, number>; camp: Point | null;
   // `restReady` is the campfire: one rest, then it needs a won battle to relight.
   resources: Resources; openedChests: string[]; restReady: boolean;
   tutorialDone: boolean; bossDefeated: boolean; completed: boolean;
@@ -57,6 +69,9 @@ export type WorldEvent =
   | { type: 'moved'; chance: number }
   | { type: 'blocked'; reason: 'wall' | 'edge' | 'busy' | 'party' }
   | { type: 'roster' }
+  | { type: 'hired'; heroId: string; duplicate: boolean }
+  | { type: 'upgraded'; heroId: string; stars: number }
+  | { type: 'dismissed'; heroId: string }
   | { type: 'encounter'; kind: BattleKind; encounterId: string; chance: number }
   | { type: 'goal' }
   | { type: 'rested' }

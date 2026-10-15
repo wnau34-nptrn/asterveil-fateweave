@@ -3,7 +3,7 @@ import { encounterById } from '../../src/content/encounters/catalog';
 import { chapterOne as map } from '../../src/content/world/chapter1';
 import { createBattle, currentHeroId, resolveCommand } from '../../src/core/battle/engine';
 import type { ExpeditionState } from '../../src/core/world/types';
-import { findTiles, move, newExpedition, reveal } from '../../src/core/world/world';
+import { boardOffers, findTiles, move, newExpedition, reveal } from '../../src/core/world/world';
 import { battleLesson } from '../../src/ui/tutorial';
 
 const key = 'asterveil.fateweave.expedition.v1';
@@ -12,7 +12,7 @@ function base(patch: Partial<ExpeditionState> = {}): ExpeditionState {
   const state = { ...newExpedition(map, encounterById, 77), tutorialDone: true, ...patch }; reveal(state, map); return state;
 }
 async function seed(page: Page, state: ExpeditionState) {
-  await page.addInitScript(({ raw, key }) => { if (sessionStorage.getItem('playtest-seeded')) return; localStorage.setItem(key, raw); sessionStorage.setItem('playtest-seeded', 'yes'); }, { raw: JSON.stringify({ version: 3, state }), key });
+  await page.addInitScript(({ raw, key }) => { if (sessionStorage.getItem('playtest-seeded')) return; localStorage.setItem(key, raw); sessionStorage.setItem('playtest-seeded', 'yes'); }, { raw: JSON.stringify({ version: 4, state }), key });
 }
 async function open(page: Page, state?: ExpeditionState) {
   const issues: string[] = []; page.on('pageerror', e => issues.push(e.message)); page.on('console', m => { if (m.type() === 'error') issues.push(m.text()); });
@@ -144,6 +144,30 @@ test('the camp team tab benches and redeploys members; the party row follows the
   expect(issues).toEqual([]);
 });
 
+test('hiring a duplicate at camp, upgrading a star and the company carrying into a new expedition', async ({ page }, info) => {
+  const camp = findTiles(map, 'camp')[1]!;
+  const state = base({ position: camp, camp, resources: { ore: 120, ember: 0, seal: 0 } });
+  const offer = boardOffers(state, map, encounterById)[0]!;
+  const issues = await open(page, state);
+  await page.locator('#rest').click(); await page.locator('#camp-tab-hire').click();
+  await expect(page.locator('#hire-0')).toContainText('จ้าง · 30'); await page.screenshot({ path: info.outputPath('hire.png') });
+  await page.locator('#hire-0').click();
+  await expect(page.locator('#world-message')).toContainText('ได้ตัวซ้ำ');
+  await expect(page.locator('#hire-0')).toBeDisabled(); await expect(page.locator('#hire-0')).toContainText('จ้างแล้ว');
+  expect((await saved(page)).members[offer]).toEqual({ stars: 1, dupes: 1 }); expect((await saved(page)).resources.ore).toBe(90);
+  await page.locator('#camp-tab-team').click(); await page.locator(`#team-${offer}`).click();
+  await expect(page.locator('#team-upgrade')).toContainText('อัปเป็น ★2'); await reachable(page, '#team-upgrade');
+  await page.screenshot({ path: info.outputPath('upgrade.png') });
+  await page.locator('#team-upgrade').click();
+  await expect(page.locator('#world-message')).toContainText('★2');
+  expect((await saved(page)).members[offer]).toEqual({ stars: 2, dupes: 0 }); expect((await saved(page)).resources.ore).toBe(70);
+  await page.keyboard.press('Escape'); await expect(page.locator(`#world-hero-${offer} .hero-stars`)).toHaveText('★2');
+  await page.locator('#world-info-button').click(); await page.locator('#new-expedition').click(); await page.locator('#confirm-new').click();
+  const next = await saved(page);
+  expect(next.members[offer]).toEqual({ stars: 2, dupes: 0 }); expect(next.resources.ore).toBe(0); expect(next.steps).toBe(0);
+  expect(issues).toEqual([]);
+});
+
 test('defeat retreats to the last camp; the fallen stay down and a whole-roster wipe gets one member up', async ({ page }) => {
   const data = encounterById('veil-siege')!; const hp = { guardian: 6, tracer: 4, weaver: 3, healer: 2 };
   const camp = findTiles(map, 'camp')[1]!;
@@ -225,7 +249,11 @@ for (const viewport of viewports) {
     await page.locator('#camp-tab-team').click();
     for (const id of ['guardian', 'tracer', 'weaver', 'healer']) await reachable(page, `#team-${id}`);
     expect(await page.evaluate(() => document.documentElement.scrollHeight > innerHeight)).toBe(false);
-    await page.screenshot({ path: info.outputPath('team.png') }); await page.keyboard.press('Escape');
+    await page.screenshot({ path: info.outputPath('team.png') });
+    await page.locator('#camp-tab-hire').click();
+    for (const sel of ['#hire-0', '#hire-1', '#hire-2']) await reachable(page, sel);
+    expect(await page.evaluate(() => document.documentElement.scrollHeight > innerHeight)).toBe(false);
+    await page.screenshot({ path: info.outputPath('hire.png') }); await page.keyboard.press('Escape');
     expect(issues).toEqual([]); await context.close();
   });
 }

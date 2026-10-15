@@ -1,4 +1,4 @@
-import { currentHeroId, targetOptions } from '../core/battle/engine';
+import { currentHeroId, skillPower, targetOptions } from '../core/battle/engine';
 import type { ActionId, BattleState, EncounterDefinition } from '../core/battle/types';
 import { actorName } from './th';
 export interface Lesson { step:number; title:string; copy:string; heroId:string; action:ActionId; targetId:string }
@@ -23,17 +23,17 @@ export function battleLesson(state:BattleState,data:EncounterDefinition):Lesson|
   return attack();
  }
  if(heroId==='tracer'){
-  if(target.markedUntil>state.round)return make('execute',target.id,'ตีเป้าเดิมเพื่อใช้ตรา',`พลัง ${data.skills.execute.power+data.rules.markedBonus}`)??make('attack',target.id,'ตีเป้าเดิมเพื่อใช้ตรา',`เพิ่มพลัง +${data.rules.markedBonus}`);
+  if(target.markedUntil>state.round)return make('execute',target.id,'ตีเป้าเดิมเพื่อใช้ตรา',`พลัง ${skillPower(data,heroId,'execute')+data.rules.markedBonus}`)??make('attack',target.id,'ตีเป้าเดิมเพื่อใช้ตรา',`เพิ่มพลัง +${data.rules.markedBonus}`);
   return make('mark',target.id,'ติดตราไว้ใช้รอบถัดไป',`ยังไม่ทำความเสียหาย · ตราอยู่ ${data.rules.markDuration} รอบ`)??attack();
  }
  if(heroId==='weaver'){
-  if(intent?.kind==='energy'){const ward=make('ward',intent.targetId,'โล่รับพลังงานก่อนเลือด',`โล่ ${data.skills.ward.power}`);if(ward)return ward;}
-  return make('bolt',target.id,'จอมเวทโจมตีด้วยพลังงาน',`ศรเวทพลัง ${data.skills.bolt.power}`)??attack();
+  if(intent?.kind==='energy'){const ward=make('ward',intent.targetId,'โล่รับพลังงานก่อนเลือด',`โล่ ${skillPower(data,heroId,'ward')}`);if(ward)return ward;}
+  return make('bolt',target.id,'จอมเวทโจมตีด้วยพลังงาน',`ศรเวทพลัง ${skillPower(data,heroId,'bolt')}`)??attack();
  }
  const injured=state.heroes.filter(h=>h.hp>0).map(h=>({h,missing:data.heroes.find(d=>d.id===h.id)!.maxHp-h.hp})).filter(v=>v.missing>0).sort((a,b)=>b.missing-a.missing);
  if(injured.length){
-  const heal=make('heal',injured[0]!.h.id,'รักษาเพื่อนก่อนศัตรูลงมือ',`ฟื้นเลือดได้ถึง ${data.skills.heal.power}`);if(heal)return heal;
-  if(injured.length>1){const prayer=make('prayer','party','ฟื้นฟูทั้งทีม',`คนละ ${data.skills.prayer.power}`);if(prayer)return prayer;}
+  const heal=make('heal',injured[0]!.h.id,'รักษาเพื่อนก่อนศัตรูลงมือ',`ฟื้นเลือดได้ถึง ${skillPower(data,heroId,'heal')}`);if(heal)return heal;
+  if(injured.length>1){const prayer=make('prayer','party','ฟื้นฟูทั้งทีม',`คนละ ${skillPower(data,heroId,'prayer')}`);if(prayer)return prayer;}
  }
  return attack();
 }

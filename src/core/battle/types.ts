@@ -4,6 +4,8 @@ export interface SkillDefinition { name: string; english: string; icon: string; 
 export interface HeroDefinition {
   id: string; name: string; role: string; lane: 'front' | 'back'; maxHp: number; attack: number; speed: number;
   actions: readonly ActionId[]; color: number; empoweredByStatuses?: boolean;
+  // Percent added to this hero's skill power (stars). Attack and max HP are scaled directly.
+  skillBonus?: number;
 }
 export interface EnemyDefinition { id: string; name: string; displayName?: string; maxHp: number; speed: number; color: number }
 // Enemy moves aim at a party slot (0-3 in deployment order), not a named hero, so any

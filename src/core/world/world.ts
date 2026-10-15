@@ -1,6 +1,6 @@
 import { replay, withParty } from '../battle/engine';
 import type { BattleState, Command, EncounterDefinition, HeroDefinition } from '../battle/types';
-import type { ActiveBattle, BattleKind, ChestDefinition, Direction, ExpeditionState, LootTable, MapDefinition, Point, Resources, Tile, WorldResult, ZoneDefinition } from './types';
+import type { ActiveBattle, BattleKind, ChestDefinition, Company, Direction, ExpeditionState, LootTable, MapDefinition, Point, Resources, Tile, WorldResult, ZoneDefinition } from './types';
 import { PARTY_SLOTS, RESERVE_SLOTS } from './types';
 
 // Pure expedition rules: no DOM, Phaser, clocks or Math.random. Every roll is
@@ -54,15 +54,32 @@ export function heroDef(lookup: EncounterLookup, map: MapDefinition, id: string)
   return heroCatalog(lookup, map).find(h => h.id === id);
 }
 export const rosterIds = (state: ExpeditionState): string[] => [...state.roster.deployed, ...state.roster.reserve];
-// Max HP for the given members (default: the whole roster).
-export function fullParty(lookup: EncounterLookup, map: MapDefinition, ids?: readonly string[]): Record<string, number> {
-  return Object.fromEntries((ids ?? map.startingRoster).map(id => [id, heroDef(lookup, map, id)!.maxHp]));
+// Each star above ★1 adds `starStatPercent` to max HP, Attack and skill power. SPD never
+// changes, so stars cannot reorder turns.
+export function starred(base: HeroDefinition, stars: number, map: MapDefinition): HeroDefinition {
+  const bonus = (stars - 1) * map.company.starStatPercent;
+  if (!bonus) return base;
+  const scale = (n: number) => Math.round(n * (100 + bonus) / 100);
+  return { ...base, maxHp: scale(base.maxHp), attack: scale(base.attack), skillBonus: bonus };
 }
-export function newExpedition(map: MapDefinition, lookup: EncounterLookup, seed: number): ExpeditionState {
+export function memberDef(lookup: EncounterLookup, map: MapDefinition, members: ExpeditionState['members'], id: string): HeroDefinition | undefined {
+  const base = heroDef(lookup, map, id);
+  return base && starred(base, members[id]?.stars ?? 1, map);
+}
+// Max HP for the given members (default: the starting roster at ★1).
+export function fullParty(lookup: EncounterLookup, map: MapDefinition, ids?: readonly string[], members: ExpeditionState['members'] = {}): Record<string, number> {
+  return Object.fromEntries((ids ?? map.startingRoster).map(id => [id, memberDef(lookup, map, members, id)!.maxHp]));
+}
+// A new expedition keeps the company (roster, stars, duplicates) from the last one;
+// position, HP, resources and map progress start over.
+export function newExpedition(map: MapDefinition, lookup: EncounterLookup, seed: number, company?: Company): ExpeditionState {
   const width = map.rows[0]!.length;
+  const roster = company ? structuredClone(company.roster) : { deployed: [...map.startingRoster], reserve: [] };
+  const members = company ? structuredClone(company.members) : Object.fromEntries(map.startingRoster.map(id => [id, { stars: 1, dupes: 0 }]));
   const state: ExpeditionState = {
     mapId: map.id, mapVersion: map.version, seed: seed >>> 0, rolls: 0, position: startOf(map), steps: 0, pressure: 0,
-    revealed: '0'.repeat(width * map.rows.length), roster: { deployed: [...map.startingRoster], reserve: [] }, hp: fullParty(lookup, map), camp: null,
+    revealed: '0'.repeat(width * map.rows.length), roster, members, board: null,
+    hp: fullParty(lookup, map, [...roster.deployed, ...roster.reserve], members), camp: null,
     resources: { ore: 0, ember: 0, seal: 0 }, openedChests: [], restReady: true,
     tutorialDone: false, bossDefeated: false, completed: false, wins: 0, defeats: 0, battle: null,
   };
@@ -115,7 +132,7 @@ const percentOf = (max: number, percent: number) => Math.max(1, Math.ceil(max * 
 // A rest heals standing members by a share of max HP; the fallen need an ember each.
 export function rest(initial: ExpeditionState, map: MapDefinition, lookup: EncounterLookup): WorldResult {
   if (!canRest(initial, map)) return { state: initial, event: { type: 'blocked', reason: 'busy' } };
-  const state = structuredClone(initial); const full = fullParty(lookup, map, rosterIds(state));
+  const state = structuredClone(initial); const full = fullParty(lookup, map, rosterIds(state), state.members);
   for (const [id, max] of Object.entries(full)) if (state.hp[id]! > 0) state.hp[id] = Math.min(max, state.hp[id]! + percentOf(max, map.camp.restHealPercent));
   state.pressure = 0; state.camp = { ...state.position }; state.restReady = false;
   return { state, event: { type: 'rested' } };
@@ -126,7 +143,7 @@ export function canRevive(state: ExpeditionState, map: MapDefinition, heroId: st
 export function revive(initial: ExpeditionState, map: MapDefinition, lookup: EncounterLookup, heroId: string): WorldResult {
   if (!canRevive(initial, map, heroId)) return { state: initial, event: { type: 'blocked', reason: 'busy' } };
   const state = structuredClone(initial);
-  state.hp[heroId] = percentOf(heroDef(lookup, map, heroId)!.maxHp, map.camp.reviveHpPercent); state.resources.ember--;
+  state.hp[heroId] = percentOf(memberDef(lookup, map, state.members, heroId)!.maxHp, map.camp.reviveHpPercent); state.resources.ember--;
   return { state, event: { type: 'revived', heroId } };
 }
 
@@ -150,6 +167,81 @@ export function moveMember(initial: ExpeditionState, map: MapDefinition, id: str
   from.splice(from.indexOf(id), 1); to.push(id);
   return { state, event: { type: 'roster' } };
 }
+
+// ---- Mercenary company (2C) ----
+export const boardKey = (state: ExpeditionState): string => `${state.position.x},${state.position.y}:${state.wins}`;
+// Offers at the current camp: distinct catalog ids from (seed, camp, wins), so a reload never
+// re-rolls them and each won battle refreshes the board. Roster members can appear (duplicates).
+export function boardOffers(state: ExpeditionState, map: MapDefinition, lookup: EncounterLookup): string[] {
+  const pool = heroCatalog(lookup, map).map(h => h.id); const offers: string[] = [];
+  const salt = (Math.imul(state.position.x + 1, 73856093) ^ Math.imul(state.position.y + 1, 19349663) ^ Math.imul(state.wins + 1, 83492791)) >>> 0;
+  for (let i = 0; offers.length < Math.min(map.company.offers, pool.length); i++) {
+    const left = pool.filter(id => !offers.includes(id));
+    offers.push(left[(rollPercent(state.seed ^ salt, i) * 7919 + i) % left.length]!);
+  }
+  return offers;
+}
+export const takenOffers = (state: ExpeditionState): number[] => state.board?.key === boardKey(state) ? state.board.taken : [];
+export function hireReason(state: ExpeditionState, map: MapDefinition, lookup: EncounterLookup, index: number): string {
+  if (!atCamp(state, map)) return 'camp';
+  const id = boardOffers(state, map, lookup)[index];
+  if (!id || takenOffers(state).includes(index)) return 'taken';
+  if (state.resources.ore < map.company.hireCost) return 'ore';
+  if (state.members[id]) return state.members[id]!.stars >= map.company.maxStars ? 'maxed' : '';
+  return rosterIds(state).length >= PARTY_SLOTS + RESERVE_SLOTS ? 'full' : '';
+}
+// Hiring someone already on the roster stores a duplicate for star upgrades instead.
+export function hire(initial: ExpeditionState, map: MapDefinition, lookup: EncounterLookup, index: number): WorldResult {
+  if (hireReason(initial, map, lookup, index)) return { state: initial, event: { type: 'blocked', reason: 'busy' } };
+  const state = structuredClone(initial); const id = boardOffers(state, map, lookup)[index]!;
+  const duplicate = !!state.members[id];
+  state.resources.ore -= map.company.hireCost;
+  state.board = { key: boardKey(state), taken: [...takenOffers(state), index] };
+  if (duplicate) state.members[id]!.dupes++;
+  else {
+    state.members[id] = { stars: 1, dupes: 0 };
+    (state.roster.reserve.length < RESERVE_SLOTS ? state.roster.reserve : state.roster.deployed).push(id);
+    state.hp[id] = memberDef(lookup, map, state.members, id)!.maxHp;
+  }
+  return { state, event: { type: 'hired', heroId: id, duplicate } };
+}
+// Cost of the next star: duplicates first; one contract seal may stand in for a missing duplicate.
+export function upgradeCost(state: ExpeditionState, map: MapDefinition, id: string): { dupes: number; seals: number; ore: number } | undefined {
+  const m = state.members[id]; const cost = m && map.company.starCosts[m.stars - 1];
+  if (!m || !cost || m.stars >= map.company.maxStars) return undefined;
+  const dupes = Math.min(m.dupes, cost.dupes);
+  return { dupes, seals: cost.dupes - dupes, ore: cost.ore };
+}
+export function upgradeReason(state: ExpeditionState, map: MapDefinition, id: string): string {
+  if (!atCamp(state, map)) return 'camp';
+  const cost = upgradeCost(state, map, id);
+  if (!cost) return 'maxed';
+  if (cost.seals > 1 || cost.seals > state.resources.seal) return 'dupes';
+  return state.resources.ore < cost.ore ? 'ore' : '';
+}
+export function upgrade(initial: ExpeditionState, map: MapDefinition, lookup: EncounterLookup, id: string): WorldResult {
+  if (upgradeReason(initial, map, id)) return { state: initial, event: { type: 'blocked', reason: 'busy' } };
+  const state = structuredClone(initial); const cost = upgradeCost(state, map, id)!; const m = state.members[id]!;
+  const before = memberDef(lookup, map, state.members, id)!.maxHp;
+  m.dupes -= cost.dupes; m.stars++; state.resources.seal -= cost.seals; state.resources.ore -= cost.ore;
+  // A standing member gains the added max HP; the fallen stay down.
+  if (state.hp[id]! > 0) state.hp[id]! += memberDef(lookup, map, state.members, id)!.maxHp - before;
+  return { state, event: { type: 'upgraded', heroId: id, stars: m.stars } };
+}
+// Dismissing loses the member's stars and duplicates; half the hire cost comes back.
+export function dismissReason(state: ExpeditionState, map: MapDefinition, id: string): string {
+  if (!atCamp(state, map)) return 'camp';
+  if (!rosterIds(state).includes(id)) return 'unknown';
+  return state.roster.deployed.length === 1 && state.roster.deployed[0] === id ? 'last' : '';
+}
+export function dismiss(initial: ExpeditionState, map: MapDefinition, id: string): WorldResult {
+  if (dismissReason(initial, map, id)) return { state: initial, event: { type: 'blocked', reason: 'busy' } };
+  const state = structuredClone(initial);
+  state.roster.deployed = state.roster.deployed.filter(m => m !== id); state.roster.reserve = state.roster.reserve.filter(m => m !== id);
+  delete state.members[id]; delete state.hp[id]; state.resources.ore += map.company.dismissRefund;
+  return { state, event: { type: 'dismissed', heroId: id } };
+}
+export const companyOf = (state: ExpeditionState): Company => ({ roster: structuredClone(state.roster), members: structuredClone(state.members) });
 
 // Loot consumes rolls from the same (seed, rolls) stream, so it is fixed once saved.
 function rollLoot(state: ExpeditionState, table: LootTable): Resources {
@@ -180,7 +272,7 @@ function battleLoot(state: ExpeditionState, map: MapDefinition, kind: BattleKind
 // The encounter as fought by the deployed party, in slot order.
 export function battleData(state: ExpeditionState, map: MapDefinition, lookup: EncounterLookup): EncounterDefinition | undefined {
   const data = state.battle && lookup(state.battle.encounterId);
-  const party = state.roster.deployed.map(id => heroDef(lookup, map, id));
+  const party = state.roster.deployed.map(id => memberDef(lookup, map, state.members, id));
   return data && party.every(Boolean) ? withParty(data, party as HeroDefinition[]) : undefined;
 }
 // The battle's committed commands are replayed from the recorded entry; the world
@@ -211,7 +303,7 @@ export function finishBattle(initial: ExpeditionState, map: MapDefinition, looku
   }
   state.defeats++;
   if (kind === 'tutorial') {
-    state.battle = { kind: 'tutorial', encounterId, entry: fullParty(lookup, map, state.roster.deployed), commands: [] };
+    state.battle = { kind: 'tutorial', encounterId, entry: fullParty(lookup, map, state.roster.deployed, state.members), commands: [] };
     return { state, event: { type: 'defeat', kind, encounterId } };
   }
   // The fallen stay fallen; the party retreats to the last camp reached (or start).
@@ -223,7 +315,7 @@ export function finishBattle(initial: ExpeditionState, map: MapDefinition, looku
   let rescued: string | undefined;
   if (rosterIds(state).every(id => state.hp[id] === 0)) {
     rescued = state.roster.deployed[0]!;
-    state.hp[rescued] = percentOf(heroDef(lookup, map, rescued)!.maxHp, map.camp.reviveHpPercent); state.restReady = true;
+    state.hp[rescued] = percentOf(memberDef(lookup, map, state.members, rescued)!.maxHp, map.camp.reviveHpPercent); state.restReady = true;
   }
   return { state, event: { type: 'defeat', kind, encounterId, ...(rescued ? { rescued } : {}) } };
 }

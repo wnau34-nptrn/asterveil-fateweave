@@ -1,7 +1,7 @@
 import type { BattleState, Outcome } from '../core/battle/types';
 import { clearLegacySaves, loadExpedition, saveExpedition } from '../core/save/expedition-save';
 import type { Direction, ExpeditionState, MapDefinition, WorldEvent } from '../core/world/types';
-import { battleData, finishBattle, heroCatalog, move, moveMember, newExpedition, openChest, recordBattle, rest, revive, swapMembers, type EncounterLookup } from '../core/world/world';
+import { battleData, boardOffers, companyOf, dismiss, finishBattle, heroCatalog, hire, hireReason, move, moveMember, newExpedition, openChest, recordBattle, rest, revive, swapMembers, upgrade, type EncounterLookup } from '../core/world/world';
 import { browserStorage } from '../platform/browser-storage';
 import type { BattleUI } from './battle-ui';
 import { heroText, lootThai } from './th';
@@ -26,7 +26,10 @@ export class GameShell {
     clearLegacySaves(this.storage);
     this.state = loadExpedition(this.storage, map, lookup);
     this.world = new WorldUI(views.world, map, heroCatalog(lookup, map), {
-      move: dir => this.move(dir), rest: () => this.rest(), revive: id => this.revive(id), swap: (a, b) => this.roster(swapMembers(this.state!, map, a, b)), moveMember: id => this.roster(moveMember(this.state!, map, id)), openChest: () => this.openChest(), newExpedition: () => this.begin(),
+      move: dir => this.move(dir), rest: () => this.rest(), revive: id => this.revive(id), swap: (a, b) => this.roster(swapMembers(this.state!, map, a, b)), moveMember: id => this.roster(moveMember(this.state!, map, id)),
+      hire: i => this.roster(hire(this.state!, map, lookup, i)), upgrade: id => this.roster(upgrade(this.state!, map, lookup, id)), dismiss: id => this.roster(dismiss(this.state!, map, id)),
+      board: () => this.state ? boardOffers(this.state, map, lookup).map((id, i) => ({ id, reason: hireReason(this.state!, map, lookup, i) })) : [],
+      openChest: () => this.openChest(), newExpedition: () => this.begin(),
     });
     views.title.addEventListener('click', e => {
       const button = (e.target as HTMLElement).closest<HTMLButtonElement>('button[data-title]');
@@ -61,7 +64,8 @@ export class GameShell {
   private persist(): void { if (this.state) this.saved = saveExpedition(this.storage, this.state); }
   private begin(): void {
     // Seed only chooses future rolls; rules never read the clock.
-    this.state = newExpedition(this.map, this.lookup, (Date.now() ^ Math.floor(Math.random() * 0xffffffff)) >>> 0);
+    // The company (roster, stars, duplicates) carries over; everything else starts fresh.
+    this.state = newExpedition(this.map, this.lookup, (Date.now() ^ Math.floor(Math.random() * 0xffffffff)) >>> 0, this.state && companyOf(this.state));
     this.persist(); this.banner = undefined; this.locked = false;
     this.message = 'แตะช่องที่ไฮไลต์หรือใช้ลูกศรเพื่อเดิน';
     this.renderWorld();
@@ -124,9 +128,14 @@ export class GameShell {
     this.renderWorld();
   }
   private roster(result: { state: ExpeditionState; event: WorldEvent }): void {
-    if (!this.state || this.locked || result.event.type !== 'roster') return;
+    const e = result.event;
+    if (!this.state || this.locked || !['roster', 'hired', 'upgraded', 'dismissed'].includes(e.type)) return;
     this.state = result.state; this.persist();
-    this.message = 'จัดทีมแล้ว · ศัตรูเล็งตามหมายเลขช่อง';
+    const name = (id: string) => heroText[id]?.name ?? '';
+    this.message = e.type === 'hired' ? (e.duplicate ? `ได้ตัวซ้ำของ${name(e.heroId)} · ใช้อัปดาวในแท็บทีม` : `จ้าง${name(e.heroId)}แล้ว · อยู่ในทีมสำรอง`)
+      : e.type === 'upgraded' ? `${name(e.heroId)}ขึ้นเป็น ★${e.stars} แล้ว` : e.type === 'dismissed' ? `เลิกจ้าง${name(e.heroId)}แล้ว · ได้แร่ดาวคืน ${this.map.company.dismissRefund}`
+      : 'จัดทีมแล้ว · ศัตรูเล็งตามหมายเลขช่อง';
+    if (e.type === 'upgraded' || e.type === 'hired') this.effect = 'loot';
     this.renderWorld();
   }
   private openChest(): void {

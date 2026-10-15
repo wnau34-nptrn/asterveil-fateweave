@@ -1,5 +1,6 @@
 import type { ActionId, BattleEvent, BattleState, EncounterDefinition, Intent } from '../core/battle/types';
 import type { ResourceId, Resources } from '../core/world/types';
+import { skillPower } from '../core/battle/engine';
 export const thaiFont = '"Noto Sans Thai", "Leelawadee UI", Tahoma, sans-serif';
 export const heroText: Record<string, { name: string; role: string; help: string; icon: string }> = {
   guardian: { name: 'เอกิส', role: 'อัศวิน', help: 'รับแทนเพื่อนและหยุดการโจมตี', icon: '♜' },
@@ -15,7 +16,7 @@ export function intentName(intent: Intent): string {
   return ({ 'Raking Slash': 'ฟันกวาด', 'Rift Bolt': 'ลำแสงรอยแยก', 'Crushing Blow': 'ทุบหนัก', 'Shadow Knife': 'มีดเงา' } as Record<string, string>)[intent.name] ?? intent.name;
 }
 export function skillDescription(action: ActionId, heroId: string, data: EncounterDefinition): string {
-  const skill = data.skills[action];
+  const skill = { ...data.skills[action], power: skillPower(data, heroId, action) };
   const hero = data.heroes.find(h => h.id === heroId)!;
   const cooldown = skill.cooldown ? ` ใช้แล้วพร้อมอีกครั้งใน ${skill.cooldown} รอบ` : '';
   const text: Record<ActionId, string> = {

@@ -15,7 +15,8 @@ Approved 2026-10-14, re-planned 2026-10-15 for the mercenary roster.
 | 1. Exploration core | Remove practice mode; tile map, camera, fog; shown per-step encounter chance; carried HP; camps; defeat; expedition save; one-time teaching battle | **Implemented** |
 | 2A. Resources and chests | Star ore, veil embers and contract seals; victory drops; six map chests; camp rest at 50% with a campfire; ember revive one member at a time | **Implemented** |
 | 2B. Roster of 8 | 4 deployed + 4 reserve, swapped at camp; enemies target party slots instead of hero ids; defeat rule for the roster | **Implemented** |
-| 2C. Mercenaries | Camp hiring board, catalog of 10 (existing 4 + 6 from ART-CHAR-MERC-ENEMY-001), stars by duplicates, one new class mechanic at a time | Planned |
+| 2C-1. Company | Hiring board at camps, duplicates, star upgrades (stats), dismissal, company carried into the next expedition | **Implemented** |
+| 2C-2. New classes | Six new mercenaries (ART-CHAR-MERC-ENEMY-001), one class mechanic at a time; ★3 skill and ★5 passive per class | Planned |
 | 2D. Equipment and level | Equipment (weapon by class, body, accessory; rarity and affixes; bad-luck protection), shared EXP/level, consumables on the map | Planned |
 | 3. Choices and content | Events with fight/avoid choices, elites, mini boss, puzzles (rune order, push stone, lever), secrets, map quest "2 of 3" and side quests | Planned |
 | 4. Economy and wrap-up | Local gold and shop, salvage, fast travel between camps, elite respawn on rest, defeat penalty, whole-map balance simulation, completion screen | Planned |
@@ -147,6 +148,39 @@ Elites (phase 3) will add guaranteed seals.
 - With only four members before hiring, a full defeat leaves one member standing. Recovery then needs embers.
 - A deployed party that is down while the reserve stands can occur only after a camp was reached, because reserve members come from camps. So there is always a camp to swap at.
 
+## Phase 2C-1 rules (draft numbers)
+
+**Stars.**
+- Each star above ★1 adds 8% to max HP and Attack (rounded) and +8% skill power via `HeroDefinition.skillBonus`, which the resolver, previews and skill text all read through `skillPower`. SPD never changes, so stars never reorder turns.
+- The ★3 skill and ★5 passive unlocks are not implemented yet. They need per-class designs and arrive with the class work in 2C-2.
+
+**Hiring board.**
+- At a camp, the "จ้าง" tab shows three distinct offers from the hero catalog, derived from `(seed, camp position, wins)`. A reload cannot re-roll them, and every won battle refreshes the board. Only the taken offer indexes are saved (`board`).
+- Every hire costs 30 ore.
+- A new mercenary joins the reserve (or the deployed party if the reserve is full) at ★1 with full HP.
+- Hiring someone already on the roster stores one duplicate instead, even when the roster is full. A ★5 member cannot be offered as a duplicate.
+- A new member cannot join when the roster already holds 8.
+- Until the six new mercenaries exist, the catalog is the starting four, so every offer is a duplicate.
+
+**Upgrades** (team tab, tap a member):
+
+| To | Duplicates | Ore |
+|---|---|---|
+| ★2 | 1 | 20 |
+| ★3 | 2 | 40 |
+| ★4 | 3 | 70 |
+| ★5 | 4 | 110 |
+
+- One contract seal may stand in for one missing duplicate.
+- A standing member gains the added max HP; a fallen member stays at 0.
+
+**Dismissal.** Dismissing a member returns 15 ore and loses its stars and duplicates. It needs a second press to confirm. The last deployed member cannot be dismissed.
+
+**Company carry-over.**
+- Starting a new expedition (from the info dialog, the completion banner or the title) keeps the roster order, stars and duplicates.
+- HP resets to full; position, fog, resources, chests, camp, flags and the board start over.
+- The company lives inside the single expedition save, so an incompatible save also loses it. A separate company save can come later if needed.
+
 **Encounters added for the expedition** (all reuse the two illustrated enemy slots `raider`/`brute`):
 
 | id / version | Enemies (HP, SPD) | Moves per own round |
@@ -163,10 +197,10 @@ veil-siege / 5, rear-ambush / 3 and rift-warden / 3 keep their content and versi
 
 ## Save
 
-Key `asterveil.fateweave.expedition.v1`, envelope `{ version: 3, state }`. State fields:
+Key `asterveil.fateweave.expedition.v1`, envelope `{ version: 4, state }`. State fields:
 - map id/version, seed, roll counter;
 - position, steps, pressure, fog string;
-- roster `{ deployed, reserve }`, HP for every roster member, last camp;
+- roster `{ deployed, reserve }`, `members` (stars/duplicates per member), `board`, HP for every roster member, last camp;
 - resources `{ ore, ember, seal }`, `openedChests`, `restReady`;
 - tutorial/boss/completed flags, wins/defeats;
 - the active battle `{ kind, encounterId, entry, commands }`.
@@ -177,6 +211,7 @@ The practice keys (`asterveil.fateweave.battle.v1`, `.rear-ambush`, `.rift-warde
 
 Save history:
 - Version 1 (phase 1) was new; earlier practice saves were intentionally dropped.
+- Version 4 (phase 2C-1) adds `members` and `board`. Older saves migrate with every member at ★1 and no board. Stars outside 1–5, missing members, and malformed or out-of-range board entries are rejected.
 - Version 3 (phase 2B) adds `roster`. v1/v2 saves migrate with the starting four deployed and an empty reserve. Unknown, duplicated or missing members, an empty deployment, and HP keys that differ from the roster are rejected.
 - Version 2 (phase 2A) adds resources, opened chests and the campfire flag. A v1 save migrates with zero resources, no opened chests and a lit campfire. The map layout and map version are unchanged. Tested in `tests/world.test.ts`.
 - Unknown resource keys, unknown or repeated chest ids, and a non-boolean campfire flag are rejected.

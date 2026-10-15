@@ -12,6 +12,11 @@ export function currentHeroId(state: BattleState, data: EncounterDefinition): st
   const id = currentActorId(state); return data.heroes.some(h => h.id === id) ? id : undefined;
 }
 // Forecast order assumes today's survivors remain alive. Current-round order is frozen.
+// Skill power as cast by this hero (stars add a percentage).
+export function skillPower(data: EncounterDefinition, heroId: string, action: ActionId): number {
+  const bonus = data.heroes.find(h => h.id === heroId)?.skillBonus ?? 0;
+  return Math.round(data.skills[action].power * (100 + bonus) / 100);
+}
 // Deploys a party (in slot order) into an encounter; enemy slots then resolve to these heroes.
 export function withParty(data: EncounterDefinition, party: readonly HeroDefinition[]): EncounterDefinition {
   if (!party.length || party.length > 4 || new Set(party.map(h => h.id)).size !== party.length) throw new Error('Invalid party.');
@@ -138,7 +143,7 @@ export function targetOptions(state: BattleState, data: EncounterDefinition, her
     const reason = unavailable || (actor.hp <= 0 ? 'This hero is down.' :
       action === 'guard' && state.intent?.targetId !== h.id ? 'Guard must protect the announced target.' :
       action === 'heal' && actor.hp >= h.maxHp ? 'This ally is at full health.' :
-      action === 'ward' && actor.barrier >= data.skills.ward.power ? 'This ally already has this barrier.' : '');
+      action === 'ward' && actor.barrier >= skillPower(data, heroId, 'ward') ? 'This ally already has this barrier.' : '');
     return { id: h.id, name: h.name, valid: !reason, reason };
   });
   return data.enemies.map(e => {
@@ -159,7 +164,8 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
   const invalid = validateCommand(initial, data, command); if (invalid) throw new Error(invalid);
   const state = structuredClone(initial); const events: BattleEvent[] = []; const turns: TurnStage[] = [];
   const hero = data.heroes.find(h => h.id === command.heroId)!; const actor = state.heroes.find(h => h.id === hero.id)!;
-  const skill = data.skills[command.action]; const enemy = state.enemies.find(e => e.id === command.targetId);
+  const base = data.skills[command.action]; const enemy = state.enemies.find(e => e.id === command.targetId);
+  const skill = { ...base, power: skillPower(data, hero.id, command.action) };
   const damage = (power: number) => {
     const amount = Math.min(enemy!.hp, power); enemy!.hp -= amount;
     events.push({ type: 'damage', sourceId: hero.id, targetId: enemy!.id, amount, text: 'Hero attacks.' });

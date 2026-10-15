@@ -64,4 +64,8 @@ export const chapterOne: MapDefinition = {
   },
   camp: { restHealPercent: 50, reviveHpPercent: 30 },
   startingRoster: ['guardian', 'tracer', 'weaver', 'healer'],
+  company: {
+    hireCost: 30, dismissRefund: 15, offers: 3, maxStars: 5, starStatPercent: 8,
+    starCosts: [{ dupes: 1, ore: 20 }, { dupes: 2, ore: 40 }, { dupes: 3, ore: 70 }, { dupes: 4, ore: 110 }],
+  },
 };

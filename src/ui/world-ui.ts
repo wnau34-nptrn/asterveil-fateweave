@@ -1,13 +1,13 @@
 import type { HeroDefinition } from '../core/battle/types';
 import type { Direction, ExpeditionState, MapDefinition, Point } from '../core/world/types';
-import { atCamp, canOpenChest, canRest, canRevive, chestAt, encounterChance, isRevealed, rosterIds, tileAt, zoneOf } from '../core/world/world';
+import { atCamp, canOpenChest, canRest, canRevive, chestAt, dismissReason, encounterChance, isRevealed, rosterIds, starred, tileAt, upgradeCost, upgradeReason, zoneOf } from '../core/world/world';
 import { PARTY_SLOTS, RESERVE_SLOTS } from '../core/world/types';
 import { actorFrames, artUrl } from '../game/visuals/assets';
 import { SOURCE_TILE, decorAt, floorFrame, fogLayers, landmarkAt, tileSizeFor, tileset, worldArtUrl, type Landmark } from '../game/visuals/world-art';
 import { heroText, resourceOrder, resourceText } from './th';
 import { icon } from './icons';
 
-export interface WorldHost { move(dir: Direction): void; rest(): void; revive(heroId: string): void; swap(a: string, b: string): void; moveMember(id: string): void; openChest(): void; newExpedition(): void }
+export interface WorldHost { move(dir: Direction): void; rest(): void; revive(heroId: string): void; swap(a: string, b: string): void; moveMember(id: string): void; hire(index: number): void; upgrade(id: string): void; dismiss(id: string): void; board(): { id: string; reason: string }[]; openChest(): void; newExpedition(): void }
 export interface WorldBanner { kind: 'encounter' | 'boss' | 'tutorial' | 'complete'; eyebrow: string; title: string; detail: string }
 export interface WorldView { state: ExpeditionState; message: string; locked: boolean; saved: boolean; banner?: WorldBanner; effect?: 'rest' | 'loot' }
 
@@ -36,8 +36,9 @@ export class WorldUI {
   private previous: { position: Point; chance: number; revealed: string; boss: boolean; done: boolean } | undefined;
   private lastKey = 0;
   private confirmNew = false;
-  private campTab: 'care' | 'team' = 'care';
+  private campTab: 'care' | 'team' | 'hire' = 'care';
   private picked: string | undefined;
+  private confirmDismiss = false;
   private tile = 48;
   private readonly width: number;
   private readonly reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -93,8 +94,13 @@ export class WorldUI {
           case 'camp-rest': if (!this.view?.locked) this.host.rest(); break;
           case 'camp-revive': if (!this.view?.locked && button.dataset.hero) this.host.revive(button.dataset.hero); break;
           case 'camp-close': dialog('#camp-dialog').close(); break;
-          case 'camp-tab': this.campTab = button.dataset.tab as 'care' | 'team'; this.picked = undefined; this.renderCamp(); this.root.querySelector<HTMLElement>(`#camp-tab-${this.campTab}`)?.focus(); break;
-          case 'team-pick': this.pickMember(button.dataset.hero, button.dataset.side as 'deployed' | 'reserve'); break;
+          case 'camp-tab': this.campTab = button.dataset.tab as WorldUI['campTab']; this.picked = undefined; this.confirmDismiss = false; this.renderCamp(); this.root.querySelector<HTMLElement>(`#camp-tab-${this.campTab}`)?.focus(); break;
+          case 'team-pick': this.confirmDismiss = false; this.pickMember(button.dataset.hero, button.dataset.side as 'deployed' | 'reserve'); break;
+          case 'hire': if (!this.view?.locked) this.host.hire(Number(button.dataset.index)); break;
+          case 'upgrade': if (!this.view?.locked && this.picked) this.host.upgrade(this.picked); break;
+          case 'dismiss': if (this.view?.locked || !this.picked) break;
+            if (!this.confirmDismiss) { this.confirmDismiss = true; this.renderCamp(); this.root.querySelector<HTMLElement>('#team-dismiss')?.focus(); break; }
+            this.confirmDismiss = false; { const id = this.picked; this.picked = undefined; this.host.dismiss(id); } break;
           case 'pack': this.renderPack(); dialog('#pack-dialog').showModal(); break;
           case 'pack-close': dialog('#pack-dialog').close(); break;
           case 'info': this.confirmNew = false; this.renderInfo(); dialog('#world-info').showModal(); break;
@@ -224,12 +230,38 @@ export class WorldUI {
       <p class="world-stats">เปิดกล่องสมบัติแล้ว ${opened}/${this.map.chests.length} กล่อง · ของตกจากศึกที่ชนะและกล่องสมบัติ</p>`;
   }
 
-  private hero(id: string): HeroDefinition { return this.heroes.find(h => h.id === id)!; }
+  private stars(s: ExpeditionState, id: string): number { return s.members[id]?.stars ?? 1; }
+  // Member stats as they fight: the catalog entry scaled by the member's stars.
+  private hero(id: string, s = this.view?.state): HeroDefinition { const base = this.heroes.find(h => h.id === id)!; return s ? starred(base, this.stars(s, id), this.map) : base; }
+  private starRow(n: number): string { return `<span class="star-row" aria-label="${n} ดาว">${'★'.repeat(n)}<i>${'★'.repeat(this.map.company.maxStars - n)}</i></span>`; }
   private renderCamp(): void {
     const s = this.view?.state; if (!s) return;
-    const tab = (id: 'care' | 'team', label: string) => `<button id="camp-tab-${id}" data-world="camp-tab" data-tab="${id}" role="tab" aria-selected="${this.campTab === id}" class="${this.campTab === id ? 'active' : ''}">${label}</button>`;
-    const tabs = `<div class="camp-tabs" role="tablist" aria-label="แคมป์">${tab('care', 'พักและชุบ')}${tab('team', `จัดทีม <small>${s.roster.deployed.length}+${s.roster.reserve.length}</small>`)}</div>`;
-    this.root.querySelector('#camp-content')!.innerHTML = tabs + (this.campTab === 'care' ? this.campCare(s) : this.campTeam(s));
+    const tab = (id: WorldUI['campTab'], label: string) => `<button id="camp-tab-${id}" data-world="camp-tab" data-tab="${id}" role="tab" aria-selected="${this.campTab === id}" class="${this.campTab === id ? 'active' : ''}">${label}</button>`;
+    const tabs = `<div class="camp-tabs" role="tablist" aria-label="แคมป์">${tab('care', 'พัก/ชุบ')}${tab('team', `ทีม <small>${s.roster.deployed.length}+${s.roster.reserve.length}</small>`)}${tab('hire', 'จ้าง')}</div>`;
+    this.root.querySelector('#camp-content')!.innerHTML = tabs + (this.campTab === 'care' ? this.campCare(s) : this.campTab === 'team' ? this.campTeam(s) : this.campHire(s));
+  }
+  private memberPanel(s: ExpeditionState, id: string): string {
+    const m = s.members[id]!; const cost = upgradeCost(s, this.map, id); const reason = upgradeReason(s, this.map, id);
+    const need = cost ? cost.dupes + cost.seals : 0;
+    const why: Record<string, string> = { maxed: 'ดาวเต็มแล้ว', dupes: 'ตัวซ้ำไม่พอ', ore: 'แร่ดาวไม่พอ', camp: 'อัปได้ที่แคมป์' };
+    const upgradeLabel = !cost ? 'ดาวเต็มแล้ว' : reason ? `${why[reason]} · ★${m.stars + 1} ใช้ตัวซ้ำ ${need}${cost.seals ? ' (ตราแทนได้ 1)' : ''} แร่ ${cost.ore}`
+      : `อัปเป็น ★${m.stars + 1} · ตัวซ้ำ ${cost.dupes}${cost.seals ? ' + ตรา 1' : ''} · แร่ ${cost.ore}`;
+    const last = dismissReason(s, this.map, id) === 'last';
+    return `<div class="member-panel" aria-live="polite"><p><b>${heroText[id]!.name}</b> ${this.starRow(m.stars)} <span>ตัวซ้ำที่เก็บไว้ ${m.dupes}</span></p>
+      <div class="member-actions"><button id="team-upgrade" data-world="upgrade" class="primary"${reason ? ' disabled' : ''}>${upgradeLabel}</button>
+      <button id="team-dismiss" data-world="dismiss" class="danger-button"${last ? ' disabled' : ''}>${last ? 'ต้องมีคนลงสนาม 1 คน' : this.confirmDismiss ? `ยืนยันเลิกจ้าง · ดาวและตัวซ้ำหาย +${this.map.company.dismissRefund} แร่` : 'เลิกจ้าง'}</button></div></div>`;
+  }
+  private campHire(s: ExpeditionState): string {
+    const why: Record<string, string> = { taken: 'จ้างแล้ว', ore: 'แร่ดาวไม่พอ', full: 'ทีมเต็ม 8 คน', maxed: 'ดาวเต็มแล้ว', camp: 'จ้างได้ที่แคมป์' };
+    const offers = this.host.board();
+    return `<section class="camp-section hire-section" role="tabpanel"><h3>${icon('flag')} ป้ายจ้างทหารรับจ้าง <span class="camp-embers">${icon('ore')} แร่ดาว ${s.resources.ore}</span></h3>
+      <ul class="hire-list">${offers.map(({ id, reason }, i) => {
+        const h = this.hero(id); const text = heroText[id]!; const m = s.members[id];
+        const status = m ? `${this.starRow(m.stars)} ตัวซ้ำ ${m.dupes} · มีในทีม` : 'ใหม่ · ★1 เข้าสำรอง';
+        return `<li class="${reason === 'taken' ? 'taken' : ''}">${portrait(id)}<span><b>${text.name}</b><small>${text.role} · ${h.lane === 'front' ? 'แนวหน้า' : 'แนวหลัง'} · ${text.help}</small><small class="hire-status">${status}</small></span>
+          <button id="hire-${i}" data-world="hire" data-index="${i}" class="secondary"${reason ? ' disabled' : ''} aria-label="จ้าง${text.name} ใช้แร่ดาว ${this.map.company.hireCost}">${reason ? why[reason] ?? 'จ้างไม่ได้' : `จ้าง · ${this.map.company.hireCost}`}</button></li>`;
+      }).join('')}</ul>
+      <p class="camp-note">ทุกคนเริ่ม ★1 · จ้างคนที่มีอยู่แล้วจะได้ตัวซ้ำไว้อัปดาวในแท็บทีม · ป้ายเปลี่ยนใหม่ทุกครั้งที่ชนะศึก</p></section>`;
   }
   private campCare(s: ExpeditionState): string {
     const ready = canRest(s, this.map); const embers = s.resources.ember;
@@ -249,7 +281,7 @@ export class WorldUI {
       if (!id) return `<button class="team-card empty${this.picked ? ' target' : ''}" data-world="team-pick" data-side="${side}" aria-label="${side === 'deployed' ? `ช่อง ${slot + 1} ว่าง` : 'ช่องสำรองว่าง'}"${this.picked ? '' : ' disabled'}><span>ว่าง</span></button>`;
       const h = this.hero(id); const hp = s.hp[id] ?? 0; const text = heroText[id]!;
       const lane = h.lane === 'front' ? 'แนวหน้า' : 'แนวหลัง';
-      return `<button id="team-${id}" class="team-card${hp <= 0 ? ' fallen' : ''}" data-world="team-pick" data-hero="${id}" data-side="${side}" aria-pressed="${this.picked === id}" aria-label="${side === 'deployed' ? `ช่อง ${slot + 1} · ` : 'สำรอง · '}${text.name} ${text.role} ${lane} ${hp <= 0 ? 'ล้มแล้ว' : `เลือด ${hp} จาก ${h.maxHp}`}">${side === 'deployed' ? `<i class="slot-no">${slot + 1}</i>` : ''}${portrait(id)}<b>${text.name}</b><small>${hp <= 0 ? 'ล้มแล้ว' : `${hp}/${h.maxHp}`}</small><small class="lane">${text.role} · ${lane}</small></button>`;
+      return `<button id="team-${id}" class="team-card${hp <= 0 ? ' fallen' : ''}" data-world="team-pick" data-hero="${id}" data-side="${side}" aria-pressed="${this.picked === id}" aria-label="${side === 'deployed' ? `ช่อง ${slot + 1} · ` : 'สำรอง · '}${text.name} ${this.stars(s, id)} ดาว ${text.role} ${lane} ${hp <= 0 ? 'ล้มแล้ว' : `เลือด ${hp} จาก ${h.maxHp}`}">${side === 'deployed' ? `<i class="slot-no">${slot + 1}</i>` : ''}${portrait(id)}<b>${text.name}</b>${this.starRow(this.stars(s, id))}<small>${hp <= 0 ? 'ล้มแล้ว' : `${hp}/${h.maxHp}`}</small><small class="lane">${text.role} · ${lane}</small></button>`;
     };
     const row = (ids: string[], side: 'deployed' | 'reserve', size: number) => Array.from({ length: size }, (_, i) => card(ids[i], side, i)).join('');
     const deployedUp = s.roster.deployed.some(id => s.hp[id]! > 0);
@@ -258,6 +290,7 @@ export class WorldUI {
         <div class="team-grid">${row(s.roster.deployed, 'deployed', PARTY_SLOTS)}</div>
         <h3>${icon('camp')} สำรอง</h3>
         <div class="team-grid">${row(s.roster.reserve, 'reserve', RESERVE_SLOTS)}</div>
+        ${this.picked ? this.memberPanel(s, this.picked) : ''}
         <p class="camp-note" id="team-hint">${this.picked ? `เลือก${heroText[this.picked]!.name}แล้ว · แตะคนหรือช่องว่างอีกฝั่งเพื่อสลับ แตะซ้ำเพื่อยกเลิก` : !deployedUp ? 'ทีมที่ลงสนามล้มหมด · สลับตัวสำรองที่ยังยืนอยู่หรือชุบก่อนออกเดินทาง' : s.roster.reserve.length ? 'แตะสมาชิก แล้วแตะคนหรือช่องว่างอีกฝั่งเพื่อสลับ' : 'ยังไม่มีตัวสำรอง · จ้างทหารรับจ้างได้ที่แคมป์ในช่วงถัดไป'}</p></section>`;
   }
 
@@ -272,10 +305,10 @@ export class WorldUI {
   }
 
   private renderParty(s: ExpeditionState): void {
-    this.root.querySelector('#world-party')!.innerHTML = s.roster.deployed.map(id => this.hero(id)).map(h => {
+    this.root.querySelector('#world-party')!.innerHTML = s.roster.deployed.map(id => this.hero(id, s)).map(h => {
       const hp = s.hp[h.id] ?? 0; const ratio = hp / h.maxHp; const text = heroText[h.id]!;
       const state = hp <= 0 ? 'fallen' : ratio < .25 ? 'critical' : ratio < .6 ? 'hurt' : 'healthy';
-      return `<div class="world-hero ${state}" id="world-hero-${h.id}" aria-label="${text.name} ${hp <= 0 ? 'ล้มแล้ว' : `เลือด ${hp} จาก ${h.maxHp}`}">${portrait(h.id)}<span class="hero-copy"><b>${text.name}</b><small>${hp <= 0 ? 'ล้มแล้ว' : `${hp}/${h.maxHp}`}</small><span class="hp"><span style="width:${ratio * 100}%"></span></span></span></div>`;
+      return `<div class="world-hero ${state}" id="world-hero-${h.id}" aria-label="${text.name} ${this.stars(s, h.id)} ดาว ${hp <= 0 ? 'ล้มแล้ว' : `เลือด ${hp} จาก ${h.maxHp}`}">${portrait(h.id)}<span class="hero-copy"><b>${text.name}${this.stars(s, h.id) > 1 ? `<i class="hero-stars">★${this.stars(s, h.id)}</i>` : ''}</b><small>${hp <= 0 ? 'ล้มแล้ว' : `${hp}/${h.maxHp}`}</small><span class="hp"><span style="width:${ratio * 100}%"></span></span></span></div>`;
     }).join('');
   }
 
