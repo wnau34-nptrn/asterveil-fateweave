@@ -298,7 +298,7 @@ export class WorldUI {
     let html = '';
     for (let y = 0; y < this.map.rows.length; y++) for (let x = 0; x < this.width; x++) {
       const layers = fogLayers(this.map, s, { x, y });
-      if (layers.length) html += `<div class="fog-cell${layers[0] === 'fog_tile' ? ' opaque' : ''}" style="--x:${x};--y:${y};background-image:${layers.map(l => `url(${worldArtUrl(l)})`).join(',')}"></div>`;
+      if (layers.length) html += `<div class="fog-cell${layers[0]!.startsWith('fog_tile') ? ' opaque' : ''}" style="--x:${x};--y:${y};background-image:${layers.map(l => `url(${worldArtUrl(l)})`).join(',')}"></div>`;
     }
     this.root.querySelector('#fog-layer')!.innerHTML = html;
     this.root.querySelectorAll<HTMLElement>('.sprite[data-cell]').forEach(el => {

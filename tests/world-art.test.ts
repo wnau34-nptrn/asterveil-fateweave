@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { encounterById } from '../src/content/encounters/catalog';
 import { chapterOne as map } from '../src/content/world/chapter1';
 import { findTiles, newExpedition, tileAt } from '../src/core/world/world';
-import { cellHash, decorAt, floorFrame, fogLayers, landmarkAt, tileSizeFor, tileset } from '../src/game/visuals/world-art';
+import { cellHash, decorAt, floorFrame, fogFills, fogLayers, landmarkAt, tileSizeFor, tileset } from '../src/game/visuals/world-art';
 import { riftBackdropFrame } from '../src/game/visuals/rift-backdrop';
 
 describe('world art selection', () => {
@@ -33,10 +33,19 @@ describe('world art selection', () => {
   it('fog is opaque on unexplored cells and dissolves only inside explored edges', () => {
     const s = newExpedition(map, encounterById, 1); const start = findTiles(map, 'start')[0]!;
     expect(fogLayers(map, s, start)).toEqual([]);
-    expect(fogLayers(map, s, { x: 0, y: 0 })).toEqual(['fog_tile']);
+    expect(fogFills).toContain(fogLayers(map, s, { x: 0, y: 0 })[0]);
     const edge = { x: start.x, y: start.y - 3 };
-    expect(fogLayers(map, s, edge)).toContain('fog_edge_n');
-    expect(fogLayers(map, s, { x: start.x - 3, y: start.y - 3 })).toEqual(expect.arrayContaining(['fog_edge_n', 'fog_edge_w']));
+    expect(fogLayers(map, s, edge)).toEqual(['fog_edge_n']);
+    // A concave corner of the explored square: one rounded inner corner, never two stacked edges.
+    expect(fogLayers(map, s, { x: start.x - 3, y: start.y - 3 })).toEqual(['fog_inner_nw']);
+  });
+  it('unexplored cells mix all three seamless fill variants and stay stable per cell', () => {
+    const s = newExpedition(map, encounterById, 1); const seen = new Set<string>();
+    for (let y = 0; y < map.rows.length; y++) for (let x = 0; x < map.rows[0]!.length; x++) {
+      const layers = fogLayers(map, s, { x, y }); if (!layers[0]?.startsWith('fog_tile')) continue;
+      expect(layers).toHaveLength(1); expect(fogLayers(map, s, { x, y })).toEqual(layers); seen.add(layers[0]);
+    }
+    expect([...seen].sort()).toEqual([...fogFills].sort());
   });
   it('landmarks follow committed flags: boss pedestal → cleared, gate → open', () => {
     const s = newExpedition(map, encounterById, 1); const [boss] = findTiles(map, 'boss'); const [gate] = findTiles(map, 'goal');

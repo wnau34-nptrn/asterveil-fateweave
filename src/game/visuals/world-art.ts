@@ -62,6 +62,9 @@ export function decorAt(map: MapDefinition, p: Point): (Frame & { name: string }
   return { name, ...frame };
 }
 
+// Fill variants (ART-WORLD-FOG-002) share their borders, so any mix tiles without seams.
+export const fogFills = ['fog_tile', 'fog_tile_b', 'fog_tile_c'] as const;
+
 // Fog layers for one cell: an opaque veil when unexplored, otherwise dissolving
 // edges toward unexplored cardinal neighbours, and corners only for diagonals.
 export function fogLayers(map: MapDefinition, state: ExpeditionState, p: Point): string[] {
@@ -69,9 +72,11 @@ export function fogLayers(map: MapDefinition, state: ExpeditionState, p: Point):
     const q = { x: p.x + dx, y: p.y + dy };
     return q.x >= 0 && q.y >= 0 && q.y < map.rows.length && q.x < map.rows[0]!.length && !isRevealed(state, map, q);
   };
-  if (hidden(0, 0)) return ['fog_tile'];
+  if (hidden(0, 0)) return [fogFills[cellHash(p.x, p.y, 7) % fogFills.length]!];
   const n = hidden(0, -1), s = hidden(0, 1), e = hidden(1, 0), w = hidden(-1, 0);
-  const layers = [n && 'fog_edge_n', s && 'fog_edge_s', e && 'fog_edge_e', w && 'fog_edge_w'].filter(Boolean) as string[];
+  // Exactly two adjacent hidden sides: one rounded inner corner instead of two stacked edges.
+  const inner = [n, s, e, w].filter(Boolean).length === 2 && n !== s ? `fog_inner_${n ? 'n' : 's'}${e ? 'e' : 'w'}` : undefined;
+  const layers = inner ? [inner] : [n && 'fog_edge_n', s && 'fog_edge_s', e && 'fog_edge_e', w && 'fog_edge_w'].filter(Boolean) as string[];
   if (!n && !e && hidden(1, -1)) layers.push('fog_corner_ne');
   if (!s && !e && hidden(1, 1)) layers.push('fog_corner_se');
   if (!s && !w && hidden(-1, 1)) layers.push('fog_corner_sw');
