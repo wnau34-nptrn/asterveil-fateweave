@@ -1,8 +1,9 @@
 import { entryReason } from '../battle/engine';
 import type { ActionId, Command } from '../battle/types';
-import { PARTY_SLOTS, RESERVE_SLOTS, type ActiveBattle, type ExpeditionState, type MapDefinition, type Point, type Roster } from '../world/types';
-import { battleState, finishBattle, fullParty, heroDef, tileAt, type EncounterLookup } from '../world/world';
-import type { BoardState, MemberProgress } from '../world/types';
+import { COMPANY_CAP, PARTY_SLOTS, RESERVE_SLOTS, type ActiveBattle, type ExpeditionState, type MapDefinition, type Point, type Profile, type Roster, type RunOutcome } from '../world/types';
+import { battleState, finishBattle, fullParty, heroDef, rosterIds, tileAt, type EncounterLookup } from '../world/world';
+import { newProfile, settle } from '../world/profile';
+import type { MemberProgress } from '../world/types';
 
 export interface StoragePort { getItem(key: string): string | null; setItem(key: string, value: string): void; removeItem?(key: string): void }
 export const expeditionKey = 'asterveil.fateweave.expedition.v1';
@@ -12,13 +13,18 @@ export const legacyKeys = ['asterveil.fateweave.battle.v1', 'asterveil.fateweave
 // v2 → v3 (phase 2B): adds the roster. v3 → v4 (phase 2C): adds member stars/duplicates and
 // the hiring board. Older saves migrate with empty resources, a lit campfire (v1), the
 // starting four deployed (v1–v2), every member at ★1 and no board; the map layout is unchanged.
-const SAVE_VERSION = 4;
+// v4 → v5 (lobby L1): the envelope becomes { version, profile, run }. A v1–v4 `state` becomes the
+// run (its camp board is dropped) and a profile is built from its roster with an empty bank;
+// a run that had already reached the goal is settled into the profile at once.
+const SAVE_VERSION = 5;
+export interface Game { profile: Profile; run: ExpeditionState | null }
 const actions: readonly ActionId[] = ['attack', 'guard', 'bash', 'mark', 'execute', 'bolt', 'ward', 'heal', 'prayer'];
 
-export function saveExpedition(storage: StoragePort | undefined, state: ExpeditionState): boolean {
+// One key for profile and run, so settling an expedition is a single atomic write.
+export function saveGame(storage: StoragePort | undefined, game: Game): boolean {
   try {
     if (!storage) return false;
-    storage.setItem(expeditionKey, JSON.stringify({ version: SAVE_VERSION, state }));
+    storage.setItem(expeditionKey, JSON.stringify({ version: SAVE_VERSION, profile: game.profile, run: game.run }));
     return true;
   } catch { return false; }
 }
@@ -55,13 +61,6 @@ function membersOf(v: unknown, map: MapDefinition, ids: readonly string[]): Reco
     return [id, { stars: m.stars, dupes: m.dupes }];
   }));
 }
-function boardOf(v: unknown, map: MapDefinition): BoardState | null {
-  if (v === null) return null;
-  const b = obj(v);
-  if (typeof b.key !== 'string' || !/^\d+,\d+:\d+$/.test(b.key) || !Array.isArray(b.taken) || new Set(b.taken).size !== b.taken.length
-    || b.taken.some(i => !isInt(i, 0, map.company.offers - 1))) throw new Error('Invalid board');
-  return { key: b.key, taken: [...b.taken as number[]] };
-}
 function hpRecord(v: unknown, lookup: EncounterLookup, map: MapDefinition, ids: readonly string[], members: Record<string, MemberProgress>): Record<string, number> {
   const raw = obj(v); const full = fullParty(lookup, map, ids, members);
   if (Object.keys(raw).length !== Object.keys(full).length) throw new Error('Invalid party');
@@ -76,18 +75,17 @@ function command(v: unknown): Command {
   return { beat: c.beat, heroId: c.heroId, targetId: c.targetId, action: c.action as ActionId };
 }
 
-// Rebuilds the state field by field. Battles are validated by replaying every
-// command under the current rules; any mismatch starts a fresh expedition.
-export function parseExpedition(raw: string, map: MapDefinition, lookup: EncounterLookup): ExpeditionState {
-  const envelope = obj(JSON.parse(raw));
-  if (![1, 2, 3, SAVE_VERSION].includes(envelope.version as number)) throw new Error('Unsupported save version');
-  const s = obj(envelope.state);
-  if (envelope.version === 1) Object.assign(s, { resources: { ore: 0, ember: 0, seal: 0 }, openedChests: [], restReady: true });
-  if ((envelope.version as number) < 3) s.roster = { deployed: [...map.startingRoster], reserve: [] };
-  if ((envelope.version as number) < 4) {
+// Rebuilds a run field by field. Battles are validated by replaying every command under
+// the current rules; any mismatch rejects the save.
+function parseRun(v: unknown, version: number, map: MapDefinition, lookup: EncounterLookup): ExpeditionState {
+  const s = obj(v);
+  if (version === 1) Object.assign(s, { resources: { ore: 0, ember: 0, seal: 0 }, openedChests: [], restReady: true });
+  if (version < 3) s.roster = { deployed: [...map.startingRoster], reserve: [] };
+  if (version < 4) {
     const r = obj(s.roster); const ids = [...(r.deployed as unknown[] ?? []), ...(r.reserve as unknown[] ?? [])];
-    s.members = Object.fromEntries(ids.map(id => [String(id), { stars: 1, dupes: 0 }])); s.board = null;
+    s.members = Object.fromEntries(ids.map(id => [String(id), { stars: 1, dupes: 0 }]));
   }
+  if (version === 4) delete s.board;
   if (s.mapId !== map.id || s.mapVersion !== map.version) throw new Error('Map changed');
   const cells = map.rows.length * map.rows[0]!.length;
   if (typeof s.revealed !== 'string' || s.revealed.length !== cells || /[^01]/.test(s.revealed)) throw new Error('Invalid fog');
@@ -95,7 +93,7 @@ export function parseExpedition(raw: string, map: MapDefinition, lookup: Encount
   if (!isInt(s.seed, 0, 0xffffffff) || !isInt(s.rolls) || !isInt(s.steps) || !isInt(s.pressure, 0, 100) || !isInt(s.wins) || !isInt(s.defeats)) throw new Error('Invalid counters');
   const roster = rosterOf(s.roster, lookup, map);
   const ids = [...roster.deployed, ...roster.reserve];
-  const members = membersOf(s.members, map, ids); const board = boardOf(s.board, map);
+  const members = membersOf(s.members, map, ids);
   const hp = hpRecord(s.hp, lookup, map, ids, members);
   const r = obj(s.resources);
   if (Object.keys(r).length !== 3 || !isInt(r.ore, 0, 999999) || !isInt(r.ember, 0, 9999) || !isInt(r.seal, 0, 9999)) throw new Error('Invalid resources');
@@ -109,10 +107,10 @@ export function parseExpedition(raw: string, map: MapDefinition, lookup: Encount
     const entry = hpRecord(b.entry, lookup, map, roster.deployed, members);
     if (entryReason(data, { hp: entry })) throw new Error('Invalid entry');
     battle = { kind: b.kind as ActiveBattle['kind'], encounterId: data.id, entry, commands: b.commands.map(command) };
-  } else if (!Object.values(hp).some(v => v > 0)) throw new Error('Roster down outside battle');
+  }
   const state: ExpeditionState = {
     mapId: map.id, mapVersion: map.version, seed: s.seed as number, rolls: s.rolls as number, position: point(s.position, map),
-    steps: s.steps as number, pressure: s.pressure as number, revealed: s.revealed, roster, members, board, hp,
+    steps: s.steps as number, pressure: s.pressure as number, revealed: s.revealed, roster, members, hp,
     camp: s.camp === null ? null : point(s.camp, map),
     resources: { ore: r.ore as number, ember: r.ember as number, seal: r.seal as number }, openedChests: [...s.openedChests as string[]], restReady: s.restReady as boolean,
     tutorialDone: s.tutorialDone as boolean, bossDefeated: s.bossDefeated as boolean,
@@ -123,9 +121,52 @@ export function parseExpedition(raw: string, map: MapDefinition, lookup: Encount
   if (battle && battleState(state, map, lookup)!.outcome !== 'active') return finishBattle(state, map, lookup).state;
   return state;
 }
-export function loadExpedition(storage: StoragePort | undefined, map: MapDefinition, lookup: EncounterLookup): ExpeditionState | undefined {
+function parseProfile(v: unknown, map: MapDefinition, lookup: EncounterLookup): Profile {
+  const p = obj(v);
+  if (!isInt(p.seed, 0, 0xffffffff) || !isInt(p.returns) || !isInt(p.expeditions) || !isInt(p.completes) || typeof p.tutorialDone !== 'boolean') throw new Error('Invalid profile');
+  const company = p.company;
+  if (!Array.isArray(company) || !company.length || company.length > COMPANY_CAP || new Set(company).size !== company.length
+    || company.some(id => typeof id !== 'string' || !heroDef(lookup, map, id))) throw new Error('Invalid company');
+  const party = rosterOf(p.party, lookup, map);
+  if ([...party.deployed, ...party.reserve].some(id => !company.includes(id))) throw new Error('Invalid party');
+  const members = membersOf(p.members, map, company as string[]);
+  const bank = obj(p.bank);
+  if (Object.keys(bank).length !== 2 || !isInt(bank.ore, 0, 9999999) || !isInt(bank.seal, 0, 99999)) throw new Error('Invalid bank');
+  if (!Array.isArray(p.taken) || new Set(p.taken).size !== p.taken.length || p.taken.some(i => !isInt(i, 0, map.company.offers - 1))) throw new Error('Invalid board');
+  let last: Profile['last'] = null;
+  if (p.last !== null) {
+    const l = obj(p.last);
+    if (!['complete', 'withdrawn', 'wiped'].includes(l.outcome as string) || !isInt(l.ore) || !isInt(l.seal) || !isInt(l.steps) || !isInt(l.wins)) throw new Error('Invalid result');
+    last = { outcome: l.outcome as RunOutcome, ore: l.ore, seal: l.seal, steps: l.steps, wins: l.wins };
+  }
+  return { seed: p.seed, returns: p.returns, tutorialDone: p.tutorialDone, company: [...company as string[]], members, party,
+    bank: { ore: bank.ore as number, seal: bank.seal as number }, taken: [...p.taken as number[]], expeditions: p.expeditions, completes: p.completes, last };
+}
+// A run that already reached the goal or lost every brought member is settled on load.
+function settleFinished(game: Game): Game {
+  const run = game.run; if (!run) return game;
+  if (run.completed) return { profile: settle(game.profile, run, 'complete'), run: null };
+  if (!run.battle && rosterIds(run).every(id => run.hp[id] === 0)) return { profile: settle(game.profile, run, 'wiped'), run: null };
+  return game;
+}
+export function parseGame(raw: string, map: MapDefinition, lookup: EncounterLookup): Game {
+  const envelope = obj(JSON.parse(raw)); const version = envelope.version as number;
+  if (![1, 2, 3, 4, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
+  if (version < SAVE_VERSION) {
+    const run = parseRun(envelope.state, version, map, lookup);
+    const profile = newProfile(map, (run.seed ^ 0x5bd1e995) >>> 0);
+    profile.company = rosterIds(run); profile.members = structuredClone(run.members); profile.party = structuredClone(run.roster);
+    profile.tutorialDone = run.tutorialDone;
+    return settleFinished({ profile, run });
+  }
+  const profile = parseProfile(envelope.profile, map, lookup);
+  const run = envelope.run === null ? null : parseRun(envelope.run, version, map, lookup);
+  if (run && rosterIds(run).some(id => !profile.company.includes(id))) throw new Error('Run member left the company');
+  return settleFinished({ profile, run });
+}
+export function loadGame(storage: StoragePort | undefined, map: MapDefinition, lookup: EncounterLookup): Game | undefined {
   try {
     const raw = storage?.getItem(expeditionKey);
-    return raw ? parseExpedition(raw, map, lookup) : undefined;
+    return raw ? parseGame(raw, map, lookup) : undefined;
   } catch { return undefined; }
 }

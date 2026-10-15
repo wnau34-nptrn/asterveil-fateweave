@@ -3,7 +3,9 @@ import { encounterById } from '../../src/content/encounters/catalog';
 import { chapterOne as map } from '../../src/content/world/chapter1';
 import { createBattle, currentHeroId, resolveCommand } from '../../src/core/battle/engine';
 import type { ExpeditionState } from '../../src/core/world/types';
-import { boardOffers, findTiles, move, newExpedition, reveal } from '../../src/core/world/world';
+import { findTiles, move, newExpedition, reveal } from '../../src/core/world/world';
+import { boardOffers, newProfile } from '../../src/core/world/profile';
+import type { Profile } from '../../src/core/world/types';
 import { battleLesson } from '../../src/ui/tutorial';
 
 const key = 'asterveil.fateweave.expedition.v1';
@@ -11,8 +13,8 @@ const full = { guardian: 76, tracer: 56, weaver: 48, healer: 46 };
 function base(patch: Partial<ExpeditionState> = {}): ExpeditionState {
   const state = { ...newExpedition(map, encounterById, 77), tutorialDone: true, ...patch }; reveal(state, map); return state;
 }
-async function seed(page: Page, state: ExpeditionState) {
-  await page.addInitScript(({ raw, key }) => { if (sessionStorage.getItem('playtest-seeded')) return; localStorage.setItem(key, raw); sessionStorage.setItem('playtest-seeded', 'yes'); }, { raw: JSON.stringify({ version: 4, state }), key });
+async function seed(page: Page, state: ExpeditionState | null, profile: Profile = { ...newProfile(map, 5), tutorialDone: true }) {
+  await page.addInitScript(({ raw, key }) => { if (sessionStorage.getItem('playtest-seeded')) return; localStorage.setItem(key, raw); sessionStorage.setItem('playtest-seeded', 'yes'); }, { raw: JSON.stringify({ version: 5, profile, run: state }), key });
 }
 async function open(page: Page, state?: ExpeditionState) {
   const issues: string[] = []; page.on('pageerror', e => issues.push(e.message)); page.on('console', m => { if (m.type() === 'error') issues.push(m.text()); });
@@ -21,7 +23,8 @@ async function open(page: Page, state?: ExpeditionState) {
   await page.locator(state ? '#continue' : '#new-game').click();
   return issues;
 }
-const saved = (page: Page): Promise<ExpeditionState> => page.evaluate(k => JSON.parse(localStorage.getItem(k)!).state, key);
+const saved = (page: Page): Promise<ExpeditionState> => page.evaluate(k => JSON.parse(localStorage.getItem(k)!).run, key);
+const savedProfile = (page: Page): Promise<Profile> => page.evaluate(k => JSON.parse(localStorage.getItem(k)!).profile, key);
 async function reachable(page: Page, selector: string) {
   await expect.poll(() => page.locator(selector).evaluate(el => { const r = el.getBoundingClientRect(); return r.width >= 44 && r.height >= 44 && r.left >= 0 && r.top >= 0 && r.right <= innerWidth && r.bottom <= innerHeight && el.contains(document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2)); })).toBe(true);
 }
@@ -113,7 +116,7 @@ test('camp revives one fallen member per ember; a chest opens once and fills the
   expect((await saved(page)).hp).toMatchObject({ tracer: 17, weaver: 0 }); expect((await saved(page)).resources.ember).toBe(0);
   await expect(page.locator('#camp-revive-weaver')).toBeDisabled(); await expect(page.locator('#camp-revive-tracer')).toHaveCount(0);
   await page.keyboard.press('Escape');
-  await page.evaluate(([k, p]) => { const s = JSON.parse(localStorage.getItem(k)!); s.state.position = p; s.state.revealed = s.state.revealed.replace(/0/g, '1'); localStorage.setItem(k, JSON.stringify(s)); }, [key, { x: chest.x, y: chest.y }] as const);
+  await page.evaluate(([k, p]) => { const s = JSON.parse(localStorage.getItem(k)!); s.run.position = p; s.run.revealed = s.run.revealed.replace(/0/g, '1'); localStorage.setItem(k, JSON.stringify(s)); }, [key, { x: chest.x, y: chest.y }] as const);
   await page.reload(); await page.locator('#continue').click();
   await expect(page.locator('#rest')).toContainText('เปิด'); await page.screenshot({ path: info.outputPath('chest.png') });
   await page.locator('#rest').click();
@@ -132,7 +135,7 @@ test('the camp team tab benches and redeploys members; the party row follows the
   const camp = findTiles(map, 'camp')[1]!;
   const issues = await open(page, base({ position: camp, camp }));
   await page.locator('#rest').click(); await page.locator('#camp-tab-team').click();
-  await expect(page.locator('#team-hint')).toContainText('ยังไม่มีตัวสำรอง');
+  await expect(page.locator('#team-hint')).toContainText('ไม่ได้พาตัวสำรองมา');
   await page.locator('#team-healer').click(); await expect(page.locator('#team-healer')).toHaveAttribute('aria-pressed', 'true');
   await page.locator('.team-card.empty[data-side=reserve]').first().click();
   await expect.poll(async () => (await saved(page)).roster).toEqual({ deployed: ['guardian', 'tracer', 'weaver'], reserve: ['healer'] });
@@ -144,46 +147,52 @@ test('the camp team tab benches and redeploys members; the party row follows the
   expect(issues).toEqual([]);
 });
 
-test('hiring a duplicate at camp, upgrading a star and the company carrying into a new expedition', async ({ page }, info) => {
-  const camp = findTiles(map, 'camp')[1]!;
-  const state = base({ position: camp, camp, resources: { ore: 120, ember: 0, seal: 0 } });
-  const offer = boardOffers(state, map, encounterById)[0]!;
-  const issues = await open(page, state);
-  await page.locator('#rest').click(); await page.locator('#camp-tab-hire').click();
-  await expect(page.locator('#hire-0')).toContainText('จ้าง · 30'); await page.screenshot({ path: info.outputPath('hire.png') });
-  await page.locator('#hire-0').click();
-  await expect(page.locator('#world-message')).toContainText('ได้ตัวซ้ำ');
-  await expect(page.locator('#hire-0')).toBeDisabled(); await expect(page.locator('#hire-0')).toContainText('จ้างแล้ว');
-  expect((await saved(page)).members[offer]).toEqual({ stars: 1, dupes: 1 }); expect((await saved(page)).resources.ore).toBe(90);
-  await page.locator('#camp-tab-team').click(); await page.locator(`#team-${offer}`).click();
-  await expect(page.locator('#team-upgrade')).toContainText('อัปเป็น ★2'); await reachable(page, '#team-upgrade');
-  await page.screenshot({ path: info.outputPath('upgrade.png') });
-  await page.locator('#team-upgrade').click();
-  await expect(page.locator('#world-message')).toContainText('★2');
-  expect((await saved(page)).members[offer]).toEqual({ stars: 2, dupes: 0 }); expect((await saved(page)).resources.ore).toBe(70);
-  await page.keyboard.press('Escape'); await expect(page.locator(`#world-hero-${offer} .hero-stars`)).toHaveText('★2');
-  await page.locator('#world-info-button').click(); await page.locator('#new-expedition').click(); await page.locator('#confirm-new').click();
-  const next = await saved(page);
-  expect(next.members[offer]).toEqual({ stars: 2, dupes: 0 }); expect(next.resources.ore).toBe(0); expect(next.steps).toBe(0);
+test('lobby: hire a duplicate, upgrade a star, pick the team, depart, and withdraw at the entrance', async ({ page }, info) => {
+  const profile = { ...newProfile(map, 5), tutorialDone: true, bank: { ore: 120, seal: 0 } };
+  const offer = boardOffers(profile, map, encounterById)[0]!;
+  await seed(page, null, profile);
+  const issues: string[] = []; page.on('pageerror', e => issues.push(e.message));
+  await page.goto('./'); await expect(page.locator('#continue')).toContainText('เข้าค่าย'); await page.locator('#continue').click();
+  await expect(page.locator('#lobby-view')).toBeVisible(); await page.screenshot({ path: info.outputPath('lobby.png') });
+  await page.locator('#lobby-tab-hire').click(); await expect(page.locator('#hire-0')).toContainText('จ้าง · 30');
+  await page.screenshot({ path: info.outputPath('lobby-hire.png') });
+  await page.locator('#hire-0').click(); await expect(page.locator('#hire-0')).toContainText('จ้างแล้ว');
+  expect((await savedProfile(page)).members[offer]).toEqual({ stars: 1, dupes: 1 }); expect((await savedProfile(page)).bank.ore).toBe(90);
+  await page.locator('#lobby-tab-team').click(); await page.locator(`#lobby-member-${offer}`).click();
+  await expect(page.locator('#lobby-upgrade')).toContainText('อัปเป็น ★2'); await page.locator('#lobby-upgrade').scrollIntoViewIfNeeded(); await reachable(page, '#lobby-upgrade');
+  await page.screenshot({ path: info.outputPath('lobby-upgrade.png') });
+  await page.locator('#lobby-upgrade').click();
+  await expect.poll(async () => (await savedProfile(page)).members[offer]).toEqual({ stars: 2, dupes: 0 }); expect((await savedProfile(page)).bank.ore).toBe(70);
+  // Bench one member who is not the upgraded one: the expedition brings three.
+  const benched = offer === 'healer' ? 'weaver' : 'healer';
+  await page.locator(`#lobby-member-${offer}`).click(); await expect(page.locator(`#lobby-member-${offer}`)).toHaveAttribute('aria-pressed', 'false');
+  await page.locator(`#lobby-member-${benched}`).click(); await page.locator('.team-card.empty[data-group=bench]').click();
+  await expect.poll(async () => (await savedProfile(page)).party.deployed).toEqual(['guardian', 'tracer', 'weaver', 'healer'].filter(id => id !== benched));
+  await page.locator('#lobby-depart').click(); await expect(page.locator('#world-view')).toBeVisible();
+  const run = await saved(page); expect(run.roster.deployed).toHaveLength(3); expect(run.members[offer]!.stars).toBe(2);
+  await expect(page.locator('#world-party .world-hero')).toHaveCount(3);
+  await expect(page.locator('#rest')).toContainText('ทางออก'); await page.locator('#rest').click();
+  await expect(page.locator('#camp-title')).toContainText('ทางเข้าด่าน'); await page.locator('#withdraw').click();
+  await expect(page.locator('#withdraw')).toContainText('ยืนยันถอนตัว'); await page.locator('#withdraw').click();
+  await expect(page.locator('#lobby-view')).toBeVisible(); await expect(page.locator('.lobby-result')).toContainText('ถอนตัวกลับค่าย');
+  expect(await saved(page)).toBeNull(); expect((await savedProfile(page)).expeditions).toBe(1);
   expect(issues).toEqual([]);
 });
 
-test('defeat retreats to the last camp; the fallen stay down and a whole-roster wipe gets one member up', async ({ page }) => {
+test('losing every brought member fails the expedition: back to the lobby with half the ore', async ({ page }) => {
   const data = encounterById('veil-siege')!; const hp = { guardian: 6, tracer: 4, weaver: 3, healer: 2 };
   const camp = findTiles(map, 'camp')[1]!;
   let b = createBattle(data, { hp }); const commands = [];
   while (b.outcome === 'active') { const c = { beat: b.beat, heroId: currentHeroId(b, data)!, action: 'attack' as const, targetId: b.enemies.find(e => e.hp > 0)!.id }; const next = resolveCommand(b, data, c).state; if (next.outcome !== 'active') break; commands.push(c); b = next; }
   const last = { heroId: currentHeroId(b, data)!, targetId: b.enemies.find(e => e.hp > 0)!.id };
-  const state = base({ position: { x: camp.x - 1, y: camp.y }, camp, hp, battle: { kind: 'random', encounterId: data.id, entry: hp, commands } });
+  const state = base({ position: { x: camp.x - 1, y: camp.y }, camp, hp, resources: { ore: 11, ember: 2, seal: 1 }, battle: { kind: 'random', encounterId: data.id, entry: hp, commands } });
   const issues = await open(page, state);
   await page.locator('#action-attack').click(); await page.locator('[data-ui=skill-close]').click(); await page.locator(`#target-${last.targetId}`).click();
   await finishPlayback(page);
-  await expect(page.locator('.result-card')).toContainText('แพ้แล้ว'); await expect(page.locator('#leave-battle')).toContainText('กลับแคมป์');
+  await expect(page.locator('.result-card')).toContainText('แพ้แล้ว'); await expect(page.locator('#leave-battle')).toContainText('กลับค่าย');
+  expect(await saved(page)).toBeNull(); expect((await savedProfile(page)).bank).toEqual({ ore: 5, seal: 0 });
   await page.locator('#leave-battle').click();
-  const after = await saved(page);
-  expect(after.position).toEqual(camp); expect(after.hp).toEqual({ guardian: 23, tracer: 0, weaver: 0, healer: 0 }); expect(after.defeats).toBe(1);
-  await expect(page.locator('#world-message')).toContainText('ลุกขึ้นได้อีกครั้ง'); await expect(page.locator('#rest')).toBeEnabled();
-  await expect(page.locator('#world-hero-tracer')).toContainText('ล้มแล้ว');
+  await expect(page.locator('#lobby-view')).toBeVisible(); await expect(page.locator('.lobby-result')).toContainText('ได้แร่ดาว 5');
   expect(issues).toEqual([]);
 });
 
@@ -194,24 +203,21 @@ test('the boss blocks the gate; after its defeat the goal completes the expediti
   await expect(page.locator('#encounter-kind')).toContainText('บอส');
   expect((await saved(page)).battle?.kind).toBe('boss');
   await page.reload(); await page.locator('#continue').click(); await expect(page.locator('#encounter-title')).toContainText('ผู้คุมรอยแยก');
-  await page.evaluate(k => { const s = JSON.parse(localStorage.getItem(k)!); s.state.battle = null; s.state.bossDefeated = true; localStorage.setItem(k, JSON.stringify(s)); }, key);
+  await page.evaluate(k => { const s = JSON.parse(localStorage.getItem(k)!); s.run.battle = null; s.run.bossDefeated = true; localStorage.setItem(k, JSON.stringify(s)); }, key);
   await page.reload(); await page.locator('#continue').click();
   for (let i = 0; i < 3; i++) await page.locator('#move-up').click();
-  await expect(page.locator('#world-banner')).toContainText('ประตูรอยแยกปิดลงแล้ว');
-  expect((await saved(page)).completed).toBe(true); await expect(page.locator('#move-up')).toBeDisabled();
-  await reachable(page, '#new-expedition-banner'); await page.screenshot({ path: info.outputPath('expedition-complete.png') });
-  await page.locator('#new-expedition-banner').click(); expect((await saved(page)).completed).toBe(false);
+  await expect(page.locator('#lobby-view')).toBeVisible(); await expect(page.locator('.lobby-result')).toContainText('สำเร็จการเดินทาง');
+  expect(await saved(page)).toBeNull(); expect((await savedProfile(page)).completes).toBe(1);
+  await reachable(page, '#lobby-depart'); await page.screenshot({ path: info.outputPath('expedition-complete.png') });
   expect(issues).toEqual([]);
 });
 
-test('starting over from the title and the info dialog both require confirmation', async ({ page }) => {
+test('starting a new game from the title requires confirmation and resets the company', async ({ page }) => {
   const issues = await open(page, base({ steps: 9 }));
-  await page.locator('#world-info-button').click(); await page.locator('#new-expedition').click();
-  await expect(page.locator('#confirm-new')).toContainText('ยืนยันเริ่มใหม่'); expect((await saved(page)).steps).toBe(9);
-  await page.locator('#cancel-new').click(); await expect(page.locator('#new-expedition')).toBeVisible(); expect((await saved(page)).steps).toBe(9);
-  await page.locator('#new-expedition').click(); await page.locator('#confirm-new').click(); await expect(page.locator('#world-info')).not.toBeVisible();
-  expect((await saved(page)).steps).toBe(0);
-  await page.reload(); await page.locator('#new-game').click(); await expect(page.locator('#new-game')).toContainText('ยืนยัน');
+  await page.reload(); await expect(page.locator('#continue')).toContainText('เดินทางต่อ');
+  await page.locator('#new-game').click(); await expect(page.locator('#new-game')).toContainText('ยืนยัน'); expect((await saved(page)).steps).toBe(9);
+  await page.locator('#new-game').click(); await expect(page.locator('#lobby-view')).toBeVisible();
+  expect(await saved(page)).toBeNull(); expect((await savedProfile(page)).expeditions).toBe(0);
   expect(issues).toEqual([]);
 });
 
@@ -249,11 +255,25 @@ for (const viewport of viewports) {
     await page.locator('#camp-tab-team').click();
     for (const id of ['guardian', 'tracer', 'weaver', 'healer']) await reachable(page, `#team-${id}`);
     expect(await page.evaluate(() => document.documentElement.scrollHeight > innerHeight)).toBe(false);
-    await page.screenshot({ path: info.outputPath('team.png') });
-    await page.locator('#camp-tab-hire').click();
-    for (const sel of ['#hire-0', '#hire-1', '#hire-2']) await reachable(page, sel);
-    expect(await page.evaluate(() => document.documentElement.scrollHeight > innerHeight)).toBe(false);
-    await page.screenshot({ path: info.outputPath('hire.png') }); await page.keyboard.press('Escape');
+    await page.locator('#withdraw').scrollIntoViewIfNeeded(); await reachable(page, '#withdraw');
+    await page.screenshot({ path: info.outputPath('team.png') }); await page.keyboard.press('Escape');
+    expect(issues).toEqual([]); await context.close();
+  });
+}
+
+for (const viewport of viewports) {
+  test(`lobby ${viewport.width}x${viewport.height}: team, hire and depart fit without page scroll`, async ({ browser }, info) => {
+    const context = await browser.newContext({ viewport, hasTouch: viewport.width < 900, reducedMotion: 'reduce' }); const page = await context.newPage();
+    await seed(page, null, { ...newProfile(map, 5), tutorialDone: true, bank: { ore: 45, seal: 1 } });
+    const issues: string[] = []; page.on('pageerror', e => issues.push(e.message));
+    await page.goto('./'); await page.locator('#continue').click(); await expect(page.locator('#lobby-view')).toBeVisible();
+    const noScroll = () => page.evaluate(() => document.documentElement.scrollHeight > innerHeight || document.documentElement.scrollWidth > innerWidth);
+    expect(await noScroll()).toBe(false);
+    for (const sel of ['#lobby-depart', '#lobby-tab-team', '#lobby-tab-hire', '#lobby-member-guardian']) { await page.locator(sel).scrollIntoViewIfNeeded(); await reachable(page, sel); }
+    await page.screenshot({ path: info.outputPath('lobby.png') });
+    // The panel scrolls inside itself on short screens; the page never does.
+    await page.locator('#lobby-tab-hire').click(); for (const sel of ['#hire-0', '#hire-1', '#hire-2']) { await page.locator(sel).scrollIntoViewIfNeeded(); await reachable(page, sel); }
+    expect(await noScroll()).toBe(false); await page.screenshot({ path: info.outputPath('lobby-hire.png') });
     expect(issues).toEqual([]); await context.close();
   });
 }

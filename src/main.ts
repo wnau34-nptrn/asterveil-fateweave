@@ -11,8 +11,8 @@ import './ui/world.css';
 import './ui/battle-skin.css';
 
 const app = document.querySelector<HTMLElement>('#app')!;
-app.innerHTML = '<section id="title-view" class="view title-view"></section><section id="world-view" class="view world-view" hidden></section><section id="battle-view" class="view battle-view view-off"></section>';
-const views = { title: app.querySelector<HTMLElement>('#title-view')!, world: app.querySelector<HTMLElement>('#world-view')!, battle: app.querySelector<HTMLElement>('#battle-view')! };
+app.innerHTML = '<section id="title-view" class="view title-view"></section><section id="lobby-view" class="view lobby-view" hidden></section><section id="world-view" class="view world-view" hidden></section><section id="battle-view" class="view battle-view view-off"></section>';
+const views = { title: app.querySelector<HTMLElement>('#title-view')!, lobby: app.querySelector<HTMLElement>('#lobby-view')!, world: app.querySelector<HTMLElement>('#world-view')!, battle: app.querySelector<HTMLElement>('#battle-view')! };
 const ui = new BattleUI(views.battle, encounterById(chapterOne.tutorialEncounterId)!);
 let battleVisible = false;
 const scene = new BattleScene(ui.encounter, id => ui.choose(id, 'canvas'), () => { ui.sceneReady(); if (!battleVisible) game.loop.sleep(); }, () => ui.fieldLayoutChanged());

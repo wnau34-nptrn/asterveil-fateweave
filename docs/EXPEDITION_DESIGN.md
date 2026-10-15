@@ -15,7 +15,9 @@ Approved 2026-10-14, re-planned 2026-10-15 for the mercenary roster.
 | 1. Exploration core | Remove practice mode; tile map, camera, fog; shown per-step encounter chance; carried HP; camps; defeat; expedition save; one-time teaching battle | **Implemented** |
 | 2A. Resources and chests | Star ore, veil embers and contract seals; victory drops; six map chests; camp rest at 50% with a campfire; ember revive one member at a time | **Implemented** |
 | 2B. Roster of 8 | 4 deployed + 4 reserve, swapped at camp; enemies target party slots instead of hero ids; defeat rule for the roster | **Implemented** |
-| 2C-1. Company | Hiring board at camps, duplicates, star upgrades (stats), dismissal, company carried into the next expedition | **Implemented** |
+| 2C-1. Company | Hiring board, duplicates, star upgrades (stats), dismissal | **Implemented** (moved to the lobby in L1) |
+| L1. Lobby | Home → Lobby → Map; persistent profile (company ≤ 20, bank, board); choose the 4 + 4; withdraw/complete/wipe settle home | **Implemented** |
+| L2. Character creation | Commander (non-combat) name and look, once, between Home and Lobby | Planned |
 | 2C-2. New classes | Six new mercenaries (ART-CHAR-MERC-ENEMY-001), one class mechanic at a time; ★3 skill and ★5 passive per class | Planned |
 | 2D. Equipment and level | Equipment (weapon by class, body, accessory; rarity and affixes; bad-luck protection), shared EXP/level, consumables on the map | Planned |
 | 3. Choices and content | Events with fight/avoid choices, elites, mini boss, puzzles (rune order, push stone, lever), secrets, map quest "2 of 3" and side quests | Planned |
@@ -148,7 +150,39 @@ Elites (phase 3) will add guaranteed seals.
 - With only four members before hiring, a full defeat leaves one member standing. Recovery then needs embers.
 - A deployed party that is down while the reserve stands can occur only after a camp was reached, because reserve members come from camps. So there is always a camp to swap at.
 
-## Phase 2C-1 rules (draft numbers)
+## Lobby L1 rules (owner-approved 2026-10-15; numbers are drafts)
+
+**Flow.** Home (title) → Lobby (ค่ายทหารรับจ้าง) → map → back to the Lobby. Character creation (L2) will sit between Home and Lobby. While an expedition is running, the title offers only "เดินทางต่อ". The Lobby opens again once the run is settled.
+
+**Lobby, persistent (`Profile`).**
+- **Company:** up to 20 owned mercenaries with stars and duplicates.
+- **Party:** the 4 deployed + 4 reserve to bring.
+- **Bank:** ore and seals.
+- **Hiring board:** derived from `(profile seed, returns)`. It refreshes each time an expedition comes home, and only the taken indexes are stored.
+- **Other:** tutorial flag, counts of expeditions and completions, and the last result.
+- **Hiring:** a new member joins the company and, if there is room, the reserve.
+- **Team tab:** tap a member, then tap a member or an empty slot in another group (ลงสนาม / สำรอง / ในค่าย) to swap or move. At least one member stays deployed.
+- **Upgrades and dismissal:** the member panel also holds star upgrades and dismissal (2C-1 costs).
+
+**In the map.**
+- The camp keeps rest/revive and team swaps among the brought 8; hiring is gone from the camp.
+- The **map entrance** (start tile) is also a muster point. Its lower-right action is **ทางออก**, which opens the team tab and withdraw.
+- Stars are fixed for the whole run.
+
+**Ending a run (settled into the profile in the same write that clears the run).**
+
+| Outcome | How | Ore / seals kept |
+|---|---|---|
+| complete | stepping onto the goal | 100% |
+| withdrawn | "ถอนตัวกลับค่าย" at a camp or the entrance (confirm twice) | 100% |
+| wiped | every brought member down after a defeat | 50% (rounded down) |
+
+- Embers never leave the map. HP is full again in the Lobby.
+- The 2B "free rescue" rule is removed. A defeat with any brought member standing still retreats to the last camp (or the entrance) with the fallen down.
+
+**Lobby look.** A warm dusk camp band shows the brought team around a code-drawn fire, using the existing idle frames with gentle breathing and embers, all off under reduced motion. This is interim until `docs/handoffs/ART-UI-LOBBY-001.md` (scene layers and sit/cheer/idle_alt poses) is delivered.
+
+## Phase 2C-1 rules (draft numbers; now applied in the Lobby)
 
 **Stars.**
 - Each star above ★1 adds 8% to max HP and Attack (rounded) and +8% skill power via `HeroDefinition.skillBonus`, which the resolver, previews and skill text all read through `skillPower`. SPD never changes, so stars never reorder turns.
@@ -197,10 +231,10 @@ veil-siege / 5, rear-ambush / 3 and rift-warden / 3 keep their content and versi
 
 ## Save
 
-Key `asterveil.fateweave.expedition.v1`, envelope `{ version: 4, state }`. State fields:
+Key `asterveil.fateweave.expedition.v1`, envelope `{ version: 5, profile, run }` (run = the expedition below, or null). State fields:
 - map id/version, seed, roll counter;
 - position, steps, pressure, fog string;
-- roster `{ deployed, reserve }`, `members` (stars/duplicates per member), `board`, HP for every roster member, last camp;
+- roster `{ deployed, reserve }`, `members` (stars/duplicates per brought member), HP for every brought member, last camp;
 - resources `{ ore, ember, seal }`, `openedChests`, `restReady`;
 - tutorial/boss/completed flags, wins/defeats;
 - the active battle `{ kind, encounterId, entry, commands }`.
@@ -211,6 +245,11 @@ The practice keys (`asterveil.fateweave.battle.v1`, `.rear-ambush`, `.rift-warde
 
 Save history:
 - Version 1 (phase 1) was new; earlier practice saves were intentionally dropped.
+- Version 5 (lobby L1) splits the envelope into `profile` and `run`.
+  - A v1–v4 `state` becomes the run; its camp board is dropped.
+  - The profile is built from the run's roster and stars, with an empty bank.
+  - A run that had already reached the goal, or had lost everyone, is settled at once.
+  - The profile is validated field by field: company ≤ 20 unique catalog ids, party ⊆ company, members, bank, board indexes and the last result. Run members must belong to the company.
 - Version 4 (phase 2C-1) adds `members` and `board`. Older saves migrate with every member at ★1 and no board. Stars outside 1–5, missing members, and malformed or out-of-range board entries are rejected.
 - Version 3 (phase 2B) adds `roster`. v1/v2 saves migrate with the starting four deployed and an empty reserve. Unknown, duplicated or missing members, an empty deployment, and HP keys that differ from the roster are rejected.
 - Version 2 (phase 2A) adds resources, opened chests and the campfire flag. A v1 save migrates with zero resources, no opened chests and a lit campfire. The map layout and map version are unchanged. Tested in `tests/world.test.ts`.

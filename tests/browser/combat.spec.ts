@@ -37,7 +37,8 @@ async function cast(page:Page,hero:string,action:string,target:string){
  await owner(page,hero);await page.locator(`#action-${action}`).click();await expect(page.locator('#skill-popover')).toBeVisible();
  await page.locator('[data-ui=skill-close]').click();await page.locator(`#target-${target}`).click();
 }
-async function saved(page:Page){return page.evaluate(k=>JSON.parse(localStorage.getItem(k)!).state,key);}
+async function saved(page:Page){return page.evaluate(k=>{const j=JSON.parse(localStorage.getItem(k)!);return j.run===undefined?j.state:j.run;},key);}
+async function savedProfile(page:Page){return page.evaluate(k=>JSON.parse(localStorage.getItem(k)!).profile,key);}
 async function count(page:Page){const s=await saved(page);return s.battle?s.battle.commands.length:-1;}
 async function reachable(page:Page,selector:string){
  await expect.poll(()=>page.locator(selector).evaluate(el=>{const r=el.getBoundingClientRect();return r.width>=44&&r.height>=44&&r.left>=0&&r.top>=0&&r.right<=innerWidth&&r.bottom<=innerHeight&&el.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2));})).toBe(true);
@@ -132,8 +133,10 @@ for(const first of ['raider','brute']){
    await cast(page,hero,'attack',e.id);await finish(page);s=resolveCommand(s,veilSiege,{beat:s.beat,heroId:hero,action:'attack',targetId:e.id}).state;
   }
   expect(s.outcome).toBe('defeat');await expect(page.locator('.result-card')).toContainText('แพ้แล้ว');await reachable(page,'.result-card button');
-  expect((await saved(page)).battle).toBeNull();await page.locator('.result-card button').click();await expect(page.locator('#world-view')).toBeVisible();
-  await expect(page.locator('#world-hero-tracer')).toContainText('ล้มแล้ว');await expect(page.locator('#world-hero-guardian')).toContainText('23/76');expect(issues).toEqual([]);
+  // Every brought member is down: the run settles home in the same write.
+  expect(await saved(page)).toBeNull();expect((await savedProfile(page)).last.outcome).toBe('wiped');
+  await expect(page.locator('.result-card button')).toContainText('กลับค่าย');await page.locator('.result-card button').click();
+  await expect(page.locator('#lobby-view')).toBeVisible();await expect(page.locator('.lobby-result')).toContainText('การเดินทางล้มเหลว');expect(issues).toEqual([]);
  });
 }
 const routes=[...partyRoutes.map(r=>({...r,data:veilSiege})),...encounterRoutes];
@@ -195,7 +198,7 @@ test('a fallen upcoming hero is skipped on commit, reload and continued input',a
 test('denied storage keeps the battle playable in the tab and says progress is not saved',async({browser})=>{
  const context=await browser.newContext({viewport:{width:320,height:568},hasTouch:true,reducedMotion:'reduce'});await context.addInitScript(()=>Object.defineProperty(window,'localStorage',{get:()=>{throw new Error('Denied');}}));
  const page=await context.newPage();const issues:string[]=[];page.on('pageerror',e=>issues.push(e.message));await page.goto('./');
- await expect(page.locator('#title-view')).toContainText('ไม่อนุญาตให้บันทึก');await page.locator('#new-game').click();await page.locator('#world-info-button').click();await expect(page.locator('#world-save')).toContainText('บันทึกบนเครื่องนี้ไม่ได้');await page.keyboard.press('Escape');
+ await expect(page.locator('#title-view')).toContainText('ไม่อนุญาตให้บันทึก');await page.locator('#new-game').click();await page.locator('#lobby-depart').click();await page.locator('#world-info-button').click();await expect(page.locator('#world-save')).toContainText('บันทึกบนเครื่องนี้ไม่ได้');await page.keyboard.press('Escape');
  await page.locator('#move-left').click();
  // A first step can legitimately roll the tutorial encounter; either way the move is kept in memory.
  await expect(page.locator('#world-view:not([hidden]), #battle-view:not(.view-off)').first()).toBeVisible();expect(issues).toEqual([]);await context.close();
@@ -207,7 +210,8 @@ for(const invalid of ['old-content','foreign-owner','malformed','wrong-map']){
    invalid==='old-content'?JSON.stringify({...good,state:{...good.state,battle:{...good.state.battle,encounterId:'crystal-rift'}}}):
    JSON.stringify({...good,state:{...good.state,battle:{...good.state.battle,commands:[{beat:1,heroId:'guardian',action:'attack',targetId:'brute'}]}}});
   await seedRaw(page,raw);const issues:string[]=[];page.on('pageerror',e=>issues.push(e.message));await page.goto('./');
-  await expect(page.locator('#continue')).toHaveCount(0);await page.locator('#new-game').click();await expect(page.locator('#world-view')).toBeVisible();
+  await expect(page.locator('#continue')).toHaveCount(0);await page.locator('#new-game').click();await expect(page.locator('#lobby-view')).toBeVisible();
+  await page.locator('#lobby-depart').click();await expect(page.locator('#world-view')).toBeVisible();
   await expect(page.locator('#world-hero-tracer')).toContainText('56/56');expect((await saved(page)).battle).toBeNull();expect(issues).toEqual([]);
  });
 }

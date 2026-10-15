@@ -43,10 +43,32 @@ export interface CompanyRules {
   starCosts: readonly { dupes: number; ore: number }[];
 }
 export interface MemberProgress { stars: number; dupes: number }
-// The hiring board is derived from (seed, camp, wins); only taken offers are stored.
-export interface BoardState { key: string; taken: number[] }
-// Carried from one expedition to the next.
+// The team brought into one expedition and their star progress (fixed during the run).
 export interface Company { roster: Roster; members: Record<string, MemberProgress> }
+
+// ---- Lobby profile (persistent between expeditions) ----
+export const COMPANY_CAP = 20;
+export type RunOutcome = 'complete' | 'withdrawn' | 'wiped';
+export interface Bank { ore: number; seal: number }
+export interface Profile {
+  seed: number; returns: number; tutorialDone: boolean;
+  // Every owned mercenary in display order, with stars and stored duplicates.
+  company: string[]; members: Record<string, MemberProgress>;
+  // The 4 + 4 chosen for the next expedition (subset of `company`).
+  party: Roster;
+  bank: Bank;
+  // Hiring board taken indexes for the current `returns` count.
+  taken: number[];
+  expeditions: number; completes: number;
+  last: { outcome: RunOutcome; ore: number; seal: number; steps: number; wins: number } | null;
+}
+export type ProfileEvent =
+  | { type: 'blocked'; reason: string }
+  | { type: 'party' }
+  | { type: 'hired'; heroId: string; duplicate: boolean }
+  | { type: 'upgraded'; heroId: string; stars: number }
+  | { type: 'dismissed'; heroId: string };
+export interface ProfileResult { profile: Profile; event: ProfileEvent }
 // Up to 4 deployed (slot order = enemy target slots) and 4 in reserve, swapped at camps.
 export const PARTY_SLOTS = 4;
 export const RESERVE_SLOTS = 4;
@@ -58,7 +80,7 @@ export interface ExpeditionState {
   mapId: string; mapVersion: number; seed: number; rolls: number;
   position: Point; steps: number; pressure: number;
   // `hp` covers every roster member; the battle entry covers the deployed ones.
-  revealed: string; roster: Roster; members: Record<string, MemberProgress>; board: BoardState | null;
+  revealed: string; roster: Roster; members: Record<string, MemberProgress>;
   hp: Record<string, number>; camp: Point | null;
   // `restReady` is the campfire: one rest, then it needs a won battle to relight.
   resources: Resources; openedChests: string[]; restReady: boolean;
@@ -69,14 +91,11 @@ export type WorldEvent =
   | { type: 'moved'; chance: number }
   | { type: 'blocked'; reason: 'wall' | 'edge' | 'busy' | 'party' }
   | { type: 'roster' }
-  | { type: 'hired'; heroId: string; duplicate: boolean }
-  | { type: 'upgraded'; heroId: string; stars: number }
-  | { type: 'dismissed'; heroId: string }
   | { type: 'encounter'; kind: BattleKind; encounterId: string; chance: number }
   | { type: 'goal' }
   | { type: 'rested' }
   | { type: 'revived'; heroId: string }
   | { type: 'chest'; chestId: string; loot: Resources }
   | { type: 'victory'; kind: BattleKind; encounterId: string; loot: Resources }
-  | { type: 'defeat'; kind: BattleKind; encounterId: string; rescued?: string };
+  | { type: 'defeat'; kind: BattleKind; encounterId: string; wiped?: boolean };
 export interface WorldResult { state: ExpeditionState; event: WorldEvent }
