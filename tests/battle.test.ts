@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { actionReason, beginBattle, createBattle, currentHeroId, enemyIntent, plannedIntents, previewCommand, replay, resolveCommand, targetOptions, upcomingTurns, validateCommand } from '../src/core/battle/engine';
+import { actionReason, beginBattle, withParty, createBattle, currentHeroId, enemyIntent, plannedIntents, previewCommand, replay, resolveCommand, targetOptions, upcomingTurns, validateCommand } from '../src/core/battle/engine';
 import type { ActionId, BattleState } from '../src/core/battle/types';
 import { veilSiege as data } from '../src/content/encounters/veil-siege';
 const act = (s: BattleState, action: ActionId, targetId: string, d = data) => resolveCommand(s, d, { beat: s.beat, heroId: currentHeroId(s, d)!, action, targetId });
@@ -8,6 +8,28 @@ const at = (id: string, d = data) => {
   while (currentHeroId(s, d) !== id) s = act(s, 'attack', 'brute', d).state;
   return s;
 };
+describe('party slots', () => {
+  it('enemy moves aim at a slot, so whoever is deployed there becomes the target', () => {
+    const [guardian, tracer, weaver, healer] = data.heroes as typeof data.heroes[number][];
+    // veil-siege opens with Raking Slash at slot 1 (physical) and Rift Bolt at slot 2 (energy).
+    expect(plannedIntents(createBattle(data), data).map(i => i.targetId)).toEqual(['tracer', 'weaver']);
+    const swapped = withParty(data, [tracer!, guardian!, healer!, weaver!]);
+    expect(plannedIntents(createBattle(swapped), swapped).map(i => i.targetId)).toEqual(['guardian', 'healer']);
+    // A physical move aimed at a back-lane slot still lands on the front lane while it stands.
+    const backFirst = withParty(data, [weaver!, tracer!, guardian!, healer!]);
+    expect(enemyIntent(createBattle(backFirst), backFirst, 'raider', 1)!.targetId).toBe('tracer');
+  });
+  it('rejects empty, oversized or duplicated parties and plays a smaller party', () => {
+    const [guardian, tracer] = data.heroes;
+    expect(() => withParty(data, [])).toThrow(); expect(() => withParty(data, [guardian!, guardian!])).toThrow();
+    expect(() => withParty(data, [...data.heroes, { ...guardian!, id: 'extra' }])).toThrow();
+    const pair = withParty(data, [guardian!, tracer!]);
+    const s = createBattle(pair);
+    expect(s.heroes.map(h => h.id)).toEqual(['guardian', 'tracer']);
+    expect(plannedIntents(s, pair).every(i => ['guardian', 'tracer'].includes(i.targetId))).toBe(true);
+  });
+});
+
 describe('SPD round initiative', () => {
   it('sorts both sides by SPD, starts with Duelist and keeps separate four-class states', () => {
     const a = createBattle(data), b = createBattle(data);

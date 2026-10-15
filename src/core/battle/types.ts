@@ -6,7 +6,9 @@ export interface HeroDefinition {
   actions: readonly ActionId[]; color: number; empoweredByStatuses?: boolean;
 }
 export interface EnemyDefinition { id: string; name: string; displayName?: string; maxHp: number; speed: number; color: number }
-export interface IntentDefinition { sourceId: string; targetId: string; name: string; damage: number; kind: 'physical' | 'energy' }
+// Enemy moves aim at a party slot (0-3 in deployment order), not a named hero, so any
+// mercenary in that slot is the target. The resolved hero id is stored on Intent.
+export interface IntentDefinition { sourceId: string; targetSlot: number; name: string; damage: number; kind: 'physical' | 'energy' }
 export interface EncounterDefinition {
   id: string; version: number; name: string;
   heroes: readonly HeroDefinition[]; enemies: readonly EnemyDefinition[]; intents: readonly IntentDefinition[];
@@ -16,7 +18,7 @@ export interface EncounterDefinition {
 // Expiry/cooldown values are absolute round numbers, never animation time.
 export interface HeroState { id: string; hp: number; barrier: number; cooldowns: Partial<Record<ActionId, number>> }
 export interface EnemyState { id: string; hp: number; markedUntil: number; interruptedRound?: number }
-export interface Intent extends IntentDefinition { beat: number; round: number }
+export interface Intent extends IntentDefinition { targetId: string; beat: number; round: number }
 // Party condition carried in from the expedition. Missing ids start at max HP.
 export interface BattleEntry { hp: Readonly<Record<string, number>> }
 export interface Command { beat: number; heroId: string; action: ActionId; targetId: string }

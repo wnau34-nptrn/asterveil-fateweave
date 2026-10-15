@@ -1,12 +1,13 @@
 import type { HeroDefinition } from '../core/battle/types';
 import type { Direction, ExpeditionState, MapDefinition, Point } from '../core/world/types';
-import { atCamp, canOpenChest, canRest, canRevive, chestAt, encounterChance, isRevealed, tileAt, zoneOf } from '../core/world/world';
+import { atCamp, canOpenChest, canRest, canRevive, chestAt, encounterChance, isRevealed, rosterIds, tileAt, zoneOf } from '../core/world/world';
+import { PARTY_SLOTS, RESERVE_SLOTS } from '../core/world/types';
 import { actorFrames, artUrl } from '../game/visuals/assets';
 import { SOURCE_TILE, decorAt, floorFrame, fogLayers, landmarkAt, tileSizeFor, tileset, worldArtUrl, type Landmark } from '../game/visuals/world-art';
 import { heroText, resourceOrder, resourceText } from './th';
 import { icon } from './icons';
 
-export interface WorldHost { move(dir: Direction): void; rest(): void; revive(heroId: string): void; openChest(): void; newExpedition(): void }
+export interface WorldHost { move(dir: Direction): void; rest(): void; revive(heroId: string): void; swap(a: string, b: string): void; moveMember(id: string): void; openChest(): void; newExpedition(): void }
 export interface WorldBanner { kind: 'encounter' | 'boss' | 'tutorial' | 'complete'; eyebrow: string; title: string; detail: string }
 export interface WorldView { state: ExpeditionState; message: string; locked: boolean; saved: boolean; banner?: WorldBanner; effect?: 'rest' | 'loot' }
 
@@ -35,6 +36,8 @@ export class WorldUI {
   private previous: { position: Point; chance: number; revealed: string; boss: boolean; done: boolean } | undefined;
   private lastKey = 0;
   private confirmNew = false;
+  private campTab: 'care' | 'team' = 'care';
+  private picked: string | undefined;
   private tile = 48;
   private readonly width: number;
   private readonly reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -90,6 +93,8 @@ export class WorldUI {
           case 'camp-rest': if (!this.view?.locked) this.host.rest(); break;
           case 'camp-revive': if (!this.view?.locked && button.dataset.hero) this.host.revive(button.dataset.hero); break;
           case 'camp-close': dialog('#camp-dialog').close(); break;
+          case 'camp-tab': this.campTab = button.dataset.tab as 'care' | 'team'; this.picked = undefined; this.renderCamp(); this.root.querySelector<HTMLElement>(`#camp-tab-${this.campTab}`)?.focus(); break;
+          case 'team-pick': this.pickMember(button.dataset.hero, button.dataset.side as 'deployed' | 'reserve'); break;
           case 'pack': this.renderPack(); dialog('#pack-dialog').showModal(); break;
           case 'pack-close': dialog('#pack-dialog').close(); break;
           case 'info': this.confirmNew = false; this.renderInfo(); dialog('#world-info').showModal(); break;
@@ -121,9 +126,23 @@ export class WorldUI {
   // The lower-right action is contextual: camp opens the camp sheet, an unopened chest opens.
   private interact(): void {
     const s = this.view?.state; if (!s || this.view!.locked) return;
-    if (atCamp(s, this.map)) { this.renderCamp(); this.root.querySelector<HTMLDialogElement>('#camp-dialog')!.showModal(); }
+    if (atCamp(s, this.map)) {
+      // Open on the team tab when the deployed party cannot walk on.
+      this.campTab = s.roster.deployed.some(id => s.hp[id]! > 0) ? 'care' : 'team'; this.picked = undefined;
+      this.renderCamp(); this.root.querySelector<HTMLDialogElement>('#camp-dialog')!.showModal();
+    }
     else if (canOpenChest(s, this.map)) this.host.openChest();
   }
+  // Tap a member, then a member or an empty slot on the other side to swap or move.
+  private pickMember(id: string | undefined, side: 'deployed' | 'reserve'): void {
+    const s = this.view?.state; if (!s || this.view!.locked) return;
+    const pickedSide = this.picked && (s.roster.deployed.includes(this.picked) ? 'deployed' : 'reserve');
+    if (!this.picked || pickedSide === side) { this.picked = id && id !== this.picked ? id : undefined; this.renderCamp(); this.focusTeam(this.picked ?? id); return; }
+    const from = this.picked; this.picked = undefined;
+    if (id) this.host.swap(from, id); else this.host.moveMember(from);
+    this.focusTeam(from);
+  }
+  private focusTeam(id: string | undefined): void { if (id) this.root.querySelector<HTMLElement>(`#team-${id}`)?.focus(); }
   private input(dir: Direction): void { if (this.view && !this.view.locked && !this.view.state.completed) this.host.move(dir); }
 
   private floorCells(): string {
@@ -180,7 +199,7 @@ export class WorldUI {
   private renderAction(s: ExpeditionState, locked: boolean): void {
     const camp = atCamp(s, this.map); const chest = !camp && canOpenChest(s, this.map);
     const available = !locked && (camp || chest);
-    const fallen = this.heroes.filter(h => s.hp[h.id] === 0).length;
+    const fallen = rosterIds(s).filter(id => s.hp[id] === 0).length;
     const action = this.root.querySelector<HTMLButtonElement>('#rest')!;
     action.disabled = !available; action.classList.toggle('available', available);
     action.dataset.context = camp ? 'camp' : chest ? 'chest' : 'none';
@@ -205,19 +224,41 @@ export class WorldUI {
       <p class="world-stats">เปิดกล่องสมบัติแล้ว ${opened}/${this.map.chests.length} กล่อง · ของตกจากศึกที่ชนะและกล่องสมบัติ</p>`;
   }
 
+  private hero(id: string): HeroDefinition { return this.heroes.find(h => h.id === id)!; }
   private renderCamp(): void {
     const s = this.view?.state; if (!s) return;
+    const tab = (id: 'care' | 'team', label: string) => `<button id="camp-tab-${id}" data-world="camp-tab" data-tab="${id}" role="tab" aria-selected="${this.campTab === id}" class="${this.campTab === id ? 'active' : ''}">${label}</button>`;
+    const tabs = `<div class="camp-tabs" role="tablist" aria-label="แคมป์">${tab('care', 'พักและชุบ')}${tab('team', `จัดทีม <small>${s.roster.deployed.length}+${s.roster.reserve.length}</small>`)}</div>`;
+    this.root.querySelector('#camp-content')!.innerHTML = tabs + (this.campTab === 'care' ? this.campCare(s) : this.campTeam(s));
+  }
+  private campCare(s: ExpeditionState): string {
     const ready = canRest(s, this.map); const embers = s.resources.ember;
-    const fallen = this.heroes.filter(h => s.hp[h.id] === 0);
+    const fallen = rosterIds(s).filter(id => s.hp[id] === 0).map(id => this.hero(id));
     const reviveHp = (max: number) => Math.max(1, Math.ceil(max * this.map.camp.reviveHpPercent / 100));
-    this.root.querySelector('#camp-content')!.innerHTML = `
-      <section class="camp-section"><h3>${icon('rest')} พักฟื้น</h3>
-        <p>คนที่ยังยืนอยู่ฟื้นเลือด ${this.map.camp.restHealPercent}% ของเลือดสูงสุด ไฟแคมป์ใช้ได้ 1 ครั้ง แล้วต้องชนะศึกอีกครั้งจึงจุดใหม่ได้</p>
+    return `
+      <section class="camp-section" role="tabpanel"><h3>${icon('rest')} พักฟื้น</h3>
+        <p>ทุกคนในทีมและตัวสำรองที่ยังยืนอยู่ฟื้นเลือด ${this.map.camp.restHealPercent}% ของเลือดสูงสุด ไฟแคมป์ใช้ได้ 1 ครั้ง แล้วต้องชนะศึกอีกครั้งจึงจุดใหม่ได้</p>
         <button id="camp-rest" data-world="camp-rest" class="primary"${ready ? '' : ' disabled'}>${ready ? `พักฟื้น +${this.map.camp.restHealPercent}%` : 'ไฟแคมป์มอด · ชนะศึกก่อน'}</button></section>
       <section class="camp-section"><h3>${icon('ember')} ชุบชีวิต <span class="camp-embers">ถ่านม่านเวล ${embers}</span></h3>
         ${fallen.length ? `<ul class="revive-list">${fallen.map(h => { const ok = canRevive(s, this.map, h.id); return `<li>${portrait(h.id)}<span><b>${heroText[h.id]!.name}</b><small>ฟื้นด้วยเลือด ${reviveHp(h.maxHp)}/${h.maxHp}</small></span><button id="camp-revive-${h.id}" data-world="camp-revive" data-hero="${h.id}" class="secondary"${ok ? '' : ' disabled'} aria-label="ชุบ${heroText[h.id]!.name} ใช้ถ่านม่านเวล 1">${ok ? 'ชุบ · ใช้ 1' : 'ไม่มีถ่าน'}</button></li>`; }).join('')}</ul>`
           : '<p>ไม่มีใครล้ม</p>'}
         <p class="camp-note">ชุบได้ครั้งละ 1 คน ต่อถ่านม่านเวล 1 ก้อน หาได้จากศึกและกล่องสมบัติ</p></section>`;
+  }
+  private campTeam(s: ExpeditionState): string {
+    const card = (id: string | undefined, side: 'deployed' | 'reserve', slot: number) => {
+      if (!id) return `<button class="team-card empty${this.picked ? ' target' : ''}" data-world="team-pick" data-side="${side}" aria-label="${side === 'deployed' ? `ช่อง ${slot + 1} ว่าง` : 'ช่องสำรองว่าง'}"${this.picked ? '' : ' disabled'}><span>ว่าง</span></button>`;
+      const h = this.hero(id); const hp = s.hp[id] ?? 0; const text = heroText[id]!;
+      const lane = h.lane === 'front' ? 'แนวหน้า' : 'แนวหลัง';
+      return `<button id="team-${id}" class="team-card${hp <= 0 ? ' fallen' : ''}" data-world="team-pick" data-hero="${id}" data-side="${side}" aria-pressed="${this.picked === id}" aria-label="${side === 'deployed' ? `ช่อง ${slot + 1} · ` : 'สำรอง · '}${text.name} ${text.role} ${lane} ${hp <= 0 ? 'ล้มแล้ว' : `เลือด ${hp} จาก ${h.maxHp}`}">${side === 'deployed' ? `<i class="slot-no">${slot + 1}</i>` : ''}${portrait(id)}<b>${text.name}</b><small>${hp <= 0 ? 'ล้มแล้ว' : `${hp}/${h.maxHp}`}</small><small class="lane">${text.role} · ${lane}</small></button>`;
+    };
+    const row = (ids: string[], side: 'deployed' | 'reserve', size: number) => Array.from({ length: size }, (_, i) => card(ids[i], side, i)).join('');
+    const deployedUp = s.roster.deployed.some(id => s.hp[id]! > 0);
+    return `<section class="camp-section team-section" role="tabpanel">
+        <h3>${icon('flag')} ลงสนาม <span class="camp-embers">ศัตรูเล็งตามหมายเลขช่อง</span></h3>
+        <div class="team-grid">${row(s.roster.deployed, 'deployed', PARTY_SLOTS)}</div>
+        <h3>${icon('camp')} สำรอง</h3>
+        <div class="team-grid">${row(s.roster.reserve, 'reserve', RESERVE_SLOTS)}</div>
+        <p class="camp-note" id="team-hint">${this.picked ? `เลือก${heroText[this.picked]!.name}แล้ว · แตะคนหรือช่องว่างอีกฝั่งเพื่อสลับ แตะซ้ำเพื่อยกเลิก` : !deployedUp ? 'ทีมที่ลงสนามล้มหมด · สลับตัวสำรองที่ยังยืนอยู่หรือชุบก่อนออกเดินทาง' : s.roster.reserve.length ? 'แตะสมาชิก แล้วแตะคนหรือช่องว่างอีกฝั่งเพื่อสลับ' : 'ยังไม่มีตัวสำรอง · จ้างทหารรับจ้างได้ที่แคมป์ในช่วงถัดไป'}</p></section>`;
   }
 
   private renderDanger(chance: number, before: number | undefined): void {
@@ -231,7 +272,7 @@ export class WorldUI {
   }
 
   private renderParty(s: ExpeditionState): void {
-    this.root.querySelector('#world-party')!.innerHTML = this.heroes.map(h => {
+    this.root.querySelector('#world-party')!.innerHTML = s.roster.deployed.map(id => this.hero(id)).map(h => {
       const hp = s.hp[h.id] ?? 0; const ratio = hp / h.maxHp; const text = heroText[h.id]!;
       const state = hp <= 0 ? 'fallen' : ratio < .25 ? 'critical' : ratio < .6 ? 'hurt' : 'healthy';
       return `<div class="world-hero ${state}" id="world-hero-${h.id}" aria-label="${text.name} ${hp <= 0 ? 'ล้มแล้ว' : `เลือด ${hp} จาก ${h.maxHp}`}">${portrait(h.id)}<span class="hero-copy"><b>${text.name}</b><small>${hp <= 0 ? 'ล้มแล้ว' : `${hp}/${h.maxHp}`}</small><span class="hp"><span style="width:${ratio * 100}%"></span></span></span></div>`;
@@ -347,7 +388,8 @@ export class WorldUI {
       <h3>เลือดติดตัว</h3><p>จบศึกแล้วเลือดไม่ฟื้นเอง สมาชิกที่ล้มยังล้มอยู่จนกว่าจะชุบที่แคมป์ ศึกถัดไปเริ่มด้วยเลือดที่เหลือ</p>
       <h3>${icon('camp')} แคมป์</h3><p>ยืนบนแคมป์แล้วกด “พัก” มุมขวาล่าง พักฟื้นได้ ${this.map.camp.restHealPercent}% ครั้งเดียวจนกว่าจะชนะศึกถัดไป คนที่ล้มต้องใช้ถ่านม่านเวลชุบทีละคน แคมป์ล่าสุดที่ไปถึงคือจุดกลับเมื่อแพ้</p>
       <h3>${icon('chest')} ของตกและกล่องสมบัติ</h3><p>ชนะศึกได้แร่ดาวและบางครั้งได้ถ่านม่านเวล ยืนบนกล่องแล้วกด “เปิด” กล่องหายากมีตราสัญญา ดูของที่มีได้จากช่องสัมภาระ</p>
-      <h3>เมื่อแพ้</h3><p>ทีมกลับแคมป์ล่าสุดที่ไปถึง (หรือจุดเริ่ม) และฟื้นเลือดเต็ม ศัตรูที่ชนะคุณไม่ตามมา ของที่เก็บมาแล้วไม่หาย</p>
+      <h3>${icon('flag')} ทีมและตัวสำรอง</h3><p>ลงสนามได้ 4 คน สำรองได้ 4 คน สลับตัวได้ที่แคมป์ ศัตรูเล็งตามหมายเลขช่อง ใครยืนช่องนั้นคือเป้า (กายภาพยังโดนแนวหน้าก่อน)</p>
+      <h3>เมื่อแพ้</h3><p>ทีมถอยกลับแคมป์ล่าสุดที่ไปถึง (หรือจุดเริ่ม) คนที่ล้มยังล้มอยู่ ต้องชุบหรือสลับตัวสำรอง ถ้าทุกคนในทีมและสำรองล้มหมด 1 คนจะลุกขึ้นได้ฟรีและไฟแคมป์จุดใหม่ ของที่เก็บมาแล้วไม่หาย</p>
       <h3>${icon('boss')} ผู้คุมรอยแยก</h3><p>บอสเฝ้าทางเดียวไปประตูรอยแยก เดินชนบอสเพื่อเริ่มศึก ชนะแล้วเดินไปที่ประตูเพื่อจบการเดินทาง</p></section>
       ${s ? `<p class="world-stats">เดินแล้ว ${s.steps} ก้าว · ชนะ ${s.wins} ศึก · แพ้ ${s.defeats} ครั้ง</p>` : ''}
       <p id="world-save" class="world-save">${this.view?.saved ? 'บันทึกอัตโนมัติบนเครื่องนี้ทุกก้าว' : 'เล่นได้ แต่บันทึกบนเครื่องนี้ไม่ได้'}</p>

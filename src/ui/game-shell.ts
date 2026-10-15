@@ -1,7 +1,7 @@
 import type { BattleState, Outcome } from '../core/battle/types';
 import { clearLegacySaves, loadExpedition, saveExpedition } from '../core/save/expedition-save';
 import type { Direction, ExpeditionState, MapDefinition, WorldEvent } from '../core/world/types';
-import { finishBattle, move, newExpedition, openChest, recordBattle, rest, revive, type EncounterLookup } from '../core/world/world';
+import { battleData, finishBattle, heroCatalog, move, moveMember, newExpedition, openChest, recordBattle, rest, revive, swapMembers, type EncounterLookup } from '../core/world/world';
 import { browserStorage } from '../platform/browser-storage';
 import type { BattleUI } from './battle-ui';
 import { heroText, lootThai } from './th';
@@ -25,8 +25,8 @@ export class GameShell {
     private readonly views: { title: HTMLElement; world: HTMLElement; battle: HTMLElement }) {
     clearLegacySaves(this.storage);
     this.state = loadExpedition(this.storage, map, lookup);
-    this.world = new WorldUI(views.world, map, lookup(map.tutorialEncounterId)!.heroes, {
-      move: dir => this.move(dir), rest: () => this.rest(), revive: id => this.revive(id), openChest: () => this.openChest(), newExpedition: () => this.begin(),
+    this.world = new WorldUI(views.world, map, heroCatalog(lookup, map), {
+      move: dir => this.move(dir), rest: () => this.rest(), revive: id => this.revive(id), swap: (a, b) => this.roster(swapMembers(this.state!, map, a, b)), moveMember: id => this.roster(moveMember(this.state!, map, id)), openChest: () => this.openChest(), newExpedition: () => this.begin(),
     });
     views.title.addEventListener('click', e => {
       const button = (e.target as HTMLElement).closest<HTMLButtonElement>('button[data-title]');
@@ -86,7 +86,10 @@ export class GameShell {
   private move(dir: Direction): void {
     if (!this.state || this.locked) return;
     const result = move(this.state, this.map, dir);
-    if (result.event.type === 'blocked') { this.message = result.event.reason === 'wall' ? 'ทางนี้ไปต่อไม่ได้' : this.message; this.renderWorld(); return; }
+    if (result.event.type === 'blocked') {
+      this.message = result.event.reason === 'wall' ? 'ทางนี้ไปต่อไม่ได้' : result.event.reason === 'party' ? 'ทีมที่ลงสนามล้มหมด · สลับตัวสำรองหรือชุบที่แคมป์ก่อนออกเดินทาง' : this.message;
+      this.renderWorld(); return;
+    }
     this.state = result.state; this.persist();
     this.message = this.describe(result.event);
     if (result.event.type === 'goal') this.banner = this.completedBanner();
@@ -120,6 +123,12 @@ export class GameShell {
     this.effect = 'rest';
     this.renderWorld();
   }
+  private roster(result: { state: ExpeditionState; event: WorldEvent }): void {
+    if (!this.state || this.locked || result.event.type !== 'roster') return;
+    this.state = result.state; this.persist();
+    this.message = 'จัดทีมแล้ว · ศัตรูเล็งตามหมายเลขช่อง';
+    this.renderWorld();
+  }
   private openChest(): void {
     if (!this.state || this.locked) return;
     const result = openChest(this.state, this.map);
@@ -139,7 +148,7 @@ export class GameShell {
   }
 
   private openBattle(): void {
-    const s = this.state!; const b = s.battle!; const data = this.lookup(b.encounterId)!;
+    const s = this.state!; const b = s.battle!; const data = battleData(s, this.map, this.lookup)!;
     this.show('battle');
     this.battle.open({
       kind: b.kind, data, entry: { hp: b.entry }, commands: b.commands,
@@ -151,14 +160,19 @@ export class GameShell {
   private commitBattle(battle: BattleState): boolean {
     if (!this.state?.battle) return false;
     const kind = this.state.battle.kind;
-    let next = recordBattle(this.state, this.lookup, battle.commands);
+    let next = recordBattle(this.state, this.map, this.lookup, battle.commands);
     if (battle.outcome !== 'active') {
       const result = finishBattle(next, this.map, this.lookup); next = result.state;
       const fallen = Object.values(next.hp).filter(hp => hp <= 0).length;
       if (result.event.type === 'victory') {
         const loot = lootThai(result.event.loot); this.effect = 'loot';
         this.message = kind === 'boss' ? `ผู้คุมรอยแยกล้มแล้ว · ${loot} · ทางไปประตูเปิดออก` : `ชนะศึก · ${loot}${fallen ? ` · ${fallen} คนล้มอยู่ ชุบที่แคมป์` : ''}`;
-      } else this.message = kind === 'tutorial' ? 'ลองศึกสอนอีกครั้งด้วยเลือดเต็ม' : 'ทีมถอยกลับมาฟื้นตัว · เลือดเต็มแล้ว';
+      } else if (result.event.type === 'defeat') {
+        const rescued = result.event.rescued;
+        this.message = kind === 'tutorial' ? 'ลองศึกสอนอีกครั้งด้วยเลือดเต็ม'
+          : rescued ? `ทุกคนล้มหมด · ${heroText[rescued]?.name ?? ''}ลุกขึ้นได้อีกครั้ง ไฟแคมป์จุดใหม่แล้ว`
+          : 'ทีมถอยกลับแคมป์ · คนที่ล้มยังล้มอยู่ ชุบหรือสลับตัวสำรองที่แคมป์';
+      }
     }
     this.state = next; this.persist();
     return this.saved;

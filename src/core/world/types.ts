@@ -33,14 +33,21 @@ export interface MapDefinition {
   chests: readonly ChestDefinition[];
   loot: { tutorial: LootTable; boss: LootTable; chest: Readonly<Record<ChestTier, LootTable>> };
   camp: { restHealPercent: number; reviveHpPercent: number };
+  // Hero ids that join free at ★1, deployed in this slot order.
+  startingRoster: readonly string[];
 }
+// Up to 4 deployed (slot order = enemy target slots) and 4 in reserve, swapped at camps.
+export const PARTY_SLOTS = 4;
+export const RESERVE_SLOTS = 4;
+export interface Roster { deployed: string[]; reserve: string[] }
 
 export type BattleKind = 'tutorial' | 'random' | 'boss';
 export interface ActiveBattle { kind: BattleKind; encounterId: string; entry: Record<string, number>; commands: Command[] }
 export interface ExpeditionState {
   mapId: string; mapVersion: number; seed: number; rolls: number;
   position: Point; steps: number; pressure: number;
-  revealed: string; hp: Record<string, number>; camp: Point | null;
+  // `hp` covers every roster member; the battle entry covers the deployed ones.
+  revealed: string; roster: Roster; hp: Record<string, number>; camp: Point | null;
   // `restReady` is the campfire: one rest, then it needs a won battle to relight.
   resources: Resources; openedChests: string[]; restReady: boolean;
   tutorialDone: boolean; bossDefeated: boolean; completed: boolean;
@@ -48,12 +55,13 @@ export interface ExpeditionState {
 }
 export type WorldEvent =
   | { type: 'moved'; chance: number }
-  | { type: 'blocked'; reason: 'wall' | 'edge' | 'busy' }
+  | { type: 'blocked'; reason: 'wall' | 'edge' | 'busy' | 'party' }
+  | { type: 'roster' }
   | { type: 'encounter'; kind: BattleKind; encounterId: string; chance: number }
   | { type: 'goal' }
   | { type: 'rested' }
   | { type: 'revived'; heroId: string }
   | { type: 'chest'; chestId: string; loot: Resources }
   | { type: 'victory'; kind: BattleKind; encounterId: string; loot: Resources }
-  | { type: 'defeat'; kind: BattleKind; encounterId: string };
+  | { type: 'defeat'; kind: BattleKind; encounterId: string; rescued?: string };
 export interface WorldResult { state: ExpeditionState; event: WorldEvent }

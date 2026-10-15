@@ -1,4 +1,4 @@
-import type { ActionId, BattleEntry, BattleEvent, BattleState, Command, EncounterDefinition, Intent, Resolution, TargetOption, TurnSlot, TurnStage } from './types';
+import type { ActionId, BattleEntry, HeroDefinition, BattleEvent, BattleState, Command, EncounterDefinition, Intent, Resolution, TargetOption, TurnSlot, TurnStage } from './types';
 
 const living = (state: BattleState, id: string) => [...state.heroes, ...state.enemies].some(a => a.id === id && a.hp > 0);
 const definitions = (data: EncounterDefinition) => [...data.heroes, ...data.enemies];
@@ -12,6 +12,11 @@ export function currentHeroId(state: BattleState, data: EncounterDefinition): st
   const id = currentActorId(state); return data.heroes.some(h => h.id === id) ? id : undefined;
 }
 // Forecast order assumes today's survivors remain alive. Current-round order is frozen.
+// Deploys a party (in slot order) into an encounter; enemy slots then resolve to these heroes.
+export function withParty(data: EncounterDefinition, party: readonly HeroDefinition[]): EncounterDefinition {
+  if (!party.length || party.length > 4 || new Set(party.map(h => h.id)).size !== party.length) throw new Error('Invalid party.');
+  return { ...data, heroes: party };
+}
 export function upcomingTurns(state: BattleState, data: EncounterDefinition, count = 6): TurnSlot[] {
   if (state.outcome !== 'active') return [];
   const slots: TurnSlot[] = [];
@@ -34,7 +39,7 @@ export function enemyIntent(state: BattleState, data: EncounterDefinition, id: s
   const alive = state.heroes.filter(h => h.hp > 0);
   const front = alive.filter(h => data.heroes.find(d => d.id === h.id)!.lane === 'front');
   const allowed = template.kind === 'physical' && front.length ? front : alive;
-  const target = allowed.find(h => h.id === template.targetId) ?? allowed[0];
+  const target = allowed.find(h => h.id === data.heroes[template.targetSlot]?.id) ?? allowed[0];
   return target ? { ...template, targetId: target.id, beat: state.beat, round } : null;
 }
 export function plannedIntents(state: BattleState, data: EncounterDefinition, count = 2): Intent[] {

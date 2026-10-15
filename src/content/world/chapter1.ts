@@ -63,4 +63,5 @@ export const chapterOne: MapDefinition = {
     chest: { common: { ore: [16, 24], ember: [0, 30], seal: [0, 0] }, rare: { ore: [30, 40], ember: [1, 0], seal: [1, 0] } },
   },
   camp: { restHealPercent: 50, reviveHpPercent: 30 },
+  startingRoster: ['guardian', 'tracer', 'weaver', 'healer'],
 };

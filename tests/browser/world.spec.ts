@@ -12,7 +12,7 @@ function base(patch: Partial<ExpeditionState> = {}): ExpeditionState {
   const state = { ...newExpedition(map, encounterById, 77), tutorialDone: true, ...patch }; reveal(state, map); return state;
 }
 async function seed(page: Page, state: ExpeditionState) {
-  await page.addInitScript(({ raw, key }) => { if (sessionStorage.getItem('playtest-seeded')) return; localStorage.setItem(key, raw); sessionStorage.setItem('playtest-seeded', 'yes'); }, { raw: JSON.stringify({ version: 2, state }), key });
+  await page.addInitScript(({ raw, key }) => { if (sessionStorage.getItem('playtest-seeded')) return; localStorage.setItem(key, raw); sessionStorage.setItem('playtest-seeded', 'yes'); }, { raw: JSON.stringify({ version: 3, state }), key });
 }
 async function open(page: Page, state?: ExpeditionState) {
   const issues: string[] = []; page.on('pageerror', e => issues.push(e.message)); page.on('console', m => { if (m.type() === 'error') issues.push(m.text()); });
@@ -128,7 +128,23 @@ test('camp revives one fallen member per ember; a chest opens once and fills the
   expect(issues).toEqual([]);
 });
 
-test('defeat retreats to the last rested camp with a recovered party', async ({ page }) => {
+test('the camp team tab benches and redeploys members; the party row follows the deployed slots', async ({ page }, info) => {
+  const camp = findTiles(map, 'camp')[1]!;
+  const issues = await open(page, base({ position: camp, camp }));
+  await page.locator('#rest').click(); await page.locator('#camp-tab-team').click();
+  await expect(page.locator('#team-hint')).toContainText('ยังไม่มีตัวสำรอง');
+  await page.locator('#team-healer').click(); await expect(page.locator('#team-healer')).toHaveAttribute('aria-pressed', 'true');
+  await page.locator('.team-card.empty[data-side=reserve]').first().click();
+  await expect.poll(async () => (await saved(page)).roster).toEqual({ deployed: ['guardian', 'tracer', 'weaver'], reserve: ['healer'] });
+  await expect(page.locator('#world-party .world-hero')).toHaveCount(3);
+  await reachable(page, '#team-healer'); await page.screenshot({ path: info.outputPath('team.png') });
+  await page.locator('#team-healer').click(); await page.locator('.team-card.empty[data-side=deployed]').click();
+  await expect.poll(async () => (await saved(page)).roster).toEqual({ deployed: ['guardian', 'tracer', 'weaver', 'healer'], reserve: [] });
+  await page.keyboard.press('Escape'); await expect(page.locator('#world-party .world-hero')).toHaveCount(4);
+  expect(issues).toEqual([]);
+});
+
+test('defeat retreats to the last camp; the fallen stay down and a whole-roster wipe gets one member up', async ({ page }) => {
   const data = encounterById('veil-siege')!; const hp = { guardian: 6, tracer: 4, weaver: 3, healer: 2 };
   const camp = findTiles(map, 'camp')[1]!;
   let b = createBattle(data, { hp }); const commands = [];
@@ -141,8 +157,9 @@ test('defeat retreats to the last rested camp with a recovered party', async ({ 
   await expect(page.locator('.result-card')).toContainText('แพ้แล้ว'); await expect(page.locator('#leave-battle')).toContainText('กลับแคมป์');
   await page.locator('#leave-battle').click();
   const after = await saved(page);
-  expect(after.position).toEqual(camp); expect(after.hp).toEqual(full); expect(after.defeats).toBe(1);
-  await expect(page.locator('#world-message')).toContainText('ถอยกลับ'); await expect(page.locator('#rest')).toBeEnabled();
+  expect(after.position).toEqual(camp); expect(after.hp).toEqual({ guardian: 23, tracer: 0, weaver: 0, healer: 0 }); expect(after.defeats).toBe(1);
+  await expect(page.locator('#world-message')).toContainText('ลุกขึ้นได้อีกครั้ง'); await expect(page.locator('#rest')).toBeEnabled();
+  await expect(page.locator('#world-hero-tracer')).toContainText('ล้มแล้ว');
   expect(issues).toEqual([]);
 });
 
@@ -202,9 +219,13 @@ for (const viewport of viewports) {
     await reachable(page, '[data-world=goals-close]'); await page.screenshot({ path: info.outputPath('goals.png') }); await page.keyboard.press('Escape');
     // The camp sheet fits without page scrolling and keeps >=44px controls.
     await page.locator('#rest').click(); await expect(page.locator('#camp-dialog')).toBeVisible();
-    for (const sel of ['#camp-rest', '#camp-revive-tracer', '[data-world=camp-close]']) await reachable(page, sel);
+    for (const sel of ['#camp-rest', '#camp-revive-tracer', '[data-world=camp-close]', '#camp-tab-team']) await reachable(page, sel);
     expect(await page.evaluate(() => document.documentElement.scrollHeight > innerHeight)).toBe(false);
-    await page.screenshot({ path: info.outputPath('camp.png') }); await page.keyboard.press('Escape');
+    await page.screenshot({ path: info.outputPath('camp.png') });
+    await page.locator('#camp-tab-team').click();
+    for (const id of ['guardian', 'tracer', 'weaver', 'healer']) await reachable(page, `#team-${id}`);
+    expect(await page.evaluate(() => document.documentElement.scrollHeight > innerHeight)).toBe(false);
+    await page.screenshot({ path: info.outputPath('team.png') }); await page.keyboard.press('Escape');
     expect(issues).toEqual([]); await context.close();
   });
 }

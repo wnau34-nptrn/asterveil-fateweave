@@ -133,7 +133,7 @@ for(const first of ['raider','brute']){
   }
   expect(s.outcome).toBe('defeat');await expect(page.locator('.result-card')).toContainText('แพ้แล้ว');await reachable(page,'.result-card button');
   expect((await saved(page)).battle).toBeNull();await page.locator('.result-card button').click();await expect(page.locator('#world-view')).toBeVisible();
-  await expect(page.locator('#world-hero-tracer')).toContainText('56/56');expect(issues).toEqual([]);
+  await expect(page.locator('#world-hero-tracer')).toContainText('ล้มแล้ว');await expect(page.locator('#world-hero-guardian')).toContainText('23/76');expect(issues).toEqual([]);
  });
 }
 const routes=[...partyRoutes.map(r=>({...r,data:veilSiege})),...encounterRoutes];

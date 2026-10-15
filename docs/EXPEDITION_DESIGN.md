@@ -14,7 +14,7 @@ Approved 2026-10-14, re-planned 2026-10-15 for the mercenary roster.
 |---|---|---|
 | 1. Exploration core | Remove practice mode; tile map, camera, fog; shown per-step encounter chance; carried HP; camps; defeat; expedition save; one-time teaching battle | **Implemented** |
 | 2A. Resources and chests | Star ore, veil embers and contract seals; victory drops; six map chests; camp rest at 50% with a campfire; ember revive one member at a time | **Implemented** |
-| 2B. Roster of 8 | 4 deployed + 4 reserve, swapped at camp; enemies target lanes/slots instead of hero ids; defeat rule for the roster | Planned |
+| 2B. Roster of 8 | 4 deployed + 4 reserve, swapped at camp; enemies target party slots instead of hero ids; defeat rule for the roster | **Implemented** |
 | 2C. Mercenaries | Camp hiring board, catalog of 10 (existing 4 + 6 from ART-CHAR-MERC-ENEMY-001), stars by duplicates, one new class mechanic at a time | Planned |
 | 2D. Equipment and level | Equipment (weapon by class, body, accessory; rarity and affixes; bad-luck protection), shared EXP/level, consumables on the map | Planned |
 | 3. Choices and content | Events with fight/avoid choices, elites, mini boss, puzzles (rune order, push stone, lever), secrets, map quest "2 of 3" and side quests | Planned |
@@ -116,6 +116,37 @@ Elites (phase 3) will add guaranteed seals.
 
 **Balance evidence.** The advisor's full run (seed 2026, revive then rest at each camp) still reaches the goal. The advisor still wins every encounter from 60% HP. Human playtesting is still needed.
 
+## Phase 2B rules
+
+**Party slots.**
+- `IntentDefinition.targetSlot` (0–3, deployment order) replaces the old hero-id target, so whoever stands in that slot is the target.
+- The front-lane rule is unchanged: a physical move hits the front lane while anyone there stands. If the slot is empty, down, or blocked by that rule, the move falls back to the first allowed member.
+- The resolved hero id is still stored on `Intent.targetId`, so Guard, previews and the advisor work as before.
+- Old content maps guardian/tracer/weaver/healer to slots 0/1/2/3. With the starting four in their default order, every battle plays exactly as before; the full balance suite is unchanged.
+- Every encounter version was bumped: veil-siege 6, rear-ambush 4, rift-warden 4, the rest 2.
+- `withParty(data, heroes)` deploys 1–4 unique heroes into an encounter.
+
+**Roster.**
+- `roster: { deployed (1–4, slot order), reserve (0–4) }`. HP is tracked for every member.
+- The battle entry contains only the deployed members.
+- Until hiring exists (2C), the hero catalog is the four starting members, so the reserve starts empty.
+
+**Camp team tab.**
+- The camp sheet has two tabs: "พักและชุบ" (rest/revive) and "จัดทีม" (team).
+- To change the team, tap a member, then tap a member or an empty slot on the other side:
+  - deployed ↔ reserve swaps the two;
+  - a member tapped onto an empty slot moves there.
+- At least one member stays deployed. Changes are allowed only at a camp, never in battle.
+- A rest heals reserve members too; embers can revive anyone on the roster.
+- If no deployed member can stand, movement is blocked ("ทีมที่ลงสนามล้มหมด"). The camp sheet then opens on the team tab.
+
+**Defeat (replaces the 2A interim).**
+- The deployed members stay down. The party returns to the last camp reached (or the start), and resources are kept.
+- If the whole roster is down, slot 1 gets back up free at 30% HP and the campfire is relit.
+- A lost teaching battle still restarts at full HP.
+- With only four members before hiring, a full defeat leaves one member standing. Recovery then needs embers.
+- A deployed party that is down while the reserve stands can occur only after a camp was reached, because reserve members come from camps. So there is always a camp to swap at.
+
 **Encounters added for the expedition** (all reuse the two illustrated enemy slots `raider`/`brute`):
 
 | id / version | Enemies (HP, SPD) | Moves per own round |
@@ -132,10 +163,10 @@ veil-siege / 5, rear-ambush / 3 and rift-warden / 3 keep their content and versi
 
 ## Save
 
-Key `asterveil.fateweave.expedition.v1`, envelope `{ version: 2, state }`. State fields:
+Key `asterveil.fateweave.expedition.v1`, envelope `{ version: 3, state }`. State fields:
 - map id/version, seed, roll counter;
 - position, steps, pressure, fog string;
-- party HP, last camp;
+- roster `{ deployed, reserve }`, HP for every roster member, last camp;
 - resources `{ ore, ember, seal }`, `openedChests`, `restReady`;
 - tutorial/boss/completed flags, wins/defeats;
 - the active battle `{ kind, encounterId, entry, commands }`.
@@ -146,6 +177,7 @@ The practice keys (`asterveil.fateweave.battle.v1`, `.rear-ambush`, `.rift-warde
 
 Save history:
 - Version 1 (phase 1) was new; earlier practice saves were intentionally dropped.
+- Version 3 (phase 2B) adds `roster`. v1/v2 saves migrate with the starting four deployed and an empty reserve. Unknown, duplicated or missing members, an empty deployment, and HP keys that differ from the roster are rejected.
 - Version 2 (phase 2A) adds resources, opened chests and the campfire flag. A v1 save migrates with zero resources, no opened chests and a lit campfire. The map layout and map version are unchanged. Tested in `tests/world.test.ts`.
 - Unknown resource keys, unknown or repeated chest ids, and a non-boolean campfire flag are rejected.
 

@@ -1,15 +1,16 @@
 import { entryReason } from '../battle/engine';
 import type { ActionId, Command } from '../battle/types';
-import type { ActiveBattle, ExpeditionState, MapDefinition, Point } from '../world/types';
-import { battleState, finishBattle, fullParty, tileAt, type EncounterLookup } from '../world/world';
+import { PARTY_SLOTS, RESERVE_SLOTS, type ActiveBattle, type ExpeditionState, type MapDefinition, type Point, type Roster } from '../world/types';
+import { battleState, finishBattle, fullParty, heroDef, tileAt, type EncounterLookup } from '../world/world';
 
 export interface StoragePort { getItem(key: string): string | null; setItem(key: string, value: string): void; removeItem?(key: string): void }
 export const expeditionKey = 'asterveil.fateweave.expedition.v1';
 // Practice-mode slots from the combat prototype. They are never read again.
 export const legacyKeys = ['asterveil.fateweave.battle.v1', 'asterveil.fateweave.battle.v1.rear-ambush', 'asterveil.fateweave.battle.v1.rift-warden', 'asterveil.fateweave.encounter.v1'];
 // v1 (phase 1) → v2 (phase 2A): adds resources, opened chests and the campfire flag.
-// v1 saves migrate with empty resources and a lit campfire; the map layout is unchanged.
-const SAVE_VERSION = 2;
+// v2 → v3 (phase 2B): adds the roster. Older saves migrate with empty resources, a lit
+// campfire (v1) and the starting four deployed; the map layout is unchanged.
+const SAVE_VERSION = 3;
 const actions: readonly ActionId[] = ['attack', 'guard', 'bash', 'mark', 'execute', 'bolt', 'ward', 'heal', 'prayer'];
 
 export function saveExpedition(storage: StoragePort | undefined, state: ExpeditionState): boolean {
@@ -35,8 +36,16 @@ function point(v: unknown, map: MapDefinition): Point {
   if (!tile || tile.kind === 'wall' || tile.kind === 'boss') throw new Error('Invalid position');
   return { x: p.x, y: p.y };
 }
-function hpRecord(v: unknown, lookup: EncounterLookup, map: MapDefinition): Record<string, number> {
-  const raw = obj(v); const full = fullParty(lookup, map);
+function rosterOf(v: unknown, lookup: EncounterLookup, map: MapDefinition): Roster {
+  const r = obj(v); const { deployed, reserve } = r;
+  if (!Array.isArray(deployed) || !Array.isArray(reserve) || Object.keys(r).length !== 2) throw new Error('Invalid roster');
+  const ids = [...deployed, ...reserve];
+  if (!deployed.length || deployed.length > PARTY_SLOTS || reserve.length > RESERVE_SLOTS || new Set(ids).size !== ids.length
+    || ids.some(id => typeof id !== 'string' || !heroDef(lookup, map, id))) throw new Error('Invalid roster');
+  return { deployed: [...deployed] as string[], reserve: [...reserve] as string[] };
+}
+function hpRecord(v: unknown, lookup: EncounterLookup, map: MapDefinition, ids: readonly string[]): Record<string, number> {
+  const raw = obj(v); const full = fullParty(lookup, map, ids);
   if (Object.keys(raw).length !== Object.keys(full).length) throw new Error('Invalid party');
   return Object.fromEntries(Object.entries(full).map(([id, max]) => {
     if (!isInt(raw[id], 0, max)) throw new Error('Invalid party');
@@ -53,15 +62,17 @@ function command(v: unknown): Command {
 // command under the current rules; any mismatch starts a fresh expedition.
 export function parseExpedition(raw: string, map: MapDefinition, lookup: EncounterLookup): ExpeditionState {
   const envelope = obj(JSON.parse(raw));
-  if (envelope.version !== SAVE_VERSION && envelope.version !== 1) throw new Error('Unsupported save version');
+  if (![1, 2, SAVE_VERSION].includes(envelope.version as number)) throw new Error('Unsupported save version');
   const s = obj(envelope.state);
   if (envelope.version === 1) Object.assign(s, { resources: { ore: 0, ember: 0, seal: 0 }, openedChests: [], restReady: true });
+  if (envelope.version !== SAVE_VERSION) s.roster = { deployed: [...map.startingRoster], reserve: [] };
   if (s.mapId !== map.id || s.mapVersion !== map.version) throw new Error('Map changed');
   const cells = map.rows.length * map.rows[0]!.length;
   if (typeof s.revealed !== 'string' || s.revealed.length !== cells || /[^01]/.test(s.revealed)) throw new Error('Invalid fog');
   for (const key of ['tutorialDone', 'bossDefeated', 'completed', 'restReady'] as const) if (typeof s[key] !== 'boolean') throw new Error('Invalid flag');
   if (!isInt(s.seed, 0, 0xffffffff) || !isInt(s.rolls) || !isInt(s.steps) || !isInt(s.pressure, 0, 100) || !isInt(s.wins) || !isInt(s.defeats)) throw new Error('Invalid counters');
-  const hp = hpRecord(s.hp, lookup, map);
+  const roster = rosterOf(s.roster, lookup, map);
+  const hp = hpRecord(s.hp, lookup, map, [...roster.deployed, ...roster.reserve]);
   const r = obj(s.resources);
   if (Object.keys(r).length !== 3 || !isInt(r.ore, 0, 999999) || !isInt(r.ember, 0, 9999) || !isInt(r.seal, 0, 9999)) throw new Error('Invalid resources');
   const chestIds = map.chests.map(c => c.id);
@@ -71,13 +82,13 @@ export function parseExpedition(raw: string, map: MapDefinition, lookup: Encount
     const b = obj(s.battle); const data = typeof b.encounterId === 'string' ? lookup(b.encounterId) : undefined;
     if (!['tutorial', 'random', 'boss'].includes(b.kind as string) || !data) throw new Error('Invalid battle');
     if (!Array.isArray(b.commands) || b.commands.length > 5000) throw new Error('Invalid battle');
-    const entry = hpRecord(b.entry, lookup, map);
+    const entry = hpRecord(b.entry, lookup, map, roster.deployed);
     if (entryReason(data, { hp: entry })) throw new Error('Invalid entry');
     battle = { kind: b.kind as ActiveBattle['kind'], encounterId: data.id, entry, commands: b.commands.map(command) };
-  } else if (!Object.values(hp).some(v => v > 0)) throw new Error('Party down outside battle');
+  } else if (!Object.values(hp).some(v => v > 0)) throw new Error('Roster down outside battle');
   const state: ExpeditionState = {
     mapId: map.id, mapVersion: map.version, seed: s.seed as number, rolls: s.rolls as number, position: point(s.position, map),
-    steps: s.steps as number, pressure: s.pressure as number, revealed: s.revealed, hp,
+    steps: s.steps as number, pressure: s.pressure as number, revealed: s.revealed, roster, hp,
     camp: s.camp === null ? null : point(s.camp, map),
     resources: { ore: r.ore as number, ember: r.ember as number, seal: r.seal as number }, openedChests: [...s.openedChests as string[]], restReady: s.restReady as boolean,
     tutorialDone: s.tutorialDone as boolean, bossDefeated: s.bossDefeated as boolean,
@@ -85,7 +96,7 @@ export function parseExpedition(raw: string, map: MapDefinition, lookup: Encount
   };
   if (state.camp && tileAt(map, state.camp)?.kind !== 'camp') throw new Error('Invalid camp');
   // A battle can end on enemy opening turns before any command; apply it now.
-  if (battle && battleState(state, lookup)!.outcome !== 'active') return finishBattle(state, map, lookup).state;
+  if (battle && battleState(state, map, lookup)!.outcome !== 'active') return finishBattle(state, map, lookup).state;
   return state;
 }
 export function loadExpedition(storage: StoragePort | undefined, map: MapDefinition, lookup: EncounterLookup): ExpeditionState | undefined {

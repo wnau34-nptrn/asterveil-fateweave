@@ -1,6 +1,7 @@
-import { replay } from '../battle/engine';
-import type { BattleState, Command, EncounterDefinition } from '../battle/types';
+import { replay, withParty } from '../battle/engine';
+import type { BattleState, Command, EncounterDefinition, HeroDefinition } from '../battle/types';
 import type { ActiveBattle, BattleKind, ChestDefinition, Direction, ExpeditionState, LootTable, MapDefinition, Point, Resources, Tile, WorldResult, ZoneDefinition } from './types';
+import { PARTY_SLOTS, RESERVE_SLOTS } from './types';
 
 // Pure expedition rules: no DOM, Phaser, clocks or Math.random. Every roll is
 // derived from (seed, rolls) so a reload can never re-roll an outcome.
@@ -44,14 +45,24 @@ export function reveal(state: ExpeditionState, map: MapDefinition): void {
   }
   state.revealed = cells.join('');
 }
-export function fullParty(lookup: EncounterLookup, map: MapDefinition): Record<string, number> {
-  return Object.fromEntries(lookup(map.tutorialEncounterId)!.heroes.map(h => [h.id, h.maxHp]));
+// Hero definitions available to the roster. Until hiring exists (2C) the catalog is the
+// teaching encounter's party; a test can supply a larger one through the lookup.
+export function heroCatalog(lookup: EncounterLookup, map: MapDefinition): readonly HeroDefinition[] {
+  return lookup(map.tutorialEncounterId)!.heroes;
+}
+export function heroDef(lookup: EncounterLookup, map: MapDefinition, id: string): HeroDefinition | undefined {
+  return heroCatalog(lookup, map).find(h => h.id === id);
+}
+export const rosterIds = (state: ExpeditionState): string[] => [...state.roster.deployed, ...state.roster.reserve];
+// Max HP for the given members (default: the whole roster).
+export function fullParty(lookup: EncounterLookup, map: MapDefinition, ids?: readonly string[]): Record<string, number> {
+  return Object.fromEntries((ids ?? map.startingRoster).map(id => [id, heroDef(lookup, map, id)!.maxHp]));
 }
 export function newExpedition(map: MapDefinition, lookup: EncounterLookup, seed: number): ExpeditionState {
   const width = map.rows[0]!.length;
   const state: ExpeditionState = {
     mapId: map.id, mapVersion: map.version, seed: seed >>> 0, rolls: 0, position: startOf(map), steps: 0, pressure: 0,
-    revealed: '0'.repeat(width * map.rows.length), hp: fullParty(lookup, map), camp: null,
+    revealed: '0'.repeat(width * map.rows.length), roster: { deployed: [...map.startingRoster], reserve: [] }, hp: fullParty(lookup, map), camp: null,
     resources: { ore: 0, ember: 0, seal: 0 }, openedChests: [], restReady: true,
     tutorialDone: false, bossDefeated: false, completed: false, wins: 0, defeats: 0, battle: null,
   };
@@ -59,7 +70,7 @@ export function newExpedition(map: MapDefinition, lookup: EncounterLookup, seed:
   return state;
 }
 const startBattle = (state: ExpeditionState, kind: BattleKind, encounterId: string): ActiveBattle =>
-  ({ kind, encounterId, entry: { ...state.hp }, commands: [] });
+  ({ kind, encounterId, entry: Object.fromEntries(state.roster.deployed.map(id => [id, state.hp[id]!])), commands: [] });
 
 export function move(initial: ExpeditionState, map: MapDefinition, dir: Direction): WorldResult {
   if (initial.battle || initial.completed) return { state: initial, event: { type: 'blocked', reason: 'busy' } };
@@ -67,6 +78,7 @@ export function move(initial: ExpeditionState, map: MapDefinition, dir: Directio
   const tile = tileAt(map, target);
   if (!tile) return { state: initial, event: { type: 'blocked', reason: 'edge' } };
   if (tile.kind === 'wall') return { state: initial, event: { type: 'blocked', reason: 'wall' } };
+  if (!initial.roster.deployed.some(id => initial.hp[id]! > 0)) return { state: initial, event: { type: 'blocked', reason: 'party' } };
   const state = structuredClone(initial);
   // The boss is visible and blocks its tile: stepping into it starts the fight in place.
   if (tile.kind === 'boss' && !state.bossDefeated) {
@@ -103,7 +115,7 @@ const percentOf = (max: number, percent: number) => Math.max(1, Math.ceil(max * 
 // A rest heals standing members by a share of max HP; the fallen need an ember each.
 export function rest(initial: ExpeditionState, map: MapDefinition, lookup: EncounterLookup): WorldResult {
   if (!canRest(initial, map)) return { state: initial, event: { type: 'blocked', reason: 'busy' } };
-  const state = structuredClone(initial); const full = fullParty(lookup, map);
+  const state = structuredClone(initial); const full = fullParty(lookup, map, rosterIds(state));
   for (const [id, max] of Object.entries(full)) if (state.hp[id]! > 0) state.hp[id] = Math.min(max, state.hp[id]! + percentOf(max, map.camp.restHealPercent));
   state.pressure = 0; state.camp = { ...state.position }; state.restReady = false;
   return { state, event: { type: 'rested' } };
@@ -114,8 +126,29 @@ export function canRevive(state: ExpeditionState, map: MapDefinition, heroId: st
 export function revive(initial: ExpeditionState, map: MapDefinition, lookup: EncounterLookup, heroId: string): WorldResult {
   if (!canRevive(initial, map, heroId)) return { state: initial, event: { type: 'blocked', reason: 'busy' } };
   const state = structuredClone(initial);
-  state.hp[heroId] = percentOf(fullParty(lookup, map)[heroId]!, map.camp.reviveHpPercent); state.resources.ember--;
+  state.hp[heroId] = percentOf(heroDef(lookup, map, heroId)!.maxHp, map.camp.reviveHpPercent); state.resources.ember--;
   return { state, event: { type: 'revived', heroId } };
+}
+
+// Camp roster management: a deployed member and a reserve member trade places, or one
+// member moves to a free slot on the other side. At least one member stays deployed.
+export function swapMembers(initial: ExpeditionState, map: MapDefinition, a: string, b: string): WorldResult {
+  const { deployed, reserve } = initial.roster;
+  const [d, r] = deployed.includes(a) ? [a, b] : [b, a];
+  if (!atCamp(initial, map) || !deployed.includes(d) || !reserve.includes(r)) return { state: initial, event: { type: 'blocked', reason: 'busy' } };
+  const state = structuredClone(initial);
+  state.roster.deployed[deployed.indexOf(d)] = r; state.roster.reserve[reserve.indexOf(r)] = d;
+  return { state, event: { type: 'roster' } };
+}
+export function moveMember(initial: ExpeditionState, map: MapDefinition, id: string): WorldResult {
+  const { deployed, reserve } = initial.roster;
+  const toReserve = deployed.includes(id);
+  const ok = atCamp(initial, map) && (toReserve ? deployed.length > 1 && reserve.length < RESERVE_SLOTS : reserve.includes(id) && deployed.length < PARTY_SLOTS);
+  if (!ok) return { state: initial, event: { type: 'blocked', reason: 'busy' } };
+  const state = structuredClone(initial);
+  const from = toReserve ? state.roster.deployed : state.roster.reserve; const to = toReserve ? state.roster.reserve : state.roster.deployed;
+  from.splice(from.indexOf(id), 1); to.push(id);
+  return { state, event: { type: 'roster' } };
 }
 
 // Loot consumes rolls from the same (seed, rolls) stream, so it is fixed once saved.
@@ -144,35 +177,53 @@ function battleLoot(state: ExpeditionState, map: MapDefinition, kind: BattleKind
   return zoneOf(map, tileAt(map, state.position)?.zoneId ?? '')?.loot ?? noLoot;
 }
 
+// The encounter as fought by the deployed party, in slot order.
+export function battleData(state: ExpeditionState, map: MapDefinition, lookup: EncounterLookup): EncounterDefinition | undefined {
+  const data = state.battle && lookup(state.battle.encounterId);
+  const party = state.roster.deployed.map(id => heroDef(lookup, map, id));
+  return data && party.every(Boolean) ? withParty(data, party as HeroDefinition[]) : undefined;
+}
 // The battle's committed commands are replayed from the recorded entry; the world
 // never trusts a supplied HP snapshot.
-export function battleState(state: ExpeditionState, lookup: EncounterLookup): BattleState | undefined {
-  const battle = state.battle; const data = battle && lookup(battle.encounterId);
-  return battle && data ? replay(data, battle.commands, { hp: battle.entry }) : undefined;
+export function battleState(state: ExpeditionState, map: MapDefinition, lookup: EncounterLookup): BattleState | undefined {
+  const data = battleData(state, map, lookup);
+  return state.battle && data ? replay(data, state.battle.commands, { hp: state.battle.entry }) : undefined;
 }
-export function recordBattle(initial: ExpeditionState, lookup: EncounterLookup, commands: readonly Command[]): ExpeditionState {
+export function recordBattle(initial: ExpeditionState, map: MapDefinition, lookup: EncounterLookup, commands: readonly Command[]): ExpeditionState {
   if (!initial.battle) throw new Error('No active battle.');
   const state = structuredClone(initial); state.battle!.commands = commands.map(c => ({ ...c }));
-  battleState(state, lookup);
+  battleState(state, map, lookup);
   return state;
 }
 // Applies a finished battle. Victory keeps the surviving HP, rolls loot and relights
-// the campfire; defeat returns to the last camp (or start) with a recovered party.
-// A lost tutorial simply restarts.
+// the campfire; defeat leaves the deployed members down at the last camp (or start).
+// A lost tutorial simply restarts at full HP.
 export function finishBattle(initial: ExpeditionState, map: MapDefinition, lookup: EncounterLookup): WorldResult {
-  const result = battleState(initial, lookup);
+  const result = battleState(initial, map, lookup);
   if (!initial.battle || !result || result.outcome === 'active') throw new Error('The battle has not finished.');
   const state = structuredClone(initial); const { kind, encounterId } = initial.battle;
   if (result.outcome === 'victory') {
-    state.hp = Object.fromEntries(result.heroes.map(h => [h.id, h.hp]));
+    for (const h of result.heroes) state.hp[h.id] = h.hp;
     state.battle = null; state.wins++; state.restReady = true;
     if (kind === 'tutorial') state.tutorialDone = true;
     if (kind === 'boss') state.bossDefeated = true;
     return { state, event: { type: 'victory', kind, encounterId, loot: rollLoot(state, battleLoot(state, map, kind)) } };
   }
   state.defeats++;
-  if (kind === 'tutorial') { state.battle = startBattle({ ...state, hp: fullParty(lookup, map) }, 'tutorial', encounterId); return { state, event: { type: 'defeat', kind, encounterId } }; }
-  state.battle = null; state.hp = fullParty(lookup, map); state.pressure = 0;
+  if (kind === 'tutorial') {
+    state.battle = { kind: 'tutorial', encounterId, entry: fullParty(lookup, map, state.roster.deployed), commands: [] };
+    return { state, event: { type: 'defeat', kind, encounterId } };
+  }
+  // The fallen stay fallen; the party retreats to the last camp reached (or start).
+  // Only when the whole roster is down does one member get back up, free, and the
+  // campfire is relit so the survivor can rest.
+  for (const h of result.heroes) state.hp[h.id] = 0;
+  state.battle = null; state.pressure = 0;
   state.position = state.camp ? { ...state.camp } : startOf(map); reveal(state, map);
-  return { state, event: { type: 'defeat', kind, encounterId } };
+  let rescued: string | undefined;
+  if (rosterIds(state).every(id => state.hp[id] === 0)) {
+    rescued = state.roster.deployed[0]!;
+    state.hp[rescued] = percentOf(heroDef(lookup, map, rescued)!.maxHp, map.camp.reviveHpPercent); state.restReady = true;
+  }
+  return { state, event: { type: 'defeat', kind, encounterId, ...(rescued ? { rescued } : {}) } };
 }
