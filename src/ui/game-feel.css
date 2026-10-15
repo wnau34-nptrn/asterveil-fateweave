@@ -352,3 +352,20 @@ html, body { background: #0a1422; }
 #battle-view .arena { position: relative; }
 #game { position: absolute; inset: 0; width: auto; height: auto; }
 #game canvas { position: absolute; left: 0; top: 0; width: 100% !important; height: 100% !important; }
+
+/* ================= One-handed map controls (phone portrait) ================= */
+/* The D-pad sits bottom-centre within thumb reach and the contextual action (rest / open) takes
+   its centre cell, so moving and interacting never need a second hand. */
+@media (max-width: 600px) and (orientation: portrait) {
+  .world-hud { --pad: 62px; --pad-gap: 5px; --pad-bottom: calc(var(--hud-bottom) + 10px); }
+  .hud-movement { left: 50%; right: auto; bottom: var(--pad-bottom); transform: translateX(-50%); }
+  .ghost-dpad { --pad: inherit; gap: var(--pad-gap); }
+  .ghost-dpad button .icon { width: 27px; height: 27px; }
+  .dpad-centre { visibility: hidden; }
+  .hud-action { left: 50%; right: auto; bottom: calc(var(--pad-bottom) + var(--pad) + var(--pad-gap)); transform: translateX(-50%); max-width: none; gap: 0; }
+  .interact-button { width: var(--pad); height: var(--pad); min-width: 44px; min-height: 44px; padding: 4px; gap: 1px; font-size: 11px; }
+  .interact-button .icon { width: 22px; height: 22px; }
+  .interact-button > span { padding: 0 4px; background: none; }
+  /* Event toasts float above the control cluster. */
+  .hud-event { bottom: calc(var(--pad-bottom) + 3 * var(--pad) + 2 * var(--pad-gap) + 14px); }
+}

@@ -499,3 +499,25 @@ test('normal motion: hop, danger meter and veil-shatter encounter finish within 
   expect((await saved(page)).battle?.kind).toBe('tutorial');
   expect(issues).toEqual([]); await context.close();
 });
+
+// Phone portrait is played one-handed: the D-pad is bottom-centre and the contextual action
+// takes its centre cell; landscape keeps the D-pad lower left and the action lower right.
+test('phone portrait centres the D-pad with the action in its middle for one-handed play', async ({ browser }) => {
+  for (const [width, height, portrait] of [[390, 844, true], [320, 568, true], [844, 390, false]] as const) {
+    const context = await browser.newContext({ viewport: { width, height }, hasTouch: true }); const page = await context.newPage();
+    const issues = await open(page, newExpedition(map, encounterById, 11)); await expect(page.locator('#move-up')).toBeVisible();
+    const box = async (sel: string) => (await page.locator(sel).boundingBox())!;
+    const [up, left, right, down, act] = await Promise.all(['#move-up', '#move-left', '#move-right', '#move-down', '#rest'].map(box));
+    for (const b of [up, left, right, down, act]) { expect(b!.width).toBeGreaterThanOrEqual(44); expect(b!.height).toBeGreaterThanOrEqual(44); }
+    const cx = (b: { x: number; width: number }) => b.x + b.width / 2, cy = (b: { y: number; height: number }) => b.y + b.height / 2;
+    if (portrait) {
+      expect(Math.abs(cx(up!) - width / 2)).toBeLessThanOrEqual(1);
+      expect(Math.abs(cx(act!) - cx(up!))).toBeLessThanOrEqual(1); expect(Math.abs(cy(act!) - cy(left!))).toBeLessThanOrEqual(1);
+      expect(act!.y).toBeGreaterThanOrEqual(up!.y + up!.height); expect(act!.y + act!.height).toBeLessThanOrEqual(down!.y);
+      expect(down!.y + down!.height).toBeLessThanOrEqual(height);
+    } else {
+      expect(cx(up!)).toBeLessThan(width / 3); expect(cx(act!)).toBeGreaterThan(width * 2 / 3);
+    }
+    expect(issues).toEqual([]); await context.close();
+  }
+});
