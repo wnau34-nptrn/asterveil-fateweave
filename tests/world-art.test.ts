@@ -3,6 +3,7 @@ import { encounterById } from '../src/content/encounters/catalog';
 import { chapterOne as map } from '../src/content/world/chapter1';
 import { findTiles, newExpedition, tileAt } from '../src/core/world/world';
 import { cellHash, decorAt, floorFrame, fogLayers, landmarkAt, tileSizeFor, tileset } from '../src/game/visuals/world-art';
+import { riftBackdropFrame } from '../src/game/visuals/rift-backdrop';
 
 describe('world art selection', () => {
   it('maps every cell to an existing atlas frame, with stable variants', () => {
@@ -46,5 +47,18 @@ describe('world art selection', () => {
   });
   it('tile size follows the responsive contract', () => {
     expect([tileSizeFor(320, 568), tileSizeFor(390, 844), tileSizeFor(844, 390), tileSizeFor(768, 1024), tileSizeFor(1366, 768), tileSizeFor(1920, 1080)]).toEqual([49, 60, 46, 96, 90, 96]);
+  });
+});
+
+describe('battle backdrop framing', () => {
+  it('anchors the courtyard horizon at 27% of the field and covers the whole view', () => {
+    for (const [view, field] of [[{ w: 390, h: 844 }, { x: 8, y: 150, w: 374, h: 280 }], [{ w: 1366, h: 768 }, { x: 12, y: 130, w: 880, h: 450 }], [{ w: 844, h: 390 }, { x: 6, y: 90, w: 520, h: 190 }]] as const) {
+      const f = riftBackdropFrame(view, field);
+      expect(f.y + f.h * .45).toBeCloseTo(field.y + field.h * .27, 5);
+      expect(f.x + f.w / 2).toBeCloseTo(field.x + field.w / 2, 5);
+      expect(f.x).toBeLessThanOrEqual(0); expect(f.y).toBeLessThanOrEqual(0);
+      expect(f.x + f.w).toBeGreaterThanOrEqual(view.w - 1e-6); expect(f.y + f.h).toBeGreaterThanOrEqual(view.h - 1e-6);
+      expect(f.w / f.h).toBeCloseTo(1.5, 5);
+    }
   });
 });

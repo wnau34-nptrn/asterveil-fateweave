@@ -2,7 +2,6 @@ import Phaser from 'phaser';
 import type { BattleEvent, BattleState, EncounterDefinition } from '../../core/battle/types';
 import { actorName, thaiFont } from '../../ui/th';
 import { palette } from '../visuals/palette';
-import { drawRiftBackdrop } from '../visuals/rift-backdrop';
 import { actorArt, actorFootOrigins, artOf, artUrl, unitsUrl } from '../visuals/assets';
 
 export interface ActorTarget { x: number; y: number; width: number; height: number }
@@ -10,8 +9,6 @@ export interface SceneView { state: BattleState; heroId: string; targetId: strin
 export class BattleScene extends Phaser.Scene {
   private view: SceneView | undefined;
   private layer: Phaser.GameObjects.Container | undefined;
-  private backdrop: Phaser.GameObjects.Image | undefined;
-  private backdropSize = '';
   private positions = new Map<string, { x: number; y: number }>();
   readonly actorTargets = new Map<string, ActorTarget>();
   private bodies = new Map<string, Phaser.GameObjects.Container>();
@@ -43,7 +40,7 @@ export class BattleScene extends Phaser.Scene {
       this.game.canvas.removeEventListener('pointerdown', updateInputBounds, true);
       this.game.canvas.removeEventListener('touchstart', updateInputBounds, true);
       this.scale.off('resize', this.paint, this);
-      this.ready = false; this.backdropSize = ''; this.backdrop = undefined;
+      this.ready = false;
     });
     this.paint();
     this.onReady();
@@ -58,11 +55,6 @@ export class BattleScene extends Phaser.Scene {
     const { width: w, height: h } = this.scale;
     const short = w < 900 || h < 360;
     const phone = window.matchMedia('(max-width: 600px) and (orientation: portrait)').matches;
-    if (this.backdropSize !== `${w}:${h}`) {
-      this.backdrop?.destroy();
-      this.backdrop = drawRiftBackdrop(this, w, h);
-      this.backdropSize = `${w}:${h}`;
-    }
     const bg = this.add.graphics(); this.layer.add(bg);
     // These are sole positions on the courtyard, not image centers. Each
     // front fighter steps diagonally past its back-row partner; the second
@@ -172,6 +164,9 @@ export class BattleScene extends Phaser.Scene {
     if (source && target && events.some(event => event.type === 'damage')) {
       this.tweens.add({ targets: source, x: source.x + Math.sign(target.x - source.x) * 16, duration: 160, yoyo: true, ease: 'Sine.Out' });
     }
+    // Impact: a short camera shake for any landed hit (stronger when a fighter falls).
+    const landed = events.filter(event => event.type === 'damage' && (event.amount ?? 0) > 0);
+    if (landed.length) this.cameras.main.shake(events.some(event => event.type === 'down') ? 220 : 140, events.some(event => event.type === 'down') ? .008 : .004);
     for (const [index, event] of events.entries()) {
       const position = event.targetId ? this.positions.get(event.targetId) : undefined;
       if (!position) continue;
@@ -180,9 +175,14 @@ export class BattleScene extends Phaser.Scene {
         this.effects.add(ring);
         this.tweens.add({ targets: ring, radius: 55, alpha: 0, duration: 420, onComplete: () => ring.destroy() });
         const label = event.amount ? `−${event.amount}` : event.absorbed ? `โล่รับ ${event.absorbed}` : 'ป้องกันได้';
-        const text = this.add.text(position.x, position.y - 20, label, { fontFamily: thaiFont, fontSize: '23px', color: this.view?.phase === 'enemy' ? '#ffb6b8' : '#ffe0a6', stroke: '#101c36', strokeThickness: 4 }).setOrigin(0.5);
+        const text = this.add.text(position.x, position.y - 20, label, { fontFamily: thaiFont, fontSize: event.amount ? '32px' : '23px', fontStyle: 'bold', color: this.view?.phase === 'enemy' ? '#ffb6b8' : '#ffe0a6', stroke: '#101c36', strokeThickness: 5 }).setOrigin(0.5).setScale(.6);
         this.effects.add(text);
-        this.tweens.add({ targets: text, y: position.y - 65, alpha: 0, duration: 650, delay: index * 40, onComplete: () => text.destroy() });
+        // Numbers pop in large, then rise and fade.
+        this.tweens.add({ targets: text, scale: 1.15, duration: 110, ease: 'Back.Out', yoyo: false, onComplete: () => this.tweens.add({ targets: text, scale: 1, y: position.y - 70, alpha: 0, duration: 620, delay: 120 + index * 40, onComplete: () => text.destroy() }) });
+        // The struck body flashes white for a moment.
+        const struck = event.targetId ? this.bodies.get(event.targetId) : undefined;
+        const sprite = struck?.list.find((child): child is Phaser.GameObjects.Image => child instanceof Phaser.GameObjects.Image);
+        if (sprite && event.amount) { sprite.setTint(0xffffff).setTintMode(Phaser.TintModes.FILL); this.time.delayedCall(90, () => { if (sprite.active) sprite.clearTint().setTintMode(Phaser.TintModes.MULTIPLY); }); }
       }
       if (event.type === 'dodge') {
         const text = this.add.text(position.x, position.y - 20, 'หลบ!', { fontFamily: thaiFont, fontSize: '22px', color: '#a9d4ff', stroke: '#101c36', strokeThickness: 4 }).setOrigin(0.5);

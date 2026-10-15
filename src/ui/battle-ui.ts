@@ -6,6 +6,7 @@ import type { BattleScene } from '../game/scenes/BattleScene';
 import { actorName, eventThai, heroText, intentName, reasonThai, skillDescription } from './th';
 import { portrait } from './world-ui';
 import { artOf } from '../game/visuals/assets';
+import { riftBackdropFrame } from '../game/visuals/rift-backdrop';
 import { icon } from './icons';
 import { battleLesson } from './tutorial';
 
@@ -113,7 +114,7 @@ export class BattleUI {
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape' && root.querySelector('#skill-popover:popover-open')) { e.preventDefault(); this.closeSkill(true); }
     });
-    window.addEventListener('resize', () => this.positionSkill());
+    window.addEventListener('resize', () => { this.positionSkill(); this.placeBackdrop(); });
     this.mobile.addEventListener('change', () => this.render());
     this.portraitLayout.addEventListener('change', () => this.render());
     document.addEventListener('visibilitychange', () => {
@@ -139,7 +140,16 @@ export class BattleUI {
   private get teaching(): boolean { return this.session?.kind === 'tutorial' && this.hintsEnabled; }
   get encounter(): EncounterDefinition { return this.data; }
   sceneReady(): void { this.render(); }
-  fieldLayoutChanged(): void { this.renderFieldTargets(); this.renderTutorial(); }
+  fieldLayoutChanged(): void { this.renderFieldTargets(); this.renderTutorial(); this.placeBackdrop(); }
+  // The battle painting lies behind the whole view, framed to the arena so fighters stand on its floor.
+  private placeBackdrop(): void {
+    const arena = this.root.querySelector<HTMLElement>('.arena'); if (!arena) return;
+    const v = this.root.getBoundingClientRect(), a = arena.getBoundingClientRect(); if (!a.width || !a.height) return;
+    const f = riftBackdropFrame({ w: v.width, h: v.height }, { x: a.left - v.left, y: a.top - v.top, w: a.width, h: a.height });
+    const style = this.root.style;
+    style.setProperty('--bd-x', `${f.x.toFixed(1)}px`); style.setProperty('--bd-y', `${f.y.toFixed(1)}px`);
+    style.setProperty('--bd-w', `${f.w.toFixed(1)}px`); style.setProperty('--bd-h', `${f.h.toFixed(1)}px`);
+  }
   private get displayState(): BattleState { return this.presentation?.frame ?? (!this.started ? beginBattle(this.data, this.session?.entry).initial : this.state); }
   private get stage(): TurnStage | undefined { return this.presentation?.resolution.turns[this.presentation.index]; }
   private get actingActor(): string | undefined { return this.stage?.events.some(e => e.type === 'cancel') ? undefined : this.stage?.actorId; }
@@ -404,5 +414,6 @@ export class BattleUI {
     this.renderFieldTargets();
     this.renderTutorial();
     if (focus) this.root.querySelector<HTMLElement>(`#${focus}`)?.focus({ preventScroll: true });
+    this.placeBackdrop();
   }
 }

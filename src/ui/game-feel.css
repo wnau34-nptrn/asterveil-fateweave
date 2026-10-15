@@ -301,3 +301,33 @@ button:active:not(:disabled) { transform: scale(.97); }
   .hud-party .world-hero { flex-direction: row; align-items: center; gap: 5px; }
   .hud-party .world-hero .portrait { width: 30px; height: 30px; flex-basis: 30px; border-width: 2px; }
 }
+
+/* ================= P5: battle on one continuous scene ================= */
+/* The painting fills the whole battle view (framed to the arena by rift-backdrop.ts); the canvas is
+   transparent, and every panel floats over the scene as translucent HUD instead of a bordered box. */
+#battle-view { background:
+  linear-gradient(180deg, #050b14c0 0%, #050b1400 22%, #050b1400 52%, #050b14b3 74%, #050b14e6 100%),
+  url('/assets/art/ruins.webp') var(--bd-x, 50%) var(--bd-y, 0) / var(--bd-w, cover) var(--bd-h, auto) no-repeat, #0a1422; }
+#battle-view .battle-layout { border: 0; border-radius: 0; background: transparent; box-shadow: none; overflow: visible; }
+#battle-view .arena, #battle-view .battle-board { background: transparent; }
+#battle-view .masthead { background: transparent; }
+#battle-view .masthead h1, #battle-view .masthead .eyebrow { text-shadow: 0 1px 8px #000; }
+/* Turn order: a slim floating strip of portraits. */
+#battle-view .turn-phase { background: linear-gradient(180deg, #0b1626b8, #0b162680); border-color: #e8f5ff1f; box-shadow: 0 8px 24px #0006; }
+#battle-view .turn-phase[data-phase="enemy"] { background: linear-gradient(105deg, #2b1d33cc, #141a2e99); }
+#battle-view .turn-slot { background: #0d1c2e99; border-color: #e8f5ff1f; }
+/* Enemy HP and the announced move float over the lower scene. */
+#battle-view #enemy-roster { background: transparent; border: 0; }
+#battle-view .enemy-card { background: linear-gradient(90deg, #160f2acc, #160f2a66); border-color: #b59aff33; }
+#battle-view #intent { background: linear-gradient(100deg, #3a1d27d9, #22182ab3 70%, #22182a40); border: 0; border-left: 3px solid #dc8b78; border-radius: 14px; margin: 4px 8px; box-shadow: 0 8px 22px #0007; }
+/* Party and skills: glass over the scene, no panel walls. */
+#battle-view .decision-panel { background: transparent; border: 0; }
+#battle-view .command-dock { background: linear-gradient(180deg, #0b162600, #0b1626b3 30%); border: 0; }
+#battle-view .hero-card { background: linear-gradient(135deg, #132740cc, #0b182a99); border-color: #e8f5ff26; box-shadow: 0 6px 16px #0006; }
+#battle-view .hero-card.selected { border-color: var(--gold-light); box-shadow: 0 0 0 1px #f2d59666, 0 6px 18px #000a, 0 0 16px #f2d59640; }
+#battle-view .action-option .action { background: radial-gradient(circle at 50% 20%, #24456acc, #0e1d31e6 70%); border-color: #a9d6f04d; box-shadow: 0 6px 16px #0008, inset 0 1px 0 #ffffff24; }
+#battle-view .action-option .action.selected { border-color: var(--gold-light); box-shadow: 0 0 0 1px #f2d59680, 0 0 18px #f2d5965c, 0 6px 16px #0008; }
+#battle-view .action-option .action .icon { width: 26px; height: 26px; }
+#battle-view .start-card, #battle-view .result-card { background: linear-gradient(180deg, #0f2036e6, #08121fee); border-color: #f2d59666; box-shadow: 0 18px 50px #000c, 0 0 30px #f2d59626; }
+/* Start and result overlays dim softly toward the centre card, with no box edge on the scene. */
+#battle-view #start-screen:not(:empty) { background: radial-gradient(ellipse 70% 65% at 50% 50%, #07111dd9 0%, #07111d8c 45%, #07111d00 80%); }

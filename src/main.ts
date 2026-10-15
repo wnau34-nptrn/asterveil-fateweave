@@ -21,7 +21,8 @@ ui.attach(scene);
 const game = new Phaser.Game({
   type: Phaser.AUTO,
   parent: 'game',
-  backgroundColor: '#101c36',
+  // Transparent: the battle painting is drawn behind the whole view (rift-backdrop.ts).
+  transparent: true,
   scale: { mode: Phaser.Scale.RESIZE, width: '100%', height: '100%' },
   scene: [scene],
   fps: { target: 30 },
