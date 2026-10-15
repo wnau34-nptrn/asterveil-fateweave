@@ -1,14 +1,14 @@
 import type { HeroDefinition } from '../core/battle/types';
 import type { Direction, ExpeditionState, MapDefinition, Point } from '../core/world/types';
-import { canRest, encounterChance, isRevealed, tileAt, zoneOf } from '../core/world/world';
+import { atCamp, canOpenChest, canRest, canRevive, chestAt, encounterChance, isRevealed, tileAt, zoneOf } from '../core/world/world';
 import { actorFrames, artUrl } from '../game/visuals/assets';
 import { SOURCE_TILE, decorAt, floorFrame, fogLayers, landmarkAt, tileSizeFor, tileset, worldArtUrl, type Landmark } from '../game/visuals/world-art';
-import { heroText } from './th';
+import { heroText, resourceOrder, resourceText } from './th';
 import { icon } from './icons';
 
-export interface WorldHost { move(dir: Direction): void; rest(): void; newExpedition(): void }
+export interface WorldHost { move(dir: Direction): void; rest(): void; revive(heroId: string): void; openChest(): void; newExpedition(): void }
 export interface WorldBanner { kind: 'encounter' | 'boss' | 'tutorial' | 'complete'; eyebrow: string; title: string; detail: string }
-export interface WorldView { state: ExpeditionState; message: string; locked: boolean; saved: boolean; banner?: WorldBanner; effect?: 'rest' }
+export interface WorldView { state: ExpeditionState; message: string; locked: boolean; saved: boolean; banner?: WorldBanner; effect?: 'rest' | 'loot' }
 
 const keyDirections: Record<string, Direction> = { ArrowUp: 'up', ArrowDown: 'down', ArrowLeft: 'left', ArrowRight: 'right', w: 'up', s: 'down', a: 'left', d: 'right', W: 'up', S: 'down', A: 'left', D: 'right' };
 const dirLabel: Record<Direction, string> = { up: 'เดินขึ้น', down: 'เดินลง', left: 'เดินซ้าย', right: 'เดินขวา' };
@@ -23,7 +23,7 @@ export function portrait(id: string): string {
   return `<span class="portrait" data-actor="${id}" style="--portrait-x:${frame % 2};--portrait-y:${Math.floor(frame / 2)}" aria-hidden="true"><img src="${artUrl('portraits')}" alt="" width="1024" height="1536" draggable="false"></span>`;
 }
 const goals = (s: ExpeditionState) => [
-  { done: s.tutorialDone, label: 'ผ่านการปะทะครั้งแรก' }, { done: !!s.camp, label: 'พักที่แคมป์' },
+  { done: s.tutorialDone, label: 'ผ่านการปะทะครั้งแรก' }, { done: !!s.camp, label: 'ไปถึงแคมป์' },
   { done: s.bossDefeated, label: 'ชนะผู้คุมรอยแยก' }, { done: s.completed, label: 'ไปถึงประตูรอยแยก' },
 ];
 
@@ -60,6 +60,7 @@ export class WorldUI {
         </div>
         <div class="hud-party" id="world-party" aria-label="เลือดทีม"></div>
         <button id="objective-button" data-world="goals" class="hud-objective glass-capsule" aria-haspopup="dialog" aria-controls="world-goals"></button>
+        <button id="world-pack" data-world="pack" class="hud-pack glass-capsule" aria-haspopup="dialog" aria-controls="pack-dialog"></button>
         <p id="world-message" class="hud-event glass-capsule" role="status" aria-live="polite"></p>
         <div class="hud-movement">
           <div class="ghost-dpad" role="group" aria-label="เดินทีละช่อง">
@@ -69,12 +70,14 @@ export class WorldUI {
           <span class="movement-caption">เดินทีละ 1 ช่อง</span>
         </div>
         <div class="hud-action">
-          <button id="rest" data-world="rest" class="interact-button"></button>
+          <button id="rest" data-world="interact" class="interact-button"></button>
           <span id="action-caption" class="context-caption"></span>
         </div>
       </div>
       <div id="world-banner" class="world-banner" role="status" hidden></div>
       <dialog id="world-goals" class="world-dialog" aria-labelledby="world-goals-title"><div class="info-header"><h2 id="world-goals-title">เป้าหมายการเดินทาง</h2><button data-world="goals-close" class="quiet" aria-label="ปิดเป้าหมาย">${icon('close')}</button></div><div class="info-content" id="world-goals-content"></div></dialog>
+      <dialog id="camp-dialog" class="world-dialog" aria-labelledby="camp-title"><div class="info-header"><h2 id="camp-title">${icon('camp')} แคมป์พักแรม</h2><button data-world="camp-close" class="quiet" aria-label="ปิดแคมป์">${icon('close')}</button></div><div class="info-content" id="camp-content"></div></dialog>
+      <dialog id="pack-dialog" class="world-dialog" aria-labelledby="pack-title"><div class="info-header"><h2 id="pack-title">สัมภาระ</h2><button data-world="pack-close" class="quiet" aria-label="ปิดสัมภาระ">${icon('close')}</button></div><div class="info-content" id="pack-content"></div></dialog>
       <dialog id="world-info" class="world-dialog" aria-labelledby="world-info-title"><div class="info-header"><h2 id="world-info-title">ข้อมูลการเดินทาง</h2><button data-world="info-close" class="quiet" aria-label="ปิดข้อมูล">${icon('close')}</button></div><div class="info-content" id="world-info-content"></div></dialog>`;
     root.addEventListener('click', e => {
       const el = e.target as HTMLElement;
@@ -83,7 +86,12 @@ export class WorldUI {
         const dialog = (id: string) => root.querySelector<HTMLDialogElement>(id)!;
         switch (button.dataset.world) {
           case 'move': this.input(button.dataset.dir as Direction); break;
-          case 'rest': if (!this.view?.locked) this.host.rest(); break;
+          case 'interact': this.interact(); break;
+          case 'camp-rest': if (!this.view?.locked) this.host.rest(); break;
+          case 'camp-revive': if (!this.view?.locked && button.dataset.hero) this.host.revive(button.dataset.hero); break;
+          case 'camp-close': dialog('#camp-dialog').close(); break;
+          case 'pack': this.renderPack(); dialog('#pack-dialog').showModal(); break;
+          case 'pack-close': dialog('#pack-dialog').close(); break;
           case 'info': this.confirmNew = false; this.renderInfo(); dialog('#world-info').showModal(); break;
           case 'info-close': dialog('#world-info').close(); break;
           case 'goals': this.renderGoals(); dialog('#world-goals').showModal(); break;
@@ -110,6 +118,12 @@ export class WorldUI {
     new ResizeObserver(() => this.layout()).observe(root.querySelector('#map-viewport')!);
   }
 
+  // The lower-right action is contextual: camp opens the camp sheet, an unopened chest opens.
+  private interact(): void {
+    const s = this.view?.state; if (!s || this.view!.locked) return;
+    if (atCamp(s, this.map)) { this.renderCamp(); this.root.querySelector<HTMLDialogElement>('#camp-dialog')!.showModal(); }
+    else if (canOpenChest(s, this.map)) this.host.openChest();
+  }
   private input(dir: Direction): void { if (this.view && !this.view.locked && !this.view.state.completed) this.host.move(dir); }
 
   private floorCells(): string {
@@ -126,6 +140,8 @@ export class WorldUI {
     for (let y = 0; y < this.map.rows.length; y++) for (let x = 0; x < this.width; x++) {
       const prop = decorAt(this.map, { x, y });
       if (prop) html += `<span class="decor sprite" data-cell="${x},${y}" style="--x:${x};--y:${y};--fx:${prop.x / SOURCE_TILE};--fy:${prop.y / SOURCE_TILE};z-index:${y * 3 + 1}"></span>`;
+      const chest = chestAt(this.map, { x, y });
+      if (chest) html += `<span class="chest sprite" data-cell="${x},${y}" data-chest="${chest.id}" data-tier="${chest.tier}" style="--x:${x};--y:${y};z-index:${y * 3 + 1}"></span>`;
       const kind = tileAt(this.map, { x, y })!.kind;
       if (['camp', 'start', 'goal', 'boss'].includes(kind)) html += `<span class="landmark sprite" data-cell="${x},${y}" data-kind="${kind}" style="--x:${x};--y:${y};z-index:${y * 3 + 1}">${kind === 'boss' ? '<span class="boss-unit"></span>' : ''}</span>`;
     }
@@ -147,13 +163,11 @@ export class WorldUI {
     if (message.textContent !== view.message) message.textContent = view.message;
     message.hidden = !view.message;
     message.classList.toggle('rest-feedback', view.effect === 'rest');
+    message.classList.toggle('loot-feedback', view.effect === 'loot');
     for (const d of ['up', 'down', 'left', 'right'] as Direction[]) this.root.querySelector<HTMLButtonElement>(`#move-${d}`)!.disabled = view.locked || s.completed;
-    const available = !view.locked && canRest(s, this.map);
-    const action = this.root.querySelector<HTMLButtonElement>('#rest')!;
-    action.disabled = !available; action.classList.toggle('available', available);
-    action.innerHTML = `${icon('talk')}<span>${available ? 'พัก' : 'โต้ตอบ'}</span>${available ? '<i class="context-dot"></i>' : ''}`;
-    action.setAttribute('aria-label', available ? 'พักที่แคมป์ ฟื้นเลือดเต็มและชุบทุกคน' : 'โต้ตอบ · ยังไม่มีจุดให้โต้ตอบ ยืนบนแคมป์เพื่อพัก');
-    this.root.querySelector('#action-caption')!.textContent = available ? 'ฟื้นเลือดและชุบทุกคน' : 'ยืนบนแคมป์เพื่อพัก';
+    this.renderAction(s, view.locked);
+    this.renderPackButton(s, view.effect === 'loot');
+    if (this.root.querySelector<HTMLDialogElement>('#camp-dialog')!.open) { if (atCamp(s, this.map) && !view.locked) this.renderCamp(); else this.root.querySelector<HTMLDialogElement>('#camp-dialog')!.close(); }
     if (!prev || prev.revealed !== s.revealed) this.renderFog(s);
     this.renderSprites(s, prev);
     this.renderHints(s, view.locked);
@@ -161,6 +175,49 @@ export class WorldUI {
     if (view.effect === 'rest' && !this.reduced.matches) this.sparkle();
     this.previous = { position: { ...s.position }, chance: encounterChance(s, this.map), revealed: s.revealed, boss: s.bossDefeated, done: s.completed };
     this.layout();
+  }
+
+  private renderAction(s: ExpeditionState, locked: boolean): void {
+    const camp = atCamp(s, this.map); const chest = !camp && canOpenChest(s, this.map);
+    const available = !locked && (camp || chest);
+    const fallen = this.heroes.filter(h => s.hp[h.id] === 0).length;
+    const action = this.root.querySelector<HTMLButtonElement>('#rest')!;
+    action.disabled = !available; action.classList.toggle('available', available);
+    action.dataset.context = camp ? 'camp' : chest ? 'chest' : 'none';
+    const label = camp ? 'พัก' : chest ? 'เปิด' : 'โต้ตอบ';
+    action.innerHTML = `${icon(camp ? 'rest' : chest ? 'chest' : 'talk')}<span>${label}</span>${available ? '<i class="context-dot"></i>' : ''}`;
+    const caption = camp ? (canRest(s, this.map) ? 'พักฟื้นหรือชุบคนที่ล้ม' : fallen ? 'ชุบคนที่ล้มด้วยถ่าน' : 'ไฟแคมป์รอศึกถัดไป') : chest ? 'เปิดกล่องสมบัติ' : 'ยืนบนแคมป์หรือกล่องสมบัติ';
+    action.setAttribute('aria-label', camp ? `แคมป์ · เปิดหน้าต่างพักและชุบ · ${caption}` : chest ? 'เปิดกล่องสมบัติ' : 'โต้ตอบ · ยังไม่มีจุดให้โต้ตอบ ยืนบนแคมป์หรือกล่องสมบัติ');
+    this.root.querySelector('#action-caption')!.textContent = caption;
+  }
+
+  private renderPackButton(s: ExpeditionState, gained: boolean): void {
+    const pack = this.root.querySelector<HTMLElement>('#world-pack')!;
+    pack.innerHTML = resourceOrder.map(id => `<span class="pack-item" data-resource="${id}">${icon(id)}<b>${s.resources[id]}</b></span>`).join('');
+    pack.setAttribute('aria-label', `สัมภาระ · ${resourceOrder.map(id => `${resourceText[id].name} ${s.resources[id]}`).join(' · ')} · เปิดรายละเอียด`);
+    if (gained && !this.reduced.matches) { pack.classList.remove('gain'); void pack.offsetWidth; pack.classList.add('gain'); }
+  }
+
+  private renderPack(): void {
+    const s = this.view?.state; if (!s) return;
+    const opened = s.openedChests.length;
+    this.root.querySelector('#pack-content')!.innerHTML = `<ul class="pack-list">${resourceOrder.map(id => `<li data-resource="${id}">${icon(id)}<div><b>${resourceText[id].name}</b><small>${resourceText[id].use}</small></div><strong>${s.resources[id]}</strong></li>`).join('')}</ul>
+      <p class="world-stats">เปิดกล่องสมบัติแล้ว ${opened}/${this.map.chests.length} กล่อง · ของตกจากศึกที่ชนะและกล่องสมบัติ</p>`;
+  }
+
+  private renderCamp(): void {
+    const s = this.view?.state; if (!s) return;
+    const ready = canRest(s, this.map); const embers = s.resources.ember;
+    const fallen = this.heroes.filter(h => s.hp[h.id] === 0);
+    const reviveHp = (max: number) => Math.max(1, Math.ceil(max * this.map.camp.reviveHpPercent / 100));
+    this.root.querySelector('#camp-content')!.innerHTML = `
+      <section class="camp-section"><h3>${icon('rest')} พักฟื้น</h3>
+        <p>คนที่ยังยืนอยู่ฟื้นเลือด ${this.map.camp.restHealPercent}% ของเลือดสูงสุด ไฟแคมป์ใช้ได้ 1 ครั้ง แล้วต้องชนะศึกอีกครั้งจึงจุดใหม่ได้</p>
+        <button id="camp-rest" data-world="camp-rest" class="primary"${ready ? '' : ' disabled'}>${ready ? `พักฟื้น +${this.map.camp.restHealPercent}%` : 'ไฟแคมป์มอด · ชนะศึกก่อน'}</button></section>
+      <section class="camp-section"><h3>${icon('ember')} ชุบชีวิต <span class="camp-embers">ถ่านม่านเวล ${embers}</span></h3>
+        ${fallen.length ? `<ul class="revive-list">${fallen.map(h => { const ok = canRevive(s, this.map, h.id); return `<li>${portrait(h.id)}<span><b>${heroText[h.id]!.name}</b><small>ฟื้นด้วยเลือด ${reviveHp(h.maxHp)}/${h.maxHp}</small></span><button id="camp-revive-${h.id}" data-world="camp-revive" data-hero="${h.id}" class="secondary"${ok ? '' : ' disabled'} aria-label="ชุบ${heroText[h.id]!.name} ใช้ถ่านม่านเวล 1">${ok ? 'ชุบ · ใช้ 1' : 'ไม่มีถ่าน'}</button></li>`; }).join('')}</ul>`
+          : '<p>ไม่มีใครล้ม</p>'}
+        <p class="camp-note">ชุบได้ครั้งละ 1 คน ต่อถ่านม่านเวล 1 ก้อน หาได้จากศึกและกล่องสมบัติ</p></section>`;
   }
 
   private renderDanger(chance: number, before: number | undefined): void {
@@ -202,6 +259,13 @@ export class WorldUI {
       el.style.backgroundImage = `url(${worldArtUrl(art)})`;
       el.classList.toggle('has-boss', art === 'boss_pedestal');
       if (changed && !this.reduced.matches) { el.classList.remove('lv-gate-open'); void el.offsetWidth; el.classList.add('lv-gate-open'); }
+    });
+    this.root.querySelectorAll<HTMLElement>('.chest').forEach(el => {
+      const open = s.openedChests.includes(el.dataset.chest!);
+      if (el.dataset.open === String(open)) return;
+      const changed = el.dataset.open !== undefined; el.dataset.open = String(open);
+      el.innerHTML = icon(open ? 'chestOpen' : 'chest');
+      if (changed && open && !this.reduced.matches) { el.classList.remove('lv-chest-open'); void el.offsetWidth; el.classList.add('lv-chest-open'); }
     });
     const token = this.root.querySelector<HTMLElement>('#party-token')!;
     token.style.setProperty('--x', String(s.position.x)); token.style.setProperty('--y', String(s.position.y));
@@ -262,7 +326,7 @@ export class WorldUI {
     const band = (r: DOMRect) => r.width > 0 && r.right > w / 2 - 1.5 * t && r.left < w / 2 + 1.5 * t;
     const rect = (sel: string) => this.root.querySelector<HTMLElement>(sel)?.getBoundingClientRect();
     let top = 0, bottom = h;
-    for (const sel of ['.hud-location', '.hud-top-right', '.hud-party', '.hud-objective']) { const r = rect(sel); if (r && band(r)) top = Math.max(top, r.bottom); }
+    for (const sel of ['.hud-location', '.hud-top-right', '.hud-party', '.hud-objective', '.hud-pack']) { const r = rect(sel); if (r && band(r)) top = Math.max(top, r.bottom); }
     for (const sel of ['.hud-movement', '.hud-action', '#world-message']) { const r = rect(sel); if (r && band(r) && !(sel === '#world-message' && this.root.querySelector<HTMLElement>(sel)!.hidden)) bottom = Math.min(bottom, r.top); }
     const focusY = bottom - top >= 3 * t ? (top + bottom) / 2 : h / 2;
     const p = this.view.state.position;
@@ -280,9 +344,10 @@ export class WorldUI {
     const s = this.view?.state;
     this.root.querySelector('#world-info-content')!.innerHTML = `
       <section class="world-rules"><h3>เดินทีละช่อง</h3><p>แตะช่องที่ไฮไลต์ ใช้ปุ่มลูกศรมุมซ้ายล่าง หรือแป้น ←↑↓→ / WASD ทุกก้าวในพื้นที่อันตรายมีโอกาสพบศัตรู ตัวเลขมุมขวาบนคือโอกาสของก้าวถัดไป ยิ่งเดินโดยไม่เจอ โอกาสยิ่งเพิ่ม และกลับไปต่ำสุดเมื่อพบศัตรูหรือพักที่แคมป์</p>
-      <h3>เลือดติดตัว</h3><p>จบศึกแล้วเลือดไม่ฟื้นเอง สมาชิกที่ล้มยังล้มอยู่จนกว่าจะพักที่แคมป์ ศึกถัดไปเริ่มด้วยเลือดที่เหลือ</p>
-      <h3>${icon('camp')} แคมป์</h3><p>ยืนบนแคมป์แล้วกดปุ่ม “พัก” มุมขวาล่าง เพื่อฟื้นเลือดเต็มและชุบทุกคน แคมป์ที่พักล่าสุดคือจุดกลับเมื่อแพ้</p>
-      <h3>เมื่อแพ้</h3><p>ทีมกลับแคมป์ที่พักล่าสุด (หรือจุดเริ่ม) และฟื้นเลือดเต็ม ศัตรูที่ชนะคุณไม่ตามมา</p>
+      <h3>เลือดติดตัว</h3><p>จบศึกแล้วเลือดไม่ฟื้นเอง สมาชิกที่ล้มยังล้มอยู่จนกว่าจะชุบที่แคมป์ ศึกถัดไปเริ่มด้วยเลือดที่เหลือ</p>
+      <h3>${icon('camp')} แคมป์</h3><p>ยืนบนแคมป์แล้วกด “พัก” มุมขวาล่าง พักฟื้นได้ ${this.map.camp.restHealPercent}% ครั้งเดียวจนกว่าจะชนะศึกถัดไป คนที่ล้มต้องใช้ถ่านม่านเวลชุบทีละคน แคมป์ล่าสุดที่ไปถึงคือจุดกลับเมื่อแพ้</p>
+      <h3>${icon('chest')} ของตกและกล่องสมบัติ</h3><p>ชนะศึกได้แร่ดาวและบางครั้งได้ถ่านม่านเวล ยืนบนกล่องแล้วกด “เปิด” กล่องหายากมีตราสัญญา ดูของที่มีได้จากช่องสัมภาระ</p>
+      <h3>เมื่อแพ้</h3><p>ทีมกลับแคมป์ล่าสุดที่ไปถึง (หรือจุดเริ่ม) และฟื้นเลือดเต็ม ศัตรูที่ชนะคุณไม่ตามมา ของที่เก็บมาแล้วไม่หาย</p>
       <h3>${icon('boss')} ผู้คุมรอยแยก</h3><p>บอสเฝ้าทางเดียวไปประตูรอยแยก เดินชนบอสเพื่อเริ่มศึก ชนะแล้วเดินไปที่ประตูเพื่อจบการเดินทาง</p></section>
       ${s ? `<p class="world-stats">เดินแล้ว ${s.steps} ก้าว · ชนะ ${s.wins} ศึก · แพ้ ${s.defeats} ครั้ง</p>` : ''}
       <p id="world-save" class="world-save">${this.view?.saved ? 'บันทึกอัตโนมัติบนเครื่องนี้ทุกก้าว' : 'เล่นได้ แต่บันทึกบนเครื่องนี้ไม่ได้'}</p>

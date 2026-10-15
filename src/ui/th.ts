@@ -1,4 +1,5 @@
 import type { ActionId, BattleEvent, BattleState, EncounterDefinition, Intent } from '../core/battle/types';
+import type { ResourceId, Resources } from '../core/world/types';
 export const thaiFont = '"Noto Sans Thai", "Leelawadee UI", Tahoma, sans-serif';
 export const heroText: Record<string, { name: string; role: string; help: string; icon: string }> = {
   guardian: { name: 'เอกิส', role: 'อัศวิน', help: 'รับแทนเพื่อนและหยุดการโจมตี', icon: '♜' },
@@ -60,4 +61,14 @@ export function eventThai(event: BattleEvent, after: BattleState, data: Encounte
     case 'down': return `${target}${data.heroes.some(h => h.id === event.targetId) ? 'ล้มแล้ว' : 'ถูกกำจัดแล้ว'}`;
     case 'outcome': return after.outcome === 'victory' ? 'ชนะแล้ว! รอยแยกสงบลง' : 'แพ้แล้ว ลองจัดแผนใหม่';
   }
+}
+export const resourceText: Record<ResourceId, { name: string; use: string }> = {
+  ore: { name: 'แร่ดาว', use: 'ใช้จ้างและอัปดาวทหารรับจ้างที่แคมป์ (เปิดในช่วงถัดไป)' },
+  ember: { name: 'ถ่านม่านเวล', use: 'ชุบสมาชิกที่ล้ม 1 คนที่แคมป์' },
+  seal: { name: 'ตราสัญญา', use: 'ใช้แทนตัวซ้ำ 1 ชิ้นเมื่ออัปดาว (เปิดในช่วงถัดไป)' },
+};
+export const resourceOrder: readonly ResourceId[] = ['ore', 'ember', 'seal'];
+export function lootThai(loot: Resources): string {
+  const parts = resourceOrder.filter(id => loot[id] > 0).map(id => `${resourceText[id].name} +${loot[id]}`);
+  return parts.length ? parts.join(' · ') : 'ไม่มีของตก';
 }

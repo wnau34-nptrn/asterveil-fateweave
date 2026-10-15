@@ -38,14 +38,29 @@ export const chapterOne: MapDefinition = {
   specialZones: { S: 'meadow', C: 'camp', B: 'sanctum', G: 'sanctum' },
   zones: [
     { id: 'meadow', name: 'ทุ่งชายแดน', safe: false, base: 4, step: 3, cap: 35,
-      pool: [{ encounterId: 'scout-patrol', weight: 3 }, { encounterId: 'rift-whelp', weight: 2 }] },
+      pool: [{ encounterId: 'scout-patrol', weight: 3 }, { encounterId: 'rift-whelp', weight: 2 }],
+      loot: { ore: [6, 10], ember: [0, 8], seal: [0, 0] } },
     { id: 'thicket', name: 'พงหนามม่านเวล', safe: false, base: 6, step: 4, cap: 45,
-      pool: [{ encounterId: 'thicket-ambush', weight: 2 }, { encounterId: 'shadow-stalker', weight: 2 }, { encounterId: 'rift-whelp', weight: 1 }] },
+      pool: [{ encounterId: 'thicket-ambush', weight: 2 }, { encounterId: 'shadow-stalker', weight: 2 }, { encounterId: 'rift-whelp', weight: 1 }],
+      loot: { ore: [9, 14], ember: [0, 12], seal: [0, 0] } },
     { id: 'scar', name: 'แผลรอยแยก', safe: false, base: 8, step: 5, cap: 50,
-      pool: [{ encounterId: 'veil-siege', weight: 2 }, { encounterId: 'rear-ambush', weight: 2 }, { encounterId: 'thicket-ambush', weight: 1 }] },
+      pool: [{ encounterId: 'veil-siege', weight: 2 }, { encounterId: 'rear-ambush', weight: 2 }, { encounterId: 'thicket-ambush', weight: 1 }],
+      loot: { ore: [12, 18], ember: [0, 15], seal: [0, 0] } },
     { id: 'camp', name: 'แคมป์', safe: true, base: 0, step: 0, cap: 0, pool: [] },
     { id: 'sanctum', name: 'ประตูรอยแยก', safe: true, base: 0, step: 0, cap: 0, pool: [] },
   ],
   tutorialEncounterId: 'first-clash', bossEncounterId: 'rift-warden',
   revealRadius: 3,
+  // Draft phase 2A numbers: chests sit in side pockets away from the main route.
+  chests: [
+    { id: 'meadow-west', x: 3, y: 23, tier: 'common' }, { id: 'meadow-east', x: 17, y: 23, tier: 'common' },
+    { id: 'thicket-west', x: 3, y: 12, tier: 'common' }, { id: 'thicket-east', x: 17, y: 12, tier: 'rare' },
+    { id: 'scar-west', x: 3, y: 6, tier: 'rare' }, { id: 'scar-east', x: 17, y: 6, tier: 'common' },
+  ],
+  loot: {
+    tutorial: { ore: [10, 10], ember: [1, 0], seal: [0, 0] },
+    boss: { ore: [60, 60], ember: [1, 0], seal: [2, 0] },
+    chest: { common: { ore: [16, 24], ember: [0, 30], seal: [0, 0] }, rare: { ore: [30, 40], ember: [1, 0], seal: [1, 0] } },
+  },
+  camp: { restHealPercent: 50, reviveHpPercent: 30 },
 };

@@ -7,7 +7,9 @@ export interface StoragePort { getItem(key: string): string | null; setItem(key:
 export const expeditionKey = 'asterveil.fateweave.expedition.v1';
 // Practice-mode slots from the combat prototype. They are never read again.
 export const legacyKeys = ['asterveil.fateweave.battle.v1', 'asterveil.fateweave.battle.v1.rear-ambush', 'asterveil.fateweave.battle.v1.rift-warden', 'asterveil.fateweave.encounter.v1'];
-const SAVE_VERSION = 1;
+// v1 (phase 1) → v2 (phase 2A): adds resources, opened chests and the campfire flag.
+// v1 saves migrate with empty resources and a lit campfire; the map layout is unchanged.
+const SAVE_VERSION = 2;
 const actions: readonly ActionId[] = ['attack', 'guard', 'bash', 'mark', 'execute', 'bolt', 'ward', 'heal', 'prayer'];
 
 export function saveExpedition(storage: StoragePort | undefined, state: ExpeditionState): boolean {
@@ -51,14 +53,19 @@ function command(v: unknown): Command {
 // command under the current rules; any mismatch starts a fresh expedition.
 export function parseExpedition(raw: string, map: MapDefinition, lookup: EncounterLookup): ExpeditionState {
   const envelope = obj(JSON.parse(raw));
-  if (envelope.version !== SAVE_VERSION) throw new Error('Unsupported save version');
+  if (envelope.version !== SAVE_VERSION && envelope.version !== 1) throw new Error('Unsupported save version');
   const s = obj(envelope.state);
+  if (envelope.version === 1) Object.assign(s, { resources: { ore: 0, ember: 0, seal: 0 }, openedChests: [], restReady: true });
   if (s.mapId !== map.id || s.mapVersion !== map.version) throw new Error('Map changed');
   const cells = map.rows.length * map.rows[0]!.length;
   if (typeof s.revealed !== 'string' || s.revealed.length !== cells || /[^01]/.test(s.revealed)) throw new Error('Invalid fog');
-  for (const key of ['tutorialDone', 'bossDefeated', 'completed'] as const) if (typeof s[key] !== 'boolean') throw new Error('Invalid flag');
+  for (const key of ['tutorialDone', 'bossDefeated', 'completed', 'restReady'] as const) if (typeof s[key] !== 'boolean') throw new Error('Invalid flag');
   if (!isInt(s.seed, 0, 0xffffffff) || !isInt(s.rolls) || !isInt(s.steps) || !isInt(s.pressure, 0, 100) || !isInt(s.wins) || !isInt(s.defeats)) throw new Error('Invalid counters');
   const hp = hpRecord(s.hp, lookup, map);
+  const r = obj(s.resources);
+  if (Object.keys(r).length !== 3 || !isInt(r.ore, 0, 999999) || !isInt(r.ember, 0, 9999) || !isInt(r.seal, 0, 9999)) throw new Error('Invalid resources');
+  const chestIds = map.chests.map(c => c.id);
+  if (!Array.isArray(s.openedChests) || s.openedChests.some(id => !chestIds.includes(id)) || new Set(s.openedChests).size !== s.openedChests.length) throw new Error('Invalid chests');
   let battle: ActiveBattle | null = null;
   if (s.battle !== null) {
     const b = obj(s.battle); const data = typeof b.encounterId === 'string' ? lookup(b.encounterId) : undefined;
@@ -71,7 +78,9 @@ export function parseExpedition(raw: string, map: MapDefinition, lookup: Encount
   const state: ExpeditionState = {
     mapId: map.id, mapVersion: map.version, seed: s.seed as number, rolls: s.rolls as number, position: point(s.position, map),
     steps: s.steps as number, pressure: s.pressure as number, revealed: s.revealed, hp,
-    camp: s.camp === null ? null : point(s.camp, map), tutorialDone: s.tutorialDone as boolean, bossDefeated: s.bossDefeated as boolean,
+    camp: s.camp === null ? null : point(s.camp, map),
+    resources: { ore: r.ore as number, ember: r.ember as number, seal: r.seal as number }, openedChests: [...s.openedChests as string[]], restReady: s.restReady as boolean,
+    tutorialDone: s.tutorialDone as boolean, bossDefeated: s.bossDefeated as boolean,
     completed: s.completed as boolean, wins: s.wins as number, defeats: s.defeats as number, battle,
   };
   if (state.camp && tileAt(map, state.camp)?.kind !== 'camp') throw new Error('Invalid camp');

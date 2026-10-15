@@ -6,16 +6,49 @@ Fateweave is a single game: an expedition across a square-tile map with turn-bas
 
 The owner asked to adapt the non-combat systems of the private Godot project *Asterveil: Rise Beyond* to this 2D tile game. Only **design concepts** were taken from its lock documents (map/exploration, game, party, economy, equipment/loot). No code, data files, names, art or history were imported. Rise Beyond's 3D presentation, 10-member company, 3×3 formation, Orders/Stance, Break/Chain and reserve swap do not apply: they are combat or party rules, and Fateweave keeps its own combat.
 
-## Phase plan (approved 2026-10-14)
+## Phase plan
+
+Approved 2026-10-14, re-planned 2026-10-15 for the mercenary roster.
 
 | Phase | Content | Status |
 |---|---|---|
 | 1. Exploration core | Remove practice mode; tile map, camera, fog; shown per-step encounter chance; carried HP; camps; defeat; expedition save; one-time teaching battle | **Implemented** |
-| 2. Loot and team power | Equipment (weapon by class, body, accessory; rarity and random affixes; bad-luck protection), shared EXP/level, consumables used on the map, treasure chests | Planned |
+| 2A. Resources and chests | Star ore, veil embers and contract seals; victory drops; six map chests; camp rest at 50% with a campfire; ember revive one member at a time | **Implemented** |
+| 2B. Roster of 8 | 4 deployed + 4 reserve, swapped at camp; enemies target lanes/slots instead of hero ids; defeat rule for the roster | Planned |
+| 2C. Mercenaries | Camp hiring board, catalog of 10 (existing 4 + 6 from ART-CHAR-MERC-ENEMY-001), stars by duplicates, one new class mechanic at a time | Planned |
+| 2D. Equipment and level | Equipment (weapon by class, body, accessory; rarity and affixes; bad-luck protection), shared EXP/level, consumables on the map | Planned |
 | 3. Choices and content | Events with fight/avoid choices, elites, mini boss, puzzles (rune order, push stone, lever), secrets, map quest "2 of 3" and side quests | Planned |
-| 4. Economy and wrap-up | Local gold and shop, salvage, fast travel between camps, elite respawn on rest, defeat gold penalty (30% of gold gained since the last camp), whole-map balance simulation, completion screen | Planned |
+| 4. Economy and wrap-up | Local gold and shop, salvage, fast travel between camps, elite respawn on rest, defeat penalty, whole-map balance simulation, completion screen | Planned |
 
-Numbers in phases 2–4 are drafts and need owner approval before they ship.
+Numbers in phases 2–4 are drafts and need owner approval after playtesting.
+
+## Mercenary decisions (owner, 2026-10-15)
+
+These decisions guide phases 2B–2C. They are not implemented yet.
+
+- **No fixed heroes.** Every party member is a hired mercenary. The starting four (Aegis, Lyra, Eira, Seren) join free at ★1.
+- **One mercenary is one character and one portrait.** Art is not tied to a class. The class decides the skills and lane.
+- **Roster of 8:** 4 deployed and 4 reserve, swapped at a camp.
+- **Hiring board at camps:** random offers drawn from the whole catalog, seeded so reloads cannot re-roll. Every offer costs the same ore.
+- **Stars.**
+  - Everyone starts at ★1. Hiring someone already on the roster gives that mercenary a duplicate instead of a second copy, even when the roster is full.
+  - Upgrade cost: ★2 = 1 duplicate + 20 ore; ★3 = 2 + 40 (unlocks the 3rd skill); ★4 = 3 + 70; ★5 = 4 + 110 (unlocks a passive).
+  - Each star adds +8% to base stats.
+  - One contract seal can replace one duplicate in an upgrade.
+  - Dismissing a mercenary loses its stars and stored duplicates.
+- **Stars and roster persist across expeditions.** Map position, HP and carried resources reset when a new expedition starts. This needs a separate roster save.
+- **Every class has a unique mechanic.** The four existing classes keep theirs.
+  - Spear: counter.
+  - Archer: delay SPD.
+  - Alchemist: corrode and haste.
+  - Scout: first-strike bonus and evade.
+  - Hammer warden: taunt-all.
+  - Bard: persistent song.
+
+  New mechanics go into the pure resolver one class at a time, each with its own tests.
+- **Enemies target lanes/slots** instead of hero ids (2B).
+- **Defeat with a roster:** fallen members stay fallen. If all 8 are down, one is revived free.
+- **Future gacha:** cosmetic avatars for owned mercenaries with a small stat bonus (proposed cap +3%). No paid power.
 
 ## Boundary between world and battle
 
@@ -46,11 +79,42 @@ Start, camp, boss, goal and sanctum tiles never roll. Rolls come from `(seed, ro
 
 **After battle.** The party stays on the tile where the battle began.
 - Victory: HP carries over exactly; fallen heroes stay down.
-- Defeat (not tutorial): return to the last rested camp (or the start) with full HP; the defeated encounter does not follow. No penalty until gold exists (phase 4).
+- Defeat (not tutorial): return to the last camp reached (or the start) with full HP; the defeated encounter does not follow. Resources are kept. This is interim: the roster defeat rule replaces it in 2B.
 - Boss victory clears the boss tile; stepping onto the goal completes the expedition.
 - A battle that ends on enemy opening turns before any command is applied on the next load instead of discarding the save.
 
-**Camp.** Stand on a camp tile and press **พัก**: full HP, revive the fallen, pressure 0, and this camp becomes the defeat return point. Camps can be used any number of times.
+**Camp.** Phase 2A replaces the phase 1 full rest; see below. Reaching a camp tile makes it the defeat return point.
+
+## Phase 2A rules (draft numbers)
+
+**Resources.** Three counters are carried in the expedition state.
+- **Star ore (แร่ดาว):** will pay for hiring and star upgrades in 2C.
+- **Veil ember (ถ่านม่านเวล):** revives one fallen member at a camp.
+- **Contract seal (ตราสัญญา):** will replace one duplicate in a star upgrade (2C).
+
+Ore and seals have no use yet; the pack dialog says so.
+
+**Loot.** Loot is rolled from the same `(seed, rolls)` stream as encounters and saved in the same write, so a reload never re-rolls it. Ore is rolled from `min..max`. Embers and seals are `guaranteed + percent chance of one more`.
+
+| Source | Ore | Ember | Seal |
+|---|---|---|---|
+| Victory in meadow | 6–10 | 8% | 0 |
+| Victory in thicket | 9–14 | 12% | 0 |
+| Victory in scar | 12–18 | 15% | 0 |
+| Teaching battle | 10 | 1 | 0 |
+| Boss | 60 | 1 | 2 |
+| Common chest (4) | 16–24 | 30% | 0 |
+| Rare chest (2) | 30–40 | 1 | 1 |
+
+Elites (phase 3) will add guaranteed seals.
+
+**Chests.** There are six, defined as map content (`chests`) on floor tiles in side pockets: meadow west/east, thicket west/east (east is rare), and scar west (rare)/east. Standing on an unopened chest turns the lower-right action into **เปิด**. Each chest opens once (`openedChests`). The chest tile still rolls encounters like any floor tile. The chest markers are code-native placeholders until chest art is commissioned.
+
+**Camp.** Pressing **พัก** on a camp opens the camp sheet.
+- **Rest:** standing members heal 50% of max HP (rounded up, capped at max). Pressure resets, and the camp becomes the return point. The campfire (`restReady`) then goes out; any won battle relights it. The fallen do not heal.
+- **Revive:** one fallen member per ember, to 30% of max HP (rounded up). This works whether or not the fire is lit.
+
+**Balance evidence.** The advisor's full run (seed 2026, revive then rest at each camp) still reaches the goal. The advisor still wins every encounter from 60% HP. Human playtesting is still needed.
 
 **Encounters added for the expedition** (all reuse the two illustrated enemy slots `raider`/`brute`):
 
@@ -68,17 +132,29 @@ veil-siege / 5, rear-ambush / 3 and rift-warden / 3 keep their content and versi
 
 ## Save
 
-Key `asterveil.fateweave.expedition.v1`, envelope `{ version: 1, state }`. State: map id/version, seed, roll counter, position, steps, pressure, fog string, party HP, last camp, tutorial/boss/completed flags, wins/defeats, and the active battle `{ kind, encounterId, entry, commands }`.
+Key `asterveil.fateweave.expedition.v1`, envelope `{ version: 2, state }`. State fields:
+- map id/version, seed, roll counter;
+- position, steps, pressure, fog string;
+- party HP, last camp;
+- resources `{ ore, ember, seal }`, `openedChests`, `restReady`;
+- tutorial/boss/completed flags, wins/defeats;
+- the active battle `{ kind, encounterId, entry, commands }`.
 
 Every field is validated on load. The active battle is replayed under current rules, so a foreign-owner command, an unknown encounter or a wrong map version rejects the save, and the title screen then offers only a new expedition. A finished battle is applied in the same write that records its last command, so a reload never repeats damage.
 
 The practice keys (`asterveil.fateweave.battle.v1`, `.rear-ambush`, `.rift-warden`, `asterveil.fateweave.encounter.v1`) are deleted at start and never read. The teaching-advice preference key `asterveil.fateweave.tutorial.v1` is kept.
 
-Save history: none before this. Version 1 is new; earlier practice saves are intentionally dropped, not migrated.
+Save history:
+- Version 1 (phase 1) was new; earlier practice saves were intentionally dropped.
+- Version 2 (phase 2A) adds resources, opened chests and the campfire flag. A v1 save migrates with zero resources, no opened chests and a lit campfire. The map layout and map version are unchanged. Tested in `tests/world.test.ts`.
+- Unknown resource keys, unknown or repeated chest ids, and a non-boolean campfire flag are rejected.
 
 ## UI
 
 - **Title:** Continue (with a summary) or New expedition; replacing an existing save needs a second confirming press.
+- **Pack and camp (2A):**
+  - A pack capsule under the top-right corner shows ore/ember/seal counts and opens the pack dialog.
+  - The lower-right action is **พัก** on a camp (opens the camp sheet), **เปิด** on an unopened chest, and otherwise disabled.
 - **World:** zone name, encounter-chance chip and ⓘ in the top bar. The map has a camera that follows the party and is clamped to the map edges. The team HP cards, a goal checklist on large screens, the last message, the D-pad and the camp **พัก** button sit beside or below the map.
   - Portrait phones: map, then the four HP cards in one row, then message and D-pad.
   - Short landscape: map on the left, a compact column on the right.

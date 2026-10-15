@@ -1,6 +1,6 @@
 import { replay } from '../battle/engine';
 import type { BattleState, Command, EncounterDefinition } from '../battle/types';
-import type { ActiveBattle, BattleKind, Direction, ExpeditionState, MapDefinition, Point, Tile, WorldResult, ZoneDefinition } from './types';
+import type { ActiveBattle, BattleKind, ChestDefinition, Direction, ExpeditionState, LootTable, MapDefinition, Point, Resources, Tile, WorldResult, ZoneDefinition } from './types';
 
 // Pure expedition rules: no DOM, Phaser, clocks or Math.random. Every roll is
 // derived from (seed, rolls) so a reload can never re-roll an outcome.
@@ -52,6 +52,7 @@ export function newExpedition(map: MapDefinition, lookup: EncounterLookup, seed:
   const state: ExpeditionState = {
     mapId: map.id, mapVersion: map.version, seed: seed >>> 0, rolls: 0, position: startOf(map), steps: 0, pressure: 0,
     revealed: '0'.repeat(width * map.rows.length), hp: fullParty(lookup, map), camp: null,
+    resources: { ore: 0, ember: 0, seal: 0 }, openedChests: [], restReady: true,
     tutorialDone: false, bossDefeated: false, completed: false, wins: 0, defeats: 0, battle: null,
   };
   reveal(state, map);
@@ -73,6 +74,8 @@ export function move(initial: ExpeditionState, map: MapDefinition, dir: Directio
     return { state, event: { type: 'encounter', kind: 'boss', encounterId: map.bossEncounterId, chance: 100 } };
   }
   state.position = target; state.steps++; reveal(state, map);
+  // Reaching a camp makes it the defeat return point, whether or not the party rests.
+  if (tile.kind === 'camp') state.camp = { ...target };
   if (tile.kind === 'goal') { state.completed = true; return { state, event: { type: 'goal' } }; }
   const zone = rollingZone(map, target);
   if (!zone) return { state, event: { type: 'moved', chance: 0 } };
@@ -93,14 +96,52 @@ export function move(initial: ExpeditionState, map: MapDefinition, dir: Directio
   return { state, event: { type: 'moved', chance } };
 }
 
-export function canRest(state: ExpeditionState, map: MapDefinition): boolean {
-  return !state.battle && !state.completed && tileAt(map, state.position)?.kind === 'camp';
-}
+export const atCamp = (state: ExpeditionState, map: MapDefinition): boolean =>
+  !state.battle && !state.completed && tileAt(map, state.position)?.kind === 'camp';
+export function canRest(state: ExpeditionState, map: MapDefinition): boolean { return atCamp(state, map) && state.restReady; }
+const percentOf = (max: number, percent: number) => Math.max(1, Math.ceil(max * percent / 100));
+// A rest heals standing members by a share of max HP; the fallen need an ember each.
 export function rest(initial: ExpeditionState, map: MapDefinition, lookup: EncounterLookup): WorldResult {
   if (!canRest(initial, map)) return { state: initial, event: { type: 'blocked', reason: 'busy' } };
-  const state = structuredClone(initial);
-  state.hp = fullParty(lookup, map); state.pressure = 0; state.camp = { ...state.position };
+  const state = structuredClone(initial); const full = fullParty(lookup, map);
+  for (const [id, max] of Object.entries(full)) if (state.hp[id]! > 0) state.hp[id] = Math.min(max, state.hp[id]! + percentOf(max, map.camp.restHealPercent));
+  state.pressure = 0; state.camp = { ...state.position }; state.restReady = false;
   return { state, event: { type: 'rested' } };
+}
+export function canRevive(state: ExpeditionState, map: MapDefinition, heroId: string): boolean {
+  return atCamp(state, map) && state.resources.ember > 0 && state.hp[heroId] === 0;
+}
+export function revive(initial: ExpeditionState, map: MapDefinition, lookup: EncounterLookup, heroId: string): WorldResult {
+  if (!canRevive(initial, map, heroId)) return { state: initial, event: { type: 'blocked', reason: 'busy' } };
+  const state = structuredClone(initial);
+  state.hp[heroId] = percentOf(fullParty(lookup, map)[heroId]!, map.camp.reviveHpPercent); state.resources.ember--;
+  return { state, event: { type: 'revived', heroId } };
+}
+
+// Loot consumes rolls from the same (seed, rolls) stream, so it is fixed once saved.
+function rollLoot(state: ExpeditionState, table: LootTable): Resources {
+  const [lo, hi] = table.ore;
+  const extra = ([base, chance]: readonly [number, number]) => base + (chance > 0 && rollPercent(state.seed, state.rolls++) < chance ? 1 : 0);
+  const loot = { ore: lo + (hi > lo ? rollPercent(state.seed, state.rolls++) % (hi - lo + 1) : 0), ember: extra(table.ember), seal: extra(table.seal) };
+  state.resources = { ore: state.resources.ore + loot.ore, ember: state.resources.ember + loot.ember, seal: state.resources.seal + loot.seal };
+  return loot;
+}
+export const chestAt = (map: MapDefinition, p: Point): ChestDefinition | undefined => map.chests.find(c => c.x === p.x && c.y === p.y);
+export function canOpenChest(state: ExpeditionState, map: MapDefinition): boolean {
+  const chest = chestAt(map, state.position);
+  return !!chest && !state.battle && !state.completed && !state.openedChests.includes(chest.id);
+}
+export function openChest(initial: ExpeditionState, map: MapDefinition): WorldResult {
+  if (!canOpenChest(initial, map)) return { state: initial, event: { type: 'blocked', reason: 'busy' } };
+  const state = structuredClone(initial); const chest = chestAt(map, state.position)!;
+  state.openedChests.push(chest.id);
+  return { state, event: { type: 'chest', chestId: chest.id, loot: rollLoot(state, map.loot.chest[chest.tier]) } };
+}
+const noLoot: LootTable = { ore: [0, 0], ember: [0, 0], seal: [0, 0] };
+function battleLoot(state: ExpeditionState, map: MapDefinition, kind: BattleKind): LootTable {
+  if (kind === 'tutorial') return map.loot.tutorial;
+  if (kind === 'boss') return map.loot.boss;
+  return zoneOf(map, tileAt(map, state.position)?.zoneId ?? '')?.loot ?? noLoot;
 }
 
 // The battle's committed commands are replayed from the recorded entry; the world
@@ -115,18 +156,19 @@ export function recordBattle(initial: ExpeditionState, lookup: EncounterLookup, 
   battleState(state, lookup);
   return state;
 }
-// Applies a finished battle. Victory keeps the surviving HP; defeat returns to the
-// last camp (or start) with a recovered party. A lost tutorial simply restarts.
+// Applies a finished battle. Victory keeps the surviving HP, rolls loot and relights
+// the campfire; defeat returns to the last camp (or start) with a recovered party.
+// A lost tutorial simply restarts.
 export function finishBattle(initial: ExpeditionState, map: MapDefinition, lookup: EncounterLookup): WorldResult {
   const result = battleState(initial, lookup);
   if (!initial.battle || !result || result.outcome === 'active') throw new Error('The battle has not finished.');
   const state = structuredClone(initial); const { kind, encounterId } = initial.battle;
   if (result.outcome === 'victory') {
     state.hp = Object.fromEntries(result.heroes.map(h => [h.id, h.hp]));
-    state.battle = null; state.wins++;
+    state.battle = null; state.wins++; state.restReady = true;
     if (kind === 'tutorial') state.tutorialDone = true;
     if (kind === 'boss') state.bossDefeated = true;
-    return { state, event: { type: 'victory', kind, encounterId } };
+    return { state, event: { type: 'victory', kind, encounterId, loot: rollLoot(state, battleLoot(state, map, kind)) } };
   }
   state.defeats++;
   if (kind === 'tutorial') { state.battle = startBattle({ ...state, hp: fullParty(lookup, map) }, 'tutorial', encounterId); return { state, event: { type: 'defeat', kind, encounterId } }; }

@@ -4,7 +4,7 @@ import { chapterOne as map } from '../src/content/world/chapter1';
 import { createBattle, currentHeroId, resolveCommand } from '../src/core/battle/engine';
 import { clearLegacySaves, expeditionKey, legacyKeys, loadExpedition, parseExpedition, saveExpedition, type StoragePort } from '../src/core/save/expedition-save';
 import type { Direction, ExpeditionState, Point } from '../src/core/world/types';
-import { battleState, canRest, encounterChance, findTiles, finishBattle, isRevealed, move, newExpedition, recordBattle, rest, rollPercent, startOf, tileAt } from '../src/core/world/world';
+import { battleState, canOpenChest, canRest, canRevive, chestAt, encounterChance, findTiles, finishBattle, isRevealed, move, newExpedition, openChest, recordBattle, rest, revive, rollPercent, startOf, tileAt } from '../src/core/world/world';
 import { battleLesson } from '../src/ui/tutorial';
 
 const lookup = encounterById;
@@ -87,18 +87,37 @@ describe('expedition rules', () => {
     expect(s.battle).toBeNull(); expect(s.position).toEqual(where); expect(s.tutorialDone).toBe(true); expect(s.wins).toBe(1);
     expect(Object.values(s.hp).some(hp => hp < 76)).toBe(true);
   });
-  it('carries fallen heroes into the next battle and only a camp rest revives them', () => {
+  it('carries fallen heroes into the next battle; a rest heals the standing by half and embers revive one at a time', () => {
     let s = fresh(5); s.tutorialDone = true; s.hp = { guardian: 30, tracer: 0, weaver: 20, healer: 10 };
     while (!s.battle) s = move(s, map, s.steps % 2 ? 'right' : 'left').state;
     expect(s.battle.kind).toBe('random');
     expect(s.battle.entry).toEqual({ guardian: 30, tracer: 0, weaver: 20, healer: 10 });
     expect(createBattle(lookup(s.battle.encounterId)!, { hp: s.battle.entry }).order).not.toContain('tracer');
     const camp = findTiles(map, 'camp')[1]!;
-    let t: ExpeditionState = { ...fresh(5), position: camp, hp: { guardian: 1, tracer: 0, weaver: 0, healer: 3 }, pressure: 20 };
+    let t: ExpeditionState = { ...fresh(5), position: camp, hp: { guardian: 1, tracer: 0, weaver: 0, healer: 40 }, pressure: 20 };
     expect(canRest(t, map)).toBe(true);
     t = rest(t, map, lookup).state;
-    expect(t.hp).toEqual({ guardian: 76, tracer: 56, weaver: 48, healer: 46 }); expect(t.pressure).toBe(0); expect(t.camp).toEqual(camp);
+    expect(t.hp).toEqual({ guardian: 39, tracer: 0, weaver: 0, healer: 46 }); expect(t.pressure).toBe(0); expect(t.camp).toEqual(camp);
+    expect(t.restReady).toBe(false); expect(canRest(t, map)).toBe(false);
+    expect(rest(t, map, lookup).event).toEqual({ type: 'blocked', reason: 'busy' });
+    expect(canRevive(t, map, 'tracer')).toBe(false);
+    t = { ...t, resources: { ore: 0, ember: 1, seal: 0 } };
+    expect(canRevive(t, map, 'guardian')).toBe(false);
+    const r = revive(t, map, lookup, 'tracer');
+    expect(r.event).toEqual({ type: 'revived', heroId: 'tracer' });
+    expect(r.state.hp).toMatchObject({ tracer: 17, weaver: 0 }); expect(r.state.resources.ember).toBe(0);
+    expect(revive(r.state, map, lookup, 'weaver').event.type).toBe('blocked');
     expect(canRest(fresh(), map)).toBe(false);
+  });
+  it('a camp becomes the return point on arrival, and a victory relights the campfire', () => {
+    const camp = findTiles(map, 'camp')[1]!;
+    let s: ExpeditionState = { ...fresh(5), position: { x: camp.x - 1, y: camp.y } };
+    s = move(s, map, 'right').state;
+    expect(s.camp).toEqual(camp); expect(s.battle).toBeNull();
+    s = rest(s, map, lookup).state; expect(s.restReady).toBe(false);
+    s = { ...s, position: { x: 10, y: 22 } };
+    while (!s.battle) s = move(s, map, s.steps % 2 ? 'right' : 'left').state;
+    s = fight(s); expect(s.restReady).toBe(true);
   });
   it('defeat returns to the last rested camp with a recovered party; a lost tutorial restarts in place', () => {
     const loseWith = (state: ExpeditionState) => {
@@ -137,8 +156,45 @@ describe('expedition rules', () => {
         if (s.battle) s = fight(s);
       }
     };
-    walk(campA); s = rest(s, map, lookup).state; walk(campB); s = rest(s, map, lookup).state; walk(goal!, true);
+    const camp = () => { for (const id of Object.keys(s.hp)) if (canRevive(s, map, id)) s = revive(s, map, lookup, id).state; if (canRest(s, map)) s = rest(s, map, lookup).state; };
+    walk(campA); camp(); walk(campB); camp(); walk(goal!, true);
     expect(s.completed).toBe(true); expect(s.tutorialDone).toBe(true); expect(s.bossDefeated).toBe(true); expect(s.wins).toBeGreaterThan(2);
+  });
+});
+
+describe('resources and chests', () => {
+  it('places every chest on a reachable floor tile with a unique id', () => {
+    expect(new Set(map.chests.map(c => c.id)).size).toBe(map.chests.length);
+    for (const c of map.chests) {
+      expect(tileAt(map, c)?.kind).toBe('floor');
+      expect(route(startOf(map), c).length).toBeGreaterThan(0);
+    }
+  });
+  it('opens a chest once, with loot fixed by the seed and roll counter', () => {
+    const chest = map.chests.find(c => c.tier === 'rare')!;
+    const s: ExpeditionState = { ...fresh(12), position: { x: chest.x, y: chest.y } };
+    expect(chestAt(map, s.position)).toEqual(chest); expect(canOpenChest(s, map)).toBe(true);
+    const a = openChest(s, map); const b = openChest(s, map);
+    expect(a).toEqual(b);
+    if (a.event.type !== 'chest') throw new Error('expected a chest');
+    expect(a.event.loot.seal).toBe(1); expect(a.event.loot.ember).toBe(1);
+    expect(a.event.loot.ore).toBeGreaterThanOrEqual(30); expect(a.event.loot.ore).toBeLessThanOrEqual(40);
+    expect(a.state.resources).toEqual(a.event.loot); expect(a.state.openedChests).toEqual([chest.id]);
+    expect(canOpenChest(a.state, map)).toBe(false); expect(openChest(a.state, map).event.type).toBe('blocked');
+    expect(canOpenChest(fresh(), map)).toBe(false);
+  });
+  it('a victory adds loot from its zone, the tutorial grants an ember and the boss grants seals', () => {
+    let s = fresh(3);
+    while (!s.battle) s = move(s, map, s.steps % 2 ? 'right' : 'left').state;
+    s = fight(s);
+    expect(s.resources).toEqual({ ore: 10, ember: 1, seal: 0 });
+    while (!s.battle) s = move(s, map, s.steps % 2 ? 'right' : 'left').state;
+    const before = s.resources.ore; s = fight(s);
+    expect(s.resources.ore - before).toBeGreaterThanOrEqual(6); expect(s.resources.ore - before).toBeLessThanOrEqual(10);
+    const [boss] = findTiles(map, 'boss');
+    let t: ExpeditionState = { ...fresh(2), tutorialDone: true, position: { x: boss!.x, y: boss!.y + 1 } };
+    t = fight(move(t, map, 'up').state);
+    expect(t.resources).toEqual({ ore: 60, ember: 1, seal: 2 });
   });
 });
 
@@ -155,17 +211,28 @@ describe('expedition save', () => {
   });
   it.each([
     ['malformed', () => '{bad'],
-    ['wrong version', (s: ExpeditionState) => JSON.stringify({ version: 2, state: s })],
-    ['old map version', (s: ExpeditionState) => JSON.stringify({ version: 1, state: { ...s, mapVersion: 0 } })],
-    ['wall position', (s: ExpeditionState) => JSON.stringify({ version: 1, state: { ...s, position: { x: 0, y: 0 } } })],
-    ['hp above max', (s: ExpeditionState) => JSON.stringify({ version: 1, state: { ...s, hp: { ...s.hp, tracer: 99 } } })],
-    ['all down outside battle', (s: ExpeditionState) => JSON.stringify({ version: 1, state: { ...s, hp: { guardian: 0, tracer: 0, weaver: 0, healer: 0 } } })],
-    ['foreign owner command', (s: ExpeditionState) => JSON.stringify({ version: 1, state: { ...s, battle: { kind: 'random', encounterId: 'veil-siege', entry: s.hp, commands: [{ beat: 1, heroId: 'guardian', action: 'attack', targetId: 'brute' }] } } })],
-    ['unknown encounter', (s: ExpeditionState) => JSON.stringify({ version: 1, state: { ...s, battle: { kind: 'random', encounterId: 'crystal-rift', entry: s.hp, commands: [] } } })],
-    ['bad fog', (s: ExpeditionState) => JSON.stringify({ version: 1, state: { ...s, revealed: 'x' } })],
+    ['wrong version', (s: ExpeditionState) => JSON.stringify({ version: 3, state: s })],
+    ['old map version', (s: ExpeditionState) => JSON.stringify({ version: 2, state: { ...s, mapVersion: 0 } })],
+    ['wall position', (s: ExpeditionState) => JSON.stringify({ version: 2, state: { ...s, position: { x: 0, y: 0 } } })],
+    ['hp above max', (s: ExpeditionState) => JSON.stringify({ version: 2, state: { ...s, hp: { ...s.hp, tracer: 99 } } })],
+    ['all down outside battle', (s: ExpeditionState) => JSON.stringify({ version: 2, state: { ...s, hp: { guardian: 0, tracer: 0, weaver: 0, healer: 0 } } })],
+    ['foreign owner command', (s: ExpeditionState) => JSON.stringify({ version: 2, state: { ...s, battle: { kind: 'random', encounterId: 'veil-siege', entry: s.hp, commands: [{ beat: 1, heroId: 'guardian', action: 'attack', targetId: 'brute' }] } } })],
+    ['unknown encounter', (s: ExpeditionState) => JSON.stringify({ version: 2, state: { ...s, battle: { kind: 'random', encounterId: 'crystal-rift', entry: s.hp, commands: [] } } })],
+    ['negative ore', (s: ExpeditionState) => JSON.stringify({ version: 2, state: { ...s, resources: { ore: -1, ember: 0, seal: 0 } } })],
+    ['extra resource', (s: ExpeditionState) => JSON.stringify({ version: 2, state: { ...s, resources: { ore: 1, ember: 0, seal: 0, gold: 5 } } })],
+    ['unknown chest', (s: ExpeditionState) => JSON.stringify({ version: 2, state: { ...s, openedChests: ['vault'] } })],
+    ['repeated chest', (s: ExpeditionState) => JSON.stringify({ version: 2, state: { ...s, openedChests: ['meadow-west', 'meadow-west'] } })],
+    ['missing campfire flag', (s: ExpeditionState) => JSON.stringify({ version: 2, state: { ...s, restReady: 'yes' } })],
+    ['bad fog', (s: ExpeditionState) => JSON.stringify({ version: 2, state: { ...s, revealed: 'x' } })],
   ])('rejects %s', (_, make) => {
     expect(() => parseExpedition(make(fresh()), map, lookup)).toThrow();
     expect(loadExpedition({ getItem: () => make(fresh()), setItem: () => {} }, map, lookup)).toBeUndefined();
+  });
+  it('migrates a phase 1 (v1) save with empty resources and a lit campfire', () => {
+    const v1: Partial<ExpeditionState> = { ...fresh(8), steps: 4 };
+    delete v1.resources; delete v1.openedChests; delete v1.restReady;
+    const loaded = parseExpedition(JSON.stringify({ version: 1, state: v1 }), map, lookup);
+    expect(loaded).toEqual({ ...fresh(8), steps: 4 });
   });
   it('tolerates absent or denied storage and clears practice-mode slots', () => {
     const denied: StoragePort = { getItem: () => { throw new Error('Denied'); }, setItem: () => { throw new Error('Denied'); } };
@@ -178,7 +245,7 @@ describe('expedition save', () => {
     const s = { ...fresh(4), tutorialDone: true, hp: { guardian: 0, tracer: 0, weaver: 0, healer: 1 } };
     s.battle = { kind: 'random', encounterId: 'scout-patrol', entry: { ...s.hp }, commands: [] };
     expect(battleState(s, lookup)!.outcome).toBe('defeat');
-    const loaded = parseExpedition(JSON.stringify({ version: 1, state: s }), map, lookup);
+    const loaded = parseExpedition(JSON.stringify({ version: 2, state: s }), map, lookup);
     expect(loaded.battle).toBeNull(); expect(loaded.defeats).toBe(1); expect(loaded.position).toEqual(startOf(map));
     for (const data of encounters) expect(() => createBattle(data, { hp: { guardian: 0, tracer: 0, weaver: 0, healer: 1 } })).not.toThrow();
   });

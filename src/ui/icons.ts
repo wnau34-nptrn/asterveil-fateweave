@@ -27,9 +27,16 @@ import check from './svg/check.svg?raw';
 import circle from './svg/circle.svg?raw';
 import close from './svg/close.svg?raw';
 import footprints from './svg/footprints.svg?raw';
+// Phase 2A placeholder line icons drawn in the same 24px stroke style.
+import chest from './svg/chest.svg?raw';
+import chestOpen from './svg/chest-open.svg?raw';
+import ore from './svg/ore.svg?raw';
+import ember from './svg/ember.svg?raw';
+import seal from './svg/seal.svg?raw';
+import pack from './svg/pack.svg?raw';
 
 // Original ART-UI-WORLD-001 line icons (24px viewBox, currentColor). Inlined so they inherit state colour.
-const svgs = { attack, guard, bash, mark, execute, bolt, ward, heal, prayer, up, down, left, right, camp, rest, flag, goal, star, danger, safe, talk, info, map, boss, check, circle, close, footprints } as const;
+const svgs = { attack, guard, bash, mark, execute, bolt, ward, heal, prayer, up, down, left, right, camp, rest, flag, goal, star, danger, safe, talk, info, map, boss, check, circle, close, footprints, chest, chestOpen, ore, ember, seal, pack } as const;
 const restartPath = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10a8 8 0 1 1 1 8M4 4v6h6"/></svg>';
 export type IconName = ActionId | keyof typeof svgs | 'restart';
 export function icon(name: IconName): string {

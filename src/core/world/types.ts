@@ -10,7 +10,16 @@ export interface Tile { kind: TileKind; zoneId: string }
 export interface ZoneDefinition {
   id: string; name: string; safe: boolean; base: number; step: number; cap: number;
   pool: readonly { encounterId: string; weight: number }[];
+  loot?: LootTable;
 }
+// Map-collected resources. Ore will pay for hiring, embers revive one fallen
+// member at a camp, and seals will substitute a duplicate in star upgrades.
+export type ResourceId = 'ore' | 'ember' | 'seal';
+export type Resources = Record<ResourceId, number>;
+// A roll gives `min..max` ore; ember/seal give `[guaranteed, percent chance of one more]`.
+export interface LootTable { ore: readonly [number, number]; ember: readonly [number, number]; seal: readonly [number, number] }
+export type ChestTier = 'common' | 'rare';
+export interface ChestDefinition { id: string; x: number; y: number; tier: ChestTier }
 export interface MapDefinition {
   id: string; version: number; name: string;
   rows: readonly string[];
@@ -20,6 +29,10 @@ export interface MapDefinition {
   zones: readonly ZoneDefinition[];
   tutorialEncounterId: string; bossEncounterId: string;
   revealRadius: number;
+  // Chests sit on floor tiles; loot tables are drafts until playtested.
+  chests: readonly ChestDefinition[];
+  loot: { tutorial: LootTable; boss: LootTable; chest: Readonly<Record<ChestTier, LootTable>> };
+  camp: { restHealPercent: number; reviveHpPercent: number };
 }
 
 export type BattleKind = 'tutorial' | 'random' | 'boss';
@@ -28,6 +41,8 @@ export interface ExpeditionState {
   mapId: string; mapVersion: number; seed: number; rolls: number;
   position: Point; steps: number; pressure: number;
   revealed: string; hp: Record<string, number>; camp: Point | null;
+  // `restReady` is the campfire: one rest, then it needs a won battle to relight.
+  resources: Resources; openedChests: string[]; restReady: boolean;
   tutorialDone: boolean; bossDefeated: boolean; completed: boolean;
   wins: number; defeats: number; battle: ActiveBattle | null;
 }
@@ -37,6 +52,8 @@ export type WorldEvent =
   | { type: 'encounter'; kind: BattleKind; encounterId: string; chance: number }
   | { type: 'goal' }
   | { type: 'rested' }
-  | { type: 'victory'; kind: BattleKind; encounterId: string }
+  | { type: 'revived'; heroId: string }
+  | { type: 'chest'; chestId: string; loot: Resources }
+  | { type: 'victory'; kind: BattleKind; encounterId: string; loot: Resources }
   | { type: 'defeat'; kind: BattleKind; encounterId: string };
 export interface WorldResult { state: ExpeditionState; event: WorldEvent }

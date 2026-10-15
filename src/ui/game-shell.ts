@@ -1,9 +1,10 @@
 import type { BattleState, Outcome } from '../core/battle/types';
 import { clearLegacySaves, loadExpedition, saveExpedition } from '../core/save/expedition-save';
 import type { Direction, ExpeditionState, MapDefinition, WorldEvent } from '../core/world/types';
-import { finishBattle, move, newExpedition, recordBattle, rest, type EncounterLookup } from '../core/world/world';
+import { finishBattle, move, newExpedition, openChest, recordBattle, rest, revive, type EncounterLookup } from '../core/world/world';
 import { browserStorage } from '../platform/browser-storage';
 import type { BattleUI } from './battle-ui';
+import { heroText, lootThai } from './th';
 import { WorldUI, type WorldBanner } from './world-ui';
 
 // Owns the authoritative expedition state and switches between title, world and
@@ -15,7 +16,7 @@ export class GameShell {
   private message = '';
   private locked = false;
   private banner: WorldBanner | undefined;
-  private effect: 'rest' | undefined;
+  private effect: 'rest' | 'loot' | undefined;
   private world: WorldUI;
   private onBattleVisibility: (visible: boolean) => void = () => {};
   private readonly reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -25,7 +26,7 @@ export class GameShell {
     clearLegacySaves(this.storage);
     this.state = loadExpedition(this.storage, map, lookup);
     this.world = new WorldUI(views.world, map, lookup(map.tutorialEncounterId)!.heroes, {
-      move: dir => this.move(dir), rest: () => this.rest(), newExpedition: () => this.begin(),
+      move: dir => this.move(dir), rest: () => this.rest(), revive: id => this.revive(id), openChest: () => this.openChest(), newExpedition: () => this.begin(),
     });
     views.title.addEventListener('click', e => {
       const button = (e.target as HTMLElement).closest<HTMLButtonElement>('button[data-title]');
@@ -106,8 +107,26 @@ export class GameShell {
     const result = rest(this.state, this.map, this.lookup);
     if (result.event.type !== 'rested') return;
     this.state = result.state; this.persist();
-    this.message = 'พักที่แคมป์แล้ว · ทุกคนเลือดเต็ม ชุบคนที่ล้ม และบันทึกแคมป์นี้เป็นจุดกลับเมื่อแพ้';
+    this.message = `พักที่แคมป์แล้ว · คนที่ยืนอยู่ฟื้นเลือด ${this.map.camp.restHealPercent}% ไฟแคมป์จะจุดใหม่เมื่อชนะศึก`;
     this.effect = 'rest';
+    this.renderWorld();
+  }
+  private revive(heroId: string): void {
+    if (!this.state || this.locked) return;
+    const result = revive(this.state, this.map, this.lookup, heroId);
+    if (result.event.type !== 'revived') return;
+    this.state = result.state; this.persist();
+    this.message = `ชุบ${heroText[heroId]?.name ?? ''}แล้ว · ใช้ถ่านม่านเวล 1 เหลือ ${this.state.resources.ember}`;
+    this.effect = 'rest';
+    this.renderWorld();
+  }
+  private openChest(): void {
+    if (!this.state || this.locked) return;
+    const result = openChest(this.state, this.map);
+    if (result.event.type !== 'chest') return;
+    this.state = result.state; this.persist();
+    this.message = `เปิดกล่องสมบัติ · ${lootThai(result.event.loot)}`;
+    this.effect = 'loot';
     this.renderWorld();
   }
   private describe(event: WorldEvent): string {
@@ -136,9 +155,10 @@ export class GameShell {
     if (battle.outcome !== 'active') {
       const result = finishBattle(next, this.map, this.lookup); next = result.state;
       const fallen = Object.values(next.hp).filter(hp => hp <= 0).length;
-      this.message = result.event.type === 'victory'
-        ? kind === 'boss' ? 'ผู้คุมรอยแยกล้มแล้ว · ทางไปประตูเปิดออก' : `ชนะศึก · เดินทางต่อด้วยเลือดที่เหลือ${fallen ? ` (${fallen} คนล้มอยู่ ต้องพักที่แคมป์)` : ''}`
-        : kind === 'tutorial' ? 'ลองศึกสอนอีกครั้งด้วยเลือดเต็ม' : 'ทีมถอยกลับมาฟื้นตัว · เลือดเต็มแล้ว';
+      if (result.event.type === 'victory') {
+        const loot = lootThai(result.event.loot); this.effect = 'loot';
+        this.message = kind === 'boss' ? `ผู้คุมรอยแยกล้มแล้ว · ${loot} · ทางไปประตูเปิดออก` : `ชนะศึก · ${loot}${fallen ? ` · ${fallen} คนล้มอยู่ ชุบที่แคมป์` : ''}`;
+      } else this.message = kind === 'tutorial' ? 'ลองศึกสอนอีกครั้งด้วยเลือดเต็ม' : 'ทีมถอยกลับมาฟื้นตัว · เลือดเต็มแล้ว';
     }
     this.state = next; this.persist();
     return this.saved;
