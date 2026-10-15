@@ -165,6 +165,7 @@ test('lobby: hiring a new mercenary adds them to the reserve with full roster da
   expect(p.members.mira).toEqual({ stars: 1, dupes: 0 }); expect(p.party.reserve).toEqual(['mira']); expect(p.company).toContain('mira');
   await expect(page.locator('.lobby-unit[data-actor=mira]')).toHaveAttribute('data-pose', 'cheer');
   await page.screenshot({ path: info.outputPath('lobby-mira-cheers.png') });
+  await page.keyboard.press('Escape'); await expect(page.locator('#lobby-sheet')).toHaveCount(0); await expect(page.locator('#lobby-tab-hire')).toBeFocused();
   await page.locator('#lobby-tab-team').click(); await expect(page.locator('#lobby-member-mira')).toContainText('มิร่า');
 });
 
@@ -472,7 +473,9 @@ for (const viewport of viewports) {
     await page.goto('./'); await page.locator('#continue').click(); await expect(page.locator('#lobby-view')).toBeVisible();
     const noScroll = () => page.evaluate(() => document.documentElement.scrollHeight > innerHeight || document.documentElement.scrollWidth > innerWidth);
     expect(await noScroll()).toBe(false);
-    for (const sel of ['#lobby-depart', '#lobby-tab-team', '#lobby-tab-hire', '#lobby-member-guardian']) { await page.locator(sel).scrollIntoViewIfNeeded(); await reachable(page, sel); }
+    for (const sel of ['#lobby-depart', '#lobby-tab-team', '#lobby-tab-hire']) { await page.locator(sel).scrollIntoViewIfNeeded(); await reachable(page, sel); }
+    // Team and hire open as a sheet over the camp; the depart button stays reachable with it open.
+    await page.locator('#lobby-tab-team').click(); for (const sel of ['#lobby-member-guardian', '#lobby-depart']) { await page.locator(sel).scrollIntoViewIfNeeded(); await reachable(page, sel); }
     await page.screenshot({ path: info.outputPath('lobby.png') });
     // The panel scrolls inside itself on short screens; the page never does.
     await page.locator('#lobby-tab-hire').click(); for (const sel of ['#hire-0', '#hire-1', '#hire-2']) { await page.locator(sel).scrollIntoViewIfNeeded(); await reachable(page, sel); }

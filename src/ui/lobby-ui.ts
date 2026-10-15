@@ -17,16 +17,21 @@ const groupName: Record<Group, string> = { deployed: 'ลงสนาม', reser
 // bring, and depart. It owns no rules; every action goes to the host, which saves first.
 export class LobbyUI {
   private view: LobbyView | undefined;
-  private tab: 'team' | 'hire' = 'team';
+  // The team or hire sheet floats over the camp; the scene alone shows when it is closed.
+  private sheet: 'team' | 'hire' | null = null;
+  private sceneDrawn = '';
   private picked: string | undefined;
   private confirmDismiss = false;
   constructor(private readonly root: HTMLElement, private readonly map: MapDefinition, private readonly lookup: EncounterLookup, private readonly heroes: readonly HeroDefinition[], private readonly host: LobbyHost) {
+    // Escape closes the sheet even after a redraw moved focus out of it (only while the lobby shows).
+    root.ownerDocument.addEventListener('keydown', e => { if (e.key === 'Escape' && this.sheet && !root.hidden) { e.preventDefault(); this.closeSheet(); } });
     root.addEventListener('click', e => {
       const b = (e.target as HTMLElement).closest<HTMLButtonElement>('button[data-lobby]');
       if (!b || b.disabled) return;
       const id = b.dataset.hero;
       switch (b.dataset.lobby) {
-        case 'tab': this.tab = b.dataset.tab as 'team' | 'hire'; this.picked = undefined; this.confirmDismiss = false; this.draw(); this.focus(`#lobby-tab-${this.tab}`); break;
+        case 'tab': this.sheet = b.dataset.tab as 'team' | 'hire'; this.picked = undefined; this.confirmDismiss = false; this.draw(); this.focus(`#lobby-tab-${this.sheet}`); break;
+        case 'close': this.closeSheet(); break;
         case 'pick': this.pick(id, b.dataset.group as Group); break;
         case 'hire': this.host.hire(Number(b.dataset.index)); break;
         case 'upgrade': if (this.picked) this.host.upgrade(this.picked); break;
@@ -39,6 +44,7 @@ export class LobbyUI {
       }
     });
   }
+  private closeSheet(): void { const was = this.sheet; this.sheet = null; this.picked = undefined; this.confirmDismiss = false; this.draw(); if (was) this.focus(`#lobby-tab-${was}`); }
   render(view: LobbyView): void {
     this.view = view;
     if (this.picked && !view.profile.company.includes(this.picked)) this.picked = undefined;
@@ -61,26 +67,31 @@ export class LobbyUI {
   private toastShown = '';
   private draw(): void {
     const p = this.view!.profile; const last = p.last;
-    const tab = (id: 'team' | 'hire', label: string) => `<button id="lobby-tab-${id}" data-lobby="tab" data-tab="${id}" role="tab" aria-selected="${this.tab === id}" class="${this.tab === id ? 'active' : ''}">${label}</button>`;
     const ready = p.party.deployed.length > 0;
     // A notice toasts once; redraws (tab switches, picks) keep it settled instead of replaying it.
     const notice = last ? `${last.outcome}:${last.steps}:${last.ore}:${p.expeditions}` : this.view!.message;
     const toast = notice && notice !== this.toastShown ? 'toast-new' : 'toast-seen'; this.toastShown = notice;
-    this.root.innerHTML = `<div class="lobby-shell">
-      <header class="lobby-header glass-capsule"><button data-lobby="home" class="round-glass" aria-label="กลับหน้าแรก">${icon('left')}</button>
-        ${p.commander ? commanderBadge(p.commander) : ''}<div><p class="eyebrow">ค่ายทหารรับจ้าง · ผู้บัญชาการ</p><h1 id="lobby-commander">${p.commander ? this.escape(p.commander.name) : 'เตรียมทีมก่อนออกเดินทาง'}</h1></div>
-        <div class="lobby-bank" aria-label="คลัง แร่ดาว ${p.bank.ore} ตราสัญญา ${p.bank.seal}"><span>${icon('ore')}<b>${p.bank.ore}</b></span><span>${icon('seal')}<b>${p.bank.seal}</b></span></div></header>
-      ${this.scene(p)}
+    // The camp scene fills the screen and is rebuilt only when who stands there (or how) changes.
+    if (!this.root.querySelector('.lobby-scene-host')) this.root.innerHTML = '<div class="lobby-shell"><div class="lobby-scene-host"></div><div class="lobby-hud"></div></div>';
+    const scene = this.scene(p);
+    if (scene !== this.sceneDrawn) { this.root.querySelector('.lobby-scene-host')!.innerHTML = scene; this.sceneDrawn = scene; }
+    const menu = (id: 'team' | 'hire', glyph: Parameters<typeof icon>[0], label: string, badge: string) =>
+      `<button id="lobby-tab-${id}" data-lobby="tab" data-tab="${id}" class="lobby-menu-button${this.sheet === id ? ' active' : ''}" aria-expanded="${this.sheet === id}" aria-controls="lobby-sheet">${icon(glyph)}<span>${label}</span>${badge ? `<small>${badge}</small>` : ''}</button>`;
+    const openOffers = boardOffers(p, this.map, this.lookup).filter((_, i) => !hireReason(p, this.map, this.lookup, i)).length;
+    this.root.querySelector('.lobby-hud')!.innerHTML = `
+      <header class="lobby-top"><button data-lobby="home" class="round-glass" aria-label="กลับหน้าแรก">${icon('left')}</button>
+        ${p.commander ? commanderBadge(p.commander) : ''}<div class="lobby-who"><p class="eyebrow">ค่ายทหารรับจ้าง · ${this.view!.saved ? 'บันทึกอัตโนมัติ' : 'บันทึกบนเครื่องนี้ไม่ได้'}</p><h1 id="lobby-commander">${p.commander ? this.escape(p.commander.name) : 'เตรียมทีมก่อนออกเดินทาง'}</h1></div>
+        <div class="lobby-bank" aria-label="คลัง แร่ดาว ${p.bank.ore} ตราสัญญา ${p.bank.seal}"><span class="glass-capsule">${icon('ore')}<b>${p.bank.ore}</b></span><span class="glass-capsule">${icon('seal')}<b>${p.bank.seal}</b></span></div></header>
       ${last ? `<p class="lobby-result glass-capsule ${toast}" data-outcome="${last.outcome}" role="status">${icon(last.outcome === 'wiped' ? 'danger' : last.outcome === 'complete' ? 'star' : 'camp')}<span><b>${outcomeText[last.outcome]}</b> · เดิน ${last.steps} ก้าว ชนะ ${last.wins} ศึก · ได้แร่ดาว ${last.ore}${last.seal ? ` ตราสัญญา ${last.seal}` : ''}${last.outcome === 'wiped' ? ' (เก็บได้ครึ่งเดียว)' : ''}</span></p>`
         : this.view!.message ? `<p class="lobby-result glass-capsule ${toast}" role="status"><span>${this.view!.message}</span></p>` : ''}
-      <section class="lobby-panel">
-        <div class="camp-tabs lobby-tabs" role="tablist" aria-label="ค่าย">${tab('team', `ทีม <small>${p.company.length}/${COMPANY_CAP}</small>`)}${tab('hire', 'จ้าง')}</div>
-        <div class="lobby-content" role="tabpanel">${this.tab === 'team' ? this.team(p) : this.board(p)}</div>
-      </section>
-      <footer class="lobby-footer">
-        <p class="lobby-save">${this.view!.message && last ? this.view!.message : this.view!.saved ? 'บันทึกอัตโนมัติบนเครื่องนี้' : 'บันทึกบนเครื่องนี้ไม่ได้'}</p>
-        <button id="lobby-depart" data-lobby="depart" class="primary"${ready ? '' : ' disabled'}>${icon('map')} ออกเดินทาง · ${this.map.name} <small>${p.party.deployed.length}+${p.party.reserve.length} คน</small></button>
-      </footer></div>`;
+      ${this.sheet ? `<section id="lobby-sheet" class="lobby-sheet" role="dialog" aria-modal="false" aria-labelledby="lobby-sheet-title">
+        <div class="lobby-sheet-head"><h2 id="lobby-sheet-title">${this.sheet === 'team' ? `${icon('flag')} จัดทีม <small>${p.company.length}/${COMPANY_CAP}</small>` : `${icon('ore')} ป้ายจ้างทหารรับจ้าง`}</h2>
+          <button data-lobby="close" class="round-glass" aria-label="ปิด">${icon('close')}</button></div>
+        <div class="lobby-content">${this.sheet === 'team' ? this.team(p) : this.board(p)}</div></section>` : ''}
+      <footer class="lobby-bottom">
+        <nav class="lobby-menu" aria-label="ค่าย">${menu('team', 'flag', 'ทีม', `${p.party.deployed.length}+${p.party.reserve.length}`)}${menu('hire', 'ore', 'จ้าง', openOffers ? String(openOffers) : '')}</nav>
+        <button id="lobby-depart" data-lobby="depart" class="primary"${ready ? '' : ' disabled'}>${icon('map')}<span>ออกเดินทาง<small>${this.map.name} · ${p.party.deployed.length}+${p.party.reserve.length} คน</small></span></button>
+      </footer>`;
   }
 
   // Warm camp scene (ART-UI-LOBBY-001): the brought team gathers around the fire. Front members sit on
@@ -131,7 +142,7 @@ export class LobbyUI {
   }
   private board(p: Profile): string {
     const why: Record<string, string> = { taken: 'จ้างแล้ว', ore: 'แร่ดาวไม่พอ', full: `ค่ายเต็ม ${COMPANY_CAP} คน`, maxed: 'ดาวเต็มแล้ว' };
-    return `<h3>${icon('flag')} ป้ายจ้างทหารรับจ้าง <span class="camp-embers">${icon('ore')} แร่ดาว ${p.bank.ore}</span></h3>
+    return `<p class="hire-cost">จ้างคนละ ${icon('ore')} ${this.map.company.hireCost} · ป้ายเปลี่ยนใหม่เมื่อกลับจากการเดินทาง</p>
       <ul class="hire-list">${boardOffers(p, this.map, this.lookup).map((id, i) => {
         const reason = hireReason(p, this.map, this.lookup, i); const h = this.hero(id); const text = heroText[id]!; const m = p.members[id];
         const status = m ? `${this.stars(m.stars)} ตัวซ้ำ ${m.dupes} · มีในค่าย` : 'ใหม่ · ★1';
