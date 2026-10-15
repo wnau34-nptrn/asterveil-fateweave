@@ -23,6 +23,7 @@ export class BattleScene extends Phaser.Scene {
   private viewH = 0;
   private dpr = 1;
   private fitting = false;
+  private shaking: Phaser.Tweens.Tween | undefined;
   constructor(private encounter: EncounterDefinition, private readonly choose: (id: string) => void, private readonly onReady: () => void, private readonly onLayout: () => void) { super('battle'); }
   get isReady(): boolean { return this.ready; }
   setEncounter(data: EncounterDefinition): void {
@@ -83,6 +84,8 @@ export class BattleScene extends Phaser.Scene {
   private paint(): void {
     if (!this.view) return;
     this.stopEffects(); this.bodies.clear();
+    // The camera only carries the pixel-ratio zoom; clear any effect so art and DOM targets share one origin.
+    this.cameras.main.resetFX().setScroll(0, 0);
     this.layer?.destroy();
     this.layer = this.add.container(0, 0);
     this.positions.clear(); this.actorTargets.clear();
@@ -183,7 +186,21 @@ export class BattleScene extends Phaser.Scene {
       info.add(warning);
     }
   }
+  // Impact shake moves the field layer, never the camera: the camera carries the
+  // devicePixelRatio zoom, and a camera shake left the art offset from the DOM targets.
+  private shake(duration: number, strength: number): void {
+    const layer = this.layer; if (!layer) return;
+    if (this.shaking) this.shaking.stop();
+    layer.setPosition(0, 0);
+    this.shaking = this.tweens.addCounter({
+      from: 1, to: 0, duration,
+      onUpdate: tween => { if (layer.active) { const k = tween.getValue()! * strength; layer.setPosition((Math.random() * 2 - 1) * k, (Math.random() * 2 - 1) * k); } },
+      onComplete: () => { if (layer.active) layer.setPosition(0, 0); },
+      onStop: () => { if (layer.active) layer.setPosition(0, 0); },
+    });
+  }
   stopEffects(): void {
+    if (this.shaking) { this.shaking.stop(); this.shaking = undefined; }
     for (const body of this.bodies.values()) this.tweens.killTweensOf(body);
     if (this.effects) {
       for (const child of this.effects.list) this.tweens.killTweensOf(child);
@@ -200,7 +217,7 @@ export class BattleScene extends Phaser.Scene {
     }
     // Impact: a short camera shake for any landed hit (stronger when a fighter falls).
     const landed = events.filter(event => event.type === 'damage' && (event.amount ?? 0) > 0);
-    if (landed.length) this.cameras.main.shake(events.some(event => event.type === 'down') ? 220 : 140, events.some(event => event.type === 'down') ? .008 : .004);
+    if (landed.length) this.shake(events.some(event => event.type === 'down') ? 220 : 140, events.some(event => event.type === 'down') ? 7 : 4);
     for (const [index, event] of events.entries()) {
       const position = event.targetId ? this.positions.get(event.targetId) : undefined;
       if (!position) continue;
