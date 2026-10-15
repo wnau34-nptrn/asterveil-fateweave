@@ -187,7 +187,8 @@ export class WorldUI {
     this.root.querySelector('#objective-button')!.innerHTML = `<span class="objective-symbol">${icon('goal')}</span><span class="objective-text">${next ? next.label : 'สำเร็จการเดินทาง'}</span><span class="objective-count">${done}/4</span>${icon('right')}`;
     this.root.querySelector('#objective-button')!.setAttribute('aria-label', `เป้าหมาย ${done} จาก 4 · ${next ? `ถัดไป ${next.label}` : 'สำเร็จแล้ว'} · เปิดรายการ`);
     const message = this.root.querySelector<HTMLElement>('#world-message')!;
-    if (message.textContent !== view.message) message.textContent = view.message;
+    // A new notice pops in as a toast and fades by itself; the text stays for assistive tech.
+    if (message.textContent !== view.message) { message.textContent = view.message; message.classList.remove('toast-live'); void message.offsetWidth; message.classList.add('toast-live'); }
     message.hidden = !view.message;
     message.classList.toggle('rest-feedback', view.effect === 'rest');
     message.classList.toggle('loot-feedback', view.effect === 'loot');

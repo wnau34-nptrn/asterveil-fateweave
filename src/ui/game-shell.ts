@@ -60,6 +60,8 @@ export class GameShell {
   setBattleVisibilityListener(listener: (visible: boolean) => void): void { this.onBattleVisibility = listener; }
 
   private show(view: 'title' | 'commander' | 'lobby' | 'world' | 'battle'): void {
+    // Entering a different view replays a short fade-and-settle (off under reduced motion).
+    if (this.root.dataset.view !== view) { const next = this.views[view]; next.classList.remove('view-enter'); void next.offsetWidth; next.classList.add('view-enter'); }
     this.views.title.hidden = view !== 'title'; this.views.commander.hidden = view !== 'commander'; this.views.world.hidden = view !== 'world'; this.views.lobby.hidden = view !== 'lobby';
     // The battle view keeps its layout while hidden so Phaser never sizes to zero.
     this.views.battle.classList.toggle('view-off', view !== 'battle');

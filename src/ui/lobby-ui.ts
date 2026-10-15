@@ -58,17 +58,21 @@ export class LobbyUI {
   private hero(id: string): HeroDefinition { return starred(this.heroes.find(h => h.id === id)!, this.view!.profile.members[id]?.stars ?? 1, this.map); }
   private stars(n: number): string { return starRow(n, this.map.company.maxStars); }
 
+  private toastShown = '';
   private draw(): void {
     const p = this.view!.profile; const last = p.last;
     const tab = (id: 'team' | 'hire', label: string) => `<button id="lobby-tab-${id}" data-lobby="tab" data-tab="${id}" role="tab" aria-selected="${this.tab === id}" class="${this.tab === id ? 'active' : ''}">${label}</button>`;
     const ready = p.party.deployed.length > 0;
+    // A notice toasts once; redraws (tab switches, picks) keep it settled instead of replaying it.
+    const notice = last ? `${last.outcome}:${last.steps}:${last.ore}:${p.expeditions}` : this.view!.message;
+    const toast = notice && notice !== this.toastShown ? 'toast-new' : 'toast-seen'; this.toastShown = notice;
     this.root.innerHTML = `<div class="lobby-shell">
       <header class="lobby-header glass-capsule"><button data-lobby="home" class="round-glass" aria-label="กลับหน้าแรก">${icon('left')}</button>
         ${p.commander ? commanderBadge(p.commander) : ''}<div><p class="eyebrow">ค่ายทหารรับจ้าง · ผู้บัญชาการ</p><h1 id="lobby-commander">${p.commander ? this.escape(p.commander.name) : 'เตรียมทีมก่อนออกเดินทาง'}</h1></div>
         <div class="lobby-bank" aria-label="คลัง แร่ดาว ${p.bank.ore} ตราสัญญา ${p.bank.seal}"><span>${icon('ore')}<b>${p.bank.ore}</b></span><span>${icon('seal')}<b>${p.bank.seal}</b></span></div></header>
       ${this.scene(p)}
-      ${last ? `<p class="lobby-result glass-capsule" data-outcome="${last.outcome}" role="status">${icon(last.outcome === 'wiped' ? 'danger' : last.outcome === 'complete' ? 'star' : 'camp')}<span><b>${outcomeText[last.outcome]}</b> · เดิน ${last.steps} ก้าว ชนะ ${last.wins} ศึก · ได้แร่ดาว ${last.ore}${last.seal ? ` ตราสัญญา ${last.seal}` : ''}${last.outcome === 'wiped' ? ' (เก็บได้ครึ่งเดียว)' : ''}</span></p>`
-        : this.view!.message ? `<p class="lobby-result glass-capsule" role="status"><span>${this.view!.message}</span></p>` : ''}
+      ${last ? `<p class="lobby-result glass-capsule ${toast}" data-outcome="${last.outcome}" role="status">${icon(last.outcome === 'wiped' ? 'danger' : last.outcome === 'complete' ? 'star' : 'camp')}<span><b>${outcomeText[last.outcome]}</b> · เดิน ${last.steps} ก้าว ชนะ ${last.wins} ศึก · ได้แร่ดาว ${last.ore}${last.seal ? ` ตราสัญญา ${last.seal}` : ''}${last.outcome === 'wiped' ? ' (เก็บได้ครึ่งเดียว)' : ''}</span></p>`
+        : this.view!.message ? `<p class="lobby-result glass-capsule ${toast}" role="status"><span>${this.view!.message}</span></p>` : ''}
       <section class="lobby-panel">
         <div class="camp-tabs lobby-tabs" role="tablist" aria-label="ค่าย">${tab('team', `ทีม <small>${p.company.length}/${COMPANY_CAP}</small>`)}${tab('hire', 'จ้าง')}</div>
         <div class="lobby-content" role="tabpanel">${this.tab === 'team' ? this.team(p) : this.board(p)}</div>
@@ -111,7 +115,8 @@ export class LobbyUI {
       <h3>${icon('rest')} ในค่าย <span class="camp-embers">ไม่ได้เข้าด่านรอบนี้</span></h3>
       <div class="team-grid bench">${bench.map((id, i) => this.card(p, id, 'bench', i)).join('')}${this.picked && groupOf(p, this.picked) !== 'bench' ? this.card(p, undefined, 'bench', bench.length) : ''}${!bench.length && !this.picked ? '<p class="camp-note">ทุกคนอยู่ในทีมที่จะพาไปแล้ว</p>' : ''}</div>
       ${this.picked ? this.memberPanel(p, this.picked) : ''}
-      <p class="camp-note" id="lobby-hint">${this.picked ? `เลือก${heroText[this.picked]!.name}แล้ว · แตะคนหรือช่องว่างในกลุ่มอื่นเพื่อสลับ แตะซ้ำเพื่อยกเลิก` : 'แตะสมาชิกเพื่อดูการอัปดาว หรือแตะต่อที่กลุ่มอื่นเพื่อจัดทีม'}</p>`;
+      ${this.picked ? `<p class="camp-note picked-hint" id="lobby-hint">เลือก${heroText[this.picked]!.name}แล้ว · แตะคนหรือช่องว่างในกลุ่มอื่นเพื่อสลับ แตะซ้ำเพื่อยกเลิก</p>`
+        : `<details class="lobby-help" id="lobby-hint"><summary>${icon('info')} วิธีจัดทีม</summary><p>แตะสมาชิกเพื่อดูการอัปดาว หรือแตะต่อที่กลุ่มอื่นเพื่อสลับและจัดทีม</p></details>`}`;
   }
   private memberPanel(p: Profile, id: string): string {
     const m = p.members[id]!; const cost = upgradeCost(p, this.map, id); const reason = upgradeReason(p, this.map, id);
@@ -133,6 +138,6 @@ export class LobbyUI {
         return `<li class="${reason === 'taken' ? 'taken' : ''}">${portrait(id)}<span><b>${text.name}</b><small>${text.role} · ${h.lane === 'front' ? 'แนวหน้า' : 'แนวหลัง'} · ${text.help}</small><small class="hire-status">${status}</small></span>
           <button id="hire-${i}" data-lobby="hire" data-index="${i}" class="secondary"${reason ? ' disabled' : ''} aria-label="จ้าง${text.name} ใช้แร่ดาว ${this.map.company.hireCost}">${reason ? why[reason] ?? 'จ้างไม่ได้' : `จ้าง · ${this.map.company.hireCost}`}</button></li>`;
       }).join('')}</ul>
-      <p class="camp-note">ทุกคนเริ่ม ★1 · จ้างคนที่มีอยู่แล้วจะได้ตัวซ้ำไว้อัปดาวในแท็บทีม · ป้ายเปลี่ยนใหม่ทุกครั้งที่กลับจากการเดินทาง</p>`;
+      <details class="lobby-help"><summary>${icon('info')} วิธีจ้างและอัปดาว</summary><p>ทุกคนเริ่ม ★1 · จ้างคนที่มีอยู่แล้วจะได้ตัวซ้ำไว้อัปดาวในแท็บทีม · ป้ายเปลี่ยนใหม่ทุกครั้งที่กลับจากการเดินทาง</p></details>`;
   }
 }
