@@ -1,0 +1,11 @@
+# Style check
+
+- References: unchanged units.webp, portraits.webp, title_bg.webp, landmark_camp.webp, the Luminous Veil guide and current phone/desktop lobby validation captures. Mercenary references are the accepted units_mercs.webp masters.
+- Hero identity: Aegis retains blond hair, blue eyes, blue/gold armor, blue shield and sword. Lyra retains red hair, red cape, black/gold armor and red sword. Eira retains silver hair, violet eyes, purple witch hat/dress and violet staff. Seren retains brown hair, green eyes, green/white/gold robes, leaf ornaments and emerald staff.
+- Activities: shield polishing, sword twirl, floating blank book and healing light. Sit poses include a log with resting equipment; cheer poses use a friendly wave. Mercenaries retain spear/buckler, bow/quiver, goggles/glasses/vials, scarf/daggers, heavy hammer and coral lute identities.
+- Treatment: heroic chibi, compact 2.5–3-head proportions, fine dark contours, cel shading softened by gradients, warm edge light. Amber foreground, violet-blue dusk, cyan waterfall accents, teal/gold tents and navy/champagne HUD boundary outlines follow the supplied palette.
+- All stored frames look right. Mirror pairs were reviewed for all thirty poses. There is no text, asymmetric lettering or logo that reverses incorrectly. Handedness changes are allowed. In both actual-size viewport compositions Eira and Seren are reflected toward the central flame.
+- Silhouettes retain shields, capes, hats, staffs and weapons at 90px. Masters and new poses appear on an equal frame grid in the lineup. The runtime alpha has no painted ground or cast shadow; small magical light is intentional. Foreground props occupy only the bottom 12%.
+- Review images contain only requested art, flame placeholder and thin HUD region outlines, without text or painted interactive controls. No new NPC, pet or companion.
+
+Limits for intake: fine costume filigree is generated raster detail, not an exact tracing of each gold ornament. Full-size runtime texture is softer than lossless PNG because of the shared 1.6MB budget; the actual runtime WebPs are used for all review sheets. The scene is a static illustration and the flame is deliberately absent from runtime art. Mockups document composition, not implemented UI. NOTES.md documents encoding and source hashes.

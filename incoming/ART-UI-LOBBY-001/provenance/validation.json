@@ -1,0 +1,174 @@
+{
+  "runtime_bytes": 1200288,
+  "images": {
+    "poses/lobby_poses_heroes.png": {
+      "bytes": 4087108,
+      "size": [
+        1536,
+        2048
+      ],
+      "mode": "RGBA"
+    },
+    "poses/lobby_poses_heroes.webp": {
+      "bytes": 408506,
+      "size": [
+        1536,
+        2048
+      ],
+      "mode": "RGBA"
+    },
+    "poses/lobby_poses_mercs.png": {
+      "bytes": 5521124,
+      "size": [
+        1536,
+        3072
+      ],
+      "mode": "RGBA"
+    },
+    "poses/lobby_poses_mercs.webp": {
+      "bytes": 489228,
+      "size": [
+        1536,
+        3072
+      ],
+      "mode": "RGBA"
+    },
+    "review/lobby-desktop.png": {
+      "bytes": 354110,
+      "size": [
+        1366,
+        768
+      ],
+      "mode": "RGBA"
+    },
+    "review/lobby-phone.png": {
+      "bytes": 189828,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGBA"
+    },
+    "review/mercs-mirror-check.png": {
+      "bytes": 1602589,
+      "size": [
+        1080,
+        1080
+      ],
+      "mode": "RGBA"
+    },
+    "review/mirror-check.png": {
+      "bytes": 1532498,
+      "size": [
+        1320,
+        880
+      ],
+      "mode": "RGBA"
+    },
+    "review/poses-lineup.png": {
+      "bytes": 1275375,
+      "size": [
+        960,
+        960
+      ],
+      "mode": "RGBA"
+    },
+    "review/silhouettes.png": {
+      "bytes": 56990,
+      "size": [
+        1320,
+        110
+      ],
+      "mode": "RGBA"
+    },
+    "scene/lobby_bg.png": {
+      "bytes": 3724806,
+      "size": [
+        2400,
+        1000
+      ],
+      "mode": "RGB"
+    },
+    "scene/lobby_bg.webp": {
+      "bytes": 255120,
+      "size": [
+        2400,
+        1000
+      ],
+      "mode": "RGB"
+    },
+    "scene/lobby_fg.png": {
+      "bytes": 100843,
+      "size": [
+        2400,
+        1000
+      ],
+      "mode": "RGBA"
+    },
+    "scene/lobby_fg.webp": {
+      "bytes": 35796,
+      "size": [
+        2400,
+        1000
+      ],
+      "mode": "RGBA"
+    },
+    "scene/lobby_firepit.png": {
+      "bytes": 74966,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "scene/lobby_firepit.webp": {
+      "bytes": 11638,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "provenance/generated/exec-53a687e1-f03a-454f-8563-a0c3aad274cb.png": {
+      "bytes": 2907597,
+      "size": [
+        1086,
+        1448
+      ],
+      "mode": "RGBA"
+    },
+    "provenance/generated/exec-7a5eab89-b273-4b6d-ab08-a724732bdf03.png": {
+      "bytes": 495642,
+      "size": [
+        1942,
+        809
+      ],
+      "mode": "RGBA"
+    },
+    "provenance/generated/exec-90072eb2-157b-430b-9e03-5119fbf80b1a.png": {
+      "bytes": 2708923,
+      "size": [
+        1920,
+        819
+      ],
+      "mode": "RGB"
+    },
+    "provenance/generated/exec-9491dbb1-5cb5-4d67-93b7-bb7d7a679430.png": {
+      "bytes": 2916506,
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA"
+    },
+    "provenance/generated/exec-c342cb7a-14d3-42f8-942f-12317616fda7.png": {
+      "bytes": 1253657,
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA"
+    }
+  },
+  "protected_hashes_unchanged": true
+}
