@@ -1,4 +1,4 @@
-import type { ActionId, BattleEntry, HeroDefinition, BattleEvent, BattleState, Command, EncounterDefinition, Intent, Resolution, TargetOption, TurnSlot, TurnStage } from './types';
+import type { ActionId, BattleEntry, HeroDefinition, HeroState, EnemyState, BattleEvent, BattleState, Command, EncounterDefinition, Intent, Resolution, TargetOption, TurnSlot, TurnStage } from './types';
 
 const living = (state: BattleState, id: string) => [...state.heroes, ...state.enemies].some(a => a.id === id && a.hp > 0);
 const definitions = (data: EncounterDefinition) => [...data.heroes, ...data.enemies];
@@ -18,6 +18,9 @@ export function currentHeroId(state: BattleState, data: EncounterDefinition): st
 // Every hero hit on a corroded enemy gains the flat corrode bonus.
 export const corrodeBonus = (state: BattleState, data: EncounterDefinition, enemyId: string): number =>
   (state.enemies.find(e => e.id === enemyId)?.corrodedUntil ?? 0) > state.round ? data.rules.corrodeBonus : 0;
+// A scout's ambush strikes harder at an enemy that still has its turn ahead in the current round.
+export const ambushBonus = (state: BattleState, data: EncounterDefinition, enemyId: string): number =>
+  state.order.indexOf(enemyId) > state.turnIndex ? data.rules.ambushBonus : 0;
 // Skill power as cast by this hero (stars add a percentage).
 export function skillPower(data: EncounterDefinition, heroId: string, action: ActionId): number {
   const bonus = data.heroes.find(h => h.id === heroId)?.skillBonus ?? 0;
@@ -76,7 +79,23 @@ function finishOrAdvance(state: BattleState, data: EncounterDefinition, events: 
   } while (!living(state, state.order[state.turnIndex]!));
   if (state.guard && (!living(state, state.guard.heroId) || !living(state, state.guard.sourceId) || currentActorId(state) === state.guard.heroId)) state.guard = null;
   if (state.counter && (!living(state, state.counter.heroId) || currentActorId(state) === state.counter.heroId)) state.counter = null;
+  for (const h of state.heroes) if (h.evading && (h.hp <= 0 || currentActorId(state) === h.id)) delete h.evading;
   refreshIntent(state, data);
+}
+function hit(state: BattleState, data: EncounterDefinition, enemy: EnemyState, intent: Intent, recipient: HeroState, incoming: number, events: BattleEvent[]): void {
+  const actorId = enemy.id;
+  const absorbed = Math.min(recipient.barrier, incoming); recipient.barrier -= absorbed;
+  const amount = Math.min(recipient.hp, incoming - absorbed); recipient.hp -= amount;
+  events.push({ type: 'damage', sourceId: actorId, targetId: recipient.id, amount, absorbed, text: 'Enemy attacks on its own turn.' });
+  if (!recipient.hp) events.push({ type: 'down', targetId: recipient.id, text: 'Hero falls.' });
+  // A braced spear answers the first physical hit on any front-lane ally while it stands.
+  const brace = state.counter;
+  if (brace && intent.kind === 'physical' && living(state, brace.heroId) && data.heroes.find(h => h.id === recipient.id)!.lane === 'front') {
+    const power = skillPower(data, brace.heroId, 'brace') + corrodeBonus(state, data, actorId); const dealt = Math.min(enemy.hp, power); enemy.hp -= dealt;
+    events.push({ type: 'counter', sourceId: brace.heroId, targetId: actorId, amount: dealt, text: 'Braced spear counters.' });
+    if (!enemy.hp) events.push({ type: 'down', targetId: actorId, text: 'Enemy falls.' });
+    state.counter = null;
+  }
 }
 function automaticTurns(state: BattleState, data: EncounterDefinition, turns: TurnStage[]): void {
   while (state.outcome === 'active' && !currentHeroId(state, data)) {
@@ -91,19 +110,11 @@ function automaticTurns(state: BattleState, data: EncounterDefinition, turns: Tu
       } else {
         const guard = state.guard?.sourceId === actorId && state.guard.targetId === intent.targetId && living(state, state.guard.heroId) ? state.guard : null;
         const recipient = state.heroes.find(h => h.id === (guard?.heroId ?? intent.targetId))!;
-        const incoming = guard ? Math.ceil(intent.damage * (1 - data.rules.guardReduction)) : intent.damage;
-        const absorbed = Math.min(recipient.barrier, incoming); recipient.barrier -= absorbed;
-        const amount = Math.min(recipient.hp, incoming - absorbed); recipient.hp -= amount;
-        events.push({ type: 'damage', sourceId: actorId, targetId: recipient.id, amount, absorbed, text: 'Enemy attacks on its own turn.' });
-        if (!recipient.hp) events.push({ type: 'down', targetId: recipient.id, text: 'Hero falls.' });
-        // A braced spear answers the first physical hit on any front-lane ally while it stands.
-        const brace = state.counter;
-        if (brace && intent.kind === 'physical' && living(state, brace.heroId) && data.heroes.find(h => h.id === recipient.id)!.lane === 'front') {
-          const power = skillPower(data, brace.heroId, 'brace') + corrodeBonus(state, data, actorId); const hit = Math.min(enemy.hp, power); enemy.hp -= hit;
-          events.push({ type: 'counter', sourceId: brace.heroId, targetId: actorId, amount: hit, text: 'Braced spear counters.' });
-          if (!enemy.hp) events.push({ type: 'down', targetId: actorId, text: 'Enemy falls.' });
-          state.counter = null;
-        }
+        if (recipient.evading) {
+          // A scout's shadow step: the whole hit misses, so nothing is absorbed and no counter triggers.
+          delete recipient.evading;
+          events.push({ type: 'dodge', sourceId: actorId, targetId: recipient.id, amount: 0, text: 'The attack misses the evading scout.' });
+        } else hit(state, data, enemy, intent, recipient, guard ? Math.ceil(intent.damage * (1 - data.rules.guardReduction)) : intent.damage, events);
       }
       if (state.guard?.sourceId === actorId) state.guard = null;
     }
@@ -111,7 +122,7 @@ function automaticTurns(state: BattleState, data: EncounterDefinition, turns: Tu
     const frame = structuredClone(state); const beat = state.beat; const round = state.round;
     finishOrAdvance(state, data, events);
     if (state.outcome !== 'active') { frame.outcome = state.outcome; frame.intent = null; }
-    turns.push({ actorId, side: 'enemy', beat, round, intent, targetId: events.find(e => e.type === 'damage')?.targetId ?? intent?.targetId, state: frame, events });
+    turns.push({ actorId, side: 'enemy', beat, round, intent, targetId: events.find(e => e.type === 'damage' || e.type === 'dodge')?.targetId ?? intent?.targetId, state: frame, events });
   }
 }
 export function entryReason(data: EncounterDefinition, entry?: BattleEntry): string {
@@ -157,8 +168,9 @@ export function targetOptions(state: BattleState, data: EncounterDefinition, her
     const reason = unavailable || (!state.enemies.some(e => e.hp > 0) ? 'This enemy is down.' : '');
     return [{ id: 'enemies', name: 'Enemies', valid: !reason, reason }];
   }
-  if (action === 'brace') {
-    const reason = unavailable || (state.counter?.heroId === heroId ? 'Already braced.' : '');
+  if (action === 'brace' || action === 'evade') {
+    // Both are self-only; a shadow step always lapses at the scout's own turn, so it cannot stack either.
+    const reason = unavailable || (action === 'brace' && state.counter?.heroId === heroId ? 'Already braced.' : '');
     return [{ id: heroId, name: data.heroes.find(h => h.id === heroId)?.name ?? heroId, valid: !reason, reason }];
   }
   if (action === 'haste') return data.heroes.map(h => {
@@ -220,6 +232,8 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
       break;
     }
     case 'bolt': case 'pierce': damage(skill.power); break;
+    case 'ambush': damage(skill.power + ambushBonus(state, data, enemy!.id)); break;
+    case 'evade': actor.evading = true; events.push({ type: 'evade', sourceId: hero.id, targetId: hero.id, text: 'Scout evades the next hit until its next turn.' }); break;
     case 'hinder': {
       damage(skill.power);
       if (enemy!.hp > 0) { enemy!.delayedRound = state.round + 1; events.push({ type: 'delay', sourceId: hero.id, targetId: enemy!.id, text: 'Enemy acts last next round.' }); }

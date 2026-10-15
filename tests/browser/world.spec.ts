@@ -8,6 +8,8 @@ import { boardOffers, newProfile } from '../../src/core/world/profile';
 import type { Commander, Profile } from '../../src/core/world/types';
 const commander: Commander = { name: 'อารี', crest: 'star', color: 'gold' };
 import { battleLesson } from '../../src/ui/tutorial';
+import { watchPage } from './diagnostics';
+test.beforeEach(({ page }) => watchPage(page));
 
 const key = 'asterveil.fateweave.expedition.v1';
 const full = { guardian: 76, tracer: 56, weaver: 48, healer: 46 };
@@ -256,6 +258,43 @@ test('Toma (alchemist) hastes an ally by tapping them; the SPD queue puts that a
   expect(order.slice(0, 4)).toEqual(['guardian', 'brute', 'healer', 'healer']);
   await page.screenshot({ path: info.outputPath('toma-haste.png') });
   expect((await saved(page)).battle!.commands.map(c => c.action)).toEqual(['attack', 'haste']);
+  expect(issues).toEqual([]);
+});
+
+test('Sefa (scout) steps aside: the announced slash at her misses and the intent panel says so', async ({ page }, info) => {
+  const roster = { deployed: ['tracer', 'sefa', 'weaver', 'healer'], reserve: [] as string[] };
+  const members = Object.fromEntries(roster.deployed.map(id => [id, { stars: 1, dupes: 0 }]));
+  const run = { ...newExpedition(map, encounterById, 34, { roster, members }, true) }; reveal(run, map);
+  run.battle = { kind: 'random', encounterId: 'veil-siege', entry: { ...run.hp }, commands: [] };
+  const profile = { ...newProfile(map, 5), tutorialDone: true, commander, company: ['guardian', 'tracer', 'weaver', 'healer', 'sefa'], members: { ...newProfile(map, 5).members, sefa: { stars: 1, dupes: 0 } }, party: roster };
+  await seed(page, run, profile);
+  const issues: string[] = []; page.on('pageerror', e => issues.push(e.message));
+  await page.goto('./'); await page.locator('#continue').click(); await page.locator('#start').click();
+  await page.locator('#action-attack').click(); await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-raider').click(); await finishPlayback(page);
+  await expect(page.locator('#hero-sefa')).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator('#hero-sefa .portrait img')).toHaveAttribute('src', /portraits_mercs\.webp$/);
+  await page.locator('#action-ambush').click(); await expect(page.locator('#skill-popover')).toContainText('ยังไม่ได้ลงมือในรอบนี้');
+  await page.locator('#action-evade').click(); await expect(page.locator('#skill-popover')).toContainText('จะพลาดทั้งหมด');
+  await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-sefa').click();
+  await expect(page.locator('#intent')).toContainText('การโจมตีนี้พลาด');
+  await page.screenshot({ path: info.outputPath('sefa-dodge.png') });
+  await finishPlayback(page);
+  await expect(page.locator('#hero-sefa')).toContainText('54 / 54');
+  expect((await saved(page)).battle!.commands.map(c => c.action)).toEqual(['attack', 'evade']);
+  expect(issues).toEqual([]);
+});
+
+test('new Veil Frontier foes fight with their own art: Mycon and the elite Thorn Matriarch', async ({ page }, info) => {
+  const run = { ...newExpedition(map, encounterById, 35, undefined, true) }; reveal(run, map);
+  run.battle = { kind: 'random', encounterId: 'thicket-ambush', entry: { ...run.hp }, commands: [] };
+  await seed(page, run, { ...newProfile(map, 5), tutorialDone: true, commander });
+  const issues: string[] = []; page.on('pageerror', e => issues.push(e.message));
+  await page.goto('./'); await page.locator('#continue').click(); await page.locator('#start').click();
+  await expect(page.locator('[data-enemy=brute]')).toContainText('ราชินีหนาม'); await expect(page.locator('[data-enemy=raider]')).toContainText('เห็ดหมอผีกลวง');
+  await expect(page.locator('[data-enemy=brute] .portrait img')).toHaveAttribute('src', /portraits_foes\.webp$/);
+  await expect(page.locator('[data-enemy=brute] .portrait')).toHaveAttribute('data-actor', 'foe_matriarch');
+  await expect(page.locator('#intent')).toContainText('คำสาปสปอร์');
+  await page.screenshot({ path: info.outputPath('foes-thicket.png') });
   expect(issues).toEqual([]);
 });
 

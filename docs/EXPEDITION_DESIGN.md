@@ -18,7 +18,7 @@ Approved 2026-10-14, re-planned 2026-10-15 for the mercenary roster.
 | 2C-1. Company | Hiring board, duplicates, star upgrades (stats), dismissal | **Implemented** (moved to the lobby in L1) |
 | L1. Lobby | Home → Lobby → Map; persistent profile (company ≤ 20, bank, board); choose the 4 + 4; withdraw/complete/wipe settle home | **Implemented** |
 | L2. Character creation | Commander (non-combat) name, crest and banner colour, once, between Home and Lobby | **Implemented** |
-| 2C-2. New classes | Six new mercenaries (ART-CHAR-MERC-ENEMY-001), one class mechanic at a time; ★3 skill and ★5 passive per class | **In progress**: 3/6 (Garran spear, Mira archer, Toma alchemist) |
+| 2C-2. New classes | Six new mercenaries (ART-CHAR-MERC-ENEMY-001), one class mechanic at a time; ★3 skill and ★5 passive per class | **In progress**: 4/6 (Garran spear, Mira archer, Toma alchemist, Sefa scout) |
 | 2D. Equipment and level | Equipment (weapon by class, body, accessory; rarity and affixes; bad-luck protection), shared EXP/level, consumables on the map | Planned |
 | 3. Choices and content | Events with fight/avoid choices, elites, mini boss, puzzles (rune order, push stone, lever), secrets, map quest "2 of 3" and side quests | Planned |
 | 4. Economy and wrap-up | Local gold and shop, salvage, fast travel between camps, elite respawn on rest, defeat penalty, whole-map balance simulation, completion screen | Planned |
@@ -227,6 +227,39 @@ Elites (phase 3) will add guaranteed seals.
 - **Evidence:** the advisor wins every encounter with Toma replacing either back-liner. Tests cover the corrosion window and bonus, haste ordering for one round only, the no-stacking rule, and replay/preview equality.
 - **Art:** his own frame and portrait from ART-CHAR-MERC-ENEMY-001.
 - **Version bumps:** veil-siege 9, rear-ambush 7, rift-warden 7, the rest 5.
+
+**4. Sefa — Scout (front, SPD 115, HP 54, Attack 12).** Her mechanic is striking before the enemy moves and stepping out of a hit.
+- **จู่โจมก่อน (Ambush)**, cooldown 2: 12 damage, plus `ambushBonus` (+12) when the target still has its turn ahead in the current round (its place in the frozen queue comes after hers). The SPD queue shows who that is.
+- **ก้าวเงา (Shadow Step)**, cooldown 3, targets herself.
+  - The first enemy hit aimed at Sefa before her next turn misses completely, physical or energy (`HeroState.evading`).
+  - A missed hit is not a hit: no barrier is spent and a braced spear keeps its counter.
+  - A Guard redirect lands on the Knight instead, so the step stays ready.
+  - It lapses when her own turn returns, and it ends if she falls.
+  - The intent panel shows "การโจมตีนี้พลาด" with 0 damage, and the field floats "หลบ!".
+- **Advisor:** shadow step when the announced hit aims at her; otherwise ambush an enemy that has not acted yet this round.
+- **Evidence:** the advisor wins every encounter with Sefa replacing either front-liner. Tests cover the ambush bonus window (including a slower scout), the dodge, the lapse, the kept spear counter, and replay/preview equality.
+- **Art:** her own frame and portrait from ART-CHAR-MERC-ENEMY-001.
+- **Version bumps** (with the new foes below): veil-siege 10, rear-ambush 8, rift-warden 8, the rest 6; crystal-stampede is new at 1.
+
+## Veil Frontier foes in battle (ART-CHAR-MERC-ENEMY-001)
+
+- Enemy ids remain the two **field positions**: `raider` (back, normal size) and `brute` (front, large). `EnemyDefinition.art` picks the illustrated frame. Without it, the original Raider/Brute frames are shown (the teaching battle and veil-siege keep them).
+- Physical-looking foes use physical moves and energy-looking foes energy moves. The elite and mini-boss art may mix both.
+- HP, SPD, damage and target slots are unchanged except where noted, so the balance evidence carries over.
+
+| Encounter (zone) | Foes (art) | Moves |
+|---|---|---|
+| scout-patrol → "ภูตเมล็ดลม" (meadow) | Dandelion Sprite (`foe_sprite`) | Seed Spark, all energy (was a mix) |
+| rift-whelp → "หมูป่าหลังตะไคร่" (meadow, thicket) | Mossback Tusker (`foe_tusker`) | Tusk Charge, all physical, aimed at slots 1/0/1 |
+| shadow-stalker → "ลิงซ์หนามพราง" (thicket) | Briar Stalker (`foe_stalker`) | Thorn Pounce, all physical, aimed at slots 1/0/1 |
+| thicket-ambush → "ราชินีแห่งพงหนาม" (thicket) | Hollow Mycon (`foe_mycon`) + Thorn Matriarch (`foe_matriarch`, elite art) | Mycon Spore Hex (energy); Matriarch Thorn Bloom (energy) and Briar Lash (physical) |
+| rear-ambush (scar) | Rift Weaver (`foe_riftweaver`) + the original Rift Channeler | Weaver Rune Lash (energy) and one Ribbon Snare (physical, Bash can stop it) |
+| **crystal-stampede** (scar, new, weight 1, replaces thicket-ambush in the scar pool) | Shard Golem (`foe_golem`, 100 HP, SPD 75) + Crystal Juggernaut (`foe_juggernaut`, elite art, 180 HP, SPD 60) | Crystal Fist 16/18/16 (physical); Horn Charge 24/26 (physical) and Shard Burst 22 (energy) |
+| rift-warden (boss) | Veilbound Sentinel (`foe_sentinel`, mini-boss art) | unchanged |
+
+- Elite and mini-boss **rules** (tougher stats, rewards, map placement) remain phase 3. Only their art is in use now.
+- **Matriarch facing:** she was delivered facing right. The runtime atlas mirrors her frame and portrait so she faces the party.
+- **Evidence:** the advisor wins all nine encounters from 60% HP and with every new class swapped in. Both scripted rear-ambush plans still win. The full-expedition run still reaches the goal.
 
 ## L2 rules: commander creation
 

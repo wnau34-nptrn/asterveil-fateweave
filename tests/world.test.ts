@@ -6,7 +6,7 @@ import { clearLegacySaves, expeditionKey, legacyKeys, loadGame, parseGame, saveG
 import { boardOffers, commanderReason, createCommander, departure, dismiss, dismissReason, groupOf, hire, hireReason, newProfile, placeMember, settle, upgrade, upgradeCost, upgradeReason } from '../src/core/world/profile';
 import type { Direction, ExpeditionState, Point, Profile } from '../src/core/world/types';
 import { atMuster, heroCatalog, battleData, battleState, canOpenChest, memberDef, moveMember, swapMembers, canRest, canRevive, chestAt, encounterChance, findTiles, finishBattle, isRevealed, move, newExpedition, openChest, recordBattle, rest, revive, rollPercent, startOf, tileAt } from '../src/core/world/world';
-import { actorArt } from '../src/game/visuals/assets';
+import { actorArt, artOf } from '../src/game/visuals/assets';
 import { battleLesson } from '../src/ui/tutorial';
 
 const lookup = encounterById;
@@ -236,7 +236,9 @@ describe('lobby profile', () => {
     expect(skillPower(data, 'guardian', 'bash')).toBe(21); expect(skillPower(data, 'tracer', 'execute')).toBe(28);
   });
   it('offers a fixed board per return; hiring a company member stores a duplicate; a new one joins the reserve', () => {
+    // The board refreshes per return; find one whose first offer is already in the company.
     let p = rich({ bank: { ore: 100, seal: 0 } });
+    while (!p.members[boardOffers(p, map, lookup)[0]!] && p.returns < 50) p = { ...p, returns: p.returns + 1 };
     const offers = boardOffers(p, map, lookup);
     expect(offers).toHaveLength(3); expect(new Set(offers).size).toBe(3); expect(boardOffers(p, map, lookup)).toEqual(offers);
     const r = hire(p, map, lookup, 0);
@@ -423,8 +425,11 @@ describe('game save', () => {
 
 describe('character art', () => {
   it('maps every hireable mercenary and every encounter enemy to its own illustrated frame', () => {
-    const ids = [...heroCatalog(lookup, map).map(h => h.id), ...encounters.flatMap(e => e.enemies.map(x => x.id))];
+    const ids = [...heroCatalog(lookup, map).map(h => h.id), ...encounters.flatMap(e => e.enemies.map(x => artOf(e, x.id)))];
     for (const id of new Set(ids)) expect(actorArt[id], id).toBeDefined();
+    // All nine Veil Frontier foes fight somewhere, and every random pool entry exists.
+    expect(Object.keys(actorArt).filter(k => k.startsWith('foe_')).every(k => ids.includes(k))).toBe(true);
+    for (const zone of map.zones) for (const p of zone.pool) expect(encounterById(p.encounterId), p.encounterId).toBeDefined();
     const used = Object.values(actorArt).map(a => `${a.sheet}:${a.frame}`);
     expect(new Set(used).size).toBe(used.length);
   });

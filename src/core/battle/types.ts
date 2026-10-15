@@ -1,4 +1,4 @@
-export type ActionId = 'attack' | 'guard' | 'bash' | 'mark' | 'execute' | 'bolt' | 'ward' | 'heal' | 'prayer' | 'brace' | 'pierce' | 'hinder' | 'volley' | 'acid' | 'haste';
+export type ActionId = 'attack' | 'guard' | 'bash' | 'mark' | 'execute' | 'bolt' | 'ward' | 'heal' | 'prayer' | 'brace' | 'pierce' | 'hinder' | 'volley' | 'acid' | 'haste' | 'ambush' | 'evade';
 export type Outcome = 'active' | 'victory' | 'defeat';
 export interface SkillDefinition { name: string; english: string; icon: string; power: number; cooldown: number }
 export interface HeroDefinition {
@@ -7,7 +7,8 @@ export interface HeroDefinition {
   // Percent added to this hero's skill power (stars). Attack and max HP are scaled directly.
   skillBonus?: number;
 }
-export interface EnemyDefinition { id: string; name: string; displayName?: string; maxHp: number; speed: number; color: number }
+// `id` is the field position (`raider` back, `brute` front/large); `art` names the illustrated frame (presentation only).
+export interface EnemyDefinition { id: string; name: string; displayName?: string; maxHp: number; speed: number; color: number; art?: string }
 // Enemy moves aim at a party slot (0-3 in deployment order), not a named hero, so any
 // mercenary in that slot is the target. The resolved hero id is stored on Intent.
 export interface IntentDefinition { sourceId: string; targetSlot: number; name: string; damage: number; kind: 'physical' | 'energy' }
@@ -16,11 +17,13 @@ export interface EncounterDefinition {
   heroes: readonly HeroDefinition[]; enemies: readonly EnemyDefinition[]; intents: readonly IntentDefinition[];
   skills: Record<ActionId, SkillDefinition>;
   // corrode*: alchemist acid adds a flat bonus to every hero hit on the target for corrodeDuration rounds.
-  rules: { guardReduction: number; markDuration: number; markedBonus: number; corrodeDuration: number; corrodeBonus: number };
+  // ambushBonus: scout ambush adds this when the target has not acted yet this round.
+  rules: { guardReduction: number; markDuration: number; markedBonus: number; corrodeDuration: number; corrodeBonus: number; ambushBonus: number };
 }
 // Expiry/cooldown values are absolute round numbers, never animation time.
 // `hastedRound`: an alchemist's haste makes this hero act before everyone in that round.
-export interface HeroState { id: string; hp: number; barrier: number; cooldowns: Partial<Record<ActionId, number>>; hastedRound?: number }
+// `evading`: a scout's shadow step; the first enemy hit on this hero before its next turn misses.
+export interface HeroState { id: string; hp: number; barrier: number; cooldowns: Partial<Record<ActionId, number>>; hastedRound?: number; evading?: boolean }
 // `delayedRound`: an archer's hindering shot sends this enemy to the end of that round's queue.
 export interface EnemyState { id: string; hp: number; markedUntil: number; interruptedRound?: number; delayedRound?: number; corrodedUntil?: number }
 export interface Intent extends IntentDefinition { targetId: string; beat: number; round: number }
@@ -35,7 +38,7 @@ export interface BattleState {
   counter: { heroId: string } | null;
 }
 export interface BattleEvent {
-  type: 'damage' | 'guard' | 'mark' | 'barrier' | 'heal' | 'interrupt' | 'cancel' | 'down' | 'outcome' | 'brace' | 'counter' | 'delay' | 'corrode' | 'haste';
+  type: 'damage' | 'guard' | 'mark' | 'barrier' | 'heal' | 'interrupt' | 'cancel' | 'down' | 'outcome' | 'brace' | 'counter' | 'delay' | 'corrode' | 'haste' | 'evade' | 'dodge';
   text: string; sourceId?: string; targetId?: string; amount?: number; absorbed?: number; cause?: 'defeated' | 'interrupted';
 }
 // One frame per real actor turn. Only Resolution.state is committed/saved.

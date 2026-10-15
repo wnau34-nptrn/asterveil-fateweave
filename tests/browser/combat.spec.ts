@@ -9,6 +9,8 @@ import { newExpedition } from '../../src/core/world/world';
 import type { BattleKind } from '../../src/core/world/types';
 import { offensive, guided, partyRoutes, type Move } from '../fixtures/party-routes';
 import { encounterRoutes } from '../fixtures/encounter-routes';
+import { watchPage } from './diagnostics';
+test.beforeEach(({ page }) => watchPage(page));
 const key='asterveil.fateweave.expedition.v1';
 const full={guardian:76,tracer:56,weaver:48,healer:46};
 function simulate(data:EncounterDefinition,moves:readonly Move[],entry?:BattleEntry){let s=createBattle(data,entry);for(const [heroId,action,targetId]of moves)s=resolveCommand(s,data,{beat:s.beat,heroId,action,targetId}).state;return s;}

@@ -28,7 +28,7 @@ main { max-width: 1240px; margin: auto; padding: 0 max(16px, env(safe-area-inset
 #game { width: 100%; height: 100%; }
 #game canvas { display: block; }
 .portrait { position: relative; display: block; width: 100%; aspect-ratio: 1; overflow: hidden; border-radius: 7px; background: #081628; }
-.portrait > img { position: absolute; width: 200%; height: 300%; max-width: none; left: calc(var(--portrait-x) * -100%); top: calc(var(--portrait-y) * -100%); }
+.portrait > img { position: absolute; width: 200%; height: calc(var(--portrait-rows, 3) * 100%); max-width: none; left: calc(var(--portrait-x) * -100%); top: calc(var(--portrait-y) * -100%); }
 #turn-order { position: absolute; top: 12px; left: 50%; transform: translateX(-50%); padding: 7px 10px; border: 1px solid #aacbe63a; background: #081525dd; border-radius: 8px; }
 #turn-order > p { font-size: 11px; color: #e5c98f; }
 #turn-order > p > small { color: var(--muted); font-size: 10px; padding-left: 8px; }

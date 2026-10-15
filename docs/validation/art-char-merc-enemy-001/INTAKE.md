@@ -27,11 +27,17 @@ Date: 2026-10-15 · Source: [PR #4](https://github.com/wnau34-nptrn/asterveil-fa
 ## Tech fixes
 
 - **Re-encode.** Codex shipped quality-50 WebPs, to fit both the standalone and the atlas copies in the budget. The game only loads atlases, so Claude rebuilt them from the PNGs: units at quality 80 (336,890 B) and portraits at quality 72 (264,554 B). The new mercenary runtime total is 601,444 B.
-- **Matriarch facing** (when foes are integrated): mirror `foe_matriarch` and its portrait horizontally. The design is symmetric, with no text or one-sided emblem, so no redraw is needed.
+- **Matriarch facing:** `foe_matriarch` and its portrait are mirrored horizontally in the runtime atlas. The design is symmetric, with no text or one-sided emblem, so no redraw was needed.
+
+## Integrated later (same day)
+
+- **Sefa** (frame 3) shipped with the scout class.
+- **The 9 foes:** `public/assets/art/units_foes.webp` (q80, 568,786 B) and `portraits_foes.webp` (q72, 431,008 B), each 1024×2560 in table order. The Matriarch's frame and portrait are mirrored (tech fix). Encounters choose them through `EnemyDefinition.art`; see "Veil Frontier foes in battle" in `docs/EXPEDITION_DESIGN.md`.
+- **Total runtime art from this package:** 1,601,238 B (budget 2.0 MB).
 
 ## Not integrated yet
 
-- **The 9 new foes.** Encounters use only `raider`/`brute` (CLAUDE.md), so the foes wait for a scoped encounter/content task. Their files stay in `incoming/`.
+- Brann and Lio (frames 4–5) wait for their classes.
 - **The review mock** was a single large composition, not the real phone and desktop sizes. The real sizes were checked in-game instead (screenshots in this folder).
 - **Optional attack and hit poses:** not delivered.
 

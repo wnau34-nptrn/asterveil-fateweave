@@ -45,7 +45,7 @@ export const chapterOne: MapDefinition = {
       pool: [{ encounterId: 'thicket-ambush', weight: 2 }, { encounterId: 'shadow-stalker', weight: 2 }, { encounterId: 'rift-whelp', weight: 1 }],
       loot: { ore: [9, 14], ember: [0, 12], seal: [0, 0] } },
     { id: 'scar', name: 'แผลรอยแยก', safe: false, base: 8, step: 5, cap: 50,
-      pool: [{ encounterId: 'veil-siege', weight: 2 }, { encounterId: 'rear-ambush', weight: 2 }, { encounterId: 'thicket-ambush', weight: 1 }],
+      pool: [{ encounterId: 'veil-siege', weight: 2 }, { encounterId: 'rear-ambush', weight: 2 }, { encounterId: 'crystal-stampede', weight: 1 }],
       loot: { ore: [12, 18], ember: [0, 15], seal: [0, 0] } },
     { id: 'camp', name: 'แคมป์', safe: true, base: 0, step: 0, cap: 0, pool: [] },
     { id: 'sanctum', name: 'ประตูรอยแยก', safe: true, base: 0, step: 0, cap: 0, pool: [] },

@@ -1,4 +1,4 @@
-import { currentHeroId, skillPower, targetOptions } from '../core/battle/engine';
+import { ambushBonus, currentHeroId, skillPower, targetOptions } from '../core/battle/engine';
 import type { ActionId, BattleState, EncounterDefinition } from '../core/battle/types';
 import { actorName } from './th';
 export interface Lesson { step:number; title:string; copy:string; heroId:string; action:ActionId; targetId:string }
@@ -34,6 +34,13 @@ export function battleLesson(state:BattleState,data:EncounterDefinition):Lesson|
   // Hinder the fastest living enemy so it acts last next round.
   const fast=[...living2].sort((a,b)=>data.enemies.find(e=>e.id===b.id)!.speed-data.enemies.find(e=>e.id===a.id)!.speed)[0];
   return (fast&&make('hinder',fast.id,'ยิงสกัดศัตรูที่เร็วที่สุด',`${actorName(fast.id,data)} จะลงมือท้ายสุดรอบหน้า`))??attack();
+ }
+ if(heroId==='sefa'){
+  // Step aside from the announced hit; otherwise ambush an enemy that still has to act this round.
+  if(intent?.targetId===heroId){const e=make('evade',heroId,'ก้าวเงาหลบการโจมตี',`${actorName(intent.sourceId,data)} จะตีพลาด`);if(e)return e;}
+  const pending=[target,...living].find(e=>ambushBonus(state,data,e.id)>0);
+  const pick=pending??target;
+  return make('ambush',pick.id,'จู่โจมก่อนศัตรูขยับ',`พลัง ${skillPower(data,heroId,'ambush')+ambushBonus(state,data,pick.id)}`)??attack();
  }
  if(heroId==='garran'){
   const front=intent?.kind==='physical'&&data.heroes.find(h=>h.id===intent.targetId)?.lane==='front';

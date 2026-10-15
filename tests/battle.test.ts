@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { actionReason, beginBattle, corrodeBonus, skillPower, withParty, createBattle, currentHeroId, enemyIntent, plannedIntents, previewCommand, replay, resolveCommand, targetOptions, upcomingTurns, validateCommand } from '../src/core/battle/engine';
+import { actionReason, ambushBonus, beginBattle, corrodeBonus, skillPower, withParty, createBattle, currentHeroId, enemyIntent, plannedIntents, previewCommand, replay, resolveCommand, targetOptions, upcomingTurns, validateCommand } from '../src/core/battle/engine';
 import type { ActionId, BattleState } from '../src/core/battle/types';
 import { veilSiege as data } from '../src/content/encounters/veil-siege';
 import { encounterById } from '../src/content/encounters/catalog';
@@ -128,6 +128,75 @@ describe('alchemist (Toma)', () => {
       expect(previewCommand(s, party, command)).toEqual(resolveCommand(s, party, command)); s = resolveCommand(s, party, command).state;
     }
     expect(s.commands.some(c => c.action === 'acid')).toBe(true); expect(replay(party, s.commands)).toEqual(s);
+  });
+});
+
+describe('scout (Sefa)', () => {
+  const sefa = mercenaries.find(m => m.id === 'sefa')!; const [, tracer, weaver, healer] = data.heroes;
+  it('ambush adds its bonus only on an enemy that still has to act this round', () => {
+    const party = withParty(data, [sefa, tracer!, weaver!, healer!]);
+    let s = createBattle(party);
+    // R1 order: Lyra 120, Sefa 115, Raider 110, Eira 100, Brute 70, Seren 60.
+    expect(s.order).toEqual(['tracer', 'sefa', 'raider', 'weaver', 'brute', 'healer']);
+    s = act(s, 'attack', 'raider', party).state;
+    const r = act(s, 'ambush', 'brute', party);
+    expect(r.events.find(e => e.type === 'damage' && e.sourceId === 'sefa')).toMatchObject({ targetId: 'brute', amount: 24 });
+    // At Eira's turn the Raider has acted (no bonus) and the Brute has not.
+    expect([ambushBonus(r.state, party, 'raider'), ambushBonus(r.state, party, 'brute')]).toEqual([0, 12]);
+    // A slower scout reaches the Raider after it acted: plain power.
+    const slow = withParty(data, [{ ...sefa, speed: 105 }, tracer!, weaver!, healer!]);
+    let t = createBattle(slow); t = act(t, 'attack', 'brute', slow).state;
+    expect(currentHeroId(t, slow)).toBe('sefa');
+    expect(act(t, 'ambush', 'raider', slow).events.find(e => e.sourceId === 'sefa')).toMatchObject({ amount: 12 });
+  });
+  it('shadow step makes the first enemy hit on Sefa miss', () => {
+    // Slot 1 is Sefa, so the Raider's opening physical slash aims at her.
+    const party = withParty(data, [tracer!, sefa, weaver!, healer!]);
+    let s = createBattle(party); s = act(s, 'attack', 'raider', party).state;
+    expect(s.intent).toMatchObject({ sourceId: 'raider', targetId: 'sefa' });
+    const r = act(s, 'evade', 'sefa', party);
+    const raider = r.turns.find(t => t.actorId === 'raider')!;
+    expect(raider.events.map(e => e.type)).toEqual(['dodge']); expect(raider.targetId).toBe('sefa');
+    expect(r.state.heroes.find(h => h.id === 'sefa')).toMatchObject({ hp: 54 }); expect(r.state.heroes.find(h => h.id === 'sefa')!.evading).toBeUndefined();
+  });
+  it('an unused shadow step lapses when her own turn returns', () => {
+    const party = withParty(data, [sefa, tracer!, weaver!, healer!]);
+    // The Raider's opening slash aims at slot 1 (Lyra), so the step is never tested this round.
+    let s = createBattle(party); s = act(s, 'attack', 'brute', party).state;
+    s = act(s, 'evade', 'sefa', party).state;
+    expect(s.heroes.find(h => h.id === 'sefa')!.evading).toBe(true);
+    while (currentHeroId(s, party) !== 'sefa') s = act(s, 'attack', 'brute', party).state;
+    expect(s.round).toBe(2); expect(s.heroes.find(h => h.id === 'sefa')!.evading).toBeUndefined();
+  });
+  it('a dodged hit is not a hit: a braced spear keeps its counter for the next one', () => {
+    const garran = mercenaries.find(m => m.id === 'garran')!;
+    const party = withParty(data, [garran, sefa, weaver!, healer!]);
+    // Order: Sefa 115, Raider 110, Eira 100, Garran 90, Brute 70, Seren 60. The Raider's round-4 slash aims at slot 1 (Sefa).
+    let s = createBattle(party); let checked = false;
+    while (s.round < 5 && s.outcome === 'active') {
+      const hero = currentHeroId(s, party)!;
+      const [action, target]: [ActionId, string] = hero === 'garran' && s.round === 3 ? ['brace', 'garran'] : hero === 'sefa' && s.round === 4 ? ['evade', 'sefa'] : ['attack', 'brute'];
+      const r = act(s, action, target, party);
+      if (action === 'evade') {
+        const raider = r.turns.find(t => t.actorId === 'raider')!;
+        expect(raider.events.map(e => e.type)).toEqual(['dodge']);
+        // The frame after the Raider's turn still holds the brace (it lapses later, at Garran's own turn).
+        expect(raider.state.counter).toEqual({ heroId: 'garran' }); checked = true;
+      }
+      s = r.state;
+    }
+    expect(checked).toBe(true);
+  });
+  it('replays and previews identically', () => {
+    const party = withParty(data, [sefa, tracer!, weaver!, healer!]);
+    let s = createBattle(party);
+    for (let i = 0; i < 12 && s.outcome === 'active'; i++) {
+      const hero = currentHeroId(s, party)!;
+      const options: [ActionId, string][] = hero === 'sefa' ? [['ambush', 'brute'], ['evade', 'sefa'], ['attack', 'brute']] : [['attack', 'brute']];
+      const use = options.map(([action, targetId]) => ({ beat: s.beat, heroId: hero, action, targetId })).find(c => !validateCommand(s, party, c))!;
+      expect(previewCommand(s, party, use)).toEqual(resolveCommand(s, party, use)); s = resolveCommand(s, party, use).state;
+    }
+    expect(s.commands.some(c => c.action === 'ambush')).toBe(true); expect(replay(party, s.commands)).toEqual(s);
   });
 });
 

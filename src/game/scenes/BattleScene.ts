@@ -3,7 +3,7 @@ import type { BattleEvent, BattleState, EncounterDefinition } from '../../core/b
 import { actorName, thaiFont } from '../../ui/th';
 import { palette } from '../visuals/palette';
 import { drawRiftBackdrop } from '../visuals/rift-backdrop';
-import { actorArt, actorFootOrigins, artUrl, unitsUrl } from '../visuals/assets';
+import { actorArt, actorFootOrigins, artOf, artUrl, unitsUrl } from '../visuals/assets';
 
 export interface ActorTarget { x: number; y: number; width: number; height: number }
 export interface SceneView { state: BattleState; heroId: string; targetId: string | null; phase?: 'hero' | 'enemy'; activeActorId?: string; activeTargetId?: string }
@@ -30,7 +30,7 @@ export class BattleScene extends Phaser.Scene {
   }
   preload(): void {
     this.load.image('rift-ruins', artUrl('ruins'));
-    for (const sheet of ['units', 'mercs'] as const) this.load.spritesheet(`battle-${sheet}`, unitsUrl(sheet), { frameWidth: 512, frameHeight: 512 });
+    for (const sheet of ['units', 'mercs', 'foes'] as const) this.load.spritesheet(`battle-${sheet}`, unitsUrl(sheet), { frameWidth: 512, frameHeight: 512 });
   }
   create(): void {
     this.ready = true;
@@ -127,8 +127,8 @@ export class BattleScene extends Phaser.Scene {
     if (id === this.view!.activeActorId && hp > 0) {
       g.lineStyle(3, enemy ? 0xf19b9f : palette.cyan); g.strokeEllipse(0, 0, size * .72, size * .16);
     }
-    const art = actorArt[id]!;
-    const sprite = this.add.image(0, 0, `battle-${art.sheet}`, art.frame).setOrigin(0.5, actorFootOrigins[id] ?? 1).setDisplaySize(size, size);
+    const key = artOf(this.encounter, id); const art = actorArt[key]!;
+    const sprite = this.add.image(0, 0, `battle-${art.sheet}`, art.frame).setOrigin(0.5, actorFootOrigins[key] ?? 1).setDisplaySize(size, size);
     body.add(sprite);
     const hitWidth = Math.max(44, Math.min(72, size * .7));
     const hitHeight = Math.max(44, size * .9);
@@ -183,6 +183,11 @@ export class BattleScene extends Phaser.Scene {
         const text = this.add.text(position.x, position.y - 20, label, { fontFamily: thaiFont, fontSize: '23px', color: this.view?.phase === 'enemy' ? '#ffb6b8' : '#ffe0a6', stroke: '#101c36', strokeThickness: 4 }).setOrigin(0.5);
         this.effects.add(text);
         this.tweens.add({ targets: text, y: position.y - 65, alpha: 0, duration: 650, delay: index * 40, onComplete: () => text.destroy() });
+      }
+      if (event.type === 'dodge') {
+        const text = this.add.text(position.x, position.y - 20, 'หลบ!', { fontFamily: thaiFont, fontSize: '22px', color: '#a9d4ff', stroke: '#101c36', strokeThickness: 4 }).setOrigin(0.5);
+        this.effects.add(text);
+        this.tweens.add({ targets: text, x: position.x - 24, y: position.y - 60, alpha: 0, duration: 650, onComplete: () => text.destroy() });
       }
       if (event.type === 'heal' || event.type === 'barrier') {
         const circle = this.add.circle(position.x, position.y, 18).setStrokeStyle(3, palette.cyan);
