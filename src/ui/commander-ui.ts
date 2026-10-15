@@ -35,11 +35,15 @@ export class CommanderUI {
   private draw(focus?: string): void {
     const d = this.draft;
     this.root.innerHTML = `<form class="commander-shell" novalidate>
-      <header class="lobby-header glass-capsule"><button type="button" data-cmd="back" class="round-glass" aria-label="กลับหน้าแรก">${icon('left')}</button>
+      <header class="commander-top"><button type="button" data-cmd="back" class="round-glass" aria-label="กลับหน้าแรก">${icon('left')}</button>
         <div><p class="eyebrow">ก่อนเข้าค่าย</p><h1>สร้างผู้บัญชาการ</h1></div></header>
       <section class="commander-panel">
-        <div class="commander-preview" aria-live="polite"><span class="commander-banner" data-color="${d.color}">${commanderBadge(d)}</span>
-          <div><p class="eyebrow">ผู้บัญชาการกองทหารรับจ้าง</p><b id="commander-preview-name">${this.escape(d.name.trim()) || 'ตั้งชื่อของคุณ'}</b><small>นำทีมจากค่าย ไม่ลงสนามรบ ทหารรับจ้างคือผู้ต่อสู้</small></div></div>
+        <div class="commander-preview" data-color="${d.color}" aria-live="polite">
+          <div class="commander-stage"><span class="commander-pole" aria-hidden="true"></span>
+            <span class="commander-banner" data-color="${d.color}" data-crest="${d.crest}">${commanderBadge(d)}</span></div>
+          <div class="commander-identity"><p class="eyebrow">ผู้บัญชาการกองทหารรับจ้าง</p><b id="commander-preview-name">${this.escape(d.name.trim()) || 'ตั้งชื่อของคุณ'}</b>
+            <small>${crestName[d.crest]} · ธง${colorName[d.color]}</small><small>นำทีมจากค่าย ไม่ลงสนามรบ ทหารรับจ้างคือผู้ต่อสู้</small></div></div>
+        <div class="commander-form">
         <label class="commander-field" for="commander-name"><span>ชื่อผู้บัญชาการ</span>
           <input id="commander-name" name="name" type="text" autocomplete="nickname" enterkeyhint="done" maxlength="${NAME_MAX * 2}" value="${this.escape(d.name)}" aria-describedby="commander-name-hint" required>
           <small id="commander-name-hint" class="commander-hint"></small></label>
@@ -47,8 +51,9 @@ export class CommanderUI {
           ${COMMANDER_CRESTS.map(c => `<button type="button" id="crest-${c}" data-cmd="crest" data-value="${c}" aria-pressed="${d.crest === c}" aria-label="${crestName[c]}">${icon(crestIcon[c]!)}</button>`).join('')}</div></fieldset>
         <fieldset class="commander-choice"><legend>สีธง</legend><div class="choice-row">
           ${COMMANDER_COLORS.map(c => `<button type="button" id="color-${c}" class="swatch" data-color="${c}" data-cmd="color" data-value="${c}" aria-pressed="${d.color === c}" aria-label="${colorName[c]}"></button>`).join('')}</div></fieldset>
+        </div>
       </section>
-      <footer class="lobby-footer"><p class="lobby-save">เปลี่ยนภายหลังไม่ได้ในเวอร์ชันนี้</p><button id="commander-create" type="submit" class="primary">${icon('camp')} ยืนยันและเข้าค่าย</button></footer>
+      <footer class="commander-footer"><p class="commander-note">เปลี่ยนภายหลังไม่ได้ในเวอร์ชันนี้</p><button id="commander-create" type="submit" class="primary">${icon('camp')} ยืนยันและเข้าค่าย</button></footer>
     </form>`;
     this.update();
     if (focus) this.root.querySelector<HTMLElement>(focus)?.focus({ preventScroll: true });

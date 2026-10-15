@@ -9,6 +9,7 @@ import { heroText, lootThai } from './th';
 import { CommanderUI } from './commander-ui';
 import { LobbyUI } from './lobby-ui';
 import { WorldUI, type WorldBanner } from './world-ui';
+import { icon, type IconName } from './icons';
 
 // Owns the authoritative game (lobby profile + current run) and switches between the
 // title, lobby, world and battle views. Every commit is saved before anything animates.
@@ -71,9 +72,15 @@ export class GameShell {
   }
   private showTitle(): void {
     const g = this.game; const s = g?.run;
-    const summary = !g ? '' : s ? `กำลังเดินทาง · เดินแล้ว ${s.steps} ก้าว · ชนะ ${s.wins} ศึก${s.battle ? ' · ค้างอยู่ในศึก' : ''}` : `อยู่ที่ค่าย · ทีม ${g.profile.company.length} คน · แร่ดาว ${g.profile.bank.ore}`;
-    this.views.title.innerHTML = `<div class="title-card"><h1 class="title-logo"><img src="${import.meta.env.BASE_URL}assets/title/logo.svg" alt="Asterveil · Fateweave" width="700" height="224"></h1><p class="title-copy">ข้ามม่านเวล · ถักทอโชคชะตา</p>
-      <div class="title-actions">${g ? `<p class="title-save">${summary}</p><button id="continue" data-title="continue" class="primary">${s ? 'เดินทางต่อ →' : 'เข้าค่าย →'}</button>` : ''}
+    // Save summary as icon chips: the run in progress, or the company waiting at camp.
+    const chips = !g ? [] : s ? [['footprints', `เดินแล้ว ${s.steps} ก้าว`], ['star', `ชนะ ${s.wins} ศึก`], ...(s.battle ? [['danger', 'ค้างอยู่ในศึก']] : [])]
+      : [['camp', 'อยู่ที่ค่าย'], ['flag', `ทีม ${g.profile.company.length} คน`], ['ore', `แร่ดาว ${g.profile.bank.ore}`]];
+    const summary = chips.map(([i, t]) => `<span>${icon(i as IconName)}${t}</span>`).join('');
+    // Layered title: drifting painting, light rays and motes behind a logo that resolves into focus.
+    this.views.title.innerHTML = `<div class="title-stage" aria-hidden="true"><div class="title-bg"></div><div class="title-rays"></div>
+      <div class="title-motes">${'<i></i>'.repeat(14)}</div><div class="title-vignette"></div></div>
+      <div class="title-card"><h1 class="title-logo"><img src="${import.meta.env.BASE_URL}assets/title/logo.svg" alt="Asterveil · Fateweave" width="700" height="224"></h1><p class="title-copy">ข้ามม่านเวล · ถักทอโชคชะตา</p>
+      <div class="title-actions">${g ? `<p class="title-save">${s ? 'การเดินทางที่บันทึกไว้' : 'ค่ายของคุณ'}<span class="title-chips">${summary}</span></p><button id="continue" data-title="continue" class="primary">${s ? 'เดินทางต่อ →' : 'เข้าค่าย →'}</button>` : ''}
       <button id="new-game" data-title="new" class="${g ? 'secondary' : 'primary'}">${g ? 'เริ่มเกมใหม่' : 'เริ่มเกม'}</button>
       ${this.storage ? '' : '<p class="title-warning">เบราว์เซอร์นี้ไม่อนุญาตให้บันทึก เล่นได้แต่จะไม่จำความคืบหน้า</p>'}</div><p class="title-footer">ชายแดนม่านเวล</p></div>`;
     this.show('title');
