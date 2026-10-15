@@ -1,0 +1,77 @@
+[
+  {
+    "id": "merc_spear",
+    "body": "exec-e4995049-ef53-443d-8fbf-37b251695da2.png",
+    "portrait": "exec-0c6b8c78-fb5e-44e4-8279-7d6043ceec4a.png"
+  },
+  {
+    "id": "merc_archer",
+    "body": "exec-900ff031-23d0-444d-a64a-aef49622ef3f.png",
+    "portrait": "exec-ff0b0985-24d7-4bc1-aa6b-53724fb408c4.png"
+  },
+  {
+    "id": "merc_alchemist",
+    "body": "exec-6649c8ae-994e-4751-9bec-cdc6d44eaa44.png",
+    "portrait": "exec-3ff25e4c-193e-442a-9bc2-256be30874d3.png"
+  },
+  {
+    "id": "merc_scout",
+    "body": "exec-0344de0f-5162-4d3e-bb1a-227c6afbbca9.png",
+    "portrait": "exec-a0f616e8-73cb-4538-9cd2-ce36babd9776.png"
+  },
+  {
+    "id": "merc_warden",
+    "body": "exec-28248000-e339-4777-8c8a-34ef6bc73837.png",
+    "portrait": "exec-fe07c6ad-8234-4381-9496-dbaddf0a30e6.png"
+  },
+  {
+    "id": "merc_bard",
+    "body": "exec-bd8da625-79e7-4370-aa9a-d2d9371f9c14.png",
+    "portrait": "exec-024694bf-b8d5-4230-a4bd-9d0175b4f9c5.png"
+  },
+  {
+    "id": "foe_tusker",
+    "body": "exec-9bd42e9e-6984-4f05-9c98-9135673919ed.png",
+    "portrait": "exec-58fc39ea-af69-43bb-afb4-07fbc67a3853.png"
+  },
+  {
+    "id": "foe_sprite",
+    "body": "exec-98cf3c91-b07b-4e4c-8a76-8fd51c820788.png",
+    "portrait": "exec-c292879b-9e85-4838-bdb3-343c3de9362c.png"
+  },
+  {
+    "id": "foe_stalker",
+    "body": "exec-e8df86cc-9803-4cf6-8b75-978fc3a44f79.png",
+    "portrait": "exec-d2c81f0d-2db0-4018-8f74-ff4b255548fd.png"
+  },
+  {
+    "id": "foe_mycon",
+    "body": "exec-15f39ccb-5ca0-4014-84da-9d3877201c6f.png",
+    "portrait": "exec-bbb1a2c1-019a-49ab-bf32-5a9e45d0efdd.png"
+  },
+  {
+    "id": "foe_golem",
+    "body": "exec-8244df71-f502-464d-a622-b40c08e5b48c.png",
+    "portrait": "exec-a224e681-0fa4-4cb5-8bad-7fef8aae8918.png"
+  },
+  {
+    "id": "foe_riftweaver",
+    "body": "exec-30950a8f-53e7-4501-a921-3639cd01a810.png",
+    "portrait": "exec-b17eb874-9065-453d-bd6b-94e25439f7c2.png"
+  },
+  {
+    "id": "foe_matriarch",
+    "body": "exec-e009e0ab-9bc1-4535-bf1e-00d71da861ab.png",
+    "portrait": "exec-46555bb1-7ddb-485a-b1b0-3f5a0798efaf.png"
+  },
+  {
+    "id": "foe_juggernaut",
+    "body": "exec-aa61387a-7758-4599-a43b-d2d4ab963779.png",
+    "portrait": "exec-de2d1719-1a03-4284-9d6e-5e7bc4157ba2.png"
+  },
+  {
+    "id": "foe_sentinel",
+    "body": "exec-35e6ee47-9da7-4a5d-8123-6fae6a704b7a.png",
+    "portrait": "exec-bd5a1ae2-7eaa-4092-b390-c74c73bf351f.png"
+  }
+]
