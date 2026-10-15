@@ -27,3 +27,20 @@ type ArtName = 'units' | 'portraits' | 'ruins' | 'units_mercs' | 'portraits_merc
 export const artUrl = (name: ArtName): string => `${import.meta.env.BASE_URL}assets/art/${name}.webp`;
 export const unitsUrl = (sheet: ArtSheet): string => artUrl(sheet === 'units' ? 'units' : `units_${sheet}`);
 export const portraitsUrl = (sheet: ArtSheet): string => artUrl(sheet === 'units' ? 'portraits' : `portraits_${sheet}`);
+
+// Lobby camp poses (ART-UI-LOBBY-001): 3 columns (sit, cheer, idle_alt) of 512 px frames, one row per
+// character. Every frame faces right with soles at y=496 (sitting frames include their log).
+export type LobbyPose = 'sit' | 'cheer' | 'idle_alt';
+const poseColumns: Readonly<Record<LobbyPose, number>> = { sit: 0, cheer: 1, idle_alt: 2 };
+const poseSheets = {
+  heroes: ['guardian', 'tracer', 'weaver', 'healer'],
+  mercs: ['garran', 'mira', 'toma', 'sefa', 'brann', 'lio'],
+} as const;
+export function lobbyPose(id: string, pose: LobbyPose): { url: string; column: number; row: number; rows: number } | undefined {
+  for (const [sheet, ids] of Object.entries(poseSheets) as [keyof typeof poseSheets, readonly string[]][]) {
+    const row = ids.indexOf(id);
+    if (row >= 0) return { url: `${import.meta.env.BASE_URL}assets/lobby/lobby_poses_${sheet}.webp`, column: poseColumns[pose], row, rows: ids.length };
+  }
+  return undefined;
+}
+export const lobbyArt = (name: 'lobby_bg' | 'lobby_fg' | 'lobby_firepit'): string => `${import.meta.env.BASE_URL}assets/lobby/${name}.webp`;

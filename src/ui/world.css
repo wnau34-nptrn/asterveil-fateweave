@@ -383,25 +383,26 @@ h1, h2, h3, .primary, .secondary { font-family: var(--font-heading); font-weight
 .camp-tabs.two { grid-template-columns: 1fr 1fr; }
 .withdraw-section .danger-button { width: 100%; min-height: 46px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
 .withdraw-section .icon { width: 18px; height: 18px; }
-/* Warm lobby camp scene (interim: existing idle frames; ART-UI-LOBBY-001 replaces with painted poses). */
+/* Warm lobby camp scene (ART-UI-LOBBY-001): painted camp, stone firepit, posed members; the flame stays code-drawn. */
 .lobby-view { background: radial-gradient(ellipse 80% 45% at 50% 30%, #ff9a4a33, #ff9a4a00 70%), linear-gradient(180deg, #1a1220e6, #140f1ccc 35%, #0b111df5), url('/assets/title/title_bg.webp') 50% 50% / cover no-repeat, #120d18; }
 .lobby-scene { position: relative; flex: 0 0 clamp(92px, 22vh, 230px); border-radius: var(--radius-md); overflow: hidden; border: 1px solid #ffc98a40;
-  background: radial-gradient(ellipse 34% 60% at 50% 88%, #ffb35c70, #ff8a3d22 55%, #ff8a3d00 75%), linear-gradient(180deg, #2a1b2c 0%, #3b2433 45%, #4a3226 72%, #2b2219 100%); box-shadow: inset 0 -30px 40px #120c0a99; }
-.lobby-scene::before { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 30%; background: linear-gradient(180deg, #3a2a1c, #241a12); border-top: 1px solid #ffcf9a22; }
+  /* The painting's ground band (bottom 35%) stays under the actors at every band ratio; firelight is added on top. */
+  background: radial-gradient(ellipse 34% 60% at 50% 88%, #ffb35c55, #ff8a3d18 55%, #ff8a3d00 75%), var(--lobby-bg) 50% 78% / cover no-repeat, #2a1b2c; box-shadow: inset 0 -30px 40px #120c0a66; }
+.lobby-fg { position: absolute; inset: 0; z-index: 6; pointer-events: none; background: var(--lobby-fg) 50% 78% / cover no-repeat; }
 .lobby-fire { position: absolute; left: 50%; bottom: 10%; width: clamp(34px, 7vh, 56px); height: clamp(40px, 8vh, 64px); transform: translateX(-50%); z-index: 3; }
-.lobby-fire::before { content: ''; position: absolute; left: -60%; right: -60%; bottom: -10%; height: 30%; border-radius: 50%; background: radial-gradient(#5a3a22, #2a1c12 70%); }
+.lobby-fire b { position: absolute; left: 50%; bottom: -34%; width: 230%; aspect-ratio: 1; transform: translateX(-50%); background: var(--lobby-pit) 50% 100% / contain no-repeat; }
 .lobby-fire i { position: absolute; left: 50%; bottom: 8%; width: 70%; height: 90%; transform: translateX(-50%); border-radius: 50% 50% 45% 45% / 70% 70% 30% 30%;
   background: radial-gradient(ellipse at 50% 80%, #fff3c4, #ffc04d 35%, #ff7a2e 65%, #ff7a2e00 72%); filter: blur(.5px); transform-origin: 50% 100%; }
-.lobby-fire i:nth-child(2) { width: 50%; height: 70%; left: 34%; background: radial-gradient(ellipse at 50% 80%, #fff8de, #ffd36b 40%, #ff9a3c00 72%); }
-.lobby-fire i:nth-child(3) { width: 45%; height: 60%; left: 66%; }
+.lobby-fire i:nth-of-type(2) { width: 50%; height: 70%; left: 34%; background: radial-gradient(ellipse at 50% 80%, #fff8de, #ffd36b 40%, #ff9a3c00 72%); }
+.lobby-fire i:nth-of-type(3) { width: 45%; height: 60%; left: 66%; }
 .lobby-unit { position: absolute; left: var(--ux); bottom: 12%; width: calc(clamp(84px, 21vh, 210px) * var(--us)); aspect-ratio: 1; transform: translate(-50%, var(--sole, 0%)); z-index: 2; }
 .lobby-unit[data-depth="0"] { z-index: 4; bottom: 6%; } .lobby-unit[data-depth="2"] { bottom: 22%; filter: brightness(.82) saturate(.9); }
-.lobby-unit i { position: absolute; inset: 0; background-repeat: no-repeat; background-size: 200% 300%; background-position: var(--fx) var(--fy);
+.lobby-unit i { position: absolute; inset: 0; background-repeat: no-repeat; background-size: var(--fs, 200% 300%); background-position: var(--fx) var(--fy);
   transform: scaleX(var(--flip)); filter: drop-shadow(0 6px 6px #0a0606aa) drop-shadow(calc(var(--flip) * 6px) 0 10px #ff9a4a33); }
 .lobby-embers i { position: absolute; left: calc(46% + var(--e, 0%)); bottom: 22%; width: 3px; height: 3px; border-radius: 50%; background: #ffd08a; box-shadow: 0 0 6px #ff9a4a; opacity: 0; z-index: 5; }
 .lobby-embers i:nth-child(2) { --e: 4%; } .lobby-embers i:nth-child(3) { --e: 7%; } .lobby-embers i:nth-child(4) { --e: 2%; } .lobby-embers i:nth-child(5) { --e: 6%; } .lobby-embers i:nth-child(6) { --e: 1%; } .lobby-embers i:nth-child(7) { --e: 5%; }
 @media (prefers-reduced-motion: no-preference) {
-  .lobby-fire i { animation: lobby-flame 900ms ease-in-out infinite alternate; } .lobby-fire i:nth-child(2) { animation-duration: 700ms; } .lobby-fire i:nth-child(3) { animation-duration: 1100ms; }
+  .lobby-fire i { animation: lobby-flame 900ms ease-in-out infinite alternate; } .lobby-fire i:nth-of-type(2) { animation-duration: 700ms; } .lobby-fire i:nth-of-type(3) { animation-duration: 1100ms; }
   .lobby-unit i { animation: lobby-breathe 3.2s ease-in-out infinite; animation-delay: inherit; }
   .lobby-embers i { animation: lobby-ember 2.8s linear infinite; } .lobby-embers i:nth-child(odd) { animation-duration: 3.6s; }
   .lobby-embers i:nth-child(2) { animation-delay: .4s; } .lobby-embers i:nth-child(3) { animation-delay: .9s; } .lobby-embers i:nth-child(4) { animation-delay: 1.3s; } .lobby-embers i:nth-child(5) { animation-delay: 1.8s; } .lobby-embers i:nth-child(6) { animation-delay: 2.2s; } .lobby-embers i:nth-child(7) { animation-delay: 2.6s; }

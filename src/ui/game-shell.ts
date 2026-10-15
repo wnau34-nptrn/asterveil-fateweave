@@ -20,6 +20,8 @@ export class GameShell {
   private commander: CommanderUI;
   private replacing = false;
   private lobbyMessage = '';
+  // The member who was just hired or upgraded cheers in the lobby scene.
+  private lobbyCheer = '';
   private readonly storage = browserStorage();
   private saved = true;
   private message = '';
@@ -89,7 +91,7 @@ export class GameShell {
   }
   private showLobby(): void {
     this.show('lobby');
-    this.lobby.render({ profile: this.game!.profile, message: this.lobbyMessage, saved: this.saved && !!this.storage });
+    this.lobby.render({ profile: this.game!.profile, message: this.lobbyMessage, cheer: this.lobbyCheer, saved: this.saved && !!this.storage });
   }
   private profileChange(result: ProfileResult): void {
     if (!this.game || this.game.run) return;
@@ -98,12 +100,13 @@ export class GameShell {
     this.game = { ...this.game, profile: { ...result.profile, last: null } }; this.persist();
     this.lobbyMessage = e.type === 'hired' ? (e.duplicate ? `ได้ตัวซ้ำของ${name(e.heroId)} · ใช้อัปดาวในแท็บทีม` : `จ้าง${name(e.heroId)}แล้ว`)
       : e.type === 'upgraded' ? `${name(e.heroId)}ขึ้นเป็น ★${e.stars} แล้ว` : e.type === 'dismissed' ? `เลิกจ้าง${name(e.heroId)}แล้ว · ได้แร่ดาวคืน ${this.map.company.dismissRefund}` : 'จัดทีมแล้ว';
+    this.lobbyCheer = e.type === 'hired' || e.type === 'upgraded' ? e.heroId : '';
     this.showLobby();
   }
   private depart(): void {
     if (!this.game || this.game.run) return;
     this.game = { profile: { ...this.game.profile, last: null }, run: departure(this.game.profile, this.map, this.lookup, this.freshSeed()) };
-    this.persist(); this.banner = undefined; this.locked = false; this.lobbyMessage = '';
+    this.persist(); this.banner = undefined; this.locked = false; this.lobbyMessage = ''; this.lobbyCheer = '';
     this.message = 'แตะช่องที่ไฮไลต์หรือใช้ลูกศรเพื่อเดิน';
     this.renderWorld();
   }
@@ -112,7 +115,7 @@ export class GameShell {
     const run = this.state; if (!this.game || !run) return;
     if (outcome === 'withdrawn' && !canWithdraw(run, this.map)) return;
     this.game = { profile: settle(this.game.profile, run, outcome), run: null };
-    this.persist(); this.lobbyMessage = ''; this.banner = undefined; this.locked = false;
+    this.persist(); this.lobbyMessage = ''; this.lobbyCheer = ''; this.banner = undefined; this.locked = false;
     this.showLobby();
   }
   private resume(): void {
@@ -225,7 +228,7 @@ export class GameShell {
     return this.saved;
   }
   private leaveBattle(): void {
-    if (!this.state) { this.lobbyMessage = ''; this.locked = false; this.showLobby(); return; }
+    if (!this.state) { this.lobbyMessage = ''; this.lobbyCheer = ''; this.locked = false; this.showLobby(); return; }
     if (this.state.battle) { this.openBattle(); return; }
     this.locked = false;
     this.banner = undefined;

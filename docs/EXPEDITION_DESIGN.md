@@ -182,6 +182,8 @@ Elites (phase 3) will add guaranteed seals.
 
 **Lobby look.** A warm dusk camp band shows the brought team around a code-drawn fire, using the existing idle frames with gentle breathing and embers, all off under reduced motion. This is interim until `docs/handoffs/ART-UI-LOBBY-001.md` (scene layers and sit/cheer/idle_alt poses) is delivered.
 
+**Lobby art (ART-UI-LOBBY-001).** The camp scene is the painted lobby with a stone firepit and posed members: front pair sitting, middle pair idle moments, back alternating. The member just hired or upgraded cheers, and everyone cheers after a completed expedition. See `docs/validation/art-ui-lobby-001/INTAKE.md`.
+
 ## 2C-2 rules: new classes, one at a time (draft numbers)
 
 **Infrastructure.**

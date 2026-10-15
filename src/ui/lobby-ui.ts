@@ -2,14 +2,14 @@ import type { HeroDefinition } from '../core/battle/types';
 import { boardOffers, dismissReason, groupOf, hireReason, upgradeCost, upgradeReason, type Group } from '../core/world/profile';
 import { COMPANY_CAP, PARTY_SLOTS, RESERVE_SLOTS, type MapDefinition, type Profile } from '../core/world/types';
 import { starred, type EncounterLookup } from '../core/world/world';
-import { actorArt, actorFootOrigins, unitsUrl } from '../game/visuals/assets';
+import { actorArt, actorFootOrigins, lobbyArt, lobbyPose, unitsUrl, type LobbyPose } from '../game/visuals/assets';
 import { icon } from './icons';
 import { commanderBadge } from './commander-ui';
 import { heroText } from './th';
 import { portrait, starRow } from './world-ui';
 
 export interface LobbyHost { hire(index: number): void; upgrade(id: string): void; dismiss(id: string): void; place(id: string, group: Group, other?: string): void; depart(): void; home(): void }
-export interface LobbyView { profile: Profile; message: string; saved: boolean }
+export interface LobbyView { profile: Profile; message: string; saved: boolean; cheer?: string }
 const outcomeText = { complete: 'สำเร็จการเดินทาง', withdrawn: 'ถอนตัวกลับค่าย', wiped: 'ทีมล้มหมด · การเดินทางล้มเหลว' } as const;
 const groupName: Record<Group, string> = { deployed: 'ลงสนาม', reserve: 'สำรอง', bench: 'ในค่าย' };
 
@@ -79,18 +79,23 @@ export class LobbyUI {
       </footer></div>`;
   }
 
-  // Warm camp scene: the brought team gathers around the fire. Interim art uses the existing
-  // full-body frames (idle only) until ART-UI-LOBBY-001 delivers the lobby painting and poses.
+  // Warm camp scene (ART-UI-LOBBY-001): the brought team gathers around the fire. Front members sit on
+  // logs, the middle pair has a character moment, the back alternates; the member just hired or upgraded
+  // cheers, and everyone cheers after a completed expedition. Right of the fire the frames are mirrored.
   private scene(p: Profile): string {
-    const ids = [...p.party.deployed, ...p.party.reserve].filter(id => actorArt[id] !== undefined);
+    const ids = [...p.party.deployed, ...p.party.reserve].filter(id => lobbyPose(id, 'sit') ?? actorArt[id]);
     const spots = [[18, 0, 1], [33, 1, .92], [67, 1, .92], [82, 0, 1], [8, 2, .78], [43, 2, .74], [57, 2, .74], [92, 2, .78]] as const;
+    const party = p.last?.outcome === 'complete';
     const units = ids.slice(0, spots.length).map((id, i) => {
-      const [x, depth, scale] = spots[i]!; const { sheet, frame: f } = actorArt[id]!;
-      // Frames with padding under the soles drop by that padding so every pair of feet shares the ground line.
-      const sole = (1 - (actorFootOrigins[id] ?? 1)) * 100;
-      return `<span class="lobby-unit" data-depth="${depth}" style="--ux:${x}%;--us:${scale};--fx:${(f % 2) * 100}%;--fy:${Math.floor(f / 2) * 50}%;--flip:${x > 50 ? -1 : 1};--sole:${sole.toFixed(2)}%;animation-delay:${i * -620}ms"><i style="background-image:url(${unitsUrl(sheet)})"></i></span>`;
+      const [x, depth, scale] = spots[i]!;
+      const pose: LobbyPose = party || id === this.view!.cheer ? 'cheer' : depth === 0 ? 'sit' : depth === 1 ? 'idle_alt' : i % 2 ? 'idle_alt' : 'sit';
+      const frame = lobbyPose(id, pose);
+      // Pose frames share the battle frames' 512 px sole line (y=496); without one, fall back to the idle frame.
+      const art = frame ? { url: frame.url, fx: frame.column * 50, fy: frame.row / (frame.rows - 1) * 100, size: `300% ${frame.rows * 100}%`, sole: 15 / 512 * 100 }
+        : { url: unitsUrl(actorArt[id]!.sheet), fx: (actorArt[id]!.frame % 2) * 100, fy: Math.floor(actorArt[id]!.frame / 2) * 50, size: '200% 300%', sole: (1 - (actorFootOrigins[id] ?? 1)) * 100 };
+      return `<span class="lobby-unit" data-depth="${depth}" data-actor="${id}" data-pose="${frame ? pose : 'idle'}" style="--ux:${x}%;--us:${scale};--fx:${art.fx}%;--fy:${art.fy}%;--fs:${art.size};--flip:${x > 50 ? -1 : 1};--sole:${art.sole.toFixed(2)}%;animation-delay:${i * -620}ms"><i style="background-image:url(${art.url})"></i></span>`;
     }).join('');
-    return `<div class="lobby-scene" aria-hidden="true"><div class="lobby-fire"><i></i><i></i><i></i></div>${units}<div class="lobby-embers">${'<i></i>'.repeat(7)}</div></div>`;
+    return `<div class="lobby-scene" aria-hidden="true" style="--lobby-bg:url(${lobbyArt('lobby_bg')});--lobby-fg:url(${lobbyArt('lobby_fg')});--lobby-pit:url(${lobbyArt('lobby_firepit')})"><div class="lobby-fire"><b></b><i></i><i></i><i></i></div>${units}<div class="lobby-fg"></div><div class="lobby-embers">${'<i></i>'.repeat(7)}</div></div>`;
   }
   private card(p: Profile, id: string | undefined, group: Group, slot: number): string {
     if (!id) return `<button class="team-card empty${this.picked ? ' target' : ''}" data-lobby="pick" data-group="${group}" aria-label="${groupName[group]} ช่อง ${slot + 1} ว่าง"${this.picked ? '' : ' disabled'}><span>ว่าง</span></button>`;
