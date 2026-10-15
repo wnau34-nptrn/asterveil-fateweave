@@ -22,6 +22,7 @@ export class BattleScene extends Phaser.Scene {
   private viewW = 0;
   private viewH = 0;
   private dpr = 1;
+  private fitting = false;
   constructor(private encounter: EncounterDefinition, private readonly choose: (id: string) => void, private readonly onReady: () => void, private readonly onLayout: () => void) { super('battle'); }
   get isReady(): boolean { return this.ready; }
   setEncounter(data: EncounterDefinition): void {
@@ -36,16 +37,23 @@ export class BattleScene extends Phaser.Scene {
   // Size the canvas to its parent at the screen's pixel density (sharp art on 2x/3x phones).
   // clientWidth/Height ignore CSS transforms, so view transitions never resize the buffer.
   private fit(force = false): void {
-    const parent = this.game.canvas.parentElement; if (!parent) return;
-    const w = parent.clientWidth, h = parent.clientHeight; if (!w || !h) return;
+    const parent = this.game.canvas.parentElement; if (!parent || this.fitting) return;
+    // The canvas is absolutely positioned (CSS), so its buffer can never grow the arena;
+    // the clamp is a second guard against a resize feedback loop on any engine.
+    const w = Math.min(parent.clientWidth, window.innerWidth), h = Math.min(parent.clientHeight, window.innerHeight);
+    if (!w || !h) return;
     const dpr = pixelRatio();
     if (!force && w === this.viewW && h === this.viewH && dpr === this.dpr) return;
-    this.viewW = w; this.viewH = h; this.dpr = dpr;
-    this.cameras.main.setZoom(dpr).setOrigin(0, 0);
-    this.scale.resize(Math.round(w * dpr), Math.round(h * dpr)); // emits 'resize' → paint
-    Object.assign(this.game.canvas.style, { width: `${w}px`, height: `${h}px` });
-    this.cameras.main.setZoom(dpr).setOrigin(0, 0);
-    this.scale.updateBounds();
+    this.fitting = true;
+    try {
+      this.viewW = w; this.viewH = h; this.dpr = dpr;
+      this.scale.zoom = 1 / dpr; // Phaser styles the canvas at buffer × zoom = CSS size
+      this.cameras.main.setZoom(dpr).setOrigin(0, 0);
+      this.scale.resize(Math.round(w * dpr), Math.round(h * dpr)); // emits 'resize' → paint
+      Object.assign(this.game.canvas.style, { width: `${w}px`, height: `${h}px` });
+      this.cameras.main.setZoom(dpr).setOrigin(0, 0);
+      this.scale.updateBounds();
+    } finally { this.fitting = false; }
   }
   private text(x: number, y: number, value: string, style: Phaser.Types.GameObjects.Text.TextStyle): Phaser.GameObjects.Text {
     return this.add.text(x, y, value, { ...style, resolution: this.dpr });

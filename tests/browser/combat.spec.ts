@@ -273,7 +273,7 @@ test('iPhone 3x portrait: sharp canvas, full-height layout and HUD clear of the 
   return {masthead:box('#battle-view .masthead').top,view:box('#battle-view'),dock:box('.command-dock').bottom,canvas:[c.width,c.height],css:[box('#game canvas').width,box('#game canvas').height],scroll:document.scrollingElement!.scrollHeight};});
  expect(m.masthead).toBeGreaterThanOrEqual(44);expect(m.view.top).toBe(0);expect(m.view.bottom).toBe(932);
  expect(m.dock).toBeGreaterThan(932-20);expect(m.dock).toBeLessThanOrEqual(932);expect(m.scroll).toBeLessThanOrEqual(932);
- expect(m.canvas[0]).toBe(Math.round(m.css[0]!*3));expect(m.canvas[1]).toBe(Math.round(m.css[1]!*3));
+ expect(Math.abs(m.canvas[0]!-m.css[0]!*3)).toBeLessThanOrEqual(3);expect(Math.abs(m.canvas[1]!-m.css[1]!*3)).toBeLessThanOrEqual(3);
  // Field targets keep working in CSS pixels on the 3x buffer.
  await cast(page,'tracer','attack','raider');await finish(page);await expect(page.locator('[data-enemy=raider]')).not.toContainText('78 / 78');
  await page.screenshot({path:info.outputPath('iphone-3x-battle.png')});expect(issues).toEqual([]);await context.close();

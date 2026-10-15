@@ -347,3 +347,8 @@ html, body { background: #0a1422; }
 /* The battle scene reaches every screen edge; only its HUD keeps clear of the insets.
    (Map, lobby, commander and title are fixed full-screen views with their own insets.) */
 #battle-view { padding: var(--safe-top) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px); }
+/* The canvas buffer is devicePixelRatio × the arena; pin it so its size can never feed back into
+   the arena's layout (WebKit sizes percentage heights in flex items from content). */
+#battle-view .arena { position: relative; }
+#game { position: absolute; inset: 0; width: auto; height: auto; }
+#game canvas { position: absolute; left: 0; top: 0; width: 100% !important; height: 100% !important; }
