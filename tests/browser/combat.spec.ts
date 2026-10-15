@@ -278,3 +278,19 @@ test('iPhone 3x portrait: sharp canvas, full-height layout and HUD clear of the 
  await cast(page,'tracer','attack','raider');await finish(page);await expect(page.locator('[data-enemy=raider]')).not.toContainText('78 / 78');
  await page.screenshot({path:info.outputPath('iphone-3x-battle.png')});expect(issues).toEqual([]);await context.close();
 });
+
+// With motion on, the target ring pulses (veil-hint animates transform); its centring must not
+// depend on transform, or the ring drifts half its width off the fighter.
+test('pulsing target rings stay centred on their fighters with motion enabled',async({browser})=>{
+ const context=await browser.newContext({viewport:{width:430,height:932},deviceScaleFactor:3,hasTouch:true,isMobile:true,reducedMotion:'no-preference'});
+ const page=await context.newPage();watchPage(page);const issues=await start(page);
+ for(const action of ['attack']){
+  await page.locator(`#action-${action}`).click();await page.locator('[data-ui=skill-close]').click().catch(()=>{});
+  const rings=await page.evaluate(()=>[...document.querySelectorAll<HTMLElement>('.field-target.valid-target')].map(b=>{const r=b.getBoundingClientRect(),s=getComputedStyle(b,'::before');
+   const w=parseFloat(s.width),left=parseFloat(s.marginLeft)+parseFloat(s.left);const t=new DOMMatrix(s.transform==='none'?undefined:s.transform);
+   return {button:r.width/2,ring:left+w/2+t.m41};}));
+  expect(rings.length).toBeGreaterThan(0);
+  for(const r of rings)expect(Math.abs(r.ring-r.button)).toBeLessThanOrEqual(4);
+ }
+ expect(issues).toEqual([]);await context.close();
+});

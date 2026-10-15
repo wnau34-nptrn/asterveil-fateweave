@@ -24,6 +24,8 @@ export class BattleScene extends Phaser.Scene {
   private dpr = 1;
   private fitting = false;
   private shaking: Phaser.Tweens.Tween | undefined;
+  private root: Phaser.GameObjects.Container | undefined;
+  private nextSizeCheck = 0;
   constructor(private encounter: EncounterDefinition, private readonly choose: (id: string) => void, private readonly onReady: () => void, private readonly onLayout: () => void) { super('battle'); }
   get isReady(): boolean { return this.ready; }
   setEncounter(data: EncounterDefinition): void {
@@ -49,10 +51,8 @@ export class BattleScene extends Phaser.Scene {
     try {
       this.viewW = w; this.viewH = h; this.dpr = dpr;
       this.scale.zoom = 1 / dpr; // Phaser styles the canvas at buffer × zoom = CSS size
-      this.cameras.main.setZoom(dpr).setOrigin(0, 0);
       this.scale.resize(Math.round(w * dpr), Math.round(h * dpr)); // emits 'resize' → paint
       Object.assign(this.game.canvas.style, { width: `${w}px`, height: `${h}px` });
-      this.cameras.main.setZoom(dpr).setOrigin(0, 0);
       this.scale.updateBounds();
     } finally { this.fitting = false; }
   }
@@ -80,14 +80,25 @@ export class BattleScene extends Phaser.Scene {
     this.paint();
     this.onReady();
   }
+  // A missed resize notification would leave the canvas stretched against the DOM targets;
+  // re-measure the arena twice a second while the battle renders.
+  update(time: number): void {
+    if (time < this.nextSizeCheck) return;
+    this.nextSizeCheck = time + 500;
+    this.fit();
+  }
   sync(view: SceneView): void { this.view = view; if (this.ready) this.paint(); }
   private paint(): void {
     if (!this.view) return;
     this.stopEffects(); this.bodies.clear();
     // The camera only carries the pixel-ratio zoom; clear any effect so art and DOM targets share one origin.
-    this.cameras.main.resetFX().setScroll(0, 0);
+    // The camera stays at its defaults; the root container alone carries the pixel-ratio scale,
+    // so art, input zones and the DOM targets (CSS pixels) share one origin.
+    this.cameras.main.resetFX().setZoom(1).setScroll(0, 0);
+    this.root ??= this.add.container(0, 0);
+    this.root.setPosition(0, 0).setScale(this.dpr);
     this.layer?.destroy();
-    this.layer = this.add.container(0, 0);
+    this.layer = this.add.container(0, 0); this.root.addAt(this.layer, 0);
     this.positions.clear(); this.actorTargets.clear();
     const w = this.viewW, h = this.viewH;
     const short = w < 900 || h < 360;
@@ -209,7 +220,7 @@ export class BattleScene extends Phaser.Scene {
   }
   play(events: BattleEvent[]): void {
     if (!this.ready || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    this.effects = this.add.container(0, 0).setDepth(20);
+    this.effects = this.add.container(0, 0); this.root?.add(this.effects);
     const source = this.view?.activeActorId ? this.bodies.get(this.view.activeActorId) : undefined;
     const target = this.view?.activeTargetId ? this.positions.get(this.view.activeTargetId) : undefined;
     if (source && target && events.some(event => event.type === 'damage')) {
