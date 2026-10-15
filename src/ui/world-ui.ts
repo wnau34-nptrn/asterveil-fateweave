@@ -3,7 +3,7 @@ import type { Direction, ExpeditionState, MapDefinition, Point } from '../core/w
 import { atCamp, atMuster, canOpenChest, canRest, canRevive, chestAt, encounterChance, isRevealed, rosterIds, starred, tileAt, zoneOf } from '../core/world/world';
 import { PARTY_SLOTS, RESERVE_SLOTS } from '../core/world/types';
 import { actorFrames, artUrl } from '../game/visuals/assets';
-import { SOURCE_TILE, decorAt, floorFrame, fogLayers, landmarkAt, tileSizeFor, tileset, worldArtUrl, type Landmark } from '../game/visuals/world-art';
+import { SOURCE_TILE, chestFrame, decorAt, itemFrame, floorFrame, fogLayers, landmarkAt, tileSizeFor, tileset, worldArtUrl, type Landmark } from '../game/visuals/world-art';
 import { heroText, resourceOrder, resourceText } from './th';
 import { icon } from './icons';
 
@@ -19,6 +19,15 @@ const shards: readonly [string, string, string, string, string][] = [
   ['10%', '66%', '-60px', '40px', '22deg'], ['32%', '70%', '-25px', '55px', '-26deg'], ['58%', '68%', '25px', '55px', '18deg'], ['80%', '60%', '60px', '40px', '-28deg'],
 ];
 
+// Painted item frame (ART-WORLD-LOOT-001) for the pack and camp sheets.
+export function itemArt(id: 'ore' | 'ember' | 'seal'): string {
+  const f = itemFrame(id);
+  return `<span class="item-art" data-item="${id}" style="--fx:${f.x / f.w}" aria-hidden="true"></span>`;
+}
+// Star rank as individual badges; the count stays readable text for assistive tech.
+export function starRow(n: number, max: number): string {
+  return `<span class="star-row" role="img" aria-label="${n} ดาว">${icon('starBadge').repeat(n)}${icon('starBadgeEmpty').replace('class="icon"', 'class="icon empty"').repeat(max - n)}</span>`;
+}
 export function portrait(id: string): string {
   const frame = actorFrames[id]!;
   return `<span class="portrait" data-actor="${id}" style="--portrait-x:${frame % 2};--portrait-y:${Math.floor(frame / 2)}" aria-hidden="true"><img src="${artUrl('portraits')}" alt="" width="1024" height="1536" draggable="false"></span>`;
@@ -219,14 +228,14 @@ export class WorldUI {
   private renderPack(): void {
     const s = this.view?.state; if (!s) return;
     const opened = s.openedChests.length;
-    this.root.querySelector('#pack-content')!.innerHTML = `<ul class="pack-list">${resourceOrder.map(id => `<li data-resource="${id}">${icon(id)}<div><b>${resourceText[id].name}</b><small>${resourceText[id].use}</small></div><strong>${s.resources[id]}</strong></li>`).join('')}</ul>
+    this.root.querySelector('#pack-content')!.innerHTML = `<ul class="pack-list">${resourceOrder.map(id => `<li data-resource="${id}">${itemArt(id)}<div><b>${resourceText[id].name}</b><small>${resourceText[id].use}</small></div><strong>${s.resources[id]}</strong></li>`).join('')}</ul>
       <p class="world-stats">เปิดกล่องสมบัติแล้ว ${opened}/${this.map.chests.length} กล่อง · ของตกจากศึกที่ชนะและกล่องสมบัติ</p>`;
   }
 
   private stars(s: ExpeditionState, id: string): number { return s.members[id]?.stars ?? 1; }
   // Member stats as they fight: the catalog entry scaled by the member's stars.
   private hero(id: string, s = this.view?.state): HeroDefinition { const base = this.heroes.find(h => h.id === id)!; return s ? starred(base, this.stars(s, id), this.map) : base; }
-  private starRow(n: number): string { return `<span class="star-row" aria-label="${n} ดาว">${'★'.repeat(n)}<i>${'★'.repeat(this.map.company.maxStars - n)}</i></span>`; }
+  private starRow(n: number): string { return starRow(n, this.map.company.maxStars); }
   private renderCamp(): void {
     const s = this.view?.state; if (!s) return;
     const tab = (id: WorldUI['campTab'], label: string) => `<button id="camp-tab-${id}" data-world="camp-tab" data-tab="${id}" role="tab" aria-selected="${this.campTab === id}" class="${this.campTab === id ? 'active' : ''}">${label}</button>`;
@@ -310,7 +319,8 @@ export class WorldUI {
       const open = s.openedChests.includes(el.dataset.chest!);
       if (el.dataset.open === String(open)) return;
       const changed = el.dataset.open !== undefined; el.dataset.open = String(open);
-      el.innerHTML = icon(open ? 'chestOpen' : 'chest');
+      const f = chestFrame(el.dataset.tier as 'common' | 'rare', open);
+      el.style.setProperty('--fx', String(f.x / f.w)); el.innerHTML = '';
       if (changed && open && !this.reduced.matches) { el.classList.remove('lv-chest-open'); void el.offsetWidth; el.classList.add('lv-chest-open'); }
     });
     const token = this.root.querySelector<HTMLElement>('#party-token')!;

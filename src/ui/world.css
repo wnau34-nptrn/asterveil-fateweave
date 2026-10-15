@@ -171,7 +171,7 @@ h1, h2, h3, .primary, .secondary { font-family: var(--font-heading); font-weight
 .confirm-new p { font-size: 14px; margin-bottom: 8px; color: #ffe4dc; }
 .confirm-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 
-/* Phase 2A: resources, chests and the camp sheet (code-native placeholders until chest art exists). */
+/* Phase 2A: resources, chests and the camp sheet. Chest and item art: ART-WORLD-LOOT-001 (accepted). */
 .hud-pack { position: absolute; top: calc(var(--hud-top) + 76px); right: var(--hud-right); height: 44px; width: 186px; display: flex; align-items: center; justify-content: space-between; gap: 6px; padding: 0 14px; }
 .pack-item { display: inline-flex; align-items: center; gap: 4px; font: 600 15px/1.2 var(--font-heading); font-variant-numeric: tabular-nums; }
 .pack-item .icon { width: 17px; height: 17px; }
@@ -181,16 +181,15 @@ h1, h2, h3, .primary, .secondary { font-family: var(--font-heading); font-weight
 .hud-pack.gain { animation: pack-gain 700ms var(--ease-out) 1; }
 @keyframes pack-gain { 0% { box-shadow: var(--hud-shadow); } 30% { box-shadow: var(--glow-gold), var(--hud-shadow); border-color: var(--gold-light); } 100% { box-shadow: var(--hud-shadow); } }
 .hud-event.loot-feedback { border-color: var(--gold-light); color: #ffeec4; }
-.chest { width: calc(var(--t) * .74); height: calc(var(--t) * .74); transform: translate(-50%, calc(-100% - var(--t) * .13)); display: grid; place-items: center; border-radius: 30%;
-  background: radial-gradient(circle at 50% 35%, #1d4a66f0, #0d2236f0); border: 1px solid #a3edffaa; color: #bff3ff; box-shadow: 0 4px 8px #08121f90, 0 0 10px #74d4ef55; }
-.chest[data-tier=rare] { border-color: var(--gold-light); color: var(--gold-light); box-shadow: 0 4px 8px #08121f90, var(--glow-gold); }
-.chest .icon { width: 62%; height: 62%; }
-.chest[data-open=true] { opacity: .55; filter: grayscale(.8); box-shadow: 0 3px 6px #08121f80; }
-.chest.lv-chest-open { animation: chest-open 520ms var(--ease-out) 1; }
-@keyframes chest-open { 0% { transform: translate(-50%, calc(-100% - var(--t) * .13)) scale(1); opacity: 1; filter: none; } 40% { transform: translate(-50%, calc(-100% - var(--t) * .13)) scale(1.18); } 100% { transform: translate(-50%, calc(-100% - var(--t) * .13)) scale(1); } }
+.chest { width: var(--t); height: var(--t); background: url('/assets/world/chests.webp') calc(var(--fx, 0) * var(--t) * -1) 0 / calc(var(--t) * 4) var(--t) no-repeat;
+  filter: drop-shadow(0 2px 2px #08121fa0); }
+.chest::before { content: ''; position: absolute; left: 20%; right: 20%; bottom: 4%; height: 12%; border-radius: 50%; background: #08121f66; z-index: -1; }
+.chest[data-tier=rare][data-open=false] { filter: drop-shadow(0 2px 2px #08121fa0) drop-shadow(0 0 6px #f2d59680); }
+.chest.lv-chest-open { animation: chest-open 520ms var(--ease-out) 1; transform-origin: 50% 92%; }
+@keyframes chest-open { 0% { transform: translate(-50%, -100%) scale(1); } 40% { transform: translate(-50%, -100%) scale(1.16); } 100% { transform: translate(-50%, -100%) scale(1); } }
+.item-art { flex: none; display: inline-block; width: 40px; height: 40px; background: url('/assets/world/items.webp') calc(var(--fx, 0) * -40px) 0 / 120px 40px no-repeat; }
 .pack-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
 .pack-list li { display: flex; align-items: center; gap: 12px; min-height: 52px; padding: 6px 4px; border-bottom: 1px solid #e8f5ff14; }
-.pack-list li > .icon { width: 24px; height: 24px; flex: none; }
 .pack-list li[data-resource=ore] > .icon { color: var(--veil-cyan); } .pack-list li[data-resource=ember] > .icon { color: #ffb27a; } .pack-list li[data-resource=seal] > .icon { color: var(--gold-light); }
 .pack-list li div { flex: 1; min-width: 0; display: flex; flex-direction: column; }
 .pack-list b { font: 600 15px/1.4 var(--font-heading); }
@@ -239,8 +238,9 @@ h1, h2, h3, .primary, .secondary { font-family: var(--font-heading); font-weight
 }
 
 /* Phase 2C: stars, member panel and hiring board. Stars are live text until ART-WORLD-LOOT-001 lands. */
-.star-row { color: var(--gold-light); font-size: 11px; letter-spacing: 1px; line-height: 1.3; white-space: nowrap; }
-.star-row i { font-style: normal; color: #e8f5ff33; }
+.star-row { display: inline-flex; gap: 1px; line-height: 1; white-space: nowrap; vertical-align: middle; }
+.star-row .icon { width: 12px; height: 12px; flex: none; }
+.hire-list .star-row .icon, .member-panel .star-row .icon { width: 14px; height: 14px; }
 .hero-stars { font-style: normal; font-size: 11px; color: var(--gold-light); margin-left: 4px; }
 .member-panel { margin: 4px 0 8px; padding: 10px; border: 1px solid #f2d59655; border-radius: 12px; background: #0a1626; }
 .member-panel p { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: 13px; color: var(--text-muted); margin-bottom: 8px; }
@@ -463,3 +463,4 @@ h1, h2, h3, .primary, .secondary { font-family: var(--font-heading); font-weight
 @media (max-width: 420px) { .choice-row { grid-template-columns: repeat(3, minmax(0, 1fr)); } .commander-preview b { font-size: 19px; } }
 .choice-row .swatch:hover:not(:disabled) { background-color: var(--crest-color); filter: brightness(1.08); }
 .commander-panel { flex: 0 1 auto; } .commander-shell { justify-content: center; }
+.star-row .icon.empty { filter: brightness(2.4) saturate(.5); opacity: .85; }

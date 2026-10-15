@@ -2,6 +2,8 @@ import type { ExpeditionState, MapDefinition, Point } from '../../core/world/typ
 import { isRevealed, tileAt } from '../../core/world/world';
 import tilesetFrames from '../../content/world/tileset.json';
 import decorFrames from '../../content/world/decor.json';
+import chestFrames from '../../content/world/chests.json';
+import itemFrames from '../../content/world/items.json';
 
 // Pure art selection for the DOM map (ART-UI-WORLD-001). Choices depend only on
 // tile coordinates and committed state, so a frame never changes between renders.
@@ -9,6 +11,9 @@ export interface Frame { x: number; y: number; w: number; h: number }
 export const SOURCE_TILE = 128;
 export const tileset: Readonly<Record<string, Frame>> = tilesetFrames;
 const decor: Readonly<Record<string, Frame & { zone: string }>> = decorFrames;
+// ART-WORLD-LOOT-001 atlases: 128 px chest frames (sole baseline footY) and item frames.
+export const chestFrame = (tier: 'common' | 'rare', open: boolean): Frame & { footY: number } => chestFrames[`chest_${tier}${open ? '_open' : ''}`];
+export const itemFrame = (id: 'ore' | 'ember' | 'seal'): Frame => itemFrames[`item_${id}`];
 export const worldArtUrl = (name: string): string => `${import.meta.env.BASE_URL}assets/world/${name}.webp`;
 
 // Stable integer hash of a coordinate (and a salt) for variants and decor.

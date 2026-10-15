@@ -6,7 +6,7 @@ import { actorFrames, artUrl } from '../game/visuals/assets';
 import { icon } from './icons';
 import { commanderBadge } from './commander-ui';
 import { heroText } from './th';
-import { portrait } from './world-ui';
+import { portrait, starRow } from './world-ui';
 
 export interface LobbyHost { hire(index: number): void; upgrade(id: string): void; dismiss(id: string): void; place(id: string, group: Group, other?: string): void; depart(): void; home(): void }
 export interface LobbyView { profile: Profile; message: string; saved: boolean }
@@ -56,7 +56,7 @@ export class LobbyUI {
     this.focus(`#lobby-member-${moving}`);
   }
   private hero(id: string): HeroDefinition { return starred(this.heroes.find(h => h.id === id)!, this.view!.profile.members[id]?.stars ?? 1, this.map); }
-  private stars(n: number): string { return `<span class="star-row" aria-label="${n} ดาว">${'★'.repeat(n)}<i>${'★'.repeat(this.map.company.maxStars - n)}</i></span>`; }
+  private stars(n: number): string { return starRow(n, this.map.company.maxStars); }
 
   private draw(): void {
     const p = this.view!.profile; const last = p.last;
