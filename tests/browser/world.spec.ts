@@ -68,6 +68,8 @@ test('walking until the first encounter opens the tutorial battle in place', asy
 });
 
 test('victory returns to the same tile with surviving HP and loot; a camp rest heals the standing by half and an ember revives', async ({ page }, info) => {
+  // Plays a whole battle through the UI; the production build on CI needs more than the 45 s default.
+  test.setTimeout(90000);
   const data = encounterById('shadow-stalker')!; const hp = { guardian: 40, tracer: 20, weaver: 30, healer: 4 };
   const camp = findTiles(map, 'camp')[1]!; const where = { x: camp.x, y: camp.y + 1 };
   const state = base({ position: where, hp, battle: { kind: 'random', encounterId: data.id, entry: hp, commands: [] } });
