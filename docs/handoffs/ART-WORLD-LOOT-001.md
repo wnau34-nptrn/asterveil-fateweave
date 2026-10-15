@@ -11,6 +11,10 @@ Return a package that the developer (Claude) will review and integrate. **Do not
 
 Repository: `wnau34-nptrn/asterveil-fateweave`. Base branch: `feature/fateweave-initial-prototype`.
 
+### 0. Placement rules
+
+See `docs/handoffs/ART-PLACEMENT-RULES.md` §3 (exploration map): chests are about 0.75 of a tile, centred slightly above the tile's bottom edge.
+
 ### 1. Read first (style lock)
 
 These files are the style bible. **Do not modify or regenerate them.**

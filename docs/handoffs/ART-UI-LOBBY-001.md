@@ -13,6 +13,14 @@ The game now has a **lobby** (ค่ายทหารรับจ้าง, "th
 
 Repository: `wnau34-nptrn/asterveil-fateweave`. Base branch: `feature/fateweave-initial-prototype`.
 
+### 0. Placement rules (read first)
+
+Read `docs/handoffs/ART-PLACEMENT-RULES.md`, especially §4 (lobby) and §1 (battle facing).
+
+- Draw every pose facing RIGHT (→), the same as the battle frames.
+- In the lobby the game **mirrors** characters standing to the right of the fire so that they face it. Every pose must therefore still look correct when flipped horizontally: no text, letters or one-sided emblems.
+- Keep the same 512 px frame and sole (or seat) baseline as `units.webp`, so poses can swap in place.
+
 ### 1. Read first (style lock)
 
 **Do not regenerate or modify these files.**
@@ -76,7 +84,9 @@ Deliver them as:
 
 **C. Review sheets** (reference only)
 
-- `review/lobby-phone.png` (390×844 crop) and `review/lobby-desktop.png` (1366×768 crop): a mock composition of the scene with the four heroes posed around the fire (two sitting, one cheering, one idle_alt), plus a flame placeholder. Show the real HUD region boundaries as thin outlines, with no text.
+- `review/lobby-phone.png` (390×844 crop) and `review/lobby-desktop.png` (1366×768 crop): a mock composition of the scene with the four heroes posed around the fire (two sitting, one cheering, one idle_alt), plus a flame placeholder.
+  - Characters right of the fire must be **mirrored** in the mock, as the game will show them.
+  - Show the real HUD region boundaries as thin outlines, with no text.
 - `review/poses-lineup.png`: all 12 poses next to the original idle frames at the same scale.
 - `review/silhouettes.png`: the 12 poses as black silhouettes at 90 px.
 
@@ -99,7 +109,8 @@ Deliver them as:
 
 - [ ] `lobby_bg`, `lobby_fg` and `lobby_firepit` at the exact sizes; key content inside the safe area
 - [ ] 12 hero poses (sit / cheer / idle_alt × 4) in the atlas, with JSON including `footY` (and `seatY` for sit)
-- [ ] Identities match the masters; same scale and facing; no halos
+- [ ] Identities match the masters; same scale; no halos
+- [ ] **Facing:** all poses face RIGHT (→); each pose still reads correctly when mirrored (checked in `review/lobby-*.png` with right-side characters flipped)
 - [ ] Mercenary poses delivered, or explicitly deferred in `NOTES.md`
 - [ ] Review sheets included
 - [ ] No text; original work; runtime total ≤ 1.6 MB; existing hashes unchanged

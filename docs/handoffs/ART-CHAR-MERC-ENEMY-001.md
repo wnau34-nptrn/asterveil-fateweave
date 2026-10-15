@@ -13,6 +13,16 @@ Repository: `wnau34-nptrn/asterveil-fateweave`. Base branch: `feature/fateweave-
 
 ---
 
+### 0. Placement rules (read first)
+
+Read `docs/handoffs/ART-PLACEMENT-RULES.md` before drawing. It describes exactly where and how the game places, scales and overlays these frames. The key rules:
+
+- **Mercenaries fight on the LEFT half of the battlefield and must face RIGHT (→).**
+- **Enemies stand on the RIGHT half and must face LEFT (←).**
+- **The game never mirrors battle sprites**, so the facing in your file is final.
+- Large foes take the enemy front position and are shown about 1.5× normal size.
+- Frames are anchored at the soles (`footY`). The game draws shadows, rings, names and HP bars below the feet.
+
 ### 1. Read before drawing (style lock)
 
 Study these existing files closely. They are the style bible. **Do not regenerate, repaint or modify them.**
@@ -113,6 +123,8 @@ For **each of the 15 characters**:
 - `review/lineup-foes.png`: all 9 new enemies next to the existing Raider and Brute, same scale.
 - `review/silhouettes.png`: black silhouettes of all 15 at 64 px high.
 - `review/in-arena.png`: a mock composition of 2 mercenaries plus 2 heroes against 2 new foes over `ruins.webp`. This is a mock only; do not change the arena.
+  - Use the real positions: our side at x 14–39% facing right; foes at x 70–85% facing left, with the large foe at the front position.
+  - Show it at phone size (about 100 px units) and at desktop size (about 145 px units, 215 px for large foes).
 - `review/on-map.png`: the elite and mini-boss full-body frames scaled to about 1.5 world tiles, standing on the existing tileset.
 
 ### 6. Technical constraints
@@ -138,7 +150,9 @@ For **each of the 15 characters**:
 
 ### 8. Validation checklist (tick before returning)
 
-- [ ] 15 full-body idle frames, 512×512 RGBA, correct facing, shared baseline (`footY` recorded)
+- [ ] 15 full-body idle frames, 512×512 RGBA, shared baseline (`footY` recorded)
+- [ ] **Facing:** all 6 mercenaries face RIGHT (→); all 9 enemies face LEFT (←); portraits match their frame's facing
+- [ ] `review/in-arena.png` uses the real formation: mercenaries on the left facing right and foes on the right facing left, at the real display sizes from `ART-PLACEMENT-RULES.md`
 - [ ] 15 portraits, 512×512, readable at 40 px in a circle
 - [ ] 4 atlases + 4 JSON frame maps in the 2-column 512 px format
 - [ ] Line-up, silhouette, in-arena and on-map review sheets
