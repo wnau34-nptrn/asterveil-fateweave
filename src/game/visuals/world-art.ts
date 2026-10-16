@@ -51,7 +51,7 @@ export function landmarkAt(map: MapDefinition, state: ExpeditionState, p: Point)
 // Puzzle pieces (3C) keep their tiles free of decor so stones, levers, boulders and pits read clearly.
 const puzzleTile = (map: MapDefinition, p: Point): boolean => {
   const at = (q: Point) => q.x === p.x && q.y === p.y; const P = map.puzzles;
-  return P.runes.some(r => r.stones.some(at)) || P.levers.some(l => l.levers.some(at)) || P.boulders.some(b => at(b.at) || at(b.pit));
+  return P.runes.some(r => r.stones.some(at)) || P.levers.some(l => l.levers.some(at)) || P.boulders.some(b => at(b.at) || at(b.pit)) || map.herbs.some(at);
 };
 // The floor frame a doorway or found secret passage shows once open: that of a walkable neighbour.
 export function openingFrame(map: MapDefinition, p: Point): string {

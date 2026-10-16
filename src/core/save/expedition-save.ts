@@ -33,7 +33,8 @@ export const legacyKeys = ['asterveil.fateweave.battle.v1', 'asterveil.fateweave
 // v13 → v14: gold coins pay for hiring. Run resources, the bank and the last result gain `gold`; older data
 // starts with 0 in the run and one hire's worth in the bank, so a company saved for hiring can still hire.
 // v14 → v15 (3C): the run gains puzzle state: `runes`, `solved`, `levers`, `boulders` and `secrets` (older data: none).
-const SAVE_VERSION = 15;
+// v15 → v16 (3D): the profile gains side-quest `quests`; the run gains picked `herbs` (older data: none).
+const SAVE_VERSION = 16;
 export interface Game { profile: Profile; run: ExpeditionState | null }
 const actions: readonly ActionId[] = ['attack', 'guard', 'bash', 'mark', 'execute', 'bolt', 'ward', 'heal', 'prayer', 'brace', 'pierce', 'hinder', 'volley', 'acid', 'haste', 'ambush', 'evade', 'taunt', 'slam', 'valor', 'mend',
   'rally', 'finisher', 'sigil', 'sanctuary', 'spearwall', 'weakshot', 'bomb', 'backstab', 'quake', 'finale'];
@@ -182,6 +183,7 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
   if (version < 13) Object.assign(s, { elitesDefeated: [], eventsDone: [], dust: 0 });
   if (version < 14 && s.resources && typeof s.resources === 'object') (s.resources as Record<string, unknown>).gold ??= 0;
   if (version < 15) Object.assign(s, { runes: {}, solved: [], levers: [], boulders: {}, secrets: [] });
+  if (version < 16) s.herbs = [];
   if (s.mapId !== map.id) throw new Error('Map changed');
   if (s.mapVersion !== map.version) throw new StaleRun(staleRun(s, map, lookup));
   const cells = map.rows.length * map.rows[0]!.length;
@@ -222,7 +224,7 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
     potions: potionsOf(s.potions, map.potions.carry), repel: isInt(s.repel, 0, map.potions.repelSteps) ? s.repel : badRun(),
     elitesDefeated: idList(s.elitesDefeated, map.elites.map(e => e.id)), eventsDone: idList(s.eventsDone, map.events.map(e => e.id)),
     dust: isInt(s.dust, 0, 999999) ? s.dust : badRun(),
-    ...puzzleState(s, map),
+    ...puzzleState(s, map), herbs: idList(s.herbs, map.herbs.map(h => h.id)),
   };
   // Standing on a wall is only possible in an opened doorway or a secret passage; never inside a boulder or an open pit.
   if (tileAt(map, state.position)?.kind === 'wall' && !passableWall(state, map, state.position)) throw new Error('Invalid position');
@@ -246,6 +248,8 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
   if (version < 9) Object.assign(p, { items: [], nextItem: 1 });
   if (version < 11) p.forge = 0;
   if (version < 12) p.potions = { salve: 0, tonic: 0, repel: 0 };
+  if (version < 16) p.quests = {};
+  const quests = questsOf(p.quests, map);
   if (!isInt(p.forge)) throw new Error('Invalid forge');
   if (!isInt(p.nextItem, 1) || !Array.isArray(p.items) || p.items.length > map.equipment.bagCap) throw new Error('Invalid items');
   const items = p.items.map(i => itemOf(i, map, lookup));
@@ -268,7 +272,17 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
     if (commanderReason(commander)) throw new Error('Invalid commander');
   } else if (p.commander === undefined && version >= 6) throw new Error('Invalid commander');
   return { seed: p.seed, returns: p.returns, tutorialDone: p.tutorialDone, commander, company: [...company as string[]], members, party,
-    bank: { ore: bank.ore as number, gold: bank.gold as number, seal: bank.seal as number, dust: bank.dust as number }, items, nextItem: p.nextItem as number, forge: p.forge as number, potions: potionsOf(p.potions, 9999), taken: [...p.taken as number[]], expeditions: p.expeditions, completes: p.completes, last };
+    bank: { ore: bank.ore as number, gold: bank.gold as number, seal: bank.seal as number, dust: bank.dust as number }, items, nextItem: p.nextItem as number, forge: p.forge as number, potions: potionsOf(p.potions, 9999), quests, taken: [...p.taken as number[]], expeditions: p.expeditions, completes: p.completes, last };
+}
+// Side-quest progress: known quests only, progress within the target, claimed only when complete.
+function questsOf(v: unknown, map: MapDefinition): Profile['quests'] {
+  const out: Profile['quests'] = {};
+  for (const [id, raw] of Object.entries(obj(v))) {
+    const q = map.sideQuests.find(s => s.id === id); const e = obj(raw);
+    if (!q || Object.keys(e).length !== 2 || !isInt(e.progress, 0, q.target) || typeof e.claimed !== 'boolean' || (e.claimed && e.progress !== q.target)) throw new Error('Invalid quests');
+    out[id] = { progress: e.progress, claimed: e.claimed };
+  }
+  return out;
 }
 // A run that already reached the goal or lost every brought member is settled on load.
 function settleFinished(game: Game, map: MapDefinition): Game {
@@ -279,7 +293,7 @@ function settleFinished(game: Game, map: MapDefinition): Game {
 }
 export function parseGame(raw: string, map: MapDefinition, lookup: EncounterLookup): Game {
   const envelope = obj(JSON.parse(raw)); const version = envelope.version as number;
-  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
+  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
   if (version < 5) {
     const run = parseRun(envelope.state, version, map, lookup);
     const profile = newProfile(map, (run.seed ^ 0x5bd1e995) >>> 0);

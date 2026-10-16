@@ -1,4 +1,4 @@
-import type { Commander, ExpeditionState, GearSlot, Item, MapDefinition, MemberProgress, PotionId, Potions, Profile, ProfileResult, RunOutcome, TalentNode, Talents } from './types';
+import type { Commander, SideQuestKind, ExpeditionState, GearSlot, Item, MapDefinition, MemberProgress, PotionId, Potions, Profile, ProfileResult, RunOutcome, TalentNode, Talents } from './types';
 import { salvageValue } from './equipment';
 import { COMPANY_CAP, PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS } from './types';
 import { heroCatalog, levelOf, newExpedition, rollPercent, type EncounterLookup } from './world';
@@ -10,7 +10,7 @@ export function newProfile(map: MapDefinition, seed: number): Profile {
     seed: seed >>> 0, returns: 0, tutorialDone: false, commander: null,
     company: [...map.startingRoster], members: Object.fromEntries(map.startingRoster.map(id => [id, { stars: 1, dupes: 0 }])),
     party: { deployed: [...map.startingRoster], reserve: [] },
-    bank: { ore: 0, gold: 0, seal: 0, dust: 0 }, items: [], nextItem: 1, forge: 0, potions: { salve: 0, tonic: 0, repel: 0 }, taken: [], expeditions: 0, completes: 0, last: null,
+    bank: { ore: 0, gold: 0, seal: 0, dust: 0 }, items: [], nextItem: 1, forge: 0, potions: { salve: 0, tonic: 0, repel: 0 }, quests: {}, taken: [], expeditions: 0, completes: 0, last: null,
   };
 }
 const blocked = (profile: Profile, reason: string): ProfileResult => ({ profile, event: { type: 'blocked', reason } });
@@ -240,6 +240,12 @@ export function settle(initial: Profile, run: ExpeditionState, outcome: RunOutco
   if (outcome !== 'wiped') for (const id of POTION_IDS) profile.potions[id] += run.potions[id];
   // Levels and EXP earned on the run are kept whatever the outcome (2D-1).
   for (const [id, m] of Object.entries(run.members)) if (profile.members[id] && m.level) profile.members[id] = { ...profile.members[id]!, level: m.level, exp: m.exp ?? 0 };
+  // 3D: side quests count what this run did (herbs are lost on a wipe), capped at each target.
+  for (const q of map.sideQuests) {
+    const now = profile.quests[q.id] ?? { progress: 0, claimed: false }; if (now.claimed) continue;
+    const add = sideQuestGain(q.kind, run, outcome, map);
+    if (add) profile.quests[q.id] = { ...now, progress: Math.min(q.target, now.progress + add) };
+  }
   profile.tutorialDone ||= run.tutorialDone; profile.expeditions++; if (outcome === 'complete') profile.completes++;
   profile.returns++; profile.taken = [];
   profile.last = { outcome, ore, gold, seal, steps: run.steps, wins: run.wins, items, salvaged };
@@ -247,3 +253,29 @@ export function settle(initial: Profile, run: ExpeditionState, outcome: RunOutco
 }
 // Withdrawal is allowed at a camp or the map entrance, outside battle.
 export { atMuster as canWithdraw } from './world';
+
+// 3D side quests from the camp NPCs: progress is added when a run settles; the reward is claimed once, in the Lobby.
+function sideQuestGain(kind: SideQuestKind, run: ExpeditionState, outcome: RunOutcome, map: MapDefinition): number {
+  switch (kind) {
+    case 'wins': return run.wins;
+    case 'elites': return run.elitesDefeated.length;
+    case 'secrets': return run.secrets.length;
+    case 'puzzles': return run.solved.length;
+    case 'rareChests': return run.openedChests.filter(id => map.chests.find(c => c.id === id)?.tier === 'rare').length;
+    case 'herbs': return outcome === 'wiped' ? 0 : run.herbs.length;
+  }
+}
+export function claimReason(profile: Profile, map: MapDefinition, questId: string): string {
+  const q = map.sideQuests.find(s => s.id === questId); if (!q) return 'quest';
+  const now = profile.quests[q.id];
+  if (now?.claimed) return 'claimed';
+  return (now?.progress ?? 0) >= q.target ? '' : 'progress';
+}
+export function claimQuest(initial: Profile, map: MapDefinition, questId: string): ProfileResult {
+  const reason = claimReason(initial, map, questId); if (reason) return blocked(initial, reason);
+  const profile = structuredClone(initial); const q = map.sideQuests.find(s => s.id === questId)!; const r = q.reward;
+  profile.bank.ore += r.ore ?? 0; profile.bank.gold += r.gold ?? 0; profile.bank.seal += r.seal ?? 0; profile.bank.dust += r.dust ?? 0;
+  for (const id of POTION_IDS) profile.potions[id] += r.potions?.[id] ?? 0;
+  profile.quests[q.id] = { progress: q.target, claimed: true };
+  return { profile, event: { type: 'claimed', questId: q.id } };
+}

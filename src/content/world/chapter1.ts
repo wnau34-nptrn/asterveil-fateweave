@@ -65,6 +65,17 @@ export const chapterOne: MapDefinition = {
   ],
   // Phase 3C (draft): one puzzle per zone guarding a rare chest, and one secret wall per zone hiding a common one.
   // The map is 23 columns wide: x 20–21 hold the vaults behind the old east wall.
+  // Phase 3D (draft): one side quest per camp NPC; progress comes from finished runs, rewards are claimed at camp.
+  sideQuests: [
+    { id: 'smith-rare-ore', npc: 'smith', kind: 'rareChests', target: 3, reward: { ore: 30, dust: 25 } },
+    { id: 'broker-proven', npc: 'broker', kind: 'wins', target: 12, reward: { gold: 40 } },
+    { id: 'trainer-elites', npc: 'trainer', kind: 'elites', target: 3, reward: { seal: 2 } },
+    { id: 'keeper-hidden', npc: 'keeper', kind: 'secrets', target: 3, reward: { gold: 20, dust: 15 } },
+    { id: 'herbalist-glow', npc: 'herbalist', kind: 'herbs', target: 3, reward: { potions: { salve: 2, tonic: 2 } } },
+    { id: 'scout-puzzles', npc: 'scout', kind: 'puzzles', target: 3, reward: { ore: 40, seal: 1 } },
+  ],
+  // Glowing herbs for the herbalist, one per zone.
+  herbs: [{ id: 'meadow-herb', x: 7, y: 23 }, { id: 'thicket-herb', x: 12, y: 15 }, { id: 'scar-herb', x: 12, y: 7 }],
   puzzles: {
     runes: [{ id: 'meadow-runes', door: { x: 18, y: 21 }, stones: [{ x: 5, y: 21, glyph: 'star' }, { x: 11, y: 19, glyph: 'moon' }, { x: 16, y: 22, glyph: 'sun' }] }],
     boulders: [{ id: 'thicket-boulder', at: { x: 19, y: 13 }, pit: { x: 20, y: 13 } }],

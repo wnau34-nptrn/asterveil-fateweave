@@ -52,6 +52,9 @@ export interface MapDefinition {
   quest: QuestDefinition;
   // 3C: puzzles and secret walls (doors, secret walls and pits sit on '#'/floor tiles of `rows`).
   puzzles: PuzzleDefinitions;
+  // 3D: side quests from the camp NPCs, and the herbs one of them asks for.
+  sideQuests: readonly SideQuestDefinition[];
+  herbs: readonly (Point & { id: string })[];
   events: readonly MapEventDefinition[];
   eventRules: EventRules;
   // Passive talent tree per hero id (2D-1b).
@@ -107,6 +110,12 @@ export interface PuzzleDefinitions {
   levers: readonly { id: string; levers: readonly Point[]; door: Point }[];
   boulders: readonly { id: string; at: Point; pit: Point }[];
   secrets: readonly (Point & { id: string })[];
+}
+// 3D side quests count what finished runs did. Rewards add to the bank and the home potion stock.
+export type SideQuestKind = 'wins' | 'elites' | 'secrets' | 'puzzles' | 'rareChests' | 'herbs';
+export interface SideQuestDefinition {
+  id: string; npc: string; kind: SideQuestKind; target: number;
+  reward: { ore?: number; gold?: number; seal?: number; dust?: number; potions?: Partial<Record<PotionId, number>> };
 }
 export interface QuestDefinition { need: number; objectives: readonly QuestObjective[] }
 export interface EliteDefinition { id: string; x: number; y: number; encounterId: string; forced: boolean; mini?: boolean }
@@ -209,6 +218,8 @@ export interface Profile {
   forge: number;
   // Brewed potions waiting at home (2D-5); a departure packs up to `carry` of each.
   potions: Potions;
+  // 3D side quests: progress gathered from finished runs and whether the reward was claimed (one-time each).
+  quests: Record<string, { progress: number; claimed: boolean }>;
   // Hiring board taken indexes for the current `returns` count.
   taken: number[];
   expeditions: number; completes: number;
@@ -226,7 +237,8 @@ export type ProfileEvent =
   | { type: 'equipped'; heroId: string }
   | { type: 'salvaged'; count: number; ore: number; dust: number }
   | { type: 'forged'; uid: number; action: 'enhance' | 'fuse' | 'reroll' }
-  | { type: 'brewed'; potion: PotionId };
+  | { type: 'brewed'; potion: PotionId }
+  | { type: 'claimed'; questId: string };
 export interface ProfileResult { profile: Profile; event: ProfileEvent }
 // Up to 4 deployed (slot order = enemy target slots) and 4 in reserve, swapped at camps.
 export const PARTY_SLOTS = 4;
@@ -256,6 +268,8 @@ export interface ExpeditionState {
   // 3C puzzles and secrets for this run: rune progress per puzzle, solved puzzle ids, pulled levers ('<puzzle>:<i>'),
   // moved boulders' positions and found secret walls. Everything resets with a new run.
   runes: Record<string, number>; solved: string[]; levers: string[]; boulders: Record<string, Point>; secrets: string[];
+  // 3D: glowing herbs picked up this run (they count for the herbalist's quest when the run settles, not on a wipe).
+  herbs: string[];
 }
 export type WorldEvent =
   | { type: 'moved'; chance: number }
@@ -273,6 +287,7 @@ export type WorldEvent =
   | { type: 'lever'; puzzleId: string; pulled: number; solved: boolean }
   | { type: 'pushed'; puzzleId: string; filled: boolean }
   | { type: 'secret'; secretId: string }
+  | { type: 'herb'; herbId: string }
   | { type: 'victory'; kind: BattleKind; encounterId: string; loot: Resources; exp?: Record<string, ExpGain>; item?: Item; dust?: number }
   | { type: 'defeat'; kind: BattleKind; encounterId: string; wiped?: boolean };
 // EXP from one victory for one brought member: `percent` is the level-gap multiplier.

@@ -20,7 +20,7 @@ Approved 2026-10-14, re-planned 2026-10-15 for the mercenary roster.
 | L2. Character creation | Commander (non-combat) name, crest and banner colour, once, between Home and Lobby | **Implemented** |
 | 2C-2. New classes | Six new mercenaries (ART-CHAR-MERC-ENEMY-001), one class mechanic at a time; ★3 skill and ★5 passive per class | **Implemented**: all 6 base classes (Garran spear, Mira archer, Toma alchemist, Sefa scout, Brann warden, Lio bard) and the ★3 skill + ★5 passive for all 10 classes (see Star unlocks) |
 | 2D. Equipment and level | 2D-1 member + monster levels; 2D-2 equipment (6 slots, 5 rarities, drops, inventory); 2D-3 sets; 2D-4 forge (enhance, fuse, reroll, salvage); 2D-5 map potions; 2D-1b passive talent tree | **Implemented**: 2D-1 (see Levels), 2D-1b (Talent tree), 2D-2 (Equipment), 2D-3 (Equipment sets), 2D-4 (Forge), 2D-5 (Map potions); numbers are drafts |
-| 3. Choices and content | 3A events with fight/avoid choices and forced elites; later mini boss, puzzles (rune order, push stone, lever), secrets, map quest "2 of 3" and side quests | **3A, 3B and 3C implemented** (see Events and elites; Rift seal and mini-boss; Puzzles and secrets); 3D side quests planned |
+| 3. Choices and content | 3A events with fight/avoid choices and forced elites; later mini boss, puzzles (rune order, push stone, lever), secrets, map quest "2 of 3" and side quests | **3A–3D implemented** (see Events and elites; Rift seal and mini-boss; Puzzles and secrets; Camp side quests) |
 | 4. Economy and wrap-up | Local gold and shop, salvage, fast travel between camps, elite respawn on rest, defeat penalty, whole-map balance simulation, completion screen | Planned |
 
 Numbers in phases 2–4 are drafts and need owner approval after playtesting.
@@ -703,9 +703,49 @@ Then `startPrologue` starts the `first-clash` battle (now "กองหน้า
 - **Migration:** v14 data migrates with no puzzle state; runs saved on map version 4 settle home as withdrawn.
 - **Position checks:** the party may stand in an opened doorway or a secret passage, never in a closed door, a boulder or an open pit.
 
-**Art:** code-drawn placeholders for the stones, levers, boulder, pit, door and cracks, until a painted pass is commissioned.
+**Art:** code-drawn placeholders for the stones, levers, boulder, pit, door and cracks. The painted pass is commissioned as `docs/handoffs/ART-WORLD-PUZZLE-001.md` (owner request 2026-10-16).
 
 **Tests:**
 - `tests/puzzles.test.ts`: runes in order and reset, levers, boulder and pit, secret walls, save v15.
 - The chest reachability test opens puzzles before reaching vaults.
 - A browser test walks the rune door, the boulder and a secret wall.
+
+## Camp side quests (3D; approved 2026-10-16, draft numbers)
+
+**Each of the six camp NPCs asks for one thing.** Progress is gathered from finished expeditions and the reward is claimed from that NPC in the Lobby, once.
+- **Where the rules live:** `map.sideQuests` holds the data; `settle` adds progress, and `claimReason`/`claimQuest` in `core/world/profile.ts` handle claims.
+- **No new battle rules or buttons.**
+
+| NPC | Quest | Counts per run | Target | Reward |
+|---|---|---|---|---|
+| ลุงบอร์ก (smith) | แร่จากกล่องหายาก | rare chests opened | 3 | ore 30 · dust 25 |
+| พีโน่ (broker) | ผลงานให้ลูกค้าดู | battles won | 12 | gold 40 |
+| ครูฮัลดา (trainer) | บททดสอบของครู | elites beaten | 3 | seal 2 |
+| มิมี่ (keeper) | ห้องลับในกำแพง | secret walls found | 3 | gold 20 · dust 15 |
+| เฟิร์น (herbalist) | สมุนไพรเรืองแสง | glowing herbs picked | 3 | salve 2 · tonic 2 |
+| คาเอล (scout) | ไขกลไกโบราณ | puzzles solved | 3 | ore 40 · seal 1 |
+
+**Counting rules:**
+- Progress is added when the run settles (complete, withdrawn or wiped) and is capped at the target.
+- Herbs come home only if the team was not wiped. Everything else is kept, like EXP.
+- A claimed quest stops counting.
+
+**Glowing herbs:**
+- There are three, one per zone: meadow (7,23), thicket (12,15) and scar (12,7), on plain floor.
+- Stepping on one picks it (once per run) and rolls no encounter.
+- They are code-drawn placeholders.
+- They are new tile content, not a board change, so the map version stays 5.
+
+**UI:**
+- Each NPC's service sheet shows the quest card under the NPC's line: name, request, progress bar, reward, and a claim button, disabled while progress is incomplete.
+- A gold "!" floats over an NPC whose reward is ready.
+- Claiming saves first, then the NPC cheers and the result toasts.
+
+**Save v16.**
+- The profile gains `quests` (`{ progress, claimed }` per known quest id). Progress is limited to 0..target; `claimed` is allowed only at the target.
+- The run gains `herbs` (known herb ids, unique).
+- v15 data migrates with none.
+
+**Tests:**
+- `tests/side-quests.test.ts`: content and geometry, herb pickup, settle, wipe, claim once, save v16 and migration.
+- A browser test picks a herb and claims the herbalist's reward.

@@ -88,12 +88,12 @@ describe('secret walls', () => {
   });
 });
 
-describe('save v15', () => {
+describe('save v15–16', () => {
   it('round-trips puzzle state, a party standing in an open doorway, and rejects impossible puzzle data', () => {
     const lv = P.levers[0]!;
     const s = run({ position: lv.door, solved: [lv.id], levers: [`${lv.id}:0`, `${lv.id}:1`], runes: { [P.runes[0]!.id]: 2 }, secrets: [P.secrets[1]!.id],
       boulders: { [P.boulders[0]!.id]: { x: P.boulders[0]!.at.x - 1, y: P.boulders[0]!.at.y } } });
-    const raw = (run: unknown) => JSON.stringify({ version: 15, profile: newProfile(map, 3), run });
+    const raw = (run: unknown) => JSON.stringify({ version: 16, profile: newProfile(map, 3), run });
     expect(parseGame(raw(s), map, lookup).run).toEqual(s);
     expect(() => parseGame(raw({ ...s, solved: [] }), map, lookup)).toThrow();
     expect(() => parseGame(raw({ ...s, runes: { [P.runes[0]!.id]: 3 } }), map, lookup)).toThrow();

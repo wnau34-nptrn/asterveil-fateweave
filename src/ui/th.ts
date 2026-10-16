@@ -1,5 +1,5 @@
 import type { ActionId, PassiveId, BattleEvent, BattleState, EncounterDefinition, Intent, TalentCap, TalentRule } from '../core/battle/types';
-import type { EquipmentRules, ExpGain, ExpeditionState, Gear, GearSlot, GearStat, Item, PotionId, PotionRules, ResourceId, Resources, SetDefinition, SetId, TalentNodeDef, MapEventKind, EventChoice, EventRules, QuestObjective } from '../core/world/types';
+import type { EquipmentRules, ExpGain, ExpeditionState, Gear, GearSlot, GearStat, Item, PotionId, PotionRules, ResourceId, Resources, SetDefinition, SetId, TalentNodeDef, MapEventKind, EventChoice, EventRules, QuestObjective, SideQuestDefinition, SideQuestKind } from '../core/world/types';
 import type { GearSpecial } from '../core/battle/types';
 import { itemStats, setCounts } from '../core/world/equipment';
 import { ambushBonusOf, capAmount, corrodeBonusOf, guardReductionOf, hasCap, skillPower, songPower, talentRule, tauntReductionOf } from '../core/battle/engine';
@@ -285,3 +285,19 @@ export const eventChoices: Record<MapEventKind, readonly EventChoice[]> = {
   bandits: ['fight', 'sneak'], shrine: ['pray', 'offer'], merchant: ['buy-salve', 'buy-tonic', 'buy-repel'], traveller: ['help'], rift: ['fight'],
 };
 export const eventReasonText: Record<string, string> = { ore: 'แร่ดาวไม่พอ', salve: 'ไม่มียาฟื้นแผล', carry: 'พกเต็มแล้ว', busy: 'ทำตอนนี้ไม่ได้', choice: 'ทำไม่ได้' };
+// ---- Camp side quests (3D): each NPC's request and its reward, in Thai. ----
+export const sideQuestText: Record<SideQuestKind, { name: string; ask: (n: number) => string }> = {
+  rareChests: { name: 'แร่จากกล่องหายาก', ask: n => `เปิดกล่องสมบัติหายาก ${n} กล่อง แล้วเล่าให้ข้าฟังว่าข้างในมีอะไร` },
+  wins: { name: 'ผลงานให้ลูกค้าดู', ask: n => `ชนะการต่อสู้ให้ได้ ${n} ครั้ง ข้าจะเอาไปโฆษณาให้ทหารรับจ้างอยากมาร่วม` },
+  elites: { name: 'บททดสอบของครู', ask: n => `ปราบศัตรูหัวหน้าให้ได้ ${n} ตัว พิสูจน์ว่าทีมพร้อมรับมือของแข็ง` },
+  secrets: { name: 'ห้องลับในกำแพง', ask: n => `หาทางลับในกำแพงร้าวให้เจอ ${n} แห่ง ของที่ซ่อนไว้ต้องมาอยู่ในคลังนะคะ` },
+  herbs: { name: 'สมุนไพรเรืองแสง', ask: n => `เก็บสมุนไพรเรืองแสง ${n} ต้นจากในแผนที่ แล้วกลับมาถึงแคมป์อย่างปลอดภัยนะ` },
+  puzzles: { name: 'ไขกลไกโบราณ', ask: n => `ไขกลไกโบราณ (หินรูน ก้อนหิน คันโยก) ให้ได้ ${n} อย่าง` },
+};
+export function rewardText(r: SideQuestDefinition['reward']): string {
+  const parts: string[] = [];
+  if (r.gold) parts.push(`เหรียญทอง ${r.gold}`); if (r.ore) parts.push(`แร่ดาว ${r.ore}`);
+  if (r.seal) parts.push(`ตราสัญญา ${r.seal}`); if (r.dust) parts.push(`ฝุ่นดาว ${r.dust}`);
+  for (const [id, n] of Object.entries(r.potions ?? {}) as [PotionId, number][]) if (n) parts.push(`${potionText[id].name} ${n} ขวด`);
+  return parts.join(' · ');
+}

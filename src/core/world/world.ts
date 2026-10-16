@@ -124,7 +124,7 @@ export function newExpedition(map: MapDefinition, lookup: EncounterLookup, seed:
     resources: { ore: 0, gold: 0, ember: 0, seal: 0 }, openedChests: [], restReady: true,
     tutorialDone, bossDefeated: false, completed: false, wins: 0, defeats: 0, battle: null, found: [], dry: 0,
     potions: company?.potions ? { ...company.potions } : { salve: 0, tonic: 0, repel: 0 }, repel: 0,
-    elitesDefeated: [], eventsDone: [], dust: 0,
+    elitesDefeated: [], eventsDone: [], dust: 0, herbs: [],
     runes: {}, solved: [], levers: [], boulders: {}, secrets: [],
   };
   reveal(state, map);
@@ -195,6 +195,9 @@ export function move(initial: ExpeditionState, map: MapDefinition, dir: Directio
   state.position = target; state.steps++; reveal(state, map);
   // 3C: puzzle tiles answer instead of rolling an encounter on that step.
   if (pushed) return { state, event: pushed };
+  // 3D: a glowing herb is picked up (once per run) instead of rolling an encounter.
+  const herb = map.herbs.find(h => h.x === target.x && h.y === target.y);
+  if (herb && !state.herbs.includes(herb.id)) { state.herbs.push(herb.id); return { state, event: { type: 'herb', herbId: herb.id } }; }
   const secret = secretAt(map, target);
   if (secret && !state.secrets.includes(secret.id)) { state.secrets.push(secret.id); return { state, event: { type: 'secret', secretId: secret.id } }; }
   const runes = runePuzzleAt(map, target);

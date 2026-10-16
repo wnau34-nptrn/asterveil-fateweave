@@ -240,6 +240,9 @@ export class WorldUI {
     }
     const sec = P.secrets.find(at);
     if (sec) html += `<span class="secret-wall sprite" data-cell="${x},${y}" data-secret="${sec.id}" style="--x:${x};--y:${y};z-index:${y * 3 + 1};${opening()}"></span>`;
+    // 3D: a glowing herb for the herbalist's side quest (picked once per run).
+    const herb = this.map.herbs.find(at);
+    if (herb) html += `<span class="herb sprite" data-cell="${x},${y}" data-herb="${herb.id}" ${pos}><i></i><i></i><i></i></span>`;
     return html;
   }
   private renderPuzzles(s: ExpeditionState): void {
@@ -255,6 +258,7 @@ export class WorldUI {
       el.hidden = !isRevealed(s, this.map, at);
     });
     this.root.querySelectorAll<HTMLElement>('.secret-wall').forEach(el => el.classList.toggle('found', s.secrets.includes(el.dataset.secret!)));
+    this.root.querySelectorAll<HTMLElement>('.herb').forEach(el => el.classList.toggle('picked', s.herbs.includes(el.dataset.herb!)));
   }
 
   render(view: WorldView): void {

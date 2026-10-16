@@ -1,5 +1,5 @@
 import type { HeroDefinition } from '../core/battle/types';
-import { boardOffers, brewReason, dismissReason, equipReason, groupOf, hireReason, talentPoints, talentReason, talentsSpent, upgradeCost, upgradeReason, type Group } from '../core/world/profile';
+import { boardOffers, brewReason, claimReason, dismissReason, equipReason, groupOf, hireReason, talentPoints, talentReason, talentsSpent, upgradeCost, upgradeReason, type Group } from '../core/world/profile';
 import { salvageValue } from '../core/world/equipment';
 import { COMPANY_CAP, GEAR_SLOTS, PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS, type GearSlot, type MapDefinition, type PotionId, type Profile, type TalentNode } from '../core/world/types';
 import { expToNext, starred, type EncounterLookup } from '../core/world/world';
@@ -7,13 +7,13 @@ import { actorArt, actorFootOrigins, lobbyArt, lobbyPose, NPC_IDS, npcAtlasUrl, 
 import { icon } from './icons';
 import { commanderBadge } from './commander-ui';
 import { gearArt, potionArt } from './equip-art';
-import { heroText, npcText, itemLines, itemName, itemOwner, passiveText, potionText, rarityText, setText, slotIcon, slotText, statName, talentBranches, talentHelp, wornSets } from './th';
+import { heroText, npcText, rewardText, sideQuestText, itemLines, itemName, itemOwner, passiveText, potionText, rarityText, setText, slotIcon, slotText, statName, talentBranches, talentHelp, wornSets } from './th';
 import { enhanceCost, enhanceReason, findItem, fuseMaterials, fuseReason, rerollReason } from '../core/world/forge';
 import { portrait, starRow } from './world-ui';
 
 export interface LobbyHost { hire(index: number): void; upgrade(id: string): void; dismiss(id: string): void; place(id: string, group: Group, other?: string): void; talent(id: string, node: TalentNode): void; resetTalents(id: string): void;
   equip(id: string, uid: number): void; unequip(id: string, slot: GearSlot): void; salvage(uids: number[]): void;
-  enhance(uid: number): void; fuse(uid: number): void; reroll(uid: number, index: number): void; brew(potion: PotionId): void; depart(): void; home(): void }
+  enhance(uid: number): void; fuse(uid: number): void; reroll(uid: number, index: number): void; brew(potion: PotionId): void; claim(questId: string): void; depart(): void; home(): void }
 // `npcCheer`: the camp NPC whose service just succeeded (plays its cheer once).
 export interface LobbyView { profile: Profile; message: string; saved: boolean; cheer?: string; npcCheer?: NpcId }
 type Sheet = 'team' | 'hire' | 'tree' | 'gear' | 'forge' | 'brew';
@@ -80,6 +80,7 @@ export class LobbyUI {
           if (item && item.rarity >= 2 && this.confirmSalvage !== uid) { this.confirmSalvage = uid; this.draw(); this.focus(`#salvage-${uid}`); break; }
           this.confirmSalvage = undefined; this.host.salvage([uid]); this.focus('#lobby-sub-back'); break;
         }
+        case 'claim': { const q = b.dataset.quest!; this.host.claim(q); this.focus(`#quest-claim-${q}`); break; }
         case 'brew': { const potion = b.dataset.potion as PotionId; this.host.brew(potion); this.focus(`#brew-${potion}`); break; }
         case 'forge-pick': this.forgeUid = Number(b.dataset.uid); this.draw(); this.focus('#forge-enhance'); break;
         case 'enhance': if (this.forgeUid) { this.host.enhance(this.forgeUid); this.focus('#forge-enhance'); } break;
@@ -118,7 +119,17 @@ export class LobbyUI {
   private npcLine(sheet: Sheet | null): string {
     const id = npcOfSheet(sheet); if (!id || !sheet) return '';
     const text = npcText[id]; const i = NPC_IDS.indexOf(id); const index = this.line?.sheet === sheet ? this.line.index : 0;
-    return `<div class="npc-line" style="--busts:url(${npcBustsUrl()});--sx:${(i % 3) * 50}%;--sy:${Math.floor(i / 3) * 100}%"><span class="npc-bust" aria-hidden="true"></span><p><b>${text.name} · ${text.role}</b>${text.lines[index % text.lines.length]}</p></div>`;
+    return `<div class="npc-line" style="--busts:url(${npcBustsUrl()});--sx:${(i % 3) * 50}%;--sy:${Math.floor(i / 3) * 100}%"><span class="npc-bust" aria-hidden="true"></span><p><b>${text.name} · ${text.role}</b>${text.lines[index % text.lines.length]}</p></div>${this.questCard(id)}`;
+  }
+  // 3D: this NPC's side quest, with progress gathered from finished expeditions and a one-time claim.
+  private questCard(npc: NpcId): string {
+    const q = this.map.sideQuests.find(s => s.npc === npc); if (!q) return '';
+    const p = this.view!.profile; const st = p.quests[q.id] ?? { progress: 0, claimed: false }; const reason = claimReason(p, this.map, q.id); const t = sideQuestText[q.kind];
+    return `<section class="side-quest" id="quest-${q.id}" data-state="${st.claimed ? 'claimed' : reason ? 'open' : 'ready'}" aria-label="เควสต์ ${t.name}">
+      <p class="side-quest-head">${icon('flag')}<b>${t.name}</b><small>${st.progress}/${q.target}</small></p>
+      <p class="side-quest-ask">${t.ask(q.target)}</p><div class="side-quest-bar" aria-hidden="true"><i style="width:${Math.round(st.progress / q.target * 100)}%"></i></div>
+      <p class="side-quest-reward">รางวัล: ${rewardText(q.reward)}</p>
+      ${st.claimed ? '<p class="side-quest-done">รับรางวัลแล้ว</p>' : `<button id="quest-claim-${q.id}" data-lobby="claim" data-quest="${q.id}" class="primary"${reason ? ' disabled' : ''}>${reason ? `สะสมจากการเดินทาง (${st.progress}/${q.target})` : 'รับรางวัล'}</button>`}</section>`;
   }
   // The scene and the NPC tap targets pan together (portrait phones); the HUD stays put above them.
   private build(): void {
@@ -167,6 +178,8 @@ export class LobbyUI {
     // The camp scene fills the screen and is rebuilt only when who stands there (or how) changes.
     if (!this.root.querySelector('.lobby-scene-host')) this.build();
     const scene = this.scene(p);
+    // A ready side quest puts a "!" over its NPC.
+    for (const q of this.map.sideQuests) this.root.querySelector(`#npc-${q.npc}`)?.classList.toggle('quest-ready', !claimReason(p, this.map, q.id));
     if (scene !== this.sceneDrawn) { this.root.querySelector('.lobby-scene-host')!.innerHTML = scene; this.sceneDrawn = scene; }
     const menu = (id: 'team' | 'hire' | 'forge' | 'brew', glyph: Parameters<typeof icon>[0], label: string, badge: string) =>
       `<button id="lobby-tab-${id}" data-lobby="tab" data-tab="${id}" class="lobby-menu-button${this.sheet === id || id === 'team' && (this.sheet === 'tree' || this.sheet === 'gear') ? ' active' : ''}" aria-expanded="${this.sheet === id || id === 'team' && (this.sheet === 'tree' || this.sheet === 'gear')}" aria-controls="lobby-sheet">${icon(glyph)}<span>${label}</span>${badge ? `<small>${badge}</small>` : ''}</button>`;

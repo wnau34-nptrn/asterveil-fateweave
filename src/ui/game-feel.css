@@ -666,3 +666,20 @@ html, body { background: #0a1422; }
 .secret-wall { width: var(--t); height: var(--t);
   background: linear-gradient(115deg, transparent 44%, #c79bff55 46%, transparent 49%), linear-gradient(60deg, transparent 52%, #c79bff40 54%, transparent 57%); }
 @media (prefers-reduced-motion: reduce) { .lever i, .boulder { transition: none; } }
+
+/* ---- Phase 3D: camp side quests and glowing herbs ---- */
+.side-quest { margin: 8px 0 12px; padding: 10px 12px; border-radius: 14px; background: #0d1c2ecc; border: 1px solid #74d4ef44; }
+.side-quest[data-state="ready"] { border-color: #ffd36e; box-shadow: 0 0 12px #ffd36e44; }
+.side-quest p { margin: 0 0 6px; } .side-quest-head { display: flex; align-items: center; gap: 6px; } .side-quest-head small { margin-left: auto; color: #9fb3c8; }
+.side-quest-ask { font-size: 14px; color: #d8e6f3; } .side-quest-reward { font-size: 13px; color: #ffd36e; }
+.side-quest-bar { height: 6px; margin: 0 0 6px; border-radius: 3px; background: #ffffff1a; overflow: hidden; } .side-quest-bar i { display: block; height: 100%; background: linear-gradient(90deg, #74d4ef, #ffd36e); }
+.side-quest button { width: 100%; min-height: 44px; } .side-quest-done { color: #8ef0a8; font-weight: 600; }
+#lobby-view .npc-hit.quest-ready::after { content: '!'; position: absolute; left: 50%; top: -6px; transform: translateX(-50%); width: 28px; height: 28px; display: grid; place-items: center;
+  border-radius: 50%; background: #ffd36e; color: #3a2400; font: 800 18px/1 Kanit, sans-serif; box-shadow: 0 0 10px #ffd36e99; animation: quest-bob 1.4s ease-in-out infinite alternate; }
+@keyframes quest-bob { from { margin-top: 0; } to { margin-top: -5px; } }
+.herb { width: calc(var(--t) * .55); height: calc(var(--t) * .55); } .herb.picked { display: none; }
+.herb i { position: absolute; bottom: 8%; left: 44%; width: 18%; height: 62%; border-radius: 50% 50% 10% 10%; background: linear-gradient(#b7ffd0, #3fae74); box-shadow: 0 0 8px #8ef0a8; transform-origin: 50% 100%; }
+.herb i:nth-child(1) { transform: rotate(-32deg); } .herb i:nth-child(3) { transform: rotate(32deg); }
+.herb::after { content: ''; position: absolute; inset: 0; border-radius: 50%; background: radial-gradient(circle, #8ef0a855, transparent 65%); animation: herb-glow 1.8s ease-in-out infinite alternate; }
+@keyframes herb-glow { from { opacity: .5; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { #lobby-view .npc-hit.quest-ready::after, .herb::after { animation: none; } }
