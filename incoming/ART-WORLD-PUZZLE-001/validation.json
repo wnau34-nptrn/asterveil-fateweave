@@ -1,0 +1,19 @@
+{
+  "source": "exec-e98d8efa-e7a5-4e35-b574-dec9a0f03647.png",
+  "size": [
+    640,
+    512
+  ],
+  "namedFrames": 19,
+  "transparentUnusedCells": 1,
+  "webpBytes": 79522,
+  "quality": 85,
+  "iccProfile": "embedded sRGB",
+  "baseline": 116,
+  "wallFootY": 128,
+  "hashes": {
+    "tileset.webp": "38b3ba3719ce3534e1e5ecee1c4ec1aa52fb1bbb16a5a05d66852e11fdb49c33",
+    "decor.webp": "4b09ba9340c464ea09a0b66c8eedb9f715696d2106ae5a87ec7c00505d436928",
+    "chests.webp": "f79a477776c14ea82f5055bbf3d0bc3a623b46e2a5a67a693f2558e920ff460b"
+  }
+}
