@@ -17,8 +17,10 @@ export interface RunSummary {
 }
 export function runSummary(before: Profile, run: ExpeditionState, after: Profile, outcome: RunOutcome, map: MapDefinition): RunSummary {
   const kept = { ore: after.bank.ore - before.bank.ore, gold: after.bank.gold - before.bank.gold, seal: after.bank.seal - before.bank.seal, dust: after.bank.dust - before.bank.dust };
-  const known = new Set(before.items.map(i => i.uid));
-  const items = after.items.filter(i => !known.has(i.uid)).sort((a, b) => b.rarity - a.rarity);
+  // New items come home in the bag or worn (map bag): anything with a uid the profile did not have before.
+  const all = (p: Profile) => [...p.items, ...Object.values(p.members).flatMap(m => Object.values(m.gear ?? {}) as Item[])];
+  const known = new Set(all(before).map(i => i.uid));
+  const items = all(after).filter(i => !known.has(i.uid)).sort((a, b) => b.rarity - a.rarity);
   const levels = Object.keys(run.members).filter(id => after.members[id])
     .map(id => ({ id, from: before.members[id]?.level ?? 1, to: after.members[id]!.level ?? 1 })).filter(l => l.to > l.from);
   const quests = map.sideQuests.map(q => ({ id: q.id, npc: q.npc, from: before.quests[q.id]?.progress ?? 0, to: after.quests[q.id]?.progress ?? 0, target: q.target, ready: !after.quests[q.id]?.claimed && (after.quests[q.id]?.progress ?? 0) >= q.target }))

@@ -119,7 +119,7 @@ function campCare(s: ExpeditionState): ExpeditionState {
   if (atCamp(s, map)) for (const id of rosterIds(s)) if (canRevive(s, map, id)) s = revive(s, map, lookup, id).state;
   if (atMuster(s, map)) for (const d of [...s.roster.deployed]) {
     if (s.hp[d]) continue;
-    const r = s.roster.reserve.find(id => s.hp[id]! > 0); if (r) s = swapMembers(s, map, d, r).state;
+    const r = s.roster.reserve.find(id => s.hp[id]! > 0); if (r) s = swapMembers(s, d, r).state;
   }
   if (canRest(s, map) && hpPercent(s, rosterIds(s)) < 90) s = rest(s, map, lookup).state;
   return s;

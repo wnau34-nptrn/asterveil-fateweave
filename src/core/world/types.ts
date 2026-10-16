@@ -300,11 +300,15 @@ export interface ExpeditionState {
   // 4B: camps reached this run ("x,y"), the destinations of free camp travel. 4C: how often each optional elite
   // has come back after a rest (each return fights one level higher and pays no gold/seal bonus).
   visited: string[]; respawns: Record<string, number>;
+  // Map bag (2026-10-17): the company's own items (uid > 0) taken off on the map. They always come home, even
+  // after a wipe. Found items taken off go back to `found`.
+  spare: Item[];
 }
 export type WorldEvent =
   | { type: 'moved'; chance: number }
   | { type: 'blocked'; reason: 'wall' | 'edge' | 'busy' | 'party' | 'sealed' | 'stone' | 'pit' }
   | { type: 'roster' }
+  | { type: 'equipped'; heroId: string }
   | { type: 'encounter'; kind: BattleKind; encounterId: string; chance: number }
   | { type: 'goal' }
   | { type: 'rested'; respawned?: string[] }

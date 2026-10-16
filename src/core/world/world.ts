@@ -1,7 +1,7 @@
 import { replay, withLevel, withParty } from '../battle/engine';
 import { boulderAt, leverPuzzleAt, openPit, passableWall, runePuzzleAt, secretAt } from './puzzles';
 import type { BattleState, Command, EncounterDefinition, HeroDefinition, HeroTalents } from '../battle/types';
-import type { ActiveBattle, BattleKind, ChestDefinition, Company, Direction, ExpGain, ExpeditionState, LootTable, MapDefinition, MemberProgress, Point, PotionId, Resources, Talents, Tile, WorldEvent, WorldResult, ZoneDefinition, Gear, Item, EliteDefinition, EventChoice, MapEventDefinition, MapEventKind } from './types';
+import type { ActiveBattle, BattleKind, ChestDefinition, Company, Direction, ExpGain, ExpeditionState, LootTable, MapDefinition, MemberProgress, Point, PotionId, Resources, Talents, Tile, WorldEvent, WorldResult, ZoneDefinition, Gear, Item, EliteDefinition, EventChoice, MapEventDefinition, MapEventKind, GearSlot } from './types';
 import { gearTotals, rollItem } from './equipment';
 import { PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS, SET_IDS } from './types';
 
@@ -124,7 +124,7 @@ export function newExpedition(map: MapDefinition, lookup: EncounterLookup, seed:
     resources: { ore: 0, gold: 0, ember: 0, seal: 0 }, openedChests: [], restReady: true,
     tutorialDone, bossDefeated: false, completed: false, wins: 0, defeats: 0, battle: null, found: [], dry: 0,
     potions: company?.potions ? { ...company.potions } : { salve: 0, tonic: 0, repel: 0 }, repel: 0,
-    elitesDefeated: [], eventsDone: [], dust: 0, herbs: [], visited: [], respawns: {},
+    elitesDefeated: [], eventsDone: [], dust: 0, herbs: [], visited: [], respawns: {}, spare: [],
     runes: {}, solved: [], levers: [], boulders: {}, secrets: [],
   };
   reveal(state, map);
@@ -276,25 +276,58 @@ export function revive(initial: ExpeditionState, map: MapDefinition, lookup: Enc
   return { state, event: { type: 'revived', heroId } };
 }
 
-// Roster management at a muster point: a deployed member and a reserve member trade places,
-// or one member moves to a free slot on the other side. At least one member stays deployed.
-export function swapMembers(initial: ExpeditionState, map: MapDefinition, a: string, b: string): WorldResult {
+// Roster management anywhere outside battle (map bag, owner 2026-10-17): a deployed member and a reserve member
+// trade places, or one member moves to a free slot on the other side. At least one member stays deployed.
+export const canManage = (state: ExpeditionState): boolean => !state.battle && !state.completed;
+export function swapMembers(initial: ExpeditionState, a: string, b: string): WorldResult {
   const { deployed, reserve } = initial.roster;
   const [d, r] = deployed.includes(a) ? [a, b] : [b, a];
-  if (!atMuster(initial, map) || !deployed.includes(d) || !reserve.includes(r)) return { state: initial, event: { type: 'blocked', reason: 'busy' } };
+  if (!canManage(initial) || !deployed.includes(d) || !reserve.includes(r)) return { state: initial, event: { type: 'blocked', reason: 'busy' } };
   const state = structuredClone(initial);
   state.roster.deployed[deployed.indexOf(d)] = r; state.roster.reserve[reserve.indexOf(r)] = d;
   return { state, event: { type: 'roster' } };
 }
-export function moveMember(initial: ExpeditionState, map: MapDefinition, id: string): WorldResult {
+export function moveMember(initial: ExpeditionState, id: string): WorldResult {
   const { deployed, reserve } = initial.roster;
   const toReserve = deployed.includes(id);
-  const ok = atMuster(initial, map) && (toReserve ? deployed.length > 1 && reserve.length < RESERVE_SLOTS : reserve.includes(id) && deployed.length < PARTY_SLOTS);
+  const ok = canManage(initial) && (toReserve ? deployed.length > 1 && reserve.length < RESERVE_SLOTS : reserve.includes(id) && deployed.length < PARTY_SLOTS);
   if (!ok) return { state: initial, event: { type: 'blocked', reason: 'busy' } };
   const state = structuredClone(initial);
   const from = toReserve ? state.roster.deployed : state.roster.reserve; const to = toReserve ? state.roster.reserve : state.roster.deployed;
   from.splice(from.indexOf(id), 1); to.push(id);
   return { state, event: { type: 'roster' } };
+}
+
+// Map bag gear (owner 2026-10-17): outside battle a brought member wears an item found this run (`found`) or one
+// of the company's own items taken off on the map (`spare`); the item it replaces goes back to the list it
+// belongs to (uid 0 = found, else spare). HP never rises from gear and is capped at the new maximum.
+export type BagList = 'found' | 'spare';
+export function wearReason(state: ExpeditionState, heroId: string, from: BagList, index: number): string {
+  const item = state[from][index];
+  if (!canManage(state)) return 'busy';
+  if (!item || !state.members[heroId]) return 'unknown';
+  return item.slot === 'weapon' && item.hero !== heroId ? 'class' : '';
+}
+export function wear(initial: ExpeditionState, map: MapDefinition, lookup: EncounterLookup, heroId: string, from: BagList, index: number): WorldResult {
+  const reason = wearReason(initial, heroId, from, index); if (reason) return { state: initial, event: { type: 'blocked', reason: 'busy' } };
+  const state = structuredClone(initial); const m = state.members[heroId]!;
+  const [item] = state[from].splice(index, 1); const old = m.gear?.[item!.slot];
+  if (old) (old.uid ? state.spare : state.found).push(old);
+  m.gear = { ...m.gear, [item!.slot]: item! };
+  capHp(state, map, lookup, heroId);
+  return { state, event: { type: 'equipped', heroId } };
+}
+export function takeOff(initial: ExpeditionState, map: MapDefinition, lookup: EncounterLookup, heroId: string, slot: GearSlot): WorldResult {
+  const item = initial.members[heroId]?.gear?.[slot];
+  if (!canManage(initial) || !item) return { state: initial, event: { type: 'blocked', reason: 'busy' } };
+  const state = structuredClone(initial); const m = state.members[heroId]!;
+  delete m.gear![slot]; if (!Object.keys(m.gear!).length) delete m.gear;
+  (item.uid ? state.spare : state.found).push(item);
+  capHp(state, map, lookup, heroId);
+  return { state, event: { type: 'equipped', heroId } };
+}
+function capHp(state: ExpeditionState, map: MapDefinition, lookup: EncounterLookup, id: string): void {
+  const max = memberDef(lookup, map, state.members, id)!.maxHp; state.hp[id] = Math.min(state.hp[id] ?? 0, max);
 }
 
 // Loot consumes rolls from the same (seed, rolls) stream, so it is fixed once saved.

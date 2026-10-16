@@ -150,7 +150,7 @@ describe('expedition rules', () => {
     expect(down.event).toEqual({ type: 'defeat', kind: 'random', encounterId: 'veil-siege' });
     expect(down.state.hp).toEqual({ guardian: 0, tracer: 0, weaver: 0, healer: 0, 'guardian-b': 40 }); expect(down.state.restReady).toBe(false);
     expect(move(down.state, map, 'left').event).toEqual({ type: 'blocked', reason: 'party' });
-    const swapped = swapMembers(down.state, map, 'guardian', 'guardian-b').state;
+    const swapped = swapMembers(down.state, 'guardian', 'guardian-b').state;
     expect(swapped.roster).toEqual({ deployed: ['guardian-b', 'tracer', 'weaver', 'healer'], reserve: ['guardian'] });
     expect(move(swapped, map, 'left').event.type).not.toBe('blocked');
     const t: ExpeditionState = { ...fresh(9), hp: { guardian: 1, tracer: 1, weaver: 1, healer: 1 } };
@@ -159,25 +159,28 @@ describe('expedition rules', () => {
     expect(retry.battle).toEqual({ kind: 'tutorial', encounterId: 'first-clash', entry: { guardian: 76, tracer: 56, weaver: 48, healer: 46 }, commands: [] });
     expect(retry.tutorialDone).toBe(false);
   });
-  it('manages the brought 4 + 4 only at a camp or the entrance: swaps, benches and deploys keep one member deployed', () => {
+  it('manages the brought 4 + 4 anywhere outside battle: swaps, benches and deploys keep one member deployed', () => {
     const camp = findTiles(map, 'camp')[1]!;
     let s: ExpeditionState = { ...newExpedition(map, rosterLookup, 4), position: camp,
       roster: { deployed: ['guardian', 'tracer', 'weaver', 'healer'], reserve: ['tracer-b', 'weaver-b'] } };
     s.hp = { ...s.hp, 'tracer-b': 56, 'weaver-b': 48 };
-    expect(swapMembers({ ...s, position: { x: 10, y: 22 } }, map, 'tracer', 'tracer-b').event.type).toBe('blocked');
+    // Away from a muster point it works too (map bag, 2026-10-17); never during a battle or after the goal.
+    expect(swapMembers({ ...s, position: { x: 10, y: 22 } }, 'tracer', 'tracer-b').event.type).toBe('roster');
+    expect(swapMembers({ ...s, battle: { kind: 'random', encounterId: 'x', entry: {}, commands: [] } }, 'tracer', 'tracer-b').event.type).toBe('blocked');
+    expect(moveMember({ ...s, completed: true }, 'healer').event.type).toBe('blocked');
     expect(atMuster({ ...s, position: startOf(map) }, map)).toBe(true);
-    expect(swapMembers(s, map, 'tracer', 'weaver').event.type).toBe('blocked');
-    s = swapMembers(s, map, 'tracer-b', 'tracer').state;
+    expect(swapMembers(s, 'tracer', 'weaver').event.type).toBe('blocked');
+    s = swapMembers(s, 'tracer-b', 'tracer').state;
     expect(s.roster).toEqual({ deployed: ['guardian', 'tracer-b', 'weaver', 'healer'], reserve: ['tracer', 'weaver-b'] });
-    expect(moveMember(s, map, 'weaver-b').event.type).toBe('blocked'); // party is full
-    s = moveMember(s, map, 'healer').state; s = moveMember(s, map, 'weaver-b').state;
+    expect(moveMember(s, 'weaver-b').event.type).toBe('blocked'); // party is full
+    s = moveMember(s, 'healer').state; s = moveMember(s, 'weaver-b').state;
     expect(s.roster).toEqual({ deployed: ['guardian', 'tracer-b', 'weaver', 'weaver-b'], reserve: ['tracer', 'healer'] });
-    for (const id of ['tracer-b', 'weaver']) s = moveMember(s, map, id).state;
+    for (const id of ['tracer-b', 'weaver']) s = moveMember(s, id).state;
     expect(s.roster).toEqual({ deployed: ['guardian', 'weaver-b'], reserve: ['tracer', 'healer', 'tracer-b', 'weaver'] });
-    expect(moveMember(s, map, 'weaver-b').event.type).toBe('blocked'); // reserve is full
+    expect(moveMember(s, 'weaver-b').event.type).toBe('blocked'); // reserve is full
     let solo: ExpeditionState = { ...fresh(4), position: camp };
-    for (const id of ['tracer', 'weaver', 'healer']) solo = moveMember(solo, map, id).state;
-    expect(solo.roster.deployed).toEqual(['guardian']); expect(moveMember(solo, map, 'guardian').event.type).toBe('blocked');
+    for (const id of ['tracer', 'weaver', 'healer']) solo = moveMember(solo, id).state;
+    expect(solo.roster.deployed).toEqual(['guardian']); expect(moveMember(solo, 'guardian').event.type).toBe('blocked');
     // A rest heals the reserve too; the next battle enters with the deployed members only.
     s = { ...s, hp: { ...s.hp, healer: 10 } }; s = rest(s, map, rosterLookup).state; expect(s.hp.healer).toBe(33);
     s = { ...s, position: { x: 10, y: 22 }, tutorialDone: true };
@@ -373,7 +376,7 @@ describe('game save', () => {
   });
   it.each([
     ['malformed', () => '{bad'],
-    ['wrong version', (s: ExpeditionState) => JSON.stringify({ version: 20, profile: newProfile(map, 4), run: s })],
+    ['wrong version', (s: ExpeditionState) => JSON.stringify({ version: 21, profile: newProfile(map, 4), run: s })],
     ['wall position', (s: ExpeditionState) => v6({ ...s, position: { x: 0, y: 0 } })],
     ['hp above max', (s: ExpeditionState) => v6({ ...s, hp: { ...s.hp, tracer: 99 } })],
     ['foreign owner command', (s: ExpeditionState) => v6({ ...s, battle: { kind: 'random', encounterId: 'veil-siege', entry: s.hp, commands: [{ beat: 1, heroId: 'guardian', action: 'attack', targetId: 'brute' }] } })],

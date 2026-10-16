@@ -953,3 +953,36 @@ Then `startPrologue` starts the `first-clash` battle (now "กองหน้า
 **Tests:**
 - `tests/travel.test.ts`: visits, travel targets and refusals, the rest return and its level, the quest count, and save v19 with migration.
 - A browser test rests (the elite returns), then travels to the entrance.
+
+## Map bag (owner request and decisions 2026-10-17)
+
+The pack capsule on the map is now the **bag** (กระเป๋า). It opens a sheet with three tabs, usable anywhere outside battle:
+
+- **Items (ของ):** potions (drink a salve, tonic or repel), resources, the gear found so far and chests opened.
+- **Gear (อุปกรณ์):** pick any brought member, see the six slots and their stats, then wear or take off gear.
+  - What can be worn on the map: items found on this run (`run.found`), and the company's own items already worn by the brought members.
+  - An own item that is taken off waits in `run.spare`. Items in the Lobby bag stay in the Lobby.
+  - Weapons keep their class. HP never rises from gear; it is capped at the new maximum.
+- **Team (ทีม):** the 4 + 4 swap grid, now usable anywhere outside battle (not only at camps or the entrance). Tapping a member shows their details: role, lane, stars, level and EXP, HP/Attack/SPD, wound, skills with descriptions, ★3/★5 unlocks and worn gear, with a shortcut to their gear.
+
+Owner decisions:
+
+| Question | Decision |
+|---|---|
+| Where can gear change on the map? | Anywhere outside battle. |
+| Which items? | Finds from this run and the gear the brought members already wear. |
+| Wipe with a find worn? | Worn finds count with the bag finds for the wipe rule: only the best one (`wipeKeep`) comes home. |
+| Where can the party change? | Anywhere outside battle. |
+
+Settling (`settle`):
+
+- Members keep what they wear.
+- A worn find that is kept gets a new uid and stays worn.
+- A worn find that is lost frees its slot. The member gets back the own item they left the Lobby with, if that item is in `spare`.
+- Every own item in `spare` comes home to the Lobby bag, even past the bag limit.
+
+Save v20: the run gains `spare` (older runs: none), and run members may wear finds (uid 0). On load, the run's own items, worn and spare, must exactly match what the profile says those members wear (`ownItemsMatch`), so the bag can neither copy nor lose an item.
+
+Phones show only the bag icon, ore and new gear on the capsule; wider screens also show gold, embers, seals and potions.
+
+Tests: `tests/map-bag.test.ts` (wear, take off, party away from camp, settle on finish and wipe, save v20) and the browser test "map bag".

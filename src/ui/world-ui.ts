@@ -1,16 +1,18 @@
-import type { HeroDefinition } from '../core/battle/types';
-import type { Direction, EventChoice, ExpeditionState, MapDefinition, Point, PotionId } from '../core/world/types';
-import { travelTargets, atCamp, atMuster, canOpenChest, canRest, canRevive, chestAt, eliteBlocks, questComplete, questDone, encounterChance, eventChoiceReason, isRevealed, monsterLevelAt, pendingEvent, rosterIds, starred, tileAt, wounded, zoneOf } from '../core/world/world';
-import { PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS } from '../core/world/types';
+import type { EncounterDefinition, HeroDefinition } from '../core/battle/types';
+import { withParty } from '../core/battle/engine';
+import type { Direction, EventChoice, ExpeditionState, GearSlot, Item, MapDefinition, Point, PotionId } from '../core/world/types';
+import { canManage, expToNext, wearReason, type BagList, travelTargets, atCamp, atMuster, canOpenChest, canRest, canRevive, chestAt, eliteBlocks, questComplete, questDone, encounterChance, eventChoiceReason, isRevealed, monsterLevelAt, pendingEvent, rosterIds, starred, tileAt, wounded, zoneOf } from '../core/world/world';
+import { GEAR_SLOTS, PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS } from '../core/world/types';
 import { actorArt, portraitsUrl, sheetRows } from '../game/visuals/assets';
 import { SOURCE_TILE, openingFrame, chestFrame, decorAt, itemFrame, floorFrame, fogLayers, landmarkAt, tileSizeFor, tileset, worldArtUrl, type Landmark } from '../game/visuals/world-art';
-import { questLine, choiceText, eventChoices, eventReasonText, eventText, heroText, itemLines, itemName, potionText, resourceOrder, resourceText } from './th';
+import { questLine, choiceText, eventChoices, eventReasonText, eventText, heroText, itemLines, itemName, itemOwner, passiveText, potionText, resourceOrder, resourceText, skillDescription, slotIcon, slotText, wornSets } from './th';
 import { icon, type IconName } from './icons';
 import { gearArt, potionArt } from './equip-art';
 import { boulderPosition, doorOpen, openPit, secretAt } from '../core/world/puzzles';
 
 export interface WorldHost { travel(to: Point): void; move(dir: Direction): void; rest(): void; revive(heroId: string): void; swap(a: string, b: string): void; moveMember(id: string): void; withdraw(): void; openChest(): void;
-  usePotion(potion: PotionId, heroId?: string): void; chooseEvent(choice: EventChoice): void }
+  usePotion(potion: PotionId, heroId?: string): void; chooseEvent(choice: EventChoice): void;
+  wear(heroId: string, from: BagList, index: number): void; takeOff(heroId: string, slot: GearSlot): void }
 export interface WorldBanner { kind: 'encounter' | 'boss' | 'elite' | 'tutorial' | 'complete'; eyebrow: string; title: string; detail: string }
 export interface WorldView { state: ExpeditionState; message: string; locked: boolean; saved: boolean; banner?: WorldBanner; effect?: 'rest' | 'loot' }
 
@@ -53,6 +55,10 @@ export class WorldUI {
   private previous: { position: Point; chance: number; revealed: string; boss: boolean; done: boolean } | undefined;
   private lastKey = 0;
   private campTab: 'care' | 'team' | 'travel' = 'care';
+  // Map bag (2026-10-17): items, gear and team tabs; the member and slot shown on the gear tab.
+  private bagTab: 'items' | 'gear' | 'team' = 'items';
+  private bagHero: string | undefined;
+  private bagSlot: GearSlot | undefined;
   private picked: string | undefined;
   private confirmWithdraw = false;
   private tile = 48;
@@ -60,7 +66,7 @@ export class WorldUI {
   private readonly reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
   // `eliteArt` maps each elite id to the actor art of its leading foe (the token drawn on its gate).
   constructor(private readonly root: HTMLElement, private readonly map: MapDefinition, private readonly heroes: readonly HeroDefinition[], private readonly host: WorldHost,
-    private readonly eliteArt: Readonly<Record<string, string>> = {}) {
+    private readonly eliteArt: Readonly<Record<string, string>> = {}, private readonly skillData?: EncounterDefinition) {
     this.width = map.rows[0]!.length;
     root.innerHTML = `
       <section class="map-view" id="map-viewport" aria-label="แผนที่ ใช้ปุ่มลูกศรหรือแตะช่องที่ไฮไลต์เพื่อเดินทีละช่อง">
@@ -99,7 +105,7 @@ export class WorldUI {
       <div id="world-banner" class="world-banner" role="status" hidden></div>
       <dialog id="world-goals" class="world-dialog" aria-labelledby="world-goals-title"><div class="info-header"><h2 id="world-goals-title">เป้าหมายการเดินทาง</h2><button data-world="goals-close" class="quiet" aria-label="ปิดเป้าหมาย">${icon('close')}</button></div><div class="info-content" id="world-goals-content"></div></dialog>
       <dialog id="camp-dialog" class="world-dialog" aria-labelledby="camp-title"><div class="info-header"><h2 id="camp-title">${icon('camp')} แคมป์พักแรม</h2><button data-world="camp-close" class="quiet" aria-label="ปิดแคมป์">${icon('close')}</button></div><div class="info-content" id="camp-content"></div></dialog>
-      <dialog id="pack-dialog" class="world-dialog" aria-labelledby="pack-title"><div class="info-header"><h2 id="pack-title">สัมภาระ</h2><button data-world="pack-close" class="quiet" aria-label="ปิดสัมภาระ">${icon('close')}</button></div><div class="info-content" id="pack-content"></div></dialog>
+      <dialog id="pack-dialog" class="world-dialog" aria-labelledby="pack-title"><div class="info-header"><h2 id="pack-title">${icon('pack')} กระเป๋า</h2><button data-world="pack-close" class="quiet" aria-label="ปิดกระเป๋า">${icon('close')}</button></div><div class="info-content" id="pack-content"></div></dialog>
       <dialog id="event-dialog" class="world-dialog" aria-labelledby="event-title"><div class="info-header"><h2 id="event-title"></h2><button data-world="event-close" class="quiet" aria-label="ปิดและเดินต่อ">${icon('close')}</button></div><div class="info-content" id="event-content"></div></dialog>
       <dialog id="world-info" class="world-dialog" aria-labelledby="world-info-title"><div class="info-header"><h2 id="world-info-title">ข้อมูลการเดินทาง</h2><button data-world="info-close" class="quiet" aria-label="ปิดข้อมูล">${icon('close')}</button></div><div class="info-content" id="world-info-content"></div></dialog>`;
     root.addEventListener('click', e => {
@@ -119,7 +125,13 @@ export class WorldUI {
           case 'withdraw': if (this.view?.locked) break;
             if (!this.confirmWithdraw) { this.confirmWithdraw = true; this.renderCamp(); this.root.querySelector<HTMLElement>('#withdraw')?.focus(); break; }
             this.confirmWithdraw = false; dialog('#camp-dialog').close(); this.host.withdraw(); break;
-          case 'pack': this.renderPack(); dialog('#pack-dialog').showModal(); break;
+          case 'pack': this.bagTab = 'items'; this.picked = undefined; this.salvePick = false; this.renderPack(); dialog('#pack-dialog').showModal(); break;
+          case 'bag-tab': this.bagTab = button.dataset.tab as WorldUI['bagTab']; this.picked = undefined; this.salvePick = false; this.renderPack(); this.root.querySelector<HTMLElement>(`#bag-tab-${this.bagTab}`)?.focus(); break;
+          case 'bag-member': this.bagHero = button.dataset.hero; this.renderPack(); this.root.querySelector<HTMLElement>(`#bag-member-${this.bagHero}`)?.focus(); break;
+          case 'bag-slot': { const slot = button.dataset.slot as GearSlot; this.bagSlot = this.bagSlot === slot ? undefined : slot; this.renderPack(); this.root.querySelector<HTMLElement>(`#bag-slot-${slot}`)?.focus(); break; }
+          case 'bag-gear-of': this.bagHero = button.dataset.hero; this.bagSlot = undefined; this.bagTab = 'gear'; this.picked = undefined; this.renderPack(); this.root.querySelector<HTMLElement>('#bag-tab-gear')?.focus(); break;
+          case 'bag-wear': if (!this.view?.locked && this.bagHero) { this.host.wear(this.bagHero, button.dataset.from as BagList, Number(button.dataset.index)); this.root.querySelector<HTMLElement>(`#bag-slot-${this.bagSlot ?? ''}`)?.focus(); } break;
+          case 'bag-takeoff': if (!this.view?.locked && this.bagHero && this.bagSlot) { this.host.takeOff(this.bagHero, this.bagSlot); this.root.querySelector<HTMLElement>(`#bag-slot-${this.bagSlot}`)?.focus(); } break;
           case 'pack-close': dialog('#pack-dialog').close(); break;
           case 'potion': if (!this.view?.locked) {
             const potion = button.dataset.potion as PotionId;
@@ -183,12 +195,13 @@ export class WorldUI {
   private pickMember(id: string | undefined, side: 'deployed' | 'reserve'): void {
     const s = this.view?.state; if (!s || this.view!.locked) return;
     const pickedSide = this.picked && (s.roster.deployed.includes(this.picked) ? 'deployed' : 'reserve');
-    if (!this.picked || pickedSide === side) { this.picked = id && id !== this.picked ? id : undefined; this.renderCamp(); this.focusTeam(this.picked ?? id); return; }
+    if (!this.picked || pickedSide === side) { this.picked = id && id !== this.picked ? id : undefined; if (this.bagOpen()) this.renderPack(); else this.renderCamp(); this.focusTeam(this.picked ?? id); return; }
     const from = this.picked; this.picked = undefined;
     if (id) this.host.swap(from, id); else this.host.moveMember(from);
     this.focusTeam(from);
   }
-  private focusTeam(id: string | undefined): void { if (id) this.root.querySelector<HTMLElement>(`#team-${id}`)?.focus(); }
+  private focusTeam(id: string | undefined): void { if (id) this.root.querySelector<HTMLElement>(`#${this.bagOpen() ? 'bag-team' : 'team'}-${id}`)?.focus(); }
+  private bagOpen(): boolean { return this.root.querySelector<HTMLDialogElement>('#pack-dialog')!.open; }
   private input(dir: Direction): void { if (this.view && !this.view.locked && !this.view.state.completed) this.host.move(dir); }
 
   private floorCells(): string {
@@ -286,6 +299,7 @@ export class WorldUI {
     this.renderPackButton(s, view.effect === 'loot');
     const eventDialog = this.root.querySelector<HTMLDialogElement>('#event-dialog')!;
     if (eventDialog.open) { if (pendingEvent(s, this.map) && !view.locked) this.renderEvent(); else eventDialog.close(); }
+    if (this.bagOpen()) this.renderPack();
     if (this.root.querySelector<HTMLDialogElement>('#camp-dialog')!.open) { if (atMuster(s, this.map) && !view.locked) this.renderCamp(); else this.root.querySelector<HTMLDialogElement>('#camp-dialog')!.close(); }
     if (!prev || prev.revealed !== s.revealed) this.renderFog(s);
     this.renderSprites(s, prev);
@@ -315,10 +329,10 @@ export class WorldUI {
   private renderPackButton(s: ExpeditionState, gained: boolean): void {
     const pack = this.root.querySelector<HTMLElement>('#world-pack')!;
     const potions = POTION_IDS.reduce((n, id) => n + s.potions[id], 0);
-    pack.innerHTML = resourceOrder.map(id => `<span class="pack-item" data-resource="${id}">${icon(id as IconName)}<b>${s.resources[id]}</b></span>`).join('')
+    pack.innerHTML = `<span class="pack-bag">${icon('pack')}</span>` + resourceOrder.map(id => `<span class="pack-item" data-resource="${id}">${icon(id as IconName)}<b>${s.resources[id]}</b></span>`).join('')
       + (potions ? `<span class="pack-item" data-resource="potion">${icon('potionSalve')}<b>${potions}</b></span>` : '')
       + (s.found.length ? `<span class="pack-item" data-resource="gear">${icon('gearBody')}<b>${s.found.length}</b></span>` : '');
-    pack.setAttribute('aria-label', `สัมภาระ · ${resourceOrder.map(id => `${resourceText[id].name} ${s.resources[id]}`).join(' · ')}${s.found.length ? ` · อุปกรณ์ ${s.found.length} ชิ้น` : ''} · เปิดรายละเอียด`);
+    pack.setAttribute('aria-label', `กระเป๋า · ${resourceOrder.map(id => `${resourceText[id].name} ${s.resources[id]}`).join(' · ')}${s.found.length ? ` · อุปกรณ์ ${s.found.length} ชิ้น` : ''} · เปิดดูของ อุปกรณ์ และทีม`);
     if (gained && !this.reduced.matches) { pack.classList.remove('gain'); void pack.offsetWidth; pack.classList.add('gain'); }
   }
 
@@ -341,12 +355,64 @@ export class WorldUI {
     return `<h3 class="pack-gear-title">${icon('potionSalve')} ยา <small>พกได้อย่างละ ${this.map.potions.carry} · ใช้บนแผนที่เท่านั้น</small></h3><ul class="pack-potions">${rows}</ul>
       ${targets ? `<div class="salve-targets" role="group" aria-label="เลือกคนดื่มยาฟื้นแผล">${targets}</div>` : ''}${s.repel > 0 ? `<p class="world-stats">ยาไล่อสูรเหลือ ${s.repel} ก้าว</p>` : ''}`;
   }
+  // Map bag (2026-10-17): items (potions and resources), gear (wear finds and own items) and team (party and details).
   private renderPack(): void {
     const s = this.view?.state; if (!s) return;
+    const tab = (id: WorldUI['bagTab'], label: string) => `<button id="bag-tab-${id}" data-world="bag-tab" data-tab="${id}" role="tab" aria-selected="${this.bagTab === id}" class="${this.bagTab === id ? 'active' : ''}">${label}</button>`;
+    const tabs = `<div class="camp-tabs three" role="tablist" aria-label="กระเป๋า">${tab('items', 'ของ')}${tab('gear', `อุปกรณ์${s.found.length ? ` <small>ใหม่ ${s.found.length}</small>` : ''}`)}${tab('team', `ทีม <small>${s.roster.deployed.length}+${s.roster.reserve.length}</small>`)}</div>`;
+    this.root.querySelector('#pack-content')!.innerHTML = tabs + (this.bagTab === 'gear' ? this.bagGear(s) : this.bagTab === 'team' ? this.bagTeam(s) : this.bagItems(s));
+  }
+  private bagItems(s: ExpeditionState): string {
     const opened = s.openedChests.length;
-    this.root.querySelector('#pack-content')!.innerHTML = `${this.potionSection(s)}<ul class="pack-list">${resourceOrder.map(id => `<li data-resource="${id}">${id === 'gold' ? potionArt('gold') : itemArt(id)}<div><b>${resourceText[id].name}</b><small>${resourceText[id].use}</small></div><strong>${s.resources[id]}</strong></li>`).join('')}${s.dust ? `<li data-resource="dust">${potionArt('dust')}<div><b>ฝุ่นดาว</b><small>วัตถุดิบตีอุปกรณ์ · นำกลับค่ายเมื่อจบการเดินทาง</small></div><strong>${s.dust}</strong></li>` : ''}</ul>
-      ${s.found.length ? `<h3 class="pack-gear-title">${icon('gearBody')} อุปกรณ์ที่เจอ ${s.found.length} ชิ้น</h3><ul class="pack-gear">${s.found.map(i => `<li data-rarity="${i.rarity}">${gearArt(i)}<div><b>${itemName(i)} Lv${i.level}</b><small>${itemLines(this.map.equipment, i).join(' · ')}</small></div></li>`).join('')}</ul><p class="world-stats">ใส่ได้ที่ค่ายหลังกลับจากการเดินทาง · ถ้าทีมล้มหมดจะเก็บกลับได้แค่ชิ้นที่ดีที่สุด 1 ชิ้น</p>` : ''}
-      <p class="world-stats">เปิดกล่องสมบัติแล้ว ${opened}/${this.map.chests.length} กล่อง · ของตกจากศึกที่ชนะและกล่องสมบัติ</p>`;
+    return `<div role="tabpanel">${this.potionSection(s)}<ul class="pack-list">${resourceOrder.map(id => `<li data-resource="${id}">${id === 'gold' ? potionArt('gold') : itemArt(id)}<div><b>${resourceText[id].name}</b><small>${resourceText[id].use}</small></div><strong>${s.resources[id]}</strong></li>`).join('')}${s.dust ? `<li data-resource="dust">${potionArt('dust')}<div><b>ฝุ่นดาว</b><small>วัตถุดิบตีอุปกรณ์ · นำกลับค่ายเมื่อจบการเดินทาง</small></div><strong>${s.dust}</strong></li>` : ''}</ul>
+      ${s.found.length ? `<h3 class="pack-gear-title">${icon('gearBody')} อุปกรณ์ที่เจอ ${s.found.length} ชิ้น</h3><ul class="pack-gear">${s.found.map(i => `<li data-rarity="${i.rarity}">${gearArt(i)}<div><b>${itemName(i)} Lv${i.level}</b><small>${itemLines(this.map.equipment, i).join(' · ')}</small></div></li>`).join('')}</ul><p class="world-stats">ใส่ได้เลยที่แท็บอุปกรณ์ · ถ้าทีมล้มหมดจะเก็บกลับได้แค่ชิ้นที่ดีที่สุด 1 ชิ้น</p>` : ''}
+      <p class="world-stats">เปิดกล่องสมบัติแล้ว ${opened}/${this.map.chests.length} กล่อง · ของตกจากศึกที่ชนะและกล่องสมบัติ</p></div>`;
+  }
+  // Gear tab: pick a brought member, see the six slots, wear finds (`found`) or own items taken off (`spare`).
+  private bagGear(s: ExpeditionState): string {
+    const ids = rosterIds(s); const id = this.bagHero && ids.includes(this.bagHero) ? this.bagHero : ids[0]!; this.bagHero = id;
+    const m = s.members[id]; const h = this.hero(id, s); const rules = this.map.equipment; const slot = this.bagSlot; const free = canManage(s);
+    const picker = `<div class="tree-members" role="group" aria-label="เลือกสมาชิก">${ids.map(c => { const n = Object.keys(s.members[c]?.gear ?? {}).length;
+      return `<button id="bag-member-${c}" data-world="bag-member" data-hero="${c}" class="tree-member" aria-pressed="${c === id}" aria-label="${heroText[c]!.name} Lv${s.members[c]?.level ?? 1} · ใส่ ${n}/6">${portrait(c)}<small>${heroText[c]!.name}</small>${n ? `<i>${n}</i>` : ''}</button>`; }).join('')}</div>`;
+    const slots = GEAR_SLOTS.map(sl => { const it = m?.gear?.[sl];
+      return `<button id="bag-slot-${sl}" data-world="bag-slot" data-slot="${sl}" class="gear-slot" aria-pressed="${slot === sl}" ${it ? `data-rarity="${it.rarity}"` : ''} aria-label="${slotText[sl]}: ${it ? `${itemName(it)} Lv${it.level}` : 'ว่าง'}">${it ? gearArt(it) : icon(slotIcon[sl])}<b>${slotText[sl]}</b><small>${it ? `${itemName(it)} Lv${it.level}` : 'ว่าง'}</small></button>`;
+    }).join('');
+    const worn = slot && m?.gear?.[slot];
+    const detail = slot ? `<div class="gear-detail">${worn ? `${gearArt(worn)}<p><b>${itemName(worn)} Lv${worn.level}</b> · ${itemLines(rules, worn).join(' · ')}${worn.uid ? '' : ' · <em>เจอรอบนี้</em>'}</p>
+      <button id="bag-takeoff" data-world="bag-takeoff" class="secondary"${free ? '' : ' disabled'}>ถอดเก็บเข้ากระเป๋า</button>` : `<p>ยังไม่ได้ใส่${slotText[slot]}</p>`}</div>` : '';
+    const entries = (['found', 'spare'] as const).flatMap(from => s[from].map((item, index) => ({ item, from, index })))
+      .filter(e => !slot || e.item.slot === slot).sort((a, b) => b.item.rarity - a.item.rarity || b.item.level - a.item.level);
+    const rows = entries.map(({ item: i, from, index }) => { const reason = wearReason(s, id, from, index);
+      return `<li data-rarity="${i.rarity}">${gearArt(i)}<div><b>${itemName(i)} Lv${i.level}</b><small>${itemLines(rules, i).join(' · ')}</small><small class="gear-owner">${from === 'found' ? 'เจอรอบนี้' : 'ของในค่าย'} · ${itemOwner(i)}</small></div>
+        <span class="gear-actions"><button id="wear-${from}-${index}" data-world="bag-wear" data-from="${from}" data-index="${index}" class="primary"${reason ? ' disabled' : ''}>${reason === 'class' ? 'คนอื่นใช้' : reason ? 'ใส่ไม่ได้ตอนนี้' : 'ใส่'}</button></span></li>`;
+    }).join('');
+    const sets = wornSets(rules, m?.gear);
+    return `<div role="tabpanel">${picker}<p class="gear-stats"><b>${heroText[id]!.name}</b> Lv${m?.level ?? 1} · เลือด ${s.hp[id] ?? 0}/${h.maxHp} · พลังโจมตี ${h.attack} · พลังสกิล +${h.skillBonus ?? 0}% · SPD ${h.speed}</p>
+      <div class="gear-slots">${slots}</div>${detail}
+      ${sets.length ? `<ul class="gear-sets" aria-label="ชุดอุปกรณ์ที่ใส่">${sets.map(w => `<li><b>ชุด${w.name}</b> <span>${w.pieces}/4 ชิ้น</span><small class="${w.pieces >= 2 ? 'on' : ''}">2 ชิ้น: ${w.two}</small><small class="${w.pieces >= 4 ? 'on' : ''}">4 ชิ้น: ${w.four}</small></li>`).join('')}</ul>` : ''}
+      <h3>${icon('pack')} ในกระเป๋า${slot ? ` · ${slotText[slot]}` : ''} <span class="camp-embers">${entries.length} ชิ้น · แตะช่องเพื่อกรอง</span></h3>
+      ${rows ? `<ul class="gear-bag">${rows}</ul>` : '<p class="camp-note">ยังไม่มีอุปกรณ์ในกระเป๋า · ชนะศึกหรือเปิดกล่องเพื่อหาอุปกรณ์</p>'}
+      <p class="camp-note">ใส่ได้ทุกที่นอกการต่อสู้ · ของในค่ายกลับบ้านเสมอ · ถ้าทีมล้มหมด ของที่เจอรอบนี้ (รวมที่ใส่อยู่) เก็บกลับได้แค่ชิ้นที่ดีที่สุด 1 ชิ้น</p></div>`;
+  }
+  // Team tab: the same 4 + 4 swap grid as the camp; the picked member's details show underneath.
+  private bagTeam(s: ExpeditionState): string {
+    return this.campTeam(s, 'bag-team') + (this.picked && rosterIds(s).includes(this.picked) ? this.heroDetail(s, this.picked) : '<p class="camp-note">แตะสมาชิกเพื่อดูรายละเอียด สกิล และอุปกรณ์</p>');
+  }
+  private heroDetail(s: ExpeditionState, id: string): string {
+    const h = this.hero(id, s); const m = s.members[id]; const text = heroText[id]!; const level = m?.level ?? 1;
+    const data = this.skillData && withParty(this.skillData, [h]);
+    const skills = data ? h.actions.map(a => `<li>${icon(a)}<div><b>${data.skills[a].name}</b><small>${data.skills[a].cooldown ? `คูลดาวน์ ${data.skills[a].cooldown} รอบ` : 'ใช้ได้ทุกเทิร์น'}</small><p>${skillDescription(a, id, data)}</p></div></li>`).join('') : '';
+    const unlocks = this.heroes.find(x => x.id === id)?.unlocks; const stars = this.stars(s, id);
+    const row = (need: number, iconName: IconName, name: string, help: string) => `<li class="${stars >= need ? 'unlocked' : 'locked'}"><span class="unlock-star">★${need}</span>${icon(iconName)}<b>${name}</b><small>${stars >= need ? 'ปลดล็อกแล้ว' : `ปลดล็อกที่ ★${need}`} · ${help}</small></li>`;
+    const unlockRows = unlocks && data ? `<ul class="member-unlocks" aria-label="สิ่งที่ปลดล็อกจากดาว">${row(3, unlocks.skill as IconName, data.skills[unlocks.skill].name, 'สกิลใหม่ในการต่อสู้')}${row(5, 'starFilled', passiveText[unlocks.passive].name, passiveText[unlocks.passive].help(data))}</ul>` : '';
+    const gear = GEAR_SLOTS.map(sl => m?.gear?.[sl]).filter((i): i is Item => !!i);
+    return `<div class="hire-preview bag-detail" aria-label="ข้อมูล${text.name}">
+      <div class="hire-preview-head">${portrait(id)}<div><h3>${text.name}</h3><p>${text.role} · ${h.lane === 'front' ? 'แนวหน้า' : 'แนวหลัง'} · ${this.starRow(stars)}</p><p>Lv${level}${level < this.map.progression.levelCap ? ` · EXP ${m?.exp ?? 0}/${expToNext(this.map, level)}` : ' · เลเวลสูงสุด'}${m?.wound ? ` · บาดแผล −${m.wound}% เลือดสูงสุด` : ''}</p><p class="hire-preview-help">${text.help}</p></div></div>
+      <dl class="hire-stats"><div><dt>เลือด</dt><dd>${s.hp[id] ?? 0}/${h.maxHp}</dd></div><div><dt>พลังโจมตี</dt><dd>${h.attack}</dd></div><div><dt>ความเร็ว</dt><dd>${h.speed}</dd></div></dl>
+      ${skills ? `<h4>สกิล</h4><ul class="hire-skills">${skills}</ul>` : ''}
+      ${unlockRows ? `<h4>ปลดล็อกด้วยดาว</h4>${unlockRows}` : ''}
+      <h4>อุปกรณ์ <small>${gear.length}/6</small></h4>${gear.length ? `<ul class="pack-gear">${gear.map(i => `<li data-rarity="${i.rarity}">${gearArt(i)}<div><b>${itemName(i)} Lv${i.level}</b><small>${itemLines(this.map.equipment, i).join(' · ')}</small></div></li>`).join('')}</ul>` : '<p class="camp-note">ยังไม่ได้ใส่อุปกรณ์</p>'}
+      <button id="bag-gear-of" data-world="bag-gear-of" data-hero="${id}" class="secondary">${icon('gearBody')}<span>เปลี่ยนอุปกรณ์ของ${text.name}</span></button></div>`;
   }
 
   private stars(s: ExpeditionState, id: string): number { return s.members[id]?.stars ?? 1; }
@@ -382,12 +448,12 @@ export class WorldUI {
           : '<p>ไม่มีใครล้ม</p>'}
         <p class="camp-note">ชุบได้ครั้งละ 1 คน ต่อถ่านคืนชีพ 1 ก้อน หาได้จากศึกและกล่องสมบัติ</p></section>`;
   }
-  private campTeam(s: ExpeditionState): string {
+  private campTeam(s: ExpeditionState, prefix = 'team'): string {
     const card = (id: string | undefined, side: 'deployed' | 'reserve', slot: number) => {
       if (!id) return `<button class="team-card empty${this.picked ? ' target' : ''}" data-world="team-pick" data-side="${side}" aria-label="${side === 'deployed' ? `ช่อง ${slot + 1} ว่าง` : 'ช่องสำรองว่าง'}"${this.picked ? '' : ' disabled'}><span>ว่าง</span></button>`;
       const h = this.hero(id); const hp = s.hp[id] ?? 0; const text = heroText[id]!;
       const lane = h.lane === 'front' ? 'แนวหน้า' : 'แนวหลัง';
-      return `<button id="team-${id}" class="team-card${hp <= 0 ? ' fallen' : ''}" data-world="team-pick" data-hero="${id}" data-side="${side}" aria-pressed="${this.picked === id}" aria-label="${side === 'deployed' ? `ช่อง ${slot + 1} · ` : 'สำรอง · '}${text.name} ${this.stars(s, id)} ดาว ${text.role} ${lane} ${hp <= 0 ? 'ล้มแล้ว' : `เลือด ${hp} จาก ${h.maxHp}`}">${side === 'deployed' ? `<i class="slot-no">${slot + 1}</i>` : ''}${portrait(id)}<b>${text.name}</b>${this.starRow(this.stars(s, id))}<small>Lv${s.members[h.id]?.level ?? 1} · ${hp <= 0 ? 'ล้มแล้ว' : `${hp}/${h.maxHp}`}</small><small class="lane">${text.role} · ${lane}</small></button>`;
+      return `<button id="${prefix}-${id}" class="team-card${hp <= 0 ? ' fallen' : ''}" data-world="team-pick" data-hero="${id}" data-side="${side}" aria-pressed="${this.picked === id}" aria-label="${side === 'deployed' ? `ช่อง ${slot + 1} · ` : 'สำรอง · '}${text.name} ${this.stars(s, id)} ดาว ${text.role} ${lane} ${hp <= 0 ? 'ล้มแล้ว' : `เลือด ${hp} จาก ${h.maxHp}`}">${side === 'deployed' ? `<i class="slot-no">${slot + 1}</i>` : ''}${portrait(id)}<b>${text.name}</b>${this.starRow(this.stars(s, id))}<small>Lv${s.members[h.id]?.level ?? 1} · ${hp <= 0 ? 'ล้มแล้ว' : `${hp}/${h.maxHp}`}</small><small class="lane">${text.role} · ${lane}</small></button>`;
     };
     const row = (ids: string[], side: 'deployed' | 'reserve', size: number) => Array.from({ length: size }, (_, i) => card(ids[i], side, i)).join('');
     const deployedUp = s.roster.deployed.some(id => s.hp[id]! > 0);
@@ -396,7 +462,7 @@ export class WorldUI {
         <div class="team-grid">${row(s.roster.deployed, 'deployed', PARTY_SLOTS)}</div>
         <h3>${icon('camp')} สำรอง</h3>
         <div class="team-grid">${row(s.roster.reserve, 'reserve', RESERVE_SLOTS)}</div>
-        <p class="camp-note" id="team-hint">${this.picked ? `เลือก${heroText[this.picked]!.name}แล้ว · แตะคนหรือช่องว่างอีกฝั่งเพื่อสลับ แตะซ้ำเพื่อยกเลิก` : !deployedUp ? 'ทีมที่ลงสนามล้มหมด · สลับตัวสำรองที่ยังยืนอยู่หรือชุบก่อนออกเดินทาง' : s.roster.reserve.length ? 'แตะสมาชิก แล้วแตะคนหรือช่องว่างอีกฝั่งเพื่อสลับ' : 'ไม่ได้พาตัวสำรองมา · เลือกตัวสำรองได้ที่ค่ายก่อนออกเดินทาง'}</p></section>`;
+        <p class="camp-note" id="${prefix}-hint">${this.picked ? `เลือก${heroText[this.picked]!.name}แล้ว · แตะคนหรือช่องว่างอีกฝั่งเพื่อสลับ แตะซ้ำเพื่อยกเลิก` : !deployedUp ? 'ทีมที่ลงสนามล้มหมด · สลับตัวสำรองที่ยังยืนอยู่หรือชุบก่อนออกเดินทาง' : s.roster.reserve.length ? 'แตะสมาชิก แล้วแตะคนหรือช่องว่างอีกฝั่งเพื่อสลับ' : 'ไม่ได้พาตัวสำรองมา · เลือกตัวสำรองได้ที่ค่ายก่อนออกเดินทาง'}</p></section>`;
   }
 
   private renderDanger(chance: number, before: number | undefined): void {
@@ -539,7 +605,7 @@ export class WorldUI {
       <h3>เลือดติดตัว</h3><p>จบศึกแล้วเลือดไม่ฟื้นเอง สมาชิกที่ล้มยังล้มอยู่จนกว่าจะชุบที่แคมป์ ศึกถัดไปเริ่มด้วยเลือดที่เหลือ</p>
       <h3>${icon('camp')} แคมป์</h3><p>ยืนบนแคมป์แล้วกด “พัก” มุมขวาล่าง พักฟื้นได้ ${this.map.camp.restHealPercent}% ครั้งเดียวจนกว่าจะชนะศึกถัดไป คนที่ล้มต้องใช้ถ่านคืนชีพชุบทีละคน แคมป์ล่าสุดที่ไปถึงคือจุดกลับเมื่อแพ้</p>
       <h3>${icon('chest')} ของตกและกล่องสมบัติ</h3><p>ชนะศึกได้แร่ดาวและบางครั้งได้ถ่านคืนชีพ ยืนบนกล่องแล้วกด “เปิด” กล่องหายากมีตราสัญญา ดูของที่มีได้จากช่องสัมภาระ</p>
-      <h3>${icon('flag')} ทีมและตัวสำรอง</h3><p>พาเข้าด่านได้ 4 + 4 คนจากค่าย สลับตัวได้ที่แคมป์และทางเข้าด่าน ศัตรูเล็งตามหมายเลขช่อง ใครยืนช่องนั้นคือเป้า (กายภาพยังโดนแนวหน้าก่อน)</p>
+      <h3>${icon('flag')} ทีมและตัวสำรอง</h3><p>พาเข้าด่านได้ 4 + 4 คนจากค่าย สลับตัวและเปลี่ยนอุปกรณ์ได้ในกระเป๋าทุกที่นอกการต่อสู้ ศัตรูเล็งตามหมายเลขช่อง ใครยืนช่องนั้นคือเป้า (กายภาพยังโดนแนวหน้าก่อน)</p>
       <h3>เมื่อแพ้</h3><p>ทีมถอยกลับแคมป์ล่าสุดที่ไปถึง (หรือทางเข้า) คนที่ล้มยังล้มอยู่ ต้องชุบหรือสลับตัวสำรอง ถ้าทุกคนที่พามาล้มหมด การเดินทางล้มเหลว กลับค่ายพร้อมแร่ดาวและตราครึ่งเดียว</p>
       <h3>${icon('camp')} กลับค่าย</h3><p>ถอนตัวได้ที่แคมป์หรือทางเข้าด่าน ของที่เก็บได้กลับค่ายครบ ไปถึงประตูรอยแยกคือสำเร็จการเดินทาง</p>
       <h3>${icon('boss')} อีลิท</h3><p>อีลิทขอบแดงเฝ้าด่านทางเดียว ต้องชนะถึงจะผ่าน · อีลิทขอบทองที่มีหีบเหนือหัวเดินอ้อมได้ แต่ถ้าท้าสู้แล้วชนะจะได้ EXP ×${this.map.eventRules.optionalElite.exp} อุปกรณ์ชั้นดีกว่า เหรียญทอง +${this.map.eventRules.optionalElite.gold} และตราสัญญา +${this.map.eventRules.optionalElite.seal}</p>

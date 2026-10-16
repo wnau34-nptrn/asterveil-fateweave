@@ -1,6 +1,6 @@
-import type { Commander, ShopItemId, SideQuestKind, ExpeditionState, GearSlot, Item, MapDefinition, MemberProgress, PotionId, Potions, Profile, ProfileResult, RunOutcome, TalentNode, Talents } from './types';
+import type { Commander, ShopItemId, SideQuestKind, ExpeditionState, Gear, GearSlot, Item, MapDefinition, MemberProgress, PotionId, Potions, Profile, ProfileResult, RunOutcome, TalentNode, Talents } from './types';
 import { rollItem, salvageValue } from './equipment';
-import { COMPANY_CAP, PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS, SET_IDS } from './types';
+import { COMPANY_CAP, GEAR_SLOTS, PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS, SET_IDS } from './types';
 import { heroCatalog, levelOf, newExpedition, rollPercent, type EncounterLookup } from './world';
 
 // Pure lobby rules: the persistent mercenary company, the bank, the hiring board, the
@@ -236,10 +236,27 @@ export function settle(initial: Profile, run: ExpeditionState, outcome: RunOutco
   const ore = Math.floor(run.resources.ore * pct / 100); const seal = Math.floor(run.resources.seal * pct / 100);
   const dust = Math.floor(run.dust * pct / 100); const gold = Math.floor(run.resources.gold * pct / 100);
   profile.bank.ore += ore; profile.bank.gold += gold; profile.bank.seal += seal; profile.bank.dust += dust;
-  // Found equipment comes home; a wiped team keeps only its `wipeKeep` best finds (rarity, then level, then
-  // the earliest found). A full bag salvages the rest (2D-2).
-  let items = 0, salvaged = 0;
-  for (const found of homeItems(run, outcome, map)) { if (stash(profile, map, { ...found, uid: profile.nextItem++ })) items++; else salvaged++; }
+  // Found equipment comes home, in the bag or worn; a wiped team keeps only its `wipeKeep` best finds (rarity,
+  // then level, then the earliest found). A full bag salvages the rest (2D-2). Map bag (2026-10-17): members keep
+  // what they wear; a lost find leaves its slot to the item the member left the lobby with, when that is spare.
+  const kept = new Set(homeItems(run, outcome, map)); let items = 0, salvaged = 0;
+  const spare = [...run.spare];
+  for (const id of Object.keys(run.members)) {
+    const home = profile.members[id]; if (!home) continue;
+    const before = home.gear ?? {}; const gear: Gear = {};
+    for (const [slot, item] of Object.entries(run.members[id]!.gear ?? {}) as [GearSlot, Item][]) {
+      if (item.uid) gear[slot] = item;
+      else if (kept.has(item)) { gear[slot] = { ...item, uid: profile.nextItem++ }; items++; }
+    }
+    for (const slot of GEAR_SLOTS) {
+      const own = before[slot]; const at = own && !gear[slot] ? spare.findIndex(i => i.uid === own.uid) : -1;
+      if (at >= 0) gear[slot] = spare.splice(at, 1)[0]!;
+    }
+    if (Object.keys(gear).length) home.gear = gear; else delete home.gear;
+  }
+  // The company's own items taken off on the map always come home, even past the bag limit.
+  profile.items.push(...spare);
+  for (const found of run.found) if (kept.has(found)) { if (stash(profile, map, { ...found, uid: profile.nextItem++ })) items++; else salvaged++; }
   // Unused potions come home too, unless the team was wiped.
   if (outcome !== 'wiped') for (const id of POTION_IDS) profile.potions[id] += run.potions[id];
   // Levels and EXP earned on the run are kept whatever the outcome (2D-1).
@@ -255,9 +272,14 @@ export function settle(initial: Profile, run: ExpeditionState, outcome: RunOutco
   profile.last = { outcome, ore, gold, seal, steps: run.steps, wins: run.wins, items, salvaged };
   return profile;
 }
+// Every item found this run, in the bag or worn on the map (uid 0), in that order.
+export function runFinds(run: ExpeditionState): Item[] {
+  return [...run.found, ...Object.values(run.members).flatMap(m => Object.values(m.gear ?? {}) as Item[]).filter(i => !i.uid)];
+}
+// The finds that come home: all of them, or after a wipe only the `wipeKeep` best.
 export function homeItems(run: ExpeditionState, outcome: RunOutcome, map: MapDefinition): Item[] {
-  if (outcome !== 'wiped') return run.found;
-  return run.found.map((item, i) => ({ item, i })).sort((a, b) => b.item.rarity - a.item.rarity || b.item.level - a.item.level || a.i - b.i)
+  const finds = runFinds(run); if (outcome !== 'wiped') return finds;
+  return finds.map((item, i) => ({ item, i })).sort((a, b) => b.item.rarity - a.item.rarity || b.item.level - a.item.level || a.i - b.i)
     .slice(0, map.equipment.wipeKeep).sort((a, b) => a.i - b.i).map(x => x.item);
 }
 // Withdrawal is allowed at a camp or the map entrance, outside battle.
