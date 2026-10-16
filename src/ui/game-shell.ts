@@ -4,6 +4,7 @@ import { createCommander, depart, brew, buy, claimQuest, refreshBoard, dismiss, 
 import type { Direction, EventChoice, ExpeditionState, MapDefinition, PotionId, Profile, ProfileResult, RunOutcome, ShopItemId, WorldEvent } from '../core/world/types';
 import { startPrologue, questDone, battleData, chooseEvent, finishBattle, heroCatalog, move, moveMember, openChest, recordBattle, usePotion, rest, revive, swapMembers, type EncounterLookup } from '../core/world/world';
 import { Music, type Track } from '../platform/music';
+import { sfx, type SfxName } from '../platform/sfx';
 import { browserStorage } from '../platform/browser-storage';
 import type { BattleUI } from './battle-ui';
 import type { NpcId } from '../game/visuals/assets';
@@ -41,7 +42,7 @@ export class GameShell {
 
   constructor(private readonly root: HTMLElement, private readonly map: MapDefinition, private readonly lookup: EncounterLookup, private readonly battle: BattleUI,
     private readonly views: { title: HTMLElement; commander: HTMLElement; lobby: HTMLElement; world: HTMLElement; battle: HTMLElement }) {
-    clearLegacySaves(this.storage);
+    clearLegacySaves(this.storage); sfx.init(this.storage);
     this.game = loadGame(this.storage, map, lookup);
     this.world = new WorldUI(views.world, map, heroCatalog(lookup, map), {
       move: dir => this.move(dir), rest: () => this.rest(), revive: id => this.revive(id), swap: (a, b) => this.roster(swapMembers(this.state!, map, a, b)), moveMember: id => this.roster(moveMember(this.state!, map, id)),
@@ -72,13 +73,19 @@ export class GameShell {
     });
     // Music controls (title and lobby): a mute toggle anywhere, and the volume slider on the title.
     root.addEventListener('click', e => { if ((e.target as HTMLElement).closest('[data-music-toggle]')) { this.music.setMuted(!this.music.settings.muted); this.refreshMusicControls(); } });
-    root.addEventListener('input', e => { const t = e.target as HTMLInputElement; if (t.id === 'music-volume') this.music.setVolume(Number(t.value) / 100); });
+    // Every enabled button press clicks (the D-pad steps instead; game results add their own sound).
+    root.addEventListener('click', e => { const b = (e.target as HTMLElement).closest<HTMLButtonElement>('button'); if (b && !b.disabled && !b.id.startsWith('move-')) sfx.play('click'); }, { capture: true });
+    root.addEventListener('click', e => { if ((e.target as HTMLElement).closest('[data-sfx-toggle]')) { sfx.setMuted(!sfx.settings.muted); this.refreshMusicControls(); } });
+    root.addEventListener('input', e => { const t = e.target as HTMLInputElement; if (t.id === 'music-volume') this.music.setVolume(Number(t.value) / 100); if (t.id === 'sfx-volume') { sfx.setVolume(Number(t.value) / 100); sfx.play('click'); } });
     this.showTitle();
   }
   private refreshMusicControls(): void {
     const p = this.music.settings;
     this.root.querySelectorAll<HTMLButtonElement>('[data-music-toggle]').forEach(b => { b.setAttribute('aria-pressed', String(!p.muted)); b.setAttribute('aria-label', p.muted ? 'เปิดเพลง' : 'ปิดเพลง'); b.innerHTML = icon(p.muted ? 'musicOff' : 'music'); });
     const v = this.root.querySelector<HTMLInputElement>('#music-volume'); if (v) v.disabled = p.muted;
+    const s = sfx.settings; const st = this.root.querySelector<HTMLButtonElement>('#sfx-toggle');
+    if (st) { st.setAttribute('aria-pressed', String(!s.muted)); st.setAttribute('aria-label', s.muted ? 'เปิดเสียงเอฟเฟกต์' : 'ปิดเสียงเอฟเฟกต์'); st.innerHTML = icon(s.muted ? 'soundOff' : 'sound'); }
+    const sv = this.root.querySelector<HTMLInputElement>('#sfx-volume'); if (sv) sv.disabled = s.muted;
   }
   setBattleVisibilityListener(listener: (visible: boolean) => void): void { this.onBattleVisibility = listener; }
 
@@ -100,9 +107,11 @@ export class GameShell {
     return ({ title: 'camp', commander: 'archway', lobby: 'ruins', world: 'meadow' } as const)[view];
   }
   private musicControls(): string {
-    const p = this.music.settings;
+    const p = this.music.settings; const s = sfx.settings;
     return `<div class="music-controls"><button id="music-toggle" data-music-toggle class="round-glass" aria-pressed="${!p.muted}" aria-label="${p.muted ? 'เปิดเพลง' : 'ปิดเพลง'}">${icon(p.muted ? 'musicOff' : 'music')}</button>`
-      + `<label class="music-volume"><span>เพลง</span><input id="music-volume" type="range" min="0" max="100" step="5" value="${Math.round(p.volume * 100)}" aria-label="ระดับเสียงเพลง"${p.muted ? ' disabled' : ''}></label></div>`;
+      + `<label class="music-volume"><span>เพลง</span><input id="music-volume" type="range" min="0" max="100" step="5" value="${Math.round(p.volume * 100)}" aria-label="ระดับเสียงเพลง"${p.muted ? ' disabled' : ''}></label></div>`
+      + `<div class="music-controls"><button id="sfx-toggle" data-sfx-toggle class="round-glass" aria-pressed="${!s.muted}" aria-label="${s.muted ? 'เปิดเสียงเอฟเฟกต์' : 'ปิดเสียงเอฟเฟกต์'}">${icon(s.muted ? 'soundOff' : 'sound')}</button>`
+      + `<label class="music-volume"><span>เอฟเฟกต์</span><input id="sfx-volume" type="range" min="0" max="100" step="5" value="${Math.round(s.volume * 100)}" aria-label="ระดับเสียงเอฟเฟกต์"${s.muted ? ' disabled' : ''}></label></div>`;
   }
   private showTitle(): void {
     const g = this.game; const s = g?.run;
@@ -161,6 +170,7 @@ export class GameShell {
       : e.type === 'claimed' ? `ได้รับรางวัลเควสต์ · ${rewardText(this.map.sideQuests.find(q => q.id === e.questId)!.reward)}` : 'จัดทีมแล้ว';
     this.lobbyCheer = e.type === 'hired' || e.type === 'upgraded' ? e.heroId : '';
     // The camp NPC whose service just succeeded cheers once.
+    sfx.play(({ hired: 'coin', upgraded: 'upgrade', dismissed: 'close', talent: 'buff', equipped: 'guard', salvaged: 'anvil', forged: 'anvil', smelted: 'anvil', brewed: 'potion', claimed: 'claim', bought: 'coin', refreshed: 'coin' } as Partial<Record<string, SfxName>>)[e.type] ?? 'click');
     this.npcCheer = e.type === 'bought' || e.type === 'refreshed' ? 'broker' : e.type === 'claimed' ? this.map.sideQuests.find(q => q.id === e.questId)!.npc as NpcId
       : ({ hired: 'broker', talent: 'trainer', equipped: 'keeper', salvaged: 'keeper', forged: 'smith', smelted: 'smith', brewed: 'herbalist' } as Partial<Record<string, NpcId>>)[e.type];
     this.showLobby();
@@ -223,15 +233,22 @@ export class GameShell {
       this.message = result.event.reason === 'wall' ? 'ทางนี้ไปต่อไม่ได้' : result.event.reason === 'party' ? 'ทีมที่ลงสนามล้มหมด · สลับตัวสำรองหรือชุบที่แคมป์ก่อนออกเดินทาง'
         : result.event.reason === 'stone' ? 'หินขยับไปทางนั้นไม่ได้' : result.event.reason === 'pit' ? 'หลุมลึกขวางทาง · ต้องหาอะไรมาถม'
         : result.event.reason === 'sealed' ? `ผู้คุมรอยแยกยังถูกผนึก · ทำเป้าหมายให้ครบ ${this.map.quest.need} จาก ${this.map.quest.objectives.length} ก่อน (ตอนนี้ ${questDone(this.state, this.map).length}/${this.map.quest.need}) ดูได้ที่ช่องเป้าหมาย` : this.message;
-      this.renderWorld(); return;
+      sfx.play('bump'); this.renderWorld(); return;
     }
-    this.state = result.state;
+    this.state = result.state; this.worldSound(result.event);
     if (result.event.type === 'goal') { this.endRun('complete'); return; }
     this.persist();
     this.message = this.describe(result.event);
     if (result.event.type === 'encounter') { this.startEncounter(result.event.kind, result.event.encounterId); return; }
     this.renderWorld();
     if (result.event.type === 'event') this.world.openEvent();
+  }
+  // Map sounds by world event (placeholder synth, platform/sfx.ts).
+  private worldSound(e: WorldEvent): void {
+    const map: Partial<Record<WorldEvent['type'], SfxName>> = { moved: 'step', encounter: 'encounter', event: 'open', pushed: 'push', secret: 'secret', herb: 'herb', goal: 'victory' };
+    if (e.type === 'rune') sfx.play(e.reset ? 'runeReset' : e.solved ? 'door' : 'rune');
+    else if (e.type === 'lever') { sfx.play('lever'); if (e.solved) setTimeout(() => sfx.play('door'), 250); }
+    else { const name = map[e.type]; if (name) sfx.play(name); }
   }
   private eliteMini(): boolean { return !!this.map.elites.find(e => e.id === this.state?.battle?.source)?.mini; }
   // Seal progress (3B) after an action that may finish an objective: a note only when the count moved.
@@ -273,7 +290,7 @@ export class GameShell {
     if (!this.state) return;
     const result = rest(this.state, this.map, this.lookup);
     if (result.event.type !== 'rested') return;
-    this.state = result.state; this.persist();
+    this.state = result.state; this.persist(); sfx.play('rest');
     this.message = `พักที่แคมป์แล้ว · คนที่ยืนอยู่ฟื้นเลือด ${this.map.camp.restHealPercent}% ไฟแคมป์จะจุดใหม่เมื่อชนะศึก`;
     this.effect = 'rest';
     this.renderWorld();
@@ -282,7 +299,7 @@ export class GameShell {
     if (!this.state || this.locked) return;
     const result = revive(this.state, this.map, this.lookup, heroId);
     if (result.event.type !== 'revived') return;
-    this.state = result.state; this.persist();
+    this.state = result.state; this.persist(); sfx.play('heal');
     this.message = `ชุบ${heroText[heroId]?.name ?? ''}แล้ว · ใช้ถ่านคืนชีพ 1 เหลือ ${this.state.resources.ember}`;
     this.effect = 'rest';
     this.renderWorld();
@@ -298,7 +315,7 @@ export class GameShell {
     if (!this.state || this.locked) return;
     const result = usePotion(this.state, this.map, this.lookup, potion, heroId);
     if (result.event.type !== 'potion') return;
-    this.state = result.state; this.persist();
+    this.state = result.state; this.persist(); sfx.play('potion');
     const healed = Object.entries(result.event.heal ?? {}).map(([id, n]) => `${heroText[id]?.name ?? id} +${n}`).join(' · ');
     this.message = `${potionText[potion].name} · ${potion === 'repel' ? `ไม่เจอศัตรูสุ่ม ${this.map.potions.repelSteps} ก้าว` : `ฟื้นเลือด ${healed}`}`;
     this.renderWorld();
@@ -308,7 +325,7 @@ export class GameShell {
     const result = openChest(this.state, this.map);
     if (result.event.type !== 'chest') return;
     const before = this.state;
-    this.state = result.state; this.persist();
+    this.state = result.state; this.persist(); sfx.play(this.map.chests.find(c => c.id === (result.event.type === 'chest' ? result.event.chestId : ''))?.tier === 'rare' ? 'chestRare' : 'chest');
     this.message = `เปิดกล่องสมบัติ · ${lootThai(result.event.loot)}${result.event.potion ? ` · ${potionText[result.event.potion].name} +1` : ''}`;
     this.message += this.sealNote(before, result.state);
     this.effect = 'loot';

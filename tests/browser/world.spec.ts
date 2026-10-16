@@ -267,6 +267,27 @@ test('background music follows the view (title camp, lobby ruins, map meadow, ba
   expect(issues).toEqual([]);
 });
 
+test('sound effects: steps, walls, chests and battle turns name their sound; the effects toggle is kept', async ({ page }) => {
+  const issues: string[] = []; page.on('pageerror', e => issues.push(e.message));
+  const sound = () => page.evaluate(() => document.documentElement.dataset.sfx);
+  const [chest] = map.chests; const all = (st: ExpeditionState) => ({ ...st, revealed: '1'.repeat(st.revealed.length), repel: 10 });
+  const from = { x: chest!.x + 1, y: chest!.y };
+  await open(page, all(base({ position: from })));
+  await page.locator('#move-left').click(); await expect.poll(sound).toBe('step');
+  await page.locator('#rest').click(); await expect.poll(sound).toMatch(/^chest/);
+  // A wall bumps.
+  let blocked = false;
+  for (const d of ['up', 'down', 'left'] as const) { const t = { x: chest!.x + (d === 'left' ? -1 : 0), y: chest!.y + (d === 'up' ? -1 : d === 'down' ? 1 : 0) };
+    if (map.rows[t.y]?.[t.x] === '#' && !map.puzzles.secrets.some(q => q.x === t.x && q.y === t.y)) { await page.locator(`#move-${d}`).click(); blocked = true; break; } }
+  if (blocked) await expect.poll(sound).toBe('bump');
+  // The title toggles effects off and remembers it.
+  await page.goto('./'); await page.locator('#sfx-toggle').click();
+  await expect(page.locator('#sfx-toggle')).toHaveAttribute('aria-pressed', 'false'); await expect(page.locator('#sfx-volume')).toBeDisabled();
+  expect(await page.evaluate(() => JSON.parse(localStorage.getItem('asterveil.fateweave.sfx.v1')!))).toMatchObject({ muted: true });
+  await page.reload(); await expect(page.locator('#sfx-toggle')).toHaveAttribute('aria-pressed', 'false');
+  expect(issues).toEqual([]);
+});
+
 test('the smith smelts ore into veil dust, capped per return; saved v18', async ({ page }) => {
   const f = map.equipment.forge;
   await seed(page, null, { ...newProfile(map, 5), tutorialDone: true, commander, bank: { ore: 500, gold: 0, seal: 0, dust: 0 } } as Profile);

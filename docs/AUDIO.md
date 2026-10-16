@@ -26,3 +26,21 @@ Each file is about 2.1 MB, 13 MB in total. A track is fetched only when it first
 - **Controls:** a toggle and a volume slider on the title screen, and a toggle in the lobby header.
 
 **Testing.** Chromium checks the track choice (`data-music`), the controls, the stored preference and that every file is served. Whether sound is actually heard, and iOS Safari behaviour, need a real device.
+
+# Sound effects (placeholder synth, owner choice 2026-10-16)
+
+**Engine.** `src/platform/sfx.ts` builds every sound from Web Audio oscillators and filtered noise, so there are no audio files.
+- 34 named sounds (`SfxName`), each a small recipe of tones and noise bursts.
+- **Not production audio.** They are placeholders, meant to be replaced one by one with recorded files under the same names.
+- Sounds start after the first gesture, are skipped while the page is hidden, and the same sound within 40 ms is dropped.
+- Mute and volume are stored in `asterveil.fateweave.sfx.v1`, separate from the music.
+- The title has an effects toggle and volume slider.
+
+| Where | Sounds |
+|---|---|
+| Buttons | `click` on every enabled button (the D-pad steps instead) |
+| Map | `step`, `bump` (wall/stone/pit/seal), `encounter`, `chest`/`chestRare`, `rest`, `heal` (revive), `potion`, `rune`/`runeReset`/`door`, `lever` (+`door` when solved), `push`, `secret`, `herb`, `open` (event tile), `victory` (goal) |
+| Battle (per actor turn, from its events) | `hit` (physical) or `zap` (energy intent or energy move), `crit` (execute/finisher/backstab), `miss` (dodge/evade), `guard`, `barrier`, `heal`, `buff`, `debuff`, `cancel`, `down`, then `victory`/`defeat` |
+| Lobby | `coin` (hire, market, refresh), `upgrade`, `anvil` (forge, salvage, smelt), `potion` (brew), `claim`, `buff` (talent), `guard` (equip) |
+
+**Testing.** `<html data-sfx>` names the last sound played, so Chromium tests check which sound each action picks and that the toggle is stored. Whether the sounds are heard, and how they sound, needs a real device.

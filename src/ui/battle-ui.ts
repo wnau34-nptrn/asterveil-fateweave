@@ -1,5 +1,8 @@
 import { actionReason, beginBattle, createBattle, currentHeroId, plannedIntents, replay, resolveCommand, targetOptions, targetKind, upcomingTurns, skillPower, guardReductionOf } from '../core/battle/engine';
 import type { ActionId, BattleEntry, BattleState, Command, EncounterDefinition, Outcome, Resolution, TurnStage } from '../core/battle/types';
+import { sfx } from '../platform/sfx';
+// Moves that sound like magic rather than steel (placeholder SFX).
+const energyActions = new Set(['bolt', 'quake', 'bomb', 'acid', 'weakshot', 'sigil']);
 import type { BattleKind } from '../core/world/types';
 import { browserStorage } from '../platform/browser-storage';
 import type { BattleScene } from '../game/scenes/BattleScene';
@@ -274,7 +277,7 @@ export class BattleUI {
     const turn = playback.resolution.turns[playback.index]!;
     playback.phase = turn.side; playback.frame = turn.state;
     if (turn.side === 'hero') this.heroId = turn.actorId;
-    this.render(); this.scene?.play(turn.events);
+    this.render(); this.scene?.play(turn.events); this.stageSound(turn);
     this.timer = setTimeout(() => {
       if (this.presentation !== playback) return;
       if (++playback.index < playback.resolution.turns.length) this.showStage();
@@ -282,8 +285,23 @@ export class BattleUI {
     }, 1000);
   }
 
+  // Placeholder synth sounds for one actor turn (platform/sfx.ts), from its events.
+  private stageSound(turn: TurnStage): void {
+    const has = (t: string) => turn.events.some(e => e.type === t);
+    if (has('cancel')) { sfx.play('cancel'); return; }
+    const hit = turn.events.find(e => e.type === 'damage');
+    if (hit) sfx.play(['execute', 'finisher', 'backstab'].includes(turn.action ?? '') ? 'crit' : (turn.side === 'enemy' ? turn.intent?.kind === 'energy' : energyActions.has(turn.action ?? '')) ? 'zap' : 'hit');
+    else if (has('dodge') || has('evade')) sfx.play('miss');
+    if (has('guard') || has('brace') || has('taunt') || has('counter')) sfx.play('guard');
+    if (has('barrier') || has('sanctuary') || has('sigil')) sfx.play('barrier');
+    if (has('heal')) sfx.play('heal');
+    if (has('haste') || has('song') || has('rally') || has('stand') || has('finale')) sfx.play('buff');
+    if (has('mark') || has('corrode') || has('delay') || has('interrupt')) sfx.play('debuff');
+    if (has('down')) setTimeout(() => sfx.play('down'), 220);
+  }
   private finishPresentation(): void {
     if (!this.presentation) return;
+    if (this.state.outcome !== 'active') sfx.play(this.state.outcome === 'victory' ? 'victory' : 'defeat');
     clearTimeout(this.timer); this.timer = undefined; this.scene?.stopEffects();
     this.presentation = undefined; this.busy = false;
     this.heroId = currentHeroId(this.state, this.data) ?? this.heroId;
