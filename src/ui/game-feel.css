@@ -594,3 +594,24 @@ html, body { background: #0a1422; }
 .elite-unit[data-mini] .elite-reward { background: radial-gradient(circle at 40% 35%, #f3e6ff, #c79bff 60%, #6b45a8); }
 .seal-title { display: flex; align-items: center; gap: 6px; margin: 12px 0 4px; font-size: 14px; color: var(--gold-light, #f2d596); }
 .seal-title .icon { width: 18px; height: 18px; }
+/* ---- ART-UI-EQUIP-001: painted equipment, potions and set emblems ---- */
+.gear-art, .potion-art { position: relative; flex: none; display: inline-grid; place-items: center; width: var(--art, 44px); height: var(--art, 44px); }
+.equip-sprite { position: absolute; inset: 0; background: var(--atlas) var(--ax) var(--ay) / calc(var(--cols) * 100%) calc(var(--rows) * 100%) no-repeat; }
+/* Rarity is a plain code-drawn frame around the piece (common → legendary). */
+.gear-art { border-radius: 10px; border: 2px solid var(--rarity, #b9c8d8); background: radial-gradient(circle at 50% 45%, color-mix(in srgb, var(--rarity, #b9c8d8) 22%, transparent), #08121f99 70%); }
+.gear-art[data-rarity="0"] { --rarity: var(--rarity-0); } .gear-art[data-rarity="1"] { --rarity: var(--rarity-1); } .gear-art[data-rarity="2"] { --rarity: var(--rarity-2); }
+.gear-art[data-rarity="3"] { --rarity: var(--rarity-3); } .gear-art[data-rarity="4"] { --rarity: var(--rarity-4); box-shadow: 0 0 8px #f2b84b66; }
+/* Where the art sits in each list. */
+.gear-slot .gear-art { grid-row: 1 / 3; --art: 38px; }
+.gear-bag li { grid-template-columns: auto 1fr auto; } .gear-bag li .gear-art { --art: 46px; }
+.pack-gear li { grid-template-columns: auto 1fr; align-items: center; gap: 8px; } .pack-gear li div { display: grid; gap: 1px; min-width: 0; } .pack-gear li .gear-art { --art: 40px; }
+.forge-pick { display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto; column-gap: 8px; align-items: center; text-align: left; }
+.forge-pick .gear-art { grid-row: 1 / 3; --art: 40px; }
+.gear-detail > .gear-art, .forge-detail > .gear-art { --art: 64px; justify-self: start; }
+.forge-detail h4 .icon { width: 16px; height: 16px; vertical-align: -3px; color: var(--gold-light, #f2d596); }
+.pack-potions li .potion-art, .brew-list li .potion-art { --art: 40px; }
+.pack-list li .potion-art { --art: 40px; }
+.gear-art .equip-sprite { inset: 3px; }
+.gear-art > .icon { width: 60%; height: 60%; color: var(--rarity, #b9c8d8); }
+.set-emblem { position: absolute; right: -6px; bottom: -6px; width: 20px; height: 20px; background: var(--atlas) var(--ax) 0 / 600% 100% no-repeat; filter: drop-shadow(0 1px 2px #000c); }
+.potion-art { --art: 40px; }

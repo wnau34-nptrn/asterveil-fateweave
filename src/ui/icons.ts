@@ -59,6 +59,13 @@ import chestOpen from './svg/chest-open.svg?raw';
 import ore from './svg/ore.svg?raw';
 import ember from './svg/ember.svg?raw';
 import gold from './svg/gold.svg?raw';
+import forge from './svg/forge.svg?raw';
+import enhance from './svg/enhance.svg?raw';
+import fuse from './svg/fuse.svg?raw';
+import reroll from './svg/reroll.svg?raw';
+import salvage from './svg/salvage.svg?raw';
+import brew from './svg/brew.svg?raw';
+import set from './svg/set.svg?raw';
 import seal from './svg/seal.svg?raw';
 import pack from './svg/pack.svg?raw';
 import starFilled from './svg/star-filled.svg?raw';
@@ -78,7 +85,7 @@ import potionTonic from './svg/potion-tonic.svg?raw';
 import potionRepel from './svg/potion-repel.svg?raw';
 
 // Original ART-UI-WORLD-001 line icons (24px viewBox, currentColor). Inlined so they inherit state colour.
-const svgs = { attack, guard, bash, mark, execute, bolt, ward, heal, prayer, brace, pierce, hinder, volley, acid, haste, ambush, evade, taunt, slam, valor, mend, rally, finisher, sigil, sanctuary, spearwall, weakshot, bomb, backstab, quake, finale, up, down, left, right, camp, rest, flag, goal, star, danger, safe, talk, info, map, boss, check, circle, close, footprints, chest, chestOpen, ore, gold, ember, seal, pack, starFilled, starBadge, starBadgeEmpty, gearWeapon, gearHead, gearBody, gearGloves, gearBoots, gearCharm, dust, potionSalve, potionTonic, potionRepel } as const;
+const svgs = { attack, guard, bash, mark, execute, bolt, ward, heal, prayer, brace, pierce, hinder, volley, acid, haste, ambush, evade, taunt, slam, valor, mend, rally, finisher, sigil, sanctuary, spearwall, weakshot, bomb, backstab, quake, finale, up, down, left, right, camp, rest, flag, goal, star, danger, safe, talk, info, map, boss, check, circle, close, footprints, chest, chestOpen, ore, gold, forge, enhance, fuse, reroll, salvage, brew, set, ember, seal, pack, starFilled, starBadge, starBadgeEmpty, gearWeapon, gearHead, gearBody, gearGloves, gearBoots, gearCharm, dust, potionSalve, potionTonic, potionRepel } as const;
 const restartPath = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10a8 8 0 1 1 1 8M4 4v6h6"/></svg>';
 export type IconName = ActionId | keyof typeof svgs | 'restart';
 export function icon(name: IconName): string {

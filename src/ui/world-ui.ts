@@ -4,8 +4,9 @@ import { atCamp, atMuster, canOpenChest, canRest, canRevive, chestAt, eliteBlock
 import { PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS } from '../core/world/types';
 import { actorArt, portraitsUrl, sheetRows } from '../game/visuals/assets';
 import { SOURCE_TILE, chestFrame, decorAt, itemFrame, floorFrame, fogLayers, landmarkAt, tileSizeFor, tileset, worldArtUrl, type Landmark } from '../game/visuals/world-art';
-import { questLine, choiceText, eventChoices, eventReasonText, eventText, heroText, itemLines, itemName, potionIcon, potionText, resourceOrder, resourceText } from './th';
+import { questLine, choiceText, eventChoices, eventReasonText, eventText, heroText, itemLines, itemName, potionText, resourceOrder, resourceText } from './th';
 import { icon, type IconName } from './icons';
+import { gearArt, potionArt } from './equip-art';
 
 export interface WorldHost { move(dir: Direction): void; rest(): void; revive(heroId: string): void; swap(a: string, b: string): void; moveMember(id: string): void; withdraw(): void; openChest(): void;
   usePotion(potion: PotionId, heroId?: string): void; chooseEvent(choice: EventChoice): void }
@@ -287,7 +288,7 @@ export class WorldUI {
       return potion === 'repel' && s.repel > 0 ? reasons.active! : '';
     };
     const rows = POTION_IDS.map(id => { const reason = why(id);
-      return `<li data-potion="${id}">${icon(potionIcon[id])}<div><b>${potionText[id].name}</b><small>${potionText[id].help(this.map.potions)}</small></div><strong>${s.potions[id]}</strong>
+      return `<li data-potion="${id}">${potionArt(id)}<div><b>${potionText[id].name}</b><small>${potionText[id].help(this.map.potions)}</small></div><strong>${s.potions[id]}</strong>
         <button id="potion-${id}" data-world="potion" data-potion="${id}" class="secondary"${reason ? ' disabled' : ''} aria-expanded="${id === 'salve' ? this.salvePick : false}">${reason || (id === 'salve' && this.salvePick ? 'เลือกคน' : 'ใช้')}</button></li>`; }).join('');
     const targets = this.salvePick ? rosterIds(s).filter(id => s.hp[id]! > 0 && s.hp[id]! < this.hero(id, s).maxHp)
       .map(id => `<button id="salve-${id}" data-world="potion" data-potion="salve" data-hero="${id}" class="secondary salve-target">${portrait(id)}<span>${heroText[id]!.name}<small>${s.hp[id]}/${this.hero(id, s).maxHp}</small></span></button>`).join('') : '';
@@ -297,8 +298,8 @@ export class WorldUI {
   private renderPack(): void {
     const s = this.view?.state; if (!s) return;
     const opened = s.openedChests.length;
-    this.root.querySelector('#pack-content')!.innerHTML = `${this.potionSection(s)}<ul class="pack-list">${resourceOrder.map(id => `<li data-resource="${id}">${id === 'gold' ? `<span class="item-art icon-art" aria-hidden="true">${icon('gold')}</span>` : itemArt(id)}<div><b>${resourceText[id].name}</b><small>${resourceText[id].use}</small></div><strong>${s.resources[id]}</strong></li>`).join('')}${s.dust ? `<li data-resource="dust">${icon('dust')}<div><b>ผงม่าน</b><small>วัตถุดิบตีอุปกรณ์ · นำกลับค่ายเมื่อจบการเดินทาง</small></div><strong>${s.dust}</strong></li>` : ''}</ul>
-      ${s.found.length ? `<h3 class="pack-gear-title">${icon('gearBody')} อุปกรณ์ที่เจอ ${s.found.length} ชิ้น</h3><ul class="pack-gear">${s.found.map(i => `<li data-rarity="${i.rarity}"><b>${itemName(i)} Lv${i.level}</b><small>${itemLines(this.map.equipment, i).join(' · ')}</small></li>`).join('')}</ul><p class="world-stats">ใส่ได้ที่ค่ายหลังกลับจากการเดินทาง · ถ้าทีมล้มหมดอุปกรณ์ที่เจอรอบนี้จะหาย</p>` : ''}
+    this.root.querySelector('#pack-content')!.innerHTML = `${this.potionSection(s)}<ul class="pack-list">${resourceOrder.map(id => `<li data-resource="${id}">${id === 'gold' ? potionArt('gold') : itemArt(id)}<div><b>${resourceText[id].name}</b><small>${resourceText[id].use}</small></div><strong>${s.resources[id]}</strong></li>`).join('')}${s.dust ? `<li data-resource="dust">${potionArt('dust')}<div><b>ผงม่าน</b><small>วัตถุดิบตีอุปกรณ์ · นำกลับค่ายเมื่อจบการเดินทาง</small></div><strong>${s.dust}</strong></li>` : ''}</ul>
+      ${s.found.length ? `<h3 class="pack-gear-title">${icon('gearBody')} อุปกรณ์ที่เจอ ${s.found.length} ชิ้น</h3><ul class="pack-gear">${s.found.map(i => `<li data-rarity="${i.rarity}">${gearArt(i)}<div><b>${itemName(i)} Lv${i.level}</b><small>${itemLines(this.map.equipment, i).join(' · ')}</small></div></li>`).join('')}</ul><p class="world-stats">ใส่ได้ที่ค่ายหลังกลับจากการเดินทาง · ถ้าทีมล้มหมดอุปกรณ์ที่เจอรอบนี้จะหาย</p>` : ''}
       <p class="world-stats">เปิดกล่องสมบัติแล้ว ${opened}/${this.map.chests.length} กล่อง · ของตกจากศึกที่ชนะและกล่องสมบัติ</p>`;
   }
 
