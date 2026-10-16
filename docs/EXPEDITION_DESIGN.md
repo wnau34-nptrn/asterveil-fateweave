@@ -19,7 +19,7 @@ Approved 2026-10-14, re-planned 2026-10-15 for the mercenary roster.
 | L1. Lobby | Home → Lobby → Map; persistent profile (company ≤ 20, bank, board); choose the 4 + 4; withdraw/complete/wipe settle home | **Implemented** |
 | L2. Character creation | Commander (non-combat) name, crest and banner colour, once, between Home and Lobby | **Implemented** |
 | 2C-2. New classes | Six new mercenaries (ART-CHAR-MERC-ENEMY-001), one class mechanic at a time; ★3 skill and ★5 passive per class | **Implemented**: all 6 base classes (Garran spear, Mira archer, Toma alchemist, Sefa scout, Brann warden, Lio bard) and the ★3 skill + ★5 passive for all 10 classes (see Star unlocks) |
-| 2D. Equipment and level | 2D-1 member + monster levels; 2D-2 equipment (6 slots, 5 rarities, drops, inventory); 2D-3 sets; 2D-4 forge (enhance, fuse, reroll, salvage); 2D-5 map potions | **In progress**: 2D-1 implemented (see Levels) |
+| 2D. Equipment and level | 2D-1 member + monster levels; 2D-2 equipment (6 slots, 5 rarities, drops, inventory); 2D-3 sets; 2D-4 forge (enhance, fuse, reroll, salvage); 2D-5 map potions; 2D-1b passive talent tree | **In progress**: 2D-1 implemented (see Levels); 2D-1b structure approved (see Talent tree) |
 | 3. Choices and content | Events with fight/avoid choices, elites, mini boss, puzzles (rune order, push stone, lever), secrets, map quest "2 of 3" and side quests | Planned |
 | 4. Economy and wrap-up | Local gold and shop, salvage, fast travel between camps, elite respawn on rest, defeat penalty, whole-map balance simulation, completion screen | Planned |
 
@@ -421,3 +421,12 @@ Every class (the starting four included) gains one battle skill at ★3 and one 
 **EXP.** Each victory gives every brought member (deployed and reserve, standing or fallen) `enemies × (6 + 2 × monster level)`, ×3 for the boss, multiplied by the level gap (`expPercent`): up to 2 levels above the monster 100%, 3 → 75%, 4 → 50%, 5 → 25%, 6+ → 10% (never zero); 3+ levels below the monster 120%. A level-up raises max HP and standing members gain the difference. Levels are kept in the profile whatever the outcome. The advisor's short full run ends at level 6.
 
 **Save v7.** Members may carry `level`/`exp`; an active battle may carry its monster `level`. v6 data loads unchanged (level 1, encounter level). The command validator now also accepts the ★3 skills.
+
+## Talent tree (2D-1b; owner-scoped 2026-10-16, structure approved, node table pending)
+
+The owner asked for a skill tree made only of passives ("ความถนัด"). This scopes the CLAUDE.md rule-10 exception for a skill tree: passive nodes only, no new battle buttons.
+
+- Points: 1 per level-up (9 at the level cap 10). Spent and reset (free, any time) in the Lobby only.
+- Shape (same for every class, class-specific contents): root (1 rank) → branch A and branch B, each tier 1 (2 ranks) → tier 2 (2 ranks) → capstone (1 rank). 7 nodes, 11 ranks, so a member cannot take everything.
+- Gates: the root first; tier 2 needs 1 rank in its tier 1; a capstone needs 4 ranks in its branch.
+- Tier 1 = readable stats, tier 2 = the class mechanic, capstone = a small rule change. Effects live in the pure resolver (read from the deployed hero definition, like `passive`), never in the UI. 0 points = today's numbers.
