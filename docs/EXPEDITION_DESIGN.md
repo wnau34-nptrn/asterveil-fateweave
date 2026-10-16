@@ -21,7 +21,7 @@ Approved 2026-10-14, re-planned 2026-10-15 for the mercenary roster.
 | 2C-2. New classes | Six new mercenaries (ART-CHAR-MERC-ENEMY-001), one class mechanic at a time; ★3 skill and ★5 passive per class | **Implemented**: all 6 base classes (Garran spear, Mira archer, Toma alchemist, Sefa scout, Brann warden, Lio bard) and the ★3 skill + ★5 passive for all 10 classes (see Star unlocks) |
 | 2D. Equipment and level | 2D-1 member + monster levels; 2D-2 equipment (6 slots, 5 rarities, drops, inventory); 2D-3 sets; 2D-4 forge (enhance, fuse, reroll, salvage); 2D-5 map potions; 2D-1b passive talent tree | **Implemented**: 2D-1 (see Levels), 2D-1b (Talent tree), 2D-2 (Equipment), 2D-3 (Equipment sets), 2D-4 (Forge), 2D-5 (Map potions); numbers are drafts |
 | 3. Choices and content | 3A events with fight/avoid choices and forced elites; later mini boss, puzzles (rune order, push stone, lever), secrets, map quest "2 of 3" and side quests | **3A–3D implemented** (see Events and elites; Rift seal and mini-boss; Puzzles and secrets; Camp side quests) |
-| 4. Economy and wrap-up | Local gold and shop, salvage, fast travel between camps, elite respawn on rest, defeat penalty, whole-map balance simulation, completion screen | **4E simulation implemented** (see Balance simulation); tuning awaits owner decisions; others planned |
+| 4. Economy and wrap-up | Local gold and shop, salvage, fast travel between camps, elite respawn on rest, defeat penalty, whole-map balance simulation, completion screen | **4A and 4E implemented** (see Camp market and board refresh; Balance simulation); fast travel, elite respawn, defeat penalty and completion screen planned |
 
 Numbers in phases 2–4 are drafts and need owner approval after playtesting.
 
@@ -582,9 +582,9 @@ Hiring no longer competes with brewing and the forge for ore.
 
 | Source | Gold |
 |---|---|
-| Meadow / thicket / scar win (elite and event fights use their zone) | 3–6 / 4–8 / 6–10 |
+| Meadow / thicket / scar win (elite and event fights use their zone) | 2–4 / 2–5 / 4–6 (4A; were 3–6 / 4–8 / 6–10) |
 | Tutorial | 5 |
-| Boss | 30 |
+| Boss | 18 (4A; was 30) |
 | Common / rare chest | 8–12 / 15–20 |
 
 - Gold rides in `run.resources` and settles into `bank.gold` like ore: all of it on complete or withdraw, half on a wipe. The last-result line shows it.
@@ -718,12 +718,12 @@ Then `startPrologue` starts the `first-clash` battle (now "กองหน้า
 
 | NPC | Quest | Counts per run | Target | Reward |
 |---|---|---|---|---|
-| ลุงบอร์ก (smith) | แร่จากกล่องหายาก | rare chests opened | 3 | ore 30 · dust 25 |
-| พีโน่ (broker) | ผลงานให้ลูกค้าดู | battles won | 12 | gold 40 |
-| ครูฮัลดา (trainer) | บททดสอบของครู | elites beaten | 3 | seal 2 |
-| มิมี่ (keeper) | ห้องลับในกำแพง | secret walls found | 3 | gold 20 · dust 15 |
-| เฟิร์น (herbalist) | สมุนไพรเรืองแสง | glowing herbs picked | 3 | salve 2 · tonic 2 |
-| คาเอล (scout) | ไขกลไกโบราณ | puzzles solved | 3 | ore 40 · seal 1 |
+| ลุงบอร์ก (smith) | แร่จากกล่องหายาก | rare chests opened | 6 | ore 30 · dust 25 |
+| พีโน่ (broker) | ผลงานให้ลูกค้าดู | battles won | 30 | gold 40 |
+| ครูฮัลดา (trainer) | บททดสอบของครู | elites beaten | 6 | seal 2 |
+| มิมี่ (keeper) | ห้องลับในกำแพง | secret walls found | 6 | gold 20 · dust 15 |
+| เฟิร์น (herbalist) | สมุนไพรเรืองแสง | glowing herbs picked | 6 | salve 2 · tonic 2 |
+| คาเอล (scout) | ไขกลไกโบราณ | puzzles solved | 6 | ore 40 · seal 1 |
 
 **Counting rules:**
 - Progress is added when the run settles (complete, withdrawn or wiped) and is capped at the target.
@@ -785,7 +785,7 @@ Then `startPrologue` starts the `first-clash` battle (now "กองหน้า
 4. **Side quests are finished in one explorer run.**
    - The explorer claims all six before its second expedition.
    - The rush player only ever finishes the broker and trainer quests.
-5. **The merchant tile (16,21) is the only way to the sun rune stone and the meadow-east chest.** Its dialog opens on every pass.
+5. **The merchant tile (16,21) is the only way to the sun rune stone and the meadow-east chest.** Its dialog opens on every pass. (Fixed in 4A: the merchant moved to (3,21), map version 6.)
 
 **Tuning options proposed to the owner:**
 - Levels: steeper curve (for example `nextBase` 20 and `nextPerLevel` 25), less EXP for fighting up, or a higher cap with chapters.
@@ -818,3 +818,53 @@ Then `startPrologue` starts the `first-clash` battle (now "กองหน้า
   - A trial at +2 levels with 20 + 60 × level made the rush route almost unwinnable for the casual player, so it was reverted.
 - The full numbers are in `docs/validation/balance-sim/REPORT.md`.
 - The economy (ore and gold surplus), side-quest targets and the merchant tile are unchanged until 4A.
+
+## Camp market and board refresh (4A; approved 2026-10-16, draft numbers)
+
+**Gold coins** now pay for hiring, paid board refreshes and the market. Ore still pays for stars, brewing, the forge and the map merchant.
+- **Rules:** `refreshBoard`/`refreshReason` and `buy`/`buyReason`/`shopLeft` in `core/world/profile.ts`.
+- **Numbers:** `map.shop`.
+- **Where:** everything happens in the broker's sheet (พีโน่), which has two tabs: ป้ายจ้าง and ตลาด.
+
+**Board refresh** (owner request):
+- The hiring board can be redrawn **2 times per return**, for **15** and then **30** gold.
+- A redraw clears the "hired" marks.
+- With no redraw the board is exactly the board it was before 4A.
+- The redraw count resets when an expedition comes home.
+
+**Market** (limits reset on each return):
+
+| Item | Price | Limit | Effect |
+|---|---|---|---|
+| ตราสัญญา (seal) | 60 | 2 | +1 seal |
+| ใบสัญญาซ้ำ (contract) | 150 | 1 | +1 duplicate for a chosen member below max stars |
+| หีบอุปกรณ์ (gear box) | 120 | 1 | A rare-or-better piece (weights 60/30/10) at the company's highest level, any set. It rolls from the profile's lobby roll counter (shared with the forge), so a reload cannot re-roll it. The bag must have room. |
+| ยาไล่อสูร (repel) | 30 | 2 | +1 repel in the home potion stock |
+
+**Income cut (about 40%, draft).** Ore and gold from zone wins, chests, the boss, the mini-boss and optional elites are reduced. The tutorial is unchanged.
+
+| Source | Ore | Gold |
+|---|---|---|
+| Meadow / thicket / scar win | 4–6 / 5–8 / 7–11 | 2–4 / 2–5 / 4–6 |
+| Common chest | 10–14 | 5–7 |
+| Rare chest and mini-boss | 18–24 | 9–12 |
+| Boss | 36 | 18 |
+| Optional elite gold bonus | – | 12 |
+
+**Side quests.** Targets doubled or more: rare chests 6, wins 30, elites 6, secrets 6, herbs 6, puzzles 6. Each can be finished within three explorer runs.
+
+**Map version 6.** The merchant moved from (16,21), the only way to the sun rune stone, to the meadow's west corner (3,21). Runs saved on map version 5 settle home as withdrawn.
+
+**Save v17.**
+- The profile gains `shop` (items bought this return, each within its limit) and `refreshes` (0..2).
+- v16 data migrates with none.
+
+**Simulation** (`npm run sim`, after 6 expeditions; the scripted player buys seals up to 3, a contract, a gear box, redraws while it has gold, and enhances worn gear):
+- **Gold:** the bank now ends near 100–330 (was 480–2,500).
+- **Ore:** the explorer still ends with 1,800–2,200. Enhancing is limited by dust, not ore.
+- **Seals:** they pile up (about 50 for explorers), because only one seal can stand in for a duplicate per star.
+- These are open for the owner.
+
+**Tests:**
+- `tests/shop.test.ts`: refresh prices, limit and reset; unchanged board without a refresh; market limits and gold; contract; gear box determinism, rarity, level and full bag; save v17.
+- A browser test refreshes twice and buys a contract and a gear box.

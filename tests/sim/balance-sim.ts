@@ -4,7 +4,8 @@
 import { encounterById as lookup } from '../../src/content/encounters/catalog';
 import { chapterOne as map } from '../../src/content/world/chapter1';
 import { resolveCommand, targetOptions, currentHeroId } from '../../src/core/battle/engine';
-import { claimQuest, claimReason, createCommander, depart, equip, hire, hireReason, boardOffers, learnTalent, newProfile, salvage, settle, talentReason, upgrade, upgradeReason, brew, brewReason } from '../../src/core/world/profile';
+import { buy, buyReason, refreshBoard, refreshReason, claimQuest, claimReason, createCommander, depart, equip, hire, hireReason, boardOffers, learnTalent, newProfile, salvage, settle, talentReason, upgrade, upgradeReason, brew, brewReason } from '../../src/core/world/profile';
+import { enhance, enhanceCost, enhanceReason } from '../../src/core/world/forge';
 import { boulderAt, openPit, passableWall, runePuzzleAt } from '../../src/core/world/puzzles';
 import type { BattleKind, Direction, ExpeditionState, GearSlot, Item, Point, Profile, RunOutcome } from '../../src/core/world/types';
 import { GEAR_SLOTS } from '../../src/core/world/types';
@@ -191,7 +192,17 @@ const score = (i: Item) => i.rarity * 10 + i.level + (i.plus ?? 0) * 2;
 function lobby(p: Profile): { profile: Profile; claimed: string[] } {
   const claimed: string[] = [];
   for (const q of map.sideQuests) if (!claimReason(p, map, q.id)) { p = claimQuest(p, map, q.id).profile; claimed.push(q.id); }
-  for (let i = 0; i < boardOffers(p, map, lookup).length; i++) if (!hireReason(p, map, lookup, i)) p = hire(p, map, lookup, i).profile;
+  // Market (4A): seals, a contract for the deployed member closest to the next star, and a gear box.
+  while (!buyReason(p, map, 'seal') && p.bank.gold > 120 && p.bank.seal < 3) p = buy(p, map, 'seal').profile;
+  const pick = [...p.party.deployed].sort((x, y) => p.members[y]!.stars - p.members[x]!.stars).find(id => !buyReason(p, map, 'contract', id));
+  if (pick && p.bank.gold > 200) p = buy(p, map, 'contract', pick).profile;
+  if (!buyReason(p, map, 'gearbox') && p.bank.gold > 150) p = buy(p, map, 'gearbox').profile;
+  // Hire everything useful on the board, redrawing it (paid) while gold is plentiful.
+  for (let round = 0; ; round++) {
+    for (let i = 0; i < boardOffers(p, map, lookup).length; i++) if (!hireReason(p, map, lookup, i)) p = hire(p, map, lookup, i).profile;
+    if (round >= map.shop.refreshCosts.length || refreshReason(p, map) || p.bank.gold < 100) break;
+    p = refreshBoard(p, map).profile;
+  }
   const ids = [...p.party.deployed, ...p.party.reserve];
   for (let changed = true; changed;) { changed = false; for (const id of ids) if (!upgradeReason(p, map, id)) { p = upgrade(p, map, id).profile; changed = true; } }
   for (const id of ids) for (let changed = true; changed;) {
@@ -202,6 +213,15 @@ function lobby(p: Profile): { profile: Profile; claimed: string[] } {
     const worn = p.members[id]?.gear?.[slot];
     const best = p.items.filter(i => i.slot === slot && (slot !== 'weapon' || i.hero === id)).sort((a, b) => score(b) - score(a))[0];
     if (best && (!worn || score(best) > score(worn))) p = equip(p, id, best.uid).profile;
+  }
+  // Forge: enhance the deployed members' worn pieces while ore and dust last (keeping 80 ore for brewing).
+  for (let changed = true; changed;) {
+    changed = false;
+    for (const id of p.party.deployed) for (const item of Object.values(p.members[id]?.gear ?? {})) {
+      if (!item || enhanceReason(p, map, item.uid)) continue;
+      const cost = enhanceCost(map, item)!; if (p.bank.ore - cost.ore < 80) continue;
+      p = enhance(p, map, item.uid).profile; changed = true;
+    }
   }
   if (p.items.length > map.equipment.bagCap - 10) p = salvage(p, map, p.items.filter(i => i.rarity === 0).map(i => i.uid)).profile;
   while (p.potions.salve < map.potions.carry && !brewReason(p, map, 'salve') && p.bank.ore > 60) p = brew(p, map, 'salve').profile;

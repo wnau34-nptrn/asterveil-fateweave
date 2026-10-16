@@ -683,3 +683,16 @@ html, body { background: #0a1422; }
 .herb::after { content: ''; position: absolute; inset: 0; border-radius: 50%; background: radial-gradient(circle, #8ef0a855, transparent 65%); animation: herb-glow 1.8s ease-in-out infinite alternate; }
 @keyframes herb-glow { from { opacity: .5; } to { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { #lobby-view .npc-hit.quest-ready::after, .herb::after { animation: none; } }
+/* ---- Phase 4A: broker tabs (hiring board / market), paid board refresh and market goods ---- */
+.hire-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 4px 0 6px; }
+.hire-tabs button { min-height: 44px; display: flex; align-items: center; justify-content: center; gap: 6px; border-radius: 12px; border: 1px solid #e8f5ff2a; background: #0d1c2e99; color: var(--text-muted); font-weight: 600; }
+.hire-tabs button .icon { width: 18px; height: 18px; }
+.hire-tabs button.active { border-color: var(--gold-light); color: var(--gold-light); background: #2a2210cc; box-shadow: 0 0 10px #f2d59633; }
+.hire-refresh { width: 100%; min-height: 48px; margin: 4px 0 6px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.hire-refresh span { display: flex; flex-direction: column; align-items: flex-start; line-height: 1.2; } .hire-refresh small { font-size: 12px; opacity: .8; }
+.hire-refresh .icon { width: 20px; height: 20px; }
+.hire-list li > .market-icon { flex: none; width: 44px; height: 44px; display: grid; place-items: center; border-radius: 12px; background: #13263dcc; border: 1px solid #f2d59644; }
+.hire-list li > .market-icon .icon { width: 26px; height: 26px; color: #f2c14e; }
+.contract-pick { display: flex; align-items: center; gap: 6px; margin-top: 4px; font-size: 13px; }
+.contract-pick select { min-height: 44px; max-width: 100%; flex: 1; border-radius: 10px; border: 1px solid #e8f5ff33; background: #0b1626; color: var(--text); padding: 0 8px; font: inherit; }
+@media (max-width: 400px) { .market-list small:not(.hire-status) { display: block; } }

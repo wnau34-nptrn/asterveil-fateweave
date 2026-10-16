@@ -335,7 +335,7 @@ describe('resources and chests', () => {
     expect(a).toEqual(b);
     if (a.event.type !== 'chest') throw new Error('expected a chest');
     expect(a.event.loot.seal).toBe(1); expect(a.event.loot.ember).toBe(1);
-    expect(a.event.loot.ore).toBeGreaterThanOrEqual(30); expect(a.event.loot.ore).toBeLessThanOrEqual(40);
+    const rare = map.loot.chest.rare.ore; expect(a.event.loot.ore).toBeGreaterThanOrEqual(rare[0]); expect(a.event.loot.ore).toBeLessThanOrEqual(rare[1]);
     expect(a.state.resources).toEqual(a.event.loot); expect(a.state.openedChests).toEqual([chest.id]);
     expect(canOpenChest(a.state, map)).toBe(false); expect(openChest(a.state, map).event.type).toBe('blocked');
     expect(canOpenChest(fresh(), map)).toBe(false);
@@ -347,12 +347,13 @@ describe('resources and chests', () => {
     expect(s.resources).toEqual({ ore: 10, gold: 5, ember: 1, seal: 0 });
     while (!s.battle) s = move(s, map, s.steps % 2 ? 'right' : 'left').state;
     const before = s.resources.ore; const goldBefore = s.resources.gold; s = fight(s);
-    expect(s.resources.ore - before).toBeGreaterThanOrEqual(6); expect(s.resources.ore - before).toBeLessThanOrEqual(10);
-    expect(s.resources.gold - goldBefore).toBeGreaterThanOrEqual(3); expect(s.resources.gold - goldBefore).toBeLessThanOrEqual(6);
+    const zone = map.zones.find(z => z.id === 'meadow')!.loot!;
+    expect(s.resources.ore - before).toBeGreaterThanOrEqual(zone.ore[0]); expect(s.resources.ore - before).toBeLessThanOrEqual(zone.ore[1]);
+    expect(s.resources.gold - goldBefore).toBeGreaterThanOrEqual(zone.gold[0]); expect(s.resources.gold - goldBefore).toBeLessThanOrEqual(zone.gold[1]);
     const [boss] = findTiles(map, 'boss');
     let t: ExpeditionState = { ...fresh(2), tutorialDone: true, position: { x: boss!.x, y: boss!.y + 1 }, ...sealBroken };
     t = fight(move(t, map, 'up').state);
-    expect(t.resources).toEqual({ ore: 60, gold: 30, ember: 1, seal: 2 });
+    expect(t.resources).toEqual({ ore: map.loot.boss.ore[0], gold: map.loot.boss.gold[0], ember: 1, seal: 2 });
   });
 });
 
@@ -372,7 +373,7 @@ describe('game save', () => {
   });
   it.each([
     ['malformed', () => '{bad'],
-    ['wrong version', (s: ExpeditionState) => JSON.stringify({ version: 17, profile: newProfile(map, 4), run: s })],
+    ['wrong version', (s: ExpeditionState) => JSON.stringify({ version: 18, profile: newProfile(map, 4), run: s })],
     ['wall position', (s: ExpeditionState) => v6({ ...s, position: { x: 0, y: 0 } })],
     ['hp above max', (s: ExpeditionState) => v6({ ...s, hp: { ...s.hp, tracer: 99 } })],
     ['foreign owner command', (s: ExpeditionState) => v6({ ...s, battle: { kind: 'random', encounterId: 'veil-siege', entry: s.hp, commands: [{ beat: 1, heroId: 'guardian', action: 'attack', targetId: 'brute' }] } })],

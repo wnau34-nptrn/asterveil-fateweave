@@ -1,5 +1,5 @@
 import type { ActionId, PassiveId, BattleEvent, BattleState, EncounterDefinition, Intent, TalentCap, TalentRule } from '../core/battle/types';
-import type { EquipmentRules, ExpGain, ExpeditionState, Gear, GearSlot, GearStat, Item, PotionId, PotionRules, ResourceId, Resources, SetDefinition, SetId, TalentNodeDef, MapEventKind, EventChoice, EventRules, QuestObjective, SideQuestDefinition, SideQuestKind } from '../core/world/types';
+import type { EquipmentRules, ExpGain, ExpeditionState, Gear, GearSlot, GearStat, Item, PotionId, PotionRules, ResourceId, Resources, SetDefinition, SetId, TalentNodeDef, MapEventKind, EventChoice, EventRules, QuestObjective, SideQuestDefinition, SideQuestKind, ShopItemId } from '../core/world/types';
 import type { GearSpecial } from '../core/battle/types';
 import { itemStats, setCounts } from '../core/world/equipment';
 import { ambushBonusOf, capAmount, corrodeBonusOf, guardReductionOf, hasCap, skillPower, songPower, talentRule, tauntReductionOf } from '../core/battle/engine';
@@ -301,3 +301,10 @@ export function rewardText(r: SideQuestDefinition['reward']): string {
   for (const [id, n] of Object.entries(r.potions ?? {}) as [PotionId, number][]) if (n) parts.push(`${potionText[id].name} ${n} ขวด`);
   return parts.join(' · ');
 }
+// ---- Camp market (4A): goods sold by the broker for gold coins. ----
+export const shopText: Record<ShopItemId, { name: string; help: string }> = {
+  seal: { name: 'ตราสัญญา', help: 'ใช้แทนตัวซ้ำได้หนึ่งตัวตอนอัปดาว' },
+  contract: { name: 'ใบสัญญาซ้ำ', help: 'เพิ่มตัวซ้ำให้สมาชิกที่เลือกหนึ่งตัว ไว้อัปดาว' },
+  gearbox: { name: 'หีบอุปกรณ์', help: 'อุปกรณ์ระดับหายากขึ้นไป เลเวลเท่าสมาชิกที่เลเวลสูงสุด' },
+  repel: { name: 'ยาไล่อสูร', help: 'เก็บไว้ในคลังยา พกไปได้ตอนออกเดินทาง' },
+};

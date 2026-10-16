@@ -21,10 +21,11 @@ describe('side quest content', () => {
       expect(tileAt(map, h)?.kind).toBe('floor');
       expect(taken.some(t => t.x === h.x && t.y === h.y)).toBe(false);
     }
-    // There are enough of each thing on the map for every quest to be finishable over several expeditions.
-    expect(map.herbs.length).toBeGreaterThanOrEqual(quest('herbalist').target);
-    expect(map.puzzles.secrets.length).toBeGreaterThanOrEqual(quest('keeper').target);
-    expect(map.chests.filter(c => c.tier === 'rare').length).toBeGreaterThanOrEqual(quest('smith').target);
+    // Each quest can be finished within three expeditions (4A raised the targets above one map's worth).
+    expect(map.herbs.length * 3).toBeGreaterThanOrEqual(quest('herbalist').target);
+    expect(map.puzzles.secrets.length * 3).toBeGreaterThanOrEqual(quest('keeper').target);
+    expect(map.chests.filter(c => c.tier === 'rare').length * 3).toBeGreaterThanOrEqual(quest('smith').target);
+    expect(map.elites.length * 3).toBeGreaterThanOrEqual(quest('trainer').target);
   });
 });
 
@@ -48,7 +49,7 @@ describe('settling and claiming', () => {
   const done = (p: Profile, id: string) => p.quests[id] ?? { progress: 0, claimed: false };
   it('finished runs add progress capped at the target; herbs are lost on a wipe', () => {
     const vault = map.chests.find(c => c.tier === 'rare')!.id; const common = map.chests.find(c => c.tier === 'common')!.id;
-    const r = run({ wins: 20, elitesDefeated: [map.elites[0]!.id], secrets: [map.puzzles.secrets[0]!.id], solved: [map.puzzles.levers[0]!.id],
+    const r = run({ wins: 99, elitesDefeated: [map.elites[0]!.id], secrets: [map.puzzles.secrets[0]!.id], solved: [map.puzzles.levers[0]!.id],
       openedChests: [vault, common], herbs: [map.herbs[0]!.id, map.herbs[1]!.id] });
     const p = settle(newProfile(map, 3), r, 'withdrawn', map);
     expect(done(p, quest('broker').id)).toEqual({ progress: quest('broker').target, claimed: false });
@@ -63,7 +64,7 @@ describe('settling and claiming', () => {
   it('a complete quest is claimed once for its reward', () => {
     const q = quest('herbalist'); let p = newProfile(map, 3);
     expect(claimReason(p, map, q.id)).toBe('progress'); expect(claimQuest(p, map, q.id).event).toEqual({ type: 'blocked', reason: 'progress' });
-    p = settle(p, run({ herbs: map.herbs.map(h => h.id) }), 'complete', map);
+    for (let i = 0; i * map.herbs.length < q.target; i++) p = settle(p, run({ herbs: map.herbs.map(h => h.id) }), 'complete', map);
     const r = claimQuest(p, map, q.id);
     expect(r.event).toEqual({ type: 'claimed', questId: q.id });
     expect(r.profile.potions.salve).toBe(p.potions.salve + q.reward.potions!.salve!);

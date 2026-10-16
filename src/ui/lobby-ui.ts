@@ -1,17 +1,17 @@
 import type { HeroDefinition } from '../core/battle/types';
-import { boardOffers, brewReason, claimReason, dismissReason, equipReason, groupOf, hireReason, talentPoints, talentReason, talentsSpent, upgradeCost, upgradeReason, type Group } from '../core/world/profile';
+import { boardOffers, brewReason, buyReason, claimReason, refreshReason, shopLeft, dismissReason, equipReason, groupOf, hireReason, talentPoints, talentReason, talentsSpent, upgradeCost, upgradeReason, type Group } from '../core/world/profile';
 import { salvageValue } from '../core/world/equipment';
-import { COMPANY_CAP, GEAR_SLOTS, PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS, type GearSlot, type MapDefinition, type PotionId, type Profile, type TalentNode } from '../core/world/types';
+import { COMPANY_CAP, GEAR_SLOTS, PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS, SHOP_ITEMS, type GearSlot, type ShopItemId, type MapDefinition, type PotionId, type Profile, type TalentNode } from '../core/world/types';
 import { expToNext, starred, type EncounterLookup } from '../core/world/world';
 import { actorArt, actorFootOrigins, lobbyArt, lobbyPose, NPC_IDS, npcAtlasUrl, npcBustsUrl, npcStationsUrl, unitsUrl, type LobbyPose, type NpcId } from '../game/visuals/assets';
 import { icon } from './icons';
 import { commanderBadge } from './commander-ui';
 import { gearArt, potionArt } from './equip-art';
-import { heroText, npcText, rewardText, sideQuestText, itemLines, itemName, itemOwner, passiveText, potionText, rarityText, setText, slotIcon, slotText, statName, talentBranches, talentHelp, wornSets } from './th';
+import { heroText, npcText, rewardText, shopText, sideQuestText, itemLines, itemName, itemOwner, passiveText, potionText, rarityText, setText, slotIcon, slotText, statName, talentBranches, talentHelp, wornSets } from './th';
 import { enhanceCost, enhanceReason, findItem, fuseMaterials, fuseReason, rerollReason } from '../core/world/forge';
 import { portrait, starRow } from './world-ui';
 
-export interface LobbyHost { hire(index: number): void; upgrade(id: string): void; dismiss(id: string): void; place(id: string, group: Group, other?: string): void; talent(id: string, node: TalentNode): void; resetTalents(id: string): void;
+export interface LobbyHost { hire(index: number): void; refresh(): void; buy(item: ShopItemId, heroId?: string): void; upgrade(id: string): void; dismiss(id: string): void; place(id: string, group: Group, other?: string): void; talent(id: string, node: TalentNode): void; resetTalents(id: string): void;
   equip(id: string, uid: number): void; unequip(id: string, slot: GearSlot): void; salvage(uids: number[]): void;
   enhance(uid: number): void; fuse(uid: number): void; reroll(uid: number, index: number): void; brew(potion: PotionId): void; claim(questId: string): void; depart(): void; home(): void }
 // `npcCheer`: the camp NPC whose service just succeeded (plays its cheer once).
@@ -43,6 +43,8 @@ export class LobbyUI {
   private sceneDrawn = '';
   private picked: string | undefined;
   private confirmDismiss = false;
+  // The broker's sheet shows the hiring board or the market (4A).
+  private market = false;
   constructor(private readonly root: HTMLElement, private readonly map: MapDefinition, private readonly lookup: EncounterLookup, private readonly heroes: readonly HeroDefinition[], private readonly host: LobbyHost) {
     this.startWork();
     // Escape closes the sheet even after a redraw moved focus out of it (only while the lobby shows).
@@ -61,6 +63,10 @@ export class LobbyUI {
         case 'close': this.closeSheet(); break;
         case 'pick': this.pick(id, b.dataset.group as Group); break;
         case 'hire': this.host.hire(Number(b.dataset.index)); break;
+        case 'hire-tab': this.market = b.dataset.tab === 'market'; this.draw(); this.focus(`#hire-tab-${b.dataset.tab}`); break;
+        case 'refresh': this.host.refresh(); this.focus('#hire-refresh'); break;
+        case 'buy': { const item = b.dataset.item as ShopItemId; const hero = item === 'contract' ? this.root.querySelector<HTMLSelectElement>('#contract-hero')?.value : undefined;
+          this.host.buy(item, hero || undefined); this.focus(`#buy-${item}`); break; }
         case 'upgrade': if (this.picked) this.host.upgrade(this.picked); break;
         case 'dismiss':
           if (!this.picked) break;
@@ -362,14 +368,32 @@ export class LobbyUI {
       <button id="lobby-reset-talents" data-lobby="reset-talents" class="secondary"${talentsSpent(m.talents) ? '' : ' disabled'}>รีเซ็ตแต้ม (ฟรี)</button></section>`;
   }
   private board(p: Profile): string {
+    const tabs = `<div class="hire-tabs" role="tablist">${(['board', 'market'] as const).map(t => `<button id="hire-tab-${t}" role="tab" data-lobby="hire-tab" data-tab="${t}" aria-selected="${(t === 'market') === this.market}" class="${(t === 'market') === this.market ? 'active' : ''}">${icon(t === 'market' ? 'pack' : 'gold')}<span>${t === 'market' ? 'ตลาด' : 'ป้ายจ้าง'}</span></button>`).join('')}</div>`;
+    if (this.market) return tabs + this.marketList(p);
     const why: Record<string, string> = { taken: 'จ้างแล้ว', gold: 'เหรียญทองไม่พอ', full: `ค่ายเต็ม ${COMPANY_CAP} คน`, maxed: 'ดาวเต็มแล้ว' };
-    return `<p class="hire-cost">จ้างคนละ <span class="icon-gold">${icon('gold')}</span> ${this.map.company.hireCost} เหรียญทอง (มี ${p.bank.gold}) · ป้ายเปลี่ยนใหม่เมื่อกลับจากการเดินทาง</p>
+    const costs = this.map.shop.refreshCosts; const left = costs.length - p.refreshes; const rr = refreshReason(p, this.map);
+    const refresh = `<button id="hire-refresh" data-lobby="refresh" class="secondary hire-refresh"${rr ? ' disabled' : ''}>${icon('reroll')}<span>${rr === 'limit' ? 'สุ่มป้ายครบแล้วรอบนี้' : `สุ่มป้ายใหม่ · ${costs[p.refreshes]} เหรียญทอง`}<small>เหลือ ${left}/${costs.length} ครั้ง${rr === 'gold' ? ' · เหรียญทองไม่พอ' : ''}</small></span></button>`;
+    return `${tabs}<p class="hire-cost">จ้างคนละ <span class="icon-gold">${icon('gold')}</span> ${this.map.company.hireCost} เหรียญทอง (มี ${p.bank.gold}) · ป้ายเปลี่ยนใหม่เมื่อกลับจากการเดินทาง</p>
       <ul class="hire-list">${boardOffers(p, this.map, this.lookup).map((id, i) => {
         const reason = hireReason(p, this.map, this.lookup, i); const h = this.hero(id); const text = heroText[id]!; const m = p.members[id];
         const status = m ? `${this.stars(m.stars)} ตัวซ้ำ ${m.dupes} · มีในค่าย` : 'ใหม่ · ★1';
         return `<li class="${reason === 'taken' ? 'taken' : ''}">${portrait(id)}<span><b>${text.name}</b><small>${text.role} · ${h.lane === 'front' ? 'แนวหน้า' : 'แนวหลัง'} · ${text.help}</small><small class="hire-status">${status}</small></span>
           <button id="hire-${i}" data-lobby="hire" data-index="${i}" class="secondary"${reason ? ' disabled' : ''} aria-label="จ้าง${text.name} ใช้เหรียญทอง ${this.map.company.hireCost}">${reason ? why[reason] ?? 'จ้างไม่ได้' : `จ้าง · ${this.map.company.hireCost}`}</button></li>`;
-      }).join('')}</ul>
-      <details class="lobby-help"><summary>${icon('info')} วิธีจ้างและอัปดาว</summary><p>ทุกคนเริ่ม ★1 · จ้างคนที่มีอยู่แล้วจะได้ตัวซ้ำไว้อัปดาวในแท็บทีม · ป้ายเปลี่ยนใหม่ทุกครั้งที่กลับจากการเดินทาง</p></details>`;
+      }).join('')}</ul>${refresh}
+      <details class="lobby-help"><summary>${icon('info')} วิธีจ้างและอัปดาว</summary><p>ทุกคนเริ่ม ★1 · จ้างคนที่มีอยู่แล้วจะได้ตัวซ้ำไว้อัปดาวในแท็บทีม · ป้ายเปลี่ยนใหม่ทุกครั้งที่กลับจากการเดินทาง และสุ่มใหม่ได้ ${costs.length} ครั้งต่อรอบโดยจ่ายเหรียญทอง</p></details>`;
+  }
+  // 4A market: gold-coin goods, each with a limit per return home.
+  private marketList(p: Profile): string {
+    const why: Record<string, string> = { limit: 'หมดแล้วรอบนี้', gold: 'เหรียญทองไม่พอ', bag: 'คลังเต็ม', maxed: 'ดาวเต็มแล้ว', hero: 'เลือกคน' };
+    const glyph: Record<ShopItemId, Parameters<typeof icon>[0]> = { seal: 'seal', contract: 'starBadge', gearbox: 'chest', repel: 'potionRepel' };
+    const pickable = p.company.filter(id => (p.members[id]?.stars ?? 1) < this.map.company.maxStars);
+    return `<p class="hire-cost"><span class="icon-gold">${icon('gold')}</span> มี ${p.bank.gold} เหรียญทอง · ของในตลาดเติมใหม่ทุกครั้งที่กลับจากการเดินทาง</p>
+      <ul class="hire-list market-list">${SHOP_ITEMS.map(item => {
+        const def = this.map.shop.items[item]; const left = shopLeft(p, this.map, item); const t = shopText[item];
+        const reason = item === 'contract' ? buyReason(p, this.map, item, pickable[0]) : buyReason(p, this.map, item);
+        const pick = item === 'contract' ? `<label class="contract-pick"><span>ให้</span><select id="contract-hero" aria-label="เลือกสมาชิกที่จะรับตัวซ้ำ">${pickable.map(id => `<option value="${id}">${heroText[id]?.name ?? id} ${'★'.repeat(p.members[id]!.stars)} · ตัวซ้ำ ${p.members[id]!.dupes}</option>`).join('')}</select></label>` : '';
+        return `<li class="market-item" data-item="${item}"><span class="market-icon" aria-hidden="true">${icon(glyph[item])}</span><span><b>${t.name}</b><small>${t.help}</small><small class="hire-status">เหลือ ${left}/${def.limit} ในรอบนี้</small>${pick}</span>
+          <button id="buy-${item}" data-lobby="buy" data-item="${item}" class="secondary"${reason ? ' disabled' : ''} aria-label="ซื้อ${t.name} ใช้เหรียญทอง ${def.price}">${reason ? why[reason] ?? 'ซื้อไม่ได้' : `ซื้อ · ${def.price}`}</button></li>`;
+      }).join('')}</ul>`;
   }
 }

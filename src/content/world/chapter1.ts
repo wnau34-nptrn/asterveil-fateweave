@@ -6,7 +6,7 @@ import { talentTrees } from '../heroes/talents';
 // final camp before the boss (B) who guards the goal (G). '#' is impassable.
 // Version 2 (phase 3A) narrows the two zone gates to one tile each, held by an elite.
 export const chapterOne: MapDefinition = {
-  id: 'veil-frontier', version: 5, name: 'ชายแดนแอสเตอร์เวล',
+  id: 'veil-frontier', version: 6, name: 'ชายแดนแอสเตอร์เวล',
   rows: [
     '#######################',
     '########:G:############',
@@ -42,13 +42,13 @@ export const chapterOne: MapDefinition = {
   zones: [
     { id: 'meadow', name: 'ทุ่งชายแดน', safe: false, base: 4, step: 3, cap: 35, levels: [1, 3], sets: ['dawn', 'wind'],
       pool: [{ encounterId: 'scout-patrol', weight: 3 }, { encounterId: 'rift-whelp', weight: 2 }],
-      loot: { ore: [6, 10], gold: [3, 6], ember: [0, 8], seal: [0, 0] } },
+      loot: { ore: [4, 6], gold: [2, 4], ember: [0, 8], seal: [0, 0] } },
     { id: 'thicket', name: 'พงหนามชายแดน', safe: false, base: 6, step: 4, cap: 45, levels: [4, 6], sets: ['shadow', 'thorn'],
       pool: [{ encounterId: 'thicket-ambush', weight: 2 }, { encounterId: 'shadow-stalker', weight: 2 }, { encounterId: 'rift-whelp', weight: 1 }],
-      loot: { ore: [9, 14], gold: [4, 8], ember: [0, 12], seal: [0, 0] } },
+      loot: { ore: [5, 8], gold: [2, 5], ember: [0, 12], seal: [0, 0] } },
     { id: 'scar', name: 'แผลรอยแยก', safe: false, base: 8, step: 5, cap: 50, levels: [7, 9], sets: ['starveil', 'mender'],
       pool: [{ encounterId: 'veil-siege', weight: 2 }, { encounterId: 'rear-ambush', weight: 2 }, { encounterId: 'crystal-stampede', weight: 1 }],
-      loot: { ore: [12, 18], gold: [6, 10], ember: [0, 15], seal: [0, 0] } },
+      loot: { ore: [7, 11], gold: [4, 6], ember: [0, 15], seal: [0, 0] } },
     { id: 'camp', name: 'แคมป์', safe: true, base: 0, step: 0, cap: 0, pool: [] },
     { id: 'sanctum', name: 'ประตูรอยแยก', safe: true, base: 0, step: 0, cap: 0, pool: [] },
   ],
@@ -67,12 +67,12 @@ export const chapterOne: MapDefinition = {
   // The map is 23 columns wide: x 20–21 hold the vaults behind the old east wall.
   // Phase 3D (draft): one side quest per camp NPC; progress comes from finished runs, rewards are claimed at camp.
   sideQuests: [
-    { id: 'smith-rare-ore', npc: 'smith', kind: 'rareChests', target: 3, reward: { ore: 30, dust: 25 } },
-    { id: 'broker-proven', npc: 'broker', kind: 'wins', target: 12, reward: { gold: 40 } },
-    { id: 'trainer-elites', npc: 'trainer', kind: 'elites', target: 3, reward: { seal: 2 } },
-    { id: 'keeper-hidden', npc: 'keeper', kind: 'secrets', target: 3, reward: { gold: 20, dust: 15 } },
-    { id: 'herbalist-glow', npc: 'herbalist', kind: 'herbs', target: 3, reward: { potions: { salve: 2, tonic: 2 } } },
-    { id: 'scout-puzzles', npc: 'scout', kind: 'puzzles', target: 3, reward: { ore: 40, seal: 1 } },
+    { id: 'smith-rare-ore', npc: 'smith', kind: 'rareChests', target: 6, reward: { ore: 30, dust: 25 } },
+    { id: 'broker-proven', npc: 'broker', kind: 'wins', target: 30, reward: { gold: 40 } },
+    { id: 'trainer-elites', npc: 'trainer', kind: 'elites', target: 6, reward: { seal: 2 } },
+    { id: 'keeper-hidden', npc: 'keeper', kind: 'secrets', target: 6, reward: { gold: 20, dust: 15 } },
+    { id: 'herbalist-glow', npc: 'herbalist', kind: 'herbs', target: 6, reward: { potions: { salve: 2, tonic: 2 } } },
+    { id: 'scout-puzzles', npc: 'scout', kind: 'puzzles', target: 6, reward: { ore: 40, seal: 1 } },
   ],
   // Glowing herbs for the herbalist, one per zone.
   herbs: [{ id: 'meadow-herb', x: 7, y: 23 }, { id: 'thicket-herb', x: 12, y: 15 }, { id: 'scar-herb', x: 12, y: 7 }],
@@ -84,15 +84,21 @@ export const chapterOne: MapDefinition = {
   },
   loot: {
     tutorial: { ore: [10, 10], gold: [5, 5], ember: [1, 0], seal: [0, 0] },
-    boss: { ore: [60, 60], gold: [30, 30], ember: [1, 0], seal: [2, 0] },
-    chest: { common: { ore: [16, 24], gold: [8, 12], ember: [0, 30], seal: [0, 0] }, rare: { ore: [30, 40], gold: [15, 20], ember: [1, 0], seal: [1, 0] } },
+    boss: { ore: [36, 36], gold: [18, 18], ember: [1, 0], seal: [2, 0] },
+    chest: { common: { ore: [10, 14], gold: [5, 7], ember: [0, 30], seal: [0, 0] }, rare: { ore: [18, 24], gold: [9, 12], ember: [1, 0], seal: [1, 0] } },
   },
   camp: { restHealPercent: 50, reviveHpPercent: 30 },
   startingRoster: ['guardian', 'tracer', 'weaver', 'healer'],
   mercenaries,
+  // Phase 4A (draft): the camp market, paid in gold coins, and paid hiring-board refreshes (2 per return).
+  shop: {
+    items: { seal: { price: 60, limit: 2 }, contract: { price: 150, limit: 1 }, gearbox: { price: 120, limit: 1 }, repel: { price: 30, limit: 2 } },
+    gearboxWeights: [0, 0, 60, 30, 10], refreshCosts: [15, 30],
+  },
   company: {
     // Hiring costs gold coins only (ore pays for upgrades, brewing and the forge).
     hireCost: 20, dismissRefund: 10, offers: 3, maxStars: 5, starStatPercent: 8,
+    // (4A) see `shop` for the market and paid board refreshes.
     starCosts: [{ dupes: 1, ore: 20 }, { dupes: 2, ore: 40 }, { dupes: 3, ore: 70 }, { dupes: 4, ore: 110 }],
   },
   // Draft 2D-1 numbers: a first full run ends near level 9; farming low levels is tapered (world `expPercent`).
@@ -115,7 +121,7 @@ export const chapterOne: MapDefinition = {
     { id: 'rift', kind: 'event', target: 'scar-rift' },
   ] },
   events: [
-    { id: 'meadow-traveller', x: 4, y: 20, kind: 'traveller' }, { id: 'meadow-merchant', x: 16, y: 21, kind: 'merchant' },
+    { id: 'meadow-traveller', x: 4, y: 20, kind: 'traveller' }, { id: 'meadow-merchant', x: 3, y: 21, kind: 'merchant' },
     { id: 'thicket-bandits', x: 4, y: 13, kind: 'bandits' }, { id: 'thicket-shrine', x: 16, y: 14, kind: 'shrine' },
     { id: 'scar-rift', x: 5, y: 7, kind: 'rift' }, { id: 'scar-bandits', x: 14, y: 8, kind: 'bandits' },
   ],
@@ -124,8 +130,8 @@ export const chapterOne: MapDefinition = {
     merchant: { salve: 8, tonic: 14, repel: 10 }, traveller: { ore: 10, seal: 1 },
     riftEncounterId: 'scout-patrol', riftDust: 12,
     eliteExp: 2, eliteRarityWeights: [0, 0, 60, 30, 10],
-    optionalElite: { exp: 3, rarityWeights: [0, 0, 20, 50, 30], gold: 20, seal: 1 },
-    miniBoss: { exp: 3, rarityWeights: [0, 0, 0, 60, 40], loot: { ore: [30, 40], gold: [15, 20], ember: [1, 0], seal: [1, 0] } },
+    optionalElite: { exp: 3, rarityWeights: [0, 0, 20, 50, 30], gold: 12, seal: 1 },
+    miniBoss: { exp: 3, rarityWeights: [0, 0, 0, 60, 40], loot: { ore: [18, 24], gold: [9, 12], ember: [1, 0], seal: [1, 0] } },
   },
   potions: {
     carry: 3, salvePercent: 40, tonicPercent: 20, repelSteps: 10,

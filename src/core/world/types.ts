@@ -46,6 +46,8 @@ export interface MapDefinition {
   // Hireable mercenaries beyond the teaching party (the hero catalog is both together).
   mercenaries: readonly HeroDefinition[];
   company: CompanyRules;
+  // 4A: the camp market (paid in gold coins) and paid hiring-board refreshes.
+  shop: ShopRules;
   progression: ProgressionRules;
   potions: PotionRules;
   // Phase 3A: forced elites in one-tile gates and one-time event tiles.
@@ -187,6 +189,16 @@ export interface ProgressionRules {
   nextBase: number; nextPerLevel: number;
 }
 // Mercenary company rules (draft numbers). starCosts[i] upgrades ★(i+1) → ★(i+2).
+// 4A camp market: each item has a gold price and a limit per return home. The gear box rolls a rare-or-better
+// piece at the company's highest level; the contract adds one duplicate to a chosen member.
+export const SHOP_ITEMS = ['seal', 'contract', 'gearbox', 'repel'] as const;
+export type ShopItemId = typeof SHOP_ITEMS[number];
+export interface ShopRules {
+  items: Record<ShopItemId, { price: number; limit: number }>;
+  gearboxWeights: readonly number[];
+  // The hiring board can be redrawn this many times per return, each at the next price.
+  refreshCosts: readonly number[];
+}
 export interface CompanyRules {
   hireCost: number; dismissRefund: number; offers: number; maxStars: number; starStatPercent: number;
   starCosts: readonly { dupes: number; ore: number }[];
@@ -223,6 +235,8 @@ export interface Profile {
   potions: Potions;
   // 3D side quests: progress gathered from finished runs and whether the reward was claimed (one-time each).
   quests: Record<string, { progress: number; claimed: boolean }>;
+  // 4A: market items bought and hiring-board refreshes used since the last return (both reset on return).
+  shop: Partial<Record<ShopItemId, number>>; refreshes: number;
   // Hiring board taken indexes for the current `returns` count.
   taken: number[];
   expeditions: number; completes: number;
@@ -241,7 +255,9 @@ export type ProfileEvent =
   | { type: 'salvaged'; count: number; ore: number; dust: number }
   | { type: 'forged'; uid: number; action: 'enhance' | 'fuse' | 'reroll' }
   | { type: 'brewed'; potion: PotionId }
-  | { type: 'claimed'; questId: string };
+  | { type: 'claimed'; questId: string }
+  | { type: 'bought'; item: ShopItemId; heroId?: string; uid?: number }
+  | { type: 'refreshed' };
 export interface ProfileResult { profile: Profile; event: ProfileEvent }
 // Up to 4 deployed (slot order = enemy target slots) and 4 in reserve, swapped at camps.
 export const PARTY_SLOTS = 4;

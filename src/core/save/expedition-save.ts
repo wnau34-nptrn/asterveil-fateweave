@@ -6,7 +6,7 @@ import { itemValid } from '../world/equipment';
 import { boulderAt, openPit, passableWall } from '../world/puzzles';
 import { commanderReason, newProfile, settle, talentsValid } from '../world/profile';
 import type { Item, MemberProgress, Potions, Talents } from '../world/types';
-import { POTION_IDS } from '../world/types';
+import { POTION_IDS, SHOP_ITEMS, type ShopItemId } from '../world/types';
 
 export interface StoragePort { getItem(key: string): string | null; setItem(key: string, value: string): void; removeItem?(key: string): void }
 export const expeditionKey = 'asterveil.fateweave.expedition.v1';
@@ -34,7 +34,8 @@ export const legacyKeys = ['asterveil.fateweave.battle.v1', 'asterveil.fateweave
 // starts with 0 in the run and one hire's worth in the bank, so a company saved for hiring can still hire.
 // v14 → v15 (3C): the run gains puzzle state: `runes`, `solved`, `levers`, `boulders` and `secrets` (older data: none).
 // v15 → v16 (3D): the profile gains side-quest `quests`; the run gains picked `herbs` (older data: none).
-const SAVE_VERSION = 16;
+// v16 → v17 (4A): the profile gains `shop` (market items bought this return) and `refreshes` (older data: none).
+const SAVE_VERSION = 17;
 export interface Game { profile: Profile; run: ExpeditionState | null }
 const actions: readonly ActionId[] = ['attack', 'guard', 'bash', 'mark', 'execute', 'bolt', 'ward', 'heal', 'prayer', 'brace', 'pierce', 'hinder', 'volley', 'acid', 'haste', 'ambush', 'evade', 'taunt', 'slam', 'valor', 'mend',
   'rally', 'finisher', 'sigil', 'sanctuary', 'spearwall', 'weakshot', 'bomb', 'backstab', 'quake', 'finale'];
@@ -249,6 +250,9 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
   if (version < 11) p.forge = 0;
   if (version < 12) p.potions = { salve: 0, tonic: 0, repel: 0 };
   if (version < 16) p.quests = {};
+  if (version < 17) Object.assign(p, { shop: {}, refreshes: 0 });
+  const shop = shopOf(p.shop, map);
+  if (!isInt(p.refreshes, 0, map.shop.refreshCosts.length)) throw new Error('Invalid board');
   const quests = questsOf(p.quests, map);
   if (!isInt(p.forge)) throw new Error('Invalid forge');
   if (!isInt(p.nextItem, 1) || !Array.isArray(p.items) || p.items.length > map.equipment.bagCap) throw new Error('Invalid items');
@@ -272,7 +276,17 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
     if (commanderReason(commander)) throw new Error('Invalid commander');
   } else if (p.commander === undefined && version >= 6) throw new Error('Invalid commander');
   return { seed: p.seed, returns: p.returns, tutorialDone: p.tutorialDone, commander, company: [...company as string[]], members, party,
-    bank: { ore: bank.ore as number, gold: bank.gold as number, seal: bank.seal as number, dust: bank.dust as number }, items, nextItem: p.nextItem as number, forge: p.forge as number, potions: potionsOf(p.potions, 9999), quests, taken: [...p.taken as number[]], expeditions: p.expeditions, completes: p.completes, last };
+    bank: { ore: bank.ore as number, gold: bank.gold as number, seal: bank.seal as number, dust: bank.dust as number }, items, nextItem: p.nextItem as number, forge: p.forge as number, potions: potionsOf(p.potions, 9999), quests, shop, refreshes: p.refreshes as number, taken: [...p.taken as number[]], expeditions: p.expeditions, completes: p.completes, last };
+}
+// Market purchases this return (4A): known items only, within each limit.
+function shopOf(v: unknown, map: MapDefinition): Profile['shop'] {
+  const out: Profile['shop'] = {};
+  for (const [id, n] of Object.entries(obj(v))) {
+    const def = map.shop.items[id as ShopItemId];
+    if (!def || !(SHOP_ITEMS as readonly string[]).includes(id) || !isInt(n, 1, def.limit)) throw new Error('Invalid shop');
+    out[id as ShopItemId] = n;
+  }
+  return out;
 }
 // Side-quest progress: known quests only, progress within the target, claimed only when complete.
 function questsOf(v: unknown, map: MapDefinition): Profile['quests'] {
@@ -293,7 +307,7 @@ function settleFinished(game: Game, map: MapDefinition): Game {
 }
 export function parseGame(raw: string, map: MapDefinition, lookup: EncounterLookup): Game {
   const envelope = obj(JSON.parse(raw)); const version = envelope.version as number;
-  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
+  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
   if (version < 5) {
     const run = parseRun(envelope.state, version, map, lookup);
     const profile = newProfile(map, (run.seed ^ 0x5bd1e995) >>> 0);

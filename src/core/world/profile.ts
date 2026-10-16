@@ -1,6 +1,6 @@
-import type { Commander, SideQuestKind, ExpeditionState, GearSlot, Item, MapDefinition, MemberProgress, PotionId, Potions, Profile, ProfileResult, RunOutcome, TalentNode, Talents } from './types';
-import { salvageValue } from './equipment';
-import { COMPANY_CAP, PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS } from './types';
+import type { Commander, ShopItemId, SideQuestKind, ExpeditionState, GearSlot, Item, MapDefinition, MemberProgress, PotionId, Potions, Profile, ProfileResult, RunOutcome, TalentNode, Talents } from './types';
+import { rollItem, salvageValue } from './equipment';
+import { COMPANY_CAP, PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS, SET_IDS } from './types';
 import { heroCatalog, levelOf, newExpedition, rollPercent, type EncounterLookup } from './world';
 
 // Pure lobby rules: the persistent mercenary company, the bank, the hiring board, the
@@ -10,7 +10,7 @@ export function newProfile(map: MapDefinition, seed: number): Profile {
     seed: seed >>> 0, returns: 0, tutorialDone: false, commander: null,
     company: [...map.startingRoster], members: Object.fromEntries(map.startingRoster.map(id => [id, { stars: 1, dupes: 0 }])),
     party: { deployed: [...map.startingRoster], reserve: [] },
-    bank: { ore: 0, gold: 0, seal: 0, dust: 0 }, items: [], nextItem: 1, forge: 0, potions: { salve: 0, tonic: 0, repel: 0 }, quests: {}, taken: [], expeditions: 0, completes: 0, last: null,
+    bank: { ore: 0, gold: 0, seal: 0, dust: 0 }, items: [], nextItem: 1, forge: 0, potions: { salve: 0, tonic: 0, repel: 0 }, quests: {}, shop: {}, refreshes: 0, taken: [], expeditions: 0, completes: 0, last: null,
   };
 }
 const blocked = (profile: Profile, reason: string): ProfileResult => ({ profile, event: { type: 'blocked', reason } });
@@ -37,7 +37,8 @@ export function createCommander(initial: Profile, c: Commander): ProfileResult {
 // every time an expedition comes home. Company members can be offered (duplicates).
 export function boardOffers(profile: Profile, map: MapDefinition, lookup: EncounterLookup): string[] {
   const pool = heroCatalog(lookup, map).map(h => h.id); const offers: string[] = [];
-  const salt = Math.imul(profile.returns + 1, 0x2c1b3c6d) >>> 0;
+  // A paid refresh (4A) redraws the board; with no refresh it is the same board as before.
+  const salt = (Math.imul(profile.returns + 1, 0x2c1b3c6d) ^ Math.imul(profile.refreshes, 0x165667b1)) >>> 0;
   for (let i = 0; offers.length < Math.min(map.company.offers, pool.length); i++) {
     const left = pool.filter(id => !offers.includes(id));
     offers.push(left[(rollPercent(profile.seed ^ salt, i) * 7919 + i) % left.length]!);
@@ -247,7 +248,7 @@ export function settle(initial: Profile, run: ExpeditionState, outcome: RunOutco
     if (add) profile.quests[q.id] = { ...now, progress: Math.min(q.target, now.progress + add) };
   }
   profile.tutorialDone ||= run.tutorialDone; profile.expeditions++; if (outcome === 'complete') profile.completes++;
-  profile.returns++; profile.taken = [];
+  profile.returns++; profile.taken = []; profile.shop = {}; profile.refreshes = 0;
   profile.last = { outcome, ore, gold, seal, steps: run.steps, wins: run.wins, items, salvaged };
   return profile;
 }
@@ -278,4 +279,45 @@ export function claimQuest(initial: Profile, map: MapDefinition, questId: string
   for (const id of POTION_IDS) profile.potions[id] += r.potions?.[id] ?? 0;
   profile.quests[q.id] = { progress: q.target, claimed: true };
   return { profile, event: { type: 'claimed', questId: q.id } };
+}
+
+// ---- Camp market and board refresh (4A): paid in gold coins, limited per return home. ----
+export function refreshReason(profile: Profile, map: MapDefinition): string {
+  const cost = map.shop.refreshCosts[profile.refreshes];
+  if (cost === undefined) return 'limit';
+  return profile.bank.gold < cost ? 'gold' : '';
+}
+export function refreshBoard(initial: Profile, map: MapDefinition): ProfileResult {
+  const reason = refreshReason(initial, map); if (reason) return blocked(initial, reason);
+  const profile = structuredClone(initial);
+  profile.bank.gold -= map.shop.refreshCosts[profile.refreshes]!; profile.refreshes++; profile.taken = [];
+  return { profile, event: { type: 'refreshed' } };
+}
+export const shopLeft = (profile: Profile, map: MapDefinition, item: ShopItemId): number => map.shop.items[item].limit - (profile.shop[item] ?? 0);
+export function buyReason(profile: Profile, map: MapDefinition, item: ShopItemId, heroId?: string): string {
+  const def = map.shop.items[item]; if (!def) return 'unknown';
+  if (shopLeft(profile, map, item) <= 0) return 'limit';
+  if (item === 'contract') {
+    const m = heroId ? profile.members[heroId] : undefined;
+    if (!m) return 'hero';
+    if (m.stars >= map.company.maxStars) return 'maxed';
+  }
+  if (item === 'gearbox' && profile.items.length >= map.equipment.bagCap) return 'bag';
+  return profile.bank.gold < def.price ? 'gold' : '';
+}
+// The gear box rolls from the profile's lobby roll counter (shared with the forge), so a reload cannot re-roll it.
+export function buy(initial: Profile, map: MapDefinition, item: ShopItemId, heroId?: string): ProfileResult {
+  const reason = buyReason(initial, map, item, heroId); if (reason) return blocked(initial, reason);
+  const profile = structuredClone(initial);
+  profile.bank.gold -= map.shop.items[item].price; profile.shop[item] = (profile.shop[item] ?? 0) + 1;
+  if (item === 'seal') profile.bank.seal++;
+  if (item === 'repel') profile.potions.repel++;
+  if (item === 'contract') { profile.members[heroId!]!.dupes++; return { profile, event: { type: 'bought', item, heroId: heroId! } }; }
+  if (item === 'gearbox') {
+    const level = Math.max(...profile.company.map(id => levelOf(profile.members[id])));
+    const piece = rollItem(map.equipment, () => rollPercent(profile.seed ^ 0x4f1bbcdc, profile.forge++), level, map.shop.gearboxWeights, profile.company, SET_IDS);
+    const uid = profile.nextItem++; profile.items.push({ ...piece, uid });
+    return { profile, event: { type: 'bought', item, uid } };
+  }
+  return { profile, event: { type: 'bought', item } };
 }
