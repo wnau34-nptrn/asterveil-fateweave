@@ -786,6 +786,24 @@ for (const viewport of viewports) {
   });
 }
 
+test('normal motion: the pulsing step markers stay centred on their tiles (iPhone report)', async ({ browser }) => {
+  const context = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true, reducedMotion: 'no-preference' }); const page = await context.newPage();
+  const issues = await open(page, newExpedition(map, encounterById, 3));
+  const hints = page.locator('.step-hint'); expect(await hints.count()).toBeGreaterThan(1);
+  // The marker drawn by ::before must share its tile's centre while the pulse animation runs.
+  for (const hint of await hints.all()) {
+    const off = await hint.evaluate(el => {
+      const r = el.getBoundingClientRect(), cs = getComputedStyle(el, '::before');
+      const m = new DOMMatrix(cs.transform === 'none' ? undefined : cs.transform);
+      const cx = r.left + parseFloat(cs.left) + parseFloat(cs.marginLeft) + parseFloat(cs.width) / 2 + m.e;
+      const cy = r.top + parseFloat(cs.top) + parseFloat(cs.marginTop) + parseFloat(cs.height) / 2 + m.f;
+      return { animated: cs.animationName, dx: Math.abs(cx - (r.left + r.width / 2)), dy: Math.abs(cy - (r.top + r.height / 2)) };
+    });
+    expect(off.animated).toBe('veil-hint'); expect(off.dx).toBeLessThan(1); expect(off.dy).toBeLessThan(1);
+  }
+  expect(issues).toEqual([]); await context.close();
+});
+
 test('normal motion: hop, danger meter and veil-shatter encounter finish within the 800 ms budget', async ({ browser }) => {
   const context = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true, reducedMotion: 'no-preference' }); const page = await context.newPage();
   const state = newExpedition(map, encounterById, 11);
