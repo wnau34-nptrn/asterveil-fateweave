@@ -5,7 +5,7 @@ import { icon, type IconName } from './icons';
 export interface CommanderHost { create(c: Commander): void; back(): void }
 const crestIcon: Record<string, IconName> = { star: 'star', guard: 'guard', flag: 'flag', bolt: 'bolt', heal: 'heal', mark: 'mark' };
 const crestName: Record<string, string> = { star: 'ดาวนำทาง', guard: 'โล่พิทักษ์', flag: 'ธงศึก', bolt: 'ศรเวท', heal: 'แสงเยียวยา', mark: 'ตราล่า' };
-const colorName: Record<string, string> = { gold: 'ทอง', cyan: 'ฟ้าม่านเวล', violet: 'ม่วงรอยแยก', coral: 'ปะการัง', mint: 'มิ้นต์', rose: 'กุหลาบ' };
+const colorName: Record<string, string> = { gold: 'ทอง', cyan: 'ฟ้าแสงดาว', violet: 'ม่วงรอยแยก', coral: 'ปะการัง', mint: 'มิ้นต์', rose: 'กุหลาบ' };
 export const commanderBadge = (c: Commander): string =>
   `<span class="commander-crest" data-color="${c.color}" aria-hidden="true">${icon(crestIcon[c.crest] ?? 'star')}</span>`;
 

@@ -203,10 +203,11 @@ test('a fallen upcoming hero is skipped on commit, reload and continued input',a
 test('denied storage keeps the battle playable in the tab and says progress is not saved',async({browser})=>{
  const context=await browser.newContext({viewport:{width:320,height:568},hasTouch:true,reducedMotion:'reduce'});await context.addInitScript(()=>Object.defineProperty(window,'localStorage',{get:()=>{throw new Error('Denied');}}));
  const page=await context.newPage();const issues:string[]=[];page.on('pageerror',e=>issues.push(e.message));await page.goto('./');
- await expect(page.locator('#title-view')).toContainText('ไม่อนุญาตให้บันทึก');await page.locator('#new-game').click();await page.locator('#commander-name').fill('Ari');await page.locator('#commander-create').click();await page.locator('#lobby-depart').click();await page.locator('#world-info-button').click();await expect(page.locator('#world-save')).toContainText('บันทึกบนเครื่องนี้ไม่ได้');await page.keyboard.press('Escape');
- await page.locator('#move-left').click();
- // A first step can legitimately roll the tutorial encounter; either way the move is kept in memory.
- await expect(page.locator('#world-view:not([hidden]), #battle-view:not(.view-off)').first()).toBeVisible();expect(issues).toEqual([]);await context.close();
+ await expect(page.locator('#title-view')).toContainText('ไม่อนุญาตให้บันทึก');await page.locator('#new-game').click();await page.locator('#commander-name').fill('Ari');await page.locator('#commander-create').click();
+ // A new company goes straight into the prologue and the first battle; it plays on without storage.
+ await expect(page.locator('#story-view')).toBeVisible();await page.locator('[data-story=skip]').click();
+ await expect(page.locator('#battle-view')).not.toHaveClass(/view-off/);await page.locator('#start').click();await page.locator('#battle-info').click();await expect(page.locator('#save-status')).toContainText('บันทึกบนเครื่องนี้ไม่ได้');await page.keyboard.press('Escape');
+ expect(issues).toEqual([]);await context.close();
 });
 for(const invalid of ['old-content','foreign-owner','malformed','wrong-map']){
  test(`save ${invalid}: discarded safely and a new expedition starts`,async({page})=>{
@@ -215,20 +216,27 @@ for(const invalid of ['old-content','foreign-owner','malformed','wrong-map']){
    invalid==='old-content'?JSON.stringify({...good,state:{...good.state,battle:{...good.state.battle,encounterId:'crystal-rift'}}}):
    JSON.stringify({...good,state:{...good.state,battle:{...good.state.battle,commands:[{beat:1,heroId:'guardian',action:'attack',targetId:'brute'}]}}});
   await seedRaw(page,raw);const issues:string[]=[];page.on('pageerror',e=>issues.push(e.message));await page.goto('./');
-  await expect(page.locator('#continue')).toHaveCount(0);await page.locator('#new-game').click();await page.locator('#commander-name').fill('Ari');await page.locator('#commander-create').click();await expect(page.locator('#lobby-view')).toBeVisible();
-  await page.locator('#lobby-depart').click();await expect(page.locator('#world-view')).toBeVisible();
-  await expect(page.locator('#world-hero-tracer')).toContainText('56/56');expect((await saved(page)).battle).toBeNull();expect(issues).toEqual([]);
+  await expect(page.locator('#continue')).toHaveCount(0);await page.locator('#new-game').click();await page.locator('#commander-name').fill('Ari');await page.locator('#commander-create').click();
+  await expect(page.locator('#story-view')).toBeVisible();await page.locator('[data-story=skip]').click();await expect(page.locator('#battle-view')).not.toHaveClass(/view-off/);
+  const fresh=await saved(page);expect(fresh.battle).toMatchObject({kind:'tutorial',commands:[]});expect(fresh.battle!.entry.tracer).toBe(56);expect(issues).toEqual([]);
  });
 }
-test('the first battle has no teaching advice: no coach strip, no highlights, no advice setting, and the old preference key is deleted',async({page},info)=>{
- await page.addInitScript(()=>{if(!sessionStorage.getItem('coach-key-seeded')){localStorage.setItem('asterveil.fateweave.tutorial.v1','off');sessionStorage.setItem('coach-key-seeded','1');}});
+test('teaching advice appears only in the tutorial battle, follows SPD owners and can be dismissed',async({page},info)=>{
  await seedRaw(page,expedition(firstClash,[],'tutorial'));const issues:string[]=[];page.on('pageerror',e=>issues.push(e.message));
  await page.goto('./');await resume(page);await expect(page.locator('#encounter-kind')).toContainText('ศึกแรก');await page.locator('#start').click();
- await expect(page.locator('#battle-coach, #coach-copy, #coach-dismiss, #tutorial-settings, .coach-focus')).toHaveCount(0);
- await cast(page,'tracer','mark','brute');await finish(page);await expect(page.locator('.coach-focus')).toHaveCount(0);
- await page.locator('#battle-info').click();await expect(page.locator('#coach-toggle')).toHaveCount(0);await page.keyboard.press('Escape');
- expect(await page.evaluate(()=>localStorage.getItem('asterveil.fateweave.tutorial.v1'))).toBeNull();
- await page.screenshot({path:info.outputPath('first-battle-no-coach.png')});expect(issues).toEqual([]);
+ await expect(page.locator('#coach-copy')).toContainText('ไลรา');await expect(page.locator('#coach-copy')).toContainText('ติดตรา');
+ for(const [i,[h,a,t]]of ([['tracer','mark','brute'],['weaver','ward','weaver'],['guardian','guard','weaver']] as Move[]).entries()){
+  await expect(page.locator('#coach-copy')).toContainText(a==='mark'?'ติดตรา':a==='ward'?'โล่เวท':'ตั้งรับแทน');await cast(page,h,a,t);await finish(page);
+  if(i===0)await expect(page.locator('#coach-copy')).toContainText('ไอรา');
+ }
+ await expect(page.locator('#coach-copy')).toContainText('รักษา');await page.screenshot({path:info.outputPath('tutorial-coach.png')});
+ await page.locator('#coach-dismiss').click();await expect(page.locator('#battle-coach')).not.toBeVisible();expect(await count(page)).toBe(3);
+ await page.locator('#battle-info').click();await page.locator('#coach-toggle').click();await expect(page.locator('#coach-toggle')).toBeFocused();await page.locator('[data-ui=info-close]').click();
+ await expect(page.locator('#battle-coach')).toBeVisible();expect(issues).toEqual([]);
+});
+test('ordinary battles show no teaching strip or tutorial setting',async({page})=>{
+ const issues=await start(page);await expect(page.locator('#battle-coach')).not.toBeVisible();await page.locator('#battle-info').click();
+ await expect(page.locator('#tutorial-settings')).toBeHidden();await page.keyboard.press('Escape');expect(issues).toEqual([]);
 });
 test('round cooldown can be inspected but never cast; the intervening actors do not refresh it',async({page})=>{
  const moves:readonly Move[]=[['tracer','execute','brute'],['weaver','ward','weaver'],['guardian','guard','weaver'],['healer','heal','guardian']];

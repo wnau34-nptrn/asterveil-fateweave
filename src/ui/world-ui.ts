@@ -38,7 +38,7 @@ export function portrait(id: string): string {
 const goals = (s: ExpeditionState, map: MapDefinition) => {
   const seal = questDone(s, map).length; const need = map.quest.need;
   return [
-    { done: s.tutorialDone, label: 'ผ่านการปะทะครั้งแรก' }, { done: !!s.camp, label: 'ไปถึงแคมป์' },
+    { done: s.tutorialDone, label: 'ขับไล่กองหน้าของวาร์กอธ' }, { done: !!s.camp, label: 'ไปถึงแคมป์' },
     { done: seal >= need || s.bossDefeated, label: `ทำลายผนึกรอยแยก ${Math.min(seal, need)}/${need}` },
     { done: s.bossDefeated, label: 'ชนะผู้คุมรอยแยก' }, { done: s.completed, label: 'ไปถึงประตูรอยแยก' },
   ];
@@ -171,7 +171,7 @@ export class WorldUI {
     this.root.querySelector('#event-title')!.innerHTML = `${icon(text.icon)} ${text.name}`;
     const rows = eventChoices[ev.kind].map(choice => {
       const reason = this.view!.locked ? 'busy' : eventChoiceReason(s, this.map, choice); const t = choiceText(choice, r);
-      const help = choice === 'fight' ? (ev.kind === 'bandits' ? `สู้กับโจรที่แข็งกว่าโซนนี้ ${r.banditLevelBonus} เลเวล · ชนะแล้วได้อุปกรณ์แน่นอน` : `ชนะแล้วได้ผงม่าน ${r.riftDust}`) : t.help;
+      const help = choice === 'fight' ? (ev.kind === 'bandits' ? `สู้กับโจรที่แข็งกว่าโซนนี้ ${r.banditLevelBonus} เลเวล · ชนะแล้วได้อุปกรณ์แน่นอน` : `ชนะแล้วได้ฝุ่นดาว ${r.riftDust}`) : t.help;
       return `<li><div><b>${t.label}</b>${help ? `<small>${help}</small>` : ''}</div><button id="event-${choice}" data-world="event-choice" data-choice="${choice}" class="${choice === 'fight' ? 'primary' : 'secondary'}"${reason ? ' disabled' : ''}>${reason ? eventReasonText[reason] ?? '' : t.label}</button></li>`;
     }).join('');
     this.root.querySelector('#event-content')!.innerHTML = `<p class="event-scene">${text.scene}</p><ul class="event-choices">${rows}</ul>
@@ -293,12 +293,12 @@ export class WorldUI {
     const targets = this.salvePick ? rosterIds(s).filter(id => s.hp[id]! > 0 && s.hp[id]! < this.hero(id, s).maxHp)
       .map(id => `<button id="salve-${id}" data-world="potion" data-potion="salve" data-hero="${id}" class="secondary salve-target">${portrait(id)}<span>${heroText[id]!.name}<small>${s.hp[id]}/${this.hero(id, s).maxHp}</small></span></button>`).join('') : '';
     return `<h3 class="pack-gear-title">${icon('potionSalve')} ยา <small>พกได้อย่างละ ${this.map.potions.carry} · ใช้บนแผนที่เท่านั้น</small></h3><ul class="pack-potions">${rows}</ul>
-      ${targets ? `<div class="salve-targets" role="group" aria-label="เลือกคนดื่มยาฟื้นแผล">${targets}</div>` : ''}${s.repel > 0 ? `<p class="world-stats">ยาไล่ม่านเหลือ ${s.repel} ก้าว</p>` : ''}`;
+      ${targets ? `<div class="salve-targets" role="group" aria-label="เลือกคนดื่มยาฟื้นแผล">${targets}</div>` : ''}${s.repel > 0 ? `<p class="world-stats">ยาไล่อสูรเหลือ ${s.repel} ก้าว</p>` : ''}`;
   }
   private renderPack(): void {
     const s = this.view?.state; if (!s) return;
     const opened = s.openedChests.length;
-    this.root.querySelector('#pack-content')!.innerHTML = `${this.potionSection(s)}<ul class="pack-list">${resourceOrder.map(id => `<li data-resource="${id}">${id === 'gold' ? potionArt('gold') : itemArt(id)}<div><b>${resourceText[id].name}</b><small>${resourceText[id].use}</small></div><strong>${s.resources[id]}</strong></li>`).join('')}${s.dust ? `<li data-resource="dust">${potionArt('dust')}<div><b>ผงม่าน</b><small>วัตถุดิบตีอุปกรณ์ · นำกลับค่ายเมื่อจบการเดินทาง</small></div><strong>${s.dust}</strong></li>` : ''}</ul>
+    this.root.querySelector('#pack-content')!.innerHTML = `${this.potionSection(s)}<ul class="pack-list">${resourceOrder.map(id => `<li data-resource="${id}">${id === 'gold' ? potionArt('gold') : itemArt(id)}<div><b>${resourceText[id].name}</b><small>${resourceText[id].use}</small></div><strong>${s.resources[id]}</strong></li>`).join('')}${s.dust ? `<li data-resource="dust">${potionArt('dust')}<div><b>ฝุ่นดาว</b><small>วัตถุดิบตีอุปกรณ์ · นำกลับค่ายเมื่อจบการเดินทาง</small></div><strong>${s.dust}</strong></li>` : ''}</ul>
       ${s.found.length ? `<h3 class="pack-gear-title">${icon('gearBody')} อุปกรณ์ที่เจอ ${s.found.length} ชิ้น</h3><ul class="pack-gear">${s.found.map(i => `<li data-rarity="${i.rarity}">${gearArt(i)}<div><b>${itemName(i)} Lv${i.level}</b><small>${itemLines(this.map.equipment, i).join(' · ')}</small></div></li>`).join('')}</ul><p class="world-stats">ใส่ได้ที่ค่ายหลังกลับจากการเดินทาง · ถ้าทีมล้มหมดอุปกรณ์ที่เจอรอบนี้จะหาย</p>` : ''}
       <p class="world-stats">เปิดกล่องสมบัติแล้ว ${opened}/${this.map.chests.length} กล่อง · ของตกจากศึกที่ชนะและกล่องสมบัติ</p>`;
   }
@@ -313,7 +313,7 @@ export class WorldUI {
     const camp = atCamp(s, this.map); if (!camp) this.campTab = 'team';
     this.root.querySelector('#camp-title')!.innerHTML = `${icon(camp ? 'camp' : 'flag')} ${camp ? 'แคมป์พักแรม' : 'ทางเข้าด่าน'}`;
     const tabs = camp ? `<div class="camp-tabs two" role="tablist" aria-label="แคมป์">${tab('care', 'พัก/ชุบ')}${tab('team', `ทีม <small>${s.roster.deployed.length}+${s.roster.reserve.length}</small>`)}</div>` : '';
-    const leave = `<section class="camp-section withdraw-section"><button id="withdraw" data-world="withdraw" class="danger-button">${this.confirmWithdraw ? 'ยืนยันถอนตัว · กลับค่ายพร้อมของที่เก็บได้' : `${icon('flag')} ถอนตัวกลับค่าย`}</button><p class="camp-note">ของที่เก็บได้ (แร่ดาว ${s.resources.ore} ตรา ${s.resources.seal}) กลับค่ายครบ ถ่านม่านเวลใช้ได้เฉพาะในด่าน</p></section>`;
+    const leave = `<section class="camp-section withdraw-section"><button id="withdraw" data-world="withdraw" class="danger-button">${this.confirmWithdraw ? 'ยืนยันถอนตัว · กลับค่ายพร้อมของที่เก็บได้' : `${icon('flag')} ถอนตัวกลับค่าย`}</button><p class="camp-note">ของที่เก็บได้ (แร่ดาว ${s.resources.ore} ตรา ${s.resources.seal}) กลับค่ายครบ ถ่านคืนชีพใช้ได้เฉพาะในด่าน</p></section>`;
     this.root.querySelector('#camp-content')!.innerHTML = tabs + (this.campTab === 'care' ? this.campCare(s) : this.campTeam(s)) + leave;
   }
   private campCare(s: ExpeditionState): string {
@@ -324,10 +324,10 @@ export class WorldUI {
       <section class="camp-section" role="tabpanel"><h3>${icon('rest')} พักฟื้น</h3>
         <p>ทุกคนในทีมและตัวสำรองที่ยังยืนอยู่ฟื้นเลือด ${this.map.camp.restHealPercent}% ของเลือดสูงสุด ไฟแคมป์ใช้ได้ 1 ครั้ง แล้วต้องชนะศึกอีกครั้งจึงจุดใหม่ได้</p>
         <button id="camp-rest" data-world="camp-rest" class="primary"${ready ? '' : ' disabled'}>${ready ? `พักฟื้น +${this.map.camp.restHealPercent}%` : 'ไฟแคมป์มอด · ชนะศึกก่อน'}</button></section>
-      <section class="camp-section"><h3>${icon('ember')} ชุบชีวิต <span class="camp-embers">ถ่านม่านเวล ${embers}</span></h3>
-        ${fallen.length ? `<ul class="revive-list">${fallen.map(h => { const ok = canRevive(s, this.map, h.id); return `<li>${portrait(h.id)}<span><b>${heroText[h.id]!.name}</b><small>ฟื้นด้วยเลือด ${reviveHp(h.maxHp)}/${h.maxHp}</small></span><button id="camp-revive-${h.id}" data-world="camp-revive" data-hero="${h.id}" class="secondary"${ok ? '' : ' disabled'} aria-label="ชุบ${heroText[h.id]!.name} ใช้ถ่านม่านเวล 1">${ok ? 'ชุบ · ใช้ 1' : 'ไม่มีถ่าน'}</button></li>`; }).join('')}</ul>`
+      <section class="camp-section"><h3>${icon('ember')} ชุบชีวิต <span class="camp-embers">ถ่านคืนชีพ ${embers}</span></h3>
+        ${fallen.length ? `<ul class="revive-list">${fallen.map(h => { const ok = canRevive(s, this.map, h.id); return `<li>${portrait(h.id)}<span><b>${heroText[h.id]!.name}</b><small>ฟื้นด้วยเลือด ${reviveHp(h.maxHp)}/${h.maxHp}</small></span><button id="camp-revive-${h.id}" data-world="camp-revive" data-hero="${h.id}" class="secondary"${ok ? '' : ' disabled'} aria-label="ชุบ${heroText[h.id]!.name} ใช้ถ่านคืนชีพ 1">${ok ? 'ชุบ · ใช้ 1' : 'ไม่มีถ่าน'}</button></li>`; }).join('')}</ul>`
           : '<p>ไม่มีใครล้ม</p>'}
-        <p class="camp-note">ชุบได้ครั้งละ 1 คน ต่อถ่านม่านเวล 1 ก้อน หาได้จากศึกและกล่องสมบัติ</p></section>`;
+        <p class="camp-note">ชุบได้ครั้งละ 1 คน ต่อถ่านคืนชีพ 1 ก้อน หาได้จากศึกและกล่องสมบัติ</p></section>`;
   }
   private campTeam(s: ExpeditionState): string {
     const card = (id: string | undefined, side: 'deployed' | 'reserve', slot: number) => {
@@ -352,7 +352,7 @@ export class WorldUI {
     chip.dataset.level = level;
     const fill = level === 'safe' ? 1 : Math.min(1, chance / 40);
     const repel = this.view?.state.repel ?? 0;
-    chip.innerHTML = `<span class="danger-label">${icon(level === 'safe' ? (repel ? 'potionRepel' : 'safe') : 'danger')}<span>${repel ? `ไล่ม่าน ${repel} ก้าว` : level === 'safe' ? 'ปลอดภัย' : 'ก้าวถัดไป'}</span><strong>${chance}%</strong></span><span class="gauge"><span style="width:${fill * 100}%"></span></span>`;
+    chip.innerHTML = `<span class="danger-label">${icon(level === 'safe' ? (repel ? 'potionRepel' : 'safe') : 'danger')}<span>${repel ? `ไล่อสูร ${repel} ก้าว` : level === 'safe' ? 'ปลอดภัย' : 'ก้าวถัดไป'}</span><strong>${chance}%</strong></span><span class="gauge"><span style="width:${fill * 100}%"></span></span>`;
     chip.setAttribute('aria-label', level === 'safe' ? 'พื้นที่ปลอดภัย โอกาสพบศัตรู 0 เปอร์เซ็นต์' : `โอกาสพบศัตรูในก้าวถัดไป ${chance} เปอร์เซ็นต์`);
     if (before !== undefined && chance > before && !this.reduced.matches) { chip.classList.remove('rise'); void chip.offsetWidth; chip.classList.add('rise'); }
   }
@@ -479,8 +479,8 @@ export class WorldUI {
     this.root.querySelector('#world-info-content')!.innerHTML = `
       <section class="world-rules"><h3>เดินทีละช่อง</h3><p>แตะช่องที่ไฮไลต์ ใช้ปุ่มลูกศรมุมซ้ายล่าง หรือแป้น ←↑↓→ / WASD ทุกก้าวในพื้นที่อันตรายมีโอกาสพบศัตรู ตัวเลขมุมขวาบนคือโอกาสของก้าวถัดไป ยิ่งเดินโดยไม่เจอ โอกาสยิ่งเพิ่ม และกลับไปต่ำสุดเมื่อพบศัตรูหรือพักที่แคมป์</p>
       <h3>เลือดติดตัว</h3><p>จบศึกแล้วเลือดไม่ฟื้นเอง สมาชิกที่ล้มยังล้มอยู่จนกว่าจะชุบที่แคมป์ ศึกถัดไปเริ่มด้วยเลือดที่เหลือ</p>
-      <h3>${icon('camp')} แคมป์</h3><p>ยืนบนแคมป์แล้วกด “พัก” มุมขวาล่าง พักฟื้นได้ ${this.map.camp.restHealPercent}% ครั้งเดียวจนกว่าจะชนะศึกถัดไป คนที่ล้มต้องใช้ถ่านม่านเวลชุบทีละคน แคมป์ล่าสุดที่ไปถึงคือจุดกลับเมื่อแพ้</p>
-      <h3>${icon('chest')} ของตกและกล่องสมบัติ</h3><p>ชนะศึกได้แร่ดาวและบางครั้งได้ถ่านม่านเวล ยืนบนกล่องแล้วกด “เปิด” กล่องหายากมีตราสัญญา ดูของที่มีได้จากช่องสัมภาระ</p>
+      <h3>${icon('camp')} แคมป์</h3><p>ยืนบนแคมป์แล้วกด “พัก” มุมขวาล่าง พักฟื้นได้ ${this.map.camp.restHealPercent}% ครั้งเดียวจนกว่าจะชนะศึกถัดไป คนที่ล้มต้องใช้ถ่านคืนชีพชุบทีละคน แคมป์ล่าสุดที่ไปถึงคือจุดกลับเมื่อแพ้</p>
+      <h3>${icon('chest')} ของตกและกล่องสมบัติ</h3><p>ชนะศึกได้แร่ดาวและบางครั้งได้ถ่านคืนชีพ ยืนบนกล่องแล้วกด “เปิด” กล่องหายากมีตราสัญญา ดูของที่มีได้จากช่องสัมภาระ</p>
       <h3>${icon('flag')} ทีมและตัวสำรอง</h3><p>พาเข้าด่านได้ 4 + 4 คนจากค่าย สลับตัวได้ที่แคมป์และทางเข้าด่าน ศัตรูเล็งตามหมายเลขช่อง ใครยืนช่องนั้นคือเป้า (กายภาพยังโดนแนวหน้าก่อน)</p>
       <h3>เมื่อแพ้</h3><p>ทีมถอยกลับแคมป์ล่าสุดที่ไปถึง (หรือทางเข้า) คนที่ล้มยังล้มอยู่ ต้องชุบหรือสลับตัวสำรอง ถ้าทุกคนที่พามาล้มหมด การเดินทางล้มเหลว กลับค่ายพร้อมแร่ดาวและตราครึ่งเดียว</p>
       <h3>${icon('camp')} กลับค่าย</h3><p>ถอนตัวได้ที่แคมป์หรือทางเข้าด่าน ของที่เก็บได้กลับค่ายครบ ไปถึงประตูรอยแยกคือสำเร็จการเดินทาง</p>

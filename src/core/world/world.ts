@@ -130,6 +130,14 @@ export function newExpedition(map: MapDefinition, lookup: EncounterLookup, seed:
 }
 const startBattle = (state: ExpeditionState, kind: BattleKind, encounterId: string, level?: number, source?: string): ActiveBattle =>
   ({ kind, encounterId, entry: Object.fromEntries(state.roster.deployed.map(id => [id, state.hp[id]!])), commands: [], ...(level ? { level } : {}), ...(source ? { source } : {}) });
+// Prologue (lore 2026-10-16): on a company's first expedition, Vargoth's vanguard attacks at the start tile
+// before the first step. The battle is the ordinary tutorial battle; old saves still meet it on the first step.
+export function startPrologue(initial: ExpeditionState, map: MapDefinition): WorldResult {
+  if (initial.tutorialDone || initial.battle || initial.completed || initial.steps > 0) return { state: initial, event: { type: 'blocked', reason: 'busy' } };
+  const state = structuredClone(initial);
+  state.battle = startBattle(state, 'tutorial', map.tutorialEncounterId);
+  return { state, event: { type: 'encounter', kind: 'tutorial', encounterId: map.tutorialEncounterId, chance: 100 } };
+}
 // ---- Phase 3A: elites and events ----
 // An elite that can be walked around (not `forced`) pays the richer optional-elite reward.
 export const optionalElite = (map: MapDefinition, source?: string): boolean => map.elites.some(e => e.id === source && !e.forced && !e.mini);

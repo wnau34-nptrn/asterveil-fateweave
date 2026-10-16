@@ -39,10 +39,11 @@ export const riftWarden: EncounterDefinition = {
 // One-time teaching battle. Each scheduled move gives one class skill a reason to exist:
 // R1 Mark → physical hit on Lyra → Ward/Guard the energy blast → Heal; R2 consume Mark → Bash the physical.
 export const firstClash: EncounterDefinition = {
-  ...veilSiege, id: 'first-clash', version: 9, level: 1, name: 'การปะทะครั้งแรก',
+  // The prologue fight: Vargoth's vanguard attacks the ruined frontier fort as the commander wakes (lore 2026-10-16).
+  ...veilSiege, id: 'first-clash', version: 10, level: 1, name: 'กองหน้าของวาร์กอธ',
   enemies: [
-    { id: 'raider', speed: 110, name: 'Veil Scout', displayName: 'หน่วยสอดแนมเวล', maxHp: 56, color: 0xee80bd },
-    { id: 'brute', speed: 70, name: 'Young Brute', displayName: 'อสูรหนุ่ม', maxHp: 100, color: 0x9785f2 },
+    { id: 'raider', speed: 110, name: 'Vargoth Hunter', displayName: 'นักล่าเผ่าอสูร', maxHp: 56, color: 0xee80bd },
+    { id: 'brute', speed: 70, name: 'Vargoth Guard', displayName: 'องครักษ์อสูร', maxHp: 100, color: 0x9785f2 },
   ],
   intents: [
     { sourceId: 'raider', targetSlot: 1, name: 'Raking Slash', damage: 10, kind: 'physical' },
@@ -155,10 +156,10 @@ export const eliteBriarLord: EncounterDefinition = {
 // Mini-boss (3B): a stone golem guarding the scar's side pocket with a rift weaver. Optional, but beating it is one of
 // the rift seal's three objectives. Physical golem, energy weaver.
 export const miniVeilGolem: EncounterDefinition = {
-  ...veilSiege, id: 'mini-veil-golem', version: 1, level: 9, name: 'ยักษ์หินแห่งรอยแผล',
+  ...veilSiege, id: 'mini-veil-golem', version: 2, level: 9, name: 'ยักษ์หินแห่งรอยแผล',
   enemies: [
     { id: 'raider', speed: 105, name: 'Rift Weaver', displayName: 'ผู้ถักรอยแยก', maxHp: 95, color: 0x8a6cc7, art: 'foe_riftweaver' },
-    { id: 'brute', speed: 65, name: 'Veil Golem', displayName: 'ยักษ์หินม่านเวล', maxHp: 240, color: 0x7d8a96, art: 'foe_golem' },
+    { id: 'brute', speed: 65, name: 'Veil Golem', displayName: 'ยักษ์หินรอยแยก', maxHp: 240, color: 0x7d8a96, art: 'foe_golem' },
   ],
   intents: [
     { sourceId: 'raider', targetSlot: 2, name: 'Rift Needle', damage: 18, kind: 'energy' },

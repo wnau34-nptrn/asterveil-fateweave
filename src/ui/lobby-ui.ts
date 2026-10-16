@@ -175,7 +175,7 @@ export class LobbyUI {
       <button class="lobby-pan-button" data-lobby="pan" data-dir="-1" aria-label="เลื่อนดูค่ายทางซ้าย" tabindex="-1">${icon('left')}</button><button class="lobby-pan-button" data-lobby="pan" data-dir="1" aria-label="เลื่อนดูค่ายทางขวา" tabindex="-1">${icon('right')}</button>
       <header class="lobby-top"><button data-lobby="home" class="round-glass" aria-label="กลับหน้าแรก">${icon('left')}</button>
         ${p.commander ? commanderBadge(p.commander) : ''}<div class="lobby-who"><p class="eyebrow">ค่ายทหารรับจ้าง · ${this.view!.saved ? 'บันทึกอัตโนมัติ' : 'บันทึกบนเครื่องนี้ไม่ได้'}</p><h1 id="lobby-commander">${p.commander ? this.escape(p.commander.name) : 'เตรียมทีมก่อนออกเดินทาง'}</h1></div>
-        <div class="lobby-bank" aria-label="คลัง เหรียญทอง ${p.bank.gold} แร่ดาว ${p.bank.ore} ตราสัญญา ${p.bank.seal} ผงม่านเวล ${p.bank.dust}"><span class="glass-capsule" data-bank="gold">${icon('gold')}<b>${p.bank.gold}</b></span><span class="glass-capsule" data-bank="ore">${icon('ore')}<b>${p.bank.ore}</b></span><span class="glass-capsule">${icon('seal')}<b>${p.bank.seal}</b></span><span class="glass-capsule">${icon('dust')}<b>${p.bank.dust}</b></span></div></header>
+        <div class="lobby-bank" aria-label="คลัง เหรียญทอง ${p.bank.gold} แร่ดาว ${p.bank.ore} ตราสัญญา ${p.bank.seal} ฝุ่นดาว ${p.bank.dust}"><span class="glass-capsule" data-bank="gold">${icon('gold')}<b>${p.bank.gold}</b></span><span class="glass-capsule" data-bank="ore">${icon('ore')}<b>${p.bank.ore}</b></span><span class="glass-capsule">${icon('seal')}<b>${p.bank.seal}</b></span><span class="glass-capsule">${icon('dust')}<b>${p.bank.dust}</b></span></div></header>
       ${last ? `<p class="lobby-result glass-capsule ${toast}" data-outcome="${last.outcome}" role="status">${icon(last.outcome === 'wiped' ? 'danger' : last.outcome === 'complete' ? 'star' : 'camp')}<span><b>${outcomeText[last.outcome]}</b> · เดิน ${last.steps} ก้าว ชนะ ${last.wins} ศึก · ได้แร่ดาว ${last.ore}${last.gold ? ` เหรียญทอง ${last.gold}` : ''}${last.seal ? ` ตราสัญญา ${last.seal}` : ''}${last.outcome === 'wiped' ? ' (เก็บได้ครึ่งเดียว)' : ''}${last.items ? ` · อุปกรณ์ ${last.items} ชิ้น` : ''}${last.salvaged ? ` (คลังเต็ม แยกชิ้นอัตโนมัติ ${last.salvaged})` : ''}</span></p>`
         : this.view!.message ? `<p class="lobby-result glass-capsule ${toast}" role="status"><span>${this.view!.message}</span></p>` : ''}
       ${this.sheet ? `<section id="lobby-sheet" class="lobby-sheet" role="dialog" aria-modal="false" aria-labelledby="lobby-sheet-title">
@@ -287,7 +287,7 @@ export class LobbyUI {
   }
   // Map potions (2D-5): brew for ore and veil dust; each departure packs up to `carry` of each.
   private brewing(p: Profile): string {
-    const rules = this.map.potions; const why: Record<string, string> = { ore: 'แร่ดาวไม่พอ', dust: 'ผงม่านเวลไม่พอ' };
+    const rules = this.map.potions; const why: Record<string, string> = { ore: 'แร่ดาวไม่พอ', dust: 'ฝุ่นดาวไม่พอ' };
     return `<p class="hire-cost">${icon('ore')} ${p.bank.ore} · ${icon('dust')} ${p.bank.dust} · ออกเดินทางแล้วพายาไปอย่างละไม่เกิน ${rules.carry} ขวด ที่เหลือเก็บไว้ที่ค่าย</p>
       <ul class="hire-list brew-list">${POTION_IDS.map(id => { const cost = rules.brew[id]; const reason = brewReason(p, this.map, id);
         return `<li>${potionArt(id)}<span><b>${potionText[id].name}</b><small>${potionText[id].help(rules)}</small><small class="hire-status">มีที่ค่าย ${p.potions[id]} ขวด · จะพาไป ${Math.min(rules.carry, p.potions[id])}</small></span>
@@ -302,7 +302,7 @@ export class LobbyUI {
     if (this.forgeUid && !findItem(p, this.forgeUid)) this.forgeUid = undefined;
     const list = all.map(({ item, owner }) => `<li data-rarity="${item.rarity}"><button id="forge-item-${item.uid}" data-lobby="forge-pick" data-uid="${item.uid}" class="forge-pick" aria-pressed="${this.forgeUid === item.uid}">
       ${gearArt(item)}<b>${itemName(item)} Lv${item.level}</b><small>${owner ? `ใส่อยู่: ${heroText[owner]?.name ?? owner}` : 'ในคลัง'}${item.set ? ` · ชุด${setText[item.set]}` : ''}</small></button></li>`).join('');
-    const why: Record<string, string> = { maxed: 'เต็มแล้ว', ore: 'แร่ดาวไม่พอ', dust: 'ผงม่านเวลไม่พอ', seal: 'ตราสัญญาไม่พอ', materials: 'ชิ้นในคลังไม่พอ' };
+    const why: Record<string, string> = { maxed: 'เต็มแล้ว', ore: 'แร่ดาวไม่พอ', dust: 'ฝุ่นดาวไม่พอ', seal: 'ตราสัญญาไม่พอ', materials: 'ชิ้นในคลังไม่พอ' };
     let detail = '<p class="camp-note">แตะอุปกรณ์ด้านล่างเพื่อเลือกชิ้นที่จะพัฒนา</p>';
     const found = this.forgeUid ? findItem(p, this.forgeUid) : undefined;
     if (found) {
@@ -318,7 +318,7 @@ export class LobbyUI {
         <div class="forge-rerolls">${item.affixes.map((a, i) => { const r = rerollReason(p, this.map, item.uid, i);
           return `<button id="forge-reroll-${i}" data-lobby="reroll" data-index="${i}" class="secondary"${r ? ' disabled' : ''}>สุ่ม${statName[a]}ใหม่${r ? ` · ${why[r]}` : ''}</button>`; }).join('')}</div>` : ''}</div>`;
     }
-    return `<p class="hire-cost">${icon('ore')} ${p.bank.ore} · ${icon('dust')} ${p.bank.dust} · ${icon('seal')} ${p.bank.seal} · ผงม่านเวลได้จากการแยกชิ้น</p>${detail}
+    return `<p class="hire-cost">${icon('ore')} ${p.bank.ore} · ${icon('dust')} ${p.bank.dust} · ${icon('seal')} ${p.bank.seal} · ฝุ่นดาวได้จากการแยกชิ้น</p>${detail}
       <h3>${icon('pack')} อุปกรณ์ทั้งหมด <span class="camp-embers">${all.length} ชิ้น</span></h3>${list ? `<ul class="forge-list">${list}</ul>` : '<p class="camp-note">ยังไม่มีอุปกรณ์ · ชนะศึกบนแผนที่เพื่อหาอุปกรณ์</p>'}`;
   }
   // Opens the member's talent tree in its own sheet.

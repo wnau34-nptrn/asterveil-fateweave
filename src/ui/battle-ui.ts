@@ -8,8 +8,9 @@ import { portrait } from './world-ui';
 import { artOf } from '../game/visuals/assets';
 import { riftBackdropFrame } from '../game/visuals/rift-backdrop';
 import { icon } from './icons';
+import { battleLesson } from './tutorial';
+import { heroVoice } from './story-ui';
 
-// The old teaching-advice preference (removed with the advice); deleted on start, never read.
 const tutorialKey = 'asterveil.fateweave.tutorial.v1';
 
 // The expedition owns persistence: every commit is handed to the session before playback.
@@ -33,6 +34,7 @@ export class BattleUI {
   private presentation: { phase: 'hero' | 'enemy'; index: number; resolution: Resolution; frame: BattleState; logEnds: number[] } | undefined;
   private timer: ReturnType<typeof setTimeout> | undefined;
   private storage = browserStorage();
+  private hintsEnabled = true;
   private saved = true;
   private messages: string[];
   private scene: BattleScene | undefined;
@@ -43,7 +45,7 @@ export class BattleUI {
 
   constructor(private readonly root: HTMLElement, data: EncounterDefinition) {
     this.data = data;
-    try { this.storage?.removeItem?.(tutorialKey); } catch { /* Storage is optional. */ }
+    try { this.hintsEnabled = this.storage?.getItem(tutorialKey) !== 'off'; } catch { /* Advice still works without storage. */ }
     this.state = createBattle(data);
     this.started = false;
     this.messages = [];
@@ -54,6 +56,7 @@ export class BattleUI {
       </header>
       <main>
         <section id="turn-phase" class="turn-phase" role="status" aria-live="polite" aria-label="เทิร์นการต่อสู้"></section>
+        <aside id="battle-coach" class="battle-coach" aria-label="คำแนะนำจากทีม" hidden><span id="coach-face" class="coach-face" aria-hidden="true"></span><div class="coach-content"><strong id="coach-title"></strong><p id="coach-copy" aria-live="polite"></p></div><button id="coach-dismiss" data-ui="coach-dismiss" class="quiet" aria-label="ปิดคำใบ้สอนเล่น">×</button></aside>
         <div class="battle-layout">
           <section class="battle-board" aria-label="สถานการณ์การต่อสู้">
             <section class="arena" aria-label="สนามต่อสู้ แตะเป้าหมายเพื่อใช้สกิล">
@@ -71,6 +74,7 @@ export class BattleUI {
         </div>
         <div id="help-home"><details class="help-panel"><summary>วิธีเล่น · แผนศัตรู · บันทึกการต่อสู้</summary><div class="battle-notes">
           <div id="formation-info" class="formation-info"></div>
+          <section id="tutorial-settings" class="tutorial-settings" aria-label="ตั้งค่าคำใบ้สอนเล่น"></section>
           <details id="forecast-details" class="forecast-panel"><summary>ดูการโจมตีของศัตรู 2 เทิร์นถัดไป</summary><div id="forecast" class="forecast"></div></details>
           <details class="field-notes"><summary>อาชีพ · สกิลและแนวหน้า/หลัง</summary><div id="rules"></div></details>
           <details class="combat-history"><summary>บันทึกการต่อสู้</summary><ol id="event-log" role="log" aria-live="polite"></ol></details>
@@ -97,6 +101,8 @@ export class BattleUI {
         case 'target': if (value) this.choose(value); break;
         case 'skip-turn': this.finishPresentation(); break;
         case 'leave': if (!this.busy && this.state.outcome !== 'active') this.session?.leave(); break;
+        case 'coach-dismiss': this.setHints(false); break;
+        case 'coach-toggle': this.setHints(!this.hintsEnabled); break;
       }
     });
     const infoDialog = root.querySelector<HTMLDialogElement>('#game-info')!;
@@ -132,9 +138,10 @@ export class BattleUI {
     this.saved = true;
     this.render(); this.scene?.refreshLayout();
   }
+  private get teaching(): boolean { return this.session?.kind === 'tutorial' && this.hintsEnabled; }
   get encounter(): EncounterDefinition { return this.data; }
   sceneReady(): void { this.render(); }
-  fieldLayoutChanged(): void { this.renderFieldTargets(); this.placeBackdrop(); }
+  fieldLayoutChanged(): void { this.renderFieldTargets(); this.renderTutorial(); this.placeBackdrop(); }
   // The battle painting lies behind the whole view, framed to the arena so fighters stand on its floor.
   private placeBackdrop(): void {
     const arena = this.root.querySelector<HTMLElement>('.arena'); if (!arena) return;
@@ -163,6 +170,48 @@ export class BattleUI {
   private selectHero(id: string): void {
     if (this.busy || id !== currentHeroId(this.state, this.data)) return;
     this.heroId = id; this.action = 'attack'; this.render();
+  }
+
+  private setHints(enabled: boolean): void {
+    this.hintsEnabled = enabled;
+    // Removing the strip moves the field under its closing touch.
+    this.canvasInputAfterInfo = performance.now() + 250;
+    try { this.storage?.setItem(tutorialKey, enabled ? 'on' : 'off'); } catch { /* Preference is optional. */ }
+    this.render();
+    const focus = this.root.querySelector<HTMLDialogElement>('#game-info')!.open ? '#coach-toggle' :
+      enabled && this.started && this.state.outcome === 'active' ? '#coach-dismiss' : '#battle-info';
+    this.root.querySelector<HTMLElement>(focus)?.focus({ preventScroll: true });
+  }
+
+  private renderTutorial(): void {
+    const coach = this.root.querySelector<HTMLElement>('#battle-coach')!;
+    const lesson = this.started && this.teaching ? battleLesson(this.presentation?.resolution.initial ?? this.displayState, this.data) : undefined;
+    const resized = coach.hidden !== !lesson;
+    coach.hidden = !lesson;
+    this.root.querySelectorAll('.coach-focus').forEach(el => el.classList.remove('coach-focus'));
+    if (!lesson) { delete coach.dataset.lesson; if (resized) this.scene?.refreshLayout(); return; }
+    coach.dataset.lesson = String(lesson.step);
+    const p = this.presentation;
+    let title = `${heroText[lesson.heroId]?.name ?? ''} · ${lesson.title}`; let copy = `“${heroVoice(lesson.heroId, lesson.action)}” ${lesson.copy}`;
+    const speaker = p ? undefined : lesson.heroId; const face = this.root.querySelector<HTMLElement>('#coach-face')!;
+    if (face.dataset.hero !== (speaker ?? '')) { face.dataset.hero = speaker ?? ''; face.innerHTML = speaker ? portrait(speaker) : ''; }
+    if (p) {
+      lesson.step = p.resolution.initial.commands.length + 1;
+      const event = this.stage!.events.find(e => e.type !== 'outcome');
+      title = p.phase === 'hero' ? 'เทิร์นฮีโร่ตามความเร็ว' : 'ถึงเทิร์นศัตรู';
+      copy = event ? eventThai(event, this.displayState, this.data) : 'การตอบโต้จังหวะนี้ถูกยกเลิก';
+      if (p.phase === 'hero' && this.stage?.action === 'mark') copy = `${actorName(this.stage!.targetId, this.data)} ติดตราแล้ว · ไลราตีเป้านี้ครั้งถัดไป +${this.data.rules.markedBonus}`;
+    } else {
+      const next = this.heroId !== lesson.heroId ? `#hero-${lesson.heroId}` : this.action !== lesson.action ? `#action-${lesson.action}` : `#target-${lesson.targetId}`;
+      this.root.querySelector(next)?.classList.add('coach-focus');
+      if (lesson.step === 1) this.root.querySelector('#intent')?.classList.add('coach-focus');
+    }
+    const heading = `ศึกแรก ${lesson.step} · ${title}`;
+    const titleNode = this.root.querySelector('#coach-title')!; const copyNode = this.root.querySelector('#coach-copy')!;
+    // Layout-only updates retain settings focus and avoid repeating live copy.
+    if (titleNode.textContent !== heading) titleNode.textContent = heading;
+    if (copyNode.textContent !== copy) copyNode.textContent = copy;
+    if (resized) this.scene?.refreshLayout();
   }
 
   private showSkill(): void {
@@ -357,6 +406,8 @@ export class BattleUI {
     const host = this.root.querySelector('#info-host')!;
     if (help.parentElement !== host) { if (dialog.open) dialog.close(); host.append(help); help.open = true; }
     this.set('info-skill', `<h3>${d.skills[this.action].name} · ${heroText[this.heroId]!.name}</h3><p>${skillDescription(this.action, this.heroId, d)}</p>`);
+    this.root.querySelector<HTMLElement>('#tutorial-settings')!.hidden = this.session?.kind !== 'tutorial';
+    this.set('tutorial-settings', `<strong>คำแนะนำศึกแรก</strong><p>อ่านแผนศัตรู · ตั้งรับ · ติดตราแล้วตีเป้าเดิม · ขัดจังหวะ · รักษา</p><button id="coach-toggle" data-ui="coach-toggle" class="quiet" aria-pressed="${this.hintsEnabled}">${this.hintsEnabled ? 'ปิดคำแนะนำ' : 'เปิดคำแนะนำ'}</button>`);
     this.renderPhase(); this.renderSituation(); this.renderSelectedHero(); this.renderParty(disabled); this.renderCommands(disabled);
     this.set('rules', `<h3>ลงสนาม ${d.heroes.length} คน · ศัตรูเล็งตามหมายเลขช่อง</h3><p>รวมฮีโร่และศัตรูเรียง SPD มากไปน้อยเมื่อเริ่มรอบ คนละ 1 ครั้งต่อรอบ ข้ามตัวที่ล้ม SPD เท่ากันใช้ลำดับรายชื่อฮีโร่ก่อน ตามด้วยศัตรู</p><p>แนวหน้าที่ยังยืนอยู่รับการโจมตีกายภาพก่อน พลังงานโจมตีแนวหลังได้ เมื่อแนวหน้าล้มหมด กายภาพจะถึงแนวหลัง ท่าของศัตรูเล็งหมายเลขช่องในทีม ใครยืนช่องนั้นคือเป้า แผนโจมตีเป็นการคาดการณ์ตามคนที่ยังยืนอยู่ เมื่อถึงเทิร์นศัตรูจึงกำหนดเป้าหมายจริง</p>${d.heroes.map(hero => `<h3>${heroText[hero.id]!.name} · ${heroText[hero.id]!.role} · SPD ${hero.speed} · ${hero.lane === 'front' ? 'แนวหน้า' : 'แนวหลัง'}</h3><dl>${hero.actions.map(action => `<dt>${d.skills[action].name} (${d.skills[action].english})</dt><dd>${skillDescription(action, hero.id, d)}</dd>`).join('')}</dl>`).join('')}<p>แต่ละตัวลงมือ 1 ครั้งต่อรอบ สกิลคูลดาวน์ 2 รอบที่ใช้ในรอบ 1 จะพร้อมในรอบ 3 พรฟื้นฟูคูลดาวน์ 3 รอบ ${d.enemies.map(e => `${actorName(e.id, d)} SPD ${e.speed}`).join(' · ')} การรักษาไม่ชุบชีวิต โล่เวทไม่ซ้อนกัน เป้าหมายเสริมคือชนะโดยรักษาทีมครบ ${d.heroes.length} คน</p>`);
     const shownMessages = this.presentation ? this.messages.slice(0, this.presentation.logEnds[this.presentation.index]) : this.messages;
@@ -364,6 +415,7 @@ export class BattleUI {
     this.set('save-status', this.saved && this.storage ? 'บันทึกบนเครื่องนี้อัตโนมัติ' : 'เล่นได้ แต่บันทึกบนเครื่องนี้ไม่ได้');
     this.scene?.sync({ state: this.displayState, heroId: this.heroId, targetId: null, phase: this.presentation?.phase, activeActorId: this.actingActor, activeTargetId: this.actingTarget });
     this.renderFieldTargets();
+    this.renderTutorial();
     if (focus) this.root.querySelector<HTMLElement>(`#${focus}`)?.focus({ preventScroll: true });
     this.placeBackdrop();
   }

@@ -14,6 +14,8 @@
 .turn-slot.enemy { border-color: #b59aff40; }
 .turn-slot.current-turn.hero, .turn-slot.current-turn.enemy { border-color: var(--gold-light); background: #2a2a2e; box-shadow: var(--glow-gold); }
 .turn-slot b { font-family: var(--font-heading); font-weight: 600; }
+.battle-coach { border: 1px solid #74d4ef80; border-left: 3px solid var(--veil-cyan); border-radius: var(--radius-sm); background: #0d2236e6; }
+.coach-content strong { font-family: var(--font-heading); font-weight: 600; color: #bff3ff; }
 .enemy-card { border: 1px solid #b59aff40; border-radius: 12px; background: #120f24cc; }
 .enemy-card .hp-track, .hero-card .hp-track { border: 0; background: var(--hp-track); border-radius: 999px; }
 .enemy-card .hp-track > span { background: var(--hp-enemy); box-shadow: none; }

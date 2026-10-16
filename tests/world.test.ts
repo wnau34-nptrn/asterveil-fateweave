@@ -5,7 +5,7 @@ import { createBattle, currentHeroId, resolveCommand, skillPower } from '../src/
 import { clearLegacySaves, expeditionKey, legacyKeys, loadGame, parseGame, saveGame, type StoragePort } from '../src/core/save/expedition-save';
 import { boardOffers, commanderReason, createCommander, departure, dismiss, dismissReason, groupOf, hire, hireReason, newProfile, placeMember, settle, upgrade, upgradeCost, upgradeReason } from '../src/core/world/profile';
 import type { Direction, ExpeditionState, Point, Profile } from '../src/core/world/types';
-import { chooseEvent, questComplete, atMuster, heroCatalog, battleData, battleState, canOpenChest, memberDef, moveMember, swapMembers, canRest, canRevive, chestAt, encounterChance, findTiles, finishBattle, isRevealed, move, newExpedition, openChest, recordBattle, rest, revive, rollPercent, startOf, tileAt } from '../src/core/world/world';
+import { startPrologue, chooseEvent, questComplete, atMuster, heroCatalog, battleData, battleState, canOpenChest, memberDef, moveMember, swapMembers, canRest, canRevive, chestAt, encounterChance, findTiles, finishBattle, isRevealed, move, newExpedition, openChest, recordBattle, rest, revive, rollPercent, startOf, tileAt } from '../src/core/world/world';
 import { actorArt, artOf } from '../src/game/visuals/assets';
 import { battleLesson } from '../src/ui/tutorial';
 
@@ -464,5 +464,19 @@ describe('gold coins (hiring currency, save v14)', () => {
     expect(settle(newProfile(map, 1), run, 'withdrawn', map).bank.gold).toBe(41);
     expect(settle(newProfile(map, 1), run, 'wiped', map).bank.gold).toBe(20);
     expect(settle(newProfile(map, 1), run, 'complete', map).last?.gold).toBe(41);
+  });
+});
+
+describe('prologue', () => {
+  it('a first expedition meets Vargoth\'s vanguard at the start tile before any step; later runs and moved runs do not', () => {
+    const s = fresh(9);
+    const r = startPrologue(s, map);
+    expect(r.event).toEqual({ type: 'encounter', kind: 'tutorial', encounterId: map.tutorialEncounterId, chance: 100 });
+    expect(r.state.battle).toMatchObject({ kind: 'tutorial', encounterId: map.tutorialEncounterId }); expect(r.state.position).toEqual(s.position);
+    expect(startPrologue({ ...s, tutorialDone: true }, map).event.type).toBe('blocked');
+    expect(startPrologue(r.state, map).event.type).toBe('blocked');
+    expect(startPrologue({ ...s, steps: 1 }, map).event.type).toBe('blocked');
+    // Won, it marks the tutorial done like any tutorial battle.
+    expect(fight(r.state).tutorialDone).toBe(true);
   });
 });

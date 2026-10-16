@@ -2,8 +2,8 @@ import { ambushBonus, corrodeBonusOf, guardReductionOf, tauntReductionOf, curren
 import type { ActionId, BattleState, EncounterDefinition } from '../core/battle/types';
 import { actorName } from './th';
 export interface Lesson { step:number; title:string; copy:string; heroId:string; action:ActionId; targetId:string }
-// The scripted advisor: picks a sensible command from the committed state, never for a hero outside the
-// current SPD turn. The game no longer shows it (teaching advice removed 2026-10-16); tests use it as a player.
+// Reactive advice for the teaching battle. It reads the committed state only and
+// never suggests commanding a hero outside the current SPD turn.
 export function battleLesson(state:BattleState,data:EncounterDefinition):Lesson|undefined {
  if(state.outcome!=='active')return;
  const heroId=currentHeroId(state,data); if(!heroId)return;

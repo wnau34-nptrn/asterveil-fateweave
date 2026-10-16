@@ -192,7 +192,7 @@ export function eventThai(event: BattleEvent, after: BattleState, data: Encounte
 export const resourceText: Record<ResourceId, { name: string; use: string }> = {
   ore: { name: 'แร่ดาว', use: 'พากลับค่าย ใช้อัปดาว ปรุงยา และตีอุปกรณ์' },
   gold: { name: 'เหรียญทอง', use: 'พากลับค่าย ใช้จ้างทหารรับจ้างเท่านั้น' },
-  ember: { name: 'ถ่านม่านเวล', use: 'ชุบสมาชิกที่ล้ม 1 คนที่แคมป์' },
+  ember: { name: 'ถ่านคืนชีพ', use: 'ชุบสมาชิกที่ล้ม 1 คนที่แคมป์' },
   seal: { name: 'ตราสัญญา', use: 'พากลับค่าย ใช้แทนตัวซ้ำ 1 ชิ้นเมื่ออัปดาว' },
 };
 export const resourceOrder: readonly ResourceId[] = ['ore', 'gold', 'ember', 'seal'];
@@ -228,7 +228,7 @@ export function itemLines(rules: EquipmentRules, item: Item): string[] {
     ...(item.set ? [`ชุด${setText[item.set]}`] : [])];
 }
 // ---- Equipment sets (2D-3) ----
-export const setText: Record<SetId, string> = { dawn: 'ผู้พิทักษ์รุ่งอรุณ', wind: 'สายลมเร็ว', shadow: 'นักล่าเงา', thorn: 'หนามสวน', starveil: 'เวทม่านดาว', mender: 'ผู้เยียวยา' };
+export const setText: Record<SetId, string> = { dawn: 'ผู้พิทักษ์รุ่งอรุณ', wind: 'สายลมเร็ว', shadow: 'นักล่าเงา', thorn: 'หนามสวน', starveil: 'เวทแสงดาว', mender: 'ผู้เยียวยา' };
 const twoText = (t: SetDefinition['two']) => t.stat === 'speed' ? `SPD +${t.value}` : `${({ hp: 'เลือด', attack: 'พลังโจมตี', skill: 'พลังสกิล', heal: 'พลังรักษา' } as const)[t.stat]} +${t.value}%`;
 const fourText = (f: SetDefinition['four']) => ({
   barrier: `เริ่มศึกพร้อมโล่ ${f.amount}`, firstStrike: 'รอบแรกของศึกลงมือก่อนทุกคน', freshHit: `ตีศัตรูที่ยังไม่ลงมือในรอบนี้ +${f.amount}`,
@@ -245,7 +245,7 @@ export const potionIcon = { salve: 'potionSalve', tonic: 'potionTonic', repel: '
 export const potionText: Record<PotionId, { name: string; help: (r: PotionRules) => string }> = {
   salve: { name: 'ยาฟื้นแผล', help: r => `ฟื้นเลือด ${r.salvePercent}% ให้สมาชิกที่ยังยืนอยู่ 1 คน` },
   tonic: { name: 'ยาฟื้นหมู่', help: r => `ฟื้นเลือด ${r.tonicPercent}% ให้ทุกคนที่ยังยืนอยู่` },
-  repel: { name: 'ยาไล่ม่าน', help: r => `${r.repelSteps} ก้าวถัดไปไม่เจอศัตรูสุ่ม (บอสยังขวางทาง)` },
+  repel: { name: 'ยาไล่อสูร', help: r => `${r.repelSteps} ก้าวถัดไปไม่เจอศัตรูสุ่ม (บอสยังขวางทาง)` },
 };
 // ---- Camp NPCs (ART-CHAR-NPC-001): names, roles and a few lines each (live Thai text, never baked into art). ----
 export const npcText: Record<'smith' | 'broker' | 'trainer' | 'keeper' | 'herbalist' | 'scout', { name: string; role: string; lines: readonly string[] }> = {
@@ -253,7 +253,7 @@ export const npcText: Record<'smith' | 'broker' | 'trainer' | 'keeper' | 'herbal
   broker: { name: 'พีโน่', role: 'นายหน้าจ้างทหาร', lines: ['มีนักรบฝีมือดีมาใหม่ ราคาพิเศษเฉพาะท่านเลยนะ', 'จ้างคนเดิมซ้ำได้ตัวซ้ำไว้อัปดาว คุ้มสุดๆ', 'ป้ายเปลี่ยนใหม่ทุกครั้งที่ท่านกลับจากการเดินทาง'] },
   trainer: { name: 'ครูฮัลดา', role: 'ครูฝึก', lines: ['ถนัดทางเดียวให้สุด ดีกว่าทำได้ทุกอย่างครึ่งๆ', 'เลเวลขึ้นเมื่อไหร่ มาลงแต้มกับข้า', 'ลงแต้มผิดก็รีเซ็ตได้ ไม่ต้องกลัว'] },
   keeper: { name: 'มิมี่', role: 'ผู้ดูแลคลัง', lines: ['ใส่ให้พอดีตัวนะคะ ชุดครบสี่ชิ้นได้โบนัสใหญ่', 'คลังเก็บได้หกสิบชิ้น ถ้าเต็มจะแยกชิ้นให้อัตโนมัติค่ะ', 'ของหายากแยกชิ้นต้องกดยืนยันสองครั้งนะคะ'] },
-  herbalist: { name: 'เฟิร์น', role: 'นักปรุงยา', lines: ['ยาใหม่ร้อนๆ เพิ่งต้มเสร็จเลย!', 'พกไปได้อย่างละสามขวดนะ อย่าลืม', 'ยาไล่ม่านช่วยให้เดินผ่านทุ่งได้เงียบๆ'] },
+  herbalist: { name: 'เฟิร์น', role: 'นักปรุงยา', lines: ['ยาใหม่ร้อนๆ เพิ่งต้มเสร็จเลย!', 'พกไปได้อย่างละสามขวดนะ อย่าลืม', 'ยาไล่อสูรช่วยให้เดินผ่านทุ่งได้เงียบๆ'] },
   scout: { name: 'คาเอล', role: 'ผู้นำทาง', lines: ['ทางข้างหน้ามืด เตรียมทีมให้พร้อม', 'ตัวสำรองสลับได้ที่แคมป์เท่านั้น เลือกให้ดี', 'ศัตรูเล็งตามหมายเลขช่อง จัดแถวให้ดี'] },
 };
 // ---- Rift seal (3B): objective lines with live progress. ----
@@ -263,11 +263,11 @@ export function questLine(o: QuestObjective, state: ExpeditionState): string {
 }
 // ---- Map events (3A): live Thai text for each event and choice; numbers come from the rules. ----
 export const eventText: Record<MapEventKind, { name: string; scene: string; icon: IconName }> = {
-  bandits: { name: 'ด่านโจรม่าน', scene: 'กลุ่มโจรตั้งด่านขวางทาง พวกมันเฝ้าของที่ปล้นมา', icon: 'danger' },
-  shrine: { name: 'ศาลม่านเก่า', scene: 'ศาลหินเรืองแสงจาง ๆ พลังของมันรักษาได้แต่ต้องแลกกับบางอย่าง', icon: 'star' },
+  bandits: { name: 'ด่านโจร', scene: 'กลุ่มโจรตั้งด่านขวางทาง พวกมันเฝ้าของที่ปล้นมา', icon: 'danger' },
+  shrine: { name: 'ศาลเก่า', scene: 'ศาลหินเรืองแสงจาง ๆ พลังของมันรักษาได้แต่ต้องแลกกับบางอย่าง', icon: 'star' },
   merchant: { name: 'พ่อค้าเร่', scene: 'พ่อค้าเร่แวะพักริมทาง ขายยาแลกแร่ดาว', icon: 'pack' },
   traveller: { name: 'นักเดินทางบาดเจ็บ', scene: 'นักเดินทางคนหนึ่งบาดเจ็บนั่งพิงต้นไม้ ขอยาสักขวด', icon: 'talk' },
-  rift: { name: 'รอยแยกเล็ก', scene: 'รอยแยกม่านเล็ก ๆ กำลังสั่น มีบางอย่างกำลังจะคลานออกมา', icon: 'boss' },
+  rift: { name: 'รอยแยกเล็ก', scene: 'รอยแยกเล็ก ๆ กำลังสั่น มีบางอย่างกำลังจะคลานออกมา', icon: 'boss' },
 };
 export function choiceText(choice: EventChoice, r: EventRules): { label: string; help: string } {
   switch (choice) {
@@ -277,7 +277,7 @@ export function choiceText(choice: EventChoice, r: EventRules): { label: string;
     case 'offer': return { label: 'ถวายแร่', help: `จ่ายแร่ดาว ${r.offerOre} ได้ตราสัญญา ${r.offerSeal}` };
     case 'buy-salve': return { label: `ซื้อยาฟื้นแผล · ${r.merchant.salve} แร่`, help: '' };
     case 'buy-tonic': return { label: `ซื้อยาฟื้นหมู่ · ${r.merchant.tonic} แร่`, help: '' };
-    case 'buy-repel': return { label: `ซื้อยาไล่ม่าน · ${r.merchant.repel} แร่`, help: '' };
+    case 'buy-repel': return { label: `ซื้อยาไล่อสูร · ${r.merchant.repel} แร่`, help: '' };
     case 'help': return { label: 'ให้ยาฟื้นแผล', help: `ใช้ยาฟื้นแผล 1 ขวด ได้แร่ดาว ${r.traveller.ore} และตราสัญญา ${r.traveller.seal}` };
   }
 }

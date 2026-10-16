@@ -2,7 +2,7 @@ import type { BattleState, Outcome } from '../core/battle/types';
 import { clearLegacySaves, loadGame, saveGame, type Game } from '../core/save/expedition-save';
 import { createCommander, depart, brew, dismiss, equip, hire, learnTalent, newProfile, placeMember, resetTalents, salvage, settle, unequip, upgrade, canWithdraw } from '../core/world/profile';
 import type { Direction, EventChoice, ExpeditionState, MapDefinition, PotionId, Profile, ProfileResult, RunOutcome, WorldEvent } from '../core/world/types';
-import { questDone, battleData, chooseEvent, finishBattle, heroCatalog, move, moveMember, openChest, recordBattle, usePotion, rest, revive, swapMembers, type EncounterLookup } from '../core/world/world';
+import { startPrologue, questDone, battleData, chooseEvent, finishBattle, heroCatalog, move, moveMember, openChest, recordBattle, usePotion, rest, revive, swapMembers, type EncounterLookup } from '../core/world/world';
 import { browserStorage } from '../platform/browser-storage';
 import type { BattleUI } from './battle-ui';
 import type { NpcId } from '../game/visuals/assets';
@@ -10,6 +10,7 @@ import { choiceText, eventText, expThai, heroText, itemLines, itemName, lootThai
 import { enhance, findItem, fuse, reroll } from '../core/world/forge';
 import { CommanderUI } from './commander-ui';
 import { LobbyUI } from './lobby-ui';
+import { prologue, prologueEnd, StoryUI } from './story-ui';
 import { WorldUI, type WorldBanner } from './world-ui';
 import { icon, type IconName } from './icons';
 
@@ -54,6 +55,7 @@ export class GameShell {
       reroll: (uid, i) => this.profileChange(reroll(this.game!.profile, map, uid, i)), brew: potion => this.profileChange(brew(this.game!.profile, map, potion)),
       depart: () => this.depart(), home: () => this.showTitle(),
     });
+    const story = document.createElement('section'); root.append(story); this.story = new StoryUI(story);
     this.commander = new CommanderUI(views.commander, { create: c => this.createCommander(c), back: () => { this.replacing = false; this.showTitle(); } });
     views.title.addEventListener('click', e => {
       const button = (e.target as HTMLElement).closest<HTMLButtonElement>('button[data-title]');
@@ -87,10 +89,10 @@ export class GameShell {
     // Layered title: drifting painting, light rays and motes behind a logo that resolves into focus.
     this.views.title.innerHTML = `<div class="title-stage" aria-hidden="true"><div class="title-bg"></div><div class="title-rays"></div>
       <div class="title-motes">${'<i></i>'.repeat(14)}</div><div class="title-vignette"></div></div>
-      <div class="title-card"><h1 class="title-logo"><img src="${import.meta.env.BASE_URL}assets/title/logo.svg" alt="Asterveil · Fateweave" width="700" height="224"></h1><p class="title-copy">ข้ามม่านเวล · ถักทอโชคชะตา</p>
+      <div class="title-card"><h1 class="title-logo"><img src="${import.meta.env.BASE_URL}assets/title/logo.svg" alt="Asterveil · Fateweave" width="700" height="224"></h1><p class="title-copy">ข้ามรอยแยก · ถักทอโชคชะตา</p>
       <div class="title-actions">${g ? `<p class="title-save">${s ? 'การเดินทางที่บันทึกไว้' : 'ค่ายของคุณ'}<span class="title-chips">${summary}</span></p><button id="continue" data-title="continue" class="primary">${s ? 'เดินทางต่อ →' : 'เข้าค่าย →'}</button>` : ''}
       <button id="new-game" data-title="new" class="${g ? 'secondary' : 'primary'}">${g ? 'เริ่มเกมใหม่' : 'เริ่มเกม'}</button>
-      ${this.storage ? '' : '<p class="title-warning">เบราว์เซอร์นี้ไม่อนุญาตให้บันทึก เล่นได้แต่จะไม่จำความคืบหน้า</p>'}</div><p class="title-footer">ชายแดนม่านเวล</p></div>`;
+      ${this.storage ? '' : '<p class="title-warning">เบราว์เซอร์นี้ไม่อนุญาตให้บันทึก เล่นได้แต่จะไม่จำความคืบหน้า</p>'}</div><p class="title-footer">ชายแดนแอสเตอร์เวล</p></div>`;
     this.show('title');
     this.views.title.querySelector<HTMLElement>(g ? '#continue' : '#new-game')?.focus({ preventScroll: true });
   }
@@ -104,7 +106,10 @@ export class GameShell {
     const result = createCommander(base, c); if (result.event.type !== 'commander') return;
     this.game = { profile: result.profile, run: this.replacing ? null : this.game?.run ?? null }; this.replacing = false;
     this.lobbyMessage = `ยินดีต้อนรับ ผู้บัญชาการ${result.profile.commander!.name} · เลือกทีมแล้วออกเดินทางได้เลย`;
-    this.persist(); this.showLobby();
+    this.persist();
+    // A company that has never fought starts with the prologue: depart at once and meet Vargoth's vanguard.
+    if (!result.profile.tutorialDone && !this.game.run) { this.lobbyMessage = ''; this.depart(); return; }
+    this.showLobby();
   }
   private showLobby(): void {
     const entering = this.root.dataset.view !== 'lobby';
@@ -120,7 +125,7 @@ export class GameShell {
     if (e.type === 'blocked') return;
     this.game = { ...this.game, profile: { ...result.profile, last: null } }; this.persist();
     this.lobbyMessage = e.type === 'hired' ? (e.duplicate ? `ได้ตัวซ้ำของ${name(e.heroId)} · ใช้อัปดาวในแท็บทีม` : `จ้าง${name(e.heroId)}แล้ว`)
-      : e.type === 'upgraded' ? `${name(e.heroId)}ขึ้นเป็น ★${e.stars} แล้ว` : e.type === 'dismissed' ? `เลิกจ้าง${name(e.heroId)}แล้ว · ได้เหรียญทองคืน ${this.map.company.dismissRefund}` : e.type === 'talent' || e.type === 'equipped' ? '' : e.type === 'salvaged' ? `แยกชิ้น ${e.count} ชิ้น · ได้แร่ดาว ${e.ore} ผงม่านเวล ${e.dust}`
+      : e.type === 'upgraded' ? `${name(e.heroId)}ขึ้นเป็น ★${e.stars} แล้ว` : e.type === 'dismissed' ? `เลิกจ้าง${name(e.heroId)}แล้ว · ได้เหรียญทองคืน ${this.map.company.dismissRefund}` : e.type === 'talent' || e.type === 'equipped' ? '' : e.type === 'salvaged' ? `แยกชิ้น ${e.count} ชิ้น · ได้แร่ดาว ${e.ore} ฝุ่นดาว ${e.dust}`
       : e.type === 'forged' ? this.forgedText(result.profile, e.uid, e.action) : e.type === 'brewed' ? `ปรุง${potionText[e.potion].name}แล้ว · มีอยู่ ${result.profile.potions[e.potion]} ขวด` : 'จัดทีมแล้ว';
     this.lobbyCheer = e.type === 'hired' || e.type === 'upgraded' ? e.heroId : '';
     // The camp NPC whose service just succeeded cheers once.
@@ -133,12 +138,22 @@ export class GameShell {
     return `${({ enhance: 'ตีบวกสำเร็จ', fuse: 'หลอมรวมสำเร็จ', reroll: 'ปรับค่าแล้ว' })[action]} · ${itemName(item)} · ${itemLines(this.map.equipment, item).join(' · ')}`;
   }
   private npcCheer: NpcId | undefined;
+  private readonly story: StoryUI;
+  // Set when the prologue (tutorial) battle is won; its closing scene plays on leaving the battle.
+  private prologueWon = false;
   private depart(): void {
     if (!this.game || this.game.run) return;
     const out = depart(this.game.profile, this.map, this.lookup, this.freshSeed());
     this.game = { profile: { ...out.profile, last: null }, run: out.run };
     this.persist(); this.banner = undefined; this.locked = false; this.lobbyMessage = ''; this.lobbyCheer = '';
     this.message = 'แตะช่องที่ไฮไลต์หรือใช้ลูกศรเพื่อเดิน';
+    // First expedition (lore): the prologue plays, then Vargoth's vanguard attacks before the first step.
+    const prologueStart = startPrologue(this.state!, this.map);
+    if (prologueStart.event.type === 'encounter') {
+      this.state = prologueStart.state; this.persist(); this.locked = true; this.renderWorld();
+      this.story.play(prologue(this.game.profile.commander?.name ?? 'ผู้บัญชาการ'), 'เข้าสู่การต่อสู้', () => { this.locked = false; this.openBattle(); });
+      return;
+    }
     this.renderWorld();
   }
   // Settles the run into the profile in the same write that clears it.
@@ -227,7 +242,7 @@ export class GameShell {
     const result = revive(this.state, this.map, this.lookup, heroId);
     if (result.event.type !== 'revived') return;
     this.state = result.state; this.persist();
-    this.message = `ชุบ${heroText[heroId]?.name ?? ''}แล้ว · ใช้ถ่านม่านเวล 1 เหลือ ${this.state.resources.ember}`;
+    this.message = `ชุบ${heroText[heroId]?.name ?? ''}แล้ว · ใช้ถ่านคืนชีพ 1 เหลือ ${this.state.resources.ember}`;
     this.effect = 'rest';
     this.renderWorld();
   }
@@ -286,8 +301,9 @@ export class GameShell {
       const result = finishBattle(next, this.map, this.lookup); next = result.state;
       const fallen = Object.values(next.hp).filter(hp => hp <= 0).length;
       if (result.event.type === 'victory') {
+        if (kind === 'tutorial') this.prologueWon = true;
         const loot = lootThai(result.event.loot) + (result.event.item ? ` · ได้${itemName(result.event.item)} Lv${result.event.item.level}` : ''); this.effect = 'loot'; const exp = expThai(result.event.exp, next);
-        const dust = result.event.dust ? ` · ผงม่าน +${result.event.dust}` : '';
+        const dust = result.event.dust ? ` · ฝุ่นดาว +${result.event.dust}` : '';
         this.message = kind === 'boss' ? `ผู้คุมรอยแยกล้มแล้ว · ${loot}${exp} · ทางไปประตูเปิดออก` : kind === 'elite' ? this.map.elites.find(e => e.id === next.elitesDefeated.at(-1))?.mini ? `มินิบอสล้มแล้ว · ${loot}${exp}` : (this.map.elites.find(e => e.id === next.elitesDefeated.at(-1))?.forced ? `อีลิทล้มแล้ว · ${loot}${exp} · ด่านเปิดออก` : `ท้าสู้สำเร็จ · รางวัลพิเศษ · ${loot}${exp}`) : kind === 'event' ? `ชนะศึก · ${loot}${dust}${exp}` : `ชนะศึก · ${loot}${exp}${fallen ? ` · ${fallen} คนล้มอยู่ ชุบที่แคมป์` : ''}`;
         this.message += this.sealNote(this.state, next);
       } else if (result.event.type === 'defeat') {
@@ -308,6 +324,8 @@ export class GameShell {
     this.locked = false;
     this.banner = undefined;
     this.renderWorld();
+    // After the prologue fight, Vargoth withdraws into the rift and the journey's goal is set.
+    if (this.prologueWon) { this.prologueWon = false; this.story.play(prologueEnd, 'ออกเดินทาง', () => this.views.world.querySelector<HTMLElement>('#move-up')?.focus({ preventScroll: true })); return; }
     this.views.world.querySelector<HTMLElement>('#move-up')?.focus({ preventScroll: true });
   }
 }

@@ -58,13 +58,56 @@ test('a new expedition walks tile by tile with buttons, keys and adjacent taps; 
   expect(issues).toEqual([]);
 });
 
+test('prologue: a new commander wakes in the ruins, Vargoth speaks, and his vanguard attacks before the first step; the heroes voice the advice', async ({ page }, info) => {
+  const issues: string[] = []; page.on('pageerror', e => issues.push(e.message));
+  await page.goto('./'); await page.locator('#new-game').click(); await page.locator('#commander-name').fill('อารี'); await page.locator('#commander-create').click();
+  const story = page.locator('#story-view');
+  await expect(story).toBeVisible(); await expect(story).toHaveAttribute('data-speaker', 'narrator'); await expect(page.locator('.story-text')).toContainText('อารี');
+  await expect(page.locator('#story-next')).toBeFocused(); await reachable(page, '#story-next'); await reachable(page, '[data-story=skip]');
+  await page.locator('#story-next').click(); await expect(story).toHaveAttribute('data-speaker', 'guardian'); await expect(page.locator('.story-who')).toContainText('เอกิส');
+  await page.locator('#story-next').click(); await expect(story).toHaveAttribute('data-speaker', 'vargoth'); await expect(page.locator('.story-who')).toContainText('วาร์กอธ');
+  await page.screenshot({ path: info.outputPath('prologue-vargoth.png') });
+  await page.locator('#story-next').click(); await expect(page.locator('#story-next')).toHaveText('เข้าสู่การต่อสู้');
+  expect(await page.evaluate(() => document.scrollingElement!.scrollHeight <= innerHeight)).toBe(true);
+  await page.locator('#story-next').click(); await expect(story).toBeHidden();
+  await expect(page.locator('#battle-view')).not.toHaveClass(/view-off/); await expect(page.locator('#encounter-title')).toContainText('กองหน้าของวาร์กอธ');
+  const run = await saved(page); expect(run.steps).toBe(0); expect(run.battle).toMatchObject({ kind: 'tutorial' });
+  await page.locator('#start').click();
+  await expect(page.locator('#coach-title')).toContainText('ไลรา'); await expect(page.locator('#coach-copy')).toContainText('ข้าจะติดตรา');
+  await expect(page.locator('#coach-face .portrait')).toHaveCount(1);
+  await page.screenshot({ path: info.outputPath('prologue-coach.png') });
+  expect(issues).toEqual([]);
+});
+test('winning the first battle plays Vargoth\'s retreat, then the map', async ({ page }, info) => {
+  const data = encounterById(map.tutorialEncounterId)!;
+  let b = createBattle(data); const moves: [string, string, string][] = [];
+  while (b.outcome === 'active') { const l = battleLesson(b, data)!; moves.push([l.heroId, l.action, l.targetId]); b = resolveCommand(b, data, { beat: b.beat, heroId: l.heroId, action: l.action, targetId: l.targetId }).state; }
+  // Replay all but the winning move into the save; the last one is played through the UI.
+  let pre = createBattle(data); const commands = [];
+  for (const [heroId, action, targetId] of moves.slice(0, -1)) { const c = { beat: pre.beat, heroId, action: action as never, targetId }; commands.push(c); pre = resolveCommand(pre, data, c).state; }
+  const s = newExpedition(map, encounterById, 77); reveal(s, map);
+  s.battle = { kind: 'tutorial', encounterId: data.id, entry: { ...s.hp }, commands };
+  const issues = await open(page, s);
+  const [hero, action, target] = moves.at(-1)!;
+  await expect(page.locator(`#hero-${hero}`)).toHaveAttribute('aria-pressed', 'true');
+  await page.locator(`#action-${action}`).click(); await page.locator('[data-ui=skill-close]').click();
+  await page.locator(`#target-${action === 'prayer' ? 'party' : target}`).click(); await finishPlayback(page);
+  await expect(page.locator('.result-card')).toContainText('ชนะแล้ว'); await page.locator('#leave-battle').click();
+  await expect(page.locator('#story-view')).toBeVisible(); await expect(page.locator('#story-view')).toHaveAttribute('data-speaker', 'vargoth');
+  await expect(page.locator('.story-text')).toContainText('ประตูรอยแยก');
+  await page.screenshot({ path: info.outputPath('prologue-end.png') });
+  await page.locator('#story-next').click(); await expect(page.locator('#story-next')).toHaveText('ออกเดินทาง'); await page.locator('#story-next').click();
+  await expect(page.locator('#story-view')).toBeHidden(); await expect(page.locator('#world-view')).toBeVisible();
+  expect((await saved(page)).tutorialDone).toBe(true);
+  expect(issues).toEqual([]);
+});
 test('walking until the first encounter opens the tutorial battle in place', async ({ page }) => {
   const state = newExpedition(map, encounterById, 11);
   let probe = state; let steps = 0;
   while (!probe.battle) { probe = move(probe, map, steps % 2 ? 'right' : 'left').state; steps++; }
   const issues = await open(page, state);
   for (let i = 0; i < steps; i++) await page.locator(i % 2 ? '#move-right' : '#move-left').click();
-  await expect(page.locator('#world-banner')).toContainText('การปะทะครั้งแรก');
+  await expect(page.locator('#world-banner')).toContainText('กองหน้าของวาร์กอธ');
   await expect(page.locator('#battle-view')).not.toHaveClass(/view-off/);
   await expect(page.locator('#encounter-kind')).toContainText('ศึกแรก');
   expect((await saved(page)).position).toEqual(probe.position);
@@ -450,7 +493,7 @@ test('map events: stepping on one opens its choices; the shrine heals with a wou
   const issues = await open(page, start);
   await expect(page.locator(`.event-mark[data-event="${shrine.id}"]`)).toBeVisible();
   await page.locator('#move-up').click();
-  await expect(page.locator('#event-dialog')).toBeVisible(); await expect(page.locator('#event-title')).toContainText('ศาลม่านเก่า');
+  await expect(page.locator('#event-dialog')).toBeVisible(); await expect(page.locator('#event-title')).toContainText('ศาลเก่า');
   await expect(page.locator('#event-offer')).toBeDisabled(); await expect(page.locator('#event-offer')).toContainText('แร่ดาวไม่พอ');
   await reachable(page, '#event-pray'); await page.screenshot({ path: info.outputPath('event-shrine.png') });
   // Closing leaves the choice open; the action button reopens it.
@@ -481,8 +524,9 @@ test('starting a new game from the title requires confirmation and resets the co
   await page.locator('[data-cmd=back]').click(); expect((await saved(page)).steps).toBe(9);
   await page.locator('#new-game').click(); await page.locator('#new-game').click();
   await page.locator('#commander-name').fill('ผู้กองใหม่'); await page.locator('#commander-create').click();
-  await expect(page.locator('#lobby-view')).toBeVisible(); await expect(page.locator('#lobby-commander')).toHaveText('ผู้กองใหม่');
-  expect(await saved(page)).toBeNull(); expect((await savedProfile(page)).expeditions).toBe(0);
+  // The new company starts with the prologue and its first battle.
+  await expect(page.locator('#story-view')).toBeVisible(); await expect(page.locator('.story-text')).toContainText('ผู้กองใหม่');
+  expect((await saved(page)).battle?.kind).toBe('tutorial'); expect((await saved(page)).steps).toBe(0); expect((await savedProfile(page)).expeditions).toBe(0);
   expect(issues).toEqual([]);
 });
 
@@ -526,7 +570,7 @@ for (const viewport of viewports) {
   });
 }
 
-test('home → create commander → lobby: the name is required, crest and colour are chosen, and the lobby shows them', async ({ page }, info) => {
+test('home → create commander → prologue: the name is required, crest and colour are chosen and saved', async ({ page }, info) => {
   const issues: string[] = []; page.on('pageerror', e => issues.push(e.message));
   await page.goto('./'); await page.locator('#new-game').click();
   await expect(page.locator('#commander-view')).toBeVisible(); await expect(page.locator('#commander-name')).toBeFocused();
@@ -536,9 +580,10 @@ test('home → create commander → lobby: the name is required, crest and colou
   await page.locator('#commander-name').fill('ผู้กอง อารี'); await page.locator('#crest-guard').click(); await page.locator('#color-violet').click();
   await expect(page.locator('#commander-preview-name')).toHaveText('ผู้กอง อารี'); await page.screenshot({ path: info.outputPath('commander.png') });
   await page.locator('#commander-name').press('Enter');
-  await expect(page.locator('#lobby-view')).toBeVisible(); await expect(page.locator('#lobby-commander')).toHaveText('ผู้กอง อารี');
+  await expect(page.locator('#story-view')).toBeVisible(); await expect(page.locator('.story-text')).toContainText('ผู้กอง อารี');
   expect((await savedProfile(page)).commander).toEqual({ name: 'ผู้กอง อารี', crest: 'guard', color: 'violet' });
-  await page.reload(); await page.locator('#continue').click(); await expect(page.locator('#lobby-view')).toBeVisible();
+  // A reload during the prologue resumes straight into the saved first battle.
+  await page.reload(); await page.locator('#continue').click(); await expect(page.locator('#battle-view')).not.toHaveClass(/view-off/); await expect(page.locator('#encounter-kind')).toContainText('ศึกแรก');
   expect(issues).toEqual([]);
 });
 
@@ -689,7 +734,7 @@ test('lobby equipment: its own sheet; equip, class weapons, swap, unequip, salva
   await page.locator('#salvage-1').click(); await expect(page.locator('#salvage-1')).toContainText('ยืนยันแยก');
   await page.locator('#salvage-1').click(); await expect(page.locator('#salvage-1')).toHaveCount(0);
   await page.locator('#salvage-common').click(); await expect(page.locator('#salvage-2')).toHaveCount(0);
-  await expect(page.locator('.lobby-bank')).toHaveAttribute('aria-label', /ผงม่านเวล 5/);
+  await expect(page.locator('.lobby-bank')).toHaveAttribute('aria-label', /ฝุ่นดาว 5/);
   await page.setViewportSize({ width: 390, height: 844 });
   expect(await page.evaluate(() => document.scrollingElement!.scrollHeight <= innerHeight)).toBe(true);
   await page.screenshot({ path: info.outputPath('lobby-gear-phone.png') });
@@ -768,7 +813,7 @@ test('potions: brew in the lobby, pack 3 on departure, drink a salve and a repel
   await expect(page.locator('.pack-potions li').first()).toContainText('2');
   await page.locator('#potion-repel').click(); await expect(page.locator('#potion-repel')).toBeDisabled();
   await page.locator('[data-world="pack-close"]').click();
-  await expect(page.locator('#danger-chip')).toContainText('ไล่ม่าน 10 ก้าว');
+  await expect(page.locator('#danger-chip')).toContainText('ไล่อสูร 10 ก้าว');
   saved = await page.evaluate(() => JSON.parse(localStorage.getItem('asterveil.fateweave.expedition.v1')!));
   expect(saved.version).toBe(14); expect(saved.run.potions).toEqual({ salve: 2, tonic: 0, repel: 0 }); expect(saved.run.repel).toBe(10); expect(saved.run.hp.guardian).toBeGreaterThan(10);
 });

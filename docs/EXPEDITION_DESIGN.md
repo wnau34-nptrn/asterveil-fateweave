@@ -78,7 +78,7 @@ These decisions guide phases 2B–2C. They are not implemented yet.
 
 Start, camp, boss, goal and sanctum tiles never roll. Rolls come from `(seed, rolls)` with a fixed integer hash; the seed is chosen once per expedition and saved, so reloading cannot re-roll.
 
-**Teaching battle.** The first encounter of an expedition is always `first-clash`. Its schedule gives each class skill a reason in turn order: Lyra Mark → Raider hits Lyra → Eira Ward on the announced energy blast → Aegis Guard → Seren Heal → Lyra Precision Strike on the mark → Eira Bolt → Aegis Bash on the physical attack. It has no on-screen advice: the teaching strip, highlights and advice setting were removed at the owner's request (2026-10-16), and the battle is labelled "ศึกแรก". Losing it restarts it at full HP; winning marks the tutorial done. The advisor (`ui/tutorial.ts` `battleLesson`) remains only as the scripted player in the balance and expedition tests.
+**Teaching battle.** The first encounter of an expedition is always `first-clash`. Its schedule gives each class skill a reason in turn order: Lyra Mark → Raider hits Lyra → Eira Ward on the announced energy blast → Aegis Guard → Seren Heal → Lyra Precision Strike on the mark → Eira Bolt → Aegis Bash on the physical attack. Advice appears only in this battle and follows the real SPD owner. It can be hidden in ⓘ. Losing it restarts it at full HP; winning marks the tutorial done.
 
 **After battle.** The party stays on the tile where the battle began.
 - Victory: HP carries over exactly; fallen heroes stay down.
@@ -92,7 +92,7 @@ Start, camp, boss, goal and sanctum tiles never roll. Rolls come from `(seed, ro
 
 **Resources.** Three counters are carried in the expedition state.
 - **Star ore (แร่ดาว):** will pay for hiring and star upgrades in 2C.
-- **Veil ember (ถ่านม่านเวล):** revives one fallen member at a camp.
+- **Veil ember (ถ่านคืนชีพ):** revives one fallen member at a camp.
 - **Contract seal (ตราสัญญา):** will replace one duplicate in a star upgrade (2C).
 
 Ore and seals have no use yet; the pack dialog says so.
@@ -360,7 +360,7 @@ Key `asterveil.fateweave.expedition.v1`, envelope `{ version: 6, profile, run }`
 
 Every field is validated on load. The active battle is replayed under current rules, so a foreign-owner command, an unknown encounter or a wrong map version rejects the save, and the title screen then offers only a new expedition. A finished battle is applied in the same write that records its last command, so a reload never repeats damage.
 
-The practice keys (`asterveil.fateweave.battle.v1`, `.rear-ambush`, `.rift-warden`, `asterveil.fateweave.encounter.v1`) are deleted at start and never read. The old teaching-advice preference key `asterveil.fateweave.tutorial.v1` is deleted at battle start and never read (advice removed 2026-10-16).
+The practice keys (`asterveil.fateweave.battle.v1`, `.rear-ambush`, `.rift-warden`, `asterveil.fateweave.encounter.v1`) are deleted at start and never read. The teaching-advice preference key `asterveil.fateweave.tutorial.v1` is kept.
 
 Save history:
 - Version 1 (phase 1) was new; earlier practice saves were intentionally dropped.
@@ -489,7 +489,7 @@ A dropped item belongs to one of its zone's two sets at 60% (the boss: any of th
 | Swift Wind (สายลมเร็ว) | meadow | SPD +3 | act before everyone in round 1 |
 | Shadow Hunter (นักล่าเงา) | thicket | Attack +8% | the wearer's hits on an enemy that has not acted yet this round +6 |
 | Thorn (หนามสวน) | thicket | max HP +6% | a physical hit taken is answered for 6 (while both stand) |
-| Star Veil (เวทม่านดาว) | scar | skill power +10% | the battle's first skill with a cooldown is ready again at once |
+| Star Veil (เวทแสงดาว) | scar | skill power +10% | the battle's first skill with a cooldown is ready again at once |
 | Mender (ผู้เยียวยา) | scar | healing +15% | overhealing becomes a barrier up to 8 (not stacking; with Afterglow the larger cap applies) |
 
 Set percentages add to the star/level/talent percentages. The resolver reads the 4-piece rules from `HeroDefinition.gear` (`firstStrike`, `freshHit`, `thorns`, `freeCast`, `overflowCap`). The equipment sheet lists each worn set with its pieces and lights the active bonuses; bag rows name the set.
@@ -645,3 +645,36 @@ Hiring no longer competes with brewing and the forge for ore.
 - The full-expedition run now beats the mini-boss and the rift before the boss.
 - The advisor and class regressions include `mini-veil-golem`.
 - Browser test: sealed hint and message, goals dialog, mini-boss token and encounter.
+
+## Lore and prologue (owner-approved 2026-10-16)
+
+**Setting.** The land is **แอสเตอร์เวล** (Asterveil). Its sky is torn by **รอยแยก** (rifts), and the demon tribes pour out of them.
+- **Player:** the commander is **ผู้ทอชะตา**, the one who can see the threads of fate of the mercenaries. The game shows this as the forecast of enemy attacks; the commander never fights.
+- **Antagonist:** **วาร์กอธ** (Vargoth), chief of the rift demon tribes. The chapter 1 boss, ผู้คุมรอยแยก, is his general at the rift gate; Vargoth himself is kept for a later chapter.
+- **Retired term:** the owner retired "ม่านเวล". Terms renamed in the game:
+
+| Old | New |
+|---|---|
+| ชายแดนม่านเวล (map) | ชายแดนแอสเตอร์เวล |
+| ถ่านม่านเวล (ember) | ถ่านคืนชีพ |
+| ผงม่านเวล (dust) | ฝุ่นดาว |
+| ยาไล่ม่าน (repel) | ยาไล่อสูร |
+| ศาลม่านเก่า (shrine) | ศาลเก่า |
+| ด่านโจรม่าน (bandits) | ด่านโจร |
+| ยักษ์หินม่านเวล (mini-boss) | ยักษ์หินรอยแยก |
+| พงหนามม่านเวล (zone) | พงหนามชายแดน |
+| เวทม่านดาว (set) | เวทแสงดาว |
+| title tagline | ข้ามรอยแยก · ถักทอโชคชะตา |
+
+**Prologue.** A company that has never won its first battle departs straight after commander creation, skipping the lobby. The opening scene has four panels (`ui/story-ui.ts`) over the ruins backdrop:
+1. The narrator: the commander wakes.
+2. Aegis: "you are the fate-weaver".
+3. Vargoth: "this land will be my tribe's".
+4. Lyra: "command us".
+
+Then `startPrologue` starts the `first-clash` battle (now "กองหน้าของวาร์กอธ": demon hunter + demon guard, version 10) at the start tile before any step. The save holds the battle, so a reload skips the scene and resumes the fight.
+- **Scene controls:** next ("ต่อไป"), skip ("ข้าม"), and Escape to skip.
+- **After the win:** a closing scene plays: Vargoth withdraws and will wait at the rift gate, and Seren points to the camp and the rift seal.
+- **Vargoth's art:** none yet; a dark silhouette of the rift sentinel portrait stands in until an art handoff.
+
+**Voiced advice.** The first-battle advice is back, labelled "ศึกแรก". The hero whose turn it is says the line (`heroVoice`), with their face, followed by the advisor's move. It can still be hidden from ⓘ.

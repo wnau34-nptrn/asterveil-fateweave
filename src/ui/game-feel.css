@@ -615,3 +615,33 @@ html, body { background: #0a1422; }
 .gear-art > .icon { width: 60%; height: 60%; color: var(--rarity, #b9c8d8); }
 .set-emblem { position: absolute; right: -6px; bottom: -6px; width: 20px; height: 20px; background: var(--atlas) var(--ax) 0 / 600% 100% no-repeat; filter: drop-shadow(0 1px 2px #000c); }
 .potion-art { --art: 40px; }
+/* ---- Story scenes (lore 2026-10-16): the prologue before the first battle and its closing scene ---- */
+.story-view { position: fixed; inset: 0; z-index: 60; display: grid; grid-template-rows: 1fr auto; overflow: hidden;
+  padding: max(16px, var(--safe-top)) max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+  background: linear-gradient(180deg, #050b14cc, #050b1466 40%, #050b14ee 100%), var(--story-bg) 50% 50% / cover no-repeat, #050b14; color: #f4ecdc; }
+.story-view[hidden] { display: none; }
+/* The rift in the sky: a purple tear above the ruins. */
+.story-rift { position: absolute; left: 50%; top: 6%; width: min(70vw, 520px); height: 22vh; transform: translateX(-50%) rotate(-8deg); pointer-events: none;
+  background: radial-gradient(ellipse 50% 14% at 50% 50%, #f3e6ff, #c79bff 30%, #6b45a800 70%); filter: blur(1px); opacity: .85; }
+.story-view[data-speaker="vargoth"] .story-rift { opacity: 1; height: 30vh; }
+.story-figure { align-self: end; justify-self: center; width: min(42vh, 60vw); aspect-ratio: 1; position: relative; }
+.story-figure .portrait { display: block; width: 100%; height: 100%; border-radius: 50%; border: 3px solid #f2d59699; box-shadow: 0 0 40px #000c; }
+/* Vargoth has no art yet: a dark silhouette with a rift glow. */
+.story-view[data-speaker="vargoth"] .story-figure .portrait { filter: brightness(.12) saturate(0) drop-shadow(0 0 18px #c79bff); border-color: #c79bff; box-shadow: 0 0 60px #c79bff88; }
+.story-card { width: min(720px, 100%); justify-self: center; margin-top: 12px; padding: 14px 18px; border-radius: 18px; background: linear-gradient(180deg, #14243af0, #0b1626f5);
+  border: 1px solid #f2d59659; box-shadow: 0 18px 50px #000c; }
+.story-view[data-speaker="vargoth"] .story-card { border-color: #c79bffaa; }
+.story-who { display: flex; align-items: baseline; gap: 8px; margin: 0 0 6px; } .story-who b { font: 600 18px var(--font-heading); color: var(--gold-light, #f2d596); }
+.story-view[data-speaker="vargoth"] .story-who b { color: #d9b8ff; } .story-who small { font-size: 12px; color: var(--text-muted, #b9c8d8); }
+.story-text { margin: 0 0 12px; font-size: 16px; line-height: 1.6; }
+.story-actions { display: flex; align-items: center; gap: 10px; } .story-count { margin-right: auto; font-size: 12px; color: var(--text-muted, #b9c8d8); }
+.story-actions button { min-height: 44px; min-width: 88px; }
+@media (prefers-reduced-motion: no-preference) {
+  .story-card { animation: sheet-from-bottom .3s var(--ease-out) both; }
+  .story-rift { animation: story-rift 2.4s ease-in-out infinite alternate; }
+}
+@keyframes story-rift { from { opacity: .7; } to { opacity: 1; } }
+@media (max-height: 500px) and (orientation: landscape) { .story-figure { width: 34vh; } .story-text { font-size: 14px; margin-bottom: 8px; } }
+/* Voiced advice in the first battle: the speaking hero's face beside the line. */
+.coach-face { flex: none; width: 40px; height: 40px; } .coach-face:empty { display: none; }
+.coach-face .portrait { display: block; width: 100%; height: 100%; border-radius: 50%; border: 2px solid #74d4ef99; }
