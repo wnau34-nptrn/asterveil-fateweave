@@ -1,6 +1,6 @@
-import type { Commander, ExpeditionState, MapDefinition, Profile, ProfileResult, RunOutcome } from './types';
+import type { Commander, ExpeditionState, MapDefinition, MemberProgress, Profile, ProfileResult, RunOutcome, TalentNode, Talents } from './types';
 import { COMPANY_CAP, PARTY_SLOTS, RESERVE_SLOTS } from './types';
-import { heroCatalog, newExpedition, rollPercent, type EncounterLookup } from './world';
+import { heroCatalog, levelOf, newExpedition, rollPercent, type EncounterLookup } from './world';
 
 // Pure lobby rules: the persistent mercenary company, the bank, the hiring board, the
 // team chosen for the next expedition, and settling a finished expedition back home.
@@ -95,6 +95,45 @@ export function dismiss(initial: Profile, map: MapDefinition, id: string): Profi
   profile.party.deployed = profile.party.deployed.filter(m => m !== id); profile.party.reserve = profile.party.reserve.filter(m => m !== id);
   profile.bank.ore += map.company.dismissRefund;
   return { profile, event: { type: 'dismissed', heroId: id } };
+}
+
+// ---- Talent tree (2D-1b): one point per level above 1, spent and reset only here in the lobby. ----
+export const talentPoints = (map: MapDefinition, m: MemberProgress | undefined): number => Math.min(levelOf(m), map.progression.levelCap) - 1;
+export const talentsSpent = (t: Talents | undefined): number => Object.values(t ?? {}).reduce((a, b) => a + (b ?? 0), 0);
+// Gates: the root first; tier 2 needs a rank in its tier 1; a capstone needs 4 ranks in its branch.
+export function talentOpen(t: Talents, node: TalentNode): boolean {
+  const r = (n: TalentNode) => t[n] ?? 0;
+  if (node === 'root') return true;
+  if (!r('root')) return false;
+  const branch = node[0] as 'a' | 'b'; const tier = node[1];
+  if (tier === '1') return true;
+  if (tier === '2') return r(`${branch}1`) >= 1;
+  return r(`${branch}1`) + r(`${branch}2`) >= 4;
+}
+export function talentsValid(map: MapDefinition, heroId: string, level: number, t: Talents): boolean {
+  const tree = map.talents[heroId] ?? [];
+  if (Object.entries(t).some(([node, rank]) => { const def = tree.find(n => n.id === node); return !def || !Number.isInteger(rank) || rank! < 1 || rank! > def.max; })) return false;
+  return talentsSpent(t) <= Math.min(level, map.progression.levelCap) - 1 && tree.every(n => !t[n.id] || talentOpen(t, n.id));
+}
+export function talentReason(profile: Profile, map: MapDefinition, id: string, node: TalentNode): string {
+  const m = profile.members[id]; const def = map.talents[id]?.find(n => n.id === node);
+  if (!m || !def) return 'unknown';
+  const t = m.talents ?? {};
+  if ((t[node] ?? 0) >= def.max) return 'max';
+  if (!talentOpen(t, node)) return 'locked';
+  return talentsSpent(t) >= talentPoints(map, m) ? 'points' : '';
+}
+export function learnTalent(initial: Profile, map: MapDefinition, id: string, node: TalentNode): ProfileResult {
+  const reason = talentReason(initial, map, id, node); if (reason) return blocked(initial, reason);
+  const profile = structuredClone(initial); const m = profile.members[id]!;
+  m.talents = { ...m.talents, [node]: (m.talents?.[node] ?? 0) + 1 };
+  return { profile, event: { type: 'talent', heroId: id } };
+}
+// Resetting is free and returns every point.
+export function resetTalents(initial: Profile, id: string): ProfileResult {
+  if (!talentsSpent(initial.members[id]?.talents)) return blocked(initial, 'empty');
+  const profile = structuredClone(initial); delete profile.members[id]!.talents;
+  return { profile, event: { type: 'talent', heroId: id } };
 }
 
 // Team selection: every company member is in one group. Swap two members of different

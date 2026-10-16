@@ -1,5 +1,6 @@
 import type { MapDefinition } from '../../core/world/types';
 import { mercenaries } from '../heroes/mercenaries';
+import { talentTrees } from '../heroes/talents';
 
 // Chapter 1 layout: start (S) in the green south, camp (C) in the yellow middle,
 // final camp before the boss (B) who guards the goal (G). '#' is impassable.
@@ -72,4 +73,5 @@ export const chapterOne: MapDefinition = {
   },
   // Draft 2D-1 numbers: a first full run ends near level 9; farming low levels is tapered (world `expPercent`).
   progression: { levelCap: 10, levelStatPercent: 3, monsterLevelPercent: 7, expBase: 6, expPerLevel: 2, bossExpMultiplier: 3, nextBase: 10, nextPerLevel: 10 },
+  talents: talentTrees,
 };

@@ -1,6 +1,6 @@
 import { replay, withLevel, withParty } from '../battle/engine';
-import type { BattleState, Command, EncounterDefinition, HeroDefinition } from '../battle/types';
-import type { ActiveBattle, BattleKind, ChestDefinition, Company, Direction, ExpGain, ExpeditionState, LootTable, MapDefinition, MemberProgress, Point, Resources, Tile, WorldResult, ZoneDefinition } from './types';
+import type { BattleState, Command, EncounterDefinition, HeroDefinition, HeroTalents } from '../battle/types';
+import type { ActiveBattle, BattleKind, ChestDefinition, Company, Direction, ExpGain, ExpeditionState, LootTable, MapDefinition, MemberProgress, Point, Resources, Talents, Tile, WorldResult, ZoneDefinition } from './types';
 import { PARTY_SLOTS, RESERVE_SLOTS } from './types';
 
 // Pure expedition rules: no DOM, Phaser, clocks or Math.random. Every roll is
@@ -56,20 +56,35 @@ export function heroDef(lookup: EncounterLookup, map: MapDefinition, id: string)
 }
 export const rosterIds = (state: ExpeditionState): string[] => [...state.roster.deployed, ...state.roster.reserve];
 // Each star above ★1 adds `starStatPercent` to max HP, Attack and skill power. SPD never
-// changes, so stars cannot reorder turns.
-export function starred(base: HeroDefinition, stars: number, map: MapDefinition, level = 1): HeroDefinition {
+// changes, so stars cannot reorder turns. Talents (2D-1b) add their stat percents and build
+// `talents` for the resolver; no talents leaves the definition unchanged.
+export function starred(base: HeroDefinition, stars: number, map: MapDefinition, level = 1, talents: Talents = {}): HeroDefinition {
   // Stars and levels add up: each star `starStatPercent`, each level above 1 `levelStatPercent`.
   const bonus = (stars - 1) * map.company.starStatPercent + (level - 1) * map.progression.levelStatPercent;
-  if (!bonus) return base;
-  const scale = (n: number) => Math.round(n * (100 + bonus) / 100);
+  const gained = talentEffects(map, base.id, talents);
+  if (!bonus && !gained.any) return base;
+  const scale = (n: number, extra: number) => Math.round(n * (100 + bonus + extra) / 100);
   // ★3 adds the class's third skill; ★5 switches on its passive.
   const skill = stars >= 3 && base.unlocks && !base.actions.includes(base.unlocks.skill) ? [base.unlocks.skill] : [];
-  return { ...base, maxHp: scale(base.maxHp), attack: scale(base.attack), skillBonus: bonus, actions: [...base.actions, ...skill],
-    ...(stars >= 5 && base.unlocks ? { passive: base.unlocks.passive } : {}) };
+  return { ...base, maxHp: scale(base.maxHp, gained.hp), attack: scale(base.attack, gained.attack), skillBonus: bonus + gained.skill, actions: [...base.actions, ...skill],
+    ...(stars >= 5 && base.unlocks ? { passive: base.unlocks.passive } : {}), ...(gained.talents ? { talents: gained.talents } : {}) };
+}
+// Sums spent talent ranks into stat percents and the resolver's `HeroTalents`.
+export function talentEffects(map: MapDefinition, heroId: string, talents: Talents): { any: boolean; hp: number; attack: number; skill: number; talents?: HeroTalents } {
+  const out = { any: false, hp: 0, attack: 0, skill: 0 }; const t: HeroTalents = {};
+  for (const node of map.talents[heroId] ?? []) {
+    const ranks = talents[node.id] ?? 0; if (!ranks) continue;
+    const e = node.effect; out.any = true;
+    if ('stat' in e) out[e.stat] += e.percent * ranks;
+    else if ('power' in e) (t.power ??= {})[e.power] = (t.power[e.power] ?? 0) + e.amount * ranks;
+    else if ('rule' in e) (t.rules ??= {})[e.rule] = Math.round(((t.rules[e.rule] ?? 0) + e.amount * ranks) * 100) / 100;
+    else (t.caps ??= {})[e.cap] = e.amount ?? 0;
+  }
+  return Object.keys(t).length ? { ...out, talents: t } : out;
 }
 export function memberDef(lookup: EncounterLookup, map: MapDefinition, members: ExpeditionState['members'], id: string): HeroDefinition | undefined {
   const base = heroDef(lookup, map, id);
-  return base && starred(base, members[id]?.stars ?? 1, map, members[id]?.level ?? 1);
+  return base && starred(base, members[id]?.stars ?? 1, map, members[id]?.level ?? 1, members[id]?.talents);
 }
 // ---- Levels (2D-1) ----
 export const levelOf = (m: MemberProgress | undefined): number => m?.level ?? 1;

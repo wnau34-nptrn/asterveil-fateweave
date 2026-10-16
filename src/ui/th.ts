@@ -1,6 +1,6 @@
-import type { ActionId, PassiveId, BattleEvent, BattleState, EncounterDefinition, Intent } from '../core/battle/types';
-import type { ExpGain, ExpeditionState, ResourceId, Resources } from '../core/world/types';
-import { skillPower, songPower } from '../core/battle/engine';
+import type { ActionId, PassiveId, BattleEvent, BattleState, EncounterDefinition, Intent, TalentCap, TalentRule } from '../core/battle/types';
+import type { ExpGain, ExpeditionState, ResourceId, Resources, TalentNodeDef } from '../core/world/types';
+import { ambushBonusOf, capAmount, corrodeBonusOf, guardReductionOf, hasCap, skillPower, songPower, talentRule, tauntReductionOf } from '../core/battle/engine';
 export const thaiFont = '"Noto Sans Thai", "Leelawadee UI", Tahoma, sans-serif';
 export const heroText: Record<string, { name: string; role: string; help: string; icon: string }> = {
   guardian: { name: 'เอกิส', role: 'อัศวิน', help: 'รับแทนเพื่อนและหยุดการโจมตี', icon: '♜' },
@@ -32,7 +32,7 @@ export function skillDescription(action: ActionId, heroId: string, data: Encount
   const cooldown = skill.cooldown ? ` ใช้แล้วพร้อมอีกครั้งใน ${skill.cooldown} รอบ` : '';
   const text: Record<ActionId, string> = {
     attack: `โจมตีศัตรู ${hero.attack}${hero.empoweredByStatuses ? ` หรือ ${hero.attack + data.rules.markedBonus} เมื่อเป้าหมายติดตรา (ใช้ตราหมด)` : ''} กำจัดผู้โจมตีได้ก็หยุดการโจมตีของมัน`,
-    guard: `เอกิสรับการโจมตีแทนคนที่ศัตรูเล็ง ลดความเสียหาย ${data.rules.guardReduction * 100}% ปัดความเสียหายที่เหลือขึ้น แล้วใช้โล่ก่อนเลือด ป้องกันการโจมตีศัตรูถัดไปที่แสดงไว้ หมดเมื่อรับการโจมตีหรือถึงเทิร์นเอกิสอีกครั้ง`,
+    guard: `เอกิสรับการโจมตีแทนคนที่ศัตรูเล็ง ลดความเสียหาย ${Math.round(guardReductionOf(data, heroId) * 100)}% ปัดความเสียหายที่เหลือขึ้น แล้วใช้โล่ก่อนเลือด ป้องกันการโจมตีศัตรูถัดไปที่แสดงไว้ หมดเมื่อรับการโจมตีหรือถึงเทิร์นเอกิสอีกครั้ง`,
     bash: `โจมตี ${skill.power} และหยุดเทิร์นถัดไปของเป้าหมายหากการโจมตีนั้นเป็นกายภาพ พลังงานยังโจมตีต่อได้`,
     mark: `ยังไม่ทำความเสียหาย ติดตรา ${data.rules.markDuration} รอบรวมรอบนี้ เพื่อให้ไลราโจมตีหรือฟันเจาะจุดแรงขึ้น ${data.rules.markedBonus} (ใช้ตราหมดเมื่อโจมตี)`,
     execute: `ฟันเจาะจุด ${skill.power} หรือ ${skill.power + data.rules.markedBonus} เมื่อเป้าหมายติดตรา ใช้ตราหมด`,
@@ -44,10 +44,10 @@ export function skillDescription(action: ActionId, heroId: string, data: Encount
     pierce: `แทงทะลวงสร้างความเสียหาย ${skill.power} ให้ศัตรูหนึ่งตัว`,
     hinder: `ยิงสกัด ${skill.power} และเป้าหมายจะไปลงมือท้ายสุดในรอบถัดไป (ลำดับรอบนี้ไม่เปลี่ยน) ใช้ขวางศัตรูที่เร็วก่อนที่มันจะได้ตีก่อนทีม`,
     volley: `ยิงห่าธนูใส่ศัตรูทุกตัว ตัวละ ${skill.power}`,
-    acid: `ปาขวดกรด ${skill.power} แล้วเป้าหมายถูกกัดกร่อน ${data.rules.corrodeDuration} รอบรวมรอบนี้ ทุกการโจมตีของทีมใส่ตัวนี้แรงขึ้น +${data.rules.corrodeBonus}`,
-    ambush: `จู่โจม ${skill.power} หรือ ${skill.power + data.rules.ambushBonus} ถ้าเป้าหมายยังไม่ได้ลงมือในรอบนี้ (ดูคิว SPD) ใช้ได้ดีกับศัตรูที่ช้ากว่า`,
+    acid: `ปาขวดกรด ${skill.power} แล้วเป้าหมายถูกกัดกร่อน ${data.rules.corrodeDuration} รอบรวมรอบนี้ ทุกการโจมตีของทีมใส่ตัวนี้แรงขึ้น +${corrodeBonusOf(data, heroId)}`,
+    ambush: `จู่โจม ${skill.power} หรือ ${skill.power + ambushBonusOf(data, heroId)} ถ้าเป้าหมายยังไม่ได้ลงมือในรอบนี้ (ดูคิว SPD) ใช้ได้ดีกับศัตรูที่ช้ากว่า`,
     evade: `ก้าวเงาเตรียมหลบ การโจมตีของศัตรูครั้งแรกที่โดนเซฟา (กายภาพหรือพลังงาน) จะพลาดทั้งหมด อยู่จนหลบแล้วหรือถึงเทิร์นของตัวเองอีกครั้ง`,
-    taunt: `ยั่วยุศัตรูทุกตัว ตั้งแต่ตอนนี้จนถึงเทิร์นถัดไปของแบรนน์ การโจมตีของศัตรูทุกครั้ง (กายภาพหรือพลังงาน) จะเล็งมาที่แบรนน์ และเขารับเบาลง ${data.rules.tauntReduction * 100}% แผนโจมตีศัตรูจะแสดงเป้าใหม่ทันที`,
+    taunt: `ยั่วยุศัตรูทุกตัว ตั้งแต่ตอนนี้จนถึงเทิร์นถัดไปของแบรนน์ การโจมตีของศัตรูทุกครั้ง (กายภาพหรือพลังงาน) จะเล็งมาที่แบรนน์ และเขารับเบาลง ${Math.round(tauntReductionOf(data, heroId) * 100)}% แผนโจมตีศัตรูจะแสดงเป้าใหม่ทันที`,
     slam: `ทุบค้อนรูนสร้างความเสียหาย ${skill.power} ให้ศัตรูหนึ่งตัว`,
     valor: `บรรเลงเพลงกล้าค้างไว้ ทุกการโจมตีของทีมแรงขึ้น +${songPower(data, heroId, 'valor')} (รวมสกิลและการสวน) จนกว่าจะเปลี่ยนเพลงหรือลิโอล้ม เล่นได้ทีละเพลง`,
     mend: `บรรเลงเพลงฟื้นค้างไว้ ทุกคนที่ยังยืนอยู่ฟื้นเลือด ${songPower(data, heroId, 'mend')} เมื่อเริ่มแต่ละรอบใหม่ จนกว่าจะเปลี่ยนเพลงหรือลิโอล้ม เล่นได้ทีละเพลง`,
@@ -64,7 +64,64 @@ export function skillDescription(action: ActionId, heroId: string, data: Encount
     finale: `จบเพลงที่บรรเลงอยู่แล้วปล่อยพลังทันที: เพลงกล้า = โจมตีศัตรูทุกตัว ${skill.power} · เพลงฟื้น = ฟื้นเลือดทุกคน ${Math.round(data.rules.finaleHeal * (100 + (hero.skillBonus ?? 0)) / 100)} ต้องมีเพลงของลิโอเล่นอยู่`,
   };
   const passive = hero.passive && passiveText[hero.passive].actions.includes(action) ? ` · ★5 ${passiveText[hero.passive].name}: ${passiveText[hero.passive].help(data)}` : '';
-  return text[action] + passive + cooldown;
+  return text[action] + passive + talentNotes(action, heroId, data) + cooldown;
+}
+// ---- Talent tree (2D-1b) ----
+// Branch names per class (A, B), matching docs/EXPEDITION_DESIGN.md "Talent tree".
+export const talentBranches: Record<string, readonly [string, string]> = {
+  guardian: ['ผู้ลงทัณฑ์', 'ปราการ'], tracer: ['ดาบเจาะ', 'นักเต้นดาบ'], weaver: ['เวทโจมตี', 'เวทป้องกัน'], healer: ['ผู้เยียวยา', 'ผู้คุ้มครอง'],
+  garran: ['ทวนรุก', 'ทวนรับ'], mira: ['นักแม่นธนู', 'ฝนธนู'], toma: ['กรดกัดกร่อน', 'ยาเสริม'], sefa: ['นักลอบ', 'นักหลบ'],
+  brann: ['ค้อนรูน', 'ปราการหิน'], lio: ['เพลงรบ', 'เพลงปลอบ'],
+};
+const ruleText: Record<TalentRule, { actions: readonly ActionId[]; help: (n: number) => string }> = {
+  guardReduction: { actions: [], help: n => `ตั้งรับแทนลดความเสียหายเพิ่ม ${Math.round(n * 100)}%` },
+  tauntReduction: { actions: [], help: n => `ยั่วยุลดความเสียหายที่รับเพิ่ม ${Math.round(n * 100)}%` },
+  corrodeBonus: { actions: [], help: n => `กรดกัดกร่อนแรงขึ้น +${n}` },
+  ambushBonus: { actions: [], help: n => `โบนัสจู่โจมก่อน +${n}` },
+  executeHeal: { actions: ['execute'], help: n => `ฟันเจาะจุดใส่ศัตรูที่ติดตรา ฟื้นเลือดตัวเอง ${n}` },
+  healBarrier: { actions: ['heal'], help: n => `รักษาแล้วให้โล่ ${n} ด้วย (ไม่ซ้อนกัน)` },
+  hasteHeal: { actions: ['haste'], help: n => `ยาเร่งฟื้นเลือดให้คนที่ได้ ${n}` },
+  dodgeHeal: { actions: ['evade'], help: n => `หลบได้แล้วฟื้นเลือดตัวเอง ${n}` },
+};
+const capText: Record<TalentCap, { actions: readonly ActionId[]; help: (n: number) => string }> = {
+  retribution: { actions: ['bash'], help: n => `กระแทกโล่ที่หยุดท่ากายภาพได้ทำดาเมจเพิ่ม ${n}` },
+  guardcounter: { actions: ['guard'], help: n => `รับการโจมตีแทนแล้วโต้กลับผู้โจมตี ${n}` },
+  deepmark: { actions: ['attack', 'execute', 'finisher'], help: n => `ทุกการโจมตีของไลราใส่ศัตรูที่ติดตรา +${n}` },
+  relentless: { actions: ['execute'], help: () => 'ล้มศัตรูได้แล้วฟันเจาะจุดพร้อมใช้ทันที' },
+  splitbolt: { actions: ['bolt'], help: () => 'ศรเวทโดนศัตรูตัวอื่นด้วยครึ่งหนึ่ง' },
+  wardreflect: { actions: ['ward'], help: n => `โล่เวทที่รับการโจมตีได้สะท้อนใส่ผู้โจมตี ${n} (ครั้งเดียว)` },
+  twinheal: { actions: ['heal'], help: () => 'รักษาแล้วเพื่อนที่เลือดเหลือน้อยที่สุดอีกคนได้ครึ่งหนึ่ง' },
+  solace: { actions: ['heal'], help: n => `คนที่ได้รักษารับความเสียหายลดลง ${n}% จนถึงเทิร์นถัดไปของเซเรน` },
+  pierceline: { actions: ['pierce'], help: () => 'แทงทะลวงโดนศัตรูตัวอื่นด้วยครึ่งหนึ่ง' },
+  frontwall: { actions: ['brace', 'spearwall'], help: n => `ระหว่างตั้งทวน แนวหน้ารับความเสียหายกายภาพลดลง ${n}%` },
+  hunter: { actions: ['attack', 'hinder', 'volley', 'weakshot'], help: n => `ทุกการโจมตีของมิร่าใส่ศัตรูที่ถูกสกัด +${n}` },
+  volleyhinder: { actions: ['volley'], help: () => 'ห่าธนูสกัดศัตรูที่เร็วที่สุดให้ลงมือท้ายสุดในรอบถัดไป' },
+  acidspread: { actions: ['acid'], help: () => 'ขวดกรดทำให้ศัตรูตัวอื่นถูกกัดกร่อนด้วย (ไม่มีดาเมจ)' },
+  quickbrew: { actions: ['haste'], help: () => 'ยาเร่งพร้อมใช้อีกครั้งเร็วขึ้น 1 รอบ' },
+  shadowlayer: { actions: ['ambush'], help: () => 'ใช้จู่โจมก่อนแล้วได้ก้าวเงาทันที' },
+  doubleshadow: { actions: ['evade'], help: () => 'ก้าวเงาหลบได้ 2 ครั้ง' },
+  hammercounter: { actions: ['taunt'], help: n => `ระหว่างยั่วยุ ทุกครั้งที่โดนตีจะทุบสวน ${n}` },
+  stoneregen: { actions: ['taunt'], help: n => `เริ่มเทิร์นตอนเลือดต่ำกว่าครึ่ง ฟื้นเลือด ${n}` },
+  chorus: { actions: ['valor'], help: n => `ระหว่างเพลงกล้า การโจมตีของศัตรูทุกครั้งเบาลง ${n}` },
+  overture: { actions: ['mend'], help: () => 'เริ่มศึกพร้อมเพลงฟื้นที่บรรเลงอยู่แล้ว' },
+};
+const statName = { hp: 'เลือดสูงสุด', attack: 'พลังโจมตี', skill: 'พลังสกิล' } as const;
+// What one node does (per rank for multi-rank nodes); `data` names the skills.
+export function talentHelp(node: TalentNodeDef, data: EncounterDefinition): string {
+  const e = node.effect; const per = node.max > 1 ? ' ต่อขั้น' : '';
+  if ('stat' in e) return `${statName[e.stat]} +${e.percent}%${per}`;
+  if ('power' in e) return `${data.skills[e.power].name} +${e.amount}${per}`;
+  if ('rule' in e) return ruleText[e.rule].help(e.amount) + per;
+  return capText[e.cap].help(e.amount ?? 0);
+}
+// Talent effects that change this skill, appended to its description in battle.
+function talentNotes(action: ActionId, heroId: string, data: EncounterDefinition): string {
+  const t = data.heroes.find(h => h.id === heroId)?.talents; if (!t) return '';
+  const notes = [
+    ...Object.keys(t.rules ?? {}).filter(r => ruleText[r as TalentRule].actions.includes(action)).map(r => ruleText[r as TalentRule].help(talentRule(data, heroId, r as TalentRule))),
+    ...Object.keys(t.caps ?? {}).filter(c => hasCap(data, heroId, c as TalentCap) && capText[c as TalentCap].actions.includes(action)).map(c => capText[c as TalentCap].help(capAmount(data, heroId, c as TalentCap))),
+  ];
+  return notes.length ? ` · ความถนัด: ${notes.join(' · ')}` : '';
 }
 // ★5 passives (always on): name, short effect, and the skills they change.
 export const passiveText: Record<PassiveId, { name: string; actions: readonly ActionId[]; help: (data: EncounterDefinition) => string }> = {
@@ -105,7 +162,7 @@ export function eventThai(event: BattleEvent, after: BattleState, data: Encounte
   const target = actorName(event.targetId, data); const source = actorName(event.sourceId, data);
   switch (event.type) {
     case 'damage': return `${target} เสียเลือด ${event.amount ?? 0}${event.absorbed ? ` (โล่รับไว้ ${event.absorbed})` : ''}`;
-    case 'guard': return `${source}${event.sourceId === event.targetId ? 'ตั้งรับ' : `รับการโจมตีแทน${target}`} ลดความเสียหาย ${data.rules.guardReduction * 100}%`;
+    case 'guard': return `${source}${event.sourceId === event.targetId ? 'ตั้งรับ' : `รับการโจมตีแทน${target}`} ลดความเสียหาย ${Math.round(guardReductionOf(data, event.sourceId) * 100)}%`;
     case 'mark': return `${target} ติดตรา ${data.rules.markDuration} รอบ รวมรอบนี้`;
     case 'barrier': return `${target} ได้รับโล่เพิ่ม ${event.amount}`;
     case 'heal': return `${target} ฟื้นเลือด ${event.amount}`;
@@ -118,11 +175,11 @@ export function eventThai(event: BattleEvent, after: BattleState, data: Encounte
     case 'sanctuary': return event.text.startsWith('Sanctuary keeps') ? `พรคุ้มภัยทำให้${target}ยังยืนอยู่ด้วยเลือด 1` : `${target}ได้รับพรคุ้มภัย · เลือดไม่ต่ำกว่า 1 จนถึงเทิร์นถัดไปของ${source}`;
     case 'stand': return `${source}ยืนหยัด · ${target}รอดด้วยเลือด 1`;
     case 'finale': return `${source}บรรเลงบทสุดท้าย · ${event.text === 'Finale of valor.' ? 'โจมตีศัตรูทุกตัว' : 'ฟื้นเลือดทั้งทีม'}`;
-    case 'counter': return `${source}แทงสวน${target} ${event.amount}`;
+    case 'counter': return event.text === 'The ward reflects the hit.' ? `โล่เวทของ${source}สะท้อนใส่${target} ${event.amount}` : event.text === 'The knight counters.' ? `${source}โต้กลับ${target} ${event.amount}` : event.text === 'The warden hammers back.' ? `${source}ทุบสวน${target} ${event.amount}` : `${source}แทงสวน${target} ${event.amount}`;
     case 'corrode': return `${target}ถูกกัดกร่อน · ทุกการโจมตีของทีม +${event.amount}`;
     case 'haste': return `${target}จะลงมือก่อนทุกคนในรอบถัดไป`;
     case 'song': return `${source}เริ่มบรรเลงเพลงใหม่ ค้างไว้จนเปลี่ยนเพลง`;
-    case 'taunt': return `${source}ยั่วยุ · ศัตรูทุกตัวจะเล็ง${source}จนถึงเทิร์นถัดไป (รับเบาลง ${data.rules.tauntReduction * 100}%)`;
+    case 'taunt': return `${source}ยั่วยุ · ศัตรูทุกตัวจะเล็ง${source}จนถึงเทิร์นถัดไป (รับเบาลง ${Math.round(tauntReductionOf(data, event.sourceId) * 100)}%)`;
     case 'evade': return `${source}ก้าวเงา · การโจมตีครั้งแรกที่โดนจะพลาด`;
     case 'dodge': return `${target}หลบการโจมตีของ${source}ได้`;
     case 'delay': return `${target}จะลงมือท้ายสุดในรอบถัดไป`;

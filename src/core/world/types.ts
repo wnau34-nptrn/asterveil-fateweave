@@ -1,4 +1,4 @@
-import type { Command, HeroDefinition } from '../battle/types';
+import type { ActionId, Command, HeroDefinition, TalentCap, TalentRule } from '../battle/types';
 
 export type Direction = 'up' | 'down' | 'left' | 'right';
 export interface Point { x: number; y: number }
@@ -41,7 +41,23 @@ export interface MapDefinition {
   mercenaries: readonly HeroDefinition[];
   company: CompanyRules;
   progression: ProgressionRules;
+  // Passive talent tree per hero id (2D-1b).
+  talents: Readonly<Record<string, TalentTree>>;
 }
+// ---- Talent tree (2D-1b, draft numbers) ----
+// Same shape for every class: a root, then branches A and B (tier 1 → tier 2 → capstone).
+// One point per level above 1, spent and reset only in the Lobby.
+export type TalentNode = 'root' | 'a1' | 'a2' | 'a3' | 'b1' | 'b2' | 'b3';
+export const TALENT_NODES: readonly TalentNode[] = ['root', 'a1', 'a2', 'a3', 'b1', 'b2', 'b3'];
+// Per rank: `stat` percent of max HP/Attack/skill power, flat `power` on one skill, a `rule` amount, or a capstone.
+export type TalentEffect =
+  | { stat: 'hp' | 'attack' | 'skill'; percent: number }
+  | { power: ActionId; amount: number }
+  | { rule: TalentRule; amount: number }
+  | { cap: TalentCap; amount?: number };
+export interface TalentNodeDef { id: TalentNode; name: string; max: number; effect: TalentEffect }
+export type TalentTree = readonly TalentNodeDef[];
+export type Talents = Partial<Record<TalentNode, number>>;
 // Levels and EXP (2D-1, draft numbers). Each level adds `levelStatPercent` to max HP, Attack and skill
 // power; monsters gain `monsterLevelPercent` HP/damage per level. EXP per enemy = expBase + expPerLevel × L.
 export interface ProgressionRules {
@@ -56,7 +72,8 @@ export interface CompanyRules {
   starCosts: readonly { dupes: number; ore: number }[];
 }
 // `level`/`exp` (2D-1) are optional for older data: missing means level 1 with no EXP.
-export interface MemberProgress { stars: number; dupes: number; level?: number; exp?: number }
+// `talents` (2D-1b): ranks spent per node; missing means none.
+export interface MemberProgress { stars: number; dupes: number; level?: number; exp?: number; talents?: Talents }
 // The team brought into one expedition and their star progress (fixed during the run).
 export interface Company { roster: Roster; members: Record<string, MemberProgress> }
 
@@ -85,7 +102,8 @@ export type ProfileEvent =
   | { type: 'commander' }
   | { type: 'hired'; heroId: string; duplicate: boolean }
   | { type: 'upgraded'; heroId: string; stars: number }
-  | { type: 'dismissed'; heroId: string };
+  | { type: 'dismissed'; heroId: string }
+  | { type: 'talent'; heroId: string };
 export interface ProfileResult { profile: Profile; event: ProfileEvent }
 // Up to 4 deployed (slot order = enemy target slots) and 4 in reserve, swapped at camps.
 export const PARTY_SLOTS = 4;

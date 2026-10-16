@@ -3,6 +3,15 @@ export type ActionId = 'attack' | 'guard' | 'bash' | 'mark' | 'execute' | 'bolt'
   | 'rally' | 'finisher' | 'sigil' | 'sanctuary' | 'spearwall' | 'weakshot' | 'bomb' | 'backstab' | 'quake' | 'finale';
 // ★5 passives (one per class, always on at five stars).
 export type PassiveId = 'stand' | 'keeneye' | 'echo' | 'afterglow' | 'heavycounter' | 'tailwind' | 'potent' | 'shadowcounter' | 'stoneskin' | 'resound';
+// Talent-tree capstones (2D-1b): one small rule change per branch, read by the resolver from `HeroDefinition.talents`.
+export type TalentCap = 'retribution' | 'guardcounter' | 'deepmark' | 'relentless' | 'splitbolt' | 'wardreflect' | 'twinheal' | 'solace'
+  | 'pierceline' | 'frontwall' | 'hunter' | 'volleyhinder' | 'acidspread' | 'quickbrew' | 'shadowlayer' | 'doubleshadow'
+  | 'hammercounter' | 'stoneregen' | 'chorus' | 'overture';
+// Talent numbers that add to a rule for this hero only (summed over ranks).
+export type TalentRule = 'guardReduction' | 'tauntReduction' | 'corrodeBonus' | 'ambushBonus' | 'executeHeal' | 'healBarrier' | 'hasteHeal' | 'dodgeHeal';
+// What a member's spent talent points do in battle (world `starred` builds it; stat nodes are already in maxHp/attack/skillBonus).
+// `power` adds flat skill power, `rules` adds to the named rule, `caps` maps a capstone to its amount (0 when it has none).
+export interface HeroTalents { power?: Partial<Record<ActionId, number>>; rules?: Partial<Record<TalentRule, number>>; caps?: Partial<Record<TalentCap, number>> }
 export type Outcome = 'active' | 'victory' | 'defeat';
 export interface SkillDefinition { name: string; english: string; icon: string; power: number; cooldown: number }
 export interface HeroDefinition {
@@ -13,6 +22,7 @@ export interface HeroDefinition {
   // Class unlocks: the ★3 skill joins `actions` and the ★5 passive becomes `passive` (world `starred`).
   unlocks?: { skill: ActionId; passive: PassiveId };
   passive?: PassiveId;
+  talents?: HeroTalents;
 }
 // `id` is the field position (`raider` back, `brute` front/large); `art` names the illustrated frame (presentation only).
 export interface EnemyDefinition { id: string; name: string; displayName?: string; maxHp: number; speed: number; color: number; art?: string }
@@ -35,9 +45,11 @@ export interface EncounterDefinition {
 // Expiry/cooldown values are absolute round numbers, never animation time.
 // `hastedRound`: an alchemist's haste makes this hero act before everyone in that round.
 // `evading`: a scout's shadow step; the first enemy hit on this hero before its next turn misses.
-export interface HeroState { id: string; hp: number; barrier: number; cooldowns: Partial<Record<ActionId, number>>; hastedRound?: number; evading?: boolean }
+// Talents: `evadeExtra` = further hits a doubled shadow step dodges; `reflect` = a ward that strikes back once when it absorbs a hit.
+export interface HeroState { id: string; hp: number; barrier: number; cooldowns: Partial<Record<ActionId, number>>; hastedRound?: number; evading?: boolean; evadeExtra?: number; reflect?: { heroId: string; amount: number } }
 // `delayedRound`: an archer's hindering shot sends this enemy to the end of that round's queue.
-export interface EnemyState { id: string; hp: number; markedUntil: number; interruptedRound?: number; delayedRound?: number; corrodedUntil?: number }
+// `corrodeBonus`: the bonus of the flask that corroded it (talents can raise it; missing = the rule's value).
+export interface EnemyState { id: string; hp: number; markedUntil: number; interruptedRound?: number; delayedRound?: number; corrodedUntil?: number; corrodeBonus?: number }
 export interface Intent extends IntentDefinition { targetId: string; beat: number; round: number }
 // Party condition carried in from the expedition. Missing ids start at max HP.
 export interface BattleEntry { hp: Readonly<Record<string, number>> }
@@ -59,6 +71,8 @@ export interface BattleState {
   sanctuary?: { heroId: string; targetId: string } | null;
   // Knight stand (★5) is used once per battle.
   standUsed?: boolean;
+  // Priest solace (talent): the healed ally takes less damage until the priest's next turn.
+  solace?: { heroId: string; targetId: string } | null;
 }
 export interface BattleEvent {
   type: 'damage' | 'guard' | 'mark' | 'barrier' | 'heal' | 'interrupt' | 'cancel' | 'down' | 'outcome' | 'brace' | 'counter' | 'delay' | 'corrode' | 'haste' | 'evade' | 'dodge' | 'taunt' | 'song' | 'rally' | 'sigil' | 'sanctuary' | 'stand' | 'finale';

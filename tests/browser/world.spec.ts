@@ -533,6 +533,34 @@ test('lobby member panel shows the ★3 skill and ★5 passive, unlocked by star
   await page.screenshot({ path: info.outputPath('lobby-unlocks.png') });
 });
 
+test('lobby talent tree: spend points level by level, gates show, reset is free, the choice is saved', async ({ page }, info) => {
+  const profile = { ...newProfile(map, 5), tutorialDone: true, commander }; profile.members.guardian = { stars: 1, dupes: 0, level: 4, exp: 0 };
+  await seed(page, null, profile);
+  await page.goto('./'); await page.locator('#continue').click();
+  await page.locator('#lobby-tab-team').click(); await page.locator('#lobby-member-guardian').click();
+  await expect(page.locator('#lobby-tree-toggle')).toContainText('แต้มว่าง 3');
+  await page.locator('#lobby-tree-toggle').click();
+  await expect(page.locator('.talent-node')).toHaveCount(7);
+  await expect(page.locator('#talent-a1')).toHaveAttribute('data-state', 'locked');
+  await page.locator('#talent-root').click(); await expect(page.locator('#talent-root')).toHaveAttribute('data-state', 'full');
+  await page.locator('#talent-b1').click(); await page.locator('#talent-b1').click();
+  await expect(page.locator('#talent-b1')).toContainText('2/2'); await expect(page.locator('.talent-points')).toContainText('แต้ม 0/3');
+  // No points left: another node does nothing and says why.
+  await page.locator('#talent-a1').click({ force: true }); await expect(page.locator('#talent-a1')).toContainText('0/2');
+  await expect(page.locator('#talent-a1')).toHaveAttribute('aria-label', /แต้มไม่พอ/);
+  for (const b of await page.locator('.talent-node, #lobby-reset-talents').all()) expect((await b.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+  await expect(page.locator('#lobby-member-guardian')).toContainText(`เลือด ${Math.round(76 * (100 + 9 + 15) / 100)}`);
+  await page.screenshot({ path: info.outputPath('lobby-talents.png') });
+  await page.setViewportSize({ width: 390, height: 844 }); await page.locator('#talent-b3').scrollIntoViewIfNeeded();
+  expect(await page.evaluate(() => document.scrollingElement!.scrollHeight <= innerHeight)).toBe(true);
+  await page.screenshot({ path: info.outputPath('lobby-talents-phone.png') });
+  const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('asterveil.fateweave.expedition.v1')!));
+  expect(saved.version).toBe(8); expect(saved.profile.members.guardian.talents).toEqual({ root: 1, b1: 2 });
+  await page.locator('#lobby-reset-talents').click();
+  await expect(page.locator('#lobby-tree-toggle')).toContainText('แต้มว่าง 3');
+  expect(await page.evaluate(() => JSON.parse(localStorage.getItem('asterveil.fateweave.expedition.v1')!).profile.members.guardian.talents)).toBeUndefined();
+});
+
 test('levels: the map shows the monster level here and members’ levels; battles show enemy levels', async ({ page }, info) => {
   const state = newExpedition(map, encounterById, 11); state.tutorialDone = true;
   const issues = await open(page, state);

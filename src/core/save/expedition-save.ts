@@ -2,8 +2,8 @@ import { entryReason, withParty } from '../battle/engine';
 import type { ActionId, Command } from '../battle/types';
 import { COMPANY_CAP, PARTY_SLOTS, RESERVE_SLOTS, type ActiveBattle, type ExpeditionState, type MapDefinition, type Point, type Profile, type Roster, type RunOutcome } from '../world/types';
 import { battleState, expToNext, finishBattle, fullParty, heroDef, memberDef, rosterIds, tileAt, type EncounterLookup } from '../world/world';
-import { commanderReason, newProfile, settle } from '../world/profile';
-import type { MemberProgress } from '../world/types';
+import { commanderReason, newProfile, settle, talentsValid } from '../world/profile';
+import type { MemberProgress, Talents } from '../world/types';
 
 export interface StoragePort { getItem(key: string): string | null; setItem(key: string, value: string): void; removeItem?(key: string): void }
 export const expeditionKey = 'asterveil.fateweave.expedition.v1';
@@ -19,7 +19,8 @@ export const legacyKeys = ['asterveil.fateweave.battle.v1', 'asterveil.fateweave
 // v5 → v6 (L2): the profile gains `commander` (null until created; v5 migrates as null).
 // v6 → v7 (2D-1): members may carry `level`/`exp` (missing = level 1, no EXP) and an active battle
 // its monster `level` (missing = the encounter's own level). v6 data loads unchanged.
-const SAVE_VERSION = 7;
+// v7 → v8 (2D-1b): members may carry `talents` (ranks per tree node; missing = none). v7 data loads unchanged.
+const SAVE_VERSION = 8;
 export interface Game { profile: Profile; run: ExpeditionState | null }
 const actions: readonly ActionId[] = ['attack', 'guard', 'bash', 'mark', 'execute', 'bolt', 'ward', 'heal', 'prayer', 'brace', 'pierce', 'hinder', 'volley', 'acid', 'haste', 'ambush', 'evade', 'taunt', 'slam', 'valor', 'mend',
   'rally', 'finisher', 'sigil', 'sanctuary', 'spearwall', 'weakshot', 'bomb', 'backstab', 'quake', 'finale'];
@@ -60,12 +61,20 @@ function membersOf(v: unknown, map: MapDefinition, ids: readonly string[]): Reco
   const raw = obj(v);
   if (Object.keys(raw).length !== ids.length) throw new Error('Invalid members');
   return Object.fromEntries(ids.map(id => {
-    const m = obj(raw[id]);
-    const keys = Object.keys(m).length;
-    if ((keys !== 2 && keys !== 4) || !isInt(m.stars, 1, map.company.maxStars) || !isInt(m.dupes, 0, 99)) throw new Error('Invalid members');
-    if (keys === 2) return [id, { stars: m.stars, dupes: m.dupes }];
-    if (!isInt(m.level, 1, map.progression.levelCap) || !isInt(m.exp, 0, expToNext(map, m.level) - 1)) throw new Error('Invalid members');
-    return [id, { stars: m.stars, dupes: m.dupes, level: m.level, exp: m.exp }];
+    const m = obj(raw[id]); const keys = Object.keys(m);
+    if (keys.some(k => !['stars', 'dupes', 'level', 'exp', 'talents'].includes(k)) || ('level' in m) !== ('exp' in m)) throw new Error('Invalid members');
+    if (!isInt(m.stars, 1, map.company.maxStars) || !isInt(m.dupes, 0, 99)) throw new Error('Invalid members');
+    const out: MemberProgress = { stars: m.stars, dupes: m.dupes };
+    if ('level' in m) {
+      if (!isInt(m.level, 1, map.progression.levelCap) || !isInt(m.exp, 0, expToNext(map, m.level) - 1)) throw new Error('Invalid members');
+      Object.assign(out, { level: m.level, exp: m.exp });
+    }
+    if ('talents' in m) {
+      const t = obj(m.talents) as Talents;
+      if (!Object.keys(t).length || !talentsValid(map, id, out.level ?? 1, t)) throw new Error('Invalid talents');
+      out.talents = { ...t };
+    }
+    return [id, out];
   }));
 }
 function hpRecord(v: unknown, lookup: EncounterLookup, map: MapDefinition, ids: readonly string[], members: Record<string, MemberProgress>): Record<string, number> {
@@ -167,7 +176,7 @@ function settleFinished(game: Game): Game {
 }
 export function parseGame(raw: string, map: MapDefinition, lookup: EncounterLookup): Game {
   const envelope = obj(JSON.parse(raw)); const version = envelope.version as number;
-  if (![1, 2, 3, 4, 5, 6, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
+  if (![1, 2, 3, 4, 5, 6, 7, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
   if (version < 5) {
     const run = parseRun(envelope.state, version, map, lookup);
     const profile = newProfile(map, (run.seed ^ 0x5bd1e995) >>> 0);

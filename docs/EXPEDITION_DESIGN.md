@@ -19,7 +19,7 @@ Approved 2026-10-14, re-planned 2026-10-15 for the mercenary roster.
 | L1. Lobby | Home → Lobby → Map; persistent profile (company ≤ 20, bank, board); choose the 4 + 4; withdraw/complete/wipe settle home | **Implemented** |
 | L2. Character creation | Commander (non-combat) name, crest and banner colour, once, between Home and Lobby | **Implemented** |
 | 2C-2. New classes | Six new mercenaries (ART-CHAR-MERC-ENEMY-001), one class mechanic at a time; ★3 skill and ★5 passive per class | **Implemented**: all 6 base classes (Garran spear, Mira archer, Toma alchemist, Sefa scout, Brann warden, Lio bard) and the ★3 skill + ★5 passive for all 10 classes (see Star unlocks) |
-| 2D. Equipment and level | 2D-1 member + monster levels; 2D-2 equipment (6 slots, 5 rarities, drops, inventory); 2D-3 sets; 2D-4 forge (enhance, fuse, reroll, salvage); 2D-5 map potions; 2D-1b passive talent tree | **In progress**: 2D-1 implemented (see Levels); 2D-1b structure approved (see Talent tree) |
+| 2D. Equipment and level | 2D-1 member + monster levels; 2D-2 equipment (6 slots, 5 rarities, drops, inventory); 2D-3 sets; 2D-4 forge (enhance, fuse, reroll, salvage); 2D-5 map potions; 2D-1b passive talent tree | **In progress**: 2D-1 implemented (see Levels); 2D-1b implemented (see Talent tree) |
 | 3. Choices and content | Events with fight/avoid choices, elites, mini boss, puzzles (rune order, push stone, lever), secrets, map quest "2 of 3" and side quests | Planned |
 | 4. Economy and wrap-up | Local gold and shop, salvage, fast travel between camps, elite respawn on rest, defeat penalty, whole-map balance simulation, completion screen | Planned |
 
@@ -422,11 +422,30 @@ Every class (the starting four included) gains one battle skill at ★3 and one 
 
 **Save v7.** Members may carry `level`/`exp`; an active battle may carry its monster `level`. v6 data loads unchanged (level 1, encounter level). The command validator now also accepts the ★3 skills.
 
-## Talent tree (2D-1b; owner-scoped 2026-10-16, structure approved, node table pending)
+## Talent tree (2D-1b; owner-scoped and approved 2026-10-16, draft numbers)
 
 The owner asked for a skill tree made only of passives ("ความถนัด"). This scopes the CLAUDE.md rule-10 exception for a skill tree: passive nodes only, no new battle buttons.
 
-- Points: 1 per level-up (9 at the level cap 10). Spent and reset (free, any time) in the Lobby only.
-- Shape (same for every class, class-specific contents): root (1 rank) → branch A and branch B, each tier 1 (2 ranks) → tier 2 (2 ranks) → capstone (1 rank). 7 nodes, 11 ranks, so a member cannot take everything.
+- Points: 1 per level-up (9 at the level cap 10). Spent and reset (free, any time) in the Lobby member panel only; talents are fixed during an expedition (levels gained on the run add points for the next visit).
+- Shape (same for every class): root (1 rank) → branch A and branch B, each tier 1 (2 ranks) → tier 2 (2 ranks) → capstone (1 rank). 7 nodes, 11 ranks, so a member cannot take everything.
 - Gates: the root first; tier 2 needs 1 rank in its tier 1; a capstone needs 4 ranks in its branch.
-- Tier 1 = readable stats, tier 2 = the class mechanic, capstone = a small rule change. Effects live in the pure resolver (read from the deployed hero definition, like `passive`), never in the UI. 0 points = today's numbers.
+- Stat nodes add to the star/level percent (`starred`); every other effect is read by the resolver from `HeroDefinition.talents`, so preview and replay use the same rules. 0 points = today's numbers.
+
+| Class | Root | A tier 1 / tier 2 / capstone | B tier 1 / tier 2 / capstone |
+|---|---|---|---|
+| Aegis (ผู้ลงทัณฑ์ / ปราการ) | HP +5% | Attack +4%/rank · Bash +4/rank · **Retribution**: a Bash that stops a physical move +8 | HP +5%/rank · Guard reduction +5%/rank · **Counter**: a guarded hit is answered for 8 |
+| Lyra (ดาบเจาะ / นักเต้นดาบ) | Attack +4% | Attack +4%/rank · Precision Strike +4/rank · **Deep Mark**: her hits on a marked enemy +6 | HP +5%/rank · Precision Strike on a marked enemy heals her 3/rank · **Relentless**: downing an enemy resets Precision Strike |
+| Eira (เวทโจมตี / เวทป้องกัน) | Skill +4% | Skill +4%/rank · Bolt +4/rank · **Split Bolt**: other enemies take half | HP +5%/rank · Ward +3/rank · **Reflect**: a ward that absorbs a hit strikes back 6 (once) |
+| Seren (ผู้เยียวยา / ผู้คุ้มครอง) | Skill +4% | Heal +3/rank · Prayer +2/rank · **Twin Heal**: the most hurt other ally gets half | HP +5%/rank · Heal adds a 2/rank barrier (not stacking) · **Solace**: the healed ally takes 15% less until Seren's next turn |
+| Garran (ทวนรุก / ทวนรับ) | HP +5% | Attack +4%/rank · Pierce +4/rank · **Piercing Line**: other enemies take half | HP +5%/rank · Brace counter +3/rank · **Front Wall**: while braced, physical hits on the front lane −10% |
+| Mira (นักแม่นธนู / ฝนธนู) | Attack +4% | Attack +4%/rank · Hinder +3/rank · **Hunter**: her hits on a hindered enemy +6 | HP +5%/rank · Volley +2/rank · **Volley Hinder**: Volley hinders the fastest enemy |
+| Toma (กรดกัดกร่อน / ยาเสริม) | Skill +4% | Acid +2/rank · corrosion +2/rank · **Acid Spread**: Acid corrodes the other enemies (no damage) | HP +5%/rank · Haste heals 4/rank · **Quick Brew**: Haste cooldown −1 |
+| Sefa (นักลอบ / นักหลบ) | Attack +4% | Attack +4%/rank · Ambush bonus +4/rank · **Shadow Layer**: Ambush grants Shadow Step | HP +5%/rank · a dodge heals 3/rank · **Double Shadow**: Shadow Step dodges two hits |
+| Brann (ค้อนรูน / ปราการหิน) | HP +5% | Attack +4%/rank · Rune Slam +4/rank · **Hammer Counter**: while challenging, each hit is answered for 6 | HP +6%/rank · Challenge reduction +5%/rank · **Stone Regen**: below half HP he heals 6 at the start of his turn |
+| Lio (เพลงรบ / เพลงปลอบ) | Skill +4% | Valor +1/rank · Attack +5%/rank · **Chorus**: while valor plays every enemy hit −2 | HP +5%/rank · Mending +2/rank · **Overture**: the battle opens with mending playing |
+
+Counters from talents add corrosion/valor like other counters. Stone regen does not trigger on Brann's very first turn of a battle.
+
+**Save v8.** Members may carry `talents` (ranks per node); every load re-checks ranks, gates and points against the member's level. v7 data loads unchanged (no talents).
+
+**Tests.** `tests/talents.test.ts` (shape, stats, every node's effect, gates, points, reset, settle, save) and a lobby browser test (spend, gate reason, ≥44px nodes, reset, saved v8, phone portrait).

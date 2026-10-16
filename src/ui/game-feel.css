@@ -384,6 +384,29 @@ html, body { background: #0a1422; }
 .member-unlocks .unlock-star { font-size: 11px; font-weight: 700; color: var(--gold-light, #f2d596); }
 .member-unlocks li.locked { opacity: .62; }
 .member-unlocks li.unlocked { border-color: #f2d59666; }
+/* Talent tree (2D-1b): root on top, two branch columns; capstones glow when owned. */
+.tree-toggle { width: 100%; min-height: 44px; display: flex; align-items: center; gap: 8px; margin: 2px 0 8px; }
+.tree-toggle small { margin-left: auto; font-size: 12px; color: var(--gold-light, #f2d596); }
+.talent-tree { display: grid; gap: 6px; margin-bottom: 8px; }
+.talent-points, .talent-gate { margin: 0; font-size: 11px; color: var(--text-muted, #b9c8d8); }
+.talent-gate { text-align: center; }
+.talent-root { display: flex; justify-content: center; }
+.talent-root .talent-node { width: min(100%, 260px); }
+.talent-branches { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.talent-branch { display: grid; gap: 5px; align-content: start; }
+.talent-branch h4 { margin: 0; text-align: center; font-size: 13px; color: var(--gold-light, #f2d596); }
+.talent-node { min-height: 44px; display: grid; grid-template-columns: 1fr auto; gap: 1px 6px; text-align: left; padding: 6px 8px; border-radius: 10px;
+  background: #08121fb3; border: 1px solid #e8f5ff26; color: inherit; font: inherit; cursor: pointer; }
+.talent-node b { font-size: 13px; }
+.talent-node i { font-style: normal; font-size: 12px; font-weight: 700; color: var(--gold-light, #f2d596); }
+.talent-node small { grid-column: 1 / -1; font-size: 11px; line-height: 1.35; color: var(--text-muted, #b9c8d8); }
+.talent-node[data-state="locked"] { opacity: .5; }
+.talent-node[data-state="partial"] { border-color: #f2d59666; }
+.talent-node[data-state="full"] { border-color: #f2d596; background: #2a2210cc; }
+.talent-node.capstone[data-state="full"] { box-shadow: 0 0 12px #f2d59655; }
+.talent-node[aria-disabled="true"] { cursor: default; }
+.talent-node:focus-visible { outline: 2px solid var(--gold-light, #f2d596); outline-offset: 2px; }
+@media (max-width: 360px) { .talent-branches { grid-template-columns: 1fr; } }
 
 /* ================= 2D-1 levels ================= */
 #zone-name .zone-level { font-size: .72em; font-weight: 600; color: var(--gold-light, #f2d596); white-space: nowrap; }

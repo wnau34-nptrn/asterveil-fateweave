@@ -1,4 +1,4 @@
-import { ambushBonus, currentHeroId, skillPower, targetOptions } from '../core/battle/engine';
+import { ambushBonus, corrodeBonusOf, guardReductionOf, tauntReductionOf, currentHeroId, skillPower, targetOptions } from '../core/battle/engine';
 import type { ActionId, BattleState, EncounterDefinition } from '../core/battle/types';
 import { actorName } from './th';
 export interface Lesson { step:number; title:string; copy:string; heroId:string; action:ActionId; targetId:string }
@@ -18,12 +18,12 @@ export function battleLesson(state:BattleState,data:EncounterDefinition):Lesson|
  const intent=state.intent;
  if(heroId==='guardian'){
   if(intent?.kind==='physical')return make('bash',intent.sourceId,'ขัดจังหวะโจมตีกายภาพ',`${actorName(intent.sourceId,data)} จะเสียเทิร์นโจมตีกายภาพถัดไป`)
-   ??make('guard',intent.targetId,'อ่านแผนศัตรู',`รับแทนและลดพลัง ${intent.damage} → ${Math.ceil(intent.damage*(1-data.rules.guardReduction))}`)??attack();
-  if(intent)return make('guard',intent.targetId,'อ่านแผนศัตรู',`รับแทนและลดพลัง ${intent.damage} → ${Math.ceil(intent.damage*(1-data.rules.guardReduction))}`)??attack();
+   ??make('guard',intent.targetId,'อ่านแผนศัตรู',`รับแทนและลดพลัง ${intent.damage} → ${Math.ceil(intent.damage*(1-guardReductionOf(data,heroId)))}`)??attack();
+  if(intent)return make('guard',intent.targetId,'อ่านแผนศัตรู',`รับแทนและลดพลัง ${intent.damage} → ${Math.ceil(intent.damage*(1-guardReductionOf(data,heroId)))}`)??attack();
   return attack();
  }
  if(heroId==='toma'){
-  if(!(target.corrodedUntil&&target.corrodedUntil>state.round)){const a=make('acid',target.id,'กรดกัดกร่อนเป้าหลัก',`ทุกการโจมตีของทีม +${data.rules.corrodeBonus}`);if(a)return a;}
+  if(!(target.corrodedUntil&&target.corrodedUntil>state.round)){const a=make('acid',target.id,'กรดกัดกร่อนเป้าหลัก',`ทุกการโจมตีของทีม +${corrodeBonusOf(data,heroId)}`);if(a)return a;}
   // Haste the hardest-hitting standing ally so it strikes first next round.
   const ally=[...data.heroes].filter(h=>h.id!==heroId&&state.heroes.some(s=>s.id===h.id&&s.hp>0)).sort((a,b)=>b.attack-a.attack)[0];
   return (ally&&make('haste',ally.id,'ยาเร่งเพื่อนตัวแรง',`${actorName(ally.id,data)} ลงมือก่อนทุกคนรอบหน้า`))??attack();
@@ -45,15 +45,15 @@ export function battleLesson(state:BattleState,data:EncounterDefinition):Lesson|
  }
  if(heroId==='brann'){
   // Draw the announced hit away from an ally (reduced on him); otherwise slam the main target.
-  if(intent&&intent.targetId!==heroId){const t=make('taunt',heroId,'ยั่วยุดึงการโจมตี',`${actorName(intent.sourceId,data)} จะตีแบรนน์แทน${actorName(intent.targetId,data)} และเบาลง ${data.rules.tauntReduction*100}%`);if(t)return t;}
+  if(intent&&intent.targetId!==heroId){const t=make('taunt',heroId,'ยั่วยุดึงการโจมตี',`${actorName(intent.sourceId,data)} จะตีแบรนน์แทน${actorName(intent.targetId,data)} และเบาลง ${Math.round(tauntReductionOf(data,heroId)*100)}%`);if(t)return t;}
   return make('slam',target.id,'ทุบค้อนรูน',`พลัง ${skillPower(data,heroId,'slam')}`)??attack();
  }
  if(heroId==='sefa'){
   // Step aside from the announced hit; otherwise ambush an enemy that still has to act this round.
   if(intent?.targetId===heroId){const e=make('evade',heroId,'ก้าวเงาหลบการโจมตี',`${actorName(intent.sourceId,data)} จะตีพลาด`);if(e)return e;}
-  const pending=[target,...living].find(e=>ambushBonus(state,data,e.id)>0);
+  const pending=[target,...living].find(e=>ambushBonus(state,data,e.id,heroId)>0);
   const pick=pending??target;
-  return make('ambush',pick.id,'จู่โจมก่อนศัตรูขยับ',`พลัง ${skillPower(data,heroId,'ambush')+ambushBonus(state,data,pick.id)}`)??attack();
+  return make('ambush',pick.id,'จู่โจมก่อนศัตรูขยับ',`พลัง ${skillPower(data,heroId,'ambush')+ambushBonus(state,data,pick.id,heroId)}`)??attack();
  }
  if(heroId==='garran'){
   const front=intent?.kind==='physical'&&data.heroes.find(h=>h.id===intent.targetId)?.lane==='front';
