@@ -26,6 +26,8 @@ export class BattleScene extends Phaser.Scene {
   private shaking: Phaser.Tweens.Tween | undefined;
   private root: Phaser.GameObjects.Container | undefined;
   private nextSizeCheck = 0;
+  // Idle life (breathing, auras, motes) is rebuilt with each paint and never touches state.
+  private idle: Phaser.Tweens.Tween[] = [];
   constructor(private encounter: EncounterDefinition, private readonly choose: (id: string) => void, private readonly onReady: () => void, private readonly onLayout: () => void) { super('battle'); }
   get isReady(): boolean { return this.ready; }
   setEncounter(data: EncounterDefinition): void {
@@ -91,6 +93,7 @@ export class BattleScene extends Phaser.Scene {
   private paint(): void {
     if (!this.view) return;
     this.stopEffects(); this.bodies.clear();
+    for (const t of this.idle) t.remove(); this.idle = [];
     // The camera only carries the pixel-ratio zoom; clear any effect so art and DOM targets share one origin.
     // The camera stays at its defaults; the root container alone carries the pixel-ratio scale,
     // so art, input zones and the DOM targets (CSS pixels) share one origin.
@@ -108,6 +111,8 @@ export class BattleScene extends Phaser.Scene {
     // front fighter steps diagonally past its back-row partner; the second
     // pair is offset again so faces and touch targets stay unobstructed.
     const spots = { back0: { x: .14, y: .48 }, front0: { x: .35, y: .59 }, back1: { x: .16, y: .77 }, front1: { x: .39, y: .90 } };
+    // Wide desktop fields: the back pair spreads diagonally too, so the rear names never sit on a partner's head.
+    if (w >= 760 && h >= 300 && w / h >= 1.6) Object.assign(spots, { back0: { x: .12, y: .46 }, back1: { x: .21, y: .80 }, front0: { x: .33, y: .57 }, front1: { x: .42, y: .89 } });
     // Reserve independent 44px ally targets on the shortest portrait fields.
     // Upper and lower pairs stay staggered; all sole anchors remain on the floor.
     if (phone && h < 170) {
@@ -170,6 +175,7 @@ export class BattleScene extends Phaser.Scene {
     const key = artOf(this.encounter, id); const art = actorArt[key]!;
     const sprite = this.add.image(0, 0, `battle-${art.sheet}`, art.frame).setOrigin(0.5, actorFootOrigins[key] ?? 1).setDisplaySize(size, size).setFlipX(mirroredArt.has(key));
     body.add(sprite);
+    if (hp > 0) this.liven(id, body, sprite, size, enemy, id === this.view!.activeActorId);
     const hitWidth = Math.max(44, Math.min(72, size * .7));
     const hitHeight = Math.max(44, size * .9);
     this.actorTargets.set(id, { x: x - hitWidth / 2, y: y + sprite.y - hitHeight, width: hitWidth, height: hitHeight });
@@ -195,6 +201,27 @@ export class BattleScene extends Phaser.Scene {
     if (this.view!.state.intent?.sourceId === id && hp > 0) {
       const warning = this.text(35, -38, '◆', { fontFamily: thaiFont, fontSize: '15px', color: '#fdbdcf' }).setOrigin(0.5);
       info.add(warning);
+    }
+  }
+  // Idle life: a soft aura under the feet (cyan for heroes, rift violet for foes, brighter for the acting unit),
+  // gentle breathing out of phase per unit, and rift motes rising around foes. Off under reduced motion.
+  private liven(id: string, body: Phaser.GameObjects.Container, sprite: Phaser.GameObjects.Image, size: number, enemy: boolean, active: boolean): void {
+    const tint = enemy ? 0xb072ff : active ? palette.cyan : 0x7fd6ff;
+    const aura = this.add.ellipse(0, -2, size * .78, size * .2, tint, active ? .42 : .22).setBlendMode(Phaser.BlendModes.ADD);
+    body.addAt(aura, 1);
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const phase = [...id].reduce((a, c) => a + c.charCodeAt(0), 0) % 1000;
+    const sx = sprite.scaleX, sy = sprite.scaleY;
+    this.idle.push(this.tweens.add({ targets: sprite, scaleY: sy * 1.022, scaleX: sx * .992, duration: 1500 + phase % 600, delay: phase, yoyo: true, repeat: -1, ease: 'Sine.InOut' }));
+    this.idle.push(this.tweens.add({ targets: aura, alpha: active ? .62 : .36, scaleX: 1.08, duration: 1300 + phase % 500, yoyo: true, repeat: -1, ease: 'Sine.InOut' }));
+    if (active) this.idle.push(this.tweens.add({ targets: sprite, y: sprite.y - 4, duration: 700, yoyo: true, repeat: -1, ease: 'Sine.InOut' }));
+    // Rift motes: a few sparks drifting up through each foe.
+    const motes = enemy ? 4 : active ? 3 : 0;
+    for (let i = 0; i < motes; i++) {
+      const dot = this.add.circle(0, 0, enemy ? 2.2 : 1.8, enemy ? 0xd9b8ff : 0xfff1c4, .9).setBlendMode(Phaser.BlendModes.ADD); body.add(dot);
+      const x0 = (((phase * (i + 3)) % 100) / 100 - .5) * size * .6; const y0 = -size * (.1 + ((phase + i * 37) % 30) / 100);
+      dot.setPosition(x0, y0).setAlpha(0);
+      this.idle.push(this.tweens.add({ targets: dot, y: y0 - size * .45, x: x0 + (i % 2 ? 8 : -8), alpha: { from: 0, to: .9, yoyo: true }, duration: 2200 + i * 350, delay: i * 520 + phase % 400, repeat: -1, ease: 'Sine.Out' }));
     }
   }
   // Impact shake moves the field layer, never the camera: the camera carries the
@@ -225,6 +252,15 @@ export class BattleScene extends Phaser.Scene {
     const target = this.view?.activeTargetId ? this.positions.get(this.view.activeTargetId) : undefined;
     if (source && target && events.some(event => event.type === 'damage')) {
       this.tweens.add({ targets: source, x: source.x + Math.sign(target.x - source.x) * 16, duration: 160, yoyo: true, ease: 'Sine.Out' });
+    }
+    // Hit reaction: the struck unit flashes white and recoils a step away from the attacker.
+    for (const event of events) {
+      if (event.type !== 'damage' || !event.targetId || !event.amount) continue;
+      const body = this.bodies.get(event.targetId); const sprite = body?.list.find(c => c instanceof Phaser.GameObjects.Image) as Phaser.GameObjects.Image | undefined;
+      if (!body || !sprite) continue;
+      const from = event.sourceId ? this.positions.get(event.sourceId) : undefined; const away = from ? Math.sign(body.x - from.x) || 1 : 1;
+      this.time.delayedCall(140, () => { if (!sprite.active) return; sprite.setTint(0xffffff).setTintMode(Phaser.TintModes.FILL); this.time.delayedCall(90, () => { if (sprite.active) sprite.clearTint().setTintMode(Phaser.TintModes.MULTIPLY); }); });
+      this.tweens.add({ targets: body, x: body.x + away * 10, duration: 90, delay: 140, yoyo: true, ease: 'Quad.Out' });
     }
     // Impact: a short camera shake for any landed hit (stronger when a fighter falls).
     const landed = events.filter(event => event.type === 'damage' && (event.amount ?? 0) > 0);

@@ -621,14 +621,14 @@ html, body { background: #0a1422; }
   background: linear-gradient(180deg, #050b14cc, #050b1466 40%, #050b14ee 100%), var(--story-bg) 50% 50% / cover no-repeat, #050b14; color: #f4ecdc; }
 .story-view[hidden] { display: none; }
 /* The painted scenes (ART-STORY-PROLOGUE-001) carry the rift; phones see their centred 9:16 slice. */
-.story-figure { align-self: end; justify-self: center; width: min(42vh, 60vw); aspect-ratio: 1; position: relative; }
+.story-figure { grid-row: 1; align-self: end; justify-self: center; width: min(42vh, 60vw); aspect-ratio: 1; position: relative; }
 .story-figure .portrait { display: block; width: 100%; height: 100%; border-radius: 50%; border: 3px solid #f2d59699; box-shadow: 0 0 40px #000c; }
 /* Vargoth stands full-figure (feet at y 1000 of 1024) right of centre on wide screens, centred on phones. */
 .story-view[data-speaker="vargoth"] .story-figure { width: min(66vh, 92vw); margin-bottom: calc(min(66vh, 92vw) * -.0234); }
 @media (min-aspect-ratio: 4/3) { .story-view[data-speaker="vargoth"] .story-figure { justify-self: end; margin-right: 8vw; } }
 .story-vargoth { display: block; width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 0 24px #c79bff66); }
 .story-bust { flex: none; align-self: center; width: 40px; height: 40px; border-radius: 50%; border: 2px solid #c79bffaa; background: 50% 38% / cover no-repeat; }
-.story-card { width: min(720px, 100%); justify-self: center; margin-top: 12px; padding: 14px 18px; border-radius: 18px; background: linear-gradient(180deg, #14243af0, #0b1626f5);
+.story-card { grid-row: 2; align-self: end; width: min(720px, 100%); justify-self: center; margin-top: 12px; padding: 14px 18px; border-radius: 18px; background: linear-gradient(180deg, #14243af0, #0b1626f5);
   border: 1px solid #f2d59659; box-shadow: 0 18px 50px #000c; }
 .story-view[data-speaker="vargoth"] .story-card { border-color: #c79bffaa; }
 .story-who { display: flex; align-items: baseline; gap: 8px; margin: 0 0 6px; } .story-who b { font: 600 18px var(--font-heading); color: var(--gold-light, #f2d596); }
@@ -704,3 +704,5 @@ html, body { background: #0a1422; }
 .music-volume { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-muted, #b9c8d8); }
 .music-volume input { width: 140px; height: 44px; accent-color: var(--gold-light, #f2d596); }
 .music-volume input:disabled { opacity: .45; }
+/* Desktop story card: a little wider and larger text. */
+@media (min-width: 1200px) and (min-height: 700px) { .story-card { width: min(860px, 100%); padding: 18px 24px; } .story-text { font-size: 18px; } .story-who b { font-size: 20px; } }

@@ -591,3 +591,10 @@ main { width: 100%; max-width: 1600px; flex: 1; min-height: 0; display: flex; fl
 
 .turn-slot.blocked-turn { border-style: dashed; opacity: .8; }
 
+/* Desktop: the team and command column sits on its own glass panel so it reads over the painted field. */
+@media (min-width: 1100px) and (min-height: 600px) {
+  .decision-panel { background: linear-gradient(180deg, #0b1626d9, #0b1626c4); border: 1px solid #314d7088; border-radius: 16px; backdrop-filter: blur(6px); margin-left: 8px; }
+  .team-heading .step-heading { color: var(--gold-light, #f2d596); }
+}
+/* Wide desktop fields: lane tags sit above the rear fighter's head at the new spread spots. */
+@media (min-width: 1100px) and (min-height: 600px) { .formation-labels { top: 8px; } .back-label { left: 16%; } .front-label { left: 37%; } }

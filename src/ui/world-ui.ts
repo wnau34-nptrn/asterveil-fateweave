@@ -508,7 +508,11 @@ export class WorldUI {
     for (const sel of ['.hud-movement', '.hud-action', '#world-message']) { const r = rect(sel); if (r && band(r) && !(sel === '#world-message' && this.root.querySelector<HTMLElement>(sel)!.hidden)) bottom = Math.min(bottom, r.top); }
     const focusY = bottom - top >= 3 * t ? (top + bottom) / 2 : h / 2;
     const p = this.view.state.position;
-    const ox = Math.round(w / 2 - (p.x + .5) * t), oy = Math.round(focusY - (p.y + .5) * t);
+    let ox = Math.round(w / 2 - (p.x + .5) * t), oy = Math.round(focusY - (p.y + .5) * t);
+    // Near the board's edges the camera stops at the edge (within the open area) instead of showing empty void.
+    const gw = this.map.rows[0]!.length * t, gh = this.map.rows.length * t;
+    if (gw > w) ox = Math.min(0, Math.max(w - gw, ox));
+    if (gh > bottom - top) oy = Math.min(top, Math.max(Math.round(bottom - gh), oy));
     grid.style.transform = `translate(${ox}px, ${oy}px)`;
     viewport.style.setProperty('--ox', `${ox}px`); viewport.style.setProperty('--oy', `${oy}px`);
   }
