@@ -288,6 +288,27 @@ test('sound effects: steps, walls, chests and battle turns name their sound; the
   expect(issues).toEqual([]);
 });
 
+test('portrait phone lobby: the painting covers both pan ends, sheets fill the screen, and a hiring offer previews skills first', async ({ browser }, info) => {
+  const context = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true }); const page = await context.newPage();
+  await seed(page, null, { ...newProfile(map, 5), tutorialDone: true, commander, bank: { ore: 0, gold: 40, seal: 0, dust: 0 } } as Profile);
+  await page.goto('./'); await page.locator('#continue').click();
+  const pan = page.locator('.lobby-pan');
+  // The backdrop's painting reaches both edges of the screen at both ends of the pan.
+  const covers = () => page.evaluate(() => { const b = document.querySelector<HTMLElement>('.lobby-backdrop')!; const [x] = b.style.backgroundPosition.split(' ').map(parseFloat); const [w] = b.style.backgroundSize.split(' ').map(parseFloat); return x! <= 0.5 && x! + w! >= b.clientWidth - 0.5; });
+  for (const end of [0, 1]) { await pan.evaluate((el, e) => { el.scrollLeft = e ? el.scrollWidth : 0; }, end); await expect.poll(covers).toBe(true); await page.screenshot({ path: info.outputPath(`lobby-pan-${end}.png`) }); }
+  // Sheets take the whole screen.
+  await page.locator('#lobby-tab-hire').click();
+  const box = (await page.locator('#lobby-sheet').boundingBox())!; expect(box.x).toBe(0); expect(box.y).toBe(0); expect(box.width).toBe(390); expect(box.height).toBe(844);
+  // Tapping an offer previews it: stats, every skill, star unlocks, and a hire button.
+  await page.locator('#hire-open-0').click();
+  await expect(page.locator('.hire-preview')).toBeVisible(); await expect(page.locator('.hire-stats dd')).toHaveCount(3);
+  expect(await page.locator('.hire-skills li').count()).toBeGreaterThanOrEqual(2); await expect(page.locator('.hire-preview .member-unlocks li')).toHaveCount(2);
+  await reachable(page, '#hire-preview-back'); await page.locator('#hire-0').scrollIntoViewIfNeeded(); await reachable(page, '#hire-0');
+  await page.screenshot({ path: info.outputPath('hire-preview.png') });
+  await page.locator('#hire-preview-back').click(); await expect(page.locator('#hire-open-0')).toBeFocused();
+  await context.close();
+});
+
 test('the smith smelts ore into veil dust, capped per return; saved v18', async ({ page }) => {
   const f = map.equipment.forge;
   await seed(page, null, { ...newProfile(map, 5), tutorialDone: true, commander, bank: { ore: 500, gold: 0, seal: 0, dust: 0 } } as Profile);
@@ -726,10 +747,14 @@ for (const viewport of viewports) {
     const noScroll = () => page.evaluate(() => document.documentElement.scrollHeight > innerHeight || document.documentElement.scrollWidth > innerWidth);
     expect(await noScroll()).toBe(false);
     for (const sel of ['#lobby-depart', '#lobby-tab-team', '#lobby-tab-hire']) { await page.locator(sel).scrollIntoViewIfNeeded(); await reachable(page, sel); }
-    // Team and hire open as a sheet over the camp; the depart button stays reachable with it open.
-    await page.locator('#lobby-tab-team').click(); for (const sel of ['#lobby-member-guardian', '#lobby-depart']) { await page.locator(sel).scrollIntoViewIfNeeded(); await reachable(page, sel); }
+    // Team and hire open as a sheet over the camp. Portrait phones show it full screen (close to switch);
+    // elsewhere the depart button stays reachable with it open.
+    const full = viewport.width <= 760 && viewport.height > viewport.width;
+    await page.locator('#lobby-tab-team').click(); for (const sel of ['#lobby-member-guardian', ...(full ? ['[data-lobby=close]'] : ['#lobby-depart'])]) { await page.locator(sel).scrollIntoViewIfNeeded(); await reachable(page, sel); }
+    if (full) { const box = (await page.locator('#lobby-sheet').boundingBox())!; expect(box.width).toBe(viewport.width); expect(box.height).toBe(viewport.height); }
     await page.screenshot({ path: info.outputPath('lobby.png') });
     // The panel scrolls inside itself on short screens; the page never does.
+    if (full) await page.locator('[data-lobby=close]').click();
     await page.locator('#lobby-tab-hire').click(); for (const sel of ['#hire-0', '#hire-1', '#hire-2']) { await page.locator(sel).scrollIntoViewIfNeeded(); await reachable(page, sel); }
     expect(await noScroll()).toBe(false); await page.screenshot({ path: info.outputPath('lobby-hire.png') });
     expect(issues).toEqual([]); await context.close();

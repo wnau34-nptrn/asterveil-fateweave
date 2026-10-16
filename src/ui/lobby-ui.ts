@@ -1,4 +1,5 @@
-import type { HeroDefinition } from '../core/battle/types';
+import type { ActionId, HeroDefinition } from '../core/battle/types';
+import { withParty } from '../core/battle/engine';
 import { boardOffers, brewReason, buyReason, claimReason, sealLimit, refreshReason, shopLeft, dismissReason, equipReason, groupOf, hireReason, talentPoints, talentReason, talentsSpent, upgradeCost, upgradeReason, type Group } from '../core/world/profile';
 import { salvageValue } from '../core/world/equipment';
 import { COMPANY_CAP, GEAR_SLOTS, PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS, SHOP_ITEMS, type GearSlot, type ShopItemId, type MapDefinition, type PotionId, type Profile, type TalentNode } from '../core/world/types';
@@ -7,7 +8,7 @@ import { actorArt, actorFootOrigins, lobbyArt, lobbyPose, NPC_IDS, npcAtlasUrl, 
 import { icon } from './icons';
 import { commanderBadge } from './commander-ui';
 import { gearArt, potionArt } from './equip-art';
-import { heroText, npcText, rewardText, shopText, sideQuestText, itemLines, itemName, itemOwner, passiveText, potionText, rarityText, setText, slotIcon, slotText, statName, talentBranches, talentHelp, wornSets } from './th';
+import { skillDescription, heroText, npcText, rewardText, shopText, sideQuestText, itemLines, itemName, itemOwner, passiveText, potionText, rarityText, setText, slotIcon, slotText, statName, talentBranches, talentHelp, wornSets } from './th';
 import { enhanceCost, enhanceReason, findItem, fuseMaterials, fuseReason, rerollReason, smeltLeft, smeltReason } from '../core/world/forge';
 import { portrait, starRow } from './world-ui';
 
@@ -45,6 +46,8 @@ export class LobbyUI {
   private confirmDismiss = false;
   // The broker's sheet shows the hiring board or the market (4A).
   private market = false;
+  // The hiring offer being previewed (stats, skills and star unlocks) before hiring.
+  private preview: number | undefined;
   constructor(private readonly root: HTMLElement, private readonly map: MapDefinition, private readonly lookup: EncounterLookup, private readonly heroes: readonly HeroDefinition[], private readonly host: LobbyHost) {
     this.startWork();
     // Escape closes the sheet even after a redraw moved focus out of it (only while the lobby shows).
@@ -58,12 +61,14 @@ export class LobbyUI {
           // The trainer and keeper open for the first deployed member; the others open their own sheet.
           if (sheet === 'tree' || sheet === 'gear') this.picked = this.view!.profile.party.deployed[0];
           else this.picked = undefined;
-          this.sheet = sheet; this.confirmDismiss = false; this.openedLine(sheet); this.draw(); this.act(npc, 'greet', 1400); this.focus(`#npc-${npc}`); break; }
-        case 'tab': this.sheet = b.dataset.tab as 'team' | 'hire' | 'forge' | 'brew'; this.openedLine(this.sheet); { const n = npcOfSheet(this.sheet); if (n) this.act(n, 'greet', 1400); } this.picked = undefined; this.confirmDismiss = false; this.draw(); this.focus(`#lobby-tab-${this.sheet}`); break;
+          this.sheet = sheet; this.preview = undefined; this.confirmDismiss = false; this.openedLine(sheet); this.draw(); this.act(npc, 'greet', 1400); this.focus(`#npc-${npc}`); break; }
+        case 'tab': this.preview = undefined; this.sheet = b.dataset.tab as 'team' | 'hire' | 'forge' | 'brew'; this.openedLine(this.sheet); { const n = npcOfSheet(this.sheet); if (n) this.act(n, 'greet', 1400); } this.picked = undefined; this.confirmDismiss = false; this.draw(); this.focus(`#lobby-tab-${this.sheet}`); break;
         case 'close': this.closeSheet(); break;
         case 'pick': this.pick(id, b.dataset.group as Group); break;
         case 'hire': this.host.hire(Number(b.dataset.index)); break;
-        case 'hire-tab': this.market = b.dataset.tab === 'market'; this.draw(); this.focus(`#hire-tab-${b.dataset.tab}`); break;
+        case 'hire-preview': this.preview = Number(b.dataset.index); this.draw(); this.root.querySelector('.lobby-content')?.scrollTo(0, 0); this.focus('#hire-preview-back'); break;
+        case 'hire-preview-back': { const i = this.preview; this.preview = undefined; this.draw(); this.focus(`#hire-open-${i}`); break; }
+        case 'hire-tab': this.market = b.dataset.tab === 'market'; this.preview = undefined; this.draw(); this.focus(`#hire-tab-${b.dataset.tab}`); break;
         case 'smelt': this.host.smelt(Number(b.dataset.dust)); this.focus(`#smelt-${b.dataset.dust}`); break;
         case 'refresh': this.host.refresh(); this.focus('#hire-refresh'); break;
         case 'buy': { const item = b.dataset.item as ShopItemId; const hero = item === 'contract' ? this.root.querySelector<HTMLSelectElement>('#contract-hero')?.value : undefined;
@@ -124,7 +129,7 @@ export class LobbyUI {
   }
   // The bust and one line of the NPC who runs this sheet.
   private npcLine(sheet: Sheet | null): string {
-    const id = npcOfSheet(sheet); if (!id || !sheet) return '';
+    const id = npcOfSheet(sheet); if (!id || !sheet || (sheet === 'hire' && this.preview !== undefined && !this.market)) return '';
     const text = npcText[id]; const i = NPC_IDS.indexOf(id); const index = this.line?.sheet === sheet ? this.line.index : 0;
     return `<div class="npc-line" style="--busts:url(${npcBustsUrl()});--sx:${(i % 3) * 50}%;--sy:${Math.floor(i / 3) * 100}%"><span class="npc-bust" aria-hidden="true"></span><p><b>${text.name} · ${text.role}</b>${text.lines[index % text.lines.length]}</p></div>${this.questCard(id)}`;
   }
@@ -140,19 +145,26 @@ export class LobbyUI {
   }
   // The scene and the NPC tap targets pan together (portrait phones); the HUD stays put above them.
   private build(): void {
-    this.root.innerHTML = `<div class="lobby-shell"><div class="lobby-pan"><div class="lobby-world"><div class="lobby-scene-host"></div>
+    this.root.innerHTML = `<div class="lobby-shell"><div class="lobby-backdrop" aria-hidden="true" style="background-image:url(${lobbyArt('lobby_bg')})"></div><div class="lobby-pan"><div class="lobby-world"><div class="lobby-scene-host"></div>
       <div class="lobby-npcs">${NPC_IDS.map(id => `<button id="npc-${id}" data-lobby="npc" data-npc="${id}" class="npc-hit" style="--nx:${npcSpots[id].x}%;--npx:${npcSpots[id].px}%" aria-label="${npcText[id].name} ${npcText[id].role}"></button>`).join('')}</div></div></div><div class="lobby-hud"></div></div>`;
     const pan = this.root.querySelector<HTMLElement>('.lobby-pan')!; const shell = this.root.querySelector<HTMLElement>('.lobby-shell')!;
     const edges = () => { const max = pan.scrollWidth - pan.clientWidth; shell.classList.toggle('pan-start', pan.scrollLeft <= 4); shell.classList.toggle('pan-end', pan.scrollLeft >= max - 4); };
-    pan.addEventListener('scroll', edges, { passive: true });
-    let width = 0; new ResizeObserver(() => { if (pan.clientWidth !== width) { width = pan.clientWidth; this.centreScene(); } edges(); }).observe(pan);
+    // The camp painting is drawn on a screen-sized backdrop that follows the pan, not on the 3-screen-wide world:
+    // one huge painted layer left black bands at the ends on iOS. Same placement as `cover` on the world.
+    const backdrop = this.root.querySelector<HTMLElement>('.lobby-backdrop')!;
+    const place = () => {
+      const worldW = pan.scrollWidth, h = pan.clientHeight; const scale = Math.max(worldW / 2400, h / 1000); const iw = 2400 * scale, ih = 1000 * scale;
+      backdrop.style.backgroundSize = `${iw}px ${ih}px`; backdrop.style.backgroundPosition = `${(worldW - iw) / 2 - pan.scrollLeft}px ${(h - ih) * .72}px`;
+    };
+    pan.addEventListener('scroll', () => { edges(); place(); }, { passive: true });
+    let width = 0; new ResizeObserver(() => { if (pan.clientWidth !== width) { width = pan.clientWidth; this.centreScene(); } edges(); place(); }).observe(pan);
   }
   // Opens on the fire and the team; the staff are a swipe (or an arrow) away on each side.
   centreScene(): void {
     const pan = this.root.querySelector<HTMLElement>('.lobby-pan'); if (!pan) return;
     pan.scrollLeft = (pan.scrollWidth - pan.clientWidth) / 2;
   }
-  private closeSheet(): void { const was = this.sheet === 'tree' || this.sheet === 'gear' ? 'team' : this.sheet; this.sheet = null; this.picked = undefined; this.confirmDismiss = false; this.draw(); if (was) this.focus(`#lobby-tab-${was}`); }
+  private closeSheet(): void { this.preview = undefined; const was = this.sheet === 'tree' || this.sheet === 'gear' ? 'team' : this.sheet; this.sheet = null; this.picked = undefined; this.confirmDismiss = false; this.draw(); if (was) this.focus(`#lobby-tab-${was}`); }
   render(view: LobbyView): void {
     const cheer = view.npcCheer && view !== this.view ? view.npcCheer : undefined;
     this.view = view;
@@ -379,6 +391,7 @@ export class LobbyUI {
   private board(p: Profile): string {
     const tabs = `<div class="hire-tabs" role="tablist">${(['board', 'market'] as const).map(t => `<button id="hire-tab-${t}" role="tab" data-lobby="hire-tab" data-tab="${t}" aria-selected="${(t === 'market') === this.market}" class="${(t === 'market') === this.market ? 'active' : ''}">${icon(t === 'market' ? 'pack' : 'gold')}<span>${t === 'market' ? 'ตลาด' : 'ป้ายจ้าง'}</span></button>`).join('')}</div>`;
     if (this.market) return tabs + this.marketList(p);
+    if (this.preview !== undefined && boardOffers(p, this.map, this.lookup)[this.preview]) return this.hirePreview(p, this.preview);
     const why: Record<string, string> = { taken: 'จ้างแล้ว', gold: 'เหรียญทองไม่พอ', full: `ค่ายเต็ม ${COMPANY_CAP} คน`, maxed: 'ดาวเต็มแล้ว' };
     const costs = this.map.shop.refreshCosts; const left = costs.length - p.refreshes; const rr = refreshReason(p, this.map);
     const refresh = `<button id="hire-refresh" data-lobby="refresh" class="secondary hire-refresh"${rr ? ' disabled' : ''}>${icon('reroll')}<span>${rr === 'limit' ? 'สุ่มป้ายครบแล้วรอบนี้' : `สุ่มป้ายใหม่ · ${costs[p.refreshes]} เหรียญทอง`}<small>เหลือ ${left}/${costs.length} ครั้ง${rr === 'gold' ? ' · เหรียญทองไม่พอ' : ''}</small></span></button>`;
@@ -386,10 +399,25 @@ export class LobbyUI {
       <ul class="hire-list">${boardOffers(p, this.map, this.lookup).map((id, i) => {
         const reason = hireReason(p, this.map, this.lookup, i); const h = this.hero(id); const text = heroText[id]!; const m = p.members[id];
         const status = m ? `${this.stars(m.stars)} ตัวซ้ำ ${m.dupes} · มีในค่าย` : 'ใหม่ · ★1';
-        return `<li class="${reason === 'taken' ? 'taken' : ''}">${portrait(id)}<span><b>${text.name}</b><small>${text.role} · ${h.lane === 'front' ? 'แนวหน้า' : 'แนวหลัง'} · ${text.help}</small><small class="hire-status">${status}</small></span>
+        return `<li class="${reason === 'taken' ? 'taken' : ''}"><button id="hire-open-${i}" data-lobby="hire-preview" data-index="${i}" class="hire-open" aria-label="ดูข้อมูล${text.name}ก่อนจ้าง">${portrait(id)}<span><b>${text.name}</b><small>${text.role} · ${h.lane === 'front' ? 'แนวหน้า' : 'แนวหลัง'} · ${text.help}</small><small class="hire-status">${status} · แตะเพื่อดูสกิล</small></span></button>
           <button id="hire-${i}" data-lobby="hire" data-index="${i}" class="secondary"${reason ? ' disabled' : ''} aria-label="จ้าง${text.name} ใช้เหรียญทอง ${this.map.company.hireCost}">${reason ? why[reason] ?? 'จ้างไม่ได้' : `จ้าง · ${this.map.company.hireCost}`}</button></li>`;
       }).join('')}</ul>${refresh}
       <details class="lobby-help"><summary>${icon('info')} วิธีจ้างและอัปดาว</summary><p>ทุกคนเริ่ม ★1 · จ้างคนที่มีอยู่แล้วจะได้ตัวซ้ำไว้อัปดาวในแท็บทีม · ป้ายเปลี่ยนใหม่ทุกครั้งที่กลับจากการเดินทาง และสุ่มใหม่ได้ ${costs.length} ครั้งต่อรอบโดยจ่ายเหรียญทอง</p></details>`;
+  }
+  // Preview of a hiring offer: the mercenary as they would join (or as owned), stats, every skill and the star unlocks.
+  private hirePreview(p: Profile, index: number): string {
+    const id = boardOffers(p, this.map, this.lookup)[index]!; const text = heroText[id]!; const m = p.members[id]; const h = this.hero(id);
+    const reason = hireReason(p, this.map, this.lookup, index);
+    const why: Record<string, string> = { taken: 'จ้างแล้ว', gold: 'เหรียญทองไม่พอ', full: `ค่ายเต็ม ${COMPANY_CAP} คน`, maxed: 'ดาวเต็มแล้ว' };
+    const data = withParty(this.lookup(this.map.tutorialEncounterId)!, [h]);
+    const skills = h.actions.map((a: ActionId) => `<li>${icon(a)}<div><b>${data.skills[a].name}</b><small>${data.skills[a].cooldown ? `คูลดาวน์ ${data.skills[a].cooldown} รอบ` : 'ใช้ได้ทุกเทิร์น'}</small><p>${skillDescription(a, id, data)}</p></div></li>`).join('');
+    return `<div class="hire-preview" aria-label="ข้อมูล${text.name}">
+      <button id="hire-preview-back" data-lobby="hire-preview-back" class="secondary hire-preview-back">${icon('left')}<span>กลับไปป้ายจ้าง</span></button>
+      <div class="hire-preview-head">${portrait(id)}<div><h3>${text.name}</h3><p>${text.role} · ${h.lane === 'front' ? 'แนวหน้า' : 'แนวหลัง'} · ${m ? `${this.stars(m.stars)} มีในค่าย (ตัวซ้ำ ${m.dupes})` : 'ใหม่ · ★1 Lv1'}</p><p class="hire-preview-help">${text.help}</p></div></div>
+      <dl class="hire-stats"><div><dt>เลือด</dt><dd>${h.maxHp}</dd></div><div><dt>พลังโจมตี</dt><dd>${h.attack}</dd></div><div><dt>ความเร็ว</dt><dd>${h.speed}</dd></div></dl>
+      <h4>สกิล</h4><ul class="hire-skills">${skills}</ul>
+      <h4>ปลดล็อกด้วยดาว</h4>${this.unlocks(id, m?.stars ?? 1)}
+      <button id="hire-${index}" data-lobby="hire" data-index="${index}" class="primary hire-preview-hire"${reason ? ' disabled' : ''}>${reason ? why[reason] ?? 'จ้างไม่ได้' : `${m ? 'จ้างเป็นตัวซ้ำ' : 'จ้าง'} · ${this.map.company.hireCost} เหรียญทอง`}</button></div>`;
   }
   // 4A market: gold-coin goods, each with a limit per return home.
   private marketList(p: Profile): string {

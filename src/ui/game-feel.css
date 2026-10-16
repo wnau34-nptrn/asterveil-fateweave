@@ -205,7 +205,8 @@ button:active:not(:disabled) { transform: scale(.97); }
 .lobby-scene-host { position: absolute; inset: 0; }
 #lobby-view .lobby-shell { --ground: max(104px, calc(env(safe-area-inset-bottom) + 13vh)); --unit: min(30vh, 31vw, 300px); }
 #lobby-view .lobby-scene { position: absolute; inset: 0; flex: none; border: 0; border-radius: 0; box-shadow: none;
-  background: radial-gradient(ellipse 30% 26% at 50% calc(100% - var(--ground)), #ffb35c55, #ff8a3d18 55%, #ff8a3d00 75%), var(--lobby-bg) 50% 72% / cover no-repeat, #2a1b2c; }
+  background: radial-gradient(ellipse 30% 26% at 50% calc(100% - var(--ground)), #ffb35c55, #ff8a3d18 55%, #ff8a3d00 75%); }
+#lobby-view .lobby-backdrop { position: absolute; inset: 0; background-color: #2a1b2c; background-repeat: no-repeat; background-size: cover; background-position: 50% 72%; }
 /* Top and bottom shade keep the HUD readable without boxes. */
 #lobby-view .lobby-scene::after { content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 7;
   background: linear-gradient(180deg, #08121fb3 0%, #08121f00 18%, #08121f00 66%, #08121fcc 100%); }
@@ -706,3 +707,32 @@ html, body { background: #0a1422; }
 .music-volume input:disabled { opacity: .45; }
 /* Desktop story card: a little wider and larger text. */
 @media (min-width: 1200px) and (min-height: 700px) { .story-card { width: min(860px, 100%); padding: 18px 24px; } .story-text { font-size: 18px; } .story-who b { font-size: 20px; } }
+/* Portrait phones: service sheets and map dialogs take the whole screen (owner request 2026-10-16); the lobby
+   menu and depart button wait underneath until the sheet closes. */
+@media (max-width: 760px) and (orientation: portrait) {
+  .lobby-sheet { position: fixed; z-index: 40; inset: 0; width: auto; border-radius: 0;
+    padding: max(10px, var(--safe-top)) max(12px, env(safe-area-inset-right)) max(10px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+    background: linear-gradient(180deg, #14243af5, #0b1626fa); }
+  .lobby-sheet .lobby-content { padding-bottom: 8px; }
+  .lobby-hud:has(.lobby-sheet) .lobby-top, .lobby-hud:has(.lobby-sheet) .lobby-bottom, .lobby-hud:has(.lobby-sheet) .lobby-result { visibility: hidden; }
+  .world-dialog { width: 100%; max-width: none; height: 100%; max-height: none; margin: 0; border-radius: 0; border: 0;
+    padding: var(--safe-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); }
+}
+/* Hiring offers open a preview of the mercenary before hiring. */
+.hire-open { flex: 1; min-width: 0; min-height: 44px; display: flex; align-items: center; gap: 10px; padding: 0; border: 0; background: none; text-align: left; color: inherit; }
+.hire-open > span { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.hire-preview { display: flex; flex-direction: column; gap: 10px; }
+.hire-preview-back { align-self: flex-start; display: flex; align-items: center; gap: 6px; } .hire-preview-back .icon { width: 18px; height: 18px; }
+.hire-preview-head { display: flex; gap: 12px; align-items: center; }
+.hire-preview-head .portrait { flex: none; width: 84px; height: 84px; border-radius: 18px; border: 2px solid #f2d59680; }
+.hire-preview-head h3 { margin: 0; font-size: 22px; color: var(--gold-light, #f2d596); } .hire-preview-head p { margin: 2px 0; font-size: 13px; color: var(--text-muted, #b9c8d8); }
+.hire-preview-help { color: #d8e6f3 !important; }
+.hire-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 0; }
+.hire-stats div { padding: 8px; border-radius: 12px; background: #0d1c2ecc; border: 1px solid #74d4ef33; text-align: center; }
+.hire-stats dt { font-size: 12px; color: var(--text-muted, #b9c8d8); } .hire-stats dd { margin: 0; font: 600 20px var(--font-heading, inherit); color: #e9f6ff; }
+.hire-preview h4 { margin: 4px 0 0; font-size: 15px; color: var(--gold-light, #f2d596); }
+.hire-skills { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.hire-skills li { display: flex; gap: 10px; padding: 8px 10px; border-radius: 12px; background: #0d1c2ecc; border: 1px solid #e8f5ff1f; }
+.hire-skills li > .icon { flex: none; width: 26px; height: 26px; color: var(--veil-cyan, #74d4ef); margin-top: 2px; }
+.hire-skills b { font-size: 15px; } .hire-skills small { margin-left: 6px; font-size: 12px; color: var(--text-muted, #b9c8d8); } .hire-skills p { margin: 4px 0 0; font-size: 13px; line-height: 1.5; color: #d8e6f3; }
+.hire-preview-hire { min-height: 52px; font-size: 17px; }
