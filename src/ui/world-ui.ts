@@ -5,7 +5,7 @@ import { PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS } from '../core/world/types';
 import { actorArt, portraitsUrl, sheetRows } from '../game/visuals/assets';
 import { SOURCE_TILE, chestFrame, decorAt, itemFrame, floorFrame, fogLayers, landmarkAt, tileSizeFor, tileset, worldArtUrl, type Landmark } from '../game/visuals/world-art';
 import { choiceText, eventChoices, eventReasonText, eventText, heroText, itemLines, itemName, potionIcon, potionText, resourceOrder, resourceText } from './th';
-import { icon } from './icons';
+import { icon, type IconName } from './icons';
 
 export interface WorldHost { move(dir: Direction): void; rest(): void; revive(heroId: string): void; swap(a: string, b: string): void; moveMember(id: string): void; withdraw(): void; openChest(): void;
   usePotion(potion: PotionId, heroId?: string): void; chooseEvent(choice: EventChoice): void }
@@ -263,7 +263,7 @@ export class WorldUI {
   private renderPackButton(s: ExpeditionState, gained: boolean): void {
     const pack = this.root.querySelector<HTMLElement>('#world-pack')!;
     const potions = POTION_IDS.reduce((n, id) => n + s.potions[id], 0);
-    pack.innerHTML = resourceOrder.map(id => `<span class="pack-item" data-resource="${id}">${icon(id)}<b>${s.resources[id]}</b></span>`).join('')
+    pack.innerHTML = resourceOrder.map(id => `<span class="pack-item" data-resource="${id}">${icon(id as IconName)}<b>${s.resources[id]}</b></span>`).join('')
       + (potions ? `<span class="pack-item" data-resource="potion">${icon('potionSalve')}<b>${potions}</b></span>` : '')
       + (s.found.length ? `<span class="pack-item" data-resource="gear">${icon('gearBody')}<b>${s.found.length}</b></span>` : '');
     pack.setAttribute('aria-label', `สัมภาระ · ${resourceOrder.map(id => `${resourceText[id].name} ${s.resources[id]}`).join(' · ')}${s.found.length ? ` · อุปกรณ์ ${s.found.length} ชิ้น` : ''} · เปิดรายละเอียด`);
@@ -292,7 +292,7 @@ export class WorldUI {
   private renderPack(): void {
     const s = this.view?.state; if (!s) return;
     const opened = s.openedChests.length;
-    this.root.querySelector('#pack-content')!.innerHTML = `${this.potionSection(s)}<ul class="pack-list">${resourceOrder.map(id => `<li data-resource="${id}">${itemArt(id)}<div><b>${resourceText[id].name}</b><small>${resourceText[id].use}</small></div><strong>${s.resources[id]}</strong></li>`).join('')}${s.dust ? `<li data-resource="dust">${icon('dust')}<div><b>ผงม่าน</b><small>วัตถุดิบตีอุปกรณ์ · นำกลับค่ายเมื่อจบการเดินทาง</small></div><strong>${s.dust}</strong></li>` : ''}</ul>
+    this.root.querySelector('#pack-content')!.innerHTML = `${this.potionSection(s)}<ul class="pack-list">${resourceOrder.map(id => `<li data-resource="${id}">${id === 'gold' ? `<span class="item-art icon-art" aria-hidden="true">${icon('gold')}</span>` : itemArt(id)}<div><b>${resourceText[id].name}</b><small>${resourceText[id].use}</small></div><strong>${s.resources[id]}</strong></li>`).join('')}${s.dust ? `<li data-resource="dust">${icon('dust')}<div><b>ผงม่าน</b><small>วัตถุดิบตีอุปกรณ์ · นำกลับค่ายเมื่อจบการเดินทาง</small></div><strong>${s.dust}</strong></li>` : ''}</ul>
       ${s.found.length ? `<h3 class="pack-gear-title">${icon('gearBody')} อุปกรณ์ที่เจอ ${s.found.length} ชิ้น</h3><ul class="pack-gear">${s.found.map(i => `<li data-rarity="${i.rarity}"><b>${itemName(i)} Lv${i.level}</b><small>${itemLines(this.map.equipment, i).join(' · ')}</small></li>`).join('')}</ul><p class="world-stats">ใส่ได้ที่ค่ายหลังกลับจากการเดินทาง · ถ้าทีมล้มหมดอุปกรณ์ที่เจอรอบนี้จะหาย</p>` : ''}
       <p class="world-stats">เปิดกล่องสมบัติแล้ว ${opened}/${this.map.chests.length} กล่อง · ของตกจากศึกที่ชนะและกล่องสมบัติ</p>`;
   }

@@ -42,13 +42,13 @@ export const chapterOne: MapDefinition = {
   zones: [
     { id: 'meadow', name: 'ทุ่งชายแดน', safe: false, base: 4, step: 3, cap: 35, levels: [1, 3], sets: ['dawn', 'wind'],
       pool: [{ encounterId: 'scout-patrol', weight: 3 }, { encounterId: 'rift-whelp', weight: 2 }],
-      loot: { ore: [6, 10], ember: [0, 8], seal: [0, 0] } },
+      loot: { ore: [6, 10], gold: [3, 6], ember: [0, 8], seal: [0, 0] } },
     { id: 'thicket', name: 'พงหนามม่านเวล', safe: false, base: 6, step: 4, cap: 45, levels: [4, 6], sets: ['shadow', 'thorn'],
       pool: [{ encounterId: 'thicket-ambush', weight: 2 }, { encounterId: 'shadow-stalker', weight: 2 }, { encounterId: 'rift-whelp', weight: 1 }],
-      loot: { ore: [9, 14], ember: [0, 12], seal: [0, 0] } },
+      loot: { ore: [9, 14], gold: [4, 8], ember: [0, 12], seal: [0, 0] } },
     { id: 'scar', name: 'แผลรอยแยก', safe: false, base: 8, step: 5, cap: 50, levels: [7, 9], sets: ['starveil', 'mender'],
       pool: [{ encounterId: 'veil-siege', weight: 2 }, { encounterId: 'rear-ambush', weight: 2 }, { encounterId: 'crystal-stampede', weight: 1 }],
-      loot: { ore: [12, 18], ember: [0, 15], seal: [0, 0] } },
+      loot: { ore: [12, 18], gold: [6, 10], ember: [0, 15], seal: [0, 0] } },
     { id: 'camp', name: 'แคมป์', safe: true, base: 0, step: 0, cap: 0, pool: [] },
     { id: 'sanctum', name: 'ประตูรอยแยก', safe: true, base: 0, step: 0, cap: 0, pool: [] },
   ],
@@ -61,15 +61,16 @@ export const chapterOne: MapDefinition = {
     { id: 'scar-west', x: 3, y: 6, tier: 'rare' }, { id: 'scar-east', x: 17, y: 6, tier: 'common' },
   ],
   loot: {
-    tutorial: { ore: [10, 10], ember: [1, 0], seal: [0, 0] },
-    boss: { ore: [60, 60], ember: [1, 0], seal: [2, 0] },
-    chest: { common: { ore: [16, 24], ember: [0, 30], seal: [0, 0] }, rare: { ore: [30, 40], ember: [1, 0], seal: [1, 0] } },
+    tutorial: { ore: [10, 10], gold: [5, 5], ember: [1, 0], seal: [0, 0] },
+    boss: { ore: [60, 60], gold: [30, 30], ember: [1, 0], seal: [2, 0] },
+    chest: { common: { ore: [16, 24], gold: [8, 12], ember: [0, 30], seal: [0, 0] }, rare: { ore: [30, 40], gold: [15, 20], ember: [1, 0], seal: [1, 0] } },
   },
   camp: { restHealPercent: 50, reviveHpPercent: 30 },
   startingRoster: ['guardian', 'tracer', 'weaver', 'healer'],
   mercenaries,
   company: {
-    hireCost: 30, dismissRefund: 15, offers: 3, maxStars: 5, starStatPercent: 8,
+    // Hiring costs gold coins only (ore pays for upgrades, brewing and the forge).
+    hireCost: 20, dismissRefund: 10, offers: 3, maxStars: 5, starStatPercent: 8,
     starCosts: [{ dupes: 1, ore: 20 }, { dupes: 2, ore: 40 }, { dupes: 3, ore: 70 }, { dupes: 4, ore: 110 }],
   },
   // Draft 2D-1 numbers: a first full run ends near level 9; farming low levels is tapered (world `expPercent`).

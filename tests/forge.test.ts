@@ -10,7 +10,7 @@ import type { Item, Profile } from '../src/core/world/types';
 // Forge (2D-4, docs/EXPEDITION_DESIGN.md "Forge").
 const f = map.equipment.forge;
 const item = (patch: Partial<Item>): Item => ({ uid: 1, slot: 'body', rarity: 0, level: 5, affixes: [], ...patch });
-const rich = (items: Item[], patch: Partial<Profile> = {}): Profile => ({ ...newProfile(map, 9), items, nextItem: 100, bank: { ore: 9999, seal: 9, dust: 9999 }, ...patch });
+const rich = (items: Item[], patch: Partial<Profile> = {}): Profile => ({ ...newProfile(map, 9), items, nextItem: 100, bank: { ore: 9999, gold: 0, seal: 9, dust: 9999 }, ...patch });
 const ids = ['guardian', 'tracer', 'weaver', 'healer', 'garran', 'mira', 'toma', 'sefa', 'brann', 'lio'];
 
 describe('enhance', () => {
@@ -24,8 +24,8 @@ describe('enhance', () => {
     expect(itemStats(map.equipment, done).hp).toBe(Math.round(15 * 1.3));
     expect(p.bank.ore).toBe(9999 - (4 + 5 + 6 + 7 + 8)); expect(p.bank.dust).toBe(9999 - (1 + 1 + 2 + 2 + 3));
     expect(itemValid(map, done, ids)).toBe(true);
-    expect(enhanceReason(rich([item({})], { bank: { ore: 3, seal: 0, dust: 9 } }), map, 1)).toBe('ore');
-    expect(enhanceReason(rich([item({})], { bank: { ore: 9, seal: 0, dust: 0 } }), map, 1)).toBe('dust');
+    expect(enhanceReason(rich([item({})], { bank: { ore: 3, gold: 0, seal: 0, dust: 9 } }), map, 1)).toBe('ore');
+    expect(enhanceReason(rich([item({})], { bank: { ore: 9, gold: 0, seal: 0, dust: 0 } }), map, 1)).toBe('dust');
   });
   it('works on a worn piece; affixes are not raised; salvage returns extra dust per level', () => {
     let p = equip(rich([item({ rarity: 1, affixes: ['hp'] })]), 'guardian', 1).profile;
@@ -74,7 +74,7 @@ describe('reroll', () => {
     const it = p.items[0]!;
     expect(it.affixes[0]).toBe('hp'); expect(['hp', 'attack']).not.toContain(it.affixes[1]); expect(it.affixes[1]).not.toBe('speed');
     expect(p.bank.seal).toBe(8); expect(itemValid(map, it, ids)).toBe(true);
-    expect(rerollReason(rich([item({ rarity: 1, affixes: ['hp'] })], { bank: { ore: 0, seal: 0, dust: 0 } }), map, 1, 0)).toBe('seal');
+    expect(rerollReason(rich([item({ rarity: 1, affixes: ['hp'] })], { bank: { ore: 0, gold: 0, seal: 0, dust: 0 } }), map, 1, 0)).toBe('seal');
     expect(rerollReason(p, map, 1, 5)).toBe('unknown');
   });
 });

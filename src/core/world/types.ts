@@ -18,10 +18,12 @@ export interface ZoneDefinition {
 }
 // Map-collected resources. Ore will pay for hiring, embers revive one fallen
 // member at a camp, and seals will substitute a duplicate in star upgrades.
-export type ResourceId = 'ore' | 'ember' | 'seal';
+// `gold` (gold coins) pays only for hiring; ore stays for star upgrades, brewing and the forge.
+export type ResourceId = 'ore' | 'gold' | 'ember' | 'seal';
 export type Resources = Record<ResourceId, number>;
 // A roll gives `min..max` ore; ember/seal give `[guaranteed, percent chance of one more]`.
-export interface LootTable { ore: readonly [number, number]; ember: readonly [number, number]; seal: readonly [number, number] }
+// `ore` and `gold` are [min, max]; `ember` and `seal` are [base, chance of one more %].
+export interface LootTable { ore: readonly [number, number]; gold: readonly [number, number]; ember: readonly [number, number]; seal: readonly [number, number] }
 export type ChestTier = 'common' | 'rare';
 export interface ChestDefinition { id: string; x: number; y: number; tier: ChestTier }
 export interface MapDefinition {
@@ -167,7 +169,8 @@ export interface Company { roster: Roster; members: Record<string, MemberProgres
 export const COMPANY_CAP = 20;
 export type RunOutcome = 'complete' | 'withdrawn' | 'wiped';
 // `dust` (veil dust, 2D-2) comes from salvage and pays for the forge (2D-4).
-export interface Bank { ore: number; seal: number; dust: number }
+// `gold` pays for hiring only.
+export interface Bank { ore: number; gold: number; seal: number; dust: number }
 // The player's commander (non-combat leader of the company), created once (L2).
 export interface Commander { name: string; crest: string; color: string }
 export interface Profile {
@@ -188,7 +191,7 @@ export interface Profile {
   taken: number[];
   expeditions: number; completes: number;
   // `items` kept in the bag and `salvaged` because the bag was full (2D-2).
-  last: { outcome: RunOutcome; ore: number; seal: number; steps: number; wins: number; items: number; salvaged: number } | null;
+  last: { outcome: RunOutcome; ore: number; gold: number; seal: number; steps: number; wins: number; items: number; salvaged: number } | null;
 }
 export type ProfileEvent =
   | { type: 'blocked'; reason: string }

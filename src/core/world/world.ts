@@ -120,7 +120,7 @@ export function newExpedition(map: MapDefinition, lookup: EncounterLookup, seed:
     mapId: map.id, mapVersion: map.version, seed: seed >>> 0, rolls: 0, position: startOf(map), steps: 0, pressure: 0,
     revealed: '0'.repeat(width * map.rows.length), roster, members,
     hp: fullParty(lookup, map, [...roster.deployed, ...roster.reserve], members), camp: null,
-    resources: { ore: 0, ember: 0, seal: 0 }, openedChests: [], restReady: true,
+    resources: { ore: 0, gold: 0, ember: 0, seal: 0 }, openedChests: [], restReady: true,
     tutorialDone, bossDefeated: false, completed: false, wins: 0, defeats: 0, battle: null, found: [], dry: 0,
     potions: company?.potions ? { ...company.potions } : { salve: 0, tonic: 0, repel: 0 }, repel: 0,
     elitesDefeated: [], eventsDone: [], dust: 0,
@@ -236,10 +236,12 @@ export function moveMember(initial: ExpeditionState, map: MapDefinition, id: str
 
 // Loot consumes rolls from the same (seed, rolls) stream, so it is fixed once saved.
 function rollLoot(state: ExpeditionState, table: LootTable): Resources {
-  const [lo, hi] = table.ore;
+  const range = ([lo, hi]: readonly [number, number]) => lo + (hi > lo ? rollPercent(state.seed, state.rolls++) % (hi - lo + 1) : 0);
   const extra = ([base, chance]: readonly [number, number]) => base + (chance > 0 && rollPercent(state.seed, state.rolls++) < chance ? 1 : 0);
-  const loot = { ore: lo + (hi > lo ? rollPercent(state.seed, state.rolls++) % (hi - lo + 1) : 0), ember: extra(table.ember), seal: extra(table.seal) };
-  state.resources = { ore: state.resources.ore + loot.ore, ember: state.resources.ember + loot.ember, seal: state.resources.seal + loot.seal };
+  // Gold rolls last so the ore, ember and seal rolls of earlier saves keep their order.
+  const ore = range(table.ore); const ember = extra(table.ember); const seal = extra(table.seal); const gold = range(table.gold);
+  const loot = { ore, gold, ember, seal };
+  state.resources = { ore: state.resources.ore + ore, gold: state.resources.gold + gold, ember: state.resources.ember + ember, seal: state.resources.seal + seal };
   return loot;
 }
 export const chestAt = (map: MapDefinition, p: Point): ChestDefinition | undefined => map.chests.find(c => c.x === p.x && c.y === p.y);
@@ -282,7 +284,7 @@ export function usePotion(initial: ExpeditionState, map: MapDefinition, lookup: 
   }
   return { state, event: { type: 'potion', potion, heal } };
 }
-const noLoot: LootTable = { ore: [0, 0], ember: [0, 0], seal: [0, 0] };
+const noLoot: LootTable = { ore: [0, 0], gold: [0, 0], ember: [0, 0], seal: [0, 0] };
 function battleLoot(state: ExpeditionState, map: MapDefinition, kind: BattleKind): LootTable {
   if (kind === 'tutorial') return map.loot.tutorial;
   if (kind === 'boss') return map.loot.boss;

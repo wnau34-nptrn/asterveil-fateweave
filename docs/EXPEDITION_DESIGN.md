@@ -563,3 +563,36 @@ The lobby's **ช่าง** menu opens the forge sheet: every piece (bag or wor
 **Save v13.** The run gains `elitesDefeated`, `eventsDone` and `dust`; members may carry `wound`; battles may be `elite`/`event` with a `source` (an elite battle for a beaten elite, or an event battle for a finished event, is rejected). v12 data migrates empty. A run saved on an older map version can no longer be replayed on the new board, so it is settled home as **withdrawn** (its ore, seals, found items, potions, dust and EXP) instead of discarding the whole save.
 
 **Tests.** `tests/events.test.ts` (forced elites on one-tile gates and optional ones that can be bypassed, elite fight, win/loss, every event choice, wounds, dust settling, save v13 and stale-map settling), the full-expedition run in `tests/world.test.ts` (it must beat every forced elite) and the advisor/class regressions that cover both elite encounters, plus browser tests for the forced elite gate and the shrine/merchant dialog.
+
+## Gold coins: a hiring-only currency (owner request 2026-10-16, draft numbers)
+
+Hiring no longer competes with brewing and the forge for ore.
+
+- **Gold coins (เหรียญทอง, `gold`)** pay only for hiring: 20 per hire; dismissal refunds 10.
+- **Ore** keeps paying for star upgrades, brewing, the forge and the merchant.
+- **Drops:** every win rolls gold like ore.
+
+| Source | Gold |
+|---|---|
+| Meadow / thicket / scar win (elite and event fights use their zone) | 3–6 / 4–8 / 6–10 |
+| Tutorial | 5 |
+| Boss | 30 |
+| Common / rare chest | 8–12 / 15–20 |
+
+- Gold rides in `run.resources` and settles into `bank.gold` like ore: all of it on complete or withdraw, half on a wipe. The last-result line shows it.
+- Gold is rolled after the other resources, so earlier rolls keep their order.
+- **UI:** the lobby bank shows gold first; the hire button, board text and the **จ้าง** menu use the coin icon; the map pack lists gold under ore (line icon until painted art exists).
+
+**Save v14.** Run resources, the bank and the last result gain `gold`. v13 and older data migrate with 0 gold in the run and the last result, and **one hire's worth (20) in the bank**, so a company that saved ore for hiring can still hire once.
+
+## Lobby on portrait phones (owner request 2026-10-16)
+
+- **Portrait:** the camp scene is 3 screen-widths wide and pans sideways (native swipe, scroll snap, and ≥44 px arrow buttons at the edges, hidden at each end and while a sheet is open). It opens on the fire with the team; the six staff stand full size at their stations, three on each side. Returning to the lobby re-centres it; redraws keep the pan.
+- **Landscape and wide screens:** unchanged (`--pan: 1`).
+- **NPC frames:** frames now change by `transform` on a one-cell window over the atlas, never by `background-position`. Repainting the whole atlas every frame flickered on iOS Safari.
+- **Runtime atlases:** downscaled from the ART-CHAR-NPC-001 masters in `incoming/` (unchanged):
+  - NPC atlases: 512 → 320 px cells (1280×960);
+  - stations: 960×640;
+  - busts: 768×512.
+
+  Decoded image memory drops from about 90 MB to about 35 MB, and runtime bytes from 2.03 MB to 1.60 MB. Intake status: ACCEPTED_WITH_TECH_FIX.

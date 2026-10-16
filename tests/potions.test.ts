@@ -13,13 +13,13 @@ const max = (s: ExpeditionState, id: string) => memberDef(lookup, map, s.members
 
 describe('brewing and packing', () => {
   it('brewing costs ore and dust; a departure packs up to 3 of each and the rest stays home', () => {
-    let p: Profile = { ...newProfile(map, 2), bank: { ore: 100, seal: 0, dust: 40 } };
+    let p: Profile = { ...newProfile(map, 2), bank: { ore: 100, gold: 0, seal: 0, dust: 40 } };
     for (let i = 0; i < 5; i++) p = brew(p, map, 'salve').profile;
     p = brew(p, map, 'repel').profile;
     expect(p.potions).toEqual({ salve: 5, tonic: 0, repel: 1 });
-    expect(p.bank).toEqual({ ore: 100 - 5 * 6 - 8, seal: 0, dust: 40 - 5 * 2 - 3 });
-    expect(brewReason({ ...p, bank: { ore: 5, seal: 0, dust: 9 } }, map, 'salve')).toBe('ore');
-    expect(brewReason({ ...p, bank: { ore: 50, seal: 0, dust: 1 } }, map, 'salve')).toBe('dust');
+    expect(p.bank).toEqual({ ore: 100 - 5 * 6 - 8, gold: 0, seal: 0, dust: 40 - 5 * 2 - 3 });
+    expect(brewReason({ ...p, bank: { ore: 5, gold: 0, seal: 0, dust: 9 } }, map, 'salve')).toBe('ore');
+    expect(brewReason({ ...p, bank: { ore: 50, gold: 0, seal: 0, dust: 1 } }, map, 'salve')).toBe('dust');
     const out = depart(p, map, lookup, 9);
     expect(out.run.potions).toEqual({ salve: 3, tonic: 0, repel: 1 }); expect(out.profile.potions).toEqual({ salve: 2, tonic: 0, repel: 0 });
   });

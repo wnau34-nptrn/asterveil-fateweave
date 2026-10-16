@@ -29,7 +29,9 @@ export const legacyKeys = ['asterveil.fateweave.battle.v1', 'asterveil.fateweave
 // v11 → v12 (2D-5): the profile gains brewed `potions`; the run gains carried `potions` and `repel` (older data: none).
 // v12 → v13 (3A): the run gains `elitesDefeated`, `eventsDone` and `dust`, members a shrine `wound`, battles the
 // kinds 'elite'/'event' with a `source`. A run saved on an older map version is settled home as withdrawn.
-const SAVE_VERSION = 13;
+// v13 → v14: gold coins pay for hiring. Run resources, the bank and the last result gain `gold`; older data
+// starts with 0 in the run and one hire's worth in the bank, so a company saved for hiring can still hire.
+const SAVE_VERSION = 14;
 export interface Game { profile: Profile; run: ExpeditionState | null }
 const actions: readonly ActionId[] = ['attack', 'guard', 'bash', 'mark', 'execute', 'bolt', 'ward', 'heal', 'prayer', 'brace', 'pierce', 'hinder', 'volley', 'acid', 'haste', 'ambush', 'evade', 'taunt', 'slam', 'valor', 'mend',
   'rally', 'finisher', 'sigil', 'sanctuary', 'spearwall', 'weakshot', 'bomb', 'backstab', 'quake', 'finale'];
@@ -134,7 +136,7 @@ function staleRun(s: Record<string, unknown>, map: MapDefinition, lookup: Encoun
   const members = membersOf(s.members, map, ids, lookup); const r = obj(s.resources);
   if (!isInt(r.ore, 0, 999999) || !isInt(r.seal, 0, 9999) || !isInt(s.steps) || !isInt(s.wins)) throw new Error('Invalid run');
   const run = newExpedition(map, lookup, 0, { roster, members });
-  return { ...run, resources: { ore: r.ore, ember: 0, seal: r.seal }, steps: s.steps, wins: s.wins, found: foundOf(s.found, map, lookup),
+  return { ...run, resources: { ore: r.ore, gold: isInt(r.gold, 0, 999999) ? r.gold : 0, ember: 0, seal: r.seal }, steps: s.steps, wins: s.wins, found: foundOf(s.found, map, lookup),
     potions: potionsOf(s.potions, map.potions.carry), dust: isInt(s.dust, 0, 999999) ? s.dust : 0, tutorialDone: s.tutorialDone === true };
 }
 function foundOf(v: unknown, map: MapDefinition, lookup: EncounterLookup): Item[] {
@@ -155,6 +157,7 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
   if (version < 9) Object.assign(s, { found: [], dry: 0 });
   if (version < 12) Object.assign(s, { potions: { salve: 0, tonic: 0, repel: 0 }, repel: 0 });
   if (version < 13) Object.assign(s, { elitesDefeated: [], eventsDone: [], dust: 0 });
+  if (version < 14 && s.resources && typeof s.resources === 'object') (s.resources as Record<string, unknown>).gold ??= 0;
   if (s.mapId !== map.id) throw new Error('Map changed');
   if (s.mapVersion !== map.version) throw new StaleRun(staleRun(s, map, lookup));
   const cells = map.rows.length * map.rows[0]!.length;
@@ -166,7 +169,7 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
   const members = membersOf(s.members, map, ids, lookup);
   const hp = hpRecord(s.hp, lookup, map, ids, members);
   const r = obj(s.resources);
-  if (Object.keys(r).length !== 3 || !isInt(r.ore, 0, 999999) || !isInt(r.ember, 0, 9999) || !isInt(r.seal, 0, 9999)) throw new Error('Invalid resources');
+  if (Object.keys(r).length !== 4 || !isInt(r.ore, 0, 999999) || !isInt(r.gold, 0, 999999) || !isInt(r.ember, 0, 9999) || !isInt(r.seal, 0, 9999)) throw new Error('Invalid resources');
   const chestIds = map.chests.map(c => c.id);
   if (!Array.isArray(s.openedChests) || s.openedChests.some(id => !chestIds.includes(id)) || new Set(s.openedChests).size !== s.openedChests.length) throw new Error('Invalid chests');
   let battle: ActiveBattle | null = null;
@@ -188,7 +191,7 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
     mapId: map.id, mapVersion: map.version, seed: s.seed as number, rolls: s.rolls as number, position: point(s.position, map),
     steps: s.steps as number, pressure: s.pressure as number, revealed: s.revealed, roster, members, hp,
     camp: s.camp === null ? null : point(s.camp, map),
-    resources: { ore: r.ore as number, ember: r.ember as number, seal: r.seal as number }, openedChests: [...s.openedChests as string[]], restReady: s.restReady as boolean,
+    resources: { ore: r.ore as number, gold: r.gold as number, ember: r.ember as number, seal: r.seal as number }, openedChests: [...s.openedChests as string[]], restReady: s.restReady as boolean,
     tutorialDone: s.tutorialDone as boolean, bossDefeated: s.bossDefeated as boolean,
     completed: s.completed as boolean, wins: s.wins as number, defeats: s.defeats as number, battle,
     found: foundOf(s.found, map, lookup), dry: isInt(s.dry, 0, map.equipment.pity) ? s.dry : badRun(),
@@ -210,8 +213,8 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
   const party = rosterOf(p.party, lookup, map);
   if ([...party.deployed, ...party.reserve].some(id => !company.includes(id))) throw new Error('Invalid party');
   const members = membersOf(p.members, map, company as string[], lookup);
-  const bank = obj(p.bank); if (version < 9) bank.dust = 0;
-  if (Object.keys(bank).length !== 3 || !isInt(bank.ore, 0, 9999999) || !isInt(bank.seal, 0, 99999) || !isInt(bank.dust, 0, 9999999)) throw new Error('Invalid bank');
+  const bank = obj(p.bank); if (version < 9) bank.dust = 0; if (version < 14 && bank.gold === undefined) bank.gold = map.company.hireCost;
+  if (Object.keys(bank).length !== 4 || !isInt(bank.gold, 0, 9999999) || !isInt(bank.ore, 0, 9999999) || !isInt(bank.seal, 0, 99999) || !isInt(bank.dust, 0, 9999999)) throw new Error('Invalid bank');
   if (version < 9) Object.assign(p, { items: [], nextItem: 1 });
   if (version < 11) p.forge = 0;
   if (version < 12) p.potions = { salve: 0, tonic: 0, repel: 0 };
@@ -225,8 +228,9 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
   if (p.last !== null) {
     const l = obj(p.last);
     if (version < 9) Object.assign(l, { items: 0, salvaged: 0 });
-    if (!['complete', 'withdrawn', 'wiped'].includes(l.outcome as string) || !isInt(l.ore) || !isInt(l.seal) || !isInt(l.steps) || !isInt(l.wins) || !isInt(l.items) || !isInt(l.salvaged)) throw new Error('Invalid result');
-    last = { outcome: l.outcome as RunOutcome, ore: l.ore, seal: l.seal, steps: l.steps, wins: l.wins, items: l.items, salvaged: l.salvaged };
+    if (version < 14 && l.gold === undefined) l.gold = 0;
+    if (!['complete', 'withdrawn', 'wiped'].includes(l.outcome as string) || !isInt(l.ore) || !isInt(l.gold) || !isInt(l.seal) || !isInt(l.steps) || !isInt(l.wins) || !isInt(l.items) || !isInt(l.salvaged)) throw new Error('Invalid result');
+    last = { outcome: l.outcome as RunOutcome, ore: l.ore, gold: l.gold as number, seal: l.seal, steps: l.steps, wins: l.wins, items: l.items, salvaged: l.salvaged };
   }
   let commander: Profile['commander'] = null;
   if (p.commander !== null && p.commander !== undefined) {
@@ -236,7 +240,7 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
     if (commanderReason(commander)) throw new Error('Invalid commander');
   } else if (p.commander === undefined && version >= 6) throw new Error('Invalid commander');
   return { seed: p.seed, returns: p.returns, tutorialDone: p.tutorialDone, commander, company: [...company as string[]], members, party,
-    bank: { ore: bank.ore as number, seal: bank.seal as number, dust: bank.dust as number }, items, nextItem: p.nextItem as number, forge: p.forge as number, potions: potionsOf(p.potions, 9999), taken: [...p.taken as number[]], expeditions: p.expeditions, completes: p.completes, last };
+    bank: { ore: bank.ore as number, gold: bank.gold as number, seal: bank.seal as number, dust: bank.dust as number }, items, nextItem: p.nextItem as number, forge: p.forge as number, potions: potionsOf(p.potions, 9999), taken: [...p.taken as number[]], expeditions: p.expeditions, completes: p.completes, last };
 }
 // A run that already reached the goal or lost every brought member is settled on load.
 function settleFinished(game: Game, map: MapDefinition): Game {
@@ -247,7 +251,7 @@ function settleFinished(game: Game, map: MapDefinition): Game {
 }
 export function parseGame(raw: string, map: MapDefinition, lookup: EncounterLookup): Game {
   const envelope = obj(JSON.parse(raw)); const version = envelope.version as number;
-  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
+  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
   if (version < 5) {
     const run = parseRun(envelope.state, version, map, lookup);
     const profile = newProfile(map, (run.seed ^ 0x5bd1e995) >>> 0);

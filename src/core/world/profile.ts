@@ -10,7 +10,7 @@ export function newProfile(map: MapDefinition, seed: number): Profile {
     seed: seed >>> 0, returns: 0, tutorialDone: false, commander: null,
     company: [...map.startingRoster], members: Object.fromEntries(map.startingRoster.map(id => [id, { stars: 1, dupes: 0 }])),
     party: { deployed: [...map.startingRoster], reserve: [] },
-    bank: { ore: 0, seal: 0, dust: 0 }, items: [], nextItem: 1, forge: 0, potions: { salve: 0, tonic: 0, repel: 0 }, taken: [], expeditions: 0, completes: 0, last: null,
+    bank: { ore: 0, gold: 0, seal: 0, dust: 0 }, items: [], nextItem: 1, forge: 0, potions: { salve: 0, tonic: 0, repel: 0 }, taken: [], expeditions: 0, completes: 0, last: null,
   };
 }
 const blocked = (profile: Profile, reason: string): ProfileResult => ({ profile, event: { type: 'blocked', reason } });
@@ -47,7 +47,7 @@ export function boardOffers(profile: Profile, map: MapDefinition, lookup: Encoun
 export function hireReason(profile: Profile, map: MapDefinition, lookup: EncounterLookup, index: number): string {
   const id = boardOffers(profile, map, lookup)[index];
   if (!id || profile.taken.includes(index)) return 'taken';
-  if (profile.bank.ore < map.company.hireCost) return 'ore';
+  if (profile.bank.gold < map.company.hireCost) return 'gold';
   if (profile.members[id]) return profile.members[id]!.stars >= map.company.maxStars ? 'maxed' : '';
   return profile.company.length >= COMPANY_CAP ? 'full' : '';
 }
@@ -57,7 +57,7 @@ export function hire(initial: Profile, map: MapDefinition, lookup: EncounterLook
   const reason = hireReason(initial, map, lookup, index); if (reason) return blocked(initial, reason);
   const profile = structuredClone(initial); const id = boardOffers(profile, map, lookup)[index]!;
   const duplicate = !!profile.members[id];
-  profile.bank.ore -= map.company.hireCost; profile.taken.push(index);
+  profile.bank.gold -= map.company.hireCost; profile.taken.push(index);
   if (duplicate) profile.members[id]!.dupes++;
   else {
     profile.members[id] = { stars: 1, dupes: 0 }; profile.company.push(id);
@@ -96,7 +96,7 @@ export function dismiss(initial: Profile, map: MapDefinition, id: string): Profi
   for (const item of Object.values(profile.members[id]?.gear ?? {})) if (item) stash(profile, map, item);
   profile.company = profile.company.filter(m => m !== id); delete profile.members[id];
   profile.party.deployed = profile.party.deployed.filter(m => m !== id); profile.party.reserve = profile.party.reserve.filter(m => m !== id);
-  profile.bank.ore += map.company.dismissRefund;
+  profile.bank.gold += map.company.dismissRefund;
   return { profile, event: { type: 'dismissed', heroId: id } };
 }
 
@@ -231,8 +231,8 @@ export const keptPercent: Record<RunOutcome, number> = { complete: 100, withdraw
 export function settle(initial: Profile, run: ExpeditionState, outcome: RunOutcome, map: MapDefinition): Profile {
   const profile = structuredClone(initial); const pct = keptPercent[outcome];
   const ore = Math.floor(run.resources.ore * pct / 100); const seal = Math.floor(run.resources.seal * pct / 100);
-  const dust = Math.floor(run.dust * pct / 100);
-  profile.bank.ore += ore; profile.bank.seal += seal; profile.bank.dust += dust;
+  const dust = Math.floor(run.dust * pct / 100); const gold = Math.floor(run.resources.gold * pct / 100);
+  profile.bank.ore += ore; profile.bank.gold += gold; profile.bank.seal += seal; profile.bank.dust += dust;
   // Found equipment comes home unless the team was wiped; a full bag salvages the rest (2D-2).
   let items = 0, salvaged = 0;
   if (outcome !== 'wiped') for (const found of run.found) { if (stash(profile, map, { ...found, uid: profile.nextItem++ })) items++; else salvaged++; }
@@ -242,7 +242,7 @@ export function settle(initial: Profile, run: ExpeditionState, outcome: RunOutco
   for (const [id, m] of Object.entries(run.members)) if (profile.members[id] && m.level) profile.members[id] = { ...profile.members[id]!, level: m.level, exp: m.exp ?? 0 };
   profile.tutorialDone ||= run.tutorialDone; profile.expeditions++; if (outcome === 'complete') profile.completes++;
   profile.returns++; profile.taken = [];
-  profile.last = { outcome, ore, seal, steps: run.steps, wins: run.wins, items, salvaged };
+  profile.last = { outcome, ore, gold, seal, steps: run.steps, wins: run.wins, items, salvaged };
   return profile;
 }
 // Withdrawal is allowed at a camp or the map entrance, outside battle.

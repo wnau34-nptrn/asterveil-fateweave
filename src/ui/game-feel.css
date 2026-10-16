@@ -494,33 +494,62 @@ html, body { background: #0a1422; }
 .brew-list li small:not(.hire-status) { display: block !important; }
 /* Camp NPCs (ART-CHAR-NPC-001): staff at their stations along the back of the camp, behind the members.
    Drawings live in the scene; the tap targets sit in the HUD at the same spots. Right-side staff are mirrored. */
+/* Pan layer: the camp scene and the NPC tap targets scroll together; the HUD floats above.
+   Landscape and wide screens show the whole camp (--pan: 1). Portrait phones widen it (below). */
+#lobby-view .lobby-pan { position: absolute; inset: 0; overflow: hidden; scrollbar-width: none; }
+#lobby-view .lobby-pan::-webkit-scrollbar { display: none; }
+#lobby-view .lobby-world { position: relative; height: 100%; width: calc(100% * var(--pan, 1)); }
+#lobby-view .lobby-scene-host { z-index: 0; }
+#lobby-view .lobby-npcs { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+/* The team stays inside the middle screen-width of the camp whatever the pan width. */
+#lobby-view .lobby-unit { left: calc(50% + (var(--ux) - 50%) / var(--pan, 1)); }
+#lobby-view .lobby-embers i { left: calc(50% + (var(--e, 0%) - 4%) / var(--pan, 1)); }
 #lobby-view .lobby-npc, #lobby-view .lobby-station, #lobby-view .npc-hit { position: absolute; left: var(--nx); bottom: calc(var(--ground) + 21vh); width: calc(var(--unit) * .5); aspect-ratio: 1; transform: translate(-50%, 3.1%); }
+#lobby-view .npc-hit { pointer-events: auto; }
 #lobby-view .lobby-npc { z-index: 1; filter: brightness(.9) saturate(.95); }
-#lobby-view .lobby-npc i, #lobby-view .lobby-station i { position: absolute; inset: 0; background-repeat: no-repeat; transform: scaleX(var(--flip)); }
-#lobby-view .lobby-npc i { background-image: var(--atlas); background-size: 400% 300%; background-position: 0% 0%; filter: drop-shadow(0 5px 5px #0a0606aa); }
+/* NPC frames: a 4 × 3 atlas behind a one-cell window. Frames change by transform (composited), never by
+   background-position, so the large atlas is not repainted on every frame (that flickered on iOS). */
+#lobby-view .lobby-npc b { position: absolute; inset: 0; overflow: hidden; transform: scaleX(var(--flip)); filter: drop-shadow(0 5px 5px #0a0606aa); }
+#lobby-view .lobby-npc i { position: absolute; left: 0; top: 0; width: 400%; height: 300%; background: var(--atlas) 0 0 / 100% 100% no-repeat; transform: translate(0, 0); will-change: transform; backface-visibility: hidden; }
+#lobby-view .lobby-station i { position: absolute; inset: 0; background-repeat: no-repeat; transform: scaleX(var(--flip)); }
 #lobby-view .lobby-station { left: calc(var(--nx) + var(--flip) * var(--unit) * .27); z-index: 0; filter: brightness(.85); }
 #lobby-view .lobby-station i { background-image: var(--stations); background-size: 300% 200%; background-position: var(--sx) var(--sy); }
 #lobby-view .npc-hit { z-index: 0; min-width: 44px; min-height: 44px; padding: 0; border: 0; border-radius: 40% 40% 12px 12px; background: transparent; cursor: pointer; }
 #lobby-view .npc-hit:focus-visible { outline: 2px solid var(--gold-light, #f2d596); outline-offset: -6px; }
 #lobby-view .npc-hit:hover { background: radial-gradient(ellipse 45% 50% at 50% 60%, #f2d59622, transparent 70%); }
-#lobby-view .lobby-npc[data-act="work"] i { background-position-y: 50%; }
-#lobby-view .lobby-npc[data-act="greet"] i, #lobby-view .lobby-npc[data-act="cheer"] i { background-position-y: 100%; }
-#lobby-view .lobby-npc[data-act="cheer"] i { background-position-x: 66.667%; }
+#lobby-view .lobby-npc[data-act="work"] i { transform: translate(0, -33.333%); }
+#lobby-view .lobby-npc[data-act="greet"] i { transform: translate(0, -66.667%); }
+#lobby-view .lobby-npc[data-act="cheer"] i { transform: translate(-50%, -66.667%); }
 @media (prefers-reduced-motion: no-preference) {
   #lobby-view .lobby-npc i { animation: npc-idle 2.4s step-end infinite; animation-delay: var(--nd, 0s); }
-  #lobby-view .lobby-npc[data-act="work"] i { animation: npc-loop .5s step-end infinite; }
+  #lobby-view .lobby-npc[data-act="work"] i { animation: npc-work .5s step-end infinite; }
   #lobby-view .lobby-npc[data-act="greet"] i { animation: npc-greet .5s step-end infinite; }
-  #lobby-view .lobby-npc[data-act="cheer"] i { animation: npc-cheer .6s ease-out 1; }
+  #lobby-view .lobby-npc[data-act="cheer"] i { animation: none; }
+  #lobby-view .lobby-npc[data-act="cheer"] b { animation: npc-cheer .6s ease-out 1; }
 }
-/* Idle holds the rest frame, then plays the fidget at 8 fps; work and greet loop. */
-@keyframes npc-idle { 0% { background-position-x: 0%; } 62.5% { background-position-x: 33.333%; } 67.7% { background-position-x: 66.667%; } 72.9% { background-position-x: 100%; } 78.1% { background-position-x: 33.333%; } 83.3% { background-position-x: 0%; } }
-@keyframes npc-loop { 0% { background-position-x: 0%; } 25% { background-position-x: 33.333%; } 50% { background-position-x: 66.667%; } 75% { background-position-x: 100%; } }
-@keyframes npc-greet { 0% { background-position-x: 0%; } 50% { background-position-x: 33.333%; } }
+/* Idle holds the rest frame, then plays the fidget at 8 fps; work and greet loop. One cell = 25% across, 33.333% down. */
+@keyframes npc-idle { 0% { transform: translate(0, 0); } 62.5% { transform: translate(-25%, 0); } 67.7% { transform: translate(-50%, 0); } 72.9% { transform: translate(-75%, 0); } 78.1% { transform: translate(-25%, 0); } 83.3% { transform: translate(0, 0); } }
+@keyframes npc-work { 0% { transform: translate(0, -33.333%); } 25% { transform: translate(-25%, -33.333%); } 50% { transform: translate(-50%, -33.333%); } 75% { transform: translate(-75%, -33.333%); } }
+@keyframes npc-greet { 0% { transform: translate(0, -66.667%); } 50% { transform: translate(-25%, -66.667%); } }
 @keyframes npc-cheer { 0% { transform: scaleX(var(--flip)) translateY(0); } 40% { transform: scaleX(var(--flip)) translateY(-6%); } 100% { transform: scaleX(var(--flip)) translateY(0); } }
-/* Narrow screens: no room for the stations; the staff stand smaller along the back. */
-@media (max-width: 760px) {
-  #lobby-view .lobby-station { display: none; }
-  #lobby-view .lobby-npc, #lobby-view .npc-hit { width: calc(var(--unit) * .5); bottom: calc(var(--ground) + 15vh); }
+/* Side-pan arrows: portrait phones only. */
+.lobby-pan-button { display: none; }
+/* Portrait phones: the camp is 3 screens wide and pans sideways (swipe or the arrows). It opens on the fire
+   with the team; the six staff stand at their stations on the two sides, at full size. */
+@media (max-width: 760px) and (orientation: portrait) {
+  #lobby-view .lobby-shell { --pan: 3; }
+  #lobby-view .lobby-pan { overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; scroll-snap-type: x proximity; -webkit-overflow-scrolling: touch; }
+  #lobby-view .lobby-world::before, #lobby-view .lobby-world::after { content: ''; position: absolute; top: 0; width: 1px; height: 1px; scroll-snap-align: start; }
+  #lobby-view .lobby-world::before { left: 0; } #lobby-view .lobby-world::after { right: 0; scroll-snap-align: end; }
+  #lobby-view .lobby-npc, #lobby-view .npc-hit { left: var(--npx); width: calc(var(--unit) * .8); bottom: calc(var(--ground) + 8vh); }
+  #lobby-view .lobby-station { display: block; left: calc(var(--npx) + var(--flip) * var(--unit) * .36); width: calc(var(--unit) * .64); bottom: calc(var(--ground) + 8vh); }
+  .lobby-pan-button { display: grid; place-items: center; position: absolute; top: 46%; width: 44px; height: 56px; padding: 0; border-radius: 14px; border: 1px solid #f2d59666;
+    background: #0d1c2ecc; color: var(--gold-light, #f2d596); box-shadow: 0 4px 12px #000a; transition: opacity .2s; }
+  .lobby-pan-button[data-dir="-1"] { left: max(6px, env(safe-area-inset-left)); } .lobby-pan-button[data-dir="1"] { right: max(6px, env(safe-area-inset-right)); }
+  .lobby-pan-button .icon { width: 22px; height: 22px; }
+  .lobby-shell.pan-start .lobby-pan-button[data-dir="-1"], .lobby-shell.pan-end .lobby-pan-button[data-dir="1"] { opacity: 0; pointer-events: none; }
+  /* While a sheet is open the arrows step aside. */
+  .lobby-hud:has(.lobby-sheet) .lobby-pan-button { display: none; }
 }
 /* Service sheets open with the NPC's bust and one line. */
 .npc-line { display: flex; align-items: center; gap: 10px; margin: 0 0 8px; padding: 6px 10px 6px 6px; border-radius: 14px; background: #2a1d24cc; border: 1px solid #ffc98a33; }
@@ -548,3 +577,6 @@ html, body { background: #0a1422; }
 /* An optional elite (walk around it or challenge it) wears gold instead of the gate's coral. */
 .elite-unit[data-forced=false] .portrait { border-color: var(--gold-light, #f2d596); box-shadow: 0 0 0 2px #08121fcc, 0 0 10px #f2d59680; }
 .elite-unit[data-forced=false]::after { background: var(--gold-light, #f2d596); }
+/* Gold coins (hiring currency) use the line icon until painted item art exists. */
+.item-art.icon-art { display: inline-grid; place-items: center; background: none; } .item-art.icon-art .icon { width: 28px; height: 28px; color: #f2c14e; }
+.pack-item[data-resource=gold] .icon, .lobby-bank [data-bank=gold] .icon, .hire-cost .icon-gold { color: #f2c14e; }

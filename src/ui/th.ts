@@ -190,11 +190,12 @@ export function eventThai(event: BattleEvent, after: BattleState, data: Encounte
   }
 }
 export const resourceText: Record<ResourceId, { name: string; use: string }> = {
-  ore: { name: 'แร่ดาว', use: 'พากลับค่าย ใช้จ้างและอัปดาวทหารรับจ้าง' },
+  ore: { name: 'แร่ดาว', use: 'พากลับค่าย ใช้อัปดาว ปรุงยา และตีอุปกรณ์' },
+  gold: { name: 'เหรียญทอง', use: 'พากลับค่าย ใช้จ้างทหารรับจ้างเท่านั้น' },
   ember: { name: 'ถ่านม่านเวล', use: 'ชุบสมาชิกที่ล้ม 1 คนที่แคมป์' },
   seal: { name: 'ตราสัญญา', use: 'พากลับค่าย ใช้แทนตัวซ้ำ 1 ชิ้นเมื่ออัปดาว' },
 };
-export const resourceOrder: readonly ResourceId[] = ['ore', 'ember', 'seal'];
+export const resourceOrder: readonly ResourceId[] = ['ore', 'gold', 'ember', 'seal'];
 // Victory EXP (2D-1): the deployed lead's gain, any level-ups, and a note when the level gap cut it.
 export function expThai(exp: Record<string, ExpGain> | undefined, state: ExpeditionState): string {
   if (!exp) return '';

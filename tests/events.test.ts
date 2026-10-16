@@ -101,8 +101,8 @@ describe('map events', () => {
     expect(r.state.hp.weaver).toBe(max(r.state, 'weaver'));
     expect(r.state.eventsDone).toEqual([ev.id]); expect(pendingEvent(r.state, map)).toBeUndefined();
     expect(eventChoiceReason(at(ev), map, 'offer')).toBe('ore');
-    const o = chooseEvent(at(ev, { resources: { ore: 15, ember: 0, seal: 0 } }), map, lookup, 'offer').state;
-    expect(o.resources).toEqual({ ore: 15 - R.offerOre, ember: 0, seal: R.offerSeal });
+    const o = chooseEvent(at(ev, { resources: { ore: 15, gold: 0, ember: 0, seal: 0 } }), map, lookup, 'offer').state;
+    expect(o.resources).toEqual({ ore: 15 - R.offerOre, gold: 0, ember: 0, seal: R.offerSeal });
   });
   it('wounds never pass the cap and stay off the profile', () => {
     const s = at(event('shrine')); s.members.guardian = { ...s.members.guardian!, wound: 18 };
@@ -111,12 +111,12 @@ describe('map events', () => {
     expect(settle(newProfile(map, 1), r, 'withdrawn', map).members.guardian?.wound).toBeUndefined();
   });
   it('merchant sells potions for ore up to the carry limit and stays open', () => {
-    const ev = event('merchant'); let s = at(ev, { resources: { ore: 100, ember: 0, seal: 0 } });
+    const ev = event('merchant'); let s = at(ev, { resources: { ore: 100, gold: 0, ember: 0, seal: 0 } });
     for (let i = 0; i < map.potions.carry; i++) s = chooseEvent(s, map, lookup, 'buy-salve').state;
     expect(s.potions.salve).toBe(map.potions.carry); expect(s.resources.ore).toBe(100 - map.potions.carry * R.merchant.salve);
     expect(eventChoiceReason(s, map, 'buy-salve')).toBe('carry');
     expect(s.eventsDone).toEqual([]); expect(pendingEvent(s, map)?.id).toBe(ev.id);
-    expect(eventChoiceReason({ ...s, resources: { ore: 1, ember: 0, seal: 0 } }, map, 'buy-tonic')).toBe('ore');
+    expect(eventChoiceReason({ ...s, resources: { ore: 1, gold: 0, ember: 0, seal: 0 } }, map, 'buy-tonic')).toBe('ore');
   });
   it('traveller: giving a salve pays ore and a seal', () => {
     const ev = event('traveller');
@@ -164,8 +164,8 @@ describe('save v13', () => {
     expect(() => parseGame(JSON.stringify({ version: 13, profile: newProfile(map, 3), run: { ...run(), eventsDone: ['nowhere'] } }), map, lookup)).toThrow();
   });
   it('a run from an older map version settles home as withdrawn instead of losing the profile', () => {
-    const s = run({ mapVersion: map.version - 1, resources: { ore: 40, ember: 1, seal: 2 }, steps: 12, wins: 3 });
-    const profile = { ...newProfile(map, 3), bank: { ore: 5, seal: 0, dust: 0 } };
+    const s = run({ mapVersion: map.version - 1, resources: { ore: 40, gold: 0, ember: 1, seal: 2 }, steps: 12, wins: 3 });
+    const profile = { ...newProfile(map, 3), bank: { ore: 5, gold: 0, seal: 0, dust: 0 } };
     const game = parseGame(JSON.stringify({ version: 12, profile, run: s }), map, lookup);
     expect(game.run).toBeNull(); expect(game.profile.last?.outcome).toBe('withdrawn');
     expect(game.profile.bank.ore).toBeGreaterThan(5); expect(game.profile.expeditions).toBe(profile.expeditions + 1);
