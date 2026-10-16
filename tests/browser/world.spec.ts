@@ -1031,7 +1031,13 @@ test('camp NPCs stand at their stations, open their service when tapped and gree
   await expect(page.locator('#npc-art-herbalist')).toHaveAttribute('data-act', 'cheer');
   await page.locator('[data-lobby="close"]').click();
   // NPC frames change by transform, never by background-position (that repainted the atlas and flickered on iOS).
-  expect(await page.locator('#npc-art-smith i').evaluate(el => getComputedStyle(el).animationName)).toBe('npc-idle');
+  // Staff take turns working, so the smith may be idling or working at this moment; check both animations.
+  expect(['npc-idle', 'npc-work']).toContain(await page.locator('#npc-art-smith i').evaluate(el => getComputedStyle(el).animationName));
+  const frames = await page.evaluate(() => [...document.styleSheets].flatMap(sheet => [...sheet.cssRules])
+    .flatMap(r => r instanceof CSSMediaRule ? [...r.cssRules] : [r]).filter((r): r is CSSKeyframesRule => r instanceof CSSKeyframesRule && /^npc-(idle|work)$/.test(r.name))
+    .flatMap(r => [...r.cssRules].map(k => ({ name: r.name, transform: !!(k as CSSKeyframeRule).style.transform, background: !!(k as CSSKeyframeRule).style.backgroundPosition }))));
+  expect(new Set(frames.map(f => f.name))).toEqual(new Set(['npc-idle', 'npc-work']));
+  for (const f of frames) expect(f).toMatchObject({ transform: true, background: false });
   await page.setViewportSize({ width: 390, height: 844 }); await page.waitForTimeout(300);
   expect(await page.evaluate(() => document.scrollingElement!.scrollHeight <= innerHeight)).toBe(true);
   // Portrait: the camp pans sideways. It opens on the fire with the team; the staff are off to the sides.
