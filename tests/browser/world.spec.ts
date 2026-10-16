@@ -692,6 +692,8 @@ test('potions: brew in the lobby, pack 3 on departure, drink a salve and a repel
 });
 
 test('camp NPCs stand at their stations, open their service when tapped and greet with a line', async ({ page }, info) => {
+  // Opens and closes six sheets; the CI runner needed more than the 45 s default (16 s locally).
+  test.slow();
   const profile = { ...newProfile(map, 5), tutorialDone: true, commander, bank: { ore: 50, seal: 0, dust: 10 } } as Profile;
   // NPCs move only without reduced motion (the suite default is reduced).
   await page.emulateMedia({ reducedMotion: 'no-preference' }); await seed(page, null, profile);
