@@ -231,7 +231,8 @@ export const keptPercent: Record<RunOutcome, number> = { complete: 100, withdraw
 export function settle(initial: Profile, run: ExpeditionState, outcome: RunOutcome, map: MapDefinition): Profile {
   const profile = structuredClone(initial); const pct = keptPercent[outcome];
   const ore = Math.floor(run.resources.ore * pct / 100); const seal = Math.floor(run.resources.seal * pct / 100);
-  profile.bank.ore += ore; profile.bank.seal += seal;
+  const dust = Math.floor(run.dust * pct / 100);
+  profile.bank.ore += ore; profile.bank.seal += seal; profile.bank.dust += dust;
   // Found equipment comes home unless the team was wiped; a full bag salvages the rest (2D-2).
   let items = 0, salvaged = 0;
   if (outcome !== 'wiped') for (const found of run.found) { if (stash(profile, map, { ...found, uid: profile.nextItem++ })) items++; else salvaged++; }

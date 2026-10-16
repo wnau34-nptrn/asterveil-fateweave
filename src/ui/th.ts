@@ -1,8 +1,9 @@
 import type { ActionId, PassiveId, BattleEvent, BattleState, EncounterDefinition, Intent, TalentCap, TalentRule } from '../core/battle/types';
-import type { EquipmentRules, ExpGain, ExpeditionState, Gear, GearSlot, GearStat, Item, PotionId, PotionRules, ResourceId, Resources, SetDefinition, SetId, TalentNodeDef } from '../core/world/types';
+import type { EquipmentRules, ExpGain, ExpeditionState, Gear, GearSlot, GearStat, Item, PotionId, PotionRules, ResourceId, Resources, SetDefinition, SetId, TalentNodeDef, MapEventKind, EventChoice, EventRules } from '../core/world/types';
 import type { GearSpecial } from '../core/battle/types';
 import { itemStats, setCounts } from '../core/world/equipment';
 import { ambushBonusOf, capAmount, corrodeBonusOf, guardReductionOf, hasCap, skillPower, songPower, talentRule, tauntReductionOf } from '../core/battle/engine';
+import type { IconName } from './icons';
 export const thaiFont = '"Noto Sans Thai", "Leelawadee UI", Tahoma, sans-serif';
 export const heroText: Record<string, { name: string; role: string; help: string; icon: string }> = {
   guardian: { name: 'เอกิส', role: 'อัศวิน', help: 'รับแทนเพื่อนและหยุดการโจมตี', icon: '♜' },
@@ -254,3 +255,27 @@ export const npcText: Record<'smith' | 'broker' | 'trainer' | 'keeper' | 'herbal
   herbalist: { name: 'เฟิร์น', role: 'นักปรุงยา', lines: ['ยาใหม่ร้อนๆ เพิ่งต้มเสร็จเลย!', 'พกไปได้อย่างละสามขวดนะ อย่าลืม', 'ยาไล่ม่านช่วยให้เดินผ่านทุ่งได้เงียบๆ'] },
   scout: { name: 'คาเอล', role: 'ผู้นำทาง', lines: ['ทางข้างหน้ามืด เตรียมทีมให้พร้อม', 'ตัวสำรองสลับได้ที่แคมป์เท่านั้น เลือกให้ดี', 'ศัตรูเล็งตามหมายเลขช่อง จัดแถวให้ดี'] },
 };
+// ---- Map events (3A): live Thai text for each event and choice; numbers come from the rules. ----
+export const eventText: Record<MapEventKind, { name: string; scene: string; icon: IconName }> = {
+  bandits: { name: 'ด่านโจรม่าน', scene: 'กลุ่มโจรตั้งด่านขวางทาง พวกมันเฝ้าของที่ปล้นมา', icon: 'danger' },
+  shrine: { name: 'ศาลม่านเก่า', scene: 'ศาลหินเรืองแสงจาง ๆ พลังของมันรักษาได้แต่ต้องแลกกับบางอย่าง', icon: 'star' },
+  merchant: { name: 'พ่อค้าเร่', scene: 'พ่อค้าเร่แวะพักริมทาง ขายยาแลกแร่ดาว', icon: 'pack' },
+  traveller: { name: 'นักเดินทางบาดเจ็บ', scene: 'นักเดินทางคนหนึ่งบาดเจ็บนั่งพิงต้นไม้ ขอยาสักขวด', icon: 'talk' },
+  rift: { name: 'รอยแยกเล็ก', scene: 'รอยแยกม่านเล็ก ๆ กำลังสั่น มีบางอย่างกำลังจะคลานออกมา', icon: 'boss' },
+};
+export function choiceText(choice: EventChoice, r: EventRules): { label: string; help: string } {
+  switch (choice) {
+    case 'fight': return { label: 'สู้', help: '' };
+    case 'sneak': return { label: 'ลอบผ่าน', help: 'ไม่ต้องสู้ แต่ศัตรูในโซนจะตื่นตัวเต็มที่' };
+    case 'pray': return { label: 'สวดขอพร', help: `คนที่ยืนอยู่ฟื้นเลือด ${r.prayHeal}% แต่เลือดสูงสุดทุกคนลด ${r.prayWound}% ตลอดรอบนี้` };
+    case 'offer': return { label: 'ถวายแร่', help: `จ่ายแร่ดาว ${r.offerOre} ได้ตราสัญญา ${r.offerSeal}` };
+    case 'buy-salve': return { label: `ซื้อยาฟื้นแผล · ${r.merchant.salve} แร่`, help: '' };
+    case 'buy-tonic': return { label: `ซื้อยาฟื้นหมู่ · ${r.merchant.tonic} แร่`, help: '' };
+    case 'buy-repel': return { label: `ซื้อยาไล่ม่าน · ${r.merchant.repel} แร่`, help: '' };
+    case 'help': return { label: 'ให้ยาฟื้นแผล', help: `ใช้ยาฟื้นแผล 1 ขวด ได้แร่ดาว ${r.traveller.ore} และตราสัญญา ${r.traveller.seal}` };
+  }
+}
+export const eventChoices: Record<MapEventKind, readonly EventChoice[]> = {
+  bandits: ['fight', 'sneak'], shrine: ['pray', 'offer'], merchant: ['buy-salve', 'buy-tonic', 'buy-repel'], traveller: ['help'], rift: ['fight'],
+};
+export const eventReasonText: Record<string, string> = { ore: 'แร่ดาวไม่พอ', salve: 'ไม่มียาฟื้นแผล', carry: 'พกเต็มแล้ว', busy: 'ทำตอนนี้ไม่ได้', choice: 'ทำไม่ได้' };

@@ -1,6 +1,6 @@
 import { replay, withLevel, withParty } from '../battle/engine';
 import type { BattleState, Command, EncounterDefinition, HeroDefinition, HeroTalents } from '../battle/types';
-import type { ActiveBattle, BattleKind, ChestDefinition, Company, Direction, ExpGain, ExpeditionState, LootTable, MapDefinition, MemberProgress, Point, PotionId, Resources, Talents, Tile, WorldResult, ZoneDefinition, Gear, Item } from './types';
+import type { ActiveBattle, BattleKind, ChestDefinition, Company, Direction, ExpGain, ExpeditionState, LootTable, MapDefinition, MemberProgress, Point, PotionId, Resources, Talents, Tile, WorldResult, ZoneDefinition, Gear, Item, EliteDefinition, EventChoice, MapEventDefinition, MapEventKind } from './types';
 import { gearTotals, rollItem } from './equipment';
 import { PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS, SET_IDS } from './types';
 
@@ -89,7 +89,7 @@ export function talentEffects(map: MapDefinition, heroId: string, talents: Talen
 }
 export function memberDef(lookup: EncounterLookup, map: MapDefinition, members: ExpeditionState['members'], id: string): HeroDefinition | undefined {
   const base = heroDef(lookup, map, id);
-  return base && starred(base, members[id]?.stars ?? 1, map, members[id]?.level ?? 1, members[id]?.talents, members[id]?.gear);
+  return base && wounded(starred(base, members[id]?.stars ?? 1, map, members[id]?.level ?? 1, members[id]?.talents, members[id]?.gear), members[id]?.wound);
 }
 // ---- Levels (2D-1) ----
 export const levelOf = (m: MemberProgress | undefined): number => m?.level ?? 1;
@@ -123,12 +123,21 @@ export function newExpedition(map: MapDefinition, lookup: EncounterLookup, seed:
     resources: { ore: 0, ember: 0, seal: 0 }, openedChests: [], restReady: true,
     tutorialDone, bossDefeated: false, completed: false, wins: 0, defeats: 0, battle: null, found: [], dry: 0,
     potions: company?.potions ? { ...company.potions } : { salve: 0, tonic: 0, repel: 0 }, repel: 0,
+    elitesDefeated: [], eventsDone: [], dust: 0,
   };
   reveal(state, map);
   return state;
 }
-const startBattle = (state: ExpeditionState, kind: BattleKind, encounterId: string, level?: number): ActiveBattle =>
-  ({ kind, encounterId, entry: Object.fromEntries(state.roster.deployed.map(id => [id, state.hp[id]!])), commands: [], ...(level ? { level } : {}) });
+const startBattle = (state: ExpeditionState, kind: BattleKind, encounterId: string, level?: number, source?: string): ActiveBattle =>
+  ({ kind, encounterId, entry: Object.fromEntries(state.roster.deployed.map(id => [id, state.hp[id]!])), commands: [], ...(level ? { level } : {}), ...(source ? { source } : {}) });
+// ---- Phase 3A: elites and events ----
+// A shrine wound lowers max HP by a percent for the rest of the run.
+export const wounded = (def: HeroDefinition, wound = 0): HeroDefinition => wound ? { ...def, maxHp: Math.max(1, Math.round(def.maxHp * (100 - wound) / 100)) } : def;
+export const eliteAt = (map: MapDefinition, p: Point): EliteDefinition | undefined => map.elites.find(e => e.x === p.x && e.y === p.y);
+export const eventAt = (map: MapDefinition, p: Point): MapEventDefinition | undefined => map.events.find(e => e.x === p.x && e.y === p.y);
+// An unbeaten elite blocks its tile; an unfinished event is waiting on its tile.
+export const eliteBlocks = (state: ExpeditionState, map: MapDefinition, p: Point): EliteDefinition | undefined => { const e = eliteAt(map, p); return e && !state.elitesDefeated.includes(e.id) ? e : undefined; };
+export const pendingEvent = (state: ExpeditionState, map: MapDefinition, p: Point = state.position): MapEventDefinition | undefined => { const e = eventAt(map, p); return e && !state.eventsDone.includes(e.id) ? e : undefined; };
 
 export function move(initial: ExpeditionState, map: MapDefinition, dir: Direction): WorldResult {
   if (initial.battle || initial.completed) return { state: initial, event: { type: 'blocked', reason: 'busy' } };
@@ -143,10 +152,19 @@ export function move(initial: ExpeditionState, map: MapDefinition, dir: Directio
     state.battle = startBattle(state, 'boss', map.bossEncounterId);
     return { state, event: { type: 'encounter', kind: 'boss', encounterId: map.bossEncounterId, chance: 100 } };
   }
+  // An elite holds its gate the same way: stepping into it starts the fight; beaten, the gate is open for the run.
+  const elite = eliteBlocks(state, map, target);
+  if (elite) {
+    state.battle = startBattle(state, 'elite', elite.encounterId, undefined, elite.id);
+    return { state, event: { type: 'encounter', kind: 'elite', encounterId: elite.encounterId, chance: 100 } };
+  }
   state.position = target; state.steps++; reveal(state, map);
   // Reaching a camp makes it the defeat return point, whether or not the party rests.
   if (tile.kind === 'camp') state.camp = { ...target };
   if (tile.kind === 'goal') { state.completed = true; return { state, event: { type: 'goal' } }; }
+  // An event tile asks for a choice instead of rolling an encounter.
+  const waiting = pendingEvent(state, map, target);
+  if (waiting) return { state, event: { type: 'event', eventId: waiting.id } };
   const zone = rollingZone(map, target);
   if (!zone) return { state, event: { type: 'moved', chance: 0 } };
   // Each step through an encounter zone uses up one step of repel, with no roll and no pressure.
@@ -271,12 +289,64 @@ function battleLoot(state: ExpeditionState, map: MapDefinition, kind: BattleKind
   return zoneOf(map, tileAt(map, state.position)?.zoneId ?? '')?.loot ?? noLoot;
 }
 
+// Event choices (3A). Valid only while standing on the unfinished event and outside battle. Fights start a battle
+// that finishes the event on victory; other choices finish it at once (the merchant stays open for more trades).
+export function eventChoiceReason(state: ExpeditionState, map: MapDefinition, choice: EventChoice): string {
+  const ev = pendingEvent(state, map); const r = map.eventRules;
+  if (!ev || state.battle || state.completed) return 'busy';
+  const allowed: Record<MapEventKind, readonly EventChoice[]> = { bandits: ['fight', 'sneak'], shrine: ['pray', 'offer'], merchant: ['buy-salve', 'buy-tonic', 'buy-repel'], traveller: ['help'], rift: ['fight'] };
+  if (!allowed[ev.kind].includes(choice)) return 'choice';
+  if (choice === 'offer' && state.resources.ore < r.offerOre) return 'ore';
+  if (choice === 'help' && state.potions.salve < 1) return 'salve';
+  if (choice.startsWith('buy-')) {
+    const potion = choice.slice(4) as PotionId;
+    if (state.potions[potion] >= map.potions.carry) return 'carry';
+    if (state.resources.ore < r.merchant[potion]) return 'ore';
+  }
+  return '';
+}
+export function chooseEvent(initial: ExpeditionState, map: MapDefinition, lookup: EncounterLookup, choice: EventChoice): WorldResult {
+  if (eventChoiceReason(initial, map, choice)) return { state: initial, event: { type: 'blocked', reason: 'busy' } };
+  const state = structuredClone(initial); const ev = pendingEvent(state, map)!; const r = map.eventRules;
+  const zone = zoneOf(map, tileAt(map, state.position)!.zoneId); const level = monsterLevelAt(map, state.position) ?? 1;
+  if (choice === 'fight') {
+    let encounterId = r.riftEncounterId; let lv = level;
+    if (ev.kind === 'bandits') {
+      const pool = zone?.pool ?? []; const total = pool.reduce((sum, e) => sum + e.weight, 0);
+      let pick = rollPercent(state.seed, state.rolls++) % Math.max(1, total);
+      encounterId = pool.find(e => (pick -= e.weight) < 0)?.encounterId ?? r.riftEncounterId; lv = level + r.banditLevelBonus;
+    }
+    state.battle = startBattle(state, 'event', encounterId, lv, ev.id);
+    return { state, event: { type: 'encounter', kind: 'event', encounterId, chance: 100 } };
+  }
+  const heal: Record<string, number> = {};
+  if (choice === 'sneak') state.pressure = zone?.cap ?? state.pressure;
+  if (choice === 'pray') {
+    // Healing first at the old maximum, then the wound lowers every brought member's maximum for the run.
+    for (const id of rosterIds(state)) {
+      const max = memberDef(lookup, map, state.members, id)!.maxHp; if (!state.hp[id]) continue;
+      const amount = Math.min(max - state.hp[id]!, Math.ceil(max * r.prayHeal / 100)); if (amount > 0) { state.hp[id]! += amount; heal[id] = amount; }
+    }
+    for (const id of rosterIds(state)) {
+      const m = state.members[id]!; state.members[id] = { ...m, wound: Math.min(r.maxWound, (m.wound ?? 0) + r.prayWound) };
+      state.hp[id] = Math.min(state.hp[id]!, memberDef(lookup, map, state.members, id)!.maxHp);
+    }
+  }
+  if (choice === 'offer') { state.resources.ore -= r.offerOre; state.resources.seal += r.offerSeal; }
+  if (choice === 'help') { state.potions.salve--; state.resources.ore += r.traveller.ore; state.resources.seal += r.traveller.seal; }
+  if (choice.startsWith('buy-')) { const potion = choice.slice(4) as PotionId; state.resources.ore -= r.merchant[potion]; state.potions[potion]++; }
+  if (ev.kind !== 'merchant') state.eventsDone.push(ev.id);
+  return { state, event: { type: 'eventDone', eventId: ev.id, choice, ...(Object.keys(heal).length ? { heal } : {}) } };
+}
 // Equipment drop (2D-2): random victories drop at `dropPercent`, guaranteed after `pity` dry wins; the boss
 // always drops with better rarity weights; the tutorial never drops. The item's level is the monster level,
 // and a weapon is made for one of the brought members. Found items ride with the run until it is settled.
-function dropItem(state: ExpeditionState, map: MapDefinition, kind: BattleKind, level: number): Item | undefined {
+function dropItem(state: ExpeditionState, map: MapDefinition, kind: BattleKind, level: number, source?: string): Item | undefined {
   const rules = map.equipment;
   if (kind === 'tutorial') return undefined;
+  // Event fights: bandits always drop an item; a rift pays in veil dust instead.
+  if (kind === 'event' && !state.eventsDone.includes(source ?? '')) return undefined;
+  if (kind === 'event' && map.events.find(e => e.id === source)?.kind === 'rift') return undefined;
   if (kind === 'random') {
     const lucky = rollPercent(state.seed, state.rolls++) < rules.dropPercent || state.dry + 1 >= rules.pity;
     if (!lucky) { state.dry++; return undefined; }
@@ -284,7 +354,8 @@ function dropItem(state: ExpeditionState, map: MapDefinition, kind: BattleKind, 
   }
   // Sets come from the zone the battle was fought in; the boss can drop any set.
   const sets = kind === 'boss' ? SET_IDS : zoneOf(map, tileAt(map, state.position)?.zoneId ?? '')?.sets ?? [];
-  const item = rollItem(rules, () => rollPercent(state.seed, state.rolls++), level, kind === 'boss' ? rules.bossRarityWeights : rules.rarityWeights, rosterIds(state), sets);
+  const weights = kind === 'boss' ? rules.bossRarityWeights : kind === 'elite' ? map.eventRules.eliteRarityWeights : rules.rarityWeights;
+  const item = rollItem(rules, () => rollPercent(state.seed, state.rolls++), level, weights, rosterIds(state), sets);
   state.found.push(item);
   return item;
 }
@@ -311,7 +382,7 @@ export function recordBattle(initial: ExpeditionState, map: MapDefinition, looku
 // their level against the monster level. Level-ups raise max HP; standing members gain the difference.
 function gainExp(state: ExpeditionState, map: MapDefinition, lookup: EncounterLookup, data: EncounterDefinition, kind: BattleKind): Record<string, ExpGain> {
   const rules = map.progression; const level = data.level ?? 1;
-  const base = data.enemies.length * (rules.expBase + rules.expPerLevel * level) * (kind === 'boss' ? rules.bossExpMultiplier : 1);
+  const base = data.enemies.length * (rules.expBase + rules.expPerLevel * level) * (kind === 'boss' ? rules.bossExpMultiplier : kind === 'elite' ? map.eventRules.eliteExp : 1);
   const gains: Record<string, ExpGain> = {};
   for (const id of rosterIds(state)) {
     const member = state.members[id] ?? { stars: 1, dupes: 0 }; const before = memberDef(lookup, map, state.members, id)!.maxHp;
@@ -338,11 +409,18 @@ export function finishBattle(initial: ExpeditionState, map: MapDefinition, looku
     state.battle = null; state.wins++; state.restReady = true;
     if (kind === 'tutorial') state.tutorialDone = true;
     if (kind === 'boss') state.bossDefeated = true;
+    // Elites stay beaten and events finished for the rest of the run; a rift pays veil dust.
+    const source = initial.battle.source; let dust = 0;
+    if (kind === 'elite' && source) state.elitesDefeated.push(source);
+    if (kind === 'event' && source) {
+      state.eventsDone.push(source);
+      if (map.events.find(e => e.id === source)?.kind === 'rift') { dust = map.eventRules.riftDust; state.dust += dust; }
+    }
     const data = battleData(initial, map, lookup)!;
     const exp = gainExp(state, map, lookup, data, kind);
     const loot = rollLoot(state, battleLoot(state, map, kind));
-    const item = dropItem(state, map, kind, data.level ?? 1);
-    return { state, event: { type: 'victory', kind, encounterId, loot, exp, ...(item ? { item } : {}) } };
+    const item = dropItem(state, map, kind, data.level ?? 1, source);
+    return { state, event: { type: 'victory', kind, encounterId, loot, exp, ...(item ? { item } : {}), ...(dust ? { dust } : {}) } };
   }
   state.defeats++;
   if (kind === 'tutorial') {

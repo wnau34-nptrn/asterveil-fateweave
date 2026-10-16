@@ -19,7 +19,7 @@ export interface BattleSession {
   leaveLabel(outcome: Outcome): string;
   leave(): void;
 }
-const kindLabel: Record<BattleKind, string> = { tutorial: 'ศึกสอน', random: 'พบศัตรู', boss: 'บอส' };
+const kindLabel: Record<BattleKind, string> = { tutorial: 'ศึกสอน', random: 'พบศัตรู', boss: 'บอส', elite: 'อีลิท', event: 'เหตุการณ์' };
 
 const escapeHtml = (s: string) => s.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
 

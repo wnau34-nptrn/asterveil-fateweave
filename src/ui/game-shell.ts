@@ -1,12 +1,12 @@
 import type { BattleState, Outcome } from '../core/battle/types';
 import { clearLegacySaves, loadGame, saveGame, type Game } from '../core/save/expedition-save';
 import { createCommander, depart, brew, dismiss, equip, hire, learnTalent, newProfile, placeMember, resetTalents, salvage, settle, unequip, upgrade, canWithdraw } from '../core/world/profile';
-import type { Direction, ExpeditionState, MapDefinition, PotionId, Profile, ProfileResult, RunOutcome, WorldEvent } from '../core/world/types';
-import { battleData, finishBattle, heroCatalog, move, moveMember, openChest, recordBattle, usePotion, rest, revive, swapMembers, type EncounterLookup } from '../core/world/world';
+import type { Direction, EventChoice, ExpeditionState, MapDefinition, PotionId, Profile, ProfileResult, RunOutcome, WorldEvent } from '../core/world/types';
+import { battleData, chooseEvent, finishBattle, heroCatalog, move, moveMember, openChest, recordBattle, usePotion, rest, revive, swapMembers, type EncounterLookup } from '../core/world/world';
 import { browserStorage } from '../platform/browser-storage';
 import type { BattleUI } from './battle-ui';
 import type { NpcId } from '../game/visuals/assets';
-import { expThai, heroText, itemLines, itemName, lootThai, potionText } from './th';
+import { choiceText, eventText, expThai, heroText, itemLines, itemName, lootThai, potionText } from './th';
 import { enhance, findItem, fuse, reroll } from '../core/world/forge';
 import { CommanderUI } from './commander-ui';
 import { LobbyUI } from './lobby-ui';
@@ -42,7 +42,8 @@ export class GameShell {
     this.world = new WorldUI(views.world, map, heroCatalog(lookup, map), {
       move: dir => this.move(dir), rest: () => this.rest(), revive: id => this.revive(id), swap: (a, b) => this.roster(swapMembers(this.state!, map, a, b)), moveMember: id => this.roster(moveMember(this.state!, map, id)),
       withdraw: () => this.endRun('withdrawn'), openChest: () => this.openChest(), usePotion: (potion, id) => this.drink(potion, id),
-    });
+      chooseEvent: choice => this.chooseEvent(choice),
+    }, Object.fromEntries(map.elites.map(e => [e.id, lookup(e.encounterId)?.enemies.find(f => f.id === 'brute')?.art ?? 'brute'])));
     this.lobby = new LobbyUI(views.lobby, map, lookup, heroCatalog(lookup, map), {
       hire: i => this.profileChange(hire(this.game!.profile, map, lookup, i)), upgrade: id => this.profileChange(upgrade(this.game!.profile, map, id)),
       dismiss: id => this.profileChange(dismiss(this.game!.profile, map, id)), place: (id, group, other) => this.profileChange(placeMember(this.game!.profile, id, group, other)),
@@ -168,16 +169,36 @@ export class GameShell {
     if (result.event.type === 'goal') { this.endRun('complete'); return; }
     this.persist();
     this.message = this.describe(result.event);
-    if (result.event.type === 'encounter') {
-      const data = this.lookup(result.event.encounterId)!;
-      this.locked = true;
-      const kind = result.event.kind === 'random' ? 'encounter' : result.event.kind;
-      this.banner = { kind, eyebrow: kind === 'boss' ? 'บอส · รอยแยกกำลังตื่นขึ้น' : kind === 'tutorial' ? 'ศึกแรก' : 'พบศัตรู!', title: data.name, detail: data.enemies.map(e => e.displayName ?? e.name).join(' · ') };
-      this.renderWorld();
-      // Veil-shatter presentation (720 ms, 100 ms crossfade under reduced motion); the battle is already saved.
-      setTimeout(() => { this.banner = undefined; this.openBattle(); }, this.reducedMotion.matches ? 100 : 720);
-      return;
-    }
+    if (result.event.type === 'encounter') { this.startEncounter(result.event.kind, result.event.encounterId); return; }
+    this.renderWorld();
+    if (result.event.type === 'event') this.world.openEvent();
+  }
+  private startEncounter(battleKind: 'tutorial' | 'random' | 'boss' | 'elite' | 'event', encounterId: string): void {
+    const data = this.lookup(encounterId)!;
+    this.locked = true;
+    const kind = battleKind === 'random' || battleKind === 'event' ? 'encounter' : battleKind;
+    const eyebrow = kind === 'boss' ? 'บอส · รอยแยกกำลังตื่นขึ้น' : kind === 'elite' ? 'อีลิท · ผู้เฝ้าด่าน' : kind === 'tutorial' ? 'ศึกแรก' : 'พบศัตรู!';
+    this.banner = { kind, eyebrow, title: data.name, detail: data.enemies.map(e => e.displayName ?? e.name).join(' · ') };
+    this.renderWorld();
+    // Veil-shatter presentation (720 ms, 100 ms crossfade under reduced motion); the battle is already saved.
+    setTimeout(() => { this.banner = undefined; this.openBattle(); }, this.reducedMotion.matches ? 100 : 720);
+  }
+  // Event choices (3A) are saved at once; a fight starts like any encounter.
+  private chooseEvent(choice: EventChoice): void {
+    if (!this.state || this.locked) return;
+    const result = chooseEvent(this.state, this.map, this.lookup, choice);
+    if (result.event.type === 'blocked') return;
+    this.state = result.state; this.persist();
+    if (result.event.type === 'encounter') { this.message = 'เข้าสู่การต่อสู้!'; this.startEncounter(result.event.kind, result.event.encounterId); return; }
+    const done = result.event; if (done.type !== 'eventDone') return;
+    const ev = this.map.events.find(e => e.id === done.eventId)!;
+    const healed = Object.entries(done.heal ?? {}).map(([id, n]) => `${heroText[id]?.name ?? id} +${n}`).join(' · ');
+    const detail: Partial<Record<EventChoice, string>> = {
+      sneak: 'ลอบผ่านไปได้ · ศัตรูในโซนตื่นตัวเต็มที่', pray: `ศาลประทานพร${healed ? ` · ${healed}` : ''} · เลือดสูงสุดลด ${this.map.eventRules.prayWound}%`,
+      offer: `ถวายแร่ ${this.map.eventRules.offerOre} · ได้ตราสัญญา ${this.map.eventRules.offerSeal}`, help: `ช่วยนักเดินทาง · ได้แร่ดาว ${this.map.eventRules.traveller.ore} และตราสัญญา ${this.map.eventRules.traveller.seal}`,
+    };
+    this.message = `${eventText[ev.kind].name} · ${detail[choice] ?? `${choiceText(choice, this.map.eventRules).label} แล้ว`}`;
+    if (choice === 'pray') this.effect = 'rest'; else if (choice !== 'sneak') this.effect = 'loot';
     this.renderWorld();
   }
   private rest(): void {
@@ -226,7 +247,8 @@ export class GameShell {
   private describe(event: WorldEvent): string {
     switch (event.type) {
       case 'moved': return event.chance ? `ก้าวต่อไป · ไม่พบศัตรู (โอกาส ${event.chance}%)` : 'พื้นที่ปลอดภัย';
-      case 'encounter': return event.kind === 'boss' ? 'ผู้คุมรอยแยกขวางประตูไว้!' : 'พบศัตรู!';
+      case 'encounter': return event.kind === 'boss' ? 'ผู้คุมรอยแยกขวางประตูไว้!' : event.kind === 'elite' ? 'อีลิทเฝ้าด่านขวางทางไว้ · ต้องชนะถึงจะผ่าน' : 'พบศัตรู!';
+      case 'event': return eventText[this.map.events.find(e => e.id === event.eventId)!.kind].name;
       case 'goal': return 'ถึงประตูรอยแยกแล้ว';
       default: return this.message;
     }
@@ -251,7 +273,8 @@ export class GameShell {
       const fallen = Object.values(next.hp).filter(hp => hp <= 0).length;
       if (result.event.type === 'victory') {
         const loot = lootThai(result.event.loot) + (result.event.item ? ` · ได้${itemName(result.event.item)} Lv${result.event.item.level}` : ''); this.effect = 'loot'; const exp = expThai(result.event.exp, next);
-        this.message = kind === 'boss' ? `ผู้คุมรอยแยกล้มแล้ว · ${loot}${exp} · ทางไปประตูเปิดออก` : `ชนะศึก · ${loot}${exp}${fallen ? ` · ${fallen} คนล้มอยู่ ชุบที่แคมป์` : ''}`;
+        const dust = result.event.dust ? ` · ผงม่าน +${result.event.dust}` : '';
+        this.message = kind === 'boss' ? `ผู้คุมรอยแยกล้มแล้ว · ${loot}${exp} · ทางไปประตูเปิดออก` : kind === 'elite' ? `อีลิทล้มแล้ว · ${loot}${exp} · ด่านเปิดออก` : kind === 'event' ? `ชนะศึก · ${loot}${dust}${exp}` : `ชนะศึก · ${loot}${exp}${fallen ? ` · ${fallen} คนล้มอยู่ ชุบที่แคมป์` : ''}`;
       } else if (result.event.type === 'defeat') {
         if (result.event.wiped) {
           // Every brought member is down: the expedition fails and settles home in this write.

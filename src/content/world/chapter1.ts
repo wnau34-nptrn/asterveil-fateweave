@@ -4,8 +4,9 @@ import { talentTrees } from '../heroes/talents';
 
 // Chapter 1 layout: start (S) in the green south, camp (C) in the yellow middle,
 // final camp before the boss (B) who guards the goal (G). '#' is impassable.
+// Version 2 (phase 3A) narrows the two zone gates to one tile each, held by an elite.
 export const chapterOne: MapDefinition = {
-  id: 'veil-frontier', version: 1, name: 'ชายแดนม่านเวล',
+  id: 'veil-frontier', version: 2, name: 'ชายแดนม่านเวล',
   rows: [
     '####################',
     '########:G:#########',
@@ -17,7 +18,7 @@ export const chapterOne: MapDefinition = {
     '###;;;;;;#;;;;;#;;##',
     '####;;;###;;;;;;;;##',
     '#####;;;;;;##;;;####',
-    '######,,,;;##;######',
+    '#########;##########',
     '####,,,,,,,,,,,,####',
     '###,,,##,,,,,##,,,##',
     '###,,,##,,#,,##,,,##',
@@ -25,7 +26,7 @@ export const chapterOne: MapDefinition = {
     '####,,,#,,,,,#,,,###',
     '#####,,#,,C,,#,,####',
     '######,,,,,,,,,#####',
-    '#######,,....,######',
+    '#########.##########',
     '#####...........####',
     '####....##...##..###',
     '###.....##...##...##',
@@ -75,6 +76,22 @@ export const chapterOne: MapDefinition = {
   progression: { levelCap: 10, levelStatPercent: 3, monsterLevelPercent: 7, expBase: 6, expPerLevel: 2, bossExpMultiplier: 3, nextBase: 10, nextPerLevel: 10 },
   talents: talentTrees,
   // Map potions (2D-5, draft numbers).
+  // Phase 3A (draft numbers): elites hold the one-tile gates; events wait in the side areas, two per zone.
+  elites: [
+    { id: 'gate-meadow', x: 9, y: 18, encounterId: 'elite-tusk-chief' },
+    { id: 'gate-thicket', x: 9, y: 10, encounterId: 'elite-briar-lord' },
+  ],
+  events: [
+    { id: 'meadow-traveller', x: 4, y: 20, kind: 'traveller' }, { id: 'meadow-merchant', x: 16, y: 21, kind: 'merchant' },
+    { id: 'thicket-bandits', x: 4, y: 13, kind: 'bandits' }, { id: 'thicket-shrine', x: 16, y: 14, kind: 'shrine' },
+    { id: 'scar-rift', x: 5, y: 7, kind: 'rift' }, { id: 'scar-bandits', x: 14, y: 8, kind: 'bandits' },
+  ],
+  eventRules: {
+    banditLevelBonus: 1, prayHeal: 25, prayWound: 5, maxWound: 20, offerOre: 10, offerSeal: 1,
+    merchant: { salve: 8, tonic: 14, repel: 10 }, traveller: { ore: 10, seal: 1 },
+    riftEncounterId: 'scout-patrol', riftDust: 12,
+    eliteExp: 2, eliteRarityWeights: [0, 0, 60, 30, 10],
+  },
   potions: {
     carry: 3, salvePercent: 40, tonicPercent: 20, repelSteps: 10,
     brew: { salve: { ore: 6, dust: 2 }, tonic: { ore: 10, dust: 4 }, repel: { ore: 8, dust: 3 } },

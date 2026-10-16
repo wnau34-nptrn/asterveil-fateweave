@@ -118,5 +118,39 @@ export const crystalStampede: EncounterDefinition = {
   ],
 };
 
-export const encounters: readonly EncounterDefinition[] = [firstClash, scoutPatrol, riftWhelp, thicketAmbush, shadowStalker, veilSiege, rearAmbush, crystalStampede, riftWarden];
+// Phase 3A elites guard the one-tile gates between zones (level = zone top + 2). Each brings one extra signature move.
+export const eliteTuskChief: EncounterDefinition = {
+  ...veilSiege, id: 'elite-tusk-chief', version: 1, level: 5, name: 'จ่าฝูงแห่งทุ่ง',
+  enemies: [
+    { id: 'raider', speed: 110, name: 'Dandelion Sprite', displayName: 'ภูตแดนดิไลออน', maxHp: 70, color: 0xa6dfce, art: 'foe_sprite' },
+    { id: 'brute', speed: 70, name: 'Tusker Chief', displayName: 'จ่าฝูงหมูป่าหลังตะไคร่', maxHp: 190, color: 0x718746, art: 'foe_tusker' },
+  ],
+  intents: [
+    { sourceId: 'raider', targetSlot: 2, name: 'Seed Spark', damage: 13, kind: 'energy' },
+    { sourceId: 'brute', targetSlot: 1, name: 'Tusk Charge', damage: 20, kind: 'physical' },
+    { sourceId: 'raider', targetSlot: 3, name: 'Seed Spark', damage: 14, kind: 'energy' },
+    // Signature: the chief's stampede, the round's heaviest physical hit (Shield Bash can stop it).
+    { sourceId: 'brute', targetSlot: 0, name: 'Stampede', damage: 26, kind: 'physical' },
+    { sourceId: 'raider', targetSlot: 2, name: 'Seed Spark', damage: 13, kind: 'energy' },
+    { sourceId: 'brute', targetSlot: 1, name: 'Tusk Charge', damage: 20, kind: 'physical' },
+  ],
+};
+export const eliteBriarLord: EncounterDefinition = {
+  ...veilSiege, id: 'elite-briar-lord', version: 1, level: 8, name: 'เจ้าป่าหนาม',
+  enemies: [
+    { id: 'raider', speed: 110, name: 'Briar Stalker', displayName: 'ลิงซ์หนามพราง', maxHp: 100, color: 0x397e77, art: 'foe_stalker' },
+    { id: 'brute', speed: 70, name: 'Briar Lord', displayName: 'เจ้าป่าหนาม', maxHp: 200, color: 0x397e77, art: 'foe_matriarch' },
+  ],
+  intents: [
+    { sourceId: 'raider', targetSlot: 1, name: 'Thorn Pounce', damage: 19, kind: 'physical' },
+    { sourceId: 'brute', targetSlot: 3, name: 'Thorn Bloom', damage: 22, kind: 'energy' },
+    { sourceId: 'raider', targetSlot: 0, name: 'Thorn Pounce', damage: 18, kind: 'physical' },
+    // Signature: a storm of thorns at the back line (energy: Sigil Bind or a Ward answer it).
+    { sourceId: 'brute', targetSlot: 2, name: 'Thorn Storm', damage: 27, kind: 'energy' },
+    { sourceId: 'raider', targetSlot: 1, name: 'Thorn Pounce', damage: 19, kind: 'physical' },
+    { sourceId: 'brute', targetSlot: 1, name: 'Briar Lash', damage: 22, kind: 'physical' },
+  ],
+};
+
+export const encounters: readonly EncounterDefinition[] = [firstClash, scoutPatrol, riftWhelp, thicketAmbush, shadowStalker, veilSiege, rearAmbush, crystalStampede, riftWarden, eliteTuskChief, eliteBriarLord];
 export const encounterById = (id: string): EncounterDefinition | undefined => encounters.find(e => e.id === id);

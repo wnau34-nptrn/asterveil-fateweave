@@ -1,15 +1,15 @@
 import type { HeroDefinition } from '../core/battle/types';
-import type { Direction, ExpeditionState, MapDefinition, Point, PotionId } from '../core/world/types';
-import { atCamp, atMuster, canOpenChest, canRest, canRevive, chestAt, encounterChance, isRevealed, monsterLevelAt, rosterIds, starred, tileAt, zoneOf } from '../core/world/world';
+import type { Direction, EventChoice, ExpeditionState, MapDefinition, Point, PotionId } from '../core/world/types';
+import { atCamp, atMuster, canOpenChest, canRest, canRevive, chestAt, eliteBlocks, encounterChance, eventChoiceReason, isRevealed, monsterLevelAt, pendingEvent, rosterIds, starred, tileAt, wounded, zoneOf } from '../core/world/world';
 import { PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS } from '../core/world/types';
 import { actorArt, portraitsUrl, sheetRows } from '../game/visuals/assets';
 import { SOURCE_TILE, chestFrame, decorAt, itemFrame, floorFrame, fogLayers, landmarkAt, tileSizeFor, tileset, worldArtUrl, type Landmark } from '../game/visuals/world-art';
-import { heroText, itemLines, itemName, potionIcon, potionText, resourceOrder, resourceText } from './th';
+import { choiceText, eventChoices, eventReasonText, eventText, heroText, itemLines, itemName, potionIcon, potionText, resourceOrder, resourceText } from './th';
 import { icon } from './icons';
 
 export interface WorldHost { move(dir: Direction): void; rest(): void; revive(heroId: string): void; swap(a: string, b: string): void; moveMember(id: string): void; withdraw(): void; openChest(): void;
-  usePotion(potion: PotionId, heroId?: string): void }
-export interface WorldBanner { kind: 'encounter' | 'boss' | 'tutorial' | 'complete'; eyebrow: string; title: string; detail: string }
+  usePotion(potion: PotionId, heroId?: string): void; chooseEvent(choice: EventChoice): void }
+export interface WorldBanner { kind: 'encounter' | 'boss' | 'elite' | 'tutorial' | 'complete'; eyebrow: string; title: string; detail: string }
 export interface WorldView { state: ExpeditionState; message: string; locked: boolean; saved: boolean; banner?: WorldBanner; effect?: 'rest' | 'loot' }
 
 const keyDirections: Record<string, Direction> = { ArrowUp: 'up', ArrowDown: 'down', ArrowLeft: 'left', ArrowRight: 'right', w: 'up', s: 'down', a: 'left', d: 'right', W: 'up', S: 'down', A: 'left', D: 'right' };
@@ -51,7 +51,9 @@ export class WorldUI {
   private tile = 48;
   private readonly width: number;
   private readonly reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
-  constructor(private readonly root: HTMLElement, private readonly map: MapDefinition, private readonly heroes: readonly HeroDefinition[], private readonly host: WorldHost) {
+  // `eliteArt` maps each elite id to the actor art of its leading foe (the token drawn on its gate).
+  constructor(private readonly root: HTMLElement, private readonly map: MapDefinition, private readonly heroes: readonly HeroDefinition[], private readonly host: WorldHost,
+    private readonly eliteArt: Readonly<Record<string, string>> = {}) {
     this.width = map.rows[0]!.length;
     root.innerHTML = `
       <section class="map-view" id="map-viewport" aria-label="แผนที่ ใช้ปุ่มลูกศรหรือแตะช่องที่ไฮไลต์เพื่อเดินทีละช่อง">
@@ -91,6 +93,7 @@ export class WorldUI {
       <dialog id="world-goals" class="world-dialog" aria-labelledby="world-goals-title"><div class="info-header"><h2 id="world-goals-title">เป้าหมายการเดินทาง</h2><button data-world="goals-close" class="quiet" aria-label="ปิดเป้าหมาย">${icon('close')}</button></div><div class="info-content" id="world-goals-content"></div></dialog>
       <dialog id="camp-dialog" class="world-dialog" aria-labelledby="camp-title"><div class="info-header"><h2 id="camp-title">${icon('camp')} แคมป์พักแรม</h2><button data-world="camp-close" class="quiet" aria-label="ปิดแคมป์">${icon('close')}</button></div><div class="info-content" id="camp-content"></div></dialog>
       <dialog id="pack-dialog" class="world-dialog" aria-labelledby="pack-title"><div class="info-header"><h2 id="pack-title">สัมภาระ</h2><button data-world="pack-close" class="quiet" aria-label="ปิดสัมภาระ">${icon('close')}</button></div><div class="info-content" id="pack-content"></div></dialog>
+      <dialog id="event-dialog" class="world-dialog" aria-labelledby="event-title"><div class="info-header"><h2 id="event-title"></h2><button data-world="event-close" class="quiet" aria-label="ปิดและเดินต่อ">${icon('close')}</button></div><div class="info-content" id="event-content"></div></dialog>
       <dialog id="world-info" class="world-dialog" aria-labelledby="world-info-title"><div class="info-header"><h2 id="world-info-title">ข้อมูลการเดินทาง</h2><button data-world="info-close" class="quiet" aria-label="ปิดข้อมูล">${icon('close')}</button></div><div class="info-content" id="world-info-content"></div></dialog>`;
     root.addEventListener('click', e => {
       const el = e.target as HTMLElement;
@@ -116,6 +119,8 @@ export class WorldUI {
             if (potion === 'salve' && !button.dataset.hero) { this.salvePick = !this.salvePick; this.renderPack(); this.root.querySelector<HTMLElement>('#potion-salve')?.focus(); break; }
             this.salvePick = false; this.host.usePotion(potion, button.dataset.hero); this.renderPack(); this.root.querySelector<HTMLElement>(`#potion-${potion}`)?.focus();
           } break;
+          case 'event-close': dialog('#event-dialog').close(); break;
+          case 'event-choice': if (!this.view?.locked) { const choice = button.dataset.choice as EventChoice; this.host.chooseEvent(choice); this.root.querySelector<HTMLElement>(`#event-${choice}`)?.focus(); } break;
           case 'info': this.renderInfo(); dialog('#world-info').showModal(); break;
           case 'info-close': dialog('#world-info').close(); break;
           case 'goals': this.renderGoals(); dialog('#world-goals').showModal(); break;
@@ -147,6 +152,24 @@ export class WorldUI {
       this.renderCamp(); this.root.querySelector<HTMLDialogElement>('#camp-dialog')!.showModal();
     }
     else if (canOpenChest(s, this.map)) this.host.openChest();
+    else if (pendingEvent(s, this.map)) this.openEvent();
+  }
+  // Map events (3A): the dialog opens when the team steps onto one and from the action button while standing on it.
+  openEvent(): void {
+    const dialog = this.root.querySelector<HTMLDialogElement>('#event-dialog')!;
+    if (!this.view || !pendingEvent(this.view.state, this.map)) return;
+    this.renderEvent(); if (!dialog.open) dialog.showModal();
+  }
+  private renderEvent(): void {
+    const s = this.view!.state; const ev = pendingEvent(s, this.map)!; const text = eventText[ev.kind]; const r = this.map.eventRules;
+    this.root.querySelector('#event-title')!.innerHTML = `${icon(text.icon)} ${text.name}`;
+    const rows = eventChoices[ev.kind].map(choice => {
+      const reason = this.view!.locked ? 'busy' : eventChoiceReason(s, this.map, choice); const t = choiceText(choice, r);
+      const help = choice === 'fight' ? (ev.kind === 'bandits' ? `สู้กับโจรที่แข็งกว่าโซนนี้ ${r.banditLevelBonus} เลเวล · ชนะแล้วได้อุปกรณ์แน่นอน` : `ชนะแล้วได้ผงม่าน ${r.riftDust}`) : t.help;
+      return `<li><div><b>${t.label}</b>${help ? `<small>${help}</small>` : ''}</div><button id="event-${choice}" data-world="event-choice" data-choice="${choice}" class="${choice === 'fight' ? 'primary' : 'secondary'}"${reason ? ' disabled' : ''}>${reason ? eventReasonText[reason] ?? '' : t.label}</button></li>`;
+    }).join('');
+    this.root.querySelector('#event-content')!.innerHTML = `<p class="event-scene">${text.scene}</p><ul class="event-choices">${rows}</ul>
+      <p class="world-stats">${ev.kind === 'merchant' ? `มีแร่ดาว ${s.resources.ore} · พ่อค้ารอตรงนี้ตลอดรอบ` : 'ปิดหน้าต่างเพื่อเดินต่อ กลับมาตัดสินใจทีหลังได้'}</p>`;
   }
   // Tap a member, then a member or an empty slot on the other side to swap or move.
   private pickMember(id: string | undefined, side: 'deployed' | 'reserve'): void {
@@ -177,6 +200,10 @@ export class WorldUI {
       const chest = chestAt(this.map, { x, y });
       if (chest) html += `<span class="chest sprite" data-cell="${x},${y}" data-chest="${chest.id}" data-tier="${chest.tier}" style="--x:${x};--y:${y};z-index:${y * 3 + 1}"></span>`;
       const kind = tileAt(this.map, { x, y })!.kind;
+      const elite = this.map.elites.find(e => e.x === x && e.y === y);
+      if (elite) html += `<span class="elite-unit sprite" data-cell="${x},${y}" data-elite="${elite.id}" style="--x:${x};--y:${y};z-index:${y * 3 + 1}">${this.eliteArt[elite.id] ? portrait(this.eliteArt[elite.id]!) : ''}</span>`;
+      const event = this.map.events.find(e => e.x === x && e.y === y);
+      if (event) html += `<span class="event-mark sprite" data-cell="${x},${y}" data-event="${event.id}" data-kind="${event.kind}" style="--x:${x};--y:${y};z-index:${y * 3 + 1}"><i>!</i></span>`;
       if (['camp', 'start', 'goal', 'boss'].includes(kind)) html += `<span class="landmark sprite" data-cell="${x},${y}" data-kind="${kind}" style="--x:${x};--y:${y};z-index:${y * 3 + 1}">${kind === 'boss' ? '<span class="boss-unit"></span>' : ''}</span>`;
     }
     return html;
@@ -206,6 +233,8 @@ export class WorldUI {
     for (const d of ['up', 'down', 'left', 'right'] as Direction[]) this.root.querySelector<HTMLButtonElement>(`#move-${d}`)!.disabled = view.locked || s.completed;
     this.renderAction(s, view.locked);
     this.renderPackButton(s, view.effect === 'loot');
+    const eventDialog = this.root.querySelector<HTMLDialogElement>('#event-dialog')!;
+    if (eventDialog.open) { if (pendingEvent(s, this.map) && !view.locked) this.renderEvent(); else eventDialog.close(); }
     if (this.root.querySelector<HTMLDialogElement>('#camp-dialog')!.open) { if (atMuster(s, this.map) && !view.locked) this.renderCamp(); else this.root.querySelector<HTMLDialogElement>('#camp-dialog')!.close(); }
     if (!prev || prev.revealed !== s.revealed) this.renderFog(s);
     this.renderSprites(s, prev);
@@ -218,15 +247,16 @@ export class WorldUI {
 
   private renderAction(s: ExpeditionState, locked: boolean): void {
     const camp = atCamp(s, this.map); const entrance = !camp && atMuster(s, this.map); const chest = !camp && !entrance && canOpenChest(s, this.map);
-    const available = !locked && (camp || entrance || chest);
+    const ev = !camp && !entrance && !chest ? pendingEvent(s, this.map) : undefined;
+    const available = !locked && (camp || entrance || chest || !!ev);
     const fallen = rosterIds(s).filter(id => s.hp[id] === 0).length;
     const action = this.root.querySelector<HTMLButtonElement>('#rest')!;
     action.disabled = !available; action.classList.toggle('available', available);
-    action.dataset.context = camp ? 'camp' : entrance ? 'entrance' : chest ? 'chest' : 'none';
-    const label = camp ? 'พัก' : entrance ? 'ทางออก' : chest ? 'เปิด' : 'โต้ตอบ';
+    action.dataset.context = camp ? 'camp' : entrance ? 'entrance' : chest ? 'chest' : ev ? 'event' : 'none';
+    const label = camp ? 'พัก' : entrance ? 'ทางออก' : chest ? 'เปิด' : ev ? 'ดู' : 'โต้ตอบ';
     action.innerHTML = `${icon(camp ? 'rest' : entrance ? 'flag' : chest ? 'chest' : 'talk')}<span>${label}</span>${available ? '<i class="context-dot"></i>' : ''}`;
-    const caption = camp ? (canRest(s, this.map) ? 'พักฟื้นหรือชุบคนที่ล้ม' : fallen ? 'ชุบคนที่ล้มด้วยถ่าน' : 'ไฟแคมป์รอศึกถัดไป') : entrance ? 'จัดทีมหรือถอนตัวกลับค่าย' : chest ? 'เปิดกล่องสมบัติ' : 'ยืนบนแคมป์หรือกล่องสมบัติ';
-    action.setAttribute('aria-label', camp ? `แคมป์ · เปิดหน้าต่างพักและชุบ · ${caption}` : entrance ? `ทางเข้าด่าน · ${caption}` : chest ? 'เปิดกล่องสมบัติ' : 'โต้ตอบ · ยังไม่มีจุดให้โต้ตอบ ยืนบนแคมป์หรือกล่องสมบัติ');
+    const caption = camp ? (canRest(s, this.map) ? 'พักฟื้นหรือชุบคนที่ล้ม' : fallen ? 'ชุบคนที่ล้มด้วยถ่าน' : 'ไฟแคมป์รอศึกถัดไป') : entrance ? 'จัดทีมหรือถอนตัวกลับค่าย' : chest ? 'เปิดกล่องสมบัติ' : ev ? eventText[ev.kind].name : 'ยืนบนแคมป์หรือกล่องสมบัติ';
+    action.setAttribute('aria-label', camp ? `แคมป์ · เปิดหน้าต่างพักและชุบ · ${caption}` : entrance ? `ทางเข้าด่าน · ${caption}` : chest ? 'เปิดกล่องสมบัติ' : ev ? `${eventText[ev.kind].name} · เปิดหน้าต่างตัวเลือก` : 'โต้ตอบ · ยังไม่มีจุดให้โต้ตอบ ยืนบนแคมป์หรือกล่องสมบัติ');
     this.root.querySelector('#action-caption')!.textContent = caption;
   }
 
@@ -262,14 +292,14 @@ export class WorldUI {
   private renderPack(): void {
     const s = this.view?.state; if (!s) return;
     const opened = s.openedChests.length;
-    this.root.querySelector('#pack-content')!.innerHTML = `${this.potionSection(s)}<ul class="pack-list">${resourceOrder.map(id => `<li data-resource="${id}">${itemArt(id)}<div><b>${resourceText[id].name}</b><small>${resourceText[id].use}</small></div><strong>${s.resources[id]}</strong></li>`).join('')}</ul>
+    this.root.querySelector('#pack-content')!.innerHTML = `${this.potionSection(s)}<ul class="pack-list">${resourceOrder.map(id => `<li data-resource="${id}">${itemArt(id)}<div><b>${resourceText[id].name}</b><small>${resourceText[id].use}</small></div><strong>${s.resources[id]}</strong></li>`).join('')}${s.dust ? `<li data-resource="dust">${icon('dust')}<div><b>ผงม่าน</b><small>วัตถุดิบตีอุปกรณ์ · นำกลับค่ายเมื่อจบการเดินทาง</small></div><strong>${s.dust}</strong></li>` : ''}</ul>
       ${s.found.length ? `<h3 class="pack-gear-title">${icon('gearBody')} อุปกรณ์ที่เจอ ${s.found.length} ชิ้น</h3><ul class="pack-gear">${s.found.map(i => `<li data-rarity="${i.rarity}"><b>${itemName(i)} Lv${i.level}</b><small>${itemLines(this.map.equipment, i).join(' · ')}</small></li>`).join('')}</ul><p class="world-stats">ใส่ได้ที่ค่ายหลังกลับจากการเดินทาง · ถ้าทีมล้มหมดอุปกรณ์ที่เจอรอบนี้จะหาย</p>` : ''}
       <p class="world-stats">เปิดกล่องสมบัติแล้ว ${opened}/${this.map.chests.length} กล่อง · ของตกจากศึกที่ชนะและกล่องสมบัติ</p>`;
   }
 
   private stars(s: ExpeditionState, id: string): number { return s.members[id]?.stars ?? 1; }
   // Member stats as they fight: the catalog entry scaled by the member's stars.
-  private hero(id: string, s = this.view?.state): HeroDefinition { const base = this.heroes.find(h => h.id === id)!; return s ? starred(base, this.stars(s, id), this.map, s.members[id]?.level ?? 1, s.members[id]?.talents, s.members[id]?.gear) : base; }
+  private hero(id: string, s = this.view?.state): HeroDefinition { const base = this.heroes.find(h => h.id === id)!; return s ? wounded(starred(base, this.stars(s, id), this.map, s.members[id]?.level ?? 1, s.members[id]?.talents, s.members[id]?.gear), s.members[id]?.wound) : base; }
   private starRow(n: number): string { return starRow(n, this.map.company.maxStars); }
   private renderCamp(): void {
     const s = this.view?.state; if (!s) return;
@@ -351,6 +381,9 @@ export class WorldUI {
       el.classList.toggle('has-boss', art === 'boss_pedestal');
       if (changed && !this.reduced.matches) { el.classList.remove('lv-gate-open'); void el.offsetWidth; el.classList.add('lv-gate-open'); }
     });
+    // Beaten elites leave their gate; finished events lose their marker (the merchant stays).
+    this.root.querySelectorAll<HTMLElement>('.elite-unit').forEach(el => { el.classList.toggle('beaten', s.elitesDefeated.includes(el.dataset.elite!)); });
+    this.root.querySelectorAll<HTMLElement>('.event-mark').forEach(el => { el.classList.toggle('done', s.eventsDone.includes(el.dataset.event!)); });
     this.root.querySelectorAll<HTMLElement>('.chest').forEach(el => {
       const open = s.openedChests.includes(el.dataset.chest!);
       if (el.dataset.open === String(open)) return;
@@ -382,7 +415,7 @@ export class WorldUI {
     layer.innerHTML = (Object.entries(offsets) as [Direction, Point][]).map(([dir, o]) => {
       const p = { x: s.position.x + o.x, y: s.position.y + o.y }; const t = tileAt(this.map, p);
       if (!t || t.kind === 'wall') return '';
-      return `<span class="step-hint${t.kind === 'boss' && !s.bossDefeated ? ' boss' : ''}" data-dir="${dir}" style="--x:${p.x};--y:${p.y}"><i>${icon(dir)}</i></span>`;
+      return `<span class="step-hint${(t.kind === 'boss' && !s.bossDefeated) || eliteBlocks(s, this.map, p) ? ' boss' : ''}" data-dir="${dir}" style="--x:${p.x};--y:${p.y}"><i>${icon(dir)}</i></span>`;
     }).join('');
   }
 
@@ -394,8 +427,8 @@ export class WorldUI {
     if (banner.dataset.key === key) return;
     banner.dataset.key = key;
     const transition = b.kind !== 'complete' && !this.reduced.matches;
-    const headIcon = b.kind === 'boss' ? 'boss' : b.kind === 'complete' ? 'star' : 'danger';
-    banner.innerHTML = `${transition ? `<div class="lv-encounter-flash"></div><div class="lv-veil-shatter">${shards.map(([l, t, x, y, a]) => `<i style="--shard-left:${l};--shard-top:${t};--shard-x:${x};--shard-y:${y};--shard-angle:${a}"></i>`).join('')}</div>` : ''}<div class="banner-card ${b.kind === 'boss' ? 'lv-boss-reveal' : 'lv-sheet'}"><p class="eyebrow">${icon(headIcon)}<span>${b.eyebrow}</span></p><h2>${b.title}</h2><p>${b.detail}</p></div>`;
+    const headIcon = b.kind === 'boss' || b.kind === 'elite' ? 'boss' : b.kind === 'complete' ? 'star' : 'danger';
+    banner.innerHTML = `${transition ? `<div class="lv-encounter-flash"></div><div class="lv-veil-shatter">${shards.map(([l, t, x, y, a]) => `<i style="--shard-left:${l};--shard-top:${t};--shard-x:${x};--shard-y:${y};--shard-angle:${a}"></i>`).join('')}</div>` : ''}<div class="banner-card ${b.kind === 'boss' || b.kind === 'elite' ? 'lv-boss-reveal' : 'lv-sheet'}"><p class="eyebrow">${icon(headIcon)}<span>${b.eyebrow}</span></p><h2>${b.title}</h2><p>${b.detail}</p></div>`;
   }
 
   private sparkle(): void {

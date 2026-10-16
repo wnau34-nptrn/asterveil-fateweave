@@ -44,6 +44,10 @@ export interface MapDefinition {
   company: CompanyRules;
   progression: ProgressionRules;
   potions: PotionRules;
+  // Phase 3A: forced elites in one-tile gates and one-time event tiles.
+  elites: readonly EliteDefinition[];
+  events: readonly MapEventDefinition[];
+  eventRules: EventRules;
   // Passive talent tree per hero id (2D-1b).
   talents: Readonly<Record<string, TalentTree>>;
   equipment: EquipmentRules;
@@ -82,6 +86,24 @@ export interface EquipmentRules {
   // A dropped item belongs to one of its zone's sets at `setPercent` (the boss: any set).
   setPercent: number; sets: Readonly<Record<SetId, SetDefinition>>;
   forge: ForgeRules;
+}
+// ---- Phase 3A: elites and map events (draft numbers) ----
+// An elite stands on its tile like the boss: the only way past is to beat it (it uses its encounter's own level).
+export interface EliteDefinition { id: string; x: number; y: number; encounterId: string }
+export type MapEventKind = 'bandits' | 'shrine' | 'merchant' | 'traveller' | 'rift';
+export interface MapEventDefinition { id: string; x: number; y: number; kind: MapEventKind }
+export type EventChoice = 'fight' | 'sneak' | 'pray' | 'offer' | 'buy-salve' | 'buy-tonic' | 'buy-repel' | 'help';
+export interface EventRules {
+  // Bandits: a battle from the zone pool one level above the tile; the win always drops an item. Sneaking fills pressure.
+  banditLevelBonus: number;
+  // Shrine: prayer heals standing members `prayHeal`% and wounds every brought member `prayWound`% max HP for the run.
+  prayHeal: number; prayWound: number; maxWound: number; offerOre: number; offerSeal: number;
+  merchant: Readonly<Record<PotionId, number>>;
+  traveller: { ore: number; seal: number };
+  // Rift: an energy battle at the tile's level; the win brings veil dust home.
+  riftEncounterId: string; riftDust: number;
+  // Elites: EXP multiplier and the drop's rarity weights.
+  eliteExp: number; eliteRarityWeights: readonly number[];
 }
 // ---- Map potions (2D-5, draft numbers) ----
 // salve heals one standing member, tonic every standing member (percent of max HP); repel stops random
@@ -134,7 +156,8 @@ export interface CompanyRules {
 }
 // `level`/`exp` (2D-1) are optional for older data: missing means level 1 with no EXP.
 // `talents` (2D-1b): ranks spent per node; missing means none. `gear` (2D-2): equipped items by slot.
-export interface MemberProgress { stars: number; dupes: number; level?: number; exp?: number; talents?: Talents; gear?: Gear }
+// `wound` (3A, run only): percent of max HP lost to a shrine prayer until the expedition ends.
+export interface MemberProgress { stars: number; dupes: number; level?: number; exp?: number; talents?: Talents; gear?: Gear; wound?: number }
 // The team brought into one expedition and their star progress (fixed during the run).
 // `potions`: what the expedition packs (2D-5; missing = none).
 export interface Company { roster: Roster; members: Record<string, MemberProgress>; potions?: Potions }
@@ -184,9 +207,10 @@ export const PARTY_SLOTS = 4;
 export const RESERVE_SLOTS = 4;
 export interface Roster { deployed: string[]; reserve: string[] }
 
-export type BattleKind = 'tutorial' | 'random' | 'boss';
+// `elite` and `event` (3A) name the elite or event in `ActiveBattle.source`.
+export type BattleKind = 'tutorial' | 'random' | 'boss' | 'elite' | 'event';
 // `level`: the monster level fixed when the battle started (missing in older saves = the encounter's own level).
-export interface ActiveBattle { kind: BattleKind; encounterId: string; entry: Record<string, number>; commands: Command[]; level?: number }
+export interface ActiveBattle { kind: BattleKind; encounterId: string; entry: Record<string, number>; commands: Command[]; level?: number; source?: string }
 export interface ExpeditionState {
   mapId: string; mapVersion: number; seed: number; rolls: number;
   position: Point; steps: number; pressure: number;
@@ -201,6 +225,8 @@ export interface ExpeditionState {
   found: Item[]; dry: number;
   // Potions carried (≤ carry each) and steps of repel left (2D-5).
   potions: Potions; repel: number;
+  // 3A: elites beaten and events finished this run, and veil dust found (settles into the bank like ore).
+  elitesDefeated: string[]; eventsDone: string[]; dust: number;
 }
 export type WorldEvent =
   | { type: 'moved'; chance: number }
@@ -212,7 +238,9 @@ export type WorldEvent =
   | { type: 'revived'; heroId: string }
   | { type: 'chest'; chestId: string; loot: Resources; potion?: PotionId }
   | { type: 'potion'; potion: PotionId; heal?: Record<string, number> }
-  | { type: 'victory'; kind: BattleKind; encounterId: string; loot: Resources; exp?: Record<string, ExpGain>; item?: Item }
+  | { type: 'event'; eventId: string }
+  | { type: 'eventDone'; eventId: string; choice: EventChoice; heal?: Record<string, number> }
+  | { type: 'victory'; kind: BattleKind; encounterId: string; loot: Resources; exp?: Record<string, ExpGain>; item?: Item; dust?: number }
   | { type: 'defeat'; kind: BattleKind; encounterId: string; wiped?: boolean };
 // EXP from one victory for one brought member: `percent` is the level-gap multiplier.
 export interface ExpGain { gained: number; percent: number; level: number; levelsUp: number }

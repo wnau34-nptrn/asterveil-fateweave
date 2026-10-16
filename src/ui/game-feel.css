@@ -526,3 +526,22 @@ html, body { background: #0a1422; }
 .npc-line { display: flex; align-items: center; gap: 10px; margin: 0 0 8px; padding: 6px 10px 6px 6px; border-radius: 14px; background: #2a1d24cc; border: 1px solid #ffc98a33; }
 .npc-line .npc-bust { flex: 0 0 56px; width: 56px; height: 56px; border-radius: 50%; background-image: var(--busts); background-size: 300% 200%; background-position: var(--sx) var(--sy); box-shadow: 0 0 0 2px #f2d59666; }
 .npc-line p { margin: 0; font-size: 13px; line-height: 1.4; } .npc-line b { display: block; font-size: 12px; color: var(--gold-light, #f2d596); }
+/* ---- Phase 3A: elite gate tokens, event markers and the event dialog ---- */
+.elite-unit { width: calc(var(--t) * 1.25); height: calc(var(--t) * 1.25); filter: drop-shadow(0 4px 6px #08121fb0); }
+.elite-unit .portrait { display: block; width: 100%; height: 100%; border-radius: 50%; border: 2px solid var(--danger-coral, #ff8a7a); box-shadow: 0 0 0 2px #08121fcc, 0 0 10px #ff8a7a80; }
+.elite-unit::after { content: ''; position: absolute; left: 50%; bottom: -4px; width: 12px; height: 12px; transform: translateX(-50%) rotate(45deg); background: var(--danger-coral, #ff8a7a); border: 2px solid #08121f; }
+.elite-unit.beaten { display: none; }
+.event-mark { width: calc(var(--t) * .62); height: calc(var(--t) * .62); display: grid; place-items: center; margin-top: calc(var(--t) * -.18); border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, #fff4cf, var(--gold-light, #f2d596) 55%, #b98a35); border: 2px solid #08121f; box-shadow: 0 0 10px #f2d59699; }
+.event-mark i { font-style: normal; font-weight: 800; font-size: calc(var(--t) * .38); line-height: 1; color: #2a1d08; }
+.event-mark[data-kind=merchant] { background: radial-gradient(circle at 40% 35%, #dffcf4, #7fe3d0 55%, #2f8f80); }
+.event-mark[data-kind=rift] { background: radial-gradient(circle at 40% 35%, #f3e6ff, #c79bff 55%, #6b45a8); }
+.event-mark.done { display: none; }
+@media (prefers-reduced-motion: no-preference) { .event-mark:not(.done) { animation: event-bob 1.6s ease-in-out infinite; } }
+@keyframes event-bob { 50% { transform: translate(-50%, calc(-100% - 4px)); } }
+.event-scene { margin: 0 0 10px; color: var(--text-muted, #b9c8d8); }
+.event-choices { list-style: none; margin: 0 0 8px; padding: 0; display: grid; gap: 6px; }
+.event-choices li { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center; padding: 8px 10px; border-radius: 10px; background: #08121f99; }
+.event-choices li div { display: grid; gap: 2px; } .event-choices li small { font-size: 12px; color: var(--text-muted, #b9c8d8); }
+.event-choices button { min-height: 44px; min-width: 88px; }
+.pack-list li[data-resource=dust] .icon { width: 40px; height: 32px; color: #c79bff; }

@@ -204,6 +204,8 @@ describe('expedition rules', () => {
     expect(s.completed).toBe(true); expect(s.tutorialDone).toBe(true); expect(s.bossDefeated).toBe(true); expect(s.wins).toBeGreaterThan(2);
     // Levels (2D-1): every brought member grew on the way; this short advisor route reaches level 6.
     for (const m of Object.values(s.members)) expect(m.level).toBeGreaterThanOrEqual(4);
+    // Both elites (3A) hold one-tile gates on the way, so the run had to beat them.
+    expect(s.elitesDefeated).toHaveLength(map.elites.length);
   });
 });
 
@@ -352,8 +354,7 @@ describe('game save', () => {
   });
   it.each([
     ['malformed', () => '{bad'],
-    ['wrong version', (s: ExpeditionState) => JSON.stringify({ version: 13, profile: newProfile(map, 4), run: s })],
-    ['old map version', (s: ExpeditionState) => v6({ ...s, mapVersion: 0 })],
+    ['wrong version', (s: ExpeditionState) => JSON.stringify({ version: 14, profile: newProfile(map, 4), run: s })],
     ['wall position', (s: ExpeditionState) => v6({ ...s, position: { x: 0, y: 0 } })],
     ['hp above max', (s: ExpeditionState) => v6({ ...s, hp: { ...s.hp, tracer: 99 } })],
     ['foreign owner command', (s: ExpeditionState) => v6({ ...s, battle: { kind: 'random', encounterId: 'veil-siege', entry: s.hp, commands: [{ beat: 1, heroId: 'guardian', action: 'attack', targetId: 'brute' }] } })],

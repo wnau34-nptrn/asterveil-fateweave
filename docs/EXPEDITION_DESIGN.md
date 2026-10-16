@@ -20,7 +20,7 @@ Approved 2026-10-14, re-planned 2026-10-15 for the mercenary roster.
 | L2. Character creation | Commander (non-combat) name, crest and banner colour, once, between Home and Lobby | **Implemented** |
 | 2C-2. New classes | Six new mercenaries (ART-CHAR-MERC-ENEMY-001), one class mechanic at a time; ★3 skill and ★5 passive per class | **Implemented**: all 6 base classes (Garran spear, Mira archer, Toma alchemist, Sefa scout, Brann warden, Lio bard) and the ★3 skill + ★5 passive for all 10 classes (see Star unlocks) |
 | 2D. Equipment and level | 2D-1 member + monster levels; 2D-2 equipment (6 slots, 5 rarities, drops, inventory); 2D-3 sets; 2D-4 forge (enhance, fuse, reroll, salvage); 2D-5 map potions; 2D-1b passive talent tree | **Implemented**: 2D-1 (see Levels), 2D-1b (Talent tree), 2D-2 (Equipment), 2D-3 (Equipment sets), 2D-4 (Forge), 2D-5 (Map potions); numbers are drafts |
-| 3. Choices and content | Events with fight/avoid choices, elites, mini boss, puzzles (rune order, push stone, lever), secrets, map quest "2 of 3" and side quests | Planned |
+| 3. Choices and content | 3A events with fight/avoid choices and forced elites; later mini boss, puzzles (rune order, push stone, lever), secrets, map quest "2 of 3" and side quests | **3A implemented** (see Events and elites); the rest planned |
 | 4. Economy and wrap-up | Local gold and shop, salvage, fast travel between camps, elite respawn on rest, defeat penalty, whole-map balance simulation, completion screen | Planned |
 
 Numbers in phases 2–4 are drafts and need owner approval after playtesting.
@@ -531,3 +531,35 @@ The lobby's **ช่าง** menu opens the forge sheet: every piece (bag or wor
 **Save v12.** The profile gains `potions` (the home stock); the run gains `potions` (carried, ≤ 3 each) and `repel`. v11 data migrates with none.
 
 **Tests.** `tests/potions.test.ts` (brewing, packing, settling, each potion, battle lock, chests, save) and a browser test (brew, depart, drink a salve and a repel).
+
+## Events and elites (3A; approved 2026-10-16 "อีลิทบังคับสู้", draft numbers)
+
+**Elites are forced fights.** The map (version 2) narrows two passages to a single tile, and an elite stands on each:
+
+| Elite | Gate | Encounter (reference level) |
+|---|---|---|
+| จ่าฝูงแห่งทุ่ง (Tusker Chief + Dandelion Sprite) | `gate-meadow` (9,18), meadow → thicket | `elite-tusk-chief` (Lv5) |
+| เจ้าป่าหนาม (Briar Lord + Briar Stalker) | `gate-thicket` (9,10), thicket → scar | `elite-briar-lord` (Lv8) |
+
+- Stepping into an unbeaten elite starts its battle at once, like the boss; there is no way around.
+- A win marks the elite beaten for the run (the token disappears and the tile is floor). It also gives EXP ×2, a guaranteed item (rarity weights 0 : 0 : 60 : 30 : 10, so rare or better) and the zone's normal loot.
+- A loss sends the team back like any defeat, and the elite stays.
+- Step hints into an elite tile are red, like the boss.
+
+**Event tiles** ("!" markers) open a choice dialog instead of rolling an encounter. Closing the dialog leaves the event waiting: the action button (**ดู**) reopens it. Finished events lose their marker for the run.
+
+| Event | Choices |
+|---|---|
+| Bandits (thicket, scar) | **Fight:** a battle from the zone pool at the tile's level +1; the win always drops an item. **Sneak past:** no fight, but the zone pressure rises to its cap. |
+| Shrine (thicket) | **Pray:** standing members heal 25%, then every brought member's max HP drops 5% for the rest of the run (a wound, capped at 20%). **Offer:** 10 ore for 1 seal. |
+| Merchant (meadow) | Buy a salve (8 ore), tonic (14) or repel (10), up to the carry limit; the merchant never closes. |
+| Traveller (meadow) | **Help:** give a salve for 10 ore and 1 seal. |
+| Rift (scar) | **Fight:** `scout-patrol` at the tile's level; the win pays 12 veil dust instead of an item. |
+
+- Choices are pure world rules (`chooseEvent`, `eventChoiceReason` in `core/world/world.ts`; numbers in `map.eventRules`). Fights are battles of kind `event` with the event as `source`.
+- Veil dust from the run (`run.dust`) settles into the bank like ore (kept in full on complete/withdraw, halved on a wipe).
+- Wounds live on the run's members only (`MemberProgress.wound`) and never reach the profile. `memberDef` (and the map HUD) applies them, and HP is clamped to the lowered maximum.
+
+**Save v13.** The run gains `elitesDefeated`, `eventsDone` and `dust`; members may carry `wound`; battles may be `elite`/`event` with a `source` (an elite battle for a beaten elite, or an event battle for a finished event, is rejected). v12 data migrates empty. A run saved on an older map version can no longer be replayed on the new board, so it is settled home as **withdrawn** (its ore, seals, found items, potions, dust and EXP) instead of discarding the whole save.
+
+**Tests.** `tests/events.test.ts` (one-tile gates, forced elite fight, win/loss, every event choice, wounds, dust settling, save v13 and stale-map settling), the full-expedition run in `tests/world.test.ts` (it now beats both elites) and the advisor/class regressions that cover both elite encounters, plus browser tests for the elite gate and the shrine/merchant dialog.
