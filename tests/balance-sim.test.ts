@@ -12,7 +12,7 @@ describe('whole-map balance simulation', () => {
   const companies: CompanyReport[] = [];
   for (const seed of seeds) {
     companies.push(simulateCompany(seed, 'rush', expeditions), simulateCompany(seed, 'explorer', expeditions));
-    if (full) companies.push(simulateCompany(seed, 'explorer', expeditions, 'attack'));
+    if (full) companies.push(simulateCompany(seed, 'rush', expeditions, 'casual'), simulateCompany(seed, 'explorer', expeditions, 'casual'), simulateCompany(seed, 'explorer', expeditions, 'attack'));
   }
   it('is deterministic for a seed', () => {
     expect(JSON.stringify(simulateCompany(seeds[0]!, 'explorer', expeditions))).toBe(JSON.stringify(companies.find(c => c.policy === 'explorer' && c.seed === seeds[0])));
@@ -29,7 +29,7 @@ describe('whole-map balance simulation', () => {
     expect(sum('explorer', e => e.chests)).toBeGreaterThan(sum('rush', e => e.chests));
     expect(sum('explorer', e => e.gained.ore)).toBeGreaterThan(sum('rush', e => e.gained.ore));
     // Every chest and puzzle on the map can be reached (the explorer opens all of them), and side quests get claimed.
-    expect(companies.filter(c => c.policy === 'explorer' && c.style === 'advisor').every(c => c.expeditions[0]!.chests === 12)).toBe(true);
+    expect(companies.filter(c => c.policy === 'explorer' && c.style === 'advisor').every(c => c.expeditions.some(e => e.chests === 12))).toBe(true);
     expect(companies.filter(c => c.policy === 'explorer' && c.style === 'advisor').some(c => c.expeditions.some(e => e.claimed.length))).toBe(true);
   });
   if (full) it('writes the report', () => {

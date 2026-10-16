@@ -414,11 +414,11 @@ Every class (the starting four included) gains one battle skill at ★3 and one 
 
 ## Levels (2D-1, approved 2026-10-15, draft numbers)
 
-**Monster levels.** Every encounter has a reference level (its content numbers): first-clash 1; meadow encounters 2; thicket 5; scar 8; Rift Warden 10. Zones have level ranges (meadow 1–3, thicket 4–6, scar 7–9): a random battle takes the level of the tile it starts on, low at the zone's southern (entrance) rows and high at its northern rows (`monsterLevelAt`), and stores it in the battle. The tutorial and boss keep their own level. `withLevel` scales enemy max HP and move damage by 7% per level from the reference; SPD and rules never change. The map HUD shows the level here, in red with "อันตราย" when the deployed team's average level is 2+ below it; enemy names in battle read "Lv5 …".
+**Monster levels.** Every encounter has a reference level (its content numbers): first-clash 1; meadow encounters 2; thicket 5; scar 8; Rift Warden 10. Zones have level ranges (meadow 1–3, thicket 4–6, scar 7–9): a random battle takes the level of the tile it starts on, low at the zone's southern (entrance) rows and high at its northern rows (`monsterLevelAt`), and stores it in the battle. The tutorial keeps its own level; elites, the mini-boss and the boss fight at their map fight level (4E: `EliteDefinition.level`, `map.bossLevel`). `withLevel` scales enemy max HP and move damage by 7% per level from the reference; SPD and rules never change. The map HUD shows the level here, in red with "อันตราย" when the deployed team's average level is 2+ below it; enemy names in battle read "Lv5 …".
 
-**Member levels.** Per member, cap 10. Each level adds 3% max HP, Attack and skill power (stacking with stars' 8%); SPD never changes. EXP to the next level = 10 + 10 × level (20, 30 … 100).
+**Member levels.** Per member, cap 10. Each level adds 3% max HP, Attack and skill power (stacking with stars' 8%); SPD never changes. EXP to the next level = 20 + 45 × level (65, 110 … 425; retuned in 4E from 10 + 10 × level).
 
-**EXP.** Each victory gives every brought member (deployed and reserve, standing or fallen) `enemies × (6 + 2 × monster level)`, ×3 for the boss, multiplied by the level gap (`expPercent`): up to 2 levels above the monster 100%, 3 → 75%, 4 → 50%, 5 → 25%, 6+ → 10% (never zero); 3+ levels below the monster 120%. A level-up raises max HP and standing members gain the difference. Levels are kept in the profile whatever the outcome. The advisor's short full run ends at level 6.
+**EXP.** Each victory gives every brought member (deployed and reserve, standing or fallen) `enemies × (6 + 2 × monster level)`, ×3 for the boss, multiplied by the level gap (`expPercent`): up to 2 levels above the monster 100%, 3 → 75%, 4 → 50%, 5 → 25%, 6+ → 10% (never zero); 3+ levels below the monster 110% (120% before 4E). A level-up raises max HP and standing members gain the difference. Levels are kept in the profile whatever the outcome. The advisor's short full run ends at level 6.
 
 **Save v7.** Members may carry `level`/`exp`; an active battle may carry its monster `level`. v6 data loads unchanged (level 1, encounter level). The command validator now also accepts the ★3 skills.
 
@@ -787,9 +787,34 @@ Then `startPrologue` starts the `first-clash` battle (now "กองหน้า
    - The rush player only ever finishes the broker and trainer quests.
 5. **The merchant tile (16,21) is the only way to the sun rune stone and the meadow-east chest.** Its dialog opens on every pass.
 
-**Tuning options for the owner** (not applied):
+**Tuning options proposed to the owner:**
 - Levels: steeper curve (for example `nextBase` 20 and `nextPerLevel` 25), less EXP for fighting up, or a higher cap with chapters.
 - Battles: tougher elites, mini-boss and boss (HP or damage), or let fewer heals through. The target would be the advisor keeping about 60–75% HP and the blind player completing within 2–4 expeditions.
 - Economy: about half the ore and gold from chests and battles, or new sinks (a camp shop in 4A, forge costs).
 - Side quests: higher targets (for example 6 rare chests, 30 wins, 6 secrets), or a repeatable tier.
 - Map: move the merchant off the only path, or keep it as a deliberate stop.
+
+**Applied tuning (owner approved 2026-10-16: "levels and battle difficulty first").**
+- **EXP curve:** EXP to the next level is 20 + 45 × level (it was 10 + 10 × level), and the fighting-up bonus is 110% (it was 120%). Existing EXP stays valid because every step is larger.
+- **Fight levels:** elites, the mini-boss and the boss fight one level above their reference level.
+  - The level is stored in the battle when it starts, so a saved battle keeps its old level.
+
+  | Fight | Was | Now |
+  |---|---|---|
+  | Tusk Chief | 5 | 6 |
+  | Briar Lord | 8 | 9 |
+  | Golem | 9 | 10 |
+  | Rift Warden | 10 | 11 |
+
+- **Casual player:** the simulation adds a casual player who follows the advice on about 70% of turns. The advisor reads every intent and stays an upper bound that barely loses HP whatever the numbers.
+- **Results** (casual; tuning ran 8 seeds × 4 expeditions, and the final report runs 24 seeds × 6 expeditions):
+
+  | Route | Before | After |
+  |---|---|---|
+  | Explorer | most finished on trip 1–2 | median trip 2 (range 1–3); the first trip usually ends in a wipe that keeps levels and half the haul |
+  | Rush | most finished on trip 1–2 | a risky route: median trip 5 (range 3–6), forced elite won 77% |
+  | Advisor | reached level 10 on the first trip | ~level 6 after the first trip, cap on the third (explorer) |
+
+  - A trial at +2 levels with 20 + 60 × level made the rush route almost unwinnable for the casual player, so it was reverted.
+- The full numbers are in `docs/validation/balance-sim/REPORT.md`.
+- The economy (ore and gold surplus), side-quest targets and the merchant tile are unchanged until 4A.

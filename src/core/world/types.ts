@@ -34,6 +34,8 @@ export interface MapDefinition {
   specialZones: Readonly<Record<'S' | 'C' | 'B' | 'G', string>>;
   zones: readonly ZoneDefinition[];
   tutorialEncounterId: string; bossEncounterId: string;
+  // The boss's fight level (4E tuning; missing = the encounter's own level). Monster levels scale HP and damage only.
+  bossLevel?: number;
   revealRadius: number;
   // Chests sit on floor tiles; loot tables are drafts until playtested.
   chests: readonly ChestDefinition[];
@@ -118,7 +120,8 @@ export interface SideQuestDefinition {
   reward: { ore?: number; gold?: number; seal?: number; dust?: number; potions?: Partial<Record<PotionId, number>> };
 }
 export interface QuestDefinition { need: number; objectives: readonly QuestObjective[] }
-export interface EliteDefinition { id: string; x: number; y: number; encounterId: string; forced: boolean; mini?: boolean }
+// `level`: the fight level (4E tuning; missing = the encounter's own level).
+export interface EliteDefinition { id: string; x: number; y: number; encounterId: string; forced: boolean; mini?: boolean; level?: number }
 export type MapEventKind = 'bandits' | 'shrine' | 'merchant' | 'traveller' | 'rift';
 export interface MapEventDefinition { id: string; x: number; y: number; kind: MapEventKind }
 export type EventChoice = 'fight' | 'sneak' | 'pray' | 'offer' | 'buy-salve' | 'buy-tonic' | 'buy-repel' | 'help';

@@ -9,15 +9,17 @@ import { boulderAt, openPit, passableWall, runePuzzleAt } from '../../src/core/w
 import type { BattleKind, Direction, ExpeditionState, GearSlot, Item, Point, Profile, RunOutcome } from '../../src/core/world/types';
 import { GEAR_SLOTS } from '../../src/core/world/types';
 import {
-  atCamp, atMuster, battleData, battleState, canOpenChest, canRest, canRevive, eliteAt, eventAt, finishBattle, findTiles, memberDef, move, openChest,
-  pendingEvent, questComplete, recordBattle, rest, revive, rosterIds, startPrologue, swapMembers, tileAt, usePotion, chooseEvent, eventChoiceReason, potionReason,
+  atCamp, atMuster, monsterLevelAt, battleData, battleState, canOpenChest, canRest, canRevive, eliteAt, eventAt, finishBattle, findTiles, memberDef, move, openChest,
+  pendingEvent, questComplete, rollPercent, recordBattle, rest, revive, rosterIds, startPrologue, swapMembers, tileAt, usePotion, chooseEvent, eventChoiceReason, potionReason,
 } from '../../src/core/world/world';
 import { battleLesson } from '../../src/ui/tutorial';
 
 export type Policy = 'rush' | 'explorer';
-// How battles are played: the teaching advisor, or blind basic attacks on the first valid target (a lower bound).
-export type Style = 'advisor' | 'attack';
-export interface BattleStat { fought: number; won: number; hpAfter: number }
+// How battles are played: the teaching advisor (reads every intent: an upper bound), a casual player who follows
+// the advice on about 70% of turns and otherwise attacks, or blind basic attacks on the first valid target (a lower bound).
+export type Style = 'advisor' | 'casual' | 'attack';
+// `low`: the party's lowest HP% at any point of the battle (summed over battles fought).
+export interface BattleStat { fought: number; won: number; hpAfter: number; low: number }
 export interface ExpeditionReport {
   index: number; outcome: RunOutcome; steps: number; wins: number; defeats: number; lowestHp: number;
   battles: Partial<Record<string, BattleStat>>;
@@ -96,14 +98,16 @@ function fight(s: ExpeditionState, report: ExpeditionReport, style: Style): { st
   const b = s.battle!; const mini = b.kind === 'elite' && map.elites.find(e => e.id === b.source)?.mini;
   const label = b.kind === 'elite' ? (mini ? 'mini' : map.elites.find(e => e.id === b.source)?.forced ? 'elite-forced' : 'elite-optional') : b.kind === 'event' ? `event-${map.events.find(e => e.id === b.source)?.kind}` : b.kind;
   const data = battleData(s, map, lookup)!; let bs = battleState(s, map, lookup)!;
+  const max = data.heroes.reduce((a, h) => a + h.maxHp, 0); const now = () => bs.heroes.reduce((a, h) => a + h.hp, 0) / max * 100; let low = now();
   for (let guard = 0; bs.outcome === 'active' && guard < 400; guard++) {
-    const l = style === 'advisor' ? battleLesson(bs, data) : undefined;
-    if (l) { bs = resolveCommand(bs, data, { beat: bs.beat, heroId: l.heroId, action: l.action, targetId: l.targetId }).state; continue; }
+    const follow = style === 'advisor' || (style === 'casual' && rollPercent(s.seed ^ 0x9e3779b9, s.rolls * 997 + bs.commands.length) < 70);
+    const l = follow ? battleLesson(bs, data) : undefined;
+    if (l) { bs = resolveCommand(bs, data, { beat: bs.beat, heroId: l.heroId, action: l.action, targetId: l.targetId }).state; low = Math.min(low, now()); continue; }
     const hero = currentHeroId(bs, data)!; const t = targetOptions(bs, data, hero, 'attack').find(o => o.valid)!;
-    bs = resolveCommand(bs, data, { beat: bs.beat, heroId: hero, action: 'attack', targetId: t.id }).state;
+    bs = resolveCommand(bs, data, { beat: bs.beat, heroId: hero, action: 'attack', targetId: t.id }).state; low = Math.min(low, now());
   }
   const r = finishBattle(recordBattle(s, map, lookup, bs.commands), map, lookup);
-  const st = (report.battles[label] ??= { fought: 0, won: 0, hpAfter: 0 }); st.fought++;
+  const st = (report.battles[label] ??= { fought: 0, won: 0, hpAfter: 0, low: 0 }); st.fought++; st.low += low;
   if (r.event.type === 'victory') { st.won++; st.hpAfter += hpPercent(r.state); report.lowestHp = Math.min(report.lowestHp, hpPercent(r.state)); }
   else report.lowestHp = 0;
   return { state: r.state, wiped: r.event.type === 'defeat' && !!r.event.wiped };
@@ -159,7 +163,12 @@ function runExpedition(start: ExpeditionState, policy: Policy, style: Style, rep
     };
     let best = leaving ? nearest(camps.filter(c => tileAt(map, c)!.kind === 'start' || same(c, s.camp ?? c)))
       : hpPercent(s) < 45 && s.restReady ? nearest(findTiles(map, 'camp')) : undefined;
-    if (!best && !leaving) best = nearest(pending.map(t => t.at));
+    // A fallen member who can be revived (or replaced) sends the party back to camp first.
+    const down = s.roster.deployed.some(id => !s.hp[id]) && (s.resources.ember > 0 || s.roster.reserve.some(id => s.hp[id]! > 0));
+    if (!best && !leaving && down && !atMuster(s, map)) best = nearest(s.resources.ember > 0 ? findTiles(map, 'camp') : camps);
+    // Work through the zones in order: only tasks within two levels of the easiest pending one.
+    const lv = (p: Point) => monsterLevelAt(map, p) ?? 0; const easiest = Math.min(...pending.map(t => lv(t.at)));
+    if (!best && !leaving) best = nearest(pending.filter(t => lv(t.at) <= easiest + 2).map(t => t.at)) ?? nearest(pending.map(t => t.at));
     if (!best && !leaving && questComplete(s, map)) best = nearest([s.bossDefeated ? goal : boss]);
     if (!best) return { state: s, outcome: 'withdrawn' };
     const r = move(s, map, best.step!.dir);
@@ -229,10 +238,10 @@ const pct = (n: number, d: number) => d ? `${Math.round(n / d * 100)}%` : '–';
 const f1 = (n: number) => n.toFixed(1);
 export function report(companies: CompanyReport[]): string {
   const lines: string[] = [];
-  for (const [policy, style] of [['rush', 'advisor'], ['explorer', 'advisor'], ['explorer', 'attack']] as [Policy, Style][]) {
+  for (const [policy, style] of [['rush', 'advisor'], ['explorer', 'advisor'], ['rush', 'casual'], ['explorer', 'casual'], ['explorer', 'attack']] as [Policy, Style][]) {
     const cs = companies.filter(c => c.policy === policy && c.style === style); if (!cs.length) continue;
     const n = cs[0]!.expeditions.length;
-    lines.push(`### ${policy === 'rush' ? 'Rush (rift seal only)' : 'Explorer (every chest, herb, puzzle, secret and optional elite)'}, ${style === 'advisor' ? 'advisor battles' : 'blind basic attacks'} · ${cs.length} companies × ${n} expeditions`, '',
+    lines.push(`### ${policy === 'rush' ? 'Rush (rift seal only)' : 'Explorer (every chest, herb, puzzle, secret and optional elite)'}, ${style === 'advisor' ? 'advisor battles' : style === 'casual' ? 'casual battles (advice on ~70% of turns)' : 'blind basic attacks'} · ${cs.length} companies × ${n} expeditions`, '',
       '| Exp. | Complete | Withdrawn | Wiped | Steps | Wins | Defeats | Lowest HP% | Ore | Gold | Seal | Dust | Items (C/U/R/E/L) | Chests | Min level | Max ★ | Company |',
       '|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|');
     for (let i = 0; i < n; i++) {
@@ -241,10 +250,10 @@ export function report(companies: CompanyReport[]): string {
       lines.push(`| ${i + 1} | ${pct(k('complete'), es.length)} | ${pct(k('withdrawn'), es.length)} | ${pct(k('wiped'), es.length)} | ${Math.round(avg(es.map(e => e.steps)))} | ${f1(avg(es.map(e => e.wins)))} | ${f1(avg(es.map(e => e.defeats)))} | ${Math.round(avg(es.map(e => e.lowestHp)))} | ${Math.round(avg(es.map(e => e.gained.ore)))} | ${Math.round(avg(es.map(e => e.gained.gold)))} | ${f1(avg(es.map(e => e.gained.seal)))} | ${Math.round(avg(es.map(e => e.gained.dust)))} | ${items} | ${f1(avg(es.map(e => e.chests)))} | ${f1(avg(es.map(e => e.level)))} | ${f1(avg(es.map(e => e.stars)))} | ${f1(avg(es.map(e => e.company)))} |`);
     }
     const all = cs.flatMap(c => c.expeditions); const kinds = [...new Set(all.flatMap(e => Object.keys(e.battles)))].sort();
-    lines.push('', '| Battle | Fought | Won | HP% after a win |', '|---|---|---|---|');
+    lines.push('', '| Battle | Fought | Won | Lowest party HP% during (avg) | HP% after a win |', '|---|---|---|---|---|');
     for (const kd of kinds) {
       const st = all.map(e => e.battles[kd]).filter(Boolean) as BattleStat[]; const fought = st.reduce((a, b) => a + b.fought, 0); const won = st.reduce((a, b) => a + b.won, 0);
-      lines.push(`| ${kd} | ${fought} | ${pct(won, fought)} | ${won ? Math.round(st.reduce((a, b) => a + b.hpAfter, 0) / won) : '–'} |`);
+      lines.push(`| ${kd} | ${fought} | ${pct(won, fought)} | ${Math.round(st.reduce((a, b) => a + b.low, 0) / fought)} | ${won ? Math.round(st.reduce((a, b) => a + b.hpAfter, 0) / won) : '–'} |`);
     }
     const first = cs.map(c => c.expeditions.find(e => e.outcome === 'complete')?.index);
     lines.push('', `First completed expedition: ${first.map(x => x ?? '–').join(', ')} (median ${median(first)}).`);

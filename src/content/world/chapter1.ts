@@ -52,7 +52,7 @@ export const chapterOne: MapDefinition = {
     { id: 'camp', name: 'แคมป์', safe: true, base: 0, step: 0, cap: 0, pool: [] },
     { id: 'sanctum', name: 'ประตูรอยแยก', safe: true, base: 0, step: 0, cap: 0, pool: [] },
   ],
-  tutorialEncounterId: 'first-clash', bossEncounterId: 'rift-warden',
+  tutorialEncounterId: 'first-clash', bossEncounterId: 'rift-warden', bossLevel: 11,
   revealRadius: 3,
   // Draft phase 2A numbers: chests sit in side pockets away from the main route.
   chests: [
@@ -96,17 +96,17 @@ export const chapterOne: MapDefinition = {
     starCosts: [{ dupes: 1, ore: 20 }, { dupes: 2, ore: 40 }, { dupes: 3, ore: 70 }, { dupes: 4, ore: 110 }],
   },
   // Draft 2D-1 numbers: a first full run ends near level 9; farming low levels is tapered (world `expPercent`).
-  progression: { levelCap: 10, levelStatPercent: 3, monsterLevelPercent: 7, expBase: 6, expPerLevel: 2, bossExpMultiplier: 3, nextBase: 10, nextPerLevel: 10 },
+  progression: { levelCap: 10, levelStatPercent: 3, monsterLevelPercent: 7, expBase: 6, expPerLevel: 2, bossExpMultiplier: 3, nextBase: 20, nextPerLevel: 45 },
   talents: talentTrees,
   // Map potions (2D-5, draft numbers).
   // Phase 3A (draft numbers): elites hold the one-tile gates; events wait in the side areas, two per zone.
   elites: [
     // Optional: the meadow passage is wide, so the Tusk Chief can be challenged or walked around.
-    { id: 'gate-meadow', x: 9, y: 18, encounterId: 'elite-tusk-chief', forced: false },
+    { id: 'gate-meadow', x: 9, y: 18, encounterId: 'elite-tusk-chief', forced: false, level: 6 },
     // Forced: the only way from the thicket to the scar and the boss.
-    { id: 'gate-thicket', x: 9, y: 10, encounterId: 'elite-briar-lord', forced: true },
+    { id: 'gate-thicket', x: 9, y: 10, encounterId: 'elite-briar-lord', forced: true, level: 9 },
     // Mini-boss (3B): optional, in the scar's right-hand pocket; beating it is one rift-seal objective.
-    { id: 'scar-golem', x: 17, y: 6, encounterId: 'mini-veil-golem', forced: false, mini: true },
+    { id: 'scar-golem', x: 17, y: 6, encounterId: 'mini-veil-golem', forced: false, mini: true, level: 10 },
   ],
   // The rift seal (3B, draft): any two of the three open the way to the boss.
   quest: { need: 2, objectives: [

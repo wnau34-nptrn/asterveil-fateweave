@@ -51,7 +51,7 @@ describe('monster levels', () => {
 
 describe('member levels and EXP', () => {
   it('EXP tapers when a member is far above the monster, never to zero, and rewards fighting up', () => {
-    expect([-4, -3, 0, 2, 3, 4, 5, 6, 9].map(g => expPercent(5 + g, 5))).toEqual([120, 120, 100, 100, 75, 50, 25, 10, 10]);
+    expect([-4, -3, 0, 2, 3, 4, 5, 6, 9].map(g => expPercent(5 + g, 5))).toEqual([110, 110, 100, 100, 75, 50, 25, 10, 10]);
   });
   it('a victory gives every brought member EXP, level-ups raise max HP and standing HP', () => {
     const s = randomBattle(); const level = s.battle!.level!; const enemies = battleData(s, map, lookup)!.enemies.length;
@@ -64,11 +64,21 @@ describe('member levels and EXP', () => {
       if (exp[id]!.levelsUp) expect(memberDef(lookup, map, r.state.members, id)!.maxHp).toBeGreaterThan(memberDef(lookup, map, s.members, id)!.maxHp);
     }
   });
+  it('elites, the mini-boss and the boss fight at the map\'s fight level (4E), above their reference level', () => {
+    for (const e of map.elites) {
+      const s = { ...newExpedition(map, lookup, 5, undefined, true), position: { x: e.x + 1, y: e.y }, elitesDefeated: [] };
+      const r = move(tileAt(map, s.position)?.kind === 'floor' ? s : { ...s, position: { x: e.x, y: e.y + 1 } }, map, tileAt(map, s.position)?.kind === 'floor' ? 'left' : 'up');
+      expect(r.state.battle).toMatchObject({ kind: 'elite', level: e.level });
+      expect(e.level).toBeGreaterThan(lookup(e.encounterId)!.level!);
+      expect(battleData(r.state, map, lookup)!.enemies[0]!.maxHp).toBeGreaterThan(lookup(e.encounterId)!.enemies[0]!.maxHp);
+    }
+    expect(map.bossLevel).toBeGreaterThan(lookup(map.bossEncounterId)!.level!);
+  });
   it('stops at the level cap and adds 3% stats per level', () => {
     const s = newExpedition(map, lookup, 1);
     const at = (level: number) => memberDef(lookup, map, { guardian: { stars: 1, dupes: 0, level } }, 'guardian')!;
     expect(at(10).maxHp).toBe(Math.round(at(1).maxHp * (100 + 9 * map.progression.levelStatPercent) / 100));
-    expect(expToNext(map, 1)).toBe(20); expect(expToNext(map, 9)).toBe(100);
+    expect(expToNext(map, 1)).toBe(65); expect(expToNext(map, 9)).toBe(425);
     s.members.guardian = { stars: 1, dupes: 0, level: map.progression.levelCap, exp: 0 };
     expect(s.members.guardian.level).toBe(10);
   });
@@ -91,7 +101,7 @@ describe('save v7', () => {
   });
   it.each([
     ['a level above the cap', { level: 11, exp: 0 }],
-    ['EXP beyond the next level', { level: 2, exp: 30 }],
+    ['EXP beyond the next level', { level: 2, exp: 140 }],
   ])('rejects %s', (_, bad) => {
     const profile = newProfile(map, 4); profile.members.guardian = { stars: 1, dupes: 0, ...bad };
     expect(() => parseGame(JSON.stringify({ version: 7, profile, run: null }), map, lookup)).toThrow();

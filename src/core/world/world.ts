@@ -106,7 +106,7 @@ export function monsterLevelAt(map: MapDefinition, p: Point): number | undefined
 // EXP multiplier by how far a member's level is above the monster's (never zero), with a bonus for fighting up.
 export function expPercent(memberLevel: number, monsterLevel: number): number {
   const gap = memberLevel - monsterLevel;
-  return gap <= -3 ? 120 : gap <= 2 ? 100 : gap === 3 ? 75 : gap === 4 ? 50 : gap === 5 ? 25 : 10;
+  return gap <= -3 ? 110 : gap <= 2 ? 100 : gap === 3 ? 75 : gap === 4 ? 50 : gap === 5 ? 25 : 10;
 }
 // Max HP for the given members (default: the starting roster at ★1).
 export function fullParty(lookup: EncounterLookup, map: MapDefinition, ids?: readonly string[], members: ExpeditionState['members'] = {}): Record<string, number> {
@@ -183,13 +183,13 @@ export function move(initial: ExpeditionState, map: MapDefinition, dir: Directio
   // Until the rift seal is broken (enough objectives), the boss cannot be challenged.
   if (tile.kind === 'boss' && !state.bossDefeated && !questComplete(state, map)) return { state: initial, event: { type: 'blocked', reason: 'sealed' } };
   if (tile.kind === 'boss' && !state.bossDefeated) {
-    state.battle = startBattle(state, 'boss', map.bossEncounterId);
+    state.battle = startBattle(state, 'boss', map.bossEncounterId, map.bossLevel);
     return { state, event: { type: 'encounter', kind: 'boss', encounterId: map.bossEncounterId, chance: 100 } };
   }
   // An elite holds its gate the same way: stepping into it starts the fight; beaten, the gate is open for the run.
   const elite = eliteBlocks(state, map, target);
   if (elite) {
-    state.battle = startBattle(state, 'elite', elite.encounterId, undefined, elite.id);
+    state.battle = startBattle(state, 'elite', elite.encounterId, elite.level, elite.id);
     return { state, event: { type: 'encounter', kind: 'elite', encounterId: elite.encounterId, chance: 100 } };
   }
   state.position = target; state.steps++; reveal(state, map);
