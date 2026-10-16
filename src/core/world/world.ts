@@ -1,6 +1,7 @@
 import { replay, withLevel, withParty } from '../battle/engine';
+import { boulderAt, leverPuzzleAt, openPit, passableWall, runePuzzleAt, secretAt } from './puzzles';
 import type { BattleState, Command, EncounterDefinition, HeroDefinition, HeroTalents } from '../battle/types';
-import type { ActiveBattle, BattleKind, ChestDefinition, Company, Direction, ExpGain, ExpeditionState, LootTable, MapDefinition, MemberProgress, Point, PotionId, Resources, Talents, Tile, WorldResult, ZoneDefinition, Gear, Item, EliteDefinition, EventChoice, MapEventDefinition, MapEventKind } from './types';
+import type { ActiveBattle, BattleKind, ChestDefinition, Company, Direction, ExpGain, ExpeditionState, LootTable, MapDefinition, MemberProgress, Point, PotionId, Resources, Talents, Tile, WorldEvent, WorldResult, ZoneDefinition, Gear, Item, EliteDefinition, EventChoice, MapEventDefinition, MapEventKind } from './types';
 import { gearTotals, rollItem } from './equipment';
 import { PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS, SET_IDS } from './types';
 
@@ -124,6 +125,7 @@ export function newExpedition(map: MapDefinition, lookup: EncounterLookup, seed:
     tutorialDone, bossDefeated: false, completed: false, wins: 0, defeats: 0, battle: null, found: [], dry: 0,
     potions: company?.potions ? { ...company.potions } : { salve: 0, tonic: 0, repel: 0 }, repel: 0,
     elitesDefeated: [], eventsDone: [], dust: 0,
+    runes: {}, solved: [], levers: [], boulders: {}, secrets: [],
   };
   reveal(state, map);
   return state;
@@ -161,9 +163,22 @@ export function move(initial: ExpeditionState, map: MapDefinition, dir: Directio
   const target = { x: initial.position.x + offsets[dir].x, y: initial.position.y + offsets[dir].y };
   const tile = tileAt(map, target);
   if (!tile) return { state: initial, event: { type: 'blocked', reason: 'edge' } };
-  if (tile.kind === 'wall') return { state: initial, event: { type: 'blocked', reason: 'wall' } };
+  // 3C: opened puzzle doors and secret walls can be walked through; everything else that is '#' blocks.
+  if (tile.kind === 'wall' && !passableWall(initial, map, target)) return { state: initial, event: { type: 'blocked', reason: 'wall' } };
   if (!initial.roster.deployed.some(id => initial.hp[id]! > 0)) return { state: initial, event: { type: 'blocked', reason: 'party' } };
+  if (openPit(initial, map, target)) return { state: initial, event: { type: 'blocked', reason: 'pit' } };
   const state = structuredClone(initial);
+  // A boulder in the way is pushed one tile in the walking direction: onto plain floor, or into its pit, which it fills.
+  const boulder = boulderAt(state, map, target); let pushed: WorldEvent | undefined;
+  if (boulder) {
+    const next = { x: target.x + offsets[dir].x, y: target.y + offsets[dir].y }; const into = tileAt(map, next);
+    const pit = boulder.pit.x === next.x && boulder.pit.y === next.y;
+    const free = into?.kind === 'floor' && !boulderAt(state, map, next) && !openPit(state, map, next) && !eliteAt(map, next) && !eventAt(map, next) && !chestAt(map, next)
+      && !runePuzzleAt(map, next) && !leverPuzzleAt(map, next);
+    if (!pit && !free) return { state: initial, event: { type: 'blocked', reason: 'stone' } };
+    if (pit) { state.solved.push(boulder.id); delete state.boulders[boulder.id]; } else state.boulders[boulder.id] = next;
+    pushed = { type: 'pushed', puzzleId: boulder.id, filled: pit };
+  }
   // The boss is visible and blocks its tile: stepping into it starts the fight in place.
   // Until the rift seal is broken (enough objectives), the boss cannot be challenged.
   if (tile.kind === 'boss' && !state.bossDefeated && !questComplete(state, map)) return { state: initial, event: { type: 'blocked', reason: 'sealed' } };
@@ -178,6 +193,29 @@ export function move(initial: ExpeditionState, map: MapDefinition, dir: Directio
     return { state, event: { type: 'encounter', kind: 'elite', encounterId: elite.encounterId, chance: 100 } };
   }
   state.position = target; state.steps++; reveal(state, map);
+  // 3C: puzzle tiles answer instead of rolling an encounter on that step.
+  if (pushed) return { state, event: pushed };
+  const secret = secretAt(map, target);
+  if (secret && !state.secrets.includes(secret.id)) { state.secrets.push(secret.id); return { state, event: { type: 'secret', secretId: secret.id } }; }
+  const runes = runePuzzleAt(map, target);
+  if (runes && !state.solved.includes(runes.id)) {
+    // The right stone advances the sequence; a wrong one resets it (and counts as the first stone if it is the first).
+    const index = runes.stones.findIndex(s => s.x === target.x && s.y === target.y); const at = state.runes[runes.id] ?? 0;
+    const reset = index !== at; const step = reset ? (index === 0 ? 1 : 0) : at + 1;
+    const solved = step >= runes.stones.length;
+    if (solved) { state.solved.push(runes.id); delete state.runes[runes.id]; } else state.runes[runes.id] = step;
+    return { state, event: { type: 'rune', puzzleId: runes.id, step, solved, reset } };
+  }
+  const levers = leverPuzzleAt(map, target);
+  if (levers && !state.solved.includes(levers.id)) {
+    const key = `${levers.id}:${levers.levers.findIndex(l => l.x === target.x && l.y === target.y)}`;
+    if (!state.levers.includes(key)) {
+      state.levers.push(key);
+      const pulled = state.levers.filter(k => k.startsWith(`${levers.id}:`)).length; const solved = pulled >= levers.levers.length;
+      if (solved) state.solved.push(levers.id);
+      return { state, event: { type: 'lever', puzzleId: levers.id, pulled, solved } };
+    }
+  }
   // Reaching a camp makes it the defeat return point, whether or not the party rests.
   if (tile.kind === 'camp') state.camp = { ...target };
   if (tile.kind === 'goal') { state.completed = true; return { state, event: { type: 'goal' } }; }

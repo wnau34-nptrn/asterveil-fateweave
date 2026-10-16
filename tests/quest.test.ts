@@ -27,9 +27,9 @@ describe('rift seal (2 of 3)', () => {
     }
   });
   it('counts each objective from the run state; any two break the seal', () => {
-    const chests = map.chests.slice(0, 4).map(c => c.id);
+    const chests = map.chests.slice(0, 6).map(c => c.id);
     expect(questDone(run(), map)).toEqual([]);
-    expect(questDone(run({ openedChests: chests.slice(0, 3) }), map)).toEqual([]);
+    expect(questDone(run({ openedChests: chests.slice(0, 5) }), map)).toEqual([]);
     expect(questDone(run({ openedChests: chests }), map)).toEqual(['chests']);
     expect(questDone(run({ elitesDefeated: [golem.id], eventsDone: ['scar-rift'] }), map)).toEqual(['golem', 'rift']);
     for (const patch of [{ openedChests: chests, elitesDefeated: [golem.id] }, { openedChests: chests, eventsDone: ['scar-rift'] }, { elitesDefeated: [golem.id], eventsDone: ['scar-rift'] }])
@@ -39,7 +39,7 @@ describe('rift seal (2 of 3)', () => {
   it('the boss stays sealed (no battle, no step) until two objectives are done', () => {
     const sealed = move(run({ position: below }), map, 'up');
     expect(sealed.event).toEqual({ type: 'blocked', reason: 'sealed' }); expect(sealed.state.position).toEqual(below); expect(sealed.state.battle).toBeNull();
-    const open = move(run({ position: below, openedChests: map.chests.slice(0, 4).map(c => c.id), eventsDone: ['scar-rift'] }), map, 'up');
+    const open = move(run({ position: below, openedChests: map.chests.slice(0, 6).map(c => c.id), eventsDone: ['scar-rift'] }), map, 'up');
     expect(open.event).toMatchObject({ type: 'encounter', kind: 'boss' });
   });
 });

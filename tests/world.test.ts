@@ -22,14 +22,16 @@ function memory(): StoragePort & { values: Map<string, string> } {
   return { values, getItem: k => values.get(k) ?? null, setItem: (k, v) => { values.set(k, v); }, removeItem: k => { values.delete(k); } };
 }
 // Breadth-first route over walkable tiles, optionally treating the boss as passable.
-function route(from: Point, to: Point, throughBoss = false): Direction[] {
+function route(from: Point, to: Point, throughBoss = false, puzzlesOpen = false): Direction[] {
+  const opened = (p: Point) => puzzlesOpen && (map.puzzles.secrets.some(s => s.x === p.x && s.y === p.y) || [...map.puzzles.runes, ...map.puzzles.levers].some(d => d.door.x === p.x && d.door.y === p.y));
   const key = (p: Point) => `${p.x},${p.y}`; const prev = new Map<string, [string, Direction]>(); const queue = [from]; const seen = new Set([key(from)]);
   while (queue.length) {
     const p = queue.shift()!;
     if (p.x === to.x && p.y === to.y) break;
     for (const [d, o] of Object.entries(dirs) as [Direction, Point][]) {
       const n = { x: p.x + o.x, y: p.y + o.y }; const t = tileAt(map, n);
-      if (!t || t.kind === 'wall' || (t.kind === 'boss' && !throughBoss) || seen.has(key(n))) continue;
+      const stone = !puzzlesOpen && map.puzzles.boulders.some(b => (b.at.x === n.x && b.at.y === n.y) || (b.pit.x === n.x && b.pit.y === n.y));
+      if (!t || stone || (t.kind === 'wall' && !opened(n)) || (t.kind === 'boss' && !throughBoss) || seen.has(key(n))) continue;
       seen.add(key(n)); prev.set(key(n), [key(p), d]); queue.push(n);
     }
   }
@@ -319,7 +321,10 @@ describe('resources and chests', () => {
     expect(new Set(map.chests.map(c => c.id)).size).toBe(map.chests.length);
     for (const c of map.chests) {
       expect(tileAt(map, c)?.kind).toBe('floor');
-      expect(route(startOf(map), c).length).toBeGreaterThan(0);
+      // Vault and secret chests (3C) sit behind puzzle doors and secret walls: reachable once those are open.
+      const behind = c.id.endsWith('-vault') || c.id.endsWith('-secret');
+      expect(route(startOf(map), c).length > 0).toBe(!behind);
+      if (behind) expect(route(startOf(map), c, false, true).length).toBeGreaterThan(0);
     }
   });
   it('opens a chest once, with loot fixed by the seed and roll counter', () => {
@@ -367,7 +372,7 @@ describe('game save', () => {
   });
   it.each([
     ['malformed', () => '{bad'],
-    ['wrong version', (s: ExpeditionState) => JSON.stringify({ version: 15, profile: newProfile(map, 4), run: s })],
+    ['wrong version', (s: ExpeditionState) => JSON.stringify({ version: 16, profile: newProfile(map, 4), run: s })],
     ['wall position', (s: ExpeditionState) => v6({ ...s, position: { x: 0, y: 0 } })],
     ['hp above max', (s: ExpeditionState) => v6({ ...s, hp: { ...s.hp, tracer: 99 } })],
     ['foreign owner command', (s: ExpeditionState) => v6({ ...s, battle: { kind: 'random', encounterId: 'veil-siege', entry: s.hp, commands: [{ beat: 1, heroId: 'guardian', action: 'attack', targetId: 'brute' }] } })],

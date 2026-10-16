@@ -3,10 +3,13 @@ import type { Direction, EventChoice, ExpeditionState, MapDefinition, Point, Pot
 import { atCamp, atMuster, canOpenChest, canRest, canRevive, chestAt, eliteBlocks, questComplete, questDone, encounterChance, eventChoiceReason, isRevealed, monsterLevelAt, pendingEvent, rosterIds, starred, tileAt, wounded, zoneOf } from '../core/world/world';
 import { PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS } from '../core/world/types';
 import { actorArt, portraitsUrl, sheetRows } from '../game/visuals/assets';
-import { SOURCE_TILE, chestFrame, decorAt, itemFrame, floorFrame, fogLayers, landmarkAt, tileSizeFor, tileset, worldArtUrl, type Landmark } from '../game/visuals/world-art';
+import { SOURCE_TILE, openingFrame, chestFrame, decorAt, itemFrame, floorFrame, fogLayers, landmarkAt, tileSizeFor, tileset, worldArtUrl, type Landmark } from '../game/visuals/world-art';
 import { questLine, choiceText, eventChoices, eventReasonText, eventText, heroText, itemLines, itemName, potionText, resourceOrder, resourceText } from './th';
 import { icon, type IconName } from './icons';
 import { gearArt, potionArt } from './equip-art';
+import { boulderPosition, doorOpen, openPit, secretAt } from '../core/world/puzzles';
+import type { RuneGlyph } from '../core/world/types';
+const glyph: Record<RuneGlyph, string> = { star: '✦', moon: '☾', sun: '☀' };
 
 export interface WorldHost { move(dir: Direction): void; rest(): void; revive(heroId: string): void; swap(a: string, b: string): void; moveMember(id: string): void; withdraw(): void; openChest(): void;
   usePotion(potion: PotionId, heroId?: string): void; chooseEvent(choice: EventChoice): void }
@@ -210,9 +213,48 @@ export class WorldUI {
       if (elite) html += `<span class="elite-unit sprite" data-cell="${x},${y}" data-elite="${elite.id}" data-forced="${elite.forced}"${elite.mini ? ' data-mini="true"' : ''} style="--x:${x};--y:${y};z-index:${y * 3 + 1}">${this.eliteArt[elite.id] ? portrait(this.eliteArt[elite.id]!) : ''}${elite.forced ? '' : `<em class="elite-reward">${icon(elite.mini ? 'boss' : 'chest')}</em>`}</span>`;
       const event = this.map.events.find(e => e.x === x && e.y === y);
       if (event) html += `<span class="event-mark sprite" data-cell="${x},${y}" data-event="${event.id}" data-kind="${event.kind}" style="--x:${x};--y:${y};z-index:${y * 3 + 1}"><i>!</i></span>`;
+      html += this.puzzleSprites(x, y);
       if (['camp', 'start', 'goal', 'boss'].includes(kind)) html += `<span class="landmark sprite" data-cell="${x},${y}" data-kind="${kind}" style="--x:${x};--y:${y};z-index:${y * 3 + 1}">${kind === 'boss' ? '<span class="boss-unit"></span>' : ''}</span>`;
     }
     return html;
+  }
+
+  // 3C puzzle pieces, built once; renderPuzzles() updates them from the committed state.
+  private puzzleSprites(x: number, y: number): string {
+    const P = this.map.puzzles; const at = (q: Point) => q.x === x && q.y === y; const pos = `style="--x:${x};--y:${y};z-index:${y * 3 + 1}"`;
+    const opening = () => { const f = tileset[openingFrame(this.map, { x, y })]!; return `--fx:${f.x / SOURCE_TILE};--fy:${f.y / SOURCE_TILE}`; };
+    let html = '';
+    for (const r of P.runes) {
+      const i = r.stones.findIndex(at);
+      if (i >= 0) html += `<span class="rune-stone sprite" data-cell="${x},${y}" data-rune="${r.id}" data-index="${i}" data-glyph="${r.stones[i]!.glyph}" ${pos}><i>${glyph[r.stones[i]!.glyph]}</i></span>`;
+      if (at(r.door)) html += `<span class="puzzle-door sprite" data-cell="${x},${y}" data-door="${r.id}" data-kind="runes" style="--x:${x};--y:${y};z-index:${y * 3 + 1};${opening()}"><i>${r.stones.map(s => glyph[s.glyph]).join('')}</i></span>`;
+    }
+    for (const l of P.levers) {
+      const i = l.levers.findIndex(at);
+      if (i >= 0) html += `<span class="lever sprite" data-cell="${x},${y}" data-lever="${l.id}:${i}" ${pos}><i></i></span>`;
+      if (at(l.door)) html += `<span class="puzzle-door sprite" data-cell="${x},${y}" data-door="${l.id}" data-kind="levers" style="--x:${x};--y:${y};z-index:${y * 3 + 1};${opening()}"><i>${'◖'.repeat(l.levers.length)}</i></span>`;
+    }
+    for (const b of P.boulders) {
+      if (at(b.pit)) html += `<span class="pit sprite" data-cell="${x},${y}" data-pit="${b.id}" ${pos}></span>`;
+      if (at(b.at)) html += `<span class="boulder sprite" data-cell="${x},${y}" data-boulder="${b.id}" ${pos}></span>`;
+    }
+    const sec = P.secrets.find(at);
+    if (sec) html += `<span class="secret-wall sprite" data-cell="${x},${y}" data-secret="${sec.id}" style="--x:${x};--y:${y};z-index:${y * 3 + 1};${opening()}"></span>`;
+    return html;
+  }
+  private renderPuzzles(s: ExpeditionState): void {
+    this.root.querySelectorAll<HTMLElement>('.rune-stone').forEach(el => {
+      const id = el.dataset.rune!; el.classList.toggle('lit', s.solved.includes(id) || Number(el.dataset.index) < (s.runes[id] ?? 0));
+    });
+    this.root.querySelectorAll<HTMLElement>('.puzzle-door').forEach(el => el.classList.toggle('open', s.solved.includes(el.dataset.door!)));
+    this.root.querySelectorAll<HTMLElement>('.lever').forEach(el => el.classList.toggle('pulled', s.levers.includes(el.dataset.lever!) || s.solved.includes(el.dataset.lever!.split(':')[0]!)));
+    this.root.querySelectorAll<HTMLElement>('.pit').forEach(el => { el.classList.toggle('filled', s.solved.includes(el.dataset.pit!)); });
+    this.root.querySelectorAll<HTMLElement>('.boulder').forEach(el => {
+      const at = boulderPosition(s, this.map, el.dataset.boulder!); el.classList.toggle('gone', !at); if (!at) return;
+      el.style.setProperty('--x', String(at.x)); el.style.setProperty('--y', String(at.y)); el.style.zIndex = String(at.y * 3 + 1); el.dataset.cell = `${at.x},${at.y}`;
+      el.hidden = !isRevealed(s, this.map, at);
+    });
+    this.root.querySelectorAll<HTMLElement>('.secret-wall').forEach(el => el.classList.toggle('found', s.secrets.includes(el.dataset.secret!)));
   }
 
   render(view: WorldView): void {
@@ -244,6 +286,7 @@ export class WorldUI {
     if (this.root.querySelector<HTMLDialogElement>('#camp-dialog')!.open) { if (atMuster(s, this.map) && !view.locked) this.renderCamp(); else this.root.querySelector<HTMLDialogElement>('#camp-dialog')!.close(); }
     if (!prev || prev.revealed !== s.revealed) this.renderFog(s);
     this.renderSprites(s, prev);
+    this.renderPuzzles(s);
     this.renderHints(s, view.locked);
     this.renderBanner(view);
     if (view.effect === 'rest' && !this.reduced.matches) this.sparkle();
@@ -420,7 +463,8 @@ export class WorldUI {
     if (locked || s.completed) { layer.innerHTML = ''; return; }
     layer.innerHTML = (Object.entries(offsets) as [Direction, Point][]).map(([dir, o]) => {
       const p = { x: s.position.x + o.x, y: s.position.y + o.y }; const t = tileAt(this.map, p);
-      if (!t || t.kind === 'wall') return '';
+      // Opened doors and found secret passages get a hint; an open pit does not, and unfound secrets stay secret.
+      if (!t || (t.kind === 'wall' && !doorOpen(s, this.map, p) && !(secretAt(this.map, p) && s.secrets.some(id => id === secretAt(this.map, p)!.id))) || openPit(s, this.map, p)) return '';
       const sealed = t.kind === 'boss' && !s.bossDefeated && !questComplete(s, this.map);
       return `<span class="step-hint${sealed ? ' sealed' : (t.kind === 'boss' && !s.bossDefeated) || eliteBlocks(s, this.map, p) ? ' boss' : ''}" data-dir="${dir}" style="--x:${p.x};--y:${p.y}"><i>${icon(dir)}</i></span>`;
     }).join('');
@@ -485,7 +529,8 @@ export class WorldUI {
       <h3>เมื่อแพ้</h3><p>ทีมถอยกลับแคมป์ล่าสุดที่ไปถึง (หรือทางเข้า) คนที่ล้มยังล้มอยู่ ต้องชุบหรือสลับตัวสำรอง ถ้าทุกคนที่พามาล้มหมด การเดินทางล้มเหลว กลับค่ายพร้อมแร่ดาวและตราครึ่งเดียว</p>
       <h3>${icon('camp')} กลับค่าย</h3><p>ถอนตัวได้ที่แคมป์หรือทางเข้าด่าน ของที่เก็บได้กลับค่ายครบ ไปถึงประตูรอยแยกคือสำเร็จการเดินทาง</p>
       <h3>${icon('boss')} อีลิท</h3><p>อีลิทขอบแดงเฝ้าด่านทางเดียว ต้องชนะถึงจะผ่าน · อีลิทขอบทองที่มีหีบเหนือหัวเดินอ้อมได้ แต่ถ้าท้าสู้แล้วชนะจะได้ EXP ×${this.map.eventRules.optionalElite.exp} อุปกรณ์ชั้นดีกว่า เหรียญทอง +${this.map.eventRules.optionalElite.gold} และตราสัญญา +${this.map.eventRules.optionalElite.seal}</p>
-      <h3>${icon('boss')} ผนึกรอยแยก</h3><p>ผู้คุมรอยแยกถูกผนึกไว้ ต้องทำเป้าหมายให้ครบ ${this.map.quest.need} จาก ${this.map.quest.objectives.length} ก่อนจึงท้าสู้ได้: ชนะมินิบอสยักษ์หินในรอยแผล, เปิดกล่องสมบัติ 4 กล่อง หรือชำระรอยแยกเล็ก ดูความคืบหน้าได้จากช่องเป้าหมายมุมซ้ายบน</p>
+      <h3>${icon('boss')} ผนึกรอยแยก</h3><p>ผู้คุมรอยแยกถูกผนึกไว้ ต้องทำเป้าหมายให้ครบ ${this.map.quest.need} จาก ${this.map.quest.objectives.length} ก่อนจึงท้าสู้ได้: ชนะมินิบอสยักษ์หินในรอยแผล, เปิดกล่องสมบัติ 6 กล่อง หรือชำระรอยแยกเล็ก ดูความคืบหน้าได้จากช่องเป้าหมายมุมซ้ายบน</p>
+      <h3>${icon('star')} ปริศนาและทางลับ</h3><p>แต่ละโซนมีปริศนาเฝ้ากล่องหายาก: ทุ่งมีหินรูน 3 ก้อน เหยียบตามลำดับสัญลักษณ์บนประตูหิน · พงหนามมีก้อนหิน เดินชนเพื่อผลักลงหลุม · รอยแผลมีคันโยก 2 อันคนละฝั่ง ดึงให้ครบ · กำแพงที่มีรอยร้าวเรืองแสงจาง ๆ บางช่องเดินทะลุได้</p>
       <h3>${icon('boss')} ผู้คุมรอยแยก</h3><p>บอสเฝ้าทางเดียวไปประตูรอยแยก เดินชนบอสเพื่อเริ่มศึก ชนะแล้วเดินไปที่ประตูเพื่อจบการเดินทาง</p></section>
       ${s ? `<p class="world-stats">เดินแล้ว ${s.steps} ก้าว · ชนะ ${s.wins} ศึก · แพ้ ${s.defeats} ครั้ง</p>` : ''}
       <p id="world-save" class="world-save">${this.view?.saved ? 'บันทึกอัตโนมัติบนเครื่องนี้ทุกก้าว' : 'เล่นได้ แต่บันทึกบนเครื่องนี้ไม่ได้'}</p>`;

@@ -20,7 +20,7 @@ Approved 2026-10-14, re-planned 2026-10-15 for the mercenary roster.
 | L2. Character creation | Commander (non-combat) name, crest and banner colour, once, between Home and Lobby | **Implemented** |
 | 2C-2. New classes | Six new mercenaries (ART-CHAR-MERC-ENEMY-001), one class mechanic at a time; ★3 skill and ★5 passive per class | **Implemented**: all 6 base classes (Garran spear, Mira archer, Toma alchemist, Sefa scout, Brann warden, Lio bard) and the ★3 skill + ★5 passive for all 10 classes (see Star unlocks) |
 | 2D. Equipment and level | 2D-1 member + monster levels; 2D-2 equipment (6 slots, 5 rarities, drops, inventory); 2D-3 sets; 2D-4 forge (enhance, fuse, reroll, salvage); 2D-5 map potions; 2D-1b passive talent tree | **Implemented**: 2D-1 (see Levels), 2D-1b (Talent tree), 2D-2 (Equipment), 2D-3 (Equipment sets), 2D-4 (Forge), 2D-5 (Map potions); numbers are drafts |
-| 3. Choices and content | 3A events with fight/avoid choices and forced elites; later mini boss, puzzles (rune order, push stone, lever), secrets, map quest "2 of 3" and side quests | **3A and 3B implemented** (see Events and elites; Rift seal and mini-boss); 3C puzzles/secrets and 3D side quests planned |
+| 3. Choices and content | 3A events with fight/avoid choices and forced elites; later mini boss, puzzles (rune order, push stone, lever), secrets, map quest "2 of 3" and side quests | **3A, 3B and 3C implemented** (see Events and elites; Rift seal and mini-boss; Puzzles and secrets); 3D side quests planned |
 | 4. Economy and wrap-up | Local gold and shop, salvage, fast travel between camps, elite respawn on rest, defeat penalty, whole-map balance simulation, completion screen | Planned |
 
 Numbers in phases 2–4 are drafts and need owner approval after playtesting.
@@ -678,3 +678,34 @@ Then `startPrologue` starts the `first-clash` battle (now "กองหน้า
 - **Vargoth's art:** none yet; a dark silhouette of the rift sentinel portrait stands in until an art handoff.
 
 **Voiced advice.** The first-battle advice is back, labelled "ศึกแรก". The hero whose turn it is says the line (`heroVoice`), with their face, followed by the advisor's move. It can still be hidden from ⓘ.
+
+## Puzzles and secrets (3C; approved 2026-10-16, draft numbers)
+
+**One puzzle per zone guards a rare chest, and one secret wall per zone hides a common chest.**
+- **Map version 5 is 23 columns wide:** the vaults sit at x 19–21 behind the old east wall, so no existing coordinate moved.
+- **No new battle buttons:** everything is driven by the ordinary one-tile steps.
+- **Rules:** pure, in `core/world/puzzles.ts` and `move`. Numbers and places live in `map.puzzles`.
+
+| Zone | Puzzle | How it works | Reward |
+|---|---|---|---|
+| Meadow | Rune stones ✦ ☾ ☀ at (5,21), (11,19), (16,22) | Step on them in the order carved on the stone door at (18,21). A wrong stone resets the sequence; stepping on the first stone always counts as stone 1. | The door opens onto the vault, rare chest `meadow-vault` at (20,21). |
+| Thicket | Boulder at (19,13), pit at (20,13) | Walking into the boulder pushes it one tile in the walking direction, onto plain floor or into its pit, which fills. An open pit blocks. | Rare chest `thicket-vault` at (21,13). |
+| Scar | Levers at (5,9) and (15,9), on opposite sides | Each lever counts once; pulling both opens the storeroom door at (18,8). | Rare chest `scar-vault` at (20,8). |
+
+- **Secret walls:**
+  - At (3,24), (3,15) and (3,8), drawn with faint violet cracks.
+  - They can be walked through. Until found they show no step hint.
+  - The first pass reports "พบทางลับ"; behind each is a common chest (`*-secret`).
+- **Puzzle steps roll no encounter:** stones, levers, pushes and the first pass through a secret wall answer instead of rolling. Doorways and secret passages have no zone, so they never roll.
+- **Rift seal:** the "chests" objective rises from 4 to **6 of 12** chests.
+
+**Save v15.** The run gains `runes` (step per unsolved rune puzzle), `solved`, `levers` (`<puzzle>:<index>`), `boulders` (moved positions) and `secrets`. Everything resets with each new run.
+- **Migration:** v14 data migrates with no puzzle state; runs saved on map version 4 settle home as withdrawn.
+- **Position checks:** the party may stand in an opened doorway or a secret passage, never in a closed door, a boulder or an open pit.
+
+**Art:** code-drawn placeholders for the stones, levers, boulder, pit, door and cracks, until a painted pass is commissioned.
+
+**Tests:**
+- `tests/puzzles.test.ts`: runes in order and reset, levers, boulder and pit, secret walls, save v15.
+- The chest reachability test opens puzzles before reaching vaults.
+- A browser test walks the rune door, the boulder and a secret wall.

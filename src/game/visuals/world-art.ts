@@ -48,10 +48,22 @@ export function landmarkAt(map: MapDefinition, state: ExpeditionState, p: Point)
   }
 }
 
+// Puzzle pieces (3C) keep their tiles free of decor so stones, levers, boulders and pits read clearly.
+const puzzleTile = (map: MapDefinition, p: Point): boolean => {
+  const at = (q: Point) => q.x === p.x && q.y === p.y; const P = map.puzzles;
+  return P.runes.some(r => r.stones.some(at)) || P.levers.some(l => l.levers.some(at)) || P.boulders.some(b => at(b.at) || at(b.pit));
+};
+// The floor frame a doorway or found secret passage shows once open: that of a walkable neighbour.
+export function openingFrame(map: MapDefinition, p: Point): string {
+  for (const [dx, dy] of [[-1, 0], [1, 0], [0, 1], [0, -1]] as const) {
+    const t = tileAt(map, { x: p.x + dx, y: p.y + dy }); if (t && t.kind === 'floor') return floorFrame(map, { x: p.x + dx, y: p.y + dy });
+  }
+  return 'sanctum_0';
+}
 // Sparse props on plain floor only, away from landmarks so silhouettes stay readable.
 export function decorAt(map: MapDefinition, p: Point): (Frame & { name: string }) | undefined {
   const tile = tileAt(map, p);
-  if (tile?.kind !== 'floor' || cellHash(p.x, p.y, 7) % 100 >= 18) return undefined;
+  if (tile?.kind !== 'floor' || cellHash(p.x, p.y, 7) % 100 >= 18 || puzzleTile(map, p)) return undefined;
   for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
     const near = tileAt(map, { x: p.x + dx, y: p.y + dy })?.kind;
     if (near && near !== 'floor' && near !== 'wall') return undefined;

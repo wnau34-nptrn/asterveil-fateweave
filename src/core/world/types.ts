@@ -50,6 +50,8 @@ export interface MapDefinition {
   elites: readonly EliteDefinition[];
   // The rift seal (3B): the boss can be challenged only once `need` of these objectives are done.
   quest: QuestDefinition;
+  // 3C: puzzles and secret walls (doors, secret walls and pits sit on '#'/floor tiles of `rows`).
+  puzzles: PuzzleDefinitions;
   events: readonly MapEventDefinition[];
   eventRules: EventRules;
   // Passive talent tree per hero id (2D-1b).
@@ -97,6 +99,15 @@ export interface EquipmentRules {
 // `mini` (3B): a mini-boss; it pays the `miniBoss` reward instead of the elite one.
 // Quest objectives read the run's own state: a beaten elite, a finished event, or a number of opened chests.
 export type QuestObjective = { id: string; kind: 'elite' | 'event'; target: string } | { id: string; kind: 'chests'; count: number };
+// 3C puzzles. Runes: step on the stones in order to open `door`. Levers: pull every lever to open `door`.
+// Boulder: push it (walk into it) along the floor into `pit`, which fills and becomes floor. Secrets: walls you can walk through.
+export type RuneGlyph = 'star' | 'moon' | 'sun';
+export interface PuzzleDefinitions {
+  runes: readonly { id: string; stones: readonly (Point & { glyph: RuneGlyph })[]; door: Point }[];
+  levers: readonly { id: string; levers: readonly Point[]; door: Point }[];
+  boulders: readonly { id: string; at: Point; pit: Point }[];
+  secrets: readonly (Point & { id: string })[];
+}
 export interface QuestDefinition { need: number; objectives: readonly QuestObjective[] }
 export interface EliteDefinition { id: string; x: number; y: number; encounterId: string; forced: boolean; mini?: boolean }
 export type MapEventKind = 'bandits' | 'shrine' | 'merchant' | 'traveller' | 'rift';
@@ -242,10 +253,13 @@ export interface ExpeditionState {
   potions: Potions; repel: number;
   // 3A: elites beaten and events finished this run, and veil dust found (settles into the bank like ore).
   elitesDefeated: string[]; eventsDone: string[]; dust: number;
+  // 3C puzzles and secrets for this run: rune progress per puzzle, solved puzzle ids, pulled levers ('<puzzle>:<i>'),
+  // moved boulders' positions and found secret walls. Everything resets with a new run.
+  runes: Record<string, number>; solved: string[]; levers: string[]; boulders: Record<string, Point>; secrets: string[];
 }
 export type WorldEvent =
   | { type: 'moved'; chance: number }
-  | { type: 'blocked'; reason: 'wall' | 'edge' | 'busy' | 'party' | 'sealed' }
+  | { type: 'blocked'; reason: 'wall' | 'edge' | 'busy' | 'party' | 'sealed' | 'stone' | 'pit' }
   | { type: 'roster' }
   | { type: 'encounter'; kind: BattleKind; encounterId: string; chance: number }
   | { type: 'goal' }
@@ -255,6 +269,10 @@ export type WorldEvent =
   | { type: 'potion'; potion: PotionId; heal?: Record<string, number> }
   | { type: 'event'; eventId: string }
   | { type: 'eventDone'; eventId: string; choice: EventChoice; heal?: Record<string, number> }
+  | { type: 'rune'; puzzleId: string; step: number; solved: boolean; reset: boolean }
+  | { type: 'lever'; puzzleId: string; pulled: number; solved: boolean }
+  | { type: 'pushed'; puzzleId: string; filled: boolean }
+  | { type: 'secret'; secretId: string }
   | { type: 'victory'; kind: BattleKind; encounterId: string; loot: Resources; exp?: Record<string, ExpGain>; item?: Item; dust?: number }
   | { type: 'defeat'; kind: BattleKind; encounterId: string; wiped?: boolean };
 // EXP from one victory for one brought member: `percent` is the level-gap multiplier.

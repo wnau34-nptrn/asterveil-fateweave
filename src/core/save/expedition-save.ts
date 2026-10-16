@@ -3,6 +3,7 @@ import type { ActionId, Command } from '../battle/types';
 import { COMPANY_CAP, PARTY_SLOTS, RESERVE_SLOTS, type ActiveBattle, type ExpeditionState, type MapDefinition, type Point, type Profile, type Roster, type RunOutcome } from '../world/types';
 import { battleState, expToNext, newExpedition, finishBattle, fullParty, heroCatalog, heroDef, memberDef, rosterIds, tileAt, type EncounterLookup } from '../world/world';
 import { itemValid } from '../world/equipment';
+import { boulderAt, openPit, passableWall } from '../world/puzzles';
 import { commanderReason, newProfile, settle, talentsValid } from '../world/profile';
 import type { Item, MemberProgress, Potions, Talents } from '../world/types';
 import { POTION_IDS } from '../world/types';
@@ -31,7 +32,8 @@ export const legacyKeys = ['asterveil.fateweave.battle.v1', 'asterveil.fateweave
 // kinds 'elite'/'event' with a `source`. A run saved on an older map version is settled home as withdrawn.
 // v13 → v14: gold coins pay for hiring. Run resources, the bank and the last result gain `gold`; older data
 // starts with 0 in the run and one hire's worth in the bank, so a company saved for hiring can still hire.
-const SAVE_VERSION = 14;
+// v14 → v15 (3C): the run gains puzzle state: `runes`, `solved`, `levers`, `boulders` and `secrets` (older data: none).
+const SAVE_VERSION = 15;
 export interface Game { profile: Profile; run: ExpeditionState | null }
 const actions: readonly ActionId[] = ['attack', 'guard', 'bash', 'mark', 'execute', 'bolt', 'ward', 'heal', 'prayer', 'brace', 'pierce', 'hinder', 'volley', 'acid', 'haste', 'ambush', 'evade', 'taunt', 'slam', 'valor', 'mend',
   'rally', 'finisher', 'sigil', 'sanctuary', 'spearwall', 'weakshot', 'bomb', 'backstab', 'quake', 'finale'];
@@ -53,11 +55,12 @@ function obj(v: unknown): Record<string, unknown> {
   if (!v || typeof v !== 'object' || Array.isArray(v)) throw new Error('Invalid save');
   return v as Record<string, unknown>;
 }
-function point(v: unknown, map: MapDefinition): Point {
+// `walls` lets the party stand in a doorway or secret passage (3C); the run checks it is really passable.
+function point(v: unknown, map: MapDefinition, walls = false): Point {
   const p = obj(v); const width = map.rows[0]!.length;
   if (!isInt(p.x, 0, width - 1) || !isInt(p.y, 0, map.rows.length - 1)) throw new Error('Invalid position');
   const tile = tileAt(map, { x: p.x, y: p.y });
-  if (!tile || tile.kind === 'wall' || tile.kind === 'boss') throw new Error('Invalid position');
+  if (!tile || (tile.kind === 'wall' && !walls) || tile.kind === 'boss') throw new Error('Invalid position');
   return { x: p.x, y: p.y };
 }
 function rosterOf(v: unknown, lookup: EncounterLookup, map: MapDefinition): Roster {
@@ -139,6 +142,26 @@ function staleRun(s: Record<string, unknown>, map: MapDefinition, lookup: Encoun
   return { ...run, resources: { ore: r.ore, gold: isInt(r.gold, 0, 999999) ? r.gold : 0, ember: 0, seal: r.seal }, steps: s.steps, wins: s.wins, found: foundOf(s.found, map, lookup),
     potions: potionsOf(s.potions, map.potions.carry), dust: isInt(s.dust, 0, 999999) ? s.dust : 0, tutorialDone: s.tutorialDone === true };
 }
+// 3C puzzle state, validated against the map's puzzles.
+function puzzleState(s: Record<string, unknown>, map: MapDefinition): Pick<ExpeditionState, 'runes' | 'solved' | 'levers' | 'boulders' | 'secrets'> {
+  const P = map.puzzles;
+  const solved = idList(s.solved, [...P.runes, ...P.levers, ...P.boulders].map(x => x.id));
+  const secrets = idList(s.secrets, P.secrets.map(x => x.id));
+  const levers = idList(s.levers, P.levers.flatMap(l => l.levers.map((_, i) => `${l.id}:${i}`)));
+  const runesRaw = obj(s.runes); const runes: Record<string, number> = {};
+  for (const [id, n] of Object.entries(runesRaw)) {
+    const r = P.runes.find(x => x.id === id);
+    if (!r || solved.includes(id) || !isInt(n, 1, r.stones.length - 1)) throw new Error('Invalid puzzle');
+    runes[id] = n;
+  }
+  const bRaw = obj(s.boulders); const boulders: Record<string, Point> = {};
+  for (const [id, at] of Object.entries(bRaw)) {
+    if (!P.boulders.some(x => x.id === id) || solved.includes(id)) throw new Error('Invalid puzzle');
+    const p = point(at, map); if (tileAt(map, p)?.kind !== 'floor') throw new Error('Invalid puzzle');
+    boulders[id] = p;
+  }
+  return { runes, solved, levers, boulders, secrets };
+}
 function foundOf(v: unknown, map: MapDefinition, lookup: EncounterLookup): Item[] {
   if (!Array.isArray(v) || v.length > 99) throw new Error('Invalid found');
   return v.map(i => itemOf(i, map, lookup, true));
@@ -158,6 +181,7 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
   if (version < 12) Object.assign(s, { potions: { salve: 0, tonic: 0, repel: 0 }, repel: 0 });
   if (version < 13) Object.assign(s, { elitesDefeated: [], eventsDone: [], dust: 0 });
   if (version < 14 && s.resources && typeof s.resources === 'object') (s.resources as Record<string, unknown>).gold ??= 0;
+  if (version < 15) Object.assign(s, { runes: {}, solved: [], levers: [], boulders: {}, secrets: [] });
   if (s.mapId !== map.id) throw new Error('Map changed');
   if (s.mapVersion !== map.version) throw new StaleRun(staleRun(s, map, lookup));
   const cells = map.rows.length * map.rows[0]!.length;
@@ -188,7 +212,7 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
     battle = { kind: b.kind as ActiveBattle['kind'], encounterId: data.id, entry, commands: b.commands.map(command), ...(b.level !== undefined ? { level: b.level as number } : {}), ...(typeof source === 'string' ? { source } : {}) };
   }
   const state: ExpeditionState = {
-    mapId: map.id, mapVersion: map.version, seed: s.seed as number, rolls: s.rolls as number, position: point(s.position, map),
+    mapId: map.id, mapVersion: map.version, seed: s.seed as number, rolls: s.rolls as number, position: point(s.position, map, true),
     steps: s.steps as number, pressure: s.pressure as number, revealed: s.revealed, roster, members, hp,
     camp: s.camp === null ? null : point(s.camp, map),
     resources: { ore: r.ore as number, gold: r.gold as number, ember: r.ember as number, seal: r.seal as number }, openedChests: [...s.openedChests as string[]], restReady: s.restReady as boolean,
@@ -198,7 +222,11 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
     potions: potionsOf(s.potions, map.potions.carry), repel: isInt(s.repel, 0, map.potions.repelSteps) ? s.repel : badRun(),
     elitesDefeated: idList(s.elitesDefeated, map.elites.map(e => e.id)), eventsDone: idList(s.eventsDone, map.events.map(e => e.id)),
     dust: isInt(s.dust, 0, 999999) ? s.dust : badRun(),
+    ...puzzleState(s, map),
   };
+  // Standing on a wall is only possible in an opened doorway or a secret passage; never inside a boulder or an open pit.
+  if (tileAt(map, state.position)?.kind === 'wall' && !passableWall(state, map, state.position)) throw new Error('Invalid position');
+  if (boulderAt(state, map, state.position) || openPit(state, map, state.position)) throw new Error('Invalid position');
   if (state.camp && tileAt(map, state.camp)?.kind !== 'camp') throw new Error('Invalid camp');
   // A battle can end on enemy opening turns before any command; apply it now.
   if (battle && battleState(state, map, lookup)!.outcome !== 'active') return finishBattle(state, map, lookup).state;
@@ -251,7 +279,7 @@ function settleFinished(game: Game, map: MapDefinition): Game {
 }
 export function parseGame(raw: string, map: MapDefinition, lookup: EncounterLookup): Game {
   const envelope = obj(JSON.parse(raw)); const version = envelope.version as number;
-  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
+  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
   if (version < 5) {
     const run = parseRun(envelope.state, version, map, lookup);
     const profile = newProfile(map, (run.seed ^ 0x5bd1e995) >>> 0);

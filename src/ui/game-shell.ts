@@ -184,6 +184,7 @@ export class GameShell {
     const result = move(this.state, this.map, dir);
     if (result.event.type === 'blocked') {
       this.message = result.event.reason === 'wall' ? 'ทางนี้ไปต่อไม่ได้' : result.event.reason === 'party' ? 'ทีมที่ลงสนามล้มหมด · สลับตัวสำรองหรือชุบที่แคมป์ก่อนออกเดินทาง'
+        : result.event.reason === 'stone' ? 'หินขยับไปทางนั้นไม่ได้' : result.event.reason === 'pit' ? 'หลุมลึกขวางทาง · ต้องหาอะไรมาถม'
         : result.event.reason === 'sealed' ? `ผู้คุมรอยแยกยังถูกผนึก · ทำเป้าหมายให้ครบ ${this.map.quest.need} จาก ${this.map.quest.objectives.length} ก่อน (ตอนนี้ ${questDone(this.state, this.map).length}/${this.map.quest.need}) ดูได้ที่ช่องเป้าหมาย` : this.message;
       this.renderWorld(); return;
     }
@@ -281,6 +282,11 @@ export class GameShell {
       case 'moved': return event.chance ? `ก้าวต่อไป · ไม่พบศัตรู (โอกาส ${event.chance}%)` : 'พื้นที่ปลอดภัย';
       case 'encounter': return event.kind === 'boss' ? 'ผู้คุมรอยแยกขวางประตูไว้!' : event.kind === 'elite' ? (this.eliteMini() ? 'มินิบอสยักษ์หินลุกขึ้นขวาง · ชนะแล้วนับเป็นเป้าหมายผนึกรอยแยก' : this.eliteForced() ? 'อีลิทเฝ้าด่านขวางทางไว้ · ต้องชนะถึงจะผ่าน' : `ท้าสู้อีลิท · ชนะได้ EXP ×${this.map.eventRules.optionalElite.exp} เหรียญทอง +${this.map.eventRules.optionalElite.gold} ตราสัญญา +${this.map.eventRules.optionalElite.seal} และอุปกรณ์ชั้นดี`) : 'พบศัตรู!';
       case 'event': return eventText[this.map.events.find(e => e.id === event.eventId)!.kind].name;
+      // 3C puzzles and secrets.
+      case 'rune': return event.solved ? 'หินรูนเรืองแสงครบ · ประตูหินเปิดออกแล้ว' : event.reset ? 'หินรูนดับลง · ลำดับผิด ดูสัญลักษณ์บนประตูหิน' : `หินรูนเรืองแสง ${event.step}/3`;
+      case 'lever': return event.solved ? 'ดึงคันโยกครบ · ประตูคลังเปิดออกแล้ว' : `ดึงคันโยกแล้ว ${event.pulled}/2 · อีกอันอยู่อีกฝั่ง`;
+      case 'pushed': return event.filled ? 'ผลักหินลงหลุมแล้ว · ทางข้างหน้าเปิด' : 'ผลักหินไปหนึ่งช่อง';
+      case 'secret': return 'กำแพงร้าวนี้เดินทะลุได้ · พบทางลับ!';
       case 'goal': return 'ถึงประตูรอยแยกแล้ว';
       default: return this.message;
     }
