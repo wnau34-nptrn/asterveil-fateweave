@@ -124,7 +124,7 @@ export function newExpedition(map: MapDefinition, lookup: EncounterLookup, seed:
     resources: { ore: 0, gold: 0, ember: 0, seal: 0 }, openedChests: [], restReady: true,
     tutorialDone, bossDefeated: false, completed: false, wins: 0, defeats: 0, battle: null, found: [], dry: 0,
     potions: company?.potions ? { ...company.potions } : { salve: 0, tonic: 0, repel: 0 }, repel: 0,
-    elitesDefeated: [], eventsDone: [], dust: 0, herbs: [],
+    elitesDefeated: [], eventsDone: [], dust: 0, herbs: [], visited: [], respawns: {},
     runes: {}, solved: [], levers: [], boulders: {}, secrets: [],
   };
   reveal(state, map);
@@ -189,7 +189,7 @@ export function move(initial: ExpeditionState, map: MapDefinition, dir: Directio
   // An elite holds its gate the same way: stepping into it starts the fight; beaten, the gate is open for the run.
   const elite = eliteBlocks(state, map, target);
   if (elite) {
-    state.battle = startBattle(state, 'elite', elite.encounterId, elite.level, elite.id);
+    state.battle = startBattle(state, 'elite', elite.encounterId, elite.level !== undefined ? elite.level + (state.respawns[elite.id] ?? 0) : undefined, elite.id);
     return { state, event: { type: 'encounter', kind: 'elite', encounterId: elite.encounterId, chance: 100 } };
   }
   state.position = target; state.steps++; reveal(state, map);
@@ -220,7 +220,7 @@ export function move(initial: ExpeditionState, map: MapDefinition, dir: Directio
     }
   }
   // Reaching a camp makes it the defeat return point, whether or not the party rests.
-  if (tile.kind === 'camp') state.camp = { ...target };
+  if (tile.kind === 'camp') { state.camp = { ...target }; if (!state.visited.includes(key(target))) state.visited.push(key(target)); }
   if (tile.kind === 'goal') { state.completed = true; return { state, event: { type: 'goal' } }; }
   // An event tile asks for a choice instead of rolling an encounter.
   const waiting = pendingEvent(state, map, target);
@@ -261,7 +261,10 @@ export function rest(initial: ExpeditionState, map: MapDefinition, lookup: Encou
   const state = structuredClone(initial); const full = fullParty(lookup, map, rosterIds(state), state.members);
   for (const [id, max] of Object.entries(full)) if (state.hp[id]! > 0) state.hp[id] = Math.min(max, state.hp[id]! + percentOf(max, map.camp.restHealPercent));
   state.pressure = 0; state.camp = { ...state.position }; state.restReady = false;
-  return { state, event: { type: 'rested' } };
+  // 4C: beaten optional elites (not gate guards, not the mini-boss) return after a rest, one level higher.
+  const respawned = map.elites.filter(e => !e.forced && !e.mini && state.elitesDefeated.includes(e.id)).map(e => e.id);
+  for (const id of respawned) { state.elitesDefeated = state.elitesDefeated.filter(e => e !== id); state.respawns[id] = (state.respawns[id] ?? 0) + 1; }
+  return { state, event: { type: 'rested', ...(respawned.length ? { respawned } : {}) } };
 }
 export function canRevive(state: ExpeditionState, map: MapDefinition, heroId: string): boolean {
   return atCamp(state, map) && state.resources.ember > 0 && state.hp[heroId] === 0;
@@ -482,7 +485,7 @@ export function finishBattle(initial: ExpeditionState, map: MapDefinition, looku
     const exp = gainExp(state, map, lookup, data, kind, source);
     // A mini-boss pays its own loot table instead of the zone's.
     const loot = rollLoot(state, miniBoss(map, source) ? map.eventRules.miniBoss.loot : battleLoot(state, map, kind));
-    if (kind === 'elite' && optionalElite(map, source)) {
+    if (kind === 'elite' && optionalElite(map, source) && !state.respawns[source ?? '']) {
       const { gold, seal } = map.eventRules.optionalElite;
       loot.gold += gold; loot.seal += seal; state.resources.gold += gold; state.resources.seal += seal;
     }
@@ -502,4 +505,20 @@ export function finishBattle(initial: ExpeditionState, map: MapDefinition, looku
   state.position = state.camp ? { ...state.camp } : startOf(map); reveal(state, map);
   const wiped = rosterIds(state).every(id => state.hp[id] === 0);
   return { state, event: { type: 'defeat', kind, encounterId, ...(wiped ? { wiped } : {}) } };
+}
+
+// ---- 4B: free camp travel. From a camp or the entrance, the party travels to any camp reached this run (or the
+// entrance) with no encounter roll; it becomes the return point like walking there would.
+const key = (p: Point): string => `${p.x},${p.y}`;
+export function travelTargets(state: ExpeditionState, map: MapDefinition): Point[] {
+  if (!atMuster(state, map)) return [];
+  return [startOf(map), ...findTiles(map, 'camp').filter(c => state.visited.includes(key(c)))].filter(p => p.x !== state.position.x || p.y !== state.position.y);
+}
+export function travel(initial: ExpeditionState, map: MapDefinition, to: Point): WorldResult {
+  if (!travelTargets(initial, map).some(p => p.x === to.x && p.y === to.y)) return { state: initial, event: { type: 'blocked', reason: 'busy' } };
+  const state = structuredClone(initial);
+  state.position = { ...to }; state.pressure = 0;
+  if (tileAt(map, to)?.kind === 'camp') state.camp = { ...to };
+  reveal(state, map);
+  return { state, event: { type: 'travelled', to: { ...to } } };
 }

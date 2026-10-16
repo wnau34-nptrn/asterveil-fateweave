@@ -21,7 +21,7 @@ Approved 2026-10-14, re-planned 2026-10-15 for the mercenary roster.
 | 2C-2. New classes | Six new mercenaries (ART-CHAR-MERC-ENEMY-001), one class mechanic at a time; ★3 skill and ★5 passive per class | **Implemented**: all 6 base classes (Garran spear, Mira archer, Toma alchemist, Sefa scout, Brann warden, Lio bard) and the ★3 skill + ★5 passive for all 10 classes (see Star unlocks) |
 | 2D. Equipment and level | 2D-1 member + monster levels; 2D-2 equipment (6 slots, 5 rarities, drops, inventory); 2D-3 sets; 2D-4 forge (enhance, fuse, reroll, salvage); 2D-5 map potions; 2D-1b passive talent tree | **Implemented**: 2D-1 (see Levels), 2D-1b (Talent tree), 2D-2 (Equipment), 2D-3 (Equipment sets), 2D-4 (Forge), 2D-5 (Map potions); numbers are drafts |
 | 3. Choices and content | 3A events with fight/avoid choices and forced elites; later mini boss, puzzles (rune order, push stone, lever), secrets, map quest "2 of 3" and side quests | **3A–3D implemented** (see Events and elites; Rift seal and mini-boss; Puzzles and secrets; Camp side quests) |
-| 4. Economy and wrap-up | Local gold and shop, salvage, fast travel between camps, elite respawn on rest, defeat penalty, whole-map balance simulation, completion screen | **4A, 4E and 4F implemented** (see Camp market and board refresh; Balance simulation; Expedition summary); fast travel, elite respawn and defeat penalty planned |
+| 4. Economy and wrap-up | Local gold and shop, salvage, fast travel between camps, elite respawn on rest, defeat penalty, whole-map balance simulation, completion screen | **Phase 4 done:** 4A, 4B, 4C, 4E and 4F implemented; 4D kept as is (see Camp market; Camp travel and elite returns; Balance simulation; Expedition summary) |
 
 Numbers in phases 2–4 are drafts and need owner approval after playtesting.
 
@@ -920,3 +920,36 @@ Then `startPrologue` starts the `first-clash` battle (now "กองหน้า
 **Tests:**
 - `tests/summary.test.ts` covers the counts, haul, gear, level-ups, quests, first clear and the wipe.
 - Browser tests cover a withdrawal, a wipe and a first clear (Vargoth, then the summary, then the lobby).
+
+## Camp travel and elite returns (4B/4C; owner-approved 2026-10-16) and the defeat penalty (4D)
+
+**4B camp travel (free).**
+- **From where:** a camp or the entrance only.
+- **To where:** the entrance, or any camp reached this run (`run.visited`, recorded when the party steps onto a camp).
+- **Effects:**
+  - There is no encounter roll and pressure resets.
+  - Arriving at a camp makes it the return point.
+- **UI:** a **วาร์ป** tab in the camp sheet.
+- **Rules:** `travelTargets` and `travel` in `core/world/world.ts`.
+
+**4C optional elite returns.**
+- **When:** resting at a camp brings back every beaten **optional** elite. Gate guards (`forced`) and the mini-boss stay beaten.
+- **Tracking:** `run.respawns` counts the returns.
+- **Fight level:** a returned elite fights at its map fight level plus its return count.
+- **Rewards:** EXP and the elite drop as usual, but no optional-elite gold or seal bonus, because seals were already plentiful.
+- **Messages:** the rest message names the elites that came back.
+- **Side quest:** returns count toward the trainer's elite quest and the summary.
+
+**4D defeat penalty.** Kept as is, as the owner approved:
+- a wipe keeps half the resources, loses found gear and herbs, and keeps levels;
+- the summary (4F) spells it out.
+
+**Save v19.**
+- The run gains `visited` (camp tiles) and `respawns` (known optional elites, 1..99).
+- v18 runs start with the camp they last reached and no returns.
+
+**Simulation.** The scripted explorer fights each optional elite once, so its numbers are unchanged.
+
+**Tests:**
+- `tests/travel.test.ts`: visits, travel targets and refusals, the rest return and its level, the quest count, and save v19 with migration.
+- A browser test rests (the elite returns), then travels to the entrance.

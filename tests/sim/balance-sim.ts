@@ -46,7 +46,7 @@ function tasks(policy: Policy): Task[] {
   if (policy === 'rush') return list;
   for (const c of map.chests) list.push({ id: c.id, at: c, done: s => s.openedChests.includes(c.id) });
   for (const h of map.herbs) list.push({ id: h.id, at: h, done: s => s.herbs.includes(h.id) });
-  for (const e of map.elites.filter(e => !e.forced && !e.mini)) list.push({ id: e.id, at: e, done: s => s.elitesDefeated.includes(e.id) });
+  for (const e of map.elites.filter(e => !e.forced && !e.mini)) list.push({ id: e.id, at: e, done: s => s.elitesDefeated.includes(e.id) || !!s.respawns[e.id] });
   for (const e of map.events.filter(e => e.kind !== 'rift' && e.kind !== 'merchant')) list.push({ id: e.id, at: e, done: s => s.eventsDone.includes(e.id) });
   for (const r of map.puzzles.runes) r.stones.forEach((st, i) => list.push({ id: `${r.id}:${i}`, at: st,
     done: s => s.solved.includes(r.id) || (s.runes[r.id] ?? 0) > i, ready: s => (s.runes[r.id] ?? 0) === i }));

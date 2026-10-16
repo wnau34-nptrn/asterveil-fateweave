@@ -25,7 +25,7 @@ export function runSummary(before: Profile, run: ExpeditionState, after: Profile
     .filter(q => q.to > q.from);
   return {
     outcome, firstClear: outcome === 'complete' && before.completes === 0,
-    steps: run.steps, wins: run.wins, defeats: run.defeats, elites: run.elitesDefeated.length, chests: run.openedChests.length,
+    steps: run.steps, wins: run.wins, defeats: run.defeats, elites: run.elitesDefeated.length + Object.values(run.respawns).reduce((a, b) => a + b, 0), chests: run.openedChests.length,
     puzzles: run.solved.length, secrets: run.secrets.length, herbs: outcome === 'wiped' ? 0 : run.herbs.length,
     kept, items, salvaged: after.last?.salvaged ?? 0, levels, quests,
   };

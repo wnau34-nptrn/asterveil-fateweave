@@ -296,6 +296,9 @@ export interface ExpeditionState {
   runes: Record<string, number>; solved: string[]; levers: string[]; boulders: Record<string, Point>; secrets: string[];
   // 3D: glowing herbs picked up this run (they count for the herbalist's quest when the run settles, not on a wipe).
   herbs: string[];
+  // 4B: camps reached this run ("x,y"), the destinations of free camp travel. 4C: how often each optional elite
+  // has come back after a rest (each return fights one level higher and pays no gold/seal bonus).
+  visited: string[]; respawns: Record<string, number>;
 }
 export type WorldEvent =
   | { type: 'moved'; chance: number }
@@ -303,7 +306,7 @@ export type WorldEvent =
   | { type: 'roster' }
   | { type: 'encounter'; kind: BattleKind; encounterId: string; chance: number }
   | { type: 'goal' }
-  | { type: 'rested' }
+  | { type: 'rested'; respawned?: string[] }
   | { type: 'revived'; heroId: string }
   | { type: 'chest'; chestId: string; loot: Resources; potion?: PotionId }
   | { type: 'potion'; potion: PotionId; heal?: Record<string, number> }
@@ -314,6 +317,7 @@ export type WorldEvent =
   | { type: 'pushed'; puzzleId: string; filled: boolean }
   | { type: 'secret'; secretId: string }
   | { type: 'herb'; herbId: string }
+  | { type: 'travelled'; to: Point }
   | { type: 'victory'; kind: BattleKind; encounterId: string; loot: Resources; exp?: Record<string, ExpGain>; item?: Item; dust?: number }
   | { type: 'defeat'; kind: BattleKind; encounterId: string; wiped?: boolean };
 // EXP from one victory for one brought member: `percent` is the level-gap multiplier.

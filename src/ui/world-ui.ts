@@ -1,6 +1,6 @@
 import type { HeroDefinition } from '../core/battle/types';
 import type { Direction, EventChoice, ExpeditionState, MapDefinition, Point, PotionId } from '../core/world/types';
-import { atCamp, atMuster, canOpenChest, canRest, canRevive, chestAt, eliteBlocks, questComplete, questDone, encounterChance, eventChoiceReason, isRevealed, monsterLevelAt, pendingEvent, rosterIds, starred, tileAt, wounded, zoneOf } from '../core/world/world';
+import { travelTargets, atCamp, atMuster, canOpenChest, canRest, canRevive, chestAt, eliteBlocks, questComplete, questDone, encounterChance, eventChoiceReason, isRevealed, monsterLevelAt, pendingEvent, rosterIds, starred, tileAt, wounded, zoneOf } from '../core/world/world';
 import { PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS } from '../core/world/types';
 import { actorArt, portraitsUrl, sheetRows } from '../game/visuals/assets';
 import { SOURCE_TILE, openingFrame, chestFrame, decorAt, itemFrame, floorFrame, fogLayers, landmarkAt, tileSizeFor, tileset, worldArtUrl, type Landmark } from '../game/visuals/world-art';
@@ -9,7 +9,7 @@ import { icon, type IconName } from './icons';
 import { gearArt, potionArt } from './equip-art';
 import { boulderPosition, doorOpen, openPit, secretAt } from '../core/world/puzzles';
 
-export interface WorldHost { move(dir: Direction): void; rest(): void; revive(heroId: string): void; swap(a: string, b: string): void; moveMember(id: string): void; withdraw(): void; openChest(): void;
+export interface WorldHost { travel(to: Point): void; move(dir: Direction): void; rest(): void; revive(heroId: string): void; swap(a: string, b: string): void; moveMember(id: string): void; withdraw(): void; openChest(): void;
   usePotion(potion: PotionId, heroId?: string): void; chooseEvent(choice: EventChoice): void }
 export interface WorldBanner { kind: 'encounter' | 'boss' | 'elite' | 'tutorial' | 'complete'; eyebrow: string; title: string; detail: string }
 export interface WorldView { state: ExpeditionState; message: string; locked: boolean; saved: boolean; banner?: WorldBanner; effect?: 'rest' | 'loot' }
@@ -52,7 +52,7 @@ export class WorldUI {
   private view: WorldView | undefined;
   private previous: { position: Point; chance: number; revealed: string; boss: boolean; done: boolean } | undefined;
   private lastKey = 0;
-  private campTab: 'care' | 'team' = 'care';
+  private campTab: 'care' | 'team' | 'travel' = 'care';
   private picked: string | undefined;
   private confirmWithdraw = false;
   private tile = 48;
@@ -113,6 +113,7 @@ export class WorldUI {
           case 'camp-rest': if (!this.view?.locked) this.host.rest(); break;
           case 'camp-revive': if (!this.view?.locked && button.dataset.hero) this.host.revive(button.dataset.hero); break;
           case 'camp-close': dialog('#camp-dialog').close(); break;
+          case 'travel': this.host.travel({ x: Number(button.dataset.x), y: Number(button.dataset.y) }); break;
           case 'camp-tab': this.campTab = button.dataset.tab as WorldUI['campTab']; this.picked = undefined; this.confirmWithdraw = false; this.renderCamp(); this.root.querySelector<HTMLElement>(`#camp-tab-${this.campTab}`)?.focus(); break;
           case 'team-pick': this.pickMember(button.dataset.hero, button.dataset.side as 'deployed' | 'reserve'); break;
           case 'withdraw': if (this.view?.locked) break;
@@ -357,9 +358,16 @@ export class WorldUI {
     const tab = (id: WorldUI['campTab'], label: string) => `<button id="camp-tab-${id}" data-world="camp-tab" data-tab="${id}" role="tab" aria-selected="${this.campTab === id}" class="${this.campTab === id ? 'active' : ''}">${label}</button>`;
     const camp = atCamp(s, this.map); if (!camp) this.campTab = 'team';
     this.root.querySelector('#camp-title')!.innerHTML = `${icon(camp ? 'camp' : 'flag')} ${camp ? 'แคมป์พักแรม' : 'ทางเข้าด่าน'}`;
-    const tabs = camp ? `<div class="camp-tabs two" role="tablist" aria-label="แคมป์">${tab('care', 'พัก/ชุบ')}${tab('team', `ทีม <small>${s.roster.deployed.length}+${s.roster.reserve.length}</small>`)}</div>` : '';
+    const targets = travelTargets(s, this.map); if (!targets.length && this.campTab === 'travel') this.campTab = camp ? 'care' : 'team';
+    const tabs = `<div class="camp-tabs ${camp && targets.length ? 'three' : 'two'}" role="tablist" aria-label="แคมป์">${camp ? tab('care', 'พัก/ชุบ') : ''}${tab('team', `ทีม <small>${s.roster.deployed.length}+${s.roster.reserve.length}</small>`)}${targets.length ? tab('travel', 'วาร์ป') : ''}</div>`;
     const leave = `<section class="camp-section withdraw-section"><button id="withdraw" data-world="withdraw" class="danger-button">${this.confirmWithdraw ? 'ยืนยันถอนตัว · กลับค่ายพร้อมของที่เก็บได้' : `${icon('flag')} ถอนตัวกลับค่าย`}</button><p class="camp-note">ของที่เก็บได้ (แร่ดาว ${s.resources.ore} ตรา ${s.resources.seal}) กลับค่ายครบ ถ่านคืนชีพใช้ได้เฉพาะในด่าน</p></section>`;
-    this.root.querySelector('#camp-content')!.innerHTML = tabs + (this.campTab === 'care' ? this.campCare(s) : this.campTeam(s)) + leave;
+    const showTabs = camp || targets.length > 0;
+    this.root.querySelector('#camp-content')!.innerHTML = (showTabs ? tabs : '') + (this.campTab === 'care' ? this.campCare(s) : this.campTab === 'travel' ? this.campTravel(targets) : this.campTeam(s)) + leave;
+  }
+  // 4B: free travel to camps reached this run and the entrance (no encounter on the way).
+  private campTravel(targets: Point[]): string {
+    const name = (p: Point) => tileAt(this.map, p)?.kind === 'start' ? 'ทางเข้าด่าน' : `แคมป์${zoneOf(this.map, tileAt(this.map, p)?.zoneId ?? '')?.name ?? ''}`;
+    return `<section class="camp-section"><p class="camp-note">วาร์ปฟรีไปยังแคมป์ที่เคยไปถึงในรอบนี้ ไม่เจอศัตรูระหว่างทาง</p><ul class="travel-list">${targets.map(p => `<li><button id="travel-${p.x}-${p.y}" data-world="travel" data-x="${p.x}" data-y="${p.y}" class="secondary">${icon(tileAt(this.map, p)?.kind === 'start' ? 'flag' : 'camp')}<span>${name(p)}</span></button></li>`).join('')}</ul></section>`;
   }
   private campCare(s: ExpeditionState): string {
     const ready = canRest(s, this.map); const embers = s.resources.ember;

@@ -261,7 +261,7 @@ export { atMuster as canWithdraw } from './world';
 function sideQuestGain(kind: SideQuestKind, run: ExpeditionState, outcome: RunOutcome, map: MapDefinition): number {
   switch (kind) {
     case 'wins': return run.wins;
-    case 'elites': return run.elitesDefeated.length;
+    case 'elites': return run.elitesDefeated.length + Object.values(run.respawns).reduce((a, b) => a + b, 0);
     case 'secrets': return run.secrets.length;
     case 'puzzles': return run.solved.length;
     case 'rareChests': return run.openedChests.filter(id => map.chests.find(c => c.id === id)?.tier === 'rare').length;

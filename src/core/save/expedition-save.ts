@@ -1,7 +1,7 @@
 import { entryReason, withParty } from '../battle/engine';
 import type { ActionId, Command } from '../battle/types';
 import { COMPANY_CAP, PARTY_SLOTS, RESERVE_SLOTS, type ActiveBattle, type ExpeditionState, type MapDefinition, type Point, type Profile, type Roster, type RunOutcome } from '../world/types';
-import { battleState, expToNext, newExpedition, finishBattle, fullParty, heroCatalog, heroDef, memberDef, rosterIds, tileAt, type EncounterLookup } from '../world/world';
+import { battleState, expToNext, findTiles, newExpedition, finishBattle, fullParty, heroCatalog, heroDef, memberDef, rosterIds, tileAt, type EncounterLookup } from '../world/world';
 import { itemValid } from '../world/equipment';
 import { boulderAt, openPit, passableWall } from '../world/puzzles';
 import { commanderReason, newProfile, settle, talentsValid } from '../world/profile';
@@ -36,7 +36,9 @@ export const legacyKeys = ['asterveil.fateweave.battle.v1', 'asterveil.fateweave
 // v15 → v16 (3D): the profile gains side-quest `quests`; the run gains picked `herbs` (older data: none).
 // v16 → v17 (4A): the profile gains `shop` (market items bought this return) and `refreshes` (older data: none).
 // v17 → v18: the profile gains `smelted` (veil dust smelted from ore this return; older data: 0).
-const SAVE_VERSION = 18;
+// v18 → v19 (4B/4C): the run gains `visited` (camps reached) and `respawns` (optional elite returns); older
+// runs start with the camp they last reached and no returns.
+const SAVE_VERSION = 19;
 export interface Game { profile: Profile; run: ExpeditionState | null }
 const actions: readonly ActionId[] = ['attack', 'guard', 'bash', 'mark', 'execute', 'bolt', 'ward', 'heal', 'prayer', 'brace', 'pierce', 'hinder', 'volley', 'acid', 'haste', 'ambush', 'evade', 'taunt', 'slam', 'valor', 'mend',
   'rally', 'finisher', 'sigil', 'sanctuary', 'spearwall', 'weakshot', 'bomb', 'backstab', 'quake', 'finale'];
@@ -186,6 +188,7 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
   if (version < 14 && s.resources && typeof s.resources === 'object') (s.resources as Record<string, unknown>).gold ??= 0;
   if (version < 15) Object.assign(s, { runes: {}, solved: [], levers: [], boulders: {}, secrets: [] });
   if (version < 16) s.herbs = [];
+  if (version < 19) Object.assign(s, { visited: s.camp && typeof s.camp === 'object' ? [`${(s.camp as Point).x},${(s.camp as Point).y}`] : [], respawns: {} });
   if (s.mapId !== map.id) throw new Error('Map changed');
   if (s.mapVersion !== map.version) throw new StaleRun(staleRun(s, map, lookup));
   const cells = map.rows.length * map.rows[0]!.length;
@@ -227,6 +230,7 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
     elitesDefeated: idList(s.elitesDefeated, map.elites.map(e => e.id)), eventsDone: idList(s.eventsDone, map.events.map(e => e.id)),
     dust: isInt(s.dust, 0, 999999) ? s.dust : badRun(),
     ...puzzleState(s, map), herbs: idList(s.herbs, map.herbs.map(h => h.id)),
+    visited: idList(s.visited, findTiles(map, 'camp').map(c => `${c.x},${c.y}`)), respawns: respawnsOf(s.respawns, map),
   };
   // Standing on a wall is only possible in an opened doorway or a secret passage; never inside a boulder or an open pit.
   if (tileAt(map, state.position)?.kind === 'wall' && !passableWall(state, map, state.position)) throw new Error('Invalid position');
@@ -281,6 +285,15 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
   return { seed: p.seed, returns: p.returns, tutorialDone: p.tutorialDone, commander, company: [...company as string[]], members, party,
     bank: { ore: bank.ore as number, gold: bank.gold as number, seal: bank.seal as number, dust: bank.dust as number }, items, nextItem: p.nextItem as number, forge: p.forge as number, potions: potionsOf(p.potions, 9999), quests, shop, refreshes: p.refreshes as number, smelted: p.smelted as number, taken: [...p.taken as number[]], expeditions: p.expeditions, completes: p.completes, last };
 }
+// Optional elite returns (4C): known optional elites only, 1..99 each.
+function respawnsOf(v: unknown, map: MapDefinition): Record<string, number> {
+  const out: Record<string, number> = {};
+  for (const [id, n] of Object.entries(obj(v))) {
+    if (!map.elites.some(e => e.id === id && !e.forced && !e.mini) || !isInt(n, 1, 99)) throw new Error('Invalid run');
+    out[id] = n;
+  }
+  return out;
+}
 // Market purchases this return (4A): known items only, within each limit.
 function shopOf(v: unknown, map: MapDefinition): Profile['shop'] {
   const out: Profile['shop'] = {};
@@ -310,7 +323,7 @@ function settleFinished(game: Game, map: MapDefinition): Game {
 }
 export function parseGame(raw: string, map: MapDefinition, lookup: EncounterLookup): Game {
   const envelope = obj(JSON.parse(raw)); const version = envelope.version as number;
-  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
+  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
   if (version < 5) {
     const run = parseRun(envelope.state, version, map, lookup);
     const profile = newProfile(map, (run.seed ^ 0x5bd1e995) >>> 0);
