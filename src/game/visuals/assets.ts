@@ -16,6 +16,9 @@ export const actorArt: Readonly<Record<string, { sheet: ArtSheet; frame: number 
   foe_matriarch: { sheet: 'foes', frame: 6 }, foe_juggernaut: { sheet: 'foes', frame: 7 }, foe_sentinel: { sheet: 'foes', frame: 8 },
 };
 // Enemy ids are field positions (`raider` back, `brute` front/large); `art` picks the illustration.
+// Frames drawn facing the wrong way for their side (party faces right, enemies face left, ART-PLACEMENT-RULES):
+// the original units-atlas raider faces right, so the field mirrors it.
+export const mirroredArt: ReadonlySet<string> = new Set(['raider']);
 export const artOf = (data: EncounterDefinition, id: string): string => data.enemies.find(e => e.id === id)?.art ?? id;
 // Anchor the illustrated soles, excluding transparent padding below the feet (delivered frames: footY 496).
 const deliveredSoles = 497 / 512;

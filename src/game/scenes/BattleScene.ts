@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import type { BattleEvent, BattleState, EncounterDefinition } from '../../core/battle/types';
 import { actorName, thaiFont } from '../../ui/th';
 import { palette } from '../visuals/palette';
-import { actorArt, actorFootOrigins, artOf, artUrl, unitsUrl } from '../visuals/assets';
+import { actorArt, actorFootOrigins, artOf, artUrl, mirroredArt, unitsUrl } from '../visuals/assets';
 
 // Device pixels per CSS pixel for the canvas buffer (capped: 3x covers current phones).
 export const pixelRatio = (): number => Math.min(3, Math.max(1, window.devicePixelRatio || 1));
@@ -168,7 +168,7 @@ export class BattleScene extends Phaser.Scene {
       g.lineStyle(3, enemy ? 0xf19b9f : palette.cyan); g.strokeEllipse(0, 0, size * .72, size * .16);
     }
     const key = artOf(this.encounter, id); const art = actorArt[key]!;
-    const sprite = this.add.image(0, 0, `battle-${art.sheet}`, art.frame).setOrigin(0.5, actorFootOrigins[key] ?? 1).setDisplaySize(size, size);
+    const sprite = this.add.image(0, 0, `battle-${art.sheet}`, art.frame).setOrigin(0.5, actorFootOrigins[key] ?? 1).setDisplaySize(size, size).setFlipX(mirroredArt.has(key));
     body.add(sprite);
     const hitWidth = Math.max(44, Math.min(72, size * .7));
     const hitHeight = Math.max(44, size * .9);
