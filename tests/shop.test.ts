@@ -14,7 +14,7 @@ describe('paid hiring-board refresh', () => {
     let p = rich(); const first = boardOffers(p, map, lookup);
     p = hire(p, map, lookup, 0).profile; expect(p.taken).toEqual([0]);
     const [c1, c2] = map.shop.refreshCosts; const gold = p.bank.gold;
-    let r = refreshBoard(p, map); expect(r.event).toEqual({ type: 'refreshed' }); p = r.profile;
+    const r = refreshBoard(p, map); expect(r.event).toEqual({ type: 'refreshed' }); p = r.profile;
     expect(p.bank.gold).toBe(gold - c1!); expect(p.taken).toEqual([]); expect(p.refreshes).toBe(1);
     const second = boardOffers(p, map, lookup); expect(second).not.toEqual(first);
     p = refreshBoard(p, map).profile; expect(p.bank.gold).toBe(gold - c1! - c2!);
