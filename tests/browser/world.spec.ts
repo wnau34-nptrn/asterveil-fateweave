@@ -269,6 +269,8 @@ test('Toma (alchemist) hastes an ally by tapping them; the SPD queue puts that a
 });
 
 test('Sefa (scout) steps aside: the announced slash at her misses and the intent panel says so', async ({ page }, info) => {
+  // Two full battle playbacks; under a loaded full run this scenario has exceeded the 45 s default with a correct state on screen.
+  test.slow();
   const roster = { deployed: ['tracer', 'sefa', 'weaver', 'healer'], reserve: [] as string[] };
   const members = Object.fromEntries(roster.deployed.map(id => [id, { stars: 1, dupes: 0 }]));
   const run = { ...newExpedition(map, encounterById, 34, { roster, members }, true) }; reveal(run, map);
