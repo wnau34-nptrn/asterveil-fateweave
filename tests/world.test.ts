@@ -37,7 +37,8 @@ function route(from: Point, to: Point, throughBoss = false): Direction[] {
 }
 // Plays the active battle with the teaching advisor until it ends, then applies it.
 function fight(state: ExpeditionState): ExpeditionState {
-  const data = lookup(state.battle!.encounterId)!; let s = battleState(state, map, lookup)!;
+  // The encounter as fought: deployed party (stars/levels) and the battle's monster level.
+  const data = battleData(state, map, lookup)!; let s = battleState(state, map, lookup)!;
   while (s.outcome === 'active') { const l = battleLesson(s, data)!; s = resolveCommand(s, data, { beat: s.beat, heroId: l.heroId, action: l.action, targetId: l.targetId }).state; }
   return finishBattle(recordBattle(state, map, lookup, s.commands), map, lookup).state;
 }
@@ -201,6 +202,8 @@ describe('expedition rules', () => {
     const camp = () => { for (const id of Object.keys(s.hp)) if (canRevive(s, map, id)) s = revive(s, map, lookup, id).state; if (canRest(s, map)) s = rest(s, map, lookup).state; };
     walk(campA); camp(); walk(campB); camp(); walk(goal!, true);
     expect(s.completed).toBe(true); expect(s.tutorialDone).toBe(true); expect(s.bossDefeated).toBe(true); expect(s.wins).toBeGreaterThan(2);
+    // Levels (2D-1): every brought member grew on the way; this short advisor route reaches level 6.
+    for (const m of Object.values(s.members)) expect(m.level).toBeGreaterThanOrEqual(4);
   });
 });
 
@@ -349,7 +352,7 @@ describe('game save', () => {
   });
   it.each([
     ['malformed', () => '{bad'],
-    ['wrong version', (s: ExpeditionState) => JSON.stringify({ version: 7, profile: newProfile(map, 4), run: s })],
+    ['wrong version', (s: ExpeditionState) => JSON.stringify({ version: 8, profile: newProfile(map, 4), run: s })],
     ['old map version', (s: ExpeditionState) => v6({ ...s, mapVersion: 0 })],
     ['wall position', (s: ExpeditionState) => v6({ ...s, position: { x: 0, y: 0 } })],
     ['hp above max', (s: ExpeditionState) => v6({ ...s, hp: { ...s.hp, tracer: 99 } })],

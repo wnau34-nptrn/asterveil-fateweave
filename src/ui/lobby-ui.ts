@@ -1,7 +1,7 @@
 import type { HeroDefinition } from '../core/battle/types';
 import { boardOffers, dismissReason, groupOf, hireReason, upgradeCost, upgradeReason, type Group } from '../core/world/profile';
 import { COMPANY_CAP, PARTY_SLOTS, RESERVE_SLOTS, type MapDefinition, type Profile } from '../core/world/types';
-import { starred, type EncounterLookup } from '../core/world/world';
+import { expToNext, starred, type EncounterLookup } from '../core/world/world';
 import { actorArt, actorFootOrigins, lobbyArt, lobbyPose, unitsUrl, type LobbyPose } from '../game/visuals/assets';
 import { icon } from './icons';
 import { commanderBadge } from './commander-ui';
@@ -61,7 +61,7 @@ export class LobbyUI {
     this.host.place(moving, group, id);
     this.focus(`#lobby-member-${moving}`);
   }
-  private hero(id: string): HeroDefinition { return starred(this.heroes.find(h => h.id === id)!, this.view!.profile.members[id]?.stars ?? 1, this.map); }
+  private hero(id: string): HeroDefinition { const m = this.view!.profile.members[id]; return starred(this.heroes.find(h => h.id === id)!, m?.stars ?? 1, this.map, m?.level ?? 1); }
   private stars(n: number): string { return starRow(n, this.map.company.maxStars); }
 
   private toastShown = '';
@@ -116,7 +116,7 @@ export class LobbyUI {
     if (!id) return `<button class="team-card empty${this.picked ? ' target' : ''}" data-lobby="pick" data-group="${group}" aria-label="${groupName[group]} ช่อง ${slot + 1} ว่าง"${this.picked ? '' : ' disabled'}><span>ว่าง</span></button>`;
     const h = this.hero(id); const text = heroText[id]!; const lane = h.lane === 'front' ? 'แนวหน้า' : 'แนวหลัง';
     return `<button id="lobby-member-${id}" class="team-card" data-lobby="pick" data-hero="${id}" data-group="${group}" aria-pressed="${this.picked === id}"
-      aria-label="${groupName[group]}${group === 'deployed' ? ` ช่อง ${slot + 1}` : ''} · ${text.name} ${p.members[id]!.stars} ดาว ${text.role} ${lane} เลือด ${h.maxHp}">${group === 'deployed' ? `<i class="slot-no">${slot + 1}</i>` : ''}${portrait(id)}<b>${text.name}</b>${this.stars(p.members[id]!.stars)}<small>เลือด ${h.maxHp}</small><small class="lane">${text.role} · ${lane}</small></button>`;
+      aria-label="${groupName[group]}${group === 'deployed' ? ` ช่อง ${slot + 1}` : ''} · ${text.name} ${p.members[id]!.stars} ดาว ${text.role} ${lane} เลือด ${h.maxHp}">${group === 'deployed' ? `<i class="slot-no">${slot + 1}</i>` : ''}${portrait(id)}<b>${text.name}</b>${this.stars(p.members[id]!.stars)}<small>Lv${p.members[id]!.level ?? 1} · เลือด ${h.maxHp}</small><small class="lane">${text.role} · ${lane}</small></button>`;
   }
   private team(p: Profile): string {
     const row = (ids: string[], group: Group, size: number) => Array.from({ length: size }, (_, i) => this.card(p, ids[i], group, i)).join('');
@@ -136,7 +136,7 @@ export class LobbyUI {
     const label = !cost ? 'ดาวเต็มแล้ว' : reason ? `${why[reason]} · ★${m.stars + 1} ใช้ตัวซ้ำ ${need}${cost.seals ? ' (ตราแทนได้ 1)' : ''} แร่ ${cost.ore}`
       : `อัปเป็น ★${m.stars + 1} · ตัวซ้ำ ${cost.dupes}${cost.seals ? ' + ตรา 1' : ''} · แร่ ${cost.ore}`;
     const last = dismissReason(p, id) === 'last';
-    return `<div class="member-panel" aria-live="polite"><p><b>${heroText[id]!.name}</b> ${this.stars(m.stars)} <span>ตัวซ้ำที่เก็บไว้ ${m.dupes}</span></p>${this.unlocks(id, m.stars)}
+    return `<div class="member-panel" aria-live="polite"><p><b>${heroText[id]!.name}</b> ${this.stars(m.stars)} <span>Lv${m.level ?? 1}${(m.level ?? 1) < this.map.progression.levelCap ? ` · EXP ${m.exp ?? 0}/${expToNext(this.map, m.level ?? 1)}` : ' · เลเวลสูงสุด'} · ตัวซ้ำที่เก็บไว้ ${m.dupes}</span></p>${this.unlocks(id, m.stars)}
       <div class="member-actions"><button id="lobby-upgrade" data-lobby="upgrade" class="primary"${reason ? ' disabled' : ''}>${label}</button>
       <button id="lobby-dismiss" data-lobby="dismiss" class="danger-button"${last ? ' disabled' : ''}>${last ? 'ต้องมีคนลงสนาม 1 คน' : this.confirmDismiss ? `ยืนยันเลิกจ้าง · ดาวหาย +${this.map.company.dismissRefund} แร่` : 'เลิกจ้าง'}</button></div></div>`;
   }

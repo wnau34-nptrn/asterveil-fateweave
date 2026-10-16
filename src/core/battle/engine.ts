@@ -51,6 +51,14 @@ export function withParty(data: EncounterDefinition, party: readonly HeroDefinit
   if (!party.length || party.length > 4 || new Set(party.map(h => h.id)).size !== party.length) throw new Error('Invalid party.');
   return { ...data, heroes: party };
 }
+// Monster level (2D-1): enemy max HP and move damage change by `percent` per level away from the
+// encounter's reference level (`data.level`). SPD never changes, so turn order is unaffected.
+export function withLevel(data: EncounterDefinition, level: number, percent = 7): EncounterDefinition {
+  const ref = data.level ?? level; const factor = 1 + (level - ref) * percent / 100;
+  if (level === ref) return { ...data, level };
+  const scale = (n: number) => Math.max(1, Math.round(n * factor));
+  return { ...data, level, enemies: data.enemies.map(e => ({ ...e, maxHp: scale(e.maxHp) })), intents: data.intents.map(i => ({ ...i, damage: scale(i.damage) })) };
+}
 export function upcomingTurns(state: BattleState, data: EncounterDefinition, count = 6): TurnSlot[] {
   if (state.outcome !== 'active') return [];
   const slots: TurnSlot[] = [];

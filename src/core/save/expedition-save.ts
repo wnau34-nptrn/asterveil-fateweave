@@ -1,7 +1,7 @@
 import { entryReason, withParty } from '../battle/engine';
 import type { ActionId, Command } from '../battle/types';
 import { COMPANY_CAP, PARTY_SLOTS, RESERVE_SLOTS, type ActiveBattle, type ExpeditionState, type MapDefinition, type Point, type Profile, type Roster, type RunOutcome } from '../world/types';
-import { battleState, finishBattle, fullParty, heroDef, memberDef, rosterIds, tileAt, type EncounterLookup } from '../world/world';
+import { battleState, expToNext, finishBattle, fullParty, heroDef, memberDef, rosterIds, tileAt, type EncounterLookup } from '../world/world';
 import { commanderReason, newProfile, settle } from '../world/profile';
 import type { MemberProgress } from '../world/types';
 
@@ -17,9 +17,12 @@ export const legacyKeys = ['asterveil.fateweave.battle.v1', 'asterveil.fateweave
 // run (its camp board is dropped) and a profile is built from its roster with an empty bank;
 // a run that had already reached the goal is settled into the profile at once.
 // v5 → v6 (L2): the profile gains `commander` (null until created; v5 migrates as null).
-const SAVE_VERSION = 6;
+// v6 → v7 (2D-1): members may carry `level`/`exp` (missing = level 1, no EXP) and an active battle
+// its monster `level` (missing = the encounter's own level). v6 data loads unchanged.
+const SAVE_VERSION = 7;
 export interface Game { profile: Profile; run: ExpeditionState | null }
-const actions: readonly ActionId[] = ['attack', 'guard', 'bash', 'mark', 'execute', 'bolt', 'ward', 'heal', 'prayer', 'brace', 'pierce', 'hinder', 'volley', 'acid', 'haste', 'ambush', 'evade', 'taunt', 'slam', 'valor', 'mend'];
+const actions: readonly ActionId[] = ['attack', 'guard', 'bash', 'mark', 'execute', 'bolt', 'ward', 'heal', 'prayer', 'brace', 'pierce', 'hinder', 'volley', 'acid', 'haste', 'ambush', 'evade', 'taunt', 'slam', 'valor', 'mend',
+  'rally', 'finisher', 'sigil', 'sanctuary', 'spearwall', 'weakshot', 'bomb', 'backstab', 'quake', 'finale'];
 
 // One key for profile and run, so settling an expedition is a single atomic write.
 export function saveGame(storage: StoragePort | undefined, game: Game): boolean {
@@ -58,8 +61,11 @@ function membersOf(v: unknown, map: MapDefinition, ids: readonly string[]): Reco
   if (Object.keys(raw).length !== ids.length) throw new Error('Invalid members');
   return Object.fromEntries(ids.map(id => {
     const m = obj(raw[id]);
-    if (Object.keys(m).length !== 2 || !isInt(m.stars, 1, map.company.maxStars) || !isInt(m.dupes, 0, 99)) throw new Error('Invalid members');
-    return [id, { stars: m.stars, dupes: m.dupes }];
+    const keys = Object.keys(m).length;
+    if ((keys !== 2 && keys !== 4) || !isInt(m.stars, 1, map.company.maxStars) || !isInt(m.dupes, 0, 99)) throw new Error('Invalid members');
+    if (keys === 2) return [id, { stars: m.stars, dupes: m.dupes }];
+    if (!isInt(m.level, 1, map.progression.levelCap) || !isInt(m.exp, 0, expToNext(map, m.level) - 1)) throw new Error('Invalid members');
+    return [id, { stars: m.stars, dupes: m.dupes, level: m.level, exp: m.exp }];
   }));
 }
 function hpRecord(v: unknown, lookup: EncounterLookup, map: MapDefinition, ids: readonly string[], members: Record<string, MemberProgress>): Record<string, number> {
@@ -108,7 +114,8 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
     const entry = hpRecord(b.entry, lookup, map, roster.deployed, members);
     // Validate against the encounter as fought by this run's deployed party (stars included).
     if (entryReason(withParty(data, roster.deployed.map(id => memberDef(lookup, map, members, id)!)), { hp: entry })) throw new Error('Invalid entry');
-    battle = { kind: b.kind as ActiveBattle['kind'], encounterId: data.id, entry, commands: b.commands.map(command) };
+    if (b.level !== undefined && !isInt(b.level, 1, 99)) throw new Error('Invalid battle');
+    battle = { kind: b.kind as ActiveBattle['kind'], encounterId: data.id, entry, commands: b.commands.map(command), ...(b.level !== undefined ? { level: b.level as number } : {}) };
   }
   const state: ExpeditionState = {
     mapId: map.id, mapVersion: map.version, seed: s.seed as number, rolls: s.rolls as number, position: point(s.position, map),
@@ -160,7 +167,7 @@ function settleFinished(game: Game): Game {
 }
 export function parseGame(raw: string, map: MapDefinition, lookup: EncounterLookup): Game {
   const envelope = obj(JSON.parse(raw)); const version = envelope.version as number;
-  if (![1, 2, 3, 4, 5, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
+  if (![1, 2, 3, 4, 5, 6, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
   if (version < 5) {
     const run = parseRun(envelope.state, version, map, lookup);
     const profile = newProfile(map, (run.seed ^ 0x5bd1e995) >>> 0);

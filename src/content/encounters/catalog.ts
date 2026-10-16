@@ -6,7 +6,7 @@ import { veilSiege } from './veil-siege';
 // `art` picks the illustrated Veil Frontier foe (ART-CHAR-MERC-ENEMY-001); without it the
 // original Raider/Brute frames are shown. Physical foes use physical moves, energy foes energy moves.
 export const rearAmbush: EncounterDefinition = {
-  ...veilSiege, id: 'rear-ambush', version: 11, name: 'ศึกเงาล่าแนวหลัง',
+  ...veilSiege, id: 'rear-ambush', version: 11, level: 8, name: 'ศึกเงาล่าแนวหลัง',
   enemies: [
     { id: 'raider', speed: 110, name: 'Rift Weaver', displayName: 'ผู้ทอรอยแยก', maxHp: 90, color: 0x5b63c9, art: 'foe_riftweaver' },
     { id: 'brute', speed: 70, name: 'Rift Channeler', displayName: 'อสูรส่งพลัง', maxHp: 180, color: 0x9785f2 },
@@ -23,7 +23,7 @@ export const rearAmbush: EncounterDefinition = {
 };
 
 export const riftWarden: EncounterDefinition = {
-  ...veilSiege, id: 'rift-warden', version: 11, name: 'ศึกผู้คุมรอยแยก',
+  ...veilSiege, id: 'rift-warden', version: 11, level: 10, name: 'ศึกผู้คุมรอยแยก',
   // The Veilbound Sentinel, an ancient gate guardian cracked by the rift (mini boss art: gold and violet).
   enemies: [{ id: 'brute', speed: 70, name: 'Rift Warden', displayName: 'ผู้คุมรอยแยก', maxHp: 350, color: 0xd9bf86, art: 'foe_sentinel' }],
   intents: [
@@ -39,7 +39,7 @@ export const riftWarden: EncounterDefinition = {
 // One-time teaching battle. Each scheduled move gives one class skill a reason to exist:
 // R1 Mark → physical hit on Lyra → Ward/Guard the energy blast → Heal; R2 consume Mark → Bash the physical.
 export const firstClash: EncounterDefinition = {
-  ...veilSiege, id: 'first-clash', version: 9, name: 'การปะทะครั้งแรก',
+  ...veilSiege, id: 'first-clash', version: 9, level: 1, name: 'การปะทะครั้งแรก',
   enemies: [
     { id: 'raider', speed: 110, name: 'Veil Scout', displayName: 'หน่วยสอดแนมเวล', maxHp: 56, color: 0xee80bd },
     { id: 'brute', speed: 70, name: 'Young Brute', displayName: 'อสูรหนุ่ม', maxHp: 100, color: 0x9785f2 },
@@ -55,7 +55,7 @@ export const firstClash: EncounterDefinition = {
 };
 
 export const scoutPatrol: EncounterDefinition = {
-  ...veilSiege, id: 'scout-patrol', version: 9, name: 'ภูตเมล็ดลม',
+  ...veilSiege, id: 'scout-patrol', version: 9, level: 2, name: 'ภูตเมล็ดลม',
   enemies: [{ id: 'raider', speed: 110, name: 'Dandelion Sprite', displayName: 'ภูตแดนดิไลออน', maxHp: 64, color: 0xa6dfce, art: 'foe_sprite' }],
   intents: [
     { sourceId: 'raider', targetSlot: 1, name: 'Seed Spark', damage: 11, kind: 'energy' },
@@ -65,7 +65,7 @@ export const scoutPatrol: EncounterDefinition = {
 };
 
 export const riftWhelp: EncounterDefinition = {
-  ...veilSiege, id: 'rift-whelp', version: 9, name: 'หมูป่าหลังตะไคร่',
+  ...veilSiege, id: 'rift-whelp', version: 9, level: 2, name: 'หมูป่าหลังตะไคร่',
   enemies: [{ id: 'brute', speed: 70, name: 'Mossback Tusker', displayName: 'หมูป่าหลังตะไคร่', maxHp: 120, color: 0x718746, art: 'foe_tusker' }],
   intents: [
     { sourceId: 'brute', targetSlot: 1, name: 'Tusk Charge', damage: 18, kind: 'physical' },
@@ -75,7 +75,7 @@ export const riftWhelp: EncounterDefinition = {
 };
 
 export const thicketAmbush: EncounterDefinition = {
-  ...veilSiege, id: 'thicket-ambush', version: 9, name: 'ราชินีแห่งพงหนาม',
+  ...veilSiege, id: 'thicket-ambush', version: 9, level: 5, name: 'ราชินีแห่งพงหนาม',
   // Elite art (gold crown): the Thorn Matriarch fights with briars (physical) and blooms (energy).
   enemies: [
     { id: 'raider', speed: 110, name: 'Hollow Mycon', displayName: 'เห็ดหมอผีกลวง', maxHp: 66, color: 0x427f87, art: 'foe_mycon' },
@@ -92,7 +92,7 @@ export const thicketAmbush: EncounterDefinition = {
 };
 
 export const shadowStalker: EncounterDefinition = {
-  ...veilSiege, id: 'shadow-stalker', version: 9, name: 'ลิงซ์หนามพราง',
+  ...veilSiege, id: 'shadow-stalker', version: 9, level: 5, name: 'ลิงซ์หนามพราง',
   enemies: [{ id: 'raider', speed: 110, name: 'Briar Stalker', displayName: 'ลิงซ์หนามพราง', maxHp: 96, color: 0x397e77, art: 'foe_stalker' }],
   intents: [
     { sourceId: 'raider', targetSlot: 1, name: 'Thorn Pounce', damage: 18, kind: 'physical' },
@@ -103,7 +103,7 @@ export const shadowStalker: EncounterDefinition = {
 
 // Rift Scar: a Shard Golem (normal) with a Crystal Juggernaut (elite art: gold banding), both mostly physical.
 export const crystalStampede: EncounterDefinition = {
-  ...veilSiege, id: 'crystal-stampede', version: 4, name: 'ฝูงผลึกบุกตะลุย',
+  ...veilSiege, id: 'crystal-stampede', version: 4, level: 8, name: 'ฝูงผลึกบุกตะลุย',
   enemies: [
     { id: 'raider', speed: 75, name: 'Shard Golem', displayName: 'โกเลมเศษผลึก', maxHp: 100, color: 0x9454d6, art: 'foe_golem' },
     { id: 'brute', speed: 60, name: 'Crystal Juggernaut', displayName: 'ด้วงเกราะผลึก', maxHp: 180, color: 0x9454d6, art: 'foe_juggernaut' },

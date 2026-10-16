@@ -21,6 +21,8 @@ export interface EnemyDefinition { id: string; name: string; displayName?: strin
 export interface IntentDefinition { sourceId: string; targetSlot: number; name: string; damage: number; kind: 'physical' | 'energy' }
 export interface EncounterDefinition {
   id: string; version: number; name: string;
+  // Monster level (2D-1): the content numbers are this level's; `withLevel` rescales a copy.
+  level?: number;
   heroes: readonly HeroDefinition[]; enemies: readonly EnemyDefinition[]; intents: readonly IntentDefinition[];
   skills: Record<ActionId, SkillDefinition>;
   // corrode*: alchemist acid adds a flat bonus to every hero hit on the target for corrodeDuration rounds.

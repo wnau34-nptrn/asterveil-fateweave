@@ -11,6 +11,8 @@ export interface ZoneDefinition {
   id: string; name: string; safe: boolean; base: number; step: number; cap: number;
   pool: readonly { encounterId: string; weight: number }[];
   loot?: LootTable;
+  // Monster levels (2D-1): the zone's entrance side has the low end, its far (north) side the high end.
+  levels?: readonly [number, number];
 }
 // Map-collected resources. Ore will pay for hiring, embers revive one fallen
 // member at a camp, and seals will substitute a duplicate in star upgrades.
@@ -38,13 +40,23 @@ export interface MapDefinition {
   // Hireable mercenaries beyond the teaching party (the hero catalog is both together).
   mercenaries: readonly HeroDefinition[];
   company: CompanyRules;
+  progression: ProgressionRules;
+}
+// Levels and EXP (2D-1, draft numbers). Each level adds `levelStatPercent` to max HP, Attack and skill
+// power; monsters gain `monsterLevelPercent` HP/damage per level. EXP per enemy = expBase + expPerLevel × L.
+export interface ProgressionRules {
+  levelCap: number; levelStatPercent: number; monsterLevelPercent: number;
+  expBase: number; expPerLevel: number; bossExpMultiplier: number;
+  // EXP to go from level L to L+1 = nextBase + nextPerLevel × L.
+  nextBase: number; nextPerLevel: number;
 }
 // Mercenary company rules (draft numbers). starCosts[i] upgrades ★(i+1) → ★(i+2).
 export interface CompanyRules {
   hireCost: number; dismissRefund: number; offers: number; maxStars: number; starStatPercent: number;
   starCosts: readonly { dupes: number; ore: number }[];
 }
-export interface MemberProgress { stars: number; dupes: number }
+// `level`/`exp` (2D-1) are optional for older data: missing means level 1 with no EXP.
+export interface MemberProgress { stars: number; dupes: number; level?: number; exp?: number }
 // The team brought into one expedition and their star progress (fixed during the run).
 export interface Company { roster: Roster; members: Record<string, MemberProgress> }
 
@@ -81,7 +93,8 @@ export const RESERVE_SLOTS = 4;
 export interface Roster { deployed: string[]; reserve: string[] }
 
 export type BattleKind = 'tutorial' | 'random' | 'boss';
-export interface ActiveBattle { kind: BattleKind; encounterId: string; entry: Record<string, number>; commands: Command[] }
+// `level`: the monster level fixed when the battle started (missing in older saves = the encounter's own level).
+export interface ActiveBattle { kind: BattleKind; encounterId: string; entry: Record<string, number>; commands: Command[]; level?: number }
 export interface ExpeditionState {
   mapId: string; mapVersion: number; seed: number; rolls: number;
   position: Point; steps: number; pressure: number;
@@ -102,6 +115,8 @@ export type WorldEvent =
   | { type: 'rested' }
   | { type: 'revived'; heroId: string }
   | { type: 'chest'; chestId: string; loot: Resources }
-  | { type: 'victory'; kind: BattleKind; encounterId: string; loot: Resources }
+  | { type: 'victory'; kind: BattleKind; encounterId: string; loot: Resources; exp?: Record<string, ExpGain> }
   | { type: 'defeat'; kind: BattleKind; encounterId: string; wiped?: boolean };
+// EXP from one victory for one brought member: `percent` is the level-gap multiplier.
+export interface ExpGain { gained: number; percent: number; level: number; levelsUp: number }
 export interface WorldResult { state: ExpeditionState; event: WorldEvent }

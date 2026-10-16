@@ -384,3 +384,8 @@ html, body { background: #0a1422; }
 .member-unlocks .unlock-star { font-size: 11px; font-weight: 700; color: var(--gold-light, #f2d596); }
 .member-unlocks li.locked { opacity: .62; }
 .member-unlocks li.unlocked { border-color: #f2d59666; }
+
+/* ================= 2D-1 levels ================= */
+#zone-name .zone-level { font-size: .72em; font-weight: 600; color: var(--gold-light, #f2d596); white-space: nowrap; }
+#zone-name .zone-level.danger { color: #ff9a9a; }
+.world-hero .hero-level { font-style: normal; font-size: 10px; font-weight: 600; margin-left: 4px; color: var(--gold-light, #f2d596); }

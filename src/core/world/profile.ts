@@ -134,6 +134,8 @@ export function settle(initial: Profile, run: ExpeditionState, outcome: RunOutco
   const profile = structuredClone(initial); const pct = keptPercent[outcome];
   const ore = Math.floor(run.resources.ore * pct / 100); const seal = Math.floor(run.resources.seal * pct / 100);
   profile.bank.ore += ore; profile.bank.seal += seal;
+  // Levels and EXP earned on the run are kept whatever the outcome (2D-1).
+  for (const [id, m] of Object.entries(run.members)) if (profile.members[id] && m.level) profile.members[id] = { ...profile.members[id]!, level: m.level, exp: m.exp ?? 0 };
   profile.tutorialDone ||= run.tutorialDone; profile.expeditions++; if (outcome === 'complete') profile.completes++;
   profile.returns++; profile.taken = [];
   profile.last = { outcome, ore, seal, steps: run.steps, wins: run.wins };

@@ -5,7 +5,7 @@ import type { Direction, ExpeditionState, MapDefinition, ProfileResult, RunOutco
 import { battleData, finishBattle, heroCatalog, move, moveMember, openChest, recordBattle, rest, revive, swapMembers, type EncounterLookup } from '../core/world/world';
 import { browserStorage } from '../platform/browser-storage';
 import type { BattleUI } from './battle-ui';
-import { heroText, lootThai } from './th';
+import { expThai, heroText, lootThai } from './th';
 import { CommanderUI } from './commander-ui';
 import { LobbyUI } from './lobby-ui';
 import { WorldUI, type WorldBanner } from './world-ui';
@@ -222,8 +222,8 @@ export class GameShell {
       const result = finishBattle(next, this.map, this.lookup); next = result.state;
       const fallen = Object.values(next.hp).filter(hp => hp <= 0).length;
       if (result.event.type === 'victory') {
-        const loot = lootThai(result.event.loot); this.effect = 'loot';
-        this.message = kind === 'boss' ? `ผู้คุมรอยแยกล้มแล้ว · ${loot} · ทางไปประตูเปิดออก` : `ชนะศึก · ${loot}${fallen ? ` · ${fallen} คนล้มอยู่ ชุบที่แคมป์` : ''}`;
+        const loot = lootThai(result.event.loot); this.effect = 'loot'; const exp = expThai(result.event.exp, next);
+        this.message = kind === 'boss' ? `ผู้คุมรอยแยกล้มแล้ว · ${loot}${exp} · ทางไปประตูเปิดออก` : `ชนะศึก · ${loot}${exp}${fallen ? ` · ${fallen} คนล้มอยู่ ชุบที่แคมป์` : ''}`;
       } else if (result.event.type === 'defeat') {
         if (result.event.wiped) {
           // Every brought member is down: the expedition fails and settles home in this write.

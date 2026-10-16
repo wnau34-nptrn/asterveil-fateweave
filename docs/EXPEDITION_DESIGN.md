@@ -19,7 +19,7 @@ Approved 2026-10-14, re-planned 2026-10-15 for the mercenary roster.
 | L1. Lobby | Home → Lobby → Map; persistent profile (company ≤ 20, bank, board); choose the 4 + 4; withdraw/complete/wipe settle home | **Implemented** |
 | L2. Character creation | Commander (non-combat) name, crest and banner colour, once, between Home and Lobby | **Implemented** |
 | 2C-2. New classes | Six new mercenaries (ART-CHAR-MERC-ENEMY-001), one class mechanic at a time; ★3 skill and ★5 passive per class | **Implemented**: all 6 base classes (Garran spear, Mira archer, Toma alchemist, Sefa scout, Brann warden, Lio bard) and the ★3 skill + ★5 passive for all 10 classes (see Star unlocks) |
-| 2D. Equipment and level | Equipment (weapon by class, body, accessory; rarity and affixes; bad-luck protection), shared EXP/level, consumables on the map | Planned |
+| 2D. Equipment and level | 2D-1 member + monster levels; 2D-2 equipment (6 slots, 5 rarities, drops, inventory); 2D-3 sets; 2D-4 forge (enhance, fuse, reroll, salvage); 2D-5 map potions | **In progress**: 2D-1 implemented (see Levels) |
 | 3. Choices and content | Events with fight/avoid choices, elites, mini boss, puzzles (rune order, push stone, lever), secrets, map quest "2 of 3" and side quests | Planned |
 | 4. Economy and wrap-up | Local gold and shop, salvage, fast travel between camps, elite respawn on rest, defeat penalty, whole-map balance simulation, completion screen | Planned |
 
@@ -411,3 +411,13 @@ Every class (the starting four included) gains one battle skill at ★3 and one 
 
 - UI: a ★3 member has four command buttons (one row, ≥44 px at 320 px wide); passives appear in the affected skill's description; the lobby member panel lists both unlocks with their state.
 - Tests: `tests/stars.test.ts` (each skill and passive, unlock gating, ★5 parties win veil-siege with their ★3 skills) and browser tests for the four-button row and the lobby panel.
+
+## Levels (2D-1, approved 2026-10-15, draft numbers)
+
+**Monster levels.** Every encounter has a reference level (its content numbers): first-clash 1; meadow encounters 2; thicket 5; scar 8; Rift Warden 10. Zones have level ranges (meadow 1–3, thicket 4–6, scar 7–9): a random battle takes the level of the tile it starts on, low at the zone's southern (entrance) rows and high at its northern rows (`monsterLevelAt`), and stores it in the battle. The tutorial and boss keep their own level. `withLevel` scales enemy max HP and move damage by 7% per level from the reference; SPD and rules never change. The map HUD shows the level here, in red with "อันตราย" when the deployed team's average level is 2+ below it; enemy names in battle read "Lv5 …".
+
+**Member levels.** Per member, cap 10. Each level adds 3% max HP, Attack and skill power (stacking with stars' 8%); SPD never changes. EXP to the next level = 10 + 10 × level (20, 30 … 100).
+
+**EXP.** Each victory gives every brought member (deployed and reserve, standing or fallen) `enemies × (6 + 2 × monster level)`, ×3 for the boss, multiplied by the level gap (`expPercent`): up to 2 levels above the monster 100%, 3 → 75%, 4 → 50%, 5 → 25%, 6+ → 10% (never zero); 3+ levels below the monster 120%. A level-up raises max HP and standing members gain the difference. Levels are kept in the profile whatever the outcome. The advisor's short full run ends at level 6.
+
+**Save v7.** Members may carry `level`/`exp`; an active battle may carry its monster `level`. v6 data loads unchanged (level 1, encounter level). The command validator now also accepts the ★3 skills.

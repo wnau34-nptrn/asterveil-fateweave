@@ -5,7 +5,7 @@ import { chapterOne } from '../../src/content/world/chapter1';
 import type { BattleEntry, EncounterDefinition } from '../../src/core/battle/types';
 import { createBattle, currentHeroId, replay, resolveCommand } from '../../src/core/battle/engine';
 import { encounterById } from '../../src/content/encounters/catalog';
-import { newExpedition } from '../../src/core/world/world';
+import { memberDef, newExpedition } from '../../src/core/world/world';
 import { newProfile } from '../../src/core/world/profile';
 import type { BattleKind } from '../../src/core/world/types';
 import { offensive, guided, partyRoutes, type Move } from '../fixtures/party-routes';
@@ -155,9 +155,11 @@ for(const [index,route]of routes.entries()){
   await expect(page.locator('.result-card')).toContainText('ยืนอยู่ 4 / 4 คน');await expect(page.locator('.result-card')).toContainText(`เลือดทีม ${route.hp.reduce((a,b)=>a+b,0)}`);
   for(const [i,hero]of route.data.heroes.entries())await expect(page.locator('#hero-'+hero.id)).toContainText(`${route.hp[i]} / ${hero.maxHp}`);
   await reachable(page,'.result-card button');await reachable(page,'#battle-info');await page.screenshot({path:info.outputPath('four-survivor-victory.png')});
-  expect((await saved(page)).hp).toEqual(Object.fromEntries(route.data.heroes.map((h,i)=>[h.id,route.hp[i]])));
+  // Victory EXP may level members up (2D-1): standing members gain the max-HP difference.
+  const after=await saved(page);const grown=(id:string,i:number)=>route.hp[i]!+memberDef(encounterById,chapterOne,after.members,id)!.maxHp-route.data.heroes[i]!.maxHp;
+  expect(after.hp).toEqual(Object.fromEntries(route.data.heroes.map((h,i)=>[h.id,grown(h.id,i)])));
   await page.locator('.result-card button').click();await expect(page.locator('#world-view')).toBeVisible();
-  for(const [i,hero]of route.data.heroes.entries())await expect(page.locator('#world-hero-'+hero.id)).toContainText(`${route.hp[i]}/${hero.maxHp}`);
+  for(const [i,hero]of route.data.heroes.entries())await expect(page.locator('#world-hero-'+hero.id)).toContainText(`${grown(hero.id,i)}/${memberDef(encounterById,chapterOne,after.members,hero.id)!.maxHp}`);
   expect(issues).toEqual([]);await context.close();
  });
 }

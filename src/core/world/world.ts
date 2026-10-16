@@ -1,6 +1,6 @@
-import { replay, withParty } from '../battle/engine';
+import { replay, withLevel, withParty } from '../battle/engine';
 import type { BattleState, Command, EncounterDefinition, HeroDefinition } from '../battle/types';
-import type { ActiveBattle, BattleKind, ChestDefinition, Company, Direction, ExpeditionState, LootTable, MapDefinition, Point, Resources, Tile, WorldResult, ZoneDefinition } from './types';
+import type { ActiveBattle, BattleKind, ChestDefinition, Company, Direction, ExpGain, ExpeditionState, LootTable, MapDefinition, MemberProgress, Point, Resources, Tile, WorldResult, ZoneDefinition } from './types';
 import { PARTY_SLOTS, RESERVE_SLOTS } from './types';
 
 // Pure expedition rules: no DOM, Phaser, clocks or Math.random. Every roll is
@@ -57,8 +57,9 @@ export function heroDef(lookup: EncounterLookup, map: MapDefinition, id: string)
 export const rosterIds = (state: ExpeditionState): string[] => [...state.roster.deployed, ...state.roster.reserve];
 // Each star above ★1 adds `starStatPercent` to max HP, Attack and skill power. SPD never
 // changes, so stars cannot reorder turns.
-export function starred(base: HeroDefinition, stars: number, map: MapDefinition): HeroDefinition {
-  const bonus = (stars - 1) * map.company.starStatPercent;
+export function starred(base: HeroDefinition, stars: number, map: MapDefinition, level = 1): HeroDefinition {
+  // Stars and levels add up: each star `starStatPercent`, each level above 1 `levelStatPercent`.
+  const bonus = (stars - 1) * map.company.starStatPercent + (level - 1) * map.progression.levelStatPercent;
   if (!bonus) return base;
   const scale = (n: number) => Math.round(n * (100 + bonus) / 100);
   // ★3 adds the class's third skill; ★5 switches on its passive.
@@ -68,7 +69,23 @@ export function starred(base: HeroDefinition, stars: number, map: MapDefinition)
 }
 export function memberDef(lookup: EncounterLookup, map: MapDefinition, members: ExpeditionState['members'], id: string): HeroDefinition | undefined {
   const base = heroDef(lookup, map, id);
-  return base && starred(base, members[id]?.stars ?? 1, map);
+  return base && starred(base, members[id]?.stars ?? 1, map, members[id]?.level ?? 1);
+}
+// ---- Levels (2D-1) ----
+export const levelOf = (m: MemberProgress | undefined): number => m?.level ?? 1;
+// EXP needed to go from `level` to the next one.
+export const expToNext = (map: MapDefinition, level: number): number => map.progression.nextBase + map.progression.nextPerLevel * level;
+// Monster level of a floor tile: the zone's low end at its southern (entrance) rows, rising to the high end in the north.
+export function monsterLevelAt(map: MapDefinition, p: Point): number | undefined {
+  const tile = tileAt(map, p); const zone = tile && zoneOf(map, tile.zoneId); if (!zone?.levels) return undefined;
+  const ys = map.rows.flatMap((_, y) => map.rows[y]!.split('').some((_, x) => tileAt(map, { x, y })?.zoneId === zone.id) ? [y] : []);
+  const [lo, hi] = zone.levels; const top = Math.min(...ys), bottom = Math.max(...ys);
+  return bottom === top ? lo : lo + Math.round((bottom - p.y) / (bottom - top) * (hi - lo));
+}
+// EXP multiplier by how far a member's level is above the monster's (never zero), with a bonus for fighting up.
+export function expPercent(memberLevel: number, monsterLevel: number): number {
+  const gap = memberLevel - monsterLevel;
+  return gap <= -3 ? 120 : gap <= 2 ? 100 : gap === 3 ? 75 : gap === 4 ? 50 : gap === 5 ? 25 : 10;
 }
 // Max HP for the given members (default: the starting roster at ★1).
 export function fullParty(lookup: EncounterLookup, map: MapDefinition, ids?: readonly string[], members: ExpeditionState['members'] = {}): Record<string, number> {
@@ -89,8 +106,8 @@ export function newExpedition(map: MapDefinition, lookup: EncounterLookup, seed:
   reveal(state, map);
   return state;
 }
-const startBattle = (state: ExpeditionState, kind: BattleKind, encounterId: string): ActiveBattle =>
-  ({ kind, encounterId, entry: Object.fromEntries(state.roster.deployed.map(id => [id, state.hp[id]!])), commands: [] });
+const startBattle = (state: ExpeditionState, kind: BattleKind, encounterId: string, level?: number): ActiveBattle =>
+  ({ kind, encounterId, entry: Object.fromEntries(state.roster.deployed.map(id => [id, state.hp[id]!])), commands: [], ...(level ? { level } : {}) });
 
 export function move(initial: ExpeditionState, map: MapDefinition, dir: Direction): WorldResult {
   if (initial.battle || initial.completed) return { state: initial, event: { type: 'blocked', reason: 'busy' } };
@@ -121,7 +138,8 @@ export function move(initial: ExpeditionState, map: MapDefinition, dir: Directio
       let pick = rollPercent(state.seed, state.rolls++) % total;
       encounterId = zone.pool.find(e => (pick -= e.weight) < 0)!.encounterId;
     }
-    state.battle = startBattle(state, kind, encounterId);
+    // Random encounters take the monster level of the tile; the tutorial and boss keep their own.
+    state.battle = startBattle(state, kind, encounterId, kind === 'random' ? monsterLevelAt(map, target) : undefined);
     return { state, event: { type: 'encounter', kind, encounterId, chance } };
   }
   state.pressure = Math.min(zone.cap, state.pressure + zone.step);
@@ -203,7 +221,8 @@ function battleLoot(state: ExpeditionState, map: MapDefinition, kind: BattleKind
 
 // The encounter as fought by the deployed party, in slot order.
 export function battleData(state: ExpeditionState, map: MapDefinition, lookup: EncounterLookup): EncounterDefinition | undefined {
-  const data = state.battle && lookup(state.battle.encounterId);
+  const base = state.battle && lookup(state.battle.encounterId);
+  const data = base && withLevel(base, state.battle!.level ?? base.level ?? 1, map.progression.monsterLevelPercent);
   const party = state.roster.deployed.map(id => memberDef(lookup, map, state.members, id));
   return data && party.every(Boolean) ? withParty(data, party as HeroDefinition[]) : undefined;
 }
@@ -219,6 +238,25 @@ export function recordBattle(initial: ExpeditionState, map: MapDefinition, looku
   battleState(state, map, lookup);
   return state;
 }
+// Every brought member (deployed and reserve, standing or fallen) gains the victory's EXP, tapered by
+// their level against the monster level. Level-ups raise max HP; standing members gain the difference.
+function gainExp(state: ExpeditionState, map: MapDefinition, lookup: EncounterLookup, data: EncounterDefinition, kind: BattleKind): Record<string, ExpGain> {
+  const rules = map.progression; const level = data.level ?? 1;
+  const base = data.enemies.length * (rules.expBase + rules.expPerLevel * level) * (kind === 'boss' ? rules.bossExpMultiplier : 1);
+  const gains: Record<string, ExpGain> = {};
+  for (const id of rosterIds(state)) {
+    const member = state.members[id] ?? { stars: 1, dupes: 0 }; const before = memberDef(lookup, map, state.members, id)!.maxHp;
+    const percent = expPercent(levelOf(member), level); const gained = Math.round(base * percent / 100);
+    let lv = levelOf(member), exp = (member.exp ?? 0) + gained; const start = lv;
+    while (lv < rules.levelCap && exp >= expToNext(map, lv)) { exp -= expToNext(map, lv); lv++; }
+    if (lv >= rules.levelCap) exp = 0;
+    state.members[id] = { ...member, level: lv, exp };
+    const after = memberDef(lookup, map, state.members, id)!.maxHp;
+    if (state.hp[id]! > 0) state.hp[id] = Math.min(after, state.hp[id]! + after - before);
+    gains[id] = { gained, percent, level: lv, levelsUp: lv - start };
+  }
+  return gains;
+}
 // Applies a finished battle. Victory keeps the surviving HP, rolls loot and relights
 // the campfire; defeat leaves the deployed members down at the last camp (or entrance).
 // A lost tutorial simply restarts at full HP.
@@ -231,7 +269,8 @@ export function finishBattle(initial: ExpeditionState, map: MapDefinition, looku
     state.battle = null; state.wins++; state.restReady = true;
     if (kind === 'tutorial') state.tutorialDone = true;
     if (kind === 'boss') state.bossDefeated = true;
-    return { state, event: { type: 'victory', kind, encounterId, loot: rollLoot(state, battleLoot(state, map, kind)) } };
+    const exp = gainExp(state, map, lookup, battleData(initial, map, lookup)!, kind);
+    return { state, event: { type: 'victory', kind, encounterId, loot: rollLoot(state, battleLoot(state, map, kind)), exp } };
   }
   state.defeats++;
   if (kind === 'tutorial') {

@@ -532,3 +532,16 @@ test('lobby member panel shows the ★3 skill and ★5 passive, unlocked by star
   await expect(rows.nth(1)).toHaveClass(/locked/); await expect(rows.nth(1)).toContainText('ยืนหยัด'); await expect(rows.nth(1)).toContainText('ปลดล็อกที่ ★5');
   await page.screenshot({ path: info.outputPath('lobby-unlocks.png') });
 });
+
+test('levels: the map shows the monster level here and members’ levels; battles show enemy levels', async ({ page }, info) => {
+  const state = newExpedition(map, encounterById, 11); state.tutorialDone = true;
+  const issues = await open(page, state);
+  await expect(page.locator('#zone-name .zone-level')).toHaveText(/^Lv[1-3]$/);
+  await expect(page.locator('#world-hero-guardian')).toContainText('Lv1');
+  await page.screenshot({ path: info.outputPath('levels-map.png') });
+  let s = state; let steps = 0; while (!s.battle && steps < 80) { s = move(s, map, steps % 2 ? 'right' : 'left').state; steps++; }
+  for (let i = 0; i < steps; i++) await page.locator(i % 2 ? '#move-right' : '#move-left').click();
+  await expect(page.locator('#battle-view')).not.toHaveClass(/view-off/);
+  await expect(page.locator('#enemy-roster')).toContainText(`Lv${s.battle!.level}`);
+  expect(issues).toEqual([]);
+});

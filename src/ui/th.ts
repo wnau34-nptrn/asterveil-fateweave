@@ -1,5 +1,5 @@
 import type { ActionId, PassiveId, BattleEvent, BattleState, EncounterDefinition, Intent } from '../core/battle/types';
-import type { ResourceId, Resources } from '../core/world/types';
+import type { ExpGain, ExpeditionState, ResourceId, Resources } from '../core/world/types';
 import { skillPower, songPower } from '../core/battle/engine';
 export const thaiFont = '"Noto Sans Thai", "Leelawadee UI", Tahoma, sans-serif';
 export const heroText: Record<string, { name: string; role: string; help: string; icon: string }> = {
@@ -16,6 +16,9 @@ export const heroText: Record<string, { name: string; role: string; help: string
 };
 const names: Record<string, string> = { lio: 'ลิโอ', brann: 'แบรนน์', sefa: 'เซฟา', toma: 'โทมะ', mira: 'มิร่า', garran: 'การ์แรน', guardian: 'เอกิส', tracer: 'ไลรา', weaver: 'ไอรา', healer: 'เซเรน', raider: 'นักจู่โจม', brute: 'อสูรรอยแยก', party: 'ทั้งทีม' };
 export function actorName(id: string | undefined, data: EncounterDefinition): string {
+  // Enemies carry the battle's monster level (2D-1).
+  const foe = id ? data.enemies.find(e => e.id === id) : undefined;
+  if (foe && data.level) return `Lv${data.level} ${foe.displayName ?? foe.name}`;
   return id ? data.enemies.find(e => e.id === id)?.displayName ?? names[id] ?? data.heroes.find(h => h.id === id)?.name ?? data.enemies.find(e => e.id === id)?.name ?? 'เป้าหมาย' : 'ทีม';
 }
 export function intentName(intent: Intent): string {
@@ -132,6 +135,14 @@ export const resourceText: Record<ResourceId, { name: string; use: string }> = {
   seal: { name: 'ตราสัญญา', use: 'พากลับค่าย ใช้แทนตัวซ้ำ 1 ชิ้นเมื่ออัปดาว' },
 };
 export const resourceOrder: readonly ResourceId[] = ['ore', 'ember', 'seal'];
+// Victory EXP (2D-1): the deployed lead's gain, any level-ups, and a note when the level gap cut it.
+export function expThai(exp: Record<string, ExpGain> | undefined, state: ExpeditionState): string {
+  if (!exp) return '';
+  const lead = exp[state.roster.deployed[0]!]; if (!lead) return '';
+  const ups = Object.entries(exp).filter(([, g]) => g.levelsUp > 0).map(([id, g]) => `${heroText[id]?.name ?? id} Lv${g.level}`);
+  const cut = Object.values(exp).some(g => g.percent < 100);
+  return ` · EXP +${lead.gained}${cut ? ' (บางคนได้น้อยลงเพราะเลเวลสูงกว่ามอน)' : ''}${ups.length ? ` · เลเวลอัป ${ups.join(', ')}` : ''}`;
+}
 export function lootThai(loot: Resources): string {
   const parts = resourceOrder.filter(id => loot[id] > 0).map(id => `${resourceText[id].name} +${loot[id]}`);
   return parts.length ? parts.join(' · ') : 'ไม่มีของตก';

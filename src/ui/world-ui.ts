@@ -1,6 +1,6 @@
 import type { HeroDefinition } from '../core/battle/types';
 import type { Direction, ExpeditionState, MapDefinition, Point } from '../core/world/types';
-import { atCamp, atMuster, canOpenChest, canRest, canRevive, chestAt, encounterChance, isRevealed, rosterIds, starred, tileAt, zoneOf } from '../core/world/world';
+import { atCamp, atMuster, canOpenChest, canRest, canRevive, chestAt, encounterChance, isRevealed, monsterLevelAt, rosterIds, starred, tileAt, zoneOf } from '../core/world/world';
 import { PARTY_SLOTS, RESERVE_SLOTS } from '../core/world/types';
 import { actorArt, portraitsUrl, sheetRows } from '../game/visuals/assets';
 import { SOURCE_TILE, chestFrame, decorAt, itemFrame, floorFrame, fogLayers, landmarkAt, tileSizeFor, tileset, worldArtUrl, type Landmark } from '../game/visuals/world-art';
@@ -179,7 +179,11 @@ export class WorldUI {
     const s = view.state; const prev = this.previous;
     this.view = view;
     const tile = tileAt(this.map, s.position)!; const zone = zoneOf(this.map, tile.zoneId);
-    this.root.querySelector('#zone-name')!.textContent = tile.kind === 'camp' ? 'แคมป์พักแรม' : zone?.name ?? '';
+    // Monster level here (2D-1): shown with the zone, red when the deployed team is 2+ levels below it.
+    const level = tile.kind === 'camp' ? undefined : monsterLevelAt(this.map, s.position);
+    const living = s.roster.deployed.filter(id => s.hp[id]! > 0); const team = living.length ? Math.round(living.reduce((sum, id) => sum + (s.members[id]?.level ?? 1), 0) / living.length) : 1;
+    const danger = level !== undefined && team <= level - 2;
+    this.root.querySelector('#zone-name')!.innerHTML = `${tile.kind === 'camp' ? 'แคมป์พักแรม' : zone?.name ?? ''}${level !== undefined ? ` <span class="zone-level${danger ? ' danger' : ''}">Lv${level}${danger ? ' · อันตราย' : ''}</span>` : ''}`;
     this.root.dataset.zone = tile.kind === 'camp' ? 'camp' : tile.zoneId;
     this.renderDanger(encounterChance(s, this.map), prev?.chance);
     this.renderParty(s);
@@ -235,7 +239,7 @@ export class WorldUI {
 
   private stars(s: ExpeditionState, id: string): number { return s.members[id]?.stars ?? 1; }
   // Member stats as they fight: the catalog entry scaled by the member's stars.
-  private hero(id: string, s = this.view?.state): HeroDefinition { const base = this.heroes.find(h => h.id === id)!; return s ? starred(base, this.stars(s, id), this.map) : base; }
+  private hero(id: string, s = this.view?.state): HeroDefinition { const base = this.heroes.find(h => h.id === id)!; return s ? starred(base, this.stars(s, id), this.map, s.members[id]?.level ?? 1) : base; }
   private starRow(n: number): string { return starRow(n, this.map.company.maxStars); }
   private renderCamp(): void {
     const s = this.view?.state; if (!s) return;
@@ -264,7 +268,7 @@ export class WorldUI {
       if (!id) return `<button class="team-card empty${this.picked ? ' target' : ''}" data-world="team-pick" data-side="${side}" aria-label="${side === 'deployed' ? `ช่อง ${slot + 1} ว่าง` : 'ช่องสำรองว่าง'}"${this.picked ? '' : ' disabled'}><span>ว่าง</span></button>`;
       const h = this.hero(id); const hp = s.hp[id] ?? 0; const text = heroText[id]!;
       const lane = h.lane === 'front' ? 'แนวหน้า' : 'แนวหลัง';
-      return `<button id="team-${id}" class="team-card${hp <= 0 ? ' fallen' : ''}" data-world="team-pick" data-hero="${id}" data-side="${side}" aria-pressed="${this.picked === id}" aria-label="${side === 'deployed' ? `ช่อง ${slot + 1} · ` : 'สำรอง · '}${text.name} ${this.stars(s, id)} ดาว ${text.role} ${lane} ${hp <= 0 ? 'ล้มแล้ว' : `เลือด ${hp} จาก ${h.maxHp}`}">${side === 'deployed' ? `<i class="slot-no">${slot + 1}</i>` : ''}${portrait(id)}<b>${text.name}</b>${this.starRow(this.stars(s, id))}<small>${hp <= 0 ? 'ล้มแล้ว' : `${hp}/${h.maxHp}`}</small><small class="lane">${text.role} · ${lane}</small></button>`;
+      return `<button id="team-${id}" class="team-card${hp <= 0 ? ' fallen' : ''}" data-world="team-pick" data-hero="${id}" data-side="${side}" aria-pressed="${this.picked === id}" aria-label="${side === 'deployed' ? `ช่อง ${slot + 1} · ` : 'สำรอง · '}${text.name} ${this.stars(s, id)} ดาว ${text.role} ${lane} ${hp <= 0 ? 'ล้มแล้ว' : `เลือด ${hp} จาก ${h.maxHp}`}">${side === 'deployed' ? `<i class="slot-no">${slot + 1}</i>` : ''}${portrait(id)}<b>${text.name}</b>${this.starRow(this.stars(s, id))}<small>Lv${s.members[h.id]?.level ?? 1} · ${hp <= 0 ? 'ล้มแล้ว' : `${hp}/${h.maxHp}`}</small><small class="lane">${text.role} · ${lane}</small></button>`;
     };
     const row = (ids: string[], side: 'deployed' | 'reserve', size: number) => Array.from({ length: size }, (_, i) => card(ids[i], side, i)).join('');
     const deployedUp = s.roster.deployed.some(id => s.hp[id]! > 0);
@@ -290,7 +294,7 @@ export class WorldUI {
     this.root.querySelector('#world-party')!.innerHTML = s.roster.deployed.map(id => this.hero(id, s)).map(h => {
       const hp = s.hp[h.id] ?? 0; const ratio = hp / h.maxHp; const text = heroText[h.id]!;
       const state = hp <= 0 ? 'fallen' : ratio < .25 ? 'critical' : ratio < .6 ? 'hurt' : 'healthy';
-      return `<div class="world-hero ${state}" id="world-hero-${h.id}" aria-label="${text.name} ${this.stars(s, h.id)} ดาว ${hp <= 0 ? 'ล้มแล้ว' : `เลือด ${hp} จาก ${h.maxHp}`}">${portrait(h.id)}<span class="hero-copy"><b>${text.name}${this.stars(s, h.id) > 1 ? `<i class="hero-stars">★${this.stars(s, h.id)}</i>` : ''}</b><small>${hp <= 0 ? 'ล้มแล้ว' : `${hp}/${h.maxHp}`}</small><span class="hp"><span style="width:${ratio * 100}%"></span></span></span></div>`;
+      return `<div class="world-hero ${state}" id="world-hero-${h.id}" aria-label="${text.name} ${this.stars(s, h.id)} ดาว เลเวล ${s.members[h.id]?.level ?? 1} ${hp <= 0 ? 'ล้มแล้ว' : `เลือด ${hp} จาก ${h.maxHp}`}">${portrait(h.id)}<span class="hero-copy"><b>${text.name}${this.stars(s, h.id) > 1 ? `<i class="hero-stars">★${this.stars(s, h.id)}</i>` : ''}<i class="hero-level">Lv${s.members[h.id]?.level ?? 1}</i></b><small>${hp <= 0 ? 'ล้มแล้ว' : `${hp}/${h.maxHp}`}</small><span class="hp"><span style="width:${ratio * 100}%"></span></span></span></div>`;
     }).join('');
   }
 
