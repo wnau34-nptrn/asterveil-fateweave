@@ -39,13 +39,13 @@ export const chapterOne: MapDefinition = {
   floorZones: { '.': 'meadow', ',': 'thicket', ';': 'scar', ':': 'sanctum' },
   specialZones: { S: 'meadow', C: 'camp', B: 'sanctum', G: 'sanctum' },
   zones: [
-    { id: 'meadow', name: 'ทุ่งชายแดน', safe: false, base: 4, step: 3, cap: 35, levels: [1, 3],
+    { id: 'meadow', name: 'ทุ่งชายแดน', safe: false, base: 4, step: 3, cap: 35, levels: [1, 3], sets: ['dawn', 'wind'],
       pool: [{ encounterId: 'scout-patrol', weight: 3 }, { encounterId: 'rift-whelp', weight: 2 }],
       loot: { ore: [6, 10], ember: [0, 8], seal: [0, 0] } },
-    { id: 'thicket', name: 'พงหนามม่านเวล', safe: false, base: 6, step: 4, cap: 45, levels: [4, 6],
+    { id: 'thicket', name: 'พงหนามม่านเวล', safe: false, base: 6, step: 4, cap: 45, levels: [4, 6], sets: ['shadow', 'thorn'],
       pool: [{ encounterId: 'thicket-ambush', weight: 2 }, { encounterId: 'shadow-stalker', weight: 2 }, { encounterId: 'rift-whelp', weight: 1 }],
       loot: { ore: [9, 14], ember: [0, 12], seal: [0, 0] } },
-    { id: 'scar', name: 'แผลรอยแยก', safe: false, base: 8, step: 5, cap: 50, levels: [7, 9],
+    { id: 'scar', name: 'แผลรอยแยก', safe: false, base: 8, step: 5, cap: 50, levels: [7, 9], sets: ['starveil', 'mender'],
       pool: [{ encounterId: 'veil-siege', weight: 2 }, { encounterId: 'rear-ambush', weight: 2 }, { encounterId: 'crystal-stampede', weight: 1 }],
       loot: { ore: [12, 18], ember: [0, 15], seal: [0, 0] } },
     { id: 'camp', name: 'แคมป์', safe: true, base: 0, step: 0, cap: 0, pool: [] },
@@ -86,5 +86,15 @@ export const chapterOne: MapDefinition = {
     dropPercent: 35, pity: 6,
     rarityWeights: [55, 28, 12, 4, 1], bossRarityWeights: [0, 0, 50, 35, 15],
     salvage: [{ ore: 2, dust: 1 }, { ore: 3, dust: 2 }, { ore: 5, dust: 4 }, { ore: 8, dust: 8 }, { ore: 12, dust: 15 }],
+    // Sets (2D-3, draft numbers): meadow dawn/wind, thicket shadow/thorn, scar star-veil/mender.
+    setPercent: 60,
+    sets: {
+      dawn: { two: { stat: 'hp', value: 10 }, four: { kind: 'barrier', amount: 12 } },
+      wind: { two: { stat: 'speed', value: 3 }, four: { kind: 'firstStrike', amount: 0 } },
+      shadow: { two: { stat: 'attack', value: 8 }, four: { kind: 'freshHit', amount: 6 } },
+      thorn: { two: { stat: 'hp', value: 6 }, four: { kind: 'thorns', amount: 6 } },
+      starveil: { two: { stat: 'skill', value: 10 }, four: { kind: 'freeCast', amount: 0 } },
+      mender: { two: { stat: 'heal', value: 15 }, four: { kind: 'overflow', amount: 8 } },
+    },
   },
 };

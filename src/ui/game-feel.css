@@ -449,3 +449,9 @@ html, body { background: #0a1422; }
 .pack-gear-title { margin: 10px 0 4px; font-size: 13px; display: flex; gap: 6px; align-items: center; }
 #salvage-common, #gear-unequip { width: 100%; min-height: 44px; }
 @media (max-width: 360px) { .gear-slots { grid-template-columns: repeat(2, 1fr); } }
+/* Equipment sets (2D-3) */
+.gear-sets { list-style: none; margin: 6px 0; padding: 0; display: grid; gap: 4px; }
+.gear-sets li { display: grid; grid-template-columns: 1fr auto; gap: 1px 6px; padding: 6px 8px; border-radius: 10px; background: #08121f99; border: 1px solid #f2d59633; font-size: 12px; }
+.gear-sets li span { color: var(--gold-light, #f2d596); font-weight: 700; }
+.gear-sets small { grid-column: 1 / -1; font-size: 11px; color: var(--text-muted, #b9c8d8); opacity: .55; }
+.gear-sets small.on { opacity: 1; color: var(--gold-light, #f2d596); }

@@ -2,7 +2,7 @@ import { replay, withLevel, withParty } from '../battle/engine';
 import type { BattleState, Command, EncounterDefinition, HeroDefinition, HeroTalents } from '../battle/types';
 import type { ActiveBattle, BattleKind, ChestDefinition, Company, Direction, ExpGain, ExpeditionState, LootTable, MapDefinition, MemberProgress, Point, Resources, Talents, Tile, WorldResult, ZoneDefinition, Gear, Item } from './types';
 import { gearTotals, rollItem } from './equipment';
-import { PARTY_SLOTS, RESERVE_SLOTS } from './types';
+import { PARTY_SLOTS, RESERVE_SLOTS, SET_IDS } from './types';
 
 // Pure expedition rules: no DOM, Phaser, clocks or Math.random. Every roll is
 // derived from (seed, rolls) so a reload can never re-roll an outcome.
@@ -64,12 +64,12 @@ export function starred(base: HeroDefinition, stars: number, map: MapDefinition,
   const bonus = (stars - 1) * map.company.starStatPercent + (level - 1) * map.progression.levelStatPercent;
   const gained = talentEffects(map, base.id, talents);
   // Equipment (2D-2) adds flat max HP/Attack/SPD after the percentages, and skill power percent.
-  const worn = gearTotals(map, gear); const equipped = !!(worn.hp || worn.attack || worn.skill || worn.speed || worn.gear);
+  const worn = gearTotals(map, gear); const equipped = !!(worn.hp || worn.attack || worn.skill || worn.speed || worn.hpPercent || worn.attackPercent || worn.gear);
   if (!bonus && !gained.any && !equipped) return base;
   const scale = (n: number, extra: number) => Math.round(n * (100 + bonus + extra) / 100);
   // ★3 adds the class's third skill; ★5 switches on its passive.
   const skill = stars >= 3 && base.unlocks && !base.actions.includes(base.unlocks.skill) ? [base.unlocks.skill] : [];
-  return { ...base, maxHp: scale(base.maxHp, gained.hp) + worn.hp, attack: scale(base.attack, gained.attack) + worn.attack, speed: base.speed + worn.speed,
+  return { ...base, maxHp: scale(base.maxHp, gained.hp + worn.hpPercent) + worn.hp, attack: scale(base.attack, gained.attack + worn.attackPercent) + worn.attack, speed: base.speed + worn.speed,
     skillBonus: bonus + gained.skill + worn.skill, actions: [...base.actions, ...skill],
     ...(stars >= 5 && base.unlocks ? { passive: base.unlocks.passive } : {}), ...(gained.talents ? { talents: gained.talents } : {}), ...(worn.gear ? { gear: worn.gear } : {}) };
 }
@@ -249,7 +249,9 @@ function dropItem(state: ExpeditionState, map: MapDefinition, kind: BattleKind, 
     if (!lucky) { state.dry++; return undefined; }
     state.dry = 0;
   }
-  const item = rollItem(rules, () => rollPercent(state.seed, state.rolls++), level, kind === 'boss' ? rules.bossRarityWeights : rules.rarityWeights, rosterIds(state));
+  // Sets come from the zone the battle was fought in; the boss can drop any set.
+  const sets = kind === 'boss' ? SET_IDS : zoneOf(map, tileAt(map, state.position)?.zoneId ?? '')?.sets ?? [];
+  const item = rollItem(rules, () => rollPercent(state.seed, state.rolls++), level, kind === 'boss' ? rules.bossRarityWeights : rules.rarityWeights, rosterIds(state), sets);
   state.found.push(item);
   return item;
 }

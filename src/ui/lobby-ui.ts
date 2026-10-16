@@ -6,7 +6,7 @@ import { expToNext, starred, type EncounterLookup } from '../core/world/world';
 import { actorArt, actorFootOrigins, lobbyArt, lobbyPose, unitsUrl, type LobbyPose } from '../game/visuals/assets';
 import { icon } from './icons';
 import { commanderBadge } from './commander-ui';
-import { heroText, itemLines, itemName, itemOwner, passiveText, slotIcon, slotText, talentBranches, talentHelp } from './th';
+import { heroText, itemLines, itemName, itemOwner, passiveText, slotIcon, slotText, talentBranches, talentHelp, wornSets } from './th';
 import { portrait, starRow } from './world-ui';
 
 export interface LobbyHost { hire(index: number): void; upgrade(id: string): void; dismiss(id: string): void; place(id: string, group: Group, other?: string): void; talent(id: string, node: TalentNode): void; resetTalents(id: string): void;
@@ -200,10 +200,16 @@ export class LobbyUI {
     }).join('');
     const commons = p.items.filter(i => i.rarity === 0).length;
     return `${picker}<p class="gear-stats"><b>${heroText[id]!.name}</b> Lv${m.level ?? 1} · เลือด ${h.maxHp} · พลังโจมตี ${h.attack} · พลังสกิล +${h.skillBonus ?? 0}% · SPD ${h.speed}</p>
-      <div class="gear-slots">${slots}</div>${detail}
+      <div class="gear-slots">${slots}</div>${detail}${this.sets(m.gear)}
       <h3>${icon('pack')} คลัง${slot ? ` · ${slotText[slot]}` : ''} <span class="camp-embers">${bag.length} ชิ้น · แตะช่องเพื่อกรอง</span></h3>
       ${rows ? `<ul class="gear-bag">${rows}</ul>` : '<p class="camp-note">ยังไม่มีอุปกรณ์ในคลัง · ชนะศึกบนแผนที่เพื่อหาอุปกรณ์</p>'}
       ${commons ? `<button id="salvage-common" data-lobby="salvage-common" class="secondary">แยกขั้นธรรมดาทั้งหมด (${commons} ชิ้น)</button>` : ''}`;
+  }
+  // Sets worn (2D-3): pieces and the 2- and 4-piece bonuses, lit when active.
+  private sets(gear: Profile['members'][string]['gear']): string {
+    const worn = wornSets(this.map.equipment, gear); if (!worn.length) return '';
+    return `<ul class="gear-sets" aria-label="ชุดอุปกรณ์ที่ใส่">${worn.map(w => `<li><b>ชุด${w.name}</b> <span>${w.pieces}/4 ชิ้น</span>
+      <small class="${w.pieces >= 2 ? 'on' : ''}">2 ชิ้น: ${w.two}</small><small class="${w.pieces >= 4 ? 'on' : ''}">4 ชิ้น: ${w.four}</small></li>`).join('')}</ul>`;
   }
   // Opens the member's talent tree in its own sheet.
   private treeButton(p: Profile, id: string): string {

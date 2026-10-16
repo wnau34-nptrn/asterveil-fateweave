@@ -1,7 +1,7 @@
 import type { ActionId, PassiveId, BattleEvent, BattleState, EncounterDefinition, Intent, TalentCap, TalentRule } from '../core/battle/types';
-import type { EquipmentRules, ExpGain, ExpeditionState, GearSlot, GearStat, Item, ResourceId, Resources, TalentNodeDef } from '../core/world/types';
+import type { EquipmentRules, ExpGain, ExpeditionState, Gear, GearSlot, GearStat, Item, ResourceId, Resources, SetDefinition, SetId, TalentNodeDef } from '../core/world/types';
 import type { GearSpecial } from '../core/battle/types';
-import { itemStats } from '../core/world/equipment';
+import { itemStats, setCounts } from '../core/world/equipment';
 import { ambushBonusOf, capAmount, corrodeBonusOf, guardReductionOf, hasCap, skillPower, songPower, talentRule, tauntReductionOf } from '../core/battle/engine';
 export const thaiFont = '"Noto Sans Thai", "Leelawadee UI", Tahoma, sans-serif';
 export const heroText: Record<string, { name: string; role: string; help: string; icon: string }> = {
@@ -177,7 +177,7 @@ export function eventThai(event: BattleEvent, after: BattleState, data: Encounte
     case 'sanctuary': return event.text.startsWith('Sanctuary keeps') ? `พรคุ้มภัยทำให้${target}ยังยืนอยู่ด้วยเลือด 1` : `${target}ได้รับพรคุ้มภัย · เลือดไม่ต่ำกว่า 1 จนถึงเทิร์นถัดไปของ${source}`;
     case 'stand': return event.text.startsWith('Last stand') ? `อุปกรณ์ยืนหยัดทำให้${target}รอดด้วยเลือด 1` : `${source}ยืนหยัด · ${target}รอดด้วยเลือด 1`;
     case 'finale': return `${source}บรรเลงบทสุดท้าย · ${event.text === 'Finale of valor.' ? 'โจมตีศัตรูทุกตัว' : 'ฟื้นเลือดทั้งทีม'}`;
-    case 'counter': return event.text === 'The ward reflects the hit.' ? `โล่เวทของ${source}สะท้อนใส่${target} ${event.amount}` : event.text === 'The knight counters.' ? `${source}โต้กลับ${target} ${event.amount}` : event.text === 'The warden hammers back.' ? `${source}ทุบสวน${target} ${event.amount}` : `${source}แทงสวน${target} ${event.amount}`;
+    case 'counter': return event.text === 'The ward reflects the hit.' ? `โล่เวทของ${source}สะท้อนใส่${target} ${event.amount}` : event.text === 'The knight counters.' ? `${source}โต้กลับ${target} ${event.amount}` : event.text === 'The warden hammers back.' ? `${source}ทุบสวน${target} ${event.amount}` : event.text === 'Thorns strike back.' ? `หนามของ${source}สวน${target} ${event.amount}` : `${source}แทงสวน${target} ${event.amount}`;
     case 'corrode': return `${target}ถูกกัดกร่อน · ทุกการโจมตีของทีม +${event.amount}`;
     case 'haste': return `${target}จะลงมือก่อนทุกคนในรอบถัดไป`;
     case 'song': return `${source}เริ่มบรรเลงเพลงใหม่ ค้างไว้จนเปลี่ยนเพลง`;
@@ -218,9 +218,22 @@ export const specialText: Record<GearSpecial, string> = {
   laststand: 'ครั้งแรกในศึกที่จะล้ม เหลือเลือด 1', markhunter: 'โจมตีศัตรูที่ติดตรา +8', renewal: 'ฟื้นเลือด 4 เมื่อเริ่มเทิร์นของตัวเอง',
 };
 export const itemName = (item: Item): string => `${item.slot === 'weapon' ? weaponText[item.hero!] ?? 'อาวุธ' : slotText[item.slot]}${rarityText[item.rarity]}`;
-// Base stats first, then affixes; a legendary special at the end.
+// Base stats first, then affixes; a legendary special and the set at the end.
 export function itemLines(rules: EquipmentRules, item: Item): string[] {
   const stats = itemStats(rules, item);
-  return [...(Object.entries(stats) as [GearStat, number][]).map(([k, v]) => statText[k](v)), ...(item.special ? [`★ ${specialText[item.special]}`] : [])];
+  return [...(Object.entries(stats) as [GearStat, number][]).map(([k, v]) => statText[k](v)), ...(item.special ? [`★ ${specialText[item.special]}`] : []),
+    ...(item.set ? [`ชุด${setText[item.set]}`] : [])];
+}
+// ---- Equipment sets (2D-3) ----
+export const setText: Record<SetId, string> = { dawn: 'ผู้พิทักษ์รุ่งอรุณ', wind: 'สายลมเร็ว', shadow: 'นักล่าเงา', thorn: 'หนามสวน', starveil: 'เวทม่านดาว', mender: 'ผู้เยียวยา' };
+const twoText = (t: SetDefinition['two']) => t.stat === 'speed' ? `SPD +${t.value}` : `${({ hp: 'เลือด', attack: 'พลังโจมตี', skill: 'พลังสกิล', heal: 'พลังรักษา' } as const)[t.stat]} +${t.value}%`;
+const fourText = (f: SetDefinition['four']) => ({
+  barrier: `เริ่มศึกพร้อมโล่ ${f.amount}`, firstStrike: 'รอบแรกของศึกลงมือก่อนทุกคน', freshHit: `ตีศัตรูที่ยังไม่ลงมือในรอบนี้ +${f.amount}`,
+  thorns: `โดนตีกายภาพแล้วสวน ${f.amount}`, freeCast: 'สกิลแรกในแต่ละศึกไม่ติดคูลดาวน์', overflow: `รักษาเกินเลือดเต็มกลายเป็นโล่ (สูงสุด ${f.amount})`,
+})[f.kind];
+export const setBonusText = (rules: EquipmentRules, id: SetId) => ({ two: twoText(rules.sets[id].two), four: fourText(rules.sets[id].four) });
+// The sets a member wears, with pieces and which bonuses are active.
+export function wornSets(rules: EquipmentRules, gear: Gear | undefined): { id: SetId; name: string; pieces: number; two: string; four: string }[] {
+  return (Object.entries(setCounts(gear)) as [SetId, number][]).map(([id, pieces]) => ({ id, name: setText[id], pieces, ...setBonusText(rules, id) }));
 }
 export const itemOwner = (item: Item): string => item.hero ? `เฉพาะ${heroText[item.hero]?.name ?? ''}` : 'ใส่ได้ทุกคน';

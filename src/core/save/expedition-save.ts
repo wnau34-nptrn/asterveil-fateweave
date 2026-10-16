@@ -23,7 +23,8 @@ export const legacyKeys = ['asterveil.fateweave.battle.v1', 'asterveil.fateweave
 // v7 → v8 (2D-1b): members may carry `talents` (ranks per tree node; missing = none). v7 data loads unchanged.
 // v8 → v9 (2D-2): members may carry `gear`; the profile gains `items`, `nextItem`, `bank.dust` and the
 // last result `items`/`salvaged`; the run gains `found` and `dry`. Older data migrates empty.
-const SAVE_VERSION = 9;
+// v9 → v10 (2D-3): items may carry `set`. v9 data loads unchanged.
+const SAVE_VERSION = 10;
 export interface Game { profile: Profile; run: ExpeditionState | null }
 const actions: readonly ActionId[] = ['attack', 'guard', 'bash', 'mark', 'execute', 'bolt', 'ward', 'heal', 'prayer', 'brace', 'pierce', 'hinder', 'volley', 'acid', 'haste', 'ambush', 'evade', 'taunt', 'slam', 'valor', 'mend',
   'rally', 'finisher', 'sigil', 'sanctuary', 'spearwall', 'weakshot', 'bomb', 'backstab', 'quake', 'finale'];
@@ -207,7 +208,7 @@ function settleFinished(game: Game, map: MapDefinition): Game {
 }
 export function parseGame(raw: string, map: MapDefinition, lookup: EncounterLookup): Game {
   const envelope = obj(JSON.parse(raw)); const version = envelope.version as number;
-  if (![1, 2, 3, 4, 5, 6, 7, 8, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
+  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
   if (version < 5) {
     const run = parseRun(envelope.state, version, map, lookup);
     const profile = newProfile(map, (run.seed ^ 0x5bd1e995) >>> 0);

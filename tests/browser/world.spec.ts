@@ -17,7 +17,7 @@ function base(patch: Partial<ExpeditionState> = {}): ExpeditionState {
   const state = { ...newExpedition(map, encounterById, 77), tutorialDone: true, ...patch }; reveal(state, map); return state;
 }
 async function seed(page: Page, state: ExpeditionState | null, profile: Profile = { ...newProfile(map, 5), tutorialDone: true, commander }) {
-  await page.addInitScript(({ raw, key }) => { if (sessionStorage.getItem('playtest-seeded')) return; localStorage.setItem(key, raw); sessionStorage.setItem('playtest-seeded', 'yes'); }, { raw: JSON.stringify({ version: 9, profile, run: state }), key });
+  await page.addInitScript(({ raw, key }) => { if (sessionStorage.getItem('playtest-seeded')) return; localStorage.setItem(key, raw); sessionStorage.setItem('playtest-seeded', 'yes'); }, { raw: JSON.stringify({ version: 10, profile, run: state }), key });
 }
 async function open(page: Page, state?: ExpeditionState) {
   const issues: string[] = []; page.on('pageerror', e => issues.push(e.message)); page.on('console', m => { if (m.type() === 'error') issues.push(m.text()); });
@@ -562,7 +562,7 @@ test('lobby talent tree: its own sheet; spend points level by level, gates show,
   expect(await page.evaluate(() => document.scrollingElement!.scrollHeight <= innerHeight)).toBe(true);
   await page.screenshot({ path: info.outputPath('lobby-talents-phone.png') });
   const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('asterveil.fateweave.expedition.v1')!));
-  expect(saved.version).toBe(9); expect(saved.profile.members.guardian.talents).toEqual({ root: 1, b1: 2 });
+  expect(saved.version).toBe(10); expect(saved.profile.members.guardian.talents).toEqual({ root: 1, b1: 2 });
   // Back to the team sheet: the card shows the new max HP.
   await page.locator('#lobby-sub-back').click(); await expect(page.locator('#lobby-sheet-title')).toContainText('จัดทีม');
   await expect(page.locator('#lobby-member-guardian')).toContainText(`เลือด ${Math.round(76 * (100 + 9 + 15) / 100)}`);
@@ -610,8 +610,23 @@ test('lobby equipment: its own sheet; equip, class weapons, swap, unequip, salva
   expect(await page.evaluate(() => document.scrollingElement!.scrollHeight <= innerHeight)).toBe(true);
   await page.screenshot({ path: info.outputPath('lobby-gear-phone.png') });
   const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('asterveil.fateweave.expedition.v1')!));
-  expect(saved.version).toBe(9); expect(saved.profile.members.guardian.gear.charm.uid).toBe(4); expect(saved.profile.items.map((i: { uid: number }) => i.uid)).toEqual([3]);
+  expect(saved.version).toBe(10); expect(saved.profile.members.guardian.gear.charm.uid).toBe(4); expect(saved.profile.items.map((i: { uid: number }) => i.uid)).toEqual([3]);
   expect(saved.profile.bank).toMatchObject({ ore: 7, dust: 5 });
+});
+
+test('lobby equipment sets: worn pieces light the 2- and 4-piece bonuses', async ({ page }, info) => {
+  const piece = (uid: number, slot: string) => ({ uid, slot, rarity: 0, level: 1, affixes: [], set: 'dawn' });
+  const profile = { ...newProfile(map, 5), tutorialDone: true, commander, items: [piece(4, 'boots')], nextItem: 5 } as Profile;
+  profile.members.guardian = { stars: 1, dupes: 0, gear: { head: piece(1, 'head'), body: piece(2, 'body'), gloves: piece(3, 'gloves') } } as Profile['members'][string];
+  await seed(page, null, profile);
+  await page.goto('./'); await page.locator('#continue').click();
+  await page.locator('#lobby-tab-team').click(); await page.locator('#lobby-member-guardian').click(); await page.locator('#lobby-gear-open').click();
+  await expect(page.locator('.gear-sets li')).toContainText('ชุดผู้พิทักษ์รุ่งอรุณ'); await expect(page.locator('.gear-sets li')).toContainText('3/4');
+  await expect(page.locator('.gear-sets small.on')).toHaveCount(1);
+  await expect(page.locator('.gear-bag li')).toContainText('ชุดผู้พิทักษ์รุ่งอรุณ');
+  await page.locator('#equip-4').click();
+  await expect(page.locator('.gear-sets small.on')).toHaveCount(2); await expect(page.locator('.gear-sets li')).toContainText('เริ่มศึกพร้อมโล่ 12');
+  await page.screenshot({ path: info.outputPath('lobby-sets.png') });
 });
 
 test('levels: the map shows the monster level here and members’ levels; battles show enemy levels', async ({ page }, info) => {

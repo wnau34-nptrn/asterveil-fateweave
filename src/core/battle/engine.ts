@@ -63,8 +63,9 @@ export function skillPower(data: EncounterDefinition, heroId: string, action: Ac
 // Extra damage a hero's own hits gain from its capstones (duelist deep mark, archer hunter) and mark-hunter gear.
 export function talentHitBonus(state: BattleState, data: EncounterDefinition, heroId: string, enemy: EnemyState): number {
   const marked = enemy.markedUntil > state.round;
+  const fresh = state.order.indexOf(enemy.id) > state.turnIndex ? data.heroes.find(h => h.id === heroId)?.gear?.freshHit ?? 0 : 0;
   return (marked ? capAmount(data, heroId, 'deepmark') + (hasGear(data, heroId, 'markhunter') ? GEAR_MARK_HUNTER : 0) : 0)
-    + ((enemy.delayedRound ?? 0) >= state.round ? capAmount(data, heroId, 'hunter') : 0);
+    + ((enemy.delayedRound ?? 0) >= state.round ? capAmount(data, heroId, 'hunter') : 0) + fresh;
 }
 // ---- Equipment (2D-2) ----
 export const GEAR_MARK_HUNTER = 8; export const GEAR_RENEWAL = 4;
@@ -206,6 +207,9 @@ function hit(state: BattleState, data: EncounterDefinition, enemy: EnemyState, i
   events.push({ type: 'damage', sourceId: actorId, targetId: recipient.id, amount, absorbed, text: 'Enemy attacks on its own turn.' });
   if (!recipient.hp) events.push({ type: 'down', targetId: recipient.id, text: 'Hero falls.' });
   if (reflect && living(state, reflect.heroId) && enemy.hp > 0) strikeBack(state, data, reflect.heroId, enemy, reflect.amount, events, 'The ward reflects the hit.');
+  // Thorn set (4 pieces): a physical hit taken is answered.
+  const thorns = data.heroes.find(h => h.id === recipient.id)!.gear?.thorns;
+  if (thorns && intent.kind === 'physical' && enemy.hp > 0 && recipient.hp > 0) strikeBack(state, data, recipient.id, enemy, thorns, events, 'Thorns strike back.');
   // A guarding knight's counter and a taunting warden's hammer counter (talents).
   if (enemy.hp > 0 && protector === recipient.id && state.guard?.heroId === recipient.id && hasCap(data, recipient.id, 'guardcounter') && recipient.hp > 0)
     strikeBack(state, data, recipient.id, enemy, capAmount(data, recipient.id, 'guardcounter'), events, 'The knight counters.');
@@ -285,6 +289,8 @@ export function beginBattle(data: EncounterDefinition, entry?: BattleEntry): Res
     heroes: data.heroes.map(h => { const hp = entry?.hp[h.id] ?? h.maxHp; return { id: h.id, hp, barrier: hp > 0 ? h.gear?.barrier ?? 0 : 0, cooldowns: {} }; }),
     enemies: data.enemies.map(e => ({ id: e.id, hp: e.maxHp, markedUntil: 0 })), intent: null, commands: [],
   };
+  // Wind set (4 pieces): the wearer acts before everyone in round 1.
+  for (const h of state.heroes) if (h.hp > 0 && data.heroes.find(d => d.id === h.id)!.gear?.firstStrike) h.hastedRound = 1;
   // Bard overture (talent): the battle opens with the song of mending already playing.
   const bard = data.heroes.find(h => hasCap(data, h.id, 'overture') && state.heroes.find(s => s.id === h.id)!.hp > 0);
   if (bard) state.song = { heroId: bard.id, action: 'mend' };
@@ -371,7 +377,9 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
     const amount = Math.min(power, data.heroes.find(h => h.id === id)!.maxHp - target.hp);
     if (amount) { target.hp += amount; events.push({ type: 'heal', sourceId: hero.id, targetId: id, amount, text: 'Restored HP.' }); }
     // Afterglow (★5): healing beyond full HP becomes a barrier (capped, not stacking).
-    const glow = hasPassive(data, hero.id, 'afterglow') ? Math.min(data.rules.afterglowCap, power - amount) - target.barrier : 0;
+    // The mender set (4 pieces) does the same with its own cap; the larger cap applies.
+    const cap = Math.max(hasPassive(data, hero.id, 'afterglow') ? data.rules.afterglowCap : 0, hero.gear?.overflowCap ?? 0);
+    const glow = cap ? Math.min(cap, power - amount) - target.barrier : 0;
     if (glow > 0) { target.barrier += glow; events.push({ type: 'barrier', sourceId: hero.id, targetId: id, amount: glow, text: 'Overflowing light becomes a barrier.' }); }
   };
   const nextIntent = () => nextIntentOf(state, data, command.targetId);
@@ -496,7 +504,10 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
     case 'prayer': for (const h of state.heroes) heal(h.id, skill.power); break;
   }
   const cooldown = command.action === 'volley' && hasPassive(data, hero.id, 'tailwind') || command.action === 'haste' && hasCap(data, hero.id, 'quickbrew') ? skill.cooldown - 1 : skill.cooldown;
-  if (cooldown) actor.cooldowns[command.action] = state.round + cooldown;
+  // Star-veil set (4 pieces): the battle's first skill with a cooldown is ready again at once.
+  const free = !!cooldown && !!hero.gear?.freeCast && !state.freeCast?.includes(hero.id);
+  if (free) state.freeCast = [...state.freeCast ?? [], hero.id];
+  else if (cooldown) actor.cooldowns[command.action] = state.round + cooldown;
   // Duelist relentless (talent): downing an enemy readies her precision strike again.
   if (hasCap(data, hero.id, 'relentless') && livingBefore.some(id => state.enemies.find(e => e.id === id)!.hp <= 0)) delete actor.cooldowns.execute;
   state.commands.push({ ...command });

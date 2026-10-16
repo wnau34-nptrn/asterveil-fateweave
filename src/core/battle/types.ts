@@ -16,7 +16,11 @@ export interface HeroTalents { power?: Partial<Record<ActionId, number>>; rules?
 // mark hunter (hits on a marked enemy +amount), renewal (heal at the start of each own turn).
 export type GearSpecial = 'laststand' | 'markhunter' | 'renewal';
 // What a member's equipment adds beyond max HP/Attack/SPD/skill power (world `starred` builds it).
-export interface HeroGear { healBonus?: number; barrier?: number; specials?: GearSpecial[] }
+// Set 4-piece bonuses (2D-3): `firstStrike` acts first in round 1, `freshHit` adds to hits on an enemy that has not
+// acted yet this round, `thorns` answers physical hits taken, `freeCast` spares the battle's first skill its cooldown,
+// `overflowCap` turns overhealing into a barrier up to that cap. A 4-piece starting barrier adds to `barrier`.
+export interface HeroGear { healBonus?: number; barrier?: number; specials?: GearSpecial[];
+  firstStrike?: boolean; freshHit?: number; thorns?: number; freeCast?: boolean; overflowCap?: number }
 export type Outcome = 'active' | 'victory' | 'defeat';
 export interface SkillDefinition { name: string; english: string; icon: string; power: number; cooldown: number }
 export interface HeroDefinition {
@@ -81,6 +85,8 @@ export interface BattleState {
   solace?: { heroId: string; targetId: string } | null;
   // Heroes whose last-stand equipment has already saved them this battle.
   lastStand?: string[];
+  // Heroes who have used their star-veil free cast this battle.
+  freeCast?: string[];
 }
 export interface BattleEvent {
   type: 'damage' | 'guard' | 'mark' | 'barrier' | 'heal' | 'interrupt' | 'cancel' | 'down' | 'outcome' | 'brace' | 'counter' | 'delay' | 'corrode' | 'haste' | 'evade' | 'dodge' | 'taunt' | 'song' | 'rally' | 'sigil' | 'sanctuary' | 'stand' | 'finale';

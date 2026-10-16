@@ -13,6 +13,8 @@ export interface ZoneDefinition {
   loot?: LootTable;
   // Monster levels (2D-1): the zone's entrance side has the low end, its far (north) side the high end.
   levels?: readonly [number, number];
+  // Equipment sets that drop here (2D-3).
+  sets?: readonly SetId[];
 }
 // Map-collected resources. Ore will pay for hiring, embers revive one fallen
 // member at a camp, and seals will substitute a duplicate in star upgrades.
@@ -53,7 +55,15 @@ export const GEAR_SLOTS: readonly GearSlot[] = ['weapon', 'head', 'body', 'glove
 export type GearStat = 'hp' | 'attack' | 'skill' | 'heal' | 'barrier' | 'speed';
 // Rarity 0 common … 4 legendary. Stat values come from (stat, level) through the rules, so an item stores
 // only what was rolled. `uid` is 0 while the item is still on the expedition (`found`).
-export interface Item { uid: number; slot: GearSlot; rarity: number; level: number; hero?: string; affixes: GearStat[]; special?: GearSpecial }
+export interface Item { uid: number; slot: GearSlot; rarity: number; level: number; hero?: string; affixes: GearStat[]; special?: GearSpecial; set?: SetId }
+// ---- Equipment sets (2D-3, draft numbers): 2 pieces give a stat, 4 pieces a rule. ----
+export type SetId = 'dawn' | 'wind' | 'shadow' | 'thorn' | 'starveil' | 'mender';
+export const SET_IDS: readonly SetId[] = ['dawn', 'wind', 'shadow', 'thorn', 'starveil', 'mender'];
+// `two`: hp/attack/skill/heal are percent, speed is flat SPD. `four`: see `HeroGear`.
+export interface SetDefinition {
+  two: { stat: 'hp' | 'attack' | 'skill' | 'heal' | 'speed'; value: number };
+  four: { kind: 'barrier' | 'firstStrike' | 'freshHit' | 'thorns' | 'freeCast' | 'overflow'; amount: number };
+}
 // A value at item level L = round(base + perLevel × (L − 1)).
 export type StatCurve = readonly [base: number, perLevel: number];
 export interface EquipmentRules {
@@ -67,6 +77,8 @@ export interface EquipmentRules {
   rarityWeights: readonly number[]; bossRarityWeights: readonly number[];
   // Salvaging (or an overflowing bag) returns ore and veil dust by rarity.
   salvage: readonly { ore: number; dust: number }[];
+  // A dropped item belongs to one of its zone's sets at `setPercent` (the boss: any set).
+  setPercent: number; sets: Readonly<Record<SetId, SetDefinition>>;
 }
 export type Gear = Partial<Record<GearSlot, Item>>;
 // ---- Talent tree (2D-1b, draft numbers) ----

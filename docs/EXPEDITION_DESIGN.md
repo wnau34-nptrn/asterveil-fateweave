@@ -19,7 +19,7 @@ Approved 2026-10-14, re-planned 2026-10-15 for the mercenary roster.
 | L1. Lobby | Home → Lobby → Map; persistent profile (company ≤ 20, bank, board); choose the 4 + 4; withdraw/complete/wipe settle home | **Implemented** |
 | L2. Character creation | Commander (non-combat) name, crest and banner colour, once, between Home and Lobby | **Implemented** |
 | 2C-2. New classes | Six new mercenaries (ART-CHAR-MERC-ENEMY-001), one class mechanic at a time; ★3 skill and ★5 passive per class | **Implemented**: all 6 base classes (Garran spear, Mira archer, Toma alchemist, Sefa scout, Brann warden, Lio bard) and the ★3 skill + ★5 passive for all 10 classes (see Star unlocks) |
-| 2D. Equipment and level | 2D-1 member + monster levels; 2D-2 equipment (6 slots, 5 rarities, drops, inventory); 2D-3 sets; 2D-4 forge (enhance, fuse, reroll, salvage); 2D-5 map potions; 2D-1b passive talent tree | **In progress**: 2D-1 implemented (see Levels); 2D-1b implemented (see Talent tree); 2D-2 implemented (see Equipment) |
+| 2D. Equipment and level | 2D-1 member + monster levels; 2D-2 equipment (6 slots, 5 rarities, drops, inventory); 2D-3 sets; 2D-4 forge (enhance, fuse, reroll, salvage); 2D-5 map potions; 2D-1b passive talent tree | **In progress**: 2D-1 implemented (see Levels); 2D-1b implemented (see Talent tree); 2D-2 implemented (see Equipment); 2D-3 implemented (see Equipment sets) |
 | 3. Choices and content | Events with fight/avoid choices, elites, mini boss, puzzles (rune order, push stone, lever), secrets, map quest "2 of 3" and side quests | Planned |
 | 4. Economy and wrap-up | Local gold and shop, salvage, fast travel between camps, elite respawn on rest, defeat penalty, whole-map balance simulation, completion screen | Planned |
 
@@ -452,7 +452,7 @@ Counters from talents add corrosion/valor like other counters. Stone regen does 
 
 ## Equipment (2D-2; design approved 2026-10-15, draft numbers)
 
-Sets (2D-3), the forge (enhance, fuse, reroll; 2D-4) and map potions (2D-5) come later. Icons are code-drawn placeholders until the ART-UI-EQUIP-001 handoff.
+Sets are 2D-3 (below); the forge (enhance, fuse, reroll; 2D-4) and map potions (2D-5) come later. Icons are code-drawn placeholders until the ART-UI-EQUIP-001 handoff.
 
 **Slots.** Weapon (one class only: `Item.hero`), head, body, gloves, boots, charm. Values come from the item level L (the monster level it dropped at) as `round(base + perLevel × (L − 1))`, never stored:
 
@@ -478,3 +478,22 @@ Sets (2D-3), the forge (enhance, fuse, reroll; 2D-4) and map potions (2D-5) come
 **Save v9.** Members may carry `gear`; the profile gains `items`, `nextItem`, `bank.dust` and last-result `items`/`salvaged`; the run gains `found` and `dry`. Every item is checked (slot, class, affixes, special, uid unique and below `nextItem`). v1–v8 data migrates with nothing.
 
 **Tests.** `tests/equipment.test.ts` (stats, validity, rolls, battle effects, drops and pity, settle, equip/unequip/salvage/dismiss, save v9) and a lobby browser test.
+
+## Equipment sets (2D-3; design approved 2026-10-15, draft numbers)
+
+A dropped item belongs to one of its zone's two sets at 60% (the boss: any of the six). Any slot can carry a set, the weapon included. Pieces of the same set count together: 2 pieces give a stat, 4 pieces add a rule. Six slots allow 4 + 2 or 2 + 2 + 2; nothing forces a full set.
+
+| Set | Drops in | 2 pieces | 4 pieces |
+|---|---|---|---|
+| Dawn Guardian (ผู้พิทักษ์รุ่งอรุณ) | meadow | max HP +10% | start each battle with a 12 barrier (adds to gear barriers) |
+| Swift Wind (สายลมเร็ว) | meadow | SPD +3 | act before everyone in round 1 |
+| Shadow Hunter (นักล่าเงา) | thicket | Attack +8% | the wearer's hits on an enemy that has not acted yet this round +6 |
+| Thorn (หนามสวน) | thicket | max HP +6% | a physical hit taken is answered for 6 (while both stand) |
+| Star Veil (เวทม่านดาว) | scar | skill power +10% | the battle's first skill with a cooldown is ready again at once |
+| Mender (ผู้เยียวยา) | scar | healing +15% | overhealing becomes a barrier up to 8 (not stacking; with Afterglow the larger cap applies) |
+
+Set percentages add to the star/level/talent percentages. The resolver reads the 4-piece rules from `HeroDefinition.gear` (`firstStrike`, `freshHit`, `thorns`, `freeCast`, `overflowCap`). The equipment sheet lists each worn set with its pieces and lights the active bonuses; bag rows name the set.
+
+**Save v10.** Items may carry `set`; unknown sets are rejected. v9 data loads unchanged.
+
+**Tests.** `tests/sets.test.ts` (each bonus, 2 + 2 mixing, set rolls, zone sets, save) and a lobby browser test.
