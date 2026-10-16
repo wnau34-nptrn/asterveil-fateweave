@@ -48,6 +48,9 @@ export class StoryUI {
   private finish(): void {
     if (this.root.hidden) return;
     this.root.hidden = true; this.root.innerHTML = '';
+    // The next view lays out from an unscrolled page (iOS can leave it scrolled after the keyboard closes).
+    if (window.scrollX || window.scrollY) window.scrollTo(0, 0);
+    window.dispatchEvent(new Event('resize'));
     const done = this.done; this.done = undefined; done?.();
   }
   private draw(): void {

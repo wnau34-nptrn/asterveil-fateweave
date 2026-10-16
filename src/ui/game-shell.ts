@@ -102,6 +102,9 @@ export class GameShell {
   // Home → create commander → Lobby. A new game replaces the save only on confirmation.
   private showCommander(replacing: boolean): void { this.replacing = replacing; this.show('commander'); this.commander.open(); }
   private createCommander(c: Parameters<typeof createCommander>[1]): void {
+    // Close the on-screen keyboard first: the prologue and the first battle follow at once, and a keyboard still
+    // open on iOS leaves the page scrolled and laid out for a short, wide (landscape) viewport.
+    (document.activeElement as HTMLElement | null)?.blur?.();
     const base = this.replacing || !this.game ? newProfile(this.map, this.freshSeed()) : this.game.profile;
     const result = createCommander(base, c); if (result.event.type !== 'commander') return;
     this.game = { profile: result.profile, run: this.replacing ? null : this.game?.run ?? null }; this.replacing = false;
