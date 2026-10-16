@@ -69,6 +69,27 @@ describe('elites', () => {
     const again = move({ ...done.state, position: from }, map, dir);
     expect(again.state.battle).toBeNull(); expect(again.state.position).toEqual({ x: elite.x, y: elite.y });
   });
+  it('an optional elite pays more than a forced one: more EXP, better items, bonus gold and a seal', () => {
+    const elite = map.elites.find(e => !e.forced)!; const { from, dir } = approach(elite);
+    const start = move(at(from), map, dir).state;
+    // The same fight under a map where this elite were a forced gate.
+    const gated = { ...map, elites: map.elites.map(e => ({ ...e, forced: true })) };
+    const winOn = (m: typeof map) => {
+      const data = battleData(start, m, lookup)!; let b = battleState(start, m, lookup)!;
+      while (b.outcome === 'active') { const l = battleLesson(b, data)!; b = resolveCommand(b, data, { beat: b.beat, heroId: l.heroId, action: l.action, targetId: l.targetId }).state; }
+      return finishBattle(recordBattle(start, m, lookup, b.commands), m, lookup);
+    };
+    const optional = winOn(map); const forced = winOn(gated);
+    if (optional.event.type !== 'victory' || forced.event.type !== 'victory') throw new Error('lost');
+    const O = R.optionalElite;
+    expect(optional.event.loot.gold).toBe(forced.event.loot.gold + O.gold); expect(optional.event.loot.seal).toBe(forced.event.loot.seal + O.seal);
+    expect(optional.state.resources.gold).toBe(forced.state.resources.gold + O.gold);
+    const exp = (r: typeof optional) => r.event.type === 'victory' ? Object.values(r.event.exp ?? {}).reduce((n, g) => n + g.gained, 0) : 0;
+    expect(exp(optional)).toBeGreaterThan(exp(forced));
+    // Better rarity table: no rares-only floor like the gate, and more epic/legendary weight.
+    const w = O.rarityWeights; const f = R.eliteRarityWeights;
+    expect(w[3]! + w[4]!).toBeGreaterThan(f[3]! + f[4]!); expect(O.exp).toBeGreaterThan(R.eliteExp);
+  });
   it('a lost elite fight sends the team back and the elite stays', () => {
     const elite = map.elites[0]!; const { from, dir } = approach(elite);
     const weak = at(from); for (const id of weak.roster.deployed) weak.hp[id] = 1;

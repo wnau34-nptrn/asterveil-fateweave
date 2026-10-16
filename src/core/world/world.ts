@@ -131,6 +131,8 @@ export function newExpedition(map: MapDefinition, lookup: EncounterLookup, seed:
 const startBattle = (state: ExpeditionState, kind: BattleKind, encounterId: string, level?: number, source?: string): ActiveBattle =>
   ({ kind, encounterId, entry: Object.fromEntries(state.roster.deployed.map(id => [id, state.hp[id]!])), commands: [], ...(level ? { level } : {}), ...(source ? { source } : {}) });
 // ---- Phase 3A: elites and events ----
+// An elite that can be walked around (not `forced`) pays the richer optional-elite reward.
+export const optionalElite = (map: MapDefinition, source?: string): boolean => map.elites.some(e => e.id === source && !e.forced);
 // A shrine wound lowers max HP by a percent for the rest of the run.
 export const wounded = (def: HeroDefinition, wound = 0): HeroDefinition => wound ? { ...def, maxHp: Math.max(1, Math.round(def.maxHp * (100 - wound) / 100)) } : def;
 export const eliteAt = (map: MapDefinition, p: Point): EliteDefinition | undefined => map.elites.find(e => e.x === p.x && e.y === p.y);
@@ -356,7 +358,7 @@ function dropItem(state: ExpeditionState, map: MapDefinition, kind: BattleKind, 
   }
   // Sets come from the zone the battle was fought in; the boss can drop any set.
   const sets = kind === 'boss' ? SET_IDS : zoneOf(map, tileAt(map, state.position)?.zoneId ?? '')?.sets ?? [];
-  const weights = kind === 'boss' ? rules.bossRarityWeights : kind === 'elite' ? map.eventRules.eliteRarityWeights : rules.rarityWeights;
+  const weights = kind === 'boss' ? rules.bossRarityWeights : kind === 'elite' ? (optionalElite(map, source) ? map.eventRules.optionalElite.rarityWeights : map.eventRules.eliteRarityWeights) : rules.rarityWeights;
   const item = rollItem(rules, () => rollPercent(state.seed, state.rolls++), level, weights, rosterIds(state), sets);
   state.found.push(item);
   return item;
@@ -382,9 +384,9 @@ export function recordBattle(initial: ExpeditionState, map: MapDefinition, looku
 }
 // Every brought member (deployed and reserve, standing or fallen) gains the victory's EXP, tapered by
 // their level against the monster level. Level-ups raise max HP; standing members gain the difference.
-function gainExp(state: ExpeditionState, map: MapDefinition, lookup: EncounterLookup, data: EncounterDefinition, kind: BattleKind): Record<string, ExpGain> {
+function gainExp(state: ExpeditionState, map: MapDefinition, lookup: EncounterLookup, data: EncounterDefinition, kind: BattleKind, source?: string): Record<string, ExpGain> {
   const rules = map.progression; const level = data.level ?? 1;
-  const base = data.enemies.length * (rules.expBase + rules.expPerLevel * level) * (kind === 'boss' ? rules.bossExpMultiplier : kind === 'elite' ? map.eventRules.eliteExp : 1);
+  const base = data.enemies.length * (rules.expBase + rules.expPerLevel * level) * (kind === 'boss' ? rules.bossExpMultiplier : kind === 'elite' ? (optionalElite(map, source) ? map.eventRules.optionalElite.exp : map.eventRules.eliteExp) : 1);
   const gains: Record<string, ExpGain> = {};
   for (const id of rosterIds(state)) {
     const member = state.members[id] ?? { stars: 1, dupes: 0 }; const before = memberDef(lookup, map, state.members, id)!.maxHp;
@@ -419,8 +421,12 @@ export function finishBattle(initial: ExpeditionState, map: MapDefinition, looku
       if (map.events.find(e => e.id === source)?.kind === 'rift') { dust = map.eventRules.riftDust; state.dust += dust; }
     }
     const data = battleData(initial, map, lookup)!;
-    const exp = gainExp(state, map, lookup, data, kind);
+    const exp = gainExp(state, map, lookup, data, kind, source);
     const loot = rollLoot(state, battleLoot(state, map, kind));
+    if (kind === 'elite' && optionalElite(map, source)) {
+      const { gold, seal } = map.eventRules.optionalElite;
+      loot.gold += gold; loot.seal += seal; state.resources.gold += gold; state.resources.seal += seal;
+    }
     const item = dropItem(state, map, kind, data.level ?? 1, source);
     return { state, event: { type: 'victory', kind, encounterId, loot, exp, ...(item ? { item } : {}), ...(dust ? { dust } : {}) } };
   }

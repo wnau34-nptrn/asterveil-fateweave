@@ -580,3 +580,7 @@ html, body { background: #0a1422; }
 /* Gold coins (hiring currency) use the line icon until painted item art exists. */
 .item-art.icon-art { display: inline-grid; place-items: center; background: none; } .item-art.icon-art .icon { width: 28px; height: 28px; color: #f2c14e; }
 .pack-item[data-resource=gold] .icon, .lobby-bank [data-bank=gold] .icon, .hire-cost .icon-gold { color: #f2c14e; }
+/* An optional elite carries a small chest badge: beating it pays the richer challenge reward. */
+.elite-unit .elite-reward { position: absolute; top: -14%; right: -12%; width: 46%; aspect-ratio: 1; display: grid; place-items: center; border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, #fff4cf, var(--gold-light, #f2d596) 60%, #b98a35); border: 2px solid #08121f; box-shadow: 0 0 8px #f2d596aa; }
+.elite-unit .elite-reward .icon { width: 64%; height: 64%; color: #2a1d08; }

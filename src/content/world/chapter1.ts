@@ -94,6 +94,7 @@ export const chapterOne: MapDefinition = {
     merchant: { salve: 8, tonic: 14, repel: 10 }, traveller: { ore: 10, seal: 1 },
     riftEncounterId: 'scout-patrol', riftDust: 12,
     eliteExp: 2, eliteRarityWeights: [0, 0, 60, 30, 10],
+    optionalElite: { exp: 3, rarityWeights: [0, 0, 20, 50, 30], gold: 20, seal: 1 },
   },
   potions: {
     carry: 3, salvePercent: 40, tonicPercent: 20, repelSteps: 10,

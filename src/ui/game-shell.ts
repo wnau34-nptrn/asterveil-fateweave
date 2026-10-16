@@ -181,7 +181,7 @@ export class GameShell {
     const data = this.lookup(encounterId)!;
     this.locked = true;
     const kind = battleKind === 'random' || battleKind === 'event' ? 'encounter' : battleKind;
-    const eyebrow = kind === 'boss' ? 'บอส · รอยแยกกำลังตื่นขึ้น' : kind === 'elite' ? (this.eliteForced() ? 'อีลิท · ผู้เฝ้าด่าน' : 'อีลิท · ท้าสู้') : kind === 'tutorial' ? 'ศึกแรก' : 'พบศัตรู!';
+    const eyebrow = kind === 'boss' ? 'บอส · รอยแยกกำลังตื่นขึ้น' : kind === 'elite' ? (this.eliteForced() ? 'อีลิท · ผู้เฝ้าด่าน' : 'อีลิท · ท้าสู้ · รางวัลพิเศษ') : kind === 'tutorial' ? 'ศึกแรก' : 'พบศัตรู!';
     this.banner = { kind, eyebrow, title: data.name, detail: data.enemies.map(e => e.displayName ?? e.name).join(' · ') };
     this.renderWorld();
     // Veil-shatter presentation (720 ms, 100 ms crossfade under reduced motion); the battle is already saved.
@@ -251,7 +251,7 @@ export class GameShell {
   private describe(event: WorldEvent): string {
     switch (event.type) {
       case 'moved': return event.chance ? `ก้าวต่อไป · ไม่พบศัตรู (โอกาส ${event.chance}%)` : 'พื้นที่ปลอดภัย';
-      case 'encounter': return event.kind === 'boss' ? 'ผู้คุมรอยแยกขวางประตูไว้!' : event.kind === 'elite' ? (this.eliteForced() ? 'อีลิทเฝ้าด่านขวางทางไว้ · ต้องชนะถึงจะผ่าน' : 'ท้าสู้อีลิท · ชนะแล้วได้ของดี') : 'พบศัตรู!';
+      case 'encounter': return event.kind === 'boss' ? 'ผู้คุมรอยแยกขวางประตูไว้!' : event.kind === 'elite' ? (this.eliteForced() ? 'อีลิทเฝ้าด่านขวางทางไว้ · ต้องชนะถึงจะผ่าน' : `ท้าสู้อีลิท · ชนะได้ EXP ×${this.map.eventRules.optionalElite.exp} เหรียญทอง +${this.map.eventRules.optionalElite.gold} ตราสัญญา +${this.map.eventRules.optionalElite.seal} และอุปกรณ์ชั้นดี`) : 'พบศัตรู!';
       case 'event': return eventText[this.map.events.find(e => e.id === event.eventId)!.kind].name;
       case 'goal': return 'ถึงประตูรอยแยกแล้ว';
       default: return this.message;
@@ -278,7 +278,7 @@ export class GameShell {
       if (result.event.type === 'victory') {
         const loot = lootThai(result.event.loot) + (result.event.item ? ` · ได้${itemName(result.event.item)} Lv${result.event.item.level}` : ''); this.effect = 'loot'; const exp = expThai(result.event.exp, next);
         const dust = result.event.dust ? ` · ผงม่าน +${result.event.dust}` : '';
-        this.message = kind === 'boss' ? `ผู้คุมรอยแยกล้มแล้ว · ${loot}${exp} · ทางไปประตูเปิดออก` : kind === 'elite' ? `อีลิทล้มแล้ว · ${loot}${exp}${this.map.elites.find(e => e.id === next.elitesDefeated.at(-1))?.forced ? ' · ด่านเปิดออก' : ''}` : kind === 'event' ? `ชนะศึก · ${loot}${dust}${exp}` : `ชนะศึก · ${loot}${exp}${fallen ? ` · ${fallen} คนล้มอยู่ ชุบที่แคมป์` : ''}`;
+        this.message = kind === 'boss' ? `ผู้คุมรอยแยกล้มแล้ว · ${loot}${exp} · ทางไปประตูเปิดออก` : kind === 'elite' ? (this.map.elites.find(e => e.id === next.elitesDefeated.at(-1))?.forced ? `อีลิทล้มแล้ว · ${loot}${exp} · ด่านเปิดออก` : `ท้าสู้สำเร็จ · รางวัลพิเศษ · ${loot}${exp}`) : kind === 'event' ? `ชนะศึก · ${loot}${dust}${exp}` : `ชนะศึก · ${loot}${exp}${fallen ? ` · ${fallen} คนล้มอยู่ ชุบที่แคมป์` : ''}`;
       } else if (result.event.type === 'defeat') {
         if (result.event.wiped) {
           // Every brought member is down: the expedition fails and settles home in this write.

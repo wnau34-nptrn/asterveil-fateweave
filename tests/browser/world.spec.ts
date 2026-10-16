@@ -410,6 +410,17 @@ test('a forced elite holds its one-tile gate: stepping in forces the fight and t
   expect((await saved(page)).position).toEqual({ x: elite.x, y: elite.y });
   expect(issues).toEqual([]);
 });
+test('an optional elite wears gold with a reward badge and announces its bonus when challenged', async ({ page }, info) => {
+  const elite = map.elites.find(e => !e.forced)!;
+  const issues = await open(page, base({ position: { x: elite.x, y: elite.y + 1 } }));
+  await expect(page.locator(`.elite-unit[data-elite="${elite.id}"] .elite-reward`)).toBeVisible();
+  await expect(page.locator('.elite-unit[data-forced=true] .elite-reward')).toHaveCount(0);
+  await page.screenshot({ path: info.outputPath('elite-optional.png') });
+  await page.locator('#move-up').click();
+  await expect(page.locator('#world-message')).toContainText(`เหรียญทอง +${map.eventRules.optionalElite.gold}`);
+  await expect(page.locator('#encounter-kind')).toContainText('อีลิท');
+  expect(issues).toEqual([]);
+});
 test('map events: stepping on one opens its choices; the shrine heals with a wound, the merchant sells, saved v13', async ({ page }, info) => {
   const shrine = map.events.find(e => e.kind === 'shrine')!; const merchant = map.events.find(e => e.kind === 'merchant')!;
   const start = base({ position: { x: shrine.x, y: shrine.y + 1 } }); start.hp.guardian = 20;

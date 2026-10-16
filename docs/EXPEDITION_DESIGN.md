@@ -542,7 +542,15 @@ The lobby's **ช่าง** menu opens the forge sheet: every piece (bag or wor
 | เจ้าป่าหนาม (Briar Lord + Briar Stalker) | `gate-thicket` (9,10), the only way thicket → scar | **forced** (coral token) | `elite-briar-lord` (Lv8) |
 
 - Stepping into an unbeaten elite starts its battle at once, like the boss. A forced elite cannot be avoided; an optional one only fights if the team steps onto its tile.
-- A win marks the elite beaten for the run (the token disappears and the tile is floor). It also gives EXP ×2, a guaranteed item (rarity weights 0 : 0 : 60 : 30 : 10, so rare or better) and the zone's normal loot.
+- A win marks the elite beaten for the run (the token disappears and the tile is floor) and pays the zone's normal loot plus a reward that depends on the type (owner request 2026-10-16: optional elites pay more, to make the risk worth it):
+
+| Reward | Forced elite (gate) | Optional elite (challenge) |
+|---|---|---|
+| EXP multiplier | ×2 | ×3 |
+| Guaranteed item, rarity weights (common : uncommon : rare : epic : legendary) | 0 : 0 : 60 : 30 : 10 | 0 : 0 : 20 : 50 : 30 |
+| Bonus on top of zone loot | — | gold +20, seal +1 |
+
+  Numbers live in `map.eventRules` (`eliteExp`/`eliteRarityWeights` and `optionalElite`). The optional elite's token carries a chest badge. Its encounter message and the world info sheet name the bonus before the fight.
 - A loss sends the team back like any defeat, and the elite stays.
 - Step hints into an elite tile are red, like the boss. Forced elites wear a coral ring, optional ones gold.
 

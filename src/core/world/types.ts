@@ -107,6 +107,9 @@ export interface EventRules {
   riftEncounterId: string; riftDust: number;
   // Elites: EXP multiplier and the drop's rarity weights.
   eliteExp: number; eliteRarityWeights: readonly number[];
+  // An optional elite (not on a gate) pays more to make challenging it worth the risk: its own EXP multiplier and
+  // rarity weights, plus bonus gold and seals added to the battle's loot.
+  optionalElite: { exp: number; rarityWeights: readonly number[]; gold: number; seal: number };
 }
 // ---- Map potions (2D-5, draft numbers) ----
 // salve heals one standing member, tonic every standing member (percent of max HP); repel stops random
