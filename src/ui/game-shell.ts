@@ -1,11 +1,12 @@
 import type { BattleState, Outcome } from '../core/battle/types';
 import { clearLegacySaves, loadGame, saveGame, type Game } from '../core/save/expedition-save';
 import { createCommander, departure, dismiss, equip, hire, learnTalent, newProfile, placeMember, resetTalents, salvage, settle, unequip, upgrade, canWithdraw } from '../core/world/profile';
-import type { Direction, ExpeditionState, MapDefinition, ProfileResult, RunOutcome, WorldEvent } from '../core/world/types';
+import type { Direction, ExpeditionState, MapDefinition, Profile, ProfileResult, RunOutcome, WorldEvent } from '../core/world/types';
 import { battleData, finishBattle, heroCatalog, move, moveMember, openChest, recordBattle, rest, revive, swapMembers, type EncounterLookup } from '../core/world/world';
 import { browserStorage } from '../platform/browser-storage';
 import type { BattleUI } from './battle-ui';
-import { expThai, heroText, itemName, lootThai } from './th';
+import { expThai, heroText, itemLines, itemName, lootThai } from './th';
+import { enhance, findItem, fuse, reroll } from '../core/world/forge';
 import { CommanderUI } from './commander-ui';
 import { LobbyUI } from './lobby-ui';
 import { WorldUI, type WorldBanner } from './world-ui';
@@ -47,6 +48,8 @@ export class GameShell {
       talent: (id, node) => this.profileChange(learnTalent(this.game!.profile, map, id, node)), resetTalents: id => this.profileChange(resetTalents(this.game!.profile, id)),
       equip: (id, uid) => this.profileChange(equip(this.game!.profile, id, uid)), unequip: (id, slot) => this.profileChange(unequip(this.game!.profile, map, id, slot)),
       salvage: uids => this.profileChange(salvage(this.game!.profile, map, uids)),
+      enhance: uid => this.profileChange(enhance(this.game!.profile, map, uid)), fuse: uid => this.profileChange(fuse(this.game!.profile, map, uid)),
+      reroll: (uid, i) => this.profileChange(reroll(this.game!.profile, map, uid, i)),
       depart: () => this.depart(), home: () => this.showTitle(),
     });
     this.commander = new CommanderUI(views.commander, { create: c => this.createCommander(c), back: () => { this.replacing = false; this.showTitle(); } });
@@ -111,9 +114,15 @@ export class GameShell {
     if (e.type === 'blocked') return;
     this.game = { ...this.game, profile: { ...result.profile, last: null } }; this.persist();
     this.lobbyMessage = e.type === 'hired' ? (e.duplicate ? `ได้ตัวซ้ำของ${name(e.heroId)} · ใช้อัปดาวในแท็บทีม` : `จ้าง${name(e.heroId)}แล้ว`)
-      : e.type === 'upgraded' ? `${name(e.heroId)}ขึ้นเป็น ★${e.stars} แล้ว` : e.type === 'dismissed' ? `เลิกจ้าง${name(e.heroId)}แล้ว · ได้แร่ดาวคืน ${this.map.company.dismissRefund}` : e.type === 'talent' || e.type === 'equipped' ? '' : e.type === 'salvaged' ? `แยกชิ้น ${e.count} ชิ้น · ได้แร่ดาว ${e.ore} ผงม่านเวล ${e.dust}` : 'จัดทีมแล้ว';
+      : e.type === 'upgraded' ? `${name(e.heroId)}ขึ้นเป็น ★${e.stars} แล้ว` : e.type === 'dismissed' ? `เลิกจ้าง${name(e.heroId)}แล้ว · ได้แร่ดาวคืน ${this.map.company.dismissRefund}` : e.type === 'talent' || e.type === 'equipped' ? '' : e.type === 'salvaged' ? `แยกชิ้น ${e.count} ชิ้น · ได้แร่ดาว ${e.ore} ผงม่านเวล ${e.dust}`
+      : e.type === 'forged' ? this.forgedText(result.profile, e.uid, e.action) : 'จัดทีมแล้ว';
     this.lobbyCheer = e.type === 'hired' || e.type === 'upgraded' ? e.heroId : '';
     this.showLobby();
+  }
+  // Forge result: the piece as it is now (fuse and reroll show what was rolled).
+  private forgedText(profile: Profile, uid: number, action: 'enhance' | 'fuse' | 'reroll'): string {
+    const item = findItem(profile, uid)?.item; if (!item) return '';
+    return `${({ enhance: 'ตีบวกสำเร็จ', fuse: 'หลอมรวมสำเร็จ', reroll: 'ปรับค่าแล้ว' })[action]} · ${itemName(item)} · ${itemLines(this.map.equipment, item).join(' · ')}`;
   }
   private depart(): void {
     if (!this.game || this.game.run) return;

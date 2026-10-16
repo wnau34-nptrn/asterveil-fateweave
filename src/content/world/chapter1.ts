@@ -88,6 +88,8 @@ export const chapterOne: MapDefinition = {
     salvage: [{ ore: 2, dust: 1 }, { ore: 3, dust: 2 }, { ore: 5, dust: 4 }, { ore: 8, dust: 8 }, { ore: 12, dust: 15 }],
     // Sets (2D-3, draft numbers): meadow dawn/wind, thicket shadow/thorn, scar star-veil/mender.
     setPercent: 60,
+    // Forge (2D-4, draft numbers): caps +5/+10/+15/+20/+25, +6% base stats per level.
+    forge: { plusCap: [5, 10, 15, 20, 25], plusPercent: 6, ore: 3, orePerPlus: 1, dustPerPlus: 0.5, fuseCount: 3, rerollSeals: 1, salvageDustPerPlus: 1 },
     sets: {
       dawn: { two: { stat: 'hp', value: 10 }, four: { kind: 'barrier', amount: 12 } },
       wind: { two: { stat: 'speed', value: 3 }, four: { kind: 'firstStrike', amount: 0 } },

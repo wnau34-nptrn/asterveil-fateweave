@@ -59,7 +59,8 @@ describe('items and stats', () => {
     ['a legendary without a special', item({ rarity: 4, affixes: ['hp', 'attack', 'skill'] })],
     ['a weapon without a class', item({ slot: 'weapon' })],
     ['a class on armour', item({ hero: 'guardian' })],
-    ['an extra field', { ...item({}), plus: 3 } as Item],
+    ['an extra field', { ...item({}), shine: 3 } as Item],
+    ['an enhance level above the rarity cap', item({ plus: 6 })],
   ])('rejects %s', (_, bad) => expect(itemValid(map, bad, heroIds)).toBe(false));
 });
 

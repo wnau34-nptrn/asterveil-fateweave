@@ -13,7 +13,9 @@ export const affixPool = (slot: GearSlot): GearStat[] => GEAR_STATS.filter(s => 
 // Every stat an item gives: its slot's base stats plus one value per affix.
 export function itemStats(rules: EquipmentRules, item: Item): Partial<Record<GearStat, number>> {
   const out: Partial<Record<GearStat, number>> = {};
-  for (const [stat, c] of Object.entries(rules.slotStats[item.slot]) as [GearStat, StatCurve][]) out[stat] = (out[stat] ?? 0) + curve(c, item.level);
+  // Forge levels raise only the slot's base stats.
+  const plus = 1 + (item.plus ?? 0) * rules.forge.plusPercent / 100;
+  for (const [stat, c] of Object.entries(rules.slotStats[item.slot]) as [GearStat, StatCurve][]) out[stat] = (out[stat] ?? 0) + Math.round(curve(c, item.level) * plus);
   for (const stat of item.affixes) out[stat] = (out[stat] ?? 0) + curve(rules.affixStats[stat], item.level);
   return out;
 }
@@ -74,7 +76,11 @@ export function itemValid(map: MapDefinition, item: Item, heroIds: readonly stri
   if (!Array.isArray(item.affixes) || item.affixes.length !== rules.affixCount[item.rarity] || new Set(item.affixes).size !== item.affixes.length || item.affixes.some(a => !pool.includes(a))) return false;
   if ((item.rarity === RARITIES - 1) !== (item.special !== undefined) || (item.special !== undefined && !GEAR_SPECIALS.includes(item.special))) return false;
   if (item.set !== undefined && !SET_IDS.includes(item.set)) return false;
-  const keys = Object.keys(item).filter(k => !['uid', 'slot', 'rarity', 'level', 'hero', 'affixes', 'special', 'set'].includes(k));
+  if (item.plus !== undefined && (!Number.isInteger(item.plus) || item.plus < 1 || item.plus > rules.forge.plusCap[item.rarity]!)) return false;
+  const keys = Object.keys(item).filter(k => !['uid', 'slot', 'rarity', 'level', 'hero', 'affixes', 'special', 'set', 'plus'].includes(k));
   return !keys.length;
 }
-export const salvageValue = (map: MapDefinition, item: Item) => map.equipment.salvage[item.rarity]!;
+export function salvageValue(map: MapDefinition, item: Item): { ore: number; dust: number } {
+  const v = map.equipment.salvage[item.rarity]!;
+  return { ore: v.ore, dust: v.dust + (item.plus ?? 0) * map.equipment.forge.salvageDustPerPlus };
+}

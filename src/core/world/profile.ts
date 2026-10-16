@@ -10,7 +10,7 @@ export function newProfile(map: MapDefinition, seed: number): Profile {
     seed: seed >>> 0, returns: 0, tutorialDone: false, commander: null,
     company: [...map.startingRoster], members: Object.fromEntries(map.startingRoster.map(id => [id, { stars: 1, dupes: 0 }])),
     party: { deployed: [...map.startingRoster], reserve: [] },
-    bank: { ore: 0, seal: 0, dust: 0 }, items: [], nextItem: 1, taken: [], expeditions: 0, completes: 0, last: null,
+    bank: { ore: 0, seal: 0, dust: 0 }, items: [], nextItem: 1, forge: 0, taken: [], expeditions: 0, completes: 0, last: null,
   };
 }
 const blocked = (profile: Profile, reason: string): ProfileResult => ({ profile, event: { type: 'blocked', reason } });

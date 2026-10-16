@@ -107,11 +107,11 @@ const capText: Record<TalentCap, { actions: readonly ActionId[]; help: (n: numbe
   chorus: { actions: ['valor'], help: n => `ระหว่างเพลงกล้า การโจมตีของศัตรูทุกครั้งเบาลง ${n}` },
   overture: { actions: ['mend'], help: () => 'เริ่มศึกพร้อมเพลงฟื้นที่บรรเลงอยู่แล้ว' },
 };
-const statName = { hp: 'เลือดสูงสุด', attack: 'พลังโจมตี', skill: 'พลังสกิล' } as const;
+const talentStatName = { hp: 'เลือดสูงสุด', attack: 'พลังโจมตี', skill: 'พลังสกิล' } as const;
 // What one node does (per rank for multi-rank nodes); `data` names the skills.
 export function talentHelp(node: TalentNodeDef, data: EncounterDefinition): string {
   const e = node.effect; const per = node.max > 1 ? ' ต่อขั้น' : '';
-  if ('stat' in e) return `${statName[e.stat]} +${e.percent}%${per}`;
+  if ('stat' in e) return `${talentStatName[e.stat]} +${e.percent}%${per}`;
   if ('power' in e) return `${data.skills[e.power].name} +${e.amount}${per}`;
   if ('rule' in e) return ruleText[e.rule].help(e.amount) + per;
   return capText[e.cap].help(e.amount ?? 0);
@@ -217,7 +217,8 @@ const statText: Record<GearStat, (n: number) => string> = {
 export const specialText: Record<GearSpecial, string> = {
   laststand: 'ครั้งแรกในศึกที่จะล้ม เหลือเลือด 1', markhunter: 'โจมตีศัตรูที่ติดตรา +8', renewal: 'ฟื้นเลือด 4 เมื่อเริ่มเทิร์นของตัวเอง',
 };
-export const itemName = (item: Item): string => `${item.slot === 'weapon' ? weaponText[item.hero!] ?? 'อาวุธ' : slotText[item.slot]}${rarityText[item.rarity]}`;
+export const itemName = (item: Item): string => `${item.slot === 'weapon' ? weaponText[item.hero!] ?? 'อาวุธ' : slotText[item.slot]}${rarityText[item.rarity]}${item.plus ? ` +${item.plus}` : ''}`;
+export const statName: Record<GearStat, string> = { hp: 'เลือด', attack: 'พลังโจมตี', skill: 'พลังสกิล', heal: 'พลังรักษา', barrier: 'โล่เริ่มศึก', speed: 'SPD' };
 // Base stats first, then affixes; a legendary special and the set at the end.
 export function itemLines(rules: EquipmentRules, item: Item): string[] {
   const stats = itemStats(rules, item);

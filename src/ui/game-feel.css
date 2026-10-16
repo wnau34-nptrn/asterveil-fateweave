@@ -455,3 +455,20 @@ html, body { background: #0a1422; }
 .gear-sets li span { color: var(--gold-light, #f2d596); font-weight: 700; }
 .gear-sets small { grid-column: 1 / -1; font-size: 11px; color: var(--text-muted, #b9c8d8); opacity: .55; }
 .gear-sets small.on { opacity: 1; color: var(--gold-light, #f2d596); }
+/* Forge (2D-4) */
+.forge-detail { display: grid; gap: 6px; padding: 8px; margin-bottom: 8px; border-radius: 12px; background: #08121fb3; border: 1px solid #e8f5ff26; border-left: 3px solid var(--rarity-0); font-size: 12px; }
+.forge-detail[data-rarity="1"] { border-left-color: var(--rarity-1); } .forge-detail[data-rarity="2"] { border-left-color: var(--rarity-2); }
+.forge-detail[data-rarity="3"] { border-left-color: var(--rarity-3); } .forge-detail[data-rarity="4"] { border-left-color: var(--rarity-4); }
+.forge-detail p, .forge-detail h4 { margin: 0; } .forge-detail h4 { font-size: 13px; color: var(--gold-light, #f2d596); }
+.forge-detail h4 small { display: block; font-weight: 400; font-size: 11px; color: var(--text-muted, #b9c8d8); }
+.forge-detail button { min-height: 44px; width: 100%; }
+.forge-mats { font-size: 11px; color: var(--text-muted, #b9c8d8); }
+.forge-rerolls { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 6px; }
+.forge-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 5px; }
+.forge-pick { width: 100%; min-height: 44px; display: grid; gap: 1px; text-align: left; padding: 6px 8px; border-radius: 10px; background: #08121fb3; border: 1px solid #e8f5ff1f; border-left: 3px solid var(--rarity-0); color: inherit; font: inherit; cursor: pointer; }
+.forge-list li[data-rarity="1"] .forge-pick { border-left-color: var(--rarity-1); } .forge-list li[data-rarity="2"] .forge-pick { border-left-color: var(--rarity-2); }
+.forge-list li[data-rarity="3"] .forge-pick { border-left-color: var(--rarity-3); } .forge-list li[data-rarity="4"] .forge-pick { border-left-color: var(--rarity-4); }
+.forge-pick b { font-size: 13px; } .forge-pick small { font-size: 11px; color: var(--text-muted, #b9c8d8); }
+.forge-pick[aria-pressed="true"] { border-color: var(--gold-light, #f2d596); background: #2a2210cc; }
+.forge-list li[data-rarity] b { color: var(--rarity-0); } .forge-list li[data-rarity="1"] b { color: var(--rarity-1); } .forge-list li[data-rarity="2"] b { color: var(--rarity-2); }
+.forge-list li[data-rarity="3"] b { color: var(--rarity-3); } .forge-list li[data-rarity="4"] b { color: var(--rarity-4); }

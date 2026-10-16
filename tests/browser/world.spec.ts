@@ -17,7 +17,7 @@ function base(patch: Partial<ExpeditionState> = {}): ExpeditionState {
   const state = { ...newExpedition(map, encounterById, 77), tutorialDone: true, ...patch }; reveal(state, map); return state;
 }
 async function seed(page: Page, state: ExpeditionState | null, profile: Profile = { ...newProfile(map, 5), tutorialDone: true, commander }) {
-  await page.addInitScript(({ raw, key }) => { if (sessionStorage.getItem('playtest-seeded')) return; localStorage.setItem(key, raw); sessionStorage.setItem('playtest-seeded', 'yes'); }, { raw: JSON.stringify({ version: 10, profile, run: state }), key });
+  await page.addInitScript(({ raw, key }) => { if (sessionStorage.getItem('playtest-seeded')) return; localStorage.setItem(key, raw); sessionStorage.setItem('playtest-seeded', 'yes'); }, { raw: JSON.stringify({ version: 11, profile, run: state }), key });
 }
 async function open(page: Page, state?: ExpeditionState) {
   const issues: string[] = []; page.on('pageerror', e => issues.push(e.message)); page.on('console', m => { if (m.type() === 'error') issues.push(m.text()); });
@@ -562,7 +562,7 @@ test('lobby talent tree: its own sheet; spend points level by level, gates show,
   expect(await page.evaluate(() => document.scrollingElement!.scrollHeight <= innerHeight)).toBe(true);
   await page.screenshot({ path: info.outputPath('lobby-talents-phone.png') });
   const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('asterveil.fateweave.expedition.v1')!));
-  expect(saved.version).toBe(10); expect(saved.profile.members.guardian.talents).toEqual({ root: 1, b1: 2 });
+  expect(saved.version).toBe(11); expect(saved.profile.members.guardian.talents).toEqual({ root: 1, b1: 2 });
   // Back to the team sheet: the card shows the new max HP.
   await page.locator('#lobby-sub-back').click(); await expect(page.locator('#lobby-sheet-title')).toContainText('จัดทีม');
   await expect(page.locator('#lobby-member-guardian')).toContainText(`เลือด ${Math.round(76 * (100 + 9 + 15) / 100)}`);
@@ -610,7 +610,7 @@ test('lobby equipment: its own sheet; equip, class weapons, swap, unequip, salva
   expect(await page.evaluate(() => document.scrollingElement!.scrollHeight <= innerHeight)).toBe(true);
   await page.screenshot({ path: info.outputPath('lobby-gear-phone.png') });
   const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('asterveil.fateweave.expedition.v1')!));
-  expect(saved.version).toBe(10); expect(saved.profile.members.guardian.gear.charm.uid).toBe(4); expect(saved.profile.items.map((i: { uid: number }) => i.uid)).toEqual([3]);
+  expect(saved.version).toBe(11); expect(saved.profile.members.guardian.gear.charm.uid).toBe(4); expect(saved.profile.items.map((i: { uid: number }) => i.uid)).toEqual([3]);
   expect(saved.profile.bank).toMatchObject({ ore: 7, dust: 5 });
 });
 
@@ -627,6 +627,33 @@ test('lobby equipment sets: worn pieces light the 2- and 4-piece bonuses', async
   await page.locator('#equip-4').click();
   await expect(page.locator('.gear-sets small.on')).toHaveCount(2); await expect(page.locator('.gear-sets li')).toContainText('เริ่มศึกพร้อมโล่ 12');
   await page.screenshot({ path: info.outputPath('lobby-sets.png') });
+});
+
+test('lobby forge: enhance, fuse and reroll from its own menu; saved v11', async ({ page }, info) => {
+  const body = (uid: number, affixes: string[]) => ({ uid, slot: 'body', rarity: 1, level: 4, affixes });
+  const profile = { ...newProfile(map, 5), tutorialDone: true, commander, bank: { ore: 100, seal: 1, dust: 20 },
+    items: [body(1, ['hp']), body(2, ['attack']), body(3, ['skill'])], nextItem: 4, forge: 0 } as Profile;
+  await seed(page, null, profile);
+  await page.goto('./'); await page.locator('#continue').click();
+  await page.locator('#lobby-tab-forge').click();
+  await expect(page.locator('#lobby-sheet-title')).toContainText('ช่างตีเหล็ก'); await expect(page.locator('.forge-pick')).toHaveCount(3);
+  await page.locator('#forge-item-1').click();
+  await expect(page.locator('#forge-enhance')).toContainText('ตีบวก +1 · แร่ 4 ผง 1');
+  await page.locator('#forge-enhance').click(); await expect(page.locator('#forge-enhance')).toContainText('ตีบวก +2');
+  await expect(page.locator('.forge-detail')).toContainText('เกราะดี +1');
+  await page.locator('#forge-reroll-0').click(); await expect(page.locator('#forge-reroll-0')).toBeDisabled();
+  await expect(page.locator('#forge-reroll-0')).toContainText('ตราสัญญาไม่พอ');
+  await expect(page.locator('.forge-mats')).toContainText('จะใช้');
+  await page.locator('#forge-fuse').click();
+  await expect(page.locator('.forge-pick')).toHaveCount(1); await expect(page.locator('.forge-detail')).toContainText('เกราะหายาก');
+  for (const b of await page.locator('.forge-pick, .forge-detail button, .lobby-menu-button').all()) expect((await b.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+  await page.screenshot({ path: info.outputPath('lobby-forge.png') });
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(await page.evaluate(() => document.scrollingElement!.scrollHeight <= innerHeight)).toBe(true);
+  await page.screenshot({ path: info.outputPath('lobby-forge-phone.png') });
+  const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('asterveil.fateweave.expedition.v1')!));
+  expect(saved.version).toBe(11); expect(saved.profile.items).toHaveLength(1); expect(saved.profile.items[0]).toMatchObject({ uid: 1, rarity: 2 });
+  expect(saved.profile.bank).toMatchObject({ ore: 96, seal: 0, dust: 19 }); expect(saved.profile.forge).toBeGreaterThan(0);
 });
 
 test('levels: the map shows the monster level here and members’ levels; battles show enemy levels', async ({ page }, info) => {

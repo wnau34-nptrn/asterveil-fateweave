@@ -19,7 +19,7 @@ Approved 2026-10-14, re-planned 2026-10-15 for the mercenary roster.
 | L1. Lobby | Home → Lobby → Map; persistent profile (company ≤ 20, bank, board); choose the 4 + 4; withdraw/complete/wipe settle home | **Implemented** |
 | L2. Character creation | Commander (non-combat) name, crest and banner colour, once, between Home and Lobby | **Implemented** |
 | 2C-2. New classes | Six new mercenaries (ART-CHAR-MERC-ENEMY-001), one class mechanic at a time; ★3 skill and ★5 passive per class | **Implemented**: all 6 base classes (Garran spear, Mira archer, Toma alchemist, Sefa scout, Brann warden, Lio bard) and the ★3 skill + ★5 passive for all 10 classes (see Star unlocks) |
-| 2D. Equipment and level | 2D-1 member + monster levels; 2D-2 equipment (6 slots, 5 rarities, drops, inventory); 2D-3 sets; 2D-4 forge (enhance, fuse, reroll, salvage); 2D-5 map potions; 2D-1b passive talent tree | **In progress**: 2D-1 implemented (see Levels); 2D-1b implemented (see Talent tree); 2D-2 implemented (see Equipment); 2D-3 implemented (see Equipment sets) |
+| 2D. Equipment and level | 2D-1 member + monster levels; 2D-2 equipment (6 slots, 5 rarities, drops, inventory); 2D-3 sets; 2D-4 forge (enhance, fuse, reroll, salvage); 2D-5 map potions; 2D-1b passive talent tree | **In progress**: 2D-1 implemented (see Levels); 2D-1b implemented (see Talent tree); 2D-2 implemented (see Equipment); 2D-3 implemented (see Equipment sets); 2D-4 implemented (see Forge) |
 | 3. Choices and content | Events with fight/avoid choices, elites, mini boss, puzzles (rune order, push stone, lever), secrets, map quest "2 of 3" and side quests | Planned |
 | 4. Economy and wrap-up | Local gold and shop, salvage, fast travel between camps, elite respawn on rest, defeat penalty, whole-map balance simulation, completion screen | Planned |
 
@@ -497,3 +497,17 @@ Set percentages add to the star/level/talent percentages. The resolver reads the
 **Save v10.** Items may carry `set`; unknown sets are rejected. v9 data loads unchanged.
 
 **Tests.** `tests/sets.test.ts` (each bonus, 2 + 2 mixing, set rolls, zone sets, save) and a lobby browser test.
+
+## Forge (2D-4; design approved 2026-10-15, draft numbers)
+
+The lobby's **ช่าง** menu opens the forge sheet: every piece (bag or worn) in one list, then three actions on the chosen piece. Rules live in `core/world/forge.ts`, numbers in `map.equipment.forge`.
+
+- **Enhance (ตีบวก).** Always succeeds. Level n costs `3 + n` ore and `ceil(n / 2)` veil dust. Each level adds 6% to the slot's base stats (affixes unchanged). Caps by rarity: +5 / +10 / +15 / +20 / +25.
+- **Fuse (หลอมรวม).** The chosen piece (bag or worn) plus two bag pieces of the same slot and rarity become the chosen piece one rarity up. It keeps its class, level, set and affixes, gains affixes up to the new rarity's count (an epic fusing into a legendary gains a special instead), and keeps half its enhance level. The cheapest matching pieces are used (lowest enhance, then lowest level), and the sheet names them before the press. Another class's weapon can be material.
+- **Reroll (ปรับค่า).** One contract seal turns the chosen affix into one the piece does not have yet; the others stay.
+- **Salvage** of an enhanced piece returns 1 extra dust per enhance level.
+- Fuse and reroll draw from `(profile seed, forge)`, a counter saved in the profile, so a reload never changes a result.
+
+**Save v11.** Items may carry `plus` (checked against the rarity cap); the profile gains `forge` (older data: 0).
+
+**Tests.** `tests/forge.test.ts` (costs, caps, stats, worn pieces, fuse rules and determinism, reroll, salvage, save) and a lobby browser test.

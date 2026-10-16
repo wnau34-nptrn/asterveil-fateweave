@@ -6,11 +6,13 @@ import { expToNext, starred, type EncounterLookup } from '../core/world/world';
 import { actorArt, actorFootOrigins, lobbyArt, lobbyPose, unitsUrl, type LobbyPose } from '../game/visuals/assets';
 import { icon } from './icons';
 import { commanderBadge } from './commander-ui';
-import { heroText, itemLines, itemName, itemOwner, passiveText, slotIcon, slotText, talentBranches, talentHelp, wornSets } from './th';
+import { heroText, itemLines, itemName, itemOwner, passiveText, rarityText, setText, slotIcon, slotText, statName, talentBranches, talentHelp, wornSets } from './th';
+import { enhanceCost, enhanceReason, findItem, fuseMaterials, fuseReason, rerollReason } from '../core/world/forge';
 import { portrait, starRow } from './world-ui';
 
 export interface LobbyHost { hire(index: number): void; upgrade(id: string): void; dismiss(id: string): void; place(id: string, group: Group, other?: string): void; talent(id: string, node: TalentNode): void; resetTalents(id: string): void;
-  equip(id: string, uid: number): void; unequip(id: string, slot: GearSlot): void; salvage(uids: number[]): void; depart(): void; home(): void }
+  equip(id: string, uid: number): void; unequip(id: string, slot: GearSlot): void; salvage(uids: number[]): void;
+  enhance(uid: number): void; fuse(uid: number): void; reroll(uid: number, index: number): void; depart(): void; home(): void }
 export interface LobbyView { profile: Profile; message: string; saved: boolean; cheer?: string }
 const outcomeText = { complete: 'สำเร็จการเดินทาง', withdrawn: 'ถอนตัวกลับค่าย', wiped: 'ทีมล้มหมด · การเดินทางล้มเหลว' } as const;
 const groupName: Record<Group, string> = { deployed: 'ลงสนาม', reserve: 'สำรอง', bench: 'ในค่าย' };
@@ -22,7 +24,9 @@ export class LobbyUI {
   // The team, hire or talent-tree sheet floats over the camp; the scene alone shows when it is closed.
   // The tree sheet is its own window, opened from a member in the team sheet (`picked`).
   // The equipment sheet (2D-2) works the same way.
-  private sheet: 'team' | 'hire' | 'tree' | 'gear' | null = null;
+  // The forge (2D-4) is a third menu sheet.
+  private sheet: 'team' | 'hire' | 'tree' | 'gear' | 'forge' | null = null;
+  private forgeUid: number | undefined;
   private gearSlot: GearSlot | undefined;
   private confirmSalvage: number | undefined;
   private sceneDrawn = '';
@@ -36,7 +40,7 @@ export class LobbyUI {
       if (!b || b.disabled) return;
       const id = b.dataset.hero;
       switch (b.dataset.lobby) {
-        case 'tab': this.sheet = b.dataset.tab as 'team' | 'hire'; this.picked = undefined; this.confirmDismiss = false; this.draw(); this.focus(`#lobby-tab-${this.sheet}`); break;
+        case 'tab': this.sheet = b.dataset.tab as 'team' | 'hire' | 'forge'; this.picked = undefined; this.confirmDismiss = false; this.draw(); this.focus(`#lobby-tab-${this.sheet}`); break;
         case 'close': this.closeSheet(); break;
         case 'pick': this.pick(id, b.dataset.group as Group); break;
         case 'hire': this.host.hire(Number(b.dataset.index)); break;
@@ -59,6 +63,10 @@ export class LobbyUI {
           if (item && item.rarity >= 2 && this.confirmSalvage !== uid) { this.confirmSalvage = uid; this.draw(); this.focus(`#salvage-${uid}`); break; }
           this.confirmSalvage = undefined; this.host.salvage([uid]); this.focus('#lobby-sub-back'); break;
         }
+        case 'forge-pick': this.forgeUid = Number(b.dataset.uid); this.draw(); this.focus('#forge-enhance'); break;
+        case 'enhance': if (this.forgeUid) { this.host.enhance(this.forgeUid); this.focus('#forge-enhance'); } break;
+        case 'fuse': if (this.forgeUid) { this.host.fuse(this.forgeUid); this.focus('#forge-fuse'); } break;
+        case 'reroll': if (this.forgeUid) { const i = Number(b.dataset.index); this.host.reroll(this.forgeUid, i); this.focus(`#forge-reroll-${i}`); } break;
         case 'salvage-common': this.host.salvage(this.view!.profile.items.filter(i => i.rarity === 0).map(i => i.uid)); this.focus('#lobby-sub-back'); break;
         case 'talent': if (this.picked) { const node = b.dataset.node as TalentNode; this.host.talent(this.picked, node); this.focus(`#talent-${node}`); } break;
         case 'reset-talents': if (this.picked) { this.host.resetTalents(this.picked); this.focus('#lobby-tree-back'); } break;
@@ -99,7 +107,7 @@ export class LobbyUI {
     if (!this.root.querySelector('.lobby-scene-host')) this.root.innerHTML = '<div class="lobby-shell"><div class="lobby-scene-host"></div><div class="lobby-hud"></div></div>';
     const scene = this.scene(p);
     if (scene !== this.sceneDrawn) { this.root.querySelector('.lobby-scene-host')!.innerHTML = scene; this.sceneDrawn = scene; }
-    const menu = (id: 'team' | 'hire', glyph: Parameters<typeof icon>[0], label: string, badge: string) =>
+    const menu = (id: 'team' | 'hire' | 'forge', glyph: Parameters<typeof icon>[0], label: string, badge: string) =>
       `<button id="lobby-tab-${id}" data-lobby="tab" data-tab="${id}" class="lobby-menu-button${this.sheet === id || id === 'team' && (this.sheet === 'tree' || this.sheet === 'gear') ? ' active' : ''}" aria-expanded="${this.sheet === id || id === 'team' && (this.sheet === 'tree' || this.sheet === 'gear')}" aria-controls="lobby-sheet">${icon(glyph)}<span>${label}</span>${badge ? `<small>${badge}</small>` : ''}</button>`;
     const openOffers = boardOffers(p, this.map, this.lookup).filter((_, i) => !hireReason(p, this.map, this.lookup, i)).length;
     this.root.querySelector('.lobby-hud')!.innerHTML = `
@@ -109,11 +117,11 @@ export class LobbyUI {
       ${last ? `<p class="lobby-result glass-capsule ${toast}" data-outcome="${last.outcome}" role="status">${icon(last.outcome === 'wiped' ? 'danger' : last.outcome === 'complete' ? 'star' : 'camp')}<span><b>${outcomeText[last.outcome]}</b> · เดิน ${last.steps} ก้าว ชนะ ${last.wins} ศึก · ได้แร่ดาว ${last.ore}${last.seal ? ` ตราสัญญา ${last.seal}` : ''}${last.outcome === 'wiped' ? ' (เก็บได้ครึ่งเดียว)' : ''}${last.items ? ` · อุปกรณ์ ${last.items} ชิ้น` : ''}${last.salvaged ? ` (คลังเต็ม แยกชิ้นอัตโนมัติ ${last.salvaged})` : ''}</span></p>`
         : this.view!.message ? `<p class="lobby-result glass-capsule ${toast}" role="status"><span>${this.view!.message}</span></p>` : ''}
       ${this.sheet ? `<section id="lobby-sheet" class="lobby-sheet" role="dialog" aria-modal="false" aria-labelledby="lobby-sheet-title">
-        <div class="lobby-sheet-head">${this.sheet === 'tree' || this.sheet === 'gear' ? `<button id="lobby-sub-back" data-lobby="sub-back" class="round-glass" aria-label="กลับไปจัดทีม">${icon('left')}</button>` : ''}<h2 id="lobby-sheet-title">${this.sheet === 'team' ? `${icon('flag')} จัดทีม <small>${p.company.length}/${COMPANY_CAP}</small>` : this.sheet === 'tree' ? `${icon('starFilled')} ต้นไม้ความถนัด` : this.sheet === 'gear' ? `${icon('gearBody')} อุปกรณ์ <small>คลัง ${p.items.length}/${this.map.equipment.bagCap}</small>` : `${icon('ore')} ป้ายจ้างทหารรับจ้าง`}</h2>
+        <div class="lobby-sheet-head">${this.sheet === 'tree' || this.sheet === 'gear' ? `<button id="lobby-sub-back" data-lobby="sub-back" class="round-glass" aria-label="กลับไปจัดทีม">${icon('left')}</button>` : ''}<h2 id="lobby-sheet-title">${this.sheet === 'team' ? `${icon('flag')} จัดทีม <small>${p.company.length}/${COMPANY_CAP}</small>` : this.sheet === 'tree' ? `${icon('starFilled')} ต้นไม้ความถนัด` : this.sheet === 'gear' ? `${icon('gearBody')} อุปกรณ์ <small>คลัง ${p.items.length}/${this.map.equipment.bagCap}</small>` : this.sheet === 'forge' ? `${icon('dust')} ช่างตีเหล็ก` : `${icon('ore')} ป้ายจ้างทหารรับจ้าง`}</h2>
           <button data-lobby="close" class="round-glass" aria-label="ปิด">${icon('close')}</button></div>
-        <div class="lobby-content">${this.sheet === 'team' ? this.team(p) : this.sheet === 'tree' && this.picked ? this.tree(p, this.picked) : this.sheet === 'gear' && this.picked ? this.gear(p, this.picked) : this.board(p)}</div></section>` : ''}
+        <div class="lobby-content">${this.sheet === 'team' ? this.team(p) : this.sheet === 'tree' && this.picked ? this.tree(p, this.picked) : this.sheet === 'gear' && this.picked ? this.gear(p, this.picked) : this.sheet === 'forge' ? this.forge(p) : this.board(p)}</div></section>` : ''}
       <footer class="lobby-bottom">
-        <nav class="lobby-menu" aria-label="ค่าย">${menu('team', 'flag', 'ทีม', `${p.party.deployed.length}+${p.party.reserve.length}`)}${menu('hire', 'ore', 'จ้าง', openOffers ? String(openOffers) : '')}</nav>
+        <nav class="lobby-menu" aria-label="ค่าย">${menu('team', 'flag', 'ทีม', `${p.party.deployed.length}+${p.party.reserve.length}`)}${menu('hire', 'ore', 'จ้าง', openOffers ? String(openOffers) : '')}${menu('forge', 'dust', 'ช่าง', '')}</nav>
         <button id="lobby-depart" data-lobby="depart" class="primary"${ready ? '' : ' disabled'}>${icon('map')}<span>ออกเดินทาง<small>${this.map.name} · ${p.party.deployed.length}+${p.party.reserve.length} คน</small></span></button>
       </footer>`;
   }
@@ -210,6 +218,33 @@ export class LobbyUI {
     const worn = wornSets(this.map.equipment, gear); if (!worn.length) return '';
     return `<ul class="gear-sets" aria-label="ชุดอุปกรณ์ที่ใส่">${worn.map(w => `<li><b>ชุด${w.name}</b> <span>${w.pieces}/4 ชิ้น</span>
       <small class="${w.pieces >= 2 ? 'on' : ''}">2 ชิ้น: ${w.two}</small><small class="${w.pieces >= 4 ? 'on' : ''}">4 ชิ้น: ${w.four}</small></li>`).join('')}</ul>`;
+  }
+  // Forge (2D-4): pick any piece (bag or worn), then enhance, fuse or reroll it. All rules live in core/world/forge.
+  private forge(p: Profile): string {
+    const rules = this.map.equipment;
+    const all = [...p.items.map(i => ({ item: i, owner: undefined as string | undefined })),
+      ...Object.entries(p.members).flatMap(([owner, m]) => Object.values(m.gear ?? {}).map(i => ({ item: i!, owner })))].sort((a, b) => b.item.rarity - a.item.rarity || (b.item.plus ?? 0) - (a.item.plus ?? 0) || b.item.level - a.item.level);
+    if (this.forgeUid && !findItem(p, this.forgeUid)) this.forgeUid = undefined;
+    const list = all.map(({ item, owner }) => `<li data-rarity="${item.rarity}"><button id="forge-item-${item.uid}" data-lobby="forge-pick" data-uid="${item.uid}" class="forge-pick" aria-pressed="${this.forgeUid === item.uid}">
+      <b>${itemName(item)} Lv${item.level}</b><small>${owner ? `ใส่อยู่: ${heroText[owner]?.name ?? owner}` : 'ในคลัง'}${item.set ? ` · ชุด${setText[item.set]}` : ''}</small></button></li>`).join('');
+    const why: Record<string, string> = { maxed: 'เต็มแล้ว', ore: 'แร่ดาวไม่พอ', dust: 'ผงม่านเวลไม่พอ', seal: 'ตราสัญญาไม่พอ', materials: 'ชิ้นในคลังไม่พอ' };
+    let detail = '<p class="camp-note">แตะอุปกรณ์ด้านล่างเพื่อเลือกชิ้นที่จะพัฒนา</p>';
+    const found = this.forgeUid ? findItem(p, this.forgeUid) : undefined;
+    if (found) {
+      const { item } = found; const cost = enhanceCost(this.map, item); const eReason = enhanceReason(p, this.map, item.uid);
+      const mats = fuseMaterials(p, this.map, item.uid); const fReason = fuseReason(p, this.map, item.uid); const need = rules.forge.fuseCount - 1;
+      detail = `<div class="forge-detail" data-rarity="${item.rarity}"><p><b>${itemName(item)} Lv${item.level}</b> · ${itemLines(rules, item).join(' · ')}</p>
+        <h4>ตีบวก <small>สำเร็จทุกครั้ง · ค่าพื้นฐาน +${rules.forge.plusPercent}% ต่อขั้น · สูงสุด +${rules.forge.plusCap[item.rarity]}</small></h4>
+        <button id="forge-enhance" data-lobby="enhance" class="primary"${eReason ? ' disabled' : ''}>${cost ? `ตีบวก +${(item.plus ?? 0) + 1} · แร่ ${cost.ore} ผง ${cost.dust}` : 'ตีบวกเต็มแล้ว'}${eReason && eReason !== 'maxed' ? ` · ${why[eReason]}` : ''}</button>
+        <h4>หลอมรวม <small>ใช้${slotText[item.slot]}${rarityText[item.rarity]}ในคลังอีก ${need} ชิ้น · ได้ขั้นถัดไป เก็บชุดและค่าเดิม ระดับตีบวกเหลือครึ่ง</small></h4>
+        ${item.rarity < 4 ? `<p class="forge-mats">${mats.length ? `จะใช้: ${mats.map(m => `${itemName(m)} Lv${m.level}`).join(', ')}` : 'ยังไม่มีชิ้นที่ใช้หลอมได้'}</p>` : ''}
+        <button id="forge-fuse" data-lobby="fuse" class="secondary"${fReason ? ' disabled' : ''}>${item.rarity >= 4 ? 'ขั้นสูงสุดแล้ว' : `หลอมเป็น${rarityText[item.rarity + 1]}${fReason ? ` · ${why[fReason]}` : ''}`}</button>
+        ${item.affixes.length ? `<h4>ปรับค่า <small>ใช้ตราสัญญา ${rules.forge.rerollSeals} อัน สุ่มค่าที่เลือกใหม่ ค่าอื่นคงเดิม</small></h4>
+        <div class="forge-rerolls">${item.affixes.map((a, i) => { const r = rerollReason(p, this.map, item.uid, i);
+          return `<button id="forge-reroll-${i}" data-lobby="reroll" data-index="${i}" class="secondary"${r ? ' disabled' : ''}>สุ่ม${statName[a]}ใหม่${r ? ` · ${why[r]}` : ''}</button>`; }).join('')}</div>` : ''}</div>`;
+    }
+    return `<p class="hire-cost">${icon('ore')} ${p.bank.ore} · ${icon('dust')} ${p.bank.dust} · ${icon('seal')} ${p.bank.seal} · ผงม่านเวลได้จากการแยกชิ้น</p>${detail}
+      <h3>${icon('pack')} อุปกรณ์ทั้งหมด <span class="camp-embers">${all.length} ชิ้น</span></h3>${list ? `<ul class="forge-list">${list}</ul>` : '<p class="camp-note">ยังไม่มีอุปกรณ์ · ชนะศึกบนแผนที่เพื่อหาอุปกรณ์</p>'}`;
   }
   // Opens the member's talent tree in its own sheet.
   private treeButton(p: Profile, id: string): string {

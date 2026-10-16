@@ -55,7 +55,8 @@ export const GEAR_SLOTS: readonly GearSlot[] = ['weapon', 'head', 'body', 'glove
 export type GearStat = 'hp' | 'attack' | 'skill' | 'heal' | 'barrier' | 'speed';
 // Rarity 0 common … 4 legendary. Stat values come from (stat, level) through the rules, so an item stores
 // only what was rolled. `uid` is 0 while the item is still on the expedition (`found`).
-export interface Item { uid: number; slot: GearSlot; rarity: number; level: number; hero?: string; affixes: GearStat[]; special?: GearSpecial; set?: SetId }
+// `plus` (2D-4): forge enhance level (missing = +0).
+export interface Item { uid: number; slot: GearSlot; rarity: number; level: number; hero?: string; affixes: GearStat[]; special?: GearSpecial; set?: SetId; plus?: number }
 // ---- Equipment sets (2D-3, draft numbers): 2 pieces give a stat, 4 pieces a rule. ----
 export type SetId = 'dawn' | 'wind' | 'shadow' | 'thorn' | 'starveil' | 'mender';
 export const SET_IDS: readonly SetId[] = ['dawn', 'wind', 'shadow', 'thorn', 'starveil', 'mender'];
@@ -79,6 +80,15 @@ export interface EquipmentRules {
   salvage: readonly { ore: number; dust: number }[];
   // A dropped item belongs to one of its zone's sets at `setPercent` (the boss: any set).
   setPercent: number; sets: Readonly<Record<SetId, SetDefinition>>;
+  forge: ForgeRules;
+}
+// Forge (2D-4, draft numbers). Enhancing always succeeds: +1 costs `ore + orePerPlus × n` ore and ceil(n × dustPerPlus) dust
+// for the n-th level, up to `plusCap[rarity]`; each level adds `plusPercent` to the slot's base stats (not affixes).
+// Fusing three pieces of one slot and rarity raises the chosen main piece one rarity; rerolling one affix costs a seal.
+// Salvaging an enhanced piece returns `salvageDustPerPlus` dust per level on top.
+export interface ForgeRules {
+  plusCap: readonly number[]; plusPercent: number; ore: number; orePerPlus: number; dustPerPlus: number;
+  fuseCount: number; rerollSeals: number; salvageDustPerPlus: number;
 }
 export type Gear = Partial<Record<GearSlot, Item>>;
 // ---- Talent tree (2D-1b, draft numbers) ----
@@ -131,6 +141,8 @@ export interface Profile {
   bank: Bank;
   // Unequipped items (≤ bagCap) and the next item uid.
   items: Item[]; nextItem: number;
+  // Forge rolls used so far (fuse and reroll draw from (seed, forge)).
+  forge: number;
   // Hiring board taken indexes for the current `returns` count.
   taken: number[];
   expeditions: number; completes: number;
@@ -146,7 +158,8 @@ export type ProfileEvent =
   | { type: 'dismissed'; heroId: string }
   | { type: 'talent'; heroId: string }
   | { type: 'equipped'; heroId: string }
-  | { type: 'salvaged'; count: number; ore: number; dust: number };
+  | { type: 'salvaged'; count: number; ore: number; dust: number }
+  | { type: 'forged'; uid: number; action: 'enhance' | 'fuse' | 'reroll' };
 export interface ProfileResult { profile: Profile; event: ProfileEvent }
 // Up to 4 deployed (slot order = enemy target slots) and 4 in reserve, swapped at camps.
 export const PARTY_SLOTS = 4;
