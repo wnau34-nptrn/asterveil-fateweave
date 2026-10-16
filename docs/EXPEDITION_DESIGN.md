@@ -21,7 +21,7 @@ Approved 2026-10-14, re-planned 2026-10-15 for the mercenary roster.
 | 2C-2. New classes | Six new mercenaries (ART-CHAR-MERC-ENEMY-001), one class mechanic at a time; ★3 skill and ★5 passive per class | **Implemented**: all 6 base classes (Garran spear, Mira archer, Toma alchemist, Sefa scout, Brann warden, Lio bard) and the ★3 skill + ★5 passive for all 10 classes (see Star unlocks) |
 | 2D. Equipment and level | 2D-1 member + monster levels; 2D-2 equipment (6 slots, 5 rarities, drops, inventory); 2D-3 sets; 2D-4 forge (enhance, fuse, reroll, salvage); 2D-5 map potions; 2D-1b passive talent tree | **Implemented**: 2D-1 (see Levels), 2D-1b (Talent tree), 2D-2 (Equipment), 2D-3 (Equipment sets), 2D-4 (Forge), 2D-5 (Map potions); numbers are drafts |
 | 3. Choices and content | 3A events with fight/avoid choices and forced elites; later mini boss, puzzles (rune order, push stone, lever), secrets, map quest "2 of 3" and side quests | **3A–3D implemented** (see Events and elites; Rift seal and mini-boss; Puzzles and secrets; Camp side quests) |
-| 4. Economy and wrap-up | Local gold and shop, salvage, fast travel between camps, elite respawn on rest, defeat penalty, whole-map balance simulation, completion screen | Planned |
+| 4. Economy and wrap-up | Local gold and shop, salvage, fast travel between camps, elite respawn on rest, defeat penalty, whole-map balance simulation, completion screen | **4E simulation implemented** (see Balance simulation); tuning awaits owner decisions; others planned |
 
 Numbers in phases 2–4 are drafts and need owner approval after playtesting.
 
@@ -749,3 +749,47 @@ Then `startPrologue` starts the `first-clash` battle (now "กองหน้า
 **Tests:**
 - `tests/side-quests.test.ts`: content and geometry, herb pickup, settle, wipe, claim once, save v16 and migration.
 - A browser test picks a herb and claims the herbalist's reward.
+
+## Balance simulation (4E; 2026-10-16)
+
+**What it is.** `npm run sim` runs a scripted player through whole companies using only the pure rules: world, profile and battle.
+- It writes `docs/validation/balance-sim/REPORT.md`.
+- `npm test` keeps a small 3-company sweep as a guard: deterministic, every company finishes, wipes under a third, exploring pays more than rushing, and all 12 chests can be reached.
+- The code is `tests/sim/balance-sim.ts`. It changes no rules.
+
+**The scripted player.**
+- *Rush* breaks the seal (golem and rift) and fights the boss.
+- *Explorer* also takes every chest, herb, puzzle, secret, optional elite and event.
+- Battles are played either by the teaching advisor or by blind basic attacks on the first valid target. The blind player is a lower bound; a real player lies between the two.
+- Between expeditions it:
+  - claims quests, hires and upgrades stars;
+  - spends talents and equips the best pieces;
+  - salvages commons when the bag fills and brews salves.
+- On the map it:
+  - rests or revives at camps and swaps in reserves;
+  - drinks potions when low;
+  - withdraws when spent.
+- **Sweep:** 24 seeds × 6 expeditions per scenario.
+
+**Findings** (draft numbers; nothing has been retuned):
+
+1. **The advisor never loses.**
+   - Every battle kind is won 100% of the time, with 95–100% party HP after a win; the boss is beaten at full HP.
+   - Every company completes its first expedition.
+   - Battles are only dangerous for the blind player: 0% completion over 6 expeditions and 88–100% wipes. The forced elite is won 63% of the time and the optional elite 72%.
+2. **Levels cap on the first expedition.** With advisor battles both routes reach the level cap (10) in about 13 wins. Fighting up pays 120% EXP, and the curve needs only 540 EXP in total. Levels and talents stop growing after the first trip.
+3. **Ore and gold pile up.**
+   - One explorer run settles about 770 ore and 425 gold. That is 21 hires at 20 gold, against 3 board offers per return.
+   - After 6 expeditions the explorer bank holds about 4,300 ore and 2,300 gold.
+   - Stars are limited by duplicates (★3.3 at best), not by ore.
+4. **Side quests are finished in one explorer run.**
+   - The explorer claims all six before its second expedition.
+   - The rush player only ever finishes the broker and trainer quests.
+5. **The merchant tile (16,21) is the only way to the sun rune stone and the meadow-east chest.** Its dialog opens on every pass.
+
+**Tuning options for the owner** (not applied):
+- Levels: steeper curve (for example `nextBase` 20 and `nextPerLevel` 25), less EXP for fighting up, or a higher cap with chapters.
+- Battles: tougher elites, mini-boss and boss (HP or damage), or let fewer heals through. The target would be the advisor keeping about 60–75% HP and the blind player completing within 2–4 expeditions.
+- Economy: about half the ore and gold from chests and battles, or new sinks (a camp shop in 4A, forge costs).
+- Side quests: higher targets (for example 6 rare chests, 30 wins, 6 secrets), or a repeatable tier.
+- Map: move the merchant off the only path, or keep it as a deliberate stop.
