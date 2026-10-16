@@ -645,27 +645,28 @@ html, body { background: #0a1422; }
 /* Voiced advice in the first battle: the speaking hero's face beside the line. */
 .coach-face { flex: none; width: 40px; height: 40px; } .coach-face:empty { display: none; }
 .coach-face .portrait { display: block; width: 100%; height: 100%; border-radius: 50%; border: 2px solid #74d4ef99; }
-/* ---- Phase 3C: puzzle pieces and secret walls (code-drawn placeholders until painted art) ---- */
-.rune-stone { width: calc(var(--t) * .7); height: calc(var(--t) * .5); margin-top: calc(var(--t) * -.18); display: grid; place-items: center; border-radius: 50% / 45%;
-  background: radial-gradient(ellipse at 50% 40%, #5d6b80, #2b3546 70%); border: 2px solid #0b1626; box-shadow: inset 0 -3px 0 #0006; }
-.rune-stone i { font-style: normal; font-size: calc(var(--t) * .32); line-height: 1; color: #9fb3c8; }
-.rune-stone.lit { box-shadow: inset 0 -3px 0 #0006, 0 0 12px #8ef0ff; } .rune-stone.lit i { color: #e9fdff; text-shadow: 0 0 8px #8ef0ff; }
-.puzzle-door { width: var(--t); height: var(--t); display: grid; place-items: center;
-  background: linear-gradient(180deg, #4a3f55, #2b2433); border: 2px solid #120d18; border-radius: 6px 6px 2px 2px; box-shadow: inset 0 0 0 3px #6b5a7a66; }
-.puzzle-door i { font-style: normal; font-size: calc(var(--t) * .22); letter-spacing: .04em; color: #c9b8ff; text-shadow: 0 0 6px #8b6bd8; white-space: nowrap; }
-.puzzle-door.open, .secret-wall.found { border: 0; border-radius: 0; box-shadow: none;
-  background: url('/assets/world/tileset.webp') calc(var(--fx) * var(--t) * -1) calc(var(--fy) * var(--t) * -1) / calc(var(--t) * 4) calc(var(--t) * 6) no-repeat; }
-.puzzle-door.open i { display: none; }
-.lever { width: calc(var(--t) * .5); height: calc(var(--t) * .6); }
-.lever::before { content: ''; position: absolute; left: 15%; right: 15%; bottom: 0; height: 28%; border-radius: 4px; background: #3a4150; border: 2px solid #0b1626; }
-.lever i { position: absolute; left: 50%; bottom: 22%; width: 12%; height: 70%; transform-origin: 50% 100%; transform: translateX(-50%) rotate(-35deg); border-radius: 3px; background: #b9c8d8; box-shadow: 0 -4px 0 2px #ff8a7a; transition: transform .25s; }
-.lever.pulled i { transform: translateX(-50%) rotate(35deg); box-shadow: 0 -4px 0 2px #8ef0a8; }
-.boulder { width: calc(var(--t) * .86); height: calc(var(--t) * .78); border-radius: 46% 54% 42% 48%; background: radial-gradient(circle at 35% 30%, #a3a8ae, #5d636b 55%, #33373d); border: 2px solid #15181c;
-  transition: left .2s, top .2s; } .boulder.gone { display: none; }
-.pit { width: var(--t); height: var(--t); border-radius: 30%; background: radial-gradient(ellipse at 50% 50%, #000 40%, #0b1018cc 62%, transparent 72%); } .pit.filled { display: none; }
-.secret-wall { width: var(--t); height: var(--t);
-  background: linear-gradient(115deg, transparent 44%, #c79bff55 46%, transparent 49%), linear-gradient(60deg, transparent 52%, #c79bff40 54%, transparent 57%); }
-@media (prefers-reduced-motion: reduce) { .lever i, .boulder { transition: none; } }
+/* ---- Phase 3C puzzle pieces, painted (ART-WORLD-PUZZLE-001): 128 px cells in a 5×4 atlas, frame chosen by state ---- */
+.rune-stone, .puzzle-door, .lever, .boulder, .pit, .secret-wall, .door-glyph { width: var(--t); height: var(--t);
+  background: url('/assets/world/puzzle.webp') calc(var(--px) * var(--t) * -1) calc(var(--py) * var(--t) * -1) / calc(var(--t) * 5) calc(var(--t) * 4) no-repeat; }
+.rune-stone[data-glyph=star] { --px: 0; --py: 0; } .rune-stone[data-glyph=moon] { --px: 1; --py: 0; } .rune-stone[data-glyph=sun] { --px: 2; --py: 0; }
+.rune-stone.lit[data-glyph=star] { --px: 3; --py: 0; } .rune-stone.lit[data-glyph=moon] { --px: 4; --py: 0; } .rune-stone.lit[data-glyph=sun] { --px: 0; --py: 1; }
+.rune-stone.lit { filter: drop-shadow(0 0 6px #8ef0ffaa); }
+.lever { --px: 1; --py: 1; } .lever.pulled { --px: 2; --py: 1; }
+.boulder { --px: 3; --py: 1; transition: left .2s, top .2s; } .boulder.gone { display: none; }
+.pit { --px: 4; --py: 1; } .pit.filled { --px: 0; --py: 2; }
+.puzzle-door[data-kind=runes] { --px: 1; --py: 2; } .puzzle-door[data-kind=levers] { --px: 2; --py: 2; }
+.secret-wall { --px: 4; --py: 2; }
+/* Open doorways and found passages: the painted arch or rubble over the floor tile of a walkable neighbour. */
+.puzzle-door.open, .secret-wall.found {
+  background: url('/assets/world/puzzle.webp') calc(var(--px) * var(--t) * -1) calc(var(--py) * var(--t) * -1) / calc(var(--t) * 5) calc(var(--t) * 4) no-repeat,
+    url('/assets/world/tileset.webp') calc(var(--fx) * var(--t) * -1) calc(var(--fy) * var(--t) * -1) / calc(var(--t) * 4) calc(var(--t) * 6) no-repeat; }
+.puzzle-door.open { --px: 3; --py: 2; } .secret-wall.found { --px: 0; --py: 3; }
+/* The rune door shows the stone order in its three sockets. */
+.door-glyph { position: absolute; top: 8%; left: calc(29% + var(--n) * 14.5%); width: calc(var(--t) * .14); height: calc(var(--t) * .14);
+  background-size: calc(var(--t) * .7) calc(var(--t) * .56); background-position: calc(var(--px) * var(--t) * -.14) calc(var(--py) * var(--t) * -.14); }
+.door-glyph[data-glyph=star] { --px: 1; --py: 3; } .door-glyph[data-glyph=moon] { --px: 2; --py: 3; } .door-glyph[data-glyph=sun] { --px: 3; --py: 3; }
+.puzzle-door.open .door-glyph { display: none; }
+@media (prefers-reduced-motion: reduce) { .boulder { transition: none; } }
 
 /* ---- Phase 3D: camp side quests and glowing herbs ---- */
 .side-quest { margin: 8px 0 12px; padding: 10px 12px; border-radius: 14px; background: #0d1c2ecc; border: 1px solid #74d4ef44; }

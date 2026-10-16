@@ -8,8 +8,6 @@ import { questLine, choiceText, eventChoices, eventReasonText, eventText, heroTe
 import { icon, type IconName } from './icons';
 import { gearArt, potionArt } from './equip-art';
 import { boulderPosition, doorOpen, openPit, secretAt } from '../core/world/puzzles';
-import type { RuneGlyph } from '../core/world/types';
-const glyph: Record<RuneGlyph, string> = { star: '✦', moon: '☾', sun: '☀' };
 
 export interface WorldHost { move(dir: Direction): void; rest(): void; revive(heroId: string): void; swap(a: string, b: string): void; moveMember(id: string): void; withdraw(): void; openChest(): void;
   usePotion(potion: PotionId, heroId?: string): void; chooseEvent(choice: EventChoice): void }
@@ -226,13 +224,13 @@ export class WorldUI {
     let html = '';
     for (const r of P.runes) {
       const i = r.stones.findIndex(at);
-      if (i >= 0) html += `<span class="rune-stone sprite" data-cell="${x},${y}" data-rune="${r.id}" data-index="${i}" data-glyph="${r.stones[i]!.glyph}" ${pos}><i>${glyph[r.stones[i]!.glyph]}</i></span>`;
-      if (at(r.door)) html += `<span class="puzzle-door sprite" data-cell="${x},${y}" data-door="${r.id}" data-kind="runes" style="--x:${x};--y:${y};z-index:${y * 3 + 1};${opening()}"><i>${r.stones.map(s => glyph[s.glyph]).join('')}</i></span>`;
+      if (i >= 0) html += `<span class="rune-stone sprite" data-cell="${x},${y}" data-rune="${r.id}" data-index="${i}" data-glyph="${r.stones[i]!.glyph}" aria-hidden="true" ${pos}></span>`;
+      if (at(r.door)) html += `<span class="puzzle-door sprite" data-cell="${x},${y}" data-door="${r.id}" data-kind="runes" style="--x:${x};--y:${y};z-index:${y * 3 + 1};${opening()}">${r.stones.map((s, n) => `<i class="door-glyph" data-glyph="${s.glyph}" style="--n:${n}"></i>`).join('')}</span>`;
     }
     for (const l of P.levers) {
       const i = l.levers.findIndex(at);
       if (i >= 0) html += `<span class="lever sprite" data-cell="${x},${y}" data-lever="${l.id}:${i}" ${pos}><i></i></span>`;
-      if (at(l.door)) html += `<span class="puzzle-door sprite" data-cell="${x},${y}" data-door="${l.id}" data-kind="levers" style="--x:${x};--y:${y};z-index:${y * 3 + 1};${opening()}"><i>${'◖'.repeat(l.levers.length)}</i></span>`;
+      if (at(l.door)) html += `<span class="puzzle-door sprite" data-cell="${x},${y}" data-door="${l.id}" data-kind="levers" style="--x:${x};--y:${y};z-index:${y * 3 + 1};${opening()}"></span>`;
     }
     for (const b of P.boulders) {
       if (at(b.pit)) html += `<span class="pit sprite" data-cell="${x},${y}" data-pit="${b.id}" ${pos}></span>`;

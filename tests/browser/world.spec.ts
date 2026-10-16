@@ -551,7 +551,7 @@ test('puzzles: rune stones in order open the vault door, a boulder fills its pit
   await page.reload(); await page.locator('#continue').click();
   await expect(page.locator('.pit')).toBeVisible(); await page.screenshot({ path: info.outputPath('puzzle-boulder.png') });
   await page.locator('#move-right').click(); await expect(page.locator('#world-message')).toContainText('ผลักหินลงหลุม');
-  await expect(page.locator('.pit')).toBeHidden(); await expect(page.locator('.boulder')).toBeHidden();
+  await expect(page.locator('.pit')).toHaveClass(/filled/); await expect(page.locator('.boulder')).toBeHidden();
   // Secret wall: no hint before it is found, then walk through.
   const sec = P.secrets[0]!;
   await page.evaluate(([k, x, y]) => { const s = JSON.parse(localStorage.getItem(k as string)!); s.run.position = { x: (x as number) + 1, y }; localStorage.setItem(k as string, JSON.stringify(s)); }, [key, sec.x, sec.y]);
