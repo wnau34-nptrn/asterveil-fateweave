@@ -1,13 +1,14 @@
 import type { HeroDefinition } from '../core/battle/types';
-import type { Direction, ExpeditionState, MapDefinition, Point } from '../core/world/types';
+import type { Direction, ExpeditionState, MapDefinition, Point, PotionId } from '../core/world/types';
 import { atCamp, atMuster, canOpenChest, canRest, canRevive, chestAt, encounterChance, isRevealed, monsterLevelAt, rosterIds, starred, tileAt, zoneOf } from '../core/world/world';
-import { PARTY_SLOTS, RESERVE_SLOTS } from '../core/world/types';
+import { PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS } from '../core/world/types';
 import { actorArt, portraitsUrl, sheetRows } from '../game/visuals/assets';
 import { SOURCE_TILE, chestFrame, decorAt, itemFrame, floorFrame, fogLayers, landmarkAt, tileSizeFor, tileset, worldArtUrl, type Landmark } from '../game/visuals/world-art';
-import { heroText, itemLines, itemName, resourceOrder, resourceText } from './th';
+import { heroText, itemLines, itemName, potionIcon, potionText, resourceOrder, resourceText } from './th';
 import { icon } from './icons';
 
-export interface WorldHost { move(dir: Direction): void; rest(): void; revive(heroId: string): void; swap(a: string, b: string): void; moveMember(id: string): void; withdraw(): void; openChest(): void }
+export interface WorldHost { move(dir: Direction): void; rest(): void; revive(heroId: string): void; swap(a: string, b: string): void; moveMember(id: string): void; withdraw(): void; openChest(): void;
+  usePotion(potion: PotionId, heroId?: string): void }
 export interface WorldBanner { kind: 'encounter' | 'boss' | 'tutorial' | 'complete'; eyebrow: string; title: string; detail: string }
 export interface WorldView { state: ExpeditionState; message: string; locked: boolean; saved: boolean; banner?: WorldBanner; effect?: 'rest' | 'loot' }
 
@@ -109,6 +110,12 @@ export class WorldUI {
             this.confirmWithdraw = false; dialog('#camp-dialog').close(); this.host.withdraw(); break;
           case 'pack': this.renderPack(); dialog('#pack-dialog').showModal(); break;
           case 'pack-close': dialog('#pack-dialog').close(); break;
+          case 'potion': if (!this.view?.locked) {
+            const potion = button.dataset.potion as PotionId;
+            // A salve first asks who drinks it.
+            if (potion === 'salve' && !button.dataset.hero) { this.salvePick = !this.salvePick; this.renderPack(); this.root.querySelector<HTMLElement>('#potion-salve')?.focus(); break; }
+            this.salvePick = false; this.host.usePotion(potion, button.dataset.hero); this.renderPack(); this.root.querySelector<HTMLElement>(`#potion-${potion}`)?.focus();
+          } break;
           case 'info': this.renderInfo(); dialog('#world-info').showModal(); break;
           case 'info-close': dialog('#world-info').close(); break;
           case 'goals': this.renderGoals(); dialog('#world-goals').showModal(); break;
@@ -225,16 +232,37 @@ export class WorldUI {
 
   private renderPackButton(s: ExpeditionState, gained: boolean): void {
     const pack = this.root.querySelector<HTMLElement>('#world-pack')!;
+    const potions = POTION_IDS.reduce((n, id) => n + s.potions[id], 0);
     pack.innerHTML = resourceOrder.map(id => `<span class="pack-item" data-resource="${id}">${icon(id)}<b>${s.resources[id]}</b></span>`).join('')
+      + (potions ? `<span class="pack-item" data-resource="potion">${icon('potionSalve')}<b>${potions}</b></span>` : '')
       + (s.found.length ? `<span class="pack-item" data-resource="gear">${icon('gearBody')}<b>${s.found.length}</b></span>` : '');
     pack.setAttribute('aria-label', `สัมภาระ · ${resourceOrder.map(id => `${resourceText[id].name} ${s.resources[id]}`).join(' · ')}${s.found.length ? ` · อุปกรณ์ ${s.found.length} ชิ้น` : ''} · เปิดรายละเอียด`);
     if (gained && !this.reduced.matches) { pack.classList.remove('gain'); void pack.offsetWidth; pack.classList.add('gain'); }
   }
 
+  private salvePick = false;
+  // Map potions (2D-5): use buttons with live reasons; a salve lists who can drink it.
+  private potionSection(s: ExpeditionState): string {
+    const reasons: Record<string, string> = { none: 'ไม่มีแล้ว', full: 'เลือดเต็มทุกคน', active: 'ยังออกฤทธิ์อยู่', busy: 'ใช้ตอนนี้ไม่ได้' };
+    const why = (potion: PotionId) => {
+      if (s.battle || s.completed) return reasons.busy!;
+      if (s.potions[potion] <= 0) return reasons.none!;
+      const hurt = rosterIds(s).some(id => s.hp[id]! > 0 && s.hp[id]! < this.hero(id, s).maxHp);
+      if (potion !== 'repel' && !hurt) return reasons.full!;
+      return potion === 'repel' && s.repel > 0 ? reasons.active! : '';
+    };
+    const rows = POTION_IDS.map(id => { const reason = why(id);
+      return `<li data-potion="${id}">${icon(potionIcon[id])}<div><b>${potionText[id].name}</b><small>${potionText[id].help(this.map.potions)}</small></div><strong>${s.potions[id]}</strong>
+        <button id="potion-${id}" data-world="potion" data-potion="${id}" class="secondary"${reason ? ' disabled' : ''} aria-expanded="${id === 'salve' ? this.salvePick : false}">${reason || (id === 'salve' && this.salvePick ? 'เลือกคน' : 'ใช้')}</button></li>`; }).join('');
+    const targets = this.salvePick ? rosterIds(s).filter(id => s.hp[id]! > 0 && s.hp[id]! < this.hero(id, s).maxHp)
+      .map(id => `<button id="salve-${id}" data-world="potion" data-potion="salve" data-hero="${id}" class="secondary salve-target">${portrait(id)}<span>${heroText[id]!.name}<small>${s.hp[id]}/${this.hero(id, s).maxHp}</small></span></button>`).join('') : '';
+    return `<h3 class="pack-gear-title">${icon('potionSalve')} ยา <small>พกได้อย่างละ ${this.map.potions.carry} · ใช้บนแผนที่เท่านั้น</small></h3><ul class="pack-potions">${rows}</ul>
+      ${targets ? `<div class="salve-targets" role="group" aria-label="เลือกคนดื่มยาฟื้นแผล">${targets}</div>` : ''}${s.repel > 0 ? `<p class="world-stats">ยาไล่ม่านเหลือ ${s.repel} ก้าว</p>` : ''}`;
+  }
   private renderPack(): void {
     const s = this.view?.state; if (!s) return;
     const opened = s.openedChests.length;
-    this.root.querySelector('#pack-content')!.innerHTML = `<ul class="pack-list">${resourceOrder.map(id => `<li data-resource="${id}">${itemArt(id)}<div><b>${resourceText[id].name}</b><small>${resourceText[id].use}</small></div><strong>${s.resources[id]}</strong></li>`).join('')}</ul>
+    this.root.querySelector('#pack-content')!.innerHTML = `${this.potionSection(s)}<ul class="pack-list">${resourceOrder.map(id => `<li data-resource="${id}">${itemArt(id)}<div><b>${resourceText[id].name}</b><small>${resourceText[id].use}</small></div><strong>${s.resources[id]}</strong></li>`).join('')}</ul>
       ${s.found.length ? `<h3 class="pack-gear-title">${icon('gearBody')} อุปกรณ์ที่เจอ ${s.found.length} ชิ้น</h3><ul class="pack-gear">${s.found.map(i => `<li data-rarity="${i.rarity}"><b>${itemName(i)} Lv${i.level}</b><small>${itemLines(this.map.equipment, i).join(' · ')}</small></li>`).join('')}</ul><p class="world-stats">ใส่ได้ที่ค่ายหลังกลับจากการเดินทาง · ถ้าทีมล้มหมดอุปกรณ์ที่เจอรอบนี้จะหาย</p>` : ''}
       <p class="world-stats">เปิดกล่องสมบัติแล้ว ${opened}/${this.map.chests.length} กล่อง · ของตกจากศึกที่ชนะและกล่องสมบัติ</p>`;
   }
@@ -287,7 +315,8 @@ export class WorldUI {
     const level = chance === 0 ? 'safe' : chance < 15 ? 'low' : chance < 30 ? 'mid' : 'high';
     chip.dataset.level = level;
     const fill = level === 'safe' ? 1 : Math.min(1, chance / 40);
-    chip.innerHTML = `<span class="danger-label">${icon(level === 'safe' ? 'safe' : 'danger')}<span>${level === 'safe' ? 'ปลอดภัย' : 'ก้าวถัดไป'}</span><strong>${chance}%</strong></span><span class="gauge"><span style="width:${fill * 100}%"></span></span>`;
+    const repel = this.view?.state.repel ?? 0;
+    chip.innerHTML = `<span class="danger-label">${icon(level === 'safe' ? (repel ? 'potionRepel' : 'safe') : 'danger')}<span>${repel ? `ไล่ม่าน ${repel} ก้าว` : level === 'safe' ? 'ปลอดภัย' : 'ก้าวถัดไป'}</span><strong>${chance}%</strong></span><span class="gauge"><span style="width:${fill * 100}%"></span></span>`;
     chip.setAttribute('aria-label', level === 'safe' ? 'พื้นที่ปลอดภัย โอกาสพบศัตรู 0 เปอร์เซ็นต์' : `โอกาสพบศัตรูในก้าวถัดไป ${chance} เปอร์เซ็นต์`);
     if (before !== undefined && chance > before && !this.reduced.matches) { chip.classList.remove('rise'); void chip.offsetWidth; chip.classList.add('rise'); }
   }

@@ -1,6 +1,6 @@
-import type { Commander, ExpeditionState, GearSlot, Item, MapDefinition, MemberProgress, Profile, ProfileResult, RunOutcome, TalentNode, Talents } from './types';
+import type { Commander, ExpeditionState, GearSlot, Item, MapDefinition, MemberProgress, PotionId, Potions, Profile, ProfileResult, RunOutcome, TalentNode, Talents } from './types';
 import { salvageValue } from './equipment';
-import { COMPANY_CAP, PARTY_SLOTS, RESERVE_SLOTS } from './types';
+import { COMPANY_CAP, PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS } from './types';
 import { heroCatalog, levelOf, newExpedition, rollPercent, type EncounterLookup } from './world';
 
 // Pure lobby rules: the persistent mercenary company, the bank, the hiring board, the
@@ -10,7 +10,7 @@ export function newProfile(map: MapDefinition, seed: number): Profile {
     seed: seed >>> 0, returns: 0, tutorialDone: false, commander: null,
     company: [...map.startingRoster], members: Object.fromEntries(map.startingRoster.map(id => [id, { stars: 1, dupes: 0 }])),
     party: { deployed: [...map.startingRoster], reserve: [] },
-    bank: { ore: 0, seal: 0, dust: 0 }, items: [], nextItem: 1, forge: 0, taken: [], expeditions: 0, completes: 0, last: null,
+    bank: { ore: 0, seal: 0, dust: 0 }, items: [], nextItem: 1, forge: 0, potions: { salve: 0, tonic: 0, repel: 0 }, taken: [], expeditions: 0, completes: 0, last: null,
   };
 }
 const blocked = (profile: Profile, reason: string): ProfileResult => ({ profile, event: { type: 'blocked', reason } });
@@ -205,8 +205,26 @@ export function placeMember(initial: Profile, id: string, target: Group, other?:
 
 // Starts an expedition with the chosen 4 + 4 at full HP and their current stars.
 export function departure(profile: Profile, map: MapDefinition, lookup: EncounterLookup, seed: number): ExpeditionState {
-  const ids = [...profile.party.deployed, ...profile.party.reserve];
-  return newExpedition(map, lookup, seed, { roster: structuredClone(profile.party), members: Object.fromEntries(ids.map(id => [id, { ...profile.members[id]! }])) }, profile.tutorialDone);
+  return depart(profile, map, lookup, seed).run;
+}
+// Departing also packs up to `carry` of each brewed potion, taken out of the home stock (2D-5).
+export function depart(initial: Profile, map: MapDefinition, lookup: EncounterLookup, seed: number): { profile: Profile; run: ExpeditionState } {
+  const profile = structuredClone(initial); const ids = [...profile.party.deployed, ...profile.party.reserve];
+  const potions = Object.fromEntries(POTION_IDS.map(id => [id, Math.min(map.potions.carry, profile.potions[id])])) as Potions;
+  for (const id of POTION_IDS) profile.potions[id] -= potions[id];
+  const run = newExpedition(map, lookup, seed, { roster: structuredClone(profile.party), members: Object.fromEntries(ids.map(id => [id, { ...profile.members[id]! }])), potions }, profile.tutorialDone);
+  return { profile, run };
+}
+// ---- Potions (2D-5): brewed in the lobby for ore and veil dust; stock at home has no cap. ----
+export function brewReason(profile: Profile, map: MapDefinition, potion: PotionId): string {
+  const cost = map.potions.brew[potion]; if (!cost) return 'unknown';
+  return profile.bank.ore < cost.ore ? 'ore' : profile.bank.dust < cost.dust ? 'dust' : '';
+}
+export function brew(initial: Profile, map: MapDefinition, potion: PotionId): ProfileResult {
+  const reason = brewReason(initial, map, potion); if (reason) return blocked(initial, reason);
+  const profile = structuredClone(initial); const cost = map.potions.brew[potion];
+  profile.bank.ore -= cost.ore; profile.bank.dust -= cost.dust; profile.potions[potion]++;
+  return { profile, event: { type: 'brewed', potion } };
 }
 // Share of carried ore/seals kept when the expedition ends this way (embers never leave the map).
 export const keptPercent: Record<RunOutcome, number> = { complete: 100, withdrawn: 100, wiped: 50 };
@@ -217,6 +235,8 @@ export function settle(initial: Profile, run: ExpeditionState, outcome: RunOutco
   // Found equipment comes home unless the team was wiped; a full bag salvages the rest (2D-2).
   let items = 0, salvaged = 0;
   if (outcome !== 'wiped') for (const found of run.found) { if (stash(profile, map, { ...found, uid: profile.nextItem++ })) items++; else salvaged++; }
+  // Unused potions come home too, unless the team was wiped.
+  if (outcome !== 'wiped') for (const id of POTION_IDS) profile.potions[id] += run.potions[id];
   // Levels and EXP earned on the run are kept whatever the outcome (2D-1).
   for (const [id, m] of Object.entries(run.members)) if (profile.members[id] && m.level) profile.members[id] = { ...profile.members[id]!, level: m.level, exp: m.exp ?? 0 };
   profile.tutorialDone ||= run.tutorialDone; profile.expeditions++; if (outcome === 'complete') profile.completes++;

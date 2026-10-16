@@ -1,11 +1,11 @@
 import type { BattleState, Outcome } from '../core/battle/types';
 import { clearLegacySaves, loadGame, saveGame, type Game } from '../core/save/expedition-save';
-import { createCommander, departure, dismiss, equip, hire, learnTalent, newProfile, placeMember, resetTalents, salvage, settle, unequip, upgrade, canWithdraw } from '../core/world/profile';
-import type { Direction, ExpeditionState, MapDefinition, Profile, ProfileResult, RunOutcome, WorldEvent } from '../core/world/types';
-import { battleData, finishBattle, heroCatalog, move, moveMember, openChest, recordBattle, rest, revive, swapMembers, type EncounterLookup } from '../core/world/world';
+import { createCommander, depart, brew, dismiss, equip, hire, learnTalent, newProfile, placeMember, resetTalents, salvage, settle, unequip, upgrade, canWithdraw } from '../core/world/profile';
+import type { Direction, ExpeditionState, MapDefinition, PotionId, Profile, ProfileResult, RunOutcome, WorldEvent } from '../core/world/types';
+import { battleData, finishBattle, heroCatalog, move, moveMember, openChest, recordBattle, usePotion, rest, revive, swapMembers, type EncounterLookup } from '../core/world/world';
 import { browserStorage } from '../platform/browser-storage';
 import type { BattleUI } from './battle-ui';
-import { expThai, heroText, itemLines, itemName, lootThai } from './th';
+import { expThai, heroText, itemLines, itemName, lootThai, potionText } from './th';
 import { enhance, findItem, fuse, reroll } from '../core/world/forge';
 import { CommanderUI } from './commander-ui';
 import { LobbyUI } from './lobby-ui';
@@ -40,7 +40,7 @@ export class GameShell {
     this.game = loadGame(this.storage, map, lookup);
     this.world = new WorldUI(views.world, map, heroCatalog(lookup, map), {
       move: dir => this.move(dir), rest: () => this.rest(), revive: id => this.revive(id), swap: (a, b) => this.roster(swapMembers(this.state!, map, a, b)), moveMember: id => this.roster(moveMember(this.state!, map, id)),
-      withdraw: () => this.endRun('withdrawn'), openChest: () => this.openChest(),
+      withdraw: () => this.endRun('withdrawn'), openChest: () => this.openChest(), usePotion: (potion, id) => this.drink(potion, id),
     });
     this.lobby = new LobbyUI(views.lobby, map, lookup, heroCatalog(lookup, map), {
       hire: i => this.profileChange(hire(this.game!.profile, map, lookup, i)), upgrade: id => this.profileChange(upgrade(this.game!.profile, map, id)),
@@ -49,7 +49,7 @@ export class GameShell {
       equip: (id, uid) => this.profileChange(equip(this.game!.profile, id, uid)), unequip: (id, slot) => this.profileChange(unequip(this.game!.profile, map, id, slot)),
       salvage: uids => this.profileChange(salvage(this.game!.profile, map, uids)),
       enhance: uid => this.profileChange(enhance(this.game!.profile, map, uid)), fuse: uid => this.profileChange(fuse(this.game!.profile, map, uid)),
-      reroll: (uid, i) => this.profileChange(reroll(this.game!.profile, map, uid, i)),
+      reroll: (uid, i) => this.profileChange(reroll(this.game!.profile, map, uid, i)), brew: potion => this.profileChange(brew(this.game!.profile, map, potion)),
       depart: () => this.depart(), home: () => this.showTitle(),
     });
     this.commander = new CommanderUI(views.commander, { create: c => this.createCommander(c), back: () => { this.replacing = false; this.showTitle(); } });
@@ -115,7 +115,7 @@ export class GameShell {
     this.game = { ...this.game, profile: { ...result.profile, last: null } }; this.persist();
     this.lobbyMessage = e.type === 'hired' ? (e.duplicate ? `ได้ตัวซ้ำของ${name(e.heroId)} · ใช้อัปดาวในแท็บทีม` : `จ้าง${name(e.heroId)}แล้ว`)
       : e.type === 'upgraded' ? `${name(e.heroId)}ขึ้นเป็น ★${e.stars} แล้ว` : e.type === 'dismissed' ? `เลิกจ้าง${name(e.heroId)}แล้ว · ได้แร่ดาวคืน ${this.map.company.dismissRefund}` : e.type === 'talent' || e.type === 'equipped' ? '' : e.type === 'salvaged' ? `แยกชิ้น ${e.count} ชิ้น · ได้แร่ดาว ${e.ore} ผงม่านเวล ${e.dust}`
-      : e.type === 'forged' ? this.forgedText(result.profile, e.uid, e.action) : 'จัดทีมแล้ว';
+      : e.type === 'forged' ? this.forgedText(result.profile, e.uid, e.action) : e.type === 'brewed' ? `ปรุง${potionText[e.potion].name}แล้ว · มีอยู่ ${result.profile.potions[e.potion]} ขวด` : 'จัดทีมแล้ว';
     this.lobbyCheer = e.type === 'hired' || e.type === 'upgraded' ? e.heroId : '';
     this.showLobby();
   }
@@ -126,7 +126,8 @@ export class GameShell {
   }
   private depart(): void {
     if (!this.game || this.game.run) return;
-    this.game = { profile: { ...this.game.profile, last: null }, run: departure(this.game.profile, this.map, this.lookup, this.freshSeed()) };
+    const out = depart(this.game.profile, this.map, this.lookup, this.freshSeed());
+    this.game = { profile: { ...out.profile, last: null }, run: out.run };
     this.persist(); this.banner = undefined; this.locked = false; this.lobbyMessage = ''; this.lobbyCheer = '';
     this.message = 'แตะช่องที่ไฮไลต์หรือใช้ลูกศรเพื่อเดิน';
     this.renderWorld();
@@ -198,12 +199,22 @@ export class GameShell {
     this.message = 'จัดทีมแล้ว · ศัตรูเล็งตามหมายเลขช่อง';
     this.renderWorld();
   }
+  // Map potions (2D-5): saved at once, like every other map action.
+  private drink(potion: PotionId, heroId?: string): void {
+    if (!this.state || this.locked) return;
+    const result = usePotion(this.state, this.map, this.lookup, potion, heroId);
+    if (result.event.type !== 'potion') return;
+    this.state = result.state; this.persist();
+    const healed = Object.entries(result.event.heal ?? {}).map(([id, n]) => `${heroText[id]?.name ?? id} +${n}`).join(' · ');
+    this.message = `${potionText[potion].name} · ${potion === 'repel' ? `ไม่เจอศัตรูสุ่ม ${this.map.potions.repelSteps} ก้าว` : `ฟื้นเลือด ${healed}`}`;
+    this.renderWorld();
+  }
   private openChest(): void {
     if (!this.state || this.locked) return;
     const result = openChest(this.state, this.map);
     if (result.event.type !== 'chest') return;
     this.state = result.state; this.persist();
-    this.message = `เปิดกล่องสมบัติ · ${lootThai(result.event.loot)}`;
+    this.message = `เปิดกล่องสมบัติ · ${lootThai(result.event.loot)}${result.event.potion ? ` · ${potionText[result.event.potion].name} +1` : ''}`;
     this.effect = 'loot';
     this.renderWorld();
   }

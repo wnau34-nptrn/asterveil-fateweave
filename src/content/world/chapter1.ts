@@ -74,6 +74,12 @@ export const chapterOne: MapDefinition = {
   // Draft 2D-1 numbers: a first full run ends near level 9; farming low levels is tapered (world `expPercent`).
   progression: { levelCap: 10, levelStatPercent: 3, monsterLevelPercent: 7, expBase: 6, expPerLevel: 2, bossExpMultiplier: 3, nextBase: 10, nextPerLevel: 10 },
   talents: talentTrees,
+  // Map potions (2D-5, draft numbers).
+  potions: {
+    carry: 3, salvePercent: 40, tonicPercent: 20, repelSteps: 10,
+    brew: { salve: { ore: 6, dust: 2 }, tonic: { ore: 10, dust: 4 }, repel: { ore: 8, dust: 3 } },
+    chest: { common: { chance: 35, weights: { salve: 3, tonic: 1, repel: 1 } }, rare: { chance: 70, weights: { salve: 1, tonic: 2, repel: 2 } } },
+  },
   // Equipment (2D-2, draft numbers; docs/EXPEDITION_DESIGN.md "Equipment").
   equipment: {
     bagCap: 60,

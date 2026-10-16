@@ -43,6 +43,7 @@ export interface MapDefinition {
   mercenaries: readonly HeroDefinition[];
   company: CompanyRules;
   progression: ProgressionRules;
+  potions: PotionRules;
   // Passive talent tree per hero id (2D-1b).
   talents: Readonly<Record<string, TalentTree>>;
   equipment: EquipmentRules;
@@ -81,6 +82,19 @@ export interface EquipmentRules {
   // A dropped item belongs to one of its zone's sets at `setPercent` (the boss: any set).
   setPercent: number; sets: Readonly<Record<SetId, SetDefinition>>;
   forge: ForgeRules;
+}
+// ---- Map potions (2D-5, draft numbers) ----
+// salve heals one standing member, tonic every standing member (percent of max HP); repel stops random
+// encounters for `repelSteps` steps. Potions are used on the map only, never in battle.
+export type PotionId = 'salve' | 'tonic' | 'repel';
+export const POTION_IDS: readonly PotionId[] = ['salve', 'tonic', 'repel'];
+export type Potions = Record<PotionId, number>;
+export interface PotionRules {
+  carry: number; salvePercent: number; tonicPercent: number; repelSteps: number;
+  // Brewing cost in the lobby, per potion.
+  brew: Readonly<Record<PotionId, { ore: number; dust: number }>>;
+  // A chest adds one potion at `chance` percent (if the party can carry it), picked by weight.
+  chest: Readonly<Record<ChestTier, { chance: number; weights: Readonly<Record<PotionId, number>> }>>;
 }
 // Forge (2D-4, draft numbers). Enhancing always succeeds: +1 costs `ore + orePerPlus × n` ore and ceil(n × dustPerPlus) dust
 // for the n-th level, up to `plusCap[rarity]`; each level adds `plusPercent` to the slot's base stats (not affixes).
@@ -122,7 +136,8 @@ export interface CompanyRules {
 // `talents` (2D-1b): ranks spent per node; missing means none. `gear` (2D-2): equipped items by slot.
 export interface MemberProgress { stars: number; dupes: number; level?: number; exp?: number; talents?: Talents; gear?: Gear }
 // The team brought into one expedition and their star progress (fixed during the run).
-export interface Company { roster: Roster; members: Record<string, MemberProgress> }
+// `potions`: what the expedition packs (2D-5; missing = none).
+export interface Company { roster: Roster; members: Record<string, MemberProgress>; potions?: Potions }
 
 // ---- Lobby profile (persistent between expeditions) ----
 export const COMPANY_CAP = 20;
@@ -143,6 +158,8 @@ export interface Profile {
   items: Item[]; nextItem: number;
   // Forge rolls used so far (fuse and reroll draw from (seed, forge)).
   forge: number;
+  // Brewed potions waiting at home (2D-5); a departure packs up to `carry` of each.
+  potions: Potions;
   // Hiring board taken indexes for the current `returns` count.
   taken: number[];
   expeditions: number; completes: number;
@@ -159,7 +176,8 @@ export type ProfileEvent =
   | { type: 'talent'; heroId: string }
   | { type: 'equipped'; heroId: string }
   | { type: 'salvaged'; count: number; ore: number; dust: number }
-  | { type: 'forged'; uid: number; action: 'enhance' | 'fuse' | 'reroll' };
+  | { type: 'forged'; uid: number; action: 'enhance' | 'fuse' | 'reroll' }
+  | { type: 'brewed'; potion: PotionId };
 export interface ProfileResult { profile: Profile; event: ProfileEvent }
 // Up to 4 deployed (slot order = enemy target slots) and 4 in reserve, swapped at camps.
 export const PARTY_SLOTS = 4;
@@ -181,6 +199,8 @@ export interface ExpeditionState {
   wins: number; defeats: number; battle: ActiveBattle | null;
   // Items found on this expedition (kept on complete/withdraw, lost on a wipe) and dry random wins for the pity.
   found: Item[]; dry: number;
+  // Potions carried (≤ carry each) and steps of repel left (2D-5).
+  potions: Potions; repel: number;
 }
 export type WorldEvent =
   | { type: 'moved'; chance: number }
@@ -190,7 +210,8 @@ export type WorldEvent =
   | { type: 'goal' }
   | { type: 'rested' }
   | { type: 'revived'; heroId: string }
-  | { type: 'chest'; chestId: string; loot: Resources }
+  | { type: 'chest'; chestId: string; loot: Resources; potion?: PotionId }
+  | { type: 'potion'; potion: PotionId; heal?: Record<string, number> }
   | { type: 'victory'; kind: BattleKind; encounterId: string; loot: Resources; exp?: Record<string, ExpGain>; item?: Item }
   | { type: 'defeat'; kind: BattleKind; encounterId: string; wiped?: boolean };
 // EXP from one victory for one brought member: `percent` is the level-gap multiplier.

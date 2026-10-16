@@ -19,7 +19,7 @@ Approved 2026-10-14, re-planned 2026-10-15 for the mercenary roster.
 | L1. Lobby | Home → Lobby → Map; persistent profile (company ≤ 20, bank, board); choose the 4 + 4; withdraw/complete/wipe settle home | **Implemented** |
 | L2. Character creation | Commander (non-combat) name, crest and banner colour, once, between Home and Lobby | **Implemented** |
 | 2C-2. New classes | Six new mercenaries (ART-CHAR-MERC-ENEMY-001), one class mechanic at a time; ★3 skill and ★5 passive per class | **Implemented**: all 6 base classes (Garran spear, Mira archer, Toma alchemist, Sefa scout, Brann warden, Lio bard) and the ★3 skill + ★5 passive for all 10 classes (see Star unlocks) |
-| 2D. Equipment and level | 2D-1 member + monster levels; 2D-2 equipment (6 slots, 5 rarities, drops, inventory); 2D-3 sets; 2D-4 forge (enhance, fuse, reroll, salvage); 2D-5 map potions; 2D-1b passive talent tree | **In progress**: 2D-1 implemented (see Levels); 2D-1b implemented (see Talent tree); 2D-2 implemented (see Equipment); 2D-3 implemented (see Equipment sets); 2D-4 implemented (see Forge) |
+| 2D. Equipment and level | 2D-1 member + monster levels; 2D-2 equipment (6 slots, 5 rarities, drops, inventory); 2D-3 sets; 2D-4 forge (enhance, fuse, reroll, salvage); 2D-5 map potions; 2D-1b passive talent tree | **Implemented**: 2D-1 (see Levels), 2D-1b (Talent tree), 2D-2 (Equipment), 2D-3 (Equipment sets), 2D-4 (Forge), 2D-5 (Map potions); numbers are drafts |
 | 3. Choices and content | Events with fight/avoid choices, elites, mini boss, puzzles (rune order, push stone, lever), secrets, map quest "2 of 3" and side quests | Planned |
 | 4. Economy and wrap-up | Local gold and shop, salvage, fast travel between camps, elite respawn on rest, defeat penalty, whole-map balance simulation, completion screen | Planned |
 
@@ -511,3 +511,23 @@ The lobby's **ช่าง** menu opens the forge sheet: every piece (bag or wor
 **Save v11.** Items may carry `plus` (checked against the rarity cap); the profile gains `forge` (older data: 0).
 
 **Tests.** `tests/forge.test.ts` (costs, caps, stats, worn pieces, fuse rules and determinism, reroll, salvage, save) and a lobby browser test.
+
+## Map potions (2D-5; design approved 2026-10-16, draft numbers)
+
+| Potion | Effect | Brew cost |
+|---|---|---|
+| Salve (ยาฟื้นแผล) | one standing member heals 40% of max HP | 6 ore + 2 dust |
+| Tonic (ยาฟื้นหมู่) | every standing member heals 20% of max HP | 10 ore + 4 dust |
+| Repel (ยาไล่ม่าน) | the next 10 steps through encounter zones roll no random encounter and add no pressure (the boss still blocks its tile) | 8 ore + 3 dust |
+
+- **Brewing** happens in the lobby's **ยา** sheet; the home stock has no cap.
+- **Packing:** each departure packs up to 3 of each, taken out of the stock.
+- **Chests:** a common chest adds a potion at 35% (salve 3 : tonic 1 : repel 1); a rare chest at 70% (1 : 2 : 2). Nothing is added when that potion is already at 3.
+- **Use:** on the map only, from the pack dialog (a salve asks who drinks it); never in battle. Nothing revives: reviving stays the job of embers at a camp.
+- The danger chip shows the steps of repel left.
+- **Settling:** complete or withdraw brings unused potions home; a wipe loses them.
+- **Phone layout:** with four lobby menu buttons, portrait phones put the depart button on its own full-width row.
+
+**Save v12.** The profile gains `potions` (the home stock); the run gains `potions` (carried, ≤ 3 each) and `repel`. v11 data migrates with none.
+
+**Tests.** `tests/potions.test.ts` (brewing, packing, settling, each potion, battle lock, chests, save) and a browser test (brew, depart, drink a salve and a repel).

@@ -1,5 +1,5 @@
 import type { ActionId, PassiveId, BattleEvent, BattleState, EncounterDefinition, Intent, TalentCap, TalentRule } from '../core/battle/types';
-import type { EquipmentRules, ExpGain, ExpeditionState, Gear, GearSlot, GearStat, Item, ResourceId, Resources, SetDefinition, SetId, TalentNodeDef } from '../core/world/types';
+import type { EquipmentRules, ExpGain, ExpeditionState, Gear, GearSlot, GearStat, Item, PotionId, PotionRules, ResourceId, Resources, SetDefinition, SetId, TalentNodeDef } from '../core/world/types';
 import type { GearSpecial } from '../core/battle/types';
 import { itemStats, setCounts } from '../core/world/equipment';
 import { ambushBonusOf, capAmount, corrodeBonusOf, guardReductionOf, hasCap, skillPower, songPower, talentRule, tauntReductionOf } from '../core/battle/engine';
@@ -238,3 +238,10 @@ export function wornSets(rules: EquipmentRules, gear: Gear | undefined): { id: S
   return (Object.entries(setCounts(gear)) as [SetId, number][]).map(([id, pieces]) => ({ id, name: setText[id], pieces, ...setBonusText(rules, id) }));
 }
 export const itemOwner = (item: Item): string => item.hero ? `เฉพาะ${heroText[item.hero]?.name ?? ''}` : 'ใส่ได้ทุกคน';
+// ---- Map potions (2D-5) ----
+export const potionIcon = { salve: 'potionSalve', tonic: 'potionTonic', repel: 'potionRepel' } as const;
+export const potionText: Record<PotionId, { name: string; help: (r: PotionRules) => string }> = {
+  salve: { name: 'ยาฟื้นแผล', help: r => `ฟื้นเลือด ${r.salvePercent}% ให้สมาชิกที่ยังยืนอยู่ 1 คน` },
+  tonic: { name: 'ยาฟื้นหมู่', help: r => `ฟื้นเลือด ${r.tonicPercent}% ให้ทุกคนที่ยังยืนอยู่` },
+  repel: { name: 'ยาไล่ม่าน', help: r => `${r.repelSteps} ก้าวถัดไปไม่เจอศัตรูสุ่ม (บอสยังขวางทาง)` },
+};

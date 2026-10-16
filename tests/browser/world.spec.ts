@@ -17,7 +17,7 @@ function base(patch: Partial<ExpeditionState> = {}): ExpeditionState {
   const state = { ...newExpedition(map, encounterById, 77), tutorialDone: true, ...patch }; reveal(state, map); return state;
 }
 async function seed(page: Page, state: ExpeditionState | null, profile: Profile = { ...newProfile(map, 5), tutorialDone: true, commander }) {
-  await page.addInitScript(({ raw, key }) => { if (sessionStorage.getItem('playtest-seeded')) return; localStorage.setItem(key, raw); sessionStorage.setItem('playtest-seeded', 'yes'); }, { raw: JSON.stringify({ version: 11, profile, run: state }), key });
+  await page.addInitScript(({ raw, key }) => { if (sessionStorage.getItem('playtest-seeded')) return; localStorage.setItem(key, raw); sessionStorage.setItem('playtest-seeded', 'yes'); }, { raw: JSON.stringify({ version: 12, profile, run: state }), key });
 }
 async function open(page: Page, state?: ExpeditionState) {
   const issues: string[] = []; page.on('pageerror', e => issues.push(e.message)); page.on('console', m => { if (m.type() === 'error') issues.push(m.text()); });
@@ -562,7 +562,7 @@ test('lobby talent tree: its own sheet; spend points level by level, gates show,
   expect(await page.evaluate(() => document.scrollingElement!.scrollHeight <= innerHeight)).toBe(true);
   await page.screenshot({ path: info.outputPath('lobby-talents-phone.png') });
   const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('asterveil.fateweave.expedition.v1')!));
-  expect(saved.version).toBe(11); expect(saved.profile.members.guardian.talents).toEqual({ root: 1, b1: 2 });
+  expect(saved.version).toBe(12); expect(saved.profile.members.guardian.talents).toEqual({ root: 1, b1: 2 });
   // Back to the team sheet: the card shows the new max HP.
   await page.locator('#lobby-sub-back').click(); await expect(page.locator('#lobby-sheet-title')).toContainText('จัดทีม');
   await expect(page.locator('#lobby-member-guardian')).toContainText(`เลือด ${Math.round(76 * (100 + 9 + 15) / 100)}`);
@@ -610,7 +610,7 @@ test('lobby equipment: its own sheet; equip, class weapons, swap, unequip, salva
   expect(await page.evaluate(() => document.scrollingElement!.scrollHeight <= innerHeight)).toBe(true);
   await page.screenshot({ path: info.outputPath('lobby-gear-phone.png') });
   const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('asterveil.fateweave.expedition.v1')!));
-  expect(saved.version).toBe(11); expect(saved.profile.members.guardian.gear.charm.uid).toBe(4); expect(saved.profile.items.map((i: { uid: number }) => i.uid)).toEqual([3]);
+  expect(saved.version).toBe(12); expect(saved.profile.members.guardian.gear.charm.uid).toBe(4); expect(saved.profile.items.map((i: { uid: number }) => i.uid)).toEqual([3]);
   expect(saved.profile.bank).toMatchObject({ ore: 7, dust: 5 });
 });
 
@@ -652,8 +652,41 @@ test('lobby forge: enhance, fuse and reroll from its own menu; saved v11', async
   expect(await page.evaluate(() => document.scrollingElement!.scrollHeight <= innerHeight)).toBe(true);
   await page.screenshot({ path: info.outputPath('lobby-forge-phone.png') });
   const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('asterveil.fateweave.expedition.v1')!));
-  expect(saved.version).toBe(11); expect(saved.profile.items).toHaveLength(1); expect(saved.profile.items[0]).toMatchObject({ uid: 1, rarity: 2 });
+  expect(saved.version).toBe(12); expect(saved.profile.items).toHaveLength(1); expect(saved.profile.items[0]).toMatchObject({ uid: 1, rarity: 2 });
   expect(saved.profile.bank).toMatchObject({ ore: 96, seal: 0, dust: 19 }); expect(saved.profile.forge).toBeGreaterThan(0);
+});
+
+test('potions: brew in the lobby, pack 3 on departure, drink a salve and a repel on the map', async ({ page }, info) => {
+  const profile = { ...newProfile(map, 5), tutorialDone: true, commander, bank: { ore: 200, seal: 0, dust: 40 }, potions: { salve: 3, tonic: 0, repel: 0 } } as Profile;
+  await seed(page, null, profile);
+  await page.goto('./'); await page.locator('#continue').click();
+  await page.locator('#lobby-tab-brew').click();
+  await expect(page.locator('#lobby-sheet-title')).toContainText('นักปรุงยา');
+  await page.locator('#brew-salve').click(); await page.locator('#brew-repel').click();
+  await expect(page.locator('.brew-list li').first()).toContainText('มีที่ค่าย 4 ขวด · จะพาไป 3');
+  for (const b of await page.locator('.brew-list button, .lobby-menu-button').all()) expect((await b.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(await page.evaluate(() => document.scrollingElement!.scrollHeight <= innerHeight)).toBe(true);
+  await page.screenshot({ path: info.outputPath('lobby-brew-phone.png') });
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.locator('[data-lobby="close"]').click(); await page.locator('#lobby-depart').click();
+  await expect(page.locator('#world-pack')).toHaveAttribute('aria-label', /สัมภาระ/);
+  let saved = await page.evaluate(() => JSON.parse(localStorage.getItem('asterveil.fateweave.expedition.v1')!));
+  expect(saved.run.potions).toEqual({ salve: 3, tonic: 0, repel: 1 }); expect(saved.profile.potions).toEqual({ salve: 1, tonic: 0, repel: 0 });
+  // Hurt the knight in the save, reload, and drink a salve from the pack.
+  saved.run.hp.guardian = 10; await page.evaluate(raw => localStorage.setItem('asterveil.fateweave.expedition.v1', raw), JSON.stringify(saved));
+  await page.evaluate(() => sessionStorage.setItem('playtest-seeded', 'yes')); await page.reload(); await page.locator('#continue').click();
+  await page.locator('#world-pack').click();
+  await expect(page.locator('#potion-tonic')).toBeDisabled(); await expect(page.locator('#potion-tonic')).toContainText('ไม่มีแล้ว');
+  await page.locator('#potion-salve').click(); await expect(page.locator('.salve-target')).toHaveCount(1);
+  await page.screenshot({ path: info.outputPath('map-potions.png') });
+  await page.locator('#salve-guardian').click();
+  await expect(page.locator('.pack-potions li').first()).toContainText('2');
+  await page.locator('#potion-repel').click(); await expect(page.locator('#potion-repel')).toBeDisabled();
+  await page.locator('[data-world="pack-close"]').click();
+  await expect(page.locator('#danger-chip')).toContainText('ไล่ม่าน 10 ก้าว');
+  saved = await page.evaluate(() => JSON.parse(localStorage.getItem('asterveil.fateweave.expedition.v1')!));
+  expect(saved.version).toBe(12); expect(saved.run.potions).toEqual({ salve: 2, tonic: 0, repel: 0 }); expect(saved.run.repel).toBe(10); expect(saved.run.hp.guardian).toBeGreaterThan(10);
 });
 
 test('levels: the map shows the monster level here and members’ levels; battles show enemy levels', async ({ page }, info) => {

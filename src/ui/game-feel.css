@@ -260,10 +260,16 @@ button:active:not(:disabled) { transform: scale(.97); }
   .lobby-top .lobby-bank { flex-direction: column; align-items: flex-end; gap: 4px; } .lobby-top .lobby-bank span { min-height: 30px; padding: 2px 10px; font-size: 14px; }
   .lobby-menu-button { width: 60px; height: 60px; font-size: 13px; } .lobby-menu { gap: 8px; }
   #lobby-depart { min-height: 60px; padding: 6px 16px 6px 12px; font-size: 18px; gap: 8px; } #lobby-depart .icon { width: 22px; height: 22px; }
+  /* Four menu buttons leave no room beside the depart button: it takes its own full-width row below them. */
+  .lobby-bottom { flex-direction: column; align-items: stretch; gap: 8px; }
+  #lobby-depart { margin-left: 0; width: 100%; min-height: 52px; justify-content: center; }
+  .lobby-sheet { bottom: calc(max(12px, env(safe-area-inset-bottom)) + 136px); }
+  #lobby-view .lobby-scene { --ground: max(160px, calc(env(safe-area-inset-bottom) + 18vh)); }
 }
 @media (max-width: 360px) and (orientation: portrait) {
   .lobby-menu-button { width: 54px; height: 54px; font-size: 12px; } .lobby-menu-button .icon { width: 20px; height: 20px; }
-  #lobby-depart { font-size: 16px; padding: 4px 12px 4px 10px; } #lobby-depart small { display: none; }
+  #lobby-depart { font-size: 16px; padding: 4px 12px 4px 10px; min-height: 48px; } #lobby-depart small { display: none; }
+  .lobby-sheet { bottom: calc(max(12px, env(safe-area-inset-bottom)) + 120px); }
 }
 @media (orientation: landscape) and (max-height: 500px) {
   #lobby-view .lobby-scene { --unit: min(36vh, 22vw); --ground: 18vh; }
@@ -472,3 +478,17 @@ html, body { background: #0a1422; }
 .forge-pick[aria-pressed="true"] { border-color: var(--gold-light, #f2d596); background: #2a2210cc; }
 .forge-list li[data-rarity] b { color: var(--rarity-0); } .forge-list li[data-rarity="1"] b { color: var(--rarity-1); } .forge-list li[data-rarity="2"] b { color: var(--rarity-2); }
 .forge-list li[data-rarity="3"] b { color: var(--rarity-3); } .forge-list li[data-rarity="4"] b { color: var(--rarity-4); }
+/* Map potions (2D-5) */
+.pack-potions { list-style: none; margin: 0 0 8px; padding: 0; display: grid; gap: 5px; }
+.pack-potions li { display: grid; grid-template-columns: auto 1fr auto auto; gap: 8px; align-items: center; padding: 6px 8px; border-radius: 10px; background: #08121f99; }
+.pack-potions li .icon { width: 24px; height: 24px; color: #7fe3d0; }
+.pack-potions li div { display: grid; gap: 1px; } .pack-potions li small { font-size: 11px; color: var(--text-muted, #b9c8d8); }
+.pack-potions li strong { font-size: 16px; color: var(--gold-light, #f2d596); }
+.pack-potions button { min-height: 44px; min-width: 64px; padding: 0 10px; }
+.pack-gear-title small { font-weight: 400; font-size: 11px; color: var(--text-muted, #b9c8d8); }
+.salve-targets { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 6px; margin-bottom: 8px; }
+.salve-target { min-height: 52px; display: flex; align-items: center; gap: 8px; text-align: left; }
+.salve-target .portrait { width: 36px; height: 36px; flex: 0 0 36px; border-radius: 50%; }
+.salve-target span { display: grid; } .salve-target small { font-size: 11px; color: var(--text-muted, #b9c8d8); }
+.brew-list li > .icon { width: 28px; height: 28px; color: #7fe3d0; flex: 0 0 auto; }
+.brew-list li small:not(.hire-status) { display: block !important; }

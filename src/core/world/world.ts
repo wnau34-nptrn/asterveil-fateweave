@@ -1,8 +1,8 @@
 import { replay, withLevel, withParty } from '../battle/engine';
 import type { BattleState, Command, EncounterDefinition, HeroDefinition, HeroTalents } from '../battle/types';
-import type { ActiveBattle, BattleKind, ChestDefinition, Company, Direction, ExpGain, ExpeditionState, LootTable, MapDefinition, MemberProgress, Point, Resources, Talents, Tile, WorldResult, ZoneDefinition, Gear, Item } from './types';
+import type { ActiveBattle, BattleKind, ChestDefinition, Company, Direction, ExpGain, ExpeditionState, LootTable, MapDefinition, MemberProgress, Point, PotionId, Resources, Talents, Tile, WorldResult, ZoneDefinition, Gear, Item } from './types';
 import { gearTotals, rollItem } from './equipment';
-import { PARTY_SLOTS, RESERVE_SLOTS, SET_IDS } from './types';
+import { PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS, SET_IDS } from './types';
 
 // Pure expedition rules: no DOM, Phaser, clocks or Math.random. Every roll is
 // derived from (seed, rolls) so a reload can never re-roll an outcome.
@@ -36,7 +36,8 @@ function rollingZone(map: MapDefinition, p: Point): ZoneDefinition | undefined {
   return tile?.kind === 'floor' && zone && !zone.safe ? zone : undefined;
 }
 export function encounterChance(state: ExpeditionState, map: MapDefinition, p: Point = state.position): number {
-  const zone = rollingZone(map, p);
+  // A repel potion stops random encounters while it lasts.
+  const zone = state.repel > 0 ? undefined : rollingZone(map, p);
   return zone ? Math.min(zone.cap, zone.base + state.pressure) : 0;
 }
 export function reveal(state: ExpeditionState, map: MapDefinition): void {
@@ -121,6 +122,7 @@ export function newExpedition(map: MapDefinition, lookup: EncounterLookup, seed:
     hp: fullParty(lookup, map, [...roster.deployed, ...roster.reserve], members), camp: null,
     resources: { ore: 0, ember: 0, seal: 0 }, openedChests: [], restReady: true,
     tutorialDone, bossDefeated: false, completed: false, wins: 0, defeats: 0, battle: null, found: [], dry: 0,
+    potions: company?.potions ? { ...company.potions } : { salve: 0, tonic: 0, repel: 0 }, repel: 0,
   };
   reveal(state, map);
   return state;
@@ -147,6 +149,8 @@ export function move(initial: ExpeditionState, map: MapDefinition, dir: Directio
   if (tile.kind === 'goal') { state.completed = true; return { state, event: { type: 'goal' } }; }
   const zone = rollingZone(map, target);
   if (!zone) return { state, event: { type: 'moved', chance: 0 } };
+  // Each step through an encounter zone uses up one step of repel, with no roll and no pressure.
+  if (state.repel > 0) { state.repel--; return { state, event: { type: 'moved', chance: 0 } }; }
   const chance = encounterChance(state, map);
   if (rollPercent(state.seed, state.rolls++) < chance) {
     state.pressure = 0;
@@ -229,7 +233,36 @@ export function openChest(initial: ExpeditionState, map: MapDefinition): WorldRe
   if (!canOpenChest(initial, map)) return { state: initial, event: { type: 'blocked', reason: 'busy' } };
   const state = structuredClone(initial); const chest = chestAt(map, state.position)!;
   state.openedChests.push(chest.id);
-  return { state, event: { type: 'chest', chestId: chest.id, loot: rollLoot(state, map.loot.chest[chest.tier]) } };
+  const loot = rollLoot(state, map.loot.chest[chest.tier]);
+  // Chests may also hold one potion (2D-5) when the party can still carry it.
+  const table = map.potions.chest[chest.tier]; let potion: PotionId | undefined;
+  if (rollPercent(state.seed, state.rolls++) < table.chance) {
+    const total = POTION_IDS.reduce((sum, id) => sum + table.weights[id], 0); let pick = rollPercent(state.seed, state.rolls++) % total;
+    const id = POTION_IDS.find(p => (pick -= table.weights[p]) < 0)!;
+    if (state.potions[id] < map.potions.carry) { state.potions[id]++; potion = id; }
+  }
+  return { state, event: { type: 'chest', chestId: chest.id, loot, ...(potion ? { potion } : {}) } };
+}
+// ---- Map potions (2D-5): used outside battle only ----
+export function potionReason(state: ExpeditionState, map: MapDefinition, lookup: EncounterLookup, potion: PotionId, targetId?: string): string {
+  if (state.battle || state.completed) return 'busy';
+  if (state.potions[potion] <= 0) return 'none';
+  const hurt = (id: string) => state.hp[id]! > 0 && state.hp[id]! < memberDef(lookup, map, state.members, id)!.maxHp;
+  if (potion === 'salve') return !targetId || !rosterIds(state).includes(targetId) ? 'target' : state.hp[targetId] === 0 ? 'down' : hurt(targetId) ? '' : 'full';
+  if (potion === 'tonic') return rosterIds(state).some(hurt) ? '' : 'full';
+  return state.repel > 0 ? 'active' : '';
+}
+export function usePotion(initial: ExpeditionState, map: MapDefinition, lookup: EncounterLookup, potion: PotionId, targetId?: string): WorldResult {
+  const reason = potionReason(initial, map, lookup, potion, targetId); if (reason) return { state: initial, event: { type: 'blocked', reason: 'busy' } };
+  const state = structuredClone(initial); state.potions[potion]--;
+  if (potion === 'repel') { state.repel = map.potions.repelSteps; return { state, event: { type: 'potion', potion } }; }
+  const heal: Record<string, number> = {};
+  for (const id of potion === 'salve' ? [targetId!] : rosterIds(state)) {
+    const max = memberDef(lookup, map, state.members, id)!.maxHp; if (!state.hp[id]) continue;
+    const amount = Math.min(max - state.hp[id]!, Math.ceil(max * (potion === 'salve' ? map.potions.salvePercent : map.potions.tonicPercent) / 100));
+    if (amount > 0) { state.hp[id]! += amount; heal[id] = amount; }
+  }
+  return { state, event: { type: 'potion', potion, heal } };
 }
 const noLoot: LootTable = { ore: [0, 0], ember: [0, 0], seal: [0, 0] };
 function battleLoot(state: ExpeditionState, map: MapDefinition, kind: BattleKind): LootTable {

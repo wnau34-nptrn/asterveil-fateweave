@@ -4,7 +4,8 @@ import { COMPANY_CAP, PARTY_SLOTS, RESERVE_SLOTS, type ActiveBattle, type Expedi
 import { battleState, expToNext, finishBattle, fullParty, heroCatalog, heroDef, memberDef, rosterIds, tileAt, type EncounterLookup } from '../world/world';
 import { itemValid } from '../world/equipment';
 import { commanderReason, newProfile, settle, talentsValid } from '../world/profile';
-import type { Item, MemberProgress, Talents } from '../world/types';
+import type { Item, MemberProgress, Potions, Talents } from '../world/types';
+import { POTION_IDS } from '../world/types';
 
 export interface StoragePort { getItem(key: string): string | null; setItem(key: string, value: string): void; removeItem?(key: string): void }
 export const expeditionKey = 'asterveil.fateweave.expedition.v1';
@@ -25,7 +26,8 @@ export const legacyKeys = ['asterveil.fateweave.battle.v1', 'asterveil.fateweave
 // last result `items`/`salvaged`; the run gains `found` and `dry`. Older data migrates empty.
 // v9 → v10 (2D-3): items may carry `set`. v9 data loads unchanged.
 // v10 → v11 (2D-4): items may carry `plus`; the profile gains the `forge` roll counter (older data: 0).
-const SAVE_VERSION = 11;
+// v11 → v12 (2D-5): the profile gains brewed `potions`; the run gains carried `potions` and `repel` (older data: none).
+const SAVE_VERSION = 12;
 export interface Game { profile: Profile; run: ExpeditionState | null }
 const actions: readonly ActionId[] = ['attack', 'guard', 'bash', 'mark', 'execute', 'bolt', 'ward', 'heal', 'prayer', 'brace', 'pierce', 'hinder', 'volley', 'acid', 'haste', 'ambush', 'evade', 'taunt', 'slam', 'valor', 'mend',
   'rally', 'finisher', 'sigil', 'sanctuary', 'spearwall', 'weakshot', 'bomb', 'backstab', 'quake', 'finale'];
@@ -112,6 +114,11 @@ function command(v: unknown): Command {
 }
 
 const badRun = (): never => { throw new Error('Invalid run'); };
+function potionsOf(v: unknown, max: number): Potions {
+  const p = obj(v);
+  if (Object.keys(p).length !== POTION_IDS.length || POTION_IDS.some(id => !isInt(p[id], 0, max))) throw new Error('Invalid potions');
+  return Object.fromEntries(POTION_IDS.map(id => [id, p[id] as number])) as Potions;
+}
 function foundOf(v: unknown, map: MapDefinition, lookup: EncounterLookup): Item[] {
   if (!Array.isArray(v) || v.length > 99) throw new Error('Invalid found');
   return v.map(i => itemOf(i, map, lookup, true));
@@ -128,6 +135,7 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
   }
   if (version === 4) delete s.board;
   if (version < 9) Object.assign(s, { found: [], dry: 0 });
+  if (version < 12) Object.assign(s, { potions: { salve: 0, tonic: 0, repel: 0 }, repel: 0 });
   if (s.mapId !== map.id || s.mapVersion !== map.version) throw new Error('Map changed');
   const cells = map.rows.length * map.rows[0]!.length;
   if (typeof s.revealed !== 'string' || s.revealed.length !== cells || /[^01]/.test(s.revealed)) throw new Error('Invalid fog');
@@ -160,6 +168,7 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
     tutorialDone: s.tutorialDone as boolean, bossDefeated: s.bossDefeated as boolean,
     completed: s.completed as boolean, wins: s.wins as number, defeats: s.defeats as number, battle,
     found: foundOf(s.found, map, lookup), dry: isInt(s.dry, 0, map.equipment.pity) ? s.dry : badRun(),
+    potions: potionsOf(s.potions, map.potions.carry), repel: isInt(s.repel, 0, map.potions.repelSteps) ? s.repel : badRun(),
   };
   if (state.camp && tileAt(map, state.camp)?.kind !== 'camp') throw new Error('Invalid camp');
   // A battle can end on enemy opening turns before any command; apply it now.
@@ -179,6 +188,7 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
   if (Object.keys(bank).length !== 3 || !isInt(bank.ore, 0, 9999999) || !isInt(bank.seal, 0, 99999) || !isInt(bank.dust, 0, 9999999)) throw new Error('Invalid bank');
   if (version < 9) Object.assign(p, { items: [], nextItem: 1 });
   if (version < 11) p.forge = 0;
+  if (version < 12) p.potions = { salve: 0, tonic: 0, repel: 0 };
   if (!isInt(p.forge)) throw new Error('Invalid forge');
   if (!isInt(p.nextItem, 1) || !Array.isArray(p.items) || p.items.length > map.equipment.bagCap) throw new Error('Invalid items');
   const items = p.items.map(i => itemOf(i, map, lookup));
@@ -200,7 +210,7 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
     if (commanderReason(commander)) throw new Error('Invalid commander');
   } else if (p.commander === undefined && version >= 6) throw new Error('Invalid commander');
   return { seed: p.seed, returns: p.returns, tutorialDone: p.tutorialDone, commander, company: [...company as string[]], members, party,
-    bank: { ore: bank.ore as number, seal: bank.seal as number, dust: bank.dust as number }, items, nextItem: p.nextItem as number, forge: p.forge as number, taken: [...p.taken as number[]], expeditions: p.expeditions, completes: p.completes, last };
+    bank: { ore: bank.ore as number, seal: bank.seal as number, dust: bank.dust as number }, items, nextItem: p.nextItem as number, forge: p.forge as number, potions: potionsOf(p.potions, 9999), taken: [...p.taken as number[]], expeditions: p.expeditions, completes: p.completes, last };
 }
 // A run that already reached the goal or lost every brought member is settled on load.
 function settleFinished(game: Game, map: MapDefinition): Game {
@@ -211,7 +221,7 @@ function settleFinished(game: Game, map: MapDefinition): Game {
 }
 export function parseGame(raw: string, map: MapDefinition, lookup: EncounterLookup): Game {
   const envelope = obj(JSON.parse(raw)); const version = envelope.version as number;
-  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
+  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
   if (version < 5) {
     const run = parseRun(envelope.state, version, map, lookup);
     const profile = newProfile(map, (run.seed ^ 0x5bd1e995) >>> 0);
