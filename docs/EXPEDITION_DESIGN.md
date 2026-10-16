@@ -426,7 +426,7 @@ Every class (the starting four included) gains one battle skill at ★3 and one 
 
 The owner asked for a skill tree made only of passives ("ความถนัด"). This scopes the CLAUDE.md rule-10 exception for a skill tree: passive nodes only, no new battle buttons.
 
-- Points: 1 per level-up (9 at the level cap 10). Spent and reset (free, any time) in the Lobby member panel only; talents are fixed during an expedition (levels gained on the run add points for the next visit).
+- Points: 1 per level-up (9 at the level cap 10). Spent and reset (free, any time) only in the Lobby, in the talent-tree sheet (its own window, opened from a member in the team sheet, with a member picker and a back button); talents are fixed during an expedition (levels gained on the run add points for the next visit).
 - Shape (same for every class): root (1 rank) → branch A and branch B, each tier 1 (2 ranks) → tier 2 (2 ranks) → capstone (1 rank). 7 nodes, 11 ranks, so a member cannot take everything.
 - Gates: the root first; tier 2 needs 1 rank in its tier 1; a capstone needs 4 ranks in its branch.
 - Stat nodes add to the star/level percent (`starred`); every other effect is read by the resolver from `HeroDefinition.talents`, so preview and replay use the same rules. 0 points = today's numbers.
@@ -448,4 +448,4 @@ Counters from talents add corrosion/valor like other counters. Stone regen does 
 
 **Save v8.** Members may carry `talents` (ranks per node); every load re-checks ranks, gates and points against the member's level. v7 data loads unchanged (no talents).
 
-**Tests.** `tests/talents.test.ts` (shape, stats, every node's effect, gates, points, reset, settle, save) and a lobby browser test (spend, gate reason, ≥44px nodes, reset, saved v8, phone portrait).
+**Tests.** `tests/talents.test.ts` (shape, stats, every node's effect, gates, points, reset, settle, save) and a lobby browser test (separate sheet, member picker, spend, gate reason, ≥44px nodes, reset, saved v8, phone portrait).

@@ -17,13 +17,12 @@ const groupName: Record<Group, string> = { deployed: 'ลงสนาม', reser
 // bring, and depart. It owns no rules; every action goes to the host, which saves first.
 export class LobbyUI {
   private view: LobbyView | undefined;
-  // The team or hire sheet floats over the camp; the scene alone shows when it is closed.
-  private sheet: 'team' | 'hire' | null = null;
+  // The team, hire or talent-tree sheet floats over the camp; the scene alone shows when it is closed.
+  // The tree sheet is its own window, opened from a member in the team sheet (`picked`).
+  private sheet: 'team' | 'hire' | 'tree' | null = null;
   private sceneDrawn = '';
   private picked: string | undefined;
   private confirmDismiss = false;
-  // The member's talent tree is open in the member panel (kept across redraws).
-  private treeOpen = false;
   constructor(private readonly root: HTMLElement, private readonly map: MapDefinition, private readonly lookup: EncounterLookup, private readonly heroes: readonly HeroDefinition[], private readonly host: LobbyHost) {
     // Escape closes the sheet even after a redraw moved focus out of it (only while the lobby shows).
     root.ownerDocument.addEventListener('keydown', e => { if (e.key === 'Escape' && this.sheet && !root.hidden) { e.preventDefault(); this.closeSheet(); } });
@@ -41,18 +40,20 @@ export class LobbyUI {
           if (!this.picked) break;
           if (!this.confirmDismiss) { this.confirmDismiss = true; this.draw(); this.focus('#lobby-dismiss'); break; }
           this.confirmDismiss = false; { const target = this.picked; this.picked = undefined; this.host.dismiss(target); } break;
-        case 'tree': this.treeOpen = !this.treeOpen; this.draw(); this.focus('#lobby-tree-toggle'); break;
+        case 'tree': if (id ?? this.picked) { this.picked = id ?? this.picked; this.sheet = 'tree'; this.confirmDismiss = false; this.draw(); this.focus(id ? `#tree-member-${id}` : '#lobby-tree-back'); } break;
+        case 'tree-back': this.sheet = 'team'; this.draw(); this.focus('#lobby-tree-open'); break;
         case 'talent': if (this.picked) { const node = b.dataset.node as TalentNode; this.host.talent(this.picked, node); this.focus(`#talent-${node}`); } break;
-        case 'reset-talents': if (this.picked) { this.host.resetTalents(this.picked); this.focus('#lobby-tree-toggle'); } break;
+        case 'reset-talents': if (this.picked) { this.host.resetTalents(this.picked); this.focus('#lobby-tree-back'); } break;
         case 'depart': this.host.depart(); break;
         case 'home': this.host.home(); break;
       }
     });
   }
-  private closeSheet(): void { const was = this.sheet; this.sheet = null; this.picked = undefined; this.confirmDismiss = false; this.draw(); if (was) this.focus(`#lobby-tab-${was}`); }
+  private closeSheet(): void { const was = this.sheet === 'tree' ? 'team' : this.sheet; this.sheet = null; this.picked = undefined; this.confirmDismiss = false; this.draw(); if (was) this.focus(`#lobby-tab-${was}`); }
   render(view: LobbyView): void {
     this.view = view;
     if (this.picked && !view.profile.company.includes(this.picked)) this.picked = undefined;
+    if (this.sheet === 'tree' && !this.picked) this.sheet = 'team';
     this.draw();
   }
   private escape(text: string): string { return text.replace(/[&<>"]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[ch]!); }
@@ -81,7 +82,7 @@ export class LobbyUI {
     const scene = this.scene(p);
     if (scene !== this.sceneDrawn) { this.root.querySelector('.lobby-scene-host')!.innerHTML = scene; this.sceneDrawn = scene; }
     const menu = (id: 'team' | 'hire', glyph: Parameters<typeof icon>[0], label: string, badge: string) =>
-      `<button id="lobby-tab-${id}" data-lobby="tab" data-tab="${id}" class="lobby-menu-button${this.sheet === id ? ' active' : ''}" aria-expanded="${this.sheet === id}" aria-controls="lobby-sheet">${icon(glyph)}<span>${label}</span>${badge ? `<small>${badge}</small>` : ''}</button>`;
+      `<button id="lobby-tab-${id}" data-lobby="tab" data-tab="${id}" class="lobby-menu-button${this.sheet === id || id === 'team' && this.sheet === 'tree' ? ' active' : ''}" aria-expanded="${this.sheet === id || id === 'team' && this.sheet === 'tree'}" aria-controls="lobby-sheet">${icon(glyph)}<span>${label}</span>${badge ? `<small>${badge}</small>` : ''}</button>`;
     const openOffers = boardOffers(p, this.map, this.lookup).filter((_, i) => !hireReason(p, this.map, this.lookup, i)).length;
     this.root.querySelector('.lobby-hud')!.innerHTML = `
       <header class="lobby-top"><button data-lobby="home" class="round-glass" aria-label="กลับหน้าแรก">${icon('left')}</button>
@@ -90,9 +91,9 @@ export class LobbyUI {
       ${last ? `<p class="lobby-result glass-capsule ${toast}" data-outcome="${last.outcome}" role="status">${icon(last.outcome === 'wiped' ? 'danger' : last.outcome === 'complete' ? 'star' : 'camp')}<span><b>${outcomeText[last.outcome]}</b> · เดิน ${last.steps} ก้าว ชนะ ${last.wins} ศึก · ได้แร่ดาว ${last.ore}${last.seal ? ` ตราสัญญา ${last.seal}` : ''}${last.outcome === 'wiped' ? ' (เก็บได้ครึ่งเดียว)' : ''}</span></p>`
         : this.view!.message ? `<p class="lobby-result glass-capsule ${toast}" role="status"><span>${this.view!.message}</span></p>` : ''}
       ${this.sheet ? `<section id="lobby-sheet" class="lobby-sheet" role="dialog" aria-modal="false" aria-labelledby="lobby-sheet-title">
-        <div class="lobby-sheet-head"><h2 id="lobby-sheet-title">${this.sheet === 'team' ? `${icon('flag')} จัดทีม <small>${p.company.length}/${COMPANY_CAP}</small>` : `${icon('ore')} ป้ายจ้างทหารรับจ้าง`}</h2>
+        <div class="lobby-sheet-head">${this.sheet === 'tree' ? `<button id="lobby-tree-back" data-lobby="tree-back" class="round-glass" aria-label="กลับไปจัดทีม">${icon('left')}</button>` : ''}<h2 id="lobby-sheet-title">${this.sheet === 'team' ? `${icon('flag')} จัดทีม <small>${p.company.length}/${COMPANY_CAP}</small>` : this.sheet === 'tree' ? `${icon('starFilled')} ต้นไม้ความถนัด` : `${icon('ore')} ป้ายจ้างทหารรับจ้าง`}</h2>
           <button data-lobby="close" class="round-glass" aria-label="ปิด">${icon('close')}</button></div>
-        <div class="lobby-content">${this.sheet === 'team' ? this.team(p) : this.board(p)}</div></section>` : ''}
+        <div class="lobby-content">${this.sheet === 'team' ? this.team(p) : this.sheet === 'tree' && this.picked ? this.tree(p, this.picked) : this.board(p)}</div></section>` : ''}
       <footer class="lobby-bottom">
         <nav class="lobby-menu" aria-label="ค่าย">${menu('team', 'flag', 'ทีม', `${p.party.deployed.length}+${p.party.reserve.length}`)}${menu('hire', 'ore', 'จ้าง', openOffers ? String(openOffers) : '')}</nav>
         <button id="lobby-depart" data-lobby="depart" class="primary"${ready ? '' : ' disabled'}>${icon('map')}<span>ออกเดินทาง<small>${this.map.name} · ${p.party.deployed.length}+${p.party.reserve.length} คน</small></span></button>
@@ -141,7 +142,7 @@ export class LobbyUI {
     const label = !cost ? 'ดาวเต็มแล้ว' : reason ? `${why[reason]} · ★${m.stars + 1} ใช้ตัวซ้ำ ${need}${cost.seals ? ' (ตราแทนได้ 1)' : ''} แร่ ${cost.ore}`
       : `อัปเป็น ★${m.stars + 1} · ตัวซ้ำ ${cost.dupes}${cost.seals ? ' + ตรา 1' : ''} · แร่ ${cost.ore}`;
     const last = dismissReason(p, id) === 'last';
-    return `<div class="member-panel" aria-live="polite"><p><b>${heroText[id]!.name}</b> ${this.stars(m.stars)} <span>Lv${m.level ?? 1}${(m.level ?? 1) < this.map.progression.levelCap ? ` · EXP ${m.exp ?? 0}/${expToNext(this.map, m.level ?? 1)}` : ' · เลเวลสูงสุด'} · ตัวซ้ำที่เก็บไว้ ${m.dupes}</span></p>${this.unlocks(id, m.stars)}${this.tree(p, id)}
+    return `<div class="member-panel" aria-live="polite"><p><b>${heroText[id]!.name}</b> ${this.stars(m.stars)} <span>Lv${m.level ?? 1}${(m.level ?? 1) < this.map.progression.levelCap ? ` · EXP ${m.exp ?? 0}/${expToNext(this.map, m.level ?? 1)}` : ' · เลเวลสูงสุด'} · ตัวซ้ำที่เก็บไว้ ${m.dupes}</span></p>${this.unlocks(id, m.stars)}${this.treeButton(p, id)}
       <div class="member-actions"><button id="lobby-upgrade" data-lobby="upgrade" class="primary"${reason ? ' disabled' : ''}>${label}</button>
       <button id="lobby-dismiss" data-lobby="dismiss" class="danger-button"${last ? ' disabled' : ''}>${last ? 'ต้องมีคนลงสนาม 1 คน' : this.confirmDismiss ? `ยืนยันเลิกจ้าง · ดาวหาย +${this.map.company.dismissRefund} แร่` : 'เลิกจ้าง'}</button></div></div>`;
   }
@@ -153,14 +154,22 @@ export class LobbyUI {
       `<li class="${stars >= need ? 'unlocked' : 'locked'}"><span class="unlock-star">★${need}</span>${icon(iconName)}<b>${name}</b><small>${stars >= need ? 'ปลดล็อกแล้ว' : `ปลดล็อกที่ ★${need}`} · ${help}</small></li>`;
     return `<ul class="member-unlocks" aria-label="สิ่งที่ปลดล็อกจากดาว">${row(3, unlocks.skill, skill.name, 'สกิลใหม่ในการต่อสู้')}${row(5, 'starFilled', passive.name, passive.help(data))}</ul>`;
   }
-  // Passive talent tree (2D-1b): root, then two branches of tier 1 → tier 2 → capstone. Tap a node to spend a point.
+  // Opens the member's talent tree in its own sheet.
+  private treeButton(p: Profile, id: string): string {
+    if (!this.map.talents[id]) return '';
+    const m = p.members[id]!; const points = talentPoints(this.map, m); const spent = talentsSpent(m.talents); const free = points - spent;
+    return `<button id="lobby-tree-open" data-lobby="tree" class="secondary tree-toggle">${icon('starFilled')}<span>ต้นไม้ความถนัด</span><small>${free > 0 ? `แต้มว่าง ${free}` : `ใช้ ${spent}/${points} แต้ม`}</small></button>`;
+  }
+  // Passive talent tree (2D-1b), its own sheet: pick a member at the top, then root → two branches of tier 1 → tier 2 → capstone.
   private tree(p: Profile, id: string): string {
     const nodes = this.map.talents[id]; if (!nodes) return '';
-    const m = p.members[id]!; const points = talentPoints(this.map, m); const spent = talentsSpent(m.talents); const free = points - spent;
-    const toggle = `<button id="lobby-tree-toggle" data-lobby="tree" class="secondary tree-toggle" aria-expanded="${this.treeOpen}" aria-controls="lobby-tree">${icon('starFilled')}<span>ต้นไม้ความถนัด</span><small>${free > 0 ? `แต้มว่าง ${free}` : `ใช้ ${spent}/${points} แต้ม`}</small></button>`;
-    if (!this.treeOpen) return toggle;
+    const m = p.members[id]!; const points = talentPoints(this.map, m); const free = points - talentsSpent(m.talents);
     const data = this.lookup(this.map.tutorialEncounterId)!; const branches = talentBranches[id] ?? ['สาย A', 'สาย B'];
     const why: Record<string, string> = { max: 'เต็มแล้ว', locked: 'ยังล็อก', points: 'แต้มไม่พอ' };
+    const members = p.company.map(c => {
+      const cm = p.members[c]!; const left = talentPoints(this.map, cm) - talentsSpent(cm.talents);
+      return `<button id="tree-member-${c}" data-lobby="tree" data-hero="${c}" class="tree-member" aria-pressed="${c === id}" aria-label="${heroText[c]!.name} Lv${cm.level ?? 1}${left > 0 ? ` แต้มว่าง ${left}` : ''}">${portrait(c)}<small>${heroText[c]!.name}</small>${left > 0 ? `<i>${left}</i>` : ''}</button>`;
+    }).join('');
     const node = (n: TalentNode) => {
       const def = nodes.find(x => x.id === n)!; const rank = m.talents?.[n] ?? 0; const reason = talentReason(p, this.map, id, n);
       const state = rank >= def.max ? 'full' : rank ? 'partial' : reason === 'locked' ? 'locked' : 'open';
@@ -168,11 +177,12 @@ export class LobbyUI {
         aria-label="${def.name} ขั้น ${rank}/${def.max} · ${talentHelp(def, data)}${reason ? ` · ${why[reason]}` : ' · แตะเพื่อลงแต้ม'}"><b>${def.name}</b><i>${rank}/${def.max}</i><small>${talentHelp(def, data)}</small></button>`;
     };
     const gate = '<p class="talent-gate">ยอดสาย: ลงสายนี้ครบ 4 แต้ม</p>';
-    return `${toggle}<section id="lobby-tree" class="talent-tree" aria-label="ต้นไม้ความถนัดของ${heroText[id]!.name}">
-      <p class="talent-points">แต้ม ${free}/${points} · ได้ 1 แต้มทุกเลเวลอัป · รีเซ็ตได้ฟรีที่ค่าย</p>
+    return `<div class="tree-members" role="group" aria-label="เลือกสมาชิก">${members}</div>
+      <section id="lobby-tree" class="talent-tree" aria-label="ต้นไม้ความถนัดของ${heroText[id]!.name}">
+      <p class="talent-points"><b>${heroText[id]!.name}</b> Lv${m.level ?? 1} · แต้ม ${free}/${points} · ได้ 1 แต้มทุกเลเวลอัป · รีเซ็ตได้ฟรีที่ค่าย</p>
       <div class="talent-root">${node('root')}</div>
       <div class="talent-branches">${(['a', 'b'] as const).map((b, i) => `<div class="talent-branch"><h4>${branches[i]}</h4>${node(`${b}1`)}${node(`${b}2`)}${gate}${node(`${b}3`)}</div>`).join('')}</div>
-      <button id="lobby-reset-talents" data-lobby="reset-talents" class="secondary"${spent ? '' : ' disabled'}>รีเซ็ตแต้ม (ฟรี)</button></section>`;
+      <button id="lobby-reset-talents" data-lobby="reset-talents" class="secondary"${talentsSpent(m.talents) ? '' : ' disabled'}>รีเซ็ตแต้ม (ฟรี)</button></section>`;
   }
   private board(p: Profile): string {
     const why: Record<string, string> = { taken: 'จ้างแล้ว', ore: 'แร่ดาวไม่พอ', full: `ค่ายเต็ม ${COMPANY_CAP} คน`, maxed: 'ดาวเต็มแล้ว' };

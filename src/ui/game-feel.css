@@ -388,6 +388,13 @@ html, body { background: #0a1422; }
 .tree-toggle { width: 100%; min-height: 44px; display: flex; align-items: center; gap: 8px; margin: 2px 0 8px; }
 .tree-toggle small { margin-left: auto; font-size: 12px; color: var(--gold-light, #f2d596); }
 .talent-tree { display: grid; gap: 6px; margin-bottom: 8px; }
+.tree-members { display: flex; gap: 6px; overflow-x: auto; padding: 2px 2px 6px; margin-bottom: 4px; scrollbar-width: thin; }
+.tree-member { position: relative; flex: 0 0 auto; min-width: 56px; min-height: 64px; display: grid; justify-items: center; gap: 2px; padding: 4px; border-radius: 12px;
+  background: #08121fb3; border: 1px solid #e8f5ff26; color: inherit; font: inherit; cursor: pointer; }
+.tree-member[aria-pressed="true"] { border-color: var(--gold-light, #f2d596); background: #2a2210cc; }
+.tree-member small { font-size: 11px; }
+.tree-member i { position: absolute; top: 2px; right: 2px; min-width: 16px; height: 16px; border-radius: 8px; font-style: normal; font-size: 10px; font-weight: 700; line-height: 16px; text-align: center; background: var(--gold-light, #f2d596); color: #1a1408; }
+.tree-member .portrait { width: 36px; height: 36px; border-radius: 50%; }
 .talent-points, .talent-gate { margin: 0; font-size: 11px; color: var(--text-muted, #b9c8d8); }
 .talent-gate { text-align: center; }
 .talent-root { display: flex; justify-content: center; }
