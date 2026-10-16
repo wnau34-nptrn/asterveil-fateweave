@@ -697,3 +697,10 @@ html, body { background: #0a1422; }
 @media (max-width: 400px) { .market-list small:not(.hire-status) { display: block; } }
 /* Smelting ore into veil dust at the smith (owner-approved 2026-10-16). */
 .smelt { margin: 10px 0; } .smelt-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; } .smelt-buttons button { min-height: 44px; }
+/* Background music controls (title: toggle and volume; lobby header: toggle). */
+.music-controls { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 4px; }
+.music-controls .round-glass, #lobby-music { width: 44px; height: 44px; min-width: 44px; display: grid; place-items: center; padding: 0; }
+.music-controls .icon, #lobby-music .icon { width: 20px; height: 20px; }
+.music-volume { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-muted, #b9c8d8); }
+.music-volume input { width: 140px; height: 44px; accent-color: var(--gold-light, #f2d596); }
+.music-volume input:disabled { opacity: .45; }

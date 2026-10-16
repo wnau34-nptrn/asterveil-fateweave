@@ -246,6 +246,27 @@ test('lobby market (4A): the broker sheet redraws the board for gold twice per r
   expect(issues).toEqual([]);
 });
 
+test('background music follows the view (title camp, lobby ruins, map meadow, battle and boss) and the mute choice is kept', async ({ page }) => {
+  const issues: string[] = []; page.on('pageerror', e => issues.push(e.message));
+  const music = () => page.evaluate(() => document.documentElement.dataset.music);
+  await seed(page, null); await page.goto('./');
+  await expect.poll(music).toBe('camp');
+  for (const t of ['camp', 'archway', 'ruins', 'meadow', 'battle', 'boss']) expect((await page.request.get(`./assets/music/bgm_${t}.mp3`)).ok()).toBe(true);
+  await reachable(page, '#music-toggle'); await page.locator('#music-toggle').click();
+  await expect(page.locator('#music-toggle')).toHaveAttribute('aria-pressed', 'false'); await expect(page.locator('#music-volume')).toBeDisabled();
+  expect(await page.evaluate(() => JSON.parse(localStorage.getItem('asterveil.fateweave.audio.v1')!))).toMatchObject({ muted: true });
+  await page.locator('#continue').click(); await expect.poll(music).toBe('ruins');
+  await expect(page.locator('#lobby-music')).toHaveAttribute('aria-pressed', 'false'); await reachable(page, '#lobby-music');
+  await page.locator('#lobby-music').click(); await expect(page.locator('#lobby-music')).toHaveAttribute('aria-pressed', 'true');
+  await page.locator('#lobby-depart').click(); await expect.poll(music).toBe('meadow');
+  // A boss battle plays the boss theme.
+  const [boss] = findTiles(map, 'boss');
+  await page.evaluate(([k, x, y]) => { const s = JSON.parse(localStorage.getItem(k as string)!); Object.assign(s.run, { position: { x, y: (y as number) + 1 }, elitesDefeated: ['scar-golem'], eventsDone: ['scar-rift'] }); localStorage.setItem(k as string, JSON.stringify(s)); }, [key, boss!.x, boss!.y]);
+  await page.reload(); await page.locator('#continue').click(); await page.locator('#move-up').click();
+  await expect.poll(music).toBe('boss');
+  expect(issues).toEqual([]);
+});
+
 test('the smith smelts ore into veil dust, capped per return; saved v18', async ({ page }) => {
   const f = map.equipment.forge;
   await seed(page, null, { ...newProfile(map, 5), tutorialDone: true, commander, bank: { ore: 500, gold: 0, seal: 0, dust: 0 } } as Profile);

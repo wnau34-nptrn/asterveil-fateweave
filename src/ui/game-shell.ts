@@ -3,6 +3,7 @@ import { clearLegacySaves, loadGame, saveGame, type Game } from '../core/save/ex
 import { createCommander, depart, brew, buy, claimQuest, refreshBoard, dismiss, equip, hire, learnTalent, newProfile, placeMember, resetTalents, salvage, settle, unequip, upgrade, canWithdraw } from '../core/world/profile';
 import type { Direction, EventChoice, ExpeditionState, MapDefinition, PotionId, Profile, ProfileResult, RunOutcome, ShopItemId, WorldEvent } from '../core/world/types';
 import { startPrologue, questDone, battleData, chooseEvent, finishBattle, heroCatalog, move, moveMember, openChest, recordBattle, usePotion, rest, revive, swapMembers, type EncounterLookup } from '../core/world/world';
+import { Music, type Track } from '../platform/music';
 import { browserStorage } from '../platform/browser-storage';
 import type { BattleUI } from './battle-ui';
 import type { NpcId } from '../game/visuals/assets';
@@ -27,6 +28,8 @@ export class GameShell {
   // The member who was just hired or upgraded cheers in the lobby scene.
   private lobbyCheer = '';
   private readonly storage = browserStorage();
+  // Background music per view (owner-supplied tracks); see platform/music.ts.
+  private readonly music = new Music(this.storage);
   private saved = true;
   private message = '';
   private locked = false;
@@ -67,7 +70,15 @@ export class GameShell {
         this.showCommander(true);
       }
     });
+    // Music controls (title and lobby): a mute toggle anywhere, and the volume slider on the title.
+    root.addEventListener('click', e => { if ((e.target as HTMLElement).closest('[data-music-toggle]')) { this.music.setMuted(!this.music.settings.muted); this.refreshMusicControls(); } });
+    root.addEventListener('input', e => { const t = e.target as HTMLInputElement; if (t.id === 'music-volume') this.music.setVolume(Number(t.value) / 100); });
     this.showTitle();
+  }
+  private refreshMusicControls(): void {
+    const p = this.music.settings;
+    this.root.querySelectorAll<HTMLButtonElement>('[data-music-toggle]').forEach(b => { b.setAttribute('aria-pressed', String(!p.muted)); b.setAttribute('aria-label', p.muted ? 'เปิดเพลง' : 'ปิดเพลง'); b.innerHTML = icon(p.muted ? 'musicOff' : 'music'); });
+    const v = this.root.querySelector<HTMLInputElement>('#music-volume'); if (v) v.disabled = p.muted;
   }
   setBattleVisibilityListener(listener: (visible: boolean) => void): void { this.onBattleVisibility = listener; }
 
@@ -79,7 +90,19 @@ export class GameShell {
     this.views.battle.classList.toggle('view-off', view !== 'battle');
     this.views.battle.inert = view !== 'battle';
     this.root.dataset.view = view;
+    this.music.play(this.trackFor(view));
     this.onBattleVisibility(view === 'battle');
+  }
+  // Title and prologue: camp; commander creation and Vargoth's retreat: archway; lobby: ruins; map: meadow;
+  // battles: the battle theme, or the boss theme for the boss and the mini-boss.
+  private trackFor(view: 'title' | 'commander' | 'lobby' | 'world' | 'battle'): Track {
+    if (view === 'battle') { const b = this.state?.battle; return b?.kind === 'boss' || (b?.kind === 'elite' && this.map.elites.find(e => e.id === b.source)?.mini) ? 'boss' : 'battle'; }
+    return ({ title: 'camp', commander: 'archway', lobby: 'ruins', world: 'meadow' } as const)[view];
+  }
+  private musicControls(): string {
+    const p = this.music.settings;
+    return `<div class="music-controls"><button id="music-toggle" data-music-toggle class="round-glass" aria-pressed="${!p.muted}" aria-label="${p.muted ? 'เปิดเพลง' : 'ปิดเพลง'}">${icon(p.muted ? 'musicOff' : 'music')}</button>`
+      + `<label class="music-volume"><span>เพลง</span><input id="music-volume" type="range" min="0" max="100" step="5" value="${Math.round(p.volume * 100)}" aria-label="ระดับเสียงเพลง"${p.muted ? ' disabled' : ''}></label></div>`;
   }
   private showTitle(): void {
     const g = this.game; const s = g?.run;
@@ -93,6 +116,7 @@ export class GameShell {
       <div class="title-card"><h1 class="title-logo"><img src="${import.meta.env.BASE_URL}assets/title/logo.svg" alt="Asterveil · Fateweave" width="700" height="224"></h1><p class="title-copy">ข้ามรอยแยก · ถักทอโชคชะตา</p>
       <div class="title-actions">${g ? `<p class="title-save">${s ? 'การเดินทางที่บันทึกไว้' : 'ค่ายของคุณ'}<span class="title-chips">${summary}</span></p><button id="continue" data-title="continue" class="primary">${s ? 'เดินทางต่อ →' : 'เข้าค่าย →'}</button>` : ''}
       <button id="new-game" data-title="new" class="${g ? 'secondary' : 'primary'}">${g ? 'เริ่มเกมใหม่' : 'เริ่มเกม'}</button>
+      ${this.musicControls()}
       ${this.storage ? '' : '<p class="title-warning">เบราว์เซอร์นี้ไม่อนุญาตให้บันทึก เล่นได้แต่จะไม่จำความคืบหน้า</p>'}</div><p class="title-footer">ชายแดนแอสเตอร์เวล</p></div>`;
     this.show('title');
     this.views.title.querySelector<HTMLElement>(g ? '#continue' : '#new-game')?.focus({ preventScroll: true });
@@ -167,7 +191,7 @@ export class GameShell {
     const prologueStart = startPrologue(this.state!, this.map);
     if (prologueStart.event.type === 'encounter') {
       this.state = prologueStart.state; this.persist(); this.locked = true; this.renderWorld();
-      this.story.play(prologue(this.game.profile.commander?.name ?? 'ผู้บัญชาการ'), 'เข้าสู่การต่อสู้', () => { this.locked = false; this.openBattle(); });
+      this.music.play('camp'); this.story.play(prologue(this.game.profile.commander?.name ?? 'ผู้บัญชาการ'), 'เข้าสู่การต่อสู้', () => { this.locked = false; this.openBattle(); });
       return;
     }
     this.renderWorld();
@@ -348,7 +372,7 @@ export class GameShell {
     this.banner = undefined;
     this.renderWorld();
     // After the prologue fight, Vargoth withdraws into the rift and the journey's goal is set.
-    if (this.prologueWon) { this.prologueWon = false; this.story.play(prologueEnd, 'ออกเดินทาง', () => this.views.world.querySelector<HTMLElement>('#move-up')?.focus({ preventScroll: true })); return; }
+    if (this.prologueWon) { this.prologueWon = false; this.music.play('archway'); this.story.play(prologueEnd, 'ออกเดินทาง', () => { this.music.play('meadow'); this.views.world.querySelector<HTMLElement>('#move-up')?.focus({ preventScroll: true }); }); return; }
     this.views.world.querySelector<HTMLElement>('#move-up')?.focus({ preventScroll: true });
   }
 }
