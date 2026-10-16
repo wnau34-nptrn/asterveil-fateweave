@@ -545,3 +545,6 @@ html, body { background: #0a1422; }
 .event-choices li div { display: grid; gap: 2px; } .event-choices li small { font-size: 12px; color: var(--text-muted, #b9c8d8); }
 .event-choices button { min-height: 44px; min-width: 88px; }
 .pack-list li[data-resource=dust] .icon { width: 40px; height: 32px; color: #c79bff; }
+/* An optional elite (walk around it or challenge it) wears gold instead of the gate's coral. */
+.elite-unit[data-forced=false] .portrait { border-color: var(--gold-light, #f2d596); box-shadow: 0 0 0 2px #08121fcc, 0 0 10px #f2d59680; }
+.elite-unit[data-forced=false]::after { background: var(--gold-light, #f2d596); }

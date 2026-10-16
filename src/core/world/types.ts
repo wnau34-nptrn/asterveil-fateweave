@@ -89,7 +89,8 @@ export interface EquipmentRules {
 }
 // ---- Phase 3A: elites and map events (draft numbers) ----
 // An elite stands on its tile like the boss: the only way past is to beat it (it uses its encounter's own level).
-export interface EliteDefinition { id: string; x: number; y: number; encounterId: string }
+// `forced`: the elite stands on a one-tile gate with no way around (checked by tests); otherwise it can be bypassed.
+export interface EliteDefinition { id: string; x: number; y: number; encounterId: string; forced: boolean }
 export type MapEventKind = 'bandits' | 'shrine' | 'merchant' | 'traveller' | 'rift';
 export interface MapEventDefinition { id: string; x: number; y: number; kind: MapEventKind }
 export type EventChoice = 'fight' | 'sneak' | 'pray' | 'offer' | 'buy-salve' | 'buy-tonic' | 'buy-repel' | 'help';

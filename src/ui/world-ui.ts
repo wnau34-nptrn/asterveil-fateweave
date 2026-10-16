@@ -201,7 +201,7 @@ export class WorldUI {
       if (chest) html += `<span class="chest sprite" data-cell="${x},${y}" data-chest="${chest.id}" data-tier="${chest.tier}" style="--x:${x};--y:${y};z-index:${y * 3 + 1}"></span>`;
       const kind = tileAt(this.map, { x, y })!.kind;
       const elite = this.map.elites.find(e => e.x === x && e.y === y);
-      if (elite) html += `<span class="elite-unit sprite" data-cell="${x},${y}" data-elite="${elite.id}" style="--x:${x};--y:${y};z-index:${y * 3 + 1}">${this.eliteArt[elite.id] ? portrait(this.eliteArt[elite.id]!) : ''}</span>`;
+      if (elite) html += `<span class="elite-unit sprite" data-cell="${x},${y}" data-elite="${elite.id}" data-forced="${elite.forced}" style="--x:${x};--y:${y};z-index:${y * 3 + 1}">${this.eliteArt[elite.id] ? portrait(this.eliteArt[elite.id]!) : ''}</span>`;
       const event = this.map.events.find(e => e.x === x && e.y === y);
       if (event) html += `<span class="event-mark sprite" data-cell="${x},${y}" data-event="${event.id}" data-kind="${event.kind}" style="--x:${x};--y:${y};z-index:${y * 3 + 1}"><i>!</i></span>`;
       if (['camp', 'start', 'goal', 'boss'].includes(kind)) html += `<span class="landmark sprite" data-cell="${x},${y}" data-kind="${kind}" style="--x:${x};--y:${y};z-index:${y * 3 + 1}">${kind === 'boss' ? '<span class="boss-unit"></span>' : ''}</span>`;

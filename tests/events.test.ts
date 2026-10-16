@@ -43,15 +43,17 @@ function win(state: ExpeditionState) {
   return finishBattle(recordBattle(state, map, lookup, s.commands), map, lookup);
 }
 
-describe('elite gates', () => {
-  it('each elite holds a one-tile gate: without it the camps and the boss cannot be reached', () => {
-    const [campB, campA] = map.rows.flatMap((row, y) => [...row].map((c, x) => ({ c, x, y }))).filter(t => tileAt(map, t)?.kind === 'camp');
-    const open = reachable([]); const gated = reachable([map.elites[0]!]);
-    expect(open.size).toBeGreaterThan(gated.size);
-    for (const camp of [campA!, campB!]) expect(open.has(`${camp.x},${camp.y}`)).toBe(true);
-    // Beyond the first gate lies every camp but the one before it.
-    expect([campA!, campB!].filter(c => !gated.has(`${c.x},${c.y}`)).length).toBeGreaterThan(0);
-    for (const e of map.elites) { expect(tileAt(map, e)?.kind).toBe('floor'); expect(lookup(e.encounterId)).toBeDefined(); }
+describe('elites', () => {
+  it('forced elites hold one-tile gates with no way around; optional elites can be walked around', () => {
+    expect(map.elites.some(e => e.forced)).toBe(true); expect(map.elites.some(e => !e.forced)).toBe(true);
+    const open = reachable([]); const key = (p: Point) => `${p.x},${p.y}`;
+    for (const e of map.elites) {
+      expect(tileAt(map, e)?.kind).toBe('floor'); expect(lookup(e.encounterId)).toBeDefined();
+      const without = reachable([e]);
+      // Without the elite's tile the reachable floor shrinks only when it is a true gate.
+      expect(without.size < open.size - 1).toBe(e.forced);
+      if (!e.forced) for (const n of Object.values(dirs)) { const p = { x: e.x + n.x, y: e.y + n.y }; if (open.has(key(p))) expect(without.has(key(p))).toBe(true); }
+    }
   });
   it('stepping into an unbeaten elite forces its fight; a win opens the gate for the run with an item and double EXP', () => {
     const elite = map.elites[0]!; const { from, dir } = approach(elite);

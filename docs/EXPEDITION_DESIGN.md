@@ -532,19 +532,19 @@ The lobby's **ช่าง** menu opens the forge sheet: every piece (bag or wor
 
 **Tests.** `tests/potions.test.ts` (brewing, packing, settling, each potion, battle lock, chests, save) and a browser test (brew, depart, drink a salve and a repel).
 
-## Events and elites (3A; approved 2026-10-16 "อีลิทบังคับสู้", draft numbers)
+## Events and elites (3A; approved 2026-10-16, revised the same day: "แก้ไขเป็นบางตัวบังคับสู้"; draft numbers)
 
-**Elites are forced fights.** The map (version 2) narrows two passages to a single tile, and an elite stands on each:
+**Some elites are forced fights.** `EliteDefinition.forced` marks an elite that stands on a one-tile gate with no way around (tests check the map geometry matches the flag). The others stand in open ground and can be challenged or walked around. Map version 3:
 
-| Elite | Gate | Encounter (reference level) |
-|---|---|---|
-| จ่าฝูงแห่งทุ่ง (Tusker Chief + Dandelion Sprite) | `gate-meadow` (9,18), meadow → thicket | `elite-tusk-chief` (Lv5) |
-| เจ้าป่าหนาม (Briar Lord + Briar Stalker) | `gate-thicket` (9,10), thicket → scar | `elite-briar-lord` (Lv8) |
+| Elite | Tile | Type | Encounter (reference level) |
+|---|---|---|---|
+| จ่าฝูงแห่งทุ่ง (Tusker Chief + Dandelion Sprite) | `gate-meadow` (9,18), in the wide meadow → thicket passage | optional (gold token) | `elite-tusk-chief` (Lv5) |
+| เจ้าป่าหนาม (Briar Lord + Briar Stalker) | `gate-thicket` (9,10), the only way thicket → scar | **forced** (coral token) | `elite-briar-lord` (Lv8) |
 
-- Stepping into an unbeaten elite starts its battle at once, like the boss; there is no way around.
+- Stepping into an unbeaten elite starts its battle at once, like the boss. A forced elite cannot be avoided; an optional one only fights if the team steps onto its tile.
 - A win marks the elite beaten for the run (the token disappears and the tile is floor). It also gives EXP ×2, a guaranteed item (rarity weights 0 : 0 : 60 : 30 : 10, so rare or better) and the zone's normal loot.
 - A loss sends the team back like any defeat, and the elite stays.
-- Step hints into an elite tile are red, like the boss.
+- Step hints into an elite tile are red, like the boss. Forced elites wear a coral ring, optional ones gold.
 
 **Event tiles** ("!" markers) open a choice dialog instead of rolling an encounter. Closing the dialog leaves the event waiting: the action button (**ดู**) reopens it. Finished events lose their marker for the run.
 
@@ -562,4 +562,4 @@ The lobby's **ช่าง** menu opens the forge sheet: every piece (bag or wor
 
 **Save v13.** The run gains `elitesDefeated`, `eventsDone` and `dust`; members may carry `wound`; battles may be `elite`/`event` with a `source` (an elite battle for a beaten elite, or an event battle for a finished event, is rejected). v12 data migrates empty. A run saved on an older map version can no longer be replayed on the new board, so it is settled home as **withdrawn** (its ore, seals, found items, potions, dust and EXP) instead of discarding the whole save.
 
-**Tests.** `tests/events.test.ts` (one-tile gates, forced elite fight, win/loss, every event choice, wounds, dust settling, save v13 and stale-map settling), the full-expedition run in `tests/world.test.ts` (it now beats both elites) and the advisor/class regressions that cover both elite encounters, plus browser tests for the elite gate and the shrine/merchant dialog.
+**Tests.** `tests/events.test.ts` (forced elites on one-tile gates and optional ones that can be bypassed, elite fight, win/loss, every event choice, wounds, dust settling, save v13 and stale-map settling), the full-expedition run in `tests/world.test.ts` (it must beat every forced elite) and the advisor/class regressions that cover both elite encounters, plus browser tests for the forced elite gate and the shrine/merchant dialog.

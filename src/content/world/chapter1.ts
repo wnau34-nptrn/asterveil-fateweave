@@ -6,7 +6,7 @@ import { talentTrees } from '../heroes/talents';
 // final camp before the boss (B) who guards the goal (G). '#' is impassable.
 // Version 2 (phase 3A) narrows the two zone gates to one tile each, held by an elite.
 export const chapterOne: MapDefinition = {
-  id: 'veil-frontier', version: 2, name: 'ชายแดนม่านเวล',
+  id: 'veil-frontier', version: 3, name: 'ชายแดนม่านเวล',
   rows: [
     '####################',
     '########:G:#########',
@@ -26,7 +26,7 @@ export const chapterOne: MapDefinition = {
     '####,,,#,,,,,#,,,###',
     '#####,,#,,C,,#,,####',
     '######,,,,,,,,,#####',
-    '#########.##########',
+    '#######,,....,######',
     '#####...........####',
     '####....##...##..###',
     '###.....##...##...##',
@@ -78,8 +78,10 @@ export const chapterOne: MapDefinition = {
   // Map potions (2D-5, draft numbers).
   // Phase 3A (draft numbers): elites hold the one-tile gates; events wait in the side areas, two per zone.
   elites: [
-    { id: 'gate-meadow', x: 9, y: 18, encounterId: 'elite-tusk-chief' },
-    { id: 'gate-thicket', x: 9, y: 10, encounterId: 'elite-briar-lord' },
+    // Optional: the meadow passage is wide, so the Tusk Chief can be challenged or walked around.
+    { id: 'gate-meadow', x: 9, y: 18, encounterId: 'elite-tusk-chief', forced: false },
+    // Forced: the only way from the thicket to the scar and the boss.
+    { id: 'gate-thicket', x: 9, y: 10, encounterId: 'elite-briar-lord', forced: true },
   ],
   events: [
     { id: 'meadow-traveller', x: 4, y: 20, kind: 'traveller' }, { id: 'meadow-merchant', x: 16, y: 21, kind: 'merchant' },

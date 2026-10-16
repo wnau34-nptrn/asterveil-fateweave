@@ -390,16 +390,18 @@ test('the boss blocks the gate; after its defeat the goal completes the expediti
   expect(issues).toEqual([]);
 });
 
-test('an elite holds its one-tile gate: stepping in forces the fight and the gate opens once it falls', async ({ page }, info) => {
-  const elite = map.elites[0]!;
+test('a forced elite holds its one-tile gate: stepping in forces the fight and the gate opens once it falls', async ({ page }, info) => {
+  const elite = map.elites.find(e => e.forced)!;
   const issues = await open(page, base({ position: { x: elite.x, y: elite.y + 1 } }));
   await expect(page.locator(`.elite-unit[data-elite="${elite.id}"]`)).toBeVisible();
   await expect(page.locator('.step-hint[data-dir=up]')).toHaveClass(/boss/);
   await page.screenshot({ path: info.outputPath('elite-gate.png') });
+  // The optional meadow elite wears gold; the gate's elite wears coral.
+  expect(await page.locator('.elite-unit[data-forced=false]').count()).toBe(map.elites.filter(e => !e.forced).length);
   await page.locator('#move-up').click();
   await expect(page.locator('#encounter-kind')).toContainText('อีลิท');
   const run = await saved(page); expect(run.battle).toMatchObject({ kind: 'elite', source: elite.id });
-  await page.evaluate(k => { const s = JSON.parse(localStorage.getItem(k)!); s.run.battle = null; s.run.elitesDefeated = [s.run.elitesDefeated, 'gate-meadow'].flat(); localStorage.setItem(k, JSON.stringify(s)); }, key);
+  await page.evaluate(k => { const s = JSON.parse(localStorage.getItem(k)!); s.run.battle = null; s.run.elitesDefeated = ['gate-thicket']; localStorage.setItem(k, JSON.stringify(s)); }, key);
   await page.reload(); await page.locator('#continue').click();
   await expect(page.locator(`.elite-unit[data-elite="${elite.id}"]`)).toBeHidden();
   await page.locator('#move-up').click(); await expect(page.locator('#world-view')).toBeVisible();

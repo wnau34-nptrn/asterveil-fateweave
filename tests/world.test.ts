@@ -204,8 +204,8 @@ describe('expedition rules', () => {
     expect(s.completed).toBe(true); expect(s.tutorialDone).toBe(true); expect(s.bossDefeated).toBe(true); expect(s.wins).toBeGreaterThan(2);
     // Levels (2D-1): every brought member grew on the way; this short advisor route reaches level 6.
     for (const m of Object.values(s.members)) expect(m.level).toBeGreaterThanOrEqual(4);
-    // Both elites (3A) hold one-tile gates on the way, so the run had to beat them.
-    expect(s.elitesDefeated).toHaveLength(map.elites.length);
+    // Forced elites (3A) hold one-tile gates on the way, so the run had to beat them.
+    for (const e of map.elites.filter(e => e.forced)) expect(s.elitesDefeated).toContain(e.id);
   });
 });
 
