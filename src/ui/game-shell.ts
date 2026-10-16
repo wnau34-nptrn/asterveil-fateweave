@@ -4,6 +4,7 @@ import { createCommander, depart, brew, buy, claimQuest, refreshBoard, dismiss, 
 import type { Direction, EventChoice, ExpeditionState, MapDefinition, PotionId, Profile, ProfileResult, RunOutcome, ShopItemId, WorldEvent } from '../core/world/types';
 import { startPrologue, questDone, battleData, chooseEvent, finishBattle, heroCatalog, move, moveMember, openChest, recordBattle, usePotion, rest, revive, swapMembers, type EncounterLookup } from '../core/world/world';
 import { Music, type Track } from '../platform/music';
+import { firstClearStory, runSummary, SummaryUI, type RunSummary } from './summary-ui';
 import { sfx, type SfxName } from '../platform/sfx';
 import { browserStorage } from '../platform/browser-storage';
 import type { BattleUI } from './battle-ui';
@@ -61,6 +62,7 @@ export class GameShell {
       depart: () => this.depart(), home: () => this.showTitle(),
     });
     const story = document.createElement('section'); root.append(story); this.story = new StoryUI(story);
+    const summary = document.createElement('section'); root.append(summary); this.summary = new SummaryUI(summary, map);
     this.commander = new CommanderUI(views.commander, { create: c => this.createCommander(c), back: () => { this.replacing = false; this.showTitle(); } });
     views.title.addEventListener('click', e => {
       const button = (e.target as HTMLElement).closest<HTMLButtonElement>('button[data-title]');
@@ -189,6 +191,9 @@ export class GameShell {
   }
   private npcCheer: NpcId | undefined;
   private readonly story: StoryUI;
+  // 4F: the summary of a run that just ended, shown once before the lobby.
+  private readonly summary: SummaryUI;
+  private pendingSummary: RunSummary | undefined;
   // Set when the prologue (tutorial) battle is won; its closing scene plays on leaving the battle.
   private prologueWon = false;
   private depart(): void {
@@ -210,9 +215,18 @@ export class GameShell {
   private endRun(outcome: RunOutcome): void {
     const run = this.state; if (!this.game || !run) return;
     if (outcome === 'withdrawn' && !canWithdraw(run, this.map)) return;
-    this.game = { profile: settle(this.game.profile, run, outcome, this.map), run: null };
+    const before = this.game.profile; const after = settle(before, run, outcome, this.map);
+    this.game = { profile: after, run: null }; this.pendingSummary = runSummary(before, run, after, outcome, this.map);
     this.persist(); this.lobbyMessage = ''; this.lobbyCheer = ''; this.banner = undefined; this.locked = false;
-    this.showLobby();
+    this.showSummary();
+  }
+  // The lobby comes up behind the summary (and, after the first clear, Vargoth's answer), so closing it lands there.
+  private showSummary(): void {
+    const s = this.pendingSummary; this.pendingSummary = undefined;
+    this.showLobby(); if (!s) return;
+    this.music.play('archway'); sfx.play(s.outcome === 'wiped' ? 'defeat' : s.outcome === 'complete' ? 'victory' : 'claim');
+    const open = () => this.summary.show(s, () => { this.music.play('ruins'); this.views.lobby.querySelector<HTMLElement>('#lobby-depart')?.focus({ preventScroll: true }); });
+    if (s.firstClear) this.story.play(firstClearStory, 'ดูสรุปการเดินทาง', open); else open();
   }
   private resume(): void {
     this.locked = false;
@@ -373,7 +387,8 @@ export class GameShell {
       } else if (result.event.type === 'defeat') {
         if (result.event.wiped) {
           // Every brought member is down: the expedition fails and settles home in this write.
-          this.game = { profile: settle(this.game!.profile, next, 'wiped', this.map), run: null }; this.persist();
+          const before = this.game!.profile; const after = settle(before, next, 'wiped', this.map);
+          this.game = { profile: after, run: null }; this.pendingSummary = runSummary(before, next, after, 'wiped', this.map); this.persist();
           return this.saved;
         }
         this.message = kind === 'tutorial' ? 'ลองศึกแรกอีกครั้งด้วยเลือดเต็ม' : 'ทีมถอยกลับ · คนที่ล้มยังล้มอยู่ ชุบหรือสลับตัวสำรองที่แคมป์';
@@ -383,7 +398,7 @@ export class GameShell {
     return this.saved;
   }
   private leaveBattle(): void {
-    if (!this.state) { this.lobbyMessage = ''; this.lobbyCheer = ''; this.locked = false; this.showLobby(); return; }
+    if (!this.state) { this.lobbyMessage = ''; this.lobbyCheer = ''; this.locked = false; this.showSummary(); return; }
     if (this.state.battle) { this.openBattle(); return; }
     this.locked = false;
     this.banner = undefined;

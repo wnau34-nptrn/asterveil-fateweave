@@ -139,6 +139,7 @@ for(const first of ['raider','brute']){
   // Every brought member is down: the run settles home in the same write.
   expect(await saved(page)).toBeNull();expect((await savedProfile(page)).last.outcome).toBe('wiped');
   await expect(page.locator('.result-card button')).toContainText('กลับค่าย');await page.locator('.result-card button').click();
+  await expect(page.locator('#summary-title')).toContainText('ทีมล้มทั้งหมด');await page.locator('#summary-done').click();
   await expect(page.locator('#lobby-view')).toBeVisible();await expect(page.locator('.lobby-result')).toContainText('การเดินทางล้มเหลว');expect(issues).toEqual([]);
  });
 }

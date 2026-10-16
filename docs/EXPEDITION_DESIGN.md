@@ -21,7 +21,7 @@ Approved 2026-10-14, re-planned 2026-10-15 for the mercenary roster.
 | 2C-2. New classes | Six new mercenaries (ART-CHAR-MERC-ENEMY-001), one class mechanic at a time; ★3 skill and ★5 passive per class | **Implemented**: all 6 base classes (Garran spear, Mira archer, Toma alchemist, Sefa scout, Brann warden, Lio bard) and the ★3 skill + ★5 passive for all 10 classes (see Star unlocks) |
 | 2D. Equipment and level | 2D-1 member + monster levels; 2D-2 equipment (6 slots, 5 rarities, drops, inventory); 2D-3 sets; 2D-4 forge (enhance, fuse, reroll, salvage); 2D-5 map potions; 2D-1b passive talent tree | **Implemented**: 2D-1 (see Levels), 2D-1b (Talent tree), 2D-2 (Equipment), 2D-3 (Equipment sets), 2D-4 (Forge), 2D-5 (Map potions); numbers are drafts |
 | 3. Choices and content | 3A events with fight/avoid choices and forced elites; later mini boss, puzzles (rune order, push stone, lever), secrets, map quest "2 of 3" and side quests | **3A–3D implemented** (see Events and elites; Rift seal and mini-boss; Puzzles and secrets; Camp side quests) |
-| 4. Economy and wrap-up | Local gold and shop, salvage, fast travel between camps, elite respawn on rest, defeat penalty, whole-map balance simulation, completion screen | **4A and 4E implemented** (see Camp market and board refresh; Balance simulation); fast travel, elite respawn, defeat penalty and completion screen planned |
+| 4. Economy and wrap-up | Local gold and shop, salvage, fast travel between camps, elite respawn on rest, defeat penalty, whole-map balance simulation, completion screen | **4A, 4E and 4F implemented** (see Camp market and board refresh; Balance simulation; Expedition summary); fast travel, elite respawn and defeat penalty planned |
 
 Numbers in phases 2–4 are drafts and need owner approval after playtesting.
 
@@ -893,3 +893,30 @@ Then `startPrologue` starts the `first-clash` battle (now "กองหน้า
 **Tests:**
 - `tests/shop.test.ts`: smelt rate, cap, reset and save v18; seal limits per star.
 - A browser test smelts at the forge.
+
+## Expedition summary (4F; 2026-10-16)
+
+**When a run ends** (goal reached, withdrawn at a muster point, or every brought member down), a full-screen summary shows over the lobby before the player continues.
+
+**What it shows:**
+- **The run:** steps, wins, retreats, elites beaten, chests opened and puzzles solved.
+- **Resources kept:** ore, gold, seals and dust, after the wipe halving.
+- **New gear:** pieces that reached the bag, best first, with the auto-salvage count.
+- **Level-ups:** each member's level before and after.
+- **Side quests:** progress for every quest that moved, marked when ready to claim at camp.
+
+**First clear.** The first time the rift warden falls, Vargoth answers before the summary in three story panels: the warden fell, the rifts go deeper and he will wait, then Aegis calls the team home.
+
+**Presentation:**
+- The backdrop follows the outcome: retreat for a clear, awaken for a withdrawal, rift for a wipe.
+- The archway theme plays during the summary.
+- It is full screen on portrait phones.
+
+**Data and saves.**
+- `runSummary` in `ui/summary-ui.ts` builds the summary from the profile before and after `settle` plus the finished run.
+- It owns no rules and adds no save field.
+- A reload during the summary simply lands in the lobby, which still shows the last-result line.
+
+**Tests:**
+- `tests/summary.test.ts` covers the counts, haul, gear, level-ups, quests, first clear and the wipe.
+- Browser tests cover a withdrawal, a wipe and a first clear (Vargoth, then the summary, then the lobby).

@@ -348,6 +348,8 @@ test('lobby: hire a duplicate, upgrade a star, pick the team, depart, and withdr
   await expect(page.locator('#rest')).toContainText('ทางออก'); await page.locator('#rest').click();
   await expect(page.locator('#camp-title')).toContainText('ทางเข้าด่าน'); await page.locator('#withdraw').click();
   await expect(page.locator('#withdraw')).toContainText('ยืนยันถอนตัว'); await page.locator('#withdraw').click();
+  // 4F: the run summary comes first, then the lobby.
+  await expect(page.locator('#summary-title')).toContainText('ถอนตัวกลับค่าย'); await page.locator('#summary-done').click();
   await expect(page.locator('#lobby-view')).toBeVisible(); await expect(page.locator('.lobby-result')).toContainText('ถอนตัวกลับค่าย');
   expect(await saved(page)).toBeNull(); expect((await savedProfile(page)).expeditions).toBe(1);
   expect(issues).toEqual([]);
@@ -520,6 +522,8 @@ test('losing every brought member fails the expedition: back to the lobby with h
   await expect(page.locator('.result-card')).toContainText('แพ้แล้ว'); await expect(page.locator('#leave-battle')).toContainText('กลับค่าย');
   expect(await saved(page)).toBeNull(); expect((await savedProfile(page)).bank).toEqual({ ore: 5, gold: 0, seal: 0, dust: 0 });
   await page.locator('#leave-battle').click();
+  await expect(page.locator('#summary-title')).toContainText('ทีมล้มทั้งหมด'); await expect(page.locator('.summary-haul')).toContainText('+5');
+  await page.locator('#summary-done').click();
   await expect(page.locator('#lobby-view')).toBeVisible(); await expect(page.locator('.lobby-result')).toContainText('ได้แร่ดาว 5');
   expect(issues).toEqual([]);
 });
@@ -535,6 +539,12 @@ test('the boss blocks the gate; after its defeat the goal completes the expediti
   await page.evaluate(k => { const s = JSON.parse(localStorage.getItem(k)!); s.run.battle = null; s.run.bossDefeated = true; localStorage.setItem(k, JSON.stringify(s)); }, key);
   await page.reload(); await page.locator('#continue').click();
   for (let i = 0; i < 3; i++) await page.locator('#move-up').click();
+  // 4F: the first clear plays Vargoth's answer, then the summary, then the lobby.
+  await expect(page.locator('#story-view')).toBeVisible(); await expect(page.locator('#story-view')).toHaveAttribute('data-speaker', 'vargoth');
+  for (let i = 0; i < 3; i++) await page.locator('#story-next').click();
+  await expect(page.locator('#summary-title')).toContainText('สำเร็จการเดินทาง'); await reachable(page, '#summary-done');
+  await page.screenshot({ path: info.outputPath('expedition-summary.png') });
+  await page.locator('#summary-done').click(); await expect(page.locator('#summary-view')).toBeHidden();
   await expect(page.locator('#lobby-view')).toBeVisible(); await expect(page.locator('.lobby-result')).toContainText('สำเร็จการเดินทาง');
   expect(await saved(page)).toBeNull(); expect((await savedProfile(page)).completes).toBe(1);
   await reachable(page, '#lobby-depart'); await page.screenshot({ path: info.outputPath('expedition-complete.png') });
