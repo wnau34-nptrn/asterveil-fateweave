@@ -1,0 +1,93 @@
+{
+  "runtime": [
+    {
+      "file": "scenes/story_awaken.webp",
+      "bytes": 415622,
+      "size": [
+        1920,
+        1080
+      ],
+      "mode": "RGB"
+    },
+    {
+      "file": "scenes/story_retreat.webp",
+      "bytes": 369084,
+      "size": [
+        1920,
+        1080
+      ],
+      "mode": "RGB"
+    },
+    {
+      "file": "scenes/story_rift.webp",
+      "bytes": 353070,
+      "size": [
+        1920,
+        1080
+      ],
+      "mode": "RGB"
+    },
+    {
+      "file": "vargoth/vargoth_bust.webp",
+      "bytes": 99024,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGB"
+    },
+    {
+      "file": "vargoth/vargoth_full.webp",
+      "bytes": 271662,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    }
+  ],
+  "runtime_bytes": 1508462,
+  "footY": 1000,
+  "figure_alpha_bbox": [
+    68,
+    130,
+    955,
+    1000
+  ],
+  "isolated_source_speck_pixels_removed": 163,
+  "source_components_largest": [
+    810284,
+    4,
+    3,
+    3,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2
+  ],
+  "source_bbox": [
+    18,
+    47,
+    1240,
+    1245
+  ],
+  "sources": {
+    "vargoth_full": "exec-b68d3457-8855-4b3f-bd25-20e455fe2c21.png",
+    "vargoth_bust": "exec-a0623adf-bbf2-4697-96ac-a47e54ee090b.png",
+    "story_awaken": "exec-62b73144-592c-402b-a628-f9349474c8c3.png",
+    "story_rift": "exec-f8168156-cee3-452f-bd17-dc9b09894034.png",
+    "story_retreat": "exec-4100e993-876a-4a42-89da-814edc36f2f2.png"
+  },
+  "reference_sha256": {
+    "public/assets/art/ruins.webp": "a06f910462fb69b1a38d94c1a169274f8b28d559286ec6ae3fc7ac3db61e7868",
+    "public/assets/art/units.webp": "d205b57d8a4082290a3a2e5a415407245106f948033cf3c66eb7b8e537393629",
+    "public/assets/art/units_foes.webp": "a76432680856f6f45bf2c7a006124e29cc8a248ea680779194dfa339c7338860",
+    "public/assets/art/portraits.webp": "f604b5f93c6526130546e194674d37f4e3265083908bbbb3448affadf4b70496",
+    "public/assets/art/portraits_foes.webp": "a0af4dc53e1413de8d161e2f454845b856ca255622a2efdc03b8439961ca841e",
+    "public/assets/lobby/lobby_bg.webp": "3fbd0e041c78904fa0dc83f86e019d46124238555a250f95dc1f60e487d83f1f"
+  }
+}

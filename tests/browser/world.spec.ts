@@ -67,6 +67,11 @@ test('prologue: a new commander wakes in the ruins, Vargoth speaks, and his vang
   await page.locator('#story-next').click(); await expect(story).toHaveAttribute('data-speaker', 'guardian'); await expect(page.locator('.story-who')).toContainText('เอกิส');
   await page.locator('#story-next').click(); await expect(story).toHaveAttribute('data-speaker', 'vargoth'); await expect(page.locator('.story-who')).toContainText('วาร์กอธ');
   await page.screenshot({ path: info.outputPath('prologue-vargoth.png') });
+  // The painted rift scene and Vargoth's full figure (ART-STORY-PROLOGUE-001), also on a portrait phone.
+  await expect(story).toHaveAttribute('data-scene', 'rift'); await expect(page.locator('.story-vargoth')).toBeVisible(); await expect(page.locator('.story-bust')).toHaveCount(1);
+  expect(await page.locator('.story-vargoth').evaluate(el => (el as HTMLImageElement).naturalWidth)).toBe(1024);
+  const size = page.viewportSize()!; await page.setViewportSize({ width: 390, height: 844 });
+  await reachable(page, '#story-next'); await page.screenshot({ path: info.outputPath('prologue-vargoth-phone.png') }); await page.setViewportSize(size);
   await page.locator('#story-next').click(); await expect(page.locator('#story-next')).toHaveText('เข้าสู่การต่อสู้');
   expect(await page.evaluate(() => document.scrollingElement!.scrollHeight <= innerHeight)).toBe(true);
   await page.locator('#story-next').click(); await expect(story).toBeHidden();
