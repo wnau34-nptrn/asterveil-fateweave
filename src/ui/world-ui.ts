@@ -1,10 +1,10 @@
 import type { HeroDefinition } from '../core/battle/types';
 import type { Direction, EventChoice, ExpeditionState, MapDefinition, Point, PotionId } from '../core/world/types';
-import { atCamp, atMuster, canOpenChest, canRest, canRevive, chestAt, eliteBlocks, encounterChance, eventChoiceReason, isRevealed, monsterLevelAt, pendingEvent, rosterIds, starred, tileAt, wounded, zoneOf } from '../core/world/world';
+import { atCamp, atMuster, canOpenChest, canRest, canRevive, chestAt, eliteBlocks, questComplete, questDone, encounterChance, eventChoiceReason, isRevealed, monsterLevelAt, pendingEvent, rosterIds, starred, tileAt, wounded, zoneOf } from '../core/world/world';
 import { PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS } from '../core/world/types';
 import { actorArt, portraitsUrl, sheetRows } from '../game/visuals/assets';
 import { SOURCE_TILE, chestFrame, decorAt, itemFrame, floorFrame, fogLayers, landmarkAt, tileSizeFor, tileset, worldArtUrl, type Landmark } from '../game/visuals/world-art';
-import { choiceText, eventChoices, eventReasonText, eventText, heroText, itemLines, itemName, potionIcon, potionText, resourceOrder, resourceText } from './th';
+import { questLine, choiceText, eventChoices, eventReasonText, eventText, heroText, itemLines, itemName, potionIcon, potionText, resourceOrder, resourceText } from './th';
 import { icon, type IconName } from './icons';
 
 export interface WorldHost { move(dir: Direction): void; rest(): void; revive(heroId: string): void; swap(a: string, b: string): void; moveMember(id: string): void; withdraw(): void; openChest(): void;
@@ -33,10 +33,15 @@ export function portrait(id: string): string {
   const { sheet, frame } = actorArt[id]!; const rows = sheetRows[sheet];
   return `<span class="portrait" data-actor="${id}" style="--portrait-x:${frame % 2};--portrait-y:${Math.floor(frame / 2)};--portrait-rows:${rows}" aria-hidden="true"><img src="${portraitsUrl(sheet)}" alt="" width="1024" height="${rows * 512}" draggable="false"></span>`;
 }
-const goals = (s: ExpeditionState) => [
-  { done: s.tutorialDone, label: 'ผ่านการปะทะครั้งแรก' }, { done: !!s.camp, label: 'ไปถึงแคมป์' },
-  { done: s.bossDefeated, label: 'ชนะผู้คุมรอยแยก' }, { done: s.completed, label: 'ไปถึงประตูรอยแยก' },
-];
+// The rift seal (3B) sits between the camp and the boss: any `need` of its objectives break it.
+const goals = (s: ExpeditionState, map: MapDefinition) => {
+  const seal = questDone(s, map).length; const need = map.quest.need;
+  return [
+    { done: s.tutorialDone, label: 'ผ่านการปะทะครั้งแรก' }, { done: !!s.camp, label: 'ไปถึงแคมป์' },
+    { done: seal >= need || s.bossDefeated, label: `ทำลายผนึกรอยแยก ${Math.min(seal, need)}/${need}` },
+    { done: s.bossDefeated, label: 'ชนะผู้คุมรอยแยก' }, { done: s.completed, label: 'ไปถึงประตูรอยแยก' },
+  ];
+};
 
 // Full-screen DOM renderer for the pure expedition state (Luminous Veil R2).
 // It owns no rules: every input is forwarded to the host, which commits and
@@ -201,7 +206,7 @@ export class WorldUI {
       if (chest) html += `<span class="chest sprite" data-cell="${x},${y}" data-chest="${chest.id}" data-tier="${chest.tier}" style="--x:${x};--y:${y};z-index:${y * 3 + 1}"></span>`;
       const kind = tileAt(this.map, { x, y })!.kind;
       const elite = this.map.elites.find(e => e.x === x && e.y === y);
-      if (elite) html += `<span class="elite-unit sprite" data-cell="${x},${y}" data-elite="${elite.id}" data-forced="${elite.forced}" style="--x:${x};--y:${y};z-index:${y * 3 + 1}">${this.eliteArt[elite.id] ? portrait(this.eliteArt[elite.id]!) : ''}${elite.forced ? '' : `<em class="elite-reward">${icon('chest')}</em>`}</span>`;
+      if (elite) html += `<span class="elite-unit sprite" data-cell="${x},${y}" data-elite="${elite.id}" data-forced="${elite.forced}"${elite.mini ? ' data-mini="true"' : ''} style="--x:${x};--y:${y};z-index:${y * 3 + 1}">${this.eliteArt[elite.id] ? portrait(this.eliteArt[elite.id]!) : ''}${elite.forced ? '' : `<em class="elite-reward">${icon(elite.mini ? 'boss' : 'chest')}</em>`}</span>`;
       const event = this.map.events.find(e => e.x === x && e.y === y);
       if (event) html += `<span class="event-mark sprite" data-cell="${x},${y}" data-event="${event.id}" data-kind="${event.kind}" style="--x:${x};--y:${y};z-index:${y * 3 + 1}"><i>!</i></span>`;
       if (['camp', 'start', 'goal', 'boss'].includes(kind)) html += `<span class="landmark sprite" data-cell="${x},${y}" data-kind="${kind}" style="--x:${x};--y:${y};z-index:${y * 3 + 1}">${kind === 'boss' ? '<span class="boss-unit"></span>' : ''}</span>`;
@@ -221,9 +226,9 @@ export class WorldUI {
     this.root.dataset.zone = tile.kind === 'camp' ? 'camp' : tile.zoneId;
     this.renderDanger(encounterChance(s, this.map), prev?.chance);
     this.renderParty(s);
-    const done = goals(s).filter(g => g.done).length; const next = goals(s).find(g => !g.done);
-    this.root.querySelector('#objective-button')!.innerHTML = `<span class="objective-symbol">${icon('goal')}</span><span class="objective-text">${next ? next.label : 'สำเร็จการเดินทาง'}</span><span class="objective-count">${done}/4</span>${icon('right')}`;
-    this.root.querySelector('#objective-button')!.setAttribute('aria-label', `เป้าหมาย ${done} จาก 4 · ${next ? `ถัดไป ${next.label}` : 'สำเร็จแล้ว'} · เปิดรายการ`);
+    const all = goals(s, this.map); const done = all.filter(g => g.done).length; const next = all.find(g => !g.done);
+    this.root.querySelector('#objective-button')!.innerHTML = `<span class="objective-symbol">${icon('goal')}</span><span class="objective-text">${next ? next.label : 'สำเร็จการเดินทาง'}</span><span class="objective-count">${done}/${all.length}</span>${icon('right')}`;
+    this.root.querySelector('#objective-button')!.setAttribute('aria-label', `เป้าหมาย ${done} จาก ${all.length} · ${next ? `ถัดไป ${next.label}` : 'สำเร็จแล้ว'} · เปิดรายการ`);
     const message = this.root.querySelector<HTMLElement>('#world-message')!;
     // A new notice pops in as a toast and fades by itself; the text stays for assistive tech.
     if (message.textContent !== view.message) { message.textContent = view.message; message.classList.remove('toast-live'); void message.offsetWidth; message.classList.add('toast-live'); }
@@ -415,7 +420,8 @@ export class WorldUI {
     layer.innerHTML = (Object.entries(offsets) as [Direction, Point][]).map(([dir, o]) => {
       const p = { x: s.position.x + o.x, y: s.position.y + o.y }; const t = tileAt(this.map, p);
       if (!t || t.kind === 'wall') return '';
-      return `<span class="step-hint${(t.kind === 'boss' && !s.bossDefeated) || eliteBlocks(s, this.map, p) ? ' boss' : ''}" data-dir="${dir}" style="--x:${p.x};--y:${p.y}"><i>${icon(dir)}</i></span>`;
+      const sealed = t.kind === 'boss' && !s.bossDefeated && !questComplete(s, this.map);
+      return `<span class="step-hint${sealed ? ' sealed' : (t.kind === 'boss' && !s.bossDefeated) || eliteBlocks(s, this.map, p) ? ' boss' : ''}" data-dir="${dir}" style="--x:${p.x};--y:${p.y}"><i>${icon(dir)}</i></span>`;
     }).join('');
   }
 
@@ -462,7 +468,9 @@ export class WorldUI {
 
   private renderGoals(): void {
     const s = this.view?.state; if (!s) return;
-    this.root.querySelector('#world-goals-content')!.innerHTML = `<ul class="goal-list">${goals(s).map(g => `<li class="${g.done ? 'done' : ''}">${icon(g.done ? 'check' : 'circle')}<span>${g.label}</span></li>`).join('')}</ul><p class="world-stats">เดินแล้ว ${s.steps} ก้าว · ชนะ ${s.wins} ศึก · แพ้ ${s.defeats} ครั้ง</p>`;
+    const sealed = questDone(s, this.map);
+    const seal = `<h3 class="seal-title">${icon('boss')} ผนึกรอยแยก · ทำให้ครบ ${this.map.quest.need} จาก ${this.map.quest.objectives.length} ก่อนท้าผู้คุม</h3><ul class="goal-list seal-list">${this.map.quest.objectives.map(o => `<li id="quest-${o.id}" class="${sealed.includes(o.id) ? 'done' : ''}">${icon(sealed.includes(o.id) ? 'check' : 'circle')}<span>${questLine(o, s)}</span></li>`).join('')}</ul>`;
+    this.root.querySelector('#world-goals-content')!.innerHTML = `<ul class="goal-list">${goals(s, this.map).map(g => `<li class="${g.done ? 'done' : ''}">${icon(g.done ? 'check' : 'circle')}<span>${g.label}</span></li>`).join('')}</ul>${seal}<p class="world-stats">เดินแล้ว ${s.steps} ก้าว · ชนะ ${s.wins} ศึก · แพ้ ${s.defeats} ครั้ง</p>`;
   }
 
   private renderInfo(): void {
@@ -476,6 +484,7 @@ export class WorldUI {
       <h3>เมื่อแพ้</h3><p>ทีมถอยกลับแคมป์ล่าสุดที่ไปถึง (หรือทางเข้า) คนที่ล้มยังล้มอยู่ ต้องชุบหรือสลับตัวสำรอง ถ้าทุกคนที่พามาล้มหมด การเดินทางล้มเหลว กลับค่ายพร้อมแร่ดาวและตราครึ่งเดียว</p>
       <h3>${icon('camp')} กลับค่าย</h3><p>ถอนตัวได้ที่แคมป์หรือทางเข้าด่าน ของที่เก็บได้กลับค่ายครบ ไปถึงประตูรอยแยกคือสำเร็จการเดินทาง</p>
       <h3>${icon('boss')} อีลิท</h3><p>อีลิทขอบแดงเฝ้าด่านทางเดียว ต้องชนะถึงจะผ่าน · อีลิทขอบทองที่มีหีบเหนือหัวเดินอ้อมได้ แต่ถ้าท้าสู้แล้วชนะจะได้ EXP ×${this.map.eventRules.optionalElite.exp} อุปกรณ์ชั้นดีกว่า เหรียญทอง +${this.map.eventRules.optionalElite.gold} และตราสัญญา +${this.map.eventRules.optionalElite.seal}</p>
+      <h3>${icon('boss')} ผนึกรอยแยก</h3><p>ผู้คุมรอยแยกถูกผนึกไว้ ต้องทำเป้าหมายให้ครบ ${this.map.quest.need} จาก ${this.map.quest.objectives.length} ก่อนจึงท้าสู้ได้: ชนะมินิบอสยักษ์หินในรอยแผล, เปิดกล่องสมบัติ 4 กล่อง หรือชำระรอยแยกเล็ก ดูความคืบหน้าได้จากช่องเป้าหมายมุมซ้ายบน</p>
       <h3>${icon('boss')} ผู้คุมรอยแยก</h3><p>บอสเฝ้าทางเดียวไปประตูรอยแยก เดินชนบอสเพื่อเริ่มศึก ชนะแล้วเดินไปที่ประตูเพื่อจบการเดินทาง</p></section>
       ${s ? `<p class="world-stats">เดินแล้ว ${s.steps} ก้าว · ชนะ ${s.wins} ศึก · แพ้ ${s.defeats} ครั้ง</p>` : ''}
       <p id="world-save" class="world-save">${this.view?.saved ? 'บันทึกอัตโนมัติบนเครื่องนี้ทุกก้าว' : 'เล่นได้ แต่บันทึกบนเครื่องนี้ไม่ได้'}</p>`;

@@ -20,7 +20,7 @@ Approved 2026-10-14, re-planned 2026-10-15 for the mercenary roster.
 | L2. Character creation | Commander (non-combat) name, crest and banner colour, once, between Home and Lobby | **Implemented** |
 | 2C-2. New classes | Six new mercenaries (ART-CHAR-MERC-ENEMY-001), one class mechanic at a time; ★3 skill and ★5 passive per class | **Implemented**: all 6 base classes (Garran spear, Mira archer, Toma alchemist, Sefa scout, Brann warden, Lio bard) and the ★3 skill + ★5 passive for all 10 classes (see Star unlocks) |
 | 2D. Equipment and level | 2D-1 member + monster levels; 2D-2 equipment (6 slots, 5 rarities, drops, inventory); 2D-3 sets; 2D-4 forge (enhance, fuse, reroll, salvage); 2D-5 map potions; 2D-1b passive talent tree | **Implemented**: 2D-1 (see Levels), 2D-1b (Talent tree), 2D-2 (Equipment), 2D-3 (Equipment sets), 2D-4 (Forge), 2D-5 (Map potions); numbers are drafts |
-| 3. Choices and content | 3A events with fight/avoid choices and forced elites; later mini boss, puzzles (rune order, push stone, lever), secrets, map quest "2 of 3" and side quests | **3A implemented** (see Events and elites); the rest planned |
+| 3. Choices and content | 3A events with fight/avoid choices and forced elites; later mini boss, puzzles (rune order, push stone, lever), secrets, map quest "2 of 3" and side quests | **3A and 3B implemented** (see Events and elites; Rift seal and mini-boss); 3C puzzles/secrets and 3D side quests planned |
 | 4. Economy and wrap-up | Local gold and shop, salvage, fast travel between camps, elite respawn on rest, defeat penalty, whole-map balance simulation, completion screen | Planned |
 
 Numbers in phases 2–4 are drafts and need owner approval after playtesting.
@@ -604,3 +604,44 @@ Hiring no longer competes with brewing and the forge for ore.
   - busts: 768×512.
 
   Decoded image memory drops from about 90 MB to about 35 MB, and runtime bytes from 2.03 MB to 1.60 MB. Intake status: ACCEPTED_WITH_TECH_FIX.
+
+## Rift seal and mini-boss (3B; approved 2026-10-16, draft numbers)
+
+**The rift seal.** The boss can be challenged only after **2 of 3** objectives (`map.quest`):
+
+| Objective | Done when |
+|---|---|
+| `golem` | the mini-boss `scar-golem` is beaten (`run.elitesDefeated`) |
+| `chests` | 4 of the 6 chests are open (`run.openedChests`) |
+| `rift` | the scar rift event is cleared (`run.eventsDone`) |
+
+- Progress is derived from state that already exists (`questDone`, `questComplete`), so the save shape and version are unchanged (v14).
+- Stepping into the boss while sealed is blocked with reason `sealed`. No battle starts and the team stays put; the message names the progress.
+- The objective capsule gains a fifth goal, "ทำลายผนึกรอยแยก n/2". The goals dialog lists the three objectives with live progress, and the boss step hint shows a grey lock instead of red.
+- Finishing an objective adds "ผนึกรอยแยก n/2" (or "ผนึกแตกแล้ว") to the result message.
+
+**Mini-boss.** "ยักษ์หินแห่งรอยแผล" (`mini-veil-golem`, Lv9):
+- Veil Golem 240 HP (physical, signature *Veil Quake* 30 at slot 2) with a Rift Weaver 95 HP (energy).
+- Art `foe_golem` / `foe_riftweaver`.
+- Stands in the scar's right-hand pocket at (17,6), an optional elite (`mini: true`, not forced).
+- Its win replaces the zone loot with `eventRules.miniBoss`:
+
+| Reward | Mini-boss |
+|---|---|
+| EXP multiplier | ×3 |
+| Item rarity weights (common : uncommon : rare : epic : legendary) | 0 : 0 : 0 : 60 : 40 (epic or better) |
+| Ore | 30–40 |
+| Gold | 15–20 |
+| Ember | 1 |
+| Seal | 1 |
+
+- The optional-elite bonus does not stack with this reward.
+- Token: purple ring and boss badge. The banner reads "มินิบอส".
+
+**Map version 4** (the new mini-boss tile). Runs saved on v3 settle home as withdrawn.
+
+**Tests.**
+- `tests/quest.test.ts`: objectives, any-two, sealed boss, mini-boss reward.
+- The full-expedition run now beats the mini-boss and the rift before the boss.
+- The advisor and class regressions include `mini-veil-golem`.
+- Browser test: sealed hint and message, goals dialog, mini-boss token and encounter.

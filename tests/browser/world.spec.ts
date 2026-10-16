@@ -378,7 +378,8 @@ test('losing every brought member fails the expedition: back to the lobby with h
 
 test('the boss blocks the gate; after its defeat the goal completes the expedition', async ({ page }, info) => {
   const [boss] = findTiles(map, 'boss');
-  const issues = await open(page, base({ position: { x: boss!.x, y: boss!.y + 1 }, bossDefeated: false }));
+  // The rift seal (3B) is broken: two of its objectives are done.
+  const issues = await open(page, base({ position: { x: boss!.x, y: boss!.y + 1 }, bossDefeated: false, elitesDefeated: ['scar-golem'], eventsDone: ['scar-rift'] }));
   await page.locator('#move-up').click();
   await expect(page.locator('#encounter-kind')).toContainText('บอส');
   expect((await saved(page)).battle?.kind).toBe('boss');
@@ -419,6 +420,28 @@ test('an optional elite wears gold with a reward badge and announces its bonus w
   await page.locator('#move-up').click();
   await expect(page.locator('#world-message')).toContainText(`เหรียญทอง +${map.eventRules.optionalElite.gold}`);
   await expect(page.locator('#encounter-kind')).toContainText('อีลิท');
+  expect(issues).toEqual([]);
+});
+test('rift seal: the boss stays sealed until 2 of 3 objectives; the goal list shows them; the mini-boss guards the scar', async ({ page }, info) => {
+  const [boss] = findTiles(map, 'boss'); const golem = map.elites.find(e => e.mini)!;
+  const issues = await open(page, base({ position: { x: boss!.x, y: boss!.y + 1 }, camp: findTiles(map, 'camp')[0]!, elitesDefeated: ['scar-golem'] }));
+  await expect(page.locator('.step-hint[data-dir=up]')).toHaveClass(/sealed/);
+  await page.locator('#move-up').click();
+  await expect(page.locator('#world-message')).toContainText('ยังถูกผนึก'); await expect(page.locator('#world-message')).toContainText('1/2');
+  expect((await saved(page)).battle).toBeNull(); expect((await saved(page)).position).toEqual({ x: boss!.x, y: boss!.y + 1 });
+  await expect(page.locator('.objective-text')).toContainText('ทำลายผนึกรอยแยก 1/2');
+  await page.locator('#objective-button').click();
+  await expect(page.locator('#quest-golem')).toHaveClass(/done/); await expect(page.locator('#quest-chests')).toContainText('0/4'); await expect(page.locator('#quest-rift')).not.toHaveClass(/done/);
+  await page.screenshot({ path: info.outputPath('rift-seal-goals.png') });
+  await page.locator('[data-world=goals-close]').click();
+  // The mini-boss: purple ring and a boss badge, announced as a mini-boss.
+  await page.evaluate(([k, x, y]) => { const s = JSON.parse(localStorage.getItem(k as string)!); s.run.position = { x, y: (y as number) + 1 }; s.run.elitesDefeated = []; s.run.revealed = '1'.repeat(s.run.revealed.length); localStorage.setItem(k as string, JSON.stringify(s)); }, [key, golem.x, golem.y]);
+  await page.reload(); await page.locator('#continue').click();
+  await expect(page.locator(`.elite-unit[data-elite="${golem.id}"][data-mini]`)).toBeVisible();
+  await page.screenshot({ path: info.outputPath('mini-boss.png') });
+  await page.locator('#move-up').click();
+  await expect(page.locator('#world-message')).toContainText('มินิบอส'); await expect(page.locator('#encounter-kind')).toContainText('อีลิท');
+  expect((await saved(page)).battle).toMatchObject({ kind: 'elite', source: golem.id });
   expect(issues).toEqual([]);
 });
 test('map events: stepping on one opens its choices; the shrine heals with a wound, the merchant sells, saved v13', async ({ page }, info) => {
@@ -487,7 +510,7 @@ for (const viewport of viewports) {
     // Thai text in the capsules is not clipped vertically.
     for (const sel of ['#zone-name', '#world-hero-guardian b', '.objective-text']) expect(await page.locator(sel).evaluate(el => el.scrollHeight <= el.clientHeight + 1)).toBe(true);
     await page.screenshot({ path: info.outputPath('world.png') });
-    await page.locator('#objective-button').click(); await expect(page.locator('#world-goals')).toBeVisible(); await expect(page.locator('#world-goals li')).toHaveCount(4);
+    await page.locator('#objective-button').click(); await expect(page.locator('#world-goals')).toBeVisible(); await expect(page.locator('#world-goals .goal-list:not(.seal-list) li')).toHaveCount(5); await expect(page.locator('#world-goals .seal-list li')).toHaveCount(3);
     await reachable(page, '[data-world=goals-close]'); await page.screenshot({ path: info.outputPath('goals.png') }); await page.keyboard.press('Escape');
     // The camp sheet fits without page scrolling and keeps >=44px controls.
     await page.locator('#rest').click(); await expect(page.locator('#camp-dialog')).toBeVisible();

@@ -152,5 +152,24 @@ export const eliteBriarLord: EncounterDefinition = {
   ],
 };
 
-export const encounters: readonly EncounterDefinition[] = [firstClash, scoutPatrol, riftWhelp, thicketAmbush, shadowStalker, veilSiege, rearAmbush, crystalStampede, riftWarden, eliteTuskChief, eliteBriarLord];
+// Mini-boss (3B): a stone golem guarding the scar's side pocket with a rift weaver. Optional, but beating it is one of
+// the rift seal's three objectives. Physical golem, energy weaver.
+export const miniVeilGolem: EncounterDefinition = {
+  ...veilSiege, id: 'mini-veil-golem', version: 1, level: 9, name: 'ยักษ์หินแห่งรอยแผล',
+  enemies: [
+    { id: 'raider', speed: 105, name: 'Rift Weaver', displayName: 'ผู้ถักรอยแยก', maxHp: 95, color: 0x8a6cc7, art: 'foe_riftweaver' },
+    { id: 'brute', speed: 65, name: 'Veil Golem', displayName: 'ยักษ์หินม่านเวล', maxHp: 240, color: 0x7d8a96, art: 'foe_golem' },
+  ],
+  intents: [
+    { sourceId: 'raider', targetSlot: 2, name: 'Rift Needle', damage: 18, kind: 'energy' },
+    { sourceId: 'brute', targetSlot: 0, name: 'Stone Fist', damage: 22, kind: 'physical' },
+    { sourceId: 'raider', targetSlot: 3, name: 'Rift Needle', damage: 18, kind: 'energy' },
+    // Signature: a quake that lands on the front line hardest (physical: Guard or Bash answer it).
+    { sourceId: 'brute', targetSlot: 1, name: 'Veil Quake', damage: 30, kind: 'physical' },
+    { sourceId: 'raider', targetSlot: 2, name: 'Rift Needle', damage: 19, kind: 'energy' },
+    { sourceId: 'brute', targetSlot: 0, name: 'Stone Fist', damage: 22, kind: 'physical' },
+  ],
+};
+
+export const encounters: readonly EncounterDefinition[] = [firstClash, scoutPatrol, riftWhelp, thicketAmbush, shadowStalker, veilSiege, rearAmbush, crystalStampede, riftWarden, eliteTuskChief, eliteBriarLord, miniVeilGolem];
 export const encounterById = (id: string): EncounterDefinition | undefined => encounters.find(e => e.id === id);

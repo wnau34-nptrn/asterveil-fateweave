@@ -6,7 +6,7 @@ import { talentTrees } from '../heroes/talents';
 // final camp before the boss (B) who guards the goal (G). '#' is impassable.
 // Version 2 (phase 3A) narrows the two zone gates to one tile each, held by an elite.
 export const chapterOne: MapDefinition = {
-  id: 'veil-frontier', version: 3, name: 'ชายแดนม่านเวล',
+  id: 'veil-frontier', version: 4, name: 'ชายแดนม่านเวล',
   rows: [
     '####################',
     '########:G:#########',
@@ -83,7 +83,15 @@ export const chapterOne: MapDefinition = {
     { id: 'gate-meadow', x: 9, y: 18, encounterId: 'elite-tusk-chief', forced: false },
     // Forced: the only way from the thicket to the scar and the boss.
     { id: 'gate-thicket', x: 9, y: 10, encounterId: 'elite-briar-lord', forced: true },
+    // Mini-boss (3B): optional, in the scar's right-hand pocket; beating it is one rift-seal objective.
+    { id: 'scar-golem', x: 17, y: 6, encounterId: 'mini-veil-golem', forced: false, mini: true },
   ],
+  // The rift seal (3B, draft): any two of the three open the way to the boss.
+  quest: { need: 2, objectives: [
+    { id: 'golem', kind: 'elite', target: 'scar-golem' },
+    { id: 'chests', kind: 'chests', count: 4 },
+    { id: 'rift', kind: 'event', target: 'scar-rift' },
+  ] },
   events: [
     { id: 'meadow-traveller', x: 4, y: 20, kind: 'traveller' }, { id: 'meadow-merchant', x: 16, y: 21, kind: 'merchant' },
     { id: 'thicket-bandits', x: 4, y: 13, kind: 'bandits' }, { id: 'thicket-shrine', x: 16, y: 14, kind: 'shrine' },
@@ -95,6 +103,7 @@ export const chapterOne: MapDefinition = {
     riftEncounterId: 'scout-patrol', riftDust: 12,
     eliteExp: 2, eliteRarityWeights: [0, 0, 60, 30, 10],
     optionalElite: { exp: 3, rarityWeights: [0, 0, 20, 50, 30], gold: 20, seal: 1 },
+    miniBoss: { exp: 3, rarityWeights: [0, 0, 0, 60, 40], loot: { ore: [30, 40], gold: [15, 20], ember: [1, 0], seal: [1, 0] } },
   },
   potions: {
     carry: 3, salvePercent: 40, tonicPercent: 20, repelSteps: 10,

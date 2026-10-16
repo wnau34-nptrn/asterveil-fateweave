@@ -584,3 +584,13 @@ html, body { background: #0a1422; }
 .elite-unit .elite-reward { position: absolute; top: -14%; right: -12%; width: 46%; aspect-ratio: 1; display: grid; place-items: center; border-radius: 50%;
   background: radial-gradient(circle at 40% 35%, #fff4cf, var(--gold-light, #f2d596) 60%, #b98a35); border: 2px solid #08121f; box-shadow: 0 0 8px #f2d596aa; }
 .elite-unit .elite-reward .icon { width: 64%; height: 64%; color: #2a1d08; }
+/* ---- Phase 3B: the rift seal and the mini-boss ---- */
+/* The sealed boss: the step hint shows a cold lock instead of the red fight hint. */
+.step-hint.sealed::before { filter: grayscale(1) brightness(.8); }
+.step-hint.sealed i { color: #9fb3c8; }
+.elite-unit[data-mini] { width: calc(var(--t) * 1.45); height: calc(var(--t) * 1.45); }
+.elite-unit[data-mini] .portrait { border-color: #c79bff; box-shadow: 0 0 0 2px #08121fcc, 0 0 12px #c79bffaa; }
+.elite-unit[data-mini]::after { background: #c79bff; }
+.elite-unit[data-mini] .elite-reward { background: radial-gradient(circle at 40% 35%, #f3e6ff, #c79bff 60%, #6b45a8); }
+.seal-title { display: flex; align-items: center; gap: 6px; margin: 12px 0 4px; font-size: 14px; color: var(--gold-light, #f2d596); }
+.seal-title .icon { width: 18px; height: 18px; }

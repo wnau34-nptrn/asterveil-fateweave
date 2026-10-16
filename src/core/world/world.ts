@@ -132,7 +132,14 @@ const startBattle = (state: ExpeditionState, kind: BattleKind, encounterId: stri
   ({ kind, encounterId, entry: Object.fromEntries(state.roster.deployed.map(id => [id, state.hp[id]!])), commands: [], ...(level ? { level } : {}), ...(source ? { source } : {}) });
 // ---- Phase 3A: elites and events ----
 // An elite that can be walked around (not `forced`) pays the richer optional-elite reward.
-export const optionalElite = (map: MapDefinition, source?: string): boolean => map.elites.some(e => e.id === source && !e.forced);
+export const optionalElite = (map: MapDefinition, source?: string): boolean => map.elites.some(e => e.id === source && !e.forced && !e.mini);
+export const miniBoss = (map: MapDefinition, source?: string): boolean => map.elites.some(e => e.id === source && e.mini);
+// The rift seal (3B): which objectives this run has done, and whether enough are done to face the boss.
+export function questDone(state: ExpeditionState, map: MapDefinition): string[] {
+  return map.quest.objectives.filter(o => o.kind === 'chests' ? state.openedChests.length >= o.count
+    : o.kind === 'elite' ? state.elitesDefeated.includes(o.target) : state.eventsDone.includes(o.target)).map(o => o.id);
+}
+export const questComplete = (state: ExpeditionState, map: MapDefinition): boolean => questDone(state, map).length >= map.quest.need;
 // A shrine wound lowers max HP by a percent for the rest of the run.
 export const wounded = (def: HeroDefinition, wound = 0): HeroDefinition => wound ? { ...def, maxHp: Math.max(1, Math.round(def.maxHp * (100 - wound) / 100)) } : def;
 export const eliteAt = (map: MapDefinition, p: Point): EliteDefinition | undefined => map.elites.find(e => e.x === p.x && e.y === p.y);
@@ -150,6 +157,8 @@ export function move(initial: ExpeditionState, map: MapDefinition, dir: Directio
   if (!initial.roster.deployed.some(id => initial.hp[id]! > 0)) return { state: initial, event: { type: 'blocked', reason: 'party' } };
   const state = structuredClone(initial);
   // The boss is visible and blocks its tile: stepping into it starts the fight in place.
+  // Until the rift seal is broken (enough objectives), the boss cannot be challenged.
+  if (tile.kind === 'boss' && !state.bossDefeated && !questComplete(state, map)) return { state: initial, event: { type: 'blocked', reason: 'sealed' } };
   if (tile.kind === 'boss' && !state.bossDefeated) {
     state.battle = startBattle(state, 'boss', map.bossEncounterId);
     return { state, event: { type: 'encounter', kind: 'boss', encounterId: map.bossEncounterId, chance: 100 } };
@@ -358,7 +367,7 @@ function dropItem(state: ExpeditionState, map: MapDefinition, kind: BattleKind, 
   }
   // Sets come from the zone the battle was fought in; the boss can drop any set.
   const sets = kind === 'boss' ? SET_IDS : zoneOf(map, tileAt(map, state.position)?.zoneId ?? '')?.sets ?? [];
-  const weights = kind === 'boss' ? rules.bossRarityWeights : kind === 'elite' ? (optionalElite(map, source) ? map.eventRules.optionalElite.rarityWeights : map.eventRules.eliteRarityWeights) : rules.rarityWeights;
+  const weights = kind === 'boss' ? rules.bossRarityWeights : kind === 'elite' ? (miniBoss(map, source) ? map.eventRules.miniBoss.rarityWeights : optionalElite(map, source) ? map.eventRules.optionalElite.rarityWeights : map.eventRules.eliteRarityWeights) : rules.rarityWeights;
   const item = rollItem(rules, () => rollPercent(state.seed, state.rolls++), level, weights, rosterIds(state), sets);
   state.found.push(item);
   return item;
@@ -386,7 +395,7 @@ export function recordBattle(initial: ExpeditionState, map: MapDefinition, looku
 // their level against the monster level. Level-ups raise max HP; standing members gain the difference.
 function gainExp(state: ExpeditionState, map: MapDefinition, lookup: EncounterLookup, data: EncounterDefinition, kind: BattleKind, source?: string): Record<string, ExpGain> {
   const rules = map.progression; const level = data.level ?? 1;
-  const base = data.enemies.length * (rules.expBase + rules.expPerLevel * level) * (kind === 'boss' ? rules.bossExpMultiplier : kind === 'elite' ? (optionalElite(map, source) ? map.eventRules.optionalElite.exp : map.eventRules.eliteExp) : 1);
+  const base = data.enemies.length * (rules.expBase + rules.expPerLevel * level) * (kind === 'boss' ? rules.bossExpMultiplier : kind === 'elite' ? (miniBoss(map, source) ? map.eventRules.miniBoss.exp : optionalElite(map, source) ? map.eventRules.optionalElite.exp : map.eventRules.eliteExp) : 1);
   const gains: Record<string, ExpGain> = {};
   for (const id of rosterIds(state)) {
     const member = state.members[id] ?? { stars: 1, dupes: 0 }; const before = memberDef(lookup, map, state.members, id)!.maxHp;
@@ -422,7 +431,8 @@ export function finishBattle(initial: ExpeditionState, map: MapDefinition, looku
     }
     const data = battleData(initial, map, lookup)!;
     const exp = gainExp(state, map, lookup, data, kind, source);
-    const loot = rollLoot(state, battleLoot(state, map, kind));
+    // A mini-boss pays its own loot table instead of the zone's.
+    const loot = rollLoot(state, miniBoss(map, source) ? map.eventRules.miniBoss.loot : battleLoot(state, map, kind));
     if (kind === 'elite' && optionalElite(map, source)) {
       const { gold, seal } = map.eventRules.optionalElite;
       loot.gold += gold; loot.seal += seal; state.resources.gold += gold; state.resources.seal += seal;

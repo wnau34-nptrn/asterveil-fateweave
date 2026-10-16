@@ -1,5 +1,5 @@
 import type { ActionId, PassiveId, BattleEvent, BattleState, EncounterDefinition, Intent, TalentCap, TalentRule } from '../core/battle/types';
-import type { EquipmentRules, ExpGain, ExpeditionState, Gear, GearSlot, GearStat, Item, PotionId, PotionRules, ResourceId, Resources, SetDefinition, SetId, TalentNodeDef, MapEventKind, EventChoice, EventRules } from '../core/world/types';
+import type { EquipmentRules, ExpGain, ExpeditionState, Gear, GearSlot, GearStat, Item, PotionId, PotionRules, ResourceId, Resources, SetDefinition, SetId, TalentNodeDef, MapEventKind, EventChoice, EventRules, QuestObjective } from '../core/world/types';
 import type { GearSpecial } from '../core/battle/types';
 import { itemStats, setCounts } from '../core/world/equipment';
 import { ambushBonusOf, capAmount, corrodeBonusOf, guardReductionOf, hasCap, skillPower, songPower, talentRule, tauntReductionOf } from '../core/battle/engine';
@@ -256,6 +256,11 @@ export const npcText: Record<'smith' | 'broker' | 'trainer' | 'keeper' | 'herbal
   herbalist: { name: 'เฟิร์น', role: 'นักปรุงยา', lines: ['ยาใหม่ร้อนๆ เพิ่งต้มเสร็จเลย!', 'พกไปได้อย่างละสามขวดนะ อย่าลืม', 'ยาไล่ม่านช่วยให้เดินผ่านทุ่งได้เงียบๆ'] },
   scout: { name: 'คาเอล', role: 'ผู้นำทาง', lines: ['ทางข้างหน้ามืด เตรียมทีมให้พร้อม', 'ตัวสำรองสลับได้ที่แคมป์เท่านั้น เลือกให้ดี', 'ศัตรูเล็งตามหมายเลขช่อง จัดแถวให้ดี'] },
 };
+// ---- Rift seal (3B): objective lines with live progress. ----
+export function questLine(o: QuestObjective, state: ExpeditionState): string {
+  if (o.kind === 'chests') return `เปิดกล่องสมบัติ ${o.count} กล่อง (${Math.min(o.count, state.openedChests.length)}/${o.count})`;
+  return o.kind === 'elite' ? 'ชนะยักษ์หินแห่งรอยแผล (มินิบอส)' : 'ชำระรอยแยกเล็กในรอยแผล';
+}
 // ---- Map events (3A): live Thai text for each event and choice; numbers come from the rules. ----
 export const eventText: Record<MapEventKind, { name: string; scene: string; icon: IconName }> = {
   bandits: { name: 'ด่านโจรม่าน', scene: 'กลุ่มโจรตั้งด่านขวางทาง พวกมันเฝ้าของที่ปล้นมา', icon: 'danger' },

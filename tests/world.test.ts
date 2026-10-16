@@ -5,7 +5,7 @@ import { createBattle, currentHeroId, resolveCommand, skillPower } from '../src/
 import { clearLegacySaves, expeditionKey, legacyKeys, loadGame, parseGame, saveGame, type StoragePort } from '../src/core/save/expedition-save';
 import { boardOffers, commanderReason, createCommander, departure, dismiss, dismissReason, groupOf, hire, hireReason, newProfile, placeMember, settle, upgrade, upgradeCost, upgradeReason } from '../src/core/world/profile';
 import type { Direction, ExpeditionState, Point, Profile } from '../src/core/world/types';
-import { atMuster, heroCatalog, battleData, battleState, canOpenChest, memberDef, moveMember, swapMembers, canRest, canRevive, chestAt, encounterChance, findTiles, finishBattle, isRevealed, move, newExpedition, openChest, recordBattle, rest, revive, rollPercent, startOf, tileAt } from '../src/core/world/world';
+import { chooseEvent, questComplete, atMuster, heroCatalog, battleData, battleState, canOpenChest, memberDef, moveMember, swapMembers, canRest, canRevive, chestAt, encounterChance, findTiles, finishBattle, isRevealed, move, newExpedition, openChest, recordBattle, rest, revive, rollPercent, startOf, tileAt } from '../src/core/world/world';
 import { actorArt, artOf } from '../src/game/visuals/assets';
 import { battleLesson } from '../src/ui/tutorial';
 
@@ -14,6 +14,8 @@ const lookup = encounterById;
 const extras = ['guardian', 'tracer', 'weaver', 'healer'].map(id => ({ ...encounterById(map.tutorialEncounterId)!.heroes.find(h => h.id === id)!, id: `${id}-b` }));
 const rosterLookup = (id: string) => id === map.tutorialEncounterId ? { ...encounterById(id)!, heroes: [...encounterById(id)!.heroes, ...extras] } : encounterById(id);
 const fresh = (seed = 7) => newExpedition(map, lookup, seed);
+// Two rift-seal objectives done (3B): the boss can be challenged.
+const sealBroken = { elitesDefeated: ['scar-golem'], eventsDone: ['scar-rift'] };
 const dirs: Record<Direction, Point> = { up: { x: 0, y: -1 }, down: { x: 0, y: 1 }, left: { x: -1, y: 0 }, right: { x: 1, y: 0 } };
 function memory(): StoragePort & { values: Map<string, string> } {
   const values = new Map<string, string>();
@@ -183,7 +185,10 @@ describe('expedition rules', () => {
   });
   it('the boss blocks its tile, and only its defeat opens the goal', () => {
     const [boss] = findTiles(map, 'boss'); const below = { x: boss!.x, y: boss!.y + 1 };
+    // The rift seal (3B) holds until two objectives are done.
     let s = { ...fresh(2), tutorialDone: true, position: below };
+    expect(move(s, map, 'up').event).toEqual({ type: 'blocked', reason: 'sealed' });
+    s = { ...s, ...sealBroken };
     const r = move(s, map, 'up'); expect(r.event).toMatchObject({ type: 'encounter', kind: 'boss' }); expect(r.state.position).toEqual(below);
     s = fight(r.state); expect(s.bossDefeated).toBe(true);
     s = move(s, map, 'up').state; expect(s.position).toEqual(boss);
@@ -200,7 +205,14 @@ describe('expedition rules', () => {
       }
     };
     const camp = () => { for (const id of Object.keys(s.hp)) if (canRevive(s, map, id)) s = revive(s, map, lookup, id).state; if (canRest(s, map)) s = rest(s, map, lookup).state; };
-    walk(campA); camp(); walk(campB); camp(); walk(goal!, true);
+    walk(campA); camp(); walk(campB); camp();
+    // The rift seal (3B): beat the mini-boss and clear the rift, resting at the last camp in between.
+    const golem = map.elites.find(e => e.mini)!; const rift = map.events.find(e => e.id === 'scar-rift')!;
+    expect(move({ ...s, position: { x: findTiles(map, 'boss')[0]!.x, y: findTiles(map, 'boss')[0]!.y + 1 } }, map, 'up').event).toEqual({ type: 'blocked', reason: 'sealed' });
+    walk(golem); walk(campB); camp(); walk(rift);
+    s = fight(chooseEvent(s, map, lookup, 'fight').state); walk(campB); camp();
+    expect(questComplete(s, map)).toBe(true);
+    walk(goal!, true);
     expect(s.completed).toBe(true); expect(s.tutorialDone).toBe(true); expect(s.bossDefeated).toBe(true); expect(s.wins).toBeGreaterThan(2);
     // Levels (2D-1): every brought member grew on the way; this short advisor route reaches level 6.
     for (const m of Object.values(s.members)) expect(m.level).toBeGreaterThanOrEqual(4);
@@ -333,7 +345,7 @@ describe('resources and chests', () => {
     expect(s.resources.ore - before).toBeGreaterThanOrEqual(6); expect(s.resources.ore - before).toBeLessThanOrEqual(10);
     expect(s.resources.gold - goldBefore).toBeGreaterThanOrEqual(3); expect(s.resources.gold - goldBefore).toBeLessThanOrEqual(6);
     const [boss] = findTiles(map, 'boss');
-    let t: ExpeditionState = { ...fresh(2), tutorialDone: true, position: { x: boss!.x, y: boss!.y + 1 } };
+    let t: ExpeditionState = { ...fresh(2), tutorialDone: true, position: { x: boss!.x, y: boss!.y + 1 }, ...sealBroken };
     t = fight(move(t, map, 'up').state);
     expect(t.resources).toEqual({ ore: 60, gold: 30, ember: 1, seal: 2 });
   });

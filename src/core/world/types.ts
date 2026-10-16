@@ -48,6 +48,8 @@ export interface MapDefinition {
   potions: PotionRules;
   // Phase 3A: forced elites in one-tile gates and one-time event tiles.
   elites: readonly EliteDefinition[];
+  // The rift seal (3B): the boss can be challenged only once `need` of these objectives are done.
+  quest: QuestDefinition;
   events: readonly MapEventDefinition[];
   eventRules: EventRules;
   // Passive talent tree per hero id (2D-1b).
@@ -92,7 +94,11 @@ export interface EquipmentRules {
 // ---- Phase 3A: elites and map events (draft numbers) ----
 // An elite stands on its tile like the boss: the only way past is to beat it (it uses its encounter's own level).
 // `forced`: the elite stands on a one-tile gate with no way around (checked by tests); otherwise it can be bypassed.
-export interface EliteDefinition { id: string; x: number; y: number; encounterId: string; forced: boolean }
+// `mini` (3B): a mini-boss; it pays the `miniBoss` reward instead of the elite one.
+// Quest objectives read the run's own state: a beaten elite, a finished event, or a number of opened chests.
+export type QuestObjective = { id: string; kind: 'elite' | 'event'; target: string } | { id: string; kind: 'chests'; count: number };
+export interface QuestDefinition { need: number; objectives: readonly QuestObjective[] }
+export interface EliteDefinition { id: string; x: number; y: number; encounterId: string; forced: boolean; mini?: boolean }
 export type MapEventKind = 'bandits' | 'shrine' | 'merchant' | 'traveller' | 'rift';
 export interface MapEventDefinition { id: string; x: number; y: number; kind: MapEventKind }
 export type EventChoice = 'fight' | 'sneak' | 'pray' | 'offer' | 'buy-salve' | 'buy-tonic' | 'buy-repel' | 'help';
@@ -110,6 +116,8 @@ export interface EventRules {
   // An optional elite (not on a gate) pays more to make challenging it worth the risk: its own EXP multiplier and
   // rarity weights, plus bonus gold and seals added to the battle's loot.
   optionalElite: { exp: number; rarityWeights: readonly number[]; gold: number; seal: number };
+  // A mini-boss (3B) replaces the zone loot with its own table and uses its own EXP multiplier and rarity weights.
+  miniBoss: { exp: number; rarityWeights: readonly number[]; loot: LootTable };
 }
 // ---- Map potions (2D-5, draft numbers) ----
 // salve heals one standing member, tonic every standing member (percent of max HP); repel stops random
@@ -237,7 +245,7 @@ export interface ExpeditionState {
 }
 export type WorldEvent =
   | { type: 'moved'; chance: number }
-  | { type: 'blocked'; reason: 'wall' | 'edge' | 'busy' | 'party' }
+  | { type: 'blocked'; reason: 'wall' | 'edge' | 'busy' | 'party' | 'sealed' }
   | { type: 'roster' }
   | { type: 'encounter'; kind: BattleKind; encounterId: string; chance: number }
   | { type: 'goal' }
