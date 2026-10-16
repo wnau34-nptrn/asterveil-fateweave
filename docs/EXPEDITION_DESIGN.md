@@ -868,3 +868,28 @@ Then `startPrologue` starts the `first-clash` battle (now "กองหน้า
 **Tests:**
 - `tests/shop.test.ts`: refresh prices, limit and reset; unchanged board without a refresh; market limits and gold; contract; gear box determinism, rarity, level and full bag; save v17.
 - A browser test refreshes twice and buys a contract and a gear box.
+
+## Smelting and the seal share (owner-approved 2026-10-16, draft numbers)
+
+**Smelting.** The smith (ลุงบอร์ก) smelts ore into veil dust at a deliberately poor rate: **8 ore per dust**, at most **30 dust per return home**.
+- **Where:** buttons +1 and +5 in the forge sheet.
+- **Rules:** `smelt`/`smeltReason`/`smeltLeft` in `core/world/forge.ts`; numbers in `map.equipment.forge` (`smeltOre`, `smeltCap`).
+- **Why:** salvaging stays the main dust source, and surplus ore now feeds enhancing.
+
+**Seal share.** Contract seals may stand in for up to **half (rounded up)** of the duplicates a star needs (`map.company.sealSharePercent` 50; `sealLimit`). It was a single seal before.
+
+| Upgrade to | ★2 | ★3 | ★4 | ★5 |
+|---|---|---|---|---|
+| Duplicates needed | 1 | 2 | 3 | 4 |
+| Seals allowed | 1 | 1 | 2 | 2 |
+
+**Save v18.** The profile gains `smelted` (0..cap, reset on return). v17 data migrates with 0.
+
+**Simulation after 6 expeditions** (advisor explorer):
+- **Bank:** ore about 740 (was 2,200) and seals about 49 (explorers still collect many from chests and elites).
+- **Stars:** the best deployed member reaches ★5.0 (was ★3.3).
+- **Rush route:** unchanged (ore about 200).
+
+**Tests:**
+- `tests/shop.test.ts`: smelt rate, cap, reset and save v18; seal limits per star.
+- A browser test smelts at the forge.

@@ -10,7 +10,7 @@ export function newProfile(map: MapDefinition, seed: number): Profile {
     seed: seed >>> 0, returns: 0, tutorialDone: false, commander: null,
     company: [...map.startingRoster], members: Object.fromEntries(map.startingRoster.map(id => [id, { stars: 1, dupes: 0 }])),
     party: { deployed: [...map.startingRoster], reserve: [] },
-    bank: { ore: 0, gold: 0, seal: 0, dust: 0 }, items: [], nextItem: 1, forge: 0, potions: { salve: 0, tonic: 0, repel: 0 }, quests: {}, shop: {}, refreshes: 0, taken: [], expeditions: 0, completes: 0, last: null,
+    bank: { ore: 0, gold: 0, seal: 0, dust: 0 }, items: [], nextItem: 1, forge: 0, potions: { salve: 0, tonic: 0, repel: 0 }, quests: {}, shop: {}, refreshes: 0, smelted: 0, taken: [], expeditions: 0, completes: 0, last: null,
   };
 }
 const blocked = (profile: Profile, reason: string): ProfileResult => ({ profile, event: { type: 'blocked', reason } });
@@ -66,17 +66,19 @@ export function hire(initial: Profile, map: MapDefinition, lookup: EncounterLook
   }
   return { profile, event: { type: 'hired', heroId: id, duplicate } };
 }
-// Cost of the next star: duplicates first; one contract seal may stand in for a missing duplicate.
+// Cost of the next star: duplicates first; contract seals may stand in for up to `sealSharePercent` (rounded up)
+// of the duplicates the star needs.
 export function upgradeCost(profile: Profile, map: MapDefinition, id: string): { dupes: number; seals: number; ore: number } | undefined {
   const m = profile.members[id]; const cost = m && map.company.starCosts[m.stars - 1];
   if (!m || !cost || m.stars >= map.company.maxStars) return undefined;
   const dupes = Math.min(m.dupes, cost.dupes);
   return { dupes, seals: cost.dupes - dupes, ore: cost.ore };
 }
+export const sealLimit = (map: MapDefinition, stars: number): number => Math.ceil((map.company.starCosts[stars - 1]?.dupes ?? 0) * map.company.sealSharePercent / 100);
 export function upgradeReason(profile: Profile, map: MapDefinition, id: string): string {
   const cost = upgradeCost(profile, map, id);
   if (!cost) return 'maxed';
-  if (cost.seals > 1 || cost.seals > profile.bank.seal) return 'dupes';
+  if (cost.seals > sealLimit(map, profile.members[id]!.stars) || cost.seals > profile.bank.seal) return 'dupes';
   return profile.bank.ore < cost.ore ? 'ore' : '';
 }
 export function upgrade(initial: Profile, map: MapDefinition, id: string): ProfileResult {
@@ -248,7 +250,7 @@ export function settle(initial: Profile, run: ExpeditionState, outcome: RunOutco
     if (add) profile.quests[q.id] = { ...now, progress: Math.min(q.target, now.progress + add) };
   }
   profile.tutorialDone ||= run.tutorialDone; profile.expeditions++; if (outcome === 'complete') profile.completes++;
-  profile.returns++; profile.taken = []; profile.shop = {}; profile.refreshes = 0;
+  profile.returns++; profile.taken = []; profile.shop = {}; profile.refreshes = 0; profile.smelted = 0;
   profile.last = { outcome, ore, gold, seal, steps: run.steps, wins: run.wins, items, salvaged };
   return profile;
 }

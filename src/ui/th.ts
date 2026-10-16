@@ -193,7 +193,7 @@ export const resourceText: Record<ResourceId, { name: string; use: string }> = {
   ore: { name: 'แร่ดาว', use: 'พากลับค่าย ใช้อัปดาว ปรุงยา และตีอุปกรณ์' },
   gold: { name: 'เหรียญทอง', use: 'พากลับค่าย ใช้จ้างทหารรับจ้างเท่านั้น' },
   ember: { name: 'ถ่านคืนชีพ', use: 'ชุบสมาชิกที่ล้ม 1 คนที่แคมป์' },
-  seal: { name: 'ตราสัญญา', use: 'พากลับค่าย ใช้แทนตัวซ้ำ 1 ชิ้นเมื่ออัปดาว' },
+  seal: { name: 'ตราสัญญา', use: 'พากลับค่าย ใช้แทนตัวซ้ำได้ครึ่งหนึ่งเมื่ออัปดาว' },
 };
 export const resourceOrder: readonly ResourceId[] = ['ore', 'gold', 'ember', 'seal'];
 // Victory EXP (2D-1): the deployed lead's gain, any level-ups, and a note when the level gap cut it.
@@ -303,7 +303,7 @@ export function rewardText(r: SideQuestDefinition['reward']): string {
 }
 // ---- Camp market (4A): goods sold by the broker for gold coins. ----
 export const shopText: Record<ShopItemId, { name: string; help: string }> = {
-  seal: { name: 'ตราสัญญา', help: 'ใช้แทนตัวซ้ำได้หนึ่งตัวตอนอัปดาว' },
+  seal: { name: 'ตราสัญญา', help: 'ใช้แทนตัวซ้ำได้ถึงครึ่งหนึ่งของที่ต้องใช้ตอนอัปดาว' },
   contract: { name: 'ใบสัญญาซ้ำ', help: 'เพิ่มตัวซ้ำให้สมาชิกที่เลือกหนึ่งตัว ไว้อัปดาว' },
   gearbox: { name: 'หีบอุปกรณ์', help: 'อุปกรณ์ระดับหายากขึ้นไป เลเวลเท่าสมาชิกที่เลเวลสูงสุด' },
   repel: { name: 'ยาไล่อสูร', help: 'เก็บไว้ในคลังยา พกไปได้ตอนออกเดินทาง' },

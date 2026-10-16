@@ -696,3 +696,5 @@ html, body { background: #0a1422; }
 .contract-pick { display: flex; align-items: center; gap: 6px; margin-top: 4px; font-size: 13px; }
 .contract-pick select { min-height: 44px; max-width: 100%; flex: 1; border-radius: 10px; border: 1px solid #e8f5ff33; background: #0b1626; color: var(--text); padding: 0 8px; font: inherit; }
 @media (max-width: 400px) { .market-list small:not(.hire-status) { display: block; } }
+/* Smelting ore into veil dust at the smith (owner-approved 2026-10-16). */
+.smelt { margin: 10px 0; } .smelt-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; } .smelt-buttons button { min-height: 44px; }

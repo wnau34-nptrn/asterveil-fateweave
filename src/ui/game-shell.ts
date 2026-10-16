@@ -7,7 +7,7 @@ import { browserStorage } from '../platform/browser-storage';
 import type { BattleUI } from './battle-ui';
 import type { NpcId } from '../game/visuals/assets';
 import { choiceText, eventText, expThai, heroText, itemLines, itemName, lootThai, potionText, rewardText, shopText } from './th';
-import { enhance, findItem, fuse, reroll } from '../core/world/forge';
+import { enhance, findItem, fuse, reroll, smelt } from '../core/world/forge';
 import { CommanderUI } from './commander-ui';
 import { LobbyUI } from './lobby-ui';
 import { prologue, prologueEnd, StoryUI } from './story-ui';
@@ -47,7 +47,7 @@ export class GameShell {
     }, Object.fromEntries(map.elites.map(e => [e.id, lookup(e.encounterId)?.enemies.find(f => f.id === 'brute')?.art ?? 'brute'])));
     this.lobby = new LobbyUI(views.lobby, map, lookup, heroCatalog(lookup, map), {
       hire: i => this.profileChange(hire(this.game!.profile, map, lookup, i)), refresh: () => this.profileChange(refreshBoard(this.game!.profile, map)),
-      buy: (item, hero) => this.profileChange(buy(this.game!.profile, map, item, hero)), upgrade: id => this.profileChange(upgrade(this.game!.profile, map, id)),
+      buy: (item, hero) => this.profileChange(buy(this.game!.profile, map, item, hero)), smelt: dust => this.profileChange(smelt(this.game!.profile, map, dust)), upgrade: id => this.profileChange(upgrade(this.game!.profile, map, id)),
       dismiss: id => this.profileChange(dismiss(this.game!.profile, map, id)), place: (id, group, other) => this.profileChange(placeMember(this.game!.profile, id, group, other)),
       talent: (id, node) => this.profileChange(learnTalent(this.game!.profile, map, id, node)), resetTalents: id => this.profileChange(resetTalents(this.game!.profile, id)),
       equip: (id, uid) => this.profileChange(equip(this.game!.profile, id, uid)), unequip: (id, slot) => this.profileChange(unequip(this.game!.profile, map, id, slot)),
@@ -131,13 +131,14 @@ export class GameShell {
     this.lobbyMessage = e.type === 'hired' ? (e.duplicate ? `ได้ตัวซ้ำของ${name(e.heroId)} · ใช้อัปดาวในแท็บทีม` : `จ้าง${name(e.heroId)}แล้ว`)
       : e.type === 'upgraded' ? `${name(e.heroId)}ขึ้นเป็น ★${e.stars} แล้ว` : e.type === 'dismissed' ? `เลิกจ้าง${name(e.heroId)}แล้ว · ได้เหรียญทองคืน ${this.map.company.dismissRefund}` : e.type === 'talent' || e.type === 'equipped' ? '' : e.type === 'salvaged' ? `แยกชิ้น ${e.count} ชิ้น · ได้แร่ดาว ${e.ore} ฝุ่นดาว ${e.dust}`
       : e.type === 'forged' ? this.forgedText(result.profile, e.uid, e.action) : e.type === 'brewed' ? `ปรุง${potionText[e.potion].name}แล้ว · มีอยู่ ${result.profile.potions[e.potion]} ขวด`
+      : e.type === 'smelted' ? `ลุงบอร์กหลอมแร่ดาวเป็นฝุ่นดาว ${e.dust} · มีฝุ่นดาว ${result.profile.bank.dust}`
       : e.type === 'refreshed' ? `พีโน่เปลี่ยนป้ายจ้างใหม่แล้ว · สุ่มได้อีก ${this.map.shop.refreshCosts.length - result.profile.refreshes} ครั้ง`
       : e.type === 'bought' ? this.boughtText(result.profile, e)
       : e.type === 'claimed' ? `ได้รับรางวัลเควสต์ · ${rewardText(this.map.sideQuests.find(q => q.id === e.questId)!.reward)}` : 'จัดทีมแล้ว';
     this.lobbyCheer = e.type === 'hired' || e.type === 'upgraded' ? e.heroId : '';
     // The camp NPC whose service just succeeded cheers once.
     this.npcCheer = e.type === 'bought' || e.type === 'refreshed' ? 'broker' : e.type === 'claimed' ? this.map.sideQuests.find(q => q.id === e.questId)!.npc as NpcId
-      : ({ hired: 'broker', talent: 'trainer', equipped: 'keeper', salvaged: 'keeper', forged: 'smith', brewed: 'herbalist' } as Partial<Record<string, NpcId>>)[e.type];
+      : ({ hired: 'broker', talent: 'trainer', equipped: 'keeper', salvaged: 'keeper', forged: 'smith', smelted: 'smith', brewed: 'herbalist' } as Partial<Record<string, NpcId>>)[e.type];
     this.showLobby();
   }
   // Market purchase (4A): what was bought and where it went.

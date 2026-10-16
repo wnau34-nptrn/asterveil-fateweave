@@ -1,5 +1,5 @@
 import type { HeroDefinition } from '../core/battle/types';
-import { boardOffers, brewReason, buyReason, claimReason, refreshReason, shopLeft, dismissReason, equipReason, groupOf, hireReason, talentPoints, talentReason, talentsSpent, upgradeCost, upgradeReason, type Group } from '../core/world/profile';
+import { boardOffers, brewReason, buyReason, claimReason, sealLimit, refreshReason, shopLeft, dismissReason, equipReason, groupOf, hireReason, talentPoints, talentReason, talentsSpent, upgradeCost, upgradeReason, type Group } from '../core/world/profile';
 import { salvageValue } from '../core/world/equipment';
 import { COMPANY_CAP, GEAR_SLOTS, PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS, SHOP_ITEMS, type GearSlot, type ShopItemId, type MapDefinition, type PotionId, type Profile, type TalentNode } from '../core/world/types';
 import { expToNext, starred, type EncounterLookup } from '../core/world/world';
@@ -8,10 +8,10 @@ import { icon } from './icons';
 import { commanderBadge } from './commander-ui';
 import { gearArt, potionArt } from './equip-art';
 import { heroText, npcText, rewardText, shopText, sideQuestText, itemLines, itemName, itemOwner, passiveText, potionText, rarityText, setText, slotIcon, slotText, statName, talentBranches, talentHelp, wornSets } from './th';
-import { enhanceCost, enhanceReason, findItem, fuseMaterials, fuseReason, rerollReason } from '../core/world/forge';
+import { enhanceCost, enhanceReason, findItem, fuseMaterials, fuseReason, rerollReason, smeltLeft, smeltReason } from '../core/world/forge';
 import { portrait, starRow } from './world-ui';
 
-export interface LobbyHost { hire(index: number): void; refresh(): void; buy(item: ShopItemId, heroId?: string): void; upgrade(id: string): void; dismiss(id: string): void; place(id: string, group: Group, other?: string): void; talent(id: string, node: TalentNode): void; resetTalents(id: string): void;
+export interface LobbyHost { hire(index: number): void; refresh(): void; buy(item: ShopItemId, heroId?: string): void; smelt(dust: number): void; upgrade(id: string): void; dismiss(id: string): void; place(id: string, group: Group, other?: string): void; talent(id: string, node: TalentNode): void; resetTalents(id: string): void;
   equip(id: string, uid: number): void; unequip(id: string, slot: GearSlot): void; salvage(uids: number[]): void;
   enhance(uid: number): void; fuse(uid: number): void; reroll(uid: number, index: number): void; brew(potion: PotionId): void; claim(questId: string): void; depart(): void; home(): void }
 // `npcCheer`: the camp NPC whose service just succeeded (plays its cheer once).
@@ -64,6 +64,7 @@ export class LobbyUI {
         case 'pick': this.pick(id, b.dataset.group as Group); break;
         case 'hire': this.host.hire(Number(b.dataset.index)); break;
         case 'hire-tab': this.market = b.dataset.tab === 'market'; this.draw(); this.focus(`#hire-tab-${b.dataset.tab}`); break;
+        case 'smelt': this.host.smelt(Number(b.dataset.dust)); this.focus(`#smelt-${b.dataset.dust}`); break;
         case 'refresh': this.host.refresh(); this.focus('#hire-refresh'); break;
         case 'buy': { const item = b.dataset.item as ShopItemId; const hero = item === 'contract' ? this.root.querySelector<HTMLSelectElement>('#contract-hero')?.value : undefined;
           this.host.buy(item, hero || undefined); this.focus(`#buy-${item}`); break; }
@@ -250,8 +251,8 @@ export class LobbyUI {
     const m = p.members[id]!; const cost = upgradeCost(p, this.map, id); const reason = upgradeReason(p, this.map, id);
     const need = cost ? cost.dupes + cost.seals : 0;
     const why: Record<string, string> = { maxed: 'ดาวเต็มแล้ว', dupes: 'ตัวซ้ำไม่พอ', ore: 'แร่ดาวไม่พอ' };
-    const label = !cost ? 'ดาวเต็มแล้ว' : reason ? `${why[reason]} · ★${m.stars + 1} ใช้ตัวซ้ำ ${need}${cost.seals ? ' (ตราแทนได้ 1)' : ''} แร่ ${cost.ore}`
-      : `อัปเป็น ★${m.stars + 1} · ตัวซ้ำ ${cost.dupes}${cost.seals ? ' + ตรา 1' : ''} · แร่ ${cost.ore}`;
+    const label = !cost ? 'ดาวเต็มแล้ว' : reason ? `${why[reason]} · ★${m.stars + 1} ใช้ตัวซ้ำ ${need}${cost.seals ? ` (ตราแทนได้ ${sealLimit(this.map, m.stars)})` : ''} แร่ ${cost.ore}`
+      : `อัปเป็น ★${m.stars + 1} · ตัวซ้ำ ${cost.dupes}${cost.seals ? ` + ตรา ${cost.seals}` : ''} · แร่ ${cost.ore}`;
     const last = dismissReason(p, id) === 'last';
     return `<div class="member-panel" aria-live="polite"><p><b>${heroText[id]!.name}</b> ${this.stars(m.stars)} <span>Lv${m.level ?? 1}${(m.level ?? 1) < this.map.progression.levelCap ? ` · EXP ${m.exp ?? 0}/${expToNext(this.map, m.level ?? 1)}` : ' · เลเวลสูงสุด'} · ตัวซ้ำที่เก็บไว้ ${m.dupes}</span></p>${this.unlocks(id, m.stars)}<div class="member-subs">${this.treeButton(p, id)}${this.gearButton(p, id)}</div>
       <div class="member-actions"><button id="lobby-upgrade" data-lobby="upgrade" class="primary"${reason ? ' disabled' : ''}>${label}</button>
@@ -337,7 +338,10 @@ export class LobbyUI {
         <div class="forge-rerolls">${item.affixes.map((a, i) => { const r = rerollReason(p, this.map, item.uid, i);
           return `<button id="forge-reroll-${i}" data-lobby="reroll" data-index="${i}" class="secondary"${r ? ' disabled' : ''}>สุ่ม${statName[a]}ใหม่${r ? ` · ${why[r]}` : ''}</button>`; }).join('')}</div>` : ''}</div>`;
     }
-    return `<p class="hire-cost">${icon('ore')} ${p.bank.ore} · ${icon('dust')} ${p.bank.dust} · ${icon('seal')} ${p.bank.seal} · ฝุ่นดาวได้จากการแยกชิ้น</p>${detail}
+    const f = rules.forge; const left = smeltLeft(p, this.map);
+    const smelt = `<div class="smelt"><h4>${icon('dust')} หลอมแร่เป็นฝุ่นดาว <small>แร่ดาว ${f.smeltOre} ต่อฝุ่นดาว 1 · หลอมได้อีก ${left}/${f.smeltCap} ในรอบนี้</small></h4><div class="smelt-buttons">${[1, 5].map(n => { const r = smeltReason(p, this.map, n);
+      return `<button id="smelt-${n}" data-lobby="smelt" data-dust="${n}" class="secondary"${r ? ' disabled' : ''}>ฝุ่น +${n} · แร่ ${n * f.smeltOre}${r === 'limit' ? ' · ครบแล้วรอบนี้' : r === 'ore' ? ' · แร่ดาวไม่พอ' : ''}</button>`; }).join('')}</div></div>`;
+    return `<p class="hire-cost">${icon('ore')} ${p.bank.ore} · ${icon('dust')} ${p.bank.dust} · ${icon('seal')} ${p.bank.seal} · ฝุ่นดาวได้จากการแยกชิ้นและการหลอมแร่</p>${detail}${smelt}
       <h3>${icon('pack')} อุปกรณ์ทั้งหมด <span class="camp-embers">${all.length} ชิ้น</span></h3>${list ? `<ul class="forge-list">${list}</ul>` : '<p class="camp-note">ยังไม่มีอุปกรณ์ · ชนะศึกบนแผนที่เพื่อหาอุปกรณ์</p>'}`;
   }
   // Opens the member's talent tree in its own sheet.

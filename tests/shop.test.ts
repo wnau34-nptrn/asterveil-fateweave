@@ -2,7 +2,8 @@ import { describe, expect, it } from 'vitest';
 import { encounterById as lookup } from '../src/content/encounters/catalog';
 import { chapterOne as map } from '../src/content/world/chapter1';
 import { parseGame } from '../src/core/save/expedition-save';
-import { boardOffers, buy, buyReason, hire, newProfile, refreshBoard, refreshReason, settle, shopLeft } from '../src/core/world/profile';
+import { boardOffers, buy, buyReason, hire, newProfile, refreshBoard, refreshReason, sealLimit, settle, shopLeft, upgrade, upgradeReason } from '../src/core/world/profile';
+import { smelt, smeltLeft, smeltReason } from '../src/core/world/forge';
 import type { Profile } from '../src/core/world/types';
 import { newExpedition } from '../src/core/world/world';
 
@@ -69,5 +70,34 @@ describe('save v17', () => {
     expect(() => parseGame(raw({ ...p, refreshes: map.shop.refreshCosts.length + 1 }), map, lookup)).toThrow();
     const old = rich() as Partial<Profile>; delete old.shop; delete old.refreshes;
     const m = parseGame(raw(old, 16), map, lookup); expect(m.profile.shop).toEqual({}); expect(m.profile.refreshes).toBe(0);
+  });
+});
+
+describe('smelting and the seal share (owner-approved 2026-10-16)', () => {
+  it('the smith smelts ore into veil dust at a poor rate, up to the cap per return', () => {
+    const f = map.equipment.forge; let p = { ...rich(), bank: { ore: 1000, gold: 0, seal: 0, dust: 0 } };
+    const r = smelt(p, map, 5); expect(r.event).toEqual({ type: 'smelted', dust: 5 });
+    p = r.profile; expect(p.bank).toMatchObject({ ore: 1000 - 5 * f.smeltOre, dust: 5 }); expect(p.smelted).toBe(5);
+    expect(smeltReason(p, map, f.smeltCap - 4)).toBe('limit'); p = smelt(p, map, f.smeltCap - 5).profile;
+    expect(smeltLeft(p, map)).toBe(0); expect(smeltReason(p, map, 1)).toBe('limit');
+    expect(smeltReason({ ...p, smelted: 0, bank: { ...p.bank, ore: f.smeltOre - 1 } }, map, 1)).toBe('ore');
+    expect(smeltReason(p, map, 0)).toBe('unknown');
+    expect(settle(p, newExpedition(map, lookup, 3), 'complete', map).smelted).toBe(0);
+  });
+  it('seals stand in for up to half (rounded up) of the duplicates a star needs', () => {
+    const id = newProfile(map, 9).company[0]!; const at = (stars: number, dupes: number, seal: number): Profile => {
+      const p = { ...rich(), bank: { ore: 999, gold: 0, seal, dust: 0 } }; p.members[id] = { ...p.members[id]!, stars, dupes }; return p; };
+    expect(map.company.starCosts.map((_, i) => sealLimit(map, i + 1))).toEqual([1, 1, 2, 2]);
+    // ★3 → ★4 needs 3 duplicates: one duplicate and two seals are enough, no duplicates and three seals are not.
+    expect(upgradeReason(at(3, 1, 2), map, id)).toBe('');
+    const up = upgrade(at(3, 1, 2), map, id).profile; expect(up.members[id]).toMatchObject({ stars: 4, dupes: 0 }); expect(up.bank.seal).toBe(0);
+    expect(upgradeReason(at(3, 0, 3), map, id)).toBe('dupes');
+    expect(upgradeReason(at(1, 0, 1), map, id)).toBe('');
+  });
+  it('save v18 keeps the smelted count and rejects one above the cap; v17 migrates with 0', () => {
+    const raw = (profile: unknown, version = 18) => JSON.stringify({ version, profile, run: null });
+    expect(parseGame(raw({ ...rich(), smelted: 12 }), map, lookup).profile.smelted).toBe(12);
+    expect(() => parseGame(raw({ ...rich(), smelted: map.equipment.forge.smeltCap + 1 }), map, lookup)).toThrow();
+    const old = rich() as Partial<Profile>; delete old.smelted; expect(parseGame(raw(old, 17), map, lookup).profile.smelted).toBe(0);
   });
 });

@@ -99,6 +99,7 @@ export const chapterOne: MapDefinition = {
     // Hiring costs gold coins only (ore pays for upgrades, brewing and the forge).
     hireCost: 20, dismissRefund: 10, offers: 3, maxStars: 5, starStatPercent: 8,
     // (4A) see `shop` for the market and paid board refreshes.
+    sealSharePercent: 50,
     starCosts: [{ dupes: 1, ore: 20 }, { dupes: 2, ore: 40 }, { dupes: 3, ore: 70 }, { dupes: 4, ore: 110 }],
   },
   // Draft 2D-1 numbers: a first full run ends near level 9; farming low levels is tapered (world `expPercent`).
@@ -153,7 +154,7 @@ export const chapterOne: MapDefinition = {
     // Sets (2D-3, draft numbers): meadow dawn/wind, thicket shadow/thorn, scar star-veil/mender.
     setPercent: 60,
     // Forge (2D-4, draft numbers): caps +5/+10/+15/+20/+25, +6% base stats per level.
-    forge: { plusCap: [5, 10, 15, 20, 25], plusPercent: 6, ore: 3, orePerPlus: 1, dustPerPlus: 0.5, fuseCount: 3, rerollSeals: 1, salvageDustPerPlus: 1 },
+    forge: { plusCap: [5, 10, 15, 20, 25], plusPercent: 6, ore: 3, orePerPlus: 1, dustPerPlus: 0.5, fuseCount: 3, rerollSeals: 1, salvageDustPerPlus: 1, smeltOre: 8, smeltCap: 30 },
     sets: {
       dawn: { two: { stat: 'hp', value: 10 }, four: { kind: 'barrier', amount: 12 } },
       wind: { two: { stat: 'speed', value: 3 }, four: { kind: 'firstStrike', amount: 0 } },

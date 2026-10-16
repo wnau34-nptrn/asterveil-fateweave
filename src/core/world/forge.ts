@@ -67,3 +67,17 @@ export function reroll(initial: Profile, map: MapDefinition, uid: number, index:
   profile.bank.seal -= map.equipment.forge.rerollSeals;
   return { profile, event: { type: 'forged', uid, action: 'reroll' } };
 }
+
+// ---- Smelt: ore into veil dust at a poor rate, capped per return home (owner-approved 2026-10-16). ----
+export const smeltLeft = (profile: Profile, map: MapDefinition): number => Math.max(0, map.equipment.forge.smeltCap - profile.smelted);
+export function smeltReason(profile: Profile, map: MapDefinition, dust: number): string {
+  if (!Number.isInteger(dust) || dust < 1) return 'unknown';
+  if (dust > smeltLeft(profile, map)) return 'limit';
+  return profile.bank.ore < dust * map.equipment.forge.smeltOre ? 'ore' : '';
+}
+export function smelt(initial: Profile, map: MapDefinition, dust: number): ProfileResult {
+  const reason = smeltReason(initial, map, dust); if (reason) return blocked(initial, reason);
+  const profile = structuredClone(initial);
+  profile.bank.ore -= dust * map.equipment.forge.smeltOre; profile.bank.dust += dust; profile.smelted += dust;
+  return { profile, event: { type: 'smelted', dust } };
+}

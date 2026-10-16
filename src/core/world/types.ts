@@ -163,6 +163,8 @@ export interface PotionRules {
 // Salvaging an enhanced piece returns `salvageDustPerPlus` dust per level on top.
 export interface ForgeRules {
   plusCap: readonly number[]; plusPercent: number; ore: number; orePerPlus: number; dustPerPlus: number;
+  // Smelting (owner-approved 2026-10-16): `smeltOre` ore per veil dust, at most `smeltCap` dust per return home.
+  smeltOre: number; smeltCap: number;
   fuseCount: number; rerollSeals: number; salvageDustPerPlus: number;
 }
 export type Gear = Partial<Record<GearSlot, Item>>;
@@ -202,6 +204,8 @@ export interface ShopRules {
 export interface CompanyRules {
   hireCost: number; dismissRefund: number; offers: number; maxStars: number; starStatPercent: number;
   starCosts: readonly { dupes: number; ore: number }[];
+  // Seals may stand in for this share (percent, rounded up) of a star's duplicates.
+  sealSharePercent: number;
 }
 // `level`/`exp` (2D-1) are optional for older data: missing means level 1 with no EXP.
 // `talents` (2D-1b): ranks spent per node; missing means none. `gear` (2D-2): equipped items by slot.
@@ -237,6 +241,8 @@ export interface Profile {
   quests: Record<string, { progress: number; claimed: boolean }>;
   // 4A: market items bought and hiring-board refreshes used since the last return (both reset on return).
   shop: Partial<Record<ShopItemId, number>>; refreshes: number;
+  // Veil dust smelted from ore since the last return (reset on return).
+  smelted: number;
   // Hiring board taken indexes for the current `returns` count.
   taken: number[];
   expeditions: number; completes: number;
@@ -254,6 +260,7 @@ export type ProfileEvent =
   | { type: 'equipped'; heroId: string }
   | { type: 'salvaged'; count: number; ore: number; dust: number }
   | { type: 'forged'; uid: number; action: 'enhance' | 'fuse' | 'reroll' }
+  | { type: 'smelted'; dust: number }
   | { type: 'brewed'; potion: PotionId }
   | { type: 'claimed'; questId: string }
   | { type: 'bought'; item: ShopItemId; heroId?: string; uid?: number }

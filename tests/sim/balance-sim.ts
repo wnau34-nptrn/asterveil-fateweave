@@ -5,7 +5,7 @@ import { encounterById as lookup } from '../../src/content/encounters/catalog';
 import { chapterOne as map } from '../../src/content/world/chapter1';
 import { resolveCommand, targetOptions, currentHeroId } from '../../src/core/battle/engine';
 import { buy, buyReason, refreshBoard, refreshReason, claimQuest, claimReason, createCommander, depart, equip, hire, hireReason, boardOffers, learnTalent, newProfile, salvage, settle, talentReason, upgrade, upgradeReason, brew, brewReason } from '../../src/core/world/profile';
-import { enhance, enhanceCost, enhanceReason } from '../../src/core/world/forge';
+import { enhance, enhanceCost, enhanceReason, smelt, smeltReason } from '../../src/core/world/forge';
 import { boulderAt, openPit, passableWall, runePuzzleAt } from '../../src/core/world/puzzles';
 import type { BattleKind, Direction, ExpeditionState, GearSlot, Item, Point, Profile, RunOutcome } from '../../src/core/world/types';
 import { GEAR_SLOTS } from '../../src/core/world/types';
@@ -214,6 +214,8 @@ function lobby(p: Profile): { profile: Profile; claimed: string[] } {
     const best = p.items.filter(i => i.slot === slot && (slot !== 'weapon' || i.hero === id)).sort((a, b) => score(b) - score(a))[0];
     if (best && (!worn || score(best) > score(worn))) p = equip(p, id, best.uid).profile;
   }
+  // Smelt surplus ore into veil dust (keeping 300 ore), then enhance.
+  while (p.bank.ore > 300 && !smeltReason(p, map, 1)) p = smelt(p, map, 1).profile;
   // Forge: enhance the deployed members' worn pieces while ore and dust last (keeping 80 ore for brewing).
   for (let changed = true; changed;) {
     changed = false;

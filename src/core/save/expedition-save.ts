@@ -35,7 +35,8 @@ export const legacyKeys = ['asterveil.fateweave.battle.v1', 'asterveil.fateweave
 // v14 → v15 (3C): the run gains puzzle state: `runes`, `solved`, `levers`, `boulders` and `secrets` (older data: none).
 // v15 → v16 (3D): the profile gains side-quest `quests`; the run gains picked `herbs` (older data: none).
 // v16 → v17 (4A): the profile gains `shop` (market items bought this return) and `refreshes` (older data: none).
-const SAVE_VERSION = 17;
+// v17 → v18: the profile gains `smelted` (veil dust smelted from ore this return; older data: 0).
+const SAVE_VERSION = 18;
 export interface Game { profile: Profile; run: ExpeditionState | null }
 const actions: readonly ActionId[] = ['attack', 'guard', 'bash', 'mark', 'execute', 'bolt', 'ward', 'heal', 'prayer', 'brace', 'pierce', 'hinder', 'volley', 'acid', 'haste', 'ambush', 'evade', 'taunt', 'slam', 'valor', 'mend',
   'rally', 'finisher', 'sigil', 'sanctuary', 'spearwall', 'weakshot', 'bomb', 'backstab', 'quake', 'finale'];
@@ -251,6 +252,8 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
   if (version < 12) p.potions = { salve: 0, tonic: 0, repel: 0 };
   if (version < 16) p.quests = {};
   if (version < 17) Object.assign(p, { shop: {}, refreshes: 0 });
+  if (version < 18) p.smelted = 0;
+  if (!isInt(p.smelted, 0, map.equipment.forge.smeltCap)) throw new Error('Invalid forge');
   const shop = shopOf(p.shop, map);
   if (!isInt(p.refreshes, 0, map.shop.refreshCosts.length)) throw new Error('Invalid board');
   const quests = questsOf(p.quests, map);
@@ -276,7 +279,7 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
     if (commanderReason(commander)) throw new Error('Invalid commander');
   } else if (p.commander === undefined && version >= 6) throw new Error('Invalid commander');
   return { seed: p.seed, returns: p.returns, tutorialDone: p.tutorialDone, commander, company: [...company as string[]], members, party,
-    bank: { ore: bank.ore as number, gold: bank.gold as number, seal: bank.seal as number, dust: bank.dust as number }, items, nextItem: p.nextItem as number, forge: p.forge as number, potions: potionsOf(p.potions, 9999), quests, shop, refreshes: p.refreshes as number, taken: [...p.taken as number[]], expeditions: p.expeditions, completes: p.completes, last };
+    bank: { ore: bank.ore as number, gold: bank.gold as number, seal: bank.seal as number, dust: bank.dust as number }, items, nextItem: p.nextItem as number, forge: p.forge as number, potions: potionsOf(p.potions, 9999), quests, shop, refreshes: p.refreshes as number, smelted: p.smelted as number, taken: [...p.taken as number[]], expeditions: p.expeditions, completes: p.completes, last };
 }
 // Market purchases this return (4A): known items only, within each limit.
 function shopOf(v: unknown, map: MapDefinition): Profile['shop'] {
@@ -307,7 +310,7 @@ function settleFinished(game: Game, map: MapDefinition): Game {
 }
 export function parseGame(raw: string, map: MapDefinition, lookup: EncounterLookup): Game {
   const envelope = obj(JSON.parse(raw)); const version = envelope.version as number;
-  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
+  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
   if (version < 5) {
     const run = parseRun(envelope.state, version, map, lookup);
     const profile = newProfile(map, (run.seed ^ 0x5bd1e995) >>> 0);
