@@ -91,9 +91,10 @@ export interface EquipmentRules {
   slotStats: Readonly<Record<GearSlot, Partial<Record<GearStat, StatCurve>>>>;
   affixStats: Readonly<Record<GearStat, StatCurve>>;
   affixCount: readonly number[];
-  // Random victories drop an item at `dropPercent`, guaranteed after `pity` dry wins; the boss always drops.
+  // Random victories drop an item at `dropPercent`, guaranteed after `pity` dry wins; the boss always drops
+  // `bossDrops` items. A wiped team still brings home its `wipeKeep` best found items.
   dropPercent: number; pity: number;
-  rarityWeights: readonly number[]; bossRarityWeights: readonly number[];
+  rarityWeights: readonly number[]; bossRarityWeights: readonly number[]; bossDrops: number; wipeKeep: number;
   // Salvaging (or an overflowing bag) returns ore and veil dust by rarity.
   salvage: readonly { ore: number; dust: number }[];
   // A dropped item belongs to one of its zone's sets at `setPercent` (the boss: any set).
@@ -285,7 +286,7 @@ export interface ExpeditionState {
   resources: Resources; openedChests: string[]; restReady: boolean;
   tutorialDone: boolean; bossDefeated: boolean; completed: boolean;
   wins: number; defeats: number; battle: ActiveBattle | null;
-  // Items found on this expedition (kept on complete/withdraw, lost on a wipe) and dry random wins for the pity.
+  // Items found on this expedition (kept on complete/withdraw; a wipe keeps only the best `wipeKeep`) and dry random wins for the pity.
   found: Item[]; dry: number;
   // Potions carried (≤ carry each) and steps of repel left (2D-5).
   potions: Potions; repel: number;
@@ -318,7 +319,7 @@ export type WorldEvent =
   | { type: 'secret'; secretId: string }
   | { type: 'herb'; herbId: string }
   | { type: 'travelled'; to: Point }
-  | { type: 'victory'; kind: BattleKind; encounterId: string; loot: Resources; exp?: Record<string, ExpGain>; item?: Item; dust?: number }
+  | { type: 'victory'; kind: BattleKind; encounterId: string; loot: Resources; exp?: Record<string, ExpGain>; item?: Item; items?: Item[]; dust?: number }
   | { type: 'defeat'; kind: BattleKind; encounterId: string; wiped?: boolean };
 // EXP from one victory for one brought member: `percent` is the level-gap multiplier.
 export interface ExpGain { gained: number; percent: number; level: number; levelsUp: number }

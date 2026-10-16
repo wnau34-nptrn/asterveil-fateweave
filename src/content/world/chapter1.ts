@@ -149,7 +149,7 @@ export const chapterOne: MapDefinition = {
     affixStats: { hp: [4, 1], attack: [1, 0.35], skill: [2, 0.5], heal: [4, 1], barrier: [3, 0.5], speed: [1, 0.15] },
     affixCount: [0, 1, 2, 3, 3],
     dropPercent: 35, pity: 6,
-    rarityWeights: [55, 28, 12, 4, 1], bossRarityWeights: [0, 0, 50, 35, 15],
+    rarityWeights: [55, 28, 12, 4, 1], bossRarityWeights: [0, 0, 20, 45, 35], bossDrops: 3, wipeKeep: 1,
     salvage: [{ ore: 2, dust: 1 }, { ore: 3, dust: 2 }, { ore: 5, dust: 4 }, { ore: 8, dust: 8 }, { ore: 12, dust: 15 }],
     // Sets (2D-3, draft numbers): meadow dawn/wind, thicket shadow/thorn, scar star-veil/mender.
     setPercent: 60,

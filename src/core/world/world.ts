@@ -404,25 +404,25 @@ export function chooseEvent(initial: ExpeditionState, map: MapDefinition, lookup
   return { state, event: { type: 'eventDone', eventId: ev.id, choice, ...(Object.keys(heal).length ? { heal } : {}) } };
 }
 // Equipment drop (2D-2): random victories drop at `dropPercent`, guaranteed after `pity` dry wins; the boss
-// always drops with better rarity weights; the tutorial never drops. The item's level is the monster level,
+// always drops `bossDrops` items with better rarity weights; the tutorial never drops. The item's level is the monster level,
 // and a weapon is made for one of the brought members. Found items ride with the run until it is settled.
-function dropItem(state: ExpeditionState, map: MapDefinition, kind: BattleKind, level: number, source?: string): Item | undefined {
+function dropItems(state: ExpeditionState, map: MapDefinition, kind: BattleKind, level: number, source?: string): Item[] {
   const rules = map.equipment;
-  if (kind === 'tutorial') return undefined;
+  if (kind === 'tutorial') return [];
   // Event fights: bandits always drop an item; a rift pays in veil dust instead.
-  if (kind === 'event' && !state.eventsDone.includes(source ?? '')) return undefined;
-  if (kind === 'event' && map.events.find(e => e.id === source)?.kind === 'rift') return undefined;
+  if (kind === 'event' && !state.eventsDone.includes(source ?? '')) return [];
+  if (kind === 'event' && map.events.find(e => e.id === source)?.kind === 'rift') return [];
   if (kind === 'random') {
     const lucky = rollPercent(state.seed, state.rolls++) < rules.dropPercent || state.dry + 1 >= rules.pity;
-    if (!lucky) { state.dry++; return undefined; }
+    if (!lucky) { state.dry++; return []; }
     state.dry = 0;
   }
   // Sets come from the zone the battle was fought in; the boss can drop any set.
   const sets = kind === 'boss' ? SET_IDS : zoneOf(map, tileAt(map, state.position)?.zoneId ?? '')?.sets ?? [];
   const weights = kind === 'boss' ? rules.bossRarityWeights : kind === 'elite' ? (miniBoss(map, source) ? map.eventRules.miniBoss.rarityWeights : optionalElite(map, source) ? map.eventRules.optionalElite.rarityWeights : map.eventRules.eliteRarityWeights) : rules.rarityWeights;
-  const item = rollItem(rules, () => rollPercent(state.seed, state.rolls++), level, weights, rosterIds(state), sets);
-  state.found.push(item);
-  return item;
+  const items = Array.from({ length: kind === 'boss' ? rules.bossDrops : 1 }, () => rollItem(rules, () => rollPercent(state.seed, state.rolls++), level, weights, rosterIds(state), sets));
+  state.found.push(...items);
+  return items;
 }
 // The encounter as fought by the deployed party, in slot order.
 export function battleData(state: ExpeditionState, map: MapDefinition, lookup: EncounterLookup): EncounterDefinition | undefined {
@@ -489,8 +489,8 @@ export function finishBattle(initial: ExpeditionState, map: MapDefinition, looku
       const { gold, seal } = map.eventRules.optionalElite;
       loot.gold += gold; loot.seal += seal; state.resources.gold += gold; state.resources.seal += seal;
     }
-    const item = dropItem(state, map, kind, data.level ?? 1, source);
-    return { state, event: { type: 'victory', kind, encounterId, loot, exp, ...(item ? { item } : {}), ...(dust ? { dust } : {}) } };
+    const items = dropItems(state, map, kind, data.level ?? 1, source);
+    return { state, event: { type: 'victory', kind, encounterId, loot, exp, ...(items[0] ? { item: items[0] } : {}), ...(items.length > 1 ? { items } : {}), ...(dust ? { dust } : {}) } };
   }
   state.defeats++;
   if (kind === 'tutorial') {

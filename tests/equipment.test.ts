@@ -123,13 +123,16 @@ describe('drops', () => {
     expect(drops).toBe(s.found.length); expect(drops).toBeGreaterThan(0); expect(longest).toBeLessThan(rules.pity);
     for (const f of s.found) expect(itemValid(map, f, heroIds, true)).toBe(true);
   });
-  it('the boss always drops rare or better; the tutorial never drops', () => {
+  it('the boss always drops bossDrops items of rare or better; the tutorial never drops', () => {
     let s = newExpedition(map, lookup, 8);
     s = nextBattle(s); expect(s.battle!.kind).toBe('tutorial');
     const t = win(s); expect(t.event.type === 'victory' && t.event.item).toBeFalsy();
     const boss = { ...t.state, battle: { kind: 'boss' as const, encounterId: map.bossEncounterId, entry: Object.fromEntries(t.state.roster.deployed.map(id => [id, memberHp(t.state, id)])), commands: [] } };
     const b = win(boss);
-    if (b.event.type === 'victory') { expect(b.event.item!.rarity).toBeGreaterThanOrEqual(2); expect(b.state.found).toHaveLength(1); }
+    if (b.event.type === 'victory') {
+      expect(rules.bossDrops).toBe(3); expect(b.state.found).toHaveLength(rules.bossDrops); expect(b.event.items).toEqual(b.state.found);
+      expect(b.event.item).toEqual(b.state.found[0]); for (const i of b.state.found) expect(i.rarity).toBeGreaterThanOrEqual(2);
+    }
     else expect(b.event.type).toBe('victory');
   });
 });
@@ -137,11 +140,16 @@ const memberHp = (s: ExpeditionState, id: string) => starred(heroDef(lookup, map
 
 describe('lobby: bag, equip, salvage, settle', () => {
   const withBag = (...items: Item[]) => ({ ...newProfile(map, 3), items, nextItem: 100 });
-  it('found items come home on complete/withdraw, are lost on a wipe, and a full bag salvages the rest', () => {
+  it('found items come home on complete/withdraw, a wipe keeps only the best one, and a full bag salvages the rest', () => {
     const run = newExpedition(map, lookup, 1); run.found = [item({ uid: 0, rarity: 1, affixes: ['hp'] }), item({ uid: 0 })];
     const done = settle(newProfile(map, 1), run, 'withdrawn', map);
     expect(done.items.map(i => i.uid)).toEqual([1, 2]); expect(done.nextItem).toBe(3); expect(done.last).toMatchObject({ items: 2, salvaged: 0 });
-    expect(settle(newProfile(map, 1), run, 'wiped', map).items).toEqual([]);
+    const wiped = settle(newProfile(map, 1), run, 'wiped', map);
+    expect(wiped.items).toHaveLength(rules.wipeKeep); expect(wiped.items[0]).toMatchObject({ uid: 1, rarity: 1 }); expect(wiped.last).toMatchObject({ items: 1 });
+    // Ties on rarity go to the higher level, then the earliest found.
+    const tie = { ...run, found: [item({ uid: 0, level: 3 }), item({ uid: 0, level: 5, slot: 'head' }), item({ uid: 0, level: 5 })] };
+    expect(settle(newProfile(map, 1), tie, 'wiped', map).items.map(i => i.slot)).toEqual(['head']);
+    expect(settle(newProfile(map, 1), { ...run, found: [] }, 'wiped', map).items).toEqual([]);
     const full = { ...newProfile(map, 1), items: Array.from({ length: rules.bagCap - 1 }, (_, i) => item({ uid: i + 1 })), nextItem: rules.bagCap };
     const over = settle(full, run, 'complete', map);
     expect(over.items).toHaveLength(rules.bagCap); expect(over.last).toMatchObject({ items: 1, salvaged: 1 }); expect(over.bank.dust).toBe(rules.salvage[0]!.dust);

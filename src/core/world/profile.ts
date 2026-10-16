@@ -236,9 +236,10 @@ export function settle(initial: Profile, run: ExpeditionState, outcome: RunOutco
   const ore = Math.floor(run.resources.ore * pct / 100); const seal = Math.floor(run.resources.seal * pct / 100);
   const dust = Math.floor(run.dust * pct / 100); const gold = Math.floor(run.resources.gold * pct / 100);
   profile.bank.ore += ore; profile.bank.gold += gold; profile.bank.seal += seal; profile.bank.dust += dust;
-  // Found equipment comes home unless the team was wiped; a full bag salvages the rest (2D-2).
+  // Found equipment comes home; a wiped team keeps only its `wipeKeep` best finds (rarity, then level, then
+  // the earliest found). A full bag salvages the rest (2D-2).
   let items = 0, salvaged = 0;
-  if (outcome !== 'wiped') for (const found of run.found) { if (stash(profile, map, { ...found, uid: profile.nextItem++ })) items++; else salvaged++; }
+  for (const found of homeItems(run, outcome, map)) { if (stash(profile, map, { ...found, uid: profile.nextItem++ })) items++; else salvaged++; }
   // Unused potions come home too, unless the team was wiped.
   if (outcome !== 'wiped') for (const id of POTION_IDS) profile.potions[id] += run.potions[id];
   // Levels and EXP earned on the run are kept whatever the outcome (2D-1).
@@ -253,6 +254,11 @@ export function settle(initial: Profile, run: ExpeditionState, outcome: RunOutco
   profile.returns++; profile.taken = []; profile.shop = {}; profile.refreshes = 0; profile.smelted = 0;
   profile.last = { outcome, ore, gold, seal, steps: run.steps, wins: run.wins, items, salvaged };
   return profile;
+}
+export function homeItems(run: ExpeditionState, outcome: RunOutcome, map: MapDefinition): Item[] {
+  if (outcome !== 'wiped') return run.found;
+  return run.found.map((item, i) => ({ item, i })).sort((a, b) => b.item.rarity - a.item.rarity || b.item.level - a.item.level || a.i - b.i)
+    .slice(0, map.equipment.wipeKeep).sort((a, b) => a.i - b.i).map(x => x.item);
 }
 // Withdrawal is allowed at a camp or the map entrance, outside battle.
 export { atMuster as canWithdraw } from './world';

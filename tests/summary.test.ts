@@ -26,10 +26,10 @@ describe('expedition summary', () => {
     // A later clear is not the first.
     expect(runSummary(after, r, settle(after, r, 'complete', map), 'complete', map).firstClear).toBe(false);
   });
-  it('a wipe keeps half the resources, no gear and no herbs', () => {
+  it('a wipe keeps half the resources, only the best item and no herbs', () => {
     const before = newProfile(map, 3);
     const r = run({ resources: { ore: 50, gold: 20, ember: 0, seal: 2 }, found: [item], herbs: [map.herbs[0]!.id] });
     const s = runSummary(before, r, settle(before, r, 'wiped', map), 'wiped', map);
-    expect(s.kept).toMatchObject({ ore: 25, gold: 10, seal: 1 }); expect(s.items).toEqual([]); expect(s.herbs).toBe(0); expect(s.firstClear).toBe(false);
+    expect(s.kept).toMatchObject({ ore: 25, gold: 10, seal: 1 }); expect(s.items).toHaveLength(1); expect(s.items[0]).toMatchObject({ rarity: item.rarity, level: item.level }); expect(s.herbs).toBe(0); expect(s.firstClear).toBe(false);
   });
 });

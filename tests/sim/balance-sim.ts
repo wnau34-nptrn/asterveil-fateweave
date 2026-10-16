@@ -4,7 +4,7 @@
 import { encounterById as lookup } from '../../src/content/encounters/catalog';
 import { chapterOne as map } from '../../src/content/world/chapter1';
 import { resolveCommand, targetOptions, currentHeroId } from '../../src/core/battle/engine';
-import { buy, buyReason, refreshBoard, refreshReason, claimQuest, claimReason, createCommander, depart, equip, hire, hireReason, boardOffers, learnTalent, newProfile, salvage, settle, talentReason, upgrade, upgradeReason, brew, brewReason } from '../../src/core/world/profile';
+import { buy, buyReason, refreshBoard, refreshReason, claimQuest, claimReason, createCommander, depart, equip, hire, hireReason, boardOffers, learnTalent, newProfile, salvage, settle, talentReason, upgrade, upgradeReason, brew, brewReason, homeItems } from '../../src/core/world/profile';
 import { enhance, enhanceCost, enhanceReason, smelt, smeltReason } from '../../src/core/world/forge';
 import { boulderAt, openPit, passableWall, runePuzzleAt } from '../../src/core/world/puzzles';
 import type { BattleKind, Direction, ExpeditionState, GearSlot, Item, Point, Profile, RunOutcome } from '../../src/core/world/types';
@@ -248,7 +248,7 @@ export function simulateCompany(seed: number, policy: Policy, expeditions: numbe
       bossBeaten: s.bossDefeated, gained: { ore: p.bank.ore - before.ore, gold: p.bank.gold - before.gold, seal: p.bank.seal - before.seal, dust: p.bank.dust - before.dust },
       level: Math.min(...p.party.deployed.map(id => p.members[id]!.level ?? 1)), stars: Math.max(...p.party.deployed.map(id => p.members[id]!.stars)),
     });
-    if (r.outcome !== 'wiped') for (const i of s.found) report.items[i.rarity]!++;
+    for (const i of homeItems(s, r.outcome, map)) report.items[i.rarity]!++;
     out.push(report);
   }
   return { seed, policy, style, expeditions: out, profile: p };

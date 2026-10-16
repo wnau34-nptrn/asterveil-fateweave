@@ -469,9 +469,9 @@ Sets are 2D-3 (below); the forge (enhance, fuse, reroll; 2D-4) and map potions (
 
 **Stats in battle.** Gear adds flat max HP, Attack and SPD after the star/level/talent percentages, and adds its skill percent to theirs; healing percent raises every heal the wearer casts (including mending), and the barrier is present at the start of each battle for standing heroes. The resolver reads `HeroDefinition.gear`; nothing worn leaves a definition unchanged.
 
-**Drops.** The tutorial never drops. A random victory drops one item at 35%, guaranteed after 6 dry wins in a row (pity, `dry` in the run); the boss always drops one (rare 50 / epic 35 / legendary 15). Normal weights: common 55, good 28, rare 12, epic 4, legendary 1. Slot uniform; a weapon is made for one of the brought members. Rolls use the run's (seed, rolls) stream, so a reload cannot re-roll a drop.
+**Drops.** The tutorial never drops. A random victory drops one item at 35%, guaranteed after 6 dry wins in a row (pity, `dry` in the run); the boss always drops three (`bossDrops`; each rare 20 / epic 45 / legendary 35, owner 2026-10-16: the final boss must out-pay the mini-boss and elites). Normal weights: common 55, good 28, rare 12, epic 4, legendary 1. Slot uniform; a weapon is made for one of the brought members. Rolls use the run's (seed, rolls) stream, so a reload cannot re-roll a drop.
 
-**Found items** ride with the run (shown in the map pack). Completing or withdrawing brings them home; a wipe loses them. The bag holds 60 unequipped items; whatever does not fit is salvaged automatically and reported.
+**Found items** ride with the run (shown in the map pack). Completing or withdrawing brings them home; a wipe keeps only the best one (`wipeKeep` 1: highest rarity, then level, then the earliest found; owner 2026-10-16) and loses the rest. The bag holds 60 unequipped items; whatever does not fit is salvaged automatically and reported.
 
 **Lobby.** From a member in the team sheet, **อุปกรณ์** opens the equipment sheet (its own window, with a member picker and a back button): six slots, the bag filtered by the chosen slot, equip (swaps with the slot), unequip (needs bag space) and salvage (rare and better ask for a second press; one button salvages every common). Salvage: common 2 ore + 1 dust, good 3 + 2, rare 5 + 4, epic 8 + 8, legendary 12 + 15. Veil dust is banked for the forge. Dismissing a member returns their gear to the bag (overflow salvaged).
 
@@ -941,7 +941,7 @@ Then `startPrologue` starts the `first-clash` battle (now "กองหน้า
 - **Side quest:** returns count toward the trainer's elite quest and the summary.
 
 **4D defeat penalty.** Kept as is, as the owner approved:
-- a wipe keeps half the resources, loses found gear and herbs, and keeps levels;
+- a wipe keeps half the resources and the best found item, loses the other gear and herbs, and keeps levels;
 - the summary (4F) spells it out.
 
 **Save v19.**
