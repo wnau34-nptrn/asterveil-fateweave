@@ -331,16 +331,6 @@ footer { display: flex; justify-content: space-between; gap: 10px; font-size: 10
 .target-hint { font-size: 11px; color: #b6d6ed; margin: 0 0 8px; }
 
 #battle-info { display: none; flex: 0 0 44px; padding: 0; font-size: 22px; }
-.battle-coach { display: flex; align-items: center; gap: 6px; padding: 4px 6px 4px 10px; margin-bottom: 8px; border: 1px solid #bca06d; border-radius: 8px; background: linear-gradient(105deg, #263445, #142336); color: #e8d9b3; }
-.coach-content { flex: 1; min-width: 0; }
-.coach-content strong { display: block; font-size: 12px; font-weight: 500; }
-.coach-content p { font-size: 11px; line-height: 1.35; color: #e2edf5; }
-#coach-dismiss { flex: 0 0 44px; width: 44px; height: 44px; padding: 0; font-size: 23px; background: transparent; border: 0; }
-.coach-focus { outline: 2px dashed var(--gold) !important; outline-offset: -3px; }
-.tutorial-settings { padding: 9px 10px; }
-.tutorial-settings strong { font-size: 12px; color: #e8d9b3; font-weight: 500; }
-.tutorial-settings p { font-size: 11px; color: var(--muted); margin-bottom: 6px; }
-.tutorial-settings button { font-size: 11px; }
 #game-info, #world-info { width: min(560px, calc(100% - 16px)); max-height: calc(100dvh - 16px); padding: 0; color: #eef4ff; background: #102039; border: 1px solid #718ba7; border-radius: 12px; }
 #game-info::backdrop, #world-info::backdrop { background: #020a17ce; }
 .info-header { display: flex; align-items: center; justify-content: space-between; padding: 6px 10px; border-bottom: 1px solid #355170; }
@@ -371,7 +361,6 @@ html, body { height: 100%; overflow: hidden; overscroll-behavior: none; }
 #battle-info { display: block; }
 main { width: 100%; max-width: 1600px; flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 6px; padding: 0 12px 10px; }
 .turn-phase { position: relative; top: auto; flex: 0 0 72px; height: 72px; min-height: 72px; margin: 0; }
-.battle-coach { flex: 0 0 54px; height: 54px; margin: 0; }
 .battle-layout { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) minmax(340px, .43fr); }
 .battle-board { min-width: 0; min-height: 0; display: flex; flex-direction: column; }
 .arena { flex: 1; height: auto; min-height: 0; }
@@ -415,9 +404,6 @@ main { width: 100%; max-width: 1600px; flex: 1; min-height: 0; display: flex; fl
   .phase-flow, .phase-result { display: none; }
   .phase-copy h2 { font-size: 12px; }
   .phase-copy > p { font-size: 9px; }
-  .battle-coach { height: 48px; flex-basis: 48px; padding: 2px 6px; }
-  .coach-content strong { font-size: 11px; }
-  .coach-content p { font-size: 10px; }
   .battle-layout { grid-template-columns: minmax(0, 1fr) 320px; }
   #turn-order, .formation-labels, #enemy-roster { display: none; }
   #intent { padding: 3px 6px; gap: 6px; }
@@ -468,9 +454,6 @@ main { width: 100%; max-width: 1600px; flex: 1; min-height: 0; display: flex; fl
   #restart { width: 44px; height: 44px; }
   main { width: 100%; flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 4px; padding: 4px 6px 6px; }
   .turn-phase { position: relative; top: auto; min-height: 44px; height: 44px; flex: 0 0 44px; margin: 0; padding: 3px 6px; gap: 6px; border-radius: 8px; box-shadow: none; }
-  .battle-coach { flex: 0 0 48px; height: 48px; margin: 0; padding: 2px 3px 2px 6px; gap: 3px; }
-  .coach-content strong { font-size: 11px; line-height: 1.3; }
-  .coach-content p { font-size: 10px; line-height: 1.3; }
   .phase-portrait { width: 27px; flex-basis: 27px; }
   .phase-flow, .phase-result { display: none; }
   .phase-copy h2 { font-size: 12px; line-height: 1.35; }

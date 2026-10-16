@@ -66,7 +66,7 @@ test('walking until the first encounter opens the tutorial battle in place', asy
   for (let i = 0; i < steps; i++) await page.locator(i % 2 ? '#move-right' : '#move-left').click();
   await expect(page.locator('#world-banner')).toContainText('การปะทะครั้งแรก');
   await expect(page.locator('#battle-view')).not.toHaveClass(/view-off/);
-  await expect(page.locator('#encounter-kind')).toContainText('ศึกสอน');
+  await expect(page.locator('#encounter-kind')).toContainText('ศึกแรก');
   expect((await saved(page)).position).toEqual(probe.position);
   expect(issues).toEqual([]);
 });

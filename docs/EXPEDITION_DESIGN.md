@@ -78,7 +78,7 @@ These decisions guide phases 2B–2C. They are not implemented yet.
 
 Start, camp, boss, goal and sanctum tiles never roll. Rolls come from `(seed, rolls)` with a fixed integer hash; the seed is chosen once per expedition and saved, so reloading cannot re-roll.
 
-**Teaching battle.** The first encounter of an expedition is always `first-clash`. Its schedule gives each class skill a reason in turn order: Lyra Mark → Raider hits Lyra → Eira Ward on the announced energy blast → Aegis Guard → Seren Heal → Lyra Precision Strike on the mark → Eira Bolt → Aegis Bash on the physical attack. Advice appears only in this battle and follows the real SPD owner. It can be hidden in ⓘ. Losing it restarts it at full HP; winning marks the tutorial done.
+**Teaching battle.** The first encounter of an expedition is always `first-clash`. Its schedule gives each class skill a reason in turn order: Lyra Mark → Raider hits Lyra → Eira Ward on the announced energy blast → Aegis Guard → Seren Heal → Lyra Precision Strike on the mark → Eira Bolt → Aegis Bash on the physical attack. It has no on-screen advice: the teaching strip, highlights and advice setting were removed at the owner's request (2026-10-16), and the battle is labelled "ศึกแรก". Losing it restarts it at full HP; winning marks the tutorial done. The advisor (`ui/tutorial.ts` `battleLesson`) remains only as the scripted player in the balance and expedition tests.
 
 **After battle.** The party stays on the tile where the battle began.
 - Victory: HP carries over exactly; fallen heroes stay down.
@@ -360,7 +360,7 @@ Key `asterveil.fateweave.expedition.v1`, envelope `{ version: 6, profile, run }`
 
 Every field is validated on load. The active battle is replayed under current rules, so a foreign-owner command, an unknown encounter or a wrong map version rejects the save, and the title screen then offers only a new expedition. A finished battle is applied in the same write that records its last command, so a reload never repeats damage.
 
-The practice keys (`asterveil.fateweave.battle.v1`, `.rear-ambush`, `.rift-warden`, `asterveil.fateweave.encounter.v1`) are deleted at start and never read. The teaching-advice preference key `asterveil.fateweave.tutorial.v1` is kept.
+The practice keys (`asterveil.fateweave.battle.v1`, `.rear-ambush`, `.rift-warden`, `asterveil.fateweave.encounter.v1`) are deleted at start and never read. The old teaching-advice preference key `asterveil.fateweave.tutorial.v1` is deleted at battle start and never read (advice removed 2026-10-16).
 
 Save history:
 - Version 1 (phase 1) was new; earlier practice saves were intentionally dropped.

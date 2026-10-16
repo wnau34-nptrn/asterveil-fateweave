@@ -220,22 +220,15 @@ for(const invalid of ['old-content','foreign-owner','malformed','wrong-map']){
   await expect(page.locator('#world-hero-tracer')).toContainText('56/56');expect((await saved(page)).battle).toBeNull();expect(issues).toEqual([]);
  });
 }
-test('teaching advice appears only in the tutorial battle, follows SPD owners and can be dismissed',async({page},info)=>{
+test('the first battle has no teaching advice: no coach strip, no highlights, no advice setting, and the old preference key is deleted',async({page},info)=>{
+ await page.addInitScript(()=>{if(!sessionStorage.getItem('coach-key-seeded')){localStorage.setItem('asterveil.fateweave.tutorial.v1','off');sessionStorage.setItem('coach-key-seeded','1');}});
  await seedRaw(page,expedition(firstClash,[],'tutorial'));const issues:string[]=[];page.on('pageerror',e=>issues.push(e.message));
- await page.goto('./');await resume(page);await expect(page.locator('#encounter-kind')).toContainText('ศึกสอน');await page.locator('#start').click();
- await expect(page.locator('#coach-copy')).toContainText('ไลรา');await expect(page.locator('#coach-copy')).toContainText('ติดตรา');
- for(const [i,[h,a,t]]of ([['tracer','mark','brute'],['weaver','ward','weaver'],['guardian','guard','weaver']] as Move[]).entries()){
-  await expect(page.locator('#coach-copy')).toContainText(a==='mark'?'ติดตรา':a==='ward'?'โล่เวท':'ตั้งรับแทน');await cast(page,h,a,t);await finish(page);
-  if(i===0)await expect(page.locator('#coach-copy')).toContainText('ไอรา');
- }
- await expect(page.locator('#coach-copy')).toContainText('รักษา');await page.screenshot({path:info.outputPath('tutorial-coach.png')});
- await page.locator('#coach-dismiss').click();await expect(page.locator('#battle-coach')).not.toBeVisible();expect(await count(page)).toBe(3);
- await page.locator('#battle-info').click();await page.locator('#coach-toggle').click();await expect(page.locator('#coach-toggle')).toBeFocused();await page.locator('[data-ui=info-close]').click();
- await expect(page.locator('#battle-coach')).toBeVisible();expect(issues).toEqual([]);
-});
-test('ordinary battles show no teaching strip or tutorial setting',async({page})=>{
- const issues=await start(page);await expect(page.locator('#battle-coach')).not.toBeVisible();await page.locator('#battle-info').click();
- await expect(page.locator('#tutorial-settings')).toBeHidden();await page.keyboard.press('Escape');expect(issues).toEqual([]);
+ await page.goto('./');await resume(page);await expect(page.locator('#encounter-kind')).toContainText('ศึกแรก');await page.locator('#start').click();
+ await expect(page.locator('#battle-coach, #coach-copy, #coach-dismiss, #tutorial-settings, .coach-focus')).toHaveCount(0);
+ await cast(page,'tracer','mark','brute');await finish(page);await expect(page.locator('.coach-focus')).toHaveCount(0);
+ await page.locator('#battle-info').click();await expect(page.locator('#coach-toggle')).toHaveCount(0);await page.keyboard.press('Escape');
+ expect(await page.evaluate(()=>localStorage.getItem('asterveil.fateweave.tutorial.v1'))).toBeNull();
+ await page.screenshot({path:info.outputPath('first-battle-no-coach.png')});expect(issues).toEqual([]);
 });
 test('round cooldown can be inspected but never cast; the intervening actors do not refresh it',async({page})=>{
  const moves:readonly Move[]=[['tracer','execute','brute'],['weaver','ward','weaver'],['guardian','guard','weaver'],['healer','heal','guardian']];

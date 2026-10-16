@@ -274,7 +274,7 @@ export class GameShell {
     this.battle.open({
       kind: b.kind, data, entry: { hp: b.entry }, commands: b.commands,
       commit: (state: BattleState) => this.commitBattle(state),
-      leaveLabel: (outcome: Outcome) => outcome === 'victory' ? (b.kind === 'boss' ? 'ไปยังประตูรอยแยก →' : 'กลับสู่แผนที่ →') : b.kind === 'tutorial' ? 'ลองศึกสอนอีกครั้ง ↻' : !this.state ? 'ทีมล้มหมด · กลับค่าย →' : this.state.camp ? 'กลับแคมป์ →' : 'กลับทางเข้าด่าน →',
+      leaveLabel: (outcome: Outcome) => outcome === 'victory' ? (b.kind === 'boss' ? 'ไปยังประตูรอยแยก →' : 'กลับสู่แผนที่ →') : b.kind === 'tutorial' ? 'ลองศึกแรกอีกครั้ง ↻' : !this.state ? 'ทีมล้มหมด · กลับค่าย →' : this.state.camp ? 'กลับแคมป์ →' : 'กลับทางเข้าด่าน →',
       leave: () => this.leaveBattle(),
     });
   }
@@ -296,7 +296,7 @@ export class GameShell {
           this.game = { profile: settle(this.game!.profile, next, 'wiped', this.map), run: null }; this.persist();
           return this.saved;
         }
-        this.message = kind === 'tutorial' ? 'ลองศึกสอนอีกครั้งด้วยเลือดเต็ม' : 'ทีมถอยกลับ · คนที่ล้มยังล้มอยู่ ชุบหรือสลับตัวสำรองที่แคมป์';
+        this.message = kind === 'tutorial' ? 'ลองศึกแรกอีกครั้งด้วยเลือดเต็ม' : 'ทีมถอยกลับ · คนที่ล้มยังล้มอยู่ ชุบหรือสลับตัวสำรองที่แคมป์';
       }
     }
     this.state = next; this.persist();
