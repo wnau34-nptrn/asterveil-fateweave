@@ -5,6 +5,7 @@ import type { Direction, ExpeditionState, MapDefinition, PotionId, Profile, Prof
 import { battleData, finishBattle, heroCatalog, move, moveMember, openChest, recordBattle, usePotion, rest, revive, swapMembers, type EncounterLookup } from '../core/world/world';
 import { browserStorage } from '../platform/browser-storage';
 import type { BattleUI } from './battle-ui';
+import type { NpcId } from '../game/visuals/assets';
 import { expThai, heroText, itemLines, itemName, lootThai, potionText } from './th';
 import { enhance, findItem, fuse, reroll } from '../core/world/forge';
 import { CommanderUI } from './commander-ui';
@@ -106,7 +107,8 @@ export class GameShell {
   }
   private showLobby(): void {
     this.show('lobby');
-    this.lobby.render({ profile: this.game!.profile, message: this.lobbyMessage, cheer: this.lobbyCheer, saved: this.saved && !!this.storage });
+    this.lobby.render({ profile: this.game!.profile, message: this.lobbyMessage, cheer: this.lobbyCheer, saved: this.saved && !!this.storage, ...(this.npcCheer ? { npcCheer: this.npcCheer } : {}) });
+    this.npcCheer = undefined;
   }
   private profileChange(result: ProfileResult): void {
     if (!this.game || this.game.run) return;
@@ -117,6 +119,8 @@ export class GameShell {
       : e.type === 'upgraded' ? `${name(e.heroId)}ขึ้นเป็น ★${e.stars} แล้ว` : e.type === 'dismissed' ? `เลิกจ้าง${name(e.heroId)}แล้ว · ได้แร่ดาวคืน ${this.map.company.dismissRefund}` : e.type === 'talent' || e.type === 'equipped' ? '' : e.type === 'salvaged' ? `แยกชิ้น ${e.count} ชิ้น · ได้แร่ดาว ${e.ore} ผงม่านเวล ${e.dust}`
       : e.type === 'forged' ? this.forgedText(result.profile, e.uid, e.action) : e.type === 'brewed' ? `ปรุง${potionText[e.potion].name}แล้ว · มีอยู่ ${result.profile.potions[e.potion]} ขวด` : 'จัดทีมแล้ว';
     this.lobbyCheer = e.type === 'hired' || e.type === 'upgraded' ? e.heroId : '';
+    // The camp NPC whose service just succeeded cheers once.
+    this.npcCheer = ({ hired: 'broker', talent: 'trainer', equipped: 'keeper', salvaged: 'keeper', forged: 'smith', brewed: 'herbalist' } as Partial<Record<string, NpcId>>)[e.type];
     this.showLobby();
   }
   // Forge result: the piece as it is now (fuse and reroll show what was rolled).
@@ -124,6 +128,7 @@ export class GameShell {
     const item = findItem(profile, uid)?.item; if (!item) return '';
     return `${({ enhance: 'ตีบวกสำเร็จ', fuse: 'หลอมรวมสำเร็จ', reroll: 'ปรับค่าแล้ว' })[action]} · ${itemName(item)} · ${itemLines(this.map.equipment, item).join(' · ')}`;
   }
+  private npcCheer: NpcId | undefined;
   private depart(): void {
     if (!this.game || this.game.run) return;
     const out = depart(this.game.profile, this.map, this.lookup, this.freshSeed());

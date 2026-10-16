@@ -44,3 +44,12 @@ export function lobbyPose(id: string, pose: LobbyPose): { url: string; column: n
   return undefined;
 }
 export const lobbyArt = (name: 'lobby_bg' | 'lobby_fg' | 'lobby_firepit'): string => `${import.meta.env.BASE_URL}assets/lobby/${name}.webp`;
+// Camp NPCs (ART-CHAR-NPC-001): one 4 × 3 atlas of 512 px frames per NPC (row 0 idle ×4, row 1 work ×4,
+// row 2 greet ×2 + cheer + empty), soles at y=496, facing right. Stations and busts share one 3 × 2 atlas each,
+// in NPC_IDS order. Each NPC runs one lobby service.
+export const NPC_IDS = ['smith', 'broker', 'trainer', 'keeper', 'herbalist', 'scout'] as const;
+export type NpcId = typeof NPC_IDS[number];
+const npcBase = () => `${import.meta.env.BASE_URL}assets/lobby/npc/`;
+export const npcAtlasUrl = (id: NpcId): string => `${npcBase()}npc_${id}.webp`;
+export const npcStationsUrl = (): string => `${npcBase()}npc_stations.webp`;
+export const npcBustsUrl = (): string => `${npcBase()}npc_busts.webp`;

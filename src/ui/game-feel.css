@@ -203,8 +203,8 @@ button:active:not(:disabled) { transform: scale(.97); }
 #lobby-view { background: #120d18; }
 #lobby-view .lobby-shell { position: absolute; inset: 0; display: block; max-width: none; margin: 0; padding: 0; height: auto; grid-template: none; }
 .lobby-scene-host { position: absolute; inset: 0; }
+#lobby-view .lobby-shell { --ground: max(104px, calc(env(safe-area-inset-bottom) + 13vh)); --unit: min(30vh, 31vw, 300px); }
 #lobby-view .lobby-scene { position: absolute; inset: 0; flex: none; border: 0; border-radius: 0; box-shadow: none;
-  --ground: max(104px, calc(env(safe-area-inset-bottom) + 13vh)); --unit: min(30vh, 31vw, 300px);
   background: radial-gradient(ellipse 30% 26% at 50% calc(100% - var(--ground)), #ffb35c55, #ff8a3d18 55%, #ff8a3d00 75%), var(--lobby-bg) 50% 72% / cover no-repeat, #2a1b2c; }
 /* Top and bottom shade keep the HUD readable without boxes. */
 #lobby-view .lobby-scene::after { content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 7;
@@ -254,7 +254,7 @@ button:active:not(:disabled) { transform: scale(.97); }
 .lobby-sheet-head h2 .icon { width: 20px; height: 20px; } .lobby-sheet-head h2 small { font: 400 13px var(--font-body); color: var(--text-muted); }
 .lobby-sheet .lobby-content { flex: 1; min-height: 0; overflow-y: auto; padding-top: 4px; }
 @media (max-width: 760px) and (orientation: portrait) {
-  #lobby-view .lobby-scene { --unit: min(26vh, 33vw); --ground: max(108px, calc(env(safe-area-inset-bottom) + 13vh)); }
+  #lobby-view .lobby-shell { --unit: min(26vh, 33vw); --ground: max(108px, calc(env(safe-area-inset-bottom) + 13vh)); }
   .lobby-sheet { left: max(10px, env(safe-area-inset-left)); right: max(10px, env(safe-area-inset-right)); width: auto; top: 30vh; bottom: calc(max(12px, env(safe-area-inset-bottom)) + 76px); animation-name: sheet-from-bottom; }
   .lobby-who h1 { font-size: 19px; } .lobby-who .eyebrow { font-size: 11px; }
   .lobby-top .lobby-bank { flex-direction: column; align-items: flex-end; gap: 4px; } .lobby-top .lobby-bank span { min-height: 30px; padding: 2px 10px; font-size: 14px; }
@@ -264,7 +264,7 @@ button:active:not(:disabled) { transform: scale(.97); }
   .lobby-bottom { flex-direction: column; align-items: stretch; gap: 8px; }
   #lobby-depart { margin-left: 0; width: 100%; min-height: 52px; justify-content: center; }
   .lobby-sheet { bottom: calc(max(12px, env(safe-area-inset-bottom)) + 136px); }
-  #lobby-view .lobby-scene { --ground: max(160px, calc(env(safe-area-inset-bottom) + 18vh)); }
+  #lobby-view .lobby-shell { --ground: max(160px, calc(env(safe-area-inset-bottom) + 18vh)); }
 }
 @media (max-width: 360px) and (orientation: portrait) {
   .lobby-menu-button { width: 54px; height: 54px; font-size: 12px; } .lobby-menu-button .icon { width: 20px; height: 20px; }
@@ -272,7 +272,7 @@ button:active:not(:disabled) { transform: scale(.97); }
   .lobby-sheet { bottom: calc(max(12px, env(safe-area-inset-bottom)) + 120px); }
 }
 @media (orientation: landscape) and (max-height: 500px) {
-  #lobby-view .lobby-scene { --unit: min(36vh, 22vw); --ground: 18vh; }
+  #lobby-view .lobby-shell { --unit: min(36vh, 22vw); --ground: 18vh; }
   .lobby-sheet { top: calc(max(8px, var(--safe-top)) + 54px); bottom: max(8px, env(safe-area-inset-bottom)); width: min(460px, 56vw); padding: 8px 10px; }
   .lobby-bottom { right: auto; flex-direction: column; align-items: flex-start; }
   .lobby-sheet ~ .lobby-bottom #lobby-depart { margin-left: 0; }
@@ -492,3 +492,37 @@ html, body { background: #0a1422; }
 .salve-target span { display: grid; } .salve-target small { font-size: 11px; color: var(--text-muted, #b9c8d8); }
 .brew-list li > .icon { width: 28px; height: 28px; color: #7fe3d0; flex: 0 0 auto; }
 .brew-list li small:not(.hire-status) { display: block !important; }
+/* Camp NPCs (ART-CHAR-NPC-001): staff at their stations along the back of the camp, behind the members.
+   Drawings live in the scene; the tap targets sit in the HUD at the same spots. Right-side staff are mirrored. */
+#lobby-view .lobby-npc, #lobby-view .lobby-station, #lobby-view .npc-hit { position: absolute; left: var(--nx); bottom: calc(var(--ground) + 21vh); width: calc(var(--unit) * .5); aspect-ratio: 1; transform: translate(-50%, 3.1%); }
+#lobby-view .lobby-npc { z-index: 1; filter: brightness(.9) saturate(.95); }
+#lobby-view .lobby-npc i, #lobby-view .lobby-station i { position: absolute; inset: 0; background-repeat: no-repeat; transform: scaleX(var(--flip)); }
+#lobby-view .lobby-npc i { background-image: var(--atlas); background-size: 400% 300%; background-position: 0% 0%; filter: drop-shadow(0 5px 5px #0a0606aa); }
+#lobby-view .lobby-station { left: calc(var(--nx) + var(--flip) * var(--unit) * .27); z-index: 0; filter: brightness(.85); }
+#lobby-view .lobby-station i { background-image: var(--stations); background-size: 300% 200%; background-position: var(--sx) var(--sy); }
+#lobby-view .npc-hit { z-index: 0; min-width: 44px; min-height: 44px; padding: 0; border: 0; border-radius: 40% 40% 12px 12px; background: transparent; cursor: pointer; }
+#lobby-view .npc-hit:focus-visible { outline: 2px solid var(--gold-light, #f2d596); outline-offset: -6px; }
+#lobby-view .npc-hit:hover { background: radial-gradient(ellipse 45% 50% at 50% 60%, #f2d59622, transparent 70%); }
+#lobby-view .lobby-npc[data-act="work"] i { background-position-y: 50%; }
+#lobby-view .lobby-npc[data-act="greet"] i, #lobby-view .lobby-npc[data-act="cheer"] i { background-position-y: 100%; }
+#lobby-view .lobby-npc[data-act="cheer"] i { background-position-x: 66.667%; }
+@media (prefers-reduced-motion: no-preference) {
+  #lobby-view .lobby-npc i { animation: npc-idle 2.4s step-end infinite; animation-delay: var(--nd, 0s); }
+  #lobby-view .lobby-npc[data-act="work"] i { animation: npc-loop .5s step-end infinite; }
+  #lobby-view .lobby-npc[data-act="greet"] i { animation: npc-greet .5s step-end infinite; }
+  #lobby-view .lobby-npc[data-act="cheer"] i { animation: npc-cheer .6s ease-out 1; }
+}
+/* Idle holds the rest frame, then plays the fidget at 8 fps; work and greet loop. */
+@keyframes npc-idle { 0% { background-position-x: 0%; } 62.5% { background-position-x: 33.333%; } 67.7% { background-position-x: 66.667%; } 72.9% { background-position-x: 100%; } 78.1% { background-position-x: 33.333%; } 83.3% { background-position-x: 0%; } }
+@keyframes npc-loop { 0% { background-position-x: 0%; } 25% { background-position-x: 33.333%; } 50% { background-position-x: 66.667%; } 75% { background-position-x: 100%; } }
+@keyframes npc-greet { 0% { background-position-x: 0%; } 50% { background-position-x: 33.333%; } }
+@keyframes npc-cheer { 0% { transform: scaleX(var(--flip)) translateY(0); } 40% { transform: scaleX(var(--flip)) translateY(-6%); } 100% { transform: scaleX(var(--flip)) translateY(0); } }
+/* Narrow screens: no room for the stations; the staff stand smaller along the back. */
+@media (max-width: 760px) {
+  #lobby-view .lobby-station { display: none; }
+  #lobby-view .lobby-npc, #lobby-view .npc-hit { width: calc(var(--unit) * .5); bottom: calc(var(--ground) + 15vh); }
+}
+/* Service sheets open with the NPC's bust and one line. */
+.npc-line { display: flex; align-items: center; gap: 10px; margin: 0 0 8px; padding: 6px 10px 6px 6px; border-radius: 14px; background: #2a1d24cc; border: 1px solid #ffc98a33; }
+.npc-line .npc-bust { flex: 0 0 56px; width: 56px; height: 56px; border-radius: 50%; background-image: var(--busts); background-size: 300% 200%; background-position: var(--sx) var(--sy); box-shadow: 0 0 0 2px #f2d59666; }
+.npc-line p { margin: 0; font-size: 13px; line-height: 1.4; } .npc-line b { display: block; font-size: 12px; color: var(--gold-light, #f2d596); }

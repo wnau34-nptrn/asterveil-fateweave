@@ -691,6 +691,30 @@ test('potions: brew in the lobby, pack 3 on departure, drink a salve and a repel
   expect(saved.version).toBe(12); expect(saved.run.potions).toEqual({ salve: 2, tonic: 0, repel: 0 }); expect(saved.run.repel).toBe(10); expect(saved.run.hp.guardian).toBeGreaterThan(10);
 });
 
+test('camp NPCs stand at their stations, open their service when tapped and greet with a line', async ({ page }, info) => {
+  const profile = { ...newProfile(map, 5), tutorialDone: true, commander, bank: { ore: 50, seal: 0, dust: 10 } } as Profile;
+  // NPCs move only without reduced motion (the suite default is reduced).
+  await page.emulateMedia({ reducedMotion: 'no-preference' }); await seed(page, null, profile);
+  await page.goto('./'); await page.locator('#continue').click();
+  await expect(page.locator('.lobby-npc')).toHaveCount(6); await expect(page.locator('.npc-hit')).toHaveCount(6);
+  for (const b of await page.locator('.npc-hit').all()) { const box = (await b.boundingBox())!; expect(box.width).toBeGreaterThanOrEqual(44); expect(box.height).toBeGreaterThanOrEqual(44); }
+  await page.waitForTimeout(600);
+  await page.screenshot({ path: info.outputPath('camp-npcs.png') });
+  for (const [npc, title, line] of [['smith', 'ช่างตีเหล็ก', 'ลุงบอร์ก'], ['broker', 'ป้ายจ้าง', 'พีโน่'], ['herbalist', 'นักปรุงยา', 'เฟิร์น'], ['keeper', 'อุปกรณ์', 'มิมี่'], ['trainer', 'ต้นไม้ความถนัด', 'ครูฮัลดา'], ['scout', 'จัดทีม', 'คาเอล']] as const) {
+    await page.locator(`#npc-${npc}`).click();
+    await expect(page.locator('#lobby-sheet-title')).toContainText(title); await expect(page.locator('.npc-line')).toContainText(line);
+    if (npc === 'smith') { await expect(page.locator(`#npc-art-${npc}`)).toHaveAttribute('data-act', 'greet'); await page.waitForTimeout(400); await page.screenshot({ path: info.outputPath('camp-npc-sheet.png') }); }
+    await page.locator('[data-lobby="close"]').click();
+  }
+  // Brewing makes the herbalist cheer.
+  await page.locator('#npc-herbalist').click(); await page.locator('#brew-salve').click();
+  await expect(page.locator('#npc-art-herbalist')).toHaveAttribute('data-act', 'cheer');
+  await page.locator('[data-lobby="close"]').click();
+  await page.setViewportSize({ width: 390, height: 844 }); await page.waitForTimeout(300);
+  expect(await page.evaluate(() => document.scrollingElement!.scrollHeight <= innerHeight)).toBe(true);
+  await page.screenshot({ path: info.outputPath('camp-npcs-phone.png') });
+});
+
 test('levels: the map shows the monster level here and members’ levels; battles show enemy levels', async ({ page }, info) => {
   const state = newExpedition(map, encounterById, 11); state.tutorialDone = true;
   const issues = await open(page, state);
