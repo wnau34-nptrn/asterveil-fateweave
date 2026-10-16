@@ -1,11 +1,11 @@
 import type { BattleState, Outcome } from '../core/battle/types';
 import { clearLegacySaves, loadGame, saveGame, type Game } from '../core/save/expedition-save';
-import { createCommander, departure, dismiss, hire, learnTalent, newProfile, placeMember, resetTalents, settle, upgrade, canWithdraw } from '../core/world/profile';
+import { createCommander, departure, dismiss, equip, hire, learnTalent, newProfile, placeMember, resetTalents, salvage, settle, unequip, upgrade, canWithdraw } from '../core/world/profile';
 import type { Direction, ExpeditionState, MapDefinition, ProfileResult, RunOutcome, WorldEvent } from '../core/world/types';
 import { battleData, finishBattle, heroCatalog, move, moveMember, openChest, recordBattle, rest, revive, swapMembers, type EncounterLookup } from '../core/world/world';
 import { browserStorage } from '../platform/browser-storage';
 import type { BattleUI } from './battle-ui';
-import { expThai, heroText, lootThai } from './th';
+import { expThai, heroText, itemName, lootThai } from './th';
 import { CommanderUI } from './commander-ui';
 import { LobbyUI } from './lobby-ui';
 import { WorldUI, type WorldBanner } from './world-ui';
@@ -45,6 +45,8 @@ export class GameShell {
       hire: i => this.profileChange(hire(this.game!.profile, map, lookup, i)), upgrade: id => this.profileChange(upgrade(this.game!.profile, map, id)),
       dismiss: id => this.profileChange(dismiss(this.game!.profile, map, id)), place: (id, group, other) => this.profileChange(placeMember(this.game!.profile, id, group, other)),
       talent: (id, node) => this.profileChange(learnTalent(this.game!.profile, map, id, node)), resetTalents: id => this.profileChange(resetTalents(this.game!.profile, id)),
+      equip: (id, uid) => this.profileChange(equip(this.game!.profile, id, uid)), unequip: (id, slot) => this.profileChange(unequip(this.game!.profile, map, id, slot)),
+      salvage: uids => this.profileChange(salvage(this.game!.profile, map, uids)),
       depart: () => this.depart(), home: () => this.showTitle(),
     });
     this.commander = new CommanderUI(views.commander, { create: c => this.createCommander(c), back: () => { this.replacing = false; this.showTitle(); } });
@@ -109,7 +111,7 @@ export class GameShell {
     if (e.type === 'blocked') return;
     this.game = { ...this.game, profile: { ...result.profile, last: null } }; this.persist();
     this.lobbyMessage = e.type === 'hired' ? (e.duplicate ? `ได้ตัวซ้ำของ${name(e.heroId)} · ใช้อัปดาวในแท็บทีม` : `จ้าง${name(e.heroId)}แล้ว`)
-      : e.type === 'upgraded' ? `${name(e.heroId)}ขึ้นเป็น ★${e.stars} แล้ว` : e.type === 'dismissed' ? `เลิกจ้าง${name(e.heroId)}แล้ว · ได้แร่ดาวคืน ${this.map.company.dismissRefund}` : e.type === 'talent' ? '' : 'จัดทีมแล้ว';
+      : e.type === 'upgraded' ? `${name(e.heroId)}ขึ้นเป็น ★${e.stars} แล้ว` : e.type === 'dismissed' ? `เลิกจ้าง${name(e.heroId)}แล้ว · ได้แร่ดาวคืน ${this.map.company.dismissRefund}` : e.type === 'talent' || e.type === 'equipped' ? '' : e.type === 'salvaged' ? `แยกชิ้น ${e.count} ชิ้น · ได้แร่ดาว ${e.ore} ผงม่านเวล ${e.dust}` : 'จัดทีมแล้ว';
     this.lobbyCheer = e.type === 'hired' || e.type === 'upgraded' ? e.heroId : '';
     this.showLobby();
   }
@@ -124,7 +126,7 @@ export class GameShell {
   private endRun(outcome: RunOutcome): void {
     const run = this.state; if (!this.game || !run) return;
     if (outcome === 'withdrawn' && !canWithdraw(run, this.map)) return;
-    this.game = { profile: settle(this.game.profile, run, outcome), run: null };
+    this.game = { profile: settle(this.game.profile, run, outcome, this.map), run: null };
     this.persist(); this.lobbyMessage = ''; this.lobbyCheer = ''; this.banner = undefined; this.locked = false;
     this.showLobby();
   }
@@ -223,12 +225,12 @@ export class GameShell {
       const result = finishBattle(next, this.map, this.lookup); next = result.state;
       const fallen = Object.values(next.hp).filter(hp => hp <= 0).length;
       if (result.event.type === 'victory') {
-        const loot = lootThai(result.event.loot); this.effect = 'loot'; const exp = expThai(result.event.exp, next);
+        const loot = lootThai(result.event.loot) + (result.event.item ? ` · ได้${itemName(result.event.item)} Lv${result.event.item.level}` : ''); this.effect = 'loot'; const exp = expThai(result.event.exp, next);
         this.message = kind === 'boss' ? `ผู้คุมรอยแยกล้มแล้ว · ${loot}${exp} · ทางไปประตูเปิดออก` : `ชนะศึก · ${loot}${exp}${fallen ? ` · ${fallen} คนล้มอยู่ ชุบที่แคมป์` : ''}`;
       } else if (result.event.type === 'defeat') {
         if (result.event.wiped) {
           // Every brought member is down: the expedition fails and settles home in this write.
-          this.game = { profile: settle(this.game!.profile, next, 'wiped'), run: null }; this.persist();
+          this.game = { profile: settle(this.game!.profile, next, 'wiped', this.map), run: null }; this.persist();
           return this.saved;
         }
         this.message = kind === 'tutorial' ? 'ลองศึกสอนอีกครั้งด้วยเลือดเต็ม' : 'ทีมถอยกลับ · คนที่ล้มยังล้มอยู่ ชุบหรือสลับตัวสำรองที่แคมป์';

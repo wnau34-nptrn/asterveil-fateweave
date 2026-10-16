@@ -1,4 +1,5 @@
-import type { Commander, ExpeditionState, MapDefinition, MemberProgress, Profile, ProfileResult, RunOutcome, TalentNode, Talents } from './types';
+import type { Commander, ExpeditionState, GearSlot, Item, MapDefinition, MemberProgress, Profile, ProfileResult, RunOutcome, TalentNode, Talents } from './types';
+import { salvageValue } from './equipment';
 import { COMPANY_CAP, PARTY_SLOTS, RESERVE_SLOTS } from './types';
 import { heroCatalog, levelOf, newExpedition, rollPercent, type EncounterLookup } from './world';
 
@@ -9,7 +10,7 @@ export function newProfile(map: MapDefinition, seed: number): Profile {
     seed: seed >>> 0, returns: 0, tutorialDone: false, commander: null,
     company: [...map.startingRoster], members: Object.fromEntries(map.startingRoster.map(id => [id, { stars: 1, dupes: 0 }])),
     party: { deployed: [...map.startingRoster], reserve: [] },
-    bank: { ore: 0, seal: 0 }, taken: [], expeditions: 0, completes: 0, last: null,
+    bank: { ore: 0, seal: 0, dust: 0 }, items: [], nextItem: 1, taken: [], expeditions: 0, completes: 0, last: null,
   };
 }
 const blocked = (profile: Profile, reason: string): ProfileResult => ({ profile, event: { type: 'blocked', reason } });
@@ -91,6 +92,8 @@ export function dismissReason(profile: Profile, id: string): string {
 export function dismiss(initial: Profile, map: MapDefinition, id: string): ProfileResult {
   const reason = dismissReason(initial, id); if (reason) return blocked(initial, reason);
   const profile = structuredClone(initial);
+  // Their equipment goes back to the bag; whatever does not fit is salvaged.
+  for (const item of Object.values(profile.members[id]?.gear ?? {})) if (item) stash(profile, map, item);
   profile.company = profile.company.filter(m => m !== id); delete profile.members[id];
   profile.party.deployed = profile.party.deployed.filter(m => m !== id); profile.party.reserve = profile.party.reserve.filter(m => m !== id);
   profile.bank.ore += map.company.dismissRefund;
@@ -136,6 +139,44 @@ export function resetTalents(initial: Profile, id: string): ProfileResult {
   return { profile, event: { type: 'talent', heroId: id } };
 }
 
+// ---- Equipment (2D-2): equip, unequip and salvage happen only in the lobby. ----
+// Puts an item in the bag, or salvages it when the bag is full (returns whether it was kept).
+function stash(profile: Profile, map: MapDefinition, item: Item): boolean {
+  if (profile.items.length < map.equipment.bagCap) { profile.items.push(item); return true; }
+  const v = salvageValue(map, item); profile.bank.ore += v.ore; profile.bank.dust += v.dust; return false;
+}
+export function equipReason(profile: Profile, heroId: string, uid: number): string {
+  const item = profile.items.find(i => i.uid === uid);
+  if (!item || !profile.members[heroId]) return 'unknown';
+  return item.slot === 'weapon' && item.hero !== heroId ? 'class' : '';
+}
+// Equipping swaps: the slot's previous item returns to the bag in the new item's place.
+export function equip(initial: Profile, heroId: string, uid: number): ProfileResult {
+  const reason = equipReason(initial, heroId, uid); if (reason) return blocked(initial, reason);
+  const profile = structuredClone(initial); const m = profile.members[heroId]!;
+  const index = profile.items.findIndex(i => i.uid === uid); const item = profile.items[index]!; const old = m.gear?.[item.slot];
+  if (old) profile.items[index] = old; else profile.items.splice(index, 1);
+  m.gear = { ...m.gear, [item.slot]: item };
+  return { profile, event: { type: 'equipped', heroId } };
+}
+export function unequip(initial: Profile, map: MapDefinition, heroId: string, slot: GearSlot): ProfileResult {
+  const item = initial.members[heroId]?.gear?.[slot];
+  if (!item) return blocked(initial, 'unknown');
+  if (initial.items.length >= map.equipment.bagCap) return blocked(initial, 'full');
+  const profile = structuredClone(initial); const m = profile.members[heroId]!;
+  profile.items.push(item); delete m.gear![slot]; if (!Object.keys(m.gear!).length) delete m.gear;
+  return { profile, event: { type: 'equipped', heroId } };
+}
+// Salvages bag items (never equipped ones) into ore and veil dust.
+export function salvage(initial: Profile, map: MapDefinition, uids: readonly number[]): ProfileResult {
+  const picked = initial.items.filter(i => uids.includes(i.uid));
+  if (!picked.length || picked.length !== new Set(uids).size) return blocked(initial, 'unknown');
+  const profile = structuredClone(initial); let ore = 0, dust = 0;
+  for (const item of picked) { const v = salvageValue(map, item); ore += v.ore; dust += v.dust; }
+  profile.items = profile.items.filter(i => !uids.includes(i.uid)); profile.bank.ore += ore; profile.bank.dust += dust;
+  return { profile, event: { type: 'salvaged', count: picked.length, ore, dust } };
+}
+
 // Team selection: every company member is in one group. Swap two members of different
 // groups, or move one into a free slot of another group. One member always stays deployed.
 export type Group = 'deployed' | 'reserve' | 'bench';
@@ -169,15 +210,18 @@ export function departure(profile: Profile, map: MapDefinition, lookup: Encounte
 }
 // Share of carried ore/seals kept when the expedition ends this way (embers never leave the map).
 export const keptPercent: Record<RunOutcome, number> = { complete: 100, withdrawn: 100, wiped: 50 };
-export function settle(initial: Profile, run: ExpeditionState, outcome: RunOutcome): Profile {
+export function settle(initial: Profile, run: ExpeditionState, outcome: RunOutcome, map: MapDefinition): Profile {
   const profile = structuredClone(initial); const pct = keptPercent[outcome];
   const ore = Math.floor(run.resources.ore * pct / 100); const seal = Math.floor(run.resources.seal * pct / 100);
   profile.bank.ore += ore; profile.bank.seal += seal;
+  // Found equipment comes home unless the team was wiped; a full bag salvages the rest (2D-2).
+  let items = 0, salvaged = 0;
+  if (outcome !== 'wiped') for (const found of run.found) { if (stash(profile, map, { ...found, uid: profile.nextItem++ })) items++; else salvaged++; }
   // Levels and EXP earned on the run are kept whatever the outcome (2D-1).
   for (const [id, m] of Object.entries(run.members)) if (profile.members[id] && m.level) profile.members[id] = { ...profile.members[id]!, level: m.level, exp: m.exp ?? 0 };
   profile.tutorialDone ||= run.tutorialDone; profile.expeditions++; if (outcome === 'complete') profile.completes++;
   profile.returns++; profile.taken = [];
-  profile.last = { outcome, ore, seal, steps: run.steps, wins: run.wins };
+  profile.last = { outcome, ore, seal, steps: run.steps, wins: run.wins, items, salvaged };
   return profile;
 }
 // Withdrawal is allowed at a camp or the map entrance, outside battle.

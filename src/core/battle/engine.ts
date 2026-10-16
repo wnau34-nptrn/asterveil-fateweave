@@ -1,4 +1,4 @@
-import type { ActionId, BattleEntry, HeroDefinition, PassiveId, TalentCap, TalentRule, HeroState, EnemyState, BattleEvent, BattleState, Command, EncounterDefinition, Intent, Resolution, TargetOption, TurnSlot, TurnStage } from './types';
+import type { ActionId, BattleEntry, GearSpecial, HeroDefinition, PassiveId, TalentCap, TalentRule, HeroState, EnemyState, BattleEvent, BattleState, Command, EncounterDefinition, Intent, Resolution, TargetOption, TurnSlot, TurnStage } from './types';
 
 const living = (state: BattleState, id: string) => [...state.heroes, ...state.enemies].some(a => a.id === id && a.hp > 0);
 const definitions = (data: EncounterDefinition) => [...data.heroes, ...data.enemies];
@@ -60,9 +60,20 @@ export function skillPower(data: EncounterDefinition, heroId: string, action: Ac
   const hero = data.heroes.find(h => h.id === heroId);
   return Math.round(data.skills[action].power * (100 + (hero?.skillBonus ?? 0)) / 100) + (hero?.talents?.power?.[action] ?? 0);
 }
-// Extra damage a hero's own hits gain from its capstones: duelist deep mark, archer hunter.
+// Extra damage a hero's own hits gain from its capstones (duelist deep mark, archer hunter) and mark-hunter gear.
 export function talentHitBonus(state: BattleState, data: EncounterDefinition, heroId: string, enemy: EnemyState): number {
-  return (enemy.markedUntil > state.round ? capAmount(data, heroId, 'deepmark') : 0) + ((enemy.delayedRound ?? 0) >= state.round ? capAmount(data, heroId, 'hunter') : 0);
+  const marked = enemy.markedUntil > state.round;
+  return (marked ? capAmount(data, heroId, 'deepmark') + (hasGear(data, heroId, 'markhunter') ? GEAR_MARK_HUNTER : 0) : 0)
+    + ((enemy.delayedRound ?? 0) >= state.round ? capAmount(data, heroId, 'hunter') : 0);
+}
+// ---- Equipment (2D-2) ----
+export const GEAR_MARK_HUNTER = 8; export const GEAR_RENEWAL = 4;
+export const hasGear = (data: EncounterDefinition, heroId: string | undefined, special: GearSpecial): boolean =>
+  !!heroId && !!data.heroes.find(h => h.id === heroId)?.gear?.specials?.includes(special);
+// Healing cast by this hero, raised by its equipment's heal bonus.
+export function healPower(data: EncounterDefinition, heroId: string, power: number): number {
+  const bonus = data.heroes.find(h => h.id === heroId)?.gear?.healBonus ?? 0;
+  return bonus ? Math.round(power * (100 + bonus) / 100) : power;
 }
 // Deploys a party (in slot order) into an encounter; enemy slots then resolve to these heroes.
 export function withParty(data: EncounterDefinition, party: readonly HeroDefinition[]): EncounterDefinition {
@@ -138,7 +149,7 @@ function finishOrAdvance(state: BattleState, data: EncounterDefinition, events: 
       for (const e of state.enemies) if (e.markedUntil <= state.round) e.markedUntil = 0;
       // A song of mending heals every standing ally as each new round begins.
       if (state.song?.action === 'mend' && living(state, state.song.heroId)) {
-        const power = songPower(data, state.song.heroId, 'mend');
+        const power = healPower(data, state.song.heroId, songPower(data, state.song.heroId, 'mend'));
         for (const h of state.heroes) {
           const amount = h.hp > 0 ? Math.min(power, data.heroes.find(d => d.id === h.id)!.maxHp - h.hp) : 0;
           if (amount) { h.hp += amount; events.push({ type: 'heal', sourceId: state.song.heroId, targetId: h.id, amount, text: 'The song mends the party.' }); }
@@ -161,6 +172,11 @@ function finishOrAdvance(state: BattleState, data: EncounterDefinition, events: 
     const max = data.heroes.find(d => d.id === turnHero.id)!.maxHp; const amount = turnHero.hp * 2 < max ? Math.min(regen, max - turnHero.hp) : 0;
     if (amount) { turnHero.hp += amount; events.push({ type: 'heal', sourceId: turnHero.id, targetId: turnHero.id, amount, text: 'Stone regen.' }); }
   }
+  // Renewal gear: a small heal at the start of the wearer's turn.
+  if (turnHero && hasGear(data, turnHero.id, 'renewal')) {
+    const amount = Math.min(GEAR_RENEWAL, data.heroes.find(d => d.id === turnHero.id)!.maxHp - turnHero.hp);
+    if (amount > 0) { turnHero.hp += amount; events.push({ type: 'heal', sourceId: turnHero.id, targetId: turnHero.id, amount, text: 'Renewal.' }); }
+  }
   refreshIntent(state, data);
 }
 function strikeBack(state: BattleState, data: EncounterDefinition, heroId: string, enemy: EnemyState, power: number, events: BattleEvent[], text: string): void {
@@ -181,6 +197,9 @@ function hit(state: BattleState, data: EncounterDefinition, enemy: EnemyState, i
       amount = recipient.hp - 1; events.push({ type: 'sanctuary', sourceId: sanctuary.heroId, targetId: recipient.id, text: 'Sanctuary keeps the ally standing.' });
     } else if (protector && !state.standUsed && hasPassive(data, protector, 'stand') && living(state, protector)) {
       amount = recipient.hp - 1; state.standUsed = true; events.push({ type: 'stand', sourceId: protector, targetId: recipient.id, text: 'The knight’s stand keeps the ally at 1 HP.' });
+    } else if (hasGear(data, recipient.id, 'laststand') && !state.lastStand?.includes(recipient.id)) {
+      amount = recipient.hp - 1; state.lastStand = [...state.lastStand ?? [], recipient.id];
+      events.push({ type: 'stand', sourceId: recipient.id, targetId: recipient.id, text: 'Last stand keeps the hero at 1 HP.' });
     }
   }
   recipient.hp -= amount;
@@ -262,7 +281,8 @@ export function beginBattle(data: EncounterDefinition, entry?: BattleEntry): Res
   const invalid = entryReason(data, entry); if (invalid) throw new Error(invalid);
   const state: BattleState = {
     encounterId: data.id, beat: 1, round: 1, turnIndex: 0, order: [], outcome: 'active', guard: null, counter: null, taunt: null, song: null,
-    heroes: data.heroes.map(h => ({ id: h.id, hp: entry?.hp[h.id] ?? h.maxHp, barrier: 0, cooldowns: {} })),
+    // Equipment can start a standing hero with a barrier.
+    heroes: data.heroes.map(h => { const hp = entry?.hp[h.id] ?? h.maxHp; return { id: h.id, hp, barrier: hp > 0 ? h.gear?.barrier ?? 0 : 0, cooldowns: {} }; }),
     enemies: data.enemies.map(e => ({ id: e.id, hp: e.maxHp, markedUntil: 0 })), intent: null, commands: [],
   };
   // Bard overture (talent): the battle opens with the song of mending already playing.
@@ -345,8 +365,9 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
   // Split bolt / piercing line (talents): the other living enemies take half the skill power.
   const splash = (power: number) => { for (const foe of state.enemies.filter(e => e.hp > 0 && e.id !== enemy!.id)) strike(foe, Math.floor(power / 2), 'The hit carries on.'); };
   const livingBefore = state.enemies.filter(e => e.hp > 0).map(e => e.id);
-  const heal = (id: string, power: number) => {
+  const heal = (id: string, base: number) => {
     const target = state.heroes.find(h => h.id === id)!; if (!target.hp) return;
+    const power = healPower(data, hero.id, base);
     const amount = Math.min(power, data.heroes.find(h => h.id === id)!.maxHp - target.hp);
     if (amount) { target.hp += amount; events.push({ type: 'heal', sourceId: hero.id, targetId: id, amount, text: 'Restored HP.' }); }
     // Afterglow (★5): healing beyond full HP becomes a barrier (capped, not stacking).

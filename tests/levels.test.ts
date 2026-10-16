@@ -74,7 +74,7 @@ describe('member levels and EXP', () => {
   });
   it('levels are kept in the profile whatever the outcome', () => {
     const run = newExpedition(map, lookup, 1); run.members.guardian = { stars: 1, dupes: 0, level: 4, exp: 12 };
-    for (const outcome of ['complete', 'withdrawn', 'wiped'] as const) expect(settle(newProfile(map, 1), run, outcome).members.guardian).toEqual({ stars: 1, dupes: 0, level: 4, exp: 12 });
+    for (const outcome of ['complete', 'withdrawn', 'wiped'] as const) expect(settle(newProfile(map, 1), run, outcome, map).members.guardian).toEqual({ stars: 1, dupes: 0, level: 4, exp: 12 });
   });
 });
 

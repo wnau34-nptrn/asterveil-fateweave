@@ -1,9 +1,10 @@
 import { entryReason, withParty } from '../battle/engine';
 import type { ActionId, Command } from '../battle/types';
 import { COMPANY_CAP, PARTY_SLOTS, RESERVE_SLOTS, type ActiveBattle, type ExpeditionState, type MapDefinition, type Point, type Profile, type Roster, type RunOutcome } from '../world/types';
-import { battleState, expToNext, finishBattle, fullParty, heroDef, memberDef, rosterIds, tileAt, type EncounterLookup } from '../world/world';
+import { battleState, expToNext, finishBattle, fullParty, heroCatalog, heroDef, memberDef, rosterIds, tileAt, type EncounterLookup } from '../world/world';
+import { itemValid } from '../world/equipment';
 import { commanderReason, newProfile, settle, talentsValid } from '../world/profile';
-import type { MemberProgress, Talents } from '../world/types';
+import type { Item, MemberProgress, Talents } from '../world/types';
 
 export interface StoragePort { getItem(key: string): string | null; setItem(key: string, value: string): void; removeItem?(key: string): void }
 export const expeditionKey = 'asterveil.fateweave.expedition.v1';
@@ -20,7 +21,9 @@ export const legacyKeys = ['asterveil.fateweave.battle.v1', 'asterveil.fateweave
 // v6 → v7 (2D-1): members may carry `level`/`exp` (missing = level 1, no EXP) and an active battle
 // its monster `level` (missing = the encounter's own level). v6 data loads unchanged.
 // v7 → v8 (2D-1b): members may carry `talents` (ranks per tree node; missing = none). v7 data loads unchanged.
-const SAVE_VERSION = 8;
+// v8 → v9 (2D-2): members may carry `gear`; the profile gains `items`, `nextItem`, `bank.dust` and the
+// last result `items`/`salvaged`; the run gains `found` and `dry`. Older data migrates empty.
+const SAVE_VERSION = 9;
 export interface Game { profile: Profile; run: ExpeditionState | null }
 const actions: readonly ActionId[] = ['attack', 'guard', 'bash', 'mark', 'execute', 'bolt', 'ward', 'heal', 'prayer', 'brace', 'pierce', 'hinder', 'volley', 'acid', 'haste', 'ambush', 'evade', 'taunt', 'slam', 'valor', 'mend',
   'rally', 'finisher', 'sigil', 'sanctuary', 'spearwall', 'weakshot', 'bomb', 'backstab', 'quake', 'finale'];
@@ -57,12 +60,17 @@ function rosterOf(v: unknown, lookup: EncounterLookup, map: MapDefinition): Rost
     || ids.some(id => typeof id !== 'string' || !heroDef(lookup, map, id))) throw new Error('Invalid roster');
   return { deployed: [...deployed] as string[], reserve: [...reserve] as string[] };
 }
-function membersOf(v: unknown, map: MapDefinition, ids: readonly string[]): Record<string, MemberProgress> {
+function itemOf(v: unknown, map: MapDefinition, lookup: EncounterLookup, found = false): Item {
+  const i = structuredClone(obj(v)) as unknown as Item;
+  if (!itemValid(map, i, heroCatalog(lookup, map).map(h => h.id), found)) throw new Error('Invalid item');
+  return i;
+}
+function membersOf(v: unknown, map: MapDefinition, ids: readonly string[], lookup: EncounterLookup): Record<string, MemberProgress> {
   const raw = obj(v);
   if (Object.keys(raw).length !== ids.length) throw new Error('Invalid members');
   return Object.fromEntries(ids.map(id => {
     const m = obj(raw[id]); const keys = Object.keys(m);
-    if (keys.some(k => !['stars', 'dupes', 'level', 'exp', 'talents'].includes(k)) || ('level' in m) !== ('exp' in m)) throw new Error('Invalid members');
+    if (keys.some(k => !['stars', 'dupes', 'level', 'exp', 'talents', 'gear'].includes(k)) || ('level' in m) !== ('exp' in m)) throw new Error('Invalid members');
     if (!isInt(m.stars, 1, map.company.maxStars) || !isInt(m.dupes, 0, 99)) throw new Error('Invalid members');
     const out: MemberProgress = { stars: m.stars, dupes: m.dupes };
     if ('level' in m) {
@@ -73,6 +81,16 @@ function membersOf(v: unknown, map: MapDefinition, ids: readonly string[]): Reco
       const t = obj(m.talents) as Talents;
       if (!Object.keys(t).length || !talentsValid(map, id, out.level ?? 1, t)) throw new Error('Invalid talents');
       out.talents = { ...t };
+    }
+    if ('gear' in m) {
+      const g = obj(m.gear) as Record<string, unknown>;
+      if (!Object.keys(g).length) throw new Error('Invalid gear');
+      out.gear = {};
+      for (const [slot, raw] of Object.entries(g)) {
+        const item = itemOf(raw, map, lookup);
+        if (item.slot !== slot || (item.hero !== undefined && item.hero !== id)) throw new Error('Invalid gear');
+        out.gear[item.slot] = item;
+      }
     }
     return [id, out];
   }));
@@ -91,6 +109,11 @@ function command(v: unknown): Command {
   return { beat: c.beat, heroId: c.heroId, targetId: c.targetId, action: c.action as ActionId };
 }
 
+const badRun = (): never => { throw new Error('Invalid run'); };
+function foundOf(v: unknown, map: MapDefinition, lookup: EncounterLookup): Item[] {
+  if (!Array.isArray(v) || v.length > 99) throw new Error('Invalid found');
+  return v.map(i => itemOf(i, map, lookup, true));
+}
 // Rebuilds a run field by field. Battles are validated by replaying every command under
 // the current rules; any mismatch rejects the save.
 function parseRun(v: unknown, version: number, map: MapDefinition, lookup: EncounterLookup): ExpeditionState {
@@ -102,6 +125,7 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
     s.members = Object.fromEntries(ids.map(id => [String(id), { stars: 1, dupes: 0 }]));
   }
   if (version === 4) delete s.board;
+  if (version < 9) Object.assign(s, { found: [], dry: 0 });
   if (s.mapId !== map.id || s.mapVersion !== map.version) throw new Error('Map changed');
   const cells = map.rows.length * map.rows[0]!.length;
   if (typeof s.revealed !== 'string' || s.revealed.length !== cells || /[^01]/.test(s.revealed)) throw new Error('Invalid fog');
@@ -109,7 +133,7 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
   if (!isInt(s.seed, 0, 0xffffffff) || !isInt(s.rolls) || !isInt(s.steps) || !isInt(s.pressure, 0, 100) || !isInt(s.wins) || !isInt(s.defeats)) throw new Error('Invalid counters');
   const roster = rosterOf(s.roster, lookup, map);
   const ids = [...roster.deployed, ...roster.reserve];
-  const members = membersOf(s.members, map, ids);
+  const members = membersOf(s.members, map, ids, lookup);
   const hp = hpRecord(s.hp, lookup, map, ids, members);
   const r = obj(s.resources);
   if (Object.keys(r).length !== 3 || !isInt(r.ore, 0, 999999) || !isInt(r.ember, 0, 9999) || !isInt(r.seal, 0, 9999)) throw new Error('Invalid resources');
@@ -133,6 +157,7 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
     resources: { ore: r.ore as number, ember: r.ember as number, seal: r.seal as number }, openedChests: [...s.openedChests as string[]], restReady: s.restReady as boolean,
     tutorialDone: s.tutorialDone as boolean, bossDefeated: s.bossDefeated as boolean,
     completed: s.completed as boolean, wins: s.wins as number, defeats: s.defeats as number, battle,
+    found: foundOf(s.found, map, lookup), dry: isInt(s.dry, 0, map.equipment.pity) ? s.dry : badRun(),
   };
   if (state.camp && tileAt(map, state.camp)?.kind !== 'camp') throw new Error('Invalid camp');
   // A battle can end on enemy opening turns before any command; apply it now.
@@ -147,15 +172,21 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
     || company.some(id => typeof id !== 'string' || !heroDef(lookup, map, id))) throw new Error('Invalid company');
   const party = rosterOf(p.party, lookup, map);
   if ([...party.deployed, ...party.reserve].some(id => !company.includes(id))) throw new Error('Invalid party');
-  const members = membersOf(p.members, map, company as string[]);
-  const bank = obj(p.bank);
-  if (Object.keys(bank).length !== 2 || !isInt(bank.ore, 0, 9999999) || !isInt(bank.seal, 0, 99999)) throw new Error('Invalid bank');
+  const members = membersOf(p.members, map, company as string[], lookup);
+  const bank = obj(p.bank); if (version < 9) bank.dust = 0;
+  if (Object.keys(bank).length !== 3 || !isInt(bank.ore, 0, 9999999) || !isInt(bank.seal, 0, 99999) || !isInt(bank.dust, 0, 9999999)) throw new Error('Invalid bank');
+  if (version < 9) Object.assign(p, { items: [], nextItem: 1 });
+  if (!isInt(p.nextItem, 1) || !Array.isArray(p.items) || p.items.length > map.equipment.bagCap) throw new Error('Invalid items');
+  const items = p.items.map(i => itemOf(i, map, lookup));
+  const uids = [...items, ...Object.values(members).flatMap(m => Object.values(m.gear ?? {}))].map(i => i!.uid);
+  if (new Set(uids).size !== uids.length || uids.some(u => u >= (p.nextItem as number))) throw new Error('Invalid items');
   if (!Array.isArray(p.taken) || new Set(p.taken).size !== p.taken.length || p.taken.some(i => !isInt(i, 0, map.company.offers - 1))) throw new Error('Invalid board');
   let last: Profile['last'] = null;
   if (p.last !== null) {
     const l = obj(p.last);
-    if (!['complete', 'withdrawn', 'wiped'].includes(l.outcome as string) || !isInt(l.ore) || !isInt(l.seal) || !isInt(l.steps) || !isInt(l.wins)) throw new Error('Invalid result');
-    last = { outcome: l.outcome as RunOutcome, ore: l.ore, seal: l.seal, steps: l.steps, wins: l.wins };
+    if (version < 9) Object.assign(l, { items: 0, salvaged: 0 });
+    if (!['complete', 'withdrawn', 'wiped'].includes(l.outcome as string) || !isInt(l.ore) || !isInt(l.seal) || !isInt(l.steps) || !isInt(l.wins) || !isInt(l.items) || !isInt(l.salvaged)) throw new Error('Invalid result');
+    last = { outcome: l.outcome as RunOutcome, ore: l.ore, seal: l.seal, steps: l.steps, wins: l.wins, items: l.items, salvaged: l.salvaged };
   }
   let commander: Profile['commander'] = null;
   if (p.commander !== null && p.commander !== undefined) {
@@ -165,29 +196,29 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
     if (commanderReason(commander)) throw new Error('Invalid commander');
   } else if (p.commander === undefined && version >= 6) throw new Error('Invalid commander');
   return { seed: p.seed, returns: p.returns, tutorialDone: p.tutorialDone, commander, company: [...company as string[]], members, party,
-    bank: { ore: bank.ore as number, seal: bank.seal as number }, taken: [...p.taken as number[]], expeditions: p.expeditions, completes: p.completes, last };
+    bank: { ore: bank.ore as number, seal: bank.seal as number, dust: bank.dust as number }, items, nextItem: p.nextItem as number, taken: [...p.taken as number[]], expeditions: p.expeditions, completes: p.completes, last };
 }
 // A run that already reached the goal or lost every brought member is settled on load.
-function settleFinished(game: Game): Game {
+function settleFinished(game: Game, map: MapDefinition): Game {
   const run = game.run; if (!run) return game;
-  if (run.completed) return { profile: settle(game.profile, run, 'complete'), run: null };
-  if (!run.battle && rosterIds(run).every(id => run.hp[id] === 0)) return { profile: settle(game.profile, run, 'wiped'), run: null };
+  if (run.completed) return { profile: settle(game.profile, run, 'complete', map), run: null };
+  if (!run.battle && rosterIds(run).every(id => run.hp[id] === 0)) return { profile: settle(game.profile, run, 'wiped', map), run: null };
   return game;
 }
 export function parseGame(raw: string, map: MapDefinition, lookup: EncounterLookup): Game {
   const envelope = obj(JSON.parse(raw)); const version = envelope.version as number;
-  if (![1, 2, 3, 4, 5, 6, 7, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
+  if (![1, 2, 3, 4, 5, 6, 7, 8, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
   if (version < 5) {
     const run = parseRun(envelope.state, version, map, lookup);
     const profile = newProfile(map, (run.seed ^ 0x5bd1e995) >>> 0);
     profile.company = rosterIds(run); profile.members = structuredClone(run.members); profile.party = structuredClone(run.roster);
     profile.tutorialDone = run.tutorialDone;
-    return settleFinished({ profile, run });
+    return settleFinished({ profile, run }, map);
   }
   const profile = parseProfile(envelope.profile, version, map, lookup);
   const run = envelope.run === null ? null : parseRun(envelope.run, version, map, lookup);
   if (run && rosterIds(run).some(id => !profile.company.includes(id))) throw new Error('Run member left the company');
-  return settleFinished({ profile, run });
+  return settleFinished({ profile, run }, map);
 }
 export function loadGame(storage: StoragePort | undefined, map: MapDefinition, lookup: EncounterLookup): Game | undefined {
   try {

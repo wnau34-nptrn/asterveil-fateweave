@@ -12,6 +12,11 @@ export type TalentRule = 'guardReduction' | 'tauntReduction' | 'corrodeBonus' | 
 // What a member's spent talent points do in battle (world `starred` builds it; stat nodes are already in maxHp/attack/skillBonus).
 // `power` adds flat skill power, `rules` adds to the named rule, `caps` maps a capstone to its amount (0 when it has none).
 export interface HeroTalents { power?: Partial<Record<ActionId, number>>; rules?: Partial<Record<TalentRule, number>>; caps?: Partial<Record<TalentCap, number>> }
+// Legendary equipment specials (2D-2): last stand (once per battle a downing hit leaves 1 HP),
+// mark hunter (hits on a marked enemy +amount), renewal (heal at the start of each own turn).
+export type GearSpecial = 'laststand' | 'markhunter' | 'renewal';
+// What a member's equipment adds beyond max HP/Attack/SPD/skill power (world `starred` builds it).
+export interface HeroGear { healBonus?: number; barrier?: number; specials?: GearSpecial[] }
 export type Outcome = 'active' | 'victory' | 'defeat';
 export interface SkillDefinition { name: string; english: string; icon: string; power: number; cooldown: number }
 export interface HeroDefinition {
@@ -23,6 +28,7 @@ export interface HeroDefinition {
   unlocks?: { skill: ActionId; passive: PassiveId };
   passive?: PassiveId;
   talents?: HeroTalents;
+  gear?: HeroGear;
 }
 // `id` is the field position (`raider` back, `brute` front/large); `art` names the illustrated frame (presentation only).
 export interface EnemyDefinition { id: string; name: string; displayName?: string; maxHp: number; speed: number; color: number; art?: string }
@@ -73,6 +79,8 @@ export interface BattleState {
   standUsed?: boolean;
   // Priest solace (talent): the healed ally takes less damage until the priest's next turn.
   solace?: { heroId: string; targetId: string } | null;
+  // Heroes whose last-stand equipment has already saved them this battle.
+  lastStand?: string[];
 }
 export interface BattleEvent {
   type: 'damage' | 'guard' | 'mark' | 'barrier' | 'heal' | 'interrupt' | 'cancel' | 'down' | 'outcome' | 'brace' | 'counter' | 'delay' | 'corrode' | 'haste' | 'evade' | 'dodge' | 'taunt' | 'song' | 'rally' | 'sigil' | 'sanctuary' | 'stand' | 'finale';

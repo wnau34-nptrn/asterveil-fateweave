@@ -4,7 +4,7 @@ import { atCamp, atMuster, canOpenChest, canRest, canRevive, chestAt, encounterC
 import { PARTY_SLOTS, RESERVE_SLOTS } from '../core/world/types';
 import { actorArt, portraitsUrl, sheetRows } from '../game/visuals/assets';
 import { SOURCE_TILE, chestFrame, decorAt, itemFrame, floorFrame, fogLayers, landmarkAt, tileSizeFor, tileset, worldArtUrl, type Landmark } from '../game/visuals/world-art';
-import { heroText, resourceOrder, resourceText } from './th';
+import { heroText, itemLines, itemName, resourceOrder, resourceText } from './th';
 import { icon } from './icons';
 
 export interface WorldHost { move(dir: Direction): void; rest(): void; revive(heroId: string): void; swap(a: string, b: string): void; moveMember(id: string): void; withdraw(): void; openChest(): void }
@@ -225,8 +225,9 @@ export class WorldUI {
 
   private renderPackButton(s: ExpeditionState, gained: boolean): void {
     const pack = this.root.querySelector<HTMLElement>('#world-pack')!;
-    pack.innerHTML = resourceOrder.map(id => `<span class="pack-item" data-resource="${id}">${icon(id)}<b>${s.resources[id]}</b></span>`).join('');
-    pack.setAttribute('aria-label', `สัมภาระ · ${resourceOrder.map(id => `${resourceText[id].name} ${s.resources[id]}`).join(' · ')} · เปิดรายละเอียด`);
+    pack.innerHTML = resourceOrder.map(id => `<span class="pack-item" data-resource="${id}">${icon(id)}<b>${s.resources[id]}</b></span>`).join('')
+      + (s.found.length ? `<span class="pack-item" data-resource="gear">${icon('gearBody')}<b>${s.found.length}</b></span>` : '');
+    pack.setAttribute('aria-label', `สัมภาระ · ${resourceOrder.map(id => `${resourceText[id].name} ${s.resources[id]}`).join(' · ')}${s.found.length ? ` · อุปกรณ์ ${s.found.length} ชิ้น` : ''} · เปิดรายละเอียด`);
     if (gained && !this.reduced.matches) { pack.classList.remove('gain'); void pack.offsetWidth; pack.classList.add('gain'); }
   }
 
@@ -234,12 +235,13 @@ export class WorldUI {
     const s = this.view?.state; if (!s) return;
     const opened = s.openedChests.length;
     this.root.querySelector('#pack-content')!.innerHTML = `<ul class="pack-list">${resourceOrder.map(id => `<li data-resource="${id}">${itemArt(id)}<div><b>${resourceText[id].name}</b><small>${resourceText[id].use}</small></div><strong>${s.resources[id]}</strong></li>`).join('')}</ul>
+      ${s.found.length ? `<h3 class="pack-gear-title">${icon('gearBody')} อุปกรณ์ที่เจอ ${s.found.length} ชิ้น</h3><ul class="pack-gear">${s.found.map(i => `<li data-rarity="${i.rarity}"><b>${itemName(i)} Lv${i.level}</b><small>${itemLines(this.map.equipment, i).join(' · ')}</small></li>`).join('')}</ul><p class="world-stats">ใส่ได้ที่ค่ายหลังกลับจากการเดินทาง · ถ้าทีมล้มหมดอุปกรณ์ที่เจอรอบนี้จะหาย</p>` : ''}
       <p class="world-stats">เปิดกล่องสมบัติแล้ว ${opened}/${this.map.chests.length} กล่อง · ของตกจากศึกที่ชนะและกล่องสมบัติ</p>`;
   }
 
   private stars(s: ExpeditionState, id: string): number { return s.members[id]?.stars ?? 1; }
   // Member stats as they fight: the catalog entry scaled by the member's stars.
-  private hero(id: string, s = this.view?.state): HeroDefinition { const base = this.heroes.find(h => h.id === id)!; return s ? starred(base, this.stars(s, id), this.map, s.members[id]?.level ?? 1) : base; }
+  private hero(id: string, s = this.view?.state): HeroDefinition { const base = this.heroes.find(h => h.id === id)!; return s ? starred(base, this.stars(s, id), this.map, s.members[id]?.level ?? 1, s.members[id]?.talents, s.members[id]?.gear) : base; }
   private starRow(n: number): string { return starRow(n, this.map.company.maxStars); }
   private renderCamp(): void {
     const s = this.view?.state; if (!s) return;

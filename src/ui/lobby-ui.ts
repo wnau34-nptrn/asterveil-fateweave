@@ -1,14 +1,16 @@
 import type { HeroDefinition } from '../core/battle/types';
-import { boardOffers, dismissReason, groupOf, hireReason, talentPoints, talentReason, talentsSpent, upgradeCost, upgradeReason, type Group } from '../core/world/profile';
-import { COMPANY_CAP, PARTY_SLOTS, RESERVE_SLOTS, type MapDefinition, type Profile, type TalentNode } from '../core/world/types';
+import { boardOffers, dismissReason, equipReason, groupOf, hireReason, talentPoints, talentReason, talentsSpent, upgradeCost, upgradeReason, type Group } from '../core/world/profile';
+import { salvageValue } from '../core/world/equipment';
+import { COMPANY_CAP, GEAR_SLOTS, PARTY_SLOTS, RESERVE_SLOTS, type GearSlot, type MapDefinition, type Profile, type TalentNode } from '../core/world/types';
 import { expToNext, starred, type EncounterLookup } from '../core/world/world';
 import { actorArt, actorFootOrigins, lobbyArt, lobbyPose, unitsUrl, type LobbyPose } from '../game/visuals/assets';
 import { icon } from './icons';
 import { commanderBadge } from './commander-ui';
-import { heroText, passiveText, talentBranches, talentHelp } from './th';
+import { heroText, itemLines, itemName, itemOwner, passiveText, slotIcon, slotText, talentBranches, talentHelp } from './th';
 import { portrait, starRow } from './world-ui';
 
-export interface LobbyHost { hire(index: number): void; upgrade(id: string): void; dismiss(id: string): void; place(id: string, group: Group, other?: string): void; talent(id: string, node: TalentNode): void; resetTalents(id: string): void; depart(): void; home(): void }
+export interface LobbyHost { hire(index: number): void; upgrade(id: string): void; dismiss(id: string): void; place(id: string, group: Group, other?: string): void; talent(id: string, node: TalentNode): void; resetTalents(id: string): void;
+  equip(id: string, uid: number): void; unequip(id: string, slot: GearSlot): void; salvage(uids: number[]): void; depart(): void; home(): void }
 export interface LobbyView { profile: Profile; message: string; saved: boolean; cheer?: string }
 const outcomeText = { complete: 'สำเร็จการเดินทาง', withdrawn: 'ถอนตัวกลับค่าย', wiped: 'ทีมล้มหมด · การเดินทางล้มเหลว' } as const;
 const groupName: Record<Group, string> = { deployed: 'ลงสนาม', reserve: 'สำรอง', bench: 'ในค่าย' };
@@ -19,7 +21,10 @@ export class LobbyUI {
   private view: LobbyView | undefined;
   // The team, hire or talent-tree sheet floats over the camp; the scene alone shows when it is closed.
   // The tree sheet is its own window, opened from a member in the team sheet (`picked`).
-  private sheet: 'team' | 'hire' | 'tree' | null = null;
+  // The equipment sheet (2D-2) works the same way.
+  private sheet: 'team' | 'hire' | 'tree' | 'gear' | null = null;
+  private gearSlot: GearSlot | undefined;
+  private confirmSalvage: number | undefined;
   private sceneDrawn = '';
   private picked: string | undefined;
   private confirmDismiss = false;
@@ -40,8 +45,21 @@ export class LobbyUI {
           if (!this.picked) break;
           if (!this.confirmDismiss) { this.confirmDismiss = true; this.draw(); this.focus('#lobby-dismiss'); break; }
           this.confirmDismiss = false; { const target = this.picked; this.picked = undefined; this.host.dismiss(target); } break;
-        case 'tree': if (id ?? this.picked) { this.picked = id ?? this.picked; this.sheet = 'tree'; this.confirmDismiss = false; this.draw(); this.focus(id ? `#tree-member-${id}` : '#lobby-tree-back'); } break;
-        case 'tree-back': this.sheet = 'team'; this.draw(); this.focus('#lobby-tree-open'); break;
+        case 'tree': case 'gear': if (id ?? this.picked) {
+          const kind = b.dataset.lobby as 'tree' | 'gear'; this.picked = id ?? this.picked; this.sheet = kind; this.confirmDismiss = false; this.confirmSalvage = undefined;
+          this.draw(); this.focus(id ? `#${kind}-member-${id}` : '#lobby-sub-back');
+        } break;
+        case 'sub-back': { const was = this.sheet; this.sheet = 'team'; this.draw(); this.focus(was === 'gear' ? '#lobby-gear-open' : '#lobby-tree-open'); break; }
+        case 'slot': { const slot = b.dataset.slot as GearSlot; this.gearSlot = this.gearSlot === slot ? undefined : slot; this.confirmSalvage = undefined; this.draw(); this.focus(`#gear-slot-${slot}`); break; }
+        case 'equip': if (this.picked) { this.confirmSalvage = undefined; this.host.equip(this.picked, Number(b.dataset.uid)); this.focus(`#gear-slot-${this.gearSlot ?? ''}`); } break;
+        case 'unequip': if (this.picked && this.gearSlot) { this.host.unequip(this.picked, this.gearSlot); this.focus(`#gear-slot-${this.gearSlot}`); } break;
+        case 'salvage': {
+          const uid = Number(b.dataset.uid); const item = this.view!.profile.items.find(i => i.uid === uid);
+          // Rare and better items need a second press.
+          if (item && item.rarity >= 2 && this.confirmSalvage !== uid) { this.confirmSalvage = uid; this.draw(); this.focus(`#salvage-${uid}`); break; }
+          this.confirmSalvage = undefined; this.host.salvage([uid]); this.focus('#lobby-sub-back'); break;
+        }
+        case 'salvage-common': this.host.salvage(this.view!.profile.items.filter(i => i.rarity === 0).map(i => i.uid)); this.focus('#lobby-sub-back'); break;
         case 'talent': if (this.picked) { const node = b.dataset.node as TalentNode; this.host.talent(this.picked, node); this.focus(`#talent-${node}`); } break;
         case 'reset-talents': if (this.picked) { this.host.resetTalents(this.picked); this.focus('#lobby-tree-back'); } break;
         case 'depart': this.host.depart(); break;
@@ -49,11 +67,11 @@ export class LobbyUI {
       }
     });
   }
-  private closeSheet(): void { const was = this.sheet === 'tree' ? 'team' : this.sheet; this.sheet = null; this.picked = undefined; this.confirmDismiss = false; this.draw(); if (was) this.focus(`#lobby-tab-${was}`); }
+  private closeSheet(): void { const was = this.sheet === 'tree' || this.sheet === 'gear' ? 'team' : this.sheet; this.sheet = null; this.picked = undefined; this.confirmDismiss = false; this.draw(); if (was) this.focus(`#lobby-tab-${was}`); }
   render(view: LobbyView): void {
     this.view = view;
     if (this.picked && !view.profile.company.includes(this.picked)) this.picked = undefined;
-    if (this.sheet === 'tree' && !this.picked) this.sheet = 'team';
+    if ((this.sheet === 'tree' || this.sheet === 'gear') && !this.picked) this.sheet = 'team';
     this.draw();
   }
   private escape(text: string): string { return text.replace(/[&<>"]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[ch]!); }
@@ -67,7 +85,7 @@ export class LobbyUI {
     this.host.place(moving, group, id);
     this.focus(`#lobby-member-${moving}`);
   }
-  private hero(id: string): HeroDefinition { const m = this.view!.profile.members[id]; return starred(this.heroes.find(h => h.id === id)!, m?.stars ?? 1, this.map, m?.level ?? 1, m?.talents); }
+  private hero(id: string): HeroDefinition { const m = this.view!.profile.members[id]; return starred(this.heroes.find(h => h.id === id)!, m?.stars ?? 1, this.map, m?.level ?? 1, m?.talents, m?.gear); }
   private stars(n: number): string { return starRow(n, this.map.company.maxStars); }
 
   private toastShown = '';
@@ -82,18 +100,18 @@ export class LobbyUI {
     const scene = this.scene(p);
     if (scene !== this.sceneDrawn) { this.root.querySelector('.lobby-scene-host')!.innerHTML = scene; this.sceneDrawn = scene; }
     const menu = (id: 'team' | 'hire', glyph: Parameters<typeof icon>[0], label: string, badge: string) =>
-      `<button id="lobby-tab-${id}" data-lobby="tab" data-tab="${id}" class="lobby-menu-button${this.sheet === id || id === 'team' && this.sheet === 'tree' ? ' active' : ''}" aria-expanded="${this.sheet === id || id === 'team' && this.sheet === 'tree'}" aria-controls="lobby-sheet">${icon(glyph)}<span>${label}</span>${badge ? `<small>${badge}</small>` : ''}</button>`;
+      `<button id="lobby-tab-${id}" data-lobby="tab" data-tab="${id}" class="lobby-menu-button${this.sheet === id || id === 'team' && (this.sheet === 'tree' || this.sheet === 'gear') ? ' active' : ''}" aria-expanded="${this.sheet === id || id === 'team' && (this.sheet === 'tree' || this.sheet === 'gear')}" aria-controls="lobby-sheet">${icon(glyph)}<span>${label}</span>${badge ? `<small>${badge}</small>` : ''}</button>`;
     const openOffers = boardOffers(p, this.map, this.lookup).filter((_, i) => !hireReason(p, this.map, this.lookup, i)).length;
     this.root.querySelector('.lobby-hud')!.innerHTML = `
       <header class="lobby-top"><button data-lobby="home" class="round-glass" aria-label="กลับหน้าแรก">${icon('left')}</button>
         ${p.commander ? commanderBadge(p.commander) : ''}<div class="lobby-who"><p class="eyebrow">ค่ายทหารรับจ้าง · ${this.view!.saved ? 'บันทึกอัตโนมัติ' : 'บันทึกบนเครื่องนี้ไม่ได้'}</p><h1 id="lobby-commander">${p.commander ? this.escape(p.commander.name) : 'เตรียมทีมก่อนออกเดินทาง'}</h1></div>
-        <div class="lobby-bank" aria-label="คลัง แร่ดาว ${p.bank.ore} ตราสัญญา ${p.bank.seal}"><span class="glass-capsule">${icon('ore')}<b>${p.bank.ore}</b></span><span class="glass-capsule">${icon('seal')}<b>${p.bank.seal}</b></span></div></header>
-      ${last ? `<p class="lobby-result glass-capsule ${toast}" data-outcome="${last.outcome}" role="status">${icon(last.outcome === 'wiped' ? 'danger' : last.outcome === 'complete' ? 'star' : 'camp')}<span><b>${outcomeText[last.outcome]}</b> · เดิน ${last.steps} ก้าว ชนะ ${last.wins} ศึก · ได้แร่ดาว ${last.ore}${last.seal ? ` ตราสัญญา ${last.seal}` : ''}${last.outcome === 'wiped' ? ' (เก็บได้ครึ่งเดียว)' : ''}</span></p>`
+        <div class="lobby-bank" aria-label="คลัง แร่ดาว ${p.bank.ore} ตราสัญญา ${p.bank.seal} ผงม่านเวล ${p.bank.dust}"><span class="glass-capsule">${icon('ore')}<b>${p.bank.ore}</b></span><span class="glass-capsule">${icon('seal')}<b>${p.bank.seal}</b></span><span class="glass-capsule">${icon('dust')}<b>${p.bank.dust}</b></span></div></header>
+      ${last ? `<p class="lobby-result glass-capsule ${toast}" data-outcome="${last.outcome}" role="status">${icon(last.outcome === 'wiped' ? 'danger' : last.outcome === 'complete' ? 'star' : 'camp')}<span><b>${outcomeText[last.outcome]}</b> · เดิน ${last.steps} ก้าว ชนะ ${last.wins} ศึก · ได้แร่ดาว ${last.ore}${last.seal ? ` ตราสัญญา ${last.seal}` : ''}${last.outcome === 'wiped' ? ' (เก็บได้ครึ่งเดียว)' : ''}${last.items ? ` · อุปกรณ์ ${last.items} ชิ้น` : ''}${last.salvaged ? ` (คลังเต็ม แยกชิ้นอัตโนมัติ ${last.salvaged})` : ''}</span></p>`
         : this.view!.message ? `<p class="lobby-result glass-capsule ${toast}" role="status"><span>${this.view!.message}</span></p>` : ''}
       ${this.sheet ? `<section id="lobby-sheet" class="lobby-sheet" role="dialog" aria-modal="false" aria-labelledby="lobby-sheet-title">
-        <div class="lobby-sheet-head">${this.sheet === 'tree' ? `<button id="lobby-tree-back" data-lobby="tree-back" class="round-glass" aria-label="กลับไปจัดทีม">${icon('left')}</button>` : ''}<h2 id="lobby-sheet-title">${this.sheet === 'team' ? `${icon('flag')} จัดทีม <small>${p.company.length}/${COMPANY_CAP}</small>` : this.sheet === 'tree' ? `${icon('starFilled')} ต้นไม้ความถนัด` : `${icon('ore')} ป้ายจ้างทหารรับจ้าง`}</h2>
+        <div class="lobby-sheet-head">${this.sheet === 'tree' || this.sheet === 'gear' ? `<button id="lobby-sub-back" data-lobby="sub-back" class="round-glass" aria-label="กลับไปจัดทีม">${icon('left')}</button>` : ''}<h2 id="lobby-sheet-title">${this.sheet === 'team' ? `${icon('flag')} จัดทีม <small>${p.company.length}/${COMPANY_CAP}</small>` : this.sheet === 'tree' ? `${icon('starFilled')} ต้นไม้ความถนัด` : this.sheet === 'gear' ? `${icon('gearBody')} อุปกรณ์ <small>คลัง ${p.items.length}/${this.map.equipment.bagCap}</small>` : `${icon('ore')} ป้ายจ้างทหารรับจ้าง`}</h2>
           <button data-lobby="close" class="round-glass" aria-label="ปิด">${icon('close')}</button></div>
-        <div class="lobby-content">${this.sheet === 'team' ? this.team(p) : this.sheet === 'tree' && this.picked ? this.tree(p, this.picked) : this.board(p)}</div></section>` : ''}
+        <div class="lobby-content">${this.sheet === 'team' ? this.team(p) : this.sheet === 'tree' && this.picked ? this.tree(p, this.picked) : this.sheet === 'gear' && this.picked ? this.gear(p, this.picked) : this.board(p)}</div></section>` : ''}
       <footer class="lobby-bottom">
         <nav class="lobby-menu" aria-label="ค่าย">${menu('team', 'flag', 'ทีม', `${p.party.deployed.length}+${p.party.reserve.length}`)}${menu('hire', 'ore', 'จ้าง', openOffers ? String(openOffers) : '')}</nav>
         <button id="lobby-depart" data-lobby="depart" class="primary"${ready ? '' : ' disabled'}>${icon('map')}<span>ออกเดินทาง<small>${this.map.name} · ${p.party.deployed.length}+${p.party.reserve.length} คน</small></span></button>
@@ -142,7 +160,7 @@ export class LobbyUI {
     const label = !cost ? 'ดาวเต็มแล้ว' : reason ? `${why[reason]} · ★${m.stars + 1} ใช้ตัวซ้ำ ${need}${cost.seals ? ' (ตราแทนได้ 1)' : ''} แร่ ${cost.ore}`
       : `อัปเป็น ★${m.stars + 1} · ตัวซ้ำ ${cost.dupes}${cost.seals ? ' + ตรา 1' : ''} · แร่ ${cost.ore}`;
     const last = dismissReason(p, id) === 'last';
-    return `<div class="member-panel" aria-live="polite"><p><b>${heroText[id]!.name}</b> ${this.stars(m.stars)} <span>Lv${m.level ?? 1}${(m.level ?? 1) < this.map.progression.levelCap ? ` · EXP ${m.exp ?? 0}/${expToNext(this.map, m.level ?? 1)}` : ' · เลเวลสูงสุด'} · ตัวซ้ำที่เก็บไว้ ${m.dupes}</span></p>${this.unlocks(id, m.stars)}${this.treeButton(p, id)}
+    return `<div class="member-panel" aria-live="polite"><p><b>${heroText[id]!.name}</b> ${this.stars(m.stars)} <span>Lv${m.level ?? 1}${(m.level ?? 1) < this.map.progression.levelCap ? ` · EXP ${m.exp ?? 0}/${expToNext(this.map, m.level ?? 1)}` : ' · เลเวลสูงสุด'} · ตัวซ้ำที่เก็บไว้ ${m.dupes}</span></p>${this.unlocks(id, m.stars)}<div class="member-subs">${this.treeButton(p, id)}${this.gearButton(p, id)}</div>
       <div class="member-actions"><button id="lobby-upgrade" data-lobby="upgrade" class="primary"${reason ? ' disabled' : ''}>${label}</button>
       <button id="lobby-dismiss" data-lobby="dismiss" class="danger-button"${last ? ' disabled' : ''}>${last ? 'ต้องมีคนลงสนาม 1 คน' : this.confirmDismiss ? `ยืนยันเลิกจ้าง · ดาวหาย +${this.map.company.dismissRefund} แร่` : 'เลิกจ้าง'}</button></div></div>`;
   }
@@ -153,6 +171,39 @@ export class LobbyUI {
     const row = (need: number, iconName: Parameters<typeof icon>[0], name: string, help: string) =>
       `<li class="${stars >= need ? 'unlocked' : 'locked'}"><span class="unlock-star">★${need}</span>${icon(iconName)}<b>${name}</b><small>${stars >= need ? 'ปลดล็อกแล้ว' : `ปลดล็อกที่ ★${need}`} · ${help}</small></li>`;
     return `<ul class="member-unlocks" aria-label="สิ่งที่ปลดล็อกจากดาว">${row(3, unlocks.skill, skill.name, 'สกิลใหม่ในการต่อสู้')}${row(5, 'starFilled', passive.name, passive.help(data))}</ul>`;
+  }
+  // A row of company portraits to switch the member shown in a sub-sheet; `badge` marks a member (free points, …).
+  private memberPicker(p: Profile, id: string, kind: 'tree' | 'gear', badge: (c: string) => string): string {
+    return `<div class="tree-members" role="group" aria-label="เลือกสมาชิก">${p.company.map(c => { const mark = badge(c);
+      return `<button id="${kind}-member-${c}" data-lobby="${kind}" data-hero="${c}" class="tree-member" aria-pressed="${c === id}" aria-label="${heroText[c]!.name} Lv${p.members[c]!.level ?? 1}${mark ? ` · ${mark}` : ''}">${portrait(c)}<small>${heroText[c]!.name}</small>${mark ? `<i>${mark}</i>` : ''}</button>`;
+    }).join('')}</div>`;
+  }
+  private gearButton(p: Profile, id: string): string {
+    const worn = Object.keys(p.members[id]!.gear ?? {}).length;
+    return `<button id="lobby-gear-open" data-lobby="gear" class="secondary tree-toggle">${icon('gearBody')}<span>อุปกรณ์</span><small>ใส่ ${worn}/6</small></button>`;
+  }
+  // Equipment sheet (2D-2): member picker, six slots, then the bag (filtered by the chosen slot) with equip and salvage.
+  private gear(p: Profile, id: string): string {
+    const m = p.members[id]!; const h = this.hero(id); const rules = this.map.equipment; const slot = this.gearSlot;
+    const picker = this.memberPicker(p, id, 'gear', c => { const n = Object.keys(p.members[c]!.gear ?? {}).length; return n ? `${n}` : ''; });
+    const slots = GEAR_SLOTS.map(sl => { const it = m.gear?.[sl];
+      return `<button id="gear-slot-${sl}" data-lobby="slot" data-slot="${sl}" class="gear-slot" aria-pressed="${slot === sl}" ${it ? `data-rarity="${it.rarity}"` : ''} aria-label="${slotText[sl]}: ${it ? `${itemName(it)} Lv${it.level}` : 'ว่าง'}">${icon(slotIcon[sl])}<b>${slotText[sl]}</b><small>${it ? `${itemName(it)} Lv${it.level}` : 'ว่าง'}</small></button>`;
+    }).join('');
+    const worn = slot && m.gear?.[slot];
+    const detail = slot ? `<div class="gear-detail">${worn ? `<p><b>${itemName(worn)} Lv${worn.level}</b> · ${itemLines(rules, worn).join(' · ')}</p>
+      <button id="gear-unequip" data-lobby="unequip" class="secondary"${p.items.length >= rules.bagCap ? ' disabled' : ''}>${p.items.length >= rules.bagCap ? 'คลังเต็ม ถอดไม่ได้' : 'ถอดเก็บเข้าคลัง'}</button>` : `<p>ยังไม่ได้ใส่${slotText[slot]}</p>`}</div>` : '';
+    const bag = p.items.filter(i => !slot || i.slot === slot).sort((a, b) => b.rarity - a.rarity || b.level - a.level);
+    const rows = bag.map(i => { const reason = equipReason(p, id, i.uid); const confirm = this.confirmSalvage === i.uid; const v = salvageValue(this.map, i);
+      return `<li data-rarity="${i.rarity}"><div><b>${itemName(i)} Lv${i.level}</b><small>${itemLines(rules, i).join(' · ')}</small><small class="gear-owner">${itemOwner(i)}</small></div>
+        <span class="gear-actions"><button id="equip-${i.uid}" data-lobby="equip" data-uid="${i.uid}" class="primary"${reason ? ' disabled' : ''}>${reason === 'class' ? 'คนอื่นใช้' : 'ใส่'}</button>
+        <button id="salvage-${i.uid}" data-lobby="salvage" data-uid="${i.uid}" class="${confirm ? 'danger-button' : 'secondary'}" aria-label="แยกชิ้น${itemName(i)} ได้แร่ ${v.ore} ผง ${v.dust}">${confirm ? 'ยืนยันแยก' : 'แยก'}</button></span></li>`;
+    }).join('');
+    const commons = p.items.filter(i => i.rarity === 0).length;
+    return `${picker}<p class="gear-stats"><b>${heroText[id]!.name}</b> Lv${m.level ?? 1} · เลือด ${h.maxHp} · พลังโจมตี ${h.attack} · พลังสกิล +${h.skillBonus ?? 0}% · SPD ${h.speed}</p>
+      <div class="gear-slots">${slots}</div>${detail}
+      <h3>${icon('pack')} คลัง${slot ? ` · ${slotText[slot]}` : ''} <span class="camp-embers">${bag.length} ชิ้น · แตะช่องเพื่อกรอง</span></h3>
+      ${rows ? `<ul class="gear-bag">${rows}</ul>` : '<p class="camp-note">ยังไม่มีอุปกรณ์ในคลัง · ชนะศึกบนแผนที่เพื่อหาอุปกรณ์</p>'}
+      ${commons ? `<button id="salvage-common" data-lobby="salvage-common" class="secondary">แยกขั้นธรรมดาทั้งหมด (${commons} ชิ้น)</button>` : ''}`;
   }
   // Opens the member's talent tree in its own sheet.
   private treeButton(p: Profile, id: string): string {
@@ -166,10 +217,7 @@ export class LobbyUI {
     const m = p.members[id]!; const points = talentPoints(this.map, m); const free = points - talentsSpent(m.talents);
     const data = this.lookup(this.map.tutorialEncounterId)!; const branches = talentBranches[id] ?? ['สาย A', 'สาย B'];
     const why: Record<string, string> = { max: 'เต็มแล้ว', locked: 'ยังล็อก', points: 'แต้มไม่พอ' };
-    const members = p.company.map(c => {
-      const cm = p.members[c]!; const left = talentPoints(this.map, cm) - talentsSpent(cm.talents);
-      return `<button id="tree-member-${c}" data-lobby="tree" data-hero="${c}" class="tree-member" aria-pressed="${c === id}" aria-label="${heroText[c]!.name} Lv${cm.level ?? 1}${left > 0 ? ` แต้มว่าง ${left}` : ''}">${portrait(c)}<small>${heroText[c]!.name}</small>${left > 0 ? `<i>${left}</i>` : ''}</button>`;
-    }).join('');
+    const members = this.memberPicker(p, id, 'tree', c => { const cm = p.members[c]!; const left = talentPoints(this.map, cm) - talentsSpent(cm.talents); return left > 0 ? String(left) : ''; });
     const node = (n: TalentNode) => {
       const def = nodes.find(x => x.id === n)!; const rank = m.talents?.[n] ?? 0; const reason = talentReason(p, this.map, id, n);
       const state = rank >= def.max ? 'full' : rank ? 'partial' : reason === 'locked' ? 'locked' : 'open';
@@ -177,7 +225,7 @@ export class LobbyUI {
         aria-label="${def.name} ขั้น ${rank}/${def.max} · ${talentHelp(def, data)}${reason ? ` · ${why[reason]}` : ' · แตะเพื่อลงแต้ม'}"><b>${def.name}</b><i>${rank}/${def.max}</i><small>${talentHelp(def, data)}</small></button>`;
     };
     const gate = '<p class="talent-gate">ยอดสาย: ลงสายนี้ครบ 4 แต้ม</p>';
-    return `<div class="tree-members" role="group" aria-label="เลือกสมาชิก">${members}</div>
+    return `${members}
       <section id="lobby-tree" class="talent-tree" aria-label="ต้นไม้ความถนัดของ${heroText[id]!.name}">
       <p class="talent-points"><b>${heroText[id]!.name}</b> Lv${m.level ?? 1} · แต้ม ${free}/${points} · ได้ 1 แต้มทุกเลเวลอัป · รีเซ็ตได้ฟรีที่ค่าย</p>
       <div class="talent-root">${node('root')}</div>

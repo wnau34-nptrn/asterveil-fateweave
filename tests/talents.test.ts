@@ -88,7 +88,7 @@ describe('talent points, gates and reset (lobby)', () => {
     const run = newExpedition(map, lookup, 1, { roster: p.party, members: structuredClone(p.members) });
     expect(run.members.guardian!.talents).toEqual({ root: 1, b1: 1 });
     run.members.guardian = { ...run.members.guardian!, level: 4, exp: 2 };
-    expect(settle(p, run, 'wiped').members.guardian).toEqual({ stars: 1, dupes: 0, level: 4, exp: 2, talents: { root: 1, b1: 1 } });
+    expect(settle(p, run, 'wiped', map).members.guardian).toEqual({ stars: 1, dupes: 0, level: 4, exp: 2, talents: { root: 1, b1: 1 } });
   });
   it.each([
     ['too many points', 2, { root: 1, a1: 1 }],

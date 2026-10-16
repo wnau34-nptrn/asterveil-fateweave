@@ -1,4 +1,4 @@
-import type { ActionId, Command, HeroDefinition, TalentCap, TalentRule } from '../battle/types';
+import type { ActionId, Command, GearSpecial, HeroDefinition, TalentCap, TalentRule } from '../battle/types';
 
 export type Direction = 'up' | 'down' | 'left' | 'right';
 export interface Point { x: number; y: number }
@@ -43,7 +43,32 @@ export interface MapDefinition {
   progression: ProgressionRules;
   // Passive talent tree per hero id (2D-1b).
   talents: Readonly<Record<string, TalentTree>>;
+  equipment: EquipmentRules;
 }
+// ---- Equipment (2D-2, draft numbers) ----
+// Six slots: a class weapon (`Item.hero`) and five pieces anyone can wear.
+export type GearSlot = 'weapon' | 'head' | 'body' | 'gloves' | 'boots' | 'charm';
+export const GEAR_SLOTS: readonly GearSlot[] = ['weapon', 'head', 'body', 'gloves', 'boots', 'charm'];
+// hp/attack/barrier are flat; skill/heal are percent; speed is SPD (boots and charms only).
+export type GearStat = 'hp' | 'attack' | 'skill' | 'heal' | 'barrier' | 'speed';
+// Rarity 0 common … 4 legendary. Stat values come from (stat, level) through the rules, so an item stores
+// only what was rolled. `uid` is 0 while the item is still on the expedition (`found`).
+export interface Item { uid: number; slot: GearSlot; rarity: number; level: number; hero?: string; affixes: GearStat[]; special?: GearSpecial }
+// A value at item level L = round(base + perLevel × (L − 1)).
+export type StatCurve = readonly [base: number, perLevel: number];
+export interface EquipmentRules {
+  bagCap: number;
+  // Base stats per slot; affix values per stat; affix count per rarity (legendary also has a special).
+  slotStats: Readonly<Record<GearSlot, Partial<Record<GearStat, StatCurve>>>>;
+  affixStats: Readonly<Record<GearStat, StatCurve>>;
+  affixCount: readonly number[];
+  // Random victories drop an item at `dropPercent`, guaranteed after `pity` dry wins; the boss always drops.
+  dropPercent: number; pity: number;
+  rarityWeights: readonly number[]; bossRarityWeights: readonly number[];
+  // Salvaging (or an overflowing bag) returns ore and veil dust by rarity.
+  salvage: readonly { ore: number; dust: number }[];
+}
+export type Gear = Partial<Record<GearSlot, Item>>;
 // ---- Talent tree (2D-1b, draft numbers) ----
 // Same shape for every class: a root, then branches A and B (tier 1 → tier 2 → capstone).
 // One point per level above 1, spent and reset only in the Lobby.
@@ -72,15 +97,16 @@ export interface CompanyRules {
   starCosts: readonly { dupes: number; ore: number }[];
 }
 // `level`/`exp` (2D-1) are optional for older data: missing means level 1 with no EXP.
-// `talents` (2D-1b): ranks spent per node; missing means none.
-export interface MemberProgress { stars: number; dupes: number; level?: number; exp?: number; talents?: Talents }
+// `talents` (2D-1b): ranks spent per node; missing means none. `gear` (2D-2): equipped items by slot.
+export interface MemberProgress { stars: number; dupes: number; level?: number; exp?: number; talents?: Talents; gear?: Gear }
 // The team brought into one expedition and their star progress (fixed during the run).
 export interface Company { roster: Roster; members: Record<string, MemberProgress> }
 
 // ---- Lobby profile (persistent between expeditions) ----
 export const COMPANY_CAP = 20;
 export type RunOutcome = 'complete' | 'withdrawn' | 'wiped';
-export interface Bank { ore: number; seal: number }
+// `dust` (veil dust, 2D-2) comes from salvage and pays for the forge (2D-4).
+export interface Bank { ore: number; seal: number; dust: number }
 // The player's commander (non-combat leader of the company), created once (L2).
 export interface Commander { name: string; crest: string; color: string }
 export interface Profile {
@@ -91,10 +117,13 @@ export interface Profile {
   // The 4 + 4 chosen for the next expedition (subset of `company`).
   party: Roster;
   bank: Bank;
+  // Unequipped items (≤ bagCap) and the next item uid.
+  items: Item[]; nextItem: number;
   // Hiring board taken indexes for the current `returns` count.
   taken: number[];
   expeditions: number; completes: number;
-  last: { outcome: RunOutcome; ore: number; seal: number; steps: number; wins: number } | null;
+  // `items` kept in the bag and `salvaged` because the bag was full (2D-2).
+  last: { outcome: RunOutcome; ore: number; seal: number; steps: number; wins: number; items: number; salvaged: number } | null;
 }
 export type ProfileEvent =
   | { type: 'blocked'; reason: string }
@@ -103,7 +132,9 @@ export type ProfileEvent =
   | { type: 'hired'; heroId: string; duplicate: boolean }
   | { type: 'upgraded'; heroId: string; stars: number }
   | { type: 'dismissed'; heroId: string }
-  | { type: 'talent'; heroId: string };
+  | { type: 'talent'; heroId: string }
+  | { type: 'equipped'; heroId: string }
+  | { type: 'salvaged'; count: number; ore: number; dust: number };
 export interface ProfileResult { profile: Profile; event: ProfileEvent }
 // Up to 4 deployed (slot order = enemy target slots) and 4 in reserve, swapped at camps.
 export const PARTY_SLOTS = 4;
@@ -123,6 +154,8 @@ export interface ExpeditionState {
   resources: Resources; openedChests: string[]; restReady: boolean;
   tutorialDone: boolean; bossDefeated: boolean; completed: boolean;
   wins: number; defeats: number; battle: ActiveBattle | null;
+  // Items found on this expedition (kept on complete/withdraw, lost on a wipe) and dry random wins for the pity.
+  found: Item[]; dry: number;
 }
 export type WorldEvent =
   | { type: 'moved'; chance: number }
@@ -133,7 +166,7 @@ export type WorldEvent =
   | { type: 'rested' }
   | { type: 'revived'; heroId: string }
   | { type: 'chest'; chestId: string; loot: Resources }
-  | { type: 'victory'; kind: BattleKind; encounterId: string; loot: Resources; exp?: Record<string, ExpGain> }
+  | { type: 'victory'; kind: BattleKind; encounterId: string; loot: Resources; exp?: Record<string, ExpGain>; item?: Item }
   | { type: 'defeat'; kind: BattleKind; encounterId: string; wiped?: boolean };
 // EXP from one victory for one brought member: `percent` is the level-gap multiplier.
 export interface ExpGain { gained: number; percent: number; level: number; levelsUp: number }

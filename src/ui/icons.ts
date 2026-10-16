@@ -63,9 +63,17 @@ import pack from './svg/pack.svg?raw';
 import starFilled from './svg/star-filled.svg?raw';
 import starBadge from './svg/star_badge.svg?raw';
 import starBadgeEmpty from './svg/star_badge_empty.svg?raw';
+// Equipment slots and veil dust (2D-2): code-drawn placeholders until ART-UI-EQUIP-001.
+import gearWeapon from './svg/gear-weapon.svg?raw';
+import gearHead from './svg/gear-head.svg?raw';
+import gearBody from './svg/gear-body.svg?raw';
+import gearGloves from './svg/gear-gloves.svg?raw';
+import gearBoots from './svg/gear-boots.svg?raw';
+import gearCharm from './svg/gear-charm.svg?raw';
+import dust from './svg/dust.svg?raw';
 
 // Original ART-UI-WORLD-001 line icons (24px viewBox, currentColor). Inlined so they inherit state colour.
-const svgs = { attack, guard, bash, mark, execute, bolt, ward, heal, prayer, brace, pierce, hinder, volley, acid, haste, ambush, evade, taunt, slam, valor, mend, rally, finisher, sigil, sanctuary, spearwall, weakshot, bomb, backstab, quake, finale, up, down, left, right, camp, rest, flag, goal, star, danger, safe, talk, info, map, boss, check, circle, close, footprints, chest, chestOpen, ore, ember, seal, pack, starFilled, starBadge, starBadgeEmpty } as const;
+const svgs = { attack, guard, bash, mark, execute, bolt, ward, heal, prayer, brace, pierce, hinder, volley, acid, haste, ambush, evade, taunt, slam, valor, mend, rally, finisher, sigil, sanctuary, spearwall, weakshot, bomb, backstab, quake, finale, up, down, left, right, camp, rest, flag, goal, star, danger, safe, talk, info, map, boss, check, circle, close, footprints, chest, chestOpen, ore, ember, seal, pack, starFilled, starBadge, starBadgeEmpty, gearWeapon, gearHead, gearBody, gearGloves, gearBoots, gearCharm, dust } as const;
 const restartPath = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10a8 8 0 1 1 1 8M4 4v6h6"/></svg>';
 export type IconName = ActionId | keyof typeof svgs | 'restart';
 export function icon(name: IconName): string {

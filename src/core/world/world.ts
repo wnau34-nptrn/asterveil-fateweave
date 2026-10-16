@@ -1,6 +1,7 @@
 import { replay, withLevel, withParty } from '../battle/engine';
 import type { BattleState, Command, EncounterDefinition, HeroDefinition, HeroTalents } from '../battle/types';
-import type { ActiveBattle, BattleKind, ChestDefinition, Company, Direction, ExpGain, ExpeditionState, LootTable, MapDefinition, MemberProgress, Point, Resources, Talents, Tile, WorldResult, ZoneDefinition } from './types';
+import type { ActiveBattle, BattleKind, ChestDefinition, Company, Direction, ExpGain, ExpeditionState, LootTable, MapDefinition, MemberProgress, Point, Resources, Talents, Tile, WorldResult, ZoneDefinition, Gear, Item } from './types';
+import { gearTotals, rollItem } from './equipment';
 import { PARTY_SLOTS, RESERVE_SLOTS } from './types';
 
 // Pure expedition rules: no DOM, Phaser, clocks or Math.random. Every roll is
@@ -58,16 +59,19 @@ export const rosterIds = (state: ExpeditionState): string[] => [...state.roster.
 // Each star above ★1 adds `starStatPercent` to max HP, Attack and skill power. SPD never
 // changes, so stars cannot reorder turns. Talents (2D-1b) add their stat percents and build
 // `talents` for the resolver; no talents leaves the definition unchanged.
-export function starred(base: HeroDefinition, stars: number, map: MapDefinition, level = 1, talents: Talents = {}): HeroDefinition {
+export function starred(base: HeroDefinition, stars: number, map: MapDefinition, level = 1, talents: Talents = {}, gear?: Gear): HeroDefinition {
   // Stars and levels add up: each star `starStatPercent`, each level above 1 `levelStatPercent`.
   const bonus = (stars - 1) * map.company.starStatPercent + (level - 1) * map.progression.levelStatPercent;
   const gained = talentEffects(map, base.id, talents);
-  if (!bonus && !gained.any) return base;
+  // Equipment (2D-2) adds flat max HP/Attack/SPD after the percentages, and skill power percent.
+  const worn = gearTotals(map, gear); const equipped = !!(worn.hp || worn.attack || worn.skill || worn.speed || worn.gear);
+  if (!bonus && !gained.any && !equipped) return base;
   const scale = (n: number, extra: number) => Math.round(n * (100 + bonus + extra) / 100);
   // ★3 adds the class's third skill; ★5 switches on its passive.
   const skill = stars >= 3 && base.unlocks && !base.actions.includes(base.unlocks.skill) ? [base.unlocks.skill] : [];
-  return { ...base, maxHp: scale(base.maxHp, gained.hp), attack: scale(base.attack, gained.attack), skillBonus: bonus + gained.skill, actions: [...base.actions, ...skill],
-    ...(stars >= 5 && base.unlocks ? { passive: base.unlocks.passive } : {}), ...(gained.talents ? { talents: gained.talents } : {}) };
+  return { ...base, maxHp: scale(base.maxHp, gained.hp) + worn.hp, attack: scale(base.attack, gained.attack) + worn.attack, speed: base.speed + worn.speed,
+    skillBonus: bonus + gained.skill + worn.skill, actions: [...base.actions, ...skill],
+    ...(stars >= 5 && base.unlocks ? { passive: base.unlocks.passive } : {}), ...(gained.talents ? { talents: gained.talents } : {}), ...(worn.gear ? { gear: worn.gear } : {}) };
 }
 // Sums spent talent ranks into stat percents and the resolver's `HeroTalents`.
 export function talentEffects(map: MapDefinition, heroId: string, talents: Talents): { any: boolean; hp: number; attack: number; skill: number; talents?: HeroTalents } {
@@ -84,7 +88,7 @@ export function talentEffects(map: MapDefinition, heroId: string, talents: Talen
 }
 export function memberDef(lookup: EncounterLookup, map: MapDefinition, members: ExpeditionState['members'], id: string): HeroDefinition | undefined {
   const base = heroDef(lookup, map, id);
-  return base && starred(base, members[id]?.stars ?? 1, map, members[id]?.level ?? 1, members[id]?.talents);
+  return base && starred(base, members[id]?.stars ?? 1, map, members[id]?.level ?? 1, members[id]?.talents, members[id]?.gear);
 }
 // ---- Levels (2D-1) ----
 export const levelOf = (m: MemberProgress | undefined): number => m?.level ?? 1;
@@ -116,7 +120,7 @@ export function newExpedition(map: MapDefinition, lookup: EncounterLookup, seed:
     revealed: '0'.repeat(width * map.rows.length), roster, members,
     hp: fullParty(lookup, map, [...roster.deployed, ...roster.reserve], members), camp: null,
     resources: { ore: 0, ember: 0, seal: 0 }, openedChests: [], restReady: true,
-    tutorialDone, bossDefeated: false, completed: false, wins: 0, defeats: 0, battle: null,
+    tutorialDone, bossDefeated: false, completed: false, wins: 0, defeats: 0, battle: null, found: [], dry: 0,
   };
   reveal(state, map);
   return state;
@@ -234,6 +238,21 @@ function battleLoot(state: ExpeditionState, map: MapDefinition, kind: BattleKind
   return zoneOf(map, tileAt(map, state.position)?.zoneId ?? '')?.loot ?? noLoot;
 }
 
+// Equipment drop (2D-2): random victories drop at `dropPercent`, guaranteed after `pity` dry wins; the boss
+// always drops with better rarity weights; the tutorial never drops. The item's level is the monster level,
+// and a weapon is made for one of the brought members. Found items ride with the run until it is settled.
+function dropItem(state: ExpeditionState, map: MapDefinition, kind: BattleKind, level: number): Item | undefined {
+  const rules = map.equipment;
+  if (kind === 'tutorial') return undefined;
+  if (kind === 'random') {
+    const lucky = rollPercent(state.seed, state.rolls++) < rules.dropPercent || state.dry + 1 >= rules.pity;
+    if (!lucky) { state.dry++; return undefined; }
+    state.dry = 0;
+  }
+  const item = rollItem(rules, () => rollPercent(state.seed, state.rolls++), level, kind === 'boss' ? rules.bossRarityWeights : rules.rarityWeights, rosterIds(state));
+  state.found.push(item);
+  return item;
+}
 // The encounter as fought by the deployed party, in slot order.
 export function battleData(state: ExpeditionState, map: MapDefinition, lookup: EncounterLookup): EncounterDefinition | undefined {
   const base = state.battle && lookup(state.battle.encounterId);
@@ -284,8 +303,11 @@ export function finishBattle(initial: ExpeditionState, map: MapDefinition, looku
     state.battle = null; state.wins++; state.restReady = true;
     if (kind === 'tutorial') state.tutorialDone = true;
     if (kind === 'boss') state.bossDefeated = true;
-    const exp = gainExp(state, map, lookup, battleData(initial, map, lookup)!, kind);
-    return { state, event: { type: 'victory', kind, encounterId, loot: rollLoot(state, battleLoot(state, map, kind)), exp } };
+    const data = battleData(initial, map, lookup)!;
+    const exp = gainExp(state, map, lookup, data, kind);
+    const loot = rollLoot(state, battleLoot(state, map, kind));
+    const item = dropItem(state, map, kind, data.level ?? 1);
+    return { state, event: { type: 'victory', kind, encounterId, loot, exp, ...(item ? { item } : {}) } };
   }
   state.defeats++;
   if (kind === 'tutorial') {

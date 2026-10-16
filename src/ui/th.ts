@@ -1,5 +1,7 @@
 import type { ActionId, PassiveId, BattleEvent, BattleState, EncounterDefinition, Intent, TalentCap, TalentRule } from '../core/battle/types';
-import type { ExpGain, ExpeditionState, ResourceId, Resources, TalentNodeDef } from '../core/world/types';
+import type { EquipmentRules, ExpGain, ExpeditionState, GearSlot, GearStat, Item, ResourceId, Resources, TalentNodeDef } from '../core/world/types';
+import type { GearSpecial } from '../core/battle/types';
+import { itemStats } from '../core/world/equipment';
 import { ambushBonusOf, capAmount, corrodeBonusOf, guardReductionOf, hasCap, skillPower, songPower, talentRule, tauntReductionOf } from '../core/battle/engine';
 export const thaiFont = '"Noto Sans Thai", "Leelawadee UI", Tahoma, sans-serif';
 export const heroText: Record<string, { name: string; role: string; help: string; icon: string }> = {
@@ -173,7 +175,7 @@ export function eventThai(event: BattleEvent, after: BattleState, data: Encounte
     case 'rally': return `${source}ตั้งรับหมู่ · การโจมตีครั้งแรกที่ทุกคนโดนเบาลง ${data.rules.rallyReduction * 100}%`;
     case 'sigil': return `${target}ถูกตรึงเวท · ท่าพลังงานครั้งถัดไปจะถูกยกเลิก`;
     case 'sanctuary': return event.text.startsWith('Sanctuary keeps') ? `พรคุ้มภัยทำให้${target}ยังยืนอยู่ด้วยเลือด 1` : `${target}ได้รับพรคุ้มภัย · เลือดไม่ต่ำกว่า 1 จนถึงเทิร์นถัดไปของ${source}`;
-    case 'stand': return `${source}ยืนหยัด · ${target}รอดด้วยเลือด 1`;
+    case 'stand': return event.text.startsWith('Last stand') ? `อุปกรณ์ยืนหยัดทำให้${target}รอดด้วยเลือด 1` : `${source}ยืนหยัด · ${target}รอดด้วยเลือด 1`;
     case 'finale': return `${source}บรรเลงบทสุดท้าย · ${event.text === 'Finale of valor.' ? 'โจมตีศัตรูทุกตัว' : 'ฟื้นเลือดทั้งทีม'}`;
     case 'counter': return event.text === 'The ward reflects the hit.' ? `โล่เวทของ${source}สะท้อนใส่${target} ${event.amount}` : event.text === 'The knight counters.' ? `${source}โต้กลับ${target} ${event.amount}` : event.text === 'The warden hammers back.' ? `${source}ทุบสวน${target} ${event.amount}` : `${source}แทงสวน${target} ${event.amount}`;
     case 'corrode': return `${target}ถูกกัดกร่อน · ทุกการโจมตีของทีม +${event.amount}`;
@@ -204,3 +206,21 @@ export function lootThai(loot: Resources): string {
   const parts = resourceOrder.filter(id => loot[id] > 0).map(id => `${resourceText[id].name} +${loot[id]}`);
   return parts.length ? parts.join(' · ') : 'ไม่มีของตก';
 }
+// ---- Equipment (2D-2) ----
+export const slotText: Record<GearSlot, string> = { weapon: 'อาวุธ', head: 'หมวก', body: 'เกราะ', gloves: 'ถุงมือ', boots: 'รองเท้า', charm: 'เครื่องราง' };
+export const slotIcon = { weapon: 'gearWeapon', head: 'gearHead', body: 'gearBody', gloves: 'gearGloves', boots: 'gearBoots', charm: 'gearCharm' } as const;
+export const rarityText = ['ธรรมดา', 'ดี', 'หายาก', 'ล้ำค่า', 'ตำนาน'] as const;
+const weaponText: Record<string, string> = { guardian: 'ดาบอัศวิน', tracer: 'ดาบนักดวล', weaver: 'คทาเวท', healer: 'ไม้เท้าศักดิ์สิทธิ์', garran: 'ทวน', mira: 'ธนู', toma: 'ชุดขวดแร่', sefa: 'มีดสั้น', brann: 'ค้อนรูน', lio: 'พิณรูน' };
+const statText: Record<GearStat, (n: number) => string> = {
+  hp: n => `เลือด +${n}`, attack: n => `พลังโจมตี +${n}`, skill: n => `พลังสกิล +${n}%`, heal: n => `พลังรักษา +${n}%`, barrier: n => `โล่เริ่มศึก ${n}`, speed: n => `SPD +${n}`,
+};
+export const specialText: Record<GearSpecial, string> = {
+  laststand: 'ครั้งแรกในศึกที่จะล้ม เหลือเลือด 1', markhunter: 'โจมตีศัตรูที่ติดตรา +8', renewal: 'ฟื้นเลือด 4 เมื่อเริ่มเทิร์นของตัวเอง',
+};
+export const itemName = (item: Item): string => `${item.slot === 'weapon' ? weaponText[item.hero!] ?? 'อาวุธ' : slotText[item.slot]}${rarityText[item.rarity]}`;
+// Base stats first, then affixes; a legendary special at the end.
+export function itemLines(rules: EquipmentRules, item: Item): string[] {
+  const stats = itemStats(rules, item);
+  return [...(Object.entries(stats) as [GearStat, number][]).map(([k, v]) => statText[k](v)), ...(item.special ? [`★ ${specialText[item.special]}`] : [])];
+}
+export const itemOwner = (item: Item): string => item.hero ? `เฉพาะ${heroText[item.hero]?.name ?? ''}` : 'ใส่ได้ทุกคน';

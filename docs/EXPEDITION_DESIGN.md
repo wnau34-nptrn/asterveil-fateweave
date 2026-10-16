@@ -19,7 +19,7 @@ Approved 2026-10-14, re-planned 2026-10-15 for the mercenary roster.
 | L1. Lobby | Home → Lobby → Map; persistent profile (company ≤ 20, bank, board); choose the 4 + 4; withdraw/complete/wipe settle home | **Implemented** |
 | L2. Character creation | Commander (non-combat) name, crest and banner colour, once, between Home and Lobby | **Implemented** |
 | 2C-2. New classes | Six new mercenaries (ART-CHAR-MERC-ENEMY-001), one class mechanic at a time; ★3 skill and ★5 passive per class | **Implemented**: all 6 base classes (Garran spear, Mira archer, Toma alchemist, Sefa scout, Brann warden, Lio bard) and the ★3 skill + ★5 passive for all 10 classes (see Star unlocks) |
-| 2D. Equipment and level | 2D-1 member + monster levels; 2D-2 equipment (6 slots, 5 rarities, drops, inventory); 2D-3 sets; 2D-4 forge (enhance, fuse, reroll, salvage); 2D-5 map potions; 2D-1b passive talent tree | **In progress**: 2D-1 implemented (see Levels); 2D-1b implemented (see Talent tree) |
+| 2D. Equipment and level | 2D-1 member + monster levels; 2D-2 equipment (6 slots, 5 rarities, drops, inventory); 2D-3 sets; 2D-4 forge (enhance, fuse, reroll, salvage); 2D-5 map potions; 2D-1b passive talent tree | **In progress**: 2D-1 implemented (see Levels); 2D-1b implemented (see Talent tree); 2D-2 implemented (see Equipment) |
 | 3. Choices and content | Events with fight/avoid choices, elites, mini boss, puzzles (rune order, push stone, lever), secrets, map quest "2 of 3" and side quests | Planned |
 | 4. Economy and wrap-up | Local gold and shop, salvage, fast travel between camps, elite respawn on rest, defeat penalty, whole-map balance simulation, completion screen | Planned |
 
@@ -449,3 +449,32 @@ Counters from talents add corrosion/valor like other counters. Stone regen does 
 **Save v8.** Members may carry `talents` (ranks per node); every load re-checks ranks, gates and points against the member's level. v7 data loads unchanged (no talents).
 
 **Tests.** `tests/talents.test.ts` (shape, stats, every node's effect, gates, points, reset, settle, save) and a lobby browser test (separate sheet, member picker, spend, gate reason, ≥44px nodes, reset, saved v8, phone portrait).
+
+## Equipment (2D-2; design approved 2026-10-15, draft numbers)
+
+Sets (2D-3), the forge (enhance, fuse, reroll; 2D-4) and map potions (2D-5) come later. Icons are code-drawn placeholders until the ART-UI-EQUIP-001 handoff.
+
+**Slots.** Weapon (one class only: `Item.hero`), head, body, gloves, boots, charm. Values come from the item level L (the monster level it dropped at) as `round(base + perLevel × (L − 1))`, never stored:
+
+| Slot | Base stats (L1 → L10) |
+|---|---|
+| Weapon | Attack 2 → 7, skill power +3% → +12% |
+| Head | HP 4 → 13, skill +1% → +6% |
+| Body | HP 7 → 25 |
+| Gloves | Attack 1 → 4, skill +1% → +6% |
+| Boots | HP 4 → 13, SPD +1 → +3 |
+| Charm | skill +4% → +13% |
+
+**Rarity.** Common / good / rare / epic / legendary with 0 / 1 / 2 / 3 / 3 distinct affixes; a legendary also has one special. Affixes (L1 → L10): HP +4 → +13, Attack +1 → +4, skill +2% → +7%, healing +4% → +13%, starting barrier 3 → 8, SPD +1 → +2 (boots and charms only). Specials: **last stand** (once per battle a hit that would down the wearer leaves 1 HP), **mark hunter** (the wearer's hits on a marked enemy +8), **renewal** (heal 4 at the start of the wearer's turn).
+
+**Stats in battle.** Gear adds flat max HP, Attack and SPD after the star/level/talent percentages, and adds its skill percent to theirs; healing percent raises every heal the wearer casts (including mending), and the barrier is present at the start of each battle for standing heroes. The resolver reads `HeroDefinition.gear`; nothing worn leaves a definition unchanged.
+
+**Drops.** The tutorial never drops. A random victory drops one item at 35%, guaranteed after 6 dry wins in a row (pity, `dry` in the run); the boss always drops one (rare 50 / epic 35 / legendary 15). Normal weights: common 55, good 28, rare 12, epic 4, legendary 1. Slot uniform; a weapon is made for one of the brought members. Rolls use the run's (seed, rolls) stream, so a reload cannot re-roll a drop.
+
+**Found items** ride with the run (shown in the map pack). Completing or withdrawing brings them home; a wipe loses them. The bag holds 60 unequipped items; whatever does not fit is salvaged automatically and reported.
+
+**Lobby.** From a member in the team sheet, **อุปกรณ์** opens the equipment sheet (its own window, with a member picker and a back button): six slots, the bag filtered by the chosen slot, equip (swaps with the slot), unequip (needs bag space) and salvage (rare and better ask for a second press; one button salvages every common). Salvage: common 2 ore + 1 dust, good 3 + 2, rare 5 + 4, epic 8 + 8, legendary 12 + 15. Veil dust is banked for the forge. Dismissing a member returns their gear to the bag (overflow salvaged).
+
+**Save v9.** Members may carry `gear`; the profile gains `items`, `nextItem`, `bank.dust` and last-result `items`/`salvaged`; the run gains `found` and `dry`. Every item is checked (slot, class, affixes, special, uid unique and below `nextItem`). v1–v8 data migrates with nothing.
+
+**Tests.** `tests/equipment.test.ts` (stats, validity, rolls, battle effects, drops and pity, settle, equip/unequip/salvage/dismiss, save v9) and a lobby browser test.

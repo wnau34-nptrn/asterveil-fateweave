@@ -74,4 +74,17 @@ export const chapterOne: MapDefinition = {
   // Draft 2D-1 numbers: a first full run ends near level 9; farming low levels is tapered (world `expPercent`).
   progression: { levelCap: 10, levelStatPercent: 3, monsterLevelPercent: 7, expBase: 6, expPerLevel: 2, bossExpMultiplier: 3, nextBase: 10, nextPerLevel: 10 },
   talents: talentTrees,
+  // Equipment (2D-2, draft numbers; docs/EXPEDITION_DESIGN.md "Equipment").
+  equipment: {
+    bagCap: 60,
+    slotStats: {
+      weapon: { attack: [2, 0.5], skill: [3, 1] }, head: { hp: [4, 1], skill: [1, 0.5] }, body: { hp: [7, 2] },
+      gloves: { attack: [1, 0.35], skill: [1, 0.5] }, boots: { hp: [4, 1], speed: [1, 0.25] }, charm: { skill: [4, 1] },
+    },
+    affixStats: { hp: [4, 1], attack: [1, 0.35], skill: [2, 0.5], heal: [4, 1], barrier: [3, 0.5], speed: [1, 0.15] },
+    affixCount: [0, 1, 2, 3, 3],
+    dropPercent: 35, pity: 6,
+    rarityWeights: [55, 28, 12, 4, 1], bossRarityWeights: [0, 0, 50, 35, 15],
+    salvage: [{ ore: 2, dust: 1 }, { ore: 3, dust: 2 }, { ore: 5, dust: 4 }, { ore: 8, dust: 8 }, { ore: 12, dust: 15 }],
+  },
 };
