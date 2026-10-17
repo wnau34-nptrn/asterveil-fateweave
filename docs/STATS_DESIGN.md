@@ -2,7 +2,32 @@
 
 Owner request (2026-10-17): more stats than HP, Attack and SPD; gear rolls those stats so no two items are alike; and every stat must fit the whole skill kit of every class. The owner approved this design and the recommendations for questions A–D on 2026-10-17 ("อนุมัติตามคุณแนะนำ"). All numbers are drafts.
 
-**Status:** step 1 (damaging skills scale with Attack, Support replaces Skill %) is implemented; steps 2–5 are next. Corrode's +6 is a flat rule bonus like Mark and Ambush (answer A), so it stays flat.
+**Status:**
+
+| Step | What | State |
+|---|---|---|
+| 1 | Damaging skills scale with Attack; Support replaces Skill % | done |
+| 2 | Armour, Resistance and Leech in the resolver | done |
+| 3 | Gear main stats, pools, 80–120% rolls, Trail regen, Luck; save v21 | done |
+| 4 | Stat lines in the bag, Lobby and member details | done |
+| 5 | Per-class simulation | next |
+
+Choices made while building (these refine sections 6–7):
+
+- **Gear Attack is a percent**, like Support. As a flat number, a +10 Attack weapon would have added about +100% skill damage to an 8–10 Attack class but only +60% to a 16 Attack duelist. A percent treats every class alike.
+  - Draft values: weapon main Attack 8% (+1.5/level), gloves 4% (+1/level), Attack affix 3% (+0.7/level).
+- **Weapons never roll SPD.** The existing rule (SPD only from boots, charms and the wind set) stays.
+  - Damage-class weapon affixes: Attack, Leech, HP.
+  - Support-class weapon (Priest, Alchemist, Bard) affixes: Support, HP, Resistance.
+- **Corrode's +6 stays flat**, like Mark and Ambush (answer A).
+- **The old Heal % gear bonus is gone.** Support now raises heals directly.
+- **Item stats:**
+  - Each item stores roll qualities `q` (main stats, then each affix). Values show the best the roll could have been, e.g. "เกราะ +5% (สูงสุด 8)".
+  - The forge's Reroll draws a fresh quality for the new affix. Fusing gives each new affix a quality.
+- **Map stats:**
+  - Trail regen heals standing brought members every 5 steps. The step needs the encounter lookup, which the game passes.
+  - The deployed members' Luck adds points to the random-battle drop chance, up to +15.
+- **Save v21:** old `skill`/`heal` affixes become `support`. An affix the slot can no longer roll becomes the first unused stat of its pool. Old values count as 100%.
 
 ## 1. Audit: what the stats do today
 

@@ -8,7 +8,7 @@ import { actorArt, actorFootOrigins, lobbyArt, lobbyPose, NPC_IDS, npcAtlasUrl, 
 import { icon } from './icons';
 import { commanderBadge } from './commander-ui';
 import { gearArt, potionArt } from './equip-art';
-import { skillDescription, heroText, npcText, rewardText, shopText, sideQuestText, itemLines, itemName, itemOwner, passiveText, potionText, rarityText, setText, slotIcon, slotText, statName, talentBranches, talentHelp, wornSets } from './th';
+import { heroStatLine, skillDescription, heroText, npcText, rewardText, shopText, sideQuestText, itemLines, itemName, itemOwner, passiveText, potionText, rarityText, setText, slotIcon, slotText, statName, talentBranches, talentHelp, wornSets } from './th';
 import { enhanceCost, enhanceReason, findItem, fuseMaterials, fuseReason, rerollReason, smeltLeft, smeltReason } from '../core/world/forge';
 import { portrait, starRow } from './world-ui';
 
@@ -310,7 +310,7 @@ export class LobbyUI {
         <button id="salvage-${i.uid}" data-lobby="salvage" data-uid="${i.uid}" class="${confirm ? 'danger-button' : 'secondary'}" aria-label="แยกชิ้น${itemName(i)} ได้แร่ ${v.ore} ผง ${v.dust}">${confirm ? 'ยืนยันแยก' : 'แยก'}</button></span></li>`;
     }).join('');
     const commons = p.items.filter(i => i.rarity === 0).length;
-    return `${picker}<p class="gear-stats"><b>${heroText[id]!.name}</b> Lv${m.level ?? 1} · เลือด ${h.maxHp} · พลังโจมตี ${h.attack} · พลังเสริม +${h.skillBonus ?? 0}% · SPD ${h.speed}</p>
+    return `${picker}<p class="gear-stats"><b>${heroText[id]!.name}</b> Lv${m.level ?? 1} · ${heroStatLine(h)}</p>
       <div class="gear-slots">${slots}</div>${detail}${this.sets(m.gear)}
       <h3>${icon('pack')} คลัง${slot ? ` · ${slotText[slot]}` : ''} <span class="camp-embers">${bag.length} ชิ้น · แตะช่องเพื่อกรอง</span></h3>
       ${rows ? `<ul class="gear-bag">${rows}</ul>` : '<p class="camp-note">ยังไม่มีอุปกรณ์ในคลัง · ชนะศึกบนแผนที่เพื่อหาอุปกรณ์</p>'}

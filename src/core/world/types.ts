@@ -69,27 +69,37 @@ export interface MapDefinition {
 // Six slots: a class weapon (`Item.hero`) and five pieces anyone can wear.
 export type GearSlot = 'weapon' | 'head' | 'body' | 'gloves' | 'boots' | 'charm';
 export const GEAR_SLOTS: readonly GearSlot[] = ['weapon', 'head', 'body', 'gloves', 'boots', 'charm'];
-// hp/attack/barrier are flat; skill/heal are percent; speed is SPD (boots and charms only).
-export type GearStat = 'hp' | 'attack' | 'skill' | 'heal' | 'barrier' | 'speed';
+// Stats design (2026-10-17): hp, barrier (starting shield) and speed (SPD) are flat; attack and support are
+// percents; armour/resist/leech are battle percents (capped by the battle rules); regen (HP every
+// `regenSteps` steps on the map) and luck (+points on the battle drop chance, capped) work on the map.
+export type GearStat = 'hp' | 'attack' | 'support' | 'speed' | 'armour' | 'resist' | 'leech' | 'barrier' | 'regen' | 'luck';
 // Rarity 0 common … 4 legendary. Stat values come from (stat, level) through the rules, so an item stores
 // only what was rolled. `uid` is 0 while the item is still on the expedition (`found`).
 // `plus` (2D-4): forge enhance level (missing = +0).
-export interface Item { uid: number; slot: GearSlot; rarity: number; level: number; hero?: string; affixes: GearStat[]; special?: GearSpecial; set?: SetId; plus?: number }
+// `q` (stats design): roll quality in percent (80–120) of the main stats and of each affix, in affix order;
+// missing = 100 (items made before the rolls).
+export interface Item { uid: number; slot: GearSlot; rarity: number; level: number; hero?: string; affixes: GearStat[]; special?: GearSpecial; set?: SetId; plus?: number;
+  q?: { main: number; affixes: number[] } }
 // ---- Equipment sets (2D-3, draft numbers): 2 pieces give a stat, 4 pieces a rule. ----
 export type SetId = 'dawn' | 'wind' | 'shadow' | 'thorn' | 'starveil' | 'mender';
 export const SET_IDS: readonly SetId[] = ['dawn', 'wind', 'shadow', 'thorn', 'starveil', 'mender'];
-// `two`: hp/attack/skill/heal are percent, speed is flat SPD. `four`: see `HeroGear`.
+// `two`: hp/attack/support are percent, speed is flat SPD. `four`: see `HeroGear`.
 export interface SetDefinition {
-  two: { stat: 'hp' | 'attack' | 'skill' | 'heal' | 'speed'; value: number };
+  two: readonly { stat: 'hp' | 'attack' | 'support' | 'speed'; value: number }[];
   four: { kind: 'barrier' | 'firstStrike' | 'freshHit' | 'thorns' | 'freeCast' | 'overflow'; amount: number };
 }
 // A value at item level L = round(base + perLevel × (L − 1)).
 export type StatCurve = readonly [base: number, perLevel: number];
 export interface EquipmentRules {
   bagCap: number;
-  // Base stats per slot; affix values per stat; affix count per rarity (legendary also has a special).
-  slotStats: Readonly<Record<GearSlot, Partial<Record<GearStat, StatCurve>>>>;
+  // Main stats per slot (a support class's weapon uses `supportWeapon`); affix values per stat; the affixes each
+  // slot can roll (`supportWeapon` again for support classes); affix count per rarity (legendary also has a special).
+  slotStats: Readonly<Record<GearSlot | 'supportWeapon', Partial<Record<GearStat, StatCurve>>>>;
   affixStats: Readonly<Record<GearStat, StatCurve>>;
+  affixPools: Readonly<Record<GearSlot | 'supportWeapon', readonly GearStat[]>>;
+  supportHeroes: readonly string[];
+  // Roll quality range (percent) and the map stats: regen heals every `regenSteps` steps, luck is capped.
+  quality: readonly [min: number, max: number]; regenSteps: number; luckCap: number;
   affixCount: readonly number[];
   // Random victories drop an item at `dropPercent`, guaranteed after `pity` dry wins; the boss always drops
   // `bossDrops` items. A wiped team still brings home its `wipeKeep` best found items.

@@ -25,20 +25,24 @@ const heroIds = ['guardian', 'tracer', 'weaver', 'healer', 'garran', 'mira', 'to
 
 describe('items and stats', () => {
   it('slot base stats and affixes grow with the item level; SPD only on boots and charms', () => {
-    expect(itemStats(rules, item({ slot: 'body', level: 1 }))).toEqual({ hp: 7 });
-    expect(itemStats(rules, item({ slot: 'body', level: 10 }))).toEqual({ hp: 25 });
-    expect(itemStats(rules, item({ slot: 'weapon', hero: 'guardian', level: 5, rarity: 1, affixes: ['hp'] }))).toEqual({ attack: 4, skill: 7, hp: 8 });
+    expect(itemStats(rules, item({ slot: 'body', level: 1 }))).toEqual({ hp: 7, armour: 3 });
+    expect(itemStats(rules, item({ slot: 'body', level: 10 }))).toEqual({ hp: 25, armour: 7 });
+    expect(itemStats(rules, item({ slot: 'weapon', hero: 'guardian', level: 5, rarity: 1, affixes: ['hp'] }))).toEqual({ attack: 14, hp: 8 });
+    // A support class's weapon gives Support instead of Attack (stats design 2026-10-17).
+    expect(itemStats(rules, item({ slot: 'weapon', hero: 'healer', level: 5 }))).toEqual({ support: 14 });
     expect(itemStats(rules, item({ slot: 'boots', level: 9 })).speed).toBe(3);
-    for (const slot of ['weapon', 'head', 'body', 'gloves'] as const) expect(affixPool(slot)).not.toContain('speed');
-    expect(affixPool('boots')).toContain('speed'); expect(affixPool('charm')).toContain('speed');
+    for (const slot of ['weapon', 'head', 'body', 'gloves'] as const) expect(affixPool(rules, slot, 'healer')).not.toContain('speed');
+    expect(affixPool(rules, 'boots')).toContain('speed'); expect(affixPool(rules, 'charm')).toContain('speed');
+    expect(affixPool(rules, 'weapon', 'tracer')).toContain('leech'); expect(affixPool(rules, 'weapon', 'healer')).toContain('support');
   });
-  it('gear adds flat HP/Attack/SPD and skill percent; nothing worn leaves the hero unchanged', () => {
+  it('gear adds flat HP/SPD, Attack/Support percents and defence; nothing worn leaves the hero unchanged', () => {
     expect(member('guardian')).toEqual(heroDef(lookup, map, 'guardian'));
     const gear: Gear = { body: item({ slot: 'body', level: 10 }), boots: item({ uid: 2, slot: 'boots', level: 9 }), weapon: item({ uid: 3, slot: 'weapon', hero: 'guardian', level: 1 }) };
     const h = member('guardian', gear); const base = heroDef(lookup, map, 'guardian')!;
-    expect(h.maxHp).toBe(base.maxHp + 25 + 12); expect(h.speed).toBe(base.speed + 3); expect(h.attack).toBe(base.attack + 2); expect(h.skillBonus).toBe(3);
-    const t = gearTotals(map, { charm: item({ slot: 'charm', rarity: 4, affixes: ['heal', 'barrier', 'speed'], special: 'renewal' }) });
-    expect(t.gear).toEqual({ healBonus: 4, barrier: 3, specials: ['renewal'] }); expect(t.speed).toBe(1);
+    expect(h.maxHp).toBe(base.maxHp + 25 + 12); expect(h.speed).toBe(base.speed + 3); expect(h.attack).toBe(Math.round(base.attack * 1.08));
+    expect(h).toMatchObject({ damageBonus: 8, skillBonus: 0, armour: 7 });
+    const t = gearTotals(map, { charm: item({ slot: 'charm', rarity: 4, affixes: ['support', 'luck', 'speed'], special: 'renewal' }) });
+    expect(t.gear).toEqual({ specials: ['renewal'] }); expect(t).toMatchObject({ speed: 1, support: 6 + 3, luck: 2 });
   });
   it('rolled items are always valid and deterministic; rarity follows the weights', () => {
     let n = 0; const roll = () => rollPercent(77, n++); const counts = [0, 0, 0, 0, 0];
@@ -56,7 +60,10 @@ describe('items and stats', () => {
     ['SPD on a helmet', item({ slot: 'head', rarity: 1, affixes: ['speed'] })],
     ['the wrong affix count', item({ rarity: 2, affixes: ['hp'] })],
     ['a repeated affix', item({ rarity: 2, affixes: ['hp', 'hp'] })],
-    ['a legendary without a special', item({ rarity: 4, affixes: ['hp', 'attack', 'skill'] })],
+    ['a legendary without a special', item({ rarity: 4, affixes: ['hp', 'armour', 'resist'] })],
+    ['an affix the slot cannot roll', item({ rarity: 1, affixes: ['leech'] })],
+    ['a roll quality outside 80–120', item({ q: { main: 121, affixes: [] } })],
+    ['roll qualities that miss an affix', item({ rarity: 1, affixes: ['hp'], q: { main: 100, affixes: [] } })],
     ['a weapon without a class', item({ slot: 'weapon' })],
     ['a class on armour', item({ hero: 'guardian' })],
     ['an extra field', { ...item({}), shine: 3 } as Item],
@@ -66,16 +73,17 @@ describe('items and stats', () => {
 
 describe('equipment in battle', () => {
   const party = (gear: Gear) => withParty(veilSiege, [member('guardian'), member('tracer', gear), member('weaver'), member('healer', gear.charm ? { charm: gear.charm } : undefined)]);
-  it('starting barrier, heal bonus and SPD apply', () => {
-    const d = party({ charm: item({ slot: 'charm', rarity: 2, affixes: ['barrier', 'heal'] }) });
+  it('starting barrier and Support apply', () => {
+    const d = party({ body: item({ slot: 'body', rarity: 2, affixes: ['barrier', 'hp'] }), charm: item({ uid: 2, slot: 'charm' }) });
     const s = createBattle(d);
     expect(s.heroes.find(h => h.id === 'tracer')!.barrier).toBe(3); expect(s.heroes.find(h => h.id === 'weaver')!.barrier).toBe(0);
     let t = until(createBattle(d), d, 'healer'); t = { ...t, heroes: t.heroes.map(h => h.id === 'guardian' ? { ...h, hp: 10 } : h) };
     const heal = act(t, d, 'heal', 'guardian').turns[0]!.events.find(e => e.type === 'heal')!;
-    expect(heal.amount).toBe(Math.round(Math.round(20 * (100 + 4) / 100) * 1.04));
+    // The charm's main Support (+6%) raises the priest's heal.
+    expect(heal.amount).toBe(Math.round(20 * (100 + 6) / 100));
   });
   it('last stand saves the wearer once per battle', () => {
-    const d = party({ body: item({ slot: 'body', rarity: 4, affixes: ['hp', 'attack', 'skill'], special: 'laststand' }) });
+    const d = party({ body: item({ slot: 'body', rarity: 4, affixes: ['hp', 'armour', 'resist'], special: 'laststand' }) });
     let s = createBattle(d); s = { ...s, heroes: s.heroes.map(h => h.id === 'tracer' ? { ...h, hp: 2 } : h) };
     let saved = 0; let down = false;
     for (let i = 0; i < 30 && s.outcome === 'active' && !down; i++) {
@@ -86,12 +94,12 @@ describe('equipment in battle', () => {
     expect(saved).toBe(1);
   });
   it('mark hunter adds 8 on a marked enemy; renewal heals 4 at the wearer’s turn', () => {
-    const d = party({ weapon: item({ slot: 'weapon', hero: 'tracer', rarity: 4, affixes: ['hp', 'attack', 'skill'], special: 'markhunter' }) });
+    const d = party({ weapon: item({ slot: 'weapon', hero: 'tracer', rarity: 4, affixes: ['hp', 'attack', 'leech'], special: 'markhunter' }) });
     const plain = party({});
     const marked = (data: EncounterDefinition) => { const s = until(createBattle(data), data, 'tracer'); return { ...s, enemies: s.enemies.map(e => e.id === 'brute' ? { ...e, markedUntil: s.round + 2 } : e) }; };
     const hit = (data: EncounterDefinition) => act(marked(data), data, 'attack', 'brute').turns[0]!.events.find(e => e.type === 'damage')!.amount!;
-    expect(hit(d) - hit(plain)).toBe(member('tracer', { weapon: item({ slot: 'weapon', hero: 'tracer', rarity: 4, affixes: ['hp', 'attack', 'skill'], special: 'markhunter' }) }).attack - member('tracer').attack + 8);
-    const r = party({ head: item({ slot: 'head', rarity: 4, affixes: ['hp', 'attack', 'skill'], special: 'renewal' }) });
+    expect(hit(d) - hit(plain)).toBe(member('tracer', { weapon: item({ slot: 'weapon', hero: 'tracer', rarity: 4, affixes: ['hp', 'attack', 'leech'], special: 'markhunter' }) }).attack - member('tracer').attack + 8);
+    const r = party({ head: item({ slot: 'head', rarity: 4, affixes: ['hp', 'resist', 'support'], special: 'renewal' }) });
     let s = createBattle(r); s = { ...s, heroes: s.heroes.map(h => h.id === 'tracer' ? { ...h, hp: 20 } : h) };
     const events: { text: string }[] = []; for (let i = 0; i < 8 && !events.some(e => e.text === 'Renewal.'); i++) { const x = act(s, r, 'attack', 'brute'); events.push(...x.events); s = x.state; }
     expect(events.find(e => e.text === 'Renewal.')).toMatchObject({ targetId: 'tracer', amount: 4 });
@@ -155,7 +163,7 @@ describe('lobby: bag, equip, salvage, settle', () => {
     expect(over.items).toHaveLength(rules.bagCap); expect(over.last).toMatchObject({ items: 1, salvaged: 1 }); expect(over.bank.dust).toBe(rules.salvage[0]!.dust);
   });
   it('equip swaps with the slot, weapons only fit their class, unequip needs bag space, salvage pays ore and dust', () => {
-    let p = withBag(item({ uid: 5, slot: 'weapon', hero: 'tracer' }), item({ uid: 6 }), item({ uid: 7, rarity: 2, affixes: ['hp', 'skill'] }));
+    let p = withBag(item({ uid: 5, slot: 'weapon', hero: 'tracer' }), item({ uid: 6 }), item({ uid: 7, rarity: 2, affixes: ['hp', 'armour'] }));
     expect(equip(p, 'guardian', 5).event).toEqual({ type: 'blocked', reason: 'class' });
     p = equip(p, 'tracer', 5).profile; p = equip(p, 'guardian', 6).profile;
     expect(p.items.map(i => i.uid)).toEqual([7]); expect(p.members.guardian!.gear!.body!.uid).toBe(6);
@@ -180,7 +188,7 @@ describe('lobby: bag, equip, salvage, settle', () => {
 describe('save v9', () => {
   const memory = () => { const v = new Map<string, string>(); return { getItem: (k: string) => v.get(k) ?? null, setItem: (k: string, x: string) => { v.set(k, x); } }; };
   it('round-trips the bag, gear and found items; v8 data migrates empty', () => {
-    let profile = { ...newProfile(map, 4), items: [item({ uid: 1 }), item({ uid: 2, slot: 'charm', rarity: 4, affixes: ['speed', 'heal', 'hp'], special: 'laststand' })], nextItem: 3 };
+    let profile = { ...newProfile(map, 4), items: [item({ uid: 1 }), item({ uid: 2, slot: 'charm', rarity: 4, affixes: ['speed', 'support', 'luck'], special: 'laststand' })], nextItem: 3 };
     profile = equip(profile, 'healer', 2).profile;
     const run = newExpedition(map, lookup, 2, { roster: profile.party, members: structuredClone(profile.members) }); run.found = [item({ uid: 0, level: 3 })]; run.dry = 2;
     const store = memory(); saveGame(store, { profile, run });

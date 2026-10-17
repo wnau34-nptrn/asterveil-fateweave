@@ -34,8 +34,9 @@ describe('set bonuses', () => {
     expect(gearTotals(map, wear('dawn', 4)).gear).toMatchObject({ barrier: 12 });
     expect(member('guardian', wear('wind', 2)).speed).toBe(base.speed + 3);
     expect(gearTotals(map, wear('shadow', 2)).attackPercent).toBe(8);
-    expect(gearTotals(map, wear('starveil', 2)).skill).toBe(1 + 10);
-    expect(gearTotals(map, wear('mender', 2)).gear?.healBonus).toBe(15);
+    // Stats design: star-veil gives Attack and Support, the mender Support (it used to be Heal %).
+    expect(gearTotals(map, wear('starveil', 2))).toMatchObject({ attackPercent: 6, support: 6 });
+    expect(gearTotals(map, wear('mender', 2)).support).toBe(12);
     expect(gearTotals(map, wear('wind', 4)).gear?.firstStrike).toBe(true);
     expect(gearTotals(map, wear('thorn', 4)).gear?.thorns).toBe(6);
     expect(gearTotals(map, wear('starveil', 4)).gear?.freeCast).toBe(true);
@@ -43,7 +44,8 @@ describe('set bonuses', () => {
     expect(gearTotals(map, wear('shadow', 4)).gear?.freshHit).toBe(6);
     // 2 + 2: two small bonuses at once.
     const mix = { ...wear('dawn', 2), gloves: piece('shadow', 'gloves', 3), boots: piece('shadow', 'boots', 4) };
-    expect(gearTotals(map, mix)).toMatchObject({ hpPercent: 10, attackPercent: 8 });
+    // The gloves' own main Attack (+4%) adds to the shadow pair's +8%.
+    expect(gearTotals(map, mix)).toMatchObject({ hpPercent: 10, attackPercent: 8 + 4 });
   });
   it('wind ×4: the wearer acts first in round 1 only', () => {
     const d = party('healer', wear('wind', 4)); const s = createBattle(d);

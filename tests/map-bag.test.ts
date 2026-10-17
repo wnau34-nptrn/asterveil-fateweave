@@ -14,7 +14,7 @@ function start(): { profile: Profile; run: ExpeditionState } {
   let profile: Profile = { ...newProfile(map, 4), tutorialDone: true, items: [own], nextItem: 8 };
   profile = equip(profile, 'guardian', 7).profile;
   const out = depart(profile, map, lookup, 9);
-  out.run.found = [item({ rarity: 3, level: 4, affixes: ['hp', 'attack', 'skill'] }), item({ slot: 'weapon', hero: 'tracer', rarity: 0, level: 2 })];
+  out.run.found = [item({ rarity: 3, level: 4, affixes: ['hp', 'armour', 'resist'] }), item({ slot: 'weapon', hero: 'tracer', rarity: 0, level: 2 })];
   return out;
 }
 const busy = (run: ExpeditionState): ExpeditionState => ({ ...run, battle: { kind: 'random', encounterId: map.tutorialEncounterId, entry: {}, commands: [] } });

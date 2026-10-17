@@ -65,16 +65,19 @@ export function starred(base: HeroDefinition, stars: number, map: MapDefinition,
   // Stars and levels add up: each star `starStatPercent`, each level above 1 `levelStatPercent`.
   const bonus = (stars - 1) * map.company.starStatPercent + (level - 1) * map.progression.levelStatPercent;
   const gained = talentEffects(map, base.id, talents);
-  // Equipment (2D-2) adds flat max HP/Attack/SPD after the percentages, and skill power percent.
-  const worn = gearTotals(map, gear); const equipped = !!(worn.hp || worn.attack || worn.skill || worn.speed || worn.hpPercent || worn.attackPercent || worn.gear);
+  // Equipment adds flat max HP and SPD, and Attack/Support/HP percents on top of stars, levels and talents
+  // (stats design 2026-10-17); Armour, Resistance and Leech go to the battle as they are.
+  const worn = gearTotals(map, gear);
+  const equipped = !!(worn.hp || worn.hpPercent || worn.attackPercent || worn.support || worn.speed || worn.armour || worn.resist || worn.leech || worn.gear);
   if (!bonus && !gained.any && !equipped) return base;
   const scale = (n: number, extra: number) => Math.round(n * (100 + bonus + extra) / 100);
   // ★3 adds the class's third skill; ★5 switches on its passive.
   const skill = stars >= 3 && base.unlocks && !base.actions.includes(base.unlocks.skill) ? [base.unlocks.skill] : [];
-  // Damaging skills grow with Attack: the same percentages, plus flat gear Attack as a share of the class base.
-  const damageBonus = Math.round((bonus + gained.attack + worn.attackPercent + worn.attack * 100 / base.attack) * 10) / 10;
-  return { ...base, maxHp: scale(base.maxHp, gained.hp + worn.hpPercent) + worn.hp, attack: scale(base.attack, gained.attack + worn.attackPercent) + worn.attack, speed: base.speed + worn.speed,
-    skillBonus: bonus + gained.skill + worn.skill, damageBonus, actions: [...base.actions, ...skill],
+  // Damaging skills grow by the same Attack percent as the basic attack.
+  const damageBonus = bonus + gained.attack + worn.attackPercent;
+  return { ...base, maxHp: scale(base.maxHp, gained.hp + worn.hpPercent) + worn.hp, attack: scale(base.attack, damageBonus - bonus), speed: base.speed + worn.speed,
+    skillBonus: bonus + gained.skill + worn.support, damageBonus, actions: [...base.actions, ...skill],
+    ...(worn.armour ? { armour: worn.armour } : {}), ...(worn.resist ? { resist: worn.resist } : {}), ...(worn.leech ? { leech: worn.leech } : {}),
     ...(stars >= 5 && base.unlocks ? { passive: base.unlocks.passive } : {}), ...(gained.talents ? { talents: gained.talents } : {}), ...(worn.gear ? { gear: worn.gear } : {}) };
 }
 // Sums spent talent ranks into stat percents and the resolver's `HeroTalents`.
@@ -160,7 +163,8 @@ export const eventAt = (map: MapDefinition, p: Point): MapEventDefinition | unde
 export const eliteBlocks = (state: ExpeditionState, map: MapDefinition, p: Point): EliteDefinition | undefined => { const e = eliteAt(map, p); return e && !state.elitesDefeated.includes(e.id) ? e : undefined; };
 export const pendingEvent = (state: ExpeditionState, map: MapDefinition, p: Point = state.position): MapEventDefinition | undefined => { const e = eventAt(map, p); return e && !state.eventsDone.includes(e.id) ? e : undefined; };
 
-export function move(initial: ExpeditionState, map: MapDefinition, dir: Direction): WorldResult {
+// `lookup` lets gear Trail regen heal on the step (stats design); without it the step heals nobody.
+export function move(initial: ExpeditionState, map: MapDefinition, dir: Direction, lookup?: EncounterLookup): WorldResult {
   if (initial.battle || initial.completed) return { state: initial, event: { type: 'blocked', reason: 'busy' } };
   const target = { x: initial.position.x + offsets[dir].x, y: initial.position.y + offsets[dir].y };
   const tile = tileAt(map, target);
@@ -195,6 +199,7 @@ export function move(initial: ExpeditionState, map: MapDefinition, dir: Directio
     return { state, event: { type: 'encounter', kind: 'elite', encounterId: elite.encounterId, chance: 100 } };
   }
   state.position = target; state.steps++; reveal(state, map);
+  if (lookup) trailRegen(state, map, lookup);
   // 3C: puzzle tiles answer instead of rolling an encounter on that step.
   if (pushed) return { state, event: pushed };
   // 3D: a glowing herb is picked up (once per run) instead of rolling an encounter.
@@ -438,6 +443,17 @@ export function chooseEvent(initial: ExpeditionState, map: MapDefinition, lookup
   if (ev.kind !== 'merchant') state.eventsDone.push(ev.id);
   return { state, event: { type: 'eventDone', eventId: ev.id, choice, ...(Object.keys(heal).length ? { heal } : {}) } };
 }
+// Map stats from gear (stats design 2026-10-17): every `regenSteps` steps each standing brought member heals its
+// Trail regen; the deployed members' Luck adds to the battle drop chance, capped.
+function trailRegen(state: ExpeditionState, map: MapDefinition, lookup: EncounterLookup): void {
+  if (state.steps % map.equipment.regenSteps) return;
+  for (const id of rosterIds(state)) {
+    const regen = gearTotals(map, state.members[id]?.gear).regen; const hp = state.hp[id] ?? 0;
+    if (regen && hp > 0) state.hp[id] = Math.min(memberDef(lookup, map, state.members, id)!.maxHp, hp + regen);
+  }
+}
+export const partyLuck = (state: ExpeditionState, map: MapDefinition): number =>
+  Math.min(map.equipment.luckCap, state.roster.deployed.reduce((n, id) => n + gearTotals(map, state.members[id]?.gear).luck, 0));
 // Equipment drop (2D-2): random victories drop at `dropPercent`, guaranteed after `pity` dry wins; the boss
 // always drops `bossDrops` items with better rarity weights; the tutorial never drops. The item's level is the monster level,
 // and a weapon is made for one of the brought members. Found items ride with the run until it is settled.
@@ -448,7 +464,7 @@ function dropItems(state: ExpeditionState, map: MapDefinition, kind: BattleKind,
   if (kind === 'event' && !state.eventsDone.includes(source ?? '')) return [];
   if (kind === 'event' && map.events.find(e => e.id === source)?.kind === 'rift') return [];
   if (kind === 'random') {
-    const lucky = rollPercent(state.seed, state.rolls++) < rules.dropPercent || state.dry + 1 >= rules.pity;
+    const lucky = rollPercent(state.seed, state.rolls++) < rules.dropPercent + partyLuck(state, map) || state.dry + 1 >= rules.pity;
     if (!lucky) { state.dry++; return []; }
     state.dry = 0;
   }

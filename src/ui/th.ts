@@ -1,7 +1,7 @@
 import type { ActionId, PassiveId, BattleEvent, BattleState, EncounterDefinition, Intent, TalentCap, TalentRule } from '../core/battle/types';
 import type { EquipmentRules, ExpGain, ExpeditionState, Gear, GearSlot, GearStat, Item, PotionId, PotionRules, ResourceId, Resources, SetDefinition, SetId, TalentNodeDef, MapEventKind, EventChoice, EventRules, QuestObjective, SideQuestDefinition, SideQuestKind, ShopItemId } from '../core/world/types';
-import type { GearSpecial } from '../core/battle/types';
-import { itemStats, setCounts } from '../core/world/equipment';
+import type { GearSpecial, HeroDefinition } from '../core/battle/types';
+import { setCounts, statLines } from '../core/world/equipment';
 import { ambushBonusOf, capAmount, corrodeBonusOf, guardReductionOf, hasCap, skillPower, songPower, talentRule, tauntReductionOf } from '../core/battle/engine';
 import type { IconName } from './icons';
 export const thaiFont = '"Noto Sans Thai", "Leelawadee UI", Tahoma, sans-serif';
@@ -214,22 +214,23 @@ export const slotIcon = { weapon: 'gearWeapon', head: 'gearHead', body: 'gearBod
 export const rarityText = ['ธรรมดา', 'ดี', 'หายาก', 'ล้ำค่า', 'ตำนาน'] as const;
 const weaponText: Record<string, string> = { guardian: 'ดาบอัศวิน', tracer: 'ดาบนักดวล', weaver: 'คทาเวท', healer: 'ไม้เท้าศักดิ์สิทธิ์', garran: 'ทวน', mira: 'ธนู', toma: 'ชุดขวดแร่', sefa: 'มีดสั้น', brann: 'ค้อนรูน', lio: 'พิณรูน' };
 const statText: Record<GearStat, (n: number) => string> = {
-  hp: n => `เลือด +${n}`, attack: n => `พลังโจมตี +${n}`, skill: n => `พลังเสริม +${n}%`, heal: n => `พลังรักษา +${n}%`, barrier: n => `โล่เริ่มศึก ${n}`, speed: n => `SPD +${n}`,
+  hp: n => `เลือด +${n}`, attack: n => `พลังโจมตี +${n}%`, support: n => `พลังเสริม +${n}%`, speed: n => `SPD +${n}`, armour: n => `เกราะ +${n}%`,
+  resist: n => `ต้านพลังงาน +${n}%`, leech: n => `ดูดเลือด +${n}%`, barrier: n => `โล่เริ่มศึก ${n}`, regen: n => `ฟื้นฟูระหว่างเดิน +${n}`, luck: n => `โชค +${n}`,
 };
 export const specialText: Record<GearSpecial, string> = {
   laststand: 'ครั้งแรกในศึกที่จะล้ม เหลือเลือด 1', markhunter: 'โจมตีศัตรูที่ติดตรา +8', renewal: 'ฟื้นเลือด 4 เมื่อเริ่มเทิร์นของตัวเอง',
 };
 export const itemName = (item: Item): string => `${item.slot === 'weapon' ? weaponText[item.hero!] ?? 'อาวุธ' : slotText[item.slot]}${rarityText[item.rarity]}${item.plus ? ` +${item.plus}` : ''}`;
-export const statName: Record<GearStat, string> = { hp: 'เลือด', attack: 'พลังโจมตี', skill: 'พลังเสริม', heal: 'พลังรักษา', barrier: 'โล่เริ่มศึก', speed: 'SPD' };
+export const statName: Record<GearStat, string> = { hp: 'เลือด', attack: 'พลังโจมตี', support: 'พลังเสริม', speed: 'SPD', armour: 'เกราะ', resist: 'ต้านพลังงาน', leech: 'ดูดเลือด', barrier: 'โล่เริ่มศึก', regen: 'ฟื้นฟูระหว่างเดิน', luck: 'โชค' };
 // Base stats first, then affixes; a legendary special and the set at the end.
+// Each value shows the best its roll could have been (stats design: rolls are 80–120%).
 export function itemLines(rules: EquipmentRules, item: Item): string[] {
-  const stats = itemStats(rules, item);
-  return [...(Object.entries(stats) as [GearStat, number][]).map(([k, v]) => statText[k](v)), ...(item.special ? [`★ ${specialText[item.special]}`] : []),
+  return [...statLines(rules, item).map(l => `${statText[l.stat](l.value)}${l.value < l.max ? ` (สูงสุด ${l.max})` : ''}`), ...(item.special ? [`★ ${specialText[item.special]}`] : []),
     ...(item.set ? [`ชุด${setText[item.set]}`] : [])];
 }
 // ---- Equipment sets (2D-3) ----
 export const setText: Record<SetId, string> = { dawn: 'ผู้พิทักษ์รุ่งอรุณ', wind: 'สายลมเร็ว', shadow: 'นักล่าเงา', thorn: 'หนามสวน', starveil: 'เวทแสงดาว', mender: 'ผู้เยียวยา' };
-const twoText = (t: SetDefinition['two']) => t.stat === 'speed' ? `SPD +${t.value}` : `${({ hp: 'เลือด', attack: 'พลังโจมตี', skill: 'พลังเสริม', heal: 'พลังรักษา' } as const)[t.stat]} +${t.value}%`;
+const twoText = (t: SetDefinition['two']) => t.map(x => x.stat === 'speed' ? `SPD +${x.value}` : `${({ hp: 'เลือด', attack: 'พลังโจมตี', support: 'พลังเสริม' } as const)[x.stat]} +${x.value}%`).join(' · ');
 const fourText = (f: SetDefinition['four']) => ({
   barrier: `เริ่มศึกพร้อมโล่ ${f.amount}`, firstStrike: 'รอบแรกของศึกลงมือก่อนทุกคน', freshHit: `ตีศัตรูที่ยังไม่ลงมือในรอบนี้ +${f.amount}`,
   thorns: `โดนตีกายภาพแล้วสวน ${f.amount}`, freeCast: 'สกิลแรกในแต่ละศึกไม่ติดคูลดาวน์', overflow: `รักษาเกินเลือดเต็มกลายเป็นโล่ (สูงสุด ${f.amount})`,
@@ -308,3 +309,9 @@ export const shopText: Record<ShopItemId, { name: string; help: string }> = {
   gearbox: { name: 'หีบอุปกรณ์', help: 'อุปกรณ์ระดับหายากขึ้นไป เลเวลเท่าสมาชิกที่เลเวลสูงสุด' },
   repel: { name: 'ยาไล่อสูร', help: 'เก็บไว้ในคลังยา พกไปได้ตอนออกเดินทาง' },
 };
+
+// A member's battle stats in one line (stats design 2026-10-17); defence and leech appear only when worn.
+export function heroStatLine(h: HeroDefinition, hp?: number): string {
+  return [`เลือด ${hp !== undefined ? `${hp}/` : ''}${h.maxHp}`, `พลังโจมตี ${h.attack}`, `พลังเสริม +${h.skillBonus ?? 0}%`, `SPD ${h.speed}`,
+    ...(h.armour ? [`เกราะ ${h.armour}%`] : []), ...(h.resist ? [`ต้านพลังงาน ${h.resist}%`] : []), ...(h.leech ? [`ดูดเลือด ${h.leech}%`] : [])].join(' · ');
+}

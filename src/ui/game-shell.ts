@@ -243,7 +243,7 @@ export class GameShell {
   }
   private move(dir: Direction): void {
     if (!this.state || this.locked) return;
-    const result = move(this.state, this.map, dir);
+    const result = move(this.state, this.map, dir, this.lookup);
     if (result.event.type === 'blocked') {
       this.message = result.event.reason === 'wall' ? 'ทางนี้ไปต่อไม่ได้' : result.event.reason === 'party' ? 'ทีมที่ลงสนามล้มหมด · สลับตัวสำรองในกระเป๋า หรือชุบที่แคมป์ก่อนออกเดินทาง'
         : result.event.reason === 'stone' ? 'หินขยับไปทางนั้นไม่ได้' : result.event.reason === 'pit' ? 'หลุมลึกขวางทาง · ต้องหาอะไรมาถม'

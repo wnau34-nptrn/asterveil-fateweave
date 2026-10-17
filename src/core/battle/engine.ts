@@ -75,10 +75,6 @@ export const GEAR_MARK_HUNTER = 8; export const GEAR_RENEWAL = 4;
 export const hasGear = (data: EncounterDefinition, heroId: string | undefined, special: GearSpecial): boolean =>
   !!heroId && !!data.heroes.find(h => h.id === heroId)?.gear?.specials?.includes(special);
 // Healing cast by this hero, raised by its equipment's heal bonus.
-export function healPower(data: EncounterDefinition, heroId: string, power: number): number {
-  const bonus = data.heroes.find(h => h.id === heroId)?.gear?.healBonus ?? 0;
-  return bonus ? Math.round(power * (100 + bonus) / 100) : power;
-}
 // Deploys a party (in slot order) into an encounter; enemy slots then resolve to these heroes.
 export function withParty(data: EncounterDefinition, party: readonly HeroDefinition[]): EncounterDefinition {
   if (!party.length || party.length > 4 || new Set(party.map(h => h.id)).size !== party.length) throw new Error('Invalid party.');
@@ -153,7 +149,7 @@ function finishOrAdvance(state: BattleState, data: EncounterDefinition, events: 
       for (const e of state.enemies) if (e.markedUntil <= state.round) e.markedUntil = 0;
       // A song of mending heals every standing ally as each new round begins.
       if (state.song?.action === 'mend' && living(state, state.song.heroId)) {
-        const power = healPower(data, state.song.heroId, songPower(data, state.song.heroId, 'mend'));
+        const power = songPower(data, state.song.heroId, 'mend');
         for (const h of state.heroes) {
           const amount = h.hp > 0 ? Math.min(power, data.heroes.find(d => d.id === h.id)!.maxHp - h.hp) : 0;
           if (amount) { h.hp += amount; events.push({ type: 'heal', sourceId: state.song.heroId, targetId: h.id, amount, text: 'The song mends the party.' }); }
@@ -387,9 +383,8 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
   // Split bolt / piercing line (talents): the other living enemies take half the skill power.
   const splash = (power: number) => { for (const foe of state.enemies.filter(e => e.hp > 0 && e.id !== enemy!.id)) strike(foe, Math.floor(power / 2), 'The hit carries on.'); };
   const livingBefore = state.enemies.filter(e => e.hp > 0).map(e => e.id);
-  const heal = (id: string, base: number) => {
+  const heal = (id: string, power: number) => {
     const target = state.heroes.find(h => h.id === id)!; if (!target.hp) return;
-    const power = healPower(data, hero.id, base);
     const amount = Math.min(power, data.heroes.find(h => h.id === id)!.maxHp - target.hp);
     if (amount) { target.hp += amount; events.push({ type: 'heal', sourceId: hero.id, targetId: id, amount, text: 'Restored HP.' }); }
     // Afterglow (★5): healing beyond full HP becomes a barrier (capped, not stacking).

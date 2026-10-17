@@ -19,7 +19,7 @@ export type GearSpecial = 'laststand' | 'markhunter' | 'renewal';
 // Set 4-piece bonuses (2D-3): `firstStrike` acts first in round 1, `freshHit` adds to hits on an enemy that has not
 // acted yet this round, `thorns` answers physical hits taken, `freeCast` spares the battle's first skill its cooldown,
 // `overflowCap` turns overhealing into a barrier up to that cap. A 4-piece starting barrier adds to `barrier`.
-export interface HeroGear { healBonus?: number; barrier?: number; specials?: GearSpecial[];
+export interface HeroGear { barrier?: number; specials?: GearSpecial[];
   firstStrike?: boolean; freshHit?: number; thorns?: number; freeCast?: boolean; overflowCap?: number }
 export type Outcome = 'active' | 'victory' | 'defeat';
 export interface SkillDefinition { name: string; english: string; icon: string; power: number; cooldown: number }

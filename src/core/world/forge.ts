@@ -1,5 +1,5 @@
 import type { Item, MapDefinition, Profile, ProfileResult } from './types';
-import { affixPool, GEAR_SPECIALS, RARITIES } from './equipment';
+import { affixPool, GEAR_SPECIALS, RARITIES, rollQuality } from './equipment';
 import { rollPercent } from './world';
 
 // Forge (2D-4): enhance, fuse and reroll in the lobby. Pure rules on the profile. Fuse and reroll draw from
@@ -46,24 +46,27 @@ export function fuse(initial: Profile, map: MapDefinition, uid: number): Profile
   const profile = structuredClone(initial); const used = fuseMaterials(profile, map, uid).map(i => i.uid);
   const { item } = findItem(profile, uid)!; const roll = () => rollPercent(profile.seed ^ 0x6f726765, profile.forge++);
   item.rarity++;
-  const pool = affixPool(item.slot).filter(a => !item.affixes.includes(a));
-  while (item.affixes.length < map.equipment.affixCount[item.rarity]! && pool.length) item.affixes.push(pool.splice((roll() * 7919 + roll()) % pool.length, 1)[0]!);
+  const pool = affixPool(map.equipment, item.slot, item.hero).filter(a => !item.affixes.includes(a));
+  const q = item.q ?? { main: 100, affixes: item.affixes.map(() => 100) };
+  while (item.affixes.length < map.equipment.affixCount[item.rarity]! && pool.length) { item.affixes.push(pool.splice((roll() * 7919 + roll()) % pool.length, 1)[0]!); q.affixes.push(rollQuality(map.equipment, roll)); }
+  item.q = q;
   if (item.rarity === RARITIES - 1) item.special = GEAR_SPECIALS[(roll() * 7919 + roll()) % GEAR_SPECIALS.length]!;
   const half = Math.floor((item.plus ?? 0) / 2); if (half) item.plus = half; else delete item.plus;
   profile.items = profile.items.filter(i => !used.includes(i.uid));
   return { profile, event: { type: 'forged', uid, action: 'fuse' } };
 }
-// ---- Reroll: one chosen affix becomes a different one the piece does not have yet ----
+// ---- Reroll: one chosen affix becomes a different one the piece does not have yet, with a fresh roll quality ----
 export function rerollReason(profile: Profile, map: MapDefinition, uid: number, index: number): string {
   const item = findItem(profile, uid)?.item; if (!item || !Number.isInteger(index) || !item.affixes[index]) return 'unknown';
-  if (!affixPool(item.slot).some(a => !item.affixes.includes(a))) return 'maxed';
+  if (!affixPool(map.equipment, item.slot, item.hero).some(a => !item.affixes.includes(a))) return 'maxed';
   return profile.bank.seal < map.equipment.forge.rerollSeals ? 'seal' : '';
 }
 export function reroll(initial: Profile, map: MapDefinition, uid: number, index: number): ProfileResult {
   const reason = rerollReason(initial, map, uid, index); if (reason) return blocked(initial, reason);
   const profile = structuredClone(initial); const { item } = findItem(profile, uid)!;
-  const pool = affixPool(item.slot).filter(a => !item.affixes.includes(a));
-  item.affixes[index] = pool[(rollPercent(profile.seed ^ 0x6f726765, profile.forge++) * 7919 + rollPercent(profile.seed ^ 0x6f726765, profile.forge++)) % pool.length]!;
+  const pool = affixPool(map.equipment, item.slot, item.hero).filter(a => !item.affixes.includes(a)); const roll = () => rollPercent(profile.seed ^ 0x6f726765, profile.forge++);
+  item.affixes[index] = pool[(roll() * 7919 + roll()) % pool.length]!;
+  const q = item.q ?? { main: 100, affixes: item.affixes.map(() => 100) }; q.affixes[index] = rollQuality(map.equipment, roll); item.q = q;
   profile.bank.seal -= map.equipment.forge.rerollSeals;
   return { profile, event: { type: 'forged', uid, action: 'reroll' } };
 }

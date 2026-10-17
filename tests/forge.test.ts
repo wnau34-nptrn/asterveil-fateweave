@@ -31,7 +31,7 @@ describe('enhance', () => {
     let p = equip(rich([item({ rarity: 1, affixes: ['hp'] })]), 'guardian', 1).profile;
     p = enhance(p, map, 1).profile;
     expect(findItem(p, 1)).toMatchObject({ owner: 'guardian', item: { plus: 1 } });
-    expect(itemStats(map.equipment, findItem(p, 1)!.item)).toEqual({ hp: Math.round(15 * 1.06) + 8 });
+    expect(itemStats(map.equipment, findItem(p, 1)!.item)).toEqual({ hp: Math.round(15 * 1.06) + 8, armour: Math.round(4.6 * 1.06) });
     expect(salvageValue(map, item({ rarity: 1, plus: 4 }))).toEqual({ ore: 3, dust: 2 + 4 });
   });
 });
@@ -39,7 +39,7 @@ describe('enhance', () => {
 describe('fuse', () => {
   it('three of one slot and rarity become the main piece one rarity up; it keeps its set, class and level and gains an affix', () => {
     const main = item({ uid: 1, rarity: 1, affixes: ['hp'], set: 'thorn', plus: 5, level: 8 });
-    let p = rich([main, item({ uid: 2, rarity: 1, affixes: ['attack'], plus: 2 }), item({ uid: 3, rarity: 1, affixes: ['skill'] }), item({ uid: 4, rarity: 1, affixes: ['heal'] }), item({ uid: 5, slot: 'head', rarity: 1, affixes: ['hp'] })]);
+    let p = rich([main, item({ uid: 2, rarity: 1, affixes: ['armour'], plus: 2 }), item({ uid: 3, rarity: 1, affixes: ['resist'] }), item({ uid: 4, rarity: 1, affixes: ['barrier'] }), item({ uid: 5, slot: 'head', rarity: 1, affixes: ['hp'] })]);
     // The cheapest matching pieces are used: no enhance first.
     expect(fuseMaterials(p, map, 1).map(i => i.uid)).toEqual([3, 4]);
     p = fuse(p, map, 1).profile;
@@ -49,7 +49,7 @@ describe('fuse', () => {
     expect(itemValid(map, up, ids)).toBe(true);
   });
   it('an epic piece fuses into a legendary with a special; legendary cannot fuse; too few pieces are refused', () => {
-    const epic = (uid: number) => item({ uid, rarity: 3, affixes: ['hp', 'attack', 'skill'] });
+    const epic = (uid: number) => item({ uid, rarity: 3, affixes: ['hp', 'armour', 'resist'] });
     const p = fuse(rich([epic(1), epic(2), epic(3)]), map, 1).profile;
     expect(p.items[0]).toMatchObject({ rarity: 4 }); expect(p.items[0]!.special).toBeDefined(); expect(itemValid(map, p.items[0]!, ids)).toBe(true);
     expect(fuseReason(p, map, 1)).toBe('maxed');

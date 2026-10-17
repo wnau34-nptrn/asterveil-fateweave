@@ -2,11 +2,11 @@ import { entryReason, withParty } from '../battle/engine';
 import type { ActionId, Command } from '../battle/types';
 import { COMPANY_CAP, PARTY_SLOTS, RESERVE_SLOTS, type ActiveBattle, type ExpeditionState, type MapDefinition, type Point, type Profile, type Roster, type RunOutcome } from '../world/types';
 import { battleState, expToNext, findTiles, newExpedition, finishBattle, fullParty, heroCatalog, heroDef, memberDef, rosterIds, tileAt, type EncounterLookup } from '../world/world';
-import { itemValid } from '../world/equipment';
+import { affixPool, itemValid } from '../world/equipment';
 import { boulderAt, openPit, passableWall } from '../world/puzzles';
 import { commanderReason, newProfile, settle, talentsValid } from '../world/profile';
-import type { Item, MemberProgress, Potions, Talents } from '../world/types';
-import { POTION_IDS, SHOP_ITEMS, type ShopItemId } from '../world/types';
+import type { GearSlot, GearStat, Item, MemberProgress, Potions, Talents } from '../world/types';
+import { GEAR_SLOTS, POTION_IDS, SHOP_ITEMS, type ShopItemId } from '../world/types';
 
 export interface StoragePort { getItem(key: string): string | null; setItem(key: string, value: string): void; removeItem?(key: string): void }
 export const expeditionKey = 'asterveil.fateweave.expedition.v1';
@@ -40,7 +40,10 @@ export const legacyKeys = ['asterveil.fateweave.battle.v1', 'asterveil.fateweave
 // runs start with the camp they last reached and no returns.
 // v19 → v20 (map bag): run members may wear items found this run (uid 0) and the run gains `spare`, the
 // company's own items taken off on the map (older runs: none). The run's own items must match the profile's.
-const SAVE_VERSION = 20;
+// v20 → v21 (stats design): items may carry roll qualities `q` (older items: 100%). The `skill` and `heal` affixes
+// become `support`; an affix the slot can no longer roll (or a duplicate) becomes the first stat of the slot's pool
+// the item does not have yet.
+const SAVE_VERSION = 21;
 export interface Game { profile: Profile; run: ExpeditionState | null }
 const actions: readonly ActionId[] = ['attack', 'guard', 'bash', 'mark', 'execute', 'bolt', 'ward', 'heal', 'prayer', 'brace', 'pierce', 'hinder', 'volley', 'acid', 'haste', 'ambush', 'evade', 'taunt', 'slam', 'valor', 'mend',
   'rally', 'finisher', 'sigil', 'sanctuary', 'spearwall', 'weakshot', 'bomb', 'backstab', 'quake', 'finale'];
@@ -338,9 +341,25 @@ function settleFinished(game: Game, map: MapDefinition): Game {
   if (!run.battle && rosterIds(run).every(id => run.hp[id] === 0)) return { profile: settle(game.profile, run, 'wiped', map), run: null };
   return game;
 }
+// v20 → v21: rewrites every item in the envelope (bag, worn, found, spare) to the stats-design affix pools.
+function migrateItems(v: unknown, map: MapDefinition): void {
+  if (Array.isArray(v)) { v.forEach(x => migrateItems(x, map)); return; }
+  if (!v || typeof v !== 'object') return;
+  const o = v as Record<string, unknown>;
+  if (typeof o.slot === 'string' && Array.isArray(o.affixes) && (GEAR_SLOTS as readonly string[]).includes(o.slot)) {
+    const pool = affixPool(map.equipment, o.slot as GearSlot, typeof o.hero === 'string' ? o.hero : undefined); const out: string[] = [];
+    for (const a of o.affixes as unknown[]) {
+      const named = a === 'skill' || a === 'heal' ? 'support' : a;
+      out.push(typeof named === 'string' && pool.includes(named as GearStat) && !out.includes(named) ? named : pool.find(p => !out.includes(p) && !(o.affixes as unknown[]).includes(p)) ?? pool.find(p => !out.includes(p)) ?? String(named));
+    }
+    o.affixes = out; return;
+  }
+  for (const x of Object.values(o)) migrateItems(x, map);
+}
 export function parseGame(raw: string, map: MapDefinition, lookup: EncounterLookup): Game {
   const envelope = obj(JSON.parse(raw)); const version = envelope.version as number;
-  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
+  if (version < 21) migrateItems(envelope, map);
+  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
   if (version < 5) {
     const run = parseRun(envelope.state, version, map, lookup);
     const profile = newProfile(map, (run.seed ^ 0x5bd1e995) >>> 0);

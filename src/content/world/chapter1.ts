@@ -142,11 +142,19 @@ export const chapterOne: MapDefinition = {
   // Equipment (2D-2, draft numbers; docs/EXPEDITION_DESIGN.md "Equipment").
   equipment: {
     bagCap: 60,
+    // Stats design (owner-approved 2026-10-17, draft numbers): attack and support are percents; armour/resist/leech
+    // are battle percents; regen and luck work on the map. Each value rolls 80–120% of its level value.
     slotStats: {
-      weapon: { attack: [2, 0.5], skill: [3, 1] }, head: { hp: [4, 1], skill: [1, 0.5] }, body: { hp: [7, 2] },
-      gloves: { attack: [1, 0.35], skill: [1, 0.5] }, boots: { hp: [4, 1], speed: [1, 0.25] }, charm: { skill: [4, 1] },
+      weapon: { attack: [8, 1.5] }, supportWeapon: { support: [8, 1.5] }, head: { hp: [4, 1], resist: [3, 0.4] }, body: { hp: [7, 2], armour: [3, 0.4] },
+      gloves: { attack: [4, 1] }, boots: { hp: [4, 1], speed: [1, 0.25] }, charm: { support: [6, 1.2] },
     },
-    affixStats: { hp: [4, 1], attack: [1, 0.35], skill: [2, 0.5], heal: [4, 1], barrier: [3, 0.5], speed: [1, 0.15] },
+    affixStats: { hp: [4, 1], attack: [3, 0.7], support: [3, 0.7], speed: [1, 0.15], armour: [2, 0.4], resist: [2, 0.4], leech: [3, 0.5], barrier: [3, 0.5], regen: [2, 0.3], luck: [2, 0.3] },
+    affixPools: {
+      weapon: ['attack', 'leech', 'hp'], supportWeapon: ['support', 'hp', 'resist'], head: ['hp', 'resist', 'support', 'luck'], body: ['hp', 'armour', 'resist', 'barrier'],
+      gloves: ['attack', 'leech', 'support'], boots: ['speed', 'hp', 'regen'], charm: ['support', 'attack', 'luck', 'speed'],
+    },
+    supportHeroes: ['healer', 'toma', 'lio'],
+    quality: [80, 120], regenSteps: 5, luckCap: 15,
     affixCount: [0, 1, 2, 3, 3],
     dropPercent: 35, pity: 6,
     rarityWeights: [55, 28, 12, 4, 1], bossRarityWeights: [0, 0, 20, 45, 35], bossDrops: 3, wipeKeep: 1,
@@ -156,12 +164,12 @@ export const chapterOne: MapDefinition = {
     // Forge (2D-4, draft numbers): caps +5/+10/+15/+20/+25, +6% base stats per level.
     forge: { plusCap: [5, 10, 15, 20, 25], plusPercent: 6, ore: 3, orePerPlus: 1, dustPerPlus: 0.5, fuseCount: 3, rerollSeals: 1, salvageDustPerPlus: 1, smeltOre: 8, smeltCap: 30 },
     sets: {
-      dawn: { two: { stat: 'hp', value: 10 }, four: { kind: 'barrier', amount: 12 } },
-      wind: { two: { stat: 'speed', value: 3 }, four: { kind: 'firstStrike', amount: 0 } },
-      shadow: { two: { stat: 'attack', value: 8 }, four: { kind: 'freshHit', amount: 6 } },
-      thorn: { two: { stat: 'hp', value: 6 }, four: { kind: 'thorns', amount: 6 } },
-      starveil: { two: { stat: 'skill', value: 10 }, four: { kind: 'freeCast', amount: 0 } },
-      mender: { two: { stat: 'heal', value: 15 }, four: { kind: 'overflow', amount: 8 } },
+      dawn: { two: [{ stat: 'hp', value: 10 }], four: { kind: 'barrier', amount: 12 } },
+      wind: { two: [{ stat: 'speed', value: 3 }], four: { kind: 'firstStrike', amount: 0 } },
+      shadow: { two: [{ stat: 'attack', value: 8 }], four: { kind: 'freshHit', amount: 6 } },
+      thorn: { two: [{ stat: 'hp', value: 6 }], four: { kind: 'thorns', amount: 6 } },
+      starveil: { two: [{ stat: 'attack', value: 6 }, { stat: 'support', value: 6 }], four: { kind: 'freeCast', amount: 0 } },
+      mender: { two: [{ stat: 'support', value: 12 }], four: { kind: 'overflow', amount: 8 } },
     },
   },
 };

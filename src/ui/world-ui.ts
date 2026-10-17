@@ -5,7 +5,7 @@ import { canManage, expToNext, wearReason, type BagList, travelTargets, atCamp, 
 import { GEAR_SLOTS, PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS } from '../core/world/types';
 import { actorArt, portraitsUrl, sheetRows } from '../game/visuals/assets';
 import { SOURCE_TILE, openingFrame, chestFrame, decorAt, itemFrame, floorFrame, fogLayers, landmarkAt, tileSizeFor, tileset, worldArtUrl, type Landmark } from '../game/visuals/world-art';
-import { questLine, choiceText, eventChoices, eventReasonText, eventText, heroText, itemLines, itemName, itemOwner, passiveText, potionText, resourceOrder, resourceText, skillDescription, slotIcon, slotText, wornSets } from './th';
+import { heroStatLine, questLine, choiceText, eventChoices, eventReasonText, eventText, heroText, itemLines, itemName, itemOwner, passiveText, potionText, resourceOrder, resourceText, skillDescription, slotIcon, slotText, wornSets } from './th';
 import { icon, type IconName } from './icons';
 import { gearArt, potionArt } from './equip-art';
 import { boulderPosition, doorOpen, openPit, secretAt } from '../core/world/puzzles';
@@ -387,7 +387,7 @@ export class WorldUI {
         <span class="gear-actions"><button id="wear-${from}-${index}" data-world="bag-wear" data-from="${from}" data-index="${index}" class="primary"${reason ? ' disabled' : ''}>${reason === 'class' ? 'คนอื่นใช้' : reason ? 'ใส่ไม่ได้ตอนนี้' : 'ใส่'}</button></span></li>`;
     }).join('');
     const sets = wornSets(rules, m?.gear);
-    return `<div role="tabpanel">${picker}<p class="gear-stats"><b>${heroText[id]!.name}</b> Lv${m?.level ?? 1} · เลือด ${s.hp[id] ?? 0}/${h.maxHp} · พลังโจมตี ${h.attack} · พลังเสริม +${h.skillBonus ?? 0}% · SPD ${h.speed}</p>
+    return `<div role="tabpanel">${picker}<p class="gear-stats"><b>${heroText[id]!.name}</b> Lv${m?.level ?? 1} · ${heroStatLine(h, s.hp[id] ?? 0)}</p>
       <div class="gear-slots">${slots}</div>${detail}
       ${sets.length ? `<ul class="gear-sets" aria-label="ชุดอุปกรณ์ที่ใส่">${sets.map(w => `<li><b>ชุด${w.name}</b> <span>${w.pieces}/4 ชิ้น</span><small class="${w.pieces >= 2 ? 'on' : ''}">2 ชิ้น: ${w.two}</small><small class="${w.pieces >= 4 ? 'on' : ''}">4 ชิ้น: ${w.four}</small></li>`).join('')}</ul>` : ''}
       <h3>${icon('pack')} ในกระเป๋า${slot ? ` · ${slotText[slot]}` : ''} <span class="camp-embers">${entries.length} ชิ้น · แตะช่องเพื่อกรอง</span></h3>
@@ -408,7 +408,7 @@ export class WorldUI {
     const gear = GEAR_SLOTS.map(sl => m?.gear?.[sl]).filter((i): i is Item => !!i);
     return `<div class="hire-preview bag-detail" aria-label="ข้อมูล${text.name}">
       <div class="hire-preview-head">${portrait(id)}<div><h3>${text.name}</h3><p>${text.role} · ${h.lane === 'front' ? 'แนวหน้า' : 'แนวหลัง'} · ${this.starRow(stars)}</p><p>Lv${level}${level < this.map.progression.levelCap ? ` · EXP ${m?.exp ?? 0}/${expToNext(this.map, level)}` : ' · เลเวลสูงสุด'}${m?.wound ? ` · บาดแผล −${m.wound}% เลือดสูงสุด` : ''}</p><p class="hire-preview-help">${text.help}</p></div></div>
-      <dl class="hire-stats"><div><dt>เลือด</dt><dd>${s.hp[id] ?? 0}/${h.maxHp}</dd></div><div><dt>พลังโจมตี</dt><dd>${h.attack}</dd></div><div><dt>ความเร็ว</dt><dd>${h.speed}</dd></div></dl>
+      <dl class="hire-stats"><div><dt>เลือด</dt><dd>${s.hp[id] ?? 0}/${h.maxHp}</dd></div><div><dt>พลังโจมตี</dt><dd>${h.attack}</dd></div><div><dt>ความเร็ว</dt><dd>${h.speed}</dd></div><div><dt>พลังเสริม</dt><dd>+${h.skillBonus ?? 0}%</dd></div>${[['เกราะ', h.armour], ['ต้านพลังงาน', h.resist], ['ดูดเลือด', h.leech]].filter(([, v]) => v).map(([n, v]) => `<div><dt>${n}</dt><dd>${v}%</dd></div>`).join('')}</dl>
       ${skills ? `<h4>สกิล</h4><ul class="hire-skills">${skills}</ul>` : ''}
       ${unlockRows ? `<h4>ปลดล็อกด้วยดาว</h4>${unlockRows}` : ''}
       <h4>อุปกรณ์ <small>${gear.length}/6</small></h4>${gear.length ? `<ul class="pack-gear">${gear.map(i => `<li data-rarity="${i.rarity}">${gearArt(i)}<div><b>${itemName(i)} Lv${i.level}</b><small>${itemLines(this.map.equipment, i).join(' · ')}</small></div></li>`).join('')}</ul>` : '<p class="camp-note">ยังไม่ได้ใส่อุปกรณ์</p>'}

@@ -172,7 +172,7 @@ function runExpedition(start: ExpeditionState, policy: Policy, style: Style, rep
     if (!best && !leaving) best = nearest(pending.filter(t => lv(t.at) <= easiest + 2).map(t => t.at)) ?? nearest(pending.map(t => t.at));
     if (!best && !leaving && questComplete(s, map)) best = nearest([s.bossDefeated ? goal : boss]);
     if (!best) return { state: s, outcome: 'withdrawn' };
-    const r = move(s, map, best.step!.dir);
+    const r = move(s, map, best.step!.dir, lookup);
     if (r.event.type === 'blocked') { const t = plan.find(x => same(x.at, best.t)); if (t) skipped.add(t.id); else return { state: s, outcome: 'withdrawn' }; continue; }
     s = r.state;
     if (r.event.type === 'event') { s = chooseFor(s); if (!s.battle && pendingEvent(s, map)) { const t = plan.find(x => same(x.at, s.position)); if (t) skipped.add(t.id); } }
