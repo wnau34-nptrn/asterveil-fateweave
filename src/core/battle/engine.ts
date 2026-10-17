@@ -55,10 +55,13 @@ export function targetKind(action: ActionId): TargetKind {
 // A scout's ambush strikes harder at an enemy that still has its turn ahead in the current round.
 export const ambushBonus = (state: BattleState, data: EncounterDefinition, enemyId: string, heroId?: string): number =>
   state.order.indexOf(enemyId) > state.turnIndex ? ambushBonusOf(data, heroId) : 0;
-// Skill power as cast by this hero (stars and levels add a percentage, talents a flat amount).
+// Support skills scale with Support (`skillBonus`); every other skill with power deals damage and scales with
+// Attack (`damageBonus`). Talents add a flat amount on top (stats design 2026-10-17).
+export const SUPPORT_SKILLS: readonly ActionId[] = ['ward', 'heal', 'prayer', 'valor', 'mend'];
 export function skillPower(data: EncounterDefinition, heroId: string, action: ActionId): number {
   const hero = data.heroes.find(h => h.id === heroId);
-  return Math.round(data.skills[action].power * (100 + (hero?.skillBonus ?? 0)) / 100) + (hero?.talents?.power?.[action] ?? 0);
+  const bonus = SUPPORT_SKILLS.includes(action) ? hero?.skillBonus : hero?.damageBonus;
+  return Math.round(data.skills[action].power * (100 + (bonus ?? 0)) / 100) + (hero?.talents?.power?.[action] ?? 0);
 }
 // Extra damage a hero's own hits gain from its capstones (duelist deep mark, archer hunter) and mark-hunter gear.
 export function talentHitBonus(state: BattleState, data: EncounterDefinition, heroId: string, enemy: EnemyState): number {

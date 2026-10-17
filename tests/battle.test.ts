@@ -39,7 +39,7 @@ describe('spear brace (Garran)', () => {
     expect(targetOptions(s, whelp, 'garran', 'brace')[0]!.valid).toBe(false);
     while (currentHeroId(s, whelp) !== 'garran') s = act(s, 'attack', 'brute', whelp).state;
     expect(s.counter).toBeNull();
-    const starred = withParty(data, [{ ...garran, skillBonus: 16 }, tracer!, weaver!, healer!]);
+    const starred = withParty(data, [{ ...garran, damageBonus: 16 }, tracer!, weaver!, healer!]);
     expect(skillPower(starred, 'garran', 'brace')).toBe(16);
   });
   it('replays and previews identically', () => {

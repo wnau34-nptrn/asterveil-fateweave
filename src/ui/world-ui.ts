@@ -387,7 +387,7 @@ export class WorldUI {
         <span class="gear-actions"><button id="wear-${from}-${index}" data-world="bag-wear" data-from="${from}" data-index="${index}" class="primary"${reason ? ' disabled' : ''}>${reason === 'class' ? 'คนอื่นใช้' : reason ? 'ใส่ไม่ได้ตอนนี้' : 'ใส่'}</button></span></li>`;
     }).join('');
     const sets = wornSets(rules, m?.gear);
-    return `<div role="tabpanel">${picker}<p class="gear-stats"><b>${heroText[id]!.name}</b> Lv${m?.level ?? 1} · เลือด ${s.hp[id] ?? 0}/${h.maxHp} · พลังโจมตี ${h.attack} · พลังสกิล +${h.skillBonus ?? 0}% · SPD ${h.speed}</p>
+    return `<div role="tabpanel">${picker}<p class="gear-stats"><b>${heroText[id]!.name}</b> Lv${m?.level ?? 1} · เลือด ${s.hp[id] ?? 0}/${h.maxHp} · พลังโจมตี ${h.attack} · พลังเสริม +${h.skillBonus ?? 0}% · SPD ${h.speed}</p>
       <div class="gear-slots">${slots}</div>${detail}
       ${sets.length ? `<ul class="gear-sets" aria-label="ชุดอุปกรณ์ที่ใส่">${sets.map(w => `<li><b>ชุด${w.name}</b> <span>${w.pieces}/4 ชิ้น</span><small class="${w.pieces >= 2 ? 'on' : ''}">2 ชิ้น: ${w.two}</small><small class="${w.pieces >= 4 ? 'on' : ''}">4 ชิ้น: ${w.four}</small></li>`).join('')}</ul>` : ''}
       <h3>${icon('pack')} ในกระเป๋า${slot ? ` · ${slotText[slot]}` : ''} <span class="camp-embers">${entries.length} ชิ้น · แตะช่องเพื่อกรอง</span></h3>

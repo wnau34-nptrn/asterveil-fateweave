@@ -26,8 +26,11 @@ export interface SkillDefinition { name: string; english: string; icon: string; 
 export interface HeroDefinition {
   id: string; name: string; role: string; lane: 'front' | 'back'; maxHp: number; attack: number; speed: number;
   actions: readonly ActionId[]; color: number; empoweredByStatuses?: boolean;
-  // Percent added to this hero's skill power (stars). Attack and max HP are scaled directly.
+  // Support (stats 2026-10-17): percent added to support skills (heals, shields, songs) from stars, levels, talents and gear.
   skillBonus?: number;
+  // Percent added to damaging skills: the hero's Attack growth over its class base (stars, levels, talents, gear),
+  // so a skill hits as hard at ★1 Lv1 as its listed power and grows with Attack.
+  damageBonus?: number;
   // Class unlocks: the ★3 skill joins `actions` and the ★5 passive becomes `passive` (world `starred`).
   unlocks?: { skill: ActionId; passive: PassiveId };
   passive?: PassiveId;

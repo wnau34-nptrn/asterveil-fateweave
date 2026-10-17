@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { encounterById as lookup } from '../src/content/encounters/catalog';
 import { veilSiege } from '../src/content/encounters/veil-siege';
 import { chapterOne as map } from '../src/content/world/chapter1';
-import { createBattle, currentHeroId, resolveCommand, roundOrder, withParty } from '../src/core/battle/engine';
+import { createBattle, currentHeroId, resolveCommand, roundOrder, skillPower, withParty } from '../src/core/battle/engine';
 import type { ActionId, BattleState, EncounterDefinition } from '../src/core/battle/types';
 import { parseGame } from '../src/core/save/expedition-save';
 import { gearTotals, itemValid, rollItem } from '../src/core/world/equipment';
@@ -62,7 +62,8 @@ describe('set bonuses', () => {
     const s = until(createBattle(d), d, 'weaver'); const p = until(createBattle(plain), plain, 'weaver');
     const pending = s.order.indexOf('brute') > s.turnIndex;
     const hit = (data: EncounterDefinition, st: BattleState) => act(st, data, 'bolt', 'brute').turns[0]!.events.find(e => e.type === 'damage')!.amount!;
-    expect(hit(d, s) - hit(plain, p)).toBe(pending ? 6 : 0);
+    // The 2-piece Attack % also raises Arcane Bolt (damaging skills scale with Attack); the 4-piece adds 6 on top.
+    expect(hit(d, s) - hit(plain, p)).toBe((pending ? 6 : 0) + skillPower(d, 'weaver', 'bolt') - skillPower(plain, 'weaver', 'bolt'));
     expect(pending).toBe(true);
   });
   it('star-veil ×4: the first skill of the battle has no cooldown, the second does', () => {

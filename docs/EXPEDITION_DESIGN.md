@@ -986,3 +986,38 @@ Save v20: the run gains `spare` (older runs: none), and run members may wear fin
 Phones show only the bag icon, ore and new gear on the capsule; wider screens also show gold, embers, seals and potions.
 
 Tests: `tests/map-bag.test.ts` (wear, take off, party away from camp, settle on finish and wipe, save v20) and the browser test "map bag".
+
+## Chapters: two short teaching maps before the rift frontier (owner-approved 2026-10-17)
+
+The current map becomes map 3, "แนวรอยแยก". Two short new maps come before it and teach the systems in order. Each one is a real expedition, not a practice mode.
+
+| Map | Size and time | Levels | Teaches |
+|---|---|---|---|
+| 1. ซากชายแดน | about 12×10, 8–12 min | 1–3 | Moving, battle, chests, potions, wearing gear from the bag, camp rest, a small boss. The prologue and the first clash move here. |
+| 2. เส้นทางป่าทึบ | about 16×14, 15–20 min | 3–6 | Events, elites (forced and optional), a simple puzzle, reserve swaps, camp travel, herbs. |
+| 3. แนวรอยแยก | the current map | about 6–15 | Everything: rift seal, mini-boss, rift warden. |
+
+### Lobby
+
+- Lobby systems unlock in order.
+- Each camp NPC gives one skippable guided task with a small reward. The maps guarantee the materials each task needs:
+  - after map 1: forge enhance, a talent point and brewing;
+  - after map 2: hiring, the 4 + 4 team, and a ★2 upgrade (map 2's boss drops a duplicate contract).
+
+### Decisions
+
+| Decision | Choice |
+|---|---|
+| Map names | as listed above |
+| Level cap | rises to 15, and map 3 moves up |
+| Existing companies | anyone who already cleared the frontier counts maps 1–2 as cleared |
+| Running expedition | keeps its map id |
+| Order of work | the stats work (docs/STATS_DESIGN.md) comes first, so the tutorials teach the final systems |
+
+### Technical plan
+
+1. Split game-wide rules (company, progression, equipment, potions, shop, talents, mercenaries) out of `MapDefinition`.
+2. A map choice in the Lobby. Choosing a chapter is not choosing rooms on the board.
+3. Save v21: cleared maps and guided tasks.
+4. Build map 1, then map 2.
+5. Re-level map 3 and simulate all three maps.

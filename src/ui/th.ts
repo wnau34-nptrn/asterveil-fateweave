@@ -108,7 +108,7 @@ const capText: Record<TalentCap, { actions: readonly ActionId[]; help: (n: numbe
   chorus: { actions: ['valor'], help: n => `ระหว่างเพลงกล้า การโจมตีของศัตรูทุกครั้งเบาลง ${n}` },
   overture: { actions: ['mend'], help: () => 'เริ่มศึกพร้อมเพลงฟื้นที่บรรเลงอยู่แล้ว' },
 };
-const talentStatName = { hp: 'เลือดสูงสุด', attack: 'พลังโจมตี', skill: 'พลังสกิล' } as const;
+const talentStatName = { hp: 'เลือดสูงสุด', attack: 'พลังโจมตี', skill: 'พลังเสริม' } as const;
 // What one node does (per rank for multi-rank nodes); `data` names the skills.
 export function talentHelp(node: TalentNodeDef, data: EncounterDefinition): string {
   const e = node.effect; const per = node.max > 1 ? ' ต่อขั้น' : '';
@@ -214,13 +214,13 @@ export const slotIcon = { weapon: 'gearWeapon', head: 'gearHead', body: 'gearBod
 export const rarityText = ['ธรรมดา', 'ดี', 'หายาก', 'ล้ำค่า', 'ตำนาน'] as const;
 const weaponText: Record<string, string> = { guardian: 'ดาบอัศวิน', tracer: 'ดาบนักดวล', weaver: 'คทาเวท', healer: 'ไม้เท้าศักดิ์สิทธิ์', garran: 'ทวน', mira: 'ธนู', toma: 'ชุดขวดแร่', sefa: 'มีดสั้น', brann: 'ค้อนรูน', lio: 'พิณรูน' };
 const statText: Record<GearStat, (n: number) => string> = {
-  hp: n => `เลือด +${n}`, attack: n => `พลังโจมตี +${n}`, skill: n => `พลังสกิล +${n}%`, heal: n => `พลังรักษา +${n}%`, barrier: n => `โล่เริ่มศึก ${n}`, speed: n => `SPD +${n}`,
+  hp: n => `เลือด +${n}`, attack: n => `พลังโจมตี +${n}`, skill: n => `พลังเสริม +${n}%`, heal: n => `พลังรักษา +${n}%`, barrier: n => `โล่เริ่มศึก ${n}`, speed: n => `SPD +${n}`,
 };
 export const specialText: Record<GearSpecial, string> = {
   laststand: 'ครั้งแรกในศึกที่จะล้ม เหลือเลือด 1', markhunter: 'โจมตีศัตรูที่ติดตรา +8', renewal: 'ฟื้นเลือด 4 เมื่อเริ่มเทิร์นของตัวเอง',
 };
 export const itemName = (item: Item): string => `${item.slot === 'weapon' ? weaponText[item.hero!] ?? 'อาวุธ' : slotText[item.slot]}${rarityText[item.rarity]}${item.plus ? ` +${item.plus}` : ''}`;
-export const statName: Record<GearStat, string> = { hp: 'เลือด', attack: 'พลังโจมตี', skill: 'พลังสกิล', heal: 'พลังรักษา', barrier: 'โล่เริ่มศึก', speed: 'SPD' };
+export const statName: Record<GearStat, string> = { hp: 'เลือด', attack: 'พลังโจมตี', skill: 'พลังเสริม', heal: 'พลังรักษา', barrier: 'โล่เริ่มศึก', speed: 'SPD' };
 // Base stats first, then affixes; a legendary special and the set at the end.
 export function itemLines(rules: EquipmentRules, item: Item): string[] {
   const stats = itemStats(rules, item);
@@ -229,7 +229,7 @@ export function itemLines(rules: EquipmentRules, item: Item): string[] {
 }
 // ---- Equipment sets (2D-3) ----
 export const setText: Record<SetId, string> = { dawn: 'ผู้พิทักษ์รุ่งอรุณ', wind: 'สายลมเร็ว', shadow: 'นักล่าเงา', thorn: 'หนามสวน', starveil: 'เวทแสงดาว', mender: 'ผู้เยียวยา' };
-const twoText = (t: SetDefinition['two']) => t.stat === 'speed' ? `SPD +${t.value}` : `${({ hp: 'เลือด', attack: 'พลังโจมตี', skill: 'พลังสกิล', heal: 'พลังรักษา' } as const)[t.stat]} +${t.value}%`;
+const twoText = (t: SetDefinition['two']) => t.stat === 'speed' ? `SPD +${t.value}` : `${({ hp: 'เลือด', attack: 'พลังโจมตี', skill: 'พลังเสริม', heal: 'พลังรักษา' } as const)[t.stat]} +${t.value}%`;
 const fourText = (f: SetDefinition['four']) => ({
   barrier: `เริ่มศึกพร้อมโล่ ${f.amount}`, firstStrike: 'รอบแรกของศึกลงมือก่อนทุกคน', freshHit: `ตีศัตรูที่ยังไม่ลงมือในรอบนี้ +${f.amount}`,
   thorns: `โดนตีกายภาพแล้วสวน ${f.amount}`, freeCast: 'สกิลแรกในแต่ละศึกไม่ติดคูลดาวน์', overflow: `รักษาเกินเลือดเต็มกลายเป็นโล่ (สูงสุด ${f.amount})`,

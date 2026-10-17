@@ -50,13 +50,15 @@ describe('talent trees: content and stats', () => {
     const base = heroDef(lookup, map, 'guardian')!;
     const t = member('guardian', { root: 1, b1: 2, a1: 2 });
     expect(t.maxHp).toBe(Math.round(base.maxHp * 1.15)); expect(t.attack).toBe(Math.round(base.attack * 1.08));
-    expect(member('weaver', { root: 1, a1: 2 }).skillBonus).toBe(12);
+    // Stats design (2026-10-17): the mage's nodes are Attack %, which feeds damaging skills (damageBonus), not Support.
+    expect(member('weaver', { root: 1, a1: 2 })).toMatchObject({ damageBonus: 12, skillBonus: 0 });
     // Talents add to stars and levels.
     expect(starred(base, 2, map, 3, { root: 1 }).maxHp).toBe(Math.round(base.maxHp * (100 + 8 + 6 + 5) / 100));
   });
   it('flat skill nodes add to skill power', () => {
     const d = party([['guardian', { root: 1, a1: 1, a2: 2 }], ...rest]);
-    expect(skillPower(d, 'guardian', 'bash')).toBe(skillPower(veilSiege, 'guardian', 'bash') + 8);
+    // a1 (+4% Attack) also raises Shield Bash now that damaging skills scale with Attack.
+    expect(skillPower(d, 'guardian', 'bash')).toBe(Math.round(skillPower(veilSiege, 'guardian', 'bash') * 1.04) + 8);
   });
 });
 
@@ -123,7 +125,8 @@ describe('knight talents (Aegis)', () => {
     const plain = party([['guardian'], ...rest]); const t = party([['guardian', full(true)], ...rest]);
     const s = until(createBattle(plain), plain, 'guardian'); const target = s.enemies.find(e => nextIntentOf(s, plain, e.id)?.kind === 'physical')!.id;
     const st = until(createBattle(t), t, 'guardian');
-    expect(dealt(act(st, t, 'bash', target), target)).toBe(dealt(act(s, plain, 'bash', target), target) + 8 + 8);
+    // The skill's own growth (Attack % and the flat node) plus the retribution bonus.
+    expect(dealt(act(st, t, 'bash', target), target)).toBe(dealt(act(s, plain, 'bash', target), target) + skillPower(t, 'guardian', 'bash') - skillPower(plain, 'guardian', 'bash') + 8);
   });
   it('guard reduces more and counters the attacker', () => {
     const d = party([['guardian', full(false)], ...rest]);
@@ -164,7 +167,8 @@ describe('mage talents (Eira)', () => {
   });
   it('a thicker ward reflects the first hit it absorbs', () => {
     const d = party([['guardian'], ['tracer'], ['weaver', full(false)], ['healer']]);
-    expect(skillPower(d, 'weaver', 'ward')).toBe(Math.round(14 * 1.04) + 6);
+    // The root node is Attack % now, so the ward (Support) grows only from the flat node.
+    expect(skillPower(d, 'weaver', 'ward')).toBe(14 + 6);
     const s = until(createBattle(d), d, 'weaver'); const intent = s.intent!;
     const { turn } = enemyTurn(s, d, ['ward', intent.targetId], intent.sourceId);
     expect(turn.events.find(e => e.type === 'counter')).toMatchObject({ sourceId: 'weaver', targetId: intent.sourceId, amount: 6 });
@@ -265,7 +269,7 @@ describe('scout talents (Sefa)', () => {
 describe('warden talents (Brann)', () => {
   it('a challenged warden hammers back every hit', () => {
     const d = party([['brann', full(true)], ...rest]);
-    expect(skillPower(d, 'brann', 'slam')).toBe(18 + 8);
+    expect(skillPower(d, 'brann', 'slam')).toBe(Math.round(18 * 1.08) + 8);
     let s = act(until(createBattle(d), d, 'brann'), d, 'taunt', 'brann').state; const counters: number[] = [];
     for (let i = 0; i < 12 && currentHeroId(s, d) !== 'brann'; i++) {
       const r = act(s, d, 'attack', 'brute');

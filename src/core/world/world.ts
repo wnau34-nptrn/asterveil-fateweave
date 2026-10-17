@@ -71,8 +71,10 @@ export function starred(base: HeroDefinition, stars: number, map: MapDefinition,
   const scale = (n: number, extra: number) => Math.round(n * (100 + bonus + extra) / 100);
   // ★3 adds the class's third skill; ★5 switches on its passive.
   const skill = stars >= 3 && base.unlocks && !base.actions.includes(base.unlocks.skill) ? [base.unlocks.skill] : [];
+  // Damaging skills grow with Attack: the same percentages, plus flat gear Attack as a share of the class base.
+  const damageBonus = Math.round((bonus + gained.attack + worn.attackPercent + worn.attack * 100 / base.attack) * 10) / 10;
   return { ...base, maxHp: scale(base.maxHp, gained.hp + worn.hpPercent) + worn.hp, attack: scale(base.attack, gained.attack + worn.attackPercent) + worn.attack, speed: base.speed + worn.speed,
-    skillBonus: bonus + gained.skill + worn.skill, actions: [...base.actions, ...skill],
+    skillBonus: bonus + gained.skill + worn.skill, damageBonus, actions: [...base.actions, ...skill],
     ...(stars >= 5 && base.unlocks ? { passive: base.unlocks.passive } : {}), ...(gained.talents ? { talents: gained.talents } : {}), ...(worn.gear ? { gear: worn.gear } : {}) };
 }
 // Sums spent talent ranks into stat percents and the resolver's `HeroTalents`.

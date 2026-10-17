@@ -1,6 +1,8 @@
-# Stats and gear rolls: design proposal (2026-10-17, awaiting owner approval)
+# Stats and gear rolls (owner-approved 2026-10-17, draft numbers)
 
-Owner request (2026-10-17): more stats than HP, Attack and SPD; gear rolls those stats so no two items are alike; and every stat must fit the whole skill kit of every class. This document is step 1 of the agreed plan: an audit and a full stat × skill × class table. No code changes until it is approved. All numbers are drafts.
+Owner request (2026-10-17): more stats than HP, Attack and SPD; gear rolls those stats so no two items are alike; and every stat must fit the whole skill kit of every class. The owner approved this design and the recommendations for questions A–D on 2026-10-17 ("อนุมัติตามคุณแนะนำ"). All numbers are drafts.
+
+**Status:** step 1 (damaging skills scale with Attack, Support replaces Skill %) is implemented; steps 2–5 are next. Corrode's +6 is a flat rule bonus like Mark and Ambush (answer A), so it stays flat.
 
 ## 1. Audit: what the stats do today
 
