@@ -945,10 +945,10 @@ test('lobby talent tree: its own sheet; spend points level by level, gates show,
 
 test('lobby equipment: its own sheet; equip, class weapons, swap, unequip, salvage with confirmation; saved v9', async ({ page }, info) => {
   const items = [
-    { uid: 1, slot: 'body', rarity: 2, level: 5, affixes: ['hp', 'skill'] },
+    { uid: 1, slot: 'body', rarity: 2, level: 5, affixes: ['hp', 'armour'] },
     { uid: 2, slot: 'body', rarity: 0, level: 1, affixes: [] },
     { uid: 3, slot: 'weapon', rarity: 1, level: 3, hero: 'tracer', affixes: ['attack'] },
-    { uid: 4, slot: 'charm', rarity: 4, level: 10, affixes: ['speed', 'heal', 'barrier'], special: 'laststand' },
+    { uid: 4, slot: 'charm', rarity: 4, level: 10, affixes: ['speed', 'support', 'luck'], special: 'laststand' },
   ];
   const profile = { ...newProfile(map, 5), tutorialDone: true, commander, items, nextItem: 5 } as Profile;
   await seed(page, null, profile);
@@ -1002,7 +1002,7 @@ test('lobby equipment sets: worn pieces light the 2- and 4-piece bonuses', async
 test('lobby forge: enhance, fuse and reroll from its own menu; saved v11', async ({ page }, info) => {
   const body = (uid: number, affixes: string[]) => ({ uid, slot: 'body', rarity: 1, level: 4, affixes });
   const profile = { ...newProfile(map, 5), tutorialDone: true, commander, bank: { ore: 100, gold: 0, seal: 1, dust: 20 },
-    items: [body(1, ['hp']), body(2, ['attack']), body(3, ['skill'])], nextItem: 4, forge: 0 } as Profile;
+    items: [body(1, ['hp']), body(2, ['armour']), body(3, ['resist'])], nextItem: 4, forge: 0 } as Profile;
   await seed(page, null, profile);
   await page.goto('./'); await page.locator('#continue').click();
   await page.locator('#lobby-tab-forge').click();
