@@ -1,0 +1,77 @@
+import { ambushBonus, corrodeBonusOf, guardReductionOf, tauntReductionOf, currentHeroId, skillPower, targetOptions } from '../core/battle/engine';
+import type { ActionId, BattleState, EncounterDefinition } from '../core/battle/types';
+import { actorName } from './th';
+export interface Lesson { step:number; title:string; copy:string; heroId:string; action:ActionId; targetId:string }
+// Reactive advice for the teaching battle. It reads the committed state only and
+// never suggests commanding a hero outside the current SPD turn.
+export function battleLesson(state:BattleState,data:EncounterDefinition):Lesson|undefined {
+ if(state.outcome!=='active')return;
+ const heroId=currentHeroId(state,data); if(!heroId)return;
+ const make=(action:ActionId,targetId:string,title:string,detail:string):Lesson|undefined=>{
+  if(!targetOptions(state,data,heroId,action).some(t=>t.id===targetId&&t.valid))return;
+  return{step:state.commands.length+1,heroId,action,targetId,title,copy:`${actorName(heroId,data)} → ${data.skills[action].name} → ${actorName(targetId,data)} · ${detail}`};
+ };
+ const living=state.enemies.filter(e=>e.hp>0);
+ const target=living.find(e=>e.markedUntil>state.round)??living.find(e=>e.id==='brute')??living[0];
+ if(!target)return;
+ const attack=()=>make('attack',target.id,'โจมตีพื้นฐาน','แตะศัตรูในสนาม');
+ const intent=state.intent;
+ if(heroId==='guardian'){
+  if(intent?.kind==='physical')return make('bash',intent.sourceId,'ขัดจังหวะโจมตีกายภาพ',`${actorName(intent.sourceId,data)} จะเสียเทิร์นโจมตีกายภาพถัดไป`)
+   ??make('guard',intent.targetId,'อ่านแผนศัตรู',`รับแทนและลดพลัง ${intent.damage} → ${Math.ceil(intent.damage*(1-guardReductionOf(data,heroId)))}`)??attack();
+  if(intent)return make('guard',intent.targetId,'อ่านแผนศัตรู',`รับแทนและลดพลัง ${intent.damage} → ${Math.ceil(intent.damage*(1-guardReductionOf(data,heroId)))}`)??attack();
+  return attack();
+ }
+ if(heroId==='toma'){
+  if(!(target.corrodedUntil&&target.corrodedUntil>state.round)){const a=make('acid',target.id,'กรดกัดกร่อนเป้าหลัก',`ทุกการโจมตีของทีม +${corrodeBonusOf(data,heroId)}`);if(a)return a;}
+  // Haste the hardest-hitting standing ally so it strikes first next round.
+  const ally=[...data.heroes].filter(h=>h.id!==heroId&&state.heroes.some(s=>s.id===h.id&&s.hp>0)).sort((a,b)=>b.attack-a.attack)[0];
+  return (ally&&make('haste',ally.id,'ยาเร่งเพื่อนตัวแรง',`${actorName(ally.id,data)} ลงมือก่อนทุกคนรอบหน้า`))??attack();
+ }
+ if(heroId==='mira'){
+  const living2=state.enemies.filter(e=>e.hp>0);
+  if(living2.length>1){const v=make('volley','enemies','ห่าธนูโดนทุกตัว',`ตัวละ ${skillPower(data,heroId,'volley')}`);if(v)return v;}
+  // Hinder the fastest living enemy so it acts last next round.
+  const fast=[...living2].sort((a,b)=>data.enemies.find(e=>e.id===b.id)!.speed-data.enemies.find(e=>e.id===a.id)!.speed)[0];
+  return (fast&&make('hinder',fast.id,'ยิงสกัดศัตรูที่เร็วที่สุด',`${actorName(fast.id,data)} จะลงมือท้ายสุดรอบหน้า`))??attack();
+ }
+ if(heroId==='lio'){
+  // Keep one song playing: mending once the party is worn down, otherwise valor; then attack.
+  const song=state.song?.heroId===heroId?state.song.action:undefined;
+  const worn=state.heroes.some(h=>h.hp>0&&h.hp<data.heroes.find(d=>d.id===h.id)!.maxHp*.5);
+  if(worn&&song!=='mend'){const m=make('mend',heroId,'เพลงฟื้นทั้งทีม',`ทุกคนฟื้น ${skillPower(data,heroId,'mend')} ทุกต้นรอบ`);if(m)return m;}
+  if(!song){const v=make('valor',heroId,'เพลงกล้าเพิ่มพลังทีม',`ทุกการโจมตี +${skillPower(data,heroId,'valor')}`);if(v)return v;}
+  return attack();
+ }
+ if(heroId==='brann'){
+  // Draw the announced hit away from an ally (reduced on him); otherwise slam the main target.
+  if(intent&&intent.targetId!==heroId){const t=make('taunt',heroId,'ยั่วยุดึงการโจมตี',`${actorName(intent.sourceId,data)} จะตีแบรนน์แทน${actorName(intent.targetId,data)} และเบาลง ${Math.round(tauntReductionOf(data,heroId)*100)}%`);if(t)return t;}
+  return make('slam',target.id,'ทุบค้อนรูน',`พลัง ${skillPower(data,heroId,'slam')}`)??attack();
+ }
+ if(heroId==='sefa'){
+  // Step aside from the announced hit; otherwise ambush an enemy that still has to act this round.
+  if(intent?.targetId===heroId){const e=make('evade',heroId,'ก้าวเงาหลบการโจมตี',`${actorName(intent.sourceId,data)} จะตีพลาด`);if(e)return e;}
+  const pending=[target,...living].find(e=>ambushBonus(state,data,e.id,heroId)>0);
+  const pick=pending??target;
+  return make('ambush',pick.id,'จู่โจมก่อนศัตรูขยับ',`พลัง ${skillPower(data,heroId,'ambush')+ambushBonus(state,data,pick.id,heroId)}`)??attack();
+ }
+ if(heroId==='garran'){
+  const front=intent?.kind==='physical'&&data.heroes.find(h=>h.id===intent.targetId)?.lane==='front';
+  if(front)return make('brace',heroId,'ตั้งทวนรอสวน',`${actorName(intent!.sourceId,data)} จะโดนแทงสวน ${skillPower(data,heroId,'brace')}`)??make('pierce',target.id,'แทงทะลวง',`พลัง ${skillPower(data,heroId,'pierce')}`)??attack();
+  return make('pierce',target.id,'แทงทะลวง',`พลัง ${skillPower(data,heroId,'pierce')}`)??attack();
+ }
+ if(heroId==='tracer'){
+  if(target.markedUntil>state.round)return make('execute',target.id,'ตีเป้าเดิมเพื่อใช้ตรา',`พลัง ${skillPower(data,heroId,'execute')+data.rules.markedBonus}`)??make('attack',target.id,'ตีเป้าเดิมเพื่อใช้ตรา',`เพิ่มพลัง +${data.rules.markedBonus}`);
+  return make('mark',target.id,'ติดตราไว้ใช้รอบถัดไป',`ยังไม่ทำความเสียหาย · ตราอยู่ ${data.rules.markDuration} รอบ`)??attack();
+ }
+ if(heroId==='weaver'){
+  if(intent?.kind==='energy'){const ward=make('ward',intent.targetId,'โล่รับพลังงานก่อนเลือด',`โล่ ${skillPower(data,heroId,'ward')}`);if(ward)return ward;}
+  return make('bolt',target.id,'จอมเวทโจมตีด้วยพลังงาน',`ศรเวทพลัง ${skillPower(data,heroId,'bolt')}`)??attack();
+ }
+ const injured=state.heroes.filter(h=>h.hp>0).map(h=>({h,missing:data.heroes.find(d=>d.id===h.id)!.maxHp-h.hp})).filter(v=>v.missing>0).sort((a,b)=>b.missing-a.missing);
+ if(injured.length){
+  const heal=make('heal',injured[0]!.h.id,'รักษาเพื่อนก่อนศัตรูลงมือ',`ฟื้นเลือดได้ถึง ${skillPower(data,heroId,'heal')}`);if(heal)return heal;
+  if(injured.length>1){const prayer=make('prayer','party','ฟื้นฟูทั้งทีม',`คนละ ${skillPower(data,heroId,'prayer')}`);if(prayer)return prayer;}
+ }
+ return attack();
+}

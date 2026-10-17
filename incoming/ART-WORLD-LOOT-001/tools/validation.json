@@ -1,0 +1,141 @@
+{
+  "frames": {
+    "chest_common": {
+      "size": [
+        128,
+        128
+      ],
+      "alpha_bounds": [
+        14,
+        24,
+        114,
+        118
+      ],
+      "x": 0,
+      "y": 0,
+      "w": 128,
+      "h": 128,
+      "footY": 118
+    },
+    "chest_common_open": {
+      "size": [
+        128,
+        128
+      ],
+      "alpha_bounds": [
+        14,
+        8,
+        113,
+        118
+      ],
+      "x": 128,
+      "y": 0,
+      "w": 128,
+      "h": 128,
+      "footY": 118
+    },
+    "chest_rare": {
+      "size": [
+        128,
+        128
+      ],
+      "alpha_bounds": [
+        14,
+        41,
+        114,
+        118
+      ],
+      "x": 256,
+      "y": 0,
+      "w": 128,
+      "h": 128,
+      "footY": 118
+    },
+    "chest_rare_open": {
+      "size": [
+        128,
+        128
+      ],
+      "alpha_bounds": [
+        14,
+        18,
+        114,
+        118
+      ],
+      "x": 384,
+      "y": 0,
+      "w": 128,
+      "h": 128,
+      "footY": 118
+    },
+    "item_ore": {
+      "size": [
+        128,
+        128
+      ],
+      "alpha_bounds": [
+        14,
+        14,
+        114,
+        113
+      ],
+      "x": 0,
+      "y": 0,
+      "w": 128,
+      "h": 128
+    },
+    "item_ember": {
+      "size": [
+        128,
+        128
+      ],
+      "alpha_bounds": [
+        18,
+        12,
+        109,
+        116
+      ],
+      "x": 128,
+      "y": 0,
+      "w": 128,
+      "h": 128
+    },
+    "item_seal": {
+      "size": [
+        128,
+        128
+      ],
+      "alpha_bounds": [
+        21,
+        12,
+        106,
+        116
+      ],
+      "x": 256,
+      "y": 0,
+      "w": 128,
+      "h": 128
+    }
+  },
+  "runtime_files": {
+    "chests/chests.webp": 23710,
+    "icons/chest-open.svg": 237,
+    "icons/chest.svg": 260,
+    "icons/ember.svg": 269,
+    "icons/ore.svg": 258,
+    "icons/pack.svg": 249,
+    "icons/seal.svg": 299,
+    "icons/star-filled.svg": 269,
+    "icons/star.svg": 249,
+    "icons/star_badge.svg": 330,
+    "icons/star_badge_empty.svg": 330,
+    "items/items.webp": 18418
+  },
+  "source_hashes": {
+    "public/assets/world/tileset.webp": "38b3ba3719ce3534e1e5ecee1c4ec1aa52fb1bbb16a5a05d66852e11fdb49c33",
+    "public/assets/world/decor.webp": "4b09ba9340c464ea09a0b66c8eedb9f715696d2106ae5a87ec7c00505d436928",
+    "public/assets/art/units.webp": "d205b57d8a4082290a3a2e5a415407245106f948033cf3c66eb7b8e537393629",
+    "public/assets/art/portraits.webp": "f604b5f93c6526130546e194674d37f4e3265083908bbbb3448affadf4b70496"
+  },
+  "runtime_bytes": 44878
+}

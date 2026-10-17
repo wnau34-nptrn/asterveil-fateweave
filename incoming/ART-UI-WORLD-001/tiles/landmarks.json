@@ -1,0 +1,98 @@
+{
+  "landmark_camp": {
+    "w": 256,
+    "h": 256,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "logicalFootprint": {
+      "w": 1,
+      "h": 1
+    },
+    "visualFootprint": {
+      "w": 2,
+      "h": 2
+    }
+  },
+  "landmark_start": {
+    "w": 256,
+    "h": 256,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "logicalFootprint": {
+      "w": 1,
+      "h": 1
+    },
+    "visualFootprint": {
+      "w": 2,
+      "h": 2
+    }
+  },
+  "landmark_gate": {
+    "w": 256,
+    "h": 256,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "logicalFootprint": {
+      "w": 1,
+      "h": 1
+    },
+    "visualFootprint": {
+      "w": 2,
+      "h": 2
+    }
+  },
+  "landmark_gate_open": {
+    "w": 256,
+    "h": 256,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "logicalFootprint": {
+      "w": 1,
+      "h": 1
+    },
+    "visualFootprint": {
+      "w": 2,
+      "h": 2
+    }
+  },
+  "boss_pedestal": {
+    "w": 256,
+    "h": 256,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "logicalFootprint": {
+      "w": 1,
+      "h": 1
+    },
+    "visualFootprint": {
+      "w": 2,
+      "h": 2
+    }
+  },
+  "landmark_boss_cleared": {
+    "w": 256,
+    "h": 256,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "logicalFootprint": {
+      "w": 1,
+      "h": 1
+    },
+    "visualFootprint": {
+      "w": 2,
+      "h": 2
+    }
+  }
+}
