@@ -31,6 +31,9 @@ export interface HeroDefinition {
   // Percent added to damaging skills: the hero's Attack growth over its class base (stars, levels, talents, gear),
   // so a skill hits as hard at ★1 Lv1 as its listed power and grows with Attack.
   damageBonus?: number;
+  // Defence and sustain from gear (stats step 2, percents): Armour cuts physical hits taken, Resistance energy hits,
+  // Leech heals the hero by a share of the damage its own hits deal. Capped by `rules.defenseCap`/`rules.leechCap`.
+  armour?: number; resist?: number; leech?: number;
   // Class unlocks: the ★3 skill joins `actions` and the ★5 passive becomes `passive` (world `starred`).
   unlocks?: { skill: ActionId; passive: PassiveId };
   passive?: PassiveId;
@@ -53,7 +56,9 @@ export interface EncounterDefinition {
   rules: { guardReduction: number; markDuration: number; markedBonus: number; corrodeDuration: number; corrodeBonus: number; ambushBonus: number; tauntReduction: number;
     // ★3/★5 numbers (drafts): see docs/EXPEDITION_DESIGN.md "Star unlocks".
     rallyReduction: number; finisherThreshold: number; echoBonus: number; afterglowCap: number; heavyCounter: number;
-    weakshotBonus: number; quakeBonus: number; shadowCounter: number; stoneskinReduction: number; resound: number; finaleHeal: number };
+    weakshotBonus: number; quakeBonus: number; shadowCounter: number; stoneskinReduction: number; resound: number; finaleHeal: number;
+    // Stats step 2 caps (percent).
+    defenseCap: number; leechCap: number };
 }
 // Expiry/cooldown values are absolute round numbers, never animation time.
 // `hastedRound`: an alchemist's haste makes this hero act before everyone in that round.

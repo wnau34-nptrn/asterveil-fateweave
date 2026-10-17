@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { encounterById as lookup } from '../src/content/encounters/catalog';
 import { chapterOne as map } from '../src/content/world/chapter1';
-import { createBattle, previewCommand, resolveCommand, skillPower, SUPPORT_SKILLS, withParty } from '../src/core/battle/engine';
-import type { ActionId, HeroDefinition } from '../src/core/battle/types';
+import { beginBattle, createBattle, defenseOf, previewCommand, resolveCommand, skillPower, SUPPORT_SKILLS, withParty } from '../src/core/battle/engine';
+import type { ActionId, EncounterDefinition, HeroDefinition, Resolution } from '../src/core/battle/types';
 import type { Item } from '../src/core/world/types';
 import { heroCatalog, starred } from '../src/core/world/world';
 import { battleLesson } from '../src/ui/tutorial';
@@ -44,5 +44,41 @@ describe('skill scaling', () => {
       const l = battleLesson(s, d)!; const command = { beat: s.beat, heroId: l.heroId, action: l.action, targetId: l.targetId };
       const r = resolveCommand(s, d, command); expect(previewCommand(s, d, command)).toEqual(r); s = r.state;
     }
+  });
+});
+
+// Stats step 2: Armour and Resistance cut hits taken by kind (capped), Leech heals from damage dealt (capped).
+describe('armour, resistance and leech', () => {
+  const party = heroCatalog(lookup, map).slice(0, 4);
+  const firstHit = (d: EncounterDefinition) => {
+    let r: Resolution = beginBattle(d); let s = r.state;
+    for (let i = 0; i < 20; i++) {
+      for (const t of r.turns) for (const e of t.events) if (e.type === 'damage' && t.side === 'enemy') return { ...e, kind: t.intent!.kind, raw: (e.amount ?? 0) + (e.absorbed ?? 0) };
+      const l = battleLesson(s, d)!; r = resolveCommand(s, d, { beat: s.beat, heroId: l.heroId, action: l.action, targetId: l.targetId }); s = r.state;
+    }
+    throw new Error('no enemy hit');
+  };
+  it('the hit taken shrinks by the defence matching its kind, rounded up, and never past the cap', () => {
+    const plain = firstHit(withParty(data, party));
+    const armoured = firstHit(withParty(data, party.map(h => ({ ...h, armour: 20 }))));
+    const resistant = firstHit(withParty(data, party.map(h => ({ ...h, resist: 20 }))));
+    const [matching, other] = plain.kind === 'physical' ? [armoured, resistant] : [resistant, armoured];
+    expect(matching.raw).toBe(Math.ceil(plain.raw * 0.8)); expect(other.raw).toBe(plain.raw);
+    const capped = withParty(data, party.map(h => ({ ...h, armour: 80, resist: 80 })));
+    expect(defenseOf(capped, party[0]!.id, 'physical')).toBe(data.rules.defenseCap); expect(defenseOf(capped, party[0]!.id, 'energy')).toBe(30);
+    expect(firstHit(capped).raw).toBe(Math.ceil(plain.raw * 0.7));
+  });
+  it('leech heals the hitter by a share of the damage dealt, up to its max HP; preview matches', () => {
+    const d = withParty(data, party.map(h => ({ ...h, leech: 50 }))); // above the 20% cap
+    let s = beginBattle(d, { hp: Object.fromEntries(party.map(h => [h.id, 10])) }).state;
+    for (let i = 0; i < 10; i++) {
+      const l = battleLesson(s, d)!; const command = { beat: s.beat, heroId: l.heroId, action: l.action, targetId: l.targetId };
+      const r = resolveCommand(s, d, command); expect(previewCommand(s, d, command)).toEqual(r);
+      const events = r.turns[0]!.events; const dealt = events.filter(e => e.type === 'damage' && e.sourceId === l.heroId).reduce((n, e) => n + (e.amount ?? 0), 0);
+      const healed = events.filter(e => e.type === 'heal' && e.text === 'Leech.').reduce((n, e) => n + (e.amount ?? 0), 0);
+      if (dealt) { expect(healed).toBe(Math.floor(dealt * data.rules.leechCap / 100)); return; }
+      s = r.state;
+    }
+    throw new Error('no hero hit');
   });
 });

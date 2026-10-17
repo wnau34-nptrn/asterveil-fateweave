@@ -183,10 +183,20 @@ function finishOrAdvance(state: BattleState, data: EncounterDefinition, events: 
   }
   refreshIntent(state, data);
 }
+// Stats step 2: Armour (physical) and Resistance (energy) cut a hit taken by a percent, capped by the rules.
+export const defenseOf = (data: EncounterDefinition, heroId: string, kind: Intent['kind']): number =>
+  Math.min(data.rules.defenseCap, (kind === 'physical' ? data.heroes.find(h => h.id === heroId)?.armour : data.heroes.find(h => h.id === heroId)?.resist) ?? 0);
+// Leech: a standing hero heals by a share of the damage its own hit dealt (rounded down, never above max HP).
+function leech(state: BattleState, data: EncounterDefinition, heroId: string, dealt: number, events: BattleEvent[]): void {
+  const def = data.heroes.find(h => h.id === heroId); const hero = state.heroes.find(h => h.id === heroId);
+  const amount = def && hero && hero.hp > 0 ? Math.min(Math.floor(dealt * Math.min(data.rules.leechCap, def.leech ?? 0) / 100), def.maxHp - hero.hp) : 0;
+  if (amount > 0) { hero!.hp += amount; events.push({ type: 'heal', sourceId: heroId, targetId: heroId, amount, text: 'Leech.' }); }
+}
 function strikeBack(state: BattleState, data: EncounterDefinition, heroId: string, enemy: EnemyState, power: number, events: BattleEvent[], text: string): void {
   const dealt = Math.min(enemy.hp, power + hitBonus(state, data, enemy.id)); enemy.hp -= dealt;
   events.push({ type: 'counter', sourceId: heroId, targetId: enemy.id, amount: dealt, text });
   if (!enemy.hp) events.push({ type: 'down', targetId: enemy.id, text: 'Enemy falls.' });
+  leech(state, data, heroId, dealt, events);
 }
 // `protector`: the knight whose Guard or Rally reduced this hit (his ★5 stand may keep the recipient up once).
 function hit(state: BattleState, data: EncounterDefinition, enemy: EnemyState, intent: Intent, recipient: HeroState, incoming: number, events: BattleEvent[], protector?: string): void {
@@ -261,6 +271,8 @@ function automaticTurns(state: BattleState, data: EncounterDefinition, turns: Tu
           if (brace && intent.kind === 'physical' && living(state, brace.heroId) && hasCap(data, brace.heroId, 'frontwall') && data.heroes.find(h => h.id === recipient.id)!.lane === 'front')
             incoming = Math.ceil(incoming * (1 - capAmount(data, brace.heroId, 'frontwall') / 100));
           if (state.solace?.targetId === recipient.id && living(state, state.solace.heroId)) incoming = Math.ceil(incoming * (1 - capAmount(data, state.solace.heroId, 'solace') / 100));
+          // The recipient's own Armour or Resistance (gear), by the move's kind.
+          const defense = defenseOf(data, recipient.id, intent.kind); if (defense) incoming = Math.ceil(incoming * (1 - defense / 100));
           if (state.song?.action === 'valor' && living(state, state.song.heroId) && hasCap(data, state.song.heroId, 'chorus')) incoming = Math.max(0, incoming - capAmount(data, state.song.heroId, 'chorus'));
           hit(state, data, enemy, intent, recipient, incoming, events, protector);
         }
@@ -369,6 +381,7 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
     const amount = Math.min(foe.hp, power + hitBonus(state, data, foe.id) + talentHitBonus(state, data, hero.id, foe)); foe.hp -= amount;
     events.push({ type: 'damage', sourceId: hero.id, targetId: foe.id, amount, text });
     if (!foe.hp) events.push({ type: 'down', targetId: foe.id, text: 'Enemy falls.' });
+    leech(state, data, hero.id, amount, events);
   };
   const damage = (power: number) => strike(enemy!, power, 'Hero attacks.');
   // Split bolt / piercing line (talents): the other living enemies take half the skill power.

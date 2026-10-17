@@ -168,7 +168,7 @@ export function eventThai(event: BattleEvent, after: BattleState, data: Encounte
     case 'guard': return `${source}${event.sourceId === event.targetId ? 'ตั้งรับ' : `รับการโจมตีแทน${target}`} ลดความเสียหาย ${Math.round(guardReductionOf(data, event.sourceId) * 100)}%`;
     case 'mark': return `${target} ติดตรา ${data.rules.markDuration} รอบ รวมรอบนี้`;
     case 'barrier': return `${target} ได้รับโล่เพิ่ม ${event.amount}`;
-    case 'heal': return `${target} ฟื้นเลือด ${event.amount}`;
+    case 'heal': return event.text === 'Leech.' ? `${target} ดูดเลือด ${event.amount}` : `${target} ฟื้นเลือด ${event.amount}`;
     case 'interrupt': return `${target} จะเสียเทิร์นโจมตีกายภาพครั้งถัดไป`;
     case 'cancel': return event.cause === 'sealed' ? 'ตรึงเวทยกเลิกท่าพลังงานของศัตรูได้' : event.cause === 'interrupted' ? 'กระแทกโล่หยุดการโจมตีกายภาพของศัตรูได้' : 'กำจัดผู้โจมตีได้ การโจมตีของมันถูกยกเลิก';
     case 'down': return `${target}${data.heroes.some(h => h.id === event.targetId) ? 'ล้มแล้ว' : 'ถูกกำจัดแล้ว'}`;
