@@ -823,6 +823,19 @@ test('map bag (2026-10-17): wear a find away from camp, take it off, read a memb
   expect(issues).toEqual([]);
 });
 
+test('map props (ART-WORLD-PROPS-002): herbs and events are painted props; the event badge sits in the clear top band', async ({ page }, info) => {
+  const herb = map.herbs[0]!; const ev = map.events.find(e => e.kind === 'merchant')!;
+  const state = base({ position: { x: herb.x, y: herb.y + 1 } }); state.revealed = '1'.repeat(state.revealed.length);
+  const issues = await open(page, state);
+  for (const sel of [`.herb[data-herb="${herb.id}"] b.map-prop`, `.herb[data-herb="${herb.id}"] .herb-glow`, `.event-mark[data-event="${ev.id}"] .map-prop`])
+    expect(await page.locator(sel).evaluate(el => getComputedStyle(el).backgroundImage)).toContain('map_props');
+  const mark = (await page.locator(`.event-mark[data-event="${ev.id}"]`).boundingBox())!; const badge = (await page.locator(`.event-mark[data-event="${ev.id}"] i`).boundingBox())!;
+  expect(badge.y + badge.height).toBeLessThan(mark.y + mark.height * .4);
+  await page.locator(`.herb[data-herb="${herb.id}"]`).scrollIntoViewIfNeeded();
+  await page.screenshot({ path: info.outputPath('map-props.png') });
+  expect(issues).toEqual([]);
+});
+
 test('normal motion: the pulsing step markers stay centred on their tiles (iPhone report)', async ({ browser }) => {
   const context = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true, reducedMotion: 'no-preference' }); const page = await context.newPage();
   const issues = await open(page, newExpedition(map, encounterById, 3));

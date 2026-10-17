@@ -245,7 +245,7 @@ export class LobbyUI {
     const staff = NPC_IDS.map((id, i) => { const flip = npcSpots[id].x > 50 ? -1 : 1;
       return `<span class="lobby-station" style="--nx:${npcSpots[id].x}%;--npx:${npcSpots[id].px}%;--flip:${flip};--stations:url(${npcStationsUrl()});--sx:${(i % 3) * 50}%;--sy:${Math.floor(i / 3) * 100}%"><i></i></span>`
         + `<span id="npc-art-${id}" class="lobby-npc" data-npc="${id}" style="--nx:${npcSpots[id].x}%;--npx:${npcSpots[id].px}%;--flip:${flip};--atlas:url(${npcAtlasUrl(id)});--nd:${i * -0.37}s"><b><i></i></b></span>`; }).join('');
-    return `<div class="lobby-scene" aria-hidden="true" style="--lobby-bg:url(${lobbyArt('lobby_bg')});--lobby-fg:url(${lobbyArt('lobby_fg')});--lobby-pit:url(${lobbyArt('lobby_firepit')})"><div class="lobby-fire"><b></b><i></i><i></i><i></i></div>${staff}${units}<div class="lobby-fg"></div><div class="lobby-embers">${'<i></i>'.repeat(7)}</div></div>`;
+    return `<div class="lobby-scene" aria-hidden="true" style="--lobby-bg:url(${lobbyArt('lobby_bg')});--lobby-fg:url(${lobbyArt('lobby_fg')});--lobby-pit:url(${lobbyArt('lobby_firepit')})"><div class="lobby-fire"><b></b><span class="lobby-flame"><i></i></span></div>${staff}${units}<div class="lobby-fg"></div><div class="lobby-embers">${'<i></i>'.repeat(7)}</div></div>`;
   }
   private card(p: Profile, id: string | undefined, group: Group, slot: number): string {
     if (!id) return `<button class="team-card empty${this.picked ? ' target' : ''}" data-lobby="pick" data-group="${group}" aria-label="${groupName[group]} ช่อง ${slot + 1} ว่าง"${this.picked ? '' : ' disabled'}><span>ว่าง</span></button>`;
@@ -429,7 +429,9 @@ export class LobbyUI {
         const def = this.map.shop.items[item]; const left = shopLeft(p, this.map, item); const t = shopText[item];
         const reason = item === 'contract' ? buyReason(p, this.map, item, pickable[0]) : buyReason(p, this.map, item);
         const pick = item === 'contract' ? `<label class="contract-pick"><span>ให้</span><select id="contract-hero" aria-label="เลือกสมาชิกที่จะรับตัวซ้ำ">${pickable.map(id => `<option value="${id}">${heroText[id]?.name ?? id} ${'★'.repeat(p.members[id]!.stars)} · ตัวซ้ำ ${p.members[id]!.dupes}</option>`).join('')}</select></label>` : '';
-        return `<li class="market-item" data-item="${item}"><span class="market-icon" aria-hidden="true">${icon(glyph[item])}</span><span><b>${t.name}</b><small>${t.help}</small><small class="hire-status">เหลือ ${left}/${def.limit} ในรอบนี้</small>${pick}</span>
+        // ART-WORLD-PROPS-002: the contract and gear box are painted (2-cell atlas); seals and repel keep their icons.
+        const art = item === 'contract' || item === 'gearbox' ? `<i class="market-art" data-item="${item}"></i>` : icon(glyph[item]);
+        return `<li class="market-item" data-item="${item}"><span class="market-icon" aria-hidden="true">${art}</span><span><b>${t.name}</b><small>${t.help}</small><small class="hire-status">เหลือ ${left}/${def.limit} ในรอบนี้</small>${pick}</span>
           <button id="buy-${item}" data-lobby="buy" data-item="${item}" class="secondary"${reason ? ' disabled' : ''} aria-label="ซื้อ${t.name} ใช้เหรียญทอง ${def.price}">${reason ? why[reason] ?? 'ซื้อไม่ได้' : `ซื้อ · ${def.price}`}</button></li>`;
       }).join('')}</ul>`;
   }

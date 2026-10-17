@@ -224,7 +224,7 @@ export class WorldUI {
       const elite = this.map.elites.find(e => e.x === x && e.y === y);
       if (elite) html += `<span class="elite-unit sprite" data-cell="${x},${y}" data-elite="${elite.id}" data-forced="${elite.forced}"${elite.mini ? ' data-mini="true"' : ''} style="--x:${x};--y:${y};z-index:${y * 3 + 1}">${this.eliteArt[elite.id] ? portrait(this.eliteArt[elite.id]!) : ''}${elite.forced ? '' : `<em class="elite-reward">${icon(elite.mini ? 'boss' : 'chest')}</em>`}</span>`;
       const event = this.map.events.find(e => e.x === x && e.y === y);
-      if (event) html += `<span class="event-mark sprite" data-cell="${x},${y}" data-event="${event.id}" data-kind="${event.kind}" style="--x:${x};--y:${y};z-index:${y * 3 + 1}"><i>!</i></span>`;
+      if (event) html += `<span class="event-mark sprite" data-cell="${x},${y}" data-event="${event.id}" data-kind="${event.kind}" style="--x:${x};--y:${y};z-index:${y * 3 + 1}"><b class="map-prop"></b><i>!</i></span>`;
       html += this.puzzleSprites(x, y);
       if (['camp', 'start', 'goal', 'boss'].includes(kind)) html += `<span class="landmark sprite" data-cell="${x},${y}" data-kind="${kind}" style="--x:${x};--y:${y};z-index:${y * 3 + 1}">${kind === 'boss' ? '<span class="boss-unit"></span>' : ''}</span>`;
     }
@@ -254,7 +254,7 @@ export class WorldUI {
     if (sec) html += `<span class="secret-wall sprite" data-cell="${x},${y}" data-secret="${sec.id}" style="--x:${x};--y:${y};z-index:${y * 3 + 1};${opening()}"></span>`;
     // 3D: a glowing herb for the herbalist's side quest (picked once per run).
     const herb = this.map.herbs.find(at);
-    if (herb) html += `<span class="herb sprite" data-cell="${x},${y}" data-herb="${herb.id}" ${pos}><i></i><i></i><i></i></span>`;
+    if (herb) html += `<span class="herb sprite" data-cell="${x},${y}" data-herb="${herb.id}" ${pos}><i class="map-prop herb-glow"></i><b class="map-prop"></b></span>`;
     return html;
   }
   private renderPuzzles(s: ExpeditionState): void {
