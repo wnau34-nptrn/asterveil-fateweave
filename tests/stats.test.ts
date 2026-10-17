@@ -130,7 +130,7 @@ describe('gear rolls and map stats', () => {
       { uid: 3, slot: 'weapon', hero: 'healer', rarity: 1, level: 3, affixes: ['attack'] },
     ], nextItem: 4 };
     const g = parseGame(JSON.stringify({ version: 20, profile, run: null }), map, lookup);
-    expect(g.profile.items.map(i => i.affixes)).toEqual([['support', 'hp'], ['support', 'attack', 'speed'], ['support']]);
+    expect(g.profile.items.map(i => i.affixes)).toEqual([['support', 'attack'], ['support', 'attack', 'speed'], ['support']]);
     for (const it of g.profile.items) expect(itemValid(map, it, ['healer'])).toBe(true);
   });
 });

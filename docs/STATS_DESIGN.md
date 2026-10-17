@@ -10,7 +10,7 @@ Owner request (2026-10-17): more stats than HP, Attack and SPD; gear rolls those
 | 2 | Armour, Resistance and Leech in the resolver | done |
 | 3 | Gear main stats, pools, 80–120% rolls, Trail regen, Luck; save v21 | done |
 | 4 | Stat lines in the bag, Lobby and member details | done |
-| 5 | Per-class simulation | next |
+| 5 | Per-class simulation | done (see below) |
 
 Choices made while building (these refine sections 6–7):
 
@@ -211,3 +211,20 @@ The affix count by rarity stays 0/1/2/3/3. Each affix rolls 80–120% of its lev
 | B | Keep Trail regen and Luck (map stats)? | Yes: they give boots and charms map value. |
 | C | Caps: Armour/Resistance 30%, Leech 20%, Luck +15? | Yes, as drafts until the simulation. |
 | D | Should support weapons (Priest, Bard, Alchemist) give Support instead of Attack? | Yes. |
+
+## Step 5 result: per-class simulation (2026-10-17)
+
+`tests/sim/class-sim.ts` runs each class (★3 Lv6) through six mid-game fights at fight level 11, with three teaching members, played by the teaching advisor. Each class runs three times:
+
+- no gear;
+- epic gear rolled on its main stats;
+- the same pieces rolled on stats it barely uses.
+
+The report is in `docs/validation/balance-sim/CLASSES.md`. `tests/class-sim.test.ts` guards that gear always helps and that main-stat gear is never worse for the party than off-stat gear.
+
+**What it found:**
+
+1. **The first affix pools were too small.** Slots had 3–4 stats while an epic rolls 3 affixes, so every epic came out the same and there was nothing to choose. Pools now hold 5–6 stats per slot.
+2. **Gear on main stats beats gear on off-stats** in damage, healing or damage taken for 9 of 10 classes. Gear lifts the party's HP left by 3–13 points.
+3. **Real alternative builds exist.** For example, a Leech warden deals and heals more but takes about 60% more damage than an Armour warden.
+4. **The knight is the exception.** Its value (Guard) protects the others, which the per-class numbers cannot show.

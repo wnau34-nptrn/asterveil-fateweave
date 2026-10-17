@@ -149,9 +149,12 @@ export const chapterOne: MapDefinition = {
       gloves: { attack: [4, 1] }, boots: { hp: [4, 1], speed: [1, 0.25] }, charm: { support: [6, 1.2] },
     },
     affixStats: { hp: [4, 1], attack: [3, 0.7], support: [3, 0.7], speed: [1, 0.15], armour: [2, 0.4], resist: [2, 0.4], leech: [3, 0.5], barrier: [3, 0.5], regen: [2, 0.3], luck: [2, 0.3] },
+    // 5–6 stats per slot so the three affixes of an epic piece are a real choice (per-class simulation 2026-10-17).
+    // SPD only on boots and charms; weapons follow their class (support classes use `supportWeapon`).
     affixPools: {
-      weapon: ['attack', 'leech', 'hp'], supportWeapon: ['support', 'hp', 'resist'], head: ['hp', 'resist', 'support', 'luck'], body: ['hp', 'armour', 'resist', 'barrier'],
-      gloves: ['attack', 'leech', 'support'], boots: ['speed', 'hp', 'regen'], charm: ['support', 'attack', 'luck', 'speed'],
+      weapon: ['attack', 'leech', 'hp', 'armour', 'resist', 'barrier'], supportWeapon: ['support', 'hp', 'resist', 'armour', 'barrier', 'luck'],
+      head: ['hp', 'resist', 'support', 'luck', 'attack', 'armour'], body: ['hp', 'armour', 'resist', 'barrier', 'support', 'regen'],
+      gloves: ['attack', 'leech', 'support', 'hp', 'luck'], boots: ['speed', 'hp', 'regen', 'armour', 'resist'], charm: ['support', 'attack', 'luck', 'speed', 'leech', 'hp'],
     },
     supportHeroes: ['healer', 'toma', 'lio'],
     quality: [80, 120], regenSteps: 5, luckCap: 15,
