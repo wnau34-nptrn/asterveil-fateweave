@@ -15,6 +15,7 @@ export class Music {
   private prefs: MusicPrefs = { muted: false, volume: 0.6 };
   private fades = new Map<HTMLAudioElement, number>();
   private listeners = new Set<(prefs: MusicPrefs) => void>();
+  private previewTimer: number | undefined;
 
   constructor(private readonly storage: StoragePort | undefined) {
     try {
@@ -40,6 +41,14 @@ export class Music {
     this.prefs.volume = Math.min(1, Math.max(0, volume)); this.save();
     const a = this.audio(this.current); if (a && !this.fades.has(a)) a.volume = this.prefs.volume;
   }
+  // Pause every track, including an outgoing crossfade. Unlike element volume, pause also works
+  // on iPhone: the effects sample must be audible without any music masking it.
+  pauseForEffectPreview(): void {
+    clearTimeout(this.previewTimer);
+    for (const timer of this.fades.values()) clearInterval(timer);
+    this.fades.clear(); this.tracks.forEach(a => a.pause());
+    this.previewTimer = window.setTimeout(() => { this.previewTimer = undefined; this.start(); }, 2000);
+  }
   private save(): void {
     try { this.storage?.setItem(prefKey, JSON.stringify(this.prefs)); } catch { /* not saved: fine for a preference */ }
     for (const l of this.listeners) l(this.settings);
@@ -54,7 +63,7 @@ export class Music {
   // Starts (or resumes) the current track with a fade-in, once sound is allowed and not muted.
   private start(): void {
     const a = this.audio(this.current);
-    if (!a || !this.unlocked || this.prefs.muted || document.hidden) return;
+    if (!a || !this.unlocked || this.prefs.muted || document.hidden || this.previewTimer !== undefined) return;
     if (a.paused) { a.volume = 0; a.play().catch(() => { /* blocked or unsupported: stay silent */ }); }
     this.fadeTo(a, this.prefs.volume, false);
   }

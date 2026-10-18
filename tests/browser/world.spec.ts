@@ -325,16 +325,38 @@ for (const [width, height] of [[390, 844], [844, 390]]) {
     const run = { ...newExpedition(map, encounterById, 35, undefined, true) }; reveal(run, map);
     run.battle = { kind: 'random', encounterId: 'thicket-ambush', entry: { ...run.hp }, commands: [] };
     await seed(page, run);
-    await page.addInitScript(() => localStorage.setItem('asterveil.fateweave.sfx.v1', JSON.stringify({ muted: true, volume: 0 })));
+    await page.addInitScript(() => {
+      localStorage.setItem('asterveil.fateweave.sfx.v1', JSON.stringify({ muted: true, volume: 0 }));
+      const tracks: HTMLAudioElement[] = [];
+      (window as unknown as { musicTracks: HTMLAudioElement[] }).musicTracks = tracks;
+      const Original = window.Audio;
+      window.Audio = class extends Original {
+        constructor(src?: string) { super(src); tracks.push(this); }
+      };
+    });
     const issues: string[] = []; page.on('pageerror', e => issues.push(e.message));
     await page.goto('./'); await page.locator('#continue').tap(); await page.locator('#start').tap();
     const before = await page.evaluate(k => localStorage.getItem(k), key);
     await page.locator('#battle-info').tap(); await expect(page.locator('#game-info')).toBeVisible();
+    await reachable(page, '#battle-music-toggle');
     await reachable(page, '#battle-sfx-toggle'); await reachable(page, '#battle-sfx-test');
+    const musicPlaying = () => page.evaluate(() => (window as unknown as { musicTracks: HTMLAudioElement[] }).musicTracks.some(a => !a.paused));
+    await expect.poll(musicPlaying).toBe(true);
+    const musicPrefs = await page.evaluate(() => localStorage.getItem('asterveil.fateweave.audio.v1'));
     await expect(page.locator('#battle-sfx-toggle')).toContainText('เอฟเฟกต์: ปิด');
     await expect(page.locator('#battle-sfx-test')).toHaveText('เปิดและทดสอบเอฟเฟกต์');
     await page.locator('#battle-sfx-test').tap();
-    await expect(page.locator('#battle-sfx-feedback')).toContainText('ตัวอย่างเสียงโจมตี');
+    await expect(page.locator('#battle-sfx-feedback')).toContainText('ตัวอย่างเสียงโจมตีขณะพักเพลง');
+    expect(await musicPlaying()).toBe(false);
+    expect(await page.evaluate(() => localStorage.getItem('asterveil.fateweave.audio.v1'))).toBe(musicPrefs);
+    await expect.poll(musicPlaying).toBe(true);
+    await page.locator('#battle-music-volume').focus(); await page.locator('#battle-music-volume').press('ArrowLeft');
+    await expect(page.locator('#battle-music-level')).toHaveText('55%');
+    await expect(page.locator('#music-volume')).toHaveValue('55');
+    await page.locator('#battle-music-toggle').tap();
+    await expect(page.locator('#battle-music-toggle')).toContainText('เพลง: ปิด');
+    await expect(page.locator('#music-toggle')).toContainText('เพลง: ปิด');
+    expect(await musicPlaying()).toBe(false);
     await expect(page.locator('#battle-sfx-toggle')).toContainText('เอฟเฟกต์: เปิด');
     await expect(page.locator('#battle-sfx-level')).toHaveText('70%');
     // Both screens share preferences, but touching audio settings never commits a battle command.
