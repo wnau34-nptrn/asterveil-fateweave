@@ -1,5 +1,13 @@
 # Codex → Claude handoff
 
+## 2026-10-18 — Publication follow-up: audio probe timing
+
+- Owner authorized merging and publishing the sound fix. PR #13 merged at `253caaea0423fce587c8ad90cd8f90fad35dc91a`.
+- First publication run `39131084875` passed all 416 unit tests and 127 browser cases, but the new audio case failed before deployment. Its probe read `AudioParam.value` immediately after scheduling automation; that getter can still reflect the previous audio render quantum and miss the low-frequency hit oscillator.
+- Correct the test probe to observe the initial frequency passed through native `setValueAtTime`, while still asserting native oscillator start, context suspension/recovery, an actual battle attack and Arcane Bolt. No game code or audio recipes change in this follow-up.
+- Validation: corrected focused case passed locally in Chromium; all 6 production-Pages cases passed across desktop (1366×1000) and touch-emulated phone (390×844, DPR 3): SFX controls, suspended-context attack/Arcane Bolt recovery and the Matriarch/Mycon battle. Real canvas screenshots were inspected; enemies face left. Typecheck, lint and whitespace checks passed. Physical iPhone audible output still needs owner verification.
+- Follow-up is within the owner's instruction to complete the merge/publication. Do not describe the failed run as deployed. Check the latest successful Pages run for final publication state.
+
 ## 2026-10-18 — iPhone sound-effect recovery
 
 - Owner hears background music on iPhone but no attack/skill effects; turning off Silent mode did not help.
