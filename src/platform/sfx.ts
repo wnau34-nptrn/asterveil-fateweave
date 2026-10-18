@@ -58,6 +58,7 @@ export class Sfx {
   private prefs: SfxPrefs = { muted: false, volume: 0.7 };
   private storage: StoragePort | undefined;
   private last = new Map<SfxName, number>();
+  private unlocked = false;
   init(storage: StoragePort | undefined): void {
     this.storage = storage;
     try {
@@ -65,18 +66,37 @@ export class Sfx {
       if (typeof p.muted === 'boolean') this.prefs.muted = p.muted;
       if (typeof p.volume === 'number' && p.volume >= 0 && p.volume <= 1) this.prefs.volume = p.volume;
     } catch { /* corrupt preference: keep the defaults */ }
-    const unlock = () => { this.context(); this.ctx?.resume().catch(() => {}); };
-    window.addEventListener('pointerdown', unlock, { capture: true, once: true }); window.addEventListener('keydown', unlock, { capture: true, once: true });
+    // Safari can interrupt Web Audio after the first gesture (app switching, screen lock, calls).
+    // Keep retrying on gestures: a denied or interrupted resume must not permanently silence effects.
+    const unlock = () => { this.unlocked = true; this.resume(); };
+    window.addEventListener('pointerdown', unlock, { capture: true });
+    window.addEventListener('keydown', unlock, { capture: true });
+    document.addEventListener('visibilitychange', () => { if (this.unlocked && !document.hidden) this.resume(); });
   }
   get settings(): SfxPrefs { return { ...this.prefs }; }
-  setMuted(muted: boolean): void { this.prefs.muted = muted; this.save(); }
+  setMuted(muted: boolean): void { this.prefs.muted = muted; this.save(); if (!muted && this.unlocked) this.resume(); }
   setVolume(volume: number): void { this.prefs.volume = Math.min(1, Math.max(0, volume)); this.save(); if (this.out) this.out.gain.value = this.prefs.volume; }
   private save(): void { try { this.storage?.setItem(prefKey, JSON.stringify(this.prefs)); } catch { /* fine for a preference */ } }
+  private resume(): void {
+    if (!this.unlocked || this.prefs.muted || document.hidden) return;
+    // Match background music's playback session where Safari exposes the Audio Session API.
+    // Older Safari and other browsers can omit it or reject the request; gesture recovery still works.
+    try {
+      const session = (navigator as Navigator & { audioSession?: { type: string } }).audioSession;
+      if (session && session.type !== 'playback') session.type = 'playback';
+    } catch { /* optional platform support */ }
+    const ctx = this.context();
+    if (ctx && ctx.state !== 'running') void ctx.resume().catch(() => { /* retry on the next gesture */ });
+  }
   private context(): AudioContext | undefined {
-    if (this.ctx) return this.ctx;
+    if (this.ctx && this.ctx.state !== 'closed') return this.ctx;
     const Ctor = window.AudioContext ?? (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
     if (!Ctor) return undefined;
     try { this.ctx = new Ctor(); } catch { return undefined; }
+    this.last.clear();
+    this.ctx.addEventListener('statechange', () => {
+      if (this.ctx?.state === 'interrupted') this.resume();
+    });
     this.out = this.ctx.createGain(); this.out.gain.value = this.prefs.volume; this.out.connect(this.ctx.destination);
     const len = this.ctx.sampleRate; this.noiseBuffer = this.ctx.createBuffer(1, len, this.ctx.sampleRate);
     const data = this.noiseBuffer.getChannelData(0); let seed = 1;
@@ -87,7 +107,8 @@ export class Sfx {
   play(name: SfxName): void {
     document.documentElement.dataset.sfx = name;
     if (this.prefs.muted || document.hidden) return;
-    const ctx = this.ctx; if (!ctx || !this.out || ctx.state !== 'running') return;
+    const ctx = this.ctx;
+    if (!ctx || !this.out || ctx.state !== 'running') { this.resume(); return; }
     const now = ctx.currentTime; if (now - (this.last.get(name) ?? -1) < .04) return; this.last.set(name, now);
     const r = recipes[name];
     for (const t of r.tones ?? []) {

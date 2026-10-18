@@ -289,6 +289,51 @@ test('sound effects: steps, walls, chests and battle turns name their sound; the
   expect(issues).toEqual([]);
 });
 
+test('battle effects recover a suspended audio context and start attack and skill audio nodes', async ({ page }, info) => {
+  // Observe real Web Audio scheduling: data-sfx alone also changes when nothing can be heard.
+  await page.addInitScript(() => {
+    const probe = { contexts: [] as AudioContext[], attacks: 0, zaps: 0 };
+    (window as unknown as { sfxProbe: typeof probe }).sfxProbe = probe;
+    const Original = window.AudioContext;
+    window.AudioContext = class extends Original {
+      constructor(options?: AudioContextOptions) { super(options); probe.contexts.push(this); }
+      createOscillator(): OscillatorNode {
+        const oscillator = super.createOscillator(); const start = oscillator.start.bind(oscillator);
+        oscillator.start = (when?: number) => {
+          if (oscillator.type === 'sine' && oscillator.frequency.value < 300) probe.attacks++;
+          if (oscillator.type === 'sawtooth') probe.zaps++;
+          start(when);
+        };
+        return oscillator;
+      }
+    };
+  });
+  const run = { ...newExpedition(map, encounterById, 35, undefined, true) }; reveal(run, map);
+  run.battle = { kind: 'random', encounterId: 'thicket-ambush', entry: { ...run.hp }, commands: [] };
+  await seed(page, run, { ...newProfile(map, 5), tutorialDone: true, commander });
+  const issues: string[] = []; page.on('pageerror', e => issues.push(e.message));
+  await page.goto('./'); await page.locator('#continue').click(); await page.locator('#start').click();
+  const audioState = () => page.evaluate(() => (window as unknown as { sfxProbe: { contexts: AudioContext[] } }).sfxProbe.contexts[0]?.state);
+  await expect.poll(audioState).toBe('running');
+  await page.evaluate(() => (window as unknown as { sfxProbe: { contexts: AudioContext[] } }).sfxProbe.contexts[0]!.suspend());
+  await expect.poll(audioState).toBe('suspended');
+  await page.locator('#action-attack').click(); await expect.poll(audioState).toBe('running');
+  await page.locator('[data-ui=skill-close]').click();
+  const attacks = () => page.evaluate(() => (window as unknown as { sfxProbe: { attacks: number } }).sfxProbe.attacks);
+  const before = await attacks();
+  await page.locator('#target-brute').click(); await expect.poll(attacks).toBeGreaterThan(before);
+  await finishPlayback(page);
+  await expect(page.locator('#hero-weaver')).toHaveAttribute('aria-pressed', 'true');
+  await page.evaluate(() => (window as unknown as { sfxProbe: { contexts: AudioContext[] } }).sfxProbe.contexts[0]!.suspend());
+  await page.locator('#action-bolt').click(); await expect.poll(audioState).toBe('running');
+  await page.locator('[data-ui=skill-close]').click();
+  const zaps = () => page.evaluate(() => (window as unknown as { sfxProbe: { zaps: number } }).sfxProbe.zaps);
+  const beforeSkill = await zaps();
+  await page.locator('#target-brute').click(); await expect.poll(zaps).toBeGreaterThan(beforeSkill);
+  await finishPlayback(page); await page.screenshot({ path: info.outputPath('sfx-recovered-attack-skill.png') });
+  expect(issues).toEqual([]);
+});
+
 test('portrait phone lobby: the painting covers both pan ends, sheets fill the screen, and a hiring offer previews skills first', async ({ browser }, info) => {
   const context = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true }); const page = await context.newPage();
   await seed(page, null, { ...newProfile(map, 5), tutorialDone: true, commander, bank: { ore: 0, gold: 40, seal: 0, dust: 0 } } as Profile);

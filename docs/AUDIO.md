@@ -33,6 +33,7 @@ Each file is about 2.1 MB, 13 MB in total. A track is fetched only when it first
 - 34 named sounds (`SfxName`), each a small recipe of tones and noise bursts.
 - **Not production audio.** They are placeholders, meant to be replaced one by one with recorded files under the same names.
 - Sounds start after the first gesture, are skipped while the page is hidden, and the same sound within 40 ms is dropped.
+- Recovery (2026-10-18): every later pointer/key gesture can resume a suspended or interrupted Web Audio context; returning to the page or enabling effects retries too. Closed contexts are recreated. Safari's optional Audio Session API is set to `playback` to match music; unsupported/rejected API access falls back to gesture recovery. Mute/volume preferences are preserved, and missed effects are never replayed in a burst.
 - Mute and volume are stored in `asterveil.fateweave.sfx.v1`, separate from the music.
 - The title has an effects toggle and volume slider.
 
@@ -43,4 +44,4 @@ Each file is about 2.1 MB, 13 MB in total. A track is fetched only when it first
 | Battle (per actor turn, from its events) | `hit` (physical) or `zap` (energy intent or energy move), `crit` (execute/finisher/backstab), `miss` (dodge/evade), `guard`, `barrier`, `heal`, `buff`, `debuff`, `cancel`, `down`, then `victory`/`defeat` |
 | Lobby | `coin` (hire, market, refresh), `upgrade`, `anvil` (forge, salvage, smelt), `potion` (brew), `claim`, `buff` (talent), `guard` (equip) |
 
-**Testing.** `<html data-sfx>` names the last sound played, so Chromium tests check which sound each action picks and that the toggle is stored. Whether the sounds are heard, and how they sound, needs a real device.
+**Testing.** `<html data-sfx>` names the last sound requested, even if playback is blocked: it cannot prove audio output. Lifecycle unit tests check actual oscillator/noise start calls after interruptions, rejected unlock, return from background, keyboard recovery, unmute and closed-context recreation. A focused Chromium battle test observes native audio-context state and oscillator scheduling after suspension for both an attack and Arcane Bolt. Audible output and iOS Safari behaviour still need a real device.

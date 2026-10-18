@@ -1,5 +1,19 @@
 # Codex → Claude handoff
 
+## 2026-10-18 — iPhone sound-effect recovery
+
+- Owner hears background music on iPhone but no attack/skill effects; turning off Silent mode did not help.
+- Base: `feature/fateweave-initial-prototype` at `fbd33dc40a09f16f9615ba712e4d56d04d6a1ce8`. Branch: `codex/fix-iphone-sfx-recovery`.
+- Confirmed code defect: SFX removed its gesture listeners after the first attempt and `play()` silently discarded sounds unless the context was running. A rejected initial resume or later iOS suspension could leave effects silent for the rest of a touch session. The owner's exact device state is not remotely observable.
+- Fix in `platform/sfx.ts`: keep gesture recovery available, retry on returning to a visible page/unmute/playback, recover Safari interruption, recreate closed contexts and request the optional Safari playback session. Preserve user preferences and do not queue missed sounds.
+- Nine lifecycle unit tests observe oscillator/noise starts instead of relying on `data-sfx`. A new browser battle test suspends native Web Audio, then checks recovery plus attack and skill oscillator starts. Local Chromium cannot launch in this sandbox, so the browser case remains pending; real iPhone sound output is also unverified.
+- Validation: all 416 unit tests, typecheck, lint and build passed before adding the browser-only case; the browser addition is typechecked/linted separately. Phaser retains its existing chunk-size warning.
+- No gameplay/save changes or audio assets added. No merge/publication of this sound fix without the owner's instruction.
+
+### Previous fix publication
+
+- Owner approved merging PR #12. It merged at `fbd33dc` and GitHub Actions run `39128061742` completed both build/browser verification and deployment successfully. The older "no merge" note below records the state before that approval.
+
 ## 2026-10-18 — Thorn Matriarch faces left
 
 - Owner reported the Thorn Matriarch (ราชินีหนาม) facing right in battle. Party units must face right and enemies left.
