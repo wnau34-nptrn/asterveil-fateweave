@@ -299,8 +299,15 @@ test('battle effects recover a suspended audio context and start attack and skil
       constructor(options?: AudioContextOptions) { super(options); probe.contexts.push(this); }
       createOscillator(): OscillatorNode {
         const oscillator = super.createOscillator(); const start = oscillator.start.bind(oscillator);
+        // AudioParam.value can still report the previous render quantum immediately after automation.
+        // Observe the scheduled frequency instead of sampling that asynchronous getter at start().
+        let frequency = oscillator.frequency.value;
+        const setFrequency = oscillator.frequency.setValueAtTime.bind(oscillator.frequency);
+        oscillator.frequency.setValueAtTime = (value: number, when: number) => {
+          frequency = value; return setFrequency(value, when);
+        };
         oscillator.start = (when?: number) => {
-          if (oscillator.type === 'sine' && oscillator.frequency.value < 300) probe.attacks++;
+          if (oscillator.type === 'sine' && frequency < 300) probe.attacks++;
           if (oscillator.type === 'sawtooth') probe.zaps++;
           start(when);
         };
