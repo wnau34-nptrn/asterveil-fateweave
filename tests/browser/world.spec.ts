@@ -318,6 +318,40 @@ for (const [width, height] of [[320, 568], [390, 844], [844, 390], [1366, 768]])
   });
 }
 
+for (const [width, height] of [[390, 844], [844, 390]]) {
+  test(`battle info exposes effects settings and preview without taking a turn at ${width}x${height}`, async ({ browser }, info) => {
+    const context = await browser.newContext({ viewport: { width: width!, height: height! }, hasTouch: true });
+    const page = await context.newPage(); watchPage(page);
+    const run = { ...newExpedition(map, encounterById, 35, undefined, true) }; reveal(run, map);
+    run.battle = { kind: 'random', encounterId: 'thicket-ambush', entry: { ...run.hp }, commands: [] };
+    await seed(page, run);
+    await page.addInitScript(() => localStorage.setItem('asterveil.fateweave.sfx.v1', JSON.stringify({ muted: true, volume: 0 })));
+    const issues: string[] = []; page.on('pageerror', e => issues.push(e.message));
+    await page.goto('./'); await page.locator('#continue').tap(); await page.locator('#start').tap();
+    const before = await page.evaluate(k => localStorage.getItem(k), key);
+    await page.locator('#battle-info').tap(); await expect(page.locator('#game-info')).toBeVisible();
+    await reachable(page, '#battle-sfx-toggle'); await reachable(page, '#battle-sfx-test');
+    await expect(page.locator('#battle-sfx-toggle')).toContainText('เอฟเฟกต์: ปิด');
+    await expect(page.locator('#battle-sfx-test')).toHaveText('เปิดและทดสอบเอฟเฟกต์');
+    await page.locator('#battle-sfx-test').tap();
+    await expect(page.locator('#battle-sfx-feedback')).toContainText('ตัวอย่างเสียงโจมตี');
+    await expect(page.locator('#battle-sfx-toggle')).toContainText('เอฟเฟกต์: เปิด');
+    await expect(page.locator('#battle-sfx-level')).toHaveText('70%');
+    // Both screens share preferences, but touching audio settings never commits a battle command.
+    await expect(page.locator('#sfx-toggle')).toContainText('เอฟเฟกต์: เปิด');
+    await page.locator('#battle-sfx-volume').focus(); await page.locator('#battle-sfx-volume').press('ArrowLeft');
+    await expect(page.locator('#battle-sfx-level')).toHaveText('65%');
+    await expect(page.locator('#sfx-level')).toHaveText('65%');
+    expect(await page.evaluate(k => localStorage.getItem(k), key)).toBe(before);
+    await page.screenshot({ path: info.outputPath('battle-sound-settings.png') });
+    await page.locator('[data-ui=info-close]').tap(); await expect(page.locator('#game-info')).not.toBeVisible();
+    await page.locator('#action-attack').tap(); await page.locator('[data-ui=skill-close]').tap();
+    await page.locator('#target-brute').tap(); await finishPlayback(page);
+    expect((await saved(page)).battle!.commands).toHaveLength(1);
+    expect(issues).toEqual([]); await context.close();
+  });
+}
+
 test('battle effects recover a suspended audio context and start attack and skill audio nodes', async ({ page }, info) => {
   // Observe real Web Audio scheduling: data-sfx alone also changes when nothing can be heard.
   await page.addInitScript(() => {
