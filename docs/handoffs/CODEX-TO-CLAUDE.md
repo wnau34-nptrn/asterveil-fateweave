@@ -1,5 +1,13 @@
 # Codex → Claude handoff
 
+## 2026-10-18 — Isolate effects from possible music masking
+
+- Owner suggests background music may mask effects. This remains a hypothesis: no physical iPhone sample result or audible output has been confirmed. Avoid claiming a mix fix or that the device is now audible.
+- A direct effects sample now pauses **all** music tracks, including an outgoing crossfade, for two seconds. Repeated samples extend the pause; playback restores only the current track and respects mute, page visibility and the latest volume. Music preferences and game saves remain untouched. Pausing deliberately avoids relying on HTML media volume changes that some iPhones ignore.
+- Battle **ⓘ → เพลงและเสียงเอฟเฟกต์** now includes music mute/volume as well as the existing effects controls/sample. Music controls synchronize with title controls. The owner can disable music and test actual attacks/skills without leaving the fight or spending a turn on settings.
+- Validation: 422 unit tests, typecheck, lint, normal and Pages builds passed. All eight focused production-Pages browser cases passed, including real media pause/resume, synchronized music controls and unchanged save/battle commands. Portrait 390×844 and landscape 844×390 battle screenshots were inspected; title controls also passed at 320×568, 390×844, 844×390 and 1366×768. Browser extension tools are unavailable in this session, so use repository Playwright/Chromium under the Pages subpath. Physical iPhone output remains unverified.
+- Next device check: refresh, continue, open battle ⓘ and press the effects sample. If still silent while music is paused, masking alone cannot explain the problem. If audible, disable music and try actual attacks/skills to confirm before changing every recipe or replacing the audio engine.
+
 ## 2026-10-18 — Make sound settings discoverable and add a direct sample
 
 - Owner still hears no effects on iPhone and asked whether an effects toggle even exists. Current device mute/volume preferences remain unconfirmed; do not assert the iPhone issue is resolved from Chromium results.
