@@ -13,7 +13,7 @@ Date: 2026-10-15 · Source: [PR #4](https://github.com/wnau34-nptrn/asterveil-fa
 | Text / logos | None. |
 | Tiers | Normal foes have no gold, the elites have gold, and the Sentinel has gold plus violet. |
 | Style | Same heroic-chibi line weight, cel shading and warm rim light as `units.webp`. Silhouettes are distinct from the heroes and from each other. |
-| Facing | All 6 mercenaries face right. Sefa lunges wide, but his face and eyes turn right, so it is accepted. 8 of 9 foes face left or the front. **`foe_matriarch` faces right** in the frame and the portrait (see the tech fixes). |
+| Facing | All 6 mercenaries face right. Sefa lunges wide, but his face and eyes turn right, so it is accepted. 8 of 9 foes face left or the front. **Correction (2026-10-18):** the incoming `foe_matriarch` body and portrait face left; the intake flip made their runtime frames face right (see the tech fixes). |
 | Budget | Package runtime WebP 1,939,496 B (limit 2.0 MB). |
 | Provenance | Built-in image generation; prompts and hashes are in `PROMPTS.md` and `provenance/`. No external art imported. |
 
@@ -27,7 +27,7 @@ Date: 2026-10-15 · Source: [PR #4](https://github.com/wnau34-nptrn/asterveil-fa
 ## Tech fixes
 
 - **Re-encode.** Codex shipped quality-50 WebPs, to fit both the standalone and the atlas copies in the budget. The game only loads atlases, so Claude rebuilt them from the PNGs: units at quality 80 (336,890 B) and portraits at quality 72 (264,554 B). The new mercenary runtime total is 601,444 B.
-- **Matriarch facing:** `foe_matriarch` and its portrait are mirrored horizontally in the runtime atlas. The design is symmetric, with no text or one-sided emblem, so no redraw was needed.
+- **Matriarch facing (corrected 2026-10-18):** intake mirrored the already-left-facing incoming body and portrait, leaving the runtime atlas frames facing right. `mirroredArt` now flips only the Matriarch battle frame back to the left; CSS mirrors its cropped DOM portrait to match. The atlas files are unchanged. If rebuilding these runtime frames from the incoming originals, omit the intake flip and remove both display corrections.
 
 ## Integrated later (same day)
 
