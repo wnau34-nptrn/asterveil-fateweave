@@ -1,5 +1,13 @@
 # Codex → Claude handoff
 
+## 2026-10-18 — Make sound settings discoverable and add a direct sample
+
+- Owner still hears no effects on iPhone and asked whether an effects toggle even exists. Current device mute/volume preferences remain unconfirmed; do not assert the iPhone issue is resolved from Chromium results.
+- Replace icon-only title toggles with explicit เพลง/เอฟเฟกต์ เปิด/ปิด text and visible percentages. Add a direct attack sample. If effects are muted/0%, the button explicitly says it will enable and test them, restoring only zero volume to 70%.
+- `Sfx.preview()` awaits context resume before scheduling the sample, avoids first-sample loss, preserves preferences itself and returns a failure if unsupported/blocked. The UI changes preferences only on the explicitly labelled enable-and-test action. No game save changes.
+- Validation: 418 unit tests, typecheck, lint and Pages build passed; 6 focused browser cases passed on the production Pages build (existing effects controls, attack/skill recovery, new settings/sample at 320×568, 390×844, 844×390 and 1366×768). Screenshots inspected. Minor feedback-copy adjustment follows the same verified flow and deliberately avoids claiming the device speaker was heard.
+- Ask for the result of the sample and the visible on/off/percentage if silence persists. Physical iPhone output is not verified, and automatic tests cannot establish the owner's current preferences or speaker output. No audio-engine replacement or new assets in this change.
+
 ## 2026-10-18 — Publication follow-up: audio probe timing
 
 - Owner authorized merging and publishing the sound fix. PR #13 merged at `253caaea0423fce587c8ad90cd8f90fad35dc91a`.

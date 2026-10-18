@@ -289,6 +289,35 @@ test('sound effects: steps, walls, chests and battle turns name their sound; the
   expect(issues).toEqual([]);
 });
 
+for (const [width, height] of [[320, 568], [390, 844], [844, 390], [1366, 768]]) {
+  test(`sound settings are explicit and preview enables muted zero-volume effects without changing the save at ${width}x${height}`, async ({ page }, info) => {
+    await page.setViewportSize({ width: width!, height: height! });
+    await seed(page, null);
+    await page.addInitScript(() => {
+      if (sessionStorage.getItem('sound-pref-seeded')) return;
+      localStorage.setItem('asterveil.fateweave.sfx.v1', JSON.stringify({ muted: true, volume: 0 }));
+      sessionStorage.setItem('sound-pref-seeded', 'yes');
+    });
+    await page.goto('./');
+    await expect(page.locator('#sfx-toggle')).toContainText('เอฟเฟกต์: ปิด');
+    await expect(page.locator('#sfx-level')).toHaveText('0%');
+    await expect(page.locator('#sfx-test')).toHaveText('เปิดและทดสอบเอฟเฟกต์');
+    await reachable(page, '#sfx-toggle'); await reachable(page, '#sfx-test'); await reachable(page, '#continue');
+    const before = await page.evaluate(k => localStorage.getItem(k), key);
+    await page.locator('#sfx-test').click();
+    await expect(page.locator('#sfx-feedback')).toContainText('ตัวอย่างเสียงโจมตี');
+    await expect(page.locator('#sfx-toggle')).toContainText('เอฟเฟกต์: เปิด');
+    await expect(page.locator('#sfx-level')).toHaveText('70%');
+    await expect(page.locator('#sfx-volume')).toHaveValue('70');
+    expect(await page.evaluate(k => localStorage.getItem(k), key)).toBe(before);
+    expect(await page.evaluate(() => JSON.parse(localStorage.getItem('asterveil.fateweave.sfx.v1')!))).toEqual({ muted: false, volume: .7 });
+    expect(await page.evaluate(() => document.scrollingElement!.scrollHeight <= innerHeight)).toBe(true);
+    await page.screenshot({ path: info.outputPath('explicit-audio-controls.png') });
+    await page.reload(); await expect(page.locator('#sfx-toggle')).toContainText('เอฟเฟกต์: เปิด');
+    await expect(page.locator('#sfx-level')).toHaveText('70%');
+  });
+}
+
 test('battle effects recover a suspended audio context and start attack and skill audio nodes', async ({ page }, info) => {
   // Observe real Web Audio scheduling: data-sfx alone also changes when nothing can be heard.
   await page.addInitScript(() => {

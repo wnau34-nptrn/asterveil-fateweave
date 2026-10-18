@@ -79,16 +79,29 @@ export class GameShell {
     // Every enabled button press clicks (the D-pad steps instead; game results add their own sound).
     root.addEventListener('click', e => { const b = (e.target as HTMLElement).closest<HTMLButtonElement>('button'); if (b && !b.disabled && !b.id.startsWith('move-')) sfx.play('click'); }, { capture: true });
     root.addEventListener('click', e => { if ((e.target as HTMLElement).closest('[data-sfx-toggle]')) { sfx.setMuted(!sfx.settings.muted); this.refreshMusicControls(); } });
-    root.addEventListener('input', e => { const t = e.target as HTMLInputElement; if (t.id === 'music-volume') this.music.setVolume(Number(t.value) / 100); if (t.id === 'sfx-volume') { sfx.setVolume(Number(t.value) / 100); sfx.play('click'); } });
+    root.addEventListener('click', e => {
+      if (!(e.target as HTMLElement).closest('#sfx-test')) return;
+      // The button explicitly offers to enable effects if they are muted or set to zero.
+      sfx.setMuted(false); if (sfx.settings.volume === 0) sfx.setVolume(.7); this.refreshMusicControls();
+      const feedback = this.root.querySelector<HTMLElement>('#sfx-feedback')!;
+      feedback.textContent = 'กำลังทดสอบเสียงโจมตี…';
+      void sfx.preview().then(played => {
+        if (feedback.isConnected) feedback.textContent = played ? `ตัวอย่างเสียงโจมตี · ระดับเอฟเฟกต์ ${Math.round(sfx.settings.volume * 100)}%` : 'เบราว์เซอร์ยังไม่เปิดเสียง · ลองแตะทดสอบอีกครั้ง';
+      });
+    });
+    root.addEventListener('input', e => { const t = e.target as HTMLInputElement; if (t.id === 'music-volume') this.music.setVolume(Number(t.value) / 100); if (t.id === 'sfx-volume') { sfx.setVolume(Number(t.value) / 100); sfx.play('click'); } if (t.id === 'music-volume' || t.id === 'sfx-volume') this.refreshMusicControls(); });
     this.showTitle();
   }
   private refreshMusicControls(): void {
     const p = this.music.settings;
-    this.root.querySelectorAll<HTMLButtonElement>('[data-music-toggle]').forEach(b => { b.setAttribute('aria-pressed', String(!p.muted)); b.setAttribute('aria-label', p.muted ? 'เปิดเพลง' : 'ปิดเพลง'); b.innerHTML = icon(p.muted ? 'musicOff' : 'music'); });
+    this.root.querySelectorAll<HTMLButtonElement>('[data-music-toggle]').forEach(b => { b.setAttribute('aria-pressed', String(!p.muted)); b.setAttribute('aria-label', p.muted ? 'เปิดเพลง' : 'ปิดเพลง'); b.innerHTML = icon(p.muted ? 'musicOff' : 'music') + (b.id === 'music-toggle' ? `<span>เพลง: ${p.muted ? 'ปิด' : 'เปิด'}</span>` : ''); });
     const v = this.root.querySelector<HTMLInputElement>('#music-volume'); if (v) v.disabled = p.muted;
+    const ml = this.root.querySelector<HTMLOutputElement>('#music-level'); if (ml) ml.value = `${Math.round(p.volume * 100)}%`;
     const s = sfx.settings; const st = this.root.querySelector<HTMLButtonElement>('#sfx-toggle');
-    if (st) { st.setAttribute('aria-pressed', String(!s.muted)); st.setAttribute('aria-label', s.muted ? 'เปิดเสียงเอฟเฟกต์' : 'ปิดเสียงเอฟเฟกต์'); st.innerHTML = icon(s.muted ? 'soundOff' : 'sound'); }
-    const sv = this.root.querySelector<HTMLInputElement>('#sfx-volume'); if (sv) sv.disabled = s.muted;
+    if (st) { st.setAttribute('aria-pressed', String(!s.muted)); st.setAttribute('aria-label', s.muted ? 'เปิดเสียงเอฟเฟกต์' : 'ปิดเสียงเอฟเฟกต์'); st.innerHTML = icon(s.muted ? 'soundOff' : 'sound') + `<span>เอฟเฟกต์: ${s.muted ? 'ปิด' : 'เปิด'}</span>`; }
+    const sv = this.root.querySelector<HTMLInputElement>('#sfx-volume'); if (sv) { sv.disabled = s.muted; sv.value = String(Math.round(s.volume * 100)); }
+    const sl = this.root.querySelector<HTMLOutputElement>('#sfx-level'); if (sl) sl.value = `${Math.round(s.volume * 100)}%`;
+    const test = this.root.querySelector<HTMLButtonElement>('#sfx-test'); if (test) test.textContent = s.muted || s.volume === 0 ? 'เปิดและทดสอบเอฟเฟกต์' : 'ทดสอบเสียงเอฟเฟกต์';
   }
   setBattleVisibilityListener(listener: (visible: boolean) => void): void { this.onBattleVisibility = listener; }
 
@@ -111,10 +124,11 @@ export class GameShell {
   }
   private musicControls(): string {
     const p = this.music.settings; const s = sfx.settings;
-    return `<div class="music-controls"><button id="music-toggle" data-music-toggle class="round-glass" aria-pressed="${!p.muted}" aria-label="${p.muted ? 'เปิดเพลง' : 'ปิดเพลง'}">${icon(p.muted ? 'musicOff' : 'music')}</button>`
-      + `<label class="music-volume"><span>เพลง</span><input id="music-volume" type="range" min="0" max="100" step="5" value="${Math.round(p.volume * 100)}" aria-label="ระดับเสียงเพลง"${p.muted ? ' disabled' : ''}></label></div>`
-      + `<div class="music-controls"><button id="sfx-toggle" data-sfx-toggle class="round-glass" aria-pressed="${!s.muted}" aria-label="${s.muted ? 'เปิดเสียงเอฟเฟกต์' : 'ปิดเสียงเอฟเฟกต์'}">${icon(s.muted ? 'soundOff' : 'sound')}</button>`
-      + `<label class="music-volume"><span>เอฟเฟกต์</span><input id="sfx-volume" type="range" min="0" max="100" step="5" value="${Math.round(s.volume * 100)}" aria-label="ระดับเสียงเอฟเฟกต์"${s.muted ? ' disabled' : ''}></label></div>`;
+    return `<div class="music-controls audio-settings"><button id="music-toggle" data-music-toggle class="round-glass audio-toggle" aria-pressed="${!p.muted}" aria-label="${p.muted ? 'เปิดเพลง' : 'ปิดเพลง'}">${icon(p.muted ? 'musicOff' : 'music')}<span>เพลง: ${p.muted ? 'ปิด' : 'เปิด'}</span></button>`
+      + `<label class="music-volume"><input id="music-volume" type="range" min="0" max="100" step="5" value="${Math.round(p.volume * 100)}" aria-label="ระดับเสียงเพลง"${p.muted ? ' disabled' : ''}></label><output id="music-level" for="music-volume">${Math.round(p.volume * 100)}%</output></div>`
+      + `<div class="music-controls audio-settings"><button id="sfx-toggle" data-sfx-toggle class="round-glass audio-toggle" aria-pressed="${!s.muted}" aria-label="${s.muted ? 'เปิดเสียงเอฟเฟกต์' : 'ปิดเสียงเอฟเฟกต์'}">${icon(s.muted ? 'soundOff' : 'sound')}<span>เอฟเฟกต์: ${s.muted ? 'ปิด' : 'เปิด'}</span></button>`
+      + `<label class="music-volume"><input id="sfx-volume" type="range" min="0" max="100" step="5" value="${Math.round(s.volume * 100)}" aria-label="ระดับเสียงเอฟเฟกต์"${s.muted ? ' disabled' : ''}></label><output id="sfx-level" for="sfx-volume">${Math.round(s.volume * 100)}%</output></div>`
+      + `<div class="sfx-check"><button id="sfx-test" class="secondary">${s.muted || s.volume === 0 ? 'เปิดและทดสอบเอฟเฟกต์' : 'ทดสอบเสียงเอฟเฟกต์'}</button><p id="sfx-feedback" role="status"></p></div>`;
   }
   private showTitle(): void {
     const g = this.game; const s = g?.run;

@@ -74,6 +74,16 @@ export class Sfx {
     document.addEventListener('visibilitychange', () => { if (this.unlocked && !document.hidden) this.resume(); });
   }
   get settings(): SfxPrefs { return { ...this.prefs }; }
+  // Explicit preview button: resume within its gesture, then schedule the sample after resume completes.
+  // A true result means Web Audio accepted playback, not proof of sound from a physical speaker.
+  async preview(): Promise<boolean> {
+    if (this.prefs.muted || this.prefs.volume === 0 || document.hidden) return false;
+    this.unlocked = true; this.resume();
+    const ctx = this.ctx; if (!ctx) return false;
+    try { if (ctx.state !== 'running') await ctx.resume(); } catch { return false; }
+    if (ctx.state !== 'running') return false;
+    this.last.delete('hit'); this.play('hit'); return true;
+  }
   setMuted(muted: boolean): void { this.prefs.muted = muted; this.save(); if (!muted && this.unlocked) this.resume(); }
   setVolume(volume: number): void { this.prefs.volume = Math.min(1, Math.max(0, volume)); this.save(); if (this.out) this.out.gain.value = this.prefs.volume; }
   private save(): void { try { this.storage?.setItem(prefKey, JSON.stringify(this.prefs)); } catch { /* fine for a preference */ } }
