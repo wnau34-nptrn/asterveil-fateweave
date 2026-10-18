@@ -1,6 +1,19 @@
 # Fateweave development instructions
 
-Work only in `asterveil-fateweave`. Never modify, reset, merge, push to, or import private code/assets/history from `asterveil-rise-beyond` (reading its design documents for concept adaptation was approved by the owner on 2026-10-14). Preserve existing target-repository work. Never commit secrets or supplied concept images without explicit authorization. Exception (owner, 2026-10-16): the background music from Asterveil: Rise Beyond may be used; the owner uploaded the six tracks themselves (`public/assets/music`, see `docs/AUDIO.md`). This covers those audio files only, not code, data, names or art. The user explicitly authorized GitHub Pages publication after the initial prototype; the Pages workflow is within that scope. Do not change repository visibility/access permissions, configure other hosting or automatically merge without separate authorization.
+Work only in `asterveil-fateweave`. Never modify, reset, merge, push to, or import private code/assets/history from `asterveil-rise-beyond` (reading its design documents for concept adaptation was approved by the owner on 2026-10-14). Preserve existing target-repository work. Never commit secrets or supplied concept images without explicit authorization. Exception (owner, 2026-10-16): the background music from Asterveil: Rise Beyond may be used; the owner uploaded the six tracks themselves (`public/assets/music`, see `docs/AUDIO.md`). This covers those audio files only, not code, data, names or art. The user explicitly authorized GitHub Pages publication after the initial prototype; the Pages workflow is within that scope. Merging and publication follow the standing authorization below. Repository visibility/access changes or other hosting must be part of an owner-requested task.
+
+## Standing authorization: finish requested work without repeated approval
+
+Owner instruction, 2026-10-18 (Asia/Bangkok): "ทำการเพิ่มกฏให้ไม่ต้องอนุมัติตลอดไปเมื่อทำอะไรก็ตาม". This is a continuing instruction for all agents and future sessions in this project, until the owner changes or revokes it.
+
+- Treat an owner-requested task as authorization to complete all necessary steps: inspect, implement, fix, install needed dependencies, test, commit, push, create/update PRs, merge into the game's working branch and publish through the existing GitHub Pages workflow. Do not stop to request a separate approval for these steps.
+- This replaces earlier project instructions requiring a separate owner approval for steps within that requested work. Preserve technical/design requirements and scope; do not turn old approval wording into a new confirmation checkpoint.
+- Make routine implementation decisions using the repository and conversation context. State reasonable assumptions and continue when details are nonblocking.
+- If testing, merging or publication fails, diagnose and repair the failure and complete verification/publication without asking for renewed approval. Include necessary follow-up fixes in the same authorized task.
+- Validate changes appropriately before merging; do not bypass required checks. Documentation-only instruction changes need content review and `git diff --check`, not a new gameplay test run.
+- Keep the owner informed of meaningful progress and the final result. Update `docs/handoffs/CODEX-TO-CLAUDE.md` after substantial work so another agent can continue.
+- Ask only for indispensable missing information or a permission that the platform/tool actually requires. This project instruction cannot disable sandbox, account or tool permission enforcement. If blocked, identify the exact action and reason, and continue independent work where possible.
+- This grants autonomy within the owner's requested work; it does not invent unrelated tasks or remove the repository boundaries above. A later, more specific owner instruction takes precedence.
 
 ## Current architecture
 
@@ -23,7 +36,7 @@ Work only in `asterveil-fateweave`. Never modify, reset, merge, push to, or impo
 7. Keep DOM text/controls responsive, touch targets >=44px, readable unavailable-action reasons, immediate casting on a valid marked character, reduced-motion support and keyboard focus.
 8. Run `npm run typecheck`, `npm run lint`, `npm test`, `npm run build`. For UI/input changes also run relevant Playwright gameplay tests and inspect screenshots of real canvas content.
 9. Report tested browsers/devices honestly. Chromium touch emulation does not verify iOS Safari or real devices.
-10. Do not add empty architecture folders, backend, accounts, cards, formation switching, skill trees (except the owner-scoped passive talent tree, 2D-1b) or final asset production without a scoped task. Expedition systems follow the approved phase plan in `docs/EXPEDITION_DESIGN.md`; their draft numbers still need owner approval.
+10. Do not add empty architecture folders, backend, accounts, cards, formation switching, skill trees (except the owner-scoped passive talent tree, 2D-1b) or final asset production without a scoped task. Expedition systems follow the phase plan in `docs/EXPEDITION_DESIGN.md`; validate draft numbers through simulation/playtesting and report them under the standing authorization above.
 
 ## Expedition (single game, no practice mode)
 
