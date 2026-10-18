@@ -113,4 +113,17 @@ describe('sound effect audio lifecycle', () => {
     expect(context().resume).toHaveBeenCalledTimes(2); expect(context().noises).toHaveLength(0);
     effects.play('zap'); expect(context().tones).toHaveLength(2);
   });
+
+  it('previews after resuming without needing a second gesture', async () => {
+    expect(await effects.preview()).toBe(true);
+    expect(context().noises[0]!.start).toHaveBeenCalledOnce();
+    expect(context().tones[0]!.start).toHaveBeenCalledOnce();
+  });
+
+  it('does not let a preview silently change mute or zero-volume preferences', async () => {
+    effects.setMuted(true); expect(await effects.preview()).toBe(false);
+    expect(effects.settings.muted).toBe(true); expect(TestAudioContext.instances).toHaveLength(0);
+    effects.setMuted(false); effects.setVolume(0); expect(await effects.preview()).toBe(false);
+    expect(effects.settings.volume).toBe(0);
+  });
 });

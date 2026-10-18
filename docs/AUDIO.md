@@ -35,7 +35,8 @@ Each file is about 2.1 MB, 13 MB in total. A track is fetched only when it first
 - Sounds start after the first gesture, are skipped while the page is hidden, and the same sound within 40 ms is dropped.
 - Recovery (2026-10-18): every later pointer/key gesture can resume a suspended or interrupted Web Audio context; returning to the page or enabling effects retries too. Closed contexts are recreated. Safari's optional Audio Session API is set to `playback` to match music; unsupported/rejected API access falls back to gesture recovery. Mute/volume preferences are preserved, and missed effects are never replayed in a burst.
 - Mute and volume are stored in `asterveil.fateweave.sfx.v1`, separate from the music.
-- The title has an effects toggle and volume slider.
+- The title has explicit music/effects on/off labels, percentage readouts and separate volume sliders. "ทดสอบเสียงเอฟเฟกต์" resumes Web Audio within its own click and plays an attack sample. If effects are muted or at 0%, the button explicitly offers "เปิดและทดสอบเอฟเฟกต์"; that action enables effects and restores zero volume to 70%. It never changes the game save. Browser rejection is reported beside the button; accepted playback is not proof of physical speaker output.
+- The battle's **ⓘ** dialog exposes the same effects toggle, volume and preview at the top. Preferences synchronize with the title controls. These controls never spend a turn or leave the battle; the existing dialog-closing touch protection is retained.
 
 | Where | Sounds |
 |---|---|

@@ -55,7 +55,7 @@ export class BattleUI {
     root.innerHTML = `
       <header class="masthead">
         <div class="encounter-heading"><p class="eyebrow" id="encounter-kind">การต่อสู้</p><h1 id="encounter-title"></h1></div>
-        <div id="beat-status"></div><button id="battle-info" aria-haspopup="dialog" aria-controls="game-info" data-ui="info" class="quiet" aria-label="ข้อมูลสกิลและวิธีเล่น">ⓘ</button>
+        <div id="beat-status"></div><button id="battle-info" aria-haspopup="dialog" aria-controls="game-info" data-ui="info" class="quiet" aria-label="ข้อมูลการต่อสู้และตั้งค่าเสียง">ⓘ</button>
       </header>
       <main>
         <section id="turn-phase" class="turn-phase" role="status" aria-live="polite" aria-label="เทิร์นการต่อสู้"></section>
@@ -83,7 +83,7 @@ export class BattleUI {
           <details class="combat-history"><summary>บันทึกการต่อสู้</summary><ol id="event-log" role="log" aria-live="polite"></ol></details>
         </div></details></div>
         <footer><span>เจ้าของเทิร์น → เลือกสกิล → แตะเป้าหมายในสนาม</span><span id="save-status"></span></footer>
-      </main><dialog id="game-info" aria-labelledby="info-title"><div class="info-header"><h2 id="info-title">ข้อมูลการต่อสู้</h2><button data-ui="info-close" class="quiet" aria-label="ปิดข้อมูล">✕</button></div><div class="info-content"><section id="info-skill"></section><div id="info-host"></div></div></dialog>
+      </main><dialog id="game-info" aria-labelledby="info-title"><div class="info-header"><h2 id="info-title">ข้อมูลการต่อสู้</h2><button data-ui="info-close" class="quiet" aria-label="ปิดข้อมูล">✕</button></div><div class="info-content"><section class="battle-sound" aria-labelledby="battle-sound-title"><h3 id="battle-sound-title">เสียงเอฟเฟกต์</h3><div id="battle-sfx-controls"></div></section><section id="info-skill"></section><div id="info-host"></div></div></dialog>
 
       <section id="skill-popover" popover="manual" role="dialog" aria-modal="false" aria-labelledby="skill-title" aria-describedby="skill-copy skill-availability" tabindex="-1"><div class="skill-popover-heading"><h2 id="skill-title"></h2><button data-ui="skill-close" class="quiet" aria-label="ปิดคำอธิบายสกิล">✕</button></div><p id="skill-copy"></p><p id="skill-availability"></p><small>อ่านแล้วแตะเป้าหมายในสนามเพื่อใช้สกิล</small></section>`;
     root.addEventListener('click', e => {
