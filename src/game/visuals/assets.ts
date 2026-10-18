@@ -17,8 +17,9 @@ export const actorArt: Readonly<Record<string, { sheet: ArtSheet; frame: number 
 };
 // Enemy ids are field positions (`raider` back, `brute` front/large); `art` picks the illustration.
 // Frames drawn facing the wrong way for their side (party faces right, enemies face left, ART-PLACEMENT-RULES):
-// the original units-atlas raider faces right, so the field mirrors it.
-export const mirroredArt: ReadonlySet<string> = new Set(['raider']);
+// The original units-atlas raider and the runtime foes-atlas matriarch face right.
+// The incoming matriarch already faces left; intake flipped it when building the runtime atlas.
+export const mirroredArt: ReadonlySet<string> = new Set(['raider', 'foe_matriarch']);
 export const artOf = (data: EncounterDefinition, id: string): string => data.enemies.find(e => e.id === id)?.art ?? id;
 // Anchor the illustrated soles, excluding transparent padding below the feet (delivered frames: footY 496).
 const deliveredSoles = 497 / 512;
