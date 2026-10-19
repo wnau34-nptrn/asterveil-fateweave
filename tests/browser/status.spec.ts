@@ -5,6 +5,7 @@ import { veilSiege as data } from '../../src/content/encounters/veil-siege';
 import { createBattle, resolveCommand } from '../../src/core/battle/engine';
 import { newExpedition } from '../../src/core/world/world';
 import { newProfile } from '../../src/core/world/profile';
+import { fieldSlots } from '../../src/game/visuals/field-layout';
 
 const key = 'asterveil.fateweave.expedition.v1';
 async function openBattle(page: Page) {
@@ -18,6 +19,47 @@ async function openBattle(page: Page) {
   await page.addInitScript(({ key, raw }) => { if (!sessionStorage.getItem('status-seeded')) { localStorage.setItem(key, raw); sessionStorage.setItem('status-seeded', 'yes'); } }, { key, raw: JSON.stringify({ version: 21, profile, run }) });
   await page.goto('./'); await page.locator('#continue').click(); await expect(page.locator('#action-attack')).toBeEnabled();
 }
+
+test('all six reserved HP/status panels avoid every sprite and each other through short-field and viewport resize', async ({ page }, info) => {
+  await page.setViewportSize({ width: 320, height: 568 }); await openBattle(page);
+  await page.locator('#action-bash').click();
+  const before = await page.evaluate(k => localStorage.getItem(k), key);
+  for (const [width, height, forceShort] of [[320, 568, true], [320, 568, false], [390, 844, false], [1366, 768, false]] as const) {
+    await page.setViewportSize({ width, height });
+    await page.locator('.arena').evaluate((el, short) => {
+      (el as HTMLElement).style.cssText = short ? 'height:128px!important;min-height:128px!important;max-height:128px!important;flex:none!important' : '';
+    }, forceShort);
+    const arena = await page.locator('.arena').evaluate(el => ({ x: el.getBoundingClientRect().x, y: el.getBoundingClientRect().y, width: el.clientWidth, height: el.clientHeight }));
+    await expect.poll(() => page.locator('#game canvas').evaluate(el => parseFloat((el as HTMLElement).style.height))).toBe(arena.height);
+    const slots = fieldSlots(arena.width, arena.height);
+    // Layout stress only: fill every reserved row, including currently unaffected units.
+    // This intentionally changes DOM decorations, never combat state or saved commands.
+    await page.locator('.field-unit-info').evaluateAll(els => {
+      const sample = document.querySelector('.field-status')!.outerHTML;
+      for (const el of els) {
+        el.querySelector('.field-statuses')?.remove();
+        const icons = el.classList.contains('compact') ? 1 : Math.min(3, Math.floor((el.clientWidth - 18) / 20));
+        const row = document.createElement('span'); row.className = 'field-statuses';
+        row.innerHTML = sample.repeat(icons) + '<span class="field-status-more">+9</span>'; el.append(row);
+      }
+    });
+    expect(await page.locator('.field-unit-info').evaluateAll((els, { arena, slots }) => {
+      const boxes = els.map(el => el.getBoundingClientRect());
+      const overlap = (a: {x:number;y:number;width:number;height:number}, b: {x:number;y:number;width:number;height:number}) => a.x < b.x+b.width-.5 && b.x < a.x+a.width-.5 && a.y < b.y+b.height-.5 && b.y < a.y+a.height-.5;
+      return els.length === 6 && els.every((el, i) => {
+        const r = boxes[i]!;
+        const local = { x:r.x-arena.x, y:r.y-arena.y, width:r.width, height:r.height };
+        return !slots.some(s => overlap(local, s.body)) && !boxes.some((b,j) => i!==j && overlap(r,b)) &&
+          [...el.querySelectorAll('.field-status, .field-status-more, .field-health, .field-hp-value, .field-unit-name')].every(c => {
+            const b = c.getBoundingClientRect(); return !b.width || b.left>=r.left-.5 && b.right<=r.right+.5 && b.top>=r.top-.5 && b.bottom<=r.bottom+.5 && (!c.classList.contains('field-hp-value') || c.scrollWidth<=c.clientWidth+1);
+          });
+      });
+    }, { arena, slots })).toBe(true);
+    await expect(page.locator('#action-bash')).toHaveAttribute('aria-pressed', 'true');
+    expect(await page.evaluate(k => localStorage.getItem(k), key)).toBe(before);
+    await page.screenshot({ path: info.outputPath(`reserved-status-${width}-${forceShort ? 'short' : 'normal'}.png`) });
+  }
+});
 
 test('status inspection follows each displayed actor stage instead of leaking the final committed state', async ({ page }) => {
   await openBattle(page);

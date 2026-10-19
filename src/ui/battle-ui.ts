@@ -467,10 +467,12 @@ export class BattleUI {
   private renderFieldStatuses(): void {
     const s = this.displayState, d = this.data;
     this.set('field-statuses', !this.started || !this.scene ? '' : [...d.heroes, ...d.enemies].map(a => {
-      const position = this.scene!.actorStatusAnchors.get(a.id), rows = unitStatuses(s, d, a.id);
-      if (!position || !rows.length) return '';
+      const slot = this.scene!.actorPanels.get(a.id), rows = unitStatuses(s, d, a.id);
+      if (!slot) return '';
+      const position = slot.panel, actor = [...s.heroes, ...s.enemies].find(h => h.id === a.id)!;
+      const enemy = d.enemies.some(e => e.id === a.id);
       const label = `${actorName(a.id, d)} · ${rows.map(r => `${r.kind === 'buff' ? 'บัฟ' : 'ดีบัฟ'} ${r.name}: ${r.duration}`).join(' · ')} · รายละเอียดที่ปุ่มข้อมูล แท็บสถานะ`;
-      return `<span class="field-statuses" data-status-actor="${a.id}" role="img" aria-label="${escapeHtml(label)}" style="left:${position.x}px;top:${position.y}px">${rows.slice(0, 3).map(r => `<span class="field-status ${r.kind}" data-status="${r.id}" aria-hidden="true">${icon(r.icon)}</span>`).join('')}${rows.length > 3 ? `<span class="field-status-more" aria-hidden="true">+${rows.length - 3}</span>` : ''}</span>`;
+      return `<div class="field-unit-info ${slot.compact ? 'compact' : ''} ${slot.tiny ? 'tiny' : ''} ${slot.side ? 'side' : ''} ${enemy ? 'enemy' : 'ally'}" data-field-unit="${a.id}" style="left:${position.x}px;top:${position.y}px;width:${position.width}px;height:${position.height}px;--field-icon:${slot.iconSize}px;opacity:${actor.hp > 0 ? 1 : .4}"><span class="field-unit-name">${escapeHtml(actorName(a.id, d))}</span><span class="field-health" aria-label="${escapeHtml(actorName(a.id, d))} HP ${actor.hp}/${a.maxHp}"><span class="field-hp-value">${actor.hp}/${a.maxHp}</span><span class="field-hp-track"><span style="width:${actor.hp / a.maxHp * 100}%;background:#${a.color.toString(16).padStart(6, '0')}"></span></span></span>${rows.length ? `<span class="field-statuses" data-status-actor="${a.id}" role="img" aria-label="${escapeHtml(label)}">${rows.slice(0, slot.maxIcons).map(r => `<span class="field-status ${r.kind}" data-status="${r.id}" aria-hidden="true">${icon(r.icon)}</span>`).join('')}${rows.length > slot.maxIcons ? `<span class="field-status-more" aria-hidden="true">+${rows.length - slot.maxIcons}</span>` : ''}</span>` : ''}</div>`;
     }).join(''));
   }
 

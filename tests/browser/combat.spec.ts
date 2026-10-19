@@ -181,7 +181,7 @@ for(const viewport of [{width:320,height:568},{width:360,height:640},{width:375,
   await cast(page,'weaver','ward','weaver');await finish(page);await owner(page,'guardian');await page.locator('#action-guard').click();await page.locator('#skill-details').click();await page.locator('[data-ui=skill-close]').click();
   const positions=await page.locator('#field-targets button').evaluateAll(es=>es.map(el=>{const r=el.getBoundingClientRect();return{id:(el as HTMLElement).dataset.actor!,x:r.x,y:r.y,w:r.width,h:r.height,bottom:r.bottom};}));
   expect(positions).toHaveLength(4);if(viewport.width<=600&&viewport.height>=viewport.width)for(const [i,a]of positions.entries())for(const b of positions.slice(i+1))expect(a.x<b.x+b.w&&b.x<a.x+a.w&&a.y<b.y+b.h&&b.y<a.y+a.h).toBe(false);
-  const field=(await page.locator('#game canvas').boundingBox())!;for(const r of positions){expect(r.w).toBeGreaterThanOrEqual(44);expect(r.h).toBeGreaterThanOrEqual(44);expect((r.bottom-field.y)/field.height).toBeGreaterThan(.4);}
+  const field=(await page.locator('#game canvas').boundingBox())!;for(const r of positions){expect(r.w).toBeGreaterThanOrEqual(44);expect(r.h).toBeGreaterThanOrEqual(44);expect(r.y).toBeGreaterThanOrEqual(field.y);expect(r.bottom).toBeLessThanOrEqual(field.y+field.height);}
   for(const [front,back]of [['guardian','weaver'],['tracer','healer']]){const f=positions.find(p=>p.id===front)!,b=positions.find(p=>p.id===back)!;expect(f.x).toBeGreaterThan(b.x);expect(f.bottom).toBeGreaterThan(b.bottom);}
   await reachable(page,'#target-weaver');await page.locator('#target-weaver').click();await finish(page);await owner(page,'healer');
   await fits(['heal','prayer']);expect(issues).toEqual([]);await context.close();
