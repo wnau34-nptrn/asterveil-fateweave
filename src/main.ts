@@ -11,6 +11,7 @@ import './ui/effects.css';
 import './ui/world.css';
 import './ui/battle-skin.css';
 import './ui/game-feel.css';
+import './ui/portrait.css';
 
 fitViewport();
 const app = document.querySelector<HTMLElement>('#app')!;

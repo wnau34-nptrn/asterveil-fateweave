@@ -1,6 +1,17 @@
 # Modern battle HUD design spec
 
-Dated sections record earlier presentation work; the final SPD-round section defines the current rules and save behavior.
+## Current: portrait game with PC input — 2026-10-19
+
+Owner-approved direction: one mobile portrait layout, playable with mouse/keyboard on PC. This section supersedes historical desktop/landscape layout notes below; battle rules and saves are unchanged.
+
+- The game frame is at most 480px wide and centred on PC. Every view adapts to the frame via named size-container queries; no CSS scaling of the whole game. Phone landscape requests rotation, and undersized desktop windows request more room.
+- Battle: slim circular six-actor queue, arena with direct targets, compact announced enemy intent, four readable HP summaries and a centred command dock. Waiting allies' health stays readable. Queue buttons expose actor/SPD/HP details without permanent numeric labels.
+- Commands: Attack is initially selected. Choose a skill, then click/tap a legal target. The dock appears ready on each real hero turn; keys or inspection do not spend the turn. Optional ⓘ opens the full skill description. Escape cancels targeting, requiring another explicit selection before any field click can cast.
+- PC: WASD/arrows walk; 1–4 select displayed action slots, including the fourth unlocked skill; click chooses its enemy/ally target; B opens the map bag; I opens world/battle info. Repeats, modifiers, IME/editing and input during rotation guidance or presentation cannot queue skills or issue commands behind a modal. A keyboard guide appears beside the desktop frame.
+- Native dialogs stay centred over the game frame, with internal reading scroll. Popovers clamp to the same frame. Mobile keyboard editing is not treated as an instruction to rotate.
+- Preserve ≥44px controls, optional descriptions, focus restoration, reduced motion and the existing touch-close guard. No art or dependency changes.
+
+Dated sections below record historical presentation work and must not reintroduce a wide/landscape game layout.
 
 The supplied classic JRPG screenshots guide a portrait battle screen: arena above enemy HP, two-column hero cards below, and skills/targets at the bottom. The user's requested modernization retains that recognizable skeleton with restrained framing, larger readable type, clear class colors and touch-friendly controls.
 

@@ -15,6 +15,17 @@ Owner instruction, 2026-10-18 (Asia/Bangkok): "ทำการเพิ่มก
 - Ask only for indispensable missing information or a permission that the platform/tool actually requires. This project instruction cannot disable sandbox, account or tool permission enforcement. If blocked, identify the exact action and reason, and continue independent work where possible.
 - This grants autonomy within the owner's requested work; it does not invent unrelated tasks or remove the repository boundaries above. A later, more specific owner instruction takes precedence.
 
+## Portrait game and desktop keyboard — owner-approved 2026-10-19
+
+The owner chose a mobile portrait game that also plays on PC. This replaces earlier wide desktop/landscape layouts; older dated UI notes are historical.
+
+- Every view uses one portrait frame, up to 480px wide, centred on desktop (up to 960px high) with native-sized controls. Mobile portrait uses the available phone area. Coarse-pointer landscape shows rotation guidance and gates gameplay input; a desktop window below 320px wide or 560px high requests more space instead of shrinking touch targets.
+- `#app` is the named size container `game`. Component breakpoints use `@container game` and `cqw`/`cqh`; pointer/hover/reduced-motion remain media queries. The root is sized from `platform/viewport.ts`. Top-layer native dialogs centre on the game frame, and floating descriptions clamp to `gameBounds()`, not the monitor edges.
+- Battle commands stay in the centred lower dock and become available on the actual hero turn. Slot keys 1–4 select the displayed action; selecting never commits. A valid field target tap/click commits once. Attack is the initial selection; Escape cancels targeting, after which a new selection is required. Full skill descriptions are explicit via the dock's ⓘ button, not an automatic interruption on every selection.
+- The six-actor queue uses circular portraits with 44px buttons. Name/SPD/HP details are available on request and accessible labels preserve round/side/interruption information. Waiting allies retain readable HP; only the actual owner can issue a command.
+- WASD/arrows move on the map (existing step/repeat throttle); B toggles the map bag, I toggles world/battle information, Escape closes the top surface or cancels targeting. Ignore skill-key repeats, browser modifiers, IME/editing, background/rotation-blocked input and input behind other modals. Never queue commands during presentation for the next hero.
+- Use the game/arena dimensions in `BattleScene`, not viewport-wide media queries. Rotation, resize, inspection and keyboard selection must preserve saves and cannot add a command. No resolver, encounter or save-format changes are part of this UI work.
+
 ## Current architecture
 
 - Phaser 4.2.1 + strict TypeScript + Vite. Framework rules are different from Godot; Godot Lock documents are not requirements here.
@@ -71,4 +82,4 @@ Each hero command resolves that actor plus subsequent automatic enemies until th
 
 Mark lasts 2 rounds including application. Bash/Strike/Bolt/Ward/Heal cooldowns use 2 absolute rounds, Prayer 3. Guard protects the displayed next enemy target/source until consumed or the Knight returns; Bash cancels a chosen enemy's next physical turn, never energy. Earlier content saves start fresh. Preserve two distinct four-survivor plans per encounter and explicit blind Attack policy defeats.
 
-The current/next SPD queue stays in the phase band at every viewport, four compact or six large slots, without document scrolling. Owned skill buttons retain nonmodal floating descriptions, keyboard focus return, delayed closing-touch filtering and direct ≥44px field targets. Other actors remain support recipients only. Cooling skills are readable but cannot cast. On the shortest portrait fields preserve nonoverlapping ally targets and staggered grounded units.
+The current/next SPD queue stays in the portrait phase band as six circular slots without document scrolling. Owned skill buttons select the action; their explicit information button opens nonmodal floating descriptions. Preserve keyboard focus return, delayed closing-touch filtering and direct ≥44px field targets. Other actors remain support recipients only. Cooling skills are readable but cannot cast. On the shortest portrait fields preserve nonoverlapping ally targets and staggered grounded units.

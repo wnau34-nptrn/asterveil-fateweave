@@ -96,7 +96,7 @@ test('winning the first battle plays Vargoth\'s retreat, then the map', async ({
   const issues = await open(page, s);
   const [hero, action, target] = moves.at(-1)!;
   await expect(page.locator(`#hero-${hero}`)).toHaveAttribute('aria-pressed', 'true');
-  await page.locator(`#action-${action}`).click(); await page.locator('[data-ui=skill-close]').click();
+  await page.locator(`#action-${action}`).click();await page.locator('#skill-details').click(); await page.locator('[data-ui=skill-close]').click();
   await page.locator(`#target-${action === 'prayer' ? 'party' : target}`).click(); await finishPlayback(page);
   await expect(page.locator('.result-card')).toContainText('ชนะแล้ว'); await page.locator('#leave-battle').click();
   await expect(page.locator('#story-view')).toBeVisible(); await expect(page.locator('#story-view')).toHaveAttribute('data-speaker', 'vargoth');
@@ -132,7 +132,7 @@ test('victory returns to the same tile with surviving HP and loot; a camp rest h
   const issues = await open(page, state); await page.locator('#start').click();
   for (const [hero, action, target] of moves) {
     await expect(page.locator(`#hero-${hero}`)).toHaveAttribute('aria-pressed', 'true');
-    await page.locator(`#action-${action}`).click(); await page.locator('[data-ui=skill-close]').click();
+    await page.locator(`#action-${action}`).click();await page.locator('#skill-details').click(); await page.locator('[data-ui=skill-close]').click();
     await page.locator(`#target-${action === 'prayer' ? 'party' : target}`).click(); await finishPlayback(page);
   }
   await expect(page.locator('.result-card')).toContainText('ชนะแล้ว'); await page.locator('#leave-battle').click();
@@ -289,7 +289,7 @@ test('sound effects: steps, walls, chests and battle turns name their sound; the
   expect(issues).toEqual([]);
 });
 
-for (const [width, height] of [[320, 568], [390, 844], [844, 390], [1366, 768]]) {
+for (const [width, height] of [[320, 568], [390, 844], [1366, 600], [1366, 768]]) {
   test(`sound settings are explicit and preview enables muted zero-volume effects without changing the save at ${width}x${height}`, async ({ page }, info) => {
     await page.setViewportSize({ width: width!, height: height! });
     await seed(page, null);
@@ -318,7 +318,7 @@ for (const [width, height] of [[320, 568], [390, 844], [844, 390], [1366, 768]])
   });
 }
 
-for (const [width, height] of [[390, 844], [844, 390]]) {
+for (const [width, height] of [[390, 844], [430, 932]]) {
   test(`battle info exposes effects settings and preview without taking a turn at ${width}x${height}`, async ({ browser }, info) => {
     const context = await browser.newContext({ viewport: { width: width!, height: height! }, hasTouch: true });
     const page = await context.newPage(); watchPage(page);
@@ -367,7 +367,7 @@ for (const [width, height] of [[390, 844], [844, 390]]) {
     expect(await page.evaluate(k => localStorage.getItem(k), key)).toBe(before);
     await page.screenshot({ path: info.outputPath('battle-sound-settings.png') });
     await page.locator('[data-ui=info-close]').tap(); await expect(page.locator('#game-info')).not.toBeVisible();
-    await page.locator('#action-attack').tap(); await page.locator('[data-ui=skill-close]').tap();
+    await page.locator('#action-attack').tap();await page.locator('#skill-details').click(); await page.locator('[data-ui=skill-close]').tap();
     await page.locator('#target-brute').tap(); await finishPlayback(page);
     expect((await saved(page)).battle!.commands).toHaveLength(1);
     expect(issues).toEqual([]); await context.close();
@@ -409,7 +409,7 @@ test('battle effects recover a suspended audio context and start attack and skil
   await expect.poll(audioState).toBe('running');
   await page.evaluate(() => (window as unknown as { sfxProbe: { contexts: AudioContext[] } }).sfxProbe.contexts[0]!.suspend());
   await expect.poll(audioState).toBe('suspended');
-  await page.locator('#action-attack').click(); await expect.poll(audioState).toBe('running');
+  await page.locator('#action-attack').click();await page.locator('#skill-details').click(); await expect.poll(audioState).toBe('running');
   await page.locator('[data-ui=skill-close]').click();
   const attacks = () => page.evaluate(() => (window as unknown as { sfxProbe: { attacks: number } }).sfxProbe.attacks);
   const before = await attacks();
@@ -417,7 +417,7 @@ test('battle effects recover a suspended audio context and start attack and skil
   await finishPlayback(page);
   await expect(page.locator('#hero-weaver')).toHaveAttribute('aria-pressed', 'true');
   await page.evaluate(() => (window as unknown as { sfxProbe: { contexts: AudioContext[] } }).sfxProbe.contexts[0]!.suspend());
-  await page.locator('#action-bolt').click(); await expect.poll(audioState).toBe('running');
+  await page.locator('#action-bolt').click();await page.locator('#skill-details').click(); await expect.poll(audioState).toBe('running');
   await page.locator('[data-ui=skill-close]').click();
   const zaps = () => page.evaluate(() => (window as unknown as { sfxProbe: { zaps: number } }).sfxProbe.zaps);
   const beforeSkill = await zaps();
@@ -485,6 +485,7 @@ test('lobby: hire a duplicate, upgrade a star, pick the team, depart, and withdr
   await page.screenshot({ path: info.outputPath('lobby-hire.png') });
   await page.locator('#hire-0').click(); await expect(page.locator('#hire-0')).toContainText('จ้างแล้ว');
   expect((await savedProfile(page)).members[offer]).toEqual({ stars: 1, dupes: 1 }); expect((await savedProfile(page)).bank).toMatchObject({ ore: 120, gold: 20 });
+  await page.locator('[data-lobby=close]').click();
   await page.locator('#lobby-tab-team').click(); await page.locator(`#lobby-member-${offer}`).click();
   await expect(page.locator('#lobby-upgrade')).toContainText('อัปเป็น ★2'); await page.locator('#lobby-upgrade').scrollIntoViewIfNeeded(); await reachable(page, '#lobby-upgrade');
   await page.screenshot({ path: info.outputPath('lobby-upgrade.png') });
@@ -495,6 +496,7 @@ test('lobby: hire a duplicate, upgrade a star, pick the team, depart, and withdr
   await page.locator(`#lobby-member-${offer}`).click(); await expect(page.locator(`#lobby-member-${offer}`)).toHaveAttribute('aria-pressed', 'false');
   await page.locator(`#lobby-member-${benched}`).click(); await page.locator('.team-card.empty[data-group=bench]').click();
   await expect.poll(async () => (await savedProfile(page)).party.deployed).toEqual(['guardian', 'tracer', 'weaver', 'healer'].filter(id => id !== benched));
+  await page.locator('[data-lobby=close]').click();
   await page.locator('#lobby-depart').click(); await expect(page.locator('#world-view')).toBeVisible();
   const run = await saved(page); expect(run.roster.deployed).toHaveLength(3); expect(run.members[offer]!.stars).toBe(2);
   await expect(page.locator('#world-party .world-hero')).toHaveCount(3);
@@ -519,11 +521,11 @@ test('Garran (spear) fights from the front slot: brace targets himself, drawn wi
   await page.goto('./'); await page.locator('#continue').click(); await page.locator('#start').click();
   for (const hero of ['tracer', 'weaver']) {
     await expect(page.locator(`#hero-${hero}`)).toHaveAttribute('aria-pressed', 'true');
-    await page.locator('#action-attack').click(); await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-brute').click(); await finishPlayback(page);
+    await page.locator('#action-attack').click();await page.locator('#skill-details').click(); await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-brute').click(); await finishPlayback(page);
   }
   await expect(page.locator('#hero-garran')).toHaveAttribute('aria-pressed', 'true');
   await expect(page.locator('#action-brace')).toContainText('ตั้งทวน'); await expect(page.locator('#action-pierce')).toContainText('แทงทะลวง');
-  await page.locator('#action-brace').click(); await expect(page.locator('#skill-popover')).toContainText('แทงสวนกลับ 14');
+  await page.locator('#action-brace').click();await page.locator('#skill-details').click(); await expect(page.locator('#skill-popover')).toContainText('แทงสวนกลับ 14');
   await page.locator('[data-ui=skill-close]').click(); await page.screenshot({ path: info.outputPath('garran-battle.png') });
   await expect(page.locator('#hero-garran .portrait img')).toHaveAttribute('src', /portraits_mercs\.webp$/);
   await page.locator('#target-garran').click(); await finishPlayback(page);
@@ -540,9 +542,9 @@ test('Mira (archer) volleys every enemy by tapping any of them, and the SPD queu
   await seed(page, run, profile);
   const issues: string[] = []; page.on('pageerror', e => issues.push(e.message));
   await page.goto('./'); await page.locator('#continue').click(); await page.locator('#start').click();
-  await page.locator('#action-attack').click(); await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-brute').click(); await finishPlayback(page);
+  await page.locator('#action-attack').click();await page.locator('#skill-details').click(); await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-brute').click(); await finishPlayback(page);
   await expect(page.locator('#hero-mira')).toHaveAttribute('aria-pressed', 'true');
-  await page.locator('#action-hinder').click(); await expect(page.locator('#skill-popover')).toContainText('ท้ายสุดในรอบถัดไป');
+  await page.locator('#action-hinder').click();await page.locator('#skill-details').click(); await expect(page.locator('#skill-popover')).toContainText('ท้ายสุดในรอบถัดไป');
   await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-raider').click(); await finishPlayback(page);
   // The next six turns (rest of round 1, then round 2) no longer include the Raider: it acts last in round 2.
   const order = await page.locator('.turn-slot').evaluateAll(els => els.map(e => (e as HTMLElement).dataset.actor));
@@ -561,9 +563,9 @@ test('Toma (alchemist) hastes an ally by tapping them; the SPD queue puts that a
   await seed(page, run, profile);
   const issues: string[] = []; page.on('pageerror', e => issues.push(e.message));
   await page.goto('./'); await page.locator('#continue').click(); await page.locator('#start').click();
-  await page.locator('#action-attack').click(); await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-raider').click(); await finishPlayback(page);
+  await page.locator('#action-attack').click();await page.locator('#skill-details').click(); await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-raider').click(); await finishPlayback(page);
   await expect(page.locator('#hero-toma')).toHaveAttribute('aria-pressed', 'true');
-  await page.locator('#action-haste').click(); await expect(page.locator('#skill-popover')).toContainText('ลงมือก่อนทุกคน');
+  await page.locator('#action-haste').click();await page.locator('#skill-details').click(); await expect(page.locator('#skill-popover')).toContainText('ลงมือก่อนทุกคน');
   await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-healer').click(); await finishPlayback(page);
   // Rest of round 1 (Aegis, Brute, Seren), then round 2 opens with the hasted Seren.
   const order = await page.locator('.turn-slot').evaluateAll(els => els.map(e => (e as HTMLElement).dataset.actor));
@@ -584,11 +586,11 @@ test('Sefa (scout) steps aside: the announced slash at her misses and the intent
   await seed(page, run, profile);
   const issues: string[] = []; page.on('pageerror', e => issues.push(e.message));
   await page.goto('./'); await page.locator('#continue').click(); await page.locator('#start').click();
-  await page.locator('#action-attack').click(); await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-raider').click(); await finishPlayback(page);
+  await page.locator('#action-attack').click();await page.locator('#skill-details').click(); await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-raider').click(); await finishPlayback(page);
   await expect(page.locator('#hero-sefa')).toHaveAttribute('aria-pressed', 'true');
   await expect(page.locator('#hero-sefa .portrait img')).toHaveAttribute('src', /portraits_mercs\.webp$/);
-  await page.locator('#action-ambush').click(); await expect(page.locator('#skill-popover')).toContainText('ยังไม่ได้ลงมือในรอบนี้');
-  await page.locator('#action-evade').click(); await expect(page.locator('#skill-popover')).toContainText('จะพลาดทั้งหมด');
+  await page.locator('#action-ambush').click();await page.locator('#skill-details').click(); await expect(page.locator('#skill-popover')).toContainText('ยังไม่ได้ลงมือในรอบนี้');
+  await page.locator('#action-evade').click();await page.locator('#skill-details').click(); await expect(page.locator('#skill-popover')).toContainText('จะพลาดทั้งหมด');
   await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-sefa').click();
   await expect(page.locator('#intent')).toContainText('การโจมตีนี้พลาด');
   await page.screenshot({ path: info.outputPath('sefa-dodge.png') });
@@ -610,11 +612,11 @@ test('Brann (warden) challenges: the announced hit and the forecast turn to him,
   // R1: Lyra, then Eira (the Raider acts between them), then the Brute, then Brann.
   for (const hero of ['tracer', 'weaver']) {
     await expect(page.locator(`#hero-${hero}`)).toHaveAttribute('aria-pressed', 'true');
-    await page.locator('#action-attack').click(); await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-brute').click(); await finishPlayback(page);
+    await page.locator('#action-attack').click();await page.locator('#skill-details').click(); await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-brute').click(); await finishPlayback(page);
   }
   await expect(page.locator('#hero-brann')).toHaveAttribute('aria-pressed', 'true');
   await expect(page.locator('#hero-brann .portrait img')).toHaveAttribute('src', /portraits_mercs\.webp$/);
-  await page.locator('#action-taunt').click(); await expect(page.locator('#skill-popover')).toContainText('รับเบาลง 35%');
+  await page.locator('#action-taunt').click();await page.locator('#skill-details').click(); await expect(page.locator('#skill-popover')).toContainText('รับเบาลง 35%');
   await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-brann').click(); await finishPlayback(page);
   await expect(page.locator('#intent h2')).toContainText('แบรนน์');
   await expect(page.locator('#hero-brann')).toContainText('ยั่วยุ');
@@ -632,16 +634,16 @@ test('Lio (bard) plays a song of valor: it stays on his card and the next ally h
   await seed(page, run, profile);
   const issues: string[] = []; page.on('pageerror', e => issues.push(e.message));
   await page.goto('./'); await page.locator('#continue').click(); await page.locator('#start').click();
-  await page.locator('#action-attack').click(); await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-brute').click(); await finishPlayback(page);
+  await page.locator('#action-attack').click();await page.locator('#skill-details').click(); await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-brute').click(); await finishPlayback(page);
   await expect(page.locator('#hero-lio')).toHaveAttribute('aria-pressed', 'true');
   await expect(page.locator('#hero-lio .portrait img')).toHaveAttribute('src', /portraits_mercs\.webp$/);
-  await page.locator('#action-mend').click(); await expect(page.locator('#skill-popover')).toContainText('เมื่อเริ่มแต่ละรอบใหม่');
-  await page.locator('#action-valor').click(); await expect(page.locator('#skill-popover')).toContainText('+4');
+  await page.locator('#action-mend').click();await page.locator('#skill-details').click(); await expect(page.locator('#skill-popover')).toContainText('เมื่อเริ่มแต่ละรอบใหม่');
+  await page.locator('#action-valor').click();await page.locator('#skill-details').click(); await expect(page.locator('#skill-popover')).toContainText('+4');
   await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-lio').click(); await finishPlayback(page);
   await expect(page.locator('#hero-lio')).toContainText('เพลงกล้า');
   // Aegis attacks for 10 + 4.
   await expect(page.locator('#hero-guardian')).toHaveAttribute('aria-pressed', 'true');
-  await page.locator('#action-attack').click(); await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-brute').click(); await finishPlayback(page);
+  await page.locator('#action-attack').click();await page.locator('#skill-details').click(); await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-brute').click(); await finishPlayback(page);
   await page.screenshot({ path: info.outputPath('lio-valor.png') });
   const s = await saved(page); expect(s.battle!.commands.map(c => c.action)).toEqual(['attack', 'valor', 'attack']);
   await expect(page.locator('[data-enemy=brute]')).toContainText(`${200 - 16 - 14} / 200`);
@@ -670,7 +672,7 @@ test('losing every brought member fails the expedition: back to the lobby with h
   const last = { heroId: currentHeroId(b, data)!, targetId: b.enemies.find(e => e.hp > 0)!.id };
   const state = base({ position: { x: camp.x - 1, y: camp.y }, camp, hp, resources: { ore: 11, gold: 0, ember: 2, seal: 1 }, battle: { kind: 'random', encounterId: data.id, entry: hp, commands } });
   const issues = await open(page, state);
-  await page.locator('#action-attack').click(); await page.locator('[data-ui=skill-close]').click(); await page.locator(`#target-${last.targetId}`).click();
+  await page.locator('#action-attack').click();await page.locator('#skill-details').click(); await page.locator('[data-ui=skill-close]').click(); await page.locator(`#target-${last.targetId}`).click();
   await finishPlayback(page);
   await expect(page.locator('.result-card')).toContainText('แพ้แล้ว'); await expect(page.locator('#leave-battle')).toContainText('กลับค่าย');
   expect(await saved(page)).toBeNull(); expect((await savedProfile(page)).bank).toEqual({ ore: 5, gold: 0, seal: 0, dust: 0 });
@@ -837,7 +839,7 @@ test('starting a new game from the title requires confirmation and resets the co
   expect(issues).toEqual([]);
 });
 
-const viewports = [{ width: 320, height: 568 }, { width: 360, height: 640 }, { width: 375, height: 812 }, { width: 390, height: 844 }, { width: 414, height: 896 }, { width: 430, height: 932 }, { width: 844, height: 390 }, { width: 768, height: 1024 }, { width: 1024, height: 768 }, { width: 1366, height: 768 }, { width: 1920, height: 1080 }];
+const viewports = [{ width: 320, height: 568 }, { width: 360, height: 640 }, { width: 375, height: 812 }, { width: 390, height: 844 }, { width: 414, height: 896 }, { width: 430, height: 932 }, { width: 480, height: 900 }, { width: 768, height: 1024 }, { width: 1024, height: 768 }, { width: 1366, height: 768 }, { width: 1920, height: 1080 }];
 for (const viewport of viewports) {
   test(`world ${viewport.width}x${viewport.height}: full-bleed map, floating HUD and open walking targets without scroll`, async ({ browser }, info) => {
     const context = await browser.newContext({ viewport, hasTouch: viewport.width < 900, reducedMotion: 'reduce' }); const page = await context.newPage();
@@ -846,8 +848,8 @@ for (const viewport of viewports) {
     const issues = await open(page, base({ position: camp, hp: { guardian: 50, tracer: 0, weaver: 10, healer: 46 }, resources: { ore: 128, gold: 96, ember: 3, seal: 12 },
       potions: { salve: 3, tonic: 2, repel: 1 }, found: [{ uid: 0, slot: 'head', rarity: 0, level: 3, affixes: [] }, { uid: 0, slot: 'boots', rarity: 0, level: 3, affixes: [] }] }));
     expect(await page.evaluate(() => ({ x: scrollX, y: scrollY, overflow: document.documentElement.scrollHeight > innerHeight || document.documentElement.scrollWidth > innerWidth }))).toEqual({ x: 0, y: 0, overflow: false });
-    // The map fills the whole viewport; nothing is reserved for a sidebar.
-    expect(await page.locator('#map-viewport').boundingBox()).toEqual({ x: 0, y: 0, width: viewport.width, height: viewport.height });
+    // The map fills the portrait game frame, including on a wider desktop viewport.
+    expect(await page.locator('#map-viewport').boundingBox()).toEqual(await page.locator('#app').boundingBox());
     for (const s of ['#move-up', '#move-down', '#move-left', '#move-right', '#rest', '#world-info-button', '#objective-button', '#world-pack']) await reachable(page, s);
     const overlap = await page.evaluate(() => { const a = document.querySelector('#objective-button')!.getBoundingClientRect(), b = document.querySelector('#world-pack')!.getBoundingClientRect(); return a.right > b.left && a.left < b.right && a.bottom > b.top && a.top < b.bottom; });
     expect(overlap).toBe(false);
@@ -914,9 +916,9 @@ for (const viewport of viewports) {
     for (const sel of ['#lobby-depart', '#lobby-tab-team', '#lobby-tab-hire']) { await page.locator(sel).scrollIntoViewIfNeeded(); await reachable(page, sel); }
     // Team and hire open as a sheet over the camp. Portrait phones show it full screen (close to switch);
     // elsewhere the depart button stays reachable with it open.
-    const full = viewport.width <= 760 && viewport.height > viewport.width;
+    const frame = (await page.locator('#app').boundingBox())!; const full = frame.width <= 760 && frame.height > frame.width;
     await page.locator('#lobby-tab-team').click(); for (const sel of ['#lobby-member-guardian', ...(full ? ['[data-lobby=close]'] : ['#lobby-depart'])]) { await page.locator(sel).scrollIntoViewIfNeeded(); await reachable(page, sel); }
-    if (full) { const box = (await page.locator('#lobby-sheet').boundingBox())!; expect(box.width).toBe(viewport.width); expect(box.height).toBe(viewport.height); }
+    if (full) { const box = (await page.locator('#lobby-sheet').boundingBox())!; expect(box.width).toBe(frame.width); expect(box.height).toBe(frame.height); }
     await page.screenshot({ path: info.outputPath('lobby.png') });
     // The panel scrolls inside itself on short screens; the page never does.
     if (full) await page.locator('[data-lobby=close]').click();
@@ -1008,9 +1010,9 @@ test('normal motion: hop, danger meter and veil-shatter encounter finish within 
 });
 
 // Phone portrait is played one-handed: the D-pad is bottom-centre and the contextual action
-// takes its centre cell; landscape keeps the D-pad lower left and the action lower right.
+// takes its centre cell in the same portrait frame on every supported device.
 test('phone portrait centres the D-pad with the action in its middle for one-handed play', async ({ browser }) => {
-  for (const [width, height, portrait] of [[390, 844, true], [320, 568, true], [844, 390, false]] as const) {
+  for (const [width, height, portrait] of [[390, 844, true], [320, 568, true], [480, 900, true]] as const) {
     const context = await browser.newContext({ viewport: { width, height }, hasTouch: true }); const page = await context.newPage();
     const issues = await open(page, newExpedition(map, encounterById, 11)); await expect(page.locator('#move-up')).toBeVisible();
     const box = async (sel: string) => (await page.locator(sel).boundingBox())!;
@@ -1243,8 +1245,8 @@ test('camp NPCs stand at their stations, open their service when tapped and gree
   await page.locator('[data-lobby="close"]').click(); expect(await pan.evaluate(el => el.scrollLeft)).toBeLessThan(5);
   await pan.evaluate(el => { el.scrollLeft = el.scrollWidth; }); await expect(page.locator('#npc-scout')).toBeInViewport();
   await page.screenshot({ path: info.outputPath('camp-npcs-phone-right.png') });
-  await page.setViewportSize({ width: 844, height: 390 }); await page.waitForTimeout(300);
-  await page.screenshot({ path: info.outputPath('camp-npcs-landscape.png') });
+  await page.setViewportSize({ width: 1366, height: 768 }); await page.waitForTimeout(300);
+  await page.screenshot({ path: info.outputPath('camp-npcs-desktop.png') });
 });
 
 test('side quests: a herb is picked on the map; at camp the herbalist shows "!", and her reward is claimed once; saved v17', async ({ page }, info) => {

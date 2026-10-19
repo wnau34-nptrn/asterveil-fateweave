@@ -1,3 +1,4 @@
+import { shortcutBlocked } from '../platform/keyboard';
 import { storyArt } from '../game/visuals/assets';
 import { heroText } from './th';
 import { portrait } from './world-ui';
@@ -35,7 +36,7 @@ export class StoryUI {
       if (b?.dataset.story === 'next') this.next(); else if (b?.dataset.story === 'skip') this.finish();
     });
     root.ownerDocument.addEventListener('keydown', e => {
-      if (root.hidden) return;
+      if (root.hidden || shortcutBlocked(e)) return;
       if (e.key === 'Escape') { e.preventDefault(); this.finish(); }
     });
   }

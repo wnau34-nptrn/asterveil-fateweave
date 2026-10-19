@@ -105,7 +105,7 @@ export class BattleScene extends Phaser.Scene {
     this.positions.clear(); this.actorTargets.clear();
     const w = this.viewW, h = this.viewH;
     const short = w < 900 || h < 360;
-    const phone = window.matchMedia('(max-width: 600px) and (orientation: portrait)').matches;
+    const phone = this.viewW <= 600;
     const bg = this.add.graphics(); this.layer.add(bg);
     // These are sole positions on the courtyard, not image centers. Each
     // front fighter steps diagonally past its back-row partner; the second
@@ -162,7 +162,7 @@ export class BattleScene extends Phaser.Scene {
     info.setAlpha(hp <= 0 ? 0.4 : involved ? 1 : 0.75);
     const g = this.add.graphics(); body.add(g);
     const short = compact;
-    const phone = window.matchMedia('(max-width: 600px) and (orientation: portrait)').matches;
+    const phone = this.viewW <= 600;
     const portrait = phone || this.viewW < 900 && this.viewH >= 280;
     const selected = this.view!.heroId === id || this.view!.targetId === id;
     const size = Math.max(44, Math.min(phone ? id === 'brute' ? 120 : 100 : short ? id === 'brute' ? 110 : 80 : id === 'brute' ? 215 : 145, this.viewW * (id === 'brute' ? .32 : .25), this.viewH * (id === 'brute' ? .36 : .30)));
