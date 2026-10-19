@@ -1,4 +1,12 @@
 # Codex → Claude handoff
+
+## 2026-10-19 — Battlefield buff/debuff symbols
+
+- Owner requested implementing symbols on the units themselves, complementing the status tab. All units now use the same pure `unitStatuses` projection and displayed actor-turn snapshot as the inspector.
+- `BattleScene.actorStatusAnchors` exposes CSS-pixel points above the artwork, independently from valid targets. Clear on encounter/paint and rebuild on layout. This keeps lower-row badges inside short portrait fields without moving actors or reducing targets. Remove the old separate Mark-only diamond.
+- DOM `#field-statuses` shows up to three symbols per affected unit plus +N overflow. Green buff/rose debuff borders match the inspector; accessible labels include every current effect and expiry, including overflow. Overlay ignores pointer input and remains visible when targeting is canceled or a different target kind is selected. Existing intent/target markers remain.
+- No effects on empty, downed or finished units. No engine, formation, balance, save v21, audio or Home contrast changes. Details stay in battle ⓘ → สถานะ, the default tab on every open.
+- Local validation: typecheck, lint, build, all 428 unit tests and four focused Chromium cases passed. Visually inspected battlefield screenshots at 320×568 touch, 390×844 touch and 1366×768 PC. Browser checks cover bounds, pointer pass-through, canceled targeting, stage-snapshot removal and unchanged saves. Real iPhone/Safari remains unverified. CI/publication results will be appended after completion.
 ## 2026-10-19 — Battle status inspection inside information
 
 - Owner selected the recommended unit-status inspector but moved it into battle ⓘ as a tab. Every click/tap/keyboard opening must reset to สถานะ; other tabs remain available. No new battlefield/header button.

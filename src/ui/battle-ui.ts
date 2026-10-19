@@ -66,7 +66,7 @@ export class BattleUI {
         <div class="battle-layout">
           <section class="battle-board" aria-label="สถานการณ์การต่อสู้">
             <section class="arena" aria-label="สนามต่อสู้ แตะเป้าหมายเพื่อใช้สกิล">
-              <div id="game"></div><div id="field-targets" aria-label="แตะตัวละครในสนามเพื่อใช้สกิล"></div>
+              <div id="game"></div><div id="field-statuses" aria-label="บัฟและดีบัฟในสนาม"></div><div id="field-targets" aria-label="แตะตัวละครในสนามเพื่อใช้สกิล"></div>
               <div class="formation-labels" aria-hidden="true"><span class="back-label">แนวหลัง</span><span class="front-label">แนวหน้า</span></div>
               <div id="start-screen"></div>
             </section>
@@ -175,7 +175,7 @@ export class BattleUI {
   private get teaching(): boolean { return this.session?.kind === 'tutorial' && this.hintsEnabled; }
   get encounter(): EncounterDefinition { return this.data; }
   sceneReady(): void { this.render(); }
-  fieldLayoutChanged(): void { this.renderFieldTargets(); this.renderTutorial(); this.placeBackdrop(); }
+  fieldLayoutChanged(): void { this.renderFieldTargets(); this.renderFieldStatuses(); this.renderTutorial(); this.placeBackdrop(); }
   // The battle painting lies behind the whole view, framed to the arena so fighters stand on its floor.
   private placeBackdrop(): void {
     const arena = this.root.querySelector<HTMLElement>('.arena'); if (!arena) return;
@@ -464,6 +464,16 @@ export class BattleUI {
     }).join(''));
   }
 
+  private renderFieldStatuses(): void {
+    const s = this.displayState, d = this.data;
+    this.set('field-statuses', !this.started || !this.scene ? '' : [...d.heroes, ...d.enemies].map(a => {
+      const position = this.scene!.actorStatusAnchors.get(a.id), rows = unitStatuses(s, d, a.id);
+      if (!position || !rows.length) return '';
+      const label = `${actorName(a.id, d)} · ${rows.map(r => `${r.kind === 'buff' ? 'บัฟ' : 'ดีบัฟ'} ${r.name}: ${r.duration}`).join(' · ')} · รายละเอียดที่ปุ่มข้อมูล แท็บสถานะ`;
+      return `<span class="field-statuses" data-status-actor="${a.id}" role="img" aria-label="${escapeHtml(label)}" style="left:${position.x}px;top:${position.y}px">${rows.slice(0, 3).map(r => `<span class="field-status ${r.kind}" data-status="${r.id}" aria-hidden="true">${icon(r.icon)}</span>`).join('')}${rows.length > 3 ? `<span class="field-status-more" aria-hidden="true">+${rows.length - 3}</span>` : ''}</span>`;
+    }).join(''));
+  }
+
   private renderStatuses(): void {
     const s = this.displayState, d = this.data;
     const actors = [...d.heroes, ...d.enemies];
@@ -505,6 +515,7 @@ export class BattleUI {
     this.set('save-status', this.saved && this.storage ? 'บันทึกบนเครื่องนี้อัตโนมัติ' : 'เล่นได้ แต่บันทึกบนเครื่องนี้ไม่ได้');
     this.scene?.sync({ state: this.displayState, heroId: this.heroId, targetId: null, phase: this.presentation?.phase, activeActorId: this.actingActor, activeTargetId: this.actingTarget });
     this.renderFieldTargets();
+    this.renderFieldStatuses();
     this.renderTutorial();
     if (focus) this.root.querySelector<HTMLElement>(`#${focus}`)?.focus({ preventScroll: true });
     this.placeBackdrop();
