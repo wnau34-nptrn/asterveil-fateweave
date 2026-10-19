@@ -1,7 +1,8 @@
 import Phaser from 'phaser';
 import type { BattleEvent, BattleState, EncounterDefinition } from '../../core/battle/types';
-import { actorName, thaiFont } from '../../ui/th';
+import { thaiFont } from '../../ui/th';
 import { palette } from '../visuals/palette';
+import { fieldSlots, type FieldSlot } from '../visuals/field-layout';
 import { actorArt, actorFootOrigins, artOf, artUrl, mirroredArt, unitsUrl } from '../visuals/assets';
 
 // Device pixels per CSS pixel for the canvas buffer (capped: 3x covers current phones).
@@ -14,7 +15,7 @@ export class BattleScene extends Phaser.Scene {
   private layer: Phaser.GameObjects.Container | undefined;
   private positions = new Map<string, { x: number; y: number }>();
   readonly actorTargets = new Map<string, ActorTarget>();
-  readonly actorStatusAnchors = new Map<string, { x: number; y: number }>();
+  readonly actorPanels = new Map<string, FieldSlot>();
   private bodies = new Map<string, Phaser.GameObjects.Container>();
   private effects: Phaser.GameObjects.Container | undefined;
   private ready = false;
@@ -33,7 +34,7 @@ export class BattleScene extends Phaser.Scene {
   get isReady(): boolean { return this.ready; }
   setEncounter(data: EncounterDefinition): void {
     this.stopEffects(); this.encounter = data; this.view = undefined;
-    this.actorTargets.clear(); this.actorStatusAnchors.clear();
+    this.actorTargets.clear(); this.actorPanels.clear();
   }
   refreshLayout(): void {
     // DOM teaching strips change the field without a window resize. Refresh
@@ -103,45 +104,22 @@ export class BattleScene extends Phaser.Scene {
     this.root.setPosition(0, 0).setScale(this.dpr);
     this.layer?.destroy();
     this.layer = this.add.container(0, 0); this.root.addAt(this.layer, 0);
-    this.positions.clear(); this.actorTargets.clear(); this.actorStatusAnchors.clear();
+    this.positions.clear(); this.actorTargets.clear(); this.actorPanels.clear();
     const w = this.viewW, h = this.viewH;
-    const short = w < 900 || h < 360;
-    const phone = this.viewW <= 600;
     const bg = this.add.graphics(); this.layer.add(bg);
-    // These are sole positions on the courtyard, not image centers. Each
-    // front fighter steps diagonally past its back-row partner; the second
-    // pair is offset again so faces and touch targets stay unobstructed.
-    const spots = { back0: { x: .14, y: .48 }, front0: { x: .35, y: .59 }, back1: { x: .16, y: .77 }, front1: { x: .39, y: .90 } };
-    // Wide desktop fields: the back pair spreads diagonally too, so the rear names never sit on a partner's head.
-    if (w >= 760 && h >= 300 && w / h >= 1.6) Object.assign(spots, { back0: { x: .12, y: .46 }, back1: { x: .21, y: .80 }, front0: { x: .33, y: .57 }, front1: { x: .42, y: .89 } });
-    // Reserve independent 44px ally targets on the shortest portrait fields.
-    // Upper and lower pairs stay staggered; all sole anchors remain on the floor.
-    if (phone && h < 170) {
-      const rearTop = h * .48;
-      const frontTop = Math.min(h * .59, h - 16 - 46);
-      spots.back0.y = rearTop / h;
-      spots.front0.y = frontTop / h;
-      spots.back1.y = Math.min(h - 16, Math.max(h * .77, rearTop + 46)) / h;
-      spots.front1.y = Math.min(h - 16, Math.max(h * .90, frontTop + 46)) / h;
+    const slots = fieldSlots(w, h);
+    const free = { back: [slots[0]!, slots[1]!], front: [slots[2]!, slots[3]!] };
+    for (const [i, hero] of this.encounter.heroes.entries()) {
+      const own = free[hero.lane], other = free[hero.lane === 'front' ? 'back' : 'front'];
+      const slot = own.shift() ?? other.shift()!;
+      this.actorPanels.set(hero.id, slot);
+      this.actor(hero.id, slot, this.view.state.heroes[i]!.hp, false);
     }
-    // Field spots follow party slots and lanes, not hero ids: front-lane members take the
-    // front spots in slot order, back-lane members the back spots; overflow uses the other row.
-    const formation: Record<string, { x: number; y: number }> = { raider: { x: .85, y: .51 }, brute: { x: .70, y: .81 } };
-    const free = { front: [spots.front0, spots.front1], back: [spots.back0, spots.back1] };
-    for (const hero of this.encounter.heroes) {
-      const own = free[hero.lane]; const other = free[hero.lane === 'front' ? 'back' : 'front'];
-      formation[hero.id] = own.shift() ?? other.shift()!;
+    for (const [i, enemy] of this.encounter.enemies.entries()) {
+      const slot = slots[4 + i]!;
+      this.actorPanels.set(enemy.id, slot);
+      this.actor(enemy.id, slot, this.view.state.enemies[i]!.hp, true);
     }
-    this.encounter.heroes.forEach((hero, i) => {
-      const x = w * formation[hero.id]!.x;
-      const y = Math.min(h * formation[hero.id]!.y, h - (phone ? 16 : hero.lane === 'back' ? 50 : 42));
-      this.actor(hero.id, actorName(hero.id, this.encounter), x, y, hero.color, this.view!.state.heroes[i]!.hp, hero.maxHp, false, short);
-    });
-    this.encounter.enemies.forEach((enemy, i) => {
-      const x = w * formation[enemy.id]!.x;
-      const y = Math.min(h * formation[enemy.id]!.y, h - 46);
-      this.actor(enemy.id, actorName(enemy.id, this.encounter), x, y, enemy.color, this.view!.state.enemies[i]!.hp, enemy.maxHp, true, short);
-    });
     const intent = this.view.state.intent;
     const source = this.positions.get(this.view.phase ? this.view.activeActorId ?? '' : intent?.sourceId ?? '');
     const target = this.positions.get(this.view.phase ? this.view.activeTargetId ?? '' : intent?.targetId ?? '');
@@ -152,7 +130,8 @@ export class BattleScene extends Phaser.Scene {
     }
     this.layer.sort('depth'); this.onLayout();
   }
-  private actor(id: string, name: string, x: number, y: number, color: number, hp: number, maxHp: number, enemy: boolean, compact: boolean): void {
+  private actor(id: string, slot: FieldSlot, hp: number, enemy: boolean): void {
+    const { x, y, size } = slot;
     this.positions.set(id, { x, y });
     // Sort bodies by their feet rather than roster insertion order.
     const body = this.add.container(x, y).setDepth(y); this.layer!.add(body);
@@ -162,11 +141,7 @@ export class BattleScene extends Phaser.Scene {
     body.setAlpha(hp <= 0 ? 0.28 : involved ? 1 : 0.55);
     info.setAlpha(hp <= 0 ? 0.4 : involved ? 1 : 0.75);
     const g = this.add.graphics(); body.add(g);
-    const short = compact;
-    const phone = this.viewW <= 600;
-    const portrait = phone || this.viewW < 900 && this.viewH >= 280;
     const selected = this.view!.heroId === id || this.view!.targetId === id;
-    const size = Math.max(44, Math.min(phone ? id === 'brute' ? 120 : 100 : short ? id === 'brute' ? 110 : 80 : id === 'brute' ? 215 : 145, this.viewW * (id === 'brute' ? .32 : .25), this.viewH * (id === 'brute' ? .36 : .30)));
     // A contact shadow and selection ring share the same foot anchor.
     g.fillStyle(0x07131f, .65); g.fillEllipse(0, 0, size * .65, size * .12);
     if (selected && hp > 0) { g.lineStyle(2, palette.gold); g.strokeEllipse(0, 0, size * .68, size * .14); }
@@ -180,21 +155,6 @@ export class BattleScene extends Phaser.Scene {
     const hitWidth = Math.max(44, Math.min(72, size * .7));
     const hitHeight = Math.max(44, size * .9);
     this.actorTargets.set(id, { x: x - hitWidth / 2, y: y + sprite.y - hitHeight, width: hitWidth, height: hitHeight });
-    // Keep status badges above the artwork, including the bottom row on short phones.
-    // These are CSS pixel anchors, matching the DOM target overlay at every DPR.
-    this.actorStatusAnchors.set(id, { x: Math.max(40, Math.min(this.viewW - 40, x)), y: Math.max(2, y - size - 21) });
-    const label = this.text(0, 14, name, { fontFamily: thaiFont, fontSize: phone ? '10px' : compact ? '12px' : '14px', color: '#f0f5ff', stroke: '#101c36', strokeThickness: 3 }).setOrigin(0.5);
-    label.setVisible(!phone || enemy);
-    const hpX = 0;
-    const hpY = 35;
-    const barY = phone && !enemy ? 8 : 24;
-    const barWidth = phone ? enemy ? Math.min(65, this.viewW * .17) : 35 : enemy ? 70 : 52;
-    const bar = this.add.graphics(); bar.fillStyle(0x101c36); bar.fillRoundedRect(hpX - barWidth / 2, barY, barWidth, 5, 2);
-    bar.fillStyle(color); bar.fillRoundedRect(hpX - barWidth / 2, barY, barWidth * hp / maxHp, 5, 2);
-    const hpLabel = this.text(hpX, hpY, `${hp} / ${maxHp}`, { fontFamily: thaiFont, fontSize: '10px', color: '#d4e6f7', stroke: '#101c36', strokeThickness: 3 }).setOrigin(0.5);
-    // Compact hero cards carry exact HP; keep canvas rows clear for artwork.
-    hpLabel.setVisible(enemy || !portrait && this.viewH >= 280);
-    info.add([label, bar, hpLabel]);
     const hit = this.add.zone(0, sprite.y, Math.max(64, size * 0.7), size).setOrigin(0.5, 1).setInteractive({ useHandCursor: true });
     hit.on('pointerdown', () => this.choose(id)); body.add(hit);
     if (this.view!.state.intent?.sourceId === id && hp > 0) {

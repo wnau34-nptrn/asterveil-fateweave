@@ -1,5 +1,14 @@
 # Codex → Claude handoff
 
+## 2026-10-19 — Prevent status badges covering neighboring units
+
+- Owner reported that lower-row above-head symbols can cover upper-row units. The previous bounds-only browser check missed this; the investigation reproduced it with every unit showing multiple symbols at 320×568, 390×844 and PC.
+- Replace independent above-head anchors with pure `game/visuals/field-layout.ts` slots reserving the complete body and HP/status panel for all six units, including unaffected/downed units. Rear/front party assignment and overflow still follow real formation lanes; front feet retain a slight stagger. Panels and art have disjoint rectangles; sprites fit the available row/column while target bounds remain ≥44px. No game-rule formation or save changes.
+- HP/names now render in the same pointer-transparent DOM panel as effects; remove duplicated Phaser labels/bars. Normal fields place icons under HP, with 2–3 icons depending on width plus +N. Short fields (<260px) use one icon +N alongside HP. Very short teaching fields (<150px) reserve a 26px side panel with 12px symbols, keeping 44px artwork/targets. Exact enemy HP remains visible; full names/effects remain in the queue/info inspector. All effects still derive from the displayed actor-stage snapshot.
+- Layout never depends on active status count, so gaining/consuming effects cannot move units. Resize rebuilds slots and preserves pending selection/save. Buff/debuff colors and default ⓘ → สถานะ remain unchanged.
+- Local typecheck, lint, build and 430 unit tests passed. Two new geometry tests cover panel-versus-all-bodies/panels at six widths and fourteen heights, including 120/128px fields and compact breakpoints. Seven focused Chromium cases passed: saturated symbols on all six panels, 128px field, resize across phone/PC, stage expiry, info inspection, real targeting at 320/390px. Visually inspected saturated 320-short, 320-normal and 390px screenshots. Earlier portrait keyboard/status sweep passed 19 cases before final compact refinements; full CI/publication results follow. Physical iPhone/Safari remains unverified.
+
+
 ## 2026-10-19 — Battlefield buff/debuff symbols
 
 - Owner requested implementing symbols on the units themselves, complementing the status tab. All units now use the same pure `unitStatuses` projection and displayed actor-turn snapshot as the inspector.

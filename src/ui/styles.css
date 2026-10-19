@@ -539,11 +539,26 @@ main { width: 100%; max-width: 1600px; flex: 1; min-height: 0; display: flex; fl
 /* Target controls follow real actor bounds on the field, with no bottom target list. */
 #field-targets { position: absolute; inset: 0; z-index: 4; pointer-events: none; }
 #field-statuses { position: absolute; inset: 0; z-index: 3; pointer-events: none; }
-.field-statuses { position: absolute; display: flex; align-items: center; gap: 2px; transform: translateX(-50%); pointer-events: none; }
-.field-status, .field-status-more { display: grid; place-items: center; width: 18px; height: 18px; border: 1px solid; border-radius: 5px; box-shadow: 0 1px 3px #07101fe6; }
+.field-unit-info { position: absolute; display: flex; flex-direction: column; align-items: center; gap: 2px; pointer-events: none; font-size: 9px; line-height: 11px; color: #f0f5ff; text-shadow: 0 1px 2px #07101f, 1px 0 2px #07101f; }
+.field-unit-name { display: block; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.field-unit-info.ally .field-unit-name, .field-unit-info.ally .field-hp-value { display: none; }
+.field-health { width: 52px; max-width: 100%; text-align: center; flex-shrink: 1; min-width: 0; }
+.field-hp-value { display: block; white-space: nowrap; }
+.field-hp-track { display: block; height: 4px; border-radius: 3px; background: #071424; box-shadow: 0 0 0 1px #afdaee70; overflow: hidden; }
+.field-hp-track > span { display: block; height: 100%; border-radius: inherit; }
+.field-unit-info.compact { display: grid; grid-template-columns: minmax(0, 1fr) calc(var(--field-icon) * 2 + 2px); align-content: start; align-items: center; column-gap: 3px; row-gap: 2px; }
+.field-unit-info.compact .field-unit-name { grid-column: 1 / -1; text-align: center; }
+.field-unit-info.compact .field-health { width: 100%; }
+.field-unit-info.tiny .field-unit-name { display: none; }
+.field-unit-info.tiny { font-size: 8px; line-height: 8px; row-gap: 0; }
+.field-unit-info.tiny .field-hp-track { height: 3px; }
+.field-unit-info.side { display: flex; gap: 1px; }
+.field-unit-info.side .field-health { width: 100%; }
+.field-statuses { display: flex; align-items: center; justify-content: center; gap: 2px; pointer-events: none; }
+.field-status, .field-status-more { display: grid; place-items: center; width: var(--field-icon, 18px); height: var(--field-icon, 18px); border: 1px solid; border-radius: 4px; box-shadow: 0 1px 3px #07101fe6; }
 .field-status.buff { color: #adffe4; border-color: #66d9b0; background: #10392ff5; }
 .field-status.debuff { color: #ffccd7; border-color: #fa849e; background: #4a1d30f5; }
-.field-status .icon { width: 13px; height: 13px; }
+.field-status .icon { width: calc(var(--field-icon, 18px) - 5px); height: calc(var(--field-icon, 18px) - 5px); }
 .field-status-more { color: #f3e8c7; border-color: #bdaa7c; background: #17263af5; font-size: 10px; font-weight: 700; }
 .field-target { position: absolute; min-width: 44px; min-height: 44px; padding: 0; border: 0; border-radius: 10px; background: transparent !important; pointer-events: auto; box-shadow: none; }
 .field-target.valid-target { outline: 1px solid #8addf578; outline-offset: -2px; }
