@@ -1,4 +1,5 @@
 import { bindInfoTabs } from './info-tabs';
+import { learnRunTalent } from '../core/world/world';
 import { shortcutBlocked } from '../platform/keyboard';
 import type { BattleState, Outcome } from '../core/battle/types';
 import { clearLegacySaves, loadGame, saveGame, type Game } from '../core/save/expedition-save';
@@ -51,6 +52,14 @@ export class GameShell {
       travel: to => this.travelTo(to), move: dir => this.move(dir), rest: () => this.rest(), revive: id => this.revive(id), swap: (a, b) => this.roster(swapMembers(this.state!, a, b)), moveMember: id => this.roster(moveMember(this.state!, id)),
       withdraw: () => this.endRun('withdrawn'), openChest: () => this.openChest(), usePotion: (potion, id) => this.drink(potion, id),
       chooseEvent: choice => this.chooseEvent(choice),
+      talent: (id, node) => {
+        if (!this.state || this.locked) return;
+        const result = learnRunTalent(this.state, map, lookup, id, node);
+        if (result.event.type !== 'talent') return;
+        this.state = result.state; this.persist(); sfx.play('buff');
+        this.message = `ลงแต้มความถนัด${heroText[id]?.name ?? ''}แล้ว`;
+        this.renderWorld();
+      },
       wear: (id, from, index) => this.gear(wear(this.state!, map, lookup, id, from, index)), takeOff: (id, slot) => this.gear(takeOff(this.state!, map, lookup, id, slot)),
     }, Object.fromEntries(map.elites.map(e => [e.id, lookup(e.encounterId)?.enemies.find(f => f.id === 'brute')?.art ?? 'brute'])), lookup(map.tutorialEncounterId));
     this.lobby = new LobbyUI(views.lobby, map, lookup, heroCatalog(lookup, map), {

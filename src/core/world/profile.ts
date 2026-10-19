@@ -1,4 +1,5 @@
-import type { Commander, ShopItemId, SideQuestKind, ExpeditionState, Gear, GearSlot, Item, MapDefinition, MemberProgress, PotionId, Potions, Profile, ProfileResult, RunOutcome, TalentNode, Talents } from './types';
+import { memberTalentReason, talentsSpent } from './talents';
+import type { Commander, ShopItemId, SideQuestKind, ExpeditionState, Gear, GearSlot, Item, MapDefinition, PotionId, Potions, Profile, ProfileResult, RunOutcome, TalentNode } from './types';
 import { rollItem, salvageValue } from './equipment';
 import { COMPANY_CAP, GEAR_SLOTS, PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS, SET_IDS } from './types';
 import { heroCatalog, levelOf, newExpedition, rollPercent, type EncounterLookup } from './world';
@@ -103,31 +104,10 @@ export function dismiss(initial: Profile, map: MapDefinition, id: string): Profi
   return { profile, event: { type: 'dismissed', heroId: id } };
 }
 
-// ---- Talent tree (2D-1b): one point per level above 1, spent and reset only here in the lobby. ----
-export const talentPoints = (map: MapDefinition, m: MemberProgress | undefined): number => Math.min(levelOf(m), map.progression.levelCap) - 1;
-export const talentsSpent = (t: Talents | undefined): number => Object.values(t ?? {}).reduce((a, b) => a + (b ?? 0), 0);
-// Gates: the root first; tier 2 needs a rank in its tier 1; a capstone needs 4 ranks in its branch.
-export function talentOpen(t: Talents, node: TalentNode): boolean {
-  const r = (n: TalentNode) => t[n] ?? 0;
-  if (node === 'root') return true;
-  if (!r('root')) return false;
-  const branch = node[0] as 'a' | 'b'; const tier = node[1];
-  if (tier === '1') return true;
-  if (tier === '2') return r(`${branch}1`) >= 1;
-  return r(`${branch}1`) + r(`${branch}2`) >= 4;
-}
-export function talentsValid(map: MapDefinition, heroId: string, level: number, t: Talents): boolean {
-  const tree = map.talents[heroId] ?? [];
-  if (Object.entries(t).some(([node, rank]) => { const def = tree.find(n => n.id === node); return !def || !Number.isInteger(rank) || rank! < 1 || rank! > def.max; })) return false;
-  return talentsSpent(t) <= Math.min(level, map.progression.levelCap) - 1 && tree.every(n => !t[n.id] || talentOpen(t, n.id));
-}
+// Talent gates are shared with exploration spending; only the lobby can reset points.
+export { talentPoints, talentsSpent, talentOpen, talentsValid } from './talents';
 export function talentReason(profile: Profile, map: MapDefinition, id: string, node: TalentNode): string {
-  const m = profile.members[id]; const def = map.talents[id]?.find(n => n.id === node);
-  if (!m || !def) return 'unknown';
-  const t = m.talents ?? {};
-  if ((t[node] ?? 0) >= def.max) return 'max';
-  if (!talentOpen(t, node)) return 'locked';
-  return talentsSpent(t) >= talentPoints(map, m) ? 'points' : '';
+  return memberTalentReason(map, id, profile.members[id], node);
 }
 export function learnTalent(initial: Profile, map: MapDefinition, id: string, node: TalentNode): ProfileResult {
   const reason = talentReason(initial, map, id, node); if (reason) return blocked(initial, reason);
@@ -260,7 +240,7 @@ export function settle(initial: Profile, run: ExpeditionState, outcome: RunOutco
   // Unused potions come home too, unless the team was wiped.
   if (outcome !== 'wiped') for (const id of POTION_IDS) profile.potions[id] += run.potions[id];
   // Levels and EXP earned on the run are kept whatever the outcome (2D-1).
-  for (const [id, m] of Object.entries(run.members)) if (profile.members[id] && m.level) profile.members[id] = { ...profile.members[id]!, level: m.level, exp: m.exp ?? 0 };
+  for (const [id, m] of Object.entries(run.members)) if (profile.members[id] && m.level) profile.members[id] = { ...profile.members[id]!, level: m.level, exp: m.exp ?? 0, ...(m.talents ? { talents: structuredClone(m.talents) } : {}) };
   // 3D: side quests count what this run did (herbs are lost on a wipe), capped at each target.
   for (const q of map.sideQuests) {
     const now = profile.quests[q.id] ?? { progress: 0, claimed: false }; if (now.claimed) continue;

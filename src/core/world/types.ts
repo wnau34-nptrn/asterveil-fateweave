@@ -315,6 +315,7 @@ export interface ExpeditionState {
   spare: Item[];
 }
 export type WorldEvent =
+  | { type: 'talent'; heroId: string }
   | { type: 'moved'; chance: number }
   | { type: 'blocked'; reason: 'wall' | 'edge' | 'busy' | 'party' | 'sealed' | 'stone' | 'pit' }
   | { type: 'roster' }

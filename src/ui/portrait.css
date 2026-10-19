@@ -82,3 +82,24 @@ body { display: grid; place-items: center; background: radial-gradient(ellipse a
 #desktop-controls p { margin-top: 12px; }
 #desktop-controls kbd { color: #eef4ff; font: inherit; font-weight: 600; }
 @media (min-width: 1000px) and (pointer: fine) { #desktop-controls { display: block; } }
+
+/* Map character sheet: one portrait frame, with independently scrolling content. */
+#app #character-dialog[open] { display: flex; flex-direction: column; overflow: hidden; padding: 10px; gap: 8px; }
+#character-dialog .info-header { flex: 0 0 auto; }
+#character-title { font-size: 18px; line-height: 1.5; }
+#character-members { flex: 0 0 auto; margin: 0; padding: 3px 2px 6px; }
+.character-tabs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 3px; flex: 0 0 auto; }
+.character-tabs button { min-height: 44px; padding: 6px 2px; font-size: 13px; border-radius: 10px; }
+.character-tabs [aria-selected=true] { border-color: var(--gold-light); color: var(--gold-light); background: #293145; }
+#app #character-content { flex: 1 1 auto; min-height: 0; max-height: none; overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain; padding: 4px; }
+.character-summary { margin: 0 0 10px; color: var(--text-muted); font-size: 12px; }
+.character-passive { padding: 12px; border: 1px solid var(--hud-edge); border-radius: 12px; background: var(--hud-glass); }
+#character-content .talent-branches { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+#character-content .talent-branch { min-width: 0; }
+#character-content .talent-node[data-state=locked] { opacity: .72; }
+#app .world-hero { position: relative; display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: 3px; min-height: 52px; padding: 5px 4px; text-align: left; color: var(--text); }
+#app .world-hero .portrait { display: block; width: 24px; border-radius: 7px; }
+#app .world-hero b { font-size: 10px; }
+#app .world-hero small { font-size: 9px; }
+#app .world-hero .hero-level, #app .world-hero .hero-stars { display: none; }
+.world-talent-badge { position: absolute; top: -5px; right: 0; border: 1px solid var(--gold-light); border-radius: 8px; background: #40321e; color: var(--gold-light); padding: 0 3px; font-size: 9px; line-height: 14px; }

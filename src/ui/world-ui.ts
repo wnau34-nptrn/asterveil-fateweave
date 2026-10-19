@@ -1,18 +1,22 @@
 import { infoTabs } from './info-tabs';
+import { characterOverview, characterSkills, characterTalents, characterTabs, type CharacterTab } from './character-view';
+import { talentPoints, talentsSpent } from '../core/world/talents';
+import type { TalentNode } from '../core/world/types';
 import { shortcutBlocked } from '../platform/keyboard';
 import type { EncounterDefinition, HeroDefinition } from '../core/battle/types';
-import { withParty } from '../core/battle/engine';
-import type { Direction, EventChoice, ExpeditionState, GearSlot, Item, MapDefinition, Point, PotionId } from '../core/world/types';
-import { canManage, expToNext, wearReason, type BagList, travelTargets, atCamp, atMuster, canOpenChest, canRest, canRevive, chestAt, eliteBlocks, questComplete, questDone, encounterChance, eventChoiceReason, isRevealed, monsterLevelAt, pendingEvent, rosterIds, starred, tileAt, wounded, zoneOf } from '../core/world/world';
+
+import type { Direction, EventChoice, ExpeditionState, GearSlot, MapDefinition, Point, PotionId } from '../core/world/types';
+import { canManage, wearReason, type BagList, travelTargets, atCamp, atMuster, canOpenChest, canRest, canRevive, chestAt, eliteBlocks, questComplete, questDone, encounterChance, eventChoiceReason, isRevealed, monsterLevelAt, pendingEvent, rosterIds, starred, tileAt, wounded, zoneOf } from '../core/world/world';
 import { GEAR_SLOTS, PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS } from '../core/world/types';
 import { actorArt, portraitsUrl, sheetRows } from '../game/visuals/assets';
 import { SOURCE_TILE, openingFrame, chestFrame, decorAt, itemFrame, floorFrame, fogLayers, landmarkAt, tileSizeFor, tileset, worldArtUrl, type Landmark } from '../game/visuals/world-art';
-import { heroStatLine, questLine, choiceText, eventChoices, eventReasonText, eventText, heroText, itemLines, itemName, itemOwner, passiveText, potionText, resourceOrder, resourceText, skillDescription, slotIcon, slotText, wornSets } from './th';
+import { heroStatLine, questLine, choiceText, eventChoices, eventReasonText, eventText, heroText, itemLines, itemName, itemOwner, potionText, resourceOrder, resourceText, slotIcon, slotText, wornSets } from './th';
 import { icon, type IconName } from './icons';
 import { gearArt, potionArt } from './equip-art';
 import { boulderPosition, doorOpen, openPit, secretAt } from '../core/world/puzzles';
 
 export interface WorldHost { travel(to: Point): void; move(dir: Direction): void; rest(): void; revive(heroId: string): void; swap(a: string, b: string): void; moveMember(id: string): void; withdraw(): void; openChest(): void;
+  talent(heroId: string, node: TalentNode): void;
   usePotion(potion: PotionId, heroId?: string): void; chooseEvent(choice: EventChoice): void;
   wear(heroId: string, from: BagList, index: number): void; takeOff(heroId: string, slot: GearSlot): void }
 export interface WorldBanner { kind: 'encounter' | 'boss' | 'elite' | 'tutorial' | 'complete'; eyebrow: string; title: string; detail: string }
@@ -61,6 +65,8 @@ export class WorldUI {
   private bagTab: 'items' | 'gear' | 'team' = 'items';
   private bagHero: string | undefined;
   private bagSlot: GearSlot | undefined;
+  private characterTab: CharacterTab = 'overview';
+  private characterReturn: { dialog?: string; focus: string; scroll: number } = { focus: 'world-pack', scroll: 0 };
   private picked: string | undefined;
   private confirmWithdraw = false;
   private tile = 48;
@@ -108,19 +114,50 @@ export class WorldUI {
       <dialog id="world-goals" class="world-dialog" aria-labelledby="world-goals-title"><div class="info-header"><h2 id="world-goals-title">เป้าหมายการเดินทาง</h2><button data-world="goals-close" class="quiet" aria-label="ปิดเป้าหมาย">${icon('close')}</button></div><div class="info-content" id="world-goals-content"></div></dialog>
       <dialog id="camp-dialog" class="world-dialog" aria-labelledby="camp-title"><div class="info-header"><h2 id="camp-title">${icon('camp')} แคมป์พักแรม</h2><button data-world="camp-close" class="quiet" aria-label="ปิดแคมป์">${icon('close')}</button></div><div class="info-content" id="camp-content"></div></dialog>
       <dialog id="pack-dialog" class="world-dialog" aria-labelledby="pack-title"><div class="info-header"><h2 id="pack-title">${icon('pack')} กระเป๋า</h2><button data-world="pack-close" class="quiet" aria-label="ปิดกระเป๋า">${icon('close')}</button></div><div class="info-content" id="pack-content"></div></dialog>
+      <dialog id="character-dialog" class="world-dialog character-dialog" aria-labelledby="character-title"><div class="info-header"><h2 id="character-title">ตัวละคร</h2><button data-world="character-close" class="quiet" aria-label="ปิดข้อมูลตัวละคร">${icon('close')}</button></div><div id="character-members" class="tree-members"></div><div id="character-tabs" class="character-tabs" role="tablist" aria-label="ข้อมูลตัวละคร"></div><div id="character-content" class="info-content" role="tabpanel"></div></dialog>
       <dialog id="event-dialog" class="world-dialog" aria-labelledby="event-title"><div class="info-header"><h2 id="event-title"></h2><button data-world="event-close" class="quiet" aria-label="ปิดและเดินต่อ">${icon('close')}</button></div><div class="info-content" id="event-content"></div></dialog>
       <dialog id="world-info" class="world-dialog" aria-labelledby="world-info-title"><div class="info-header"><h2 id="world-info-title">ข้อมูลการเดินทาง</h2><button data-world="info-close" class="quiet" aria-label="ปิดข้อมูล">${icon('close')}</button></div>${infoTabs('world')}<div class="info-content"><section id="world-panel-settings" role="tabpanel" aria-labelledby="world-tab-settings" hidden><section class="battle-sound"><h3>เพลงและเสียงเอฟเฟกต์</h3><div id="world-sfx-controls"></div></section></section><section id="world-panel-guide" role="tabpanel" aria-labelledby="world-tab-guide"><div id="world-info-content"></div></section></div></dialog>`;
     for (const [id, trigger] of [['world-info', 'world-info-button'], ['world-goals', 'objective-button'], ['pack-dialog', 'world-pack'], ['camp-dialog', 'rest'], ['event-dialog', 'rest']]) {
       root.querySelector(`#${id}`)!.addEventListener('close', () => {
+        if (root.querySelector('dialog[open]')) return;
         if (!root.hidden && !root.closest('[inert]')) root.querySelector<HTMLElement>(`#${trigger}`)?.focus({ preventScroll: true });
       });
     }
+    root.querySelector('#character-dialog')!.addEventListener('close', () => {
+      if (root.hidden || root.closest('[inert]')) return;
+      const back = this.characterReturn;
+      if (back.dialog) {
+        if (back.dialog === 'pack-dialog') this.renderPack(); else this.renderCamp();
+        const dialog = root.querySelector<HTMLDialogElement>(`#${back.dialog}`)!;
+        if (!dialog.open) dialog.showModal();
+        dialog.querySelector('.info-content')!.scrollTop = back.scroll;
+      }
+      root.querySelector<HTMLElement>(`#${back.focus}`)?.focus({ preventScroll: true });
+    });
+    root.addEventListener('keydown', e => {
+      if (root.hidden || root.closest('[inert]')) return;
+      if (e.repeat && (e.target as HTMLElement).closest('[data-world=character-talent]')) { e.preventDefault(); return; }
+      const tab = (e.target as HTMLElement).closest<HTMLButtonElement>('.character-tabs [role=tab]');
+      if (!tab || !['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(e.key)) return;
+      e.preventDefault(); e.stopPropagation();
+      const keys = Object.keys(characterTabs) as CharacterTab[], index = keys.indexOf(this.characterTab);
+      this.characterTab = keys[e.key === 'Home' ? 0 : e.key === 'End' ? keys.length - 1 : (index + (e.key === 'ArrowRight' ? 1 : -1) + keys.length) % keys.length]!;
+      this.renderCharacter(); root.querySelector<HTMLElement>(`#character-tab-${this.characterTab}`)!.focus();
+    });
     root.addEventListener('click', e => {
+      if (root.hidden || root.closest('[inert]')) return;
       const el = e.target as HTMLElement;
       const button = el.closest<HTMLButtonElement>('button[data-world]');
       if (button && !button.disabled) {
+        const modal = root.querySelector('dialog[open]');
+        if (modal && !modal.contains(button)) return;
         const dialog = (id: string) => root.querySelector<HTMLDialogElement>(id)!;
         switch (button.dataset.world) {
+          case 'character-open': this.openCharacter(button.dataset.hero!, (button.dataset.tab as CharacterTab) ?? 'overview', button); break;
+          case 'character-close': dialog('#character-dialog').close(); break;
+          case 'character-member': this.bagHero = button.dataset.hero; this.bagSlot = undefined; this.renderCharacter(); root.querySelector<HTMLElement>(`#character-member-${this.bagHero}`)?.focus(); break;
+          case 'character-tab': this.characterTab = button.dataset.tab as CharacterTab; root.querySelector('#character-content')!.scrollTop = 0; this.renderCharacter(); root.querySelector<HTMLElement>(`#character-tab-${this.characterTab}`)?.focus(); break;
+          case 'character-talent': if (!this.view?.locked && this.bagHero && button.getAttribute('aria-disabled') !== 'true') { this.host.talent(this.bagHero, button.dataset.node as TalentNode); root.querySelector<HTMLElement>(`#character-talent-${button.dataset.node}`)?.focus(); } break;
           case 'move': this.input(button.dataset.dir as Direction); break;
           case 'interact': this.interact(); break;
           case 'camp-rest': if (!this.view?.locked) this.host.rest(); break;
@@ -134,9 +171,9 @@ export class WorldUI {
             this.confirmWithdraw = false; dialog('#camp-dialog').close(); this.host.withdraw(); break;
           case 'pack': this.bagTab = 'items'; this.picked = undefined; this.salvePick = false; this.renderPack(); dialog('#pack-dialog').showModal(); break;
           case 'bag-tab': this.bagTab = button.dataset.tab as WorldUI['bagTab']; this.picked = undefined; this.salvePick = false; this.renderPack(); this.root.querySelector<HTMLElement>(`#bag-tab-${this.bagTab}`)?.focus(); break;
-          case 'bag-member': this.bagHero = button.dataset.hero; this.renderPack(); this.root.querySelector<HTMLElement>(`#bag-member-${this.bagHero}`)?.focus(); break;
-          case 'bag-slot': { const slot = button.dataset.slot as GearSlot; this.bagSlot = this.bagSlot === slot ? undefined : slot; this.renderPack(); this.root.querySelector<HTMLElement>(`#bag-slot-${slot}`)?.focus(); break; }
-          case 'bag-gear-of': this.bagHero = button.dataset.hero; this.bagSlot = undefined; this.bagTab = 'gear'; this.picked = undefined; this.renderPack(); this.root.querySelector<HTMLElement>('#bag-tab-gear')?.focus(); break;
+          case 'bag-member': this.openCharacter(button.dataset.hero!, 'gear', button); break;
+          case 'bag-slot': { const slot = button.dataset.slot as GearSlot; this.bagSlot = this.bagSlot === slot ? undefined : slot; this.renderCharacter(); this.root.querySelector<HTMLElement>(`#bag-slot-${slot}`)?.focus(); break; }
+          case 'bag-gear-of': this.openCharacter(button.dataset.hero!, 'gear', button); break;
           case 'bag-wear': if (!this.view?.locked && this.bagHero) { this.host.wear(this.bagHero, button.dataset.from as BagList, Number(button.dataset.index)); this.root.querySelector<HTMLElement>(`#bag-slot-${this.bagSlot ?? ''}`)?.focus(); } break;
           case 'bag-takeoff': if (!this.view?.locked && this.bagHero && this.bagSlot) { this.host.takeOff(this.bagHero, this.bagSlot); this.root.querySelector<HTMLElement>(`#bag-slot-${this.bagSlot}`)?.focus(); } break;
           case 'pack-close': dialog('#pack-dialog').close(); break;
@@ -209,7 +246,38 @@ export class WorldUI {
   }
   private focusTeam(id: string | undefined): void { if (id) this.root.querySelector<HTMLElement>(`#${this.bagOpen() ? 'bag-team' : 'team'}-${id}`)?.focus(); }
   private bagOpen(): boolean { return this.root.querySelector<HTMLDialogElement>('#pack-dialog')!.open; }
-  private input(dir: Direction): void { if (this.view && !this.view.locked && !this.view.state.completed) this.host.move(dir); }
+  private openCharacter(id: string, tab: CharacterTab, trigger: HTMLButtonElement): void {
+    const s = this.view?.state;
+    if (!s || this.view!.locked || !canManage(s) || !rosterIds(s).includes(id) || this.root.hidden || this.root.closest('[inert]')) return;
+    const from = trigger.closest<HTMLDialogElement>('dialog');
+    this.characterReturn = { dialog: from?.id, focus: trigger.id || `world-hero-${id}`, scroll: from?.querySelector('.info-content')?.scrollTop ?? 0 };
+    this.bagHero = id; this.bagSlot = undefined;
+    this.characterTab = Object.hasOwn(characterTabs, tab) ? tab : 'overview';
+    from?.close(); this.renderCharacter();
+    const dialog = this.root.querySelector<HTMLDialogElement>('#character-dialog')!;
+    dialog.querySelector('.info-content')!.scrollTop = 0;
+    dialog.showModal(); this.root.querySelector<HTMLElement>(`#character-tab-${this.characterTab}`)!.focus();
+  }
+  private renderCharacter(): void {
+    const s = this.view?.state, id = this.bagHero;
+    if (!s || !id || !rosterIds(s).includes(id)) return;
+    const h = this.hero(id, s), base = this.heroes.find(v => v.id === id)!, m = s.members[id]!, text = heroText[id]!;
+    const focus = document.activeElement instanceof HTMLElement ? document.activeElement.id : '';
+    const members = this.root.querySelector<HTMLElement>('#character-members')!, left = members.scrollLeft;
+    this.root.querySelector('#character-title')!.textContent = `${text.name} · Lv${m.level ?? 1} · ★${m.stars}`;
+    members.innerHTML = rosterIds(s).map(c => {
+      const free = talentPoints(this.map, s.members[c]) - talentsSpent(s.members[c]?.talents);
+      return `<button id="character-member-${c}" data-world="character-member" data-hero="${c}" class="tree-member" aria-pressed="${c === id}" aria-label="${heroText[c]!.name} · ${s.roster.deployed.includes(c) ? 'ตัวหลัก' : 'สำรอง'} · แต้มเหลือ ${free}">${portrait(c)}<small>${heroText[c]!.name}</small>${free ? `<i>+${free}</i>` : ''}</button>`;
+    }).join(''); members.scrollLeft = left;
+    this.root.querySelector('#character-tabs')!.innerHTML = Object.entries(characterTabs).map(([tab, label]) => `<button id="character-tab-${tab}" data-world="character-tab" data-tab="${tab}" role="tab" aria-controls="character-content" aria-selected="${tab === this.characterTab}" tabindex="${tab === this.characterTab ? 0 : -1}">${label}</button>`).join('');
+    const content = this.root.querySelector<HTMLElement>('#character-content')!, scroll = content.scrollTop;
+    content.setAttribute('aria-labelledby', `character-tab-${this.characterTab}`);
+    content.innerHTML = `<p class="character-summary">${text.role} · ${h.lane === 'front' ? 'แนวหน้า' : 'แนวหลัง'} · ${s.roster.deployed.includes(id) ? `ตัวหลักช่อง ${s.roster.deployed.indexOf(id) + 1}` : 'สำรอง'} · HP ${s.hp[id] ?? 0}/${h.maxHp}</p>` +
+      (this.characterTab === 'overview' ? characterOverview(s, this.map, h) : this.characterTab === 'gear' ? this.bagGear(s) : !this.skillData ? '<p>ไม่มีข้อมูลสกิล</p>' : this.characterTab === 'skills' ? characterSkills(h, base, m.stars, this.skillData) : characterTalents(s, this.map, id, this.skillData));
+    content.scrollTop = scroll;
+    if (this.root.querySelector<HTMLDialogElement>('#character-dialog')!.open && focus) this.root.querySelector<HTMLElement>(`#${focus}`)?.focus({ preventScroll: true });
+  }
+  private input(dir: Direction): void { if (this.view && !this.view.locked && !this.view.state.completed && !this.root.hidden && !this.root.querySelector('dialog[open]')) this.host.move(dir); }
 
   private floorCells(): string {
     let html = '';
@@ -307,6 +375,7 @@ export class WorldUI {
     const eventDialog = this.root.querySelector<HTMLDialogElement>('#event-dialog')!;
     if (eventDialog.open) { if (pendingEvent(s, this.map) && !view.locked) this.renderEvent(); else eventDialog.close(); }
     if (this.bagOpen()) this.renderPack();
+    if (this.root.querySelector<HTMLDialogElement>('#character-dialog')!.open) this.renderCharacter();
     if (this.root.querySelector<HTMLDialogElement>('#camp-dialog')!.open) { if (atMuster(s, this.map) && !view.locked) this.renderCamp(); else this.root.querySelector<HTMLDialogElement>('#camp-dialog')!.close(); }
     if (!prev || prev.revealed !== s.revealed) this.renderFog(s);
     this.renderSprites(s, prev);
@@ -367,20 +436,22 @@ export class WorldUI {
     const s = this.view?.state; if (!s) return;
     const tab = (id: WorldUI['bagTab'], label: string) => `<button id="bag-tab-${id}" data-world="bag-tab" data-tab="${id}" role="tab" aria-selected="${this.bagTab === id}" class="${this.bagTab === id ? 'active' : ''}">${label}</button>`;
     const tabs = `<div class="camp-tabs three" role="tablist" aria-label="กระเป๋า">${tab('items', 'ของ')}${tab('gear', `อุปกรณ์${s.found.length ? ` <small>ใหม่ ${s.found.length}</small>` : ''}`)}${tab('team', `ทีม <small>${s.roster.deployed.length}+${s.roster.reserve.length}</small>`)}</div>`;
-    this.root.querySelector('#pack-content')!.innerHTML = tabs + (this.bagTab === 'gear' ? this.bagGear(s) : this.bagTab === 'team' ? this.bagTeam(s) : this.bagItems(s));
+    this.root.querySelector('#pack-content')!.innerHTML = tabs + (this.bagTab === 'gear' ? this.bagInventory(s) : this.bagTab === 'team' ? this.bagTeam(s) : this.bagItems(s));
   }
   private bagItems(s: ExpeditionState): string {
     const opened = s.openedChests.length;
     return `<div role="tabpanel">${this.potionSection(s)}<ul class="pack-list">${resourceOrder.map(id => `<li data-resource="${id}">${id === 'gold' ? potionArt('gold') : itemArt(id)}<div><b>${resourceText[id].name}</b><small>${resourceText[id].use}</small></div><strong>${s.resources[id]}</strong></li>`).join('')}${s.dust ? `<li data-resource="dust">${potionArt('dust')}<div><b>ฝุ่นดาว</b><small>วัตถุดิบตีอุปกรณ์ · นำกลับค่ายเมื่อจบการเดินทาง</small></div><strong>${s.dust}</strong></li>` : ''}</ul>
-      ${s.found.length ? `<h3 class="pack-gear-title">${icon('gearBody')} อุปกรณ์ที่เจอ ${s.found.length} ชิ้น</h3><ul class="pack-gear">${s.found.map(i => `<li data-rarity="${i.rarity}">${gearArt(i)}<div><b>${itemName(i)} Lv${i.level}</b><small>${itemLines(this.map.equipment, i).join(' · ')}</small></div></li>`).join('')}</ul><p class="world-stats">ใส่ได้เลยที่แท็บอุปกรณ์ · ถ้าทีมล้มหมดจะเก็บกลับได้แค่ชิ้นที่ดีที่สุด 1 ชิ้น</p>` : ''}
+      ${s.found.length ? `<h3 class="pack-gear-title">${icon('gearBody')} อุปกรณ์ที่เจอ ${s.found.length} ชิ้น</h3><ul class="pack-gear">${s.found.map(i => `<li data-rarity="${i.rarity}">${gearArt(i)}<div><b>${itemName(i)} Lv${i.level}</b><small>${itemLines(this.map.equipment, i).join(' · ')}</small></div></li>`).join('')}</ul><p class="world-stats">เลือกผู้สวมใส่ได้ที่แท็บอุปกรณ์ · ถ้าทีมล้มหมดจะเก็บกลับได้แค่ชิ้นที่ดีที่สุด 1 ชิ้น</p>` : ''}
       <p class="world-stats">เปิดกล่องสมบัติแล้ว ${opened}/${this.map.chests.length} กล่อง · ของตกจากศึกที่ชนะและกล่องสมบัติ</p></div>`;
+  }
+  private bagInventory(s: ExpeditionState): string {
+    const entries = [...s.found.map(item => ({ item, label: 'เจอรอบนี้' })), ...s.spare.map(item => ({ item, label: 'ของที่พกมา' }))];
+    return `<div role="tabpanel"><h3>เลือกตัวละครเพื่อสวมใส่</h3><div class="tree-members" role="group" aria-label="เลือกผู้สวมใส่">${rosterIds(s).map(id => `<button id="bag-member-${id}" data-world="character-open" data-hero="${id}" data-tab="gear" class="tree-member">${portrait(id)}<small>${heroText[id]!.name}</small></button>`).join('')}</div><h3>อุปกรณ์ในกระเป๋า · ${entries.length} ชิ้น</h3>${entries.length ? `<ul class="pack-gear">${entries.map(({ item, label }) => `<li data-rarity="${item.rarity}">${gearArt(item)}<div><b>${itemName(item)} Lv${item.level}</b><small>${itemLines(this.map.equipment, item).join(' · ')}</small><small>${label} · ${itemOwner(item)}</small></div></li>`).join('')}</ul>` : '<p class="camp-note">ยังไม่มีอุปกรณ์ในกระเป๋า</p>'}<p class="camp-note">สวมใส่และถอดของได้ในหน้าตัวละคร · คลังที่ค่ายใช้ได้เมื่อกลับบ้าน</p></div>`;
   }
   // Gear tab: pick a brought member, see the six slots, wear finds (`found`) or own items taken off (`spare`).
   private bagGear(s: ExpeditionState): string {
     const ids = rosterIds(s); const id = this.bagHero && ids.includes(this.bagHero) ? this.bagHero : ids[0]!; this.bagHero = id;
     const m = s.members[id]; const h = this.hero(id, s); const rules = this.map.equipment; const slot = this.bagSlot; const free = canManage(s);
-    const picker = `<div class="tree-members" role="group" aria-label="เลือกสมาชิก">${ids.map(c => { const n = Object.keys(s.members[c]?.gear ?? {}).length;
-      return `<button id="bag-member-${c}" data-world="bag-member" data-hero="${c}" class="tree-member" aria-pressed="${c === id}" aria-label="${heroText[c]!.name} Lv${s.members[c]?.level ?? 1} · ใส่ ${n}/6">${portrait(c)}<small>${heroText[c]!.name}</small>${n ? `<i>${n}</i>` : ''}</button>`; }).join('')}</div>`;
     const slots = GEAR_SLOTS.map(sl => { const it = m?.gear?.[sl];
       return `<button id="bag-slot-${sl}" data-world="bag-slot" data-slot="${sl}" class="gear-slot" aria-pressed="${slot === sl}" ${it ? `data-rarity="${it.rarity}"` : ''} aria-label="${slotText[sl]}: ${it ? `${itemName(it)} Lv${it.level}` : 'ว่าง'}">${it ? gearArt(it) : icon(slotIcon[sl])}<b>${slotText[sl]}</b><small>${it ? `${itemName(it)} Lv${it.level}` : 'ว่าง'}</small></button>`;
     }).join('');
@@ -390,11 +461,11 @@ export class WorldUI {
     const entries = (['found', 'spare'] as const).flatMap(from => s[from].map((item, index) => ({ item, from, index })))
       .filter(e => !slot || e.item.slot === slot).sort((a, b) => b.item.rarity - a.item.rarity || b.item.level - a.item.level);
     const rows = entries.map(({ item: i, from, index }) => { const reason = wearReason(s, id, from, index);
-      return `<li data-rarity="${i.rarity}">${gearArt(i)}<div><b>${itemName(i)} Lv${i.level}</b><small>${itemLines(rules, i).join(' · ')}</small><small class="gear-owner">${from === 'found' ? 'เจอรอบนี้' : 'ของในค่าย'} · ${itemOwner(i)}</small></div>
+      return `<li data-rarity="${i.rarity}">${gearArt(i)}<div><b>${itemName(i)} Lv${i.level}</b><small>${itemLines(rules, i).join(' · ')}</small><small class="gear-owner">${from === 'found' ? 'เจอรอบนี้' : 'ของที่พกมา'} · ${itemOwner(i)}</small></div>
         <span class="gear-actions"><button id="wear-${from}-${index}" data-world="bag-wear" data-from="${from}" data-index="${index}" class="primary"${reason ? ' disabled' : ''}>${reason === 'class' ? 'คนอื่นใช้' : reason ? 'ใส่ไม่ได้ตอนนี้' : 'ใส่'}</button></span></li>`;
     }).join('');
     const sets = wornSets(rules, m?.gear);
-    return `<div role="tabpanel">${picker}<p class="gear-stats"><b>${heroText[id]!.name}</b> Lv${m?.level ?? 1} · ${heroStatLine(h, s.hp[id] ?? 0)}</p>
+    return `<div class="character-gear"><p class="gear-stats"><b>${heroText[id]!.name}</b> Lv${m?.level ?? 1} · ${heroStatLine(h, s.hp[id] ?? 0)}</p>
       <div class="gear-slots">${slots}</div>${detail}
       ${sets.length ? `<ul class="gear-sets" aria-label="ชุดอุปกรณ์ที่ใส่">${sets.map(w => `<li><b>ชุด${w.name}</b> <span>${w.pieces}/4 ชิ้น</span><small class="${w.pieces >= 2 ? 'on' : ''}">2 ชิ้น: ${w.two}</small><small class="${w.pieces >= 4 ? 'on' : ''}">4 ชิ้น: ${w.four}</small></li>`).join('')}</ul>` : ''}
       <h3>${icon('pack')} ในกระเป๋า${slot ? ` · ${slotText[slot]}` : ''} <span class="camp-embers">${entries.length} ชิ้น · แตะช่องเพื่อกรอง</span></h3>
@@ -406,22 +477,8 @@ export class WorldUI {
     return this.campTeam(s, 'bag-team') + (this.picked && rosterIds(s).includes(this.picked) ? this.heroDetail(s, this.picked) : '<p class="camp-note">แตะสมาชิกเพื่อดูรายละเอียด สกิล และอุปกรณ์</p>');
   }
   private heroDetail(s: ExpeditionState, id: string): string {
-    const h = this.hero(id, s); const m = s.members[id]; const text = heroText[id]!; const level = m?.level ?? 1;
-    const data = this.skillData && withParty(this.skillData, [h]);
-    const skills = data ? h.actions.map(a => `<li>${icon(a)}<div><b>${data.skills[a].name}</b><small>${data.skills[a].cooldown ? `คูลดาวน์ ${data.skills[a].cooldown} รอบ` : 'ใช้ได้ทุกเทิร์น'}</small><p>${skillDescription(a, id, data)}</p></div></li>`).join('') : '';
-    const unlocks = this.heroes.find(x => x.id === id)?.unlocks; const stars = this.stars(s, id);
-    const row = (need: number, iconName: IconName, name: string, help: string) => `<li class="${stars >= need ? 'unlocked' : 'locked'}"><span class="unlock-star">★${need}</span>${icon(iconName)}<b>${name}</b><small>${stars >= need ? 'ปลดล็อกแล้ว' : `ปลดล็อกที่ ★${need}`} · ${help}</small></li>`;
-    const unlockRows = unlocks && data ? `<ul class="member-unlocks" aria-label="สิ่งที่ปลดล็อกจากดาว">${row(3, unlocks.skill as IconName, data.skills[unlocks.skill].name, 'สกิลใหม่ในการต่อสู้')}${row(5, 'starFilled', passiveText[unlocks.passive].name, passiveText[unlocks.passive].help(data))}</ul>` : '';
-    const gear = GEAR_SLOTS.map(sl => m?.gear?.[sl]).filter((i): i is Item => !!i);
-    return `<div class="hire-preview bag-detail" aria-label="ข้อมูล${text.name}">
-      <div class="hire-preview-head">${portrait(id)}<div><h3>${text.name}</h3><p>${text.role} · ${h.lane === 'front' ? 'แนวหน้า' : 'แนวหลัง'} · ${this.starRow(stars)}</p><p>Lv${level}${level < this.map.progression.levelCap ? ` · EXP ${m?.exp ?? 0}/${expToNext(this.map, level)}` : ' · เลเวลสูงสุด'}${m?.wound ? ` · บาดแผล −${m.wound}% เลือดสูงสุด` : ''}</p><p class="hire-preview-help">${text.help}</p></div></div>
-      <dl class="hire-stats"><div><dt>เลือด</dt><dd>${s.hp[id] ?? 0}/${h.maxHp}</dd></div><div><dt>พลังโจมตี</dt><dd>${h.attack}</dd></div><div><dt>ความเร็ว</dt><dd>${h.speed}</dd></div><div><dt>พลังเสริม</dt><dd>+${h.skillBonus ?? 0}%</dd></div>${[['เกราะ', h.armour], ['ต้านพลังงาน', h.resist], ['ดูดเลือด', h.leech]].filter(([, v]) => v).map(([n, v]) => `<div><dt>${n}</dt><dd>${v}%</dd></div>`).join('')}</dl>
-      ${skills ? `<h4>สกิล</h4><ul class="hire-skills">${skills}</ul>` : ''}
-      ${unlockRows ? `<h4>ปลดล็อกด้วยดาว</h4>${unlockRows}` : ''}
-      <h4>อุปกรณ์ <small>${gear.length}/6</small></h4>${gear.length ? `<ul class="pack-gear">${gear.map(i => `<li data-rarity="${i.rarity}">${gearArt(i)}<div><b>${itemName(i)} Lv${i.level}</b><small>${itemLines(this.map.equipment, i).join(' · ')}</small></div></li>`).join('')}</ul>` : '<p class="camp-note">ยังไม่ได้ใส่อุปกรณ์</p>'}
-      <button id="bag-gear-of" data-world="bag-gear-of" data-hero="${id}" class="secondary">${icon('gearBody')}<span>เปลี่ยนอุปกรณ์ของ${text.name}</span></button></div>`;
+    return `<div class="bag-detail"><p>${heroText[id]!.name} · ${heroStatLine(this.hero(id, s), s.hp[id])}</p><button id="bag-gear-of" data-world="bag-gear-of" data-hero="${id}" class="secondary">${icon('gearBody')}<span>ดูตัวละครและเปลี่ยนอุปกรณ์</span></button></div>`;
   }
-
   private stars(s: ExpeditionState, id: string): number { return s.members[id]?.stars ?? 1; }
   // Member stats as they fight: the catalog entry scaled by the member's stars.
   private hero(id: string, s = this.view?.state): HeroDefinition { const base = this.heroes.find(h => h.id === id)!; return s ? wounded(starred(base, this.stars(s, id), this.map, s.members[id]?.level ?? 1, s.members[id]?.talents, s.members[id]?.gear), s.members[id]?.wound) : base; }
@@ -487,7 +544,7 @@ export class WorldUI {
     this.root.querySelector('#world-party')!.innerHTML = s.roster.deployed.map(id => this.hero(id, s)).map(h => {
       const hp = s.hp[h.id] ?? 0; const ratio = hp / h.maxHp; const text = heroText[h.id]!;
       const state = hp <= 0 ? 'fallen' : ratio < .25 ? 'critical' : ratio < .6 ? 'hurt' : 'healthy';
-      return `<div class="world-hero ${state}" id="world-hero-${h.id}" aria-label="${text.name} ${this.stars(s, h.id)} ดาว เลเวล ${s.members[h.id]?.level ?? 1} ${hp <= 0 ? 'ล้มแล้ว' : `เลือด ${hp} จาก ${h.maxHp}`}">${portrait(h.id)}<span class="hero-copy"><b>${text.name}${this.stars(s, h.id) > 1 ? `<i class="hero-stars">★${this.stars(s, h.id)}</i>` : ''}<i class="hero-level">Lv${s.members[h.id]?.level ?? 1}</i></b><small>${hp <= 0 ? 'ล้มแล้ว' : `${hp}/${h.maxHp}`}</small><span class="hp"><span style="width:${ratio * 100}%"></span></span></span></div>`;
+      return `<button data-world="character-open" data-hero="${h.id}" aria-haspopup="dialog" aria-controls="character-dialog" class="world-hero ${state}" id="world-hero-${h.id}" aria-label="${text.name} ${this.stars(s, h.id)} ดาว เลเวล ${s.members[h.id]?.level ?? 1} ${hp <= 0 ? 'ล้มแล้ว' : `เลือด ${hp} จาก ${h.maxHp}`}">${portrait(h.id)}<span class="hero-copy"><b>${text.name}${this.stars(s, h.id) > 1 ? `<i class="hero-stars">★${this.stars(s, h.id)}</i>` : ''}<i class="hero-level">Lv${s.members[h.id]?.level ?? 1}</i></b><small>${hp <= 0 ? 'ล้มแล้ว' : `${hp}/${h.maxHp}`}</small><span class="hp"><span style="width:${ratio * 100}%"></span></span>${talentPoints(this.map, s.members[h.id]) - talentsSpent(s.members[h.id]?.talents) > 0 ? '<span class="world-talent-badge">+แต้ม</span>' : ''}</span></button>`;
     }).join('');
   }
 
