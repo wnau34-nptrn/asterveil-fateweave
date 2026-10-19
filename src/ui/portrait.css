@@ -101,6 +101,40 @@ body { display: grid; place-items: center; background: radial-gradient(ellipse a
 #app #character-content { flex: 1 1 auto; min-height: 0; max-height: none; overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain; padding: 4px; }
 .character-summary { margin: 0 0 10px; color: var(--text-muted); font-size: 12px; }
 .character-passive { padding: 12px; border: 1px solid var(--hud-edge); border-radius: 12px; background: var(--hud-glass); }
+.character-stat-list { display: grid; gap: 7px; }
+.character-stat, .comparison-skills details { border: 1px solid var(--hud-edge); border-radius: 10px; background: var(--hud-glass); }
+.character-stat summary { display: flex; justify-content: space-between; align-items: center; gap: 12px; min-height: 48px; font-size: 13px; }
+.character-stat summary strong, .skill-metric strong { color: var(--gold-light); font-size: 17px; }
+.character-stat summary span { flex: 1; }
+.character-stat summary::after { content: '+'; color: var(--gold-light); }
+.character-stat[open] summary::after { content: '−'; }
+.character-stat[open] summary { border-bottom: 1px solid var(--hud-edge); }
+.character-stat p { margin: 10px; font-size: 13px; line-height: 1.7; }
+.character-skills .skill-metric { color: var(--veil-cyan); margin: 7px 0; }
+#character-content .gear-actions { display: flex; flex-direction: column; gap: 6px; }
+#character-content .gear-actions button { min-height: 44px; padding: 7px 12px; }
+.comparison-items { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.comparison-item { min-width: 0; padding: 10px; border: 1px solid var(--hud-edge); border-radius: 12px; background: var(--hud-glass); }
+.comparison-item h4, .comparison-effects h4 { margin: 0 0 8px; color: var(--gold-light); }
+.comparison-item > b, .comparison-item > small, .comparison-effects small { display: block; overflow-wrap: anywhere; }
+.comparison-item .gear-art { --art: 44px; margin-bottom: 6px; }
+.comparison-item small { color: var(--text-muted); font-size: 11px; line-height: 1.6; }
+.comparison-table { width: 100%; border-collapse: collapse; font-size: 12px; font-variant-numeric: tabular-nums; }
+.comparison-table th, .comparison-table td { padding: 9px 3px; border-bottom: 1px solid var(--hud-edge); text-align: right; }
+.comparison-table th:first-child { width: 40%; text-align: left; font-weight: 400; }
+.comparison-table thead th { color: var(--text-muted); font-weight: 400; }
+.gear-comparison .gain { color: #8ef0a8; }
+.gear-comparison .loss { color: #ffb4a8; }
+.gear-comparison .same { color: var(--text-muted); }
+.comparison-skills { display: grid; gap: 8px; }
+.comparison-skills summary { min-height: 56px; font-size: 13px; }
+.comparison-skills summary span { display: block; margin-top: 5px; font-size: 12px; line-height: 1.6; }
+.comparison-skills em { font-style: normal; }
+.comparison-skills p, .comparison-skills details > small { margin: 10px; display: block; font-size: 12px; line-height: 1.7; }
+.comparison-effects section { padding: 10px; margin: 8px 0; border: 1px solid var(--hud-edge); border-radius: 10px; }
+.comparison-effects ul { margin: 0; padding-left: 18px; font-size: 12px; line-height: 1.7; }
+.comparison-footer { position: sticky; bottom: -4px; z-index: 1; display: flex; gap: 8px; padding: 10px 0 4px; background: #0c192bf5; border-top: 1px solid var(--hud-edge); }
+.comparison-footer button { min-height: 48px; flex: 1; padding: 8px; }
 #character-content .talent-branches { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 #character-content .talent-branch { min-width: 0; }
 #character-content .talent-node[data-state=locked] { opacity: .72; }

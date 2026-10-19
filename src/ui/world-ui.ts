@@ -1,12 +1,12 @@
 import { infoTabs } from './info-tabs';
-import { characterOverview, characterSkills, characterTalents, characterTabs, type CharacterTab } from './character-view';
+import { characterEquipmentComparison, characterOverview, characterSkills, characterTalents, characterTabs, type CharacterTab } from './character-view';
 import { talentPoints, talentsSpent } from '../core/world/talents';
 import type { TalentNode } from '../core/world/types';
 import { shortcutBlocked } from '../platform/keyboard';
 import type { EncounterDefinition, HeroDefinition } from '../core/battle/types';
 
-import type { Direction, EventChoice, ExpeditionState, GearSlot, MapDefinition, Point, PotionId } from '../core/world/types';
-import { canManage, wearReason, type BagList, travelTargets, atCamp, atMuster, canOpenChest, canRest, canRevive, chestAt, eliteBlocks, questComplete, questDone, encounterChance, eventChoiceReason, isRevealed, monsterLevelAt, pendingEvent, rosterIds, starred, tileAt, wounded, zoneOf } from '../core/world/world';
+import type { Direction, EventChoice, ExpeditionState, GearSlot, Item, MapDefinition, Point, PotionId } from '../core/world/types';
+import { canManage, wear, wearReason, type BagList, travelTargets, atCamp, atMuster, canOpenChest, canRest, canRevive, chestAt, eliteBlocks, questComplete, questDone, encounterChance, eventChoiceReason, isRevealed, monsterLevelAt, pendingEvent, rosterIds, starred, tileAt, wounded, zoneOf } from '../core/world/world';
 import { GEAR_SLOTS, PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS } from '../core/world/types';
 import { actorArt, portraitsUrl, sheetRows } from '../game/visuals/assets';
 import { SOURCE_TILE, openingFrame, chestFrame, decorAt, itemFrame, floorFrame, fogLayers, landmarkAt, tileSizeFor, tileset, worldArtUrl, type Landmark } from '../game/visuals/world-art';
@@ -66,6 +66,7 @@ export class WorldUI {
   private bagHero: string | undefined;
   private bagSlot: GearSlot | undefined;
   private characterTab: CharacterTab = 'overview';
+  private comparison: { from: BagList; index: number; item: Item } | undefined;
   private characterReturn: { dialog?: string; focus: string; scroll: number } = { focus: 'world-pack', scroll: 0 };
   private picked: string | undefined;
   private confirmWithdraw = false;
@@ -141,8 +142,12 @@ export class WorldUI {
       if (!tab || !['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(e.key)) return;
       e.preventDefault(); e.stopPropagation();
       const keys = Object.keys(characterTabs) as CharacterTab[], index = keys.indexOf(this.characterTab);
+      this.comparison = undefined;
       this.characterTab = keys[e.key === 'Home' ? 0 : e.key === 'End' ? keys.length - 1 : (index + (e.key === 'ArrowRight' ? 1 : -1) + keys.length) % keys.length]!;
       this.renderCharacter(); root.querySelector<HTMLElement>(`#character-tab-${this.characterTab}`)!.focus();
+    });
+    root.querySelector('#character-dialog')!.addEventListener('cancel', e => {
+      if (this.comparison && !root.closest('[inert]')) { e.preventDefault(); this.closeComparison(); }
     });
     root.addEventListener('click', e => {
       if (root.hidden || root.closest('[inert]')) return;
@@ -155,8 +160,21 @@ export class WorldUI {
         switch (button.dataset.world) {
           case 'character-open': this.openCharacter(button.dataset.hero!, (button.dataset.tab as CharacterTab) ?? 'overview', button); break;
           case 'character-close': dialog('#character-dialog').close(); break;
-          case 'character-member': this.bagHero = button.dataset.hero; this.bagSlot = undefined; this.renderCharacter(); root.querySelector<HTMLElement>(`#character-member-${this.bagHero}`)?.focus(); break;
-          case 'character-tab': this.characterTab = button.dataset.tab as CharacterTab; root.querySelector('#character-content')!.scrollTop = 0; this.renderCharacter(); root.querySelector<HTMLElement>(`#character-tab-${this.characterTab}`)?.focus(); break;
+          case 'character-member': this.comparison = undefined; this.bagHero = button.dataset.hero; this.bagSlot = undefined; this.renderCharacter(); root.querySelector<HTMLElement>(`#character-member-${this.bagHero}`)?.focus(); break;
+          case 'character-tab': this.comparison = undefined; this.characterTab = button.dataset.tab as CharacterTab; root.querySelector('#character-content')!.scrollTop = 0; this.renderCharacter(); root.querySelector<HTMLElement>(`#character-tab-${this.characterTab}`)?.focus(); break;
+          case 'bag-compare': {
+            const from = button.dataset.from as BagList, index = Number(button.dataset.index), s = this.view?.state;
+            if (s && !this.view!.locked && this.skillData && this.bagHero && !wearReason(s,this.bagHero,from,index)) {
+              this.comparison = { from, index, item: s[from][index]! }; this.renderCharacter(); root.querySelector('#character-content')!.scrollTop = 0; root.querySelector<HTMLElement>('#comparison-back')?.focus();
+            } break;
+          }
+          case 'comparison-back': this.closeComparison(); break;
+          case 'comparison-equip': {
+            const c = this.comparison, s = this.view?.state;
+            if (c && s && !this.view!.locked && this.bagHero && s[c.from][c.index] === c.item && !wearReason(s,this.bagHero,c.from,c.index)) {
+              this.comparison = undefined; this.host.wear(this.bagHero,c.from,c.index); root.querySelector<HTMLElement>(`#bag-slot-${this.bagSlot ?? c.item.slot}`)?.focus();
+            } break;
+          }
           case 'character-talent': if (!this.view?.locked && this.bagHero && button.getAttribute('aria-disabled') !== 'true') { this.host.talent(this.bagHero, button.dataset.node as TalentNode); root.querySelector<HTMLElement>(`#character-talent-${button.dataset.node}`)?.focus(); } break;
           case 'move': this.input(button.dataset.dir as Direction); break;
           case 'interact': this.interact(); break;
@@ -251,7 +269,7 @@ export class WorldUI {
     if (!s || this.view!.locked || !canManage(s) || !rosterIds(s).includes(id) || this.root.hidden || this.root.closest('[inert]')) return;
     const from = trigger.closest<HTMLDialogElement>('dialog');
     this.characterReturn = { dialog: from?.id, focus: trigger.id || `world-hero-${id}`, scroll: from?.querySelector('.info-content')?.scrollTop ?? 0 };
-    this.bagHero = id; this.bagSlot = undefined;
+    this.comparison = undefined; this.bagHero = id; this.bagSlot = undefined;
     this.characterTab = Object.hasOwn(characterTabs, tab) ? tab : 'overview';
     from?.close(); this.renderCharacter();
     const dialog = this.root.querySelector<HTMLDialogElement>('#character-dialog')!;
@@ -273,7 +291,7 @@ export class WorldUI {
     const content = this.root.querySelector<HTMLElement>('#character-content')!, scroll = content.scrollTop;
     content.setAttribute('aria-labelledby', `character-tab-${this.characterTab}`);
     content.innerHTML = `<p class="character-summary">${text.role} · ${h.lane === 'front' ? 'แนวหน้า' : 'แนวหลัง'} · ${s.roster.deployed.includes(id) ? `ตัวหลักช่อง ${s.roster.deployed.indexOf(id) + 1}` : 'สำรอง'} · HP ${s.hp[id] ?? 0}/${h.maxHp}</p>` +
-      (this.characterTab === 'overview' ? characterOverview(s, this.map, h) : this.characterTab === 'gear' ? this.bagGear(s) : !this.skillData ? '<p>ไม่มีข้อมูลสกิล</p>' : this.characterTab === 'skills' ? characterSkills(h, base, m.stars, this.skillData) : characterTalents(s, this.map, id, this.skillData));
+      (this.characterTab === 'overview' ? characterOverview(s, this.map, h, this.skillData) : this.characterTab === 'gear' ? this.characterGear(s) : !this.skillData ? '<p>ไม่มีข้อมูลสกิล</p>' : this.characterTab === 'skills' ? characterSkills(h, base, m.stars, this.skillData) : characterTalents(s, this.map, id, this.skillData));
     content.scrollTop = scroll;
     if (this.root.querySelector<HTMLDialogElement>('#character-dialog')!.open && focus) this.root.querySelector<HTMLElement>(`#${focus}`)?.focus({ preventScroll: true });
   }
@@ -449,6 +467,19 @@ export class WorldUI {
     return `<div role="tabpanel"><h3>เลือกตัวละครเพื่อสวมใส่</h3><div class="tree-members" role="group" aria-label="เลือกผู้สวมใส่">${rosterIds(s).map(id => `<button id="bag-member-${id}" data-world="character-open" data-hero="${id}" data-tab="gear" class="tree-member">${portrait(id)}<small>${heroText[id]!.name}</small></button>`).join('')}</div><h3>อุปกรณ์ในกระเป๋า · ${entries.length} ชิ้น</h3>${entries.length ? `<ul class="pack-gear">${entries.map(({ item, label }) => `<li data-rarity="${item.rarity}">${gearArt(item)}<div><b>${itemName(item)} Lv${item.level}</b><small>${itemLines(this.map.equipment, item).join(' · ')}</small><small>${label} · ${itemOwner(item)}</small></div></li>`).join('')}</ul>` : '<p class="camp-note">ยังไม่มีอุปกรณ์ในกระเป๋า</p>'}<p class="camp-note">สวมใส่และถอดของได้ในหน้าตัวละคร · คลังที่ค่ายใช้ได้เมื่อกลับบ้าน</p></div>`;
   }
   // Gear tab: pick a brought member, see the six slots, wear finds (`found`) or own items taken off (`spare`).
+  private closeComparison(): void {
+    const c = this.comparison; this.comparison = undefined; this.renderCharacter();
+    if (c) this.root.querySelector<HTMLElement>(`#compare-${c.from}-${c.index}`)?.focus();
+  }
+  private characterGear(s: ExpeditionState): string {
+    const c = this.comparison, id = this.bagHero, template = this.skillData;
+    if (c && id && template && s[c.from][c.index] === c.item && !wearReason(s,id,c.from,c.index)) {
+      // The reducer is pure: this proposed state is never committed or persisted.
+      const next = wear(s,this.map,() => ({ ...template, heroes: this.heroes }),id,c.from,c.index).state;
+      return characterEquipmentComparison(s,next,this.map,this.hero(id,s),this.hero(id,next),c.item,template);
+    }
+    this.comparison = undefined; return this.bagGear(s);
+  }
   private bagGear(s: ExpeditionState): string {
     const ids = rosterIds(s); const id = this.bagHero && ids.includes(this.bagHero) ? this.bagHero : ids[0]!; this.bagHero = id;
     const m = s.members[id]; const h = this.hero(id, s); const rules = this.map.equipment; const slot = this.bagSlot; const free = canManage(s);
@@ -462,7 +493,7 @@ export class WorldUI {
       .filter(e => !slot || e.item.slot === slot).sort((a, b) => b.item.rarity - a.item.rarity || b.item.level - a.item.level);
     const rows = entries.map(({ item: i, from, index }) => { const reason = wearReason(s, id, from, index);
       return `<li data-rarity="${i.rarity}">${gearArt(i)}<div><b>${itemName(i)} Lv${i.level}</b><small>${itemLines(rules, i).join(' · ')}</small><small class="gear-owner">${from === 'found' ? 'เจอรอบนี้' : 'ของที่พกมา'} · ${itemOwner(i)}</small></div>
-        <span class="gear-actions"><button id="wear-${from}-${index}" data-world="bag-wear" data-from="${from}" data-index="${index}" class="primary"${reason ? ' disabled' : ''}>${reason === 'class' ? 'คนอื่นใช้' : reason ? 'ใส่ไม่ได้ตอนนี้' : 'ใส่'}</button></span></li>`;
+        <span class="gear-actions">${this.skillData ? `<button id="compare-${from}-${index}" data-world="bag-compare" data-from="${from}" data-index="${index}" class="secondary"${reason ? ' disabled' : ''}>เปรียบเทียบ</button>` : ''}<button id="wear-${from}-${index}" data-world="bag-wear" data-from="${from}" data-index="${index}" class="primary"${reason ? ' disabled' : ''}>${reason === 'class' ? 'คนอื่นใช้' : reason ? 'ใส่ไม่ได้ตอนนี้' : 'ใส่'}</button></span></li>`;
     }).join('');
     const sets = wornSets(rules, m?.gear);
     return `<div class="character-gear"><p class="gear-stats"><b>${heroText[id]!.name}</b> Lv${m?.level ?? 1} · ${heroStatLine(h, s.hp[id] ?? 0)}</p>
