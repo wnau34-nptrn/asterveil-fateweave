@@ -24,7 +24,7 @@ export function unitStatuses(s: BattleState, d: EncounterDefinition, id: string)
     if (hero.hastedRound !== undefined && hero.hastedRound >= s.round) add('haste', 'haste', 'เร่งจังหวะ', `ได้ลำดับลงมือก่อนกลุ่มปกติในรอบ ${hero.hastedRound} (ถ้ามีหลายคน เรียง SPD)`, `มีผลในรอบ ${hero.hastedRound} เท่านั้น`);
     if (s.guard && alive(s.guard.heroId) && s.enemies.some(e => e.id === s.guard!.sourceId && e.hp > 0)) {
       const g = s.guard;
-      if (g.targetId === id || g.heroId === id) add('guard', 'guard', g.targetId === id ? 'ได้รับการคุ้มกัน' : 'กำลังคุ้มกัน', `${name(g.heroId)}รับการโจมตีจาก${name(g.sourceId)}แทน${name(g.targetId)} ลดความเสียหาย ${Math.round(guardReductionOf(d, g.heroId) * 100)}%`, `หมดเมื่อ${name(g.sourceId)}ลงมือ/ถูกกำจัด หรือถึงเทิร์นถัดไปของ${name(g.heroId)}`);
+      if (g.targetId === id || g.heroId === id) add('guard', 'guard', g.targetId === id ? 'ได้รับการคุ้มกัน' : 'กำลังคุ้มกัน', `หาก${name(g.sourceId)}โจมตี${name(g.targetId)} ${name(g.heroId)}จะรับแทน ลดความเสียหาย ${Math.round(guardReductionOf(d, g.heroId) * 100)}%`, `หมดเมื่อ${name(g.sourceId)}ลงมือ/ถูกกำจัด หรือถึงเทิร์นถัดไปของ${name(g.heroId)}`);
     }
     const brace = s.counter;
     if (brace && alive(brace.heroId) && d.heroes.find(h => h.id === id)?.lane === 'front') {
