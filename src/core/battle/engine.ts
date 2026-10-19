@@ -63,6 +63,8 @@ export function skillPower(data: EncounterDefinition, heroId: string, action: Ac
   const bonus = SUPPORT_SKILLS.includes(action) ? hero?.skillBonus : hero?.damageBonus;
   return Math.round(data.skills[action].power * (100 + (bonus ?? 0)) / 100) + (hero?.talents?.power?.[action] ?? 0);
 }
+export const finaleHealPower = (data: EncounterDefinition, heroId: string): number =>
+  Math.round(data.rules.finaleHeal * (100 + (data.heroes.find(h => h.id === heroId)?.skillBonus ?? 0)) / 100);
 // Extra damage a hero's own hits gain from its capstones (duelist deep mark, archer hunter) and mark-hunter gear.
 export function talentHitBonus(state: BattleState, data: EncounterDefinition, heroId: string, enemy: EnemyState): number {
   const marked = enemy.markedUntil > state.round;
@@ -443,7 +445,7 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
       events.push({ type: 'finale', sourceId: hero.id, targetId: hero.id, text: song === 'valor' ? 'Finale of valor.' : 'Finale of mending.' });
       if (song === 'valor') for (const foe of state.enemies.filter(e => e.hp > 0)) strike(foe, skill.power, 'The finale strikes every enemy.');
       else {
-        const power = Math.round(data.rules.finaleHeal * (100 + (hero.skillBonus ?? 0)) / 100);
+        const power = finaleHealPower(data, hero.id);
         for (const h of state.heroes) heal(h.id, power);
       }
       break;
