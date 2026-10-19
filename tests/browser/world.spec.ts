@@ -485,6 +485,7 @@ test('lobby: hire a duplicate, upgrade a star, pick the team, depart, and withdr
   await page.screenshot({ path: info.outputPath('lobby-hire.png') });
   await page.locator('#hire-0').click(); await expect(page.locator('#hire-0')).toContainText('จ้างแล้ว');
   expect((await savedProfile(page)).members[offer]).toEqual({ stars: 1, dupes: 1 }); expect((await savedProfile(page)).bank).toMatchObject({ ore: 120, gold: 20 });
+  await page.locator('[data-lobby=close]').click();
   await page.locator('#lobby-tab-team').click(); await page.locator(`#lobby-member-${offer}`).click();
   await expect(page.locator('#lobby-upgrade')).toContainText('อัปเป็น ★2'); await page.locator('#lobby-upgrade').scrollIntoViewIfNeeded(); await reachable(page, '#lobby-upgrade');
   await page.screenshot({ path: info.outputPath('lobby-upgrade.png') });
