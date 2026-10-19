@@ -1,4 +1,13 @@
 # Codex → Claude handoff
+## 2026-10-19 — Battle status inspection inside information
+
+- Owner selected the recommended unit-status inspector but moved it into battle ⓘ as a tab. Every click/tap/keyboard opening must reset to สถานะ; other tabs remain available. No new battlefield/header button.
+- `ui/battle-status.ts` projects temporary buffs/debuffs from the displayed `BattleState` plus the real resolver helpers. It covers barriers/reflect, evade charges, haste, Guard, front-lane counter/wall, taunt, group songs/rally, sanctuary/solace, marks, corrosion, delay and physical interruption/energy seals. Expiry is round-based only where the rules are; otherwise explain consumption or the caster's next turn. Show songs on every living recipient. Dead units/casters, expired data and ended battles do not invent active effects.
+- The native status tab lists the actual party/enemy definitions with portraits/HP and compact status icons. Unit inspection is independent of the command owner/target, and uses `displayState` during actor-stage playback. Shared tab selection now supports resetting the default while retaining keyboard navigation; world information keeps its existing default.
+- Initial validation: typecheck/lint/build and 428 unit tests passed, including six status projection cases. Three mobile/PC browser cases passed at 320×568, 390×844 and 1366×768, verifying default-on-reopen, both sides/empty states, unchanged save/selection, blocked background casts, a subsequent real cast and consumed-barrier updates. A clock-controlled actor-stage case also passed: the inspector keeps the hero-stage barrier until the enemy stage actually absorbs it. Screenshots visually inspected. Browser plugin not available; repository Playwright/Chromium used. Physical iPhone/Safari remains unverified. CI/publication results follow below.
+
+- Final local focused browser sweep: 9/9 passed (status tab, stage snapshots, battle-info keyboard, audio tabs, teaching settings and SPD details). Full unit rerun passed 428/428 with `--maxWorkers=2`; a concurrent all-worker run had one unrelated 5s balance-simulation timeout under local load, so do not report that particular run as passing. No simulation or game-rule changes were made.
+
 ## 2026-10-19 — Restore Home contrast after owner review
 
 - Owner found the brightened Home washed out. Correct only its CSS: reduce brightness from 1.22 to .96, add modest contrast 1.08, reduce saturation from 1.18 to 1.04, lower screen-blended rays (including normal-motion keyframes), remove the pale wash and restore restrained navy edge shading. Preserve the existing painting and all controls/tabs.

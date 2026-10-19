@@ -802,3 +802,36 @@ html, body { background: #0a1422; }
 [role=tabpanel] { min-width: 0; }
 #app #game-info[open], #app #world-info[open] { display: flex; flex-direction: column; overflow: hidden; }
 #app #game-info .info-content, #app #world-info .info-content { min-height: 0; max-height: calc(var(--app-h) - 160px); flex: 1; }
+/* Battle status inspection stays in the native information dialog. */
+#game-info .info-tabs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; padding-inline: 10px; }
+#game-info .info-tabs [role=tab] { min-width: 0; padding: 8px 3px; font-size: 13px; }
+.status-help { color: #d5e4f3; font-size: 13px; margin: 0 0 6px; }
+.status-frame { color: #aebfd3; font-size: 12px; margin-bottom: 10px; }
+.status-units { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+.status-unit { display: flex; align-items: center; gap: 7px; min-width: 0; min-height: 66px; padding: 7px; text-align: left; border: 1px solid #3c5874; border-radius: 10px; background: #152b41; color: #eef4ff; }
+.status-unit[aria-pressed=true] { border-color: #f2d596; background: #293d4c; box-shadow: inset 0 0 0 1px #f2d59666; }
+.status-unit > span { min-width: 0; }
+.status-unit .portrait { width: 34px; height: 34px; flex: 0 0 34px; border-radius: 50%; }
+.status-unit strong { display: block; font-size: 13px; overflow-wrap: anywhere; }
+.status-unit small { display: block; color: #bbccdf; font-size: 11px; }
+.status-unit.enemy { border-left: 3px solid #d49be8; }
+.status-mini { display: flex; gap: 4px; align-items: center; min-height: 20px; }
+.status-mini > span { display: inline-flex; padding: 2px; border-radius: 4px; }
+.status-mini .buff { color: #96e9d4; background: #143e3d; }
+.status-mini .debuff { color: #ffb5c9; background: #442638; }
+.status-mini .icon { width: 14px; height: 14px; }
+.status-selected { display: flex; align-items: center; gap: 10px; margin: 16px 0 10px; }
+.status-selected .portrait { width: 46px; height: 46px; flex: 0 0 46px; border-radius: 50%; }
+.status-selected h3 { font-size: 16px; }
+.status-selected p { font-size: 13px; color: #c1d3e5; }
+.status-group { margin-top: 10px; }
+.status-group h4 { font-size: 13px; color: #96e9d4; margin: 8px 0; }
+.status-group.debuff h4 { color: #ffb5c9; }
+.status-group ul { list-style: none; padding: 0; margin: 0; }
+.status-group li { padding: 10px 0; border-top: 1px solid #35516c; }
+.status-name { display: flex; align-items: center; gap: 7px; color: #96e9d4; }
+.status-group.debuff .status-name { color: #ffb5c9; }
+.status-name .icon { width: 20px; height: 20px; flex-shrink: 0; }
+.status-group li p { font-size: 13px; margin-top: 5px; overflow-wrap: anywhere; }
+.status-group .status-duration { color: #bfd0e1; font-size: 12px; }
+.status-empty { padding: 14px 0; color: #c1d3e5; font-size: 14px; }

@@ -147,3 +147,7 @@ Home has no audio controls or sound-test button. Its existing artwork uses a bri
 ### Contrast correction after owner review — 2026-10-19
 
 The first brightening pass was too washed out. Home now uses restrained exposure (.96), modest contrast (1.08) and saturation (1.04), reduced screen-blended rays and navy edge shading. Preserve detail in the bright waterfall/sky and dark rocks; avoid a pale overlay or global brightness boost. The existing painting, layout and tabbed settings remain.
+
+## Battle status tab — owner-approved 2026-10-19
+
+Battle ⓘ always opens สถานะ first, even after closing on คำแนะนำ / ตั้งค่า / บันทึก. No extra inspection button is added to the battlefield/header. The status tab lists the deployed party and actual encounter enemies with portraits, HP and compact buff/debuff icons; selecting a unit shows all current temporary effects, real values and expiry/consumption conditions. Group buffs appear on all recipients. Unknown/stale effects are not invented from animation or log text. Downed/finished/empty units are explained explicitly. Inspection reads the displayed actor-turn snapshot, never leaks a later committed turn, and cannot cast, change targeting, mutate save v21 or issue a command. Native dialog scroll, keyboard tabs, focus restoration and closing-touch protection remain.

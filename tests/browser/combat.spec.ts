@@ -239,7 +239,7 @@ test('teaching advice appears only in the tutorial battle, follows SPD owners an
 });
 test('ordinary battles show no teaching strip or tutorial setting',async({page})=>{
  const issues=await start(page);await expect(page.locator('#battle-coach')).not.toBeVisible();await page.locator('#battle-info').click();
- await expect(page.locator('#tutorial-settings')).toBeHidden();await page.keyboard.press('Escape');expect(issues).toEqual([]);
+ await page.locator('#battle-tab-settings').click();await expect(page.locator('#tutorial-settings')).toBeHidden();await page.keyboard.press('Escape');expect(issues).toEqual([]);
 });
 test('round cooldown can be inspected but never cast; the intervening actors do not refresh it',async({page})=>{
  const moves:readonly Move[]=[['tracer','execute','brute'],['weaver','ward','weaver'],['guardian','guard','weaver'],['healer','heal','guardian']];
@@ -258,7 +258,7 @@ test('visible queue follows actual SPD actors across a round and explains speeds
  const issues=await start(page);expect(await page.locator('.turn-slot').evaluateAll(es=>es.map(e=>(e as HTMLElement).dataset.actor))).toEqual(['tracer','raider','weaver','guardian','brute','healer']);
  await prefix(page,3);await cast(page,'healer','heal','guardian');await finish(page);await expect(page.locator('#beat-status')).toContainText('รอบ 2');await owner(page,'tracer');
  await expect(page.locator('.turn-slot').first()).toHaveAttribute('data-actor','tracer');await expect(page.locator('.turn-slot').first()).toHaveAttribute('aria-current','step');
- await page.locator('#battle-info').click();await expect(page.locator('#rules')).toContainText('SPD 120');await expect(page.locator('#rules')).toContainText('คนละ 1 ครั้งต่อรอบ');await page.keyboard.press('Escape');
+ await page.locator('#battle-info').click();await page.locator('#battle-tab-guide').click();await expect(page.locator('#rules')).toContainText('SPD 120');await expect(page.locator('#rules')).toContainText('คนละ 1 ครั้งต่อรอบ');await page.keyboard.press('Escape');
  await page.screenshot({path:info.outputPath('speed-round-queue.png')});expect(issues).toEqual([]);
 });
 
