@@ -6,6 +6,8 @@
 - Typecheck, lint, build and 422 unit tests passed. All eight focused frame/Home Chromium cases passed (320×568, 390×844, 768×1024, 1366×768 and 1920×1080); publication results follow below. Chromium verification is not physical iPhone/Safari verification.
 
 
+- Published commit `8285268` through successful Pages run [39198790412](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/39198790412); quality runs 39198790629 and 39198794175 also passed. Live smoke checks at 390×844 and 1366×768 confirmed the new filter, unchanged tabs and no page/console errors; live phone screenshot inspected. Also inspected normal-motion rays at peak opacity .12 locally. Publication complete; do not redeploy for this documentation-only completion note.
+
 ## 2026-10-19 — Home brightness and tabbed in-game settings
 
 - Owner requested removing all audio panels/sample buttons from Home, brightening its artwork and moving volume controls into in-game information, with separate tabs for settings and advice.
