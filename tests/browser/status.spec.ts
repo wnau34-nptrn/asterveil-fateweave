@@ -50,8 +50,8 @@ test('all six reserved HP/status panels avoid every sprite and each other throug
         const r = boxes[i]!;
         const local = { x:r.x-arena.x, y:r.y-arena.y, width:r.width, height:r.height };
         return !slots.some(s => overlap(local, s.body)) && !boxes.some((b,j) => i!==j && overlap(r,b)) &&
-          [...el.querySelectorAll('.field-status, .field-status-more, .field-health, .field-unit-name')].every(c => {
-            const b = c.getBoundingClientRect(); return !b.width || b.left>=r.left-.5 && b.right<=r.right+.5 && b.top>=r.top-.5 && b.bottom<=r.bottom+.5;
+          [...el.querySelectorAll('.field-status, .field-status-more, .field-health, .field-hp-value, .field-unit-name')].every(c => {
+            const b = c.getBoundingClientRect(); return !b.width || b.left>=r.left-.5 && b.right<=r.right+.5 && b.top>=r.top-.5 && b.bottom<=r.bottom+.5 && (!c.classList.contains('field-hp-value') || c.scrollWidth<=c.clientWidth+1);
           });
       });
     }, { arena, slots })).toBe(true);
