@@ -14,6 +14,7 @@ export class BattleScene extends Phaser.Scene {
   private layer: Phaser.GameObjects.Container | undefined;
   private positions = new Map<string, { x: number; y: number }>();
   readonly actorTargets = new Map<string, ActorTarget>();
+  readonly actorStatusAnchors = new Map<string, { x: number; y: number }>();
   private bodies = new Map<string, Phaser.GameObjects.Container>();
   private effects: Phaser.GameObjects.Container | undefined;
   private ready = false;
@@ -32,7 +33,7 @@ export class BattleScene extends Phaser.Scene {
   get isReady(): boolean { return this.ready; }
   setEncounter(data: EncounterDefinition): void {
     this.stopEffects(); this.encounter = data; this.view = undefined;
-    this.actorTargets.clear();
+    this.actorTargets.clear(); this.actorStatusAnchors.clear();
   }
   refreshLayout(): void {
     // DOM teaching strips change the field without a window resize. Refresh
@@ -102,7 +103,7 @@ export class BattleScene extends Phaser.Scene {
     this.root.setPosition(0, 0).setScale(this.dpr);
     this.layer?.destroy();
     this.layer = this.add.container(0, 0); this.root.addAt(this.layer, 0);
-    this.positions.clear(); this.actorTargets.clear();
+    this.positions.clear(); this.actorTargets.clear(); this.actorStatusAnchors.clear();
     const w = this.viewW, h = this.viewH;
     const short = w < 900 || h < 360;
     const phone = this.viewW <= 600;
@@ -179,6 +180,9 @@ export class BattleScene extends Phaser.Scene {
     const hitWidth = Math.max(44, Math.min(72, size * .7));
     const hitHeight = Math.max(44, size * .9);
     this.actorTargets.set(id, { x: x - hitWidth / 2, y: y + sprite.y - hitHeight, width: hitWidth, height: hitHeight });
+    // Keep status badges above the artwork, including the bottom row on short phones.
+    // These are CSS pixel anchors, matching the DOM target overlay at every DPR.
+    this.actorStatusAnchors.set(id, { x: Math.max(40, Math.min(this.viewW - 40, x)), y: Math.max(2, y - size - 21) });
     const label = this.text(0, 14, name, { fontFamily: thaiFont, fontSize: phone ? '10px' : compact ? '12px' : '14px', color: '#f0f5ff', stroke: '#101c36', strokeThickness: 3 }).setOrigin(0.5);
     label.setVisible(!phone || enemy);
     const hpX = 0;
@@ -193,11 +197,6 @@ export class BattleScene extends Phaser.Scene {
     info.add([label, bar, hpLabel]);
     const hit = this.add.zone(0, sprite.y, Math.max(64, size * 0.7), size).setOrigin(0.5, 1).setInteractive({ useHandCursor: true });
     hit.on('pointerdown', () => this.choose(id)); body.add(hit);
-    const status = this.view!.state.enemies.find(e => e.id === id);
-    if (status && (status.markedUntil > this.view!.state.round)) {
-      const icon = this.text(-30, -20, '◇', { fontFamily: thaiFont, fontSize: '18px', color: '#e6b7ff', stroke: '#101c36', strokeThickness: 3 }).setOrigin(0.5);
-      info.add(icon);
-    }
     if (this.view!.state.intent?.sourceId === id && hp > 0) {
       const warning = this.text(35, -38, '◆', { fontFamily: thaiFont, fontSize: '15px', color: '#fdbdcf' }).setOrigin(0.5);
       info.add(warning);

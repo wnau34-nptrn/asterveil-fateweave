@@ -29,8 +29,10 @@ test('status inspection follows each displayed actor stage instead of leaking th
   await page.locator('#battle-info').click(); await page.locator('#status-unit-weaver').click();
   await expect(page.locator('#status-frame')).toContainText('จังหวะที่กำลังแสดง');
   await expect(page.locator('#status-details [data-status=barrier]')).toBeVisible();
+  await expect(page.locator('[data-status-actor=weaver] [data-status=barrier]')).toHaveCount(1);
   await page.clock.runFor(1000);
   await expect(page.locator('#status-details [data-status=barrier]')).toHaveCount(0);
+  await expect(page.locator('[data-status-actor=weaver]')).toHaveCount(0);
   await expect(page.locator('#battle-tab-status')).toHaveAttribute('aria-selected', 'true');
   expect(await page.evaluate(k => localStorage.getItem(k), key)).toBe(committed);
   await page.keyboard.press('Escape'); await page.clock.runFor(1000);
@@ -42,6 +44,18 @@ for (const [width, height, touch] of [[320, 568, true], [390, 844, true], [1366,
     const context = await browser.newContext({ viewport: { width, height }, hasTouch: touch, reducedMotion: 'reduce' });
     const page = await context.newPage(), issues: string[] = []; page.on('pageerror', e => issues.push(e.message));
     await openBattle(page); await page.locator('#action-bash').click();
+    await expect(page.locator('[data-status-actor=brute] .debuff[data-status=mark]')).toBeVisible();
+    await expect(page.locator('[data-status-actor=weaver] .buff[data-status=barrier]')).toBeVisible();
+    await expect(page.locator('[data-status-actor=healer]')).toHaveCount(0);
+    // Badges remain visible without a selected skill and do not consume target input.
+    await page.keyboard.press('Escape');
+    await expect(page.locator('[data-status-actor=brute]')).toBeVisible();
+    await page.locator('#action-bash').click();
+    expect(await page.locator('.field-statuses').evaluateAll(els => els.every(el => {
+      const r = el.getBoundingClientRect(), arena = document.querySelector('.arena')!.getBoundingClientRect();
+      return r.left >= arena.left && r.right <= arena.right && r.top >= arena.top && r.bottom <= arena.bottom && getComputedStyle(el).pointerEvents === 'none';
+    }))).toBe(true);
+    await page.screenshot({ path: info.outputPath('battle-field-statuses.png') });
     const before = await page.evaluate(k => localStorage.getItem(k), key);
     await page.locator('#battle-info').click();
     await expect(page.locator('#battle-tab-status')).toHaveAttribute('aria-selected', 'true');
