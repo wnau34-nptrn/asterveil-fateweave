@@ -234,7 +234,7 @@ test('teaching advice appears only in the tutorial battle, follows SPD owners an
  }
  await expect(page.locator('#coach-copy')).toContainText('รักษา');await page.screenshot({path:info.outputPath('tutorial-coach.png')});
  await page.locator('#coach-dismiss').click();await expect(page.locator('#battle-coach')).not.toBeVisible();expect(await count(page)).toBe(3);
- await page.locator('#battle-info').click();await page.locator('#coach-toggle').click();await expect(page.locator('#coach-toggle')).toBeFocused();await page.locator('[data-ui=info-close]').click();
+ await page.locator('#battle-info').click();await page.locator('#battle-tab-settings').click();await page.locator('#coach-toggle').click();await expect(page.locator('#coach-toggle')).toBeFocused();await page.locator('[data-ui=info-close]').click();
  await expect(page.locator('#battle-coach')).toBeVisible();expect(issues).toEqual([]);
 });
 test('ordinary battles show no teaching strip or tutorial setting',async({page})=>{

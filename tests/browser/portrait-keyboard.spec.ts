@@ -46,7 +46,7 @@ for (const [width, height, touch] of [[1366, 768, false], [1920, 1080, false], [
     const frame = (await page.locator('#app').boundingBox())!;
     expect(frame.width).toBeLessThanOrEqual(480); expect(frame.width).toBeLessThan(frame.height);
     expect(Math.abs(frame.x + frame.width / 2 - width / 2)).toBeLessThanOrEqual(1);
-    for (const id of ['#continue', '#new-game', '#sfx-test']) await inFrame(page, id);
+    for (const id of ['#continue', '#new-game']) await inFrame(page, id);
     await page.screenshot({ path: info.outputPath('portrait-title.png') });
     await page.locator('#continue').click(); await expect(page.locator('#lobby-view')).toBeVisible();
     await inFrame(page, '#lobby-depart'); await page.locator('#lobby-tab-team').click();
@@ -136,7 +136,7 @@ test('PC: I opens battle info; number keys leave selection and save untouched wh
   await page.setViewportSize({ width: 1366, height: 768 }); await battle(page);
   await page.keyboard.press('2'); await page.keyboard.press('i'); await expect(page.locator('#game-info')).toBeVisible();
   const before = await page.evaluate(k => localStorage.getItem(k), key);
-  await page.locator('#battle-sfx-volume').focus(); await page.keyboard.press('3');
+  await page.locator('#battle-tab-settings').click(); await page.locator('#battle-sfx-volume').focus(); await page.keyboard.press('3');
   await expect(page.locator('#action-mark')).toHaveAttribute('aria-pressed', 'true');
   expect(await page.evaluate(k => localStorage.getItem(k), key)).toBe(before);
   await page.keyboard.press('Escape'); await expect(page.locator('#game-info')).not.toBeVisible();

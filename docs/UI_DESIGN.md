@@ -139,3 +139,7 @@ The practice selector and restart button described above are removed. The app ha
 - **Battle:** the existing single-screen HUD with the battle kind/name header and ⓘ only. The result card's button returns to the map, retreats to camp, or retries the teaching battle.
 
 Both views fit all 11 tested viewports without document scrolling; controls are ≥44px. Details: `EXPEDITION_DESIGN.md`.
+
+## Home and tabbed information — 2026-10-19
+
+Home has no audio controls or sound-test button. Its existing artwork uses a brighter, more vivid rendering with a lighter vignette. In-game information on the map and in battle separates คำแนะนำ and ตั้งค่า; battle additionally exposes บันทึก. Music/effects mute and volume live in ตั้งค่า, alongside first-battle coaching preferences where applicable. No audio sample button is exposed. Tabs share accessible semantics and arrow/Home/End keyboard navigation, retain 44px targets and stay inside the portrait frame. Audio preferences remain separate from save v21.

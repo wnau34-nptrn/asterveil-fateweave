@@ -247,19 +247,20 @@ test('lobby market (4A): the broker sheet redraws the board for gold twice per r
   expect(issues).toEqual([]);
 });
 
+
 test('background music follows the view (title camp, lobby ruins, map meadow, battle and boss) and the mute choice is kept', async ({ page }) => {
   const issues: string[] = []; page.on('pageerror', e => issues.push(e.message));
   const music = () => page.evaluate(() => document.documentElement.dataset.music);
   await seed(page, null); await page.goto('./');
   await expect.poll(music).toBe('camp');
   for (const t of ['camp', 'archway', 'ruins', 'meadow', 'battle', 'boss']) expect((await page.request.get(`./assets/music/bgm_${t}.mp3`)).ok()).toBe(true);
-  await reachable(page, '#music-toggle'); await page.locator('#music-toggle').click();
-  await expect(page.locator('#music-toggle')).toHaveAttribute('aria-pressed', 'false'); await expect(page.locator('#music-volume')).toBeDisabled();
-  expect(await page.evaluate(() => JSON.parse(localStorage.getItem('asterveil.fateweave.audio.v1')!))).toMatchObject({ muted: true });
   await page.locator('#continue').click(); await expect.poll(music).toBe('ruins');
-  await expect(page.locator('#lobby-music')).toHaveAttribute('aria-pressed', 'false'); await reachable(page, '#lobby-music');
-  await page.locator('#lobby-music').click(); await expect(page.locator('#lobby-music')).toHaveAttribute('aria-pressed', 'true');
   await page.locator('#lobby-depart').click(); await expect.poll(music).toBe('meadow');
+  await page.locator('#world-info-button').click(); await page.locator('#world-tab-settings').click();
+  await reachable(page, '#world-music-toggle'); await page.locator('#world-music-toggle').click();
+  await expect(page.locator('#world-music-toggle')).toHaveAttribute('aria-pressed', 'false'); await expect(page.locator('#world-music-volume')).toBeDisabled();
+  expect(await page.evaluate(() => JSON.parse(localStorage.getItem('asterveil.fateweave.audio.v1')!))).toMatchObject({ muted: true });
+  await page.locator('[data-world=info-close]').click();
   // A boss battle plays the boss theme.
   const [boss] = findTiles(map, 'boss');
   await page.evaluate(([k, x, y]) => { const s = JSON.parse(localStorage.getItem(k as string)!); Object.assign(s.run, { position: { x, y: (y as number) + 1 }, elitesDefeated: ['scar-golem'], eventsDone: ['scar-rift'] }); localStorage.setItem(k as string, JSON.stringify(s)); }, [key, boss!.x, boss!.y]);
@@ -281,96 +282,69 @@ test('sound effects: steps, walls, chests and battle turns name their sound; the
   for (const d of ['up', 'down', 'left'] as const) { const t = { x: chest!.x + (d === 'left' ? -1 : 0), y: chest!.y + (d === 'up' ? -1 : d === 'down' ? 1 : 0) };
     if (map.rows[t.y]?.[t.x] === '#' && !map.puzzles.secrets.some(q => q.x === t.x && q.y === t.y)) { await page.locator(`#move-${d}`).click(); blocked = true; break; } }
   if (blocked) await expect.poll(sound).toBe('bump');
-  // The title toggles effects off and remembers it.
-  await page.goto('./'); await page.locator('#sfx-toggle').click();
-  await expect(page.locator('#sfx-toggle')).toHaveAttribute('aria-pressed', 'false'); await expect(page.locator('#sfx-volume')).toBeDisabled();
+  // In-game settings remember effects mute.
+  await page.locator('#world-info-button').click(); await page.locator('#world-tab-settings').click(); await page.locator('#world-sfx-toggle').click();
+  await expect(page.locator('#world-sfx-toggle')).toHaveAttribute('aria-pressed', 'false'); await expect(page.locator('#world-sfx-volume')).toBeDisabled();
   expect(await page.evaluate(() => JSON.parse(localStorage.getItem('asterveil.fateweave.sfx.v1')!))).toMatchObject({ muted: true });
-  await page.reload(); await expect(page.locator('#sfx-toggle')).toHaveAttribute('aria-pressed', 'false');
+  await page.reload(); await page.locator('#continue').click(); await page.locator('#world-info-button').click(); await page.locator('#world-tab-settings').click(); await expect(page.locator('#world-sfx-toggle')).toHaveAttribute('aria-pressed', 'false');
   expect(issues).toEqual([]);
 });
 
-for (const [width, height] of [[320, 568], [390, 844], [1366, 600], [1366, 768]]) {
-  test(`sound settings are explicit and preview enables muted zero-volume effects without changing the save at ${width}x${height}`, async ({ page }, info) => {
+for (const [width, height] of [[320, 568], [390, 844], [1366, 768]]) {
+  test(`home and information tabs keep settings separate at ${width}x${height}`, async ({ page }, info) => {
     await page.setViewportSize({ width: width!, height: height! });
-    await seed(page, null);
-    await page.addInitScript(() => {
-      if (sessionStorage.getItem('sound-pref-seeded')) return;
-      localStorage.setItem('asterveil.fateweave.sfx.v1', JSON.stringify({ muted: true, volume: 0 }));
-      sessionStorage.setItem('sound-pref-seeded', 'yes');
-    });
-    await page.goto('./');
-    await expect(page.locator('#sfx-toggle')).toContainText('เอฟเฟกต์: ปิด');
-    await expect(page.locator('#sfx-level')).toHaveText('0%');
-    await expect(page.locator('#sfx-test')).toHaveText('เปิดและทดสอบเอฟเฟกต์');
-    await reachable(page, '#sfx-toggle'); await reachable(page, '#sfx-test'); await reachable(page, '#continue');
+    const issues: string[] = []; page.on('pageerror', e => issues.push(e.message));
+    await seed(page, base()); await page.goto('./');
+    await expect(page.locator('#title-view [data-music-volume], #title-view [data-sfx-volume], [data-sfx-test]')).toHaveCount(0);
+    await reachable(page, '#continue');
+    await page.screenshot({ path: info.outputPath('bright-home.png') });
+    await page.locator('#continue').click(); await page.locator('#world-info-button').click();
+    await expect(page.locator('#world-panel-guide')).toBeVisible();
+    await expect(page.locator('#world-panel-settings')).toBeHidden();
+    await page.locator('#world-tab-settings').click();
+    await reachable(page, '#world-music-toggle'); await reachable(page, '#world-sfx-toggle');
     const before = await page.evaluate(k => localStorage.getItem(k), key);
-    await page.locator('#sfx-test').click();
-    await expect(page.locator('#sfx-feedback')).toContainText('ตัวอย่างเสียงโจมตี');
-    await expect(page.locator('#sfx-toggle')).toContainText('เอฟเฟกต์: เปิด');
-    await expect(page.locator('#sfx-level')).toHaveText('70%');
-    await expect(page.locator('#sfx-volume')).toHaveValue('70');
+    await page.locator('#world-music-volume').fill('35');
+    await expect(page.locator('#world-music-level')).toHaveText('35%');
+    await page.locator('#world-sfx-volume').fill('45');
+    await expect(page.locator('#world-sfx-level')).toHaveText('45%');
+    await page.locator('#world-sfx-toggle').click();
+    await expect(page.locator('#world-sfx-volume')).toBeDisabled();
     expect(await page.evaluate(k => localStorage.getItem(k), key)).toBe(before);
-    expect(await page.evaluate(() => JSON.parse(localStorage.getItem('asterveil.fateweave.sfx.v1')!))).toEqual({ muted: false, volume: .7 });
-    expect(await page.evaluate(() => document.scrollingElement!.scrollHeight <= innerHeight)).toBe(true);
-    await page.screenshot({ path: info.outputPath('explicit-audio-controls.png') });
-    await page.reload(); await expect(page.locator('#sfx-toggle')).toContainText('เอฟเฟกต์: เปิด');
-    await expect(page.locator('#sfx-level')).toHaveText('70%');
+    await page.screenshot({ path: info.outputPath('world-settings-tabs.png') });
+    await page.locator('#world-tab-settings').press('ArrowLeft');
+    await expect(page.locator('#world-tab-guide')).toBeFocused();
+    await expect(page.locator('#world-panel-guide')).toBeVisible();
+    await page.keyboard.press('Escape'); await expect(page.locator('#world-info-button')).toBeFocused();
+    await page.reload(); await page.locator('#continue').click(); await page.locator('#world-info-button').click(); await page.locator('#world-tab-settings').click();
+    await expect(page.locator('#world-sfx-volume')).toHaveValue('45');
+    await expect(page.locator('#world-sfx-volume')).toBeDisabled();
+    await expect(page.locator('#world-music-volume')).toHaveValue('35');
+    expect(issues).toEqual([]);
   });
 }
-
 for (const [width, height] of [[390, 844], [430, 932]]) {
-  test(`battle info exposes effects settings and preview without taking a turn at ${width}x${height}`, async ({ browser }, info) => {
+  test(`battle information tabs change audio without taking a turn at ${width}x${height}`, async ({ browser }, info) => {
     const context = await browser.newContext({ viewport: { width: width!, height: height! }, hasTouch: true });
     const page = await context.newPage(); watchPage(page);
     const run = { ...newExpedition(map, encounterById, 35, undefined, true) }; reveal(run, map);
     run.battle = { kind: 'random', encounterId: 'thicket-ambush', entry: { ...run.hp }, commands: [] };
-    await seed(page, run);
-    await page.addInitScript(() => {
-      localStorage.setItem('asterveil.fateweave.sfx.v1', JSON.stringify({ muted: true, volume: 0 }));
-      const tracks: HTMLAudioElement[] = [];
-      (window as unknown as { musicTracks: HTMLAudioElement[] }).musicTracks = tracks;
-      const Original = window.Audio;
-      window.Audio = class extends Original {
-        constructor(src?: string) { super(src); tracks.push(this); }
-      };
-    });
-    const issues: string[] = []; page.on('pageerror', e => issues.push(e.message));
-    await page.goto('./'); await page.locator('#continue').tap(); await page.locator('#start').tap();
+    await seed(page, run); await page.goto('./'); await page.locator('#continue').tap(); await page.locator('#start').tap();
     const before = await page.evaluate(k => localStorage.getItem(k), key);
-    await page.locator('#battle-info').tap(); await expect(page.locator('#game-info')).toBeVisible();
-    await reachable(page, '#battle-music-toggle');
-    await reachable(page, '#battle-sfx-toggle'); await reachable(page, '#battle-sfx-test');
-    const musicPlaying = () => page.evaluate(() => (window as unknown as { musicTracks: HTMLAudioElement[] }).musicTracks.some(a => !a.paused));
-    await expect.poll(musicPlaying).toBe(true);
-    const musicPrefs = await page.evaluate(() => localStorage.getItem('asterveil.fateweave.audio.v1'));
-    await expect(page.locator('#battle-sfx-toggle')).toContainText('เอฟเฟกต์: ปิด');
-    await expect(page.locator('#battle-sfx-test')).toHaveText('เปิดและทดสอบเอฟเฟกต์');
-    await page.locator('#battle-sfx-test').tap();
-    await expect(page.locator('#battle-sfx-feedback')).toContainText('ตัวอย่างเสียงโจมตีขณะพักเพลง');
-    expect(await musicPlaying()).toBe(false);
-    expect(await page.evaluate(() => localStorage.getItem('asterveil.fateweave.audio.v1'))).toBe(musicPrefs);
-    await expect.poll(musicPlaying).toBe(true);
-    await page.locator('#battle-music-volume').focus(); await page.locator('#battle-music-volume').press('ArrowLeft');
-    await expect(page.locator('#battle-music-level')).toHaveText('55%');
-    await expect(page.locator('#music-volume')).toHaveValue('55');
-    await page.locator('#battle-music-toggle').tap();
-    await expect(page.locator('#battle-music-toggle')).toContainText('เพลง: ปิด');
-    await expect(page.locator('#music-toggle')).toContainText('เพลง: ปิด');
-    expect(await musicPlaying()).toBe(false);
-    await expect(page.locator('#battle-sfx-toggle')).toContainText('เอฟเฟกต์: เปิด');
-    await expect(page.locator('#battle-sfx-level')).toHaveText('70%');
-    // Both screens share preferences, but touching audio settings never commits a battle command.
-    await expect(page.locator('#sfx-toggle')).toContainText('เอฟเฟกต์: เปิด');
-    await page.locator('#battle-sfx-volume').focus(); await page.locator('#battle-sfx-volume').press('ArrowLeft');
-    await expect(page.locator('#battle-sfx-level')).toHaveText('65%');
-    await expect(page.locator('#sfx-level')).toHaveText('65%');
+    await page.locator('#battle-info').tap(); await page.locator('#battle-tab-settings').tap();
+    await reachable(page, '#battle-sfx-toggle'); await reachable(page, '#battle-music-toggle');
+    await expect(page.locator('[data-sfx-test]')).toHaveCount(0);
+    await page.locator('#battle-sfx-volume').fill('65'); await expect(page.locator('#battle-sfx-level')).toHaveText('65%');
+    await expect(page.locator('#world-sfx-volume')).toHaveValue('65');
+    await page.locator('#battle-music-toggle').tap(); await expect(page.locator('#battle-music-volume')).toBeDisabled();
+    await page.screenshot({ path: info.outputPath('battle-settings-tabs.png') });
+    await page.locator('#battle-tab-history').tap(); await expect(page.locator('#battle-panel-history')).toBeVisible();
+    await page.locator('#battle-tab-guide').tap(); await expect(page.locator('#info-skill')).toBeVisible();
     expect(await page.evaluate(k => localStorage.getItem(k), key)).toBe(before);
-    await page.screenshot({ path: info.outputPath('battle-sound-settings.png') });
-    await page.locator('[data-ui=info-close]').tap(); await expect(page.locator('#game-info')).not.toBeVisible();
-    await page.locator('#action-attack').tap();await page.locator('#skill-details').click(); await page.locator('[data-ui=skill-close]').tap();
-    await page.locator('#target-brute').tap(); await finishPlayback(page);
+    await page.locator('[data-ui=info-close]').tap(); await expect(page.locator('#battle-info')).toBeFocused();
+    await page.locator('#action-attack').tap(); await page.locator('#target-brute').tap(); await finishPlayback(page);
     expect((await saved(page)).battle!.commands).toHaveLength(1);
-    expect(issues).toEqual([]); await context.close();
+    await context.close();
   });
 }
 

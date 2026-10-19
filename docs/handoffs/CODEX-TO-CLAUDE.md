@@ -1,5 +1,13 @@
 # Codex → Claude handoff
 
+## 2026-10-19 — Home brightness and tabbed in-game settings
+
+- Owner requested removing all audio panels/sample buttons from Home, brightening its artwork and moving volume controls into in-game information, with separate tabs for settings and advice.
+- Home reuses its existing painting with brighter/more vivid CSS treatment and lighter vignette. No generated assets or gameplay changes.
+- Map information has คำแนะนำ / ตั้งค่า; battle information adds บันทึก. Settings contain shared music/effects mute and volume, with no sample button. First-battle coaching toggle lives under settings. Preferences remain synchronized and persistent under the existing audio keys; save v21 is unchanged.
+- Shared tab helper supplies tab/tabpanel relationships, selected state, roving focus and Left/Right/Home/End keyboard navigation. Native close/Escape focus return and closing-touch protection remain.
+- Initial validation: typecheck, lint, build and 422 unit tests passed; eight focused Chromium cases passed on 320×568, 390×844, 430×932 touch and 1366×768 PC. Home/map/battle screenshots visually inspected. Browser plugin not available; repository Playwright used. Full browser/CI/publication results follow below. Physical iPhone/Safari audible output remains unverified.
+
 ## 2026-10-19 — Portrait game and keyboard selection on PC
 
 - Owner accepted one mobile portrait layout on PC, then authorized implementation, merge and publication. Standing authorization applies; do not add another approval checkpoint.

@@ -1,3 +1,4 @@
+import { bindInfoTabs } from './info-tabs';
 import { shortcutBlocked } from '../platform/keyboard';
 import type { BattleState, Outcome } from '../core/battle/types';
 import { clearLegacySaves, loadGame, saveGame, type Game } from '../core/save/expedition-save';
@@ -75,24 +76,15 @@ export class GameShell {
         this.showCommander(true);
       }
     });
-    // Shared music settings on the title, lobby and battle information dialog.
+    // Shared audio preferences in the in-game settings tabs.
     root.addEventListener('click', e => { if ((e.target as HTMLElement).closest('[data-music-toggle]')) { this.music.setMuted(!this.music.settings.muted); this.refreshMusicControls(); } });
     // Every enabled button press clicks (the D-pad steps instead; game results add their own sound).
     root.addEventListener('click', e => { const b = (e.target as HTMLElement).closest<HTMLButtonElement>('button'); if (b && !b.disabled && !b.id.startsWith('move-')) sfx.play('click'); }, { capture: true });
     root.addEventListener('click', e => { if ((e.target as HTMLElement).closest('[data-sfx-toggle]')) { sfx.setMuted(!sfx.settings.muted); this.refreshMusicControls(); } });
-    root.addEventListener('click', e => {
-      const test = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-sfx-test]'); if (!test) return;
-      // The button explicitly offers to enable effects if they are muted or set to zero.
-      sfx.setMuted(false); if (sfx.settings.volume === 0) sfx.setVolume(.7); this.refreshMusicControls();
-      const feedback = this.root.querySelector<HTMLElement>(`#${test.dataset.sfxPrefix ?? ''}sfx-feedback`)!;
-      this.music.pauseForEffectPreview();
-      feedback.textContent = 'กำลังทดสอบเสียงโจมตีขณะพักเพลง…';
-      void sfx.preview().then(played => {
-        if (feedback.isConnected) feedback.textContent = played ? `ตัวอย่างเสียงโจมตีขณะพักเพลง · ระดับเอฟเฟกต์ ${Math.round(sfx.settings.volume * 100)}%` : 'เบราว์เซอร์ยังไม่เปิดเสียง · ลองแตะทดสอบอีกครั้ง';
-      });
-    });
     root.addEventListener('input', e => { const t = e.target as HTMLInputElement; if (t.matches('[data-music-volume]')) this.music.setVolume(Number(t.value) / 100); if (t.matches('[data-sfx-volume]')) { sfx.setVolume(Number(t.value) / 100); sfx.play('click'); } if (t.matches('[data-music-volume]') || t.matches('[data-sfx-volume]')) this.refreshMusicControls(); });
     this.root.querySelector('#battle-sfx-controls')!.innerHTML = this.musicControls('battle-');
+    this.root.querySelector('#world-sfx-controls')!.innerHTML = this.musicControls('world-');
+    bindInfoTabs(root);
     this.showTitle();
     document.addEventListener('keydown', e => {
       if (shortcutBlocked(e) || this.story.open || root.querySelector('.summary-view:not([hidden])')) return;
@@ -118,7 +110,6 @@ export class GameShell {
     this.root.querySelectorAll<HTMLButtonElement>('[data-sfx-toggle]').forEach(st => { st.setAttribute('aria-pressed', String(!s.muted)); st.setAttribute('aria-label', s.muted ? 'เปิดเสียงเอฟเฟกต์' : 'ปิดเสียงเอฟเฟกต์'); st.innerHTML = icon(s.muted ? 'soundOff' : 'sound') + `<span>เอฟเฟกต์: ${s.muted ? 'ปิด' : 'เปิด'}</span>`; });
     this.root.querySelectorAll<HTMLInputElement>('[data-sfx-volume]').forEach(sv => { sv.disabled = s.muted; sv.value = String(Math.round(s.volume * 100)); });
     this.root.querySelectorAll<HTMLOutputElement>('[data-sfx-level]').forEach(sl => { sl.value = `${Math.round(s.volume * 100)}%`; });
-    this.root.querySelectorAll<HTMLButtonElement>('[data-sfx-test]').forEach(test => { test.textContent = s.muted || s.volume === 0 ? 'เปิดและทดสอบเอฟเฟกต์' : 'ทดสอบเสียงเอฟเฟกต์'; });
   }
   setBattleVisibilityListener(listener: (visible: boolean) => void): void { this.onBattleVisibility = listener; }
 
@@ -148,8 +139,7 @@ export class GameShell {
   private effectsControls(prefix: string): string {
     const s = sfx.settings;
     return `<div class="music-controls audio-settings"><button id="${prefix}sfx-toggle" data-sfx-toggle class="round-glass audio-toggle" aria-pressed="${!s.muted}" aria-label="${s.muted ? 'เปิดเสียงเอฟเฟกต์' : 'ปิดเสียงเอฟเฟกต์'}">${icon(s.muted ? 'soundOff' : 'sound')}<span>เอฟเฟกต์: ${s.muted ? 'ปิด' : 'เปิด'}</span></button>`
-      + `<label class="music-volume"><input id="${prefix}sfx-volume" data-sfx-volume type="range" min="0" max="100" step="5" value="${Math.round(s.volume * 100)}" aria-label="ระดับเสียงเอฟเฟกต์"${s.muted ? ' disabled' : ''}></label><output id="${prefix}sfx-level" data-sfx-level for="${prefix}sfx-volume">${Math.round(s.volume * 100)}%</output></div>`
-      + `<div class="sfx-check"><button id="${prefix}sfx-test" data-sfx-test data-sfx-prefix="${prefix}" class="secondary">${s.muted || s.volume === 0 ? 'เปิดและทดสอบเอฟเฟกต์' : 'ทดสอบเสียงเอฟเฟกต์'}</button><p id="${prefix}sfx-feedback" class="sfx-feedback" role="status"></p></div>`;
+      + `<label class="music-volume"><input id="${prefix}sfx-volume" data-sfx-volume type="range" min="0" max="100" step="5" value="${Math.round(s.volume * 100)}" aria-label="ระดับเสียงเอฟเฟกต์"${s.muted ? ' disabled' : ''}></label><output id="${prefix}sfx-level" data-sfx-level for="${prefix}sfx-volume">${Math.round(s.volume * 100)}%</output></div>`;
   }
   private showTitle(): void {
     const g = this.game; const s = g?.run;
@@ -163,7 +153,7 @@ export class GameShell {
       <div class="title-card"><h1 class="title-logo"><img src="${import.meta.env.BASE_URL}assets/title/logo.svg" alt="Asterveil · Fateweave" width="700" height="224"></h1><p class="title-copy">ข้ามรอยแยก · ถักทอโชคชะตา</p>
       <div class="title-actions">${g ? `<p class="title-save">${s ? 'การเดินทางที่บันทึกไว้' : 'ค่ายของคุณ'}<span class="title-chips">${summary}</span></p><button id="continue" data-title="continue" class="primary">${s ? 'เดินทางต่อ →' : 'เข้าค่าย →'}</button>` : ''}
       <button id="new-game" data-title="new" class="${g ? 'secondary' : 'primary'}">${g ? 'เริ่มเกมใหม่' : 'เริ่มเกม'}</button>
-      ${this.musicControls()}
+
       ${this.storage ? '' : '<p class="title-warning">เบราว์เซอร์นี้ไม่อนุญาตให้บันทึก เล่นได้แต่จะไม่จำความคืบหน้า</p>'}</div><p class="title-footer">ชายแดนแอสเตอร์เวล</p></div>`;
     this.show('title');
     this.views.title.querySelector<HTMLElement>(g ? '#continue' : '#new-game')?.focus({ preventScroll: true });
