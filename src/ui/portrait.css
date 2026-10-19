@@ -3,6 +3,13 @@
 body { display: grid; place-items: center; background: radial-gradient(ellipse at 50% 45%, #23364e, #050b15 75%); }
 #app { position: relative; inset: auto; width: var(--game-w); max-width: 100%; height: var(--app-h); padding: 0; container: game / size; overflow: clip; isolation: isolate; box-shadow: 0 0 90px #0009; }
 #app > .view, #app > .story-view, #app > .summary-view { position: absolute; inset: 0; width: 100%; height: 100%; }
+/* Bound the grid track before sizing its card: a content-sized auto track lets a
+   long summary grow beyond the clipped game frame instead of scrolling. */
+.summary-view { grid-template-rows: minmax(0, 1fr); }
+.summary-card { min-height: 0; max-height: 100%; overflow: hidden; }
+.summary-card > header, #summary-done { flex-shrink: 0; }
+.summary-body { overscroll-behavior: contain; touch-action: pan-y; }
+.summary-body > * { flex-shrink: 0; }
 #app dialog { width: min(560px, calc(var(--game-w) - 16px)); max-height: calc(var(--app-h) - 16px); }
 #app dialog .info-content { max-height: calc(var(--app-h) - 90px); }
 #skill-popover { width: min(350px, calc(var(--game-w) - 16px)); max-height: calc(var(--app-h) - 100px); }
