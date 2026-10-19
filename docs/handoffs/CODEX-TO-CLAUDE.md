@@ -1,5 +1,11 @@
 # Codex → Claude handoff
 
+## 2026-10-19 — Expedition summary scroll and camp return
+
+- Owner reported completion summary trapping players before returning to camp. Reproduced at 320×568 with twelve returned items and four level-ups: the grid auto track grew to its content, pushing the footer outside the clipped game frame, while the body never became a bounded scroll area.
+- `portrait.css` bounds the summary grid row with `minmax(0, 1fr)`, permits the card to shrink and clips it to the frame. Header and 52px camp footer do not shrink; body children keep their full content height and the body scrolls vertically with contained overscroll/touch pan. No settlement, save v21, combat, reward or asset changes.
+- Added three browser regressions at 320×568/390×844 touch and 1366×768 PC, reaching a real completed run with a long summary. Check initial and scrolled footer hit-testing inside the game frame, real CDP touch swipes or mouse wheel, access to level-ups/final quest, unchanged settled save during scrolling, actual camp return/focus and twelve retained items. Original code failed the initial footer check. Browser plugin unavailable; repository Playwright used. Local typecheck/lint/build and 433 unit tests passed; Chromium summary screenshots inspected. CI/publication results follow. Physical iPhone/Safari remains unverified.
+
 ## 2026-10-19 — Map character sheet and passive spending (phase 1)
 
 - Owner authorized the first phase of the character/bag/team proposal: map portrait opens Overview / Equipment / Skills / Talents, spending passive points on the map, and moving wear/take-off into that sheet. Comparison, auto-equip and the larger filter/bag/team redesign are later phases; no camp development systems here.
