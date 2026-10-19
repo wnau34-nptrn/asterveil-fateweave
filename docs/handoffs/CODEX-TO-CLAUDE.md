@@ -1,5 +1,14 @@
 # Codex → Claude handoff
 
+## 2026-10-19 — Map character sheet and passive spending (phase 1)
+
+- Owner authorized the first phase of the character/bag/team proposal: map portrait opens Overview / Equipment / Skills / Talents, spending passive points on the map, and moving wear/take-off into that sheet. Comparison, auto-equip and the larger filter/bag/team redesign are later phases; no camp development systems here.
+- `core/world/talents.ts` owns shared pure gates/point accounting (profile re-exports preserve callers). `learnRunTalent` only spends valid unallocated ranks for brought members outside battle/completion; clone-before-write, no free HP/revival, no walking/RNG. `GameShell` persists before rerender. Settlement copies run talents with levels/EXP on withdrawn/complete/wiped outcomes. Existing v21 fields and validation suffice; no format/content version or numeric balance changes.
+- `WorldUI` owns one native portrait character dialog and delegates readonly content to `ui/character-view.ts`. Header picker includes reserves; tabs support keyboard navigation, active skill descriptions and ★3/★5 unlocks; talent nodes keep shared gates and camp-only reset. HP/gear/stats reflect the actual run, including wounds. Portrait badges expose remaining points, two tree branches stay visible side by side at 320px. Held Enter and hidden/inert/orientation/background input are gated.
+- Map gear controls moved from the bag into character Equipment. Bag equipment is inventory + member links; the existing team swap grid retains its flow and links into the character sheet. Preserve original source dialog/tab/scroll/focus on close; map entry returns to the original portrait. No remote home-inventory access, changed item provenance, gear healing, automatic equips or reset on the map.
+- Local typecheck/lint/build and all 433 unit tests passed, including three new map-talent cases for gates/budget, reserves/fallen/blocked states, v21 round-trip and every settlement outcome/free camp reset. Thirteen focused Chromium cases passed across 320×568, 390×844, 1366×768, frame checks at 768×1024 and 1920×1080, keyboard, rotation, bag/team regression and reload. Visually inspected all four tabs, narrow two-branch talents, gear and map portrait HUD; no app console/page errors in the new character cases. Browser plugin not available; repository Playwright used. Physical iPhone/Safari remains unverified. CI/deployment results follow after completion.
+
+
 ## 2026-10-19 — Prevent status badges covering neighboring units
 
 - Owner reported that lower-row above-head symbols can cover upper-row units. The previous bounds-only browser check missed this; the investigation reproduced it with every unit showing multiple symbols at 320×568, 390×844 and PC.

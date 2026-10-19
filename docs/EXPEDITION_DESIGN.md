@@ -426,7 +426,7 @@ Every class (the starting four included) gains one battle skill at ★3 and one 
 
 The owner asked for a skill tree made only of passives ("ความถนัด"). This scopes the CLAUDE.md rule-10 exception for a skill tree: passive nodes only, no new battle buttons.
 
-- Points: 1 per level-up (9 at the level cap 10). Spent and reset (free, any time) only in the Lobby, in the talent-tree sheet (its own window, opened from a member in the team sheet, with a member picker and a back button); talents are fixed during an expedition (levels gained on the run add points for the next visit).
+- Points: 1 per level-up (9 at the level cap 10). Owner update 2026-10-19: spend in the Lobby or on the map through a brought character sheet, outside battle. Reset remains free only in the Lobby. Map spending keeps current HP unchanged (including fallen members), uses existing gates and budget, advances no steps/RNG, persists immediately in v21, and settles home with levels/EXP on every outcome.
 - Shape (same for every class): root (1 rank) → branch A and branch B, each tier 1 (2 ranks) → tier 2 (2 ranks) → capstone (1 rank). 7 nodes, 11 ranks, so a member cannot take everything.
 - Gates: the root first; tier 2 needs 1 rank in its tier 1; a capstone needs 4 ranks in its branch.
 - Stat nodes add to the star/level percent (`starred`); every other effect is read by the resolver from `HeroDefinition.talents`, so preview and replay use the same rules. 0 points = today's numbers.
