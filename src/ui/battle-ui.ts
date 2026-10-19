@@ -12,7 +12,8 @@ import { portrait } from './world-ui';
 import { artOf } from '../game/visuals/assets';
 import { riftBackdropFrame } from '../game/visuals/rift-backdrop';
 import { icon } from './icons';
-import { infoTabs } from './info-tabs';
+import { infoTabs, selectInfoTab } from './info-tabs';
+import { unitStatuses } from './battle-status';
 import { battleLesson } from './tutorial';
 import { heroVoice } from './story-ui';
 
@@ -34,6 +35,7 @@ export class BattleUI {
   private heroId = 'guardian';
   private action: ActionId = 'attack';
   private targeting = true;
+  private inspectedActorId = '';
   private started: boolean;
   private busy = false;
   private canvasInputAfterInfo = 0;
@@ -56,7 +58,7 @@ export class BattleUI {
     root.innerHTML = `
       <header class="masthead">
         <div class="encounter-heading"><p class="eyebrow" id="encounter-kind">การต่อสู้</p><h1 id="encounter-title"></h1></div>
-        <div id="beat-status"></div><button id="battle-info" aria-haspopup="dialog" aria-controls="game-info" data-ui="info" class="quiet" aria-label="ข้อมูลการต่อสู้และตั้งค่าเสียง">ⓘ</button>
+        <div id="beat-status"></div><button id="battle-info" aria-haspopup="dialog" aria-controls="game-info" data-ui="info" class="quiet" aria-label="สถานะยูนิต ข้อมูลการต่อสู้และตั้งค่าเสียง">ⓘ</button>
       </header>
       <main>
         <section id="turn-phase" class="turn-phase" role="status" aria-live="polite" aria-label="เทิร์นการต่อสู้"></section>
@@ -84,7 +86,7 @@ export class BattleUI {
 
         </div></details></div>
         <footer><span>เจ้าของเทิร์น → เลือกสกิล → แตะเป้าหมายในสนาม</span><span id="save-status"></span></footer>
-      </main><dialog id="game-info" aria-labelledby="info-title"><div class="info-header"><h2 id="info-title">ข้อมูลการต่อสู้</h2><button data-ui="info-close" class="quiet" aria-label="ปิดข้อมูล">✕</button></div>${infoTabs('battle', true)}<div class="info-content"><section id="battle-panel-settings" role="tabpanel" aria-labelledby="battle-tab-settings" hidden><section class="battle-sound" aria-labelledby="battle-sound-title"><h3 id="battle-sound-title">เพลงและเสียงเอฟเฟกต์</h3><div id="battle-sfx-controls"></div></section><section id="tutorial-settings" class="tutorial-settings" aria-label="ตั้งค่าคำใบ้สอนเล่น"></section></section><section id="battle-panel-guide" role="tabpanel" aria-labelledby="battle-tab-guide"><section id="info-skill"></section><div id="info-host"></div></section><section id="battle-panel-history" role="tabpanel" aria-labelledby="battle-tab-history" hidden><h3>บันทึกการต่อสู้</h3><ol id="event-log" role="log" aria-live="polite"></ol></section></div></dialog>
+      </main><dialog id="game-info" aria-labelledby="info-title"><div class="info-header"><h2 id="info-title">ข้อมูลการต่อสู้</h2><button data-ui="info-close" class="quiet" aria-label="ปิดข้อมูล">✕</button></div>${infoTabs('battle', true, true)}<div class="info-content"><section id="battle-panel-status" role="tabpanel" aria-labelledby="battle-tab-status"><p class="status-help">เลือกยูนิตเพื่อดูบัฟและดีบัฟ · ตรวจดูได้โดยไม่ใช้เทิร์น</p><p id="status-frame" class="status-frame"></p><div id="status-units" class="status-units" role="group" aria-label="เลือกยูนิตที่ต้องการตรวจสถานะ"></div><section id="status-details" aria-live="polite" aria-atomic="true"></section></section><section id="battle-panel-settings" role="tabpanel" aria-labelledby="battle-tab-settings" hidden><section class="battle-sound" aria-labelledby="battle-sound-title"><h3 id="battle-sound-title">เพลงและเสียงเอฟเฟกต์</h3><div id="battle-sfx-controls"></div></section><section id="tutorial-settings" class="tutorial-settings" aria-label="ตั้งค่าคำใบ้สอนเล่น"></section></section><section id="battle-panel-guide" role="tabpanel" aria-labelledby="battle-tab-guide" hidden><section id="info-skill"></section><div id="info-host"></div></section><section id="battle-panel-history" role="tabpanel" aria-labelledby="battle-tab-history" hidden><h3>บันทึกการต่อสู้</h3><ol id="event-log" role="log" aria-live="polite"></ol></section></div></dialog>
 
       <section id="turn-detail" popover="auto" role="dialog" aria-label="รายละเอียดลำดับเทิร์น"><p></p><button data-ui="turn-close" class="quiet" aria-label="ปิดรายละเอียดเทิร์น">×</button></section>
       <section id="skill-popover" popover="manual" role="dialog" aria-modal="false" aria-labelledby="skill-title" aria-describedby="skill-copy skill-availability" tabindex="-1"><div class="skill-popover-heading"><h2 id="skill-title"></h2><button data-ui="skill-close" class="quiet" aria-label="ปิดคำอธิบายสกิล">✕</button></div><p id="skill-copy"></p><p id="skill-availability"></p><small>อ่านแล้วแตะเป้าหมายในสนามเพื่อใช้สกิล</small></section>`;
@@ -97,7 +99,12 @@ export class BattleUI {
       if (modal && !modal.contains(button)) return;
       const value = button.dataset.value;
       switch (button.dataset.ui) {
-        case 'info': this.root.querySelector<HTMLDialogElement>('#game-info')!.showModal(); break;
+        case 'info': {
+          this.inspectedActorId = this.heroId; this.renderStatuses();
+          const tab = this.root.querySelector<HTMLButtonElement>('#battle-tab-status')!; selectInfoTab(tab);
+          this.root.querySelector<HTMLDialogElement>('#game-info')!.showModal(); tab.focus({ preventScroll: true }); break;
+        }
+        case 'status-unit': if (value) { this.inspectedActorId = value; this.renderStatuses(); this.root.querySelector<HTMLElement>(`#status-unit-${value}`)?.focus({ preventScroll: true }); } break;
         case 'info-close': this.root.querySelector<HTMLDialogElement>('#game-info')!.close(); break;
         case 'start': if (this.session && !this.started) { this.started = true; this.present(beginBattle(this.data, this.session.entry)); } break;
         case 'hero': if (value) this.selectHero(value); break;
@@ -457,6 +464,25 @@ export class BattleUI {
     }).join(''));
   }
 
+  private renderStatuses(): void {
+    const s = this.displayState, d = this.data;
+    const actors = [...d.heroes, ...d.enemies];
+    if (!actors.some(a => a.id === this.inspectedActorId)) this.inspectedActorId = this.heroId;
+    const states = [...s.heroes, ...s.enemies];
+    this.set('status-frame', this.presentation ? `รอบ ${s.round} · สถานะตามจังหวะที่กำลังแสดง` : `รอบ ${s.round} · ${s.outcome === 'active' ? 'สถานะปัจจุบัน' : 'จบการต่อสู้แล้ว'}`);
+    this.set('status-units', actors.map(a => {
+      const actor = states.find(v => v.id === a.id)!;
+      const rows = unitStatuses(s, d, a.id), ally = d.heroes.some(h => h.id === a.id);
+      return `<button id="status-unit-${a.id}" data-ui="status-unit" data-value="${a.id}" class="status-unit ${ally ? 'ally' : 'enemy'}" aria-pressed="${a.id === this.inspectedActorId}">${this.portrait(a.id)}<span><strong>${escapeHtml(actorName(a.id, d))}</strong><small>${ally ? 'ฝ่ายเรา' : 'ศัตรู'} · ${actor.hp <= 0 ? 'ล้มแล้ว' : 'HP ' + actor.hp + '/' + a.maxHp}</small><span class="status-mini" role="img" aria-label="${rows.length ? escapeHtml(rows.map(r => (r.kind === 'buff' ? 'บัฟ ' : 'ดีบัฟ ') + r.name).join(' · ')) : 'ไม่มีสถานะชั่วคราว'}">${rows.slice(0, 3).map(r => `<span class="${r.kind}" aria-hidden="true">${icon(r.icon)}</span>`).join('')}${rows.length > 3 ? '<small>+' + (rows.length - 3) + '</small>' : ''}</span></span></button>`;
+    }).join(''));
+    const id = this.inspectedActorId, def = actors.find(a => a.id === id)!, actor = states.find(a => a.id === id)!;
+    const rows = unitStatuses(s, d, id);
+    this.set('status-details', `<div class="status-selected">${this.portrait(id)}<div><h3>${escapeHtml(actorName(id, d))}</h3><p>HP ${actor.hp} / ${def.maxHp}${actor.hp <= 0 ? ' · ล้มแล้ว' : ''}</p></div></div>${rows.length ? (['buff', 'debuff'] as const).map(kind => {
+      const group = rows.filter(r => r.kind === kind);
+      return group.length ? `<section class="status-group ${kind}"><h4>${kind === 'buff' ? 'บัฟ · ผลเสริม' : 'ดีบัฟ · ผลลดทอน'}</h4><ul>${group.map(r => `<li data-status="${r.id}"><div class="status-name">${icon(r.icon)}<strong>${escapeHtml(r.name)}</strong></div><p>${escapeHtml(r.detail)}</p><p class="status-duration">${escapeHtml(r.duration)}</p></li>`).join('')}</ul></section>` : '';
+    }).join('') : `<p class="status-empty">${actor.hp <= 0 ? 'ยูนิตล้มแล้ว ไม่มีสถานะชั่วคราวที่มีผล' : s.outcome !== 'active' ? 'การต่อสู้จบแล้ว ไม่มีสถานะชั่วคราวที่มีผล' : 'ไม่มีบัฟหรือดีบัฟชั่วคราว'}</p>` }`);
+  }
+
   private render(): void {
     const focus = document.activeElement instanceof HTMLElement ? document.activeElement.id : '';
     const s = this.state; const d = this.data; const disabled = !this.scene?.isReady || !this.started || this.busy || s.outcome !== 'active';
@@ -471,6 +497,7 @@ export class BattleUI {
     this.set('info-skill', `<h3>${d.skills[this.action].name} · ${heroText[this.heroId]!.name}</h3><p>${skillDescription(this.action, this.heroId, d)}</p>`);
     this.root.querySelector<HTMLElement>('#tutorial-settings')!.hidden = this.session?.kind !== 'tutorial';
     this.set('tutorial-settings', `<strong>คำแนะนำศึกแรก</strong><p>อ่านแผนศัตรู · ตั้งรับ · ติดตราแล้วตีเป้าเดิม · ขัดจังหวะ · รักษา</p><button id="coach-toggle" data-ui="coach-toggle" class="quiet" aria-pressed="${this.hintsEnabled}">${this.hintsEnabled ? 'ปิดคำแนะนำ' : 'เปิดคำแนะนำ'}</button>`);
+    this.renderStatuses();
     this.renderPhase(); this.renderSituation(); this.renderSelectedHero(); this.renderParty(disabled); this.renderCommands(disabled);
     this.set('rules', `<h3>ลงสนาม ${d.heroes.length} คน · ศัตรูเล็งตามหมายเลขช่อง</h3><p>รวมฮีโร่และศัตรูเรียง SPD มากไปน้อยเมื่อเริ่มรอบ คนละ 1 ครั้งต่อรอบ ข้ามตัวที่ล้ม SPD เท่ากันใช้ลำดับรายชื่อฮีโร่ก่อน ตามด้วยศัตรู</p><p>แนวหน้าที่ยังยืนอยู่รับการโจมตีกายภาพก่อน พลังงานโจมตีแนวหลังได้ เมื่อแนวหน้าล้มหมด กายภาพจะถึงแนวหลัง ท่าของศัตรูเล็งหมายเลขช่องในทีม ใครยืนช่องนั้นคือเป้า แผนโจมตีเป็นการคาดการณ์ตามคนที่ยังยืนอยู่ เมื่อถึงเทิร์นศัตรูจึงกำหนดเป้าหมายจริง</p>${d.heroes.map(hero => `<h3>${heroText[hero.id]!.name} · ${heroText[hero.id]!.role} · SPD ${hero.speed} · ${hero.lane === 'front' ? 'แนวหน้า' : 'แนวหลัง'}</h3><dl>${hero.actions.map(action => `<dt>${d.skills[action].name} (${d.skills[action].english})</dt><dd>${skillDescription(action, hero.id, d)}</dd>`).join('')}</dl>`).join('')}<p>แต่ละตัวลงมือ 1 ครั้งต่อรอบ สกิลคูลดาวน์ 2 รอบที่ใช้ในรอบ 1 จะพร้อมในรอบ 3 พรฟื้นฟูคูลดาวน์ 3 รอบ ${d.enemies.map(e => `${actorName(e.id, d)} SPD ${e.speed}`).join(' · ')} การรักษาไม่ชุบชีวิต โล่เวทไม่ซ้อนกัน เป้าหมายเสริมคือชนะโดยรักษาทีมครบ ${d.heroes.length} คน</p>`);
     const shownMessages = this.presentation ? this.messages.slice(0, this.presentation.logEnds[this.presentation.index]) : this.messages;
