@@ -29,8 +29,9 @@ test('all six reserved HP/status panels avoid every sprite and each other throug
     await page.locator('.arena').evaluate((el, short) => {
       (el as HTMLElement).style.cssText = short ? 'height:128px!important;min-height:128px!important;max-height:128px!important;flex:none!important' : '';
     }, forceShort);
+    await expect.poll(() => page.locator('#app').evaluate(el => [el.clientWidth, el.clientHeight])).toEqual([Math.min(width, 480), Math.min(height, 960)]);
+    await expect.poll(() => page.evaluate(() => parseFloat((document.querySelector('#game canvas') as HTMLElement).style.height) === document.querySelector('.arena')!.clientHeight)).toBe(true);
     const arena = await page.locator('.arena').evaluate(el => ({ x: el.getBoundingClientRect().x, y: el.getBoundingClientRect().y, width: el.clientWidth, height: el.clientHeight }));
-    await expect.poll(() => page.locator('#game canvas').evaluate(el => parseFloat((el as HTMLElement).style.height))).toBe(arena.height);
     const slots = fieldSlots(arena.width, arena.height);
     // Layout stress only: fill every reserved row, including currently unaffected units.
     // This intentionally changes DOM decorations, never combat state or saved commands.
