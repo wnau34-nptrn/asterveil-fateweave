@@ -8,6 +8,10 @@
 
 - Final local focused browser sweep: 9/9 passed (status tab, stage snapshots, battle-info keyboard, audio tabs, teaching settings and SPD details). Full unit rerun passed 428/428 with `--maxWorkers=2`; a concurrent all-worker run had one unrelated 5s balance-simulation timeout under local load, so do not report that particular run as passing. No simulation or game-rule changes were made.
 
+- PR [#20](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/20) merged as `cc5e443dc63beda6b583bd953405b6161ed95b7a`. Final source `63832bd` clarifies Guard's target condition when taunt redirects attacks. Quality run [39202976831](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/39202976831) passed; production browser run [39202976861](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/39202976861) passed 152/152 browser tests plus three focused frame/focus regressions. A fresh-company local flow also passed at 390×844 and 1366×768, including first-battle Mark inspection, default-on-reopen and unchanged save.
+
+- Publication complete: Pages run [39204186830](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/39204186830) passed lint, unit tests, production build/browser verification and deployment for merged `cc5e443`. Live fresh-company smoke checks at 390×844 and 1366×768 passed: all six units, real Mark detail, Status first on every information reopening, unchanged game save and no page/console errors. Live phone screenshot visually inspected. Keep save v21; no physical iPhone/Safari verification is implied. Do not redeploy just for this documentation-only completion note.
+
 ## 2026-10-19 — Restore Home contrast after owner review
 
 - Owner found the brightened Home washed out. Correct only its CSS: reduce brightness from 1.22 to .96, add modest contrast 1.08, reduce saturation from 1.18 to 1.04, lower screen-blended rays (including normal-motion keyframes), remove the pale wash and restore restrained navy edge shading. Preserve the existing painting and all controls/tabs.
