@@ -582,7 +582,11 @@ export class WorldUI {
     this.tile = tileSizeFor(w, h); const t = this.tile;
     this.root.style.setProperty('--t', `${t}px`);
     const band = (r: DOMRect) => r.width > 0 && r.right > w / 2 - 1.5 * t && r.left < w / 2 + 1.5 * t;
-    const rect = (sel: string) => this.root.querySelector<HTMLElement>(sel)?.getBoundingClientRect();
+    const bounds = viewport.getBoundingClientRect();
+    const rect = (sel: string) => {
+      const r = this.root.querySelector<HTMLElement>(sel)?.getBoundingClientRect();
+      return r ? new DOMRect(r.x - bounds.x, r.y - bounds.y, r.width, r.height) : undefined;
+    };
     let top = 0, bottom = h;
     for (const sel of ['.hud-location', '.hud-top-right', '.hud-party', '.hud-objective', '.hud-pack']) { const r = rect(sel); if (r && band(r)) top = Math.max(top, r.bottom); }
     for (const sel of ['.hud-movement', '.hud-action', '#world-message']) { const r = rect(sel); if (r && band(r) && !(sel === '#world-message' && this.root.querySelector<HTMLElement>(sel)!.hidden)) bottom = Math.min(bottom, r.top); }

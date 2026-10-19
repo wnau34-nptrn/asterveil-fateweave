@@ -495,6 +495,7 @@ test('lobby: hire a duplicate, upgrade a star, pick the team, depart, and withdr
   await page.locator(`#lobby-member-${offer}`).click(); await expect(page.locator(`#lobby-member-${offer}`)).toHaveAttribute('aria-pressed', 'false');
   await page.locator(`#lobby-member-${benched}`).click(); await page.locator('.team-card.empty[data-group=bench]').click();
   await expect.poll(async () => (await savedProfile(page)).party.deployed).toEqual(['guardian', 'tracer', 'weaver', 'healer'].filter(id => id !== benched));
+  await page.locator('[data-lobby=close]').click();
   await page.locator('#lobby-depart').click(); await expect(page.locator('#world-view')).toBeVisible();
   const run = await saved(page); expect(run.roster.deployed).toHaveLength(3); expect(run.members[offer]!.stars).toBe(2);
   await expect(page.locator('#world-party .world-hero')).toHaveCount(3);
@@ -1008,7 +1009,7 @@ test('normal motion: hop, danger meter and veil-shatter encounter finish within 
 });
 
 // Phone portrait is played one-handed: the D-pad is bottom-centre and the contextual action
-// takes its centre cell; landscape keeps the D-pad lower left and the action lower right.
+// takes its centre cell in the same portrait frame on every supported device.
 test('phone portrait centres the D-pad with the action in its middle for one-handed play', async ({ browser }) => {
   for (const [width, height, portrait] of [[390, 844, true], [320, 568, true], [480, 900, true]] as const) {
     const context = await browser.newContext({ viewport: { width, height }, hasTouch: true }); const page = await context.newPage();
@@ -1243,8 +1244,8 @@ test('camp NPCs stand at their stations, open their service when tapped and gree
   await page.locator('[data-lobby="close"]').click(); expect(await pan.evaluate(el => el.scrollLeft)).toBeLessThan(5);
   await pan.evaluate(el => { el.scrollLeft = el.scrollWidth; }); await expect(page.locator('#npc-scout')).toBeInViewport();
   await page.screenshot({ path: info.outputPath('camp-npcs-phone-right.png') });
-  await page.setViewportSize({ width: 844, height: 390 }); await page.waitForTimeout(300);
-  await page.screenshot({ path: info.outputPath('camp-npcs-landscape.png') });
+  await page.setViewportSize({ width: 1366, height: 768 }); await page.waitForTimeout(300);
+  await page.screenshot({ path: info.outputPath('camp-npcs-desktop.png') });
 });
 
 test('side quests: a herb is picked on the map; at camp the herbalist shows "!", and her reward is claimed once; saved v17', async ({ page }, info) => {

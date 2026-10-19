@@ -140,6 +140,7 @@ test('PC: I opens battle info; number keys leave selection and save untouched wh
   await expect(page.locator('#action-mark')).toHaveAttribute('aria-pressed', 'true');
   expect(await page.evaluate(k => localStorage.getItem(k), key)).toBe(before);
   await page.keyboard.press('Escape'); await expect(page.locator('#game-info')).not.toBeVisible();
+  await expect(page.locator('#battle-info')).toBeFocused();
   await page.keyboard.press('3'); await expect(page.locator('#action-execute')).toHaveAttribute('aria-pressed', 'true');
 });
 

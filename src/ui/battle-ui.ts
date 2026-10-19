@@ -120,7 +120,12 @@ export class BattleUI {
       blockClosingTouch();
       if (!root.closest('[inert]') && !root.classList.contains('view-off')) root.querySelector<HTMLElement>('#battle-info')!.focus({ preventScroll: true });
     });
-    infoDialog.addEventListener('cancel', blockClosingTouch);
+    infoDialog.addEventListener('cancel', event => {
+      event.preventDefault(); blockClosingTouch(); infoDialog.close();
+      // Native Escape can leave the settings range as the key target until the
+      // queued close event. Restore the visible trigger before the next key.
+      root.querySelector<HTMLElement>('#battle-info')!.focus({ preventScroll: true });
+    });
     root.querySelector('[data-ui=info-close]')!.addEventListener('pointerdown', blockClosingTouch);
     root.querySelector('#skill-popover')!.addEventListener('pointerdown', blockClosingTouch);
     document.addEventListener('keydown', e => {
