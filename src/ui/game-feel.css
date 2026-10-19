@@ -85,7 +85,7 @@ button:active:not(:disabled) { transform: scale(.97); }
 .title-stage { position: absolute; inset: 0; overflow: hidden; z-index: 0; pointer-events: none; }
 .title-card { position: relative; z-index: 1; }
 /* A slow camera drift over the painting. */
-.title-bg { position: absolute; inset: -5%; background: url('/assets/title/title_bg.webp') 50% 50% / cover no-repeat; animation: title-drift 46s ease-in-out infinite alternate; will-change: transform; }
+.title-bg { filter: brightness(1.22) saturate(1.18); position: absolute; inset: -5%; background: url('/assets/title/title_bg.webp') 50% 50% / cover no-repeat; animation: title-drift 46s ease-in-out infinite alternate; will-change: transform; }
 @keyframes title-drift { from { transform: scale(1) translate(0, 0); } to { transform: scale(1.09) translate(-1.6%, -1.2%); } }
 /* Soft god-rays from the sky, breathing. */
 .title-rays { position: absolute; left: 50%; top: -30%; width: 160vmax; height: 160vmax; transform: translateX(-50%); mix-blend-mode: screen; opacity: .22;
@@ -104,8 +104,8 @@ button:active:not(:disabled) { transform: scale(.97); }
 .title-motes i:nth-child(9) { --x: 73%; --d: 10s; --w: -8s; } .title-motes i:nth-child(10) { --x: 80%; --s: 4px; --d: 16s; --w: -5s; --dx: -30px; }
 .title-motes i:nth-child(11) { --x: 87%; --s: 3px; --d: 12s; --w: -10s; } .title-motes i:nth-child(12) { --x: 93%; --d: 14s; --w: -1.5s; --dx: 18px; }
 .title-motes i:nth-child(13) { --x: 4%; --s: 5px; --d: 17s; --w: -12s; } .title-motes i:nth-child(14) { --x: 47%; --s: 4px; --d: 15s; --w: -13s; --dx: 24px; }
-.title-vignette { position: absolute; inset: 0; background: radial-gradient(ellipse 70% 32% at 50% 14%, #08121fc0, #08121f00 100%), radial-gradient(ellipse 120% 90% at 50% 45%, #08121f00 55%, #08121fb0 100%),
-  linear-gradient(180deg, #08121f80 0%, #08121f00 30%, #08121f40 60%, #08121ff0 100%); }
+.title-vignette { position: absolute; inset: 0; background: radial-gradient(ellipse 70% 32% at 50% 14%, #08121f45, #08121f00 100%), radial-gradient(ellipse 120% 90% at 50% 45%, #08121f00 65%, #08121f65 100%),
+  linear-gradient(180deg, #eefadf20 0%, #08121f00 35%, #08121f18 65%, #08121fa0 100%); }
 /* The logo resolves out of a blur, then glows softly; copy and buttons follow in stages. */
 .title-logo img { animation: logo-in 1.5s var(--ease-out) both, logo-glow 5s ease-in-out 1.6s infinite alternate; }
 @keyframes logo-in { from { opacity: 0; transform: scale(1.12); filter: blur(10px) drop-shadow(0 0 0 #08121f00); } to { opacity: 1; transform: scale(1); filter: blur(0) drop-shadow(0 4px 18px #08121fcc); } }
@@ -704,7 +704,7 @@ html, body { background: #0a1422; }
 @container game (max-width: 400px)  { .market-list small:not(.hire-status) { display: block; } }
 /* Smelting ore into veil dust at the smith (owner-approved 2026-10-16). */
 .smelt { margin: 10px 0; } .smelt-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; } .smelt-buttons button { min-height: 44px; }
-/* Background music controls (title: toggle and volume; lobby header: toggle). */
+/* Audio preferences in the in-game settings tabs; quick mute in the lobby. */
 .music-controls { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 4px; }
 .music-controls .round-glass, #lobby-music { width: 44px; height: 44px; min-width: 44px; display: grid; place-items: center; padding: 0; }
 .music-controls .icon, #lobby-music .icon { width: 20px; height: 20px; }
@@ -716,17 +716,10 @@ html, body { background: #0a1422; }
 .audio-settings .music-volume { flex: 1; min-width: 0; }
 .audio-settings .music-volume input { width: 100%; min-width: 0; }
 .audio-settings output { min-width: 34px; font-size: 12px; color: var(--text-muted); text-align: right; }
-.sfx-check { width: 100%; }
-.title-actions .sfx-check button, .battle-sound .sfx-check button { min-height: 44px; font-size: 14px; width: 100%; }
-.sfx-feedback { min-height: 16px; margin-top: 4px; font-size: 11px; line-height: 1.4; color: var(--text-muted); }
 .battle-sound { margin-bottom: 10px; padding: 10px; border: 1px solid #355170; border-radius: 8px; }
 .battle-sound h3 { color: var(--gold-light, #f2d596); font-size: 14px; margin-bottom: 6px; }
 @container game (orientation: landscape) and (max-height: 500px)  {
-  .title-actions .audio-settings { width: calc(50% - 4px); }
   .audio-settings .audio-toggle { width: 126px; min-width: 126px; flex-basis: 126px; font-size: 12px; }
-  .title-actions .sfx-check { display: flex; align-items: center; gap: 8px; }
-  .title-actions .sfx-check button { flex: 0 0 190px; }
-  .title-actions .sfx-feedback { margin: 0; text-align: left; }
 }
 /* Desktop story card: a little wider and larger text. */
 @container game (min-width: 1200px) and (min-height: 700px)  { .story-card { width: min(860px, 100%); padding: 18px 24px; } .story-text { font-size: 18px; } .story-who b { font-size: 20px; } }
@@ -801,3 +794,11 @@ html, body { background: #0a1422; }
 .travel-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
 .travel-list button { width: 100%; min-height: 48px; display: flex; align-items: center; gap: 10px; justify-content: flex-start; font-size: 16px; }
 .travel-list .icon { width: 22px; height: 22px; color: var(--gold-light, #f2d596); }
+.info-tabs { display: flex; gap: 6px; padding: 8px 14px; border-bottom: 1px solid #355170; flex-shrink: 0; }
+.info-tabs [role=tab] { flex: 1; min-height: 44px; padding: 8px; border: 1px solid transparent; border-radius: 8px; background: #162b40; color: var(--text); font: inherit; }
+.info-tabs [aria-selected=true] { background: #294452; border-color: var(--gold-light, #f2d596); color: var(--gold-light, #f2d596); }
+.info-tabs [role=tab]:focus-visible { outline: 2px solid var(--veil-cyan, #8eeafa); outline-offset: 2px; }
+[role=tabpanel][hidden] { display: none !important; }
+[role=tabpanel] { min-width: 0; }
+#app #game-info[open], #app #world-info[open] { display: flex; flex-direction: column; overflow: hidden; }
+#app #game-info .info-content, #app #world-info .info-content { min-height: 0; max-height: calc(var(--app-h) - 160px); flex: 1; }
