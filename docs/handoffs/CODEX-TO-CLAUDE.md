@@ -1,4 +1,10 @@
 # Codex → Claude handoff
+## 2026-10-19 — Restore Home contrast after owner review
+
+- Owner found the brightened Home washed out. Correct only its CSS: reduce brightness from 1.22 to .96, add modest contrast 1.08, reduce saturation from 1.18 to 1.04, lower screen-blended rays (including normal-motion keyframes), remove the pale wash and restore restrained navy edge shading. Preserve the existing painting and all controls/tabs.
+- Home screenshots at 390×844 and 1366×768 visually inspected: waterfall/rock/sky detail and logo separation restored. No new assets, dependencies, gameplay, audio or save changes.
+- Typecheck, lint, build and 422 unit tests passed. All eight focused frame/Home Chromium cases passed (320×568, 390×844, 768×1024, 1366×768 and 1920×1080); publication results follow below. Chromium verification is not physical iPhone/Safari verification.
+
 
 ## 2026-10-19 — Home brightness and tabbed in-game settings
 

@@ -143,3 +143,7 @@ Both views fit all 11 tested viewports without document scrolling; controls are 
 ## Home and tabbed information — 2026-10-19
 
 Home has no audio controls or sound-test button. Its existing artwork uses a brighter, more vivid rendering with a lighter vignette. In-game information on the map and in battle separates คำแนะนำ and ตั้งค่า; battle additionally exposes บันทึก. Music/effects mute and volume live in ตั้งค่า, alongside first-battle coaching preferences where applicable. No audio sample button is exposed. Tabs share accessible semantics and arrow/Home/End keyboard navigation, retain 44px targets and stay inside the portrait frame. Audio preferences remain separate from save v21.
+
+### Contrast correction after owner review — 2026-10-19
+
+The first brightening pass was too washed out. Home now uses restrained exposure (.96), modest contrast (1.08) and saturation (1.04), reduced screen-blended rays and navy edge shading. Preserve detail in the bright waterfall/sky and dark rocks; avoid a pale overlay or global brightness boost. The existing painting, layout and tabbed settings remain.

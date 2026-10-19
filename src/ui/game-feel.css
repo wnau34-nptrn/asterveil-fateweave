@@ -85,14 +85,14 @@ button:active:not(:disabled) { transform: scale(.97); }
 .title-stage { position: absolute; inset: 0; overflow: hidden; z-index: 0; pointer-events: none; }
 .title-card { position: relative; z-index: 1; }
 /* A slow camera drift over the painting. */
-.title-bg { filter: brightness(1.22) saturate(1.18); position: absolute; inset: -5%; background: url('/assets/title/title_bg.webp') 50% 50% / cover no-repeat; animation: title-drift 46s ease-in-out infinite alternate; will-change: transform; }
+.title-bg { filter: brightness(.96) contrast(1.08) saturate(1.04); position: absolute; inset: -5%; background: url('/assets/title/title_bg.webp') 50% 50% / cover no-repeat; animation: title-drift 46s ease-in-out infinite alternate; will-change: transform; }
 @keyframes title-drift { from { transform: scale(1) translate(0, 0); } to { transform: scale(1.09) translate(-1.6%, -1.2%); } }
 /* Soft god-rays from the sky, breathing. */
-.title-rays { position: absolute; left: 50%; top: -30%; width: 160vmax; height: 160vmax; transform: translateX(-50%); mix-blend-mode: screen; opacity: .22;
+.title-rays { position: absolute; left: 50%; top: -30%; width: 160vmax; height: 160vmax; transform: translateX(-50%); mix-blend-mode: screen; opacity: .08;
   background: repeating-conic-gradient(from 160deg at 50% 0%, #fff6d8 0deg 2.5deg, transparent 2.5deg 11deg);
   -webkit-mask-image: radial-gradient(circle at 50% 0%, #000 0%, transparent 55%); mask-image: radial-gradient(circle at 50% 0%, #000 0%, transparent 55%);
   animation: title-rays 14s ease-in-out infinite alternate; }
-@keyframes title-rays { from { transform: translateX(-50%) rotate(-3deg); opacity: .16; } to { transform: translateX(-50%) rotate(3deg); opacity: .28; } }
+@keyframes title-rays { from { transform: translateX(-50%) rotate(-3deg); opacity: .06; } to { transform: translateX(-50%) rotate(3deg); opacity: .12; } }
 /* Veil motes drifting up through the scene. */
 .title-motes i { position: absolute; left: var(--x); bottom: -4%; width: var(--s, 4px); height: var(--s, 4px); border-radius: 50%; background: #c9f6ff; box-shadow: 0 0 8px 2px #74d4efaa; opacity: 0;
   animation: title-mote var(--d, 11s) linear var(--w, 0s) infinite; }
@@ -104,8 +104,8 @@ button:active:not(:disabled) { transform: scale(.97); }
 .title-motes i:nth-child(9) { --x: 73%; --d: 10s; --w: -8s; } .title-motes i:nth-child(10) { --x: 80%; --s: 4px; --d: 16s; --w: -5s; --dx: -30px; }
 .title-motes i:nth-child(11) { --x: 87%; --s: 3px; --d: 12s; --w: -10s; } .title-motes i:nth-child(12) { --x: 93%; --d: 14s; --w: -1.5s; --dx: 18px; }
 .title-motes i:nth-child(13) { --x: 4%; --s: 5px; --d: 17s; --w: -12s; } .title-motes i:nth-child(14) { --x: 47%; --s: 4px; --d: 15s; --w: -13s; --dx: 24px; }
-.title-vignette { position: absolute; inset: 0; background: radial-gradient(ellipse 70% 32% at 50% 14%, #08121f45, #08121f00 100%), radial-gradient(ellipse 120% 90% at 50% 45%, #08121f00 65%, #08121f65 100%),
-  linear-gradient(180deg, #eefadf20 0%, #08121f00 35%, #08121f18 65%, #08121fa0 100%); }
+.title-vignette { position: absolute; inset: 0; background: radial-gradient(ellipse 70% 32% at 50% 14%, #08121f70, #08121f00 100%), radial-gradient(ellipse 120% 90% at 50% 45%, #08121f00 55%, #08121f90 100%),
+  linear-gradient(180deg, #08121f20 0%, #08121f00 35%, #08121f20 65%, #08121fc8 100%); }
 /* The logo resolves out of a blur, then glows softly; copy and buttons follow in stages. */
 .title-logo img { animation: logo-in 1.5s var(--ease-out) both, logo-glow 5s ease-in-out 1.6s infinite alternate; }
 @keyframes logo-in { from { opacity: 0; transform: scale(1.12); filter: blur(10px) drop-shadow(0 0 0 #08121f00); } to { opacity: 1; transform: scale(1); filter: blur(0) drop-shadow(0 4px 18px #08121fcc); } }
