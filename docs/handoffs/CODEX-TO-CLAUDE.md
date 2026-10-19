@@ -8,6 +8,11 @@
 - Shared tab helper supplies tab/tabpanel relationships, selected state, roving focus and Left/Right/Home/End keyboard navigation. Native close/Escape focus return and closing-touch protection remain.
 - Initial validation: typecheck, lint, build and 422 unit tests passed; eight focused Chromium cases passed on 320×568, 390×844, 430×932 touch and 1366×768 PC. Home/map/battle screenshots visually inspected. Browser plugin not available; repository Playwright used. Full browser/CI/publication results follow below. Physical iPhone/Safari audible output remains unverified.
 
+- PR [#19](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/19) merged as `423df77842b943e2023fa0b85be532bba31c3785`. Quality run [39196998161](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/39196998161) passed; production browser run [39196998162](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/39196998162) passed all 148 browser tests plus three focused frame/focus cases.
+- Full local Chromium run was stopped after production CI passed: the local `blind Attack priority raider` case exhausted its 75-second timeout near the final summary assertion; the same unchanged combat case passed in full production CI. Do not report the interrupted local full run as passing. Eight focused local settings/input cases passed, and real screenshots were inspected.
+
+- Publication complete: Pages run [39197657164](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/39197657164) passed build/browser verification and deployed successfully. Live smoke checks at 390×844 and 1366×768 confirmed the brighter Home, zero Home audio/sample controls, both tab containers, no error overlay and no page/console errors. Desktop live screenshot inspected. Live URL: https://wnau34-nptrn.github.io/asterveil-fateweave/ . Do not republish for this documentation-only completion note.
+
 ## 2026-10-19 — Portrait game and keyboard selection on PC
 
 - Owner accepted one mobile portrait layout on PC, then authorized implementation, merge and publication. Standing authorization applies; do not add another approval checkpoint.
