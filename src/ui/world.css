@@ -2,7 +2,7 @@
    Values follow incoming/ART-UI-WORLD-001/ui/world_overlay.css and STYLE_GUIDE.md. */
 
 .view { flex: 1; min-height: 0; width: 100%; display: flex; flex-direction: column; align-items: center; }
-.view-off { visibility: hidden; position: fixed; inset: 0; pointer-events: none; }
+.view-off { visibility: hidden; position: absolute; inset: 0; pointer-events: none; }
 :root { font-family: var(--font-body), "Leelawadee UI", Tahoma, sans-serif; }
 h1, h2, h3, .primary, .secondary { font-family: var(--font-heading); font-weight: 600; }
 .secondary { background: var(--secondary-fill); color: var(--text); border: 1px solid #e8f5ff40; font-family: var(--font-heading); font-weight: 600; min-height: 48px; border-radius: var(--radius-sm); }
@@ -11,10 +11,10 @@ h1, h2, h3, .primary, .secondary { font-family: var(--font-heading); font-weight
 .primary:active, .secondary:active, .danger-button:active { transform: translateY(2px); }
 
 /* ---------- Title ---------- */
-.title-view { position: fixed; inset: 0; justify-content: flex-end; padding: max(16px, var(--safe-top)) max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+.title-view { position: absolute; inset: 0; justify-content: flex-end; padding: max(16px, var(--safe-top)) max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
   background: radial-gradient(ellipse 70% 32% at 50% 14%, #08121fd0, #08121f00 100%), linear-gradient(180deg, #08121f99 0%, #08121f00 34%, #08121f55 62%, #08121ff2 100%), url('/assets/title/title_bg.webp') 50% 50% / cover no-repeat, var(--navy-950); }
 .title-card { width: min(440px, 100%); height: 100%; display: flex; flex-direction: column; align-items: center; text-align: center; }
-.title-logo { margin-top: max(5vh, 12px); width: min(92%, 520px); }
+.title-logo { margin-top: max(5cqh, 12px); width: min(92%, 520px); }
 .title-logo img { width: 100%; height: auto; filter: drop-shadow(0 4px 18px #08121fcc); }
 .title-copy { margin-top: 2px; color: #f4f7fc; font-size: 15px; text-shadow: 0 1px 3px #08121f, 0 0 12px #08121f; }
 .title-actions { margin-top: auto; width: 100%; display: flex; flex-direction: column; gap: 12px; }
@@ -22,7 +22,7 @@ h1, h2, h3, .primary, .secondary { font-family: var(--font-heading); font-weight
 .title-save { color: #e8eef6; font-size: 14px; text-shadow: 0 1px 4px #08121f; }
 .title-warning { font-size: 12px; color: #ffd6cc; background: #08121fcc; border: 1px solid #ed927f80; border-radius: 10px; padding: 6px 10px; }
 .title-footer { margin-top: 12px; color: var(--gold-edge); font-size: 12px; letter-spacing: .04em; }
-@media (orientation: landscape) and (max-height: 500px) {
+@container game (orientation: landscape) and (max-height: 500px)  {
   .title-card { width: min(560px, 100%); }
   .title-logo { margin-top: 0; width: min(56%, 360px); }
   .title-actions { flex-direction: row; flex-wrap: wrap; gap: 8px; }
@@ -32,7 +32,7 @@ h1, h2, h3, .primary, .secondary { font-family: var(--font-heading); font-weight
 }
 
 /* ---------- World: full-bleed map ---------- */
-.world-view { position: fixed; inset: 0; display: block; width: 100%; max-width: none; isolation: isolate; background: var(--navy-950); --t: 48px; }
+.world-view { position: absolute; inset: 0; display: block; width: 100%; max-width: none; isolation: isolate; background: var(--navy-950); --t: 48px; }
 .map-view { position: absolute; inset: 0; overflow: hidden; touch-action: manipulation;
   background: linear-gradient(#0d1c2e73, #0d1c2e73), url('/assets/world/fog_tile.webp') var(--ox, 0) var(--oy, 0) / var(--t) var(--t) repeat, #0f2236; }
 .map-grid { position: absolute; left: 0; top: 0; width: calc(var(--cols, 20) * var(--t)); height: calc(var(--rows, 28) * var(--t)); transition: transform var(--hop-ms) var(--ease-out); will-change: transform; }
@@ -151,13 +151,13 @@ h1, h2, h3, .primary, .secondary { font-family: var(--font-heading); font-weight
 .banner-card h2 { font-size: 26px; color: var(--text); margin: 6px 0 4px; }
 .banner-card p:not(.eyebrow) { font-size: 14px; color: var(--text-muted); }
 .banner-card .primary { margin-top: 14px; min-width: 220px; min-height: 48px; pointer-events: auto; }
-.world-dialog { width: min(480px, calc(100% - 24px)); max-height: calc(100dvh - 24px); padding: 0; color: var(--text); background: var(--panel-bg); border: 1px solid #e8f5ff40; border-radius: 24px; box-shadow: var(--panel-shadow); }
+.world-dialog { width: min(480px, calc(100% - 24px)); max-height: calc(100cqh - 24px); padding: 0; color: var(--text); background: var(--panel-bg); border: 1px solid #e8f5ff40; border-radius: 24px; box-shadow: var(--panel-shadow); }
 .world-dialog::backdrop { background: var(--scrim); }
 .world-dialog[open] { animation: sheet-in var(--sheet-ms) var(--ease-out); }
 .world-dialog .info-header { padding: 8px 10px 8px 18px; border-bottom: 1px solid #e8f5ff26; }
 .world-dialog .info-header h2 { font-size: 20px; }
 .world-dialog .info-header button { width: 44px; height: 44px; display: grid; place-items: center; padding: 0; border-radius: 50%; }
-.world-dialog .info-content { padding: 14px 18px 18px; max-height: calc(100dvh - 100px); overflow-y: auto; }
+.world-dialog .info-content { padding: 14px 18px 18px; max-height: calc(100cqh - 100px); overflow-y: auto; }
 .goal-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
 .goal-list li { display: flex; align-items: center; gap: 10px; min-height: 40px; font-size: 15px; border-bottom: 1px solid #e8f5ff14; }
 .goal-list li .icon { width: 20px; height: 20px; color: var(--text-muted); }
@@ -234,7 +234,7 @@ h1, h2, h3, .primary, .secondary { font-family: var(--font-heading); font-weight
 .team-card.empty { justify-content: center; border-style: dashed; background: #0a1626; color: var(--text-muted); font-size: 13px; }
 .team-card.empty.target { border-color: #a3edff; color: #bff3ff; }
 .team-card.empty:disabled { opacity: .7; }
-@media (orientation: landscape) and (max-height: 500px) {
+@container game (orientation: landscape) and (max-height: 500px)  {
   .team-card { min-height: 72px; flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 0 4px; }
   .team-card .portrait { width: 28px; } .team-card .lane { display: none; }
   .camp-tabs { margin-bottom: 8px; }
@@ -261,11 +261,11 @@ h1, h2, h3, .primary, .secondary { font-family: var(--font-heading); font-weight
 .hire-list .hire-status { color: #c6e8f2; }
 .hire-list .secondary { min-width: 96px; min-height: 44px; padding: 0 10px; }
 .camp-tabs { grid-template-columns: repeat(3, 1fr); }
-@media (max-width: 400px) { .hire-list small:not(.hire-status) { display: none; } .member-actions { grid-template-columns: 1fr; } .hire-list .portrait { width: 40px; flex-basis: 40px; } .hire-list .secondary { min-width: 84px; } .hire-list li { padding: 4px 6px; } }
-@media (orientation: landscape) and (max-height: 500px) { .hire-list { gap: 4px; } .hire-list li { padding: 2px 6px; } .hire-list .portrait { width: 34px; flex-basis: 34px; } .hire-list small:not(.hire-status) { display: none; } .hire-section .camp-note { display: none; } }
+@container game (max-width: 400px)  { .hire-list small:not(.hire-status) { display: none; } .member-actions { grid-template-columns: 1fr; } .hire-list .portrait { width: 40px; flex-basis: 40px; } .hire-list .secondary { min-width: 84px; } .hire-list li { padding: 4px 6px; } }
+@container game (orientation: landscape) and (max-height: 500px)  { .hire-list { gap: 4px; } .hire-list li { padding: 2px 6px; } .hire-list .portrait { width: 34px; flex-basis: 34px; } .hire-list small:not(.hire-status) { display: none; } .hire-section .camp-note { display: none; } }
 
 /* Tablet / narrower desktop: party on a second row under the corner capsules. */
-@media (max-width: 1100px) and (min-height: 501px) {
+@container game (max-width: 1100px) and (min-height: 501px)  {
   .world-hud { --hud-inset: 20px; }
   .hud-party { top: calc(var(--hud-top) + 72px); width: min(560px, calc(100% - 40px)); }
   .hud-objective { top: calc(var(--hud-top) + 140px); }
@@ -273,7 +273,7 @@ h1, h2, h3, .primary, .secondary { font-family: var(--font-heading); font-weight
   .hud-event { max-width: calc(100% - 400px); }
 }
 /* Portrait phones: portrait-free party row, compact capsules, smaller thumbs. */
-@media (max-width: 600px) and (orientation: portrait) {
+@container game (max-width: 600px) and (orientation: portrait)  {
   .world-hud { --hud-inset: 12px; }
   .hud-location { max-width: calc(100% - 160px); gap: 8px; padding: 6px 12px; border-radius: 20px; }
   .location-mark { display: none; }
@@ -300,7 +300,7 @@ h1, h2, h3, .primary, .secondary { font-family: var(--font-heading); font-weight
   .context-caption { white-space: normal; text-align: center; }
   .hud-event { bottom: calc(var(--hud-bottom) + 190px); max-width: calc(100% - 24px); width: max-content; font-size: 12px; padding: 5px 12px; min-height: 32px; }
 }
-@media (max-width: 360px) and (orientation: portrait) {
+@container game (max-width: 360px) and (orientation: portrait)  {
   .world-hud { --hud-inset: 8px; }
   .hud-location { max-width: calc(100% - 146px); padding: 6px 10px; }
   .hud-location h1 { font-size: 16px; }
@@ -316,7 +316,7 @@ h1, h2, h3, .primary, .secondary { font-family: var(--font-heading); font-weight
   .context-caption { font-size: 11px; }
 }
 /* Short landscape phones. */
-@media (orientation: landscape) and (max-height: 500px) {
+@container game (orientation: landscape) and (max-height: 500px)  {
   .world-hud { --hud-inset: 10px; }
   .hud-location { max-width: 210px; padding: 5px 12px; gap: 8px; border-radius: 18px; }
   .location-mark { display: none; }
@@ -349,10 +349,10 @@ h1, h2, h3, .primary, .secondary { font-family: var(--font-heading); font-weight
 }
 /* Thai above/below marks need line boxes taller than Latin text when overflow clips for ellipsis. */
 .hud-location h1, .world-hero b, .world-hero small, .objective-text { line-height: 1.55; padding-block: 1px; }
-@media (max-width: 400px) { .team-card .lane { display: none; } }
+@container game (max-width: 400px)  { .team-card .lane { display: none; } }
 
 /* ---------- Lobby (ค่ายทหารรับจ้าง) — L1, glass UI over the title painting until lobby art exists ---------- */
-.lobby-view { position: fixed; inset: 0; display: block; max-width: none;
+.lobby-view { position: absolute; inset: 0; display: block; max-width: none;
   background: linear-gradient(180deg, #08121fe6, #08121fcc 40%, #08121ff2), url('/assets/title/title_bg.webp') 50% 50% / cover no-repeat, var(--navy-950); }
 .lobby-shell { height: 100%; max-width: 820px; margin: 0 auto; display: flex; flex-direction: column; gap: 10px;
   padding: max(12px, var(--safe-top)) max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left)); }
@@ -381,7 +381,7 @@ h1, h2, h3, .primary, .secondary { font-family: var(--font-heading); font-weight
 #lobby-depart .icon { width: 20px; height: 20px; }
 #lobby-depart small { font: 400 12px var(--font-body); opacity: .8; }
 #lobby-depart:disabled { opacity: .5; }
-@media (max-width: 600px) {
+@container game (max-width: 600px)  {
   .lobby-header h1 { font-size: 16px; }
   .lobby-footer { flex-direction: column-reverse; align-items: stretch; gap: 4px; }
   .lobby-save { text-align: center; }
@@ -392,16 +392,16 @@ h1, h2, h3, .primary, .secondary { font-family: var(--font-heading); font-weight
 .withdraw-section .icon { width: 18px; height: 18px; }
 /* Warm lobby camp scene (ART-UI-LOBBY-001): painted camp, stone firepit, posed members; the flame is a painted 6-frame strip (ART-WORLD-PROPS-002). */
 .lobby-view { background: radial-gradient(ellipse 80% 45% at 50% 30%, #ff9a4a33, #ff9a4a00 70%), linear-gradient(180deg, #1a1220e6, #140f1ccc 35%, #0b111df5), url('/assets/title/title_bg.webp') 50% 50% / cover no-repeat, #120d18; }
-.lobby-scene { position: relative; flex: 0 0 clamp(92px, 22vh, 230px); border-radius: var(--radius-md); overflow: hidden; border: 1px solid #ffc98a40;
+.lobby-scene { position: relative; flex: 0 0 clamp(92px, 22cqh, 230px); border-radius: var(--radius-md); overflow: hidden; border: 1px solid #ffc98a40;
   /* The painting's ground band (bottom 35%) stays under the actors at every band ratio; firelight is added on top. */
   background: radial-gradient(ellipse 34% 60% at 50% 88%, #ffb35c55, #ff8a3d18 55%, #ff8a3d00 75%), var(--lobby-bg) 50% 78% / cover no-repeat, #2a1b2c; box-shadow: inset 0 -30px 40px #120c0a66; }
 .lobby-fg { position: absolute; inset: 0; z-index: 6; pointer-events: none; background: var(--lobby-fg) 50% 78% / cover no-repeat; }
-.lobby-fire { position: absolute; left: 50%; bottom: 10%; width: clamp(34px, 7vh, 56px); height: clamp(40px, 8vh, 64px); transform: translateX(-50%); z-index: 3; }
+.lobby-fire { position: absolute; left: 50%; bottom: 10%; width: clamp(34px, 7cqh, 56px); height: clamp(40px, 8cqh, 64px); transform: translateX(-50%); z-index: 3; }
 .lobby-fire b { position: absolute; left: 50%; bottom: -34%; width: 230%; aspect-ratio: 1; transform: translateX(-50%); background: var(--lobby-pit) 50% 100% / contain no-repeat; }
 /* The flame strip shares the firepit's 256 px canvas (base y 200), so it sits on the same box as the pit. Frames step by transform only. */
 .lobby-flame { position: absolute; left: 50%; bottom: -34%; width: 230%; aspect-ratio: 1; transform: translateX(-50%); overflow: hidden; }
 .lobby-flame i { position: absolute; left: 0; top: 0; width: 600%; height: 100%; background: url('/assets/lobby/camp_flame.webp') 0 0 / 100% 100% no-repeat; }
-.lobby-unit { position: absolute; left: var(--ux); bottom: 12%; width: calc(clamp(84px, 21vh, 210px) * var(--us)); aspect-ratio: 1; transform: translate(-50%, var(--sole, 0%)); z-index: 2; }
+.lobby-unit { position: absolute; left: var(--ux); bottom: 12%; width: calc(clamp(84px, 21cqh, 210px) * var(--us)); aspect-ratio: 1; transform: translate(-50%, var(--sole, 0%)); z-index: 2; }
 .lobby-unit[data-depth="0"] { z-index: 4; bottom: 6%; } .lobby-unit[data-depth="2"] { bottom: 22%; filter: brightness(.82) saturate(.9); }
 .lobby-unit i { position: absolute; inset: 0; background-repeat: no-repeat; background-size: var(--fs, 200% 300%); background-position: var(--fx) var(--fy);
   transform: scaleX(var(--flip)); filter: drop-shadow(0 6px 6px #0a0606aa) drop-shadow(calc(var(--flip) * 6px) 0 10px #ff9a4a33); }
@@ -419,7 +419,7 @@ h1, h2, h3, .primary, .secondary { font-family: var(--font-heading); font-weight
 .lobby-header, .lobby-result { background: #2a1d24d9; border-color: #ffc98a40; }
 .lobby-header .eyebrow { color: #ffd9a8; }
 .lobby-panel { background: #17121ee6; border-color: #ffc98a33; }
-@media (orientation: landscape) and (max-height: 500px) {
+@container game (orientation: landscape) and (max-height: 500px)  {
   .lobby-shell { display: grid; max-width: none; gap: 6px; grid-template: auto auto 1fr auto / 1fr 280px; grid-template-areas: "head head" "panel res" "panel scene" "panel foot"; }
   .lobby-header { grid-area: head; } .lobby-panel { grid-area: panel; } .lobby-result { grid-area: res; }
   .lobby-scene { grid-area: scene; flex: none; min-height: 0; }
@@ -460,14 +460,14 @@ h1, h2, h3, .primary, .secondary { font-family: var(--font-heading); font-weight
 #commander-create { min-height: 52px; padding: 0 22px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-size: 17px; }
 #commander-create .icon { width: 20px; height: 20px; }
 .lobby-header .commander-crest { width: 40px; height: 40px; }
-@media (orientation: landscape) and (max-height: 500px) {
+@container game (orientation: landscape) and (max-height: 500px)  {
   .commander-shell { max-width: 760px; }
   .commander-panel { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 10px; }
   .commander-preview { grid-column: 1 / -1; padding: 6px 10px; } .commander-banner { width: 44px; height: 52px; }
   .choice-row { grid-template-columns: repeat(3, 1fr); gap: 6px; } .choice-row button { min-height: 44px; }
 }
 .commander-panel { overflow-x: hidden; }
-@media (max-width: 420px) { .choice-row { grid-template-columns: repeat(3, minmax(0, 1fr)); } .commander-preview b { font-size: 19px; } }
+@container game (max-width: 420px)  { .choice-row { grid-template-columns: repeat(3, minmax(0, 1fr)); } .commander-preview b { font-size: 19px; } }
 .choice-row .swatch:hover:not(:disabled) { background-color: var(--crest-color); filter: brightness(1.08); }
 .commander-panel { flex: 0 1 auto; } .commander-shell { justify-content: center; }
 .star-row .icon.empty { filter: brightness(2.4) saturate(.5); opacity: .85; }

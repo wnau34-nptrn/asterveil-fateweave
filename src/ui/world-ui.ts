@@ -1,3 +1,4 @@
+import { shortcutBlocked } from '../platform/keyboard';
 import type { EncounterDefinition, HeroDefinition } from '../core/battle/types';
 import { withParty } from '../core/battle/engine';
 import type { Direction, EventChoice, ExpeditionState, GearSlot, Item, MapDefinition, Point, PotionId } from '../core/world/types';
@@ -108,6 +109,11 @@ export class WorldUI {
       <dialog id="pack-dialog" class="world-dialog" aria-labelledby="pack-title"><div class="info-header"><h2 id="pack-title">${icon('pack')} กระเป๋า</h2><button data-world="pack-close" class="quiet" aria-label="ปิดกระเป๋า">${icon('close')}</button></div><div class="info-content" id="pack-content"></div></dialog>
       <dialog id="event-dialog" class="world-dialog" aria-labelledby="event-title"><div class="info-header"><h2 id="event-title"></h2><button data-world="event-close" class="quiet" aria-label="ปิดและเดินต่อ">${icon('close')}</button></div><div class="info-content" id="event-content"></div></dialog>
       <dialog id="world-info" class="world-dialog" aria-labelledby="world-info-title"><div class="info-header"><h2 id="world-info-title">ข้อมูลการเดินทาง</h2><button data-world="info-close" class="quiet" aria-label="ปิดข้อมูล">${icon('close')}</button></div><div class="info-content" id="world-info-content"></div></dialog>`;
+    for (const [id, trigger] of [['world-info', 'world-info-button'], ['world-goals', 'objective-button'], ['pack-dialog', 'world-pack'], ['camp-dialog', 'rest'], ['event-dialog', 'rest']]) {
+      root.querySelector(`#${id}`)!.addEventListener('close', () => {
+        if (!root.hidden && !root.closest('[inert]')) root.querySelector<HTMLElement>(`#${trigger}`)?.focus({ preventScroll: true });
+      });
+    }
     root.addEventListener('click', e => {
       const el = e.target as HTMLElement;
       const button = el.closest<HTMLButtonElement>('button[data-world]');
@@ -152,9 +158,9 @@ export class WorldUI {
       if (hint?.dataset.dir) this.input(hint.dataset.dir as Direction);
     });
     document.addEventListener('keydown', e => {
-      const dir = keyDirections[e.key];
-      if (!dir || root.hidden || root.querySelector('dialog[open]') || e.altKey || e.ctrlKey || e.metaKey) return;
-      if ((e.target as HTMLElement).closest?.('input, textarea')) return;
+      const codeDirections: Record<string, Direction> = { KeyW: 'up', KeyA: 'left', KeyS: 'down', KeyD: 'right' };
+      const dir = codeDirections[e.code] ?? keyDirections[e.key];
+      if (!dir || shortcutBlocked(e, true) || root.hidden || document.querySelector('dialog[open], .story-view:not([hidden]), .summary-view:not([hidden])')) return;
       e.preventDefault();
       const now = performance.now(); if (now - this.lastKey < 120) return; this.lastKey = now;
       this.input(dir);

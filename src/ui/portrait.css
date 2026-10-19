@@ -1,0 +1,84 @@
+/* One portrait play surface on every device. Component queries follow this frame,
+   while pointer/hover media queries still describe the actual input device. */
+body { display: grid; place-items: center; background: radial-gradient(ellipse at 50% 45%, #23364e, #050b15 75%); }
+#app { position: relative; inset: auto; width: var(--game-w); max-width: 100%; height: var(--app-h); padding: 0; container: game / size; overflow: clip; isolation: isolate; box-shadow: 0 0 90px #0009; }
+#app > .view, #app > .story-view, #app > .summary-view { position: absolute; inset: 0; width: 100%; height: 100%; }
+#app dialog { width: min(560px, calc(var(--game-w) - 16px)); max-height: calc(var(--app-h) - 16px); }
+#app dialog .info-content { max-height: calc(var(--app-h) - 90px); }
+#skill-popover { width: min(350px, calc(var(--game-w) - 16px)); max-height: calc(var(--app-h) - 100px); }
+#orientation-gate { width: min(400px, calc(100vw - 32px)); padding: 28px 24px; border: 1px solid #f2d59688; border-radius: 24px; background: #0d1c2f; color: #eef4ff; text-align: center; }
+#orientation-gate::backdrop { background: #050c18ed; }
+#orientation-gate h1 { color: #f2d596; font-size: 23px; margin: 8px 0 12px; }
+#orientation-gate p { font-size: 15px; }
+#orientation-gate small { display: block; margin-top: 14px; color: #adc2d9; }
+.rotate-device { font-size: 52px; line-height: 1; color: #74d4ef; }
+.sr-only { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; margin: -1px !important; overflow: hidden !important; clip-path: inset(50%); white-space: nowrap; border: 0 !important; }
+
+/* A compact circular queue, readable by name/SPD on request rather than repeated labels. */
+#battle-view #turn-phase { flex: 0 0 70px; height: 70px; min-height: 70px; padding: 2px 6px; gap: 0; }
+#battle-view .phase-head { min-height: 20px; height: 20px; gap: 4px; }
+#battle-view .phase-portrait, #battle-view .phase-copy > p { display: none; }
+#battle-view .phase-head .phase-copy h2 { font-size: 12px; line-height: 20px; }
+#battle-view #skip-turn { min-height: 44px; height: 44px; position: absolute; right: 52px; top: -44px; font-size: 11px; background: #0b192c; }
+#battle-view #turn-order ol { justify-content: center; gap: 4px; }
+#battle-view .turn-slot { display: block; flex: 0 0 44px; width: 44px; height: 44px; padding: 0; border: 0; background: transparent; box-shadow: none; position: relative; }
+#battle-view .turn-slot:nth-child(n) { display: block; }
+#battle-view .turn-icon { width: 44px; height: 44px; padding: 4px; border: 0; border-radius: 50%; background: transparent; }
+#battle-view .turn-icon .portrait { width: 36px; height: 36px; border-radius: 50%; border: 2px solid #74d4ef99; }
+#battle-view .turn-slot.enemy .portrait { border-color: #cf9def; }
+#battle-view .turn-slot.current-turn .portrait { border-color: #f2d596; box-shadow: 0 0 10px #f2d59688; }
+#battle-view .turn-slot.current-turn::after { content: ''; position: absolute; top: 0; left: 18px; border: 4px solid transparent; border-top-color: #f2d596; pointer-events: none; }
+#battle-view .turn-slot.blocked-turn::before { content: '×'; position: absolute; right: 0; bottom: 0; color: #ffb9c5; background: #28121b; border-radius: 50%; width: 16px; text-align: center; pointer-events: none; z-index: 1; }
+#turn-detail { position: fixed; inset: auto; margin: 0; width: min(320px, calc(var(--game-w) - 16px)); padding: 10px 54px 10px 12px; color: #eef4ff; background: #10253af5; border: 1px solid #718ba7; border-radius: 12px; font-size: 13px; }
+#turn-detail button { position: absolute; right: 2px; top: 0; width: 44px; padding: 0; }
+
+/* The same centred command dock is used by touch and mouse. HP remains legible for waiting allies. */
+#battle-view .decision-panel { border: 0; margin: 0; border-radius: 16px 16px 0 0; background: linear-gradient(180deg, #0c1c30e8, #07111df5); }
+#battle-view .team-section { padding: 4px; }
+#battle-view .party { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; }
+#battle-view .hero-card { grid-template-columns: 1fr; height: 48px; min-height: 48px; padding: 3px 4px; gap: 0; border-radius: 10px; text-align: center; }
+#battle-view .hero-card.waiting-turn { opacity: 1; }
+#battle-view .hero-emblem, #battle-view .hero-class, #battle-view .hero-skills, #battle-view .selected-tag, #battle-view .hero-hp .hp-label { display: none; }
+#battle-view .hero-copy > strong { font-size: 12px; }
+#battle-view .hero-hp { font-size: 11px; color: #e1f4ec; }
+#battle-view .hero-card .hp-track { margin: 2px 0 0; }
+#battle-view .hero-card .barrier-info { position: static; font-size: 9px; }
+#battle-view .command-dock { padding: 0 6px 6px; margin: 0; background: transparent; }
+#battle-view #selected-hero { display: flex; align-items: center; height: 44px; margin: 0; gap: 4px; }
+#battle-view #selected-hero .selected-info { flex: 1; min-width: 0; }
+#battle-view .selected-info h2 { font-size: 14px; }
+#battle-view .selected-info h2 > span, #battle-view .selected-resource, #battle-view .selection-state { display: none; }
+#skill-details, #cancel-action { width: 44px; height: 44px; padding: 0; border: 0; background: transparent; }
+#battle-view .action { position: relative; height: 64px; min-height: 64px; padding: 4px 2px; }
+#battle-view .action strong { font-size: 14px; }
+#battle-view .action svg { width: 22px; height: 22px; }
+#battle-view .action .skill-value { font-size: 11px; }
+#battle-view .action-option > p { min-height: 14px; font-size: 10px; margin-top: 1px; }
+#battle-view .target-hint { min-height: 18px; line-height: 18px; font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#battle-view #enemy-roster { display: none; }
+.key-hint { position: absolute; top: 3px; left: 5px; font: 600 11px/1.25 var(--font-body); color: #e8d5ad; border: 1px solid #8f9caa88; padding: 0 3px; border-radius: 4px; }
+@media (pointer: coarse) and (hover: none) { .key-hint { display: none; } }
+@container game (max-height: 640px) {
+  #battle-view .hero-card { height: 44px; min-height: 44px; }
+  #battle-view #selected-hero { height: 44px; }
+  #battle-view .action { height: 54px; min-height: 54px; }
+  #battle-view .action svg { width: 18px; height: 18px; }
+  #battle-view .action strong { font-size: 12px; }
+  #battle-view .action-option > p { font-size: 9px; }
+  #battle-view .target-hint { font-size: 10px; }
+}
+
+#battle-view .command-dock { border: 1px solid #e8f5ff24; border-radius: 14px; margin: 2px 4px 4px; }
+#battle-view .command-dock[data-ready=false] .actions, #battle-view .command-dock[data-ready=false] .target-hint { visibility: hidden; }
+@media (prefers-reduced-motion: no-preference) {
+  #battle-view .command-dock[data-ready=true] { animation: command-arrive 160ms ease-out; }
+}
+@keyframes command-arrive { from { opacity: .5; translate: 0 5px; } to { opacity: 1; translate: 0 0; } }
+/* Native dialogs enter the browser top layer. Centre them explicitly over the frame;
+   inset:0 + margin:0 would otherwise pin a portrait sheet to the monitor's left edge. */
+#app dialog { position: fixed; inset: 0; margin: auto; width: var(--game-w); height: var(--app-h); max-height: var(--app-h); border-radius: 0; }
+#desktop-controls { display: none; position: fixed; top: 50%; right: max(16px, calc((100vw - var(--game-w)) / 2 - 224px)); translate: 0 -50%; width: 200px; padding: 16px; background: #0a172acc; border: 1px solid #314d7066; border-radius: 16px; font-size: 13px; color: #b4c7df; }
+#desktop-controls strong { color: #f2d596; }
+#desktop-controls p { margin-top: 12px; }
+#desktop-controls kbd { color: #eef4ff; font: inherit; font-weight: 600; }
+@media (min-width: 1000px) and (pointer: fine) { #desktop-controls { display: block; } }

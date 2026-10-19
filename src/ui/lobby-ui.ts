@@ -1,3 +1,4 @@
+import { shortcutBlocked } from '../platform/keyboard';
 import type { ActionId, HeroDefinition } from '../core/battle/types';
 import { withParty } from '../core/battle/engine';
 import { boardOffers, brewReason, buyReason, claimReason, sealLimit, refreshReason, shopLeft, dismissReason, equipReason, groupOf, hireReason, talentPoints, talentReason, talentsSpent, upgradeCost, upgradeReason, type Group } from '../core/world/profile';
@@ -51,7 +52,7 @@ export class LobbyUI {
   constructor(private readonly root: HTMLElement, private readonly map: MapDefinition, private readonly lookup: EncounterLookup, private readonly heroes: readonly HeroDefinition[], private readonly host: LobbyHost) {
     this.startWork();
     // Escape closes the sheet even after a redraw moved focus out of it (only while the lobby shows).
-    root.ownerDocument.addEventListener('keydown', e => { if (e.key === 'Escape' && this.sheet && !root.hidden) { e.preventDefault(); this.closeSheet(); } });
+    root.ownerDocument.addEventListener('keydown', e => { if (!shortcutBlocked(e) && e.key === 'Escape' && this.sheet && !root.hidden) { e.preventDefault(); this.closeSheet(); } });
     root.addEventListener('click', e => {
       const b = (e.target as HTMLElement).closest<HTMLButtonElement>('button[data-lobby]');
       if (!b || b.disabled) return;

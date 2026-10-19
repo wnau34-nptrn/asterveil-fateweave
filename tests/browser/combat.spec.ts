@@ -37,7 +37,7 @@ async function finish(page:Page){
  await expect(page.locator('#beat-status')).not.toContainText('กำลังแสดงผล');
 }
 async function cast(page:Page,hero:string,action:string,target:string){
- await owner(page,hero);await page.locator(`#action-${action}`).click();await expect(page.locator('#skill-popover')).toBeVisible();
+ await owner(page,hero);await page.locator(`#action-${action}`).click();await page.locator('#skill-details').click();await expect(page.locator('#skill-popover')).toBeVisible();
  await page.locator('[data-ui=skill-close]').click();await page.locator(`#target-${target}`).click();
 }
 async function saved(page:Page){return page.evaluate(k=>{const j=JSON.parse(localStorage.getItem(k)!);return j.run===undefined?j.state:j.run;},key);}
@@ -70,7 +70,7 @@ test('only the SPD owner can command through cards, forged events, canvas and ke
  await page.locator('#hero-guardian').evaluate(el=>el.dispatchEvent(new MouseEvent('click',{bubbles:true})));await owner(page,'tracer');
  const canvas=(await page.locator('#game canvas').boundingBox())!;await page.mouse.click(canvas.x+canvas.width*.35,canvas.y+canvas.height*.59-15);await owner(page,'tracer');
  const card=await page.locator('#hero-weaver').boundingBox();await page.mouse.click(card!.x+card!.width/2,card!.y+card!.height/2);await owner(page,'tracer');
- await page.locator('#action-mark').focus();await page.keyboard.press('Enter');await expect(page.locator('#skill-popover')).toBeVisible();await page.keyboard.press('Escape');await expect(page.locator('#action-mark')).toBeFocused();
+ await page.locator('#action-mark').focus();await page.keyboard.press('Enter');await expect(page.locator('#skill-popover')).not.toBeVisible();await page.locator('#skill-details').click();await expect(page.locator('#skill-popover')).toBeVisible();await page.keyboard.press('Escape');await expect(page.locator('#action-mark')).toBeFocused();
  await page.locator('#target-brute').focus();await page.keyboard.press('Enter');await finish(page);await owner(page,'weaver');expect(await count(page)).toBe(1);expect(issues).toEqual([]);
 });
 test('normal motion shows separate actual hero and enemy turns, exact staged HP and locked controls',async({browser},info)=>{
@@ -100,7 +100,7 @@ for(const [index,hero]of ['tracer','weaver','guardian','healer'].entries()){
  test(`${hero}: owned skills explain real abilities in a floating window without committing`,async({page},info)=>{
   const issues=await start(page);await prefix(page,index);await owner(page,hero);const before=await count(page),field=await page.locator('.arena').boundingBox();
   for(const action of veilSiege.heroes.find(h=>h.id===hero)!.actions){
-   await page.locator('#action-'+action).click();await expect(page.locator('#skill-popover')).toBeVisible();await expect(page.locator('#skill-title')).toContainText(veilSiege.skills[action].name);
+   await page.locator('#action-'+action).click();await page.locator('#skill-details').click();await expect(page.locator('#skill-popover')).toBeVisible();await expect(page.locator('#skill-title')).toContainText(veilSiege.skills[action].name);
    await expect(page.locator('#skill-copy')).not.toBeEmpty();expect(await count(page)).toBe(before);expect(await page.locator('.arena').boundingBox()).toEqual(field);
    await reachable(page,'[data-ui=skill-close]');await page.screenshot({path:info.outputPath(action+'-explanation.png')});await page.keyboard.press('Escape');await expect(page.locator('#action-'+action)).toBeFocused();
   }
@@ -108,7 +108,7 @@ for(const [index,hero]of ['tracer','weaver','guardian','healer'].entries()){
  });
 }
 test('Guard targets the announced ally without transferring the Knight turn; popup permits direct field casting',async({page})=>{
- const issues=await start(page);await prefix(page,2);await owner(page,'guardian');await page.locator('#action-guard').click();await expect(page.locator('#skill-popover')).toBeVisible();
+ const issues=await start(page);await prefix(page,2);await owner(page,'guardian');await page.locator('#action-guard').click();await page.locator('#skill-details').click();await expect(page.locator('#skill-popover')).toBeVisible();
  await page.locator('#target-weaver').click();await expect(page.locator('#skill-popover')).not.toBeVisible();await finish(page);await owner(page,'healer');
  await expect(page.locator('#hero-guardian')).toContainText('66 / 76');await expect(page.locator('#hero-weaver')).toContainText('48 / 48');expect(await count(page)).toBe(3);expect(issues).toEqual([]);
 });
@@ -119,7 +119,7 @@ test('Mark waits for the next round, survives Mage actions and adds 22 to the Du
  await page.screenshot({path:info.outputPath('marked-follow-up.png')});expect(issues).toEqual([]);
 });
 test('Priest can heal another hero without allowing that recipient to command',async({page})=>{
- const issues=await start(page);await prefix(page,3);await owner(page,'healer');await page.locator('#action-heal').click();await page.locator('[data-ui=skill-close]').click();
+ const issues=await start(page);await prefix(page,3);await owner(page,'healer');await page.locator('#action-heal').click();await page.locator('#skill-details').click();await page.locator('[data-ui=skill-close]').click();
  await expect(page.locator('#target-weaver')).toBeDisabled();await expect(page.locator('#target-guardian')).toBeEnabled();await page.locator('#target-guardian').click();await finish(page);await owner(page,'tracer');
  await expect(page.locator('#hero-guardian')).toContainText('76 / 76');expect(issues).toEqual([]);
 });
@@ -164,21 +164,21 @@ for(const [index,route]of routes.entries()){
   expect(issues).toEqual([]);await context.close();
  });
 }
-for(const viewport of [{width:320,height:568},{width:360,height:640},{width:375,height:812},{width:390,height:844},{width:414,height:896},{width:430,height:932},{width:844,height:390},{width:768,height:1024},{width:1024,height:768},{width:1366,height:768},{width:1920,height:1080}]){
+for(const viewport of [{width:320,height:568},{width:360,height:640},{width:375,height:812},{width:390,height:844},{width:414,height:896},{width:430,height:932},{width:480,height:900},{width:768,height:1024},{width:1024,height:768},{width:1366,height:768},{width:1920,height:1080}]){
  test(`viewport ${viewport.width}x${viewport.height}: timeline, popup and controls fit without scroll`,async({browser},info)=>{
   const context=await browser.newContext({viewport,hasTouch:viewport.width<900,reducedMotion:'reduce'}),page=await context.newPage(),issues=await start(page);
   const fits=async(actions=['mark','execute'])=>{
    expect(await page.evaluate(()=>({x:scrollX,y:scrollY,overflow:document.documentElement.scrollHeight>innerHeight}))).toEqual({x:0,y:0,overflow:false});
    for(const s of ['#battle-info','#action-attack',...actions.map(a=>'#action-'+a)])await reachable(page,s);
    await expect.poll(()=>page.locator('#game canvas').evaluate(el=>{const r=el.getBoundingClientRect(),a=el.parentElement!.parentElement!.getBoundingClientRect();return r.height>=120&&r.left>=a.left-1&&r.right<=a.right+1&&r.top>=a.top-1&&r.bottom<=a.bottom+1;/* canvas backing size is whole pixels; arena may be fractional */})).toBe(true);
-   await expect(page.locator('#turn-order')).toBeVisible();expect(await page.locator('.turn-slot:visible').count()).toBe(viewport.width<=600||viewport.height<=700?4:6);
+   await expect(page.locator('#turn-order')).toBeVisible();expect(await page.locator('.turn-slot:visible').count()).toBe(6);
    expect(await page.locator('#turn-order').evaluate(el=>{const r=el.getBoundingClientRect();return r.left>=0&&r.top>=0&&r.right<=innerWidth&&r.bottom<=innerHeight&&el.scrollWidth<=el.clientWidth;})).toBe(true);
   };
-  await fits();await owner(page,'tracer');const before=await page.locator('.arena').boundingBox();await page.locator('#action-mark').click();
+  await fits();await owner(page,'tracer');const before=await page.locator('.arena').boundingBox();await page.locator('#action-mark').click();await page.locator('#skill-details').click();
   await expect(page.locator('#skill-copy')).toContainText('2 รอบ');await reachable(page,'[data-ui=skill-close]');expect(await page.locator('.arena').boundingBox()).toEqual(before);
   expect(await page.locator('#skill-popover').evaluate(el=>{const r=el.getBoundingClientRect();return r.left>=0&&r.top>=0&&r.right<=innerWidth&&r.bottom<=innerHeight&&el.scrollHeight<=el.clientHeight+1;})).toBe(true);
   await page.screenshot({path:info.outputPath('floating-skill.png')});await page.locator('[data-ui=skill-close]').click();await page.locator('#target-brute').click();await finish(page);await owner(page,'weaver');
-  await cast(page,'weaver','ward','weaver');await finish(page);await owner(page,'guardian');await page.locator('#action-guard').click();await page.locator('[data-ui=skill-close]').click();
+  await cast(page,'weaver','ward','weaver');await finish(page);await owner(page,'guardian');await page.locator('#action-guard').click();await page.locator('#skill-details').click();await page.locator('[data-ui=skill-close]').click();
   const positions=await page.locator('#field-targets button').evaluateAll(es=>es.map(el=>{const r=el.getBoundingClientRect();return{id:(el as HTMLElement).dataset.actor!,x:r.x,y:r.y,w:r.width,h:r.height,bottom:r.bottom};}));
   expect(positions).toHaveLength(4);if(viewport.width<=600&&viewport.height>=viewport.width)for(const [i,a]of positions.entries())for(const b of positions.slice(i+1))expect(a.x<b.x+b.w&&b.x<a.x+a.w&&a.y<b.y+b.h&&b.y<a.y+a.h).toBe(false);
   const field=(await page.locator('#game canvas').boundingBox())!;for(const r of positions){expect(r.w).toBeGreaterThanOrEqual(44);expect(r.h).toBeGreaterThanOrEqual(44);expect((r.bottom-field.y)/field.height).toBeGreaterThan(.4);}
@@ -187,12 +187,14 @@ for(const viewport of [{width:320,height:568},{width:360,height:640},{width:375,
   await fits(['heal','prayer']);expect(issues).toEqual([]);await context.close();
  });
 }
-test('phone rotation and simulated safe areas retain the owner, skill and visible timeline',async({browser},info)=>{
+test('phone rotation gates input and preserves the selected skill and owner on returning to portrait',async({browser},info)=>{
  const context=await browser.newContext({viewport:{width:390,height:844},hasTouch:true,reducedMotion:'reduce'}),page=await context.newPage(),issues=await start(page);
- await page.locator('#action-mark').tap();for(const viewport of [{width:844,height:390},{width:1366,height:768},{width:390,height:640}]){
-  await page.setViewportSize(viewport);await expect(page.locator('#action-mark')).toHaveAttribute('aria-pressed','true');await owner(page,'tracer');await reachable(page,'[data-ui=skill-close]');await expect(page.locator('#turn-order')).toBeVisible();
- }
- await page.locator('[data-ui=skill-close]').tap();await page.addStyleTag({content:'#app {padding-top:20px;padding-bottom:34px;}'});await reachable(page,'#action-mark');await reachable(page,'#target-brute');
+ await page.locator('#action-mark').tap();const before=await count(page);
+ await page.setViewportSize({width:844,height:390});await expect(page.locator('#orientation-gate')).toBeVisible();
+ await page.keyboard.press('3');await page.keyboard.press('Escape');await expect(page.locator('#orientation-gate')).toBeVisible();expect(await count(page)).toBe(before);
+ await page.setViewportSize({width:390,height:640});await expect(page.locator('#orientation-gate')).not.toBeVisible();
+ await expect(page.locator('#action-mark')).toHaveAttribute('aria-pressed','true');await owner(page,'tracer');await expect(page.locator('#turn-order')).toBeVisible();
+ await page.addStyleTag({content:'#battle-view {padding-top:20px;padding-bottom:34px;}'});await reachable(page,'#action-mark');await reachable(page,'#target-brute');
  await page.locator('#target-brute').click();await finish(page);await owner(page,'weaver');expect(await page.evaluate(()=>scrollY)).toBe(0);await page.screenshot({path:info.outputPath('rotated-safe-area.png')});expect(issues).toEqual([]);await context.close();
 });
 test('a fallen upcoming hero is skipped on commit, reload and continued input',async({page})=>{
@@ -242,7 +244,7 @@ test('ordinary battles show no teaching strip or tutorial setting',async({page})
 test('round cooldown can be inspected but never cast; the intervening actors do not refresh it',async({page})=>{
  const moves:readonly Move[]=[['tracer','execute','brute'],['weaver','ward','weaver'],['guardian','guard','weaver'],['healer','heal','guardian']];
  await seed(page,veilSiege,moves);const issues=await start(page);await owner(page,'tracer');await expect(page.locator('#beat-status')).toContainText('รอบ 2');
- await page.locator('#action-execute').click();await expect(page.locator('#skill-availability')).toContainText('พร้อมใน 1 รอบ');await page.locator('[data-ui=skill-close]').click();await expect(page.locator('#target-brute')).toBeDisabled();
+ await page.locator('#action-execute').click();await page.locator('#skill-details').click();await expect(page.locator('#skill-availability')).toContainText('พร้อมใน 1 รอบ');await page.locator('[data-ui=skill-close]').click();await expect(page.locator('#target-brute')).toBeDisabled();
  await page.locator('#target-brute').evaluate(el=>el.dispatchEvent(new MouseEvent('click',{bubbles:true})));expect(await count(page)).toBe(4);
  await cast(page,'tracer','attack','brute');await finish(page);await owner(page,'weaver');expect(issues).toEqual([]);
 });
@@ -290,7 +292,7 @@ test('pulsing target rings stay centred on their fighters with motion enabled',a
  const context=await browser.newContext({viewport:{width:430,height:932},deviceScaleFactor:3,hasTouch:true,isMobile:true,reducedMotion:'no-preference'});
  const page=await context.newPage();watchPage(page);const issues=await start(page);
  for(const action of ['attack']){
-  await page.locator(`#action-${action}`).click();await page.locator('[data-ui=skill-close]').click().catch(()=>{});
+  await page.locator(`#action-${action}`).click();await page.locator('#skill-details').click();await page.locator('[data-ui=skill-close]').click().catch(()=>{});
   const rings=await page.evaluate(()=>[...document.querySelectorAll<HTMLElement>('.field-target.valid-target')].map(b=>{const r=b.getBoundingClientRect(),s=getComputedStyle(b,'::before');
    const w=parseFloat(s.width),left=parseFloat(s.marginLeft)+parseFloat(s.left);const t=new DOMMatrix(s.transform==='none'?undefined:s.transform);
    return {button:r.width/2,ring:left+w/2+t.m41};}));
@@ -315,9 +317,9 @@ test('★3/★5 members: four command buttons fit phones and the ★3 skill cast
   const buttons=page.locator('.actions .action');await expect(buttons).toHaveCount(4);
   for(const b of await buttons.all()){const r=(await b.boundingBox())!;expect(r.width).toBeGreaterThanOrEqual(44);expect(r.height).toBeGreaterThanOrEqual(44);expect(r.x+r.width).toBeLessThanOrEqual(width);}
   expect(await page.evaluate(()=>document.scrollingElement!.scrollHeight<=innerHeight)).toBe(true);
-  await page.locator('#action-mark').click();await expect(page.locator('#skill-popover')).toContainText('ตาเหยี่ยว');await page.locator('[data-ui=skill-close]').click();
+  await page.locator('#action-mark').click();await page.locator('#skill-details').click();await expect(page.locator('#skill-popover')).toContainText('ตาเหยี่ยว');await page.locator('[data-ui=skill-close]').click();
   await page.screenshot({path:info.outputPath(`star-skills-${width}.png`)});
-  await page.locator('#action-finisher').click();await page.locator('[data-ui=skill-close]').click();await page.locator('#target-raider').click();await finish(page);
+  await page.locator('#action-finisher').click();await page.locator('#skill-details').click();await page.locator('[data-ui=skill-close]').click();await page.locator('#target-raider').click();await finish(page);
   await expect(page.locator('[data-enemy=raider]')).not.toContainText('78 / 78');
   await context.close();
  }

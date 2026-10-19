@@ -1,3 +1,4 @@
+import { shortcutBlocked } from '../platform/keyboard';
 import type { BattleState, Outcome } from '../core/battle/types';
 import { clearLegacySaves, loadGame, saveGame, type Game } from '../core/save/expedition-save';
 import { createCommander, depart, brew, buy, claimQuest, refreshBoard, dismiss, equip, hire, learnTalent, newProfile, placeMember, resetTalents, salvage, settle, unequip, upgrade, canWithdraw } from '../core/world/profile';
@@ -93,6 +94,20 @@ export class GameShell {
     root.addEventListener('input', e => { const t = e.target as HTMLInputElement; if (t.matches('[data-music-volume]')) this.music.setVolume(Number(t.value) / 100); if (t.matches('[data-sfx-volume]')) { sfx.setVolume(Number(t.value) / 100); sfx.play('click'); } if (t.matches('[data-music-volume]') || t.matches('[data-sfx-volume]')) this.refreshMusicControls(); });
     this.root.querySelector('#battle-sfx-controls')!.innerHTML = this.musicControls('battle-');
     this.showTitle();
+    document.addEventListener('keydown', e => {
+      if (shortcutBlocked(e) || this.story.open || root.querySelector('.summary-view:not([hidden])')) return;
+      const view = root.dataset.view;
+      const bag = e.code === 'KeyB' || e.key.toLowerCase() === 'b';
+      const info = e.code === 'KeyI' || e.key.toLowerCase() === 'i';
+      const buttonId = bag && view === 'world' ? 'world-pack' : info && view === 'world' ? 'world-info-button' : info && view === 'battle' ? 'battle-info' : undefined;
+      const dialogId = bag && view === 'world' ? 'pack-dialog' : info && view === 'world' ? 'world-info' : info && view === 'battle' ? 'game-info' : undefined;
+      if (!buttonId || !dialogId) return;
+      const modal = document.querySelector<HTMLDialogElement>('dialog[open]');
+      if (modal && modal.id !== dialogId) return;
+      e.preventDefault();
+      if (modal) modal.close(); else root.querySelector<HTMLButtonElement>(`#${buttonId}`)?.click();
+    });
+    for (const [id, key] of [['world-pack', 'B'], ['world-info-button', 'I'], ['battle-info', 'I']]) root.querySelector(`#${id}`)?.setAttribute('aria-keyshortcuts', key!);
   }
   private refreshMusicControls(): void {
     const p = this.music.settings;
