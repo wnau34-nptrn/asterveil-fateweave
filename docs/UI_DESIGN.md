@@ -1,5 +1,11 @@
 # Modern battle HUD design spec
 
+## Storage phase 3 — 2026-10-20
+
+Camp bag exposes Inventory / Pending source buttons with current counts. Pending rewards persist; a clearly placed camp call-to-action explains why departure waits. Collect selected items or review recycling; never silently discard excess loot. Show item name/Lv/+/set/stat details and protection state. Lock/paid gear can be collected but cannot enter bulk recycling. Individual existing equipment/forge routes remain available once stored.
+
+Permanent expansion lives in a disclosure with current gold, added capacity, exact price and a separate confirmation. Keeper quests and character selection remain explicit disclosures so items have space. Bulk review shows the exact destroyed/collected UID list, totals and remaining wallet. The long list scrolls independently of confirm/cancel, including 56-item reviews at 320px. Selection/filter changes cancel review; a source-profile change clears stale selections. Held-key, modal and landscape inert guards still apply.
+
 ## Forge phase 2 — 2026-10-20
 
 Develop now has four 44px modes in a 2×2 grid: Enhance / Item Lv / Fuse / Reroll. Item Lv shares the exact target/cost/stat/skill preview and review/confirm flow. Show the permanent area cap and named unlock milestones; never use hero level as the cap. Preserve target on picker return. Review hides secondary selection controls to retain a reachable footer at 320px.

@@ -41,7 +41,7 @@ it('preserves the paid ledger through full-plus fusion and excludes zero-plus in
 it('round-trips locks and exact credits through departure, run item ownership and v23 persistence',()=>{
   let p=lockEquipment(enhanceTo(setup(),map,1,3).profile,1).profile;p=equip(p,'guardian',1).profile;
   const game=depart(p,map,lookup,23);let raw='';saveGame({getItem:()=>null,setItem:(_k,s)=>{raw=s;}},game);
-  expect(JSON.parse(raw).version).toBe(23);const back=parseGame(raw,map,lookup);expect(back).toEqual(game);
+  expect(JSON.parse(raw).version).toBe(24);const back=parseGame(raw,map,lookup);expect(back).toEqual(game);
   const changed=JSON.parse(raw);changed.run.members.guardian.gear.body.investment.ore++;expect(()=>parseGame(JSON.stringify(changed),map,lookup)).toThrow();
   const legacy=JSON.parse(raw);legacy.version=21;delete legacy.profile.members.guardian.gear.body.investment;delete legacy.run.members.guardian.gear.body.investment;
   const migrated=parseGame(JSON.stringify(legacy),map,lookup);expect(migrated.run!.members.guardian!.gear).toEqual(migrated.profile.members.guardian!.gear);
@@ -50,7 +50,7 @@ it('rejects malformed ledgers/locks and preserves locked equipment when dismissi
   const ids=Object.keys(setup().members);
   for(const patch of [{locked:false},{investment:{ore:-1,dust:0}},{investment:{ore:1.5,dust:0}},{investment:{ore:0,dust:0,extra:1}},{investment:null}])expect(itemValid(map,{...item(1),...patch} as Item,ids)).toBe(false);
   let p=setup();p=equip(lockEquipment(p,1).profile,'tracer',1).profile;p.items=Array.from({length:map.equipment.bagCap},(_,i)=>item(i+5));p.nextItem=100;
-  expect(dismiss(p,map,'tracer').profile).toBe(p);
+  expect(dismiss(p,map,'tracer').profile.overflow).toEqual([expect.objectContaining({uid:1,locked:true})]);
   p.items.pop();const out=dismiss(p,map,'tracer').profile;expect(out.items.some(i=>i.uid===1&&i.locked)).toBe(true);expect(out.items).toHaveLength(map.equipment.bagCap);
 });
 

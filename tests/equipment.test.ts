@@ -160,7 +160,7 @@ describe('lobby: bag, equip, salvage, settle', () => {
     expect(settle(newProfile(map, 1), { ...run, found: [] }, 'wiped', map).items).toEqual([]);
     const full = { ...newProfile(map, 1), items: Array.from({ length: rules.bagCap - 1 }, (_, i) => item({ uid: i + 1 })), nextItem: rules.bagCap };
     const over = settle(full, run, 'complete', map);
-    expect(over.items).toHaveLength(rules.bagCap); expect(over.last).toMatchObject({ items: 1, salvaged: 1 }); expect(over.bank.dust).toBe(rules.salvage[0]!.dust);
+    expect(over.items).toHaveLength(rules.bagCap); expect(over.last).toMatchObject({ items: 2, salvaged: 0 }); expect(over.overflow).toHaveLength(1); expect(over.bank.dust).toBe(0);
   });
   it('equip swaps with the slot, weapons only fit their class, unequip needs bag space, salvage pays ore and dust', () => {
     let p = withBag(item({ uid: 5, slot: 'weapon', hero: 'tracer' }), item({ uid: 6 }), item({ uid: 7, rarity: 2, affixes: ['hp', 'armour'] }));

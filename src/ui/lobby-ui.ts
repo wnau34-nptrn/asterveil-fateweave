@@ -1,3 +1,5 @@
+import {StorageManager} from './storage-manager';
+import {storageCap,departureBlocked,type StorageSource} from '../core/world/storage';
 import { ForgeWorkbench } from './forge-workbench';
 import { CharacterPanel, type CharacterModel } from './character-panel';
 import type { CharacterTab } from './character-view';
@@ -19,6 +21,7 @@ import { skillDescription, heroText, npcText, rewardText, shopText, sideQuestTex
 import { portrait, starRow } from './portraits';
 
 export interface LobbyHost { autoEquip(plan: AutoEquipmentPlan): void; hire(index: number): void; refresh(): void; buy(item: ShopItemId, heroId?: string): void; smelt(dust: number): void; upgrade(id: string): void; dismiss(id: string): void; place(id: string, group: Group, other?: string): void; talent(id: string, node: TalentNode): void; resetTalents(id: string): void;
+  collect(ids:number[]):void; recycleStored(source:StorageSource,ids:number[]):void; expandStorage():void;
   equip(id: string, uid: number): void; unequip(id: string, slot: GearSlot): void; salvage(uids: number[]): void;
   enhance(uid: number, target: number): void; lock(uid:number):void; fuse(uid: number, donors:number[]): void; level(uid:number,target:number):void; reroll(uid: number, index: number): void; brew(potion: PotionId): void; claim(questId: string): void; depart(): void; home(): void }
 // `npcCheer`: the camp NPC whose service just succeeded (plays its cheer once).
@@ -44,6 +47,7 @@ export class LobbyUI {
   // The equipment sheet (2D-2) works the same way.
   // The forge (2D-4) is a third menu sheet.
   private sheet: 'team' | 'hire' | 'tree' | 'gear' | 'forge' | 'brew' | null = null;
+  private readonly storageUI:StorageManager;
   private readonly forgeUI:ForgeWorkbench;
   private forgeReturn:string|undefined;
   private readonly inventoryFilters = newGearFilters();
@@ -58,7 +62,7 @@ export class LobbyUI {
   // The hiring offer being previewed (stats, skills and star unlocks) before hiring.
   private preview: number | undefined;
   constructor(private readonly root: HTMLElement, private readonly map: MapDefinition, private readonly lookup: EncounterLookup, private readonly heroes: readonly HeroDefinition[], private readonly host: LobbyHost) {
-    this.build();
+    this.build();this.storageUI=new StorageManager(map,host);
     this.forgeUI=new ForgeWorkbench(map,heroes,lookup(map.tutorialEncounterId)!,{...host,quest:()=>this.questCard('smith')});
     this.characters=new CharacterPanel(root,map,heroes,lookup(map.tutorialEncounterId)!,{
       model:()=>this.characterModel(),
@@ -67,14 +71,14 @@ export class LobbyUI {
       wear:(id,key)=>{const entry=this.view&&campEquipment(this.view.profile).find(e=>e.key===key);if(entry)this.host.equip(id,entry.item.uid);},
       takeOff:(id,slot)=>this.host.unequip(id,slot),talent:(id,node)=>this.host.talent(id,node),reset:id=>this.host.resetTalents(id),applyPlan:plan=>this.host.autoEquip(plan),forge:(id,uid)=>{this.forgeReturn=id;this.sheet='forge';this.forgeUI.open(uid);this.draw();this.focus('#forge-change-item');},
     },'camp-',this.inventoryFilters);
-    root.addEventListener('change',event=>{const c=event.target as HTMLInputElement|HTMLSelectElement;if(c.closest('.forge-workbench')&&!root.hidden&&!root.closest('[inert]')&&!this.characters.open){this.forgeUI.remember(c.closest<HTMLElement>('.forge-workbench')!);const focus=this.forgeUI.change(c);this.draw();this.focus('#'+focus);return;}if(c.closest('.character-dialog')||!c.dataset.gearFilter||root.hidden||root.closest('[inert]')||this.characters.open)return;changeGearFilter(this.inventoryFilters,c);this.draw();this.focus('#'+c.id);});
-    root.addEventListener('keydown',e=>{if(root.hidden||root.closest('[inert]'))return;const tab=(e.target as HTMLElement).closest<HTMLButtonElement>('.forge-tabs [role=tab]');if(tab&&['ArrowLeft','ArrowRight','Home','End'].includes(e.key)){e.preventDefault();const buttons=[...root.querySelectorAll<HTMLButtonElement>('.forge-tabs [role=tab]')],i=buttons.indexOf(tab),n=e.key==='Home'?0:e.key==='End'?buttons.length-1:(i+(e.key==='ArrowRight'?1:-1)+buttons.length)%buttons.length;buttons[n]!.click();this.focus('#'+buttons[n]!.id);return;}if(e.repeat&&(e.target as HTMLElement).closest('[data-forge=review],[data-forge=confirm],[data-lobby=salvage]'))e.preventDefault();});
+    root.addEventListener('change',event=>{const c=event.target as HTMLInputElement|HTMLSelectElement;if(c.closest('.forge-workbench')&&!root.hidden&&!root.closest('[inert]')&&!this.characters.open){this.forgeUI.remember(c.closest<HTMLElement>('.forge-workbench')!);const focus=this.forgeUI.change(c);this.draw();this.focus('#'+focus);return;}if(c.dataset.gearFilter)this.storageUI.reset();if(c.closest('.character-dialog')||!c.dataset.gearFilter||root.hidden||root.closest('[inert]')||this.characters.open)return;changeGearFilter(this.inventoryFilters,c);this.draw();this.focus('#'+c.id);});
+    root.addEventListener('keydown',e=>{if(root.hidden||root.closest('[inert]'))return;const tab=(e.target as HTMLElement).closest<HTMLButtonElement>('.forge-tabs [role=tab]');if(tab&&['ArrowLeft','ArrowRight','Home','End'].includes(e.key)){e.preventDefault();const buttons=[...root.querySelectorAll<HTMLButtonElement>('.forge-tabs [role=tab]')],i=buttons.indexOf(tab),n=e.key==='Home'?0:e.key==='End'?buttons.length-1:(i+(e.key==='ArrowRight'?1:-1)+buttons.length)%buttons.length;buttons[n]!.click();this.focus('#'+buttons[n]!.id);return;}if(e.repeat&&(e.target as HTMLElement).closest('[data-forge=review],[data-forge=confirm],[data-lobby=salvage],[data-storage=confirm],[data-storage=collect],[data-storage=recycle],[data-storage=expand],[data-storage=common]'))e.preventDefault();});
     this.startWork();
     // Escape closes the sheet even after a redraw moved focus out of it (only while the lobby shows).
     root.ownerDocument.addEventListener('keydown', e => { if (!shortcutBlocked(e) && e.key === 'Escape' && this.sheet && !root.hidden && !this.characters.open) { e.preventDefault(); this.closeSheet(); } });
     root.addEventListener('click', e => {
       if(root.hidden||root.closest('[inert]')||this.characters.open)return;
-      const el=e.target as HTMLElement;const forgeButton=el.closest<HTMLButtonElement>('button');if(forgeButton?.closest('.forge-workbench')&&(forgeButton.dataset.forge||forgeButton.hasAttribute('data-gear-reset'))){if(forgeButton.hasAttribute('data-gear-reset'))forgeButton.dataset.forge='reset';this.forgeUI.remember(forgeButton.closest<HTMLElement>('.forge-workbench')!);const focus=this.forgeUI.click(forgeButton,this.view!.profile);if(focus){this.draw();this.focus('#'+focus);}return;}if(el.closest('[data-gear-reset]')){Object.assign(this.inventoryFilters,newGearFilters());this.draw();this.focus('#camp-inventory-gear-filter-set');return;}
+      const el=e.target as HTMLElement;const storageButton=el.closest<HTMLButtonElement>('button[data-storage]');if(storageButton){const focus=this.storageUI.click(storageButton,this.view!.profile);this.draw();this.focus('#'+focus);return;}const forgeButton=el.closest<HTMLButtonElement>('button');if(forgeButton?.closest('.forge-workbench')&&(forgeButton.dataset.forge||forgeButton.hasAttribute('data-gear-reset'))){if(forgeButton.hasAttribute('data-gear-reset'))forgeButton.dataset.forge='reset';this.forgeUI.remember(forgeButton.closest<HTMLElement>('.forge-workbench')!);const focus=this.forgeUI.click(forgeButton,this.view!.profile);if(focus){this.draw();this.focus('#'+focus);}return;}if(el.closest('[data-gear-reset]')){this.storageUI.reset();Object.assign(this.inventoryFilters,newGearFilters());this.draw();this.focus('#camp-inventory-gear-filter-set');return;}
       const b = el.closest<HTMLButtonElement>('button[data-lobby]');
       if (!b || b.disabled) return;
       const id = b.dataset.hero;
@@ -118,7 +122,8 @@ export class LobbyUI {
 
 
 
-        case 'salvage-common': this.host.salvage(this.view!.profile.items.filter(i => i.rarity === 0 && !i.locked && !i.plus && !i.investment&&!i.levelInvestment).map(i => i.uid)); this.focus('#lobby-sub-back'); break;
+
+        case 'overflow': Object.assign(this.inventoryFilters,newGearFilters());this.storageUI.openOverflow();this.sheet='gear';this.picked=this.view!.profile.party.deployed[0];this.draw();this.focus('#storage-source-overflow');break;
         case 'depart': this.host.depart(); break;
         case 'home': this.host.home(); break;
         case 'pan': { const pan = this.root.querySelector<HTMLElement>('.lobby-pan')!; pan.scrollBy({ left: Number(b.dataset.dir) * pan.clientWidth * .8, behavior: this.reduced() ? 'auto' : 'smooth' }); break; }
@@ -182,7 +187,7 @@ export class LobbyUI {
     const pan = this.root.querySelector<HTMLElement>('.lobby-pan'); if (!pan) return;
     pan.scrollLeft = (pan.scrollWidth - pan.clientWidth) / 2;
   }
-  private closeSheet(): void { this.preview = undefined; const was = this.sheet; this.forgeUI.cancelReview(); this.sheet = null; this.picked = undefined; this.confirmDismiss = false; this.draw(); if(was==='forge'&&this.forgeReturn){const id=this.forgeReturn;this.forgeReturn=undefined;this.characters.openFor(id,'gear',this.root.querySelector<HTMLButtonElement>('#lobby-tab-forge')!);return;} if (was) this.focus(`#lobby-tab-${was}`); }
+  private closeSheet(): void { this.preview = undefined; const was = this.sheet; this.forgeUI.cancelReview();this.storageUI.reset(); this.sheet = null; this.picked = undefined; this.confirmDismiss = false; this.draw(); if(was==='forge'&&this.forgeReturn){const id=this.forgeReturn;this.forgeReturn=undefined;this.characters.openFor(id,'gear',this.root.querySelector<HTMLButtonElement>('#lobby-tab-forge')!);return;} if (was) this.focus(`#lobby-tab-${was}`); }
   render(view: LobbyView): void {
     const cheer = view.npcCheer && view !== this.view ? view.npcCheer : undefined;
     this.view = view;
@@ -193,7 +198,7 @@ export class LobbyUI {
   }
   private characterModel(p=this.view?.profile):CharacterModel|undefined {
     if(!p)return;const hp=Object.fromEntries(p.company.map(id=>{const m=p.members[id]!,base=this.heroes.find(h=>h.id===id)!;return [id,starred(base,m.stars,this.map,m.level??1,m.talents,m.gear).maxHp];}));
-    return {source:p,state:{members:p.members,roster:p.party,hp},ids:p.company,entries:campEquipment(p),available:true,camp:true};
+    return {source:p,state:{members:p.members,roster:p.party,hp},ids:p.company,entries:campEquipment(p),available:true,camp:true,capacity:storageCap(p,this.map)};
   }
   private escape(text: string): string { return text.replace(/[&<>"]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[ch]!); }
   private focus(sel: string): void { this.root.querySelector<HTMLElement>(sel)?.focus({ preventScroll: true }); }
@@ -217,7 +222,7 @@ export class LobbyUI {
   private toastShown = '';
   private draw(): void {
     const p = this.view!.profile; const last = p.last;
-    const ready = p.party.deployed.length > 0;
+    const ready = p.party.deployed.length > 0&&!departureBlocked(p);
     // A notice toasts once; redraws (tab switches, picks) keep it settled instead of replaying it.
     const notice = last ? `${last.outcome}:${last.steps}:${last.ore}:${p.expeditions}` : this.view!.message;
     const toast = notice && notice !== this.toastShown ? 'toast-new' : 'toast-seen'; this.toastShown = notice;
@@ -235,12 +240,13 @@ export class LobbyUI {
       <header class="lobby-top"><button data-lobby="home" class="round-glass" aria-label="กลับหน้าแรก">${icon('left')}</button>${this.musicButton()}
         ${p.commander ? commanderBadge(p.commander) : ''}<div class="lobby-who"><p class="eyebrow">ค่ายทหารรับจ้าง · ${this.view!.saved ? 'บันทึกอัตโนมัติ' : 'บันทึกบนเครื่องนี้ไม่ได้'}</p><h1 id="lobby-commander">${p.commander ? this.escape(p.commander.name) : 'เตรียมทีมก่อนออกเดินทาง'}</h1></div>
         <div class="lobby-bank" aria-label="คลัง เหรียญทอง ${p.bank.gold} แร่ดาว ${p.bank.ore} ตราสัญญา ${p.bank.seal} ฝุ่นดาว ${p.bank.dust}"><span class="glass-capsule" data-bank="gold">${icon('gold')}<b>${p.bank.gold}</b></span><span class="glass-capsule" data-bank="ore">${icon('ore')}<b>${p.bank.ore}</b></span><span class="glass-capsule">${icon('seal')}<b>${p.bank.seal}</b></span><span class="glass-capsule">${icon('dust')}<b>${p.bank.dust}</b></span></div></header>
+      ${p.overflow?.length?`<button id="lobby-overflow" data-lobby="overflow" class="secondary storage-notice">ของรอจัด ${p.overflow.length} ชิ้น · เปิดถาดก่อนออกเดินทาง</button>`:""}
       ${last ? `<p class="lobby-result glass-capsule ${toast}" data-outcome="${last.outcome}" role="status">${icon(last.outcome === 'wiped' ? 'danger' : last.outcome === 'complete' ? 'star' : 'camp')}<span><b>${outcomeText[last.outcome]}</b> · เดิน ${last.steps} ก้าว ชนะ ${last.wins} ศึก · ได้แร่ดาว ${last.ore}${last.gold ? ` เหรียญทอง ${last.gold}` : ''}${last.seal ? ` ตราสัญญา ${last.seal}` : ''}${last.outcome === 'wiped' ? ' (เก็บได้ครึ่งเดียว)' : ''}${last.items ? ` · อุปกรณ์ ${last.items} ชิ้น` : ''}${last.salvaged ? ` (คลังเต็ม แยกชิ้นอัตโนมัติ ${last.salvaged})` : ''}</span></p>`
         : this.view!.message ? `<p class="lobby-result glass-capsule ${toast}" role="status"><span>${this.view!.message}</span></p>` : ''}
       ${this.sheet ? `<section id="lobby-sheet" class="lobby-sheet" role="dialog" aria-modal="false" aria-labelledby="lobby-sheet-title">
-        <div class="lobby-sheet-head">${this.sheet === 'tree' || this.sheet === 'gear' ? `<button id="lobby-sub-back" data-lobby="sub-back" class="round-glass" aria-label="กลับไปจัดทีม">${icon('left')}</button>` : ''}<h2 id="lobby-sheet-title">${this.sheet === 'team' ? `${icon('flag')} จัดทีม <small>${p.company.length}/${COMPANY_CAP}</small>` : this.sheet === 'tree' ? `${icon('starFilled')} ต้นไม้ความถนัด` : this.sheet === 'gear' ? `${icon('gearBody')} อุปกรณ์ <small>คลัง ${p.items.length}/${this.map.equipment.bagCap}</small>` : this.sheet === 'forge' ? `${icon('forge')} ช่างตีเหล็ก` : this.sheet === 'brew' ? `${icon('brew')} นักปรุงยา` : `${icon('gold')} ป้ายจ้างทหารรับจ้าง`}</h2>
+        <div class="lobby-sheet-head">${this.sheet === 'tree' || this.sheet === 'gear' ? `<button id="lobby-sub-back" data-lobby="sub-back" class="round-glass" aria-label="กลับไปจัดทีม">${icon('left')}</button>` : ''}<h2 id="lobby-sheet-title">${this.sheet === 'team' ? `${icon('flag')} จัดทีม <small>${p.company.length}/${COMPANY_CAP}</small>` : this.sheet === 'tree' ? `${icon('starFilled')} ต้นไม้ความถนัด` : this.sheet === 'gear' ? `${icon('gearBody')} อุปกรณ์ <small>คลัง ${p.items.length}/${storageCap(p,this.map)}</small>` : this.sheet === 'forge' ? `${icon('forge')} ช่างตีเหล็ก` : this.sheet === 'brew' ? `${icon('brew')} นักปรุงยา` : `${icon('gold')} ป้ายจ้างทหารรับจ้าง`}</h2>
           <button data-lobby="close" class="round-glass" aria-label="ปิด">${icon('close')}</button></div>
-        <div class="lobby-content">${this.sheet==='forge'?'':this.npcLine(this.sheet as Sheet | null)}${this.sheet === 'team' ? this.team(p) : this.sheet === 'gear' && this.picked ? this.gear(p, this.picked) : this.sheet === 'forge' ? this.forge(p) : this.sheet === 'brew' ? this.brewing(p) : this.board(p)}</div></section>` : ''}
+        <div class="lobby-content">${this.sheet==='forge'?'':this.sheet==='gear'?`<details class="storage-keeper"><summary>มิมี่ · งานผู้ดูแลคลัง</summary>${this.npcLine(this.sheet)}</details>`:this.npcLine(this.sheet as Sheet | null)}${this.sheet === 'team' ? this.team(p) : this.sheet === 'gear' && this.picked ? this.gear(p, this.picked) : this.sheet === 'forge' ? this.forge(p) : this.sheet === 'brew' ? this.brewing(p) : this.board(p)}</div></section>` : ''}
       <footer class="lobby-bottom">
         <nav class="lobby-menu" aria-label="ค่าย">${menu('team', 'flag', 'ทีม', `${p.party.deployed.length}+${p.party.reserve.length}`)}${menu('hire', 'gold', 'จ้าง', openOffers ? String(openOffers) : '')}${menu('gear', 'pack', 'กระเป๋า', p.items.length ? String(p.items.length) : '')}${menu('forge', 'forge', 'ช่าง', '')}${menu('brew', 'brew', 'ยา', '')}</nav>
         <button id="lobby-depart" data-lobby="depart" class="primary"${ready ? '' : ' disabled'}>${icon('map')}<span>ออกเดินทาง<small>${this.map.name} · ${p.party.deployed.length}+${p.party.reserve.length} คน</small></span></button>
@@ -292,10 +298,10 @@ export class LobbyUI {
     const why: Record<string, string> = { maxed: 'ดาวเต็มแล้ว', dupes: 'ตัวซ้ำไม่พอ', ore: 'แร่ดาวไม่พอ' };
     const label = !cost ? 'ดาวเต็มแล้ว' : reason ? `${why[reason]} · ★${m.stars + 1} ใช้ตัวซ้ำ ${need}${cost.seals ? ` (ตราแทนได้ ${sealLimit(this.map, m.stars)})` : ''} แร่ ${cost.ore}`
       : `อัปเป็น ★${m.stars + 1} · ตัวซ้ำ ${cost.dupes}${cost.seals ? ` + ตรา ${cost.seals}` : ''} · แร่ ${cost.ore}`;
-    const last = dismissReason(p, id) === 'last',lockedFull=Object.values(m.gear??{}).filter(i=>i?.locked).length>Math.max(0,this.map.equipment.bagCap-p.items.length);
+    const last = dismissReason(p, id) === 'last';
     return `<div class="member-panel" aria-live="polite"><p><b>${heroText[id]!.name}</b> ${this.stars(m.stars)} <span>Lv${m.level ?? 1}${(m.level ?? 1) < this.map.progression.levelCap ? ` · EXP ${m.exp ?? 0}/${expToNext(this.map, m.level ?? 1)}` : ' · เลเวลสูงสุด'} · ตัวซ้ำที่เก็บไว้ ${m.dupes}</span></p><div class="member-subs character-links"><button id="lobby-character-open" data-lobby="character" data-tab="overview" class="secondary">ดูตัวละคร</button><button id="lobby-skills-open" data-lobby="character" data-tab="skills" class="secondary">สกิล</button>${this.treeButton(p, id)}${this.gearButton(p, id)}</div>
       <div class="member-actions"><button id="lobby-upgrade" data-lobby="upgrade" class="primary"${reason ? ' disabled' : ''}>${label}</button>
-      <button id="lobby-dismiss" data-lobby="dismiss" class="danger-button"${last||lockedFull ? ' disabled' : ''}>${lockedFull?'เคลียร์คลังเพื่อเก็บของล็อกก่อน':last ? 'ต้องมีคนลงสนาม 1 คน' : this.confirmDismiss ? `ยืนยันเลิกจ้าง · ดาวหาย +${this.map.company.dismissRefund} เหรียญทอง` : 'เลิกจ้าง'}</button></div></div>`;
+      <button id="lobby-dismiss" data-lobby="dismiss" class="danger-button"${last ? ' disabled' : ''}>${last ? 'ต้องมีคนลงสนาม 1 คน' : this.confirmDismiss ? `ยืนยันเลิกจ้าง · ดาวหาย +${this.map.company.dismissRefund} เหรียญทอง` : 'เลิกจ้าง'}</button></div></div>`;
   }
   // What ★3 (a third skill) and ★5 (a passive) unlock for this class, and whether they are open yet.
   private unlocks(id: string, stars: number): string {
@@ -317,11 +323,13 @@ export class LobbyUI {
   }
   // Equipment sheet (2D-2): member picker, six slots, then the bag (filtered by the chosen slot) with equip and salvage.
   private gear(p: Profile, id: string): string {
-    const all=campEquipment(p),entries=filteredEquipment(all,this.inventoryFilters),pick=all.find(e=>e.key===this.inventoryPick);
+    const all=this.storageUI.source==='bag'?campEquipment(p):(p.overflow??[]).map(item=>({key:'pending:'+item.uid,item,label:'รอจัดเข้าคลัง'})),entries=filteredEquipment(all,this.inventoryFilters),pick=all.find(e=>e.key===this.inventoryPick);
     const picker=pick?'<section class="inventory-pick"><h3>เลือกผู้สวมใส่: '+itemName(pick.item)+'</h3><div class="tree-members">'+p.company.map(c=>'<button id="camp-inventory-hero-'+c+'" data-lobby="inventory-character" data-hero="'+c+'" data-key="'+pick.key+'" class="tree-member"'+(pick.item.slot==='weapon'&&pick.item.hero!==c?' disabled':'')+'>'+portrait(c)+'<small>'+heroText[c]!.name+'</small></button>').join('')+'</div></section>':'';
-    const rows=entries.map(e=>{const i=e.item,v=salvageValue(this.map,i),confirm=this.confirmSalvage===i.uid;return `<li data-rarity="${i.rarity}" data-item-key="${e.key}">${gearArt(i)}<div><b>${itemName(i)} Lv${i.level}${i.locked?' · 🔒':''}</b><small>${itemLines(this.map.equipment,i).join(' · ')}</small><small>${itemOwner(i)}</small></div><span class="gear-actions"><button id="equip-${i.uid}" data-lobby="inventory-pick" data-key="${e.key}" class="secondary">ดู/เปรียบเทียบ</button><button id="forge-open-${i.uid}" data-lobby="forge-open" data-uid="${i.uid}" class="secondary">พัฒนา</button><button id="lock-${i.uid}" data-lobby="lock" data-uid="${i.uid}" class="secondary" aria-pressed="${!!i.locked}">${i.locked?'ปลดล็อก':'ล็อก'}</button><button id="salvage-${i.uid}" data-lobby="salvage" data-uid="${i.uid}" class="${confirm?'danger-button':'secondary'}"${i.locked?' disabled':''} aria-label="แยกชิ้น ได้แร่ ${v.ore} ผง ${v.dust}">${confirm?'ยืนยันแยก':'แยก'}</button>${confirm?`<small>รวมคืน แร่ ${v.ore} · ฝุ่น ${v.dust} · ชิ้นนี้จะหายไป</small>`:''}</span></li>`;}).join('');
-    const commons=p.items.filter(i=>i.rarity===0&&!i.locked&&!i.plus&&!i.investment&&!i.levelInvestment).length;
-    return '<h3>เปิดหน้าตัวละคร</h3>'+this.memberPicker(p,id,'gear',()=> '')+picker+'<h3>คลัง '+entries.length+'/'+p.items.length+' ชิ้น</h3>'+gearFilterControls(this.inventoryFilters,'camp-inventory-')+(rows?'<ul class="gear-bag inventory-gear">'+rows+'</ul>':'<p class="camp-note">ไม่พบอุปกรณ์ตามตัวกรอง</p>')+(commons?'<button id="salvage-common" data-lobby="salvage-common" class="secondary">แยกขั้นธรรมดาทั้งหมด ('+commons+' ชิ้น)</button>':'');
+    const manage=this.storageUI.render(p,entries.map(e=>e.item));if(manage.review)return manage.head;
+    const pending=this.storageUI.source==='overflow';
+    const rows=entries.map(e=>{const i=e.item,v=salvageValue(this.map,i),confirm=this.confirmSalvage===i.uid;return `<li data-rarity="${i.rarity}" data-item-key="${e.key}">${gearArt(i)}<div><b>${itemName(i)} Lv${i.level}${i.locked?' · 🔒':''}</b><small>${itemLines(this.map.equipment,i).join(' · ')}</small><small>${itemOwner(i)}</small></div><span class="gear-actions">${this.storageUI.row(i)}${pending?`<small>เก็บเข้าคลังก่อนสวมใส่/พัฒนา</small>`:`<button id="equip-${i.uid}" data-lobby="inventory-pick" data-key="${e.key}" class="secondary">ดู/เปรียบเทียบ</button><button id="forge-open-${i.uid}" data-lobby="forge-open" data-uid="${i.uid}" class="secondary">พัฒนา</button><button id="lock-${i.uid}" data-lobby="lock" data-uid="${i.uid}" class="secondary" aria-pressed="${!!i.locked}">${i.locked?'ปลดล็อก':'ล็อก'}</button><button id="salvage-${i.uid}" data-lobby="salvage" data-uid="${i.uid}" class="${confirm?'danger-button':'secondary'}"${i.locked?' disabled':''} aria-label="แยกชิ้น ได้แร่ ${v.ore} ผง ${v.dust}">${confirm?'ยืนยันแยก':'แยก'}</button>`}${confirm?`<small>รวมคืน แร่ ${v.ore} · ฝุ่น ${v.dust} · ชิ้นนี้จะหายไป</small>`:''}</span></li>`;}).join('');
+    const commons=entries.filter(e=>e.item.rarity===0&&!e.item.locked&&!e.item.plus&&!e.item.investment&&!e.item.levelInvestment).length;
+    return manage.head+'<details class="storage-characters"><summary>เปิดหน้าตัวละคร</summary>'+this.memberPicker(p,id,'gear',()=> '')+'</details>'+picker+'<h3>คลัง '+entries.length+'/'+(pending?(p.overflow?.length??0):p.items.length)+' ชิ้น</h3>'+gearFilterControls(this.inventoryFilters,'camp-inventory-')+(rows?'<ul class="gear-bag inventory-gear">'+rows+'</ul>':'<p class="camp-note">ไม่พบอุปกรณ์ตามตัวกรอง</p>')+(!pending&&commons?'<button id="salvage-common" data-storage="common" class="secondary">ตรวจแยกธรรมดาที่แสดง ('+commons+' ชิ้น)</button>':'');
   }
   // Map potions (2D-5): brew for ore and veil dust; each departure packs up to `carry` of each.
   private brewing(p: Profile): string {
