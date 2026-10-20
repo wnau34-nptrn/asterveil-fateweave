@@ -36,6 +36,11 @@ The owner chose a mobile portrait game that also plays on PC. This replaces earl
 - `core/save` accepts an injected storage port and validates saves by command replay. `platform/browser-storage` handles browser API access.
 - CSS tokens (`src/ui/tokens.css`, Luminous Veil) define the navy-glass HUD; self-hosted OFL subset fonts Kanit/Noto Sans Thai live in `public/assets/fonts`; Phaser uses original generated unit and backdrop atlases with code-native input, HP/status labels and short VFX. Generated artwork and asset frame mapping live in `game/visuals`; HUD text and controls must remain DOM-native.
 
+## Shared character sheet — owner scope 2026-10-20
+
+- Use ui/character-panel.ts for MAP, rest-camp and main-camp character views. Keep one shared Overview / Equipment / Skills / Talents implementation; camp adapters include the whole company and expedition adapters only brought members. ui/character-view.ts and character-metrics.ts read the same scaled stats and battle power helpers. Native dialog IDs/ARIA are namespaced per context.
+- Inventory and team link into that sheet. Equipment filters are presentation only. Auto-equipment previews a deterministic recommendation from worn + bag gear, then requires an explicit confirmation; never remove another hero's gear. core/world/auto-equipment.ts validates all selected items and the member snapshot atomically, preserves provenance and caps run HP once at the final loadout. No save v21 or combat-balance change. Keep camp-only free talent reset, formation/hire/forge/salvage services and source focus restoration.
+
 ## Development rules
 
 1. Keep exactly one primary action per actor turn and one turn per surviving actor each round. Skip dead queue entries and freeze the real target when the enemy starts its turn.

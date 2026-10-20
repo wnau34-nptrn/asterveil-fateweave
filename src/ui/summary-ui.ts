@@ -3,7 +3,7 @@ import { storyArt } from '../game/visuals/assets';
 import { gearArt } from './equip-art';
 import { icon, type IconName } from './icons';
 import { heroText, itemName, sideQuestText } from './th';
-import { portrait } from './world-ui';
+import { portrait } from './portraits';
 import type { StoryPanel } from './story-ui';
 
 // 4F: the expedition summary shown once when a run ends, before the lobby. It is built from the profile before

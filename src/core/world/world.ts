@@ -463,7 +463,7 @@ function trailRegen(state: ExpeditionState, map: MapDefinition, lookup: Encounte
     if (regen && hp > 0) state.hp[id] = Math.min(memberDef(lookup, map, state.members, id)!.maxHp, hp + regen);
   }
 }
-export const partyLuck = (state: ExpeditionState, map: MapDefinition): number =>
+export const partyLuck = (state: Pick<ExpeditionState,'members'|'roster'>, map: MapDefinition): number =>
   Math.min(map.equipment.luckCap, state.roster.deployed.reduce((n, id) => n + gearTotals(map, state.members[id]?.gear).luck, 0));
 // Equipment drop (2D-2): random victories drop at `dropPercent`, guaranteed after `pity` dry wins; the boss
 // always drops `bossDrops` items with better rarity weights; the tutorial never drops. The item's level is the monster level,
