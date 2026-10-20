@@ -18,7 +18,7 @@ for(const [width,height,touch] of [[320,568,true],[390,844,true],[1366,768,false
     await page.locator('#lobby-tab-team').click();await page.locator('#lobby-member-guardian').click();await page.locator('#lobby-gear-open').click();await page.locator('#camp-bag-slot-body').click();await page.locator('#camp-character-forge-worn').click();
     await expect(page.locator('#camp-character-dialog')).not.toBeVisible();await expect(page.locator('.forge-item-head')).toContainText('Lv1');await expect(page.locator('.forge-item-head')).toContainText('+2');
     await page.locator('#forge-target').selectOption('5');await expect(page.locator('#forge-cost')).toContainText('แร่ 21');await expect(page.locator('#forge-cost')).toContainText('ฝุ่น 7');
-    await page.locator('.forge-impact summary').click();await expect(page.locator('.forge-skills')).toContainText('โจมตี');expect(await saved()).toBe(original);
+    await page.locator('#forge-change-item').click();await expect(page.locator('.forge-pick')).toHaveCount(3);await page.locator('#forge-resume').click();await expect(page.locator('#forge-target')).toHaveValue('5');await page.locator('.forge-impact summary').click();await expect(page.locator('.forge-skills')).toContainText('โจมตี');expect(await saved()).toBe(original);
     await page.locator('#forge-enhance').click();expect(await saved()).toBe(original);await expect(page.locator('#forge-confirm')).toBeVisible();
     expect(await page.locator('#forge-confirm').evaluate(el=>{const r=el.getBoundingClientRect();return r.height>=44&&document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)===el;})).toBe(true);
     expect(await page.locator('.forge-workbench').evaluate(el=>el.scrollWidth<=el.clientWidth+1)).toBe(true);
@@ -29,7 +29,7 @@ for(const [width,height,touch] of [[320,568,true],[390,844,true],[1366,768,false
     let game=parseGame(await saved(),map,lookup);expect(game.profile.bank).toMatchObject({ore:79,dust:43});expect(game.profile.members.guardian!.gear!.body).toMatchObject({plus:5,investment:{ore:30,dust:9}});expect(game.profile.forge).toBe(profile.forge);expect(JSON.parse(await saved()).version).toBe(22);
     await page.locator('#forge-lock').click();await expect(page.locator('#forge-lock')).toHaveAttribute('aria-pressed','true');
     await page.keyboard.press('Escape');await expect(page.locator('#camp-character-dialog')).toBeVisible();await page.locator('#camp-character-dialog [data-world=character-close]').click();await expect(page.locator('#camp-character-dialog')).not.toBeVisible();
-    await page.locator('#lobby-tab-gear').click();await page.locator('#forge-open-2').click();await page.locator('#forge-tab-recycle').click();await page.locator('#forge-item-2').click();
+    await page.locator('#lobby-tab-gear').click();await page.locator('#forge-open-2').click();await page.locator('#forge-tab-recycle').click();await expect(page.locator('.forge-item-head')).toContainText('+3');
     await expect(page.locator('.forge-refund')).toContainText('แร่ 15');await expect(page.locator('.forge-refund')).toContainText('แร่ 17');
     await page.locator('#forge-lock').click();await expect(page.locator('#forge-recycle')).toBeDisabled();await page.locator('#forge-lock').click();
     const recycleBefore=await saved();await page.locator('#forge-recycle').click();expect(await saved()).toBe(recycleBefore);await page.locator('#forge-cancel').click();expect(await saved()).toBe(recycleBefore);
