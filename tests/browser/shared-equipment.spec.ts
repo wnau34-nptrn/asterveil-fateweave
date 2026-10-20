@@ -48,7 +48,7 @@ for(const [width,height,touch] of [[320,568,true],[390,844,true],[1366,768,false
     const after=await saved();await id('auto-preview').click();await expect(panel.locator('.auto-empty')).toBeVisible();expect(await saved()).toBe(after);
     await page.screenshot({path:info.outputPath('auto-equipped.png')});
     await panel.locator('[data-world=character-close]').click();
-    if(!camp){await page.keyboard.press('Escape');await page.locator('#rest').click();await page.locator('#team-guardian').click();await page.locator('#camp-character-overview').click();await expect(panel).toBeVisible();await panel.locator('[data-world=character-close]').click();await expect(page.locator('#camp-dialog')).toBeVisible();}
+    if(!camp){await expect(panel).not.toBeVisible();await expect(page.locator('#pack-dialog')).toBeVisible();await page.keyboard.press('Escape');await expect(page.locator('#pack-dialog')).not.toBeVisible();await page.locator('#rest').click();await page.locator('#team-guardian').click();await page.locator('#camp-character-overview').click();await expect(panel).toBeVisible();await panel.locator('[data-world=character-close]').click();await expect(page.locator('#camp-dialog')).toBeVisible();}
     await page.reload();await page.locator('#continue').click();const resumed=parseGame(await saved(),map,lookup);expect((camp?resumed.profile.members:resumed.run!.members).guardian!.gear).toEqual(member.gear);
     expect(errors).toEqual([]);await context.close();
   });
