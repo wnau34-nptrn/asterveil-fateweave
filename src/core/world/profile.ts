@@ -11,7 +11,7 @@ export function newProfile(map: MapDefinition, seed: number): Profile {
     seed: seed >>> 0, returns: 0, tutorialDone: false, commander: null,
     company: [...map.startingRoster], members: Object.fromEntries(map.startingRoster.map(id => [id, { stars: 1, dupes: 0 }])),
     party: { deployed: [...map.startingRoster], reserve: [] },
-    bank: { ore: 0, gold: 0, seal: 0, dust: 0 }, items: [], nextItem: 1, forge: 0, potions: { salve: 0, tonic: 0, repel: 0 }, quests: {}, shop: {}, refreshes: 0, smelted: 0, taken: [], expeditions: 0, completes: 0, last: null,
+    forgeLevel: map.equipment.forge.itemLevel.baseCap, bank: { ore: 0, gold: 0, seal: 0, dust: 0 }, items: [], nextItem: 1, forge: 0, potions: { salve: 0, tonic: 0, repel: 0 }, quests: {}, shop: {}, refreshes: 0, smelted: 0, taken: [], expeditions: 0, completes: 0, last: null,
   };
 }
 const blocked = (profile: Profile, reason: string): ProfileResult => ({ profile, event: { type: 'blocked', reason } });
@@ -254,6 +254,8 @@ export function settle(initial: Profile, run: ExpeditionState, outcome: RunOutco
     const add = sideQuestGain(q.kind, run, outcome, map);
     if (add) profile.quests[q.id] = { ...now, progress: Math.min(q.target, now.progress + add) };
   }
+  const levels=map.equipment.forge.itemLevel;
+  profile.forgeLevel=Math.max(profile.forgeLevel??levels.baseCap,...levels.unlocks.filter(u=>run.elitesDefeated.includes(u.elite)||(run.respawns[u.elite]??0)>0||outcome==='complete').map(u=>u.cap));
   profile.tutorialDone ||= run.tutorialDone; profile.expeditions++; if (outcome === 'complete') profile.completes++;
   profile.returns++; profile.taken = []; profile.shop = {}; profile.refreshes = 0; profile.smelted = 0;
   profile.last = { outcome, ore, gold, seal, steps: run.steps, wins: run.wins, items, salvaged };

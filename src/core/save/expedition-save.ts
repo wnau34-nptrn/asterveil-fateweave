@@ -45,7 +45,9 @@ export const legacyKeys = ['asterveil.fateweave.battle.v1', 'asterveil.fateweave
 // the item does not have yet.
 // v21 → v22: optional lock and paid-enhancement ledger. Legacy items retain their shape;
 // missing ledger grants credit for the remaining + through enhancementInvestment.
-const SAVE_VERSION = 22;
+// v22 → v23: permanent area-earned item-Lv cap and optional exact item-level investment.
+// Earlier completed expeditions unlock the chapter cap; absent item ledgers never invent level spending.
+const SAVE_VERSION = 23;
 export interface Game { profile: Profile; run: ExpeditionState | null }
 const actions: readonly ActionId[] = ['attack', 'guard', 'bash', 'mark', 'execute', 'bolt', 'ward', 'heal', 'prayer', 'brace', 'pierce', 'hinder', 'volley', 'acid', 'haste', 'ambush', 'evade', 'taunt', 'slam', 'valor', 'mend',
   'rally', 'finisher', 'sigil', 'sanctuary', 'spearwall', 'weakshot', 'bomb', 'backstab', 'quake', 'finale'];
@@ -265,6 +267,9 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
 function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: EncounterLookup): Profile {
   const p = obj(v);
   if (!isInt(p.seed, 0, 0xffffffff) || !isInt(p.returns) || !isInt(p.expeditions) || !isInt(p.completes) || typeof p.tutorialDone !== 'boolean') throw new Error('Invalid profile');
+  const levels=map.equipment.forge.itemLevel, caps=[levels.baseCap,...levels.unlocks.map(u=>u.cap)];
+  if(version<23)p.forgeLevel=p.completes>0?Math.max(...caps):levels.baseCap;
+  if(!caps.includes(p.forgeLevel as number))throw new Error('Invalid forge level');
   const company = p.company;
   if (!Array.isArray(company) || !company.length || company.length > COMPANY_CAP || new Set(company).size !== company.length
     || company.some(id => typeof id !== 'string' || !heroDef(lookup, map, id))) throw new Error('Invalid company');
@@ -304,7 +309,7 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
     commander = { name: c.name, crest: c.crest, color: c.color };
     if (commanderReason(commander)) throw new Error('Invalid commander');
   } else if (p.commander === undefined && version >= 6) throw new Error('Invalid commander');
-  return { seed: p.seed, returns: p.returns, tutorialDone: p.tutorialDone, commander, company: [...company as string[]], members, party,
+  return { forgeLevel:p.forgeLevel as number, seed: p.seed, returns: p.returns, tutorialDone: p.tutorialDone, commander, company: [...company as string[]], members, party,
     bank: { ore: bank.ore as number, gold: bank.gold as number, seal: bank.seal as number, dust: bank.dust as number }, items, nextItem: p.nextItem as number, forge: p.forge as number, potions: potionsOf(p.potions, 9999), quests, shop, refreshes: p.refreshes as number, smelted: p.smelted as number, taken: [...p.taken as number[]], expeditions: p.expeditions, completes: p.completes, last };
 }
 // Optional elite returns (4C): known optional elites only, 1..99 each.
@@ -361,7 +366,7 @@ function migrateItems(v: unknown, map: MapDefinition): void {
 export function parseGame(raw: string, map: MapDefinition, lookup: EncounterLookup): Game {
   const envelope = obj(JSON.parse(raw)); const version = envelope.version as number;
   if (version < 21) migrateItems(envelope, map);
-  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
+  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
   if (version < 5) {
     const run = parseRun(envelope.state, version, map, lookup);
     const profile = newProfile(map, (run.seed ^ 0x5bd1e995) >>> 0);

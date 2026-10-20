@@ -1,5 +1,11 @@
 # Modern battle HUD design spec
 
+## Forge phase 2 — 2026-10-20
+
+Develop now has four 44px modes in a 2×2 grid: Enhance / Item Lv / Fuse / Reroll. Item Lv shares the exact target/cost/stat/skill preview and review/confirm flow. Show the permanent area cap and named unlock milestones; never use hero level as the cap. Preserve target on picker return. Review hides secondary selection controls to retain a reachable footer at 320px.
+
+Fusion retains full + and shows the main item's retained Lv/set/rolls and unknown random additions. Recommend only non-invested, unlocked bag gear, but permit manual choice of exactly two compatible donors. Each donor has a UID, Lv, +, stats, selected state and a visible lock restriction; worn gear is excluded. Review names the pieces to destroy and separately states the aggregate 100% development refund (no base salvage). Recycle separates base salvage, enhancement capital and item-Lv capital. Keep source-character return, readonly previews, repeat/inert guards and bounded scrolling.
+
 ## Forge phase 1 — 2026-10-20
 
 The smith uses a full portrait sheet with Develop / Recycle / Smelt tabs. A filtered bag+worn picker comes first. Selecting an item shows its wearer, item Lv, rarity and + as separate facts; change-item and lock controls are secondary. Develop shows one enhance/fuse/reroll mode at a time. Enhancement selects a target + and shows total cost, remaining wallet, real item-stat changes and expandable current-user skill effects. Random outcomes remain explicitly unknown until confirmed. Existing smith quests live in a collapsed picker disclosure.

@@ -80,7 +80,9 @@ export type GearStat = 'hp' | 'attack' | 'support' | 'speed' | 'armour' | 'resis
 // missing = 100 (items made before the rolls).
 // locked protects destruction; investment is the paid enhancement credit, preserved across equipment moves.
 export interface Item { uid: number; slot: GearSlot; rarity: number; level: number; hero?: string; affixes: GearStat[]; special?: GearSpecial; set?: SetId; plus?: number;
-  q?: { main: number; affixes: number[] }; locked?: true; investment?: { ore: number; dust: number } }
+  q?: { main: number; affixes: number[] }; locked?: true; investment?: { ore: number; dust: number };
+  // Actual paid item-Lv costs only; the original dropped level never grants credit.
+  levelInvestment?: {ore:number;dust:number} }
 // ---- Equipment sets (2D-3, draft numbers): 2 pieces give a stat, 4 pieces a rule. ----
 export type SetId = 'dawn' | 'wind' | 'shadow' | 'thorn' | 'starveil' | 'mender';
 export const SET_IDS: readonly SetId[] = ['dawn', 'wind', 'shadow', 'thorn', 'starveil', 'mender'];
@@ -172,8 +174,9 @@ export interface PotionRules {
 // Forge (2D-4, draft numbers). Enhancing always succeeds: +1 costs `ore + orePerPlus × n` ore and ceil(n × dustPerPlus) dust
 // for the n-th level, up to `plusCap[rarity]`; each level adds `plusPercent` to the slot's base stats (not affixes).
 // Fusing three pieces of one slot and rarity raises the chosen main piece one rarity; rerolling one affix costs a seal.
-// Salvaging an enhanced piece returns `salvageDustPerPlus` dust per level on top.
+// Recycling returns base salvage plus paid enhancement and item-Lv investment.
 export interface ForgeRules {
+  itemLevel: {baseCap:number; orePerLevel:number; dustPerLevel:number; unlocks:readonly {elite:string;cap:number}[]};
   plusCap: readonly number[]; plusPercent: number; ore: number; orePerPlus: number; dustPerPlus: number;
   // Smelting (owner-approved 2026-10-16): `smeltOre` ore per veil dust, at most `smeltCap` dust per return home.
   smeltOre: number; smeltCap: number;
@@ -257,6 +260,7 @@ export interface Profile {
   smelted: number;
   // Hiring board taken indexes for the current `returns` count.
   taken: number[];
+  forgeLevel?: number;
   expeditions: number; completes: number;
   // `items` kept in the bag and `salvaged` because the bag was full (2D-2).
   last: { outcome: RunOutcome; ore: number; gold: number; seal: number; steps: number; wins: number; items: number; salvaged: number } | null;
@@ -271,7 +275,7 @@ export type ProfileEvent =
   | { type: 'talent'; heroId: string }
   | { type: 'equipped'; heroId: string }
   | { type: 'salvaged'; count: number; ore: number; dust: number }
-  | { type: 'forged'; uid: number; action: 'enhance' | 'fuse' | 'reroll' }
+  | { type: 'forged'; uid: number; action: 'enhance' | 'fuse' | 'reroll' | 'level' }
   | { type: 'equipmentLocked'; uid: number; locked: boolean }
   | { type: 'smelted'; dust: number }
   | { type: 'brewed'; potion: PotionId }

@@ -44,7 +44,7 @@ describe('fuse', () => {
     expect(fuseMaterials(p, map, 1).map(i => i.uid)).toEqual([3, 4]);
     p = fuse(p, map, 1).profile;
     const up = findItem(p, 1)!.item;
-    expect(up).toMatchObject({ rarity: 2, set: 'thorn', level: 8, plus: 2 }); expect(up.affixes[0]).toBe('hp'); expect(up.affixes).toHaveLength(2);
+    expect(up).toMatchObject({ rarity: 2, set: 'thorn', level: 8, plus: 5 }); expect(up.affixes[0]).toBe('hp'); expect(up.affixes).toHaveLength(2);
     expect(p.items.map(i => i.uid)).toEqual([1, 2, 5]); expect(p.forge).toBeGreaterThan(0);
     expect(itemValid(map, up, ids)).toBe(true);
   });
