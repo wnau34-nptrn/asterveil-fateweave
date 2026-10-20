@@ -1,8 +1,9 @@
+import {huntedReward} from './targeted-loot';
 import { replay, withLevel, withParty } from '../battle/engine';
 import { boulderAt, leverPuzzleAt, openPit, passableWall, runePuzzleAt, secretAt } from './puzzles';
 import type { BattleState, Command, EncounterDefinition, HeroDefinition, HeroTalents } from '../battle/types';
 import type { ActiveBattle, BattleKind, ChestDefinition, Company, Direction, ExpGain, ExpeditionState, LootTable, MapDefinition, MemberProgress, Point, PotionId, Resources, Talents, Tile, WorldEvent, WorldResult, ZoneDefinition, Gear, Item, EliteDefinition, EventChoice, MapEventDefinition, MapEventKind, GearSlot } from './types';
-import { gearTotals, rollItem } from './equipment';
+import { gearTotals } from './equipment';
 import { memberTalentReason } from './talents';
 import type { TalentNode } from './types';
 import { PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS, SET_IDS } from './types';
@@ -482,7 +483,7 @@ function dropItems(state: ExpeditionState, map: MapDefinition, kind: BattleKind,
   // Sets come from the zone the battle was fought in; the boss can drop any set.
   const sets = kind === 'boss' ? SET_IDS : zoneOf(map, tileAt(map, state.position)?.zoneId ?? '')?.sets ?? [];
   const weights = kind === 'boss' ? rules.bossRarityWeights : kind === 'elite' ? (miniBoss(map, source) ? map.eventRules.miniBoss.rarityWeights : optionalElite(map, source) ? map.eventRules.optionalElite.rarityWeights : map.eventRules.eliteRarityWeights) : rules.rarityWeights;
-  const items = Array.from({ length: kind === 'boss' ? rules.bossDrops : 1 }, () => rollItem(rules, () => rollPercent(state.seed, state.rolls++), level, weights, rosterIds(state), sets));
+  const items = Array.from({ length: kind === 'boss' ? rules.bossDrops : 1 }, () => huntedReward(rules, () => rollPercent(state.seed, state.rolls++), level, weights, rosterIds(state), sets,state.hunt));
   state.found.push(...items);
   return items;
 }

@@ -1,5 +1,11 @@
 # Modern battle HUD design spec
 
+## Targeted farming phase 4 — 2026-10-20
+
+Camp has six >=44px menu controls including Farm, within the existing portrait frame. Farm shows owned-class selection, an explicit free save action, per-class progress preview and zone/set/Lv sources. Unsaved changes disappear on close/tab switch. Clearly label the camp guide as the next-run preview. MAP ! adds Equipment sources after Guide and Settings, showing the frozen current-run target and live remaining equipment drops. Legacy ongoing runs explicitly show old loot rules. All source content scrolls within existing bounded sheets/dialogs; retain keyboard tabs, focus restoration, editing/repeat guards and landscape inert behavior. Battle ! still defaults to Status.
+
+Explain that 70% is an additional class bias among weapon drops, with an overall chance of at least 70%; guarantee counts equipment pieces, not fights, and resets at the drop. Show existing regional sets/Lv and their 60% set chance, boss quantity and all-set pool without implying guaranteed sets.
+
 ## Storage phase 3 — 2026-10-20
 
 Camp bag exposes Inventory / Pending source buttons with current counts. Pending rewards persist; a clearly placed camp call-to-action explains why departure waits. Collect selected items or review recycling; never silently discard excess loot. Show item name/Lv/+/set/stat details and protection state. Lock/paid gear can be collected but cannot enter bulk recycling. Individual existing equipment/forge routes remain available once stored.

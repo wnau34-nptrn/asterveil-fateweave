@@ -93,7 +93,9 @@ export interface SetDefinition {
 }
 // A value at item level L = round(base + perLevel × (L − 1)).
 export type StatCurve = readonly [base: number, perLevel: number];
+export interface HuntPlan {target?:string;misses:number}
 export interface EquipmentRules {
+  hunt:{weaponBiasPercent:number;pityDrops:number};
   bagCap: number;
   // Main stats per slot (a support class's weapon uses `supportWeapon`); affix values per stat; the affixes each
   // slot can roll (`supportWeapon` again for support classes); affix count per rarity (legendary also has a special).
@@ -240,6 +242,7 @@ export interface Bank { ore: number; gold: number; seal: number; dust: number }
 // The player's commander (non-combat leader of the company), created once (L2).
 export interface Commander { name: string; crest: string; color: string }
 export interface Profile {
+  hunt?:{target?:string;pity:Record<string,number>};
   seed: number; returns: number; tutorialDone: boolean;
   commander: Commander | null;
   // Every owned mercenary in display order, with stars and stored duplicates.
@@ -268,6 +271,7 @@ export interface Profile {
   last: { outcome: RunOutcome; ore: number; gold: number; seal: number; steps: number; wins: number; items: number; salvaged: number } | null;
 }
 export type ProfileEvent =
+  | {type:'huntTarget'}
   | {type:'storageCollected';count:number}
   | {type:'storageExpanded'}
   | { type: 'blocked'; reason: string }
@@ -297,6 +301,8 @@ export type BattleKind = 'tutorial' | 'random' | 'boss' | 'elite' | 'event';
 // `level`: the monster level fixed when the battle started (missing in older saves = the encounter's own level).
 export interface ActiveBattle { kind: BattleKind; encounterId: string; entry: Record<string, number>; commands: Command[]; level?: number; source?: string }
 export interface ExpeditionState {
+  // Missing plan preserves legacy RNG and drop behavior until this expedition ends.
+  hunt?:HuntPlan;
   mapId: string; mapVersion: number; seed: number; rolls: number;
   position: Point; steps: number; pressure: number;
   // `hp` covers every roster member; the battle entry covers the deployed ones.
