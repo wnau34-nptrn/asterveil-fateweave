@@ -16,7 +16,7 @@ import { browserStorage } from '../platform/browser-storage';
 import type { BattleUI } from './battle-ui';
 import type { NpcId } from '../game/visuals/assets';
 import { choiceText, eventText, expThai, heroText, itemLines, itemName, lootThai, potionText, rewardText, shopText } from './th';
-import { raiseItemLevel, enhanceTo, lockEquipment, findItem, fuse, reroll, smelt } from '../core/world/forge';
+import { craftWeapon, raiseItemLevel, enhanceTo, lockEquipment, findItem, fuse, reroll, smelt } from '../core/world/forge';
 import { CommanderUI } from './commander-ui';
 import { LobbyUI } from './lobby-ui';
 import { prologue, prologueEnd, StoryUI } from './story-ui';
@@ -73,6 +73,7 @@ export class GameShell {
       talent: (id, node) => this.profileChange(learnTalent(this.game!.profile, map, id, node)), resetTalents: id => this.profileChange(resetTalents(this.game!.profile, id)),
       equip: (id, uid) => this.profileChange(equip(this.game!.profile, id, uid)), unequip: (id, slot) => this.profileChange(unequip(this.game!.profile, map, id, slot)),
       autoEquip: plan => this.profileChange(applyCampEquipment(this.game!.profile,plan)),
+      craft:(hero,level)=>this.profileChange(craftWeapon(this.game!.profile,map,hero,level)),
       huntTarget:target=>this.profileChange(chooseHuntTarget(this.game!.profile,target)),
       collect:ids=>this.profileChange(collectOverflow(this.game!.profile,map,ids)), recycleStored:(source,ids)=>this.profileChange(recycleSelection(this.game!.profile,map,source,ids)),expandStorage:()=>this.profileChange(expandStorage(this.game!.profile,map)),
       salvage: uids => this.profileChange(salvage(this.game!.profile, map, uids)),
@@ -227,9 +228,9 @@ export class GameShell {
     return `ซื้อ${shopText[e.item].name}แล้ว`;
   }
   // Forge result: the piece as it is now (fuse and reroll show what was rolled).
-  private forgedText(profile: Profile, uid: number, action: 'enhance' | 'fuse' | 'reroll' | 'level'): string {
+  private forgedText(profile: Profile, uid: number, action: 'enhance' | 'fuse' | 'reroll' | 'level' | 'craft'): string {
     const item = findItem(profile, uid)?.item; if (!item) return '';
-    return `${({ level:'เพิ่ม Lv สำเร็จ', enhance: 'ตีบวกสำเร็จ', fuse: 'หลอมรวมสำเร็จ', reroll: 'ปรับค่าแล้ว' })[action]} · ${itemName(item)} · ${itemLines(this.map.equipment, item).join(' · ')}`;
+    return `${({ craft:'สร้างอาวุธเข้าคลังแล้ว', level:'เพิ่ม Lv สำเร็จ', enhance: 'ตีบวกสำเร็จ', fuse: 'หลอมรวมสำเร็จ', reroll: 'ปรับค่าแล้ว' })[action]} · ${itemName(item)} · ${itemLines(this.map.equipment, item).join(' · ')}`;
   }
   private npcCheer: NpcId | undefined;
   private readonly story: StoryUI;

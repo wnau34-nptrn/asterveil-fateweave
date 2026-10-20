@@ -249,3 +249,6 @@ body { display: grid; place-items: center; background: radial-gradient(ellipse a
 .loot-zones li {display:grid;gap:5px;padding:10px;border:1px solid var(--hud-edge);border-radius:10px;background:var(--hud-glass);}
 .loot-zones span {color:var(--text-muted);}
 .loot-guide summary {min-height:44px;padding:10px 0;}
+
+.forge-tabs { grid-template-columns:repeat(4,minmax(0,1fr)); }
+.forge-workbench[data-review=true] .forge-craft-selectors { display:none; }
