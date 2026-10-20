@@ -100,10 +100,19 @@ export function itemValid(map: MapDefinition, item: Item, heroIds: readonly stri
   if ((item.rarity === RARITIES - 1) !== (item.special !== undefined) || (item.special !== undefined && !GEAR_SPECIALS.includes(item.special))) return false;
   if (item.set !== undefined && !SET_IDS.includes(item.set)) return false;
   if (item.plus !== undefined && (!Number.isInteger(item.plus) || item.plus < 1 || item.plus > rules.forge.plusCap[item.rarity]!)) return false;
-  const keys = Object.keys(item).filter(k => !['uid', 'slot', 'rarity', 'level', 'hero', 'affixes', 'special', 'set', 'plus', 'q'].includes(k));
+  if (item.locked !== undefined && item.locked !== true) return false;
+  if (item.investment !== undefined && (!item.investment || typeof item.investment !== 'object' || Object.keys(item.investment).length !== 2 || !['ore','dust'].every(k => Number.isSafeInteger(item.investment![k as 'ore'|'dust']) && item.investment![k as 'ore'|'dust'] >= 0))) return false;
+  const keys = Object.keys(item).filter(k => !['uid', 'slot', 'rarity', 'level', 'hero', 'affixes', 'special', 'set', 'plus', 'q', 'locked', 'investment'].includes(k));
   return !keys.length;
 }
+// Missing ledger = legacy credit for the remaining + level, never inferred lost past upgrades.
+export function enhancementInvestment(map: MapDefinition, item: Item): { ore: number; dust: number } {
+  if(item.investment)return {...item.investment};
+  let ore=0,dust=0;const f=map.equipment.forge;
+  for(let n=1;n<=(item.plus??0);n++){ore+=f.ore+f.orePerPlus*n;dust+=Math.ceil(n*f.dustPerPlus);}
+  return {ore,dust};
+}
 export function salvageValue(map: MapDefinition, item: Item): { ore: number; dust: number } {
-  const v = map.equipment.salvage[item.rarity]!;
-  return { ore: v.ore, dust: v.dust + (item.plus ?? 0) * map.equipment.forge.salvageDustPerPlus };
+  const v=map.equipment.salvage[item.rarity]!,paid=enhancementInvestment(map,item);
+  return {ore:v.ore+paid.ore,dust:v.dust+paid.dust};
 }

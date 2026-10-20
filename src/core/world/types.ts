@@ -78,8 +78,9 @@ export type GearStat = 'hp' | 'attack' | 'support' | 'speed' | 'armour' | 'resis
 // `plus` (2D-4): forge enhance level (missing = +0).
 // `q` (stats design): roll quality in percent (80–120) of the main stats and of each affix, in affix order;
 // missing = 100 (items made before the rolls).
+// locked protects destruction; investment is the paid enhancement credit, preserved across equipment moves.
 export interface Item { uid: number; slot: GearSlot; rarity: number; level: number; hero?: string; affixes: GearStat[]; special?: GearSpecial; set?: SetId; plus?: number;
-  q?: { main: number; affixes: number[] } }
+  q?: { main: number; affixes: number[] }; locked?: true; investment?: { ore: number; dust: number } }
 // ---- Equipment sets (2D-3, draft numbers): 2 pieces give a stat, 4 pieces a rule. ----
 export type SetId = 'dawn' | 'wind' | 'shadow' | 'thorn' | 'starveil' | 'mender';
 export const SET_IDS: readonly SetId[] = ['dawn', 'wind', 'shadow', 'thorn', 'starveil', 'mender'];
@@ -271,6 +272,7 @@ export type ProfileEvent =
   | { type: 'equipped'; heroId: string }
   | { type: 'salvaged'; count: number; ore: number; dust: number }
   | { type: 'forged'; uid: number; action: 'enhance' | 'fuse' | 'reroll' }
+  | { type: 'equipmentLocked'; uid: number; locked: boolean }
   | { type: 'smelted'; dust: number }
   | { type: 'brewed'; potion: PotionId }
   | { type: 'claimed'; questId: string }

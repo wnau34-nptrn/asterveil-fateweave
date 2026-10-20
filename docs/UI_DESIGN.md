@@ -1,5 +1,12 @@
 # Modern battle HUD design spec
 
+## Forge phase 1 — 2026-10-20
+
+The smith uses a full portrait sheet with Develop / Recycle / Smelt tabs. A filtered bag+worn picker comes first. Selecting an item shows its wearer, item Lv, rarity and + as separate facts; change-item and lock controls are secondary. Develop shows one enhance/fuse/reroll mode at a time. Enhancement selects a target + and shows total cost, remaining wallet, real item-stat changes and expandable current-user skill effects. Random outcomes remain explicitly unknown until confirmed. Existing smith quests live in a collapsed picker disclosure.
+
+Every spending/destructive action has a readonly review then explicit confirmation; review hides secondary item/mode controls to make space at 320px. A sticky footer inside the bounded game-frame scroller keeps totals, confirmation and cancel reachable. Recycle item summary names the destroyed piece, separates base salvage from 100% enhancement-credit refund and shows the total. Locked items cannot be recycled; worn pieces must be taken off first. Camp character/inventory links preselect the item and preserve a route back to the source character. Keep the existing navy/gold palette and original art. Future Craft and item-Lv features should be added only in their scoped phases.
+
+
 ## Shared characters and equipment — 2026-10-20
 
 MAP and main-camp characters use one native portrait sheet with Overview / Equipment / Skills / Talents. Inventory and team remain entry/management surfaces; equipment inspection, individual swaps, set thresholds, stat/Active explanations and passive spending live in the shared sheet. Main camp exposes the entire company; expedition exposes the brought team. Trainer opens Talents and retains free camp-only reset. Closing restores the original surface and focus.

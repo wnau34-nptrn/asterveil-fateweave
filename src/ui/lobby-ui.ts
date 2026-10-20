@@ -1,3 +1,4 @@
+import { ForgeWorkbench } from './forge-workbench';
 import { CharacterPanel, type CharacterModel } from './character-panel';
 import type { CharacterTab } from './character-view';
 import { applyCampEquipment, campEquipment, type AutoEquipmentPlan } from '../core/world/auto-equipment';
@@ -13,13 +14,13 @@ import { actorArt, actorFootOrigins, lobbyArt, lobbyPose, NPC_IDS, npcAtlasUrl, 
 import { icon } from './icons';
 import { commanderBadge } from './commander-ui';
 import { gearArt, potionArt } from './equip-art';
-import { skillDescription, heroText, npcText, rewardText, shopText, sideQuestText, itemLines, itemName, itemOwner, passiveText, potionText, rarityText, setText, slotText, statName } from './th';
-import { enhanceCost, enhanceReason, findItem, fuseMaterials, fuseReason, rerollReason, smeltLeft, smeltReason } from '../core/world/forge';
+import { skillDescription, heroText, npcText, rewardText, shopText, sideQuestText, itemLines, itemName, itemOwner, passiveText, potionText } from './th';
+
 import { portrait, starRow } from './portraits';
 
 export interface LobbyHost { autoEquip(plan: AutoEquipmentPlan): void; hire(index: number): void; refresh(): void; buy(item: ShopItemId, heroId?: string): void; smelt(dust: number): void; upgrade(id: string): void; dismiss(id: string): void; place(id: string, group: Group, other?: string): void; talent(id: string, node: TalentNode): void; resetTalents(id: string): void;
   equip(id: string, uid: number): void; unequip(id: string, slot: GearSlot): void; salvage(uids: number[]): void;
-  enhance(uid: number): void; fuse(uid: number): void; reroll(uid: number, index: number): void; brew(potion: PotionId): void; claim(questId: string): void; depart(): void; home(): void }
+  enhance(uid: number, target: number): void; lock(uid:number):void; fuse(uid: number): void; reroll(uid: number, index: number): void; brew(potion: PotionId): void; claim(questId: string): void; depart(): void; home(): void }
 // `npcCheer`: the camp NPC whose service just succeeded (plays its cheer once).
 export interface LobbyView { profile: Profile; message: string; saved: boolean; cheer?: string; npcCheer?: NpcId }
 type Sheet = 'team' | 'hire' | 'tree' | 'gear' | 'forge' | 'brew';
@@ -43,7 +44,8 @@ export class LobbyUI {
   // The equipment sheet (2D-2) works the same way.
   // The forge (2D-4) is a third menu sheet.
   private sheet: 'team' | 'hire' | 'tree' | 'gear' | 'forge' | 'brew' | null = null;
-  private forgeUid: number | undefined;
+  private readonly forgeUI:ForgeWorkbench;
+  private forgeReturn:string|undefined;
   private readonly inventoryFilters = newGearFilters();
   private inventoryPick: string | undefined;
   private readonly characters: CharacterPanel;
@@ -57,20 +59,22 @@ export class LobbyUI {
   private preview: number | undefined;
   constructor(private readonly root: HTMLElement, private readonly map: MapDefinition, private readonly lookup: EncounterLookup, private readonly heroes: readonly HeroDefinition[], private readonly host: LobbyHost) {
     this.build();
+    this.forgeUI=new ForgeWorkbench(map,heroes,lookup(map.tutorialEncounterId)!,{...host,quest:()=>this.questCard('smith')});
     this.characters=new CharacterPanel(root,map,heroes,lookup(map.tutorialEncounterId)!,{
       model:()=>this.characterModel(),
       preview:(id,key)=>{const p=this.view?.profile,entry=p&&campEquipment(p).find(e=>e.key===key);if(!p||!entry)return;const out=equip(p,id,entry.item.uid);return out.event.type==='equipped'?this.characterModel(out.profile):undefined;},
       previewPlan:plan=>{if(!this.view)return;const out=applyCampEquipment(this.view.profile,plan);return out.event.type==='equipped'?this.characterModel(out.profile):undefined;},
       wear:(id,key)=>{const entry=this.view&&campEquipment(this.view.profile).find(e=>e.key===key);if(entry)this.host.equip(id,entry.item.uid);},
-      takeOff:(id,slot)=>this.host.unequip(id,slot),talent:(id,node)=>this.host.talent(id,node),reset:id=>this.host.resetTalents(id),applyPlan:plan=>this.host.autoEquip(plan),
+      takeOff:(id,slot)=>this.host.unequip(id,slot),talent:(id,node)=>this.host.talent(id,node),reset:id=>this.host.resetTalents(id),applyPlan:plan=>this.host.autoEquip(plan),forge:(id,uid)=>{this.forgeReturn=id;this.sheet='forge';this.forgeUI.open(uid);this.draw();this.focus('#forge-change-item');},
     },'camp-',this.inventoryFilters);
-    root.addEventListener('change',event=>{const c=event.target as HTMLInputElement|HTMLSelectElement;if(c.closest('.character-dialog')||!c.dataset.gearFilter||root.hidden||root.closest('[inert]')||this.characters.open)return;changeGearFilter(this.inventoryFilters,c);this.draw();this.focus('#'+c.id);});
+    root.addEventListener('change',event=>{const c=event.target as HTMLInputElement|HTMLSelectElement;if(c.closest('.forge-workbench')&&!root.hidden&&!root.closest('[inert]')&&!this.characters.open){this.forgeUI.remember(c.closest<HTMLElement>('.forge-workbench')!);const focus=this.forgeUI.change(c);this.draw();this.focus('#'+focus);return;}if(c.closest('.character-dialog')||!c.dataset.gearFilter||root.hidden||root.closest('[inert]')||this.characters.open)return;changeGearFilter(this.inventoryFilters,c);this.draw();this.focus('#'+c.id);});
+    root.addEventListener('keydown',e=>{if(root.hidden||root.closest('[inert]'))return;const tab=(e.target as HTMLElement).closest<HTMLButtonElement>('.forge-tabs [role=tab]');if(tab&&['ArrowLeft','ArrowRight','Home','End'].includes(e.key)){e.preventDefault();const buttons=[...root.querySelectorAll<HTMLButtonElement>('.forge-tabs [role=tab]')],i=buttons.indexOf(tab),n=e.key==='Home'?0:e.key==='End'?buttons.length-1:(i+(e.key==='ArrowRight'?1:-1)+buttons.length)%buttons.length;buttons[n]!.click();this.focus('#'+buttons[n]!.id);return;}if(e.repeat&&(e.target as HTMLElement).closest('[data-forge=review],[data-forge=confirm],[data-lobby=salvage]'))e.preventDefault();});
     this.startWork();
     // Escape closes the sheet even after a redraw moved focus out of it (only while the lobby shows).
     root.ownerDocument.addEventListener('keydown', e => { if (!shortcutBlocked(e) && e.key === 'Escape' && this.sheet && !root.hidden && !this.characters.open) { e.preventDefault(); this.closeSheet(); } });
     root.addEventListener('click', e => {
       if(root.hidden||root.closest('[inert]')||this.characters.open)return;
-      const el=e.target as HTMLElement;if(el.closest('[data-gear-reset]')){Object.assign(this.inventoryFilters,newGearFilters());this.draw();this.focus('#camp-inventory-gear-filter-set');return;}
+      const el=e.target as HTMLElement;const forgeButton=el.closest<HTMLButtonElement>('button');if(forgeButton?.closest('.forge-workbench')&&(forgeButton.dataset.forge||forgeButton.hasAttribute('data-gear-reset'))){if(forgeButton.hasAttribute('data-gear-reset'))forgeButton.dataset.forge='reset';this.forgeUI.remember(forgeButton.closest<HTMLElement>('.forge-workbench')!);const focus=this.forgeUI.click(forgeButton,this.view!.profile);if(focus){this.draw();this.focus('#'+focus);}return;}if(el.closest('[data-gear-reset]')){Object.assign(this.inventoryFilters,newGearFilters());this.draw();this.focus('#camp-inventory-gear-filter-set');return;}
       const b = el.closest<HTMLButtonElement>('button[data-lobby]');
       if (!b || b.disabled) return;
       const id = b.dataset.hero;
@@ -104,16 +108,17 @@ export class LobbyUI {
         case 'salvage': {
           const uid = Number(b.dataset.uid); const item = this.view!.profile.items.find(i => i.uid === uid);
           // Rare and better items need a second press.
-          if (item && item.rarity >= 2 && this.confirmSalvage !== uid) { this.confirmSalvage = uid; this.draw(); this.focus(`#salvage-${uid}`); break; }
+          if (item && (item.rarity >= 2 || !!item.plus || !!item.investment) && this.confirmSalvage !== uid) { this.confirmSalvage = uid; this.draw(); this.focus(`#salvage-${uid}`); break; }
           this.confirmSalvage = undefined; this.host.salvage([uid]); this.focus('#lobby-sub-back'); break;
         }
         case 'claim': { const q = b.dataset.quest!; this.host.claim(q); this.focus(`#quest-claim-${q}`); break; }
         case 'brew': { const potion = b.dataset.potion as PotionId; this.host.brew(potion); this.focus(`#brew-${potion}`); break; }
-        case 'forge-pick': this.forgeUid = Number(b.dataset.uid); this.draw(); this.focus('#forge-enhance'); break;
-        case 'enhance': if (this.forgeUid) { this.host.enhance(this.forgeUid); this.focus('#forge-enhance'); } break;
-        case 'fuse': if (this.forgeUid) { this.host.fuse(this.forgeUid); this.focus('#forge-fuse'); } break;
-        case 'reroll': if (this.forgeUid) { const i = Number(b.dataset.index); this.host.reroll(this.forgeUid, i); this.focus(`#forge-reroll-${i}`); } break;
-        case 'salvage-common': this.host.salvage(this.view!.profile.items.filter(i => i.rarity === 0).map(i => i.uid)); this.focus('#lobby-sub-back'); break;
+        case 'forge-open': this.sheet='forge';this.forgeReturn=undefined;this.forgeUI.open(Number(b.dataset.uid));this.draw();this.focus('#forge-change-item');break;
+        case 'lock': this.host.lock(Number(b.dataset.uid));this.focus('#lock-'+b.dataset.uid);break;
+
+
+
+        case 'salvage-common': this.host.salvage(this.view!.profile.items.filter(i => i.rarity === 0 && !i.locked && !i.plus && !i.investment).map(i => i.uid)); this.focus('#lobby-sub-back'); break;
         case 'depart': this.host.depart(); break;
         case 'home': this.host.home(); break;
         case 'pan': { const pan = this.root.querySelector<HTMLElement>('.lobby-pan')!; pan.scrollBy({ left: Number(b.dataset.dir) * pan.clientWidth * .8, behavior: this.reduced() ? 'auto' : 'smooth' }); break; }
@@ -177,7 +182,7 @@ export class LobbyUI {
     const pan = this.root.querySelector<HTMLElement>('.lobby-pan'); if (!pan) return;
     pan.scrollLeft = (pan.scrollWidth - pan.clientWidth) / 2;
   }
-  private closeSheet(): void { this.preview = undefined; const was = this.sheet; this.sheet = null; this.picked = undefined; this.confirmDismiss = false; this.draw(); if (was) this.focus(`#lobby-tab-${was}`); }
+  private closeSheet(): void { this.preview = undefined; const was = this.sheet; this.forgeUI.cancelReview(); this.sheet = null; this.picked = undefined; this.confirmDismiss = false; this.draw(); if(was==='forge'&&this.forgeReturn){const id=this.forgeReturn;this.forgeReturn=undefined;this.characters.openFor(id,'gear',this.root.querySelector<HTMLButtonElement>('#lobby-tab-forge')!);return;} if (was) this.focus(`#lobby-tab-${was}`); }
   render(view: LobbyView): void {
     const cheer = view.npcCheer && view !== this.view ? view.npcCheer : undefined;
     this.view = view;
@@ -235,7 +240,7 @@ export class LobbyUI {
       ${this.sheet ? `<section id="lobby-sheet" class="lobby-sheet" role="dialog" aria-modal="false" aria-labelledby="lobby-sheet-title">
         <div class="lobby-sheet-head">${this.sheet === 'tree' || this.sheet === 'gear' ? `<button id="lobby-sub-back" data-lobby="sub-back" class="round-glass" aria-label="กลับไปจัดทีม">${icon('left')}</button>` : ''}<h2 id="lobby-sheet-title">${this.sheet === 'team' ? `${icon('flag')} จัดทีม <small>${p.company.length}/${COMPANY_CAP}</small>` : this.sheet === 'tree' ? `${icon('starFilled')} ต้นไม้ความถนัด` : this.sheet === 'gear' ? `${icon('gearBody')} อุปกรณ์ <small>คลัง ${p.items.length}/${this.map.equipment.bagCap}</small>` : this.sheet === 'forge' ? `${icon('forge')} ช่างตีเหล็ก` : this.sheet === 'brew' ? `${icon('brew')} นักปรุงยา` : `${icon('gold')} ป้ายจ้างทหารรับจ้าง`}</h2>
           <button data-lobby="close" class="round-glass" aria-label="ปิด">${icon('close')}</button></div>
-        <div class="lobby-content">${this.npcLine(this.sheet as Sheet | null)}${this.sheet === 'team' ? this.team(p) : this.sheet === 'gear' && this.picked ? this.gear(p, this.picked) : this.sheet === 'forge' ? this.forge(p) : this.sheet === 'brew' ? this.brewing(p) : this.board(p)}</div></section>` : ''}
+        <div class="lobby-content">${this.sheet==='forge'?'':this.npcLine(this.sheet as Sheet | null)}${this.sheet === 'team' ? this.team(p) : this.sheet === 'gear' && this.picked ? this.gear(p, this.picked) : this.sheet === 'forge' ? this.forge(p) : this.sheet === 'brew' ? this.brewing(p) : this.board(p)}</div></section>` : ''}
       <footer class="lobby-bottom">
         <nav class="lobby-menu" aria-label="ค่าย">${menu('team', 'flag', 'ทีม', `${p.party.deployed.length}+${p.party.reserve.length}`)}${menu('hire', 'gold', 'จ้าง', openOffers ? String(openOffers) : '')}${menu('gear', 'pack', 'กระเป๋า', p.items.length ? String(p.items.length) : '')}${menu('forge', 'forge', 'ช่าง', '')}${menu('brew', 'brew', 'ยา', '')}</nav>
         <button id="lobby-depart" data-lobby="depart" class="primary"${ready ? '' : ' disabled'}>${icon('map')}<span>ออกเดินทาง<small>${this.map.name} · ${p.party.deployed.length}+${p.party.reserve.length} คน</small></span></button>
@@ -287,10 +292,10 @@ export class LobbyUI {
     const why: Record<string, string> = { maxed: 'ดาวเต็มแล้ว', dupes: 'ตัวซ้ำไม่พอ', ore: 'แร่ดาวไม่พอ' };
     const label = !cost ? 'ดาวเต็มแล้ว' : reason ? `${why[reason]} · ★${m.stars + 1} ใช้ตัวซ้ำ ${need}${cost.seals ? ` (ตราแทนได้ ${sealLimit(this.map, m.stars)})` : ''} แร่ ${cost.ore}`
       : `อัปเป็น ★${m.stars + 1} · ตัวซ้ำ ${cost.dupes}${cost.seals ? ` + ตรา ${cost.seals}` : ''} · แร่ ${cost.ore}`;
-    const last = dismissReason(p, id) === 'last';
+    const last = dismissReason(p, id) === 'last',lockedFull=Object.values(m.gear??{}).filter(i=>i?.locked).length>Math.max(0,this.map.equipment.bagCap-p.items.length);
     return `<div class="member-panel" aria-live="polite"><p><b>${heroText[id]!.name}</b> ${this.stars(m.stars)} <span>Lv${m.level ?? 1}${(m.level ?? 1) < this.map.progression.levelCap ? ` · EXP ${m.exp ?? 0}/${expToNext(this.map, m.level ?? 1)}` : ' · เลเวลสูงสุด'} · ตัวซ้ำที่เก็บไว้ ${m.dupes}</span></p><div class="member-subs character-links"><button id="lobby-character-open" data-lobby="character" data-tab="overview" class="secondary">ดูตัวละคร</button><button id="lobby-skills-open" data-lobby="character" data-tab="skills" class="secondary">สกิล</button>${this.treeButton(p, id)}${this.gearButton(p, id)}</div>
       <div class="member-actions"><button id="lobby-upgrade" data-lobby="upgrade" class="primary"${reason ? ' disabled' : ''}>${label}</button>
-      <button id="lobby-dismiss" data-lobby="dismiss" class="danger-button"${last ? ' disabled' : ''}>${last ? 'ต้องมีคนลงสนาม 1 คน' : this.confirmDismiss ? `ยืนยันเลิกจ้าง · ดาวหาย +${this.map.company.dismissRefund} เหรียญทอง` : 'เลิกจ้าง'}</button></div></div>`;
+      <button id="lobby-dismiss" data-lobby="dismiss" class="danger-button"${last||lockedFull ? ' disabled' : ''}>${lockedFull?'เคลียร์คลังเพื่อเก็บของล็อกก่อน':last ? 'ต้องมีคนลงสนาม 1 คน' : this.confirmDismiss ? `ยืนยันเลิกจ้าง · ดาวหาย +${this.map.company.dismissRefund} เหรียญทอง` : 'เลิกจ้าง'}</button></div></div>`;
   }
   // What ★3 (a third skill) and ★5 (a passive) unlock for this class, and whether they are open yet.
   private unlocks(id: string, stars: number): string {
@@ -314,8 +319,8 @@ export class LobbyUI {
   private gear(p: Profile, id: string): string {
     const all=campEquipment(p),entries=filteredEquipment(all,this.inventoryFilters),pick=all.find(e=>e.key===this.inventoryPick);
     const picker=pick?'<section class="inventory-pick"><h3>เลือกผู้สวมใส่: '+itemName(pick.item)+'</h3><div class="tree-members">'+p.company.map(c=>'<button id="camp-inventory-hero-'+c+'" data-lobby="inventory-character" data-hero="'+c+'" data-key="'+pick.key+'" class="tree-member"'+(pick.item.slot==='weapon'&&pick.item.hero!==c?' disabled':'')+'>'+portrait(c)+'<small>'+heroText[c]!.name+'</small></button>').join('')+'</div></section>':'';
-    const rows=entries.map(e=>{const i=e.item,v=salvageValue(this.map,i),confirm=this.confirmSalvage===i.uid;return '<li data-rarity="'+i.rarity+'" data-item-key="'+e.key+'">'+gearArt(i)+'<div><b>'+itemName(i)+' Lv'+i.level+'</b><small>'+itemLines(this.map.equipment,i).join(' · ')+'</small><small>'+itemOwner(i)+'</small></div><span class="gear-actions"><button id="equip-'+i.uid+'" data-lobby="inventory-pick" data-key="'+e.key+'" class="secondary">ดู/เปรียบเทียบ</button><button id="salvage-'+i.uid+'" data-lobby="salvage" data-uid="'+i.uid+'" class="'+(confirm?'danger-button':'secondary')+'" aria-label="แยกชิ้น ได้แร่ '+v.ore+' ผง '+v.dust+'">'+(confirm?'ยืนยันแยก':'แยก')+'</button></span></li>';}).join('');
-    const commons=p.items.filter(i=>i.rarity===0).length;
+    const rows=entries.map(e=>{const i=e.item,v=salvageValue(this.map,i),confirm=this.confirmSalvage===i.uid;return `<li data-rarity="${i.rarity}" data-item-key="${e.key}">${gearArt(i)}<div><b>${itemName(i)} Lv${i.level}${i.locked?' · 🔒':''}</b><small>${itemLines(this.map.equipment,i).join(' · ')}</small><small>${itemOwner(i)}</small></div><span class="gear-actions"><button id="equip-${i.uid}" data-lobby="inventory-pick" data-key="${e.key}" class="secondary">ดู/เปรียบเทียบ</button><button id="forge-open-${i.uid}" data-lobby="forge-open" data-uid="${i.uid}" class="secondary">พัฒนา</button><button id="lock-${i.uid}" data-lobby="lock" data-uid="${i.uid}" class="secondary" aria-pressed="${!!i.locked}">${i.locked?'ปลดล็อก':'ล็อก'}</button><button id="salvage-${i.uid}" data-lobby="salvage" data-uid="${i.uid}" class="${confirm?'danger-button':'secondary'}"${i.locked?' disabled':''} aria-label="แยกชิ้น ได้แร่ ${v.ore} ผง ${v.dust}">${confirm?'ยืนยันแยก':'แยก'}</button>${confirm?`<small>รวมคืน แร่ ${v.ore} · ฝุ่น ${v.dust} · ชิ้นนี้จะหายไป</small>`:''}</span></li>`;}).join('');
+    const commons=p.items.filter(i=>i.rarity===0&&!i.locked&&!i.plus&&!i.investment).length;
     return '<h3>เปิดหน้าตัวละคร</h3>'+this.memberPicker(p,id,'gear',()=> '')+picker+'<h3>คลัง '+entries.length+'/'+p.items.length+' ชิ้น</h3>'+gearFilterControls(this.inventoryFilters,'camp-inventory-')+(rows?'<ul class="gear-bag inventory-gear">'+rows+'</ul>':'<p class="camp-note">ไม่พบอุปกรณ์ตามตัวกรอง</p>')+(commons?'<button id="salvage-common" data-lobby="salvage-common" class="secondary">แยกขั้นธรรมดาทั้งหมด ('+commons+' ชิ้น)</button>':'');
   }
   // Map potions (2D-5): brew for ore and veil dust; each departure packs up to `carry` of each.
@@ -327,36 +332,7 @@ export class LobbyUI {
           <button id="brew-${id}" data-lobby="brew" data-potion="${id}" class="secondary"${reason ? ' disabled' : ''}>${reason ? why[reason] : `ปรุง · แร่ ${cost.ore} ผง ${cost.dust}`}</button></li>`; }).join('')}</ul>
       <details class="lobby-help"><summary>${icon('info')} ยาใช้อย่างไร</summary><p>ใช้บนแผนที่จากปุ่มสัมภาระ ใช้ระหว่างต่อสู้ไม่ได้ · ยาที่เหลือกลับค่ายเมื่อจบด่านหรือถอนตัว ถ้าทีมล้มหมดยาที่พาไปจะหาย · กล่องสมบัติมีโอกาสได้ยา</p></details>`;
   }
-  // Forge (2D-4): pick any piece (bag or worn), then enhance, fuse or reroll it. All rules live in core/world/forge.
-  private forge(p: Profile): string {
-    const rules = this.map.equipment;
-    const all = [...p.items.map(i => ({ item: i, owner: undefined as string | undefined })),
-      ...Object.entries(p.members).flatMap(([owner, m]) => Object.values(m.gear ?? {}).map(i => ({ item: i!, owner })))].sort((a, b) => b.item.rarity - a.item.rarity || (b.item.plus ?? 0) - (a.item.plus ?? 0) || b.item.level - a.item.level);
-    if (this.forgeUid && !findItem(p, this.forgeUid)) this.forgeUid = undefined;
-    const list = all.map(({ item, owner }) => `<li data-rarity="${item.rarity}"><button id="forge-item-${item.uid}" data-lobby="forge-pick" data-uid="${item.uid}" class="forge-pick" aria-pressed="${this.forgeUid === item.uid}">
-      ${gearArt(item)}<b>${itemName(item)} Lv${item.level}</b><small>${owner ? `ใส่อยู่: ${heroText[owner]?.name ?? owner}` : 'ในคลัง'}${item.set ? ` · ชุด${setText[item.set]}` : ''}</small></button></li>`).join('');
-    const why: Record<string, string> = { maxed: 'เต็มแล้ว', ore: 'แร่ดาวไม่พอ', dust: 'ฝุ่นดาวไม่พอ', seal: 'ตราสัญญาไม่พอ', materials: 'ชิ้นในคลังไม่พอ' };
-    let detail = '<p class="camp-note">แตะอุปกรณ์ด้านล่างเพื่อเลือกชิ้นที่จะพัฒนา</p>';
-    const found = this.forgeUid ? findItem(p, this.forgeUid) : undefined;
-    if (found) {
-      const { item } = found; const cost = enhanceCost(this.map, item); const eReason = enhanceReason(p, this.map, item.uid);
-      const mats = fuseMaterials(p, this.map, item.uid); const fReason = fuseReason(p, this.map, item.uid); const need = rules.forge.fuseCount - 1;
-      detail = `<div class="forge-detail" data-rarity="${item.rarity}">${gearArt(item)}<p><b>${itemName(item)} Lv${item.level}</b> · ${itemLines(rules, item).join(' · ')}</p>
-        <h4>${icon('enhance')} ตีบวก <small>สำเร็จทุกครั้ง · ค่าพื้นฐาน +${rules.forge.plusPercent}% ต่อขั้น · สูงสุด +${rules.forge.plusCap[item.rarity]}</small></h4>
-        <button id="forge-enhance" data-lobby="enhance" class="primary"${eReason ? ' disabled' : ''}>${cost ? `ตีบวก +${(item.plus ?? 0) + 1} · แร่ ${cost.ore} ผง ${cost.dust}` : 'ตีบวกเต็มแล้ว'}${eReason && eReason !== 'maxed' ? ` · ${why[eReason]}` : ''}</button>
-        <h4>${icon('fuse')} หลอมรวม <small>ใช้${slotText[item.slot]}${rarityText[item.rarity]}ในคลังอีก ${need} ชิ้น · ได้ขั้นถัดไป เก็บชุดและค่าเดิม ระดับตีบวกเหลือครึ่ง</small></h4>
-        ${item.rarity < 4 ? `<p class="forge-mats">${mats.length ? `จะใช้: ${mats.map(m => `${itemName(m)} Lv${m.level}`).join(', ')}` : 'ยังไม่มีชิ้นที่ใช้หลอมได้'}</p>` : ''}
-        <button id="forge-fuse" data-lobby="fuse" class="secondary"${fReason ? ' disabled' : ''}>${item.rarity >= 4 ? 'ขั้นสูงสุดแล้ว' : `หลอมเป็น${rarityText[item.rarity + 1]}${fReason ? ` · ${why[fReason]}` : ''}`}</button>
-        ${item.affixes.length ? `<h4>${icon('reroll')} ปรับค่า <small>ใช้ตราสัญญา ${rules.forge.rerollSeals} อัน สุ่มค่าที่เลือกใหม่ ค่าอื่นคงเดิม</small></h4>
-        <div class="forge-rerolls">${item.affixes.map((a, i) => { const r = rerollReason(p, this.map, item.uid, i);
-          return `<button id="forge-reroll-${i}" data-lobby="reroll" data-index="${i}" class="secondary"${r ? ' disabled' : ''}>สุ่ม${statName[a]}ใหม่${r ? ` · ${why[r]}` : ''}</button>`; }).join('')}</div>` : ''}</div>`;
-    }
-    const f = rules.forge; const left = smeltLeft(p, this.map);
-    const smelt = `<div class="smelt"><h4>${icon('dust')} หลอมแร่เป็นฝุ่นดาว <small>แร่ดาว ${f.smeltOre} ต่อฝุ่นดาว 1 · หลอมได้อีก ${left}/${f.smeltCap} ในรอบนี้</small></h4><div class="smelt-buttons">${[1, 5].map(n => { const r = smeltReason(p, this.map, n);
-      return `<button id="smelt-${n}" data-lobby="smelt" data-dust="${n}" class="secondary"${r ? ' disabled' : ''}>ฝุ่น +${n} · แร่ ${n * f.smeltOre}${r === 'limit' ? ' · ครบแล้วรอบนี้' : r === 'ore' ? ' · แร่ดาวไม่พอ' : ''}</button>`; }).join('')}</div></div>`;
-    return `<p class="hire-cost">${icon('ore')} ${p.bank.ore} · ${icon('dust')} ${p.bank.dust} · ${icon('seal')} ${p.bank.seal} · ฝุ่นดาวได้จากการแยกชิ้นและการหลอมแร่</p>${detail}${smelt}
-      <h3>${icon('pack')} อุปกรณ์ทั้งหมด <span class="camp-embers">${all.length} ชิ้น</span></h3>${list ? `<ul class="forge-list">${list}</ul>` : '<p class="camp-note">ยังไม่มีอุปกรณ์ · ชนะศึกบนแผนที่เพื่อหาอุปกรณ์</p>'}`;
-  }
+  private forge(p:Profile):string {return this.forgeUI.render(p);}
   // Opens the member's talent tree in its own sheet.
   private treeButton(p: Profile, id: string): string {
     if (!this.map.talents[id]) return '';

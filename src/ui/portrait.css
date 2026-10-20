@@ -165,3 +165,44 @@ body { display: grid; place-items: center; background: radial-gradient(ellipse a
 #app .world-hero small { font-size: 9px; }
 #app .world-hero .hero-level, #app .world-hero .hero-stars { display: none; }
 .world-talent-badge { position: absolute; top: -5px; right: 0; border: 1px solid var(--gold-light); border-radius: 8px; background: #40321e; color: var(--gold-light); padding: 0 3px; font-size: 9px; line-height: 14px; }
+/* Forge: one selected item and action, with a persistent price/review area inside the game frame. */
+.lobby-sheet:has(.forge-workbench) { inset: 0; width: auto; border-radius: 0; min-height: 0; padding: 10px; }
+.lobby-sheet:has(.forge-workbench) .lobby-content { display: flex; flex-direction: column; overflow: hidden; padding: 0; }
+.lobby-sheet:has(.forge-workbench) .npc-line { display: none; }
+.forge-workbench { display: flex; flex-direction: column; flex: 1; min-height: 0; }
+.forge-tabs, .forge-modes { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 5px; margin: 7px 0; }
+.forge-tabs button, .forge-modes button { min-height: 44px; padding: 7px 3px; font-size: 13px; }
+.forge-tabs [aria-selected=true], .forge-modes [aria-pressed=true] { color: var(--gold-light); border-color: var(--gold-light); background: #293145; }
+#forge-body { flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain; padding: 2px 3px 0; }
+#forge-body h3 { margin: 10px 0; font-size: 16px; }
+.forge-item-head { display: flex; align-items: center; gap: 10px; padding: 8px; border: 1px solid var(--hud-edge); border-radius: 10px; background: var(--hud-glass); }
+.forge-item-head .gear-art { --art: 44px; flex: 0 0 44px; }
+.forge-item-head > div { min-width: 0; }
+.forge-item-head b, .forge-item-head small { display: block; overflow-wrap: anywhere; }
+.forge-item-head small { color: var(--text-muted); font-size: 12px; }
+.forge-item-tools { display: flex; gap: 8px; margin: 8px 0; }
+.forge-item-tools button { flex: 1; min-height: 44px; padding: 7px; }
+.forge-label { display: grid; gap: 5px; font-size: 13px; color: var(--text-muted); margin: 8px 0; }
+.forge-label select { min-width: 0; width: 100%; min-height: 44px; border: 1px solid var(--hud-edge); border-radius: 9px; padding: 8px; background: #102137; color: var(--text); font: inherit; }
+.forge-workbench .forge-detail { display: block; background: none; border: 0; padding: 0; margin: 0; }
+.forge-workbench .forge-pick { min-height: 64px; padding: 10px; }
+.forge-workbench .forge-pick small { line-height: 1.6; }
+.forge-impact { border: 1px solid var(--hud-edge); border-radius: 10px; margin-top: 10px; padding: 8px; }
+.forge-impact summary { min-height: 44px; padding: 10px 2px; color: var(--gold-light); font-size: 13px; }
+.forge-skills { padding-left: 18px; line-height: 1.8; font-size: 13px; }
+.forge-stat-preview caption { text-align: left; padding: 8px 0; }
+.forge-footer { position: sticky; bottom: 0; z-index: 2; padding: 10px 0 4px; margin-top: 10px; border-top: 1px solid var(--hud-edge); background: #0c192bfa; }
+.forge-footer > p { margin: 4px 0 8px; font-size: 13px; }
+.forge-footer > small { display: block; color: var(--text-muted); font-size: 12px; margin-bottom: 8px; }
+.forge-footer button { width: 100%; min-height: 48px; padding: 8px; }
+.forge-footer-buttons { display: flex; gap: 8px; }
+.forge-footer-buttons button { flex: 1; }
+.forge-reason { color: #ffc6b6; font-size: 13px; }
+.forge-review { color: var(--gold-light); }
+.forge-refund { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 10px; padding: 12px; background: var(--hud-glass); border: 1px solid var(--hud-edge); border-radius: 10px; font-size: 13px; }
+.forge-refund dt { color: var(--text-muted); }
+.forge-refund dd { margin: 0; text-align: right; }
+.forge-workbench[data-review=true] .forge-item-tools, .forge-workbench[data-review=true] .forge-modes { display: none; }
+.forge-workbench[data-review=true][data-mode=enhance] .forge-detail > .camp-note, .forge-workbench[data-review=true][data-mode=enhance] .forge-detail > .forge-label { display: none; }
+.forge-quests { border-bottom: 1px solid var(--hud-edge); margin-bottom: 8px; }
+.forge-quests summary { min-height: 44px; padding: 10px 4px; color: var(--text-muted); font-size: 13px; }

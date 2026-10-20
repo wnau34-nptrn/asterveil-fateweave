@@ -95,9 +95,10 @@ export function dismissReason(profile: Profile, id: string): string {
 }
 export function dismiss(initial: Profile, map: MapDefinition, id: string): ProfileResult {
   const reason = dismissReason(initial, id); if (reason) return blocked(initial, reason);
+  if(Object.values(initial.members[id]?.gear??{}).filter(i=>i?.locked).length>Math.max(0,map.equipment.bagCap-initial.items.length))return blocked(initial,'full');
   const profile = structuredClone(initial);
   // Their equipment goes back to the bag; whatever does not fit is salvaged.
-  for (const item of Object.values(profile.members[id]?.gear ?? {})) if (item) stash(profile, map, item);
+  for (const item of Object.values(profile.members[id]?.gear ?? {}).sort((a,b)=>Number(!!b?.locked)-Number(!!a?.locked))) if (item) stash(profile, map, item);
   profile.company = profile.company.filter(m => m !== id); delete profile.members[id];
   profile.party.deployed = profile.party.deployed.filter(m => m !== id); profile.party.reserve = profile.party.reserve.filter(m => m !== id);
   profile.bank.gold += map.company.dismissRefund;
@@ -151,13 +152,19 @@ export function unequip(initial: Profile, map: MapDefinition, heroId: string, sl
   return { profile, event: { type: 'equipped', heroId } };
 }
 // Salvages bag items (never equipped ones) into ore and veil dust.
+export function salvageReason(initial:Profile,map:MapDefinition,uids:readonly number[]):string {
+  const picked=initial.items.filter(i=>uids.includes(i.uid));
+  if(!picked.length||picked.length!==uids.length||new Set(uids).size!==uids.length)return 'unknown';
+  if(picked.some(i=>i.locked))return 'locked';
+  const total=picked.reduce((v,item)=>{const n=salvageValue(map,item);return {ore:v.ore+n.ore,dust:v.dust+n.dust};},{ore:0,dust:0});
+  return !Number.isSafeInteger(total.ore)||!Number.isSafeInteger(total.dust)||initial.bank.ore+total.ore>9999999||initial.bank.dust+total.dust>9999999?'full':'';
+}
 export function salvage(initial: Profile, map: MapDefinition, uids: readonly number[]): ProfileResult {
-  const picked = initial.items.filter(i => uids.includes(i.uid));
-  if (!picked.length || picked.length !== new Set(uids).size) return blocked(initial, 'unknown');
-  const profile = structuredClone(initial); let ore = 0, dust = 0;
-  for (const item of picked) { const v = salvageValue(map, item); ore += v.ore; dust += v.dust; }
-  profile.items = profile.items.filter(i => !uids.includes(i.uid)); profile.bank.ore += ore; profile.bank.dust += dust;
-  return { profile, event: { type: 'salvaged', count: picked.length, ore, dust } };
+  const reason=salvageReason(initial,map,uids);if(reason)return blocked(initial,reason);
+  const profile=structuredClone(initial);let ore=0,dust=0;
+  for(const item of profile.items.filter(i=>uids.includes(i.uid))){const v=salvageValue(map,item);ore+=v.ore;dust+=v.dust;}
+  profile.items=profile.items.filter(i=>!uids.includes(i.uid));profile.bank.ore+=ore;profile.bank.dust+=dust;
+  return {profile,event:{type:'salvaged',count:uids.length,ore,dust}};
 }
 
 // Team selection: every company member is in one group. Swap two members of different
