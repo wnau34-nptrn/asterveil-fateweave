@@ -1,5 +1,11 @@
 # Expedition design — 2D tile board
 
+## Equipment progression phase 5 — fixed weapon crafting (2026-10-20)
+
+Camp smith → Craft weapon creates one fixed green (rarity 1) weapon for an owned class, including members left at camp. Choose Lv1 through the same permanent area-earned item-Lv cap. Quality is 100%, one class-appropriate Attack/Support affix at 100%, no set/special/+; no RNG or automatic equip. Content draft costs: 18 ore +4 dust at Lv1, plus 6 ore +1 dust per additional starting level. This manufacture price is not refundable development capital; recycle pays only existing base salvage (3 ore/2 dust) plus any separately paid later enhancement/Lv investment. Existing fusion/development remains available. No new currency, loot/pity/encounter/combat changes.
+
+Crafting is a predictable starter/fallback, not a source of selected sets or ideal rolls. At Lv1, 27 green weapons cost 486 ore/108 dust before existing three-to-one fusion could reach legendary (no selected special); drops can skip this material cost and supply sets/higher initial Lv/quality. A craft/recycle cycle loses resources at every unlocked Lv; initial manufacturing does not mint investment credit. No pity progress/reset from crafting. Existing item shape and save v25 accept crafted gear through normal equip, expedition provenance, forge and recycling.
+
 ## Equipment progression phase 4 — targeted farming (2026-10-20)
 
 Camp → Farm selects any owned class, including members left at camp; apply is explicit and free. Each new departure freezes its target. Existing weapon drops get an additional 70% target-class bias; after 11 equipment drops without that weapon, drop 12 is forced to that class weapon. Count equipment drops, not wins/steps; no extra item, drop-rate, rarity, quality, Lv or set-chance boost. Counters persist separately per class on completion, withdrawal and wipe; reset on the actual target drop even if subsequently lost. Dismissal clears a selected target but retains its counter. Shops/forge/tutorial do not advance it.

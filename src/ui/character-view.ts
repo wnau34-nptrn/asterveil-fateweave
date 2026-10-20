@@ -25,7 +25,7 @@ export function characterSkills(h: HeroDefinition, base: HeroDefinition, stars: 
 
 const deltaText = (a: number, b: number) => b === a ? 'เท่าเดิม' : `${b > a ? '+' : '−'}${Math.abs(b-a)}`;
 const deltaClass = (a: number, b: number) => b === a ? 'same' : b > a ? 'gain' : 'loss';
-function equipmentEffects(s: CharacterState, map: MapDefinition, h: HeroDefinition): string {
+export function equipmentEffects(s: CharacterState, map: MapDefinition, h: HeroDefinition): string {
   const sets = wornSets(map.equipment, s.members[h.id]?.gear), specials = h.gear?.specials ?? [];
   return [sets.map(v => `<li><b>ชุด${v.name} ${v.pieces}/4</b><small>2 ชิ้น ${v.pieces >= 2 ? 'ทำงาน' : 'ยังไม่ครบ'}: ${v.two}</small><small>4 ชิ้น ${v.pieces >= 4 ? 'ทำงาน' : 'ยังไม่ครบ'}: ${v.four}</small></li>`).join(''), specials.map(v => `<li>★ ${specialText[v]}</li>`).join('')].join('') || '<li>ไม่มีเซ็ตหรือคุณสมบัติพิเศษ</li>';
 }

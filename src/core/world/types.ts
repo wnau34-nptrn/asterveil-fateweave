@@ -179,6 +179,7 @@ export interface PotionRules {
 // Fusing three pieces of one slot and rarity raises the chosen main piece one rarity; rerolling one affix costs a seal.
 // Recycling returns base salvage plus paid enhancement and item-Lv investment.
 export interface ForgeRules {
+  craft: {ore:number;dust:number;orePerLevel:number;dustPerLevel:number};
   itemLevel: {baseCap:number; orePerLevel:number; dustPerLevel:number; unlocks:readonly {elite:string;cap:number}[]};
   plusCap: readonly number[]; plusPercent: number; ore: number; orePerPlus: number; dustPerPlus: number;
   // Smelting (owner-approved 2026-10-16): `smeltOre` ore per veil dust, at most `smeltCap` dust per return home.
@@ -283,7 +284,7 @@ export type ProfileEvent =
   | { type: 'talent'; heroId: string }
   | { type: 'equipped'; heroId: string }
   | { type: 'salvaged'; count: number; ore: number; dust: number }
-  | { type: 'forged'; uid: number; action: 'enhance' | 'fuse' | 'reroll' | 'level' }
+  | { type: 'forged'; uid: number; action: 'enhance' | 'fuse' | 'reroll' | 'level' | 'craft' }
   | { type: 'equipmentLocked'; uid: number; locked: boolean }
   | { type: 'smelted'; dust: number }
   | { type: 'brewed'; potion: PotionId }

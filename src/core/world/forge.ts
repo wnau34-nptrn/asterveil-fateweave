@@ -1,5 +1,6 @@
 import type { Item, MapDefinition, Profile, ProfileResult } from './types';
 import { affixPool, enhancementInvestment, GEAR_SPECIALS, RARITIES, rollQuality } from './equipment';
+import { storageCap } from './storage';
 import { rollPercent } from './world';
 
 // Forge (2D-4): enhance, fuse and reroll in the lobby. Pure rules on the profile. Fuse and reroll draw from
@@ -130,4 +131,27 @@ export function raiseItemLevel(initial:Profile,map:MapDefinition,uid:number,targ
   profile.bank.ore-=cost.ore;profile.bank.dust-=cost.dust;item.level=target;
   item.levelInvestment={ore:paid.ore+cost.ore,dust:paid.dust+cost.dust};
   return {profile,event:{type:'forged',uid,action:'level'}};
+}
+
+// Fixed starter weapon: no RNG, set or paid-development credit. Higher-tier/set rewards remain farmed.
+export function weaponBlueprint(map:MapDefinition,hero:string,level:number,uid=0):Item {
+  return {uid,slot:'weapon',hero,rarity:1,level,affixes:[map.equipment.supportHeroes.includes(hero)?'support':'attack'],q:{main:100,affixes:[100]}};
+}
+export function weaponCraftCost(map:MapDefinition,level:number):{ore:number;dust:number}|undefined {
+  if(!Number.isInteger(level)||level<1||level>99)return;const c=map.equipment.forge.craft;
+  return {ore:c.ore+c.orePerLevel*(level-1),dust:c.dust+c.dustPerLevel*(level-1)};
+}
+export function weaponCraftReason(p:Profile,map:MapDefinition,hero:string,level:number):string {
+  if(!p.company.includes(hero))return 'unknown';
+  const cost=weaponCraftCost(map,level);if(!cost||level>itemLevelCap(p,map))return 'level';
+  if(p.overflow?.length)return 'pending';
+  if(p.items.length>=storageCap(p,map))return 'bag';
+  if(p.bank.ore<cost.ore)return 'ore';if(p.bank.dust<cost.dust)return 'dust';
+  if(!Number.isSafeInteger(p.nextItem+1))return 'full';return '';
+}
+export function craftWeapon(initial:Profile,map:MapDefinition,hero:string,level:number):ProfileResult {
+  const reason=weaponCraftReason(initial,map,hero,level);if(reason)return blocked(initial,reason);
+  const profile=structuredClone(initial),cost=weaponCraftCost(map,level)!,uid=profile.nextItem++;
+  profile.items.push(weaponBlueprint(map,hero,level,uid));profile.bank.ore-=cost.ore;profile.bank.dust-=cost.dust;
+  return {profile,event:{type:'forged',uid,action:'craft'}};
 }

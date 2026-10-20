@@ -1,5 +1,11 @@
 # Modern battle HUD design spec
 
+## Weapon crafting phase 5 — 2026-10-20
+
+Smith tabs: Develop / Craft weapon / Recycle / Smelt. Four >=44px controls fit the existing portrait frame. Craft selects an owned class and an unlocked starting item Lv. Display exact fixed weapon stats, one-item destination in the bag, actual current-worn versus proposed hero/Active preview, total price and remaining wallet. Clearly state green/100%/no set/no RNG/no auto-equip and that manufacture price differs from refundable later development.
+
+Review hides class/Lv selectors, retains the named result and price, and requires explicit confirmation. Cancel restores class selection/focus; Escape closes without purchase. Successful craft focuses the created item in Develop; return to the originating character remains intact. Full or pending storage explains the block; never silently overflow or recycle a purchase. Keep bounded scrolling, keyboard tab navigation and rotation/inert guards.
+
 ## Targeted farming phase 4 — 2026-10-20
 
 Camp has six >=44px menu controls including Farm, within the existing portrait frame. Farm shows owned-class selection, an explicit free save action, per-class progress preview and zone/set/Lv sources. Unsaved changes disappear on close/tab switch. Clearly label the camp guide as the next-run preview. MAP ! adds Equipment sources after Guide and Settings, showing the frozen current-run target and live remaining equipment drops. Legacy ongoing runs explicitly show old loot rules. All source content scrolls within existing bounded sheets/dialogs; retain keyboard tabs, focus restoration, editing/repeat guards and landscape inert behavior. Battle ! still defaults to Status.
