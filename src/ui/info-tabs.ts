@@ -1,9 +1,9 @@
 // Shared navigation for expandable in-game information and preference panels.
-export function infoTabs(prefix: string, history = false, status = false): string {
+export function infoTabs(prefix: string, history = false, status = false, loot = false): string {
   const initial = status ? 'status' : 'guide';
   return `<div class="info-tabs" role="tablist" aria-label="ข้อมูลและการตั้งค่า">${[
     ...(status ? [['status', 'สถานะ']] : []),
-    ['guide', 'คำแนะนำ'], ['settings', 'ตั้งค่า'], ...(history ? [['history', 'บันทึก']] : []),
+    ['guide', 'คำแนะนำ'], ['settings', 'ตั้งค่า'], ...(loot?[['loot','แหล่งอุปกรณ์']]:[]), ...(history ? [['history', 'บันทึก']] : []),
   ].map(([id, label]) => `<button id="${prefix}-tab-${id}" type="button" role="tab" aria-controls="${prefix}-panel-${id}" aria-selected="${id === initial}" tabindex="${id === initial ? 0 : -1}">${label}</button>`).join('')}</div>`;
 }
 

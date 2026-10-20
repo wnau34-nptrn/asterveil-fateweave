@@ -238,3 +238,14 @@ body { display: grid; place-items: center; background: radial-gradient(ellipse a
 
 .lobby-sheet:has(.storage-review) .storage-keeper { display:none; }
 .storage-keeper > summary,.storage-characters > summary { min-height:44px; padding:12px 0; color:var(--text-muted); font-size:13px; }
+
+.lobby-menu {grid-template-columns:repeat(6,minmax(44px,1fr));gap:4px;}
+.lobby-menu .lobby-menu-button {height:auto;aspect-ratio:1;min-height:44px;font-size:12px;}
+.loot-guide {font-size:13px;line-height:1.7;}
+.loot-guide h3,.hunt-settings h3 {color:var(--gold-light);}
+.hunt-settings > button {min-height:48px;width:100%;}
+.loot-progress {border:1px solid var(--gold-light);border-radius:10px;padding:10px;color:var(--gold-light);}
+.loot-zones {list-style:none;padding:0;display:grid;gap:8px;}
+.loot-zones li {display:grid;gap:5px;padding:10px;border:1px solid var(--hud-edge);border-radius:10px;background:var(--hud-glass);}
+.loot-zones span {color:var(--text-muted);}
+.loot-guide summary {min-height:44px;padding:10px 0;}

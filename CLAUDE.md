@@ -1,5 +1,12 @@
 # Fateweave development instructions
 
+## Targeted farming phase 4 — owner scope 2026-10-20
+
+Camp → Farm selects any owned class, including members left at camp; apply is explicit and free. Each new departure freezes its target. Existing weapon drops get an additional 70% target-class bias; after 11 equipment drops without that weapon, drop 12 is forced to that class weapon. Count equipment drops, not wins/steps; no extra item, drop-rate, rarity, quality, Lv or set-chance boost. Counters persist separately per class on completion, withdrawal and wipe; reset on the actual target drop even if subsequently lost. Dismissal clears a selected target but retains its counter. Shops/forge/tutorial do not advance it.
+
+- core/world/targeted-loot.ts owns selection/snapshot/reward progression. Save v25 accepts v1–v24. Absent hunt metadata on an ongoing legacy run preserves the exact old loot/RNG path until return; do not add it during migration. No map/encounter version bump: the optional per-run snapshot gates the changed loot rule. Validate known/owned targets, profile/run agreement and counters 0–11; preserve active battle replay and item ownership checks.
+- ui/loot-guide.ts shares the camp preview and readonly MAP ! → Equipment sources guide. Maintain separate unsaved selection, cancel/reset and input/inert guards; source info cannot mutate RNG, equipment or resources.
+
 Work only in `asterveil-fateweave`. Never modify, reset, merge, push to, or import private code/assets/history from `asterveil-rise-beyond` (reading its design documents for concept adaptation was approved by the owner on 2026-10-14). Preserve existing target-repository work. Never commit secrets or supplied concept images without explicit authorization. Exception (owner, 2026-10-16): the background music from Asterveil: Rise Beyond may be used; the owner uploaded the six tracks themselves (`public/assets/music`, see `docs/AUDIO.md`). This covers those audio files only, not code, data, names or art. The user explicitly authorized GitHub Pages publication after the initial prototype; the Pages workflow is within that scope. Merging and publication follow the standing authorization below. Repository visibility/access changes or other hosting must be part of an owner-requested task.
 
 ## Standing authorization: finish requested work without repeated approval

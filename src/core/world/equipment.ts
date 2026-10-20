@@ -73,12 +73,13 @@ export function gearTotals(map: MapDefinition, gear: Gear | undefined): GearTota
 }
 // Rolls one item from `roll()` (0–99 per call): slot, the weapon's class from `heroes`, rarity by weight, distinct affixes,
 // a legendary special, a set from `sets` at the rules' set chance (2D-3), and last the roll qualities.
-export function rollItem(rules: EquipmentRules, roll: () => number, level: number, weights: readonly number[], heroes: readonly string[], sets: readonly SetId[] = []): Item {
+export function rollItem(rules: EquipmentRules, roll: () => number, level: number, weights: readonly number[], heroes: readonly string[], sets: readonly SetId[] = [], target?:{hero:string;bias:number;force:boolean}): Item {
   const pick = <T>(list: readonly T[]) => list[(roll() * 7919 + roll()) % list.length]!;
-  const slot = pick(GEAR_SLOTS);
+  const rolledSlot=pick(GEAR_SLOTS),slot=target?.force?'weapon':rolledSlot;
   const total = weights.reduce((a, b) => a + b, 0); let r = (roll() * 100 + roll()) % total; let rarity = 0;
   while (r >= weights[rarity]!) { r -= weights[rarity]!; rarity++; }
-  const hero = slot === 'weapon' ? pick(heroes) : undefined;
+  let hero = slot === 'weapon' ? pick(heroes) : undefined;
+  if(hero&&target&&(target.force||roll()<target.bias))hero=target.hero;
   const pool = affixPool(rules, slot, hero); const affixes: GearStat[] = [];
   for (let i = 0; i < rules.affixCount[rarity]! && pool.length; i++) affixes.push(pool.splice((roll() * 7919 + roll()) % pool.length, 1)[0]!);
   const special = rarity === RARITIES - 1 ? pick(GEAR_SPECIALS) : undefined;

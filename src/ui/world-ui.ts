@@ -1,3 +1,4 @@
+import {lootGuide} from './loot-guide';
 import { infoTabs } from './info-tabs';
 import type { CharacterTab } from './character-view';
 import { CharacterPanel, type CharacterModel } from './character-panel';
@@ -111,7 +112,7 @@ export class WorldUI {
       <dialog id="camp-dialog" class="world-dialog" aria-labelledby="camp-title"><div class="info-header"><h2 id="camp-title">${icon('camp')} แคมป์พักแรม</h2><button data-world="camp-close" class="quiet" aria-label="ปิดแคมป์">${icon('close')}</button></div><div class="info-content" id="camp-content"></div></dialog>
       <dialog id="pack-dialog" class="world-dialog" aria-labelledby="pack-title"><div class="info-header"><h2 id="pack-title">${icon('pack')} กระเป๋า</h2><button data-world="pack-close" class="quiet" aria-label="ปิดกระเป๋า">${icon('close')}</button></div><div class="info-content" id="pack-content"></div></dialog>
       <dialog id="event-dialog" class="world-dialog" aria-labelledby="event-title"><div class="info-header"><h2 id="event-title"></h2><button data-world="event-close" class="quiet" aria-label="ปิดและเดินต่อ">${icon('close')}</button></div><div class="info-content" id="event-content"></div></dialog>
-      <dialog id="world-info" class="world-dialog" aria-labelledby="world-info-title"><div class="info-header"><h2 id="world-info-title">ข้อมูลการเดินทาง</h2><button data-world="info-close" class="quiet" aria-label="ปิดข้อมูล">${icon('close')}</button></div>${infoTabs('world')}<div class="info-content"><section id="world-panel-settings" role="tabpanel" aria-labelledby="world-tab-settings" hidden><section class="battle-sound"><h3>เพลงและเสียงเอฟเฟกต์</h3><div id="world-sfx-controls"></div></section></section><section id="world-panel-guide" role="tabpanel" aria-labelledby="world-tab-guide"><div id="world-info-content"></div></section></div></dialog>`;
+      <dialog id="world-info" class="world-dialog" aria-labelledby="world-info-title"><div class="info-header"><h2 id="world-info-title">ข้อมูลการเดินทาง</h2><button data-world="info-close" class="quiet" aria-label="ปิดข้อมูล">${icon('close')}</button></div>${infoTabs('world',false,false,true)}<div class="info-content"><section id="world-panel-settings" role="tabpanel" aria-labelledby="world-tab-settings" hidden><section class="battle-sound"><h3>เพลงและเสียงเอฟเฟกต์</h3><div id="world-sfx-controls"></div></section></section><section id="world-panel-loot" role="tabpanel" aria-labelledby="world-tab-loot" hidden><div id="world-loot-content"></div></section><section id="world-panel-guide" role="tabpanel" aria-labelledby="world-tab-guide"><div id="world-info-content"></div></section></div></dialog>`;
     if(skillData) this.characters = new CharacterPanel(root,map,heroes,skillData,{
       model:()=>this.characterModel(),
       preview:(id,key)=>{const s=this.view?.state,match=/^(found|spare):(\d+)$/.exec(key);if(!s||!match)return;const out=wear(s,map,()=>({...skillData,heroes}),id,match[1] as BagList,Number(match[2]));return out.event.type==='equipped'?this.characterModel(out.state):undefined;},
@@ -600,6 +601,7 @@ export class WorldUI {
 
   private renderInfo(): void {
     const s = this.view?.state;
+    this.root.querySelector('#world-loot-content')!.innerHTML=lootGuide(this.map,s?.hunt,!s?.hunt);
     this.root.querySelector('#world-info-content')!.innerHTML = `
       <section class="world-rules"><h3>เดินทีละช่อง</h3><p>แตะช่องที่ไฮไลต์ ใช้ปุ่มลูกศรมุมซ้ายล่าง หรือแป้น ←↑↓→ / WASD ทุกก้าวในพื้นที่อันตรายมีโอกาสพบศัตรู ตัวเลขมุมขวาบนคือโอกาสของก้าวถัดไป ยิ่งเดินโดยไม่เจอ โอกาสยิ่งเพิ่ม และกลับไปต่ำสุดเมื่อพบศัตรูหรือพักที่แคมป์</p>
       <h3>เลือดติดตัว</h3><p>จบศึกแล้วเลือดไม่ฟื้นเอง สมาชิกที่ล้มยังล้มอยู่จนกว่าจะชุบที่แคมป์ ศึกถัดไปเริ่มด้วยเลือดที่เหลือ</p>

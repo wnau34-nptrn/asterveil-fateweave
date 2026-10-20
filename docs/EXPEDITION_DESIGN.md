@@ -1,5 +1,13 @@
 # Expedition design — 2D tile board
 
+## Equipment progression phase 4 — targeted farming (2026-10-20)
+
+Camp → Farm selects any owned class, including members left at camp; apply is explicit and free. Each new departure freezes its target. Existing weapon drops get an additional 70% target-class bias; after 11 equipment drops without that weapon, drop 12 is forced to that class weapon. Count equipment drops, not wins/steps; no extra item, drop-rate, rarity, quality, Lv or set-chance boost. Counters persist separately per class on completion, withdrawal and wipe; reset on the actual target drop even if subsequently lost. Dismissal clears a selected target but retains its counter. Shops/forge/tutorial do not advance it.
+
+Regional source information uses existing zone data: meadow dawn/wind Lv1–3, thicket shadow/thorn Lv4–6, scar starveil/mender Lv7–9; the boss remains three Lv11 drops from all sets. No crafting, rarity upgrade changes, affix transfer or exclusive boss effects in this phase. Save v25 preserves old active-run RNG through absent hunt metadata; new departures snapshot the camp goal.
+
+Deterministic 24,000-drop sample (1,000 seeds ×24, four-class party, Lv5 normal rewards) measured target weapons at 4.025% without targeting versus 15.1375% with targeting; all weapon share 16.8958% versus 18.7917%. These are scoped sample rates, not a universal forecast. The forced threshold only substitutes an existing reward.
+
 Fateweave is a single game: an expedition across a square-tile map with turn-based SPD battles. The earlier practice selector is removed. Combat rules are unchanged (see `GAMEPLAY_DIRECTION.md`).
 
 ## Source of the design
