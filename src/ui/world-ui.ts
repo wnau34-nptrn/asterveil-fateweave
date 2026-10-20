@@ -1,22 +1,25 @@
 import { infoTabs } from './info-tabs';
-import { characterEquipmentComparison, characterOverview, characterSkills, characterTalents, characterTabs, type CharacterTab } from './character-view';
+import type { CharacterTab } from './character-view';
+import { CharacterPanel, type CharacterModel } from './character-panel';
+import { applyRunEquipment, runEquipment, type AutoEquipmentPlan } from '../core/world/auto-equipment';
+import { newGearFilters, changeGearFilter, filteredEquipment, gearFilters as gearFilterControls } from './gear-inventory';
 import { talentPoints, talentsSpent } from '../core/world/talents';
 import type { TalentNode } from '../core/world/types';
 import { shortcutBlocked } from '../platform/keyboard';
 import type { EncounterDefinition, HeroDefinition } from '../core/battle/types';
 
-import type { Direction, EventChoice, ExpeditionState, GearSlot, Item, MapDefinition, Point, PotionId } from '../core/world/types';
-import { canManage, wear, wearReason, type BagList, travelTargets, atCamp, atMuster, canOpenChest, canRest, canRevive, chestAt, eliteBlocks, questComplete, questDone, encounterChance, eventChoiceReason, isRevealed, monsterLevelAt, pendingEvent, rosterIds, starred, tileAt, wounded, zoneOf } from '../core/world/world';
-import { GEAR_SLOTS, PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS } from '../core/world/types';
-import { actorArt, portraitsUrl, sheetRows } from '../game/visuals/assets';
+import type { Direction, EventChoice, ExpeditionState, GearSlot, MapDefinition, Point, PotionId } from '../core/world/types';
+import { canManage, wear, type BagList, travelTargets, atCamp, atMuster, canOpenChest, canRest, canRevive, chestAt, eliteBlocks, questComplete, questDone, encounterChance, eventChoiceReason, isRevealed, monsterLevelAt, pendingEvent, rosterIds, starred, tileAt, wounded, zoneOf } from '../core/world/world';
+import { PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS } from '../core/world/types';
+import { portrait, starRow } from './portraits';
 import { SOURCE_TILE, openingFrame, chestFrame, decorAt, itemFrame, floorFrame, fogLayers, landmarkAt, tileSizeFor, tileset, worldArtUrl, type Landmark } from '../game/visuals/world-art';
-import { heroStatLine, questLine, choiceText, eventChoices, eventReasonText, eventText, heroText, itemLines, itemName, itemOwner, potionText, resourceOrder, resourceText, slotIcon, slotText, wornSets } from './th';
+import { questLine, choiceText, eventChoices, eventReasonText, eventText, heroText, itemLines, itemName, itemOwner, potionText, resourceOrder, resourceText } from './th';
 import { icon, type IconName } from './icons';
 import { gearArt, potionArt } from './equip-art';
 import { boulderPosition, doorOpen, openPit, secretAt } from '../core/world/puzzles';
 
 export interface WorldHost { travel(to: Point): void; move(dir: Direction): void; rest(): void; revive(heroId: string): void; swap(a: string, b: string): void; moveMember(id: string): void; withdraw(): void; openChest(): void;
-  talent(heroId: string, node: TalentNode): void;
+  talent(heroId: string, node: TalentNode): void; autoEquip(plan: AutoEquipmentPlan): void;
   usePotion(potion: PotionId, heroId?: string): void; chooseEvent(choice: EventChoice): void;
   wear(heroId: string, from: BagList, index: number): void; takeOff(heroId: string, slot: GearSlot): void }
 export interface WorldBanner { kind: 'encounter' | 'boss' | 'elite' | 'tutorial' | 'complete'; eyebrow: string; title: string; detail: string }
@@ -35,14 +38,7 @@ export function itemArt(id: 'ore' | 'ember' | 'seal'): string {
   const f = itemFrame(id);
   return `<span class="item-art" data-item="${id}" style="--fx:${f.x / f.w}" aria-hidden="true"></span>`;
 }
-// Star rank as individual badges; the count stays readable text for assistive tech.
-export function starRow(n: number, max: number): string {
-  return `<span class="star-row" role="img" aria-label="${n} ดาว">${icon('starBadge').repeat(n)}${icon('starBadgeEmpty').replace('class="icon"', 'class="icon empty"').repeat(max - n)}</span>`;
-}
-export function portrait(id: string): string {
-  const { sheet, frame } = actorArt[id]!; const rows = sheetRows[sheet];
-  return `<span class="portrait" data-actor="${id}" style="--portrait-x:${frame % 2};--portrait-y:${Math.floor(frame / 2)};--portrait-rows:${rows}" aria-hidden="true"><img src="${portraitsUrl(sheet)}" alt="" width="1024" height="${rows * 512}" draggable="false"></span>`;
-}
+export { portrait, starRow } from './portraits';
 // The rift seal (3B) sits between the camp and the boss: any `need` of its objectives break it.
 const goals = (s: ExpeditionState, map: MapDefinition) => {
   const seal = questDone(s, map).length; const need = map.quest.need;
@@ -63,11 +59,10 @@ export class WorldUI {
   private campTab: 'care' | 'team' | 'travel' = 'care';
   // Map bag (2026-10-17): items, gear and team tabs; the member and slot shown on the gear tab.
   private bagTab: 'items' | 'gear' | 'team' = 'items';
-  private bagHero: string | undefined;
-  private bagSlot: GearSlot | undefined;
-  private characterTab: CharacterTab = 'overview';
-  private comparison: { from: BagList; index: number; item: Item } | undefined;
-  private characterReturn: { dialog?: string; focus: string; scroll: number } = { focus: 'world-pack', scroll: 0 };
+  private inventoryPick: string | undefined;
+  private inventorySource: ExpeditionState | undefined;
+  private readonly inventoryFilters = newGearFilters();
+  private readonly characters: CharacterPanel | undefined;
   private picked: string | undefined;
   private confirmWithdraw = false;
   private tile = 48;
@@ -75,7 +70,7 @@ export class WorldUI {
   private readonly reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
   // `eliteArt` maps each elite id to the actor art of its leading foe (the token drawn on its gate).
   constructor(private readonly root: HTMLElement, private readonly map: MapDefinition, private readonly heroes: readonly HeroDefinition[], private readonly host: WorldHost,
-    private readonly eliteArt: Readonly<Record<string, string>> = {}, private readonly skillData?: EncounterDefinition) {
+    private readonly eliteArt: Readonly<Record<string, string>> = {}, skillData?: EncounterDefinition) {
     this.width = map.rows[0]!.length;
     root.innerHTML = `
       <section class="map-view" id="map-viewport" aria-label="แผนที่ ใช้ปุ่มลูกศรหรือแตะช่องที่ไฮไลต์เพื่อเดินทีละช่อง">
@@ -115,43 +110,28 @@ export class WorldUI {
       <dialog id="world-goals" class="world-dialog" aria-labelledby="world-goals-title"><div class="info-header"><h2 id="world-goals-title">เป้าหมายการเดินทาง</h2><button data-world="goals-close" class="quiet" aria-label="ปิดเป้าหมาย">${icon('close')}</button></div><div class="info-content" id="world-goals-content"></div></dialog>
       <dialog id="camp-dialog" class="world-dialog" aria-labelledby="camp-title"><div class="info-header"><h2 id="camp-title">${icon('camp')} แคมป์พักแรม</h2><button data-world="camp-close" class="quiet" aria-label="ปิดแคมป์">${icon('close')}</button></div><div class="info-content" id="camp-content"></div></dialog>
       <dialog id="pack-dialog" class="world-dialog" aria-labelledby="pack-title"><div class="info-header"><h2 id="pack-title">${icon('pack')} กระเป๋า</h2><button data-world="pack-close" class="quiet" aria-label="ปิดกระเป๋า">${icon('close')}</button></div><div class="info-content" id="pack-content"></div></dialog>
-      <dialog id="character-dialog" class="world-dialog character-dialog" aria-labelledby="character-title"><div class="info-header"><h2 id="character-title">ตัวละคร</h2><button data-world="character-close" class="quiet" aria-label="ปิดข้อมูลตัวละคร">${icon('close')}</button></div><div id="character-members" class="tree-members"></div><div id="character-tabs" class="character-tabs" role="tablist" aria-label="ข้อมูลตัวละคร"></div><div id="character-content" class="info-content" role="tabpanel"></div></dialog>
       <dialog id="event-dialog" class="world-dialog" aria-labelledby="event-title"><div class="info-header"><h2 id="event-title"></h2><button data-world="event-close" class="quiet" aria-label="ปิดและเดินต่อ">${icon('close')}</button></div><div class="info-content" id="event-content"></div></dialog>
       <dialog id="world-info" class="world-dialog" aria-labelledby="world-info-title"><div class="info-header"><h2 id="world-info-title">ข้อมูลการเดินทาง</h2><button data-world="info-close" class="quiet" aria-label="ปิดข้อมูล">${icon('close')}</button></div>${infoTabs('world')}<div class="info-content"><section id="world-panel-settings" role="tabpanel" aria-labelledby="world-tab-settings" hidden><section class="battle-sound"><h3>เพลงและเสียงเอฟเฟกต์</h3><div id="world-sfx-controls"></div></section></section><section id="world-panel-guide" role="tabpanel" aria-labelledby="world-tab-guide"><div id="world-info-content"></div></section></div></dialog>`;
+    if(skillData) this.characters = new CharacterPanel(root,map,heroes,skillData,{
+      model:()=>this.characterModel(),
+      preview:(id,key)=>{const s=this.view?.state,match=/^(found|spare):(\d+)$/.exec(key);if(!s||!match)return;const out=wear(s,map,()=>({...skillData,heroes}),id,match[1] as BagList,Number(match[2]));return out.event.type==='equipped'?this.characterModel(out.state):undefined;},
+      previewPlan:plan=>{if(!this.view)return;const out=applyRunEquipment(this.view.state,map,()=>({...skillData,heroes}),plan);return out.event.type==='equipped'?this.characterModel(out.state):undefined;},
+      wear:(id,key)=>{const match=/^(found|spare):(\d+)$/.exec(key);if(match)this.host.wear(id,match[1] as BagList,Number(match[2]));},
+      takeOff:(id,slot)=>this.host.takeOff(id,slot),talent:(id,node)=>this.host.talent(id,node),applyPlan:plan=>this.host.autoEquip(plan),
+      restore:id=>{if(id==='pack-dialog')this.renderPack();else if(id==='camp-dialog')this.renderCamp();},
+    },'',this.inventoryFilters);
+    root.addEventListener('change',event=>{const control=event.target as HTMLInputElement|HTMLSelectElement;if(control.closest('.character-dialog')||!control.dataset.gearFilter||root.hidden||root.closest('[inert]')||Array.from(root.querySelectorAll('dialog[open]')).some(d=>!d.contains(control)))return;changeGearFilter(this.inventoryFilters,control);this.renderPack();root.querySelector<HTMLElement>('#'+control.id)?.focus();});
     for (const [id, trigger] of [['world-info', 'world-info-button'], ['world-goals', 'objective-button'], ['pack-dialog', 'world-pack'], ['camp-dialog', 'rest'], ['event-dialog', 'rest']]) {
       root.querySelector(`#${id}`)!.addEventListener('close', () => {
         if (root.querySelector('dialog[open]')) return;
         if (!root.hidden && !root.closest('[inert]')) root.querySelector<HTMLElement>(`#${trigger}`)?.focus({ preventScroll: true });
       });
     }
-    root.querySelector('#character-dialog')!.addEventListener('close', () => {
-      if (root.hidden || root.closest('[inert]')) return;
-      const back = this.characterReturn;
-      if (back.dialog) {
-        if (back.dialog === 'pack-dialog') this.renderPack(); else this.renderCamp();
-        const dialog = root.querySelector<HTMLDialogElement>(`#${back.dialog}`)!;
-        if (!dialog.open) dialog.showModal();
-        dialog.querySelector('.info-content')!.scrollTop = back.scroll;
-      }
-      root.querySelector<HTMLElement>(`#${back.focus}`)?.focus({ preventScroll: true });
-    });
-    root.addEventListener('keydown', e => {
-      if (root.hidden || root.closest('[inert]')) return;
-      if (e.repeat && (e.target as HTMLElement).closest('[data-world=character-talent]')) { e.preventDefault(); return; }
-      const tab = (e.target as HTMLElement).closest<HTMLButtonElement>('.character-tabs [role=tab]');
-      if (!tab || !['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(e.key)) return;
-      e.preventDefault(); e.stopPropagation();
-      const keys = Object.keys(characterTabs) as CharacterTab[], index = keys.indexOf(this.characterTab);
-      this.comparison = undefined;
-      this.characterTab = keys[e.key === 'Home' ? 0 : e.key === 'End' ? keys.length - 1 : (index + (e.key === 'ArrowRight' ? 1 : -1) + keys.length) % keys.length]!;
-      this.renderCharacter(); root.querySelector<HTMLElement>(`#character-tab-${this.characterTab}`)!.focus();
-    });
-    root.querySelector('#character-dialog')!.addEventListener('cancel', e => {
-      if (this.comparison && !root.closest('[inert]')) { e.preventDefault(); this.closeComparison(); }
-    });
     root.addEventListener('click', e => {
       if (root.hidden || root.closest('[inert]')) return;
       const el = e.target as HTMLElement;
+      const activeDialog=root.querySelector('dialog[open]');if(activeDialog&&!activeDialog.contains(el))return;
+      if(el.closest('[data-gear-reset]')){Object.assign(this.inventoryFilters,newGearFilters());this.renderPack();this.root.querySelector<HTMLElement>('#pack-gear-filter-set')?.focus();return;}
       const button = el.closest<HTMLButtonElement>('button[data-world]');
       if (button && !button.disabled) {
         const modal = root.querySelector('dialog[open]');
@@ -159,23 +139,6 @@ export class WorldUI {
         const dialog = (id: string) => root.querySelector<HTMLDialogElement>(id)!;
         switch (button.dataset.world) {
           case 'character-open': this.openCharacter(button.dataset.hero!, (button.dataset.tab as CharacterTab) ?? 'overview', button); break;
-          case 'character-close': dialog('#character-dialog').close(); break;
-          case 'character-member': this.comparison = undefined; this.bagHero = button.dataset.hero; this.bagSlot = undefined; this.renderCharacter(); root.querySelector<HTMLElement>(`#character-member-${this.bagHero}`)?.focus(); break;
-          case 'character-tab': this.comparison = undefined; this.characterTab = button.dataset.tab as CharacterTab; root.querySelector('#character-content')!.scrollTop = 0; this.renderCharacter(); root.querySelector<HTMLElement>(`#character-tab-${this.characterTab}`)?.focus(); break;
-          case 'bag-compare': {
-            const from = button.dataset.from as BagList, index = Number(button.dataset.index), s = this.view?.state;
-            if (s && !this.view!.locked && this.skillData && this.bagHero && !wearReason(s,this.bagHero,from,index)) {
-              this.comparison = { from, index, item: s[from][index]! }; this.renderCharacter(); root.querySelector('#character-content')!.scrollTop = 0; root.querySelector<HTMLElement>('#comparison-back')?.focus();
-            } break;
-          }
-          case 'comparison-back': this.closeComparison(); break;
-          case 'comparison-equip': {
-            const c = this.comparison, s = this.view?.state;
-            if (c && s && !this.view!.locked && this.bagHero && s[c.from][c.index] === c.item && !wearReason(s,this.bagHero,c.from,c.index)) {
-              this.comparison = undefined; this.host.wear(this.bagHero,c.from,c.index); root.querySelector<HTMLElement>(`#bag-slot-${this.bagSlot ?? c.item.slot}`)?.focus();
-            } break;
-          }
-          case 'character-talent': if (!this.view?.locked && this.bagHero && button.getAttribute('aria-disabled') !== 'true') { this.host.talent(this.bagHero, button.dataset.node as TalentNode); root.querySelector<HTMLElement>(`#character-talent-${button.dataset.node}`)?.focus(); } break;
           case 'move': this.input(button.dataset.dir as Direction); break;
           case 'interact': this.interact(); break;
           case 'camp-rest': if (!this.view?.locked) this.host.rest(); break;
@@ -189,11 +152,10 @@ export class WorldUI {
             this.confirmWithdraw = false; dialog('#camp-dialog').close(); this.host.withdraw(); break;
           case 'pack': this.bagTab = 'items'; this.picked = undefined; this.salvePick = false; this.renderPack(); dialog('#pack-dialog').showModal(); break;
           case 'bag-tab': this.bagTab = button.dataset.tab as WorldUI['bagTab']; this.picked = undefined; this.salvePick = false; this.renderPack(); this.root.querySelector<HTMLElement>(`#bag-tab-${this.bagTab}`)?.focus(); break;
+          case 'inventory-pick': this.inventoryPick=button.dataset.key;this.renderPack();this.root.querySelector<HTMLElement>('#inventory-hero-'+rosterIds(this.view!.state).find(id=>{const i=runEquipment(this.view!.state).find(e=>e.key===this.inventoryPick)?.item;return i&&(i.slot!=='weapon'||i.hero===id);}))?.focus();break;
+          case 'inventory-character': this.openCharacter(button.dataset.hero!,'gear',button,button.dataset.key);break;
           case 'bag-member': this.openCharacter(button.dataset.hero!, 'gear', button); break;
-          case 'bag-slot': { const slot = button.dataset.slot as GearSlot; this.bagSlot = this.bagSlot === slot ? undefined : slot; this.renderCharacter(); this.root.querySelector<HTMLElement>(`#bag-slot-${slot}`)?.focus(); break; }
           case 'bag-gear-of': this.openCharacter(button.dataset.hero!, 'gear', button); break;
-          case 'bag-wear': if (!this.view?.locked && this.bagHero) { this.host.wear(this.bagHero, button.dataset.from as BagList, Number(button.dataset.index)); this.root.querySelector<HTMLElement>(`#bag-slot-${this.bagSlot ?? ''}`)?.focus(); } break;
-          case 'bag-takeoff': if (!this.view?.locked && this.bagHero && this.bagSlot) { this.host.takeOff(this.bagHero, this.bagSlot); this.root.querySelector<HTMLElement>(`#bag-slot-${this.bagSlot}`)?.focus(); } break;
           case 'pack-close': dialog('#pack-dialog').close(); break;
           case 'potion': if (!this.view?.locked) {
             const potion = button.dataset.potion as PotionId;
@@ -264,36 +226,9 @@ export class WorldUI {
   }
   private focusTeam(id: string | undefined): void { if (id) this.root.querySelector<HTMLElement>(`#${this.bagOpen() ? 'bag-team' : 'team'}-${id}`)?.focus(); }
   private bagOpen(): boolean { return this.root.querySelector<HTMLDialogElement>('#pack-dialog')!.open; }
-  private openCharacter(id: string, tab: CharacterTab, trigger: HTMLButtonElement): void {
-    const s = this.view?.state;
-    if (!s || this.view!.locked || !canManage(s) || !rosterIds(s).includes(id) || this.root.hidden || this.root.closest('[inert]')) return;
-    const from = trigger.closest<HTMLDialogElement>('dialog');
-    this.characterReturn = { dialog: from?.id, focus: trigger.id || `world-hero-${id}`, scroll: from?.querySelector('.info-content')?.scrollTop ?? 0 };
-    this.comparison = undefined; this.bagHero = id; this.bagSlot = undefined;
-    this.characterTab = Object.hasOwn(characterTabs, tab) ? tab : 'overview';
-    from?.close(); this.renderCharacter();
-    const dialog = this.root.querySelector<HTMLDialogElement>('#character-dialog')!;
-    dialog.querySelector('.info-content')!.scrollTop = 0;
-    dialog.showModal(); this.root.querySelector<HTMLElement>(`#character-tab-${this.characterTab}`)!.focus();
-  }
-  private renderCharacter(): void {
-    const s = this.view?.state, id = this.bagHero;
-    if (!s || !id || !rosterIds(s).includes(id)) return;
-    const h = this.hero(id, s), base = this.heroes.find(v => v.id === id)!, m = s.members[id]!, text = heroText[id]!;
-    const focus = document.activeElement instanceof HTMLElement ? document.activeElement.id : '';
-    const members = this.root.querySelector<HTMLElement>('#character-members')!, left = members.scrollLeft;
-    this.root.querySelector('#character-title')!.textContent = `${text.name} · Lv${m.level ?? 1} · ★${m.stars}`;
-    members.innerHTML = rosterIds(s).map(c => {
-      const free = talentPoints(this.map, s.members[c]) - talentsSpent(s.members[c]?.talents);
-      return `<button id="character-member-${c}" data-world="character-member" data-hero="${c}" class="tree-member" aria-pressed="${c === id}" aria-label="${heroText[c]!.name} · ${s.roster.deployed.includes(c) ? 'ตัวหลัก' : 'สำรอง'} · แต้มเหลือ ${free}">${portrait(c)}<small>${heroText[c]!.name}</small>${free ? `<i>+${free}</i>` : ''}</button>`;
-    }).join(''); members.scrollLeft = left;
-    this.root.querySelector('#character-tabs')!.innerHTML = Object.entries(characterTabs).map(([tab, label]) => `<button id="character-tab-${tab}" data-world="character-tab" data-tab="${tab}" role="tab" aria-controls="character-content" aria-selected="${tab === this.characterTab}" tabindex="${tab === this.characterTab ? 0 : -1}">${label}</button>`).join('');
-    const content = this.root.querySelector<HTMLElement>('#character-content')!, scroll = content.scrollTop;
-    content.setAttribute('aria-labelledby', `character-tab-${this.characterTab}`);
-    content.innerHTML = `<p class="character-summary">${text.role} · ${h.lane === 'front' ? 'แนวหน้า' : 'แนวหลัง'} · ${s.roster.deployed.includes(id) ? `ตัวหลักช่อง ${s.roster.deployed.indexOf(id) + 1}` : 'สำรอง'} · HP ${s.hp[id] ?? 0}/${h.maxHp}</p>` +
-      (this.characterTab === 'overview' ? characterOverview(s, this.map, h, this.skillData) : this.characterTab === 'gear' ? this.characterGear(s) : !this.skillData ? '<p>ไม่มีข้อมูลสกิล</p>' : this.characterTab === 'skills' ? characterSkills(h, base, m.stars, this.skillData) : characterTalents(s, this.map, id, this.skillData));
-    content.scrollTop = scroll;
-    if (this.root.querySelector<HTMLDialogElement>('#character-dialog')!.open && focus) this.root.querySelector<HTMLElement>(`#${focus}`)?.focus({ preventScroll: true });
+  private openCharacter(id: string, tab: CharacterTab, trigger: HTMLButtonElement, key?: string): void { this.characters?.openFor(id,tab,trigger,key); }
+  private characterModel(state = this.view?.state): CharacterModel | undefined {
+    return state ? { state, source:state, ids:rosterIds(state), entries:runEquipment(state), available:!this.view?.locked&&canManage(state), camp:false } : undefined;
   }
   private input(dir: Direction): void { if (this.view && !this.view.locked && !this.view.state.completed && !this.root.hidden && !this.root.querySelector('dialog[open]')) this.host.move(dir); }
 
@@ -393,7 +328,7 @@ export class WorldUI {
     const eventDialog = this.root.querySelector<HTMLDialogElement>('#event-dialog')!;
     if (eventDialog.open) { if (pendingEvent(s, this.map) && !view.locked) this.renderEvent(); else eventDialog.close(); }
     if (this.bagOpen()) this.renderPack();
-    if (this.root.querySelector<HTMLDialogElement>('#character-dialog')!.open) this.renderCharacter();
+    this.characters?.refresh();
     if (this.root.querySelector<HTMLDialogElement>('#camp-dialog')!.open) { if (atMuster(s, this.map) && !view.locked) this.renderCamp(); else this.root.querySelector<HTMLDialogElement>('#camp-dialog')!.close(); }
     if (!prev || prev.revealed !== s.revealed) this.renderFog(s);
     this.renderSprites(s, prev);
@@ -452,6 +387,7 @@ export class WorldUI {
   // Map bag (2026-10-17): items (potions and resources), gear (wear finds and own items) and team (party and details).
   private renderPack(): void {
     const s = this.view?.state; if (!s) return;
+    if(this.inventorySource&&this.inventorySource!==s)this.inventoryPick=undefined;this.inventorySource=s;
     const tab = (id: WorldUI['bagTab'], label: string) => `<button id="bag-tab-${id}" data-world="bag-tab" data-tab="${id}" role="tab" aria-selected="${this.bagTab === id}" class="${this.bagTab === id ? 'active' : ''}">${label}</button>`;
     const tabs = `<div class="camp-tabs three" role="tablist" aria-label="กระเป๋า">${tab('items', 'ของ')}${tab('gear', `อุปกรณ์${s.found.length ? ` <small>ใหม่ ${s.found.length}</small>` : ''}`)}${tab('team', `ทีม <small>${s.roster.deployed.length}+${s.roster.reserve.length}</small>`)}</div>`;
     this.root.querySelector('#pack-content')!.innerHTML = tabs + (this.bagTab === 'gear' ? this.bagInventory(s) : this.bagTab === 'team' ? this.bagTeam(s) : this.bagItems(s));
@@ -463,52 +399,17 @@ export class WorldUI {
       <p class="world-stats">เปิดกล่องสมบัติแล้ว ${opened}/${this.map.chests.length} กล่อง · ของตกจากศึกที่ชนะและกล่องสมบัติ</p></div>`;
   }
   private bagInventory(s: ExpeditionState): string {
-    const entries = [...s.found.map(item => ({ item, label: 'เจอรอบนี้' })), ...s.spare.map(item => ({ item, label: 'ของที่พกมา' }))];
-    return `<div role="tabpanel"><h3>เลือกตัวละครเพื่อสวมใส่</h3><div class="tree-members" role="group" aria-label="เลือกผู้สวมใส่">${rosterIds(s).map(id => `<button id="bag-member-${id}" data-world="character-open" data-hero="${id}" data-tab="gear" class="tree-member">${portrait(id)}<small>${heroText[id]!.name}</small></button>`).join('')}</div><h3>อุปกรณ์ในกระเป๋า · ${entries.length} ชิ้น</h3>${entries.length ? `<ul class="pack-gear">${entries.map(({ item, label }) => `<li data-rarity="${item.rarity}">${gearArt(item)}<div><b>${itemName(item)} Lv${item.level}</b><small>${itemLines(this.map.equipment, item).join(' · ')}</small><small>${label} · ${itemOwner(item)}</small></div></li>`).join('')}</ul>` : '<p class="camp-note">ยังไม่มีอุปกรณ์ในกระเป๋า</p>'}<p class="camp-note">สวมใส่และถอดของได้ในหน้าตัวละคร · คลังที่ค่ายใช้ได้เมื่อกลับบ้าน</p></div>`;
-  }
-  // Gear tab: pick a brought member, see the six slots, wear finds (`found`) or own items taken off (`spare`).
-  private closeComparison(): void {
-    const c = this.comparison; this.comparison = undefined; this.renderCharacter();
-    if (c) this.root.querySelector<HTMLElement>(`#compare-${c.from}-${c.index}`)?.focus();
-  }
-  private characterGear(s: ExpeditionState): string {
-    const c = this.comparison, id = this.bagHero, template = this.skillData;
-    if (c && id && template && s[c.from][c.index] === c.item && !wearReason(s,id,c.from,c.index)) {
-      // The reducer is pure: this proposed state is never committed or persisted.
-      const next = wear(s,this.map,() => ({ ...template, heroes: this.heroes }),id,c.from,c.index).state;
-      return characterEquipmentComparison(s,next,this.map,this.hero(id,s),this.hero(id,next),c.item,template);
-    }
-    this.comparison = undefined; return this.bagGear(s);
-  }
-  private bagGear(s: ExpeditionState): string {
-    const ids = rosterIds(s); const id = this.bagHero && ids.includes(this.bagHero) ? this.bagHero : ids[0]!; this.bagHero = id;
-    const m = s.members[id]; const h = this.hero(id, s); const rules = this.map.equipment; const slot = this.bagSlot; const free = canManage(s);
-    const slots = GEAR_SLOTS.map(sl => { const it = m?.gear?.[sl];
-      return `<button id="bag-slot-${sl}" data-world="bag-slot" data-slot="${sl}" class="gear-slot" aria-pressed="${slot === sl}" ${it ? `data-rarity="${it.rarity}"` : ''} aria-label="${slotText[sl]}: ${it ? `${itemName(it)} Lv${it.level}` : 'ว่าง'}">${it ? gearArt(it) : icon(slotIcon[sl])}<b>${slotText[sl]}</b><small>${it ? `${itemName(it)} Lv${it.level}` : 'ว่าง'}</small></button>`;
-    }).join('');
-    const worn = slot && m?.gear?.[slot];
-    const detail = slot ? `<div class="gear-detail">${worn ? `${gearArt(worn)}<p><b>${itemName(worn)} Lv${worn.level}</b> · ${itemLines(rules, worn).join(' · ')}${worn.uid ? '' : ' · <em>เจอรอบนี้</em>'}</p>
-      <button id="bag-takeoff" data-world="bag-takeoff" class="secondary"${free ? '' : ' disabled'}>ถอดเก็บเข้ากระเป๋า</button>` : `<p>ยังไม่ได้ใส่${slotText[slot]}</p>`}</div>` : '';
-    const entries = (['found', 'spare'] as const).flatMap(from => s[from].map((item, index) => ({ item, from, index })))
-      .filter(e => !slot || e.item.slot === slot).sort((a, b) => b.item.rarity - a.item.rarity || b.item.level - a.item.level);
-    const rows = entries.map(({ item: i, from, index }) => { const reason = wearReason(s, id, from, index);
-      return `<li data-rarity="${i.rarity}">${gearArt(i)}<div><b>${itemName(i)} Lv${i.level}</b><small>${itemLines(rules, i).join(' · ')}</small><small class="gear-owner">${from === 'found' ? 'เจอรอบนี้' : 'ของที่พกมา'} · ${itemOwner(i)}</small></div>
-        <span class="gear-actions">${this.skillData ? `<button id="compare-${from}-${index}" data-world="bag-compare" data-from="${from}" data-index="${index}" class="secondary"${reason ? ' disabled' : ''}>เปรียบเทียบ</button>` : ''}<button id="wear-${from}-${index}" data-world="bag-wear" data-from="${from}" data-index="${index}" class="primary"${reason ? ' disabled' : ''}>${reason === 'class' ? 'คนอื่นใช้' : reason ? 'ใส่ไม่ได้ตอนนี้' : 'ใส่'}</button></span></li>`;
-    }).join('');
-    const sets = wornSets(rules, m?.gear);
-    return `<div class="character-gear"><p class="gear-stats"><b>${heroText[id]!.name}</b> Lv${m?.level ?? 1} · ${heroStatLine(h, s.hp[id] ?? 0)}</p>
-      <div class="gear-slots">${slots}</div>${detail}
-      ${sets.length ? `<ul class="gear-sets" aria-label="ชุดอุปกรณ์ที่ใส่">${sets.map(w => `<li><b>ชุด${w.name}</b> <span>${w.pieces}/4 ชิ้น</span><small class="${w.pieces >= 2 ? 'on' : ''}">2 ชิ้น: ${w.two}</small><small class="${w.pieces >= 4 ? 'on' : ''}">4 ชิ้น: ${w.four}</small></li>`).join('')}</ul>` : ''}
-      <h3>${icon('pack')} ในกระเป๋า${slot ? ` · ${slotText[slot]}` : ''} <span class="camp-embers">${entries.length} ชิ้น · แตะช่องเพื่อกรอง</span></h3>
-      ${rows ? `<ul class="gear-bag">${rows}</ul>` : '<p class="camp-note">ยังไม่มีอุปกรณ์ในกระเป๋า · ชนะศึกหรือเปิดกล่องเพื่อหาอุปกรณ์</p>'}
-      <p class="camp-note">ใส่ได้ทุกที่นอกการต่อสู้ · ของในค่ายกลับบ้านเสมอ · ถ้าทีมล้มหมด ของที่เจอรอบนี้ (รวมที่ใส่อยู่) เก็บกลับได้แค่ชิ้นที่ดีที่สุด 1 ชิ้น</p></div>`;
+    const all=runEquipment(s),entries=filteredEquipment(all,this.inventoryFilters),pick=all.find(e=>e.key===this.inventoryPick);
+    const picker=pick?'<section class="inventory-pick"><h3>เลือกผู้สวมใส่: '+itemName(pick.item)+'</h3><div class="tree-members">'+rosterIds(s).map(id=>'<button id="inventory-hero-'+id+'" data-world="inventory-character" data-hero="'+id+'" data-key="'+pick.key+'" class="tree-member"'+(pick.item.slot==='weapon'&&pick.item.hero!==id?' disabled':'')+'>'+portrait(id)+'<small>'+heroText[id]!.name+'</small></button>').join('')+'</div></section>':'';
+    const rows=entries.map(e=>'<li data-rarity="'+e.item.rarity+'" data-item-key="'+e.key+'">'+gearArt(e.item)+'<div><b>'+itemName(e.item)+' Lv'+e.item.level+'</b><small>'+itemLines(this.map.equipment,e.item).join(' · ')+'</small><small>'+e.label+' · '+itemOwner(e.item)+'</small></div><button id="inventory-'+e.key.replace(':','-')+'" data-world="inventory-pick" data-key="'+e.key+'" class="secondary">ดู/เปรียบเทียบ</button></li>').join('');
+    return '<div role="tabpanel"><h3>เปิดหน้าตัวละคร</h3><div class="tree-members">'+rosterIds(s).map(id=>'<button id="bag-member-'+id+'" data-world="character-open" data-hero="'+id+'" data-tab="gear" class="tree-member">'+portrait(id)+'<small>'+heroText[id]!.name+'</small></button>').join('')+'</div>'+picker+'<h3>อุปกรณ์ในกระเป๋า · '+entries.length+'/'+all.length+' ชิ้น</h3>'+gearFilterControls(this.inventoryFilters,'pack-')+(rows?'<ul class="pack-gear inventory-gear">'+rows+'</ul>':'<p class="camp-note">ไม่พบอุปกรณ์ตามตัวกรอง</p>')+'<p class="camp-note">เลือกชิ้นแล้วเลือกตัวละคร เพื่อเปรียบเทียบในหน้าตัวละครเดียวกัน</p></div>';
   }
   // Team tab: the same 4 + 4 swap grid as the camp; the picked member's details show underneath.
   private bagTeam(s: ExpeditionState): string {
-    return this.campTeam(s, 'bag-team') + (this.picked && rosterIds(s).includes(this.picked) ? this.heroDetail(s, this.picked) : '<p class="camp-note">แตะสมาชิกเพื่อดูรายละเอียด สกิล และอุปกรณ์</p>');
+    return this.campTeam(s, 'bag-team');
   }
-  private heroDetail(s: ExpeditionState, id: string): string {
-    return `<div class="bag-detail"><p>${heroText[id]!.name} · ${heroStatLine(this.hero(id, s), s.hp[id])}</p><button id="bag-gear-of" data-world="bag-gear-of" data-hero="${id}" class="secondary">${icon('gearBody')}<span>ดูตัวละครและเปลี่ยนอุปกรณ์</span></button></div>`;
+  private heroDetail(_s: ExpeditionState, id: string, prefix = 'bag'): string {
+    return '<div class="bag-detail character-links"><h3>'+heroText[id]!.name+'</h3>'+Object.entries({overview:'ดูตัวละคร',gear:'อุปกรณ์',skills:'สกิล',talents:'ความถนัด'}).map(([tab,label])=>'<button id="'+(tab==='gear'?prefix+'-gear-of':prefix+'-character-'+tab)+'" data-world="character-open" data-hero="'+id+'" data-tab="'+tab+'" class="secondary">'+label+'</button>').join('')+'</div>';
   }
   private stars(s: ExpeditionState, id: string): number { return s.members[id]?.stars ?? 1; }
   // Member stats as they fight: the catalog entry scaled by the member's stars.
@@ -557,7 +458,7 @@ export class WorldUI {
         <div class="team-grid">${row(s.roster.deployed, 'deployed', PARTY_SLOTS)}</div>
         <h3>${icon('camp')} สำรอง</h3>
         <div class="team-grid">${row(s.roster.reserve, 'reserve', RESERVE_SLOTS)}</div>
-        <p class="camp-note" id="${prefix}-hint">${this.picked ? `เลือก${heroText[this.picked]!.name}แล้ว · แตะคนหรือช่องว่างอีกฝั่งเพื่อสลับ แตะซ้ำเพื่อยกเลิก` : !deployedUp ? 'ทีมที่ลงสนามล้มหมด · สลับตัวสำรองที่ยังยืนอยู่หรือชุบก่อนออกเดินทาง' : s.roster.reserve.length ? 'แตะสมาชิก แล้วแตะคนหรือช่องว่างอีกฝั่งเพื่อสลับ' : 'ไม่ได้พาตัวสำรองมา · เลือกตัวสำรองได้ที่ค่ายก่อนออกเดินทาง'}</p></section>`;
+        <p class="camp-note" id="${prefix}-hint">${this.picked ? `เลือก${heroText[this.picked]!.name}แล้ว · แตะคนหรือช่องว่างอีกฝั่งเพื่อสลับ แตะซ้ำเพื่อยกเลิก` : !deployedUp ? 'ทีมที่ลงสนามล้มหมด · สลับตัวสำรองที่ยังยืนอยู่หรือชุบก่อนออกเดินทาง' : s.roster.reserve.length ? 'แตะสมาชิก แล้วแตะคนหรือช่องว่างอีกฝั่งเพื่อสลับ' : 'ไม่ได้พาตัวสำรองมา · เลือกตัวสำรองได้ที่ค่ายก่อนออกเดินทาง'}</p>${this.picked&&rosterIds(s).includes(this.picked)?this.heroDetail(s,this.picked,prefix==='bag-team'?'bag':'camp'):''}</section>`;
   }
 
   private renderDanger(chance: number, before: number | undefined): void {

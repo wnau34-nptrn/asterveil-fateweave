@@ -923,7 +923,7 @@ test('map bag (2026-10-17): wear a find away from camp, take it off, read a memb
   await expect.poll(async () => (await saved(page)).found.length).toBe(2); expect((await saved(page)).members.guardian?.gear).toBeUndefined();
   await page.locator('#character-member-tracer').click(); await page.locator('#bag-slot-weapon').click();
   await expect(page.locator('[data-world=bag-wear]')).toHaveCount(1);
-  await page.locator('[data-world=bag-wear][data-from=found]').first().click();
+  await page.locator('[data-world=bag-wear][data-key^="found:"]').first().click();
   await expect.poll(async () => (await saved(page)).members.tracer?.gear?.weapon?.hero).toBe('tracer');
   // Team tab: tapping a member shows their details; tapping an empty reserve seat benches them, away from any camp.
   await page.keyboard.press('Escape'); await expect(page.locator('#pack-dialog')).toBeVisible();
@@ -1013,9 +1013,10 @@ test('lobby member panel shows the ★3 skill and ★5 passive, unlocked by star
   await seed(page, null, profile);
   await page.goto('./'); await page.locator('#continue').click();
   await page.locator('#lobby-tab-team').click(); await page.locator('#lobby-member-guardian').click();
-  const rows = page.locator('.member-unlocks li'); await expect(rows).toHaveCount(2);
-  await expect(rows.nth(0)).toHaveClass(/unlocked/); await expect(rows.nth(0)).toContainText('ตั้งรับหมู่'); await expect(rows.nth(0)).toContainText('ปลดล็อกแล้ว');
-  await expect(rows.nth(1)).toHaveClass(/locked/); await expect(rows.nth(1)).toContainText('ยืนหยัด'); await expect(rows.nth(1)).toContainText('ปลดล็อกที่ ★5');
+  await page.locator('#lobby-skills-open').click();
+  await expect(page.locator('#camp-character-dialog .character-skills [data-skill=rally]')).toContainText('ตั้งรับหมู่');
+  await expect(page.locator('#camp-character-dialog .character-passive')).toContainText('ยืนหยัด');
+  await expect(page.locator('#camp-character-dialog .character-passive')).toContainText('ยังล็อก · ปลดที่ ★5');
   await page.screenshot({ path: info.outputPath('lobby-unlocks.png') });
 });
 
@@ -1028,35 +1029,36 @@ test('lobby talent tree: its own sheet; spend points level by level, gates show,
   await expect(page.locator('.talent-node')).toHaveCount(0);
   await page.locator('#lobby-tree-open').click();
   // The tree replaces the team sheet: no team cards, a back button and a member picker.
-  await expect(page.locator('#lobby-sheet-title')).toContainText('ต้นไม้ความถนัด');
-  await expect(page.locator('.team-card')).toHaveCount(0); await expect(page.locator('#tree-member-guardian')).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator('#camp-character-dialog')).toBeVisible();
+  await expect(page.locator('#camp-character-tab-talents')).toHaveAttribute('aria-selected','true');
+  await expect(page.locator('#camp-character-member-guardian')).toHaveAttribute('aria-pressed','true');
   await expect(page.locator('.talent-node')).toHaveCount(7);
-  await expect(page.locator('#talent-a1')).toHaveAttribute('data-state', 'locked');
-  await page.locator('#talent-root').click(); await expect(page.locator('#talent-root')).toHaveAttribute('data-state', 'full');
-  await page.locator('#talent-b1').click(); await page.locator('#talent-b1').click();
-  await expect(page.locator('#talent-b1')).toContainText('2/2'); await expect(page.locator('.talent-points')).toContainText('แต้ม 0/3');
+  await expect(page.locator('#camp-character-talent-a1')).toHaveAttribute('data-state', 'locked');
+  await page.locator('#camp-character-talent-root').click(); await expect(page.locator('#camp-character-talent-root')).toHaveAttribute('data-state', 'full');
+  await page.locator('#camp-character-talent-b1').click(); await page.locator('#camp-character-talent-b1').click();
+  await expect(page.locator('#camp-character-talent-b1')).toContainText('2/2'); await expect(page.locator('.talent-points')).toContainText('แต้มเหลือ 0/3');
   // No points left: another node does nothing and says why.
-  await page.locator('#talent-a1').click({ force: true }); await expect(page.locator('#talent-a1')).toContainText('0/2');
-  await expect(page.locator('#talent-a1')).toHaveAttribute('aria-label', /แต้มไม่พอ/);
-  for (const b of await page.locator('.talent-node, #lobby-reset-talents, .tree-member, #lobby-sub-back').all()) expect((await b.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+  await page.locator('#camp-character-talent-a1').click({ force: true }); await expect(page.locator('#camp-character-talent-a1')).toContainText('0/2');
+  await expect(page.locator('#camp-character-talent-a1')).toHaveAttribute('aria-label', /แต้มไม่พอ/);
+  for (const b of await page.locator('#camp-character-dialog .talent-node, #camp-character-reset, #camp-character-dialog .tree-member').all()) expect((await b.boundingBox())!.height).toBeGreaterThanOrEqual(44);
   await page.screenshot({ path: info.outputPath('lobby-talents.png') });
   // Another member's tree from the picker.
-  await page.locator('#tree-member-tracer').click(); await expect(page.locator('#lobby-tree')).toHaveAttribute('aria-label', /ไลรา/);
-  await expect(page.locator('#talent-root')).toHaveAttribute('aria-label', /แต้มไม่พอ/);
-  await page.locator('#tree-member-guardian').click();
-  await page.setViewportSize({ width: 390, height: 844 }); await page.locator('#talent-b3').scrollIntoViewIfNeeded();
+  await page.locator('#camp-character-member-tracer').click(); await expect(page.locator('#camp-character-dialog .talent-tree')).toHaveAttribute('aria-label', /ไลรา/);
+  await expect(page.locator('#camp-character-talent-root')).toHaveAttribute('aria-label', /แต้มไม่พอ/);
+  await page.locator('#camp-character-member-guardian').click();
+  await page.setViewportSize({ width: 390, height: 844 }); await page.locator('#camp-character-talent-b3').scrollIntoViewIfNeeded();
   expect(await page.evaluate(() => document.scrollingElement!.scrollHeight <= innerHeight)).toBe(true);
   await page.screenshot({ path: info.outputPath('lobby-talents-phone.png') });
   const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('asterveil.fateweave.expedition.v1')!));
   expect(saved.version).toBe(21); expect(saved.profile.members.guardian.talents).toEqual({ root: 1, b1: 2 });
   // Back to the team sheet: the card shows the new max HP.
-  await page.locator('#lobby-sub-back').click(); await expect(page.locator('#lobby-sheet-title')).toContainText('จัดทีม');
+  await page.locator('#camp-character-dialog [data-world=character-close]').click(); await expect(page.locator('#lobby-sheet-title')).toContainText('จัดทีม');
   await expect(page.locator('#lobby-member-guardian')).toContainText(`เลือด ${Math.round(76 * (100 + 9 + 15) / 100)}`);
-  await page.locator('#lobby-tree-open').click(); await page.locator('#lobby-reset-talents').click();
-  await expect(page.locator('.talent-points')).toContainText('แต้ม 3/3');
+  await page.locator('#lobby-tree-open').click(); await page.locator('#camp-character-reset').click();
+  await expect(page.locator('.talent-points')).toContainText('แต้มเหลือ 3/3');
   expect(await page.evaluate(() => JSON.parse(localStorage.getItem('asterveil.fateweave.expedition.v1')!).profile.members.guardian.talents)).toBeUndefined();
   // Escape closes the tree sheet back to the camp.
-  await page.keyboard.press('Escape'); await expect(page.locator('#lobby-sheet')).toHaveCount(0);
+  await page.keyboard.press('Escape'); await expect(page.locator('#camp-character-dialog')).not.toBeVisible(); await page.keyboard.press('Escape'); await expect(page.locator('#lobby-sheet')).toHaveCount(0);
 });
 
 test('lobby equipment: its own sheet; equip, class weapons, swap, unequip, salvage with confirmation; saved v9', async ({ page }, info) => {
@@ -1071,23 +1073,24 @@ test('lobby equipment: its own sheet; equip, class weapons, swap, unequip, salva
   await page.goto('./'); await page.locator('#continue').click();
   await page.locator('#lobby-tab-team').click(); await page.locator('#lobby-member-guardian').click();
   await page.locator('#lobby-gear-open').click();
-  await expect(page.locator('#lobby-sheet-title')).toContainText('อุปกรณ์'); await expect(page.locator('.team-card')).toHaveCount(0);
+  await expect(page.locator('#camp-character-dialog')).toBeVisible(); await expect(page.locator('#camp-character-tab-gear')).toHaveAttribute('aria-selected','true');
   await expect(page.locator('.gear-slot')).toHaveCount(6); await expect(page.locator('.gear-bag li')).toHaveCount(4);
   // Another class's weapon cannot be worn.
-  await expect(page.locator('#equip-3')).toBeDisabled(); await expect(page.locator('#equip-3')).toContainText('คนอื่นใช้');
-  await page.locator('#gear-slot-body').click(); await expect(page.locator('.gear-bag li')).toHaveCount(2);
-  await page.locator('#equip-1').click();
-  await expect(page.locator('#gear-slot-body')).toContainText('เกราะหายาก Lv5'); await expect(page.locator('.gear-bag li')).toHaveCount(1);
+  await expect(page.locator('#camp-wear-owned-3')).toBeDisabled(); await expect(page.locator('#camp-wear-owned-3')).toContainText('คนอื่นใช้');
+  await page.locator('#camp-bag-slot-body').click(); await expect(page.locator('.gear-bag li')).toHaveCount(2);
+  await page.locator('#camp-wear-owned-1').click();
+  await expect(page.locator('#camp-bag-slot-body')).toContainText('เกราะหายาก Lv5'); await expect(page.locator('.gear-bag li')).toHaveCount(1);
   await expect(page.locator('.gear-stats')).toContainText(`เลือด ${76 + 15 + 8}`);
   // Swapping returns the old piece to the bag.
-  await page.locator('#equip-2').click(); await expect(page.locator('#gear-slot-body')).toContainText('เกราะธรรมดา');
-  await expect(page.locator('#equip-1')).toBeVisible();
-  await page.locator('#gear-unequip').click(); await expect(page.locator('#gear-slot-body')).toContainText('ว่าง');
-  for (const b of await page.locator('.gear-slot, .gear-actions button, #lobby-sub-back, .tree-member').all()) expect((await b.boundingBox())!.height).toBeGreaterThanOrEqual(44);
-  await page.locator('#gear-slot-body').click();
-  await page.locator('#equip-4').click(); await expect(page.locator('#gear-slot-charm')).toContainText('เครื่องรางตำนาน');
+  await page.locator('#camp-wear-owned-2').click(); await expect(page.locator('#camp-bag-slot-body')).toContainText('เกราะธรรมดา');
+  await expect(page.locator('#camp-wear-owned-1')).toBeVisible();
+  await page.locator('#camp-bag-takeoff').click(); await expect(page.locator('#camp-bag-slot-body')).toContainText('ว่าง');
+  for (const b of await page.locator('#camp-character-dialog .gear-slot, #camp-character-dialog .gear-actions button, #camp-character-dialog .tree-member').all()) expect((await b.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+  await page.locator('#camp-bag-slot-body').click();
+  await page.locator('#camp-wear-owned-4').click(); await expect(page.locator('#camp-bag-slot-charm')).toContainText('เครื่องรางตำนาน');
   await page.screenshot({ path: info.outputPath('lobby-gear.png') });
-  // A rare piece needs a second press to salvage; a common one goes at once.
+  await page.locator('#camp-character-dialog [data-world=character-close]').click(); await page.keyboard.press('Escape'); await page.locator('#lobby-tab-gear').click();
+  // Salvage stays in the camp inventory; a rare piece needs a second press.
   await page.locator('#salvage-1').click(); await expect(page.locator('#salvage-1')).toContainText('ยืนยันแยก');
   await page.locator('#salvage-1').click(); await expect(page.locator('#salvage-1')).toHaveCount(0);
   await page.locator('#salvage-common').click(); await expect(page.locator('#salvage-2')).toHaveCount(0);
@@ -1110,7 +1113,7 @@ test('lobby equipment sets: worn pieces light the 2- and 4-piece bonuses', async
   await expect(page.locator('.gear-sets li')).toContainText('ชุดผู้พิทักษ์รุ่งอรุณ'); await expect(page.locator('.gear-sets li')).toContainText('3/4');
   await expect(page.locator('.gear-sets small.on')).toHaveCount(1);
   await expect(page.locator('.gear-bag li')).toContainText('ชุดผู้พิทักษ์รุ่งอรุณ');
-  await page.locator('#equip-4').click();
+  await page.locator('#camp-wear-owned-4').click();
   await expect(page.locator('.gear-sets small.on')).toHaveCount(2); await expect(page.locator('.gear-sets li')).toContainText('เริ่มศึกพร้อมโล่ 12');
   await page.screenshot({ path: info.outputPath('lobby-sets.png') });
 });
@@ -1188,6 +1191,7 @@ test('camp NPCs stand at their stations, open their service when tapped and gree
   await page.screenshot({ path: info.outputPath('camp-npcs.png') });
   for (const [npc, title, line] of [['smith', 'ช่างตีเหล็ก', 'ลุงบอร์ก'], ['broker', 'ป้ายจ้าง', 'พีโน่'], ['herbalist', 'นักปรุงยา', 'เฟิร์น'], ['keeper', 'อุปกรณ์', 'มิมี่'], ['trainer', 'ต้นไม้ความถนัด', 'ครูฮัลดา'], ['scout', 'จัดทีม', 'คาเอล']] as const) {
     await page.locator(`#npc-${npc}`).click();
+    if(npc==='trainer'){await expect(page.locator('#camp-character-dialog')).toBeVisible();await expect(page.locator('#camp-character-tab-talents')).toHaveAttribute('aria-selected','true');await expect(page.locator('#npc-art-trainer')).toHaveAttribute('data-act','greet');await page.locator('#camp-character-dialog [data-world=character-close]').click();continue;}
     await expect(page.locator('#lobby-sheet-title')).toContainText(title); await expect(page.locator('.npc-line')).toContainText(line);
     if (npc === 'smith') { await expect(page.locator(`#npc-art-${npc}`)).toHaveAttribute('data-act', 'greet'); await page.waitForTimeout(400); await page.screenshot({ path: info.outputPath('camp-npc-sheet.png') }); }
     await page.locator('[data-lobby="close"]').click();

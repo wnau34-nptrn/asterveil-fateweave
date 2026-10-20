@@ -1,5 +1,6 @@
 import { bindInfoTabs } from './info-tabs';
 import { learnRunTalent } from '../core/world/world';
+import { applyCampEquipment, applyRunEquipment } from '../core/world/auto-equipment';
 import { shortcutBlocked } from '../platform/keyboard';
 import type { BattleState, Outcome } from '../core/battle/types';
 import { clearLegacySaves, loadGame, saveGame, type Game } from '../core/save/expedition-save';
@@ -61,6 +62,7 @@ export class GameShell {
         this.renderWorld();
       },
       wear: (id, from, index) => this.gear(wear(this.state!, map, lookup, id, from, index)), takeOff: (id, slot) => this.gear(takeOff(this.state!, map, lookup, id, slot)),
+      autoEquip: plan => { if(this.state&&!this.locked)this.gear(applyRunEquipment(this.state,map,lookup,plan)); },
     }, Object.fromEntries(map.elites.map(e => [e.id, lookup(e.encounterId)?.enemies.find(f => f.id === 'brute')?.art ?? 'brute'])), lookup(map.tutorialEncounterId));
     this.lobby = new LobbyUI(views.lobby, map, lookup, heroCatalog(lookup, map), {
       hire: i => this.profileChange(hire(this.game!.profile, map, lookup, i)), refresh: () => this.profileChange(refreshBoard(this.game!.profile, map)),
@@ -68,6 +70,7 @@ export class GameShell {
       dismiss: id => this.profileChange(dismiss(this.game!.profile, map, id)), place: (id, group, other) => this.profileChange(placeMember(this.game!.profile, id, group, other)),
       talent: (id, node) => this.profileChange(learnTalent(this.game!.profile, map, id, node)), resetTalents: id => this.profileChange(resetTalents(this.game!.profile, id)),
       equip: (id, uid) => this.profileChange(equip(this.game!.profile, id, uid)), unequip: (id, slot) => this.profileChange(unequip(this.game!.profile, map, id, slot)),
+      autoEquip: plan => this.profileChange(applyCampEquipment(this.game!.profile,plan)),
       salvage: uids => this.profileChange(salvage(this.game!.profile, map, uids)),
       enhance: uid => this.profileChange(enhance(this.game!.profile, map, uid)), fuse: uid => this.profileChange(fuse(this.game!.profile, map, uid)),
       reroll: (uid, i) => this.profileChange(reroll(this.game!.profile, map, uid, i)), brew: potion => this.profileChange(brew(this.game!.profile, map, potion)), claim: id => this.profileChange(claimQuest(this.game!.profile, map, id)),

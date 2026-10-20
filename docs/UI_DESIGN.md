@@ -1,5 +1,12 @@
 # Modern battle HUD design spec
 
+## Shared characters and equipment — 2026-10-20
+
+MAP and main-camp characters use one native portrait sheet with Overview / Equipment / Skills / Talents. Inventory and team remain entry/management surfaces; equipment inspection, individual swaps, set thresholds, stat/Active explanations and passive spending live in the shared sheet. Main camp exposes the entire company; expedition exposes the brought team. Trainer opens Talents and retains free camp-only reset. Closing restores the original surface and focus.
+
+Show a set filter directly above inventory; fold slot/rarity/source/compatible/sort controls into additional filters. Auto-equipment is an optional disclosure with a goal and preferred set, then a full before/after preview and explicit confirmation. Clearly describe recommendations as estimates and retain conditional skill/effect details. Recommend from worn + bag only, never strip teammates. Keep 44px controls, bounded internal scrolling, comparison footer access, portrait rotation guards and preserved unconfirmed trials. Main-camp bottom navigation adds Bag alongside existing services.
+
+
 ## Current: portrait game with PC input — 2026-10-19
 
 Owner-approved direction: one mobile portrait layout, playable with mouse/keyboard on PC. This section supersedes historical desktop/landscape layout notes below; battle rules and saves are unchanged.

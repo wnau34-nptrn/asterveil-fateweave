@@ -5,8 +5,9 @@ import type { ExpeditionState, MapDefinition } from '../core/world/types';
 import { partyLuck } from '../core/world/world';
 
 export interface CharacterStat { id: string; name: string; value: number; unit: string; help: string }
+export type CharacterState = Pick<ExpeditionState,'members'|'hp'|'roster'>;
 // Readonly UI projections. All growth, caps, gear/set totals and skill powers use the game helpers.
-export function characterStats(s: ExpeditionState, map: MapDefinition, h: HeroDefinition, template: EncounterDefinition): CharacterStat[] {
+export function characterStats(s: CharacterState, map: MapDefinition, h: HeroDefinition, template: EncounterDefinition): CharacterStat[] {
   const data = withParty(template, [h]), gear = gearTotals(map, s.members[h.id]?.gear);
   const stat = (id: string, name: string, value: number, unit: string, help: string): CharacterStat => ({ id, name, value, unit, help });
   return [

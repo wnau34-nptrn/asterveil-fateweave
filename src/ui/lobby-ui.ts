@@ -1,19 +1,23 @@
+import { CharacterPanel, type CharacterModel } from './character-panel';
+import type { CharacterTab } from './character-view';
+import { applyCampEquipment, campEquipment, type AutoEquipmentPlan } from '../core/world/auto-equipment';
+import { newGearFilters, changeGearFilter, filteredEquipment, gearFilters as gearFilterControls } from './gear-inventory';
 import { shortcutBlocked } from '../platform/keyboard';
 import type { ActionId, HeroDefinition } from '../core/battle/types';
 import { withParty } from '../core/battle/engine';
-import { boardOffers, brewReason, buyReason, claimReason, sealLimit, refreshReason, shopLeft, dismissReason, equipReason, groupOf, hireReason, talentPoints, talentReason, talentsSpent, upgradeCost, upgradeReason, type Group } from '../core/world/profile';
+import { boardOffers, brewReason, buyReason, claimReason, sealLimit, refreshReason, shopLeft, dismissReason, equip, groupOf, hireReason, talentPoints, talentsSpent, upgradeCost, upgradeReason, type Group } from '../core/world/profile';
 import { salvageValue } from '../core/world/equipment';
-import { COMPANY_CAP, GEAR_SLOTS, PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS, SHOP_ITEMS, type GearSlot, type ShopItemId, type MapDefinition, type PotionId, type Profile, type TalentNode } from '../core/world/types';
+import { COMPANY_CAP, PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS, SHOP_ITEMS, type GearSlot, type ShopItemId, type MapDefinition, type PotionId, type Profile, type TalentNode } from '../core/world/types';
 import { expToNext, starred, type EncounterLookup } from '../core/world/world';
 import { actorArt, actorFootOrigins, lobbyArt, lobbyPose, NPC_IDS, npcAtlasUrl, npcBustsUrl, npcStationsUrl, unitsUrl, type LobbyPose, type NpcId } from '../game/visuals/assets';
 import { icon } from './icons';
 import { commanderBadge } from './commander-ui';
 import { gearArt, potionArt } from './equip-art';
-import { heroStatLine, skillDescription, heroText, npcText, rewardText, shopText, sideQuestText, itemLines, itemName, itemOwner, passiveText, potionText, rarityText, setText, slotIcon, slotText, statName, talentBranches, talentHelp, wornSets } from './th';
+import { skillDescription, heroText, npcText, rewardText, shopText, sideQuestText, itemLines, itemName, itemOwner, passiveText, potionText, rarityText, setText, slotText, statName } from './th';
 import { enhanceCost, enhanceReason, findItem, fuseMaterials, fuseReason, rerollReason, smeltLeft, smeltReason } from '../core/world/forge';
-import { portrait, starRow } from './world-ui';
+import { portrait, starRow } from './portraits';
 
-export interface LobbyHost { hire(index: number): void; refresh(): void; buy(item: ShopItemId, heroId?: string): void; smelt(dust: number): void; upgrade(id: string): void; dismiss(id: string): void; place(id: string, group: Group, other?: string): void; talent(id: string, node: TalentNode): void; resetTalents(id: string): void;
+export interface LobbyHost { autoEquip(plan: AutoEquipmentPlan): void; hire(index: number): void; refresh(): void; buy(item: ShopItemId, heroId?: string): void; smelt(dust: number): void; upgrade(id: string): void; dismiss(id: string): void; place(id: string, group: Group, other?: string): void; talent(id: string, node: TalentNode): void; resetTalents(id: string): void;
   equip(id: string, uid: number): void; unequip(id: string, slot: GearSlot): void; salvage(uids: number[]): void;
   enhance(uid: number): void; fuse(uid: number): void; reroll(uid: number, index: number): void; brew(potion: PotionId): void; claim(questId: string): void; depart(): void; home(): void }
 // `npcCheer`: the camp NPC whose service just succeeded (plays its cheer once).
@@ -40,7 +44,9 @@ export class LobbyUI {
   // The forge (2D-4) is a third menu sheet.
   private sheet: 'team' | 'hire' | 'tree' | 'gear' | 'forge' | 'brew' | null = null;
   private forgeUid: number | undefined;
-  private gearSlot: GearSlot | undefined;
+  private readonly inventoryFilters = newGearFilters();
+  private inventoryPick: string | undefined;
+  private readonly characters: CharacterPanel;
   private confirmSalvage: number | undefined;
   private sceneDrawn = '';
   private picked: string | undefined;
@@ -50,20 +56,32 @@ export class LobbyUI {
   // The hiring offer being previewed (stats, skills and star unlocks) before hiring.
   private preview: number | undefined;
   constructor(private readonly root: HTMLElement, private readonly map: MapDefinition, private readonly lookup: EncounterLookup, private readonly heroes: readonly HeroDefinition[], private readonly host: LobbyHost) {
+    this.build();
+    this.characters=new CharacterPanel(root,map,heroes,lookup(map.tutorialEncounterId)!,{
+      model:()=>this.characterModel(),
+      preview:(id,key)=>{const p=this.view?.profile,entry=p&&campEquipment(p).find(e=>e.key===key);if(!p||!entry)return;const out=equip(p,id,entry.item.uid);return out.event.type==='equipped'?this.characterModel(out.profile):undefined;},
+      previewPlan:plan=>{if(!this.view)return;const out=applyCampEquipment(this.view.profile,plan);return out.event.type==='equipped'?this.characterModel(out.profile):undefined;},
+      wear:(id,key)=>{const entry=this.view&&campEquipment(this.view.profile).find(e=>e.key===key);if(entry)this.host.equip(id,entry.item.uid);},
+      takeOff:(id,slot)=>this.host.unequip(id,slot),talent:(id,node)=>this.host.talent(id,node),reset:id=>this.host.resetTalents(id),applyPlan:plan=>this.host.autoEquip(plan),
+    },'camp-',this.inventoryFilters);
+    root.addEventListener('change',event=>{const c=event.target as HTMLInputElement|HTMLSelectElement;if(c.closest('.character-dialog')||!c.dataset.gearFilter||root.hidden||root.closest('[inert]')||this.characters.open)return;changeGearFilter(this.inventoryFilters,c);this.draw();this.focus('#'+c.id);});
     this.startWork();
     // Escape closes the sheet even after a redraw moved focus out of it (only while the lobby shows).
-    root.ownerDocument.addEventListener('keydown', e => { if (!shortcutBlocked(e) && e.key === 'Escape' && this.sheet && !root.hidden) { e.preventDefault(); this.closeSheet(); } });
+    root.ownerDocument.addEventListener('keydown', e => { if (!shortcutBlocked(e) && e.key === 'Escape' && this.sheet && !root.hidden && !this.characters.open) { e.preventDefault(); this.closeSheet(); } });
     root.addEventListener('click', e => {
-      const b = (e.target as HTMLElement).closest<HTMLButtonElement>('button[data-lobby]');
+      if(root.hidden||root.closest('[inert]')||this.characters.open)return;
+      const el=e.target as HTMLElement;if(el.closest('[data-gear-reset]')){Object.assign(this.inventoryFilters,newGearFilters());this.draw();this.focus('#camp-inventory-gear-filter-set');return;}
+      const b = el.closest<HTMLButtonElement>('button[data-lobby]');
       if (!b || b.disabled) return;
       const id = b.dataset.hero;
       switch (b.dataset.lobby) {
         case 'npc': { const npc = b.dataset.npc as NpcId; const sheet = npcSpots[npc].sheet;
+          if(sheet==='tree'){const id=this.view!.profile.party.deployed[0]??this.view!.profile.company[0];if(id){this.act(npc,'greet',1400);this.characters.openFor(id,'talents',b);}break;}
           // The trainer and keeper open for the first deployed member; the others open their own sheet.
-          if (sheet === 'tree' || sheet === 'gear') this.picked = this.view!.profile.party.deployed[0];
+          if (sheet === 'gear') this.picked = this.view!.profile.party.deployed[0];
           else this.picked = undefined;
           this.sheet = sheet; this.preview = undefined; this.confirmDismiss = false; this.openedLine(sheet); this.draw(); this.act(npc, 'greet', 1400); this.focus(`#npc-${npc}`); break; }
-        case 'tab': this.preview = undefined; this.sheet = b.dataset.tab as 'team' | 'hire' | 'forge' | 'brew'; this.openedLine(this.sheet); { const n = npcOfSheet(this.sheet); if (n) this.act(n, 'greet', 1400); } this.picked = undefined; this.confirmDismiss = false; this.draw(); this.focus(`#lobby-tab-${this.sheet}`); break;
+        case 'tab': this.preview = undefined; this.sheet = b.dataset.tab as 'team' | 'hire' | 'gear' | 'forge' | 'brew'; this.openedLine(this.sheet); { const n = npcOfSheet(this.sheet); if (n) this.act(n, 'greet', 1400); } this.picked = this.sheet==='gear'?(this.view!.profile.party.deployed[0]??this.view!.profile.company[0]):undefined; this.confirmDismiss = false; this.draw(); this.focus(`#lobby-tab-${this.sheet}`); break;
         case 'close': this.closeSheet(); break;
         case 'pick': this.pick(id, b.dataset.group as Group); break;
         case 'hire': this.host.hire(Number(b.dataset.index)); break;
@@ -79,14 +97,10 @@ export class LobbyUI {
           if (!this.picked) break;
           if (!this.confirmDismiss) { this.confirmDismiss = true; this.draw(); this.focus('#lobby-dismiss'); break; }
           this.confirmDismiss = false; { const target = this.picked; this.picked = undefined; this.host.dismiss(target); } break;
-        case 'tree': case 'gear': if (id ?? this.picked) {
-          const kind = b.dataset.lobby as 'tree' | 'gear'; this.picked = id ?? this.picked; this.sheet = kind; this.confirmDismiss = false; this.confirmSalvage = undefined;
-          this.draw(); this.focus(id ? `#${kind}-member-${id}` : '#lobby-sub-back');
-        } break;
+        case 'tree': case 'gear': case 'character': { const target=id??this.picked;if(target)this.characters.openFor(target,b.dataset.lobby==='tree'?'talents':b.dataset.lobby==='gear'?'gear':(b.dataset.tab as CharacterTab)??'overview',b);break; }
+        case 'inventory-pick': this.inventoryPick=b.dataset.key;this.draw();this.focus('#camp-inventory-hero-'+this.view!.profile.company.find(id=>{const it=campEquipment(this.view!.profile).find(e=>e.key===this.inventoryPick)?.item;return it&&(it.slot!=='weapon'||it.hero===id);}));break;
+        case 'inventory-character': if(id)this.characters.openFor(id,'gear',b,b.dataset.key);break;
         case 'sub-back': { const was = this.sheet; this.sheet = 'team'; this.draw(); this.focus(was === 'gear' ? '#lobby-gear-open' : '#lobby-tree-open'); break; }
-        case 'slot': { const slot = b.dataset.slot as GearSlot; this.gearSlot = this.gearSlot === slot ? undefined : slot; this.confirmSalvage = undefined; this.draw(); this.focus(`#gear-slot-${slot}`); break; }
-        case 'equip': if (this.picked) { this.confirmSalvage = undefined; this.host.equip(this.picked, Number(b.dataset.uid)); this.focus(`#gear-slot-${this.gearSlot ?? ''}`); } break;
-        case 'unequip': if (this.picked && this.gearSlot) { this.host.unequip(this.picked, this.gearSlot); this.focus(`#gear-slot-${this.gearSlot}`); } break;
         case 'salvage': {
           const uid = Number(b.dataset.uid); const item = this.view!.profile.items.find(i => i.uid === uid);
           // Rare and better items need a second press.
@@ -100,8 +114,6 @@ export class LobbyUI {
         case 'fuse': if (this.forgeUid) { this.host.fuse(this.forgeUid); this.focus('#forge-fuse'); } break;
         case 'reroll': if (this.forgeUid) { const i = Number(b.dataset.index); this.host.reroll(this.forgeUid, i); this.focus(`#forge-reroll-${i}`); } break;
         case 'salvage-common': this.host.salvage(this.view!.profile.items.filter(i => i.rarity === 0).map(i => i.uid)); this.focus('#lobby-sub-back'); break;
-        case 'talent': if (this.picked) { const node = b.dataset.node as TalentNode; this.host.talent(this.picked, node); this.focus(`#talent-${node}`); } break;
-        case 'reset-talents': if (this.picked) { this.host.resetTalents(this.picked); this.focus('#lobby-tree-back'); } break;
         case 'depart': this.host.depart(); break;
         case 'home': this.host.home(); break;
         case 'pan': { const pan = this.root.querySelector<HTMLElement>('.lobby-pan')!; pan.scrollBy({ left: Number(b.dataset.dir) * pan.clientWidth * .8, behavior: this.reduced() ? 'auto' : 'smooth' }); break; }
@@ -165,14 +177,18 @@ export class LobbyUI {
     const pan = this.root.querySelector<HTMLElement>('.lobby-pan'); if (!pan) return;
     pan.scrollLeft = (pan.scrollWidth - pan.clientWidth) / 2;
   }
-  private closeSheet(): void { this.preview = undefined; const was = this.sheet === 'tree' || this.sheet === 'gear' ? 'team' : this.sheet; this.sheet = null; this.picked = undefined; this.confirmDismiss = false; this.draw(); if (was) this.focus(`#lobby-tab-${was}`); }
+  private closeSheet(): void { this.preview = undefined; const was = this.sheet; this.sheet = null; this.picked = undefined; this.confirmDismiss = false; this.draw(); if (was) this.focus(`#lobby-tab-${was}`); }
   render(view: LobbyView): void {
     const cheer = view.npcCheer && view !== this.view ? view.npcCheer : undefined;
     this.view = view;
     if (this.picked && !view.profile.company.includes(this.picked)) this.picked = undefined;
     if ((this.sheet === 'tree' || this.sheet === 'gear') && !this.picked) this.sheet = 'team';
-    this.draw();
+    this.draw(); this.characters.refresh();
     if (cheer) this.act(cheer, 'cheer', 1600);
+  }
+  private characterModel(p=this.view?.profile):CharacterModel|undefined {
+    if(!p)return;const hp=Object.fromEntries(p.company.map(id=>{const m=p.members[id]!,base=this.heroes.find(h=>h.id===id)!;return [id,starred(base,m.stars,this.map,m.level??1,m.talents,m.gear).maxHp];}));
+    return {source:p,state:{members:p.members,roster:p.party,hp},ids:p.company,entries:campEquipment(p),available:true,camp:true};
   }
   private escape(text: string): string { return text.replace(/[&<>"]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[ch]!); }
   private focus(sel: string): void { this.root.querySelector<HTMLElement>(sel)?.focus({ preventScroll: true }); }
@@ -206,8 +222,8 @@ export class LobbyUI {
     // A ready side quest puts a "!" over its NPC.
     for (const q of this.map.sideQuests) this.root.querySelector(`#npc-${q.npc}`)?.classList.toggle('quest-ready', !claimReason(p, this.map, q.id));
     if (scene !== this.sceneDrawn) { this.root.querySelector('.lobby-scene-host')!.innerHTML = scene; this.sceneDrawn = scene; }
-    const menu = (id: 'team' | 'hire' | 'forge' | 'brew', glyph: Parameters<typeof icon>[0], label: string, badge: string) =>
-      `<button id="lobby-tab-${id}" data-lobby="tab" data-tab="${id}" class="lobby-menu-button${this.sheet === id || id === 'team' && (this.sheet === 'tree' || this.sheet === 'gear') ? ' active' : ''}" aria-expanded="${this.sheet === id || id === 'team' && (this.sheet === 'tree' || this.sheet === 'gear')}" aria-controls="lobby-sheet">${icon(glyph)}<span>${label}</span>${badge ? `<small>${badge}</small>` : ''}</button>`;
+    const menu = (id: 'team' | 'hire' | 'gear' | 'forge' | 'brew', glyph: Parameters<typeof icon>[0], label: string, badge: string) =>
+      `<button id="lobby-tab-${id}" data-lobby="tab" data-tab="${id}" class="lobby-menu-button${this.sheet === id || id === 'team' && this.sheet === 'tree' ? ' active' : ''}" aria-expanded="${this.sheet === id || id === 'team' && this.sheet === 'tree'}" aria-controls="lobby-sheet">${icon(glyph)}<span>${label}</span>${badge ? `<small>${badge}</small>` : ''}</button>`;
     const openOffers = boardOffers(p, this.map, this.lookup).filter((_, i) => !hireReason(p, this.map, this.lookup, i)).length;
     this.root.querySelector('.lobby-hud')!.innerHTML = `
       <button class="lobby-pan-button" data-lobby="pan" data-dir="-1" aria-label="เลื่อนดูค่ายทางซ้าย" tabindex="-1">${icon('left')}</button><button class="lobby-pan-button" data-lobby="pan" data-dir="1" aria-label="เลื่อนดูค่ายทางขวา" tabindex="-1">${icon('right')}</button>
@@ -219,9 +235,9 @@ export class LobbyUI {
       ${this.sheet ? `<section id="lobby-sheet" class="lobby-sheet" role="dialog" aria-modal="false" aria-labelledby="lobby-sheet-title">
         <div class="lobby-sheet-head">${this.sheet === 'tree' || this.sheet === 'gear' ? `<button id="lobby-sub-back" data-lobby="sub-back" class="round-glass" aria-label="กลับไปจัดทีม">${icon('left')}</button>` : ''}<h2 id="lobby-sheet-title">${this.sheet === 'team' ? `${icon('flag')} จัดทีม <small>${p.company.length}/${COMPANY_CAP}</small>` : this.sheet === 'tree' ? `${icon('starFilled')} ต้นไม้ความถนัด` : this.sheet === 'gear' ? `${icon('gearBody')} อุปกรณ์ <small>คลัง ${p.items.length}/${this.map.equipment.bagCap}</small>` : this.sheet === 'forge' ? `${icon('forge')} ช่างตีเหล็ก` : this.sheet === 'brew' ? `${icon('brew')} นักปรุงยา` : `${icon('gold')} ป้ายจ้างทหารรับจ้าง`}</h2>
           <button data-lobby="close" class="round-glass" aria-label="ปิด">${icon('close')}</button></div>
-        <div class="lobby-content">${this.npcLine(this.sheet as Sheet | null)}${this.sheet === 'team' ? this.team(p) : this.sheet === 'tree' && this.picked ? this.tree(p, this.picked) : this.sheet === 'gear' && this.picked ? this.gear(p, this.picked) : this.sheet === 'forge' ? this.forge(p) : this.sheet === 'brew' ? this.brewing(p) : this.board(p)}</div></section>` : ''}
+        <div class="lobby-content">${this.npcLine(this.sheet as Sheet | null)}${this.sheet === 'team' ? this.team(p) : this.sheet === 'gear' && this.picked ? this.gear(p, this.picked) : this.sheet === 'forge' ? this.forge(p) : this.sheet === 'brew' ? this.brewing(p) : this.board(p)}</div></section>` : ''}
       <footer class="lobby-bottom">
-        <nav class="lobby-menu" aria-label="ค่าย">${menu('team', 'flag', 'ทีม', `${p.party.deployed.length}+${p.party.reserve.length}`)}${menu('hire', 'gold', 'จ้าง', openOffers ? String(openOffers) : '')}${menu('forge', 'forge', 'ช่าง', '')}${menu('brew', 'brew', 'ยา', '')}</nav>
+        <nav class="lobby-menu" aria-label="ค่าย">${menu('team', 'flag', 'ทีม', `${p.party.deployed.length}+${p.party.reserve.length}`)}${menu('hire', 'gold', 'จ้าง', openOffers ? String(openOffers) : '')}${menu('gear', 'pack', 'กระเป๋า', p.items.length ? String(p.items.length) : '')}${menu('forge', 'forge', 'ช่าง', '')}${menu('brew', 'brew', 'ยา', '')}</nav>
         <button id="lobby-depart" data-lobby="depart" class="primary"${ready ? '' : ' disabled'}>${icon('map')}<span>ออกเดินทาง<small>${this.map.name} · ${p.party.deployed.length}+${p.party.reserve.length} คน</small></span></button>
       </footer>`;
   }
@@ -272,7 +288,7 @@ export class LobbyUI {
     const label = !cost ? 'ดาวเต็มแล้ว' : reason ? `${why[reason]} · ★${m.stars + 1} ใช้ตัวซ้ำ ${need}${cost.seals ? ` (ตราแทนได้ ${sealLimit(this.map, m.stars)})` : ''} แร่ ${cost.ore}`
       : `อัปเป็น ★${m.stars + 1} · ตัวซ้ำ ${cost.dupes}${cost.seals ? ` + ตรา ${cost.seals}` : ''} · แร่ ${cost.ore}`;
     const last = dismissReason(p, id) === 'last';
-    return `<div class="member-panel" aria-live="polite"><p><b>${heroText[id]!.name}</b> ${this.stars(m.stars)} <span>Lv${m.level ?? 1}${(m.level ?? 1) < this.map.progression.levelCap ? ` · EXP ${m.exp ?? 0}/${expToNext(this.map, m.level ?? 1)}` : ' · เลเวลสูงสุด'} · ตัวซ้ำที่เก็บไว้ ${m.dupes}</span></p>${this.unlocks(id, m.stars)}<div class="member-subs">${this.treeButton(p, id)}${this.gearButton(p, id)}</div>
+    return `<div class="member-panel" aria-live="polite"><p><b>${heroText[id]!.name}</b> ${this.stars(m.stars)} <span>Lv${m.level ?? 1}${(m.level ?? 1) < this.map.progression.levelCap ? ` · EXP ${m.exp ?? 0}/${expToNext(this.map, m.level ?? 1)}` : ' · เลเวลสูงสุด'} · ตัวซ้ำที่เก็บไว้ ${m.dupes}</span></p><div class="member-subs character-links"><button id="lobby-character-open" data-lobby="character" data-tab="overview" class="secondary">ดูตัวละคร</button><button id="lobby-skills-open" data-lobby="character" data-tab="skills" class="secondary">สกิล</button>${this.treeButton(p, id)}${this.gearButton(p, id)}</div>
       <div class="member-actions"><button id="lobby-upgrade" data-lobby="upgrade" class="primary"${reason ? ' disabled' : ''}>${label}</button>
       <button id="lobby-dismiss" data-lobby="dismiss" class="danger-button"${last ? ' disabled' : ''}>${last ? 'ต้องมีคนลงสนาม 1 คน' : this.confirmDismiss ? `ยืนยันเลิกจ้าง · ดาวหาย +${this.map.company.dismissRefund} เหรียญทอง` : 'เลิกจ้าง'}</button></div></div>`;
   }
@@ -296,32 +312,11 @@ export class LobbyUI {
   }
   // Equipment sheet (2D-2): member picker, six slots, then the bag (filtered by the chosen slot) with equip and salvage.
   private gear(p: Profile, id: string): string {
-    const m = p.members[id]!; const h = this.hero(id); const rules = this.map.equipment; const slot = this.gearSlot;
-    const picker = this.memberPicker(p, id, 'gear', c => { const n = Object.keys(p.members[c]!.gear ?? {}).length; return n ? `${n}` : ''; });
-    const slots = GEAR_SLOTS.map(sl => { const it = m.gear?.[sl];
-      return `<button id="gear-slot-${sl}" data-lobby="slot" data-slot="${sl}" class="gear-slot" aria-pressed="${slot === sl}" ${it ? `data-rarity="${it.rarity}"` : ''} aria-label="${slotText[sl]}: ${it ? `${itemName(it)} Lv${it.level}` : 'ว่าง'}">${it ? gearArt(it) : icon(slotIcon[sl])}<b>${slotText[sl]}</b><small>${it ? `${itemName(it)} Lv${it.level}` : 'ว่าง'}</small></button>`;
-    }).join('');
-    const worn = slot && m.gear?.[slot];
-    const detail = slot ? `<div class="gear-detail">${worn ? `${gearArt(worn)}<p><b>${itemName(worn)} Lv${worn.level}</b> · ${itemLines(rules, worn).join(' · ')}</p>
-      <button id="gear-unequip" data-lobby="unequip" class="secondary"${p.items.length >= rules.bagCap ? ' disabled' : ''}>${p.items.length >= rules.bagCap ? 'คลังเต็ม ถอดไม่ได้' : 'ถอดเก็บเข้าคลัง'}</button>` : `<p>ยังไม่ได้ใส่${slotText[slot]}</p>`}</div>` : '';
-    const bag = p.items.filter(i => !slot || i.slot === slot).sort((a, b) => b.rarity - a.rarity || b.level - a.level);
-    const rows = bag.map(i => { const reason = equipReason(p, id, i.uid); const confirm = this.confirmSalvage === i.uid; const v = salvageValue(this.map, i);
-      return `<li data-rarity="${i.rarity}">${gearArt(i)}<div><b>${itemName(i)} Lv${i.level}</b><small>${itemLines(rules, i).join(' · ')}</small><small class="gear-owner">${itemOwner(i)}</small></div>
-        <span class="gear-actions"><button id="equip-${i.uid}" data-lobby="equip" data-uid="${i.uid}" class="primary"${reason ? ' disabled' : ''}>${reason === 'class' ? 'คนอื่นใช้' : 'ใส่'}</button>
-        <button id="salvage-${i.uid}" data-lobby="salvage" data-uid="${i.uid}" class="${confirm ? 'danger-button' : 'secondary'}" aria-label="แยกชิ้น${itemName(i)} ได้แร่ ${v.ore} ผง ${v.dust}">${confirm ? 'ยืนยันแยก' : 'แยก'}</button></span></li>`;
-    }).join('');
-    const commons = p.items.filter(i => i.rarity === 0).length;
-    return `${picker}<p class="gear-stats"><b>${heroText[id]!.name}</b> Lv${m.level ?? 1} · ${heroStatLine(h)}</p>
-      <div class="gear-slots">${slots}</div>${detail}${this.sets(m.gear)}
-      <h3>${icon('pack')} คลัง${slot ? ` · ${slotText[slot]}` : ''} <span class="camp-embers">${bag.length} ชิ้น · แตะช่องเพื่อกรอง</span></h3>
-      ${rows ? `<ul class="gear-bag">${rows}</ul>` : '<p class="camp-note">ยังไม่มีอุปกรณ์ในคลัง · ชนะศึกบนแผนที่เพื่อหาอุปกรณ์</p>'}
-      ${commons ? `<button id="salvage-common" data-lobby="salvage-common" class="secondary">แยกขั้นธรรมดาทั้งหมด (${commons} ชิ้น)</button>` : ''}`;
-  }
-  // Sets worn (2D-3): pieces and the 2- and 4-piece bonuses, lit when active.
-  private sets(gear: Profile['members'][string]['gear']): string {
-    const worn = wornSets(this.map.equipment, gear); if (!worn.length) return '';
-    return `<ul class="gear-sets" aria-label="ชุดอุปกรณ์ที่ใส่">${worn.map(w => `<li><b>ชุด${w.name}</b> <span>${w.pieces}/4 ชิ้น</span>
-      <small class="${w.pieces >= 2 ? 'on' : ''}">2 ชิ้น: ${w.two}</small><small class="${w.pieces >= 4 ? 'on' : ''}">4 ชิ้น: ${w.four}</small></li>`).join('')}</ul>`;
+    const all=campEquipment(p),entries=filteredEquipment(all,this.inventoryFilters),pick=all.find(e=>e.key===this.inventoryPick);
+    const picker=pick?'<section class="inventory-pick"><h3>เลือกผู้สวมใส่: '+itemName(pick.item)+'</h3><div class="tree-members">'+p.company.map(c=>'<button id="camp-inventory-hero-'+c+'" data-lobby="inventory-character" data-hero="'+c+'" data-key="'+pick.key+'" class="tree-member"'+(pick.item.slot==='weapon'&&pick.item.hero!==c?' disabled':'')+'>'+portrait(c)+'<small>'+heroText[c]!.name+'</small></button>').join('')+'</div></section>':'';
+    const rows=entries.map(e=>{const i=e.item,v=salvageValue(this.map,i),confirm=this.confirmSalvage===i.uid;return '<li data-rarity="'+i.rarity+'" data-item-key="'+e.key+'">'+gearArt(i)+'<div><b>'+itemName(i)+' Lv'+i.level+'</b><small>'+itemLines(this.map.equipment,i).join(' · ')+'</small><small>'+itemOwner(i)+'</small></div><span class="gear-actions"><button id="equip-'+i.uid+'" data-lobby="inventory-pick" data-key="'+e.key+'" class="secondary">ดู/เปรียบเทียบ</button><button id="salvage-'+i.uid+'" data-lobby="salvage" data-uid="'+i.uid+'" class="'+(confirm?'danger-button':'secondary')+'" aria-label="แยกชิ้น ได้แร่ '+v.ore+' ผง '+v.dust+'">'+(confirm?'ยืนยันแยก':'แยก')+'</button></span></li>';}).join('');
+    const commons=p.items.filter(i=>i.rarity===0).length;
+    return '<h3>เปิดหน้าตัวละคร</h3>'+this.memberPicker(p,id,'gear',()=> '')+picker+'<h3>คลัง '+entries.length+'/'+p.items.length+' ชิ้น</h3>'+gearFilterControls(this.inventoryFilters,'camp-inventory-')+(rows?'<ul class="gear-bag inventory-gear">'+rows+'</ul>':'<p class="camp-note">ไม่พบอุปกรณ์ตามตัวกรอง</p>')+(commons?'<button id="salvage-common" data-lobby="salvage-common" class="secondary">แยกขั้นธรรมดาทั้งหมด ('+commons+' ชิ้น)</button>':'');
   }
   // Map potions (2D-5): brew for ore and veil dust; each departure packs up to `carry` of each.
   private brewing(p: Profile): string {
@@ -367,27 +362,6 @@ export class LobbyUI {
     if (!this.map.talents[id]) return '';
     const m = p.members[id]!; const points = talentPoints(this.map, m); const spent = talentsSpent(m.talents); const free = points - spent;
     return `<button id="lobby-tree-open" data-lobby="tree" class="secondary tree-toggle">${icon('starFilled')}<span>ต้นไม้ความถนัด</span><small>${free > 0 ? `แต้มว่าง ${free}` : `ใช้ ${spent}/${points} แต้ม`}</small></button>`;
-  }
-  // Passive talent tree (2D-1b), its own sheet: pick a member at the top, then root → two branches of tier 1 → tier 2 → capstone.
-  private tree(p: Profile, id: string): string {
-    const nodes = this.map.talents[id]; if (!nodes) return '';
-    const m = p.members[id]!; const points = talentPoints(this.map, m); const free = points - talentsSpent(m.talents);
-    const data = this.lookup(this.map.tutorialEncounterId)!; const branches = talentBranches[id] ?? ['สาย A', 'สาย B'];
-    const why: Record<string, string> = { max: 'เต็มแล้ว', locked: 'ยังล็อก', points: 'แต้มไม่พอ' };
-    const members = this.memberPicker(p, id, 'tree', c => { const cm = p.members[c]!; const left = talentPoints(this.map, cm) - talentsSpent(cm.talents); return left > 0 ? String(left) : ''; });
-    const node = (n: TalentNode) => {
-      const def = nodes.find(x => x.id === n)!; const rank = m.talents?.[n] ?? 0; const reason = talentReason(p, this.map, id, n);
-      const state = rank >= def.max ? 'full' : rank ? 'partial' : reason === 'locked' ? 'locked' : 'open';
-      return `<button id="talent-${n}" data-lobby="talent" data-node="${n}" class="talent-node${n.endsWith('3') ? ' capstone' : ''}" data-state="${state}"${reason ? ' aria-disabled="true"' : ''}
-        aria-label="${def.name} ขั้น ${rank}/${def.max} · ${talentHelp(def, data)}${reason ? ` · ${why[reason]}` : ' · แตะเพื่อลงแต้ม'}"><b>${def.name}</b><i>${rank}/${def.max}</i><small>${talentHelp(def, data)}</small></button>`;
-    };
-    const gate = '<p class="talent-gate">ยอดสาย: ลงสายนี้ครบ 4 แต้ม</p>';
-    return `${members}
-      <section id="lobby-tree" class="talent-tree" aria-label="ต้นไม้ความถนัดของ${heroText[id]!.name}">
-      <p class="talent-points"><b>${heroText[id]!.name}</b> Lv${m.level ?? 1} · แต้ม ${free}/${points} · ได้ 1 แต้มทุกเลเวลอัป · รีเซ็ตได้ฟรีที่ค่าย</p>
-      <div class="talent-root">${node('root')}</div>
-      <div class="talent-branches">${(['a', 'b'] as const).map((b, i) => `<div class="talent-branch"><h4>${branches[i]}</h4>${node(`${b}1`)}${node(`${b}2`)}${gate}${node(`${b}3`)}</div>`).join('')}</div>
-      <button id="lobby-reset-talents" data-lobby="reset-talents" class="secondary"${talentsSpent(m.talents) ? '' : ' disabled'}>รีเซ็ตแต้ม (ฟรี)</button></section>`;
   }
   private board(p: Profile): string {
     const tabs = `<div class="hire-tabs" role="tablist">${(['board', 'market'] as const).map(t => `<button id="hire-tab-${t}" role="tab" data-lobby="hire-tab" data-tab="${t}" aria-selected="${(t === 'market') === this.market}" class="${(t === 'market') === this.market ? 'active' : ''}">${icon(t === 'market' ? 'pack' : 'gold')}<span>${t === 'market' ? 'ตลาด' : 'ป้ายจ้าง'}</span></button>`).join('')}</div>`;

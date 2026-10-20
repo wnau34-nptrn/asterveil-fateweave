@@ -8,7 +8,7 @@ import type { BattleKind } from '../core/world/types';
 import { browserStorage } from '../platform/browser-storage';
 import type { BattleScene } from '../game/scenes/BattleScene';
 import { actorName, eventThai, heroText, intentName, reasonThai, skillDescription } from './th';
-import { portrait } from './world-ui';
+import { portrait } from './portraits';
 import { artOf } from '../game/visuals/assets';
 import { riftBackdropFrame } from '../game/visuals/rift-backdrop';
 import { icon } from './icons';
