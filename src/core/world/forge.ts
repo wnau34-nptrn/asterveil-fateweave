@@ -1,5 +1,5 @@
 import type { Item, MapDefinition, Profile, ProfileResult } from './types';
-import { affixPool, GEAR_SPECIALS, RARITIES, rollQuality } from './equipment';
+import { affixPool, enhancementInvestment, GEAR_SPECIALS, RARITIES, rollQuality } from './equipment';
 import { rollPercent } from './world';
 
 // Forge (2D-4): enhance, fuse and reroll in the lobby. Pure rules on the profile. Fuse and reroll draw from
@@ -21,11 +21,28 @@ export function enhanceReason(profile: Profile, map: MapDefinition, uid: number)
   const cost = enhanceCost(map, found.item); if (!cost) return 'maxed';
   return profile.bank.ore < cost.ore ? 'ore' : profile.bank.dust < cost.dust ? 'dust' : '';
 }
+export function enhancementCostTo(map:MapDefinition,item:Item,target:number):{ore:number;dust:number}|undefined {
+  if(!Number.isInteger(target)||target<=(item.plus??0)||target>map.equipment.forge.plusCap[item.rarity]!)return;
+  let ore=0,dust=0;for(let n=(item.plus??0)+1;n<=target;n++){const f=map.equipment.forge;ore+=f.ore+f.orePerPlus*n;dust+=Math.ceil(n*f.dustPerPlus);}
+  return {ore,dust};
+}
+export function enhanceTo(initial:Profile,map:MapDefinition,uid:number,target:number):ProfileResult {
+  const found=findItem(initial,uid);if(!found)return blocked(initial,'unknown');
+  const cost=enhancementCostTo(map,found.item,target);if(!cost)return blocked(initial,'maxed');
+  if(initial.bank.ore<cost.ore||initial.bank.dust<cost.dust)return blocked(initial,initial.bank.ore<cost.ore?'ore':'dust');
+  const paid=enhancementInvestment(map,found.item);if(!Number.isSafeInteger(paid.ore+cost.ore)||!Number.isSafeInteger(paid.dust+cost.dust))return blocked(initial,'unknown');
+  const profile=structuredClone(initial),item=findItem(profile,uid)!.item;
+  profile.bank.ore-=cost.ore;profile.bank.dust-=cost.dust;item.plus=target;item.investment={ore:paid.ore+cost.ore,dust:paid.dust+cost.dust};
+  return {profile,event:{type:'forged',uid,action:'enhance'}};
+}
 export function enhance(initial: Profile, map: MapDefinition, uid: number): ProfileResult {
-  const reason = enhanceReason(initial, map, uid); if (reason) return blocked(initial, reason);
-  const profile = structuredClone(initial); const { item } = findItem(profile, uid)!; const cost = enhanceCost(map, item)!;
-  profile.bank.ore -= cost.ore; profile.bank.dust -= cost.dust; item.plus = (item.plus ?? 0) + 1;
-  return { profile, event: { type: 'forged', uid, action: 'enhance' } };
+  return enhanceTo(initial,map,uid,(findItem(initial,uid)?.item.plus??0)+1);
+}
+export function lockEquipment(initial:Profile,uid:number):ProfileResult {
+  if(!findItem(initial,uid))return blocked(initial,'unknown');
+  const profile=structuredClone(initial),item=findItem(profile,uid)!.item;
+  if(item.locked)delete item.locked;else item.locked=true;
+  return {profile,event:{type:'equipmentLocked',uid,locked:!!item.locked}};
 }
 // ---- Fuse: the main piece (bag or worn) plus bag pieces of the same slot and rarity → one rarity up ----
 // The main piece keeps its class, level, set and affixes, gains affixes up to the new rarity's count (a legendary
@@ -33,7 +50,7 @@ export function enhance(initial: Profile, map: MapDefinition, uid: number): Prof
 export function fuseMaterials(profile: Profile, map: MapDefinition, uid: number): Item[] {
   const main = findItem(profile, uid)?.item; if (!main) return [];
   // The cheapest matching bag pieces go first: lowest enhance, then lowest level.
-  return profile.items.filter(i => i.uid !== uid && i.slot === main.slot && i.rarity === main.rarity)
+  return profile.items.filter(i => i.uid !== uid && !i.locked && !(i.plus??0) && !i.investment?.ore && !i.investment?.dust && i.slot === main.slot && i.rarity === main.rarity)
     .sort((a, b) => (a.plus ?? 0) - (b.plus ?? 0) || a.level - b.level || a.uid - b.uid).slice(0, map.equipment.forge.fuseCount - 1);
 }
 export function fuseReason(profile: Profile, map: MapDefinition, uid: number): string {
@@ -45,6 +62,7 @@ export function fuse(initial: Profile, map: MapDefinition, uid: number): Profile
   const reason = fuseReason(initial, map, uid); if (reason) return blocked(initial, reason);
   const profile = structuredClone(initial); const used = fuseMaterials(profile, map, uid).map(i => i.uid);
   const { item } = findItem(profile, uid)!; const roll = () => rollPercent(profile.seed ^ 0x6f726765, profile.forge++);
+  item.investment=enhancementInvestment(map,item);
   item.rarity++;
   const pool = affixPool(map.equipment, item.slot, item.hero).filter(a => !item.affixes.includes(a));
   const q = item.q ?? { main: 100, affixes: item.affixes.map(() => 100) };

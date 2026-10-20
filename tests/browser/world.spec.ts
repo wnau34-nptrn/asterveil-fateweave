@@ -243,7 +243,7 @@ test('lobby market (4A): the broker sheet redraws the board for gold twice per r
   await page.locator('#buy-gearbox').click(); await expect(page.locator('.lobby-result')).toContainText('หีบอุปกรณ์');
   p = await savedProfile(page);
   expect(p.members.tracer!.dupes).toBe(1); expect(p.shop).toEqual({ contract: 1, gearbox: 1 }); expect(p.items).toHaveLength(1); expect(p.items[0]!.rarity).toBeGreaterThanOrEqual(2);
-  expect(await page.evaluate(k => JSON.parse(localStorage.getItem(k)!).version, key)).toBe(21);
+  expect(await page.evaluate(k => JSON.parse(localStorage.getItem(k)!).version, key)).toBe(22);
   expect(issues).toEqual([]);
 });
 
@@ -432,7 +432,7 @@ test('camp travel (4B) and optional elite returns (4C): rest brings the meadow e
   const start = findTiles(map, 'start')[0]!; await reachable(page, `#travel-${start.x}-${start.y}`); await page.locator(`#travel-${start.x}-${start.y}`).click();
   await expect(page.locator('#world-message')).toContainText('วาร์ปกลับทางเข้าด่าน');
   run = await saved(page); expect(run.position).toEqual(start);
-  expect(await page.evaluate(k => JSON.parse(localStorage.getItem(k)!).version, key)).toBe(21);
+  expect(await page.evaluate(k => JSON.parse(localStorage.getItem(k)!).version, key)).toBe(22);
   expect(issues).toEqual([]);
 });
 
@@ -440,10 +440,10 @@ test('the smith smelts ore into veil dust, capped per return; saved v18', async 
   const f = map.equipment.forge;
   await seed(page, null, { ...newProfile(map, 5), tutorialDone: true, commander, bank: { ore: 500, gold: 0, seal: 0, dust: 0 } } as Profile);
   await page.goto('./'); await page.locator('#continue').click(); await page.locator('#lobby-tab-forge').click();
-  await reachable(page, '#smelt-5'); await page.locator('#smelt-5').click();
+  await page.locator('#forge-tab-smelt').click();await page.locator('#forge-target').selectOption('5');await reachable(page,'#forge-smelt');await page.locator('#forge-smelt').click();await page.locator('#forge-confirm').click();
   await expect(page.locator('.lobby-result')).toContainText('หลอมแร่ดาวเป็นฝุ่นดาว 5');
   const p = await savedProfile(page); expect(p.bank.dust).toBe(5); expect(p.bank.ore).toBe(500 - 5 * f.smeltOre); expect(p.smelted).toBe(5);
-  expect(await page.evaluate(k => JSON.parse(localStorage.getItem(k)!).version, key)).toBe(21);
+  expect(await page.evaluate(k => JSON.parse(localStorage.getItem(k)!).version, key)).toBe(22);
 });
 
 test('lobby: hire a duplicate, upgrade a star, pick the team, depart, and withdraw at the entrance', async ({ page }, info) => {
@@ -745,7 +745,7 @@ test('puzzles: rune stones in order open the vault door, a boulder fills its pit
   }
   await expect(page.locator('#world-message')).toContainText('ประตูหินเปิด'); await expect(page.locator(`.puzzle-door[data-door="${runes.id}"]`)).toHaveClass(/open/);
   let raw = await page.evaluate(k => JSON.parse(localStorage.getItem(k)!), key);
-  expect(raw.version).toBe(21); expect(raw.run.solved).toContain(runes.id);
+  expect(raw.version).toBe(22); expect(raw.run.solved).toContain(runes.id);
   // Walk through the door to the vault chest.
   await page.evaluate(([k, x, y]) => { const s = JSON.parse(localStorage.getItem(k as string)!); s.run.position = { x: (x as number) - 1, y }; localStorage.setItem(k as string, JSON.stringify(s)); }, [key, runes.door.x, runes.door.y]);
   await page.reload(); await page.locator('#continue').click();
@@ -785,7 +785,7 @@ test('map events: stepping on one opens its choices; the shrine heals with a wou
   await page.locator('#event-pray').click(); await expect(page.locator('#event-dialog')).toBeHidden();
   await expect(page.locator('#world-message')).toContainText('ศาลประทานพร');
   let raw = await page.evaluate(k => JSON.parse(localStorage.getItem(k)!), key);
-  expect(raw.version).toBe(21); expect(raw.run.eventsDone).toEqual([shrine.id]); expect(raw.run.members.guardian.wound).toBe(5); expect(raw.run.hp.guardian).toBeGreaterThan(20);
+  expect(raw.version).toBe(22); expect(raw.run.eventsDone).toEqual([shrine.id]); expect(raw.run.members.guardian.wound).toBe(5); expect(raw.run.hp.guardian).toBeGreaterThan(20);
   await expect(page.locator(`.event-mark[data-event="${shrine.id}"]`)).toBeHidden();
   // The merchant stays open between trades.
   await page.evaluate(([k, x, y]) => { const s = JSON.parse(localStorage.getItem(k as string)!); s.run.position = { x, y: (y as number) + 1 }; s.run.resources.ore = 24; localStorage.setItem(k as string, JSON.stringify(s)); }, [key, merchant.x, merchant.y]);
@@ -934,7 +934,7 @@ test('map bag (2026-10-17): wear a find away from camp, take it off, read a memb
   await page.screenshot({ path: info.outputPath('bag-team.png') });
   await page.locator('#pack-content .team-card.empty.target').first().click();
   await expect.poll(async () => (await saved(page)).roster).toEqual({ deployed: ['guardian', 'tracer', 'weaver'], reserve: ['healer'] });
-  expect(await page.evaluate(k => JSON.parse(localStorage.getItem(k)!).version, key)).toBe(21);
+  expect(await page.evaluate(k => JSON.parse(localStorage.getItem(k)!).version, key)).toBe(22);
   expect(await page.evaluate(() => document.documentElement.scrollHeight <= innerHeight)).toBe(true);
   expect(issues).toEqual([]);
 });
@@ -1050,7 +1050,7 @@ test('lobby talent tree: its own sheet; spend points level by level, gates show,
   expect(await page.evaluate(() => document.scrollingElement!.scrollHeight <= innerHeight)).toBe(true);
   await page.screenshot({ path: info.outputPath('lobby-talents-phone.png') });
   const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('asterveil.fateweave.expedition.v1')!));
-  expect(saved.version).toBe(21); expect(saved.profile.members.guardian.talents).toEqual({ root: 1, b1: 2 });
+  expect(saved.version).toBe(22); expect(saved.profile.members.guardian.talents).toEqual({ root: 1, b1: 2 });
   // Back to the team sheet: the card shows the new max HP.
   await page.locator('#camp-character-dialog [data-world=character-close]').click(); await expect(page.locator('#lobby-sheet-title')).toContainText('จัดทีม');
   await expect(page.locator('#lobby-member-guardian')).toContainText(`เลือด ${Math.round(76 * (100 + 9 + 15) / 100)}`);
@@ -1099,7 +1099,7 @@ test('lobby equipment: its own sheet; equip, class weapons, swap, unequip, salva
   expect(await page.evaluate(() => document.scrollingElement!.scrollHeight <= innerHeight)).toBe(true);
   await page.screenshot({ path: info.outputPath('lobby-gear-phone.png') });
   const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('asterveil.fateweave.expedition.v1')!));
-  expect(saved.version).toBe(21); expect(saved.profile.members.guardian.gear.charm.uid).toBe(4); expect(saved.profile.items.map((i: { uid: number }) => i.uid)).toEqual([3]);
+  expect(saved.version).toBe(22); expect(saved.profile.members.guardian.gear.charm.uid).toBe(4); expect(saved.profile.items.map((i: { uid: number }) => i.uid)).toEqual([3]);
   expect(saved.profile.bank).toMatchObject({ ore: 7, dust: 5 });
 });
 
@@ -1127,21 +1127,22 @@ test('lobby forge: enhance, fuse and reroll from its own menu; saved v11', async
   await page.locator('#lobby-tab-forge').click();
   await expect(page.locator('#lobby-sheet-title')).toContainText('ช่างตีเหล็ก'); await expect(page.locator('.forge-pick')).toHaveCount(3);
   await page.locator('#forge-item-1').click();
-  await expect(page.locator('#forge-enhance')).toContainText('ตีบวก +1 · แร่ 4 ผง 1');
-  await page.locator('#forge-enhance').click(); await expect(page.locator('#forge-enhance')).toContainText('ตีบวก +2');
-  await expect(page.locator('.forge-detail')).toContainText('เกราะดี +1');
-  await page.locator('#forge-reroll-0').click(); await expect(page.locator('#forge-reroll-0')).toBeDisabled();
-  await expect(page.locator('#forge-reroll-0')).toContainText('ตราสัญญาไม่พอ');
-  await expect(page.locator('.forge-mats')).toContainText('จะใช้');
-  await page.locator('#forge-fuse').click();
-  await expect(page.locator('.forge-pick')).toHaveCount(1); await expect(page.locator('.forge-detail')).toContainText('เกราะหายาก');
-  for (const b of await page.locator('.forge-pick, .forge-detail button, .lobby-menu-button').all()) expect((await b.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+  await expect(page.locator('#forge-cost')).toContainText('แร่ 4');
+  await page.locator('#forge-enhance').click();await page.locator('#forge-confirm').click();
+  await expect(page.locator('.forge-item-head')).toContainText('+1');
+  await page.locator('#forge-mode-reroll').click();await page.locator('#forge-reroll-0').click();await page.locator('#forge-confirm').click();
+  await expect(page.locator('#forge-reroll-0')).toBeDisabled();await expect(page.locator('.forge-reason')).toContainText('ตราสัญญาไม่พอ');
+  await page.locator('#forge-mode-fuse').click();await expect(page.locator('.forge-mats')).toContainText('จะใช้');
+  await page.locator('#forge-fuse').click();await page.locator('#forge-confirm').click();
+  await expect(page.locator('.forge-item-head')).toContainText('หายาก');
+  await page.locator('#forge-change-item').click();await expect(page.locator('.forge-pick')).toHaveCount(1);
+  for (const b of await page.locator('.forge-pick').all()) expect((await b.boundingBox())!.height).toBeGreaterThanOrEqual(44);
   await page.screenshot({ path: info.outputPath('lobby-forge.png') });
   await page.setViewportSize({ width: 390, height: 844 });
   expect(await page.evaluate(() => document.scrollingElement!.scrollHeight <= innerHeight)).toBe(true);
   await page.screenshot({ path: info.outputPath('lobby-forge-phone.png') });
   const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('asterveil.fateweave.expedition.v1')!));
-  expect(saved.version).toBe(21); expect(saved.profile.items).toHaveLength(1); expect(saved.profile.items[0]).toMatchObject({ uid: 1, rarity: 2 });
+  expect(saved.version).toBe(22); expect(saved.profile.items).toHaveLength(1); expect(saved.profile.items[0]).toMatchObject({ uid: 1, rarity: 2 });
   expect(saved.profile.bank).toMatchObject({ ore: 96, gold: 0, seal: 0, dust: 19 }); expect(saved.profile.forge).toBeGreaterThan(0);
 });
 
@@ -1175,7 +1176,7 @@ test('potions: brew in the lobby, pack 3 on departure, drink a salve and a repel
   await page.locator('[data-world="pack-close"]').click();
   await expect(page.locator('#danger-chip')).toContainText('ไล่อสูร 10 ก้าว');
   saved = await page.evaluate(() => JSON.parse(localStorage.getItem('asterveil.fateweave.expedition.v1')!));
-  expect(saved.version).toBe(21); expect(saved.run.potions).toEqual({ salve: 2, tonic: 0, repel: 0 }); expect(saved.run.repel).toBe(10); expect(saved.run.hp.guardian).toBeGreaterThan(10);
+  expect(saved.version).toBe(22); expect(saved.run.potions).toEqual({ salve: 2, tonic: 0, repel: 0 }); expect(saved.run.repel).toBe(10); expect(saved.run.hp.guardian).toBeGreaterThan(10);
 });
 
 test('camp NPCs stand at their stations, open their service when tapped and greet with a line', async ({ page }, info) => {
@@ -1192,7 +1193,7 @@ test('camp NPCs stand at their stations, open their service when tapped and gree
   for (const [npc, title, line] of [['smith', 'ช่างตีเหล็ก', 'ลุงบอร์ก'], ['broker', 'ป้ายจ้าง', 'พีโน่'], ['herbalist', 'นักปรุงยา', 'เฟิร์น'], ['keeper', 'อุปกรณ์', 'มิมี่'], ['trainer', 'ต้นไม้ความถนัด', 'ครูฮัลดา'], ['scout', 'จัดทีม', 'คาเอล']] as const) {
     await page.locator(`#npc-${npc}`).click();
     if(npc==='trainer'){await expect(page.locator('#camp-character-dialog')).toBeVisible();await expect(page.locator('#camp-character-tab-talents')).toHaveAttribute('aria-selected','true');await expect(page.locator('#npc-art-trainer')).toHaveAttribute('data-act','greet');await page.locator('#camp-character-dialog [data-world=character-close]').click();continue;}
-    await expect(page.locator('#lobby-sheet-title')).toContainText(title); await expect(page.locator('.npc-line')).toContainText(line);
+    await expect(page.locator('#lobby-sheet-title')).toContainText(title); if(npc==='smith')await expect(page.locator('.forge-workbench')).toBeVisible();else await expect(page.locator('.npc-line')).toContainText(line);
     if (npc === 'smith') { await expect(page.locator(`#npc-art-${npc}`)).toHaveAttribute('data-act', 'greet'); await page.waitForTimeout(400); await page.screenshot({ path: info.outputPath('camp-npc-sheet.png') }); }
     await page.locator('[data-lobby="close"]').click();
   }
