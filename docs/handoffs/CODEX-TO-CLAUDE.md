@@ -1,5 +1,14 @@
 # Codex → Claude handoff
 
+## 2026-10-20 — Online/MMO and monetization analysis (proposal only)
+
+- Owner subsequently requested pushing the latest proposal to GitHub. Package only the two strategy/proposal documents and this handoff note on `codex/gacha-monetization-proposal`, based on the game's working branch, preserving the concurrent targeted-equipment work and its Git index/checkout. Documentation review and whitespace checks apply; this does not adopt the proposal or deploy gameplay changes.
+- Follow-up: owner explored a full character-gacha alternative with upgrade packs and a character/ticket/resource Season Pass. Added `docs/GACHA_MONETIZATION_PROPOSAL_TH.md` and linked it from the original strategy. Covers rarity vs farmable stars, full kits without duplicate gating, explicit featured hard-guarantee example, persistent counters, free-ticket budget, Pass/pack examples, server transactions, and storefront disclosures. All prices/rates are hypothetical; no runtime or canonical gameplay changes. Existing concurrent targeted-loot/runtime edits are outside this analysis and were preserved.
+- Owner requested a full assessment of taking Fateweave online/MMORPG and earning revenue. Added `docs/ONLINE_MMO_BUSINESS_STRATEGY_TH.md`, in Thai, based on current pure battle/world rules, profile/forge/storage/save implementations and official platform/payment documentation checked during the analysis.
+- Recommends a persistent-company tactical RPG, server authority, asynchronous social features, then 2-player instanced Co-op before a shared hub or larger MMORPG. Covers system priorities, actor ownership/IDs, economic sources/sinks and refundable capital, direct cosmetics, payment fulfillment/refunds, current hosting constraints, migration, live operations, hypothetical revenue arithmetic, staffing/milestones and release checks.
+- This is an advisory document, not adoption of new gameplay rules or authorization to launch payments. Prices, room sizes, timelines and financial scenarios are assumptions, not measured capacity, commercial quotes or forecasts. Recommendation to remove the older proposed cosmetic +3% bonus has not changed canonical rules. No backend, accounts, billing, dependencies, runtime code or publication changed.
+- Documentation validation: content/link review, scenario arithmetic and `git diff --check`; gameplay suites are not needed for this documentation-only analysis.
+
 ## 2026-10-20 — Camp storage and overflow (phase 3)
 
 - Owner authorized next phase after the phase-2 completion and roadmap: preserve overflowing loot, multi-item management and permanent camp capacity. Base cbe55b6 on feature/fateweave-initial-prototype; branch codex/storage-overflow. No targeted loot/crafting/boss power/affix transfer changes.
