@@ -923,7 +923,7 @@ test('map bag (2026-10-17): wear a find away from camp, take it off, read a memb
   await expect.poll(async () => (await saved(page)).found.length).toBe(2); expect((await saved(page)).members.guardian?.gear).toBeUndefined();
   await page.locator('#character-member-tracer').click(); await page.locator('#bag-slot-weapon').click();
   await expect(page.locator('[data-world=bag-wear]')).toHaveCount(1);
-  await page.locator('[data-world=bag-wear][data-from=found]').first().click();
+  await page.locator('[data-world=bag-wear][data-key^="found:"]').first().click();
   await expect.poll(async () => (await saved(page)).members.tracer?.gear?.weapon?.hero).toBe('tracer');
   // Team tab: tapping a member shows their details; tapping an empty reserve seat benches them, away from any camp.
   await page.keyboard.press('Escape'); await expect(page.locator('#pack-dialog')).toBeVisible();
