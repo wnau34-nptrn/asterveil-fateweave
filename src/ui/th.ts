@@ -226,7 +226,7 @@ export const statName: Record<GearStat, string> = { hp: 'เลือด', attac
 // Each value shows the best its roll could have been (stats design: rolls are 80–120%).
 export function itemLines(rules: EquipmentRules, item: Item): string[] {
   return [...statLines(rules, item).map(l => `${statText[l.stat](l.value)}${l.value < l.max ? ` (สูงสุด ${l.max})` : ''}`), ...(item.special ? [`★ ${specialText[item.special]}`] : []),
-    ...(item.set ? [`ชุด${setText[item.set]}`] : [])];
+    ...(item.set ? [`ชุด${setText[item.set]}`] : []), ...(item.transferSlot!==undefined?[`ถ่ายโอนได้เฉพาะคุณสมบัติช่อง ${item.transferSlot+1}`]:[])];
 }
 // ---- Equipment sets (2D-3) ----
 export const setText: Record<SetId, string> = { dawn: 'ผู้พิทักษ์รุ่งอรุณ', wind: 'สายลมเร็ว', shadow: 'นักล่าเงา', thorn: 'หนามสวน', starveil: 'เวทแสงดาว', mender: 'ผู้เยียวยา' };

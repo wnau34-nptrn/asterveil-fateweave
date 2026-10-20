@@ -1,5 +1,11 @@
 # Modern battle HUD design spec
 
+## Affix transfer phase 6 — 2026-10-20
+
+Add Transfer as a fifth Develop mode, keeping the four smith tabs. Choose main affix slot, bag donor and donor affix. Show native disabled options for bound-out slots and locked donors. No donor preselection. State that first transfer binds one slot permanently, copied quality scales at the main Lv, and set/Lv/+ and special remain. Show the binding in regular equipment detail text.
+
+Readonly preview lists the union of old/new equipment stats (removed/added stats use zero) and actual hero/Active metrics. Review hides selectors but retains the explicit destroyed donor UID/name/Lv/+ and chosen affix/quality, upfront fee, exact donor development refund and final wallet. Confirmation consumes only that donor once. Keep >=44px controls, reachable scrolling footer, cancel/Escape, repeat/inert/rotation guards and original character return. Bulk selection and automatic fusion recommendations skip tuned pieces.
+
 ## Weapon crafting phase 5 — 2026-10-20
 
 Smith tabs: Develop / Craft weapon / Recycle / Smelt. Four >=44px controls fit the existing portrait frame. Craft selects an owned class and an unlocked starting item Lv. Display exact fixed weapon stats, one-item destination in the bag, actual current-worn versus proposed hero/Active preview, total price and remaining wallet. Clearly state green/100%/no set/no RNG/no auto-equip and that manufacture price differs from refundable later development.

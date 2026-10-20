@@ -252,3 +252,7 @@ body { display: grid; place-items: center; background: radial-gradient(ellipse a
 
 .forge-tabs { grid-template-columns:repeat(4,minmax(0,1fr)); }
 .forge-workbench[data-review=true] .forge-craft-selectors { display:none; }
+
+#forge-mode-transfer { grid-column:1 / -1; }
+.forge-workbench[data-review=true] .forge-transfer-selectors { display:none; }
+.forge-transfer-material { font-size:13px; color:var(--gold-light); }

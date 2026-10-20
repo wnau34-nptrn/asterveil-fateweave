@@ -51,7 +51,7 @@ export function lockEquipment(initial:Profile,uid:number):ProfileResult {
 export function fuseMaterials(profile: Profile, map: MapDefinition, uid: number): Item[] {
   const main = findItem(profile, uid)?.item; if (!main) return [];
   // The cheapest matching bag pieces go first: lowest enhance, then lowest level.
-  return profile.items.filter(i => i.uid !== uid && !i.locked && !(i.plus??0) && !i.investment?.ore && !i.investment?.dust && !i.levelInvestment?.ore && !i.levelInvestment?.dust && i.slot === main.slot && i.rarity === main.rarity)
+  return profile.items.filter(i => i.uid !== uid && i.transferSlot===undefined && !i.locked && !(i.plus??0) && !i.investment?.ore && !i.investment?.dust && !i.levelInvestment?.ore && !i.levelInvestment?.dust && i.slot === main.slot && i.rarity === main.rarity)
     .sort((a, b) => (a.plus ?? 0) - (b.plus ?? 0) || a.level - b.level || a.uid - b.uid).slice(0, map.equipment.forge.fuseCount - 1);
 }
 export function fuseReason(profile: Profile, map: MapDefinition, uid: number, donors?:readonly number[]): string {
@@ -154,4 +154,28 @@ export function craftWeapon(initial:Profile,map:MapDefinition,hero:string,level:
   const profile=structuredClone(initial),cost=weaponCraftCost(map,level)!,uid=profile.nextItem++;
   profile.items.push(weaponBlueprint(map,hero,level,uid));profile.bank.ore-=cost.ore;profile.bank.dust-=cost.dust;
   return {profile,event:{type:'forged',uid,action:'craft'}};
+}
+
+// Transfer names + roll quality, never a donor's level, set, main quality or legendary effect.
+export function transferCandidate(map:MapDefinition,main:Item,index:number,donor:Item,sourceIndex:number):Item|undefined {
+  if(main.uid===donor.uid||main.slot!==donor.slot||(main.slot==='weapon'&&main.hero!==donor.hero))return;
+  if(!Number.isInteger(index)||!main.affixes[index]||(main.transferSlot!==undefined&&main.transferSlot!==index)||!Number.isInteger(sourceIndex)||!donor.affixes[sourceIndex])return;
+  const stat=donor.affixes[sourceIndex]!,quality=donor.q?.affixes[sourceIndex]??100;
+  if(!affixPool(map.equipment,main.slot,main.hero).includes(stat)||main.affixes.some((v,i)=>i!==index&&v===stat))return;
+  if(main.affixes[index]===stat&&(main.q?.affixes[index]??100)===quality)return;
+  const out=structuredClone(main);out.q??={main:100,affixes:out.affixes.map(()=>100)};out.affixes[index]=stat;out.q.affixes[index]=quality;out.transferSlot=index;return out;
+}
+export function transferReason(p:Profile,map:MapDefinition,uid:number,index:number,donorUid:number,sourceIndex:number):string {
+  const main=findItem(p,uid)?.item,donor=p.items.find(i=>i.uid===donorUid);
+  if(!main||!donor||donor.locked||!transferCandidate(map,main,index,donor,sourceIndex))return 'materials';
+  const c=map.equipment.forge.transfer;if(p.bank.ore<c.ore)return 'ore';if(p.bank.dust<c.dust)return 'dust';if(p.bank.seal<c.seal)return 'seal';
+  const refund=fusionRefund(p,map,[donorUid]);return p.bank.ore-c.ore+refund.ore>9999999||p.bank.dust-c.dust+refund.dust>9999999?'full':'';
+}
+export function transferAffix(initial:Profile,map:MapDefinition,uid:number,index:number,donorUid:number,sourceIndex:number):ProfileResult {
+  const reason=transferReason(initial,map,uid,index,donorUid,sourceIndex);if(reason)return blocked(initial,reason);
+  const candidate=transferCandidate(map,findItem(initial,uid)!.item,index,initial.items.find(i=>i.uid===donorUid)!,sourceIndex)!;
+  const profile=structuredClone(initial),c=map.equipment.forge.transfer,refund=fusionRefund(initial,map,[donorUid]);
+  Object.assign(findItem(profile,uid)!.item,candidate);profile.items=profile.items.filter(i=>i.uid!==donorUid);
+  profile.bank.ore+=refund.ore-c.ore;profile.bank.dust+=refund.dust-c.dust;profile.bank.seal-=c.seal;
+  return {profile,event:{type:'forged',uid,action:'transfer'}};
 }

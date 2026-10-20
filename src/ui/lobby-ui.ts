@@ -22,7 +22,7 @@ import { skillDescription, heroText, npcText, rewardText, shopText, sideQuestTex
 import { portrait, starRow } from './portraits';
 
 export interface LobbyHost { autoEquip(plan: AutoEquipmentPlan): void; hire(index: number): void; refresh(): void; buy(item: ShopItemId, heroId?: string): void; smelt(dust: number): void; upgrade(id: string): void; dismiss(id: string): void; place(id: string, group: Group, other?: string): void; talent(id: string, node: TalentNode): void; resetTalents(id: string): void;
-  huntTarget(target?:string):void; craft(hero:string,level:number):void;
+  transfer(uid:number,index:number,donor:number,sourceIndex:number):void; huntTarget(target?:string):void; craft(hero:string,level:number):void;
   collect(ids:number[]):void; recycleStored(source:StorageSource,ids:number[]):void; expandStorage():void;
   equip(id: string, uid: number): void; unequip(id: string, slot: GearSlot): void; salvage(uids: number[]): void;
   enhance(uid: number, target: number): void; lock(uid:number):void; fuse(uid: number, donors:number[]): void; level(uid:number,target:number):void; reroll(uid: number, index: number): void; brew(potion: PotionId): void; claim(questId: string): void; depart(): void; home(): void }

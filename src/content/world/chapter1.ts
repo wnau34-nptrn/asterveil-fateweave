@@ -167,7 +167,7 @@ export const chapterOne: MapDefinition = {
     // Forge (2D-4, draft numbers): caps +5/+10/+15/+20/+25, +6% base stats per level.
     hunt: {weaponBiasPercent:70,pityDrops:12},
     storage: {step:30,costs:[200,400,800]},
-    forge: { craft:{ore:18,dust:4,orePerLevel:6,dustPerLevel:1}, itemLevel: {baseCap:3,orePerLevel:4,dustPerLevel:1,unlocks:[{elite:'gate-meadow',cap:6},{elite:'gate-thicket',cap:9},{elite:'scar-golem',cap:10}]}, plusCap: [5, 10, 15, 20, 25], plusPercent: 6, ore: 3, orePerPlus: 1, dustPerPlus: 0.5, fuseCount: 3, rerollSeals: 1, salvageDustPerPlus: 1, smeltOre: 8, smeltCap: 30 },
+    forge: { transfer:{ore:12,dust:3,seal:1}, craft:{ore:18,dust:4,orePerLevel:6,dustPerLevel:1}, itemLevel: {baseCap:3,orePerLevel:4,dustPerLevel:1,unlocks:[{elite:'gate-meadow',cap:6},{elite:'gate-thicket',cap:9},{elite:'scar-golem',cap:10}]}, plusCap: [5, 10, 15, 20, 25], plusPercent: 6, ore: 3, orePerPlus: 1, dustPerPlus: 0.5, fuseCount: 3, rerollSeals: 1, salvageDustPerPlus: 1, smeltOre: 8, smeltCap: 30 },
     sets: {
       dawn: { two: [{ stat: 'hp', value: 10 }], four: { kind: 'barrier', amount: 12 } },
       wind: { two: [{ stat: 'speed', value: 3 }], four: { kind: 'firstStrike', amount: 0 } },
