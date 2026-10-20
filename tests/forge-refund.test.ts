@@ -30,18 +30,18 @@ it('locks block mixed salvage and automatic fusion, but permit safe enhancement 
   const worn=equip(q,'guardian',2).profile;expect(worn.members.guardian!.gear!.body!.locked).toBe(true);
   const unlock=lockEquipment(worn,2).profile;expect(findItem(unlock,2)!.item.locked).toBeUndefined();expect(p.items[1]!.investment).toBeUndefined();
 });
-it('preserves the paid ledger through current half-plus fusion and excludes zero-plus invested donors',()=>{
+it('preserves the paid ledger through full-plus fusion and excludes zero-plus invested donors',()=>{
   const p=enhanceTo(setup(),map,1,1).profile,credit=p.items[0]!.investment;
-  const out=fuse(p,map,1).profile;expect(out.items[0]!.plus).toBeUndefined();expect(out.items[0]!.investment).toEqual(credit);
+  const out=fuse(p,map,1).profile;expect(out.items[0]!.plus).toBe(1);expect(out.items[0]!.investment).toEqual(credit);
   const fresh={...out,items:[item(4,{rarity:1,affixes:['hp']}),item(5,{rarity:1,affixes:['armour']}),out.items[0]!],nextItem:6};
   expect(fuseMaterials(fresh,map,4).map(i=>i.uid)).toEqual([5]);
-  const again=enhanceTo(out,map,1,1).profile;expect(again.items[0]!.investment).toEqual({ore:8,dust:2});
+  const again=enhanceTo(out,map,1,2).profile;expect(again.items[0]!.investment).toEqual({ore:9,dust:2});
   const recycled=salvage(again,map,[1]).profile;expect(recycled.bank.ore).toBe(p.bank.ore+4+map.equipment.salvage[1]!.ore);
 });
-it('round-trips locks and exact credits through departure, run item ownership and v22 persistence',()=>{
+it('round-trips locks and exact credits through departure, run item ownership and v23 persistence',()=>{
   let p=lockEquipment(enhanceTo(setup(),map,1,3).profile,1).profile;p=equip(p,'guardian',1).profile;
   const game=depart(p,map,lookup,23);let raw='';saveGame({getItem:()=>null,setItem:(_k,s)=>{raw=s;}},game);
-  expect(JSON.parse(raw).version).toBe(22);const back=parseGame(raw,map,lookup);expect(back).toEqual(game);
+  expect(JSON.parse(raw).version).toBe(23);const back=parseGame(raw,map,lookup);expect(back).toEqual(game);
   const changed=JSON.parse(raw);changed.run.members.guardian.gear.body.investment.ore++;expect(()=>parseGame(JSON.stringify(changed),map,lookup)).toThrow();
   const legacy=JSON.parse(raw);legacy.version=21;delete legacy.profile.members.guardian.gear.body.investment;delete legacy.run.members.guardian.gear.body.investment;
   const migrated=parseGame(JSON.stringify(legacy),map,lookup);expect(migrated.run!.members.guardian!.gear).toEqual(migrated.profile.members.guardian!.gear);

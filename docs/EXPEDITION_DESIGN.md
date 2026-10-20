@@ -1021,3 +1021,12 @@ The current map becomes map 3, "แนวรอยแยก". Two short new maps
 3. Save v21: cleared maps and guided tasks.
 4. Build map 1, then map 2.
 5. Re-level map 3 and simulate all three maps.
+
+
+## Forge phase 2 — 2026-10-20 (current)
+
+Rarity fusion preserves the main item's full +, Lv, class, set, original affixes and quality rolls, and both development ledgers. It adds random affixes/specials as before. Select exactly two same-slot/same-rarity bag donors; locked/worn pieces cannot be consumed. Recommendations exclude all enhanced or invested pieces. Explicitly chosen developed donors refund actual enhancement and Lv capital in full at consumption, without base salvage; wallet overflow blocks the whole action.
+
+The smith can raise a chosen item's Lv, retaining rarity/set/rolls/affixes/+. Initial permanent cap is Lv3; defeating gate-meadow unlocks Lv6, gate-thicket Lv9 and scar-golem Lv10. Completing the chapter also unlocks Lv10. Record the best tier on return, including withdrawal/wipe; optional-elite respawn history counts. Hero Lv does not unlock this. Draft costs per next item level N are 4×N ore +1 dust, summed atomically for the selected target. Use existing ore/dust after earning the area tier, without another currency. Item.levelInvestment records actual costs; no credit for an item's original drop/market level. Recycling and donor consumption return it 100%, independently of enhancement investment.
+
+Save v23 adds profile.forgeLevel and validates levelInvestment/active-run ownership. v1–v22 remain supported. Legacy completed chapters unlock Lv10; incomplete legacy companies start at Lv3 because no permanent elite history existed. Existing high-level items remain intact and usable, with no invented upgrade spending. Prices/caps live in content. No map/encounter version or active combat change. Overflow, crafting and affix transfer remain later phases.

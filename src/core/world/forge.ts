@@ -46,21 +46,27 @@ export function lockEquipment(initial:Profile,uid:number):ProfileResult {
 }
 // ---- Fuse: the main piece (bag or worn) plus bag pieces of the same slot and rarity → one rarity up ----
 // The main piece keeps its class, level, set and affixes, gains affixes up to the new rarity's count (a legendary
-// also gains a special) and keeps half its enhance level. The other pieces are used up.
+// also gains a special) and keeps its full enhance level. The other pieces are used up.
 export function fuseMaterials(profile: Profile, map: MapDefinition, uid: number): Item[] {
   const main = findItem(profile, uid)?.item; if (!main) return [];
   // The cheapest matching bag pieces go first: lowest enhance, then lowest level.
-  return profile.items.filter(i => i.uid !== uid && !i.locked && !(i.plus??0) && !i.investment?.ore && !i.investment?.dust && i.slot === main.slot && i.rarity === main.rarity)
+  return profile.items.filter(i => i.uid !== uid && !i.locked && !(i.plus??0) && !i.investment?.ore && !i.investment?.dust && !i.levelInvestment?.ore && !i.levelInvestment?.dust && i.slot === main.slot && i.rarity === main.rarity)
     .sort((a, b) => (a.plus ?? 0) - (b.plus ?? 0) || a.level - b.level || a.uid - b.uid).slice(0, map.equipment.forge.fuseCount - 1);
 }
-export function fuseReason(profile: Profile, map: MapDefinition, uid: number): string {
+export function fuseReason(profile: Profile, map: MapDefinition, uid: number, donors?:readonly number[]): string {
   const main = findItem(profile, uid)?.item; if (!main) return 'unknown';
   if (main.rarity >= RARITIES - 1) return 'maxed';
-  return fuseMaterials(profile, map, uid).length < map.equipment.forge.fuseCount - 1 ? 'materials' : '';
+  const ids=donors??fuseMaterials(profile,map,uid).map(i=>i.uid);
+  if(ids.length!==map.equipment.forge.fuseCount-1||new Set(ids).size!==ids.length)return 'materials';
+  const used=ids.map(id=>profile.items.find(i=>i.uid===id));
+  if(used.some(i=>!i||i.uid===uid||i.locked||i.slot!==main.slot||i.rarity!==main.rarity))return 'materials';
+  const refund=fusionRefund(profile,map,ids);
+  return profile.bank.ore+refund.ore>9999999||profile.bank.dust+refund.dust>9999999?'full':'';
 }
-export function fuse(initial: Profile, map: MapDefinition, uid: number): ProfileResult {
-  const reason = fuseReason(initial, map, uid); if (reason) return blocked(initial, reason);
-  const profile = structuredClone(initial); const used = fuseMaterials(profile, map, uid).map(i => i.uid);
+export function fuse(initial: Profile, map: MapDefinition, uid: number, donors?:readonly number[]): ProfileResult {
+  const reason = fuseReason(initial, map, uid,donors); if (reason) return blocked(initial, reason);
+  const profile = structuredClone(initial); const used = donors?[...donors]:fuseMaterials(profile, map, uid).map(i => i.uid);
+  const refund=fusionRefund(profile,map,used);profile.bank.ore+=refund.ore;profile.bank.dust+=refund.dust;
   const { item } = findItem(profile, uid)!; const roll = () => rollPercent(profile.seed ^ 0x6f726765, profile.forge++);
   item.investment=enhancementInvestment(map,item);
   item.rarity++;
@@ -69,7 +75,7 @@ export function fuse(initial: Profile, map: MapDefinition, uid: number): Profile
   while (item.affixes.length < map.equipment.affixCount[item.rarity]! && pool.length) { item.affixes.push(pool.splice((roll() * 7919 + roll()) % pool.length, 1)[0]!); q.affixes.push(rollQuality(map.equipment, roll)); }
   item.q = q;
   if (item.rarity === RARITIES - 1) item.special = GEAR_SPECIALS[(roll() * 7919 + roll()) % GEAR_SPECIALS.length]!;
-  const half = Math.floor((item.plus ?? 0) / 2); if (half) item.plus = half; else delete item.plus;
+
   profile.items = profile.items.filter(i => !used.includes(i.uid));
   return { profile, event: { type: 'forged', uid, action: 'fuse' } };
 }
@@ -101,4 +107,27 @@ export function smelt(initial: Profile, map: MapDefinition, dust: number): Profi
   const profile = structuredClone(initial);
   profile.bank.ore -= dust * map.equipment.forge.smeltOre; profile.bank.dust += dust; profile.smelted += dust;
   return { profile, event: { type: 'smelted', dust } };
+}
+
+// Only actual paid development is returned for consumed donors; their base salvage is not paid.
+export function fusionRefund(profile:Profile,map:MapDefinition,ids:readonly number[]):{ore:number;dust:number} {
+  return ids.reduce((total,id)=>{const i=profile.items.find(i=>i.uid===id);if(!i)return total;const paid=enhancementInvestment(map,i);return {ore:total.ore+paid.ore+(i.levelInvestment?.ore??0),dust:total.dust+paid.dust+(i.levelInvestment?.dust??0)};},{ore:0,dust:0});
+}
+export const itemLevelCap=(p:Profile,map:MapDefinition):number=>p.forgeLevel??map.equipment.forge.itemLevel.baseCap;
+export function itemLevelCost(map:MapDefinition,item:Item,target:number):{ore:number;dust:number}|undefined {
+  if(!Number.isInteger(target)||target<=item.level||target>99)return;
+  const rules=map.equipment.forge.itemLevel;let ore=0,dust=0;
+  for(let n=item.level+1;n<=target;n++){ore+=rules.orePerLevel*n;dust+=rules.dustPerLevel;}
+  return {ore,dust};
+}
+export function raiseItemLevel(initial:Profile,map:MapDefinition,uid:number,target:number):ProfileResult {
+  const found=findItem(initial,uid);if(!found)return blocked(initial,'unknown');
+  const cost=itemLevelCost(map,found.item,target);if(!cost||target>itemLevelCap(initial,map))return blocked(initial,'level');
+  if(initial.bank.ore<cost.ore||initial.bank.dust<cost.dust)return blocked(initial,initial.bank.ore<cost.ore?'ore':'dust');
+  const paid=found.item.levelInvestment??{ore:0,dust:0};
+  if(!Number.isSafeInteger(paid.ore+cost.ore)||!Number.isSafeInteger(paid.dust+cost.dust))return blocked(initial,'unknown');
+  const profile=structuredClone(initial),item=findItem(profile,uid)!.item;
+  profile.bank.ore-=cost.ore;profile.bank.dust-=cost.dust;item.level=target;
+  item.levelInvestment={ore:paid.ore+cost.ore,dust:paid.dust+cost.dust};
+  return {profile,event:{type:'forged',uid,action:'level'}};
 }

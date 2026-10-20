@@ -206,3 +206,11 @@ body { display: grid; place-items: center; background: radial-gradient(ellipse a
 .forge-workbench[data-review=true][data-mode=enhance] .forge-detail > .camp-note, .forge-workbench[data-review=true][data-mode=enhance] .forge-detail > .forge-label { display: none; }
 .forge-quests { border-bottom: 1px solid var(--hud-edge); margin-bottom: 8px; }
 .forge-quests summary { min-height: 44px; padding: 10px 4px; color: var(--text-muted); font-size: 13px; }
+
+.forge-modes { grid-template-columns:repeat(2,minmax(0,1fr)); }
+.forge-donors button { width:100%; min-height:44px; text-align:left; }
+.forge-donors button[aria-pressed="true"] { border-color:var(--gold-light); background:#35435a; }
+.forge-workbench[data-review="true"][data-mode="level"] .forge-label { display:none; }
+
+.forge-donors small { display:block; font-size:12px; line-height:1.6; }
+.forge-workbench[data-review="true"] :is(.forge-donors,#forge-recommend) { display:none; }

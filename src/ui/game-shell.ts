@@ -14,7 +14,7 @@ import { browserStorage } from '../platform/browser-storage';
 import type { BattleUI } from './battle-ui';
 import type { NpcId } from '../game/visuals/assets';
 import { choiceText, eventText, expThai, heroText, itemLines, itemName, lootThai, potionText, rewardText, shopText } from './th';
-import { enhanceTo, lockEquipment, findItem, fuse, reroll, smelt } from '../core/world/forge';
+import { raiseItemLevel, enhanceTo, lockEquipment, findItem, fuse, reroll, smelt } from '../core/world/forge';
 import { CommanderUI } from './commander-ui';
 import { LobbyUI } from './lobby-ui';
 import { prologue, prologueEnd, StoryUI } from './story-ui';
@@ -72,7 +72,7 @@ export class GameShell {
       equip: (id, uid) => this.profileChange(equip(this.game!.profile, id, uid)), unequip: (id, slot) => this.profileChange(unequip(this.game!.profile, map, id, slot)),
       autoEquip: plan => this.profileChange(applyCampEquipment(this.game!.profile,plan)),
       salvage: uids => this.profileChange(salvage(this.game!.profile, map, uids)),
-      enhance: (uid,target) => this.profileChange(enhanceTo(this.game!.profile, map, uid,target)), lock: uid=>this.profileChange(lockEquipment(this.game!.profile,uid)), fuse: uid => this.profileChange(fuse(this.game!.profile, map, uid)),
+      enhance: (uid,target) => this.profileChange(enhanceTo(this.game!.profile, map, uid,target)), lock: uid=>this.profileChange(lockEquipment(this.game!.profile,uid)), fuse: (uid,donors) => this.profileChange(fuse(this.game!.profile, map, uid,donors)), level:(uid,target)=>this.profileChange(raiseItemLevel(this.game!.profile,map,uid,target)),
       reroll: (uid, i) => this.profileChange(reroll(this.game!.profile, map, uid, i)), brew: potion => this.profileChange(brew(this.game!.profile, map, potion)), claim: id => this.profileChange(claimQuest(this.game!.profile, map, id)),
       depart: () => this.depart(), home: () => this.showTitle(),
     });
@@ -223,9 +223,9 @@ export class GameShell {
     return `ซื้อ${shopText[e.item].name}แล้ว`;
   }
   // Forge result: the piece as it is now (fuse and reroll show what was rolled).
-  private forgedText(profile: Profile, uid: number, action: 'enhance' | 'fuse' | 'reroll'): string {
+  private forgedText(profile: Profile, uid: number, action: 'enhance' | 'fuse' | 'reroll' | 'level'): string {
     const item = findItem(profile, uid)?.item; if (!item) return '';
-    return `${({ enhance: 'ตีบวกสำเร็จ', fuse: 'หลอมรวมสำเร็จ', reroll: 'ปรับค่าแล้ว' })[action]} · ${itemName(item)} · ${itemLines(this.map.equipment, item).join(' · ')}`;
+    return `${({ level:'เพิ่ม Lv สำเร็จ', enhance: 'ตีบวกสำเร็จ', fuse: 'หลอมรวมสำเร็จ', reroll: 'ปรับค่าแล้ว' })[action]} · ${itemName(item)} · ${itemLines(this.map.equipment, item).join(' · ')}`;
   }
   private npcCheer: NpcId | undefined;
   private readonly story: StoryUI;
