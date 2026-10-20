@@ -1,5 +1,13 @@
 # Expedition design — 2D tile board
 
+## Equipment progression phase 6 — single-slot affix transfer (2026-10-20)
+
+Camp smith → Develop → Transfer copies one donor affix kind and its roll quality (%) into one main affix slot. The first successful transfer permanently binds that slot; later transfers only replace it. Donor and main must share a slot, and weapons must share class; no duplicate affixes, unchanged results, locked/worn donors or invalid indices. Main may be worn/locked. Preserve its Lv, +, rarity, set, main quality, other affixes, special and investment; use the main Lv to calculate the copied affix value. No RNG or combat rule changes.
+
+Content draft service fee: 12 ore +3 dust +1 seal, required upfront and not refundable. Consume one explicitly selected bag donor; refund only its actual/legacy remaining enhancement and actual Lv capital, without base salvage or manufacture credit. Validate the final wallet cap before any mutation. No library/extraction inventory or new currency. A tuned item is excluded from protected bulk recycling and automatic fusion donor recommendations; explicit individual recycling/manual fusion remains available and retains existing refund rules.
+
+Item.transferSlot persists in save v26, with no binding invented for v1–v25 items. All existing rarity fusion and random reroll services remain; they cannot move the binding. The one-slot restriction leaves main quality, other affixes, set and legendary effects as reasons to farm. Boss-exclusive gear remains a separate future scope.
+
 ## Equipment progression phase 5 — fixed weapon crafting (2026-10-20)
 
 Camp smith → Craft weapon creates one fixed green (rarity 1) weapon for an owned class, including members left at camp. Choose Lv1 through the same permanent area-earned item-Lv cap. Quality is 100%, one class-appropriate Attack/Support affix at 100%, no set/special/+; no RNG or automatic equip. Content draft costs: 18 ore +4 dust at Lv1, plus 6 ore +1 dust per additional starting level. This manufacture price is not refundable development capital; recycle pays only existing base salvage (3 ore/2 dust) plus any separately paid later enhancement/Lv investment. Existing fusion/development remains available. No new currency, loot/pity/encounter/combat changes.

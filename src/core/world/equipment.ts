@@ -104,7 +104,8 @@ export function itemValid(map: MapDefinition, item: Item, heroIds: readonly stri
   if (item.locked !== undefined && item.locked !== true) return false;
   if (item.investment !== undefined && (!item.investment || typeof item.investment !== 'object' || Object.keys(item.investment).length !== 2 || !['ore','dust'].every(k => Number.isSafeInteger(item.investment![k as 'ore'|'dust']) && item.investment![k as 'ore'|'dust'] >= 0))) return false;
   if (item.levelInvestment !== undefined && (!item.levelInvestment || typeof item.levelInvestment !== 'object' || Object.keys(item.levelInvestment).length !== 2 || !['ore','dust'].every(k => Number.isSafeInteger(item.levelInvestment![k as 'ore'|'dust']) && item.levelInvestment![k as 'ore'|'dust'] >= 0))) return false;
-  const keys = Object.keys(item).filter(k => !['uid', 'slot', 'rarity', 'level', 'hero', 'affixes', 'special', 'set', 'plus', 'q', 'locked', 'investment', 'levelInvestment'].includes(k));
+  if(item.transferSlot!==undefined&&(found||!item.q||!Number.isInteger(item.transferSlot)||item.transferSlot<0||item.transferSlot>=item.affixes.length))return false;
+  const keys = Object.keys(item).filter(k => !['transferSlot', 'uid', 'slot', 'rarity', 'level', 'hero', 'affixes', 'special', 'set', 'plus', 'q', 'locked', 'investment', 'levelInvestment'].includes(k));
   return !keys.length;
 }
 // Missing ledger = legacy credit for the remaining + level, never inferred lost past upgrades.

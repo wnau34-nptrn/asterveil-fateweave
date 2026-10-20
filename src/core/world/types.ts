@@ -80,6 +80,7 @@ export type GearStat = 'hp' | 'attack' | 'support' | 'speed' | 'armour' | 'resis
 // missing = 100 (items made before the rolls).
 // locked protects destruction; investment is the paid enhancement credit, preserved across equipment moves.
 export interface Item { uid: number; slot: GearSlot; rarity: number; level: number; hero?: string; affixes: GearStat[]; special?: GearSpecial; set?: SetId; plus?: number;
+  transferSlot?:number;
   q?: { main: number; affixes: number[] }; locked?: true; investment?: { ore: number; dust: number };
   // Actual paid item-Lv costs only; the original dropped level never grants credit.
   levelInvestment?: {ore:number;dust:number} }
@@ -179,6 +180,7 @@ export interface PotionRules {
 // Fusing three pieces of one slot and rarity raises the chosen main piece one rarity; rerolling one affix costs a seal.
 // Recycling returns base salvage plus paid enhancement and item-Lv investment.
 export interface ForgeRules {
+  transfer:{ore:number;dust:number;seal:number};
   craft: {ore:number;dust:number;orePerLevel:number;dustPerLevel:number};
   itemLevel: {baseCap:number; orePerLevel:number; dustPerLevel:number; unlocks:readonly {elite:string;cap:number}[]};
   plusCap: readonly number[]; plusPercent: number; ore: number; orePerPlus: number; dustPerPlus: number;
@@ -284,7 +286,7 @@ export type ProfileEvent =
   | { type: 'talent'; heroId: string }
   | { type: 'equipped'; heroId: string }
   | { type: 'salvaged'; count: number; ore: number; dust: number }
-  | { type: 'forged'; uid: number; action: 'enhance' | 'fuse' | 'reroll' | 'level' | 'craft' }
+  | { type: 'forged'; uid: number; action: 'enhance' | 'fuse' | 'reroll' | 'level' | 'craft' | 'transfer' }
   | { type: 'equipmentLocked'; uid: number; locked: boolean }
   | { type: 'smelted'; dust: number }
   | { type: 'brewed'; potion: PotionId }
