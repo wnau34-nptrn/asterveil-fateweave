@@ -214,3 +214,27 @@ body { display: grid; place-items: center; background: radial-gradient(ellipse a
 
 .forge-donors small { display:block; font-size:12px; line-height:1.6; }
 .forge-workbench[data-review="true"] :is(.forge-donors,#forge-recommend) { display:none; }
+
+.storage-sources,.storage-tools { display:flex; gap:8px; margin:8px 0; }
+.storage-sources button,.storage-tools button { flex:1; min-height:44px; min-width:0; font-size:12px; padding:8px; }
+.storage-sources [aria-pressed=true] { border-color:var(--gold-light); color:var(--gold-light); }
+.storage-expansion { border:1px solid var(--hud-edge); border-radius:10px; padding:8px; margin:10px 0; }
+.storage-expansion summary { min-height:44px; padding:10px 0; }
+.storage-expansion button { min-height:44px; }
+.lobby-sheet:has(.storage-review) .lobby-content { display:flex; flex-direction:column; overflow:hidden; }
+.storage-review { display:flex; flex-direction:column; min-height:0; flex:1; }
+.storage-review-items { overflow:auto; min-height:0; flex:1; font-size:13px; line-height:1.7; padding-left:22px; }
+.storage-footer { flex:none; background:#0c192b; border-top:1px solid var(--hud-edge); padding:10px 0; }
+.storage-footer button { min-height:48px; margin:8px 5px 0 0; }
+.storage-footer small { display:block; }
+.storage-notice { min-height:44px; margin:8px; }
+.inventory-gear [data-storage=select][aria-pressed=true] { border-color:var(--gold-light); background:#293145; }
+
+.storage-notice { position:absolute; z-index:25; top:calc(max(12px,var(--safe-top)) + 150px); left:12px; right:12px; margin:0; pointer-events:auto; font-size:13px; }
+.lobby-hud:has(.lobby-sheet) .storage-notice { display:none; }
+.lobby-hud:has(.storage-notice) > .lobby-result { display:none; }
+
+.lobby-sheet:has(.storage-review) .lobby-content > :is(.npc-line,.side-quest) { display:none; }
+
+.lobby-sheet:has(.storage-review) .storage-keeper { display:none; }
+.storage-keeper > summary,.storage-characters > summary { min-height:44px; padding:12px 0; color:var(--text-muted); font-size:13px; }

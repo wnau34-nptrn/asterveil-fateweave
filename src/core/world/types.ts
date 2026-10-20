@@ -108,10 +108,11 @@ export interface EquipmentRules {
   // `bossDrops` items. A wiped team still brings home its `wipeKeep` best found items.
   dropPercent: number; pity: number;
   rarityWeights: readonly number[]; bossRarityWeights: readonly number[]; bossDrops: number; wipeKeep: number;
-  // Salvaging (or an overflowing bag) returns ore and veil dust by rarity.
+  // Explicit recycling returns ore and veil dust by rarity. Overflow is preserved.
   salvage: readonly { ore: number; dust: number }[];
   // A dropped item belongs to one of its zone's sets at `setPercent` (the boss: any set).
   setPercent: number; sets: Readonly<Record<SetId, SetDefinition>>;
+  storage: {step:number;costs:readonly number[]};
   forge: ForgeRules;
 }
 // ---- Phase 3A: elites and map events (draft numbers) ----
@@ -246,7 +247,8 @@ export interface Profile {
   // The 4 + 4 chosen for the next expedition (subset of `company`).
   party: Roster;
   bank: Bank;
-  // Unequipped items (≤ bagCap) and the next item uid.
+  // Unequipped items (≤ upgraded storage capacity), persistent pending rewards and the next uid.
+  overflow?:Item[]; storageTier?:number;
   items: Item[]; nextItem: number;
   // Forge rolls used so far (fuse and reroll draw from (seed, forge)).
   forge: number;
@@ -266,6 +268,8 @@ export interface Profile {
   last: { outcome: RunOutcome; ore: number; gold: number; seal: number; steps: number; wins: number; items: number; salvaged: number } | null;
 }
 export type ProfileEvent =
+  | {type:'storageCollected';count:number}
+  | {type:'storageExpanded'}
   | { type: 'blocked'; reason: string }
   | { type: 'party' }
   | { type: 'commander' }

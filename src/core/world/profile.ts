@@ -1,3 +1,4 @@
+import {storageCap,departureBlocked} from './storage';
 import { memberTalentReason, talentsSpent } from './talents';
 import type { Commander, ShopItemId, SideQuestKind, ExpeditionState, Gear, GearSlot, Item, MapDefinition, PotionId, Potions, Profile, ProfileResult, RunOutcome, TalentNode } from './types';
 import { rollItem, salvageValue } from './equipment';
@@ -11,7 +12,7 @@ export function newProfile(map: MapDefinition, seed: number): Profile {
     seed: seed >>> 0, returns: 0, tutorialDone: false, commander: null,
     company: [...map.startingRoster], members: Object.fromEntries(map.startingRoster.map(id => [id, { stars: 1, dupes: 0 }])),
     party: { deployed: [...map.startingRoster], reserve: [] },
-    forgeLevel: map.equipment.forge.itemLevel.baseCap, bank: { ore: 0, gold: 0, seal: 0, dust: 0 }, items: [], nextItem: 1, forge: 0, potions: { salve: 0, tonic: 0, repel: 0 }, quests: {}, shop: {}, refreshes: 0, smelted: 0, taken: [], expeditions: 0, completes: 0, last: null,
+    forgeLevel: map.equipment.forge.itemLevel.baseCap, bank: { ore: 0, gold: 0, seal: 0, dust: 0 }, items: [], overflow:[],storageTier:0, nextItem: 1, forge: 0, potions: { salve: 0, tonic: 0, repel: 0 }, quests: {}, shop: {}, refreshes: 0, smelted: 0, taken: [], expeditions: 0, completes: 0, last: null,
   };
 }
 const blocked = (profile: Profile, reason: string): ProfileResult => ({ profile, event: { type: 'blocked', reason } });
@@ -95,9 +96,9 @@ export function dismissReason(profile: Profile, id: string): string {
 }
 export function dismiss(initial: Profile, map: MapDefinition, id: string): ProfileResult {
   const reason = dismissReason(initial, id); if (reason) return blocked(initial, reason);
-  if(Object.values(initial.members[id]?.gear??{}).filter(i=>i?.locked).length>Math.max(0,map.equipment.bagCap-initial.items.length))return blocked(initial,'full');
+
   const profile = structuredClone(initial);
-  // Their equipment goes back to the bag; whatever does not fit is salvaged.
+  // Their equipment is preserved in the bag or the pending tray.
   for (const item of Object.values(profile.members[id]?.gear ?? {}).sort((a,b)=>Number(!!b?.locked)-Number(!!a?.locked))) if (item) stash(profile, map, item);
   profile.company = profile.company.filter(m => m !== id); delete profile.members[id];
   profile.party.deployed = profile.party.deployed.filter(m => m !== id); profile.party.reserve = profile.party.reserve.filter(m => m !== id);
@@ -124,10 +125,10 @@ export function resetTalents(initial: Profile, id: string): ProfileResult {
 }
 
 // ---- Equipment (2D-2): equip, unequip and salvage happen only in the lobby. ----
-// Puts an item in the bag, or salvages it when the bag is full (returns whether it was kept).
+// Preserve excess rewards and returned owned equipment in a persistent pending tray.
 function stash(profile: Profile, map: MapDefinition, item: Item): boolean {
-  if (profile.items.length < map.equipment.bagCap) { profile.items.push(item); return true; }
-  const v = salvageValue(map, item); profile.bank.ore += v.ore; profile.bank.dust += v.dust; return false;
+  if (profile.items.length < storageCap(profile,map)) { profile.items.push(item); return true; }
+  (profile.overflow??=[]).push(item);return true;
 }
 export function equipReason(profile: Profile, heroId: string, uid: number): string {
   const item = profile.items.find(i => i.uid === uid);
@@ -146,7 +147,7 @@ export function equip(initial: Profile, heroId: string, uid: number): ProfileRes
 export function unequip(initial: Profile, map: MapDefinition, heroId: string, slot: GearSlot): ProfileResult {
   const item = initial.members[heroId]?.gear?.[slot];
   if (!item) return blocked(initial, 'unknown');
-  if (initial.items.length >= map.equipment.bagCap) return blocked(initial, 'full');
+  if (initial.items.length >= storageCap(initial,map)) return blocked(initial, 'full');
   const profile = structuredClone(initial); const m = profile.members[heroId]!;
   profile.items.push(item); delete m.gear![slot]; if (!Object.keys(m.gear!).length) delete m.gear;
   return { profile, event: { type: 'equipped', heroId } };
@@ -199,6 +200,7 @@ export function departure(profile: Profile, map: MapDefinition, lookup: Encounte
 }
 // Departing also packs up to `carry` of each brewed potion, taken out of the home stock (2D-5).
 export function depart(initial: Profile, map: MapDefinition, lookup: EncounterLookup, seed: number): { profile: Profile; run: ExpeditionState } {
+  if(departureBlocked(initial))throw new Error('Resolve overflow before departing');
   const profile = structuredClone(initial); const ids = [...profile.party.deployed, ...profile.party.reserve];
   const potions = Object.fromEntries(POTION_IDS.map(id => [id, Math.min(map.potions.carry, profile.potions[id])])) as Potions;
   for (const id of POTION_IDS) profile.potions[id] -= potions[id];
@@ -223,8 +225,8 @@ export function settle(initial: Profile, run: ExpeditionState, outcome: RunOutco
   const ore = Math.floor(run.resources.ore * pct / 100); const seal = Math.floor(run.resources.seal * pct / 100);
   const dust = Math.floor(run.dust * pct / 100); const gold = Math.floor(run.resources.gold * pct / 100);
   profile.bank.ore += ore; profile.bank.gold += gold; profile.bank.seal += seal; profile.bank.dust += dust;
-  // Found equipment comes home, in the bag or worn; a wiped team keeps only its `wipeKeep` best finds (rarity,
-  // then level, then the earliest found). A full bag salvages the rest (2D-2). Map bag (2026-10-17): members keep
+  // Found equipment comes home, in the bag, pending tray or worn; a wiped team keeps only its `wipeKeep` best finds (rarity,
+  // then level, then the earliest found). A full bag preserves the rest for an explicit camp choice. Map bag (2026-10-17): members keep
   // what they wear; a lost find leaves its slot to the item the member left the lobby with, when that is spare.
   const kept = new Set(homeItems(run, outcome, map)); let items = 0, salvaged = 0;
   const spare = [...run.spare];
@@ -242,7 +244,7 @@ export function settle(initial: Profile, run: ExpeditionState, outcome: RunOutco
     if (Object.keys(gear).length) home.gear = gear; else delete home.gear;
   }
   // The company's own items taken off on the map always come home, even past the bag limit.
-  profile.items.push(...spare);
+  for(const item of spare)stash(profile,map,item);
   for (const found of run.found) if (kept.has(found)) { if (stash(profile, map, { ...found, uid: profile.nextItem++ })) items++; else salvaged++; }
   // Unused potions come home too, unless the team was wiped.
   if (outcome !== 'wiped') for (const id of POTION_IDS) profile.potions[id] += run.potions[id];
@@ -321,7 +323,7 @@ export function buyReason(profile: Profile, map: MapDefinition, item: ShopItemId
     if (!m) return 'hero';
     if (m.stars >= map.company.maxStars) return 'maxed';
   }
-  if (item === 'gearbox' && profile.items.length >= map.equipment.bagCap) return 'bag';
+  if (item === 'gearbox' && profile.items.length >= storageCap(profile,map)) return 'bag';
   return profile.bank.gold < def.price ? 'gold' : '';
 }
 // The gear box rolls from the profile's lobby roll counter (shared with the forge), so a reload cannot re-roll it.

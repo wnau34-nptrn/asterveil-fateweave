@@ -1,3 +1,4 @@
+import {storageCap} from '../world/storage';
 import { entryReason, withParty } from '../battle/engine';
 import type { ActionId, Command } from '../battle/types';
 import { COMPANY_CAP, PARTY_SLOTS, RESERVE_SLOTS, type ActiveBattle, type ExpeditionState, type MapDefinition, type Point, type Profile, type Roster, type RunOutcome } from '../world/types';
@@ -47,7 +48,8 @@ export const legacyKeys = ['asterveil.fateweave.battle.v1', 'asterveil.fateweave
 // missing ledger grants credit for the remaining + through enhancementInvestment.
 // v22 → v23: permanent area-earned item-Lv cap and optional exact item-level investment.
 // Earlier completed expeditions unlock the chapter cap; absent item ledgers never invent level spending.
-const SAVE_VERSION = 23;
+// v23 → v24: persistent overflow tray and paid permanent camp storage tiers.
+const SAVE_VERSION = 24;
 export interface Game { profile: Profile; run: ExpeditionState | null }
 const actions: readonly ActionId[] = ['attack', 'guard', 'bash', 'mark', 'execute', 'bolt', 'ward', 'heal', 'prayer', 'brace', 'pierce', 'hinder', 'volley', 'acid', 'haste', 'ambush', 'evade', 'taunt', 'slam', 'valor', 'mend',
   'rally', 'finisher', 'sigil', 'sanctuary', 'spearwall', 'weakshot', 'bomb', 'backstab', 'quake', 'finale'];
@@ -270,6 +272,9 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
   const levels=map.equipment.forge.itemLevel, caps=[levels.baseCap,...levels.unlocks.map(u=>u.cap)];
   if(version<23)p.forgeLevel=p.completes>0?Math.max(...caps):levels.baseCap;
   if(!caps.includes(p.forgeLevel as number))throw new Error('Invalid forge level');
+  if(version<24){p.storageTier=0;p.overflow=[];}
+  if(!isInt(p.storageTier,0,map.equipment.storage.costs.length)||!Array.isArray(p.overflow))throw new Error('Invalid storage');
+  const overflow=p.overflow.map(i=>itemOf(i,map,lookup));
   const company = p.company;
   if (!Array.isArray(company) || !company.length || company.length > COMPANY_CAP || new Set(company).size !== company.length
     || company.some(id => typeof id !== 'string' || !heroDef(lookup, map, id))) throw new Error('Invalid company');
@@ -289,9 +294,9 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
   if (!isInt(p.refreshes, 0, map.shop.refreshCosts.length)) throw new Error('Invalid board');
   const quests = questsOf(p.quests, map);
   if (!isInt(p.forge)) throw new Error('Invalid forge');
-  if (!isInt(p.nextItem, 1) || !Array.isArray(p.items) || p.items.length > map.equipment.bagCap) throw new Error('Invalid items');
+  if (!isInt(p.nextItem, 1) || !Array.isArray(p.items) || p.items.length > storageCap({storageTier:p.storageTier as number},map)) throw new Error('Invalid items');
   const items = p.items.map(i => itemOf(i, map, lookup));
-  const uids = [...items, ...Object.values(members).flatMap(m => Object.values(m.gear ?? {}))].map(i => i!.uid);
+  const uids = [...items,...overflow, ...Object.values(members).flatMap(m => Object.values(m.gear ?? {}))].map(i => i!.uid);
   if (new Set(uids).size !== uids.length || uids.some(u => u >= (p.nextItem as number))) throw new Error('Invalid items');
   if (!Array.isArray(p.taken) || new Set(p.taken).size !== p.taken.length || p.taken.some(i => !isInt(i, 0, map.company.offers - 1))) throw new Error('Invalid board');
   let last: Profile['last'] = null;
@@ -309,7 +314,7 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
     commander = { name: c.name, crest: c.crest, color: c.color };
     if (commanderReason(commander)) throw new Error('Invalid commander');
   } else if (p.commander === undefined && version >= 6) throw new Error('Invalid commander');
-  return { forgeLevel:p.forgeLevel as number, seed: p.seed, returns: p.returns, tutorialDone: p.tutorialDone, commander, company: [...company as string[]], members, party,
+  return {overflow,storageTier:p.storageTier as number, forgeLevel:p.forgeLevel as number, seed: p.seed, returns: p.returns, tutorialDone: p.tutorialDone, commander, company: [...company as string[]], members, party,
     bank: { ore: bank.ore as number, gold: bank.gold as number, seal: bank.seal as number, dust: bank.dust as number }, items, nextItem: p.nextItem as number, forge: p.forge as number, potions: potionsOf(p.potions, 9999), quests, shop, refreshes: p.refreshes as number, smelted: p.smelted as number, taken: [...p.taken as number[]], expeditions: p.expeditions, completes: p.completes, last };
 }
 // Optional elite returns (4C): known optional elites only, 1..99 each.
@@ -366,7 +371,7 @@ function migrateItems(v: unknown, map: MapDefinition): void {
 export function parseGame(raw: string, map: MapDefinition, lookup: EncounterLookup): Game {
   const envelope = obj(JSON.parse(raw)); const version = envelope.version as number;
   if (version < 21) migrateItems(envelope, map);
-  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
+  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
   if (version < 5) {
     const run = parseRun(envelope.state, version, map, lookup);
     const profile = newProfile(map, (run.seed ^ 0x5bd1e995) >>> 0);
