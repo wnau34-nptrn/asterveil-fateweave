@@ -20,7 +20,7 @@ export function planEquipment(map: MapDefinition, data: EncounterDefinition, bas
     ...(current[slot] ? [{ key: `worn:${slot}`, item: current[slot]!, label: '' }] : []),
     ...entries.filter(e => e.item.slot === slot && (slot !== 'weapon' || e.item.hero === base.id)).sort((a,b)=>Number(b.item.uid>0)-Number(a.item.uid>0)),
   ].filter((e,_i,list)=>list.findIndex(v=>same({...v.item,uid:0},{...e.item,uid:0}))===_i));
-  const ref = wounded(starred(base, member.stars, map, member.level ?? 1, member.talents), member.wound);
+  const ref = wounded(starred(base, member.stars, map, member.level ?? 1, member.talents, undefined, member), member.wound);
   const direction = goal === 'recommended' ? map.equipment.supportHeroes.includes(base.id) ? 'support' : base.lane === 'front' ? 'survival' : 'attack' : goal;
   const weights = { attack: [8, 0, 2, 1], support: [1, 8, 2, 1], survival: [1, 1, 8, 1], speed: [1, 1, 2, 8] }[direction]!;
   type Loadout = (EquipmentEntry | undefined)[];
@@ -29,7 +29,7 @@ export function planEquipment(map: MapDefinition, data: EncounterDefinition, bas
   const rank = (items: Loadout): number[] => {
     const key=items.map(e=>e?.key??'').join('|'),cached=cache.get(key);if(cached)return cached;
     const gear = toGear(items), totals = gearTotals(map, gear);
-    const h = wounded(starred(base, member.stars, map, member.level ?? 1, member.talents, gear), member.wound);
+    const h = wounded(starred(base, member.stars, map, member.level ?? 1, member.talents, gear, member), member.wound);
     // Ranking weights only. Conditional set/legendary effects get an explicit utility value; real
     // stat/skill comparisons still come from the battle helpers and explain their conditions.
     const extra = h.gear, specials = extra?.specials ?? [];

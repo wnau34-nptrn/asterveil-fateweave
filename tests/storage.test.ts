@@ -36,7 +36,7 @@ it('expansion is permanent, bounded and changes actual unequip capacity without 
 });
 it('v24 roundtrips pending locks/ledgers and expanded capacity; v23 migrates without item changes',()=>{
   const p=full();p.bank.gold=200;const out=expandStorage(p,map).profile;out.items.push(item(61));out.overflow=[item(62,{locked:true,levelInvestment:{ore:20,dust:2}})];out.nextItem=63;
-  let raw='';saveGame({getItem:()=>null,setItem:(_k,s)=>{raw=s;}},{profile:out,run:null});expect(JSON.parse(raw).version).toBe(33);expect(parseGame(raw,map,lookup).profile).toEqual(out);
+  let raw='';saveGame({getItem:()=>null,setItem:(_k,s)=>{raw=s;}},{profile:out,run:null});expect(JSON.parse(raw).version).toBe(34);expect(parseGame(raw,map,lookup).profile).toEqual(out);
   for(const mutate of [(s:typeof out)=>{s.storageTier=4;},(s:typeof out)=>{s.overflow![0]!.uid=1;},(s:typeof out)=>{s.overflow![0]!.levelInvestment!.ore=-1;},(s:typeof out)=>{s.storageTier=0;}]){const bad=structuredClone(out);mutate(bad);expect(()=>parseGame(JSON.stringify({version:24,profile:bad,run:null}),map,lookup)).toThrow();}
   const old=full(),migrated=parseGame(JSON.stringify({version:23,profile:old,run:null}),map,lookup).profile;expect(migrated.items).toEqual(old.items);expect(migrated.storageTier).toBe(0);expect(migrated.overflow).toEqual([]);
 });

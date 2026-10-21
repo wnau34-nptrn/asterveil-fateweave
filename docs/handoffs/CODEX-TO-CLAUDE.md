@@ -4,7 +4,8 @@
 
 - Owner approved `docs/MASTER_PLAN_TH.md` in full; Codex art prompts are in `docs/handoffs/CODEX-ART-QUEUE-TH.md`, lore draft `docs/LORE_CHAPTER1_TH.md`, Knight tree draft `docs/design/SKILL_TREE_KNIGHT_TH.md`.
 - Shipped on `feature/fateweave-initial-prototype`: maps 1 ซากชายแดน / 2 เส้นทางป่าทึบ / 3 แนวรอยแยก (`MAPS`, shared `gameRules`), Codex systems made multi-map (forge item-Lv cap only from the frontier, teaching-boss drops, per-map boss names), camp name (v29), one-Knight start with story recruits and catch-up EXP (v30), lobby systems by chapter (v31, veterans keep everything), guided tasks (v32), hard mode part 1 (v33) and part 2 (enemy traits thorns/veilguard/enrage in the pure resolver via `rules.traits`, boss 'Rift Fury' move, status rows; no save change).
-- Next: hard-mode small map tweaks, A6 big skill tree (Knight draft approved by the owner 2026-10-21), A10 balance (re-level the frontier to Lv6–10), UI/FX once Codex art arrives.
+- A6 part 1 (save v34): the Knight's big tree (17 nodes, 3 branches × 4 tiers), three new skills (challenge/bulwark/rouse), modifiers, 3-skill loadout in the character sheet (lobby and map), legacy star grants. Tests: `tests/knight-tree*.test.ts`.
+- Next: hard-mode small map tweaks, A6 part 2 (skill levels with tomes) and the other classes' big trees, A10 balance (re-level the frontier to Lv6–10), UI/FX once Codex art arrives.
 
 ## 2026-10-21 — Owner rejects phase2 visuals; artwork-first handoff overrides phase3 priority
 

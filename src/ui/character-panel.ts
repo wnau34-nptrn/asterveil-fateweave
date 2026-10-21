@@ -1,4 +1,4 @@
-import type { EncounterDefinition, HeroDefinition } from '../core/battle/types';
+import type { ActionId, EncounterDefinition, HeroDefinition } from '../core/battle/types';
 import { AUTO_GOALS, planEquipment, type AutoEquipmentPlan, type AutoGoal, type EquipmentEntry } from '../core/world/auto-equipment';
 import { GEAR_SLOTS, SET_IDS, type GearSlot, type MapDefinition, type SetId, type TalentNode } from '../core/world/types';
 import { talentPoints, talentsSpent } from '../core/world/talents';
@@ -17,7 +17,7 @@ export interface CharacterHost {
   preview(id:string,key:string): CharacterModel|undefined;
   previewPlan(plan:AutoEquipmentPlan): CharacterModel|undefined;
   wear(id:string,key:string): void; takeOff(id:string,slot:GearSlot): void;
-  talent(id:string,node:TalentNode): void; reset?(id:string): void;
+  talent(id:string,node:TalentNode): void; reset?(id:string): void; loadout?(id:string,actions:ActionId[]): void;
   applyPlan(plan:AutoEquipmentPlan): void;
   restore?(dialogId:string): void; forge?(id:string,uid:number):void;
 }
@@ -64,7 +64,7 @@ export class CharacterPanel {
   private content():HTMLElement{return this.dialog.querySelector<HTMLElement>(`#${this.id('character-content')}`)!;}
   private focus(id:string):void{this.dialog.querySelector<HTMLElement>(`#${id}`)?.focus({preventScroll:false});}
   private usable():boolean{return this.dialog.open&&!this.root.hidden&&!this.root.closest('[inert]')&&!!this.host.model();}
-  private hero(model:CharacterModel,id=this.heroId):HeroDefinition {const m=model.state.members[id]!,base=this.heroes.find(h=>h.id===id)!;return wounded(starred(base,m.stars,this.map,m.level??1,m.talents,m.gear),m.wound);}
+  private hero(model:CharacterModel,id=this.heroId):HeroDefinition {const m=model.state.members[id]!,base=this.heroes.find(h=>h.id===id)!;return wounded(starred(base,m.stars,this.map,m.level??1,m.talents,m.gear,m),m.wound);}
   private discard():void{this.single=undefined;this.plan=undefined;}
   openFor(id:string,tab:CharacterTab,trigger:HTMLButtonElement,key?:string):void{
     const model=this.host.model();if(!model?.available||!model.ids.includes(id)||this.root.hidden||this.root.closest('[inert]'))return;
@@ -84,6 +84,11 @@ export class CharacterPanel {
     if(action==='comparison-back'){this.cancelTrial();return;}
     if(!model.available||this.source!==model.source)return;
     if(action==='character-talent'&&b.getAttribute('aria-disabled')!=='true'){this.host.talent(this.heroId,b.dataset.node as TalentNode);this.focus(this.id(`character-talent-${b.dataset.node}`));}
+    else if(action==='character-loadout'&&b.getAttribute('aria-disabled')!=='true'){
+      // Big skill trees (A6): toggle one unlocked skill in or out of the battle loadout (at least one stays).
+      const skill=b.dataset.skill as ActionId,now:ActionId[]=this.hero(model).actions.filter(a=>a!=='attack');
+      const next=now.includes(skill)?now.filter(a=>a!==skill):[...now,skill];
+      if(next.length&&next.length<=this.map.progression.loadoutSize)this.host.loadout?.(this.heroId,next);this.focus(this.id(`character-loadout-${skill}`));}
     else if(action==='character-reset'){this.host.reset?.(this.heroId);this.focus(this.id('character-reset'));}
     else if(action==='bag-slot'){const slot=b.dataset.slot as GearSlot;this.filters.slot=this.filters.slot===slot?'all':slot;this.render();this.focus(this.id(`bag-slot-${slot}`));}
     else if(action==='bag-wear'){const slot=model.entries.find(e=>e.key===b.dataset.key)?.item.slot;this.host.wear(this.heroId,b.dataset.key!);if(slot)this.focus(this.id(`bag-slot-${slot}`));}
@@ -109,11 +114,11 @@ export class CharacterPanel {
     const id=this.heroId,h=this.hero(model),m=model.state.members[id]!,base=this.heroes.find(v=>v.id===id)!,focus=this.dialog.contains(document.activeElement)?(document.activeElement as HTMLElement).id:'',scroll=this.content().scrollTop;
     this.dialog.querySelector(`#${this.id('character-title')}`)!.textContent=`${heroText[id]!.name} · Lv${m.level??1} · ★${m.stars}`;
     const picker=this.dialog.querySelector<HTMLElement>(`#${this.id('character-members')}`)!,left=picker.scrollLeft;
-    picker.innerHTML=this.ids(model.ids.map(c=>{const member=model.state.members[c]!,free=talentPoints(this.map,member)-talentsSpent(member.talents);return `<button id="character-member-${c}" data-world="character-member" data-hero="${c}" class="tree-member" aria-pressed="${c===id}" aria-label="${heroText[c]!.name} · แต้มเหลือ ${free}">${portrait(c)}<small>${heroText[c]!.name}</small>${free?`<i>+${free}</i>`:''}</button>`;}).join(''));picker.scrollLeft=left;
+    picker.innerHTML=this.ids(model.ids.map(c=>{const member=model.state.members[c]!,free=talentPoints(this.map,member,c)-talentsSpent(member.talents);return `<button id="character-member-${c}" data-world="character-member" data-hero="${c}" class="tree-member" aria-pressed="${c===id}" aria-label="${heroText[c]!.name} · แต้มเหลือ ${free}">${portrait(c)}<small>${heroText[c]!.name}</small>${free?`<i>+${free}</i>`:''}</button>`;}).join(''));picker.scrollLeft=left;
     this.dialog.querySelector(`#${this.id('character-tabs')}`)!.innerHTML=this.ids(Object.entries(characterTabs).map(([tab,label])=>`<button id="character-tab-${tab}" data-world="character-tab" data-tab="${tab}" role="tab" aria-controls="character-content" aria-selected="${tab===this.tab}" tabindex="${tab===this.tab?0:-1}">${label}</button>`).join(''));
     const position=model.state.roster.deployed.includes(id)?`ตัวหลักช่อง ${model.state.roster.deployed.indexOf(id)+1}`:model.state.roster.reserve.includes(id)?'สำรอง':'ในค่าย';
     let html=`<p class="character-summary">${heroText[id]!.role} · ${h.lane==='front'?'แนวหน้า':'แนวหลัง'} · ${position} · ${model.camp?'ค่ายหลัก · เลือดพร้อมออกเดินทาง':'HP'} ${model.state.hp[id]??0}/${h.maxHp}</p>`;
-    html+=this.tab==='overview'?characterOverview(model.state,this.map,h,this.template):this.tab==='skills'?characterSkills(h,base,m.stars,this.template):this.tab==='talents'?characterTalents(model.state,this.map,id,this.template)+(model.camp?`<button id="character-reset" data-world="character-reset" class="secondary"${talentsSpent(m.talents)?'':' disabled'}>รีเซ็ตแต้มฟรีที่ครูฝึก</button>`:''):this.gear(model,h);
+    html+=this.tab==='overview'?characterOverview(model.state,this.map,h,this.template):this.tab==='skills'?characterSkills(h,base,m.stars,this.template,this.map,m):this.tab==='talents'?characterTalents(model.state,this.map,id,this.template,h,base)+(model.camp?`<button id="character-reset" data-world="character-reset" class="secondary"${talentsSpent(m.talents)?'':' disabled'}>รีเซ็ตแต้มฟรีที่ครูฝึก</button>`:''):this.gear(model,h);
     this.content().setAttribute('aria-labelledby',this.id(`character-tab-${this.tab}`));this.content().innerHTML=this.ids(html);
     const auto=this.content().querySelector<HTMLDetailsElement>('.auto-settings'),extra=this.content().querySelector<HTMLDetailsElement>('.gear-extra-filters');if(auto)auto.open=this.autoExpanded;if(extra)extra.open=this.filtersExpanded;
     this.content().scrollTop=scroll;if(this.open&&focus)this.focus(focus);

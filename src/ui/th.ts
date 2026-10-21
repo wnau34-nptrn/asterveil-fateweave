@@ -65,6 +65,9 @@ export function skillDescription(action: ActionId, heroId: string, data: Encount
     bomb: `ปาขวดระเบิดใส่ศัตรูทุกตัว ตัวละ ${skill.power} ตัวที่ถูกกัดกร่อนอยู่โดนแรงขึ้นตามโบนัสกรด`,
     backstab: `ลอบแทง ${skill.power} ใส่ศัตรูที่ไม่ได้เล็งเซฟาในท่าถัดไป (ดูเป้าที่ศัตรูประกาศ)`,
     quake: `ทุบปฐพี ${skill.power} หรือ ${skill.power + data.rules.quakeBonus} ถ้าท่าถัดไปของเป้าหมายเล็งแบรนน์อยู่ (เข้าคู่กับยั่วยุ)`,
+    challenge: `ท้าดวลศัตรู 1 ตัว ท่าถัดไปของมันจะเล็งเอกิสแทน (แผนโจมตีแสดงเป้าใหม่ทันที) ไม่ทำความเสียหาย`,
+    bulwark: `ตั้งปราการหิน ตั้งแต่ตอนนี้จนถึงเทิร์นถัดไปของเอกิส ศัตรูทุกตัวเล็งเอกิส และเขารับเบาลง ${data.skills.bulwark.power}%`,
+    rouse: `ปลุกพล ทุกคนที่ยังยืนอยู่ฟื้นเลือด ${skill.power}% ของเลือดสูงสุดของตัวเอง ไม่ชุบชีวิต`,
     finale: `จบเพลงที่บรรเลงอยู่แล้วปล่อยพลังทันที: เพลงกล้า = โจมตีศัตรูทุกตัว ${skill.power} · เพลงฟื้น = ฟื้นเลือดทุกคน ${finaleHealPower(data, heroId)} ต้องมีเพลงของลิโอเล่นอยู่`,
   };
   const passive = hero.passive && passiveText[hero.passive].actions.includes(action) ? ` · ★5 ${passiveText[hero.passive].name}: ${passiveText[hero.passive].help(data)}` : '';
@@ -72,6 +75,8 @@ export function skillDescription(action: ActionId, heroId: string, data: Encount
 }
 // ---- Talent tree (2D-1b) ----
 // Branch names per class (A, B), matching docs/EXPEDITION_DESIGN.md "Talent tree".
+// Big skill trees (A6): three branch names per class, matching docs/design/SKILL_TREE_KNIGHT_TH.md.
+export const bigBranches: Record<string, readonly [string, string, string]> = { guardian: ['ปราการ', 'ลงทัณฑ์', 'ธงนำ'] };
 export const talentBranches: Record<string, readonly [string, string]> = {
   guardian: ['ผู้ลงทัณฑ์', 'ปราการ'], tracer: ['ดาบเจาะ', 'นักเต้นดาบ'], weaver: ['เวทโจมตี', 'เวทป้องกัน'], healer: ['ผู้เยียวยา', 'ผู้คุ้มครอง'],
   garran: ['ทวนรุก', 'ทวนรับ'], mira: ['นักแม่นธนู', 'ฝนธนู'], toma: ['กรดกัดกร่อน', 'ยาเสริม'], sefa: ['นักลอบ', 'นักหลบ'],
@@ -89,7 +94,7 @@ const ruleText: Record<TalentRule, { actions: readonly ActionId[]; help: (n: num
 };
 const capText: Record<TalentCap, { actions: readonly ActionId[]; help: (n: number) => string }> = {
   retribution: { actions: ['bash'], help: n => `กระแทกโล่ที่หยุดท่ากายภาพได้ทำดาเมจเพิ่ม ${n}` },
-  guardcounter: { actions: ['guard'], help: n => `รับการโจมตีแทนแล้วโต้กลับผู้โจมตี ${n}` },
+  guardcounter: { actions: ['guard'], help: n => `ทุกครั้งที่รับการโจมตีแทน โต้กลับผู้โจมตี ${n} + 20% ของพลังโจมตี` },
   deepmark: { actions: ['attack', 'execute', 'finisher'], help: n => `ทุกการโจมตีของไลราใส่ศัตรูที่ติดตรา +${n}` },
   relentless: { actions: ['execute'], help: () => 'ล้มศัตรูได้แล้วฟันเจาะจุดพร้อมใช้ทันที' },
   splitbolt: { actions: ['bolt'], help: () => 'ศรเวทโดนศัตรูตัวอื่นด้วยครึ่งหนึ่ง' },
@@ -108,14 +113,21 @@ const capText: Record<TalentCap, { actions: readonly ActionId[]; help: (n: numbe
   stoneregen: { actions: ['taunt'], help: n => `เริ่มเทิร์นตอนเลือดต่ำกว่าครึ่ง ฟื้นเลือด ${n}` },
   chorus: { actions: ['valor'], help: n => `ระหว่างเพลงกล้า การโจมตีของศัตรูทุกครั้งเบาลง ${n}` },
   overture: { actions: ['mend'], help: () => 'เริ่มศึกพร้อมเพลงฟื้นที่บรรเลงอยู่แล้ว' },
+  twoguard: { actions: ['guard'], help: n => `ตั้งรับแทนกันได้ 2 ครั้งจากศัตรูตัวใดก็ได้จนถึงเทิร์นถัดไป แต่ลดความเสียหายน้อยลง ${n}%` },
+  reflectbash: { actions: ['bash'], help: n => `กระแทกโล่หยุดท่าพลังงานได้ด้วย แต่ดาเมจลดลง ${n}%` },
+  brightbanner: { actions: ['rally'], help: n => `ตั้งรับหมู่แล้วทุกคนได้โล่ ${n} (ไม่ซ้อนกัน)` },
+  valorbanner: { actions: ['rally'], help: n => `ตั้งรับหมู่แล้วทุกการโจมตีของทีมแรงขึ้น ${n}% ถึงจบรอบ` },
+  fatebanner: { actions: [], help: n => `เริ่มศึก ทุกคนได้โล่ ${n}% ของเลือดสูงสุดเอกิส` },
 };
-const talentStatName = { hp: 'เลือดสูงสุด', attack: 'พลังโจมตี', skill: 'พลังเสริม' } as const;
+const talentStatName = { hp: 'เลือดสูงสุด', attack: 'พลังโจมตี', skill: 'พลังเสริม', armour: 'เกราะ' } as const;
 // What one node does (per rank for multi-rank nodes); `data` names the skills.
 export function talentHelp(node: TalentNodeDef, data: EncounterDefinition): string {
   const e = node.effect; const per = node.max > 1 ? ' ต่อขั้น' : '';
   if ('stat' in e) return `${talentStatName[e.stat]} +${e.percent}%${per}`;
   if ('power' in e) return `${data.skills[e.power].name} +${e.amount}${per}`;
   if ('rule' in e) return ruleText[e.rule].help(e.amount) + per;
+  if ('unlock' in e) return `ปลดสกิล ${data.skills[e.unlock].name}: ${skillDescription(e.unlock, data.heroes[0]!.id, data)}`;
+  if ('passive' in e) return `พาสซีฟ ${passiveText[e.passive].name}: ${passiveText[e.passive].help(data)}`;
   return capText[e.cap].help(e.amount ?? 0);
 }
 // Talent effects that change this skill, appended to its description in battle.
@@ -174,7 +186,8 @@ export function eventThai(event: BattleEvent, after: BattleState, data: Encounte
     case 'cancel': return event.cause === 'sealed' ? 'ตรึงเวทยกเลิกท่าพลังงานของศัตรูได้' : event.cause === 'interrupted' ? 'กระแทกโล่หยุดการโจมตีกายภาพของศัตรูได้' : 'กำจัดผู้โจมตีได้ การโจมตีของมันถูกยกเลิก';
     case 'down': return `${target}${data.heroes.some(h => h.id === event.targetId) ? 'ล้มแล้ว' : 'ถูกกำจัดแล้ว'}`;
     case 'brace': return after.counter?.wall || event.text.startsWith('Spear wall') ? `${source}ตั้งกำแพงทวน · ทุกการตีกายภาพใส่แนวหน้าจะโดนสวน ${event.amount}` : `${source}ตั้งทวน · ศัตรูที่ตีแนวหน้าด้วยกายภาพจะโดนสวน ${event.amount}`;
-    case 'rally': return `${source}ตั้งรับหมู่ · การโจมตีครั้งแรกที่ทุกคนโดนเบาลง ${data.rules.rallyReduction * 100}%`;
+    case 'rally': if (event.text === 'Valor banner.') return `${source}ชูธงขวัญกล้า · ทุกการโจมตีของทีมแรงขึ้น ${event.amount}% ถึงจบรอบ`;
+      return `${source}ตั้งรับหมู่ · การโจมตีครั้งแรกที่ทุกคนโดนเบาลง ${data.rules.rallyReduction * 100}%`;
     case 'sigil': return `${target}ถูกตรึงเวท · ท่าพลังงานครั้งถัดไปจะถูกยกเลิก`;
     case 'sanctuary': return event.text.startsWith('Sanctuary keeps') ? `พรคุ้มภัยทำให้${target}ยังยืนอยู่ด้วยเลือด 1` : `${target}ได้รับพรคุ้มภัย · เลือดไม่ต่ำกว่า 1 จนถึงเทิร์นถัดไปของ${source}`;
     case 'stand': return event.text.startsWith('Last stand') ? `อุปกรณ์ยืนหยัดทำให้${target}รอดด้วยเลือด 1` : `${source}ยืนหยัด · ${target}รอดด้วยเลือด 1`;
@@ -183,7 +196,9 @@ export function eventThai(event: BattleEvent, after: BattleState, data: Encounte
     case 'corrode': return `${target}ถูกกัดกร่อน · ทุกการโจมตีของทีม +${event.amount}`;
     case 'haste': return `${target}จะลงมือก่อนทุกคนในรอบถัดไป`;
     case 'song': return `${source}เริ่มบรรเลงเพลงใหม่ ค้างไว้จนเปลี่ยนเพลง`;
-    case 'taunt': return `${source}ยั่วยุ · ศัตรูทุกตัวจะเล็ง${source}จนถึงเทิร์นถัดไป (รับเบาลง ${Math.round(tauntReductionOf(data, event.sourceId) * 100)}%)`;
+    case 'taunt': if (event.text === 'Challenge.') return `${source}ท้าดวล${target} · ท่าถัดไปของมันจะเล็ง${source}`;
+      if (event.text === 'Bulwark.') return `${source}ตั้งปราการหิน · ศัตรูทุกตัวจะเล็ง${source}จนถึงเทิร์นถัดไป (รับเบาลง ${event.amount}%)`;
+      return `${source}ยั่วยุ · ศัตรูทุกตัวจะเล็ง${source}จนถึงเทิร์นถัดไป (รับเบาลง ${Math.round(tauntReductionOf(data, event.sourceId) * 100)}%)`;
     case 'evade': return `${source}ก้าวเงา · การโจมตีครั้งแรกที่โดนจะพลาด`;
     case 'dodge': return `${target}หลบการโจมตีของ${source}ได้`;
     case 'delay': return `${target}จะลงมือท้ายสุดในรอบถัดไป`;

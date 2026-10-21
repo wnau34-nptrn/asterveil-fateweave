@@ -8,7 +8,10 @@ import { heroDef, starred } from '../src/core/world/world';
 
 // ★3 skills and ★5 passives (docs/EXPEDITION_DESIGN.md "Star unlocks"). Parties are built the way the
 // world builds them: catalog definition + stars (`starred`), deployed in slot order.
-const member = (id: string, stars: number) => starred(heroDef(encounterById, map, id)!, stars, map);
+// The Knight's big tree (A6) unlocks rally and stand as tree nodes; a company that had them from stars keeps them as
+// grants (save v34), which is what these star tests model for him.
+const legacy = (id: string, stars: number) => id === 'guardian' ? { grants: [...stars >= 3 ? ['c1s'] : [], ...stars >= 5 ? ['a4'] : []] } : undefined;
+const member = (id: string, stars: number) => starred(heroDef(encounterById, map, id)!, stars, map, 1, {}, undefined, legacy(id, stars));
 const party = (members: [string, number][], base: EncounterDefinition = veilSiege) => withParty(base, members.map(([id, stars]) => member(id, stars)));
 const act = (s: BattleState, d: EncounterDefinition, action: ActionId, targetId: string) =>
   resolveCommand(s, d, { beat: s.beat, heroId: currentHeroId(s, d)!, action, targetId });

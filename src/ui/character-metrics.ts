@@ -41,6 +41,8 @@ export function characterSkillMetric(action: ActionId, h: HeroDefinition, templa
   const data = withParty(template, [h]);
   const target = ({ self: 'ตัวเอง', ally: 'เพื่อน 1 คน', party: 'เพื่อนทุกคน', enemy: 'ศัตรู 1 ตัว', enemies: 'ศัตรูทุกตัว' })[targetKind(action)];
   if (action === 'rally') return { label: 'ผลพิเศษ', scaling: 'อ่านเงื่อนไขของท่า', target: 'เพื่อนทุกคน' };
+  if (action === 'bulwark') return { label: 'ลดความเสียหายที่รับ (%)', value: data.skills.bulwark.power, scaling: 'ค่าคงที่ ไม่อิงค่าสถานะ', target };
+  if (action === 'rouse') return { label: 'ฟื้นเลือด % ของเลือดสูงสุดต่อคน', value: skillPower(data, h.id, action), scaling: 'อิงพลังเสริม', target };
   if (action === 'attack') return { label: 'โจมตีพื้นฐาน', value: h.attack, scaling: 'อิงพลังโจมตี', target };
   if (action === 'finale') return { label: 'เพลงกล้า · ดาเมจต่อเป้าหมาย', value: skillPower(data,h.id,action), secondary: { label: 'เพลงฟื้น · ฟื้นเลือดต่อคน', value: finaleHealPower(data,h.id) }, scaling: 'โจมตีอิงพลังโจมตี · รักษาอิงพลังเสริม', target: 'ศัตรู/เพื่อนทุกคน ตามเพลง' };
   if (action === 'valor' || action === 'mend') return { label: action === 'valor' ? 'โบนัสต่อการโจมตี' : 'ฟื้นเลือดต่อคน/รอบ', value: songPower(data, h.id, action), scaling: 'อิงพลังเสริม', target: 'เพื่อนทุกคน' };

@@ -52,6 +52,11 @@ export const veilSiege: EncounterDefinition = {
     backstab: { name: 'ลอบแทง', english: 'Backstab', icon: '↯', power: 20, cooldown: 2 },
     quake: { name: 'ทุบปฐพี', english: 'Earthshaker', icon: '⚒', power: 14, cooldown: 2 },
     finale: { name: 'บทสุดท้าย', english: 'Finale', icon: '♪', power: 16, cooldown: 3 },
+    // Knight big tree skills (A6, draft numbers): challenge pulls one enemy's next move, bulwark is a percent cut,
+    // rouse heals a percent of each ally's max HP.
+    challenge: { name: 'ท้าดวล', english: 'Challenge', icon: '⚔', power: 0, cooldown: 3 },
+    bulwark: { name: 'ปราการหิน', english: 'Bulwark', icon: '♜', power: 60, cooldown: 4 },
+    rouse: { name: 'ปลุกพล', english: 'Rouse', icon: '❋', power: 12, cooldown: 4 },
   },
   rules: { guardReduction: 0.65, markDuration: 2, markedBonus: 22, corrodeDuration: 2, corrodeBonus: 6, ambushBonus: 12, tauntReduction: 0.35,
     rallyReduction: 0.35, finisherThreshold: 0.4, echoBonus: 0.5, afterglowCap: 8, heavyCounter: 0.5,

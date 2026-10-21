@@ -8,7 +8,7 @@ import { newGearFilters, changeGearFilter, filteredEquipment, gearFilters as gea
 import { talentPoints, talentsSpent } from '../core/world/talents';
 import type { TalentNode } from '../core/world/types';
 import { shortcutBlocked } from '../platform/keyboard';
-import type { EncounterDefinition, HeroDefinition } from '../core/battle/types';
+import type { ActionId, EncounterDefinition, HeroDefinition } from '../core/battle/types';
 
 import type { Direction, EventChoice, ExpeditionState, GearSlot, MapDefinition, Point, PotionId } from '../core/world/types';
 import { canManage, wear, type BagList, travelTargets, atCamp, atMuster, canOpenChest, canRest, canRevive, chestAt, eliteBlocks, questComplete, questDone, encounterChance, eventChoiceReason, isRevealed, monsterLevelAt, pendingEvent, rosterIds, starred, tileAt, wounded, zoneOf } from '../core/world/world';
@@ -21,7 +21,7 @@ import { gearArt, potionArt } from './equip-art';
 import { boulderPosition, doorOpen, openPit, secretAt } from '../core/world/puzzles';
 
 export interface WorldHost { travel(to: Point): void; move(dir: Direction): void; rest(): void; revive(heroId: string): void; swap(a: string, b: string): void; moveMember(id: string): void; withdraw(): void; openChest(): void;
-  talent(heroId: string, node: TalentNode): void; autoEquip(plan: AutoEquipmentPlan): void;
+  talent(heroId: string, node: TalentNode): void; loadout(heroId: string, actions: ActionId[]): void; autoEquip(plan: AutoEquipmentPlan): void;
   usePotion(potion: PotionId, heroId?: string): void; chooseEvent(choice: EventChoice): void;
   wear(heroId: string, from: BagList, index: number): void; takeOff(heroId: string, slot: GearSlot): void }
 export interface WorldBanner { kind: 'encounter' | 'boss' | 'elite' | 'tutorial' | 'complete'; eyebrow: string; title: string; detail: string }
@@ -119,7 +119,7 @@ export class WorldUI {
       preview:(id,key)=>{const s=this.view?.state,match=/^(found|spare):(\d+)$/.exec(key);if(!s||!match)return;const out=wear(s,map,()=>({...skillData,heroes}),id,match[1] as BagList,Number(match[2]));return out.event.type==='equipped'?this.characterModel(out.state):undefined;},
       previewPlan:plan=>{if(!this.view)return;const out=applyRunEquipment(this.view.state,map,()=>({...skillData,heroes}),plan);return out.event.type==='equipped'?this.characterModel(out.state):undefined;},
       wear:(id,key)=>{const match=/^(found|spare):(\d+)$/.exec(key);if(match)this.host.wear(id,match[1] as BagList,Number(match[2]));},
-      takeOff:(id,slot)=>this.host.takeOff(id,slot),talent:(id,node)=>this.host.talent(id,node),applyPlan:plan=>this.host.autoEquip(plan),
+      takeOff:(id,slot)=>this.host.takeOff(id,slot),talent:(id,node)=>this.host.talent(id,node),loadout:(id,a)=>this.host.loadout(id,a),applyPlan:plan=>this.host.autoEquip(plan),
       restore:id=>{if(id==='pack-dialog')this.renderPack();else if(id==='camp-dialog')this.renderCamp();},
     },'',this.inventoryFilters);
     root.addEventListener('change',event=>{const control=event.target as HTMLInputElement|HTMLSelectElement;if(control.closest('.character-dialog')||!control.dataset.gearFilter||root.hidden||root.closest('[inert]')||Array.from(root.querySelectorAll('dialog[open]')).some(d=>!d.contains(control)))return;changeGearFilter(this.inventoryFilters,control);this.renderPack();root.querySelector<HTMLElement>('#'+control.id)?.focus();});
@@ -430,7 +430,7 @@ export class WorldUI {
   }
   private stars(s: ExpeditionState, id: string): number { return s.members[id]?.stars ?? 1; }
   // Member stats as they fight: the catalog entry scaled by the member's stars.
-  private hero(id: string, s = this.view?.state): HeroDefinition { const base = this.heroes.find(h => h.id === id)!; return s ? wounded(starred(base, this.stars(s, id), this.map, s.members[id]?.level ?? 1, s.members[id]?.talents, s.members[id]?.gear), s.members[id]?.wound) : base; }
+  private hero(id: string, s = this.view?.state): HeroDefinition { const base = this.heroes.find(h => h.id === id)!; return s ? wounded(starred(base, this.stars(s, id), this.map, s.members[id]?.level ?? 1, s.members[id]?.talents, s.members[id]?.gear, s.members[id]), s.members[id]?.wound) : base; }
   private starRow(n: number): string { return starRow(n, this.map.company.maxStars); }
   private renderCamp(): void {
     const s = this.view?.state; if (!s) return;

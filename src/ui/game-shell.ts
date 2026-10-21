@@ -2,12 +2,12 @@ import {chooseBossTarget} from '../core/world/boss-equipment';
 import {chooseHuntTarget} from '../core/world/targeted-loot';
 import {departureBlocked,collectOverflow,recycleSelection,expandStorage} from '../core/world/storage';
 import { bindInfoTabs } from './info-tabs';
-import { learnRunTalent } from '../core/world/world';
+import { chooseRunLoadout, learnRunTalent } from '../core/world/world';
 import { applyCampEquipment, applyRunEquipment } from '../core/world/auto-equipment';
 import { shortcutBlocked } from '../platform/keyboard';
 import type { BattleState, Outcome } from '../core/battle/types';
 import { clearLegacySaves, loadGame, saveGame, type Game } from '../core/save/expedition-save';
-import { hardReason, claimGuide, renameCamp, createCommander, depart, mapUnlocked, brew, buy, claimQuest, refreshBoard, dismiss, equip, hire, learnTalent, newProfile, placeMember, resetTalents, salvage, settle, unequip, upgrade, canWithdraw } from '../core/world/profile';
+import { chooseLoadout, hardReason, claimGuide, renameCamp, createCommander, depart, mapUnlocked, brew, buy, claimQuest, refreshBoard, dismiss, equip, hire, learnTalent, newProfile, placeMember, resetTalents, salvage, settle, unequip, upgrade, canWithdraw } from '../core/world/profile';
 import type { Point, Direction, EventChoice, ExpeditionState, MapDefinition, PotionId, Profile, ProfileResult, RunOutcome, ShopItemId, WorldEvent } from '../core/world/types';
 import { travel, tileAt, startPrologue, questDone, battleData, chooseEvent, finishBattle, heroCatalog, move, moveMember, openChest, recordBattle, usePotion, rest, revive, swapMembers, takeOff, wear, type EncounterLookup } from '../core/world/world';
 import { Music, type Track } from '../platform/music';
@@ -78,6 +78,14 @@ export class GameShell {
         this.message = `ลงแต้มความถนัด${heroText[id]?.name ?? ''}แล้ว`;
         this.renderWorld();
       },
+      loadout: (id, actions) => {
+        if (!this.state || this.locked) return;
+        const result = chooseRunLoadout(this.state, map, lookup, id, actions);
+        if (result.event.type !== 'talent') return;
+        this.state = result.state; this.persist(); sfx.play('buff');
+        this.message = `เปลี่ยนสกิลติดตัว${heroText[id]?.name ?? ''}แล้ว`;
+        this.renderWorld();
+      },
       wear: (id, from, index) => this.gear(wear(this.state!, map, lookup, id, from, index)), takeOff: (id, slot) => this.gear(takeOff(this.state!, map, lookup, id, slot)),
       autoEquip: plan => { if(this.state&&!this.locked)this.gear(applyRunEquipment(this.state,map,lookup,plan)); },
     }, this.eliteArtOf(this.map), lookup(map.tutorialEncounterId));
@@ -85,7 +93,7 @@ export class GameShell {
       hire: i => this.profileChange(hire(this.game!.profile, map, lookup, i)), refresh: () => this.profileChange(refreshBoard(this.game!.profile, map)),
       buy: (item, hero) => this.profileChange(buy(this.game!.profile, map, item, hero)), smelt: dust => this.profileChange(smelt(this.game!.profile, map, dust)), upgrade: id => this.profileChange(upgrade(this.game!.profile, map, id)),
       dismiss: id => this.profileChange(dismiss(this.game!.profile, map, id)), place: (id, group, other) => this.profileChange(placeMember(this.game!.profile, id, group, other)),
-      talent: (id, node) => this.profileChange(learnTalent(this.game!.profile, map, id, node)), resetTalents: id => this.profileChange(resetTalents(this.game!.profile, id)),
+      talent: (id, node) => this.profileChange(learnTalent(this.game!.profile, map, id, node)), loadout: (id, actions) => this.profileChange(chooseLoadout(this.game!.profile, map, lookup, id, actions)), resetTalents: id => this.profileChange(resetTalents(this.game!.profile, id)),
       renameCamp: name => this.renameCamp(name), guide: (id, skip) => this.guide(id, skip),
       equip: (id, uid) => this.profileChange(equip(this.game!.profile, id, uid)), unequip: (id, slot) => this.profileChange(unequip(this.game!.profile, map, id, slot)),
       autoEquip: plan => this.profileChange(applyCampEquipment(this.game!.profile,plan)),

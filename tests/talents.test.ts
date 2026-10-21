@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { ambushBonus, corrodeBonus, createBattle, currentHeroId, guardReductionOf, nextIntentOf, resolveCommand, skillPower, tauntReductionOf, withParty } from '../src/core/battle/engine';
+import { guardCounterPower, ambushBonus, corrodeBonus, createBattle, currentHeroId, guardReductionOf, nextIntentOf, resolveCommand, skillPower, tauntReductionOf, withParty } from '../src/core/battle/engine';
 import type { ActionId, BattleState, EncounterDefinition } from '../src/core/battle/types';
 import { veilSiege } from '../src/content/encounters/veil-siege';
 import { encounterById as lookup } from '../src/content/encounters/catalog';
@@ -36,7 +36,8 @@ const foe = (s: BattleState, id: string) => s.enemies.find(e => e.id === id)!;
 const dealt = (r: ReturnType<typeof act>, target: string) => r.turns[0]!.events.find(e => e.type === 'damage' && e.targetId === target)!.amount!;
 const rest: [string, Talents?][] = [['tracer'], ['weaver'], ['healer']];
 const full = (a: boolean): Talents => a ? { root: 1, a1: 2, a2: 2, a3: 1 } : { root: 1, b1: 2, b2: 2, b3: 1 };
-const ids = ['guardian', 'tracer', 'weaver', 'healer', 'garran', 'mira', 'toma', 'sefa', 'brann', 'lio'];
+// The Knight now has a big tree (master plan A6, tests/knight-tree.test.ts); the other classes keep the small tree.
+const ids = ['tracer', 'weaver', 'healer', 'garran', 'mira', 'toma', 'sefa', 'brann', 'lio'];
 
 describe('talent trees: content and stats', () => {
   it('every class has the same 7-node shape (11 ranks)', () => {
@@ -47,8 +48,8 @@ describe('talent trees: content and stats', () => {
   });
   it('no talents leaves the definition unchanged; stat nodes scale max HP, Attack and skill power', () => {
     for (const id of ids) expect(member(id)).toEqual(heroDef(lookup, map, id));
-    const base = heroDef(lookup, map, 'guardian')!;
-    const t = member('guardian', { root: 1, b1: 2, a1: 2 });
+    const base = heroDef(lookup, map, 'garran')!;
+    const t = member('garran', { root: 1, b1: 2, a1: 2 });
     expect(t.maxHp).toBe(Math.round(base.maxHp * 1.15)); expect(t.attack).toBe(Math.round(base.attack * 1.08));
     // Stats design (2026-10-17): the mage's nodes are Attack %, which feeds damaging skills (damageBonus), not Support.
     expect(member('weaver', { root: 1, a1: 2 })).toMatchObject({ damageBonus: 12, skillBonus: 0 });
@@ -56,41 +57,41 @@ describe('talent trees: content and stats', () => {
     expect(starred(base, 2, map, 3, { root: 1 }).maxHp).toBe(Math.round(base.maxHp * (100 + 8 + 6 + 5) / 100));
   });
   it('flat skill nodes add to skill power', () => {
-    const d = party([['guardian', { root: 1, a1: 1, a2: 2 }], ...rest]);
-    // a1 (+4% Attack) also raises Shield Bash now that damaging skills scale with Attack.
-    expect(skillPower(d, 'guardian', 'bash')).toBe(Math.round(skillPower(veilSiege, 'guardian', 'bash') * 1.04) + 8);
+    const d = party([['guardian'], ['garran', { root: 1, a1: 1, a2: 2 }], ['weaver'], ['healer']]);
+    // a1 (+4% Attack) also raises Piercing Thrust now that damaging skills scale with Attack.
+    expect(skillPower(d, 'garran', 'pierce')).toBe(Math.round(skillPower(party([['guardian'], ['garran'], ['weaver'], ['healer']]), 'garran', 'pierce') * 1.04) + 8);
   });
 });
 
 describe('talent points, gates and reset (lobby)', () => {
-  const leveled = (level: number) => { const p = newProfile(map, 3); p.members.guardian = { stars: 1, dupes: 0, level, exp: 0 }; return p; };
+  const leveled = (level: number) => { const p = newProfile(map, 3); p.members.tracer = { stars: 1, dupes: 0, level, exp: 0 }; return p; };
   it('one point per level above 1; the root comes first; tier 2 needs tier 1; the capstone needs 4 in its branch', () => {
     let p = leveled(1);
-    expect(talentReason(p, map, 'guardian', 'root')).toBe('points');
+    expect(talentReason(p, map, 'tracer', 'root')).toBe('points');
     p = leveled(10);
-    expect(talentReason(p, map, 'guardian', 'a1')).toBe('locked');
-    p = learnTalent(p, map, 'guardian', 'root').profile;
-    expect(talentReason(p, map, 'guardian', 'root')).toBe('max');
-    expect(talentReason(p, map, 'guardian', 'a2')).toBe('locked');
-    for (const n of ['a1', 'a1', 'a2'] as const) p = learnTalent(p, map, 'guardian', n).profile;
-    expect(talentReason(p, map, 'guardian', 'a3')).toBe('locked');
-    p = learnTalent(p, map, 'guardian', 'a2').profile;
-    expect(talentReason(p, map, 'guardian', 'a3')).toBe('');
-    for (const n of ['a3', 'b1', 'b1', 'b2'] as const) p = learnTalent(p, map, 'guardian', n).profile;
+    expect(talentReason(p, map, 'tracer', 'a1')).toBe('locked');
+    p = learnTalent(p, map, 'tracer', 'root').profile;
+    expect(talentReason(p, map, 'tracer', 'root')).toBe('max');
+    expect(talentReason(p, map, 'tracer', 'a2')).toBe('locked');
+    for (const n of ['a1', 'a1', 'a2'] as const) p = learnTalent(p, map, 'tracer', n).profile;
+    expect(talentReason(p, map, 'tracer', 'a3')).toBe('locked');
+    p = learnTalent(p, map, 'tracer', 'a2').profile;
+    expect(talentReason(p, map, 'tracer', 'a3')).toBe('');
+    for (const n of ['a3', 'b1', 'b1', 'b2'] as const) p = learnTalent(p, map, 'tracer', n).profile;
     // 9 points spent at level 10: nothing more, the tree cannot be completed.
-    expect(p.members.guardian!.talents).toEqual({ root: 1, a1: 2, a2: 2, a3: 1, b1: 2, b2: 1 });
-    expect(talentReason(p, map, 'guardian', 'b2')).toBe('points');
-    const reset = resetTalents(p, 'guardian');
-    expect(reset.event.type).toBe('talent'); expect(reset.profile.members.guardian!.talents).toBeUndefined();
-    expect(resetTalents(reset.profile, 'guardian').event.type).toBe('blocked');
+    expect(p.members.tracer!.talents).toEqual({ root: 1, a1: 2, a2: 2, a3: 1, b1: 2, b2: 1 });
+    expect(talentReason(p, map, 'tracer', 'b2')).toBe('points');
+    const reset = resetTalents(p, 'tracer');
+    expect(reset.event.type).toBe('talent'); expect(reset.profile.members.tracer!.talents).toBeUndefined();
+    expect(resetTalents(reset.profile, 'tracer').event.type).toBe('blocked');
   });
   it('talents stay in the profile after an expedition and travel with the member', () => {
-    let p = learnTalent(leveled(3), map, 'guardian', 'root').profile;
-    p = learnTalent(p, map, 'guardian', 'b1').profile;
+    let p = learnTalent(leveled(3), map, 'tracer', 'root').profile;
+    p = learnTalent(p, map, 'tracer', 'b1').profile;
     const run = newExpedition(map, lookup, 1, { roster: p.party, members: structuredClone(p.members) });
-    expect(run.members.guardian!.talents).toEqual({ root: 1, b1: 1 });
-    run.members.guardian = { ...run.members.guardian!, level: 4, exp: 2 };
-    expect(settle(p, run, 'wiped', map).members.guardian).toEqual({ stars: 1, dupes: 0, level: 4, exp: 2, talents: { root: 1, b1: 1 } });
+    expect(run.members.tracer!.talents).toEqual({ root: 1, b1: 1 });
+    run.members.tracer = { ...run.members.tracer!, level: 4, exp: 2 };
+    expect(settle(p, run, 'wiped', map).members.tracer).toEqual({ stars: 1, dupes: 0, level: 4, exp: 2, talents: { root: 1, b1: 1 } });
   });
   it.each([
     ['too many points', 2, { root: 1, a1: 1 }],
@@ -99,44 +100,44 @@ describe('talent points, gates and reset (lobby)', () => {
     ['tier 2 without tier 1', 5, { root: 1, a2: 1 }],
     ['a capstone too early', 6, { root: 1, a1: 2, a2: 1, a3: 1 }],
     ['an unknown node', 5, { root: 1, c1: 1 } as Talents],
-  ])('rejects %s', (_, level, t) => expect(talentsValid(map, 'guardian', level, t)).toBe(false));
+  ])('rejects %s', (_, level, t) => expect(talentsValid(map, 'tracer', level, t)).toBe(false));
 });
 
 describe('save v8', () => {
   const memory = () => { const v = new Map<string, string>(); return { getItem: (k: string) => v.get(k) ?? null, setItem: (k: string, x: string) => { v.set(k, x); } }; };
   it('round-trips talents and loads v7 data unchanged', () => {
-    const profile = newProfile(map, 4); profile.members.guardian = { stars: 1, dupes: 0, level: 3, exp: 0, talents: { root: 1, a1: 1 } };
+    const profile = newProfile(map, 4); profile.members.tracer = { stars: 1, dupes: 0, level: 3, exp: 0, talents: { root: 1, a1: 1 } };
     const run = newExpedition(map, lookup, 2, { roster: profile.party, members: structuredClone(profile.members) });
     const store = memory(); saveGame(store, { profile, run });
     const back = loadGame(store, map, lookup)!;
-    expect(back.profile.members.guardian!.talents).toEqual({ root: 1, a1: 1 });
-    expect(back.run!.hp.guardian).toBe(starred(heroDef(lookup, map, 'guardian')!, 1, map, 3, { root: 1, a1: 1 }).maxHp);
+    expect(back.profile.members.tracer!.talents).toEqual({ root: 1, a1: 1 });
+    expect(back.run!.hp.tracer).toBe(starred(heroDef(lookup, map, 'tracer')!, 1, map, 3, { root: 1, a1: 1 }).maxHp);
     const v7 = JSON.stringify({ version: 7, profile: newProfile(map, 4), run: null });
-    expect(parseGame(v7, map, lookup).profile.members.guardian).toEqual({ stars: 1, dupes: 0 });
+    expect(parseGame(v7, map, lookup).profile.members.tracer).toEqual({ stars: 1, dupes: 0 });
   });
   it('rejects invalid talents', () => {
-    const profile = newProfile(map, 4); profile.members.guardian = { stars: 1, dupes: 0, talents: { root: 1 } };
+    const profile = newProfile(map, 4); profile.members.tracer = { stars: 1, dupes: 0, talents: { root: 1 } };
     expect(() => parseGame(JSON.stringify({ version: 8, profile, run: null }), map, lookup)).toThrow();
   });
 });
 
 describe('knight talents (Aegis)', () => {
   it('retribution: a bash that stops a physical move hits harder', () => {
-    const plain = party([['guardian'], ...rest]); const t = party([['guardian', full(true)], ...rest]);
+    const plain = party([['guardian'], ...rest]); const t = party([['guardian', { b1: 2, b3r: 1 }], ...rest]);
     const s = until(createBattle(plain), plain, 'guardian'); const target = s.enemies.find(e => nextIntentOf(s, plain, e.id)?.kind === 'physical')!.id;
     const st = until(createBattle(t), t, 'guardian');
     // The skill's own growth (Attack % and the flat node) plus the retribution bonus.
     expect(dealt(act(st, t, 'bash', target), target)).toBe(dealt(act(s, plain, 'bash', target), target) + skillPower(t, 'guardian', 'bash') - skillPower(plain, 'guardian', 'bash') + 8);
   });
   it('guard reduces more and counters the attacker', () => {
-    const d = party([['guardian', full(false)], ...rest]);
+    const d = party([['guardian', { a2i: 1, b4: 1 }], ...rest]);
     expect(guardReductionOf(d, 'guardian')).toBe(0.75);
     const s = until(createBattle(d), d, 'guardian'); const intent = s.intent!;
     const r = act(s, d, 'guard', intent.targetId);
     const turn = r.turns.find(x => x.actorId === intent.sourceId)!;
     expect(turn.events.find(e => e.type === 'damage')).toMatchObject({ targetId: 'guardian' });
     expect(turn.events.find(e => e.type === 'damage')!.amount! + turn.events.find(e => e.type === 'damage')!.absorbed!).toBe(Math.ceil(intent.damage * 0.25));
-    expect(turn.events.find(e => e.type === 'counter')).toMatchObject({ sourceId: 'guardian', targetId: intent.sourceId, amount: 8 });
+    expect(turn.events.find(e => e.type === 'counter')).toMatchObject({ sourceId: 'guardian', targetId: intent.sourceId, amount: guardCounterPower(d, 'guardian') });
   });
 });
 
@@ -307,9 +308,9 @@ describe('bard talents (Lio)', () => {
 describe('talent text', () => {
   it('skill descriptions show the hero’s talent numbers and capstones', async () => {
     const { skillDescription } = await import('../src/ui/th');
-    const d = party([['guardian', full(false)], ...rest]);
+    const d = party([['guardian', { a2i: 1, b4: 1 }], ...rest]);
     expect(skillDescription('guard', 'guardian', d)).toContain('75%');
-    expect(skillDescription('guard', 'guardian', d)).toContain('ความถนัด: รับการโจมตีแทนแล้วโต้กลับผู้โจมตี 8');
+    expect(skillDescription('guard', 'guardian', d)).toContain('ความถนัด: ทุกครั้งที่รับการโจมตีแทน โต้กลับผู้โจมตี 8');
     expect(skillDescription('guard', 'guardian', party([['guardian'], ...rest]))).not.toContain('ความถนัด');
   });
 });

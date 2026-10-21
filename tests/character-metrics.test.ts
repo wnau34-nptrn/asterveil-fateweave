@@ -32,12 +32,18 @@ it('shows effective defense/leech caps and deployed team luck while keeping rese
 it('all ten classes expose finite stats and meaningful active metrics, including fixed effects and star unlocks', () => {
   const s=setup();
   for(const base of heroCatalog(lookup,map)) {
-    s.members[base.id]={stars:5,dupes:0,level:8,exp:0}; s.hp[base.id]=1;
+    // The Knight's star skills are tree nodes now (A6); a migrated ★5 company keeps them as grants.
+    s.members[base.id]={stars:5,dupes:0,level:8,exp:0,...(base.id==='guardian'?{grants:['c1s','a4']}:{})}; s.hp[base.id]=1;
     const h=memberDef(lookup,map,s.members,base.id)!;
     expect(characterStats(s,map,h,template).every(v=>Number.isFinite(v.value)&&v.help.length>10)).toBe(true);
     for(const a of h.actions) { const v=characterSkillMetric(a,h,template); expect(v.target.length).toBeGreaterThan(0); if(v.value!==undefined) expect(Number.isFinite(v.value)).toBe(true); }
     expect(h.actions).toContain(base.unlocks!.skill);
   }
+  // Every Knight tree skill has a readable metric.
+  const k=starred(heroCatalog(lookup,map).find(h=>h.id==='guardian')!,1,map,1,{},undefined,{grants:['a3s','b2','c3'],loadout:['bulwark','challenge','rouse']});
+  expect(k.actions).toEqual(['attack','bulwark','challenge','rouse']);
+  for(const a of ['bulwark','challenge','rouse'] as const){const v=characterSkillMetric(a,k,template);expect(v.target.length).toBeGreaterThan(0);}
+  expect(characterSkillMetric('bulwark',k,template).value).toBe(60);
 });
 it('displayed damage/healing/song powers agree with real resolver events before and after a gear swap', () => {
   for(const [id,action] of [['guardian','bash'],['weaver','bolt'],['healer','heal'],['lio','valor'],['lio','finale']] as const) {

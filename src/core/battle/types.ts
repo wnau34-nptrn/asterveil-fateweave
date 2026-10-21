@@ -1,12 +1,16 @@
 export type ActionId = 'attack' | 'guard' | 'bash' | 'mark' | 'execute' | 'bolt' | 'ward' | 'heal' | 'prayer' | 'brace' | 'pierce' | 'hinder' | 'volley' | 'acid' | 'haste' | 'ambush' | 'evade' | 'taunt' | 'slam' | 'valor' | 'mend'
   // ★3 skills (one per class, unlocked at three stars).
-  | 'rally' | 'finisher' | 'sigil' | 'sanctuary' | 'spearwall' | 'weakshot' | 'bomb' | 'backstab' | 'quake' | 'finale';
+  | 'rally' | 'finisher' | 'sigil' | 'sanctuary' | 'spearwall' | 'weakshot' | 'bomb' | 'backstab' | 'quake' | 'finale'
+  // Big skill tree skills (master plan A6): the Knight's challenge, bulwark and rouse.
+  | 'challenge' | 'bulwark' | 'rouse';
 // ★5 passives (one per class, always on at five stars).
 export type PassiveId = 'stand' | 'keeneye' | 'echo' | 'afterglow' | 'heavycounter' | 'tailwind' | 'potent' | 'shadowcounter' | 'stoneskin' | 'resound';
 // Talent-tree capstones (2D-1b): one small rule change per branch, read by the resolver from `HeroDefinition.talents`.
 export type TalentCap = 'retribution' | 'guardcounter' | 'deepmark' | 'relentless' | 'splitbolt' | 'wardreflect' | 'twinheal' | 'solace'
   | 'pierceline' | 'frontwall' | 'hunter' | 'volleyhinder' | 'acidspread' | 'quickbrew' | 'shadowlayer' | 'doubleshadow'
-  | 'hammercounter' | 'stoneregen' | 'chorus' | 'overture';
+  | 'hammercounter' | 'stoneregen' | 'chorus' | 'overture'
+  // Knight big tree modifiers (A6): two guards, energy bash, banners at rally and at the battle start.
+  | 'twoguard' | 'reflectbash' | 'brightbanner' | 'valorbanner' | 'fatebanner';
 // Talent numbers that add to a rule for this hero only (summed over ranks).
 export type TalentRule = 'guardReduction' | 'tauntReduction' | 'corrodeBonus' | 'ambushBonus' | 'executeHeal' | 'healBarrier' | 'hasteHeal' | 'dodgeHeal';
 // What a member's spent talent points do in battle (world `starred` builds it; stat nodes are already in maxHp/attack/skillBonus).
@@ -80,12 +84,18 @@ export interface Command { beat: number; heroId: string; action: ActionId; targe
 export interface BattleState {
   encounterId: string; beat: number; round: number; order: string[]; turnIndex: number; outcome: Outcome;
   heroes: HeroState[]; enemies: EnemyState[]; intent: Intent | null; commands: Command[];
-  guard: { heroId: string; targetId: string; sourceId: string } | null;
+  // `uses` (Knight twoguard): the guard covers this many hits on the target from any enemy until the knight returns.
+  guard: { heroId: string; targetId: string; sourceId: string; uses?: number } | null;
   // Spear brace (2C-2): the next physical enemy hit on a front-lane ally is countered.
   // Spear wall (★3): `wall` counters every physical hit on the front lane, not only the first.
   counter: { heroId: string; wall?: boolean } | null;
   // Hammer warden taunt (2C-2): from the cast until the warden's next turn, every enemy move aims at him.
-  taunt: { heroId: string; round: number } | null;
+  // `reduction`: the Knight's bulwark uses the same pull with its own reduction.
+  taunt: { heroId: string; round: number; reduction?: number } | null;
+  // Knight challenge (A6): that enemy's move in `round` aims at the knight.
+  challenge?: { heroId: string; enemyId: string; round: number } | null;
+  // Knight valor banner (A6): every hero hit is stronger for the rest of `round`.
+  banner?: { heroId: string; round: number } | null;
   // Bard song (2C-2): persists until the bard switches songs, falls or the battle ends.
   song: { heroId: string; action: 'valor' | 'mend' } | null;
   // Knight rally (★3): each listed ally's first enemy hit is reduced until the knight's next turn.

@@ -1,4 +1,4 @@
-import type { ActionId, BossPower, Command, GearSpecial, HeroDefinition, TalentCap, TalentRule } from '../battle/types';
+import type { ActionId, BossPower, Command, GearSpecial, HeroDefinition, PassiveId, TalentCap, TalentRule } from '../battle/types';
 
 export type Direction = 'up' | 'down' | 'left' | 'right';
 export interface Point { x: number; y: number }
@@ -220,15 +220,23 @@ export type Gear = Partial<Record<GearSlot, Item>>;
 // ---- Talent tree (2D-1b, draft numbers) ----
 // Same shape for every class: a root, then branches A and B (tier 1 → tier 2 → capstone).
 // One point per level above 1, spent and reset only in the Lobby.
-export type TalentNode = 'root' | 'a1' | 'a2' | 'a3' | 'b1' | 'b2' | 'b3';
+// Big skill trees (master plan A6) use their own node ids, so a node id is any string the class's tree defines.
+export type TalentNode = string;
 export const TALENT_NODES: readonly TalentNode[] = ['root', 'a1', 'a2', 'a3', 'b1', 'b2', 'b3'];
 // Per rank: `stat` percent of max HP/Attack/skill power, flat `power` on one skill, a `rule` amount, or a capstone.
 export type TalentEffect =
-  | { stat: 'hp' | 'attack' | 'skill'; percent: number }
+  | { stat: 'hp' | 'attack' | 'skill' | 'armour'; percent: number }
+  // Big trees (A6): a node can unlock an active skill or switch on a passive.
+  | { unlock: ActionId }
+  | { passive: PassiveId }
   | { power: ActionId; amount: number }
   | { rule: TalentRule; amount: number }
   | { cap: TalentCap; amount?: number };
-export interface TalentNodeDef { id: TalentNode; name: string; max: number; effect: TalentEffect }
+// Big-tree nodes (A6) carry a `branch` (a/b/c) and `tier` (1–4, opening at `progression.treeTiers`); a tier needs a rank in
+// the branch's tier before it, `needs` names a node that must have a rank, and nodes sharing a `choice` exclude each other.
+export interface TalentNodeDef { id: TalentNode; name: string; max: number; effect: TalentEffect; branch?: 'a' | 'b' | 'c'; tier?: number; choice?: string; needs?: TalentNode;
+  // Granted free (save v34 migration) to members that already had this many stars, when stars still unlocked it.
+  legacyStars?: number }
 export type TalentTree = readonly TalentNodeDef[];
 export type Talents = Partial<Record<TalentNode, number>>;
 // Levels and EXP (2D-1, draft numbers). Each level adds `levelStatPercent` to max HP, Attack and skill
@@ -247,6 +255,8 @@ export interface ProgressionRules {
   hardLevels: number; hardFirstClear: { gold: number; seal: number };
   // Hard-mode foes (A9 part 2): trait numbers for the resolver and the boss's extra move (percent of its heaviest).
   hardTraits: { thornsPercent: number; veilguardPercent: number; enrageBelow: number; enragePercent: number; bossMovePercent: number };
+  // Big skill trees (A6): the member level each tier opens at, and how many active skills go into battle.
+  treeTiers: readonly number[]; loadoutSize: number;
 }
 // Mercenary company rules (draft numbers). starCosts[i] upgrades ★(i+1) → ★(i+2).
 // 4A camp market: each item has a gold price and a limit per return home. The gear box rolls a rare-or-better
@@ -268,7 +278,9 @@ export interface CompanyRules {
 // `level`/`exp` (2D-1) are optional for older data: missing means level 1 with no EXP.
 // `talents` (2D-1b): ranks spent per node; missing means none. `gear` (2D-2): equipped items by slot.
 // `wound` (3A, run only): percent of max HP lost to a shrine prayer until the expedition ends.
-export interface MemberProgress { stars: number; dupes: number; level?: number; exp?: number; talents?: Talents; gear?: Gear; wound?: number }
+// `grants` (A6, save v34): big-tree nodes given free at full rank (skills a company had from stars before the tree).
+// `loadout` (A6): the active skills taken into battle (at most `progression.loadoutSize`; missing = the first unlocked).
+export interface MemberProgress { stars: number; dupes: number; level?: number; exp?: number; talents?: Talents; gear?: Gear; wound?: number; grants?: TalentNode[]; loadout?: ActionId[] }
 // The team brought into one expedition and their star progress (fixed during the run).
 // `potions`: what the expedition packs (2D-5; missing = none).
 export interface Company { roster: Roster; members: Record<string, MemberProgress>; potions?: Potions }

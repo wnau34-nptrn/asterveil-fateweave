@@ -2,10 +2,10 @@ import {bossReward} from './boss-equipment';
 import {huntedReward} from './targeted-loot';
 import { replay, withLevel, withParty } from '../battle/engine';
 import { boulderAt, leverPuzzleAt, openPit, passableWall, runePuzzleAt, secretAt } from './puzzles';
-import type { EnemyTrait, BattleState, Command, EncounterDefinition, HeroDefinition, HeroTalents } from '../battle/types';
+import type { EnemyTrait, BattleState, Command, EncounterDefinition, HeroDefinition, HeroTalents, ActionId, PassiveId } from '../battle/types';
 import type { RecruitPoint, ActiveBattle, BattleKind, ChestDefinition, Company, Direction, ExpGain, ExpeditionState, LootTable, MapDefinition, MemberProgress, Point, PotionId, Resources, Talents, Tile, WorldEvent, WorldResult, ZoneDefinition, Gear, Item, EliteDefinition, EventChoice, MapEventDefinition, MapEventKind, GearSlot } from './types';
 import { affixPool, gearTotals } from './equipment';
-import { memberTalentReason } from './talents';
+import { effectiveTalents, isBigTree, memberTalentReason } from './talents';
 import type { TalentNode } from './types';
 import { PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS, SET_IDS } from './types';
 
@@ -72,7 +72,22 @@ export function recruit(state: ExpeditionState, map: MapDefinition, at: RecruitP
 // Each star above ★1 adds `starStatPercent` to max HP, Attack and skill power. SPD never
 // changes, so stars cannot reorder turns. Talents (2D-1b) add their stat percents and build
 // `talents` for the resolver; no talents leaves the definition unchanged.
-export function starred(base: HeroDefinition, stars: number, map: MapDefinition, level = 1, talents: Talents = {}, gear?: Gear): HeroDefinition {
+// Big skill trees (A6): the active skills a member can take into battle (the class's own plus unlocked nodes, in tree order).
+export function skillChoices(base: HeroDefinition, map: MapDefinition, talents: Talents = {}, grants?: readonly TalentNode[]): ActionId[] {
+  const all = effectiveTalents(map.talents[base.id] ?? [], talents, grants);
+  const unlocked = (map.talents[base.id] ?? []).flatMap(n => 'unlock' in n.effect && (all[n.id] ?? 0) > 0 ? [n.effect.unlock] : []);
+  return [...new Set([...base.actions.filter(a => a !== 'attack'), ...unlocked])];
+}
+// The battle buttons of a big-tree member: Attack plus the chosen loadout (or the first unlocked skills).
+export function loadoutActions(base: HeroDefinition, map: MapDefinition, talents: Talents = {}, member?: Pick<MemberProgress, 'grants' | 'loadout'>): ActionId[] {
+  const choices = skillChoices(base, map, talents, member?.grants); const picked = member?.loadout?.filter(a => choices.includes(a)) ?? [];
+  return ['attack', ...(picked.length ? picked : choices).slice(0, map.progression.loadoutSize)];
+}
+// `member` supplies big-tree grants and the skill loadout (A6).
+export function starred(base: HeroDefinition, stars: number, map: MapDefinition, level = 1, talents: Talents = {}, gear?: Gear, member?: Pick<MemberProgress, 'grants' | 'loadout'>): HeroDefinition {
+  const big = isBigTree(map.talents[base.id]);
+  const actions = big ? loadoutActions(base, map, talents, member) : undefined;
+  if (big) talents = effectiveTalents(map.talents[base.id]!, talents, member?.grants);
   // Stars and levels add up: each star `starStatPercent`, each level above 1 `levelStatPercent`.
   const bonus = (stars - 1) * map.company.starStatPercent + (level - 1) * map.progression.levelStatPercent;
   const gained = talentEffects(map, base.id, talents);
@@ -80,25 +95,29 @@ export function starred(base: HeroDefinition, stars: number, map: MapDefinition,
   // (stats design 2026-10-17); Armour, Resistance and Leech go to the battle as they are.
   const worn = gearTotals(map, gear);
   const equipped = !!(worn.hp || worn.hpPercent || worn.attackPercent || worn.support || worn.speed || worn.armour || worn.resist || worn.leech || worn.gear);
-  if (!bonus && !gained.any && !equipped) return base;
+  const reordered = !!actions && (actions.length !== base.actions.length || actions.some((a, i) => a !== base.actions[i]));
+  if (!bonus && !gained.any && !equipped && !reordered) return base;
   const scale = (n: number, extra: number) => Math.round(n * (100 + bonus + extra) / 100);
   // ★3 adds the class's third skill; ★5 switches on its passive.
-  const skill = stars >= 3 && base.unlocks && !base.actions.includes(base.unlocks.skill) ? [base.unlocks.skill] : [];
+  // Big trees unlock these in the tree instead (A6).
+  const skill = !big && stars >= 3 && base.unlocks && !base.actions.includes(base.unlocks.skill) ? [base.unlocks.skill] : [];
   // Damaging skills grow by the same Attack percent as the basic attack.
   const damageBonus = bonus + gained.attack + worn.attackPercent;
   return { ...base, maxHp: scale(base.maxHp, gained.hp + worn.hpPercent) + worn.hp, attack: scale(base.attack, damageBonus - bonus), speed: base.speed + worn.speed,
-    skillBonus: bonus + gained.skill + worn.support, damageBonus, actions: [...base.actions, ...skill],
-    ...(worn.armour ? { armour: worn.armour } : {}), ...(worn.resist ? { resist: worn.resist } : {}), ...(worn.leech ? { leech: worn.leech } : {}),
-    ...(stars >= 5 && base.unlocks ? { passive: base.unlocks.passive } : {}), ...(gained.talents ? { talents: gained.talents } : {}), ...(worn.gear ? { gear: worn.gear } : {}) };
+    skillBonus: bonus + gained.skill + worn.support, damageBonus, actions: actions ?? [...base.actions, ...skill],
+    ...(worn.armour + gained.armour ? { armour: worn.armour + gained.armour } : {}), ...(worn.resist ? { resist: worn.resist } : {}), ...(worn.leech ? { leech: worn.leech } : {}),
+    ...(big ? (gained.passive ? { passive: gained.passive } : {}) : stars >= 5 && base.unlocks ? { passive: base.unlocks.passive } : {}), ...(gained.talents ? { talents: gained.talents } : {}), ...(worn.gear ? { gear: worn.gear } : {}) };
 }
 // Sums spent talent ranks into stat percents and the resolver's `HeroTalents`.
-export function talentEffects(map: MapDefinition, heroId: string, talents: Talents): { any: boolean; hp: number; attack: number; skill: number; talents?: HeroTalents } {
-  const out = { any: false, hp: 0, attack: 0, skill: 0 }; const t: HeroTalents = {};
+export function talentEffects(map: MapDefinition, heroId: string, talents: Talents): { any: boolean; hp: number; attack: number; skill: number; armour: number; passive?: PassiveId; talents?: HeroTalents } {
+  const out: { any: boolean; hp: number; attack: number; skill: number; armour: number; passive?: PassiveId } = { any: false, hp: 0, attack: 0, skill: 0, armour: 0 }; const t: HeroTalents = {};
   for (const node of map.talents[heroId] ?? []) {
     const ranks = talents[node.id] ?? 0; if (!ranks) continue;
     const e = node.effect; out.any = true;
     if ('stat' in e) out[e.stat] += e.percent * ranks;
     else if ('power' in e) (t.power ??= {})[e.power] = (t.power[e.power] ?? 0) + e.amount * ranks;
+    else if ('unlock' in e) continue;
+    else if ('passive' in e) out.passive = e.passive;
     else if ('rule' in e) (t.rules ??= {})[e.rule] = Math.round(((t.rules[e.rule] ?? 0) + e.amount * ranks) * 100) / 100;
     else (t.caps ??= {})[e.cap] = e.amount ?? 0;
   }
@@ -106,7 +125,7 @@ export function talentEffects(map: MapDefinition, heroId: string, talents: Talen
 }
 export function memberDef(lookup: EncounterLookup, map: MapDefinition, members: ExpeditionState['members'], id: string): HeroDefinition | undefined {
   const base = heroDef(lookup, map, id);
-  return base && wounded(starred(base, members[id]?.stars ?? 1, map, members[id]?.level ?? 1, members[id]?.talents, members[id]?.gear), members[id]?.wound);
+  return base && wounded(starred(base, members[id]?.stars ?? 1, map, members[id]?.level ?? 1, members[id]?.talents, members[id]?.gear, members[id]), members[id]?.wound);
 }
 // ---- Levels (2D-1) ----
 export const levelOf = (m: MemberProgress | undefined): number => m?.level ?? 1;
@@ -304,6 +323,18 @@ export function learnRunTalent(initial: ExpeditionState, map: MapDefinition, loo
   m.talents = { ...m.talents, [node]: (m.talents?.[node] ?? 0) + 1 };
   // Learning a max-HP talent must not heal living or fallen heroes for free.
   capHp(state, map, lookup, id);
+  return { state, event: { type: 'talent', heroId: id } };
+}
+// Skill loadout (A6): which unlocked active skills a big-tree member takes into battle. '' when allowed.
+export function loadoutReason(lookup: EncounterLookup, map: MapDefinition, id: string, m: MemberProgress | undefined, loadout: readonly ActionId[]): string {
+  const base = heroDef(lookup, map, id); if (!m || !base || !isBigTree(map.talents[id])) return 'unknown';
+  if (!loadout.length || loadout.length > map.progression.loadoutSize || new Set(loadout).size !== loadout.length) return 'size';
+  const choices = skillChoices(base, map, m.talents, m.grants);
+  return loadout.every(a => choices.includes(a)) ? '' : 'locked';
+}
+export function chooseRunLoadout(initial: ExpeditionState, map: MapDefinition, lookup: EncounterLookup, id: string, loadout: readonly ActionId[]): WorldResult {
+  if (!canManage(initial) || !rosterIds(initial).includes(id) || loadoutReason(lookup, map, id, initial.members[id], loadout)) return { state: initial, event: { type: 'blocked', reason: 'busy' } };
+  const state = structuredClone(initial); state.members[id]!.loadout = [...loadout];
   return { state, event: { type: 'talent', heroId: id } };
 }
 export function swapMembers(initial: ExpeditionState, a: string, b: string): WorldResult {

@@ -3,10 +3,11 @@ import {storageCap} from '../world/storage';
 import { entryReason, withParty } from '../battle/engine';
 import type { ActionId, Command } from '../battle/types';
 import { COMPANY_CAP, PARTY_SLOTS, RESERVE_SLOTS, type ActiveBattle, type ExpeditionState, type MapDefinition, type Point, type Profile, type Roster, type RunOutcome } from '../world/types';
-import { battleState, expToNext, findTiles, newExpedition, finishBattle, fullParty, heroCatalog, heroDef, memberDef, rosterIds, tileAt, type EncounterLookup } from '../world/world';
+import { skillChoices, battleState, expToNext, findTiles, newExpedition, finishBattle, fullParty, heroCatalog, heroDef, memberDef, rosterIds, tileAt, type EncounterLookup } from '../world/world';
 import { affixPool, itemValid } from '../world/equipment';
 import { boulderAt, openPit, passableWall } from '../world/puzzles';
 import { commanderReason, defaultCamp, newProfile, settle, talentsValid } from '../world/profile';
+import { grantsValid, isBigTree } from '../world/talents';
 import type { GearSlot, GearStat, Item, MemberProgress, Potions, Talents } from '../world/types';
 import { GEAR_SLOTS, POTION_IDS, SHOP_ITEMS, type ShopItemId } from '../world/types';
 
@@ -61,10 +62,12 @@ export const legacyKeys = ['asterveil.fateweave.battle.v1', 'asterveil.fateweave
 // v30 → v31: lobby systems open by chapter; a company from an older save that finished the prologue is `veteran`.
 // v31 → v32: the profile may record guided tasks claimed or skipped (`guides`; missing = none).
 // v32 → v33: hard mode: runs may be `hard`; the profile lists `clearedHard` maps (missing = none).
-const SAVE_VERSION = 33;
+// v33 → v34: big skill trees (A6). A big-tree class's old small-tree ranks are refunded, members get the tree nodes their
+// stars used to unlock as `grants`, and members may carry a skill `loadout`. A run whose member lost ranks settles home.
+const SAVE_VERSION = 34;
 export interface Game { profile: Profile; run: ExpeditionState | null }
 const actions: readonly ActionId[] = ['attack', 'guard', 'bash', 'mark', 'execute', 'bolt', 'ward', 'heal', 'prayer', 'brace', 'pierce', 'hinder', 'volley', 'acid', 'haste', 'ambush', 'evade', 'taunt', 'slam', 'valor', 'mend',
-  'rally', 'finisher', 'sigil', 'sanctuary', 'spearwall', 'weakshot', 'bomb', 'backstab', 'quake', 'finale'];
+  'rally', 'finisher', 'sigil', 'sanctuary', 'spearwall', 'weakshot', 'bomb', 'backstab', 'quake', 'finale', 'challenge', 'bulwark', 'rouse'];
 
 // One key for profile and run, so settling an expedition is a single atomic write.
 export function saveGame(storage: StoragePort | undefined, game: Game): boolean {
@@ -110,7 +113,7 @@ function membersOf(v: unknown, map: MapDefinition, ids: readonly string[], looku
   if (Object.keys(raw).length !== ids.length) throw new Error('Invalid members');
   return Object.fromEntries(ids.map(id => {
     const m = obj(raw[id]); const keys = Object.keys(m);
-    if (keys.some(k => !['stars', 'dupes', 'level', 'exp', 'talents', 'gear', 'wound'].includes(k)) || ('level' in m) !== ('exp' in m)) throw new Error('Invalid members');
+    if (keys.some(k => !['stars', 'dupes', 'level', 'exp', 'talents', 'gear', 'wound', 'grants', 'loadout'].includes(k)) || ('level' in m) !== ('exp' in m)) throw new Error('Invalid members');
     if (!isInt(m.stars, 1, map.company.maxStars) || !isInt(m.dupes, 0, 99)) throw new Error('Invalid members');
     const out: MemberProgress = { stars: m.stars, dupes: m.dupes };
     if ('wound' in m) { if (!isInt(m.wound, 1, map.eventRules.maxWound)) throw new Error('Invalid members'); out.wound = m.wound; }
@@ -118,10 +121,17 @@ function membersOf(v: unknown, map: MapDefinition, ids: readonly string[], looku
       if (!isInt(m.level, 1, map.progression.levelCap) || !isInt(m.exp, 0, expToNext(map, m.level) - 1)) throw new Error('Invalid members');
       Object.assign(out, { level: m.level, exp: m.exp });
     }
+    if ('grants' in m) { if (!grantsValid(map, id, m.grants)) throw new Error('Invalid talents'); out.grants = [...m.grants as string[]]; }
     if ('talents' in m) {
       const t = obj(m.talents) as Talents;
-      if (!Object.keys(t).length || !talentsValid(map, id, out.level ?? 1, t)) throw new Error('Invalid talents');
+      if (!Object.keys(t).length || !talentsValid(map, id, out.level ?? 1, t, out.stars, out.grants)) throw new Error('Invalid talents');
       out.talents = { ...t };
+    }
+    if ('loadout' in m) {
+      const base = heroDef(lookup, map, id); const choices = base ? skillChoices(base, map, out.talents, out.grants) : [];
+      const l = m.loadout;
+      if (!Array.isArray(l) || !l.length || l.length > map.progression.loadoutSize || new Set(l).size !== l.length || l.some(a => !choices.includes(a))) throw new Error('Invalid loadout');
+      out.loadout = [...l as ActionId[]];
     }
     if ('gear' in m) {
       const g = obj(m.gear) as Record<string, unknown>;
@@ -423,11 +433,31 @@ function legacyCleared(tutorialDone: boolean, completed: boolean, map: MapDefini
   const at = maps.findIndex(m => m.id === map.id);
   return [...(tutorialDone ? maps.slice(0, Math.max(0, at)).map(m => m.id) : []), ...(completed ? [map.id] : [])];
 }
+// v34 (A6): refund small-tree ranks of classes that now have a big tree and grant the nodes their stars unlocked.
+// A run whose member's ranks were refunded is marked stale so it settles home instead of replaying a changed hero.
+function migrateTrees(envelope: Record<string, unknown>, maps: readonly MapDefinition[]): void {
+  const tree = (id: string) => maps.map(m => m.talents[id]).find(t => isBigTree(t));
+  const fix = (members: unknown): boolean => {
+    let refunded = false;
+    for (const [id, raw] of Object.entries(members && typeof members === 'object' ? members as Record<string, Record<string, unknown>> : {})) {
+      const t = tree(id); if (!t || !raw || typeof raw !== 'object') continue;
+      if ('talents' in raw) { delete raw.talents; refunded = true; }
+      const stars = typeof raw.stars === 'number' ? raw.stars : 1;
+      const grants = t.filter(n => n.legacyStars !== undefined && stars >= n.legacyStars).map(n => n.id);
+      if (grants.length) raw.grants = grants;
+    }
+    return refunded;
+  };
+  const p = envelope.profile as Record<string, unknown> | undefined; if (p && typeof p === 'object') fix(p.members);
+  const r = envelope.run as Record<string, unknown> | null | undefined;
+  if (r && typeof r === 'object' && fix(r.members)) r.mapVersion = -1;
+}
 // `map` is the home map (the frontier); `maps` lists every map a run may have been started on.
 export function parseGame(raw: string, map: MapDefinition, lookup: EncounterLookup, maps: readonly MapDefinition[] = [map]): Game {
   const envelope = obj(JSON.parse(raw)); const version = envelope.version as number;
   if (version < 21) migrateItems(envelope, map);
-  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
+  if (version < 34) migrateTrees(envelope, maps.length ? maps : [map]);
+  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
   const runMap = (v: unknown): MapDefinition => maps.find(m => m.id === obj(v).mapId) ?? map;
   if (version < 5) {
     const home = runMap(envelope.state); const run = parseRun(envelope.state, version, home, lookup);

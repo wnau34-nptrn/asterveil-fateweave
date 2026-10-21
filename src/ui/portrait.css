@@ -256,3 +256,17 @@ body { display: grid; place-items: center; background: radial-gradient(ellipse a
 #forge-mode-transfer { grid-column:1 / -1; }
 .forge-workbench[data-review=true] .forge-transfer-selectors { display:none; }
 .forge-transfer-material { font-size:13px; color:var(--gold-light); }
+/* Big skill trees (master plan A6): branches stack, tiers list their nodes, the two choice nodes sit side by side. */
+.character-content .talent-branches.big { grid-template-columns: 1fr; gap: 10px; }
+.big-tree .talent-branch { border: 1px solid #f2d59633; border-radius: 12px; padding: 6px; }
+.big-tree .talent-tier { display: grid; gap: 4px; }
+.big-tree .talent-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr)); gap: 5px; }
+.big-tree .talent-node.skill b::before { content: '◆ '; color: var(--gold-light); }
+.big-tree .talent-node.choice[data-state="locked"] { opacity: .6; }
+.loadout-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 130px), 1fr)); gap: 6px; }
+.loadout-skill { min-height: 44px; display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 0 6px; text-align: left; padding: 6px 8px; border-radius: 10px; border: 1px solid #ffffff2a; background: #0f1a2acc; color: inherit; }
+.loadout-skill .icon { grid-row: span 2; width: 22px; height: 22px; }
+.loadout-skill small { font-size: 11px; color: var(--text-muted, #b9c8d8); }
+.loadout-skill[aria-pressed="true"] { border-color: var(--gold-light, #f2d596); background: #2a2210cc; }
+.loadout-skill[aria-disabled="true"] { cursor: default; opacity: .7; }
+.loadout-skill:focus-visible { outline: 2px solid var(--gold-light, #f2d596); outline-offset: 2px; }

@@ -125,7 +125,7 @@ export class ForgeWorkbench {
   }
   private heroImpact(p:Profile,id:string,gear:Gear,newGear:Gear,caption:string):string {
     const m=p.members[id]!;const base=this.heroes.find(h=>h.id===id)!;
-    const h=starred(base,m.stars,this.map,m.level??1,m.talents,gear),n=starred(base,m.stars,this.map,m.level??1,m.talents,newGear);
+    const h=starred(base,m.stars,this.map,m.level??1,m.talents,gear,m),n=starred(base,m.stars,this.map,m.level??1,m.talents,newGear,m);
     const state={members:{...p.members,[id]:{...m,gear}},roster:p.party,hp:{[id]:h.maxHp}},newState={...state,members:{...p.members,[id]:{...m,gear:newGear}},hp:{[id]:n.maxHp}};
     const old=characterStats(state,this.map,h,this.data),proposed=characterStats(newState,this.map,n,this.data);
     const effects=this.tab==='craft'?`<h4>เซ็ตและพลังพิเศษก่อน–หลัง</h4><p class="camp-note">ผลตามเงื่อนไขไม่รวมในพลังพื้นฐานด้านบน</p><div class="comparison-effects"><section><h4>สวมอยู่</h4><ul>${equipmentEffects(state,this.map,h)}</ul></section><section><h4>ถ้าใส่อาวุธนี้</h4><ul>${equipmentEffects(newState,this.map,n)}</ul></section></div>`:'';

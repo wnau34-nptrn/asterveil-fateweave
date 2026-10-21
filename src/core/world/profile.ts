@@ -5,7 +5,8 @@ import { memberTalentReason, talentsSpent } from './talents';
 import type { GuideDefinition, GuideKind, LobbyFeature, Commander, ShopItemId, SideQuestKind, ExpeditionState, Gear, GearSlot, Item, MapDefinition, PotionId, Potions, Profile, ProfileResult, RunOutcome, TalentNode } from './types';
 import { rollItem, salvageValue } from './equipment';
 import { COMPANY_CAP, GEAR_SLOTS, PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS, SET_IDS } from './types';
-import { heroCatalog, levelOf, memberDef, newExpedition, rollPercent, rosterIds, type EncounterLookup } from './world';
+import { heroCatalog, levelOf, loadoutReason, memberDef, newExpedition, rollPercent, rosterIds, type EncounterLookup } from './world';
+import type { ActionId } from '../battle/types';
 
 // Pure lobby rules: the persistent mercenary company, the bank, the hiring board, the
 // team chosen for the next expedition, and settling a finished expedition back home.
@@ -140,7 +141,14 @@ export function learnTalent(initial: Profile, map: MapDefinition, id: string, no
 // Resetting is free and returns every point.
 export function resetTalents(initial: Profile, id: string): ProfileResult {
   if (!talentsSpent(initial.members[id]?.talents)) return blocked(initial, 'empty');
-  const profile = structuredClone(initial); delete profile.members[id]!.talents;
+  // Unlocked skills may go with the points, so the loadout returns to the default.
+  const profile = structuredClone(initial); delete profile.members[id]!.talents; delete profile.members[id]!.loadout;
+  return { profile, event: { type: 'talent', heroId: id } };
+}
+// Choosing the battle skills (A6) is free, in the lobby or (`chooseRunLoadout`) on the map outside battle.
+export function chooseLoadout(initial: Profile, map: MapDefinition, lookup: EncounterLookup, id: string, loadout: readonly ActionId[]): ProfileResult {
+  const reason = loadoutReason(lookup, map, id, initial.members[id], loadout); if (reason) return blocked(initial, reason);
+  const profile = structuredClone(initial); profile.members[id]!.loadout = [...loadout];
   return { profile, event: { type: 'talent', heroId: id } };
 }
 
@@ -301,6 +309,8 @@ export function settle(initial: Profile, settled: ExpeditionState, outcome: RunO
   if (outcome !== 'wiped') for (const id of POTION_IDS) profile.potions[id] += run.potions[id];
   // Levels and EXP earned on the run are kept whatever the outcome (2D-1).
   for (const [id, m] of Object.entries(run.members)) if (profile.members[id] && m.level) profile.members[id] = { ...profile.members[id]!, level: m.level, exp: m.exp ?? 0, ...(m.talents ? { talents: structuredClone(m.talents) } : {}) };
+  // A loadout chosen on the map comes home with the member.
+  for (const [id, m] of Object.entries(run.members)) if (profile.members[id] && m.loadout) profile.members[id]!.loadout = [...m.loadout];
   // 3D: side quests count what this run did (herbs are lost on a wipe), capped at each target.
   for (const q of map.sideQuests) {
     const now = profile.quests[q.id] ?? { progress: 0, claimed: false }; if (now.claimed) continue;

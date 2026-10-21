@@ -12,11 +12,11 @@ for(const [width,height,touch] of [[320,568,true],[390,844,true],[1366,768,false
     const context=await browser.newContext({viewport:{width,height},hasTouch:touch,isMobile:touch,reducedMotion:'reduce'}),page=await context.newPage(),errors:string[]=[];
     page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
     const profile=newProfile(map,77);profile.tutorialDone=true;profile.commander={name:'อารี',crest:'star',color:'gold', camp: 'ค่ายอารี'};
-    profile.members.guardian={stars:3,dupes:0,level:6,exp:0,talents:{root:1,a1:2},gear:{body:{uid:1,slot:'body',rarity:0,level:2,affixes:[],set:'shadow'},weapon:{uid:2,slot:'weapon',hero:'guardian',rarity:0,level:1,affixes:[],set:'dawn'},boots:{uid:3,slot:'boots',rarity:0,level:1,affixes:[],set:'dawn'}}};profile.nextItem=4;
+    profile.members.guardian={stars:3,dupes:0,level:6,exp:0,talents:{a1:2},gear:{body:{uid:1,slot:'body',rarity:0,level:2,affixes:[],set:'shadow'},weapon:{uid:2,slot:'weapon',hero:'guardian',rarity:0,level:1,affixes:[],set:'dawn'},boots:{uid:3,slot:'boots',rarity:0,level:1,affixes:[],set:'dawn'}}};profile.nextItem=4;
     profile.company.push('lio');profile.members.lio={stars:3,dupes:0,level:6,exp:0};profile.party.reserve=['lio'];
     const game=depart(profile,map,lookup,1234);game.run.hp.guardian=11;
     game.run.found=[{uid:0,slot:'weapon',hero:'guardian',rarity:1,level:8,affixes:['leech'],set:'shadow',plus:3},{uid:0,slot:'weapon',hero:'tracer',rarity:0,level:1,affixes:[]},{uid:0,slot:'charm',rarity:1,level:6,affixes:['support']}];
-    const raw=JSON.stringify({version:21,...game});parseGame(raw,map,lookup);
+    const raw=JSON.stringify({version:34,...game});parseGame(raw,map,lookup);
     await page.addInitScript(({key,raw})=>{if(!sessionStorage.getItem('compare-seeded')){localStorage.setItem(key,raw);sessionStorage.setItem('compare-seeded','yes');}},{key,raw});
     const saved=()=>page.evaluate(k=>localStorage.getItem(k)!,key);
     await page.goto('./');await page.locator('#continue').click();await page.locator('#world-hero-guardian').click();

@@ -10,10 +10,31 @@ const power = (id: TalentNodeDef['id'], name: string, action: ActionId, amount: 
 const rule = (id: TalentNodeDef['id'], name: string, r: TalentRule, amount: number): TalentNodeDef => ({ id, name, max: 2, effect: { rule: r, amount } });
 const cap = (id: 'a3' | 'b3', name: string, c: TalentCap, amount?: number): TalentNodeDef => ({ id, name, max: 1, effect: amount === undefined ? { cap: c } : { cap: c, amount } });
 
+// Big skill trees (master plan A6, owner-approved 2026-10-21, draft numbers): three branches of four tiers. A node
+// can raise a stat, unlock an active skill, modify one (pick one of two per `choice`) or switch on a passive.
+type Big = Pick<TalentNodeDef, 'branch' | 'tier' | 'choice' | 'needs' | 'legacyStars'>;
+const node = (id: string, name: string, effect: TalentNodeDef['effect'], at: Big, max = 1): TalentNodeDef => ({ id, name, max, effect, ...at });
 export const talentTrees: Readonly<Record<string, TalentTree>> = {
-  guardian: [hp('ใจอัศวิน', 5, 'root', 1),
-    atk('แขนเหล็ก'), power('a2', 'โล่หนัก', 'bash', 4), cap('a3', 'ทุบซ้ำ', 'retribution', 8),
-    hp('กายเหล็ก'), rule('b2', 'รับแทนแน่น', 'guardReduction', 0.05), cap('b3', 'โต้กลับ', 'guardcounter', 8)],
+  // Knight (docs/design/SKILL_TREE_KNIGHT_TH.md): A bulwark, B retribution, C banner. Guard and Shield Bash are his from the start.
+  guardian: [
+    node('a1', 'ใจอัศวิน', { stat: 'hp', percent: 5 }, { branch: 'a', tier: 1 }, 2),
+    node('a2i', 'กำแพงเหล็ก', { rule: 'guardReduction', amount: 0.1 }, { branch: 'a', tier: 2, choice: 'guard' }),
+    node('a2t', 'ไม่ทิ้งกัน', { cap: 'twoguard', amount: 5 }, { branch: 'a', tier: 2, choice: 'guard' }),
+    node('a3', 'ผิวเหล็ก', { stat: 'armour', percent: 6 }, { branch: 'a', tier: 3 }),
+    node('a3s', 'ปราการหิน', { unlock: 'bulwark' }, { branch: 'a', tier: 3 }),
+    node('a4', 'ยืนหยัด', { passive: 'stand' }, { branch: 'a', tier: 4, legacyStars: 5 }),
+    node('b1', 'แขนเหล็ก', { stat: 'attack', percent: 4 }, { branch: 'b', tier: 1 }, 2),
+    node('b2', 'ท้าดวล', { unlock: 'challenge' }, { branch: 'b', tier: 2 }),
+    node('b3r', 'ทุบซ้ำ', { cap: 'retribution', amount: 8 }, { branch: 'b', tier: 3, choice: 'bash' }),
+    node('b3f', 'โล่สะท้อน', { cap: 'reflectbash', amount: 30 }, { branch: 'b', tier: 3, choice: 'bash' }),
+    node('b4', 'ตอบโต้ไม่หยุด', { cap: 'guardcounter', amount: 8 }, { branch: 'b', tier: 4 }),
+    node('c1', 'ใจผู้นำ', { stat: 'skill', percent: 5 }, { branch: 'c', tier: 1 }, 2),
+    node('c1s', 'ตั้งรับหมู่', { unlock: 'rally' }, { branch: 'c', tier: 1, legacyStars: 3 }),
+    node('c2b', 'ธงสว่าง', { cap: 'brightbanner', amount: 6 }, { branch: 'c', tier: 2, choice: 'rally', needs: 'c1s' }),
+    node('c2v', 'ขวัญกล้า', { cap: 'valorbanner', amount: 10 }, { branch: 'c', tier: 2, choice: 'rally', needs: 'c1s' }),
+    node('c3', 'ปลุกพล', { unlock: 'rouse' }, { branch: 'c', tier: 3 }),
+    node('c4', 'ธงแห่งชะตา', { cap: 'fatebanner', amount: 10 }, { branch: 'c', tier: 4 }),
+  ],
   tracer: [atk('สายตานักดาบ', 4, 'root', 1),
     atk('คมดาบ'), power('a2', 'จุดตาย', 'execute', 4), cap('a3', 'ตราลึก', 'deepmark', 6),
     hp('ฝีเท้าเบา'), rule('b2', 'ดาบดูดพลัง', 'executeHeal', 3), cap('b3', 'ไม่หยุดมือ', 'relentless')],

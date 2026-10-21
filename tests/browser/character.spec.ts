@@ -31,11 +31,15 @@ for (const [width,height,touch] of [[320,568,true], [390,844,true], [1366,768,fa
     await expect(page.locator('#character-tab-overview')).toHaveAttribute('aria-selected','true');
     await page.screenshot({path:info.outputPath('character-overview.png')});
     await page.keyboard.press('End'); await expect(page.locator('#character-tab-talents')).toBeFocused();
-    await expect(page.locator('#character-talent-a1')).toHaveAttribute('aria-disabled','true');
-    await page.locator('#character-talent-root').click();
-    await expect(page.locator('#character-talent-root')).toHaveAttribute('aria-disabled','true');
+    // The Knight's big tree (A6): tier 2 needs a rank in the branch's tier 1.
+    await expect(page.locator('#character-talent-a2i')).toHaveAttribute('aria-disabled','true');
+    await page.locator('#character-talent-c1s').click();
+    await expect(page.locator('#character-talent-c1s')).toHaveAttribute('aria-disabled','true');
     await page.locator('#character-talent-b1').focus(); await page.keyboard.down('Enter'); await page.keyboard.down('Enter'); await page.keyboard.up('Enter');
-    expect(parseGame(await saved(page),map,encounterById).run!.members.guardian!.talents).toEqual({root:1,b1:1});
+    expect(parseGame(await saved(page),map,encounterById).run!.members.guardian!.talents).toEqual({c1s:1,b1:1});
+    await expect(page.locator('#character-loadout-rally')).toHaveAttribute('aria-pressed','true');
+    await page.locator('#character-loadout-bash').click();
+    expect(parseGame(await saved(page),map,encounterById).run!.members.guardian!.loadout).toEqual(['guard','rally']);
     await page.locator('#move-left').dispatchEvent('click'); await page.keyboard.press('w'); await page.keyboard.press('b'); await page.keyboard.press('i');
     const after = parseGame(await saved(page),map,encounterById).run!;
     expect(after.hp.guardian).toBe(11); expect(after.steps).toBe(before.steps); expect(after.rolls).toBe(before.rolls); expect(after.position).toEqual(before.position);
@@ -43,7 +47,7 @@ for (const [width,height,touch] of [[320,568,true], [390,844,true], [1366,768,fa
     expect(parseGame(await saved(page),map,encounterById).run!.members.mira!.talents).toEqual({root:1});
     await page.locator('#character-member-healer').click(); await expect(page.locator('#character-talent-root')).toHaveAttribute('aria-disabled','true');
     await page.locator('#character-member-guardian').click(); await page.screenshot({path:info.outputPath('character-talents.png')});
-    await page.locator('#character-tab-skills').click(); await expect(page.locator('#character-content')).toContainText('ปลดที่ ★3'); await expect(page.locator('#character-content')).toContainText('ปลดที่ ★5');
+    await page.locator('#character-tab-skills').click(); await expect(page.locator('#character-content')).toContainText('ปลดที่โหนด ท้าดวล'); await expect(page.locator('#character-content')).toContainText('ปลดที่โหนด ยืนหยัด');
     await page.screenshot({path:info.outputPath('character-skills.png')});
     await page.locator('#character-tab-gear').click(); await expect(page.locator('#wear-found-1')).toBeDisabled();
     await page.locator('#wear-found-0').click();
@@ -63,7 +67,7 @@ for (const [width,height,touch] of [[320,568,true], [390,844,true], [1366,768,fa
     await expect(page.locator('#pack-dialog')).not.toBeVisible(); await page.keyboard.press('Escape');
     await expect(page.locator('#pack-dialog')).toBeVisible(); await expect(page.locator('#bag-member-guardian')).toBeFocused(); await expect(page.locator('#bag-tab-gear')).toHaveAttribute('aria-selected','true');
     await page.keyboard.press('Escape'); await expect(page.locator('#world-pack')).toBeFocused();
-    expect(JSON.parse(await saved(page)).version).toBe(33); expect(errors).toEqual([]); await context.close();
+    expect(JSON.parse(await saved(page)).version).toBe(34); expect(errors).toEqual([]); await context.close();
   });
 }
 
