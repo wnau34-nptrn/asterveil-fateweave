@@ -151,6 +151,12 @@ function potionsOf(v: unknown, max: number): Potions {
   if (Object.keys(p).length !== POTION_IDS.length || POTION_IDS.some(id => !isInt(p[id], 0, max))) throw new Error('Invalid potions');
   return Object.fromEntries(POTION_IDS.map(id => [id, p[id] as number])) as Potions;
 }
+// Cleared maps: a string list without repeats. Ids of maps this build does not know (a removed map, or a caller
+// that passes only some maps) are dropped rather than rejecting the company.
+function clearedList(v: unknown, maps: readonly MapDefinition[]): string[] {
+  if (!Array.isArray(v) || v.some(id => typeof id !== 'string') || new Set(v).size !== v.length) throw new Error('Invalid profile');
+  return (v as string[]).filter(id => maps.some(m => m.id === id));
+}
 function idList(v: unknown, allowed: readonly string[]): string[] {
   if (!Array.isArray(v) || v.some(id => !allowed.includes(id)) || new Set(v).size !== v.length) throw new Error('Invalid run');
   return [...v as string[]];
@@ -328,7 +334,7 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
     commander = { name: c.name, crest: c.crest, color: c.color };
     if (commanderReason(commander)) throw new Error('Invalid commander');
   } else if (p.commander === undefined && version >= 6) throw new Error('Invalid commander');
-  const cleared = version < 28 ? legacyCleared(p.tutorialDone === true, (p.completes as number) > 0, map, maps) : idList(p.cleared, maps.map(m => m.id));
+  const cleared = version < 28 ? legacyCleared(p.tutorialDone === true, (p.completes as number) > 0, map, maps) : clearedList(p.cleared, maps);
   const bossLoot=bossProfileOf(p.bossLoot,map);
   return {bossLoot,hunt,overflow,storageTier:p.storageTier as number, forgeLevel:p.forgeLevel as number, seed: p.seed, returns: p.returns, tutorialDone: p.tutorialDone, commander, company: [...company as string[]], members, party, cleared,
     bank: { ore: bank.ore as number, gold: bank.gold as number, seal: bank.seal as number, dust: bank.dust as number }, items, nextItem: p.nextItem as number, forge: p.forge as number, potions: potionsOf(p.potions, 9999), quests, shop, refreshes: p.refreshes as number, smelted: p.smelted as number, taken: [...p.taken as number[]], expeditions: p.expeditions, completes: p.completes, last };

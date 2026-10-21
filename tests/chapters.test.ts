@@ -37,10 +37,11 @@ describe('chapters', () => {
     expect(parseGame(v21({ completes: 2 }), frontier, lookup, maps).profile.cleared).toEqual([teaching.id, frontier.id]);
     expect(parseGame(v21({ tutorialDone: false }), frontier, lookup, maps).profile.cleared).toEqual([]);
   });
-  it('v28 keeps only known map ids and resolves the run on its own map', () => {
+  it('v28 drops unknown map ids, rejects repeats and resolves the run on its own map', () => {
     const { profile, run } = depart({ ...ready(), cleared: [teaching.id] }, teaching, lookup, 5);
     const game = parseGame(JSON.stringify({ version: 28, profile, run }), frontier, lookup, maps);
     expect(game.profile.cleared).toEqual([teaching.id]); expect(game.run!.mapId).toBe(teaching.id);
-    expect(() => parseGame(JSON.stringify({ version: 28, profile: { ...profile, cleared: ['nowhere'] }, run: null }), frontier, lookup, maps)).toThrow();
+    expect(parseGame(JSON.stringify({ version: 28, profile: { ...profile, cleared: ['nowhere', teaching.id] }, run: null }), frontier, lookup, maps).profile.cleared).toEqual([teaching.id]);
+    expect(() => parseGame(JSON.stringify({ version: 28, profile: { ...profile, cleared: [teaching.id, teaching.id] }, run: null }), frontier, lookup, maps)).toThrow();
   });
 });
