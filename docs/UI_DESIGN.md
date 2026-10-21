@@ -1,5 +1,9 @@
 # Modern battle HUD design spec
 
+## Combat presentation phase 1 — 2026-10-21
+
+Before the normal-motion contact cue, every HP/barrier/status panel and the status inspector shows the current actor's authoritative pre-turn snapshot. At contact the whole actor event group is revealed with its actual after/upkeep snapshot, existing impact VFX and stage sound; log entries wait for that cue. Do not reveal later actor damage from committed final state. Preserve the legacy actor queue frame separately so the actor being presented remains identifiable. Reduced motion reveals that same group immediately without moving VFX. Skip, hidden-tab and playback resize settle the already saved result and cancel old cues/sounds; ordinary resize while selecting retains selection. No extra battlefield button or persistent HUD row is added. Phase-2 bespoke effects and boss cutscenes remain future work. See `docs/validation/COMBAT_PRESENTATION_PHASE1.md`.
+
 ## Boss equipment — 2026-10-21
 
 Use the existing shared character sheet and six equipment slots. Boss charms carry a small ◆ marker opposite the existing normal-set emblem; item detail names the source and conditional power before stat lines. Gear filters add Type: all/boss/ordinary inside additional filters. Normal set counts/2/4 bonuses remain shared with ordinary items. Comparison and Skills expose a clearly labelled marked-primary-target example from the real resolver, separate from base skill power; equipment-effects before/after include the boss power and lost/gained ordinary effects. Explain that Lantern cannot activate for a class without Heal. Battle status reads the displayed snapshot's actual per-round use state.

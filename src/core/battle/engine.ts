@@ -248,11 +248,12 @@ function hit(state: BattleState, data: EncounterDefinition, enemy: EnemyState, i
     if (!brace.wall) state.counter = null;
   }
 }
-function automaticTurns(state: BattleState, data: EncounterDefinition, turns: TurnStage[]): void {
+function automaticTurns(state: BattleState, data: EncounterDefinition, turns: TurnStage[], presentation = false): void {
   while (state.outcome === 'active' && !currentHeroId(state, data)) {
     const actorId = currentActorId(state)!;
     const intent = enemyIntent(state, data, actorId, state.round);
     state.intent = intent;
+    const before = presentation ? structuredClone(state) : undefined;
     const events: BattleEvent[] = [];
     const enemy = state.enemies.find(e => e.id === actorId)!;
     if (intent) {
@@ -294,7 +295,7 @@ function automaticTurns(state: BattleState, data: EncounterDefinition, turns: Tu
     const frame = structuredClone(state); const beat = state.beat; const round = state.round;
     finishOrAdvance(state, data, events);
     if (state.outcome !== 'active') { frame.outcome = state.outcome; frame.intent = null; }
-    turns.push({ actorId, side: 'enemy', beat, round, intent, targetId: events.find(e => e.type === 'damage' || e.type === 'dodge')?.targetId ?? intent?.targetId, state: frame, events });
+    turns.push({ actorId, side: 'enemy', beat, round, intent, targetId: events.find(e => e.type === 'damage' || e.type === 'dodge')?.targetId ?? intent?.targetId, state: frame, events, ...(presentation ? {before, after: structuredClone(state)} : {}) });
   }
 }
 export function entryReason(data: EncounterDefinition, entry?: BattleEntry): string {
@@ -307,7 +308,8 @@ export function entryReason(data: EncounterDefinition, entry?: BattleEntry): str
   return data.heroes.some(h => (entry.hp[h.id] ?? h.maxHp) > 0) ? '' : 'The whole party is down.';
 }
 // Heroes entering at 0 HP start down: they never join the queue or receive targets.
-export function beginBattle(data: EncounterDefinition, entry?: BattleEntry): Resolution {
+// Opt-in boundaries avoid extra snapshot work in previews, replay and simulation.
+export function beginBattle(data: EncounterDefinition, entry?: BattleEntry, presentation = false): Resolution {
   const invalid = entryReason(data, entry); if (invalid) throw new Error(invalid);
   const state: BattleState = {
     encounterId: data.id, beat: 1, round: 1, turnIndex: 0, order: [], outcome: 'active', guard: null, counter: null, taunt: null, song: null,
@@ -322,7 +324,7 @@ export function beginBattle(data: EncounterDefinition, entry?: BattleEntry): Res
   if (bard) state.song = { heroId: bard.id, action: 'mend' };
   state.order = roundOrder(state, data); refreshIntent(state, data);
   const initial = structuredClone(state); const turns: TurnStage[] = [];
-  automaticTurns(state, data, turns);
+  automaticTurns(state, data, turns, presentation);
   return { initial, state, turns, events: turns.flatMap(t => t.events) };
 }
 export const createBattle = (data: EncounterDefinition, entry?: BattleEntry): BattleState => beginBattle(data, entry).state;
@@ -381,7 +383,7 @@ export function validateCommand(state: BattleState, data: EncounterDefinition, c
   const target = targetOptions(state, data, command.heroId, command.action).find(t => t.id === command.targetId);
   return target?.valid ? '' : target?.reason || 'Invalid target.';
 }
-export function resolveCommand(initial: BattleState, data: EncounterDefinition, command: Command): Resolution {
+export function resolveCommand(initial: BattleState, data: EncounterDefinition, command: Command, presentation = false): Resolution {
   const invalid = validateCommand(initial, data, command); if (invalid) throw new Error(invalid);
   const state = structuredClone(initial); const events: BattleEvent[] = []; const turns: TurnStage[] = [];
   const hero = data.heroes.find(h => h.id === command.heroId)!; const actor = state.heroes.find(h => h.id === hero.id)!;
@@ -543,8 +545,8 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
   state.commands.push({ ...command });
   const frame = structuredClone(state); finishOrAdvance(state, data, events);
   if (state.outcome !== 'active') { frame.outcome = state.outcome; frame.intent = null; }
-  turns.push({ actorId: hero.id, side: 'hero', beat: initial.beat, round: initial.round, action: command.action, targetId: command.targetId, intent: initial.intent, state: frame, events });
-  automaticTurns(state, data, turns);
+  turns.push({ actorId: hero.id, side: 'hero', beat: initial.beat, round: initial.round, action: command.action, targetId: command.targetId, intent: initial.intent, state: frame, events, ...(presentation ? {before: structuredClone(initial), after: structuredClone(state)} : {}) });
+  automaticTurns(state, data, turns, presentation);
   return { initial, state, turns, events: turns.flatMap(t => t.events) };
 }
 export const previewCommand = resolveCommand;

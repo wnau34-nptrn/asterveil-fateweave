@@ -77,11 +77,13 @@ test('normal motion shows separate actual hero and enemy turns, exact staged HP 
  const context=await browser.newContext({viewport:{width:1366,height:768},reducedMotion:'no-preference'}),page=await context.newPage();
  await page.clock.install({time:new Date('2026-10-14T00:00:00Z')});const issues=await start(page);await page.clock.pauseAt(new Date('2026-10-14T01:00:00Z'));
  await cast(page,'tracer','execute','brute');await expect(page.locator('#turn-phase')).toHaveAttribute('data-actor','tracer');
- await expect(page.locator('[data-enemy=brute]')).toContainText('172 / 200');await expect(page.locator('#hero-tracer')).toContainText('56 / 56');
+ await expect(page.locator('[data-enemy=brute]')).toContainText('200 / 200');await expect(page.locator('#hero-tracer')).toContainText('56 / 56');
  await expect(page.locator('#action-attack')).toBeDisabled();await expect(page.locator('#target-brute')).toBeDisabled();
- expect((await savedState(page)).heroes[1]!.hp).toBe(44);expect(await count(page)).toBe(1);await page.screenshot({path:info.outputPath('hero-stage.png')});
- await page.clock.runFor(1000);await expect(page.locator('#turn-phase')).toHaveAttribute('data-actor','raider');await expect(page.locator('#hero-tracer')).toContainText('44 / 56');
- await page.screenshot({path:info.outputPath('enemy-stage.png')});await page.clock.runFor(1000);await owner(page,'weaver');expect(issues).toEqual([]);await context.close();
+ expect((await savedState(page)).heroes[1]!.hp).toBe(44);expect(await count(page)).toBe(1);
+ await page.clock.runFor(298);await expect(page.locator('[data-enemy=brute]')).toContainText('172 / 200');await page.screenshot({path:info.outputPath('hero-stage.png')});
+ await page.clock.runFor(552);await expect(page.locator('#turn-phase')).toHaveAttribute('data-actor','raider');await expect(page.locator('#hero-tracer')).toContainText('56 / 56');
+ await page.clock.runFor(280);await expect(page.locator('#hero-tracer')).toContainText('44 / 56');
+ await page.screenshot({path:info.outputPath('enemy-stage.png')});await page.clock.runFor(520);await owner(page,'weaver');expect(issues).toEqual([]);await context.close();
 });
 test('reduced motion retains the physical interrupted enemy turn and never adds an extra attack',async({page},info)=>{
  await seed(page,riftWarden,[['tracer','mark','brute'],['weaver','bolt','brute']]);await page.clock.install({time:new Date('2026-10-14T00:00:00Z')});const issues=await start(page);

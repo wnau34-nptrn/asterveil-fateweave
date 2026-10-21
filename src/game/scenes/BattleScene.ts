@@ -26,6 +26,7 @@ export class BattleScene extends Phaser.Scene {
   private dpr = 1;
   private fitting = false;
   private shaking: Phaser.Tweens.Tween | undefined;
+  private effectTimers = new Set<Phaser.Time.TimerEvent>();
   private root: Phaser.GameObjects.Container | undefined;
   private nextSizeCheck = 0;
   // Idle life (breathing, auras, motes) is rebuilt with each paint and never touches state.
@@ -91,7 +92,16 @@ export class BattleScene extends Phaser.Scene {
     this.nextSizeCheck = time + 500;
     this.fit();
   }
-  sync(view: SceneView): void { this.view = view; if (this.ready) this.paint(); }
+  sync(view: SceneView, repaint = true): void {
+    this.view = view;
+    if (!this.ready) return;
+    if (repaint) this.paint();
+    else for (const [id, body] of this.bodies) {
+      const hp = [...view.state.heroes, ...view.state.enemies].find(a => a.id === id)?.hp ?? 0;
+      const involved = !view.activeActorId || id === view.activeActorId || id === view.activeTargetId;
+      body.setAlpha(hp <= 0 ? .28 : involved ? 1 : .55);
+    }
+  }
   private paint(): void {
     if (!this.view) return;
     this.stopEffects(); this.bodies.clear();
@@ -197,20 +207,38 @@ export class BattleScene extends Phaser.Scene {
     });
   }
   stopEffects(): void {
+    for (const timer of this.effectTimers) timer.remove(false);
+    this.effectTimers.clear();
     if (this.shaking) { this.shaking.stop(); this.shaking = undefined; }
-    for (const body of this.bodies.values()) this.tweens.killTweensOf(body);
+    for (const [id, body] of this.bodies) {
+      this.tweens.killTweensOf(body);
+      const origin = this.positions.get(id); if (origin) body.setPosition(origin.x, origin.y);
+      for (const child of body.list) if (child instanceof Phaser.GameObjects.Image) child.clearTint().setTintMode(Phaser.TintModes.MULTIPLY);
+    }
     if (this.effects) {
       for (const child of this.effects.list) this.tweens.killTweensOf(child);
       this.effects.destroy(); this.effects = undefined;
     }
   }
-  play(events: BattleEvent[]): void {
+  private later(ms: number, run: () => void): void {
+    const timer = this.time.delayedCall(ms, () => { this.effectTimers.delete(timer); run(); });
+    this.effectTimers.add(timer);
+  }
+  prepare(events: BattleEvent[], contactMs: number): void {
+    if (!this.ready || !contactMs || !events.some(e => e.type === 'damage') || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const source = this.bodies.get(this.view?.activeActorId ?? '');
+    const target = this.positions.get(this.view?.activeTargetId ?? '');
+    if (source && target) this.tweens.add({ targets: source, x: source.x + Math.sign(target.x - source.x) * 16, duration: contactMs, ease: 'Sine.In' });
+  }
+  play(events: BattleEvent[], remainingMs = 650): void {
     if (!this.ready || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     this.effects = this.add.container(0, 0); this.root?.add(this.effects);
     const source = this.view?.activeActorId ? this.bodies.get(this.view.activeActorId) : undefined;
-    const target = this.view?.activeTargetId ? this.positions.get(this.view.activeTargetId) : undefined;
-    if (source && target && events.some(event => event.type === 'damage')) {
-      this.tweens.add({ targets: source, x: source.x + Math.sign(target.x - source.x) * 16, duration: 160, yoyo: true, ease: 'Sine.Out' });
+    const origin = this.positions.get(this.view?.activeActorId ?? '');
+    const life = Math.max(100, remainingMs - 20);
+    if (source && origin) {
+      this.tweens.killTweensOf(source);
+      this.tweens.add({ targets: source, x: origin.x, duration: Math.min(180, life), ease: 'Sine.Out' });
     }
     // Hit reaction: the struck unit flashes white and recoils a step away from the attacker.
     for (const event of events) {
@@ -218,8 +246,9 @@ export class BattleScene extends Phaser.Scene {
       const body = this.bodies.get(event.targetId); const sprite = body?.list.find(c => c instanceof Phaser.GameObjects.Image) as Phaser.GameObjects.Image | undefined;
       if (!body || !sprite) continue;
       const from = event.sourceId ? this.positions.get(event.sourceId) : undefined; const away = from ? Math.sign(body.x - from.x) || 1 : 1;
-      this.time.delayedCall(140, () => { if (!sprite.active) return; sprite.setTint(0xffffff).setTintMode(Phaser.TintModes.FILL); this.time.delayedCall(90, () => { if (sprite.active) sprite.clearTint().setTintMode(Phaser.TintModes.MULTIPLY); }); });
-      this.tweens.add({ targets: body, x: body.x + away * 10, duration: 90, delay: 140, yoyo: true, ease: 'Quad.Out' });
+      sprite.setTint(0xffffff).setTintMode(Phaser.TintModes.FILL);
+      this.later(90, () => { if (sprite.active) sprite.clearTint().setTintMode(Phaser.TintModes.MULTIPLY); });
+      this.tweens.add({ targets: body, x: body.x + away * 10, duration: 90, yoyo: true, ease: 'Quad.Out' });
     }
     // Impact: a short camera shake for any landed hit (stronger when a fighter falls).
     const landed = events.filter(event => event.type === 'damage' && (event.amount ?? 0) > 0);
@@ -230,29 +259,25 @@ export class BattleScene extends Phaser.Scene {
       if (event.type === 'damage') {
         const ring = this.add.circle(position.x, position.y, 25, 0xffffff, 0.15).setStrokeStyle(2, palette.gold);
         this.effects.add(ring);
-        this.tweens.add({ targets: ring, radius: 55, alpha: 0, duration: 420, onComplete: () => ring.destroy() });
+        this.tweens.add({ targets: ring, radius: 55, alpha: 0, duration: Math.min(420, life), onComplete: () => ring.destroy() });
         const label = event.amount ? `−${event.amount}` : event.absorbed ? `โล่รับ ${event.absorbed}` : 'ป้องกันได้';
         const text = this.text(position.x, position.y - 20, label, { fontFamily: thaiFont, fontSize: event.amount ? '32px' : '23px', fontStyle: 'bold', color: this.view?.phase === 'enemy' ? '#ffb6b8' : '#ffe0a6', stroke: '#101c36', strokeThickness: 5 }).setOrigin(0.5).setScale(.6);
         this.effects.add(text);
         // Numbers pop in large, then rise and fade.
-        this.tweens.add({ targets: text, scale: 1.15, duration: 110, ease: 'Back.Out', yoyo: false, onComplete: () => this.tweens.add({ targets: text, scale: 1, y: position.y - 70, alpha: 0, duration: 620, delay: 120 + index * 40, onComplete: () => text.destroy() }) });
-        // The struck body flashes white for a moment.
-        const struck = event.targetId ? this.bodies.get(event.targetId) : undefined;
-        const sprite = struck?.list.find((child): child is Phaser.GameObjects.Image => child instanceof Phaser.GameObjects.Image);
-        if (sprite && event.amount) { sprite.setTint(0xffffff).setTintMode(Phaser.TintModes.FILL); this.time.delayedCall(90, () => { if (sprite.active) sprite.clearTint().setTintMode(Phaser.TintModes.MULTIPLY); }); }
+        this.tweens.add({ targets: text, scale: 1.15, duration: 80, ease: 'Back.Out', onComplete: () => this.tweens.add({ targets: text, scale: 1, y: position.y - 70 - index * 12, alpha: 0, duration: Math.max(20, life - 100), delay: 20, onComplete: () => text.destroy() }) });
       }
       if (event.type === 'dodge') {
         const text = this.text(position.x, position.y - 20, 'หลบ!', { fontFamily: thaiFont, fontSize: '22px', color: '#a9d4ff', stroke: '#101c36', strokeThickness: 4 }).setOrigin(0.5);
         this.effects.add(text);
-        this.tweens.add({ targets: text, x: position.x - 24, y: position.y - 60, alpha: 0, duration: 650, onComplete: () => text.destroy() });
+        this.tweens.add({ targets: text, x: position.x - 24, y: position.y - 60, alpha: 0, duration: life, onComplete: () => text.destroy() });
       }
       if (event.type === 'heal' || event.type === 'barrier') {
         const circle = this.add.circle(position.x, position.y, 18).setStrokeStyle(3, palette.cyan);
         this.effects.add(circle);
-        this.tweens.add({ targets: circle, scale: 3, alpha: 0, duration: 650, onComplete: () => circle.destroy() });
+        this.tweens.add({ targets: circle, scale: 3, alpha: 0, duration: life, onComplete: () => circle.destroy() });
         const label = this.text(position.x, position.y - 20, `${event.type === 'heal' ? '+' : 'โล่ +'}${event.amount}`, { fontFamily: thaiFont, fontSize: '20px', color: event.type === 'heal' ? '#85e5be' : '#8addf5', stroke: '#101c36', strokeThickness: 4 }).setOrigin(0.5);
         this.effects.add(label);
-        this.tweens.add({ targets: label, y: position.y - 65, alpha: 0, duration: 650, onComplete: () => label.destroy() });
+        this.tweens.add({ targets: label, y: position.y - 65 - index * 12, alpha: 0, duration: life, onComplete: () => label.destroy() });
       }
     }
   }

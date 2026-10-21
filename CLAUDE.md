@@ -1,5 +1,9 @@
 # Fateweave development instructions
 
+## Combat presentation phase 1 — owner scope 2026-10-21
+
+Live BattleUI opts into transient `TurnStage.before/after` with the optional final boolean on beginBattle/resolveCommand. Keep the default resolver/replay/preview path free of those extra snapshots. No save or rule-version bump is needed for presentation boundaries. Normal motion holds pre-turn HP/status/log until a common contact cue, then reveals the authoritative after/upkeep group and existing effects/sound. Do not calculate combat arithmetic in UI or invent granular states. Legacy `TurnStage.state` still supplies the acting queue frame. Reduced motion reveals synchronously at stage start. `ui/battle-playback.ts` owns pending cues and stage-sound cancellation; skip/load/hidden-tab/resize cannot add a command or replay delayed sound. `scene.sync(view,false)` updates presentation state without tearing down effects, and scene cleanup restores timers/tint/body/field positions. Preserve all input/modal/rotation guards. New skill art, richer VFX, speed controls and boss cutscenes are outside this phase. Validation/remaining verification: `docs/validation/COMBAT_PRESENTATION_PHASE1.md`.
+
 ## Boss-exclusive equipment — owner scope 2026-10-21
 
 The owner calls this equipment phase 6; the historical affix-transfer phase 6 is a separate delivered feature. Three Rift Warden legendary Lv11 charms use the existing slot. Item.boss is aegis/focus/lantern and replaces the generic legendary special. Normal sets roll at the existing 60%, from all six sets, and combine with ordinary 2/4-piece counts. No new slot, rarity, currency or set family. Main/affix qualities remain 80–120%, with one guaranteed HP/Attack/Support affix on initial creation respectively; reroll/transfer may change it later.
