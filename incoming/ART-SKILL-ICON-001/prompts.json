@@ -1,0 +1,185 @@
+{
+  "common": "Use case: stylized-concept. Produce ONE original painted fantasy JRPG skill icon, no sheet. Reference 1 is the EXACT style target: polished hand-painted item illustration, substantial dark warm contour edges, rich controlled saturation, crisp bevels, brush-painted material shading, top-left light, gold metal trim, readable solid silhouette. References 2 and 3 are character weapon and palette references only, no character portrait. Isolated on genuine transparent background. Square composition, all visible motif and glow contained within a centred circle of diameter 76% of canvas, generous completely transparent empty edges. Bold simple forms readable at 40px. No text, numbers, lettering, UI, button border, frame, rarity background, watermark, scenery, or extraneous props. Rune shapes are abstract geometry only. ",
+  "skills": [
+    {
+      "id": "guard",
+      "class": "guardian",
+      "palette": "royal blue, silver and warm gold",
+      "motif": "a large blue and gold knight kite shield sheltering a smaller silver ally shield"
+    },
+    {
+      "id": "bash",
+      "class": "guardian",
+      "palette": "royal blue, silver and warm gold",
+      "motif": "a blue gold kite shield tilted in a forceful sideways bash, stopping a small incoming steel blade with a single ivory impact spark"
+    },
+    {
+      "id": "rally",
+      "class": "guardian",
+      "palette": "royal blue, silver and warm gold",
+      "motif": "three blue and gold small shields raised together in an upward fan of protective ivory light"
+    },
+    {
+      "id": "mark",
+      "class": "tracer",
+      "palette": "crimson, rose, warm gold and ivory",
+      "motif": "a bold sculpted luminous rose targeting mark with four pointed petals and a clear hollow diamond centre"
+    },
+    {
+      "id": "execute",
+      "class": "tracer",
+      "palette": "crimson, rose, warm gold and ivory",
+      "motif": "one crimson inset silver sword sweeping through a single ivory gold crescent slash edged rose, NOT crossed swords"
+    },
+    {
+      "id": "finisher",
+      "class": "tracer",
+      "palette": "crimson, rose, warm gold and ivory",
+      "motif": "a heavy downward crimson inset sword with a broad gold hilt and compact powerful ivory impact wedge below"
+    },
+    {
+      "id": "bolt",
+      "class": "weaver",
+      "palette": "violet, sky-white, pale gold",
+      "motif": "an astral needle projectile pointing diagonally upward with a sharp sky-white star head and tapered violet threaded wake"
+    },
+    {
+      "id": "ward",
+      "class": "weaver",
+      "palette": "violet, pearl cyan, faint gold",
+      "motif": "a translucent curved pearl cyan luminous veil with volume, open visible centre and thin faint gold woven rim, no physical shield"
+    },
+    {
+      "id": "sigil",
+      "class": "weaver",
+      "palette": "violet, pearl white, pale gold",
+      "motif": "an inclined violet luminous rune circle made of abstract geometric segments and a bright central star, no letters or readable characters"
+    },
+    {
+      "id": "heal",
+      "class": "healer",
+      "palette": "emerald, mint, ivory and gold",
+      "motif": "a thick luminous mint healing cross with leaflike sculpted tips cradled by two emerald leaves"
+    },
+    {
+      "id": "prayer",
+      "class": "healer",
+      "palette": "emerald, mint, ivory and gold",
+      "motif": "two ivory gloved praying hands beneath one gold suspended blessing star, emerald cuff accents"
+    },
+    {
+      "id": "sanctuary",
+      "class": "healer",
+      "palette": "emerald, mint, ivory and gold",
+      "motif": "a small holy ground island of pale stone protected by an open mint dome and a gold blessing star"
+    },
+    {
+      "id": "brace",
+      "class": "garran",
+      "palette": "teal cloth, silver steel, bronze gold",
+      "motif": "one upright planted silver spear with teal ribbon anchored firmly into a small stone base"
+    },
+    {
+      "id": "pierce",
+      "class": "garran",
+      "palette": "teal cloth, silver steel, bronze gold",
+      "motif": "one long diagonal silver spear with teal ribbon piercing two separated pale energy slivers in a straight thrust"
+    },
+    {
+      "id": "spearwall",
+      "class": "garran",
+      "palette": "teal cloth, silver steel, bronze gold",
+      "motif": "three strong upright silver spearheads forming a defensive wall with teal pennants"
+    },
+    {
+      "id": "hinder",
+      "class": "mira",
+      "palette": "forest green, warm brown, bronze and ivory",
+      "motif": "a single broadhead arrow with green fletching tangled in a curling green thorn vine, clear slowing shot symbol"
+    },
+    {
+      "id": "volley",
+      "class": "mira",
+      "palette": "forest green, warm brown, bronze and ivory",
+      "motif": "three descending diagonal arrows with green fletching in a broad staggered fan"
+    },
+    {
+      "id": "weakshot",
+      "class": "mira",
+      "palette": "forest green, warm brown, bronze and ivory",
+      "motif": "a single arrow striking the bright tiny centre of an open bronze target ring, green fletching"
+    },
+    {
+      "id": "acid",
+      "class": "toma",
+      "palette": "amber glass, brass, cream leather with acid lime",
+      "motif": "a tilted brass capped glass flask spilling a small vivid lime corrosive droplet onto a dissolving metal chip"
+    },
+    {
+      "id": "haste",
+      "class": "toma",
+      "palette": "amber glass, brass, cream leather with cyan tonic",
+      "motif": "a tall narrow cyan speed tonic vial with brass cap and two bold curved wind streaks"
+    },
+    {
+      "id": "bomb",
+      "class": "toma",
+      "palette": "amber glass, brass, cream leather with orange glow",
+      "motif": "a round dark amber alchemical bottle bomb with brass collar, short lit fuse and compact orange burst behind"
+    },
+    {
+      "id": "ambush",
+      "class": "sefa",
+      "palette": "navy cloth, charcoal leather, silver and cool blue",
+      "motif": "two short silver daggers springing out from a compact torn navy shadow crescent, surprise impact glint"
+    },
+    {
+      "id": "evade",
+      "class": "sefa",
+      "palette": "navy cloth, charcoal leather, silver and cool blue",
+      "motif": "a curved navy scout scarf sweeping away with two translucent cool blue afterimage echoes, no person"
+    },
+    {
+      "id": "backstab",
+      "class": "sefa",
+      "palette": "navy cloth, charcoal leather, silver and cool blue",
+      "motif": "one short broad silver dagger with navy wrapped hilt striking from behind a small dark shoulder silhouette"
+    },
+    {
+      "id": "taunt",
+      "class": "brann",
+      "palette": "slate blue, stone grey, warm gold",
+      "motif": "one chunky gold geometric challenge rune floating before a small slate steel hammer face with outward call rays, no letters"
+    },
+    {
+      "id": "slam",
+      "class": "brann",
+      "palette": "slate blue, stone grey, warm gold",
+      "motif": "a heavy squared stone grey rune hammer with bold gold angular inlay slamming downward with one compact ivory impact"
+    },
+    {
+      "id": "quake",
+      "class": "brann",
+      "palette": "slate blue, stone grey, warm gold",
+      "motif": "a fractured raised stone slab splitting under a small gold rune hammer head, strong branching ground cracks"
+    },
+    {
+      "id": "valor",
+      "class": "lio",
+      "palette": "coral red cloth, honey wood, gold and ivory",
+      "motif": "a honey wood lute with coral ribbon projecting one bold rising gold musical note of courage"
+    },
+    {
+      "id": "mend",
+      "class": "lio",
+      "palette": "coral red cloth, honey wood, gold with mint healing light",
+      "motif": "a honey wood lute neck with coral ribbon and a curved mint healing melody wrapping a small leaf"
+    },
+    {
+      "id": "finale",
+      "class": "lio",
+      "palette": "coral red cloth, honey wood, gold and ivory",
+      "motif": "a sweeping honey wood lute plectrum releasing a broad final golden chord burst with a coral ribbon curl"
+    }
+  ]
+}
