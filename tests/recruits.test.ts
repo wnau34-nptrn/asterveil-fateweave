@@ -56,7 +56,7 @@ describe('story recruits', () => {
   it('saves v30 runs with guests; rejects a guest who is already a member', () => {
     const { profile, run } = depart(fresh(), map, lookup, 4); let raw = '';
     saveGame({ getItem: () => null, setItem: (_k, v) => { raw = v; } }, { profile, run });
-    expect(JSON.parse(raw).version).toBe(32); expect(parseGame(raw, chapterOne, lookup, [map, chapterOne]).run!.guests).toEqual(['tracer', 'weaver', 'healer']);
+    expect(JSON.parse(raw).version).toBe(33); expect(parseGame(raw, chapterOne, lookup, [map, chapterOne]).run!.guests).toEqual(['tracer', 'weaver', 'healer']);
     const bad = JSON.parse(raw); bad.profile.company.push('tracer'); bad.profile.members.tracer = { stars: 1, dupes: 0 };
     expect(() => parseGame(JSON.stringify(bad), chapterOne, lookup, [map, chapterOne])).toThrow();
   });

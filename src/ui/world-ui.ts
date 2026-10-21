@@ -320,7 +320,10 @@ export class WorldUI {
     this.view = view;
     const tile = tileAt(this.map, s.position)!; const zone = zoneOf(this.map, tile.zoneId);
     // Monster level here (2D-1): shown with the zone, red when the deployed team is 2+ levels below it.
-    const level = tile.kind === 'camp' ? undefined : monsterLevelAt(this.map, s.position);
+    const base = tile.kind === 'camp' ? undefined : monsterLevelAt(this.map, s.position);
+    // Hard mode (A9): monsters fight `hardLevels` higher; the map name carries the mode.
+    const level = base === undefined ? undefined : base + (s.hard ? this.map.progression.hardLevels : 0);
+    this.root.querySelector('#map-name')!.textContent = `${this.map.name}${s.hard ? ' · ยาก' : ''}`;
     const living = s.roster.deployed.filter(id => s.hp[id]! > 0); const team = living.length ? Math.round(living.reduce((sum, id) => sum + (s.members[id]?.level ?? 1), 0) / living.length) : 1;
     const danger = level !== undefined && team <= level - 2;
     this.root.querySelector('#zone-name')!.innerHTML = `${tile.kind === 'camp' ? 'แคมป์พักแรม' : zone?.name ?? ''}${level !== undefined ? ` <span class="zone-level${danger ? ' danger' : ''}">Lv${level}${danger ? ' · อันตราย' : ''}</span>` : ''}`;

@@ -36,7 +36,7 @@ export const gameRules: GameRules = {
     { id: 'guide-hire', npc: 'broker', feature: 'hire', kind: 'hire', reward: { gold: 10 } },
     { id: 'guide-reserve', npc: 'scout', feature: 'team', kind: 'reserve', reward: { potions: { repel: 1 } } },
   ],
-  unlocks: { tree: 1, forge: 1, brew: 1, gear: 1, level: 2, quests: 2, hire: 3, team: 3, market: 3, fuse: 5, craft: 5, hunt: 5, transfer: 7, bossCharm: 9 },
+  unlocks: { tree: 1, forge: 1, brew: 1, gear: 1, level: 2, quests: 2, hire: 3, team: 3, market: 3, fuse: 5, craft: 5, hunt: 5, transfer: 7, bossCharm: 9, hard: 3 },
   // Phase 4A (draft): the camp market, paid in gold coins, and paid hiring-board refreshes (2 per return).
   shop: {
     items: { seal: { price: 60, limit: 2 }, contract: { price: 150, limit: 1 }, gearbox: { price: 120, limit: 1 }, repel: { price: 30, limit: 2 } },
@@ -50,7 +50,7 @@ export const gameRules: GameRules = {
     starCosts: [{ dupes: 1, ore: 20 }, { dupes: 2, ore: 40 }, { dupes: 3, ore: 70 }, { dupes: 4, ore: 110 }],
   },
   // Draft 2D-1 numbers: a first full run ends near level 9; farming low levels is tapered (world `expPercent`).
-  progression: { levelCap: 10, levelStatPercent: 3, monsterLevelPercent: 7, expBase: 6, expPerLevel: 2, bossExpMultiplier: 3, nextBase: 20, nextPerLevel: 45, joinBehind: 2, reserveExpPercent: 50, catchUpBehind: 2, catchUpPercent: 50 },
+  progression: { levelCap: 10, levelStatPercent: 3, monsterLevelPercent: 7, expBase: 6, expPerLevel: 2, bossExpMultiplier: 3, nextBase: 20, nextPerLevel: 45, joinBehind: 2, reserveExpPercent: 50, catchUpBehind: 2, catchUpPercent: 50, hardLevels: 5, hardFirstClear: { gold: 30, seal: 2 } },
   talents: talentTrees,
   eventRules: {
     banditLevelBonus: 1, prayHeal: 25, prayWound: 5, maxWound: 20, offerOre: 10, offerSeal: 1,
@@ -87,7 +87,7 @@ export const gameRules: GameRules = {
     quality: [80, 120], regenSteps: 5, luckCap: 15,
     affixCount: [0, 1, 2, 3, 3],
     dropPercent: 35, pity: 6,
-    rarityWeights: [55, 28, 12, 4, 1], bossRarityWeights: [0, 0, 20, 45, 35], bossDrops: 3, wipeKeep: 1,
+    rarityWeights: [55, 28, 12, 4, 1], bossRarityWeights: [0, 0, 20, 45, 35], bossDrops: 3, wipeKeep: 1, hardRarityWeights: [25, 35, 25, 12, 3],
     salvage: [{ ore: 2, dust: 1 }, { ore: 3, dust: 2 }, { ore: 5, dust: 4 }, { ore: 8, dust: 8 }, { ore: 12, dust: 15 }],
     // Sets (2D-3, draft numbers): meadow dawn/wind, thicket shadow/thorn, scar star-veil/mender.
     setPercent: 60,

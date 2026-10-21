@@ -131,6 +131,8 @@ export interface EquipmentRules {
   // `bossDrops` items. A wiped team still brings home its `wipeKeep` best found items.
   dropPercent: number; pity: number;
   rarityWeights: readonly number[]; bossRarityWeights: readonly number[]; bossDrops: number; wipeKeep: number;
+  // Hard mode (A9): random-battle rarity weights on a hard run (bosses use `bossRarityWeights`, never a teaching `bossDrop`).
+  hardRarityWeights: readonly number[];
   // Explicit recycling returns ore and veil dust by rarity. Overflow is preserved.
   salvage: readonly { ore: number; dust: number }[];
   // A dropped item belongs to one of its zone's sets at `setPercent` (the boss: any set).
@@ -240,6 +242,9 @@ export interface ProgressionRules {
   // members gain `reserveExpPercent` of the EXP; a member `catchUpBehind`+ levels below the best brought member
   // gains `catchUpPercent` more.
   joinBehind: number; reserveExpPercent: number; catchUpBehind: number; catchUpPercent: number;
+  // Hard mode (A9): every battle but the prologue fights `hardLevels` levels higher; the first hard clear of a map pays
+  // `hardFirstClear` once.
+  hardLevels: number; hardFirstClear: { gold: number; seal: number };
 }
 // Mercenary company rules (draft numbers). starCosts[i] upgrades ★(i+1) → ★(i+2).
 // 4A camp market: each item has a gold price and a limit per return home. The gear box rolls a rare-or-better
@@ -282,6 +287,8 @@ export interface Profile {
   commander: Commander | null;
   // A company saved before lobby systems opened by chapter (save v31) keeps every system open.
   veteran?: true;
+  // Maps completed on hard mode (save v33; missing = none).
+  clearedHard?: string[];
   // Every owned mercenary in display order, with stars and stored duplicates.
   company: string[]; members: Record<string, MemberProgress>;
   // The 4 + 4 chosen for the next expedition (subset of `company`).
@@ -344,11 +351,13 @@ export type BattleKind = 'tutorial' | 'random' | 'boss' | 'elite' | 'event';
 // `level`: the monster level fixed when the battle started (missing in older saves = the encounter's own level).
 export interface ActiveBattle { kind: BattleKind; encounterId: string; entry: Record<string, number>; commands: Command[]; level?: number; source?: string }
 export type RecruitPoint = 'prologue' | 'camp' | 'boss';
-export type LobbyFeature = 'tree' | 'forge' | 'brew' | 'gear' | 'level' | 'quests' | 'hire' | 'team' | 'market' | 'fuse' | 'craft' | 'hunt' | 'transfer' | 'bossCharm';
+export type LobbyFeature = 'tree' | 'forge' | 'brew' | 'gear' | 'level' | 'quests' | 'hire' | 'team' | 'market' | 'fuse' | 'craft' | 'hunt' | 'transfer' | 'bossCharm' | 'hard';
 export interface ExpeditionState {
   // Story recruits (save v30): guests travel with the run but are not company members yet; `recruited` joined
   // during this run and are added to the company when it settles (whatever the outcome). Missing = none.
   guests?: string[]; recruited?: string[];
+  // Hard mode (A9, save v33): set on departure, never changed during the run.
+  hard?: true;
   bossLoot?:BossPlan;
   // Missing plan preserves legacy RNG and drop behavior until this expedition ends.
   hunt?:HuntPlan;

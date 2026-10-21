@@ -495,8 +495,8 @@ function dropItems(state: ExpeditionState, map: MapDefinition, kind: BattleKind,
   }
   // Sets come from the zone the battle was fought in; the boss can drop any set.
   const zoneSets = [...new Set(map.zones.flatMap(z => z.sets ?? []))];
-  const sets = kind === 'boss' ? (map.bossDrop?.zoneSets ? zoneSets : SET_IDS) : zoneOf(map, tileAt(map, state.position)?.zoneId ?? '')?.sets ?? [];
-  const weights = kind === 'boss' ? map.bossDrop?.weights ?? rules.bossRarityWeights : kind === 'elite' ? (miniBoss(map, source) ? map.eventRules.miniBoss.rarityWeights : optionalElite(map, source) ? map.eventRules.optionalElite.rarityWeights : map.eventRules.eliteRarityWeights) : rules.rarityWeights;
+  const sets = kind === 'boss' ? (map.bossDrop?.zoneSets && !state.hard ? zoneSets : SET_IDS) : zoneOf(map, tileAt(map, state.position)?.zoneId ?? '')?.sets ?? [];
+  const weights = kind === 'boss' ? (state.hard ? rules.bossRarityWeights : map.bossDrop?.weights ?? rules.bossRarityWeights) : kind === 'random' && state.hard ? rules.hardRarityWeights : kind === 'elite' ? (miniBoss(map, source) ? map.eventRules.miniBoss.rarityWeights : optionalElite(map, source) ? map.eventRules.optionalElite.rarityWeights : map.eventRules.eliteRarityWeights) : rules.rarityWeights;
   const items = Array.from({ length: kind === 'boss' ? rules.bossDrops : 1 }, () => huntedReward(rules, () => rollPercent(state.seed, state.rolls++), level, weights, rosterIds(state), sets,state.hunt));
   if(kind==='boss'&&state.bossLoot){let bonusRoll=0;const bonus=bossReward(map,state.bossLoot,()=>rollPercent((state.seed^0x6b05d017)>>>0,bonusRoll++),level);if(bonus)items.push(bonus);}
   state.found.push(...items);
@@ -505,7 +505,9 @@ function dropItems(state: ExpeditionState, map: MapDefinition, kind: BattleKind,
 // The encounter as fought by the deployed party, in slot order.
 export function battleData(state: ExpeditionState, map: MapDefinition, lookup: EncounterLookup): EncounterDefinition | undefined {
   const base = state.battle && lookup(state.battle.encounterId);
-  const data = base && withLevel(base, state.battle!.level ?? base.level ?? 1, map.progression.monsterLevelPercent);
+  // Hard mode (A9): every battle but the prologue fights `hardLevels` higher.
+  const hard = state.hard && state.battle!.kind !== 'tutorial' ? map.progression.hardLevels : 0;
+  const data = base && withLevel(base, (state.battle!.level ?? base.level ?? 1) + hard, map.progression.monsterLevelPercent);
   const party = state.roster.deployed.map(id => memberDef(lookup, map, state.members, id));
   return data && party.every(Boolean) ? withParty(data, party as HeroDefinition[]) : undefined;
 }

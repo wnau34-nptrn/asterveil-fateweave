@@ -7,7 +7,7 @@ import { applyCampEquipment, applyRunEquipment } from '../core/world/auto-equipm
 import { shortcutBlocked } from '../platform/keyboard';
 import type { BattleState, Outcome } from '../core/battle/types';
 import { clearLegacySaves, loadGame, saveGame, type Game } from '../core/save/expedition-save';
-import { claimGuide, renameCamp, createCommander, depart, mapUnlocked, brew, buy, claimQuest, refreshBoard, dismiss, equip, hire, learnTalent, newProfile, placeMember, resetTalents, salvage, settle, unequip, upgrade, canWithdraw } from '../core/world/profile';
+import { hardReason, claimGuide, renameCamp, createCommander, depart, mapUnlocked, brew, buy, claimQuest, refreshBoard, dismiss, equip, hire, learnTalent, newProfile, placeMember, resetTalents, salvage, settle, unequip, upgrade, canWithdraw } from '../core/world/profile';
 import type { Point, Direction, EventChoice, ExpeditionState, MapDefinition, PotionId, Profile, ProfileResult, RunOutcome, ShopItemId, WorldEvent } from '../core/world/types';
 import { travel, tileAt, startPrologue, questDone, battleData, chooseEvent, finishBattle, heroCatalog, move, moveMember, openChest, recordBattle, usePotion, rest, revive, swapMembers, takeOff, wear, type EncounterLookup } from '../core/world/world';
 import { Music, type Track } from '../platform/music';
@@ -97,7 +97,7 @@ export class GameShell {
       salvage: uids => this.profileChange(salvage(this.game!.profile, map, uids)),
       enhance: (uid,target) => this.profileChange(enhanceTo(this.game!.profile, map, uid,target)), lock: uid=>this.profileChange(lockEquipment(this.game!.profile,uid)), fuse: (uid,donors) => this.profileChange(fuse(this.game!.profile, map, uid,donors)), level:(uid,target)=>this.profileChange(raiseItemLevel(this.game!.profile,map,uid,target)),
       reroll: (uid, i) => this.profileChange(reroll(this.game!.profile, map, uid, i)), brew: potion => this.profileChange(brew(this.game!.profile, map, potion)), claim: id => this.profileChange(claimQuest(this.game!.profile, map, id)),
-      depart: id => this.depart(id), home: () => this.showTitle(),
+      depart: (id, hard) => this.depart(id, hard), home: () => this.showTitle(),
     }, maps);
     const story = document.createElement('section'); root.append(story); this.story = new StoryUI(story);
     const summary = document.createElement('section'); root.append(summary); this.summary = new SummaryUI(summary, map);
@@ -271,14 +271,15 @@ export class GameShell {
   // Set when the prologue (tutorial) battle is won; its closing scene plays on leaving the battle.
   private prologueWon = false;
   // The prologue always starts on the first map; otherwise the Lobby names an open map (default: the furthest open one).
-  private depart(mapId?: string): void {
+  private depart(mapId?: string, hard = false): void {
     if (!this.game || this.game.run) return;
     if(departureBlocked(this.game.profile)){this.lobbyMessage='จัดถาดรอเก็บในกระเป๋าก่อนออกเดินทาง';this.showLobby();return;}
     const open = this.maps.filter(m => mapUnlocked(this.game!.profile, this.maps, m.id));
     const chosen = !this.game.profile.tutorialDone ? this.maps[0]! : open.find(m => m.id === mapId) ?? open.at(-1)!;
     if (mapId && chosen.id !== mapId) return;
     this.chosenMap = chosen.id;
-    const out = depart(this.game.profile, chosen, this.lookup, this.freshSeed());
+    if (hard && hardReason(this.game.profile, this.maps, chosen.id)) return;
+    const out = depart(this.game.profile, chosen, this.lookup, this.freshSeed(), hard ? { maps: this.maps } : undefined);
     this.game = { profile: { ...out.profile, last: null }, run: out.run };
     this.persist(); this.banner = undefined; this.locked = false; this.lobbyMessage = ''; this.lobbyCheer = '';
     this.message = 'แตะช่องที่ไฮไลต์หรือใช้ลูกศรเพื่อเดิน';

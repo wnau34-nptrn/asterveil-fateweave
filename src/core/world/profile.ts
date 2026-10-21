@@ -220,13 +220,20 @@ export function departure(profile: Profile, map: MapDefinition, lookup: Encounte
   return depart(profile, map, lookup, seed).run;
 }
 // Departing also packs up to `carry` of each brewed potion, taken out of the home stock (2D-5).
-export function depart(initial: Profile, map: MapDefinition, lookup: EncounterLookup, seed: number): { profile: Profile; run: ExpeditionState } {
+// Hard mode (A9): open once the system is unlocked (chapter 3) and this map has been cleared on normal.
+export function hardReason(profile: Profile, maps: readonly MapDefinition[], mapId: string): string {
+  if (!featureOpen(profile, maps, 'hard')) return 'locked';
+  return profile.cleared.includes(mapId) ? '' : 'normal';
+}
+export function depart(initial: Profile, map: MapDefinition, lookup: EncounterLookup, seed: number, hard?: { maps: readonly MapDefinition[] }): { profile: Profile; run: ExpeditionState } {
+  if (hard && hardReason(initial, hard.maps, map.id)) throw new Error('Hard mode is not open for this map');
   if(departureBlocked(initial))throw new Error('Resolve overflow before departing');
   const profile = structuredClone(initial); const ids = [...profile.party.deployed, ...profile.party.reserve];
   const potions = Object.fromEntries(POTION_IDS.map(id => [id, Math.min(map.potions.carry, profile.potions[id])])) as Potions;
   for (const id of POTION_IDS) profile.potions[id] -= potions[id];
   const run = newExpedition(map, lookup, seed, { roster: structuredClone(profile.party), members: Object.fromEntries(ids.map(id => [id, { ...profile.members[id]! }])), potions }, profile.tutorialDone);
   run.hunt=startHunt(profile);if(map.bossCharm)run.bossLoot=startBossPlan(profile,map);
+  if (hard) run.hard = true;
   // Story recruits not yet in the company come along as guests, in free party slots, at the join level.
   const guests = (map.recruits ?? []).map(r => r.hero).filter(id => !profile.company.includes(id) && !rosterIds(run).includes(id));
   for (const id of guests) {
@@ -304,6 +311,9 @@ export function settle(initial: Profile, settled: ExpeditionState, outcome: RunO
   profile.forgeLevel=Math.max(profile.forgeLevel??levels.baseCap,...levels.unlocks.filter(u=>run.elitesDefeated.includes(u.elite)||(run.respawns[u.elite]??0)>0).map(u=>u.cap),...levels.clears.filter(c=>outcome==='complete'&&c.map===run.mapId).map(c=>c.cap));
   profile.tutorialDone ||= run.tutorialDone; profile.expeditions++; if (outcome === 'complete') profile.completes++;
   if (outcome === 'complete' && !profile.cleared.includes(run.mapId)) profile.cleared.push(run.mapId);
+  if (outcome === 'complete' && run.hard && !profile.clearedHard?.includes(run.mapId)) {
+    (profile.clearedHard ??= []).push(run.mapId); const r = map.progression.hardFirstClear; profile.bank.gold += r.gold; profile.bank.seal += r.seal;
+  }
   profile.returns++; profile.taken = []; profile.shop = {}; profile.refreshes = 0; profile.smelted = 0;
   profile.last = { outcome, ore, gold, seal, steps: run.steps, wins: run.wins, items, salvaged };
   return profile;
