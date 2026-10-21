@@ -141,6 +141,7 @@ export const chapterOne: MapDefinition = {
   },
   // Equipment (2D-2, draft numbers; docs/EXPEDITION_DESIGN.md "Equipment").
   equipment: {
+    boss:{chance:25,pity:4,barrier:6,damage:4},
     bagCap: 60,
     // Stats design (owner-approved 2026-10-17, draft numbers): attack and support are percents; armour/resist/leech
     // are battle percents; regen and luck work on the map. Each value rolls 80–120% of its level value.

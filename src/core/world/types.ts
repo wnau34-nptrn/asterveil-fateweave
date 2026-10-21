@@ -1,4 +1,4 @@
-import type { ActionId, Command, GearSpecial, HeroDefinition, TalentCap, TalentRule } from '../battle/types';
+import type { ActionId, BossPower, Command, GearSpecial, HeroDefinition, TalentCap, TalentRule } from '../battle/types';
 
 export type Direction = 'up' | 'down' | 'left' | 'right';
 export interface Point { x: number; y: number }
@@ -80,6 +80,7 @@ export type GearStat = 'hp' | 'attack' | 'support' | 'speed' | 'armour' | 'resis
 // missing = 100 (items made before the rolls).
 // locked protects destruction; investment is the paid enhancement credit, preserved across equipment moves.
 export interface Item { uid: number; slot: GearSlot; rarity: number; level: number; hero?: string; affixes: GearStat[]; special?: GearSpecial; set?: SetId; plus?: number;
+  boss?:BossPower;
   transferSlot?:number;
   q?: { main: number; affixes: number[] }; locked?: true; investment?: { ore: number; dust: number };
   // Actual paid item-Lv costs only; the original dropped level never grants credit.
@@ -95,7 +96,10 @@ export interface SetDefinition {
 // A value at item level L = round(base + perLevel × (L − 1)).
 export type StatCurve = readonly [base: number, perLevel: number];
 export interface HuntPlan {target?:string;misses:number}
+export interface BossProgress {target:BossPower;misses:number;rewarded:boolean}
+export interface BossPlan extends BossProgress {version:1;boss:string}
 export interface EquipmentRules {
+  boss:{chance:number;pity:number;barrier:number;damage:number};
   hunt:{weaponBiasPercent:number;pityDrops:number};
   bagCap: number;
   // Main stats per slot (a support class's weapon uses `supportWeapon`); affix values per stat; the affixes each
@@ -245,6 +249,7 @@ export interface Bank { ore: number; gold: number; seal: number; dust: number }
 // The player's commander (non-combat leader of the company), created once (L2).
 export interface Commander { name: string; crest: string; color: string }
 export interface Profile {
+  bossLoot?:Record<string,BossProgress>;
   hunt?:{target?:string;pity:Record<string,number>};
   seed: number; returns: number; tutorialDone: boolean;
   commander: Commander | null;
@@ -274,6 +279,7 @@ export interface Profile {
   last: { outcome: RunOutcome; ore: number; gold: number; seal: number; steps: number; wins: number; items: number; salvaged: number } | null;
 }
 export type ProfileEvent =
+  | {type:'bossTarget'}
   | {type:'huntTarget'}
   | {type:'storageCollected';count:number}
   | {type:'storageExpanded'}
@@ -304,6 +310,7 @@ export type BattleKind = 'tutorial' | 'random' | 'boss' | 'elite' | 'event';
 // `level`: the monster level fixed when the battle started (missing in older saves = the encounter's own level).
 export interface ActiveBattle { kind: BattleKind; encounterId: string; entry: Record<string, number>; commands: Command[]; level?: number; source?: string }
 export interface ExpeditionState {
+  bossLoot?:BossPlan;
   // Missing plan preserves legacy RNG and drop behavior until this expedition ends.
   hunt?:HuntPlan;
   mapId: string; mapVersion: number; seed: number; rolls: number;

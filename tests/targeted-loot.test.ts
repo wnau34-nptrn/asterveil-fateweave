@@ -49,16 +49,16 @@ it('freezes the target for an expedition and stores counters on every return, in
 });
 const easyLookup=(id:string)=>{const data=lookup(id);return data?{...data,enemies:data.enemies.map(e=>({...e,maxHp:1,speed:0}))}:undefined;};
 function win(s:ExpeditionState){const data=battleData(s,map,easyLookup)!;let state=battleState(s,map,easyLookup)!;while(state.outcome==='active')state=resolveCommand(state,data,{beat:state.beat,heroId:currentHeroId(state,data)!,action:'attack',targetId:state.enemies.find(e=>e.hp>0)!.id}).state;return finishBattle(recordBattle(s,map,easyLookup,state.commands),map,easyLookup);}
-it('actual victory applies one guarantee, tutorial applies none and boss keeps its original three-drop quantity',()=>{
+it('actual victory applies one guarantee, tutorial applies none and boss keeps its original three ordinary drops plus a separate boss bonus',()=>{
   const base=depart(chooseHuntTarget(newProfile(map,17),'healer').profile,map,easyLookup,77).run;base.tutorialDone=true;base.hunt!.misses=11;base.dry=5;
   const random={...base,battle:{kind:'random' as const,encounterId:map.tutorialEncounterId,entry:{...base.hp},commands:[]}};
   const out=win(random);expect(out.state.found).toHaveLength(1);expect(out.state.found[0]).toMatchObject({slot:'weapon',hero:'healer'});expect(out.state.hunt!.misses).toBe(0);expect(base.hunt!.misses).toBe(11);
   let checkedNoDrop=false;for(let seed=0;seed<20&&!checkedNoDrop;seed++){const none=win({...random,seed,dry:0});if(!none.state.found.length){expect(none.state.hunt!.misses).toBe(11);checkedNoDrop=true;}}expect(checkedNoDrop).toBe(true);
   const tutorial=win({...random,battle:{...random.battle,kind:'tutorial'}});expect(tutorial.state.found).toEqual([]);expect(tutorial.state.hunt!.misses).toBe(11);
-  const boss=win({...random,battle:{...random.battle,kind:'boss',encounterId:map.bossEncounterId}});expect(boss.state.found).toHaveLength(map.equipment.bossDrops);expect(boss.state.found[0]).toMatchObject({slot:'weapon',hero:'healer'});
+  const boss=win({...random,battle:{...random.battle,kind:'boss',encounterId:map.bossEncounterId}});expect(boss.state.found.filter(i=>!i.boss)).toHaveLength(map.equipment.bossDrops);expect(boss.state.found.filter(i=>i.boss)).toHaveLength(1);expect(boss.state.found[0]).toMatchObject({slot:'weapon',hero:'healer'});
 });
 it('save v25 roundtrips counters and active battle, rejects invalid or mismatched plans and keeps old run RNG unchanged',()=>{
-  const p=chooseHuntTarget(newProfile(map,17),'guardian').profile;p.hunt!.pity.guardian=9;const game=depart(p,map,lookup,77);game.run.battle={kind:'random',encounterId:map.tutorialEncounterId,entry:{...game.run.hp},commands:[]};let raw='';saveGame({getItem:()=>null,setItem:(_k,s)=>{raw=s;}},game);expect(JSON.parse(raw).version).toBe(26);expect(parseGame(raw,map,lookup)).toEqual(game);
+  const p=chooseHuntTarget(newProfile(map,17),'guardian').profile;p.hunt!.pity.guardian=9;const game=depart(p,map,lookup,77);game.run.battle={kind:'random',encounterId:map.tutorialEncounterId,entry:{...game.run.hp},commands:[]};let raw='';saveGame({getItem:()=>null,setItem:(_k,s)=>{raw=s;}},game);expect(JSON.parse(raw).version).toBe(27);expect(parseGame(raw,map,lookup)).toEqual(game);
   for(const change of [(g:typeof game)=>{g.run.hunt!.misses=12;},(g:typeof game)=>{g.run.hunt!.target='tracer';},(g:typeof game)=>{g.profile.hunt!.pity.guardian=-1;},(g:typeof game)=>{g.profile.hunt!.target='mira';}]){const bad=structuredClone(game);change(bad);expect(()=>parseGame(JSON.stringify({version:25,...bad}),map,lookup)).toThrow();}
   const oldRun=newExpedition(map,lookup,77),legacy=parseGame(JSON.stringify({version:24,profile:newProfile(map,17),run:oldRun}),map,lookup);expect(legacy.run).toEqual(oldRun);expect(legacy.run!.hunt).toBeUndefined();expect(legacy.profile.hunt).toEqual({pity:{}});
 });

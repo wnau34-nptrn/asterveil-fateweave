@@ -15,11 +15,13 @@ export interface HeroTalents { power?: Partial<Record<ActionId, number>>; rules?
 // Legendary equipment specials (2D-2): last stand (once per battle a downing hit leaves 1 HP),
 // mark hunter (hits on a marked enemy +amount), renewal (heal at the start of each own turn).
 export type GearSpecial = 'laststand' | 'markhunter' | 'renewal';
+export type BossPower = 'aegis' | 'focus' | 'lantern';
 // What a member's equipment adds beyond max HP/Attack/SPD/skill power (world `starred` builds it).
 // Set 4-piece bonuses (2D-3): `firstStrike` acts first in round 1, `freshHit` adds to hits on an enemy that has not
 // acted yet this round, `thorns` answers physical hits taken, `freeCast` spares the battle's first skill its cooldown,
 // `overflowCap` turns overhealing into a barrier up to that cap. A 4-piece starting barrier adds to `barrier`.
 export interface HeroGear { barrier?: number; specials?: GearSpecial[];
+  boss?:{power:BossPower;amount:number};
   firstStrike?: boolean; freshHit?: number; thorns?: number; freeCast?: boolean; overflowCap?: number }
 export type Outcome = 'active' | 'victory' | 'defeat';
 export interface SkillDefinition { name: string; english: string; icon: string; power: number; cooldown: number }
@@ -64,7 +66,7 @@ export interface EncounterDefinition {
 // `hastedRound`: an alchemist's haste makes this hero act before everyone in that round.
 // `evading`: a scout's shadow step; the first enemy hit on this hero before its next turn misses.
 // Talents: `evadeExtra` = further hits a doubled shadow step dodges; `reflect` = a ward that strikes back once when it absorbs a hit.
-export interface HeroState { id: string; hp: number; barrier: number; cooldowns: Partial<Record<ActionId, number>>; hastedRound?: number; evading?: boolean; evadeExtra?: number; reflect?: { heroId: string; amount: number } }
+export interface HeroState { id: string; hp: number; barrier: number; cooldowns: Partial<Record<ActionId, number>>; bossUsedRound?:number; hastedRound?: number; evading?: boolean; evadeExtra?: number; reflect?: { heroId: string; amount: number } }
 // `delayedRound`: an archer's hindering shot sends this enemy to the end of that round's queue.
 // `corrodeBonus`: the bonus of the flask that corroded it (talents can raise it; missing = the rule's value).
 export interface EnemyState { id: string; hp: number; markedUntil: number; interruptedRound?: number; delayedRound?: number; corrodedUntil?: number; corrodeBonus?: number }
