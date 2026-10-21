@@ -1,0 +1,225 @@
+# คิวงานภาพสำหรับ Codex (ร่าง 2026-10-21)
+
+ส่งให้ Codex ได้ทันทีโดยไม่ต้องรอโค้ด แต่ละงานคัดลอกเฉพาะกล่อง prompt ของงานนั้นไปวางใน Codex ได้เลย งานที่มีเงื่อนไขระบุไว้ในคอลัมน์ "เริ่มได้เมื่อ" แผนใหญ่อยู่ที่ `docs/MASTER_PLAN_TH.md`
+
+| ลำดับ | งาน | ใช้กับ | เริ่มได้เมื่อ |
+|---|---|---|---|
+| 1 | ART-UI-MODERN-001 mockup UI ทั้งเกม | สาย 4 UI/UX | ทันที |
+| 2 | ART-UI-ICONS-002 ไอคอนค่าสถานะและแท็บ | สาย 4 | ทันที |
+| 3 | ART-SKILL-ICON-001 ไอคอนสกิลแบบวาด 30 สกิล | สาย 2, 4 | ทันที |
+| 4 | ART-CHAR-BOSS-RUINS-001 บอสแมพ 1 | สาย 1 | ทันที |
+| 5 | ART-PET-001 concept สัตว์เลี้ยง 6 ชนิด | สาย 3 | ทันที (concept เท่านั้น) |
+| 6 | ART-VFX-BOLT-001 ภาพชั้นเอฟเฟกต์ Bolt | สาย 5 | เจ้าของอนุมัติ storyboard v1 (R03) |
+
+กติการ่วมของทุกงาน: ทำใน branch `art/<task-id-ตัวเล็ก>` จาก `feature/fateweave-initial-prototype`, ใส่ไฟล์เฉพาะใน `incoming/<TASK-ID>/`, ห้ามแก้ `src/`, `tests/`, `public/`, `.github/` และภาพที่ใช้งานอยู่, เปิด PR เข้า `feature/fateweave-initial-prototype` แต่ห้าม merge เอง (Claude ตรวจรับแล้วนำเข้าเอง)
+
+---
+
+## 1. ART-UI-MODERN-001 — mockup UI ทั้งเกม
+
+```text
+CODEX HANDOFF — ART-UI-MODERN-001
+Asterveil · Fateweave: modern game UI mockups (whole game)
+
+You are the UI art director for Asterveil · Fateweave, a Thai-language, mobile-first 2D fantasy JRPG for the browser (Phaser 4 + DOM HUD). The owner says the current UI "looks like a text game", especially the equipment screen. Produce mockup boards that redesign the main screens into a modern mobile game UI. Claude will rebuild the screens in DOM/CSS from your boards, so they are a design reference, not runtime assets.
+
+Repository wnau34-nptrn/asterveil-fateweave, base branch feature/fateweave-initial-prototype. Create branch art/art-ui-modern-001. Add files only under incoming/ART-UI-MODERN-001/. Do not change src/, tests/, public/, .github/ or existing art. Open a PR into feature/fateweave-initial-prototype; do not merge it.
+
+READ FIRST (style lock; do not modify)
+- docs/MASTER_PLAN_TH.md section 4 (UI principles and screen order).
+- incoming/ART-UI-WORLD-001/STYLE_GUIDE.md and src/ui/tokens.css: the "Luminous Veil" navy-glass palette, Kanit / Noto Sans Thai fonts.
+- public/assets/art/units.webp, units_mercs.webp, portraits*.webp: the characters (heroic chibi). Use them as they are; do not redesign characters.
+- public/assets/ui/equip/*.webp: painted gear, potion and set emblem art.
+- Run the game (npm ci && npm run dev) or read tests/browser/character.spec.ts, forge-refund.spec.ts, shared-equipment.spec.ts to see today's screens: character sheet (overview / equipment / skills / talents tabs), forge, lobby, map HUD, battle HUD, expedition summary.
+
+PROBLEMS TO SOLVE
+- Screens are tables and lines of text; web-style dropdowns; every label has the same weight.
+- Important things (the character, worn gear, power) are not more prominent than secondary details.
+- Comparison is a before/after table instead of a glanceable delta.
+
+DESIGN PRINCIPLES
+1. Icon + number instead of sentences (e.g. heart icon 102, shield icon 3%). Long explanations move behind an (i) button or long-press.
+2. Picture before text: the character full-body in the centre, six gear slots around it (paper doll: weapon, head, body, gloves, boots, charm).
+3. Compare with colour: green ▲ / red ▼ deltas next to numbers.
+4. Item tiles glow by rarity (common, uncommon, rare, epic, legendary). The glow/frame is drawn by code, so show it as a simple coloured frame + glow, never painted into item art.
+5. One component set for the whole game: primary/secondary/icon buttons, cards, icon tab bar, stat chips, item tiles, bottom sheet, toast, confirm dialog, filter chips (no dropdowns), currency pills.
+6. Text: buttons at most 2 Thai words; a skill description one line plus its key numbers.
+7. All touch targets at least 44 CSS px; nothing important within the top safe area (iPhone notch) or the bottom 16 px.
+
+DELIVERABLES (PNG, opaque is fine, 2x scale)
+Phone boards at 390x844 CSS px (export 780x1688), one screen per board:
+  01_character_equipment.png  paper doll + item grid + selected item card with compare deltas and Wear/Remove
+  02_item_detail_compare.png   bottom sheet: item card (art, rarity, level, +, set), main stat, affixes with quality bars, compare vs worn, actions (wear, forge, lock)
+  03_character_overview.png    hero art, level/EXP ring, stars, 6–8 key stats as chips, role tags
+  04_skill_tree.png            one big tree per class: 3 branches x 4 tiers, node types (active skill = round, skill modifier = diamond, passive = small square, capstone = large crest), 3 equipped-skill slots at the bottom, points counter
+  05_forge.png                 item in the centre, tabs as icons (enhance, level, fuse, craft, transfer, recycle), before→after chips, cost as icon pills, one big confirm button
+  06_lobby_hub.png             the camp scene with NPC hotspots, bottom navigation with icons, currency pills, depart button with the chosen map
+  07_map_hud.png               tile map with floating HUD (zone/danger capsule, party row, objective chip, D-pad, context action, bag)
+  08_battle_hud.png            SPD queue band, enemy intent, party HP cards, 4 skill buttons with painted icons and cooldown state
+  09_rewards_summary.png       expedition summary: rewards revealed as cards, EXP bars filling, new items glowing
+  10_hire_board.png            hiring / recruit board as character cards
+One PC board at 1366x768 (export 2732x1536) for 01_character_equipment.
+  components_sheet.png         all components with states (default, pressed, disabled, selected), rarity frames, stat chips, tabs, sheet, toast
+Also: NOTES.md (decisions, colour tokens used, font sizes, spacing scale, what to animate), and a short README listing every board.
+
+CONSTRAINTS
+- Thai text must be real readable Thai. Use these labels: เลือด, พลังโจมตี, พลังเสริม, SPD, เกราะ, ต้านพลังงาน, ดูดเลือด, โล่เริ่มศึก, ฟื้นฟูระหว่างเดิน, โชค; tabs ภาพรวม / อุปกรณ์ / สกิล / ต้นไม้; buttons สวมใส่, ถอด, ตีบวก, ยืนยัน, ออกเดินทาง.
+- Keep the existing characters, item art and world look. Do not invent new characters, logos or a new art style.
+- Navy glass + gold/cyan accents (Luminous Veil). Modern, clean, high contrast; no skeuomorphic parchment.
+- No real-money store screens in this task.
+- Do not copy layouts or assets from other commercial games.
+
+VALIDATION
+- [ ] every board at the exact size; Thai text readable at 100%
+- [ ] 44 px touch targets; safe areas respected
+- [ ] rarity shown by frame/glow only
+- [ ] same components reused across boards
+- [ ] NOTES.md lists tokens, sizes and animations
+
+RETURN
+incoming/ART-UI-MODERN-001/ with the PNG boards, components_sheet.png, NOTES.md, README.md
+```
+
+## 2. ART-UI-ICONS-002 — ไอคอนค่าสถานะและแท็บ
+
+```text
+CODEX HANDOFF — ART-UI-ICONS-002
+Asterveil · Fateweave: stat, tab and currency line icons
+
+You are the icon designer for Asterveil · Fateweave (Thai, mobile-first 2D fantasy JRPG). The UI is moving from sentences to icon + number. Produce a consistent line-icon set.
+
+Repository wnau34-nptrn/asterveil-fateweave, base branch feature/fateweave-initial-prototype. Branch art/art-ui-icons-002. Files only under incoming/ART-UI-ICONS-002/. Do not change src/, tests/, public/, .github/. PR into the base branch; do not merge.
+
+READ FIRST: src/ui/svg/*.svg (the current line icons: match stroke weight, corner style, 24x24 grid), src/ui/icons.ts (how icons are used), incoming/ART-UI-WORLD-001/STYLE_GUIDE.md.
+
+DELIVERABLES: one SVG per icon, 24x24 viewBox, stroke="currentColor", stroke-width matching the existing set, no fills except where the existing set uses them, no text.
+Stats: stat-hp (heart), stat-attack (sword spark), stat-support (radiant hand/star), stat-speed (wing/arrow, SPD), stat-armour (shield plate), stat-resist (shield with veil swirl, energy resistance), stat-leech (blood drop with return arrow), stat-barrier (dome shield), stat-regen (footsteps + plus), stat-luck (four-point star / clover), stat-level (chevron badge), stat-exp (rising bar).
+Tabs: tab-overview (person card), tab-gear (armour), tab-skills (lightning), tab-tree (branching tree), tab-forge (anvil), tab-bag (satchel), tab-team (three heads), tab-hire (contract scroll), tab-pet (paw), tab-map (folded map), tab-settings (gear wheel).
+Actions: act-wear, act-remove, act-lock, act-unlock, act-compare, act-filter, act-sort, act-reset, act-confirm.
+Plus preview.png (all icons at 16, 24, 32 px on navy #0b1730 and on white) and NOTES.md.
+
+CONSTRAINTS: readable at 16 px; one visual language with the existing src/ui/svg set; original designs only.
+
+RETURN: incoming/ART-UI-ICONS-002/svg/*.svg, preview.png, NOTES.md
+```
+
+## 3. ART-SKILL-ICON-001 — ไอคอนสกิลแบบวาด
+
+```text
+CODEX HANDOFF — ART-SKILL-ICON-001
+Asterveil · Fateweave: painted skill icons (30 skills)
+
+You are the 2D game asset producer for Asterveil · Fateweave (Thai, mobile-first 2D fantasy JRPG). Skill buttons and the coming skill tree need painted skill icons instead of line icons.
+
+Repository wnau34-nptrn/asterveil-fateweave, base branch feature/fateweave-initial-prototype. Branch art/art-skill-icon-001. Files only under incoming/ART-SKILL-ICON-001/. Do not change src/, tests/, public/, .github/. PR into the base branch; do not merge.
+
+READ FIRST (style lock): public/assets/ui/equip/gear_items.webp (painted item style: light from top-left, outline weight, saturation), public/assets/art/units.webp and units_mercs.webp (each class's weapon and colours), src/ui/svg/*.svg (today's skill line icons, for meaning), src/ui/th.ts (Thai skill names and descriptions), docs/combat-presentation/vfx-art-direction/README_TH.md (effect colours: Bolt sky-white/violet, Execute ivory/gold/rose, Ward pearl cyan with faint gold, Heal mint).
+
+SKILLS (id — class — meaning)
+Knight guardian: guard (shield a friend), bash (shield bash that cancels a physical attack), rally (raise allies).
+Duelist tracer: mark (rose mark on a foe), execute (single finishing cut), finisher (heavy finishing blow).
+Mage weaver: bolt (astral needle bolt), ward (curved light veil), sigil (rune circle).
+Priest healer: heal (mint light), prayer (lasting blessing), sanctuary (holy ground).
+Spear garran: brace (planted spear stance), pierce (piercing thrust through a line), spearwall (wall of spears).
+Archer mira: hinder (slowing arrow), volley (rain of arrows), weakshot (weak-point shot).
+Alchemist toma: acid (corroding flask), haste (speed tonic), bomb (alchemical bomb).
+Scout sefa: ambush (strike from shadow), evade (afterimage dodge), backstab (dagger from behind).
+Warden brann: taunt (rune challenge), slam (hammer slam), quake (ground quake).
+Bard lio: valor (song of courage), mend (healing melody), finale (closing chord).
+
+DELIVERABLES
+- One PNG per skill, 256x256, transparent background, the motif centred within a 200 px circle (the game crops/frames it in a round button; leave the edge empty).
+- skills_atlas.webp: all 30 in a grid of 256 px cells, same order as above, plus skills_atlas.json mapping id → cell.
+- preview.png: icons at 40, 56 and 72 px on navy #0b1730, with and without a dimmed "cooldown" overlay.
+- NOTES.md.
+
+CONSTRAINTS
+- No text, no numbers, no frames, no rarity colours; the button frame and cooldown are drawn by code.
+- Each class reads as a family (shared palette from the character), each skill clearly different in silhouette at 40 px.
+- Original designs; match the existing painted item style exactly.
+
+RETURN: incoming/ART-SKILL-ICON-001/ (png/, skills_atlas.webp, skills_atlas.json, preview.png, NOTES.md)
+```
+
+## 4. ART-CHAR-BOSS-RUINS-001 — บอสแมพ 1
+
+```text
+CODEX HANDOFF — ART-CHAR-BOSS-RUINS-001
+Asterveil · Fateweave: map-1 boss "Vanguard Captain" and "Vargoth Hunter"
+
+You are the character artist for Asterveil · Fateweave (Thai, mobile-first 2D fantasy JRPG). Map 1 "ซากชายแดน" (ruined frontier fort) ends with a new boss fight, encounter vanguard-captain: the captain of Vargoth's vanguard (หัวหน้ากองหน้า, large, front position) with a Vargoth Hunter (นักล่าเผ่าอสูร, normal, back position). Both currently use placeholder frames. Vargoth is the demon chief of the rift tribes; his vanguard attacked the fort in the prologue.
+
+Repository wnau34-nptrn/asterveil-fateweave, base branch feature/fateweave-initial-prototype. Branch art/art-char-boss-ruins-001. Files only under incoming/ART-CHAR-BOSS-RUINS-001/. Do not change src/, tests/, public/, .github/ or existing art. PR into the base branch; do not merge.
+
+READ FIRST: docs/handoffs/ART-PLACEMENT-RULES.md (enemies face LEFT; frames anchored at the soles; large foes shown ~1.5x), docs/handoffs/ART-CHAR-MERC-ENEMY-001.md (the exact atlas format, frame size, portrait format and style rules to repeat), public/assets/art/units_foes.webp and portraits_foes.webp (style and format), src/content/encounters/catalog.ts (vanguardCaptain, firstClash), src/ui/story-ui.ts (prologue lore).
+
+DESIGN
+- Vanguard Captain: armoured demon officer of the rift tribes, heavy halberd or cleaver, horned helm, violet-black armour with ember-orange cracks; reads as a boss at a glance but stays heroic-chibi. Its signature move is War Cry (energy) and Crushing Blow (physical).
+- Vargoth Hunter: lighter demon skirmisher with claws/knives, same tribe palette.
+- Same chibi proportions, line weight, lighting and saturation as the existing foes.
+
+DELIVERABLES (same format as ART-CHAR-MERC-ENEMY-001): two 512x512 full-body frames facing LEFT (units_ruins_boss.webp atlas + json with footY), two square bust portraits (portraits_ruins_boss.webp + json), preview.png on the ruins battle backdrop at phone scale (390x844), NOTES.md.
+
+CONSTRAINTS: transparent background, no text, no shadow baked in (the game draws it), consistent scale with units_foes.webp, original designs.
+
+RETURN: incoming/ART-CHAR-BOSS-RUINS-001/
+```
+
+## 5. ART-PET-001 — concept สัตว์เลี้ยง
+
+```text
+CODEX HANDOFF — ART-PET-001 (concept stage)
+Asterveil · Fateweave: companion pets, 6 concepts
+
+You are the creature designer for Asterveil · Fateweave (Thai, mobile-first 2D fantasy JRPG). A pet system is planned: the company keeps pets; one pet joins each expedition, follows the party on the tile map, and helps in battle every few rounds (small shield, small heal, a strike on a marked foe, or a cooldown tick). Pets are small companions, not party members. This task is CONCEPTS ONLY for owner approval; production sprites come in a later task.
+
+Repository wnau34-nptrn/asterveil-fateweave, base branch feature/fateweave-initial-prototype. Branch art/art-pet-001. Files only under incoming/ART-PET-001/. Do not change src/, tests/, public/, .github/. PR into the base branch; do not merge.
+
+READ FIRST: docs/MASTER_PLAN_TH.md section 3, public/assets/art/units.webp (character style and scale), public/assets/world/*.webp and incoming/ART-UI-WORLD-001/STYLE_GUIDE.md (world look), docs/handoffs/ART-PLACEMENT-RULES.md.
+
+PETS (one per zone theme; names are working titles)
+1. Meadow: a dandelion-fluff fox kit (map perk: luck) 
+2. Thicket: a moss-backed piglet (map perk: finds herbs/chests)
+3. Rift scar: a crystal moth (map perk: fog reveal +1)
+4. Ruined fort: a little gargoyle pup (battle help: small shield)
+5. Deep forest: a lantern owl (battle help: cooldown tick)
+6. Rift gate: a star-veil slime (battle help: small heal)
+
+DELIVERABLES
+- concept_sheet.png (2048x1152): all six, front 3/4 view, same scale, with a tiny silhouette test at 32 px and 64 px.
+- One turnaround per pet (front, side, back) at 1024x1024 each.
+- scale_preview.png: each pet next to the Knight from units.webp at battle scale and on a map tile at 48 px.
+- NOTES.md (palette per pet, readable features, ideas for idle/help animations).
+
+CONSTRAINTS: heroic-chibi, cute but readable; distinct silhouettes; no text; original designs; no resemblance to known franchise creatures.
+
+RETURN: incoming/ART-PET-001/
+```
+
+## 6. ART-VFX-BOLT-001 — ภาพชั้นเอฟเฟกต์ Bolt (หลังเจ้าของอนุมัติ storyboard)
+
+```text
+CODEX HANDOFF — ART-VFX-BOLT-001
+Asterveil · Fateweave: Bolt "Astral Thread" effect-only layers
+
+Start only after the owner approves the v1 Bolt storyboard (implementation plan R03). You are the VFX artist for Asterveil · Fateweave. Produce transparent effect-only texture layers for the Mage's Bolt so Claude can animate them in Phaser from the approved storyboard.
+
+Repository wnau34-nptrn/asterveil-fateweave, base branch feature/fateweave-initial-prototype. Branch art/art-vfx-bolt-001. Files only under incoming/ART-VFX-BOLT-001/. Do not change src/, tests/, public/, .github/. PR into the base branch; do not merge.
+
+READ FIRST: docs/combat-presentation/vfx-art-direction/README_TH.md (palette, layer brief, anchors, sizes, timing, things not to do) and bolt-storyboard-v1.png (shape and sequence only; never crop from it), src/game/scenes/BattleScene.ts (how effects are drawn today).
+
+LAYERS (each a separate transparent PNG, premultiplied-safe edges, no background)
+- cast_thread: thin gathering threads/petals around the staff tip, 4–6 frame flipbook, 256 px cells.
+- comet_core: the bolt head, a star/needle shape, sky-white core with violet edge, 128 px, plus a 4-frame shimmer flipbook.
+- tapered_wake: a short tapered tail (not a beam), 256x64, designed to be stretched 50–90 px along the travel axis.
+- impact_petals: contact burst, 6–8 frame flipbook, 256 px cells, radius reads at 28–40 px on a 390 px wide screen.
+- spark: 3 small spark sprites, 32 px.
+- dissolve_wisps: 4–6 frame flipbook, 256 px cells.
+Pack into bolt_fx.webp atlas + bolt_fx.json (frame names, sizes, pivots: cast at the staff tip, impact centred on body contact), and provide the source PNGs.
+
+ALSO: preview_dark.png and preview_light.png (layers composited over a dark and a bright battle background at 390x844 scale) to check alpha fringes, and NOTES.md (blend mode per layer: additive only for the light core/glow, normal alpha for coloured edges; suggested scale and timing per the README table).
+
+CONSTRAINTS: no text, no UI, no characters; no full-screen flashes; shapes tapered and intentional, not uniform circles or thick straight beams.
+
+RETURN: incoming/ART-VFX-BOLT-001/
+```
