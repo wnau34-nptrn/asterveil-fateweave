@@ -1,4 +1,4 @@
-import type { HeroGear, ActionId, BattleEntry, GearSpecial, HeroDefinition, PassiveId, TalentCap, TalentRule, HeroState, EnemyState, BattleEvent, BattleState, Command, EncounterDefinition, Intent, Resolution, TargetOption, TurnSlot, TurnStage } from './types';
+import type { EnemyTrait, HeroGear, ActionId, BattleEntry, GearSpecial, HeroDefinition, PassiveId, TalentCap, TalentRule, HeroState, EnemyState, BattleEvent, BattleState, Command, EncounterDefinition, Intent, Resolution, TargetOption, TurnSlot, TurnStage } from './types';
 
 const living = (state: BattleState, id: string) => [...state.heroes, ...state.enemies].some(a => a.id === id && a.hp > 0);
 const definitions = (data: EncounterDefinition) => [...data.heroes, ...data.enemies];
@@ -202,8 +202,26 @@ function leech(state: BattleState, data: EncounterDefinition, heroId: string, de
   const amount = def && hero && hero.hp > 0 ? Math.min(Math.floor(dealt * Math.min(data.rules.leechCap, def.leech ?? 0) / 100), def.maxHp - hero.hp) : 0;
   if (amount > 0) { hero!.hp += amount; events.push({ type: 'heal', sourceId: heroId, targetId: heroId, amount, text: 'Leech.' }); }
 }
+// Hard-mode traits (A9). A veilguarded foe takes less unless it is marked or corroded.
+const hasTrait = (data: EncounterDefinition, enemyId: string, trait: EnemyTrait): boolean => !!data.enemies.find(e => e.id === enemyId)?.traits?.includes(trait);
+function veiled(state: BattleState, data: EncounterDefinition, enemy: EnemyState, raw: number): number {
+  const t = data.rules.traits; if (!t || !hasTrait(data, enemy.id, 'veilguard')) return raw;
+  return enemy.markedUntil > state.round || (enemy.corrodedUntil ?? 0) > state.round ? raw : Math.ceil(raw * (1 - t.veilguardPercent / 100));
+}
+// A thorned foe answers each hero hit that damaged it; thorns never take the hero below 1 HP.
+function thorned(state: BattleState, data: EncounterDefinition, enemy: EnemyState, heroId: string, dealt: number, events: BattleEvent[]): void {
+  const t = data.rules.traits; const hero = state.heroes.find(h => h.id === heroId);
+  if (!t || !dealt || !hero || hero.hp <= 1 || !hasTrait(data, enemy.id, 'thorns')) return;
+  const back = Math.min(hero.hp - 1, Math.max(1, Math.floor(dealt * t.thornsPercent / 100))); hero.hp -= back;
+  events.push({ type: 'damage', sourceId: enemy.id, targetId: heroId, amount: back, absorbed: 0, text: 'Thorns.' });
+}
+// An enraged foe below its HP share hits harder.
+export function enraged(state: BattleState, data: EncounterDefinition, enemyId: string): boolean {
+  const t = data.rules.traits; const e = state.enemies.find(x => x.id === enemyId); const def = data.enemies.find(x => x.id === enemyId);
+  return !!t && !!e && !!def && hasTrait(data, enemyId, 'enrage') && e.hp > 0 && e.hp * 100 <= def.maxHp * t.enrageBelow;
+}
 function strikeBack(state: BattleState, data: EncounterDefinition, heroId: string, enemy: EnemyState, power: number, events: BattleEvent[], text: string): void {
-  const dealt = Math.min(enemy.hp, power + hitBonus(state, data, enemy.id)); enemy.hp -= dealt;
+  const dealt = Math.min(enemy.hp, veiled(state, data, enemy, power + hitBonus(state, data, enemy.id))); enemy.hp -= dealt;
   events.push({ type: 'counter', sourceId: heroId, targetId: enemy.id, amount: dealt, text });
   if (!enemy.hp) events.push({ type: 'down', targetId: enemy.id, text: 'Enemy falls.' });
   leech(state, data, heroId, dealt, events);
@@ -271,7 +289,8 @@ function automaticTurns(state: BattleState, data: EncounterDefinition, turns: Tu
           if (hasPassive(data, recipient.id, 'shadowcounter')) strikeBack(state, data, recipient.id, enemy, data.rules.shadowCounter, events, 'The scout strikes back from the shadows.');
         } else {
           // Reductions apply in order: Guard, a taunting warden (stoneskin ★5 is stronger), then a knight's rally.
-          let incoming = guard ? Math.ceil(intent.damage * (1 - guardReductionOf(data, guard.heroId))) : intent.damage;
+          const raw = enraged(state, data, enemy.id) ? Math.ceil(intent.damage * (1 + data.rules.traits!.enragePercent / 100)) : intent.damage;
+          let incoming = guard ? Math.ceil(raw * (1 - guardReductionOf(data, guard.heroId))) : raw;
           let protector = guard?.heroId;
           if (state.taunt?.heroId === recipient.id) incoming = Math.ceil(incoming * (1 - tauntReductionOf(data, recipient.id)));
           const rally = state.rally;
@@ -393,10 +412,11 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
   const strike = (foe: EnemyState, power: number, text: string) => {
     const boss=foe===enemy&&targetKind(command.action)==='enemy'&&power>0&&foe.markedUntil>state.round?bossPowerReady(state,data,hero.id,'focus'):0;
     if(boss)actor.bossUsedRound=state.round;
-    const amount = Math.min(foe.hp, power + boss + hitBonus(state, data, foe.id) + talentHitBonus(state, data, hero.id, foe)); foe.hp -= amount;
+    const amount = Math.min(foe.hp, veiled(state, data, foe, power + boss + hitBonus(state, data, foe.id) + talentHitBonus(state, data, hero.id, foe))); foe.hp -= amount;
     events.push({ type: 'damage', sourceId: hero.id, targetId: foe.id, amount, text });
     if (!foe.hp) events.push({ type: 'down', targetId: foe.id, text: 'Enemy falls.' });
     leech(state, data, hero.id, amount, events);
+    thorned(state, data, foe, hero.id, amount, events);
   };
   const damage = (power: number) => strike(enemy!, power, 'Hero attacks.');
   // Split bolt / piercing line (talents): the other living enemies take half the skill power.

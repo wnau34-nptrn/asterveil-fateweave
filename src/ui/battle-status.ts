@@ -45,6 +45,11 @@ export function unitStatuses(s: BattleState, d: EncounterDefinition, id: string)
     if (s.solace?.targetId === id && alive(s.solace.heroId)) add('solace', 'heal', 'แสงปลอบประโลม', `ลดความเสียหาย ${capAmount(d, s.solace.heroId, 'solace')}% · จาก${name(s.solace.heroId)}`, untilTurn(s.solace.heroId));
   }
   if (enemy) {
+    // Hard-mode traits (A9): always on for this foe.
+    const t = d.rules.traits; const traits = d.enemies.find(e => e.id === id)?.traits ?? [];
+    if (t && traits.includes('thorns')) add('thorns', 'pierce', 'หนาม', `ตีโดนแล้วผู้ตีเสียเลือด ${t.thornsPercent}% ของความเสียหาย (ไม่ต่ำกว่า 1)`, 'ตลอดศึก');
+    if (t && traits.includes('veilguard')) add('veilguard', 'ward', 'เกราะพลังงาน', `รับความเสียหายลดลง ${t.veilguardPercent}% เว้นแต่ติดตราหรือกัดกร่อน`, 'ตลอดศึก');
+    if (t && traits.includes('enrage')) add('enrage', 'slam', 'เดือดดาล', `เลือดต่ำกว่า ${t.enrageBelow}% ท่าแรงขึ้น ${t.enragePercent}%`, 'ตลอดศึก');
     if (enemy.markedUntil > s.round) {
       const users = d.heroes.filter(h => h.empoweredByStatuses).map(h => name(h.id)).join(' / ') || 'ผู้มีท่าใช้ตรา';
       add('mark', 'mark', 'ติดตรา', `${users}ใช้โจมตีปกติหรือ${d.skills.execute.name} สร้างความเสียหายเพิ่ม ${d.rules.markedBonus} และใช้ตราหมด`, `${rounds(enemy.markedUntil)} หรือถูกใช้ตราโจมตี`, 'debuff');

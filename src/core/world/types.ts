@@ -245,6 +245,8 @@ export interface ProgressionRules {
   // Hard mode (A9): every battle but the prologue fights `hardLevels` levels higher; the first hard clear of a map pays
   // `hardFirstClear` once.
   hardLevels: number; hardFirstClear: { gold: number; seal: number };
+  // Hard-mode foes (A9 part 2): trait numbers for the resolver and the boss's extra move (percent of its heaviest).
+  hardTraits: { thornsPercent: number; veilguardPercent: number; enrageBelow: number; enragePercent: number; bossMovePercent: number };
 }
 // Mercenary company rules (draft numbers). starCosts[i] upgrades ★(i+1) → ★(i+2).
 // 4A camp market: each item has a gold price and a limit per return home. The gear box rolls a rare-or-better

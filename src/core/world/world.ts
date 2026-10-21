@@ -2,7 +2,7 @@ import {bossReward} from './boss-equipment';
 import {huntedReward} from './targeted-loot';
 import { replay, withLevel, withParty } from '../battle/engine';
 import { boulderAt, leverPuzzleAt, openPit, passableWall, runePuzzleAt, secretAt } from './puzzles';
-import type { BattleState, Command, EncounterDefinition, HeroDefinition, HeroTalents } from '../battle/types';
+import type { EnemyTrait, BattleState, Command, EncounterDefinition, HeroDefinition, HeroTalents } from '../battle/types';
 import type { RecruitPoint, ActiveBattle, BattleKind, ChestDefinition, Company, Direction, ExpGain, ExpeditionState, LootTable, MapDefinition, MemberProgress, Point, PotionId, Resources, Talents, Tile, WorldEvent, WorldResult, ZoneDefinition, Gear, Item, EliteDefinition, EventChoice, MapEventDefinition, MapEventKind, GearSlot } from './types';
 import { affixPool, gearTotals } from './equipment';
 import { memberTalentReason } from './talents';
@@ -503,11 +503,26 @@ function dropItems(state: ExpeditionState, map: MapDefinition, kind: BattleKind,
   return items;
 }
 // The encounter as fought by the deployed party, in slot order.
+// Hard mode (A9 part 2): every foe gets one trait, fixed by the encounter and its position; a boss gets enrage and
+// veilguard plus one extra move, a heavier copy of its heaviest move in the other damage kind.
+const TRAITS: readonly EnemyTrait[] = ['thorns', 'veilguard', 'enrage'];
+export function hardEncounter(data: EncounterDefinition, kind: BattleKind, map: MapDefinition): EncounterDefinition {
+  const t = map.progression.hardTraits; const salt = [...data.id].reduce((n, c) => n + c.charCodeAt(0), 0);
+  const enemies = data.enemies.map((e, i) => ({ ...e, traits: kind === 'boss' ? ['enrage', 'veilguard'] as EnemyTrait[] : [TRAITS[(salt + i) % TRAITS.length]!] }));
+  let intents = data.intents;
+  if (kind === 'boss') {
+    const source = (data.enemies.find(e => e.id === 'brute') ?? data.enemies[0]!).id;
+    const heaviest = [...data.intents].filter(i => i.sourceId === source).sort((a, b) => b.damage - a.damage)[0]!;
+    intents = [...data.intents, { sourceId: source, targetSlot: 0, name: 'Rift Fury', damage: Math.ceil(heaviest.damage * t.bossMovePercent / 100), kind: heaviest.kind === 'physical' ? 'energy' : 'physical' }];
+  }
+  return { ...data, enemies, intents, rules: { ...data.rules, traits: { thornsPercent: t.thornsPercent, veilguardPercent: t.veilguardPercent, enrageBelow: t.enrageBelow, enragePercent: t.enragePercent } } };
+}
 export function battleData(state: ExpeditionState, map: MapDefinition, lookup: EncounterLookup): EncounterDefinition | undefined {
   const base = state.battle && lookup(state.battle.encounterId);
   // Hard mode (A9): every battle but the prologue fights `hardLevels` higher.
   const hard = state.hard && state.battle!.kind !== 'tutorial' ? map.progression.hardLevels : 0;
-  const data = base && withLevel(base, (state.battle!.level ?? base.level ?? 1) + hard, map.progression.monsterLevelPercent);
+  const leveled = base && withLevel(base, (state.battle!.level ?? base.level ?? 1) + hard, map.progression.monsterLevelPercent);
+  const data = leveled && hard ? hardEncounter(leveled, state.battle!.kind, map) : leveled;
   const party = state.roster.deployed.map(id => memberDef(lookup, map, state.members, id));
   return data && party.every(Boolean) ? withParty(data, party as HeroDefinition[]) : undefined;
 }

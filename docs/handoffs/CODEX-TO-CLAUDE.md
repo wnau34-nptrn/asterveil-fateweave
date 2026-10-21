@@ -3,8 +3,8 @@
 ## 2026-10-21 — Claude: master plan release A progress (chapters, recruits, unlocks, hard mode)
 
 - Owner approved `docs/MASTER_PLAN_TH.md` in full; Codex art prompts are in `docs/handoffs/CODEX-ART-QUEUE-TH.md`, lore draft `docs/LORE_CHAPTER1_TH.md`, Knight tree draft `docs/design/SKILL_TREE_KNIGHT_TH.md`.
-- Shipped on `feature/fateweave-initial-prototype`: maps 1 ซากชายแดน / 2 เส้นทางป่าทึบ / 3 แนวรอยแยก (`MAPS`, shared `gameRules`), Codex systems made multi-map (forge item-Lv cap only from the frontier, teaching-boss drops, per-map boss names), camp name (v29), one-Knight start with story recruits and catch-up EXP (v30), lobby systems by chapter (v31, veterans keep everything), guided tasks (v32), hard mode part 1 (v33).
-- Next: hard-mode enemy traits/boss moves, A6 big skill tree (after owner reads the Knight draft), A10 balance (re-level the frontier to Lv6–10), UI/FX once Codex art arrives.
+- Shipped on `feature/fateweave-initial-prototype`: maps 1 ซากชายแดน / 2 เส้นทางป่าทึบ / 3 แนวรอยแยก (`MAPS`, shared `gameRules`), Codex systems made multi-map (forge item-Lv cap only from the frontier, teaching-boss drops, per-map boss names), camp name (v29), one-Knight start with story recruits and catch-up EXP (v30), lobby systems by chapter (v31, veterans keep everything), guided tasks (v32), hard mode part 1 (v33) and part 2 (enemy traits thorns/veilguard/enrage in the pure resolver via `rules.traits`, boss 'Rift Fury' move, status rows; no save change).
+- Next: hard-mode small map tweaks, A6 big skill tree (Knight draft approved by the owner 2026-10-21), A10 balance (re-level the frontier to Lv6–10), UI/FX once Codex art arrives.
 
 ## 2026-10-21 — Owner rejects phase2 visuals; artwork-first handoff overrides phase3 priority
 

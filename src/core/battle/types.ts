@@ -43,7 +43,10 @@ export interface HeroDefinition {
   gear?: HeroGear;
 }
 // `id` is the field position (`raider` back, `brute` front/large); `art` names the illustrated frame (presentation only).
-export interface EnemyDefinition { id: string; name: string; displayName?: string; maxHp: number; speed: number; color: number; art?: string }
+// Hard-mode traits (master plan A9): thorns answers a hero's hit, veilguard blunts hits on a foe that is neither marked
+// nor corroded, enrage strengthens its moves below a share of its HP. Numbers come from `rules.traits`.
+export type EnemyTrait = 'thorns' | 'veilguard' | 'enrage';
+export interface EnemyDefinition { id: string; name: string; displayName?: string; maxHp: number; speed: number; color: number; art?: string; traits?: readonly EnemyTrait[] }
 // Enemy moves aim at a party slot (0-3 in deployment order), not a named hero, so any
 // mercenary in that slot is the target. The resolved hero id is stored on Intent.
 export interface IntentDefinition { sourceId: string; targetSlot: number; name: string; damage: number; kind: 'physical' | 'energy' }
@@ -55,7 +58,7 @@ export interface EncounterDefinition {
   skills: Record<ActionId, SkillDefinition>;
   // corrode*: alchemist acid adds a flat bonus to every hero hit on the target for corrodeDuration rounds.
   // ambushBonus: scout ambush adds this when the target has not acted yet this round.
-  rules: { guardReduction: number; markDuration: number; markedBonus: number; corrodeDuration: number; corrodeBonus: number; ambushBonus: number; tauntReduction: number;
+  rules: { traits?: { thornsPercent: number; veilguardPercent: number; enrageBelow: number; enragePercent: number }; guardReduction: number; markDuration: number; markedBonus: number; corrodeDuration: number; corrodeBonus: number; ambushBonus: number; tauntReduction: number;
     // ★3/★5 numbers (drafts): see docs/EXPEDITION_DESIGN.md "Star unlocks".
     rallyReduction: number; finisherThreshold: number; echoBonus: number; afterglowCap: number; heavyCounter: number;
     weakshotBonus: number; quakeBonus: number; shadowCounter: number; stoneskinReduction: number; resound: number; finaleHeal: number;
