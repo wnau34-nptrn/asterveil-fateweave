@@ -847,3 +847,7 @@ html, body { background: #0a1422; }
 .lobby-camp-button:focus-visible { outline: 2px solid var(--gold-light); outline-offset: 2px; }
 .camp-rename { display: grid; gap: 14px; padding: 4px 2px; }
 .camp-rename button { min-height: 44px; }
+/* Lobby systems by chapter (A3): a locked sheet names the map that opens it. */
+.lobby-locked { display: flex; gap: 14px; align-items: center; padding: 18px 16px; border-radius: 16px; background: #0b173099; border: 1px solid #f2d59633; }
+.lobby-locked svg { width: 32px; height: 32px; color: var(--gold-light); flex: none; }
+.lobby-locked p { display: grid; gap: 4px; margin: 0; } .lobby-locked b { font-size: 17px; color: #fff6e0; } .lobby-locked span { color: #c9d4e2; font-size: 14px; }

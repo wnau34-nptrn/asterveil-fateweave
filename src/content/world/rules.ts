@@ -5,7 +5,7 @@ import { talentTrees } from '../heroes/talents';
 // Game-wide rules shared by every map (chapters plan, owner-approved 2026-10-17): the company, progression, gear,
 // forge, potions, market, talents, event numbers and the camp NPCs' side quests. A map spreads these and adds its
 // own board, zones, encounters, loot and objectives; tests check that every map uses this exact object.
-export type GameRules = Pick<MapDefinition, 'tutorialEncounterId' | 'camp' | 'startingRoster' | 'firstCompany' | 'mercenaries' | 'shop' | 'company' | 'progression' | 'talents'
+export type GameRules = Pick<MapDefinition, 'tutorialEncounterId' | 'camp' | 'startingRoster' | 'firstCompany' | 'unlocks' | 'mercenaries' | 'shop' | 'company' | 'progression' | 'talents'
   | 'eventRules' | 'potions' | 'equipment' | 'sideQuests'>;
 export const gameRules: GameRules = {
   // The prologue's first battle (Vargoth's vanguard).
@@ -24,6 +24,9 @@ export const gameRules: GameRules = {
   startingRoster: ['guardian', 'tracer', 'weaver', 'healer'],
   // A new ค่ายทหารรับจ้าง starts with the Knight alone (owner 2026-10-21); the other three join on map 1.
   firstCompany: ['guardian'],
+  // Master plan A3 (owner 2026-10-21): the chapter whose map opens each lobby system. A chapter whose map is not built
+  // yet falls back to the latest built chapter before it.
+  unlocks: { tree: 1, forge: 1, brew: 1, gear: 1, level: 2, quests: 2, hire: 3, team: 3, market: 3, fuse: 5, craft: 5, hunt: 5, transfer: 7, bossCharm: 9 },
   // Phase 4A (draft): the camp market, paid in gold coins, and paid hiring-board refreshes (2 per return).
   shop: {
     items: { seal: { price: 60, limit: 2 }, contract: { price: 150, limit: 1 }, gearbox: { price: 120, limit: 1 }, repel: { price: 30, limit: 2 } },

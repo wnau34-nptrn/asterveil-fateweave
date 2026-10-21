@@ -9,9 +9,9 @@ import { newGearFilters, changeGearFilter, filteredEquipment, gearFilters as gea
 import { shortcutBlocked } from '../platform/keyboard';
 import type { BossPower, ActionId, HeroDefinition } from '../core/battle/types';
 import { withParty } from '../core/battle/engine';
-import { NAME_MAX, mapUnlocked, boardOffers, brewReason, buyReason, claimReason, sealLimit, refreshReason, shopLeft, dismissReason, equip, groupOf, hireReason, talentPoints, talentsSpent, upgradeCost, upgradeReason, type Group } from '../core/world/profile';
+import { featureMap, featureOpen, NAME_MAX, mapUnlocked, boardOffers, brewReason, buyReason, claimReason, sealLimit, refreshReason, shopLeft, dismissReason, equip, groupOf, hireReason, talentPoints, talentsSpent, upgradeCost, upgradeReason, type Group } from '../core/world/profile';
 import { salvageValue } from '../core/world/equipment';
-import { COMPANY_CAP, PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS, SHOP_ITEMS, type GearSlot, type ShopItemId, type MapDefinition, type PotionId, type Profile, type TalentNode } from '../core/world/types';
+import { COMPANY_CAP, PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS, SHOP_ITEMS, type GearSlot, type LobbyFeature, type ShopItemId, type MapDefinition, type PotionId, type Profile, type TalentNode } from '../core/world/types';
 import { expToNext, starred, type EncounterLookup } from '../core/world/world';
 import { actorArt, actorFootOrigins, lobbyArt, lobbyPose, NPC_IDS, npcAtlasUrl, npcBustsUrl, npcStationsUrl, unitsUrl, type LobbyPose, type NpcId } from '../game/visuals/assets';
 import { icon } from './icons';
@@ -88,6 +88,7 @@ export class LobbyUI {
       const id = b.dataset.hero;
       switch (b.dataset.lobby) {
         case 'npc': { const npc = b.dataset.npc as NpcId; const sheet = npcSpots[npc].sheet;
+          if(sheet==='tree'&&!this.open('tree')){this.sheet='tree';this.draw();this.act(npc,'greet',1400);this.focus(`#npc-${npc}`);break;}
           if(sheet==='tree'){const id=this.view!.profile.party.deployed[0]??this.view!.profile.company[0];if(id){this.act(npc,'greet',1400);this.characters.openFor(id,'talents',b);}break;}
           // The trainer and keeper open for the first deployed member; the others open their own sheet.
           if (sheet === 'gear') this.picked = this.view!.profile.party.deployed[0];
@@ -170,7 +171,7 @@ export class LobbyUI {
   }
   // 3D: this NPC's side quest, with progress gathered from finished expeditions and a one-time claim.
   private questCard(npc: NpcId): string {
-    const q = this.map.sideQuests.find(s => s.npc === npc); if (!q) return '';
+    const q = this.map.sideQuests.find(s => s.npc === npc); if (!q || !this.open('quests')) return '';
     const p = this.view!.profile; const st = p.quests[q.id] ?? { progress: 0, claimed: false }; const reason = claimReason(p, this.map, q.id); const t = sideQuestText[q.kind];
     return `<section class="side-quest" id="quest-${q.id}" data-state="${st.claimed ? 'claimed' : reason ? 'open' : 'ready'}" aria-label="เควสต์ ${t.name}">
       <p class="side-quest-head">${icon('flag')}<b>${t.name}</b><small>${st.progress}/${q.target}</small></p>
@@ -245,7 +246,7 @@ export class LobbyUI {
     // A ready side quest puts a "!" over its NPC.
     for (const q of this.map.sideQuests) this.root.querySelector(`#npc-${q.npc}`)?.classList.toggle('quest-ready', !claimReason(p, this.map, q.id));
     if (scene !== this.sceneDrawn) { this.root.querySelector('.lobby-scene-host')!.innerHTML = scene; this.sceneDrawn = scene; }
-    const menu = (id: Exclude<Sheet,'tree'>, glyph: Parameters<typeof icon>[0], label: string, badge: string) =>
+    const menu = (id: Exclude<Sheet,'tree'>, glyph: Parameters<typeof icon>[0], label: string, shown: string, badge = this.locked(id) ? '🔒' : shown) =>
       `<button id="lobby-tab-${id}" data-lobby="tab" data-tab="${id}" class="lobby-menu-button${this.sheet === id || id === 'team' && this.sheet === 'tree' ? ' active' : ''}" aria-expanded="${this.sheet === id || id === 'team' && this.sheet === 'tree'}" aria-controls="lobby-sheet">${icon(glyph)}<span>${label}</span>${badge ? `<small>${badge}</small>` : ''}</button>`;
     const openOffers = boardOffers(p, this.map, this.lookup).filter((_, i) => !hireReason(p, this.map, this.lookup, i)).length;
     this.root.querySelector('.lobby-hud')!.innerHTML = `
@@ -259,7 +260,7 @@ export class LobbyUI {
       ${this.sheet ? `<section id="lobby-sheet" class="lobby-sheet" role="dialog" aria-modal="false" aria-labelledby="lobby-sheet-title">
         <div class="lobby-sheet-head">${this.sheet === 'tree' || this.sheet === 'gear' ? `<button id="lobby-sub-back" data-lobby="sub-back" class="round-glass" aria-label="กลับไปจัดทีม">${icon('left')}</button>` : ''}<h2 id="lobby-sheet-title">${this.sheet === 'team' ? `${icon('flag')} จัดทีม <small>${p.company.length}/${COMPANY_CAP}</small>` : this.sheet === 'tree' ? `${icon('starFilled')} ต้นไม้ความถนัด` : this.sheet === 'gear' ? `${icon('gearBody')} อุปกรณ์ <small>คลัง ${p.items.length}/${storageCap(p,this.map)}</small>` : this.sheet === 'forge' ? `${icon('forge')} ช่างตีเหล็ก` : this.sheet === 'hunt'?`${icon('goal')} แผนฟาร์ม`:this.sheet === 'brew' ? `${icon('brew')} นักปรุงยา` : this.sheet === 'camp' ? `${icon('camp')} ชื่อค่ายทหารรับจ้าง` : this.sheet === 'maps' ? `${icon('map')} เลือกแผนที่` : `${icon('gold')} ป้ายจ้างทหารรับจ้าง`}</h2>
           <button data-lobby="close" class="round-glass" aria-label="ปิด">${icon('close')}</button></div>
-        <div class="lobby-content">${this.sheet==='forge'?'':this.sheet==='gear'?`<details class="storage-keeper"><summary>มิมี่ · งานผู้ดูแลคลัง</summary>${this.npcLine(this.sheet)}</details>`:this.npcLine(this.sheet as Sheet | null)}${this.sheet==='hunt'?this.huntUI.render(p,this.map,this.openMaps().some(m=>m.bossCharm)):this.sheet === 'team' ? this.team(p) : this.sheet === 'gear' && this.picked ? this.gear(p, this.picked) : this.sheet === 'forge' ? this.forge(p) : this.sheet === 'brew' ? this.brewing(p) : this.sheet === 'maps' ? this.mapList(p) : this.sheet === 'camp' ? this.campForm(p) : this.board(p)}</div></section>` : ''}
+        <div class="lobby-content">${this.sheet==='forge'?'':this.sheet==='gear'?`<details class="storage-keeper"><summary>มิมี่ · งานผู้ดูแลคลัง</summary>${this.npcLine(this.sheet)}</details>`:this.npcLine(this.sheet as Sheet | null)}${this.locked(this.sheet) ? this.lockedPanel(this.locked(this.sheet)!) : this.sheet==='hunt'?this.huntUI.render(p,this.map,this.open('bossCharm')):this.sheet === 'team' ? this.team(p) : this.sheet === 'gear' && this.picked ? this.gear(p, this.picked) : this.sheet === 'forge' ? this.forge(p) : this.sheet === 'brew' ? this.brewing(p) : this.sheet === 'maps' ? this.mapList(p) : this.sheet === 'camp' ? this.campForm(p) : this.board(p)}</div></section>` : ''}
       <footer class="lobby-bottom">
         <nav class="lobby-menu" aria-label="ค่าย">${menu('team', 'flag', 'ทีม', `${p.party.deployed.length}+${p.party.reserve.length}`)}${menu('hire', 'gold', 'จ้าง', openOffers ? String(openOffers) : '')}${menu('gear', 'pack', 'กระเป๋า', p.items.length ? String(p.items.length) : '')}${menu('hunt', 'goal', 'ฟาร์ม', '')}${menu('forge', 'forge', 'ช่าง', '')}${menu('brew', 'brew', 'ยา', '')}</nav>
         ${this.openMaps().length > 1 ? `<button id="lobby-maps" data-lobby="maps" class="secondary">${icon('map')}<span>เลือกแผนที่</span></button>` : ''}
@@ -355,7 +356,7 @@ export class LobbyUI {
           <button id="brew-${id}" data-lobby="brew" data-potion="${id}" class="secondary"${reason ? ' disabled' : ''}>${reason ? why[reason] : `ปรุง · แร่ ${cost.ore} ผง ${cost.dust}`}</button></li>`; }).join('')}</ul>
       <details class="lobby-help"><summary>${icon('info')} ยาใช้อย่างไร</summary><p>ใช้บนแผนที่จากปุ่มสัมภาระ ใช้ระหว่างต่อสู้ไม่ได้ · ยาที่เหลือกลับค่ายเมื่อจบด่านหรือถอนตัว ถ้าทีมล้มหมดยาที่พาไปจะหาย · กล่องสมบัติมีโอกาสได้ยา</p></details>`;
   }
-  private forge(p:Profile):string {return this.forgeUI.render(p);}
+  private forge(p:Profile):string {return this.forgeUI.render(p,f=>this.open(f));}
   // Opens the member's talent tree in its own sheet.
   private treeButton(p: Profile, id: string): string {
     if (!this.map.talents[id]) return '';
@@ -401,6 +402,16 @@ export class LobbyUI {
       <input id="camp-name" type="text" autocomplete="off" enterkeyhint="done" maxlength="${NAME_MAX * 2}" value="${this.escape(name)}" aria-describedby="camp-name-hint">
       <small id="camp-name-hint" class="commander-hint">1–${NAME_MAX} ตัวอักษร (ไม่ใช้ &lt; &gt;) · แสดงในค่ายและหน้าสรุปการเดินทาง</small></label>
       <button id="camp-save" data-lobby="camp-save" class="primary">${icon('check')} บันทึกชื่อ</button></div>`;
+  }
+  // Lobby systems by chapter (A3). A locked sheet still opens, showing which map opens it.
+  private open(feature: LobbyFeature): boolean { const p = this.view?.profile; return !p || featureOpen(p, this.maps, feature); }
+  private locked(sheet: Sheet | null): LobbyFeature | undefined {
+    const feature: Partial<Record<Sheet, LobbyFeature>> = { team: 'team', hire: 'hire', gear: 'gear', forge: 'forge', brew: 'brew', hunt: 'hunt', tree: 'tree' };
+    const f = sheet ? feature[sheet] : undefined; return f && !this.open(f) ? f : undefined;
+  }
+  private lockedPanel(feature: LobbyFeature): string {
+    const m = featureMap(this.maps, feature);
+    return `<div class="lobby-locked" role="status">${icon('seal')}<p><b>ยังไม่เปิด</b><span>ผ่านแผนที่ ${m?.chapter ?? ''} · ${m?.name ?? ''} ก่อน แล้วระบบนี้จะพร้อมใช้</span></p></div>`;
   }
   private openMaps(): MapDefinition[] { const p = this.view?.profile; return p ? this.maps.filter(m => mapUnlocked(p, this.maps, m.id)) : [this.map]; }
   private mapList(p: Profile): string {

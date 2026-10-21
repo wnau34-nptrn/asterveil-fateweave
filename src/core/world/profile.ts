@@ -2,7 +2,7 @@ import {startBossPlan} from './boss-equipment';
 import {startHunt} from './targeted-loot';
 import {storageCap,departureBlocked} from './storage';
 import { memberTalentReason, talentsSpent } from './talents';
-import type { Commander, ShopItemId, SideQuestKind, ExpeditionState, Gear, GearSlot, Item, MapDefinition, PotionId, Potions, Profile, ProfileResult, RunOutcome, TalentNode } from './types';
+import type { LobbyFeature, Commander, ShopItemId, SideQuestKind, ExpeditionState, Gear, GearSlot, Item, MapDefinition, PotionId, Potions, Profile, ProfileResult, RunOutcome, TalentNode } from './types';
 import { rollItem, salvageValue } from './equipment';
 import { COMPANY_CAP, GEAR_SLOTS, PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS, SET_IDS } from './types';
 import { heroCatalog, levelOf, memberDef, newExpedition, rollPercent, rosterIds, type EncounterLookup } from './world';
@@ -317,6 +317,16 @@ export function homeItems(run: ExpeditionState, outcome: RunOutcome, map: MapDef
   const finds = runFinds(run); if (outcome !== 'wiped') return finds;
   return finds.map((item, i) => ({ item, i })).sort((a, b) => b.item.rarity - a.item.rarity || b.item.level - a.item.level || a.i - b.i)
     .slice(0, map.equipment.wipeKeep).sort((a, b) => a.i - b.i).map(x => x.item);
+}
+// Lobby systems by chapter (A3): the map that opens a feature is the built map of the latest chapter at or before the
+// one listed; a company that predates the unlocks (`veteran`) has everything open.
+export function featureMap(maps: readonly MapDefinition[], feature: LobbyFeature): MapDefinition | undefined {
+  const need = maps[0]?.unlocks[feature] ?? 0;
+  return [...maps].filter(m => m.chapter <= need).sort((a, b) => b.chapter - a.chapter)[0];
+}
+export function featureOpen(profile: Profile, maps: readonly MapDefinition[], feature: LobbyFeature): boolean {
+  const m = featureMap(maps, feature);
+  return !!profile.veteran || !m || profile.cleared.includes(m.id);
 }
 // Chapters (2026-10-17): the first map is always open; each later map opens once the one before it is cleared.
 export function mapUnlocked(profile: Profile, maps: readonly MapDefinition[], id: string): boolean {

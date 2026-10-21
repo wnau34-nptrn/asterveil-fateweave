@@ -41,6 +41,8 @@ export interface MapDefinition {
   // Story recruits (master plan A2): heroes not yet in the company travel this map as guests and join for good at
   // the prologue win, on reaching a camp, or on beating the boss. `firstCompany`: a new company's only member.
   recruits?: readonly { hero: string; at: RecruitPoint }[]; firstCompany: readonly string[];
+  // Lobby systems open by chapter (master plan A3): the chapter number whose map must be cleared first.
+  unlocks: Readonly<Record<LobbyFeature, number>>;
   rows: readonly string[];
   // Floor characters map to zones; S/C/B/G take the zone of `specialZone` entries.
   floorZones: Readonly<Record<string, string>>;
@@ -273,6 +275,8 @@ export interface Profile {
   hunt?:{target?:string;pity:Record<string,number>};
   seed: number; returns: number; tutorialDone: boolean;
   commander: Commander | null;
+  // A company saved before lobby systems opened by chapter (save v31) keeps every system open.
+  veteran?: true;
   // Every owned mercenary in display order, with stars and stored duplicates.
   company: string[]; members: Record<string, MemberProgress>;
   // The 4 + 4 chosen for the next expedition (subset of `company`).
@@ -332,6 +336,7 @@ export type BattleKind = 'tutorial' | 'random' | 'boss' | 'elite' | 'event';
 // `level`: the monster level fixed when the battle started (missing in older saves = the encounter's own level).
 export interface ActiveBattle { kind: BattleKind; encounterId: string; entry: Record<string, number>; commands: Command[]; level?: number; source?: string }
 export type RecruitPoint = 'prologue' | 'camp' | 'boss';
+export type LobbyFeature = 'tree' | 'forge' | 'brew' | 'gear' | 'level' | 'quests' | 'hire' | 'team' | 'market' | 'fuse' | 'craft' | 'hunt' | 'transfer' | 'bossCharm';
 export interface ExpeditionState {
   // Story recruits (save v30): guests travel with the run but are not company members yet; `recruited` joined
   // during this run and are added to the company when it settles (whatever the outcome). Missing = none.

@@ -3,7 +3,7 @@ import { salvageReason } from '../core/world/profile';
 import type { EncounterDefinition, HeroDefinition } from '../core/battle/types';
 import { enhancementInvestment, itemStats, salvageValue, affixPool } from '../core/world/equipment';
 import { transferCandidate, transferReason, weaponBlueprint, weaponCraftCost, weaponCraftReason, enhanceTo, enhancementCostTo, findItem, fuseMaterials, fuseReason, fusionRefund, itemLevelCap, itemLevelCost, raiseItemLevel, rerollReason, smeltLeft, smeltReason } from '../core/world/forge';
-import type { Gear, Item, MapDefinition, Profile } from '../core/world/types';
+import type { LobbyFeature, Gear, Item, MapDefinition, Profile } from '../core/world/types';
 import { starred } from '../core/world/world';
 import { filteredEquipment, gearFilters, newGearFilters, changeGearFilter } from './gear-inventory';
 import { characterStats, characterSkillMetric } from './character-metrics';
@@ -74,10 +74,14 @@ export class ForgeWorkbench {
     else if(c.id==='forge-craft-level')this.craftLevel=Number(c.value);
     return c.id;
   }
-  render(p:Profile):string {
+  // Lobby systems by chapter (A3): `open` says which forge modes and tabs are open yet.
+  render(p:Profile,open:(f:LobbyFeature)=>boolean=()=>true):string {
+    const modeFeature:Partial<Record<Mode,LobbyFeature>>={level:'level',fuse:'fuse',reroll:'fuse',transfer:'transfer'};
+    const modeOpen=(m:Mode)=>{const f=modeFeature[m];return !f||open(f);};
+    if(!modeOpen(this.mode))this.mode='enhance';if(this.tab==='craft'&&!open('craft'))this.tab='develop';
     if(this.source!==p){this.review=false;this.donors=undefined;this.donorUid=0;this.source=p;}
     if(this.uid&&!findItem(p,this.uid)){this.uid=undefined;this.picker=true;}
-    const header=`<div class="forge-tabs" role="tablist" aria-label="โรงตีเหล็ก">${Object.entries(tabs).map(([id,text])=>`<button id="forge-tab-${id}" data-forge="tab" data-tab="${id}" role="tab" aria-selected="${id===this.tab}" aria-controls="forge-body" tabindex="${id===this.tab?0:-1}">${text}</button>`).join('')}</div>`;
+    const header=`<div class="forge-tabs" role="tablist" aria-label="โรงตีเหล็ก">${Object.entries(tabs).map(([id,text])=>`<button id="forge-tab-${id}" data-forge="tab" data-tab="${id}" role="tab"${id==='craft'&&!open('craft')?' disabled':''} aria-selected="${id===this.tab}" aria-controls="forge-body" tabindex="${id===this.tab?0:-1}">${text}</button>`).join('')}</div>`;
     let body:string;
     if(this.tab==='craft')body=this.crafting(p);
     else if(this.tab==='smelt')body=this.smelt(p);
@@ -85,7 +89,7 @@ export class ForgeWorkbench {
     else {
       const {item,owner}=findItem(p,this.uid)!;
       body=`<div class="forge-item-head">${gearArt(item)}<div><b>${itemName(item)}</b><small>${slotText[item.slot]} · Lv${item.level} · ${rarityText[item.rarity]} · +${item.plus??0}</small><small>${owner?`สวมอยู่: ${heroText[owner]!.name}`:'ในคลัง'}${item.locked?' · ล็อกแล้ว':''}</small></div></div><div class="forge-item-tools"><button id="forge-change-item" data-forge="picker" class="secondary">เปลี่ยนอุปกรณ์</button><button id="forge-lock" data-forge="lock" class="secondary" aria-pressed="${!!item.locked}">${item.locked?'ปลดล็อก':'ล็อกอุปกรณ์'}</button></div>`;
-      body+=this.tab==='recycle'?this.recycle(p,item,owner):`<div class="forge-modes" role="group" aria-label="วิธีพัฒนา">${Object.entries(modes).map(([id,text])=>`<button id="forge-mode-${id}" data-forge="mode" data-mode="${id}" aria-pressed="${id===this.mode}" class="secondary">${text}</button>`).join('')}</div><div class="forge-detail" data-rarity="${item.rarity}">${this.mode==='enhance'?this.enhancement(p,item,owner):this.mode==='level'?this.level(p,item,owner):this.mode==='fuse'?this.fusion(p,item):this.mode==='transfer'?this.transfer(p,item,owner):this.reroll(p,item)}</div>`;
+      body+=this.tab==='recycle'?this.recycle(p,item,owner):`<div class="forge-modes" role="group" aria-label="วิธีพัฒนา">${Object.entries(modes).map(([id,text])=>`<button id="forge-mode-${id}" data-forge="mode" data-mode="${id}" aria-pressed="${id===this.mode}" class="secondary"${modeOpen(id as Mode)?'':' disabled'}>${modeOpen(id as Mode)?'':'🔒 '}${text}</button>`).join('')}</div><div class="forge-detail" data-rarity="${item.rarity}">${this.mode==='enhance'?this.enhancement(p,item,owner):this.mode==='level'?this.level(p,item,owner):this.mode==='fuse'?this.fusion(p,item):this.mode==='transfer'?this.transfer(p,item,owner):this.reroll(p,item)}</div>`;
     }
     return `<section class="forge-workbench" data-review="${this.review}" data-tab="${this.tab}" data-mode="${this.mode}">${header}<div id="forge-body" role="tabpanel" aria-labelledby="forge-tab-${this.tab}">${body}</div></section>`;
   }
