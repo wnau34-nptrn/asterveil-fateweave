@@ -5,7 +5,7 @@ import {veilSiege} from '../src/content/encounters/veil-siege';
 import {BOSS_POWERS,bossReward,chooseBossTarget,startBossPlan} from '../src/core/world/boss-equipment';
 import {beginBattle,bossPowerReady,currentHeroId,previewCommand,replay,resolveCommand,withParty} from '../src/core/battle/engine';
 import {newProfile,depart,settle,salvage,equip} from '../src/core/world/profile';
-import {battleData,battleState,recordBattle,finishBattle,rollPercent,wear} from '../src/core/world/world';
+import {battleData,battleState,recordBattle,finishBattle,rollPercent,wear,heroCatalog,starred} from '../src/core/world/world';
 import {gearTotals,itemStats,itemValid,setCounts} from '../src/core/world/equipment';
 import {enhanceTo,fuse,fuseMaterials,lockEquipment,reroll,transferAffix,transferCandidate} from '../src/core/world/forge';
 import {protectedItem,recycleSelection} from '../src/core/world/storage';
@@ -105,4 +105,11 @@ it('bonus economy converges to the hard-four distribution and never adds more th
   const p={...startBossPlan(newProfile(map,4),map),rewarded:true};let wins=0,rewards=0,maxGap=0,gap=0;
   for(let seed=0;seed<12000;seed++){let n=0;const item=bossReward(map,p,()=>rollPercent(seed^0x6b05d017,n++),11);wins++;gap++;if(item){rewards++;maxGap=Math.max(maxGap,gap);gap=0;expect(item.boss).toBe('aegis');}}
   expect(maxGap).toBe(4);expect(rewards/wins).toBeGreaterThan(.35);expect(rewards/wins).toBeLessThan(.38);
+});
+it('resolver-backed boss skill examples support every class, including Backstab against an enemy aiming at an ally',()=>{
+  for(const base of heroCatalog(lookup,map)){
+    const h=starred(base,5,map,6,{}, {charm:gear('focus')});
+    for(const action of h.actions)expect(()=>markedSkillExample(action,h,lookup(map.tutorialEncounterId)!)).not.toThrow();
+    if(h.id==='sefa')expect(markedSkillExample('backstab',h,lookup(map.tutorialEncounterId)!)).toBeGreaterThan(0);
+  }
 });

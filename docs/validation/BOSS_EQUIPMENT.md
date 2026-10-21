@@ -29,10 +29,12 @@ Actual-victory tests compare new and legacy runs: the three ordinary items, ordi
 
 ## Validation surface
 
-- Typecheck, lint and494 unit tests passed locally; Pages build passed.
+- Typecheck, lint and495 unit tests passed locally; Pages build passed.
 - Six new production-subpath browser flows passed at320×568/390×844 Chromium touch emulation and1366×768 PC, followed by21 boss/shared-character/affix-transfer/storage/targeted-loot cases. Actual narrow/PC screenshots inspected. New input uses existing modal/rotation/repeat guards; readonly inspection cannot write a save.
 - Browser plugin not available; repository Playwright used. Browser checks include real canvas-backed boss victory and actual reward persistence, not only a mock page. Initial Escape test left focus inside a select; corrected the test to focus the action button/use Close, retaining the game input policy.
 - Evidence and full simulation JSON stay outside source control in this task's visualization workspace (`boss-equipment-qa`, `boss-equipment-regression`, `boss-balance.json`). CI and live publication outcomes are appended to the handoff after completion.
 - Physical iPhone/Safari, the earlier audible SFX report and human farm-time playtesting remain unverified. No claim is made that the audio issue is fixed.
 
 Initial PR browser CI passed189/193. Three legacy-summary fixtures incorrectly inherited a new boss snapshot before manually marking victory; that v21 fixture now omits bossLoot. One synthetic rotation/equip assertion did not await the displayed orientation gate; explicit gate-state waits now precede the blocked click and return to portrait. These repairs retain legacy migration, scrolling and unchanged-save assertions and do not modify runtime or relax game input guards.
+
+Additional review reproduced an illegal Backstab in the solo hypothetical skill context. The preview now includes an example ally, points enemy intents at the ally, selects a legal target through targetOptions and discloses that condition in the label. An all-ten-class/★5-action rule regression and an equipped-Scout browser flow protect the shared sheet; actual combat/loot rules are unchanged by this correction.
