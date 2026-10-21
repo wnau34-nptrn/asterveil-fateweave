@@ -1,3 +1,10 @@
+import {chooseBossTarget} from '../core/world/boss-equipment';
+import {chooseHuntTarget} from '../core/world/targeted-loot';
+import {departureBlocked,collectOverflow,recycleSelection,expandStorage} from '../core/world/storage';
+import { bindInfoTabs } from './info-tabs';
+import { learnRunTalent } from '../core/world/world';
+import { applyCampEquipment, applyRunEquipment } from '../core/world/auto-equipment';
+import { shortcutBlocked } from '../platform/keyboard';
 import type { BattleState, Outcome } from '../core/battle/types';
 import { clearLegacySaves, loadGame, saveGame, type Game } from '../core/save/expedition-save';
 import { createCommander, depart, mapUnlocked, brew, buy, claimQuest, refreshBoard, dismiss, equip, hire, learnTalent, newProfile, placeMember, resetTalents, salvage, settle, unequip, upgrade, canWithdraw } from '../core/world/profile';
@@ -10,7 +17,7 @@ import { browserStorage } from '../platform/browser-storage';
 import type { BattleUI } from './battle-ui';
 import type { NpcId } from '../game/visuals/assets';
 import { choiceText, eventText, expThai, heroText, itemLines, itemName, lootThai, potionText, rewardText, shopText } from './th';
-import { enhance, findItem, fuse, reroll, smelt } from '../core/world/forge';
+import { transferAffix, craftWeapon, raiseItemLevel, enhanceTo, lockEquipment, findItem, fuse, reroll, smelt } from '../core/world/forge';
 import { CommanderUI } from './commander-ui';
 import { LobbyUI } from './lobby-ui';
 import { prologue, prologueEnd, StoryUI } from './story-ui';
@@ -62,7 +69,16 @@ export class GameShell {
       travel: to => this.travelTo(to), move: dir => this.move(dir), rest: () => this.rest(), revive: id => this.revive(id), swap: (a, b) => this.roster(swapMembers(this.state!, a, b)), moveMember: id => this.roster(moveMember(this.state!, id)),
       withdraw: () => this.endRun('withdrawn'), openChest: () => this.openChest(), usePotion: (potion, id) => this.drink(potion, id),
       chooseEvent: choice => this.chooseEvent(choice),
+      talent: (id, node) => {
+        if (!this.state || this.locked) return;
+        const result = learnRunTalent(this.state, map, lookup, id, node);
+        if (result.event.type !== 'talent') return;
+        this.state = result.state; this.persist(); sfx.play('buff');
+        this.message = `ลงแต้มความถนัด${heroText[id]?.name ?? ''}แล้ว`;
+        this.renderWorld();
+      },
       wear: (id, from, index) => this.gear(wear(this.state!, map, lookup, id, from, index)), takeOff: (id, slot) => this.gear(takeOff(this.state!, map, lookup, id, slot)),
+      autoEquip: plan => { if(this.state&&!this.locked)this.gear(applyRunEquipment(this.state,map,lookup,plan)); },
     }, this.eliteArtOf(this.map), lookup(map.tutorialEncounterId));
     this.lobby = new LobbyUI(views.lobby, map, lookup, heroCatalog(lookup, map), {
       hire: i => this.profileChange(hire(this.game!.profile, map, lookup, i)), refresh: () => this.profileChange(refreshBoard(this.game!.profile, map)),
@@ -70,8 +86,14 @@ export class GameShell {
       dismiss: id => this.profileChange(dismiss(this.game!.profile, map, id)), place: (id, group, other) => this.profileChange(placeMember(this.game!.profile, id, group, other)),
       talent: (id, node) => this.profileChange(learnTalent(this.game!.profile, map, id, node)), resetTalents: id => this.profileChange(resetTalents(this.game!.profile, id)),
       equip: (id, uid) => this.profileChange(equip(this.game!.profile, id, uid)), unequip: (id, slot) => this.profileChange(unequip(this.game!.profile, map, id, slot)),
+      autoEquip: plan => this.profileChange(applyCampEquipment(this.game!.profile,plan)),
+      transfer:(uid,index,donor,sourceIndex)=>this.profileChange(transferAffix(this.game!.profile,map,uid,index,donor,sourceIndex)),
+      craft:(hero,level)=>this.profileChange(craftWeapon(this.game!.profile,map,hero,level)),
+      bossTarget:target=>this.profileChange(chooseBossTarget(this.game!.profile,map,target)),
+      huntTarget:target=>this.profileChange(chooseHuntTarget(this.game!.profile,target)),
+      collect:ids=>this.profileChange(collectOverflow(this.game!.profile,map,ids)), recycleStored:(source,ids)=>this.profileChange(recycleSelection(this.game!.profile,map,source,ids)),expandStorage:()=>this.profileChange(expandStorage(this.game!.profile,map)),
       salvage: uids => this.profileChange(salvage(this.game!.profile, map, uids)),
-      enhance: uid => this.profileChange(enhance(this.game!.profile, map, uid)), fuse: uid => this.profileChange(fuse(this.game!.profile, map, uid)),
+      enhance: (uid,target) => this.profileChange(enhanceTo(this.game!.profile, map, uid,target)), lock: uid=>this.profileChange(lockEquipment(this.game!.profile,uid)), fuse: (uid,donors) => this.profileChange(fuse(this.game!.profile, map, uid,donors)), level:(uid,target)=>this.profileChange(raiseItemLevel(this.game!.profile,map,uid,target)),
       reroll: (uid, i) => this.profileChange(reroll(this.game!.profile, map, uid, i)), brew: potion => this.profileChange(brew(this.game!.profile, map, potion)), claim: id => this.profileChange(claimQuest(this.game!.profile, map, id)),
       depart: id => this.depart(id), home: () => this.showTitle(),
     }, maps);
@@ -87,21 +109,40 @@ export class GameShell {
         this.showCommander(true);
       }
     });
-    // Music controls (title and lobby): a mute toggle anywhere, and the volume slider on the title.
+    // Shared audio preferences in the in-game settings tabs.
     root.addEventListener('click', e => { if ((e.target as HTMLElement).closest('[data-music-toggle]')) { this.music.setMuted(!this.music.settings.muted); this.refreshMusicControls(); } });
     // Every enabled button press clicks (the D-pad steps instead; game results add their own sound).
     root.addEventListener('click', e => { const b = (e.target as HTMLElement).closest<HTMLButtonElement>('button'); if (b && !b.disabled && !b.id.startsWith('move-')) sfx.play('click'); }, { capture: true });
     root.addEventListener('click', e => { if ((e.target as HTMLElement).closest('[data-sfx-toggle]')) { sfx.setMuted(!sfx.settings.muted); this.refreshMusicControls(); } });
-    root.addEventListener('input', e => { const t = e.target as HTMLInputElement; if (t.id === 'music-volume') this.music.setVolume(Number(t.value) / 100); if (t.id === 'sfx-volume') { sfx.setVolume(Number(t.value) / 100); sfx.play('click'); } });
+    root.addEventListener('input', e => { const t = e.target as HTMLInputElement; if (t.matches('[data-music-volume]')) this.music.setVolume(Number(t.value) / 100); if (t.matches('[data-sfx-volume]')) { sfx.setVolume(Number(t.value) / 100); sfx.play('click'); } if (t.matches('[data-music-volume]') || t.matches('[data-sfx-volume]')) this.refreshMusicControls(); });
+    this.root.querySelector('#battle-sfx-controls')!.innerHTML = this.musicControls('battle-');
+    this.root.querySelector('#world-sfx-controls')!.innerHTML = this.musicControls('world-');
+    bindInfoTabs(root);
     this.showTitle();
+    document.addEventListener('keydown', e => {
+      if (shortcutBlocked(e) || this.story.open || root.querySelector('.summary-view:not([hidden])')) return;
+      const view = root.dataset.view;
+      const bag = e.code === 'KeyB' || e.key.toLowerCase() === 'b';
+      const info = e.code === 'KeyI' || e.key.toLowerCase() === 'i';
+      const buttonId = bag && view === 'world' ? 'world-pack' : info && view === 'world' ? 'world-info-button' : info && view === 'battle' ? 'battle-info' : undefined;
+      const dialogId = bag && view === 'world' ? 'pack-dialog' : info && view === 'world' ? 'world-info' : info && view === 'battle' ? 'game-info' : undefined;
+      if (!buttonId || !dialogId) return;
+      const modal = document.querySelector<HTMLDialogElement>('dialog[open]');
+      if (modal && modal.id !== dialogId) return;
+      e.preventDefault();
+      if (modal) modal.close(); else root.querySelector<HTMLButtonElement>(`#${buttonId}`)?.click();
+    });
+    for (const [id, key] of [['world-pack', 'B'], ['world-info-button', 'I'], ['battle-info', 'I']]) root.querySelector(`#${id}`)?.setAttribute('aria-keyshortcuts', key!);
   }
   private refreshMusicControls(): void {
     const p = this.music.settings;
-    this.root.querySelectorAll<HTMLButtonElement>('[data-music-toggle]').forEach(b => { b.setAttribute('aria-pressed', String(!p.muted)); b.setAttribute('aria-label', p.muted ? 'เปิดเพลง' : 'ปิดเพลง'); b.innerHTML = icon(p.muted ? 'musicOff' : 'music'); });
-    const v = this.root.querySelector<HTMLInputElement>('#music-volume'); if (v) v.disabled = p.muted;
-    const s = sfx.settings; const st = this.root.querySelector<HTMLButtonElement>('#sfx-toggle');
-    if (st) { st.setAttribute('aria-pressed', String(!s.muted)); st.setAttribute('aria-label', s.muted ? 'เปิดเสียงเอฟเฟกต์' : 'ปิดเสียงเอฟเฟกต์'); st.innerHTML = icon(s.muted ? 'soundOff' : 'sound'); }
-    const sv = this.root.querySelector<HTMLInputElement>('#sfx-volume'); if (sv) sv.disabled = s.muted;
+    this.root.querySelectorAll<HTMLButtonElement>('[data-music-toggle]').forEach(b => { b.setAttribute('aria-pressed', String(!p.muted)); b.setAttribute('aria-label', p.muted ? 'เปิดเพลง' : 'ปิดเพลง'); b.innerHTML = icon(p.muted ? 'musicOff' : 'music') + (b.classList.contains('audio-toggle') ? `<span>เพลง: ${p.muted ? 'ปิด' : 'เปิด'}</span>` : ''); });
+    this.root.querySelectorAll<HTMLInputElement>('[data-music-volume]').forEach(v => { v.disabled = p.muted; v.value = String(Math.round(p.volume * 100)); });
+    this.root.querySelectorAll<HTMLOutputElement>('[data-music-level]').forEach(ml => { ml.value = `${Math.round(p.volume * 100)}%`; });
+    const s = sfx.settings;
+    this.root.querySelectorAll<HTMLButtonElement>('[data-sfx-toggle]').forEach(st => { st.setAttribute('aria-pressed', String(!s.muted)); st.setAttribute('aria-label', s.muted ? 'เปิดเสียงเอฟเฟกต์' : 'ปิดเสียงเอฟเฟกต์'); st.innerHTML = icon(s.muted ? 'soundOff' : 'sound') + `<span>เอฟเฟกต์: ${s.muted ? 'ปิด' : 'เปิด'}</span>`; });
+    this.root.querySelectorAll<HTMLInputElement>('[data-sfx-volume]').forEach(sv => { sv.disabled = s.muted; sv.value = String(Math.round(s.volume * 100)); });
+    this.root.querySelectorAll<HTMLOutputElement>('[data-sfx-level]').forEach(sl => { sl.value = `${Math.round(s.volume * 100)}%`; });
   }
   setBattleVisibilityListener(listener: (visible: boolean) => void): void { this.onBattleVisibility = listener; }
 
@@ -122,12 +163,16 @@ export class GameShell {
     if (view === 'battle') { const b = this.state?.battle; return b?.kind === 'boss' || (b?.kind === 'elite' && this.map.elites.find(e => e.id === b.source)?.mini) ? 'boss' : 'battle'; }
     return ({ title: 'camp', commander: 'archway', lobby: 'ruins', world: 'meadow' } as const)[view];
   }
-  private musicControls(): string {
-    const p = this.music.settings; const s = sfx.settings;
-    return `<div class="music-controls"><button id="music-toggle" data-music-toggle class="round-glass" aria-pressed="${!p.muted}" aria-label="${p.muted ? 'เปิดเพลง' : 'ปิดเพลง'}">${icon(p.muted ? 'musicOff' : 'music')}</button>`
-      + `<label class="music-volume"><span>เพลง</span><input id="music-volume" type="range" min="0" max="100" step="5" value="${Math.round(p.volume * 100)}" aria-label="ระดับเสียงเพลง"${p.muted ? ' disabled' : ''}></label></div>`
-      + `<div class="music-controls"><button id="sfx-toggle" data-sfx-toggle class="round-glass" aria-pressed="${!s.muted}" aria-label="${s.muted ? 'เปิดเสียงเอฟเฟกต์' : 'ปิดเสียงเอฟเฟกต์'}">${icon(s.muted ? 'soundOff' : 'sound')}</button>`
-      + `<label class="music-volume"><span>เอฟเฟกต์</span><input id="sfx-volume" type="range" min="0" max="100" step="5" value="${Math.round(s.volume * 100)}" aria-label="ระดับเสียงเอฟเฟกต์"${s.muted ? ' disabled' : ''}></label></div>`;
+  private musicControls(prefix = ''): string {
+    const p = this.music.settings;
+    return `<div class="music-controls audio-settings"><button id="${prefix}music-toggle" data-music-toggle class="round-glass audio-toggle" aria-pressed="${!p.muted}" aria-label="${p.muted ? 'เปิดเพลง' : 'ปิดเพลง'}">${icon(p.muted ? 'musicOff' : 'music')}<span>เพลง: ${p.muted ? 'ปิด' : 'เปิด'}</span></button>`
+      + `<label class="music-volume"><input id="${prefix}music-volume" data-music-volume type="range" min="0" max="100" step="5" value="${Math.round(p.volume * 100)}" aria-label="ระดับเสียงเพลง"${p.muted ? ' disabled' : ''}></label><output id="${prefix}music-level" data-music-level for="${prefix}music-volume">${Math.round(p.volume * 100)}%</output></div>`
+      + this.effectsControls(prefix);
+  }
+  private effectsControls(prefix: string): string {
+    const s = sfx.settings;
+    return `<div class="music-controls audio-settings"><button id="${prefix}sfx-toggle" data-sfx-toggle class="round-glass audio-toggle" aria-pressed="${!s.muted}" aria-label="${s.muted ? 'เปิดเสียงเอฟเฟกต์' : 'ปิดเสียงเอฟเฟกต์'}">${icon(s.muted ? 'soundOff' : 'sound')}<span>เอฟเฟกต์: ${s.muted ? 'ปิด' : 'เปิด'}</span></button>`
+      + `<label class="music-volume"><input id="${prefix}sfx-volume" data-sfx-volume type="range" min="0" max="100" step="5" value="${Math.round(s.volume * 100)}" aria-label="ระดับเสียงเอฟเฟกต์"${s.muted ? ' disabled' : ''}></label><output id="${prefix}sfx-level" data-sfx-level for="${prefix}sfx-volume">${Math.round(s.volume * 100)}%</output></div>`;
   }
   private showTitle(): void {
     const g = this.game; const s = g?.run;
@@ -141,7 +186,7 @@ export class GameShell {
       <div class="title-card"><h1 class="title-logo"><img src="${import.meta.env.BASE_URL}assets/title/logo.svg" alt="Asterveil · Fateweave" width="700" height="224"></h1><p class="title-copy">ข้ามรอยแยก · ถักทอโชคชะตา</p>
       <div class="title-actions">${g ? `<p class="title-save">${s ? 'การเดินทางที่บันทึกไว้' : 'ค่ายของคุณ'}<span class="title-chips">${summary}</span></p><button id="continue" data-title="continue" class="primary">${s ? 'เดินทางต่อ →' : 'เข้าค่าย →'}</button>` : ''}
       <button id="new-game" data-title="new" class="${g ? 'secondary' : 'primary'}">${g ? 'เริ่มเกมใหม่' : 'เริ่มเกม'}</button>
-      ${this.musicControls()}
+
       ${this.storage ? '' : '<p class="title-warning">เบราว์เซอร์นี้ไม่อนุญาตให้บันทึก เล่นได้แต่จะไม่จำความคืบหน้า</p>'}</div><p class="title-footer">ชายแดนแอสเตอร์เวล</p></div>`;
     this.show('title');
     this.views.title.querySelector<HTMLElement>(g ? '#continue' : '#new-game')?.focus({ preventScroll: true });
@@ -178,8 +223,8 @@ export class GameShell {
     if (e.type === 'blocked') return;
     this.game = { ...this.game, profile: { ...result.profile, last: null } }; this.persist();
     this.lobbyMessage = e.type === 'hired' ? (e.duplicate ? `ได้ตัวซ้ำของ${name(e.heroId)} · ใช้อัปดาวในแท็บทีม` : `จ้าง${name(e.heroId)}แล้ว`)
-      : e.type === 'upgraded' ? `${name(e.heroId)}ขึ้นเป็น ★${e.stars} แล้ว` : e.type === 'dismissed' ? `เลิกจ้าง${name(e.heroId)}แล้ว · ได้เหรียญทองคืน ${this.map.company.dismissRefund}` : e.type === 'talent' || e.type === 'equipped' ? '' : e.type === 'salvaged' ? `แยกชิ้น ${e.count} ชิ้น · ได้แร่ดาว ${e.ore} ฝุ่นดาว ${e.dust}`
-      : e.type === 'forged' ? this.forgedText(result.profile, e.uid, e.action) : e.type === 'brewed' ? `ปรุง${potionText[e.potion].name}แล้ว · มีอยู่ ${result.profile.potions[e.potion]} ขวด`
+      : e.type==='bossTarget'?'บันทึกเป้าหมายบอสแล้ว':e.type==='huntTarget'?'บันทึกเป้าหมายฟาร์มแล้ว':e.type==='storageCollected'?`เก็บเข้าคลัง ${e.count} ชิ้นแล้ว`:e.type==='storageExpanded'?'ขยายคลังแล้ว': e.type === 'upgraded' ? `${name(e.heroId)}ขึ้นเป็น ★${e.stars} แล้ว` : e.type === 'dismissed' ? `เลิกจ้าง${name(e.heroId)}แล้ว · ได้เหรียญทองคืน ${this.map.company.dismissRefund}` : e.type === 'talent' || e.type === 'equipped' ? '' : e.type === 'salvaged' ? `แยกชิ้น ${e.count} ชิ้น · ได้แร่ดาว ${e.ore} ฝุ่นดาว ${e.dust}`
+      : e.type === 'equipmentLocked' ? `${e.locked?'ล็อก':'ปลดล็อก'}${itemName(findItem(result.profile,e.uid)!.item)}แล้ว` : e.type === 'forged' ? this.forgedText(result.profile, e.uid, e.action) : e.type === 'brewed' ? `ปรุง${potionText[e.potion].name}แล้ว · มีอยู่ ${result.profile.potions[e.potion]} ขวด`
       : e.type === 'smelted' ? `ลุงบอร์กหลอมแร่ดาวเป็นฝุ่นดาว ${e.dust} · มีฝุ่นดาว ${result.profile.bank.dust}`
       : e.type === 'refreshed' ? `พีโน่เปลี่ยนป้ายจ้างใหม่แล้ว · สุ่มได้อีก ${this.map.shop.refreshCosts.length - result.profile.refreshes} ครั้ง`
       : e.type === 'bought' ? this.boughtText(result.profile, e)
@@ -199,9 +244,9 @@ export class GameShell {
     return `ซื้อ${shopText[e.item].name}แล้ว`;
   }
   // Forge result: the piece as it is now (fuse and reroll show what was rolled).
-  private forgedText(profile: Profile, uid: number, action: 'enhance' | 'fuse' | 'reroll'): string {
+  private forgedText(profile: Profile, uid: number, action: 'enhance' | 'fuse' | 'reroll' | 'level' | 'craft' | 'transfer'): string {
     const item = findItem(profile, uid)?.item; if (!item) return '';
-    return `${({ enhance: 'ตีบวกสำเร็จ', fuse: 'หลอมรวมสำเร็จ', reroll: 'ปรับค่าแล้ว' })[action]} · ${itemName(item)} · ${itemLines(this.map.equipment, item).join(' · ')}`;
+    return `${({ transfer:'ถ่ายโอนคุณสมบัติแล้ว', craft:'สร้างอาวุธเข้าคลังแล้ว', level:'เพิ่ม Lv สำเร็จ', enhance: 'ตีบวกสำเร็จ', fuse: 'หลอมรวมสำเร็จ', reroll: 'ปรับค่าแล้ว' })[action]} · ${itemName(item)} · ${itemLines(this.map.equipment, item).join(' · ')}`;
   }
   private npcCheer: NpcId | undefined;
   private readonly story: StoryUI;
@@ -213,6 +258,7 @@ export class GameShell {
   // The prologue always starts on the first map; otherwise the Lobby names an open map (default: the furthest open one).
   private depart(mapId?: string): void {
     if (!this.game || this.game.run) return;
+    if(departureBlocked(this.game.profile)){this.lobbyMessage='จัดถาดรอเก็บในกระเป๋าก่อนออกเดินทาง';this.showLobby();return;}
     const open = this.maps.filter(m => mapUnlocked(this.game!.profile, this.maps, m.id));
     const chosen = !this.game.profile.tutorialDone ? this.maps[0]! : open.find(m => m.id === mapId) ?? open.at(-1)!;
     if (mapId && chosen.id !== mapId) return;

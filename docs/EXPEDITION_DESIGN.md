@@ -1,5 +1,35 @@
 # Expedition design — 2D tile board
 
+## Boss-exclusive equipment — phase 6, implementation (2026-10-21)
+
+The owner authorized implementation and clarified that boss gear can roll the same normal sets as ordinary equipment. Three legendary Lv11 charms from Rift Warden use the existing slot: Aegis grants a floor-6 shield after surviving actual enemy HP damage; Focus adds 4 to the primary single-target hit against Mark; Lantern grants a floor-6 shield after Heal restores another ally. Each triggers once per wearer/round, never scales with +/stats, and replaces the generic legendary special. Normal-set chance remains 60%, from all six sets, combining normally toward 2/4-piece bonuses. Initial guaranteed affix: HP/Attack/Support respectively, with other affixes and qualities random.
+
+Camp Farm freely selects a separate boss target, frozen at departure. A first post-feature boss victory guarantees one targeted charm; afterward chance25%, hard-four victory pity. Keep three ordinary rewards and all ordinary RNG/weapon pity unchanged; bonus uses its own domain-separated stream and does not count as a weapon drop. Per-boss progress survives target switches and all returns, resetting on actual reward. Legacy runs without a snapshot stay on old loot until return. Found gear still obeys wipe retention; pending overflow remains safe. Owned boss finds start locked and are excluded from bulk recycle and all fusion/transfer donor paths even when unlocked. Boss main affixes remain developable; individual unlocked recycle returns existing base salvage and actual development credit, never a new boss-specific refund.
+
+Save v27 adds strict optional boss identity/progress/snapshot validation, preserves v1–v26 and active-run provenance, and accommodates a fourth reward crossing the prior 99-found validation bound. Encounter definitions increment for the additive powers; old gear has none of these powers and old active-run replay remains unchanged. Shared character, bag, smith, source and battle-status UI use existing surfaces. Numeric defaults have deterministic balance/economy regression coverage; human farm-time tuning and real iPhone/Safari testing remain separate. [Detailed design](BOSS_EQUIPMENT_DRAFT_TH.md) records the revised normal-set decision and implementation boundaries. The prior affix-transfer phase 6 below is a separate delivered feature; historical numbering is retained.
+
+## Equipment progression phase 6 — single-slot affix transfer (2026-10-20)
+
+Camp smith → Develop → Transfer copies one donor affix kind and its roll quality (%) into one main affix slot. The first successful transfer permanently binds that slot; later transfers only replace it. Donor and main must share a slot, and weapons must share class; no duplicate affixes, unchanged results, locked/worn donors or invalid indices. Main may be worn/locked. Preserve its Lv, +, rarity, set, main quality, other affixes, special and investment; use the main Lv to calculate the copied affix value. No RNG or combat rule changes.
+
+Content draft service fee: 12 ore +3 dust +1 seal, required upfront and not refundable. Consume one explicitly selected bag donor; refund only its actual/legacy remaining enhancement and actual Lv capital, without base salvage or manufacture credit. Validate the final wallet cap before any mutation. No library/extraction inventory or new currency. A tuned item is excluded from protected bulk recycling and automatic fusion donor recommendations; explicit individual recycling/manual fusion remains available and retains existing refund rules.
+
+Item.transferSlot persists in save v26, with no binding invented for v1–v25 items. All existing rarity fusion and random reroll services remain; they cannot move the binding. The one-slot restriction leaves main quality, other affixes, set and legendary effects as reasons to farm. Boss-exclusive gear remains a separate future scope.
+
+## Equipment progression phase 5 — fixed weapon crafting (2026-10-20)
+
+Camp smith → Craft weapon creates one fixed green (rarity 1) weapon for an owned class, including members left at camp. Choose Lv1 through the same permanent area-earned item-Lv cap. Quality is 100%, one class-appropriate Attack/Support affix at 100%, no set/special/+; no RNG or automatic equip. Content draft costs: 18 ore +4 dust at Lv1, plus 6 ore +1 dust per additional starting level. This manufacture price is not refundable development capital; recycle pays only existing base salvage (3 ore/2 dust) plus any separately paid later enhancement/Lv investment. Existing fusion/development remains available. No new currency, loot/pity/encounter/combat changes.
+
+Crafting is a predictable starter/fallback, not a source of selected sets or ideal rolls. At Lv1, 27 green weapons cost 486 ore/108 dust before existing three-to-one fusion could reach legendary (no selected special); drops can skip this material cost and supply sets/higher initial Lv/quality. A craft/recycle cycle loses resources at every unlocked Lv; initial manufacturing does not mint investment credit. No pity progress/reset from crafting. Existing item shape and save v25 accept crafted gear through normal equip, expedition provenance, forge and recycling.
+
+## Equipment progression phase 4 — targeted farming (2026-10-20)
+
+Camp → Farm selects any owned class, including members left at camp; apply is explicit and free. Each new departure freezes its target. Existing weapon drops get an additional 70% target-class bias; after 11 equipment drops without that weapon, drop 12 is forced to that class weapon. Count equipment drops, not wins/steps; no extra item, drop-rate, rarity, quality, Lv or set-chance boost. Counters persist separately per class on completion, withdrawal and wipe; reset on the actual target drop even if subsequently lost. Dismissal clears a selected target but retains its counter. Shops/forge/tutorial do not advance it.
+
+Regional source information uses existing zone data: meadow dawn/wind Lv1–3, thicket shadow/thorn Lv4–6, scar starveil/mender Lv7–9; the boss remains three Lv11 drops from all sets. No crafting, rarity upgrade changes, affix transfer or exclusive boss effects in this phase. Save v25 preserves old active-run RNG through absent hunt metadata; new departures snapshot the camp goal.
+
+Deterministic 24,000-drop sample (1,000 seeds ×24, four-class party, Lv5 normal rewards) measured target weapons at 4.025% without targeting versus 15.1375% with targeting; all weapon share 16.8958% versus 18.7917%. These are scoped sample rates, not a universal forecast. The forced threshold only substitutes an existing reward.
+
 Fateweave is a single game: an expedition across a square-tile map with turn-based SPD battles. The earlier practice selector is removed. Combat rules are unchanged (see `GAMEPLAY_DIRECTION.md`).
 
 ## Source of the design
@@ -426,7 +456,7 @@ Every class (the starting four included) gains one battle skill at ★3 and one 
 
 The owner asked for a skill tree made only of passives ("ความถนัด"). This scopes the CLAUDE.md rule-10 exception for a skill tree: passive nodes only, no new battle buttons.
 
-- Points: 1 per level-up (9 at the level cap 10). Spent and reset (free, any time) only in the Lobby, in the talent-tree sheet (its own window, opened from a member in the team sheet, with a member picker and a back button); talents are fixed during an expedition (levels gained on the run add points for the next visit).
+- Points: 1 per level-up (9 at the level cap 10). Owner update 2026-10-19: spend in the Lobby or on the map through a brought character sheet, outside battle. Reset remains free only in the Lobby. Map spending keeps current HP unchanged (including fallen members), uses existing gates and budget, advances no steps/RNG, persists immediately in v21, and settles home with levels/EXP on every outcome.
 - Shape (same for every class): root (1 rank) → branch A and branch B, each tier 1 (2 ranks) → tier 2 (2 ranks) → capstone (1 rank). 7 nodes, 11 ranks, so a member cannot take everything.
 - Gates: the root first; tier 2 needs 1 rank in its tier 1; a capstone needs 4 ranks in its branch.
 - Stat nodes add to the star/level percent (`starred`); every other effect is read by the resolver from `HeroDefinition.talents`, so preview and replay use the same rules. 0 points = today's numbers.
@@ -1018,7 +1048,7 @@ The current map becomes map 3, "แนวรอยแยก". Two short new maps
 
 1. Split game-wide rules (company, progression, equipment, potions, shop, talents, mercenaries) out of `MapDefinition`.
 2. A map choice in the Lobby. Choosing a chapter is not choosing rooms on the board.
-3. Save v22: cleared maps (`Profile.cleared`); guided tasks follow with map 1.
+3. Save v28: cleared maps (`Profile.cleared`); guided tasks follow with map 1.
 4. Build map 1, then map 2.
 5. Re-level map 3 and simulate all three maps.
 
@@ -1030,3 +1060,18 @@ Status:
   - The Lobby's depart button opens a map sheet when more than one map is open.
   - A run keeps its `mapId`, and the shell and save resolve it from `MAPS`. `WorldUI.setMap` redraws the board.
   - Only a map with `clearStory: 'warden'` plays Vargoth's first-clear story.
+
+## Forge phase 2 — 2026-10-20 (current)
+
+Rarity fusion preserves the main item's full +, Lv, class, set, original affixes and quality rolls, and both development ledgers. It adds random affixes/specials as before. Select exactly two same-slot/same-rarity bag donors; locked/worn pieces cannot be consumed. Recommendations exclude all enhanced or invested pieces. Explicitly chosen developed donors refund actual enhancement and Lv capital in full at consumption, without base salvage; wallet overflow blocks the whole action.
+
+The smith can raise a chosen item's Lv, retaining rarity/set/rolls/affixes/+. Initial permanent cap is Lv3; defeating gate-meadow unlocks Lv6, gate-thicket Lv9 and scar-golem Lv10. Completing the chapter also unlocks Lv10. Record the best tier on return, including withdrawal/wipe; optional-elite respawn history counts. Hero Lv does not unlock this. Draft costs per next item level N are 4×N ore +1 dust, summed atomically for the selected target. Use existing ore/dust after earning the area tier, without another currency. Item.levelInvestment records actual costs; no credit for an item's original drop/market level. Recycling and donor consumption return it 100%, independently of enhancement investment.
+
+Save v23 adds profile.forgeLevel and validates levelInvestment/active-run ownership. v1–v22 remain supported. Legacy completed chapters unlock Lv10; incomplete legacy companies start at Lv3 because no permanent elite history existed. Existing high-level items remain intact and usable, with no invented upgrade spending. Prices/caps live in content. No map/encounter version or active combat change. Overflow, crafting and affix transfer remain later phases.
+
+
+## Camp storage phase 3 — 2026-10-20 (current)
+
+Full camp bags preserve excess loot in profile.overflow instead of auto-recycling. Returned owned/spare gear and dismissed members' equipment receive the same protection, including locks and both investment ledgers. Wipe retention remains unchanged. Pending items have owned UIDs and persist across reload; resolve the tray through explicit collection/recycling before departure. Collect before equipping/forging. Bulk recycling excludes locked, enhanced and invested pieces; source/UID/duplicate/capacity/wallet checks are atomic. Existing individual development recycling still refunds investment.
+
+Three permanent capacity tiers add 30 slots each (60 → 90 → 120 → 150), purchased for draft 200/400/800 gold using existing currency. No auto-collection or item destruction when buying capacity. Upgraded capacity applies to bag validation, unequip and shop purchases. Save v24 accepts v1–v23; migration initializes tier 0 and empty pending without inventing previously destroyed equipment. Map/encounter versions, loot probabilities, combat and resource rewards are unchanged. Targeted farming, weapon crafting, boss gear and affix transfer remain later phases.

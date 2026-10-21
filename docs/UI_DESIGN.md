@@ -1,6 +1,76 @@
 # Modern battle HUD design spec
 
-Dated sections record earlier presentation work; the final SPD-round section defines the current rules and save behavior.
+## Combat presentation phase 2 — 2026-10-21
+
+Battle Information → Settings now includes normal/fast playback and standard/reduced effects. Keep the existing portrait modal, independent scrolling, 44px controls and focus after preference toggles. Explain that changes start with the next actor stage and do not change results; preferences live separately from progression. OS reduced-motion always takes precedence for movement, with immediate static captions/shapes. Keep HUD, DOM targets and Phaser hit zones stationary while disposable actor bodies move. Use distinct blue shields, mint healing and pink marks alongside numeric/text feedback; effects must not depend on color alone. Boss intro/defeat cinematics are a later phase.
+
+
+## Combat presentation phase 1 — 2026-10-21
+
+Before the normal-motion contact cue, every HP/barrier/status panel and the status inspector shows the current actor's authoritative pre-turn snapshot. At contact the whole actor event group is revealed with its actual after/upkeep snapshot, existing impact VFX and stage sound; log entries wait for that cue. Do not reveal later actor damage from committed final state. Preserve the legacy actor queue frame separately so the actor being presented remains identifiable. Reduced motion reveals that same group immediately without moving VFX. Skip, hidden-tab and playback resize settle the already saved result and cancel old cues/sounds; ordinary resize while selecting retains selection. No extra battlefield button or persistent HUD row is added. Phase-2 bespoke effects and boss cutscenes remain future work. See `docs/validation/COMBAT_PRESENTATION_PHASE1.md`.
+
+## Boss equipment — 2026-10-21
+
+Use the existing shared character sheet and six equipment slots. Boss charms carry a small ◆ marker opposite the existing normal-set emblem; item detail names the source and conditional power before stat lines. Gear filters add Type: all/boss/ordinary inside additional filters. Normal set counts/2/4 bonuses remain shared with ordinary items. Comparison and Skills expose a clearly labelled marked-primary-target example from the real resolver, separate from base skill power; equipment-effects before/after include the boss power and lost/gained ordinary effects. Explain that Lantern cannot activate for a class without Heal. Battle status reads the displayed snapshot's actual per-round use state.
+
+Camp Farm keeps weapon and boss selections separate, explicitly saved and free. Place boss selection before the long sources guide; preserve its scroll after redraw/apply. MAP ! → Equipment sources reads only the frozen run target/counter; explain legacy runs, first-win guarantee, chance/pity, normal set chance and found-versus-brought-home status. Keep the existing portrait frame, >=44px controls, rotation/inert/repeat/IME guards and return focus. Smith excludes boss donors, warns on individual destruction and retains exact refund review; bulk protection also covers unlocked boss items. No new art production or top-level battlefield button.
+
+## Affix transfer phase 6 — 2026-10-20
+
+Add Transfer as a fifth Develop mode, keeping the four smith tabs. Choose main affix slot, bag donor and donor affix. Show native disabled options for bound-out slots and locked donors. No donor preselection. State that first transfer binds one slot permanently, copied quality scales at the main Lv, and set/Lv/+ and special remain. Show the binding in regular equipment detail text.
+
+Readonly preview lists the union of old/new equipment stats (removed/added stats use zero) and actual hero/Active metrics. Review hides selectors but retains the explicit destroyed donor UID/name/Lv/+ and chosen affix/quality, upfront fee, exact donor development refund and final wallet. Confirmation consumes only that donor once. Keep >=44px controls, reachable scrolling footer, cancel/Escape, repeat/inert/rotation guards and original character return. Bulk selection and automatic fusion recommendations skip tuned pieces.
+
+## Weapon crafting phase 5 — 2026-10-20
+
+Smith tabs: Develop / Craft weapon / Recycle / Smelt. Four >=44px controls fit the existing portrait frame. Craft selects an owned class and an unlocked starting item Lv. Display exact fixed weapon stats, one-item destination in the bag, actual current-worn versus proposed hero/Active preview, total price and remaining wallet. Clearly state green/100%/no set/no RNG/no auto-equip and that manufacture price differs from refundable later development.
+
+Review hides class/Lv selectors, retains the named result and price, and requires explicit confirmation. Cancel restores class selection/focus; Escape closes without purchase. Successful craft focuses the created item in Develop; return to the originating character remains intact. Full or pending storage explains the block; never silently overflow or recycle a purchase. Keep bounded scrolling, keyboard tab navigation and rotation/inert guards.
+
+## Targeted farming phase 4 — 2026-10-20
+
+Camp has six >=44px menu controls including Farm, within the existing portrait frame. Farm shows owned-class selection, an explicit free save action, per-class progress preview and zone/set/Lv sources. Unsaved changes disappear on close/tab switch. Clearly label the camp guide as the next-run preview. MAP ! adds Equipment sources after Guide and Settings, showing the frozen current-run target and live remaining equipment drops. Legacy ongoing runs explicitly show old loot rules. All source content scrolls within existing bounded sheets/dialogs; retain keyboard tabs, focus restoration, editing/repeat guards and landscape inert behavior. Battle ! still defaults to Status.
+
+Explain that 70% is an additional class bias among weapon drops, with an overall chance of at least 70%; guarantee counts equipment pieces, not fights, and resets at the drop. Show existing regional sets/Lv and their 60% set chance, boss quantity and all-set pool without implying guaranteed sets.
+
+## Storage phase 3 — 2026-10-20
+
+Camp bag exposes Inventory / Pending source buttons with current counts. Pending rewards persist; a clearly placed camp call-to-action explains why departure waits. Collect selected items or review recycling; never silently discard excess loot. Show item name/Lv/+/set/stat details and protection state. Lock/paid gear can be collected but cannot enter bulk recycling. Individual existing equipment/forge routes remain available once stored.
+
+Permanent expansion lives in a disclosure with current gold, added capacity, exact price and a separate confirmation. Keeper quests and character selection remain explicit disclosures so items have space. Bulk review shows the exact destroyed/collected UID list, totals and remaining wallet. The long list scrolls independently of confirm/cancel, including 56-item reviews at 320px. Selection/filter changes cancel review; a source-profile change clears stale selections. Held-key, modal and landscape inert guards still apply.
+
+## Forge phase 2 — 2026-10-20
+
+Develop now has four 44px modes in a 2×2 grid: Enhance / Item Lv / Fuse / Reroll. Item Lv shares the exact target/cost/stat/skill preview and review/confirm flow. Show the permanent area cap and named unlock milestones; never use hero level as the cap. Preserve target on picker return. Review hides secondary selection controls to retain a reachable footer at 320px.
+
+Fusion retains full + and shows the main item's retained Lv/set/rolls and unknown random additions. Recommend only non-invested, unlocked bag gear, but permit manual choice of exactly two compatible donors. Each donor has a UID, Lv, +, stats, selected state and a visible lock restriction; worn gear is excluded. Review names the pieces to destroy and separately states the aggregate 100% development refund (no base salvage). Recycle separates base salvage, enhancement capital and item-Lv capital. Keep source-character return, readonly previews, repeat/inert guards and bounded scrolling.
+
+## Forge phase 1 — 2026-10-20
+
+The smith uses a full portrait sheet with Develop / Recycle / Smelt tabs. A filtered bag+worn picker comes first. Selecting an item shows its wearer, item Lv, rarity and + as separate facts; change-item and lock controls are secondary. Develop shows one enhance/fuse/reroll mode at a time. Enhancement selects a target + and shows total cost, remaining wallet, real item-stat changes and expandable current-user skill effects. Random outcomes remain explicitly unknown until confirmed. Existing smith quests live in a collapsed picker disclosure.
+
+Every spending/destructive action has a readonly review then explicit confirmation; review hides secondary item/mode controls to make space at 320px. A sticky footer inside the bounded game-frame scroller keeps totals, confirmation and cancel reachable. Recycle item summary names the destroyed piece, separates base salvage from 100% enhancement-credit refund and shows the total. Locked items cannot be recycled; worn pieces must be taken off first. Camp character/inventory links preselect the item and preserve a route back to the source character. Keep the existing navy/gold palette and original art. Future Craft and item-Lv features should be added only in their scoped phases.
+
+
+## Shared characters and equipment — 2026-10-20
+
+MAP and main-camp characters use one native portrait sheet with Overview / Equipment / Skills / Talents. Inventory and team remain entry/management surfaces; equipment inspection, individual swaps, set thresholds, stat/Active explanations and passive spending live in the shared sheet. Main camp exposes the entire company; expedition exposes the brought team. Trainer opens Talents and retains free camp-only reset. Closing restores the original surface and focus.
+
+Show a set filter directly above inventory; fold slot/rarity/source/compatible/sort controls into additional filters. Auto-equipment is an optional disclosure with a goal and preferred set, then a full before/after preview and explicit confirmation. Clearly describe recommendations as estimates and retain conditional skill/effect details. Recommend from worn + bag only, never strip teammates. Keep 44px controls, bounded internal scrolling, comparison footer access, portrait rotation guards and preserved unconfirmed trials. Main-camp bottom navigation adds Bag alongside existing services.
+
+
+## Current: portrait game with PC input — 2026-10-19
+
+Owner-approved direction: one mobile portrait layout, playable with mouse/keyboard on PC. This section supersedes historical desktop/landscape layout notes below; battle rules and saves are unchanged.
+
+- The game frame is at most 480px wide and centred on PC. Every view adapts to the frame via named size-container queries; no CSS scaling of the whole game. Phone landscape requests rotation, and undersized desktop windows request more room.
+- Battle: slim circular six-actor queue, arena with direct targets, compact announced enemy intent, four readable HP summaries and a centred command dock. Waiting allies' health stays readable. Queue buttons expose actor/SPD/HP details without permanent numeric labels.
+- Commands: Attack is initially selected. Choose a skill, then click/tap a legal target. The dock appears ready on each real hero turn; keys or inspection do not spend the turn. Optional ⓘ opens the full skill description. Escape cancels targeting, requiring another explicit selection before any field click can cast.
+- PC: WASD/arrows walk; 1–4 select displayed action slots, including the fourth unlocked skill; click chooses its enemy/ally target; B opens the map bag; I opens world/battle info. Repeats, modifiers, IME/editing and input during rotation guidance or presentation cannot queue skills or issue commands behind a modal. A keyboard guide appears beside the desktop frame.
+- Native dialogs stay centred over the game frame, with internal reading scroll. Popovers clamp to the same frame. Mobile keyboard editing is not treated as an instruction to rotate.
+- Preserve ≥44px controls, optional descriptions, focus restoration, reduced motion and the existing touch-close guard. No art or dependency changes.
+
+Dated sections below record historical presentation work and must not reintroduce a wide/landscape game layout.
 
 The supplied classic JRPG screenshots guide a portrait battle screen: arena above enemy HP, two-column hero cards below, and skills/targets at the bottom. The user's requested modernization retains that recognizable skeleton with restrained framing, larger readable type, clear class colors and touch-friendly controls.
 
@@ -128,3 +198,35 @@ The practice selector and restart button described above are removed. The app ha
 - **Battle:** the existing single-screen HUD with the battle kind/name header and ⓘ only. The result card's button returns to the map, retreats to camp, or retries the teaching battle.
 
 Both views fit all 11 tested viewports without document scrolling; controls are ≥44px. Details: `EXPEDITION_DESIGN.md`.
+
+## Home and tabbed information — 2026-10-19
+
+Home has no audio controls or sound-test button. Its existing artwork uses a brighter, more vivid rendering with a lighter vignette. In-game information on the map and in battle separates คำแนะนำ and ตั้งค่า; battle additionally exposes บันทึก. Music/effects mute and volume live in ตั้งค่า, alongside first-battle coaching preferences where applicable. No audio sample button is exposed. Tabs share accessible semantics and arrow/Home/End keyboard navigation, retain 44px targets and stay inside the portrait frame. Audio preferences remain separate from save v21.
+
+### Contrast correction after owner review — 2026-10-19
+
+The first brightening pass was too washed out. Home now uses restrained exposure (.96), modest contrast (1.08) and saturation (1.04), reduced screen-blended rays and navy edge shading. Preserve detail in the bright waterfall/sky and dark rocks; avoid a pale overlay or global brightness boost. The existing painting, layout and tabbed settings remain.
+
+## Battle status tab — owner-approved 2026-10-19
+
+Battle ⓘ always opens สถานะ first, even after closing on คำแนะนำ / ตั้งค่า / บันทึก. No extra inspection button is added to the battlefield/header. The status tab lists the deployed party and actual encounter enemies with portraits, HP and compact buff/debuff icons; selecting a unit shows all current temporary effects, real values and expiry/consumption conditions. Group buffs appear on all recipients. Unknown/stale effects are not invented from animation or log text. Downed/finished/empty units are explained explicitly. Inspection reads the displayed actor-turn snapshot, never leaks a later committed turn, and cannot cast, change targeting, mutate save v21 or issue a command. Native dialog scroll, keyboard tabs, focus restoration and closing-touch protection remain.
+
+## Battlefield status badges — 2026-10-19
+
+All living units show current temporary buff/debuff symbols in a compact, noninteractive row above their artwork. Use the same `unitStatuses` projection and displayed actor-stage snapshot as the status inspector. Green borders indicate buffs, rose borders indicate debuffs; show three symbols plus +N for overflow. The accessible label includes every effect and its duration, including overflow. Full details remain in battle ⓘ → สถานะ, which opens first every time. Anchors use arena CSS pixels and clamp horizontally to the field; placing badges above the art preserves the bottom row on short portrait screens without changing formations or target hitboxes. Rebuild on scene layout/resize and actor-stage changes; no badge for empty, fallen or finished units. Pointer events pass through the overlay. The old Mark-only canvas diamond is replaced by the shared badge row; intent warning and selected-skill target markers remain separate.
+
+## Reserved unit HP/status panels — 2026-10-19 (authoritative)
+
+Reserve complete body and HP/status rectangles for all six units using `game/visuals/field-layout.ts`. Slots follow party lanes with front/rear stagger and stable two-row placement; status count cannot move actors. Fit art to each cell and retain ≥44px independent target bounds. HP and statuses share a pointer-transparent DOM panel. Normal fields show 2–3 symbols plus overflow below HP; compact fields (<260px high) show one +N alongside HP. Very short fields (<150px) use a narrow side panel, 12px symbols and 44px art. Full details stay in ⓘ → สถานะ. Preserve exact enemy HP; abbreviated field names retain full accessible/inspector names. Verify every panel against every body and other panel, not only viewport bounds, and stress all six panels simultaneously through resize. The previous above-head positioning is replaced; core formation rules, saves and combat are unchanged.
+
+## Map character sheet, phase 1 — owner-approved 2026-10-19
+
+Map party portraits are 44px+ buttons with unspent-point badges. They open a full-frame character dialog with Overview, Equipment, Skills and Talents tabs. A horizontally scrollable brought-member picker includes deployed and reserve units. Tabs have keyboard Left/Right/Home/End navigation; content scrolls independently. Overview shows current scaled stats; Skills shows current Active descriptions and ★3/★5 unlocks; Talents uses the same gates as camp and allows spending unallocated points on the map. Reset stays at the base-camp trainer. Two talent branches stay side by side even at 320px.
+
+Equipment wear/take-off moves into this sheet, retaining slot filtering, set summaries, class restrictions, current carried/found sources and ownership/HP behavior. The bag equipment tab shows inventory and links into the character equipment tab; team details link there too. Closing returns to the originating bag/camp tab, scroll and focus, or the map portrait. Native modal, hidden/inert and orientation guards block map/background actions and held Enter cannot repeatedly spend points. Map card portraits remain visible on narrow screens without growing the HUD band. Item comparison, auto-equip, additional set filters and the broader bag/team redesign belong to later phases.
+
+## Character stat help and equipment comparison, phase 2 — owner-approved 2026-10-19
+
+Overview stat rows expand on request to explain HP, Attack, SPD, Support, effective Armour/Resistance/Leech caps, starting barrier, trail regeneration, individual Luck and actual deployed-team drop bonus. Current values include existing growth, gear, talents and wounds. Active skills show base power, target selection, cooldown and growth source alongside the existing resolver-aligned descriptions and unlock requirements. Bard Finale shows both damage and healing branches; songs include the class passive.
+
+Each compatible bag item has Compare alongside Equip. Comparison stays inside the existing Equipment tab, showing worn versus candidate item, effective whole-character stat deltas, HP consequences, every unlocked action and all set/special effects before/after. Base powers are explicitly conditional, not guaranteed damage; expandable skill rows retain full current/proposed descriptions. Set thresholds and legendary effects are shown separately, including lost bonuses. Use the real pure wear reducer to build the trial state; never persist it. Only the explicit Equip button commits through the existing host. Back/Cancel/Escape returns focus to the source item; changing member/tab clears the trial, resize/rotation preserves it, orientation/inert guards reject equip. Keep 44px controls, contained scrolling and a reachable sticky equip/cancel footer at 320px. Auto-equip and new set filters remain future work.

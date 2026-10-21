@@ -54,6 +54,8 @@ export function gearTotals(map: MapDefinition, gear: Gear | undefined): GearTota
     if (item.special && !specials.includes(item.special)) specials.push(item.special);
   }
   let hpPercent = 0; const extra: HeroGear = {};
+  const boss=gear?.charm?.boss;
+  if(boss)extra.boss={power:boss,amount:boss==='focus'?map.equipment.boss.damage:map.equipment.boss.barrier};
   for (const [id, n] of Object.entries(setCounts(gear)) as [SetId, number][]) {
     const set = map.equipment.sets[id];
     if (n >= 2) for (const { stat, value } of set.two) { if (stat === 'hp') hpPercent += value; else sum[stat] += value; }
@@ -73,12 +75,13 @@ export function gearTotals(map: MapDefinition, gear: Gear | undefined): GearTota
 }
 // Rolls one item from `roll()` (0–99 per call): slot, the weapon's class from `heroes`, rarity by weight, distinct affixes,
 // a legendary special, a set from `sets` at the rules' set chance (2D-3), and last the roll qualities.
-export function rollItem(rules: EquipmentRules, roll: () => number, level: number, weights: readonly number[], heroes: readonly string[], sets: readonly SetId[] = []): Item {
+export function rollItem(rules: EquipmentRules, roll: () => number, level: number, weights: readonly number[], heroes: readonly string[], sets: readonly SetId[] = [], target?:{hero:string;bias:number;force:boolean}): Item {
   const pick = <T>(list: readonly T[]) => list[(roll() * 7919 + roll()) % list.length]!;
-  const slot = pick(GEAR_SLOTS);
+  const rolledSlot=pick(GEAR_SLOTS),slot=target?.force?'weapon':rolledSlot;
   const total = weights.reduce((a, b) => a + b, 0); let r = (roll() * 100 + roll()) % total; let rarity = 0;
   while (r >= weights[rarity]!) { r -= weights[rarity]!; rarity++; }
-  const hero = slot === 'weapon' ? pick(heroes) : undefined;
+  let hero = slot === 'weapon' ? pick(heroes) : undefined;
+  if(hero&&target&&(target.force||roll()<target.bias))hero=target.hero;
   const pool = affixPool(rules, slot, hero); const affixes: GearStat[] = [];
   for (let i = 0; i < rules.affixCount[rarity]! && pool.length; i++) affixes.push(pool.splice((roll() * 7919 + roll()) % pool.length, 1)[0]!);
   const special = rarity === RARITIES - 1 ? pick(GEAR_SPECIALS) : undefined;
@@ -97,13 +100,25 @@ export function itemValid(map: MapDefinition, item: Item, heroIds: readonly stri
   const inRange = (n: unknown) => Number.isInteger(n) && (n as number) >= rules.quality[0] && (n as number) <= rules.quality[1];
   if (item.q !== undefined && (typeof item.q !== 'object' || Object.keys(item.q).length !== 2 || !inRange(item.q.main) || !Array.isArray(item.q.affixes)
     || item.q.affixes.length !== item.affixes.length || !item.q.affixes.every(inRange))) return false;
-  if ((item.rarity === RARITIES - 1) !== (item.special !== undefined) || (item.special !== undefined && !GEAR_SPECIALS.includes(item.special))) return false;
+  if(item.boss!==undefined){if(!['aegis','focus','lantern'].includes(item.boss)||item.slot!=='charm'||item.rarity!==4||item.special!==undefined)return false;}
+  else if ((item.rarity === RARITIES - 1) !== (item.special !== undefined) || (item.special !== undefined && !GEAR_SPECIALS.includes(item.special))) return false;
   if (item.set !== undefined && !SET_IDS.includes(item.set)) return false;
   if (item.plus !== undefined && (!Number.isInteger(item.plus) || item.plus < 1 || item.plus > rules.forge.plusCap[item.rarity]!)) return false;
-  const keys = Object.keys(item).filter(k => !['uid', 'slot', 'rarity', 'level', 'hero', 'affixes', 'special', 'set', 'plus', 'q'].includes(k));
+  if (item.locked !== undefined && item.locked !== true) return false;
+  if (item.investment !== undefined && (!item.investment || typeof item.investment !== 'object' || Object.keys(item.investment).length !== 2 || !['ore','dust'].every(k => Number.isSafeInteger(item.investment![k as 'ore'|'dust']) && item.investment![k as 'ore'|'dust'] >= 0))) return false;
+  if (item.levelInvestment !== undefined && (!item.levelInvestment || typeof item.levelInvestment !== 'object' || Object.keys(item.levelInvestment).length !== 2 || !['ore','dust'].every(k => Number.isSafeInteger(item.levelInvestment![k as 'ore'|'dust']) && item.levelInvestment![k as 'ore'|'dust'] >= 0))) return false;
+  if(item.transferSlot!==undefined&&(found||!item.q||!Number.isInteger(item.transferSlot)||item.transferSlot<0||item.transferSlot>=item.affixes.length))return false;
+  const keys = Object.keys(item).filter(k => !['boss', 'transferSlot', 'uid', 'slot', 'rarity', 'level', 'hero', 'affixes', 'special', 'set', 'plus', 'q', 'locked', 'investment', 'levelInvestment'].includes(k));
   return !keys.length;
 }
+// Missing ledger = legacy credit for the remaining + level, never inferred lost past upgrades.
+export function enhancementInvestment(map: MapDefinition, item: Item): { ore: number; dust: number } {
+  if(item.investment)return {...item.investment};
+  let ore=0,dust=0;const f=map.equipment.forge;
+  for(let n=1;n<=(item.plus??0);n++){ore+=f.ore+f.orePerPlus*n;dust+=Math.ceil(n*f.dustPerPlus);}
+  return {ore,dust};
+}
 export function salvageValue(map: MapDefinition, item: Item): { ore: number; dust: number } {
-  const v = map.equipment.salvage[item.rarity]!;
-  return { ore: v.ore, dust: v.dust + (item.plus ?? 0) * map.equipment.forge.salvageDustPerPlus };
+  const v=map.equipment.salvage[item.rarity]!,paid=enhancementInvestment(map,item);
+  return {ore:v.ore+paid.ore+(item.levelInvestment?.ore??0),dust:v.dust+paid.dust+(item.levelInvestment?.dust??0)};
 }

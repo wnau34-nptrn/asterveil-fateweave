@@ -27,12 +27,12 @@ describe('enhance', () => {
     expect(enhanceReason(rich([item({})], { bank: { ore: 3, gold: 0, seal: 0, dust: 9 } }), map, 1)).toBe('ore');
     expect(enhanceReason(rich([item({})], { bank: { ore: 9, gold: 0, seal: 0, dust: 0 } }), map, 1)).toBe('dust');
   });
-  it('works on a worn piece; affixes are not raised; salvage returns extra dust per level', () => {
+  it('works on a worn piece; affixes are not raised; salvage returns the full remaining legacy enhancement credit', () => {
     let p = equip(rich([item({ rarity: 1, affixes: ['hp'] })]), 'guardian', 1).profile;
     p = enhance(p, map, 1).profile;
     expect(findItem(p, 1)).toMatchObject({ owner: 'guardian', item: { plus: 1 } });
     expect(itemStats(map.equipment, findItem(p, 1)!.item)).toEqual({ hp: Math.round(15 * 1.06) + 8, armour: Math.round(4.6 * 1.06) });
-    expect(salvageValue(map, item({ rarity: 1, plus: 4 }))).toEqual({ ore: 3, dust: 2 + 4 });
+    expect(salvageValue(map, item({ rarity: 1, plus: 4 }))).toEqual({ ore: 25, dust: 8 });
   });
 });
 
@@ -44,7 +44,7 @@ describe('fuse', () => {
     expect(fuseMaterials(p, map, 1).map(i => i.uid)).toEqual([3, 4]);
     p = fuse(p, map, 1).profile;
     const up = findItem(p, 1)!.item;
-    expect(up).toMatchObject({ rarity: 2, set: 'thorn', level: 8, plus: 2 }); expect(up.affixes[0]).toBe('hp'); expect(up.affixes).toHaveLength(2);
+    expect(up).toMatchObject({ rarity: 2, set: 'thorn', level: 8, plus: 5 }); expect(up.affixes[0]).toBe('hp'); expect(up.affixes).toHaveLength(2);
     expect(p.items.map(i => i.uid)).toEqual([1, 2, 5]); expect(p.forge).toBeGreaterThan(0);
     expect(itemValid(map, up, ids)).toBe(true);
   });

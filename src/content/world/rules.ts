@@ -52,6 +52,7 @@ export const gameRules: GameRules = {
   },
   // Equipment (2D-2, draft numbers; docs/EXPEDITION_DESIGN.md "Equipment").
   equipment: {
+    boss:{chance:25,pity:4,barrier:6,damage:4},
     bagCap: 60,
     // Stats design (owner-approved 2026-10-17, draft numbers): attack and support are percents; armour/resist/leech
     // are battle percents; regen and luck work on the map. Each value rolls 80–120% of its level value.
@@ -76,7 +77,9 @@ export const gameRules: GameRules = {
     // Sets (2D-3, draft numbers): meadow dawn/wind, thicket shadow/thorn, scar star-veil/mender.
     setPercent: 60,
     // Forge (2D-4, draft numbers): caps +5/+10/+15/+20/+25, +6% base stats per level.
-    forge: { plusCap: [5, 10, 15, 20, 25], plusPercent: 6, ore: 3, orePerPlus: 1, dustPerPlus: 0.5, fuseCount: 3, rerollSeals: 1, salvageDustPerPlus: 1, smeltOre: 8, smeltCap: 30 },
+    hunt: {weaponBiasPercent:70,pityDrops:12},
+    storage: {step:30,costs:[200,400,800]},
+    forge: { transfer:{ore:12,dust:3,seal:1}, craft:{ore:18,dust:4,orePerLevel:6,dustPerLevel:1}, itemLevel: {baseCap:3,orePerLevel:4,dustPerLevel:1,unlocks:[{elite:'gate-meadow',cap:6},{elite:'gate-thicket',cap:9},{elite:'scar-golem',cap:10}]}, plusCap: [5, 10, 15, 20, 25], plusPercent: 6, ore: 3, orePerPlus: 1, dustPerPlus: 0.5, fuseCount: 3, rerollSeals: 1, salvageDustPerPlus: 1, smeltOre: 8, smeltCap: 30 },
     sets: {
       dawn: { two: [{ stat: 'hp', value: 10 }], four: { kind: 'barrier', amount: 12 } },
       wind: { two: [{ stat: 'speed', value: 3 }], four: { kind: 'firstStrike', amount: 0 } },

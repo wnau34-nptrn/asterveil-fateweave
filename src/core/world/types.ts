@@ -1,4 +1,4 @@
-import type { ActionId, Command, GearSpecial, HeroDefinition, TalentCap, TalentRule } from '../battle/types';
+import type { ActionId, BossPower, Command, GearSpecial, HeroDefinition, TalentCap, TalentRule } from '../battle/types';
 
 export type Direction = 'up' | 'down' | 'left' | 'right';
 export interface Point { x: number; y: number }
@@ -81,8 +81,13 @@ export type GearStat = 'hp' | 'attack' | 'support' | 'speed' | 'armour' | 'resis
 // `plus` (2D-4): forge enhance level (missing = +0).
 // `q` (stats design): roll quality in percent (80–120) of the main stats and of each affix, in affix order;
 // missing = 100 (items made before the rolls).
+// locked protects destruction; investment is the paid enhancement credit, preserved across equipment moves.
 export interface Item { uid: number; slot: GearSlot; rarity: number; level: number; hero?: string; affixes: GearStat[]; special?: GearSpecial; set?: SetId; plus?: number;
-  q?: { main: number; affixes: number[] } }
+  boss?:BossPower;
+  transferSlot?:number;
+  q?: { main: number; affixes: number[] }; locked?: true; investment?: { ore: number; dust: number };
+  // Actual paid item-Lv costs only; the original dropped level never grants credit.
+  levelInvestment?: {ore:number;dust:number} }
 // ---- Equipment sets (2D-3, draft numbers): 2 pieces give a stat, 4 pieces a rule. ----
 export type SetId = 'dawn' | 'wind' | 'shadow' | 'thorn' | 'starveil' | 'mender';
 export const SET_IDS: readonly SetId[] = ['dawn', 'wind', 'shadow', 'thorn', 'starveil', 'mender'];
@@ -93,7 +98,12 @@ export interface SetDefinition {
 }
 // A value at item level L = round(base + perLevel × (L − 1)).
 export type StatCurve = readonly [base: number, perLevel: number];
+export interface HuntPlan {target?:string;misses:number}
+export interface BossProgress {target:BossPower;misses:number;rewarded:boolean}
+export interface BossPlan extends BossProgress {version:1;boss:string}
 export interface EquipmentRules {
+  boss:{chance:number;pity:number;barrier:number;damage:number};
+  hunt:{weaponBiasPercent:number;pityDrops:number};
   bagCap: number;
   // Main stats per slot (a support class's weapon uses `supportWeapon`); affix values per stat; the affixes each
   // slot can roll (`supportWeapon` again for support classes); affix count per rarity (legendary also has a special).
@@ -108,10 +118,11 @@ export interface EquipmentRules {
   // `bossDrops` items. A wiped team still brings home its `wipeKeep` best found items.
   dropPercent: number; pity: number;
   rarityWeights: readonly number[]; bossRarityWeights: readonly number[]; bossDrops: number; wipeKeep: number;
-  // Salvaging (or an overflowing bag) returns ore and veil dust by rarity.
+  // Explicit recycling returns ore and veil dust by rarity. Overflow is preserved.
   salvage: readonly { ore: number; dust: number }[];
   // A dropped item belongs to one of its zone's sets at `setPercent` (the boss: any set).
   setPercent: number; sets: Readonly<Record<SetId, SetDefinition>>;
+  storage: {step:number;costs:readonly number[]};
   forge: ForgeRules;
 }
 // ---- Phase 3A: elites and map events (draft numbers) ----
@@ -174,8 +185,11 @@ export interface PotionRules {
 // Forge (2D-4, draft numbers). Enhancing always succeeds: +1 costs `ore + orePerPlus × n` ore and ceil(n × dustPerPlus) dust
 // for the n-th level, up to `plusCap[rarity]`; each level adds `plusPercent` to the slot's base stats (not affixes).
 // Fusing three pieces of one slot and rarity raises the chosen main piece one rarity; rerolling one affix costs a seal.
-// Salvaging an enhanced piece returns `salvageDustPerPlus` dust per level on top.
+// Recycling returns base salvage plus paid enhancement and item-Lv investment.
 export interface ForgeRules {
+  transfer:{ore:number;dust:number;seal:number};
+  craft: {ore:number;dust:number;orePerLevel:number;dustPerLevel:number};
+  itemLevel: {baseCap:number; orePerLevel:number; dustPerLevel:number; unlocks:readonly {elite:string;cap:number}[]};
   plusCap: readonly number[]; plusPercent: number; ore: number; orePerPlus: number; dustPerPlus: number;
   // Smelting (owner-approved 2026-10-16): `smeltOre` ore per veil dust, at most `smeltCap` dust per return home.
   smeltOre: number; smeltCap: number;
@@ -238,6 +252,8 @@ export interface Bank { ore: number; gold: number; seal: number; dust: number }
 // The player's commander (non-combat leader of the company), created once (L2).
 export interface Commander { name: string; crest: string; color: string }
 export interface Profile {
+  bossLoot?:Record<string,BossProgress>;
+  hunt?:{target?:string;pity:Record<string,number>};
   seed: number; returns: number; tutorialDone: boolean;
   commander: Commander | null;
   // Every owned mercenary in display order, with stars and stored duplicates.
@@ -245,7 +261,8 @@ export interface Profile {
   // The 4 + 4 chosen for the next expedition (subset of `company`).
   party: Roster;
   bank: Bank;
-  // Unequipped items (≤ bagCap) and the next item uid.
+  // Unequipped items (≤ upgraded storage capacity), persistent pending rewards and the next uid.
+  overflow?:Item[]; storageTier?:number;
   items: Item[]; nextItem: number;
   // Forge rolls used so far (fuse and reroll draw from (seed, forge)).
   forge: number;
@@ -259,6 +276,7 @@ export interface Profile {
   smelted: number;
   // Hiring board taken indexes for the current `returns` count.
   taken: number[];
+  forgeLevel?: number;
   expeditions: number; completes: number;
   // Chapters (2026-10-17): ids of the maps this company has completed at least once (each opens the next map).
   cleared: string[];
@@ -266,6 +284,10 @@ export interface Profile {
   last: { outcome: RunOutcome; ore: number; gold: number; seal: number; steps: number; wins: number; items: number; salvaged: number } | null;
 }
 export type ProfileEvent =
+  | {type:'bossTarget'}
+  | {type:'huntTarget'}
+  | {type:'storageCollected';count:number}
+  | {type:'storageExpanded'}
   | { type: 'blocked'; reason: string }
   | { type: 'party' }
   | { type: 'commander' }
@@ -275,7 +297,8 @@ export type ProfileEvent =
   | { type: 'talent'; heroId: string }
   | { type: 'equipped'; heroId: string }
   | { type: 'salvaged'; count: number; ore: number; dust: number }
-  | { type: 'forged'; uid: number; action: 'enhance' | 'fuse' | 'reroll' }
+  | { type: 'forged'; uid: number; action: 'enhance' | 'fuse' | 'reroll' | 'level' | 'craft' | 'transfer' }
+  | { type: 'equipmentLocked'; uid: number; locked: boolean }
   | { type: 'smelted'; dust: number }
   | { type: 'brewed'; potion: PotionId }
   | { type: 'claimed'; questId: string }
@@ -292,6 +315,9 @@ export type BattleKind = 'tutorial' | 'random' | 'boss' | 'elite' | 'event';
 // `level`: the monster level fixed when the battle started (missing in older saves = the encounter's own level).
 export interface ActiveBattle { kind: BattleKind; encounterId: string; entry: Record<string, number>; commands: Command[]; level?: number; source?: string }
 export interface ExpeditionState {
+  bossLoot?:BossPlan;
+  // Missing plan preserves legacy RNG and drop behavior until this expedition ends.
+  hunt?:HuntPlan;
   mapId: string; mapVersion: number; seed: number; rolls: number;
   position: Point; steps: number; pressure: number;
   // `hp` covers every roster member; the battle entry covers the deployed ones.
@@ -320,6 +346,7 @@ export interface ExpeditionState {
   spare: Item[];
 }
 export type WorldEvent =
+  | { type: 'talent'; heroId: string }
   | { type: 'moved'; chance: number }
   | { type: 'blocked'; reason: 'wall' | 'edge' | 'busy' | 'party' | 'sealed' | 'stone' | 'pit' }
   | { type: 'roster' }

@@ -16,7 +16,7 @@ Every Codex art task for Asterveil · Fateweave must follow these rules. They de
 
 - **Mercenaries stand on the left half** (x = 14–39% of the field) and **always face right**, toward the enemies. Draw a 3/4 view looking right, like the existing Knight/Duelist/Mage/Priest in `public/assets/art/units.webp`.
 - **Enemies stand on the right half** (x = 70–85%) and **always face left**, toward the party, like the existing Raider and Brute.
-- **The game does not mirror battle sprites,** so the facing in the file is final. The only exception is the legacy units-atlas Raider, which is drawn facing right and is mirrored by `mirroredArt` (2026-10-16). New art must face the correct way.
+- **New battle art must face its final direction.** The game corrects two existing right-facing runtime frames with `mirroredArt`: the legacy units-atlas Raider and the foes-atlas Thorn Matriarch. The Matriarch's incoming art already faces left; intake flipped it in the runtime atlas. Its cropped DOM portrait is also mirrored. If those runtime atlas frames are rebuilt facing left, remove their display corrections to avoid a double flip.
 - **Layout per side:**
   - Our side has 4 slots in two staggered pairs: back-left high (y ≈ 48% and 77%) and front-left lower and further right (y ≈ 59% and 90%).
   - The enemy side has two positions:

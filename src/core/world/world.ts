@@ -1,8 +1,12 @@
+import {bossReward} from './boss-equipment';
+import {huntedReward} from './targeted-loot';
 import { replay, withLevel, withParty } from '../battle/engine';
 import { boulderAt, leverPuzzleAt, openPit, passableWall, runePuzzleAt, secretAt } from './puzzles';
 import type { BattleState, Command, EncounterDefinition, HeroDefinition, HeroTalents } from '../battle/types';
 import type { ActiveBattle, BattleKind, ChestDefinition, Company, Direction, ExpGain, ExpeditionState, LootTable, MapDefinition, MemberProgress, Point, PotionId, Resources, Talents, Tile, WorldEvent, WorldResult, ZoneDefinition, Gear, Item, EliteDefinition, EventChoice, MapEventDefinition, MapEventKind, GearSlot } from './types';
-import { gearTotals, rollItem } from './equipment';
+import { gearTotals } from './equipment';
+import { memberTalentReason } from './talents';
+import type { TalentNode } from './types';
 import { PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS, SET_IDS } from './types';
 
 // Pure expedition rules: no DOM, Phaser, clocks or Math.random. Every roll is
@@ -286,6 +290,15 @@ export function revive(initial: ExpeditionState, map: MapDefinition, lookup: Enc
 // Roster management anywhere outside battle (map bag, owner 2026-10-17): a deployed member and a reserve member
 // trade places, or one member moves to a free slot on the other side. At least one member stays deployed.
 export const canManage = (state: ExpeditionState): boolean => !state.battle && !state.completed;
+// Spend only unallocated level points during exploration. Reset remains a lobby action.
+export function learnRunTalent(initial: ExpeditionState, map: MapDefinition, lookup: EncounterLookup, id: string, node: TalentNode): WorldResult {
+  if (!canManage(initial) || !rosterIds(initial).includes(id) || memberTalentReason(map, id, initial.members[id], node)) return { state: initial, event: { type: 'blocked', reason: 'busy' } };
+  const state = structuredClone(initial), m = state.members[id]!;
+  m.talents = { ...m.talents, [node]: (m.talents?.[node] ?? 0) + 1 };
+  // Learning a max-HP talent must not heal living or fallen heroes for free.
+  capHp(state, map, lookup, id);
+  return { state, event: { type: 'talent', heroId: id } };
+}
 export function swapMembers(initial: ExpeditionState, a: string, b: string): WorldResult {
   const { deployed, reserve } = initial.roster;
   const [d, r] = deployed.includes(a) ? [a, b] : [b, a];
@@ -452,7 +465,7 @@ function trailRegen(state: ExpeditionState, map: MapDefinition, lookup: Encounte
     if (regen && hp > 0) state.hp[id] = Math.min(memberDef(lookup, map, state.members, id)!.maxHp, hp + regen);
   }
 }
-export const partyLuck = (state: ExpeditionState, map: MapDefinition): number =>
+export const partyLuck = (state: Pick<ExpeditionState,'members'|'roster'>, map: MapDefinition): number =>
   Math.min(map.equipment.luckCap, state.roster.deployed.reduce((n, id) => n + gearTotals(map, state.members[id]?.gear).luck, 0));
 // Equipment drop (2D-2): random victories drop at `dropPercent`, guaranteed after `pity` dry wins; the boss
 // always drops `bossDrops` items with better rarity weights; the tutorial never drops. The item's level is the monster level,
@@ -471,7 +484,8 @@ function dropItems(state: ExpeditionState, map: MapDefinition, kind: BattleKind,
   // Sets come from the zone the battle was fought in; the boss can drop any set.
   const sets = kind === 'boss' ? SET_IDS : zoneOf(map, tileAt(map, state.position)?.zoneId ?? '')?.sets ?? [];
   const weights = kind === 'boss' ? rules.bossRarityWeights : kind === 'elite' ? (miniBoss(map, source) ? map.eventRules.miniBoss.rarityWeights : optionalElite(map, source) ? map.eventRules.optionalElite.rarityWeights : map.eventRules.eliteRarityWeights) : rules.rarityWeights;
-  const items = Array.from({ length: kind === 'boss' ? rules.bossDrops : 1 }, () => rollItem(rules, () => rollPercent(state.seed, state.rolls++), level, weights, rosterIds(state), sets));
+  const items = Array.from({ length: kind === 'boss' ? rules.bossDrops : 1 }, () => huntedReward(rules, () => rollPercent(state.seed, state.rolls++), level, weights, rosterIds(state), sets,state.hunt));
+  if(kind==='boss'&&state.bossLoot){let bonusRoll=0;const bonus=bossReward(map,state.bossLoot,()=>rollPercent((state.seed^0x6b05d017)>>>0,bonusRoll++),level);if(bonus)items.push(bonus);}
   state.found.push(...items);
   return items;
 }

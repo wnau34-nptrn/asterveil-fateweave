@@ -5,7 +5,7 @@ import type { StoragePort } from '../core/save/expedition-save';
 // under the same name. Sounds start only after the first user gesture and never affect game state.
 export type SfxName =
   | 'click' | 'open' | 'close' | 'step' | 'bump' | 'encounter' | 'chest' | 'chestRare' | 'rest' | 'rune' | 'runeReset' | 'lever' | 'push' | 'door' | 'secret' | 'herb'
-  | 'hit' | 'zap' | 'crit' | 'guard' | 'barrier' | 'heal' | 'buff' | 'debuff' | 'miss' | 'down' | 'cancel' | 'victory' | 'defeat'
+  | 'swing' | 'charge' | 'hit' | 'zap' | 'crit' | 'guard' | 'barrier' | 'heal' | 'buff' | 'debuff' | 'miss' | 'down' | 'cancel' | 'victory' | 'defeat'
   | 'coin' | 'upgrade' | 'anvil' | 'claim' | 'potion';
 const prefKey = 'asterveil.fateweave.sfx.v1';
 export interface SfxPrefs { muted: boolean; volume: number }
@@ -14,6 +14,8 @@ interface Tone { type?: OscillatorType; freq: number; to?: number; at?: number; 
 interface Noise { at?: number; dur: number; freq: number; q?: number; gain?: number; type?: BiquadFilterType; to?: number }
 // Recipes: tones and noise bursts, times in seconds from the start of the sound.
 const recipes: Record<SfxName, { tones?: Tone[]; noise?: Noise[] }> = {
+  swing: { noise: [{ dur: .12, freq: 800, to: 2400, q: .6, gain: .08, type: 'bandpass' }] },
+  charge: { tones: [{ type: 'sine', freq: 330, to: 880, dur: .18, gain: .045, attack: .04 }] },
   click: { tones: [{ type: 'triangle', freq: 1400, dur: .04, gain: .12 }] },
   open: { tones: [{ type: 'sine', freq: 520, to: 780, dur: .12, gain: .14 }] },
   close: { tones: [{ type: 'sine', freq: 700, to: 440, dur: .1, gain: .12 }] },
@@ -58,6 +60,7 @@ export class Sfx {
   private prefs: SfxPrefs = { muted: false, volume: 0.7 };
   private storage: StoragePort | undefined;
   private last = new Map<SfxName, number>();
+  private unlocked = false;
   init(storage: StoragePort | undefined): void {
     this.storage = storage;
     try {
@@ -65,18 +68,47 @@ export class Sfx {
       if (typeof p.muted === 'boolean') this.prefs.muted = p.muted;
       if (typeof p.volume === 'number' && p.volume >= 0 && p.volume <= 1) this.prefs.volume = p.volume;
     } catch { /* corrupt preference: keep the defaults */ }
-    const unlock = () => { this.context(); this.ctx?.resume().catch(() => {}); };
-    window.addEventListener('pointerdown', unlock, { capture: true, once: true }); window.addEventListener('keydown', unlock, { capture: true, once: true });
+    // Safari can interrupt Web Audio after the first gesture (app switching, screen lock, calls).
+    // Keep retrying on gestures: a denied or interrupted resume must not permanently silence effects.
+    const unlock = () => { this.unlocked = true; this.resume(); };
+    window.addEventListener('pointerdown', unlock, { capture: true });
+    window.addEventListener('keydown', unlock, { capture: true });
+    document.addEventListener('visibilitychange', () => { if (this.unlocked && !document.hidden) this.resume(); });
   }
   get settings(): SfxPrefs { return { ...this.prefs }; }
-  setMuted(muted: boolean): void { this.prefs.muted = muted; this.save(); }
+  // Explicit preview button: resume within its gesture, then schedule the sample after resume completes.
+  // A true result means Web Audio accepted playback, not proof of sound from a physical speaker.
+  async preview(): Promise<boolean> {
+    if (this.prefs.muted || this.prefs.volume === 0 || document.hidden) return false;
+    this.unlocked = true; this.resume();
+    const ctx = this.ctx; if (!ctx) return false;
+    try { if (ctx.state !== 'running') await ctx.resume(); } catch { return false; }
+    if (ctx.state !== 'running') return false;
+    this.last.delete('hit'); this.play('hit'); return true;
+  }
+  setMuted(muted: boolean): void { this.prefs.muted = muted; this.save(); if (!muted && this.unlocked) this.resume(); }
   setVolume(volume: number): void { this.prefs.volume = Math.min(1, Math.max(0, volume)); this.save(); if (this.out) this.out.gain.value = this.prefs.volume; }
   private save(): void { try { this.storage?.setItem(prefKey, JSON.stringify(this.prefs)); } catch { /* fine for a preference */ } }
+  private resume(): void {
+    if (!this.unlocked || this.prefs.muted || document.hidden) return;
+    // Match background music's playback session where Safari exposes the Audio Session API.
+    // Older Safari and other browsers can omit it or reject the request; gesture recovery still works.
+    try {
+      const session = (navigator as Navigator & { audioSession?: { type: string } }).audioSession;
+      if (session && session.type !== 'playback') session.type = 'playback';
+    } catch { /* optional platform support */ }
+    const ctx = this.context();
+    if (ctx && ctx.state !== 'running') void ctx.resume().catch(() => { /* retry on the next gesture */ });
+  }
   private context(): AudioContext | undefined {
-    if (this.ctx) return this.ctx;
+    if (this.ctx && this.ctx.state !== 'closed') return this.ctx;
     const Ctor = window.AudioContext ?? (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
     if (!Ctor) return undefined;
     try { this.ctx = new Ctor(); } catch { return undefined; }
+    this.last.clear();
+    this.ctx.addEventListener('statechange', () => {
+      if (this.ctx?.state === 'interrupted') this.resume();
+    });
     this.out = this.ctx.createGain(); this.out.gain.value = this.prefs.volume; this.out.connect(this.ctx.destination);
     const len = this.ctx.sampleRate; this.noiseBuffer = this.ctx.createBuffer(1, len, this.ctx.sampleRate);
     const data = this.noiseBuffer.getChannelData(0); let seed = 1;
@@ -84,17 +116,21 @@ export class Sfx {
     return this.ctx;
   }
   // Plays a sound now; the same sound within 40 ms is dropped so bursts of events do not stack into noise.
-  play(name: SfxName): void {
+  play(name: SfxName): () => void {
+    const silent = () => {};
     document.documentElement.dataset.sfx = name;
-    if (this.prefs.muted || document.hidden) return;
-    const ctx = this.ctx; if (!ctx || !this.out || ctx.state !== 'running') return;
-    const now = ctx.currentTime; if (now - (this.last.get(name) ?? -1) < .04) return; this.last.set(name, now);
+    if (this.prefs.muted || document.hidden) return silent;
+    const ctx = this.ctx;
+    if (!ctx || !this.out || ctx.state !== 'running') { this.resume(); return silent; }
+    const now = ctx.currentTime; if (now - (this.last.get(name) ?? -1) < .04) return silent; this.last.set(name, now);
+    const voices: AudioScheduledSourceNode[] = [];
     const r = recipes[name];
     for (const t of r.tones ?? []) {
       const o = ctx.createOscillator(); const g = ctx.createGain(); const start = now + (t.at ?? 0); const end = start + t.dur;
       o.type = t.type ?? 'sine'; o.frequency.setValueAtTime(t.freq, start); if (t.to) o.frequency.exponentialRampToValueAtTime(t.to, end);
       g.gain.setValueAtTime(0.0001, start); g.gain.exponentialRampToValueAtTime(t.gain ?? .1, start + (t.attack ?? .01)); g.gain.exponentialRampToValueAtTime(0.0001, end);
       o.connect(g).connect(this.out); o.start(start); o.stop(end + .02);
+      voices.push(o);
     }
     for (const n of r.noise ?? []) {
       const src = ctx.createBufferSource(); src.buffer = this.noiseBuffer!; const f = ctx.createBiquadFilter(); const g = ctx.createGain();
@@ -102,7 +138,9 @@ export class Sfx {
       f.type = n.type ?? 'bandpass'; f.frequency.setValueAtTime(n.freq, start); if (n.to) f.frequency.exponentialRampToValueAtTime(n.to, end); f.Q.value = n.q ?? 1;
       g.gain.setValueAtTime(n.gain ?? .2, start); g.gain.exponentialRampToValueAtTime(0.0001, end);
       src.connect(f).connect(g).connect(this.out); src.start(start, Math.random() * .5); src.stop(end + .02);
+      voices.push(src);
     }
+    return () => { for (const voice of voices.splice(0)) { try { voice.stop(); voice.disconnect?.(); } catch { /* Already ended or closed. */ } } };
   }
 }
 // One shared instance: the shell sets its storage; views call `sfx.play`.

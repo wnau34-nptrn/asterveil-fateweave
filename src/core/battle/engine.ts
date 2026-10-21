@@ -1,4 +1,4 @@
-import type { ActionId, BattleEntry, GearSpecial, HeroDefinition, PassiveId, TalentCap, TalentRule, HeroState, EnemyState, BattleEvent, BattleState, Command, EncounterDefinition, Intent, Resolution, TargetOption, TurnSlot, TurnStage } from './types';
+import type { HeroGear, ActionId, BattleEntry, GearSpecial, HeroDefinition, PassiveId, TalentCap, TalentRule, HeroState, EnemyState, BattleEvent, BattleState, Command, EncounterDefinition, Intent, Resolution, TargetOption, TurnSlot, TurnStage } from './types';
 
 const living = (state: BattleState, id: string) => [...state.heroes, ...state.enemies].some(a => a.id === id && a.hp > 0);
 const definitions = (data: EncounterDefinition) => [...data.heroes, ...data.enemies];
@@ -63,6 +63,8 @@ export function skillPower(data: EncounterDefinition, heroId: string, action: Ac
   const bonus = SUPPORT_SKILLS.includes(action) ? hero?.skillBonus : hero?.damageBonus;
   return Math.round(data.skills[action].power * (100 + (bonus ?? 0)) / 100) + (hero?.talents?.power?.[action] ?? 0);
 }
+export const finaleHealPower = (data: EncounterDefinition, heroId: string): number =>
+  Math.round(data.rules.finaleHeal * (100 + (data.heroes.find(h => h.id === heroId)?.skillBonus ?? 0)) / 100);
 // Extra damage a hero's own hits gain from its capstones (duelist deep mark, archer hunter) and mark-hunter gear.
 export function talentHitBonus(state: BattleState, data: EncounterDefinition, heroId: string, enemy: EnemyState): number {
   const marked = enemy.markedUntil > state.round;
@@ -74,6 +76,18 @@ export function talentHitBonus(state: BattleState, data: EncounterDefinition, he
 export const GEAR_MARK_HUNTER = 8; export const GEAR_RENEWAL = 4;
 export const hasGear = (data: EncounterDefinition, heroId: string | undefined, special: GearSpecial): boolean =>
   !!heroId && !!data.heroes.find(h => h.id === heroId)?.gear?.specials?.includes(special);
+
+export function bossPowerReady(state:BattleState,data:EncounterDefinition,heroId:string,power:NonNullable<HeroGear['boss']>['power']):number {
+  const gear=data.heroes.find(h=>h.id===heroId)?.gear?.boss,actor=state.heroes.find(h=>h.id===heroId);
+  return actor&&actor.hp>0&&actor.bossUsedRound!==state.round&&gear?.power===power?gear.amount:0;
+}
+function bossBarrier(state:BattleState,data:EncounterDefinition,ownerId:string,targetId:string,power:'aegis'|'lantern',events:BattleEvent[]):void {
+  const amount=bossPowerReady(state,data,ownerId,power),target=state.heroes.find(h=>h.id===targetId);
+  if(!amount||!target||target.hp<=0)return;
+  state.heroes.find(h=>h.id===ownerId)!.bossUsedRound=state.round;
+  const added=Math.max(target.barrier,amount)-target.barrier;target.barrier+=added;
+  if(added)events.push({type:'barrier',sourceId:ownerId,targetId,amount:added,text:power==='aegis'?'ตราพิทักษ์ผู้คุมมอบโล่หลังรับการโจมตี':'ประทีปผนึกมอบโล่หลังรักษาเพื่อน'});
+}
 // Healing cast by this hero, raised by its equipment's heal bonus.
 // Deploys a party (in slot order) into an encounter; enemy slots then resolve to these heroes.
 export function withParty(data: EncounterDefinition, party: readonly HeroDefinition[]): EncounterDefinition {
@@ -215,6 +229,7 @@ function hit(state: BattleState, data: EncounterDefinition, enemy: EnemyState, i
   recipient.hp -= amount;
   events.push({ type: 'damage', sourceId: actorId, targetId: recipient.id, amount, absorbed, text: 'Enemy attacks on its own turn.' });
   if (!recipient.hp) events.push({ type: 'down', targetId: recipient.id, text: 'Hero falls.' });
+  if(amount>0&&recipient.hp>0)bossBarrier(state,data,recipient.id,recipient.id,'aegis',events);
   if (reflect && living(state, reflect.heroId) && enemy.hp > 0) strikeBack(state, data, reflect.heroId, enemy, reflect.amount, events, 'The ward reflects the hit.');
   // Thorn set (4 pieces): a physical hit taken is answered.
   const thorns = data.heroes.find(h => h.id === recipient.id)!.gear?.thorns;
@@ -233,11 +248,12 @@ function hit(state: BattleState, data: EncounterDefinition, enemy: EnemyState, i
     if (!brace.wall) state.counter = null;
   }
 }
-function automaticTurns(state: BattleState, data: EncounterDefinition, turns: TurnStage[]): void {
+function automaticTurns(state: BattleState, data: EncounterDefinition, turns: TurnStage[], presentation = false): void {
   while (state.outcome === 'active' && !currentHeroId(state, data)) {
     const actorId = currentActorId(state)!;
     const intent = enemyIntent(state, data, actorId, state.round);
     state.intent = intent;
+    const before = presentation ? structuredClone(state) : undefined;
     const events: BattleEvent[] = [];
     const enemy = state.enemies.find(e => e.id === actorId)!;
     if (intent) {
@@ -279,7 +295,7 @@ function automaticTurns(state: BattleState, data: EncounterDefinition, turns: Tu
     const frame = structuredClone(state); const beat = state.beat; const round = state.round;
     finishOrAdvance(state, data, events);
     if (state.outcome !== 'active') { frame.outcome = state.outcome; frame.intent = null; }
-    turns.push({ actorId, side: 'enemy', beat, round, intent, targetId: events.find(e => e.type === 'damage' || e.type === 'dodge')?.targetId ?? intent?.targetId, state: frame, events });
+    turns.push({ actorId, side: 'enemy', beat, round, intent, targetId: events.find(e => e.type === 'damage' || e.type === 'dodge')?.targetId ?? intent?.targetId, state: frame, events, ...(presentation ? {before, after: structuredClone(state)} : {}) });
   }
 }
 export function entryReason(data: EncounterDefinition, entry?: BattleEntry): string {
@@ -292,7 +308,8 @@ export function entryReason(data: EncounterDefinition, entry?: BattleEntry): str
   return data.heroes.some(h => (entry.hp[h.id] ?? h.maxHp) > 0) ? '' : 'The whole party is down.';
 }
 // Heroes entering at 0 HP start down: they never join the queue or receive targets.
-export function beginBattle(data: EncounterDefinition, entry?: BattleEntry): Resolution {
+// Opt-in boundaries avoid extra snapshot work in previews, replay and simulation.
+export function beginBattle(data: EncounterDefinition, entry?: BattleEntry, presentation = false): Resolution {
   const invalid = entryReason(data, entry); if (invalid) throw new Error(invalid);
   const state: BattleState = {
     encounterId: data.id, beat: 1, round: 1, turnIndex: 0, order: [], outcome: 'active', guard: null, counter: null, taunt: null, song: null,
@@ -307,7 +324,7 @@ export function beginBattle(data: EncounterDefinition, entry?: BattleEntry): Res
   if (bard) state.song = { heroId: bard.id, action: 'mend' };
   state.order = roundOrder(state, data); refreshIntent(state, data);
   const initial = structuredClone(state); const turns: TurnStage[] = [];
-  automaticTurns(state, data, turns);
+  automaticTurns(state, data, turns, presentation);
   return { initial, state, turns, events: turns.flatMap(t => t.events) };
 }
 export const createBattle = (data: EncounterDefinition, entry?: BattleEntry): BattleState => beginBattle(data, entry).state;
@@ -366,7 +383,7 @@ export function validateCommand(state: BattleState, data: EncounterDefinition, c
   const target = targetOptions(state, data, command.heroId, command.action).find(t => t.id === command.targetId);
   return target?.valid ? '' : target?.reason || 'Invalid target.';
 }
-export function resolveCommand(initial: BattleState, data: EncounterDefinition, command: Command): Resolution {
+export function resolveCommand(initial: BattleState, data: EncounterDefinition, command: Command, presentation = false): Resolution {
   const invalid = validateCommand(initial, data, command); if (invalid) throw new Error(invalid);
   const state = structuredClone(initial); const events: BattleEvent[] = []; const turns: TurnStage[] = [];
   const hero = data.heroes.find(h => h.id === command.heroId)!; const actor = state.heroes.find(h => h.id === hero.id)!;
@@ -374,7 +391,9 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
   const skill = { ...base, power: skillPower(data, hero.id, command.action) };
   // Every hero hit adds corrosion, valor and its own capstone bonuses.
   const strike = (foe: EnemyState, power: number, text: string) => {
-    const amount = Math.min(foe.hp, power + hitBonus(state, data, foe.id) + talentHitBonus(state, data, hero.id, foe)); foe.hp -= amount;
+    const boss=foe===enemy&&targetKind(command.action)==='enemy'&&power>0&&foe.markedUntil>state.round?bossPowerReady(state,data,hero.id,'focus'):0;
+    if(boss)actor.bossUsedRound=state.round;
+    const amount = Math.min(foe.hp, power + boss + hitBonus(state, data, foe.id) + talentHitBonus(state, data, hero.id, foe)); foe.hp -= amount;
     events.push({ type: 'damage', sourceId: hero.id, targetId: foe.id, amount, text });
     if (!foe.hp) events.push({ type: 'down', targetId: foe.id, text: 'Enemy falls.' });
     leech(state, data, hero.id, amount, events);
@@ -443,7 +462,7 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
       events.push({ type: 'finale', sourceId: hero.id, targetId: hero.id, text: song === 'valor' ? 'Finale of valor.' : 'Finale of mending.' });
       if (song === 'valor') for (const foe of state.enemies.filter(e => e.hp > 0)) strike(foe, skill.power, 'The finale strikes every enemy.');
       else {
-        const power = Math.round(data.rules.finaleHeal * (100 + (hero.skillBonus ?? 0)) / 100);
+        const power = finaleHealPower(data, hero.id);
         for (const h of state.heroes) heal(h.id, power);
       }
       break;
@@ -500,6 +519,7 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
       break;
     }
     case 'heal': {
+      const hpBefore=state.heroes.find(h=>h.id===command.targetId)!.hp;
       heal(command.targetId, skill.power);
       // Priest talents: a small barrier, a half heal for the most hurt other ally, and solace on the target.
       const shield = talentRule(data, hero.id, 'healBarrier'); const target = state.heroes.find(h => h.id === command.targetId)!;
@@ -510,6 +530,7 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
         if (other) heal(other.id, Math.floor(skill.power / 2));
       }
       if (hasCap(data, hero.id, 'solace')) state.solace = { heroId: hero.id, targetId: target.id };
+      if(target.id!==hero.id&&target.hp>hpBefore)bossBarrier(state,data,hero.id,target.id,'lantern',events);
       break;
     }
     case 'prayer': for (const h of state.heroes) heal(h.id, skill.power); break;
@@ -524,8 +545,8 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
   state.commands.push({ ...command });
   const frame = structuredClone(state); finishOrAdvance(state, data, events);
   if (state.outcome !== 'active') { frame.outcome = state.outcome; frame.intent = null; }
-  turns.push({ actorId: hero.id, side: 'hero', beat: initial.beat, round: initial.round, action: command.action, targetId: command.targetId, intent: initial.intent, state: frame, events });
-  automaticTurns(state, data, turns);
+  turns.push({ actorId: hero.id, side: 'hero', beat: initial.beat, round: initial.round, action: command.action, targetId: command.targetId, intent: initial.intent, state: frame, events, ...(presentation ? {before: structuredClone(initial), after: structuredClone(state)} : {}) });
+  automaticTurns(state, data, turns, presentation);
   return { initial, state, turns, events: turns.flatMap(t => t.events) };
 }
 export const previewCommand = resolveCommand;

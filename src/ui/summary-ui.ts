@@ -3,7 +3,7 @@ import { storyArt } from '../game/visuals/assets';
 import { gearArt } from './equip-art';
 import { icon, type IconName } from './icons';
 import { heroText, itemName, sideQuestText } from './th';
-import { portrait } from './world-ui';
+import { portrait } from './portraits';
 import type { StoryPanel } from './story-ui';
 
 // 4F: the expedition summary shown once when a run ends, before the lobby. It is built from the profile before
@@ -11,14 +11,14 @@ import type { StoryPanel } from './story-ui';
 export interface RunSummary {
   outcome: RunOutcome; firstClear: boolean; mapId: string; mapName: string;
   steps: number; wins: number; defeats: number; elites: number; chests: number; puzzles: number; secrets: number; herbs: number;
-  kept: { ore: number; gold: number; seal: number; dust: number }; items: Item[]; salvaged: number;
+  kept: { ore: number; gold: number; seal: number; dust: number }; items: Item[]; salvaged: number; overflow?:number;
   levels: { id: string; from: number; to: number }[];
   quests: { id: string; npc: string; from: number; to: number; target: number; ready: boolean }[];
 }
 export function runSummary(before: Profile, run: ExpeditionState, after: Profile, outcome: RunOutcome, map: MapDefinition): RunSummary {
   const kept = { ore: after.bank.ore - before.bank.ore, gold: after.bank.gold - before.bank.gold, seal: after.bank.seal - before.bank.seal, dust: after.bank.dust - before.bank.dust };
   // New items come home in the bag or worn (map bag): anything with a uid the profile did not have before.
-  const all = (p: Profile) => [...p.items, ...Object.values(p.members).flatMap(m => Object.values(m.gear ?? {}) as Item[])];
+  const all = (p: Profile) => [...p.items,...p.overflow??[], ...Object.values(p.members).flatMap(m => Object.values(m.gear ?? {}) as Item[])];
   const known = new Set(all(before).map(i => i.uid));
   const items = all(after).filter(i => !known.has(i.uid)).sort((a, b) => b.rarity - a.rarity);
   const levels = Object.keys(run.members).filter(id => after.members[id])
@@ -29,7 +29,7 @@ export function runSummary(before: Profile, run: ExpeditionState, after: Profile
     outcome, firstClear: outcome === 'complete' && !before.cleared.includes(run.mapId), mapId: run.mapId, mapName: map.name,
     steps: run.steps, wins: run.wins, defeats: run.defeats, elites: run.elitesDefeated.length + Object.values(run.respawns).reduce((a, b) => a + b, 0), chests: run.openedChests.length,
     puzzles: run.solved.length, secrets: run.secrets.length, herbs: outcome === 'wiped' ? 0 : run.herbs.length,
-    kept, items, salvaged: after.last?.salvaged ?? 0, levels, quests,
+    kept, items, overflow:after.overflow?.length??0, salvaged: after.last?.salvaged ?? 0, levels, quests,
   };
 }
 
@@ -71,7 +71,7 @@ export class SummaryUI {
       <div class="summary-body">
         <ul class="summary-stats">${stat('footprints', 'ก้าว', s.steps)}${stat('star', 'ชนะศึก', s.wins)}${stat('danger', 'ถอยทัพ', s.defeats)}${stat('boss', 'อีลิท', s.elites)}${stat('chest', 'กล่อง', s.chests)}${stat('set', 'ปริศนา', s.puzzles)}</ul>
         <h3>${icon('pack')} ได้กลับค่าย</h3>${haul ? `<ul class="summary-haul">${haul}</ul>` : '<p class="summary-none">ไม่มีทรัพยากรกลับมา</p>'}
-        ${items ? `<h3>${icon('gearWeapon')} อุปกรณ์ใหม่ <small>${s.items.length} ชิ้น${s.salvaged ? ` · คลังเต็ม แยกชิ้นอัตโนมัติ ${s.salvaged}` : ''}</small></h3><ul class="summary-items">${items}</ul>` : ''}
+        ${items ? `<h3>${icon('gearWeapon')} อุปกรณ์ใหม่ <small>${s.items.length} ชิ้น${s.overflow?` · รอจัดเข้าคลัง ${s.overflow} ชิ้นที่ค่าย`:''}${s.salvaged ? ` · คลังเต็ม แยกชิ้นอัตโนมัติ ${s.salvaged}` : ''}</small></h3><ul class="summary-items">${items}</ul>` : ''}
         ${levels ? `<h3>${icon('starFilled')} เลเวลขึ้น</h3><ul class="summary-levels">${levels}</ul>` : ''}
         ${quests ? `<h3>${icon('flag')} เควสต์ในค่าย</h3><ul class="summary-quests">${quests}</ul>` : ''}
       </div>

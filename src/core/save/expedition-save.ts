@@ -1,3 +1,5 @@
+import {bossPlanValid,startBossPlan} from '../world/boss-equipment';
+import {storageCap} from '../world/storage';
 import { entryReason, withParty } from '../battle/engine';
 import type { ActionId, Command } from '../battle/types';
 import { COMPANY_CAP, PARTY_SLOTS, RESERVE_SLOTS, type ActiveBattle, type ExpeditionState, type MapDefinition, type Point, type Profile, type Roster, type RunOutcome } from '../world/types';
@@ -43,10 +45,18 @@ export const legacyKeys = ['asterveil.fateweave.battle.v1', 'asterveil.fateweave
 // v20 → v21 (stats design): items may carry roll qualities `q` (older items: 100%). The `skill` and `heal` affixes
 // become `support`; an affix the slot can no longer roll (or a duplicate) becomes the first stat of the slot's pool
 // the item does not have yet.
-// v21 → v22 (chapters): the profile gains `cleared`, the maps completed at least once. An existing company counts the
+// v21 → v22: optional lock and paid-enhancement ledger. Legacy items retain their shape;
+// missing ledger grants credit for the remaining + through enhancementInvestment.
+// v22 → v23: permanent area-earned item-Lv cap and optional exact item-level investment.
+// Earlier completed expeditions unlock the chapter cap; absent item ledgers never invent level spending.
+// v23 → v24: persistent overflow tray and paid permanent camp storage tiers.
+// v24 → v25: per-class farming counters; absent run plan preserves legacy loot/RNG until return.
+// v25 → v26: optional single-slot affix-transfer binding; missing binding stays unrestricted.
+// v26 → v27: optional boss item identity and independent per-boss snapshot/progress.
+// v27 → v28 (chapters): the profile gains `cleared`, the maps completed at least once. An existing company counts the
 // teaching maps before the frontier as cleared (its owner never has to replay the tutorial maps) and the frontier
 // too once it has a completed expedition. Runs load with the map they were started on (`maps`).
-const SAVE_VERSION = 22;
+const SAVE_VERSION = 28;
 export interface Game { profile: Profile; run: ExpeditionState | null }
 const actions: readonly ActionId[] = ['attack', 'guard', 'bash', 'mark', 'execute', 'bolt', 'ward', 'heal', 'prayer', 'brace', 'pierce', 'hinder', 'volley', 'acid', 'haste', 'ambush', 'evade', 'taunt', 'slam', 'valor', 'mend',
   'rally', 'finisher', 'sigil', 'sanctuary', 'spearwall', 'weakshot', 'bomb', 'backstab', 'quake', 'finale'];
@@ -190,7 +200,8 @@ function ownItemsMatch(profile: Profile, run: ExpeditionState): boolean {
   return key(onRun) === key(home);
 }
 function foundOf(v: unknown, map: MapDefinition, lookup: EncounterLookup): Item[] {
-  if (!Array.isArray(v) || v.length > 99) throw new Error('Invalid found');
+  // Bonus rewards must not invalidate an otherwise valid run crossing the former 99-find boundary.
+  if (!Array.isArray(v) || v.length > 9999) throw new Error('Invalid found');
   return v.map(i => itemOf(i, map, lookup, true));
 }
 // Rebuilds a run field by field. Battles are validated by replaying every command under
@@ -230,6 +241,7 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
   if (s.battle !== null) {
     const b = obj(s.battle); const data = typeof b.encounterId === 'string' ? lookup(b.encounterId) : undefined;
     if (!['tutorial', 'random', 'boss', 'elite', 'event'].includes(b.kind as string) || !data) throw new Error('Invalid battle');
+    if(b.kind==='boss'&&(s.bossDefeated||data.id!==map.bossEncounterId))throw new Error('Invalid boss battle');
     const source = b.source;
     if (b.kind === 'elite' && !map.elites.some(e => e.id === source && e.encounterId === data.id && !(s.elitesDefeated as unknown[]).includes(e.id))) throw new Error('Invalid battle');
     if (b.kind === 'event' && !map.events.some(e => e.id === source && !(s.eventsDone as unknown[]).includes(e.id))) throw new Error('Invalid battle');
@@ -242,6 +254,8 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
     battle = { kind: b.kind as ActiveBattle['kind'], encounterId: data.id, entry, commands: b.commands.map(command), ...(b.level !== undefined ? { level: b.level as number } : {}), ...(typeof source === 'string' ? { source } : {}) };
   }
   const state: ExpeditionState = {
+    ...(s.bossLoot===undefined?{}:{bossLoot:bossPlanOf(s.bossLoot,map)}),
+    ...(s.hunt===undefined?{}:{hunt:huntPlan(s.hunt,map,lookup)}),
     mapId: map.id, mapVersion: map.version, seed: s.seed as number, rolls: s.rolls as number, position: point(s.position, map, true),
     steps: s.steps as number, pressure: s.pressure as number, revealed: s.revealed, roster, members, hp,
     camp: s.camp === null ? null : point(s.camp, map),
@@ -266,11 +280,20 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
 function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: EncounterLookup, maps: readonly MapDefinition[]): Profile {
   const p = obj(v);
   if (!isInt(p.seed, 0, 0xffffffff) || !isInt(p.returns) || !isInt(p.expeditions) || !isInt(p.completes) || typeof p.tutorialDone !== 'boolean') throw new Error('Invalid profile');
+  const levels=map.equipment.forge.itemLevel, caps=[levels.baseCap,...levels.unlocks.map(u=>u.cap)];
+  if(version<23)p.forgeLevel=p.completes>0?Math.max(...caps):levels.baseCap;
+  if(!caps.includes(p.forgeLevel as number))throw new Error('Invalid forge level');
+  if(version<24){p.storageTier=0;p.overflow=[];}
+  if(!isInt(p.storageTier,0,map.equipment.storage.costs.length)||!Array.isArray(p.overflow))throw new Error('Invalid storage');
+  const overflow=p.overflow.map(i=>itemOf(i,map,lookup));
+  if(version<25)p.hunt={pity:{}};
+  const hunt=huntProfile(p.hunt,map,lookup);
   const company = p.company;
   if (!Array.isArray(company) || !company.length || company.length > COMPANY_CAP || new Set(company).size !== company.length
     || company.some(id => typeof id !== 'string' || !heroDef(lookup, map, id))) throw new Error('Invalid company');
   const party = rosterOf(p.party, lookup, map);
   if ([...party.deployed, ...party.reserve].some(id => !company.includes(id))) throw new Error('Invalid party');
+  if(hunt.target&&!company.includes(hunt.target))throw new Error('Unowned hunt target');
   const members = membersOf(p.members, map, company as string[], lookup);
   const bank = obj(p.bank); if (version < 9) bank.dust = 0; if (version < 14 && bank.gold === undefined) bank.gold = map.company.hireCost;
   if (Object.keys(bank).length !== 4 || !isInt(bank.gold, 0, 9999999) || !isInt(bank.ore, 0, 9999999) || !isInt(bank.seal, 0, 99999) || !isInt(bank.dust, 0, 9999999)) throw new Error('Invalid bank');
@@ -285,9 +308,9 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
   if (!isInt(p.refreshes, 0, map.shop.refreshCosts.length)) throw new Error('Invalid board');
   const quests = questsOf(p.quests, map);
   if (!isInt(p.forge)) throw new Error('Invalid forge');
-  if (!isInt(p.nextItem, 1) || !Array.isArray(p.items) || p.items.length > map.equipment.bagCap) throw new Error('Invalid items');
+  if (!isInt(p.nextItem, 1) || !Array.isArray(p.items) || p.items.length > storageCap({storageTier:p.storageTier as number},map)) throw new Error('Invalid items');
   const items = p.items.map(i => itemOf(i, map, lookup));
-  const uids = [...items, ...Object.values(members).flatMap(m => Object.values(m.gear ?? {}))].map(i => i!.uid);
+  const uids = [...items,...overflow, ...Object.values(members).flatMap(m => Object.values(m.gear ?? {}))].map(i => i!.uid);
   if (new Set(uids).size !== uids.length || uids.some(u => u >= (p.nextItem as number))) throw new Error('Invalid items');
   if (!Array.isArray(p.taken) || new Set(p.taken).size !== p.taken.length || p.taken.some(i => !isInt(i, 0, map.company.offers - 1))) throw new Error('Invalid board');
   let last: Profile['last'] = null;
@@ -305,8 +328,9 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
     commander = { name: c.name, crest: c.crest, color: c.color };
     if (commanderReason(commander)) throw new Error('Invalid commander');
   } else if (p.commander === undefined && version >= 6) throw new Error('Invalid commander');
-  const cleared = version < 22 ? legacyCleared(p.tutorialDone === true, (p.completes as number) > 0, map, maps) : idList(p.cleared, maps.map(m => m.id));
-  return { seed: p.seed, returns: p.returns, tutorialDone: p.tutorialDone, commander, company: [...company as string[]], members, party, cleared,
+  const cleared = version < 28 ? legacyCleared(p.tutorialDone === true, (p.completes as number) > 0, map, maps) : idList(p.cleared, maps.map(m => m.id));
+  const bossLoot=bossProfileOf(p.bossLoot,map);
+  return {bossLoot,hunt,overflow,storageTier:p.storageTier as number, forgeLevel:p.forgeLevel as number, seed: p.seed, returns: p.returns, tutorialDone: p.tutorialDone, commander, company: [...company as string[]], members, party, cleared,
     bank: { ore: bank.ore as number, gold: bank.gold as number, seal: bank.seal as number, dust: bank.dust as number }, items, nextItem: p.nextItem as number, forge: p.forge as number, potions: potionsOf(p.potions, 9999), quests, shop, refreshes: p.refreshes as number, smelted: p.smelted as number, taken: [...p.taken as number[]], expeditions: p.expeditions, completes: p.completes, last };
 }
 // Optional elite returns (4C): known optional elites only, 1..99 each.
@@ -370,7 +394,7 @@ function legacyCleared(tutorialDone: boolean, completed: boolean, map: MapDefini
 export function parseGame(raw: string, map: MapDefinition, lookup: EncounterLookup, maps: readonly MapDefinition[] = [map]): Game {
   const envelope = obj(JSON.parse(raw)); const version = envelope.version as number;
   if (version < 21) migrateItems(envelope, map);
-  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
+  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
   const runMap = (v: unknown): MapDefinition => maps.find(m => m.id === obj(v).mapId) ?? map;
   if (version < 5) {
     const home = runMap(envelope.state); const run = parseRun(envelope.state, version, home, lookup);
@@ -389,6 +413,11 @@ export function parseGame(raw: string, map: MapDefinition, lookup: EncounterLook
     return { profile: settle(profile, e.run, 'withdrawn', home), run: null };
   }
   if (run && rosterIds(run).some(id => !profile.company.includes(id))) throw new Error('Run member left the company');
+  if(run?.hunt&&run.hunt.target!==profile.hunt?.target)throw new Error('Hunt target mismatch');
+  if(run?.hunt?.target&&!profile.company.includes(run.hunt.target))throw new Error('Unowned hunt target');
+  if(run?.bossLoot){const before=startBossPlan(profile,map),now=run.bossLoot;
+    if(now.target!==before.target||(!run.bossDefeated&&(now.misses!==before.misses||now.rewarded!==before.rewarded))||(run.bossDefeated&&(!now.rewarded||(now.misses!==0&&now.misses!==before.misses+1))))throw new Error('Boss progress mismatch');
+  }
   if (run && !ownItemsMatch(profile, run)) throw new Error('Run items do not match the company');
   return settleFinished({ profile, run }, home);
 }
@@ -397,4 +426,25 @@ export function loadGame(storage: StoragePort | undefined, map: MapDefinition, l
     const raw = storage?.getItem(expeditionKey);
     return raw ? parseGame(raw, map, lookup, maps) : undefined;
   } catch { return undefined; }
+}
+
+function bossPlanOf(v:unknown,map:MapDefinition):NonNullable<ExpeditionState['bossLoot']> {
+  if(!bossPlanValid(v,map))throw new Error('Invalid boss plan');return structuredClone(v);
+}
+function bossProfileOf(v:unknown,map:MapDefinition):NonNullable<Profile['bossLoot']> {
+  if(v===undefined)return {};const raw=obj(v),out:NonNullable<Profile['bossLoot']>={};
+  for(const [boss,progress]of Object.entries(raw)){const p=obj(progress);if(boss!==map.bossEncounterId||Object.keys(p).length!==3)throw new Error('Invalid boss progress');
+    const plan=bossPlanOf({version:1,boss,...p},map);out[boss]={target:plan.target,misses:plan.misses,rewarded:plan.rewarded};}
+  return out;
+}
+function huntProfile(v:unknown,map:MapDefinition,lookup:EncounterLookup):NonNullable<Profile['hunt']> {
+  const h=obj(v),pity=obj(h.pity),ids=heroCatalog(lookup,map).map(h=>h.id);
+  if(Object.keys(h).some(k=>!['target','pity'].includes(k))||(h.target!==undefined&&(typeof h.target!=='string'||!ids.includes(h.target))))throw new Error('Invalid hunt');
+  for(const [id,n] of Object.entries(pity))if(!ids.includes(id)||!isInt(n,0,map.equipment.hunt.pityDrops-1))throw new Error('Invalid hunt pity');
+  return {pity:{...pity} as Record<string,number>,...(h.target?{target:h.target as string}:{})};
+}
+function huntPlan(v:unknown,map:MapDefinition,lookup:EncounterLookup):NonNullable<ExpeditionState['hunt']> {
+  const p=obj(v),h=huntProfile({target:p.target,pity:{}},map,lookup);
+  if(Object.keys(p).some(k=>!['target','misses'].includes(k))||!isInt(p.misses,0,map.equipment.hunt.pityDrops-1)||(!h.target&&p.misses!==0))throw new Error('Invalid hunt plan');
+  return {misses:p.misses,...(h.target?{target:h.target}:{})};
 }

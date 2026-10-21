@@ -1,0 +1,64 @@
+name: Browser regression checks
+
+on:
+  pull_request:
+    branches: [feature/fateweave-initial-prototype]
+    paths:
+      - 'src/**'
+      - 'public/**'
+      - 'tests/browser/**'
+      - 'package*.json'
+      - 'playwright.config.ts'
+      - '.github/workflows/browser.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: browser-pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run build:pages
+      - run: npx playwright install --with-deps chromium
+      - name: Verify dialog focus and frame-relative map input
+        env:
+          PLAYWRIGHT_PAGES: 'true'
+        run: |
+          npm run test:browser -- --workers=1 --grep 'PC: I opens battle info|lobby: hire a duplicate|world 1024x768'
+      - name: Verify production gameplay before merging
+        env:
+          PLAYWRIGHT_PAGES: 'true'
+        run: npm run test:browser -- --workers=2
+      - name: Print browser failure context
+        if: failure()
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          for p in Path('test-results').glob('*/error-context.md'):
+              print(f'\n{p}\n{p.read_text()}')
+          PY
+      - name: Keep failure evidence
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-results
+          path: test-results
+          retention-days: 7
+      - name: Keep portrait UI screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: portrait-ui-evidence
+          path: test-results/portrait-keyboard-*/**/*.png
+          if-no-files-found: ignore
+          retention-days: 7

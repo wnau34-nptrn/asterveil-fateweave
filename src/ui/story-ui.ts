@@ -1,6 +1,7 @@
+import { shortcutBlocked } from '../platform/keyboard';
 import { storyArt } from '../game/visuals/assets';
 import { heroText } from './th';
-import { portrait } from './world-ui';
+import { portrait } from './portraits';
 
 // Story scenes (lore 2026-10-16): a few full-screen panels with a speaker and one line each, shown between
 // views. They own no rules: the host saves first, then plays the scene, then continues. Skippable at any time.
@@ -35,7 +36,7 @@ export class StoryUI {
       if (b?.dataset.story === 'next') this.next(); else if (b?.dataset.story === 'skip') this.finish();
     });
     root.ownerDocument.addEventListener('keydown', e => {
-      if (root.hidden) return;
+      if (root.hidden || shortcutBlocked(e)) return;
       if (e.key === 'Escape') { e.preventDefault(); this.finish(); }
     });
   }

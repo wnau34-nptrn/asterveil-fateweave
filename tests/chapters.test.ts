@@ -30,17 +30,17 @@ describe('chapters', () => {
     const once = settle(profile, { ...run, completed: true }, 'complete', frontier);
     expect(once.cleared).toEqual([frontier.id]);
   });
-  it('v21 companies skip the teaching maps; finished ones also count the frontier cleared', () => {
+  it('v27 and older companies skip the teaching maps; finished ones also count the frontier cleared', () => {
     const p = ready() as unknown as Record<string, unknown>; delete p.cleared;
     const v21 = (patch: object) => JSON.stringify({ version: 21, profile: { ...p, ...patch }, run: null });
     expect(parseGame(v21({}), frontier, lookup, maps).profile.cleared).toEqual([teaching.id]);
     expect(parseGame(v21({ completes: 2 }), frontier, lookup, maps).profile.cleared).toEqual([teaching.id, frontier.id]);
     expect(parseGame(v21({ tutorialDone: false }), frontier, lookup, maps).profile.cleared).toEqual([]);
   });
-  it('v22 keeps only known map ids and resolves the run on its own map', () => {
+  it('v28 keeps only known map ids and resolves the run on its own map', () => {
     const { profile, run } = depart({ ...ready(), cleared: [teaching.id] }, teaching, lookup, 5);
-    const game = parseGame(JSON.stringify({ version: 22, profile, run }), frontier, lookup, maps);
+    const game = parseGame(JSON.stringify({ version: 28, profile, run }), frontier, lookup, maps);
     expect(game.profile.cleared).toEqual([teaching.id]); expect(game.run!.mapId).toBe(teaching.id);
-    expect(() => parseGame(JSON.stringify({ version: 22, profile: { ...profile, cleared: ['nowhere'] }, run: null }), frontier, lookup, maps)).toThrow();
+    expect(() => parseGame(JSON.stringify({ version: 28, profile: { ...profile, cleared: ['nowhere'] }, run: null }), frontier, lookup, maps)).toThrow();
   });
 });

@@ -1,4 +1,8 @@
-import type { Commander, ShopItemId, SideQuestKind, ExpeditionState, Gear, GearSlot, Item, MapDefinition, MemberProgress, PotionId, Potions, Profile, ProfileResult, RunOutcome, TalentNode, Talents } from './types';
+import {startBossPlan} from './boss-equipment';
+import {startHunt} from './targeted-loot';
+import {storageCap,departureBlocked} from './storage';
+import { memberTalentReason, talentsSpent } from './talents';
+import type { Commander, ShopItemId, SideQuestKind, ExpeditionState, Gear, GearSlot, Item, MapDefinition, PotionId, Potions, Profile, ProfileResult, RunOutcome, TalentNode } from './types';
 import { rollItem, salvageValue } from './equipment';
 import { COMPANY_CAP, GEAR_SLOTS, PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS, SET_IDS } from './types';
 import { heroCatalog, levelOf, newExpedition, rollPercent, type EncounterLookup } from './world';
@@ -7,10 +11,10 @@ import { heroCatalog, levelOf, newExpedition, rollPercent, type EncounterLookup 
 // team chosen for the next expedition, and settling a finished expedition back home.
 export function newProfile(map: MapDefinition, seed: number): Profile {
   return {
-    seed: seed >>> 0, returns: 0, tutorialDone: false, commander: null,
+    bossLoot:{}, hunt:{pity:{}}, seed: seed >>> 0, returns: 0, tutorialDone: false, commander: null,
     company: [...map.startingRoster], members: Object.fromEntries(map.startingRoster.map(id => [id, { stars: 1, dupes: 0 }])),
     party: { deployed: [...map.startingRoster], reserve: [] },
-    bank: { ore: 0, gold: 0, seal: 0, dust: 0 }, items: [], nextItem: 1, forge: 0, potions: { salve: 0, tonic: 0, repel: 0 }, quests: {}, shop: {}, refreshes: 0, smelted: 0, taken: [], expeditions: 0, completes: 0, cleared: [], last: null,
+    forgeLevel: map.equipment.forge.itemLevel.baseCap, bank: { ore: 0, gold: 0, seal: 0, dust: 0 }, items: [], overflow:[],storageTier:0, nextItem: 1, forge: 0, potions: { salve: 0, tonic: 0, repel: 0 }, quests: {}, shop: {}, refreshes: 0, smelted: 0, taken: [], expeditions: 0, completes: 0, cleared: [], last: null,
   };
 }
 const blocked = (profile: Profile, reason: string): ProfileResult => ({ profile, event: { type: 'blocked', reason } });
@@ -94,40 +98,21 @@ export function dismissReason(profile: Profile, id: string): string {
 }
 export function dismiss(initial: Profile, map: MapDefinition, id: string): ProfileResult {
   const reason = dismissReason(initial, id); if (reason) return blocked(initial, reason);
+
   const profile = structuredClone(initial);
-  // Their equipment goes back to the bag; whatever does not fit is salvaged.
-  for (const item of Object.values(profile.members[id]?.gear ?? {})) if (item) stash(profile, map, item);
+  // Their equipment is preserved in the bag or the pending tray.
+  for (const item of Object.values(profile.members[id]?.gear ?? {}).sort((a,b)=>Number(!!b?.locked)-Number(!!a?.locked))) if (item) stash(profile, map, item);
+  if(profile.hunt?.target===id)delete profile.hunt.target;
   profile.company = profile.company.filter(m => m !== id); delete profile.members[id];
   profile.party.deployed = profile.party.deployed.filter(m => m !== id); profile.party.reserve = profile.party.reserve.filter(m => m !== id);
   profile.bank.gold += map.company.dismissRefund;
   return { profile, event: { type: 'dismissed', heroId: id } };
 }
 
-// ---- Talent tree (2D-1b): one point per level above 1, spent and reset only here in the lobby. ----
-export const talentPoints = (map: MapDefinition, m: MemberProgress | undefined): number => Math.min(levelOf(m), map.progression.levelCap) - 1;
-export const talentsSpent = (t: Talents | undefined): number => Object.values(t ?? {}).reduce((a, b) => a + (b ?? 0), 0);
-// Gates: the root first; tier 2 needs a rank in its tier 1; a capstone needs 4 ranks in its branch.
-export function talentOpen(t: Talents, node: TalentNode): boolean {
-  const r = (n: TalentNode) => t[n] ?? 0;
-  if (node === 'root') return true;
-  if (!r('root')) return false;
-  const branch = node[0] as 'a' | 'b'; const tier = node[1];
-  if (tier === '1') return true;
-  if (tier === '2') return r(`${branch}1`) >= 1;
-  return r(`${branch}1`) + r(`${branch}2`) >= 4;
-}
-export function talentsValid(map: MapDefinition, heroId: string, level: number, t: Talents): boolean {
-  const tree = map.talents[heroId] ?? [];
-  if (Object.entries(t).some(([node, rank]) => { const def = tree.find(n => n.id === node); return !def || !Number.isInteger(rank) || rank! < 1 || rank! > def.max; })) return false;
-  return talentsSpent(t) <= Math.min(level, map.progression.levelCap) - 1 && tree.every(n => !t[n.id] || talentOpen(t, n.id));
-}
+// Talent gates are shared with exploration spending; only the lobby can reset points.
+export { talentPoints, talentsSpent, talentOpen, talentsValid } from './talents';
 export function talentReason(profile: Profile, map: MapDefinition, id: string, node: TalentNode): string {
-  const m = profile.members[id]; const def = map.talents[id]?.find(n => n.id === node);
-  if (!m || !def) return 'unknown';
-  const t = m.talents ?? {};
-  if ((t[node] ?? 0) >= def.max) return 'max';
-  if (!talentOpen(t, node)) return 'locked';
-  return talentsSpent(t) >= talentPoints(map, m) ? 'points' : '';
+  return memberTalentReason(map, id, profile.members[id], node);
 }
 export function learnTalent(initial: Profile, map: MapDefinition, id: string, node: TalentNode): ProfileResult {
   const reason = talentReason(initial, map, id, node); if (reason) return blocked(initial, reason);
@@ -143,10 +128,10 @@ export function resetTalents(initial: Profile, id: string): ProfileResult {
 }
 
 // ---- Equipment (2D-2): equip, unequip and salvage happen only in the lobby. ----
-// Puts an item in the bag, or salvages it when the bag is full (returns whether it was kept).
+// Preserve excess rewards and returned owned equipment in a persistent pending tray.
 function stash(profile: Profile, map: MapDefinition, item: Item): boolean {
-  if (profile.items.length < map.equipment.bagCap) { profile.items.push(item); return true; }
-  const v = salvageValue(map, item); profile.bank.ore += v.ore; profile.bank.dust += v.dust; return false;
+  if (profile.items.length < storageCap(profile,map)) { profile.items.push(item); return true; }
+  (profile.overflow??=[]).push(item);return true;
 }
 export function equipReason(profile: Profile, heroId: string, uid: number): string {
   const item = profile.items.find(i => i.uid === uid);
@@ -165,19 +150,26 @@ export function equip(initial: Profile, heroId: string, uid: number): ProfileRes
 export function unequip(initial: Profile, map: MapDefinition, heroId: string, slot: GearSlot): ProfileResult {
   const item = initial.members[heroId]?.gear?.[slot];
   if (!item) return blocked(initial, 'unknown');
-  if (initial.items.length >= map.equipment.bagCap) return blocked(initial, 'full');
+  if (initial.items.length >= storageCap(initial,map)) return blocked(initial, 'full');
   const profile = structuredClone(initial); const m = profile.members[heroId]!;
   profile.items.push(item); delete m.gear![slot]; if (!Object.keys(m.gear!).length) delete m.gear;
   return { profile, event: { type: 'equipped', heroId } };
 }
 // Salvages bag items (never equipped ones) into ore and veil dust.
+export function salvageReason(initial:Profile,map:MapDefinition,uids:readonly number[]):string {
+  const picked=initial.items.filter(i=>uids.includes(i.uid));
+  if(!picked.length||picked.length!==uids.length||new Set(uids).size!==uids.length)return 'unknown';
+  if(picked.some(i=>i.locked))return 'locked';
+  if(uids.length>1&&picked.some(i=>i.boss))return 'protected';
+  const total=picked.reduce((v,item)=>{const n=salvageValue(map,item);return {ore:v.ore+n.ore,dust:v.dust+n.dust};},{ore:0,dust:0});
+  return !Number.isSafeInteger(total.ore)||!Number.isSafeInteger(total.dust)||initial.bank.ore+total.ore>9999999||initial.bank.dust+total.dust>9999999?'full':'';
+}
 export function salvage(initial: Profile, map: MapDefinition, uids: readonly number[]): ProfileResult {
-  const picked = initial.items.filter(i => uids.includes(i.uid));
-  if (!picked.length || picked.length !== new Set(uids).size) return blocked(initial, 'unknown');
-  const profile = structuredClone(initial); let ore = 0, dust = 0;
-  for (const item of picked) { const v = salvageValue(map, item); ore += v.ore; dust += v.dust; }
-  profile.items = profile.items.filter(i => !uids.includes(i.uid)); profile.bank.ore += ore; profile.bank.dust += dust;
-  return { profile, event: { type: 'salvaged', count: picked.length, ore, dust } };
+  const reason=salvageReason(initial,map,uids);if(reason)return blocked(initial,reason);
+  const profile=structuredClone(initial);let ore=0,dust=0;
+  for(const item of profile.items.filter(i=>uids.includes(i.uid))){const v=salvageValue(map,item);ore+=v.ore;dust+=v.dust;}
+  profile.items=profile.items.filter(i=>!uids.includes(i.uid));profile.bank.ore+=ore;profile.bank.dust+=dust;
+  return {profile,event:{type:'salvaged',count:uids.length,ore,dust}};
 }
 
 // Team selection: every company member is in one group. Swap two members of different
@@ -212,10 +204,12 @@ export function departure(profile: Profile, map: MapDefinition, lookup: Encounte
 }
 // Departing also packs up to `carry` of each brewed potion, taken out of the home stock (2D-5).
 export function depart(initial: Profile, map: MapDefinition, lookup: EncounterLookup, seed: number): { profile: Profile; run: ExpeditionState } {
+  if(departureBlocked(initial))throw new Error('Resolve overflow before departing');
   const profile = structuredClone(initial); const ids = [...profile.party.deployed, ...profile.party.reserve];
   const potions = Object.fromEntries(POTION_IDS.map(id => [id, Math.min(map.potions.carry, profile.potions[id])])) as Potions;
   for (const id of POTION_IDS) profile.potions[id] -= potions[id];
   const run = newExpedition(map, lookup, seed, { roster: structuredClone(profile.party), members: Object.fromEntries(ids.map(id => [id, { ...profile.members[id]! }])), potions }, profile.tutorialDone);
+  run.hunt=startHunt(profile);run.bossLoot=startBossPlan(profile,map);
   return { profile, run };
 }
 // ---- Potions (2D-5): brewed in the lobby for ore and veil dust; stock at home has no cap. ----
@@ -233,11 +227,13 @@ export function brew(initial: Profile, map: MapDefinition, potion: PotionId): Pr
 export const keptPercent: Record<RunOutcome, number> = { complete: 100, withdrawn: 100, wiped: 50 };
 export function settle(initial: Profile, run: ExpeditionState, outcome: RunOutcome, map: MapDefinition): Profile {
   const profile = structuredClone(initial); const pct = keptPercent[outcome];
+  if(run.hunt?.target){profile.hunt??={pity:{}};profile.hunt.pity[run.hunt.target]=run.hunt.misses;}
+  if(run.bossLoot){const {target,misses,rewarded}=run.bossLoot;profile.bossLoot??={};profile.bossLoot[map.bossEncounterId]={target,misses,rewarded};}
   const ore = Math.floor(run.resources.ore * pct / 100); const seal = Math.floor(run.resources.seal * pct / 100);
   const dust = Math.floor(run.dust * pct / 100); const gold = Math.floor(run.resources.gold * pct / 100);
   profile.bank.ore += ore; profile.bank.gold += gold; profile.bank.seal += seal; profile.bank.dust += dust;
-  // Found equipment comes home, in the bag or worn; a wiped team keeps only its `wipeKeep` best finds (rarity,
-  // then level, then the earliest found). A full bag salvages the rest (2D-2). Map bag (2026-10-17): members keep
+  // Found equipment comes home, in the bag, pending tray or worn; a wiped team keeps only its `wipeKeep` best finds (rarity,
+  // then level, then the earliest found). A full bag preserves the rest for an explicit camp choice. Map bag (2026-10-17): members keep
   // what they wear; a lost find leaves its slot to the item the member left the lobby with, when that is spare.
   const kept = new Set(homeItems(run, outcome, map)); let items = 0, salvaged = 0;
   const spare = [...run.spare];
@@ -246,7 +242,7 @@ export function settle(initial: Profile, run: ExpeditionState, outcome: RunOutco
     const before = home.gear ?? {}; const gear: Gear = {};
     for (const [slot, item] of Object.entries(run.members[id]!.gear ?? {}) as [GearSlot, Item][]) {
       if (item.uid) gear[slot] = item;
-      else if (kept.has(item)) { gear[slot] = { ...item, uid: profile.nextItem++ }; items++; }
+      else if (kept.has(item)) { gear[slot] = { ...item, uid: profile.nextItem++, ...(item.boss?{locked:true as const}:{}) }; items++; }
     }
     for (const slot of GEAR_SLOTS) {
       const own = before[slot]; const at = own && !gear[slot] ? spare.findIndex(i => i.uid === own.uid) : -1;
@@ -255,18 +251,20 @@ export function settle(initial: Profile, run: ExpeditionState, outcome: RunOutco
     if (Object.keys(gear).length) home.gear = gear; else delete home.gear;
   }
   // The company's own items taken off on the map always come home, even past the bag limit.
-  profile.items.push(...spare);
-  for (const found of run.found) if (kept.has(found)) { if (stash(profile, map, { ...found, uid: profile.nextItem++ })) items++; else salvaged++; }
+  for(const item of spare)stash(profile,map,item);
+  for (const found of run.found) if (kept.has(found)) { if (stash(profile, map, { ...found, uid: profile.nextItem++, ...(found.boss?{locked:true as const}:{}) })) items++; else salvaged++; }
   // Unused potions come home too, unless the team was wiped.
   if (outcome !== 'wiped') for (const id of POTION_IDS) profile.potions[id] += run.potions[id];
   // Levels and EXP earned on the run are kept whatever the outcome (2D-1).
-  for (const [id, m] of Object.entries(run.members)) if (profile.members[id] && m.level) profile.members[id] = { ...profile.members[id]!, level: m.level, exp: m.exp ?? 0 };
+  for (const [id, m] of Object.entries(run.members)) if (profile.members[id] && m.level) profile.members[id] = { ...profile.members[id]!, level: m.level, exp: m.exp ?? 0, ...(m.talents ? { talents: structuredClone(m.talents) } : {}) };
   // 3D: side quests count what this run did (herbs are lost on a wipe), capped at each target.
   for (const q of map.sideQuests) {
     const now = profile.quests[q.id] ?? { progress: 0, claimed: false }; if (now.claimed) continue;
     const add = sideQuestGain(q.kind, run, outcome, map);
     if (add) profile.quests[q.id] = { ...now, progress: Math.min(q.target, now.progress + add) };
   }
+  const levels=map.equipment.forge.itemLevel;
+  profile.forgeLevel=Math.max(profile.forgeLevel??levels.baseCap,...levels.unlocks.filter(u=>run.elitesDefeated.includes(u.elite)||(run.respawns[u.elite]??0)>0||outcome==='complete').map(u=>u.cap));
   profile.tutorialDone ||= run.tutorialDone; profile.expeditions++; if (outcome === 'complete') profile.completes++;
   if (outcome === 'complete' && !profile.cleared.includes(run.mapId)) profile.cleared.push(run.mapId);
   profile.returns++; profile.taken = []; profile.shop = {}; profile.refreshes = 0; profile.smelted = 0;
@@ -338,7 +336,7 @@ export function buyReason(profile: Profile, map: MapDefinition, item: ShopItemId
     if (!m) return 'hero';
     if (m.stars >= map.company.maxStars) return 'maxed';
   }
-  if (item === 'gearbox' && profile.items.length >= map.equipment.bagCap) return 'bag';
+  if (item === 'gearbox' && profile.items.length >= storageCap(profile,map)) return 'bag';
   return profile.bank.gold < def.price ? 'gold' : '';
 }
 // The gear box rolls from the profile's lobby roll counter (shared with the forge), so a reload cannot re-roll it.
