@@ -1,5 +1,9 @@
 # Fateweave development instructions
 
+## VFX art rework checkpoint — owner scope 2026-10-21
+
+The owner rejected the visual quality of phase2 and authorized artwork/mockups before further implementation. Engineering completion and passing tests are not visual approval. Current priority supersedes the older immediate phase3 handoff: read `docs/combat-presentation/vfx-art-direction/README_TH.md` and the three v1 storyboards, obtain owner feedback on the visual direction, then implement only Bolt as a polished vertical slice and show real mobile/PC clips before expanding to Execute/Ward or boss cinematics. These are opaque AI concept sheets with known HUD/text/pose drift, not transparent runtime assets; actual game assets/UI/events remain authoritative. Do not cut the gameplay background from a board into a texture. Keep phase1–2 timing/save/cancellation and unchanged rules. This artwork-only handoff does not modify/deploy runtime or imply the owner has approved the v1 visuals. The visual review checkpoint comes from the agreed design workflow, not a new permission requirement for routine tests/git operations.
+
 ## Combat presentation phase 2 — owner scope 2026-10-21
 
 C20–C25 add code-native physical/magic/support effects for the starter Knight/Duelist/Mage/Priest, with event-based fallback for every other action. Use CSS-pixel body anchors and actual damage/dodge recipients; Guard can redirect the target. Never infer damage/healing/critical hits from effect or sound names. Body flash/recoil requires actual HP damage, while barrier absorption/depletion, interception, counters, full-HP support, Mark→Execute, interrupt/cancel/down remain truthful to events and authoritative boundaries. Input zones stay in the stationary information layer while bodies move. Timers, idle hold/resume, tints, offsets, effect objects and sounds must all settle on skip/load/hidden-tab/resize.

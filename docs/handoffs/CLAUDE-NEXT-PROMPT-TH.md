@@ -1,6 +1,6 @@
-# Prompt สำหรับ Claude รับช่วงพัฒนาต่อ
+# Prompt สำหรับ Claude รับช่วงพัฒนา Asterveil: Fateweave ต่อจาก Codex โดย **เปลี่ยนลำดับจากเริ่มเฟส3ทันที เป็นตรวจทิศทางภาพ VFX แล้วทำ Bolt ตัวอย่างหนึ่งสกิลก่อน** เจ้าของไม่พอใจความสวยของเฟส2และอนุญาตให้สร้าง mockup/storyboard แล้ว แต่ยังไม่ได้ยืนยันภาพ v1
 
-รับช่วงพัฒนา Asterveil: Fateweave ต่อจาก Codex โดยเริ่ม **Combat presentation เฟส 3 — C30–C35** และดำเนินการให้ครบทั้งพัฒนา ทดสอบ และเผยแพร่ตามสิทธิ์ที่เจ้าของอนุญาตไว้ใน `CLAUDE.md`
+อ่าน `docs/combat-presentation/vfx-art-direction/README_TH.md` และเปิด `bolt-storyboard-v1.png`, `execute-storyboard-v1.png`, `ward-storyboard-v1.png` ในโฟลเดอร์เดียวกันก่อน ภาพละ4จังหวะเป็น concept พร้อม source/prompt/manifest ภาพเหล่านี้ไม่ใช่ runtime sprites และมี UI/ข้อความที่ AI วาดคลาด จึงต้องคง DOM/assets/ตัวเลขจริงไว้ทั้งหมด
 
 ## เริ่มจากข้อมูลจริงใน repository
 
@@ -11,7 +11,19 @@
 - เฟส 0–2 เสร็จและเผยแพร่แล้ว เฟส 2 อยู่ใน PR #36; runtime source `affee50aaab22fccf939ea50db45ba1efe03ad22`, deployed merge `5446357390536fce2344acce0d145b9bb195d53c`, เอกสารสรุป `33694726f1ba5dd135cef50e9b799b4d11ce85fa` และบันทึกส่งต่อฉบับนี้ที่ใหม่กว่า ให้ตรวจ HEAD/remote และการเปลี่ยนแปลงล่าสุดก่อนลงมือ
 - Baseline ล่าสุดผ่าน 507 unit tests, 206 browser tests และเกมสาธารณะ 16/16 กรณี พร้อม resolver traces 9 สถานการณ์ที่ไม่เปลี่ยนจากเฟส 0
 
-## งานเฟส 3
+## งาน GitHub ที่เข้ามาระหว่างทำ artwork
+
+พบ remote มี Chapters phaseA/B1, shared map/rules, savev28 และ lobbyเลือกแผนที่/ไปแผนที่ไกลสุด อย่างน้อยถึง `6b05b9e` ณเวลาตรวจ อย่าย้อน code/save/map กลับไปหา runtimephase2ที่ใช้ทำภาพ Source screenshot และผล507/206/16ด้านบนเป็น baselineเก่าของงานVFX ไม่ใช่ผลรับรองโค้ดแคมเปญล่าสุด ให้ตรวจHEADจริงและรักษางานใหม่ทั้งหมด
+
+## งานถัดไป — ตรวจแบบและ Bolt ตัวอย่าง
+
+1. ให้เจ้าของ feedback/ยืนยันแนวภาพทั้ง3ก่อนอ้างว่า approved; แก้แบบตามความเห็นถ้าจำเป็น
+2. หลังยืนยัน ทำ Bolt เพียงหนึ่งสกิลเป็น vertical slice: core/tail/impact แยกชั้น ใช้ทรงและสีจากแบบ ไม่ใช้ sheet รวมฉากเป็น texture และไม่ทำคาน laser ค้างตามภาพ panel02
+3. ใช้ timing/contact/cancellation ของphase1–2เดิม คงผล/save/RNG/loot ไม่มีผลต่อสู้ใหม่ ไม่มีฉากบอสในรอบตัวอย่างนี้
+4. ส่งคลิปจากเกมจริงที่320×568/390×844และPC พร้อมnormal/fast/reduced ตรวจHP/barrier/Guard/dodge/cancel/skip/reload/resize/hidden-tabและไม่จ่ายผล/รางวัลซ้ำ
+5. ให้เจ้าของตรวจคลิปก่อนขยายExecute/Ward/สกิลอื่น แล้วค่อยกลับสู่เฟส3ด้านล่าง การตรวจแบบนี้เป็น checkpointงานภาพตามworkflowที่ตกลง ไม่ใช่การขออนุมัติซ้ำสำหรับtests/git/CIตามสิทธิ์เดิม
+
+## งานเฟส 3 — เลื่อนมาหลังจุดตรวจ VFX
 
 1. Intro ของ Rift Warden: รอยแยก → เงาร่าง → ภาพใกล้/ชื่อ → ลงน้ำหนัก → สนาม เชื่อมกับ transition เดิมโดยไม่เล่นฉากซ้ำยืดเวลา
 2. จัดลำดับก่อน `beginBattle` และ opening enemy turns ให้ถูกต้อง กดข้ามหรือ reload แล้วไม่เพิ่ม/ข้ามคำสั่งหรือเทิร์นศัตรู

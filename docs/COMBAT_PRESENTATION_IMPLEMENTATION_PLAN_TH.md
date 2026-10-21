@@ -1,10 +1,23 @@
 # แผนงานเอฟเฟกต์การต่อสู้และคัตซีนบอส
 
-วันที่ 21 ตุลาคม 2026 · สถานะ: เฟส 0–2 เสร็จและเผยแพร่แล้ว; เฟส 2 ผ่าน public16/16; เฟส 3–5 ยังไม่เริ่ม
+วันที่ 21 ตุลาคม 2026 · สถานะ: ระบบเฟส 0–2 เผยแพร่แล้ว; เจ้าของไม่รับคุณภาพภาพเฟส 2 ให้ปรับ VFX ก่อน; mockup v1 รอตรวจ; เฟส 3–5 ยังไม่เริ่ม
 
 ผลเฟส 0: [สเปกและ storyboard](combat-presentation/PHASE0_SPEC_TH.md), [ตารางครอบคลุม](combat-presentation/COVERAGE_TH.md), [asset brief](combat-presentation/ASSET_BRIEF_TH.md), [baseline 21/21 flows](combat-presentation/BASELINE_TH.md) ผลเฟส 1 C10–C16: [พฤติกรรมและหลักฐานตรวจ](validation/COMBAT_PRESENTATION_PHASE1.md) ไม่เปลี่ยนกฎต่อสู้/เซฟ/ดรอป; สถานะ deployment ดูผลตรวจนั้น
 
 อ้างอิง [ข้อเสนอการนำเสนอการต่อสู้](COMBAT_PRESENTATION_PROPOSAL_TH.md), `CLAUDE.md`, `UI_DESIGN.md` และโครงสร้างเกมปัจจุบัน แผนนี้แปลงข้อเสนอเป็นงานที่ลงมือและตรวจรับได้ ดูสถานะที่ทำเสร็จจาก checkbox และหลักฐานแต่ละเฟส ไม่ถือว่างานที่เหลือเสร็จจากการมีสเปกแล้ว
+
+## จุดตรวจงานภาพใหม่ — มาก่อนเฟส 3
+
+เจ้าของให้ทำ artwork/mockup ก่อนพัฒนาต่อ สถานะ C20–C25 ด้านระบบที่ส่งมอบแล้วไม่ใช่การยอมรับคุณภาพภาพ ดู [VFX art direction และ storyboard](combat-presentation/vfx-art-direction/README_TH.md)
+
+- [x] **R00:** บันทึก feedback ว่ารูปทรงและความสวยเฟส2ยังไม่ผ่าน แยกจากผลทดสอบเชิงระบบ
+- [x] **R01:** สร้าง concept/storyboard Bolt, Execute, Ward อย่างละ4จังหวะ บนภาพสนามจริง พร้อมเก็บ source/prompt/ขนาดจริง
+- [x] **R02:** ทำ brief สี/รูปทรง/layers/anchor/timing และแจ้งข้อคลาดเคลื่อนของภาพ AI พร้อมอัปเดต prompt ให้ Claude
+- [ ] **R03:** เจ้าของตรวจและยืนยัน/ปรับทิศทางภาพ v1 ห้ามถือว่าอนุมัติแล้วจากการอนุญาตให้สร้างภาพ
+- [ ] **R04:** Claude ทำ Bolt หนึ่งสกิลเป็นตัวอย่างที่เล่นได้จริง ส่งคลิป320/390px/PC พร้อม normal/fast/reduced และผล/save เดิม
+- [ ] **R05:** เจ้าของตรวจคลิปก่อนขยาย Execute/Ward/สกิลอื่น แล้วจึงกลับเข้า C30–C35
+
+งานรอบ artwork นี้ไม่แก้ runtime ไม่ deploy และยังไม่มี clip/transparent production assets
 
 ## 1. เป้าหมายและขอบเขตส่งมอบ
 
