@@ -7,9 +7,10 @@ const durations: Record<ActionId, number> = {
   taunt:550, slam:850, valor:600, mend:600, rally:700, finisher:950, sigil:850, sanctuary:750,
   spearwall:700, weakshot:850, bomb:900, backstab:900, quake:1000, finale:950,
 };
-export function stageTiming(turn: TurnStage, reduced: boolean, fast = false): { contact: number; end: number } {
+// `boss`: any boss battle holds its enemy stages a little longer (every map's boss, not only the Rift Warden).
+export function stageTiming(turn: TurnStage, reduced: boolean, fast = false, boss = false): { contact: number; end: number } {
   const canceled = turn.events.some(e => e.type === 'cancel');
-  const normalEnd = canceled ? 500 : turn.action ? durations[turn.action] : turn.state.encounterId === 'rift-warden' ? 1200 : 800;
+  const normalEnd = canceled ? 500 : turn.action ? durations[turn.action] : boss || turn.state.encounterId === 'rift-warden' ? 1200 : 800;
   const end = fast ? Math.round(normalEnd * .65) : normalEnd;
   const attack = turn.events.some(e => e.type === 'damage' || e.type === 'dodge');
   // Reduced motion retains readable actor stages, with immediate truthful feedback.

@@ -34,6 +34,8 @@ export interface MapDefinition {
   // `firstFind`: the tutorial (prologue) win leaves this plain piece in the bag (map 1 teaches wearing gear).
   // `bossCharm`: the boss pays the targeted boss charm (boss-equipment.ts); teaching maps leave it out.
   firstFind?: { slot: GearSlot; rarity: number }; bossCharm?: boolean;
+  // `bossDrop`: a teaching boss's lighter rarity weights, with sets limited to this map's zones (missing = the shared boss rules).
+  bossDrop?: { weights: readonly number[]; zoneSets: boolean };
   // Names shown on the map, in messages and in the summary: the boss and the goal it guards.
   bossName: string; goalName: string;
   rows: readonly string[];
@@ -194,7 +196,9 @@ export interface PotionRules {
 export interface ForgeRules {
   transfer:{ore:number;dust:number;seal:number};
   craft: {ore:number;dust:number;orePerLevel:number;dustPerLevel:number};
-  itemLevel: {baseCap:number; orePerLevel:number; dustPerLevel:number; unlocks:readonly {elite:string;cap:number}[]};
+  itemLevel: {baseCap:number; orePerLevel:number; dustPerLevel:number; unlocks:readonly {elite:string;cap:number}[];
+    // Completing a map (normal difficulty) raises the cap; other maps leave it alone (chapters, 2026-10-21).
+    clears:readonly {map:string;cap:number}[]};
   plusCap: readonly number[]; plusPercent: number; ore: number; orePerPlus: number; dustPerPlus: number;
   // Smelting (owner-approved 2026-10-16): `smeltOre` ore per veil dust, at most `smeltCap` dust per return home.
   smeltOre: number; smeltCap: number;

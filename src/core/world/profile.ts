@@ -264,7 +264,7 @@ export function settle(initial: Profile, run: ExpeditionState, outcome: RunOutco
     if (add) profile.quests[q.id] = { ...now, progress: Math.min(q.target, now.progress + add) };
   }
   const levels=map.equipment.forge.itemLevel;
-  profile.forgeLevel=Math.max(profile.forgeLevel??levels.baseCap,...levels.unlocks.filter(u=>run.elitesDefeated.includes(u.elite)||(run.respawns[u.elite]??0)>0||outcome==='complete').map(u=>u.cap));
+  profile.forgeLevel=Math.max(profile.forgeLevel??levels.baseCap,...levels.unlocks.filter(u=>run.elitesDefeated.includes(u.elite)||(run.respawns[u.elite]??0)>0).map(u=>u.cap),...levels.clears.filter(c=>outcome==='complete'&&c.map===run.mapId).map(c=>c.cap));
   profile.tutorialDone ||= run.tutorialDone; profile.expeditions++; if (outcome === 'complete') profile.completes++;
   if (outcome === 'complete' && !profile.cleared.includes(run.mapId)) profile.cleared.push(run.mapId);
   profile.returns++; profile.taken = []; profile.shop = {}; profile.refreshes = 0; profile.smelted = 0;

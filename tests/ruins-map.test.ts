@@ -75,3 +75,26 @@ describe('map 1: ซากชายแดน', () => {
     }
   });
 });
+
+describe('Codex systems on several maps (A1)', () => {
+  it('clearing map 1 leaves the item-level cap; clearing the frontier raises it', () => {
+    const levels = map.equipment.forge.itemLevel; const profile = { ...newProfile(map, 5), tutorialDone: true };
+    const run = depart(profile, map, lookup, 3).run;
+    expect(settle(profile, { ...run, completed: true }, 'complete', map).forgeLevel).toBe(levels.baseCap);
+    const frontierRun = depart(profile, chapterOne, lookup, 3).run;
+    expect(settle(profile, { ...frontierRun, completed: true }, 'complete', chapterOne).forgeLevel).toBe(levels.clears.find(c => c.map === chapterOne.id)!.cap);
+  });
+  it('the map-1 captain drops rare to epic pieces of this map\'s sets, never legendary', () => {
+    const sets = new Set(map.zones.flatMap(z => z.sets ?? [])); let seen = 0;
+    for (const seed of [1, 2, 3, 4, 5, 6, 7, 8]) {
+      let s = depart({ ...newProfile(map, 5), tutorialDone: true }, map, lookup, seed).run; const before = s.found.length;
+      s = { ...s, position: { ...findTiles(map, 'boss')[0]!, y: findTiles(map, 'boss')[0]!.y + 1 } };
+      s = fight(move(s, map, 'up').state);
+      for (const item of s.found.slice(before)) {
+        seen++; expect(item.rarity).toBeGreaterThanOrEqual(1); expect(item.rarity).toBeLessThanOrEqual(3);
+        if (item.set) expect(sets.has(item.set)).toBe(true);
+      }
+    }
+    expect(seen).toBeGreaterThan(0);
+  });
+});

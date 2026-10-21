@@ -286,7 +286,7 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
 function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: EncounterLookup, maps: readonly MapDefinition[]): Profile {
   const p = obj(v);
   if (!isInt(p.seed, 0, 0xffffffff) || !isInt(p.returns) || !isInt(p.expeditions) || !isInt(p.completes) || typeof p.tutorialDone !== 'boolean') throw new Error('Invalid profile');
-  const levels=map.equipment.forge.itemLevel, caps=[levels.baseCap,...levels.unlocks.map(u=>u.cap)];
+  const levels=map.equipment.forge.itemLevel, caps=[levels.baseCap,...levels.unlocks.map(u=>u.cap),...levels.clears.map(c=>c.cap)];
   if(version<23)p.forgeLevel=p.completes>0?Math.max(...caps):levels.baseCap;
   if(!caps.includes(p.forgeLevel as number))throw new Error('Invalid forge level');
   if(version<24){p.storageTier=0;p.overflow=[];}
@@ -335,7 +335,7 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
     if (commanderReason(commander)) throw new Error('Invalid commander');
   } else if (p.commander === undefined && version >= 6) throw new Error('Invalid commander');
   const cleared = version < 28 ? legacyCleared(p.tutorialDone === true, (p.completes as number) > 0, map, maps) : clearedList(p.cleared, maps);
-  const bossLoot=bossProfileOf(p.bossLoot,map);
+  const bossLoot=bossProfileOf(p.bossLoot,map,maps);
   return {bossLoot,hunt,overflow,storageTier:p.storageTier as number, forgeLevel:p.forgeLevel as number, seed: p.seed, returns: p.returns, tutorialDone: p.tutorialDone, commander, company: [...company as string[]], members, party, cleared,
     bank: { ore: bank.ore as number, gold: bank.gold as number, seal: bank.seal as number, dust: bank.dust as number }, items, nextItem: p.nextItem as number, forge: p.forge as number, potions: potionsOf(p.potions, 9999), quests, shop, refreshes: p.refreshes as number, smelted: p.smelted as number, taken: [...p.taken as number[]], expeditions: p.expeditions, completes: p.completes, last };
 }
@@ -421,7 +421,7 @@ export function parseGame(raw: string, map: MapDefinition, lookup: EncounterLook
   if (run && rosterIds(run).some(id => !profile.company.includes(id))) throw new Error('Run member left the company');
   if(run?.hunt&&run.hunt.target!==profile.hunt?.target)throw new Error('Hunt target mismatch');
   if(run?.hunt?.target&&!profile.company.includes(run.hunt.target))throw new Error('Unowned hunt target');
-  if(run?.bossLoot){const before=startBossPlan(profile,map),now=run.bossLoot;
+  if(run?.bossLoot){const before=startBossPlan(profile,home),now=run.bossLoot;
     if(now.target!==before.target||(!run.bossDefeated&&(now.misses!==before.misses||now.rewarded!==before.rewarded))||(run.bossDefeated&&(!now.rewarded||(now.misses!==0&&now.misses!==before.misses+1))))throw new Error('Boss progress mismatch');
   }
   if (run && !ownItemsMatch(profile, run)) throw new Error('Run items do not match the company');
@@ -437,9 +437,10 @@ export function loadGame(storage: StoragePort | undefined, map: MapDefinition, l
 function bossPlanOf(v:unknown,map:MapDefinition):NonNullable<ExpeditionState['bossLoot']> {
   if(!bossPlanValid(v,map))throw new Error('Invalid boss plan');return structuredClone(v);
 }
-function bossProfileOf(v:unknown,map:MapDefinition):NonNullable<Profile['bossLoot']> {
+// Boss charm progress is kept per boss: the home map's boss and every map that pays the charm.
+function bossProfileOf(v:unknown,home:MapDefinition,maps:readonly MapDefinition[]):NonNullable<Profile['bossLoot']> {
   if(v===undefined)return {};const raw=obj(v),out:NonNullable<Profile['bossLoot']>={};
-  for(const [boss,progress]of Object.entries(raw)){const p=obj(progress);if(boss!==map.bossEncounterId||Object.keys(p).length!==3)throw new Error('Invalid boss progress');
+  for(const [boss,progress]of Object.entries(raw)){const p=obj(progress);const map=[home,...maps.filter(m=>m.bossCharm)].find(m=>m.bossEncounterId===boss);if(!map||Object.keys(p).length!==3)throw new Error('Invalid boss progress');
     const plan=bossPlanOf({version:1,boss,...p},map);out[boss]={target:plan.target,misses:plan.misses,rewarded:plan.rewarded};}
   return out;
 }

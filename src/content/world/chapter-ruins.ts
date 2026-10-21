@@ -32,6 +32,8 @@ export const ruinsMap: MapDefinition = {
     { id: 'sanctum', name: 'ประตูป้อม', safe: true, base: 0, step: 0, cap: 0, pool: [] },
   ],
   bossEncounterId: 'vanguard-captain', bossLevel: 3,
+  // A teaching boss: rare to epic pieces of this map's sets, never legendary.
+  bossDrop: { weights: [0, 40, 45, 15, 0], zoneSets: true },
   revealRadius: 3,
   // The prologue win leaves one plain body piece in the bag, so the first lesson on the map is wearing it.
   firstFind: { slot: 'body', rarity: 1 },

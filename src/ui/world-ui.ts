@@ -614,7 +614,7 @@ export class WorldUI {
 
   private renderInfo(): void {
     const s = this.view?.state;
-    this.root.querySelector('#world-loot-content')!.innerHTML=lootGuide(this.map,s?.hunt,!s?.hunt)+bossGuide(this.map,s?.bossLoot);
+    this.root.querySelector('#world-loot-content')!.innerHTML=lootGuide(this.map,s?.hunt,!s?.hunt)+(this.map.bossCharm?bossGuide(this.map,s?.bossLoot):'');
     this.root.querySelector('#world-info-content')!.innerHTML = `
       <section class="world-rules"><h3>เดินทีละช่อง</h3><p>แตะช่องที่ไฮไลต์ ใช้ปุ่มลูกศรมุมซ้ายล่าง หรือแป้น ←↑↓→ / WASD ทุกก้าวในพื้นที่อันตรายมีโอกาสพบศัตรู ตัวเลขมุมขวาบนคือโอกาสของก้าวถัดไป ยิ่งเดินโดยไม่เจอ โอกาสยิ่งเพิ่ม และกลับไปต่ำสุดเมื่อพบศัตรูหรือพักที่แคมป์</p>
       <h3>เลือดติดตัว</h3><p>จบศึกแล้วเลือดไม่ฟื้นเอง สมาชิกที่ล้มยังล้มอยู่จนกว่าจะชุบที่แคมป์ ศึกถัดไปเริ่มด้วยเลือดที่เหลือ</p>

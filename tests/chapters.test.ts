@@ -44,4 +44,10 @@ describe('chapters', () => {
     expect(parseGame(JSON.stringify({ version: 28, profile: { ...profile, cleared: ['nowhere', teaching.id] }, run: null }), frontier, lookup, maps).profile.cleared).toEqual([teaching.id]);
     expect(() => parseGame(JSON.stringify({ version: 28, profile: { ...profile, cleared: [teaching.id, teaching.id] }, run: null }), frontier, lookup, maps)).toThrow();
   });
+  it('boss charm progress loads for any map that pays the charm, and an unknown boss is rejected', () => {
+    const profile = { ...ready(), cleared: [teaching.id], bossLoot: { [frontier.bossEncounterId]: { target: 'focus' as const, misses: 1, rewarded: true } } };
+    expect(parseGame(JSON.stringify({ version: 28, profile, run: null }), frontier, lookup, maps).profile.bossLoot).toEqual(profile.bossLoot);
+    const odd = { ...profile, bossLoot: { 'vanguard-captain': { target: 'focus', misses: 0, rewarded: false } } };
+    expect(() => parseGame(JSON.stringify({ version: 28, profile: odd, run: null }), frontier, lookup, maps)).toThrow();
+  });
 });

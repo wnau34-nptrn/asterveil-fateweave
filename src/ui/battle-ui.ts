@@ -344,7 +344,7 @@ export class BattleUI {
     playback.phase = turn.side; playback.frame = turn.before!; playback.revealed = false;
     if (turn.side === 'hero') this.heroId = turn.actorId;
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const timing = stageTiming(turn, reduced, this.combatPrefs.speed === 'fast');
+    const timing = stageTiming(turn, reduced, this.combatPrefs.speed === 'fast', this.session?.kind === 'boss');
     this.scene?.configureEffects(this.combatPrefs, reduced);
     this.render();
     let stopPrepare = () => {};
