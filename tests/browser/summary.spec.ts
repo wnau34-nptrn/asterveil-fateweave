@@ -14,6 +14,8 @@ for (const [width, height, touch] of [[320,568,true], [390,844,true], [1366,768,
     const profile = newProfile(map, 123); profile.tutorialDone = true; profile.completes = 1;
     profile.commander = { name: 'อารี', crest: 'star', color: 'gold' };
     const game = depart(profile, map, encounterById, 1234), run = game.run;
+    // This v21 fixture represents an ongoing legacy expedition, before boss-loot snapshots existed.
+    delete run.bossLoot;
     const [goal] = findTiles(map, 'goal'); run.position = { x: goal!.x, y: goal!.y + 1 };
     run.bossDefeated = true; run.elitesDefeated = ['scar-golem']; run.eventsDone = ['scar-rift'];
     run.resources = { ore: 20, gold: 20, ember: 2, seal: 4 };
