@@ -2,6 +2,7 @@ import { actionReason, beginBattle, createBattle, currentHeroId, plannedIntents,
 import type { ActionId, BattleEntry, BattleState, Command, EncounterDefinition, Outcome, Resolution, TurnStage } from '../core/battle/types';
 import { gameBounds, shortcutBlocked } from '../platform/keyboard';
 import { sfx } from '../platform/sfx';
+import { BattlePlayback, stageTiming } from './battle-playback';
 // Moves that sound like magic rather than steel (placeholder SFX).
 const energyActions = new Set(['bolt', 'quake', 'bomb', 'acid', 'weakshot', 'sigil']);
 import type { BattleKind } from '../core/world/types';
@@ -39,8 +40,8 @@ export class BattleUI {
   private started: boolean;
   private busy = false;
   private canvasInputAfterInfo = 0;
-  private presentation: { phase: 'hero' | 'enemy'; index: number; resolution: Resolution; frame: BattleState; logEnds: number[] } | undefined;
-  private timer: ReturnType<typeof setTimeout> | undefined;
+  private presentation: { phase: 'hero' | 'enemy'; index: number; resolution: Resolution; frame: BattleState; logEnds: number[]; revealed: boolean; logStart: number } | undefined;
+  private playback = new BattlePlayback();
   private storage = browserStorage();
   private hintsEnabled = true;
   private saved = true;
@@ -106,7 +107,7 @@ export class BattleUI {
         }
         case 'status-unit': if (value) { this.inspectedActorId = value; this.renderStatuses(); this.root.querySelector<HTMLElement>(`#status-unit-${value}`)?.focus({ preventScroll: true }); } break;
         case 'info-close': this.root.querySelector<HTMLDialogElement>('#game-info')!.close(); break;
-        case 'start': if (this.session && !this.started) { this.started = true; this.present(beginBattle(this.data, this.session.entry)); } break;
+        case 'start': if (this.session && !this.started) { this.started = true; this.present(beginBattle(this.data, this.session.entry, true)); } break;
         case 'hero': if (value) this.selectHero(value); break;
         case 'action': if (value && !this.busy && this.started && this.state.outcome === 'active' && this.data.heroes.find(h => h.id === currentHeroId(this.state, this.data))?.actions.includes(value as ActionId)) { this.closeSkill(); this.root.querySelector<HTMLElement>('#turn-detail:popover-open')?.hidePopover(); this.action = value as ActionId; this.targeting = true; this.render(); } break;
         case 'skill-info': this.showSkill(); break;
@@ -153,15 +154,16 @@ export class BattleUI {
     });
     new ResizeObserver(() => { this.positionSkill(); this.placeBackdrop(); this.root.querySelector<HTMLElement>('#turn-detail:popover-open')?.hidePopover(); }).observe(root);
     document.addEventListener('visibilitychange', () => {
-      if (document.hidden && this.busy) this.finishPresentation();
+      if (document.hidden && this.busy) this.finishPresentation(false);
     });
+    window.addEventListener('resize', () => { if (this.busy) this.finishPresentation(false); });
     this.render();
   }
 
   attach(scene: BattleScene): void { this.scene = scene; this.render(); }
   // Starts or resumes a battle from the expedition's recorded entry and commands.
   open(session: BattleSession): void {
-    clearTimeout(this.timer); this.timer = undefined; this.scene?.stopEffects(); this.presentation = undefined; this.busy = false;
+    this.playback.cancel(); this.scene?.stopEffects(); this.presentation = undefined; this.busy = false;
     this.closeSkill(); this.session = session; this.action = 'attack'; this.targeting = true;
     this.canvasInputAfterInfo = performance.now() + 250;
     if (this.data !== session.data) { this.scene?.setEncounter(session.data); this.data = session.data; }
@@ -229,12 +231,14 @@ export class BattleUI {
     let title = `${heroText[lesson.heroId]?.name ?? ''} · ${lesson.title}`; let copy = `“${heroVoice(lesson.heroId, lesson.action)}” ${lesson.copy}`;
     const speaker = p ? undefined : lesson.heroId; const face = this.root.querySelector<HTMLElement>('#coach-face')!;
     if (face.dataset.hero !== (speaker ?? '')) { face.dataset.hero = speaker ?? ''; face.innerHTML = speaker ? portrait(speaker) : ''; }
-    if (p) {
+    if (p?.revealed) {
       lesson.step = p.resolution.initial.commands.length + 1;
       const event = this.stage!.events.find(e => e.type !== 'outcome');
       title = p.phase === 'hero' ? 'เทิร์นฮีโร่ตามความเร็ว' : 'ถึงเทิร์นศัตรู';
       copy = event ? eventThai(event, this.displayState, this.data) : 'การตอบโต้จังหวะนี้ถูกยกเลิก';
       if (p.phase === 'hero' && this.stage?.action === 'mark') copy = `${actorName(this.stage!.targetId, this.data)} ติดตราแล้ว · ไลราตีเป้านี้ครั้งถัดไป +${this.data.rules.markedBonus}`;
+    } else if (p) {
+      title = 'กำลังเตรียมท่า'; copy = 'ติดตามผู้ลงมือและเป้าหมาย · ผลจะแสดงเมื่อท่าถึงเป้า';
     } else {
       const next = this.heroId !== lesson.heroId ? `#hero-${lesson.heroId}` : this.action !== lesson.action ? `#action-${lesson.action}` : `#target-${lesson.targetId}`;
       this.root.querySelector(next)?.classList.add('coach-focus');
@@ -301,7 +305,7 @@ export class BattleUI {
   private execute(targetId: string): void {
     if (!this.scene?.isReady || !this.started || this.busy || this.state.outcome !== 'active') return;
     const command: Command = { beat: this.state.beat, heroId: this.heroId, action: this.action, targetId };
-    this.present(resolveCommand(this.state, this.data, command));
+    this.present(resolveCommand(this.state, this.data, command, true));
   }
 
   private present(result: Resolution): void {
@@ -309,15 +313,16 @@ export class BattleUI {
     // Commit every actual actor turn before presentation. Reload never repeats damage.
     this.state = result.state;
     this.saved = this.session?.commit(this.state) ?? false;
+    const logStart = this.messages.length;
     const logEnds = result.turns.map(turn => {
       this.messages.push(`รอบ ${turn.round} · เทิร์น${turn.side === 'hero' ? 'ฮีโร่' : 'ศัตรู'} · ${actorName(turn.actorId, this.data)}${turn.action ? ` ${this.data.skills[turn.action].name}` : ''}`,
-        ...turn.events.map(event => eventThai(event, result.state, this.data)));
+        ...turn.events.map(event => eventThai(event, turn.after!, this.data)));
       return this.messages.length;
     });
     if (!result.turns.length) { this.busy = false; this.heroId = currentHeroId(this.state, this.data) ?? this.heroId; this.render(); return; }
     this.busy = true;
     const first = result.turns[0]!;
-    this.presentation = { phase: first.side, index: 0, resolution: result, frame: first.state, logEnds };
+    this.presentation = { phase: first.side, index: 0, resolution: result, frame: first.before!, logEnds, revealed: false, logStart };
     this.showStage();
     this.root.querySelector<HTMLElement>('#skip-turn')?.focus({ preventScroll: true });
   }
@@ -325,38 +330,52 @@ export class BattleUI {
   private showStage(): void {
     const playback = this.presentation; if (!playback) return;
     const turn = playback.resolution.turns[playback.index]!;
-    playback.phase = turn.side; playback.frame = turn.state;
+    playback.phase = turn.side; playback.frame = turn.before!; playback.revealed = false;
     if (turn.side === 'hero') this.heroId = turn.actorId;
-    this.render(); this.scene?.play(turn.events); this.stageSound(turn);
-    this.timer = setTimeout(() => {
-      if (this.presentation !== playback) return;
-      if (++playback.index < playback.resolution.turns.length) this.showStage();
-      else this.finishPresentation();
-    }, 1000);
+    const timing = stageTiming(turn, window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    this.render();
+    this.playback.start([
+      { at: timing.contact, run: () => {
+        if (this.presentation !== playback) return;
+        playback.frame = turn.after!; playback.revealed = true;
+        this.render(false); this.scene?.play(turn.events, timing.end - timing.contact); this.stageSound(turn);
+      } },
+      { at: Math.min(timing.end - 40, timing.contact + 220), run: () => {
+        if (turn.events.some(e => e.type === 'down')) this.playback.own(sfx.play('down'));
+      } },
+      { at: timing.end, run: () => {
+        if (this.presentation !== playback) return;
+        this.scene?.stopEffects();
+        if (++playback.index < playback.resolution.turns.length) this.showStage();
+        else this.finishPresentation();
+      } },
+    ]);
+    this.playback.own(() => this.scene?.stopEffects());
+    this.scene?.prepare(turn.events, timing.contact);
   }
 
   // Placeholder synth sounds for one actor turn (platform/sfx.ts), from its events.
   private stageSound(turn: TurnStage): void {
+    const sound = (name: Parameters<typeof sfx.play>[0]) => this.playback.own(sfx.play(name));
     const has = (t: string) => turn.events.some(e => e.type === t);
-    if (has('cancel')) { sfx.play('cancel'); return; }
+    if (has('cancel')) { sound('cancel'); return; }
     const hit = turn.events.find(e => e.type === 'damage');
-    if (hit) sfx.play(['execute', 'finisher', 'backstab'].includes(turn.action ?? '') ? 'crit' : (turn.side === 'enemy' ? turn.intent?.kind === 'energy' : energyActions.has(turn.action ?? '')) ? 'zap' : 'hit');
-    else if (has('dodge') || has('evade')) sfx.play('miss');
-    if (has('guard') || has('brace') || has('taunt') || has('counter')) sfx.play('guard');
-    if (has('barrier') || has('sanctuary') || has('sigil')) sfx.play('barrier');
-    if (has('heal')) sfx.play('heal');
-    if (has('haste') || has('song') || has('rally') || has('stand') || has('finale')) sfx.play('buff');
-    if (has('mark') || has('corrode') || has('delay') || has('interrupt')) sfx.play('debuff');
-    if (has('down')) setTimeout(() => sfx.play('down'), 220);
+    if (hit) sound(['execute', 'finisher', 'backstab'].includes(turn.action ?? '') ? 'crit' : (turn.side === 'enemy' ? turn.intent?.kind === 'energy' : energyActions.has(turn.action ?? '')) ? 'zap' : 'hit');
+    else if (has('dodge') || has('evade')) sound('miss');
+    if (has('guard') || has('brace') || has('taunt') || has('counter')) sound('guard');
+    if (has('barrier') || has('sanctuary') || has('sigil')) sound('barrier');
+    if (has('heal')) sound('heal');
+    if (has('haste') || has('song') || has('rally') || has('stand') || has('finale')) sound('buff');
+    if (has('mark') || has('corrode') || has('delay') || has('interrupt')) sound('debuff');
   }
-  private finishPresentation(): void {
+  private finishPresentation(audible = true): void {
     if (!this.presentation) return;
-    if (this.state.outcome !== 'active') sfx.play(this.state.outcome === 'victory' ? 'victory' : 'defeat');
-    clearTimeout(this.timer); this.timer = undefined; this.scene?.stopEffects();
+    this.playback.cancel(); this.scene?.stopEffects();
+    if (audible && !document.hidden && this.state.outcome !== 'active') this.playback.own(sfx.play(this.state.outcome === 'victory' ? 'victory' : 'defeat'));
     this.presentation = undefined; this.busy = false;
     this.heroId = currentHeroId(this.state, this.data) ?? this.heroId;
     this.action = 'attack'; this.targeting = true; this.render();
-    if (this.state.outcome === 'active') this.root.querySelector<HTMLElement>('#action-attack')?.focus({ preventScroll: true });
+    if (this.state.outcome === 'active' && !document.hidden && !this.root.closest('[inert]') && !this.root.querySelector('dialog[open]')) this.root.querySelector<HTMLElement>('#action-attack')?.focus({ preventScroll: true });
   }
 
   private set(id: string, content: string): void { this.root.querySelector(`#${id}`)!.innerHTML = content; }
@@ -373,6 +392,7 @@ export class BattleUI {
     const detail = turn ? canceled ? 'ศัตรูเสียเทิร์นนี้' : `${turn.action ? d.skills[turn.action].name : turn.intent ? intentName(turn.intent) : 'ลงมือ'} → ${actorName(turn.targetId, d)}` : s.outcome !== 'active' ? 'กดปุ่มด้านล่างเพื่อไปต่อ' : 'SPD มากเริ่มก่อน · คนละ 1 ครั้งต่อรอบ';
     const phaseRoot = this.root.querySelector<HTMLElement>('#turn-phase')!;
     phaseRoot.dataset.phase = mode; phaseRoot.dataset.actor = actor; phaseRoot.dataset.canceled = String(!!canceled);
+    phaseRoot.dataset.cue = this.presentation ? this.presentation.revealed ? 'impact' : 'prepare' : 'idle';
     this.set('turn-phase', `<div class="phase-head"><div class="phase-portrait">${this.portrait(actor)}</div><div class="phase-copy"><h2>${escapeHtml(title)}</h2><p>${escapeHtml(detail)}</p></div>${turn ? '<button id="skip-turn" data-ui="skip-turn" class="quiet">ดูผลทันที</button>' : ''}</div><div id="turn-order" aria-label="ลำดับเทิร์นตามความเร็ว"></div>`);
   }
 
@@ -384,7 +404,7 @@ export class BattleUI {
   }
 
   private renderTimeline(): void {
-    const s = this.displayState; const slots = upcomingTurns(s, this.data);
+    const s = this.presentation?.revealed ? this.stage!.state : this.displayState; const slots = upcomingTurns(s, this.data);
     this.set('turn-order', slots.length ? `<ol>${slots.map((slot, index) => {
       const blocked = slot.side === 'enemy' && (s.enemies.find(e => e.id === slot.actorId)?.interruptedRound === slot.round ||
         index === 0 && this.stage?.events.some(e => e.type === 'cancel'));
@@ -495,7 +515,7 @@ export class BattleUI {
     }).join('') : `<p class="status-empty">${actor.hp <= 0 ? 'ยูนิตล้มแล้ว ไม่มีสถานะชั่วคราวที่มีผล' : s.outcome !== 'active' ? 'การต่อสู้จบแล้ว ไม่มีสถานะชั่วคราวที่มีผล' : 'ไม่มีบัฟหรือดีบัฟชั่วคราว'}</p>` }`);
   }
 
-  private render(): void {
+  private render(repaint = true): void {
     const focus = document.activeElement instanceof HTMLElement ? document.activeElement.id : '';
     const s = this.state; const d = this.data; const disabled = !this.scene?.isReady || !this.started || this.busy || s.outcome !== 'active';
     this.set('encounter-title', escapeHtml(d.name));
@@ -512,10 +532,11 @@ export class BattleUI {
     this.renderStatuses();
     this.renderPhase(); this.renderSituation(); this.renderSelectedHero(); this.renderParty(disabled); this.renderCommands(disabled);
     this.set('rules', `<h3>ลงสนาม ${d.heroes.length} คน · ศัตรูเล็งตามหมายเลขช่อง</h3><p>รวมฮีโร่และศัตรูเรียง SPD มากไปน้อยเมื่อเริ่มรอบ คนละ 1 ครั้งต่อรอบ ข้ามตัวที่ล้ม SPD เท่ากันใช้ลำดับรายชื่อฮีโร่ก่อน ตามด้วยศัตรู</p><p>แนวหน้าที่ยังยืนอยู่รับการโจมตีกายภาพก่อน พลังงานโจมตีแนวหลังได้ เมื่อแนวหน้าล้มหมด กายภาพจะถึงแนวหลัง ท่าของศัตรูเล็งหมายเลขช่องในทีม ใครยืนช่องนั้นคือเป้า แผนโจมตีเป็นการคาดการณ์ตามคนที่ยังยืนอยู่ เมื่อถึงเทิร์นศัตรูจึงกำหนดเป้าหมายจริง</p>${d.heroes.map(hero => `<h3>${heroText[hero.id]!.name} · ${heroText[hero.id]!.role} · SPD ${hero.speed} · ${hero.lane === 'front' ? 'แนวหน้า' : 'แนวหลัง'}</h3><dl>${hero.actions.map(action => `<dt>${d.skills[action].name} (${d.skills[action].english})</dt><dd>${skillDescription(action, hero.id, d)}</dd>`).join('')}</dl>`).join('')}<p>แต่ละตัวลงมือ 1 ครั้งต่อรอบ สกิลคูลดาวน์ 2 รอบที่ใช้ในรอบ 1 จะพร้อมในรอบ 3 พรฟื้นฟูคูลดาวน์ 3 รอบ ${d.enemies.map(e => `${actorName(e.id, d)} SPD ${e.speed}`).join(' · ')} การรักษาไม่ชุบชีวิต โล่เวทไม่ซ้อนกัน เป้าหมายเสริมคือชนะโดยรักษาทีมครบ ${d.heroes.length} คน</p>`);
-    const shownMessages = this.presentation ? this.messages.slice(0, this.presentation.logEnds[this.presentation.index]) : this.messages;
+    const p = this.presentation;
+    const shownMessages = p ? this.messages.slice(0, p.revealed ? p.logEnds[p.index] : p.index ? p.logEnds[p.index - 1] : p.logStart) : this.messages;
     this.set('event-log', shownMessages.slice(-30).map(message => `<li>${escapeHtml(message)}</li>`).join(''));
     this.set('save-status', this.saved && this.storage ? 'บันทึกบนเครื่องนี้อัตโนมัติ' : 'เล่นได้ แต่บันทึกบนเครื่องนี้ไม่ได้');
-    this.scene?.sync({ state: this.displayState, heroId: this.heroId, targetId: null, phase: this.presentation?.phase, activeActorId: this.actingActor, activeTargetId: this.actingTarget });
+    this.scene?.sync({ state: this.displayState, heroId: this.heroId, targetId: null, phase: this.presentation?.phase, activeActorId: this.actingActor, activeTargetId: this.actingTarget }, repaint);
     this.renderFieldTargets();
     this.renderFieldStatuses();
     this.renderTutorial();

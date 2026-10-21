@@ -106,6 +106,9 @@ export interface BattleEvent {
 export interface TurnStage {
   actorId: string; side: 'hero' | 'enemy'; beat: number; round: number; action?: ActionId; targetId?: string;
   intent: Intent | null; state: BattleState; events: BattleEvent[];
+  // Transient authoritative presentation boundaries; never part of BattleState or a save.
+  // `after` includes round upkeep/cleanup emitted by advancing this turn.
+  before?: BattleState; after?: BattleState;
 }
 export interface Resolution { initial: BattleState; state: BattleState; events: BattleEvent[]; turns: TurnStage[] }
 export interface TurnSlot { actorId: string; side: 'hero' | 'enemy'; round: number; speed: number }

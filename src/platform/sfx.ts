@@ -114,18 +114,21 @@ export class Sfx {
     return this.ctx;
   }
   // Plays a sound now; the same sound within 40 ms is dropped so bursts of events do not stack into noise.
-  play(name: SfxName): void {
+  play(name: SfxName): () => void {
+    const silent = () => {};
     document.documentElement.dataset.sfx = name;
-    if (this.prefs.muted || document.hidden) return;
+    if (this.prefs.muted || document.hidden) return silent;
     const ctx = this.ctx;
-    if (!ctx || !this.out || ctx.state !== 'running') { this.resume(); return; }
-    const now = ctx.currentTime; if (now - (this.last.get(name) ?? -1) < .04) return; this.last.set(name, now);
+    if (!ctx || !this.out || ctx.state !== 'running') { this.resume(); return silent; }
+    const now = ctx.currentTime; if (now - (this.last.get(name) ?? -1) < .04) return silent; this.last.set(name, now);
+    const voices: AudioScheduledSourceNode[] = [];
     const r = recipes[name];
     for (const t of r.tones ?? []) {
       const o = ctx.createOscillator(); const g = ctx.createGain(); const start = now + (t.at ?? 0); const end = start + t.dur;
       o.type = t.type ?? 'sine'; o.frequency.setValueAtTime(t.freq, start); if (t.to) o.frequency.exponentialRampToValueAtTime(t.to, end);
       g.gain.setValueAtTime(0.0001, start); g.gain.exponentialRampToValueAtTime(t.gain ?? .1, start + (t.attack ?? .01)); g.gain.exponentialRampToValueAtTime(0.0001, end);
       o.connect(g).connect(this.out); o.start(start); o.stop(end + .02);
+      voices.push(o);
     }
     for (const n of r.noise ?? []) {
       const src = ctx.createBufferSource(); src.buffer = this.noiseBuffer!; const f = ctx.createBiquadFilter(); const g = ctx.createGain();
@@ -133,7 +136,9 @@ export class Sfx {
       f.type = n.type ?? 'bandpass'; f.frequency.setValueAtTime(n.freq, start); if (n.to) f.frequency.exponentialRampToValueAtTime(n.to, end); f.Q.value = n.q ?? 1;
       g.gain.setValueAtTime(n.gain ?? .2, start); g.gain.exponentialRampToValueAtTime(0.0001, end);
       src.connect(f).connect(g).connect(this.out); src.start(start, Math.random() * .5); src.stop(end + .02);
+      voices.push(src);
     }
+    return () => { for (const voice of voices.splice(0)) { try { voice.stop(); voice.disconnect?.(); } catch { /* Already ended or closed. */ } } };
   }
 }
 // One shared instance: the shell sets its storage; views call `sfx.play`.

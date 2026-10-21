@@ -10,7 +10,7 @@ class TestAudioContext extends EventTarget {
   sampleRate = 8;
   destination = {};
   tones: { start: ReturnType<typeof vi.fn> }[] = [];
-  noises: { start: ReturnType<typeof vi.fn> }[] = [];
+  noises: { start: ReturnType<typeof vi.fn>; stop: ReturnType<typeof vi.fn> }[] = [];
   resume = vi.fn(async () => { this.state = 'running'; });
   constructor() { super(); TestAudioContext.instances.push(this); }
   createGain() { return { ...node(), gain: param() }; }
@@ -47,6 +47,12 @@ describe('sound effect audio lifecycle', () => {
     expect(context().noises[0]!.start).toHaveBeenCalledOnce();
     expect(context().tones).toHaveLength(3);
     for (const tone of context().tones) expect(tone.start).toHaveBeenCalledOnce();
+  });
+
+  it('returns an idempotent cancellation handle for stage-owned sources', () => {
+    tap(); const stop=effects.play('hit');const noise=context().noises[0]!;
+    expect(noise.stop).toHaveBeenCalledOnce();stop();expect(noise.stop).toHaveBeenCalledTimes(2);
+    stop();expect(noise.stop).toHaveBeenCalledTimes(2);
   });
 
   it('recovers on a later tap after an earlier resume was denied', async () => {
