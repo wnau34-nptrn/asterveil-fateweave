@@ -89,11 +89,19 @@ import potionSalve from './svg/potion-salve.svg?raw';
 import potionTonic from './svg/potion-tonic.svg?raw';
 import potionRepel from './svg/potion-repel.svg?raw';
 
+// ART-UI-ICONS-002 (accepted 2026-10-22): stat, tab and action line icons, named by file (`stat-hp`, `tab-gear`, `act-lock`, …).
+const UI_ICON_NAMES = ['stat-hp', 'stat-attack', 'stat-support', 'stat-speed', 'stat-armour', 'stat-resist', 'stat-leech', 'stat-barrier', 'stat-regen', 'stat-luck', 'stat-level', 'stat-exp',
+  'tab-overview', 'tab-gear', 'tab-skills', 'tab-tree', 'tab-forge', 'tab-bag', 'tab-team', 'tab-hire', 'tab-pet', 'tab-map', 'tab-settings',
+  'act-wear', 'act-remove', 'act-lock', 'act-unlock', 'act-compare', 'act-filter', 'act-sort', 'act-reset', 'act-confirm'] as const;
+type UiIconName = typeof UI_ICON_NAMES[number];
+const uiFiles = import.meta.glob<string>('./svg/{stat,tab,act}-*.svg', { query: '?raw', import: 'default', eager: true });
+const uiSvgs = Object.fromEntries(UI_ICON_NAMES.map(n => [n, uiFiles[`./svg/${n}.svg`]!])) as Record<UiIconName, string>;
+
 // Original ART-UI-WORLD-001 line icons (24px viewBox, currentColor). Inlined so they inherit state colour.
 const svgs = { attack, guard, bash, mark, execute, bolt, ward, heal, prayer, brace, pierce, hinder, volley, acid, haste, ambush, evade, taunt, slam, valor, mend, rally, finisher, sigil, sanctuary, spearwall, weakshot, bomb, backstab, quake, finale, challenge: taunt, bulwark: guard, rouse: prayer, up, down, left, right, camp, rest, flag, goal, star, danger, safe, talk, info, map, boss, check, circle, close, footprints, chest, chestOpen, ore, gold, forge, enhance, fuse, reroll, salvage, brew, set, ember, seal, pack, starFilled, starBadge, starBadgeEmpty, gearWeapon, gearHead, gearBody, gearGloves, gearBoots, gearCharm, dust, potionSalve, potionTonic, potionRepel, music, musicOff, sound, soundOff } as const;
 const restartPath = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10a8 8 0 1 1 1 8M4 4v6h6"/></svg>';
-export type IconName = ActionId | keyof typeof svgs | 'restart';
+export type IconName = ActionId | keyof typeof svgs | UiIconName | 'restart';
 export function icon(name: IconName): string {
-  const svg = name === 'restart' ? restartPath : svgs[name];
+  const svg = name === 'restart' ? restartPath : name in uiSvgs ? uiSvgs[name as UiIconName] : svgs[name as keyof typeof svgs];
   return svg.replace('<svg ', '<svg class="icon" aria-hidden="true" focusable="false" ');
 }

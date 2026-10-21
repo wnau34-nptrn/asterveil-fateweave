@@ -270,3 +270,10 @@ body { display: grid; place-items: center; background: radial-gradient(ellipse a
 .loadout-skill[aria-pressed="true"] { border-color: var(--gold-light, #f2d596); background: #2a2210cc; }
 .loadout-skill[aria-disabled="true"] { cursor: default; opacity: .7; }
 .loadout-skill:focus-visible { outline: 2px solid var(--gold-light, #f2d596); outline-offset: 2px; }
+/* ART-UI-ICONS-002 line icons beside tab, stat and action labels. */
+.character-tabs button, .camp-tabs button { display: inline-flex; align-items: center; justify-content: center; gap: 4px; }
+.character-tabs button .icon, .camp-tabs button .icon { width: 18px; height: 18px; flex: none; }
+.character-stat summary span { display: inline-flex; align-items: center; gap: 6px; }
+.character-stat summary .icon { width: 16px; height: 16px; flex: none; color: var(--gold-light, #f2d596); }
+:is(.character-gear, .gear-comparison, .forge-workbench, .character-content) button:not(.loadout-skill) > .icon { width: 16px; height: 16px; flex: none; margin-right: 4px; vertical-align: -3px; }
+@container game (max-width: 360px) { .character-tabs button .icon { display: none; } }

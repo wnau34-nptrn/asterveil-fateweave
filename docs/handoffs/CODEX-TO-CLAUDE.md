@@ -1,5 +1,10 @@
 # Codex → Claude handoff
 
+## 2026-10-22 — Claude: intake of ART-UI-ICONS-002 and ART-SKILL-ICON-001
+
+- ART-UI-ICONS-002: ACCEPTED. Merged `art/art-ui-icons-002`; the 32 SVGs are copied to `src/ui/svg/` and exposed by `icon('stat-…' | 'tab-…' | 'act-…')` (`ui/icons.ts`, `import.meta.glob`). Used on character tabs and stat rows, map-bag tabs, lobby menu (team/hire/storage/forge), wear/take off/compare/confirm/reset and forge lock/unlock. Tab icons hide below 360 px. Weak at 16 px: speed, barrier, tab-tree, act-remove, regen (optional later revision).
+- ART-SKILL-ICON-001: ACCEPTED_WITH_TECH_FIX pending revision; not integrated. Motifs fill about 55% of the cell (about 22 px on a 40 px button); guard/rally, taunt/quake, volley/evade are hard to tell apart; the three A6 Knight skills are missing; `sources.json` holds absolute local paths. Revision prompt: `docs/handoffs/CODEX-ART-QUEUE-TH.md` §3R (ART-SKILL-ICON-001-R1). Integrate the R1 atlas (downscaled to 128 px cells) into the skill dock and skills/tree views after owner review.
+
 ## 2026-10-21 — Claude: master plan release A progress (chapters, recruits, unlocks, hard mode)
 
 - Owner approved `docs/MASTER_PLAN_TH.md` in full; Codex art prompts are in `docs/handoffs/CODEX-ART-QUEUE-TH.md`, lore draft `docs/LORE_CHAPTER1_TH.md`, Knight tree draft `docs/design/SKILL_TREE_KNIGHT_TH.md`.

@@ -405,7 +405,8 @@ export class WorldUI {
   private renderPack(): void {
     const s = this.view?.state; if (!s) return;
     if(this.inventorySource&&this.inventorySource!==s)this.inventoryPick=undefined;this.inventorySource=s;
-    const tab = (id: WorldUI['bagTab'], label: string) => `<button id="bag-tab-${id}" data-world="bag-tab" data-tab="${id}" role="tab" aria-selected="${this.bagTab === id}" class="${this.bagTab === id ? 'active' : ''}">${label}</button>`;
+    const glyph = { items: 'tab-bag', gear: 'tab-gear', team: 'tab-team' } as const;
+    const tab = (id: WorldUI['bagTab'], label: string) => `<button id="bag-tab-${id}" data-world="bag-tab" data-tab="${id}" role="tab" aria-selected="${this.bagTab === id}" class="${this.bagTab === id ? 'active' : ''}">${icon(glyph[id])}${label}</button>`;
     const tabs = `<div class="camp-tabs three" role="tablist" aria-label="กระเป๋า">${tab('items', 'ของ')}${tab('gear', `อุปกรณ์${s.found.length ? ` <small>ใหม่ ${s.found.length}</small>` : ''}`)}${tab('team', `ทีม <small>${s.roster.deployed.length}+${s.roster.reserve.length}</small>`)}</div>`;
     this.root.querySelector('#pack-content')!.innerHTML = tabs + (this.bagTab === 'gear' ? this.bagInventory(s) : this.bagTab === 'team' ? this.bagTeam(s) : this.bagItems(s));
   }

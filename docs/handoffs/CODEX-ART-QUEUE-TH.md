@@ -6,8 +6,8 @@
 |---|---|---|---|
 | 1 | ART-UI-MODERN-001 mockup UI ทั้งเกม | A7 UI | ทันที (สำคัญที่สุด) |
 | 2 | ART-VFX-BOLT-001 ภาพชั้นเอฟเฟกต์ Bolt | A8 FX | ทันที (เจ้าของอนุมัติทิศทาง storyboard v1 แล้ว 2026-10-21) |
-| 3 | ART-SKILL-ICON-001 ไอคอนสกิลแบบวาด 30 สกิล | A6 ต้นไม้, A7 | ทันที |
-| 4 | ART-UI-ICONS-002 ไอคอนค่าสถานะและแท็บ | A7 | ทันที |
+| 3 | ART-SKILL-ICON-001 ไอคอนสกิลแบบวาด 30 สกิล | A6 ต้นไม้, A7 | ได้รับแล้ว 2026-10-21 → ส่งงานแก้ **3R** ต่อทันที |
+| 4 | ART-UI-ICONS-002 ไอคอนค่าสถานะและแท็บ | A7 | ได้รับแล้วและใช้ในเกมแล้ว 2026-10-22 |
 | 5 | ART-CHAR-BOSS-RUINS-001 บอสแมพ 1 | A แมพ 1 | ทันที |
 | 6 | ART-UI-PROGRESS-001 ไอคอนตำรา แก่นรอยแยก เศษดาว เหรียญเกียรติยศ กรอบดาวชะตา | A6, B | ทันที |
 | 7 | ART-WORLD-KEYART-001 ภาพหลักแผนที่ 2 และ 4–10 (concept) | A5, B, C | ทันที (concept เท่านั้น) |
@@ -145,6 +145,55 @@ CONSTRAINTS
 - Original designs; match the existing painted item style exactly.
 
 RETURN: incoming/ART-SKILL-ICON-001/ (png/, skills_atlas.webp, skills_atlas.json, preview.png, NOTES.md)
+```
+
+## 3R. ART-SKILL-ICON-001-R1 — แก้ไอคอนสกิลแบบวาด + สกิลใหม่ของอัศวิน 3 ภาพ (เริ่มได้ทันที)
+
+ผลตรวจรอบแรก (Claude, 2026-10-22): สไตล์และสีประจำอาชีพใช้ได้ แต่ภาพกินพื้นที่ราว 55% ของช่อง ทำให้เหลือราว 22px บนปุ่ม 40px และบางคู่แยกยาก (guard/rally, taunt/quake, volley/evade) และยังไม่มีสกิลใหม่ของอัศวิน 3 ตัวจากต้นไม้ใหญ่ (A6)
+
+```text
+CODEX REVISION HANDOFF — ART-SKILL-ICON-001-R1
+Asterveil · Fateweave: painted skill icons, revision 1 (+3 new Knight skills)
+
+Repository wnau34-nptrn/asterveil-fateweave, base branch feature/fateweave-initial-prototype. Branch art/art-skill-icon-001-r1 from the base. Files only under incoming/ART-SKILL-ICON-001-R1/. Do not change src/, tests/, public/, .github/ or the round-1 folder. PR into the base branch; do not merge.
+
+READ FIRST: incoming/ART-SKILL-ICON-001/ on branch art/art-skill-icon-001 (round 1: png/, preview.png, prompts.json, NOTES.md). That round is the approved direction for style, light, outline and the per-class palettes.
+
+PRESERVE
+- Painted style, top-left light, dark contour, gold trim, per-class palette families, motif meanings of round 1.
+- 256x256 RGBA PNGs, transparent background, no text/numbers/frames/rarity colours, original artwork.
+
+CHANGE ONLY
+1. Scale: the opaque motif must fill 75–80% of the cell (bounding box about 190–205 px), still fully inside a centred 224 px circle. Round 1 averaged about 140 px.
+2. Readability at 40 px: bolder silhouette, fewer small sparks, stronger value contrast between the motif and its glow. Verify every icon at 40 px on navy #0b1730, normal and under a 61% black cooldown overlay.
+3. Make these pairs clearly different at 40 px by silhouette, not only colour:
+   - guard (one shield held in front of a single ally) vs rally (several small shields / a ring of shields around a group)
+   - taunt (rune challenge: a glowing rune sigil and a shout-wave) vs quake (cracked ground with an upward burst)
+   - volley (many arrows falling diagonally from above) vs evade (one blurred afterimage silhouette sidestepping)
+4. Add three new Knight skills (royal blue/gold family):
+   - challenge (ท้าดวล): one sword pointed forward at a single target marker, a gauntlet or crossed-blade challenge; reads as "you, fight me".
+   - bulwark (ปราการหิน): a tower shield planted in stone, with stone blocks rising around it; heavier and more grounded than guard.
+   - rouse (ปลุกพล): a raised golden banner with a mint healing glow rising from it; reads as group recovery, not resurrection.
+5. sources.json: keep only file names, no absolute local paths or user names.
+
+DELIVERABLES
+- png/<id>.png for all 33 ids (the 30 of round 1 plus challenge, bulwark, rouse).
+- skills_atlas.webp: 256 px cells, 6 columns, row-major; Knight first in this order: guard, bash, rally, challenge, bulwark, rouse, then the round-1 order for the other classes. skills_atlas.json maps id → cell as in round 1.
+- preview.png: the round-1 layout (40/56/72 px, normal and cooldown), with the Knight row holding six icons.
+- NOTES.md: what changed per item above, and the measured bounding box size per icon.
+
+DO NOT
+- Do not redesign the classes' palettes or change motifs that are not listed above beyond the scale/readability pass.
+- No text, labels, numbers, frames or UI in any icon.
+
+VALIDATION CHECKLIST
+- [ ] 33 PNGs, 256x256 RGBA, real alpha, motif inside the 224 px circle
+- [ ] bounding box 190–205 px for every icon (listed in NOTES.md)
+- [ ] the three listed pairs are distinct at 40 px in silhouette
+- [ ] new Knight icons match the Knight family of round 1
+- [ ] atlas order and json mapping match exactly; sources.json has no absolute paths
+
+RETURN: incoming/ART-SKILL-ICON-001-R1/ (png/, skills_atlas.webp, skills_atlas.json, preview.png, prompts.json, sources.json, NOTES.md)
 ```
 
 ## 4. ART-CHAR-BOSS-RUINS-001 — บอสแมพ 1
