@@ -2,7 +2,7 @@ import {startBossPlan} from './boss-equipment';
 import {startHunt} from './targeted-loot';
 import {storageCap,departureBlocked} from './storage';
 import { memberTalentReason, talentsSpent } from './talents';
-import type { LobbyFeature, Commander, ShopItemId, SideQuestKind, ExpeditionState, Gear, GearSlot, Item, MapDefinition, PotionId, Potions, Profile, ProfileResult, RunOutcome, TalentNode } from './types';
+import type { GuideDefinition, GuideKind, LobbyFeature, Commander, ShopItemId, SideQuestKind, ExpeditionState, Gear, GearSlot, Item, MapDefinition, PotionId, Potions, Profile, ProfileResult, RunOutcome, TalentNode } from './types';
 import { rollItem, salvageValue } from './equipment';
 import { COMPANY_CAP, GEAR_SLOTS, PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS, SET_IDS } from './types';
 import { heroCatalog, levelOf, memberDef, newExpedition, rollPercent, rosterIds, type EncounterLookup } from './world';
@@ -360,6 +360,33 @@ export function claimQuest(initial: Profile, map: MapDefinition, questId: string
   for (const id of POTION_IDS) profile.potions[id] += r.potions?.[id] ?? 0;
   profile.quests[q.id] = { progress: q.target, claimed: true };
   return { profile, event: { type: 'claimed', questId: q.id } };
+}
+
+// ---- Guided tasks (A4) ----
+const ownedItems = (p: Profile): Item[] => [...p.items, ...Object.values(p.members).flatMap(m => Object.values(m.gear ?? {}) as Item[])];
+export function guideDone(p: Profile, kind: GuideKind): boolean {
+  switch (kind) {
+    case 'wear': return Object.values(p.members).some(m => Object.keys(m.gear ?? {}).length > 0);
+    case 'enhance': return ownedItems(p).some(i => (i.plus ?? 0) > 0);
+    case 'talent': return Object.values(p.members).some(m => Object.values(m.talents ?? {}).some(r => (r ?? 0) > 0));
+    case 'brew': return POTION_IDS.some(id => p.potions[id] > 0);
+    case 'itemLevel': return ownedItems(p).some(i => !!i.levelInvestment);
+    case 'hire': return p.company.length > 4;
+    case 'reserve': return p.party.reserve.length > 0;
+  }
+}
+// The guided tasks to show now: their system is open, they are not claimed or skipped, and the company is not a veteran.
+export function activeGuides(p: Profile, maps: readonly MapDefinition[]): GuideDefinition[] {
+  if (p.veteran) return [];
+  return (maps[0]?.guides ?? []).filter(g => !p.guides?.[g.id] && featureOpen(p, maps, g.feature));
+}
+export function claimGuide(initial: Profile, maps: readonly MapDefinition[], id: string, skip = false): ProfileResult {
+  const g = activeGuides(initial, maps).find(x => x.id === id); if (!g) return blocked(initial, 'unknown');
+  if (!skip && !guideDone(initial, g.kind)) return blocked(initial, 'notDone');
+  const profile = structuredClone(initial); (profile.guides ??= {})[id] = skip ? 'skipped' : 'claimed';
+  if (!skip) { const r = g.reward; profile.bank.ore += r.ore ?? 0; profile.bank.gold += r.gold ?? 0; profile.bank.seal += r.seal ?? 0; profile.bank.dust += r.dust ?? 0;
+    for (const p of POTION_IDS) profile.potions[p] += r.potions?.[p] ?? 0; }
+  return { profile, event: { type: 'guide', id, skipped: skip } };
 }
 
 // ---- Camp market and board refresh (4A): paid in gold coins, limited per return home. ----

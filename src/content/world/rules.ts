@@ -5,7 +5,7 @@ import { talentTrees } from '../heroes/talents';
 // Game-wide rules shared by every map (chapters plan, owner-approved 2026-10-17): the company, progression, gear,
 // forge, potions, market, talents, event numbers and the camp NPCs' side quests. A map spreads these and adds its
 // own board, zones, encounters, loot and objectives; tests check that every map uses this exact object.
-export type GameRules = Pick<MapDefinition, 'tutorialEncounterId' | 'camp' | 'startingRoster' | 'firstCompany' | 'unlocks' | 'mercenaries' | 'shop' | 'company' | 'progression' | 'talents'
+export type GameRules = Pick<MapDefinition, 'tutorialEncounterId' | 'camp' | 'startingRoster' | 'firstCompany' | 'unlocks' | 'guides' | 'mercenaries' | 'shop' | 'company' | 'progression' | 'talents'
   | 'eventRules' | 'potions' | 'equipment' | 'sideQuests'>;
 export const gameRules: GameRules = {
   // The prologue's first battle (Vargoth's vanguard).
@@ -26,6 +26,16 @@ export const gameRules: GameRules = {
   firstCompany: ['guardian'],
   // Master plan A3 (owner 2026-10-21): the chapter whose map opens each lobby system. A chapter whose map is not built
   // yet falls back to the latest built chapter before it.
+  // Guided tasks (A4, draft rewards): each NPC teaches the system that just opened. Map 1 guarantees what they need.
+  guides: [
+    { id: 'guide-wear', npc: 'keeper', feature: 'gear', kind: 'wear', reward: { ore: 6 } },
+    { id: 'guide-enhance', npc: 'smith', feature: 'forge', kind: 'enhance', reward: { dust: 6 } },
+    { id: 'guide-talent', npc: 'trainer', feature: 'tree', kind: 'talent', reward: { ore: 8 } },
+    { id: 'guide-brew', npc: 'herbalist', feature: 'brew', kind: 'brew', reward: { potions: { salve: 1 } } },
+    { id: 'guide-level', npc: 'smith', feature: 'level', kind: 'itemLevel', reward: { dust: 4 } },
+    { id: 'guide-hire', npc: 'broker', feature: 'hire', kind: 'hire', reward: { gold: 10 } },
+    { id: 'guide-reserve', npc: 'scout', feature: 'team', kind: 'reserve', reward: { potions: { repel: 1 } } },
+  ],
   unlocks: { tree: 1, forge: 1, brew: 1, gear: 1, level: 2, quests: 2, hire: 3, team: 3, market: 3, fuse: 5, craft: 5, hunt: 5, transfer: 7, bossCharm: 9 },
   // Phase 4A (draft): the camp market, paid in gold coins, and paid hiring-board refreshes (2 per return).
   shop: {

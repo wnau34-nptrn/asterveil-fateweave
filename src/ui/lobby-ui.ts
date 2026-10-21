@@ -9,9 +9,9 @@ import { newGearFilters, changeGearFilter, filteredEquipment, gearFilters as gea
 import { shortcutBlocked } from '../platform/keyboard';
 import type { BossPower, ActionId, HeroDefinition } from '../core/battle/types';
 import { withParty } from '../core/battle/engine';
-import { featureMap, featureOpen, NAME_MAX, mapUnlocked, boardOffers, brewReason, buyReason, claimReason, sealLimit, refreshReason, shopLeft, dismissReason, equip, groupOf, hireReason, talentPoints, talentsSpent, upgradeCost, upgradeReason, type Group } from '../core/world/profile';
+import { activeGuides, guideDone, featureMap, featureOpen, NAME_MAX, mapUnlocked, boardOffers, brewReason, buyReason, claimReason, sealLimit, refreshReason, shopLeft, dismissReason, equip, groupOf, hireReason, talentPoints, talentsSpent, upgradeCost, upgradeReason, type Group } from '../core/world/profile';
 import { salvageValue } from '../core/world/equipment';
-import { COMPANY_CAP, PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS, SHOP_ITEMS, type GearSlot, type LobbyFeature, type ShopItemId, type MapDefinition, type PotionId, type Profile, type TalentNode } from '../core/world/types';
+import { COMPANY_CAP, PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS, SHOP_ITEMS, type GearSlot, type GuideKind, type LobbyFeature, type ShopItemId, type MapDefinition, type PotionId, type Profile, type TalentNode } from '../core/world/types';
 import { expToNext, starred, type EncounterLookup } from '../core/world/world';
 import { actorArt, actorFootOrigins, lobbyArt, lobbyPose, NPC_IDS, npcAtlasUrl, npcBustsUrl, npcStationsUrl, unitsUrl, type LobbyPose, type NpcId } from '../game/visuals/assets';
 import { icon } from './icons';
@@ -24,7 +24,7 @@ import { portrait, starRow } from './portraits';
 export interface LobbyHost { autoEquip(plan: AutoEquipmentPlan): void; hire(index: number): void; refresh(): void; buy(item: ShopItemId, heroId?: string): void; smelt(dust: number): void; upgrade(id: string): void; dismiss(id: string): void; place(id: string, group: Group, other?: string): void; talent(id: string, node: TalentNode): void; resetTalents(id: string): void;
   transfer(uid:number,index:number,donor:number,sourceIndex:number):void; huntTarget(target?:string):void; bossTarget(target:BossPower):void; craft(hero:string,level:number):void;
   collect(ids:number[]):void; recycleStored(source:StorageSource,ids:number[]):void; expandStorage():void;
-  equip(id: string, uid: number): void; unequip(id: string, slot: GearSlot): void; salvage(uids: number[]): void; renameCamp(name: string): void;
+  equip(id: string, uid: number): void; unequip(id: string, slot: GearSlot): void; salvage(uids: number[]): void; renameCamp(name: string): void; guide(id: string, skip: boolean): void;
   enhance(uid: number, target: number): void; lock(uid:number):void; fuse(uid: number, donors:number[]): void; level(uid:number,target:number):void; reroll(uid: number, index: number): void; brew(potion: PotionId): void; claim(questId: string): void; depart(mapId?: string): void; home(): void }
 // `npcCheer`: the camp NPC whose service just succeeded (plays its cheer once).
 export interface LobbyView { profile: Profile; message: string; saved: boolean; cheer?: string; npcCheer?: NpcId }
@@ -42,6 +42,10 @@ const groupName: Record<Group, string> = { deployed: 'ลงสนาม', reser
 
 // Lobby (ค่ายทหารรับจ้าง) between expeditions: hire, upgrade, dismiss, choose the 4 + 4 to
 // bring, and depart. It owns no rules; every action goes to the host, which saves first.
+const guideText: Record<GuideKind, string> = {
+  wear: 'สวมอุปกรณ์ 1 ชิ้นให้สมาชิก', enhance: 'ตีบวกอุปกรณ์ 1 ชิ้นที่ช่าง', talent: 'ลงแต้มต้นไม้ 1 แต้ม (ครูฝึก)', brew: 'ปรุงยา 1 ขวด',
+  itemLevel: 'เพิ่ม Lv อุปกรณ์ 1 ชิ้นที่ช่าง', hire: 'จ้างทหารรับจ้างคนใหม่', reserve: 'จัดตัวสำรองอย่างน้อย 1 คน',
+};
 export class LobbyUI {
   private view: LobbyView | undefined;
   // The team, hire or talent-tree sheet floats over the camp; the scene alone shows when it is closed.
@@ -137,6 +141,7 @@ export class LobbyUI {
         case 'maps': this.sheet = 'maps'; this.draw(); this.focus(`#map-go-${this.openMaps().at(-1)!.id}`); break;
         case 'go': this.sheet = null; this.host.depart(b.dataset.map); break;
         case 'home': this.host.home(); break;
+        case 'guide': this.host.guide(b.dataset.guide!, b.dataset.skip === 'true'); this.focus('#lobby-depart'); break;
         case 'camp': this.sheet = 'camp'; this.draw(); this.focus('#camp-name'); break;
         case 'camp-save': { const input = this.root.querySelector<HTMLInputElement>('#camp-name'); if (input) this.host.renameCamp(input.value); this.focus('#camp-name'); break; }
         case 'pan': { const pan = this.root.querySelector<HTMLElement>('.lobby-pan')!; pan.scrollBy({ left: Number(b.dataset.dir) * pan.clientWidth * .8, behavior: this.reduced() ? 'auto' : 'smooth' }); break; }
@@ -262,6 +267,7 @@ export class LobbyUI {
           <button data-lobby="close" class="round-glass" aria-label="ปิด">${icon('close')}</button></div>
         <div class="lobby-content">${this.sheet==='forge'?'':this.sheet==='gear'?`<details class="storage-keeper"><summary>มิมี่ · งานผู้ดูแลคลัง</summary>${this.npcLine(this.sheet)}</details>`:this.npcLine(this.sheet as Sheet | null)}${this.locked(this.sheet) ? this.lockedPanel(this.locked(this.sheet)!) : this.sheet==='hunt'?this.huntUI.render(p,this.map,this.open('bossCharm')):this.sheet === 'team' ? this.team(p) : this.sheet === 'gear' && this.picked ? this.gear(p, this.picked) : this.sheet === 'forge' ? this.forge(p) : this.sheet === 'brew' ? this.brewing(p) : this.sheet === 'maps' ? this.mapList(p) : this.sheet === 'camp' ? this.campForm(p) : this.board(p)}</div></section>` : ''}
       <footer class="lobby-bottom">
+        ${this.guideCard(p)}
         <nav class="lobby-menu" aria-label="ค่าย">${menu('team', 'flag', 'ทีม', `${p.party.deployed.length}+${p.party.reserve.length}`)}${menu('hire', 'gold', 'จ้าง', openOffers ? String(openOffers) : '')}${menu('gear', 'pack', 'กระเป๋า', p.items.length ? String(p.items.length) : '')}${menu('hunt', 'goal', 'ฟาร์ม', '')}${menu('forge', 'forge', 'ช่าง', '')}${menu('brew', 'brew', 'ยา', '')}</nav>
         ${this.openMaps().length > 1 ? `<button id="lobby-maps" data-lobby="maps" class="secondary">${icon('map')}<span>เลือกแผนที่</span></button>` : ''}
         <button id="lobby-depart" data-lobby="depart" class="primary"${ready ? '' : ' disabled'}>${icon('map')}<span>ออกเดินทาง<small>${this.openMaps().at(-1)?.name ?? this.map.name} · ${p.party.deployed.length}+${p.party.reserve.length} คน</small></span></button>
@@ -402,6 +408,13 @@ export class LobbyUI {
       <input id="camp-name" type="text" autocomplete="off" enterkeyhint="done" maxlength="${NAME_MAX * 2}" value="${this.escape(name)}" aria-describedby="camp-name-hint">
       <small id="camp-name-hint" class="commander-hint">1–${NAME_MAX} ตัวอักษร (ไม่ใช้ &lt; &gt;) · แสดงในค่ายและหน้าสรุปการเดินทาง</small></label>
       <button id="camp-save" data-lobby="camp-save" class="primary">${icon('check')} บันทึกชื่อ</button></div>`;
+  }
+  // Guided tasks (A4): the first open task, with its NPC, what to do and the reward; claim once done, or skip.
+  private guideCard(p: Profile): string {
+    const g = activeGuides(p, this.maps)[0]; if (!g || this.sheet) return '';
+    const npc = npcText[g.npc as NpcId]; const done = guideDone(p, g.kind);
+    return `<section class="lobby-guide glass-capsule" id="guide-${g.id}" data-done="${done}" aria-label="งานแนะนำ"><p>${icon('flag')}<span><b>${npc?.name ?? ''} · งานแนะนำ</b>${guideText[g.kind]} · รางวัล ${rewardText(g.reward)}</span></p>
+      <div><button id="guide-claim" data-lobby="guide" data-guide="${g.id}" class="primary"${done ? '' : ' disabled'}>${done ? 'รับรางวัล' : 'ยังไม่เสร็จ'}</button><button id="guide-skip" data-lobby="guide" data-guide="${g.id}" data-skip="true" class="secondary">ข้าม</button></div></section>`;
   }
   // Lobby systems by chapter (A3). A locked sheet still opens, showing which map opens it.
   private open(feature: LobbyFeature): boolean { const p = this.view?.profile; return !p || featureOpen(p, this.maps, feature); }

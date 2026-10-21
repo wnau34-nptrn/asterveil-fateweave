@@ -851,3 +851,9 @@ html, body { background: #0a1422; }
 .lobby-locked { display: flex; gap: 14px; align-items: center; padding: 18px 16px; border-radius: 16px; background: #0b173099; border: 1px solid #f2d59633; }
 .lobby-locked svg { width: 32px; height: 32px; color: var(--gold-light); flex: none; }
 .lobby-locked p { display: grid; gap: 4px; margin: 0; } .lobby-locked b { font-size: 17px; color: #fff6e0; } .lobby-locked span { color: #c9d4e2; font-size: 14px; }
+/* Guided tasks (A4): one compact card under the top bar while no sheet is open. */
+.lobby-guide { width: 100%; box-sizing: border-box; display: flex; gap: 10px; align-items: center; justify-content: space-between; padding: 8px 10px; border-radius: 16px; }
+.lobby-guide p { display: flex; gap: 8px; align-items: center; margin: 0; min-width: 0; font-size: 13px; color: #e8eef7; }
+.lobby-guide p span { display: grid; min-width: 0; } .lobby-guide b { color: var(--gold-light); font-size: 12px; }
+.lobby-guide > div { display: flex; gap: 6px; flex: none; } .lobby-guide button { min-height: 44px; padding: 0 12px; font-size: 13px; }
+@container game (max-width: 420px) { .lobby-guide { flex-direction: column; align-items: stretch; } .lobby-guide > div button { flex: 1; } }

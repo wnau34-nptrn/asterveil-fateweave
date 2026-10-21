@@ -43,6 +43,7 @@ export interface MapDefinition {
   recruits?: readonly { hero: string; at: RecruitPoint }[]; firstCompany: readonly string[];
   // Lobby systems open by chapter (master plan A3): the chapter number whose map must be cleared first.
   unlocks: Readonly<Record<LobbyFeature, number>>;
+  guides: readonly GuideDefinition[];
   rows: readonly string[];
   // Floor characters map to zones; S/C/B/G take the zone of `specialZone` entries.
   floorZones: Readonly<Record<string, string>>;
@@ -158,6 +159,10 @@ export interface SideQuestDefinition {
   id: string; npc: string; kind: SideQuestKind; target: number;
   reward: { ore?: number; gold?: number; seal?: number; dust?: number; potions?: Partial<Record<PotionId, number>> };
 }
+// Guided tasks (master plan A4): one per camp NPC and lobby system, shown once the system opens. Done is read from the
+// profile (`guideDone`); the small reward is claimed once, or the task is skipped.
+export type GuideKind = 'wear' | 'enhance' | 'talent' | 'brew' | 'itemLevel' | 'hire' | 'reserve';
+export interface GuideDefinition { id: string; npc: string; feature: LobbyFeature; kind: GuideKind; reward: SideQuestDefinition['reward'] }
 export interface QuestDefinition { need: number; objectives: readonly QuestObjective[] }
 // `level`: the fight level (4E tuning; missing = the encounter's own level).
 export interface EliteDefinition { id: string; x: number; y: number; encounterId: string; forced: boolean; mini?: boolean; level?: number }
@@ -291,6 +296,8 @@ export interface Profile {
   potions: Potions;
   // 3D side quests: progress gathered from finished runs and whether the reward was claimed (one-time each).
   quests: Record<string, { progress: number; claimed: boolean }>;
+  // Guided tasks claimed or skipped (save v32; missing = none).
+  guides?: Record<string, 'claimed' | 'skipped'>;
   // 4A: market items bought and hiring-board refreshes used since the last return (both reset on return).
   shop: Partial<Record<ShopItemId, number>>; refreshes: number;
   // Veil dust smelted from ore since the last return (reset on return).
@@ -312,6 +319,7 @@ export type ProfileEvent =
   | { type: 'blocked'; reason: string }
   | { type: 'party' }
   | { type: 'commander' }
+  | { type: 'guide'; id: string; skipped: boolean }
   | { type: 'hired'; heroId: string; duplicate: boolean }
   | { type: 'upgraded'; heroId: string; stars: number }
   | { type: 'dismissed'; heroId: string }

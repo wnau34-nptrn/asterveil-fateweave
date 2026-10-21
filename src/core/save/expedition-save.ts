@@ -59,7 +59,8 @@ export const legacyKeys = ['asterveil.fateweave.battle.v1', 'asterveil.fateweave
 // v28 → v29: the commander gains `camp`, the ค่ายทหารรับจ้าง's name (defaults to "ค่าย" + the commander's name).
 // v29 → v30: runs may carry story-recruit `guests` and `recruited` (missing = none).
 // v30 → v31: lobby systems open by chapter; a company from an older save that finished the prologue is `veteran`.
-const SAVE_VERSION = 31;
+// v31 → v32: the profile may record guided tasks claimed or skipped (`guides`; missing = none).
+const SAVE_VERSION = 32;
 export interface Game { profile: Profile; run: ExpeditionState | null }
 const actions: readonly ActionId[] = ['attack', 'guard', 'bash', 'mark', 'execute', 'bolt', 'ward', 'heal', 'prayer', 'brace', 'pierce', 'hinder', 'volley', 'acid', 'haste', 'ambush', 'evade', 'taunt', 'slam', 'valor', 'mend',
   'rally', 'finisher', 'sigil', 'sanctuary', 'spearwall', 'weakshot', 'bomb', 'backstab', 'quake', 'finale'];
@@ -351,8 +352,14 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
   const cleared = version < 28 ? legacyCleared(p.tutorialDone === true, (p.completes as number) > 0, map, maps) : clearedList(p.cleared, maps);
   const bossLoot=bossProfileOf(p.bossLoot,map,maps);
   if (p.veteran !== undefined && p.veteran !== true) throw new Error('Invalid profile');
+  let guides: Profile['guides'];
+  if (p.guides !== undefined) {
+    const g = obj(p.guides); const ids = map.guides.map(x => x.id);
+    if (Object.entries(g).some(([id, v]) => !ids.includes(id) || (v !== 'claimed' && v !== 'skipped'))) throw new Error('Invalid guides');
+    guides = { ...g } as Profile['guides'];
+  }
   const veteran = p.veteran === true || (version < 31 && p.tutorialDone === true);
-  return {...(veteran ? { veteran: true as const } : {}),bossLoot,hunt,overflow,storageTier:p.storageTier as number, forgeLevel:p.forgeLevel as number, seed: p.seed, returns: p.returns, tutorialDone: p.tutorialDone, commander, company: [...company as string[]], members, party, cleared,
+  return {...(guides ? { guides } : {}),...(veteran ? { veteran: true as const } : {}),bossLoot,hunt,overflow,storageTier:p.storageTier as number, forgeLevel:p.forgeLevel as number, seed: p.seed, returns: p.returns, tutorialDone: p.tutorialDone, commander, company: [...company as string[]], members, party, cleared,
     bank: { ore: bank.ore as number, gold: bank.gold as number, seal: bank.seal as number, dust: bank.dust as number }, items, nextItem: p.nextItem as number, forge: p.forge as number, potions: potionsOf(p.potions, 9999), quests, shop, refreshes: p.refreshes as number, smelted: p.smelted as number, taken: [...p.taken as number[]], expeditions: p.expeditions, completes: p.completes, last };
 }
 // Optional elite returns (4C): known optional elites only, 1..99 each.
@@ -416,7 +423,7 @@ function legacyCleared(tutorialDone: boolean, completed: boolean, map: MapDefini
 export function parseGame(raw: string, map: MapDefinition, lookup: EncounterLookup, maps: readonly MapDefinition[] = [map]): Game {
   const envelope = obj(JSON.parse(raw)); const version = envelope.version as number;
   if (version < 21) migrateItems(envelope, map);
-  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
+  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
   const runMap = (v: unknown): MapDefinition => maps.find(m => m.id === obj(v).mapId) ?? map;
   if (version < 5) {
     const home = runMap(envelope.state); const run = parseRun(envelope.state, version, home, lookup);
