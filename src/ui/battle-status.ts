@@ -1,3 +1,4 @@
+import {bossNames,bossDescription} from './boss-equipment';
 import { capAmount, corrodeBonus, enemyIntent, guardReductionOf, hasCap, songPower, tauntReductionOf } from '../core/battle/engine';
 import type { ActionId, BattleState, EncounterDefinition } from '../core/battle/types';
 import { actorName } from './th';
@@ -18,6 +19,8 @@ export function unitStatuses(s: BattleState, d: EncounterDefinition, id: string)
   const untilTurn = (actor: string) => `จนถึงเทิร์นถัดไปของ${name(actor)} หรือผู้ร่ายล้ม`;
   const rounds = (until: number) => `เหลือ ${until - s.round} รอบ รวมรอบนี้ · หมดเมื่อเริ่มรอบ ${until}`;
   if (hero) {
+    const boss=d.heroes.find(h=>h.id===id)?.gear?.boss;
+    if(boss)add('boss',boss.power==='focus'?'mark':boss.power==='aegis'?'ward':'heal',bossNames[boss.power],bossDescription(boss.power,boss.amount),hero.bossUsedRound===s.round?'ใช้สิทธิ์รอบนี้แล้ว · พร้อมใหม่รอบถัดไป':'สิทธิ์รอบนี้พร้อม · ต้องตรงเงื่อนไข');
     if (hero.barrier > 0) add('barrier', 'ward', 'โล่เวท', `ดูดซับความเสียหายได้อีก ${hero.barrier} ก่อนหัก HP`, 'อยู่จนโล่ถูกใช้หมด');
     if (hero.barrier > 0 && hero.reflect && alive(hero.reflect.heroId)) add('reflect', 'ward', 'โล่สะท้อน', `สวนกลับ ${hero.reflect.amount} เมื่อโล่ดูดซับการโจมตี · จาก${name(hero.reflect.heroId)}`, 'ใช้ได้ 1 ครั้ง หรือจนโล่หมด');
     if (hero.evading) add('evade', 'evade', 'ก้าวเงา', `หลบการโจมตีศัตรูได้อีก ${1 + (hero.evadeExtra ?? 0)} ครั้ง`, `ใช้ครบจำนวนครั้ง หรือถึงเทิร์นถัดไปของ${name(id)}`);

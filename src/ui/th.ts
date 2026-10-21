@@ -1,3 +1,4 @@
+import {bossNames,bossDescription} from './boss-equipment';
 import type { ActionId, PassiveId, BattleEvent, BattleState, EncounterDefinition, Intent, TalentCap, TalentRule } from '../core/battle/types';
 import type { EquipmentRules, ExpGain, ExpeditionState, Gear, GearSlot, GearStat, Item, PotionId, PotionRules, ResourceId, Resources, SetDefinition, SetId, TalentNodeDef, MapEventKind, EventChoice, EventRules, QuestObjective, SideQuestDefinition, SideQuestKind, ShopItemId } from '../core/world/types';
 import type { GearSpecial, HeroDefinition } from '../core/battle/types';
@@ -220,12 +221,12 @@ const statText: Record<GearStat, (n: number) => string> = {
 export const specialText: Record<GearSpecial, string> = {
   laststand: 'ครั้งแรกในศึกที่จะล้ม เหลือเลือด 1', markhunter: 'โจมตีศัตรูที่ติดตรา +8', renewal: 'ฟื้นเลือด 4 เมื่อเริ่มเทิร์นของตัวเอง',
 };
-export const itemName = (item: Item): string => `${item.slot === 'weapon' ? weaponText[item.hero!] ?? 'อาวุธ' : slotText[item.slot]}${rarityText[item.rarity]}${item.plus ? ` +${item.plus}` : ''}`;
+export const itemName = (item: Item): string => `${item.boss?bossNames[item.boss]:`${item.slot === 'weapon' ? weaponText[item.hero!] ?? 'อาวุธ' : slotText[item.slot]}${rarityText[item.rarity]}`}${item.plus ? ` +${item.plus}` : ''}`;
 export const statName: Record<GearStat, string> = { hp: 'เลือด', attack: 'พลังโจมตี', support: 'พลังเสริม', speed: 'SPD', armour: 'เกราะ', resist: 'ต้านพลังงาน', leech: 'ดูดเลือด', barrier: 'โล่เริ่มศึก', regen: 'ฟื้นฟูระหว่างเดิน', luck: 'โชค' };
 // Base stats first, then affixes; a legendary special and the set at the end.
 // Each value shows the best its roll could have been (stats design: rolls are 80–120%).
 export function itemLines(rules: EquipmentRules, item: Item): string[] {
-  return [...statLines(rules, item).map(l => `${statText[l.stat](l.value)}${l.value < l.max ? ` (สูงสุด ${l.max})` : ''}`), ...(item.special ? [`★ ${specialText[item.special]}`] : []),
+  return [...(item.boss?[`◆ เฉพาะผู้คุมรอยแยก · ${bossDescription(item.boss,item.boss==='focus'?rules.boss.damage:rules.boss.barrier)}`]:[]), ...statLines(rules, item).map(l => `${statText[l.stat](l.value)}${l.value < l.max ? ` (สูงสุด ${l.max})` : ''}`), ...(item.special ? [`★ ${specialText[item.special]}`] : []),
     ...(item.set ? [`ชุด${setText[item.set]}`] : []), ...(item.transferSlot!==undefined?[`ถ่ายโอนได้เฉพาะคุณสมบัติช่อง ${item.transferSlot+1}`]:[])];
 }
 // ---- Equipment sets (2D-3) ----

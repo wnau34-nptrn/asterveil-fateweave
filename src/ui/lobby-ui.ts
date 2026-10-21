@@ -7,7 +7,7 @@ import type { CharacterTab } from './character-view';
 import { applyCampEquipment, campEquipment, type AutoEquipmentPlan } from '../core/world/auto-equipment';
 import { newGearFilters, changeGearFilter, filteredEquipment, gearFilters as gearFilterControls } from './gear-inventory';
 import { shortcutBlocked } from '../platform/keyboard';
-import type { ActionId, HeroDefinition } from '../core/battle/types';
+import type { BossPower, ActionId, HeroDefinition } from '../core/battle/types';
 import { withParty } from '../core/battle/engine';
 import { boardOffers, brewReason, buyReason, claimReason, sealLimit, refreshReason, shopLeft, dismissReason, equip, groupOf, hireReason, talentPoints, talentsSpent, upgradeCost, upgradeReason, type Group } from '../core/world/profile';
 import { salvageValue } from '../core/world/equipment';
@@ -22,7 +22,7 @@ import { skillDescription, heroText, npcText, rewardText, shopText, sideQuestTex
 import { portrait, starRow } from './portraits';
 
 export interface LobbyHost { autoEquip(plan: AutoEquipmentPlan): void; hire(index: number): void; refresh(): void; buy(item: ShopItemId, heroId?: string): void; smelt(dust: number): void; upgrade(id: string): void; dismiss(id: string): void; place(id: string, group: Group, other?: string): void; talent(id: string, node: TalentNode): void; resetTalents(id: string): void;
-  transfer(uid:number,index:number,donor:number,sourceIndex:number):void; huntTarget(target?:string):void; craft(hero:string,level:number):void;
+  transfer(uid:number,index:number,donor:number,sourceIndex:number):void; huntTarget(target?:string):void; bossTarget(target:BossPower):void; craft(hero:string,level:number):void;
   collect(ids:number[]):void; recycleStored(source:StorageSource,ids:number[]):void; expandStorage():void;
   equip(id: string, uid: number): void; unequip(id: string, slot: GearSlot): void; salvage(uids: number[]): void;
   enhance(uid: number, target: number): void; lock(uid:number):void; fuse(uid: number, donors:number[]): void; level(uid:number,target:number):void; reroll(uid: number, index: number): void; brew(potion: PotionId): void; claim(questId: string): void; depart(): void; home(): void }
@@ -74,7 +74,7 @@ export class LobbyUI {
       wear:(id,key)=>{const entry=this.view&&campEquipment(this.view.profile).find(e=>e.key===key);if(entry)this.host.equip(id,entry.item.uid);},
       takeOff:(id,slot)=>this.host.unequip(id,slot),talent:(id,node)=>this.host.talent(id,node),reset:id=>this.host.resetTalents(id),applyPlan:plan=>this.host.autoEquip(plan),forge:(id,uid)=>{this.forgeReturn=id;this.sheet='forge';this.forgeUI.open(uid);this.draw();this.focus('#forge-change-item');},
     },'camp-',this.inventoryFilters);
-    root.addEventListener('change',event=>{const c=event.target as HTMLInputElement|HTMLSelectElement;if(c.id==='hunt-target'&&!root.hidden&&!root.closest('[inert]')&&!this.characters.open){this.huntUI.change(c.value);this.draw();this.focus('#hunt-target');return;}if(c.closest('.forge-workbench')&&!root.hidden&&!root.closest('[inert]')&&!this.characters.open){this.forgeUI.remember(c.closest<HTMLElement>('.forge-workbench')!);const focus=this.forgeUI.change(c);this.draw();this.focus('#'+focus);return;}if(c.dataset.gearFilter)this.storageUI.reset();if(c.closest('.character-dialog')||!c.dataset.gearFilter||root.hidden||root.closest('[inert]')||this.characters.open)return;changeGearFilter(this.inventoryFilters,c);this.draw();this.focus('#'+c.id);});
+    root.addEventListener('change',event=>{const c=event.target as HTMLInputElement|HTMLSelectElement;if(c.id==='boss-target'&&!root.hidden&&!root.closest('[inert]')&&!this.characters.open){this.huntUI.changeBoss(c.value);this.draw();this.focus('#boss-target');return;}if(c.id==='hunt-target'&&!root.hidden&&!root.closest('[inert]')&&!this.characters.open){this.huntUI.change(c.value);this.draw();this.focus('#hunt-target');return;}if(c.closest('.forge-workbench')&&!root.hidden&&!root.closest('[inert]')&&!this.characters.open){this.forgeUI.remember(c.closest<HTMLElement>('.forge-workbench')!);const focus=this.forgeUI.change(c);this.draw();this.focus('#'+focus);return;}if(c.dataset.gearFilter)this.storageUI.reset();if(c.closest('.character-dialog')||!c.dataset.gearFilter||root.hidden||root.closest('[inert]')||this.characters.open)return;changeGearFilter(this.inventoryFilters,c);this.draw();this.focus('#'+c.id);});
     root.addEventListener('keydown',e=>{if(root.hidden||root.closest('[inert]'))return;const tab=(e.target as HTMLElement).closest<HTMLButtonElement>('.forge-tabs [role=tab]');if(tab&&['ArrowLeft','ArrowRight','Home','End'].includes(e.key)){e.preventDefault();const buttons=[...root.querySelectorAll<HTMLButtonElement>('.forge-tabs [role=tab]')],i=buttons.indexOf(tab),n=e.key==='Home'?0:e.key==='End'?buttons.length-1:(i+(e.key==='ArrowRight'?1:-1)+buttons.length)%buttons.length;buttons[n]!.click();this.focus('#'+buttons[n]!.id);return;}if(e.repeat&&(e.target as HTMLElement).closest('[data-forge=review],[data-forge=confirm],[data-lobby=salvage],[data-storage=confirm],[data-storage=collect],[data-storage=recycle],[data-storage=expand],[data-storage=common]'))e.preventDefault();});
     this.startWork();
     // Escape closes the sheet even after a redraw moved focus out of it (only while the lobby shows).
@@ -126,6 +126,7 @@ export class LobbyUI {
 
 
 
+        case 'boss-apply': this.host.bossTarget(this.huntUI.bossTarget);this.focus('#boss-apply');break;
         case 'hunt-apply': this.host.huntTarget(this.huntUI.target);this.focus('#hunt-apply');break;
         case 'overflow': Object.assign(this.inventoryFilters,newGearFilters());this.storageUI.openOverflow();this.sheet='gear';this.picked=this.view!.profile.party.deployed[0];this.draw();this.focus('#storage-source-overflow');break;
         case 'depart': this.host.depart(); break;
@@ -225,6 +226,7 @@ export class LobbyUI {
   }
   private toastShown = '';
   private draw(): void {
+    const huntScroll=this.sheet==='hunt'&&this.root.querySelector('#boss-target')?this.root.querySelector('.lobby-content')?.scrollTop:undefined;
     const p = this.view!.profile; const last = p.last;
     const ready = p.party.deployed.length > 0&&!departureBlocked(p);
     // A notice toasts once; redraws (tab switches, picks) keep it settled instead of replaying it.
@@ -255,6 +257,7 @@ export class LobbyUI {
         <nav class="lobby-menu" aria-label="ค่าย">${menu('team', 'flag', 'ทีม', `${p.party.deployed.length}+${p.party.reserve.length}`)}${menu('hire', 'gold', 'จ้าง', openOffers ? String(openOffers) : '')}${menu('gear', 'pack', 'กระเป๋า', p.items.length ? String(p.items.length) : '')}${menu('hunt', 'goal', 'ฟาร์ม', '')}${menu('forge', 'forge', 'ช่าง', '')}${menu('brew', 'brew', 'ยา', '')}</nav>
         <button id="lobby-depart" data-lobby="depart" class="primary"${ready ? '' : ' disabled'}>${icon('map')}<span>ออกเดินทาง<small>${this.map.name} · ${p.party.deployed.length}+${p.party.reserve.length} คน</small></span></button>
       </footer>`;
+    if(huntScroll!==undefined&&this.sheet==='hunt')this.root.querySelector('.lobby-content')!.scrollTop=huntScroll;
   }
 
   // Warm camp scene (ART-UI-LOBBY-001): the brought team gathers around the fire. Front members sit on

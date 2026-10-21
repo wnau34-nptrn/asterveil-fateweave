@@ -54,6 +54,8 @@ export function gearTotals(map: MapDefinition, gear: Gear | undefined): GearTota
     if (item.special && !specials.includes(item.special)) specials.push(item.special);
   }
   let hpPercent = 0; const extra: HeroGear = {};
+  const boss=gear?.charm?.boss;
+  if(boss)extra.boss={power:boss,amount:boss==='focus'?map.equipment.boss.damage:map.equipment.boss.barrier};
   for (const [id, n] of Object.entries(setCounts(gear)) as [SetId, number][]) {
     const set = map.equipment.sets[id];
     if (n >= 2) for (const { stat, value } of set.two) { if (stat === 'hp') hpPercent += value; else sum[stat] += value; }
@@ -98,14 +100,15 @@ export function itemValid(map: MapDefinition, item: Item, heroIds: readonly stri
   const inRange = (n: unknown) => Number.isInteger(n) && (n as number) >= rules.quality[0] && (n as number) <= rules.quality[1];
   if (item.q !== undefined && (typeof item.q !== 'object' || Object.keys(item.q).length !== 2 || !inRange(item.q.main) || !Array.isArray(item.q.affixes)
     || item.q.affixes.length !== item.affixes.length || !item.q.affixes.every(inRange))) return false;
-  if ((item.rarity === RARITIES - 1) !== (item.special !== undefined) || (item.special !== undefined && !GEAR_SPECIALS.includes(item.special))) return false;
+  if(item.boss!==undefined){if(!['aegis','focus','lantern'].includes(item.boss)||item.slot!=='charm'||item.rarity!==4||item.special!==undefined)return false;}
+  else if ((item.rarity === RARITIES - 1) !== (item.special !== undefined) || (item.special !== undefined && !GEAR_SPECIALS.includes(item.special))) return false;
   if (item.set !== undefined && !SET_IDS.includes(item.set)) return false;
   if (item.plus !== undefined && (!Number.isInteger(item.plus) || item.plus < 1 || item.plus > rules.forge.plusCap[item.rarity]!)) return false;
   if (item.locked !== undefined && item.locked !== true) return false;
   if (item.investment !== undefined && (!item.investment || typeof item.investment !== 'object' || Object.keys(item.investment).length !== 2 || !['ore','dust'].every(k => Number.isSafeInteger(item.investment![k as 'ore'|'dust']) && item.investment![k as 'ore'|'dust'] >= 0))) return false;
   if (item.levelInvestment !== undefined && (!item.levelInvestment || typeof item.levelInvestment !== 'object' || Object.keys(item.levelInvestment).length !== 2 || !['ore','dust'].every(k => Number.isSafeInteger(item.levelInvestment![k as 'ore'|'dust']) && item.levelInvestment![k as 'ore'|'dust'] >= 0))) return false;
   if(item.transferSlot!==undefined&&(found||!item.q||!Number.isInteger(item.transferSlot)||item.transferSlot<0||item.transferSlot>=item.affixes.length))return false;
-  const keys = Object.keys(item).filter(k => !['transferSlot', 'uid', 'slot', 'rarity', 'level', 'hero', 'affixes', 'special', 'set', 'plus', 'q', 'locked', 'investment', 'levelInvestment'].includes(k));
+  const keys = Object.keys(item).filter(k => !['boss', 'transferSlot', 'uid', 'slot', 'rarity', 'level', 'hero', 'affixes', 'special', 'set', 'plus', 'q', 'locked', 'investment', 'levelInvestment'].includes(k));
   return !keys.length;
 }
 // Missing ledger = legacy credit for the remaining + level, never inferred lost past upgrades.

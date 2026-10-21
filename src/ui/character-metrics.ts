@@ -1,10 +1,22 @@
-import { defenseOf, finaleHealPower, skillPower, songPower, SUPPORT_SKILLS, targetKind, withParty } from '../core/battle/engine';
+import { beginBattle, resolveCommand, targetOptions, defenseOf, finaleHealPower, skillPower, songPower, SUPPORT_SKILLS, targetKind, withParty } from '../core/battle/engine';
 import type { ActionId, EncounterDefinition, HeroDefinition } from '../core/battle/types';
 import { gearTotals } from '../core/world/equipment';
 import type { ExpeditionState, MapDefinition } from '../core/world/types';
 import { partyLuck } from '../core/world/world';
 
 export interface CharacterStat { id: string; name: string; value: number; unit: string; help: string }
+// A labelled hypothetical battle, projected by the real resolver. No saves, loot or profile mutation.
+export function markedSkillExample(action:ActionId,h:HeroDefinition,template:EncounterDefinition):number|undefined {
+  if(targetKind(action)!=='enemy'||(action!=='attack'&&template.skills[action].power<=0)||!h.actions.includes(action))return;
+  // Backstab requires the enemy to aim at somebody else. Keep that legal context explicit,
+  // rather than throwing while a Scout's shared sheet is rendering.
+  const ally:HeroDefinition={id:'boss-preview-ally',name:'เพื่อนตัวอย่าง',role:'Preview',lane:'back',maxHp:100000,attack:1,speed:1,actions:['attack'],color:0};
+  const data=withParty({...template,enemies:template.enemies.map(e=>({...e,maxHp:100000,speed:1})),intents:template.intents.map(i=>({...i,targetSlot:1}))},[{...h,speed:1000},ally]);
+  const state=beginBattle(data).state,target=targetOptions(state,data,h.id,action).find(t=>t.valid);
+  const enemy=state.enemies.find(e=>e.id===target?.id);if(!enemy)return;enemy.markedUntil=state.round+2;
+  const resolved=resolveCommand(state,data,{heroId:h.id,beat:state.beat,action,targetId:enemy.id});
+  return resolved.turns.find(t=>t.side==='hero')?.events.filter(e=>e.type==='damage'&&e.sourceId===h.id&&e.targetId===enemy.id).reduce((n,e)=>n+(e.amount??0),0);
+}
 export type CharacterState = Pick<ExpeditionState,'members'|'hp'|'roster'>;
 // Readonly UI projections. All growth, caps, gear/set totals and skill powers use the game helpers.
 export function characterStats(s: CharacterState, map: MapDefinition, h: HeroDefinition, template: EncounterDefinition): CharacterStat[] {

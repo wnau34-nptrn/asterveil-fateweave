@@ -1,3 +1,4 @@
+import {startBossPlan} from './boss-equipment';
 import {startHunt} from './targeted-loot';
 import {storageCap,departureBlocked} from './storage';
 import { memberTalentReason, talentsSpent } from './talents';
@@ -10,7 +11,7 @@ import { heroCatalog, levelOf, newExpedition, rollPercent, type EncounterLookup 
 // team chosen for the next expedition, and settling a finished expedition back home.
 export function newProfile(map: MapDefinition, seed: number): Profile {
   return {
-    hunt:{pity:{}}, seed: seed >>> 0, returns: 0, tutorialDone: false, commander: null,
+    bossLoot:{}, hunt:{pity:{}}, seed: seed >>> 0, returns: 0, tutorialDone: false, commander: null,
     company: [...map.startingRoster], members: Object.fromEntries(map.startingRoster.map(id => [id, { stars: 1, dupes: 0 }])),
     party: { deployed: [...map.startingRoster], reserve: [] },
     forgeLevel: map.equipment.forge.itemLevel.baseCap, bank: { ore: 0, gold: 0, seal: 0, dust: 0 }, items: [], overflow:[],storageTier:0, nextItem: 1, forge: 0, potions: { salve: 0, tonic: 0, repel: 0 }, quests: {}, shop: {}, refreshes: 0, smelted: 0, taken: [], expeditions: 0, completes: 0, last: null,
@@ -159,6 +160,7 @@ export function salvageReason(initial:Profile,map:MapDefinition,uids:readonly nu
   const picked=initial.items.filter(i=>uids.includes(i.uid));
   if(!picked.length||picked.length!==uids.length||new Set(uids).size!==uids.length)return 'unknown';
   if(picked.some(i=>i.locked))return 'locked';
+  if(uids.length>1&&picked.some(i=>i.boss))return 'protected';
   const total=picked.reduce((v,item)=>{const n=salvageValue(map,item);return {ore:v.ore+n.ore,dust:v.dust+n.dust};},{ore:0,dust:0});
   return !Number.isSafeInteger(total.ore)||!Number.isSafeInteger(total.dust)||initial.bank.ore+total.ore>9999999||initial.bank.dust+total.dust>9999999?'full':'';
 }
@@ -207,7 +209,7 @@ export function depart(initial: Profile, map: MapDefinition, lookup: EncounterLo
   const potions = Object.fromEntries(POTION_IDS.map(id => [id, Math.min(map.potions.carry, profile.potions[id])])) as Potions;
   for (const id of POTION_IDS) profile.potions[id] -= potions[id];
   const run = newExpedition(map, lookup, seed, { roster: structuredClone(profile.party), members: Object.fromEntries(ids.map(id => [id, { ...profile.members[id]! }])), potions }, profile.tutorialDone);
-  run.hunt=startHunt(profile);
+  run.hunt=startHunt(profile);run.bossLoot=startBossPlan(profile,map);
   return { profile, run };
 }
 // ---- Potions (2D-5): brewed in the lobby for ore and veil dust; stock at home has no cap. ----
@@ -226,6 +228,7 @@ export const keptPercent: Record<RunOutcome, number> = { complete: 100, withdraw
 export function settle(initial: Profile, run: ExpeditionState, outcome: RunOutcome, map: MapDefinition): Profile {
   const profile = structuredClone(initial); const pct = keptPercent[outcome];
   if(run.hunt?.target){profile.hunt??={pity:{}};profile.hunt.pity[run.hunt.target]=run.hunt.misses;}
+  if(run.bossLoot){const {target,misses,rewarded}=run.bossLoot;profile.bossLoot??={};profile.bossLoot[map.bossEncounterId]={target,misses,rewarded};}
   const ore = Math.floor(run.resources.ore * pct / 100); const seal = Math.floor(run.resources.seal * pct / 100);
   const dust = Math.floor(run.dust * pct / 100); const gold = Math.floor(run.resources.gold * pct / 100);
   profile.bank.ore += ore; profile.bank.gold += gold; profile.bank.seal += seal; profile.bank.dust += dust;
@@ -239,7 +242,7 @@ export function settle(initial: Profile, run: ExpeditionState, outcome: RunOutco
     const before = home.gear ?? {}; const gear: Gear = {};
     for (const [slot, item] of Object.entries(run.members[id]!.gear ?? {}) as [GearSlot, Item][]) {
       if (item.uid) gear[slot] = item;
-      else if (kept.has(item)) { gear[slot] = { ...item, uid: profile.nextItem++ }; items++; }
+      else if (kept.has(item)) { gear[slot] = { ...item, uid: profile.nextItem++, ...(item.boss?{locked:true as const}:{}) }; items++; }
     }
     for (const slot of GEAR_SLOTS) {
       const own = before[slot]; const at = own && !gear[slot] ? spare.findIndex(i => i.uid === own.uid) : -1;
@@ -249,7 +252,7 @@ export function settle(initial: Profile, run: ExpeditionState, outcome: RunOutco
   }
   // The company's own items taken off on the map always come home, even past the bag limit.
   for(const item of spare)stash(profile,map,item);
-  for (const found of run.found) if (kept.has(found)) { if (stash(profile, map, { ...found, uid: profile.nextItem++ })) items++; else salvaged++; }
+  for (const found of run.found) if (kept.has(found)) { if (stash(profile, map, { ...found, uid: profile.nextItem++, ...(found.boss?{locked:true as const}:{}) })) items++; else salvaged++; }
   // Unused potions come home too, unless the team was wiped.
   if (outcome !== 'wiped') for (const id of POTION_IDS) profile.potions[id] += run.potions[id];
   // Levels and EXP earned on the run are kept whatever the outcome (2D-1).

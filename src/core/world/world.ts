@@ -1,3 +1,4 @@
+import {bossReward} from './boss-equipment';
 import {huntedReward} from './targeted-loot';
 import { replay, withLevel, withParty } from '../battle/engine';
 import { boulderAt, leverPuzzleAt, openPit, passableWall, runePuzzleAt, secretAt } from './puzzles';
@@ -484,6 +485,7 @@ function dropItems(state: ExpeditionState, map: MapDefinition, kind: BattleKind,
   const sets = kind === 'boss' ? SET_IDS : zoneOf(map, tileAt(map, state.position)?.zoneId ?? '')?.sets ?? [];
   const weights = kind === 'boss' ? rules.bossRarityWeights : kind === 'elite' ? (miniBoss(map, source) ? map.eventRules.miniBoss.rarityWeights : optionalElite(map, source) ? map.eventRules.optionalElite.rarityWeights : map.eventRules.eliteRarityWeights) : rules.rarityWeights;
   const items = Array.from({ length: kind === 'boss' ? rules.bossDrops : 1 }, () => huntedReward(rules, () => rollPercent(state.seed, state.rolls++), level, weights, rosterIds(state), sets,state.hunt));
+  if(kind==='boss'&&state.bossLoot){let bonusRoll=0;const bonus=bossReward(map,state.bossLoot,()=>rollPercent((state.seed^0x6b05d017)>>>0,bonusRoll++),level);if(bonus)items.push(bonus);}
   state.found.push(...items);
   return items;
 }

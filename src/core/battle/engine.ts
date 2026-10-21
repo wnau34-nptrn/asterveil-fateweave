@@ -1,4 +1,4 @@
-import type { ActionId, BattleEntry, GearSpecial, HeroDefinition, PassiveId, TalentCap, TalentRule, HeroState, EnemyState, BattleEvent, BattleState, Command, EncounterDefinition, Intent, Resolution, TargetOption, TurnSlot, TurnStage } from './types';
+import type { HeroGear, ActionId, BattleEntry, GearSpecial, HeroDefinition, PassiveId, TalentCap, TalentRule, HeroState, EnemyState, BattleEvent, BattleState, Command, EncounterDefinition, Intent, Resolution, TargetOption, TurnSlot, TurnStage } from './types';
 
 const living = (state: BattleState, id: string) => [...state.heroes, ...state.enemies].some(a => a.id === id && a.hp > 0);
 const definitions = (data: EncounterDefinition) => [...data.heroes, ...data.enemies];
@@ -76,6 +76,18 @@ export function talentHitBonus(state: BattleState, data: EncounterDefinition, he
 export const GEAR_MARK_HUNTER = 8; export const GEAR_RENEWAL = 4;
 export const hasGear = (data: EncounterDefinition, heroId: string | undefined, special: GearSpecial): boolean =>
   !!heroId && !!data.heroes.find(h => h.id === heroId)?.gear?.specials?.includes(special);
+
+export function bossPowerReady(state:BattleState,data:EncounterDefinition,heroId:string,power:NonNullable<HeroGear['boss']>['power']):number {
+  const gear=data.heroes.find(h=>h.id===heroId)?.gear?.boss,actor=state.heroes.find(h=>h.id===heroId);
+  return actor&&actor.hp>0&&actor.bossUsedRound!==state.round&&gear?.power===power?gear.amount:0;
+}
+function bossBarrier(state:BattleState,data:EncounterDefinition,ownerId:string,targetId:string,power:'aegis'|'lantern',events:BattleEvent[]):void {
+  const amount=bossPowerReady(state,data,ownerId,power),target=state.heroes.find(h=>h.id===targetId);
+  if(!amount||!target||target.hp<=0)return;
+  state.heroes.find(h=>h.id===ownerId)!.bossUsedRound=state.round;
+  const added=Math.max(target.barrier,amount)-target.barrier;target.barrier+=added;
+  if(added)events.push({type:'barrier',sourceId:ownerId,targetId,amount:added,text:power==='aegis'?'ตราพิทักษ์ผู้คุมมอบโล่หลังรับการโจมตี':'ประทีปผนึกมอบโล่หลังรักษาเพื่อน'});
+}
 // Healing cast by this hero, raised by its equipment's heal bonus.
 // Deploys a party (in slot order) into an encounter; enemy slots then resolve to these heroes.
 export function withParty(data: EncounterDefinition, party: readonly HeroDefinition[]): EncounterDefinition {
@@ -217,6 +229,7 @@ function hit(state: BattleState, data: EncounterDefinition, enemy: EnemyState, i
   recipient.hp -= amount;
   events.push({ type: 'damage', sourceId: actorId, targetId: recipient.id, amount, absorbed, text: 'Enemy attacks on its own turn.' });
   if (!recipient.hp) events.push({ type: 'down', targetId: recipient.id, text: 'Hero falls.' });
+  if(amount>0&&recipient.hp>0)bossBarrier(state,data,recipient.id,recipient.id,'aegis',events);
   if (reflect && living(state, reflect.heroId) && enemy.hp > 0) strikeBack(state, data, reflect.heroId, enemy, reflect.amount, events, 'The ward reflects the hit.');
   // Thorn set (4 pieces): a physical hit taken is answered.
   const thorns = data.heroes.find(h => h.id === recipient.id)!.gear?.thorns;
@@ -376,7 +389,9 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
   const skill = { ...base, power: skillPower(data, hero.id, command.action) };
   // Every hero hit adds corrosion, valor and its own capstone bonuses.
   const strike = (foe: EnemyState, power: number, text: string) => {
-    const amount = Math.min(foe.hp, power + hitBonus(state, data, foe.id) + talentHitBonus(state, data, hero.id, foe)); foe.hp -= amount;
+    const boss=foe===enemy&&targetKind(command.action)==='enemy'&&power>0&&foe.markedUntil>state.round?bossPowerReady(state,data,hero.id,'focus'):0;
+    if(boss)actor.bossUsedRound=state.round;
+    const amount = Math.min(foe.hp, power + boss + hitBonus(state, data, foe.id) + talentHitBonus(state, data, hero.id, foe)); foe.hp -= amount;
     events.push({ type: 'damage', sourceId: hero.id, targetId: foe.id, amount, text });
     if (!foe.hp) events.push({ type: 'down', targetId: foe.id, text: 'Enemy falls.' });
     leech(state, data, hero.id, amount, events);
@@ -502,6 +517,7 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
       break;
     }
     case 'heal': {
+      const hpBefore=state.heroes.find(h=>h.id===command.targetId)!.hp;
       heal(command.targetId, skill.power);
       // Priest talents: a small barrier, a half heal for the most hurt other ally, and solace on the target.
       const shield = talentRule(data, hero.id, 'healBarrier'); const target = state.heroes.find(h => h.id === command.targetId)!;
@@ -512,6 +528,7 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
         if (other) heal(other.id, Math.floor(skill.power / 2));
       }
       if (hasCap(data, hero.id, 'solace')) state.solace = { heroId: hero.id, targetId: target.id };
+      if(target.id!==hero.id&&target.hp>hpBefore)bossBarrier(state,data,hero.id,target.id,'lantern',events);
       break;
     }
     case 'prayer': for (const h of state.heroes) heal(h.id, skill.power); break;

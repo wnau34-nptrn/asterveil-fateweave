@@ -3,7 +3,7 @@ import {salvageValue} from './equipment';
 export type StorageSource='bag'|'overflow';
 export const storageCap=(p:Pick<Profile,'storageTier'>,map:MapDefinition):number=>map.equipment.bagCap+(p.storageTier??0)*map.equipment.storage.step;
 export const storageItems=(p:Profile,source:StorageSource):readonly Item[]=>source==='bag'?p.items:p.overflow??[];
-export const protectedItem=(i:Item):boolean=>!!(i.transferSlot!==undefined||i.locked||i.plus||i.investment?.ore||i.investment?.dust||i.levelInvestment?.ore||i.levelInvestment?.dust);
+export const protectedItem=(i:Item):boolean=>!!(i.boss||i.transferSlot!==undefined||i.locked||i.plus||i.investment?.ore||i.investment?.dust||i.levelInvestment?.ore||i.levelInvestment?.dust);
 export const departureBlocked=(p:Profile):boolean=>!!p.overflow?.length;
 const blocked=(p:Profile,reason:string):ProfileResult=>({profile:p,event:{type:'blocked',reason}});
 function selected(p:Profile,source:StorageSource,ids:readonly number[]):Item[]|undefined {

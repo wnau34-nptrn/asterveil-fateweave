@@ -1,5 +1,11 @@
 # Modern battle HUD design spec
 
+## Boss equipment — 2026-10-21
+
+Use the existing shared character sheet and six equipment slots. Boss charms carry a small ◆ marker opposite the existing normal-set emblem; item detail names the source and conditional power before stat lines. Gear filters add Type: all/boss/ordinary inside additional filters. Normal set counts/2/4 bonuses remain shared with ordinary items. Comparison and Skills expose a clearly labelled marked-primary-target example from the real resolver, separate from base skill power; equipment-effects before/after include the boss power and lost/gained ordinary effects. Explain that Lantern cannot activate for a class without Heal. Battle status reads the displayed snapshot's actual per-round use state.
+
+Camp Farm keeps weapon and boss selections separate, explicitly saved and free. Place boss selection before the long sources guide; preserve its scroll after redraw/apply. MAP ! → Equipment sources reads only the frozen run target/counter; explain legacy runs, first-win guarantee, chance/pity, normal set chance and found-versus-brought-home status. Keep the existing portrait frame, >=44px controls, rotation/inert/repeat/IME guards and return focus. Smith excludes boss donors, warns on individual destruction and retains exact refund review; bulk protection also covers unlocked boss items. No new art production or top-level battlefield button.
+
 ## Affix transfer phase 6 — 2026-10-20
 
 Add Transfer as a fifth Develop mode, keeping the four smith tabs. Choose main affix slot, bag donor and donor affix. Show native disabled options for bound-out slots and locked donors. No donor preselection. State that first transfer binds one slot permanently, copied quality scales at the main Lv, and set/Lv/+ and special remain. Show the binding in regular equipment detail text.

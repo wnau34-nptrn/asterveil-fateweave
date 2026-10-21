@@ -51,7 +51,7 @@ export function lockEquipment(initial:Profile,uid:number):ProfileResult {
 export function fuseMaterials(profile: Profile, map: MapDefinition, uid: number): Item[] {
   const main = findItem(profile, uid)?.item; if (!main) return [];
   // The cheapest matching bag pieces go first: lowest enhance, then lowest level.
-  return profile.items.filter(i => i.uid !== uid && i.transferSlot===undefined && !i.locked && !(i.plus??0) && !i.investment?.ore && !i.investment?.dust && !i.levelInvestment?.ore && !i.levelInvestment?.dust && i.slot === main.slot && i.rarity === main.rarity)
+  return profile.items.filter(i => i.uid !== uid && !i.boss && i.transferSlot===undefined && !i.locked && !(i.plus??0) && !i.investment?.ore && !i.investment?.dust && !i.levelInvestment?.ore && !i.levelInvestment?.dust && i.slot === main.slot && i.rarity === main.rarity)
     .sort((a, b) => (a.plus ?? 0) - (b.plus ?? 0) || a.level - b.level || a.uid - b.uid).slice(0, map.equipment.forge.fuseCount - 1);
 }
 export function fuseReason(profile: Profile, map: MapDefinition, uid: number, donors?:readonly number[]): string {
@@ -60,7 +60,7 @@ export function fuseReason(profile: Profile, map: MapDefinition, uid: number, do
   const ids=donors??fuseMaterials(profile,map,uid).map(i=>i.uid);
   if(ids.length!==map.equipment.forge.fuseCount-1||new Set(ids).size!==ids.length)return 'materials';
   const used=ids.map(id=>profile.items.find(i=>i.uid===id));
-  if(used.some(i=>!i||i.uid===uid||i.locked||i.slot!==main.slot||i.rarity!==main.rarity))return 'materials';
+  if(used.some(i=>!i||i.uid===uid||i.boss||i.locked||i.slot!==main.slot||i.rarity!==main.rarity))return 'materials';
   const refund=fusionRefund(profile,map,ids);
   return profile.bank.ore+refund.ore>9999999||profile.bank.dust+refund.dust>9999999?'full':'';
 }
@@ -158,7 +158,7 @@ export function craftWeapon(initial:Profile,map:MapDefinition,hero:string,level:
 
 // Transfer names + roll quality, never a donor's level, set, main quality or legendary effect.
 export function transferCandidate(map:MapDefinition,main:Item,index:number,donor:Item,sourceIndex:number):Item|undefined {
-  if(main.uid===donor.uid||main.slot!==donor.slot||(main.slot==='weapon'&&main.hero!==donor.hero))return;
+  if(donor.boss||main.uid===donor.uid||main.slot!==donor.slot||(main.slot==='weapon'&&main.hero!==donor.hero))return;
   if(!Number.isInteger(index)||!main.affixes[index]||(main.transferSlot!==undefined&&main.transferSlot!==index)||!Number.isInteger(sourceIndex)||!donor.affixes[sourceIndex])return;
   const stat=donor.affixes[sourceIndex]!,quality=donor.q?.affixes[sourceIndex]??100;
   if(!affixPool(map.equipment,main.slot,main.hero).includes(stat)||main.affixes.some((v,i)=>i!==index&&v===stat))return;
