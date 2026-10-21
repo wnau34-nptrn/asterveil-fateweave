@@ -57,7 +57,8 @@ export const legacyKeys = ['asterveil.fateweave.battle.v1', 'asterveil.fateweave
 // teaching maps before the frontier as cleared (its owner never has to replay the tutorial maps) and the frontier
 // too once it has a completed expedition. Runs load with the map they were started on (`maps`).
 // v28 → v29: the commander gains `camp`, the ค่ายทหารรับจ้าง's name (defaults to "ค่าย" + the commander's name).
-const SAVE_VERSION = 29;
+// v29 → v30: runs may carry story-recruit `guests` and `recruited` (missing = none).
+const SAVE_VERSION = 30;
 export interface Game { profile: Profile; run: ExpeditionState | null }
 const actions: readonly ActionId[] = ['attack', 'guard', 'bash', 'mark', 'execute', 'bolt', 'ward', 'heal', 'prayer', 'brace', 'pierce', 'hinder', 'volley', 'acid', 'haste', 'ambush', 'evade', 'taunt', 'slam', 'valor', 'mend',
   'rally', 'finisher', 'sigil', 'sanctuary', 'spearwall', 'weakshot', 'bomb', 'backstab', 'quake', 'finale'];
@@ -199,6 +200,7 @@ function spareOf(v: unknown, map: MapDefinition, lookup: EncounterLookup): Item[
 }
 // The company's own items on a run (worn or taken off on the map) are exactly what its members wore when they
 // left the lobby, so the map bag can neither copy nor lose them.
+const travelling = (run: ExpeditionState, id: string): boolean => !!run.guests?.includes(id) || !!run.recruited?.includes(id);
 function ownItemsMatch(profile: Profile, run: ExpeditionState): boolean {
   const key = (items: Item[]) => items.map(i => JSON.stringify(i)).sort().join('|');
   const ids = rosterIds(run);
@@ -260,7 +262,16 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
     if (b.level !== undefined && !isInt(b.level, 1, 99)) throw new Error('Invalid battle');
     battle = { kind: b.kind as ActiveBattle['kind'], encounterId: data.id, entry, commands: b.commands.map(command), ...(b.level !== undefined ? { level: b.level as number } : {}), ...(typeof source === 'string' ? { source } : {}) };
   }
+  // Story recruits (v30): guests and this run's recruits are roster members from this map's recruit list, never both.
+  const recruitIds = (v: unknown): string[] | undefined => {
+    if (v === undefined) return undefined;
+    const allowed = (map.recruits ?? []).map(r => r.hero).filter(id => [...roster.deployed, ...roster.reserve].includes(id));
+    return idList(v, allowed);
+  };
+  const guests = recruitIds(s.guests), recruited = recruitIds(s.recruited);
+  if (guests && recruited && guests.some(id => recruited.includes(id))) throw new Error('Invalid run');
   const state: ExpeditionState = {
+    ...(guests ? { guests } : {}), ...(recruited ? { recruited } : {}),
     ...(s.bossLoot===undefined?{}:{bossLoot:bossPlanOf(s.bossLoot,map)}),
     ...(s.hunt===undefined?{}:{hunt:huntPlan(s.hunt,map,lookup)}),
     mapId: map.id, mapVersion: map.version, seed: s.seed as number, rolls: s.rolls as number, position: point(s.position, map, true),
@@ -402,7 +413,7 @@ function legacyCleared(tutorialDone: boolean, completed: boolean, map: MapDefini
 export function parseGame(raw: string, map: MapDefinition, lookup: EncounterLookup, maps: readonly MapDefinition[] = [map]): Game {
   const envelope = obj(JSON.parse(raw)); const version = envelope.version as number;
   if (version < 21) migrateItems(envelope, map);
-  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
+  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
   const runMap = (v: unknown): MapDefinition => maps.find(m => m.id === obj(v).mapId) ?? map;
   if (version < 5) {
     const home = runMap(envelope.state); const run = parseRun(envelope.state, version, home, lookup);
@@ -416,11 +427,12 @@ export function parseGame(raw: string, map: MapDefinition, lookup: EncounterLook
   let run: ExpeditionState | null;
   try { run = envelope.run === null ? null : parseRun(envelope.run, version, home, lookup); } catch (e) {
     if (!(e instanceof StaleRun)) throw e;
-    if (rosterIds(e.run).some(id => !profile.company.includes(id))) throw new Error('Run member left the company', { cause: e });
+    if (rosterIds(e.run).some(id => !profile.company.includes(id) && !travelling(e.run, id))) throw new Error('Run member left the company', { cause: e });
     if (!ownItemsMatch(profile, e.run)) throw new Error('Run items do not match the company', { cause: e });
     return { profile: settle(profile, e.run, 'withdrawn', home), run: null };
   }
-  if (run && rosterIds(run).some(id => !profile.company.includes(id))) throw new Error('Run member left the company');
+  if (run && rosterIds(run).some(id => !profile.company.includes(id) && !travelling(run, id))) throw new Error('Run member left the company');
+  if (run && [...run.guests ?? [], ...run.recruited ?? []].some(id => profile.company.includes(id))) throw new Error('Guest already in the company');
   if(run?.hunt&&run.hunt.target!==profile.hunt?.target)throw new Error('Hunt target mismatch');
   if(run?.hunt?.target&&!profile.company.includes(run.hunt.target))throw new Error('Unowned hunt target');
   if(run?.bossLoot){const before=startBossPlan(profile,home),now=run.bossLoot;

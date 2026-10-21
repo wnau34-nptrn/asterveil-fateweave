@@ -14,14 +14,25 @@ const VARGOTH = { name: 'วาร์กอธ', role: 'จ้าวเผ่า
 
 export const prologue = (commander: string): readonly StoryPanel[] => [
   { speaker: 'narrator', text: `ความเงียบ… แล้วเสียงฟ้าแตกดังสนั่น ${commander} ลืมตาขึ้นท่ามกลางซากป้อมชายแดนแอสเตอร์เวล ท้องฟ้าเหนือหัวฉีกเป็นรอยแยกสีม่วง`, scene: 'awaken' },
-  { speaker: 'guardian', text: 'ท่านฟื้นแล้ว! ท่านคือผู้ทอชะตา คนที่มองเห็นเส้นด้ายชะตาของพวกเรา… เราสี่คนรอท่านอยู่', scene: 'awaken' },
+  { speaker: 'guardian', text: 'ท่านฟื้นแล้ว! ท่านคือผู้ทอชะตา คนที่มองเห็นเส้นด้ายชะตาของพวกเรา… ข้าเฝ้าท่านอยู่ที่นี่ และทหารสามคนที่หนีมาจากป้อมอื่นก็พร้อมช่วยรบ', scene: 'awaken' },
   { speaker: 'vargoth', text: 'ผู้ทอชะตาคนสุดท้ายยังหายใจอยู่อีกหรือ… แผ่นดินนี้จะเป็นของเผ่าข้า และเจ้าจะตายที่นี่!', scene: 'rift' },
   { speaker: 'tracer', text: 'มันส่งกองหน้ามาแล้ว! ผู้บัญชาการ สั่งพวกเราเถอะ ด้ายชะตาของท่านจะบอกว่าศัตรูจะโจมตีตรงไหน', scene: 'rift' },
 ];
 export const prologueEnd: readonly StoryPanel[] = [
   { speaker: 'vargoth', text: 'น่าสนใจ… ด้ายชะตาของเจ้ายังไม่ขาด ข้าจะรอเจ้าที่ประตูรอยแยก', scene: 'retreat' },
-  { speaker: 'healer', text: 'มันถอยกลับเข้ารอยแยกแล้ว แต่แม่ทัพของมันเฝ้าประตูอยู่ ไปตั้งหลักที่แคมป์ก่อน แล้วทำลายผนึกรอยแยกกัน', scene: 'retreat' },
+  { speaker: 'healer', text: 'มันถอยกลับเข้ารอยแยกแล้ว แต่แม่ทัพของมันเฝ้าประตูอยู่ ไปตั้งหลักที่แคมป์ในป้อมก่อน แล้วขับไล่หัวหน้ากองหน้าของมันออกไป', scene: 'retreat' },
 ];
+
+// Story recruits (master plan A2): the guest steps forward and joins the ค่ายทหารรับจ้าง for good.
+const recruitLines: Readonly<Record<string, string>> = {
+  tracer: 'ข้าชื่อไลรา ทหารจากป้อมตะวันออก… ถ้าท่านมองเห็นชะตาได้จริง ข้าจะตามท่านไปเอง',
+  weaver: 'แคมป์นี้อุ่นกว่าที่คิด… ไอราจะอยู่ด้วย เวทของข้าควรใช้ปกป้องคนที่ยังสู้อยู่',
+  healer: 'หัวหน้ากองหน้าล้มแล้ว… ข้าเชื่อแล้วว่าท่านพาพวกเรารอดได้ เซเรนขอเดินทางไปกับท่าน',
+};
+export const recruitStory = (heroes: readonly string[], camp: string): readonly StoryPanel[] => heroes.flatMap(id => [
+  { speaker: id as Speaker, text: recruitLines[id] ?? `${heroText[id]?.name ?? ''} ขอเข้าร่วมทางไปกับท่าน`, scene: 'retreat' as const },
+  { speaker: 'narrator' as const, text: `${heroText[id]?.role ?? ''} ${heroText[id]?.name ?? ''} เข้าร่วม${camp}แล้ว`, scene: 'retreat' as const },
+]);
 
 export class StoryUI {
   private panels: readonly StoryPanel[] = [];

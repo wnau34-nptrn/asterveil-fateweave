@@ -3,7 +3,7 @@ import {huntedReward} from './targeted-loot';
 import { replay, withLevel, withParty } from '../battle/engine';
 import { boulderAt, leverPuzzleAt, openPit, passableWall, runePuzzleAt, secretAt } from './puzzles';
 import type { BattleState, Command, EncounterDefinition, HeroDefinition, HeroTalents } from '../battle/types';
-import type { ActiveBattle, BattleKind, ChestDefinition, Company, Direction, ExpGain, ExpeditionState, LootTable, MapDefinition, MemberProgress, Point, PotionId, Resources, Talents, Tile, WorldEvent, WorldResult, ZoneDefinition, Gear, Item, EliteDefinition, EventChoice, MapEventDefinition, MapEventKind, GearSlot } from './types';
+import type { RecruitPoint, ActiveBattle, BattleKind, ChestDefinition, Company, Direction, ExpGain, ExpeditionState, LootTable, MapDefinition, MemberProgress, Point, PotionId, Resources, Talents, Tile, WorldEvent, WorldResult, ZoneDefinition, Gear, Item, EliteDefinition, EventChoice, MapEventDefinition, MapEventKind, GearSlot } from './types';
 import { affixPool, gearTotals } from './equipment';
 import { memberTalentReason } from './talents';
 import type { TalentNode } from './types';
@@ -62,6 +62,13 @@ export function heroDef(lookup: EncounterLookup, map: MapDefinition, id: string)
   return heroCatalog(lookup, map).find(h => h.id === id);
 }
 export const rosterIds = (state: ExpeditionState): string[] => [...state.roster.deployed, ...state.roster.reserve];
+// Story recruits: guests whose recruit point on this map has been reached join for good (settled into the company).
+export function recruit(state: ExpeditionState, map: MapDefinition, at: RecruitPoint): string[] {
+  const joined = (map.recruits ?? []).filter(r => r.at === at && state.guests?.includes(r.hero)).map(r => r.hero);
+  if (!joined.length) return [];
+  state.guests = state.guests!.filter(id => !joined.includes(id)); state.recruited = [...state.recruited ?? [], ...joined];
+  return joined;
+}
 // Each star above ★1 adds `starStatPercent` to max HP, Attack and skill power. SPD never
 // changes, so stars cannot reorder turns. Talents (2D-1b) add their stat percents and build
 // `talents` for the resolver; no talents leaves the definition unchanged.
@@ -231,7 +238,7 @@ export function move(initial: ExpeditionState, map: MapDefinition, dir: Directio
     }
   }
   // Reaching a camp makes it the defeat return point, whether or not the party rests.
-  if (tile.kind === 'camp') { state.camp = { ...target }; if (!state.visited.includes(key(target))) state.visited.push(key(target)); }
+  if (tile.kind === 'camp') { state.camp = { ...target }; if (!state.visited.includes(key(target))) state.visited.push(key(target)); recruit(state, map, 'camp'); }
   if (tile.kind === 'goal') { state.completed = true; return { state, event: { type: 'goal' } }; }
   // An event tile asks for a choice instead of rolling an encounter.
   const waiting = pendingEvent(state, map, target);
@@ -520,9 +527,12 @@ function gainExp(state: ExpeditionState, map: MapDefinition, lookup: EncounterLo
   const rules = map.progression; const level = data.level ?? 1;
   const base = data.enemies.length * (rules.expBase + rules.expPerLevel * level) * (kind === 'boss' ? rules.bossExpMultiplier : kind === 'elite' ? (miniBoss(map, source) ? map.eventRules.miniBoss.exp : optionalElite(map, source) ? map.eventRules.optionalElite.exp : map.eventRules.eliteExp) : 1);
   const gains: Record<string, ExpGain> = {};
+  const best = Math.max(...rosterIds(state).map(id => levelOf(state.members[id])));
   for (const id of rosterIds(state)) {
     const member = state.members[id] ?? { stars: 1, dupes: 0 }; const before = memberDef(lookup, map, state.members, id)!.maxHp;
-    const percent = expPercent(levelOf(member), level); const gained = Math.round(base * percent / 100);
+    // Reserve members learn at a reduced rate; anyone well behind the best brought member catches up faster.
+    const share = (state.roster.reserve.includes(id) ? rules.reserveExpPercent : 100) * (best - levelOf(member) >= rules.catchUpBehind ? 100 + rules.catchUpPercent : 100) / 100;
+    const percent = Math.round(expPercent(levelOf(member), level) * share / 100); const gained = Math.round(base * percent / 100);
     let lv = levelOf(member), exp = (member.exp ?? 0) + gained; const start = lv;
     while (lv < rules.levelCap && exp >= expToNext(map, lv)) { exp -= expToNext(map, lv); lv++; }
     if (lv >= rules.levelCap) exp = 0;
@@ -543,8 +553,8 @@ export function finishBattle(initial: ExpeditionState, map: MapDefinition, looku
   if (result.outcome === 'victory') {
     for (const h of result.heroes) state.hp[h.id] = h.hp;
     state.battle = null; state.wins++; state.restReady = true;
-    if (kind === 'tutorial') state.tutorialDone = true;
-    if (kind === 'boss') state.bossDefeated = true;
+    if (kind === 'tutorial') { state.tutorialDone = true; recruit(state, map, 'prologue'); }
+    if (kind === 'boss') { state.bossDefeated = true; recruit(state, map, 'boss'); }
     // Elites stay beaten and events finished for the rest of the run; a rift pays veil dust.
     const source = initial.battle.source; let dust = 0;
     if (kind === 'elite' && source) state.elitesDefeated.push(source);

@@ -20,7 +20,7 @@ import { choiceText, eventText, expThai, heroText, itemLines, itemName, lootThai
 import { transferAffix, craftWeapon, raiseItemLevel, enhanceTo, lockEquipment, findItem, fuse, reroll, smelt } from '../core/world/forge';
 import { CommanderUI } from './commander-ui';
 import { LobbyUI } from './lobby-ui';
-import { prologue, prologueEnd, StoryUI } from './story-ui';
+import { prologue, prologueEnd, recruitStory, StoryUI } from './story-ui';
 import { WorldUI, type WorldBanner } from './world-ui';
 import { icon, type IconName } from './icons';
 
@@ -65,6 +65,7 @@ export class GameShell {
     const map = home;
     clearLegacySaves(this.storage); sfx.init(this.storage);
     this.game = loadGame(this.storage, map, lookup, maps);
+    for (const id of this.game?.run?.recruited ?? []) this.recruitSeen.add(`${this.game!.run!.mapId}:${id}`);
     this.world = new WorldUI(views.world, this.map, heroCatalog(lookup, map), {
       travel: to => this.travelTo(to), move: dir => this.move(dir), rest: () => this.rest(), revive: id => this.revive(id), swap: (a, b) => this.roster(swapMembers(this.state!, a, b)), moveMember: id => this.roster(moveMember(this.state!, id)),
       withdraw: () => this.endRun('withdrawn'), openChest: () => this.openChest(), usePotion: (potion, id) => this.drink(potion, id),
@@ -201,7 +202,7 @@ export class GameShell {
     // Close the on-screen keyboard first: the prologue and the first battle follow at once, and a keyboard still
     // open on iOS leaves the page scrolled and laid out for a short, wide (landscape) viewport.
     (document.activeElement as HTMLElement | null)?.blur?.();
-    const base = this.replacing || !this.game ? newProfile(this.map, this.freshSeed()) : this.game.profile;
+    const base = this.replacing || !this.game ? newProfile(this.map, this.freshSeed(), this.map.firstCompany) : this.game.profile;
     const result = createCommander(base, c); if (result.event.type !== 'commander') return;
     this.game = { profile: result.profile, run: this.replacing ? null : this.game?.run ?? null }; this.replacing = false;
     this.lobbyMessage = `ยินดีต้อนรับ ผู้บัญชาการ${result.profile.commander!.name} · เลือกทีมแล้วออกเดินทางได้เลย`;
@@ -314,6 +315,15 @@ export class GameShell {
     this.world.render({ state: this.state!, message: this.message, locked: this.locked, saved: this.saved && !!this.storage, banner: this.banner, effect: this.effect });
     this.effect = undefined;
   }
+  // Story recruits: play each newly joined guest once per session (a reload shows the ones already joined as seen).
+  private recruitSeen = new Set<string>();
+  private markRecruits(): void { for (const id of this.state?.recruited ?? []) this.recruitSeen.add(`${this.state!.mapId}:${id}`); }
+  private playRecruits(then: () => void): void {
+    const fresh = (this.state?.recruited ?? []).filter(id => !this.recruitSeen.has(`${this.state!.mapId}:${id}`));
+    if (!fresh.length) { then(); return; }
+    this.markRecruits();
+    this.story.play(recruitStory(fresh, this.game?.profile.commander?.camp || 'ค่ายทหารรับจ้าง'), 'ไปต่อ', then);
+  }
   private move(dir: Direction): void {
     if (!this.state || this.locked) return;
     const result = move(this.state, this.map, dir, this.lookup);
@@ -330,6 +340,7 @@ export class GameShell {
     if (result.event.type === 'encounter') { this.startEncounter(result.event.kind, result.event.encounterId); return; }
     this.renderWorld();
     if (result.event.type === 'event') this.world.openEvent();
+    else this.playRecruits(() => this.views.world.querySelector<HTMLElement>('#move-up')?.focus({ preventScroll: true }));
   }
   // Map sounds by world event (placeholder synth, platform/sfx.ts).
   private worldSound(e: WorldEvent): void {
@@ -494,7 +505,8 @@ export class GameShell {
     this.banner = undefined;
     this.renderWorld();
     // After the prologue fight, Vargoth withdraws into the rift and the journey's goal is set.
-    if (this.prologueWon) { this.prologueWon = false; this.music.play('archway'); this.story.play(prologueEnd, 'ออกเดินทาง', () => { this.music.play('meadow'); this.views.world.querySelector<HTMLElement>('#move-up')?.focus({ preventScroll: true }); }); return; }
-    this.views.world.querySelector<HTMLElement>('#move-up')?.focus({ preventScroll: true });
+    const focus = () => this.views.world.querySelector<HTMLElement>('#move-up')?.focus({ preventScroll: true });
+    if (this.prologueWon) { this.prologueWon = false; this.music.play('archway'); this.story.play(prologueEnd, 'ออกเดินทาง', () => { this.music.play('meadow'); this.playRecruits(focus); }); return; }
+    this.playRecruits(focus);
   }
 }

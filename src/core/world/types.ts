@@ -38,6 +38,9 @@ export interface MapDefinition {
   bossDrop?: { weights: readonly number[]; zoneSets: boolean };
   // Names shown on the map, in messages and in the summary: the boss and the goal it guards.
   bossName: string; goalName: string;
+  // Story recruits (master plan A2): heroes not yet in the company travel this map as guests and join for good at
+  // the prologue win, on reaching a camp, or on beating the boss. `firstCompany`: a new company's only member.
+  recruits?: readonly { hero: string; at: RecruitPoint }[]; firstCompany: readonly string[];
   rows: readonly string[];
   // Floor characters map to zones; S/C/B/G take the zone of `specialZone` entries.
   floorZones: Readonly<Record<string, string>>;
@@ -226,6 +229,10 @@ export interface ProgressionRules {
   expBase: number; expPerLevel: number; bossExpMultiplier: number;
   // EXP to go from level L to L+1 = nextBase + nextPerLevel × L.
   nextBase: number; nextPerLevel: number;
+  // Catch-up (master plan A2, draft): a new member joins `joinBehind` levels below the company's best; reserve
+  // members gain `reserveExpPercent` of the EXP; a member `catchUpBehind`+ levels below the best brought member
+  // gains `catchUpPercent` more.
+  joinBehind: number; reserveExpPercent: number; catchUpBehind: number; catchUpPercent: number;
 }
 // Mercenary company rules (draft numbers). starCosts[i] upgrades ★(i+1) → ★(i+2).
 // 4A camp market: each item has a gold price and a limit per return home. The gear box rolls a rare-or-better
@@ -324,7 +331,11 @@ export interface Roster { deployed: string[]; reserve: string[] }
 export type BattleKind = 'tutorial' | 'random' | 'boss' | 'elite' | 'event';
 // `level`: the monster level fixed when the battle started (missing in older saves = the encounter's own level).
 export interface ActiveBattle { kind: BattleKind; encounterId: string; entry: Record<string, number>; commands: Command[]; level?: number; source?: string }
+export type RecruitPoint = 'prologue' | 'camp' | 'boss';
 export interface ExpeditionState {
+  // Story recruits (save v30): guests travel with the run but are not company members yet; `recruited` joined
+  // during this run and are added to the company when it settles (whatever the outcome). Missing = none.
+  guests?: string[]; recruited?: string[];
   bossLoot?:BossPlan;
   // Missing plan preserves legacy RNG and drop behavior until this expedition ends.
   hunt?:HuntPlan;

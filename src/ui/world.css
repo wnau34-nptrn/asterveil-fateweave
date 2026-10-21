@@ -471,3 +471,5 @@ h1, h2, h3, .primary, .secondary { font-family: var(--font-heading); font-weight
 .choice-row .swatch:hover:not(:disabled) { background-color: var(--crest-color); filter: brightness(1.08); }
 .commander-panel { flex: 0 1 auto; } .commander-shell { justify-content: center; }
 .star-row .icon.empty { filter: brightness(2.4) saturate(.5); opacity: .85; }
+/* Story recruits (A2): guests travel with the party until they join; a dashed ring marks them. */
+.world-hero.guest .portrait, .world-hero.guest img { outline: 2px dashed #f2d596aa; outline-offset: 1px; border-radius: 50%; }

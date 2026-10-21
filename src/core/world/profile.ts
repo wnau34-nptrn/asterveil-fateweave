@@ -5,15 +5,17 @@ import { memberTalentReason, talentsSpent } from './talents';
 import type { Commander, ShopItemId, SideQuestKind, ExpeditionState, Gear, GearSlot, Item, MapDefinition, PotionId, Potions, Profile, ProfileResult, RunOutcome, TalentNode } from './types';
 import { rollItem, salvageValue } from './equipment';
 import { COMPANY_CAP, GEAR_SLOTS, PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS, SET_IDS } from './types';
-import { heroCatalog, levelOf, newExpedition, rollPercent, type EncounterLookup } from './world';
+import { heroCatalog, levelOf, memberDef, newExpedition, rollPercent, rosterIds, type EncounterLookup } from './world';
 
 // Pure lobby rules: the persistent mercenary company, the bank, the hiring board, the
 // team chosen for the next expedition, and settling a finished expedition back home.
-export function newProfile(map: MapDefinition, seed: number): Profile {
+// `first`: the founding members. The shell starts a brand-new game with `map.firstCompany` (the Knight alone); the
+// default, the four teaching heroes, is the company of older saves and of most tests.
+export function newProfile(map: MapDefinition, seed: number, first: readonly string[] = map.startingRoster): Profile {
   return {
     bossLoot:{}, hunt:{pity:{}}, seed: seed >>> 0, returns: 0, tutorialDone: false, commander: null,
-    company: [...map.startingRoster], members: Object.fromEntries(map.startingRoster.map(id => [id, { stars: 1, dupes: 0 }])),
-    party: { deployed: [...map.startingRoster], reserve: [] },
+    company: [...first], members: Object.fromEntries(first.map(id => [id, { stars: 1, dupes: 0 }])),
+    party: { deployed: [...first], reserve: [] },
     forgeLevel: map.equipment.forge.itemLevel.baseCap, bank: { ore: 0, gold: 0, seal: 0, dust: 0 }, items: [], overflow:[],storageTier:0, nextItem: 1, forge: 0, potions: { salve: 0, tonic: 0, repel: 0 }, quests: {}, shop: {}, refreshes: 0, smelted: 0, taken: [], expeditions: 0, completes: 0, cleared: [], last: null,
   };
 }
@@ -69,6 +71,8 @@ export function hireReason(profile: Profile, map: MapDefinition, lookup: Encount
   if (profile.members[id]) return profile.members[id]!.stars >= map.company.maxStars ? 'maxed' : '';
   return profile.company.length >= COMPANY_CAP ? 'full' : '';
 }
+// A new member starts `joinBehind` levels below the company's best (never below 1), so new recruits are worth bringing.
+export const joinLevel = (profile: Profile, map: MapDefinition): number => Math.max(1, Math.max(1, ...Object.values(profile.members).map(m => m.level ?? 1)) - map.progression.joinBehind);
 // Hiring someone already in the company stores a duplicate for star upgrades instead.
 // A new mercenary joins the company and, if there is room, the reserve for the next trip.
 export function hire(initial: Profile, map: MapDefinition, lookup: EncounterLookup, index: number): ProfileResult {
@@ -78,7 +82,7 @@ export function hire(initial: Profile, map: MapDefinition, lookup: EncounterLook
   profile.bank.gold -= map.company.hireCost; profile.taken.push(index);
   if (duplicate) profile.members[id]!.dupes++;
   else {
-    profile.members[id] = { stars: 1, dupes: 0 }; profile.company.push(id);
+    profile.members[id] = { stars: 1, dupes: 0, ...(joinLevel(profile, map) > 1 ? { level: joinLevel(profile, map), exp: 0 } : {}) }; profile.company.push(id);
     if (profile.party.reserve.length < RESERVE_SLOTS) profile.party.reserve.push(id);
   }
   return { profile, event: { type: 'hired', heroId: id, duplicate } };
@@ -223,6 +227,14 @@ export function depart(initial: Profile, map: MapDefinition, lookup: EncounterLo
   for (const id of POTION_IDS) profile.potions[id] -= potions[id];
   const run = newExpedition(map, lookup, seed, { roster: structuredClone(profile.party), members: Object.fromEntries(ids.map(id => [id, { ...profile.members[id]! }])), potions }, profile.tutorialDone);
   run.hunt=startHunt(profile);if(map.bossCharm)run.bossLoot=startBossPlan(profile,map);
+  // Story recruits not yet in the company come along as guests, in free party slots, at the join level.
+  const guests = (map.recruits ?? []).map(r => r.hero).filter(id => !profile.company.includes(id) && !rosterIds(run).includes(id));
+  for (const id of guests) {
+    const group = run.roster.deployed.length < PARTY_SLOTS ? 'deployed' : run.roster.reserve.length < RESERVE_SLOTS ? 'reserve' : undefined;
+    if (!group) break;
+    run.roster[group].push(id); run.members[id] = { stars: 1, dupes: 0, ...(joinLevel(profile, map) > 1 ? { level: joinLevel(profile, map), exp: 0 } : {}) };
+    run.hp[id] = memberDef(lookup, map, run.members, id)!.maxHp; (run.guests ??= []).push(id);
+  }
   return { profile, run };
 }
 // ---- Potions (2D-5): brewed in the lobby for ore and veil dust; stock at home has no cap. ----
@@ -238,8 +250,20 @@ export function brew(initial: Profile, map: MapDefinition, potion: PotionId): Pr
 }
 // Share of carried ore/seals kept when the expedition ends this way (embers never leave the map).
 export const keptPercent: Record<RunOutcome, number> = { complete: 100, withdrawn: 100, wiped: 50 };
-export function settle(initial: Profile, run: ExpeditionState, outcome: RunOutcome, map: MapDefinition): Profile {
-  const profile = structuredClone(initial); const pct = keptPercent[outcome];
+export function settle(initial: Profile, settled: ExpeditionState, outcome: RunOutcome, map: MapDefinition): Profile {
+  const profile = structuredClone(initial); const pct = keptPercent[outcome]; const run = structuredClone(settled);
+  // Story recruits join for good (whatever the outcome); guests who never joined leave, and what they wore goes to the
+  // bag (finds) or back to the company's spare items (own items).
+  for (const id of run.recruited ?? []) {
+    if (profile.members[id]) continue;
+    profile.members[id] = { stars: 1, dupes: 0 }; profile.company.push(id);
+    const group = profile.party.deployed.length < PARTY_SLOTS ? 'deployed' : profile.party.reserve.length < RESERVE_SLOTS ? 'reserve' : undefined;
+    if (group) profile.party[group].push(id);
+  }
+  for (const id of run.guests ?? []) {
+    for (const item of Object.values(run.members[id]?.gear ?? {}) as Item[]) (item.uid ? run.spare : run.found).push(item);
+    delete run.members[id];
+  }
   if(run.hunt?.target){profile.hunt??={pity:{}};profile.hunt.pity[run.hunt.target]=run.hunt.misses;}
   if(run.bossLoot){const {target,misses,rewarded}=run.bossLoot;profile.bossLoot??={};profile.bossLoot[map.bossEncounterId]={target,misses,rewarded};}
   const ore = Math.floor(run.resources.ore * pct / 100); const seal = Math.floor(run.resources.seal * pct / 100);

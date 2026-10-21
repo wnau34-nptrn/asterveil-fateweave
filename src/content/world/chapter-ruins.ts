@@ -37,6 +37,8 @@ export const ruinsMap: MapDefinition = {
   revealRadius: 3,
   // The prologue win leaves one plain body piece in the bag, so the first lesson on the map is wearing it.
   firstFind: { slot: 'body', rarity: 1 },
+  // The three soldiers who fight beside the Knight in the prologue stay for good one by one (lore draft, act 1).
+  recruits: [{ hero: 'tracer', at: 'prologue' }, { hero: 'weaver', at: 'camp' }, { hero: 'healer', at: 'boss' }],
   chests: [
     { id: 'ruins-west', x: 2, y: 6, tier: 'common' }, { id: 'ruins-east', x: 12, y: 7, tier: 'common' },
     { id: 'ruins-tower', x: 4, y: 3, tier: 'rare' },

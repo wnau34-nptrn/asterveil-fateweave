@@ -5,7 +5,7 @@ import { talentTrees } from '../heroes/talents';
 // Game-wide rules shared by every map (chapters plan, owner-approved 2026-10-17): the company, progression, gear,
 // forge, potions, market, talents, event numbers and the camp NPCs' side quests. A map spreads these and adds its
 // own board, zones, encounters, loot and objectives; tests check that every map uses this exact object.
-export type GameRules = Pick<MapDefinition, 'tutorialEncounterId' | 'camp' | 'startingRoster' | 'mercenaries' | 'shop' | 'company' | 'progression' | 'talents'
+export type GameRules = Pick<MapDefinition, 'tutorialEncounterId' | 'camp' | 'startingRoster' | 'firstCompany' | 'mercenaries' | 'shop' | 'company' | 'progression' | 'talents'
   | 'eventRules' | 'potions' | 'equipment' | 'sideQuests'>;
 export const gameRules: GameRules = {
   // The prologue's first battle (Vargoth's vanguard).
@@ -22,6 +22,8 @@ export const gameRules: GameRules = {
   ],
   camp: { restHealPercent: 50, reviveHpPercent: 30 },
   startingRoster: ['guardian', 'tracer', 'weaver', 'healer'],
+  // A new ค่ายทหารรับจ้าง starts with the Knight alone (owner 2026-10-21); the other three join on map 1.
+  firstCompany: ['guardian'],
   // Phase 4A (draft): the camp market, paid in gold coins, and paid hiring-board refreshes (2 per return).
   shop: {
     items: { seal: { price: 60, limit: 2 }, contract: { price: 150, limit: 1 }, gearbox: { price: 120, limit: 1 }, repel: { price: 30, limit: 2 } },
@@ -35,7 +37,7 @@ export const gameRules: GameRules = {
     starCosts: [{ dupes: 1, ore: 20 }, { dupes: 2, ore: 40 }, { dupes: 3, ore: 70 }, { dupes: 4, ore: 110 }],
   },
   // Draft 2D-1 numbers: a first full run ends near level 9; farming low levels is tapered (world `expPercent`).
-  progression: { levelCap: 10, levelStatPercent: 3, monsterLevelPercent: 7, expBase: 6, expPerLevel: 2, bossExpMultiplier: 3, nextBase: 20, nextPerLevel: 45 },
+  progression: { levelCap: 10, levelStatPercent: 3, monsterLevelPercent: 7, expBase: 6, expPerLevel: 2, bossExpMultiplier: 3, nextBase: 20, nextPerLevel: 45, joinBehind: 2, reserveExpPercent: 50, catchUpBehind: 2, catchUpPercent: 50 },
   talents: talentTrees,
   eventRules: {
     banditLevelBonus: 1, prayHeal: 25, prayWound: 5, maxWound: 20, offerOre: 10, offerSeal: 1,
