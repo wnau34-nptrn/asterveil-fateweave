@@ -53,7 +53,10 @@ export const legacyKeys = ['asterveil.fateweave.battle.v1', 'asterveil.fateweave
 // v24 → v25: per-class farming counters; absent run plan preserves legacy loot/RNG until return.
 // v25 → v26: optional single-slot affix-transfer binding; missing binding stays unrestricted.
 // v26 → v27: optional boss item identity and independent per-boss snapshot/progress.
-const SAVE_VERSION = 27;
+// v27 → v28 (chapters): the profile gains `cleared`, the maps completed at least once. An existing company counts the
+// teaching maps before the frontier as cleared (its owner never has to replay the tutorial maps) and the frontier
+// too once it has a completed expedition. Runs load with the map they were started on (`maps`).
+const SAVE_VERSION = 28;
 export interface Game { profile: Profile; run: ExpeditionState | null }
 const actions: readonly ActionId[] = ['attack', 'guard', 'bash', 'mark', 'execute', 'bolt', 'ward', 'heal', 'prayer', 'brace', 'pierce', 'hinder', 'volley', 'acid', 'haste', 'ambush', 'evade', 'taunt', 'slam', 'valor', 'mend',
   'rally', 'finisher', 'sigil', 'sanctuary', 'spearwall', 'weakshot', 'bomb', 'backstab', 'quake', 'finale'];
@@ -274,7 +277,7 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
   if (battle && battleState(state, map, lookup)!.outcome !== 'active') return finishBattle(state, map, lookup).state;
   return state;
 }
-function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: EncounterLookup): Profile {
+function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: EncounterLookup, maps: readonly MapDefinition[]): Profile {
   const p = obj(v);
   if (!isInt(p.seed, 0, 0xffffffff) || !isInt(p.returns) || !isInt(p.expeditions) || !isInt(p.completes) || typeof p.tutorialDone !== 'boolean') throw new Error('Invalid profile');
   const levels=map.equipment.forge.itemLevel, caps=[levels.baseCap,...levels.unlocks.map(u=>u.cap)];
@@ -325,8 +328,9 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
     commander = { name: c.name, crest: c.crest, color: c.color };
     if (commanderReason(commander)) throw new Error('Invalid commander');
   } else if (p.commander === undefined && version >= 6) throw new Error('Invalid commander');
+  const cleared = version < 28 ? legacyCleared(p.tutorialDone === true, (p.completes as number) > 0, map, maps) : idList(p.cleared, maps.map(m => m.id));
   const bossLoot=bossProfileOf(p.bossLoot,map);
-  return {bossLoot,hunt,overflow,storageTier:p.storageTier as number, forgeLevel:p.forgeLevel as number, seed: p.seed, returns: p.returns, tutorialDone: p.tutorialDone, commander, company: [...company as string[]], members, party,
+  return {bossLoot,hunt,overflow,storageTier:p.storageTier as number, forgeLevel:p.forgeLevel as number, seed: p.seed, returns: p.returns, tutorialDone: p.tutorialDone, commander, company: [...company as string[]], members, party, cleared,
     bank: { ore: bank.ore as number, gold: bank.gold as number, seal: bank.seal as number, dust: bank.dust as number }, items, nextItem: p.nextItem as number, forge: p.forge as number, potions: potionsOf(p.potions, 9999), quests, shop, refreshes: p.refreshes as number, smelted: p.smelted as number, taken: [...p.taken as number[]], expeditions: p.expeditions, completes: p.completes, last };
 }
 // Optional elite returns (4C): known optional elites only, 1..99 each.
@@ -380,24 +384,33 @@ function migrateItems(v: unknown, map: MapDefinition): void {
   }
   for (const x of Object.values(o)) migrateItems(x, map);
 }
-export function parseGame(raw: string, map: MapDefinition, lookup: EncounterLookup): Game {
+// Companies saved before the chapters: the maps before `map` (the frontier) count as cleared once the prologue is
+// done, and the frontier itself once an expedition was completed.
+function legacyCleared(tutorialDone: boolean, completed: boolean, map: MapDefinition, maps: readonly MapDefinition[]): string[] {
+  const at = maps.findIndex(m => m.id === map.id);
+  return [...(tutorialDone ? maps.slice(0, Math.max(0, at)).map(m => m.id) : []), ...(completed ? [map.id] : [])];
+}
+// `map` is the home map (the frontier); `maps` lists every map a run may have been started on.
+export function parseGame(raw: string, map: MapDefinition, lookup: EncounterLookup, maps: readonly MapDefinition[] = [map]): Game {
   const envelope = obj(JSON.parse(raw)); const version = envelope.version as number;
   if (version < 21) migrateItems(envelope, map);
-  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
+  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
+  const runMap = (v: unknown): MapDefinition => maps.find(m => m.id === obj(v).mapId) ?? map;
   if (version < 5) {
-    const run = parseRun(envelope.state, version, map, lookup);
+    const home = runMap(envelope.state); const run = parseRun(envelope.state, version, home, lookup);
     const profile = newProfile(map, (run.seed ^ 0x5bd1e995) >>> 0);
     profile.company = rosterIds(run); profile.members = structuredClone(run.members); profile.party = structuredClone(run.roster);
-    profile.tutorialDone = run.tutorialDone;
-    return settleFinished({ profile, run }, map);
+    profile.tutorialDone = run.tutorialDone; profile.cleared = legacyCleared(run.tutorialDone, false, map, maps);
+    return settleFinished({ profile, run }, home);
   }
-  const profile = parseProfile(envelope.profile, version, map, lookup);
+  const profile = parseProfile(envelope.profile, version, map, lookup, maps);
+  const home = envelope.run === null ? map : runMap(envelope.run);
   let run: ExpeditionState | null;
-  try { run = envelope.run === null ? null : parseRun(envelope.run, version, map, lookup); } catch (e) {
+  try { run = envelope.run === null ? null : parseRun(envelope.run, version, home, lookup); } catch (e) {
     if (!(e instanceof StaleRun)) throw e;
     if (rosterIds(e.run).some(id => !profile.company.includes(id))) throw new Error('Run member left the company', { cause: e });
     if (!ownItemsMatch(profile, e.run)) throw new Error('Run items do not match the company', { cause: e });
-    return { profile: settle(profile, e.run, 'withdrawn', map), run: null };
+    return { profile: settle(profile, e.run, 'withdrawn', home), run: null };
   }
   if (run && rosterIds(run).some(id => !profile.company.includes(id))) throw new Error('Run member left the company');
   if(run?.hunt&&run.hunt.target!==profile.hunt?.target)throw new Error('Hunt target mismatch');
@@ -406,12 +419,12 @@ export function parseGame(raw: string, map: MapDefinition, lookup: EncounterLook
     if(now.target!==before.target||(!run.bossDefeated&&(now.misses!==before.misses||now.rewarded!==before.rewarded))||(run.bossDefeated&&(!now.rewarded||(now.misses!==0&&now.misses!==before.misses+1))))throw new Error('Boss progress mismatch');
   }
   if (run && !ownItemsMatch(profile, run)) throw new Error('Run items do not match the company');
-  return settleFinished({ profile, run }, map);
+  return settleFinished({ profile, run }, home);
 }
-export function loadGame(storage: StoragePort | undefined, map: MapDefinition, lookup: EncounterLookup): Game | undefined {
+export function loadGame(storage: StoragePort | undefined, map: MapDefinition, lookup: EncounterLookup, maps: readonly MapDefinition[] = [map]): Game | undefined {
   try {
     const raw = storage?.getItem(expeditionKey);
-    return raw ? parseGame(raw, map, lookup) : undefined;
+    return raw ? parseGame(raw, map, lookup, maps) : undefined;
   } catch { return undefined; }
 }
 

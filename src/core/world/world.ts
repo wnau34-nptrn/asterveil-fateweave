@@ -4,7 +4,7 @@ import { replay, withLevel, withParty } from '../battle/engine';
 import { boulderAt, leverPuzzleAt, openPit, passableWall, runePuzzleAt, secretAt } from './puzzles';
 import type { BattleState, Command, EncounterDefinition, HeroDefinition, HeroTalents } from '../battle/types';
 import type { ActiveBattle, BattleKind, ChestDefinition, Company, Direction, ExpGain, ExpeditionState, LootTable, MapDefinition, MemberProgress, Point, PotionId, Resources, Talents, Tile, WorldEvent, WorldResult, ZoneDefinition, Gear, Item, EliteDefinition, EventChoice, MapEventDefinition, MapEventKind, GearSlot } from './types';
-import { gearTotals } from './equipment';
+import { affixPool, gearTotals } from './equipment';
 import { memberTalentReason } from './talents';
 import type { TalentNode } from './types';
 import { PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS, SET_IDS } from './types';
@@ -472,7 +472,12 @@ export const partyLuck = (state: Pick<ExpeditionState,'members'|'roster'>, map: 
 // and a weapon is made for one of the brought members. Found items ride with the run until it is settled.
 function dropItems(state: ExpeditionState, map: MapDefinition, kind: BattleKind, level: number, source?: string): Item[] {
   const rules = map.equipment;
-  if (kind === 'tutorial') return [];
+  if (kind === 'tutorial') {
+    const f = map.firstFind; if (!f) return [];
+    const affixes = affixPool(rules, f.slot).slice(0, rules.affixCount[f.rarity]);
+    const item: Item = { uid: 0, slot: f.slot, rarity: f.rarity, level: 1, affixes, q: { main: 100, affixes: affixes.map(() => 100) } };
+    state.found.push(item); return [item];
+  }
   // Event fights: bandits always drop an item; a rift pays in veil dust instead.
   if (kind === 'event' && !state.eventsDone.includes(source ?? '')) return [];
   if (kind === 'event' && map.events.find(e => e.id === source)?.kind === 'rift') return [];

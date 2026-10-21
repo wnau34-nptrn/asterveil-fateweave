@@ -9,7 +9,7 @@ import type { StoryPanel } from './story-ui';
 // 4F: the expedition summary shown once when a run ends, before the lobby. It is built from the profile before
 // and after `settle` plus the finished run, so it owns no rules and needs no save of its own.
 export interface RunSummary {
-  outcome: RunOutcome; firstClear: boolean;
+  outcome: RunOutcome; firstClear: boolean; mapId: string; mapName: string;
   steps: number; wins: number; defeats: number; elites: number; chests: number; puzzles: number; secrets: number; herbs: number;
   kept: { ore: number; gold: number; seal: number; dust: number }; items: Item[]; salvaged: number; overflow?:number;
   levels: { id: string; from: number; to: number }[];
@@ -26,7 +26,7 @@ export function runSummary(before: Profile, run: ExpeditionState, after: Profile
   const quests = map.sideQuests.map(q => ({ id: q.id, npc: q.npc, from: before.quests[q.id]?.progress ?? 0, to: after.quests[q.id]?.progress ?? 0, target: q.target, ready: !after.quests[q.id]?.claimed && (after.quests[q.id]?.progress ?? 0) >= q.target }))
     .filter(q => q.to > q.from);
   return {
-    outcome, firstClear: outcome === 'complete' && before.completes === 0,
+    outcome, firstClear: outcome === 'complete' && !before.cleared.includes(run.mapId), mapId: run.mapId, mapName: map.name,
     steps: run.steps, wins: run.wins, defeats: run.defeats, elites: run.elitesDefeated.length + Object.values(run.respawns).reduce((a, b) => a + b, 0), chests: run.openedChests.length,
     puzzles: run.solved.length, secrets: run.secrets.length, herbs: outcome === 'wiped' ? 0 : run.herbs.length,
     kept, items, overflow:after.overflow?.length??0, salvaged: after.last?.salvaged ?? 0, levels, quests,
@@ -41,7 +41,7 @@ export const firstClearStory: readonly StoryPanel[] = [
 ];
 
 const titles: Record<RunOutcome, { title: string; sub: string; scene: 'awaken' | 'rift' | 'retreat' }> = {
-  complete: { title: 'สำเร็จการเดินทาง', sub: 'ผู้คุมรอยแยกล้มแล้ว · ทุกอย่างที่หามาได้กลับค่ายครบ', scene: 'retreat' },
+  complete: { title: 'สำเร็จการเดินทาง', sub: 'บอสล้มแล้ว · ทุกอย่างที่หามาได้กลับค่ายครบ', scene: 'retreat' },
   withdrawn: { title: 'ถอนตัวกลับค่าย', sub: 'ทีมกลับมาอย่างปลอดภัย · ของที่หามาได้กลับค่ายครบ', scene: 'awaken' },
   wiped: { title: 'ทีมล้มทั้งหมด', sub: 'เก็บทรัพยากรได้ครึ่งเดียว · อุปกรณ์เก็บได้แค่ชิ้นที่ดีที่สุด · สมุนไพรหายไป · เลเวลยังอยู่', scene: 'rift' },
 };
@@ -67,7 +67,7 @@ export class SummaryUI {
     this.root.dataset.outcome = s.outcome;
     this.root.style.setProperty('--summary-bg', `url(${storyArt(`story_${t.scene}`)})`);
     this.root.innerHTML = `<div class="summary-card">
-      <header><p class="eyebrow">${this.map.name}</p><h2 id="summary-title">${t.title}</h2><p>${t.sub}</p></header>
+      <header><p class="eyebrow">${s.mapName}</p><h2 id="summary-title">${t.title}</h2><p>${t.sub}</p></header>
       <div class="summary-body">
         <ul class="summary-stats">${stat('footprints', 'ก้าว', s.steps)}${stat('star', 'ชนะศึก', s.wins)}${stat('danger', 'ถอยทัพ', s.defeats)}${stat('boss', 'อีลิท', s.elites)}${stat('chest', 'กล่อง', s.chests)}${stat('set', 'ปริศนา', s.puzzles)}</ul>
         <h3>${icon('pack')} ได้กลับค่าย</h3>${haul ? `<ul class="summary-haul">${haul}</ul>` : '<p class="summary-none">ไม่มีทรัพยากรกลับมา</p>'}

@@ -7,7 +7,7 @@ import { applyCampEquipment, applyRunEquipment } from '../core/world/auto-equipm
 import { shortcutBlocked } from '../platform/keyboard';
 import type { BattleState, Outcome } from '../core/battle/types';
 import { clearLegacySaves, loadGame, saveGame, type Game } from '../core/save/expedition-save';
-import { createCommander, depart, brew, buy, claimQuest, refreshBoard, dismiss, equip, hire, learnTalent, newProfile, placeMember, resetTalents, salvage, settle, unequip, upgrade, canWithdraw } from '../core/world/profile';
+import { createCommander, depart, mapUnlocked, brew, buy, claimQuest, refreshBoard, dismiss, equip, hire, learnTalent, newProfile, placeMember, resetTalents, salvage, settle, unequip, upgrade, canWithdraw } from '../core/world/profile';
 import type { Point, Direction, EventChoice, ExpeditionState, MapDefinition, PotionId, Profile, ProfileResult, RunOutcome, ShopItemId, WorldEvent } from '../core/world/types';
 import { travel, tileAt, startPrologue, questDone, battleData, chooseEvent, finishBattle, heroCatalog, move, moveMember, openChest, recordBattle, usePotion, rest, revive, swapMembers, takeOff, wear, type EncounterLookup } from '../core/world/world';
 import { Music, type Track } from '../platform/music';
@@ -48,11 +48,24 @@ export class GameShell {
   private onBattleVisibility: (visible: boolean) => void = () => {};
   private readonly reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-  constructor(private readonly root: HTMLElement, private readonly map: MapDefinition, private readonly lookup: EncounterLookup, private readonly battle: BattleUI,
-    private readonly views: { title: HTMLElement; commander: HTMLElement; lobby: HTMLElement; world: HTMLElement; battle: HTMLElement }) {
+  // Chapters (2026-10-17): `home` is the frontier map (its rules are every map's rules); `maps` is the campaign in
+  // order. The current map is the run's, or the one chosen at departure.
+  private chosenMap: string | undefined;
+  private get map(): MapDefinition {
+    // A running expedition pins its map, so the summary after it ends still names that map.
+    if (this.game?.run) this.chosenMap = this.game.run.mapId;
+    return this.maps.find(m => m.id === this.chosenMap) ?? this.home;
+  }
+  private eliteArtOf(map: MapDefinition): Record<string, string> {
+    return Object.fromEntries(map.elites.map(e => [e.id, this.lookup(e.encounterId)?.enemies.find(f => f.id === 'brute')?.art ?? 'brute']));
+  }
+  constructor(private readonly root: HTMLElement, private readonly home: MapDefinition, private readonly lookup: EncounterLookup, private readonly battle: BattleUI,
+    private readonly views: { title: HTMLElement; commander: HTMLElement; lobby: HTMLElement; world: HTMLElement; battle: HTMLElement },
+    private readonly maps: readonly MapDefinition[] = [home]) {
+    const map = home;
     clearLegacySaves(this.storage); sfx.init(this.storage);
-    this.game = loadGame(this.storage, map, lookup);
-    this.world = new WorldUI(views.world, map, heroCatalog(lookup, map), {
+    this.game = loadGame(this.storage, map, lookup, maps);
+    this.world = new WorldUI(views.world, this.map, heroCatalog(lookup, map), {
       travel: to => this.travelTo(to), move: dir => this.move(dir), rest: () => this.rest(), revive: id => this.revive(id), swap: (a, b) => this.roster(swapMembers(this.state!, a, b)), moveMember: id => this.roster(moveMember(this.state!, id)),
       withdraw: () => this.endRun('withdrawn'), openChest: () => this.openChest(), usePotion: (potion, id) => this.drink(potion, id),
       chooseEvent: choice => this.chooseEvent(choice),
@@ -66,7 +79,7 @@ export class GameShell {
       },
       wear: (id, from, index) => this.gear(wear(this.state!, map, lookup, id, from, index)), takeOff: (id, slot) => this.gear(takeOff(this.state!, map, lookup, id, slot)),
       autoEquip: plan => { if(this.state&&!this.locked)this.gear(applyRunEquipment(this.state,map,lookup,plan)); },
-    }, Object.fromEntries(map.elites.map(e => [e.id, lookup(e.encounterId)?.enemies.find(f => f.id === 'brute')?.art ?? 'brute'])), lookup(map.tutorialEncounterId));
+    }, this.eliteArtOf(this.map), lookup(map.tutorialEncounterId));
     this.lobby = new LobbyUI(views.lobby, map, lookup, heroCatalog(lookup, map), {
       hire: i => this.profileChange(hire(this.game!.profile, map, lookup, i)), refresh: () => this.profileChange(refreshBoard(this.game!.profile, map)),
       buy: (item, hero) => this.profileChange(buy(this.game!.profile, map, item, hero)), smelt: dust => this.profileChange(smelt(this.game!.profile, map, dust)), upgrade: id => this.profileChange(upgrade(this.game!.profile, map, id)),
@@ -82,8 +95,8 @@ export class GameShell {
       salvage: uids => this.profileChange(salvage(this.game!.profile, map, uids)),
       enhance: (uid,target) => this.profileChange(enhanceTo(this.game!.profile, map, uid,target)), lock: uid=>this.profileChange(lockEquipment(this.game!.profile,uid)), fuse: (uid,donors) => this.profileChange(fuse(this.game!.profile, map, uid,donors)), level:(uid,target)=>this.profileChange(raiseItemLevel(this.game!.profile,map,uid,target)),
       reroll: (uid, i) => this.profileChange(reroll(this.game!.profile, map, uid, i)), brew: potion => this.profileChange(brew(this.game!.profile, map, potion)), claim: id => this.profileChange(claimQuest(this.game!.profile, map, id)),
-      depart: () => this.depart(), home: () => this.showTitle(),
-    });
+      depart: id => this.depart(id), home: () => this.showTitle(),
+    }, maps);
     const story = document.createElement('section'); root.append(story); this.story = new StoryUI(story);
     const summary = document.createElement('section'); root.append(summary); this.summary = new SummaryUI(summary, map);
     this.commander = new CommanderUI(views.commander, { create: c => this.createCommander(c), back: () => { this.replacing = false; this.showTitle(); } });
@@ -242,10 +255,15 @@ export class GameShell {
   private pendingSummary: RunSummary | undefined;
   // Set when the prologue (tutorial) battle is won; its closing scene plays on leaving the battle.
   private prologueWon = false;
-  private depart(): void {
+  // The prologue always starts on the first map; otherwise the Lobby names an open map (default: the furthest open one).
+  private depart(mapId?: string): void {
     if (!this.game || this.game.run) return;
     if(departureBlocked(this.game.profile)){this.lobbyMessage='จัดถาดรอเก็บในกระเป๋าก่อนออกเดินทาง';this.showLobby();return;}
-    const out = depart(this.game.profile, this.map, this.lookup, this.freshSeed());
+    const open = this.maps.filter(m => mapUnlocked(this.game!.profile, this.maps, m.id));
+    const chosen = !this.game.profile.tutorialDone ? this.maps[0]! : open.find(m => m.id === mapId) ?? open.at(-1)!;
+    if (mapId && chosen.id !== mapId) return;
+    this.chosenMap = chosen.id;
+    const out = depart(this.game.profile, chosen, this.lookup, this.freshSeed());
     this.game = { profile: { ...out.profile, last: null }, run: out.run };
     this.persist(); this.banner = undefined; this.locked = false; this.lobbyMessage = ''; this.lobbyCheer = '';
     this.message = 'แตะช่องที่ไฮไลต์หรือใช้ลูกศรเพื่อเดิน';
@@ -273,7 +291,7 @@ export class GameShell {
     this.showLobby(); if (!s) return;
     this.music.play('archway'); sfx.play(s.outcome === 'wiped' ? 'defeat' : s.outcome === 'complete' ? 'victory' : 'claim');
     const open = () => this.summary.show(s, () => { this.music.play('ruins'); this.views.lobby.querySelector<HTMLElement>('#lobby-depart')?.focus({ preventScroll: true }); });
-    if (s.firstClear) this.story.play(firstClearStory, 'ดูสรุปการเดินทาง', open); else open();
+    if (s.firstClear && this.maps.find(m => m.id === s.mapId)?.clearStory === 'warden') this.story.play(firstClearStory, 'ดูสรุปการเดินทาง', open); else open();
   }
   private resume(): void {
     this.locked = false;
@@ -283,6 +301,7 @@ export class GameShell {
     this.renderWorld();
   }
   private renderWorld(): void {
+    this.world.setMap(this.map, this.eliteArtOf(this.map));
     this.show('world');
     this.world.render({ state: this.state!, message: this.message, locked: this.locked, saved: this.saved && !!this.storage, banner: this.banner, effect: this.effect });
     this.effect = undefined;
@@ -293,7 +312,7 @@ export class GameShell {
     if (result.event.type === 'blocked') {
       this.message = result.event.reason === 'wall' ? 'ทางนี้ไปต่อไม่ได้' : result.event.reason === 'party' ? 'ทีมที่ลงสนามล้มหมด · สลับตัวสำรองในกระเป๋า หรือชุบที่แคมป์ก่อนออกเดินทาง'
         : result.event.reason === 'stone' ? 'หินขยับไปทางนั้นไม่ได้' : result.event.reason === 'pit' ? 'หลุมลึกขวางทาง · ต้องหาอะไรมาถม'
-        : result.event.reason === 'sealed' ? `ผู้คุมรอยแยกยังถูกผนึก · ทำเป้าหมายให้ครบ ${this.map.quest.need} จาก ${this.map.quest.objectives.length} ก่อน (ตอนนี้ ${questDone(this.state, this.map).length}/${this.map.quest.need}) ดูได้ที่ช่องเป้าหมาย` : this.message;
+        : result.event.reason === 'sealed' ? `${this.map.bossName}ยังถูกผนึก · ทำเป้าหมายให้ครบ ${this.map.quest.need} จาก ${this.map.quest.objectives.length} ก่อน (ตอนนี้ ${questDone(this.state, this.map).length}/${this.map.quest.need}) ดูได้ที่ช่องเป้าหมาย` : this.message;
       sfx.play('bump'); this.renderWorld(); return;
     }
     this.state = result.state; this.worldSound(result.event);
@@ -411,7 +430,7 @@ export class GameShell {
   private describe(event: WorldEvent): string {
     switch (event.type) {
       case 'moved': return event.chance ? `ก้าวต่อไป · ไม่พบศัตรู (โอกาส ${event.chance}%)` : 'พื้นที่ปลอดภัย';
-      case 'encounter': return event.kind === 'boss' ? 'ผู้คุมรอยแยกขวางประตูไว้!' : event.kind === 'elite' ? (this.eliteMini() ? 'มินิบอสยักษ์หินลุกขึ้นขวาง · ชนะแล้วนับเป็นเป้าหมายผนึกรอยแยก' : this.eliteForced() ? 'อีลิทเฝ้าด่านขวางทางไว้ · ต้องชนะถึงจะผ่าน' : `ท้าสู้อีลิท · ชนะได้ EXP ×${this.map.eventRules.optionalElite.exp} เหรียญทอง +${this.map.eventRules.optionalElite.gold} ตราสัญญา +${this.map.eventRules.optionalElite.seal} และอุปกรณ์ชั้นดี`) : 'พบศัตรู!';
+      case 'encounter': return event.kind === 'boss' ? `${this.map.bossName}ขวาง${this.map.goalName}ไว้!` : event.kind === 'elite' ? (this.eliteMini() ? 'มินิบอสยักษ์หินลุกขึ้นขวาง · ชนะแล้วนับเป็นเป้าหมายผนึกรอยแยก' : this.eliteForced() ? 'อีลิทเฝ้าด่านขวางทางไว้ · ต้องชนะถึงจะผ่าน' : `ท้าสู้อีลิท · ชนะได้ EXP ×${this.map.eventRules.optionalElite.exp} เหรียญทอง +${this.map.eventRules.optionalElite.gold} ตราสัญญา +${this.map.eventRules.optionalElite.seal} และอุปกรณ์ชั้นดี`) : 'พบศัตรู!';
       case 'event': return eventText[this.map.events.find(e => e.id === event.eventId)!.kind].name;
       // 3C puzzles and secrets.
       case 'rune': return event.solved ? 'หินรูนเรืองแสงครบ · ประตูหินเปิดออกแล้ว' : event.reset ? 'หินรูนดับลง · ลำดับผิด ดูสัญลักษณ์บนประตูหิน' : `หินรูนเรืองแสง ${event.step}/3`;
@@ -419,7 +438,7 @@ export class GameShell {
       case 'pushed': return event.filled ? 'ผลักหินลงหลุมแล้ว · ทางข้างหน้าเปิด' : 'ผลักหินไปหนึ่งช่อง';
       case 'secret': return 'กำแพงร้าวนี้เดินทะลุได้ · พบทางลับ!';
       case 'herb': return `เก็บสมุนไพรเรืองแสงแล้ว (${this.game?.run?.herbs.length ?? 0}/${this.map.herbs.length}) · กลับถึงแคมป์แล้วไปส่งเฟิร์นนะ`;
-      case 'goal': return 'ถึงประตูรอยแยกแล้ว';
+      case 'goal': return `ถึง${this.map.goalName}แล้ว`;
       default: return this.message;
     }
   }
@@ -430,7 +449,7 @@ export class GameShell {
     this.battle.open({
       kind: b.kind, data, entry: { hp: b.entry }, commands: b.commands,
       commit: (state: BattleState) => this.commitBattle(state),
-      leaveLabel: (outcome: Outcome) => outcome === 'victory' ? (b.kind === 'boss' ? 'ไปยังประตูรอยแยก →' : 'กลับสู่แผนที่ →') : b.kind === 'tutorial' ? 'ลองศึกแรกอีกครั้ง ↻' : !this.state ? 'ทีมล้มหมด · กลับค่าย →' : this.state.camp ? 'กลับแคมป์ →' : 'กลับทางเข้าด่าน →',
+      leaveLabel: (outcome: Outcome) => outcome === 'victory' ? (b.kind === 'boss' ? `ไปยัง${this.map.goalName} →` : 'กลับสู่แผนที่ →') : b.kind === 'tutorial' ? 'ลองศึกแรกอีกครั้ง ↻' : !this.state ? 'ทีมล้มหมด · กลับค่าย →' : this.state.camp ? 'กลับแคมป์ →' : 'กลับทางเข้าด่าน →',
       leave: () => this.leaveBattle(),
     });
   }
@@ -445,7 +464,7 @@ export class GameShell {
         if (kind === 'tutorial') this.prologueWon = true;
         const loot = lootThai(result.event.loot) + (result.event.item ? ` · ได้${(result.event.items ?? [result.event.item]).map(i => `${itemName(i)} Lv${i.level}`).join(', ')}` : ''); this.effect = 'loot'; const exp = expThai(result.event.exp, next);
         const dust = result.event.dust ? ` · ฝุ่นดาว +${result.event.dust}` : '';
-        this.message = kind === 'boss' ? `ผู้คุมรอยแยกล้มแล้ว · ${loot}${exp} · ทางไปประตูเปิดออก` : kind === 'elite' ? this.map.elites.find(e => e.id === next.elitesDefeated.at(-1))?.mini ? `มินิบอสล้มแล้ว · ${loot}${exp}` : (this.map.elites.find(e => e.id === next.elitesDefeated.at(-1))?.forced ? `อีลิทล้มแล้ว · ${loot}${exp} · ด่านเปิดออก` : `ท้าสู้สำเร็จ · รางวัลพิเศษ · ${loot}${exp}`) : kind === 'event' ? `ชนะศึก · ${loot}${dust}${exp}` : `ชนะศึก · ${loot}${exp}${fallen ? ` · ${fallen} คนล้มอยู่ ชุบที่แคมป์` : ''}`;
+        this.message = kind === 'boss' ? `${this.map.bossName}ล้มแล้ว · ${loot}${exp} · ทางไปประตูเปิดออก` : kind === 'elite' ? this.map.elites.find(e => e.id === next.elitesDefeated.at(-1))?.mini ? `มินิบอสล้มแล้ว · ${loot}${exp}` : (this.map.elites.find(e => e.id === next.elitesDefeated.at(-1))?.forced ? `อีลิทล้มแล้ว · ${loot}${exp} · ด่านเปิดออก` : `ท้าสู้สำเร็จ · รางวัลพิเศษ · ${loot}${exp}`) : kind === 'event' ? `ชนะศึก · ${loot}${dust}${exp}` : `ชนะศึก · ${loot}${exp}${fallen ? ` · ${fallen} คนล้มอยู่ ชุบที่แคมป์` : ''}`;
         this.message += this.sealNote(this.state, next);
       } else if (result.event.type === 'defeat') {
         if (result.event.wiped) {

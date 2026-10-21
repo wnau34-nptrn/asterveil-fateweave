@@ -46,8 +46,8 @@ const goals = (s: ExpeditionState, map: MapDefinition) => {
   const seal = questDone(s, map).length; const need = map.quest.need;
   return [
     { done: s.tutorialDone, label: 'ขับไล่กองหน้าของวาร์กอธ' }, { done: !!s.camp, label: 'ไปถึงแคมป์' },
-    { done: seal >= need || s.bossDefeated, label: `ทำลายผนึกรอยแยก ${Math.min(seal, need)}/${need}` },
-    { done: s.bossDefeated, label: 'ชนะผู้คุมรอยแยก' }, { done: s.completed, label: 'ไปถึงประตูรอยแยก' },
+    ...(need ? [{ done: seal >= need || s.bossDefeated, label: `ทำลายผนึกรอยแยก ${Math.min(seal, need)}/${need}` }] : []),
+    { done: s.bossDefeated, label: `ชนะ${map.bossName}` }, { done: s.completed, label: `ไปถึง${map.goalName}` },
   ];
 };
 
@@ -68,11 +68,11 @@ export class WorldUI {
   private picked: string | undefined;
   private confirmWithdraw = false;
   private tile = 48;
-  private readonly width: number;
+  private width: number;
   private readonly reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
   // `eliteArt` maps each elite id to the actor art of its leading foe (the token drawn on its gate).
-  constructor(private readonly root: HTMLElement, private readonly map: MapDefinition, private readonly heroes: readonly HeroDefinition[], private readonly host: WorldHost,
-    private readonly eliteArt: Readonly<Record<string, string>> = {}, skillData?: EncounterDefinition) {
+  constructor(private readonly root: HTMLElement, private map: MapDefinition, private readonly heroes: readonly HeroDefinition[], private readonly host: WorldHost,
+    private eliteArt: Readonly<Record<string, string>> = {}, skillData?: EncounterDefinition) {
     this.width = map.rows[0]!.length;
     root.innerHTML = `
       <section class="map-view" id="map-viewport" aria-label="แผนที่ ใช้ปุ่มลูกศรหรือแตะช่องที่ไฮไลต์เพื่อเดินทีละช่อง">
@@ -87,7 +87,7 @@ export class WorldUI {
         <div class="world-fx" id="world-fx" aria-hidden="true"></div>
       </section>
       <div class="world-hud">
-        <div class="hud-location glass-capsule"><span class="location-mark">${icon('map')}</span><div><p class="eyebrow">${map.name}</p><h1 id="zone-name"></h1></div></div>
+        <div class="hud-location glass-capsule"><span class="location-mark">${icon('map')}</span><div><p class="eyebrow" id="map-name">${map.name}</p><h1 id="zone-name"></h1></div></div>
         <div class="hud-top-right">
           <div id="danger-chip" class="hud-danger glass-capsule" role="status" aria-live="polite"></div>
           <button id="world-info-button" data-world="info" class="hud-info round-glass" aria-haspopup="dialog" aria-controls="world-info" aria-label="ข้อมูลการเดินทางและวิธีเล่น">${icon('info')}</button>
@@ -234,6 +234,18 @@ export class WorldUI {
   }
   private input(dir: Direction): void { if (this.view && !this.view.locked && !this.view.state.completed && !this.root.hidden && !this.root.querySelector('dialog[open]')) this.host.move(dir); }
 
+  // Chapters: the shell shows the run's map. A new board redraws the floor, props and gates; fog and hints follow on render.
+  setMap(map: MapDefinition, eliteArt: Readonly<Record<string, string>> = {}): void {
+    if (map.id === this.map.id) return;
+    this.map = map; this.eliteArt = eliteArt; this.width = map.rows[0]!.length; this.previous = undefined;
+    const grid = this.root.querySelector<HTMLElement>('#map-grid')!;
+    grid.style.setProperty('--cols', String(this.width)); grid.style.setProperty('--rows', String(map.rows.length));
+    grid.querySelector('.floor-layer')!.innerHTML = this.floorCells();
+    const token = this.root.querySelector('#party-token')!;
+    const sprites = this.root.querySelector('#sprite-layer')!; sprites.innerHTML = this.staticSprites(); sprites.append(token);
+    this.root.querySelector('#fog-layer')!.innerHTML = ''; this.root.querySelector('#hint-layer')!.innerHTML = '';
+    this.root.querySelector('#map-name')!.textContent = map.name;
+  }
   private floorCells(): string {
     let html = '';
     for (let y = 0; y < this.map.rows.length; y++) for (let x = 0; x < this.width; x++) {
@@ -596,7 +608,7 @@ export class WorldUI {
   private renderGoals(): void {
     const s = this.view?.state; if (!s) return;
     const sealed = questDone(s, this.map);
-    const seal = `<h3 class="seal-title">${icon('boss')} ผนึกรอยแยก · ทำให้ครบ ${this.map.quest.need} จาก ${this.map.quest.objectives.length} ก่อนท้าผู้คุม</h3><ul class="goal-list seal-list">${this.map.quest.objectives.map(o => `<li id="quest-${o.id}" class="${sealed.includes(o.id) ? 'done' : ''}">${icon(sealed.includes(o.id) ? 'check' : 'circle')}<span>${questLine(o, s)}</span></li>`).join('')}</ul>`;
+    const seal = !this.map.quest.need ? '' : `<h3 class="seal-title">${icon('boss')} ผนึกรอยแยก · ทำให้ครบ ${this.map.quest.need} จาก ${this.map.quest.objectives.length} ก่อนท้าผู้คุม</h3><ul class="goal-list seal-list">${this.map.quest.objectives.map(o => `<li id="quest-${o.id}" class="${sealed.includes(o.id) ? 'done' : ''}">${icon(sealed.includes(o.id) ? 'check' : 'circle')}<span>${questLine(o, s)}</span></li>`).join('')}</ul>`;
     this.root.querySelector('#world-goals-content')!.innerHTML = `<ul class="goal-list">${goals(s, this.map).map(g => `<li class="${g.done ? 'done' : ''}">${icon(g.done ? 'check' : 'circle')}<span>${g.label}</span></li>`).join('')}</ul>${seal}<p class="world-stats">เดินแล้ว ${s.steps} ก้าว · ชนะ ${s.wins} ศึก · แพ้ ${s.defeats} ครั้ง</p>`;
   }
 
@@ -610,11 +622,11 @@ export class WorldUI {
       <h3>${icon('chest')} ของตกและกล่องสมบัติ</h3><p>ชนะศึกได้แร่ดาวและบางครั้งได้ถ่านคืนชีพ ยืนบนกล่องแล้วกด “เปิด” กล่องหายากมีตราสัญญา ดูของที่มีได้จากช่องสัมภาระ</p>
       <h3>${icon('flag')} ทีมและตัวสำรอง</h3><p>พาเข้าด่านได้ 4 + 4 คนจากค่าย สลับตัวและเปลี่ยนอุปกรณ์ได้ในกระเป๋าทุกที่นอกการต่อสู้ ศัตรูเล็งตามหมายเลขช่อง ใครยืนช่องนั้นคือเป้า (กายภาพยังโดนแนวหน้าก่อน)</p>
       <h3>เมื่อแพ้</h3><p>ทีมถอยกลับแคมป์ล่าสุดที่ไปถึง (หรือทางเข้า) คนที่ล้มยังล้มอยู่ ต้องชุบหรือสลับตัวสำรอง ถ้าทุกคนที่พามาล้มหมด การเดินทางล้มเหลว กลับค่ายพร้อมแร่ดาวและตราครึ่งเดียว</p>
-      <h3>${icon('camp')} กลับค่าย</h3><p>ถอนตัวได้ที่แคมป์หรือทางเข้าด่าน ของที่เก็บได้กลับค่ายครบ ไปถึงประตูรอยแยกคือสำเร็จการเดินทาง</p>
-      <h3>${icon('boss')} อีลิท</h3><p>อีลิทขอบแดงเฝ้าด่านทางเดียว ต้องชนะถึงจะผ่าน · อีลิทขอบทองที่มีหีบเหนือหัวเดินอ้อมได้ แต่ถ้าท้าสู้แล้วชนะจะได้ EXP ×${this.map.eventRules.optionalElite.exp} อุปกรณ์ชั้นดีกว่า เหรียญทอง +${this.map.eventRules.optionalElite.gold} และตราสัญญา +${this.map.eventRules.optionalElite.seal}</p>
-      <h3>${icon('boss')} ผนึกรอยแยก</h3><p>ผู้คุมรอยแยกถูกผนึกไว้ ต้องทำเป้าหมายให้ครบ ${this.map.quest.need} จาก ${this.map.quest.objectives.length} ก่อนจึงท้าสู้ได้: ชนะมินิบอสยักษ์หินในรอยแผล, เปิดกล่องสมบัติ 6 กล่อง หรือชำระรอยแยกเล็ก ดูความคืบหน้าได้จากช่องเป้าหมายมุมซ้ายบน</p>
-      <h3>${icon('star')} ปริศนาและทางลับ</h3><p>แต่ละโซนมีปริศนาเฝ้ากล่องหายาก: ทุ่งมีหินรูน 3 ก้อน เหยียบตามลำดับสัญลักษณ์บนประตูหิน · พงหนามมีก้อนหิน เดินชนเพื่อผลักลงหลุม · รอยแผลมีคันโยก 2 อันคนละฝั่ง ดึงให้ครบ · กำแพงที่มีรอยร้าวเรืองแสงจาง ๆ บางช่องเดินทะลุได้</p>
-      <h3>${icon('boss')} ผู้คุมรอยแยก</h3><p>บอสเฝ้าทางเดียวไปประตูรอยแยก เดินชนบอสเพื่อเริ่มศึก ชนะแล้วเดินไปที่ประตูเพื่อจบการเดินทาง</p></section>
+      <h3>${icon('camp')} กลับค่าย</h3><p>ถอนตัวได้ที่แคมป์หรือทางเข้าด่าน ของที่เก็บได้กลับค่ายครบ ไปถึง${this.map.goalName}คือสำเร็จการเดินทาง</p>
+      ${this.map.elites.length ? `<h3>${icon('boss')} อีลิท</h3><p>อีลิทขอบแดงเฝ้าด่านทางเดียว ต้องชนะถึงจะผ่าน · อีลิทขอบทองที่มีหีบเหนือหัวเดินอ้อมได้ แต่ถ้าท้าสู้แล้วชนะจะได้ EXP ×${this.map.eventRules.optionalElite.exp} อุปกรณ์ชั้นดีกว่า เหรียญทอง +${this.map.eventRules.optionalElite.gold} และตราสัญญา +${this.map.eventRules.optionalElite.seal}</p>` : ''}
+      ${this.map.quest.need ? `<h3>${icon('boss')} ผนึกรอยแยก</h3><p>ผู้คุมรอยแยกถูกผนึกไว้ ต้องทำเป้าหมายให้ครบ ${this.map.quest.need} จาก ${this.map.quest.objectives.length} ก่อนจึงท้าสู้ได้: ชนะมินิบอสยักษ์หินในรอยแผล, เปิดกล่องสมบัติ 6 กล่อง หรือชำระรอยแยกเล็ก ดูความคืบหน้าได้จากช่องเป้าหมายมุมซ้ายบน</p>` : ''}
+      ${this.map.puzzles.runes.length + this.map.puzzles.secrets.length ? `<h3>${icon('star')} ปริศนาและทางลับ</h3><p>แต่ละโซนมีปริศนาเฝ้ากล่องหายาก: ทุ่งมีหินรูน 3 ก้อน เหยียบตามลำดับสัญลักษณ์บนประตูหิน · พงหนามมีก้อนหิน เดินชนเพื่อผลักลงหลุม · รอยแผลมีคันโยก 2 อันคนละฝั่ง ดึงให้ครบ · กำแพงที่มีรอยร้าวเรืองแสงจาง ๆ บางช่องเดินทะลุได้</p>` : ''}
+      <h3>${icon('boss')} ${this.map.bossName}</h3><p>บอสเฝ้าทางเดียวไป${this.map.goalName} เดินชนบอสเพื่อเริ่มศึก ชนะแล้วเดินไปที่ประตูเพื่อจบการเดินทาง</p></section>
       ${s ? `<p class="world-stats">เดินแล้ว ${s.steps} ก้าว · ชนะ ${s.wins} ศึก · แพ้ ${s.defeats} ครั้ง</p>` : ''}
       <p id="world-save" class="world-save">${this.view?.saved ? 'บันทึกอัตโนมัติบนเครื่องนี้ทุกก้าว' : 'เล่นได้ แต่บันทึกบนเครื่องนี้ไม่ได้'}</p>`;
   }

@@ -14,7 +14,7 @@ export function newProfile(map: MapDefinition, seed: number): Profile {
     bossLoot:{}, hunt:{pity:{}}, seed: seed >>> 0, returns: 0, tutorialDone: false, commander: null,
     company: [...map.startingRoster], members: Object.fromEntries(map.startingRoster.map(id => [id, { stars: 1, dupes: 0 }])),
     party: { deployed: [...map.startingRoster], reserve: [] },
-    forgeLevel: map.equipment.forge.itemLevel.baseCap, bank: { ore: 0, gold: 0, seal: 0, dust: 0 }, items: [], overflow:[],storageTier:0, nextItem: 1, forge: 0, potions: { salve: 0, tonic: 0, repel: 0 }, quests: {}, shop: {}, refreshes: 0, smelted: 0, taken: [], expeditions: 0, completes: 0, last: null,
+    forgeLevel: map.equipment.forge.itemLevel.baseCap, bank: { ore: 0, gold: 0, seal: 0, dust: 0 }, items: [], overflow:[],storageTier:0, nextItem: 1, forge: 0, potions: { salve: 0, tonic: 0, repel: 0 }, quests: {}, shop: {}, refreshes: 0, smelted: 0, taken: [], expeditions: 0, completes: 0, cleared: [], last: null,
   };
 }
 const blocked = (profile: Profile, reason: string): ProfileResult => ({ profile, event: { type: 'blocked', reason } });
@@ -209,7 +209,7 @@ export function depart(initial: Profile, map: MapDefinition, lookup: EncounterLo
   const potions = Object.fromEntries(POTION_IDS.map(id => [id, Math.min(map.potions.carry, profile.potions[id])])) as Potions;
   for (const id of POTION_IDS) profile.potions[id] -= potions[id];
   const run = newExpedition(map, lookup, seed, { roster: structuredClone(profile.party), members: Object.fromEntries(ids.map(id => [id, { ...profile.members[id]! }])), potions }, profile.tutorialDone);
-  run.hunt=startHunt(profile);run.bossLoot=startBossPlan(profile,map);
+  run.hunt=startHunt(profile);if(map.bossCharm)run.bossLoot=startBossPlan(profile,map);
   return { profile, run };
 }
 // ---- Potions (2D-5): brewed in the lobby for ore and veil dust; stock at home has no cap. ----
@@ -266,6 +266,7 @@ export function settle(initial: Profile, run: ExpeditionState, outcome: RunOutco
   const levels=map.equipment.forge.itemLevel;
   profile.forgeLevel=Math.max(profile.forgeLevel??levels.baseCap,...levels.unlocks.filter(u=>run.elitesDefeated.includes(u.elite)||(run.respawns[u.elite]??0)>0||outcome==='complete').map(u=>u.cap));
   profile.tutorialDone ||= run.tutorialDone; profile.expeditions++; if (outcome === 'complete') profile.completes++;
+  if (outcome === 'complete' && !profile.cleared.includes(run.mapId)) profile.cleared.push(run.mapId);
   profile.returns++; profile.taken = []; profile.shop = {}; profile.refreshes = 0; profile.smelted = 0;
   profile.last = { outcome, ore, gold, seal, steps: run.steps, wins: run.wins, items, salvaged };
   return profile;
@@ -279,6 +280,11 @@ export function homeItems(run: ExpeditionState, outcome: RunOutcome, map: MapDef
   const finds = runFinds(run); if (outcome !== 'wiped') return finds;
   return finds.map((item, i) => ({ item, i })).sort((a, b) => b.item.rarity - a.item.rarity || b.item.level - a.item.level || a.i - b.i)
     .slice(0, map.equipment.wipeKeep).sort((a, b) => a.i - b.i).map(x => x.item);
+}
+// Chapters (2026-10-17): the first map is always open; each later map opens once the one before it is cleared.
+export function mapUnlocked(profile: Profile, maps: readonly MapDefinition[], id: string): boolean {
+  const i = maps.findIndex(m => m.id === id);
+  return i === 0 || (i > 0 && profile.cleared.includes(maps[i - 1]!.id));
 }
 // Withdrawal is allowed at a camp or the map entrance, outside battle.
 export { atMuster as canWithdraw } from './world';

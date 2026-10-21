@@ -28,6 +28,14 @@ export type ChestTier = 'common' | 'rare';
 export interface ChestDefinition { id: string; x: number; y: number; tier: ChestTier }
 export interface MapDefinition {
   id: string; version: number; name: string;
+  // Chapters (2026-10-17): the map's place in the campaign and a one-line pitch for the Lobby's map choice;
+  // `clearStory` plays a closing story the first time the map is completed.
+  chapter: number; summary: string; clearStory?: 'warden';
+  // `firstFind`: the tutorial (prologue) win leaves this plain piece in the bag (map 1 teaches wearing gear).
+  // `bossCharm`: the boss pays the targeted boss charm (boss-equipment.ts); teaching maps leave it out.
+  firstFind?: { slot: GearSlot; rarity: number }; bossCharm?: boolean;
+  // Names shown on the map, in messages and in the summary: the boss and the goal it guards.
+  bossName: string; goalName: string;
   rows: readonly string[];
   // Floor characters map to zones; S/C/B/G take the zone of `specialZone` entries.
   floorZones: Readonly<Record<string, string>>;
@@ -275,6 +283,8 @@ export interface Profile {
   taken: number[];
   forgeLevel?: number;
   expeditions: number; completes: number;
+  // Chapters (2026-10-17): ids of the maps this company has completed at least once (each opens the next map).
+  cleared: string[];
   // `items` kept in the bag and `salvaged` because the bag was full (2D-2).
   last: { outcome: RunOutcome; ore: number; gold: number; seal: number; steps: number; wins: number; items: number; salvaged: number } | null;
 }
