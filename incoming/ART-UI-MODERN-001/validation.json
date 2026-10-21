@@ -1,0 +1,122 @@
+[
+  {
+    "id": "01_character_equipment",
+    "css": [
+      390,
+      844
+    ],
+    "buttons": 14,
+    "smallTargets": [],
+    "overflow": false
+  },
+  {
+    "id": "02_item_detail_compare",
+    "css": [
+      390,
+      844
+    ],
+    "buttons": 11,
+    "smallTargets": [],
+    "overflow": false
+  },
+  {
+    "id": "03_character_overview",
+    "css": [
+      390,
+      844
+    ],
+    "buttons": 7,
+    "smallTargets": [],
+    "overflow": false
+  },
+  {
+    "id": "04_skill_tree",
+    "css": [
+      390,
+      844
+    ],
+    "buttons": 10,
+    "smallTargets": [],
+    "overflow": false
+  },
+  {
+    "id": "05_forge",
+    "css": [
+      390,
+      844
+    ],
+    "buttons": 10,
+    "smallTargets": [],
+    "overflow": false
+  },
+  {
+    "id": "06_lobby_hub",
+    "css": [
+      390,
+      844
+    ],
+    "buttons": 11,
+    "smallTargets": [],
+    "overflow": false
+  },
+  {
+    "id": "07_map_hud",
+    "css": [
+      390,
+      844
+    ],
+    "buttons": 7,
+    "smallTargets": [],
+    "overflow": false
+  },
+  {
+    "id": "08_battle_hud",
+    "css": [
+      390,
+      844
+    ],
+    "buttons": 3,
+    "smallTargets": [],
+    "overflow": false
+  },
+  {
+    "id": "09_rewards_summary",
+    "css": [
+      390,
+      844
+    ],
+    "buttons": 3,
+    "smallTargets": [],
+    "overflow": false
+  },
+  {
+    "id": "10_hire_board",
+    "css": [
+      390,
+      844
+    ],
+    "buttons": 8,
+    "smallTargets": [],
+    "overflow": false
+  },
+  {
+    "id": "01_character_equipment_pc",
+    "css": [
+      1366,
+      768
+    ],
+    "buttons": 14,
+    "smallTargets": [],
+    "overflow": false
+  },
+  {
+    "id": "components_sheet",
+    "css": [
+      1366,
+      1000
+    ],
+    "buttons": 31,
+    "smallTargets": [],
+    "overflow": false
+  }
+]
