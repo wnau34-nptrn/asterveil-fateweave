@@ -209,7 +209,7 @@ export function depart(initial: Profile, map: MapDefinition, lookup: EncounterLo
   const potions = Object.fromEntries(POTION_IDS.map(id => [id, Math.min(map.potions.carry, profile.potions[id])])) as Potions;
   for (const id of POTION_IDS) profile.potions[id] -= potions[id];
   const run = newExpedition(map, lookup, seed, { roster: structuredClone(profile.party), members: Object.fromEntries(ids.map(id => [id, { ...profile.members[id]! }])), potions }, profile.tutorialDone);
-  run.hunt=startHunt(profile);run.bossLoot=startBossPlan(profile,map);
+  run.hunt=startHunt(profile);if(map.bossCharm)run.bossLoot=startBossPlan(profile,map);
   return { profile, run };
 }
 // ---- Potions (2D-5): brewed in the lobby for ore and veil dust; stock at home has no cap. ----

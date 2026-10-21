@@ -172,5 +172,24 @@ export const miniVeilGolem: EncounterDefinition = {
   ],
 };
 
-export const encounters: readonly EncounterDefinition[] = [firstClash, scoutPatrol, riftWhelp, thicketAmbush, shadowStalker, veilSiege, rearAmbush, crystalStampede, riftWarden, eliteTuskChief, eliteBriarLord, miniVeilGolem];
+// Map 1 boss (chapters, draft): the captain of Vargoth's vanguard holds the fort gate. One signature hit per cycle
+// teaches Guard (physical) and Ward (energy) before the frontier.
+export const vanguardCaptain: EncounterDefinition = {
+  ...veilSiege, id: 'vanguard-captain', version: 1, level: 3, name: 'หัวหน้ากองหน้าของวาร์กอธ',
+  enemies: [
+    { id: 'raider', speed: 110, name: 'Vargoth Hunter', displayName: 'นักล่าเผ่าอสูร', maxHp: 60, color: 0xee80bd },
+    { id: 'brute', speed: 70, name: 'Vanguard Captain', displayName: 'หัวหน้ากองหน้า', maxHp: 170, color: 0x9785f2 },
+  ],
+  intents: [
+    { sourceId: 'raider', targetSlot: 2, name: 'Raking Slash', damage: 11, kind: 'physical' },
+    { sourceId: 'brute', targetSlot: 1, name: 'Crushing Blow', damage: 16, kind: 'physical' },
+    { sourceId: 'raider', targetSlot: 3, name: 'Shadow Knife', damage: 12, kind: 'energy' },
+    // Signature: the captain's war cry, an energy blast on the front line (Ward answers it, Bash cannot).
+    { sourceId: 'brute', targetSlot: 0, name: 'War Cry', damage: 22, kind: 'energy' },
+    { sourceId: 'raider', targetSlot: 1, name: 'Raking Slash', damage: 11, kind: 'physical' },
+    { sourceId: 'brute', targetSlot: 2, name: 'Crushing Blow', damage: 16, kind: 'physical' },
+  ],
+};
+
+export const encounters: readonly EncounterDefinition[] = [firstClash, scoutPatrol, riftWhelp, thicketAmbush, shadowStalker, veilSiege, rearAmbush, crystalStampede, riftWarden, eliteTuskChief, eliteBriarLord, miniVeilGolem, vanguardCaptain];
 export const encounterById = (id: string): EncounterDefinition | undefined => encounters.find(e => e.id === id);

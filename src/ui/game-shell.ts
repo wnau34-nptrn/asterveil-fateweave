@@ -312,7 +312,7 @@ export class GameShell {
     if (result.event.type === 'blocked') {
       this.message = result.event.reason === 'wall' ? 'ทางนี้ไปต่อไม่ได้' : result.event.reason === 'party' ? 'ทีมที่ลงสนามล้มหมด · สลับตัวสำรองในกระเป๋า หรือชุบที่แคมป์ก่อนออกเดินทาง'
         : result.event.reason === 'stone' ? 'หินขยับไปทางนั้นไม่ได้' : result.event.reason === 'pit' ? 'หลุมลึกขวางทาง · ต้องหาอะไรมาถม'
-        : result.event.reason === 'sealed' ? `ผู้คุมรอยแยกยังถูกผนึก · ทำเป้าหมายให้ครบ ${this.map.quest.need} จาก ${this.map.quest.objectives.length} ก่อน (ตอนนี้ ${questDone(this.state, this.map).length}/${this.map.quest.need}) ดูได้ที่ช่องเป้าหมาย` : this.message;
+        : result.event.reason === 'sealed' ? `${this.map.bossName}ยังถูกผนึก · ทำเป้าหมายให้ครบ ${this.map.quest.need} จาก ${this.map.quest.objectives.length} ก่อน (ตอนนี้ ${questDone(this.state, this.map).length}/${this.map.quest.need}) ดูได้ที่ช่องเป้าหมาย` : this.message;
       sfx.play('bump'); this.renderWorld(); return;
     }
     this.state = result.state; this.worldSound(result.event);
@@ -430,7 +430,7 @@ export class GameShell {
   private describe(event: WorldEvent): string {
     switch (event.type) {
       case 'moved': return event.chance ? `ก้าวต่อไป · ไม่พบศัตรู (โอกาส ${event.chance}%)` : 'พื้นที่ปลอดภัย';
-      case 'encounter': return event.kind === 'boss' ? 'ผู้คุมรอยแยกขวางประตูไว้!' : event.kind === 'elite' ? (this.eliteMini() ? 'มินิบอสยักษ์หินลุกขึ้นขวาง · ชนะแล้วนับเป็นเป้าหมายผนึกรอยแยก' : this.eliteForced() ? 'อีลิทเฝ้าด่านขวางทางไว้ · ต้องชนะถึงจะผ่าน' : `ท้าสู้อีลิท · ชนะได้ EXP ×${this.map.eventRules.optionalElite.exp} เหรียญทอง +${this.map.eventRules.optionalElite.gold} ตราสัญญา +${this.map.eventRules.optionalElite.seal} และอุปกรณ์ชั้นดี`) : 'พบศัตรู!';
+      case 'encounter': return event.kind === 'boss' ? `${this.map.bossName}ขวาง${this.map.goalName}ไว้!` : event.kind === 'elite' ? (this.eliteMini() ? 'มินิบอสยักษ์หินลุกขึ้นขวาง · ชนะแล้วนับเป็นเป้าหมายผนึกรอยแยก' : this.eliteForced() ? 'อีลิทเฝ้าด่านขวางทางไว้ · ต้องชนะถึงจะผ่าน' : `ท้าสู้อีลิท · ชนะได้ EXP ×${this.map.eventRules.optionalElite.exp} เหรียญทอง +${this.map.eventRules.optionalElite.gold} ตราสัญญา +${this.map.eventRules.optionalElite.seal} และอุปกรณ์ชั้นดี`) : 'พบศัตรู!';
       case 'event': return eventText[this.map.events.find(e => e.id === event.eventId)!.kind].name;
       // 3C puzzles and secrets.
       case 'rune': return event.solved ? 'หินรูนเรืองแสงครบ · ประตูหินเปิดออกแล้ว' : event.reset ? 'หินรูนดับลง · ลำดับผิด ดูสัญลักษณ์บนประตูหิน' : `หินรูนเรืองแสง ${event.step}/3`;
@@ -438,7 +438,7 @@ export class GameShell {
       case 'pushed': return event.filled ? 'ผลักหินลงหลุมแล้ว · ทางข้างหน้าเปิด' : 'ผลักหินไปหนึ่งช่อง';
       case 'secret': return 'กำแพงร้าวนี้เดินทะลุได้ · พบทางลับ!';
       case 'herb': return `เก็บสมุนไพรเรืองแสงแล้ว (${this.game?.run?.herbs.length ?? 0}/${this.map.herbs.length}) · กลับถึงแคมป์แล้วไปส่งเฟิร์นนะ`;
-      case 'goal': return 'ถึงประตูรอยแยกแล้ว';
+      case 'goal': return `ถึง${this.map.goalName}แล้ว`;
       default: return this.message;
     }
   }
@@ -449,7 +449,7 @@ export class GameShell {
     this.battle.open({
       kind: b.kind, data, entry: { hp: b.entry }, commands: b.commands,
       commit: (state: BattleState) => this.commitBattle(state),
-      leaveLabel: (outcome: Outcome) => outcome === 'victory' ? (b.kind === 'boss' ? 'ไปยังประตูรอยแยก →' : 'กลับสู่แผนที่ →') : b.kind === 'tutorial' ? 'ลองศึกแรกอีกครั้ง ↻' : !this.state ? 'ทีมล้มหมด · กลับค่าย →' : this.state.camp ? 'กลับแคมป์ →' : 'กลับทางเข้าด่าน →',
+      leaveLabel: (outcome: Outcome) => outcome === 'victory' ? (b.kind === 'boss' ? `ไปยัง${this.map.goalName} →` : 'กลับสู่แผนที่ →') : b.kind === 'tutorial' ? 'ลองศึกแรกอีกครั้ง ↻' : !this.state ? 'ทีมล้มหมด · กลับค่าย →' : this.state.camp ? 'กลับแคมป์ →' : 'กลับทางเข้าด่าน →',
       leave: () => this.leaveBattle(),
     });
   }
@@ -464,7 +464,7 @@ export class GameShell {
         if (kind === 'tutorial') this.prologueWon = true;
         const loot = lootThai(result.event.loot) + (result.event.item ? ` · ได้${(result.event.items ?? [result.event.item]).map(i => `${itemName(i)} Lv${i.level}`).join(', ')}` : ''); this.effect = 'loot'; const exp = expThai(result.event.exp, next);
         const dust = result.event.dust ? ` · ฝุ่นดาว +${result.event.dust}` : '';
-        this.message = kind === 'boss' ? `ผู้คุมรอยแยกล้มแล้ว · ${loot}${exp} · ทางไปประตูเปิดออก` : kind === 'elite' ? this.map.elites.find(e => e.id === next.elitesDefeated.at(-1))?.mini ? `มินิบอสล้มแล้ว · ${loot}${exp}` : (this.map.elites.find(e => e.id === next.elitesDefeated.at(-1))?.forced ? `อีลิทล้มแล้ว · ${loot}${exp} · ด่านเปิดออก` : `ท้าสู้สำเร็จ · รางวัลพิเศษ · ${loot}${exp}`) : kind === 'event' ? `ชนะศึก · ${loot}${dust}${exp}` : `ชนะศึก · ${loot}${exp}${fallen ? ` · ${fallen} คนล้มอยู่ ชุบที่แคมป์` : ''}`;
+        this.message = kind === 'boss' ? `${this.map.bossName}ล้มแล้ว · ${loot}${exp} · ทางไปประตูเปิดออก` : kind === 'elite' ? this.map.elites.find(e => e.id === next.elitesDefeated.at(-1))?.mini ? `มินิบอสล้มแล้ว · ${loot}${exp}` : (this.map.elites.find(e => e.id === next.elitesDefeated.at(-1))?.forced ? `อีลิทล้มแล้ว · ${loot}${exp} · ด่านเปิดออก` : `ท้าสู้สำเร็จ · รางวัลพิเศษ · ${loot}${exp}`) : kind === 'event' ? `ชนะศึก · ${loot}${dust}${exp}` : `ชนะศึก · ${loot}${exp}${fallen ? ` · ${fallen} คนล้มอยู่ ชุบที่แคมป์` : ''}`;
         this.message += this.sealNote(this.state, next);
       } else if (result.event.type === 'defeat') {
         if (result.event.wiped) {

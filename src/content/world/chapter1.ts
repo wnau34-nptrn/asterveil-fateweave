@@ -7,7 +7,7 @@ import { gameRules } from './rules';
 export const chapterOne: MapDefinition = {
   ...gameRules,
   id: 'veil-frontier', version: 6, name: 'แนวรอยแยก',
-  chapter: 3, summary: 'ชายแดนแอสเตอร์เวลที่รอยแยกเปิดกว้าง ทำลายผนึกแล้วโค่นผู้คุมรอยแยก', clearStory: 'warden',
+  chapter: 3, summary: 'ชายแดนแอสเตอร์เวลที่รอยแยกเปิดกว้าง ทำลายผนึกแล้วโค่นผู้คุมรอยแยก', clearStory: 'warden', bossCharm: true, bossName: 'ผู้คุมรอยแยก', goalName: 'ประตูรอยแยก',
   rows: [
     '#######################',
     '########:G:############',

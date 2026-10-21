@@ -41,7 +41,7 @@ export const firstClearStory: readonly StoryPanel[] = [
 ];
 
 const titles: Record<RunOutcome, { title: string; sub: string; scene: 'awaken' | 'rift' | 'retreat' }> = {
-  complete: { title: 'สำเร็จการเดินทาง', sub: 'ผู้คุมรอยแยกล้มแล้ว · ทุกอย่างที่หามาได้กลับค่ายครบ', scene: 'retreat' },
+  complete: { title: 'สำเร็จการเดินทาง', sub: 'บอสล้มแล้ว · ทุกอย่างที่หามาได้กลับค่ายครบ', scene: 'retreat' },
   withdrawn: { title: 'ถอนตัวกลับค่าย', sub: 'ทีมกลับมาอย่างปลอดภัย · ของที่หามาได้กลับค่ายครบ', scene: 'awaken' },
   wiped: { title: 'ทีมล้มทั้งหมด', sub: 'เก็บทรัพยากรได้ครึ่งเดียว · อุปกรณ์เก็บได้แค่ชิ้นที่ดีที่สุด · สมุนไพรหายไป · เลเวลยังอยู่', scene: 'rift' },
 };
