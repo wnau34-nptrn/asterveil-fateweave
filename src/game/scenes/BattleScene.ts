@@ -267,9 +267,12 @@ export class BattleScene extends Phaser.Scene {
     if (family === 'arcane' || family === 'mark') {
       const trail = this.add.graphics().lineStyle(this.quiet ? 1 : 3, color, .5).lineBetween(start.x, start.y, end.x, end.y);
       this.fade(trail, contactMs);
-      const bolt = this.add.ellipse(start.x, start.y, this.quiet ? 12 : 26, 7, color).setRotation(Math.atan2(end.y-start.y,end.x-start.x));
-      this.fade(bolt, contactMs);
-      this.tweens.add({ targets: bolt, x: end.x, y: end.y, duration: contactMs, ease: 'Quad.In' });
+      // Keep the traveling core bright until contact; fading during flight made
+      // the projectile disappear against the illustrated field before arrival.
+      const bolt = this.add.graphics().fillStyle(color).fillEllipse(0,0,this.quiet?12:26,7).fillStyle(0xffffff).fillCircle(4,0,2);
+      bolt.setPosition(start.x,start.y).setRotation(Math.atan2(end.y-start.y,end.x-start.x));
+      this.effects!.add(bolt);
+      this.tweens.add({ targets: bolt, x: end.x, y: end.y, duration: contactMs, ease: 'Quad.In', onComplete: () => bolt.destroy() });
     }
   }
   play(turn: TurnStage, remainingMs = 650): void {
