@@ -1,6 +1,6 @@
 # แผนงานเอฟเฟกต์การต่อสู้และคัตซีนบอส
 
-วันที่ 21 ตุลาคม 2026 · สถานะ: เฟส 0–1 เสร็จ; เฟส 2 พัฒนา C20–C25 แล้ว กำลังตรวจและเผยแพร่; เฟส 3–5 ยังไม่เริ่ม
+วันที่ 21 ตุลาคม 2026 · สถานะ: เฟส 0–2 เสร็จและเผยแพร่แล้ว; เฟส 2 ผ่าน public16/16; เฟส 3–5 ยังไม่เริ่ม
 
 ผลเฟส 0: [สเปกและ storyboard](combat-presentation/PHASE0_SPEC_TH.md), [ตารางครอบคลุม](combat-presentation/COVERAGE_TH.md), [asset brief](combat-presentation/ASSET_BRIEF_TH.md), [baseline 21/21 flows](combat-presentation/BASELINE_TH.md) ผลเฟส 1 C10–C16: [พฤติกรรมและหลักฐานตรวจ](validation/COMBAT_PRESENTATION_PHASE1.md) ไม่เปลี่ยนกฎต่อสู้/เซฟ/ดรอป; สถานะ deployment ดูผลตรวจนั้น
 

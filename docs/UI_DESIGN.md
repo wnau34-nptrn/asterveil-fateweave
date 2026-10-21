@@ -1,5 +1,10 @@
 # Modern battle HUD design spec
 
+## Combat presentation phase 2 — 2026-10-21
+
+Battle Information → Settings now includes normal/fast playback and standard/reduced effects. Keep the existing portrait modal, independent scrolling, 44px controls and focus after preference toggles. Explain that changes start with the next actor stage and do not change results; preferences live separately from progression. OS reduced-motion always takes precedence for movement, with immediate static captions/shapes. Keep HUD, DOM targets and Phaser hit zones stationary while disposable actor bodies move. Use distinct blue shields, mint healing and pink marks alongside numeric/text feedback; effects must not depend on color alone. Boss intro/defeat cinematics are a later phase.
+
+
 ## Combat presentation phase 1 — 2026-10-21
 
 Before the normal-motion contact cue, every HP/barrier/status panel and the status inspector shows the current actor's authoritative pre-turn snapshot. At contact the whole actor event group is revealed with its actual after/upkeep snapshot, existing impact VFX and stage sound; log entries wait for that cue. Do not reveal later actor damage from committed final state. Preserve the legacy actor queue frame separately so the actor being presented remains identifiable. Reduced motion reveals that same group immediately without moving VFX. Skip, hidden-tab and playback resize settle the already saved result and cancel old cues/sounds; ordinary resize while selecting retains selection. No extra battlefield button or persistent HUD row is added. Phase-2 bespoke effects and boss cutscenes remain future work. See `docs/validation/COMBAT_PRESENTATION_PHASE1.md`.
