@@ -1,5 +1,11 @@
 # Codex → Claude handoff
 
+## 2026-10-21 — Owner transfers development back to Claude
+
+- Owner explicitly requested saving the handoff on GitHub and a prompt for Claude to continue. Copy-ready brief: `docs/handoffs/CLAUDE-NEXT-PROMPT-TH.md`. Next authorized implementation scope is combat presentation phase3 C30–C35; phases0–2 are completed and published. This transfer changes documentation only and does not start phase3 or trigger a runtime redeployment.
+- Start from `feature/fateweave-initial-prototype`, inspect current HEAD/remote, read AGENTS/CLAUDE/UI_DESIGN, the phase plan/spec/asset brief and phase2 validation. Preserve commit-before-playback, resolver/save/loot semantics, portrait/input guards and standing authorization. Carry out implementation through required CI, merge, Pages and public verification, then leave a fresh handoff. Do not claim physical Safari/audio/FPS verification from emulation.
+- Preserve the existing uncommitted MMO/gacha documents and Online/MMO handoff section. Evidence paths and completed phase2 commit/check/deployment details are recorded below. No private art/code from the sibling project is authorized by this transfer.
+
 ## 2026-10-21 — Combat presentation phase 2 starter effects and preferences
 
 - Completed C20–C25 and publication in PR[#36](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/36). Source `affee50aaab22fccf939ea50db45ba1efe03ad22`, merged `5446357390536fce2344acce0d145b9bb195d53c`. Quality39602725870 passed507 unit tests; browser39602726123 passed206 full cases plus3 focused. Pages39604374002 repeated507 unit/206 browser checks and deployed at2026-10-21T13:20:14Z. Public game passed16/16: all13 presentation/preferences/lifecycle cases plus3 actual boss victory3 ordinary+1 boss reward and stable reload cases. No check bypasses/workflow changes.
