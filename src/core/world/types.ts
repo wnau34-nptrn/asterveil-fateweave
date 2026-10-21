@@ -259,7 +259,8 @@ export type RunOutcome = 'complete' | 'withdrawn' | 'wiped';
 // `gold` pays for hiring only.
 export interface Bank { ore: number; gold: number; seal: number; dust: number }
 // The player's commander (non-combat leader of the company), created once (L2).
-export interface Commander { name: string; crest: string; color: string }
+// `camp`: the name of the player's ค่ายทหารรับจ้าง (owner 2026-10-21), shown in the lobby, summary and arena.
+export interface Commander { name: string; crest: string; color: string; camp: string }
 export interface Profile {
   bossLoot?:Record<string,BossProgress>;
   hunt?:{target?:string;pity:Record<string,number>};

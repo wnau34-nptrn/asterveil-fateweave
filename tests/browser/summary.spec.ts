@@ -12,7 +12,7 @@ for (const [width, height, touch] of [[320,568,true], [390,844,true], [1366,768,
     const page = await context.newPage(), errors: string[] = [];
     page.on('pageerror', e => errors.push(e.message)); page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
     const profile = newProfile(map, 123); profile.tutorialDone = true; profile.completes = 1;
-    profile.commander = { name: 'อารี', crest: 'star', color: 'gold' };
+    profile.commander = { name: 'อารี', crest: 'star', color: 'gold', camp: 'ค่ายอารี' };
     const game = depart(profile, map, encounterById, 1234), run = game.run;
     // This v21 fixture represents an ongoing legacy expedition, before boss-loot snapshots existed.
     delete run.bossLoot;

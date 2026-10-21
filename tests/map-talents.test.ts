@@ -8,7 +8,7 @@ import type { TalentNode } from '../src/core/world/types';
 
 function setup(level = 4) {
   const profile = newProfile(map, 77); profile.tutorialDone = true;
-  profile.commander = { name: 'อารี', crest: 'star', color: 'gold' };
+  profile.commander = { name: 'อารี', crest: 'star', color: 'gold', camp: 'ค่ายอารี' };
   profile.members.guardian = { stars: 1, dupes: 0, level, exp: 0 };
   return depart(profile, map, lookup, 1234);
 }

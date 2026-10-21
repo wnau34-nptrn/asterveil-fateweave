@@ -5,7 +5,7 @@ import { newExpedition } from '../../src/core/world/world';
 import { newProfile } from '../../src/core/world/profile';
 import type { ExpeditionState } from '../../src/core/world/types';
 const key = 'asterveil.fateweave.expedition.v1';
-const commander = { name: 'อารี', crest: 'star', color: 'gold' };
+const commander = { name: 'อารี', crest: 'star', color: 'gold', camp: 'ค่ายอารี' };
 async function seed(page: Page, run: ExpeditionState | null, stars = 1) {
   const profile = { ...newProfile(map, 5), tutorialDone: true, commander };
   if (stars > 1) for (const id of Object.keys(profile.members)) {

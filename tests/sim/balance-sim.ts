@@ -231,7 +231,7 @@ function lobby(p: Profile): { profile: Profile; claimed: string[] } {
 }
 
 export function simulateCompany(seed: number, policy: Policy, expeditions: number, style: Style = 'advisor'): CompanyReport {
-  let p = createCommander(newProfile(map, seed), { name: 'จำลอง', crest: 'star', color: 'gold' }).profile;
+  let p = createCommander(newProfile(map, seed), { name: 'จำลอง', crest: 'star', color: 'gold', camp: 'ค่ายอารี' }).profile;
   const out: ExpeditionReport[] = [];
   for (let index = 1; index <= expeditions; index++) {
     const shop = lobby(p); p = shop.profile;

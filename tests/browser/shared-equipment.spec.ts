@@ -11,7 +11,7 @@ for(const [width,height,touch] of [[320,568,true],[390,844,true],[1366,768,false
   test(`shared character and auto equipment ${camp?'camp':'map'} at ${width}x${height}`,async({browser},info)=>{
     const context=await browser.newContext({viewport:{width,height},hasTouch:touch,isMobile:touch,reducedMotion:'reduce'}),page=await context.newPage(),errors:string[]=[];
     page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
-    const profile=newProfile(map,77);profile.tutorialDone=true;profile.commander={name:'อารี',crest:'star',color:'gold'};
+    const profile=newProfile(map,77);profile.tutorialDone=true;profile.commander={name:'อารี',crest:'star',color:'gold', camp: 'ค่ายอารี'};
     profile.members.guardian={stars:3,dupes:0,level:6,exp:0,gear:{body:{uid:1,slot:'body',rarity:0,level:1,affixes:[],set:'dawn'}}};
     profile.company.push('lio','mira');profile.members.lio={stars:3,dupes:0,level:6,exp:0};profile.members.mira={stars:1,dupes:0};profile.party.reserve=['lio'];
     profile.items=GEAR_SLOTS.map((slot,n):Item=>({uid:n+2,slot,rarity:0,level:3,affixes:[],set:'wind',...(slot==='weapon'?{hero:'guardian'}:{})}));

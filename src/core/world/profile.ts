@@ -25,16 +25,29 @@ export const COMMANDER_CRESTS = ['star', 'guard', 'flag', 'bolt', 'heal', 'mark'
 export const COMMANDER_COLORS = ['gold', 'cyan', 'violet', 'coral', 'mint', 'rose'] as const;
 export const NAME_MAX = 20;
 export const normalizeName = (name: string): string => name.normalize('NFC').replace(/\s+/g, ' ').trim();
+const badName = (raw: string): boolean => {
+  const name = normalizeName(raw);
+  return !name || [...name].length > NAME_MAX || /[<>]/.test(name) || [...name].some(ch => ch.charCodeAt(0) < 32 || ch.charCodeAt(0) === 127);
+};
+// A company saved before camp names gets "ค่าย" + the commander's name, cut to the name limit.
+export const defaultCamp = (commander: string): string => [...normalizeName(`ค่าย${normalizeName(commander)}`)].slice(0, NAME_MAX).join('').trim();
 export function commanderReason(c: Commander): string {
-  const name = normalizeName(c.name);
-  if (!name) return 'name';
-  if ([...name].length > NAME_MAX || /[<>]/.test(name) || [...name].some(ch => ch.charCodeAt(0) < 32 || ch.charCodeAt(0) === 127)) return 'name';
+  if (badName(c.name)) return 'name';
+  if (badName(c.camp)) return 'camp';
   if (!(COMMANDER_CRESTS as readonly string[]).includes(c.crest)) return 'crest';
   return (COMMANDER_COLORS as readonly string[]).includes(c.color) ? '' : 'color';
 }
 export function createCommander(initial: Profile, c: Commander): ProfileResult {
   const reason = commanderReason(c); if (reason) return blocked(initial, reason);
-  return { profile: { ...structuredClone(initial), commander: { name: normalizeName(c.name), crest: c.crest, color: c.color } }, event: { type: 'commander' } };
+  return { profile: { ...structuredClone(initial), commander: { name: normalizeName(c.name), crest: c.crest, color: c.color, camp: normalizeName(c.camp) } }, event: { type: 'commander' } };
+}
+// The camp can be renamed in the lobby at any time; the name follows the commander rules.
+export function renameCamp(initial: Profile, camp: string): ProfileResult {
+  if (!initial.commander) return blocked(initial, 'commander');
+  if (badName(camp)) return blocked(initial, 'camp');
+  if (normalizeName(camp) === initial.commander.camp) return blocked(initial, 'unchanged');
+  const profile = structuredClone(initial); profile.commander!.camp = normalizeName(camp);
+  return { profile, event: { type: 'commander' } };
 }
 
 // The board is derived from (seed, returns): reloads cannot re-roll it and it refreshes

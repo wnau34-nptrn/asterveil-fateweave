@@ -6,7 +6,7 @@ import { COMPANY_CAP, PARTY_SLOTS, RESERVE_SLOTS, type ActiveBattle, type Expedi
 import { battleState, expToNext, findTiles, newExpedition, finishBattle, fullParty, heroCatalog, heroDef, memberDef, rosterIds, tileAt, type EncounterLookup } from '../world/world';
 import { affixPool, itemValid } from '../world/equipment';
 import { boulderAt, openPit, passableWall } from '../world/puzzles';
-import { commanderReason, newProfile, settle, talentsValid } from '../world/profile';
+import { commanderReason, defaultCamp, newProfile, settle, talentsValid } from '../world/profile';
 import type { GearSlot, GearStat, Item, MemberProgress, Potions, Talents } from '../world/types';
 import { GEAR_SLOTS, POTION_IDS, SHOP_ITEMS, type ShopItemId } from '../world/types';
 
@@ -56,7 +56,8 @@ export const legacyKeys = ['asterveil.fateweave.battle.v1', 'asterveil.fateweave
 // v27 → v28 (chapters): the profile gains `cleared`, the maps completed at least once. An existing company counts the
 // teaching maps before the frontier as cleared (its owner never has to replay the tutorial maps) and the frontier
 // too once it has a completed expedition. Runs load with the map they were started on (`maps`).
-const SAVE_VERSION = 28;
+// v28 → v29: the commander gains `camp`, the ค่ายทหารรับจ้าง's name (defaults to "ค่าย" + the commander's name).
+const SAVE_VERSION = 29;
 export interface Game { profile: Profile; run: ExpeditionState | null }
 const actions: readonly ActionId[] = ['attack', 'guard', 'bash', 'mark', 'execute', 'bolt', 'ward', 'heal', 'prayer', 'brace', 'pierce', 'hinder', 'volley', 'acid', 'haste', 'ambush', 'evade', 'taunt', 'slam', 'valor', 'mend',
   'rally', 'finisher', 'sigil', 'sanctuary', 'spearwall', 'weakshot', 'bomb', 'backstab', 'quake', 'finale'];
@@ -330,8 +331,9 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
   let commander: Profile['commander'] = null;
   if (p.commander !== null && p.commander !== undefined) {
     const c = obj(p.commander);
-    if (Object.keys(c).length !== 3 || typeof c.name !== 'string' || typeof c.crest !== 'string' || typeof c.color !== 'string') throw new Error('Invalid commander');
-    commander = { name: c.name, crest: c.crest, color: c.color };
+    if (version < 29 && typeof c.name === 'string' && c.camp === undefined) c.camp = defaultCamp(c.name);
+    if (Object.keys(c).length !== 4 || typeof c.name !== 'string' || typeof c.crest !== 'string' || typeof c.color !== 'string' || typeof c.camp !== 'string') throw new Error('Invalid commander');
+    commander = { name: c.name, crest: c.crest, color: c.color, camp: c.camp };
     if (commanderReason(commander)) throw new Error('Invalid commander');
   } else if (p.commander === undefined && version >= 6) throw new Error('Invalid commander');
   const cleared = version < 28 ? legacyCleared(p.tutorialDone === true, (p.completes as number) > 0, map, maps) : clearedList(p.cleared, maps);
@@ -400,7 +402,7 @@ function legacyCleared(tutorialDone: boolean, completed: boolean, map: MapDefini
 export function parseGame(raw: string, map: MapDefinition, lookup: EncounterLookup, maps: readonly MapDefinition[] = [map]): Game {
   const envelope = obj(JSON.parse(raw)); const version = envelope.version as number;
   if (version < 21) migrateItems(envelope, map);
-  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
+  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
   const runMap = (v: unknown): MapDefinition => maps.find(m => m.id === obj(v).mapId) ?? map;
   if (version < 5) {
     const home = runMap(envelope.state); const run = parseRun(envelope.state, version, home, lookup);

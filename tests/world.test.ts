@@ -229,19 +229,19 @@ describe('expedition rules', () => {
 describe('commander', () => {
   it('validates the name, crest and colour and stores a normalised name', () => {
     const p = newProfile(map, 1); expect(p.commander).toBeNull();
-    expect(commanderReason({ name: '', crest: 'star', color: 'gold' })).toBe('name');
-    expect(commanderReason({ name: 'ก'.repeat(21), crest: 'star', color: 'gold' })).toBe('name');
-    expect(commanderReason({ name: '<b>', crest: 'star', color: 'gold' })).toBe('name');
-    expect(commanderReason({ name: 'อารี', crest: 'dragon', color: 'gold' })).toBe('crest');
-    expect(commanderReason({ name: 'อารี', crest: 'star', color: 'teal' })).toBe('color');
-    const r = createCommander(p, { name: '  ผู้กอง   อารี ', crest: 'guard', color: 'cyan' });
-    expect(r.event).toEqual({ type: 'commander' }); expect(r.profile.commander).toEqual({ name: 'ผู้กอง อารี', crest: 'guard', color: 'cyan' });
-    expect(createCommander(p, { name: '', crest: 'guard', color: 'cyan' }).event.type).toBe('blocked');
+    expect(commanderReason({ name: '', crest: 'star', color: 'gold', camp: 'ค่ายอารี' })).toBe('name');
+    expect(commanderReason({ name: 'ก'.repeat(21), crest: 'star', color: 'gold', camp: 'ค่ายอารี' })).toBe('name');
+    expect(commanderReason({ name: '<b>', crest: 'star', color: 'gold', camp: 'ค่ายอารี' })).toBe('name');
+    expect(commanderReason({ name: 'อารี', crest: 'dragon', color: 'gold', camp: 'ค่ายอารี' })).toBe('crest');
+    expect(commanderReason({ name: 'อารี', crest: 'star', color: 'teal', camp: 'ค่ายอารี' })).toBe('color');
+    const r = createCommander(p, { name: '  ผู้กอง   อารี ', crest: 'guard', color: 'cyan', camp: 'ค่ายอารี' });
+    expect(r.event).toEqual({ type: 'commander' }); expect(r.profile.commander).toEqual({ name: 'ผู้กอง อารี', crest: 'guard', color: 'cyan', camp: 'ค่ายอารี' });
+    expect(createCommander(p, { name: '', crest: 'guard', color: 'cyan', camp: 'ค่ายอารี' }).event.type).toBe('blocked');
   });
   it('migrates a v5 profile without a commander and round-trips one with a commander', () => {
     const p5: Partial<Profile> = newProfile(map, 4); delete p5.commander;
     expect(parseGame(JSON.stringify({ version: 5, profile: p5, run: null }), map, lookup).profile.commander).toBeNull();
-    const withCommander = createCommander(newProfile(map, 4), { name: 'Ari', crest: 'flag', color: 'rose' }).profile;
+    const withCommander = createCommander(newProfile(map, 4), { name: 'Ari', crest: 'flag', color: 'rose', camp: 'ค่ายอารี' }).profile;
     expect(parseGame(JSON.stringify({ version: 6, profile: withCommander, run: null }), map, lookup).profile).toEqual(withCommander);
   });
 });
@@ -399,8 +399,8 @@ describe('game save', () => {
     ['company over the cap', (s: ExpeditionState) => v6(s, { ...newProfile(map, 4), company: Array.from({ length: 21 }, () => 'guardian') })],
     ['negative bank', (s: ExpeditionState) => v6(s, { ...newProfile(map, 4), bank: { ore: -5, seal: 0 } })],
     ['board index out of range', (s: ExpeditionState) => v6(s, { ...newProfile(map, 4), taken: [7] })],
-    ['commander with an unknown crest', (s: ExpeditionState) => v6(s, { ...newProfile(map, 4), commander: { name: 'Ari', crest: 'dragon', color: 'gold' } })],
-    ['commander with an empty name', (s: ExpeditionState) => v6(s, { ...newProfile(map, 4), commander: { name: '   ', crest: 'star', color: 'gold' } })],
+    ['commander with an unknown crest', (s: ExpeditionState) => v6(s, { ...newProfile(map, 4), commander: { name: 'Ari', crest: 'dragon', color: 'gold', camp: 'ค่ายอารี' } })],
+    ['commander with an empty name', (s: ExpeditionState) => v6(s, { ...newProfile(map, 4), commander: { name: '   ', crest: 'star', color: 'gold', camp: 'ค่ายอารี' } })],
     ['commander missing from a v6 profile', (s: ExpeditionState) => { const p: Partial<Profile> = newProfile(map, 4); delete p.commander; return v6(s, p); }],
     ['unknown result', (s: ExpeditionState) => v6(s, { ...newProfile(map, 4), last: { outcome: 'fled', ore: 0, seal: 0, steps: 0, wins: 0 } })],
   ])('rejects %s', (_, make) => {

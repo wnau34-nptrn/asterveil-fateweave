@@ -7,7 +7,7 @@ import { applyCampEquipment, applyRunEquipment } from '../core/world/auto-equipm
 import { shortcutBlocked } from '../platform/keyboard';
 import type { BattleState, Outcome } from '../core/battle/types';
 import { clearLegacySaves, loadGame, saveGame, type Game } from '../core/save/expedition-save';
-import { createCommander, depart, mapUnlocked, brew, buy, claimQuest, refreshBoard, dismiss, equip, hire, learnTalent, newProfile, placeMember, resetTalents, salvage, settle, unequip, upgrade, canWithdraw } from '../core/world/profile';
+import { renameCamp, createCommander, depart, mapUnlocked, brew, buy, claimQuest, refreshBoard, dismiss, equip, hire, learnTalent, newProfile, placeMember, resetTalents, salvage, settle, unequip, upgrade, canWithdraw } from '../core/world/profile';
 import type { Point, Direction, EventChoice, ExpeditionState, MapDefinition, PotionId, Profile, ProfileResult, RunOutcome, ShopItemId, WorldEvent } from '../core/world/types';
 import { travel, tileAt, startPrologue, questDone, battleData, chooseEvent, finishBattle, heroCatalog, move, moveMember, openChest, recordBattle, usePotion, rest, revive, swapMembers, takeOff, wear, type EncounterLookup } from '../core/world/world';
 import { Music, type Track } from '../platform/music';
@@ -85,6 +85,7 @@ export class GameShell {
       buy: (item, hero) => this.profileChange(buy(this.game!.profile, map, item, hero)), smelt: dust => this.profileChange(smelt(this.game!.profile, map, dust)), upgrade: id => this.profileChange(upgrade(this.game!.profile, map, id)),
       dismiss: id => this.profileChange(dismiss(this.game!.profile, map, id)), place: (id, group, other) => this.profileChange(placeMember(this.game!.profile, id, group, other)),
       talent: (id, node) => this.profileChange(learnTalent(this.game!.profile, map, id, node)), resetTalents: id => this.profileChange(resetTalents(this.game!.profile, id)),
+      renameCamp: name => this.renameCamp(name),
       equip: (id, uid) => this.profileChange(equip(this.game!.profile, id, uid)), unequip: (id, slot) => this.profileChange(unequip(this.game!.profile, map, id, slot)),
       autoEquip: plan => this.profileChange(applyCampEquipment(this.game!.profile,plan)),
       transfer:(uid,index,donor,sourceIndex)=>this.profileChange(transferAffix(this.game!.profile,map,uid,index,donor,sourceIndex)),
@@ -216,6 +217,13 @@ export class GameShell {
     this.npcCheer = undefined;
     // Arriving in the camp opens on the fire; later redraws keep where the player panned to.
     if (entering) this.lobby.centreScene();
+  }
+  private renameCamp(name: string): void {
+    if (!this.game || this.game.run) return;
+    const result = renameCamp(this.game.profile, name);
+    if (result.event.type === 'blocked') { if (result.event.reason === 'camp') { this.lobbyMessage = 'ชื่อค่ายต้องยาว 1–20 ตัวอักษร และไม่ใช้ < >'; this.showLobby(); } return; }
+    this.game = { ...this.game, profile: { ...result.profile, last: null } }; this.persist();
+    this.lobbyMessage = `เปลี่ยนชื่อค่ายเป็น ${result.profile.commander!.camp} แล้ว`; this.showLobby();
   }
   private profileChange(result: ProfileResult): void {
     if (!this.game || this.game.run) return;

@@ -170,6 +170,8 @@ button:active:not(:disabled) { transform: scale(.97); }
 @container game (max-height: 640px) and (orientation: portrait)  {
   .commander-stage .commander-banner { width: 76px; height: 98px; } .commander-pole { width: 92px; } .commander-stage .commander-banner .commander-crest { width: 48px; height: 48px; }
   .commander-identity b { font-size: 20px !important; } .commander-identity small:last-of-type { display: none; } .commander-panel { gap: 6px; } .commander-top h1 { font-size: 18px; }
+  /* Two name fields (commander + camp) on short portrait screens: hints only when they report an error. */
+  .commander-identity small, .commander-identity .eyebrow, .commander-hint:not(.error) { display: none; } .commander-form { gap: 6px; } .commander-field input { min-height: 44px; }
 }
 /* Wide screens: the banner hangs left of centre in the scene; the controls float on the right. */
 @container game (min-width: 900px) and (min-height: 600px)  {
@@ -840,3 +842,8 @@ html, body { background: #0a1422; }
 .status-group li p { font-size: 13px; margin-top: 5px; overflow-wrap: anywhere; }
 .status-group .status-duration { color: #bfd0e1; font-size: 12px; }
 .status-empty { padding: 14px 0; color: #c1d3e5; font-size: 14px; }
+/* Camp name (owner 2026-10-21): the crest in the lobby top bar opens the rename sheet. */
+.lobby-camp-button { min-width: 44px; min-height: 44px; padding: 0; border: 0; background: none; border-radius: 50%; display: grid; place-items: center; cursor: pointer; }
+.lobby-camp-button:focus-visible { outline: 2px solid var(--gold-light); outline-offset: 2px; }
+.camp-rename { display: grid; gap: 14px; padding: 4px 2px; }
+.camp-rename button { min-height: 44px; }

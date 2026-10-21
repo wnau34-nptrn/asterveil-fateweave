@@ -12,7 +12,7 @@ const key='asterveil.fateweave.expedition.v1';
 for(const [width,height,touch] of [[320,568,true],[390,844,true],[1366,768,false]] as const){
  test(`boss gear normal sets, readonly skill comparison, safeguards and target at ${width}x${height}`,async({browser},info)=>{
   const context=await browser.newContext({viewport:{width,height},hasTouch:touch,isMobile:touch,reducedMotion:'reduce'}),page=await context.newPage(),errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text())});
-  const p=newProfile(map,17);p.commander={name:'อารี',crest:'star',color:'gold'};p.tutorialDone=true;p.bossLoot={[map.bossEncounterId]:{target:'aegis',rewarded:true,misses:2}};p.bank={ore:1000,dust:1000,gold:1000,seal:10};
+  const p=newProfile(map,17);p.commander={name:'อารี',crest:'star',color:'gold', camp: 'ค่ายอารี'};p.tutorialDone=true;p.bossLoot={[map.bossEncounterId]:{target:'aegis',rewarded:true,misses:2}};p.bank={ore:1000,dust:1000,gold:1000,seal:10};
   const charm:Item={uid:1,slot:'charm',rarity:4,level:11,boss:'focus',affixes:['attack','speed','leech'],q:{main:100,affixes:[100,100,100]},set:'shadow',locked:true};
   p.items=[charm,{uid:2,slot:'charm',rarity:1,level:1,affixes:['support'],q:{main:100,affixes:[120]}}];p.nextItem=5;
   p.company.push('sefa');p.members.sefa={stars:3,dupes:0,gear:{charm:{...charm,uid:5}}};p.nextItem=6;
@@ -30,7 +30,7 @@ for(const [width,height,touch] of [[320,568,true],[390,844,true],[1366,768,false
   await page.locator('#lobby-depart').click();expect(JSON.parse(await saved()).run.bossLoot).toMatchObject({target:'focus',misses:2});const beforeInfo=await saved();await page.locator('#world-info-button').click();await page.locator('#world-tab-loot').click();await expect(page.locator('.boss-loot-guide')).toContainText('เศษแกนรอยแยก');expect(await saved()).toBe(beforeInfo);expect(errors).toEqual([]);await context.close();
  });
  test(`boss victory pays one bonus with normal set and reload cannot duplicate at ${width}x${height}`,async({browser},info)=>{
-  const p=newProfile(map,17);p.commander={name:'อารี',crest:'star',color:'gold'};p.tutorialDone=true;p.bossLoot={[map.bossEncounterId]:{target:'focus',misses:0,rewarded:false}};let uid=1;
+  const p=newProfile(map,17);p.commander={name:'อารี',crest:'star',color:'gold', camp: 'ค่ายอารี'};p.tutorialDone=true;p.bossLoot={[map.bossEncounterId]:{target:'focus',misses:0,rewarded:false}};let uid=1;
   for(const id of p.company){const gear=gearFor(id,'main',11);for(const item of Object.values(gear))if(item){item.uid=uid++;item.plus=20;}p.members[id]={stars:5,dupes:0,level:10,exp:0,gear};}p.nextItem=uid;
   let seed=1;for(;seed<100;seed++){let n=0;const item=bossReward(map,startBossPlan(p,map),()=>rollPercent((seed^0x6b05d017)>>>0,n++),11)!;if(item.set==='shadow')break;}expect(seed).toBeLessThan(100);
   const game=depart(p,map,lookup,seed),run=game.run;run.battle={kind:'boss',encounterId:map.bossEncounterId,level:11,entry:{...run.hp},commands:[]};const data=battleData(run,map,lookup)!;let battle=battleState(run,map,lookup)!;

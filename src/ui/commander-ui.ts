@@ -1,4 +1,4 @@
-import { COMMANDER_COLORS, COMMANDER_CRESTS, NAME_MAX, commanderReason } from '../core/world/profile';
+import { COMMANDER_COLORS, COMMANDER_CRESTS, NAME_MAX, commanderReason, defaultCamp } from '../core/world/profile';
 import type { Commander } from '../core/world/types';
 import { icon, type IconName } from './icons';
 
@@ -12,8 +12,10 @@ export const commanderBadge = (c: Commander): string =>
 // Commander creation (L2): shown once between Home and the Lobby. The commander leads the
 // company but never fights. Nothing is saved until the player confirms.
 export class CommanderUI {
-  private draft: Commander = { name: '', crest: COMMANDER_CRESTS[0], color: COMMANDER_COLORS[0] };
+  private draft: Commander = { name: '', crest: COMMANDER_CRESTS[0], color: COMMANDER_COLORS[0], camp: '' };
   private touched = false;
+  // The camp name follows the commander's name ("ค่าย" + name) until the player edits it.
+  private campEdited = false;
   constructor(private readonly root: HTMLElement, private readonly host: CommanderHost) {
     root.addEventListener('click', e => {
       const b = (e.target as HTMLElement).closest<HTMLButtonElement>('button[data-cmd]'); if (!b) return;
@@ -22,16 +24,21 @@ export class CommanderUI {
       if (b.dataset.cmd === 'back') this.host.back();
     });
     root.addEventListener('input', e => {
-      const input = e.target as HTMLInputElement; if (input.id !== 'commander-name') return;
-      this.draft.name = input.value; this.touched = true; this.update();
+      const input = e.target as HTMLInputElement;
+      if (input.id === 'commander-camp') { this.draft.camp = input.value; this.campEdited = true; this.touched = true; this.update(); return; }
+      if (input.id !== 'commander-name') return;
+      this.draft.name = input.value; this.touched = true;
+      if (!this.campEdited) { this.draft.camp = this.draft.name.trim() ? defaultCamp(this.draft.name) : ''; this.root.querySelector<HTMLInputElement>('#commander-camp')!.value = this.draft.camp; }
+      this.update();
     });
     root.addEventListener('submit', e => {
       e.preventDefault(); this.touched = true;
-      if (commanderReason(this.draft)) { this.update(); this.root.querySelector<HTMLElement>('#commander-name')?.focus(); return; }
+      const reason = commanderReason(this.draft);
+      if (reason) { this.update(); this.root.querySelector<HTMLElement>(reason === 'camp' ? '#commander-camp' : '#commander-name')?.focus(); return; }
       this.host.create({ ...this.draft });
     });
   }
-  open(): void { this.draft = { name: '', crest: COMMANDER_CRESTS[0], color: COMMANDER_COLORS[0] }; this.touched = false; this.draw('#commander-name'); }
+  open(): void { this.draft = { name: '', crest: COMMANDER_CRESTS[0], color: COMMANDER_COLORS[0], camp: '' }; this.touched = false; this.campEdited = false; this.draw('#commander-name'); }
   private draw(focus?: string): void {
     const d = this.draft;
     this.root.innerHTML = `<form class="commander-shell" novalidate>
@@ -47,13 +54,16 @@ export class CommanderUI {
         <label class="commander-field" for="commander-name"><span>ชื่อผู้บัญชาการ</span>
           <input id="commander-name" name="name" type="text" autocomplete="nickname" enterkeyhint="done" maxlength="${NAME_MAX * 2}" value="${this.escape(d.name)}" aria-describedby="commander-name-hint" required>
           <small id="commander-name-hint" class="commander-hint"></small></label>
+        <label class="commander-field" for="commander-camp"><span>ชื่อค่ายทหารรับจ้าง</span>
+          <input id="commander-camp" name="camp" type="text" autocomplete="off" enterkeyhint="done" maxlength="${NAME_MAX * 2}" value="${this.escape(d.camp)}" aria-describedby="commander-camp-hint" required>
+          <small id="commander-camp-hint" class="commander-hint"></small></label>
         <fieldset class="commander-choice"><legend>ตราประจำตัว</legend><div class="choice-row">
           ${COMMANDER_CRESTS.map(c => `<button type="button" id="crest-${c}" data-cmd="crest" data-value="${c}" aria-pressed="${d.crest === c}" aria-label="${crestName[c]}">${icon(crestIcon[c]!)}</button>`).join('')}</div></fieldset>
         <fieldset class="commander-choice"><legend>สีธง</legend><div class="choice-row">
           ${COMMANDER_COLORS.map(c => `<button type="button" id="color-${c}" class="swatch" data-color="${c}" data-cmd="color" data-value="${c}" aria-pressed="${d.color === c}" aria-label="${colorName[c]}"></button>`).join('')}</div></fieldset>
         </div>
       </section>
-      <footer class="commander-footer"><p class="commander-note">เปลี่ยนภายหลังไม่ได้ในเวอร์ชันนี้</p><button id="commander-create" type="submit" class="primary">${icon('camp')} ยืนยันและเข้าค่าย</button></footer>
+      <footer class="commander-footer"><p class="commander-note">ชื่อผู้บัญชาการเปลี่ยนภายหลังไม่ได้ · ชื่อค่ายเปลี่ยนได้ที่ค่าย</p><button id="commander-create" type="submit" class="primary">${icon('camp')} ยืนยันและเข้าค่าย</button></footer>
     </form>`;
     this.update();
     if (focus) this.root.querySelector<HTMLElement>(focus)?.focus({ preventScroll: true });
@@ -65,6 +75,9 @@ export class CommanderUI {
     hint.classList.toggle('error', reason === 'name' && this.touched);
     this.root.querySelector('#commander-name')!.setAttribute('aria-invalid', String(reason === 'name' && this.touched));
     this.root.querySelector('#commander-preview-name')!.textContent = this.draft.name.trim() || 'ตั้งชื่อของคุณ';
+    const campBad = reason === 'camp' && this.touched; const campHint = this.root.querySelector('#commander-camp-hint')!;
+    campHint.textContent = campBad ? `ใส่ชื่อค่าย 1–${NAME_MAX} ตัวอักษร (ไม่ใช้ < >)` : `แสดงในค่ายและหน้าสรุปการเดินทาง`;
+    campHint.classList.toggle('error', campBad); this.root.querySelector('#commander-camp')!.setAttribute('aria-invalid', String(campBad));
   }
   private escape(s: string): string { return s.replace(/[&<>"]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[ch]!); }
 }

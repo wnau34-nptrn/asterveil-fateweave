@@ -7,7 +7,7 @@ import { parseGame } from '../../src/core/save/expedition-save';
 
 const key = 'asterveil.fateweave.expedition.v1';
 async function open(page: Page) {
-  const profile = newProfile(map, 123); profile.tutorialDone = true; profile.commander = { name: 'อารี', crest: 'star', color: 'gold' };
+  const profile = newProfile(map, 123); profile.tutorialDone = true; profile.commander = { name: 'อารี', crest: 'star', color: 'gold', camp: 'ค่ายอารี' };
   profile.members.guardian = { stars: 1, dupes: 0, level: 6, exp: 0, gear: { body: { uid: 1, slot: 'body', rarity: 0, level: 1, affixes: [] } } }; profile.nextItem = 2;
   profile.members.weaver!.level = 3; profile.members.weaver!.exp = 0;
   profile.company.push('mira'); profile.members.mira = { stars: 1, dupes: 0, level: 2, exp: 0 }; profile.party.reserve = ['mira'];
@@ -63,7 +63,7 @@ for (const [width,height,touch] of [[320,568,true], [390,844,true], [1366,768,fa
     await expect(page.locator('#pack-dialog')).not.toBeVisible(); await page.keyboard.press('Escape');
     await expect(page.locator('#pack-dialog')).toBeVisible(); await expect(page.locator('#bag-member-guardian')).toBeFocused(); await expect(page.locator('#bag-tab-gear')).toHaveAttribute('aria-selected','true');
     await page.keyboard.press('Escape'); await expect(page.locator('#world-pack')).toBeFocused();
-    expect(JSON.parse(await saved(page)).version).toBe(28); expect(errors).toEqual([]); await context.close();
+    expect(JSON.parse(await saved(page)).version).toBe(29); expect(errors).toEqual([]); await context.close();
   });
 }
 

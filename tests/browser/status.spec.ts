@@ -15,7 +15,7 @@ async function openBattle(page: Page) {
   s = resolveCommand(s, data, { beat: s.beat, heroId: 'weaver', action: 'ward', targetId: 'weaver' }).state;
   const run = newExpedition(map, encounterById, 1234); run.tutorialDone = true;
   run.battle = { kind: 'random', encounterId: data.id, entry: hp, commands: s.commands };
-  const profile = { ...newProfile(map, 5), tutorialDone: true, commander: { name: 'อารี', crest: 'star', color: 'gold' } };
+  const profile = { ...newProfile(map, 5), tutorialDone: true, commander: { name: 'อารี', crest: 'star', color: 'gold', camp: 'ค่ายอารี' } };
   await page.addInitScript(({ key, raw }) => { if (!sessionStorage.getItem('status-seeded')) { localStorage.setItem(key, raw); sessionStorage.setItem('status-seeded', 'yes'); } }, { key, raw: JSON.stringify({ version: 21, profile, run }) });
   await page.goto('./'); await page.locator('#continue').click(); await expect(page.locator('#action-attack')).toBeEnabled();
 }
