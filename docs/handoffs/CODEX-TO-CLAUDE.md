@@ -1,5 +1,11 @@
 # Codex → Claude handoff
 
+## 2026-10-21 — Combat presentation phase 2 starter effects and preferences
+
+- Owner authorized the next phase. Implemented C20–C25: physical body-anchor links/slashes/visual hold/reactions, magic charge/travel, shield/heal/mark language and true Guard/absorption/depletion/counter/interrupt/cancel/down feedback. Starter Knight/Duelist/Mage/Priest use actual skills and Mark→Execute; all others retain event-based generic fallback. Input zones are stationary; scene effects remain disposable and cancelable. No rule/RNG/loot/save v27/content-version change, new artwork or boss cutscene.
+- Added separate normal/fast (65% duration) and standard/reduced intensity preferences in battle Settings. OS reduced-motion retains static truthful feedback and settles safely if changed during playback. Lead-in synth handles stop at impact; at most two contact recipes. No fake criticals or healing amounts. Keep the live-only before/after boundaries and default resolver path from phase 1.
+- Local 507 unit tests and lint/typecheck/Pages build passed; 9 frozen resolver traces are unchanged. Focused 23 tests passed after final classification correction. Initial production9/9 passed; expanded12/13 uncovered a paused-test-clock title transition after reload, corrected by advancing the test clock instead of weakening timeouts. Final checks/publication pending; see docs/validation/COMBAT_PRESENTATION_PHASE2.md. Physical iPhone/Safari/audible SFX/device FPS remain unverified. Preserve unrelated MMO/gacha files and the working handoff section; stage only owned changes.
+
 ## 2026-10-21 — Combat presentation phase 1 timing and lifecycle
 
 - Completed publication: PR[#35](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/35), runtime head `f4e6e2834c1091ec1f57e9d98a3523863c290858`, merged as `9c5a3fd2b2daea43c32314473c61f37c5b3075ed` after quality39569910285 and browser39569910465 passed503 unit tests and199 full browser cases plus3 focused checks. Pages39571683544 passed the unchanged full quality/browser/deploy workflow and deployed at2026-10-21 08:59:37 UTC. No bypasses or workflow changes.

@@ -1,5 +1,5 @@
 // Phase 0 evidence tooling only. Runs the existing game with synthetic isolated saves.
-// Usage: node scripts/combat-presentation-baseline.mjs --output <absolute external directory> [--capture]
+// Usage: node scripts/combat-presentation-baseline.mjs --output <absolute external directory> [--capture] [--url <production URL>] [--stage-frames]
 /* global localStorage, sessionStorage */
 import process from 'node:process';
 import console from 'node:console';
@@ -17,6 +17,9 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const outputArg = process.argv.indexOf('--output');
 assert(outputArg >= 0 && process.argv[outputArg + 1], '--output <absolute directory> is required');
 const output = process.argv[outputArg + 1];
+const urlArg = process.argv.indexOf('--url');
+const captureUrl = urlArg >= 0 ? process.argv[urlArg + 1] : 'http://127.0.0.1:5187/';
+assert(captureUrl && /^https?:\/\//.test(captureUrl), '--url must be an http(s) URL');
 assert(path.isAbsolute(output), 'Output must be absolute');
 const relative = path.relative(root, output);
 assert(relative.startsWith('..') || path.isAbsolute(relative), 'Evidence must be outside the repository');
@@ -55,6 +58,7 @@ let captureState;
 try {
   await server.listen();
   const load = p => server.ssrLoadModule('/' + p);
+  const { stageTiming } = await load('src/ui/battle-playback.ts');
   const catalog = await load('src/content/encounters/catalog.ts');
   const { veilSiege } = await load('src/content/encounters/veil-siege.ts');
   const { heroes } = await load('src/content/heroes/team.ts');
@@ -198,7 +202,7 @@ try {
           sessionStorage.setItem('phase0-seeded', 'yes');
         }, { key, raw: JSON.stringify({ version: 27, ...c.game }) });
         try {
-          await page.goto('http://127.0.0.1:5187/');
+          await page.goto(captureUrl);
           await page.locator('#continue').click();
           await page.locator('#game canvas').waitFor({ state: 'visible' });
           if (await page.locator('#start').isVisible()) await page.locator('#start').click();
@@ -209,7 +213,16 @@ try {
           await page.screenshot({ path: path.join(dir, 'before.png') });
           await page.locator(`#target-${c.move[2]}`).click();
           const frames = [];
-          for (const t of [0, 140, 250, 1000, 2000]) {
+          const times = new Set([0, 140, 250, 1000, 2000]);
+          if (process.argv.includes('--stage-frames')) {
+            let offset = 0;
+            for (const turn of c.expected.turns) {
+              const timing = stageTiming(turn, false);
+              times.add(offset + Math.max(0, timing.contact - 32));
+              times.add(offset + timing.contact + 32); offset += timing.end;
+            }
+          }
+          for (const t of [...times].sort((a,b) => a-b)) {
             const previous = frames.at(-1)?.ms ?? 0;
             if (t > previous) await page.clock.runFor(t - previous);
             const name = `t-${String(t).padStart(4, '0')}.png`;

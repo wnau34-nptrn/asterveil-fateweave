@@ -5,7 +5,7 @@ import type { StoragePort } from '../core/save/expedition-save';
 // under the same name. Sounds start only after the first user gesture and never affect game state.
 export type SfxName =
   | 'click' | 'open' | 'close' | 'step' | 'bump' | 'encounter' | 'chest' | 'chestRare' | 'rest' | 'rune' | 'runeReset' | 'lever' | 'push' | 'door' | 'secret' | 'herb'
-  | 'hit' | 'zap' | 'crit' | 'guard' | 'barrier' | 'heal' | 'buff' | 'debuff' | 'miss' | 'down' | 'cancel' | 'victory' | 'defeat'
+  | 'swing' | 'charge' | 'hit' | 'zap' | 'crit' | 'guard' | 'barrier' | 'heal' | 'buff' | 'debuff' | 'miss' | 'down' | 'cancel' | 'victory' | 'defeat'
   | 'coin' | 'upgrade' | 'anvil' | 'claim' | 'potion';
 const prefKey = 'asterveil.fateweave.sfx.v1';
 export interface SfxPrefs { muted: boolean; volume: number }
@@ -14,6 +14,8 @@ interface Tone { type?: OscillatorType; freq: number; to?: number; at?: number; 
 interface Noise { at?: number; dur: number; freq: number; q?: number; gain?: number; type?: BiquadFilterType; to?: number }
 // Recipes: tones and noise bursts, times in seconds from the start of the sound.
 const recipes: Record<SfxName, { tones?: Tone[]; noise?: Noise[] }> = {
+  swing: { noise: [{ dur: .12, freq: 800, to: 2400, q: .6, gain: .08, type: 'bandpass' }] },
+  charge: { tones: [{ type: 'sine', freq: 330, to: 880, dur: .18, gain: .045, attack: .04 }] },
   click: { tones: [{ type: 'triangle', freq: 1400, dur: .04, gain: .12 }] },
   open: { tones: [{ type: 'sine', freq: 520, to: 780, dur: .12, gain: .14 }] },
   close: { tones: [{ type: 'sine', freq: 700, to: 440, dur: .1, gain: .12 }] },
