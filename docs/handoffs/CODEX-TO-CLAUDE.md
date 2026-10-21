@@ -1,5 +1,11 @@
 # Codex → Claude handoff
 
+## 2026-10-21 — Claude: master plan release A progress (chapters, recruits, unlocks, hard mode)
+
+- Owner approved `docs/MASTER_PLAN_TH.md` in full; Codex art prompts are in `docs/handoffs/CODEX-ART-QUEUE-TH.md`, lore draft `docs/LORE_CHAPTER1_TH.md`, Knight tree draft `docs/design/SKILL_TREE_KNIGHT_TH.md`.
+- Shipped on `feature/fateweave-initial-prototype`: maps 1 ซากชายแดน / 2 เส้นทางป่าทึบ / 3 แนวรอยแยก (`MAPS`, shared `gameRules`), Codex systems made multi-map (forge item-Lv cap only from the frontier, teaching-boss drops, per-map boss names), camp name (v29), one-Knight start with story recruits and catch-up EXP (v30), lobby systems by chapter (v31, veterans keep everything), guided tasks (v32), hard mode part 1 (v33).
+- Next: hard-mode enemy traits/boss moves, A6 big skill tree (after owner reads the Knight draft), A10 balance (re-level the frontier to Lv6–10), UI/FX once Codex art arrives.
+
 ## 2026-10-21 — Owner rejects phase2 visuals; artwork-first handoff overrides phase3 priority
 
 - Owner said the skill effects were unattractive and authorized the proposed artwork/mockup-first workflow. Created Bolt/Astral Thread, Execute/Rose-Gold Edge and Ward/Luminous Aegis v1 concept storyboards, four panels each, using built-in image_gen and real phase2 gameplay references. All3 boards are1672×941 PNG; all3 source screenshots390×844. Stored everything in `docs/combat-presentation/vfx-art-direction/`, with README_TH.md, full generation prompts and image manifest. These are proposed directions awaiting owner feedback, not approved visuals or transparent production sprites.
