@@ -7,9 +7,10 @@ const durations: Record<ActionId, number> = {
   taunt:550, slam:850, valor:600, mend:600, rally:700, finisher:950, sigil:850, sanctuary:750,
   spearwall:700, weakshot:850, bomb:900, backstab:900, quake:1000, finale:950,
 };
-export function stageTiming(turn: TurnStage, reduced: boolean): { contact: number; end: number } {
+export function stageTiming(turn: TurnStage, reduced: boolean, fast = false): { contact: number; end: number } {
   const canceled = turn.events.some(e => e.type === 'cancel');
-  const end = canceled ? 500 : turn.action ? durations[turn.action] : turn.state.encounterId === 'rift-warden' ? 1200 : 800;
+  const normalEnd = canceled ? 500 : turn.action ? durations[turn.action] : turn.state.encounterId === 'rift-warden' ? 1200 : 800;
+  const end = fast ? Math.round(normalEnd * .65) : normalEnd;
   const attack = turn.events.some(e => e.type === 'damage' || e.type === 'dodge');
   // Reduced motion retains readable actor stages, with immediate truthful feedback.
   return { contact: reduced || canceled ? 0 : Math.round(end * (attack ? .35 : .4)), end };

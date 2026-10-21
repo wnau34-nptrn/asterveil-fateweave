@@ -3,8 +3,7 @@ import type { ActionId, BattleEntry, BattleState, Command, EncounterDefinition, 
 import { gameBounds, shortcutBlocked } from '../platform/keyboard';
 import { sfx } from '../platform/sfx';
 import { BattlePlayback, stageTiming } from './battle-playback';
-// Moves that sound like magic rather than steel (placeholder SFX).
-const energyActions = new Set(['bolt', 'quake', 'bomb', 'acid', 'weakshot', 'sigil']);
+import { combatPrefsKey, readCombatPrefs, contactSounds, effectFamily } from '../game/visuals/combat-effects';
 import type { BattleKind } from '../core/world/types';
 import { browserStorage } from '../platform/browser-storage';
 import type { BattleScene } from '../game/scenes/BattleScene';
@@ -45,6 +44,7 @@ export class BattleUI {
   private storage = browserStorage();
   private hintsEnabled = true;
   private saved = true;
+  private combatPrefs = readCombatPrefs(null);
   private messages: string[];
   private scene: BattleScene | undefined;
   private session: BattleSession | undefined;
@@ -52,6 +52,7 @@ export class BattleUI {
 
   constructor(private readonly root: HTMLElement, data: EncounterDefinition) {
     this.data = data;
+    try { this.combatPrefs = readCombatPrefs(this.storage?.getItem(combatPrefsKey) ?? null); } catch { /* Defaults work without storage. */ }
     try { this.hintsEnabled = this.storage?.getItem(tutorialKey) !== 'off'; } catch { /* Advice still works without storage. */ }
     this.state = createBattle(data);
     this.started = false;
@@ -87,7 +88,7 @@ export class BattleUI {
 
         </div></details></div>
         <footer><span>เจ้าของเทิร์น → เลือกสกิล → แตะเป้าหมายในสนาม</span><span id="save-status"></span></footer>
-      </main><dialog id="game-info" aria-labelledby="info-title"><div class="info-header"><h2 id="info-title">ข้อมูลการต่อสู้</h2><button data-ui="info-close" class="quiet" aria-label="ปิดข้อมูล">✕</button></div>${infoTabs('battle', true, true)}<div class="info-content"><section id="battle-panel-status" role="tabpanel" aria-labelledby="battle-tab-status"><p class="status-help">เลือกยูนิตเพื่อดูบัฟและดีบัฟ · ตรวจดูได้โดยไม่ใช้เทิร์น</p><p id="status-frame" class="status-frame"></p><div id="status-units" class="status-units" role="group" aria-label="เลือกยูนิตที่ต้องการตรวจสถานะ"></div><section id="status-details" aria-live="polite" aria-atomic="true"></section></section><section id="battle-panel-settings" role="tabpanel" aria-labelledby="battle-tab-settings" hidden><section class="battle-sound" aria-labelledby="battle-sound-title"><h3 id="battle-sound-title">เพลงและเสียงเอฟเฟกต์</h3><div id="battle-sfx-controls"></div></section><section id="tutorial-settings" class="tutorial-settings" aria-label="ตั้งค่าคำใบ้สอนเล่น"></section></section><section id="battle-panel-guide" role="tabpanel" aria-labelledby="battle-tab-guide" hidden><section id="info-skill"></section><div id="info-host"></div></section><section id="battle-panel-history" role="tabpanel" aria-labelledby="battle-tab-history" hidden><h3>บันทึกการต่อสู้</h3><ol id="event-log" role="log" aria-live="polite"></ol></section></div></dialog>
+      </main><dialog id="game-info" aria-labelledby="info-title"><div class="info-header"><h2 id="info-title">ข้อมูลการต่อสู้</h2><button data-ui="info-close" class="quiet" aria-label="ปิดข้อมูล">✕</button></div>${infoTabs('battle', true, true)}<div class="info-content"><section id="battle-panel-status" role="tabpanel" aria-labelledby="battle-tab-status"><p class="status-help">เลือกยูนิตเพื่อดูบัฟและดีบัฟ · ตรวจดูได้โดยไม่ใช้เทิร์น</p><p id="status-frame" class="status-frame"></p><div id="status-units" class="status-units" role="group" aria-label="เลือกยูนิตที่ต้องการตรวจสถานะ"></div><section id="status-details" aria-live="polite" aria-atomic="true"></section></section><section id="battle-panel-settings" role="tabpanel" aria-labelledby="battle-tab-settings" hidden><section class="battle-sound" aria-labelledby="battle-sound-title"><h3 id="battle-sound-title">เพลงและเสียงเอฟเฟกต์</h3><div id="battle-sfx-controls"></div></section><section id="combat-settings" class="tutorial-settings" aria-label="ตั้งค่าภาพการต่อสู้"></section><section id="tutorial-settings" class="tutorial-settings" aria-label="ตั้งค่าคำใบ้สอนเล่น"></section></section><section id="battle-panel-guide" role="tabpanel" aria-labelledby="battle-tab-guide" hidden><section id="info-skill"></section><div id="info-host"></div></section><section id="battle-panel-history" role="tabpanel" aria-labelledby="battle-tab-history" hidden><h3>บันทึกการต่อสู้</h3><ol id="event-log" role="log" aria-live="polite"></ol></section></div></dialog>
 
       <section id="turn-detail" popover="auto" role="dialog" aria-label="รายละเอียดลำดับเทิร์น"><p></p><button data-ui="turn-close" class="quiet" aria-label="ปิดรายละเอียดเทิร์น">×</button></section>
       <section id="skill-popover" popover="manual" role="dialog" aria-modal="false" aria-labelledby="skill-title" aria-describedby="skill-copy skill-availability" tabindex="-1"><div class="skill-popover-heading"><h2 id="skill-title"></h2><button data-ui="skill-close" class="quiet" aria-label="ปิดคำอธิบายสกิล">✕</button></div><p id="skill-copy"></p><p id="skill-availability"></p><small>อ่านแล้วแตะเป้าหมายในสนามเพื่อใช้สกิล</small></section>`;
@@ -119,6 +120,12 @@ export class BattleUI {
         case 'skip-turn': this.finishPresentation(); break;
         case 'leave': if (!this.busy && this.state.outcome !== 'active') this.session?.leave(); break;
         case 'coach-dismiss': this.setHints(false); break;
+        case 'combat-speed': case 'combat-intensity': {
+          if (button.dataset.ui === 'combat-speed') this.combatPrefs.speed = this.combatPrefs.speed === 'normal' ? 'fast' : 'normal';
+          else this.combatPrefs.intensity = this.combatPrefs.intensity === 'standard' ? 'reduced' : 'standard';
+          try { this.storage?.setItem(combatPrefsKey, JSON.stringify(this.combatPrefs)); } catch { /* Session preference still applies. */ }
+          this.renderCombatSettings(); this.root.querySelector<HTMLElement>(`#${button.id}`)?.focus({ preventScroll: true }); break;
+        }
         case 'coach-toggle': this.setHints(!this.hintsEnabled); break;
       }
     });
@@ -157,6 +164,10 @@ export class BattleUI {
       if (document.hidden && this.busy) this.finishPresentation(false);
     });
     window.addEventListener('resize', () => { if (this.busy) this.finishPresentation(false); });
+    window.matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', event => {
+      this.scene?.configureEffects(this.combatPrefs, event.matches);
+      if (this.busy) this.finishPresentation(false); else this.render();
+    });
     this.render();
   }
 
@@ -332,15 +343,24 @@ export class BattleUI {
     const turn = playback.resolution.turns[playback.index]!;
     playback.phase = turn.side; playback.frame = turn.before!; playback.revealed = false;
     if (turn.side === 'hero') this.heroId = turn.actorId;
-    const timing = stageTiming(turn, window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const timing = stageTiming(turn, reduced, this.combatPrefs.speed === 'fast');
+    this.scene?.configureEffects(this.combatPrefs, reduced);
     this.render();
+    let stopPrepare = () => {};
     this.playback.start([
+      { at: 0, run: () => {
+        if (timing.contact && !turn.events.some(e => e.type === 'cancel')) {
+          stopPrepare = sfx.play(effectFamily(turn) === 'steel' ? 'swing' : 'charge'); this.playback.own(stopPrepare);
+        }
+      } },
       { at: timing.contact, run: () => {
         if (this.presentation !== playback) return;
+        stopPrepare();
         playback.frame = turn.after!; playback.revealed = true;
-        this.render(false); this.scene?.play(turn.events, timing.end - timing.contact); this.stageSound(turn);
+        this.render(false); this.scene?.play(turn, timing.end - timing.contact); this.stageSound(turn);
       } },
-      { at: Math.min(timing.end - 40, timing.contact + 220), run: () => {
+      { at: Math.min(timing.end - 40, timing.contact + (this.combatPrefs.speed === 'fast' ? 140 : 220)), run: () => {
         if (turn.events.some(e => e.type === 'down')) this.playback.own(sfx.play('down'));
       } },
       { at: timing.end, run: () => {
@@ -351,23 +371,17 @@ export class BattleUI {
       } },
     ]);
     this.playback.own(() => this.scene?.stopEffects());
-    this.scene?.prepare(turn.events, timing.contact);
+    this.scene?.prepare(turn, timing.contact);
   }
 
   // Placeholder synth sounds for one actor turn (platform/sfx.ts), from its events.
   private stageSound(turn: TurnStage): void {
-    const sound = (name: Parameters<typeof sfx.play>[0]) => this.playback.own(sfx.play(name));
-    const has = (t: string) => turn.events.some(e => e.type === t);
-    if (has('cancel')) { sound('cancel'); return; }
-    const hit = turn.events.find(e => e.type === 'damage');
-    if (hit) sound(['execute', 'finisher', 'backstab'].includes(turn.action ?? '') ? 'crit' : (turn.side === 'enemy' ? turn.intent?.kind === 'energy' : energyActions.has(turn.action ?? '')) ? 'zap' : 'hit');
-    else if (has('dodge') || has('evade')) sound('miss');
-    if (has('guard') || has('brace') || has('taunt') || has('counter')) sound('guard');
-    if (has('barrier') || has('sanctuary') || has('sigil')) sound('barrier');
-    if (has('heal')) sound('heal');
-    if (has('haste') || has('song') || has('rally') || has('stand') || has('finale')) sound('buff');
-    if (has('mark') || has('corrode') || has('delay') || has('interrupt')) sound('debuff');
+    for (const name of contactSounds(turn)) this.playback.own(sfx.play(name));
   }
+  private renderCombatSettings(): void {
+    this.set('combat-settings', `<h3>ภาพการต่อสู้</h3><p>ค่าที่เปลี่ยนใช้ตั้งแต่เทิร์นถัดไป · ไม่เปลี่ยนผลต่อสู้</p><button data-ui="combat-speed" id="combat-speed" class="quiet" aria-pressed="${this.combatPrefs.speed === 'fast'}">ความเร็ว: ${this.combatPrefs.speed === 'fast' ? 'เร็ว' : 'ปกติ'}</button><button data-ui="combat-intensity" id="combat-intensity" class="quiet" aria-pressed="${this.combatPrefs.intensity === 'reduced'}">เอฟเฟกต์: ${this.combatPrefs.intensity === 'reduced' ? 'ลด' : 'มาตรฐาน'}</button><p>เมื่ออุปกรณ์ตั้งค่าลดการเคลื่อนไหว จะแสดงผลทันทีโดยไม่เคลื่อนภาพ</p>`);
+  }
+
   private finishPresentation(audible = true): void {
     if (!this.presentation) return;
     this.playback.cancel(); this.scene?.stopEffects();
@@ -392,6 +406,9 @@ export class BattleUI {
     const detail = turn ? canceled ? 'ศัตรูเสียเทิร์นนี้' : `${turn.action ? d.skills[turn.action].name : turn.intent ? intentName(turn.intent) : 'ลงมือ'} → ${actorName(turn.targetId, d)}` : s.outcome !== 'active' ? 'กดปุ่มด้านล่างเพื่อไปต่อ' : 'SPD มากเริ่มก่อน · คนละ 1 ครั้งต่อรอบ';
     const phaseRoot = this.root.querySelector<HTMLElement>('#turn-phase')!;
     phaseRoot.dataset.phase = mode; phaseRoot.dataset.actor = actor; phaseRoot.dataset.canceled = String(!!canceled);
+    phaseRoot.dataset.effect = turn ? effectFamily(turn) : 'idle';
+    phaseRoot.dataset.speed = this.combatPrefs.speed;
+    phaseRoot.dataset.intensity = this.combatPrefs.intensity;
     phaseRoot.dataset.cue = this.presentation ? this.presentation.revealed ? 'impact' : 'prepare' : 'idle';
     this.set('turn-phase', `<div class="phase-head"><div class="phase-portrait">${this.portrait(actor)}</div><div class="phase-copy"><h2>${escapeHtml(title)}</h2><p>${escapeHtml(detail)}</p></div>${turn ? '<button id="skip-turn" data-ui="skip-turn" class="quiet">ดูผลทันที</button>' : ''}</div><div id="turn-order" aria-label="ลำดับเทิร์นตามความเร็ว"></div>`);
   }
@@ -529,7 +546,7 @@ export class BattleUI {
     this.set('info-skill', `<h3>${d.skills[this.action].name} · ${heroText[this.heroId]!.name}</h3><p>${skillDescription(this.action, this.heroId, d)}</p>`);
     this.root.querySelector<HTMLElement>('#tutorial-settings')!.hidden = this.session?.kind !== 'tutorial';
     this.set('tutorial-settings', `<strong>คำแนะนำศึกแรก</strong><p>อ่านแผนศัตรู · ตั้งรับ · ติดตราแล้วตีเป้าเดิม · ขัดจังหวะ · รักษา</p><button id="coach-toggle" data-ui="coach-toggle" class="quiet" aria-pressed="${this.hintsEnabled}">${this.hintsEnabled ? 'ปิดคำแนะนำ' : 'เปิดคำแนะนำ'}</button>`);
-    this.renderStatuses();
+    this.renderCombatSettings(); this.renderStatuses();
     this.renderPhase(); this.renderSituation(); this.renderSelectedHero(); this.renderParty(disabled); this.renderCommands(disabled);
     this.set('rules', `<h3>ลงสนาม ${d.heroes.length} คน · ศัตรูเล็งตามหมายเลขช่อง</h3><p>รวมฮีโร่และศัตรูเรียง SPD มากไปน้อยเมื่อเริ่มรอบ คนละ 1 ครั้งต่อรอบ ข้ามตัวที่ล้ม SPD เท่ากันใช้ลำดับรายชื่อฮีโร่ก่อน ตามด้วยศัตรู</p><p>แนวหน้าที่ยังยืนอยู่รับการโจมตีกายภาพก่อน พลังงานโจมตีแนวหลังได้ เมื่อแนวหน้าล้มหมด กายภาพจะถึงแนวหลัง ท่าของศัตรูเล็งหมายเลขช่องในทีม ใครยืนช่องนั้นคือเป้า แผนโจมตีเป็นการคาดการณ์ตามคนที่ยังยืนอยู่ เมื่อถึงเทิร์นศัตรูจึงกำหนดเป้าหมายจริง</p>${d.heroes.map(hero => `<h3>${heroText[hero.id]!.name} · ${heroText[hero.id]!.role} · SPD ${hero.speed} · ${hero.lane === 'front' ? 'แนวหน้า' : 'แนวหลัง'}</h3><dl>${hero.actions.map(action => `<dt>${d.skills[action].name} (${d.skills[action].english})</dt><dd>${skillDescription(action, hero.id, d)}</dd>`).join('')}</dl>`).join('')}<p>แต่ละตัวลงมือ 1 ครั้งต่อรอบ สกิลคูลดาวน์ 2 รอบที่ใช้ในรอบ 1 จะพร้อมในรอบ 3 พรฟื้นฟูคูลดาวน์ 3 รอบ ${d.enemies.map(e => `${actorName(e.id, d)} SPD ${e.speed}`).join(' · ')} การรักษาไม่ชุบชีวิต โล่เวทไม่ซ้อนกัน เป้าหมายเสริมคือชนะโดยรักษาทีมครบ ${d.heroes.length} คน</p>`);
     const p = this.presentation;
