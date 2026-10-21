@@ -1010,7 +1010,7 @@ The current map becomes map 3, "แนวรอยแยก". Two short new maps
 |---|---|
 | Map names | as listed above |
 | Level cap | rises to 15, and map 3 moves up |
-| Existing companies | anyone who already cleared the frontier counts maps 1–2 as cleared |
+| Existing companies | any company that finished the prologue counts maps 1–2 as cleared; one that finished an expedition also counts the frontier |
 | Running expedition | keeps its map id |
 | Order of work | the stats work (docs/STATS_DESIGN.md) comes first, so the tutorials teach the final systems |
 
@@ -1018,6 +1018,15 @@ The current map becomes map 3, "แนวรอยแยก". Two short new maps
 
 1. Split game-wide rules (company, progression, equipment, potions, shop, talents, mercenaries) out of `MapDefinition`.
 2. A map choice in the Lobby. Choosing a chapter is not choosing rooms on the board.
-3. Save v21: cleared maps and guided tasks.
+3. Save v22: cleared maps (`Profile.cleared`); guided tasks follow with map 1.
 4. Build map 1, then map 2.
 5. Re-level map 3 and simulate all three maps.
+
+Status:
+- **Phase A is done.**
+  - `src/content/world/rules.ts` (`gameRules`) holds the shared rules; every map spreads them.
+  - `src/content/world/maps.ts` (`MAPS`) lists the campaign in order.
+  - `mapUnlocked` opens a map once the one before it is cleared. `settle` records a completed map in `profile.cleared`.
+  - The Lobby's depart button opens a map sheet when more than one map is open.
+  - A run keeps its `mapId`, and the shell and save resolve it from `MAPS`. `WorldUI.setMap` redraws the board.
+  - Only a map with `clearStory: 'warden'` plays Vargoth's first-clear story.

@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import { encounterById } from './content/encounters/catalog';
 import { chapterOne } from './content/world/chapter1';
+import { MAPS } from './content/world/maps';
 import { BattleScene } from './game/scenes/BattleScene';
 import { BattleUI } from './ui/battle-ui';
 import { GameShell } from './ui/game-shell';
@@ -32,7 +33,7 @@ const game = new Phaser.Game({
   audio: { noAudio: true },
   render: { antialias: true, roundPixels: true },
 });
-const shell = new GameShell(app, chapterOne, encounterById, ui, views);
+const shell = new GameShell(app, chapterOne, encounterById, ui, views, MAPS);
 // Web fonts and DOM strips can resize the arena without a window resize; re-measure the canvas.
 new ResizeObserver(() => scene.refreshLayout()).observe(document.querySelector('#game')!);
 void document.fonts?.ready.then(() => scene.refreshLayout());

@@ -1,6 +1,6 @@
 import type { BattleState, Outcome } from '../core/battle/types';
 import { clearLegacySaves, loadGame, saveGame, type Game } from '../core/save/expedition-save';
-import { createCommander, depart, brew, buy, claimQuest, refreshBoard, dismiss, equip, hire, learnTalent, newProfile, placeMember, resetTalents, salvage, settle, unequip, upgrade, canWithdraw } from '../core/world/profile';
+import { createCommander, depart, mapUnlocked, brew, buy, claimQuest, refreshBoard, dismiss, equip, hire, learnTalent, newProfile, placeMember, resetTalents, salvage, settle, unequip, upgrade, canWithdraw } from '../core/world/profile';
 import type { Point, Direction, EventChoice, ExpeditionState, MapDefinition, PotionId, Profile, ProfileResult, RunOutcome, ShopItemId, WorldEvent } from '../core/world/types';
 import { travel, tileAt, startPrologue, questDone, battleData, chooseEvent, finishBattle, heroCatalog, move, moveMember, openChest, recordBattle, usePotion, rest, revive, swapMembers, takeOff, wear, type EncounterLookup } from '../core/world/world';
 import { Music, type Track } from '../platform/music';
@@ -41,16 +41,29 @@ export class GameShell {
   private onBattleVisibility: (visible: boolean) => void = () => {};
   private readonly reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-  constructor(private readonly root: HTMLElement, private readonly map: MapDefinition, private readonly lookup: EncounterLookup, private readonly battle: BattleUI,
-    private readonly views: { title: HTMLElement; commander: HTMLElement; lobby: HTMLElement; world: HTMLElement; battle: HTMLElement }) {
+  // Chapters (2026-10-17): `home` is the frontier map (its rules are every map's rules); `maps` is the campaign in
+  // order. The current map is the run's, or the one chosen at departure.
+  private chosenMap: string | undefined;
+  private get map(): MapDefinition {
+    // A running expedition pins its map, so the summary after it ends still names that map.
+    if (this.game?.run) this.chosenMap = this.game.run.mapId;
+    return this.maps.find(m => m.id === this.chosenMap) ?? this.home;
+  }
+  private eliteArtOf(map: MapDefinition): Record<string, string> {
+    return Object.fromEntries(map.elites.map(e => [e.id, this.lookup(e.encounterId)?.enemies.find(f => f.id === 'brute')?.art ?? 'brute']));
+  }
+  constructor(private readonly root: HTMLElement, private readonly home: MapDefinition, private readonly lookup: EncounterLookup, private readonly battle: BattleUI,
+    private readonly views: { title: HTMLElement; commander: HTMLElement; lobby: HTMLElement; world: HTMLElement; battle: HTMLElement },
+    private readonly maps: readonly MapDefinition[] = [home]) {
+    const map = home;
     clearLegacySaves(this.storage); sfx.init(this.storage);
-    this.game = loadGame(this.storage, map, lookup);
-    this.world = new WorldUI(views.world, map, heroCatalog(lookup, map), {
+    this.game = loadGame(this.storage, map, lookup, maps);
+    this.world = new WorldUI(views.world, this.map, heroCatalog(lookup, map), {
       travel: to => this.travelTo(to), move: dir => this.move(dir), rest: () => this.rest(), revive: id => this.revive(id), swap: (a, b) => this.roster(swapMembers(this.state!, a, b)), moveMember: id => this.roster(moveMember(this.state!, id)),
       withdraw: () => this.endRun('withdrawn'), openChest: () => this.openChest(), usePotion: (potion, id) => this.drink(potion, id),
       chooseEvent: choice => this.chooseEvent(choice),
       wear: (id, from, index) => this.gear(wear(this.state!, map, lookup, id, from, index)), takeOff: (id, slot) => this.gear(takeOff(this.state!, map, lookup, id, slot)),
-    }, Object.fromEntries(map.elites.map(e => [e.id, lookup(e.encounterId)?.enemies.find(f => f.id === 'brute')?.art ?? 'brute'])), lookup(map.tutorialEncounterId));
+    }, this.eliteArtOf(this.map), lookup(map.tutorialEncounterId));
     this.lobby = new LobbyUI(views.lobby, map, lookup, heroCatalog(lookup, map), {
       hire: i => this.profileChange(hire(this.game!.profile, map, lookup, i)), refresh: () => this.profileChange(refreshBoard(this.game!.profile, map)),
       buy: (item, hero) => this.profileChange(buy(this.game!.profile, map, item, hero)), smelt: dust => this.profileChange(smelt(this.game!.profile, map, dust)), upgrade: id => this.profileChange(upgrade(this.game!.profile, map, id)),
@@ -60,8 +73,8 @@ export class GameShell {
       salvage: uids => this.profileChange(salvage(this.game!.profile, map, uids)),
       enhance: uid => this.profileChange(enhance(this.game!.profile, map, uid)), fuse: uid => this.profileChange(fuse(this.game!.profile, map, uid)),
       reroll: (uid, i) => this.profileChange(reroll(this.game!.profile, map, uid, i)), brew: potion => this.profileChange(brew(this.game!.profile, map, potion)), claim: id => this.profileChange(claimQuest(this.game!.profile, map, id)),
-      depart: () => this.depart(), home: () => this.showTitle(),
-    });
+      depart: id => this.depart(id), home: () => this.showTitle(),
+    }, maps);
     const story = document.createElement('section'); root.append(story); this.story = new StoryUI(story);
     const summary = document.createElement('section'); root.append(summary); this.summary = new SummaryUI(summary, map);
     this.commander = new CommanderUI(views.commander, { create: c => this.createCommander(c), back: () => { this.replacing = false; this.showTitle(); } });
@@ -197,9 +210,14 @@ export class GameShell {
   private pendingSummary: RunSummary | undefined;
   // Set when the prologue (tutorial) battle is won; its closing scene plays on leaving the battle.
   private prologueWon = false;
-  private depart(): void {
+  // The prologue always starts on the first map; otherwise the Lobby names an open map (default: the furthest open one).
+  private depart(mapId?: string): void {
     if (!this.game || this.game.run) return;
-    const out = depart(this.game.profile, this.map, this.lookup, this.freshSeed());
+    const open = this.maps.filter(m => mapUnlocked(this.game!.profile, this.maps, m.id));
+    const chosen = !this.game.profile.tutorialDone ? this.maps[0]! : open.find(m => m.id === mapId) ?? open.at(-1)!;
+    if (mapId && chosen.id !== mapId) return;
+    this.chosenMap = chosen.id;
+    const out = depart(this.game.profile, chosen, this.lookup, this.freshSeed());
     this.game = { profile: { ...out.profile, last: null }, run: out.run };
     this.persist(); this.banner = undefined; this.locked = false; this.lobbyMessage = ''; this.lobbyCheer = '';
     this.message = 'แตะช่องที่ไฮไลต์หรือใช้ลูกศรเพื่อเดิน';
@@ -227,7 +245,7 @@ export class GameShell {
     this.showLobby(); if (!s) return;
     this.music.play('archway'); sfx.play(s.outcome === 'wiped' ? 'defeat' : s.outcome === 'complete' ? 'victory' : 'claim');
     const open = () => this.summary.show(s, () => { this.music.play('ruins'); this.views.lobby.querySelector<HTMLElement>('#lobby-depart')?.focus({ preventScroll: true }); });
-    if (s.firstClear) this.story.play(firstClearStory, 'ดูสรุปการเดินทาง', open); else open();
+    if (s.firstClear && this.maps.find(m => m.id === s.mapId)?.clearStory === 'warden') this.story.play(firstClearStory, 'ดูสรุปการเดินทาง', open); else open();
   }
   private resume(): void {
     this.locked = false;
@@ -237,6 +255,7 @@ export class GameShell {
     this.renderWorld();
   }
   private renderWorld(): void {
+    this.world.setMap(this.map, this.eliteArtOf(this.map));
     this.show('world');
     this.world.render({ state: this.state!, message: this.message, locked: this.locked, saved: this.saved && !!this.storage, banner: this.banner, effect: this.effect });
     this.effect = undefined;

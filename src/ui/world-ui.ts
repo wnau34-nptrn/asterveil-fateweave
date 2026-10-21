@@ -62,11 +62,11 @@ export class WorldUI {
   private picked: string | undefined;
   private confirmWithdraw = false;
   private tile = 48;
-  private readonly width: number;
+  private width: number;
   private readonly reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
   // `eliteArt` maps each elite id to the actor art of its leading foe (the token drawn on its gate).
-  constructor(private readonly root: HTMLElement, private readonly map: MapDefinition, private readonly heroes: readonly HeroDefinition[], private readonly host: WorldHost,
-    private readonly eliteArt: Readonly<Record<string, string>> = {}, private readonly skillData?: EncounterDefinition) {
+  constructor(private readonly root: HTMLElement, private map: MapDefinition, private readonly heroes: readonly HeroDefinition[], private readonly host: WorldHost,
+    private eliteArt: Readonly<Record<string, string>> = {}, private readonly skillData?: EncounterDefinition) {
     this.width = map.rows[0]!.length;
     root.innerHTML = `
       <section class="map-view" id="map-viewport" aria-label="แผนที่ ใช้ปุ่มลูกศรหรือแตะช่องที่ไฮไลต์เพื่อเดินทีละช่อง">
@@ -81,7 +81,7 @@ export class WorldUI {
         <div class="world-fx" id="world-fx" aria-hidden="true"></div>
       </section>
       <div class="world-hud">
-        <div class="hud-location glass-capsule"><span class="location-mark">${icon('map')}</span><div><p class="eyebrow">${map.name}</p><h1 id="zone-name"></h1></div></div>
+        <div class="hud-location glass-capsule"><span class="location-mark">${icon('map')}</span><div><p class="eyebrow" id="map-name">${map.name}</p><h1 id="zone-name"></h1></div></div>
         <div class="hud-top-right">
           <div id="danger-chip" class="hud-danger glass-capsule" role="status" aria-live="polite"></div>
           <button id="world-info-button" data-world="info" class="hud-info round-glass" aria-haspopup="dialog" aria-controls="world-info" aria-label="ข้อมูลการเดินทางและวิธีเล่น">${icon('info')}</button>
@@ -204,6 +204,18 @@ export class WorldUI {
   private bagOpen(): boolean { return this.root.querySelector<HTMLDialogElement>('#pack-dialog')!.open; }
   private input(dir: Direction): void { if (this.view && !this.view.locked && !this.view.state.completed) this.host.move(dir); }
 
+  // Chapters: the shell shows the run's map. A new board redraws the floor, props and gates; fog and hints follow on render.
+  setMap(map: MapDefinition, eliteArt: Readonly<Record<string, string>> = {}): void {
+    if (map.id === this.map.id) return;
+    this.map = map; this.eliteArt = eliteArt; this.width = map.rows[0]!.length; this.previous = undefined;
+    const grid = this.root.querySelector<HTMLElement>('#map-grid')!;
+    grid.style.setProperty('--cols', String(this.width)); grid.style.setProperty('--rows', String(map.rows.length));
+    grid.querySelector('.floor-layer')!.innerHTML = this.floorCells();
+    const token = this.root.querySelector('#party-token')!;
+    const sprites = this.root.querySelector('#sprite-layer')!; sprites.innerHTML = this.staticSprites(); sprites.append(token);
+    this.root.querySelector('#fog-layer')!.innerHTML = ''; this.root.querySelector('#hint-layer')!.innerHTML = '';
+    this.root.querySelector('#map-name')!.textContent = map.name;
+  }
   private floorCells(): string {
     let html = '';
     for (let y = 0; y < this.map.rows.length; y++) for (let x = 0; x < this.width; x++) {
