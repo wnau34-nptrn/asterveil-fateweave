@@ -2,14 +2,20 @@
 
 ส่งให้ Codex ได้ทันทีโดยไม่ต้องรอโค้ด แต่ละงานคัดลอกเฉพาะกล่อง prompt ของงานนั้นไปวางใน Codex ได้เลย งานที่มีเงื่อนไขระบุไว้ในคอลัมน์ "เริ่มได้เมื่อ" แผนใหญ่อยู่ที่ `docs/MASTER_PLAN_TH.md`
 
-| ลำดับ | งาน | ใช้กับ | เริ่มได้เมื่อ |
+| ลำดับ | งาน | ใช้กับ (รุ่นในแผนใหญ่) | เริ่มได้เมื่อ |
 |---|---|---|---|
-| 1 | ART-UI-MODERN-001 mockup UI ทั้งเกม | สาย 4 UI/UX | ทันที |
-| 2 | ART-UI-ICONS-002 ไอคอนค่าสถานะและแท็บ | สาย 4 | ทันที |
-| 3 | ART-SKILL-ICON-001 ไอคอนสกิลแบบวาด 30 สกิล | สาย 2, 4 | ทันที |
-| 4 | ART-CHAR-BOSS-RUINS-001 บอสแมพ 1 | สาย 1 | ทันที |
-| 5 | ART-PET-001 concept สัตว์เลี้ยง 6 ชนิด | สาย 3 | ทันที (concept เท่านั้น) |
-| 6 | ART-VFX-BOLT-001 ภาพชั้นเอฟเฟกต์ Bolt | สาย 5 | เจ้าของอนุมัติ storyboard v1 (R03) |
+| 1 | ART-UI-MODERN-001 mockup UI ทั้งเกม | A7 UI | ทันที (สำคัญที่สุด) |
+| 2 | ART-VFX-BOLT-001 ภาพชั้นเอฟเฟกต์ Bolt | A8 FX | ทันที (เจ้าของอนุมัติทิศทาง storyboard v1 แล้ว 2026-10-21) |
+| 3 | ART-SKILL-ICON-001 ไอคอนสกิลแบบวาด 30 สกิล | A6 ต้นไม้, A7 | ทันที |
+| 4 | ART-UI-ICONS-002 ไอคอนค่าสถานะและแท็บ | A7 | ทันที |
+| 5 | ART-CHAR-BOSS-RUINS-001 บอสแมพ 1 | A แมพ 1 | ทันที |
+| 6 | ART-UI-PROGRESS-001 ไอคอนตำรา แก่นรอยแยก เศษดาว เหรียญเกียรติยศ กรอบดาวชะตา | A6, B | ทันที |
+| 7 | ART-WORLD-KEYART-001 ภาพหลักแผนที่ 2 และ 4–10 (concept) | A5, B, C | ทันที (concept เท่านั้น) |
+| 8 | ART-CHAR-BOSS-CH1-001 concept บอสบทที่ 1 | B, C | ทันที (concept เท่านั้น) |
+| 9 | ART-PET-001 concept สัตว์เลี้ยง 6 ชนิด | B | ทันที (concept เท่านั้น) |
+| 10 | ART-UI-RUNE-001 ไอคอนรูน 12 แบบ | B | ทันที |
+| 11 | ART-CHAR-RIVAL-001 ผู้บัญชาการคู่แข่งลานประลอง 6 คน | B PvP | ทันที |
+| 12 | ART-WORLD-TOWER-001 หอคอยแห่งชะตา (ฉากต่อสู้ + ไอคอนชั้น) | C | หลังข้อ 1 (ใช้ภาษาภาพเดียวกัน) |
 
 กติการ่วมของทุกงาน: ทำใน branch `art/<task-id-ตัวเล็ก>` จาก `feature/fateweave-initial-prototype`, ใส่ไฟล์เฉพาะใน `incoming/<TASK-ID>/`, ห้ามแก้ `src/`, `tests/`, `public/`, `.github/` และภาพที่ใช้งานอยู่, เปิด PR เข้า `feature/fateweave-initial-prototype` แต่ห้าม merge เอง (Claude ตรวจรับแล้วนำเข้าเอง)
 
@@ -196,13 +202,13 @@ CONSTRAINTS: heroic-chibi, cute but readable; distinct silhouettes; no text; ori
 RETURN: incoming/ART-PET-001/
 ```
 
-## 6. ART-VFX-BOLT-001 — ภาพชั้นเอฟเฟกต์ Bolt (หลังเจ้าของอนุมัติ storyboard)
+## 6. ART-VFX-BOLT-001 — ภาพชั้นเอฟเฟกต์ Bolt (ทิศทางอนุมัติแล้ว เริ่มได้ทันที)
 
 ```text
 CODEX HANDOFF — ART-VFX-BOLT-001
 Asterveil · Fateweave: Bolt "Astral Thread" effect-only layers
 
-Start only after the owner approves the v1 Bolt storyboard (implementation plan R03). You are the VFX artist for Asterveil · Fateweave. Produce transparent effect-only texture layers for the Mage's Bolt so Claude can animate them in Phaser from the approved storyboard.
+The owner approved the v1 storyboard direction on 2026-10-21 (implementation plan R03). You are the VFX artist for Asterveil · Fateweave. Produce transparent effect-only texture layers for the Mage's Bolt so Claude can animate them in Phaser from the approved storyboard.
 
 Repository wnau34-nptrn/asterveil-fateweave, base branch feature/fateweave-initial-prototype. Branch art/art-vfx-bolt-001. Files only under incoming/ART-VFX-BOLT-001/. Do not change src/, tests/, public/, .github/. PR into the base branch; do not merge.
 
@@ -222,4 +228,138 @@ ALSO: preview_dark.png and preview_light.png (layers composited over a dark and 
 CONSTRAINTS: no text, no UI, no characters; no full-screen flashes; shapes tapered and intentional, not uniform circles or thick straight beams.
 
 RETURN: incoming/ART-VFX-BOLT-001/
+```
+
+## 7. ART-UI-PROGRESS-001 — ไอคอนของพัฒนาตัวละคร
+
+```text
+CODEX HANDOFF — ART-UI-PROGRESS-001
+Asterveil · Fateweave: progression material icons and star-fate frames
+
+You are the 2D game asset producer for Asterveil · Fateweave (Thai, mobile-first 2D fantasy JRPG). New character progression is approved: skill levels paid with "battle tomes" in three role lines, a boss material for the last skill level, star shards for stars, honour coins from the offline arena, and "star fate" ranks ★1–5 that each unlock a unique effect.
+
+Repository wnau34-nptrn/asterveil-fateweave, base branch feature/fateweave-initial-prototype. Create branch art/art-ui-progress-001. Add files only under incoming/ART-UI-PROGRESS-001/. Do not change src/, tests/, public/, .github/ or existing art. Open a PR into feature/fateweave-initial-prototype; do not merge it. Never use names, art or content from other games or projects, and never use the term "ม่านเวล".
+
+READ FIRST: docs/MASTER_PLAN_TH.md (A6 and B), public/assets/world/items.webp + src/content/world/items.json and public/assets/ui/equip/*.webp (painted item style to match exactly: light from top-left, outline weight, 128 px framing), incoming/ART-UI-WORLD-001/STYLE_GUIDE.md.
+
+DELIVERABLES (painted, transparent, 256x256 each, motif within 200 px; plus one atlas progress_items.webp + progress_items.json):
+- tome_bulwark (ตำราปราการ, defence line: steel-blue cover, shield clasp)
+- tome_blade (ตำราศัสตรา, offence line: crimson cover, sword clasp)
+- tome_accord (ตำราประสาน, support line: mint/gold cover, radiant clasp)
+- three sizes of each tome: small / medium / large (same design, more ornate) → 9 icons
+- rift_core (แก่นรอยแยก: a violet-black crystal heart with a glowing thread inside)
+- star_shard (เศษดาว: a five-point star fragment, warm gold)
+- honour_coin (เหรียญเกียรติยศ: silver coin with crossed spear and quill)
+- pet_egg (a speckled egg with a faint thread pattern) and pet_food (a small pouch of glowing grain)
+Star-fate UI (separate PNGs, transparent): star_fate_empty, star_fate_lit (64x64 star sockets), star_fate_frame (a 512x160 decorative band that holds five sockets in a row; no text).
+Plus preview.png (all items at 32, 48, 64 px on navy #0b1730 and on a light panel) and NOTES.md.
+
+CONSTRAINTS: no text, no rarity frames (drawn by code), distinct silhouettes at 32 px, consistent with existing item art.
+
+RETURN: incoming/ART-UI-PROGRESS-001/
+```
+
+## 8. ART-WORLD-KEYART-001 — ภาพหลักแผนที่ (concept)
+
+```text
+CODEX HANDOFF — ART-WORLD-KEYART-001
+Asterveil · Fateweave: chapter-1 map key art concepts (maps 2 and 4–10)
+
+You are the environment concept artist for Asterveil · Fateweave (Thai, mobile-first 2D fantasy JRPG). Chapter 1 grows to ten tile-map expeditions. Produce one key-art concept per new map to set palette, landmarks and mood before tilesets and battle backdrops are made. CONCEPTS ONLY for owner approval.
+
+Repository wnau34-nptrn/asterveil-fateweave, base branch feature/fateweave-initial-prototype. Create branch art/art-world-keyart-001. Add files only under incoming/ART-WORLD-KEYART-001/. Do not change src/, tests/, public/, .github/ or existing art. Open a PR into feature/fateweave-initial-prototype; do not merge it. Never use names, art or content from other games or projects, and never use the term "ม่านเวล".
+
+READ FIRST: docs/LORE_CHAPTER1_TH.md and docs/MASTER_PLAN_TH.md (map table), public/assets/world/*.webp (tiles, decor, landmarks), public/assets/art/ruins.webp (battle backdrop), incoming/ART-UI-WORLD-001/STYLE_GUIDE.md, docs/handoffs/ART-UI-WORLD-001.md (how the tile map is drawn: square tiles, top-down 3/4).
+
+MAPS
+2 เส้นทางป่าทึบ (deep forest trail, twisted thorn trees, mossy shrines), 4 ทะเลสาบเงาจันทร์ (moon-shadow lake, mirror water, floating lanterns), 5 เหมืองผลึกร้าง (abandoned crystal mine, rails, crystal veins that look like frozen threads), 6 บึงหมอกพิษ (poison mist swamp, stilt huts, bubbling pools), 7 ป้อมเถ้าถ่าน (burnt fortress, embers, Vargoth war banners without readable text), 8 นครลอยฟ้าที่ล่มสลาย (fallen floating city of the old fate-weavers; must match ruins.webp), 9 ทุ่งดาวตก (meteor-strewn starfield plain at dusk), 10 บัลลังก์รอยแยก (the throne inside the rift: violet void, broken thread bridges).
+
+DELIVERABLES per map: keyart_<n>.png 1920x1080 (mood painting, top-down 3/4 angle close to the game's map camera), palette_<n>.png (6–8 swatches with hex), landmarks_<n>.png (3–4 landmark/decor sketches that could become map props), tile_mood_<n>.png (a 4x4 sample of what floor/wall tiles could look like at 48 px). Plus overview.png (all maps side by side) and NOTES.md.
+
+CONSTRAINTS: same painterly world style as the shipped tiles; readable paths (floors clearly lighter than walls); no text; original designs.
+
+RETURN: incoming/ART-WORLD-KEYART-001/
+```
+
+## 9. ART-CHAR-BOSS-CH1-001 — concept บอสบทที่ 1
+
+```text
+CODEX HANDOFF — ART-CHAR-BOSS-CH1-001
+Asterveil · Fateweave: chapter-1 boss concepts
+
+You are the character designer for Asterveil · Fateweave (Thai, mobile-first 2D fantasy JRPG). Produce boss concepts for maps 4–10. CONCEPTS ONLY for owner approval; production frames follow in a later task using the ART-CHAR-MERC-ENEMY-001 format.
+
+Repository wnau34-nptrn/asterveil-fateweave, base branch feature/fateweave-initial-prototype. Create branch art/art-char-boss-ch1-001. Add files only under incoming/ART-CHAR-BOSS-CH1-001/. Do not change src/, tests/, public/, .github/ or existing art. Open a PR into feature/fateweave-initial-prototype; do not merge it. Never use names, art or content from other games or projects, and never use the term "ม่านเวล".
+
+READ FIRST: docs/LORE_CHAPTER1_TH.md, docs/handoffs/ART-PLACEMENT-RULES.md (enemies face LEFT), public/assets/art/units_foes.webp (style and scale; the Rift Warden "foe_sentinel" is the existing map-3 boss), src/ui/story-ui.ts (Vargoth's voice).
+
+BOSSES: ภูตธารา (lake spirit, sorrowful water maiden), ยักษ์ผลึก (crystal giant of frozen fate threads), แม่มดบึง (swamp witch general, alchemy and mist), ขุนพลเพลิง (Vargoth's flame general, armoured), ผู้พิทักษ์นครโบราณ (ancient guardian construct of the floating city), เงาแห่งชะตา (a shadow double of the player commander: hooded, no face, threads trailing), วาร์กอธ (demon chief of the rift tribes; imposing but charismatic, two-phase look: armoured / unleashed).
+
+DELIVERABLES: concepts_sheet.png (2560x1440, all bosses side by side at battle scale next to the Knight from units.webp), one 1024x1024 front 3/4 concept per boss (left-facing), phase-2 variant for Vargoth, silhouette_test.png (black silhouettes at 96 px), NOTES.md (palette, attacks each design suggests: physical vs energy).
+
+CONSTRAINTS: heroic chibi proportions consistent with existing foes (bosses may be large); physical-looking bosses read physical, energy-looking bosses read magical; no text; original designs.
+
+RETURN: incoming/ART-CHAR-BOSS-CH1-001/
+```
+
+## 10. ART-UI-RUNE-001 — ไอคอนรูน
+
+```text
+CODEX HANDOFF — ART-UI-RUNE-001
+Asterveil · Fateweave: rune icons
+
+You are the 2D game asset producer for Asterveil · Fateweave. Runes are socketed into gear and give conditional effects only (no flat stats). Produce 12 rune icons and a socket.
+
+Repository wnau34-nptrn/asterveil-fateweave, base branch feature/fateweave-initial-prototype. Create branch art/art-ui-rune-001. Add files only under incoming/ART-UI-RUNE-001/. Do not change src/, tests/, public/, .github/ or existing art. Open a PR into feature/fateweave-initial-prototype; do not merge it. Never use names, art or content from other games or projects, and never use the term "ม่านเวล".
+
+READ FIRST: docs/MASTER_PLAN_TH.md (B, runes), public/assets/ui/equip/*.webp (painted style), src/ui/svg/rune-*.svg if present and public/assets/world puzzle rune stones (do not confuse: puzzle runes are map stones; these are small carved gems).
+
+RUNES (id — meaning): rune_guard (when guarding gain a shield), rune_mark (hitting a marked foe ticks a cooldown), rune_opening (first round damage up), rune_mend (healing grants resistance), rune_thorn (reflect when hit), rune_echo (repeat a small part of the first skill), rune_focus (support power on full HP), rune_last (damage up below half HP), rune_ward (start with a barrier), rune_swift (act effects on the first turn, no SPD), rune_leech (heal on defeating a foe), rune_veil (resist energy once per battle).
+Each: a carved gem/stone tablet with a unique glyph, colour by family (defence blue, offence red, support mint, utility violet).
+
+DELIVERABLES: 256x256 transparent PNGs, runes.webp atlas + runes.json, rune_socket_empty.png and rune_socket_filled_frame.png (96x96), preview.png at 24/40/56 px, NOTES.md.
+
+CONSTRAINTS: glyphs original (no real-world alphabets or religious symbols), no text, no rarity frames, readable at 24 px.
+
+RETURN: incoming/ART-UI-RUNE-001/
+```
+
+## 11. ART-CHAR-RIVAL-001 — ผู้บัญชาการคู่แข่ง
+
+```text
+CODEX HANDOFF — ART-CHAR-RIVAL-001
+Asterveil · Fateweave: rival commanders for the offline arena
+
+You are the character artist for Asterveil · Fateweave. The offline arena (ลานประลองทหารรับจ้าง) pits the player against rival mercenary companies. Each rival company is led by a commander who appears as a portrait on the ladder and a banner crest. Their fighters reuse the existing class art.
+
+Repository wnau34-nptrn/asterveil-fateweave, base branch feature/fateweave-initial-prototype. Create branch art/art-char-rival-001. Add files only under incoming/ART-CHAR-RIVAL-001/. Do not change src/, tests/, public/, .github/ or existing art. Open a PR into feature/fateweave-initial-prototype; do not merge it. Never use names, art or content from other games or projects, and never use the term "ม่านเวล".
+
+READ FIRST: public/assets/art/portraits.webp and portraits_mercs.webp (portrait format and style), src/ui/commander-ui.ts (player commander crests and colours), docs/LORE_CHAPTER1_TH.md.
+
+RIVALS (6): a proud young noble captain, a scarred veteran sellsword, a cheerful twin-blade showman, a cold strategist with a monocle, a giant-hearted dwarf-sized smith captain, and the ladder champion (mysterious masked knight with gold accents).
+
+DELIVERABLES: rivals_portraits.webp (square bust portraits, same size/format as portraits.webp) + json, rival_crests.png (6 crests, 256x256 transparent, no text), preview.png (ladder row mock at 390 px), NOTES.md.
+
+CONSTRAINTS: same style as the shipped portraits; distinct silhouettes and colour per rival; no text; original designs.
+
+RETURN: incoming/ART-CHAR-RIVAL-001/
+```
+
+## 12. ART-WORLD-TOWER-001 — หอคอยแห่งชะตา
+
+```text
+CODEX HANDOFF — ART-WORLD-TOWER-001
+Asterveil · Fateweave: Tower of Fate battle backdrop and floor icons
+
+You are the environment artist for Asterveil · Fateweave. The Tower of Fate is a floor-by-floor battle challenge with conditions per floor. Start after ART-UI-MODERN-001 so the floor list uses the same visual language.
+
+Repository wnau34-nptrn/asterveil-fateweave, base branch feature/fateweave-initial-prototype. Create branch art/art-world-tower-001. Add files only under incoming/ART-WORLD-TOWER-001/. Do not change src/, tests/, public/, .github/ or existing art. Open a PR into feature/fateweave-initial-prototype; do not merge it. Never use names, art or content from other games or projects, and never use the term "ม่านเวล".
+
+READ FIRST: public/assets/art/ruins.webp (battle backdrop format, size and where the units stand), docs/handoffs/ART-PLACEMENT-RULES.md, incoming/ART-UI-MODERN-001 (once merged) for UI language, docs/MASTER_PLAN_TH.md (C, tower).
+
+DELIVERABLES: tower_backdrop.webp (same size and composition rules as ruins.webp: clear standing areas left/right), tower_backdrop_top.webp (variant for the top floors), floor icons (64x64 transparent: normal floor, rest floor, condition floor, boss floor, cleared stamp), tower_exterior.png (1920x1080 key art for the lobby entry card), preview.png, NOTES.md.
+
+CONSTRAINTS: original design; the backdrop must not reduce readability of units, HP bars and intents; no text.
+
+RETURN: incoming/ART-WORLD-TOWER-001/
 ```
