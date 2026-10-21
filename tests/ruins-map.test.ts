@@ -3,6 +3,7 @@ import { encounterById as lookup } from '../src/content/encounters/catalog';
 import { chapterOne } from '../src/content/world/chapter1';
 import { ruinsMap as map } from '../src/content/world/chapter-ruins';
 import { MAPS } from '../src/content/world/maps';
+import { forestMap } from '../src/content/world/chapter-forest';
 import { resolveCommand } from '../src/core/battle/engine';
 import { depart, mapUnlocked, newProfile, settle } from '../src/core/world/profile';
 import type { Direction, ExpeditionState, Point } from '../src/core/world/types';
@@ -33,7 +34,7 @@ function fight(state: ExpeditionState): ExpeditionState {
 
 describe('map 1: ซากชายแดน', () => {
   it('comes first in the campaign, then the frontier; it is small, with one camp and a boss on the only way to the goal', () => {
-    expect(MAPS.map(m => m.id)).toEqual([map.id, chapterOne.id]); expect(map.chapter).toBe(1);
+    expect(MAPS.map(m => m.id)).toEqual([map.id, forestMap.id, chapterOne.id]); expect(map.chapter).toBe(1);
     expect(map.rows.length * map.rows[0]!.length).toBeLessThanOrEqual(14 * 12);
     expect(map.rows.every(r => r.length === map.rows[0]!.length)).toBe(true);
     const [goal] = findTiles(map, 'goal'); expect(findTiles(map, 'camp')).toHaveLength(1);
@@ -43,10 +44,11 @@ describe('map 1: ซากชายแดน', () => {
     expect(map.elites).toEqual([]); expect(map.events).toEqual([]); expect(map.quest.need).toBe(0); expect(map.bossCharm).toBeUndefined();
     for (const z of map.zones.filter(z => !z.safe)) expect(z.levels![1]).toBeLessThanOrEqual(3);
   });
-  it('the map opens for everyone; the frontier opens once it is cleared', () => {
+  it('the map opens for everyone; the forest opens once it is cleared, then the frontier', () => {
     const p = newProfile(map, 4);
-    expect(mapUnlocked(p, MAPS, map.id)).toBe(true); expect(mapUnlocked(p, MAPS, chapterOne.id)).toBe(false);
-    expect(mapUnlocked({ ...p, cleared: [map.id] }, MAPS, chapterOne.id)).toBe(true);
+    expect(mapUnlocked(p, MAPS, map.id)).toBe(true); expect(mapUnlocked(p, MAPS, forestMap.id)).toBe(false);
+    expect(mapUnlocked({ ...p, cleared: [map.id] }, MAPS, forestMap.id)).toBe(true); expect(mapUnlocked({ ...p, cleared: [map.id] }, MAPS, chapterOne.id)).toBe(false);
+    expect(mapUnlocked({ ...p, cleared: [map.id, forestMap.id] }, MAPS, chapterOne.id)).toBe(true);
   });
   it('the prologue win leaves one plain body piece in the bag, and a member can wear it at once', () => {
     let s = startPrologue(newExpedition(map, lookup, 11), map).state; s = fight(s);
@@ -71,7 +73,7 @@ describe('map 1: ซากชายแดน', () => {
       // The captain drops the boss's ordinary items, but no targeted boss charm on the teaching map.
       expect(s.found.length).toBeGreaterThanOrEqual(map.equipment.bossDrops); expect(s.found.some(i => i.boss)).toBe(false);
       const home = settle({ ...profile, tutorialDone: true }, s, 'complete', map);
-      expect(home.cleared).toEqual([map.id]); expect(mapUnlocked(home, MAPS, chapterOne.id)).toBe(true);
+      expect(home.cleared).toEqual([map.id]); expect(mapUnlocked(home, MAPS, forestMap.id)).toBe(true);
     }
   });
 });

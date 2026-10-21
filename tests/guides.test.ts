@@ -8,7 +8,7 @@ describe('guided tasks', () => {
   const after1 = () => ({ ...newProfile(ruinsMap, 3, ['guardian', 'tracer', 'weaver', 'healer']), tutorialDone: true, cleared: [ruinsMap.id] });
   it('only tasks of open systems show; veterans see none', () => {
     expect(activeGuides(newProfile(ruinsMap, 3, ['guardian']), MAPS)).toEqual([]);
-    expect(activeGuides(after1(), MAPS).map(g => g.id)).toEqual(['guide-wear', 'guide-enhance', 'guide-talent', 'guide-brew', 'guide-level']);
+    expect(activeGuides(after1(), MAPS).map(g => g.id)).toEqual(['guide-wear', 'guide-enhance', 'guide-talent', 'guide-brew']);
     expect(activeGuides({ ...after1(), veteran: true }, MAPS)).toEqual([]);
   });
   it('a task pays once when done, can be skipped, and then disappears', () => {

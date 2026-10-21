@@ -27,6 +27,7 @@ export const prologueEnd: readonly StoryPanel[] = [
 const recruitLines: Readonly<Record<string, string>> = {
   tracer: 'ข้าชื่อไลรา ทหารจากป้อมตะวันออก… ถ้าท่านมองเห็นชะตาได้จริง ข้าจะตามท่านไปเอง',
   weaver: 'แคมป์นี้อุ่นกว่าที่คิด… ไอราจะอยู่ด้วย เวทของข้าควรใช้ปกป้องคนที่ยังสู้อยู่',
+  garran: 'ข้าการ์แรน เฝ้าเส้นทางนี้มาคนเดียวตั้งแต่หน่วยของข้าถูกป่ากลืน… ถ้าท่านจะฝ่าไป ทวนของข้าขอไปด้วย',
   healer: 'หัวหน้ากองหน้าล้มแล้ว… ข้าเชื่อแล้วว่าท่านพาพวกเรารอดได้ เซเรนขอเดินทางไปกับท่าน',
 };
 export const recruitStory = (heroes: readonly string[], camp: string): readonly StoryPanel[] => heroes.flatMap(id => [
