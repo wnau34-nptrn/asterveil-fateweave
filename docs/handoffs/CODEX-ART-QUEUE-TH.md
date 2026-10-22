@@ -5,7 +5,7 @@
 | ลำดับ | งาน | ใช้กับ (รุ่นในแผนใหญ่) | เริ่มได้เมื่อ |
 |---|---|---|---|
 | 1 | ART-UI-MODERN-001 mockup UI ทั้งเกม | A7 UI | ทันที (สำคัญที่สุด) |
-| 2 | ART-VFX-BOLT-001 ภาพชั้นเอฟเฟกต์ Bolt | A8 FX | ได้รับ 2026-10-22 ยังไม่ใส่ในเกม (รอเจ้าของดูคลิป Bolt) |
+| 2 | ART-VFX-BOLT-001 ภาพชั้นเอฟเฟกต์ Bolt | A8 FX | เจ้าของให้ Bolt ผ่าน ใส่ในเกมแล้ว 2026-10-22 (แก้กรอบดำใน cast_thread) |
 | 3 | ART-SKILL-ICON-001 ไอคอนสกิลแบบวาด 30 สกิล | A6 ต้นไม้, A7 | รอบแก้ 3R ได้รับและเจ้าของอนุมัติ 2026-10-22 ใช้ในเกมแล้ว |
 | 4 | ART-UI-ICONS-002 ไอคอนค่าสถานะและแท็บ | A7 | ได้รับแล้วและใช้ในเกมแล้ว 2026-10-22 |
 | 5 | ART-CHAR-BOSS-RUINS-001 บอสแมพ 1 | A แมพ 1 | เจ้าของอนุมัติ ใส่ในเกมแล้ว 2026-10-22 |
@@ -22,7 +22,7 @@
 | 16 | ART-WORLD-TILES-002 ชุดช่องแผนที่ป่าทึบ (แมพ 2) จาก concept ที่อนุมัติ | A | ทันที |
 | 17 | ART-CHAR-BOSS-CH1-002 ภาพจริงบอสแมพ 4–10 + วาร์กอธ 2 ร่าง จาก concept ที่อนุมัติ | B, C | ทันที |
 | 18 | ART-PET-002 ภาพจริงสัตว์เลี้ยง 6 ตัว จาก concept ที่อนุมัติ | B | ทันที |
-| 19 | ART-VFX-EXEC-WARD-001 ภาพชั้นเอฟเฟกต์ Execute และ Ward | A8 | หลังเจ้าของตรวจคลิป Bolt |
+| 19 | ART-VFX-EXEC-WARD-001 ภาพชั้นเอฟเฟกต์ Execute และ Ward | A8 | ทันที (เจ้าของให้ Bolt ผ่าน 2026-10-22) |
 | 20 | ART-WORLD-CH1-MAP-001 แผนที่ภาพรวมบทที่ 1 (หน้าเลือกแผนที่) | A | ทันที (เจ้าของอนุมัติ 2026-10-22) |
 | 21 | ART-WORLD-MAP-001 concept แผนที่โลกแอสเตอร์เวล | C | ทันที (concept เท่านั้น) |
 
@@ -561,13 +561,13 @@ CONSTRAINTS: keep each concept's silhouette and palette; readable at 44 px; no t
 RETURN: incoming/ART-PET-002/
 ```
 
-## 19. ART-VFX-EXEC-WARD-001 — เอฟเฟกต์ Execute และ Ward (เริ่มหลังเจ้าของตรวจคลิป Bolt)
+## 19. ART-VFX-EXEC-WARD-001 — เอฟเฟกต์ Execute และ Ward (เริ่มได้ทันที)
 
 ```text
 CODEX HANDOFF — ART-VFX-EXEC-WARD-001
 Asterveil · Fateweave: effect layers for Execute (Rose-Gold Edge) and Ward (Luminous Aegis)
 
-Start only after the owner has reviewed the Bolt clips (docs/combat-presentation/bolt-slice/) and any Bolt changes are applied; follow that feedback.
+The owner passed the Bolt slice on 2026-10-22 and your ART-VFX-BOLT-001 layers are now in the game (docs/combat-presentation/bolt-slice/ has the new clips). Match that language. One packaging defect to avoid: cast_thread_00–03 carried a faint dark square outline 4 px inside each cell (alpha up to ~200); keep every cell free of grid/frame lines.
 
 Repository wnau34-nptrn/asterveil-fateweave, base branch feature/fateweave-initial-prototype. Create branch art/art-vfx-exec-ward-001. Add files only under incoming/ART-VFX-EXEC-WARD-001/. Do not change src/, tests/, public/, .github/ or existing art. Open a PR into the base branch; do not merge. Original artwork only; nothing from Asterveil: Rise Beyond. Never use the word ม่านเวล.
 

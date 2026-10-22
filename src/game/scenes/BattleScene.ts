@@ -3,7 +3,7 @@ import type { BattleState, EncounterDefinition, TurnStage } from '../../core/bat
 import { effectFamily, effectCaption, type CombatPrefs } from '../visuals/combat-effects';
 import { thaiFont } from '../../ui/th';
 import { palette } from '../visuals/palette';
-import { boltCast, boltImpact, type FxContext } from '../visuals/bolt-fx';
+import { BOLT_ATLAS, boltAtlasUrls, boltCast, boltImpact, type FxContext } from '../visuals/bolt-fx';
 import { fieldSlots, type FieldSlot } from '../visuals/field-layout';
 import { actorArt, actorFootOrigins, artOf, artUrl, mirroredArt, unitsUrl } from '../visuals/assets';
 
@@ -70,6 +70,7 @@ export class BattleScene extends Phaser.Scene {
   }
   preload(): void {
     this.load.image('rift-ruins', artUrl('ruins'));
+    this.load.atlas(BOLT_ATLAS, ...boltAtlasUrls());
     for (const sheet of ['units', 'mercs', 'foes'] as const) this.load.spritesheet(`battle-${sheet}`, unitsUrl(sheet), { frameWidth: 512, frameHeight: 512 });
   }
   create(): void {
@@ -243,7 +244,7 @@ export class BattleScene extends Phaser.Scene {
     return { scene: this, quiet: this.quiet, reduced: this.reducedMotion, scale: Phaser.Math.Clamp(size / 96, .7, 1.25),
       add: (item, life) => { if (life !== undefined) { this.fade(item, life); return; } if (!this.effects) { this.effects = this.add.container(0, 0); this.root?.add(this.effects); } this.effects.add(item); } };
   }
-  private fade(item: Phaser.GameObjects.Shape | Phaser.GameObjects.Graphics | Phaser.GameObjects.Text, life: number): void {
+  private fade(item: Phaser.GameObjects.Shape | Phaser.GameObjects.Graphics | Phaser.GameObjects.Text | Phaser.GameObjects.Image, life: number): void {
     if (!this.effects) { this.effects = this.add.container(0, 0); this.root?.add(this.effects); }
     this.effects.add(item);
     if (!this.reducedMotion) this.tweens.add({ targets: item, alpha: 0, duration: life });

@@ -10,7 +10,7 @@ ART-UI-MODERN-001 (`incoming/ART-UI-MODERN-001/`, Codex mockups) is the approved
 
 ## VFX art rework checkpoint — owner scope 2026-10-21
 
-Status 2026-10-22: the owner asked for FX first; the Bolt vertical slice is in (`game/visuals/bolt-fx.ts`, clips in `docs/combat-presentation/bolt-slice/`) and awaits the owner's clip review before Execute/Ward.
+Status 2026-10-22: the owner passed the Bolt vertical slice; `game/visuals/bolt-fx.ts` now draws Codex's ART-VFX-BOLT-001 painted layers (`public/assets/fx/bolt_fx.*`) with the same timing and truthful outcomes, clips in `docs/combat-presentation/bolt-slice/`. Execute/Ward art is queued (Codex queue 19); implement them in the same language when it arrives.
 
 The owner rejected the visual quality of phase2 and authorized artwork/mockups before further implementation. Engineering completion and passing tests are not visual approval. Current priority supersedes the older immediate phase3 handoff: read `docs/combat-presentation/vfx-art-direction/README_TH.md` and the three v1 storyboards, obtain owner feedback on the visual direction, then implement only Bolt as a polished vertical slice and show real mobile/PC clips before expanding to Execute/Ward or boss cinematics. These are opaque AI concept sheets with known HUD/text/pose drift, not transparent runtime assets; actual game assets/UI/events remain authoritative. Do not cut the gameplay background from a board into a texture. Keep phase1–2 timing/save/cancellation and unchanged rules. This artwork-only handoff does not modify/deploy runtime or imply the owner has approved the v1 visuals. The visual review checkpoint comes from the agreed design workflow, not a new permission requirement for routine tests/git operations.
 
