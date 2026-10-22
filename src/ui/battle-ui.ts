@@ -29,6 +29,8 @@ export interface BattleSession {
 const kindLabel: Record<BattleKind, string> = { tutorial: 'ศึกแรก', random: 'พบศัตรู', boss: 'บอส', elite: 'อีลิท', event: 'เหตุการณ์' };
 
 const shieldReason = 'A front-row enemy shields this target.';
+// Rounds a hero's skill still cools (0 = ready).
+const cooling = (s: BattleState, heroId: string, action: ActionId): number => Math.max(0, (s.heroes.find(h => h.id === heroId)?.cooldowns[action] ?? 0) - s.round);
 // A foe's next move in a few glyphs: kind icon + power + who it aims at (a portrait), or the boss special.
 function intentBadge(next: Intent, stopped: boolean, face: (id: string) => string): string {
   if (stopped) return '<b>หยุด</b>';
@@ -65,6 +67,7 @@ export class BattleUI {
   private scene: BattleScene | undefined;
   private session: BattleSession | undefined;
   private data: EncounterDefinition;
+  private turnTitle = '';
 
   constructor(private readonly root: HTMLElement, data: EncounterDefinition) {
     this.data = data;
@@ -420,6 +423,7 @@ export class BattleUI {
     const actor = turn?.actorId ?? this.heroId;
     const title = !this.started ? 'เรียงเทิร์นตามความเร็ว' : turn ? canceled ? `${actorName(actor, d)} · ถูกขัดจังหวะ` : `เทิร์น${turn.side === 'hero' ? 'ฮีโร่' : 'ศัตรู'} · ${actorName(actor, d)}` : s.outcome !== 'active' ? `จบการต่อสู้ · ${s.outcome === 'victory' ? 'ชนะแล้ว' : 'แพ้แล้ว'}` : `เทิร์นของคุณ · ${actorName(actor, d)}`;
     const detail = turn ? canceled ? 'ศัตรูเสียเทิร์นนี้' : `${turn.action ? d.skills[turn.action].name : turn.intent ? intentName(turn.intent) : 'ลงมือ'} → ${actorName(turn.targetId, d)}` : s.outcome !== 'active' ? 'กดปุ่มด้านล่างเพื่อไปต่อ' : 'SPD มากเริ่มก่อน · คนละ 1 ครั้งต่อรอบ';
+    this.turnTitle = title;
     const phaseRoot = this.root.querySelector<HTMLElement>('#turn-phase')!;
     phaseRoot.dataset.phase = mode; phaseRoot.dataset.actor = actor; phaseRoot.dataset.canceled = String(!!canceled);
     phaseRoot.dataset.effect = turn ? effectFamily(turn) : 'idle';
@@ -455,7 +459,7 @@ export class BattleUI {
       return `<div class="enemy-card ${enemy.hp <= 0 ? 'fallen' : ''} ${this.actingActor === e.id ? 'active-actor' : ''}" data-enemy="${e.id}">${this.portrait(e.id)}<div><strong>${actorName(e.id, d)}</strong><span class="enemy-hp">HP <b>${enemy.hp} / ${e.maxHp}</b>${enemy.markedUntil > s.round ? ' · ติดตรา' : enemy.hp <= 0 ? ' · กำจัดแล้ว' : ''}</span><span class="hp-track"><span style="width:${enemy.hp / e.maxHp * 100}%"></span></span></div></div>`;
     }).join(''));
     const living = s.heroes.filter(h => h.hp > 0);
-    this.set('beat-status', `<span class="beat-chip">${this.busy ? 'กำลังแสดงผล…' : s.outcome === 'active' ? `รอบ ${s.round}` : s.outcome === 'victory' ? 'ชนะแล้ว' : 'แพ้แล้ว'}</span><span class="formation-chip">หน้า ${living.filter(h => d.heroes.find(v => v.id === h.id)!.lane === 'front').length} · หลัง ${living.filter(h => d.heroes.find(v => v.id === h.id)!.lane === 'back').length}</span>`);
+    this.set('beat-status', `<span class="beat-chip">${this.busy ? 'กำลังแสดงผล…' : s.outcome === 'active' ? `รอบ ${s.round}` : s.outcome === 'victory' ? 'ชนะแล้ว' : 'แพ้แล้ว'}</span><span class="turn-title" aria-hidden="true">${escapeHtml(this.turnTitle)}</span><span class="formation-chip">หน้า ${living.filter(h => d.heroes.find(v => v.id === h.id)!.lane === 'front').length} · หลัง ${living.filter(h => d.heroes.find(v => v.id === h.id)!.lane === 'back').length}</span>`);
     if (intent) {
       const response = this.presentation?.phase === 'enemy';
       const hit = response ? this.stage?.events.find(e => e.type === 'damage') : undefined;
@@ -497,7 +501,7 @@ export class BattleUI {
     this.root.querySelector<HTMLElement>('.command-dock')!.dataset.ready = String(!disabled);
     this.set('commands', `<h2 class="step-heading"><span>2</span>${heroText[this.heroId]!.role} · เลือกคำสั่ง</h2><div class="actions">${hero.actions.map((action, index) => {
       const text = d.skills[action]; const reason = actionReason(s, d, this.heroId, action);
-      return `<div class="action-option"><button id="action-${action}" data-ui="action" data-value="${action}" aria-keyshortcuts="${index + 1}" class="action ${action} ${this.targeting && this.action === action ? 'selected' : ''}" aria-pressed="${this.targeting && this.action === action}" aria-describedby="reason-${action}" ${disabled ? 'disabled' : ''} data-unavailable="${!!reason}"><kbd class="key-hint">${index + 1}</kbd>${icon(action)}<strong>${text.name}</strong><small>${text.english}</small><span class="skill-value">${action === 'attack' ? `พลัง ${hero.attack}` : action === 'mark' ? `โบนัส +${d.rules.markedBonus}` : action === 'guard' ? `ลด ${Math.round(guardReductionOf(d, this.heroId) * 100)}%` : action === 'rally' ? `ลด ${d.rules.rallyReduction * 100}%` : action === 'sanctuary' ? 'กันล้ม' : `พลัง ${skillPower(d, this.heroId, action)}`}</span></button><p id="reason-${action}" class="${reason ? 'unavailable-reason' : ''}">${escapeHtml(reason ? reasonThai(reason) : text.cooldown ? `คูลดาวน์ ${text.cooldown} รอบ` : 'ใช้ได้ทุกเทิร์น')}</p></div>`;
+      return `<div class="action-option"><button id="action-${action}" data-ui="action" data-value="${action}" aria-keyshortcuts="${index + 1}" class="action ${action} ${this.targeting && this.action === action ? 'selected' : ''}" aria-pressed="${this.targeting && this.action === action}" aria-describedby="reason-${action}" ${disabled ? 'disabled' : ''} data-unavailable="${!!reason}"><kbd class="key-hint">${index + 1}</kbd>${icon(action)}<strong>${text.name}</strong><small>${text.english}</small><span class="skill-value">${action === 'attack' ? `พลัง ${hero.attack}` : action === 'mark' ? `โบนัส +${d.rules.markedBonus}` : action === 'guard' ? `ลด ${Math.round(guardReductionOf(d, this.heroId) * 100)}%` : action === 'rally' ? `ลด ${d.rules.rallyReduction * 100}%` : action === 'sanctuary' ? 'กันล้ม' : `พลัง ${skillPower(d, this.heroId, action)}`}</span></button>${cooling(s, this.heroId, action) ? `<span class="cd-badge" aria-hidden="true">รอ ${cooling(s, this.heroId, action)}</span>` : ''}<p id="reason-${action}" class="${reason ? 'unavailable-reason' : ''}">${escapeHtml(reason ? reasonThai(reason) : text.cooldown ? `คูลดาวน์ ${text.cooldown} รอบ` : 'ใช้ได้ทุกเทิร์น')}</p></div>`;
     }).join('')}</div><details class="action-help"><summary>วิธีใช้${d.skills[this.action].name}</summary><p class="action-description">${skillDescription(this.action, this.heroId, d)}</p></details><p class="target-hint">${!this.targeting ? 'เลือกสกิลเพื่อเล็งเป้าหมาย' : noTarget || `${d.skills[this.action].name} — ` + (this.action === 'prayer' ? 'แตะฮีโร่ในสนามเพื่อฟื้นฟูทั้งทีม' : targetKind(this.action) === 'enemies' ? 'แตะศัตรูตัวใดก็ได้เพื่อโจมตีทุกตัว' : this.action === 'brace' ? 'แตะตัวเองในสนามเพื่อตั้งทวน' : this.action === 'evade' ? 'แตะตัวเองในสนามเพื่อก้าวเงา' : this.action === 'taunt' ? 'แตะตัวเองในสนามเพื่อยั่วยุ' : this.action === 'valor' || this.action === 'mend' ? 'แตะตัวเองในสนามเพื่อบรรเลงเพลง' : targetKind(this.action) === 'self' ? `แตะตัวเองในสนามเพื่อใช้${d.skills[this.action].name}` : targetKind(this.action) === 'ally' ? 'แตะเพื่อนในสนามที่มีเครื่องหมาย' : 'แตะศัตรูในสนามที่มีเครื่องหมาย')}</p>`);
   }
 

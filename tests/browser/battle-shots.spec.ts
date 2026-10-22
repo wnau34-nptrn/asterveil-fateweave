@@ -24,7 +24,7 @@ for (const id of ['slime-nest', 'rift-warden', 'veil-siege']) {
     const start = page.locator('[data-ui=start]'); if (await start.isVisible().catch(() => false)) await start.click();
     await expect(page.locator('#action-attack')).toBeEnabled(); await page.waitForTimeout(400);
     await page.screenshot({ path: `${dir}/battle-${id}-390.png` });
-    if (process.env.RECTS) console.log(JSON.stringify(await page.evaluate(() => Object.fromEntries(["#turn-phase", ".arena", "#enemy-roster", "#intent", "#party", ".command-dock", ".masthead"].map(s => { const r = document.querySelector(s)?.getBoundingClientRect(); return [s, r && [r.x, r.y, r.width, r.height].map(Math.round)]; })))));
+    if (process.env.RECTS) console.log(JSON.stringify(await page.evaluate(() => Object.fromEntries(["#turn-phase", ".arena", "#intent", "#party", ".command-dock", ".masthead", "#selected-hero", "#commands", ".actions", ".target-hint", ".action-help", ".decision-panel", "#commands .step-heading", "#help-home", "footer"].map(s => { const r = document.querySelector(s)?.getBoundingClientRect(); return [s, r && [r.x, r.y, r.width, r.height].map(Math.round)]; })))));
     await context.close();
   });
 }
