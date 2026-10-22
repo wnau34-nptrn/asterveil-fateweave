@@ -1,0 +1,128 @@
+{
+  "runes": [
+    {
+      "id": "rune_guard",
+      "size": [
+        256,
+        256
+      ],
+      "alpha": "0..255",
+      "sha256": "9eabb24bbc178bdc20fca2ddba3fc4d4400e73cd8f7d7d6bb81d85330919dd9b"
+    },
+    {
+      "id": "rune_mark",
+      "size": [
+        256,
+        256
+      ],
+      "alpha": "0..255",
+      "sha256": "d2c15caec4317cd0928966ccb9b230f6a67ec4d3d90a736ddc8eabb483033882"
+    },
+    {
+      "id": "rune_opening",
+      "size": [
+        256,
+        256
+      ],
+      "alpha": "0..255",
+      "sha256": "57f838a69abb4715e6cbfe79ce375e92c1b8e702c68aad73ae4a0f634be6b01b"
+    },
+    {
+      "id": "rune_mend",
+      "size": [
+        256,
+        256
+      ],
+      "alpha": "0..255",
+      "sha256": "44d31a5dd9cbade2afbd43f70a64a3d1e13cdb682473b5c3b6efaec439a7bd06"
+    },
+    {
+      "id": "rune_thorn",
+      "size": [
+        256,
+        256
+      ],
+      "alpha": "0..255",
+      "sha256": "917aaf4481478d70a70014073613b275dce087d6ab16f3864ef8be183f8dc018"
+    },
+    {
+      "id": "rune_echo",
+      "size": [
+        256,
+        256
+      ],
+      "alpha": "0..255",
+      "sha256": "ba1f366189e9a901974c6c50df5544e5d5026614f98021b45af066cb7851f654"
+    },
+    {
+      "id": "rune_focus",
+      "size": [
+        256,
+        256
+      ],
+      "alpha": "0..255",
+      "sha256": "dd872df106dd5fa58774b82c4b92bd4477622e2af5d4125dbcf232b81da3f84d"
+    },
+    {
+      "id": "rune_last",
+      "size": [
+        256,
+        256
+      ],
+      "alpha": "0..255",
+      "sha256": "53b88f9327ac1b7176eae0f48a8c0bb1cb734f3b5c3149bc39f68b96318ea63f"
+    },
+    {
+      "id": "rune_ward",
+      "size": [
+        256,
+        256
+      ],
+      "alpha": "0..255",
+      "sha256": "a791c1db5eb3542eb90a3a22b6312a02e37feb0c65e28791d61a3e848c0fb3b9"
+    },
+    {
+      "id": "rune_swift",
+      "size": [
+        256,
+        256
+      ],
+      "alpha": "0..255",
+      "sha256": "fc9f14b9fc02220cfca99e3a6db0e17d57615d225e8509bc5eb464c1fa29c848"
+    },
+    {
+      "id": "rune_leech",
+      "size": [
+        256,
+        256
+      ],
+      "alpha": "0..255",
+      "sha256": "00bec887fec4723717e8354b98194207739ba723c64523ac687017473b6cc953"
+    },
+    {
+      "id": "rune_veil",
+      "size": [
+        256,
+        256
+      ],
+      "alpha": "0..255",
+      "sha256": "1b7894d38f34e740789c52d87b03b713eacfe1a38d13c1957600185b1cb4da81"
+    }
+  ],
+  "atlas": {
+    "size": [
+      1040,
+      780
+    ],
+    "lossless": true,
+    "alphaVerified": true,
+    "framePixelsVerified": true
+  },
+  "sockets": {
+    "size": [
+      96,
+      96
+    ],
+    "filledCentreTransparent": true
+  }
+}
