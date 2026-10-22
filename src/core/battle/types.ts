@@ -2,7 +2,10 @@ export type ActionId = 'attack' | 'guard' | 'bash' | 'mark' | 'execute' | 'bolt'
   // ★3 skills (one per class, unlocked at three stars).
   | 'rally' | 'finisher' | 'sigil' | 'sanctuary' | 'spearwall' | 'weakshot' | 'bomb' | 'backstab' | 'quake' | 'finale'
   // Big skill tree skills (master plan A6): the Knight's challenge, bulwark and rouse.
-  | 'challenge' | 'bulwark' | 'rouse';
+  | 'challenge' | 'bulwark' | 'rouse'
+  // Release A big trees (docs/design/SKILL_TREES_ALL_TH.md): duelist parry/lunge/sweep, mage storm/aegis/dispel,
+  // priest revive/halo/bless, spear hold/halt/warcry, archer disengage/pin/track.
+  | 'parry' | 'lunge' | 'sweep' | 'storm' | 'aegis' | 'dispel' | 'revive' | 'halo' | 'bless' | 'hold' | 'halt' | 'warcry' | 'disengage' | 'pin' | 'track';
 // ★5 passives (one per class, always on at five stars).
 export type PassiveId = 'stand' | 'keeneye' | 'echo' | 'afterglow' | 'heavycounter' | 'tailwind' | 'potent' | 'shadowcounter' | 'stoneskin' | 'resound';
 // Talent-tree capstones (2D-1b): one small rule change per branch, read by the resolver from `HeroDefinition.talents`.
@@ -10,7 +13,13 @@ export type TalentCap = 'retribution' | 'guardcounter' | 'deepmark' | 'relentles
   | 'pierceline' | 'frontwall' | 'hunter' | 'volleyhinder' | 'acidspread' | 'quickbrew' | 'shadowlayer' | 'doubleshadow'
   | 'hammercounter' | 'stoneregen' | 'chorus' | 'overture'
   // Knight big tree modifiers (A6): two guards, energy bash, banners at rally and at the battle start.
-  | 'twoguard' | 'reflectbash' | 'brightbanner' | 'valorbanner' | 'fatebanner';
+  | 'twoguard' | 'reflectbash' | 'brightbanner' | 'valorbanner' | 'fatebanner'
+  // Release A big trees: duelist, mage, priest, spear and archer modifiers and capstones.
+  | 'sharedmark' | 'parrymark' | 'parryall' | 'deadline' | 'endlessdance'
+  | 'piercebolt' | 'twinward' | 'sigilreflect' | 'sigildelay' | 'arcanecharge' | 'fateseal'
+  | 'sanctuaryward' | 'longprayer' | 'quickprayer' | 'lastprayer' | 'dawn'
+  | 'deeppierce' | 'spearfury' | 'holdfirm' | 'holdcounter' | 'unyielding'
+  | 'heavyhinder' | 'chase' | 'quickstep' | 'covershot' | 'stalker';
 // Talent numbers that add to a rule for this hero only (summed over ranks).
 export type TalentRule = 'guardReduction' | 'tauntReduction' | 'corrodeBonus' | 'ambushBonus' | 'executeHeal' | 'healBarrier' | 'hasteHeal' | 'dodgeHeal';
 // What a member's spent talent points do in battle (world `starred` builds it; stat nodes are already in maxHp/attack/skillBonus).
@@ -45,20 +54,36 @@ export interface HeroDefinition {
   passive?: PassiveId;
   talents?: HeroTalents;
   gear?: HeroGear;
+  // Skill levels from tomes (save v37): Lv2–5 per active skill (missing = Lv1). See `skillLevelBonus` in the engine.
+  skillLevels?: Partial<Record<ActionId, number>>;
 }
-// `id` is the field position (`raider` back, `brute` front/large); `art` names the illustrated frame (presentation only).
+// Four foe slots (A7 step 2, owner 2026-10-22): `id` is the field position `f1`/`f2` (front row) or `b1`/`b2` (back row),
+// 1–4 foes per encounter and at most two per row. `row` must match the id; front-row foes screen the back row.
+// `large` draws the foe ~1.5x (presentation only); `boss` marks the foe that hard mode empowers.
+// `art` names the illustrated frame (presentation only).
 // Hard-mode traits (master plan A9): thorns answers a hero's hit, veilguard blunts hits on a foe that is neither marked
 // nor corroded, enrage strengthens its moves below a share of its HP. Numbers come from `rules.traits`.
 export type EnemyTrait = 'thorns' | 'veilguard' | 'enrage';
-export interface EnemyDefinition { id: string; name: string; displayName?: string; maxHp: number; speed: number; color: number; art?: string; traits?: readonly EnemyTrait[] }
+export type EnemySlot = 'f1' | 'f2' | 'b1' | 'b2';
+// `reserve`: a minion that waits off the field until a boss phase summons it (owner 2026-10-22).
+export interface EnemyDefinition { id: EnemySlot; row: 'front' | 'back'; large?: boolean; boss?: boolean; reserve?: boolean; name: string; displayName?: string; maxHp: number; speed: number; color: number; art?: string; traits?: readonly EnemyTrait[] }
 // Enemy moves aim at a party slot (0-3 in deployment order), not a named hero, so any
 // mercenary in that slot is the target. The resolved hero id is stored on Intent.
-export interface IntentDefinition { sourceId: string; targetSlot: number; name: string; damage: number; kind: 'physical' | 'energy' }
+// `unstoppable` (boss signature moves, owner 2026-10-22): Bash and Sigil cannot cancel it; Guard, Ward and taunts still answer it.
+// Boss phases (owner 2026-10-22): `phase` puts the move in that phase's cycle (missing = the opening cycle); `all` hits
+// every standing hero (Guard and taunts cannot redirect it); `charge` gathers power and deals no damage.
+// `special` is set only on the generated phase-change turn.
+export interface IntentDefinition { sourceId: string; targetSlot: number; name: string; damage: number; kind: 'physical' | 'energy'; unstoppable?: boolean;
+  phase?: number; all?: boolean; charge?: boolean; special?: 'phase' }
+// A boss phase: once the boss's HP falls to `below` percent, its next turn summons the `summon` reserves (if any) and
+// switches its moves to that phase's cycle. `hardSummon` reserves join only in hard mode (world `hardEncounter`).
+export interface BossPhase { sourceId: EnemySlot; below: number; summon?: readonly EnemySlot[]; hardSummon?: readonly EnemySlot[]; name: string }
 export interface EncounterDefinition {
   id: string; version: number; name: string;
   // Monster level (2D-1): the content numbers are this level's; `withLevel` rescales a copy.
   level?: number;
   heroes: readonly HeroDefinition[]; enemies: readonly EnemyDefinition[]; intents: readonly IntentDefinition[];
+  phases?: readonly BossPhase[];
   skills: Record<ActionId, SkillDefinition>;
   // corrode*: alchemist acid adds a flat bonus to every hero hit on the target for corrodeDuration rounds.
   // ambushBonus: scout ambush adds this when the target has not acted yet this round.
@@ -67,17 +92,31 @@ export interface EncounterDefinition {
     rallyReduction: number; finisherThreshold: number; echoBonus: number; afterglowCap: number; heavyCounter: number;
     weakshotBonus: number; quakeBonus: number; shadowCounter: number; stoneskinReduction: number; resound: number; finaleHeal: number;
     // Stats step 2 caps (percent).
-    defenseCap: number; leechCap: number };
+    defenseCap: number; leechCap: number;
+    // Skill levels (tomes, save v37): each level above 1 adds `powerPercent` to a skill's power, `percentPoints` to a
+    // percent skill, or a `barrier` on use to a skill without numbers (docs/design/SKILL_TOMES_TH.md).
+    skillLevel: { powerPercent: number; percentPoints: number; barrier: number } };
 }
 // Expiry/cooldown values are absolute round numbers, never animation time.
 // `hastedRound`: an alchemist's haste makes this hero act before everyone in that round.
 // `evading`: a scout's shadow step; the first enemy hit on this hero before its next turn misses.
 // Talents: `evadeExtra` = further hits a doubled shadow step dodges; `reflect` = a ward that strikes back once when it absorbs a hit.
-export interface HeroState { id: string; hp: number; barrier: number; cooldowns: Partial<Record<ActionId, number>>; bossUsedRound?:number; hastedRound?: number; evading?: boolean; evadeExtra?: number; reflect?: { heroId: string; amount: number } }
+// Release A trees: `evadePhysical` = this dodge only takes a physical hit (archer disengage); `fell` = downed during this
+// battle (only those can be revived); `revivedRound` = revived this round (acts from the next one);
+// `empowered` = a percent added to this hero's hits until the end of `round` (priest blessing, spear war cry).
+export interface HeroState { id: string; hp: number; barrier: number; cooldowns: Partial<Record<ActionId, number>>; bossUsedRound?:number; hastedRound?: number; evading?: boolean; evadeExtra?: number; evadePhysical?: boolean; reflect?: { heroId: string; amount: number };
+  fell?: boolean; revivedRound?: number; empowered?: { percent: number; round: number } }
 // `delayedRound`: an archer's hindering shot sends this enemy to the end of that round's queue.
 // `corrodeBonus`: the bonus of the flask that corroded it (talents can raise it; missing = the rule's value).
-export interface EnemyState { id: string; hp: number; markedUntil: number; interruptedRound?: number; delayedRound?: number; corrodedUntil?: number; corrodeBonus?: number }
-export interface Intent extends IntentDefinition { targetId: string; beat: number; round: number }
+// `steadyRound` (boss steadfast): the last round a boss whose turn was cancelled cannot be interrupted again.
+// `absent`: a reserve not yet summoned (kept at 0 HP, so it is out of the queue and the target lists).
+// `phase`/`phaseRound`: how many boss phases have begun, and the round the latest began (its cycle counts from there).
+// `interruptedBy`: the hero whose Bash/Sigil cancelled that turn. `weaken`: its next move is cut by this percent
+// (archer heavy hinder). `dispelledUntil`: a mage's dispel switches off its veilguard while the round is below this.
+export interface EnemyState { id: string; hp: number; markedUntil: number; absent?: boolean; phase?: number; phaseRound?: number; interruptedRound?: number; interruptedBy?: string; steadyRound?: number; delayedRound?: number; corrodedUntil?: number; corrodeBonus?: number;
+  weaken?: number; dispelledUntil?: number }
+// `held`: a spear's hold the line turned this move from a back-lane ally to him.
+export interface Intent extends IntentDefinition { targetId: string; beat: number; round: number; held?: boolean }
 // Party condition carried in from the expedition. Missing ids start at max HP.
 export interface BattleEntry { hp: Readonly<Record<string, number>> }
 export interface Command { beat: number; heroId: string; action: ActionId; targetId: string }
@@ -110,9 +149,25 @@ export interface BattleState {
   lastStand?: string[];
   // Heroes who have used their star-veil free cast this battle.
   freeCast?: string[];
+  // ---- Release A big trees ----
+  // Duelist parry: until her next turn her first physical hit taken is halved and countered (`all`: every hit cut, no counter).
+  parry?: { heroId: string; all?: boolean } | null;
+  // Priest halo: energy hits on heroes are reduced until her next turn.
+  halo?: { heroId: string } | null;
+  // Priest long prayer / dawn: as `round` begins, every standing ally heals `amount`.
+  prayerEcho?: { heroId: string; round: number; amount: number } | null;
+  // Priests who used their once-per-battle revive; `lastPrayer` = the last-prayer capstone has fired.
+  revived?: string[]; lastPrayer?: boolean;
+  // Spear hold the line: from the cast until his next turn, moves aimed at back-lane allies turn to him.
+  hold?: { heroId: string; round: number } | null; unyielding?: boolean;
+  // Archer pinning volley: the front row screens nothing while the round is at most `round`.
+  pinned?: number;
+  // Archer tracking shots that fire again as `round` ends (if the target is still standing).
+  tracking?: { heroId: string; enemyId: string; round: number; power: number }[];
 }
 export interface BattleEvent {
-  type: 'damage' | 'guard' | 'mark' | 'barrier' | 'heal' | 'interrupt' | 'cancel' | 'down' | 'outcome' | 'brace' | 'counter' | 'delay' | 'corrode' | 'haste' | 'evade' | 'dodge' | 'taunt' | 'song' | 'rally' | 'sigil' | 'sanctuary' | 'stand' | 'finale';
+  type: 'damage' | 'guard' | 'mark' | 'barrier' | 'heal' | 'interrupt' | 'cancel' | 'down' | 'outcome' | 'brace' | 'counter' | 'delay' | 'corrode' | 'haste' | 'evade' | 'dodge' | 'taunt' | 'song' | 'rally' | 'sigil' | 'sanctuary' | 'stand' | 'finale' | 'resist' | 'phase' | 'summon' | 'charge'
+    | 'parry' | 'revive' | 'buff' | 'hold' | 'pin' | 'dispel' | 'weaken';
   text: string; sourceId?: string; targetId?: string; amount?: number; absorbed?: number; cause?: 'defeated' | 'interrupted' | 'sealed';
 }
 // One frame per real actor turn. Only Resolution.state is committed/saved.

@@ -1,13 +1,15 @@
 import {bossReward} from './boss-equipment';
 import {huntedReward} from './targeted-loot';
-import { replay, withLevel, withParty } from '../battle/engine';
+import { replay, withLevel, withParty, withStrength } from '../battle/engine';
 import { boulderAt, leverPuzzleAt, openPit, passableWall, runePuzzleAt, secretAt } from './puzzles';
 import type { EnemyTrait, BattleState, Command, EncounterDefinition, HeroDefinition, HeroTalents, ActionId, PassiveId } from '../battle/types';
 import type { RecruitPoint, ActiveBattle, BattleKind, ChestDefinition, Company, Direction, ExpGain, ExpeditionState, LootTable, MapDefinition, MemberProgress, Point, PotionId, Resources, Talents, Tile, WorldEvent, WorldResult, ZoneDefinition, Gear, Item, EliteDefinition, EventChoice, MapEventDefinition, MapEventKind, GearSlot } from './types';
 import { affixPool, gearTotals } from './equipment';
 import { effectiveTalents, isBigTree, memberTalentReason } from './talents';
+import { battleTomes, chestTomes } from './tomes';
 import type { TalentNode } from './types';
-import { PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS, SET_IDS } from './types';
+import { PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS, SET_IDS, type Lane, type Roster } from './types';
+import { formation, laneReason, placed, withLane } from './formation';
 
 // Pure expedition rules: no DOM, Phaser, clocks or Math.random. Every roll is
 // derived from (seed, rolls) so a reload can never re-roll an outcome.
@@ -84,7 +86,7 @@ export function loadoutActions(base: HeroDefinition, map: MapDefinition, talents
   return ['attack', ...(picked.length ? picked : choices).slice(0, map.progression.loadoutSize)];
 }
 // `member` supplies big-tree grants and the skill loadout (A6).
-export function starred(base: HeroDefinition, stars: number, map: MapDefinition, level = 1, talents: Talents = {}, gear?: Gear, member?: Pick<MemberProgress, 'grants' | 'loadout'>): HeroDefinition {
+export function starred(base: HeroDefinition, stars: number, map: MapDefinition, level = 1, talents: Talents = {}, gear?: Gear, member?: Pick<MemberProgress, 'grants' | 'loadout' | 'skillLevels'>): HeroDefinition {
   const big = isBigTree(map.talents[base.id]);
   const actions = big ? loadoutActions(base, map, talents, member) : undefined;
   if (big) talents = effectiveTalents(map.talents[base.id]!, talents, member?.grants);
@@ -96,7 +98,9 @@ export function starred(base: HeroDefinition, stars: number, map: MapDefinition,
   const worn = gearTotals(map, gear);
   const equipped = !!(worn.hp || worn.hpPercent || worn.attackPercent || worn.support || worn.speed || worn.armour || worn.resist || worn.leech || worn.gear);
   const reordered = !!actions && (actions.length !== base.actions.length || actions.some((a, i) => a !== base.actions[i]));
-  if (!bonus && !gained.any && !equipped && !reordered) return base;
+  // Skill levels (tomes, save v37) go to the resolver as they are.
+  const levels = member?.skillLevels && Object.keys(member.skillLevels).length ? { skillLevels: { ...member.skillLevels } } : {};
+  if (!bonus && !gained.any && !equipped && !reordered && !levels.skillLevels) return base;
   const scale = (n: number, extra: number) => Math.round(n * (100 + bonus + extra) / 100);
   // ★3 adds the class's third skill; ★5 switches on its passive.
   // Big trees unlock these in the tree instead (A6).
@@ -106,7 +110,7 @@ export function starred(base: HeroDefinition, stars: number, map: MapDefinition,
   return { ...base, maxHp: scale(base.maxHp, gained.hp + worn.hpPercent) + worn.hp, attack: scale(base.attack, damageBonus - bonus), speed: base.speed + worn.speed,
     skillBonus: bonus + gained.skill + worn.support, damageBonus, actions: actions ?? [...base.actions, ...skill],
     ...(worn.armour + gained.armour ? { armour: worn.armour + gained.armour } : {}), ...(worn.resist ? { resist: worn.resist } : {}), ...(worn.leech ? { leech: worn.leech } : {}),
-    ...(big ? (gained.passive ? { passive: gained.passive } : {}) : stars >= 5 && base.unlocks ? { passive: base.unlocks.passive } : {}), ...(gained.talents ? { talents: gained.talents } : {}), ...(worn.gear ? { gear: worn.gear } : {}) };
+    ...(big ? (gained.passive ? { passive: gained.passive } : {}) : stars >= 5 && base.unlocks ? { passive: base.unlocks.passive } : {}), ...(gained.talents ? { talents: gained.talents } : {}), ...(worn.gear ? { gear: worn.gear } : {}), ...levels };
 }
 // Sums spent talent ranks into stat percents and the resolver's `HeroTalents`.
 export function talentEffects(map: MapDefinition, heroId: string, talents: Talents): { any: boolean; hp: number; attack: number; skill: number; armour: number; passive?: PassiveId; talents?: HeroTalents } {
@@ -165,8 +169,16 @@ export function newExpedition(map: MapDefinition, lookup: EncounterLookup, seed:
   reveal(state, map);
   return state;
 }
-const startBattle = (state: ExpeditionState, kind: BattleKind, encounterId: string, level?: number, source?: string): ActiveBattle =>
-  ({ kind, encounterId, entry: Object.fromEntries(state.roster.deployed.map(id => [id, state.hp[id]!])), commands: [], ...(level ? { level } : {}), ...(source ? { source } : {}) });
+// The battle keeps the deployed members' set lanes (formation, v36); the lanes they fight in follow from them.
+const startBattle = (state: ExpeditionState, kind: BattleKind, encounterId: string, level?: number, source?: string, percent?: number): ActiveBattle =>
+  ({ kind, encounterId, entry: Object.fromEntries(state.roster.deployed.map(id => [id, state.hp[id]!])), commands: [], ...(level ? { level } : {}), ...(source ? { source } : {}), ...(percent && percent !== 100 ? { percent } : {}), lanes: setLanes(state.roster) });
+const setLanes = (roster: Roster): Record<string, Lane> => Object.fromEntries(roster.deployed.flatMap(id => roster.lanes?.[id] ? [[id, roster.lanes[id]]] : []));
+export const recommendedLane = (lookup: EncounterLookup, map: MapDefinition) => (id: string): Lane => heroDef(lookup, map, id)?.lane ?? 'front';
+// The lane each deployed hero fights in. A battle saved before formations (no `lanes`) keeps every class lane.
+export function battleLanes(state: ExpeditionState, map: MapDefinition, lookup: EncounterLookup): Record<string, Lane> | undefined {
+  const lanes = state.battle ? state.battle.lanes : state.roster.lanes ?? {};
+  return lanes && formation({ ...state.roster, lanes }, recommendedLane(lookup, map));
+}
 // Prologue (lore 2026-10-16): on a company's first expedition, Vargoth's vanguard attacks at the start tile
 // before the first step. The battle is the ordinary tutorial battle; old saves still meet it on the first step.
 export function startPrologue(initial: ExpeditionState, map: MapDefinition): WorldResult {
@@ -219,13 +231,13 @@ export function move(initial: ExpeditionState, map: MapDefinition, dir: Directio
   // Until the rift seal is broken (enough objectives), the boss cannot be challenged.
   if (tile.kind === 'boss' && !state.bossDefeated && !questComplete(state, map)) return { state: initial, event: { type: 'blocked', reason: 'sealed' } };
   if (tile.kind === 'boss' && !state.bossDefeated) {
-    state.battle = startBattle(state, 'boss', map.bossEncounterId, map.bossLevel);
+    state.battle = startBattle(state, 'boss', map.bossEncounterId, map.bossLevel, undefined, map.bossPercent);
     return { state, event: { type: 'encounter', kind: 'boss', encounterId: map.bossEncounterId, chance: 100 } };
   }
   // An elite holds its gate the same way: stepping into it starts the fight; beaten, the gate is open for the run.
   const elite = eliteBlocks(state, map, target);
   if (elite) {
-    state.battle = startBattle(state, 'elite', elite.encounterId, elite.level !== undefined ? elite.level + (state.respawns[elite.id] ?? 0) : undefined, elite.id);
+    state.battle = startBattle(state, 'elite', elite.encounterId, elite.level !== undefined ? elite.level + (state.respawns[elite.id] ?? 0) : undefined, elite.id, elite.percent);
     return { state, event: { type: 'encounter', kind: 'elite', encounterId: elite.encounterId, chance: 100 } };
   }
   state.position = target; state.steps++; reveal(state, map);
@@ -345,6 +357,13 @@ export function swapMembers(initial: ExpeditionState, a: string, b: string): Wor
   state.roster.deployed[deployed.indexOf(d)] = r; state.roster.reserve[reserve.indexOf(r)] = d;
   return { state, event: { type: 'roster' } };
 }
+// Formation on the map (owner 2026-10-22): outside battle a deployed member moves to the other column, or trades
+// columns with `other`. The next battle fights in the new formation.
+export function setLane(initial: ExpeditionState, map: MapDefinition, lookup: EncounterLookup, id: string, lane: Lane, other?: string): WorldResult {
+  if (!canManage(initial) || laneReason(initial.roster, recommendedLane(lookup, map), id, lane, other)) return { state: initial, event: { type: 'blocked', reason: 'busy' } };
+  const state = structuredClone(initial); state.roster = withLane(state.roster, recommendedLane(lookup, map), id, lane, other);
+  return { state, event: { type: 'roster', heroId: id, lane } };
+}
 export function moveMember(initial: ExpeditionState, id: string): WorldResult {
   const { deployed, reserve } = initial.roster;
   const toReserve = deployed.includes(id);
@@ -415,7 +434,8 @@ export function openChest(initial: ExpeditionState, map: MapDefinition): WorldRe
     const id = POTION_IDS.find(p => (pick -= table.weights[p]) < 0)!;
     if (state.potions[id] < map.potions.carry) { state.potions[id]++; potion = id; }
   }
-  return { state, event: { type: 'chest', chestId: chest.id, loot, ...(potion ? { potion } : {}) } };
+  const tomes = chestTomes(state, map, chest.tier);
+  return { state, event: { type: 'chest', chestId: chest.id, loot, ...(potion ? { potion } : {}), ...(tomes ? { tomes } : {}) } };
 }
 // ---- Map potions (2D-5): used outside battle only ----
 export function potionReason(state: ExpeditionState, map: MapDefinition, lookup: EncounterLookup, potion: PotionId, targetId?: string): string {
@@ -534,28 +554,47 @@ function dropItems(state: ExpeditionState, map: MapDefinition, kind: BattleKind,
   return items;
 }
 // The encounter as fought by the deployed party, in slot order.
-// Hard mode (A9 part 2): every foe gets one trait, fixed by the encounter and its position; a boss gets enrage and
+// Hard mode (A9 part 2): foes get one trait each, fixed by the encounter and its position; a boss gets enrage and
 // veilguard plus one extra move, a heavier copy of its heaviest move in the other damage kind.
 const TRAITS: readonly EnemyTrait[] = ['thorns', 'veilguard', 'enrage'];
+const toughest = (data: EncounterDefinition) => data.enemies.filter(e => !e.reserve).sort((a, b) => b.maxHp - a.maxHp);
 export function hardEncounter(data: EncounterDefinition, kind: BattleKind, map: MapDefinition): EncounterDefinition {
   const t = map.progression.hardTraits; const salt = [...data.id].reduce((n, c) => n + c.charCodeAt(0), 0);
-  const enemies = data.enemies.map((e, i) => ({ ...e, traits: kind === 'boss' ? ['enrage', 'veilguard'] as EnemyTrait[] : [TRAITS[(salt + i) % TRAITS.length]!] }));
+  // Four-slot battles (A7 step 2): only the two toughest foes take a trait, so a swarm is not buried in them.
+  // The boss (`boss`, else the toughest foe) takes enrage + veilguard.
+  const boss = kind === 'boss' ? (data.enemies.find(e => e.boss) ?? toughest(data)[0]!).id : undefined;
+  const marked = toughest(data).filter(e => e.id !== boss).slice(0, boss ? 1 : 2).map(e => e.id);
+  const enemies = data.enemies.map((e, i) => ({ ...e, ...(e.id === boss ? { traits: ['enrage', 'veilguard'] as EnemyTrait[] } : marked.includes(e.id) ? { traits: [TRAITS[(salt + i) % TRAITS.length]!] } : {}) }));
   let intents = data.intents;
-  if (kind === 'boss') {
-    const source = (data.enemies.find(e => e.id === 'brute') ?? data.enemies[0]!).id;
+  if (boss) {
+    const source = boss;
     const heaviest = [...data.intents].filter(i => i.sourceId === source).sort((a, b) => b.damage - a.damage)[0]!;
-    intents = [...data.intents, { sourceId: source, targetSlot: 0, name: 'Rift Fury', damage: Math.ceil(heaviest.damage * t.bossMovePercent / 100), kind: heaviest.kind === 'physical' ? 'energy' : 'physical' }];
+    intents = [...data.intents, { sourceId: source, targetSlot: 0, name: 'Rift Fury', damage: Math.ceil(heaviest.damage * t.bossMovePercent / 100), kind: heaviest.kind === 'physical' ? 'energy' : 'physical', unstoppable: true }];
   }
-  return { ...data, enemies, intents, rules: { ...data.rules, traits: { thornsPercent: t.thornsPercent, veilguardPercent: t.veilguardPercent, enrageBelow: t.enrageBelow, enragePercent: t.enragePercent } } };
+  // Boss phases begin 10% earlier and call their hard-mode reserves too (owner 2026-10-22).
+  const phases = data.phases?.map(p => ({ ...p, below: Math.min(100, p.below + 10), summon: [...p.summon ?? [], ...p.hardSummon ?? []] }));
+  return { ...data, enemies, intents, ...(phases ? { phases } : {}), rules: { ...data.rules, traits: { thornsPercent: t.thornsPercent, veilguardPercent: t.veilguardPercent, enrageBelow: t.enrageBelow, enragePercent: t.enragePercent } } };
+}
+// Boss mechanics follow the fight's role (owner 2026-10-22): a boss fight keeps them all (steadfast, unstoppable
+// signature moves, summons and phases); a mini-boss is steadfast only; any other fight that reuses a boss encounter
+// (an elite gate) fights without them, and its reserves never arrive.
+export function bossRole(data: EncounterDefinition, kind: BattleKind, map: MapDefinition, source?: string): EncounterDefinition {
+  if (kind === 'boss' || !data.enemies.some(e => e.boss)) return data;
+  const mini = kind === 'elite' && miniBoss(map, source);
+  return { ...data, phases: undefined, intents: data.intents.map(i => i.unstoppable ? { ...i, unstoppable: false } : i),
+    enemies: mini ? data.enemies : data.enemies.map(e => e.boss ? { ...e, boss: false } : e) };
 }
 export function battleData(state: ExpeditionState, map: MapDefinition, lookup: EncounterLookup): EncounterDefinition | undefined {
   const base = state.battle && lookup(state.battle.encounterId);
-  // Hard mode (A9): every battle but the prologue fights `hardLevels` higher.
-  const hard = state.hard && state.battle!.kind !== 'tutorial' ? map.progression.hardLevels : 0;
+  // Hard mode (A9): every battle but the prologue fights `hardLevels` higher, a boss `hardTraits.bossLevels` more (A10).
+  const hard = state.hard && state.battle!.kind !== 'tutorial' ? map.progression.hardLevels + (state.battle!.kind === 'boss' ? map.progression.hardTraits.bossLevels : 0) : 0;
   const leveled = base && withLevel(base, (state.battle!.level ?? base.level ?? 1) + hard, map.progression.monsterLevelPercent);
-  const data = leveled && hard ? hardEncounter(leveled, state.battle!.kind, map) : leveled;
+  // A10: the map strength the battle started with (`map.bossPercent`, `EliteDefinition.percent`).
+  const strong = leveled && state.battle!.percent ? withStrength(leveled, state.battle!.percent) : leveled;
+  const staged = strong && bossRole(strong, state.battle!.kind, map, state.battle!.source);
+  const data = staged && hard ? hardEncounter(staged, state.battle!.kind, map) : staged;
   const party = state.roster.deployed.map(id => memberDef(lookup, map, state.members, id));
-  return data && party.every(Boolean) ? withParty(data, party as HeroDefinition[]) : undefined;
+  return data && party.every(Boolean) ? withParty(data, placed(party as HeroDefinition[], battleLanes(state, map, lookup))) : undefined;
 }
 // The battle's committed commands are replayed from the recorded entry; the world
 // never trusts a supplied HP snapshot.
@@ -571,9 +610,14 @@ export function recordBattle(initial: ExpeditionState, map: MapDefinition, looku
 }
 // Every brought member (deployed and reserve, standing or fallen) gains the victory's EXP, tapered by
 // their level against the monster level. Level-ups raise max HP; standing members gain the difference.
-function gainExp(state: ExpeditionState, map: MapDefinition, lookup: EncounterLookup, data: EncounterDefinition, kind: BattleKind, source?: string): Record<string, ExpGain> {
+function gainExp(state: ExpeditionState, map: MapDefinition, lookup: EncounterLookup, data: EncounterDefinition, kind: BattleKind, source?: string, summoned: readonly string[] = []): Record<string, ExpGain> {
   const rules = map.progression; const level = data.level ?? 1;
-  const base = data.enemies.length * (rules.expBase + rules.expPerLevel * level) * (kind === 'boss' ? rules.bossExpMultiplier : kind === 'elite' ? (miniBoss(map, source) ? map.eventRules.miniBoss.exp : optionalElite(map, source) ? map.eventRules.optionalElite.exp : map.eventRules.eliteExp) : 1);
+  // A7 step 2: EXP follows the foes' total HP (one foe's worth per `expFoeHp` at Lv1, grown by the monster-level rule),
+  // so a swarm of small foes pays like one sturdy foe.
+  // Summoned minions pay a small share (`summonExpPercent`); reserves never summoned pay nothing.
+  const hpWorth = data.enemies.reduce((n, e) => n + (!e.reserve ? e.maxHp : summoned.includes(e.id) ? e.maxHp * rules.summonExpPercent / 100 : 0), 0);
+  const worth = hpWorth / (rules.expFoeHp * (1 + (level - 1) * rules.monsterLevelPercent / 100));
+  const base = worth * (rules.expBase + rules.expPerLevel * level) * (kind === 'boss' ? rules.bossExpMultiplier : kind === 'elite' ? (miniBoss(map, source) ? map.eventRules.miniBoss.exp : optionalElite(map, source) ? map.eventRules.optionalElite.exp : map.eventRules.eliteExp) : 1);
   const gains: Record<string, ExpGain> = {};
   const best = Math.max(...rosterIds(state).map(id => levelOf(state.members[id])));
   for (const id of rosterIds(state)) {
@@ -611,7 +655,8 @@ export function finishBattle(initial: ExpeditionState, map: MapDefinition, looku
       if (map.events.find(e => e.id === source)?.kind === 'rift') { dust = map.eventRules.riftDust; state.dust += dust; }
     }
     const data = battleData(initial, map, lookup)!;
-    const exp = gainExp(state, map, lookup, data, kind, source);
+    const summoned = data.enemies.filter(e => e.reserve && !result.enemies.find(x => x.id === e.id)?.absent).map(e => e.id);
+    const exp = gainExp(state, map, lookup, data, kind, source, summoned);
     // A mini-boss pays its own loot table instead of the zone's.
     const loot = rollLoot(state, miniBoss(map, source) ? map.eventRules.miniBoss.loot : battleLoot(state, map, kind));
     if (kind === 'elite' && optionalElite(map, source) && !state.respawns[source ?? '']) {
@@ -619,11 +664,13 @@ export function finishBattle(initial: ExpeditionState, map: MapDefinition, looku
       loot.gold += gold; loot.seal += seal; state.resources.gold += gold; state.resources.seal += seal;
     }
     const items = dropItems(state, map, kind, data.level ?? 1, source);
-    return { state, event: { type: 'victory', kind, encounterId, loot, exp, ...(items[0] ? { item: items[0] } : {}), ...(items.length > 1 ? { items } : {}), ...(dust ? { dust } : {}) } };
+    // Skill tomes on maps that drop them (no rolls, so loot and items are unchanged).
+    const tomes = battleTomes(state, map, kind, state.roster.deployed);
+    return { state, event: { type: 'victory', kind, encounterId, loot, exp, ...(items[0] ? { item: items[0] } : {}), ...(items.length > 1 ? { items } : {}), ...(dust ? { dust } : {}), ...tomes } };
   }
   state.defeats++;
   if (kind === 'tutorial') {
-    state.battle = { kind: 'tutorial', encounterId, entry: fullParty(lookup, map, state.roster.deployed, state.members), commands: [] };
+    state.battle = { kind: 'tutorial', encounterId, entry: fullParty(lookup, map, state.roster.deployed, state.members), commands: [], ...(state.battle!.lanes ? { lanes: state.battle!.lanes } : {}) };
     return { state, event: { type: 'defeat', kind, encounterId } };
   }
   // The fallen stay fallen; the party retreats to the last camp reached (or the entrance).

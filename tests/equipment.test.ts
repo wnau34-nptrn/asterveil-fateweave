@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { encounterById as lookup } from '../src/content/encounters/catalog';
-import { veilSiege } from '../src/content/encounters/veil-siege';
+import { veilSiege as siegeBase } from '../src/content/encounters/veil-siege';
+import { openField } from './fixtures/open-field';
+const veilSiege = openField(siegeBase);
 import { chapterOne as map } from '../src/content/world/chapter1';
 import { createBattle, currentHeroId, resolveCommand, withParty } from '../src/core/battle/engine';
 import type { ActionId, BattleState, EncounterDefinition } from '../src/core/battle/types';
@@ -87,7 +89,7 @@ describe('equipment in battle', () => {
     let s = createBattle(d); s = { ...s, heroes: s.heroes.map(h => h.id === 'tracer' ? { ...h, hp: 2 } : h) };
     let saved = 0; let down = false;
     for (let i = 0; i < 30 && s.outcome === 'active' && !down; i++) {
-      const r = act(s, d, 'attack', 'brute'); saved += r.events.filter(e => e.type === 'stand' && e.targetId === 'tracer').length;
+      const r = act(s, d, 'attack', 'f1'); saved += r.events.filter(e => e.type === 'stand' && e.targetId === 'tracer').length;
       down = r.events.some(e => e.type === 'down' && e.targetId === 'tracer'); s = r.state;
       if (saved) expect(s.lastStand).toEqual(['tracer']);
     }
@@ -96,12 +98,12 @@ describe('equipment in battle', () => {
   it('mark hunter adds 8 on a marked enemy; renewal heals 4 at the wearer’s turn', () => {
     const d = party({ weapon: item({ slot: 'weapon', hero: 'tracer', rarity: 4, affixes: ['hp', 'attack', 'leech'], special: 'markhunter' }) });
     const plain = party({});
-    const marked = (data: EncounterDefinition) => { const s = until(createBattle(data), data, 'tracer'); return { ...s, enemies: s.enemies.map(e => e.id === 'brute' ? { ...e, markedUntil: s.round + 2 } : e) }; };
-    const hit = (data: EncounterDefinition) => act(marked(data), data, 'attack', 'brute').turns[0]!.events.find(e => e.type === 'damage')!.amount!;
+    const marked = (data: EncounterDefinition) => { const s = until(createBattle(data), data, 'tracer'); return { ...s, enemies: s.enemies.map(e => e.id === 'f1' ? { ...e, markedUntil: s.round + 2 } : e) }; };
+    const hit = (data: EncounterDefinition) => act(marked(data), data, 'attack', 'f1').turns[0]!.events.find(e => e.type === 'damage')!.amount!;
     expect(hit(d) - hit(plain)).toBe(member('tracer', { weapon: item({ slot: 'weapon', hero: 'tracer', rarity: 4, affixes: ['hp', 'attack', 'leech'], special: 'markhunter' }) }).attack - member('tracer').attack + 8);
     const r = party({ head: item({ slot: 'head', rarity: 4, affixes: ['hp', 'resist', 'support'], special: 'renewal' }) });
     let s = createBattle(r); s = { ...s, heroes: s.heroes.map(h => h.id === 'tracer' ? { ...h, hp: 20 } : h) };
-    const events: { text: string }[] = []; for (let i = 0; i < 8 && !events.some(e => e.text === 'Renewal.'); i++) { const x = act(s, r, 'attack', 'brute'); events.push(...x.events); s = x.state; }
+    const events: { text: string }[] = []; for (let i = 0; i < 8 && !events.some(e => e.text === 'Renewal.'); i++) { const x = act(s, r, 'attack', 'f1'); events.push(...x.events); s = x.state; }
     expect(events.find(e => e.text === 'Renewal.')).toMatchObject({ targetId: 'tracer', amount: 4 });
   });
 });
@@ -135,7 +137,10 @@ describe('drops', () => {
     let s = newExpedition(map, lookup, 8);
     s = nextBattle(s); expect(s.battle!.kind).toBe('tutorial');
     const t = win(s); expect(t.event.type === 'victory' && t.event.item).toBeFalsy();
-    const boss = { ...t.state, battle: { kind: 'boss' as const, encounterId: map.bossEncounterId, entry: Object.fromEntries(t.state.roster.deployed.map(id => [id, memberHp(t.state, id)])), commands: [] } };
+    // A10: the warden is fought by a party of the map's level (★3 Lv10), not the Lv1 starters.
+    const vets = Object.fromEntries(Object.entries(t.state.members).map(([id, m]) => [id, { ...m, level: 10, stars: 3 }]));
+    const ready = { ...t.state, members: vets };
+    const boss = { ...ready, battle: { kind: 'boss' as const, encounterId: map.bossEncounterId, entry: Object.fromEntries(ready.roster.deployed.map(id => [id, memberHp(ready, id)])), commands: [] } };
     const b = win(boss);
     if (b.event.type === 'victory') {
       expect(rules.bossDrops).toBe(3); expect(b.state.found).toHaveLength(rules.bossDrops); expect(b.event.items).toEqual(b.state.found);

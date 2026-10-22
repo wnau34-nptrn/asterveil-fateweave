@@ -31,6 +31,8 @@ export interface MapDefinition {
   // Chapters (2026-10-17): the map's place in the campaign and a one-line pitch for the Lobby's map choice;
   // `clearStory` plays a closing story the first time the map is completed.
   chapter: number; summary: string; clearStory?: 'warden';
+  // Skill tomes (save v37): the boss's tome reward on maps that drop tomes (missing = no tomes on this map).
+  tomes?: MapTomes;
   // `firstFind`: the tutorial (prologue) win leaves this plain piece in the bag (map 1 teaches wearing gear).
   // `bossCharm`: the boss pays the targeted boss charm (boss-equipment.ts); teaching maps leave it out.
   firstFind?: { slot: GearSlot; rarity: number }; bossCharm?: boolean;
@@ -52,6 +54,8 @@ export interface MapDefinition {
   tutorialEncounterId: string; bossEncounterId: string;
   // The boss's fight level (4E tuning; missing = the encounter's own level). Monster levels scale HP and damage only.
   bossLevel?: number;
+  // A10: the boss's foes fight with this percent of their HP and move damage (missing = 100), like `EliteDefinition.percent`.
+  bossPercent?: number;
   revealRadius: number;
   // Chests sit on floor tiles; loot tables are drafts until playtested.
   chests: readonly ChestDefinition[];
@@ -167,7 +171,8 @@ export type GuideKind = 'wear' | 'enhance' | 'talent' | 'brew' | 'itemLevel' | '
 export interface GuideDefinition { id: string; npc: string; feature: LobbyFeature; kind: GuideKind; reward: SideQuestDefinition['reward'] }
 export interface QuestDefinition { need: number; objectives: readonly QuestObjective[] }
 // `level`: the fight level (4E tuning; missing = the encounter's own level).
-export interface EliteDefinition { id: string; x: number; y: number; encounterId: string; forced: boolean; mini?: boolean; level?: number }
+// `percent` (A10): this elite's foes fight with that percent of their HP and move damage (missing = 100).
+export interface EliteDefinition { id: string; x: number; y: number; encounterId: string; forced: boolean; mini?: boolean; level?: number; percent?: number }
 export type MapEventKind = 'bandits' | 'shrine' | 'merchant' | 'traveller' | 'rift';
 export interface MapEventDefinition { id: string; x: number; y: number; kind: MapEventKind }
 export type EventChoice = 'fight' | 'sneak' | 'pray' | 'offer' | 'buy-salve' | 'buy-tonic' | 'buy-repel' | 'help';
@@ -240,10 +245,10 @@ export interface TalentNodeDef { id: TalentNode; name: string; max: number; effe
 export type TalentTree = readonly TalentNodeDef[];
 export type Talents = Partial<Record<TalentNode, number>>;
 // Levels and EXP (2D-1, draft numbers). Each level adds `levelStatPercent` to max HP, Attack and skill
-// power; monsters gain `monsterLevelPercent` HP/damage per level. EXP per enemy = expBase + expPerLevel × L.
+// power; monsters gain `monsterLevelPercent` HP/damage per level. EXP per foe's worth of HP (`expFoeHp` at Lv1) = expBase + expPerLevel × L.
 export interface ProgressionRules {
   levelCap: number; levelStatPercent: number; monsterLevelPercent: number;
-  expBase: number; expPerLevel: number; bossExpMultiplier: number;
+  expBase: number; expPerLevel: number; expFoeHp: number; summonExpPercent: number; bossExpMultiplier: number;
   // EXP to go from level L to L+1 = nextBase + nextPerLevel × L.
   nextBase: number; nextPerLevel: number;
   // Catch-up (master plan A2, draft): a new member joins `joinBehind` levels below the company's best; reserve
@@ -254,10 +259,34 @@ export interface ProgressionRules {
   // `hardFirstClear` once.
   hardLevels: number; hardFirstClear: { gold: number; seal: number };
   // Hard-mode foes (A9 part 2): trait numbers for the resolver and the boss's extra move (percent of its heaviest).
-  hardTraits: { thornsPercent: number; veilguardPercent: number; enrageBelow: number; enragePercent: number; bossMovePercent: number };
+  hardTraits: { thornsPercent: number; veilguardPercent: number; enrageBelow: number; enragePercent: number; bossMovePercent: number;
+    // A10: a hard-mode boss fights this many levels above the other hard battles.
+    bossLevels: number };
   // Big skill trees (A6): the member level each tier opens at, and how many active skills go into battle.
   treeTiers: readonly number[]; loadoutSize: number;
+  // Skill levels with tomes (A6 part 2, docs/design/SKILL_TOMES_TH.md, draft numbers).
+  skillLevels: SkillLevelRules;
 }
+// ---- Skill tomes (save v37) ----
+// Three tome lines by class (bulwark = ปราการ, blade = ศัสตรา, accord = ประสาน), each in three sizes, plus rift cores.
+export const TOME_LINES = ['bulwark', 'blade', 'accord'] as const;
+export type TomeLine = typeof TOME_LINES[number];
+export const TOME_SIZES = ['small', 'medium', 'large'] as const;
+export type TomeSize = typeof TOME_SIZES[number];
+export type TomeBag = Record<TomeLine, Record<TomeSize, number>>;
+// `costs[i]` raises Lv(i+1) → Lv(i+2) (one tome size per step). Rewards: every `battleEvery` ordinary wins on a
+// tome map pays one small tome (lines in turn); chests and elites pay small tomes; bosses pay per map (`MapDefinition.tomes`);
+// hard mode multiplies a boss's tomes by `hardPercent` and adds `hardCore` rift cores. Dismissing refunds
+// `refundPercent` of the tomes spent on the member. Trades: `tradeUp` of a size → one of the next size (same line);
+// `swap` of a size → one of that size in another line.
+export interface SkillLevelRules {
+  max: number; costs: readonly { size: TomeSize; tomes: number; gold: number; core?: number }[];
+  lines: Readonly<Record<string, TomeLine>>;
+  battleEvery: number; chest: { common: number; rare: number }; elite: number; hardPercent: number; hardCore: number;
+  refundPercent: number; tradeUp: number; swap: number;
+}
+// A map's boss tomes (maps 2–3): `boss` every win, `first` added the first time the map is cleared.
+export interface MapTomes { boss: { medium: number; small: number }; first: { large: number; core: number } }
 // Mercenary company rules (draft numbers). starCosts[i] upgrades ★(i+1) → ★(i+2).
 // 4A camp market: each item has a gold price and a limit per return home. The gear box rolls a rare-or-better
 // piece at the company's highest level; the contract adds one duplicate to a chosen member.
@@ -280,7 +309,9 @@ export interface CompanyRules {
 // `wound` (3A, run only): percent of max HP lost to a shrine prayer until the expedition ends.
 // `grants` (A6, save v34): big-tree nodes given free at full rank (skills a company had from stars before the tree).
 // `loadout` (A6): the active skills taken into battle (at most `progression.loadoutSize`; missing = the first unlocked).
-export interface MemberProgress { stars: number; dupes: number; level?: number; exp?: number; talents?: Talents; gear?: Gear; wound?: number; grants?: TalentNode[]; loadout?: ActionId[] }
+// `skillLevels` (save v37): active skills raised above Lv1 with tomes (missing = Lv1).
+export interface MemberProgress { stars: number; dupes: number; level?: number; exp?: number; talents?: Talents; gear?: Gear; wound?: number; grants?: TalentNode[]; loadout?: ActionId[];
+  skillLevels?: Partial<Record<ActionId, number>> }
 // The team brought into one expedition and their star progress (fixed during the run).
 // `potions`: what the expedition packs (2D-5; missing = none).
 export interface Company { roster: Roster; members: Record<string, MemberProgress>; potions?: Potions }
@@ -308,6 +339,8 @@ export interface Profile {
   // The 4 + 4 chosen for the next expedition (subset of `company`).
   party: Roster;
   bank: Bank;
+  // Skill tomes and rift cores (save v37; missing = none).
+  tomes?: TomeBag; riftCore?: number;
   // Unequipped items (≤ upgraded storage capacity), persistent pending rewards and the next uid.
   overflow?:Item[]; storageTier?:number;
   items: Item[]; nextItem: number;
@@ -330,7 +363,8 @@ export interface Profile {
   // Chapters (2026-10-17): ids of the maps this company has completed at least once (each opens the next map).
   cleared: string[];
   // `items` kept in the bag and `salvaged` because the bag was full (2D-2).
-  last: { outcome: RunOutcome; ore: number; gold: number; seal: number; steps: number; wins: number; items: number; salvaged: number } | null;
+  // `tomes` (save v37): skill tomes brought home by that run (missing = none).
+  last: { outcome: RunOutcome; ore: number; gold: number; seal: number; steps: number; wins: number; items: number; salvaged: number; tomes?: number } | null;
 }
 export type ProfileEvent =
   | {type:'bossTarget'}
@@ -338,13 +372,15 @@ export type ProfileEvent =
   | {type:'storageCollected';count:number}
   | {type:'storageExpanded'}
   | { type: 'blocked'; reason: string }
-  | { type: 'party' }
+  | { type: 'party'; heroId?: string; lane?: Lane }
   | { type: 'commander' }
   | { type: 'guide'; id: string; skipped: boolean }
   | { type: 'hired'; heroId: string; duplicate: boolean }
   | { type: 'upgraded'; heroId: string; stars: number }
   | { type: 'dismissed'; heroId: string }
   | { type: 'talent'; heroId: string }
+  | { type: 'skillLevel'; heroId: string; action: ActionId; level: number }
+  | { type: 'tomeTrade'; line: TomeLine; size: TomeSize }
   | { type: 'equipped'; heroId: string }
   | { type: 'salvaged'; count: number; ore: number; dust: number }
   | { type: 'forged'; uid: number; action: 'enhance' | 'fuse' | 'reroll' | 'level' | 'craft' | 'transfer' }
@@ -358,15 +394,24 @@ export interface ProfileResult { profile: Profile; event: ProfileEvent }
 // Up to 4 deployed (slot order = enemy target slots) and 4 in reserve, swapped at camps.
 export const PARTY_SLOTS = 4;
 export const RESERVE_SLOTS = 4;
-export interface Roster { deployed: string[]; reserve: string[] }
+// Formation (save v36, owner 2026-10-22): `lanes` holds the column a member was set to stand in; a member without
+// one stands in its class's recommended lane. Each column takes at most LANE_SLOTS deployed members.
+export type Lane = 'front' | 'back';
+export const LANE_SLOTS = 3;
+export interface Roster { deployed: string[]; reserve: string[]; lanes?: Record<string, Lane> }
 
 // `elite` and `event` (3A) name the elite or event in `ActiveBattle.source`.
 export type BattleKind = 'tutorial' | 'random' | 'boss' | 'elite' | 'event';
 // `level`: the monster level fixed when the battle started (missing in older saves = the encounter's own level).
-export interface ActiveBattle { kind: BattleKind; encounterId: string; entry: Record<string, number>; commands: Command[]; level?: number; source?: string }
+// `lanes`: the formation fixed when the battle started (save v36; missing = every hero in its class lane).
+// `percent` (A10): the map strength stored at the start (foe HP and move damage; missing = 100).
+export interface ActiveBattle { kind: BattleKind; encounterId: string; entry: Record<string, number>; commands: Command[]; level?: number; percent?: number; source?: string; lanes?: Record<string, Lane> }
 export type RecruitPoint = 'prologue' | 'camp' | 'boss';
-export type LobbyFeature = 'tree' | 'forge' | 'brew' | 'gear' | 'level' | 'quests' | 'hire' | 'team' | 'market' | 'fuse' | 'craft' | 'hunt' | 'transfer' | 'bossCharm' | 'hard';
+export type LobbyFeature = 'tree' | 'forge' | 'brew' | 'gear' | 'level' | 'quests' | 'hire' | 'team' | 'market' | 'fuse' | 'craft' | 'hunt' | 'transfer' | 'bossCharm' | 'hard' | 'tomes';
 export interface ExpeditionState {
+  // Skill tomes (save v37, maps with `MapDefinition.tomes`): `tomes`/`riftCore` are this
+  // run's finds (added to the profile when it settles) and `tomeWins` counts its ordinary wins toward the next tome.
+  tomes?: TomeBag; riftCore?: number; tomeWins?: number;
   // Story recruits (save v30): guests travel with the run but are not company members yet; `recruited` joined
   // during this run and are added to the company when it settles (whatever the outcome). Missing = none.
   guests?: string[]; recruited?: string[];
@@ -406,13 +451,13 @@ export type WorldEvent =
   | { type: 'talent'; heroId: string }
   | { type: 'moved'; chance: number }
   | { type: 'blocked'; reason: 'wall' | 'edge' | 'busy' | 'party' | 'sealed' | 'stone' | 'pit' }
-  | { type: 'roster' }
+  | { type: 'roster'; heroId?: string; lane?: Lane }
   | { type: 'equipped'; heroId: string }
   | { type: 'encounter'; kind: BattleKind; encounterId: string; chance: number }
   | { type: 'goal' }
   | { type: 'rested'; respawned?: string[] }
   | { type: 'revived'; heroId: string }
-  | { type: 'chest'; chestId: string; loot: Resources; potion?: PotionId }
+  | { type: 'chest'; chestId: string; loot: Resources; potion?: PotionId; tomes?: TomeBag }
   | { type: 'potion'; potion: PotionId; heal?: Record<string, number> }
   | { type: 'event'; eventId: string }
   | { type: 'eventDone'; eventId: string; choice: EventChoice; heal?: Record<string, number> }
@@ -422,7 +467,7 @@ export type WorldEvent =
   | { type: 'secret'; secretId: string }
   | { type: 'herb'; herbId: string }
   | { type: 'travelled'; to: Point }
-  | { type: 'victory'; kind: BattleKind; encounterId: string; loot: Resources; exp?: Record<string, ExpGain>; item?: Item; items?: Item[]; dust?: number }
+  | { type: 'victory'; kind: BattleKind; encounterId: string; loot: Resources; exp?: Record<string, ExpGain>; item?: Item; items?: Item[]; dust?: number; tomes?: TomeBag; riftCore?: number }
   | { type: 'defeat'; kind: BattleKind; encounterId: string; wiped?: boolean };
 // EXP from one victory for one brought member: `percent` is the level-gap multiplier.
 export interface ExpGain { gained: number; percent: number; level: number; levelsUp: number }

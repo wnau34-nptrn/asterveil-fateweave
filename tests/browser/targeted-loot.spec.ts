@@ -3,13 +3,13 @@ import {chapterOne as map} from '../../src/content/world/chapter1';
 import {encounterById as lookup} from '../../src/content/encounters/catalog';
 import {newProfile,depart} from '../../src/core/world/profile';
 import {battleData,battleState,newExpedition} from '../../src/core/world/world';
-import {currentHeroId,resolveCommand} from '../../src/core/battle/engine';
+import {currentHeroId,resolveCommand,targetOptions} from '../../src/core/battle/engine';
 import type {Profile} from '../../src/core/world/types';
 const key='asterveil.fateweave.expedition.v1';
 function winningSave(p:Profile){
   p=structuredClone(p);for(const m of Object.values(p.members)){m.stars=5;m.level=10;m.exp=0;}
   const game=depart(p,map,lookup,77),run=game.run;run.dry=5;run.hunt!.misses=11;run.battle={kind:'random',encounterId:map.tutorialEncounterId,entry:{...run.hp},commands:[]};
-  const data=battleData(run,map,lookup)!;let battle=battleState(run,map,lookup)!;for(let n=0;battle.outcome==='active'&&n<200;n++)battle=resolveCommand(battle,data,{beat:battle.beat,heroId:currentHeroId(battle,data)!,action:'attack',targetId:battle.enemies.find(e=>e.hp>0)!.id}).state;
+  const data=battleData(run,map,lookup)!;let battle=battleState(run,map,lookup)!;for(let n=0;battle.outcome==='active'&&n<200;n++)battle=resolveCommand(battle,data,{beat:battle.beat,heroId:currentHeroId(battle,data)!,action:'attack',targetId:targetOptions(battle,data,currentHeroId(battle,data)!,'attack').find(t=>t.valid)!.id}).state;
   if(battle.outcome!=='victory')throw Error('fixture did not win');const last=battle.commands.at(-1)!;run.battle.commands=battle.commands.slice(0,-1);return {raw:JSON.stringify({version:25,...game}),last};
 }
 for(const [width,height,touch] of [[320,568,true],[390,844,true],[1366,768,false]] as const){

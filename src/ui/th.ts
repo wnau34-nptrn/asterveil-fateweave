@@ -1,9 +1,10 @@
 import {bossNames,bossDescription} from './boss-equipment';
 import type { ActionId, PassiveId, BattleEvent, BattleState, EncounterDefinition, Intent, TalentCap, TalentRule } from '../core/battle/types';
+import { TOME_LINES, TOME_SIZES, type TomeBag, type TomeLine, type TomeSize } from '../core/world/types';
 import type { EquipmentRules, ExpGain, ExpeditionState, Gear, GearSlot, GearStat, Item, PotionId, PotionRules, ResourceId, Resources, SetDefinition, SetId, TalentNodeDef, MapEventKind, EventChoice, EventRules, QuestObjective, SideQuestDefinition, SideQuestKind, ShopItemId } from '../core/world/types';
 import type { GearSpecial, HeroDefinition } from '../core/battle/types';
 import { setCounts, statLines } from '../core/world/equipment';
-import { ambushBonusOf, capAmount, corrodeBonusOf, finaleHealPower, guardReductionOf, hasCap, skillPower, songPower, talentRule, tauntReductionOf } from '../core/battle/engine';
+import { PARRY_REDUCTION, levelBarrier, rallyReductionOf, skillCooldown, skillLevel, ambushBonusOf, capAmount, corrodeBonusOf, finaleHealPower, guardReductionOf, hasCap, skillPower, songPower, talentRule, tauntReductionOf } from '../core/battle/engine';
 import type { IconName } from './icons';
 export const thaiFont = '"Noto Sans Thai", "Leelawadee UI", Tahoma, sans-serif';
 export const heroText: Record<string, { name: string; role: string; help: string; icon: string }> = {
@@ -18,20 +19,40 @@ export const heroText: Record<string, { name: string; role: string; help: string
   weaver: { name: 'ไอรา', role: 'จอมเวท', help: 'ศรเวทและโล่ป้องกัน', icon: '✧' },
   healer: { name: 'เซเรน', role: 'นักบวช', help: 'รักษาคนเดียวหรือฟื้นฟูทั้งทีม', icon: '✚' },
 };
-const names: Record<string, string> = { lio: 'ลิโอ', brann: 'แบรนน์', sefa: 'เซฟา', toma: 'โทมะ', mira: 'มิร่า', garran: 'การ์แรน', guardian: 'เอกิส', tracer: 'ไลรา', weaver: 'ไอรา', healer: 'เซเรน', raider: 'นักจู่โจม', brute: 'อสูรรอยแยก', party: 'ทั้งทีม' };
+const names: Record<string, string> = { lio: 'ลิโอ', brann: 'แบรนน์', sefa: 'เซฟา', toma: 'โทมะ', mira: 'มิร่า', garran: 'การ์แรน', guardian: 'เอกิส', tracer: 'ไลรา', weaver: 'ไอรา', healer: 'เซเรน', party: 'ทั้งทีม' };
 export function actorName(id: string | undefined, data: EncounterDefinition): string {
   // Enemies carry the battle's monster level (2D-1).
+  // Two foes of the same kind are told apart as ก/ข in slot order.
   const foe = id ? data.enemies.find(e => e.id === id) : undefined;
-  if (foe && data.level) return `Lv${data.level} ${foe.displayName ?? foe.name}`;
-  return id ? data.enemies.find(e => e.id === id)?.displayName ?? names[id] ?? data.heroes.find(h => h.id === id)?.name ?? data.enemies.find(e => e.id === id)?.name ?? 'เป้าหมาย' : 'ทีม';
+  if (foe) {
+    const label = (e: typeof foe) => e.displayName ?? e.name; const twins = data.enemies.filter(e => label(e) === label(foe));
+    const name = twins.length > 1 ? `${label(foe)} ${'กขคง'[twins.indexOf(foe)]}` : label(foe);
+    return data.level ? `Lv${data.level} ${name}` : name;
+  }
+  return id ? names[id] ?? data.heroes.find(h => h.id === id)?.name ?? 'เป้าหมาย' : 'ทีม';
 }
+// Who an announced enemy turn affects, in words: a phase change, a charge, the whole party or one hero.
+export function intentTargetThai(intent: Intent, data: EncounterDefinition, recipient = intent.targetId): string {
+  return intent.special === 'phase' ? 'เปลี่ยนช่วงการต่อสู้' : intent.charge ? 'รวบรวมพลัง' : intent.all ? 'ทั้งทีม' : actorName(recipient, data);
+}
+// The rule line under an announced enemy turn.
+export function intentRuleThai(intent: Intent): string {
+  if (intent.special === 'phase') return 'ไม่โจมตีเทิร์นนี้ · เรียกพวก/เปลี่ยนท่า · ขัดจังหวะไม่ได้';
+  if (intent.charge) return 'ไม่ทำความเสียหาย · ท่าถัดไปแรงมาก เตรียมป้องกัน';
+  const reach = intent.all ? 'โดนทุกคน · ตั้งรับแทนไม่ได้' : intent.kind === 'physical' ? 'แนวหน้ารับก่อน' : 'ถึงแนวหลังได้';
+  return intent.unstoppable ? `${reach} · ขัดจังหวะไม่ได้` : reach;
+}
+// A boss phase's name, from the same move-name table.
+export const phaseThai = (name: string): string => intentName({ name } as Intent);
 export function intentName(intent: Intent): string {
   return ({ 'Raking Slash': 'ฟันกวาด', 'Rift Bolt': 'ลำแสงรอยแยก', 'Crushing Blow': 'ทุบหนัก', 'Shadow Knife': 'มีดเงา', 'Rift Fury': 'โทสะรอยแยก', 'War Cry': 'คำรามศึก',
     'Seed Spark': 'ประกายเมล็ด', 'Tusk Charge': 'พุ่งงา', 'Thorn Pounce': 'ตะครุบหนาม', 'Spore Hex': 'คำสาปสปอร์', 'Thorn Bloom': 'หนามผลิบาน',
-    'Briar Lash': 'แส้หนาม', 'Rune Lash': 'แส้อักขระ', 'Ribbon Snare': 'ริบบิ้นรัด', 'Crystal Fist': 'หมัดผลึก', 'Horn Charge': 'พุ่งเขา', 'Shard Burst': 'ผลึกระเบิด' } as Record<string, string>)[intent.name] ?? intent.name;
+    'Briar Lash': 'แส้หนาม', 'Rune Lash': 'แส้อักขระ', 'Ribbon Snare': 'ริบบิ้นรัด', 'Crystal Fist': 'หมัดผลึก', 'Horn Charge': 'พุ่งเขา', 'Shard Burst': 'ผลึกระเบิด',
+    'Jelly Bounce': 'กระเด้งชน', 'Ember Spark': 'ประกายถ่าน', 'Nip': 'งับ', 'Shield Smash': 'ทุบโล่', 'Mace Swing': 'ฟาดกระบอง', 'Thorn Bite': 'กัดหนาม',
+    'Spore Dust': 'ฝุ่นสปอร์', 'Call the Hunt': 'เรียกพวกล่า', 'Call the Rift': 'เรียกวิญญาณรอยแยก', 'Rift Awakening': 'รอยแยกตื่น', 'Thorn Rage': 'โทสะพงหนาม', 'Gather Thorns': 'รวบรวมหนาม', 'Thorn Tempest': 'พายุหนามคลั่ง', 'Rift Gathering': 'รวบรวมพลังรอยแยก', 'Rift Cataclysm': 'มหันตภัยรอยแยก', 'Rift Wave': 'คลื่นรอยแยกกวาด', 'Thorn Storm': 'พายุหนาม', 'Rift Beam': 'คลื่นรอยแยก', 'Star Flame': 'เปลวดาว', 'Crystal Stab': 'แทงขาผลึก' } as Record<string, string>)[intent.name] ?? intent.name;
 }
 export function skillDescription(action: ActionId, heroId: string, data: EncounterDefinition): string {
-  const skill = { ...data.skills[action], power: skillPower(data, heroId, action) };
+  const skill = { ...data.skills[action], power: skillPower(data, heroId, action), cooldown: skillCooldown(data, heroId, action) };
   const hero = data.heroes.find(h => h.id === heroId)!;
   const cooldown = skill.cooldown ? ` ใช้แล้วพร้อมอีกครั้งใน ${skill.cooldown} รอบ` : '';
   const text: Record<ActionId, string> = {
@@ -56,7 +77,7 @@ export function skillDescription(action: ActionId, heroId: string, data: Encount
     valor: `บรรเลงเพลงกล้าค้างไว้ ทุกการโจมตีของทีมแรงขึ้น +${songPower(data, heroId, 'valor')} (รวมสกิลและการสวน) จนกว่าจะเปลี่ยนเพลงหรือลิโอล้ม เล่นได้ทีละเพลง`,
     mend: `บรรเลงเพลงฟื้นค้างไว้ ทุกคนที่ยังยืนอยู่ฟื้นเลือด ${songPower(data, heroId, 'mend')} เมื่อเริ่มแต่ละรอบใหม่ จนกว่าจะเปลี่ยนเพลงหรือลิโอล้ม เล่นได้ทีละเพลง`,
     haste: `ให้ยาเร่งเพื่อนที่ยังยืนอยู่ 1 คน (รวมตัวเอง) รอบถัดไปคนนั้นได้ลงมือก่อนทุกคน รอบนี้ลำดับไม่เปลี่ยน`,
-    rally: `ตั้งรับหมู่ เพื่อนทุกคนที่ยังยืนอยู่ (รวมเอกิส) ลดความเสียหาย ${data.rules.rallyReduction * 100}% จากการโจมตีครั้งแรกที่โดน จนถึงเทิร์นถัดไปของเอกิส`,
+    rally: `ตั้งรับหมู่ เพื่อนทุกคนที่ยังยืนอยู่ (รวมเอกิส) ลดความเสียหาย ${Math.round(rallyReductionOf(data, heroId) * 100)}% จากการโจมตีครั้งแรกที่โดน จนถึงเทิร์นถัดไปของเอกิส`,
     finisher: `ปลิดชีพ ${skill.power} หรือ ${skill.power * 2} ถ้าเลือดศัตรูต่ำกว่า ${data.rules.finisherThreshold * 100}% ไม่ใช้ตรา`,
     sigil: `ตรึงเวท ${skill.power} และยกเลิกท่าพลังงานครั้งถัดไปของเป้าหมาย ท่ากายภาพยังโจมตีตามปกติ (กระแทกโล่ใช้หยุดกายภาพ)`,
     sanctuary: `อวยพรเพื่อนที่ยังยืนอยู่ 1 คน (รวมตัวเอง) เลือดจะไม่ลดต่ำกว่า 1 จนถึงเทิร์นถัดไปของเซเรน`,
@@ -66,17 +87,38 @@ export function skillDescription(action: ActionId, heroId: string, data: Encount
     backstab: `ลอบแทง ${skill.power} ใส่ศัตรูที่ไม่ได้เล็งเซฟาในท่าถัดไป (ดูเป้าที่ศัตรูประกาศ)`,
     quake: `ทุบปฐพี ${skill.power} หรือ ${skill.power + data.rules.quakeBonus} ถ้าท่าถัดไปของเป้าหมายเล็งแบรนน์อยู่ (เข้าคู่กับยั่วยุ)`,
     challenge: `ท้าดวลศัตรู 1 ตัว ท่าถัดไปของมันจะเล็งเอกิสแทน (แผนโจมตีแสดงเป้าใหม่ทันที) ไม่ทำความเสียหาย`,
-    bulwark: `ตั้งปราการหิน ตั้งแต่ตอนนี้จนถึงเทิร์นถัดไปของเอกิส ศัตรูทุกตัวเล็งเอกิส และเขารับเบาลง ${data.skills.bulwark.power}%`,
+    bulwark: `ตั้งปราการหิน ตั้งแต่ตอนนี้จนถึงเทิร์นถัดไปของเอกิส ศัตรูทุกตัวเล็งเอกิส และเขารับเบาลง ${skill.power}%`,
     rouse: `ปลุกพล ทุกคนที่ยังยืนอยู่ฟื้นเลือด ${skill.power}% ของเลือดสูงสุดของตัวเอง ไม่ชุบชีวิต`,
+    parry: `ตั้งท่าปัดดาบ จนถึงเทิร์นถัดไปของไลรา การโจมตีกายภาพครั้งแรกที่โดนเธอเบาลง ${PARRY_REDUCTION * 100}% แล้วเธอฟันสวน ${skill.power}`,
+    lunge: `พุ่งตัด ${skill.power} หรือ ${skill.power + data.rules.markedBonus} เมื่อเป้าหมายติดตรา (ใช้ตราหมด) ตีทะลุแถวหน้าถึงแถวหลังได้`,
+    sweep: `ฟันกวาดศัตรูแถวหน้าทุกตัว ตัวละ ${skill.power} ถ้าแถวหน้าว่างจะฟันแถวหลังแทน`,
+    storm: `พายุเวทโจมตีศัตรูทุกตัว ตัวละ ${skill.power} (พลังงาน)`,
+    aegis: `เกราะผลึก เพื่อนทุกคนที่ยังยืนอยู่ได้โล่ ${skill.power} ไม่ซ้อนกับโล่ที่หนากว่า`,
+    dispel: `สลายเวท ${skill.power} และปิดเกราะพลังงาน (โหมดยาก) ของเป้าหมายถึงจบรอบถัดไป`,
+    revive: `ชุบเพื่อนที่ล้มในศึกนี้กลับมาด้วยเลือด ${skill.power}% ของเลือดสูงสุด ใช้ได้ 1 ครั้งต่อศึก คนที่ฟื้นได้เทิร์นตั้งแต่รอบถัดไป`,
+    halo: `วงแสงคุ้มกัน จนถึงเทิร์นถัดไปของเซเรน ทุกคนรับความเสียหายพลังงานลดลง ${skill.power}%`,
+    bless: `อวยพรเพื่อน 1 คน การโจมตีของคนนั้นแรงขึ้น ${skill.power}% จนจบรอบถัดไป`,
+    hold: `ปักหลัก ตั้งแต่ตอนนี้จนถึงเทิร์นถัดไปของการ์แรน ท่าที่เล็งเพื่อนแนวหลังจะเปลี่ยนมาที่เขา (ท่าโจมตีทั้งทีมไม่เปลี่ยน)`,
+    halt: `แทงหยุดยั้ง ${skill.power} ถ้าท่าถัดไปของเป้าหมายเป็นกายภาพและมันยังไม่ได้ลงมือในรอบนี้ มันจะไปลงมือท้ายสุดของรอบนี้`,
+    warcry: `เสียงศึกทวน เพื่อนแนวหน้าทุกคนที่ยังยืนอยู่โจมตีแรงขึ้น ${skill.power}% ถึงจบรอบ`,
+    disengage: `ถอยยิง ${skill.power} แล้วมิร่าหลบการโจมตีกายภาพครั้งแรกที่โดนเธอจนถึงเทิร์นถัดไป`,
+    pin: `ศรตรึงแถว ศัตรูแถวหน้าทุกตัวโดนตัวละ ${skill.power} และแถวหน้าเลิกบังแถวหลังถึงจบรอบถัดไป ทั้งทีมตีแถวหลังได้`,
+    track: `ศรตามรอย ${skill.power} ถ้าเป้าหมายถูกยิงสกัดอยู่ จะยิงซ้ำอีก ${skill.power} ตอนจบรอบ`,
     finale: `จบเพลงที่บรรเลงอยู่แล้วปล่อยพลังทันที: เพลงกล้า = โจมตีศัตรูทุกตัว ${skill.power} · เพลงฟื้น = ฟื้นเลือดทุกคน ${finaleHealPower(data, heroId)} ต้องมีเพลงของลิโอเล่นอยู่`,
   };
   const passive = hero.passive && passiveText[hero.passive].actions.includes(action) ? ` · ★5 ${passiveText[hero.passive].name}: ${passiveText[hero.passive].help(data)}` : '';
-  return text[action] + passive + talentNotes(action, heroId, data) + cooldown;
+  // Skill level (tomes): the level, and the barrier a levelled skill without numbers gives its user.
+  const level = skillLevel(data, heroId, action); const shield = levelBarrier(data, heroId, action);
+  const lv = level > 1 ? ` · Lv${level}${shield ? ` ผู้ใช้ได้โล่ ${shield}` : ''}` : '';
+  return text[action] + passive + talentNotes(action, heroId, data) + lv + cooldown;
 }
 // ---- Talent tree (2D-1b) ----
 // Branch names per class (A, B), matching docs/EXPEDITION_DESIGN.md "Talent tree".
 // Big skill trees (A6): three branch names per class, matching docs/design/SKILL_TREE_KNIGHT_TH.md.
-export const bigBranches: Record<string, readonly [string, string, string]> = { guardian: ['ปราการ', 'ลงทัณฑ์', 'ธงนำ'] };
+// Release A trees: docs/design/SKILL_TREES_ALL_TH.md.
+export const bigBranches: Record<string, readonly [string, string, string]> = { guardian: ['ปราการ', 'ลงทัณฑ์', 'ธงนำ'],
+  tracer: ['ตราล่า', 'ปลิดชีพ', 'ระบำดาบ'], weaver: ['เวทโจมตี', 'เวทป้องกัน', 'ผนึกเวท'], healer: ['เยียวยา', 'คุ้มครอง', 'พรศรัทธา'],
+  garran: ['ทวนรับ', 'ทวนรุก', 'ยึดแนว'], mira: ['แม่นธนู', 'ฝนธนู', 'พรานป่า'] };
 export const talentBranches: Record<string, readonly [string, string]> = {
   guardian: ['ผู้ลงทัณฑ์', 'ปราการ'], tracer: ['ดาบเจาะ', 'นักเต้นดาบ'], weaver: ['เวทโจมตี', 'เวทป้องกัน'], healer: ['ผู้เยียวยา', 'ผู้คุ้มครอง'],
   garran: ['ทวนรุก', 'ทวนรับ'], mira: ['นักแม่นธนู', 'ฝนธนู'], toma: ['กรดกัดกร่อน', 'ยาเสริม'], sefa: ['นักลอบ', 'นักหลบ'],
@@ -100,8 +142,8 @@ const capText: Record<TalentCap, { actions: readonly ActionId[]; help: (n: numbe
   splitbolt: { actions: ['bolt'], help: () => 'ศรเวทโดนศัตรูตัวอื่นด้วยครึ่งหนึ่ง' },
   wardreflect: { actions: ['ward'], help: n => `โล่เวทที่รับการโจมตีได้สะท้อนใส่ผู้โจมตี ${n} (ครั้งเดียว)` },
   twinheal: { actions: ['heal'], help: () => 'รักษาแล้วเพื่อนที่เลือดเหลือน้อยที่สุดอีกคนได้ครึ่งหนึ่ง' },
-  solace: { actions: ['heal'], help: n => `คนที่ได้รักษารับความเสียหายลดลง ${n}% จนถึงเทิร์นถัดไปของเซเรน` },
-  pierceline: { actions: ['pierce'], help: () => 'แทงทะลวงโดนศัตรูตัวอื่นด้วยครึ่งหนึ่ง' },
+  solace: { actions: ['sanctuary'], help: n => `คนที่ได้พรคุ้มภัยรับความเสียหายลดลง ${n}% จนถึงเทิร์นถัดไปของเซเรน` },
+  pierceline: { actions: ['pierce'], help: () => 'แทงทะลวงโดนศัตรูอีกตัวในคอลัมน์เดียวกัน (หน้า–หลัง) ครึ่งหนึ่ง' },
   frontwall: { actions: ['brace', 'spearwall'], help: n => `ระหว่างตั้งทวน แนวหน้ารับความเสียหายกายภาพลดลง ${n}%` },
   hunter: { actions: ['attack', 'hinder', 'volley', 'weakshot'], help: n => `ทุกการโจมตีของมิร่าใส่ศัตรูที่ถูกสกัด +${n}` },
   volleyhinder: { actions: ['volley'], help: () => 'ห่าธนูสกัดศัตรูที่เร็วที่สุดให้ลงมือท้ายสุดในรอบถัดไป' },
@@ -118,6 +160,32 @@ const capText: Record<TalentCap, { actions: readonly ActionId[]; help: (n: numbe
   brightbanner: { actions: ['rally'], help: n => `ตั้งรับหมู่แล้วทุกคนได้โล่ ${n} (ไม่ซ้อนกัน)` },
   valorbanner: { actions: ['rally'], help: n => `ตั้งรับหมู่แล้วทุกการโจมตีของทีมแรงขึ้น ${n}% ถึงจบรอบ` },
   fatebanner: { actions: [], help: n => `เริ่มศึก ทุกคนได้โล่ ${n}% ของเลือดสูงสุดเอกิส` },
+  sharedmark: { actions: ['mark'], help: n => `การโจมตีของเพื่อนใส่ศัตรูที่ติดตรา +${n}` },
+  parrymark: { actions: ['parry'], help: () => 'ปัดดาบสำเร็จแล้วผู้โจมตีติดตรา' },
+  parryall: { actions: ['parry'], help: n => `ปัดรอบตัว: ทุกท่าที่โดนไลราจนถึงเทิร์นถัดไปเบาลง ${n}% แต่ไม่ฟันสวน` },
+  deadline: { actions: ['finisher'], help: n => `ปลิดชีพแรงสองเท่าเมื่อเลือดศัตรูต่ำกว่า ${n}%` },
+  endlessdance: { actions: ['parry'], help: () => 'ปัดดาบสำเร็จแต่ละครั้ง ฟันเจาะจุดพร้อมเร็วขึ้น 1 รอบ' },
+  piercebolt: { actions: ['bolt'], help: n => `ศรเวทแรงขึ้น +${n} และตีแถวหลังได้แม้ยืนแนวหน้า` },
+  twinward: { actions: ['ward'], help: () => 'เพื่อนที่เลือดเหลือน้อยที่สุดอีกคนได้โล่ครึ่งหนึ่ง' },
+  sigilreflect: { actions: ['sigil'], help: n => `ท่าที่ถูกตรึงเวทยกเลิก สะท้อน ${n}% ของท่านั้นใส่ผู้ใช้` },
+  sigildelay: { actions: ['sigil'], help: () => 'เป้าที่โดนตรึงเวทไปลงมือท้ายสุดในรอบถัดไปด้วย' },
+  arcanecharge: { actions: ['bolt', 'storm'], help: () => 'ใช้ศรเวทแต่ละครั้ง พายุเวทพร้อมเร็วขึ้น 1 รอบ' },
+  fateseal: { actions: ['sigil'], help: n => `ตรึงเวทยกเลิกท่าได้ ไอราได้โล่ ${n}` },
+  sanctuaryward: { actions: ['sanctuary'], help: n => `พรคุ้มภัยให้โล่ ${n} ด้วย (ไม่ซ้อนกัน)` },
+  longprayer: { actions: ['prayer'], help: () => 'พรฟื้นฟูฟื้นเลือดอีกครึ่งหนึ่งตอนเริ่มรอบถัดไป' },
+  quickprayer: { actions: ['prayer'], help: () => 'พรฟื้นฟูพร้อมใช้อีกครั้งเร็วขึ้น 1 รอบ' },
+  lastprayer: { actions: [], help: n => `ครั้งแรกในศึกที่เพื่อนล้ม ทุกคนที่ยังยืนอยู่ฟื้นเลือด ${n}` },
+  dawn: { actions: ['prayer'], help: () => 'เริ่มศึกด้วยพรที่ค้างอยู่ ทุกคนฟื้นเลือดเท่าพรฟื้นฟูตอนเริ่มรอบ 2' },
+  deeppierce: { actions: ['pierce'], help: n => `แทงทะลวงใส่ศัตรูแถวหลังแรงขึ้น ${n}%` },
+  spearfury: { actions: ['brace', 'spearwall', 'pierce'], help: () => 'โต้กลับแต่ละครั้ง แทงทะลวงพร้อมเร็วขึ้น 1 รอบ' },
+  holdfirm: { actions: ['hold'], help: n => `ระหว่างปักหลัก การ์แรนรับความเสียหายลดลง ${n}%` },
+  holdcounter: { actions: ['hold'], help: () => 'ทุกท่าที่ปักหลักดึงมา โต้กลับด้วยพลังตั้งทวน' },
+  unyielding: { actions: ['hold'], help: () => 'ครั้งแรกในศึกที่จะล้มระหว่างปักหลัก เหลือเลือด 1' },
+  heavyhinder: { actions: ['hinder'], help: n => `ท่าถัดไปของเป้าที่ถูกยิงสกัดเบาลง ${n}%` },
+  chase: { actions: ['hinder'], help: () => 'ล้มศัตรูได้แล้วยิงสกัดพร้อมใช้ทันที' },
+  quickstep: { actions: ['disengage'], help: () => 'ถอยยิงแล้วเป้าหมายถูกสกัดด้วย (ลงมือท้ายสุดรอบถัดไป)' },
+  covershot: { actions: ['disengage'], help: () => 'การหลบย้ายไปให้เพื่อนที่เป้าหมายประกาศจะตีแทน' },
+  stalker: { actions: [], help: () => 'เริ่มศึก ศัตรูที่เร็วที่สุดถูกสกัดให้ลงมือท้ายสุดในรอบแรก' },
 };
 const talentStatName = { hp: 'เลือดสูงสุด', attack: 'พลังโจมตี', skill: 'พลังเสริม', armour: 'เกราะ' } as const;
 // What one node does (per rank for multi-rank nodes); `data` names the skills.
@@ -158,6 +226,10 @@ export function reasonThai(reason: string): string {
   return ({
     'The encounter has ended.': 'การต่อสู้จบแล้ว',
     'This hero is down.': 'ฮีโร่คนนี้ล้มแล้ว',
+    'Revive is used once per battle.': 'ใช้ฟื้นคืนไปแล้วในศึกนี้ (ศึกละ 1 ครั้ง)',
+    'This ally is standing.': 'เพื่อนคนนี้ยังยืนอยู่',
+    'Only an ally who fell in this battle.': 'ชุบได้เฉพาะเพื่อนที่ล้มในศึกนี้',
+    'Bless another ally.': 'เลือกเพื่อนคนอื่น',
     'It is not this hero’s turn.': 'ยังไม่ถึงเทิร์นฮีโร่คนนี้',
     'This hero does not have this action.': 'อาชีพนี้ไม่มีสกิลนี้',
     'This enemy is down.': 'ศัตรูตัวนี้ถูกกำจัดแล้ว',
@@ -171,6 +243,7 @@ export function reasonThai(reason: string): string {
     'Already hasted.': 'ได้ยาเร่งสำหรับรอบหน้าแล้ว',
     'No song is playing.': 'ต้องบรรเลงเพลงอยู่ก่อน',
     'This enemy is aiming at the scout.': 'ศัตรูตัวนี้เล็งเซฟาอยู่',
+    'A front-row enemy shields this target.': 'ศัตรูแถวหน้าบังอยู่ ต้องล้มแถวหน้าก่อน หรือใช้สกิลตีทะลุ',
     'The preview is stale. Select an action again.': 'จังหวะเปลี่ยนแล้ว กรุณาเลือกใหม่',
   } as Record<string, string>)[reason] ?? 'คำสั่งนี้ยังใช้ไม่ได้ กรุณาเลือกใหม่';
 }
@@ -187,7 +260,7 @@ export function eventThai(event: BattleEvent, after: BattleState, data: Encounte
     case 'down': return `${target}${data.heroes.some(h => h.id === event.targetId) ? 'ล้มแล้ว' : 'ถูกกำจัดแล้ว'}`;
     case 'brace': return after.counter?.wall || event.text.startsWith('Spear wall') ? `${source}ตั้งกำแพงทวน · ทุกการตีกายภาพใส่แนวหน้าจะโดนสวน ${event.amount}` : `${source}ตั้งทวน · ศัตรูที่ตีแนวหน้าด้วยกายภาพจะโดนสวน ${event.amount}`;
     case 'rally': if (event.text === 'Valor banner.') return `${source}ชูธงขวัญกล้า · ทุกการโจมตีของทีมแรงขึ้น ${event.amount}% ถึงจบรอบ`;
-      return `${source}ตั้งรับหมู่ · การโจมตีครั้งแรกที่ทุกคนโดนเบาลง ${data.rules.rallyReduction * 100}%`;
+      return `${source}ตั้งรับหมู่ · การโจมตีครั้งแรกที่ทุกคนโดนเบาลง ${Math.round(rallyReductionOf(data, event.sourceId) * 100)}%`;
     case 'sigil': return `${target}ถูกตรึงเวท · ท่าพลังงานครั้งถัดไปจะถูกยกเลิก`;
     case 'sanctuary': return event.text.startsWith('Sanctuary keeps') ? `พรคุ้มภัยทำให้${target}ยังยืนอยู่ด้วยเลือด 1` : `${target}ได้รับพรคุ้มภัย · เลือดไม่ต่ำกว่า 1 จนถึงเทิร์นถัดไปของ${source}`;
     case 'stand': return event.text.startsWith('Last stand') ? `อุปกรณ์ยืนหยัดทำให้${target}รอดด้วยเลือด 1` : `${source}ยืนหยัด · ${target}รอดด้วยเลือด 1`;
@@ -199,9 +272,20 @@ export function eventThai(event: BattleEvent, after: BattleState, data: Encounte
     case 'taunt': if (event.text === 'Challenge.') return `${source}ท้าดวล${target} · ท่าถัดไปของมันจะเล็ง${source}`;
       if (event.text === 'Bulwark.') return `${source}ตั้งปราการหิน · ศัตรูทุกตัวจะเล็ง${source}จนถึงเทิร์นถัดไป (รับเบาลง ${event.amount}%)`;
       return `${source}ยั่วยุ · ศัตรูทุกตัวจะเล็ง${source}จนถึงเทิร์นถัดไป (รับเบาลง ${Math.round(tauntReductionOf(data, event.sourceId) * 100)}%)`;
-    case 'evade': return `${source}ก้าวเงา · การโจมตีครั้งแรกที่โดนจะพลาด`;
+    case 'evade': return event.text === 'Dodges the next physical hit.' ? `${target}เตรียมหลบ · การโจมตีกายภาพครั้งแรกที่โดนจะพลาด` : `${source}ก้าวเงา · การโจมตีครั้งแรกที่โดนจะพลาด`;
     case 'dodge': return `${target}หลบการโจมตีของ${source}ได้`;
-    case 'delay': return `${target}จะลงมือท้ายสุดในรอบถัดไป`;
+    case 'delay': return event.text === 'Enemy acts last this round.' ? `${target}ถูกหยุดยั้ง · ไปลงมือท้ายสุดของรอบนี้` : `${target}จะลงมือท้ายสุดในรอบถัดไป`;
+    case 'phase': return `${source}เข้าสู่ช่วงใหม่ · ${phaseThai(event.text)}`;
+    case 'summon': return `${target}ถูกเรียกเข้าสนาม · เริ่มลงมือรอบหน้า`;
+    case 'charge': return `${source}รวบรวมพลัง · ท่าถัดไปจะรุนแรงและขัดจังหวะไม่ได้`;
+    case 'resist': return event.text === 'Unstoppable move.' ? `${target}กำลังใช้ท่าไม้ตาย · ขัดจังหวะไม่ได้` : `${target}ไม่หวั่นไหว · เพิ่งถูกขัดจังหวะ จึงขัดซ้ำไม่ได้จนพ้น 2 รอบ`;
+    case 'parry': return event.sourceId === event.targetId ? `${source}ตั้งท่าปัดดาบ · การโจมตีกายภาพครั้งแรกที่โดนจะเบาลงและถูกสวน` : `${source}ปัดดาบของ${target}ได้`;
+    case 'revive': return `${source}ชุบ${target}กลับมาด้วยเลือด ${event.amount} · ลงมือได้ตั้งแต่รอบถัดไป`;
+    case 'buff': return event.text === 'Halo.' ? `${source}กางวงแสงคุ้มกัน · ความเสียหายพลังงานลดลง ${event.amount}% จนถึงเทิร์นถัดไป` : `${target}โจมตีแรงขึ้น ${event.amount}%${event.text === 'War cry.' ? ' ถึงจบรอบ' : ' จนจบรอบถัดไป'}`;
+    case 'hold': return `${source}ปักหลัก · ท่าที่เล็งแนวหลังจะเปลี่ยนมาที่${source}จนถึงเทิร์นถัดไป`;
+    case 'pin': return `${source}ตรึงแถวหน้า · แถวหน้าเลิกบังแถวหลังถึงจบรอบถัดไป`;
+    case 'dispel': return `${target}ถูกสลายเวท · เกราะพลังงานปิดถึงจบรอบถัดไป`;
+    case 'weaken': return `ท่าถัดไปของ${target}เบาลง ${event.amount}%`;
     case 'outcome': return after.outcome === 'victory' ? 'ชนะแล้ว! รอยแยกสงบลง' : 'แพ้แล้ว ลองจัดแผนใหม่';
   }
 }
@@ -212,6 +296,13 @@ export const resourceText: Record<ResourceId, { name: string; use: string }> = {
   seal: { name: 'ตราสัญญา', use: 'พากลับค่าย ใช้แทนตัวซ้ำได้ครึ่งหนึ่งเมื่ออัปดาว' },
 };
 export const resourceOrder: readonly ResourceId[] = ['ore', 'gold', 'ember', 'seal'];
+// Skill tomes (save v37, docs/design/SKILL_TOMES_TH.md).
+export const tomeLineText: Record<TomeLine, string> = { bulwark: 'ปราการ', blade: 'ศัสตรา', accord: 'ประสาน' };
+export const tomeSizeText: Record<TomeSize, string> = { small: 'เล่มเล็ก', medium: 'เล่มกลาง', large: 'เล่มใหญ่' };
+export function tomeThai(bag: TomeBag | undefined, core = 0): string {
+  const parts = TOME_LINES.flatMap(l => TOME_SIZES.flatMap(z => bag?.[l][z] ? [`ตำรา${tomeLineText[l]}${tomeSizeText[z]} +${bag[l][z]}`] : []));
+  return [...parts, ...core ? [`แก่นรอยแยก +${core}`] : []].join(' · ');
+}
 // Victory EXP (2D-1): the deployed lead's gain, any level-ups, and a note when the level gap cut it.
 export function expThai(exp: Record<string, ExpGain> | undefined, state: ExpeditionState): string {
   if (!exp) return '';

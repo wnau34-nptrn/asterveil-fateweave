@@ -2,12 +2,14 @@ import {bossPlanValid,startBossPlan} from '../world/boss-equipment';
 import {storageCap} from '../world/storage';
 import { entryReason, withParty } from '../battle/engine';
 import type { ActionId, Command } from '../battle/types';
-import { COMPANY_CAP, PARTY_SLOTS, RESERVE_SLOTS, type ActiveBattle, type ExpeditionState, type MapDefinition, type Point, type Profile, type Roster, type RunOutcome } from '../world/types';
+import { COMPANY_CAP, PARTY_SLOTS, RESERVE_SLOTS, type ActiveBattle, type ExpeditionState, type MapDefinition, type Point, type Profile, type Lane, type Roster, type RunOutcome } from '../world/types';
 import { skillChoices, battleState, expToNext, findTiles, newExpedition, finishBattle, fullParty, heroCatalog, heroDef, memberDef, rosterIds, tileAt, type EncounterLookup } from '../world/world';
 import { affixPool, itemValid } from '../world/equipment';
 import { boulderAt, openPit, passableWall } from '../world/puzzles';
 import { commanderReason, defaultCamp, newProfile, settle, talentsValid } from '../world/profile';
 import { grantsValid, isBigTree } from '../world/talents';
+import { classSkills } from '../world/tomes';
+import { TOME_LINES, TOME_SIZES, type TomeBag } from '../world/types';
 import type { GearSlot, GearStat, Item, MemberProgress, Potions, Talents } from '../world/types';
 import { GEAR_SLOTS, POTION_IDS, SHOP_ITEMS, type ShopItemId } from '../world/types';
 
@@ -64,10 +66,22 @@ export const legacyKeys = ['asterveil.fateweave.battle.v1', 'asterveil.fateweave
 // v32 → v33: hard mode: runs may be `hard`; the profile lists `clearedHard` maps (missing = none).
 // v33 → v34: big skill trees (A6). A big-tree class's old small-tree ranks are refunded, members get the tree nodes their
 // stars used to unlock as `grants`, and members may carry a skill `loadout`. A run whose member lost ranks settles home.
-const SAVE_VERSION = 34;
+// v34 → v35 (A7 step 2): foes stand in four slots (`f1`/`f2`/`b1`/`b2`) instead of `raider`/`brute`, and encounters
+// changed. A battle in progress whose commands aim at `raider`/`brute` or no longer replay restarts from its recorded
+// entry HP (its commands are dropped); nothing else changes.
+// v35 → v36 (formation): a roster may carry `lanes` (the column each member was set to; missing = class lanes) and a
+// battle the set lanes it started with (`lanes`). A battle saved without them keeps every hero in its class lane.
+// v36 → v37 (release A trees + skill tomes): the duelist, mage, priest, spear and archer get big trees, so their old
+// small-tree ranks are refunded and star skills granted (as v34 did for the Knight; a run whose member lost ranks
+// settles home). Members may carry `skillLevels`; the profile `tomes`/`riftCore`; a run `tomes`/`riftCore`/`tomeWins`;
+// the last result `tomes`. Missing = none.
+const SAVE_VERSION = 37;
+// The classes whose big tree arrived in v37 (release A).
+const RELEASE_A_TREES = ['tracer', 'weaver', 'healer', 'garran', 'mira'];
 export interface Game { profile: Profile; run: ExpeditionState | null }
 const actions: readonly ActionId[] = ['attack', 'guard', 'bash', 'mark', 'execute', 'bolt', 'ward', 'heal', 'prayer', 'brace', 'pierce', 'hinder', 'volley', 'acid', 'haste', 'ambush', 'evade', 'taunt', 'slam', 'valor', 'mend',
-  'rally', 'finisher', 'sigil', 'sanctuary', 'spearwall', 'weakshot', 'bomb', 'backstab', 'quake', 'finale', 'challenge', 'bulwark', 'rouse'];
+  'rally', 'finisher', 'sigil', 'sanctuary', 'spearwall', 'weakshot', 'bomb', 'backstab', 'quake', 'finale', 'challenge', 'bulwark', 'rouse',
+  'parry', 'lunge', 'sweep', 'storm', 'aegis', 'dispel', 'revive', 'halo', 'bless', 'hold', 'halt', 'warcry', 'disengage', 'pin', 'track'];
 
 // One key for profile and run, so settling an expedition is a single atomic write.
 export function saveGame(storage: StoragePort | undefined, game: Game): boolean {
@@ -96,11 +110,18 @@ function point(v: unknown, map: MapDefinition, walls = false): Point {
 }
 function rosterOf(v: unknown, lookup: EncounterLookup, map: MapDefinition): Roster {
   const r = obj(v); const { deployed, reserve } = r;
-  if (!Array.isArray(deployed) || !Array.isArray(reserve) || Object.keys(r).length !== 2) throw new Error('Invalid roster');
+  if (!Array.isArray(deployed) || !Array.isArray(reserve) || Object.keys(r).length !== (r.lanes === undefined ? 2 : 3)) throw new Error('Invalid roster');
   const ids = [...deployed, ...reserve];
   if (!deployed.length || deployed.length > PARTY_SLOTS || reserve.length > RESERVE_SLOTS || new Set(ids).size !== ids.length
     || ids.some(id => typeof id !== 'string' || !heroDef(lookup, map, id))) throw new Error('Invalid roster');
-  return { deployed: [...deployed] as string[], reserve: [...reserve] as string[] };
+  // Set lanes may name any hero (a benched member keeps its column); only the deployed ones stand on the field.
+  const lanes = r.lanes === undefined ? undefined : lanesOf(r.lanes, id => !!heroDef(lookup, map, id));
+  return { deployed: [...deployed] as string[], reserve: [...reserve] as string[], ...(lanes ? { lanes } : {}) };
+}
+function lanesOf(v: unknown, known: (id: string) => boolean): Record<string, Lane> {
+  const l = obj(v);
+  if (Object.entries(l).some(([id, lane]) => !known(id) || (lane !== 'front' && lane !== 'back'))) throw new Error('Invalid lanes');
+  return { ...l } as Record<string, Lane>;
 }
 function itemOf(v: unknown, map: MapDefinition, lookup: EncounterLookup, found = false): Item {
   const i = structuredClone(obj(v)) as unknown as Item;
@@ -108,12 +129,19 @@ function itemOf(v: unknown, map: MapDefinition, lookup: EncounterLookup, found =
   return i;
 }
 // On a run (`run`), members may also wear items found on this expedition (uid 0).
+// A tome bag: every line and size present, whole numbers.
+function tomesOf(v: unknown): TomeBag {
+  const b = obj(v);
+  if (Object.keys(b).length !== TOME_LINES.length || TOME_LINES.some(l => { const x = obj(b[l]); return Object.keys(x).length !== TOME_SIZES.length || TOME_SIZES.some(z => !isInt(x[z], 0, 99999)); })) throw new Error('Invalid tomes');
+  return structuredClone(b) as unknown as TomeBag;
+}
+const badProfile = (): never => { throw new Error('Invalid profile'); };
 function membersOf(v: unknown, map: MapDefinition, ids: readonly string[], lookup: EncounterLookup, run = false): Record<string, MemberProgress> {
   const raw = obj(v);
   if (Object.keys(raw).length !== ids.length) throw new Error('Invalid members');
   return Object.fromEntries(ids.map(id => {
     const m = obj(raw[id]); const keys = Object.keys(m);
-    if (keys.some(k => !['stars', 'dupes', 'level', 'exp', 'talents', 'gear', 'wound', 'grants', 'loadout'].includes(k)) || ('level' in m) !== ('exp' in m)) throw new Error('Invalid members');
+    if (keys.some(k => !['stars', 'dupes', 'level', 'exp', 'talents', 'gear', 'wound', 'grants', 'loadout', 'skillLevels'].includes(k)) || ('level' in m) !== ('exp' in m)) throw new Error('Invalid members');
     if (!isInt(m.stars, 1, map.company.maxStars) || !isInt(m.dupes, 0, 99)) throw new Error('Invalid members');
     const out: MemberProgress = { stars: m.stars, dupes: m.dupes };
     if ('wound' in m) { if (!isInt(m.wound, 1, map.eventRules.maxWound)) throw new Error('Invalid members'); out.wound = m.wound; }
@@ -126,6 +154,12 @@ function membersOf(v: unknown, map: MapDefinition, ids: readonly string[], looku
       const t = obj(m.talents) as Talents;
       if (!Object.keys(t).length || !talentsValid(map, id, out.level ?? 1, t, out.stars, out.grants)) throw new Error('Invalid talents');
       out.talents = { ...t };
+    }
+    // Skill levels (v37): Lv2–max for skills of the member's class (a forgotten tree skill keeps its level).
+    if ('skillLevels' in m) {
+      const l = obj(m.skillLevels); const own = classSkills(lookup, map, id);
+      if (!Object.keys(l).length || Object.entries(l).some(([a, v]) => !own.includes(a as ActionId) || !isInt(v, 2, map.progression.skillLevels.max))) throw new Error('Invalid skill levels');
+      out.skillLevels = { ...l } as MemberProgress['skillLevels'];
     }
     if ('loadout' in m) {
       const base = heroDef(lookup, map, id); const choices = base ? skillChoices(base, map, out.talents, out.grants) : [];
@@ -268,12 +302,15 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
     if (b.kind === 'elite' && !map.elites.some(e => e.id === source && e.encounterId === data.id && !(s.elitesDefeated as unknown[]).includes(e.id))) throw new Error('Invalid battle');
     if (b.kind === 'event' && !map.events.some(e => e.id === source && !(s.eventsDone as unknown[]).includes(e.id))) throw new Error('Invalid battle');
     if (!['elite', 'event'].includes(b.kind as string) && source !== undefined) throw new Error('Invalid battle');
+    if (version < 35 && Array.isArray(b.commands) && b.commands.some(c => ['raider', 'brute'].includes(obj(c).targetId as string))) b.commands = [];
     if (!Array.isArray(b.commands) || b.commands.length > 5000) throw new Error('Invalid battle');
     const entry = hpRecord(b.entry, lookup, map, roster.deployed, members);
     // Validate against the encounter as fought by this run's deployed party (stars included).
     if (entryReason(withParty(data, roster.deployed.map(id => memberDef(lookup, map, members, id)!)), { hp: entry })) throw new Error('Invalid entry');
     if (b.level !== undefined && !isInt(b.level, 1, 99)) throw new Error('Invalid battle');
-    battle = { kind: b.kind as ActiveBattle['kind'], encounterId: data.id, entry, commands: b.commands.map(command), ...(b.level !== undefined ? { level: b.level as number } : {}), ...(typeof source === 'string' ? { source } : {}) };
+    if (b.percent !== undefined && !isInt(b.percent, 1, 1000)) throw new Error('Invalid battle');
+    const lanes = b.lanes === undefined ? undefined : lanesOf(b.lanes, id => roster.deployed.includes(id));
+    battle = { kind: b.kind as ActiveBattle['kind'], encounterId: data.id, entry, commands: b.commands.map(command), ...(b.level !== undefined ? { level: b.level as number } : {}), ...(b.percent !== undefined ? { percent: b.percent as number } : {}), ...(typeof source === 'string' ? { source } : {}), ...(lanes ? { lanes } : {}) };
   }
   // Story recruits (v30): guests and this run's recruits are roster members from this map's recruit list, never both.
   const recruitIds = (v: unknown): string[] | undefined => {
@@ -283,9 +320,14 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
   };
   const guests = recruitIds(s.guests), recruited = recruitIds(s.recruited);
   if (s.hard !== undefined && s.hard !== true) throw new Error('Invalid run');
+  // Skill tomes (v37): only a map that drops them carries them.
+  if ((s.tomes !== undefined || s.riftCore !== undefined || s.tomeWins !== undefined) && !map.tomes) throw new Error('Invalid run');
+  if ((s.riftCore !== undefined && !isInt(s.riftCore, 1, 999)) || (s.tomeWins !== undefined && !isInt(s.tomeWins, 1, 9999))) throw new Error('Invalid run');
+  const runTomes = s.tomes === undefined ? undefined : tomesOf(s.tomes);
   if (guests && recruited && guests.some(id => recruited.includes(id))) throw new Error('Invalid run');
   const state: ExpeditionState = {
     ...(guests ? { guests } : {}), ...(recruited ? { recruited } : {}), ...(s.hard === true ? { hard: true as const } : {}),
+    ...(runTomes ? { tomes: runTomes } : {}), ...(s.riftCore !== undefined ? { riftCore: s.riftCore as number } : {}), ...(s.tomeWins !== undefined ? { tomeWins: s.tomeWins as number } : {}),
     ...(s.bossLoot===undefined?{}:{bossLoot:bossPlanOf(s.bossLoot,map)}),
     ...(s.hunt===undefined?{}:{hunt:huntPlan(s.hunt,map,lookup)}),
     mapId: map.id, mapVersion: map.version, seed: s.seed as number, rolls: s.rolls as number, position: point(s.position, map, true),
@@ -305,6 +347,8 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
   if (tileAt(map, state.position)?.kind === 'wall' && !passableWall(state, map, state.position)) throw new Error('Invalid position');
   if (boulderAt(state, map, state.position) || openPit(state, map, state.position)) throw new Error('Invalid position');
   if (state.camp && tileAt(map, state.camp)?.kind !== 'camp') throw new Error('Invalid camp');
+  // v34 commands that no longer replay against the four-slot encounters restart the battle from its entry.
+  if (version < 35 && battle?.commands.length) try { battleState(state, map, lookup); } catch { battle.commands = []; }
   // A battle can end on enemy opening turns before any command; apply it now.
   if (battle && battleState(state, map, lookup)!.outcome !== 'active') return finishBattle(state, map, lookup).state;
   return state;
@@ -351,7 +395,8 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
     if (version < 9) Object.assign(l, { items: 0, salvaged: 0 });
     if (version < 14 && l.gold === undefined) l.gold = 0;
     if (!['complete', 'withdrawn', 'wiped'].includes(l.outcome as string) || !isInt(l.ore) || !isInt(l.gold) || !isInt(l.seal) || !isInt(l.steps) || !isInt(l.wins) || !isInt(l.items) || !isInt(l.salvaged)) throw new Error('Invalid result');
-    last = { outcome: l.outcome as RunOutcome, ore: l.ore, gold: l.gold as number, seal: l.seal, steps: l.steps, wins: l.wins, items: l.items, salvaged: l.salvaged };
+    if (l.tomes !== undefined && !isInt(l.tomes, 1, 99999)) throw new Error('Invalid result');
+    last = { outcome: l.outcome as RunOutcome, ore: l.ore, gold: l.gold as number, seal: l.seal, steps: l.steps, wins: l.wins, items: l.items, salvaged: l.salvaged, ...(l.tomes !== undefined ? { tomes: l.tomes as number } : {}) };
   }
   let commander: Profile['commander'] = null;
   if (p.commander !== null && p.commander !== undefined) {
@@ -371,9 +416,10 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
     guides = { ...g } as Profile['guides'];
   }
   const veteran = p.veteran === true || (version < 31 && p.tutorialDone === true);
+  const tomes = p.tomes === undefined ? undefined : tomesOf(p.tomes); const riftCore = p.riftCore === undefined ? undefined : isInt(p.riftCore, 0, 9999) ? p.riftCore : badProfile();
   const clearedHard = p.clearedHard === undefined ? undefined : clearedList(p.clearedHard, maps);
   if (clearedHard?.some(id => !cleared.includes(id))) throw new Error('Invalid profile');
-  return {...(clearedHard ? { clearedHard } : {}),...(guides ? { guides } : {}),...(veteran ? { veteran: true as const } : {}),bossLoot,hunt,overflow,storageTier:p.storageTier as number, forgeLevel:p.forgeLevel as number, seed: p.seed, returns: p.returns, tutorialDone: p.tutorialDone, commander, company: [...company as string[]], members, party, cleared,
+  return {...(tomes ? { tomes } : {}),...(riftCore !== undefined ? { riftCore } : {}),...(clearedHard ? { clearedHard } : {}),...(guides ? { guides } : {}),...(veteran ? { veteran: true as const } : {}),bossLoot,hunt,overflow,storageTier:p.storageTier as number, forgeLevel:p.forgeLevel as number, seed: p.seed, returns: p.returns, tutorialDone: p.tutorialDone, commander, company: [...company as string[]], members, party, cleared,
     bank: { ore: bank.ore as number, gold: bank.gold as number, seal: bank.seal as number, dust: bank.dust as number }, items, nextItem: p.nextItem as number, forge: p.forge as number, potions: potionsOf(p.potions, 9999), quests, shop, refreshes: p.refreshes as number, smelted: p.smelted as number, taken: [...p.taken as number[]], expeditions: p.expeditions, completes: p.completes, last };
 }
 // Optional elite returns (4C): known optional elites only, 1..99 each.
@@ -435,8 +481,9 @@ function legacyCleared(tutorialDone: boolean, completed: boolean, map: MapDefini
 }
 // v34 (A6): refund small-tree ranks of classes that now have a big tree and grant the nodes their stars unlocked.
 // A run whose member's ranks were refunded is marked stale so it settles home instead of replaying a changed hero.
-function migrateTrees(envelope: Record<string, unknown>, maps: readonly MapDefinition[]): void {
-  const tree = (id: string) => maps.map(m => m.talents[id]).find(t => isBigTree(t));
+// v37 does the same for the release A classes only (`ids`).
+function migrateTrees(envelope: Record<string, unknown>, maps: readonly MapDefinition[], ids?: readonly string[]): void {
+  const tree = (id: string) => ids && !ids.includes(id) ? undefined : maps.map(m => m.talents[id]).find(t => isBigTree(t));
   const fix = (members: unknown): boolean => {
     let refunded = false;
     for (const [id, raw] of Object.entries(members && typeof members === 'object' ? members as Record<string, Record<string, unknown>> : {})) {
@@ -457,7 +504,8 @@ export function parseGame(raw: string, map: MapDefinition, lookup: EncounterLook
   const envelope = obj(JSON.parse(raw)); const version = envelope.version as number;
   if (version < 21) migrateItems(envelope, map);
   if (version < 34) migrateTrees(envelope, maps.length ? maps : [map]);
-  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
+  else if (version < 37) migrateTrees(envelope, maps.length ? maps : [map], RELEASE_A_TREES);
+  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
   const runMap = (v: unknown): MapDefinition => maps.find(m => m.id === obj(v).mapId) ?? map;
   if (version < 5) {
     const home = runMap(envelope.state); const run = parseRun(envelope.state, version, home, lookup);

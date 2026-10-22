@@ -8,7 +8,7 @@ import { battleLesson } from '../src/ui/tutorial';
 afterEach(() => vi.useRealTimers());
 describe('presentation boundaries without rule changes', () => {
   it('opt-in presentation preserves the exact default resolution and legacy stage frames', () => {
-    const s=createBattle(veilSiege),command={beat:s.beat,heroId:'tracer',action:'attack' as const,targetId:'brute'};
+    const s=createBattle(veilSiege),command={beat:s.beat,heroId:'tracer',action:'attack' as const,targetId:'f1'};
     const plain=resolveCommand(s,veilSiege,command),traced=resolveCommand(s,veilSiege,command,true);
     expect({...traced,turns:traced.turns.map(turn=>{const copy={...turn};delete copy.before;delete copy.after;return copy;})}).toEqual(plain);
     expect(plain.turns[0]).not.toHaveProperty('before');
@@ -17,7 +17,7 @@ describe('presentation boundaries without rule changes', () => {
     const data = structuredClone(veilSiege);
     data.heroes = data.heroes.map(h => h.id === 'tracer' ? {...h,leech:20} : h);
     const initial = createBattle(data, {hp:{tracer:20}});
-    const r = resolveCommand(initial,data,{beat:initial.beat,heroId:'tracer',action:'attack',targetId:'brute'},true);
+    const r = resolveCommand(initial,data,{beat:initial.beat,heroId:'tracer',action:'attack',targetId:'f1'},true);
     expect(r.turns[0]!.before!.heroes[1]!.hp).toBe(20);
     expect(r.turns[0]!.after!.heroes[1]!.hp).toBe(23);
     expect(r.turns[1]!.before!.heroes[1]!.hp).toBe(23);
@@ -30,7 +30,7 @@ describe('presentation boundaries without rule changes', () => {
     const data = structuredClone(veilSiege);
     data.heroes=data.heroes.map(h=>h.id==='weaver'?{...h,gear:{specials:['renewal']}}:h);
     const s=createBattle(data,{hp:{weaver:20}});
-    const r=resolveCommand(s,data,{beat:s.beat,heroId:'tracer',action:'attack',targetId:'brute'},true);
+    const r=resolveCommand(s,data,{beat:s.beat,heroId:'tracer',action:'attack',targetId:'f1'},true);
     const enemy=r.turns[1]!;
     expect(enemy.events).toContainEqual(expect.objectContaining({type:'heal',targetId:'weaver',amount:4}));
     expect(enemy.state.heroes[2]!.hp).toBe(20);
@@ -65,7 +65,7 @@ describe('cancelable presentation clock', () => {
     clock.start([{at:100,run:contact}]);clock.cancel();vi.runAllTimers();expect(contact).toHaveBeenCalledOnce();expect(vi.getTimerCount()).toBe(0);
   });
   it('retains the same end and truth for reduced motion while moving feedback to the start', () => {
-    const s=createBattle(veilSiege);const turn=resolveCommand(s,veilSiege,{beat:s.beat,heroId:'tracer',action:'attack',targetId:'brute'}).turns[0]!;
+    const s=createBattle(veilSiege);const turn=resolveCommand(s,veilSiege,{beat:s.beat,heroId:'tracer',action:'attack',targetId:'f1'}).turns[0]!;
     expect(stageTiming(turn,false)).toEqual({contact:210,end:600});expect(stageTiming(turn,true)).toEqual({contact:0,end:600});
   });
 });

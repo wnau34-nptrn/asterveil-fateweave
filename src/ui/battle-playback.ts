@@ -7,6 +7,8 @@ const durations: Record<ActionId, number> = {
   taunt:550, slam:850, valor:600, mend:600, rally:700, finisher:950, sigil:850, sanctuary:750,
   spearwall:700, weakshot:850, bomb:900, backstab:900, quake:1000, finale:950,
   challenge:600, bulwark:650, rouse:750,
+  parry:550, lunge:850, sweep:900, storm:950, aegis:700, dispel:850, revive:900, halo:700, bless:650,
+  hold:600, halt:850, warcry:650, disengage:800, pin:900, track:850,
 };
 // `boss`: any boss battle holds its enemy stages a little longer (every map's boss, not only the Rift Warden).
 export function stageTiming(turn: TurnStage, reduced: boolean, fast = false, boss = false): { contact: number; end: number } {

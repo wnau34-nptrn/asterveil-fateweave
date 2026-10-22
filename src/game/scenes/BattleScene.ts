@@ -5,8 +5,8 @@ import { thaiFont } from '../../ui/th';
 import { palette } from '../visuals/palette';
 import { BOLT_ATLAS, boltAtlasUrls, boltCast, boltImpact, type FxContext } from '../visuals/bolt-fx';
 import { EXECUTE_ATLAS, WARD_ATLAS, executeAtlasUrls, wardAtlasUrls, executeCast, executeImpact, wardCast, wardSettle } from '../visuals/exec-ward-fx';
-import { fieldSlots, type FieldSlot } from '../visuals/field-layout';
-import { actorArt, actorFootOrigins, artOf, artUrl, mirroredArt, unitsUrl } from '../visuals/assets';
+import { FOE_SLOT_INDEX, fieldSlots, slotPlan, type FieldSlot } from '../visuals/field-layout';
+import { actorArt, actorFootOrigins, artOf, artUrl, figureRise, mirroredArt, unitsUrl } from '../visuals/assets';
 
 // Device pixels per CSS pixel for the canvas buffer (capped: 3x covers current phones).
 export const pixelRatio = (): number => Math.min(3, Math.max(1, window.devicePixelRatio || 1));
@@ -74,7 +74,7 @@ export class BattleScene extends Phaser.Scene {
     this.load.atlas(BOLT_ATLAS, ...boltAtlasUrls());
     this.load.atlas(EXECUTE_ATLAS, ...executeAtlasUrls());
     this.load.atlas(WARD_ATLAS, ...wardAtlasUrls());
-    for (const sheet of ['units', 'mercs', 'foes'] as const) this.load.spritesheet(`battle-${sheet}`, unitsUrl(sheet), { frameWidth: 512, frameHeight: 512 });
+    for (const sheet of ['units', 'mercs', 'foes', 'foes2'] as const) this.load.spritesheet(`battle-${sheet}`, unitsUrl(sheet), { frameWidth: 512, frameHeight: 512 });
   }
   create(): void {
     this.ready = true;
@@ -103,7 +103,9 @@ export class BattleScene extends Phaser.Scene {
   sync(view: SceneView, repaint = true): void {
     this.view = view;
     if (!this.ready) return;
-    if (repaint) this.paint();
+    // A summon puts a new foe on the field mid-presentation: redraw so it appears in its empty slot.
+    const present = view.state.enemies.filter(e => !e.absent).map(e => e.id);
+    if (repaint || present.some(id => !this.bodies.has(id))) this.paint();
     else for (const [id, body] of this.bodies) {
       const hp = [...view.state.heroes, ...view.state.enemies].find(a => a.id === id)?.hp ?? 0;
       const involved = !view.activeActorId || id === view.activeActorId || id === view.activeTargetId;
@@ -125,26 +127,22 @@ export class BattleScene extends Phaser.Scene {
     this.positions.clear(); this.actorTargets.clear(); this.actorPanels.clear();
     const w = this.viewW, h = this.viewH;
     const bg = this.add.graphics(); this.layer.add(bg);
-    const slots = fieldSlots(w, h);
-    const free = { back: [slots[0]!, slots[1]!], front: [slots[2]!, slots[3]!] };
+    const plan = slotPlan(this.encounter.heroes, this.encounter.enemies, new Set(this.encounter.phases?.flatMap(p => p.summon ?? [])));
+    // Each HP panel sits just above its own painted figure (per-illustration headroom).
+    const rise = new Map([...plan.heroSlots].map(([id, slot]) => [slot, figureRise(artOf(this.encounter, id))] as const)
+      .concat(this.encounter.enemies.map(e => [FOE_SLOT_INDEX[e.id]!, figureRise(artOf(this.encounter, e.id))] as const)));
+    const slots = fieldSlots(w, h, { ...plan, rise }), heroSlots = plan.heroSlots;
     for (const [i, hero] of this.encounter.heroes.entries()) {
-      const own = free[hero.lane], other = free[hero.lane === 'front' ? 'back' : 'front'];
-      const slot = own.shift() ?? other.shift()!;
+      const slot = slots[heroSlots.get(hero.id)!]!;
       this.actorPanels.set(hero.id, slot);
       this.actor(hero.id, slot, this.view.state.heroes[i]!.hp, false);
     }
     for (const [i, enemy] of this.encounter.enemies.entries()) {
-      const slot = slots[4 + i]!;
+      // Reserves not yet summoned are off the field.
+      if (this.view.state.enemies[i]!.absent) continue;
+      const slot = slots[FOE_SLOT_INDEX[enemy.id]!]!;
       this.actorPanels.set(enemy.id, slot);
       this.actor(enemy.id, slot, this.view.state.enemies[i]!.hp, true);
-    }
-    const intent = this.view.state.intent;
-    const source = this.positions.get(this.view.phase ? this.view.activeActorId ?? '' : intent?.sourceId ?? '');
-    const target = this.positions.get(this.view.phase ? this.view.activeTargetId ?? '' : intent?.targetId ?? '');
-    if (source && target) {
-      bg.lineStyle(2, this.view.phase === 'hero' ? palette.cyan : intent?.kind === 'energy' ? palette.corruption : 0xf08da1, 0.55);
-      const dx = target.x - source.x; const dy = target.y - source.y;
-      for (let t = 0.15; t < 0.8; t += 0.09) bg.lineBetween(source.x + dx * t, source.y + dy * t, source.x + dx * (t + 0.04), source.y + dy * (t + 0.04));
     }
     this.layer.sort('depth'); this.onLayout();
   }
@@ -159,7 +157,7 @@ export class BattleScene extends Phaser.Scene {
     body.setAlpha(hp <= 0 ? 0.28 : involved ? 1 : 0.55);
     info.setAlpha(hp <= 0 ? 0.4 : involved ? 1 : 0.75);
     const g = this.add.graphics(); body.add(g);
-    const selected = this.view!.heroId === id || this.view!.targetId === id;
+    const selected = this.view!.heroId === id;
     // A contact shadow and selection ring share the same foot anchor.
     g.fillStyle(0x07131f, .65); g.fillEllipse(0, 0, size * .65, size * .12);
     if (selected && hp > 0) { g.lineStyle(2, palette.gold); g.strokeEllipse(0, 0, size * .68, size * .14); }
@@ -176,10 +174,6 @@ export class BattleScene extends Phaser.Scene {
     const hit = this.add.zone(0, sprite.y, Math.max(64, size * 0.7), size).setOrigin(0.5, 1).setInteractive({ useHandCursor: true });
     // Input stays at the slot origin while the disposable body lunges/recoils.
     hit.on('pointerdown', () => this.choose(id)); info.add(hit);
-    if (this.view!.state.intent?.sourceId === id && hp > 0) {
-      const warning = this.text(35, -38, '◆', { fontFamily: thaiFont, fontSize: '15px', color: '#fdbdcf' }).setOrigin(0.5);
-      info.add(warning);
-    }
   }
   // Idle life: a soft aura under the feet (cyan for heroes, rift violet for foes, brighter for the acting unit),
   // gentle breathing out of phase per unit, and rift motes rising around foes. Off under reduced motion.

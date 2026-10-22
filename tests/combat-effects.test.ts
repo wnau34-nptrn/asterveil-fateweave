@@ -6,7 +6,7 @@ import { veilSiege } from '../src/content/encounters/veil-siege';
 import type { BattleEvent, TurnStage } from '../src/core/battle/types';
 
 const initial = createBattle(veilSiege);
-const turn = resolveCommand(initial,veilSiege,{beat:initial.beat,heroId:'tracer',action:'execute',targetId:'brute'},true).turns[0]!;
+const turn = resolveCommand(initial,veilSiege,{beat:initial.beat,heroId:'tracer',action:'execute',targetId:'f1'},true).turns[0]!;
 describe('truthful combat presentation', () => {
   it('fast and motion preferences change only time, preserving the entire traced result', () => {
     const snapshot = JSON.stringify(turn);

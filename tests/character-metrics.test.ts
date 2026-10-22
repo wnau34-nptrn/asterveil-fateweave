@@ -3,7 +3,7 @@ import { chapterOne as map } from '../src/content/world/chapter1';
 import { encounterById as lookup } from '../src/content/encounters/catalog';
 import { newProfile, depart } from '../src/core/world/profile';
 import { heroCatalog, memberDef, starred, wear } from '../src/core/world/world';
-import { createBattle, resolveCommand, withParty } from '../src/core/battle/engine';
+import { createBattle, resolveCommand, targetOptions, withParty } from '../src/core/battle/engine';
 import type { ActionId } from '../src/core/battle/types';
 import { characterSkillMetric, characterStats } from '../src/ui/character-metrics';
 import { characterEquipmentComparison } from '../src/ui/character-view';
@@ -33,7 +33,9 @@ it('all ten classes expose finite stats and meaningful active metrics, including
   const s=setup();
   for(const base of heroCatalog(lookup,map)) {
     // The Knight's star skills are tree nodes now (A6); a migrated ★5 company keeps them as grants.
-    s.members[base.id]={stars:5,dupes:0,level:8,exp:0,...(base.id==='guardian'?{grants:['c1s','a4']}:{})}; s.hp[base.id]=1;
+    // Release A big trees grant the same way from their `legacyStars` nodes.
+    const tree=map.talents[base.id]!, legacy=tree.filter(n=>n.legacyStars!==undefined).map(n=>n.id);
+    s.members[base.id]={stars:5,dupes:0,level:8,exp:0,...(legacy.length?{grants:legacy}:{})}; s.hp[base.id]=1;
     const h=memberDef(lookup,map,s.members,base.id)!;
     expect(characterStats(s,map,h,template).every(v=>Number.isFinite(v.value)&&v.help.length>10)).toBe(true);
     for(const a of h.actions) { const v=characterSkillMetric(a,h,template); expect(v.target.length).toBeGreaterThan(0); if(v.value!==undefined) expect(Number.isFinite(v.value)).toBe(true); }
@@ -56,7 +58,7 @@ it('displayed damage/healing/song powers agree with real resolver events before 
       const songs: ('valor' | 'mend' | undefined)[] = action==='finale' ? ['valor','mend'] : [undefined];
       for (const song of songs) {
       const b=createBattle(data,{hp:{[id]:1}}); if(song) b.song={heroId:id,action:song};
-      const targetId=action==='heal'||action==='valor'||action==='finale'?id:b.enemies[0]!.id;
+      const targetId=action==='heal'||action==='valor'||action==='finale'?id:targetOptions(b,data,id,action as ActionId).find(t=>t.valid)!.id;
       const metric=characterSkillMetric(action,hero,data), result=resolveCommand(b,data,{beat:b.beat,heroId:id,action:action as ActionId,targetId});
       const type=action==='heal'||song==='mend'?'heal':action==='valor'?'song':'damage';
       const event=result.events.find(e=>e.type===type&&e.sourceId===id)!;

@@ -1,12 +1,14 @@
 import {heroBossEffect} from './boss-equipment';
 import type { ActionId, EncounterDefinition, HeroDefinition } from '../core/battle/types';
 import type { Item, MapDefinition, MemberProgress, TalentNode, TalentNodeDef } from '../core/world/types';
-import { withParty } from '../core/battle/engine';
+import { levelBarrier, skillCooldown, withParty } from '../core/battle/engine';
+import { skillLevelCost, skillLevelOf, tomeLine } from '../core/world/tomes';
+import { TOME_LINES, TOME_SIZES, type TomeBag, type TomeLine, type TomeSize } from '../core/world/types';
 import { expToNext, skillChoices } from '../core/world/world';
 import { isBigTree, memberTalentReason, talentPoints, talentsSpent } from '../core/world/talents';
 import { icon, lineIcon } from './icons';
 import { heroArt, starRow } from './portraits';
-import { heroText, itemLines, itemName, itemOwner, passiveText, rarityText, setText, skillDescription, specialText, bigBranches, talentBranches, talentHelp, wornSets, slotIcon, slotText, gearStatName, statText } from './th';
+import { tomeLineText, tomeSizeText, heroText, itemLines, itemName, itemOwner, passiveText, rarityText, setText, skillDescription, specialText, bigBranches, talentBranches, talentHelp, wornSets, slotIcon, slotText, gearStatName, statText } from './th';
 import { statLines } from '../core/world/equipment';
 import { markedSkillExample, characterSkillMetric, characterStats, type CharacterState } from './character-metrics';
 import { gearArt, setEmblem } from './equip-art';
@@ -37,11 +39,40 @@ function treeSkillState(map: MapDefinition, h: HeroDefinition, base: HeroDefinit
   return { actions: [...h.actions, ...choices.filter(a => !h.actions.includes(a)), ...locked], note,
     passive: passive ? `<h3>พาสซีฟจากต้นไม้</h3><div class="character-passive"><strong>${passiveText[passive.effect.passive].name}</strong><p>${h.passive === passive.effect.passive ? 'ปลดล็อกแล้ว' : `ยังล็อก · ปลดที่โหนด ${passive.name} ชั้น ${passive.tier}`}</p><p>${passiveText[passive.effect.passive].help(data)}</p></div>` : '' };
 }
-export function characterSkills(h: HeroDefinition, base: HeroDefinition, stars: number, template: EncounterDefinition, map?: MapDefinition, member?: MemberProgress): string {
+// Skill tomes (save v37, docs/design/SKILL_TOMES_TH.md): what the camp can pay, and its reasons (the lobby builds it).
+export interface SkillTomeView { open: boolean; bag: TomeBag; gold: number; core: number; reason(id: string, action: ActionId): string; trade(line: TomeLine, size: TomeSize, to?: TomeLine): string; levelable(id: string): ActionId[] }
+const levelWhy: Record<string, string> = { locked: 'เปิดหลังจบแมพ 2 (เส้นทางป่าทึบ)', skill: 'ต้องปลดสกิลก่อน', max: 'เลเวลสูงสุดแล้ว', tomes: 'ตำราไม่พอ', gold: 'เหรียญทองไม่พอ', core: 'ต้องใช้แก่นรอยแยก', unknown: 'ไม่พบสมาชิก' };
+const tradeWhy: Record<string, string> = { locked: 'ยังไม่เปิด', size: 'เล่มใหญ่แลกขึ้นไม่ได้', tomes: 'ตำราไม่พอ', line: 'เลือกสายอื่น' };
+// One skill's level: dots, and at the camp the next level's number (▲), its cost and the button.
+function skillLevelRow(h: HeroDefinition, a: ActionId, template: EncounterDefinition, map: MapDefinition, member: MemberProgress, tomes?: SkillTomeView): string {
+  const level = skillLevelOf(member, a), max = map.progression.skillLevels.max;
+  const dots = `<span class="skill-dots" aria-hidden="true">${Array.from({ length: max }, (_, i) => `<i class="${i < level ? 'on' : ''}"></i>`).join('')}</span>`;
+  const head = `<p class="skill-level">Lv${level}/${max} ${dots}</p>`;
+  if (!tomes || !tomes.levelable(h.id).includes(a)) return head;
+  if (level >= max) return `${head}<p class="camp-note">เชี่ยวชาญแล้ว</p>`;
+  const cost = skillLevelCost(map, level)!, line = tomeLine(map, h.id), why = tomes.reason(h.id, a);
+  const next = { ...h, skillLevels: { ...h.skillLevels, [a]: level + 1 } }, now = characterSkillMetric(a, h, template), up = characterSkillMetric(a, next, template);
+  const d = withParty(template, [h]), dn = withParty(template, [next]), cd = skillCooldown(d, h.id, a), cdNext = skillCooldown(dn, h.id, a), shield = levelBarrier(dn, h.id, a) - levelBarrier(d, h.id, a);
+  const gain = [now.value !== undefined && up.value !== undefined && up.value !== now.value ? `${now.label} ${now.value} <em class="up">▲ ${up.value}</em>` : '', cdNext < cd ? `คูลดาวน์ ${cd} <em class="up">▲ ${cdNext}</em>` : '', shield > 0 ? `ผู้ใช้ได้โล่ <em class="up">▲ ${levelBarrier(dn, h.id, a)}</em>` : ''].filter(Boolean).join(' · ');
+  const chips = `<span class="tome-chip" data-line="${line}">${lineIcon('tab-skills')}${tomeLineText[line]}${tomeSizeText[cost.size]} ×${cost.tomes} <small>(มี ${tomes.bag[line][cost.size]})</small></span><span class="tome-chip">${icon('gold')}${cost.gold}</span>${cost.core ? `<span class="tome-chip">${icon('star')}แก่นรอยแยก ×${cost.core}</span>` : ''}`;
+  return `${head}${gain ? `<p class="skill-next">Lv${level + 1}: ${gain}</p>` : ''}<div class="skill-level-cost">${chips}</div><button id="skill-up-${a}" data-world="skill-level" data-level="${a}" class="${why ? 'secondary' : 'primary'} skill-up" aria-disabled="${!!why}" aria-label="เพิ่ม Lv ${d.skills[a].name} เป็น Lv${level + 1}${why ? ` · ${levelWhy[why] ?? why}` : ''}">${icon('act-confirm')}เพิ่ม Lv${why ? `<small>${levelWhy[why] ?? why}</small>` : ''}</button>`;
+}
+// The camp's tomes and the trainer's trades (up a size in this member's line, or another line's tomes into it).
+function tomeSection(map: MapDefinition, id: string, tomes: SkillTomeView): string {
+  const r = map.progression.skillLevels, line = tomeLine(map, id);
+  const bag = TOME_LINES.map(l => `<li data-line="${l}"${l === line ? ' class="own"' : ''}><b>${tomeLineText[l]}</b><span>${TOME_SIZES.map(z => `${tomeSizeText[z]} ${tomes.bag[l][z]}`).join(' · ')}</span></li>`).join('');
+  const button = (bid: string, l: TomeLine, z: TomeSize, to: TomeLine | undefined, text: string) => { const why = tomes.trade(l, z, to);
+    return `<button id="${bid}" data-world="tome-trade" data-line="${l}" data-size="${z}" data-to="${to ?? ''}" class="secondary" aria-disabled="${!!why}">${text}${why ? `<small>${tradeWhy[why] ?? why}</small>` : ''}</button>`; };
+  const ups = (['small', 'medium'] as const).map((z, i) => button(`tome-up-${z}`, line, z, undefined, `${tomeSizeText[z]} ${r.tradeUp} → ${tomeSizeText[TOME_SIZES[i + 1]!]} 1`)).join('');
+  const swaps = TOME_LINES.filter(l => l !== line).flatMap(l => TOME_SIZES.filter(z => tomes.bag[l][z] >= r.swap).map(z => button(`tome-swap-${l}-${z}`, l, z, line, `${tomeLineText[l]}${tomeSizeText[z]} ${r.swap} → ${tomeLineText[line]} 1`))).join('');
+  return `<h3>${lineIcon('tab-skills')} ตำราศึกของค่าย</h3><ul class="tome-bag">${bag}</ul><p class="camp-note">แก่นรอยแยก ${tomes.core} · เหรียญทอง ${tomes.gold} · ${heroText[id]!.name}ใช้ตำรา${tomeLineText[line]}</p>
+    <details class="tome-trade"><summary>แลกตำราที่ครูฝึก</summary><div class="tome-trade-list">${ups}${swaps}</div><p class="camp-note">แลกขึ้นในสายเดียวกัน หรือเปลี่ยนสาย ${r.swap} เล่ม → 1 เล่มขนาดเดิม · แลกกลับไม่ได้</p></details>`;
+}
+export function characterSkills(h: HeroDefinition, base: HeroDefinition, stars: number, template: EncounterDefinition, map?: MapDefinition, member?: MemberProgress, tomes?: SkillTomeView): string {
   const data = withParty(template, [h]), tree = map && member && isBigTree(map.talents[h.id]) ? treeSkillState(map, h, base, member, data) : undefined;
   const unlock = tree ? undefined : base.unlocks;
   const actions = tree ? tree.actions : [...h.actions, ...(unlock && !h.actions.includes(unlock.skill) ? [unlock.skill] : [])];
-  return `${h.gear?.boss?`<h3>พลังอุปกรณ์บอส</h3><ul class="boss-power-list">${heroBossEffect(h)}</ul>`:''}<h3>สกิล Active</h3><p class="camp-note">ค่าพื้นฐานตามตัวละครปัจจุบัน · ดาเมจจริงขึ้นกับเงื่อนไขท่า สถานะเป้าหมาย โบนัสอุปกรณ์ และเลือดที่เหลือ การรักษาไม่เกินเลือดสูงสุด</p><ul class="hire-skills character-skills">${actions.map(a => { const metric = characterSkillMetric(a, h, template),marked=h.gear?.boss?.power==='focus'?markedSkillExample(a,h,template):undefined; return `<li data-skill="${a}">${icon(a)}<div><b>${data.skills[a].name}</b><small>${tree ? tree.note(a, data.skills[a].cooldown) : h.actions.includes(a) ? data.skills[a].cooldown ? `คูลดาวน์ ${data.skills[a].cooldown} รอบ` : 'ใช้ได้ทุกเทิร์น' : 'ยังล็อก · ปลดที่ ★3'}</small><p class="skill-metric">${metric.label}${metric.value === undefined ? '' : ` <strong>${metric.value}</strong>`} · ${metric.target}${metric.secondary ? `<br>${metric.secondary.label} <strong>${metric.secondary.value}</strong>` : ''}</p><small>${metric.scaling}</small><p>${skillDescription(a, h.id, data)}</p>${marked===undefined?'':`<p class="boss-skill-example">ตัวอย่างศัตรูติดตรา ยังไม่ลงมือและเล็งเพื่อน รอบแรก สิทธิ์พร้อม: ดาเมจเป้าหมายหลัก ${marked} · ไม่มีสถานะอื่น ไม่ใช่ดาเมจรับประกัน</p>`}</div></li>`; }).join('')}</ul>${unlock ? `<h3>สกิลติดตัวประจำอาชีพ</h3><div class="character-passive"><strong>${passiveText[unlock.passive].name}</strong><p>${stars >= 5 ? 'ปลดล็อกแล้ว' : 'ยังล็อก · ปลดที่ ★5'}</p><p>${passiveText[unlock.passive].help(data)}</p></div>` : tree?.passive ?? ''}<p class="camp-note">${tree ? 'ปลดและติดสกิลได้ในแท็บความถนัด · ดาวให้แต้มต้นไม้ +1 ต่อดาว' : 'ความถนัดจากแต้มเลเวลเลือกได้ในแท็บความถนัด'}</p>`;
+  return `${h.gear?.boss?`<h3>พลังอุปกรณ์บอส</h3><ul class="boss-power-list">${heroBossEffect(h)}</ul>`:''}<h3>สกิล Active</h3><p class="camp-note">ค่าพื้นฐานตามตัวละครปัจจุบัน · ดาเมจจริงขึ้นกับเงื่อนไขท่า สถานะเป้าหมาย โบนัสอุปกรณ์ และเลือดที่เหลือ การรักษาไม่เกินเลือดสูงสุด</p><ul class="hire-skills character-skills">${actions.map(a => { const metric = characterSkillMetric(a, h, template),marked=h.gear?.boss?.power==='focus'?markedSkillExample(a,h,template):undefined; return `<li data-skill="${a}">${icon(a)}<div><b>${data.skills[a].name}</b><small>${tree ? tree.note(a, data.skills[a].cooldown) : h.actions.includes(a) ? data.skills[a].cooldown ? `คูลดาวน์ ${data.skills[a].cooldown} รอบ` : 'ใช้ได้ทุกเทิร์น' : 'ยังล็อก · ปลดที่ ★3'}</small><p class="skill-metric">${metric.label}${metric.value === undefined ? '' : ` <strong>${metric.value}</strong>`} · ${metric.target}${metric.secondary ? `<br>${metric.secondary.label} <strong>${metric.secondary.value}</strong>` : ''}</p><small>${metric.scaling}</small><p>${skillDescription(a, h.id, data)}</p>${map && member && a !== 'attack' ? skillLevelRow(h, a, template, map, member, tomes?.open ? tomes : undefined) : ''}${marked===undefined?'':`<p class="boss-skill-example">ตัวอย่างศัตรูติดตรา ยังไม่ลงมือและเล็งเพื่อน รอบแรก สิทธิ์พร้อม: ดาเมจเป้าหมายหลัก ${marked} · ไม่มีสถานะอื่น ไม่ใช่ดาเมจรับประกัน</p>`}</div></li>`; }).join('')}</ul>${unlock ? `<h3>สกิลติดตัวประจำอาชีพ</h3><div class="character-passive"><strong>${passiveText[unlock.passive].name}</strong><p>${stars >= 5 ? 'ปลดล็อกแล้ว' : 'ยังล็อก · ปลดที่ ★5'}</p><p>${passiveText[unlock.passive].help(data)}</p></div>` : tree?.passive ?? ''}<p class="camp-note">${tree ? 'ปลดและติดสกิลได้ในแท็บความถนัด · ดาวให้แต้มต้นไม้ +1 ต่อดาว' : 'ความถนัดจากแต้มเลเวลเลือกได้ในแท็บความถนัด'}</p>${map && tomes ? tomes.open ? tomeSection(map, h.id, tomes) : `<p class="camp-note">${lineIcon('tab-skills')} เลเวลสกิลด้วยตำราศึก เปิดหลังจบแมพ 2 (เส้นทางป่าทึบ)</p>` : map && member ? '<p class="camp-note">เพิ่มเลเวลสกิลด้วยตำราได้ที่ค่าย</p>' : ''}`;
 }
 
 const deltaText = (a: number, b: number) => b === a ? 'เท่าเดิม' : `${b > a ? '+' : '−'}${Math.abs(b-a)}`;

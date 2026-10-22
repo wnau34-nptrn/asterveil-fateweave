@@ -42,15 +42,28 @@
 .start-card h2, .result-card h2 { font-family: var(--font-heading); color: var(--gold-light); }
 #start-screen:not(:empty) { background: #07111dc4; }
 #game-info { background: var(--panel-bg); border: 1px solid #e8f5ff40; border-radius: 24px; }
-/* Field targets: an inviting ground ring under the character instead of a box. */
-.field-target.valid-target { outline: 0; }
-/* Centred with auto margins, not a transform: the veil-hint pulse animates transform and would
-   otherwise drop the centring and push the ring half its width off the fighter. */
-.field-target.valid-target::before { content: ''; position: absolute; left: 0; right: 0; margin: 0 auto; bottom: 4px; width: min(88%, 74px); aspect-ratio: 2.4; border: 2px solid #74d4efd0; border-radius: 50%; box-shadow: 0 0 12px #74d4ef55, inset 0 0 10px #74d4ef33; pointer-events: none; }
-.field-target.valid-target[data-actor=raider]::before, .field-target.valid-target[data-actor=brute]::before { border-color: #b59affd8; box-shadow: 0 0 12px #b59aff60, inset 0 0 10px #b59aff33; }
-.field-target.valid-target:hover::before, .field-target.valid-target:focus-visible::before { border-color: var(--gold-light); }
+/* Field targets show no ring, frame or marker (owner 2026-10-22); the invisible button still takes the tap. */
+.field-target.valid-target, .field-target.valid-target:hover { outline: 0; background: transparent !important; }
 .field-target.valid-target:focus-visible { outline: 2px solid var(--focus); outline-offset: -2px; }
-.field-marker { border-color: #a3edff; background: #0d2236f0; }
-@media (prefers-reduced-motion: no-preference) {
-  .field-target.valid-target::before { animation: veil-hint var(--hint-ms) var(--ease-soft) infinite; }
-}
+
+/* A7 step 3: 8-actor field HUD (mockup 08 language). */
+#battle-view #turn-phase #turn-order ol { gap: 1px; }
+#battle-view .turn-speed { position: absolute; left: 50%; bottom: -3px; transform: translateX(-50%); min-width: 22px; padding: 0 3px; border-radius: 999px; background: #08121fe6; border: 1px solid #e8f5ff30; color: #cfe3f2; font: 600 9px/12px var(--font-heading); text-align: center; pointer-events: none; }
+#battle-view .turn-slot.enemy .turn-speed { border-color: #b59aff55; color: #e2d2ff; }
+#battle-view .turn-slot.current-turn .turn-speed { border-color: var(--gold-light); color: var(--gold-light); }
+#battle-view .turn-slot.later-round .portrait { opacity: .72; filter: saturate(.8); }
+#battle-view .turn-slot:not(.later-round) + .turn-slot.later-round::after { content: ''; position: absolute; left: -1px; top: 8px; bottom: 8px; border-left: 1px solid #e8f5ff55; }
+@container game (max-width: 387px) { #battle-view #turn-order .turn-slot:nth-child(n+7) { display: none; } }
+
+
+#field-banner { position: absolute; z-index: 5; left: 50%; top: 6px; transform: translateX(-50%); width: max-content; max-width: calc(100% - 24px); padding: 8px 16px; border-radius: 999px; background: linear-gradient(105deg, #2b1d33f2, #141a2ef2); border: 1px solid #b59affaa; color: #f1e6ff; font: 600 14px/1.35 var(--font-heading); text-align: center; text-wrap: balance; box-shadow: 0 0 18px #b072ff55, 0 6px 18px #0009; pointer-events: none; }
+#field-banner[hidden] { display: none; }
+#field-banner[data-kind="phase"] { border-color: var(--gold-light); color: var(--gold-light); box-shadow: 0 0 22px #f2d59666, 0 6px 18px #0009; }
+#field-banner[data-kind="all"] { border-color: #ff6f7d; color: #ffd4c8; }
+/* Standard grid (owner 2026-10-22): the HP number over a centred bar under the feet, small status icons below it;
+   a foe's name stands just above its painted head. */
+#battle-view .field-unit-info.grid { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 1px; }
+#battle-view .field-unit-info.grid .field-health { width: 52px; }
+#battle-view .field-unit-info.grid.ally .field-health { margin-top: 2px; }
+#battle-view .field-unit-info.grid .field-statuses { gap: 1px; }
+.field-unit-label { position: absolute; display: flex; align-items: flex-end; justify-content: center; pointer-events: none; font-size: 9px; line-height: 11px; color: #f0f5ff; text-shadow: 0 1px 2px #07101f, 1px 0 2px #07101f; }

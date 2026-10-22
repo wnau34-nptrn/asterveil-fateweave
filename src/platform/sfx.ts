@@ -6,7 +6,7 @@ import type { StoragePort } from '../core/save/expedition-save';
 export type SfxName =
   | 'click' | 'open' | 'close' | 'step' | 'bump' | 'encounter' | 'chest' | 'chestRare' | 'rest' | 'rune' | 'runeReset' | 'lever' | 'push' | 'door' | 'secret' | 'herb'
   | 'swing' | 'charge' | 'hit' | 'zap' | 'crit' | 'guard' | 'barrier' | 'heal' | 'buff' | 'debuff' | 'miss' | 'down' | 'cancel' | 'victory' | 'defeat'
-  | 'coin' | 'upgrade' | 'anvil' | 'claim' | 'potion';
+  | 'coin' | 'upgrade' | 'anvil' | 'clang' | 'claim' | 'potion';
 const prefKey = 'asterveil.fateweave.sfx.v1';
 export interface SfxPrefs { muted: boolean; volume: number }
 
@@ -49,6 +49,8 @@ const recipes: Record<SfxName, { tones?: Tone[]; noise?: Noise[] }> = {
   coin: { tones: [{ type: 'square', freq: 988, dur: .06, gain: .06 }, { type: 'square', freq: 1319, at: .06, dur: .14, gain: .06 }] },
   upgrade: { tones: [{ type: 'triangle', freq: 523, to: 1047, dur: .3, gain: .1 }, { type: 'sine', freq: 1568, at: .25, dur: .3, gain: .08 }] },
   anvil: { tones: [{ type: 'square', freq: 1760, dur: .12, gain: .05 }, { type: 'triangle', freq: 880, dur: .3, gain: .08 }], noise: [{ dur: .04, freq: 4000, q: 2, gain: .15, type: 'bandpass' }] },
+  // Hammer on steel: a hard noise tick, then an inharmonic ringing metal tail (the forge strike effect plays it twice).
+  clang: { tones: [{ type: 'triangle', freq: 1568, dur: .5, gain: .1 }, { type: 'sine', freq: 2349, dur: .4, gain: .06 }, { type: 'sine', freq: 3322, dur: .3, gain: .04 }, { type: 'sine', freq: 180, to: 90, dur: .12, gain: .18 }], noise: [{ dur: .05, freq: 3500, q: 1.5, gain: .3, type: 'bandpass' }] },
   claim: { tones: [{ type: 'triangle', freq: 659, dur: .1, gain: .12 }, { type: 'triangle', freq: 880, at: .09, dur: .1, gain: .12 }, { type: 'triangle', freq: 1319, at: .18, dur: .3, gain: .13 }] },
   potion: { tones: [{ type: 'sine', freq: 300, to: 900, dur: .2, gain: .08 }, { type: 'sine', freq: 500, to: 1200, at: .1, dur: .2, gain: .06 }] },
 };

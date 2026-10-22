@@ -28,7 +28,7 @@ async function open(page: Page) {
     { uid: 0, slot: 'boots', rarity: 0, level: 3, affixes: [] },
     { uid: 0, slot: 'weapon', hero: 'tracer', rarity: 1, level: 2, affixes: pool('weapon', 'tracer').slice(0, 1) },
   ];
-  const raw = JSON.stringify({ version: 34, ...game }); parseGame(raw, map, encounterById);
+  const raw = JSON.stringify({ version: 35, ...game }); parseGame(raw, map, encounterById);
   await page.addInitScript(({key,raw}) => { if (!sessionStorage.getItem('shots-seeded')) { localStorage.setItem(key, raw); sessionStorage.setItem('shots-seeded', 'yes'); } }, {key,raw});
   await page.goto('./'); await page.locator('#continue').click(); await expect(page.locator('#world-view')).toBeVisible();
 }

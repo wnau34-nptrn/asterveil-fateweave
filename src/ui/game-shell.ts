@@ -7,19 +7,22 @@ import { applyCampEquipment, applyRunEquipment } from '../core/world/auto-equipm
 import { shortcutBlocked } from '../platform/keyboard';
 import type { BattleState, Outcome } from '../core/battle/types';
 import { clearLegacySaves, loadGame, saveGame, type Game } from '../core/save/expedition-save';
-import { chooseLoadout, hardReason, claimGuide, renameCamp, createCommander, depart, mapUnlocked, brew, buy, claimQuest, refreshBoard, dismiss, equip, hire, learnTalent, newProfile, placeMember, resetTalents, salvage, settle, unequip, upgrade, canWithdraw } from '../core/world/profile';
+import { setPartyLane, chooseLoadout, hardReason, claimGuide, renameCamp, createCommander, depart, mapUnlocked, brew, buy, claimQuest, refreshBoard, dismiss, equip, hire, learnTalent, newProfile, placeMember, resetTalents, salvage, settle, unequip, upgrade, canWithdraw } from '../core/world/profile';
 import type { Point, Direction, EventChoice, ExpeditionState, MapDefinition, PotionId, Profile, ProfileResult, RunOutcome, ShopItemId, WorldEvent } from '../core/world/types';
-import { travel, tileAt, startPrologue, questDone, battleData, chooseEvent, finishBattle, heroCatalog, move, moveMember, openChest, recordBattle, usePotion, rest, revive, swapMembers, takeOff, wear, type EncounterLookup } from '../core/world/world';
+import { travel, tileAt, startPrologue, questDone, battleData, chooseEvent, finishBattle, heroCatalog, move, moveMember, openChest, recordBattle, usePotion, rest, revive, setLane, swapMembers, takeOff, wear, type EncounterLookup } from '../core/world/world';
 import { Music, type Track } from '../platform/music';
 import { firstClearStory, runSummary, SummaryUI, type RunSummary } from './summary-ui';
 import { sfx, type SfxName } from '../platform/sfx';
 import { browserStorage } from '../platform/browser-storage';
 import type { BattleUI } from './battle-ui';
-import type { NpcId } from '../game/visuals/assets';
-import { choiceText, eventText, expThai, heroText, itemLines, itemName, lootThai, potionText, rewardText, shopText } from './th';
+import { leaderArt, type NpcId } from '../game/visuals/assets';
+import { choiceText, eventText, expThai, heroText, itemLines, itemName, lootThai, potionText, rewardText, shopText, tomeLineText, tomeSizeText, tomeThai } from './th';
+import { raiseSkill, tradeTomes } from '../core/world/tomes';
+import { laneName } from './formation-grid';
 import { transferAffix, craftWeapon, raiseItemLevel, enhanceTo, lockEquipment, findItem, fuse, reroll, smelt } from '../core/world/forge';
 import { CommanderUI } from './commander-ui';
 import { LobbyUI } from './lobby-ui';
+import { forgeStrike } from './forge-strike';
 import { prologue, prologueEnd, recruitStory, StoryUI } from './story-ui';
 import { WorldUI, type WorldBanner } from './world-ui';
 import { icon, type IconName } from './icons';
@@ -56,8 +59,9 @@ export class GameShell {
     if (this.game?.run) this.chosenMap = this.game.run.mapId;
     return this.maps.find(m => m.id === this.chosenMap) ?? this.home;
   }
+  // The map marker shows the encounter's leader: its boss, else its large foe, else its first foe.
   private eliteArtOf(map: MapDefinition): Record<string, string> {
-    return Object.fromEntries(map.elites.map(e => [e.id, this.lookup(e.encounterId)?.enemies.find(f => f.id === 'brute')?.art ?? 'brute']));
+    return Object.fromEntries(map.elites.map(e => [e.id, leaderArt(this.lookup(e.encounterId))]));
   }
   constructor(private readonly root: HTMLElement, private readonly home: MapDefinition, private readonly lookup: EncounterLookup, private readonly battle: BattleUI,
     private readonly views: { title: HTMLElement; commander: HTMLElement; lobby: HTMLElement; world: HTMLElement; battle: HTMLElement },
@@ -67,7 +71,7 @@ export class GameShell {
     this.game = loadGame(this.storage, map, lookup, maps);
     for (const id of this.game?.run?.recruited ?? []) this.recruitSeen.add(`${this.game!.run!.mapId}:${id}`);
     this.world = new WorldUI(views.world, this.map, heroCatalog(lookup, map), {
-      travel: to => this.travelTo(to), move: dir => this.move(dir), rest: () => this.rest(), revive: id => this.revive(id), swap: (a, b) => this.roster(swapMembers(this.state!, a, b)), moveMember: id => this.roster(moveMember(this.state!, id)),
+      travel: to => this.travelTo(to), move: dir => this.move(dir), rest: () => this.rest(), revive: id => this.revive(id), swap: (a, b) => this.roster(swapMembers(this.state!, a, b)), lane: (id, lane, other) => this.roster(setLane(this.state!, map, lookup, id, lane, other)), moveMember: id => this.roster(moveMember(this.state!, id)),
       withdraw: () => this.endRun('withdrawn'), openChest: () => this.openChest(), usePotion: (potion, id) => this.drink(potion, id),
       chooseEvent: choice => this.chooseEvent(choice),
       talent: (id, node) => {
@@ -93,6 +97,9 @@ export class GameShell {
       hire: i => this.profileChange(hire(this.game!.profile, map, lookup, i)), refresh: () => this.profileChange(refreshBoard(this.game!.profile, map)),
       buy: (item, hero) => this.profileChange(buy(this.game!.profile, map, item, hero)), smelt: dust => this.profileChange(smelt(this.game!.profile, map, dust)), upgrade: id => this.profileChange(upgrade(this.game!.profile, map, id)),
       dismiss: id => this.profileChange(dismiss(this.game!.profile, map, id)), place: (id, group, other) => this.profileChange(placeMember(this.game!.profile, id, group, other)),
+      lane: (id, lane, other) => this.profileChange(setPartyLane(this.game!.profile, map, lookup, id, lane, other)),
+      skillLevel: (id, action) => this.profileChange(raiseSkill(this.game!.profile, this.maps, map, lookup, id, action)),
+      tomeTrade: (line, size, to) => this.profileChange(tradeTomes(this.game!.profile, this.maps, map, line, size, to)),
       talent: (id, node) => this.profileChange(learnTalent(this.game!.profile, map, id, node)), loadout: (id, actions) => this.profileChange(chooseLoadout(this.game!.profile, map, lookup, id, actions)), resetTalents: id => this.profileChange(resetTalents(this.game!.profile, id)),
       renameCamp: name => this.renameCamp(name), guide: (id, skip) => this.guide(id, skip),
       equip: (id, uid) => this.profileChange(equip(this.game!.profile, id, uid)), unequip: (id, slot) => this.profileChange(unequip(this.game!.profile, map, id, slot)),
@@ -246,18 +253,19 @@ export class GameShell {
     if (e.type === 'blocked') return;
     this.game = { ...this.game, profile: { ...result.profile, last: null } }; this.persist();
     this.lobbyMessage = e.type === 'hired' ? (e.duplicate ? `ได้ตัวซ้ำของ${name(e.heroId)} · ใช้อัปดาวในแท็บทีม` : `จ้าง${name(e.heroId)}แล้ว`)
-      : e.type==='bossTarget'?'บันทึกเป้าหมายบอสแล้ว':e.type==='huntTarget'?'บันทึกเป้าหมายฟาร์มแล้ว':e.type==='storageCollected'?`เก็บเข้าคลัง ${e.count} ชิ้นแล้ว`:e.type==='storageExpanded'?'ขยายคลังแล้ว': e.type === 'upgraded' ? `${name(e.heroId)}ขึ้นเป็น ★${e.stars} แล้ว` : e.type === 'dismissed' ? `เลิกจ้าง${name(e.heroId)}แล้ว · ได้เหรียญทองคืน ${this.map.company.dismissRefund}` : e.type === 'talent' || e.type === 'equipped' ? '' : e.type === 'salvaged' ? `แยกชิ้น ${e.count} ชิ้น · ได้แร่ดาว ${e.ore} ฝุ่นดาว ${e.dust}`
+      : e.type==='bossTarget'?'บันทึกเป้าหมายบอสแล้ว':e.type==='huntTarget'?'บันทึกเป้าหมายฟาร์มแล้ว':e.type==='storageCollected'?`เก็บเข้าคลัง ${e.count} ชิ้นแล้ว`:e.type==='storageExpanded'?'ขยายคลังแล้ว': e.type === 'upgraded' ? `${name(e.heroId)}ขึ้นเป็น ★${e.stars} แล้ว` : e.type === 'dismissed' ? `เลิกจ้าง${name(e.heroId)}แล้ว · ได้เหรียญทองคืน ${this.map.company.dismissRefund}` : e.type === 'talent' || e.type === 'equipped' ? '' : e.type === 'skillLevel' ? `${name(e.heroId)} · ${this.lookup(this.map.tutorialEncounterId)!.skills[e.action].name} ขึ้นเป็น Lv${e.level}` : e.type === 'tomeTrade' ? `แลกได้ตำรา${tomeLineText[e.line]}${tomeSizeText[e.size]} 1 เล่ม` : e.type === 'salvaged' ? `แยกชิ้น ${e.count} ชิ้น · ได้แร่ดาว ${e.ore} ฝุ่นดาว ${e.dust}`
       : e.type === 'equipmentLocked' ? `${e.locked?'ล็อก':'ปลดล็อก'}${itemName(findItem(result.profile,e.uid)!.item)}แล้ว` : e.type === 'forged' ? this.forgedText(result.profile, e.uid, e.action) : e.type === 'brewed' ? `ปรุง${potionText[e.potion].name}แล้ว · มีอยู่ ${result.profile.potions[e.potion]} ขวด`
       : e.type === 'smelted' ? `ลุงบอร์กหลอมแร่ดาวเป็นฝุ่นดาว ${e.dust} · มีฝุ่นดาว ${result.profile.bank.dust}`
       : e.type === 'refreshed' ? `พีโน่เปลี่ยนป้ายจ้างใหม่แล้ว · สุ่มได้อีก ${this.map.shop.refreshCosts.length - result.profile.refreshes} ครั้ง`
       : e.type === 'bought' ? this.boughtText(result.profile, e)
-      : e.type === 'claimed' ? `ได้รับรางวัลเควสต์ · ${rewardText(this.map.sideQuests.find(q => q.id === e.questId)!.reward)}` : 'จัดทีมแล้ว';
+      : e.type === 'claimed' ? `ได้รับรางวัลเควสต์ · ${rewardText(this.map.sideQuests.find(q => q.id === e.questId)!.reward)}` : e.type === 'party' && e.heroId && e.lane ? `จัดแผนแล้ว · ${name(e.heroId)}ยืน${laneName(e.lane)}` : 'จัดทีมแล้ว';
     this.lobbyCheer = e.type === 'hired' || e.type === 'upgraded' ? e.heroId : '';
     // The camp NPC whose service just succeeded cheers once.
     sfx.play(({ hired: 'coin', upgraded: 'upgrade', dismissed: 'close', talent: 'buff', equipped: 'guard', salvaged: 'anvil', forged: 'anvil', smelted: 'anvil', brewed: 'potion', claimed: 'claim', bought: 'coin', refreshed: 'coin' } as Partial<Record<string, SfxName>>)[e.type] ?? 'click');
     this.npcCheer = e.type === 'bought' || e.type === 'refreshed' ? 'broker' : e.type === 'claimed' ? this.map.sideQuests.find(q => q.id === e.questId)!.npc as NpcId
       : ({ hired: 'broker', talent: 'trainer', equipped: 'keeper', salvaged: 'keeper', forged: 'smith', smelted: 'smith', brewed: 'herbalist' } as Partial<Record<string, NpcId>>)[e.type];
     this.showLobby();
+    if (e.type === 'forged' && (e.action === 'enhance' || e.action === 'level')) { const item = findItem(result.profile, e.uid)?.item; if (item) forgeStrike(this.root, item, e.action, this.reducedMotion.matches); }
   }
   // Market purchase (4A): what was bought and where it went.
   private boughtText(profile: Profile, e: { item: ShopItemId; heroId?: string; uid?: number }): string {
@@ -430,7 +438,7 @@ export class GameShell {
   private roster(result: { state: ExpeditionState; event: WorldEvent }): void {
     if (!this.state || this.locked || result.event.type !== 'roster') return;
     this.state = result.state; this.persist();
-    this.message = 'จัดทีมแล้ว · ศัตรูเล็งตามหมายเลขช่อง';
+    this.message = result.event.heroId && result.event.lane ? `จัดแผนแล้ว · ${heroText[result.event.heroId]?.name ?? ''}ยืน${laneName(result.event.lane)} ใช้ในศึกถัดไป` : 'จัดทีมแล้ว · ศัตรูเล็งตามหมายเลขช่อง';
     this.renderWorld();
   }
   // Map bag gear (2026-10-17): saved at once, like every other map action.
@@ -456,7 +464,7 @@ export class GameShell {
     if (result.event.type !== 'chest') return;
     const before = this.state;
     this.state = result.state; this.persist(); sfx.play(this.map.chests.find(c => c.id === (result.event.type === 'chest' ? result.event.chestId : ''))?.tier === 'rare' ? 'chestRare' : 'chest');
-    this.message = `เปิดกล่องสมบัติ · ${lootThai(result.event.loot)}${result.event.potion ? ` · ${potionText[result.event.potion].name} +1` : ''}`;
+    this.message = `เปิดกล่องสมบัติ · ${lootThai(result.event.loot)}${result.event.potion ? ` · ${potionText[result.event.potion].name} +1` : ''}${result.event.tomes ? ` · ${tomeThai(result.event.tomes)}` : ''}`;
     this.message += this.sealNote(before, result.state);
     this.effect = 'loot';
     this.renderWorld();
@@ -481,7 +489,7 @@ export class GameShell {
     const s = this.state!; const b = s.battle!; const data = battleData(s, this.map, this.lookup)!;
     this.show('battle');
     this.battle.open({
-      kind: b.kind, data, entry: { hp: b.entry }, commands: b.commands,
+      kind: b.kind, scene: this.map.id === 'deep-forest' ? 'forest' : this.map.id === 'veil-frontier' ? 'riftline' : 'ruins', data, entry: { hp: b.entry }, commands: b.commands,
       commit: (state: BattleState) => this.commitBattle(state),
       leaveLabel: (outcome: Outcome) => outcome === 'victory' ? (b.kind === 'boss' ? `ไปยัง${this.map.goalName} →` : 'กลับสู่แผนที่ →') : b.kind === 'tutorial' ? 'ลองศึกแรกอีกครั้ง ↻' : !this.state ? 'ทีมล้มหมด · กลับค่าย →' : this.state.camp ? 'กลับแคมป์ →' : 'กลับทางเข้าด่าน →',
       leave: () => this.leaveBattle(),
@@ -497,8 +505,8 @@ export class GameShell {
       if (result.event.type === 'victory') {
         if (kind === 'tutorial') this.prologueWon = true;
         const loot = lootThai(result.event.loot) + (result.event.item ? ` · ได้${(result.event.items ?? [result.event.item]).map(i => `${itemName(i)} Lv${i.level}`).join(', ')}` : ''); this.effect = 'loot'; const exp = expThai(result.event.exp, next);
-        const dust = result.event.dust ? ` · ฝุ่นดาว +${result.event.dust}` : '';
-        this.message = kind === 'boss' ? `${this.map.bossName}ล้มแล้ว · ${loot}${exp} · ทางไปประตูเปิดออก` : kind === 'elite' ? this.map.elites.find(e => e.id === next.elitesDefeated.at(-1))?.mini ? `มินิบอสล้มแล้ว · ${loot}${exp}` : (this.map.elites.find(e => e.id === next.elitesDefeated.at(-1))?.forced ? `อีลิทล้มแล้ว · ${loot}${exp} · ด่านเปิดออก` : `ท้าสู้สำเร็จ · รางวัลพิเศษ · ${loot}${exp}`) : kind === 'event' ? `ชนะศึก · ${loot}${dust}${exp}` : `ชนะศึก · ${loot}${exp}${fallen ? ` · ${fallen} คนล้มอยู่ ชุบที่แคมป์` : ''}`;
+        const dust = (result.event.dust ? ` · ฝุ่นดาว +${result.event.dust}` : '') + (result.event.tomes || result.event.riftCore ? ` · ${tomeThai(result.event.tomes, result.event.riftCore)}` : '');
+        this.message = kind === 'boss' ? `${this.map.bossName}ล้มแล้ว · ${loot}${dust}${exp} · ทางไปประตูเปิดออก` : kind === 'elite' ? this.map.elites.find(e => e.id === next.elitesDefeated.at(-1))?.mini ? `มินิบอสล้มแล้ว · ${loot}${dust}${exp}` : (this.map.elites.find(e => e.id === next.elitesDefeated.at(-1))?.forced ? `อีลิทล้มแล้ว · ${loot}${dust}${exp} · ด่านเปิดออก` : `ท้าสู้สำเร็จ · รางวัลพิเศษ · ${loot}${dust}${exp}`) : `ชนะศึก · ${loot}${dust}${exp}${kind !== 'event' && fallen ? ` · ${fallen} คนล้มอยู่ ชุบที่แคมป์` : ''}`;
         this.message += this.sealNote(this.state, next);
       } else if (result.event.type === 'defeat') {
         if (result.event.wiped) {

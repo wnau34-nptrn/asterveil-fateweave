@@ -1,4 +1,5 @@
 import { icon } from './icons';
+import { preloadForgeStrike } from './forge-strike';
 import { equipmentEffects } from './character-view';
 import { salvageReason } from '../core/world/profile';
 import type { EncounterDefinition, HeroDefinition } from '../core/battle/types';
@@ -18,6 +19,7 @@ interface ForgeHost {
 type Tab='develop'|'craft'|'recycle'|'smelt';
 type Mode='enhance'|'level'|'fuse'|'reroll'|'transfer';
 const tabs:Record<Tab,string>={develop:'พัฒนา',craft:'สร้างอาวุธ',recycle:'รีไซเคิล',smelt:'หลอมแร่'};
+const tabIcons:Record<Tab,Parameters<typeof icon>[0]>={develop:'tab-forge',craft:'attack',recycle:'act-reset',smelt:'dust'};
 const modes:Record<Mode,string>={enhance:'ตีบวก',level:'เพิ่ม Lv',fuse:'หลอมสี',reroll:'ปรับค่า',transfer:'ถ่ายโอน'};
 // Presentation state only. Every destructive action needs a review against the same profile object.
 // Random crafts expose possible outcomes, never invoke the RNG to produce a readonly forecast.
@@ -77,22 +79,24 @@ export class ForgeWorkbench {
   }
   // Lobby systems by chapter (A3): `open` says which forge modes and tabs are open yet.
   render(p:Profile,open:(f:LobbyFeature)=>boolean=()=>true):string {
+    preloadForgeStrike();
     const modeFeature:Partial<Record<Mode,LobbyFeature>>={level:'level',fuse:'fuse',reroll:'fuse',transfer:'transfer'};
     const modeOpen=(m:Mode)=>{const f=modeFeature[m];return !f||open(f);};
     if(!modeOpen(this.mode))this.mode='enhance';if(this.tab==='craft'&&!open('craft'))this.tab='develop';
     if(this.source!==p){this.review=false;this.donors=undefined;this.donorUid=0;this.source=p;}
     if(this.uid&&!findItem(p,this.uid)){this.uid=undefined;this.picker=true;}
-    const header=`<div class="forge-tabs" role="tablist" aria-label="โรงตีเหล็ก">${Object.entries(tabs).map(([id,text])=>`<button id="forge-tab-${id}" data-forge="tab" data-tab="${id}" role="tab"${id==='craft'&&!open('craft')?' disabled':''} aria-selected="${id===this.tab}" aria-controls="forge-body" tabindex="${id===this.tab?0:-1}">${text}</button>`).join('')}</div>`;
+    const header=`<div class="forge-tabs" role="tablist" aria-label="โรงตีเหล็ก">${Object.entries(tabs).map(([id,text])=>`<button id="forge-tab-${id}" data-forge="tab" data-tab="${id}" role="tab"${id==='craft'&&!open('craft')?' disabled':''} aria-selected="${id===this.tab}" aria-controls="forge-body" tabindex="${id===this.tab?0:-1}">${icon(tabIcons[id as Tab])}<span>${text}</span></button>`).join('')}</div>`;
+    const bank=`<div class="forge-bank" aria-label="ทรัพยากร แร่ดาว ${p.bank.ore} ฝุ่นดาว ${p.bank.dust} ตราสัญญา ${p.bank.seal}"><span class="ui-pill">${icon('ore')}แร่ ${p.bank.ore}</span><span class="ui-pill">${icon('dust')}ฝุ่น ${p.bank.dust}</span><span class="ui-pill">${icon('seal')}ตรา ${p.bank.seal}</span></div>`;
     let body:string;
     if(this.tab==='craft')body=this.crafting(p);
     else if(this.tab==='smelt')body=this.smelt(p);
     else if(this.picker||!this.uid)body=this.items(p);
     else {
       const {item,owner}=findItem(p,this.uid)!;
-      body=`<div class="forge-item-head">${gearArt(item)}<div><b>${itemName(item)}</b><small>${slotText[item.slot]} · Lv${item.level} · ${rarityText[item.rarity]} · +${item.plus??0}</small><small>${owner?`สวมอยู่: ${heroText[owner]!.name}`:'ในคลัง'}${item.locked?' · ล็อกแล้ว':''}</small></div></div><div class="forge-item-tools"><button id="forge-change-item" data-forge="picker" class="secondary">เปลี่ยนอุปกรณ์</button><button id="forge-lock" data-forge="lock" class="secondary" aria-pressed="${!!item.locked}">${icon(item.locked?'act-unlock':'act-lock')}${item.locked?'ปลดล็อก':'ล็อกอุปกรณ์'}</button></div>`;
+      body=`<div class="forge-item-head forge-showcase" data-rarity="${item.rarity}">${gearArt(item)}<div><b>${itemName(item)}</b><small>${slotText[item.slot]} · Lv${item.level} · ${rarityText[item.rarity]} · +${item.plus??0}</small><small>${owner?`สวมอยู่: ${heroText[owner]!.name}`:'ในคลัง'}${item.locked?' · ล็อกแล้ว':''}</small></div></div><div class="forge-item-tools"><button id="forge-change-item" data-forge="picker" class="secondary">เปลี่ยนอุปกรณ์</button><button id="forge-lock" data-forge="lock" class="secondary" aria-pressed="${!!item.locked}">${icon(item.locked?'act-unlock':'act-lock')}${item.locked?'ปลดล็อก':'ล็อกอุปกรณ์'}</button></div>`;
       body+=this.tab==='recycle'?this.recycle(p,item,owner):`<div class="forge-modes" role="group" aria-label="วิธีพัฒนา">${Object.entries(modes).map(([id,text])=>`<button id="forge-mode-${id}" data-forge="mode" data-mode="${id}" aria-pressed="${id===this.mode}" class="secondary"${modeOpen(id as Mode)?'':' disabled'}>${modeOpen(id as Mode)?'':'🔒 '}${text}</button>`).join('')}</div><div class="forge-detail" data-rarity="${item.rarity}">${this.mode==='enhance'?this.enhancement(p,item,owner):this.mode==='level'?this.level(p,item,owner):this.mode==='fuse'?this.fusion(p,item):this.mode==='transfer'?this.transfer(p,item,owner):this.reroll(p,item)}</div>`;
     }
-    return `<section class="forge-workbench" data-review="${this.review}" data-tab="${this.tab}" data-mode="${this.mode}">${header}<div id="forge-body" role="tabpanel" aria-labelledby="forge-tab-${this.tab}">${body}</div></section>`;
+    return `<section class="forge-workbench" data-review="${this.review}" data-tab="${this.tab}" data-mode="${this.mode}">${bank}${header}<div id="forge-body" role="tabpanel" aria-labelledby="forge-tab-${this.tab}">${body}</div></section>`;
   }
   private crafting(p:Profile):string {
     if(!p.company.includes(this.craftHero))this.craftHero=p.company[0]!;
@@ -107,19 +111,20 @@ export class ForgeWorkbench {
     return `${this.uid&&findItem(p,this.uid)?'<button id="forge-resume" data-forge="resume" class="secondary">← กลับชิ้นที่เลือก</button>':''}${this.tab==='develop'&&this.host.quest?`<details class="forge-quests"><summary>งานของช่างตีเหล็ก</summary>${this.host.quest()}</details>`:''}<h3>${this.tab==='recycle'?'เลือกชิ้นที่จะรีไซเคิล':'เลือกอุปกรณ์ที่จะพัฒนา'}</h3><p class="camp-note">${this.tab==='recycle'?'ชิ้นที่เลือกจะหายไป รวมพลังบอสถ้ามี · ตรวจยอดคืนก่อนยืนยัน · ของสวมอยู่ต้องถอดก่อน':'แตะชิ้นที่ต้องการ แล้วเลือกวิธีพัฒนา · ยังไม่เสียทรัพยากร · ของบอสใช้เป็นวัตถุดิบไม่ได้'}</p><label class="forge-label">ตำแหน่งอุปกรณ์<select id="forge-owner-filter"><option value="all"${this.owner==='all'?' selected':''}>ทั้งหมด</option><option value="bag"${this.owner==='bag'?' selected':''}>ในคลัง</option>${p.company.map(id=>`<option value="${id}"${this.owner===id?' selected':''}>สวมอยู่: ${heroText[id]!.name}</option>`).join('')}</select></label>${gearFilters(this.filters,'forge-').replace('<details class="gear-extra-filters">',`<details class="gear-extra-filters"${this.filtersOpen?' open':''}>`)}<p class="camp-note">${entries.length}/${all.length} ชิ้น · รูปกุญแจระบุของที่ล็อก</p><ul class="forge-list">${entries.map(e=>`<li data-rarity="${e.item.rarity}"><button id="forge-item-${e.item.uid}" data-forge="pick" data-uid="${e.item.uid}" class="forge-pick" aria-pressed="${this.uid===e.item.uid}">${gearArt(e.item)}<b>${itemName(e.item)} Lv${e.item.level} +${e.item.plus??0}${e.item.locked?' · 🔒':''}</b><small>${e.label} · ${itemLines(this.map.equipment,e.item).join(' · ')}</small></button></li>`).join('')}</ul>${entries.length?'':'<p class="camp-note">ไม่พบของตามตัวกรอง</p>'}`;
   }
   private footer(id:string,label:string,reason:string,cost:string,after:string,extra=''):string {
-    return `<div class="forge-footer"><p id="forge-cost">${cost}</p>${after?`<small>${after}</small>`:''}${reason?`<p class="forge-reason" role="status">${reason}</p>`:''}${this.review?`<p class="forge-review" role="status">ตรวจรายการแล้วกดยืนยัน</p><div class="forge-footer-buttons"><button id="forge-confirm" data-forge="confirm" ${extra} class="primary"${reason?' disabled':''}>ยืนยัน${label}</button><button id="forge-cancel" data-forge="cancel" class="secondary">ยกเลิก</button></div>`:`<button id="${id}" data-forge="review" ${extra} class="primary"${reason?' disabled':''}>${label}</button>`}</div>`;
+    return `<div class="forge-footer"><p id="forge-cost">${cost}</p>${after?`<small>${after}</small>`:''}${reason?`<p class="forge-reason" role="status">${reason}</p>`:''}${this.review?`<p class="forge-review" role="status">ตรวจรายการแล้วกดยืนยัน</p><div class="forge-footer-buttons"><button id="forge-confirm" data-forge="confirm" ${extra} class="primary"${reason?' disabled':''}>ยืนยัน${label}</button><button id="forge-cancel" data-forge="cancel" class="secondary">ยกเลิก</button></div>`:`<button id="${id}" data-forge="review" ${extra} class="primary"${reason?' disabled':''}>${icon('tab-forge')}${label}</button>`}</div>`;
   }
   private enhancement(p:Profile,item:Item,owner?:string):string {
     const current=item.plus??0,cap=this.map.equipment.forge.plusCap[item.rarity]!;
-    if(this.target<=current||this.target>cap)this.target=Math.min(cap,current+1);
+    this.target=Math.min(cap,current+1);
     const cost=enhancementCostTo(this.map,item,this.target),paid=enhancementInvestment(this.map,item),trial=cost?enhanceTo(p,this.map,item.uid,this.target):undefined;
     const projected={...item,plus:this.target};
     const reason=!cost?'ตีบวกเต็มแล้ว':p.bank.ore<cost.ore?`แร่ดาวขาด ${cost.ore-p.bank.ore}`:p.bank.dust<cost.dust?`ฝุ่นดาวขาด ${cost.dust-p.bank.dust}`:'';
-    return `<h3>ตีบวก +${current} → +${this.target}</h3><p class="camp-note">สำเร็จทุกครั้ง · เพิ่มค่าพื้นฐาน ${this.map.equipment.forge.plusPercent}% ต่อขั้น · คุณสมบัติรองคงเดิม</p>${cost?`<label class="forge-label">ระดับเป้าหมาย<select id="forge-target">${Array.from({length:cap-current},(_,i)=>current+i+1).map(n=>`<option value="${n}"${n===this.target?' selected':''}>+${n}${n===current+1?' · ครั้งถัดไป':''}</option>`).join('')}</select></label>`:''}${this.statPreview(p,item,projected,owner)}<p class="camp-note">ทุนตีบวกที่คืนได้ตอนรีไซเคิล: แร่ ${paid.ore} · ฝุ่น ${paid.dust}${!item.investment&&current?' · เครดิตของเดิมจาก + ปัจจุบัน':''}</p>${this.footer('forge-enhance',`ตีบวก +${this.target}`,reason,cost?`รวม ${this.target-current} ขั้น · แร่ ${cost.ore} · ฝุ่น ${cost.dust}`:'ไม่มีค่าใช้จ่าย',cost?`คงเหลือ แร่ ${p.bank.ore-cost.ore} · ฝุ่น ${p.bank.dust-cost.dust}`:'')}${trial?.event.type==='blocked'&&!reason?'<p class="camp-note">ไม่สามารถทำรายการนี้ได้</p>':''}`;
+    return `<h3>ตีบวก +${current} → +${this.target}</h3><p class="camp-note">สำเร็จทุกครั้ง · ตีทีละ 1 ขั้น · เพิ่มค่าพื้นฐาน ${this.map.equipment.forge.plusPercent}% ต่อขั้น · คุณสมบัติรองคงเดิม</p>${this.statPreview(p,item,projected,owner)}<p class="camp-note">ทุนตีบวกที่คืนได้ตอนรีไซเคิล: แร่ ${paid.ore} · ฝุ่น ${paid.dust}${!item.investment&&current?' · เครดิตของเดิมจาก + ปัจจุบัน':''}</p>${this.footer('forge-enhance',`ตีบวก +${this.target}`,reason,cost?`รวม ${this.target-current} ขั้น · แร่ ${cost.ore} · ฝุ่น ${cost.dust}`:'ไม่มีค่าใช้จ่าย',cost?`คงเหลือ แร่ ${p.bank.ore-cost.ore} · ฝุ่น ${p.bank.dust-cost.dust}`:'')}${trial?.event.type==='blocked'&&!reason?'<p class="camp-note">ไม่สามารถทำรายการนี้ได้</p>':''}`;
   }
   private statPreview(p:Profile,item:Item,next:Item,owner?:string):string {
     const before=itemStats(this.map.equipment,item),after=itemStats(this.map.equipment,next);
-    let html=`<table class="comparison-table forge-stat-preview"><caption>ค่าอุปกรณ์ก่อน–หลัง</caption><thead><tr><th>ค่า</th><th>ปัจจุบัน</th><th>หลังพัฒนา</th></tr></thead><tbody>${[...new Set([...Object.keys(before),...Object.keys(after)])].map(k=>{const stat=k as keyof typeof before;return `<tr><th>${statName[stat]}</th><td>${before[stat]??0}</td><td>${after[stat]??0}</td></tr>`;}).join('')}</tbody></table>`;
+    const diff=(k:keyof typeof before)=>(after[k]??0)-(before[k]??0);
+    let html=`<section class="forge-result compare-card"><h4>ผลลัพธ์</h4><table class="comparison-table forge-stat-preview"><caption>ค่าอุปกรณ์ก่อน–หลัง</caption><thead><tr><th>ค่า</th><th>ปัจจุบัน</th><th>หลังพัฒนา</th><th>ต่าง</th></tr></thead><tbody>${[...new Set([...Object.keys(before),...Object.keys(after)])].map(k=>{const stat=k as keyof typeof before,d=diff(stat);return `<tr${d?'':' class="same"'}><th>${statName[stat]}</th><td>${before[stat]??0}</td><td>${after[stat]??0}</td><td class="${d>0?'gain':d<0?'loss':''}">${d>0?'▲ '+d:d<0?'▼ '+-d:'–'}</td></tr>`;}).join('')}</tbody></table></section>`;
     const ids=p.company.filter(id=>item.slot!=='weapon'||item.hero===id),id=owner??(ids.includes(this.hero)?this.hero:ids[0]);if(!id)return html;
     if(!owner)html+=`<label class="forge-label">ทดลองผลกับ<select id="forge-preview-hero">${ids.map(c=>`<option value="${c}"${c===id?' selected':''}>${heroText[c]!.name}</option>`).join('')}</select></label>`;
     return html+this.heroImpact(p,id,{...p.members[id]!.gear,[item.slot]:item},{...p.members[id]!.gear,[item.slot]:next},'เทียบเมื่อใช้ชิ้นนี้ก่อน–หลังพัฒนา');
@@ -133,11 +138,11 @@ export class ForgeWorkbench {
     return `<details class="forge-impact"${this.impactOpen?' open':''}><summary>ผลต่อ${heroText[id]!.name}และสกิล</summary><p class="camp-note">${caption} · ค่ายแสดงเลือดพร้อมออกเดินทาง · พลังพื้นฐานก่อนเงื่อนไขต่อสู้</p><table class="comparison-table"><thead><tr><th>ค่า</th><th>ก่อน</th><th>หลัง</th></tr></thead><tbody>${old.map((v,i)=>`<tr><th>${v.name}</th><td>${v.value}${v.unit}</td><td>${proposed[i]!.value}${v.unit}</td></tr>`).join('')}</tbody></table><ul class="forge-skills">${h.actions.map(a=>{const v=characterSkillMetric(a,h,this.data),w=characterSkillMetric(a,n,this.data);return `<li>${this.data.skills[a].name}: ${v.value===undefined?'ผลพิเศษ · ค่าพลังคงเดิม':`${v.label} ${v.value} → ${w.value}`}${v.secondary?` · ${v.secondary.label} ${v.secondary.value} → ${w.secondary!.value}`:''}</li>`;}).join('')}</ul>${effects}</details>`;
   }
   private level(p:Profile,item:Item,owner?:string):string {
-    const cap=itemLevelCap(p,this.map);if(this.target<=item.level||this.target>cap)this.target=Math.max(item.level,Math.min(cap,item.level+1));
+    const cap=itemLevelCap(p,this.map);this.target=Math.max(item.level,Math.min(cap,item.level+1));
     const cost=itemLevelCost(this.map,item,this.target),trial=raiseItemLevel(p,this.map,item.uid,this.target);
     const reason=item.level>=cap?'ถึงหรือสูงกว่าเพดานที่ปลดล็อกแล้ว':trial.event.type==='blocked'?(trial.event.reason==='ore'?'แร่ดาวไม่พอ':trial.event.reason==='dust'?'ฝุ่นดาวไม่พอ':'ไม่สามารถเพิ่ม Lv ได้'):'';
     const unlocks=this.map.equipment.forge.itemLevel.unlocks;
-    return `<h3>เพิ่ม Lv อุปกรณ์</h3><p class="camp-note">เพดานถาวร Lv${cap} · ชนะหัวหน้าทุ่ง → Lv${unlocks[0]!.cap} · หัวหน้าพงหนาม → Lv${unlocks[1]!.cap} · โกเลมหรือจบแนวรอยแยก → Lv${unlocks[2]!.cap} · บันทึกเมื่อกลับค่าย</p><p class="camp-note">สำเร็จทุกครั้ง · เซ็ต สี คุณภาพ คุณสมบัติ และ + คงเดิม · คืนทุนเพิ่ม Lv 100% เมื่อรีไซเคิลหรือใช้เป็นวัตถุดิบหลอม</p>${item.level<cap?`<label class="forge-label">Lv เป้าหมาย<select id="forge-target">${Array.from({length:cap-item.level},(_,i)=>item.level+i+1).map(n=>`<option value="${n}"${n===this.target?' selected':''}>Lv${n}</option>`).join('')}</select></label>`:''}${cost?this.statPreview(p,item,{...item,level:this.target},owner):''}${this.footer('forge-level',`เพิ่มเป็น Lv${this.target}`,reason,cost?`แร่ ${cost.ore} · ฝุ่น ${cost.dust}`:'',cost?`คงเหลือ แร่ ${p.bank.ore-cost.ore} · ฝุ่น ${p.bank.dust-cost.dust}`:'')}`;
+    return `<h3>เพิ่ม Lv อุปกรณ์</h3><p class="camp-note">เพดานถาวร Lv${cap} · ชนะหัวหน้าทุ่ง → Lv${unlocks[0]!.cap} · หัวหน้าพงหนาม → Lv${unlocks[1]!.cap} · โกเลมหรือจบแนวรอยแยก → Lv${unlocks[2]!.cap} · บันทึกเมื่อกลับค่าย</p><p class="camp-note">สำเร็จทุกครั้ง · เพิ่มทีละ 1 Lv · เซ็ต สี คุณภาพ คุณสมบัติ และ + คงเดิม · คืนทุนเพิ่ม Lv 100% เมื่อรีไซเคิลหรือใช้เป็นวัตถุดิบหลอม</p>${cost?this.statPreview(p,item,{...item,level:this.target},owner):''}${this.footer('forge-level',`เพิ่มเป็น Lv${this.target}`,reason,cost?`แร่ ${cost.ore} · ฝุ่น ${cost.dust}`:'',cost?`คงเหลือ แร่ ${p.bank.ore-cost.ore} · ฝุ่น ${p.bank.dust-cost.dust}`:'')}`;
   }
   private fusion(p:Profile,item:Item):string {
     this.donors??=fuseMaterials(p,this.map,item.uid).map(i=>i.uid);

@@ -1,0 +1,923 @@
+{
+  "frameCount": 70,
+  "atlasSize": [
+    2048,
+    2048
+  ],
+  "previewSize": [
+    390,
+    844
+  ],
+  "frames": [
+    {
+      "frame": "hammer",
+      "size": [
+        256,
+        256
+      ],
+      "alpha": [
+        0,
+        255
+      ],
+      "sha256": "003ca7e97c667a3206182a999a9fded4df45abc8e604efe13a7baef121bb22c6",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "hammer_smear",
+      "size": [
+        256,
+        256
+      ],
+      "alpha": [
+        0,
+        255
+      ],
+      "sha256": "dc302c8696c758fd81dc7709548d3d8af0bf89e9c1ff8fcff2955f3e2e3e23c0",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "hit_flash_a_00",
+      "size": [
+        256,
+        256
+      ],
+      "alpha": [
+        0,
+        253
+      ],
+      "sha256": "9021874ba2383839043e650d0ac0a59f10d908056ed0eac5753e6dd27949038a",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "hit_flash_a_01",
+      "size": [
+        256,
+        256
+      ],
+      "alpha": [
+        0,
+        253
+      ],
+      "sha256": "91a71f819f0cbde5ec40523b2fdeaf9dba5d8fd4ae8428cfe1f04fd84fcc0ebc",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "hit_flash_a_02",
+      "size": [
+        256,
+        256
+      ],
+      "alpha": [
+        0,
+        253
+      ],
+      "sha256": "f9c9741becc2e0f9666f63b97cbcbd81db62f0381f31754d04ce7133bdbdfc69",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "hit_flash_a_03",
+      "size": [
+        256,
+        256
+      ],
+      "alpha": [
+        0,
+        253
+      ],
+      "sha256": "7d89adf76f308aaa75772db9de15c871f36235a13269c2ac7ccd6128197893df",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "hit_flash_a_04",
+      "size": [
+        256,
+        256
+      ],
+      "alpha": [
+        0,
+        252
+      ],
+      "sha256": "e2776096e7bddb68869002e4b73425bbeef5cbfa5a2349db45a83e25a5e6933d",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "hit_flash_a_05",
+      "size": [
+        256,
+        256
+      ],
+      "alpha": [
+        0,
+        247
+      ],
+      "sha256": "4f4a7ac345fc2aec6323d98bccb3a74112857d32e46bdbc4200d43b2308f3a4f",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "hit_flash_b_00",
+      "size": [
+        256,
+        256
+      ],
+      "alpha": [
+        0,
+        253
+      ],
+      "sha256": "0956024b85c1bb17369104bf8008f95acd6db8b7fd63f022ee02eeb75f02f145",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "hit_flash_b_01",
+      "size": [
+        256,
+        256
+      ],
+      "alpha": [
+        0,
+        254
+      ],
+      "sha256": "843c13b1df54499a5af2594f2d4df49043c823e1754f4c685ed1789f592e88f1",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "hit_flash_b_02",
+      "size": [
+        256,
+        256
+      ],
+      "alpha": [
+        0,
+        254
+      ],
+      "sha256": "62f674d041c519a5b3a8fdac8c29725c5c091c122ec0db2e848e85db13fcbc82",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "hit_flash_b_03",
+      "size": [
+        256,
+        256
+      ],
+      "alpha": [
+        0,
+        253
+      ],
+      "sha256": "598cf20e51f4d7ea3e1d8933849073963f587e014ea0a45332feda0fa20460df",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "hit_flash_b_04",
+      "size": [
+        256,
+        256
+      ],
+      "alpha": [
+        0,
+        253
+      ],
+      "sha256": "9289a2661fdedf17f3a64d09facd745be28004b8631d97167af72bd0cf4d8739",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "hit_flash_b_05",
+      "size": [
+        256,
+        256
+      ],
+      "alpha": [
+        0,
+        252
+      ],
+      "sha256": "103c89b041a9273931a22b4aaf2a422aca577929a74c06fd3867d1452f5dcdd1",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "hit_flash_b_06",
+      "size": [
+        256,
+        256
+      ],
+      "alpha": [
+        0,
+        251
+      ],
+      "sha256": "01509299d867b4dd62c72cfeaf1fda844e16e9d9b8e194156ec15b396149fb01",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "hit_flash_b_07",
+      "size": [
+        256,
+        256
+      ],
+      "alpha": [
+        0,
+        246
+      ],
+      "sha256": "fb4848631a4563809a8f84ab62b85fc848633f216981a0ccf264c6f056a21921",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "shock_ring_00",
+      "size": [
+        256,
+        256
+      ],
+      "alpha": [
+        0,
+        252
+      ],
+      "sha256": "460d7e8c637e23af894187ec4d90894e7b3294676cb0f94ed0f378ba706aad19",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "shock_ring_01",
+      "size": [
+        256,
+        256
+      ],
+      "alpha": [
+        0,
+        253
+      ],
+      "sha256": "7566c22192e4e07c2707edb3f9e02b527908c25923dc1e4cd5d321339095a798",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "shock_ring_02",
+      "size": [
+        256,
+        256
+      ],
+      "alpha": [
+        0,
+        254
+      ],
+      "sha256": "3b2d196d2e701d3f94669b630702d286d010e85e16e015cf5597000b10516944",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "shock_ring_03",
+      "size": [
+        256,
+        256
+      ],
+      "alpha": [
+        0,
+        253
+      ],
+      "sha256": "1354d74e5dee317d135c075339c7e9f1d0ef28c4f7758ab2451a2505a6b5e73b",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "shock_ring_04",
+      "size": [
+        256,
+        256
+      ],
+      "alpha": [
+        0,
+        245
+      ],
+      "sha256": "0d8d755843d2197f656524ba4dabb1fcdee5783a3bee89f9ca91e97876f5a77f",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "shock_ring_05",
+      "size": [
+        256,
+        256
+      ],
+      "alpha": [
+        0,
+        225
+      ],
+      "sha256": "a0fe7ef2b133d4582eb7e617df9e75ef37fccecba6caefdae753b5758a697c45",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "spark_arc_00",
+      "size": [
+        48,
+        48
+      ],
+      "alpha": [
+        0,
+        255
+      ],
+      "sha256": "1b5f33903cba4581f40a55f686ae81d4ba4a687a1012728de5d959fc3341206b",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "spark_arc_01",
+      "size": [
+        48,
+        48
+      ],
+      "alpha": [
+        0,
+        255
+      ],
+      "sha256": "afcb2a8f37d3a76fd2afae2758efa0d2a52591d64b35c7fc49e6ada717fb7944",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "spark_arc_02",
+      "size": [
+        48,
+        48
+      ],
+      "alpha": [
+        0,
+        255
+      ],
+      "sha256": "474ec34d3020ba89fbe90b5c84797a3c5c174b599bf134478ab475029b8c5e86",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "spark_arc_03",
+      "size": [
+        48,
+        48
+      ],
+      "alpha": [
+        0,
+        255
+      ],
+      "sha256": "4c67d79bcc04404b3403de166347937739521ee6f5abfe42d0cb3aff2917a95c",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "spark_arc_04",
+      "size": [
+        48,
+        48
+      ],
+      "alpha": [
+        0,
+        255
+      ],
+      "sha256": "d6a17c7886cbb05aab8293d296644f173d1386392b510298d73e41b060411bce",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "spark_arc_05",
+      "size": [
+        48,
+        48
+      ],
+      "alpha": [
+        0,
+        246
+      ],
+      "sha256": "2ae4ea6fa375a9d19325fbc6a57102fa35fd6e7710932eb791395103161044b1",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "result_glow_00",
+      "size": [
+        256,
+        128
+      ],
+      "alpha": [
+        0,
+        253
+      ],
+      "sha256": "734195b4de2b560ba1bf60603ed35c174e13c0c0029a202c827df9e6487787cd",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "result_glow_01",
+      "size": [
+        256,
+        128
+      ],
+      "alpha": [
+        0,
+        253
+      ],
+      "sha256": "3f0d8a2ac75f76d3557db391410283998089a094c7fe68a4248c44742c38d657",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "result_glow_02",
+      "size": [
+        256,
+        128
+      ],
+      "alpha": [
+        0,
+        253
+      ],
+      "sha256": "77b77823038da68040ca8231469bde3906b1a18c9889de3d9529a4574b61f4e8",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "result_glow_03",
+      "size": [
+        256,
+        128
+      ],
+      "alpha": [
+        0,
+        253
+      ],
+      "sha256": "a499295520294310a976cd05eedc841555f47551bb82d2cb88ddeaa12a8af95e",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "result_glow_04",
+      "size": [
+        256,
+        128
+      ],
+      "alpha": [
+        0,
+        253
+      ],
+      "sha256": "7967558095d4c5f233db212b084d497cfdf23d658f2f501cc124cdbfbf83a1a9",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "result_glow_05",
+      "size": [
+        256,
+        128
+      ],
+      "alpha": [
+        0,
+        253
+      ],
+      "sha256": "716bbd716505eae693fb9df121ee3f12aa0663d7ce6bedc122277a437484b662",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "result_glow_cyan_00",
+      "size": [
+        256,
+        128
+      ],
+      "alpha": [
+        0,
+        253
+      ],
+      "sha256": "e531c39da6640be1f7500dbe1185f421c87af7553ad73d3ec41d137e1c4e02ff",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "result_glow_cyan_01",
+      "size": [
+        256,
+        128
+      ],
+      "alpha": [
+        0,
+        253
+      ],
+      "sha256": "f2c649f9e450e7c1d17644f81117c9e4d6942a55ae377be195679541cfd9394a",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "result_glow_cyan_02",
+      "size": [
+        256,
+        128
+      ],
+      "alpha": [
+        0,
+        253
+      ],
+      "sha256": "f2c649f9e450e7c1d17644f81117c9e4d6942a55ae377be195679541cfd9394a",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "result_glow_cyan_03",
+      "size": [
+        256,
+        128
+      ],
+      "alpha": [
+        0,
+        253
+      ],
+      "sha256": "c4f978e0bef0b192bb46c842a1db27b0855d5c1ba66deaeb6939b28c1c517ea8",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "result_glow_cyan_04",
+      "size": [
+        256,
+        128
+      ],
+      "alpha": [
+        0,
+        253
+      ],
+      "sha256": "32e29f949a63f462cca2b37668707ba42f24e06b7951d729a2b5f827448e0357",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "result_glow_cyan_05",
+      "size": [
+        256,
+        128
+      ],
+      "alpha": [
+        0,
+        251
+      ],
+      "sha256": "6ac7acbad6af30a6b84cc486cf2b6c1560ce66a11d636825797685aba36c0f1e",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "spark_00",
+      "size": [
+        48,
+        48
+      ],
+      "alpha": [
+        0,
+        255
+      ],
+      "sha256": "1b5f33903cba4581f40a55f686ae81d4ba4a687a1012728de5d959fc3341206b",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "spark_01",
+      "size": [
+        48,
+        48
+      ],
+      "alpha": [
+        0,
+        255
+      ],
+      "sha256": "afcb2a8f37d3a76fd2afae2758efa0d2a52591d64b35c7fc49e6ada717fb7944",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "spark_02",
+      "size": [
+        48,
+        48
+      ],
+      "alpha": [
+        0,
+        255
+      ],
+      "sha256": "474ec34d3020ba89fbe90b5c84797a3c5c174b599bf134478ab475029b8c5e86",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "spark_03",
+      "size": [
+        48,
+        48
+      ],
+      "alpha": [
+        0,
+        255
+      ],
+      "sha256": "4c67d79bcc04404b3403de166347937739521ee6f5abfe42d0cb3aff2917a95c",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "hit_flash_a_core_00",
+      "size": [
+        256,
+        256
+      ],
+      "alpha": [
+        0,
+        253
+      ],
+      "sha256": "6d3dd98d42ef5e58414ec5c3e06074a3d243d00bc327fa87ffc944fe72c7e271",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "hit_flash_a_core_01",
+      "size": [
+        256,
+        256
+      ],
+      "alpha": [
+        0,
+        253
+      ],
+      "sha256": "b1f14ddb43eee14200a1d6d716dd0530df6f957cd79d3461b6d41bb1a350405e",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "hit_flash_a_core_02",
+      "size": [
+        256,
+        256
+      ],
+      "alpha": [
+        0,
+        253
+      ],
+      "sha256": "1fee43572aa75556804e45a381d07e794fb759b791e7cb34d456e0beafe2a948",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "hit_flash_a_core_03",
+      "size": [
+        256,
+        256
+      ],
+      "alpha": [
+        0,
+        253
+      ],
+      "sha256": "cc43473b30d429f670e6b88c450deef7f202d428d05c2cbf1214286a72108484",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "hit_flash_a_core_04",
+      "size": [
+        256,
+        256
+      ],
+      "alpha": [
+        0,
+        252
+      ],
+      "sha256": "ae93d16ac127c300b33230f5d0ee1db43f1bf075e0e5fb38aa2be7de18c1f150",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "hit_flash_a_core_05",
+      "size": [
+        256,
+        256
+      ],
+      "alpha": [
+        0,
+        247
+      ],
+      "sha256": "d8edaf10cddcd27d36a4a3c94334f21a43f72afaf87486e17abfe26ed148476b",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "hit_flash_b_core_00",
+      "size": [
+        256,
+        256
+      ],
+      "alpha": [
+        0,
+        253
+      ],
+      "sha256": "f4a8a345085c173fcde44902bf7b7d89d1235597c1eaca5e3691e7cf6535e951",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "hit_flash_b_core_01",
+      "size": [
+        256,
+        256
+      ],
+      "alpha": [
+        0,
+        254
+      ],
+      "sha256": "25f9e1ba5dfe27868a3c8ebfcbff9f442941ba759c1eb73c4508c4e4670c612e",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "hit_flash_b_core_02",
+      "size": [
+        256,
+        256
+      ],
+      "alpha": [
+        0,
+        254
+      ],
+      "sha256": "f291ea05a1b9a2736a43209266d325972cdd980f2d412413743f57c3ca1b9be1",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "hit_flash_b_core_03",
+      "size": [
+        256,
+        256
+      ],
+      "alpha": [
+        0,
+        253
+      ],
+      "sha256": "42d504158cc2a49fcd5314954e6b16bc7b147ce928955d7161db214c5c035aeb",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "hit_flash_b_core_04",
+      "size": [
+        256,
+        256
+      ],
+      "alpha": [
+        0,
+        252
+      ],
+      "sha256": "870b748586c521f91780b1718f4455e14af236b0a87aa862159cc9761ff28ba3",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "hit_flash_b_core_05",
+      "size": [
+        256,
+        256
+      ],
+      "alpha": [
+        0,
+        251
+      ],
+      "sha256": "8c4d3d004659f75343fdc2ad481f721466b292ba8d2d739d9a2af6d7c6121df6",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "hit_flash_b_core_06",
+      "size": [
+        256,
+        256
+      ],
+      "alpha": [
+        0,
+        248
+      ],
+      "sha256": "2d9c351d79759e6b919f37ae05172521775804614a028e82318316bf15643a5f",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "hit_flash_b_core_07",
+      "size": [
+        256,
+        256
+      ],
+      "alpha": [
+        0,
+        241
+      ],
+      "sha256": "7119da1f553570b0e37c01f0c24365bcb65378c6c92a8732ba07dbf1a5f7de31",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "result_glow_core_00",
+      "size": [
+        256,
+        128
+      ],
+      "alpha": [
+        0,
+        253
+      ],
+      "sha256": "d60c33f64fbda10c7af727347541cfb2662589736678d04e1876c12db739071c",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "result_glow_core_01",
+      "size": [
+        256,
+        128
+      ],
+      "alpha": [
+        0,
+        253
+      ],
+      "sha256": "13e2bdf6bd0b56126c7d23435e5dcbdfe1b8cb033ae869aaff084663a81373b9",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "result_glow_core_02",
+      "size": [
+        256,
+        128
+      ],
+      "alpha": [
+        0,
+        253
+      ],
+      "sha256": "7d77afc17dee9cfad6b3f7edaf30dd85b63341de5f3fdc8c196ad8de19d0742f",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "result_glow_core_03",
+      "size": [
+        256,
+        128
+      ],
+      "alpha": [
+        0,
+        253
+      ],
+      "sha256": "080963a80528977bdfdc32b3322307b5486fe26ac3bda4316285e451c29213a8",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "result_glow_core_04",
+      "size": [
+        256,
+        128
+      ],
+      "alpha": [
+        0,
+        253
+      ],
+      "sha256": "87a16e7b869d49225a0c76b71e4168ac38c7d1bc408dbc870e0796bb0c182dec",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "result_glow_core_05",
+      "size": [
+        256,
+        128
+      ],
+      "alpha": [
+        0,
+        253
+      ],
+      "sha256": "ecd7bedc9c44c4e53331d83072a06afe5d369a835d94b18149c6ef8643246f76",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "result_glow_cyan_core_00",
+      "size": [
+        256,
+        128
+      ],
+      "alpha": [
+        0,
+        252
+      ],
+      "sha256": "a0654167561374eebfc0c1be56298d0f942c9edb1620e270d81f77f4267de550",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "result_glow_cyan_core_01",
+      "size": [
+        256,
+        128
+      ],
+      "alpha": [
+        0,
+        253
+      ],
+      "sha256": "685b9479858d7c787e3d19e2cb91a24b36631215b50033212224b0e0d7c4c3a4",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "result_glow_cyan_core_02",
+      "size": [
+        256,
+        128
+      ],
+      "alpha": [
+        0,
+        253
+      ],
+      "sha256": "685b9479858d7c787e3d19e2cb91a24b36631215b50033212224b0e0d7c4c3a4",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "result_glow_cyan_core_03",
+      "size": [
+        256,
+        128
+      ],
+      "alpha": [
+        0,
+        253
+      ],
+      "sha256": "ed963fcc0b511ba118dacdc9f0a9c7df7486054362b98d27efc9fea46ac872d2",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "result_glow_cyan_core_04",
+      "size": [
+        256,
+        128
+      ],
+      "alpha": [
+        0,
+        253
+      ],
+      "sha256": "5335e6873382f4a563c866b85a17d447a3f8978672d44f8c3cc960563377961c",
+      "losslessRoundTrip": true
+    },
+    {
+      "frame": "result_glow_cyan_core_05",
+      "size": [
+        256,
+        128
+      ],
+      "alpha": [
+        0,
+        243
+      ],
+      "sha256": "d77cc1d360c9c215c890fdbb8ba258cb1e6fa517b897109fc8fb9c6987e0d29c",
+      "losslessRoundTrip": true
+    }
+  ]
+}

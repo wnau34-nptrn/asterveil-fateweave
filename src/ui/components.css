@@ -203,3 +203,105 @@
 .character-skills .icon.skill-art, .hire-skills .icon.skill-art { width: 36px; height: 36px; }
 #battle-view .action-option .action .icon.skill-art { width: 34px; height: 34px; }
 #battle-view .actions:has(> .action-option:nth-child(4)) .action .icon.skill-art { width: 30px; height: 30px; }
+
+/* Forge (board 05): bank pills, icon tabs, the item lit in the middle, mode chips and a result card. */
+.forge-workbench .forge-bank { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px; margin: 2px 0 4px; }
+.forge-workbench .forge-bank .ui-pill { min-height: 34px; padding: 4px 12px; font-size: 14px; }
+.forge-workbench .forge-bank .ui-pill .icon { width: 20px; height: 20px; }
+.forge-workbench .forge-tabs { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; }
+.forge-workbench .forge-tabs button { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 4px 2px; background: transparent; border-color: transparent; box-shadow: none; font: 600 12px var(--font-display, Kanit), sans-serif; color: var(--text-muted, #bbcadb); }
+.forge-workbench .forge-tabs button .icon { width: 24px; height: 24px; margin: 0; }
+.forge-workbench .forge-tabs [aria-selected=true] { background: #183c50; border-color: var(--veil-cyan, #74d4ef); color: var(--focus, #a3edff); }
+.forge-workbench .forge-tabs button[disabled] { opacity: .45; }
+.forge-workbench .forge-showcase { flex-direction: column; justify-content: center; gap: 6px; padding: 6px 8px 0; border: 0; background: radial-gradient(ellipse at 50% 38%, #23435a66, transparent 70%); text-align: center; }
+.forge-workbench .forge-showcase .gear-art { --art: 84px; flex: none; box-shadow: 0 0 22px #74d4ef33; }
+.forge-workbench .forge-showcase > div { display: grid; gap: 1px; justify-items: center; }
+.forge-workbench .forge-showcase b { font: 600 18px/1.25 var(--font-display, Kanit), sans-serif; }
+.forge-workbench .forge-showcase[data-rarity] small:first-of-type { color: var(--rarity-0); } .forge-workbench .forge-showcase[data-rarity="1"] small:first-of-type { color: var(--rarity-1); } .forge-workbench .forge-showcase[data-rarity="2"] small:first-of-type { color: var(--rarity-2); }
+.forge-workbench .forge-showcase[data-rarity="3"] small:first-of-type { color: var(--rarity-3); } .forge-workbench .forge-showcase[data-rarity="4"] small:first-of-type { color: var(--rarity-4); }
+.forge-workbench .forge-item-tools { justify-content: center; gap: 6px; margin: 2px 0; }
+.forge-workbench .forge-item-tools button { flex: 0 1 auto; display: inline-flex; align-items: center; justify-content: center; gap: 4px; padding: 0 12px; border-radius: 99px; font-size: 12px; }
+.forge-workbench .forge-item-tools button .icon { width: 18px; height: 18px; margin: 0; }
+.forge-workbench .forge-modes { display: flex; flex-wrap: nowrap; gap: 6px; overflow-x: auto; scrollbar-width: none; margin: 4px 0; padding-bottom: 2px; }
+.forge-workbench .forge-modes::-webkit-scrollbar { display: none; }
+.forge-workbench .forge-modes button { flex: 0 0 auto; min-height: 44px; padding: 0 12px; border-radius: 99px; border: 1px solid #e8f5ff33; background: #102137; box-shadow: none; color: var(--text); font: 600 13px var(--font-display, Kanit), sans-serif; }
+.forge-workbench .forge-modes [aria-pressed=true] { border-color: var(--veil-cyan, #74d4ef); background: #183c50; color: var(--focus, #a3edff); }
+.forge-workbench .forge-modes button[disabled] { opacity: .5; }
+.forge-workbench .forge-detail > h3 { margin: 6px 0 4px; text-align: center; font-size: 18px; color: var(--gold-light, #f2d596); }
+.forge-workbench .forge-detail > .camp-note { text-align: center; font-size: 12px; }
+.forge-result h4 { margin: 0 0 2px; font-size: 18px; }
+.forge-result .forge-stat-preview caption, .forge-result .forge-stat-preview thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+.forge-result .forge-stat-preview td:nth-of-type(1)::after { content: ' →'; }
+.forge-result .forge-stat-preview td { text-align: right; }
+.forge-result .forge-stat-preview td:nth-of-type(3) { width: 58px; }
+.forge-workbench .forge-footer { padding-top: 8px; border-top: 0; background: linear-gradient(#0c192b00, #0c192b 6px); }
+.forge-workbench .forge-footer > p#forge-cost { margin: 2px 0; text-align: center; font: 600 15px var(--font-display, Kanit), sans-serif; color: var(--text); }
+.forge-workbench .forge-footer > small { text-align: center; }
+.forge-workbench .forge-footer button.primary { display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+.forge-workbench .forge-footer button.primary .icon { width: 22px; height: 22px; margin: 0; }
+
+.forge-workbench .forge-detail .forge-label { margin: 4px 0; } .forge-workbench .forge-detail .forge-label select { min-height: 44px; }
+.forge-workbench .forge-result { margin: 8px 0; padding: 10px 14px; }
+.forge-workbench .forge-result .comparison-table td, .forge-workbench .forge-result .comparison-table th { padding: 6px 2px; }
+
+/* Expedition summary (board 09): stat chips, one haul card of pills, three-column item tiles, level cards. */
+.summary-card { background: linear-gradient(180deg, #14243af0, #0b1626f5); }
+.summary-card header .eyebrow { font: 600 12px var(--font-display, Kanit), sans-serif; letter-spacing: .08em; color: var(--veil-cyan, #74d4ef); }
+.summary-view .summary-stats { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
+.summary-view .summary-stats li { display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 3px 10px; border-radius: 99px; border: 1px solid #e8f5ff26; background: #08121fcc; }
+.summary-view .summary-stats .icon { width: 16px; height: 16px; grid-row: auto; }
+.summary-view .summary-stats b { font-size: 14px; } .summary-view .summary-stats small { font-size: 12px; }
+.summary-view .summary-haul { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; padding: 12px; border: 1px solid #e8f5ff26; border-radius: 16px; background: linear-gradient(160deg, #182b40, #0c1a2b); }
+.summary-view .summary-haul li { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 99px; border: 1px solid #e8f5ff33; background: #08121fcc; }
+.summary-view .summary-haul .icon { width: 22px; height: 22px; grid-row: auto; } .summary-view .summary-haul b { font-size: 17px; }
+.summary-view .summary-items { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px 6px; }
+.summary-items .tile { position: relative; display: block; width: 100%; aspect-ratio: 1; }
+.summary-items .tile .gear-art { --art: 100%; width: 100%; height: 100%; border-radius: 12px; }
+.summary-items .tile-lv { position: absolute; left: 4px; bottom: 2px; font: 700 10px var(--font-display, Kanit), sans-serif; color: #fff; text-shadow: 0 1px 2px #000, 0 0 4px #000; }
+.summary-items .tile-plus { position: absolute; right: 3px; top: 1px; font: 700 10px var(--font-display, Kanit), sans-serif; font-style: normal; color: var(--gold-light, #f2d596); text-shadow: 0 1px 2px #000; }
+.summary-items li { gap: 1px; } .summary-items small { font-size: 11px; } .summary-items em { font: normal 12px var(--font-display, Kanit), sans-serif; color: var(--rarity-0); }
+.summary-items li[data-rarity="1"] em { color: var(--rarity-1); } .summary-items li[data-rarity="2"] em { color: var(--rarity-2); } .summary-items li[data-rarity="3"] em { color: var(--rarity-3); } .summary-items li[data-rarity="4"] em { color: var(--rarity-4); }
+.summary-view .summary-levels { padding: 10px; border: 1px solid #e8f5ff26; border-radius: 16px; background: linear-gradient(160deg, #182b40, #0c1a2b); grid-template-columns: 1fr 1fr; }
+.summary-view .summary-levels li { background: none; }
+.summary-view #summary-done { min-height: 52px; width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+
+/* Hire board (board 10): the mercenary in full-body art on the left, name/role/lane and the hire button on the right. */
+.hire-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 4px 0; }
+.hire-top .hire-cost { margin: 0; flex: 1; }
+.hire-top .ui-pill { min-height: 34px; font-size: 14px; } .hire-top .ui-pill .icon { color: #f2c14e; }
+.hire-lanes { display: flex; gap: 6px; margin: 6px 0; }
+.hire-board { gap: 10px; }
+.hire-board li { position: relative; display: block; padding: 0; border-radius: 18px; border-color: #e8f5ff26; background: radial-gradient(ellipse at 22% 45%, #23435a, #0c1a2b 70%); }
+.hire-board .hire-open { position: relative; display: block; width: 100%; min-height: 150px; padding: 12px 12px 68px 124px; }
+.hire-board .hire-open .hero-art { position: absolute; left: 4px; top: 6px; width: 116px; aspect-ratio: 1; }
+.hire-board .hire-open > span { display: grid; gap: 2px; }
+.hire-board .hire-open b { font: 600 22px/1.2 var(--font-display, Kanit), sans-serif; }
+.hire-board .hire-open .star-row .icon { width: 16px; height: 16px; }
+.hire-board .hire-open small { line-height: 1.35; }
+.hire-board li > button[id^="hire-"]:not(.hire-open) { position: absolute; left: 124px; right: 12px; bottom: 12px; min-height: 48px; border-radius: 12px; font: 700 17px var(--font-display, Kanit), sans-serif; background: linear-gradient(180deg, #f2d596, #d8b673); color: #1b1305; border-color: transparent; }
+.hire-board li > button[disabled] { background: #1a2b40; color: var(--text-muted, #bbcadb); }
+@container game (max-width: 400px) { .hire-board .hire-open small:not(.hire-status) { display: block; font-size: 12px; } }
+.hire-board .hire-open .hire-status { font-size: 11px; opacity: .8; }
+.npc-fold { margin: 0 0 6px; } .npc-fold > summary { min-height: 44px; display: flex; align-items: center; gap: 8px; padding: 0 12px; border: 1px solid #e8f5ff26; border-radius: 12px; background: #0d1c2ecc; font-size: 13px; color: var(--gold-light, #f2d596); list-style: none; }
+.npc-fold > summary::-webkit-details-marker { display: none; } .npc-fold > summary .icon { width: 18px; height: 18px; }
+.npc-fold[open] > summary { margin-bottom: 6px; }
+
+/* Five-up tiles are small: the name and rarity stay for assistive tech (and the title tooltip), the rarity shows in the frame. */
+.summary-items small, .summary-items em { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+
+/* Forge strike: painted layers from forge_strike_fx.webp are placed by forge-strike.ts around the 132 px gear tile. */
+.forge-strike { position: absolute; inset: 0; z-index: 80; display: grid; place-items: center; pointer-events: none; background: radial-gradient(circle, #05101cdd, #05101c99 70%); animation: strike-fade 1.7s both; }
+.strike-card { position: relative; display: grid; justify-items: center; gap: 6px; }
+.strike-item { position: relative; z-index: 1; animation: strike-shake .7s .3s both; }
+.strike-item .gear-art { --art: 132px; box-shadow: 0 0 40px #f2d59644; }
+.strike-back, .strike-front { position: absolute; left: 50%; top: 66px; width: 0; height: 0; pointer-events: none; }
+.strike-back { z-index: 0; } .strike-front { z-index: 2; }
+.strike-card .fx { position: absolute; display: block; background-repeat: no-repeat; pointer-events: none; will-change: transform, opacity; }
+.strike-text { position: relative; z-index: 3; display: grid; place-items: center; min-height: 48px; }
+.strike-glow { position: absolute; left: 50%; top: 50%; width: 0; height: 0; z-index: -1; }
+.strike-result { font: 700 40px var(--font-display, Kanit), sans-serif; color: var(--gold-light, #f2d596); text-shadow: 0 2px 8px #000; opacity: 0; animation: strike-pop .5s .72s both; }
+.strike-card small { z-index: 3; color: var(--text, #fff); font-size: 14px; opacity: 0; animation: strike-pop .4s .8s both; }
+@keyframes strike-shake { 0%, 100% { transform: none; } 12% { transform: translateY(5px) scale(.97); } 30% { transform: translateY(-2px); } 52% { transform: translateY(7px) scale(.95); } 75% { transform: translateY(0) scale(1.05); } }
+@keyframes strike-pop { 0% { opacity: 0; transform: translateY(8px) scale(.8); } 100% { opacity: 1; transform: none; } }
+@keyframes strike-fade { 0%, 80% { opacity: 1; } 100% { opacity: 0; } }
+.forge-strike[data-reduced] { animation: strike-fade .9s both; } .forge-strike[data-reduced] * { animation: none !important; } .forge-strike[data-reduced] .strike-result, .forge-strike[data-reduced] small { opacity: 1; }

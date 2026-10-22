@@ -276,3 +276,47 @@ body { display: grid; place-items: center; background: radial-gradient(ellipse a
 .character-stat summary .icon { width: 16px; height: 16px; flex: none; color: var(--gold-light, #f2d596); }
 :is(.character-gear, .gear-comparison, .forge-workbench, .character-content) button:not(.loadout-skill) > .icon { width: 16px; height: 16px; flex: none; margin-right: 4px; vertical-align: -3px; }
 @container game (max-width: 360px) { .character-tabs button .icon { display: none; } }
+
+/* Compact battle HUD (owner 2026-10-22): the turn title rides in the masthead beside the round chip, the queue is one
+   row, the dock's ⓘ/× share the target-hint row and the static "every turn / cooldown N" line is screen-reader only.
+   The space goes to the field. */
+#battle-view #beat-status { display: flex; align-items: center; gap: 6px; min-width: 0; flex: 1; }
+#battle-view #beat-status .turn-title { min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font: 600 13px/1.2 var(--font-heading); color: #bff3ff; text-shadow: 0 1px 6px #000; }
+#battle-view #turn-phase[data-phase="enemy"] ~ * #beat-status .turn-title { color: #ffd4c8; }
+#battle-view #beat-status .formation-chip { display: none; }
+#battle-view #turn-phase { flex-basis: 50px; height: 50px; min-height: 50px; padding: 3px 6px; }
+#battle-view #turn-phase .phase-head .phase-copy { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+#battle-view #turn-phase .phase-head { height: 0; min-height: 0; }
+#battle-view .command-dock { display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "actions actions" "hint buttons"; padding: 4px 6px 0; }
+#battle-view .command-dock > #commands { display: contents; }
+#battle-view .command-dock .step-heading, #battle-view .command-dock .action-help { display: none; }
+#battle-view .command-dock .actions { grid-area: actions; }
+#battle-view .command-dock .target-hint { grid-area: hint; align-self: center; padding-left: 4px; }
+#battle-view .command-dock #selected-hero { grid-area: buttons; height: 44px; }
+#battle-view .command-dock #selected-hero .selected-info { display: none; }
+#battle-view .action-option > p { position: absolute !important; width: 1px; height: 1px; min-height: 0; margin: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+#battle-view .action-option { position: relative; }
+#battle-view .cd-badge { position: absolute; top: 3px; right: 4px; padding: 0 5px; border-radius: 999px; background: #28121be6; border: 1px solid #ffb9c580; color: #ffd4c8; font: 600 10px/15px var(--font-heading); pointer-events: none; }
+/* Skill tomes (save v37): level dots, the next level's gain, cost chips and the camp's tome bag. */
+.character-skills .skill-level { display: flex; align-items: center; gap: 8px; margin: 6px 0 2px; font: 600 13px var(--font-heading, Kanit), sans-serif; color: var(--gold-light, #ffe3a1); }
+.skill-dots { display: inline-flex; gap: 4px; }
+.skill-dots i { width: 9px; height: 9px; border-radius: 50%; border: 1px solid #ffe3a199; background: transparent; }
+.skill-dots i.on { background: var(--gold-light, #ffe3a1); box-shadow: 0 0 6px #ffcf6a88; }
+.character-skills .skill-next { margin: 2px 0; font-size: 13px; }
+.character-skills .skill-next em.up { color: var(--hp-mint, #7ee0a8); font-style: normal; font-weight: 700; }
+.skill-level-cost { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0; }
+.tome-chip { display: inline-flex; align-items: center; gap: 4px; min-height: 28px; padding: 2px 8px; border-radius: 99px; border: 1px solid #e8f5ff33; background: #08121fcc; font-size: 12px; }
+.tome-chip .icon { width: 16px; height: 16px; }
+.tome-chip[data-line="bulwark"], .tome-bag li[data-line="bulwark"] { border-color: #6f9fd8aa; }
+.tome-chip[data-line="blade"], .tome-bag li[data-line="blade"] { border-color: #d86f6faa; }
+.tome-chip[data-line="accord"], .tome-bag li[data-line="accord"] { border-color: #7ee0c0aa; }
+.tome-chip small { color: var(--text-muted, #b9c8d8); }
+.skill-up { min-height: 44px; display: inline-flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.skill-up small, .tome-trade-list button small { display: block; width: 100%; font-size: 11px; font-weight: 400; }
+.skill-up[aria-disabled="true"], .tome-trade-list button[aria-disabled="true"] { opacity: .6; }
+.tome-bag { list-style: none; margin: 6px 0; padding: 0; display: grid; gap: 6px; }
+.tome-bag li { display: flex; justify-content: space-between; gap: 8px; padding: 8px 10px; border-radius: 10px; border: 1px solid #ffffff2a; background: #0f1a2acc; font-size: 13px; }
+.tome-bag li.own { box-shadow: inset 3px 0 0 var(--gold-light, #ffe3a1); }
+.tome-trade summary { min-height: 44px; display: flex; align-items: center; cursor: pointer; font-weight: 600; }
+.tome-trade-list { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.tome-trade-list button { min-height: 44px; text-align: left; }

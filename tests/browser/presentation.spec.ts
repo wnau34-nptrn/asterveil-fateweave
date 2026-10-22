@@ -20,10 +20,10 @@ for (const [speed,intensity,motion] of [
   const ctx=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true,reducedMotion:motion}),page=await ctx.newPage();
   try {
    await page.addInitScript(p=>localStorage.setItem('asterveil.fateweave.presentation.v1',JSON.stringify(p)),{speed,intensity});
-   await open(page);await page.locator('#action-execute').click();await page.locator('#target-brute').click();const committed=await saved(page);
+   await open(page);await page.locator('#action-execute').click();await page.locator('#target-f1').click();const committed=await saved(page);
    const contact=motion==='reduce'?0:speed==='fast'?194:298;
-   if (contact) {await page.clock.runFor(contact-1);await expect(page.locator('[data-enemy=brute]')).toContainText('200 / 200');await page.clock.runFor(1);}
-   await expect(page.locator('[data-enemy=brute]')).toContainText('172 / 200');
+   if (contact) {await page.clock.runFor(contact-1);await expect(page.locator('[data-enemy=f1]')).toContainText('200 / 200');await page.clock.runFor(1);}
+   await expect(page.locator('[data-enemy=f1]')).toContainText('172 / 200');
    await page.clock.runFor(20);await page.screenshot({path:info.outputPath('mode-impact.png')});
    await page.emulateMedia({reducedMotion:motion==='reduce'?'no-preference':'reduce'});await page.clock.runFor(3000);
    await expect(page.locator('#action-bolt')).toBeEnabled();await expect(page.locator('#hero-tracer')).toContainText('44 / 56');expect(await saved(page)).toBe(committed);
@@ -39,9 +39,9 @@ for(const [width,height,touch]of [[320,568,true],[390,844,true],[1366,768,false]
    await page.locator('#combat-speed').click();await page.locator('#combat-intensity').click();
    await expect(page.locator('#combat-speed')).toHaveAttribute('aria-pressed','true');
    expect(await saved(page)).toBe(before);
-   await page.locator('[data-ui=info-close]').click();await page.locator('#action-execute').click();await page.locator('#target-brute').click();
-   const committed=await saved(page);await page.clock.runFor(193);await expect(page.locator('[data-enemy=brute]')).toContainText('200 / 200');
-   await page.clock.runFor(21);await expect(page.locator('[data-enemy=brute]')).toContainText('172 / 200');
+   await page.locator('[data-ui=info-close]').click();await page.locator('#action-execute').click();await page.locator('#target-f1').click();
+   const committed=await saved(page);await page.clock.runFor(193);await expect(page.locator('[data-enemy=f1]')).toContainText('200 / 200');
+   await page.clock.runFor(21);await expect(page.locator('[data-enemy=f1]')).toContainText('172 / 200');
    await page.screenshot({path:info.outputPath('reduced-fast-impact.png')});
    await page.clock.runFor(900);await expect(page.locator('#action-bolt')).toBeEnabled();expect(await saved(page)).toBe(committed);
    await page.reload();await page.locator('#continue').click();await page.clock.runFor(600);await page.locator('#battle-info').click();await page.locator('#battle-tab-settings').click();
@@ -53,16 +53,16 @@ for(const [width,height,touch]of [[320,568,true],[390,844,true],[1366,768,false]
   const ctx=await browser.newContext({viewport:{width,height},isMobile:touch,hasTouch:touch,reducedMotion:'no-preference'}),page=await ctx.newPage(),errors:string[]=[];
   page.on('pageerror',e=>errors.push(e.message));
   try{
-   await open(page);await page.locator('#action-execute').click();await page.locator('#target-brute').click();
-   await expect(page.locator('#turn-phase')).toHaveAttribute('data-cue','prepare');await expect(page.locator('[data-enemy=brute]')).toContainText('200 / 200');
+   await open(page);await page.locator('#action-execute').click();await page.locator('#target-f1').click();
+   await expect(page.locator('#turn-phase')).toHaveAttribute('data-cue','prepare');await expect(page.locator('[data-enemy=f1]')).toContainText('200 / 200');
    const committed=JSON.parse(await saved(page));expect(committed.run.battle.commands).toHaveLength(1);
-   await page.locator('#battle-info').click();await page.locator('#status-unit-brute').click();await expect(page.locator('#status-details')).toContainText('200 / 200');
+   await page.locator('#battle-info').click();await page.locator('#status-unit-f1').click();await expect(page.locator('#status-details')).toContainText('200 / 200');
    await page.screenshot({path:info.outputPath('before-impact.png')});
    await page.clock.runFor(297);await expect(page.locator('#status-details')).toContainText('200 / 200');
    await page.clock.runFor(1);await expect(page.locator('#status-details')).toContainText('172 / 200');await expect(page.locator('html')).toHaveAttribute('data-sfx','crit');
    await page.locator('[data-ui=info-close]').click();await expect(page.locator('#turn-phase')).toHaveAttribute('data-cue','impact');
    await expect(page.locator('#hero-tracer')).toContainText('56 / 56');await page.clock.runFor(20);await page.screenshot({path:info.outputPath('hero-impact.png')});
-   await page.clock.runFor(532);await expect(page.locator('#turn-phase')).toHaveAttribute('data-actor','raider');await expect(page.locator('#hero-tracer')).toContainText('56 / 56');
+   await page.clock.runFor(532);await expect(page.locator('#turn-phase')).toHaveAttribute('data-actor','b1');await expect(page.locator('#hero-tracer')).toContainText('56 / 56');
    await page.clock.runFor(279);await expect(page.locator('#hero-tracer')).toContainText('56 / 56');await page.clock.runFor(1);await expect(page.locator('#hero-tracer')).toContainText('44 / 56');
    await page.clock.runFor(20);await page.screenshot({path:info.outputPath('enemy-impact.png')});await page.clock.runFor(500);await expect(page.locator('#action-bolt')).toBeEnabled();expect(await saved(page)).toBe(JSON.stringify(committed));expect(errors).toEqual([]);
   }finally{await ctx.close()}
@@ -70,12 +70,12 @@ for(const [width,height,touch]of [[320,568,true],[390,844,true],[1366,768,false]
  test(`presentation skip resize and reload keep exactly one committed command at ${width}x${height}`,async({browser})=>{
   const ctx=await browser.newContext({viewport:{width,height},isMobile:touch,hasTouch:touch,reducedMotion:'no-preference'}),page=await ctx.newPage();
   try{
-   await open(page);await page.locator('#target-brute').click();const committed=await saved(page);await page.locator('#skip-turn').click();await page.clock.runFor(3000);
+   await open(page);await page.locator('#target-f1').click();const committed=await saved(page);await page.locator('#skip-turn').click();await page.clock.runFor(3000);
    await expect(page.locator('#action-bolt')).toBeEnabled();await expect(page.locator('#hero-tracer')).toContainText('44 / 56');expect(await saved(page)).toBe(committed);
-   await page.locator('#action-bolt').click();await page.locator('#target-brute').click();const second=await saved(page);
+   await page.locator('#action-bolt').click();await page.locator('#target-f1').click();const second=await saved(page);
    await page.setViewportSize({width:width+1,height});await page.clock.runFor(1500);expect(await saved(page)).toBe(second);
    await expect(page.locator('#action-bash')).toBeEnabled();await page.reload();await page.locator('#continue').click();await expect(page.locator('#action-bash')).toBeEnabled();expect(await saved(page)).toBe(second);
-   await page.locator('#action-bash').click();await page.locator('#target-brute').click();const third=await saved(page);
+   await page.locator('#action-bash').click();await page.locator('#target-f1').click();const third=await saved(page);
    const lastSound=await page.locator('html').getAttribute('data-sfx');
    await page.evaluate(()=>{Object.defineProperty(document,'hidden',{configurable:true,value:true});document.dispatchEvent(new Event('visibilitychange'));});
    await page.clock.runFor(2500);expect(await saved(page)).toBe(third);await expect(page.locator('html')).toHaveAttribute('data-sfx',lastSound!);

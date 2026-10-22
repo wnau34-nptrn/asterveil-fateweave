@@ -12,15 +12,18 @@ import type { ActionId, EncounterDefinition, HeroDefinition } from '../core/batt
 
 import type { Direction, EventChoice, ExpeditionState, GearSlot, MapDefinition, Point, PotionId } from '../core/world/types';
 import { canManage, wear, type BagList, travelTargets, atCamp, atMuster, canOpenChest, canRest, canRevive, chestAt, eliteBlocks, questComplete, questDone, encounterChance, eventChoiceReason, isRevealed, monsterLevelAt, pendingEvent, rosterIds, starred, tileAt, wounded, zoneOf } from '../core/world/world';
-import { PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS } from '../core/world/types';
+import { PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS, type Lane } from '../core/world/types';
+import { formation } from '../core/world/formation';
+import { formationGrid, formationTap, laneName } from './formation-grid';
 import { portrait, starRow } from './portraits';
 import { SOURCE_TILE, openingFrame, chestFrame, decorAt, itemFrame, floorFrame, fogLayers, landmarkAt, tileSizeFor, tileset, worldArtUrl, type Landmark } from '../game/visuals/world-art';
-import { questLine, choiceText, eventChoices, eventReasonText, eventText, heroText, itemLines, itemName, itemOwner, potionText, resourceOrder, resourceText } from './th';
-import { icon, type IconName } from './icons';
+import { questLine, choiceText, eventChoices, eventReasonText, eventText, heroText, itemLines, itemName, itemOwner, potionText, resourceOrder, resourceText, tomeThai } from './th';
+import { tomeCount } from '../core/world/tomes';
+import { icon, lineIcon, type IconName } from './icons';
 import { gearArt, potionArt } from './equip-art';
 import { boulderPosition, doorOpen, openPit, secretAt } from '../core/world/puzzles';
 
-export interface WorldHost { travel(to: Point): void; move(dir: Direction): void; rest(): void; revive(heroId: string): void; swap(a: string, b: string): void; moveMember(id: string): void; withdraw(): void; openChest(): void;
+export interface WorldHost { travel(to: Point): void; move(dir: Direction): void; rest(): void; revive(heroId: string): void; swap(a: string, b: string): void; moveMember(id: string): void; lane(id: string, lane: Lane, other?: string): void; withdraw(): void; openChest(): void;
   talent(heroId: string, node: TalentNode): void; loadout(heroId: string, actions: ActionId[]): void; autoEquip(plan: AutoEquipmentPlan): void;
   usePotion(potion: PotionId, heroId?: string): void; chooseEvent(choice: EventChoice): void;
   wear(heroId: string, from: BagList, index: number): void; takeOff(heroId: string, slot: GearSlot): void }
@@ -66,6 +69,7 @@ export class WorldUI {
   private readonly inventoryFilters = newGearFilters();
   private readonly characters: CharacterPanel | undefined;
   private picked: string | undefined;
+  private lanePick: string | undefined;
   private confirmWithdraw = false;
   private tile = 48;
   private width: number;
@@ -147,13 +151,14 @@ export class WorldUI {
           case 'camp-revive': if (!this.view?.locked && button.dataset.hero) this.host.revive(button.dataset.hero); break;
           case 'camp-close': dialog('#camp-dialog').close(); break;
           case 'travel': this.host.travel({ x: Number(button.dataset.x), y: Number(button.dataset.y) }); break;
-          case 'camp-tab': this.campTab = button.dataset.tab as WorldUI['campTab']; this.picked = undefined; this.confirmWithdraw = false; this.renderCamp(); this.root.querySelector<HTMLElement>(`#camp-tab-${this.campTab}`)?.focus(); break;
+          case 'camp-tab': this.campTab = button.dataset.tab as WorldUI['campTab']; this.picked = undefined; this.lanePick = undefined; this.confirmWithdraw = false; this.renderCamp(); this.root.querySelector<HTMLElement>(`#camp-tab-${this.campTab}`)?.focus(); break;
           case 'team-pick': this.pickMember(button.dataset.hero, button.dataset.side as 'deployed' | 'reserve'); break;
+          case 'lane-pick': case 'lane-cell': this.pickLane(button.dataset.hero, button.dataset.lane as Lane); break;
           case 'withdraw': if (this.view?.locked) break;
             if (!this.confirmWithdraw) { this.confirmWithdraw = true; this.renderCamp(); this.root.querySelector<HTMLElement>('#withdraw')?.focus(); break; }
             this.confirmWithdraw = false; dialog('#camp-dialog').close(); this.host.withdraw(); break;
-          case 'pack': this.bagTab = 'items'; this.picked = undefined; this.salvePick = false; this.renderPack(); dialog('#pack-dialog').showModal(); break;
-          case 'bag-tab': this.bagTab = button.dataset.tab as WorldUI['bagTab']; this.picked = undefined; this.salvePick = false; this.renderPack(); this.root.querySelector<HTMLElement>(`#bag-tab-${this.bagTab}`)?.focus(); break;
+          case 'pack': this.bagTab = 'items'; this.picked = undefined; this.lanePick = undefined; this.salvePick = false; this.renderPack(); dialog('#pack-dialog').showModal(); break;
+          case 'bag-tab': this.bagTab = button.dataset.tab as WorldUI['bagTab']; this.picked = undefined; this.lanePick = undefined; this.salvePick = false; this.renderPack(); this.root.querySelector<HTMLElement>(`#bag-tab-${this.bagTab}`)?.focus(); break;
           case 'inventory-pick': this.inventoryPick=button.dataset.key;this.renderPack();this.root.querySelector<HTMLElement>('#inventory-hero-'+rosterIds(this.view!.state).find(id=>{const i=runEquipment(this.view!.state).find(e=>e.key===this.inventoryPick)?.item;return i&&(i.slot!=='weapon'||i.hero===id);}))?.focus();break;
           case 'inventory-character': this.openCharacter(button.dataset.hero!,'gear',button,button.dataset.key);break;
           case 'bag-member': this.openCharacter(button.dataset.hero!, 'gear', button); break;
@@ -194,7 +199,7 @@ export class WorldUI {
     const s = this.view?.state; if (!s || this.view!.locked) return;
     if (atMuster(s, this.map)) {
       // Open on the team tab when the deployed party cannot walk on (and always at the entrance).
-      this.campTab = atCamp(s, this.map) && s.roster.deployed.some(id => s.hp[id]! > 0) ? 'care' : 'team'; this.picked = undefined; this.confirmWithdraw = false;
+      this.campTab = atCamp(s, this.map) && s.roster.deployed.some(id => s.hp[id]! > 0) ? 'care' : 'team'; this.picked = undefined; this.lanePick = undefined; this.confirmWithdraw = false;
       this.renderCamp(); this.root.querySelector<HTMLDialogElement>('#camp-dialog')!.showModal();
     }
     else if (canOpenChest(s, this.map)) this.host.openChest();
@@ -226,6 +231,16 @@ export class WorldUI {
     if (id) this.host.swap(from, id); else this.host.moveMember(from);
     this.focusTeam(from);
   }
+  // Formation grid: tap a member, then an empty cell or a member of the other column.
+  private pickLane(id: string | undefined, lane: Lane): void {
+    const s = this.view?.state; if (!s || this.view!.locked || !canManage(s)) return;
+    const tap = formationTap(this.lanePick, this.lanes(s), id, lane); this.lanePick = tap.picked;
+    if (tap.move) this.host.lane(tap.move.id, tap.move.lane, tap.move.other); else if (this.bagOpen()) this.renderPack(); else this.renderCamp();
+    const focus = tap.move?.id ?? tap.picked ?? id;
+    if (focus) this.root.querySelector<HTMLElement>(`#${this.bagOpen() ? 'bag-team' : 'team'}-lane-${focus}`)?.focus();
+  }
+  private recommended = (id: string): Lane => this.heroes.find(h => h.id === id)?.lane ?? 'front';
+  private lanes(s: ExpeditionState): Record<string, Lane> { return formation(s.roster, this.recommended); }
   private focusTeam(id: string | undefined): void { if (id) this.root.querySelector<HTMLElement>(`#${this.bagOpen() ? 'bag-team' : 'team'}-${id}`)?.focus(); }
   private bagOpen(): boolean { return this.root.querySelector<HTMLDialogElement>('#pack-dialog')!.open; }
   private openCharacter(id: string, tab: CharacterTab, trigger: HTMLButtonElement, key?: string): void { this.characters?.openFor(id,tab,trigger,key); }
@@ -412,7 +427,7 @@ export class WorldUI {
   }
   private bagItems(s: ExpeditionState): string {
     const opened = s.openedChests.length;
-    return `<div role="tabpanel">${this.potionSection(s)}<ul class="pack-list">${resourceOrder.map(id => `<li data-resource="${id}">${id === 'gold' ? potionArt('gold') : itemArt(id)}<div><b>${resourceText[id].name}</b><small>${resourceText[id].use}</small></div><strong>${s.resources[id]}</strong></li>`).join('')}${s.dust ? `<li data-resource="dust">${potionArt('dust')}<div><b>ฝุ่นดาว</b><small>วัตถุดิบตีอุปกรณ์ · นำกลับค่ายเมื่อจบการเดินทาง</small></div><strong>${s.dust}</strong></li>` : ''}</ul>
+    return `<div role="tabpanel">${this.potionSection(s)}<ul class="pack-list">${resourceOrder.map(id => `<li data-resource="${id}">${id === 'gold' ? potionArt('gold') : itemArt(id)}<div><b>${resourceText[id].name}</b><small>${resourceText[id].use}</small></div><strong>${s.resources[id]}</strong></li>`).join('')}${s.dust ? `<li data-resource="dust">${potionArt('dust')}<div><b>ฝุ่นดาว</b><small>วัตถุดิบตีอุปกรณ์ · นำกลับค่ายเมื่อจบการเดินทาง</small></div><strong>${s.dust}</strong></li>` : ''}${tomeCount(s.tomes) || s.riftCore ? `<li data-resource="tomes">${lineIcon('tab-skills')}<div><b>ตำราศึก</b><small>${tomeThai(s.tomes, s.riftCore)} · ใช้เพิ่มเลเวลสกิลที่ค่าย</small></div><strong>${tomeCount(s.tomes)}</strong></li>` : ''}</ul>
       ${s.found.length ? `<h3 class="pack-gear-title">${icon('gearBody')} อุปกรณ์ที่เจอ ${s.found.length} ชิ้น</h3><ul class="pack-gear">${s.found.map(i => `<li data-rarity="${i.rarity}">${gearArt(i)}<div><b>${itemName(i)} Lv${i.level}</b><small>${itemLines(this.map.equipment, i).join(' · ')}</small></div></li>`).join('')}</ul><p class="world-stats">เลือกผู้สวมใส่ได้ที่แท็บอุปกรณ์ · ถ้าทีมล้มหมดจะเก็บกลับได้แค่ชิ้นที่ดีที่สุด 1 ชิ้น</p>` : ''}
       <p class="world-stats">เปิดกล่องสมบัติแล้ว ${opened}/${this.map.chests.length} กล่อง · ของตกจากศึกที่ชนะและกล่องสมบัติ</p></div>`;
   }
@@ -466,7 +481,7 @@ export class WorldUI {
     const card = (id: string | undefined, side: 'deployed' | 'reserve', slot: number) => {
       if (!id) return `<button class="team-card empty${this.picked ? ' target' : ''}" data-world="team-pick" data-side="${side}" aria-label="${side === 'deployed' ? `ช่อง ${slot + 1} ว่าง` : 'ช่องสำรองว่าง'}"${this.picked ? '' : ' disabled'}><span>ว่าง</span></button>`;
       const h = this.hero(id); const hp = s.hp[id] ?? 0; const text = heroText[id]!;
-      const lane = h.lane === 'front' ? 'แนวหน้า' : 'แนวหลัง';
+      const lane = laneName(this.lanes(s)[id] ?? h.lane);
       return `<button id="${prefix}-${id}" class="team-card${hp <= 0 ? ' fallen' : ''}" data-world="team-pick" data-hero="${id}" data-side="${side}" aria-pressed="${this.picked === id}" aria-label="${side === 'deployed' ? `ช่อง ${slot + 1} · ` : 'สำรอง · '}${text.name} ${this.stars(s, id)} ดาว ${text.role} ${lane} ${hp <= 0 ? 'ล้มแล้ว' : `เลือด ${hp} จาก ${h.maxHp}`}">${side === 'deployed' ? `<i class="slot-no">${slot + 1}</i>` : ''}${portrait(id)}<b>${text.name}</b>${this.starRow(this.stars(s, id))}<small>Lv${s.members[h.id]?.level ?? 1} · ${hp <= 0 ? 'ล้มแล้ว' : `${hp}/${h.maxHp}`}</small><small class="lane">${text.role} · ${lane}</small></button>`;
     };
     const row = (ids: string[], side: 'deployed' | 'reserve', size: number) => Array.from({ length: size }, (_, i) => card(ids[i], side, i)).join('');
@@ -474,6 +489,7 @@ export class WorldUI {
     return `<section class="camp-section team-section" role="tabpanel">
         <h3>${icon('flag')} ลงสนาม <span class="camp-embers">ศัตรูเล็งตามหมายเลขช่อง</span></h3>
         <div class="team-grid">${row(s.roster.deployed, 'deployed', PARTY_SLOTS)}</div>
+        ${formationGrid({ prefix, attr: 'world', deployed: s.roster.deployed, lanes: this.lanes(s), recommended: this.recommended, picked: this.lanePick, disabled: !!this.view?.locked || !canManage(s), hp: id => s.hp[id] ?? 0 })}
         <h3>${icon('camp')} สำรอง</h3>
         <div class="team-grid">${row(s.roster.reserve, 'reserve', RESERVE_SLOTS)}</div>
         <p class="camp-note" id="${prefix}-hint">${this.picked ? `เลือก${heroText[this.picked]!.name}แล้ว · แตะคนหรือช่องว่างอีกฝั่งเพื่อสลับ แตะซ้ำเพื่อยกเลิก` : !deployedUp ? 'ทีมที่ลงสนามล้มหมด · สลับตัวสำรองที่ยังยืนอยู่หรือชุบก่อนออกเดินทาง' : s.roster.reserve.length ? 'แตะสมาชิก แล้วแตะคนหรือช่องว่างอีกฝั่งเพื่อสลับ' : 'ไม่ได้พาตัวสำรองมา · เลือกตัวสำรองได้ที่ค่ายก่อนออกเดินทาง'}</p>${this.picked&&rosterIds(s).includes(this.picked)?this.heroDetail(s,this.picked,prefix==='bag-team'?'bag':'camp'):''}</section>`;

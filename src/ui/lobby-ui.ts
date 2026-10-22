@@ -12,17 +12,24 @@ import { withParty } from '../core/battle/engine';
 import { hardReason, activeGuides, guideDone, featureMap, featureOpen, NAME_MAX, mapUnlocked, boardOffers, brewReason, buyReason, claimReason, sealLimit, refreshReason, shopLeft, dismissReason, equip, groupOf, hireReason, talentPoints, talentsSpent, upgradeCost, upgradeReason, type Group } from '../core/world/profile';
 import { isBigTree } from '../core/world/talents';
 import { salvageValue } from '../core/world/equipment';
-import { COMPANY_CAP, PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS, SHOP_ITEMS, type GearSlot, type GuideKind, type LobbyFeature, type ShopItemId, type MapDefinition, type PotionId, type Profile, type TalentNode } from '../core/world/types';
-import { expToNext, starred, type EncounterLookup } from '../core/world/world';
+import { COMPANY_CAP, PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS, SHOP_ITEMS, type GearSlot, type GuideKind, type Lane, type LobbyFeature, type ShopItemId, type MapDefinition, type PotionId, type Profile, type TalentNode } from '../core/world/types';
+import { expToNext, recommendedLane, starred, type EncounterLookup } from '../core/world/world';
+import { emptyTomes, levelableSkills, skillLevelReason, tradeReason } from '../core/world/tomes';
+import type { TomeLine, TomeSize } from '../core/world/types';
+import { formation } from '../core/world/formation';
+import { formationGrid, formationTap, laneName } from './formation-grid';
 import { actorArt, actorFootOrigins, lobbyArt, lobbyPose, NPC_IDS, npcAtlasUrl, npcBustsUrl, npcStationsUrl, unitsUrl, type LobbyPose, type NpcId } from '../game/visuals/assets';
 import { icon } from './icons';
+import region from '../content/world/region_ch1.json';
+import { worldArtUrl } from '../game/visuals/world-art';
 import { commanderBadge } from './commander-ui';
 import { gearArt, potionArt } from './equip-art';
 import { skillDescription, heroText, npcText, rewardText, shopText, sideQuestText, itemLines, itemName, itemOwner, passiveText, potionText } from './th';
 
-import { portrait, starRow } from './portraits';
+import { heroArt, portrait, starRow } from './portraits';
 
-export interface LobbyHost { autoEquip(plan: AutoEquipmentPlan): void; hire(index: number): void; refresh(): void; buy(item: ShopItemId, heroId?: string): void; smelt(dust: number): void; upgrade(id: string): void; dismiss(id: string): void; place(id: string, group: Group, other?: string): void; talent(id: string, node: TalentNode): void; loadout(id: string, actions: ActionId[]): void; resetTalents(id: string): void;
+export interface LobbyHost { autoEquip(plan: AutoEquipmentPlan): void; hire(index: number): void; refresh(): void; buy(item: ShopItemId, heroId?: string): void; smelt(dust: number): void; upgrade(id: string): void; dismiss(id: string): void; place(id: string, group: Group, other?: string): void; lane(id: string, lane: Lane, other?: string): void; talent(id: string, node: TalentNode): void; loadout(id: string, actions: ActionId[]): void; resetTalents(id: string): void;
+  skillLevel(id: string, action: ActionId): void; tomeTrade(line: TomeLine, size: TomeSize, to?: TomeLine): void;
   transfer(uid:number,index:number,donor:number,sourceIndex:number):void; huntTarget(target?:string):void; bossTarget(target:BossPower):void; craft(hero:string,level:number):void;
   collect(ids:number[]):void; recycleStored(source:StorageSource,ids:number[]):void; expandStorage():void;
   equip(id: string, uid: number): void; unequip(id: string, slot: GearSlot): void; salvage(uids: number[]): void; renameCamp(name: string): void; guide(id: string, skip: boolean): void;
@@ -55,6 +62,8 @@ export class LobbyUI {
   // The forge (2D-4) is a third menu sheet.
   private sheet: Sheet | null = null;
   private readonly huntUI=new HuntPanel();
+  // Map sheet: the node whose card shows (default: the furthest open map).
+  private mapPicked: string | undefined;
   private readonly storageUI:StorageManager;
   private readonly forgeUI:ForgeWorkbench;
   private forgeReturn:string|undefined;
@@ -64,9 +73,13 @@ export class LobbyUI {
   private confirmSalvage: number | undefined;
   private sceneDrawn = '';
   private picked: string | undefined;
+  // The member picked in the formation grid (separate from the team-card pick).
+  private lanePick: string | undefined;
   private confirmDismiss = false;
   // The broker's sheet shows the hiring board or the market (4A).
   private market = false;
+  private npcOpen = false;
+  private lane: 'all' | 'front' | 'back' = 'all';
   // The hiring offer being previewed (stats, skills and star unlocks) before hiring.
   private preview: number | undefined;
   constructor(private readonly root: HTMLElement, private readonly map: MapDefinition, private readonly lookup: EncounterLookup, private readonly heroes: readonly HeroDefinition[], private readonly host: LobbyHost,
@@ -78,8 +91,9 @@ export class LobbyUI {
       preview:(id,key)=>{const p=this.view?.profile,entry=p&&campEquipment(p).find(e=>e.key===key);if(!p||!entry)return;const out=equip(p,id,entry.item.uid);return out.event.type==='equipped'?this.characterModel(out.profile):undefined;},
       previewPlan:plan=>{if(!this.view)return;const out=applyCampEquipment(this.view.profile,plan);return out.event.type==='equipped'?this.characterModel(out.profile):undefined;},
       wear:(id,key)=>{const entry=this.view&&campEquipment(this.view.profile).find(e=>e.key===key);if(entry)this.host.equip(id,entry.item.uid);},
-      takeOff:(id,slot)=>this.host.unequip(id,slot),talent:(id,node)=>this.host.talent(id,node),loadout:(id,a)=>this.host.loadout(id,a),reset:id=>this.host.resetTalents(id),applyPlan:plan=>this.host.autoEquip(plan),forge:(id,uid)=>{this.forgeReturn=id;this.sheet='forge';this.forgeUI.open(uid);this.draw();this.focus('#forge-change-item');},
+      takeOff:(id,slot)=>this.host.unequip(id,slot),talent:(id,node)=>this.host.talent(id,node),loadout:(id,a)=>this.host.loadout(id,a),reset:id=>this.host.resetTalents(id),skillLevel:(id,a)=>this.host.skillLevel(id,a),tomeTrade:(l,z,t)=>this.host.tomeTrade(l,z,t),applyPlan:plan=>this.host.autoEquip(plan),forge:(id,uid)=>{this.forgeReturn=id;this.sheet='forge';this.forgeUI.open(uid);this.draw();this.focus('#forge-change-item');},
     },'camp-',this.inventoryFilters);
+    root.addEventListener('toggle', e => { const d = e.target as HTMLElement; if (d.id === 'npc-fold') this.npcOpen = (d as HTMLDetailsElement).open; }, true);
     root.addEventListener('change',event=>{const c=event.target as HTMLInputElement|HTMLSelectElement;if(c.id==='boss-target'&&!root.hidden&&!root.closest('[inert]')&&!this.characters.open){this.huntUI.changeBoss(c.value);this.draw();this.focus('#boss-target');return;}if(c.id==='hunt-target'&&!root.hidden&&!root.closest('[inert]')&&!this.characters.open){this.huntUI.change(c.value);this.draw();this.focus('#hunt-target');return;}if(c.closest('.forge-workbench')&&!root.hidden&&!root.closest('[inert]')&&!this.characters.open){this.forgeUI.remember(c.closest<HTMLElement>('.forge-workbench')!);const focus=this.forgeUI.change(c);this.draw();this.focus('#'+focus);return;}if(c.dataset.gearFilter)this.storageUI.reset();if(c.closest('.character-dialog')||!c.dataset.gearFilter||root.hidden||root.closest('[inert]')||this.characters.open)return;changeGearFilter(this.inventoryFilters,c);this.draw();this.focus('#'+c.id);});
     root.addEventListener('keydown',e=>{if(root.hidden||root.closest('[inert]'))return;const tab=(e.target as HTMLElement).closest<HTMLButtonElement>('.forge-tabs [role=tab]');if(tab&&['ArrowLeft','ArrowRight','Home','End'].includes(e.key)){e.preventDefault();const buttons=[...root.querySelectorAll<HTMLButtonElement>('.forge-tabs [role=tab]')],i=buttons.indexOf(tab),n=e.key==='Home'?0:e.key==='End'?buttons.length-1:(i+(e.key==='ArrowRight'?1:-1)+buttons.length)%buttons.length;buttons[n]!.click();this.focus('#'+buttons[n]!.id);return;}if(e.repeat&&(e.target as HTMLElement).closest('[data-forge=review],[data-forge=confirm],[data-lobby=salvage],[data-storage=confirm],[data-storage=collect],[data-storage=recycle],[data-storage=expand],[data-storage=common]'))e.preventDefault();});
     this.startWork();
@@ -99,12 +113,18 @@ export class LobbyUI {
           if (sheet === 'gear') this.picked = this.view!.profile.party.deployed[0];
           else this.picked = undefined;
           this.sheet = sheet; this.preview = undefined; this.confirmDismiss = false; this.openedLine(sheet); this.draw(); this.act(npc, 'greet', 1400); this.focus(`#npc-${npc}`); break; }
-        case 'tab': this.huntUI.cancel();this.preview = undefined; this.sheet = b.dataset.tab as 'team' | 'hire' | 'gear' | 'forge' | 'brew' | 'hunt'; this.openedLine(this.sheet); { const n = npcOfSheet(this.sheet); if (n) this.act(n, 'greet', 1400); } this.picked = this.sheet==='gear'?(this.view!.profile.party.deployed[0]??this.view!.profile.company[0]):undefined; this.confirmDismiss = false; this.draw(); this.focus(`#lobby-tab-${this.sheet}`); break;
+        case 'tab': this.huntUI.cancel();this.preview = undefined; this.lanePick = undefined; this.sheet = b.dataset.tab as 'team' | 'hire' | 'gear' | 'forge' | 'brew' | 'hunt'; this.openedLine(this.sheet); { const n = npcOfSheet(this.sheet); if (n) this.act(n, 'greet', 1400); } this.picked = this.sheet==='gear'?(this.view!.profile.party.deployed[0]??this.view!.profile.company[0]):undefined; this.confirmDismiss = false; this.draw(); this.focus(`#lobby-tab-${this.sheet}`); break;
         case 'close': this.closeSheet(); break;
         case 'pick': this.pick(id, b.dataset.group as Group); break;
+        case 'lane-pick': case 'lane-cell': {
+          const lanes = this.lanes(this.view!.profile); const tap = formationTap(this.lanePick, lanes, id, b.dataset.lane as Lane);
+          const moved = tap.move?.id; this.lanePick = tap.picked;
+          if (tap.move) this.host.lane(tap.move.id, tap.move.lane, tap.move.other); else this.draw();
+          this.focus(`#lobby-lane-${moved ?? tap.picked ?? id ?? ''}`); break; }
         case 'hire': this.host.hire(Number(b.dataset.index)); break;
         case 'hire-preview': this.preview = Number(b.dataset.index); this.draw(); this.root.querySelector('.lobby-content')?.scrollTo(0, 0); this.focus('#hire-preview-back'); break;
         case 'hire-preview-back': { const i = this.preview; this.preview = undefined; this.draw(); this.focus(`#hire-open-${i}`); break; }
+        case 'hire-lane': this.lane = b.dataset.lane as 'all' | 'front' | 'back'; this.draw(); this.focus(`#hire-lane-${this.lane}`); break;
         case 'hire-tab': this.market = b.dataset.tab === 'market'; this.preview = undefined; this.draw(); this.focus(`#hire-tab-${b.dataset.tab}`); break;
         case 'smelt': this.host.smelt(Number(b.dataset.dust)); this.focus(`#smelt-${b.dataset.dust}`); break;
         case 'refresh': this.host.refresh(); this.focus('#hire-refresh'); break;
@@ -139,7 +159,8 @@ export class LobbyUI {
         // Chapters: with more than one open map, departing first asks where to go.
         // Chapters: departing goes to the furthest open map; with more than one open, the map button picks another.
         case 'depart': this.host.depart(this.openMaps().at(-1)?.id); break;
-        case 'maps': this.sheet = 'maps'; this.draw(); this.focus(`#map-go-${this.openMaps().at(-1)!.id}`); break;
+        case 'maps': this.sheet = 'maps'; this.mapPicked = undefined; this.draw(); this.regionScroll(); this.focus(`#map-node-${this.openMaps().at(-1)!.id}`); break;
+        case 'pick-map': this.mapPicked = b.dataset.map; this.draw(); this.focus(`#map-node-${b.dataset.map}`); break;
         case 'go': this.sheet = null; this.host.depart(b.dataset.map, b.dataset.hard === 'true'); break;
         case 'home': this.host.home(); break;
         case 'guide': this.host.guide(b.dataset.guide!, b.dataset.skip === 'true'); this.focus('#lobby-depart'); break;
@@ -174,6 +195,11 @@ export class LobbyUI {
     const id = npcOfSheet(sheet); if (!id || !sheet || (sheet === 'hire' && this.preview !== undefined && !this.market)) return '';
     const text = npcText[id]; const i = NPC_IDS.indexOf(id); const index = this.line?.sheet === sheet ? this.line.index : 0;
     return `<div class="npc-line" style="--busts:url(${npcBustsUrl()});--sx:${(i % 3) * 50}%;--sy:${Math.floor(i / 3) * 100}%"><span class="npc-bust" aria-hidden="true"></span><p><b>${text.name} · ${text.role}</b>${text.lines[index % text.lines.length]}</p></div>${this.questCard(id)}`;
+  }
+  // The broker's line and side quest fold away so the hire cards come first; a quest ready to claim keeps it open.
+  private npcFold(p: Profile): string {
+    const q = this.map.sideQuests.find(x => x.npc === 'broker'), ready = !!q && this.open('quests') && !p.quests[q.id]?.claimed && !claimReason(p, this.map, q.id);
+    return `<details id="npc-fold" class="npc-fold"${this.npcOpen || ready ? ' open' : ''}><summary>${icon('talk')}<span>พีโน่ · ข่าวและเควสต์${ready ? ' · มีรางวัลให้รับ' : ''}</span></summary>${this.npcLine('hire')}</details>`;
   }
   // 3D: this NPC's side quest, with progress gathered from finished expeditions and a one-time claim.
   private questCard(npc: NpcId): string {
@@ -217,7 +243,9 @@ export class LobbyUI {
   }
   private characterModel(p=this.view?.profile):CharacterModel|undefined {
     if(!p)return;const hp=Object.fromEntries(p.company.map(id=>{const m=p.members[id]!,base=this.heroes.find(h=>h.id===id)!;return [id,starred(base,m.stars,this.map,m.level??1,m.talents,m.gear,m).maxHp];}));
-    return {source:p,state:{members:p.members,roster:p.party,hp},ids:p.company,entries:campEquipment(p),available:true,camp:true,capacity:storageCap(p,this.map)};
+    // Skill tomes (save v37): levels are raised here at the camp, never on the map.
+    const tomes={open:this.open('tomes'),bag:p.tomes??emptyTomes(),gold:p.bank.gold,core:p.riftCore??0,reason:(id:string,a:ActionId)=>skillLevelReason(p,this.maps,this.map,this.lookup,id,a),trade:(l:TomeLine,z:TomeSize,t?:TomeLine)=>tradeReason(p,this.maps,this.map,l,z,t),levelable:(id:string)=>levelableSkills(this.lookup,this.map,id,p.members[id])};
+    return {source:p,state:{members:p.members,roster:p.party,hp},ids:p.company,entries:campEquipment(p),available:true,camp:true,capacity:storageCap(p,this.map),tomes};
   }
   private escape(text: string): string { return text.replace(/[&<>"]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[ch]!); }
   private focus(sel: string): void { this.root.querySelector<HTMLElement>(sel)?.focus({ preventScroll: true }); }
@@ -240,7 +268,7 @@ export class LobbyUI {
   }
   private toastShown = '';
   private draw(): void {
-    const huntScroll=this.sheet==='hunt'&&this.root.querySelector('#boss-target')?this.root.querySelector('.lobby-content')?.scrollTop:undefined;
+    const huntScroll=this.sheet==='hunt'&&this.root.querySelector('#boss-target')||this.sheet==='maps'&&this.root.querySelector('.region-map')?this.root.querySelector('.lobby-content')?.scrollTop:undefined;
     const p = this.view!.profile; const last = p.last;
     const ready = p.party.deployed.length > 0&&!departureBlocked(p);
     // A notice toasts once; redraws (tab switches, picks) keep it settled instead of replaying it.
@@ -266,22 +294,23 @@ export class LobbyUI {
       ${this.sheet ? `<section id="lobby-sheet" class="lobby-sheet" role="dialog" aria-modal="false" aria-labelledby="lobby-sheet-title">
         <div class="lobby-sheet-head">${this.sheet === 'tree' || this.sheet === 'gear' ? `<button id="lobby-sub-back" data-lobby="sub-back" class="round-glass" aria-label="กลับไปจัดทีม">${icon('left')}</button>` : ''}<h2 id="lobby-sheet-title">${this.sheet === 'team' ? `${icon('flag')} จัดทีม <small>${p.company.length}/${COMPANY_CAP}</small>` : this.sheet === 'tree' ? `${icon('starFilled')} ต้นไม้ความถนัด` : this.sheet === 'gear' ? `${icon('gearBody')} อุปกรณ์ <small>คลัง ${p.items.length}/${storageCap(p,this.map)}</small>` : this.sheet === 'forge' ? `${icon('forge')} ช่างตีเหล็ก` : this.sheet === 'hunt'?`${icon('goal')} แผนฟาร์ม`:this.sheet === 'brew' ? `${icon('brew')} นักปรุงยา` : this.sheet === 'camp' ? `${icon('camp')} ชื่อค่ายทหารรับจ้าง` : this.sheet === 'maps' ? `${icon('map')} เลือกแผนที่` : `${icon('gold')} ป้ายจ้างทหารรับจ้าง`}</h2>
           <button data-lobby="close" class="round-glass" aria-label="ปิด">${icon('close')}</button></div>
-        <div class="lobby-content">${this.sheet==='forge'?'':this.sheet==='gear'?`<details class="storage-keeper"><summary>มิมี่ · งานผู้ดูแลคลัง</summary>${this.npcLine(this.sheet)}</details>`:this.npcLine(this.sheet as Sheet | null)}${this.locked(this.sheet) ? this.lockedPanel(this.locked(this.sheet)!) : this.sheet==='hunt'?this.huntUI.render(p,this.map,this.open('bossCharm')):this.sheet === 'team' ? this.team(p) : this.sheet === 'gear' && this.picked ? this.gear(p, this.picked) : this.sheet === 'forge' ? this.forge(p) : this.sheet === 'brew' ? this.brewing(p) : this.sheet === 'maps' ? this.mapList(p) : this.sheet === 'camp' ? this.campForm(p) : this.board(p)}</div></section>` : ''}
+        <div class="lobby-content">${this.sheet==='forge'?'':this.sheet==='hire'&&!this.market&&this.preview===undefined?this.npcFold(p):this.sheet==='gear'?`<details class="storage-keeper"><summary>มิมี่ · งานผู้ดูแลคลัง</summary>${this.npcLine(this.sheet)}</details>`:this.npcLine(this.sheet as Sheet | null)}${this.locked(this.sheet) ? this.lockedPanel(this.locked(this.sheet)!) : this.sheet==='hunt'?this.huntUI.render(p,this.map,this.open('bossCharm')):this.sheet === 'team' ? this.team(p) : this.sheet === 'gear' && this.picked ? this.gear(p, this.picked) : this.sheet === 'forge' ? this.forge(p) : this.sheet === 'brew' ? this.brewing(p) : this.sheet === 'maps' ? this.mapList(p) : this.sheet === 'camp' ? this.campForm(p) : this.board(p)}</div></section>` : ''}
       <footer class="lobby-bottom">
         ${this.guideCard(p)}
+        <section class="lobby-trip" aria-label="การเดินทาง"><div class="trip-head"><div><small>แผนที่ที่เลือก</small><b>${this.openMaps().at(-1)?.name ?? this.map.name}</b><span class="trip-team" data-ready="${ready}">ทีมพร้อม ${p.party.deployed.length}+${p.party.reserve.length}</span></div>${this.openMaps().length > 1 ? `<button id="lobby-maps" data-lobby="maps" class="secondary" aria-label="เลือกแผนที่">${icon('map')}<span>เลือกแผนที่</span></button>` : ''}</div>
+          <button id="lobby-depart" data-lobby="depart" class="primary"${ready ? '' : ' disabled'}>${icon('map')}<span>ออกเดินทาง</span></button></section>
         <nav class="lobby-menu" aria-label="ค่าย">${menu('team', 'tab-team', 'ทีม', `${p.party.deployed.length}+${p.party.reserve.length}`)}${menu('hire', 'tab-hire', 'จ้าง', openOffers ? String(openOffers) : '')}${menu('gear', 'tab-bag', 'กระเป๋า', p.items.length ? String(p.items.length) : '')}${menu('hunt', 'goal', 'ฟาร์ม', '')}${menu('forge', 'tab-forge', 'ช่าง', '')}${menu('brew', 'brew', 'ยา', '')}</nav>
-        ${this.openMaps().length > 1 ? `<button id="lobby-maps" data-lobby="maps" class="secondary">${icon('map')}<span>เลือกแผนที่</span></button>` : ''}
-        <button id="lobby-depart" data-lobby="depart" class="primary"${ready ? '' : ' disabled'}>${icon('map')}<span>ออกเดินทาง<small>${this.openMaps().at(-1)?.name ?? this.map.name} · ${p.party.deployed.length}+${p.party.reserve.length} คน</small></span></button>
       </footer>`;
-    if(huntScroll!==undefined&&this.sheet==='hunt')this.root.querySelector('.lobby-content')!.scrollTop=huntScroll;
+    if(huntScroll!==undefined&&(this.sheet==='hunt'||this.sheet==='maps'))this.root.querySelector('.lobby-content')!.scrollTop=huntScroll;
   }
 
   // Warm camp scene (ART-UI-LOBBY-001): the brought team gathers around the fire. Front members sit on
   // logs, the middle pair has a character moment, the back alternates; the member just hired or upgraded
   // cheers, and everyone cheers after a completed expedition. Right of the fire the frames are mirrored.
   private scene(p: Profile): string {
-    const ids = [...p.party.deployed, ...p.party.reserve].filter(id => lobbyPose(id, 'sit') ?? actorArt[id]);
-    const spots = [[18, 0, 1], [33, 1, .92], [67, 1, .92], [82, 0, 1], [8, 2, .78], [43, 2, .74], [57, 2, .74], [92, 2, .78]] as const;
+    // Only the main team (at most four) sits around the fire; reserves stay off the scene so it never crowds.
+    const ids = p.party.deployed.slice(0, 4).filter(id => lobbyPose(id, 'sit') ?? actorArt[id]);
+    const spots = [[18, 0, 1], [33, 1, .92], [67, 1, .92], [82, 0, 1]] as const;
     const party = p.last?.outcome === 'complete';
     const units = ids.slice(0, spots.length).map((id, i) => {
       const [x, depth, scale] = spots[i]!;
@@ -298,9 +327,10 @@ export class LobbyUI {
         + `<span id="npc-art-${id}" class="lobby-npc" data-npc="${id}" style="--nx:${npcSpots[id].x}%;--npx:${npcSpots[id].px}%;--flip:${flip};--atlas:url(${npcAtlasUrl(id)});--nd:${i * -0.37}s"><b><i></i></b></span>`; }).join('');
     return `<div class="lobby-scene" aria-hidden="true" style="--lobby-bg:url(${lobbyArt('lobby_bg')});--lobby-fg:url(${lobbyArt('lobby_fg')});--lobby-pit:url(${lobbyArt('lobby_firepit')})"><div class="lobby-fire"><b></b><span class="lobby-flame"><i></i></span></div>${staff}${units}<div class="lobby-fg"></div><div class="lobby-embers">${'<i></i>'.repeat(7)}</div></div>`;
   }
+  private lanes(p: Profile): Record<string, Lane> { return formation(p.party, recommendedLane(this.lookup, this.map)); }
   private card(p: Profile, id: string | undefined, group: Group, slot: number): string {
     if (!id) return `<button class="team-card empty${this.picked ? ' target' : ''}" data-lobby="pick" data-group="${group}" aria-label="${groupName[group]} ช่อง ${slot + 1} ว่าง"${this.picked ? '' : ' disabled'}><span>ว่าง</span></button>`;
-    const h = this.hero(id); const text = heroText[id]!; const lane = h.lane === 'front' ? 'แนวหน้า' : 'แนวหลัง';
+    const h = this.hero(id); const text = heroText[id]!; const lane = laneName(this.lanes(p)[id] ?? h.lane);
     return `<button id="lobby-member-${id}" class="team-card" data-lobby="pick" data-hero="${id}" data-group="${group}" aria-pressed="${this.picked === id}"
       aria-label="${groupName[group]}${group === 'deployed' ? ` ช่อง ${slot + 1}` : ''} · ${text.name} ${p.members[id]!.stars} ดาว ${text.role} ${lane} เลือด ${h.maxHp}">${group === 'deployed' ? `<i class="slot-no">${slot + 1}</i>` : ''}${portrait(id)}<b>${text.name}</b>${this.stars(p.members[id]!.stars)}<small>Lv${p.members[id]!.level ?? 1} · เลือด ${h.maxHp}</small><small class="lane">${text.role} · ${lane}</small></button>`;
   }
@@ -308,6 +338,7 @@ export class LobbyUI {
     const row = (ids: string[], group: Group, size: number) => Array.from({ length: size }, (_, i) => this.card(p, ids[i], group, i)).join('');
     const bench = p.company.filter(id => groupOf(p, id) === 'bench');
     return `<h3>${icon('flag')} ลงสนาม <span class="camp-embers">ศัตรูเล็งตามหมายเลขช่อง</span></h3><div class="team-grid">${row(p.party.deployed, 'deployed', PARTY_SLOTS)}</div>
+      ${formationGrid({ prefix: 'lobby', attr: 'lobby', deployed: p.party.deployed, lanes: this.lanes(p), recommended: recommendedLane(this.lookup, this.map), picked: this.lanePick })}
       <h3>${icon('camp')} สำรอง <span class="camp-embers">พาเข้าด่าน สลับได้ในกระเป๋านอกการต่อสู้</span></h3><div class="team-grid">${row(p.party.reserve, 'reserve', RESERVE_SLOTS)}</div>
       <h3>${icon('rest')} ในค่าย <span class="camp-embers">ไม่ได้เข้าด่านรอบนี้</span></h3>
       <div class="team-grid bench">${bench.map((id, i) => this.card(p, id, 'bench', i)).join('')}${this.picked && groupOf(p, this.picked) !== 'bench' ? this.card(p, undefined, 'bench', bench.length) : ''}${!bench.length && !this.picked ? '<p class="camp-note">ทุกคนอยู่ในทีมที่จะพาไปแล้ว</p>' : ''}</div>
@@ -379,13 +410,14 @@ export class LobbyUI {
     const why: Record<string, string> = { taken: 'จ้างแล้ว', gold: 'เหรียญทองไม่พอ', full: `ค่ายเต็ม ${COMPANY_CAP} คน`, maxed: 'ดาวเต็มแล้ว' };
     const costs = this.map.shop.refreshCosts; const left = costs.length - p.refreshes; const rr = refreshReason(p, this.map);
     const refresh = `<button id="hire-refresh" data-lobby="refresh" class="secondary hire-refresh"${rr ? ' disabled' : ''}>${icon('reroll')}<span>${rr === 'limit' ? 'สุ่มป้ายครบแล้วรอบนี้' : `สุ่มป้ายใหม่ · ${costs[p.refreshes]} เหรียญทอง`}<small>เหลือ ${left}/${costs.length} ครั้ง${rr === 'gold' ? ' · เหรียญทองไม่พอ' : ''}</small></span></button>`;
-    return `${tabs}<p class="hire-cost">จ้างคนละ <span class="icon-gold">${icon('gold')}</span> ${this.map.company.hireCost} เหรียญทอง (มี ${p.bank.gold}) · ป้ายเปลี่ยนใหม่เมื่อกลับจากการเดินทาง</p>
-      <ul class="hire-list">${boardOffers(p, this.map, this.lookup).map((id, i) => {
+    const lanes = (['all', 'front', 'back'] as const).map(l => `<button id="hire-lane-${l}" class="ui-chip" data-lobby="hire-lane" data-lane="${l}" aria-pressed="${this.lane === l}">${{ all: 'ทั้งหมด', front: 'แนวหน้า', back: 'แนวหลัง' }[l]}</button>`).join('');
+    return `${tabs}<div class="hire-top"><p class="hire-cost">จ้างคนละ ${this.map.company.hireCost} เหรียญทอง · ป้ายเปลี่ยนใหม่เมื่อกลับจากการเดินทาง</p><span class="ui-pill" aria-label="มีเหรียญทอง ${p.bank.gold}">${icon('gold')}${p.bank.gold}</span></div><div class="hire-lanes" role="group" aria-label="กรองตามแนว">${lanes}</div>${refresh}
+      <ul class="hire-list hire-board">${boardOffers(p, this.map, this.lookup).map((id, i) => ({ id, i })).filter(({ id }) => this.lane === 'all' || this.hero(id).lane === this.lane).map(({ id, i }) => {
         const reason = hireReason(p, this.map, this.lookup, i); const h = this.hero(id); const text = heroText[id]!; const m = p.members[id];
         const status = m ? `${this.stars(m.stars)} ตัวซ้ำ ${m.dupes} · มีในค่าย` : 'ใหม่ · ★1';
-        return `<li class="${reason === 'taken' ? 'taken' : ''}"><button id="hire-open-${i}" data-lobby="hire-preview" data-index="${i}" class="hire-open" aria-label="ดูข้อมูล${text.name}ก่อนจ้าง">${portrait(id)}<span><b>${text.name}</b><small>${text.role} · ${h.lane === 'front' ? 'แนวหน้า' : 'แนวหลัง'} · ${text.help}</small><small class="hire-status">${status} · แตะเพื่อดูสกิล</small></span></button>
+        return `<li class="${reason === 'taken' ? 'taken' : ''}"><button id="hire-open-${i}" data-lobby="hire-preview" data-index="${i}" class="hire-open" aria-label="ดูข้อมูล${text.name}ก่อนจ้าง">${heroArt(id)}<span>${this.stars(m?.stars ?? 1)}<b>${text.name}</b><small>${text.role} · ${h.lane === 'front' ? 'แนวหน้า' : 'แนวหลัง'} · ${text.help}</small><small class="hire-status">${status} · แตะเพื่อดูสกิล</small></span></button>
           <button id="hire-${i}" data-lobby="hire" data-index="${i}" class="secondary"${reason ? ' disabled' : ''} aria-label="จ้าง${text.name} ใช้เหรียญทอง ${this.map.company.hireCost}">${reason ? why[reason] ?? 'จ้างไม่ได้' : `จ้าง · ${this.map.company.hireCost}`}</button></li>`;
-      }).join('')}</ul>${refresh}
+      }).join('')}</ul>
       <details class="lobby-help"><summary>${icon('info')} วิธีจ้างและอัปดาว</summary><p>ทุกคนเริ่ม ★1 · จ้างคนที่มีอยู่แล้วจะได้ตัวซ้ำไว้อัปดาวในแท็บทีม · ป้ายเปลี่ยนใหม่ทุกครั้งที่กลับจากการเดินทาง และสุ่มใหม่ได้ ${costs.length} ครั้งต่อรอบโดยจ่ายเหรียญทอง</p></details>`;
   }
   // Preview of a hiring offer: the mercenary as they would join (or as owned), stats, every skill and the star unlocks.
@@ -430,11 +462,32 @@ export class LobbyUI {
     return `<div class="lobby-locked" role="status">${icon('seal')}<p><b>ยังไม่เปิด</b><span>ผ่านแผนที่ ${m?.chapter ?? ''} · ${m?.name ?? ''} ก่อน แล้วระบบนี้จะพร้อมใช้</span></p></div>`;
   }
   private openMaps(): MapDefinition[] { const p = this.view?.profile; return p ? this.maps.filter(m => mapUnlocked(p, this.maps, m.id)) : [this.map]; }
+  // Chapter 1 region painting (ART-WORLD-CH1-MAP-001): ten nodes in map order; maps that exist are live, the rest
+  // stay under fog. Node centres and fog bands are image-pixel coordinates, scaled by percentage so the layer
+  // follows the painting at any width; the card of the picked map sits at the bottom with its depart buttons.
+  private regionScroll(): void {
+    const box = this.root.querySelector<HTMLElement>('.lobby-content'), node = this.root.querySelector<HTMLElement>('.region-node[data-state="current"]');
+    if (box && node) box.scrollTop = Math.max(0, node.offsetTop - box.clientHeight / 2);
+  }
   private mapList(p: Profile): string {
-    return `<ul class="hire-list map-list">${this.maps.map((m, i) => { const open = mapUnlocked(p, this.maps, m.id); const done = p.cleared.includes(m.id);
-      return `<li class="map-choice${open ? '' : ' locked'}" data-map="${m.id}"><span class="market-icon" aria-hidden="true">${icon(open ? 'map' : 'seal')}</span>
+    const W = region.width, H = region.height, current = this.openMaps().at(-1)?.id, picked = this.mapPicked ?? current;
+    const state = (m: MapDefinition | undefined): string => !m || !mapUnlocked(p, this.maps, m.id) ? 'locked' : p.cleared.includes(m.id) ? 'cleared' : m.id === current ? 'current' : 'open';
+    const fogged = region.nodes.filter(n => state(this.maps[n.id - 1]) === 'locked');
+    // Locked nodes are always a northern suffix, so their fog bands union into one: opaque above its lower edge.
+    const edge = fogged.length ? Math.max(...fogged.map(n => n.fog[1]!)) : 0;
+    const fog = fogged.length ? `<div class="region-fog" aria-hidden="true" style="--edge:${(edge / H * 100).toFixed(3)}%;--feather:${(32 / H * 100).toFixed(3)}%"></div>` : '';
+    const nodes = region.nodes.map(n => {
+      const m = this.maps[n.id - 1], st = state(m), sel = m?.id === picked;
+      const glyph = st === 'cleared' ? icon('check') : st === 'locked' ? icon('act-lock') : String(m!.chapter);
+      return `<button class="region-node" id="${m ? `map-node-${m.id}` : `map-node-n${n.id}`}" data-state="${st}"${sel ? ' data-picked="true"' : ''} data-lobby="pick-map" data-map="${m?.id ?? ''}"${m ? '' : ' disabled'} style="left:${(n.x / W * 100).toFixed(3)}%;top:${(n.y / H * 100).toFixed(3)}%" aria-label="${n.name}${st === 'cleared' ? ' · ผ่านแล้ว' : st === 'locked' ? ' · ยังล็อก' : ''}"${sel ? ' aria-pressed="true"' : ''}><span class="region-pin">${glyph}</span><em>${n.name}</em></button>`;
+    }).join('');
+    const cards = this.maps.map((m, i) => { const open = mapUnlocked(p, this.maps, m.id); const done = p.cleared.includes(m.id);
+      return `<li class="map-choice${open ? '' : ' locked'}" data-map="${m.id}"${m.id === picked ? '' : ' hidden'}><span class="market-icon" aria-hidden="true">${icon(open ? 'map' : 'seal')}</span>
         <span><b>แผนที่ ${m.chapter} · ${m.name}</b>${done ? ' <em class="map-cleared">ผ่านแล้ว</em>' : ''}<small>${m.summary}</small>${open ? '' : `<small class="hire-status">ผ่าน${this.maps[i - 1]!.name}ก่อน</small>`}</span>
-        <span class="map-actions"><button id="map-go-${m.id}" data-lobby="go" data-map="${m.id}" class="${open ? 'primary' : 'secondary'}"${open ? '' : ' disabled'}>${open ? 'ออกเดินทาง' : 'ยังล็อก'}</button>${open && this.open('hard') ? `<button id="map-hard-${m.id}" data-lobby="go" data-map="${m.id}" data-hard="true" class="secondary map-hard"${hardReason(p, this.maps, m.id) ? ' disabled' : ''}>ยาก${p.clearedHard?.includes(m.id) ? ' ✓' : ''}</button>` : ''}</span></li>`; }).join('')}</ul>${this.open('hard') ? `<p class="camp-note">โหมดยาก: มอนสเตอร์ +${this.map.progression.hardLevels} เลเวล ของดีขึ้น · เปิดเมื่อจบแผนที่นั้นแบบปกติ · จบครั้งแรกได้ทอง ${this.map.progression.hardFirstClear.gold} ตราสัญญา ${this.map.progression.hardFirstClear.seal}</p>` : ''}`;
+        <span class="map-actions"><button id="map-go-${m.id}" data-lobby="go" data-map="${m.id}" class="${open ? 'primary' : 'secondary'}"${open ? '' : ' disabled'}>${open ? 'ออกเดินทาง' : 'ยังล็อก'}</button>${open && this.open('hard') ? `<button id="map-hard-${m.id}" data-lobby="go" data-map="${m.id}" data-hard="true" class="secondary map-hard"${hardReason(p, this.maps, m.id) ? ' disabled' : ''}>ยาก${p.clearedHard?.includes(m.id) ? ' ✓' : ''}</button>` : ''}</span></li>`; }).join('');
+    const hard = this.open('hard') ? `<p class="camp-note">โหมดยาก: มอนสเตอร์ +${this.map.progression.hardLevels} เลเวล (บอส +${this.map.progression.hardLevels + this.map.progression.hardTraits.bossLevels}) ของดีขึ้น · เปิดเมื่อจบแผนที่นั้นแบบปกติ · จบครั้งแรกได้ทอง ${this.map.progression.hardFirstClear.gold} ตราสัญญา ${this.map.progression.hardFirstClear.seal}</p>` : '';
+    return `<div class="region-map" style="aspect-ratio:${W}/${H}"><img class="region-art" src="${worldArtUrl('region_ch1')}" alt="แผนที่บทที่ 1 แอสเตอร์เวล" draggable="false">${fog}${nodes}</div>
+      <div class="region-card"><ul class="hire-list map-list">${cards}</ul>${hard}</div>`;
   }
   // 4A market: gold-coin goods, each with a limit per return home.
   private marketList(p: Profile): string {

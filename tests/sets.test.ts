@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { encounterById as lookup } from '../src/content/encounters/catalog';
-import { veilSiege } from '../src/content/encounters/veil-siege';
+import { veilSiege as siegeBase } from '../src/content/encounters/veil-siege';
+import { openField } from './fixtures/open-field';
+const veilSiege = openField(siegeBase);
 import { chapterOne as map } from '../src/content/world/chapter1';
 import { createBattle, currentHeroId, resolveCommand, roundOrder, skillPower, withParty } from '../src/core/battle/engine';
 import type { ActionId, BattleState, EncounterDefinition } from '../src/core/battle/types';
@@ -54,7 +56,7 @@ describe('set bonuses', () => {
   it('dawn ×4 starts with a barrier; thorn ×4 answers physical hits', () => {
     expect(createBattle(party('tracer', wear('dawn', 4))).heroes.find(h => h.id === 'tracer')!.barrier).toBe(12);
     const d = party('tracer', wear('thorn', 4)); let s = createBattle(d); const counters = [];
-    for (let i = 0; i < 12 && !counters.length; i++) { const r = act(s, d, 'attack', 'brute'); counters.push(...r.events.filter(e => e.type === 'counter' && e.sourceId === 'tracer')); s = r.state; }
+    for (let i = 0; i < 12 && !counters.length; i++) { const r = act(s, d, 'attack', 'f1'); counters.push(...r.events.filter(e => e.type === 'counter' && e.sourceId === 'tracer')); s = r.state; }
     expect(counters[0]).toMatchObject({ amount: 6, text: 'Thorns strike back.' });
   });
   it('shadow ×4: +6 on an enemy that has not acted yet this round', () => {
@@ -62,18 +64,18 @@ describe('set bonuses', () => {
     const bare = Object.fromEntries(Object.entries(wear('shadow', 4)).map(([k, v]) => [k, { ...v!, set: undefined }])) as Gear;
     const plain = party('weaver', JSON.parse(JSON.stringify(bare))); const d = party('weaver', wear('shadow', 4));
     const s = until(createBattle(d), d, 'weaver'); const p = until(createBattle(plain), plain, 'weaver');
-    const pending = s.order.indexOf('brute') > s.turnIndex;
-    const hit = (data: EncounterDefinition, st: BattleState) => act(st, data, 'bolt', 'brute').turns[0]!.events.find(e => e.type === 'damage')!.amount!;
+    const pending = s.order.indexOf('f1') > s.turnIndex;
+    const hit = (data: EncounterDefinition, st: BattleState) => act(st, data, 'bolt', 'f1').turns[0]!.events.find(e => e.type === 'damage')!.amount!;
     // The 2-piece Attack % also raises Arcane Bolt (damaging skills scale with Attack); the 4-piece adds 6 on top.
     expect(hit(d, s) - hit(plain, p)).toBe((pending ? 6 : 0) + skillPower(d, 'weaver', 'bolt') - skillPower(plain, 'weaver', 'bolt'));
     expect(pending).toBe(true);
   });
   it('star-veil ×4: the first skill of the battle has no cooldown, the second does', () => {
     const d = party('weaver', wear('starveil', 4));
-    let s = until(createBattle(d), d, 'weaver'); const r = act(s, d, 'bolt', 'brute').turns[0]!.state;
+    let s = until(createBattle(d), d, 'weaver'); const r = act(s, d, 'bolt', 'f1').turns[0]!.state;
     expect(r.heroes.find(h => h.id === 'weaver')!.cooldowns.bolt).toBeUndefined(); expect(r.freeCast).toEqual(['weaver']);
-    s = until(act(s, d, 'bolt', 'brute').state, d, 'weaver');
-    expect(act(s, d, 'bolt', 'brute').turns[0]!.state.heroes.find(h => h.id === 'weaver')!.cooldowns.bolt).toBe(s.round + 2);
+    s = until(act(s, d, 'bolt', 'f1').state, d, 'weaver');
+    expect(act(s, d, 'bolt', 'f1').turns[0]!.state.heroes.find(h => h.id === 'weaver')!.cooldowns.bolt).toBe(s.round + 2);
   });
   it('mender ×4: overhealing becomes a barrier up to 8', () => {
     const d = party('healer', wear('mender', 4)); let s = until(createBattle(d), d, 'healer');

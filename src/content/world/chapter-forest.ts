@@ -6,7 +6,9 @@ import { gameRules } from './rules';
 // No rift seal yet. Garran, who guards the trail alone, joins at the first camp. Draft numbers until playtested.
 export const forestMap: MapDefinition = {
   ...gameRules,
-  id: 'deep-forest', version: 1, name: 'เส้นทางป่าทึบ', chapter: 2, bossName: 'เจ้าป่าหนาม', goalName: 'ทางออกป่า',
+  id: 'deep-forest', version: 2, name: 'เส้นทางป่าทึบ', chapter: 2, bossName: 'เจ้าป่าหนาม', goalName: 'ทางออกป่า',
+  // Skill tomes (docs/design/SKILL_TOMES_TH.md, draft): the thorn lord pays tomes every win, a large one on the first clear.
+  tomes: { boss: { medium: 1, small: 2 }, first: { large: 1, core: 0 } },
   summary: 'ทางผ่านป่าที่รอยแยกบิดให้กลายเป็นหนาม ฝ่าด่านอีลิท เจอเหตุการณ์กลางทาง แล้วสงบเจ้าป่าหนาม',
   rows: [
     '################',
@@ -28,12 +30,14 @@ export const forestMap: MapDefinition = {
   specialZones: { S: 'thicket', C: 'camp', B: 'sanctum', G: 'sanctum' },
   zones: [
     { id: 'thicket', name: 'เส้นทางป่าทึบ', safe: false, base: 7, step: 4, cap: 40, levels: [3, 6], sets: ['shadow', 'thorn'],
-      pool: [{ encounterId: 'shadow-stalker', weight: 2 }, { encounterId: 'rift-whelp', weight: 2 }, { encounterId: 'thicket-ambush', weight: 1 }, { encounterId: 'scout-patrol', weight: 1 }],
+      pool: [{ encounterId: 'beetle-spore', weight: 3 }, { encounterId: 'beetle-wall', weight: 2 }, { encounterId: 'stalker-spore', weight: 2 }, { encounterId: 'forest-swarm', weight: 1 }, { encounterId: 'shadow-stalker', weight: 1 }, { encounterId: 'rift-whelp', weight: 1 }],
       loot: { ore: [5, 7], gold: [2, 5], ember: [0, 12], seal: [0, 0] } },
     { id: 'camp', name: 'แคมป์', safe: true, base: 0, step: 0, cap: 0, pool: [] },
     { id: 'sanctum', name: 'ทางออกป่า', safe: true, base: 0, step: 0, cap: 0, pool: [] },
   ],
   bossEncounterId: 'elite-briar-lord', bossLevel: 6,
+  // A10 (2026-10-22): plain attacks beat the thorn lord every time; its foes fight with 130% HP and move damage.
+  bossPercent: 130,
   bossDrop: { weights: [0, 30, 45, 20, 5], zoneSets: true },
   recruits: [{ hero: 'garran', at: 'camp' }],
   revealRadius: 3,
@@ -50,7 +54,7 @@ export const forestMap: MapDefinition = {
   },
   elites: [
     // Forced: the only way north to the boss.
-    { id: 'forest-gate', x: 8, y: 7, encounterId: 'elite-tusk-chief', forced: true, level: 5 },
+    { id: 'forest-gate', x: 8, y: 7, encounterId: 'elite-tusk-chief', forced: true, level: 5, percent: 120 },
     // Optional: a dead-end pocket in the north-west.
     { id: 'forest-matriarch', x: 1, y: 6, encounterId: 'thicket-ambush', forced: false, level: 6 },
   ],

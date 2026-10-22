@@ -45,9 +45,10 @@ for (const [width,height,touch] of [[320,568,true], [390,844,true], [1366,768,fa
     await page.locator('#move-left').dispatchEvent('click'); await page.keyboard.press('w'); await page.keyboard.press('b'); await page.keyboard.press('i');
     const after = parseGame(await saved(page),map,encounterById).run!;
     expect(after.hp.guardian).toBe(11); expect(after.steps).toBe(before.steps); expect(after.rolls).toBe(before.rolls); expect(after.position).toEqual(before.position);
-    await page.locator('#character-member-mira').click(); await page.locator('#character-talent-root').click();
-    expect(parseGame(await saved(page),map,encounterById).run!.members.mira!.talents).toEqual({root:1});
-    await page.locator('#character-member-healer').click(); await expect(page.locator('#character-talent-root')).toHaveAttribute('aria-disabled','true');
+    // Release A: Mira has a big tree too (select, then learn).
+    await page.locator('#character-member-mira').click(); await page.locator('#character-talent-a1').click(); await page.locator('#character-talent-learn').click();
+    expect(parseGame(await saved(page),map,encounterById).run!.members.mira!.talents).toEqual({a1:1});
+    await page.locator('#character-member-healer').click(); await page.locator('#character-talent-a1').click(); await expect(page.locator('#character-talent-learn')).toHaveAttribute('aria-disabled','true');
     await page.locator('#character-member-guardian').click(); await page.screenshot({path:info.outputPath('character-talents.png')});
     await page.locator('#character-tab-skills').click(); await expect(page.locator('#character-content')).toContainText('ปลดที่โหนด ท้าดวล'); await expect(page.locator('#character-content')).toContainText('ปลดที่โหนด ยืนหยัด');
     await page.screenshot({path:info.outputPath('character-skills.png')});
@@ -69,7 +70,7 @@ for (const [width,height,touch] of [[320,568,true], [390,844,true], [1366,768,fa
     await expect(page.locator('#pack-dialog')).not.toBeVisible(); await page.keyboard.press('Escape');
     await expect(page.locator('#pack-dialog')).toBeVisible(); await expect(page.locator('#bag-member-guardian')).toBeFocused(); await expect(page.locator('#bag-tab-gear')).toHaveAttribute('aria-selected','true');
     await page.keyboard.press('Escape'); await expect(page.locator('#world-pack')).toBeFocused();
-    expect(JSON.parse(await saved(page)).version).toBe(34); expect(errors).toEqual([]); await context.close();
+    expect(JSON.parse(await saved(page)).version).toBe(37); expect(errors).toEqual([]); await context.close();
   });
 }
 
