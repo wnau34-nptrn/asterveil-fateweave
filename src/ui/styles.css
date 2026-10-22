@@ -554,6 +554,9 @@ main { width: 100%; max-width: 1600px; flex: 1; min-height: 0; display: flex; fl
 .field-unit-info.tiny .field-hp-track { height: 3px; }
 .field-unit-info.side { display: flex; gap: 1px; }
 .field-unit-info.side .field-health { width: 100%; }
+/* Four foe columns (A7 step 2) leave a side panel only the ally width: enemies drop the HP number there too
+   (it stays in the roster, the status tab and each target's label). */
+.field-unit-info.side.enemy .field-unit-name, .field-unit-info.side.enemy .field-hp-value { display: none; }
 .field-statuses { display: flex; align-items: center; justify-content: center; gap: 2px; pointer-events: none; }
 .field-status, .field-status-more { display: grid; place-items: center; width: var(--field-icon, 18px); height: var(--field-icon, 18px); border: 1px solid; border-radius: 4px; box-shadow: 0 1px 3px #07101fe6; }
 .field-status.buff { color: #adffe4; border-color: #66d9b0; background: #10392ff5; }
