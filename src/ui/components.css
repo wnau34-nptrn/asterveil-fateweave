@@ -264,3 +264,21 @@
 .summary-view .summary-levels { padding: 10px; border: 1px solid #e8f5ff26; border-radius: 16px; background: linear-gradient(160deg, #182b40, #0c1a2b); grid-template-columns: 1fr 1fr; }
 .summary-view .summary-levels li { background: none; }
 .summary-view #summary-done { min-height: 52px; width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+
+/* Hire board (board 10): the mercenary in full-body art on the left, name/role/lane and the hire button on the right. */
+.hire-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 4px 0; }
+.hire-top .hire-cost { margin: 0; flex: 1; }
+.hire-top .ui-pill { min-height: 34px; font-size: 14px; } .hire-top .ui-pill .icon { color: #f2c14e; }
+.hire-lanes { display: flex; gap: 6px; margin: 6px 0; }
+.hire-board { gap: 10px; }
+.hire-board li { position: relative; display: block; padding: 0; border-radius: 18px; border-color: #e8f5ff26; background: radial-gradient(ellipse at 22% 45%, #23435a, #0c1a2b 70%); }
+.hire-board .hire-open { position: relative; display: block; width: 100%; min-height: 150px; padding: 12px 12px 68px 124px; }
+.hire-board .hire-open .hero-art { position: absolute; left: 4px; top: 6px; width: 116px; aspect-ratio: 1; }
+.hire-board .hire-open > span { display: grid; gap: 2px; }
+.hire-board .hire-open b { font: 600 22px/1.2 var(--font-display, Kanit), sans-serif; }
+.hire-board .hire-open .star-row .icon { width: 16px; height: 16px; }
+.hire-board .hire-open small { line-height: 1.35; }
+.hire-board li > button[id^="hire-"]:not(.hire-open) { position: absolute; left: 124px; right: 12px; bottom: 12px; min-height: 48px; border-radius: 12px; font: 700 17px var(--font-display, Kanit), sans-serif; background: linear-gradient(180deg, #f2d596, #d8b673); color: #1b1305; border-color: transparent; }
+.hire-board li > button[disabled] { background: #1a2b40; color: var(--text-muted, #bbcadb); }
+@container game (max-width: 400px) { .hire-board .hire-open small:not(.hire-status) { display: block; font-size: 12px; } }
+.hire-board .hire-open .hire-status { font-size: 11px; opacity: .8; }

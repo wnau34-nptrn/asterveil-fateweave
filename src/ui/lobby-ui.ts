@@ -20,7 +20,7 @@ import { commanderBadge } from './commander-ui';
 import { gearArt, potionArt } from './equip-art';
 import { skillDescription, heroText, npcText, rewardText, shopText, sideQuestText, itemLines, itemName, itemOwner, passiveText, potionText } from './th';
 
-import { portrait, starRow } from './portraits';
+import { heroArt, portrait, starRow } from './portraits';
 
 export interface LobbyHost { autoEquip(plan: AutoEquipmentPlan): void; hire(index: number): void; refresh(): void; buy(item: ShopItemId, heroId?: string): void; smelt(dust: number): void; upgrade(id: string): void; dismiss(id: string): void; place(id: string, group: Group, other?: string): void; talent(id: string, node: TalentNode): void; loadout(id: string, actions: ActionId[]): void; resetTalents(id: string): void;
   transfer(uid:number,index:number,donor:number,sourceIndex:number):void; huntTarget(target?:string):void; bossTarget(target:BossPower):void; craft(hero:string,level:number):void;
@@ -67,6 +67,7 @@ export class LobbyUI {
   private confirmDismiss = false;
   // The broker's sheet shows the hiring board or the market (4A).
   private market = false;
+  private lane: 'all' | 'front' | 'back' = 'all';
   // The hiring offer being previewed (stats, skills and star unlocks) before hiring.
   private preview: number | undefined;
   constructor(private readonly root: HTMLElement, private readonly map: MapDefinition, private readonly lookup: EncounterLookup, private readonly heroes: readonly HeroDefinition[], private readonly host: LobbyHost,
@@ -105,6 +106,7 @@ export class LobbyUI {
         case 'hire': this.host.hire(Number(b.dataset.index)); break;
         case 'hire-preview': this.preview = Number(b.dataset.index); this.draw(); this.root.querySelector('.lobby-content')?.scrollTo(0, 0); this.focus('#hire-preview-back'); break;
         case 'hire-preview-back': { const i = this.preview; this.preview = undefined; this.draw(); this.focus(`#hire-open-${i}`); break; }
+        case 'hire-lane': this.lane = b.dataset.lane as 'all' | 'front' | 'back'; this.draw(); this.focus(`#hire-lane-${this.lane}`); break;
         case 'hire-tab': this.market = b.dataset.tab === 'market'; this.preview = undefined; this.draw(); this.focus(`#hire-tab-${b.dataset.tab}`); break;
         case 'smelt': this.host.smelt(Number(b.dataset.dust)); this.focus(`#smelt-${b.dataset.dust}`); break;
         case 'refresh': this.host.refresh(); this.focus('#hire-refresh'); break;
@@ -379,13 +381,14 @@ export class LobbyUI {
     const why: Record<string, string> = { taken: 'จ้างแล้ว', gold: 'เหรียญทองไม่พอ', full: `ค่ายเต็ม ${COMPANY_CAP} คน`, maxed: 'ดาวเต็มแล้ว' };
     const costs = this.map.shop.refreshCosts; const left = costs.length - p.refreshes; const rr = refreshReason(p, this.map);
     const refresh = `<button id="hire-refresh" data-lobby="refresh" class="secondary hire-refresh"${rr ? ' disabled' : ''}>${icon('reroll')}<span>${rr === 'limit' ? 'สุ่มป้ายครบแล้วรอบนี้' : `สุ่มป้ายใหม่ · ${costs[p.refreshes]} เหรียญทอง`}<small>เหลือ ${left}/${costs.length} ครั้ง${rr === 'gold' ? ' · เหรียญทองไม่พอ' : ''}</small></span></button>`;
-    return `${tabs}<p class="hire-cost">จ้างคนละ <span class="icon-gold">${icon('gold')}</span> ${this.map.company.hireCost} เหรียญทอง (มี ${p.bank.gold}) · ป้ายเปลี่ยนใหม่เมื่อกลับจากการเดินทาง</p>
-      <ul class="hire-list">${boardOffers(p, this.map, this.lookup).map((id, i) => {
+    const lanes = (['all', 'front', 'back'] as const).map(l => `<button id="hire-lane-${l}" class="ui-chip" data-lobby="hire-lane" data-lane="${l}" aria-pressed="${this.lane === l}">${{ all: 'ทั้งหมด', front: 'แนวหน้า', back: 'แนวหลัง' }[l]}</button>`).join('');
+    return `${tabs}<div class="hire-top"><p class="hire-cost">จ้างคนละ ${this.map.company.hireCost} เหรียญทอง · ป้ายเปลี่ยนใหม่เมื่อกลับจากการเดินทาง</p><span class="ui-pill" aria-label="มีเหรียญทอง ${p.bank.gold}">${icon('gold')}${p.bank.gold}</span></div><div class="hire-lanes" role="group" aria-label="กรองตามแนว">${lanes}</div>${refresh}
+      <ul class="hire-list hire-board">${boardOffers(p, this.map, this.lookup).map((id, i) => ({ id, i })).filter(({ id }) => this.lane === 'all' || this.hero(id).lane === this.lane).map(({ id, i }) => {
         const reason = hireReason(p, this.map, this.lookup, i); const h = this.hero(id); const text = heroText[id]!; const m = p.members[id];
         const status = m ? `${this.stars(m.stars)} ตัวซ้ำ ${m.dupes} · มีในค่าย` : 'ใหม่ · ★1';
-        return `<li class="${reason === 'taken' ? 'taken' : ''}"><button id="hire-open-${i}" data-lobby="hire-preview" data-index="${i}" class="hire-open" aria-label="ดูข้อมูล${text.name}ก่อนจ้าง">${portrait(id)}<span><b>${text.name}</b><small>${text.role} · ${h.lane === 'front' ? 'แนวหน้า' : 'แนวหลัง'} · ${text.help}</small><small class="hire-status">${status} · แตะเพื่อดูสกิล</small></span></button>
+        return `<li class="${reason === 'taken' ? 'taken' : ''}"><button id="hire-open-${i}" data-lobby="hire-preview" data-index="${i}" class="hire-open" aria-label="ดูข้อมูล${text.name}ก่อนจ้าง">${heroArt(id)}<span>${this.stars(m?.stars ?? 1)}<b>${text.name}</b><small>${text.role} · ${h.lane === 'front' ? 'แนวหน้า' : 'แนวหลัง'} · ${text.help}</small><small class="hire-status">${status} · แตะเพื่อดูสกิล</small></span></button>
           <button id="hire-${i}" data-lobby="hire" data-index="${i}" class="secondary"${reason ? ' disabled' : ''} aria-label="จ้าง${text.name} ใช้เหรียญทอง ${this.map.company.hireCost}">${reason ? why[reason] ?? 'จ้างไม่ได้' : `จ้าง · ${this.map.company.hireCost}`}</button></li>`;
-      }).join('')}</ul>${refresh}
+      }).join('')}</ul>
       <details class="lobby-help"><summary>${icon('info')} วิธีจ้างและอัปดาว</summary><p>ทุกคนเริ่ม ★1 · จ้างคนที่มีอยู่แล้วจะได้ตัวซ้ำไว้อัปดาวในแท็บทีม · ป้ายเปลี่ยนใหม่ทุกครั้งที่กลับจากการเดินทาง และสุ่มใหม่ได้ ${costs.length} ครั้งต่อรอบโดยจ่ายเหรียญทอง</p></details>`;
   }
   // Preview of a hiring offer: the mercenary as they would join (or as owned), stats, every skill and the star unlocks.
