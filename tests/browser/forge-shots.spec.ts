@@ -11,8 +11,9 @@ const dir = process.env.FORGE_SHOTS;
 const key = 'asterveil.fateweave.expedition.v1';
 for (const [width, height] of [[390, 844], [320, 568]] as const) {
   test(`forge shots ${width}x${height}`, async ({ browser }) => {
+    const strike = width === 390;
     test.skip(!dir, 'set FORGE_SHOTS to a folder');
-    const context = await browser.newContext({ viewport: { width, height }, hasTouch: true, isMobile: true, reducedMotion: 'reduce', deviceScaleFactor: 2 }), page = await context.newPage();
+    const context = await browser.newContext({ viewport: { width, height }, hasTouch: true, isMobile: true, reducedMotion: 'no-preference', deviceScaleFactor: 2 }), page = await context.newPage();
     const profile = newProfile(map, 17); profile.commander = { name: 'อารี', crest: 'star', color: 'gold', camp: 'ค่ายอารี' }; profile.tutorialDone = true; profile.forgeLevel = 6; profile.completes = 9; profile.veteran = true; profile.bank = { ore: 500, dust: 50, gold: 20, seal: 3 };
     const pool = affixPool(map.equipment, 'weapon', 'guardian');
     profile.members.guardian = { stars: 3, dupes: 0, level: 6, exp: 0, gear: { weapon: { uid: 1, slot: 'weapon', hero: 'guardian', rarity: 3, level: 6, affixes: pool.slice(0, 3), plus: 4, set: 'dawn' } } };
@@ -25,7 +26,8 @@ for (const [width, height] of [[390, 844], [320, 568]] as const) {
     await page.locator('#lobby-tab-forge').click(); await expect(page.locator('.forge-workbench')).toBeVisible(); await shot('forge-pick');
     await page.locator('#forge-item-1').click(); await shot('forge-enhance');
     await page.locator('#forge-enhance').click(); await shot('forge-review');
-    await page.locator('#forge-cancel').click();
+    if (strike) { await page.locator('#forge-confirm').click(); await page.waitForTimeout(300); await page.screenshot({ path: `${dir}/forge-strike-hit-${width}.png` }); console.log('strike present', await page.locator('.forge-strike').count()); await page.screenshot({ path: `${dir}/forge-strike-result-${width}.png` }); }
+    else await page.locator('#forge-cancel').click();
     await page.locator('#forge-mode-level').click(); await shot('forge-level');
     await page.locator('#forge-tab-recycle').click(); await shot('forge-recycle');
     await context.close();

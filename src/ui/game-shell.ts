@@ -20,6 +20,7 @@ import { choiceText, eventText, expThai, heroText, itemLines, itemName, lootThai
 import { transferAffix, craftWeapon, raiseItemLevel, enhanceTo, lockEquipment, findItem, fuse, reroll, smelt } from '../core/world/forge';
 import { CommanderUI } from './commander-ui';
 import { LobbyUI } from './lobby-ui';
+import { forgeStrike } from './forge-strike';
 import { prologue, prologueEnd, recruitStory, StoryUI } from './story-ui';
 import { WorldUI, type WorldBanner } from './world-ui';
 import { icon, type IconName } from './icons';
@@ -258,6 +259,7 @@ export class GameShell {
     this.npcCheer = e.type === 'bought' || e.type === 'refreshed' ? 'broker' : e.type === 'claimed' ? this.map.sideQuests.find(q => q.id === e.questId)!.npc as NpcId
       : ({ hired: 'broker', talent: 'trainer', equipped: 'keeper', salvaged: 'keeper', forged: 'smith', smelted: 'smith', brewed: 'herbalist' } as Partial<Record<string, NpcId>>)[e.type];
     this.showLobby();
+    if (e.type === 'forged' && (e.action === 'enhance' || e.action === 'level')) { const item = findItem(result.profile, e.uid)?.item; if (item) forgeStrike(this.root, item, e.action, this.reducedMotion.matches); }
   }
   // Market purchase (4A): what was bought and where it went.
   private boughtText(profile: Profile, e: { item: ShopItemId; heroId?: string; uid?: number }): string {
