@@ -1,5 +1,5 @@
-import { actionReason, beginBattle, createBattle, currentHeroId, plannedIntents, replay, resolveCommand, targetOptions, targetKind, upcomingTurns, skillPower, guardReductionOf } from '../core/battle/engine';
-import type { ActionId, BattleEntry, BattleState, Command, EncounterDefinition, Outcome, Resolution, TurnStage } from '../core/battle/types';
+import { actionReason, beginBattle, createBattle, currentHeroId, nextIntentOf, plannedIntents, replay, resolveCommand, targetOptions, targetKind, upcomingTurns, skillPower, guardReductionOf } from '../core/battle/engine';
+import type { ActionId, BattleEntry, BattleState, Command, EncounterDefinition, Intent, Outcome, Resolution, TurnStage } from '../core/battle/types';
 import { gameBounds, shortcutBlocked } from '../platform/keyboard';
 import { sfx } from '../platform/sfx';
 import { BattlePlayback, stageTiming } from './battle-playback';
@@ -11,7 +11,7 @@ import { actorName, eventThai, heroText, intentName, intentRuleThai, intentTarge
 import { portrait } from './portraits';
 import { artOf } from '../game/visuals/assets';
 import { riftBackdropFrame } from '../game/visuals/rift-backdrop';
-import { icon } from './icons';
+import { icon, lineIcon } from './icons';
 import { infoTabs, selectInfoTab } from './info-tabs';
 import { foeProfile, unitStatuses } from './battle-status';
 import { battleLesson } from './tutorial';
@@ -28,6 +28,22 @@ export interface BattleSession {
 }
 const kindLabel: Record<BattleKind, string> = { tutorial: 'ศึกแรก', random: 'พบศัตรู', boss: 'บอส', elite: 'อีลิท', event: 'เหตุการณ์' };
 
+const shieldReason = 'A front-row enemy shields this target.';
+// A foe's next move in a few glyphs: kind icon + power + who it aims at (a portrait), or the boss special.
+function intentBadge(next: Intent, stopped: boolean, face: (id: string) => string): string {
+  if (stopped) return '<b>หยุด</b>';
+  if (next.special === 'phase') return '<b>⚠ เปลี่ยนช่วง</b>';
+  if (next.charge) return `${lineIcon('bolt')}<b>รวบรวมพลัง</b>`;
+  const aim = next.all ? '<b class="intent-all">ทั้งทีม</b>' : `<span class="intent-aim">${face(next.targetId)}</span>`;
+  return `${lineIcon(next.kind === 'energy' ? 'bolt' : 'attack')}<b>${next.damage}</b>${aim}`;
+}
+function bannerCopy(turn: TurnStage, d: EncounterDefinition): string {
+  const phase = turn.events.find(e => e.type === 'phase'), summons = turn.events.filter(e => e.type === 'summon').length;
+  if (phase) return `${d.enemies.find(e => e.id === phase.sourceId)?.displayName ?? actorName(phase.sourceId, d)} เปลี่ยนช่วง${summons ? ` · เรียกลูกน้อง ${summons} ตัว` : ''}`;
+  if (turn.events.some(e => e.type === 'charge')) return `${d.enemies.find(e => e.id === turn.actorId)?.displayName ?? actorName(turn.actorId, d)} รวบรวมพลัง · ท่าถัดไปขัดไม่ได้`;
+  if (turn.side === 'enemy' && turn.intent?.all) return `${intentName(turn.intent)} · โจมตีทั้งทีม`;
+  return '';
+}
 const escapeHtml = (s: string) => s.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
 
 export class BattleUI {
@@ -68,7 +84,7 @@ export class BattleUI {
         <div class="battle-layout">
           <section class="battle-board" aria-label="สถานการณ์การต่อสู้">
             <section class="arena" aria-label="สนามต่อสู้ แตะเป้าหมายเพื่อใช้สกิล">
-              <div id="game"></div><div id="field-statuses" aria-label="บัฟและดีบัฟในสนาม"></div><div id="field-targets" aria-label="แตะตัวละครในสนามเพื่อใช้สกิล"></div>
+              <div id="game"></div><div id="field-statuses" aria-label="บัฟและดีบัฟในสนาม"></div><div id="field-intents" role="list" aria-label="ท่าถัดไปของศัตรูแต่ละตัว"></div><div id="field-targets" aria-label="แตะตัวละครในสนามเพื่อใช้สกิล"></div><div id="field-banner" role="status" aria-live="polite" hidden></div>
               <div class="formation-labels" aria-hidden="true"><span class="back-label">แนวหลัง</span><span class="front-label">แนวหน้า</span></div>
               <div id="start-screen"></div>
             </section>
@@ -188,7 +204,7 @@ export class BattleUI {
   private get teaching(): boolean { return this.session?.kind === 'tutorial' && this.hintsEnabled; }
   get encounter(): EncounterDefinition { return this.data; }
   sceneReady(): void { this.render(); }
-  fieldLayoutChanged(): void { this.renderFieldTargets(); this.renderFieldStatuses(); this.renderTutorial(); this.placeBackdrop(); }
+  fieldLayoutChanged(): void { this.renderFieldTargets(); this.renderFieldStatuses(); this.renderFieldIntents(); this.renderTutorial(); this.placeBackdrop(); }
   // The battle painting lies behind the whole view, framed to the arena so fighters stand on its floor.
   private placeBackdrop(): void {
     const arena = this.root.querySelector<HTMLElement>('.arena'); if (!arena) return;
@@ -421,12 +437,12 @@ export class BattleUI {
   }
 
   private renderTimeline(): void {
-    const s = this.presentation?.revealed ? this.stage!.state : this.displayState; const slots = upcomingTurns(s, this.data);
+    const s = this.presentation?.revealed ? this.stage!.state : this.displayState; const slots = upcomingTurns(s, this.data, 8);
     this.set('turn-order', slots.length ? `<ol>${slots.map((slot, index) => {
       const blocked = slot.side === 'enemy' && (s.enemies.find(e => e.id === slot.actorId)?.interruptedRound === slot.round ||
         index === 0 && this.stage?.events.some(e => e.type === 'cancel'));
       const label = blocked ? 'หยุด' : index === 0 ? 'ตอนนี้' : slot.round > s.round ? `รอบ ${slot.round}` : index === 1 ? 'ถัดไป' : 'รอ';
-      return `<li class="turn-slot ${slot.side} ${blocked ? 'blocked-turn' : ''} ${index === 0 ? 'current-turn' : ''}" data-actor="${slot.actorId}" data-round="${slot.round}" ${index === 0 ? 'aria-current="step"' : ''} aria-label="${index === 0 ? 'ตอนนี้' : `ลำดับ ${index + 1}`} ${actorName(slot.actorId, this.data)} ความเร็ว ${slot.speed} รอบ ${slot.round}${blocked ? ' ถูกขัดจังหวะ' : ''}"><button data-ui="turn-info" data-value="${slot.actorId}" class="turn-icon" title="${escapeHtml(actorName(slot.actorId, this.data))} · SPD ${slot.speed}" aria-label="${escapeHtml(actorName(slot.actorId, this.data))} · SPD ${slot.speed}${blocked ? ' · ถูกขัดจังหวะ' : ''}">${this.portrait(slot.actorId)}</button><span class="sr-only"><b>${actorName(slot.actorId, this.data)}</b><small>${label} · ${slot.speed}</small></span></li>`;
+      return `<li class="turn-slot ${slot.side} ${blocked ? 'blocked-turn' : ''} ${index === 0 ? 'current-turn' : ''} ${slot.round > s.round ? 'later-round' : ''}" data-actor="${slot.actorId}" data-round="${slot.round}" ${index === 0 ? 'aria-current="step"' : ''} aria-label="${index === 0 ? 'ตอนนี้' : `ลำดับ ${index + 1}`} ${actorName(slot.actorId, this.data)} ความเร็ว ${slot.speed} รอบ ${slot.round}${blocked ? ' ถูกขัดจังหวะ' : ''}"><button data-ui="turn-info" data-value="${slot.actorId}" class="turn-icon" title="${escapeHtml(actorName(slot.actorId, this.data))} · SPD ${slot.speed}" aria-label="${escapeHtml(actorName(slot.actorId, this.data))} · SPD ${slot.speed}${blocked ? ' · ถูกขัดจังหวะ' : ''}">${this.portrait(slot.actorId)}</button><b class="turn-speed" aria-hidden="true">${slot.speed}</b><span class="sr-only"><b>${actorName(slot.actorId, this.data)}</b><small>${label} · ${slot.speed}</small></span></li>`;
     }).join('')}</ol>` : '<p>จบการต่อสู้แล้ว</p>');
   }
 
@@ -449,7 +465,7 @@ export class BattleUI {
       const target = s.heroes.find(h => h.id === recipient)!;
       const lethal = !this.presentation && !canceled && !target.evading && intent.damage >= target.hp + target.barrier;
       const heading = canceled ? 'การโจมตีนี้ถูกขัดจังหวะ' : dodge ? 'การโจมตีนี้พลาด' : response ? 'ศัตรูกำลังลงมือ' : `การโจมตีศัตรูถัดไป · รอบ ${intent.round}`;
-      this.set('intent', `<div class="intent-icon">${icon(intent.kind === 'energy' ? 'bolt' : 'attack')}</div><div class="intent-copy"><p class="eyebrow">${heading}</p><h2>${actorName(intent.sourceId, d)} <span>→</span> ${intentTargetThai(intent, d, recipient)}</h2><p>${intentName(intent)}${intent.special || intent.charge ? '' : ` · ${intent.kind === 'energy' ? 'พลังงาน' : 'กายภาพ'}`} <span class="intent-rule">${intentRuleThai(intent)}</span></p>${lethal ? `<p class="lethal-warning">⚠ ${actorName(intent.targetId, d)} จะล้มหากรับการโจมตีนี้โดยไม่มีการป้องกัน</p>` : ''}</div><div class="intent-damage"><strong>${canceled ? '—' : dodge ? 0 : hit ? hit.amount : intent.damage}</strong><small>${dodge ? 'หลบได้' : hit ? 'เสียเลือด' : 'พลังโจมตี'}</small></div>`);
+      this.set('intent', `<div class="intent-icon">${icon(intent.kind === 'energy' ? 'bolt' : 'attack')}</div><div class="intent-copy"><p class="eyebrow">${heading}</p><h2>${actorName(intent.sourceId, d)} <span>→</span> ${intentTargetThai(intent, d, recipient)}</h2><p>${intentName(intent)}${intent.special || intent.charge ? '' : ` · ${intent.kind === 'energy' ? 'พลังงาน' : 'กายภาพ'}`} <span class="intent-rule">${intentRuleThai(intent)}</span></p>${lethal ? `<p class="lethal-warning">⚠ ${actorName(intent.targetId, d)} จะล้มหากรับการโจมตีนี้โดยไม่มีการป้องกัน</p>` : ''}</div><div class="intent-damage"><strong>${canceled || (!hit && !dodge && (intent.special === 'phase' || intent.charge)) ? '—' : dodge ? 0 : hit ? hit.amount : intent.damage}</strong><small>${dodge ? 'หลบได้' : hit ? 'เสียเลือด' : intent.special === 'phase' ? 'ไม่โจมตี' : intent.charge ? 'สะสมพลัง' : 'พลังโจมตี'}</small></div>`);
     } else this.set('intent', `<div class="intent-icon">✧</div><div class="intent-copy"><p class="eyebrow">การต่อสู้จบแล้ว</p><h2>${s.outcome === 'victory' ? 'ศัตรูถูกกำจัดแล้ว' : 'ทีมของคุณล้มทั้งหมด'}</h2><p>${s.outcome === 'victory' ? 'เลือดที่เหลือติดตัวไปศึกถัดไป' : 'ทีมจะถอยกลับไปฟื้นตัว'}</p></div>`);
     this.root.querySelector<HTMLElement>('#forecast-details')!.hidden = s.outcome !== 'active';
     this.set('forecast', plannedIntents(s, d).map(next => `<div><b>รอบ ${next.round} · ${actorName(next.sourceId, d)} · ${intentName(next)}</b><small>${intentTargetThai(next, d)}${next.special || next.charge ? '' : ` · พลังโจมตี ${next.damage} · ${next.kind === 'energy' ? 'พลังงาน' : 'กายภาพ'}`}${next.special || next.charge || next.all || next.unstoppable ? ` · ${intentRuleThai(next)}` : ''}</small></div>`).join('') + (s.outcome === 'active' ? '<p>แผนนี้สมมติว่าตัวละครยังอยู่ เปลี่ยนได้เมื่อมีใครล้ม เป้าหมายจะถูกกำหนดจริงเมื่อถึงเทิร์นศัตรู</p>' : ''));
@@ -498,8 +514,34 @@ export class BattleUI {
       const maxHp = d.heroes.find(h => h.id===t.id)?.maxHp ?? d.enemies.find(e => e.id===t.id)?.maxHp;
       const label = `ใช้${d.skills[this.action].name}กับ${this.action==='prayer' ? 'ทั้งทีม โดยแตะ' : targetKind(this.action)==='enemies' ? 'ศัตรูทุกตัว โดยแตะ' : ''}${actorName(t.id,d)} · เลือด ${hero?.hp ?? enemy?.hp}/${maxHp}${!t.valid ? ` · ${reasonThai(t.reason)}` : ''}`;
       const buttonId = this.action==='prayer' ? t.id===this.heroId ? 'party' : `party-${t.id}` : targetKind(this.action)==='enemies' ? `enemies-${t.id}` : t.id;
-      return `<button id="target-${buttonId}" data-ui="target" data-value="${t.id}" data-actor="${t.id}" class="field-target ${disabled || !t.valid ? '' : 'valid-target'}" style="left:${position.x}px;top:${position.y}px;width:${position.width}px;height:${position.height}px" aria-label="${escapeHtml(label)}" ${disabled || !t.valid ? 'disabled' : ''}><span class="field-marker" aria-hidden="true">${icon(this.action)}</span></button>`;
+      const screen = !disabled && !t.valid && t.reason === shieldReason;
+      return `<button id="target-${buttonId}" data-ui="target" data-value="${t.id}" data-actor="${t.id}" class="field-target ${disabled || !t.valid ? '' : 'valid-target'} ${screen ? 'screened-target' : ''}" style="left:${position.x}px;top:${position.y}px;width:${position.width}px;height:${position.height}px" aria-label="${escapeHtml(label)}" ${disabled || !t.valid ? 'disabled' : ''}><span class="field-marker" aria-hidden="true">${icon(this.action)}</span>${screen ? `<span class="screen-marker" aria-hidden="true">${lineIcon('guard')}ถูกบัง</span>` : ''}</button>`;
     }).join(''));
+  }
+
+  // Every foe on the field shows its next move (A7 step 3): kind, power and target, or a boss phase/charge/all-party
+  // warning. Hidden while a turn is presented; the intent card and forecast keep the full text.
+  private renderFieldIntents(): void {
+    const s = this.displayState, d = this.data;
+    const show = this.scene && this.started && !this.presentation && s.outcome === 'active';
+    this.set('field-intents', !show ? '' : d.enemies.map(e => {
+      const foe = s.enemies.find(v => v.id === e.id)!, slot = this.scene!.actorPanels.get(e.id);
+      const next = foe.hp > 0 && !foe.absent ? nextIntentOf(s, d, e.id) : null;
+      if (!slot || !next) return '';
+      const stopped = foe.interruptedRound === next.round;
+      const label = `${actorName(e.id, d)}: ${stopped ? 'ถูกขัดจังหวะ' : `${intentName(next)} · ${intentTargetThai(next, d)}${next.special || next.charge ? '' : ` · พลัง ${next.damage}`}`}`;
+      const left = slot.x, top = Math.max(2, slot.body.y + 2);
+      return `<span role="listitem" class="field-intent ${next.kind} ${s.intent?.sourceId === e.id ? 'next' : ''} ${next.unstoppable ? 'unstoppable' : ''} ${stopped ? 'stopped' : ''}" data-intent="${e.id}" style="left:${left}px;top:${top}px" aria-label="${escapeHtml(label)}">${intentBadge(next, stopped, id => this.portrait(id))}</span>`;
+    }).join(''));
+  }
+
+  // Boss phase, summon, charge and all-party moves get a field banner while their turn is shown.
+  private renderFieldBanner(): void {
+    const banner = this.root.querySelector<HTMLElement>('#field-banner')!;
+    const turn = this.presentation?.revealed ? this.stage : undefined;
+    const copy = turn ? bannerCopy(turn, this.data) : '';
+    banner.hidden = !copy; banner.dataset.kind = turn?.events.find(e => e.type === 'phase' || e.type === 'summon' || e.type === 'charge')?.type ?? (turn?.intent?.all ? 'all' : '');
+    if (banner.textContent !== copy) banner.textContent = copy;
   }
 
   private renderFieldStatuses(): void {
@@ -566,6 +608,8 @@ export class BattleUI {
     this.scene?.sync({ state: this.displayState, heroId: this.heroId, targetId: null, phase: this.presentation?.phase, activeActorId: this.actingActor, activeTargetId: this.actingTarget }, repaint);
     this.renderFieldTargets();
     this.renderFieldStatuses();
+    this.renderFieldIntents();
+    this.renderFieldBanner();
     this.renderTutorial();
     if (focus) this.root.querySelector<HTMLElement>(`#${focus}`)?.focus({ preventScroll: true });
     this.placeBackdrop();

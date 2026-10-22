@@ -174,7 +174,7 @@ for(const viewport of [{width:320,height:568},{width:360,height:640},{width:375,
    expect(await page.evaluate(()=>({x:scrollX,y:scrollY,overflow:document.documentElement.scrollHeight>innerHeight}))).toEqual({x:0,y:0,overflow:false});
    for(const s of ['#battle-info','#action-attack',...actions.map(a=>'#action-'+a)])await reachable(page,s);
    await expect.poll(()=>page.locator('#game canvas').evaluate(el=>{const r=el.getBoundingClientRect(),a=el.parentElement!.parentElement!.getBoundingClientRect();return r.height>=120&&r.left>=a.left-1&&r.right<=a.right+1&&r.top>=a.top-1&&r.bottom<=a.bottom+1;/* canvas backing size is whole pixels; arena may be fractional */})).toBe(true);
-   await expect(page.locator('#turn-order')).toBeVisible();expect(await page.locator('.turn-slot:visible').count()).toBe(6);
+   await expect(page.locator('#turn-order')).toBeVisible();expect(await page.locator('.turn-slot:visible').count()).toBe(await page.locator('#app').evaluate(el=>el.clientWidth>=388?8:6));
    expect(await page.locator('#turn-order').evaluate(el=>{const r=el.getBoundingClientRect();return r.left>=0&&r.top>=0&&r.right<=innerWidth&&r.bottom<=innerHeight&&el.scrollWidth<=el.clientWidth;})).toBe(true);
   };
   await fits();await owner(page,'tracer');const before=await page.locator('.arena').boundingBox();await page.locator('#action-mark').click();await page.locator('#skill-details').click();
@@ -259,7 +259,7 @@ test('final victory waits for its actual actor stage and has no dead-enemy retal
  await reachable(page,'.result-card button');await page.screenshot({path:info.outputPath('final-speed-turn.png')});expect(issues).toEqual([]);
 });
 test('visible queue follows actual SPD actors across a round and explains speeds',async({page},info)=>{
- const issues=await start(page);expect(await page.locator('.turn-slot').evaluateAll(es=>es.map(e=>(e as HTMLElement).dataset.actor))).toEqual(['tracer','b1','weaver','guardian','f1','healer']);
+ const issues=await start(page);expect(await page.locator('.turn-slot').evaluateAll(es=>es.map(e=>(e as HTMLElement).dataset.actor))).toEqual(['tracer','b1','weaver','guardian','f1','healer','tracer','b1']);
  await prefix(page,3);await cast(page,'healer','heal','guardian');await finish(page);await expect(page.locator('#beat-status')).toContainText('รอบ 2');await owner(page,'tracer');
  await expect(page.locator('.turn-slot').first()).toHaveAttribute('data-actor','tracer');await expect(page.locator('.turn-slot').first()).toHaveAttribute('aria-current','step');
  await page.locator('#battle-info').click();await page.locator('#battle-tab-guide').click();await expect(page.locator('#rules')).toContainText('SPD 120');await expect(page.locator('#rules')).toContainText('คนละ 1 ครั้งต่อรอบ');await page.keyboard.press('Escape');

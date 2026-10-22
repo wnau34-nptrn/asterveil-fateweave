@@ -100,7 +100,9 @@ export class BattleScene extends Phaser.Scene {
   sync(view: SceneView, repaint = true): void {
     this.view = view;
     if (!this.ready) return;
-    if (repaint) this.paint();
+    // A summon puts a new foe on the field mid-presentation: redraw so it appears in its empty slot.
+    const present = view.state.enemies.filter(e => !e.absent).map(e => e.id);
+    if (repaint || present.some(id => !this.bodies.has(id))) this.paint();
     else for (const [id, body] of this.bodies) {
       const hp = [...view.state.heroes, ...view.state.enemies].find(a => a.id === id)?.hp ?? 0;
       const involved = !view.activeActorId || id === view.activeActorId || id === view.activeTargetId;
@@ -122,7 +124,8 @@ export class BattleScene extends Phaser.Scene {
     this.positions.clear(); this.actorTargets.clear(); this.actorPanels.clear();
     const w = this.viewW, h = this.viewH;
     const bg = this.add.graphics(); this.layer.add(bg);
-    const slots = fieldSlots(w, h);
+    const large = new Set(this.encounter.enemies.filter(e => e.large).map(e => FOE_SLOT_INDEX[e.id]!));
+    const slots = fieldSlots(w, h, large);
     const free = { back: [slots[0]!, slots[1]!], front: [slots[2]!, slots[3]!] };
     for (const [i, hero] of this.encounter.heroes.entries()) {
       const own = free[hero.lane], other = free[hero.lane === 'front' ? 'back' : 'front'];
@@ -166,9 +169,7 @@ export class BattleScene extends Phaser.Scene {
       g.lineStyle(3, enemy ? 0xf19b9f : palette.cyan); g.strokeEllipse(0, 0, size * .72, size * .16);
     }
     const key = artOf(this.encounter, id); const art = actorArt[key]!;
-    // Large foes stand a quarter taller from the same feet until the 8-actor field (A7 step 3) sizes them.
-    const drawn = enemy && this.encounter.enemies.find(e => e.id === id)?.large ? size * 1.25 : size;
-    const sprite = this.add.image(0, 0, `battle-${art.sheet}`, art.frame).setOrigin(0.5, actorFootOrigins[key] ?? 1).setDisplaySize(drawn, drawn).setFlipX(mirroredArt.has(key));
+    const sprite = this.add.image(0, 0, `battle-${art.sheet}`, art.frame).setOrigin(0.5, actorFootOrigins[key] ?? 1).setDisplaySize(size, size).setFlipX(mirroredArt.has(key));
     body.add(sprite);
     if (hp > 0) this.liven(id, body, sprite, size, enemy, id === this.view!.activeActorId);
     const hitWidth = Math.max(44, Math.min(72, size * .7));
@@ -177,10 +178,6 @@ export class BattleScene extends Phaser.Scene {
     const hit = this.add.zone(0, sprite.y, Math.max(64, size * 0.7), size).setOrigin(0.5, 1).setInteractive({ useHandCursor: true });
     // Input stays at the slot origin while the disposable body lunges/recoils.
     hit.on('pointerdown', () => this.choose(id)); info.add(hit);
-    if (this.view!.state.intent?.sourceId === id && hp > 0) {
-      const warning = this.text(35, -38, '◆', { fontFamily: thaiFont, fontSize: '15px', color: '#fdbdcf' }).setOrigin(0.5);
-      info.add(warning);
-    }
   }
   // Idle life: a soft aura under the feet (cyan for heroes, rift violet for foes, brighter for the acting unit),
   // gentle breathing out of phase per unit, and rift motes rising around foes. Off under reduced motion.

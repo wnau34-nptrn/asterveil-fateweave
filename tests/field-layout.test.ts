@@ -6,8 +6,7 @@ const intersects = (a: FieldBox, b: FieldBox) => a.x < b.x + b.width && b.x < a.
 describe('reserved battlefield unit panels', () => {
   it('keeps every HP/status panel clear of all eight bodies and other panels across phone and PC arena sizes', () => {
     for (const width of [296, 308, 348, 378, 418, 468]) for (const height of [120, 128, 144, 149, 150, 156, 179, 180, 193, 259, 260, 379, 455, 650]) {
-      const slots = fieldSlots(width, height);
-      for (const [i, a] of slots.entries()) {
+      for (const slots of [fieldSlots(width, height), fieldSlots(width, height, new Set([4, 5, 6, 7]))]) for (const [i, a] of slots.entries()) {
         expect(a.size).toBeGreaterThanOrEqual(44);
         expect(a.panel.x).toBeGreaterThanOrEqual(0);
         expect(a.panel.x + a.panel.width).toBeLessThanOrEqual(width);
@@ -17,6 +16,14 @@ describe('reserved battlefield unit panels', () => {
           if (i !== j) expect(intersects(a.panel, b.panel), `${width}×${height}: panels ${i}/${j}`).toBe(false);
         }
       }
+    }
+  });
+  it('draws large foes about 1.5 times taller with heads inside the field on phone arenas', () => {
+    for (const height of [379, 455, 650]) {
+      const slots = fieldSlots(378, height, new Set([4, 7]));
+      expect(slots[4]!.size / slots[5]!.size).toBeGreaterThanOrEqual(1.45);
+      expect(slots[2]!.size).toBeGreaterThanOrEqual(76);
+      for (const s of slots) expect(s.body.y).toBeGreaterThanOrEqual(-1);
     }
   });
   it('retains front/rear lane order and reserves a bounded overflow row on short fields', () => {
