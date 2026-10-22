@@ -1,0 +1,231 @@
+{
+  "fonts": {
+    "kanit": true,
+    "noto": true
+  },
+  "assets": [
+    {
+      "url": "assets/world/landmark_camp.webp",
+      "loaded": true
+    },
+    {
+      "url": "assets/art/units.webp",
+      "loaded": true
+    },
+    {
+      "url": "assets/ui/equip/gear_items.webp",
+      "loaded": true
+    },
+    {
+      "url": "assets/ui/equip/set_emblems.webp",
+      "loaded": true
+    },
+    {
+      "url": "assets/world/items.webp",
+      "loaded": true
+    },
+    {
+      "url": "assets/lobby/lobby_bg.webp",
+      "loaded": true
+    },
+    {
+      "url": "assets/lobby/npc/npc_smith.webp",
+      "loaded": true
+    },
+    {
+      "url": "assets/lobby/npc/npc_broker.webp",
+      "loaded": true
+    },
+    {
+      "url": "assets/lobby/npc/npc_trainer.webp",
+      "loaded": true
+    },
+    {
+      "url": "assets/world/tileset.webp",
+      "loaded": true
+    },
+    {
+      "url": "assets/art/portraits.webp",
+      "loaded": true
+    },
+    {
+      "url": "assets/art/ruins.webp",
+      "loaded": true
+    },
+    {
+      "url": "assets/art/units_mercs.webp",
+      "loaded": true
+    }
+  ],
+  "pageErrors": [],
+  "boards": [
+    {
+      "id": "01_character_equipment",
+      "css": [
+        390,
+        844
+      ],
+      "badTargets": [],
+      "outsideSafeArea": [],
+      "overflow": false,
+      "png": [
+        780,
+        1688
+      ]
+    },
+    {
+      "id": "02_item_detail_compare",
+      "css": [
+        390,
+        844
+      ],
+      "badTargets": [],
+      "outsideSafeArea": [],
+      "overflow": false,
+      "png": [
+        780,
+        1688
+      ]
+    },
+    {
+      "id": "03_character_overview",
+      "css": [
+        390,
+        844
+      ],
+      "badTargets": [],
+      "outsideSafeArea": [],
+      "overflow": false,
+      "png": [
+        780,
+        1688
+      ]
+    },
+    {
+      "id": "04_skill_tree",
+      "css": [
+        390,
+        844
+      ],
+      "badTargets": [],
+      "outsideSafeArea": [],
+      "overflow": false,
+      "png": [
+        780,
+        1688
+      ]
+    },
+    {
+      "id": "05_forge",
+      "css": [
+        390,
+        844
+      ],
+      "badTargets": [],
+      "outsideSafeArea": [],
+      "overflow": false,
+      "png": [
+        780,
+        1688
+      ]
+    },
+    {
+      "id": "06_lobby_hub",
+      "css": [
+        390,
+        844
+      ],
+      "badTargets": [],
+      "outsideSafeArea": [],
+      "overflow": false,
+      "png": [
+        780,
+        1688
+      ]
+    },
+    {
+      "id": "07_map_hud",
+      "css": [
+        390,
+        844
+      ],
+      "badTargets": [],
+      "outsideSafeArea": [],
+      "overflow": false,
+      "png": [
+        780,
+        1688
+      ]
+    },
+    {
+      "id": "08_battle_hud",
+      "css": [
+        390,
+        844
+      ],
+      "badTargets": [],
+      "outsideSafeArea": [],
+      "overflow": false,
+      "png": [
+        780,
+        1688
+      ]
+    },
+    {
+      "id": "09_rewards_summary",
+      "css": [
+        390,
+        844
+      ],
+      "badTargets": [],
+      "outsideSafeArea": [],
+      "overflow": false,
+      "png": [
+        780,
+        1688
+      ]
+    },
+    {
+      "id": "10_hire_board",
+      "css": [
+        390,
+        844
+      ],
+      "badTargets": [],
+      "outsideSafeArea": [],
+      "overflow": false,
+      "png": [
+        780,
+        1688
+      ]
+    },
+    {
+      "id": "01_character_equipment_pc",
+      "css": [
+        1366,
+        768
+      ],
+      "badTargets": [],
+      "outsideSafeArea": [],
+      "overflow": false,
+      "png": [
+        2732,
+        1536
+      ]
+    },
+    {
+      "id": "components_sheet",
+      "css": [
+        1366,
+        1000
+      ],
+      "badTargets": [],
+      "outsideSafeArea": [],
+      "overflow": false,
+      "png": [
+        2732,
+        2000
+      ]
+    }
+  ]
+}
