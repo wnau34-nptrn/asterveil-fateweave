@@ -4,7 +4,7 @@
 
 - `docs/design/SKILL_TREES_ALL_TH.md`: the knight's shape for every class — 3 branches × 4 tiers, 6 actives each (2 free starters, the old ★3 skill, 3 new), old ★5 passives as capstones, old small-tree caps reused as pick-one modifiers. 27 new skills; most reuse existing resolver parts, new parts: "reduce a foe's next move X%" (shared), in-battle revive, front-row screening off, corrosion detonate/transfer, a third bard song + solo, hard-mode energy-shield break. Recommended order: release A Duelist → Mage → Priest → Spear → Archer, the other four in release B.
 - `docs/design/SKILL_TOMES_TH.md`: skill Lv1–5 per member, tome line per class (bulwark/blade/accord) × small/medium/large, cost table, Lv5 = −1 cooldown for cd≥3 skills, deterministic sources (every 3 wins, chests, elites, bosses by the team's main line), trades at the trainer, save v37 sketch.
-- Waiting on the owner's answers (questions at the end of each file) before any code.
+- Owner approved both drafts as recommended (2026-10-22): 3 new skills per class, keep Revive and Pinning Volley, release A = Duelist/Mage/Priest/Spear/Archer, tomes per class, cost/source tables as drafted, dismissal refunds 50% of tomes. Next: item 4 (code) in a new Opus session.
 
 ## 2026-10-22 — Claude: formation (item 3b, save v36)
 
