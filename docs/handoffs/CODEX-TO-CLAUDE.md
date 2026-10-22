@@ -1,5 +1,11 @@
 # Codex → Claude handoff
 
+## 2026-10-22 — Claude: A6 part 2 drafts (trees for the other 9 classes + skill tomes), no code
+
+- `docs/design/SKILL_TREES_ALL_TH.md`: the knight's shape for every class — 3 branches × 4 tiers, 6 actives each (2 free starters, the old ★3 skill, 3 new), old ★5 passives as capstones, old small-tree caps reused as pick-one modifiers. 27 new skills; most reuse existing resolver parts, new parts: "reduce a foe's next move X%" (shared), in-battle revive, front-row screening off, corrosion detonate/transfer, a third bard song + solo, hard-mode energy-shield break. Recommended order: release A Duelist → Mage → Priest → Spear → Archer, the other four in release B.
+- `docs/design/SKILL_TOMES_TH.md`: skill Lv1–5 per member, tome line per class (bulwark/blade/accord) × small/medium/large, cost table, Lv5 = −1 cooldown for cd≥3 skills, deterministic sources (every 3 wins, chests, elites, bosses by the team's main line), trades at the trainer, save v37 sketch.
+- Owner approved both drafts as recommended (2026-10-22): 3 new skills per class, keep Revive and Pinning Volley, release A = Duelist/Mage/Priest/Spear/Archer, tomes per class, cost/source tables as drafted, dismissal refunds 50% of tomes. Next: item 4 (code) in a new Opus session.
+
 ## 2026-10-22 — Claude: formation (item 3b, save v36)
 
 The column a hero stands in is now its lane in the rules (owner 2026-10-22, plan `docs/design/FORMATION_PLAN_TH.md`). `core/world/formation.ts` resolves lanes (`roster.lanes` else class lane, ≤3 per column); `battleData` passes the placed party, so the resolver is unchanged; `ActiveBattle.lanes` fixes the set lanes per battle (missing in v35 battles = class lanes). Mutations: `setPartyLane` (profile, camp team sheet) and `setLane` (run, outside battle). UI `ui/formation-grid.ts` (2×3 grid) in the lobby team sheet and the camp/bag team tab; `field-layout.ts` adds trio columns (slots 8/9, full size per the owner: top panel above the head, middle unit stepped toward the field centre). Tests `tests/formation.test.ts`, `tests/field-layout.test.ts`, `tests/browser/formation.spec.ts`; simulation `tests/formation-sim.test.ts` (no formation dominates; report `docs/validation/formation-sim/REPORT.md`).
