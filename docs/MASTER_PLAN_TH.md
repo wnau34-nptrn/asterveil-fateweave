@@ -4,7 +4,7 @@
 
 เอกสารที่เกี่ยวข้อง
 - งานภาพสำหรับ Codex พร้อม prompt: `docs/handoffs/CODEX-ART-QUEUE-TH.md`
-- เนื้อเรื่องบทที่ 1 (ร่าง รอเจ้าของอ่าน): `docs/LORE_CHAPTER1_TH.md`
+- เนื้อเรื่องบทที่ 1 (อนุมัติแล้ว 2026-10-22): `docs/LORE_CHAPTER1_TH.md`
 - FX: `docs/combat-presentation/vfx-art-direction/README_TH.md`
 - ออนไลน์และกาชา (ข้อเสนอของ Codex): `docs/ONLINE_MMO_BUSINESS_STRATEGY_TH.md`, `docs/GACHA_MONETIZATION_PROPOSAL_TH.md`
 
