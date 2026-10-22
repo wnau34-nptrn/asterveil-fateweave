@@ -977,8 +977,9 @@ test('map bag (2026-10-17): wear a find away from camp, take it off, read a memb
   await expect(page.locator('#bag-tab-items')).toHaveAttribute('aria-selected', 'true');
   for (const sel of ['#bag-tab-items', '#bag-tab-gear', '#bag-tab-team', '[data-world=pack-close]']) await reachable(page, sel);
   await page.locator('#bag-tab-gear').click(); await page.locator('#bag-member-guardian').click();
-  await expect(page.locator('#wear-found-1')).toBeDisabled(); await expect(page.locator('#wear-found-1')).toContainText('คนอื่นใช้');
-  await page.locator('#wear-found-0').click();
+  // The bag is a tile grid (A7): picking a tile shows its card with the wear action.
+  await page.locator('#pick-found-1').click(); await expect(page.locator('#wear-found-1')).toBeDisabled(); await expect(page.locator('#wear-found-1')).toContainText('คนอื่นใช้');
+  await page.locator('#pick-found-0').click(); await page.locator('#wear-found-0').click();
   await expect.poll(async () => (await saved(page)).members.guardian?.gear?.body?.rarity).toBe(3);
   expect((await saved(page)).found).toEqual([bow]);
   await expect(page.locator('#bag-slot-body')).toHaveAttribute('data-rarity', '3');
