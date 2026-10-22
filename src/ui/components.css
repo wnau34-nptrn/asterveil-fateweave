@@ -154,16 +154,17 @@
 .tree-cell[data-up=lit]::before, .tree-cell[data-down=lit]::after { background: var(--lit); box-shadow: 0 0 6px #f2d59688; }
 .tree-cell.pair .node-wrap:first-child::after { content: ''; position: absolute; z-index: 0; top: calc(var(--node) / 2 - 1px); left: 50%; width: calc(100% + 4px); height: 2px; background: var(--line); }
 .node-wrap { position: relative; display: grid; justify-items: center; align-content: start; gap: 6px; width: var(--node); }
-.tree-cell.pair .node-wrap { flex: 0 1 var(--node); min-width: 0; }
+.tree-cell.pair .node-wrap { flex: 0 1 var(--node); min-width: 44px; }
 .node-name { position: relative; z-index: 1; max-width: calc(var(--node) + 16px); padding: 0 3px; border-radius: 4px; background: #0a1524; font-size: 10px; line-height: 1.25; text-align: center; color: var(--text-muted, #bbcadb); }
 .tree-cell.pair .node-name { max-width: 100%; }
-.character-content .node-tree .talent-node { position: relative; z-index: 1; width: var(--node); height: var(--node); min-height: 44px; min-width: 44px; padding: 0; display: grid; place-items: center; border: 0; background: none; box-shadow: none; color: var(--veil-cyan, #74d4ef); }
+.character-content .node-tree .talent-node { position: relative; z-index: 1; width: var(--node); height: var(--node); min-height: 44px; min-width: 44px; padding: 0; display: flex; align-items: center; justify-content: center; flex: none; border: 0; background: none; box-shadow: none; color: var(--veil-cyan, #74d4ef); }
 .node-tree .talent-node::before { content: ''; position: absolute; inset: 4px; z-index: -1; border: 2px solid #74d4ef99; background: radial-gradient(circle at 50% 40%, #1d3a52, #0d1c2e 75%); }
 .node-tree .talent-node.skill::before { border-radius: 50%; }
 .node-tree .talent-node.passive::before { inset: 7px; border-radius: 10px; }
 .node-tree .talent-node.choice::before { inset: 9px; transform: rotate(45deg); border-radius: 4px; }
 .node-tree .talent-node.capstone::before { inset: 2px 5px; border: 0; clip-path: polygon(50% 100%, 100% 72%, 100% 0, 0 0, 0 72%); background: linear-gradient(#3a5269, #1b2c40); }
-.node-tree .talent-node .icon { width: 22px; height: 22px; }
+/* Beats the character sheet's 16px button-icon rule (which adds margin-right) so the glyph sits in the shape's centre. */
+.character-content .node-tree .talent-node > .icon { width: 22px; height: 22px; margin: 0; flex: none; vertical-align: middle; }
 .node-tree .talent-node i { position: absolute; left: 50%; bottom: -7px; transform: translateX(-50%); padding: 0 5px; border-radius: 6px; background: #08121f; font: 700 10px/16px var(--font-display, Kanit), sans-serif; font-style: normal; color: var(--gold-light, #f2d596); }
 .node-tree .talent-node[data-state=locked] { color: #8597aa; }
 .node-tree .talent-node[data-state=locked]::before { border-color: #e8f5ff2e; background: #101d2d; }
