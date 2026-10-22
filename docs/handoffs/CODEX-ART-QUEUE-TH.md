@@ -23,6 +23,8 @@
 | 17 | ART-CHAR-BOSS-CH1-002 ภาพจริงบอสแมพ 4–10 + วาร์กอธ 2 ร่าง จาก concept ที่อนุมัติ | B, C | ทันที |
 | 18 | ART-PET-002 ภาพจริงสัตว์เลี้ยง 6 ตัว จาก concept ที่อนุมัติ | B | ทันที |
 | 19 | ART-VFX-EXEC-WARD-001 ภาพชั้นเอฟเฟกต์ Execute และ Ward | A8 | หลังเจ้าของตรวจคลิป Bolt |
+| 20 | ART-WORLD-CH1-MAP-001 แผนที่ภาพรวมบทที่ 1 (หน้าเลือกแผนที่) | A | ทันที (เจ้าของอนุมัติ 2026-10-22) |
+| 21 | ART-WORLD-MAP-001 concept แผนที่โลกแอสเตอร์เวล | C | ทันที (concept เท่านั้น) |
 
 **งานภาพที่เกมยังขาด (ตรวจ 2026-10-22) — เจ้าของอนุมัติให้สั่งทั้งหมด ได้เป็นข้อ 13–19 แล้ว:**
 - ศัตรูที่ยังไม่มีภาพ (ตอนนี้ใช้ภาพสำรอง): องครักษ์อสูร (ศึกแรก), อสูรส่งพลัง (ศึกเงาล่าแนวหลัง)
@@ -576,4 +578,54 @@ DELIVERABLES per effect (execute_fx.*, ward_fx.*): Phaser JSON-hash atlas webp +
 CONSTRAINTS: effects only (no characters, UI or text); readable at phone scale; reduced-motion uses the static impact frame.
 
 RETURN: incoming/ART-VFX-EXEC-WARD-001/
+```
+
+## 20. ART-WORLD-CH1-MAP-001 — แผนที่ภาพรวมบทที่ 1
+
+```text
+CODEX HANDOFF — ART-WORLD-CH1-MAP-001
+Asterveil · Fateweave: chapter-1 region map (map selection screen)
+
+The camp's "เลือกแผนที่" screen is a plain list today. Replace it with a painted region map of chapter 1: the Asterveil frontier with all ten expedition maps joined by a travel route. The game draws names, locks, cleared flags/stars and the hard-mode badge in DOM on top, so the painting carries no text.
+
+Repository wnau34-nptrn/asterveil-fateweave, base branch feature/fateweave-initial-prototype. Create branch art/art-world-ch1-map-001. Add files only under incoming/ART-WORLD-CH1-MAP-001/. Do not change src/, tests/, public/, .github/ or existing art. Open a PR into the base branch; do not merge. Original artwork only; nothing from Asterveil: Rise Beyond. Never use the word ม่านเวล; the world is แอสเตอร์เวล and the threat is รอยแยก.
+
+READ FIRST: docs/LORE_CHAPTER1_TH.md (story order and places), docs/MASTER_PLAN_TH.md (chapter-1 map table), incoming/ART-WORLD-KEYART-001/ on art/art-world-keyart-001 (approved look of maps 2 and 4–10), public/assets/art/ruins.webp and public/assets/world/tileset.webp (maps 1 and 3 today), incoming/ART-UI-MODERN-001/ (UI direction; the map sits under that HUD style), docs/handoffs/ART-UI-WORLD-001.md (world style lock).
+
+THE TEN PLACES (route order, each recognisable from its own key art):
+ 1 ซากชายแดน ruined frontier fort · 2 เส้นทางป่าทึบ rift-twisted forest trail · 3 แนวรอยแยก violet crystal rift scar · 4 ทะเลสาบเงาจันทร์ moon-shadow lake · 5 เหมืองผลึกร้าง abandoned crystal mine · 6 บึงหมอกพิษ poison-mist swamp · 7 ป้อมเถ้าถ่าน ash fortress of Vargoth's general · 8 นครลอยฟ้าที่ล่มสลาย fallen floating city · 9 ทุ่งดาวตก field of fallen stars · 10 บัลลังก์รอยแยก the rift throne (Vargoth), visibly the most dangerous place.
+
+DESIGN: hand-painted fantasy region map seen from a high 3/4 angle, portrait orientation, readable on a phone. The route winds from the bottom (map 1, safe and warm) to the top (map 10, dark and violet), so progress reads as climbing toward danger. Each place is a small landmark vignette with clear ground around it for a round node marker; the road between places is light parchment-gold. Keep the top-left/bottom-right corners calm for HUD buttons. The camp (ค่ายทหารรับจ้าง) appears as a small tent-and-fire icon beside map 1.
+
+DELIVERABLES:
+- region_ch1.webp: 1080×2340 opaque painting (and region_ch1@2x is not needed).
+- region_ch1.json: for each place id 1–10 the node centre {x,y} in image pixels, plus "camp", plus the route as a list of polyline points between consecutive nodes.
+- region_ch1_fog.webp: same size, transparent soft cloud overlay that the game can mask per place to hide maps not yet opened (or one fog patch per place as separate transparent PNGs with their offsets in the json).
+- preview_390.png and preview_1366.png: the map at phone and centred-portrait PC size with placeholder node circles, sample Thai labels (preview only), one cleared node, one current node and fogged later nodes.
+- NOTES.md: palette, node list, how fog is meant to be layered.
+
+CONSTRAINTS: no text, numbers, UI or markers baked into region_ch1.webp; every node area at least 120×120 px of clear ground; same painted style family as the key art and world tiles; original artwork.
+
+RETURN: incoming/ART-WORLD-CH1-MAP-001/
+```
+
+## 21. ART-WORLD-MAP-001 — concept แผนที่โลกแอสเตอร์เวล
+
+```text
+CODEX HANDOFF — ART-WORLD-MAP-001 (concept stage)
+Asterveil · Fateweave: world map of แอสเตอร์เวล
+
+Later releases add more chapters. This is a CONCEPT for owner review: the whole continent, split into regions, one per future chapter, with chapter 1 (the frontier) placed in one corner and the rift's spread visible toward the centre. It will become the chapter-select screen.
+
+Repository wnau34-nptrn/asterveil-fateweave, base branch feature/fateweave-initial-prototype. Create branch art/art-world-map-001. Add files only under incoming/ART-WORLD-MAP-001/. Do not change src/, tests/, public/, .github/ or existing art. Open a PR into the base branch; do not merge. Original artwork only; nothing from Asterveil: Rise Beyond. Never use the word ม่านเวล; the world is แอสเตอร์เวล and the threat is รอยแยก.
+
+READ FIRST: docs/LORE_CHAPTER1_TH.md, docs/MASTER_PLAN_TH.md (releases A–D), incoming/ART-WORLD-CH1-MAP-001/ if it exists (match its painting style), incoming/ART-WORLD-KEYART-001/.
+
+DESIGN: one hand-painted continent map, landscape 16:9 concept plus a portrait crop showing how it reads on a phone; 5–6 distinct regions (biome, palette and a landmark each) with chapter 1's frontier clearly marked by its ten landmarks in miniature; the rift as a violet scar spreading across the land; sea, mountains and a few unnamed cities for future chapters. Fog over everything beyond chapter 1 in a second version.
+
+DELIVERABLES: world_concept.png (3840×2160), world_concept_fog.png (same with later regions fogged), world_portrait.png (1080×2340 crop), regions.png (the map with numbered region outlines, numbers only, for discussion), NOTES.md with a short proposal per region (biome, mood, possible threat) for the owner to choose from.
+
+CONSTRAINTS: concept only, no runtime atlas; no text except the region numbers on regions.png; original artwork.
+
+RETURN: incoming/ART-WORLD-MAP-001/
 ```
