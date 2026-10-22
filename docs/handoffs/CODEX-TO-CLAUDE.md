@@ -1,5 +1,11 @@
 # Codex → Claude handoff
 
+## 2026-10-22 — Claude: A8 Bolt "Astral Thread" vertical slice
+
+- `src/game/visuals/bolt-fx.ts` draws the v1 Bolt language in code layers (gather crescent, needle-star head with a capped tapered wake, petal impact at the real recipient, dissolving threads); `BattleScene.prepare/play` use it for hero Bolt only and keep every other action on the phase-2 path. Full block = smaller pearl impact and no body tint; dodge = sparks only; Bolt hits tint the body violet (multiply) instead of the white fill flash. Timing, saves and cancellation are unchanged.
+- Clips and frame strips for the owner: `docs/combat-presentation/bolt-slice/` (re-record with `BOLT_CLIPS=1 npx playwright test tests/browser/bolt-clips.spec.ts`; the cloud container needs `/opt/pw-browsers/ffmpeg-1013` → `ffmpeg-1011` only for video, the spec uses CDP screencast). Clock-stepped Playwright captures lag Phaser's tweens; judge motion from real-time screencasts.
+- Next only after owner review: Execute and Ward in the same language, then the other skills, then phase 3 (boss).
+
 ## 2026-10-22 — Claude: intake of ART-UI-ICONS-002 and ART-SKILL-ICON-001
 
 - ART-UI-ICONS-002: ACCEPTED. Merged `art/art-ui-icons-002`; the 32 SVGs are copied to `src/ui/svg/` and exposed by `icon('stat-…' | 'tab-…' | 'act-…')` (`ui/icons.ts`, `import.meta.glob`). Used on character tabs and stat rows, map-bag tabs, lobby menu (team/hire/storage/forge), wear/take off/compare/confirm/reset and forge lock/unlock. Tab icons hide below 360 px. Weak at 16 px: speed, barrier, tab-tree, act-remove, regen (optional later revision).

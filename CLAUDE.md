@@ -6,6 +6,8 @@ The owner approved every recommendation in `docs/MASTER_PLAN_TH.md` ("อนุ�
 
 ## VFX art rework checkpoint — owner scope 2026-10-21
 
+Status 2026-10-22: the owner asked for FX first; the Bolt vertical slice is in (`game/visuals/bolt-fx.ts`, clips in `docs/combat-presentation/bolt-slice/`) and awaits the owner's clip review before Execute/Ward.
+
 The owner rejected the visual quality of phase2 and authorized artwork/mockups before further implementation. Engineering completion and passing tests are not visual approval. Current priority supersedes the older immediate phase3 handoff: read `docs/combat-presentation/vfx-art-direction/README_TH.md` and the three v1 storyboards, obtain owner feedback on the visual direction, then implement only Bolt as a polished vertical slice and show real mobile/PC clips before expanding to Execute/Ward or boss cinematics. These are opaque AI concept sheets with known HUD/text/pose drift, not transparent runtime assets; actual game assets/UI/events remain authoritative. Do not cut the gameplay background from a board into a texture. Keep phase1–2 timing/save/cancellation and unchanged rules. This artwork-only handoff does not modify/deploy runtime or imply the owner has approved the v1 visuals. The visual review checkpoint comes from the agreed design workflow, not a new permission requirement for routine tests/git operations.
 
 ## Combat presentation phase 2 — owner scope 2026-10-21

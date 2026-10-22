@@ -3,6 +3,7 @@ import type { BattleState, EncounterDefinition, TurnStage } from '../../core/bat
 import { effectFamily, effectCaption, type CombatPrefs } from '../visuals/combat-effects';
 import { thaiFont } from '../../ui/th';
 import { palette } from '../visuals/palette';
+import { boltCast, boltImpact, type FxContext } from '../visuals/bolt-fx';
 import { fieldSlots, type FieldSlot } from '../visuals/field-layout';
 import { actorArt, actorFootOrigins, artOf, artUrl, mirroredArt, unitsUrl } from '../visuals/assets';
 
@@ -236,6 +237,12 @@ export class BattleScene extends Phaser.Scene {
     const slot = this.actorPanels.get(id ?? '');
     return slot ? { x: slot.x, y: slot.y - slot.size * .48 } : undefined;
   }
+  // Layered skill effects (A8, Bolt first) draw into the same effect layer, sized from the actor's slot.
+  private fx(id: string | undefined): FxContext {
+    const size = this.actorPanels.get(id ?? '')?.size ?? 96;
+    return { scene: this, quiet: this.quiet, reduced: this.reducedMotion, scale: Phaser.Math.Clamp(size / 96, .7, 1.25),
+      add: (item, life) => { if (life !== undefined) { this.fade(item, life); return; } if (!this.effects) { this.effects = this.add.container(0, 0); this.root?.add(this.effects); } this.effects.add(item); } };
+  }
   private fade(item: Phaser.GameObjects.Shape | Phaser.GameObjects.Graphics | Phaser.GameObjects.Text, life: number): void {
     if (!this.effects) { this.effects = this.add.container(0, 0); this.root?.add(this.effects); }
     this.effects.add(item);
@@ -256,6 +263,8 @@ export class BattleScene extends Phaser.Scene {
     const family = effectFamily(turn), start = this.anchor(turn.actorId);
     const end = this.anchor(turn.events.find(e => e.type === 'damage' || e.type === 'dodge')?.targetId ?? turn.targetId);
     if (!start || !end) return;
+    // Bolt (A8 vertical slice): the Astral Thread cast replaces the generic charge ring and trail.
+    if (turn.action === 'bolt' && turn.side === 'hero') { boltCast(this.fx(turn.actorId), start, end, contactMs); return; }
     const color = family === 'arcane' ? 0xc5a4ff : family === 'restore' ? 0x85e5be : family === 'mark' ? 0xffa9d4 : family === 'shield' ? palette.cyan : palette.gold;
     const charge = this.add.circle(start.x, start.y, family === 'steel' ? 9 : 18).setStrokeStyle(2, color, .9);
     this.fade(charge, contactMs);
@@ -303,9 +312,11 @@ export class BattleScene extends Phaser.Scene {
       const shield = ['barrier','guard','brace','sanctuary'].includes(event.type) || !!event.absorbed || intercepted;
       const color = shield ? 0x8addf5 : event.type === 'heal' ? 0x85e5be : event.type === 'mark' ? 0xffa9d4 : family === 'arcane' ? 0xc5a4ff : palette.gold;
       say(id, effectCaption(event), '#' + color.toString(16).padStart(6,'0'));
+      const bolt = turn.action === 'bolt' && turn.side === 'hero' && event.sourceId === turn.actorId && (event.type === 'damage' || event.type === 'dodge');
+      if (bolt) boltImpact(this.fx(id), p, this.anchor(event.sourceId), life, event.type === 'dodge' ? 'dodged' : event.amount ? 'hit' : 'blocked');
       if (damage) {
         const from = this.anchor(event.sourceId);
-        if (from) {
+        if (from && !bolt) {
           const slash = this.add.graphics().lineStyle(this.quiet ? 2 : 5, color, .9);
           if (family === 'steel' || event.type === 'counter') slash.lineBetween(from.x,from.y,p.x,p.y);
           if (!event.absorbed || event.amount) {
@@ -316,7 +327,8 @@ export class BattleScene extends Phaser.Scene {
         }
         const body = this.bodies.get(id), sprite = body?.list.find(c => c instanceof Phaser.GameObjects.Image) as Phaser.GameObjects.Image | undefined;
         if (event.amount && sprite && !this.reducedMotion) {
-          sprite.setTint(0xffffff).setTintMode(Phaser.TintModes.FILL);
+          // Bolt keeps the body's detail: a short violet multiply tint instead of a white fill flash.
+          if (bolt) sprite.setTint(0xcdb8ff).setTintMode(Phaser.TintModes.MULTIPLY); else sprite.setTint(0xffffff).setTintMode(Phaser.TintModes.FILL);
           this.later(90, () => { if (sprite.active) sprite.clearTint().setTintMode(Phaser.TintModes.MULTIPLY); });
           if (body && !this.quiet) this.tweens.add({ targets:body,x:body.x+(Math.sign(p.x-(from?.x ?? p.x-1)) || 1)*7,delay:hold,duration:80,yoyo:true });
         }
@@ -339,7 +351,7 @@ export class BattleScene extends Phaser.Scene {
         this.fade(this.add.graphics().lineStyle(4,color).lineBetween(p.x-13,p.y,p.x+13,p.y).lineBetween(p.x,p.y-13,p.x,p.y+13),life);
       } else if (event.type === 'mark') {
         this.fade(this.add.graphics().lineStyle(2,color).strokeCircle(p.x,p.y,23).lineBetween(p.x-30,p.y,p.x-16,p.y).lineBetween(p.x+16,p.y,p.x+30,p.y).lineBetween(p.x,p.y-30,p.x,p.y-16).lineBetween(p.x,p.y+16,p.x,p.y+30),life);
-      } else {
+      } else if (!bolt) {
         const ring = this.add.circle(p.x,p.y,damage?19:25).setStrokeStyle(2,color,.9); this.fade(ring,life);
         if (!this.quiet && !this.reducedMotion) this.tweens.add({targets:ring,scale:damage?2:1.4,duration:Math.min(350,life)});
       }
