@@ -1,5 +1,12 @@
 # Codex → Claude handoff
 
+## 2026-10-22 — Claude: A7 step 1 part 2 (bag grid, item detail, node tree)
+
+- Bag (`ui/character-panel.ts` `gear()`/`itemCard()`): five-column tiles (`#pick-<key>`, rarity frame, Lv, +); the picked tile opens one item card with ▲▼ from the trial projection (`host.preview`, nothing saved) and `#wear-<key>` / `#compare-<key>` / Develop. Those two ids exist only for the picked piece, so browser tests click `#pick-…` first. Quick chips (`#gear-chip-*`) replace the visible set dropdown; all selects fold behind the "ตัวกรอง" chip (`gearFilters(…, chips=true)`). Folded panels read their open state before each re-render (camp re-renders beat the async toggle event).
+- Item detail (`characterEquipmentComparison`): head card, set/replace pills, main stat with ▲▼, affix quality bars, "เทียบที่สวมอยู่" table (same `data-stat` rows), swap list for automatic plans.
+- Big tree (`bigTalents`): node graph, 3 columns × 4 tiers, gold lines between ranked tiers, shapes skill/choice/passive/capstone. A node tap selects (`data-world=talent-pick`); `#character-talent-learn` spends. Small trees still tap-to-learn.
+- Review screenshots: `UI_SHOTS=<dir> npx playwright test tests/browser/ui-shots.spec.ts` (skipped without the variable). Waiting for the owner's look before step 2 items (smith, rewards, hire board, camp bottom bar).
+
 ## 2026-10-22 — Claude: handoff to a new chat
 
 - Full state, owner decisions, next steps and a copy-ready opening prompt: `docs/handoffs/NEW-CHAT-HANDOFF-TH.md`. Last commit at handoff `777aa5d` (CI green, save v34). A7 step 1 is half done (overview + paper doll); bag grid, item compare and node-style tree come next, then the 4v4 resolver step.
