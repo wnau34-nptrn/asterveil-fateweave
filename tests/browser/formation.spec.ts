@@ -55,16 +55,16 @@ test('map bag changes the formation outside battle and the next battle stands in
   await context.close();
 });
 
-test('a 3 front / 1 back formation draws the three smaller in one column', async ({ browser }) => {
+for (const [name, lanes, chip] of [['3-1', { weaver: 'front' }, 'หน้า 3 · หลัง 1'], ['1-3', { tracer: 'back' }, 'หน้า 1 · หลัง 3']] as const) test(`a ${name} formation stands three full-size heroes in one column`, async ({ browser }) => {
   const context = await browser.newContext(phone), page = await context.newPage();
   const run = { ...newExpedition(map, encounterById, 1234), tutorialDone: true };
-  run.roster.lanes = { weaver: 'front' };
+  run.roster.lanes = { ...lanes };
   const data = encounterById('slime-nest')!; const hp = Object.fromEntries(run.roster.deployed.map(id => [id, run.hp[id]!]));
-  run.battle = { kind: 'random', encounterId: data.id, entry: hp, commands: [], lanes: { weaver: 'front' } };
+  run.battle = { kind: 'random', encounterId: data.id, entry: hp, commands: [], lanes: { ...lanes } };
   await seed(page, camp(), run);
   const start = page.locator('[data-ui=start]'); if (await start.isVisible().catch(() => false)) await start.click();
   await expect(page.locator('#action-attack')).toBeEnabled();
-  await expect(page.locator('.formation-chip')).toContainText('หน้า 3 · หลัง 1');
-  if (dir) { await page.waitForTimeout(400); await page.screenshot({ path: `${dir}/formation-battle-3-1-390.png` }); }
+  await expect(page.locator('.formation-chip')).toContainText(chip);
+  if (dir) { await page.waitForTimeout(400); await page.screenshot({ path: `${dir}/formation-battle-${name}-390.png` }); }
   await context.close();
 });

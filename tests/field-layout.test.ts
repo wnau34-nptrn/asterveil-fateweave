@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { fieldSlots, slotPlan, TRIO_SCALE, type FieldBox } from '../src/game/visuals/field-layout';
+import { fieldSlots, slotPlan, type FieldBox } from '../src/game/visuals/field-layout';
 
 const intersects = (a: FieldBox, b: FieldBox) => a.x < b.x + b.width && b.x < a.x + a.width && a.y < b.y + b.height && b.y < a.y + a.height;
 
@@ -43,7 +43,7 @@ describe('reserved battlefield unit panels', () => {
       for (const [j, b] of slots.entries()) if (j !== 5) expect(intersects(slots[4]!.panel, b.body), `${height}: body ${j}`).toBe(false);
     }
   });
-  it('stacks a column of three heroes smaller, panels clear of every standing body, for 3/1 and 1/3', () => {
+  it('stacks a column of three heroes at full size, panels clear of every standing body, for 3/1 and 1/3', () => {
     const foes = [{ id: 'f1' }, { id: 'f2' }, { id: 'b1', large: true }, { id: 'b2' }];
     for (const lanes of [['front', 'front', 'front', 'back'], ['front', 'back', 'back', 'back']] as const) {
       const plan = slotPlan(['a', 'b', 'c', 'd'].map((id, i) => ({ id, lane: lanes[i]! })), foes, new Set());
@@ -53,7 +53,7 @@ describe('reserved battlefield unit panels', () => {
         const trio = [...plan.heroSlots.values()].filter(i => lanes.filter(l => l === lanes[[...plan.heroSlots.values()].indexOf(i)]).length === 3);
         for (const i of trio) {
           expect(all[i]!.size).toBeGreaterThanOrEqual(44); expect(all[i]!.body.y, `${width}×${height} top`).toBeGreaterThanOrEqual(-1);
-          if (height >= 260) expect(all[i]!.size).toBeLessThanOrEqual(Math.max(44, Math.ceil(all[4]!.size * TRIO_SCALE)));
+          if (height >= 260) { expect(all[i]!.size).toBe(all[5]!.size); expect(all[i]!.panel.width, `${width}×${height} panel ${i}`).toBeGreaterThanOrEqual(40); }
         }
         for (const [i, a] of used) {
           expect(a.panel.x).toBeGreaterThanOrEqual(0); expect(a.panel.y + a.panel.height).toBeLessThanOrEqual(height);

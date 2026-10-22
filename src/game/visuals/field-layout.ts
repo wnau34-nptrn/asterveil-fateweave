@@ -11,12 +11,10 @@ export interface FieldSlot {
  * LARGE_SCALE times taller from the same feet; the rows always reserve room for a large unit in any slot.
  * `centered` lists slots whose column holds only that unit in this encounter: they stand in the middle row.
  * Formation (owner 2026-10-22): a hero column may hold three. `trio` names such columns; their third unit takes slot
- * 8 (rear) or 9 (front) in the middle, and the column's three are drawn about TRIO_SCALE of the normal size with
- * compact panels. Slots 8/9 of other columns hold nobody.
+ * 8 (rear) or 9 (front) in the middle at the normal size (see `trioSlots`). Slots 8/9 of other columns hold nobody.
  */
 export const FOE_SLOT_INDEX: Readonly<Record<string, number>> = { f1: 4, f2: 5, b1: 6, b2: 7 };
 export const LARGE_SCALE = 1.5;
-export const TRIO_SCALE = .8;
 export type HeroColumn = 'back' | 'front';
 export const TRIO_SLOTS: Readonly<Record<HeroColumn, readonly [number, number, number]>> = { back: [0, 8, 1], front: [2, 9, 3] };
 const COLUMNS = [.12, .355, .645, .88] as const;
@@ -39,9 +37,8 @@ function narrowCentered(slots: FieldSlot[], centered: ReadonlySet<number>, trio:
   // A trio's panels sit level with the other column's middle unit, so they narrow the same way.
   for (const i of [...centered, ...[...trio].flatMap(c => TRIO_SLOTS[c])]) {
     const own = slots[i]!, p = own.panel; let left = p.x, right = p.x + p.width;
-    for (const [j, other] of slots.entries()) {
-      const b = other.body;
-      if (j === i || unused.has(j) || other.x === own.x || b.y >= p.y + p.height || b.y + b.height <= p.y) continue;
+    for (const [j, other] of slots.entries()) for (const b of [other.body, other.panel]) {
+      if (j === i || unused.has(j) || Math.abs(other.x - own.x) < 1 || b.y >= p.y + p.height || b.y + b.height <= p.y) continue;
       if (other.x < own.x) left = Math.max(left, b.x + b.width); else right = Math.min(right, b.x);
     }
     p.x = left; p.width = Math.max(0, right - left - .01);
@@ -100,31 +97,41 @@ function shortSlots(width: number, height: number, compact: boolean, tiny: boole
   });
 }
 
-// A column of three heroes stacks top/middle/bottom from the field's top edge to its bottom edge. Tall fields draw them
-// at TRIO_SCALE (smaller if the height needs it) with compact panels under the feet; short fields keep 44px bodies
-// with the small side badge, as the shortest fields already do.
+// A column of three heroes keeps the full size (owner 2026-10-22). Tall fields: the top unit's panel moves above its
+// head, the bottom unit stays on the lower row, and the middle unit stands just above the bottom unit's head, stepped
+// toward the field centre so it does not hide the top one (its panel shrinks to 32/26 px when the height is short).
+// Short fields keep 44px bodies with the small side badge, as the shortest fields already do.
 function trioSlots(slots: FieldSlot[], column: HeroColumn, width: number, height: number, short: boolean): void {
-  const ids = TRIO_SLOTS[column], base = slots[ids[0]]!, iconSize = short ? 12 : 18, gap = 2;
-  // Tall: panels start just under the body box (its 4% shadow overshoot); 32px panels unless only 26px fit.
-  const fit = (panel: number) => Math.floor(Math.min(base.size * TRIO_SCALE, ((height - 2) / 3 - 6 - gap - panel) / 1.07));
-  const panelHeight = short || fit(32) < 44 ? 26 : 32;
-  const size = short ? 44 : Math.max(44, fit(panelHeight));
-  // On short fields the side badge must end before the next column's panels (the shortest fields already badge all).
-  const x = !short || base.side ? base.x : column === 'back' ? Math.max(23, Math.min(base.x, width * .25 - 51)) : Math.max(width * .24 + 23, Math.min(base.x, width * .5 - 51));
-  const cellWidth = width * .225, below = Math.ceil(size * .04) + 2;
-  const step = 1.07 * size + 4 + below + panelHeight + gap;
-  // Tall fields share any spare height between the three; the top unit's head stays inside the field.
-  const spare = Math.max(0, (height - 2 - 3 * step) / 3);
-  const top = Math.max(4 + (height - 8) / 3 - 3, 1.03 * size + 3);
-  ids.forEach((slot, k) => {
-    const y = short ? top + k * (height - 3 - top) / 2 : 1.03 * size + 4 + spare / 2 + k * (step + spare);
-    slots[slot] = {
-      x, y, size, compact: true, tiny: base.tiny, side: short, iconSize, maxIcons: 1,
-      body: { x: x - size * .51, y: y - size * 1.03 - 4, width: size * 1.02, height: size * 1.07 + 4 },
-      panel: short ? { x: x + 24, y: y - 26, width: 26, height: 26 } : { x: x - cellWidth / 2, y: y + below, width: cellWidth, height: panelHeight },
-    };
-  });
+  const ids = TRIO_SLOTS[column], base = slots[ids[0]]!;
+  if (short) {
+    const size = 44, step = (height - 8) / 3;
+    // The side badge must end before the next column's panels (the shortest fields already badge all).
+    const x = base.side ? base.x : column === 'back' ? Math.max(23, Math.min(base.x, width * .25 - 51)) : Math.max(width * .24 + 23, Math.min(base.x, width * .5 - 51));
+    const top = Math.max(4 + step - 3, 1.03 * size + 3);
+    ids.forEach((slot, k) => {
+      const y = top + k * (height - 3 - top) / 2;
+      slots[slot] = { x, y, size, compact: true, tiny: base.tiny, side: true, iconSize: 12, maxIcons: 1, body: bodyBox(x, y, size), panel: { x: x + 24, y: y - 26, width: 26, height: 26 } };
+    });
+    return;
+  }
+  const size = base.size, x = base.x, bottom = slots[ids[2]]!, cellWidth = width * .225;
+  // The step stops short of the next column's panels (foe front panels for our front column).
+  const next = width * COLUMNS[column === 'front' ? 2 : 1] - cellWidth / 2;
+  const shift = Math.max(0, Math.min(width * (column === 'front' ? .07 : .04), next - (x + size * .51) - 2));
+  const plan = (panel: number) => {
+    const topFeet = 2 + panel + 2 + 1.03 * size + 4;
+    const middleFeet = bottom.body.y - 2 - panel - BELOW_FEET;
+    return { panel, topFeet, middleFeet, fits: middleFeet + BELOW_FEET >= topFeet + .04 * size + 2 };
+  };
+  const p = [50, 32].map(plan).find(q => q.fits) ?? plan(26);
+  const compact = p.panel < 50, maxIcons = compact ? 1 : base.maxIcons;
+  const unit = (ux: number, y: number, panelY: number): FieldSlot => ({ x: ux, y, size, compact, tiny: false, side: false, iconSize: 18, maxIcons,
+    body: bodyBox(ux, y, size), panel: { x: ux - cellWidth / 2, y: panelY, width: cellWidth, height: p.panel } });
+  slots[ids[0]] = unit(x, p.topFeet, 2);
+  slots[ids[1]] = unit(x + shift, p.middleFeet, p.middleFeet + BELOW_FEET);
+  slots[ids[2]] = { ...unit(x, bottom.y, bottom.y + BELOW_FEET) };
 }
+const bodyBox = (x: number, y: number, size: number): FieldBox => ({ x: x - size * .51, y: y - size * 1.03 - 4, width: size * 1.02, height: size * 1.07 + 4 });
 
 export interface SlotPlan { heroSlots: Map<string, number>; large: Set<number>; centered: Set<number>; trio: Set<HeroColumn>; used: number[] }
 /** Which slot each actor stands in. Heroes fill their own lane's column first. A column with a single unit in this
