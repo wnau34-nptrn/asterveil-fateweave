@@ -25,6 +25,7 @@
 | 19 | ART-VFX-EXEC-WARD-001 ภาพชั้นเอฟเฟกต์ Execute และ Ward | A8 | ทันที (เจ้าของให้ Bolt ผ่าน 2026-10-22) |
 | 20 | ART-WORLD-CH1-MAP-001 แผนที่ภาพรวมบทที่ 1 (หน้าเลือกแผนที่) | A | ทันที (เจ้าของอนุมัติ 2026-10-22) |
 | 21 | ART-WORLD-MAP-001 concept แผนที่โลกแอสเตอร์เวล | C | ทันที (concept เท่านั้น) |
+| 22 | ART-VFX-FORGE-STRIKE-001 เอฟเฟกต์ค้อนตีอุปกรณ์ตอนตีบวก/เพิ่ม Lv (แทนค้อนโค้ดวาดชั่วคราว) | A7 | ทันที (เจ้าของว่าของชั่วคราวไม่สวย 2026-10-22) |
 
 **งานภาพที่เกมยังขาด (ตรวจ 2026-10-22) — เจ้าของอนุมัติให้สั่งทั้งหมด ได้เป็นข้อ 13–19 แล้ว:**
 - ศัตรูที่ยังไม่มีภาพ (ตอนนี้ใช้ภาพสำรอง): องครักษ์อสูร (ศึกแรก), อสูรส่งพลัง (ศึกเงาล่าแนวหลัง)
@@ -628,4 +629,42 @@ DELIVERABLES: world_concept.png (3840×2160), world_concept_fog.png (same with l
 CONSTRAINTS: concept only, no runtime atlas; no text except the region numbers on regions.png; original artwork.
 
 RETURN: incoming/ART-WORLD-MAP-001/
+```
+
+---
+
+## 22. ART-VFX-FORGE-STRIKE-001 — เอฟเฟกต์ค้อนตีอุปกรณ์ (เริ่มได้ทันที)
+
+ที่มา: ตอนนี้เกมมีป๊อปอัปตีบวก/เพิ่ม Lv ที่ใช้ค้อนวาดด้วยโค้ด (สี่เหลี่ยมเทา) เจ้าของเห็นว่าไม่สวย ต้องการภาพวาดสไตล์เดียวกับ Bolt (`src/ui/forge-strike.ts`, `.forge-strike` ใน `src/ui/components.css` คือของชั่วคราว Claude จะเปลี่ยนเป็นภาพของ Codex)
+
+```text
+CODEX HANDOFF — ART-VFX-FORGE-STRIKE-001
+Asterveil · Fateweave: painted hammer-on-gear strike effect for the forge (enhance +1 and item Lv +1)
+
+The owner reviewed the placeholder popup (a code-drawn grey block hammer hitting the gear tile) and did not like it. Replace it with painted art in the same language as your ART-VFX-BOLT-001 layers (already in the game under public/assets/fx/bolt_fx.*): painterly, luminous, tapered shapes, soft sky-white cores with warm edges. Here the palette leans warm: molten gold / ember orange / rose-gold sparks over cool navy steel, keeping the Luminous Veil navy UI around it.
+
+Repository wnau34-nptrn/asterveil-fateweave, base branch feature/fateweave-initial-prototype. Create branch art/art-vfx-forge-strike-001. Add files only under incoming/ART-VFX-FORGE-STRIKE-001/. Do not change src/, tests/, public/, .github/ or existing art. Open a PR into the base branch; do not merge. Original artwork only; nothing from Asterveil: Rise Beyond. Never use the word ม่านเวล.
+
+READ FIRST: docs/combat-presentation/vfx-art-direction/README_TH.md (palette, blend rules, things not to do), incoming/ART-VFX-BOLT-001/ on art/art-vfx-bolt-001 (exact atlas/json/pivot/blend format and NOTES table to repeat), src/ui/forge-strike.ts and the "Forge strike" block at the end of src/ui/components.css (the current placeholder: timing, layout and what must be replaced), and public/assets/ui/ (how gear item art looks; the piece being struck is a 132 px rarity-framed gear tile whose art you must never repaint).
+
+WHAT HAPPENS (timing is fixed by the game, total 1.7 s, the gear tile is already shown in the middle, 132 px, over a dark vignette):
+- 0.00–0.30 s: a hammer swings in from the upper right and is raised.
+- 0.30 s: first hit on the tile (small shake). 0.70 s: second, heavier hit; the result label ("+5" or "Lv3") pops up under the tile at 0.72 s.
+- 1.36–1.70 s: everything fades.
+Two sounds (synth clang) are played at 0.33 s and 0.70 s, so impacts must read exactly at those moments.
+
+LAYERS (each a separate transparent PNG, no background, no grid or frame lines inside cells, premultiplied-safe edges)
+- hammer: one painted forge hammer (steel head, wrapped leather/wood handle, small gold inlay), drawn as a single sprite 256x256 with the pivot at the handle's lower end, plus a motion-smear variant (a tapered arc trail) of the head for the downswing; the game rotates and moves the sprite itself.
+- hit_flash_a and hit_flash_b: contact flash for hit 1 (small) and hit 2 (big), 6-8 frame flipbooks, 256 px cells, centred on contact; radius reads 40-60 px on a 390 px wide screen.
+- sparks: 3-4 spark/ember sprites 32-48 px plus a 6 frame arcing-spark flipbook, gravity-ready (they fall; no baked trajectory).
+- shock_ring: thin tapered shock ring, 6 frames, 256 px cells, for hit 2.
+- result_glow: soft gold bloom + 8-point star glint that sits behind the result label (256x128), 6 frame flipbook; also a calmer cool-cyan variant for "Lv" results.
+- anvil_dust (optional): faint heat-haze/dust at the base, 4 frames.
+Pack as forge_strike_fx.webp + forge_strike_fx.json (frame names, sizes, pivots) with the same conventions as bolt_fx, and provide the source PNGs.
+
+ALSO: preview_dark.png and preview_light.png (layers composited over a dark and a bright background at 390x844 scale, with the gear tile placeholder in the middle), a contact sheet, and NOTES.md (blend mode per layer: additive only for flash/glow cores, normal alpha for coloured edges; suggested scale and delay per layer matching the timing above; which single frame is the reduced-motion still).
+
+CONSTRAINTS: effects and the hammer only (no characters, no UI text, no numbers in the art); shapes tapered and intentional, not uniform circles or thick straight beams; no full-screen flashes; readable at phone scale; do not cover the gear art's rarity frame with opaque pixels.
+
+RETURN: incoming/ART-VFX-FORGE-STRIKE-001/
 ```
