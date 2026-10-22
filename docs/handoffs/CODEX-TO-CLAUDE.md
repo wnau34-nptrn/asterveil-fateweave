@@ -1,5 +1,10 @@
 # Codex → Claude handoff
 
+## 2026-10-22 — Claude: CLAUDE.md trimmed, session workflow rules
+
+- Owner approved token saving: CLAUDE.md is now ~14 KB (current rules + a systems index); dated phase scopes and the long expedition/SPD notes moved verbatim to `docs/design/SYSTEMS_REFERENCE.md` (line-by-line check: nothing dropped). New section "Session workflow and token economy": one big task per chat, open the next in a new cloud session with the fitting model (Sonnet for UI/art intake/docs, Opus for resolver/save/balance/design), optional Sonnet subagents for routine work, 390px screenshots only.
+- `NEW-CHAT-HANDOFF-TH.md` rewritten with today's state, next tasks with model choice and opening prompts.
+
 ## 2026-10-22 — Claude: map-1 boss art in, Codex queue 13–19 written (owner approved all)
 
 - ART-CHAR-BOSS-RUINS-001 merged; the hunter and captain are appended to the foes atlases as frames 9 and 10 (`units_foes`/`portraits_foes` now 6 rows, `sheetRows.foes = 6`), art keys `foe_hunter`/`foe_captain` on first-clash and vanguard-captain. Presentation only, no encounter version bump.
