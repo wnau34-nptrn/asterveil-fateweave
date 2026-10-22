@@ -66,13 +66,14 @@ function tallSlots(width: number, height: number, large: ReadonlySet<number>, ce
     // A column holding a single unit stands it in the middle row (owner 2026-10-22: a lone boss reads better centred).
     const y = (centered.has(slot) && !third ? (upperFeet + lowerFeet) / 2 + big * .2 : row ? lowerFeet : upperFeet) + (front ? FRONT_DROP : 0);
     const drawn = large.has(slot) ? Math.floor(big) : size;
-    // An escorted boss stands just above its partner's head (the partner is drawn at the normal size).
+    // An escorted boss stands with its feet just above its partner's head (the partner is drawn at the normal size)
+    // and carries its HP panel above its head like a boss bar, so it stays near the middle of the field.
     if (escorted.has(slot) && !third) {
       const partnerTop = lowerFeet + (front ? FRONT_DROP : 0) - 1.03 * size - 4;
-      const boss = Math.min(y, partnerTop - BELOW_FEET - panelHeight - 2);
+      const boss = Math.max(partnerTop - 4, panelHeight + 2 + 1.03 * drawn + 4 + 2), top = boss - drawn * 1.03 - 4;
       return { x, y: boss, size: drawn, compact, tiny, side, iconSize, maxIcons: Math.min(3, Math.floor((cellWidth - iconSize) / (iconSize + 2))),
-        body: { x: x - drawn * .51, y: boss - drawn * 1.03 - 4, width: drawn * 1.02, height: drawn * 1.07 + 4 },
-        panel: { x: x - cellWidth / 2, y: boss + BELOW_FEET, width: cellWidth, height: panelHeight } };
+        body: { x: x - drawn * .51, y: top, width: drawn * 1.02, height: drawn * 1.07 + 4 },
+        panel: { x: x - cellWidth / 2, y: top - panelHeight - 2, width: cellWidth, height: panelHeight } };
     }
     return {
       x, y, size: drawn, compact, tiny, side, iconSize, maxIcons: Math.min(3, Math.floor((cellWidth - iconSize) / (iconSize + 2))),
