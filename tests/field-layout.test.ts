@@ -66,4 +66,14 @@ describe('reserved battlefield unit panels', () => {
       }
     }
   });
+  it('stacks a column of three in line at full size when the field is tall enough (390×844 compact HUD: 513px)', () => {
+    for (const column of ['front', 'back'] as const) {
+      const lone = column === 'front' ? 0 : 2, ids = column === 'front' ? [2, 9, 3] : [0, 8, 1];
+      const s = fieldSlots(378, 513, new Set(), new Set([lone]), new Set([column])), full = fieldSlots(378, 513);
+      expect(new Set(ids.map(i => s[i]!.x)).size).toBe(1);
+      for (const i of ids) expect(s[i]!.size).toBe(full[2]!.size);
+      expect(s[lone]!.y).toBe(s[ids[1]!]!.y);
+      expect(s[ids[0]!]!.body.y).toBeGreaterThanOrEqual(0);
+    }
+  });
 });

@@ -24,7 +24,7 @@ const BELOW_FEET = 12, FRONT_DROP = 2;
 export function fieldSlots(width: number, height: number, large: ReadonlySet<number> = new Set(), centered: ReadonlySet<number> = new Set(), trio: ReadonlySet<HeroColumn> = new Set()): FieldSlot[] {
   const compact = height < 260, tiny = height < 180, side = height < 150;
   const slots = compact ? shortSlots(width, height, compact, tiny, side) : tallSlots(width, height, large, centered);
-  for (const column of trio) trioSlots(slots, column, width, height, compact);
+  for (const column of trio) trioSlots(slots, column, width, height, compact, centered);
   if (!compact) narrowCentered(slots, centered, trio);
   return slots;
 }
@@ -101,7 +101,7 @@ function shortSlots(width: number, height: number, compact: boolean, tiny: boole
 // head, the bottom unit stays on the lower row, and the middle unit stands just above the bottom unit's head, stepped
 // toward the field centre so it does not hide the top one (its panel shrinks to 32/26 px when the height is short).
 // Short fields keep 44px bodies with the small side badge, as the shortest fields already do.
-function trioSlots(slots: FieldSlot[], column: HeroColumn, width: number, height: number, short: boolean): void {
+function trioSlots(slots: FieldSlot[], column: HeroColumn, width: number, height: number, short: boolean, centered: ReadonlySet<number>): void {
   const ids = TRIO_SLOTS[column], base = slots[ids[0]]!;
   if (short) {
     const size = 44, step = (height - 8) / 3;
@@ -115,6 +115,28 @@ function trioSlots(slots: FieldSlot[], column: HeroColumn, width: number, height
     return;
   }
   const size = base.size, x = base.x, bottom = slots[ids[2]]!, cellWidth = width * .225;
+  // A field tall enough for three full rows (the compact HUD gives 390×844 phones 513px) stacks them evenly in line,
+  // each panel under its feet, and the other hero column stands on the same rows (a lone hero on the middle one) so
+  // neighbouring panels share a height. Shorter fields fall back to the stepped middle below.
+  const below = Math.ceil(size * .04) + 2, other = column === 'front' ? [0, 1] : [2, 3];
+  for (const panel of [50, 32]) {
+    const step = 1.07 * size + 4 + below + panel + 2, spare = (height - 2 - 3 * step) / 3;
+    if (spare < 0) continue;
+    const rows = [0, 1, 2].map(k => 1.03 * size + 4 + spare / 2 + k * (step + spare));
+    const unit = (ux: number, y: number): FieldSlot => ({ x: ux, y, size, compact: panel < 50, tiny: false, side: false, iconSize: 18, maxIcons: panel < 50 ? 1 : base.maxIcons,
+      body: bodyBox(ux, y, size), panel: { x: ux - cellWidth / 2, y: y + below, width: cellWidth, height: panel } });
+    const placed = new Map<number, FieldSlot>(ids.map((slot, k) => [slot, unit(x, rows[k]!)]));
+    for (const [k, slot] of other.entries()) placed.set(slot, unit(slots[slot]!.x, centered.has(slot) ? rows[1]! : rows[k * 2]!));
+    // Keep it only when nothing placed meets a foe body or panel (unused partner slots hold nobody).
+    const foes = [4, 5, 6, 7].filter(i => !centered.has(partner(i))).map(i => slots[i]!);
+    const heroes = [...placed.entries()].filter(([slot]) => !centered.has(partner(slot)) || ids.includes(slot)).map(([, u]) => u);
+    const meets = (a: FieldBox, b: FieldBox) => a.x < b.x + b.width && b.x < a.x + a.width && a.y < b.y + b.height && b.y < a.y + a.height;
+    const clash = heroes.some((u, n) => foes.some(o => meets(u.panel, o.body) || meets(u.body, o.panel) || meets(u.panel, o.panel))
+      || heroes.some((v, m) => m !== n && (meets(u.panel, v.body) || meets(u.panel, v.panel))));
+    if (clash) continue;
+    for (const [slot, u] of placed) slots[slot] = u;
+    return;
+  }
   // The step stops short of the next column's panels (foe front panels for our front column).
   const next = width * COLUMNS[column === 'front' ? 2 : 1] - cellWidth / 2;
   const shift = Math.max(0, Math.min(width * (column === 'front' ? .07 : .04), next - (x + size * .51) - 2));

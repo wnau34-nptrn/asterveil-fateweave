@@ -585,10 +585,9 @@ test('Mira (archer) volleys every enemy by tapping any of them, and the SPD queu
   await expect(page.locator('#hero-mira')).toHaveAttribute('aria-pressed', 'true');
   await page.locator('#action-hinder').click();await page.locator('#skill-details').click(); await expect(page.locator('#skill-popover')).toContainText('ท้ายสุดในรอบถัดไป');
   await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-b1').click(); await finishPlayback(page);
-  // The next six turns (rest of round 1, then round 2) no longer include the Raider: it acts last in round 2.
+  // The next eight turns (rest of round 1, then round 2) no longer include the Raider: it acts last in round 2.
   const order = await page.locator('.turn-slot').evaluateAll(els => els.map(e => (e as HTMLElement).dataset.actor));
-  // The queue shows 6 or 8 slots by width (A7 step 3); the first six are the turns checked here.
-  expect(order.slice(0, 6)).toEqual(['guardian', 'f1', 'healer', 'tracer', 'mira', 'guardian']);
+  expect(order).toEqual(['guardian', 'f1', 'healer', 'tracer', 'mira', 'guardian', 'f1', 'healer']);
   await page.screenshot({ path: info.outputPath('mira-hinder.png') });
   expect((await saved(page)).battle!.commands.map(c => c.action)).toEqual(['attack', 'hinder']);
   expect(issues).toEqual([]);

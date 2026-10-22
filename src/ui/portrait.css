@@ -276,3 +276,24 @@ body { display: grid; place-items: center; background: radial-gradient(ellipse a
 .character-stat summary .icon { width: 16px; height: 16px; flex: none; color: var(--gold-light, #f2d596); }
 :is(.character-gear, .gear-comparison, .forge-workbench, .character-content) button:not(.loadout-skill) > .icon { width: 16px; height: 16px; flex: none; margin-right: 4px; vertical-align: -3px; }
 @container game (max-width: 360px) { .character-tabs button .icon { display: none; } }
+
+/* Compact battle HUD (owner 2026-10-22): the turn title rides in the masthead beside the round chip, the queue is one
+   row, the dock's ⓘ/× share the target-hint row and the static "every turn / cooldown N" line is screen-reader only.
+   The space goes to the field. */
+#battle-view #beat-status { display: flex; align-items: center; gap: 6px; min-width: 0; flex: 1; }
+#battle-view #beat-status .turn-title { min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font: 600 13px/1.2 var(--font-heading); color: #bff3ff; text-shadow: 0 1px 6px #000; }
+#battle-view #turn-phase[data-phase="enemy"] ~ * #beat-status .turn-title { color: #ffd4c8; }
+#battle-view #beat-status .formation-chip { display: none; }
+#battle-view #turn-phase { flex-basis: 50px; height: 50px; min-height: 50px; padding: 3px 6px; }
+#battle-view #turn-phase .phase-head .phase-copy { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+#battle-view #turn-phase .phase-head { height: 0; min-height: 0; }
+#battle-view .command-dock { display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "actions actions" "hint buttons"; padding: 4px 6px 0; }
+#battle-view .command-dock > #commands { display: contents; }
+#battle-view .command-dock .step-heading, #battle-view .command-dock .action-help { display: none; }
+#battle-view .command-dock .actions { grid-area: actions; }
+#battle-view .command-dock .target-hint { grid-area: hint; align-self: center; padding-left: 4px; }
+#battle-view .command-dock #selected-hero { grid-area: buttons; height: 44px; }
+#battle-view .command-dock #selected-hero .selected-info { display: none; }
+#battle-view .action-option > p { position: absolute !important; width: 1px; height: 1px; min-height: 0; margin: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+#battle-view .action-option { position: relative; }
+#battle-view .cd-badge { position: absolute; top: 3px; right: 4px; padding: 0 5px; border-radius: 999px; background: #28121be6; border: 1px solid #ffb9c580; color: #ffd4c8; font: 600 10px/15px var(--font-heading); pointer-events: none; }
