@@ -43,6 +43,12 @@ describe('boss summons', () => {
     const hero = currentHeroId(s, d)!; const r = resolveCommand(s, d, { beat: s.beat, heroId: hero, action: 'attack', targetId: 'f1' });
     expect(r.state.outcome).toBe('victory'); expect(r.state.enemies.filter(e => e.hp > 0).length).toBeGreaterThan(0);
   });
+  it('a mini-boss (no phases) is won only when every foe is down', () => {
+    const d = lookup('mini-veil-golem')!; expect(d.phases).toBeUndefined();
+    const s = createBattle(d); foe(s, 'f1').hp = 1;
+    const hero = currentHeroId(s, d)!; const r = resolveCommand(s, d, { beat: s.beat, heroId: hero, action: 'attack', targetId: 'f1' });
+    expect(foe(r.state, 'f1').hp).toBe(0); expect(r.state.outcome).toBe('active');
+  });
 });
 
 describe('boss phase two', () => {

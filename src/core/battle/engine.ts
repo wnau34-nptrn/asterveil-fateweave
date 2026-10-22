@@ -215,8 +215,9 @@ export function nextIntentOf(state: BattleState, data: EncounterDefinition, enem
 }
 function refreshIntent(state: BattleState, data: EncounterDefinition): void { state.intent = plannedIntents(state, data, 1)[0] ?? null; }
 function finishOrAdvance(state: BattleState, data: EncounterDefinition, events: BattleEvent[]): void {
-  // The battle is won when every foe is down, or the moment every boss falls: its minions flee (owner 2026-10-22).
-  const bosses = data.enemies.filter(e => e.boss);
+  // The battle is won when every foe is down, or, in a boss fight with phases, the moment every boss falls: its minions
+  // flee (owner 2026-10-22). Mini-bosses and elites (no phases) are won only by downing every foe.
+  const bosses = data.phases?.length ? data.enemies.filter(e => e.boss) : [];
   if (state.enemies.every(e => e.hp <= 0) || (bosses.length && bosses.every(b => state.enemies.find(e => e.id === b.id)!.hp <= 0))) state.outcome = 'victory';
   else if (state.heroes.every(h => h.hp <= 0)) state.outcome = 'defeat';
   if (state.outcome !== 'active') {
