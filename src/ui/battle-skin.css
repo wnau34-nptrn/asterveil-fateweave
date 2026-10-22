@@ -71,7 +71,5 @@
 #field-banner[hidden] { display: none; }
 #field-banner[data-kind="phase"] { border-color: var(--gold-light); color: var(--gold-light); box-shadow: 0 0 22px #f2d59666, 0 6px 18px #0009; }
 #field-banner[data-kind="all"] { border-color: #ff6f7d; color: #ffd4c8; }
-/* Standard grid panels (compact): HP centred under the feet, one status column on the right balanced by an empty left. */
-#battle-view .field-unit-info.compact:not(.side) { grid-template-columns: calc(var(--field-icon) + 2px) minmax(0, 1fr) calc(var(--field-icon) + 2px); }
-#battle-view .field-unit-info.compact:not(.side) .field-health { grid-column: 2; }
-#battle-view .field-unit-info.compact:not(.side) .field-statuses { grid-column: 3; }
+/* Panels sit above the head: their content hugs the bottom edge so a hero's bar (no name) stays right above the head. */
+#battle-view .field-unit-info.compact:not(.side) { align-content: end; }

@@ -36,7 +36,9 @@ test('all six reserved HP/status panels avoid every sprite and each other throug
     // Only standing actors count. A large foe is wider than its column gap; its body may pass behind a neighbour's
     // panel (its painted art does not reach it, owner-reviewed shots), every other body may not.
     const all = fieldSlots(arena.width, arena.height, plan);
-    const slots = plan.used.filter(i => !plan.large.has(i) || all[i]!.compact).map(i => all[i]!);
+    // Panels sit just above the painted figure, inside its frame's empty headroom (14% of the frame), so the figure
+    // box below the headroom is what they must clear.
+    const slots = plan.used.filter(i => !plan.large.has(i) || all[i]!.side).map(i => all[i]!).map(t => t.side ? t : { ...t, body: { ...t.body, y: t.body.y + t.size * .14, height: t.body.height - t.size * .14 } });
     // Layout stress only: fill every reserved row, including currently unaffected units.
     // This intentionally changes DOM decorations, never combat state or saved commands.
     await page.locator('.field-unit-info').evaluateAll(els => {

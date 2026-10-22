@@ -53,7 +53,8 @@ describe('standard battle grid (owner 2026-10-22: every battle stands on the sam
         if (!a.side) expect(a.body.y, `${width}×${height} head ${i}`).toBeGreaterThanOrEqual(-1);
         for (const j of plan.used) {
           // A large foe is wider than its column gap: its body may pass behind a neighbour's panel (art has margins).
-          if (!plan.large.has(j) || a.side) expect(intersects(a.panel, s[j]!.body), `${width}×${height}: panel ${i} covers body ${j}`).toBe(false);
+          // Its own frame's empty headroom may hold the panel (the panel sits just above the painted figure).
+          if (i !== j && (!plan.large.has(j) || a.side)) expect(intersects(a.panel, s[j]!.body), `${width}×${height}: panel ${i} covers body ${j}`).toBe(false);
           if (i !== j) expect(intersects(a.panel, s[j]!.panel), `${width}×${height}: panels ${i}/${j}`).toBe(false);
         }
       }
@@ -66,7 +67,7 @@ describe('standard battle grid (owner 2026-10-22: every battle stands on the sam
     expect(rowOf(lone, 0)).toBe(1); expect(rowOf(lone, 6)).toBe(1);
     expect([4, 5].map(i => rowOf(lone, i))).toEqual([0, 2]);
     const boss = slotPlan(party(['front', 'front', 'back', 'back']), [{ id: 'f1', boss: true, large: true }, { id: 'f2', large: true }], new Set());
-    expect([rowOf(boss, 4), rowOf(boss, 5)]).toEqual([1, 2]); expect(boss.large.has(5)).toBe(false);
+    expect([rowOf(boss, 4), rowOf(boss, 5)]).toEqual([1, 2]); expect(boss.large.has(5)).toBe(true);
     const big = slotPlan(party(['front', 'front', 'back', 'back']), [{ id: 'f1', large: true }, { id: 'f2' }], new Set());
     expect([rowOf(big, 4), rowOf(big, 5)]).toEqual([2, 0]);
     // A reserve the phases never call does not take a cell.
@@ -79,5 +80,9 @@ describe('standard battle grid (owner 2026-10-22: every battle stands on the sam
     // The grid stands on the floor: the top row's feet sit in the lower two thirds of the field.
     expect(s[0]!.y).toBeGreaterThan(513 * .33);
     expect(s[4]!.size / s[2]!.size).toBeGreaterThanOrEqual(1.45);
+    // A large foe below another unit of its column grows only as far as its panel clears that unit's feet.
+    const plan = slotPlan(party(['front', 'front', 'back', 'back']), [{ id: 'f1', boss: true, large: true }, { id: 'f2', large: true }], new Set());
+    const g = fieldSlots(378, 513, plan);
+    expect(g[5]!.size).toBeGreaterThan(g[2]!.size); expect(g[5]!.panel.y).toBeGreaterThanOrEqual(g[4]!.y);
   });
 });
