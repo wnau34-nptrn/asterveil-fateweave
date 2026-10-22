@@ -17,25 +17,26 @@ describe('passive points during exploration', () => {
   it('uses the same gates and budget as camp, without healing, walking or consuming RNG', () => {
     const game = setup(); game.run.hp.tracer = 11;
     const original = structuredClone(game.run), oldHp = memberDef(lookup, map, original.members, 'tracer')!.maxHp;
-    expect(learnRunTalent(original, map, lookup, 'tracer', 'a1').state).toBe(original);
-    let run = learnRunTalent(original, map, lookup, 'tracer', 'root').state;
-    run = learnRunTalent(run, map, lookup, 'tracer', 'b1').state;
-    run = learnRunTalent(run, map, lookup, 'tracer', 'b1').state;
+    // Big tree (release A): tier 2 opens at Lv5.
+    expect(learnRunTalent(original, map, lookup, 'tracer', 'a2d').state).toBe(original);
+    let run = learnRunTalent(original, map, lookup, 'tracer', 'a1').state;
+    run = learnRunTalent(run, map, lookup, 'tracer', 'c1').state;
+    run = learnRunTalent(run, map, lookup, 'tracer', 'c1').state;
     expect(memberDef(lookup, map, run.members, 'tracer')!.maxHp).toBeGreaterThan(oldHp);
     expect(run.hp.tracer).toBe(11);
-    expect(learnRunTalent(run, map, lookup, 'tracer', 'b2').state).toBe(run);
-    expect(learnRunTalent(run, map, lookup, 'tracer', 'b3').state).toBe(run);
-    expect(run.members.tracer!.talents).toEqual({ root: 1, b1: 2 });
+    expect(learnRunTalent(run, map, lookup, 'tracer', 'b1').state).toBe(run);
+    expect(learnRunTalent(run, map, lookup, 'tracer', 'a2d').state).toBe(run);
+    expect(run.members.tracer!.talents).toEqual({ a1: 1, c1: 2 });
     expect(run.position).toEqual(original.position); expect(run.rolls).toBe(original.rolls); expect(run.steps).toBe(original.steps);
     expect(game.run).toEqual(original); expect(game.profile.members.tracer!.talents).toBeUndefined();
   });
   it('supports brought reserves and fallen heroes, and rejects invalid, unowned, battle and finished actions', () => {
     const game = setup(); game.run.roster.deployed = ['guardian', 'weaver', 'healer']; game.run.roster.reserve = ['tracer']; game.run.hp.tracer = 0;
-    const learned = learnRunTalent(game.run, map, lookup, 'tracer', 'root').state;
-    expect(learned.members.tracer!.talents).toEqual({ root: 1 }); expect(learned.hp.tracer).toBe(0);
-    expect(learnRunTalent(learned, map, lookup, 'tracer', 'root').state).toBe(learned);
+    const learned = learnRunTalent(game.run, map, lookup, 'tracer', 'c1s').state;
+    expect(learned.members.tracer!.talents).toEqual({ c1s: 1 }); expect(learned.hp.tracer).toBe(0);
+    expect(learnRunTalent(learned, map, lookup, 'tracer', 'c1s').state).toBe(learned);
     expect(learnRunTalent(learned, map, lookup, 'tracer', 'fake' as TalentNode).state).toBe(learned);
-    expect(learnRunTalent(learned, map, lookup, 'mira', 'root').state).toBe(learned);
+    expect(learnRunTalent(learned, map, lookup, 'mira', 'a1').state).toBe(learned);
     for (const run of [{ ...learned, completed: true }, { ...learned, battle: { kind: 'random' as const, encounterId: map.tutorialEncounterId, entry: learned.hp, commands: [] } }]) {
       expect(learnRunTalent(run, map, lookup, 'tracer', 'b1').state).toBe(run);
     }
@@ -44,13 +45,14 @@ describe('passive points during exploration', () => {
     const game = setup();
     const old = parseGame(JSON.stringify({ version: 21, ...game }), map, lookup);
     expect(old.run!.members.tracer!.talents).toBeUndefined();
-    const run = learnRunTalent(game.run, map, lookup, 'tracer', 'root').state;
-    const loaded = parseGame(JSON.stringify({ version: 21, profile: game.profile, run }), map, lookup);
-    expect(loaded.run!.members.tracer!.talents).toEqual({ root: 1 });
-    expect(learnRunTalent(loaded.run!, map, lookup, 'tracer', 'root').state).toBe(loaded.run);
+    // Release A trees (save v37) refund older duelist ranks, so learned points round-trip on the current version.
+    const run = learnRunTalent(game.run, map, lookup, 'tracer', 'c1s').state;
+    const loaded = parseGame(JSON.stringify({ version: 37, profile: game.profile, run }), map, lookup);
+    expect(loaded.run!.members.tracer!.talents).toEqual({ c1s: 1 });
+    expect(learnRunTalent(loaded.run!, map, lookup, 'tracer', 'c1s').state).toBe(loaded.run);
     for (const outcome of ['withdrawn', 'complete', 'wiped'] as const) {
       const profile = settle(game.profile, loaded.run!, outcome, map);
-      expect(profile.members.tracer!.talents).toEqual({ root: 1 });
+      expect(profile.members.tracer!.talents).toEqual({ c1s: 1 });
       const reset = resetTalents(profile, 'tracer');
       expect(reset.profile.members.tracer!.talents).toBeUndefined(); expect(reset.profile.bank).toEqual(profile.bank);
     }

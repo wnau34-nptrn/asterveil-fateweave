@@ -6,6 +6,7 @@ import type { EnemyTrait, BattleState, Command, EncounterDefinition, HeroDefinit
 import type { RecruitPoint, ActiveBattle, BattleKind, ChestDefinition, Company, Direction, ExpGain, ExpeditionState, LootTable, MapDefinition, MemberProgress, Point, PotionId, Resources, Talents, Tile, WorldEvent, WorldResult, ZoneDefinition, Gear, Item, EliteDefinition, EventChoice, MapEventDefinition, MapEventKind, GearSlot } from './types';
 import { affixPool, gearTotals } from './equipment';
 import { effectiveTalents, isBigTree, memberTalentReason } from './talents';
+import { battleTomes, chestTomes } from './tomes';
 import type { TalentNode } from './types';
 import { PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS, SET_IDS, type Lane, type Roster } from './types';
 import { formation, laneReason, placed, withLane } from './formation';
@@ -85,7 +86,7 @@ export function loadoutActions(base: HeroDefinition, map: MapDefinition, talents
   return ['attack', ...(picked.length ? picked : choices).slice(0, map.progression.loadoutSize)];
 }
 // `member` supplies big-tree grants and the skill loadout (A6).
-export function starred(base: HeroDefinition, stars: number, map: MapDefinition, level = 1, talents: Talents = {}, gear?: Gear, member?: Pick<MemberProgress, 'grants' | 'loadout'>): HeroDefinition {
+export function starred(base: HeroDefinition, stars: number, map: MapDefinition, level = 1, talents: Talents = {}, gear?: Gear, member?: Pick<MemberProgress, 'grants' | 'loadout' | 'skillLevels'>): HeroDefinition {
   const big = isBigTree(map.talents[base.id]);
   const actions = big ? loadoutActions(base, map, talents, member) : undefined;
   if (big) talents = effectiveTalents(map.talents[base.id]!, talents, member?.grants);
@@ -97,7 +98,9 @@ export function starred(base: HeroDefinition, stars: number, map: MapDefinition,
   const worn = gearTotals(map, gear);
   const equipped = !!(worn.hp || worn.hpPercent || worn.attackPercent || worn.support || worn.speed || worn.armour || worn.resist || worn.leech || worn.gear);
   const reordered = !!actions && (actions.length !== base.actions.length || actions.some((a, i) => a !== base.actions[i]));
-  if (!bonus && !gained.any && !equipped && !reordered) return base;
+  // Skill levels (tomes, save v37) go to the resolver as they are.
+  const levels = member?.skillLevels && Object.keys(member.skillLevels).length ? { skillLevels: { ...member.skillLevels } } : {};
+  if (!bonus && !gained.any && !equipped && !reordered && !levels.skillLevels) return base;
   const scale = (n: number, extra: number) => Math.round(n * (100 + bonus + extra) / 100);
   // ★3 adds the class's third skill; ★5 switches on its passive.
   // Big trees unlock these in the tree instead (A6).
@@ -107,7 +110,7 @@ export function starred(base: HeroDefinition, stars: number, map: MapDefinition,
   return { ...base, maxHp: scale(base.maxHp, gained.hp + worn.hpPercent) + worn.hp, attack: scale(base.attack, damageBonus - bonus), speed: base.speed + worn.speed,
     skillBonus: bonus + gained.skill + worn.support, damageBonus, actions: actions ?? [...base.actions, ...skill],
     ...(worn.armour + gained.armour ? { armour: worn.armour + gained.armour } : {}), ...(worn.resist ? { resist: worn.resist } : {}), ...(worn.leech ? { leech: worn.leech } : {}),
-    ...(big ? (gained.passive ? { passive: gained.passive } : {}) : stars >= 5 && base.unlocks ? { passive: base.unlocks.passive } : {}), ...(gained.talents ? { talents: gained.talents } : {}), ...(worn.gear ? { gear: worn.gear } : {}) };
+    ...(big ? (gained.passive ? { passive: gained.passive } : {}) : stars >= 5 && base.unlocks ? { passive: base.unlocks.passive } : {}), ...(gained.talents ? { talents: gained.talents } : {}), ...(worn.gear ? { gear: worn.gear } : {}), ...levels };
 }
 // Sums spent talent ranks into stat percents and the resolver's `HeroTalents`.
 export function talentEffects(map: MapDefinition, heroId: string, talents: Talents): { any: boolean; hp: number; attack: number; skill: number; armour: number; passive?: PassiveId; talents?: HeroTalents } {
@@ -431,7 +434,8 @@ export function openChest(initial: ExpeditionState, map: MapDefinition): WorldRe
     const id = POTION_IDS.find(p => (pick -= table.weights[p]) < 0)!;
     if (state.potions[id] < map.potions.carry) { state.potions[id]++; potion = id; }
   }
-  return { state, event: { type: 'chest', chestId: chest.id, loot, ...(potion ? { potion } : {}) } };
+  const tomes = chestTomes(state, map, chest.tier);
+  return { state, event: { type: 'chest', chestId: chest.id, loot, ...(potion ? { potion } : {}), ...(tomes ? { tomes } : {}) } };
 }
 // ---- Map potions (2D-5): used outside battle only ----
 export function potionReason(state: ExpeditionState, map: MapDefinition, lookup: EncounterLookup, potion: PotionId, targetId?: string): string {
@@ -658,7 +662,9 @@ export function finishBattle(initial: ExpeditionState, map: MapDefinition, looku
       loot.gold += gold; loot.seal += seal; state.resources.gold += gold; state.resources.seal += seal;
     }
     const items = dropItems(state, map, kind, data.level ?? 1, source);
-    return { state, event: { type: 'victory', kind, encounterId, loot, exp, ...(items[0] ? { item: items[0] } : {}), ...(items.length > 1 ? { items } : {}), ...(dust ? { dust } : {}) } };
+    // Skill tomes on maps that drop them (no rolls, so loot and items are unchanged).
+    const tomes = battleTomes(state, map, kind, state.roster.deployed);
+    return { state, event: { type: 'victory', kind, encounterId, loot, exp, ...(items[0] ? { item: items[0] } : {}), ...(items.length > 1 ? { items } : {}), ...(dust ? { dust } : {}), ...tomes } };
   }
   state.defeats++;
   if (kind === 'tutorial') {

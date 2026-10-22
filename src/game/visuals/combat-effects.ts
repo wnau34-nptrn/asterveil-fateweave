@@ -13,10 +13,10 @@ export function readCombatPrefs(raw: string | null): CombatPrefs {
 export function effectFamily(turn: TurnStage): EffectFamily {
   if (turn.events.some(e => e.type === 'cancel')) return 'status';
   if (turn.action === 'mark') return 'mark';
-  if (['heal','prayer','mend'].includes(turn.action ?? '')) return 'restore';
-  if (['guard','ward','brace','rally','sanctuary','spearwall'].includes(turn.action ?? '')) return 'shield';
+  if (['heal','prayer','mend','revive'].includes(turn.action ?? '')) return 'restore';
+  if (['guard','ward','brace','rally','sanctuary','spearwall','aegis','halo','hold','parry'].includes(turn.action ?? '')) return 'shield';
   if (turn.events.some(e => e.type === 'damage' || e.type === 'dodge')) {
-    return (turn.side === 'enemy' ? turn.intent?.kind === 'energy' : ['bolt','sigil','acid','bomb','quake','weakshot'].includes(turn.action ?? '')) ? 'arcane' : 'steel';
+    return (turn.side === 'enemy' ? turn.intent?.kind === 'energy' : ['bolt','sigil','acid','bomb','quake','weakshot','storm','dispel'].includes(turn.action ?? '')) ? 'arcane' : 'steel';
   }
   return 'status';
 }
@@ -49,6 +49,13 @@ export function effectCaption(event: BattleEvent): string {
     case 'summon': return 'ปรากฏตัว';
     case 'charge': return 'รวบรวมพลัง';
     case 'resist': return event.text === 'Unstoppable move.' ? 'ขัดไม่ได้' : 'ไม่หวั่นไหว';
+    case 'parry': return 'ปัดดาบ';
+    case 'revive': return 'ฟื้นคืน!';
+    case 'buff': return 'เสริมพลัง';
+    case 'hold': return 'ปักหลัก';
+    case 'pin': return 'ตรึงแถว';
+    case 'dispel': return 'สลายเวท';
+    case 'weaken': return 'อ่อนแรง';
     case 'outcome': return '';
   }
 }

@@ -1,10 +1,10 @@
 import { formation } from '../core/world/formation';
 import type { ActionId, EncounterDefinition, HeroDefinition } from '../core/battle/types';
 import { AUTO_GOALS, planEquipment, type AutoEquipmentPlan, type AutoGoal, type EquipmentEntry } from '../core/world/auto-equipment';
-import { SET_IDS, type GearSlot, type MapDefinition, type SetId, type TalentNode } from '../core/world/types';
+import { SET_IDS, type GearSlot, type MapDefinition, type SetId, type TalentNode, type TomeLine, type TomeSize } from '../core/world/types';
 import { talentPoints, talentsSpent } from '../core/world/talents';
 import { starred, wounded } from '../core/world/world';
-import { characterEquipmentComparison, characterOverview, characterSkills, characterTabs, characterTalents, characterTabIcons, type CharacterTab } from './character-view';
+import { characterEquipmentComparison, characterOverview, characterSkills, characterTabs, characterTalents, characterTabIcons, type CharacterTab, type SkillTomeView } from './character-view';
 import type { CharacterState } from './character-metrics';
 import { changeGearFilter, filteredEquipment, gearFilters, newGearFilters, type GearFilters } from './gear-inventory';
 import { gearArt } from './equip-art';
@@ -15,13 +15,14 @@ import { heroStatLine, heroText, itemLines, itemName, itemOwner, rarityText, set
 // Stats an item card compares, in display order: hero field, Thai name, unit.
 const statDeltas:readonly ['maxHp'|'attack'|'skillBonus'|'speed'|'armour'|'resist'|'leech',string,string][]=[['maxHp','เลือด',''],['attack','พลังโจมตี',''],['skillBonus','พลังเสริม','%'],['speed','SPD',''],['armour','เกราะ','%'],['resist','ต้านพลังงาน','%'],['leech','ดูดเลือด','%']];
 
-export interface CharacterModel { state: CharacterState; source: object; ids: readonly string[]; entries: EquipmentEntry[]; available: boolean; camp: boolean; capacity?:number }
+export interface CharacterModel { state: CharacterState; source: object; ids: readonly string[]; entries: EquipmentEntry[]; available: boolean; camp: boolean; capacity?:number; tomes?: SkillTomeView }
 export interface CharacterHost {
   model(): CharacterModel|undefined;
   preview(id:string,key:string): CharacterModel|undefined;
   previewPlan(plan:AutoEquipmentPlan): CharacterModel|undefined;
   wear(id:string,key:string): void; takeOff(id:string,slot:GearSlot): void;
   talent(id:string,node:TalentNode): void; reset?(id:string): void; loadout?(id:string,actions:ActionId[]): void;
+  skillLevel?(id:string,action:ActionId): void; tomeTrade?(line:TomeLine,size:TomeSize,to?:TomeLine): void;
   applyPlan(plan:AutoEquipmentPlan): void;
   restore?(dialogId:string): void; forge?(id:string,uid:number):void;
 }
@@ -94,6 +95,8 @@ export class CharacterPanel {
       const skill=b.dataset.skill as ActionId,now:ActionId[]=this.hero(model).actions.filter(a=>a!=='attack');
       const next=now.includes(skill)?now.filter(a=>a!==skill):[...now,skill];
       if(next.length&&next.length<=this.map.progression.loadoutSize)this.host.loadout?.(this.heroId,next);this.focus(this.id(`character-loadout-${skill}`));}
+    else if(action==='skill-level'&&b.getAttribute('aria-disabled')!=='true'){this.host.skillLevel?.(this.heroId,b.dataset.level as ActionId);this.focus(b.id);}
+    else if(action==='tome-trade'&&b.getAttribute('aria-disabled')!=='true'){this.host.tomeTrade?.(b.dataset.line as TomeLine,b.dataset.size as TomeSize,(b.dataset.to||undefined) as TomeLine|undefined);this.focus(b.id);}
     else if(action==='character-reset'){this.host.reset?.(this.heroId);this.focus(this.id('character-reset'));}
     else if(action==='bag-slot'){const slot=b.dataset.slot as GearSlot;this.filters.slot=this.filters.slot===slot?'all':slot;this.render();this.focus(this.id(`bag-slot-${slot}`));}
     else if(action==='bag-pick'){this.picked=b.dataset.key!;this.render();this.focus(b.id);}
@@ -127,7 +130,7 @@ export class CharacterPanel {
     // A deployed member shows the lane it stands in (formation); others their class lane.
     const lane=formation(model.state.roster,c=>this.heroes.find(v=>v.id===c)?.lane??'front')[id]??h.lane;
     let html=`<p class="character-summary">${heroText[id]!.role} · ${lane==='front'?'แนวหน้า':'แนวหลัง'} · ${position} · ${model.camp?'ค่ายหลัก · เลือดพร้อมออกเดินทาง':'HP'} ${model.state.hp[id]??0}/${h.maxHp}</p>`;
-    html+=this.tab==='overview'?characterOverview(model.state,this.map,h,this.template):this.tab==='skills'?characterSkills(h,base,m.stars,this.template,this.map,m):this.tab==='talents'?characterTalents(model.state,this.map,id,this.template,h,base,this.node)+(model.camp?`<button id="character-reset" data-world="character-reset" class="secondary"${talentsSpent(m.talents)?'':' disabled'}>${icon('act-reset')}รีเซ็ตแต้มฟรีที่ครูฝึก</button>`:''):this.gear(model,h);
+    html+=this.tab==='overview'?characterOverview(model.state,this.map,h,this.template):this.tab==='skills'?characterSkills(h,base,m.stars,this.template,this.map,m,model.tomes):this.tab==='talents'?characterTalents(model.state,this.map,id,this.template,h,base,this.node)+(model.camp?`<button id="character-reset" data-world="character-reset" class="secondary"${talentsSpent(m.talents)?'':' disabled'}>${icon('act-reset')}รีเซ็ตแต้มฟรีที่ครูฝึก</button>`:''):this.gear(model,h);
     // Read folded panels before replacing them: a camp re-render can land before their async toggle event.
     const was=this.content().querySelector<HTMLDetailsElement>('.gear-extra-filters'),wasAuto=this.content().querySelector<HTMLDetailsElement>('.auto-settings');if(was)this.filtersExpanded=was.open;if(wasAuto)this.autoExpanded=wasAuto.open;
     this.content().setAttribute('aria-labelledby',this.id(`character-tab-${this.tab}`));this.content().innerHTML=this.ids(html);

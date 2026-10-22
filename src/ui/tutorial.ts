@@ -1,4 +1,4 @@
-import { ambushBonus, corrodeBonusOf, guardReductionOf, interruptBlock, tauntReductionOf, currentHeroId, skillPower, targetOptions } from '../core/battle/engine';
+import { ambushBonus, corrodeBonusOf, guardReductionOf, interruptBlock, nextIntentOf, tauntReductionOf, currentHeroId, skillPower, targetOptions } from '../core/battle/engine';
 import type { ActionId, BattleState, EncounterDefinition } from '../core/battle/types';
 import { actorName } from './th';
 export interface Lesson { step:number; title:string; copy:string; heroId:string; action:ActionId; targetId:string }
@@ -23,6 +23,61 @@ export function battleLesson(state:BattleState,data:EncounterDefinition):Lesson|
  const attack=()=>make('attack',pick('attack').id,'โจมตีพื้นฐาน','แตะศัตรูในสนาม');
  // A phase change or a charge-up deals no damage now: nothing to guard, ward or dodge this turn.
  const intent=state.intent&&!state.intent.special&&!state.intent.charge?state.intent:null;
+ // Release A tree skills (docs/design/SKILL_TREES_ALL_TH.md) are suggested only when the hero has them equipped (`make` checks).
+ const row=(id:string)=>data.enemies.find(d=>d.id===id)?.row;
+ const lane=(id:string)=>data.heroes.find(h=>h.id===id)?.lane;
+ const front=living.filter(e=>row(e.id)==='front'),back=living.filter(e=>row(e.id)==='back');
+ const tree=treeAdvice(); if(tree)return tree;
+ function treeAdvice():Lesson|undefined{
+  if(heroId==='tracer'){
+   if(intent?.kind==='physical'&&intent.targetId===heroId){const p=make('parry',heroId,'ปัดดาบรับท่ากายภาพ',`${actorName(intent.sourceId,data)} จะโดนฟันสวน`);if(p)return p;}
+   if(front.length>=2){const w=make('sweep','enemies','ฟันกวาดแถวหน้า',`ตัวละ ${skillPower(data,heroId,'sweep')}`);if(w)return w;}
+   const low=reach('finisher').find(e=>e.hp*100<data.enemies.find(d=>d.id===e.id)!.maxHp*40);
+   if(low){const f=make('finisher',low.id,'ปลิดชีพศัตรูที่เลือดน้อย',`พลัง ${skillPower(data,heroId,'finisher')*2}`);if(f)return f;}
+   const rear=back.find(e=>e.markedUntil>state.round);
+   if(rear){const l=make('lunge',rear.id,'พุ่งตัดแถวหลังที่ติดตรา',`พลัง ${skillPower(data,heroId,'lunge')+data.rules.markedBonus}`);if(l)return l;}
+  }
+  if(heroId==='weaver'){
+   if(living.length>=3){const st=make('storm','enemies','พายุเวทโดนทุกตัว',`ตัวละ ${skillPower(data,heroId,'storm')}`);if(st)return st;}
+   // Crystal aegis before a whole-party move, or to open a fight while most allies have no barrier.
+   const bare=state.heroes.filter(h=>h.hp>0&&!h.barrier).length;
+   if(intent?.all||(intent&&bare>=3&&intent.damage>=15)){const a=make('aegis','party','เกราะผลึกให้ทั้งทีม',`ทุกคนได้โล่ ${skillPower(data,heroId,'aegis')}`);if(a)return a;}
+   if(intent?.kind==='energy'&&!interruptBlock(state,data,intent.sourceId,intent)&&nextIntentOf(state,data,intent.sourceId)?.kind==='energy'){const g=make('sigil',intent.sourceId,'ตรึงเวทยกเลิกท่าพลังงาน',`${actorName(intent.sourceId,data)} จะเสียท่าพลังงานถัดไป`);if(g)return g;}
+   const veiled=living.find(e=>data.enemies.find(d=>d.id===e.id)?.traits?.includes('veilguard')&&!(e.markedUntil>state.round)&&!((e.corrodedUntil??0)>state.round)&&!((e.dispelledUntil??0)>state.round));
+   if(veiled){const d=make('dispel',veiled.id,'สลายเกราะพลังงาน','ทีมตีเต็มแรงถึงจบรอบถัดไป');if(d)return d;}
+  }
+  if(heroId==='healer'){
+   const fallen=state.heroes.find(h=>h.hp<=0&&h.fell);
+   if(fallen){const r=make('revive',fallen.id,'ฟื้นคืนเพื่อนที่ล้ม',`${actorName(fallen.id,data)} กลับมาด้วยเลือด ${skillPower(data,heroId,'revive')}%`);if(r)return r;}
+   // Halo a whole-party energy move, or a heavy one while nobody badly needs healing.
+   const low=state.heroes.some(h=>h.hp>0&&h.hp<data.heroes.find(d=>d.id===h.id)!.maxHp*.5);
+   if(intent?.kind==='energy'&&(intent.all||(intent.damage>=20&&!low))){const h=make('halo',heroId,'วงแสงรับท่าพลังงาน',`ลด ${skillPower(data,heroId,'halo')}%`);if(h)return h;}
+   const aimed=intent&&!intent.all?state.heroes.find(h=>h.id===intent.targetId):undefined;
+   if(aimed&&aimed.hp+aimed.barrier<=intent!.damage){const c=make('sanctuary',aimed.id,'พรคุ้มภัยกันล้ม',`${actorName(aimed.id,data)} เลือดไม่ต่ำกว่า 1`);if(c)return c;}
+   const hurt=state.heroes.some(h=>h.hp>0&&h.hp<data.heroes.find(d=>d.id===h.id)!.maxHp*.7);
+   const strong=[...data.heroes].filter(h=>h.id!==heroId&&state.heroes.some(x=>x.id===h.id&&x.hp>0)).sort((a,b)=>b.attack-a.attack)[0];
+   if(!hurt&&strong){const b=make('bless',strong.id,'พรกล้าให้ตัวตีหลัก',`${actorName(strong.id,data)} แรงขึ้น ${skillPower(data,heroId,'bless')}%`);if(b)return b;}
+  }
+  if(heroId==='garran'){
+   // Hold the line for a back-liner the move would hurt badly, while Garran has HP to spare.
+   const aimed=intent&&!intent.all&&lane(intent.targetId)==='back'?state.heroes.find(h=>h.id===intent.targetId):undefined;
+   const me=state.heroes.find(h=>h.id===heroId)!,myMax=data.heroes.find(h=>h.id===heroId)!.maxHp;
+   if(aimed&&intent!.damage*100>=data.heroes.find(h=>h.id===aimed.id)!.maxHp*35&&me.hp*2>myMax){const h=make('hold',heroId,'ปักหลักรับแทนแนวหลัง',`${actorName(intent!.sourceId,data)} จะตีการ์แรนแทน`);if(h)return h;}
+   if(intent?.kind==='physical'&&lane(intent.targetId)==='front'){const w=make('spearwall',heroId,'กำแพงทวนสวนทุกท่า',`สวน ${skillPower(data,heroId,'spearwall')} ทุกครั้ง`);if(w)return w;}
+   const ahead=reach('halt').find(e=>state.order.indexOf(e.id)>state.turnIndex&&nextIntentOf(state,data,e.id)?.kind==='physical'&&nextIntentOf(state,data,e.id)?.round===state.round);
+   if(ahead){const t=make('halt',ahead.id,'แทงหยุดยั้งก่อนมันตี',`${actorName(ahead.id,data)} ไปลงมือท้ายสุดรอบนี้`);if(t)return t;}
+   // War cry pays off while at least two other front-liners still act this round.
+   const later=state.order.slice(state.turnIndex+1).filter(id=>id!==heroId&&lane(id)==='front'&&state.heroes.some(h=>h.id===id&&h.hp>0));
+   if(later.length>=2){const c=make('warcry',heroId,'เสียงศึกปลุกแนวหน้า',`แนวหน้าแรงขึ้น ${skillPower(data,heroId,'warcry')}%`);if(c)return c;}
+  }
+  if(heroId==='mira'){
+   if(front.length&&back.length&&state.heroes.some(h=>h.hp>0&&lane(h.id)==='front'&&h.id!==heroId)){const p=make('pin','enemies','ตรึงแถวหน้าเปิดแถวหลัง','ทั้งทีมตีแถวหลังได้');if(p)return p;}
+   if(intent?.kind==='physical'&&intent.targetId===heroId){const d=make('disengage',intent.sourceId,'ถอยยิงหลบท่ากายภาพ','มิร่าหลบการตีครั้งถัดไป');if(d)return d;}
+   const slowed=living.find(e=>(e.delayedRound??0)>=state.round);
+   if(slowed){const t=make('track',slowed.id,'ศรตามรอยเป้าที่ถูกสกัด',`ยิงซ้ำตอนจบรอบ`)??make('weakshot',slowed.id,'ศรจุดอ่อนเป้าที่ถูกสกัด',`พลัง ${skillPower(data,heroId,'weakshot')+data.rules.weakshotBonus}`);if(t)return t;}
+  }
+  return undefined;
+ }
  if(heroId==='guardian'){
   // A steadfast boss or an unstoppable move cannot be bashed: guard it instead.
   // Guard covers one announced hit; a whole-party move cannot be guarded.

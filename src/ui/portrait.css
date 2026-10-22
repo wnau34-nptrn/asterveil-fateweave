@@ -297,3 +297,26 @@ body { display: grid; place-items: center; background: radial-gradient(ellipse a
 #battle-view .action-option > p { position: absolute !important; width: 1px; height: 1px; min-height: 0; margin: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 #battle-view .action-option { position: relative; }
 #battle-view .cd-badge { position: absolute; top: 3px; right: 4px; padding: 0 5px; border-radius: 999px; background: #28121be6; border: 1px solid #ffb9c580; color: #ffd4c8; font: 600 10px/15px var(--font-heading); pointer-events: none; }
+/* Skill tomes (save v37): level dots, the next level's gain, cost chips and the camp's tome bag. */
+.character-skills .skill-level { display: flex; align-items: center; gap: 8px; margin: 6px 0 2px; font: 600 13px var(--font-heading, Kanit), sans-serif; color: var(--gold-light, #ffe3a1); }
+.skill-dots { display: inline-flex; gap: 4px; }
+.skill-dots i { width: 9px; height: 9px; border-radius: 50%; border: 1px solid #ffe3a199; background: transparent; }
+.skill-dots i.on { background: var(--gold-light, #ffe3a1); box-shadow: 0 0 6px #ffcf6a88; }
+.character-skills .skill-next { margin: 2px 0; font-size: 13px; }
+.character-skills .skill-next em.up { color: var(--hp-mint, #7ee0a8); font-style: normal; font-weight: 700; }
+.skill-level-cost { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0; }
+.tome-chip { display: inline-flex; align-items: center; gap: 4px; min-height: 28px; padding: 2px 8px; border-radius: 99px; border: 1px solid #e8f5ff33; background: #08121fcc; font-size: 12px; }
+.tome-chip .icon { width: 16px; height: 16px; }
+.tome-chip[data-line="bulwark"], .tome-bag li[data-line="bulwark"] { border-color: #6f9fd8aa; }
+.tome-chip[data-line="blade"], .tome-bag li[data-line="blade"] { border-color: #d86f6faa; }
+.tome-chip[data-line="accord"], .tome-bag li[data-line="accord"] { border-color: #7ee0c0aa; }
+.tome-chip small { color: var(--text-muted, #b9c8d8); }
+.skill-up { min-height: 44px; display: inline-flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.skill-up small, .tome-trade-list button small { display: block; width: 100%; font-size: 11px; font-weight: 400; }
+.skill-up[aria-disabled="true"], .tome-trade-list button[aria-disabled="true"] { opacity: .6; }
+.tome-bag { list-style: none; margin: 6px 0; padding: 0; display: grid; gap: 6px; }
+.tome-bag li { display: flex; justify-content: space-between; gap: 8px; padding: 8px 10px; border-radius: 10px; border: 1px solid #ffffff2a; background: #0f1a2acc; font-size: 13px; }
+.tome-bag li.own { box-shadow: inset 3px 0 0 var(--gold-light, #ffe3a1); }
+.tome-trade summary { min-height: 44px; display: flex; align-items: center; cursor: pointer; font-weight: 600; }
+.tome-trade-list { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.tome-trade-list button { min-height: 44px; text-align: left; }

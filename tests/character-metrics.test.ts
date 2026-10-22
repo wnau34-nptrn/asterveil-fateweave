@@ -33,7 +33,9 @@ it('all ten classes expose finite stats and meaningful active metrics, including
   const s=setup();
   for(const base of heroCatalog(lookup,map)) {
     // The Knight's star skills are tree nodes now (A6); a migrated ★5 company keeps them as grants.
-    s.members[base.id]={stars:5,dupes:0,level:8,exp:0,...(base.id==='guardian'?{grants:['c1s','a4']}:{})}; s.hp[base.id]=1;
+    // Release A big trees grant the same way from their `legacyStars` nodes.
+    const tree=map.talents[base.id]!, legacy=tree.filter(n=>n.legacyStars!==undefined).map(n=>n.id);
+    s.members[base.id]={stars:5,dupes:0,level:8,exp:0,...(legacy.length?{grants:legacy}:{})}; s.hp[base.id]=1;
     const h=memberDef(lookup,map,s.members,base.id)!;
     expect(characterStats(s,map,h,template).every(v=>Number.isFinite(v.value)&&v.help.length>10)).toBe(true);
     for(const a of h.actions) { const v=characterSkillMetric(a,h,template); expect(v.target.length).toBeGreaterThan(0); if(v.value!==undefined) expect(Number.isFinite(v.value)).toBe(true); }

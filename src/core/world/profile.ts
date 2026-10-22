@@ -4,6 +4,7 @@ import {storageCap,departureBlocked} from './storage';
 import { memberTalentReason, talentsSpent } from './talents';
 import type { Lane, GuideDefinition, GuideKind, LobbyFeature, Commander, ShopItemId, SideQuestKind, ExpeditionState, Gear, GearSlot, Item, MapDefinition, PotionId, Potions, Profile, ProfileResult, RunOutcome, TalentNode } from './types';
 import { rollItem, salvageValue } from './equipment';
+import { addTomes, dismissTomes, emptyTomes, firstClearTomes, tomeCount } from './tomes';
 import { COMPANY_CAP, GEAR_SLOTS, PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS, SET_IDS } from './types';
 import { heroCatalog, levelOf, loadoutReason, memberDef, newExpedition, recommendedLane, rollPercent, rosterIds, type EncounterLookup } from './world';
 import { laneReason, withLane } from './formation';
@@ -125,6 +126,8 @@ export function dismiss(initial: Profile, map: MapDefinition, id: string): Profi
   profile.company = profile.company.filter(m => m !== id); delete profile.members[id];
   profile.party.deployed = profile.party.deployed.filter(m => m !== id); profile.party.reserve = profile.party.reserve.filter(m => m !== id); if (profile.party.lanes) delete profile.party.lanes[id];
   profile.bank.gold += map.company.dismissRefund;
+  // Half the tomes spent on their skill levels come back (docs/design/SKILL_TOMES_TH.md).
+  const refund = dismissTomes(map, id, initial.members[id]); if (tomeCount(refund)) addTomes(profile.tomes ??= emptyTomes(), refund);
   return { profile, event: { type: 'dismissed', heroId: id } };
 }
 
@@ -329,12 +332,16 @@ export function settle(initial: Profile, settled: ExpeditionState, outcome: RunO
   const levels=map.equipment.forge.itemLevel;
   profile.forgeLevel=Math.max(profile.forgeLevel??levels.baseCap,...levels.unlocks.filter(u=>run.elitesDefeated.includes(u.elite)||(run.respawns[u.elite]??0)>0).map(u=>u.cap),...levels.clears.filter(c=>outcome==='complete'&&c.map===run.mapId).map(c=>c.cap));
   profile.tutorialDone ||= run.tutorialDone; profile.expeditions++; if (outcome === 'complete') profile.completes++;
+  // Skill tomes found on the map come home like ore (a wipe keeps its share); a tome map's first clear adds its own.
+  const tomes = emptyTomes(); addTomes(tomes, run.tomes, pct); let core = Math.floor((run.riftCore ?? 0) * pct / 100);
+  if (outcome === 'complete' && !profile.cleared.includes(run.mapId)) { const first = firstClearTomes(map, run.roster.deployed); if (first) { addTomes(tomes, first.tomes); core += first.core; } }
+  if (tomeCount(tomes) || core) { addTomes(profile.tomes ??= emptyTomes(), tomes); if (core) profile.riftCore = (profile.riftCore ?? 0) + core; }
   if (outcome === 'complete' && !profile.cleared.includes(run.mapId)) profile.cleared.push(run.mapId);
   if (outcome === 'complete' && run.hard && !profile.clearedHard?.includes(run.mapId)) {
     (profile.clearedHard ??= []).push(run.mapId); const r = map.progression.hardFirstClear; profile.bank.gold += r.gold; profile.bank.seal += r.seal;
   }
   profile.returns++; profile.taken = []; profile.shop = {}; profile.refreshes = 0; profile.smelted = 0;
-  profile.last = { outcome, ore, gold, seal, steps: run.steps, wins: run.wins, items, salvaged };
+  profile.last = { outcome, ore, gold, seal, steps: run.steps, wins: run.wins, items, salvaged, ...(tomeCount(tomes) ? { tomes: tomeCount(tomes) } : {}) };
   return profile;
 }
 // Every item found this run, in the bag or worn on the map (uid 0), in that order.

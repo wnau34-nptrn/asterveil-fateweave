@@ -7,12 +7,18 @@ const veilSiege = openField(siegeBase);
 import { encounterById } from '../src/content/encounters/catalog';
 import { chapterOne as map } from '../src/content/world/chapter1';
 import { heroDef, starred } from '../src/core/world/world';
+import { isBigTree } from '../src/core/world/talents';
 
 // ★3 skills and ★5 passives (docs/EXPEDITION_DESIGN.md "Star unlocks"). Parties are built the way the
 // world builds them: catalog definition + stars (`starred`), deployed in slot order.
 // The Knight's big tree (A6) unlocks rally and stand as tree nodes; a company that had them from stars keeps them as
 // grants (save v34), which is what these star tests model for him.
-const legacy = (id: string, stars: number) => id === 'guardian' ? { grants: [...stars >= 3 ? ['c1s'] : [], ...stars >= 5 ? ['a4'] : []] } : undefined;
+// Release A gives the duelist, mage, priest, spear and archer big trees too; their grants come from the nodes marked
+// with `legacyStars`, the same way the save migration grants them.
+const legacy = (id: string, stars: number) => {
+  const tree = map.talents[id]!; if (!isBigTree(tree)) return undefined;
+  return { grants: tree.filter(n => n.legacyStars !== undefined && stars >= n.legacyStars).map(n => n.id) };
+};
 const member = (id: string, stars: number) => starred(heroDef(encounterById, map, id)!, stars, map, 1, {}, undefined, legacy(id, stars));
 const party = (members: [string, number][], base: EncounterDefinition = veilSiege) => withParty(base, members.map(([id, stars]) => member(id, stars)));
 const act = (s: BattleState, d: EncounterDefinition, action: ActionId, targetId: string) =>

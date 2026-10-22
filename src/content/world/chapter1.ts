@@ -7,6 +7,8 @@ import { gameRules } from './rules';
 export const chapterOne: MapDefinition = {
   ...gameRules,
   id: 'veil-frontier', version: 6, name: 'แนวรอยแยก',
+  // Skill tomes (docs/design/SKILL_TOMES_TH.md, draft): the rift warden pays more, and its first clear a rift core.
+  tomes: { boss: { medium: 2, small: 2 }, first: { large: 1, core: 1 } },
   chapter: 3, summary: 'ชายแดนแอสเตอร์เวลที่รอยแยกเปิดกว้าง ทำลายผนึกแล้วโค่นผู้คุมรอยแยก', clearStory: 'warden', bossCharm: true, bossName: 'ผู้คุมรอยแยก', goalName: 'ประตูรอยแยก',
   rows: [
     '#######################',

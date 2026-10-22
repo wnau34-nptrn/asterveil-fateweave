@@ -1,4 +1,5 @@
 import type { ExpeditionState, Item, MapDefinition, Profile, RunOutcome } from '../core/world/types';
+import { tomeCount } from '../core/world/tomes';
 import { storyArt } from '../game/visuals/assets';
 import { gearArt } from './equip-art';
 import { icon, type IconName } from './icons';
@@ -11,12 +12,13 @@ import type { StoryPanel } from './story-ui';
 export interface RunSummary {
   outcome: RunOutcome; firstClear: boolean; mapId: string; mapName: string; camp: string;
   steps: number; wins: number; defeats: number; elites: number; chests: number; puzzles: number; secrets: number; herbs: number;
-  kept: { ore: number; gold: number; seal: number; dust: number }; items: Item[]; salvaged: number; overflow?:number;
+  kept: { ore: number; gold: number; seal: number; dust: number; tomes: number; core: number }; items: Item[]; salvaged: number; overflow?:number;
   levels: { id: string; from: number; to: number }[];
   quests: { id: string; npc: string; from: number; to: number; target: number; ready: boolean }[];
 }
 export function runSummary(before: Profile, run: ExpeditionState, after: Profile, outcome: RunOutcome, map: MapDefinition): RunSummary {
-  const kept = { ore: after.bank.ore - before.bank.ore, gold: after.bank.gold - before.bank.gold, seal: after.bank.seal - before.bank.seal, dust: after.bank.dust - before.bank.dust };
+  const kept = { ore: after.bank.ore - before.bank.ore, gold: after.bank.gold - before.bank.gold, seal: after.bank.seal - before.bank.seal, dust: after.bank.dust - before.bank.dust,
+    tomes: tomeCount(after.tomes) - tomeCount(before.tomes), core: (after.riftCore ?? 0) - (before.riftCore ?? 0) };
   // New items come home in the bag or worn (map bag): anything with a uid the profile did not have before.
   const all = (p: Profile) => [...p.items,...p.overflow??[], ...Object.values(p.members).flatMap(m => Object.values(m.gear ?? {}) as Item[])];
   const known = new Set(all(before).map(i => i.uid));
@@ -58,7 +60,7 @@ export class SummaryUI {
   show(s: RunSummary, done: () => void): void {
     this.done = done; const t = titles[s.outcome];
     const stat = (glyph: IconName, label: string, value: number) => `<li>${icon(glyph)}<b>${value}</b><small>${label}</small></li>`;
-    const haul = ([['ore', 'แร่ดาว', s.kept.ore], ['gold', 'เหรียญทอง', s.kept.gold], ['seal', 'ตราสัญญา', s.kept.seal], ['dust', 'ฝุ่นดาว', s.kept.dust]] as [IconName, string, number][])
+    const haul = ([['ore', 'แร่ดาว', s.kept.ore], ['gold', 'เหรียญทอง', s.kept.gold], ['seal', 'ตราสัญญา', s.kept.seal], ['dust', 'ฝุ่นดาว', s.kept.dust], ['tab-skills', 'ตำราศึก', s.kept.tomes], ['star', 'แก่นรอยแยก', s.kept.core]] as [IconName, string, number][])
       .filter(([, , n]) => n > 0).map(([g, l, n]) => `<li>${icon(g)}<b>+${n}</b><small>${l}</small></li>`).join('');
     const items = s.items.slice(0, 12).map(i => `<li data-rarity="${i.rarity}" title="${itemName(i)} Lv${i.level}"><span class="tile">${gearArt(i)}<span class="tile-lv">Lv${i.level}</span>${i.plus?`<i class="tile-plus">+${i.plus}</i>`:''}</span><small>${itemName(i)}</small><em>${rarityText[i.rarity]}</em></li>`).join('');
     const levels = s.levels.map(l => `<li>${portrait(l.id)}<span><b>${heroText[l.id]?.name ?? l.id}</b><small>Lv${l.from} → <em>Lv${l.to}</em></small></span></li>`).join('');
