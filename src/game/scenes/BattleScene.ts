@@ -4,7 +4,7 @@ import { effectFamily, effectCaption, type CombatPrefs } from '../visuals/combat
 import { thaiFont } from '../../ui/th';
 import { palette } from '../visuals/palette';
 import { BOLT_ATLAS, boltAtlasUrls, boltCast, boltImpact, type FxContext } from '../visuals/bolt-fx';
-import { FOE_SLOT_INDEX, fieldSlots, type FieldSlot } from '../visuals/field-layout';
+import { FOE_SLOT_INDEX, fieldSlots, slotPlan, type FieldSlot } from '../visuals/field-layout';
 import { actorArt, actorFootOrigins, artOf, artUrl, mirroredArt, unitsUrl } from '../visuals/assets';
 
 // Device pixels per CSS pixel for the canvas buffer (capped: 3x covers current phones).
@@ -124,12 +124,10 @@ export class BattleScene extends Phaser.Scene {
     this.positions.clear(); this.actorTargets.clear(); this.actorPanels.clear();
     const w = this.viewW, h = this.viewH;
     const bg = this.add.graphics(); this.layer.add(bg);
-    const large = new Set(this.encounter.enemies.filter(e => e.large).map(e => FOE_SLOT_INDEX[e.id]!));
-    const slots = fieldSlots(w, h, large);
-    const free = { back: [slots[0]!, slots[1]!], front: [slots[2]!, slots[3]!] };
+    const { heroSlots, large, centered } = slotPlan(this.encounter.heroes, this.encounter.enemies, new Set(this.encounter.phases?.flatMap(p => p.summon ?? [])));
+    const slots = fieldSlots(w, h, large, centered);
     for (const [i, hero] of this.encounter.heroes.entries()) {
-      const own = free[hero.lane], other = free[hero.lane === 'front' ? 'back' : 'front'];
-      const slot = own.shift() ?? other.shift()!;
+      const slot = slots[heroSlots.get(hero.id)!]!;
       this.actorPanels.set(hero.id, slot);
       this.actor(hero.id, slot, this.view.state.heroes[i]!.hp, false);
     }

@@ -9,7 +9,7 @@ import { newProfile } from '../../src/core/world/profile';
 // Run with BATTLE_SHOTS=<dir> npx playwright test tests/browser/battle-shots.spec.ts
 const dir = process.env.BATTLE_SHOTS;
 const key = 'asterveil.fateweave.expedition.v1';
-for (const id of ['slime-nest', 'rift-warden']) {
+for (const id of ['slime-nest', 'rift-warden', 'veil-siege']) {
   test(`battle shot ${id} 390x844`, async ({ browser }) => {
     test.skip(!dir, 'set BATTLE_SHOTS to a folder');
     const data = encounterById(id)!;

@@ -35,4 +35,12 @@ describe('reserved battlefield unit panels', () => {
       for (const s of slots) expect((s.maxIcons + 1) * s.iconSize + s.maxIcons * 2).toBeLessThanOrEqual(s.panel.width);
     }
   });
+  it('stands a lone unit of a column in the middle row with its panel clear of every body', () => {
+    for (const height of [379, 455, 650]) {
+      const slots = fieldSlots(378, height, new Set([4]), new Set([4]));
+      expect(slots[4]!.y).toBeGreaterThan(slots[6]!.y); expect(slots[4]!.y).toBeLessThan(slots[7]!.y);
+      expect(slots[4]!.panel.width).toBeGreaterThanOrEqual(70);
+      for (const [j, b] of slots.entries()) if (j !== 5) expect(intersects(slots[4]!.panel, b.body), `${height}: body ${j}`).toBe(false);
+    }
+  });
 });

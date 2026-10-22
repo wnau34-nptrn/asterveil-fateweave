@@ -9,6 +9,7 @@ export interface FieldSlot {
  * Slot order is hero rear 0/1, hero front 0/1, foe front f1/f2, foe back b1/b2 (A7 step 3: the 8-actor field).
  * Four columns mirror each side; each column holds an upper and a lower unit. `large` lists slot indexes drawn
  * LARGE_SCALE times taller from the same feet; the rows always reserve room for a large unit in any slot.
+ * `centered` lists slots whose column holds only that unit in this encounter: they stand in the middle row.
  */
 export const FOE_SLOT_INDEX: Readonly<Record<string, number>> = { f1: 4, f2: 5, b1: 6, b2: 7 };
 export const LARGE_SCALE = 1.5;
@@ -16,7 +17,7 @@ const COLUMNS = [.12, .355, .645, .88] as const;
 const FULL_COLUMNS = [.12, .37, .62, .865] as const;
 // Panels start below the feet: a body box overshoots its feet by 4% of its size (contact shadow).
 const BELOW_FEET = 12, FRONT_DROP = 2;
-export function fieldSlots(width: number, height: number, large: ReadonlySet<number> = new Set()): FieldSlot[] {
+export function fieldSlots(width: number, height: number, large: ReadonlySet<number> = new Set(), centered: ReadonlySet<number> = new Set()): FieldSlot[] {
   const compact = height < 260, tiny = height < 180, side = height < 150;
   if (compact) return shortSlots(width, height, compact, tiny, side);
   const iconSize = 18, panelHeight = 50, cellWidth = width * .225;
@@ -28,10 +29,11 @@ export function fieldSlots(width: number, height: number, large: ReadonlySet<num
   const big = Math.max(size, Math.min(size * LARGE_SCALE, room));
   const slack = Math.max(0, lowerFeet - (2.06 * big + BELOW_FEET + panelHeight + FRONT_DROP + 12));
   const upperFeet = 1.03 * big + 4 + slack * .55;
-  return [0, 1, 2, 3, 4, 5, 6, 7].map(slot => {
+  const slots = [0, 1, 2, 3, 4, 5, 6, 7].map(slot => {
     const enemy = slot >= 4, front = slot >= 2 && slot <= 5, row = slot % 2;
     const x = width * COLUMNS[enemy ? (front ? 2 : 3) : front ? 1 : 0];
-    const y = (row ? lowerFeet : upperFeet) + (front ? FRONT_DROP : 0);
+    // A column holding a single unit stands it in the middle row (owner 2026-10-22: a lone boss reads better centred).
+    const y = (centered.has(slot) ? (upperFeet + lowerFeet) / 2 + big * .2 : row ? lowerFeet : upperFeet) + (front ? FRONT_DROP : 0);
     const drawn = large.has(slot) ? Math.floor(big) : size;
     return {
       x, y, size: drawn, compact, tiny, side, iconSize, maxIcons: Math.min(3, Math.floor((cellWidth - iconSize) / (iconSize + 2))),
@@ -39,7 +41,22 @@ export function fieldSlots(width: number, height: number, large: ReadonlySet<num
       panel: { x: x - cellWidth / 2, y: y + BELOW_FEET, width: cellWidth, height: panelHeight },
     };
   });
+  // A middle-row panel sits level with the neighbouring columns' bodies: narrow it to the gap between them.
+  // The partner slot of a centred unit is unused, so its reserved body does not count.
+  const unused = new Set([...centered].map(partner));
+  for (const i of centered) {
+    const own = slots[i]!, p = own.panel; let left = p.x, right = p.x + p.width;
+    for (const [j, other] of slots.entries()) {
+      const b = other.body;
+      if (j === i || unused.has(j) || b.y >= p.y + p.height || b.y + b.height <= p.y) continue;
+      if (other.x < own.x) left = Math.max(left, b.x + b.width); else right = Math.min(right, b.x);
+    }
+    p.x = left; p.width = Math.max(0, right - left);
+    own.maxIcons = Math.max(1, Math.min(own.maxIcons, Math.floor((p.width - iconSize) / (iconSize + 2))));
+  }
+  return slots;
 }
+export const partner = (slot: number): number => slot % 2 ? slot - 1 : slot + 1;
 
 // Short fields (keyboard-raised or landscape PC windows) keep the pre-A7 grid: there is no room for large art,
 // so large foes draw at the normal size.
@@ -61,4 +78,15 @@ function shortSlots(width: number, height: number, compact: boolean, tiny: boole
       panel: side ? { x: x + 24, y: y - 26, width: 26, height: 26 } : { x: x - cellWidth / 2, y: panelY, width: cellWidth, height: panelHeight },
     };
   });
+}
+
+export interface SlotPlan { heroSlots: Map<string, number>; large: Set<number>; centered: Set<number> }
+/** Which slot each actor stands in. Heroes fill their own lane's column first. A column with a single unit in this
+ * encounter (counting reserves its phases can call, so nobody moves when a foe falls or is summoned) stands it in
+ * the middle row. */
+export function slotPlan(heroes: readonly { id: string; lane: 'front' | 'back' }[], foes: readonly { id: string; reserve?: boolean; large?: boolean }[], called: ReadonlySet<string>): SlotPlan {
+  const heroSlots = new Map<string, number>(), free = { back: [0, 1], front: [2, 3] };
+  for (const hero of heroes) heroSlots.set(hero.id, free[hero.lane].shift() ?? free[hero.lane === 'front' ? 'back' : 'front'].shift()!);
+  const used = [...heroSlots.values(), ...foes.filter(e => !e.reserve || called.has(e.id)).map(e => FOE_SLOT_INDEX[e.id]!)];
+  return { heroSlots, large: new Set(foes.filter(e => e.large).map(e => FOE_SLOT_INDEX[e.id]!)), centered: new Set(used.filter(i => !used.includes(partner(i)))) };
 }
