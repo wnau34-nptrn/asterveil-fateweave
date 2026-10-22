@@ -1,9 +1,14 @@
-import { actorArt, portraitsUrl, sheetRows } from '../game/visuals/assets';
+import { actorArt, portraitsUrl, sheetRows, unitsUrl } from '../game/visuals/assets';
 import { icon } from './icons';
 
 // Star rank as individual badges; the count stays readable text for assistive tech.
 export function starRow(n: number, max: number): string {
   return `<span class="star-row" role="img" aria-label="${n} ดาว">${icon('starBadge').repeat(n)}${icon('starBadgeEmpty').replace('class="icon"', 'class="icon empty"').repeat(max - n)}</span>`;
+}
+// The full-body illustration from the unit atlas (ART-UI-MODERN-001 character sheet), decorative.
+export function heroArt(id: string): string {
+  const { sheet, frame } = actorArt[id]!; const rows = sheetRows[sheet];
+  return `<span class="hero-art" data-actor="${id}" style="--art-x:${frame % 2};--art-y:${Math.floor(frame / 2)};--art-rows:${rows}" aria-hidden="true"><img src="${unitsUrl(sheet)}" alt="" width="1024" height="${rows * 512}" draggable="false"></span>`;
 }
 export function portrait(id: string): string {
   const { sheet, frame } = actorArt[id]!; const rows = sheetRows[sheet];

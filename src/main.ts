@@ -13,6 +13,7 @@ import './ui/world.css';
 import './ui/battle-skin.css';
 import './ui/game-feel.css';
 import './ui/portrait.css';
+import './ui/components.css';
 
 fitViewport();
 const app = document.querySelector<HTMLElement>('#app')!;

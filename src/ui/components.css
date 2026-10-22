@@ -1,0 +1,59 @@
+/* Shared UI primitives (ART-UI-MODERN-001, Luminous Veil): pills, meters, stat chips, icon tabs, hero art and the
+   character sheet layout. Colours come from tokens.css; images keep their pixels and rarity stays a code frame. */
+.ui-pill { display: inline-flex; align-items: center; gap: 6px; min-height: 28px; padding: 4px 10px; border: 1px solid #e8f5ff33; border-radius: 99px; background: #08121fcc; color: var(--text); font: 600 12px var(--font-display, Kanit), sans-serif; }
+.ui-pill .icon { width: 16px; height: 16px; color: var(--veil-cyan, #74d4ef); }
+.ui-meter { height: 6px; border-radius: 99px; background: var(--meter-track, #24384b); overflow: hidden; }
+.ui-meter > i { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #4fc99c, var(--hp-mint, #68e5b6)); }
+.up { color: var(--hp-mint, #68e5b6); } .down { color: var(--danger-coral, #ed927f); }
+
+/* Full-body hero art from the unit atlas, sized by its box. */
+.hero-art { position: relative; display: block; overflow: hidden; width: 100%; aspect-ratio: 1; }
+.hero-art > img { position: absolute; width: 200%; height: calc(var(--art-rows, 3) * 100%); max-width: none; left: calc(var(--art-x) * -100%); top: calc(var(--art-y) * -100%); filter: drop-shadow(0 8px 10px #0008); }
+
+/* Character sheet tabs: icon above a short label, cyan underline when selected. */
+.character-tabs button { flex-direction: column; gap: 2px; padding: 4px 2px; background: transparent; border-color: transparent; font-size: 12px; }
+.character-tabs button .icon { width: 22px; height: 22px; }
+.character-tabs [aria-selected=true] { background: #183c50; border-color: var(--veil-cyan, #74d4ef); color: var(--focus, #a3edff); }
+@container game (max-width: 360px) { .character-tabs button .icon { display: inline-block; width: 18px; height: 18px; } }
+
+/* Overview: the hero in a lit ring, EXP, role chips, then a two-column grid of stat chips. */
+.overview-hero { display: grid; justify-items: center; gap: 8px; padding-top: 4px; }
+.hero-ring { position: relative; width: min(190px, 52cqw); aspect-ratio: 1; border-radius: 50%; border: 2px solid #74d4ef99; background: radial-gradient(circle at 50% 40%, #23435a, #0d1c2e 70%); box-shadow: 0 0 24px #74d4ef33, inset 0 0 30px #08121f; }
+.hero-ring .hero-art { position: absolute; left: 4%; top: 4%; width: 92%; height: 92%; aspect-ratio: auto; border-radius: 50%; }
+.hero-badge { position: absolute; left: 50%; bottom: -12px; transform: translateX(-50%); display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border: 1px solid #74d4ef66; border-radius: 99px; background: #08121fee; font: 600 15px var(--font-display, Kanit), sans-serif; white-space: nowrap; }
+.hero-badge .star-row .icon { width: 14px; height: 14px; }
+.exp-row { width: 100%; display: flex; justify-content: space-between; gap: 8px; margin-top: 12px; font-size: 12px; color: var(--text-muted, #bbcadb); }
+.overview-hero .ui-meter { width: 100%; }
+.role-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
+.hero-help { margin: 8px 0; font-size: 13px; color: var(--text-muted, #bbcadb); text-align: center; }
+.character-content .character-stat-list { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.character-content .character-stat { border: 1px solid #e8f5ff22; border-radius: 10px; background: var(--navy-800, #14243a); }
+.character-content .character-stat[open] { grid-column: 1 / -1; border-color: #74d4ef66; }
+.character-content .character-stat summary { min-height: 58px; display: grid; grid-template-columns: 1fr; align-content: center; gap: 0; padding: 8px 10px; cursor: pointer; list-style: none; }
+.character-content .character-stat summary::-webkit-details-marker { display: none; }
+.character-content .character-stat summary::after, .character-content .character-stat summary::before { display: none; }
+.character-content .character-stat summary span { font-size: 12px; color: var(--text-muted, #bbcadb); }
+.character-content .character-stat summary strong { font: 600 20px/1.15 var(--font-display, Kanit), sans-serif; color: var(--text); }
+.character-content .character-stat p { margin: 0; padding: 0 10px 10px; font-size: 12px; color: var(--text-muted, #bbcadb); }
+
+/* Equipment paper doll: three slots each side of the hero. */
+.paperdoll { display: grid !important; grid-template-columns: auto 1fr auto; align-items: center; gap: 8px; }
+.doll-col { display: grid; gap: 8px; }
+.doll-hero { position: relative; display: grid; place-items: center; min-height: 0; }
+.doll-hero::before { content: ''; position: absolute; inset: 8% 4%; border-radius: 50%; background: radial-gradient(circle, #23435a 0, transparent 70%); }
+.doll-hero .hero-art { position: relative; width: min(100%, 220px); }
+.character-content .doll-slot { width: 66px; min-height: 0; display: grid; grid-template-columns: 1fr; justify-items: center; gap: 2px; padding: 4px; text-align: center; border-radius: 12px; background: linear-gradient(145deg, #22364b, #0d1c2e); }
+.character-content .doll-slot .gear-art, .character-content .doll-slot > .icon { width: 50px; height: 50px; }
+.character-content .doll-slot > .icon { padding: 12px; color: var(--text-muted, #bbcadb); }
+.character-content .doll-slot b { font-size: 11px; font-weight: 600; }
+.character-content .doll-slot[aria-pressed=true] { border-color: var(--veil-cyan, #74d4ef); background: #183c50; box-shadow: 0 0 12px #74d4ef55; }
+.doll-stats { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin: 8px 0; }
+@container game (max-width: 360px) { .character-content .doll-slot { width: 58px; } .character-content .doll-slot .gear-art, .character-content .doll-slot > .icon { width: 44px; height: 44px; } }
+
+/* Tree node grammar (ART-UI-MODERN-001 board 04): skill circle, choice diamond, passive square, capstone crest. */
+.big-tree .talent-node b::before { content: ''; display: inline-block; width: 10px; height: 10px; margin-right: 6px; vertical-align: 0; border: 1.5px solid var(--veil-cyan, #74d4ef); }
+.big-tree .talent-node.skill b::before { border-radius: 50%; }
+.big-tree .talent-node.choice b::before { transform: rotate(45deg) scale(.85); }
+.big-tree .talent-node.capstone b::before { border-color: var(--gold-light, #f2d596); clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%); background: #f2d59655; }
+.big-tree .talent-node.skill b::before, .big-tree .talent-node.skill b { color: inherit; }
+.big-tree .talent-node.skill b::before { content: ''; }

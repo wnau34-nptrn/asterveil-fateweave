@@ -261,7 +261,6 @@ body { display: grid; place-items: center; background: radial-gradient(ellipse a
 .big-tree .talent-branch { border: 1px solid #f2d59633; border-radius: 12px; padding: 6px; }
 .big-tree .talent-tier { display: grid; gap: 4px; }
 .big-tree .talent-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr)); gap: 5px; }
-.big-tree .talent-node.skill b::before { content: '◆ '; color: var(--gold-light); }
 .big-tree .talent-node.choice[data-state="locked"] { opacity: .6; }
 .loadout-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 130px), 1fr)); gap: 6px; }
 .loadout-skill { min-height: 44px; display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 0 6px; text-align: left; padding: 6px 8px; border-radius: 10px; border: 1px solid #ffffff2a; background: #0f1a2acc; color: inherit; }
