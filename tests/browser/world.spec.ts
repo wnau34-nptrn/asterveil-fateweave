@@ -1338,7 +1338,8 @@ test('side quests: a herb is picked on the map; at camp the herbalist shows "!",
 test('levels: the map shows the monster level here and members’ levels; battles show enemy levels', async ({ page }, info) => {
   const state = newExpedition(map, encounterById, 11); state.tutorialDone = true;
   const issues = await open(page, state);
-  await expect(page.locator('#zone-name .zone-level')).toHaveText(/^Lv[1-3]$/);
+  // A10: veil-frontier opens at Lv6–7, so a Lv1 party sees the danger note.
+  await expect(page.locator('#zone-name .zone-level')).toHaveText(/^Lv[67] · อันตราย$/);
   await expect(page.locator('#world-hero-guardian')).toContainText('Lv1');
   await page.screenshot({ path: info.outputPath('levels-map.png') });
   let s = state; let steps = 0; while (!s.battle && steps < 80) { s = move(s, map, steps % 2 ? 'right' : 'left').state; steps++; }
