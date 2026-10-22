@@ -32,7 +32,7 @@ for(const [width,height,touch] of [[320,568,true],[390,844,true],[1366,768,false
     else{await page.locator('#bag-tab-team').click();await page.locator('#bag-team-guardian').click();await page.locator('#bag-character-overview').click();}
     await expect(id('character-tab-overview')).toHaveAttribute('aria-selected','true');
     if(camp){await id('character-member-mira').click();await expect(id('character-title')).toContainText('มิร่า');await expect(panel.locator('.character-summary')).toContainText('ในค่าย');await id('character-member-guardian').click();expect(await saved()).toBe(original);}
-    await id('character-tab-gear').click();await id('gear-filter-set').selectOption('none');await expect(panel.locator('.gear-bag li')).toHaveCount(2);
+    await id('character-tab-gear').click();await panel.locator('.gear-extra-filters summary').click();await id('gear-filter-set').selectOption('none');await expect(panel.locator('.gear-bag li')).toHaveCount(2);
     await id('gear-filter-set').selectOption('wind');await expect(panel.locator('.gear-bag li')).toHaveCount(6);
     await panel.locator('.auto-settings summary').click();await id('auto-goal').selectOption('attack');await id('auto-set').selectOption('wind');
     await id('auto-preview').click();await expect(id('comparison-title')).toBeVisible();await expect(panel.locator('.auto-summary')).toContainText('สายลมเร็ว');expect(await saved()).toBe(original);

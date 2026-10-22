@@ -1146,18 +1146,18 @@ test('lobby equipment: its own sheet; equip, class weapons, swap, unequip, salva
   await expect(page.locator('#camp-character-dialog')).toBeVisible(); await expect(page.locator('#camp-character-tab-gear')).toHaveAttribute('aria-selected','true');
   await expect(page.locator('.gear-slot')).toHaveCount(6); await expect(page.locator('.gear-bag li')).toHaveCount(4);
   // Another class's weapon cannot be worn.
-  await expect(page.locator('#camp-wear-owned-3')).toBeDisabled(); await expect(page.locator('#camp-wear-owned-3')).toContainText('คนอื่นใช้');
+  await page.locator('#camp-pick-owned-3').click(); await expect(page.locator('#camp-wear-owned-3')).toBeDisabled(); await expect(page.locator('#camp-wear-owned-3')).toContainText('คนอื่นใช้');
   await page.locator('#camp-bag-slot-body').click(); await expect(page.locator('.gear-bag li')).toHaveCount(2);
-  await page.locator('#camp-wear-owned-1').click();
+  await page.locator('#camp-pick-owned-1').click(); await page.locator('#camp-wear-owned-1').click();
   await expect(page.locator('#camp-bag-slot-body')).toContainText('เกราะหายาก Lv5'); await expect(page.locator('.gear-bag li')).toHaveCount(1);
   await expect(page.locator('.gear-stats')).toContainText(`เลือด ${76 + 15 + 8}`);
   // Swapping returns the old piece to the bag.
-  await page.locator('#camp-wear-owned-2').click(); await expect(page.locator('#camp-bag-slot-body')).toContainText('เกราะธรรมดา');
-  await expect(page.locator('#camp-wear-owned-1')).toBeVisible();
+  await page.locator('#camp-pick-owned-2').click(); await page.locator('#camp-wear-owned-2').click(); await expect(page.locator('#camp-bag-slot-body')).toContainText('เกราะธรรมดา');
+  await expect(page.locator('#camp-pick-owned-1')).toBeVisible();
   await page.locator('#camp-bag-takeoff').click(); await expect(page.locator('#camp-bag-slot-body')).toContainText('ว่าง');
-  for (const b of await page.locator('#camp-character-dialog .gear-slot, #camp-character-dialog .gear-actions button, #camp-character-dialog .tree-member').all()) expect((await b.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+  for (const b of await page.locator('#camp-character-dialog .gear-slot, #camp-character-dialog .item-card-actions button, #camp-character-dialog .bag-tile, #camp-character-dialog .ui-chip, #camp-character-dialog .tree-member').all()) expect((await b.boundingBox())!.height).toBeGreaterThanOrEqual(44);
   await page.locator('#camp-bag-slot-body').click();
-  await page.locator('#camp-wear-owned-4').click(); await expect(page.locator('#camp-bag-slot-charm')).toContainText('เครื่องรางตำนาน');
+  await page.locator('#camp-pick-owned-4').click(); await page.locator('#camp-wear-owned-4').click(); await expect(page.locator('#camp-bag-slot-charm')).toContainText('เครื่องรางตำนาน');
   await page.screenshot({ path: info.outputPath('lobby-gear.png') });
   await page.locator('#camp-character-dialog [data-world=character-close]').click(); await page.keyboard.press('Escape'); await page.locator('#lobby-tab-gear').click();
   // Salvage stays in the camp inventory; a rare piece needs a second press.
@@ -1183,7 +1183,7 @@ test('lobby equipment sets: worn pieces light the 2- and 4-piece bonuses', async
   await expect(page.locator('.gear-sets li')).toContainText('ชุดผู้พิทักษ์รุ่งอรุณ'); await expect(page.locator('.gear-sets li')).toContainText('3/4');
   await expect(page.locator('.gear-sets small.on')).toHaveCount(1);
   await expect(page.locator('.gear-bag li')).toContainText('ชุดผู้พิทักษ์รุ่งอรุณ');
-  await page.locator('#camp-wear-owned-4').click();
+  await page.locator('#camp-pick-owned-4').click(); await page.locator('#camp-wear-owned-4').click();
   await expect(page.locator('.gear-sets small.on')).toHaveCount(2); await expect(page.locator('.gear-sets li')).toContainText('เริ่มศึกพร้อมโล่ 12');
   await page.screenshot({ path: info.outputPath('lobby-sets.png') });
 });

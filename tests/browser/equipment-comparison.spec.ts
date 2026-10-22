@@ -26,8 +26,8 @@ for(const [width,height,touch] of [[320,568,true],[390,844,true],[1366,768,false
     await page.screenshot({path:info.outputPath('stat-help.png')});
     await page.locator('#character-tab-skills').click();await expect(page.locator('.character-skills [data-skill=bash]')).toContainText('อิงพลังโจมตี');
     await expect(page.locator('.character-skills [data-skill=rally]')).toContainText('ผลพิเศษ');
-    await page.locator('#character-tab-gear').click();await expect(page.locator('#compare-found-1')).toBeDisabled();
-    await page.locator('#compare-found-0').click();await expect(page.locator('#comparison-title')).toBeVisible();
+    await page.locator('#character-tab-gear').click();await page.locator('#pick-found-1').click();await expect(page.locator('#compare-found-1')).toBeDisabled();
+    await page.locator('#pick-found-0').click();await page.locator('#compare-found-0').click();await expect(page.locator('#comparison-title')).toBeVisible();
     const expected=wear(game.run,map,lookup,'guardian','found',0).state,h=memberDef(lookup,map,expected.members,'guardian')!;
     await expect(page.locator('[data-stat=attack] td').nth(1)).toHaveText(String(h.attack));
     await page.locator('[data-stat=attack]').scrollIntoViewIfNeeded();
@@ -52,7 +52,7 @@ for(const [width,height,touch] of [[320,568,true],[390,844,true],[1366,768,false
     // Support equipment changes both song healing and the healing branch of Finale.
     await page.locator('#character-member-lio').click();await page.locator('#character-tab-gear').click();
     const supportIndex=equipped.found.findIndex(i=>i.slot==='charm'),beforeSupport=await saved();
-    await page.locator(`#compare-found-${supportIndex}`).click();
+    await page.locator(`#pick-found-${supportIndex}`).click();await page.locator(`#compare-found-${supportIndex}`).click();
     const proposed=wear(equipped,map,lookup,'lio','found',supportIndex).state,nextLio=memberDef(lookup,map,proposed.members,'lio')!;
     const finale=characterSkillMetric('finale',nextLio,template);
     await expect(page.locator('.comparison-skills [data-skill=finale] summary')).toContainText(`→ ${finale.secondary!.value}`);

@@ -49,12 +49,12 @@ for (const [width,height,touch] of [[320,568,true], [390,844,true], [1366,768,fa
     await page.locator('#character-member-guardian').click(); await page.screenshot({path:info.outputPath('character-talents.png')});
     await page.locator('#character-tab-skills').click(); await expect(page.locator('#character-content')).toContainText('ปลดที่โหนด ท้าดวล'); await expect(page.locator('#character-content')).toContainText('ปลดที่โหนด ยืนหยัด');
     await page.screenshot({path:info.outputPath('character-skills.png')});
-    await page.locator('#character-tab-gear').click(); await expect(page.locator('#wear-found-1')).toBeDisabled();
-    await page.locator('#wear-found-0').click();
+    await page.locator('#character-tab-gear').click(); await page.locator('#pick-found-1').click(); await expect(page.locator('#wear-found-1')).toBeDisabled();
+    await page.locator('#pick-found-0').click(); await page.locator('#wear-found-0').click();
     let current = parseGame(await saved(page),map,encounterById).run!;
     expect(current.members.guardian!.gear!.body!.rarity).toBe(3); expect(current.spare[0]!.uid).toBe(1); expect(current.hp.guardian).toBe(11);
     await page.locator('#bag-slot-body').click(); await page.locator('#bag-takeoff').click();
-    await page.locator('#wear-spare-0').click(); current = parseGame(await saved(page),map,encounterById).run!;
+    await page.locator('#pick-spare-0').click(); await page.locator('#wear-spare-0').click(); current = parseGame(await saved(page),map,encounterById).run!;
     expect(current.members.guardian!.gear!.body!.uid).toBe(1); expect(current.spare).toEqual([]);
     await page.screenshot({path:info.outputPath('character-gear.png')});
     expect(await page.locator('#character-dialog').evaluate(el => { const r=el.getBoundingClientRect(),a=document.querySelector('#app')!.getBoundingClientRect(); return r.left>=a.left-1&&r.right<=a.right+1&&r.top>=a.top-1&&r.bottom<=a.bottom+1&&el.scrollWidth<=el.clientWidth; })).toBe(true);

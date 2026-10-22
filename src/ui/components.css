@@ -57,3 +57,52 @@
 .big-tree .talent-node.capstone b::before { border-color: var(--gold-light, #f2d596); clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%); background: #f2d59655; }
 .big-tree .talent-node.skill b::before, .big-tree .talent-node.skill b { color: inherit; }
 .big-tree .talent-node.skill b::before { content: ''; }
+
+/* Filter chips (A7: chips instead of dropdowns). */
+.ui-chip { min-height: 44px; padding: 0 14px; border-radius: 99px; border: 1px solid #e8f5ff33; background: #102137; color: var(--text); font: 600 13px var(--font-display, Kanit), sans-serif; }
+.ui-chip[aria-pressed=true] { border-color: var(--veil-cyan, #74d4ef); background: #183c50; color: var(--focus, #a3edff); }
+.gear-chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0; }
+.gear-chips .gear-filters { display: contents; }
+.gear-chips .gear-extra-filters { margin: 0; padding: 0; border: 0; background: none; }
+.gear-chips .gear-extra-filters[open] { flex-basis: 100%; }
+.gear-chips .gear-extra-filters > summary { min-height: 44px; display: inline-flex; align-items: center; gap: 4px; padding: 0 14px; border: 1px solid #e8f5ff33; border-radius: 99px; background: #102137; font-size: 13px; color: var(--text-muted, #bbcadb); list-style: none; }
+.gear-chips .gear-extra-filters > summary::-webkit-details-marker, .gear-chips .gear-extra-filters > summary::before, .gear-chips .gear-extra-filters > summary::after { display: none; }
+.gear-chips .gear-extra-filters > summary .icon { width: 16px; height: 16px; }
+
+/* Bag (board 01): five-column tiles with Lv bottom-left, + top-right and the rarity frame from gearArt. */
+.bag-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 12px; }
+.bag-head h3 { margin: 0; } .bag-head h3 small { font-size: 13px; color: var(--text-muted, #bbcadb); font-weight: 500; }
+.character-content .bag-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; margin: 0 0 8px; }
+.character-content .bag-grid li { display: block; padding: 0; border: 0; background: none; }
+.bag-tile { position: relative; width: 100%; min-height: 0; aspect-ratio: 1; padding: 0; border: 0; border-radius: 12px; background: none; display: block; }
+.bag-tile .gear-art { width: 100%; height: 100%; --art: 100%; border-radius: 12px; }
+.bag-tile .gear-art .equip-sprite { inset: 10%; }
+.bag-tile .set-emblem { right: 2px; bottom: 2px; width: 16px; height: 16px; }
+.bag-tile .tile-lv { position: absolute; left: 6px; bottom: 3px; font: 700 11px var(--font-display, Kanit), sans-serif; color: #fff; text-shadow: 0 1px 2px #000, 0 0 4px #000; }
+.bag-tile .tile-plus { position: absolute; right: 5px; top: 2px; font: 700 11px var(--font-display, Kanit), sans-serif; font-style: normal; color: var(--gold-light, #f2d596); text-shadow: 0 1px 2px #000; }
+.bag-tile > .icon { position: absolute; right: 4px; top: 4px; width: 14px; height: 14px; color: var(--text-muted, #bbcadb); }
+.bag-tile.foreign .gear-art { opacity: .45; filter: grayscale(.6); }
+.bag-tile[aria-pressed=true] { box-shadow: 0 0 0 2px var(--veil-cyan, #74d4ef), 0 0 14px #74d4ef77; }
+.bag-tile:focus-visible { outline: 2px solid var(--gold-light, #f2d596); outline-offset: 2px; }
+
+/* Item card: the picked bag piece or the worn piece of the selected doll slot. */
+.character-content .item-card { display: grid; gap: 10px; margin: 8px 0; padding: 12px; border: 1px solid #e8f5ff26; border-radius: 16px; background: linear-gradient(160deg, #182b40, #0c1a2b); font-size: 13px; }
+.item-card-head { display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: center; }
+.item-card-head .gear-art { --art: 64px; }
+.item-card-head > div { display: grid; gap: 1px; min-width: 0; }
+.item-card-head b { font: 600 17px/1.25 var(--font-display, Kanit), sans-serif; color: var(--text); }
+.item-card-head small { font-size: 12px; color: var(--text-muted, #bbcadb); overflow-wrap: anywhere; }
+.item-card-head small[data-rarity] { color: var(--rarity-0); } .item-card-head small[data-rarity="1"] { color: var(--rarity-1); } .item-card-head small[data-rarity="2"] { color: var(--rarity-2); }
+.item-card-head small[data-rarity="3"] { color: var(--rarity-3); } .item-card-head small[data-rarity="4"] { color: var(--rarity-4); }
+.item-lock { display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid #e8f5ff33; border-radius: 12px; }
+.item-lock .icon { width: 20px; height: 20px; }
+.item-deltas { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; }
+.item-deltas > small { margin-left: auto; font-size: 12px; color: var(--text-muted, #bbcadb); }
+.item-delta { display: inline-flex; align-items: center; gap: 5px; font: 600 15px var(--font-display, Kanit), sans-serif; }
+.item-delta .icon { width: 20px; height: 20px; color: var(--text-muted, #bbcadb); }
+.item-delta em { font-style: normal; font-size: 13px; }
+.item-delta.same { font-weight: 400; font-size: 12px; color: var(--text-muted, #bbcadb); }
+.item-card .item-lines { font-size: 12px; line-height: 1.5; color: var(--text-muted, #bbcadb); }
+.item-card-actions { display: flex; gap: 8px; }
+.character-content .item-card-actions button { flex: 1; min-height: 48px; display: inline-flex; align-items: center; justify-content: center; gap: 4px; }
+.worn-card { border-color: #74d4ef55; }
