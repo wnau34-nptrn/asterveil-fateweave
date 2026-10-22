@@ -226,7 +226,7 @@ test('the camp team tab benches and redeploys members; the party row follows the
   expect(issues).toEqual([]);
 });
 
-test('lobby: hiring a new mercenary adds them to the reserve with full roster data, and they cheer at the fire', async ({ page }, info) => {
+test('lobby: hiring a new mercenary adds them to the reserve with full roster data; reserves do not crowd the fire', async ({ page }, info) => {
   let seedValue = 5; while (boardOffers(newProfile(map, seedValue), map, encounterById)[0] !== 'mira') seedValue++;
   await seed(page, null, { ...newProfile(map, seedValue), tutorialDone: true, commander, bank: { ore: 30, gold: 20, seal: 0, dust: 0 } });
   await page.goto('./'); await page.locator('#continue').click();
@@ -237,7 +237,8 @@ test('lobby: hiring a new mercenary adds them to the reserve with full roster da
   await expect(page.locator('#hire-0')).toContainText('จ้าง · 20'); await page.locator('#hire-0').click();
   const p = await savedProfile(page);
   expect(p.members.mira).toEqual({ stars: 1, dupes: 0 }); expect(p.party.reserve).toEqual(['mira']); expect(p.company).toContain('mira');
-  await expect(page.locator('.lobby-unit[data-actor=mira]')).toHaveAttribute('data-pose', 'cheer');
+  // Reserves stay off the camp scene: only the main team (at most four) sits at the fire.
+  await expect(page.locator('.lobby-unit[data-actor=mira]')).toHaveCount(0); await expect(page.locator('.lobby-unit')).toHaveCount(4);
   await page.screenshot({ path: info.outputPath('lobby-mira-cheers.png') });
   await page.keyboard.press('Escape'); await expect(page.locator('#lobby-sheet')).toHaveCount(0); await expect(page.locator('#lobby-tab-hire')).toBeFocused();
   await page.locator('#lobby-tab-team').click(); await expect(page.locator('#lobby-member-mira')).toContainText('มิร่า');

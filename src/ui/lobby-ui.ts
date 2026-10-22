@@ -289,8 +289,9 @@ export class LobbyUI {
   // logs, the middle pair has a character moment, the back alternates; the member just hired or upgraded
   // cheers, and everyone cheers after a completed expedition. Right of the fire the frames are mirrored.
   private scene(p: Profile): string {
-    const ids = [...p.party.deployed, ...p.party.reserve].filter(id => lobbyPose(id, 'sit') ?? actorArt[id]);
-    const spots = [[18, 0, 1], [33, 1, .92], [67, 1, .92], [82, 0, 1], [8, 2, .78], [43, 2, .74], [57, 2, .74], [92, 2, .78]] as const;
+    // Only the main team (at most four) sits around the fire; reserves stay off the scene so it never crowds.
+    const ids = p.party.deployed.slice(0, 4).filter(id => lobbyPose(id, 'sit') ?? actorArt[id]);
+    const spots = [[18, 0, 1], [33, 1, .92], [67, 1, .92], [82, 0, 1]] as const;
     const party = p.last?.outcome === 'complete';
     const units = ids.slice(0, spots.length).map((id, i) => {
       const [x, depth, scale] = spots[i]!;
