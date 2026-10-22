@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { chapterOne as map } from '../../src/content/world/chapter1';
+import { MAPS } from '../../src/content/world/maps';
 import { encounterById } from '../../src/content/encounters/catalog';
 import { createBattle, currentHeroId, pendingPhase, resolveCommand, targetOptions } from '../../src/core/battle/engine';
 import { battleData, newExpedition } from '../../src/core/world/world';
@@ -9,15 +10,16 @@ import { newProfile } from '../../src/core/world/profile';
 // Run with BATTLE_SHOTS=<dir> npx playwright test tests/browser/battle-shots.spec.ts
 const dir = process.env.BATTLE_SHOTS;
 const key = 'asterveil.fateweave.expedition.v1';
-for (const id of ['slime-nest', 'rift-warden', 'veil-siege']) {
+for (const id of ['slime-nest', 'rift-warden', 'veil-siege', 'vanguard-captain', 'elite-briar-lord']) {
   test(`battle shot ${id} 390x844`, async ({ browser }) => {
     test.skip(!dir, 'set BATTLE_SHOTS to a folder');
     const data = encounterById(id)!;
     const context = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true, reducedMotion: 'reduce', deviceScaleFactor: 2 }), page = await context.newPage();
     const hp = Object.fromEntries(data.heroes.map(h => [h.id, h.maxHp]));
     const s = createBattle(data, { hp });
-    const run = newExpedition(map, encounterById, 1234); run.tutorialDone = true;
-    run.battle = { kind: id === 'rift-warden' ? 'boss' : 'random', encounterId: data.id, entry: hp, commands: s.commands };
+    // A boss battle belongs to the map whose boss it is.
+    const run = newExpedition(MAPS.find(m => m.bossEncounterId === id) ?? map, encounterById, 1234); run.tutorialDone = true;
+    run.battle = { kind: ['rift-warden', 'vanguard-captain', 'elite-briar-lord'].includes(id) ? 'boss' : 'random', encounterId: data.id, entry: hp, commands: s.commands };
     const profile = { ...newProfile(map, 5), tutorialDone: true, commander: { name: 'อารี', crest: 'star', color: 'gold', camp: 'ค่ายอารี' } };
     await page.addInitScript(({ key, raw }) => localStorage.setItem(key, raw), { key, raw: JSON.stringify({ version: 21, profile, run }) });
     await page.goto('./'); await page.locator('#continue').click();

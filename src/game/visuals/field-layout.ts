@@ -21,19 +21,21 @@ const COLUMNS = [.12, .355, .645, .88] as const;
 const FULL_COLUMNS = [.12, .37, .62, .865] as const;
 // Panels start below the feet: a body box overshoots its feet by 4% of its size (contact shadow).
 const BELOW_FEET = 12, FRONT_DROP = 2;
-export function fieldSlots(width: number, height: number, large: ReadonlySet<number> = new Set(), centered: ReadonlySet<number> = new Set(), trio: ReadonlySet<HeroColumn> = new Set()): FieldSlot[] {
+// `escorted` lists boss slots that stand in the middle row although their column partner is used (owner 2026-10-22:
+// a boss never stands on the top row): the partner stands on the bottom row and the boss just above it.
+export function fieldSlots(width: number, height: number, large: ReadonlySet<number> = new Set(), centered: ReadonlySet<number> = new Set(), trio: ReadonlySet<HeroColumn> = new Set(), escorted: ReadonlySet<number> = new Set()): FieldSlot[] {
   const compact = height < 260, tiny = height < 180, side = height < 150;
-  const slots = compact ? shortSlots(width, height, compact, tiny, side) : tallSlots(width, height, large, centered);
-  for (const column of trio) trioSlots(slots, column, width, height, compact, centered);
-  if (!compact) narrowCentered(slots, centered, trio);
+  const slots = compact ? shortSlots(width, height, compact, tiny, side) : tallSlots(width, height, large, centered, escorted);
+  for (const column of trio) trioSlots(slots, column, width, height, compact, centered, escorted);
+  if (!compact) narrowCentered(slots, centered, trio, escorted);
   return slots;
 }
-function narrowCentered(slots: FieldSlot[], centered: ReadonlySet<number>, trio: ReadonlySet<HeroColumn>): void {
+function narrowCentered(slots: FieldSlot[], centered: ReadonlySet<number>, trio: ReadonlySet<HeroColumn>, escorted: ReadonlySet<number>): void {
   const iconSize = 18;
   // A middle-row panel sits level with the neighbouring columns' bodies: narrow it to the gap between them.
   // Bodies of the same column (a trio) stand above or below and never count.
   // The partner slot of a centred unit is unused, so its reserved body does not count.
-  const unused = new Set([...centered].map(partner).concat((['back', 'front'] as const).filter(c => !trio.has(c)).map(c => TRIO_SLOTS[c][1])));
+  const unused = new Set([...centered].filter(i => !escorted.has(i)).map(partner).concat((['back', 'front'] as const).filter(c => !trio.has(c)).map(c => TRIO_SLOTS[c][1])));
   // A trio's panels sit level with the other column's middle unit, so they narrow the same way.
   for (const i of [...centered, ...[...trio].flatMap(c => TRIO_SLOTS[c])]) {
     const own = slots[i]!, p = own.panel; let left = p.x, right = p.x + p.width;
@@ -45,7 +47,7 @@ function narrowCentered(slots: FieldSlot[], centered: ReadonlySet<number>, trio:
     own.maxIcons = Math.max(1, Math.min(own.maxIcons, Math.floor((p.width - iconSize) / (iconSize + 2))));
   }
 }
-function tallSlots(width: number, height: number, large: ReadonlySet<number>, centered: ReadonlySet<number>): FieldSlot[] {
+function tallSlots(width: number, height: number, large: ReadonlySet<number>, centered: ReadonlySet<number>, escorted: ReadonlySet<number>): FieldSlot[] {
   const compact = false, tiny = false, side = false;
   const iconSize = 18, panelHeight = 50, cellWidth = width * .225;
   // Lower feet sit above the bottom panel; the upper row leaves room for a large head and the lower row
@@ -59,11 +61,19 @@ function tallSlots(width: number, height: number, large: ReadonlySet<number>, ce
   const slots = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(slot => {
     // Slots 8/9 (a trio's middle) are placed by `trioSlots`; until then they mirror slot 0/2.
     const third = slot >= 8; if (third) slot = slot === 8 ? 0 : 2;
-    const enemy = slot >= 4, front = slot >= 2 && slot <= 5, row = slot % 2;
+    const enemy = slot >= 4, front = slot >= 2 && slot <= 5, row = escorted.has(partner(slot)) ? 1 : slot % 2;
     const x = width * COLUMNS[enemy ? (front ? 2 : 3) : front ? 1 : 0];
     // A column holding a single unit stands it in the middle row (owner 2026-10-22: a lone boss reads better centred).
     const y = (centered.has(slot) && !third ? (upperFeet + lowerFeet) / 2 + big * .2 : row ? lowerFeet : upperFeet) + (front ? FRONT_DROP : 0);
     const drawn = large.has(slot) ? Math.floor(big) : size;
+    // An escorted boss stands just above its partner's head (the partner is drawn at the normal size).
+    if (escorted.has(slot) && !third) {
+      const partnerTop = lowerFeet + (front ? FRONT_DROP : 0) - 1.03 * size - 4;
+      const boss = Math.min(y, partnerTop - BELOW_FEET - panelHeight - 2);
+      return { x, y: boss, size: drawn, compact, tiny, side, iconSize, maxIcons: Math.min(3, Math.floor((cellWidth - iconSize) / (iconSize + 2))),
+        body: { x: x - drawn * .51, y: boss - drawn * 1.03 - 4, width: drawn * 1.02, height: drawn * 1.07 + 4 },
+        panel: { x: x - cellWidth / 2, y: boss + BELOW_FEET, width: cellWidth, height: panelHeight } };
+    }
     return {
       x, y, size: drawn, compact, tiny, side, iconSize, maxIcons: Math.min(3, Math.floor((cellWidth - iconSize) / (iconSize + 2))),
       body: { x: x - drawn * .51, y: y - drawn * 1.03 - 4, width: drawn * 1.02, height: drawn * 1.07 + 4 },
@@ -101,7 +111,7 @@ function shortSlots(width: number, height: number, compact: boolean, tiny: boole
 // head, the bottom unit stays on the lower row, and the middle unit stands just above the bottom unit's head, stepped
 // toward the field centre so it does not hide the top one (its panel shrinks to 32/26 px when the height is short).
 // Short fields keep 44px bodies with the small side badge, as the shortest fields already do.
-function trioSlots(slots: FieldSlot[], column: HeroColumn, width: number, height: number, short: boolean, centered: ReadonlySet<number>): void {
+function trioSlots(slots: FieldSlot[], column: HeroColumn, width: number, height: number, short: boolean, centered: ReadonlySet<number>, escorted: ReadonlySet<number>): void {
   const ids = TRIO_SLOTS[column], base = slots[ids[0]]!;
   if (short) {
     const size = 44, step = (height - 8) / 3;
@@ -130,15 +140,18 @@ function trioSlots(slots: FieldSlot[], column: HeroColumn, width: number, height
     // Foes stand on the same three rows so both sides share one ground line per row (upper → top, lower → bottom,
     // a lone foe → middle). A large foe keeps its head inside the field, so it may stand a little lower on the top row.
     const foeAt = (fp: number) => [4, 5, 6, 7].map(i => {
-      const f = slots[i]!, y = Math.max(centered.has(i) ? rows[1]! : rows[i % 2 ? 2 : 0]!, 1.03 * f.size + 4);
+      const f = slots[i]!, y = Math.max(centered.has(i) ? rows[1]! : rows[i % 2 || escorted.has(partner(i)) ? 2 : 0]!, 1.03 * f.size + 4);
       return [i, { ...f, y, compact: fp < 50, maxIcons: fp < 50 ? 1 : f.maxIcons, body: bodyBox(f.x, y, f.size), panel: { ...f.panel, y: y + Math.ceil(f.size * .04) + 2, height: fp } }] as const;
     });
     // Keep it only when no panel meets a body or another panel (unused partner slots hold nobody). Foes keep full
     // panels when they fit, else the compact ones.
-    const heroes = [...placed.entries()].filter(([slot]) => !centered.has(partner(slot)) || ids.includes(slot)).map(([, u]) => u);
     const meets = (a: FieldBox, b: FieldBox) => a.x < b.x + b.width && b.x < a.x + a.width && a.y < b.y + b.height && b.y < a.y + a.height;
-    const clashes = (units: readonly FieldSlot[]) => units.some((u, n) => units.some((v, m) => m !== n && (meets(u.panel, v.body) || meets(u.panel, v.panel))));
-    const foeSlots = [50, panel].map(foeAt).find(set => !clashes([...heroes, ...set.filter(([i]) => !centered.has(partner(i))).map(([, f]) => f)]));
+    // A large centred foe (a boss) is wider than its column gap: its body may pass behind a neighbour's panel, as on
+    // the two-row field.
+    const clashes = (units: readonly (readonly [number, FieldSlot])[]) => units.some(([, u], n) => units.some(([j, v], m) => m !== n
+      && ((!(centered.has(j) && v.size > size * 1.2) && meets(u.panel, v.body)) || meets(u.panel, v.panel))));
+    const heroUnits = [...placed.entries()].filter(([slot]) => !centered.has(partner(slot)) || ids.includes(slot));
+    const foeSlots = [50, panel].map(foeAt).find(set => !clashes([...heroUnits, ...set.filter(([i]) => !centered.has(partner(i)) || escorted.has(partner(i)))]));
     if (!foeSlots) continue;
     for (const [slot, u] of placed) slots[slot] = u;
     for (const [slot, f] of foeSlots) slots[slot] = f;
@@ -162,11 +175,11 @@ function trioSlots(slots: FieldSlot[], column: HeroColumn, width: number, height
 }
 const bodyBox = (x: number, y: number, size: number): FieldBox => ({ x: x - size * .51, y: y - size * 1.03 - 4, width: size * 1.02, height: size * 1.07 + 4 });
 
-export interface SlotPlan { heroSlots: Map<string, number>; large: Set<number>; centered: Set<number>; trio: Set<HeroColumn>; used: number[] }
+export interface SlotPlan { heroSlots: Map<string, number>; large: Set<number>; centered: Set<number>; trio: Set<HeroColumn>; used: number[]; escorted: Set<number> }
 /** Which slot each actor stands in. Heroes fill their own lane's column first. A column with a single unit in this
  * encounter (counting reserves its phases can call, so nobody moves when a foe falls or is summoned) stands it in
  * the middle row. */
-export function slotPlan(heroes: readonly { id: string; lane: HeroColumn }[], foes: readonly { id: string; reserve?: boolean; large?: boolean }[], called: ReadonlySet<string>): SlotPlan {
+export function slotPlan(heroes: readonly { id: string; lane: HeroColumn }[], foes: readonly { id: string; reserve?: boolean; large?: boolean; boss?: boolean }[], called: ReadonlySet<string>): SlotPlan {
   // Each column holds at most three heroes (the formation rules cap it); a fourth would step over to the other one.
   const count = { back: 0, front: 0 }; const lane = new Map<string, HeroColumn>();
   for (const hero of heroes) { const l = count[hero.lane] < 3 ? hero.lane : hero.lane === 'front' ? 'back' : 'front'; lane.set(hero.id, l); count[l]++; }
@@ -174,6 +187,11 @@ export function slotPlan(heroes: readonly { id: string; lane: HeroColumn }[], fo
   const free = { back: trio.has('back') ? [...TRIO_SLOTS.back] : [0, 1], front: trio.has('front') ? [...TRIO_SLOTS.front] : [2, 3] };
   const heroSlots = new Map(heroes.map(h => [h.id, free[lane.get(h.id)!].shift()!] as const));
   const used = [...heroSlots.values(), ...foes.filter(e => !e.reserve || called.has(e.id)).map(e => FOE_SLOT_INDEX[e.id]!)];
-  return { heroSlots, large: new Set(foes.filter(e => e.large).map(e => FOE_SLOT_INDEX[e.id]!)), trio, used,
-    centered: new Set(used.filter(i => i < 8 && !used.includes(partner(i)))) };
+  // A boss always stands in the middle row of its column (owner 2026-10-22); a used partner stands below it at the
+  // normal size.
+  const bosses = foes.filter(e => e.boss).map(e => FOE_SLOT_INDEX[e.id]!);
+  const escorted = new Set(bosses.filter(i => used.includes(partner(i))));
+  const escorts = new Set([...escorted].map(partner));
+  return { heroSlots, large: new Set(foes.filter(e => e.large).map(e => FOE_SLOT_INDEX[e.id]!).filter(i => !escorts.has(i))), trio, used, escorted,
+    centered: new Set([...used.filter(i => i < 8 && !used.includes(partner(i))), ...bosses]) };
 }

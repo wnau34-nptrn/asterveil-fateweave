@@ -76,4 +76,16 @@ describe('reserved battlefield unit panels', () => {
       expect(s[ids[0]!]!.body.y).toBeGreaterThanOrEqual(0);
     }
   });
+  it('stands a boss in the middle row even with a column partner, which stands below it at the normal size', () => {
+    const foes = [{ id: 'f1', boss: true, large: true }, { id: 'f2', large: true }, { id: 'b1' }, { id: 'b2', reserve: true }];
+    for (const lanes of [['front', 'front', 'back', 'back'], ['front', 'front', 'front', 'back']] as const) for (const height of [379, 455, 513, 650]) {
+      const plan = slotPlan(['a', 'b', 'c', 'd'].map((id, i) => ({ id, lane: lanes[i]! })), foes, new Set(['b2']));
+      const s = fieldSlots(378, height, plan.large, plan.centered, plan.trio, plan.escorted);
+      expect(plan.large.has(5)).toBe(false);
+      expect(s[4]!.y).toBeGreaterThan(s[6]!.y); expect(s[4]!.y).toBeLessThan(s[5]!.y);
+      expect(s[4]!.body.y).toBeGreaterThanOrEqual(0);
+      expect(intersects(s[4]!.panel, s[5]!.body)).toBe(false);
+      if (height === 513 && lanes[2] === 'front') expect([s[2]!.y, s[3]!.y, s[0]!.y]).toEqual([s[6]!.y, s[5]!.y, s[4]!.y]);
+    }
+  });
 });

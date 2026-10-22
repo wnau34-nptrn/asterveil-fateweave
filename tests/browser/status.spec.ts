@@ -35,7 +35,7 @@ test('all six reserved HP/status panels avoid every sprite and each other throug
     const plan = slotPlan(data.heroes, data.enemies, new Set(data.phases?.flatMap(p => p.summon ?? [])));
     // Unused partner slots hold nobody. A centred large foe is wider than its column gap; its reserved box may pass
     // behind a neighbour's panel (its painted art does not reach it, owner-reviewed shot), every other body may not.
-    const all = fieldSlots(arena.width, arena.height, plan.large, plan.centered);
+    const all = fieldSlots(arena.width, arena.height, plan.large, plan.centered, plan.trio, plan.escorted);
     const slots = all.filter((_, i) => !plan.centered.has(partner(i)) && !(plan.centered.has(i) && plan.large.has(i) && !all[i]!.compact));
     // Layout stress only: fill every reserved row, including currently unaffected units.
     // This intentionally changes DOM decorations, never combat state or saved commands.
