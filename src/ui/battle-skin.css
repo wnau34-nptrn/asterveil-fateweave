@@ -71,5 +71,10 @@
 #field-banner[hidden] { display: none; }
 #field-banner[data-kind="phase"] { border-color: var(--gold-light); color: var(--gold-light); box-shadow: 0 0 22px #f2d59666, 0 6px 18px #0009; }
 #field-banner[data-kind="all"] { border-color: #ff6f7d; color: #ffd4c8; }
-/* Panels sit above the head: their content hugs the bottom edge so a hero's bar (no name) stays right above the head. */
-#battle-view .field-unit-info.compact:not(.side) { align-content: end; }
+/* Standard grid (owner 2026-10-22): the HP number over a centred bar under the feet, small status icons below it;
+   a foe's name stands just above its painted head. */
+#battle-view .field-unit-info.grid { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 1px; }
+#battle-view .field-unit-info.grid .field-health { width: 52px; }
+#battle-view .field-unit-info.grid.ally .field-health { margin-top: 2px; }
+#battle-view .field-unit-info.grid .field-statuses { gap: 1px; }
+.field-unit-label { position: absolute; display: flex; align-items: flex-end; justify-content: center; pointer-events: none; font-size: 9px; line-height: 11px; color: #f0f5ff; text-shadow: 0 1px 2px #07101f, 1px 0 2px #07101f; }

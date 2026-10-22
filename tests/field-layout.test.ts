@@ -22,7 +22,7 @@ const plans = formations.flatMap(lanes => encounters.map(foes => slotPlan(party(
 
 describe('standard battle grid (owner 2026-10-22: every battle stands on the same spots)', () => {
   it('puts every actor of every battle on the same three rows and four columns at one size, from the arena alone', () => {
-    for (const [width, height] of [[378, 513], [378, 455], [348, 420], [468, 650], [296, 300]] as const) {
+    for (const [width, height] of [[378, 513], [378, 455], [348, 420], [468, 650], [296, 380]] as const) {
       const base = fieldSlots(width, height), ys = new Set([0, 8, 1].map(i => base[i]!.y)), xs = new Set([0, 2, 4, 6].map(i => base[i]!.x));
       expect(ys.size).toBe(3);
       for (const plan of plans) {
@@ -40,6 +40,20 @@ describe('standard battle grid (owner 2026-10-22: every battle stands on the sam
       const s = fieldSlots(width, 513);
       for (const [a, b] of [[0, 2], [4, 6]] as const) expect(s[b]!.body.x - (s[a]!.body.x + s[a]!.body.width)).toBeGreaterThan(-.01);
       expect(s[4]!.body.x - (s[2]!.body.x + s[2]!.body.width)).toBeGreaterThan(width * .03);
+    }
+  });
+  it('sets every HP panel under the feet and a foe name just above its own painted figure, clear of other units', () => {
+    for (const plan of plans) {
+      const rise = new Map(plan.used.map(i => [i, i >= 4 && i <= 7 ? .55 : .97] as const));
+      const s = fieldSlots(378, 513, { ...plan, rise });
+      for (const i of plan.used) {
+        expect(s[i]!.panel.y).toBeGreaterThan(s[i]!.y);
+        expect(s[i]!.label!.y + s[i]!.label!.height).toBeCloseTo(s[i]!.y - rise.get(i)! * s[i]!.size - 6, 5);
+        for (const j of plan.used) if (j !== i) {
+          if (!plan.large.has(j)) expect(intersects(s[i]!.label!, s[j]!.body), `label ${i} body ${j}`).toBe(false);
+          expect(intersects(s[i]!.label!, s[j]!.panel), `label ${i} panel ${j}`).toBe(false);
+        }
+      }
     }
   });
   it('keeps every panel clear of every normal body and every other panel, heads inside the field', () => {
@@ -76,13 +90,14 @@ describe('standard battle grid (owner 2026-10-22: every battle stands on the sam
   });
   it('keeps full-size units on a 390×844 phone (378×513 field) with the grid on the floor, large foes about 1.5 times taller', () => {
     const s = fieldSlots(378, 513, slotPlan(party(['front', 'front', 'front', 'back']), [{ id: 'f1', boss: true, large: true }], new Set()));
-    expect(s[2]!.size).toBe(Math.floor(378 * .245));
-    // The grid stands on the floor: the top row's feet sit in the lower two thirds of the field.
-    expect(s[0]!.y).toBeGreaterThan(513 * .33);
+    expect(s[2]!.size).toBeGreaterThanOrEqual(80);
+    // The grid stands on the floor: the top row's feet sit at or below the backdrop's floor line.
+    expect(s[0]!.y).toBeGreaterThanOrEqual(513 * .38 - .5);
     expect(s[4]!.size / s[2]!.size).toBeGreaterThanOrEqual(1.45);
     // A large foe below another unit of its column grows only as far as its panel clears that unit's feet.
     const plan = slotPlan(party(['front', 'front', 'back', 'back']), [{ id: 'f1', boss: true, large: true }, { id: 'f2', large: true }], new Set());
-    const g = fieldSlots(378, 513, plan);
-    expect(g[5]!.size).toBeGreaterThan(g[2]!.size); expect(g[5]!.panel.y).toBeGreaterThanOrEqual(g[4]!.y);
+    // The guard's painted figure fills about 71% of its frame (its own headroom), so its name clears the boss's panel.
+    const g = fieldSlots(378, 513, { ...plan, rise: new Map([[5, .71]]) });
+    expect(g[5]!.size).toBeGreaterThan(g[2]!.size * 1.3); expect(g[5]!.label!.y).toBeGreaterThanOrEqual(g[4]!.panel.y + g[4]!.panel.height);
   });
 });

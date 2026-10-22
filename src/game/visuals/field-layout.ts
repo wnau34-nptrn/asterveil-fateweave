@@ -1,6 +1,7 @@
 export interface FieldBox { x: number; y: number; width: number; height: number }
 export interface FieldSlot {
-  x: number; y: number; size: number; body: FieldBox; panel: FieldBox;
+  // `label`: where a foe's name stands, just above its painted figure (standard grid only; the HP panel is below the feet).
+  x: number; y: number; size: number; body: FieldBox; panel: FieldBox; label?: FieldBox;
   compact: boolean; tiny: boolean; side: boolean; iconSize: number; maxIcons: number;
 }
 
@@ -12,7 +13,8 @@ export interface FieldSlot {
  *   - a column holding one unit stands it in the middle; two take top and bottom; three take all three rows;
  *   - a boss always stands in the middle, a column partner below it;
  *   - a large foe sharing its column stands on the bottom row and is drawn LARGE_SCALE taller from the same feet.
- * Coordinates are arena CSS pixels; each slot reserves its body and its HP/status panel (above the head).
+ * Coordinates are arena CSS pixels; each slot reserves its body, its HP/status panel (under the feet) and a foe's
+ * name label (above its painted head).
  * Slot ids: heroes 0/1 (back), 2/3 (front), 8 (back middle), 9 (front middle); foes f1 4, f2 5, b1 6, b2 7.
  * Fields shorter than three rows of 44px units keep the older two-row short grid (`shortSlots`).
  */
@@ -30,48 +32,54 @@ const FULL_COLUMNS = [.12, .37, .62, .865] as const;
 const columnOf = (slot: number): number => slot === 8 ? 0 : slot === 9 ? 1 : slot >> 1;
 export const partner = (slot: number): number => slot % 2 ? slot - 1 : slot + 1;
 
-export interface SlotLayout { large: ReadonlySet<number>; rows: ReadonlyMap<number, Row>; trio: ReadonlySet<HeroColumn> }
+// `rise`: how far each slot's painted figure rises above its feet, as a fraction of its size (`figureRise`); a foe's
+// name label sits just above that. Missing = 1 (a figure filling its frame), the case the row spacing is built for.
+export interface SlotLayout { large: ReadonlySet<number>; rows: ReadonlyMap<number, Row>; trio: ReadonlySet<HeroColumn>; rise?: ReadonlyMap<number, number> }
 const none: SlotLayout = { large: new Set(), rows: new Map(), trio: new Set() };
 
 // A body box overshoots its feet by 4% of its size (contact shadow); rows keep that clear of the next panel.
 const below = (size: number) => Math.ceil(size * .04) + 2;
 // The largest unit size whose three rows (body + panel) fit the field height.
-// The painted figure starts about HEADROOM of its frame below the frame's top; a panel sits just above the figure.
-const HEADROOM = .14, FLOOR = .38;
-const reach = (size: number) => (1.03 - HEADROOM) * size + 4;
-const stepOf = (size: number, panel: number) => reach(size) + panel + 2 + below(size);
+// Every HP/status panel sits under the feet (owner 2026-10-22: the same height for every unit); only a foe's name
+// stands above its head. Rows are spaced for a figure that fills its frame (rise 1): its name label then still clears
+// the panel of the unit above.
+const FLOOR = .38, LABEL = 13;
+const reach = (size: number) => size + 4 + LABEL + 2;
+const stepOf = (size: number, panel: number) => reach(size) + panel + below(size);
+// The largest unit size whose three rows (name + body + panel) fit between the backdrop's floor line (the top row's
+// feet at FLOOR of the height) and the field's bottom edge.
 const fitSize = (width: number, height: number, panel: number) => {
-  let size = Math.floor(Math.min(140, width * UNIT_WIDTH, ((height - 2) / 3 - 4 - 6 - panel - 2) / (1.07 - HEADROOM)));
-  while (size > 0 && 3 * stepOf(size, panel) > height - 2) size--;
+  let size = Math.floor(Math.min(140, width * UNIT_WIDTH));
+  while (size > 0 && (3 * stepOf(size, panel) > height - 2 || 2 * stepOf(size, panel) > height - 2 - panel - below(size) - Math.max(height * FLOOR, reach(size)))) size--;
   return size;
 };
 
 export function fieldSlots(width: number, height: number, layout: SlotLayout = none): FieldSlot[] {
-  // Compact 32px panels keep the rows tight so the grid stands on the floor (owner 2026-10-22: rows spread over the
-  // whole height put the top row in the sky).
-  const panel = 32, size = fitSize(width, height, panel);
+  // A 30px panel: the HP number over a centred bar, small status icons under it.
+  const panel = 30, size = fitSize(width, height, panel);
   if (size < 44) return shortSlots(width, height, layout);
   // The grid is anchored to the bottom: rows are one step apart, the bottom row's feet just above the field's edge.
   // Rows spread up to where the backdrop's floor begins (the top row's feet at FLOOR of the height) so a large foe
   // under another unit has room; never closer than one unit + panel.
-  const bottom = height - 2 - below(size), step = Math.max(stepOf(size, panel), (bottom - Math.max(height * FLOOR, reach(size) + panel + 2)) / 2);
+  const bottom = height - 2 - panel - below(size), step = Math.max(stepOf(size, panel), (bottom - Math.max(height * FLOOR, reach(size))) / 2);
   const rows = [bottom - 2 * step, bottom - step, bottom];
-  const cellWidth = width * .22, iconSize = 18, compact = panel < 50;
-  const maxIcons = compact ? 1 : Math.min(3, Math.floor((cellWidth - iconSize) / (iconSize + 2)));
+  const cellWidth = width * .22, iconSize = 12, compact = false;
+  const maxIcons = Math.min(3, Math.floor((cellWidth - 18) / (iconSize + 2)));
   return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(slot => {
     const row = layout.rows.get(slot) ?? (slot >= 8 ? 1 : slot % 2 ? 2 : 0), y = rows[row]!;
     const x = width * COLUMNS[columnOf(slot)]!;
-    // A large foe grows up from the same feet as far as LARGE_SCALE allows while its panel stays inside the field and
-    // below the feet of a unit standing higher in its column.
+    // A large foe grows up from the same feet as far as LARGE_SCALE allows while its name stays inside the field and
+    // below the panel of a unit standing higher in its column.
     const above = [...layout.rows].filter(([other, r]) => other !== slot && columnOf(other) === columnOf(slot) && r < row).map(([, r]) => rows[r]!);
-    const ceiling = above.length ? Math.max(...above) + below(size) : 0;
-    const drawn = layout.large.has(slot) ? Math.floor(Math.max(size, Math.min(size * LARGE_SCALE, (y - ceiling - 4 - panel - 2) / (1.03 - HEADROOM)))) : size;
+    const ceiling = above.length ? Math.max(...above) + below(size) + panel : 0;
+    const rise = Math.min(1, layout.rise?.get(slot) ?? 1);
+    const drawn = layout.large.has(slot) ? Math.floor(Math.max(size, Math.min(size * LARGE_SCALE, (y - ceiling - 4 - LABEL - 2) / rise))) : size;
     const top = y - drawn * 1.03 - 4;
     return {
       x, y, size: drawn, compact, tiny: false, side: false, iconSize, maxIcons,
       body: { x: x - drawn * .51, y: top, width: drawn * 1.02, height: drawn * 1.07 + 4 },
-      // Every HP/status panel sits above the head (owner 2026-10-22: one pattern for every unit).
-      panel: { x: x - cellWidth / 2, y: top + HEADROOM * drawn - panel - 2, width: cellWidth, height: panel },
+      panel: { x: x - cellWidth / 2, y: y + below(size), width: cellWidth, height: panel },
+      label: { x: x - cellWidth / 2, y: y - rise * drawn - 4 - LABEL - 2, width: cellWidth, height: LABEL },
     };
   });
 }
