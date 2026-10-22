@@ -8,16 +8,23 @@
 | 2 | ART-VFX-BOLT-001 ภาพชั้นเอฟเฟกต์ Bolt | A8 FX | ได้รับ 2026-10-22 ยังไม่ใส่ในเกม (รอเจ้าของดูคลิป Bolt) |
 | 3 | ART-SKILL-ICON-001 ไอคอนสกิลแบบวาด 30 สกิล | A6 ต้นไม้, A7 | รอบแก้ 3R ได้รับและเจ้าของอนุมัติ 2026-10-22 ใช้ในเกมแล้ว |
 | 4 | ART-UI-ICONS-002 ไอคอนค่าสถานะและแท็บ | A7 | ได้รับแล้วและใช้ในเกมแล้ว 2026-10-22 |
-| 5 | ART-CHAR-BOSS-RUINS-001 บอสแมพ 1 | A แมพ 1 | ได้รับ 2026-10-22 รอเจ้าของดู แล้วใส่ในเกม |
+| 5 | ART-CHAR-BOSS-RUINS-001 บอสแมพ 1 | A แมพ 1 | เจ้าของอนุมัติ ใส่ในเกมแล้ว 2026-10-22 |
 | 6 | ART-UI-PROGRESS-001 ไอคอนตำรา แก่นรอยแยก เศษดาว เหรียญเกียรติยศ กรอบดาวชะตา | A6, B | ได้รับ 2026-10-22 รอระบบตำรา/ดาวชะตา |
-| 7 | ART-WORLD-KEYART-001 ภาพหลักแผนที่ 2 และ 4–10 (concept) | A5, B, C | ได้รับ 2026-10-22 concept รอเจ้าของเลือก |
-| 8 | ART-CHAR-BOSS-CH1-001 concept บอสบทที่ 1 | B, C | ได้รับ 2026-10-22 concept รอเจ้าของเลือก |
-| 9 | ART-PET-001 concept สัตว์เลี้ยง 6 ชนิด | B | ได้รับ 2026-10-22 concept รอเจ้าของเลือก |
+| 7 | ART-WORLD-KEYART-001 ภาพหลักแผนที่ 2 และ 4–10 (concept) | A5, B, C | concept อนุมัติ 2026-10-22 → ทำต่อข้อ 14, 16 |
+| 8 | ART-CHAR-BOSS-CH1-001 concept บอสบทที่ 1 | B, C | concept อนุมัติ 2026-10-22 → ภาพจริงข้อ 17 |
+| 9 | ART-PET-001 concept สัตว์เลี้ยง 6 ชนิด | B | concept อนุมัติ 2026-10-22 → ภาพจริงข้อ 18 |
 | 10 | ART-UI-RUNE-001 ไอคอนรูน 12 แบบ | B | ยังไม่ได้รับ |
 | 11 | ART-CHAR-RIVAL-001 ผู้บัญชาการคู่แข่งลานประลอง 6 คน | B PvP | ยังไม่ได้รับ |
 | 12 | ART-WORLD-TOWER-001 หอคอยแห่งชะตา (ฉากต่อสู้ + ไอคอนชั้น) | C | ยังไม่ได้รับ (เริ่มได้แล้ว ข้อ 1 เสร็จ) |
+| 13 | ART-CHAR-FOES-002 ศัตรูชุดใหม่ 8 ตัวสำหรับศึก 4 ต่อ 4 (รวมองครักษ์อสูร อสูรส่งพลัง) | A7 ขั้นที่ 2 | ทันที (เจ้าของอนุมัติ 2026-10-22) |
+| 14 | ART-WORLD-BATTLE-BG-001 ฉากหลังศึกแมพ 2 ป่าทึบ และแมพ 3 แนวรอยแยก | A | ทันที |
+| 15 | ART-SKILL-ICON-002 ไอคอนวาด "โจมตี" | A7 | ทันที |
+| 16 | ART-WORLD-TILES-002 ชุดช่องแผนที่ป่าทึบ (แมพ 2) จาก concept ที่อนุมัติ | A | ทันที |
+| 17 | ART-CHAR-BOSS-CH1-002 ภาพจริงบอสแมพ 4–10 + วาร์กอธ 2 ร่าง จาก concept ที่อนุมัติ | B, C | ทันที |
+| 18 | ART-PET-002 ภาพจริงสัตว์เลี้ยง 6 ตัว จาก concept ที่อนุมัติ | B | ทันที |
+| 19 | ART-VFX-EXEC-WARD-001 ภาพชั้นเอฟเฟกต์ Execute และ Ward | A8 | หลังเจ้าของตรวจคลิป Bolt |
 
-**งานภาพที่เกมยังขาดแต่ยังไม่มี prompt ในคิว (ตรวจ 2026-10-22):**
+**งานภาพที่เกมยังขาด (ตรวจ 2026-10-22) — เจ้าของอนุมัติให้สั่งทั้งหมด ได้เป็นข้อ 13–19 แล้ว:**
 - ศัตรูที่ยังไม่มีภาพ (ตอนนี้ใช้ภาพสำรอง): องครักษ์อสูร (ศึกแรก), อสูรส่งพลัง (ศึกเงาล่าแนวหลัง)
 - ฉากหลังศึกต่อแมพ: ตอนนี้ทุกแมพใช้ฉากซากปรักหักพังภาพเดียว (ต้องมีป่าทึบ แนวรอยแยก และแมพถัดไป)
 - ศัตรูชุดใหม่สำหรับศึก 4 ต่อ 4 (A7 ขั้นที่ 2) ให้แต่ละแมพมีศัตรูหลากหลายขึ้น
@@ -419,4 +426,152 @@ DELIVERABLES: tower_backdrop.webp (same size and composition rules as ruins.webp
 CONSTRAINTS: original design; the backdrop must not reduce readability of units, HP bars and intents; no text.
 
 RETURN: incoming/ART-WORLD-TOWER-001/
+```
+
+## 13. ART-CHAR-FOES-002 — ศัตรูชุดใหม่สำหรับศึก 4 ต่อ 4
+
+```text
+CODEX HANDOFF — ART-CHAR-FOES-002
+Asterveil · Fateweave: eight new foes for 4-vs-4 battles
+
+Battles are becoming up to 4 heroes vs up to 4 foes (front 2 / back 2, 1–4 foes per encounter). Each map needs more small foes so groups of 3–4 read as different creatures. Two existing foes also have no art yet.
+
+Repository wnau34-nptrn/asterveil-fateweave, base branch feature/fateweave-initial-prototype. Create branch art/art-char-foes-002. Add files only under incoming/ART-CHAR-FOES-002/. Do not change src/, tests/, public/, .github/ or existing art. Open a PR into the base branch; do not merge. Original artwork only; nothing from Asterveil: Rise Beyond. Never use the word ม่านเวล.
+
+READ FIRST: docs/handoffs/ART-PLACEMENT-RULES.md (enemies face LEFT; soles anchored; large foes shown ~1.5x), docs/handoffs/ART-CHAR-MERC-ENEMY-001.md (exact atlas/portrait format and style), public/assets/art/units_foes.webp + portraits_foes.webp (style, scale, line weight), incoming/ART-CHAR-BOSS-RUINS-001/ (latest accepted foes).
+
+FOES (physical-looking foes use physical moves, energy-looking foes energy moves; keep that readable)
+Map 1 ซากชายแดน (ruined frontier fort, Vargoth's demon tribe: violet-black armour, ember-orange cracks):
+ 1. vargoth_guard — องครักษ์อสูร, LARGE front: tower shield + spiked mace, heavy armour (physical).
+ 2. vargoth_shaman — หมอผีเผ่าอสูร, normal back: bone staff, ember flame orb (energy).
+ 3. vargoth_grunt — พลทหารอสูร, normal front: short spear, light armour (physical).
+Map 2 เส้นทางป่าทึบ (forest twisted by the rift: moss, thorns, teal fungus):
+ 4. thorn_beetle — ด้วงหนาม, normal front: armoured beetle with thorn shell (physical).
+ 5. spore_puff — ภูตสปอร์, normal back: floating puffball with teal spores (energy).
+Map 3 แนวรอยแยก (crystal rift scar: violet crystal, star-veil light):
+ 6. rift_channeler — อสูรส่งพลัง, LARGE front: hulking demon with crystal conduits on its back (energy).
+ 7. rift_wisp — วิญญาณรอยแยก, normal back: small violet flame spirit (energy).
+ 8. shard_crawler — แมงมุมเศษผลึก, normal front: crystal-legged crawler (physical).
+
+DELIVERABLES (same format as ART-CHAR-MERC-ENEMY-001): units_foes2.webp (2 columns × 4 rows of 512×512 frames, order as listed, facing LEFT, soles at y=496, transparent) + units_foes2.json (x,y,w,h,footY); portraits_foes2.webp + json (same order, square busts); preview.png: a 390×844 phone composition on public/assets/art/ruins.webp with 4 heroes vs 4 of the new foes (two front, two back, large ones ~1.5x); NOTES.md with per-foe silhouette notes.
+
+CONSTRAINTS: same chibi proportions, outline weight, lighting and saturation as units_foes.webp; no text, no baked shadow; each foe distinct in silhouette at 64 px.
+
+RETURN: incoming/ART-CHAR-FOES-002/
+```
+
+## 14. ART-WORLD-BATTLE-BG-001 — ฉากหลังศึกแยกตามแมพ
+
+```text
+CODEX HANDOFF — ART-WORLD-BATTLE-BG-001
+Asterveil · Fateweave: battle backdrops for map 2 and map 3
+
+Every battle uses one backdrop today (public/assets/art/ruins.webp, 1536×1024). Map 2 เส้นทางป่าทึบ (forest trail twisted by the rift) and map 3 แนวรอยแยก (crystal rift scar) need their own.
+
+Repository wnau34-nptrn/asterveil-fateweave, base branch feature/fateweave-initial-prototype. Create branch art/art-world-battle-bg-001. Add files only under incoming/ART-WORLD-BATTLE-BG-001/. Do not change src/, tests/, public/, .github/ or existing art. Open a PR into the base branch; do not merge. Original artwork only; nothing from Asterveil: Rise Beyond. Never use the word ม่านเวล.
+
+READ FIRST: public/assets/art/ruins.webp (format, camera, horizon height, empty floor area), src/game/visuals/rift-backdrop.ts (how the image is framed around the battle field), incoming/ART-WORLD-KEYART-001/ on art/art-world-keyart-001 (approved palettes; keyart_2 is the forest direction), docs/handoffs/ART-PLACEMENT-RULES.md.
+
+DESIGN: same camera, horizon line and open stone/earth floor band as ruins.webp so 8 actors (4 heroes left, 4 foes right) stand on clear ground with no props behind feet; background interest stays above the horizon and at the edges. Forest: mossy roots, thorn arches, teal fungus light, rift glow far behind. Rift line: violet crystal spires, star-veil sky, cracked glowing floor seams kept dim under actors.
+
+DELIVERABLES: bg_forest.webp, bg_riftline.webp (1536×1024, opaque), preview_<id>.png at 390×844 and 1366×768 with placeholder actor silhouettes, NOTES.md.
+
+CONSTRAINTS: no text/UI/characters baked in; keep floor contrast low enough for HP bars and target rings to read.
+
+RETURN: incoming/ART-WORLD-BATTLE-BG-001/
+```
+
+## 15. ART-SKILL-ICON-002 — ไอคอนวาด "โจมตี"
+
+```text
+CODEX HANDOFF — ART-SKILL-ICON-002
+Asterveil · Fateweave: painted Attack icon
+
+All 33 skills now use the painted icons of ART-SKILL-ICON-001-R1; the shared Attack action is the only line icon left in the battle dock.
+
+Repository wnau34-nptrn/asterveil-fateweave, base branch feature/fateweave-initial-prototype. Create branch art/art-skill-icon-002. Add files only under incoming/ART-SKILL-ICON-002/. Do not change src/, tests/, public/, .github/ or existing art. Open a PR into the base branch; do not merge. Original artwork only; nothing from Asterveil: Rise Beyond. Never use the word ม่านเวล.
+
+READ FIRST: incoming/ART-SKILL-ICON-001-R1/ (style, outline, light, scale rules, preview layout).
+
+DESIGN: attack — one clean steel sword mid-slash with a short white-gold arc; neutral silver/gold so it fits every class row. Same 256×256 RGBA format, motif 190–205 px inside the centred 224 px circle, readable at 40 px normal and under a 61% black cooldown overlay.
+
+DELIVERABLES: png/attack.png, preview.png (40/56/72 px beside guard, mark, bolt, heal), NOTES.md with bounding box.
+
+RETURN: incoming/ART-SKILL-ICON-002/
+```
+
+## 16. ART-WORLD-TILES-002 — ชุดช่องแผนที่ป่าทึบ (แมพ 2)
+
+```text
+CODEX HANDOFF — ART-WORLD-TILES-002
+Asterveil · Fateweave: forest tile set for map 2 from the approved key art
+
+The owner approved the ART-WORLD-KEYART-001 directions. Map 2 เส้นทางป่าทึบ is in the game now but reuses the meadow/thicket tiles.
+
+Repository wnau34-nptrn/asterveil-fateweave, base branch feature/fateweave-initial-prototype. Create branch art/art-world-tiles-002. Add files only under incoming/ART-WORLD-TILES-002/. Do not change src/, tests/, public/, .github/ or existing art. Open a PR into the base branch; do not merge. Original artwork only; nothing from Asterveil: Rise Beyond. Never use the word ม่านเวล.
+
+READ FIRST: docs/handoffs/ART-UI-WORLD-001.md (tile rules), public/assets/world/tileset.webp + src/content/world/tileset.json (128 px tiles: 4 floor variants per zone, camp ground, wall_top/face/inner), public/assets/world/decor.webp + src/content/world/decor.json, incoming/ART-WORLD-KEYART-001/ (keyart_2, landmarks_2, tile_mood_2, palette_2).
+
+DELIVERABLES: tiles_forest.webp + json with forest_0–3 (trail floor), grove_0–3 (deeper floor), forest wall_top/wall_face/wall_inner, all 128×128 seamless; decor_forest.webp + json with 8 transparent props (roots, thorn arch, teal fungus, fallen log, lantern moss, rift-touched stump, fern clump, stone marker); preview.png: a 390×844 phone map composition at runtime scale; NOTES.md.
+
+CONSTRAINTS: same top-down 3/4 camera and lighting as the current tileset; floors lighter than walls so walkable tiles read at a glance; seamless edges.
+
+RETURN: incoming/ART-WORLD-TILES-002/
+```
+
+## 17. ART-CHAR-BOSS-CH1-002 — ภาพจริงบอสบทที่ 1
+
+```text
+CODEX HANDOFF — ART-CHAR-BOSS-CH1-002
+Asterveil · Fateweave: production frames for the approved chapter-1 bosses
+
+The owner approved all ART-CHAR-BOSS-CH1-001 concepts (maps 4–9, Vargoth armoured, Vargoth unleashed).
+
+Repository wnau34-nptrn/asterveil-fateweave, base branch feature/fateweave-initial-prototype. Create branch art/art-char-boss-ch1-002. Add files only under incoming/ART-CHAR-BOSS-CH1-002/. Do not change src/, tests/, public/, .github/ or existing art. Open a PR into the base branch; do not merge. Original artwork only; nothing from Asterveil: Rise Beyond. Never use the word ม่านเวล.
+
+READ FIRST: incoming/ART-CHAR-BOSS-CH1-001/ on art/art-char-boss-ch1-001 (designs to follow exactly), docs/handoffs/ART-CHAR-MERC-ENEMY-001.md (runtime format), docs/handoffs/ART-PLACEMENT-RULES.md (enemies face LEFT, large foes ~1.5x).
+
+DELIVERABLES: units_bosses_ch1.webp (2 columns × 4 rows of 512×512, order: lake_spirit, crystal_giant, swamp_witch, flame_general, ancient_guardian, fate_shadow, vargoth_armoured, vargoth_unleashed; facing LEFT, soles y=496) + json; portraits_bosses_ch1.webp + json (same order); preview.png on public/assets/art/ruins.webp at 390×844 with the Knight for scale; NOTES.md.
+
+CONSTRAINTS: keep each concept's silhouette and palette; same chibi proportions and outline as units_foes.webp; transparent, no text, no baked shadow.
+
+RETURN: incoming/ART-CHAR-BOSS-CH1-002/
+```
+
+## 18. ART-PET-002 — ภาพจริงสัตว์เลี้ยง
+
+```text
+CODEX HANDOFF — ART-PET-002
+Asterveil · Fateweave: production sprites for the approved pets
+
+The owner approved all six ART-PET-001 concepts. Pets follow the party on the tile map, sit in the camp and help in battle once every few rounds from beside the party (never in the turn queue).
+
+Repository wnau34-nptrn/asterveil-fateweave, base branch feature/fateweave-initial-prototype. Create branch art/art-pet-002. Add files only under incoming/ART-PET-002/. Do not change src/, tests/, public/, .github/ or existing art. Open a PR into the base branch; do not merge. Original artwork only; nothing from Asterveil: Rise Beyond. Never use the word ม่านเวล.
+
+READ FIRST: incoming/ART-PET-001/ on art/art-pet-001 (designs and scale_preview), docs/handoffs/ART-PLACEMENT-RULES.md (party side faces RIGHT), public/assets/art/units.webp (style).
+
+DELIVERABLES: pets.webp: 6 rows (meadow_fox, thicket_piglet, rift_crystal_moth, fort_gargoyle_pup, forest_lantern_owl, gate_starveil_slime) × 4 columns of 256×256 frames: idle_a, idle_b, assist (the helping pose), happy; facing RIGHT, soles at y=240, transparent; pets.json (x,y,w,h,footY); pet_portraits.webp (6 square busts) + json; preview.png showing battle (beside a 100 px Knight), map (128 px tile) and camp sizes; NOTES.md.
+
+CONSTRAINTS: keep each concept's silhouette and palette; readable at 44 px; no text or baked shadow.
+
+RETURN: incoming/ART-PET-002/
+```
+
+## 19. ART-VFX-EXEC-WARD-001 — เอฟเฟกต์ Execute และ Ward (เริ่มหลังเจ้าของตรวจคลิป Bolt)
+
+```text
+CODEX HANDOFF — ART-VFX-EXEC-WARD-001
+Asterveil · Fateweave: effect layers for Execute (Rose-Gold Edge) and Ward (Luminous Aegis)
+
+Start only after the owner has reviewed the Bolt clips (docs/combat-presentation/bolt-slice/) and any Bolt changes are applied; follow that feedback.
+
+Repository wnau34-nptrn/asterveil-fateweave, base branch feature/fateweave-initial-prototype. Create branch art/art-vfx-exec-ward-001. Add files only under incoming/ART-VFX-EXEC-WARD-001/. Do not change src/, tests/, public/, .github/ or existing art. Open a PR into the base branch; do not merge. Original artwork only; nothing from Asterveil: Rise Beyond. Never use the word ม่านเวล.
+
+READ FIRST: docs/combat-presentation/vfx-art-direction/README_TH.md and the Execute/Ward v1 storyboards, incoming/ART-VFX-BOLT-001/ on art/art-vfx-bolt-001 (exact atlas/json/pivot/blend format and NOTES table to repeat), src/game/visuals/bolt-fx.ts (how layers are timed).
+
+DELIVERABLES per effect (execute_fx.*, ward_fx.*): Phaser JSON-hash atlas webp + json with the same layer conventions (cast, travel or form, impact/settle, dissolve), preview_dark.png and preview_light.png at 390×844, NOTES.md with the layer/timing table.
+
+CONSTRAINTS: effects only (no characters, UI or text); readable at phone scale; reduced-motion uses the static impact frame.
+
+RETURN: incoming/ART-VFX-EXEC-WARD-001/
 ```

@@ -42,7 +42,7 @@ export const firstClash: EncounterDefinition = {
   // The prologue fight: Vargoth's vanguard attacks the ruined frontier fort as the commander wakes (lore 2026-10-16).
   ...veilSiege, id: 'first-clash', version: 12, level: 1, name: 'กองหน้าของวาร์กอธ',
   enemies: [
-    { id: 'raider', speed: 110, name: 'Vargoth Hunter', displayName: 'นักล่าเผ่าอสูร', maxHp: 56, color: 0xee80bd },
+    { id: 'raider', speed: 110, name: 'Vargoth Hunter', displayName: 'นักล่าเผ่าอสูร', maxHp: 56, color: 0xee80bd, art: 'foe_hunter' },
     { id: 'brute', speed: 70, name: 'Vargoth Guard', displayName: 'องครักษ์อสูร', maxHp: 100, color: 0x9785f2 },
   ],
   intents: [
@@ -177,8 +177,8 @@ export const miniVeilGolem: EncounterDefinition = {
 export const vanguardCaptain: EncounterDefinition = {
   ...veilSiege, id: 'vanguard-captain', version: 1, level: 3, name: 'หัวหน้ากองหน้าของวาร์กอธ',
   enemies: [
-    { id: 'raider', speed: 110, name: 'Vargoth Hunter', displayName: 'นักล่าเผ่าอสูร', maxHp: 60, color: 0xee80bd },
-    { id: 'brute', speed: 70, name: 'Vanguard Captain', displayName: 'หัวหน้ากองหน้า', maxHp: 170, color: 0x9785f2 },
+    { id: 'raider', speed: 110, name: 'Vargoth Hunter', displayName: 'นักล่าเผ่าอสูร', maxHp: 60, color: 0xee80bd, art: 'foe_hunter' },
+    { id: 'brute', speed: 70, name: 'Vanguard Captain', displayName: 'หัวหน้ากองหน้า', maxHp: 170, color: 0x9785f2, art: 'foe_captain' },
   ],
   intents: [
     { sourceId: 'raider', targetSlot: 2, name: 'Raking Slash', damage: 11, kind: 'physical' },

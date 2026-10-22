@@ -2,10 +2,10 @@ import type { EncounterDefinition } from '../../core/battle/types';
 
 // Each actor's full-body frame and portrait live in a 2-column atlas of 512 px cells:
 // the original cast in `units`/`portraits` (3 rows), mercenaries in `units_mercs`/`portraits_mercs`
-// (3 rows) and the Veil Frontier foes in `units_foes`/`portraits_foes` (5 rows), all from
-// ART-CHAR-MERC-ENEMY-001 except the original cast. Unit and portrait atlases share frame order.
+// (3 rows) and the Veil Frontier foes in `units_foes`/`portraits_foes` (6 rows), all from
+// ART-CHAR-MERC-ENEMY-001 except the original cast; foes frames 9–10 are the map-1 boss pair (ART-CHAR-BOSS-RUINS-001). Unit and portrait atlases share frame order.
 export type ArtSheet = 'units' | 'mercs' | 'foes';
-export const sheetRows: Readonly<Record<ArtSheet, number>> = { units: 3, mercs: 3, foes: 5 };
+export const sheetRows: Readonly<Record<ArtSheet, number>> = { units: 3, mercs: 3, foes: 6 };
 export const actorArt: Readonly<Record<string, { sheet: ArtSheet; frame: number }>> = {
   guardian: { sheet: 'units', frame: 0 }, tracer: { sheet: 'units', frame: 1 }, weaver: { sheet: 'units', frame: 2 },
   healer: { sheet: 'units', frame: 3 }, raider: { sheet: 'units', frame: 4 }, brute: { sheet: 'units', frame: 5 },
@@ -14,6 +14,7 @@ export const actorArt: Readonly<Record<string, { sheet: ArtSheet; frame: number 
   foe_tusker: { sheet: 'foes', frame: 0 }, foe_sprite: { sheet: 'foes', frame: 1 }, foe_stalker: { sheet: 'foes', frame: 2 },
   foe_mycon: { sheet: 'foes', frame: 3 }, foe_golem: { sheet: 'foes', frame: 4 }, foe_riftweaver: { sheet: 'foes', frame: 5 },
   foe_matriarch: { sheet: 'foes', frame: 6 }, foe_juggernaut: { sheet: 'foes', frame: 7 }, foe_sentinel: { sheet: 'foes', frame: 8 },
+  foe_hunter: { sheet: 'foes', frame: 9 }, foe_captain: { sheet: 'foes', frame: 10 },
 };
 // Enemy ids are field positions (`raider` back, `brute` front/large); `art` picks the illustration.
 // Frames drawn facing the wrong way for their side (party faces right, enemies face left, ART-PLACEMENT-RULES):

@@ -1,5 +1,10 @@
 # Codex → Claude handoff
 
+## 2026-10-22 — Claude: map-1 boss art in, Codex queue 13–19 written (owner approved all)
+
+- ART-CHAR-BOSS-RUINS-001 merged; the hunter and captain are appended to the foes atlases as frames 9 and 10 (`units_foes`/`portraits_foes` now 6 rows, `sheetRows.foes = 6`), art keys `foe_hunter`/`foe_captain` on first-clash and vanguard-captain. Presentation only, no encounter version bump.
+- Owner approved the boss/pet/key-art concepts and every recommended art job: `docs/handoffs/CODEX-ART-QUEUE-TH.md` items 13–19 (new 4v4 foes incl. Vargoth Guard and Rift Channeler, map 2/3 battle backdrops, painted Attack icon, forest tiles, chapter-1 boss frames, pet sprites, Execute/Ward FX after the Bolt review). PR #38 (round-1 icons) closed as superseded.
+
 ## 2026-10-22 — Claude: ART-SKILL-ICON-001-R1 integrated (owner approved)
 
 - Owner approved the R1 painted skill icons. Merged `art/art-skill-icon-001-r1`; the 33 PNGs are downscaled to 128 px cells in `public/assets/ui/skill_icons.webp` (6×6, order in `src/game/visuals/skill_icons.json`, same order as the incoming atlas).
