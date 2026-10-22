@@ -282,3 +282,6 @@
 .hire-board li > button[disabled] { background: #1a2b40; color: var(--text-muted, #bbcadb); }
 @container game (max-width: 400px) { .hire-board .hire-open small:not(.hire-status) { display: block; font-size: 12px; } }
 .hire-board .hire-open .hire-status { font-size: 11px; opacity: .8; }
+.npc-fold { margin: 0 0 6px; } .npc-fold > summary { min-height: 44px; display: flex; align-items: center; gap: 8px; padding: 0 12px; border: 1px solid #e8f5ff26; border-radius: 12px; background: #0d1c2ecc; font-size: 13px; color: var(--gold-light, #f2d596); list-style: none; }
+.npc-fold > summary::-webkit-details-marker { display: none; } .npc-fold > summary .icon { width: 18px; height: 18px; }
+.npc-fold[open] > summary { margin-bottom: 6px; }

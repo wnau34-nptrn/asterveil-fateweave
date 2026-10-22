@@ -67,6 +67,7 @@ export class LobbyUI {
   private confirmDismiss = false;
   // The broker's sheet shows the hiring board or the market (4A).
   private market = false;
+  private npcOpen = false;
   private lane: 'all' | 'front' | 'back' = 'all';
   // The hiring offer being previewed (stats, skills and star unlocks) before hiring.
   private preview: number | undefined;
@@ -81,6 +82,7 @@ export class LobbyUI {
       wear:(id,key)=>{const entry=this.view&&campEquipment(this.view.profile).find(e=>e.key===key);if(entry)this.host.equip(id,entry.item.uid);},
       takeOff:(id,slot)=>this.host.unequip(id,slot),talent:(id,node)=>this.host.talent(id,node),loadout:(id,a)=>this.host.loadout(id,a),reset:id=>this.host.resetTalents(id),applyPlan:plan=>this.host.autoEquip(plan),forge:(id,uid)=>{this.forgeReturn=id;this.sheet='forge';this.forgeUI.open(uid);this.draw();this.focus('#forge-change-item');},
     },'camp-',this.inventoryFilters);
+    root.addEventListener('toggle', e => { const d = e.target as HTMLElement; if (d.id === 'npc-fold') this.npcOpen = (d as HTMLDetailsElement).open; }, true);
     root.addEventListener('change',event=>{const c=event.target as HTMLInputElement|HTMLSelectElement;if(c.id==='boss-target'&&!root.hidden&&!root.closest('[inert]')&&!this.characters.open){this.huntUI.changeBoss(c.value);this.draw();this.focus('#boss-target');return;}if(c.id==='hunt-target'&&!root.hidden&&!root.closest('[inert]')&&!this.characters.open){this.huntUI.change(c.value);this.draw();this.focus('#hunt-target');return;}if(c.closest('.forge-workbench')&&!root.hidden&&!root.closest('[inert]')&&!this.characters.open){this.forgeUI.remember(c.closest<HTMLElement>('.forge-workbench')!);const focus=this.forgeUI.change(c);this.draw();this.focus('#'+focus);return;}if(c.dataset.gearFilter)this.storageUI.reset();if(c.closest('.character-dialog')||!c.dataset.gearFilter||root.hidden||root.closest('[inert]')||this.characters.open)return;changeGearFilter(this.inventoryFilters,c);this.draw();this.focus('#'+c.id);});
     root.addEventListener('keydown',e=>{if(root.hidden||root.closest('[inert]'))return;const tab=(e.target as HTMLElement).closest<HTMLButtonElement>('.forge-tabs [role=tab]');if(tab&&['ArrowLeft','ArrowRight','Home','End'].includes(e.key)){e.preventDefault();const buttons=[...root.querySelectorAll<HTMLButtonElement>('.forge-tabs [role=tab]')],i=buttons.indexOf(tab),n=e.key==='Home'?0:e.key==='End'?buttons.length-1:(i+(e.key==='ArrowRight'?1:-1)+buttons.length)%buttons.length;buttons[n]!.click();this.focus('#'+buttons[n]!.id);return;}if(e.repeat&&(e.target as HTMLElement).closest('[data-forge=review],[data-forge=confirm],[data-lobby=salvage],[data-storage=confirm],[data-storage=collect],[data-storage=recycle],[data-storage=expand],[data-storage=common]'))e.preventDefault();});
     this.startWork();
@@ -177,6 +179,11 @@ export class LobbyUI {
     const text = npcText[id]; const i = NPC_IDS.indexOf(id); const index = this.line?.sheet === sheet ? this.line.index : 0;
     return `<div class="npc-line" style="--busts:url(${npcBustsUrl()});--sx:${(i % 3) * 50}%;--sy:${Math.floor(i / 3) * 100}%"><span class="npc-bust" aria-hidden="true"></span><p><b>${text.name} · ${text.role}</b>${text.lines[index % text.lines.length]}</p></div>${this.questCard(id)}`;
   }
+  // The broker's line and side quest fold away so the hire cards come first; a quest ready to claim keeps it open.
+  private npcFold(p: Profile): string {
+    const q = this.map.sideQuests.find(x => x.npc === 'broker'), ready = !!q && this.open('quests') && !p.quests[q.id]?.claimed && !claimReason(p, this.map, q.id);
+    return `<details id="npc-fold" class="npc-fold"${this.npcOpen || ready ? ' open' : ''}><summary>${icon('talk')}<span>พีโน่ · ข่าวและเควสต์${ready ? ' · มีรางวัลให้รับ' : ''}</span></summary>${this.npcLine('hire')}</details>`;
+  }
   // 3D: this NPC's side quest, with progress gathered from finished expeditions and a one-time claim.
   private questCard(npc: NpcId): string {
     const q = this.map.sideQuests.find(s => s.npc === npc); if (!q || !this.open('quests')) return '';
@@ -268,7 +275,7 @@ export class LobbyUI {
       ${this.sheet ? `<section id="lobby-sheet" class="lobby-sheet" role="dialog" aria-modal="false" aria-labelledby="lobby-sheet-title">
         <div class="lobby-sheet-head">${this.sheet === 'tree' || this.sheet === 'gear' ? `<button id="lobby-sub-back" data-lobby="sub-back" class="round-glass" aria-label="กลับไปจัดทีม">${icon('left')}</button>` : ''}<h2 id="lobby-sheet-title">${this.sheet === 'team' ? `${icon('flag')} จัดทีม <small>${p.company.length}/${COMPANY_CAP}</small>` : this.sheet === 'tree' ? `${icon('starFilled')} ต้นไม้ความถนัด` : this.sheet === 'gear' ? `${icon('gearBody')} อุปกรณ์ <small>คลัง ${p.items.length}/${storageCap(p,this.map)}</small>` : this.sheet === 'forge' ? `${icon('forge')} ช่างตีเหล็ก` : this.sheet === 'hunt'?`${icon('goal')} แผนฟาร์ม`:this.sheet === 'brew' ? `${icon('brew')} นักปรุงยา` : this.sheet === 'camp' ? `${icon('camp')} ชื่อค่ายทหารรับจ้าง` : this.sheet === 'maps' ? `${icon('map')} เลือกแผนที่` : `${icon('gold')} ป้ายจ้างทหารรับจ้าง`}</h2>
           <button data-lobby="close" class="round-glass" aria-label="ปิด">${icon('close')}</button></div>
-        <div class="lobby-content">${this.sheet==='forge'?'':this.sheet==='gear'?`<details class="storage-keeper"><summary>มิมี่ · งานผู้ดูแลคลัง</summary>${this.npcLine(this.sheet)}</details>`:this.npcLine(this.sheet as Sheet | null)}${this.locked(this.sheet) ? this.lockedPanel(this.locked(this.sheet)!) : this.sheet==='hunt'?this.huntUI.render(p,this.map,this.open('bossCharm')):this.sheet === 'team' ? this.team(p) : this.sheet === 'gear' && this.picked ? this.gear(p, this.picked) : this.sheet === 'forge' ? this.forge(p) : this.sheet === 'brew' ? this.brewing(p) : this.sheet === 'maps' ? this.mapList(p) : this.sheet === 'camp' ? this.campForm(p) : this.board(p)}</div></section>` : ''}
+        <div class="lobby-content">${this.sheet==='forge'?'':this.sheet==='hire'&&!this.market&&this.preview===undefined?this.npcFold(p):this.sheet==='gear'?`<details class="storage-keeper"><summary>มิมี่ · งานผู้ดูแลคลัง</summary>${this.npcLine(this.sheet)}</details>`:this.npcLine(this.sheet as Sheet | null)}${this.locked(this.sheet) ? this.lockedPanel(this.locked(this.sheet)!) : this.sheet==='hunt'?this.huntUI.render(p,this.map,this.open('bossCharm')):this.sheet === 'team' ? this.team(p) : this.sheet === 'gear' && this.picked ? this.gear(p, this.picked) : this.sheet === 'forge' ? this.forge(p) : this.sheet === 'brew' ? this.brewing(p) : this.sheet === 'maps' ? this.mapList(p) : this.sheet === 'camp' ? this.campForm(p) : this.board(p)}</div></section>` : ''}
       <footer class="lobby-bottom">
         ${this.guideCard(p)}
         <nav class="lobby-menu" aria-label="ค่าย">${menu('team', 'tab-team', 'ทีม', `${p.party.deployed.length}+${p.party.reserve.length}`)}${menu('hire', 'tab-hire', 'จ้าง', openOffers ? String(openOffers) : '')}${menu('gear', 'tab-bag', 'กระเป๋า', p.items.length ? String(p.items.length) : '')}${menu('hunt', 'goal', 'ฟาร์ม', '')}${menu('forge', 'tab-forge', 'ช่าง', '')}${menu('brew', 'brew', 'ยา', '')}</nav>
