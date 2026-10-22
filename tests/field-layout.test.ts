@@ -38,8 +38,8 @@ describe('standard battle grid (owner 2026-10-22: every battle stands on the sam
   it('keeps a clear gap between neighbouring columns of normal units', () => {
     for (const width of [296, 378, 468]) {
       const s = fieldSlots(width, 513);
-      for (const [a, b] of [[0, 2], [4, 6]] as const) expect(s[b]!.body.x - (s[a]!.body.x + s[a]!.body.width)).toBeGreaterThan(-.01);
-      expect(s[4]!.body.x - (s[2]!.body.x + s[2]!.body.width)).toBeGreaterThan(width * .03);
+      for (const [a, b] of [[0, 2], [4, 6]] as const) expect(s[b]!.body.x - (s[a]!.body.x + s[a]!.body.width) + s[a]!.size * .2).toBeGreaterThan(0); // boxes may share their transparent padding (owner 2026-10-22: bigger units); the painted figures never touch
+      expect(s[4]!.body.x - (s[2]!.body.x + s[2]!.body.width) + s[2]!.size * .2).toBeGreaterThan(width * .03);
     }
   });
   it('sets every HP panel under the feet and a foe name just above its own painted figure, clear of other units', () => {
@@ -50,7 +50,7 @@ describe('standard battle grid (owner 2026-10-22: every battle stands on the sam
         expect(s[i]!.panel.y).toBeGreaterThan(s[i]!.y);
         expect(s[i]!.label!.y + s[i]!.label!.height).toBeCloseTo(s[i]!.y - rise.get(i)! * s[i]!.size - 6, 5);
         for (const j of plan.used) if (j !== i) {
-          if (!plan.large.has(j)) expect(intersects(s[i]!.label!, s[j]!.body), `label ${i} body ${j}`).toBe(false);
+          if (!plan.large.has(j)) { const b = s[j]!.body, core = { ...b, x: b.x + b.width * .1, width: b.width * .8 }; expect(intersects(s[i]!.label!, core), `label ${i} body ${j}`).toBe(false); }
           expect(intersects(s[i]!.label!, s[j]!.panel), `label ${i} panel ${j}`).toBe(false);
         }
       }

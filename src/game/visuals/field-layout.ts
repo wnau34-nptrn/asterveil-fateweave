@@ -27,7 +27,7 @@ export const TRIO_SLOTS: Readonly<Record<HeroColumn, readonly [number, number, n
 // so neighbouring bodies never overlap and the painted figures (about four fifths of the box) keep a clear gap
 // (owner 2026-10-22).
 const COLUMNS = [.11, .36, .64, .89] as const;
-const UNIT_WIDTH = .245;
+const UNIT_WIDTH = .27;
 const FULL_COLUMNS = [.12, .37, .62, .865] as const;
 const columnOf = (slot: number): number => slot === 8 ? 0 : slot === 9 ? 1 : slot >> 1;
 export const partner = (slot: number): number => slot % 2 ? slot - 1 : slot + 1;
