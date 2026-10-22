@@ -1,0 +1,343 @@
+{
+  "image": "skills_atlas.webp",
+  "width": 1536,
+  "height": 1536,
+  "cellWidth": 256,
+  "cellHeight": 256,
+  "columns": 6,
+  "rows": 6,
+  "order": [
+    "guard",
+    "bash",
+    "rally",
+    "challenge",
+    "bulwark",
+    "rouse",
+    "mark",
+    "execute",
+    "finisher",
+    "bolt",
+    "ward",
+    "sigil",
+    "heal",
+    "prayer",
+    "sanctuary",
+    "brace",
+    "pierce",
+    "spearwall",
+    "hinder",
+    "volley",
+    "weakshot",
+    "acid",
+    "haste",
+    "bomb",
+    "ambush",
+    "evade",
+    "backstab",
+    "taunt",
+    "slam",
+    "quake",
+    "valor",
+    "mend",
+    "finale"
+  ],
+  "frames": {
+    "guard": {
+      "index": 0,
+      "column": 0,
+      "row": 0,
+      "x": 0,
+      "y": 0,
+      "width": 256,
+      "height": 256
+    },
+    "bash": {
+      "index": 1,
+      "column": 1,
+      "row": 0,
+      "x": 256,
+      "y": 0,
+      "width": 256,
+      "height": 256
+    },
+    "rally": {
+      "index": 2,
+      "column": 2,
+      "row": 0,
+      "x": 512,
+      "y": 0,
+      "width": 256,
+      "height": 256
+    },
+    "challenge": {
+      "index": 3,
+      "column": 3,
+      "row": 0,
+      "x": 768,
+      "y": 0,
+      "width": 256,
+      "height": 256
+    },
+    "bulwark": {
+      "index": 4,
+      "column": 4,
+      "row": 0,
+      "x": 1024,
+      "y": 0,
+      "width": 256,
+      "height": 256
+    },
+    "rouse": {
+      "index": 5,
+      "column": 5,
+      "row": 0,
+      "x": 1280,
+      "y": 0,
+      "width": 256,
+      "height": 256
+    },
+    "mark": {
+      "index": 6,
+      "column": 0,
+      "row": 1,
+      "x": 0,
+      "y": 256,
+      "width": 256,
+      "height": 256
+    },
+    "execute": {
+      "index": 7,
+      "column": 1,
+      "row": 1,
+      "x": 256,
+      "y": 256,
+      "width": 256,
+      "height": 256
+    },
+    "finisher": {
+      "index": 8,
+      "column": 2,
+      "row": 1,
+      "x": 512,
+      "y": 256,
+      "width": 256,
+      "height": 256
+    },
+    "bolt": {
+      "index": 9,
+      "column": 3,
+      "row": 1,
+      "x": 768,
+      "y": 256,
+      "width": 256,
+      "height": 256
+    },
+    "ward": {
+      "index": 10,
+      "column": 4,
+      "row": 1,
+      "x": 1024,
+      "y": 256,
+      "width": 256,
+      "height": 256
+    },
+    "sigil": {
+      "index": 11,
+      "column": 5,
+      "row": 1,
+      "x": 1280,
+      "y": 256,
+      "width": 256,
+      "height": 256
+    },
+    "heal": {
+      "index": 12,
+      "column": 0,
+      "row": 2,
+      "x": 0,
+      "y": 512,
+      "width": 256,
+      "height": 256
+    },
+    "prayer": {
+      "index": 13,
+      "column": 1,
+      "row": 2,
+      "x": 256,
+      "y": 512,
+      "width": 256,
+      "height": 256
+    },
+    "sanctuary": {
+      "index": 14,
+      "column": 2,
+      "row": 2,
+      "x": 512,
+      "y": 512,
+      "width": 256,
+      "height": 256
+    },
+    "brace": {
+      "index": 15,
+      "column": 3,
+      "row": 2,
+      "x": 768,
+      "y": 512,
+      "width": 256,
+      "height": 256
+    },
+    "pierce": {
+      "index": 16,
+      "column": 4,
+      "row": 2,
+      "x": 1024,
+      "y": 512,
+      "width": 256,
+      "height": 256
+    },
+    "spearwall": {
+      "index": 17,
+      "column": 5,
+      "row": 2,
+      "x": 1280,
+      "y": 512,
+      "width": 256,
+      "height": 256
+    },
+    "hinder": {
+      "index": 18,
+      "column": 0,
+      "row": 3,
+      "x": 0,
+      "y": 768,
+      "width": 256,
+      "height": 256
+    },
+    "volley": {
+      "index": 19,
+      "column": 1,
+      "row": 3,
+      "x": 256,
+      "y": 768,
+      "width": 256,
+      "height": 256
+    },
+    "weakshot": {
+      "index": 20,
+      "column": 2,
+      "row": 3,
+      "x": 512,
+      "y": 768,
+      "width": 256,
+      "height": 256
+    },
+    "acid": {
+      "index": 21,
+      "column": 3,
+      "row": 3,
+      "x": 768,
+      "y": 768,
+      "width": 256,
+      "height": 256
+    },
+    "haste": {
+      "index": 22,
+      "column": 4,
+      "row": 3,
+      "x": 1024,
+      "y": 768,
+      "width": 256,
+      "height": 256
+    },
+    "bomb": {
+      "index": 23,
+      "column": 5,
+      "row": 3,
+      "x": 1280,
+      "y": 768,
+      "width": 256,
+      "height": 256
+    },
+    "ambush": {
+      "index": 24,
+      "column": 0,
+      "row": 4,
+      "x": 0,
+      "y": 1024,
+      "width": 256,
+      "height": 256
+    },
+    "evade": {
+      "index": 25,
+      "column": 1,
+      "row": 4,
+      "x": 256,
+      "y": 1024,
+      "width": 256,
+      "height": 256
+    },
+    "backstab": {
+      "index": 26,
+      "column": 2,
+      "row": 4,
+      "x": 512,
+      "y": 1024,
+      "width": 256,
+      "height": 256
+    },
+    "taunt": {
+      "index": 27,
+      "column": 3,
+      "row": 4,
+      "x": 768,
+      "y": 1024,
+      "width": 256,
+      "height": 256
+    },
+    "slam": {
+      "index": 28,
+      "column": 4,
+      "row": 4,
+      "x": 1024,
+      "y": 1024,
+      "width": 256,
+      "height": 256
+    },
+    "quake": {
+      "index": 29,
+      "column": 5,
+      "row": 4,
+      "x": 1280,
+      "y": 1024,
+      "width": 256,
+      "height": 256
+    },
+    "valor": {
+      "index": 30,
+      "column": 0,
+      "row": 5,
+      "x": 0,
+      "y": 1280,
+      "width": 256,
+      "height": 256
+    },
+    "mend": {
+      "index": 31,
+      "column": 1,
+      "row": 5,
+      "x": 256,
+      "y": 1280,
+      "width": 256,
+      "height": 256
+    },
+    "finale": {
+      "index": 32,
+      "column": 2,
+      "row": 5,
+      "x": 512,
+      "y": 1280,
+      "width": 256,
+      "height": 256
+    }
+  }
+}
