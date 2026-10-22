@@ -50,14 +50,6 @@
 .doll-stats { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin: 8px 0; }
 @container game (max-width: 360px) { .character-content .doll-slot { width: 58px; } .character-content .doll-slot .gear-art, .character-content .doll-slot > .icon { width: 44px; height: 44px; } }
 
-/* Tree node grammar (ART-UI-MODERN-001 board 04): skill circle, choice diamond, passive square, capstone crest. */
-.big-tree .talent-node b::before { content: ''; display: inline-block; width: 10px; height: 10px; margin-right: 6px; vertical-align: 0; border: 1.5px solid var(--veil-cyan, #74d4ef); }
-.big-tree .talent-node.skill b::before { border-radius: 50%; }
-.big-tree .talent-node.choice b::before { transform: rotate(45deg) scale(.85); }
-.big-tree .talent-node.capstone b::before { border-color: var(--gold-light, #f2d596); clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%); background: #f2d59655; }
-.big-tree .talent-node.skill b::before, .big-tree .talent-node.skill b { color: inherit; }
-.big-tree .talent-node.skill b::before { content: ''; }
-
 /* Filter chips (A7: chips instead of dropdowns). */
 .ui-chip { min-height: 44px; padding: 0 14px; border-radius: 99px; border: 1px solid #e8f5ff33; background: #102137; color: var(--text); font: 600 13px var(--font-display, Kanit), sans-serif; }
 .ui-chip[aria-pressed=true] { border-color: var(--veil-cyan, #74d4ef); background: #183c50; color: var(--focus, #a3edff); }
@@ -144,3 +136,58 @@
 .swap-list li { display: grid; grid-template-columns: auto auto auto 1fr; align-items: center; gap: 8px; padding: 8px; border: 1px solid #e8f5ff1f; border-radius: 12px; background: #0c1a2b; }
 .swap-list .gear-art { --art: 44px; } .swap-list li > span[aria-hidden] { color: var(--veil-cyan, #74d4ef); }
 .swap-list li div { display: grid; min-width: 0; } .swap-list b { font-size: 13px; } .swap-list small { font-size: 11px; color: var(--text-muted, #bbcadb); }
+
+/* Big tree node graph (board 04). Lines: each cell draws its upper and lower half-line through the centre;
+   gold when both tiers have ranks. Each node is a transparent 52px button whose ::before is the shape. */
+.tree-head, .loadout-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.tree-head h3, .loadout-head h3 { margin: 0; }
+.loadout-head { margin-top: 14px; } .loadout-head span { color: var(--text-muted, #bbcadb); font-size: 13px; }
+.node-tree .talent-points { min-height: 36px; padding: 4px 12px; font-size: 13px; border-color: #f2d59666; }
+.node-tree .talent-points .icon { color: var(--gold-light, #f2d596); }
+.tree-grid { --node: 50px; --line: #74d4ef55; --lit: var(--gold-light, #f2d596); display: grid; grid-template-columns: 30px repeat(3, minmax(0, 1fr)); column-gap: 4px; margin: 10px 0 4px; }
+.tree-grid h4 { margin: 0 0 4px; text-align: center; font-size: 13px; font-weight: 600; color: var(--veil-cyan, #74d4ef); }
+.tree-lv { align-self: start; padding-top: 18px; font-size: 10px; color: var(--text-muted, #bbcadb); text-align: right; }
+.tree-cell { position: relative; display: flex; justify-content: center; gap: 4px; padding: 8px 0 4px; }
+.tree-cell::before, .tree-cell::after { content: ''; position: absolute; left: calc(50% - 1px); width: 2px; background: var(--line); }
+.tree-cell::before { top: 0; height: calc(8px + var(--node) / 2); } .tree-cell::after { top: calc(8px + var(--node) / 2); bottom: 0; }
+.tree-cell[data-tier="1"]::before, .tree-cell[data-tier="4"]::after { display: none; }
+.tree-cell[data-up=lit]::before, .tree-cell[data-down=lit]::after { background: var(--lit); box-shadow: 0 0 6px #f2d59688; }
+.tree-cell.pair .node-wrap:first-child::after { content: ''; position: absolute; z-index: 0; top: calc(var(--node) / 2 - 1px); left: 50%; width: calc(100% + 4px); height: 2px; background: var(--line); }
+.node-wrap { position: relative; display: grid; justify-items: center; align-content: start; gap: 6px; width: var(--node); }
+.tree-cell.pair .node-wrap { flex: 0 1 var(--node); min-width: 0; }
+.node-name { position: relative; z-index: 1; max-width: calc(var(--node) + 16px); padding: 0 3px; border-radius: 4px; background: #0a1524; font-size: 10px; line-height: 1.25; text-align: center; color: var(--text-muted, #bbcadb); }
+.tree-cell.pair .node-name { max-width: 100%; }
+.character-content .node-tree .talent-node { position: relative; z-index: 1; width: var(--node); height: var(--node); min-height: 44px; min-width: 44px; padding: 0; display: grid; place-items: center; border: 0; background: none; box-shadow: none; color: var(--veil-cyan, #74d4ef); }
+.node-tree .talent-node::before { content: ''; position: absolute; inset: 4px; z-index: -1; border: 2px solid #74d4ef99; background: radial-gradient(circle at 50% 40%, #1d3a52, #0d1c2e 75%); }
+.node-tree .talent-node.skill::before { border-radius: 50%; }
+.node-tree .talent-node.passive::before { inset: 7px; border-radius: 10px; }
+.node-tree .talent-node.choice::before { inset: 9px; transform: rotate(45deg); border-radius: 4px; }
+.node-tree .talent-node.capstone::before { inset: 2px 5px; border: 0; clip-path: polygon(50% 100%, 100% 72%, 100% 0, 0 0, 0 72%); background: linear-gradient(#3a5269, #1b2c40); }
+.node-tree .talent-node .icon { width: 22px; height: 22px; }
+.node-tree .talent-node i { position: absolute; left: 50%; bottom: -7px; transform: translateX(-50%); padding: 0 5px; border-radius: 6px; background: #08121f; font: 700 10px/16px var(--font-display, Kanit), sans-serif; font-style: normal; color: var(--gold-light, #f2d596); }
+.node-tree .talent-node[data-state=locked] { color: #8597aa; }
+.node-tree .talent-node[data-state=locked]::before { border-color: #e8f5ff2e; background: #101d2d; }
+.node-tree .talent-node[data-state=locked] i { color: #8597aa; }
+.node-tree .talent-node.capstone[data-state=locked]::before { background: linear-gradient(#26384b, #142233); }
+.node-tree .talent-node[data-state=open]::before { border-color: var(--veil-cyan, #74d4ef); box-shadow: 0 0 10px #74d4ef44; }
+.node-tree .talent-node[data-state=partial]::before { border-color: var(--gold-light, #f2d596); }
+.node-tree .talent-node[data-state=full] { color: #1b1305; }
+.node-tree .talent-node[data-state=full]::before { border-color: var(--gold-light, #f2d596); background: radial-gradient(circle at 50% 40%, #ffe3a3, #c99a3e 80%); box-shadow: 0 0 12px #f2d59688; }
+.node-tree .talent-node.capstone[data-state=full]::before { background: linear-gradient(#ffe3a3, #c99a3e); }
+.node-tree .talent-node[aria-pressed=true] { filter: drop-shadow(0 0 2px #fff) drop-shadow(0 0 8px var(--veil-cyan, #74d4ef)); }
+.node-tree .talent-node:focus-visible { outline: 2px solid var(--gold-light, #f2d596); outline-offset: 2px; }
+.node-card-head { display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: center; }
+.node-card-head b { font: 600 17px var(--font-display, Kanit), sans-serif; } .node-card-head small { display: block; font-size: 12px; color: var(--text-muted, #bbcadb); }
+.node-glyph { display: grid; place-items: center; width: 52px; height: 52px; border: 2px solid var(--veil-cyan, #74d4ef); border-radius: 12px; color: var(--veil-cyan, #74d4ef); background: #0d1c2e; }
+.node-glyph.skill { border-radius: 50%; } .node-glyph[data-state=full] { border-color: var(--gold-light, #f2d596); color: var(--gold-light, #f2d596); }
+.node-glyph .icon { width: 24px; height: 24px; }
+.node-card p { margin: 0; font-size: 13px; line-height: 1.55; }
+.node-card-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.node-note { font-size: 12px; color: var(--text-muted, #bbcadb); }
+.character-content .node-card-foot button { min-height: 48px; min-width: 120px; display: inline-flex; align-items: center; justify-content: center; gap: 4px; }
+.node-card-foot button[aria-disabled=true] { opacity: .5; cursor: default; }
+.tree-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; margin: 10px 0 4px; font-size: 12px; color: var(--text-muted, #bbcadb); }
+.tree-legend .lg { display: inline-block; width: 10px; height: 10px; margin-left: 6px; border: 1.5px solid var(--veil-cyan, #74d4ef); }
+.tree-legend .lg.skill { border-radius: 50%; } .tree-legend .lg.choice { transform: rotate(45deg) scale(.85); } .tree-legend .lg.passive { border-radius: 2px; }
+.tree-legend .lg.capstone { border: 0; background: var(--gold-light, #f2d596); clip-path: polygon(50% 100%, 100% 72%, 100% 0, 0 0, 0 72%); }
+@container game (max-width: 380px) { .tree-grid { --node: 44px; grid-template-columns: repeat(3, minmax(0, 1fr)); } .tree-grid > span { display: none; } }

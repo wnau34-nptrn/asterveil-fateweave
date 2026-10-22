@@ -31,11 +31,13 @@ for (const [width,height,touch] of [[320,568,true], [390,844,true], [1366,768,fa
     await expect(page.locator('#character-tab-overview')).toHaveAttribute('aria-selected','true');
     await page.screenshot({path:info.outputPath('character-overview.png')});
     await page.keyboard.press('End'); await expect(page.locator('#character-tab-talents')).toBeFocused();
-    // The Knight's big tree (A6): tier 2 needs a rank in the branch's tier 1.
-    await expect(page.locator('#character-talent-a2i')).toHaveAttribute('aria-disabled','true');
-    await page.locator('#character-talent-c1s').click();
-    await expect(page.locator('#character-talent-c1s')).toHaveAttribute('aria-disabled','true');
-    await page.locator('#character-talent-b1').focus(); await page.keyboard.down('Enter'); await page.keyboard.down('Enter'); await page.keyboard.up('Enter');
+    // The Knight's big tree (A6): tier 2 needs a rank in the branch's tier 1. A node tap only selects; its card spends.
+    await expect(page.locator('#character-talent-a2i')).toHaveAttribute('data-state','locked');
+    await page.locator('#character-talent-a2i').click(); await expect(page.locator('#character-talent-learn')).toHaveAttribute('aria-disabled','true');
+    await page.locator('#character-talent-c1s').click(); expect(parseGame(await saved(page),map,encounterById).run!.members.guardian!.talents).toBeUndefined();
+    await page.locator('#character-talent-learn').click();
+    await expect(page.locator('#character-talent-c1s')).toHaveAttribute('data-state','full'); await expect(page.locator('#character-talent-learn')).toHaveAttribute('aria-disabled','true');
+    await page.locator('#character-talent-b1').click(); await page.locator('#character-talent-learn').focus(); await page.keyboard.down('Enter'); await page.keyboard.down('Enter'); await page.keyboard.up('Enter');
     expect(parseGame(await saved(page),map,encounterById).run!.members.guardian!.talents).toEqual({c1s:1,b1:1});
     await expect(page.locator('#character-loadout-rally')).toHaveAttribute('aria-pressed','true');
     await page.locator('#character-loadout-bash').click();
@@ -77,7 +79,7 @@ test('touch: portrait resize and rotation preserve character tabs and block pass
   const before = await saved(page);
   await page.setViewportSize({width:320,height:568}); await expect(page.locator('#character-tab-talents')).toHaveAttribute('aria-selected','true');
   await page.setViewportSize({width:844,height:390}); await expect(page.locator('#orientation-gate')).toBeVisible();
-  await page.locator('#character-talent-c1s').dispatchEvent('click'); await page.locator('#character-dialog [data-world=character-close]').dispatchEvent('click'); await page.keyboard.press('Escape');
+  await page.locator('#character-talent-c1s').dispatchEvent('click'); await page.locator('#character-talent-learn').dispatchEvent('click'); await page.locator('#character-dialog [data-world=character-close]').dispatchEvent('click'); await page.keyboard.press('Escape');
   expect(await saved(page)).toBe(before);
   await page.setViewportSize({width:390,height:844}); await expect(page.locator('#character-dialog')).toBeVisible();
   await expect(page.locator('#character-tab-talents')).toHaveAttribute('aria-selected','true');

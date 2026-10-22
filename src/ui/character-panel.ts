@@ -33,7 +33,7 @@ export class CharacterPanel {
   private heroId=''; private tab:CharacterTab='overview'; private source:object|undefined;
   private single:{key:string;item:EquipmentEntry['item']}|undefined; private plan:AutoEquipmentPlan|undefined;
   private goal:AutoGoal='recommended'; private preferred:SetId|undefined;
-  private autoExpanded=false; private filtersExpanded=false; private picked='';
+  private autoExpanded=false; private filtersExpanded=false; private picked=''; private node='';
   private back:{dialog?:string;focus:string;scroll:number;lobby:boolean}={focus:'',scroll:0,lobby:false};
   constructor(private readonly root:HTMLElement,private readonly map:MapDefinition,private readonly heroes:readonly HeroDefinition[],private readonly template:EncounterDefinition,private readonly host:CharacterHost,private readonly prefix='',readonly filters:GearFilters=newGearFilters()) {
     this.dialog=document.createElement('dialog');this.dialog.id=this.id('character-dialog');this.dialog.className='world-dialog character-dialog';this.dialog.setAttribute('aria-labelledby',this.id('character-title'));
@@ -83,10 +83,11 @@ export class CharacterPanel {
     if(action==='character-forge'&&model.camp&&this.host.forge){this.back={focus:'lobby-tab-forge',scroll:0,lobby:false};this.dialog.close();this.host.forge(this.heroId,Number(b.dataset.uid));return;}
     if(action==='character-close'){this.dialog.close();return;}
     if(action==='character-tab'){this.tab=b.dataset.tab as CharacterTab;this.discard();this.render();this.content().scrollTop=0;this.focus(this.id(`character-tab-${this.tab}`));return;}
-    if(action==='character-member'){this.heroId=b.dataset.hero!;this.filters.slot='all';this.picked='';this.discard();this.render();this.content().scrollTop=0;this.focus(this.id(`character-member-${this.heroId}`));return;}
+    if(action==='character-member'){this.heroId=b.dataset.hero!;this.filters.slot='all';this.picked='';this.node='';this.discard();this.render();this.content().scrollTop=0;this.focus(this.id(`character-member-${this.heroId}`));return;}
     if(action==='comparison-back'){this.cancelTrial();return;}
     if(!model.available||this.source!==model.source)return;
-    if(action==='character-talent'&&b.getAttribute('aria-disabled')!=='true'){this.host.talent(this.heroId,b.dataset.node as TalentNode);this.focus(this.id(`character-talent-${b.dataset.node}`));}
+    if(action==='talent-pick'){this.node=b.dataset.node!;this.render();this.focus(b.id);}
+    else if(action==='character-talent'&&b.getAttribute('aria-disabled')!=='true'){this.host.talent(this.heroId,b.dataset.node as TalentNode);this.focus(b.id);}
     else if(action==='character-loadout'&&b.getAttribute('aria-disabled')!=='true'){
       // Big skill trees (A6): toggle one unlocked skill in or out of the battle loadout (at least one stays).
       const skill=b.dataset.skill as ActionId,now:ActionId[]=this.hero(model).actions.filter(a=>a!=='attack');
@@ -123,7 +124,7 @@ export class CharacterPanel {
     this.dialog.querySelector(`#${this.id('character-tabs')}`)!.innerHTML=this.ids(Object.entries(characterTabs).map(([tab,label])=>`<button id="character-tab-${tab}" data-world="character-tab" data-tab="${tab}" role="tab" aria-controls="character-content" aria-selected="${tab===this.tab}" tabindex="${tab===this.tab?0:-1}">${icon(characterTabIcons[tab as CharacterTab])}<span>${label}</span></button>`).join(''));
     const position=model.state.roster.deployed.includes(id)?`ตัวหลักช่อง ${model.state.roster.deployed.indexOf(id)+1}`:model.state.roster.reserve.includes(id)?'สำรอง':'ในค่าย';
     let html=`<p class="character-summary">${heroText[id]!.role} · ${h.lane==='front'?'แนวหน้า':'แนวหลัง'} · ${position} · ${model.camp?'ค่ายหลัก · เลือดพร้อมออกเดินทาง':'HP'} ${model.state.hp[id]??0}/${h.maxHp}</p>`;
-    html+=this.tab==='overview'?characterOverview(model.state,this.map,h,this.template):this.tab==='skills'?characterSkills(h,base,m.stars,this.template,this.map,m):this.tab==='talents'?characterTalents(model.state,this.map,id,this.template,h,base)+(model.camp?`<button id="character-reset" data-world="character-reset" class="secondary"${talentsSpent(m.talents)?'':' disabled'}>${icon('act-reset')}รีเซ็ตแต้มฟรีที่ครูฝึก</button>`:''):this.gear(model,h);
+    html+=this.tab==='overview'?characterOverview(model.state,this.map,h,this.template):this.tab==='skills'?characterSkills(h,base,m.stars,this.template,this.map,m):this.tab==='talents'?characterTalents(model.state,this.map,id,this.template,h,base,this.node)+(model.camp?`<button id="character-reset" data-world="character-reset" class="secondary"${talentsSpent(m.talents)?'':' disabled'}>${icon('act-reset')}รีเซ็ตแต้มฟรีที่ครูฝึก</button>`:''):this.gear(model,h);
     // Read folded panels before replacing them: a camp re-render can land before their async toggle event.
     const was=this.content().querySelector<HTMLDetailsElement>('.gear-extra-filters'),wasAuto=this.content().querySelector<HTMLDetailsElement>('.auto-settings');if(was)this.filtersExpanded=was.open;if(wasAuto)this.autoExpanded=wasAuto.open;
     this.content().setAttribute('aria-labelledby',this.id(`character-tab-${this.tab}`));this.content().innerHTML=this.ids(html);

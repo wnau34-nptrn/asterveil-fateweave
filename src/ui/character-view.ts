@@ -74,32 +74,44 @@ export function characterEquipmentComparison(before: CharacterState, after: Char
     <h3>เซ็ตและคุณสมบัติพิเศษ</h3><p class="camp-note">โบนัสชุด 2/4 ชิ้นที่ได้หรือเสีย · ผลตามเงื่อนไขไม่รวมในพลังพื้นฐานด้านบน</p><div class="comparison-effects"><section><h4>สวมอยู่</h4><ul>${equipmentEffects(before,map,h)}</ul></section><section><h4>ทดลองใส่</h4><ul>${equipmentEffects(after,map,next)}</ul></section></div><div class="comparison-footer"><button id="comparison-equip" data-world="comparison-equip" class="primary">${icon('act-confirm')}สวมใส่${items.length > 1 ? 'ชุดนี้' : ''}</button>${baseCamp && one && one.uid > 0 ? `<button data-world="character-forge" data-uid="${one.uid}" class="secondary">${icon('tab-forge')}พัฒนา</button>` : ''}<button data-world="comparison-back" class="secondary">ยกเลิก</button></div></section>`;
 }
 
-// Big skill trees (A6): three branches of four tiers, then the battle loadout picker.
-function bigTalents(s: CharacterState, map: MapDefinition, id: string, data: EncounterDefinition, h: HeroDefinition, base: HeroDefinition): string {
+// Big skill trees (A6) as a node graph (ART-UI-MODERN-001 board 04): three branch columns of four tiers joined by
+// lines (gold where both ends have ranks). Node shapes: skill circle, choice diamond, passive square, capstone crest.
+// Tapping a node only selects it; its card below spends the point. Then the battle loadout and a shape legend.
+const statNodeIcon = { hp: 'stat-hp', attack: 'stat-attack', skill: 'stat-support', armour: 'stat-armour' } as const;
+function bigTalents(s: CharacterState, map: MapDefinition, id: string, data: EncounterDefinition, h: HeroDefinition, base: HeroDefinition, selected?: string): string {
   const m = s.members[id]!, nodes = map.talents[id]!, hd = withParty(data, [h]);
   const points = talentPoints(map, m, id), free = points - talentsSpent(m.talents), names = bigBranches[id] ?? ['สาย A', 'สาย B', 'สาย C'];
-  const tiers = map.progression.treeTiers;
+  const tiers = map.progression.treeTiers, branches = ['a', 'b', 'c'] as const;
   const why: Record<string, string> = { max: 'เต็มแล้ว', locked: 'ต้องลงชั้นก่อนหน้าในสายนี้', choice: 'เลือกอีกทางไว้แล้ว', points: 'แต้มไม่พอ', unknown: 'ไม่พบความถนัด' };
-  const node = (def: TalentNodeDef) => {
+  const info = (def: TalentNodeDef) => {
     const granted = !!m.grants?.includes(def.id), rank = granted ? def.max : m.talents?.[def.id] ?? 0, reason = memberTalentReason(map, id, m, def.id);
     const state = rank >= def.max ? 'full' : rank ? 'partial' : reason === 'locked' || reason === 'level' || reason === 'choice' ? 'locked' : 'open';
-    const note = granted ? 'ได้ฟรีจากดาวเดิม' : reason === 'level' ? `เปิดที่ Lv${tiers[(def.tier ?? 1) - 1]}` : reason ? why[reason] : 'แตะเพื่อลง 1 แต้ม';
-    const kind = 'unlock' in def.effect ? ' skill' : def.choice ? ' choice' : def.tier === 4 ? ' capstone' : '';
-    return `<button id="character-talent-${def.id}" data-world="character-talent" data-node="${def.id}" class="talent-node${kind}" data-state="${state}" aria-disabled="${!!reason}" aria-label="${def.name} ขั้น ${rank}/${def.max} · ${talentHelp(def, hd)} · ${note}"><b>${def.name}</b><i>${rank}/${def.max}</i><small>${talentHelp(def, hd)}</small><small>${note}</small></button>`;
+    const note = granted ? 'ได้ฟรีจากดาวเดิม' : reason === 'level' ? `เปิดที่ Lv${tiers[(def.tier ?? 1) - 1]}` : reason ? why[reason]! : 'ลงได้ 1 แต้ม';
+    const kind = 'unlock' in def.effect ? 'skill' : def.choice ? 'choice' : def.tier === 4 ? 'capstone' : 'passive';
+    const e = def.effect, glyph: Parameters<typeof icon>[0] = 'unlock' in e ? e.unlock : 'stat' in e ? statNodeIcon[e.stat] : (def.choice ?? nodes.find(n => n.branch === def.branch && n.choice)?.choice ?? 'stat-level') as ActionId;
+    return { rank, reason, state, note, kind, glyph };
   };
-  const branch = (b: 'a' | 'b' | 'c', i: number) => `<div class="talent-branch" data-branch="${b}"><h4>${names[i]}</h4>${[1, 2, 3, 4].map(t => { const row = nodes.filter(n => n.branch === b && n.tier === t);
-    return `<div class="talent-tier" data-tier="${t}"><p class="talent-gate">ชั้น ${t} · Lv${tiers[t - 1]}${row.some(n => n.choice) ? ' · เลือก 1 ใน 2' : ''}</p><div class="talent-row">${row.map(node).join('')}</div></div>`; }).join('')}</div>`;
+  const ranked = (b: string, t: number) => nodes.some(n => n.branch === b && n.tier === t && info(n).rank > 0);
+  const pick = nodes.find(n => n.id === selected) ?? nodes.find(n => info(n).state === 'open' && !info(n).reason) ?? nodes[0]!;
+  const node = (def: TalentNodeDef) => { const v = info(def);
+    return `<div class="node-wrap"><button id="character-talent-${def.id}" data-world="talent-pick" data-node="${def.id}" class="talent-node ${v.kind}" data-state="${v.state}" aria-pressed="${def === pick}" aria-label="${def.name} ขั้น ${v.rank}/${def.max} · ${talentHelp(def, hd)} · ${v.note}">${icon(v.glyph)}<i>${v.rank}/${def.max}</i></button><small class="node-name" aria-hidden="true">${def.name}</small></div>`; };
+  const grid = `<div class="tree-grid"><span></span>${names.map(n => `<h4>${n}</h4>`).join('')}${[1, 2, 3, 4].map(t => `<span class="tree-lv">Lv${tiers[t - 1]}</span>${branches.map(b => { const row = nodes.filter(n => n.branch === b && n.tier === t);
+    return `<div class="tree-cell${row.length > 1 ? ' pair' : ''}" data-tier="${t}" data-up="${t > 1 && ranked(b, t - 1) && ranked(b, t) ? 'lit' : ''}" data-down="${t < 4 && ranked(b, t) && ranked(b, t + 1) ? 'lit' : ''}">${row.map(node).join('')}</div>`; }).join('')}`).join('')}</div>`;
+  const p = info(pick), kindText = { skill: 'สกิล', choice: 'ปรับสกิล · เลือก 1 ใน 2', passive: 'พาสซีฟ', capstone: 'ขั้นสูงสุด' }[p.kind];
+  const card = `<section class="item-card node-card" aria-label="โหนดที่เลือก"><div class="node-card-head"><span class="node-glyph ${p.kind}" data-state="${p.state}">${icon(p.glyph)}</span><div><b>${pick.name}</b><small>${kindText} · ชั้น ${pick.tier} · ${p.rank}/${pick.max}</small></div></div><p>${talentHelp(pick, hd)}</p><div class="node-card-foot"><small class="node-note">${p.note}</small><button id="character-talent-learn" data-world="character-talent" data-node="${pick.id}" class="primary" aria-disabled="${!!p.reason}">${icon('act-confirm')}ลงแต้ม</button></div></section>`;
   const choices = skillChoices(base, map, m.talents, m.grants), now: ActionId[] = h.actions.filter(a => a !== 'attack'), size = map.progression.loadoutSize;
   const loadout = choices.map(a => { const on = now.includes(a), why = !on && now.length >= size ? `ติดครบ ${size} ช่องแล้ว ถอดก่อน` : on && now.length <= 1 ? 'ต้องติดอย่างน้อย 1 สกิล' : '';
     return `<button id="character-loadout-${a}" data-world="character-loadout" data-skill="${a}" class="loadout-skill" aria-pressed="${on}" aria-disabled="${!!why}" aria-label="${hd.skills[a].name} · ${on ? 'ติดอยู่' : 'ยังไม่ติด'}${why ? ` · ${why}` : ''}">${icon(a)}<b>${hd.skills[a].name}</b><small>${on ? 'ติดอยู่' : why || 'แตะเพื่อติด'}</small></button>`; }).join('');
-  return `<section class="talent-tree big-tree" aria-label="ต้นไม้สกิลของ${heroText[id]!.name}"><p class="talent-points" role="status">แต้มเหลือ <strong>${free}</strong>/${points} · ได้ 1 แต้มทุกเลเวลอัปและทุกดาว</p>
-    <h3>สกิลติดตัวในศึก (${now.length}/${size})</h3><div class="loadout-list">${loadout}</div><p class="camp-note">ศึกมี 4 ปุ่ม: โจมตีปกติ + สกิลที่ติดไว้ · เปลี่ยนได้ที่ค่ายหรือบนแผนที่นอกการต่อสู้</p>
-    <div class="talent-branches big">${(['a', 'b', 'c'] as const).map(branch).join('')}</div><p class="camp-note">ลงแต้มได้ทันทีนอกการต่อสู้ · คืนแต้มและเปลี่ยนสายได้ฟรีที่ครูฝึกในค่าย</p></section>`;
+  return `<section class="talent-tree big-tree node-tree" aria-label="ต้นไม้สกิลของ${heroText[id]!.name}"><div class="tree-head"><h3>เส้นทาง${heroText[id]!.role}</h3><span class="ui-pill talent-points" role="status">${icon('stat-level')}<span>แต้มเหลือ <strong>${free}</strong>/${points}</span></span></div>
+    ${grid}${card}
+    <div class="loadout-head"><h3>สกิลที่ติดตั้ง</h3><span>${now.length}/${size}</span></div><div class="loadout-list">${loadout}</div>
+    <p class="tree-legend" aria-hidden="true"><span class="lg skill"></span>สกิล <span class="lg choice"></span>ปรับสกิล <span class="lg passive"></span>พาสซีฟ <span class="lg capstone"></span>ขั้นสูงสุด</p>
+    <p class="camp-note">ได้ 1 แต้มทุกเลเวลอัปและทุกดาว · ศึกมี 4 ปุ่ม: โจมตีปกติ + สกิลที่ติดไว้ · คืนแต้มฟรีที่ครูฝึกในค่าย</p></section>`;
 }
-export function characterTalents(s: CharacterState, map: MapDefinition, id: string, data: EncounterDefinition, h?: HeroDefinition, base?: HeroDefinition): string {
+export function characterTalents(s: CharacterState, map: MapDefinition, id: string, data: EncounterDefinition, h?: HeroDefinition, base?: HeroDefinition, selected?: string): string {
   const m = s.members[id]!, nodes = map.talents[id];
   if (!nodes) return '<p>ตัวละครนี้ไม่มีต้นไม้ความถนัด</p>';
-  if (isBigTree(nodes) && h && base) return bigTalents(s, map, id, data, h, base);
+  if (isBigTree(nodes) && h && base) return bigTalents(s, map, id, data, h, base, selected);
   const points = talentPoints(map, m, id), free = points - talentsSpent(m.talents), branches = talentBranches[id] ?? ['สาย A', 'สาย B'];
   const why: Record<string, string> = { max: 'เต็มแล้ว', locked: 'ต้องลงขั้นก่อนหน้า', points: 'แต้มไม่พอ', unknown: 'ไม่พบความถนัด' };
   const node = (n: TalentNode) => {

@@ -1101,16 +1101,17 @@ test('lobby talent tree: its own sheet; spend points level by level, gates show,
   // The Knight's big tree (A6): 3 branches × 4 tiers; tier 2 opens at Lv5.
   await expect(page.locator('.talent-node')).toHaveCount(17);
   await expect(page.locator('#camp-character-talent-a2i')).toHaveAttribute('data-state', 'locked'); await expect(page.locator('#camp-character-talent-a2i')).toHaveAttribute('aria-label', /เปิดที่ Lv5/);
-  await page.locator('#camp-character-talent-c1s').click(); await expect(page.locator('#camp-character-talent-c1s')).toHaveAttribute('data-state', 'full');
-  await page.locator('#camp-character-talent-a1').click(); await page.locator('#camp-character-talent-a1').click();
+  const learn = page.locator('#camp-character-talent-learn');
+  await page.locator('#camp-character-talent-c1s').click(); await learn.click(); await expect(page.locator('#camp-character-talent-c1s')).toHaveAttribute('data-state', 'full');
+  await page.locator('#camp-character-talent-a1').click(); await learn.click(); await learn.click();
   await expect(page.locator('#camp-character-talent-a1')).toContainText('2/2'); await expect(page.locator('.talent-points')).toContainText('แต้มเหลือ 0/3');
   // No points left: another node does nothing and says why.
-  await page.locator('#camp-character-talent-b1').click({ force: true }); await expect(page.locator('#camp-character-talent-b1')).toContainText('0/2');
+  await page.locator('#camp-character-talent-b1').click(); await learn.click({ force: true }); await expect(page.locator('#camp-character-talent-b1')).toContainText('0/2'); await expect(learn).toHaveAttribute('aria-disabled', 'true');
   await expect(page.locator('#camp-character-talent-b1')).toHaveAttribute('aria-label', /แต้มไม่พอ/);
   // The new rally is in the battle loadout; take Shield Bash out.
   await expect(page.locator('#camp-character-loadout-rally')).toHaveAttribute('aria-pressed', 'true'); await page.locator('#camp-character-loadout-bash').click();
   await expect(page.locator('#camp-character-loadout-bash')).toHaveAttribute('aria-pressed', 'false');
-  for (const b of await page.locator('#camp-character-dialog .talent-node, #camp-character-dialog .loadout-skill, #camp-character-reset, #camp-character-dialog .tree-member').all()) expect((await b.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+  for (const b of await page.locator('#camp-character-dialog .talent-node, #camp-character-talent-learn, #camp-character-dialog .loadout-skill, #camp-character-reset, #camp-character-dialog .tree-member').all()) expect((await b.boundingBox())!.height).toBeGreaterThanOrEqual(44);
   await page.screenshot({ path: info.outputPath('lobby-talents.png') });
   // Another member's tree from the picker.
   await page.locator('#camp-character-member-tracer').click(); await expect(page.locator('#camp-character-dialog .talent-tree')).toHaveAttribute('aria-label', /ไลรา/);
