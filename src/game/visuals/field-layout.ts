@@ -48,15 +48,17 @@ const reach = (size: number) => size + 4 + LABEL + 2;
 const stepOf = (size: number, panel: number) => reach(size) + panel + below(size);
 // The largest unit size whose three rows (name + body + panel) fit between the backdrop's floor line (the top row's
 // feet at FLOOR of the height) and the field's bottom edge.
-const fitSize = (width: number, height: number, panel: number) => {
+// `floor` false drops the floor-line rule (rows may start above the backdrop's floor) for shorter fields, which
+// would otherwise fall back to the tiny two-row grid on phones with a tall status bar.
+const fitSize = (width: number, height: number, panel: number, floor = true) => {
   let size = Math.floor(Math.min(140, width * UNIT_WIDTH));
-  while (size > 0 && (3 * stepOf(size, panel) > height - 2 || 2 * stepOf(size, panel) > height - 2 - panel - below(size) - Math.max(height * FLOOR, reach(size)))) size--;
+  while (size > 0 && (3 * stepOf(size, panel) > height - 2 || floor && 2 * stepOf(size, panel) > height - 2 - panel - below(size) - Math.max(height * FLOOR, reach(size)))) size--;
   return size;
 };
 
 export function fieldSlots(width: number, height: number, layout: SlotLayout = none): FieldSlot[] {
   // A 30px panel: the HP number over a centred bar, small status icons under it.
-  const panel = 30, size = fitSize(width, height, panel);
+  const panel = 30, size = Math.max(fitSize(width, height, panel), fitSize(width, height, panel, false));
   if (size < 44) return shortSlots(width, height, layout);
   // The grid is anchored to the bottom: rows are one step apart, the bottom row's feet just above the field's edge.
   // Rows spread up to where the backdrop's floor begins (the top row's feet at FLOOR of the height) so a large foe
