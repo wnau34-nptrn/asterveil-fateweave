@@ -1,4 +1,5 @@
 import { icon } from './icons';
+import { preloadForgeStrike } from './forge-strike';
 import { equipmentEffects } from './character-view';
 import { salvageReason } from '../core/world/profile';
 import type { EncounterDefinition, HeroDefinition } from '../core/battle/types';
@@ -78,6 +79,7 @@ export class ForgeWorkbench {
   }
   // Lobby systems by chapter (A3): `open` says which forge modes and tabs are open yet.
   render(p:Profile,open:(f:LobbyFeature)=>boolean=()=>true):string {
+    preloadForgeStrike();
     const modeFeature:Partial<Record<Mode,LobbyFeature>>={level:'level',fuse:'fuse',reroll:'fuse',transfer:'transfer'};
     const modeOpen=(m:Mode)=>{const f=modeFeature[m];return !f||open(f);};
     if(!modeOpen(this.mode))this.mode='enhance';if(this.tab==='craft'&&!open('craft'))this.tab='develop';

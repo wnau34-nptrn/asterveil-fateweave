@@ -289,41 +289,19 @@
 /* Five-up tiles are small: the name and rarity stay for assistive tech (and the title tooltip), the rarity shows in the frame. */
 .summary-items small, .summary-items em { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
 
-/* Forge strike: a hammer pops up and hits the finished piece twice; the first hit shakes it, the second shows the result. */
+/* Forge strike: painted layers from forge_strike_fx.webp are placed by forge-strike.ts around the 132 px gear tile. */
 .forge-strike { position: absolute; inset: 0; z-index: 80; display: grid; place-items: center; pointer-events: none; background: radial-gradient(circle, #05101cdd, #05101c99 70%); animation: strike-fade 1.7s both; }
 .strike-card { position: relative; display: grid; justify-items: center; gap: 6px; }
-.strike-item { position: relative; animation: strike-shake .7s .3s both; }
-.strike-item .gear-art { --art: 132px; box-shadow: 0 0 40px #f2d59666; }
-.strike-hammer { position: absolute; left: calc(50% - 10px); top: -34px; width: 104px; height: 104px; transform-origin: 50% 96%; animation: strike-swing 1.1s both; filter: drop-shadow(0 6px 8px #000a); }
-.strike-spark { position: absolute; left: 50%; top: 50%; width: 150px; height: 150px; margin: -75px; border-radius: 50%; background: radial-gradient(circle, #fff 0, #ffd36e 25%, #ffd36e00 65%); opacity: 0; animation: strike-flash .25s .32s both; }
-.strike-spark.b { animation-delay: .69s; }
+.strike-item { position: relative; z-index: 1; animation: strike-shake .7s .3s both; }
+.strike-item .gear-art { --art: 132px; box-shadow: 0 0 40px #f2d59644; }
+.strike-back, .strike-front { position: absolute; left: 50%; top: 66px; width: 0; height: 0; pointer-events: none; }
+.strike-back { z-index: 0; } .strike-front { z-index: 2; }
+.strike-card .fx { position: absolute; display: block; background-repeat: no-repeat; pointer-events: none; will-change: transform, opacity; }
+.strike-text { position: relative; z-index: 3; display: grid; place-items: center; min-height: 48px; }
+.strike-glow { position: absolute; left: 50%; top: 50%; width: 0; height: 0; z-index: -1; }
 .strike-result { font: 700 40px var(--font-display, Kanit), sans-serif; color: var(--gold-light, #f2d596); text-shadow: 0 2px 8px #000; opacity: 0; animation: strike-pop .5s .72s both; }
-.strike-card small { color: var(--text, #fff); font-size: 14px; opacity: 0; animation: strike-pop .4s .8s both; }
-@keyframes strike-swing { 0% { transform: translate(30px, -34px) rotate(34deg); opacity: 0; } 16% { opacity: 1; } 30% { transform: translate(0, 4px) rotate(-12deg); } 36% { transform: translate(0, 4px) rotate(-12deg); } 50% { transform: translate(30px, -34px) rotate(34deg); } 64% { transform: translate(0, 4px) rotate(-12deg); } 72% { transform: translate(0, 4px) rotate(-12deg); } 100% { transform: translate(30px, -44px) rotate(40deg); opacity: 0; } }
+.strike-card small { z-index: 3; color: var(--text, #fff); font-size: 14px; opacity: 0; animation: strike-pop .4s .8s both; }
 @keyframes strike-shake { 0%, 100% { transform: none; } 12% { transform: translateY(5px) scale(.97); } 30% { transform: translateY(-2px); } 52% { transform: translateY(7px) scale(.95); } 75% { transform: translateY(0) scale(1.05); } }
-@keyframes strike-flash { 0% { opacity: 0; transform: scale(.4); } 30% { opacity: 1; } 100% { opacity: 0; transform: scale(1.3); } }
 @keyframes strike-pop { 0% { opacity: 0; transform: translateY(8px) scale(.8); } 100% { opacity: 1; transform: none; } }
 @keyframes strike-fade { 0%, 80% { opacity: 1; } 100% { opacity: 0; } }
-.forge-strike[data-reduced] { animation: strike-fade .9s both; } .forge-strike[data-reduced] * { animation: none !important; } .forge-strike[data-reduced] .strike-hammer, .forge-strike[data-reduced] .strike-spark { display: none; } .forge-strike[data-reduced] .strike-result, .forge-strike[data-reduced] small { opacity: 1; }
-
-/* Camp hub (board 06): the bank as a pill row under the title, a "selected map" trip card with the depart button,
-   and the services as one bottom navigation bar. The scene keeps its NPC hotspots and rises above the taller HUD. */
-#lobby-view .lobby-top { flex-wrap: wrap; row-gap: 8px; }
-#lobby-view .lobby-top .lobby-bank { order: 9; flex: 1 0 100%; flex-direction: row; align-items: center; justify-content: flex-start; flex-wrap: wrap; gap: 6px; }
-#lobby-view .lobby-top .lobby-bank span { min-height: 34px; padding: 3px 12px; font-size: 14px; }
-#lobby-view .lobby-top .lobby-bank .icon { width: 18px; height: 18px; }
-#lobby-view .lobby-bottom { flex-direction: column; align-items: stretch; gap: 8px; }
-.lobby-trip { display: grid; gap: 6px; padding: 12px; border: 1px solid #e8f5ff33; border-radius: 20px; background: linear-gradient(180deg, #101e33f2, #0a1424f5); box-shadow: 0 10px 28px #000a; }
-.trip-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-.trip-head > div { display: grid; min-width: 0; } .trip-head small { font-size: 12px; color: var(--veil-cyan, #74d4ef); }
-.trip-head b { font: 600 18px/1.3 var(--font-display, Kanit), sans-serif; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.trip-head #lobby-maps { flex: none; width: 48px; min-height: 48px; padding: 0; display: grid; place-items: center; border-radius: 14px; }
-.trip-head #lobby-maps span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
-.trip-head .trip-team { font-size: 13px; color: var(--hp-mint, #68e5b6); } .trip-head .trip-team[data-ready=false] { color: var(--danger-coral, #ed927f); }
-.lobby-trip #lobby-depart { margin: 0; width: 100%; min-height: 54px; justify-content: center; font-size: 19px; }
-#lobby-view .lobby-menu { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 2px; padding: 4px; border: 1px solid #e8f5ff33; border-radius: 20px; background: linear-gradient(180deg, #101e33f2, #0a1424f5); box-shadow: 0 10px 28px #000a; }
-#lobby-view .lobby-menu .lobby-menu-button { width: 100%; max-width: none; height: auto; min-height: 56px; aspect-ratio: auto; padding: 4px 0; border: 1px solid transparent; border-radius: 14px; background: transparent; box-shadow: none; gap: 1px; font: 600 12px var(--font-display, Kanit), sans-serif; color: var(--text-muted, #bbcadb); }
-#lobby-view .lobby-menu .lobby-menu-button .icon { width: 24px; height: 24px; color: currentColor; }
-#lobby-view .lobby-menu .lobby-menu-button.active { background: #183c50; border-color: var(--veil-cyan, #74d4ef); color: var(--focus, #a3edff); box-shadow: none; }
-#lobby-view .lobby-menu .lobby-menu-button small { top: 0; right: 2px; min-width: 20px; height: 20px; padding: 0 5px; font-size: 11px; }
-@container game (max-width: 760px) and (orientation: portrait) { #lobby-view .lobby-shell { --ground: max(222px, calc(env(safe-area-inset-bottom) + 26cqh)); } }
+.forge-strike[data-reduced] { animation: strike-fade .9s both; } .forge-strike[data-reduced] * { animation: none !important; } .forge-strike[data-reduced] .strike-result, .forge-strike[data-reduced] small { opacity: 1; }
