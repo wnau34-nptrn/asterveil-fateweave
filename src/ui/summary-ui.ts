@@ -2,7 +2,7 @@ import type { ExpeditionState, Item, MapDefinition, Profile, RunOutcome } from '
 import { storyArt } from '../game/visuals/assets';
 import { gearArt } from './equip-art';
 import { icon, type IconName } from './icons';
-import { heroText, itemName, sideQuestText } from './th';
+import { heroText, itemName, rarityText, sideQuestText } from './th';
 import { portrait } from './portraits';
 import type { StoryPanel } from './story-ui';
 
@@ -60,7 +60,7 @@ export class SummaryUI {
     const stat = (glyph: IconName, label: string, value: number) => `<li>${icon(glyph)}<b>${value}</b><small>${label}</small></li>`;
     const haul = ([['ore', 'แร่ดาว', s.kept.ore], ['gold', 'เหรียญทอง', s.kept.gold], ['seal', 'ตราสัญญา', s.kept.seal], ['dust', 'ฝุ่นดาว', s.kept.dust]] as [IconName, string, number][])
       .filter(([, , n]) => n > 0).map(([g, l, n]) => `<li>${icon(g)}<b>+${n}</b><small>${l}</small></li>`).join('');
-    const items = s.items.slice(0, 12).map(i => `<li title="${itemName(i)} Lv${i.level}">${gearArt(i)}<small>${itemName(i)}</small></li>`).join('');
+    const items = s.items.slice(0, 12).map(i => `<li data-rarity="${i.rarity}" title="${itemName(i)} Lv${i.level}"><span class="tile">${gearArt(i)}<span class="tile-lv">Lv${i.level}</span>${i.plus?`<i class="tile-plus">+${i.plus}</i>`:''}</span><small>${itemName(i)}</small><em>${rarityText[i.rarity]}</em></li>`).join('');
     const levels = s.levels.map(l => `<li>${portrait(l.id)}<span><b>${heroText[l.id]?.name ?? l.id}</b><small>Lv${l.from} → <em>Lv${l.to}</em></small></span></li>`).join('');
     const quests = s.quests.map(q => { const kind = this.map.sideQuests.find(x => x.id === q.id)!.kind;
       return `<li class="${q.ready ? 'ready' : ''}"><b>${sideQuestText[kind].name}</b><span class="summary-bar"><i style="width:${Math.round(q.to / q.target * 100)}%"></i></span><small>${q.to}/${q.target}${q.ready ? ' · พร้อมรับรางวัลที่ค่าย!' : ` (+${q.to - q.from})`}</small></li>`; }).join('');
