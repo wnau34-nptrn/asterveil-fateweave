@@ -318,9 +318,12 @@ button:active:not(:disabled) { transform: scale(.97); }
 /* ================= P5: battle on one continuous scene ================= */
 /* The painting fills the whole battle view (framed to the arena by rift-backdrop.ts); the canvas is
    transparent, and every panel floats over the scene as translucent HUD instead of a bordered box. */
-#battle-view { background:
+#battle-view { --bd-img: url('/assets/art/ruins.webp'); background:
   linear-gradient(180deg, #050b14c0 0%, #050b1400 22%, #050b1400 52%, #050b14b3 74%, #050b14e6 100%),
-  url('/assets/art/ruins.webp') var(--bd-x, 50%) var(--bd-y, 0) / var(--bd-w, cover) var(--bd-h, auto) no-repeat, #0a1422; }
+  var(--bd-img) var(--bd-x, 50%) var(--bd-y, 0) / var(--bd-w, cover) var(--bd-h, auto) no-repeat, #0a1422; }
+/* One painting per map (ART-WORLD-BATTLE-BG-001), same 1536×1024 frame and horizon. */
+#battle-view[data-scene="forest"] { --bd-img: url('/assets/art/battle_forest.webp'); }
+#battle-view[data-scene="riftline"] { --bd-img: url('/assets/art/battle_riftline.webp'); }
 #battle-view .battle-layout { border: 0; border-radius: 0; background: transparent; box-shadow: none; overflow: visible; }
 #battle-view .arena, #battle-view .battle-board { background: transparent; }
 #battle-view .masthead { background: transparent; }
@@ -672,7 +675,7 @@ html, body { background: #0a1422; }
 /* Open doorways and found passages: the painted arch or rubble over the floor tile of a walkable neighbour. */
 .puzzle-door.open, .secret-wall.found {
   background: url('/assets/world/puzzle.webp') calc(var(--px) * var(--t) * -1) calc(var(--py) * var(--t) * -1) / calc(var(--t) * 5) calc(var(--t) * 4) no-repeat,
-    url('/assets/world/tileset.webp') calc(var(--fx) * var(--t) * -1) calc(var(--fy) * var(--t) * -1) / calc(var(--t) * 4) calc(var(--t) * 6) no-repeat; }
+    url('/assets/world/tileset.webp') calc(var(--fx) * var(--t) * -1) calc(var(--fy) * var(--t) * -1) / calc(var(--t) * 4) calc(var(--t) * 9) no-repeat; }
 .puzzle-door.open { --px: 3; --py: 2; } .secret-wall.found { --px: 0; --py: 3; }
 /* The rune door shows the stone order in its three sockets. */
 .door-glyph { position: absolute; top: 8%; left: calc(29% + var(--n) * 14.5%); width: calc(var(--t) * .14); height: calc(var(--t) * .14);
@@ -874,3 +877,27 @@ html, body { background: #0a1422; }
 .foe-next { margin-left: auto; padding: 1px 8px; border-radius: 999px; font-size: 11px; background: #ffe08a; color: #1b2433; }
 .foe-ult { margin-left: auto; padding: 1px 8px; border-radius: 999px; font-size: 11px; background: #ffb5c9; color: #2a1620; }
 .foe-ult + .foe-next { margin-left: 6px; }
+
+/* ================= Chapter 1 region map (ART-WORLD-CH1-MAP-001) ================= */
+.region-map { position: relative; width: 100%; border-radius: 14px; overflow: hidden; background: #0d1c2e; }
+.region-art { position: absolute; inset: 0; width: 100%; height: 100%; display: block; user-select: none; -webkit-user-drag: none; }
+/* Fog over the locked northern bands: one cloud layer on its navy backing, feathered only along its lower edge. */
+.region-fog { position: absolute; inset: 0; pointer-events: none; background: url('/assets/world/region_ch1_fog.webp') 0 0 / 100% 100% no-repeat, #0d1c2e;
+  -webkit-mask-image: linear-gradient(180deg, #000 calc(var(--edge) - var(--feather)), #0000 calc(var(--edge) + var(--feather)));
+  mask-image: linear-gradient(180deg, #000 calc(var(--edge) - var(--feather)), #0000 calc(var(--edge) + var(--feather))); }
+.region-node { position: absolute; width: 44px; height: 44px; min-height: 44px; padding: 0; margin: -22px 0 0 -22px; background: none; border: 0; box-shadow: none; display: grid; place-items: center; }
+.region-pin { grid-area: 1 / 1; width: 40px; height: 40px; display: grid; place-items: center; border-radius: 50%; font: 600 17px var(--font-heading); color: var(--gold-light);
+  background: #0d1c2eeb; border: 2px solid #f2d59699; box-shadow: 0 3px 10px #000a; }
+.region-pin .icon { width: 20px; height: 20px; }
+.region-node em { position: absolute; top: 100%; left: 50%; transform: translateX(-50%); margin-top: -2px; max-width: 150px; padding: 3px 9px; border-radius: 8px; white-space: nowrap; font: 600 12px/1.2 var(--font-heading); font-style: normal;
+  color: var(--text); background: #0d1c2ed9; border: 1px solid #e8f5ff26; pointer-events: none; }
+.region-node[data-state="cleared"] .region-pin { border-color: #68e5b6; color: #68e5b6; }
+.region-node[data-state="current"] .region-pin { border-color: #74d4ef; box-shadow: 0 0 0 4px #74d4ef44, 0 3px 10px #000a; }
+.region-node[data-state="locked"] .region-pin { border-color: #e8f5ff55; color: #e8f5ffaa; background: #14243aeb; }
+.region-node[data-state="locked"] em { color: var(--text-muted); }
+.region-node[data-picked="true"] .region-pin { transform: scale(1.12); box-shadow: 0 0 0 4px #f2d59666, 0 3px 10px #000a; }
+.region-node:active:not(:disabled) { transform: none; }
+.region-node:disabled { opacity: 1; cursor: default; }
+.region-card { position: sticky; bottom: 0; margin-top: 8px; padding: 8px 6px 4px; border-radius: 14px; background: linear-gradient(180deg, #0b1626f2, #0b1626); border: 1px solid #f2d59633; box-shadow: 0 -10px 24px #0009; }
+.region-card .map-list { margin: 0; }
+.region-card .camp-note { margin: 6px 4px 0; }

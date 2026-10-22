@@ -141,14 +141,6 @@ export class BattleScene extends Phaser.Scene {
       this.actorPanels.set(enemy.id, slot);
       this.actor(enemy.id, slot, this.view.state.enemies[i]!.hp, true);
     }
-    const intent = this.view.state.intent;
-    const source = this.positions.get(this.view.phase ? this.view.activeActorId ?? '' : intent?.sourceId ?? '');
-    const target = this.positions.get(this.view.phase ? this.view.activeTargetId ?? '' : intent?.targetId ?? '');
-    if (source && target) {
-      bg.lineStyle(2, this.view.phase === 'hero' ? palette.cyan : intent?.kind === 'energy' ? palette.corruption : 0xf08da1, 0.55);
-      const dx = target.x - source.x; const dy = target.y - source.y;
-      for (let t = 0.15; t < 0.8; t += 0.09) bg.lineBetween(source.x + dx * t, source.y + dy * t, source.x + dx * (t + 0.04), source.y + dy * (t + 0.04));
-    }
     this.layer.sort('depth'); this.onLayout();
   }
   private actor(id: string, slot: FieldSlot, hp: number, enemy: boolean): void {
@@ -162,7 +154,7 @@ export class BattleScene extends Phaser.Scene {
     body.setAlpha(hp <= 0 ? 0.28 : involved ? 1 : 0.55);
     info.setAlpha(hp <= 0 ? 0.4 : involved ? 1 : 0.75);
     const g = this.add.graphics(); body.add(g);
-    const selected = this.view!.heroId === id || this.view!.targetId === id;
+    const selected = this.view!.heroId === id;
     // A contact shadow and selection ring share the same foot anchor.
     g.fillStyle(0x07131f, .65); g.fillEllipse(0, 0, size * .65, size * .12);
     if (selected && hp > 0) { g.lineStyle(2, palette.gold); g.strokeEllipse(0, 0, size * .68, size * .14); }

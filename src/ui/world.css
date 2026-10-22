@@ -39,9 +39,9 @@ h1, h2, h3, .primary, .secondary { font-family: var(--font-heading); font-weight
 .floor-layer, .sprite-layer, .fog-layer, .hint-layer { position: absolute; inset: 0; }
 .floor-layer { z-index: 0; } .sprite-layer { z-index: 1; } .fog-layer { z-index: 2; } .hint-layer { z-index: 3; }
 .tile { position: absolute; left: calc(var(--x) * var(--t)); top: calc(var(--y) * var(--t)); width: var(--t); height: var(--t);
-  background: url('/assets/world/tileset.webp') calc(var(--fx) * var(--t) * -1) calc(var(--fy) * var(--t) * -1) / calc(var(--t) * 4) calc(var(--t) * 6) no-repeat; }
+  background: url('/assets/world/tileset.webp') calc(var(--fx) * var(--t) * -1) calc(var(--fy) * var(--t) * -1) / calc(var(--t) * 4) calc(var(--t) * 9) no-repeat; }
 .sprite { position: absolute; left: calc((var(--x) + .5) * var(--t)); top: calc((var(--y) + 1) * var(--t)); transform: translate(-50%, -100%); pointer-events: none; }
-.decor { width: var(--t); height: var(--t); background: url('/assets/world/decor.webp') calc(var(--fx) * var(--t) * -1) calc(var(--fy) * var(--t) * -1) / calc(var(--t) * 6) calc(var(--t) * 4) no-repeat; }
+.decor { width: var(--t); height: var(--t); background: url('/assets/world/decor.webp') calc(var(--fx) * var(--t) * -1) calc(var(--fy) * var(--t) * -1) / calc(var(--t) * 6) calc(var(--t) * 6) no-repeat; }
 .landmark { width: calc(var(--t) * 2); height: calc(var(--t) * 2); background: center bottom / 100% 100% no-repeat; }
 .boss-unit { display: none; position: absolute; left: 50%; bottom: 22%; width: calc(var(--t) * 1.7); height: calc(var(--t) * 1.7); transform: translateX(-50%);
   background: url('/assets/art/units.webp') 100% 100% / 200% 300% no-repeat; filter: drop-shadow(0 6px 8px #08121fb0); }

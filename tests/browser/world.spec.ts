@@ -506,7 +506,7 @@ test('hard mode: a cleared map offers a hard start from the map sheet; the map s
   await page.addInitScript(({ raw, key }) => { if (sessionStorage.getItem('seeded')) return; localStorage.setItem(key, raw); sessionStorage.setItem('seeded', '1'); }, { raw: JSON.stringify({ version: 33, profile, run: null }), key });
   const issues: string[] = []; page.on('pageerror', e => issues.push(e.message));
   await page.goto('./'); await page.locator('#continue').click(); await page.locator('#lobby-maps').click();
-  await expect(page.locator('#map-hard-deep-forest')).toBeDisabled(); await reachable(page, '#map-hard-ruined-border');
+  await expect(page.locator('#map-hard-deep-forest')).toBeDisabled(); await page.locator('#map-node-ruined-border').click(); await reachable(page, '#map-hard-ruined-border');
   await page.locator('#map-hard-ruined-border').click(); await expect(page.locator('#world-view')).toBeVisible();
   await expect(page.locator('#map-name')).toHaveText('ซากชายแดน · ยาก'); expect((await saved(page)).hard).toBe(true);
   expect(issues).toEqual([]);

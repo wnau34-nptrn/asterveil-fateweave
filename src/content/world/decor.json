@@ -262,5 +262,93 @@
       "y": 1
     },
     "zone": "sanctum"
+  },
+  "roots": {
+    "x": 0,
+    "y": 512,
+    "w": 128,
+    "h": 128,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "zone": "forest"
+  },
+  "thorn_arch": {
+    "x": 128,
+    "y": 512,
+    "w": 128,
+    "h": 128,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "zone": "forest"
+  },
+  "teal_fungus": {
+    "x": 256,
+    "y": 512,
+    "w": 128,
+    "h": 128,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "zone": "forest"
+  },
+  "fallen_log": {
+    "x": 384,
+    "y": 512,
+    "w": 128,
+    "h": 128,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "zone": "forest"
+  },
+  "lantern_moss": {
+    "x": 512,
+    "y": 512,
+    "w": 128,
+    "h": 128,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "zone": "forest"
+  },
+  "rift_touched_stump": {
+    "x": 640,
+    "y": 512,
+    "w": 128,
+    "h": 128,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "zone": "forest"
+  },
+  "fern_clump": {
+    "x": 0,
+    "y": 640,
+    "w": 128,
+    "h": 128,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "zone": "forest"
+  },
+  "stone_marker": {
+    "x": 128,
+    "y": 640,
+    "w": 128,
+    "h": 128,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "zone": "forest"
   }
 }

@@ -20,6 +20,8 @@ import { formation } from '../core/world/formation';
 import { formationGrid, formationTap, laneName } from './formation-grid';
 import { actorArt, actorFootOrigins, lobbyArt, lobbyPose, NPC_IDS, npcAtlasUrl, npcBustsUrl, npcStationsUrl, unitsUrl, type LobbyPose, type NpcId } from '../game/visuals/assets';
 import { icon } from './icons';
+import region from '../content/world/region_ch1.json';
+import { worldArtUrl } from '../game/visuals/world-art';
 import { commanderBadge } from './commander-ui';
 import { gearArt, potionArt } from './equip-art';
 import { skillDescription, heroText, npcText, rewardText, shopText, sideQuestText, itemLines, itemName, itemOwner, passiveText, potionText } from './th';
@@ -60,6 +62,8 @@ export class LobbyUI {
   // The forge (2D-4) is a third menu sheet.
   private sheet: Sheet | null = null;
   private readonly huntUI=new HuntPanel();
+  // Map sheet: the node whose card shows (default: the furthest open map).
+  private mapPicked: string | undefined;
   private readonly storageUI:StorageManager;
   private readonly forgeUI:ForgeWorkbench;
   private forgeReturn:string|undefined;
@@ -155,7 +159,8 @@ export class LobbyUI {
         // Chapters: with more than one open map, departing first asks where to go.
         // Chapters: departing goes to the furthest open map; with more than one open, the map button picks another.
         case 'depart': this.host.depart(this.openMaps().at(-1)?.id); break;
-        case 'maps': this.sheet = 'maps'; this.draw(); this.focus(`#map-go-${this.openMaps().at(-1)!.id}`); break;
+        case 'maps': this.sheet = 'maps'; this.mapPicked = undefined; this.draw(); this.regionScroll(); this.focus(`#map-node-${this.openMaps().at(-1)!.id}`); break;
+        case 'pick-map': this.mapPicked = b.dataset.map; this.draw(); this.focus(`#map-node-${b.dataset.map}`); break;
         case 'go': this.sheet = null; this.host.depart(b.dataset.map, b.dataset.hard === 'true'); break;
         case 'home': this.host.home(); break;
         case 'guide': this.host.guide(b.dataset.guide!, b.dataset.skip === 'true'); this.focus('#lobby-depart'); break;
@@ -263,7 +268,7 @@ export class LobbyUI {
   }
   private toastShown = '';
   private draw(): void {
-    const huntScroll=this.sheet==='hunt'&&this.root.querySelector('#boss-target')?this.root.querySelector('.lobby-content')?.scrollTop:undefined;
+    const huntScroll=this.sheet==='hunt'&&this.root.querySelector('#boss-target')||this.sheet==='maps'&&this.root.querySelector('.region-map')?this.root.querySelector('.lobby-content')?.scrollTop:undefined;
     const p = this.view!.profile; const last = p.last;
     const ready = p.party.deployed.length > 0&&!departureBlocked(p);
     // A notice toasts once; redraws (tab switches, picks) keep it settled instead of replaying it.
@@ -296,7 +301,7 @@ export class LobbyUI {
           <button id="lobby-depart" data-lobby="depart" class="primary"${ready ? '' : ' disabled'}>${icon('map')}<span>ออกเดินทาง</span></button></section>
         <nav class="lobby-menu" aria-label="ค่าย">${menu('team', 'tab-team', 'ทีม', `${p.party.deployed.length}+${p.party.reserve.length}`)}${menu('hire', 'tab-hire', 'จ้าง', openOffers ? String(openOffers) : '')}${menu('gear', 'tab-bag', 'กระเป๋า', p.items.length ? String(p.items.length) : '')}${menu('hunt', 'goal', 'ฟาร์ม', '')}${menu('forge', 'tab-forge', 'ช่าง', '')}${menu('brew', 'brew', 'ยา', '')}</nav>
       </footer>`;
-    if(huntScroll!==undefined&&this.sheet==='hunt')this.root.querySelector('.lobby-content')!.scrollTop=huntScroll;
+    if(huntScroll!==undefined&&(this.sheet==='hunt'||this.sheet==='maps'))this.root.querySelector('.lobby-content')!.scrollTop=huntScroll;
   }
 
   // Warm camp scene (ART-UI-LOBBY-001): the brought team gathers around the fire. Front members sit on
@@ -457,11 +462,32 @@ export class LobbyUI {
     return `<div class="lobby-locked" role="status">${icon('seal')}<p><b>ยังไม่เปิด</b><span>ผ่านแผนที่ ${m?.chapter ?? ''} · ${m?.name ?? ''} ก่อน แล้วระบบนี้จะพร้อมใช้</span></p></div>`;
   }
   private openMaps(): MapDefinition[] { const p = this.view?.profile; return p ? this.maps.filter(m => mapUnlocked(p, this.maps, m.id)) : [this.map]; }
+  // Chapter 1 region painting (ART-WORLD-CH1-MAP-001): ten nodes in map order; maps that exist are live, the rest
+  // stay under fog. Node centres and fog bands are image-pixel coordinates, scaled by percentage so the layer
+  // follows the painting at any width; the card of the picked map sits at the bottom with its depart buttons.
+  private regionScroll(): void {
+    const box = this.root.querySelector<HTMLElement>('.lobby-content'), node = this.root.querySelector<HTMLElement>('.region-node[data-state="current"]');
+    if (box && node) box.scrollTop = Math.max(0, node.offsetTop - box.clientHeight / 2);
+  }
   private mapList(p: Profile): string {
-    return `<ul class="hire-list map-list">${this.maps.map((m, i) => { const open = mapUnlocked(p, this.maps, m.id); const done = p.cleared.includes(m.id);
-      return `<li class="map-choice${open ? '' : ' locked'}" data-map="${m.id}"><span class="market-icon" aria-hidden="true">${icon(open ? 'map' : 'seal')}</span>
+    const W = region.width, H = region.height, current = this.openMaps().at(-1)?.id, picked = this.mapPicked ?? current;
+    const state = (m: MapDefinition | undefined): string => !m || !mapUnlocked(p, this.maps, m.id) ? 'locked' : p.cleared.includes(m.id) ? 'cleared' : m.id === current ? 'current' : 'open';
+    const fogged = region.nodes.filter(n => state(this.maps[n.id - 1]) === 'locked');
+    // Locked nodes are always a northern suffix, so their fog bands union into one: opaque above its lower edge.
+    const edge = fogged.length ? Math.max(...fogged.map(n => n.fog[1]!)) : 0;
+    const fog = fogged.length ? `<div class="region-fog" aria-hidden="true" style="--edge:${(edge / H * 100).toFixed(3)}%;--feather:${(32 / H * 100).toFixed(3)}%"></div>` : '';
+    const nodes = region.nodes.map(n => {
+      const m = this.maps[n.id - 1], st = state(m), sel = m?.id === picked;
+      const glyph = st === 'cleared' ? icon('check') : st === 'locked' ? icon('act-lock') : String(m!.chapter);
+      return `<button class="region-node" id="${m ? `map-node-${m.id}` : `map-node-n${n.id}`}" data-state="${st}"${sel ? ' data-picked="true"' : ''} data-lobby="pick-map" data-map="${m?.id ?? ''}"${m ? '' : ' disabled'} style="left:${(n.x / W * 100).toFixed(3)}%;top:${(n.y / H * 100).toFixed(3)}%" aria-label="${n.name}${st === 'cleared' ? ' · ผ่านแล้ว' : st === 'locked' ? ' · ยังล็อก' : ''}"${sel ? ' aria-pressed="true"' : ''}><span class="region-pin">${glyph}</span><em>${n.name}</em></button>`;
+    }).join('');
+    const cards = this.maps.map((m, i) => { const open = mapUnlocked(p, this.maps, m.id); const done = p.cleared.includes(m.id);
+      return `<li class="map-choice${open ? '' : ' locked'}" data-map="${m.id}"${m.id === picked ? '' : ' hidden'}><span class="market-icon" aria-hidden="true">${icon(open ? 'map' : 'seal')}</span>
         <span><b>แผนที่ ${m.chapter} · ${m.name}</b>${done ? ' <em class="map-cleared">ผ่านแล้ว</em>' : ''}<small>${m.summary}</small>${open ? '' : `<small class="hire-status">ผ่าน${this.maps[i - 1]!.name}ก่อน</small>`}</span>
-        <span class="map-actions"><button id="map-go-${m.id}" data-lobby="go" data-map="${m.id}" class="${open ? 'primary' : 'secondary'}"${open ? '' : ' disabled'}>${open ? 'ออกเดินทาง' : 'ยังล็อก'}</button>${open && this.open('hard') ? `<button id="map-hard-${m.id}" data-lobby="go" data-map="${m.id}" data-hard="true" class="secondary map-hard"${hardReason(p, this.maps, m.id) ? ' disabled' : ''}>ยาก${p.clearedHard?.includes(m.id) ? ' ✓' : ''}</button>` : ''}</span></li>`; }).join('')}</ul>${this.open('hard') ? `<p class="camp-note">โหมดยาก: มอนสเตอร์ +${this.map.progression.hardLevels} เลเวล ของดีขึ้น · เปิดเมื่อจบแผนที่นั้นแบบปกติ · จบครั้งแรกได้ทอง ${this.map.progression.hardFirstClear.gold} ตราสัญญา ${this.map.progression.hardFirstClear.seal}</p>` : ''}`;
+        <span class="map-actions"><button id="map-go-${m.id}" data-lobby="go" data-map="${m.id}" class="${open ? 'primary' : 'secondary'}"${open ? '' : ' disabled'}>${open ? 'ออกเดินทาง' : 'ยังล็อก'}</button>${open && this.open('hard') ? `<button id="map-hard-${m.id}" data-lobby="go" data-map="${m.id}" data-hard="true" class="secondary map-hard"${hardReason(p, this.maps, m.id) ? ' disabled' : ''}>ยาก${p.clearedHard?.includes(m.id) ? ' ✓' : ''}</button>` : ''}</span></li>`; }).join('');
+    const hard = this.open('hard') ? `<p class="camp-note">โหมดยาก: มอนสเตอร์ +${this.map.progression.hardLevels} เลเวล ของดีขึ้น · เปิดเมื่อจบแผนที่นั้นแบบปกติ · จบครั้งแรกได้ทอง ${this.map.progression.hardFirstClear.gold} ตราสัญญา ${this.map.progression.hardFirstClear.seal}</p>` : '';
+    return `<div class="region-map" style="aspect-ratio:${W}/${H}"><img class="region-art" src="${worldArtUrl('region_ch1')}" alt="แผนที่บทที่ 1 แอสเตอร์เวล" draggable="false">${fog}${nodes}</div>
+      <div class="region-card"><ul class="hire-list map-list">${cards}</ul>${hard}</div>`;
   }
   // 4A market: gold-coin goods, each with a limit per return home.
   private marketList(p: Profile): string {

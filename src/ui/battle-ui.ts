@@ -21,7 +21,7 @@ const tutorialKey = 'asterveil.fateweave.tutorial.v1';
 
 // The expedition owns persistence: every commit is handed to the session before playback.
 export interface BattleSession {
-  kind: BattleKind; data: EncounterDefinition; entry: BattleEntry; commands: readonly Command[];
+  kind: BattleKind; scene?: 'ruins' | 'forest' | 'riftline'; data: EncounterDefinition; entry: BattleEntry; commands: readonly Command[];
   commit(state: BattleState): boolean;
   leaveLabel(outcome: Outcome): string;
   leave(): void;
@@ -185,7 +185,7 @@ export class BattleUI {
   // Starts or resumes a battle from the expedition's recorded entry and commands.
   open(session: BattleSession): void {
     this.playback.cancel(); this.scene?.stopEffects(); this.presentation = undefined; this.busy = false;
-    this.closeSkill(); this.session = session; this.action = 'attack'; this.targeting = true;
+    this.closeSkill(); this.session = session; this.root.dataset.scene = session.scene ?? 'ruins'; this.action = 'attack'; this.targeting = true;
     this.canvasInputAfterInfo = performance.now() + 250;
     if (this.data !== session.data) { this.scene?.setEncounter(session.data); this.data = session.data; }
     this.state = replay(session.data, session.commands, session.entry);
@@ -509,7 +509,7 @@ export class BattleUI {
       const maxHp = d.heroes.find(h => h.id===t.id)?.maxHp ?? d.enemies.find(e => e.id===t.id)?.maxHp;
       const label = `ใช้${d.skills[this.action].name}กับ${this.action==='prayer' ? 'ทั้งทีม โดยแตะ' : targetKind(this.action)==='enemies' ? 'ศัตรูทุกตัว โดยแตะ' : ''}${actorName(t.id,d)} · เลือด ${hero?.hp ?? enemy?.hp}/${maxHp}${!t.valid ? ` · ${reasonThai(t.reason)}` : ''}`;
       const buttonId = this.action==='prayer' ? t.id===this.heroId ? 'party' : `party-${t.id}` : targetKind(this.action)==='enemies' ? `enemies-${t.id}` : t.id;
-      return `<button id="target-${buttonId}" data-ui="target" data-value="${t.id}" data-actor="${t.id}" class="field-target ${disabled || !t.valid ? '' : 'valid-target'}" style="left:${position.x}px;top:${position.y}px;width:${position.width}px;height:${position.height}px" aria-label="${escapeHtml(label)}" ${disabled || !t.valid ? 'disabled' : ''}><span class="field-marker" aria-hidden="true">${icon(this.action)}</span></button>`;
+      return `<button id="target-${buttonId}" data-ui="target" data-value="${t.id}" data-actor="${t.id}" class="field-target ${disabled || !t.valid ? '' : 'valid-target'}" style="left:${position.x}px;top:${position.y}px;width:${position.width}px;height:${position.height}px" aria-label="${escapeHtml(label)}" ${disabled || !t.valid ? 'disabled' : ''}></button>`;
     }).join(''));
   }
 

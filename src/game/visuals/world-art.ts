@@ -25,16 +25,24 @@ export function cellHash(x: number, y: number, salt = 0): number {
 const walkable = (map: MapDefinition, p: Point) => { const t = tileAt(map, p); return !!t && t.kind !== 'wall'; };
 const floorZone: Record<string, string> = { meadow: 'meadow', thicket: 'thicket', scar: 'scar', sanctum: 'sanctum' };
 
+// Map 2's trail uses its own painted materials (ART-WORLD-TILES-002): trail floor with deeper grove pockets
+// (coarse 4×4-cell blocks so the two never checker) and its own cliff walls; camp and exit keep the shared art.
+const forestTrail = (map: MapDefinition, zoneId: string): boolean => map.id === 'deep-forest' && zoneId === 'thicket';
+const grovePocket = (p: Point): boolean => cellHash(p.x >> 2, p.y >> 2, 3) % 3 === 0;
 export function floorFrame(map: MapDefinition, p: Point): string {
   const tile = tileAt(map, p)!;
   if (tile.kind === 'wall') {
-    // Painted ledge faces south when the party can stand below it.
-    if (walkable(map, { x: p.x, y: p.y + 1 })) return 'wall_face';
-    for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) if ((dx || dy) && walkable(map, { x: p.x + dx, y: p.y + dy })) return 'wall_top';
-    return 'wall_inner';
+    return map.id === 'deep-forest' ? `forest_${wallFace(map, p)}` : wallFace(map, p);
   }
   if (tile.kind === 'camp') return `camp_ground_${cellHash(p.x, p.y) % 2}`;
+  if (forestTrail(map, tile.zoneId)) return `${grovePocket(p) ? 'grove' : 'forest'}_${cellHash(p.x, p.y) % 4}`;
   return `${floorZone[tile.zoneId] ?? 'sanctum'}_${cellHash(p.x, p.y) % 4}`;
+}
+// Painted ledge faces south when the party can stand below it.
+function wallFace(map: MapDefinition, p: Point): string {
+  if (walkable(map, { x: p.x, y: p.y + 1 })) return 'wall_face';
+  for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) if ((dx || dy) && walkable(map, { x: p.x + dx, y: p.y + dy })) return 'wall_top';
+  return 'wall_inner';
 }
 
 export type Landmark = 'landmark_camp' | 'landmark_start' | 'landmark_gate' | 'landmark_gate_open' | 'boss_pedestal' | 'landmark_boss_cleared';
@@ -68,7 +76,8 @@ export function decorAt(map: MapDefinition, p: Point): (Frame & { name: string }
     const near = tileAt(map, { x: p.x + dx, y: p.y + dy })?.kind;
     if (near && near !== 'floor' && near !== 'wall') return undefined;
   }
-  const options = Object.entries(decor).filter(([, f]) => f.zone === tile.zoneId);
+  const zone = forestTrail(map, tile.zoneId) ? 'forest' : tile.zoneId;
+  const options = Object.entries(decor).filter(([, f]) => f.zone === zone);
   if (!options.length) return undefined;
   const [name, frame] = options[cellHash(p.x, p.y, 11) % options.length]!;
   return { name, ...frame };
