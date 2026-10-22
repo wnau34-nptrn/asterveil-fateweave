@@ -1,0 +1,109 @@
+{
+  "files": [
+    {
+      "file": "region_ch1.webp",
+      "size": [
+        1080,
+        2340
+      ],
+      "mode": "RGB",
+      "bytes": 851260,
+      "alphaRange": null
+    },
+    {
+      "file": "region_ch1_fog.webp",
+      "size": [
+        1080,
+        2340
+      ],
+      "mode": "RGBA",
+      "bytes": 439048,
+      "alphaRange": [
+        0,
+        254
+      ]
+    },
+    {
+      "file": "node_review.png",
+      "size": [
+        540,
+        1170
+      ],
+      "mode": "RGB",
+      "bytes": 1475699,
+      "alphaRange": null
+    },
+    {
+      "file": "preview_390.png",
+      "size": [
+        390,
+        960
+      ],
+      "mode": "RGB",
+      "bytes": 495625,
+      "alphaRange": null
+    },
+    {
+      "file": "preview_1366.png",
+      "size": [
+        1366,
+        1050
+      ],
+      "mode": "RGB",
+      "bytes": 537871,
+      "alphaRange": null
+    }
+  ],
+  "routeEndpointsMatch": true,
+  "generatedMapSourceSize": [
+    853,
+    1844
+  ],
+  "generatedFogSourceSize": [
+    853,
+    1844
+  ],
+  "previewRenderer": "Chromium DOM with bundled OFL Noto Sans Thai 400 and Kanit 600",
+  "previewLabelChecks": [
+    {
+      "text": "ซากชายแดน",
+      "fits": true
+    },
+    {
+      "text": "เส้นทางป่าทึบ",
+      "fits": true
+    },
+    {
+      "text": "แนวรอยแยก",
+      "fits": true
+    },
+    {
+      "text": "ทะเลสาบเงาจันทร์",
+      "fits": true
+    },
+    {
+      "text": "เหมืองผลึกร้าง",
+      "fits": true
+    },
+    {
+      "text": "บึงหมอกพิษ",
+      "fits": true
+    },
+    {
+      "text": "ป้อมเถ้าถ่าน",
+      "fits": true
+    },
+    {
+      "text": "นครลอยฟ้าที่ล่มสลาย",
+      "fits": true
+    },
+    {
+      "text": "ทุ่งดาวตก",
+      "fits": true
+    },
+    {
+      "text": "บัลลังก์รอยแยก",
+      "fits": true
+    }
+  ]
+}
