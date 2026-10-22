@@ -1,5 +1,5 @@
-import { actionReason, beginBattle, createBattle, currentHeroId, nextIntentOf, plannedIntents, replay, resolveCommand, targetOptions, targetKind, upcomingTurns, skillPower, guardReductionOf } from '../core/battle/engine';
-import type { ActionId, BattleEntry, BattleState, Command, EncounterDefinition, Intent, Outcome, Resolution, TurnStage } from '../core/battle/types';
+import { actionReason, beginBattle, createBattle, currentHeroId, plannedIntents, replay, resolveCommand, targetOptions, targetKind, upcomingTurns, skillPower, guardReductionOf } from '../core/battle/engine';
+import type { ActionId, BattleEntry, BattleState, Command, EncounterDefinition, Outcome, Resolution, TurnStage } from '../core/battle/types';
 import { gameBounds, shortcutBlocked } from '../platform/keyboard';
 import { sfx } from '../platform/sfx';
 import { BattlePlayback, stageTiming } from './battle-playback';
@@ -31,14 +31,6 @@ const kindLabel: Record<BattleKind, string> = { tutorial: 'ศึกแรก', 
 const shieldReason = 'A front-row enemy shields this target.';
 // Rounds a hero's skill still cools (0 = ready).
 const cooling = (s: BattleState, heroId: string, action: ActionId): number => Math.max(0, (s.heroes.find(h => h.id === heroId)?.cooldowns[action] ?? 0) - s.round);
-// A foe's next move in a few glyphs: kind icon + power + who it aims at (a portrait), or the boss special.
-function intentBadge(next: Intent, stopped: boolean, face: (id: string) => string): string {
-  if (stopped) return '<b>หยุด</b>';
-  if (next.special === 'phase') return '<b>⚠ เปลี่ยนช่วง</b>';
-  if (next.charge) return `${lineIcon('bolt')}<b>รวบรวมพลัง</b>`;
-  const aim = next.all ? '<b class="intent-all">ทั้งทีม</b>' : `<span class="intent-aim">${face(next.targetId)}</span>`;
-  return `${lineIcon(next.kind === 'energy' ? 'bolt' : 'attack')}<b>${next.damage}</b>${aim}`;
-}
 function bannerCopy(turn: TurnStage, d: EncounterDefinition): string {
   const phase = turn.events.find(e => e.type === 'phase'), summons = turn.events.filter(e => e.type === 'summon').length;
   if (phase) return `${d.enemies.find(e => e.id === phase.sourceId)?.displayName ?? actorName(phase.sourceId, d)} เปลี่ยนช่วง${summons ? ` · เรียกลูกน้อง ${summons} ตัว` : ''}`;
@@ -87,7 +79,7 @@ export class BattleUI {
         <div class="battle-layout">
           <section class="battle-board" aria-label="สถานการณ์การต่อสู้">
             <section class="arena" aria-label="สนามต่อสู้ แตะเป้าหมายเพื่อใช้สกิล">
-              <div id="game"></div><div id="field-statuses" aria-label="บัฟและดีบัฟในสนาม"></div><div id="field-intents" role="list" aria-label="ท่าถัดไปของศัตรูแต่ละตัว"></div><div id="field-targets" aria-label="แตะตัวละครในสนามเพื่อใช้สกิล"></div><div id="field-banner" role="status" aria-live="polite" hidden></div>
+              <div id="game"></div><div id="field-statuses" aria-label="บัฟและดีบัฟในสนาม"></div><div id="field-targets" aria-label="แตะตัวละครในสนามเพื่อใช้สกิล"></div><div id="field-banner" role="status" aria-live="polite" hidden></div>
               <div class="formation-labels" aria-hidden="true"><span class="back-label">แนวหลัง</span><span class="front-label">แนวหน้า</span></div>
               <div id="start-screen"></div>
             </section>
@@ -207,7 +199,7 @@ export class BattleUI {
   private get teaching(): boolean { return this.session?.kind === 'tutorial' && this.hintsEnabled; }
   get encounter(): EncounterDefinition { return this.data; }
   sceneReady(): void { this.render(); }
-  fieldLayoutChanged(): void { this.renderFieldTargets(); this.renderFieldStatuses(); this.renderFieldIntents(); this.renderTutorial(); this.placeBackdrop(); }
+  fieldLayoutChanged(): void { this.renderFieldTargets(); this.renderFieldStatuses(); this.renderTutorial(); this.placeBackdrop(); }
   // The battle painting lies behind the whole view, framed to the arena so fighters stand on its floor.
   private placeBackdrop(): void {
     const arena = this.root.querySelector<HTMLElement>('.arena'); if (!arena) return;
@@ -523,22 +515,6 @@ export class BattleUI {
     }).join(''));
   }
 
-  // Every foe on the field shows its next move (A7 step 3): kind, power and target, or a boss phase/charge/all-party
-  // warning. Hidden while a turn is presented; the intent card and forecast keep the full text.
-  private renderFieldIntents(): void {
-    const s = this.displayState, d = this.data;
-    const show = this.scene && this.started && !this.presentation && s.outcome === 'active';
-    this.set('field-intents', !show ? '' : d.enemies.map(e => {
-      const foe = s.enemies.find(v => v.id === e.id)!, slot = this.scene!.actorPanels.get(e.id);
-      const next = foe.hp > 0 && !foe.absent ? nextIntentOf(s, d, e.id) : null;
-      if (!slot || !next) return '';
-      const stopped = foe.interruptedRound === next.round;
-      const label = `${actorName(e.id, d)}: ${stopped ? 'ถูกขัดจังหวะ' : `${intentName(next)} · ${intentTargetThai(next, d)}${next.special || next.charge ? '' : ` · พลัง ${next.damage}`}`}`;
-      const left = slot.x, top = Math.max(2, slot.body.y + 2);
-      return `<span role="listitem" class="field-intent ${next.kind} ${s.intent?.sourceId === e.id ? 'next' : ''} ${next.unstoppable ? 'unstoppable' : ''} ${stopped ? 'stopped' : ''}" data-intent="${e.id}" style="left:${left}px;top:${top}px" aria-label="${escapeHtml(label)}">${intentBadge(next, stopped, id => this.portrait(id))}</span>`;
-    }).join(''));
-  }
-
   // Boss phase, summon, charge and all-party moves get a field banner while their turn is shown.
   private renderFieldBanner(): void {
     const banner = this.root.querySelector<HTMLElement>('#field-banner')!;
@@ -612,7 +588,6 @@ export class BattleUI {
     this.scene?.sync({ state: this.displayState, heroId: this.heroId, targetId: null, phase: this.presentation?.phase, activeActorId: this.actingActor, activeTargetId: this.actingTarget }, repaint);
     this.renderFieldTargets();
     this.renderFieldStatuses();
-    this.renderFieldIntents();
     this.renderFieldBanner();
     this.renderTutorial();
     if (focus) this.root.querySelector<HTMLElement>(`#${focus}`)?.focus({ preventScroll: true });

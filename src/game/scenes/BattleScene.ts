@@ -124,8 +124,8 @@ export class BattleScene extends Phaser.Scene {
     this.positions.clear(); this.actorTargets.clear(); this.actorPanels.clear();
     const w = this.viewW, h = this.viewH;
     const bg = this.add.graphics(); this.layer.add(bg);
-    const { heroSlots, large, centered, trio, escorted } = slotPlan(this.encounter.heroes, this.encounter.enemies, new Set(this.encounter.phases?.flatMap(p => p.summon ?? [])));
-    const slots = fieldSlots(w, h, large, centered, trio, escorted);
+    const plan = slotPlan(this.encounter.heroes, this.encounter.enemies, new Set(this.encounter.phases?.flatMap(p => p.summon ?? [])));
+    const slots = fieldSlots(w, h, plan), heroSlots = plan.heroSlots;
     for (const [i, hero] of this.encounter.heroes.entries()) {
       const slot = slots[heroSlots.get(hero.id)!]!;
       this.actorPanels.set(hero.id, slot);
