@@ -15,7 +15,7 @@
 ## ทำเสร็จวันนี้ (2026-10-22)
 
 - A7 ขั้นที่ 1: หน้าภาพรวม/หุ่นแต่งตัว, กระเป๋าตาราง 5 ช่อง (`#pick-…` แล้วการ์ดมี `#wear-…`/`#compare-…`), ชิปตัวกรอง, หน้ารายละเอียด/เทียบไอเท็ม (mockup 02), ต้นไม้อัศวินแบบโหนด (แตะ = เลือก, `#character-talent-learn` = ลงแต้ม)
-- A7 ขั้นที่ 1: ช่างตีเหล็ก (mockup 05) ทำแล้ว — แถบเหรียญ, แท็บไอคอน, ไอเท็มกลางจอ, ชิปวิธีพัฒนา, การ์ดผลลัพธ์ ▲▼ (id เดิมครบ) ภาพรีวิว: `FORGE_SHOTS=<โฟลเดอร์> npx playwright test tests/browser/forge-shots.spec.ts` สรุปรางวัล (09) ทำแล้ว (`SUMMARY_SHOTS=<โฟลเดอร์> npx playwright test tests/browser/summary-shots.spec.ts`) ป้ายจ้าง (10) ทำแล้ว (`HIRE_SHOTS=<โฟลเดอร์> npx playwright test tests/browser/hire-shots.spec.ts`; ชิปแนวหน้า/หลัง, ปุ่มสุ่มป้ายย้ายไว้เหนือรายการ) เหลือ: → หน้าค่าย+แถบเมนูล่าง (06)
+- A7 ขั้นที่ 1: ช่างตีเหล็ก (mockup 05) ทำแล้ว — แถบเหรียญ, แท็บไอคอน, ไอเท็มกลางจอ, ชิปวิธีพัฒนา, การ์ดผลลัพธ์ ▲▼ (id เดิมครบ) ภาพรีวิว: `FORGE_SHOTS=<โฟลเดอร์> npx playwright test tests/browser/forge-shots.spec.ts` สรุปรางวัล (09) ทำแล้ว (`SUMMARY_SHOTS=<โฟลเดอร์> npx playwright test tests/browser/summary-shots.spec.ts`) ป้ายจ้าง (10) ทำแล้ว (`HIRE_SHOTS=<โฟลเดอร์> npx playwright test tests/browser/hire-shots.spec.ts`; ชิปแนวหน้า/หลัง, ปุ่มสุ่มป้ายย้ายไว้เหนือรายการ) เหลือ: → หน้าค่าย+แถบเมนูล่าง (06) ทำแล้ว (`LOBBY_SHOTS=<โฟลเดอร์> npx playwright test tests/browser/lobby-shots.spec.ts`) — ข้อ 1 ครบ
 - ไอคอนสกิลวาด 33 สกิล (`icon(<skill>)` → `public/assets/ui/skill_icons.webp`; `lineIcon()` สำหรับโหนดที่ไม่ใช่สกิล)
 - บอสแมพ 1 (หัวหน้ากองหน้า + นักล่าเผ่าอสูร) อยู่ใน atlas foes เฟรม 9–10
 - Bolt ใช้ภาพวาดของ Codex (`public/assets/fx/bolt_fx.*`) เจ้าของให้ผ่าน และขยายลูกพลังแล้ว
