@@ -4,7 +4,7 @@ import { effectFamily, effectCaption, type CombatPrefs } from '../visuals/combat
 import { thaiFont } from '../../ui/th';
 import { palette } from '../visuals/palette';
 import { BOLT_ATLAS, boltAtlasUrls, boltCast, boltImpact, type FxContext } from '../visuals/bolt-fx';
-import { fieldSlots, type FieldSlot } from '../visuals/field-layout';
+import { FOE_SLOT_INDEX, fieldSlots, type FieldSlot } from '../visuals/field-layout';
 import { actorArt, actorFootOrigins, artOf, artUrl, mirroredArt, unitsUrl } from '../visuals/assets';
 
 // Device pixels per CSS pixel for the canvas buffer (capped: 3x covers current phones).
@@ -71,7 +71,7 @@ export class BattleScene extends Phaser.Scene {
   preload(): void {
     this.load.image('rift-ruins', artUrl('ruins'));
     this.load.atlas(BOLT_ATLAS, ...boltAtlasUrls());
-    for (const sheet of ['units', 'mercs', 'foes'] as const) this.load.spritesheet(`battle-${sheet}`, unitsUrl(sheet), { frameWidth: 512, frameHeight: 512 });
+    for (const sheet of ['units', 'mercs', 'foes', 'foes2'] as const) this.load.spritesheet(`battle-${sheet}`, unitsUrl(sheet), { frameWidth: 512, frameHeight: 512 });
   }
   create(): void {
     this.ready = true;
@@ -131,7 +131,7 @@ export class BattleScene extends Phaser.Scene {
       this.actor(hero.id, slot, this.view.state.heroes[i]!.hp, false);
     }
     for (const [i, enemy] of this.encounter.enemies.entries()) {
-      const slot = slots[4 + i]!;
+      const slot = slots[FOE_SLOT_INDEX[enemy.id]!]!;
       this.actorPanels.set(enemy.id, slot);
       this.actor(enemy.id, slot, this.view.state.enemies[i]!.hp, true);
     }
@@ -164,7 +164,9 @@ export class BattleScene extends Phaser.Scene {
       g.lineStyle(3, enemy ? 0xf19b9f : palette.cyan); g.strokeEllipse(0, 0, size * .72, size * .16);
     }
     const key = artOf(this.encounter, id); const art = actorArt[key]!;
-    const sprite = this.add.image(0, 0, `battle-${art.sheet}`, art.frame).setOrigin(0.5, actorFootOrigins[key] ?? 1).setDisplaySize(size, size).setFlipX(mirroredArt.has(key));
+    // Large foes stand a quarter taller from the same feet until the 8-actor field (A7 step 3) sizes them.
+    const drawn = enemy && this.encounter.enemies.find(e => e.id === id)?.large ? size * 1.25 : size;
+    const sprite = this.add.image(0, 0, `battle-${art.sheet}`, art.frame).setOrigin(0.5, actorFootOrigins[key] ?? 1).setDisplaySize(drawn, drawn).setFlipX(mirroredArt.has(key));
     body.add(sprite);
     if (hp > 0) this.liven(id, body, sprite, size, enemy, id === this.view!.activeActorId);
     const hitWidth = Math.max(44, Math.min(72, size * .7));

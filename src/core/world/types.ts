@@ -240,10 +240,10 @@ export interface TalentNodeDef { id: TalentNode; name: string; max: number; effe
 export type TalentTree = readonly TalentNodeDef[];
 export type Talents = Partial<Record<TalentNode, number>>;
 // Levels and EXP (2D-1, draft numbers). Each level adds `levelStatPercent` to max HP, Attack and skill
-// power; monsters gain `monsterLevelPercent` HP/damage per level. EXP per enemy = expBase + expPerLevel × L.
+// power; monsters gain `monsterLevelPercent` HP/damage per level. EXP per foe's worth of HP (`expFoeHp` at Lv1) = expBase + expPerLevel × L.
 export interface ProgressionRules {
   levelCap: number; levelStatPercent: number; monsterLevelPercent: number;
-  expBase: number; expPerLevel: number; bossExpMultiplier: number;
+  expBase: number; expPerLevel: number; expFoeHp: number; bossExpMultiplier: number;
   // EXP to go from level L to L+1 = nextBase + nextPerLevel × L.
   nextBase: number; nextPerLevel: number;
   // Catch-up (master plan A2, draft): a new member joins `joinBehind` levels below the company's best; reserve

@@ -1,5 +1,14 @@
 # Codex → Claude handoff
 
+## 2026-10-22 — Claude: A7 step 2, four foe slots (owner decisions in `docs/design/FOUR_FOES_PLAN_TH.md`)
+
+- Foes stand in slots `f1`/`f2` (front row) and `b1`/`b2` (back row), 1–4 per encounter (`EnemyDefinition.row/large/boss`, `encounterProblems`). Owner: front-row foes **screen** the back row; front-lane heroes reach it only with `REACH_SKILLS` (pierce, mark, backstab, challenge), back-lane heroes and area moves reach all (`screened` in `core/battle/engine.ts`).
+- ART-CHAR-FOES-002 merged; runtime atlases `public/assets/art/units_foes2.webp`/`portraits_foes2.webp` (sheet `foes2`, 5 rows; art keys `foe_dew_slime` … `foe_shard_crawler`). Foe kinds with Lv1 numbers: `content/enemies/species.ts` (`foes()`); 11 new sets in `content/encounters/catalog.ts`, pools of all three maps updated, older sets re-slotted (versions bumped).
+- EXP follows total foe HP (`progression.expFoeHp: 95`); hard mode gives traits to the two toughest foes, the boss is the `boss` foe; save v35 (a v34 battle aiming at `raider`/`brute` or no longer replaying restarts from its entry). Advisor (`ui/tutorial.ts`) picks reachable targets, back-lane heroes take the back row first.
+- Fixes found on the way: Acid's Corrode now grows with Support (STATS_DESIGN said so, the resolver did not); `npm run sim` crashed on bag overflow before departing (sim now salvages overflow).
+- Status panel (battle info → สถานะ) shows a foe sheet for enemies (owner 2026-10-22): Lv/HP/SPD/row, whether the front row shields it, and its move cycle with the next move marked (`foeProfile` in `ui/battle-status.ts`).
+- Battle field is a temporary 4-column layout (`field-layout.ts` 8 slots, large foes ×1.25); the real 8-actor field/HUD is A7 step 3. Tests of other rules use `tests/fixtures/open-field.ts`; new rules in `tests/four-slots.test.ts`; route fixtures regenerated.
+
 ## 2026-10-22 — Claude: CLAUDE.md trimmed, session workflow rules
 
 - Owner approved token saving: CLAUDE.md is now ~14 KB (current rules + a systems index); dated phase scopes and the long expedition/SPD notes moved verbatim to `docs/design/SYSTEMS_REFERENCE.md` (line-by-line check: nothing dropped). New section "Session workflow and token economy": one big task per chat, open the next in a new cloud session with the fitting model (Sonnet for UI/art intake/docs, Opus for resolver/save/balance/design), optional Sonnet subagents for routine work, 390px screenshots only.

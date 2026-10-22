@@ -34,7 +34,9 @@ export const guardCounterPower = (data: EncounterDefinition, heroId: string): nu
   capAmount(data, heroId, 'guardcounter') + Math.round((data.heroes.find(h => h.id === heroId)?.attack ?? 0) * GUARD_COUNTER_ATTACK);
 export const tauntReductionOf = (data: EncounterDefinition, heroId: string | undefined): number =>
   fraction((hasPassive(data, heroId, 'stoneskin') ? data.rules.stoneskinReduction : data.rules.tauntReduction) + talentRule(data, heroId, 'tauntReduction'));
-export const corrodeBonusOf = (data: EncounterDefinition, heroId: string | undefined): number => data.rules.corrodeBonus + talentRule(data, heroId, 'corrodeBonus');
+// Corrode grows with the alchemist's Support (docs/STATS_DESIGN.md: Acid Flask "Attack / Support"); talents add flat.
+export const corrodeBonusOf = (data: EncounterDefinition, heroId: string | undefined): number =>
+  Math.round(data.rules.corrodeBonus * (100 + (data.heroes.find(h => h.id === heroId)?.skillBonus ?? 0)) / 100) + talentRule(data, heroId, 'corrodeBonus');
 export const ambushBonusOf = (data: EncounterDefinition, heroId: string | undefined): number => data.rules.ambushBonus + talentRule(data, heroId, 'ambushBonus');
 // Every hero hit adds the target's corrosion and the bard's song of valor while it plays.
 export const hitBonus = (state: BattleState, data: EncounterDefinition, enemyId: string): number =>
@@ -55,6 +57,27 @@ export function targetKind(action: ActionId): TargetKind {
   if (['brace', 'evade', 'taunt', 'valor', 'mend', 'rally', 'spearwall', 'finale', 'bulwark'].includes(action)) return 'self';
   if (['guard', 'ward', 'heal', 'haste', 'sanctuary'].includes(action)) return 'ally';
   return 'enemy';
+}
+// Front-row foes screen the back row (owner 2026-10-22): while a front foe stands, a front-lane hero's single-target
+// move reaches only the front row unless it is a reach skill; back-lane heroes reach every foe and area moves hit all.
+export const REACH_SKILLS: readonly ActionId[] = ['pierce', 'mark', 'backstab', 'challenge'];
+export const ENEMY_SLOTS = ['f1', 'f2', 'b1', 'b2'] as const;
+export function screened(state: BattleState, data: EncounterDefinition, heroId: string, action: ActionId, enemyId: string): boolean {
+  const hero = data.heroes.find(h => h.id === heroId);
+  if (!hero || hero.lane === 'back' || REACH_SKILLS.includes(action) || data.enemies.find(e => e.id === enemyId)?.row !== 'back') return false;
+  return state.enemies.some(e => e.hp > 0 && data.enemies.find(d => d.id === e.id)?.row === 'front');
+}
+// Content check: 1–4 foes in distinct slots, at most two per row, each row matching its slot, every foe with a move.
+export function encounterProblems(data: EncounterDefinition): string[] {
+  const problems: string[] = []; const ids = data.enemies.map(e => e.id);
+  if (!ids.length || ids.length > 4) problems.push(`${data.id}: ${ids.length} foes`);
+  if (new Set(ids).size !== ids.length) problems.push(`${data.id}: repeated slot`);
+  for (const e of data.enemies) {
+    if (!ENEMY_SLOTS.includes(e.id) || e.row !== (e.id.startsWith('f') ? 'front' : 'back')) problems.push(`${data.id}: ${e.id} row ${e.row}`);
+    if (!data.intents.some(i => i.sourceId === e.id)) problems.push(`${data.id}: ${e.id} has no move`);
+  }
+  for (const i of data.intents) if (!ids.includes(i.sourceId as never)) problems.push(`${data.id}: move from missing ${i.sourceId}`);
+  return problems;
 }
 // A scout's ambush strikes harder at an enemy that still has its turn ahead in the current round.
 export const ambushBonus = (state: BattleState, data: EncounterDefinition, enemyId: string, heroId?: string): number =>
@@ -406,7 +429,8 @@ export function targetOptions(state: BattleState, data: EncounterDefinition, her
   return data.enemies.map(e => {
     const actor = state.enemies.find(s => s.id === e.id);
     const reason = unavailable || (!actor || actor.hp <= 0 ? 'This enemy is down.' :
-      action === 'backstab' && nextIntentOf(state, data, e.id)?.targetId === heroId ? 'This enemy is aiming at the scout.' : '');
+      action === 'backstab' && nextIntentOf(state, data, e.id)?.targetId === heroId ? 'This enemy is aiming at the scout.' :
+      screened(state, data, heroId, action, e.id) ? 'A front-row enemy shields this target.' : '');
     return { id: e.id, name: e.name, valid: !reason, reason };
   });
 }

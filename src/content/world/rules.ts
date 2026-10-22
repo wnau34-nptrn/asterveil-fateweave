@@ -50,7 +50,7 @@ export const gameRules: GameRules = {
     starCosts: [{ dupes: 1, ore: 20 }, { dupes: 2, ore: 40 }, { dupes: 3, ore: 70 }, { dupes: 4, ore: 110 }],
   },
   // Draft 2D-1 numbers: a first full run ends near level 9; farming low levels is tapered (world `expPercent`).
-  progression: { levelCap: 10, levelStatPercent: 3, monsterLevelPercent: 7, expBase: 6, expPerLevel: 2, bossExpMultiplier: 3, nextBase: 20, nextPerLevel: 45, joinBehind: 2, reserveExpPercent: 50, catchUpBehind: 2, catchUpPercent: 50, hardLevels: 5, hardFirstClear: { gold: 30, seal: 2 },
+  progression: { levelCap: 10, levelStatPercent: 3, monsterLevelPercent: 7, expBase: 6, expPerLevel: 2, expFoeHp: 95, bossExpMultiplier: 3, nextBase: 20, nextPerLevel: 45, joinBehind: 2, reserveExpPercent: 50, catchUpBehind: 2, catchUpPercent: 50, hardLevels: 5, hardFirstClear: { gold: 30, seal: 2 },
     hardTraits: { thornsPercent: 20, veilguardPercent: 25, enrageBelow: 50, enragePercent: 30, bossMovePercent: 130 }, treeTiers: [1, 5, 10, 15], loadoutSize: 3 },
   talents: talentTrees,
   eventRules: {

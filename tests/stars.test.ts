@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { createBattle, currentHeroId, nextIntentOf, resolveCommand, skillPower, songPower, targetOptions, withParty } from '../src/core/battle/engine';
+import { corrodeBonusOf, createBattle, currentHeroId, nextIntentOf, resolveCommand, skillPower, songPower, targetOptions, withParty } from '../src/core/battle/engine';
 import type { ActionId, BattleState, EncounterDefinition } from '../src/core/battle/types';
-import { veilSiege } from '../src/content/encounters/veil-siege';
+import { veilSiege as siegeBase } from '../src/content/encounters/veil-siege';
+import { openField } from './fixtures/open-field';
+const veilSiege = openField(siegeBase);
 import { encounterById } from '../src/content/encounters/catalog';
 import { chapterOne as map } from '../src/content/world/chapter1';
 import { heroDef, starred } from '../src/core/world/world';
@@ -47,7 +49,7 @@ describe('knight ★3 rally / ★5 stand (Aegis)', () => {
     const r = act(until(createBattle(d), d, 'guardian'), d, 'rally', 'guardian');
     expect([...r.turns[0]!.state.rally!.ids].sort()).toEqual(['guardian', 'healer', 'tracer', 'weaver']);
     // The brute acts next: its Rift Bolt (28) at Eira is reduced 35% and uses up Eira's share only.
-    const bolt = r.turns.find(t => t.actorId === 'brute')!.events.find(e => e.type === 'damage')!;
+    const bolt = r.turns.find(t => t.actorId === 'f1')!.events.find(e => e.type === 'damage')!;
     expect(bolt).toMatchObject({ targetId: 'weaver', amount: Math.ceil(28 * (1 - d.rules.rallyReduction)) });
     expect(r.state.rally!.ids).not.toContain('weaver');
     const s = until(r.state, d, 'guardian');
@@ -67,16 +69,16 @@ describe('duelist ★3 finisher / ★5 keen eye (Lyra)', () => {
   it('finisher doubles below the HP threshold', () => {
     const d = party([['guardian', 1], ['tracer', 3], ['weaver', 1], ['healer', 1]]);
     const s = until(createBattle(d), d, 'tracer'); const power = skillPower(d, 'tracer', 'finisher');
-    const full = act(s, d, 'finisher', 'brute').turns[0]!.events.find(e => e.type === 'damage')!;
+    const full = act(s, d, 'finisher', 'f1').turns[0]!.events.find(e => e.type === 'damage')!;
     expect(full.amount).toBe(power);
-    const low = { ...s, enemies: s.enemies.map(e => e.id === 'brute' ? { ...e, hp: 30 } : e) };
-    expect(act(low, d, 'finisher', 'brute').turns[0]!.events.find(e => e.type === 'damage')!.amount).toBe(Math.min(30, power * 2));
+    const low = { ...s, enemies: s.enemies.map(e => e.id === 'f1' ? { ...e, hp: 30 } : e) };
+    expect(act(low, d, 'finisher', 'f1').turns[0]!.events.find(e => e.type === 'damage')!.amount).toBe(Math.min(30, power * 2));
   });
   it('keen eye makes marks last one round longer', () => {
     const d1 = party([['guardian', 1], ['tracer', 1], ['weaver', 1], ['healer', 1]]);
     const d5 = party([['guardian', 1], ['tracer', 5], ['weaver', 1], ['healer', 1]]);
-    const m1 = act(until(createBattle(d1), d1, 'tracer'), d1, 'mark', 'brute').state.enemies.find(e => e.id === 'brute')!.markedUntil;
-    const m5 = act(until(createBattle(d5), d5, 'tracer'), d5, 'mark', 'brute').state.enemies.find(e => e.id === 'brute')!.markedUntil;
+    const m1 = act(until(createBattle(d1), d1, 'tracer'), d1, 'mark', 'f1').state.enemies.find(e => e.id === 'f1')!.markedUntil;
+    const m5 = act(until(createBattle(d5), d5, 'tracer'), d5, 'mark', 'f1').state.enemies.find(e => e.id === 'f1')!.markedUntil;
     expect(m5).toBe(m1 + 1);
   });
 });
@@ -85,14 +87,14 @@ describe('mage ★3 sigil / ★5 echo (Eira)', () => {
   it('sigil cancels the target’s next energy move, never a physical one', () => {
     const d = party([['guardian', 1], ['tracer', 1], ['weaver', 3], ['healer', 1]]);
     const s = until(createBattle(d), d, 'weaver');
-    expect(nextIntentOf(s, d, 'brute')?.kind).toBe('energy');
-    const r = act(s, d, 'sigil', 'brute');
+    expect(nextIntentOf(s, d, 'f1')?.kind).toBe('energy');
+    const r = act(s, d, 'sigil', 'f1');
     expect(r.events.some(e => e.type === 'sigil')).toBe(true);
-    const next = act(r.state, d, 'attack', 'raider');
-    expect(next.turns.find(t => t.actorId === 'brute')!.events[0]).toMatchObject({ type: 'cancel', cause: 'sealed' });
+    const next = act(r.state, d, 'attack', 'b1');
+    expect(next.turns.find(t => t.actorId === 'f1')!.events[0]).toMatchObject({ type: 'cancel', cause: 'sealed' });
     // In round 2 the raider's next move is physical: sigil only deals damage.
     let t = until(r.state, d, 'weaver'); t = { ...t, heroes: t.heroes.map(h => ({ ...h, cooldowns: {} })) };
-    if (nextIntentOf(t, d, 'raider')?.kind === 'physical') expect(act(t, d, 'sigil', 'raider').events.some(e => e.type === 'sigil')).toBe(false);
+    if (nextIntentOf(t, d, 'b1')?.kind === 'physical') expect(act(t, d, 'sigil', 'b1').events.some(e => e.type === 'sigil')).toBe(false);
   });
   it('echo strengthens a ward on the announced target', () => {
     const d = party([['guardian', 1], ['tracer', 1], ['weaver', 5], ['healer', 1]]);
@@ -107,7 +109,7 @@ describe('priest ★3 sanctuary / ★5 afterglow (Seren)', () => {
   it('sanctuary keeps the ally at 1 HP until the priest’s next turn', () => {
     const d = party([['guardian', 1], ['tracer', 1], ['weaver', 1], ['healer', 3]]);
     let s = until(createBattle(d), d, 'healer');
-    const target = nextIntentOf(s, d, 'raider')!.targetId;
+    const target = nextIntentOf(s, d, 'b1')!.targetId;
     s = { ...s, heroes: s.heroes.map(h => h.id === target ? { ...h, hp: 3 } : h) };
     s = act(s, d, 'sanctuary', target).state;
     expect(s.sanctuary).toEqual({ heroId: 'healer', targetId: target });
@@ -130,7 +132,7 @@ describe('spear ★3 spear wall / ★5 heavy counter (Garran)', () => {
     expect(s.counter).toEqual({ heroId: 'garran', wall: true });
     const counters: number[] = []; let afterFirst: BattleState['counter'] | undefined;
     for (let i = 0; i < 12 && currentHeroId(s, d) !== 'garran'; i++) {
-      const r = act(s, d, 'attack', 'brute');
+      const r = act(s, d, 'attack', 'f1');
       for (const t of r.turns) if (t.events.some(e => e.type === 'counter')) { counters.push(...t.events.filter(e => e.type === 'counter').map(e => e.amount!)); afterFirst ??= t.state.counter; }
       s = r.state;
     }
@@ -143,7 +145,7 @@ describe('spear ★3 spear wall / ★5 heavy counter (Garran)', () => {
   it('heavy counter strengthens brace by half', () => {
     const d = party([['garran', 5], ['tracer', 1], ['weaver', 1], ['healer', 1]]);
     let s = act(until(createBattle(d), d, 'garran'), d, 'brace', 'garran').state; let counter;
-    for (let i = 0; i < 12 && !counter; i++) { const r = act(s, d, 'attack', 'brute'); counter = r.events.find(e => e.type === 'counter'); s = r.state; }
+    for (let i = 0; i < 12 && !counter; i++) { const r = act(s, d, 'attack', 'f1'); counter = r.events.find(e => e.type === 'counter'); s = r.state; }
     expect(counter?.amount).toBe(Math.round(skillPower(d, 'garran', 'brace') * (1 + d.rules.heavyCounter)));
   });
 });
@@ -152,9 +154,9 @@ describe('archer ★3 weak-point shot / ★5 tailwind (Mira)', () => {
   it('weak-point shot adds its bonus on a hindered enemy', () => {
     const d = party([['mira', 3], ['tracer', 1], ['weaver', 1], ['healer', 1]]);
     let s = until(createBattle(d), d, 'mira'); const power = skillPower(d, 'mira', 'weakshot');
-    expect(act(s, d, 'weakshot', 'brute').turns[0]!.events.find(e => e.type === 'damage')!.amount).toBe(power);
-    s = act(s, d, 'hinder', 'brute').state; s = until(s, d, 'mira');
-    expect(act(s, d, 'weakshot', 'brute').turns[0]!.events.find(e => e.type === 'damage')!.amount).toBe(power + d.rules.weakshotBonus);
+    expect(act(s, d, 'weakshot', 'f1').turns[0]!.events.find(e => e.type === 'damage')!.amount).toBe(power);
+    s = act(s, d, 'hinder', 'f1').state; s = until(s, d, 'mira');
+    expect(act(s, d, 'weakshot', 'f1').turns[0]!.events.find(e => e.type === 'damage')!.amount).toBe(power + d.rules.weakshotBonus);
   });
   it('tailwind shortens the volley cooldown', () => {
     const d = party([['mira', 5], ['tracer', 1], ['weaver', 1], ['healer', 1]]);
@@ -167,15 +169,15 @@ describe('alchemist ★3 blast flask / ★5 potent (Toma)', () => {
   it('the blast hits every enemy and corrosion adds to it', () => {
     const d = party([['toma', 3], ['tracer', 1], ['weaver', 1], ['healer', 1]]);
     let s = until(createBattle(d), d, 'toma'); const power = skillPower(d, 'toma', 'bomb');
-    s = act(s, d, 'acid', 'brute').state; s = until(s, d, 'toma');
+    s = act(s, d, 'acid', 'f1').state; s = until(s, d, 'toma');
     const hits = act(s, d, 'bomb', 'enemies').turns[0]!.events.filter(e => e.type === 'damage');
-    expect(hits.find(e => e.targetId === 'raider')!.amount).toBe(power);
-    expect(hits.find(e => e.targetId === 'brute')!.amount).toBe(power + d.rules.corrodeBonus);
+    expect(hits.find(e => e.targetId === 'b1')!.amount).toBe(power);
+    expect(hits.find(e => e.targetId === 'f1')!.amount).toBe(power + corrodeBonusOf(d, 'toma'));
   });
   it('potent corrosion lasts one round longer', () => {
     const d = party([['toma', 5], ['tracer', 1], ['weaver', 1], ['healer', 1]]);
     const s = until(createBattle(d), d, 'toma');
-    expect(act(s, d, 'acid', 'brute').state.enemies.find(e => e.id === 'brute')!.corrodedUntil).toBe(s.round + d.rules.corrodeDuration + 1);
+    expect(act(s, d, 'acid', 'f1').state.enemies.find(e => e.id === 'f1')!.corrodedUntil).toBe(s.round + d.rules.corrodeDuration + 1);
   });
 });
 
@@ -193,13 +195,13 @@ describe('scout ★3 backstab / ★5 shadow counter (Sefa)', () => {
     // Sefa in slot 1 (front) is the raider's first Raking Slash target, and she acts before it.
     const d = party([['guardian', 1], ['sefa', 5], ['weaver', 1], ['healer', 1]]);
     const s = until(createBattle(d), d, 'sefa');
-    expect(nextIntentOf(s, d, 'raider')?.targetId).toBe('sefa');
-    const raider = s.enemies.find(e => e.id === 'raider')!.hp;
+    expect(nextIntentOf(s, d, 'b1')?.targetId).toBe('sefa');
+    const raider = s.enemies.find(e => e.id === 'b1')!.hp;
     const r = act(s, d, 'evade', 'sefa');
-    const turn = r.turns.find(t => t.actorId === 'raider')!;
+    const turn = r.turns.find(t => t.actorId === 'b1')!;
     expect(turn.events.map(e => e.type)).toEqual(['dodge', 'counter']);
-    expect(turn.events[1]).toMatchObject({ sourceId: 'sefa', targetId: 'raider', amount: d.rules.shadowCounter });
-    expect(hp(r.state, 'raider')).toBe(raider - d.rules.shadowCounter);
+    expect(turn.events[1]).toMatchObject({ sourceId: 'sefa', targetId: 'b1', amount: d.rules.shadowCounter });
+    expect(hp(r.state, 'b1')).toBe(raider - d.rules.shadowCounter);
   });
 });
 
@@ -207,17 +209,17 @@ describe('warden ★3 earthshaker / ★5 stoneskin (Brann)', () => {
   it('earthshaker adds its bonus when the target is aiming at Brann', () => {
     const d = party([['brann', 3], ['tracer', 1], ['weaver', 1], ['healer', 1]]);
     let s = until(createBattle(d), d, 'brann'); const power = skillPower(d, 'brann', 'quake');
-    const plain = act(s, d, 'quake', 'brute').turns[0]!.events.find(e => e.type === 'damage')!.amount!;
-    expect(plain).toBe(nextIntentOf(s, d, 'brute')?.targetId === 'brann' ? power + d.rules.quakeBonus : power);
+    const plain = act(s, d, 'quake', 'f1').turns[0]!.events.find(e => e.type === 'damage')!.amount!;
+    expect(plain).toBe(nextIntentOf(s, d, 'f1')?.targetId === 'brann' ? power + d.rules.quakeBonus : power);
     s = act(s, d, 'taunt', 'brann').state; s = until(s, d, 'brann');
     s = { ...s, taunt: { heroId: 'brann', round: s.round } };
-    expect(act(s, d, 'quake', 'brute').turns[0]!.events.find(e => e.type === 'damage')!.amount).toBe(power + d.rules.quakeBonus);
+    expect(act(s, d, 'quake', 'f1').turns[0]!.events.find(e => e.type === 'damage')!.amount).toBe(power + d.rules.quakeBonus);
   });
   it('stoneskin halves the hits drawn by challenge', () => {
     const d = party([['brann', 5], ['tracer', 1], ['weaver', 1], ['healer', 1]]);
     let s = act(until(createBattle(d), d, 'brann'), d, 'taunt', 'brann').state; const hits: { amount: number; damage: number }[] = [];
     for (let i = 0; i < 12 && currentHeroId(s, d) !== 'brann'; i++) {
-      const r = act(s, d, 'attack', 'brute');
+      const r = act(s, d, 'attack', 'f1');
       for (const t of r.turns) for (const e of t.events) if (e.type === 'damage' && e.targetId === 'brann') hits.push({ amount: e.amount!, damage: t.intent!.damage });
       s = r.state;
     }

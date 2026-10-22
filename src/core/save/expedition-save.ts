@@ -64,7 +64,10 @@ export const legacyKeys = ['asterveil.fateweave.battle.v1', 'asterveil.fateweave
 // v32 → v33: hard mode: runs may be `hard`; the profile lists `clearedHard` maps (missing = none).
 // v33 → v34: big skill trees (A6). A big-tree class's old small-tree ranks are refunded, members get the tree nodes their
 // stars used to unlock as `grants`, and members may carry a skill `loadout`. A run whose member lost ranks settles home.
-const SAVE_VERSION = 34;
+// v34 → v35 (A7 step 2): foes stand in four slots (`f1`/`f2`/`b1`/`b2`) instead of `raider`/`brute`, and encounters
+// changed. A battle in progress whose commands aim at `raider`/`brute` or no longer replay restarts from its recorded
+// entry HP (its commands are dropped); nothing else changes.
+const SAVE_VERSION = 35;
 export interface Game { profile: Profile; run: ExpeditionState | null }
 const actions: readonly ActionId[] = ['attack', 'guard', 'bash', 'mark', 'execute', 'bolt', 'ward', 'heal', 'prayer', 'brace', 'pierce', 'hinder', 'volley', 'acid', 'haste', 'ambush', 'evade', 'taunt', 'slam', 'valor', 'mend',
   'rally', 'finisher', 'sigil', 'sanctuary', 'spearwall', 'weakshot', 'bomb', 'backstab', 'quake', 'finale', 'challenge', 'bulwark', 'rouse'];
@@ -268,6 +271,7 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
     if (b.kind === 'elite' && !map.elites.some(e => e.id === source && e.encounterId === data.id && !(s.elitesDefeated as unknown[]).includes(e.id))) throw new Error('Invalid battle');
     if (b.kind === 'event' && !map.events.some(e => e.id === source && !(s.eventsDone as unknown[]).includes(e.id))) throw new Error('Invalid battle');
     if (!['elite', 'event'].includes(b.kind as string) && source !== undefined) throw new Error('Invalid battle');
+    if (version < 35 && Array.isArray(b.commands) && b.commands.some(c => ['raider', 'brute'].includes(obj(c).targetId as string))) b.commands = [];
     if (!Array.isArray(b.commands) || b.commands.length > 5000) throw new Error('Invalid battle');
     const entry = hpRecord(b.entry, lookup, map, roster.deployed, members);
     // Validate against the encounter as fought by this run's deployed party (stars included).
@@ -305,6 +309,8 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
   if (tileAt(map, state.position)?.kind === 'wall' && !passableWall(state, map, state.position)) throw new Error('Invalid position');
   if (boulderAt(state, map, state.position) || openPit(state, map, state.position)) throw new Error('Invalid position');
   if (state.camp && tileAt(map, state.camp)?.kind !== 'camp') throw new Error('Invalid camp');
+  // v34 commands that no longer replay against the four-slot encounters restart the battle from its entry.
+  if (version < 35 && battle?.commands.length) try { battleState(state, map, lookup); } catch { battle.commands = []; }
   // A battle can end on enemy opening turns before any command; apply it now.
   if (battle && battleState(state, map, lookup)!.outcome !== 'active') return finishBattle(state, map, lookup).state;
   return state;
@@ -457,7 +463,7 @@ export function parseGame(raw: string, map: MapDefinition, lookup: EncounterLook
   const envelope = obj(JSON.parse(raw)); const version = envelope.version as number;
   if (version < 21) migrateItems(envelope, map);
   if (version < 34) migrateTrees(envelope, maps.length ? maps : [map]);
-  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
+  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
   const runMap = (v: unknown): MapDefinition => maps.find(m => m.id === obj(v).mapId) ?? map;
   if (version < 5) {
     const home = runMap(envelope.state); const run = parseRun(envelope.state, version, home, lookup);

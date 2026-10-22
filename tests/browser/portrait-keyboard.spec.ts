@@ -73,11 +73,11 @@ test('PC: number selects a skill, mouse commits once, Escape cancels targeting, 
   await page.screenshot({ path: info.outputPath('pc-keyboard-mark.png') });
   await page.keyboard.press('Escape'); await expect(page.locator('#action-mark')).toHaveAttribute('aria-pressed', 'false');
   // Native canvas input and forged DOM events must also respect cancellation.
-  const target = (await page.locator('#target-brute').boundingBox())!;
+  const target = (await page.locator('#target-f1').boundingBox())!;
   await page.mouse.click(target.x + target.width / 2, target.y + target.height / 2);
-  await page.locator('#target-brute').evaluate(el => el.dispatchEvent(new MouseEvent('click', { bubbles: true })));
+  await page.locator('#target-f1').evaluate(el => el.dispatchEvent(new MouseEvent('click', { bubbles: true })));
   expect(await commandCount(page)).toBe(0);
-  await page.keyboard.press('2'); await page.locator('#target-brute').click(); await settle(page);
+  await page.keyboard.press('2'); await page.locator('#target-f1').click(); await settle(page);
   expect(await commandCount(page)).toBe(1); await expect(page.locator('#hero-weaver')).toHaveAttribute('aria-pressed', 'true');
   await page.keyboard.press('3'); await expect(page.locator('#action-ward')).toHaveAttribute('aria-pressed', 'true');
   await page.locator('#skill-details').click(); await expect(page.locator('#skill-popover')).toBeVisible();
@@ -92,7 +92,7 @@ test('PC: held, modified and enemy-stage number keys never queue a command for t
   await page.evaluate(() => document.dispatchEvent(new KeyboardEvent('keydown', { key: '3', code: 'Digit3', repeat: true, bubbles: true })));
   await expect(page.locator('#action-attack')).toHaveAttribute('aria-pressed', 'true');
   await page.clock.install(); await page.clock.pauseAt(new Date(Date.now() + 1000));
-  await page.keyboard.press('2'); await page.locator('#target-brute').click();
+  await page.keyboard.press('2'); await page.locator('#target-f1').click();
   await expect(page.locator('#action-attack')).toBeDisabled();
   await page.keyboard.press('3'); await page.keyboard.press('Escape'); expect(await commandCount(page)).toBe(1);
   await page.clock.runFor(2500); await expect(page.locator('#action-attack')).toBeEnabled();
@@ -107,9 +107,9 @@ test('PC: fourth unlocked skill uses slot 4 and a later cooldown has no valid ta
   const fourth = page.locator('.actions .action').nth(3); const id = await fourth.getAttribute('id');
   await page.keyboard.press('4'); await expect(fourth).toHaveAttribute('aria-pressed', 'true');
   expect(await commandCount(page)).toBe(0); await page.keyboard.press('Escape'); expect(await commandCount(page)).toBe(0);
-  await page.keyboard.press('3'); await page.locator('#target-brute').click(); await settle(page);
+  await page.keyboard.press('3'); await page.locator('#target-f1').click(); await settle(page);
   // Move to the next round without spending another skill on the first hero.
-  for (const id of ['raider', 'brute', 'raider']) { await page.keyboard.press('1'); await page.locator(`#target-${id}`).click(); await settle(page); }
+  for (const id of ['b1', 'f1', 'b1']) { await page.keyboard.press('1'); await page.locator(`#target-${id}`).click(); await settle(page); }
   await expect(page.locator('#action-execute')).toBeVisible(); await page.keyboard.press('3');
   await expect(page.locator('#action-execute')).toHaveAttribute('data-unavailable', 'true');
   await expect(page.locator('#commands')).toContainText('คูลดาวน์');

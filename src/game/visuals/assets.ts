@@ -3,9 +3,10 @@ import type { EncounterDefinition } from '../../core/battle/types';
 // Each actor's full-body frame and portrait live in a 2-column atlas of 512 px cells:
 // the original cast in `units`/`portraits` (3 rows), mercenaries in `units_mercs`/`portraits_mercs`
 // (3 rows) and the Veil Frontier foes in `units_foes`/`portraits_foes` (6 rows), all from
-// ART-CHAR-MERC-ENEMY-001 except the original cast; foes frames 9–10 are the map-1 boss pair (ART-CHAR-BOSS-RUINS-001). Unit and portrait atlases share frame order.
-export type ArtSheet = 'units' | 'mercs' | 'foes';
-export const sheetRows: Readonly<Record<ArtSheet, number>> = { units: 3, mercs: 3, foes: 6 };
+// ART-CHAR-MERC-ENEMY-001 except the original cast; foes frames 9–10 are the map-1 boss pair (ART-CHAR-BOSS-RUINS-001); the four-foe battle set (ART-CHAR-FOES-002) is `units_foes2`/`portraits_foes2`
+// (5 rows, last cell empty). Unit and portrait atlases share frame order.
+export type ArtSheet = 'units' | 'mercs' | 'foes' | 'foes2';
+export const sheetRows: Readonly<Record<ArtSheet, number>> = { units: 3, mercs: 3, foes: 6, foes2: 5 };
 export const actorArt: Readonly<Record<string, { sheet: ArtSheet; frame: number }>> = {
   guardian: { sheet: 'units', frame: 0 }, tracer: { sheet: 'units', frame: 1 }, weaver: { sheet: 'units', frame: 2 },
   healer: { sheet: 'units', frame: 3 }, raider: { sheet: 'units', frame: 4 }, brute: { sheet: 'units', frame: 5 },
@@ -15,20 +16,29 @@ export const actorArt: Readonly<Record<string, { sheet: ArtSheet; frame: number 
   foe_mycon: { sheet: 'foes', frame: 3 }, foe_golem: { sheet: 'foes', frame: 4 }, foe_riftweaver: { sheet: 'foes', frame: 5 },
   foe_matriarch: { sheet: 'foes', frame: 6 }, foe_juggernaut: { sheet: 'foes', frame: 7 }, foe_sentinel: { sheet: 'foes', frame: 8 },
   foe_hunter: { sheet: 'foes', frame: 9 }, foe_captain: { sheet: 'foes', frame: 10 },
+  foe_dew_slime: { sheet: 'foes2', frame: 0 }, foe_ember_slime: { sheet: 'foes2', frame: 1 }, foe_ruin_bat: { sheet: 'foes2', frame: 2 },
+  foe_vargoth_guard: { sheet: 'foes2', frame: 3 }, foe_thorn_beetle: { sheet: 'foes2', frame: 4 }, foe_spore_puff: { sheet: 'foes2', frame: 5 },
+  foe_rift_channeler: { sheet: 'foes2', frame: 6 }, foe_rift_wisp: { sheet: 'foes2', frame: 7 }, foe_shard_crawler: { sheet: 'foes2', frame: 8 },
 };
-// Enemy ids are field positions (`raider` back, `brute` front/large); `art` picks the illustration.
+// Enemy ids are field slots (`f1`/`f2` front, `b1`/`b2` back); `art` picks the illustration (`raider`/`brute` are the
+// original cast's frames).
 // Frames drawn facing the wrong way for their side (party faces right, enemies face left, ART-PLACEMENT-RULES):
 // The original units-atlas raider and the runtime foes-atlas matriarch face right.
 // The incoming matriarch already faces left; intake flipped it when building the runtime atlas.
 export const mirroredArt: ReadonlySet<string> = new Set(['raider', 'foe_matriarch']);
 export const artOf = (data: EncounterDefinition, id: string): string => data.enemies.find(e => e.id === id)?.art ?? id;
+// The illustration that stands for a whole encounter (map elite markers): its boss, else its large foe, else its first.
+export const leaderArt = (data: EncounterDefinition | undefined): string => {
+  const e = data?.enemies.find(f => f.boss) ?? data?.enemies.find(f => f.large) ?? data?.enemies[0];
+  return e?.art ?? 'brute';
+};
 // Anchor the illustrated soles, excluding transparent padding below the feet (delivered frames: footY 496).
 const deliveredSoles = 497 / 512;
 export const actorFootOrigins: Readonly<Record<string, number>> = {
   raider: 493 / 512, brute: 496 / 512,
   ...Object.fromEntries(Object.entries(actorArt).filter(([, a]) => a.sheet !== 'units').map(([id]) => [id, deliveredSoles])),
 };
-type ArtName = 'units' | 'portraits' | 'ruins' | 'units_mercs' | 'portraits_mercs' | 'units_foes' | 'portraits_foes';
+type ArtName = 'units' | 'portraits' | 'ruins' | 'units_mercs' | 'portraits_mercs' | 'units_foes' | 'portraits_foes' | 'units_foes2' | 'portraits_foes2';
 export const artUrl = (name: ArtName): string => `${import.meta.env.BASE_URL}assets/art/${name}.webp`;
 export const unitsUrl = (sheet: ArtSheet): string => artUrl(sheet === 'units' ? 'units' : `units_${sheet}`);
 export const portraitsUrl = (sheet: ArtSheet): string => artUrl(sheet === 'units' ? 'portraits' : `portraits_${sheet}`);

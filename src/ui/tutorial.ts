@@ -12,9 +12,15 @@ export function battleLesson(state:BattleState,data:EncounterDefinition):Lesson|
   return{step:state.commands.length+1,heroId,action,targetId,title,copy:`${actorName(heroId,data)} → ${data.skills[action].name} → ${actorName(targetId,data)} · ${detail}`};
  };
  const living=state.enemies.filter(e=>e.hp>0);
- const target=living.find(e=>e.markedUntil>state.round)??living.find(e=>e.id==='brute')??living[0];
- if(!target)return;
- const attack=()=>make('attack',target.id,'โจมตีพื้นฐาน','แตะศัตรูในสนาม');
+ if(!living.length)return;
+ // Foes this move can reach (front-row foes screen the back row), focus: a marked foe, then the one nearest to falling.
+ const reach=(action:ActionId)=>{const ok=new Set(targetOptions(state,data,heroId,action).filter(t=>t.valid).map(t=>t.id));return living.filter(e=>ok.has(e.id));};
+ // Back-lane heroes take the screened back row that only they can reach while the front row stands.
+ const rear=data.heroes.find(h=>h.id===heroId)?.lane==='back'&&living.some(e=>data.enemies.find(d=>d.id===e.id)?.row==='front');
+ const rank=(e:typeof living[number])=>rear&&data.enemies.find(d=>d.id===e.id)?.row==='back'?0:1;
+ const focus=(list:typeof living)=>list.find(e=>e.markedUntil>state.round)??[...list].sort((a,b)=>rank(a)-rank(b)||a.hp-b.hp)[0];
+ const pick=(action:ActionId)=>focus(reach(action))??focus(reach('attack'))??living[0]!;
+ const attack=()=>make('attack',pick('attack').id,'โจมตีพื้นฐาน','แตะศัตรูในสนาม');
  const intent=state.intent;
  if(heroId==='guardian'){
   if(intent?.kind==='physical')return make('bash',intent.sourceId,'ขัดจังหวะโจมตีกายภาพ',`${actorName(intent.sourceId,data)} จะเสียเทิร์นโจมตีกายภาพถัดไป`)
@@ -23,6 +29,7 @@ export function battleLesson(state:BattleState,data:EncounterDefinition):Lesson|
   return attack();
  }
  if(heroId==='toma'){
+  const target=pick('acid');
   if(!(target.corrodedUntil&&target.corrodedUntil>state.round)){const a=make('acid',target.id,'กรดกัดกร่อนเป้าหลัก',`ทุกการโจมตีของทีม +${corrodeBonusOf(data,heroId)}`);if(a)return a;}
   // Haste the hardest-hitting standing ally so it strikes first next round.
   const ally=[...data.heroes].filter(h=>h.id!==heroId&&state.heroes.some(s=>s.id===h.id&&s.hp>0)).sort((a,b)=>b.attack-a.attack)[0];
@@ -46,27 +53,29 @@ export function battleLesson(state:BattleState,data:EncounterDefinition):Lesson|
  if(heroId==='brann'){
   // Draw the announced hit away from an ally (reduced on him); otherwise slam the main target.
   if(intent&&intent.targetId!==heroId){const t=make('taunt',heroId,'ยั่วยุดึงการโจมตี',`${actorName(intent.sourceId,data)} จะตีแบรนน์แทน${actorName(intent.targetId,data)} และเบาลง ${Math.round(tauntReductionOf(data,heroId)*100)}%`);if(t)return t;}
-  return make('slam',target.id,'ทุบค้อนรูน',`พลัง ${skillPower(data,heroId,'slam')}`)??attack();
+  return make('slam',pick('slam').id,'ทุบค้อนรูน',`พลัง ${skillPower(data,heroId,'slam')}`)??attack();
  }
  if(heroId==='sefa'){
   // Step aside from the announced hit; otherwise ambush an enemy that still has to act this round.
   if(intent?.targetId===heroId){const e=make('evade',heroId,'ก้าวเงาหลบการโจมตี',`${actorName(intent.sourceId,data)} จะตีพลาด`);if(e)return e;}
-  const pending=[target,...living].find(e=>ambushBonus(state,data,e.id,heroId)>0);
-  const pick=pending??target;
-  return make('ambush',pick.id,'จู่โจมก่อนศัตรูขยับ',`พลัง ${skillPower(data,heroId,'ambush')+ambushBonus(state,data,pick.id,heroId)}`)??attack();
+  const options=reach('ambush');
+  const foe=options.find(e=>ambushBonus(state,data,e.id,heroId)>0)??focus(options);
+  return (foe&&make('ambush',foe.id,'จู่โจมก่อนศัตรูขยับ',`พลัง ${skillPower(data,heroId,'ambush')+ambushBonus(state,data,foe.id,heroId)}`))??attack();
  }
  if(heroId==='garran'){
   const front=intent?.kind==='physical'&&data.heroes.find(h=>h.id===intent.targetId)?.lane==='front';
-  if(front)return make('brace',heroId,'ตั้งทวนรอสวน',`${actorName(intent!.sourceId,data)} จะโดนแทงสวน ${skillPower(data,heroId,'brace')}`)??make('pierce',target.id,'แทงทะลวง',`พลัง ${skillPower(data,heroId,'pierce')}`)??attack();
-  return make('pierce',target.id,'แทงทะลวง',`พลัง ${skillPower(data,heroId,'pierce')}`)??attack();
+  if(front)return make('brace',heroId,'ตั้งทวนรอสวน',`${actorName(intent!.sourceId,data)} จะโดนแทงสวน ${skillPower(data,heroId,'brace')}`)??make('pierce',pick('pierce').id,'แทงทะลวง',`พลัง ${skillPower(data,heroId,'pierce')}`)??attack();
+  return make('pierce',pick('pierce').id,'แทงทะลวง',`พลัง ${skillPower(data,heroId,'pierce')}`)??attack();
  }
  if(heroId==='tracer'){
+  // Mark only a foe the duelist can strike next turn.
+  const target=pick('execute');
   if(target.markedUntil>state.round)return make('execute',target.id,'ตีเป้าเดิมเพื่อใช้ตรา',`พลัง ${skillPower(data,heroId,'execute')+data.rules.markedBonus}`)??make('attack',target.id,'ตีเป้าเดิมเพื่อใช้ตรา',`เพิ่มพลัง +${data.rules.markedBonus}`);
   return make('mark',target.id,'ติดตราไว้ใช้รอบถัดไป',`ยังไม่ทำความเสียหาย · ตราอยู่ ${data.rules.markDuration} รอบ`)??attack();
  }
  if(heroId==='weaver'){
   if(intent?.kind==='energy'){const ward=make('ward',intent.targetId,'โล่รับพลังงานก่อนเลือด',`โล่ ${skillPower(data,heroId,'ward')}`);if(ward)return ward;}
-  return make('bolt',target.id,'จอมเวทโจมตีด้วยพลังงาน',`ศรเวทพลัง ${skillPower(data,heroId,'bolt')}`)??attack();
+  return make('bolt',pick('bolt').id,'จอมเวทโจมตีด้วยพลังงาน',`ศรเวทพลัง ${skillPower(data,heroId,'bolt')}`)??attack();
  }
  const injured=state.heroes.filter(h=>h.hp>0).map(h=>({h,missing:data.heroes.find(d=>d.id===h.id)!.maxHp-h.hp})).filter(v=>v.missing>0).sort((a,b)=>b.missing-a.missing);
  if(injured.length){

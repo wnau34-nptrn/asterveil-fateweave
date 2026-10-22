@@ -13,7 +13,7 @@ import { artOf } from '../game/visuals/assets';
 import { riftBackdropFrame } from '../game/visuals/rift-backdrop';
 import { icon } from './icons';
 import { infoTabs, selectInfoTab } from './info-tabs';
-import { unitStatuses } from './battle-status';
+import { foeProfile, unitStatuses } from './battle-status';
 import { battleLesson } from './tutorial';
 import { heroVoice } from './story-ui';
 
@@ -452,7 +452,7 @@ export class BattleUI {
     } else this.set('intent', `<div class="intent-icon">✧</div><div class="intent-copy"><p class="eyebrow">การต่อสู้จบแล้ว</p><h2>${s.outcome === 'victory' ? 'ศัตรูถูกกำจัดแล้ว' : 'ทีมของคุณล้มทั้งหมด'}</h2><p>${s.outcome === 'victory' ? 'เลือดที่เหลือติดตัวไปศึกถัดไป' : 'ทีมจะถอยกลับไปฟื้นตัว'}</p></div>`);
     this.root.querySelector<HTMLElement>('#forecast-details')!.hidden = s.outcome !== 'active';
     this.set('forecast', plannedIntents(s, d).map(next => `<div><b>รอบ ${next.round} · ${actorName(next.sourceId, d)} · ${intentName(next)}</b><small>${actorName(next.targetId, d)} · พลังโจมตี ${next.damage} · ${next.kind === 'energy' ? 'พลังงาน' : 'กายภาพ'}</small></div>`).join('') + (s.outcome === 'active' ? '<p>แผนนี้สมมติว่าตัวละครยังอยู่ เปลี่ยนได้เมื่อมีใครล้ม เป้าหมายจะถูกกำหนดจริงเมื่อถึงเทิร์นศัตรู</p>' : ''));
-    this.set('formation-info', '<div><strong>แนวหน้า 2 · แนวหลัง 2</strong><p>กายภาพโจมตีแนวหน้าก่อน · พลังงานถึงแนวหลังได้ · สกิลเฉพาะมีคูลดาวน์</p></div>');
+    this.set('formation-info', '<div><strong>แนวหน้า 2 · แนวหลัง 2</strong><p>กายภาพโจมตีแนวหน้าก่อน · พลังงานถึงแนวหลังได้ · สกิลเฉพาะมีคูลดาวน์</p></div><div><strong>ศัตรูแถวหน้าบังแถวหลัง</strong><p>ฮีโร่แนวหน้าตีแถวหลังได้เมื่อแถวหน้าล้ม หรือใช้สกิลตีทะลุ (แทงทะลวง ติดตรา แทงข้างหลัง ท้าดวล) · ฮีโร่แนวหลังตีได้ทุกช่อง</p></div>');
     const k = this.session?.kind ?? 'random'; const fallen = s.heroes.filter(h => h.hp <= 0).length;
     this.set('start-screen', !this.started ? `<div class="start-card"><p class="eyebrow">${kindLabel[k]}</p><h2>${escapeHtml(d.name)}</h2><p>${k === 'tutorial' ? 'ศึกแรกของการเดินทาง · คำแนะนำจะพาใช้สกิลของทุกอาชีพ' : k === 'boss' ? 'บอสสลับโจมตีกายภาพและพลังงาน · อ่านแผนแล้วป้องกันให้ทัน' : 'ศัตรูขวางทาง · เลือดที่เหลือติดตัวเข้าศึกนี้'}${fallen ? `<br>${fallen} คนล้มอยู่และไม่ได้ลงมือในศึกนี้` : ''}</p><button data-ui="start" id="start" class="primary" ${!this.scene?.isReady ? 'disabled' : ''}>${this.scene?.isReady ? 'เริ่มต่อสู้ →' : 'กำลังเตรียมสนาม…'}</button></div>` : !this.presentation && s.outcome !== 'active' ? `<div class="result-card" role="status"><p class="eyebrow">${s.outcome === 'victory' ? 'ชนะศึก' : k === 'tutorial' ? 'ลองอีกครั้งได้' : 'ถอยกลับไปตั้งหลัก'}</p><h2>${s.outcome === 'victory' ? 'ชนะแล้ว' : 'แพ้แล้ว'}</h2><p>ยืนอยู่ ${s.heroes.filter(h => h.hp > 0).length} / ${s.heroes.length} คน · เลือดทีม ${s.heroes.reduce((hp, h) => hp + h.hp, 0)}<br>ใช้ ${s.commands.length} คำสั่ง</p>${s.outcome === 'victory' ? `<strong class="party-result">${s.heroes.every(h => h.hp > 0) ? 'รักษาทีมครบทุกคน' : 'ชนะ แต่สมาชิกที่ล้มต้องรอพักที่แคมป์'}</strong>` : ''}<button data-ui="leave" id="leave-battle" class="primary">${escapeHtml(this.session?.leaveLabel(s.outcome) ?? 'ไปต่อ')}</button></div>` : '');
   }
@@ -526,10 +526,19 @@ export class BattleUI {
     }).join(''));
     const id = this.inspectedActorId, def = actors.find(a => a.id === id)!, actor = states.find(a => a.id === id)!;
     const rows = unitStatuses(s, d, id);
-    this.set('status-details', `<div class="status-selected">${this.portrait(id)}<div><h3>${escapeHtml(actorName(id, d))}</h3><p>HP ${actor.hp} / ${def.maxHp}${actor.hp <= 0 ? ' · ล้มแล้ว' : ''}</p></div></div>${rows.length ? (['buff', 'debuff'] as const).map(kind => {
+    this.set('status-details', `<div class="status-selected">${this.portrait(id)}<div><h3>${escapeHtml(actorName(id, d))}</h3><p>HP ${actor.hp} / ${def.maxHp}${actor.hp <= 0 ? ' · ล้มแล้ว' : ''}</p></div></div>${this.foeSheet(id)}${rows.length ? (['buff', 'debuff'] as const).map(kind => {
       const group = rows.filter(r => r.kind === kind);
       return group.length ? `<section class="status-group ${kind}"><h4>${kind === 'buff' ? 'บัฟ · ผลเสริม' : 'ดีบัฟ · ผลลดทอน'}</h4><ul>${group.map(r => `<li data-status="${r.id}"><div class="status-name">${icon(r.icon)}<strong>${escapeHtml(r.name)}</strong></div><p>${escapeHtml(r.detail)}</p><p class="status-duration">${escapeHtml(r.duration)}</p></li>`).join('')}</ul></section>` : '';
     }).join('') : `<p class="status-empty">${actor.hp <= 0 ? 'ยูนิตล้มแล้ว ไม่มีสถานะชั่วคราวที่มีผล' : s.outcome !== 'active' ? 'การต่อสู้จบแล้ว ไม่มีสถานะชั่วคราวที่มีผล' : 'ไม่มีบัฟหรือดีบัฟชั่วคราว'}</p>` }`);
+  }
+
+  // Enemy stats and move cycle in the status panel (presentation only).
+  private foeSheet(id: string): string {
+    const p = foeProfile(this.displayState, this.data, id); if (!p) return '';
+    return `<section class="foe-sheet" aria-label="ข้อมูลศัตรู"><dl class="foe-stats">${p.stats.map(r => `<div><dt>${r.label}</dt><dd>${escapeHtml(r.value)}</dd></div>`).join('')}</dl>`
+      + `<p class="foe-position">${escapeHtml(p.position)}</p><h4>ท่าโจมตี · วนตามลำดับทีละรอบ</h4><ol class="foe-moves">${p.moves.map(m => `<li class="${m.next ? 'next' : ''}" data-kind="${m.kind}">`
+      + `<div class="status-name">${icon(m.kind === 'energy' ? 'bolt' : 'attack')}<strong>${escapeHtml(m.name)}</strong>${m.next ? '<span class="foe-next">ถัดไป</span>' : ''}</div>`
+      + `<p>${m.kind === 'energy' ? 'พลังงาน' : 'กายภาพ'} · พลัง ${m.damage} · เล็ง ${escapeHtml(m.target)}</p></li>`).join('')}</ol></section>`;
   }
 
   private render(repaint = true): void {

@@ -54,10 +54,12 @@ describe('member levels and EXP', () => {
     expect([-4, -3, 0, 2, 3, 4, 5, 6, 9].map(g => expPercent(5 + g, 5))).toEqual([110, 110, 100, 100, 75, 50, 25, 10, 10]);
   });
   it('a victory gives every brought member EXP, level-ups raise max HP and standing HP', () => {
-    const s = randomBattle(); const level = s.battle!.level!; const enemies = battleData(s, map, lookup)!.enemies.length;
+    const s = randomBattle(); const level = s.battle!.level!; const foes = battleData(s, map, lookup)!.enemies; const pr = map.progression;
+    // A7 step 2: EXP follows the foes' total HP, one foe's worth per `expFoeHp` grown by the monster level.
+    const worth = foes.reduce((n, e) => n + e.maxHp, 0) / (pr.expFoeHp * (1 + (level - 1) * pr.monsterLevelPercent / 100));
     const r = win(s); expect(r.event.type).toBe('victory');
     const exp = r.event.type === 'victory' ? r.event.exp! : {};
-    const each = enemies * (map.progression.expBase + map.progression.expPerLevel * level);
+    const each = worth * (map.progression.expBase + map.progression.expPerLevel * level);
     for (const id of [...s.roster.deployed, ...s.roster.reserve]) {
       expect(exp[id]!.gained).toBe(Math.round(each * expPercent(1, level) / 100));
       const m = r.state.members[id]!; expect(m.level).toBe(exp[id]!.level);

@@ -3,7 +3,7 @@ import { chapterOne as map } from '../src/content/world/chapter1';
 import { encounterById as lookup } from '../src/content/encounters/catalog';
 import { newProfile, depart } from '../src/core/world/profile';
 import { heroCatalog, memberDef, starred, wear } from '../src/core/world/world';
-import { createBattle, resolveCommand, withParty } from '../src/core/battle/engine';
+import { createBattle, resolveCommand, targetOptions, withParty } from '../src/core/battle/engine';
 import type { ActionId } from '../src/core/battle/types';
 import { characterSkillMetric, characterStats } from '../src/ui/character-metrics';
 import { characterEquipmentComparison } from '../src/ui/character-view';
@@ -56,7 +56,7 @@ it('displayed damage/healing/song powers agree with real resolver events before 
       const songs: ('valor' | 'mend' | undefined)[] = action==='finale' ? ['valor','mend'] : [undefined];
       for (const song of songs) {
       const b=createBattle(data,{hp:{[id]:1}}); if(song) b.song={heroId:id,action:song};
-      const targetId=action==='heal'||action==='valor'||action==='finale'?id:b.enemies[0]!.id;
+      const targetId=action==='heal'||action==='valor'||action==='finale'?id:targetOptions(b,data,id,action as ActionId).find(t=>t.valid)!.id;
       const metric=characterSkillMetric(action,hero,data), result=resolveCommand(b,data,{beat:b.beat,heroId:id,action:action as ActionId,targetId});
       const type=action==='heal'||song==='mend'?'heal':action==='valor'?'song':'damage';
       const event=result.events.find(e=>e.type===type&&e.sourceId===id)!;

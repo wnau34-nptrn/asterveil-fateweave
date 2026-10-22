@@ -15,7 +15,7 @@ it('crafts a valid fixed starter for every owned class, including bench/support 
 it('pays the displayed cost atomically, allocates one UID, and roundtrips v25 including equipped active-run provenance',()=>{
   const p=setup();expect(weaponCraftCost(map,1)).toEqual({ore:18,dust:4});expect(weaponCraftCost(map,6)).toEqual({ore:48,dust:9});
   let out=craftWeapon(p,map,'guardian',6).profile;expect(out.bank).toEqual({...p.bank,ore:952,dust:991});expect(out.nextItem).toBe(2);expect(out.items[0]!.investment).toBeUndefined();expect(out.items[0]!.levelInvestment).toBeUndefined();expect(out).toEqual(craftWeapon(p,map,'guardian',6).profile);
-  out=equip(out,'guardian',1).profile;const game=depart(out,map,lookup,77);let raw='';saveGame({getItem:()=>null,setItem:(_k,v)=>{raw=v;}},game);expect(JSON.parse(raw).version).toBe(34);expect(parseGame(raw,map,lookup)).toEqual(game);
+  out=equip(out,'guardian',1).profile;const game=depart(out,map,lookup,77);let raw='';saveGame({getItem:()=>null,setItem:(_k,v)=>{raw=v;}},game);expect(JSON.parse(raw).version).toBe(35);expect(parseGame(raw,map,lookup)).toEqual(game);
 });
 it('blocks invalid choices, insufficient funds, full or pending storage and exhausted UIDs before any mutation',()=>{
   const p=setup();for(const level of [0,-1,1.5,11,NaN,Infinity])expect(craftWeapon(p,map,'guardian',level).profile).toBe(p);

@@ -5,12 +5,12 @@ export const veilSiege: EncounterDefinition = {
   id: 'veil-siege', version: 15, level: 8, name: 'ศึกปิดรอยแยก', heroes,
   enemies,
   intents: [
-    { sourceId: 'raider', targetSlot: 1, name: 'Raking Slash', damage: 12, kind: 'physical' },
-    { sourceId: 'brute', targetSlot: 2, name: 'Rift Bolt', damage: 28, kind: 'energy' },
-    { sourceId: 'raider', targetSlot: 0, name: 'Raking Slash', damage: 12, kind: 'physical' },
-    { sourceId: 'brute', targetSlot: 1, name: 'Crushing Blow', damage: 26, kind: 'physical' },
-    { sourceId: 'raider', targetSlot: 3, name: 'Shadow Knife', damage: 14, kind: 'energy' },
-    { sourceId: 'brute', targetSlot: 2, name: 'Rift Bolt', damage: 28, kind: 'energy' },
+    { sourceId: 'b1', targetSlot: 1, name: 'Raking Slash', damage: 12, kind: 'physical' },
+    { sourceId: 'f1', targetSlot: 2, name: 'Rift Bolt', damage: 28, kind: 'energy' },
+    { sourceId: 'b1', targetSlot: 0, name: 'Raking Slash', damage: 12, kind: 'physical' },
+    { sourceId: 'f1', targetSlot: 1, name: 'Crushing Blow', damage: 26, kind: 'physical' },
+    { sourceId: 'b1', targetSlot: 3, name: 'Shadow Knife', damage: 14, kind: 'energy' },
+    { sourceId: 'f1', targetSlot: 2, name: 'Rift Bolt', damage: 28, kind: 'energy' },
   ],
   skills: {
     attack: { name: 'โจมตี', english: 'Attack', icon: '⚔', power: 0, cooldown: 0 },

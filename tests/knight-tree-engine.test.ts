@@ -13,7 +13,7 @@ const knightTurn = (d: EncounterDefinition, s: BattleState = beginBattle(d).stat
 const cast = (d: EncounterDefinition, s: BattleState, action: ActionId, targetId: string) => resolveCommand(s, d, { beat: s.beat, heroId: 'guardian', action, targetId });
 describe('knight big tree skills', () => {
   it('challenge makes that enemy aim its next move at the knight', () => {
-    const d = knight(['challenge']); const s = knightTurn(d); const foe = 'brute';
+    const d = knight(['challenge']); const s = knightTurn(d); const foe = 'f1';
     const r = cast(d, s, 'challenge', foe);
     expect(r.events.some(e => e.type === 'taunt' && e.text === 'Challenge.')).toBe(true);
     const hits = r.events.filter(e => e.type === 'damage' && e.sourceId === foe);
@@ -38,7 +38,7 @@ describe('knight big tree modifiers', () => {
   it('reflect bash stops an energy move for less damage', () => {
     const plain = knight(['bash']); const reflect = knight(['bash'], { caps: { reflectbash: 30 } });
     // The brute's first move is energy (Rift Bolt).
-    const a = cast(plain, knightTurn(plain), 'bash', 'brute'); const b = cast(reflect, knightTurn(reflect), 'bash', 'brute');
+    const a = cast(plain, knightTurn(plain), 'bash', 'f1'); const b = cast(reflect, knightTurn(reflect), 'bash', 'f1');
     const dealt = (r: typeof a) => r.events.find(e => e.type === 'damage' && e.sourceId === 'guardian')!.amount!;
     expect(dealt(b)).toBe(Math.round(dealt(a) * 0.7));
     expect(b.events.some(e => e.type === 'sigil')).toBe(true); expect(a.events.some(e => e.type === 'sigil' || e.type === 'interrupt')).toBe(false);

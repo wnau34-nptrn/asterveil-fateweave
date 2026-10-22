@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest';
-import { createBattle, currentHeroId, previewCommand, replay, resolveCommand } from '../src/core/battle/engine';
+import { createBattle, currentHeroId, previewCommand, replay, resolveCommand, targetOptions } from '../src/core/battle/engine';
 import { veilSiege as data } from '../src/content/encounters/veil-siege';
 import { partyRoutes } from './fixtures/party-routes';
 it.each(partyRoutes)('supports a genuine four-survivor route with exact previews/replay: $hp', ({ moves, hp }) => {
@@ -15,11 +15,13 @@ it.each(partyRoutes)('supports a genuine four-survivor route with exact previews
   expect(new Set(state.commands.map(c => c.heroId)).size).toBe(4);
   expect(replay(data, state.commands)).toEqual(state);
 });
-it.each([['raider','brute'],['brute','raider']])('blind basic attacks lose when prioritizing %s', (first, second) => {
+it.each([['b1','f1'],['f1','b1']])('blind basic attacks lose when prioritizing %s', (first, second) => {
   let state = createBattle(data);
   while (state.outcome === 'active' && state.commands.length < 50) {
     const heroId = currentHeroId(state, data)!;
-    const target = [first,second].find(id => state.enemies.find(e => e.id === id)!.hp > 0)!;
+    // A front-lane hero cannot reach the screened back row, so it falls back to the other target.
+    const valid = targetOptions(state, data, heroId, 'attack').filter(t => t.valid).map(t => t.id);
+    const target = [first,second].find(id => valid.includes(id))!;
     state = resolveCommand(state, data, { beat: state.beat, heroId, action: 'attack', targetId: target }).state;
   }
   expect(state.outcome).toBe('defeat'); expect(state.heroes.every(h => h.hp === 0)).toBe(true);

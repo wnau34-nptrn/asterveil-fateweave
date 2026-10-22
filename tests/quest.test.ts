@@ -47,7 +47,7 @@ describe('rift seal (2 of 3)', () => {
 describe('mini-boss', () => {
   it('stands in the scar off the main path and is optional', () => {
     expect(tileAt(map, golem)?.zoneId).toBe('scar'); expect(golem.forced).toBe(false);
-    expect(lookup(golem.encounterId)?.enemies.find(e => e.id === 'brute')?.art).toBe('foe_golem');
+    expect(lookup(golem.encounterId)?.enemies.find(e => e.id === 'f1')?.art).toBe('foe_golem');
   });
   it('pays its own loot table, epic-or-better gear and EXP ×3, without the optional-elite bonus', () => {
     const dirs: Record<Direction, Point> = { up: { x: 0, y: -1 }, down: { x: 0, y: 1 }, left: { x: -1, y: 0 }, right: { x: 1, y: 0 } };
