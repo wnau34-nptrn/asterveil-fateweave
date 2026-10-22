@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { encounters, encounterById as lookup, slimeNest } from '../src/content/encounters/catalog';
+import { encounters, encounterById as lookup, riftWarden, slimeNest } from '../src/content/encounters/catalog';
 import { veilSiege } from '../src/content/encounters/veil-siege';
 import { mercenaries } from '../src/content/heroes/mercenaries';
 import { SPECIES, foes } from '../src/content/enemies/species';
 import { chapterOne as map } from '../src/content/world/chapter1';
 import { MAPS } from '../src/content/world/maps';
-import { corrodeBonusOf, createBattle, currentHeroId, encounterProblems, previewCommand, replay, resolveCommand, roundOrder, screened, targetOptions, withParty } from '../src/core/battle/engine';
+import { corrodeBonusOf, createBattle, interruptBlock, currentHeroId, encounterProblems, previewCommand, replay, resolveCommand, roundOrder, screened, targetOptions, withParty } from '../src/core/battle/engine';
 import type { ActionId, BattleState, EncounterDefinition } from '../src/core/battle/types';
 import { hardEncounter } from '../src/core/world/world';
 import { depart, newProfile } from '../src/core/world/profile';
@@ -104,5 +104,42 @@ describe('world rules for four slots', () => {
     const geared = withParty(veilSiege, [knight!, duelist!, mage!, { ...merc('toma'), skillBonus: 50 }]);
     expect(corrodeBonusOf(plain, 'toma')).toBe(veilSiege.rules.corrodeBonus);
     expect(corrodeBonusOf(geared, 'toma')).toBe(Math.round(veilSiege.rules.corrodeBonus * 1.5));
+  });
+});
+
+describe('bosses resist control (owner 2026-10-22)', () => {
+  // The warden alone and slow, four physical moves; the fourth is its unstoppable signature.
+  const boss = riftWarden.enemies.find(e => e.boss)!;
+  const d: EncounterDefinition = { ...riftWarden, enemies: [{ ...boss, speed: 10 }],
+    intents: [{ sourceId: 'f1', targetSlot: 0, name: 'Crushing Blow', damage: 20, kind: 'physical' }, { sourceId: 'f1', targetSlot: 1, name: 'Crushing Blow', damage: 20, kind: 'physical' }, { sourceId: 'f1', targetSlot: 1, name: 'Crushing Blow', damage: 20, kind: 'physical' },
+      { sourceId: 'f1', targetSlot: 0, name: 'Crushing Blow', damage: 30, kind: 'physical', unstoppable: true }] };
+  const bash = (s: BattleState) => resolveCommand(until(s, d, 'guardian'), d, { beat: until(s, d, 'guardian').beat, heroId: 'guardian', action: 'bash', targetId: 'f1' });
+  it('a cancelled boss turn makes it steadfast for its next round; bash still hits', () => {
+    let r = bash(createBattle(d)); expect(r.events.map(e => e.type)).toContain('interrupt');
+    // The slow boss's round-1 turn is cancelled later in the round; it is then steadfast through round 3,
+    // so the knight's next bash (ready in round 3) cannot cancel it.
+    let next = until(r.state, d, 'guardian'); expect(next.round).toBe(2); expect(next.enemies[0]!.steadyRound).toBe(3);
+    next = until(resolveCommand(next, d, { beat: next.beat, heroId: 'guardian', action: 'attack', targetId: 'f1' }).state, d, 'guardian'); expect(next.round).toBe(3);
+    const hp = next.enemies[0]!.hp; r = bash(next);
+    expect(r.events.find(e => e.type === 'resist')).toMatchObject({ text: 'Steadfast boss.', targetId: 'f1' });
+    expect(r.events.some(e => e.type === 'interrupt')).toBe(false); expect(r.state.enemies[0]!.hp).toBeLessThan(hp);
+    expect(r.turns.some(t => t.events.some(e => e.type === 'cancel'))).toBe(false);
+    expect(replay(d, r.state.commands)).toEqual(r.state);
+  });
+  it('an unstoppable move cannot be cancelled, and a non-boss is never steadfast', () => {
+    // No earlier cancel: attack three times, then bash into the round-4 signature move.
+    let s = createBattle(d);
+    for (let i = 0; i < 3; i++) { s = until(s, d, 'guardian'); s = resolveCommand(s, d, { beat: s.beat, heroId: 'guardian', action: 'attack', targetId: 'f1' }).state; }
+    const r = bash(s); expect(r.events.find(e => e.type === 'resist')).toMatchObject({ text: 'Unstoppable move.' });
+    const plain = { ...d, enemies: [{ ...d.enemies[0]!, boss: false }] };
+    const first = createBattle(plain); first.enemies[0]!.steadyRound = 1;
+    expect(interruptBlock(first, plain, 'f1', { ...plain.intents[0]!, targetId: 'guardian', beat: 0, round: 1 })).toBe('');
+  });
+  it('every boss has one unstoppable signature and hard mode makes Rift Fury unstoppable', () => {
+    for (const id of ['vanguard-captain', 'elite-briar-lord', 'rift-warden']) {
+      const e = lookup(id)!; const b = e.enemies.find(x => x.boss)!;
+      expect(e.intents.filter(i => i.sourceId === b.id && i.unstoppable), id).toHaveLength(1);
+    }
+    expect(hardEncounter(riftWarden, 'boss', map).intents.find(i => i.name === 'Rift Fury')!.unstoppable).toBe(true);
   });
 });

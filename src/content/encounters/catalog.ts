@@ -3,6 +3,8 @@ import { veilSiege } from './veil-siege';
 import { SPECIES, foes } from '../enemies/species';
 
 // Every encounter reuses the four-hero party, skills and numeric rules.
+// Bosses (`boss`) are steadfast: a cancelled turn shields their next round from Bash/Sigil; their signature move
+// (`unstoppable`) can never be cancelled (owner 2026-10-22).
 // Enemy ids are the four field slots `f1`/`f2` (front row) and `b1`/`b2` (back row); front-row foes screen the back
 // row. New sets are built from `SPECIES` with `foes`; older ones keep their hand-written numbers.
 // `art` picks the illustrated Veil Frontier foe (ART-CHAR-MERC-ENEMY-001); without it the
@@ -27,13 +29,13 @@ export const rearAmbush: EncounterDefinition = {
 // A rift wisp hovers in the warden's back row.
 const wardenWisps = foes(10, [['b1', SPECIES.riftWisp]]);
 export const riftWarden: EncounterDefinition = {
-  ...veilSiege, id: 'rift-warden', version: 14, level: 10, name: 'ศึกผู้คุมรอยแยก',
+  ...veilSiege, id: 'rift-warden', version: 15, level: 10, name: 'ศึกผู้คุมรอยแยก',
   // The Veilbound Sentinel, an ancient gate guardian cracked by the rift (mini boss art: gold and violet).
   enemies: [...wardenWisps.enemies, { id: 'f1', row: 'front', large: true, boss: true, speed: 70, name: 'Rift Warden', displayName: 'ผู้คุมรอยแยก', maxHp: 350, color: 0xd9bf86, art: 'foe_sentinel' }],
   intents: [...wardenWisps.intents,
     { sourceId: 'f1', targetSlot: 1, name: 'Crushing Blow', damage: 29, kind: 'physical' },
     { sourceId: 'f1', targetSlot: 2, name: 'Rift Bolt', damage: 25, kind: 'energy' },
-    { sourceId: 'f1', targetSlot: 0, name: 'Crushing Blow', damage: 33, kind: 'physical' },
+    { sourceId: 'f1', targetSlot: 0, name: 'Crushing Blow', damage: 33, kind: 'physical', unstoppable: true },
     { sourceId: 'f1', targetSlot: 3, name: 'Rift Bolt', damage: 23, kind: 'energy' },
     { sourceId: 'f1', targetSlot: 1, name: 'Raking Slash', damage: 21, kind: 'physical' },
     { sourceId: 'f1', targetSlot: 2, name: 'Rift Bolt', damage: 29, kind: 'energy' },
@@ -145,7 +147,7 @@ export const eliteTuskChief: EncounterDefinition = {
 };
 const lordSpore = foes(8, [['b1', SPECIES.sporePuff]]);
 export const eliteBriarLord: EncounterDefinition = {
-  ...veilSiege, id: 'elite-briar-lord', version: 4, level: 8, name: 'เจ้าป่าหนาม',
+  ...veilSiege, id: 'elite-briar-lord', version: 5, level: 8, name: 'เจ้าป่าหนาม',
   enemies: [...lordSpore.enemies,
     { id: 'f2', row: 'front', speed: 110, name: 'Briar Stalker', displayName: 'ลิงซ์หนามพราง', maxHp: 100, color: 0x397e77, art: 'foe_stalker' },
     { id: 'f1', row: 'front', large: true, speed: 70, boss: true, name: 'Briar Lord', displayName: 'เจ้าป่าหนาม', maxHp: 200, color: 0x397e77, art: 'foe_matriarch' },
@@ -155,7 +157,7 @@ export const eliteBriarLord: EncounterDefinition = {
     { sourceId: 'f1', targetSlot: 3, name: 'Thorn Bloom', damage: 22, kind: 'energy' },
     { sourceId: 'f2', targetSlot: 0, name: 'Thorn Pounce', damage: 18, kind: 'physical' },
     // Signature: a storm of thorns at the back line (energy: Sigil Bind or a Ward answer it).
-    { sourceId: 'f1', targetSlot: 2, name: 'Thorn Storm', damage: 27, kind: 'energy' },
+    { sourceId: 'f1', targetSlot: 2, name: 'Thorn Storm', damage: 27, kind: 'energy', unstoppable: true },
     { sourceId: 'f2', targetSlot: 1, name: 'Thorn Pounce', damage: 19, kind: 'physical' },
     { sourceId: 'f1', targetSlot: 1, name: 'Briar Lash', damage: 22, kind: 'physical' },
   ],
@@ -164,10 +166,10 @@ export const eliteBriarLord: EncounterDefinition = {
 // Mini-boss (3B): a stone golem guarding the scar's side pocket with a rift weaver. Optional, but beating it is one of
 // the rift seal's three objectives. Physical golem, energy weaver.
 export const miniVeilGolem: EncounterDefinition = {
-  ...veilSiege, id: 'mini-veil-golem', version: 5, level: 9, name: 'ยักษ์หินแห่งรอยแผล',
+  ...veilSiege, id: 'mini-veil-golem', version: 6, level: 9, name: 'ยักษ์หินแห่งรอยแผล',
   enemies: [
     { id: 'b1', row: 'back', speed: 105, name: 'Rift Weaver', displayName: 'ผู้ถักรอยแยก', maxHp: 80, color: 0x8a6cc7, art: 'foe_riftweaver' },
-    { id: 'f1', row: 'front', large: true, speed: 65, name: 'Veil Golem', displayName: 'ยักษ์หินรอยแยก', maxHp: 200, color: 0x7d8a96, art: 'foe_golem' },
+    { id: 'f1', row: 'front', large: true, speed: 65, boss: true, name: 'Veil Golem', displayName: 'ยักษ์หินรอยแยก', maxHp: 200, color: 0x7d8a96, art: 'foe_golem' },
   ],
   intents: [
     { sourceId: 'b1', targetSlot: 2, name: 'Rift Needle', damage: 18, kind: 'energy' },
@@ -185,7 +187,7 @@ export const miniVeilGolem: EncounterDefinition = {
 // The captain's own guard holds the second front slot.
 const captainGuard = foes(3, [['f2', SPECIES.vargothGuard]]);
 export const vanguardCaptain: EncounterDefinition = {
-  ...veilSiege, id: 'vanguard-captain', version: 2, level: 3, name: 'หัวหน้ากองหน้าของวาร์กอธ',
+  ...veilSiege, id: 'vanguard-captain', version: 3, level: 3, name: 'หัวหน้ากองหน้าของวาร์กอธ',
   enemies: [...captainGuard.enemies,
     { id: 'b1', row: 'back', speed: 110, name: 'Vargoth Hunter', displayName: 'นักล่าเผ่าอสูร', maxHp: 60, color: 0xee80bd, art: 'foe_hunter' },
     { id: 'f1', row: 'front', large: true, speed: 70, boss: true, name: 'Vanguard Captain', displayName: 'หัวหน้ากองหน้า', maxHp: 170, color: 0x9785f2, art: 'foe_captain' },
@@ -195,7 +197,7 @@ export const vanguardCaptain: EncounterDefinition = {
     { sourceId: 'f1', targetSlot: 1, name: 'Crushing Blow', damage: 16, kind: 'physical' },
     { sourceId: 'b1', targetSlot: 3, name: 'Shadow Knife', damage: 12, kind: 'energy' },
     // Signature: the captain's war cry, an energy blast on the front line (Ward answers it, Bash cannot).
-    { sourceId: 'f1', targetSlot: 0, name: 'War Cry', damage: 22, kind: 'energy' },
+    { sourceId: 'f1', targetSlot: 0, name: 'War Cry', damage: 22, kind: 'energy', unstoppable: true },
     { sourceId: 'b1', targetSlot: 1, name: 'Raking Slash', damage: 11, kind: 'physical' },
     { sourceId: 'f1', targetSlot: 2, name: 'Crushing Blow', damage: 16, kind: 'physical' },
   ],

@@ -50,6 +50,7 @@ export function unitStatuses(s: BattleState, d: EncounterDefinition, id: string)
     if (t && traits.includes('thorns')) add('thorns', 'pierce', 'หนาม', `ตีโดนแล้วผู้ตีเสียเลือด ${t.thornsPercent}% ของความเสียหาย (ไม่ต่ำกว่า 1)`, 'ตลอดศึก');
     if (t && traits.includes('veilguard')) add('veilguard', 'ward', 'เกราะพลังงาน', `รับความเสียหายลดลง ${t.veilguardPercent}% เว้นแต่ติดตราหรือกัดกร่อน`, 'ตลอดศึก');
     if (t && traits.includes('enrage')) add('enrage', 'slam', 'เดือดดาล', `เลือดต่ำกว่า ${t.enrageBelow}% ท่าแรงขึ้น ${t.enragePercent}%`, 'ตลอดศึก');
+    if (d.enemies.find(e => e.id === id)?.boss && (enemy.steadyRound ?? 0) >= s.round) add('steadfast', 'guard', 'ไม่หวั่นไหว', 'เพิ่งถูกขัดจังหวะ · กระแทกโล่และตรึงเวทยกเลิกท่าของรอบนี้ไม่ได้ (ยังสร้างความเสียหาย)', `ถึงท้ายรอบ ${enemy.steadyRound}`);
     if (enemy.markedUntil > s.round) {
       const users = d.heroes.filter(h => h.empoweredByStatuses).map(h => name(h.id)).join(' / ') || 'ผู้มีท่าใช้ตรา';
       add('mark', 'mark', 'ติดตรา', `${users}ใช้โจมตีปกติหรือ${d.skills.execute.name} สร้างความเสียหายเพิ่ม ${d.rules.markedBonus} และใช้ตราหมด`, `${rounds(enemy.markedUntil)} หรือถูกใช้ตราโจมตี`, 'debuff');
@@ -67,7 +68,7 @@ export function unitStatuses(s: BattleState, d: EncounterDefinition, id: string)
 
 // A foe's sheet for the status panel (owner 2026-10-22): its stats, whether the front row shields it, and its moves in
 // the order it uses them (they cycle by round), the next one marked. Presentation only, read from the encounter data.
-export interface FoeMoveRow { name: string; kind: 'physical' | 'energy'; damage: number; target: string; next: boolean }
+export interface FoeMoveRow { name: string; kind: 'physical' | 'energy'; damage: number; target: string; next: boolean; unstoppable: boolean }
 export interface FoeProfile { stats: { label: string; value: string }[]; position: string; moves: FoeMoveRow[] }
 export function foeProfile(s: BattleState, d: EncounterDefinition, id: string): FoeProfile | undefined {
   const def = d.enemies.find(e => e.id === id), foe = s.enemies.find(e => e.id === id);
@@ -78,6 +79,7 @@ export function foeProfile(s: BattleState, d: EncounterDefinition, id: string): 
     { label: 'HP', value: `${Math.max(0, foe.hp)} / ${def.maxHp}` },
     { label: 'SPD', value: String(def.speed) },
     { label: 'ตำแหน่ง', value: `${def.row === 'front' ? 'แถวหน้า' : 'แถวหลัง'}${def.boss ? ' · บอส' : def.large ? ' · ตัวใหญ่' : ''}` },
+    ...(def.boss ? [{ label: 'ทนการควบคุม', value: 'ถูกขัดแล้ว 2 รอบถัดไปขัดซ้ำไม่ได้' }] : []),
   ];
   const position = foe.hp <= 0 ? 'ล้มแล้ว' : def.row === 'back'
     ? standing('front') ? 'ถูกแถวหน้าบัง · ฮีโร่แนวหน้าตีไม่ถึง ยกเว้นสกิลตีทะลุ (แทงทะลวง ติดตรา แทงข้างหลัง ท้าดวล) · ฮีโร่แนวหลังตีได้' : 'แถวหน้าล้มหมดแล้ว · ทุกคนตีถึง'
@@ -88,7 +90,7 @@ export function foeProfile(s: BattleState, d: EncounterDefinition, id: string): 
   const moves = cycle.map((m, i) => {
     const hero = d.heroes[m.targetSlot];
     const target = `${hero ? actorName(hero.id, d) : `ช่อง ${m.targetSlot + 1}`}${m.kind === 'physical' ? ' (กายภาพ: แนวหน้าก่อนถ้ายังยืน)' : ''}`;
-    return { name: intentName({ ...m, targetId: hero?.id ?? '', beat: 0, round: 0 }), kind: m.kind, damage: m.damage, target, next: i === nextIndex };
+    return { name: intentName({ ...m, targetId: hero?.id ?? '', beat: 0, round: 0 }), kind: m.kind, damage: m.damage, target, next: i === nextIndex, unstoppable: !!m.unstoppable };
   });
   return { stats, position, moves };
 }

@@ -45,6 +45,7 @@ export function effectCaption(event: BattleEvent): string {
     case 'sanctuary': return 'เขตคุ้มครอง';
     case 'stand': return 'ยืนหยัด';
     case 'finale': return 'บทส่งท้าย';
+    case 'resist': return event.text === 'Unstoppable move.' ? 'ขัดไม่ได้' : 'ไม่หวั่นไหว';
     case 'outcome': return '';
   }
 }

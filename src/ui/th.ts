@@ -210,6 +210,7 @@ export function eventThai(event: BattleEvent, after: BattleState, data: Encounte
     case 'evade': return `${source}ก้าวเงา · การโจมตีครั้งแรกที่โดนจะพลาด`;
     case 'dodge': return `${target}หลบการโจมตีของ${source}ได้`;
     case 'delay': return `${target}จะลงมือท้ายสุดในรอบถัดไป`;
+    case 'resist': return event.text === 'Unstoppable move.' ? `${target}กำลังใช้ท่าไม้ตาย · ขัดจังหวะไม่ได้` : `${target}ไม่หวั่นไหว · เพิ่งถูกขัดจังหวะ จึงขัดซ้ำไม่ได้จนพ้น 2 รอบ`;
     case 'outcome': return after.outcome === 'victory' ? 'ชนะแล้ว! รอยแยกสงบลง' : 'แพ้แล้ว ลองจัดแผนใหม่';
   }
 }

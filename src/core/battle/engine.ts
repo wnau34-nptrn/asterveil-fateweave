@@ -79,6 +79,16 @@ export function encounterProblems(data: EncounterDefinition): string[] {
   for (const i of data.intents) if (!ids.includes(i.sourceId as never)) problems.push(`${data.id}: move from missing ${i.sourceId}`);
   return problems;
 }
+// Bosses resist control (owner 2026-10-22): a boss (`boss`) whose turn was cancelled is steadfast for its next two rounds,
+// and an `unstoppable` signature move can never be cancelled. Bash and Sigil still deal their damage.
+export function interruptBlock(state: BattleState, data: EncounterDefinition, enemyId: string, intent: Intent | null | undefined): '' | 'steadfast' | 'unstoppable' {
+  if (!intent) return '';
+  if (intent.unstoppable) return 'unstoppable';
+  return data.enemies.find(e => e.id === enemyId)?.boss && intent.round <= (state.enemies.find(e => e.id === enemyId)?.steadyRound ?? 0) ? 'steadfast' : '';
+}
+export const STEADFAST_ROUNDS = 2;
+const resistEvent = (heroId: string, enemyId: string, why: 'steadfast' | 'unstoppable'): BattleEvent =>
+  ({ type: 'resist', sourceId: heroId, targetId: enemyId, text: why === 'unstoppable' ? 'Unstoppable move.' : 'Steadfast boss.' });
 // A scout's ambush strikes harder at an enemy that still has its turn ahead in the current round.
 export const ambushBonus = (state: BattleState, data: EncounterDefinition, enemyId: string, heroId?: string): number =>
   state.order.indexOf(enemyId) > state.turnIndex ? ambushBonusOf(data, heroId) : 0;
@@ -309,6 +319,7 @@ function automaticTurns(state: BattleState, data: EncounterDefinition, turns: Tu
       const g = state.guard; const guard = g && (g.sourceId === actorId || g.uses) && g.targetId === intent.targetId && living(state, g.heroId) ? g : null;
       if (enemy.interruptedRound === state.round) {
         events.push({ type: 'cancel', sourceId: actorId, cause: intent.kind === 'energy' ? 'sealed' : 'interrupted', text: intent.kind === 'energy' ? 'Energy move sealed.' : 'Physical attack interrupted.' });
+        if (data.enemies.find(e => e.id === actorId)?.boss) enemy.steadyRound = state.round + STEADFAST_ROUNDS;
       } else {
         const recipient = state.heroes.find(h => h.id === (guard?.heroId ?? intent.targetId))!;
         if (recipient.evading) {
@@ -489,13 +500,14 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
       const intent = slot && enemyIntent(state, data, command.targetId, slot.round);
       // Knight retribution (talent): a bash that stops a move hits harder. Reflect bash (A6) also stops energy moves
       // but hits for less.
-      const reflect = hasCap(data, hero.id, 'reflectbash'); const stops = intent?.kind === 'physical' || (reflect && intent?.kind === 'energy');
+      const reflect = hasCap(data, hero.id, 'reflectbash'); const blocked = interruptBlock(state, data, command.targetId, intent);
+      const stops = !blocked && (intent?.kind === 'physical' || (reflect && intent?.kind === 'energy'));
       const power = reflect ? Math.round(skill.power * (100 - capAmount(data, hero.id, 'reflectbash')) / 100) : skill.power;
       damage(power + (stops ? capAmount(data, hero.id, 'retribution') : 0));
       if (enemy!.hp > 0 && stops) {
         enemy!.interruptedRound = intent!.round;
         events.push(intent!.kind === 'physical' ? { type: 'interrupt', sourceId: hero.id, targetId: enemy!.id, text: 'Next physical attack interrupted.' } : { type: 'sigil', sourceId: hero.id, targetId: enemy!.id, text: 'Next energy move sealed.' });
-      }
+      } else if (enemy!.hp > 0 && blocked) events.push(resistEvent(hero.id, enemy!.id, blocked));
       break;
     }
     case 'bolt': case 'pierce': damage(skill.power); if (hasCap(data, hero.id, command.action === 'bolt' ? 'splitbolt' : 'pierceline')) splash(skill.power); break;
@@ -508,11 +520,11 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
     case 'quake': damage(skill.power + (nextIntent()?.targetId === hero.id ? data.rules.quakeBonus : 0)); break;
     case 'sigil': {
       // Sigil bind is the mage's answer to energy moves (shield bash only stops physical ones).
-      const intent = nextIntent(); damage(skill.power);
-      if (enemy!.hp > 0 && intent?.kind === 'energy') {
+      const intent = nextIntent(); damage(skill.power); const blocked = interruptBlock(state, data, enemy!.id, intent);
+      if (enemy!.hp > 0 && intent?.kind === 'energy' && !blocked) {
         enemy!.interruptedRound = intent.round;
         events.push({ type: 'sigil', sourceId: hero.id, targetId: enemy!.id, text: 'Next energy move sealed.' });
-      }
+      } else if (enemy!.hp > 0 && intent?.kind === 'energy' && blocked) events.push(resistEvent(hero.id, enemy!.id, blocked));
       break;
     }
     case 'rally':

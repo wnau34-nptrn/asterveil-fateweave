@@ -1,4 +1,4 @@
-import { ambushBonus, corrodeBonusOf, guardReductionOf, tauntReductionOf, currentHeroId, skillPower, targetOptions } from '../core/battle/engine';
+import { ambushBonus, corrodeBonusOf, guardReductionOf, interruptBlock, tauntReductionOf, currentHeroId, skillPower, targetOptions } from '../core/battle/engine';
 import type { ActionId, BattleState, EncounterDefinition } from '../core/battle/types';
 import { actorName } from './th';
 export interface Lesson { step:number; title:string; copy:string; heroId:string; action:ActionId; targetId:string }
@@ -23,7 +23,8 @@ export function battleLesson(state:BattleState,data:EncounterDefinition):Lesson|
  const attack=()=>make('attack',pick('attack').id,'โจมตีพื้นฐาน','แตะศัตรูในสนาม');
  const intent=state.intent;
  if(heroId==='guardian'){
-  if(intent?.kind==='physical')return make('bash',intent.sourceId,'ขัดจังหวะโจมตีกายภาพ',`${actorName(intent.sourceId,data)} จะเสียเทิร์นโจมตีกายภาพถัดไป`)
+  // A steadfast boss or an unstoppable move cannot be bashed: guard it instead.
+  if(intent?.kind==='physical'&&!interruptBlock(state,data,intent.sourceId,intent))return make('bash',intent.sourceId,'ขัดจังหวะโจมตีกายภาพ',`${actorName(intent.sourceId,data)} จะเสียเทิร์นโจมตีกายภาพถัดไป`)
    ??make('guard',intent.targetId,'อ่านแผนศัตรู',`รับแทนและลดพลัง ${intent.damage} → ${Math.ceil(intent.damage*(1-guardReductionOf(data,heroId)))}`)??attack();
   if(intent)return make('guard',intent.targetId,'อ่านแผนศัตรู',`รับแทนและลดพลัง ${intent.damage} → ${Math.ceil(intent.damage*(1-guardReductionOf(data,heroId)))}`)??attack();
   return attack();

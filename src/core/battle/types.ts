@@ -57,7 +57,8 @@ export type EnemySlot = 'f1' | 'f2' | 'b1' | 'b2';
 export interface EnemyDefinition { id: EnemySlot; row: 'front' | 'back'; large?: boolean; boss?: boolean; name: string; displayName?: string; maxHp: number; speed: number; color: number; art?: string; traits?: readonly EnemyTrait[] }
 // Enemy moves aim at a party slot (0-3 in deployment order), not a named hero, so any
 // mercenary in that slot is the target. The resolved hero id is stored on Intent.
-export interface IntentDefinition { sourceId: string; targetSlot: number; name: string; damage: number; kind: 'physical' | 'energy' }
+// `unstoppable` (boss signature moves, owner 2026-10-22): Bash and Sigil cannot cancel it; Guard, Ward and taunts still answer it.
+export interface IntentDefinition { sourceId: string; targetSlot: number; name: string; damage: number; kind: 'physical' | 'energy'; unstoppable?: boolean }
 export interface EncounterDefinition {
   id: string; version: number; name: string;
   // Monster level (2D-1): the content numbers are this level's; `withLevel` rescales a copy.
@@ -80,7 +81,8 @@ export interface EncounterDefinition {
 export interface HeroState { id: string; hp: number; barrier: number; cooldowns: Partial<Record<ActionId, number>>; bossUsedRound?:number; hastedRound?: number; evading?: boolean; evadeExtra?: number; reflect?: { heroId: string; amount: number } }
 // `delayedRound`: an archer's hindering shot sends this enemy to the end of that round's queue.
 // `corrodeBonus`: the bonus of the flask that corroded it (talents can raise it; missing = the rule's value).
-export interface EnemyState { id: string; hp: number; markedUntil: number; interruptedRound?: number; delayedRound?: number; corrodedUntil?: number; corrodeBonus?: number }
+// `steadyRound` (boss steadfast): the last round a boss whose turn was cancelled cannot be interrupted again.
+export interface EnemyState { id: string; hp: number; markedUntil: number; interruptedRound?: number; steadyRound?: number; delayedRound?: number; corrodedUntil?: number; corrodeBonus?: number }
 export interface Intent extends IntentDefinition { targetId: string; beat: number; round: number }
 // Party condition carried in from the expedition. Missing ids start at max HP.
 export interface BattleEntry { hp: Readonly<Record<string, number>> }
@@ -116,7 +118,7 @@ export interface BattleState {
   freeCast?: string[];
 }
 export interface BattleEvent {
-  type: 'damage' | 'guard' | 'mark' | 'barrier' | 'heal' | 'interrupt' | 'cancel' | 'down' | 'outcome' | 'brace' | 'counter' | 'delay' | 'corrode' | 'haste' | 'evade' | 'dodge' | 'taunt' | 'song' | 'rally' | 'sigil' | 'sanctuary' | 'stand' | 'finale';
+  type: 'damage' | 'guard' | 'mark' | 'barrier' | 'heal' | 'interrupt' | 'cancel' | 'down' | 'outcome' | 'brace' | 'counter' | 'delay' | 'corrode' | 'haste' | 'evade' | 'dodge' | 'taunt' | 'song' | 'rally' | 'sigil' | 'sanctuary' | 'stand' | 'finale' | 'resist';
   text: string; sourceId?: string; targetId?: string; amount?: number; absorbed?: number; cause?: 'defeated' | 'interrupted' | 'sealed';
 }
 // One frame per real actor turn. Only Resolution.state is committed/saved.

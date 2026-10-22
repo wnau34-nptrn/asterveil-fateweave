@@ -872,3 +872,5 @@ html, body { background: #0a1422; }
 .foe-moves li p { font-size: 12px; color: #c1d3e5; margin: 2px 0 0; }
 .foe-moves li.next .status-name { color: #ffe08a; }
 .foe-next { margin-left: auto; padding: 1px 8px; border-radius: 999px; font-size: 11px; background: #ffe08a; color: #1b2433; }
+.foe-ult { margin-left: auto; padding: 1px 8px; border-radius: 999px; font-size: 11px; background: #ffb5c9; color: #2a1620; }
+.foe-ult + .foe-next { margin-left: 6px; }

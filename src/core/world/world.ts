@@ -549,7 +549,7 @@ export function hardEncounter(data: EncounterDefinition, kind: BattleKind, map: 
   if (boss) {
     const source = boss;
     const heaviest = [...data.intents].filter(i => i.sourceId === source).sort((a, b) => b.damage - a.damage)[0]!;
-    intents = [...data.intents, { sourceId: source, targetSlot: 0, name: 'Rift Fury', damage: Math.ceil(heaviest.damage * t.bossMovePercent / 100), kind: heaviest.kind === 'physical' ? 'energy' : 'physical' }];
+    intents = [...data.intents, { sourceId: source, targetSlot: 0, name: 'Rift Fury', damage: Math.ceil(heaviest.damage * t.bossMovePercent / 100), kind: heaviest.kind === 'physical' ? 'energy' : 'physical', unstoppable: true }];
   }
   return { ...data, enemies, intents, rules: { ...data.rules, traits: { thornsPercent: t.thornsPercent, veilguardPercent: t.veilguardPercent, enrageBelow: t.enrageBelow, enragePercent: t.enragePercent } } };
 }

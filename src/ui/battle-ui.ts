@@ -537,7 +537,7 @@ export class BattleUI {
     const p = foeProfile(this.displayState, this.data, id); if (!p) return '';
     return `<section class="foe-sheet" aria-label="ข้อมูลศัตรู"><dl class="foe-stats">${p.stats.map(r => `<div><dt>${r.label}</dt><dd>${escapeHtml(r.value)}</dd></div>`).join('')}</dl>`
       + `<p class="foe-position">${escapeHtml(p.position)}</p><h4>ท่าโจมตี · วนตามลำดับทีละรอบ</h4><ol class="foe-moves">${p.moves.map(m => `<li class="${m.next ? 'next' : ''}" data-kind="${m.kind}">`
-      + `<div class="status-name">${icon(m.kind === 'energy' ? 'bolt' : 'attack')}<strong>${escapeHtml(m.name)}</strong>${m.next ? '<span class="foe-next">ถัดไป</span>' : ''}</div>`
+      + `<div class="status-name">${icon(m.kind === 'energy' ? 'bolt' : 'attack')}<strong>${escapeHtml(m.name)}</strong>${m.unstoppable ? '<span class="foe-ult">ท่าไม้ตาย · ขัดไม่ได้</span>' : ''}${m.next ? '<span class="foe-next">ถัดไป</span>' : ''}</div>`
       + `<p>${m.kind === 'energy' ? 'พลังงาน' : 'กายภาพ'} · พลัง ${m.damage} · เล็ง ${escapeHtml(m.target)}</p></li>`).join('')}</ol></section>`;
   }
 
