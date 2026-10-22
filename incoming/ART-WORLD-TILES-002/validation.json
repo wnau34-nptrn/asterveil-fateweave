@@ -1,0 +1,131 @@
+{
+  "tileSize": 128,
+  "previewSize": [
+    390,
+    844
+  ],
+  "runtimeTilePx": 60,
+  "tileFrames": 11,
+  "decorFrames": 8,
+  "tiles": {
+    "forest_0": {
+      "oppositeEdgesExact": true,
+      "meanLuma": 143.42
+    },
+    "forest_1": {
+      "oppositeEdgesExact": true,
+      "meanLuma": 139.3
+    },
+    "forest_2": {
+      "oppositeEdgesExact": true,
+      "meanLuma": 138.98
+    },
+    "forest_3": {
+      "oppositeEdgesExact": true,
+      "meanLuma": 131.88
+    },
+    "grove_0": {
+      "oppositeEdgesExact": true,
+      "meanLuma": 85.97
+    },
+    "grove_1": {
+      "oppositeEdgesExact": true,
+      "meanLuma": 87.65
+    },
+    "grove_2": {
+      "oppositeEdgesExact": true,
+      "meanLuma": 85.49
+    },
+    "grove_3": {
+      "oppositeEdgesExact": true,
+      "meanLuma": 85.07
+    },
+    "forest_wall_top": {
+      "oppositeEdgesExact": true,
+      "meanLuma": 67.62
+    },
+    "forest_wall_face": {
+      "oppositeEdgesExact": true,
+      "meanLuma": 58.88
+    },
+    "forest_wall_inner": {
+      "oppositeEdgesExact": true,
+      "meanLuma": 42.04
+    }
+  },
+  "decor": {
+    "roots": {
+      "transparentPadding": true,
+      "bbox": [
+        8,
+        16,
+        120,
+        124
+      ]
+    },
+    "thorn_arch": {
+      "transparentPadding": true,
+      "bbox": [
+        8,
+        24,
+        120,
+        124
+      ]
+    },
+    "teal_fungus": {
+      "transparentPadding": true,
+      "bbox": [
+        8,
+        19,
+        120,
+        124
+      ]
+    },
+    "fallen_log": {
+      "transparentPadding": true,
+      "bbox": [
+        9,
+        12,
+        118,
+        124
+      ]
+    },
+    "lantern_moss": {
+      "transparentPadding": true,
+      "bbox": [
+        8,
+        17,
+        120,
+        124
+      ]
+    },
+    "rift_touched_stump": {
+      "transparentPadding": true,
+      "bbox": [
+        8,
+        19,
+        120,
+        124
+      ]
+    },
+    "fern_clump": {
+      "transparentPadding": true,
+      "bbox": [
+        8,
+        30,
+        120,
+        124
+      ]
+    },
+    "stone_marker": {
+      "transparentPadding": true,
+      "bbox": [
+        8,
+        12,
+        119,
+        124
+      ]
+    }
+  },
+  "webpBytes": 491276
+}
