@@ -1,0 +1,147 @@
+{
+  "frames": {
+    "dew_slime": {
+      "bounds": [
+        81,
+        182,
+        431,
+        497
+      ],
+      "unitSource": "4cfc2e70-900f-4eb5-8524-6aae2e5cadaf",
+      "portraitSource": "33f5ea47-df9e-4b75-9869-65482a85bf61",
+      "portraitCropTop": 0.25
+    },
+    "ember_slime": {
+      "bounds": [
+        81,
+        227,
+        431,
+        497
+      ],
+      "unitSource": "23c8773b-1927-47ac-98e1-e53f29a12dfb",
+      "portraitSource": "dbaaef10-0b82-4e37-9208-26bd64efa582",
+      "portraitCropTop": 0.22
+    },
+    "ruin_bat": {
+      "bounds": [
+        36,
+        218,
+        476,
+        497
+      ],
+      "unitSource": "3f25a6d5-2103-4c29-8d3a-2dd32a3bc6fd",
+      "portraitSource": "bf6ef4ce-4a9b-4cad-959e-a95356b243c9",
+      "portraitCropTop": 0.22
+    },
+    "vargoth_guard": {
+      "bounds": [
+        16,
+        133,
+        496,
+        497
+      ],
+      "unitSource": "22423c45-0839-418f-afed-5a26b7bb98bd",
+      "portraitSource": "a5d6f56b-9914-4f50-9174-0e976c63b600",
+      "portraitCropTop": 0.12
+    },
+    "thorn_beetle": {
+      "bounds": [
+        36,
+        191,
+        476,
+        497
+      ],
+      "unitSource": "0860abe0-a1f3-43c3-a98c-068ca180e55e",
+      "portraitSource": "3d031c7e-f361-47a1-8a20-53b7a94fb99f",
+      "portraitCropTop": 0.26
+    },
+    "spore_puff": {
+      "bounds": [
+        66,
+        107,
+        446,
+        497
+      ],
+      "unitSource": "cece79ba-7885-4768-9770-299ebd6d18a9",
+      "portraitSource": "ed02d098-025f-4473-9a78-83a54d2b7f43",
+      "portraitCropTop": 0.28
+    },
+    "rift_channeler": {
+      "bounds": [
+        16,
+        68,
+        496,
+        497
+      ],
+      "unitSource": "55c0b7af-f6e6-4146-960d-a282f315f5a8",
+      "portraitSource": "5c3d9c14-fd5c-4942-abf3-33c1d78477e4",
+      "portraitCropTop": 0.1
+    },
+    "rift_wisp": {
+      "bounds": [
+        120,
+        127,
+        391,
+        497
+      ],
+      "unitSource": "d278c658-d69e-4ba8-98b5-1951a619cd84",
+      "portraitSource": "6724a1f0-68f3-46a0-8ee7-1d45852f45a1",
+      "portraitCropTop": 0.3
+    },
+    "shard_crawler": {
+      "bounds": [
+        26,
+        191,
+        486,
+        497
+      ],
+      "unitSource": "2bb38707-7211-4182-a263-cca51ff7f38f",
+      "portraitSource": "a32cfb62-e1fc-4ce5-95e5-b0f4eeca9ba7",
+      "portraitCropTop": 0.24
+    }
+  },
+  "runtimeAtlasBytes": 766030,
+  "allWebpBytes": 1541318,
+  "referenceSHA256": {
+    "public/assets/art/portraits.webp": "f604b5f93c6526130546e194674d37f4e3265083908bbbb3448affadf4b70496",
+    "public/assets/art/portraits_foes.webp": "6835187fdd869807df966d7a3b6120ea3a071fae7b7860161ebf85af43bcde69",
+    "public/assets/art/portraits_mercs.webp": "4e52e0ebad02dee265cba112fecfe162757f4f9d4f596df09771768ade7b9ceb",
+    "public/assets/art/ruins.webp": "a06f910462fb69b1a38d94c1a169274f8b28d559286ec6ae3fc7ac3db61e7868",
+    "public/assets/art/units.webp": "d205b57d8a4082290a3a2e5a415407245106f948033cf3c66eb7b8e537393629",
+    "public/assets/art/units_foes.webp": "dcf79e09f2b0b813aa03894bd65222ae3afb2df875e84870d1dba968c49a1895",
+    "public/assets/art/units_mercs.webp": "f56977d16167593da97b41417239ef1db4fd2d790301b230c62b8ffbb1825e54",
+    "incoming/ART-CHAR-BOSS-RUINS-001/portraits_ruins_boss.webp": "95e6f60d174d54d1f5fd74719cea89161be70160d64c890b84ef64797136d5bd",
+    "incoming/ART-CHAR-BOSS-RUINS-001/portrait_vanguard_captain.png": "fbc2d249eed26c35919651a77a6c903c6557a42ed5c76ca94fbbc32d4503c154",
+    "incoming/ART-CHAR-BOSS-RUINS-001/portrait_vanguard_captain.webp": "22b75d949f489535fd3aa09e9640b0e48a4a62c2ef13f2962a9400de58e0a127",
+    "incoming/ART-CHAR-BOSS-RUINS-001/portrait_vargoth_hunter.png": "70d1e10676c24e06c2f292427cb246ae37a68b25edb3c62d639b4674d18c9904",
+    "incoming/ART-CHAR-BOSS-RUINS-001/portrait_vargoth_hunter.webp": "b5a8b0be7899e55dc55a250e0f2c94ab4954fa0a0391713f584c954695e59452",
+    "incoming/ART-CHAR-BOSS-RUINS-001/preview.png": "bbb950d15a78ed55309b6d8c1dd7cc0b82648c08ada22463a9a2191575dbd67e",
+    "incoming/ART-CHAR-BOSS-RUINS-001/review.png": "8c289f1f9e9e2c65d4a6ba31c9d376d52500a7bf06aba5306acdbd44680ec022",
+    "incoming/ART-CHAR-BOSS-RUINS-001/units_ruins_boss.webp": "6cc8ec587a5cdce1a3567ff6ec6c09644ecc3986a3f74e8e71d6c279131751da",
+    "incoming/ART-CHAR-BOSS-RUINS-001/vanguard_captain.png": "141e776309a1e560fcc835874c5a111e392228361e86682ab8c5a9f8f809657e",
+    "incoming/ART-CHAR-BOSS-RUINS-001/vanguard_captain.webp": "3b896f2a66816595e3cf662064301fb6e0bd6d2e3841faf57dd1d604a90b9f1d",
+    "incoming/ART-CHAR-BOSS-RUINS-001/vargoth_hunter.png": "81c5714302fdc36a3908f29af45de3ea073fbff1ba9dd615852d99eaba52d9bc",
+    "incoming/ART-CHAR-BOSS-RUINS-001/vargoth_hunter.webp": "bc819ea0e56057dccec67e78486ca5b6977eca83509c2b71b915065f2426bb12"
+  },
+  "checks": {
+    "atlasSize": [
+      1024,
+      2560
+    ],
+    "frameSize": [
+      512,
+      512
+    ],
+    "footY": 496,
+    "lastUnitCellEmpty": true,
+    "referenceBytesUnchanged": true,
+    "previewSize": [
+      780,
+      844
+    ],
+    "phoneFrames": [
+      390,
+      844
+    ]
+  }
+}
