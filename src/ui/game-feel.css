@@ -859,3 +859,16 @@ html, body { background: #0a1422; }
 @container game (max-width: 420px) { .lobby-guide { flex-direction: column; align-items: stretch; } .lobby-guide > div button { flex: 1; } }
 /* Hard mode (A9): a second, smaller start button beside each cleared map. */
 .map-actions { display: flex; gap: 6px; flex: none; } .map-actions .map-hard { min-width: 64px; min-height: 44px; color: #ffb3a6; border-color: #ff8a7a66; }
+/* Enemy sheet in the status panel: stats, screening and the move cycle (owner 2026-10-22). */
+.foe-sheet { margin-top: 6px; }
+.foe-stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; margin: 0; }
+.foe-stats div { padding: 6px 8px; border: 1px solid #35516c; border-radius: 8px; background: #0d1b2a99; }
+.foe-stats dt { font-size: 11px; color: #96b4cf; }
+.foe-stats dd { margin: 0; font-size: 14px; color: #eef5fb; }
+.foe-position { margin: 8px 0; font-size: 13px; color: #ffd9a0; }
+.foe-sheet h4 { font-size: 13px; color: #c1d3e5; margin: 10px 0 4px; }
+.foe-moves { list-style: none; padding: 0; margin: 0; }
+.foe-moves li { padding: 8px 0; border-top: 1px solid #35516c; }
+.foe-moves li p { font-size: 12px; color: #c1d3e5; margin: 2px 0 0; }
+.foe-moves li.next .status-name { color: #ffe08a; }
+.foe-next { margin-left: auto; padding: 1px 8px; border-radius: 999px; font-size: 11px; background: #ffe08a; color: #1b2433; }

@@ -4,7 +4,8 @@ import { veilSiege } from '../src/content/encounters/veil-siege';
 import { openField } from './fixtures/open-field';
 const data = openField(veilSiege);
 import { mercenaries } from '../src/content/heroes/mercenaries';
-import { unitStatuses } from '../src/ui/battle-status';
+import { foeProfile, unitStatuses } from '../src/ui/battle-status';
+import { slimeNest } from '../src/content/encounters/catalog';
 
 describe('battle status inspection', () => {
   it('projects real turn snapshots without mutating or revealing later consumed protection', () => {
@@ -90,5 +91,17 @@ describe('battle status inspection', () => {
     expect(unitStatuses(s, d, 'f1').map(r => r.id)).toContain('taunted');
     s.heroes.find(h => h.id === hammer.id)!.hp = 0;
     expect(unitStatuses(s, d, 'f1').map(r => r.id)).not.toContain('taunted');
+  });
+  it('shows a foe sheet: stats, screening and its move cycle with the next move marked', () => {
+    const s = createBattle(slimeNest); const back = foeProfile(s, slimeNest, 'b1')!;
+    expect(back.stats).toEqual([{ label: 'เลเวล', value: 'Lv2' }, { label: 'HP', value: '24 / 24' }, { label: 'SPD', value: '90' }, { label: 'ตำแหน่ง', value: 'แถวหลัง' }]);
+    expect(back.position).toContain('ถูกแถวหน้าบัง');
+    expect(back.moves.map(m => [m.name, m.kind, m.damage])).toEqual(slimeNest.intents.filter(i => i.sourceId === 'b1').map(i => [expect.any(String), i.kind, i.damage]));
+    expect(back.moves.filter(m => m.next)).toHaveLength(1); expect(back.moves[0]!.next).toBe(true);
+    expect(foeProfile(s, slimeNest, 'f1')!.position).toContain('บังศัตรูแถวหลัง');
+    const open = structuredClone(s); for (const e of open.enemies) if (e.id.startsWith('f')) e.hp = 0;
+    expect(foeProfile(open, slimeNest, 'b1')!.position).toBe('แถวหน้าล้มหมดแล้ว · ทุกคนตีถึง');
+    expect(foeProfile(open, slimeNest, 'f1')!.position).toBe('ล้มแล้ว');
+    expect(foeProfile(s, slimeNest, 'guardian')).toBeUndefined();
   });
 });

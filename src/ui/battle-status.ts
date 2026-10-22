@@ -1,7 +1,7 @@
 import {bossNames,bossDescription} from './boss-equipment';
-import { capAmount, corrodeBonus, enemyIntent, guardReductionOf, hasCap, songPower, tauntReductionOf } from '../core/battle/engine';
+import { capAmount, corrodeBonus, enemyIntent, guardReductionOf, hasCap, nextIntentOf, songPower, tauntReductionOf } from '../core/battle/engine';
 import type { ActionId, BattleState, EncounterDefinition } from '../core/battle/types';
-import { actorName } from './th';
+import { actorName, intentName } from './th';
 
 export interface UnitStatus {
   id: string; kind: 'buff' | 'debuff'; icon: ActionId;
@@ -63,4 +63,32 @@ export function unitStatuses(s: BattleState, d: EncounterDefinition, id: string)
     if (s.taunt && alive(s.taunt.heroId)) add('taunted', 'taunt', 'ถูกยั่วยุ', `หากลงมือก่อนเทิร์นถัดไปของ${name(s.taunt.heroId)} จะเล็งไปที่ผู้นั้น`, untilTurn(s.taunt.heroId), 'debuff');
   }
   return rows;
+}
+
+// A foe's sheet for the status panel (owner 2026-10-22): its stats, whether the front row shields it, and its moves in
+// the order it uses them (they cycle by round), the next one marked. Presentation only, read from the encounter data.
+export interface FoeMoveRow { name: string; kind: 'physical' | 'energy'; damage: number; target: string; next: boolean }
+export interface FoeProfile { stats: { label: string; value: string }[]; position: string; moves: FoeMoveRow[] }
+export function foeProfile(s: BattleState, d: EncounterDefinition, id: string): FoeProfile | undefined {
+  const def = d.enemies.find(e => e.id === id), foe = s.enemies.find(e => e.id === id);
+  if (!def || !foe) return undefined;
+  const standing = (row: 'front' | 'back') => s.enemies.some(e => e.id !== id && e.hp > 0 && d.enemies.find(x => x.id === e.id)?.row === row);
+  const stats = [
+    ...(d.level ? [{ label: 'เลเวล', value: `Lv${d.level}` }] : []),
+    { label: 'HP', value: `${Math.max(0, foe.hp)} / ${def.maxHp}` },
+    { label: 'SPD', value: String(def.speed) },
+    { label: 'ตำแหน่ง', value: `${def.row === 'front' ? 'แถวหน้า' : 'แถวหลัง'}${def.boss ? ' · บอส' : def.large ? ' · ตัวใหญ่' : ''}` },
+  ];
+  const position = foe.hp <= 0 ? 'ล้มแล้ว' : def.row === 'back'
+    ? standing('front') ? 'ถูกแถวหน้าบัง · ฮีโร่แนวหน้าตีไม่ถึง ยกเว้นสกิลตีทะลุ (แทงทะลวง ติดตรา แทงข้างหลัง ท้าดวล) · ฮีโร่แนวหลังตีได้' : 'แถวหน้าล้มหมดแล้ว · ทุกคนตีถึง'
+    : standing('back') ? 'บังศัตรูแถวหลังอยู่ · ล้มตัวนี้ก่อนฮีโร่แนวหน้าจึงตีแถวหลังได้' : 'ทุกคนตีถึง';
+  const cycle = d.intents.filter(i => i.sourceId === id);
+  const next = foe.hp > 0 && s.outcome === 'active' ? nextIntentOf(s, d, id) : null;
+  const nextIndex = next ? (next.round - 1) % cycle.length : -1;
+  const moves = cycle.map((m, i) => {
+    const hero = d.heroes[m.targetSlot];
+    const target = `${hero ? actorName(hero.id, d) : `ช่อง ${m.targetSlot + 1}`}${m.kind === 'physical' ? ' (กายภาพ: แนวหน้าก่อนถ้ายังยืน)' : ''}`;
+    return { name: intentName({ ...m, targetId: hero?.id ?? '', beat: 0, round: 0 }), kind: m.kind, damage: m.damage, target, next: i === nextIndex };
+  });
+  return { stats, position, moves };
 }
