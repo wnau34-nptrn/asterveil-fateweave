@@ -40,10 +40,10 @@ export function boltCast(ctx: FxContext, from: Point, to: Point, contactMs: numb
   // 02 Travel: the comet head shimmers along a gentle upward arc; the tapered wake trails it, capped in length.
   const dist = Math.hypot(to.x - tip.x, to.y - tip.y), lift = Math.min(40 * s, dist * .14);
   const curve = new Phaser.Curves.QuadraticBezier(V(tip.x, tip.y), V((tip.x + to.x) / 2, (tip.y + to.y) / 2 - lift), V(to.x, to.y));
-  const cap = Math.min((quiet ? 70 : 110) * s, dist / 2);
+  const cap = Math.min((quiet ? 90 : 140) * s, dist / 2);
   const wake = scene.add.image(tip.x, tip.y, BOLT_ATLAS, 'tapered_wake_00').setOrigin(1, .5).setVisible(false); ctx.add(wake);
-  const head = sprite(ctx, tip.x, tip.y, 'comet_core', 44 * s).setVisible(false);
-  const core = scene.add.image(tip.x, tip.y, BOLT_ATLAS, 'light_core_00').setDisplaySize(24 * s, 24 * s).setBlendMode(Phaser.BlendModes.ADD).setAlpha(.35).setVisible(false); ctx.add(core);
+  const head = sprite(ctx, tip.x, tip.y, 'comet_core', 72 * s).setVisible(false);
+  const core = scene.add.image(tip.x, tip.y, BOLT_ATLAS, 'light_core_00').setDisplaySize(40 * s, 40 * s).setBlendMode(Phaser.BlendModes.ADD).setAlpha(.35).setVisible(false); ctx.add(core);
   play(ctx, head, 'comet_core', 4, 200, gather, true);
   const progress = { t: 0 };
   scene.tweens.add({ targets: progress, t: 1, delay: gather, duration: travel, ease: 'Sine.In',
@@ -52,7 +52,7 @@ export function boltCast(ctx: FxContext, from: Point, to: Point, contactMs: numb
       const p = curve.getPoint(progress.t), ahead = curve.getTangent(Math.min(1, progress.t)), a = Math.atan2(ahead.y, ahead.x);
       const len = Math.min(cap, curve.getLength() * progress.t);
       head.setPosition(p.x, p.y).setRotation(a); core.setPosition(p.x, p.y).setRotation(a);
-      wake.setPosition(p.x, p.y).setRotation(a).setDisplaySize(Math.max(1, len), 16 * s);
+      wake.setPosition(p.x, p.y).setRotation(a).setDisplaySize(Math.max(1, len), 26 * s);
     },
     onComplete: () => { head.destroy(); wake.destroy(); core.destroy(); } });
 }
