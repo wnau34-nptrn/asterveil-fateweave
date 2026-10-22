@@ -67,7 +67,7 @@ test('status inspection follows each displayed actor stage instead of leaking th
   const now = new Date('2026-10-19T00:00:00Z');
   await page.clock.install({ time: now });
   await page.clock.pauseAt(new Date('2026-10-19T00:01:00Z'));
-  await page.locator('#action-bash').click(); await page.locator('#target-b1').click();
+  await page.locator('#action-bash').click(); await page.locator('#target-f1').click();
   const committed = await page.evaluate(k => localStorage.getItem(k), key);
   await page.locator('#battle-info').click(); await page.locator('#status-unit-weaver').click();
   await expect(page.locator('#status-frame')).toContainText('จังหวะที่กำลังแสดง');

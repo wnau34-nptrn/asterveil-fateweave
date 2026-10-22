@@ -1,7 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 import { encounterById } from '../../src/content/encounters/catalog';
 import { chapterOne as map } from '../../src/content/world/chapter1';
-import { createBattle, currentHeroId, resolveCommand } from '../../src/core/battle/engine';
+import { createBattle, currentHeroId, resolveCommand, targetOptions } from '../../src/core/battle/engine';
 import type { ExpeditionState, Item } from '../../src/core/world/types';
 import { findTiles, move, newExpedition, reveal, startOf } from '../../src/core/world/world';
 import { affixPool } from '../../src/core/world/equipment';
@@ -602,7 +602,7 @@ test('Toma (alchemist) hastes an ally by tapping them; the SPD queue puts that a
   await seed(page, run, profile);
   const issues: string[] = []; page.on('pageerror', e => issues.push(e.message));
   await page.goto('./'); await page.locator('#continue').click(); await page.locator('#start').click();
-  await page.locator('#action-attack').click();await page.locator('#skill-details').click(); await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-b1').click(); await finishPlayback(page);
+  await page.locator('#action-attack').click();await page.locator('#skill-details').click(); await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-f1').click(); await finishPlayback(page);
   await expect(page.locator('#hero-toma')).toHaveAttribute('aria-pressed', 'true');
   await page.locator('#action-haste').click();await page.locator('#skill-details').click(); await expect(page.locator('#skill-popover')).toContainText('ลงมือก่อนทุกคน');
   await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-healer').click(); await finishPlayback(page);
@@ -625,7 +625,7 @@ test('Sefa (scout) steps aside: the announced slash at her misses and the intent
   await seed(page, run, profile);
   const issues: string[] = []; page.on('pageerror', e => issues.push(e.message));
   await page.goto('./'); await page.locator('#continue').click(); await page.locator('#start').click();
-  await page.locator('#action-attack').click();await page.locator('#skill-details').click(); await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-b1').click(); await finishPlayback(page);
+  await page.locator('#action-attack').click();await page.locator('#skill-details').click(); await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-f1').click(); await finishPlayback(page);
   await expect(page.locator('#hero-sefa')).toHaveAttribute('aria-pressed', 'true');
   await expect(page.locator('#hero-sefa .portrait img')).toHaveAttribute('src', /portraits_mercs\.webp$/);
   await page.locator('#action-ambush').click();await page.locator('#skill-details').click(); await expect(page.locator('#skill-popover')).toContainText('ยังไม่ได้ลงมือในรอบนี้');
@@ -707,8 +707,8 @@ test('losing every brought member fails the expedition: back to the lobby with h
   const data = encounterById('veil-siege')!; const hp = { guardian: 6, tracer: 4, weaver: 3, healer: 2 };
   const camp = findTiles(map, 'camp')[1]!;
   let b = createBattle(data, { hp }); const commands = [];
-  while (b.outcome === 'active') { const c = { beat: b.beat, heroId: currentHeroId(b, data)!, action: 'attack' as const, targetId: b.enemies.find(e => e.hp > 0)!.id }; const next = resolveCommand(b, data, c).state; if (next.outcome !== 'active') break; commands.push(c); b = next; }
-  const last = { heroId: currentHeroId(b, data)!, targetId: b.enemies.find(e => e.hp > 0)!.id };
+  while (b.outcome === 'active') { const reach = (s: typeof b) => targetOptions(s, data, currentHeroId(s, data)!, 'attack').find(t => t.valid)!.id; const c = { beat: b.beat, heroId: currentHeroId(b, data)!, action: 'attack' as const, targetId: reach(b) }; const next = resolveCommand(b, data, c).state; if (next.outcome !== 'active') break; commands.push(c); b = next; }
+  const last = { heroId: currentHeroId(b, data)!, targetId: targetOptions(b, data, currentHeroId(b, data)!, 'attack').find(t => t.valid)!.id };
   const state = base({ position: { x: camp.x - 1, y: camp.y }, camp, hp, resources: { ore: 11, gold: 0, ember: 2, seal: 1 }, battle: { kind: 'random', encounterId: data.id, entry: hp, commands } });
   const issues = await open(page, state);
   await page.locator('#action-attack').click();await page.locator('#skill-details').click(); await page.locator('[data-ui=skill-close]').click(); await page.locator(`#target-${last.targetId}`).click();

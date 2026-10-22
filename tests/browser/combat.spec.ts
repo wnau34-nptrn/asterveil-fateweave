@@ -26,9 +26,9 @@ async function seedRaw(page:Page,raw:string){
 }
 async function seed(page:Page,data:EncounterDefinition,moves:readonly Move[]){await seedRaw(page,expedition(data,moves));}
 async function resume(page:Page){await page.locator('#continue').click();await expect(page.locator('#battle-view')).not.toHaveClass(/view-off/);}
-async function start(page:Page,data:EncounterDefinition=veilSiege){
+async function start(page:Page,data:EncounterDefinition=veilSiege,kind:BattleKind='random'){
  const issues:string[]=[];page.on('pageerror',e=>issues.push(e.message));page.on('console',m=>{if(m.type()==='error')issues.push(m.text());});
- await seedRaw(page,expedition(data,[]));
+ await seedRaw(page,expedition(data,[],kind));
  await page.goto('./');await resume(page);await expect(page.locator('#game canvas')).toBeVisible();
  if(await page.locator('#start').count()){await expect(page.locator('#start')).toBeEnabled();await page.locator('#start').click();}return issues;
 }
@@ -149,8 +149,9 @@ const routes=[...partyRoutes.map(r=>({...r,data:veilSiege})),...encounterRoutes]
 for(const [index,route]of routes.entries()){
  test(`${route.name}: all-four victory, exact HP, reload and return to the map with carried HP`,async({browser},info)=>{
   test.setTimeout(75000);const viewport=index%3===0?{width:320,height:568}:index%3===1?{width:390,height:844}:{width:1366,height:768};
-  const context=await browser.newContext({viewport,hasTouch:viewport.width<600,reducedMotion:'reduce'}),page=await context.newPage(),issues=await start(page,route.data);
-  await expect(page.locator('#enemy-roster .enemy-card')).toHaveCount(route.data.enemies.length);
+  const context=await browser.newContext({viewport,hasTouch:viewport.width<600,reducedMotion:'reduce'}),page=await context.newPage(),issues=await start(page,route.data,route.data.id===chapterOne.bossEncounterId?'boss':'random');
+  // The boss routes are fought as the boss (its phases and summons apply); reserves wait off the field.
+  await expect(page.locator('#enemy-roster .enemy-card')).toHaveCount(route.data.enemies.filter(e=>!e.reserve).length);
   for(const [i,[hero,action,target]]of route.moves.entries()){
    await cast(page,hero,action,target);await finish(page);
    if(i===0){await page.reload();await resume(page);await expect(page.locator('#start')).toHaveCount(0);await owner(page,'weaver');}
@@ -219,7 +220,8 @@ for(const invalid of ['old-content','foreign-owner','malformed','wrong-map']){
   const good=JSON.parse(expedition(veilSiege,guided.slice(0,1)));
   const raw=invalid==='malformed'?'{bad':invalid==='wrong-map'?JSON.stringify({...good,state:{...good.state,mapVersion:0}}):
    invalid==='old-content'?JSON.stringify({...good,state:{...good.state,battle:{...good.state.battle,encounterId:'crystal-rift'}}}):
-   JSON.stringify({...good,state:{...good.state,battle:{...good.state.battle,commands:[{beat:1,heroId:'guardian',action:'attack',targetId:'f1'}]}}});
+   // A current (v35) save: older saves restart a battle whose commands no longer replay (four-slot migration).
+   JSON.stringify({version:35,profile:{...newProfile(chapterOne,5),commander:{name:'อารี',crest:'star',color:'gold',camp:'ค่ายอารี'}},run:{...good.state,battle:{...good.state.battle,commands:[{beat:1,heroId:'guardian',action:'attack',targetId:'f1'}]}}});
   await seedRaw(page,raw);const issues:string[]=[];page.on('pageerror',e=>issues.push(e.message));await page.goto('./');
   await expect(page.locator('#continue')).toHaveCount(0);await page.locator('#new-game').click();await page.locator('#commander-name').fill('Ari');await page.locator('#commander-create').click();
   await expect(page.locator('#story-view')).toBeVisible();await page.locator('[data-story=skip]').click();await expect(page.locator('#battle-view')).not.toHaveClass(/view-off/);
@@ -253,7 +255,7 @@ test('round cooldown can be inspected but never cast; the intervening actors do 
 test('final victory waits for its actual actor stage and has no dead-enemy retaliation',async({page},info)=>{
  await seed(page,veilSiege,offensive.slice(0,-1));await page.clock.install({time:new Date('2026-10-14T00:00:00Z')});const issues=await start(page);await page.clock.pauseAt(new Date('2026-10-14T01:00:00Z'));
  const [h,a,t]=offensive.at(-1)!;await cast(page,h,a,t);await expect(page.locator('.result-card')).toHaveCount(0);expect((await saved(page)).battle).toBeNull();
- await page.clock.runFor(1000);await expect(page.locator('.result-card')).toContainText('ยืนอยู่ 4 / 4 คน');await expect(page.locator('.result-card')).toContainText('เลือดทีม 162');
+ await page.clock.runFor(1000);await expect(page.locator('.result-card')).toContainText('ยืนอยู่ 4 / 4 คน');await expect(page.locator('.result-card')).toContainText(`เลือดทีม ${partyRoutes[0].hp.reduce((a,b)=>a+b,0)}`);
  await reachable(page,'.result-card button');await page.screenshot({path:info.outputPath('final-speed-turn.png')});expect(issues).toEqual([]);
 });
 test('visible queue follows actual SPD actors across a round and explains speeds',async({page},info)=>{
@@ -265,9 +267,11 @@ test('visible queue follows actual SPD actors across a round and explains speeds
 });
 
 test('defeating a queued enemy removes its turn immediately and never damages the team',async({page},info)=>{
- await seed(page,veilSiege,[['tracer','execute','b1'],['weaver','bolt','b1'],['guardian','bash','b1'],['healer','attack','f1']]);const issues=await start(page);await owner(page,'tracer');
- const before=await savedState(page);await cast(page,'tracer','attack','b1');await finish(page);await owner(page,'weaver');
- await expect(page.locator('.turn-slot[data-actor=b1]')).toHaveCount(0);await expect(page.locator('[data-enemy=b1]')).toContainText('0 / 78');
+ // Round 3: the Mage finishes the Brute before its turn (the Raider in the back row is screened from front-liners).
+ await seed(page,veilSiege,[['tracer','execute','f1'],['weaver','bolt','f1'],['guardian','attack','f1'],['healer','heal','weaver'],['tracer','attack','f1'],['weaver','attack','f1'],['guardian','attack','f1'],['healer','attack','f1'],['tracer','execute','f1'],['weaver','bolt','f1'],['guardian','attack','f1'],['healer','heal','weaver'],['tracer','attack','f1']]);
+ const issues=await start(page);await owner(page,'weaver');
+ const before=await savedState(page);await cast(page,'weaver','attack','f1');await finish(page);await owner(page,'guardian');
+ await expect(page.locator('.turn-slot[data-actor=f1]')).toHaveCount(0);await expect(page.locator('[data-enemy=f1]')).toContainText('0 / 200');
  expect((await savedState(page)).heroes.map(h=>h.hp)).toEqual(before.heroes.map(h=>h.hp));await page.screenshot({path:info.outputPath('defeated-enemy-queue.png')});expect(issues).toEqual([]);
 });
 
@@ -284,7 +288,7 @@ test('iPhone 3x portrait: sharp canvas, full-height layout and HUD clear of the 
  expect(m.dock).toBeGreaterThan(932-20);expect(m.dock).toBeLessThanOrEqual(932);expect(m.scroll).toBeLessThanOrEqual(932);
  expect(Math.abs(m.canvas[0]!-m.css[0]!*3)).toBeLessThanOrEqual(3);expect(Math.abs(m.canvas[1]!-m.css[1]!*3)).toBeLessThanOrEqual(3);
  // Field targets keep working in CSS pixels on the 3x buffer.
- await cast(page,'tracer','attack','b1');await finish(page);await expect(page.locator('[data-enemy=b1]')).not.toContainText('78 / 78');
+ await cast(page,'tracer','attack','f1');await finish(page);await expect(page.locator('[data-enemy=f1]')).not.toContainText('200 / 200');
  await page.screenshot({path:info.outputPath('iphone-3x-battle.png')});expect(issues).toEqual([]);await context.close();
 });
 
@@ -321,8 +325,8 @@ test('★3/★5 members: four command buttons fit phones and the ★3 skill cast
   expect(await page.evaluate(()=>document.scrollingElement!.scrollHeight<=innerHeight)).toBe(true);
   await page.locator('#action-mark').click();await page.locator('#skill-details').click();await expect(page.locator('#skill-popover')).toContainText('ตาเหยี่ยว');await page.locator('[data-ui=skill-close]').click();
   await page.screenshot({path:info.outputPath(`star-skills-${width}.png`)});
-  await page.locator('#action-finisher').click();await page.locator('#skill-details').click();await page.locator('[data-ui=skill-close]').click();await page.locator('#target-b1').click();await finish(page);
-  await expect(page.locator('[data-enemy=b1]')).not.toContainText('78 / 78');
+  await page.locator('#action-finisher').click();await page.locator('#skill-details').click();await page.locator('[data-ui=skill-close]').click();await page.locator('#target-f1').click();await finish(page);
+  await expect(page.locator('[data-enemy=f1]')).not.toContainText('200 / 200');
   await context.close();
  }
 });
