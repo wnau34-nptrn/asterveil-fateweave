@@ -127,14 +127,21 @@ function trioSlots(slots: FieldSlot[], column: HeroColumn, width: number, height
       body: bodyBox(ux, y, size), panel: { x: ux - cellWidth / 2, y: y + below, width: cellWidth, height: panel } });
     const placed = new Map<number, FieldSlot>(ids.map((slot, k) => [slot, unit(x, rows[k]!)]));
     for (const [k, slot] of other.entries()) placed.set(slot, unit(slots[slot]!.x, centered.has(slot) ? rows[1]! : rows[k * 2]!));
-    // Keep it only when nothing placed meets a foe body or panel (unused partner slots hold nobody).
-    const foes = [4, 5, 6, 7].filter(i => !centered.has(partner(i))).map(i => slots[i]!);
+    // Foes stand on the same three rows so both sides share one ground line per row (upper → top, lower → bottom,
+    // a lone foe → middle). A large foe keeps its head inside the field, so it may stand a little lower on the top row.
+    const foeAt = (fp: number) => [4, 5, 6, 7].map(i => {
+      const f = slots[i]!, y = Math.max(centered.has(i) ? rows[1]! : rows[i % 2 ? 2 : 0]!, 1.03 * f.size + 4);
+      return [i, { ...f, y, compact: fp < 50, maxIcons: fp < 50 ? 1 : f.maxIcons, body: bodyBox(f.x, y, f.size), panel: { ...f.panel, y: y + Math.ceil(f.size * .04) + 2, height: fp } }] as const;
+    });
+    // Keep it only when no panel meets a body or another panel (unused partner slots hold nobody). Foes keep full
+    // panels when they fit, else the compact ones.
     const heroes = [...placed.entries()].filter(([slot]) => !centered.has(partner(slot)) || ids.includes(slot)).map(([, u]) => u);
     const meets = (a: FieldBox, b: FieldBox) => a.x < b.x + b.width && b.x < a.x + a.width && a.y < b.y + b.height && b.y < a.y + a.height;
-    const clash = heroes.some((u, n) => foes.some(o => meets(u.panel, o.body) || meets(u.body, o.panel) || meets(u.panel, o.panel))
-      || heroes.some((v, m) => m !== n && (meets(u.panel, v.body) || meets(u.panel, v.panel))));
-    if (clash) continue;
+    const clashes = (units: readonly FieldSlot[]) => units.some((u, n) => units.some((v, m) => m !== n && (meets(u.panel, v.body) || meets(u.panel, v.panel))));
+    const foeSlots = [50, panel].map(foeAt).find(set => !clashes([...heroes, ...set.filter(([i]) => !centered.has(partner(i))).map(([, f]) => f)]));
+    if (!foeSlots) continue;
     for (const [slot, u] of placed) slots[slot] = u;
+    for (const [slot, f] of foeSlots) slots[slot] = f;
     return;
   }
   // The step stops short of the next column's panels (foe front panels for our front column).
