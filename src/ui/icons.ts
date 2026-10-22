@@ -102,8 +102,8 @@ const uiSvgs = Object.fromEntries(UI_ICON_NAMES.map(n => [n, uiFiles[`./svg/${n}
 const svgs = { attack, guard, bash, mark, execute, bolt, ward, heal, prayer, brace, pierce, hinder, volley, acid, haste, ambush, evade, taunt, slam, valor, mend, rally, finisher, sigil, sanctuary, spearwall, weakshot, bomb, backstab, quake, finale, challenge: taunt, bulwark: guard, rouse: prayer, up, down, left, right, camp, rest, flag, goal, star, danger, safe, talk, info, map, boss, check, circle, close, footprints, chest, chestOpen, ore, gold, forge, enhance, fuse, reroll, salvage, brew, set, ember, seal, pack, starFilled, starBadge, starBadgeEmpty, gearWeapon, gearHead, gearBody, gearGloves, gearBoots, gearCharm, dust, potionSalve, potionTonic, potionRepel, music, musicOff, sound, soundOff } as const;
 const restartPath = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10a8 8 0 1 1 1 8M4 4v6h6"/></svg>';
 export type IconName = ActionId | keyof typeof svgs | UiIconName | 'restart';
-// Painted skill icons (ART-SKILL-ICON-001-R1, 128 px cells) replace the line icon of every skill that has one; Attack
-// and every non-skill icon stay line art. The span keeps the `icon` class so each view's icon sizing still applies.
+// Painted skill icons (ART-SKILL-ICON-001-R1 + Attack from -002, 128 px cells) replace the line icon of every skill that has one;
+// every non-skill icon stays line art. The span keeps the `icon` class so each view's icon sizing still applies.
 const skillAtlasUrl = `${import.meta.env.BASE_URL}assets/ui/skill_icons.webp`;
 const paintedSkills = new Map(skillAtlas.order.map((id, i) => [id, i]));
 export function icon(name: IconName): string {

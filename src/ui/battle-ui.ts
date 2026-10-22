@@ -21,7 +21,7 @@ const tutorialKey = 'asterveil.fateweave.tutorial.v1';
 
 // The expedition owns persistence: every commit is handed to the session before playback.
 export interface BattleSession {
-  kind: BattleKind; data: EncounterDefinition; entry: BattleEntry; commands: readonly Command[];
+  kind: BattleKind; scene?: 'ruins' | 'forest' | 'riftline'; data: EncounterDefinition; entry: BattleEntry; commands: readonly Command[];
   commit(state: BattleState): boolean;
   leaveLabel(outcome: Outcome): string;
   leave(): void;
@@ -185,7 +185,7 @@ export class BattleUI {
   // Starts or resumes a battle from the expedition's recorded entry and commands.
   open(session: BattleSession): void {
     this.playback.cancel(); this.scene?.stopEffects(); this.presentation = undefined; this.busy = false;
-    this.closeSkill(); this.session = session; this.action = 'attack'; this.targeting = true;
+    this.closeSkill(); this.session = session; this.root.dataset.scene = session.scene ?? 'ruins'; this.action = 'attack'; this.targeting = true;
     this.canvasInputAfterInfo = performance.now() + 250;
     if (this.data !== session.data) { this.scene?.setEncounter(session.data); this.data = session.data; }
     this.state = replay(session.data, session.commands, session.entry);

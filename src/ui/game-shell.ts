@@ -486,7 +486,7 @@ export class GameShell {
     const s = this.state!; const b = s.battle!; const data = battleData(s, this.map, this.lookup)!;
     this.show('battle');
     this.battle.open({
-      kind: b.kind, data, entry: { hp: b.entry }, commands: b.commands,
+      kind: b.kind, scene: this.map.id === 'deep-forest' ? 'forest' : this.map.id === 'veil-frontier' ? 'riftline' : 'ruins', data, entry: { hp: b.entry }, commands: b.commands,
       commit: (state: BattleState) => this.commitBattle(state),
       leaveLabel: (outcome: Outcome) => outcome === 'victory' ? (b.kind === 'boss' ? `ไปยัง${this.map.goalName} →` : 'กลับสู่แผนที่ →') : b.kind === 'tutorial' ? 'ลองศึกแรกอีกครั้ง ↻' : !this.state ? 'ทีมล้มหมด · กลับค่าย →' : this.state.camp ? 'กลับแคมป์ →' : 'กลับทางเข้าด่าน →',
       leave: () => this.leaveBattle(),
