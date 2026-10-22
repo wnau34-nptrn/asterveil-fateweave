@@ -1,24 +1,26 @@
 import { describe, expect, it } from 'vitest';
 import { createBattle, resolveCommand, songPower, withParty } from '../src/core/battle/engine';
-import { veilSiege as data } from '../src/content/encounters/veil-siege';
+import { veilSiege } from '../src/content/encounters/veil-siege';
+import { openField } from './fixtures/open-field';
+const data = openField(veilSiege);
 import { mercenaries } from '../src/content/heroes/mercenaries';
 import { unitStatuses } from '../src/ui/battle-status';
 
 describe('battle status inspection', () => {
   it('projects real turn snapshots without mutating or revealing later consumed protection', () => {
     let s = createBattle(data);
-    s = resolveCommand(s, data, { beat: s.beat, heroId: 'tracer', action: 'mark', targetId: 'brute' }).state;
+    s = resolveCommand(s, data, { beat: s.beat, heroId: 'tracer', action: 'mark', targetId: 'f1' }).state;
     const marked = structuredClone(s);
     const result = resolveCommand(s, data, { beat: s.beat, heroId: 'weaver', action: 'ward', targetId: 'weaver' });
     s = result.state;
     const before = structuredClone(s);
     expect(unitStatuses(s, data, 'weaver').find(r => r.id === 'barrier')?.detail).toContain(String(s.heroes.find(h => h.id === 'weaver')!.barrier));
-    expect(unitStatuses(marked, data, 'brute').find(r => r.id === 'mark')?.duration).toContain('2 รอบ รวมรอบนี้');
+    expect(unitStatuses(marked, data, 'f1').find(r => r.id === 'mark')?.duration).toContain('2 รอบ รวมรอบนี้');
     const guarded = resolveCommand(s, data, { beat: s.beat, heroId: 'guardian', action: 'guard', targetId: 'weaver' });
     const first = guarded.turns[0]!.state;
     expect(unitStatuses(first, data, 'weaver').map(r => r.id)).toContain('guard');
     expect(unitStatuses(guarded.state, data, 'weaver').map(r => r.id)).not.toContain('guard');
-    const attacked = resolveCommand(s, data, { beat: s.beat, heroId: 'guardian', action: 'bash', targetId: 'raider' });
+    const attacked = resolveCommand(s, data, { beat: s.beat, heroId: 'guardian', action: 'bash', targetId: 'b1' });
     expect(unitStatuses(attacked.turns[0]!.state, data, 'weaver').map(r => r.id)).toContain('barrier');
     expect(unitStatuses(attacked.state, data, 'weaver').map(r => r.id)).not.toContain('barrier');
     expect(s).toEqual(before);
@@ -70,13 +72,13 @@ describe('battle status inspection', () => {
 
   it('uses the actual corrosion bonus and distinguishes energy seals from physical interruption', () => {
     const s = createBattle(data);
-    const e = s.enemies.find(e => e.id === 'brute')!;
+    const e = s.enemies.find(e => e.id === 'f1')!;
     Object.assign(e, { corrodedUntil: 4, corrodeBonus: 11, interruptedRound: 1 });
     const rows = unitStatuses(s, data, e.id);
     expect(rows.find(r => r.id === 'corrode')?.detail).toContain('11');
     expect(rows.find(r => r.id === 'interrupt')?.name).toBe('ผนึกพลัง');
-    Object.assign(s.enemies.find(e => e.id === 'raider')!, { interruptedRound: 1 });
-    expect(unitStatuses(s, data, 'raider').find(r => r.id === 'interrupt')?.name).toBe('ขัดจังหวะ');
+    Object.assign(s.enemies.find(e => e.id === 'b1')!, { interruptedRound: 1 });
+    expect(unitStatuses(s, data, 'b1').find(r => r.id === 'interrupt')?.name).toBe('ขัดจังหวะ');
   });
 
   it('projects front-lane counter protection and both sides of taunt, with downed casters removed', () => {
@@ -85,8 +87,8 @@ describe('battle status inspection', () => {
     const s = createBattle(d); s.counter = { heroId: spear.id, wall: true }; s.taunt = { heroId: hammer.id, round: 1 };
     expect(unitStatuses(s, d, hammer.id).map(r => r.id)).toEqual(['counter', 'taunt']);
     expect(unitStatuses(s, d, 'weaver').map(r => r.id)).not.toContain('counter');
-    expect(unitStatuses(s, d, 'brute').map(r => r.id)).toContain('taunted');
+    expect(unitStatuses(s, d, 'f1').map(r => r.id)).toContain('taunted');
     s.heroes.find(h => h.id === hammer.id)!.hp = 0;
-    expect(unitStatuses(s, d, 'brute').map(r => r.id)).not.toContain('taunted');
+    expect(unitStatuses(s, d, 'f1').map(r => r.id)).not.toContain('taunted');
   });
 });

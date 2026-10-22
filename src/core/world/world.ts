@@ -534,15 +534,20 @@ function dropItems(state: ExpeditionState, map: MapDefinition, kind: BattleKind,
   return items;
 }
 // The encounter as fought by the deployed party, in slot order.
-// Hard mode (A9 part 2): every foe gets one trait, fixed by the encounter and its position; a boss gets enrage and
+// Hard mode (A9 part 2): foes get one trait each, fixed by the encounter and its position; a boss gets enrage and
 // veilguard plus one extra move, a heavier copy of its heaviest move in the other damage kind.
 const TRAITS: readonly EnemyTrait[] = ['thorns', 'veilguard', 'enrage'];
+const toughest = (data: EncounterDefinition) => [...data.enemies].sort((a, b) => b.maxHp - a.maxHp);
 export function hardEncounter(data: EncounterDefinition, kind: BattleKind, map: MapDefinition): EncounterDefinition {
   const t = map.progression.hardTraits; const salt = [...data.id].reduce((n, c) => n + c.charCodeAt(0), 0);
-  const enemies = data.enemies.map((e, i) => ({ ...e, traits: kind === 'boss' ? ['enrage', 'veilguard'] as EnemyTrait[] : [TRAITS[(salt + i) % TRAITS.length]!] }));
+  // Four-slot battles (A7 step 2): only the two toughest foes take a trait, so a swarm is not buried in them.
+  // The boss (`boss`, else the toughest foe) takes enrage + veilguard.
+  const boss = kind === 'boss' ? (data.enemies.find(e => e.boss) ?? toughest(data)[0]!).id : undefined;
+  const marked = toughest(data).filter(e => e.id !== boss).slice(0, boss ? 1 : 2).map(e => e.id);
+  const enemies = data.enemies.map((e, i) => ({ ...e, ...(e.id === boss ? { traits: ['enrage', 'veilguard'] as EnemyTrait[] } : marked.includes(e.id) ? { traits: [TRAITS[(salt + i) % TRAITS.length]!] } : {}) }));
   let intents = data.intents;
-  if (kind === 'boss') {
-    const source = (data.enemies.find(e => e.id === 'brute') ?? data.enemies[0]!).id;
+  if (boss) {
+    const source = boss;
     const heaviest = [...data.intents].filter(i => i.sourceId === source).sort((a, b) => b.damage - a.damage)[0]!;
     intents = [...data.intents, { sourceId: source, targetSlot: 0, name: 'Rift Fury', damage: Math.ceil(heaviest.damage * t.bossMovePercent / 100), kind: heaviest.kind === 'physical' ? 'energy' : 'physical' }];
   }
@@ -573,7 +578,10 @@ export function recordBattle(initial: ExpeditionState, map: MapDefinition, looku
 // their level against the monster level. Level-ups raise max HP; standing members gain the difference.
 function gainExp(state: ExpeditionState, map: MapDefinition, lookup: EncounterLookup, data: EncounterDefinition, kind: BattleKind, source?: string): Record<string, ExpGain> {
   const rules = map.progression; const level = data.level ?? 1;
-  const base = data.enemies.length * (rules.expBase + rules.expPerLevel * level) * (kind === 'boss' ? rules.bossExpMultiplier : kind === 'elite' ? (miniBoss(map, source) ? map.eventRules.miniBoss.exp : optionalElite(map, source) ? map.eventRules.optionalElite.exp : map.eventRules.eliteExp) : 1);
+  // A7 step 2: EXP follows the foes' total HP (one foe's worth per `expFoeHp` at Lv1, grown by the monster-level rule),
+  // so a swarm of small foes pays like one sturdy foe.
+  const worth = data.enemies.reduce((n, e) => n + e.maxHp, 0) / (rules.expFoeHp * (1 + (level - 1) * rules.monsterLevelPercent / 100));
+  const base = worth * (rules.expBase + rules.expPerLevel * level) * (kind === 'boss' ? rules.bossExpMultiplier : kind === 'elite' ? (miniBoss(map, source) ? map.eventRules.miniBoss.exp : optionalElite(map, source) ? map.eventRules.optionalElite.exp : map.eventRules.eliteExp) : 1);
   const gains: Record<string, ExpGain> = {};
   const best = Math.max(...rosterIds(state).map(id => levelOf(state.members[id])));
   for (const id of rosterIds(state)) {

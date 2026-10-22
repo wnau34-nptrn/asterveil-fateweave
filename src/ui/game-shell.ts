@@ -15,7 +15,7 @@ import { firstClearStory, runSummary, SummaryUI, type RunSummary } from './summa
 import { sfx, type SfxName } from '../platform/sfx';
 import { browserStorage } from '../platform/browser-storage';
 import type { BattleUI } from './battle-ui';
-import type { NpcId } from '../game/visuals/assets';
+import { leaderArt, type NpcId } from '../game/visuals/assets';
 import { choiceText, eventText, expThai, heroText, itemLines, itemName, lootThai, potionText, rewardText, shopText } from './th';
 import { transferAffix, craftWeapon, raiseItemLevel, enhanceTo, lockEquipment, findItem, fuse, reroll, smelt } from '../core/world/forge';
 import { CommanderUI } from './commander-ui';
@@ -57,8 +57,9 @@ export class GameShell {
     if (this.game?.run) this.chosenMap = this.game.run.mapId;
     return this.maps.find(m => m.id === this.chosenMap) ?? this.home;
   }
+  // The map marker shows the encounter's leader: its boss, else its large foe, else its first foe.
   private eliteArtOf(map: MapDefinition): Record<string, string> {
-    return Object.fromEntries(map.elites.map(e => [e.id, this.lookup(e.encounterId)?.enemies.find(f => f.id === 'brute')?.art ?? 'brute']));
+    return Object.fromEntries(map.elites.map(e => [e.id, leaderArt(this.lookup(e.encounterId))]));
   }
   constructor(private readonly root: HTMLElement, private readonly home: MapDefinition, private readonly lookup: EncounterLookup, private readonly battle: BattleUI,
     private readonly views: { title: HTMLElement; commander: HTMLElement; lobby: HTMLElement; world: HTMLElement; battle: HTMLElement },

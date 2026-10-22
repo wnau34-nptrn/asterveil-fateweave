@@ -1,3 +1,4 @@
+import { collectOverflow, protectedItem, recycleSelection } from '../../src/core/world/storage';
 // Phase 4E: whole-map balance simulation. A scripted player runs a company through several expeditions using only
 // the pure rules (world, profile, battle). Battles are played by the teaching advisor (`battleLesson`), so results
 // describe a careful-but-not-optimal player. Nothing here changes rules; it only measures them.
@@ -226,6 +227,12 @@ function lobby(p: Profile): { profile: Profile; claimed: string[] } {
     }
   }
   if (p.items.length > map.equipment.bagCap - 10) p = salvage(p, map, p.items.filter(i => i.rarity === 0).map(i => i.uid)).profile;
+  // Items that came home past the bag cap wait in overflow and block departure: salvage the loose ones, keep the rest.
+  if (p.overflow?.length) {
+    const loose = p.overflow.filter(i => !protectedItem(i)).map(i => i.uid);
+    if (loose.length) p = recycleSelection(p, map, 'overflow', loose).profile;
+    if (p.overflow?.length) p = collectOverflow(p, map, p.overflow.map(i => i.uid)).profile;
+  }
   while (p.potions.salve < map.potions.carry && !brewReason(p, map, 'salve') && p.bank.ore > 60) p = brew(p, map, 'salve').profile;
   return { profile: p, claimed };
 }

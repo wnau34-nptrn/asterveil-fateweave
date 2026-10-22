@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { encounterById, encounters } from '../src/content/encounters/catalog';
 import { chapterOne as map } from '../src/content/world/chapter1';
-import { createBattle, currentHeroId, resolveCommand, skillPower } from '../src/core/battle/engine';
+import { createBattle, currentHeroId, resolveCommand, skillPower, targetOptions } from '../src/core/battle/engine';
 import { clearLegacySaves, expeditionKey, legacyKeys, loadGame, parseGame, saveGame, type StoragePort } from '../src/core/save/expedition-save';
 import { boardOffers, commanderReason, createCommander, departure, dismiss, dismissReason, groupOf, hire, hireReason, newProfile, placeMember, settle, upgrade, upgradeCost, upgradeReason } from '../src/core/world/profile';
 import type { Direction, ExpeditionState, Point, Profile } from '../src/core/world/types';
@@ -90,7 +90,7 @@ describe('expedition rules', () => {
     expect(move(s, map, 'up').event).toEqual({ type: 'blocked', reason: 'busy' });
     const data = lookup(s.battle.encounterId)!;
     let b = battleState(s, map, lookup)!;
-    b = resolveCommand(b, data, { beat: b.beat, heroId: currentHeroId(b, data)!, action: 'attack', targetId: 'raider' }).state;
+    b = resolveCommand(b, data, { beat: b.beat, heroId: currentHeroId(b, data)!, action: 'attack', targetId: 'f1' }).state;
     s = recordBattle(s, map, lookup, b.commands);
     expect(() => finishBattle(s, map, lookup)).toThrow();
     s = fight(s);
@@ -132,7 +132,7 @@ describe('expedition rules', () => {
   it('defeat leaves the deployed members down at the last camp; losing every brought member wipes the run; a lost tutorial restarts', () => {
     const loseWith = (state: ExpeditionState, l = lookup) => {
       const data = battleData(state, map, l)!; let b = battleState(state, map, l)!;
-      while (b.outcome === 'active') b = resolveCommand(b, data, { beat: b.beat, heroId: currentHeroId(b, data)!, action: 'attack', targetId: b.enemies.find(e => e.hp > 0)!.id }).state;
+      while (b.outcome === 'active') b = resolveCommand(b, data, { beat: b.beat, heroId: currentHeroId(b, data)!, action: 'attack', targetId: targetOptions(b, data, currentHeroId(b, data)!, 'attack').find(t => t.valid)!.id }).state;
       return { state: recordBattle(state, map, l, b.commands), outcome: b.outcome };
     };
     const camp = findTiles(map, 'camp')[0]!;
@@ -363,11 +363,13 @@ describe('resources and chests', () => {
 describe('game save', () => {
   const game = (run: ExpeditionState | null = fresh(), profile = newProfile(map, 4)) => ({ profile, run });
   const v6 = (run: unknown, profile: unknown = newProfile(map, 4)) => JSON.stringify({ version: 6, profile, run });
+  // Saves before v35 forgive battle commands that no longer replay (four-slot migration), so command checks use v35.
+  const current = (run: unknown, profile: unknown = newProfile(map, 4)) => JSON.stringify({ version: 35, profile, run });
   it('round-trips the profile and an in-progress battle by replay', () => {
     const storage = memory(); let s = fresh(3);
     while (!s.battle) s = move(s, map, s.steps % 2 ? 'right' : 'left').state;
     const data = lookup(s.battle.encounterId)!; let b = battleState(s, map, lookup)!;
-    b = resolveCommand(b, data, { beat: b.beat, heroId: 'tracer', action: 'mark', targetId: 'brute' }).state;
+    b = resolveCommand(b, data, { beat: b.beat, heroId: 'tracer', action: 'mark', targetId: 'f1' }).state;
     s = recordBattle(s, map, lookup, b.commands);
     expect(saveGame(storage, game(s))).toBe(true);
     expect(loadGame(storage, map, lookup)).toEqual(game(s));
@@ -379,7 +381,7 @@ describe('game save', () => {
     ['wrong version', (s: ExpeditionState) => JSON.stringify({ version: 999, profile: newProfile(map, 4), run: s })],
     ['wall position', (s: ExpeditionState) => v6({ ...s, position: { x: 0, y: 0 } })],
     ['hp above max', (s: ExpeditionState) => v6({ ...s, hp: { ...s.hp, tracer: 99 } })],
-    ['foreign owner command', (s: ExpeditionState) => v6({ ...s, battle: { kind: 'random', encounterId: 'veil-siege', entry: s.hp, commands: [{ beat: 1, heroId: 'guardian', action: 'attack', targetId: 'brute' }] } })],
+    ['foreign owner command', (s: ExpeditionState) => current({ ...s, battle: { kind: 'random', encounterId: 'veil-siege', entry: s.hp, commands: [{ beat: 1, heroId: 'guardian', action: 'attack', targetId: 'f1' }] } })],
     ['unknown encounter', (s: ExpeditionState) => v6({ ...s, battle: { kind: 'random', encounterId: 'crystal-rift', entry: s.hp, commands: [] } })],
     ['negative ore', (s: ExpeditionState) => v6({ ...s, resources: { ore: -1, gold: 0, ember: 0, seal: 0 } })],
     ['extra resource', (s: ExpeditionState) => v6({ ...s, resources: { ore: 1, gold: 0, ember: 0, seal: 0, gem: 5 } })],
@@ -427,7 +429,7 @@ describe('game save', () => {
     let s = newExpedition(map, lookup, 6, { roster, members }, true);
     s.battle = { kind: 'random', encounterId: 'veil-siege', entry: Object.fromEntries(roster.deployed.map(id => [id, s.hp[id]!])), commands: [] };
     const data = battleData(s, map, lookup)!; let b = battleState(s, map, lookup)!;
-    b = resolveCommand(b, data, { beat: b.beat, heroId: 'tracer', action: 'attack', targetId: 'brute' }).state; s = recordBattle(s, map, lookup, b.commands);
+    b = resolveCommand(b, data, { beat: b.beat, heroId: 'tracer', action: 'attack', targetId: 'f1' }).state; s = recordBattle(s, map, lookup, b.commands);
     const profile = { ...newProfile(map, 4), company: ['guardian', 'tracer', 'weaver', 'healer', 'garran'], members, party: roster };
     expect(parseGame(v6(s, profile), map, lookup)).toEqual({ profile, run: s });
     expect(s.hp.garran).toBe(76);

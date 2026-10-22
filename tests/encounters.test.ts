@@ -1,6 +1,6 @@
 import { expect, it } from 'vitest';
 import { encounters, firstClash, rearAmbush, riftWarden } from '../src/content/encounters/catalog';
-import { createBattle, currentHeroId, previewCommand, replay, resolveCommand, withParty } from '../src/core/battle/engine';
+import { createBattle, currentHeroId, previewCommand, replay, resolveCommand, targetOptions, withParty } from '../src/core/battle/engine';
 import { mercenaries } from '../src/content/heroes/mercenaries';
 import { battleLesson } from '../src/ui/tutorial';
 import { encounterRoutes } from './fixtures/encounter-routes';
@@ -14,22 +14,22 @@ it.each(encounterRoutes)('$name wins with all four heroes, exact staged previews
   expect(state.outcome).toBe('victory');expect(state.heroes.map(h=>h.hp)).toEqual(hp);
   expect(new Set(state.commands.map(c=>c.heroId)).size).toBe(4);expect(replay(data,state.commands)).toEqual(state);
 });
-it.each([{data:rearAmbush,first:'raider'},{data:rearAmbush,first:'brute'},{data:riftWarden,first:'brute'}])('$data.id blind Attack policy targeting $first loses',({data,first})=>{
+it.each([{data:rearAmbush,first:'b1'},{data:rearAmbush,first:'f1'},{data:riftWarden,first:'f1'}])('$data.id blind Attack policy targeting $first loses',({data,first})=>{
   let s=createBattle(data);
-  while(s.outcome==='active'&&s.commands.length<100){const e=s.enemies.find(e=>e.id===first&&e.hp>0)??s.enemies.find(e=>e.hp>0)!;s=resolveCommand(s,data,{beat:s.beat,heroId:currentHeroId(s,data)!,action:'attack',targetId:e.id}).state;}
+  while(s.outcome==='active'&&s.commands.length<100){const h=currentHeroId(s,data)!,valid=targetOptions(s,data,h,'attack').filter(t=>t.valid).map(t=>t.id);const id=valid.includes(first)?first:valid[0]!;s=resolveCommand(s,data,{beat:s.beat,heroId:h,action:'attack',targetId:id}).state;}
   expect(s.outcome).toBe('defeat');expect(replay(data,s.commands)).toEqual(s);
 });
 it('rear energy hits on the Hunter turn, not after every hero, and Ward protects the Mage later',()=>{
- let s=createBattle(rearAmbush);let r=resolveCommand(s,rearAmbush,{beat:s.beat,heroId:'tracer',action:'mark',targetId:'brute'});
- expect(r.turns.map(t=>t.actorId)).toEqual(['tracer','raider']);expect(r.state.heroes[3]!.hp).toBe(22);
+ let s=createBattle(rearAmbush);let r=resolveCommand(s,rearAmbush,{beat:s.beat,heroId:'tracer',action:'mark',targetId:'f1'});
+ expect(r.turns.map(t=>t.actorId)).toEqual(['tracer','b1']);expect(r.state.heroes[3]!.hp).toBe(22);
  s=r.state;r=resolveCommand(s,rearAmbush,{beat:s.beat,heroId:'weaver',action:'ward',targetId:'weaver'});
- expect(r.turns).toHaveLength(1);s=r.state;r=resolveCommand(s,rearAmbush,{beat:s.beat,heroId:'guardian',action:'attack',targetId:'brute'});
+ expect(r.turns).toHaveLength(1);s=r.state;r=resolveCommand(s,rearAmbush,{beat:s.beat,heroId:'guardian',action:'attack',targetId:'f1'});
  expect(r.turns[1]!.events[0]).toMatchObject({amount:9,absorbed:14});
 });
-it('boss has exactly one turn per round and alternates physical/energy by round',()=>{
+it('boss (f1) has exactly one turn per round and alternates physical/energy by round',()=>{
  let s=createBattle(riftWarden);const intents=[];
- while(s.round<4){const id=currentHeroId(s,riftWarden)!;const r=resolveCommand(s,riftWarden,{beat:s.beat,heroId:id,action:'attack',targetId:'brute'});
-  intents.push(...r.turns.filter(t=>t.side==='enemy').map(t=>[t.round,t.intent!.kind]));s=r.state;}
+ while(s.round<4){const id=currentHeroId(s,riftWarden)!;const r=resolveCommand(s,riftWarden,{beat:s.beat,heroId:id,action:'attack',targetId:'f1'});
+  intents.push(...r.turns.filter(t=>t.actorId==='f1').map(t=>[t.round,t.intent!.kind]));s=r.state;}
  expect(intents).toEqual([[1,'physical'],[2,'energy'],[3,'physical']]);expect(new Set(encounters.map(e=>e.id)).size).toBe(encounters.length);
 });
 it('teaching advice follows SPD owners, uses every class skill and wins the first clash with all four',()=>{

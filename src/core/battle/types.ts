@@ -46,11 +46,15 @@ export interface HeroDefinition {
   talents?: HeroTalents;
   gear?: HeroGear;
 }
-// `id` is the field position (`raider` back, `brute` front/large); `art` names the illustrated frame (presentation only).
+// Four foe slots (A7 step 2, owner 2026-10-22): `id` is the field position `f1`/`f2` (front row) or `b1`/`b2` (back row),
+// 1–4 foes per encounter and at most two per row. `row` must match the id; front-row foes screen the back row.
+// `large` draws the foe ~1.5x (presentation only); `boss` marks the foe that hard mode empowers.
+// `art` names the illustrated frame (presentation only).
 // Hard-mode traits (master plan A9): thorns answers a hero's hit, veilguard blunts hits on a foe that is neither marked
 // nor corroded, enrage strengthens its moves below a share of its HP. Numbers come from `rules.traits`.
 export type EnemyTrait = 'thorns' | 'veilguard' | 'enrage';
-export interface EnemyDefinition { id: string; name: string; displayName?: string; maxHp: number; speed: number; color: number; art?: string; traits?: readonly EnemyTrait[] }
+export type EnemySlot = 'f1' | 'f2' | 'b1' | 'b2';
+export interface EnemyDefinition { id: EnemySlot; row: 'front' | 'back'; large?: boolean; boss?: boolean; name: string; displayName?: string; maxHp: number; speed: number; color: number; art?: string; traits?: readonly EnemyTrait[] }
 // Enemy moves aim at a party slot (0-3 in deployment order), not a named hero, so any
 // mercenary in that slot is the target. The resolved hero id is stored on Intent.
 export interface IntentDefinition { sourceId: string; targetSlot: number; name: string; damage: number; kind: 'physical' | 'energy' }

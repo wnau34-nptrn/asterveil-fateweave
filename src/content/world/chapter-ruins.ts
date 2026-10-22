@@ -26,7 +26,7 @@ export const ruinsMap: MapDefinition = {
   specialZones: { S: 'meadow', C: 'camp', B: 'sanctum', G: 'sanctum' },
   zones: [
     { id: 'meadow', name: 'ซากป้อมชายแดน', safe: false, base: 8, step: 5, cap: 40, levels: [1, 3], sets: ['dawn', 'wind'],
-      pool: [{ encounterId: 'scout-patrol', weight: 3 }, { encounterId: 'rift-whelp', weight: 2 }],
+      pool: [{ encounterId: 'slime-pair', weight: 3 }, { encounterId: 'bat-swarm', weight: 2 }, { encounterId: 'slime-nest', weight: 1 }, { encounterId: 'scout-patrol', weight: 2 }, { encounterId: 'tusker-bats', weight: 1 }],
       loot: { ore: [4, 6], gold: [2, 4], ember: [0, 10], seal: [0, 0] } },
     { id: 'camp', name: 'แคมป์', safe: true, base: 0, step: 0, cap: 0, pool: [] },
     { id: 'sanctum', name: 'ประตูป้อม', safe: true, base: 0, step: 0, cap: 0, pool: [] },

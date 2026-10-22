@@ -3,7 +3,7 @@ import {chapterOne as map} from '../src/content/world/chapter1';
 import {encounterById as lookup} from '../src/content/encounters/catalog';
 import {veilSiege} from '../src/content/encounters/veil-siege';
 import {BOSS_POWERS,bossReward,chooseBossTarget,startBossPlan} from '../src/core/world/boss-equipment';
-import {beginBattle,bossPowerReady,currentHeroId,previewCommand,replay,resolveCommand,withParty} from '../src/core/battle/engine';
+import {beginBattle,bossPowerReady,currentHeroId,previewCommand,replay,resolveCommand,targetOptions,withParty} from '../src/core/battle/engine';
 import {newProfile,depart,settle,salvage,equip} from '../src/core/world/profile';
 import {battleData,battleState,recordBattle,finishBattle,rollPercent,wear,heroCatalog,starred} from '../src/core/world/world';
 import {gearTotals,itemStats,itemValid,setCounts} from '../src/core/world/equipment';
@@ -19,7 +19,7 @@ const gear=(boss:BossPower,uid=1):Item=>({uid,boss,slot:'charm',rarity:4,level:1
 function fixture(power:BossPower,id='tracer',enemies=1):EncounterDefinition {
   const base=veilSiege.heroes.find(h=>h.id===id)!;
   const hero={...base,speed:1000,maxHp:200,gear:{boss:{power,amount:power==='focus'?4:6}}};
-  return {...withParty(veilSiege,[hero]),enemies:Array.from({length:enemies},(_,i)=>({id:'foe'+i,name:'Enemy',maxHp:10000,speed:0,color:0,lane:'front'})),intents:Array.from({length:enemies},(_,i)=>({sourceId:'foe'+i,targetSlot:0,name:'hit',damage:10,kind:'physical' as const}))};
+  return {...withParty(veilSiege,[hero]),enemies:Array.from({length:enemies},(_,i)=>({id:(['f1','f2','b1','b2'] as const)[i]!,row:'front' as const,name:'Enemy',maxHp:10000,speed:0,color:0})),intents:Array.from({length:enemies},(_,i)=>({sourceId:['f1','f2','b1','b2'][i]!,targetSlot:0,name:'hit',damage:10,kind:'physical' as const}))};
 }
 it('separates free boss targeting from class targets, snapshots it and preserves per-boss pity through all return outcomes',()=>{
   const p=newProfile(map,7),copy=structuredClone(p),selected=chooseBossTarget(p,map,'focus').profile;expect(p).toEqual(copy);expect(selected.bank).toEqual(p.bank);expect(selected.forge).toBe(p.forge);expect(selected.hunt).toEqual(p.hunt);
@@ -47,7 +47,7 @@ it('hard-four resets on actual reward, ordinary misses do not grant items, and b
   const full={charm,head,body:{...head,uid:3,slot:'body' as const},boots:{...head,uid:4,slot:'boots' as const}};expect(gearTotals(map,full).gear?.freshHit).toBe(6);
 });
 const easyLookup=(id:string)=>{const data=lookup(id);return data?{...data,enemies:data.enemies.map(e=>({...e,maxHp:1,speed:0}))}:undefined;};
-function win(run:ExpeditionState){const data=battleData(run,map,easyLookup)!;let s=battleState(run,map,easyLookup)!;while(s.outcome==='active')s=resolveCommand(s,data,{heroId:currentHeroId(s,data)!,beat:s.beat,action:'attack',targetId:s.enemies.find(e=>e.hp>0)!.id}).state;return finishBattle(recordBattle(run,map,easyLookup,s.commands),map,easyLookup);}
+function win(run:ExpeditionState){const data=battleData(run,map,easyLookup)!;let s=battleState(run,map,easyLookup)!;while(s.outcome==='active')s=resolveCommand(s,data,{heroId:currentHeroId(s,data)!,beat:s.beat,action:'attack',targetId:targetOptions(s,data,currentHeroId(s,data)!,'attack').find(t=>t.valid)!.id}).state;return finishBattle(recordBattle(run,map,easyLookup,s.commands),map,easyLookup);}
 it('actual boss victory adds only its independent bonus and preserves all three ordinary drops, RNG and weapon-pity results against legacy runs',()=>{
   const fresh=depart(newProfile(map,17),map,easyLookup,77).run;fresh.battle={kind:'boss',encounterId:map.bossEncounterId,entry:{...fresh.hp},commands:[]};
   const legacy=structuredClone(fresh);delete legacy.bossLoot;const original=structuredClone(fresh),a=win(fresh),b=win(legacy);
@@ -56,17 +56,17 @@ it('actual boss victory adds only its independent bonus and preserves all three 
 });
 it('focus adds exactly once to the marked primary hit, includes leech/replay/preview, and never adds to splash, marks or unmarked hits',()=>{
   const data=fixture('focus'),state=beginBattle(data).state;state.enemies[0]!.markedUntil=3;
-  const cmd:Command={beat:state.beat,heroId:'tracer',action:'execute',targetId:'foe0'},r=resolveCommand(state,data,cmd);
+  const cmd:Command={beat:state.beat,heroId:'tracer',action:'execute',targetId:'f1'},r=resolveCommand(state,data,cmd);
   expect(r).toEqual(previewCommand(state,data,cmd));expect(r.turns[0]!.events.find(e=>e.type==='damage')!.amount).toBe(54);expect(state.heroes[0]!.bossUsedRound).toBeUndefined();expect(r.turns[0]!.state.heroes[0]!.bossUsedRound).toBe(1);
   const used=structuredClone(state);used.heroes[0]!.bossUsedRound=1;expect(resolveCommand(used,data,cmd).turns[0]!.events.find(e=>e.type==='damage')!.amount).toBe(50);
   const leechData=structuredClone(data);leechData.heroes=[{...leechData.heroes[0]!,leech:10}];const hurt=structuredClone(state);hurt.heroes[0]!.hp=100;expect(resolveCommand(hurt,leechData,cmd).turns[0]!.state.heroes[0]!.hp).toBe(105);
   const unmarked=beginBattle(data).state;expect(resolveCommand(unmarked,data,{...cmd,beat:unmarked.beat}).turns[0]!.events.find(e=>e.type==='damage')!.amount).toBe(28);
   const mark=resolveCommand(beginBattle(data).state,data,{...cmd,action:'mark'});expect(mark.turns[0]!.state.heroes[0]!.bossUsedRound).toBeUndefined();
-  const mage=fixture('focus','weaver',2);mage.heroes=[{...mage.heroes[0]!,talents:{caps:{splitbolt:0}}}];const m=beginBattle(mage).state;m.enemies.forEach(e=>e.markedUntil=3);const hit=resolveCommand(m,mage,{beat:m.beat,heroId:'weaver',action:'bolt',targetId:'foe0'}).turns[0]!.events.filter(e=>e.type==='damage');expect(hit.map(e=>e.amount)).toEqual([30,13]);
-  const normal=beginBattle(data).state,attack={beat:normal.beat,heroId:'tracer',action:'attack' as const,targetId:'foe0'},done=resolveCommand(normal,data,attack).state;expect(replay(data,[attack])).toEqual(done);expect(markedSkillExample('execute',data.heroes[0]!,data)).toBe(54);
+  const mage=fixture('focus','weaver',2);mage.heroes=[{...mage.heroes[0]!,talents:{caps:{splitbolt:0}}}];const m=beginBattle(mage).state;m.enemies.forEach(e=>e.markedUntil=3);const hit=resolveCommand(m,mage,{beat:m.beat,heroId:'weaver',action:'bolt',targetId:'f1'}).turns[0]!.events.filter(e=>e.type==='damage');expect(hit.map(e=>e.amount)).toEqual([30,13]);
+  const normal=beginBattle(data).state,attack={beat:normal.beat,heroId:'tracer',action:'attack' as const,targetId:'f1'},done=resolveCommand(normal,data,attack).state;expect(replay(data,[attack])).toEqual(done);expect(markedSkillExample('execute',data.heroes[0]!,data)).toBe(54);
 });
 it('aegis grants a post-hit shield floor once per round, never prevents death or triggers on fully absorbed damage',()=>{
-  const data=fixture('aegis','tracer',2),s=beginBattle(data).state,cmd={beat:s.beat,heroId:'tracer',action:'mark' as const,targetId:'foe0'},out=resolveCommand(s,data,cmd);
+  const data=fixture('aegis','tracer',2),s=beginBattle(data).state,cmd={beat:s.beat,heroId:'tracer',action:'mark' as const,targetId:'f1'},out=resolveCommand(s,data,cmd);
   expect(out.turns[1]!.state.heroes[0]).toMatchObject({hp:190,barrier:6,bossUsedRound:1});expect(out.turns[2]!.state.heroes[0]).toMatchObject({hp:186,barrier:0,bossUsedRound:1});expect(bossPowerReady(out.state,data,'tracer','aegis')).toBe(6);
   const shielded=structuredClone(s);shielded.heroes[0]!.barrier=20;const shieldOut=resolveCommand(shielded,data,cmd);expect(shieldOut.state.heroes[0]!.hp).toBe(200);expect(shieldOut.state.heroes[0]!.bossUsedRound).toBeUndefined();
   const fatal=structuredClone(s);fatal.heroes[0]!.hp=5;const down=resolveCommand(fatal,data,cmd).state.heroes[0]!;expect(down.hp).toBe(0);expect(down.barrier).toBe(0);expect(down.bossUsedRound).toBeUndefined();
@@ -88,7 +88,7 @@ it('unique identity survives equip/development/transfer; never becomes a materia
   const locked=lockEquipment(tuned,1).profile;expect(salvage(locked,map,[1]).profile).toBe(locked);const unlocked=lockEquipment(locked,1).profile,investment=unlocked.items[0]!.investment!,recycled=salvage(unlocked,map,[1]);expect(recycled.profile.bank.ore-unlocked.bank.ore).toBe(12+investment.ore);expect(recycled.profile.bank.dust-unlocked.bank.dust).toBe(15+investment.dust);expect(salvage(recycled.profile,map,[1]).profile).toBe(recycled.profile);
 });
 it('v27 validates identity, provenance and boss counter state, preserves legacy active battle replay and never invents old-run bonus',()=>{
-  const p=newProfile(map,1);p.items=[gear('focus')];p.nextItem=2;const game=depart(equip(p,'tracer',1).profile,map,lookup,17);game.run.battle={kind:'random',encounterId:map.tutorialEncounterId,entry:{...game.run.hp},commands:[]};let raw='';saveGame({getItem:()=>null,setItem:(_k,v)=>raw=v},game);expect(JSON.parse(raw).version).toBe(34);expect(parseGame(raw,map,lookup)).toEqual(game);
+  const p=newProfile(map,1);p.items=[gear('focus')];p.nextItem=2;const game=depart(equip(p,'tracer',1).profile,map,lookup,17);game.run.battle={kind:'random',encounterId:map.tutorialEncounterId,entry:{...game.run.hp},commands:[]};let raw='';saveGame({getItem:()=>null,setItem:(_k,v)=>raw=v},game);expect(JSON.parse(raw).version).toBe(35);expect(parseGame(raw,map,lookup)).toEqual(game);
   for(const corrupt of [(g:typeof game)=>g.run.bossLoot!.misses=4,(g:typeof game)=>g.run.bossLoot!.target='focus',(g:typeof game)=>g.run.bossLoot!.rewarded=true,(g:typeof game)=>g.run.members.tracer!.gear!.charm!.boss='lantern']){const c=structuredClone(game);corrupt(c);expect(()=>parseGame(JSON.stringify({version:27,...c}),map,lookup)).toThrow();}
   for(const item of [{...gear('focus'),special:'renewal'}, {...gear('focus'),slot:'body'}, {...gear('focus'),rarity:3}, {...gear('focus'),boss:'unknown'}])expect(itemValid(map,item as Item,ids)).toBe(false);
   const legacy=depart(newProfile(map,3),map,lookup,17);delete legacy.run.bossLoot;legacy.run.battle={kind:'random',encounterId:map.tutorialEncounterId,entry:{...legacy.run.hp},commands:[]};const before=battleState(legacy.run,map,lookup);const loaded=parseGame(JSON.stringify({version:26,...legacy}),map,lookup);expect(loaded.run!.bossLoot).toBeUndefined();expect(battleState(loaded.run!,map,lookup)).toEqual(before);

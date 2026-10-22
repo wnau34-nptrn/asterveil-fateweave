@@ -18,17 +18,24 @@ export const heroText: Record<string, { name: string; role: string; help: string
   weaver: { name: 'ไอรา', role: 'จอมเวท', help: 'ศรเวทและโล่ป้องกัน', icon: '✧' },
   healer: { name: 'เซเรน', role: 'นักบวช', help: 'รักษาคนเดียวหรือฟื้นฟูทั้งทีม', icon: '✚' },
 };
-const names: Record<string, string> = { lio: 'ลิโอ', brann: 'แบรนน์', sefa: 'เซฟา', toma: 'โทมะ', mira: 'มิร่า', garran: 'การ์แรน', guardian: 'เอกิส', tracer: 'ไลรา', weaver: 'ไอรา', healer: 'เซเรน', raider: 'นักจู่โจม', brute: 'อสูรรอยแยก', party: 'ทั้งทีม' };
+const names: Record<string, string> = { lio: 'ลิโอ', brann: 'แบรนน์', sefa: 'เซฟา', toma: 'โทมะ', mira: 'มิร่า', garran: 'การ์แรน', guardian: 'เอกิส', tracer: 'ไลรา', weaver: 'ไอรา', healer: 'เซเรน', party: 'ทั้งทีม' };
 export function actorName(id: string | undefined, data: EncounterDefinition): string {
   // Enemies carry the battle's monster level (2D-1).
+  // Two foes of the same kind are told apart as ก/ข in slot order.
   const foe = id ? data.enemies.find(e => e.id === id) : undefined;
-  if (foe && data.level) return `Lv${data.level} ${foe.displayName ?? foe.name}`;
-  return id ? data.enemies.find(e => e.id === id)?.displayName ?? names[id] ?? data.heroes.find(h => h.id === id)?.name ?? data.enemies.find(e => e.id === id)?.name ?? 'เป้าหมาย' : 'ทีม';
+  if (foe) {
+    const label = (e: typeof foe) => e.displayName ?? e.name; const twins = data.enemies.filter(e => label(e) === label(foe));
+    const name = twins.length > 1 ? `${label(foe)} ${'กขคง'[twins.indexOf(foe)]}` : label(foe);
+    return data.level ? `Lv${data.level} ${name}` : name;
+  }
+  return id ? names[id] ?? data.heroes.find(h => h.id === id)?.name ?? 'เป้าหมาย' : 'ทีม';
 }
 export function intentName(intent: Intent): string {
   return ({ 'Raking Slash': 'ฟันกวาด', 'Rift Bolt': 'ลำแสงรอยแยก', 'Crushing Blow': 'ทุบหนัก', 'Shadow Knife': 'มีดเงา', 'Rift Fury': 'โทสะรอยแยก', 'War Cry': 'คำรามศึก',
     'Seed Spark': 'ประกายเมล็ด', 'Tusk Charge': 'พุ่งงา', 'Thorn Pounce': 'ตะครุบหนาม', 'Spore Hex': 'คำสาปสปอร์', 'Thorn Bloom': 'หนามผลิบาน',
-    'Briar Lash': 'แส้หนาม', 'Rune Lash': 'แส้อักขระ', 'Ribbon Snare': 'ริบบิ้นรัด', 'Crystal Fist': 'หมัดผลึก', 'Horn Charge': 'พุ่งเขา', 'Shard Burst': 'ผลึกระเบิด' } as Record<string, string>)[intent.name] ?? intent.name;
+    'Briar Lash': 'แส้หนาม', 'Rune Lash': 'แส้อักขระ', 'Ribbon Snare': 'ริบบิ้นรัด', 'Crystal Fist': 'หมัดผลึก', 'Horn Charge': 'พุ่งเขา', 'Shard Burst': 'ผลึกระเบิด',
+    'Jelly Bounce': 'กระเด้งชน', 'Ember Spark': 'ประกายถ่าน', 'Nip': 'งับ', 'Shield Smash': 'ทุบโล่', 'Mace Swing': 'ฟาดกระบอง', 'Thorn Bite': 'กัดหนาม',
+    'Spore Dust': 'ฝุ่นสปอร์', 'Rift Beam': 'คลื่นรอยแยก', 'Star Flame': 'เปลวดาว', 'Crystal Stab': 'แทงขาผลึก' } as Record<string, string>)[intent.name] ?? intent.name;
 }
 export function skillDescription(action: ActionId, heroId: string, data: EncounterDefinition): string {
   const skill = { ...data.skills[action], power: skillPower(data, heroId, action) };
@@ -171,6 +178,7 @@ export function reasonThai(reason: string): string {
     'Already hasted.': 'ได้ยาเร่งสำหรับรอบหน้าแล้ว',
     'No song is playing.': 'ต้องบรรเลงเพลงอยู่ก่อน',
     'This enemy is aiming at the scout.': 'ศัตรูตัวนี้เล็งเซฟาอยู่',
+    'A front-row enemy shields this target.': 'ศัตรูแถวหน้าบังอยู่ ต้องล้มแถวหน้าก่อน หรือใช้สกิลตีทะลุ',
     'The preview is stale. Select an action again.': 'จังหวะเปลี่ยนแล้ว กรุณาเลือกใหม่',
   } as Record<string, string>)[reason] ?? 'คำสั่งนี้ยังใช้ไม่ได้ กรุณาเลือกใหม่';
 }

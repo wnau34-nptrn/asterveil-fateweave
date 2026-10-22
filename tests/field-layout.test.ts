@@ -4,7 +4,7 @@ import { fieldSlots, type FieldBox } from '../src/game/visuals/field-layout';
 const intersects = (a: FieldBox, b: FieldBox) => a.x < b.x + b.width && b.x < a.x + a.width && a.y < b.y + b.height && b.y < a.y + a.height;
 
 describe('reserved battlefield unit panels', () => {
-  it('keeps every HP/status panel clear of all six bodies and other panels across phone and PC arena sizes', () => {
+  it('keeps every HP/status panel clear of all eight bodies and other panels across phone and PC arena sizes', () => {
     for (const width of [296, 308, 348, 378, 418, 468]) for (const height of [120, 128, 144, 149, 150, 156, 179, 180, 193, 259, 260, 379, 455, 650]) {
       const slots = fieldSlots(width, height);
       for (const [i, a] of slots.entries()) {

@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { guardCounterPower, ambushBonus, corrodeBonus, createBattle, currentHeroId, guardReductionOf, nextIntentOf, resolveCommand, skillPower, tauntReductionOf, withParty } from '../src/core/battle/engine';
 import type { ActionId, BattleState, EncounterDefinition } from '../src/core/battle/types';
-import { veilSiege } from '../src/content/encounters/veil-siege';
+import { veilSiege as siegeBase } from '../src/content/encounters/veil-siege';
+import { openField } from './fixtures/open-field';
+const veilSiege = openField(siegeBase);
 import { encounterById as lookup } from '../src/content/encounters/catalog';
 import { chapterOne as map } from '../src/content/world/chapter1';
 import { heroDef, newExpedition, starred } from '../src/core/world/world';
@@ -27,7 +29,7 @@ function enemyTurn(s: BattleState, d: EncounterDefinition, first: [ActionId, str
   let r = act(s, d, ...first);
   for (let i = 0; i < 12; i++) {
     const turn = r.turns.find(t => t.actorId === enemyId); if (turn) return { first: r, turn };
-    r = act(r.state, d, 'attack', 'brute');
+    r = act(r.state, d, 'attack', 'f1');
   }
   throw new Error('enemy never acted');
 }
@@ -144,26 +146,26 @@ describe('knight talents (Aegis)', () => {
 describe('duelist talents (Lyra)', () => {
   it('deep mark: her hits on a marked enemy gain 6', () => {
     const plain = party([['guardian'], ['tracer']]); const t = party([['guardian'], ['tracer', full(true)]]);
-    const mark = (s: BattleState) => set(s, 'brute', { markedUntil: s.round + 2 });
-    const a = dealt(act(mark(until(createBattle(plain), plain, 'tracer')), plain, 'attack', 'brute'), 'brute');
-    const b = dealt(act(mark(until(createBattle(t), t, 'tracer')), t, 'attack', 'brute'), 'brute');
+    const mark = (s: BattleState) => set(s, 'f1', { markedUntil: s.round + 2 });
+    const a = dealt(act(mark(until(createBattle(plain), plain, 'tracer')), plain, 'attack', 'f1'), 'f1');
+    const b = dealt(act(mark(until(createBattle(t), t, 'tracer')), t, 'attack', 'f1'), 'f1');
     expect(b - a).toBe(Math.round(16 * 1.12) - 16 + 6);
   });
   it('a precision strike on a marked enemy heals her; downing an enemy readies it again', () => {
     const d = party([['guardian'], ['tracer', full(false)]]);
-    let s = until(createBattle(d), d, 'tracer'); s = set(set(s, 'tracer', { hp: 20 }), 'brute', { markedUntil: s.round + 2 });
-    expect(hero(act(s, d, 'execute', 'brute').turns[0]!.state, 'tracer').hp).toBe(26);
-    const low = set(until(createBattle(d), d, 'tracer'), 'raider', { hp: 5 });
-    expect(hero(act(low, d, 'execute', 'raider').turns[0]!.state, 'tracer').cooldowns.execute).toBeUndefined();
-    expect(hero(act(low, d, 'execute', 'brute').turns[0]!.state, 'tracer').cooldowns.execute).toBeDefined();
+    let s = until(createBattle(d), d, 'tracer'); s = set(set(s, 'tracer', { hp: 20 }), 'f1', { markedUntil: s.round + 2 });
+    expect(hero(act(s, d, 'execute', 'f1').turns[0]!.state, 'tracer').hp).toBe(26);
+    const low = set(until(createBattle(d), d, 'tracer'), 'b1', { hp: 5 });
+    expect(hero(act(low, d, 'execute', 'b1').turns[0]!.state, 'tracer').cooldowns.execute).toBeUndefined();
+    expect(hero(act(low, d, 'execute', 'f1').turns[0]!.state, 'tracer').cooldowns.execute).toBeDefined();
   });
 });
 
 describe('mage talents (Eira)', () => {
   it('split bolt hits the other enemy for half', () => {
     const d = party([['guardian'], ['tracer'], ['weaver', full(true)]]);
-    const r = act(until(createBattle(d), d, 'weaver'), d, 'bolt', 'brute');
-    expect(dealt(r, 'raider')).toBe(Math.floor(skillPower(d, 'weaver', 'bolt') / 2));
+    const r = act(until(createBattle(d), d, 'weaver'), d, 'bolt', 'f1');
+    expect(dealt(r, 'b1')).toBe(Math.floor(skillPower(d, 'weaver', 'bolt') / 2));
     expect(skillPower(d, 'weaver', 'bolt')).toBe(Math.round(26 * 1.12) + 8);
   });
   it('a thicker ward reflects the first hit it absorbs', () => {
@@ -187,8 +189,8 @@ describe('priest talents (Seren)', () => {
   it('heal adds a small barrier and solace softens the target’s hits', () => {
     const plain = party([['guardian'], ['tracer'], ['weaver'], ['healer']]); const d = party([['guardian'], ['tracer'], ['weaver'], ['healer', full(false)]]);
     const run = (data: EncounterDefinition) => {
-      let s = until(createBattle(data), data, 'healer'); const target = nextIntentOf(s, data, 'raider')!.targetId; s = set(s, target, { hp: 10 });
-      const { first: r, turn } = enemyTurn(s, data, ['heal', target], 'raider');
+      let s = until(createBattle(data), data, 'healer'); const target = nextIntentOf(s, data, 'b1')!.targetId; s = set(s, target, { hp: 10 });
+      const { first: r, turn } = enemyTurn(s, data, ['heal', target], 'b1');
       return { r, target, turn, hit: turn.events.find(e => e.type === 'damage')! };
     };
     const a = run(plain); const b = run(d);
@@ -202,15 +204,15 @@ describe('priest talents (Seren)', () => {
 describe('spear talents (Garran)', () => {
   it('piercing line hits the other enemy for half', () => {
     const d = party([['garran', full(true)], ...rest]);
-    const r = act(until(createBattle(d), d, 'garran'), d, 'pierce', 'brute');
-    expect(dealt(r, 'raider')).toBe(Math.floor(skillPower(d, 'garran', 'pierce') / 2));
+    const r = act(until(createBattle(d), d, 'garran'), d, 'pierce', 'f1');
+    expect(dealt(r, 'b1')).toBe(Math.floor(skillPower(d, 'garran', 'pierce') / 2));
   });
   it('a braced front wall softens physical hits on the front lane; brace counters harder', () => {
     const d = party([['garran', full(false)], ...rest]);
     expect(skillPower(d, 'garran', 'brace')).toBe(14 + 6);
     let s = act(until(createBattle(d), d, 'garran'), d, 'brace', 'garran').state; let hit;
     for (let i = 0; i < 12 && !hit; i++) {
-      const r = act(s, d, 'attack', 'brute');
+      const r = act(s, d, 'attack', 'f1');
       for (const t of r.turns) { const e = t.events.find(x => x.type === 'damage' && t.side === 'enemy' && t.intent?.kind === 'physical'); if (e && !hit) hit = { e, damage: t.intent!.damage, counter: t.events.find(x => x.type === 'counter') }; }
       s = r.state;
     }
@@ -222,25 +224,25 @@ describe('spear talents (Garran)', () => {
 describe('archer talents (Mira)', () => {
   it('hunter: her hits on a hindered enemy gain 6', () => {
     const plain = party([['mira'], ...rest]); const t = party([['mira', { root: 1, a1: 1, a2: 1, a3: 1 }], ...rest]);
-    const hinder = (s: BattleState) => set(s, 'brute', { delayedRound: s.round });
-    const a = dealt(act(hinder(until(createBattle(plain), plain, 'mira')), plain, 'attack', 'brute'), 'brute');
-    const b = dealt(act(hinder(until(createBattle(t), t, 'mira')), t, 'attack', 'brute'), 'brute');
+    const hinder = (s: BattleState) => set(s, 'f1', { delayedRound: s.round });
+    const a = dealt(act(hinder(until(createBattle(plain), plain, 'mira')), plain, 'attack', 'f1'), 'f1');
+    const b = dealt(act(hinder(until(createBattle(t), t, 'mira')), t, 'attack', 'f1'), 'f1');
     expect(b - a).toBe(Math.round(13 * 1.08) - 13 + 6);
   });
   it('a heavier volley hinders the fastest standing enemy', () => {
     const d = party([['mira', full(false)], ...rest]);
     expect(skillPower(d, 'mira', 'volley')).toBe(10 + 4);
     const s = until(createBattle(d), d, 'mira'); const r = act(s, d, 'volley', 'enemies').turns[0]!;
-    expect(foe(r.state, 'raider').delayedRound).toBe(s.round + 1); expect(foe(r.state, 'brute').delayedRound).toBeUndefined();
+    expect(foe(r.state, 'b1').delayedRound).toBe(s.round + 1); expect(foe(r.state, 'f1').delayedRound).toBeUndefined();
   });
 });
 
 describe('alchemist talents (Toma)', () => {
   it('stronger corrosion spreads to every enemy', () => {
     const d = party([['toma', full(true)], ...rest]);
-    const s = until(createBattle(d), d, 'toma'); const r = act(s, d, 'acid', 'brute').turns[0]!;
-    for (const id of ['brute', 'raider']) expect(corrodeBonus(r.state, d, id)).toBe(d.rules.corrodeBonus + 4);
-    expect(r.events.find(e => e.type === 'damage' && e.targetId === 'raider')).toBeUndefined();
+    const s = until(createBattle(d), d, 'toma'); const r = act(s, d, 'acid', 'f1').turns[0]!;
+    for (const id of ['f1', 'b1']) expect(corrodeBonus(r.state, d, id)).toBe(d.rules.corrodeBonus + 4);
+    expect(r.events.find(e => e.type === 'damage' && e.targetId === 'b1')).toBeUndefined();
   });
   it('haste heals the ally and is ready sooner', () => {
     const d = party([['toma', full(false)], ...rest]);
@@ -253,15 +255,15 @@ describe('scout talents (Sefa)', () => {
   it('a stronger ambush leaves her in shadow step', () => {
     const d = party([['guardian'], ['sefa', full(true)], ['weaver'], ['healer']]);
     const s = until(createBattle(d), d, 'sefa');
-    expect(ambushBonus(s, d, 'brute', 'sefa')).toBe(s.order.indexOf('brute') > s.turnIndex ? d.rules.ambushBonus + 8 : 0);
-    expect(hero(act(s, d, 'ambush', 'brute').turns[0]!.state, 'sefa').evading).toBe(true);
+    expect(ambushBonus(s, d, 'f1', 'sefa')).toBe(s.order.indexOf('f1') > s.turnIndex ? d.rules.ambushBonus + 8 : 0);
+    expect(hero(act(s, d, 'ambush', 'f1').turns[0]!.state, 'sefa').evading).toBe(true);
   });
   it('a doubled shadow step dodges twice and each dodge heals her', () => {
     const d = party([['guardian'], ['sefa', full(false)], ['weaver'], ['healer']]);
     const s = set(until(createBattle(d), d, 'sefa'), 'sefa', { hp: 30 });
     const r = act(s, d, 'evade', 'sefa');
     expect(hero(r.turns[0]!.state, 'sefa').evadeExtra).toBe(1);
-    const turn = r.turns.find(t => t.actorId === 'raider')!;
+    const turn = r.turns.find(t => t.actorId === 'b1')!;
     expect(turn.events.map(e => e.type)).toEqual(['dodge', 'heal']);
     expect(hero(turn.state, 'sefa')).toMatchObject({ hp: 36, evading: true });
   });
@@ -273,7 +275,7 @@ describe('warden talents (Brann)', () => {
     expect(skillPower(d, 'brann', 'slam')).toBe(Math.round(18 * 1.08) + 8);
     let s = act(until(createBattle(d), d, 'brann'), d, 'taunt', 'brann').state; const counters: number[] = [];
     for (let i = 0; i < 12 && currentHeroId(s, d) !== 'brann'; i++) {
-      const r = act(s, d, 'attack', 'brute');
+      const r = act(s, d, 'attack', 'f1');
       for (const t of r.turns) if (t.side === 'enemy') counters.push(...t.events.filter(e => e.type === 'counter' && e.sourceId === 'brann').map(e => e.amount!));
       s = r.state;
     }
@@ -283,7 +285,7 @@ describe('warden talents (Brann)', () => {
     const d = party([['brann', full(false)], ...rest]);
     expect(tauntReductionOf(d, 'brann')).toBe(0.45);
     let s = until(createBattle(d), d, 'brann'); s = set(s, 'brann', { hp: 30 });
-    const events = []; for (let i = 0; i < 12; i++) { const r = act(s, d, currentHeroId(s, d) === 'brann' ? 'taunt' : 'attack', currentHeroId(s, d) === 'brann' ? 'brann' : 'brute'); events.push(...r.events); s = r.state; if (events.some(e => e.text === 'Stone regen.')) break; }
+    const events = []; for (let i = 0; i < 12; i++) { const r = act(s, d, currentHeroId(s, d) === 'brann' ? 'taunt' : 'attack', currentHeroId(s, d) === 'brann' ? 'brann' : 'f1'); events.push(...r.events); s = r.state; if (events.some(e => e.text === 'Stone regen.')) break; }
     expect(events.find(e => e.text === 'Stone regen.')).toMatchObject({ targetId: 'brann', amount: 6 });
   });
 });
@@ -294,7 +296,7 @@ describe('bard talents (Lio)', () => {
     expect(skillPower(d, 'lio', 'valor')).toBe(Math.round(4 * 1.04) + 2);
     expect(member('lio', full(true)).attack).toBe(Math.round(9 * 1.14));
     let s = act(until(createBattle(d), d, 'lio'), d, 'valor', 'lio').state; let hit;
-    for (let i = 0; i < 6 && !hit; i++) { const r = act(s, d, 'attack', 'brute'); for (const t of r.turns) if (t.side === 'enemy' && !hit) hit = { e: t.events.find(e => e.type === 'damage'), damage: t.intent!.damage }; s = r.state; }
+    for (let i = 0; i < 6 && !hit; i++) { const r = act(s, d, 'attack', 'f1'); for (const t of r.turns) if (t.side === 'enemy' && !hit) hit = { e: t.events.find(e => e.type === 'damage'), damage: t.intent!.damage }; s = r.state; }
     expect(hit!.e!.amount! + hit!.e!.absorbed!).toBe(hit!.damage - 2);
   });
   it('overture: the battle opens with the song of mending', () => {

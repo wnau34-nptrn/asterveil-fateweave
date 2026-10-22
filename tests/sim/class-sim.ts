@@ -40,7 +40,8 @@ export function gearFor(id: string, build: Exclude<Build, 'none'>, level: number
   return gear;
 }
 export interface ClassRow { id: string; build: Build; won: number; fought: number; partyHp: number; dealt: number; healed: number; taken: number; rounds: number }
-const fights = ['thicket-ambush', 'shadow-stalker', 'crystal-stampede', 'rear-ambush', 'elite-tusk-chief', 'elite-briar-lord'];
+// Includes the four-slot sets (A7 step 2) so swarms and screened back rows count.
+const fights = ['thicket-ambush', 'shadow-stalker', 'crystal-stampede', 'rear-ambush', 'elite-tusk-chief', 'elite-briar-lord', 'beetle-wall', 'forest-swarm', 'channeler-wisps', 'crawler-pack'];
 export function classSim(level = 7): ClassRow[] {
   const catalog = heroCatalog(lookup, map); const teaching = catalog.slice(0, 4);
   const rows: ClassRow[] = [];

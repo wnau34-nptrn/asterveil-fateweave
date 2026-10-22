@@ -267,7 +267,7 @@ test('lobby market (4A): the broker sheet redraws the board for gold twice per r
   await page.locator('#buy-gearbox').click(); await expect(page.locator('.lobby-result')).toContainText('หีบอุปกรณ์');
   p = await savedProfile(page);
   expect(p.members.tracer!.dupes).toBe(1); expect(p.shop).toEqual({ contract: 1, gearbox: 1 }); expect(p.items).toHaveLength(1); expect(p.items[0]!.rarity).toBeGreaterThanOrEqual(2);
-  expect(await page.evaluate(k => JSON.parse(localStorage.getItem(k)!).version, key)).toBe(34);
+  expect(await page.evaluate(k => JSON.parse(localStorage.getItem(k)!).version, key)).toBe(35);
   expect(issues).toEqual([]);
 });
 
@@ -366,7 +366,7 @@ for (const [width, height] of [[390, 844], [430, 932]]) {
     await page.locator('#battle-tab-guide').tap(); await expect(page.locator('#info-skill')).toBeVisible();
     expect(await page.evaluate(k => localStorage.getItem(k), key)).toBe(before);
     await page.locator('[data-ui=info-close]').tap(); await expect(page.locator('#battle-info')).toBeFocused();
-    await page.locator('#action-attack').tap(); await page.locator('#target-brute').tap(); await finishPlayback(page);
+    await page.locator('#action-attack').tap(); await page.locator('#target-f1').tap(); await finishPlayback(page);
     expect((await saved(page)).battle!.commands).toHaveLength(1);
     await context.close();
   });
@@ -411,7 +411,7 @@ test('battle effects recover a suspended audio context and start attack and skil
   await page.locator('[data-ui=skill-close]').click();
   const attacks = () => page.evaluate(() => (window as unknown as { sfxProbe: { attacks: number } }).sfxProbe.attacks);
   const before = await attacks();
-  await page.locator('#target-brute').click(); await expect.poll(attacks).toBeGreaterThan(before);
+  await page.locator('#target-f1').click(); await expect.poll(attacks).toBeGreaterThan(before);
   await finishPlayback(page);
   await expect(page.locator('#hero-weaver')).toHaveAttribute('aria-pressed', 'true');
   await page.evaluate(() => (window as unknown as { sfxProbe: { contexts: AudioContext[] } }).sfxProbe.contexts[0]!.suspend());
@@ -419,7 +419,7 @@ test('battle effects recover a suspended audio context and start attack and skil
   await page.locator('[data-ui=skill-close]').click();
   const zaps = () => page.evaluate(() => (window as unknown as { sfxProbe: { zaps: number } }).sfxProbe.zaps);
   const beforeSkill = await zaps();
-  await page.locator('#target-brute').click(); await expect.poll(zaps).toBeGreaterThan(beforeSkill);
+  await page.locator('#target-f1').click(); await expect.poll(zaps).toBeGreaterThan(beforeSkill);
   await finishPlayback(page); await page.screenshot({ path: info.outputPath('sfx-recovered-attack-skill.png') });
   expect(issues).toEqual([]);
 });
@@ -456,7 +456,7 @@ test('camp travel (4B) and optional elite returns (4C): rest brings the meadow e
   const start = findTiles(map, 'start')[0]!; await reachable(page, `#travel-${start.x}-${start.y}`); await page.locator(`#travel-${start.x}-${start.y}`).click();
   await expect(page.locator('#world-message')).toContainText('วาร์ปกลับทางเข้าด่าน');
   run = await saved(page); expect(run.position).toEqual(start);
-  expect(await page.evaluate(k => JSON.parse(localStorage.getItem(k)!).version, key)).toBe(34);
+  expect(await page.evaluate(k => JSON.parse(localStorage.getItem(k)!).version, key)).toBe(35);
   expect(issues).toEqual([]);
 });
 
@@ -467,7 +467,7 @@ test('the smith smelts ore into veil dust, capped per return; saved v18', async 
   await page.locator('#forge-tab-smelt').click();await page.locator('#forge-target').selectOption('5');await reachable(page,'#forge-smelt');await page.locator('#forge-smelt').click();await page.locator('#forge-confirm').click();
   await expect(page.locator('.lobby-result')).toContainText('หลอมแร่ดาวเป็นฝุ่นดาว 5');
   const p = await savedProfile(page); expect(p.bank.dust).toBe(5); expect(p.bank.ore).toBe(500 - 5 * f.smeltOre); expect(p.smelted).toBe(5);
-  expect(await page.evaluate(k => JSON.parse(localStorage.getItem(k)!).version, key)).toBe(34);
+  expect(await page.evaluate(k => JSON.parse(localStorage.getItem(k)!).version, key)).toBe(35);
 });
 
 test('the camp name shows in the lobby and the crest button renames it (owner 2026-10-21)', async ({ page }) => {
@@ -560,7 +560,7 @@ test('Garran (spear) fights from the front slot: brace targets himself, drawn wi
   await page.goto('./'); await page.locator('#continue').click(); await page.locator('#start').click();
   for (const hero of ['tracer', 'weaver']) {
     await expect(page.locator(`#hero-${hero}`)).toHaveAttribute('aria-pressed', 'true');
-    await page.locator('#action-attack').click();await page.locator('#skill-details').click(); await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-brute').click(); await finishPlayback(page);
+    await page.locator('#action-attack').click();await page.locator('#skill-details').click(); await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-f1').click(); await finishPlayback(page);
   }
   await expect(page.locator('#hero-garran')).toHaveAttribute('aria-pressed', 'true');
   await expect(page.locator('#action-brace')).toContainText('ตั้งทวน'); await expect(page.locator('#action-pierce')).toContainText('แทงทะลวง');
@@ -581,13 +581,13 @@ test('Mira (archer) volleys every enemy by tapping any of them, and the SPD queu
   await seed(page, run, profile);
   const issues: string[] = []; page.on('pageerror', e => issues.push(e.message));
   await page.goto('./'); await page.locator('#continue').click(); await page.locator('#start').click();
-  await page.locator('#action-attack').click();await page.locator('#skill-details').click(); await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-brute').click(); await finishPlayback(page);
+  await page.locator('#action-attack').click();await page.locator('#skill-details').click(); await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-f1').click(); await finishPlayback(page);
   await expect(page.locator('#hero-mira')).toHaveAttribute('aria-pressed', 'true');
   await page.locator('#action-hinder').click();await page.locator('#skill-details').click(); await expect(page.locator('#skill-popover')).toContainText('ท้ายสุดในรอบถัดไป');
-  await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-raider').click(); await finishPlayback(page);
+  await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-b1').click(); await finishPlayback(page);
   // The next six turns (rest of round 1, then round 2) no longer include the Raider: it acts last in round 2.
   const order = await page.locator('.turn-slot').evaluateAll(els => els.map(e => (e as HTMLElement).dataset.actor));
-  expect(order).toEqual(['guardian', 'brute', 'healer', 'tracer', 'mira', 'guardian']);
+  expect(order).toEqual(['guardian', 'f1', 'healer', 'tracer', 'mira', 'guardian']);
   await page.screenshot({ path: info.outputPath('mira-hinder.png') });
   expect((await saved(page)).battle!.commands.map(c => c.action)).toEqual(['attack', 'hinder']);
   expect(issues).toEqual([]);
@@ -602,13 +602,13 @@ test('Toma (alchemist) hastes an ally by tapping them; the SPD queue puts that a
   await seed(page, run, profile);
   const issues: string[] = []; page.on('pageerror', e => issues.push(e.message));
   await page.goto('./'); await page.locator('#continue').click(); await page.locator('#start').click();
-  await page.locator('#action-attack').click();await page.locator('#skill-details').click(); await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-raider').click(); await finishPlayback(page);
+  await page.locator('#action-attack').click();await page.locator('#skill-details').click(); await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-b1').click(); await finishPlayback(page);
   await expect(page.locator('#hero-toma')).toHaveAttribute('aria-pressed', 'true');
   await page.locator('#action-haste').click();await page.locator('#skill-details').click(); await expect(page.locator('#skill-popover')).toContainText('ลงมือก่อนทุกคน');
   await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-healer').click(); await finishPlayback(page);
   // Rest of round 1 (Aegis, Brute, Seren), then round 2 opens with the hasted Seren.
   const order = await page.locator('.turn-slot').evaluateAll(els => els.map(e => (e as HTMLElement).dataset.actor));
-  expect(order.slice(0, 4)).toEqual(['guardian', 'brute', 'healer', 'healer']);
+  expect(order.slice(0, 4)).toEqual(['guardian', 'f1', 'healer', 'healer']);
   await page.screenshot({ path: info.outputPath('toma-haste.png') });
   expect((await saved(page)).battle!.commands.map(c => c.action)).toEqual(['attack', 'haste']);
   expect(issues).toEqual([]);
@@ -625,7 +625,7 @@ test('Sefa (scout) steps aside: the announced slash at her misses and the intent
   await seed(page, run, profile);
   const issues: string[] = []; page.on('pageerror', e => issues.push(e.message));
   await page.goto('./'); await page.locator('#continue').click(); await page.locator('#start').click();
-  await page.locator('#action-attack').click();await page.locator('#skill-details').click(); await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-raider').click(); await finishPlayback(page);
+  await page.locator('#action-attack').click();await page.locator('#skill-details').click(); await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-b1').click(); await finishPlayback(page);
   await expect(page.locator('#hero-sefa')).toHaveAttribute('aria-pressed', 'true');
   await expect(page.locator('#hero-sefa .portrait img')).toHaveAttribute('src', /portraits_mercs\.webp$/);
   await page.locator('#action-ambush').click();await page.locator('#skill-details').click(); await expect(page.locator('#skill-popover')).toContainText('ยังไม่ได้ลงมือในรอบนี้');
@@ -651,7 +651,7 @@ test('Brann (warden) challenges: the announced hit and the forecast turn to him,
   // R1: Lyra, then Eira (the Raider acts between them), then the Brute, then Brann.
   for (const hero of ['tracer', 'weaver']) {
     await expect(page.locator(`#hero-${hero}`)).toHaveAttribute('aria-pressed', 'true');
-    await page.locator('#action-attack').click();await page.locator('#skill-details').click(); await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-brute').click(); await finishPlayback(page);
+    await page.locator('#action-attack').click();await page.locator('#skill-details').click(); await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-f1').click(); await finishPlayback(page);
   }
   await expect(page.locator('#hero-brann')).toHaveAttribute('aria-pressed', 'true');
   await expect(page.locator('#hero-brann .portrait img')).toHaveAttribute('src', /portraits_mercs\.webp$/);
@@ -673,7 +673,7 @@ test('Lio (bard) plays a song of valor: it stays on his card and the next ally h
   await seed(page, run, profile);
   const issues: string[] = []; page.on('pageerror', e => issues.push(e.message));
   await page.goto('./'); await page.locator('#continue').click(); await page.locator('#start').click();
-  await page.locator('#action-attack').click();await page.locator('#skill-details').click(); await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-brute').click(); await finishPlayback(page);
+  await page.locator('#action-attack').click();await page.locator('#skill-details').click(); await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-f1').click(); await finishPlayback(page);
   await expect(page.locator('#hero-lio')).toHaveAttribute('aria-pressed', 'true');
   await expect(page.locator('#hero-lio .portrait img')).toHaveAttribute('src', /portraits_mercs\.webp$/);
   await page.locator('#action-mend').click();await page.locator('#skill-details').click(); await expect(page.locator('#skill-popover')).toContainText('เมื่อเริ่มแต่ละรอบใหม่');
@@ -682,10 +682,10 @@ test('Lio (bard) plays a song of valor: it stays on his card and the next ally h
   await expect(page.locator('#hero-lio')).toContainText('เพลงกล้า');
   // Aegis attacks for 10 + 4.
   await expect(page.locator('#hero-guardian')).toHaveAttribute('aria-pressed', 'true');
-  await page.locator('#action-attack').click();await page.locator('#skill-details').click(); await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-brute').click(); await finishPlayback(page);
+  await page.locator('#action-attack').click();await page.locator('#skill-details').click(); await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-f1').click(); await finishPlayback(page);
   await page.screenshot({ path: info.outputPath('lio-valor.png') });
   const s = await saved(page); expect(s.battle!.commands.map(c => c.action)).toEqual(['attack', 'valor', 'attack']);
-  await expect(page.locator('[data-enemy=brute]')).toContainText(`${200 - 16 - 14} / 200`);
+  await expect(page.locator('[data-enemy=f1]')).toContainText(`${200 - 16 - 14} / 200`);
   expect(issues).toEqual([]);
 });
 
@@ -695,9 +695,9 @@ test('new Veil Frontier foes fight with their own art: Mycon and the elite Thorn
   await seed(page, run, { ...newProfile(map, 5), tutorialDone: true, commander });
   const issues: string[] = []; page.on('pageerror', e => issues.push(e.message));
   await page.goto('./'); await page.locator('#continue').click(); await page.locator('#start').click();
-  await expect(page.locator('[data-enemy=brute]')).toContainText('ราชินีหนาม'); await expect(page.locator('[data-enemy=raider]')).toContainText('เห็ดหมอผีกลวง');
-  await expect(page.locator('[data-enemy=brute] .portrait img')).toHaveAttribute('src', /portraits_foes\.webp$/);
-  await expect(page.locator('[data-enemy=brute] .portrait')).toHaveAttribute('data-actor', 'foe_matriarch');
+  await expect(page.locator('[data-enemy=f1]')).toContainText('ราชินีหนาม'); await expect(page.locator('[data-enemy=b1]')).toContainText('เห็ดหมอผีกลวง');
+  await expect(page.locator('[data-enemy=f1] .portrait img')).toHaveAttribute('src', /portraits_foes\.webp$/);
+  await expect(page.locator('[data-enemy=f1] .portrait')).toHaveAttribute('data-actor', 'foe_matriarch');
   await expect(page.locator('#intent')).toContainText('คำสาปสปอร์');
   await page.screenshot({ path: info.outputPath('foes-thicket.png') });
   expect(issues).toEqual([]);
@@ -810,7 +810,7 @@ test('puzzles: rune stones in order open the vault door, a boulder fills its pit
   }
   await expect(page.locator('#world-message')).toContainText('ประตูหินเปิด'); await expect(page.locator(`.puzzle-door[data-door="${runes.id}"]`)).toHaveClass(/open/);
   let raw = await page.evaluate(k => JSON.parse(localStorage.getItem(k)!), key);
-  expect(raw.version).toBe(34); expect(raw.run.solved).toContain(runes.id);
+  expect(raw.version).toBe(35); expect(raw.run.solved).toContain(runes.id);
   // Walk through the door to the vault chest.
   await page.evaluate(([k, x, y]) => { const s = JSON.parse(localStorage.getItem(k as string)!); s.run.position = { x: (x as number) - 1, y }; localStorage.setItem(k as string, JSON.stringify(s)); }, [key, runes.door.x, runes.door.y]);
   await page.reload(); await page.locator('#continue').click();
@@ -850,7 +850,7 @@ test('map events: stepping on one opens its choices; the shrine heals with a wou
   await page.locator('#event-pray').click(); await expect(page.locator('#event-dialog')).toBeHidden();
   await expect(page.locator('#world-message')).toContainText('ศาลประทานพร');
   let raw = await page.evaluate(k => JSON.parse(localStorage.getItem(k)!), key);
-  expect(raw.version).toBe(34); expect(raw.run.eventsDone).toEqual([shrine.id]); expect(raw.run.members.guardian.wound).toBe(5); expect(raw.run.hp.guardian).toBeGreaterThan(20);
+  expect(raw.version).toBe(35); expect(raw.run.eventsDone).toEqual([shrine.id]); expect(raw.run.members.guardian.wound).toBe(5); expect(raw.run.hp.guardian).toBeGreaterThan(20);
   await expect(page.locator(`.event-mark[data-event="${shrine.id}"]`)).toBeHidden();
   // The merchant stays open between trades.
   await page.evaluate(([k, x, y]) => { const s = JSON.parse(localStorage.getItem(k as string)!); s.run.position = { x, y: (y as number) + 1 }; s.run.resources.ore = 24; localStorage.setItem(k as string, JSON.stringify(s)); }, [key, merchant.x, merchant.y]);
@@ -1001,7 +1001,7 @@ test('map bag (2026-10-17): wear a find away from camp, take it off, read a memb
   await page.screenshot({ path: info.outputPath('bag-team.png') });
   await page.locator('#pack-content .team-card.empty.target').first().click();
   await expect.poll(async () => (await saved(page)).roster).toEqual({ deployed: ['guardian', 'tracer', 'weaver'], reserve: ['healer'] });
-  expect(await page.evaluate(k => JSON.parse(localStorage.getItem(k)!).version, key)).toBe(34);
+  expect(await page.evaluate(k => JSON.parse(localStorage.getItem(k)!).version, key)).toBe(35);
   expect(await page.evaluate(() => document.documentElement.scrollHeight <= innerHeight)).toBe(true);
   expect(issues).toEqual([]);
 });
@@ -1123,7 +1123,7 @@ test('lobby talent tree: its own sheet; spend points level by level, gates show,
   expect(await page.evaluate(() => document.scrollingElement!.scrollHeight <= innerHeight)).toBe(true);
   await page.screenshot({ path: info.outputPath('lobby-talents-phone.png') });
   const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('asterveil.fateweave.expedition.v1')!));
-  expect(saved.version).toBe(34); expect(saved.profile.members.guardian.talents).toEqual({ c1s: 1, a1: 2 }); expect(saved.profile.members.guardian.loadout).toEqual(['guard', 'rally']);
+  expect(saved.version).toBe(35); expect(saved.profile.members.guardian.talents).toEqual({ c1s: 1, a1: 2 }); expect(saved.profile.members.guardian.loadout).toEqual(['guard', 'rally']);
   // Back to the team sheet: the card shows the new max HP.
   await page.locator('#camp-character-dialog [data-world=character-close]').click(); await expect(page.locator('#lobby-sheet-title')).toContainText('จัดทีม');
   await expect(page.locator('#lobby-member-guardian')).toContainText(`เลือด ${Math.round(76 * (100 + 9 + 10) / 100)}`);
@@ -1172,7 +1172,7 @@ test('lobby equipment: its own sheet; equip, class weapons, swap, unequip, salva
   expect(await page.evaluate(() => document.scrollingElement!.scrollHeight <= innerHeight)).toBe(true);
   await page.screenshot({ path: info.outputPath('lobby-gear-phone.png') });
   const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('asterveil.fateweave.expedition.v1')!));
-  expect(saved.version).toBe(34); expect(saved.profile.members.guardian.gear.charm.uid).toBe(4); expect(saved.profile.items.map((i: { uid: number }) => i.uid)).toEqual([3]);
+  expect(saved.version).toBe(35); expect(saved.profile.members.guardian.gear.charm.uid).toBe(4); expect(saved.profile.items.map((i: { uid: number }) => i.uid)).toEqual([3]);
   expect(saved.profile.bank).toMatchObject({ ore: 7, dust: 5 });
 });
 
@@ -1215,7 +1215,7 @@ test('lobby forge: enhance, fuse and reroll from its own menu; saved v11', async
   expect(await page.evaluate(() => document.scrollingElement!.scrollHeight <= innerHeight)).toBe(true);
   await page.screenshot({ path: info.outputPath('lobby-forge-phone.png') });
   const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('asterveil.fateweave.expedition.v1')!));
-  expect(saved.version).toBe(34); expect(saved.profile.items).toHaveLength(1); expect(saved.profile.items[0]).toMatchObject({ uid: 1, rarity: 2 });
+  expect(saved.version).toBe(35); expect(saved.profile.items).toHaveLength(1); expect(saved.profile.items[0]).toMatchObject({ uid: 1, rarity: 2 });
   expect(saved.profile.bank).toMatchObject({ ore: 96, gold: 0, seal: 0, dust: 19 }); expect(saved.profile.forge).toBeGreaterThan(0);
 });
 
@@ -1249,7 +1249,7 @@ test('potions: brew in the lobby, pack 3 on departure, drink a salve and a repel
   await page.locator('[data-world="pack-close"]').click();
   await expect(page.locator('#danger-chip')).toContainText('ไล่อสูร 10 ก้าว');
   saved = await page.evaluate(() => JSON.parse(localStorage.getItem('asterveil.fateweave.expedition.v1')!));
-  expect(saved.version).toBe(34); expect(saved.run.potions).toEqual({ salve: 2, tonic: 0, repel: 0 }); expect(saved.run.repel).toBe(10); expect(saved.run.hp.guardian).toBeGreaterThan(10);
+  expect(saved.version).toBe(35); expect(saved.run.potions).toEqual({ salve: 2, tonic: 0, repel: 0 }); expect(saved.run.repel).toBe(10); expect(saved.run.hp.guardian).toBeGreaterThan(10);
 });
 
 test('camp NPCs stand at their stations, open their service when tapped and greet with a line', async ({ page }, info) => {

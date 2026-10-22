@@ -28,7 +28,7 @@ export const forestMap: MapDefinition = {
   specialZones: { S: 'thicket', C: 'camp', B: 'sanctum', G: 'sanctum' },
   zones: [
     { id: 'thicket', name: 'เส้นทางป่าทึบ', safe: false, base: 7, step: 4, cap: 40, levels: [3, 6], sets: ['shadow', 'thorn'],
-      pool: [{ encounterId: 'shadow-stalker', weight: 2 }, { encounterId: 'rift-whelp', weight: 2 }, { encounterId: 'thicket-ambush', weight: 1 }, { encounterId: 'scout-patrol', weight: 1 }],
+      pool: [{ encounterId: 'beetle-spore', weight: 3 }, { encounterId: 'beetle-wall', weight: 2 }, { encounterId: 'stalker-spore', weight: 2 }, { encounterId: 'forest-swarm', weight: 1 }, { encounterId: 'shadow-stalker', weight: 1 }, { encounterId: 'rift-whelp', weight: 1 }],
       loot: { ore: [5, 7], gold: [2, 5], ember: [0, 12], seal: [0, 0] } },
     { id: 'camp', name: 'แคมป์', safe: true, base: 0, step: 0, cap: 0, pool: [] },
     { id: 'sanctum', name: 'ทางออกป่า', safe: true, base: 0, step: 0, cap: 0, pool: [] },
