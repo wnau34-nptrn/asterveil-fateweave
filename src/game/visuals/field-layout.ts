@@ -19,7 +19,7 @@ export function fieldSlots(width: number, height: number): FieldSlot[] {
   const rowHeight = (height - top - gap - 4) / 2;
   return [0, 1, 2, 3, 4, 5, 6, 7].map(slot => {
     const enemy = slot >= 4, front = slot === 2 || slot === 3 || slot === 4 || slot === 5, row = slot % 2;
-    const cellWidth = width * .22;
+    const cellWidth = width * .24;
     const x = width * COLUMNS[enemy ? (front ? 2 : 3) : front ? 1 : 0] - (side ? 14 : 0);
     const panelY = top + row * (rowHeight + gap) + rowHeight - panelHeight + (front ? 3 : 0);
     // Include the largest foot-origin overshoot, breathing and a small visual gap.

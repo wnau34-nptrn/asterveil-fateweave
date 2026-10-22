@@ -131,7 +131,7 @@ for (const [width, height, touch] of [[320, 568, true], [390, 844, true], [1366,
     await expect(page.locator('#battle-panel-status')).toBeVisible();
     expect(await page.evaluate(k => localStorage.getItem(k), key)).toBe(before);
     await page.keyboard.press('Escape'); await expect(page.locator('#action-bash')).toHaveAttribute('aria-pressed', 'true');
-    await page.locator('#target-b1').click();
+    await page.locator('#target-f1').click();
     const skip = page.locator('#skip-turn'); if (await skip.count()) await skip.click({ timeout: 2500 }).catch(() => {});
     await expect.poll(() => page.evaluate(k => JSON.parse(localStorage.getItem(k)!).run.battle.commands.length, key)).toBe(3);
     await page.locator('#battle-info').click(); await page.locator('#status-unit-weaver').click();
