@@ -19,7 +19,7 @@ it('trial wear replaces rather than adds gear, updates sets/wounds and never mut
   expect(n.maxHp).toBeLessThan(h.maxHp); expect(next.hp.guardian).toBe(11); expect(s).toEqual(snapshot);
   const html=characterEquipmentComparison(s,next,map,h,n,candidate,template);
   expect(html).toContain('2 ชิ้น ยังไม่ครบ'); expect(html).toContain('2 ชิ้น ทำงาน');
-  expect(html).toContain('HP ปัจจุบัน 11 → 11'); expect(html).toContain('ผลต่อสกิลที่ปลดล็อกแล้ว');
+  expect(html).toContain('HP ปัจจุบัน 11 → 11'); expect(html).toContain('<h3>ผลต่อสกิล</h3>');
 });
 it('shows effective defense/leech caps and deployed team luck while keeping reserve trail regen', () => {
   const s=setup(); s.roster.reserve=['lio']; s.members.lio={stars:1,dupes:0,gear:{ boots:{uid:1,slot:'boots',rarity:1,level:99,affixes:['regen']},head:{uid:2,slot:'head',rarity:1,level:99,affixes:['luck']} }};
