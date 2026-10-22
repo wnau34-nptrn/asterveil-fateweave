@@ -1,5 +1,9 @@
 # Codex → Claude handoff
 
+## 2026-10-22 — Claude: handoff to a new chat
+
+- Full state, owner decisions, next steps and a copy-ready opening prompt: `docs/handoffs/NEW-CHAT-HANDOFF-TH.md`. Last commit at handoff `777aa5d` (CI green, save v34). A7 step 1 is half done (overview + paper doll); bag grid, item compare and node-style tree come next, then the 4v4 resolver step.
+
 ## 2026-10-22 — Claude: A8 Bolt "Astral Thread" vertical slice
 
 - `src/game/visuals/bolt-fx.ts` draws the v1 Bolt language in code layers (gather crescent, needle-star head with a capped tapered wake, petal impact at the real recipient, dissolving threads); `BattleScene.prepare/play` use it for hero Bolt only and keep every other action on the phase-2 path. Full block = smaller pearl impact and no body tint; dodge = sparks only; Bolt hits tint the body violet (multiply) instead of the white fill flash. Timing, saves and cancellation are unchanged.
