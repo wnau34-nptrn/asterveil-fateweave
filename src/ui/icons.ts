@@ -1,4 +1,5 @@
 import type { ActionId } from '../core/battle/types';
+import skillAtlas from '../game/visuals/skill_icons.json';
 import attack from './svg/attack.svg?raw';
 import guard from './svg/guard.svg?raw';
 import bash from './svg/bash.svg?raw';
@@ -101,7 +102,17 @@ const uiSvgs = Object.fromEntries(UI_ICON_NAMES.map(n => [n, uiFiles[`./svg/${n}
 const svgs = { attack, guard, bash, mark, execute, bolt, ward, heal, prayer, brace, pierce, hinder, volley, acid, haste, ambush, evade, taunt, slam, valor, mend, rally, finisher, sigil, sanctuary, spearwall, weakshot, bomb, backstab, quake, finale, challenge: taunt, bulwark: guard, rouse: prayer, up, down, left, right, camp, rest, flag, goal, star, danger, safe, talk, info, map, boss, check, circle, close, footprints, chest, chestOpen, ore, gold, forge, enhance, fuse, reroll, salvage, brew, set, ember, seal, pack, starFilled, starBadge, starBadgeEmpty, gearWeapon, gearHead, gearBody, gearGloves, gearBoots, gearCharm, dust, potionSalve, potionTonic, potionRepel, music, musicOff, sound, soundOff } as const;
 const restartPath = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10a8 8 0 1 1 1 8M4 4v6h6"/></svg>';
 export type IconName = ActionId | keyof typeof svgs | UiIconName | 'restart';
+// Painted skill icons (ART-SKILL-ICON-001-R1, 128 px cells) replace the line icon of every skill that has one; Attack
+// and every non-skill icon stay line art. The span keeps the `icon` class so each view's icon sizing still applies.
+const skillAtlasUrl = `${import.meta.env.BASE_URL}assets/ui/skill_icons.webp`;
+const paintedSkills = new Map(skillAtlas.order.map((id, i) => [id, i]));
 export function icon(name: IconName): string {
+  const cell = paintedSkills.get(name);
+  if (cell === undefined) return lineIcon(name);
+  return `<span class="icon skill-art" aria-hidden="true" style="background-image:url(${skillAtlasUrl});--sx:${cell % skillAtlas.cols / (skillAtlas.cols - 1) * 100}%;--sy:${Math.floor(cell / skillAtlas.cols) / (skillAtlas.rows - 1) * 100}%"></span>`;
+}
+// The line icon even for a painted skill (tree modifiers point at a skill without being one).
+export function lineIcon(name: IconName): string {
   const svg = name === 'restart' ? restartPath : name in uiSvgs ? uiSvgs[name as UiIconName] : svgs[name as keyof typeof svgs];
   return svg.replace('<svg ', '<svg class="icon" aria-hidden="true" focusable="false" ');
 }

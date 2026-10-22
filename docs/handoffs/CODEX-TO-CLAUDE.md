@@ -1,5 +1,10 @@
 # Codex → Claude handoff
 
+## 2026-10-22 — Claude: ART-SKILL-ICON-001-R1 integrated (owner approved)
+
+- Owner approved the R1 painted skill icons. Merged `art/art-skill-icon-001-r1`; the 33 PNGs are downscaled to 128 px cells in `public/assets/ui/skill_icons.webp` (6×6, order in `src/game/visuals/skill_icons.json`, same order as the incoming atlas).
+- `icon(<skill id>)` now returns a painted `<span class="icon skill-art">` for those 33 skills (battle dock, skills tab, loadout, lobby lists, tree skill nodes); Attack and all non-skill icons stay line SVGs. `lineIcon()` forces the line icon: tree modifier/passive/capstone nodes use it so only real skills look painted. Sizes per view live at the end of `ui/components.css`.
+
 ## 2026-10-22 — Claude: A7 step 1 part 2 (bag grid, item detail, node tree)
 
 - Bag (`ui/character-panel.ts` `gear()`/`itemCard()`): five-column tiles (`#pick-<key>`, rarity frame, Lv, +); the picked tile opens one item card with ▲▼ from the trial projection (`host.preview`, nothing saved) and `#wear-<key>` / `#compare-<key>` / Develop. Those two ids exist only for the picked piece, so browser tests click `#pick-…` first. Quick chips (`#gear-chip-*`) replace the visible set dropdown; all selects fold behind the "ตัวกรอง" chip (`gearFilters(…, chips=true)`). Folded panels read their open state before each re-render (camp re-renders beat the async toggle event).
