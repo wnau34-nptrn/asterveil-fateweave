@@ -16,7 +16,7 @@
 | 10 | ART-UI-RUNE-001 ไอคอนรูน 12 แบบ | B | ยังไม่ได้รับ |
 | 11 | ART-CHAR-RIVAL-001 ผู้บัญชาการคู่แข่งลานประลอง 6 คน | B PvP | ยังไม่ได้รับ |
 | 12 | ART-WORLD-TOWER-001 หอคอยแห่งชะตา (ฉากต่อสู้ + ไอคอนชั้น) | C | ยังไม่ได้รับ (เริ่มได้แล้ว ข้อ 1 เสร็จ) |
-| 13 | ART-CHAR-FOES-002 ศัตรูชุดใหม่ 8 ตัวสำหรับศึก 4 ต่อ 4 (รวมองครักษ์อสูร อสูรส่งพลัง) | A7 ขั้นที่ 2 | ทันที (เจ้าของอนุมัติ 2026-10-22) |
+| 13 | ART-CHAR-FOES-002 ศัตรูชุดใหม่ 9 ตัวสำหรับศึก 4 ต่อ 4 (แมพ 1 เป็นสไลม์/ค้างคาวหน้าตาอ่อน + องครักษ์อสูร อสูรส่งพลัง) | A7 ขั้นที่ 2 | ทันที (เจ้าของอนุมัติ 2026-10-22) |
 | 14 | ART-WORLD-BATTLE-BG-001 ฉากหลังศึกแมพ 2 ป่าทึบ และแมพ 3 แนวรอยแยก | A | ทันที |
 | 15 | ART-SKILL-ICON-002 ไอคอนวาด "โจมตี" | A7 | ทันที |
 | 16 | ART-WORLD-TILES-002 ชุดช่องแผนที่ป่าทึบ (แมพ 2) จาก concept ที่อนุมัติ | A | ทันที |
@@ -432,7 +432,7 @@ RETURN: incoming/ART-WORLD-TOWER-001/
 
 ```text
 CODEX HANDOFF — ART-CHAR-FOES-002
-Asterveil · Fateweave: eight new foes for 4-vs-4 battles
+Asterveil · Fateweave: nine new foes for 4-vs-4 battles
 
 Battles are becoming up to 4 heroes vs up to 4 foes (front 2 / back 2, 1–4 foes per encounter). Each map needs more small foes so groups of 3–4 read as different creatures. Two existing foes also have no art yet.
 
@@ -441,10 +441,12 @@ Repository wnau34-nptrn/asterveil-fateweave, base branch feature/fateweave-initi
 READ FIRST: docs/handoffs/ART-PLACEMENT-RULES.md (enemies face LEFT; soles anchored; large foes shown ~1.5x), docs/handoffs/ART-CHAR-MERC-ENEMY-001.md (exact atlas/portrait format and style), public/assets/art/units_foes.webp + portraits_foes.webp (style, scale, line weight), incoming/ART-CHAR-BOSS-RUINS-001/ (latest accepted foes).
 
 FOES (physical-looking foes use physical moves, energy-looking foes energy moves; keep that readable)
-Map 1 ซากชายแดน (ruined frontier fort, Vargoth's demon tribe: violet-black armour, ember-orange cracks):
- 1. vargoth_guard — องครักษ์อสูร, LARGE front: tower shield + spiked mace, heavy armour (physical).
- 2. vargoth_shaman — หมอผีเผ่าอสูร, normal back: bone staff, ember flame orb (energy).
- 3. vargoth_grunt — พลทหารอสูร, normal front: short spear, light armour (physical).
+Difficulty reads from the look (owner, 2026-10-22): map 1 foes look weak and soft, then each map looks tougher (bigger, darker, more spikes/armour, glowing eyes). Vargoth's demons appear in map 1 only in story battles, so they feel dangerous by contrast.
+Map 1 ซากชายแดน (ruined frontier fort; soft, round, pastel, no spikes or armour, friendly-silly faces):
+ 1. dew_slime — สไลม์น้ำค้าง, normal front: small mint-blue jelly with a leaf on top, bouncy (physical).
+ 2. ember_slime — สไลม์ถ่านไฟ, normal back: small peach-orange jelly with a soft ember glow from a rift crack (energy).
+ 3. ruin_bat — ค้างคาวซาก, normal back: round fuzzy bat with oversized ears, dusty lilac (physical).
+ Story only: vargoth_guard — องครักษ์อสูร, LARGE front: Vargoth's tribe (violet-black armour, ember-orange cracks), tower shield + spiked mace (physical). Clearly the most dangerous-looking foe of map 1.
 Map 2 เส้นทางป่าทึบ (forest twisted by the rift: moss, thorns, teal fungus):
  4. thorn_beetle — ด้วงหนาม, normal front: armoured beetle with thorn shell (physical).
  5. spore_puff — ภูตสปอร์, normal back: floating puffball with teal spores (energy).
@@ -453,7 +455,7 @@ Map 3 แนวรอยแยก (crystal rift scar: violet crystal, star-veil 
  7. rift_wisp — วิญญาณรอยแยก, normal back: small violet flame spirit (energy).
  8. shard_crawler — แมงมุมเศษผลึก, normal front: crystal-legged crawler (physical).
 
-DELIVERABLES (same format as ART-CHAR-MERC-ENEMY-001): units_foes2.webp (2 columns × 4 rows of 512×512 frames, order as listed, facing LEFT, soles at y=496, transparent) + units_foes2.json (x,y,w,h,footY); portraits_foes2.webp + json (same order, square busts); preview.png: a 390×844 phone composition on public/assets/art/ruins.webp with 4 heroes vs 4 of the new foes (two front, two back, large ones ~1.5x); NOTES.md with per-foe silhouette notes.
+DELIVERABLES (same format as ART-CHAR-MERC-ENEMY-001): units_foes2.webp (2 columns × 5 rows of 512×512 frames, 9 foes in the order 1, 2, 3, vargoth_guard, 4, 5, 6, 7, 8, last cell empty, facing LEFT, soles at y=496, transparent) + units_foes2.json (x,y,w,h,footY); portraits_foes2.webp + json (same order, square busts); preview.png: a 390×844 phone composition on public/assets/art/ruins.webp with 4 heroes vs the three map-1 slimes/bat, and a second 390×844 frame with 4 heroes vs 4 map-3 foes (two front, two back, large ones ~1.5x); scale_ladder.png: one foe per map side by side showing the soft → tough progression; NOTES.md with per-foe silhouette notes.
 
 CONSTRAINTS: same chibi proportions, outline weight, lighting and saturation as units_foes.webp; no text, no baked shadow; each foe distinct in silhouette at 64 px.
 
