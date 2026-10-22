@@ -11,7 +11,7 @@ import { actorName, eventThai, heroText, intentName, intentRuleThai, intentTarge
 import { portrait } from './portraits';
 import { artOf } from '../game/visuals/assets';
 import { riftBackdropFrame } from '../game/visuals/rift-backdrop';
-import { icon, lineIcon } from './icons';
+import { icon } from './icons';
 import { infoTabs, selectInfoTab } from './info-tabs';
 import { foeProfile, unitStatuses } from './battle-status';
 import { battleLesson } from './tutorial';
@@ -28,7 +28,6 @@ export interface BattleSession {
 }
 const kindLabel: Record<BattleKind, string> = { tutorial: 'ศึกแรก', random: 'พบศัตรู', boss: 'บอส', elite: 'อีลิท', event: 'เหตุการณ์' };
 
-const shieldReason = 'A front-row enemy shields this target.';
 // Rounds a hero's skill still cools (0 = ready).
 const cooling = (s: BattleState, heroId: string, action: ActionId): number => Math.max(0, (s.heroes.find(h => h.id === heroId)?.cooldowns[action] ?? 0) - s.round);
 function bannerCopy(turn: TurnStage, d: EncounterDefinition): string {
@@ -510,8 +509,7 @@ export class BattleUI {
       const maxHp = d.heroes.find(h => h.id===t.id)?.maxHp ?? d.enemies.find(e => e.id===t.id)?.maxHp;
       const label = `ใช้${d.skills[this.action].name}กับ${this.action==='prayer' ? 'ทั้งทีม โดยแตะ' : targetKind(this.action)==='enemies' ? 'ศัตรูทุกตัว โดยแตะ' : ''}${actorName(t.id,d)} · เลือด ${hero?.hp ?? enemy?.hp}/${maxHp}${!t.valid ? ` · ${reasonThai(t.reason)}` : ''}`;
       const buttonId = this.action==='prayer' ? t.id===this.heroId ? 'party' : `party-${t.id}` : targetKind(this.action)==='enemies' ? `enemies-${t.id}` : t.id;
-      const screen = !disabled && !t.valid && t.reason === shieldReason;
-      return `<button id="target-${buttonId}" data-ui="target" data-value="${t.id}" data-actor="${t.id}" class="field-target ${disabled || !t.valid ? '' : 'valid-target'} ${screen ? 'screened-target' : ''}" style="left:${position.x}px;top:${position.y}px;width:${position.width}px;height:${position.height}px" aria-label="${escapeHtml(label)}" ${disabled || !t.valid ? 'disabled' : ''}><span class="field-marker" aria-hidden="true">${icon(this.action)}</span>${screen ? `<span class="screen-marker" aria-hidden="true">${lineIcon('guard')}ถูกบัง</span>` : ''}</button>`;
+      return `<button id="target-${buttonId}" data-ui="target" data-value="${t.id}" data-actor="${t.id}" class="field-target ${disabled || !t.valid ? '' : 'valid-target'}" style="left:${position.x}px;top:${position.y}px;width:${position.width}px;height:${position.height}px" aria-label="${escapeHtml(label)}" ${disabled || !t.valid ? 'disabled' : ''}><span class="field-marker" aria-hidden="true">${icon(this.action)}</span></button>`;
     }).join(''));
   }
 

@@ -64,8 +64,6 @@
 #battle-view .turn-slot:not(.later-round) + .turn-slot.later-round::after { content: ''; position: absolute; left: -1px; top: 8px; bottom: 8px; border-left: 1px solid #e8f5ff55; }
 @container game (max-width: 387px) { #battle-view #turn-order .turn-slot:nth-child(n+7) { display: none; } }
 
-.screen-marker { position: absolute; left: 50%; bottom: 2px; transform: translateX(-50%); display: flex; align-items: center; gap: 2px; padding: 1px 6px 1px 4px; border-radius: 999px; background: #0b1524e6; border: 1px solid #e8f5ff40; color: #c3d3e2; font: 600 10px/16px var(--font-heading); white-space: nowrap; pointer-events: none; }
-.screen-marker svg { width: 11px; height: 11px; }
 
 #field-banner { position: absolute; z-index: 5; left: 50%; top: 6px; transform: translateX(-50%); width: max-content; max-width: calc(100% - 24px); padding: 8px 16px; border-radius: 999px; background: linear-gradient(105deg, #2b1d33f2, #141a2ef2); border: 1px solid #b59affaa; color: #f1e6ff; font: 600 14px/1.35 var(--font-heading); text-align: center; text-wrap: balance; box-shadow: 0 0 18px #b072ff55, 0 6px 18px #0009; pointer-events: none; }
 #field-banner[hidden] { display: none; }
