@@ -243,7 +243,7 @@ export type Talents = Partial<Record<TalentNode, number>>;
 // power; monsters gain `monsterLevelPercent` HP/damage per level. EXP per foe's worth of HP (`expFoeHp` at Lv1) = expBase + expPerLevel × L.
 export interface ProgressionRules {
   levelCap: number; levelStatPercent: number; monsterLevelPercent: number;
-  expBase: number; expPerLevel: number; expFoeHp: number; bossExpMultiplier: number;
+  expBase: number; expPerLevel: number; expFoeHp: number; summonExpPercent: number; bossExpMultiplier: number;
   // EXP to go from level L to L+1 = nextBase + nextPerLevel × L.
   nextBase: number; nextPerLevel: number;
   // Catch-up (master plan A2, draft): a new member joins `joinBehind` levels below the company's best; reserve

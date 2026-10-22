@@ -26,10 +26,12 @@ export const rearAmbush: EncounterDefinition = {
   ],
 };
 
-// A rift wisp hovers in the warden's back row.
-const wardenWisps = foes(10, [['b1', SPECIES.riftWisp]]);
+// Boss phases (owner 2026-10-22): at 70% the warden calls two rift wisps from the back row (hard mode: also a shard
+// crawler beside it); at 35% it charges, then strikes with a cataclysm and rift waves that hit the whole party.
+const wardenWisps = foes(10, [['b1', SPECIES.riftWisp, { reserve: true }], ['b2', SPECIES.riftWisp, { reserve: true }], ['f2', SPECIES.shardCrawler, { reserve: true }]]);
 export const riftWarden: EncounterDefinition = {
-  ...veilSiege, id: 'rift-warden', version: 15, level: 10, name: 'ศึกผู้คุมรอยแยก',
+  ...veilSiege, id: 'rift-warden', version: 16, level: 10, name: 'ศึกผู้คุมรอยแยก',
+  phases: [{ sourceId: 'f1', below: 70, summon: ['b1', 'b2'], hardSummon: ['f2'], name: 'Call the Rift' }, { sourceId: 'f1', below: 35, name: 'Rift Awakening' }],
   // The Veilbound Sentinel, an ancient gate guardian cracked by the rift (mini boss art: gold and violet).
   enemies: [...wardenWisps.enemies, { id: 'f1', row: 'front', large: true, boss: true, speed: 70, name: 'Rift Warden', displayName: 'ผู้คุมรอยแยก', maxHp: 350, color: 0xd9bf86, art: 'foe_sentinel' }],
   intents: [...wardenWisps.intents,
@@ -39,6 +41,10 @@ export const riftWarden: EncounterDefinition = {
     { sourceId: 'f1', targetSlot: 3, name: 'Rift Bolt', damage: 23, kind: 'energy' },
     { sourceId: 'f1', targetSlot: 1, name: 'Raking Slash', damage: 21, kind: 'physical' },
     { sourceId: 'f1', targetSlot: 2, name: 'Rift Bolt', damage: 29, kind: 'energy' },
+    { sourceId: 'f1', targetSlot: 0, name: 'Rift Gathering', damage: 0, kind: 'energy', charge: true, phase: 2 },
+    { sourceId: 'f1', targetSlot: 0, name: 'Rift Cataclysm', damage: 52, kind: 'physical', unstoppable: true, phase: 2 },
+    { sourceId: 'f1', targetSlot: 0, name: 'Rift Wave', damage: 20, kind: 'energy', all: true, phase: 2 },
+    { sourceId: 'f1', targetSlot: 1, name: 'Crushing Blow', damage: 29, kind: 'physical', phase: 2 },
   ],
 };
 
@@ -145,9 +151,12 @@ export const eliteTuskChief: EncounterDefinition = {
     { sourceId: 'f1', targetSlot: 1, name: 'Tusk Charge', damage: 20, kind: 'physical' },
   ],
 };
-const lordSpore = foes(8, [['b1', SPECIES.sporePuff]]);
+// Boss phase (owner 2026-10-22): at 50% the lord rages, gathers thorns, then lashes the whole party with a thorn
+// tempest (hard mode: a second spore puff joins).
+const lordSpore = foes(8, [['b1', SPECIES.sporePuff], ['b2', SPECIES.sporePuff, { reserve: true }]]);
 export const eliteBriarLord: EncounterDefinition = {
-  ...veilSiege, id: 'elite-briar-lord', version: 5, level: 8, name: 'เจ้าป่าหนาม',
+  ...veilSiege, id: 'elite-briar-lord', version: 6, level: 8, name: 'เจ้าป่าหนาม',
+  phases: [{ sourceId: 'f1', below: 50, hardSummon: ['b2'], name: 'Thorn Rage' }],
   enemies: [...lordSpore.enemies,
     { id: 'f2', row: 'front', speed: 110, name: 'Briar Stalker', displayName: 'ลิงซ์หนามพราง', maxHp: 100, color: 0x397e77, art: 'foe_stalker' },
     { id: 'f1', row: 'front', large: true, speed: 70, boss: true, name: 'Briar Lord', displayName: 'เจ้าป่าหนาม', maxHp: 200, color: 0x397e77, art: 'foe_matriarch' },
@@ -160,6 +169,9 @@ export const eliteBriarLord: EncounterDefinition = {
     { sourceId: 'f1', targetSlot: 2, name: 'Thorn Storm', damage: 27, kind: 'energy', unstoppable: true },
     { sourceId: 'f2', targetSlot: 1, name: 'Thorn Pounce', damage: 19, kind: 'physical' },
     { sourceId: 'f1', targetSlot: 1, name: 'Briar Lash', damage: 22, kind: 'physical' },
+    { sourceId: 'f1', targetSlot: 0, name: 'Gather Thorns', damage: 0, kind: 'energy', charge: true, phase: 1 },
+    { sourceId: 'f1', targetSlot: 0, name: 'Thorn Tempest', damage: 13, kind: 'energy', all: true, unstoppable: true, phase: 1 },
+    { sourceId: 'f1', targetSlot: 1, name: 'Briar Lash', damage: 24, kind: 'physical', phase: 1 },
   ],
 };
 
@@ -184,11 +196,14 @@ export const miniVeilGolem: EncounterDefinition = {
 
 // Map 1 boss (chapters, draft): the captain of Vargoth's vanguard holds the fort gate. One signature hit per cycle
 // teaches Guard (physical) and Ward (energy) before the frontier.
-// The captain's own guard holds the second front slot.
+// The captain's own guard holds the second front slot. Boss phase (owner 2026-10-22): at 60% the captain calls a
+// second hunter into the back row (teaches summons; no second phase).
 const captainGuard = foes(3, [['f2', SPECIES.vargothGuard]]);
+const captainHunter = { id: 'b2', row: 'back', reserve: true, speed: 110, name: 'Vargoth Hunter', displayName: 'นักล่าเผ่าอสูร', maxHp: 60, color: 0xee80bd, art: 'foe_hunter' } as const;
 export const vanguardCaptain: EncounterDefinition = {
-  ...veilSiege, id: 'vanguard-captain', version: 3, level: 3, name: 'หัวหน้ากองหน้าของวาร์กอธ',
-  enemies: [...captainGuard.enemies,
+  ...veilSiege, id: 'vanguard-captain', version: 4, level: 3, name: 'หัวหน้ากองหน้าของวาร์กอธ',
+  phases: [{ sourceId: 'f1', below: 60, summon: ['b2'], name: 'Call the Hunt' }],
+  enemies: [...captainGuard.enemies, captainHunter,
     { id: 'b1', row: 'back', speed: 110, name: 'Vargoth Hunter', displayName: 'นักล่าเผ่าอสูร', maxHp: 60, color: 0xee80bd, art: 'foe_hunter' },
     { id: 'f1', row: 'front', large: true, speed: 70, boss: true, name: 'Vanguard Captain', displayName: 'หัวหน้ากองหน้า', maxHp: 170, color: 0x9785f2, art: 'foe_captain' },
   ],
@@ -200,6 +215,8 @@ export const vanguardCaptain: EncounterDefinition = {
     { sourceId: 'f1', targetSlot: 0, name: 'War Cry', damage: 22, kind: 'energy', unstoppable: true },
     { sourceId: 'b1', targetSlot: 1, name: 'Raking Slash', damage: 11, kind: 'physical' },
     { sourceId: 'f1', targetSlot: 2, name: 'Crushing Blow', damage: 16, kind: 'physical' },
+    { sourceId: 'b2', targetSlot: 3, name: 'Shadow Knife', damage: 12, kind: 'energy' },
+    { sourceId: 'b2', targetSlot: 1, name: 'Raking Slash', damage: 11, kind: 'physical' },
   ],
 };
 

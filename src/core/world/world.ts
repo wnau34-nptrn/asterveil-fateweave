@@ -537,7 +537,7 @@ function dropItems(state: ExpeditionState, map: MapDefinition, kind: BattleKind,
 // Hard mode (A9 part 2): foes get one trait each, fixed by the encounter and its position; a boss gets enrage and
 // veilguard plus one extra move, a heavier copy of its heaviest move in the other damage kind.
 const TRAITS: readonly EnemyTrait[] = ['thorns', 'veilguard', 'enrage'];
-const toughest = (data: EncounterDefinition) => [...data.enemies].sort((a, b) => b.maxHp - a.maxHp);
+const toughest = (data: EncounterDefinition) => data.enemies.filter(e => !e.reserve).sort((a, b) => b.maxHp - a.maxHp);
 export function hardEncounter(data: EncounterDefinition, kind: BattleKind, map: MapDefinition): EncounterDefinition {
   const t = map.progression.hardTraits; const salt = [...data.id].reduce((n, c) => n + c.charCodeAt(0), 0);
   // Four-slot battles (A7 step 2): only the two toughest foes take a trait, so a swarm is not buried in them.
@@ -551,14 +551,26 @@ export function hardEncounter(data: EncounterDefinition, kind: BattleKind, map: 
     const heaviest = [...data.intents].filter(i => i.sourceId === source).sort((a, b) => b.damage - a.damage)[0]!;
     intents = [...data.intents, { sourceId: source, targetSlot: 0, name: 'Rift Fury', damage: Math.ceil(heaviest.damage * t.bossMovePercent / 100), kind: heaviest.kind === 'physical' ? 'energy' : 'physical', unstoppable: true }];
   }
-  return { ...data, enemies, intents, rules: { ...data.rules, traits: { thornsPercent: t.thornsPercent, veilguardPercent: t.veilguardPercent, enrageBelow: t.enrageBelow, enragePercent: t.enragePercent } } };
+  // Boss phases begin 10% earlier and call their hard-mode reserves too (owner 2026-10-22).
+  const phases = data.phases?.map(p => ({ ...p, below: Math.min(100, p.below + 10), summon: [...p.summon ?? [], ...p.hardSummon ?? []] }));
+  return { ...data, enemies, intents, ...(phases ? { phases } : {}), rules: { ...data.rules, traits: { thornsPercent: t.thornsPercent, veilguardPercent: t.veilguardPercent, enrageBelow: t.enrageBelow, enragePercent: t.enragePercent } } };
+}
+// Boss mechanics follow the fight's role (owner 2026-10-22): a boss fight keeps them all (steadfast, unstoppable
+// signature moves, summons and phases); a mini-boss is steadfast only; any other fight that reuses a boss encounter
+// (an elite gate) fights without them, and its reserves never arrive.
+export function bossRole(data: EncounterDefinition, kind: BattleKind, map: MapDefinition, source?: string): EncounterDefinition {
+  if (kind === 'boss' || !data.enemies.some(e => e.boss)) return data;
+  const mini = kind === 'elite' && miniBoss(map, source);
+  return { ...data, phases: undefined, intents: data.intents.map(i => i.unstoppable ? { ...i, unstoppable: false } : i),
+    enemies: mini ? data.enemies : data.enemies.map(e => e.boss ? { ...e, boss: false } : e) };
 }
 export function battleData(state: ExpeditionState, map: MapDefinition, lookup: EncounterLookup): EncounterDefinition | undefined {
   const base = state.battle && lookup(state.battle.encounterId);
   // Hard mode (A9): every battle but the prologue fights `hardLevels` higher.
   const hard = state.hard && state.battle!.kind !== 'tutorial' ? map.progression.hardLevels : 0;
   const leveled = base && withLevel(base, (state.battle!.level ?? base.level ?? 1) + hard, map.progression.monsterLevelPercent);
-  const data = leveled && hard ? hardEncounter(leveled, state.battle!.kind, map) : leveled;
+  const staged = leveled && bossRole(leveled, state.battle!.kind, map, state.battle!.source);
+  const data = staged && hard ? hardEncounter(staged, state.battle!.kind, map) : staged;
   const party = state.roster.deployed.map(id => memberDef(lookup, map, state.members, id));
   return data && party.every(Boolean) ? withParty(data, party as HeroDefinition[]) : undefined;
 }
@@ -576,11 +588,13 @@ export function recordBattle(initial: ExpeditionState, map: MapDefinition, looku
 }
 // Every brought member (deployed and reserve, standing or fallen) gains the victory's EXP, tapered by
 // their level against the monster level. Level-ups raise max HP; standing members gain the difference.
-function gainExp(state: ExpeditionState, map: MapDefinition, lookup: EncounterLookup, data: EncounterDefinition, kind: BattleKind, source?: string): Record<string, ExpGain> {
+function gainExp(state: ExpeditionState, map: MapDefinition, lookup: EncounterLookup, data: EncounterDefinition, kind: BattleKind, source?: string, summoned: readonly string[] = []): Record<string, ExpGain> {
   const rules = map.progression; const level = data.level ?? 1;
   // A7 step 2: EXP follows the foes' total HP (one foe's worth per `expFoeHp` at Lv1, grown by the monster-level rule),
   // so a swarm of small foes pays like one sturdy foe.
-  const worth = data.enemies.reduce((n, e) => n + e.maxHp, 0) / (rules.expFoeHp * (1 + (level - 1) * rules.monsterLevelPercent / 100));
+  // Summoned minions pay a small share (`summonExpPercent`); reserves never summoned pay nothing.
+  const hpWorth = data.enemies.reduce((n, e) => n + (!e.reserve ? e.maxHp : summoned.includes(e.id) ? e.maxHp * rules.summonExpPercent / 100 : 0), 0);
+  const worth = hpWorth / (rules.expFoeHp * (1 + (level - 1) * rules.monsterLevelPercent / 100));
   const base = worth * (rules.expBase + rules.expPerLevel * level) * (kind === 'boss' ? rules.bossExpMultiplier : kind === 'elite' ? (miniBoss(map, source) ? map.eventRules.miniBoss.exp : optionalElite(map, source) ? map.eventRules.optionalElite.exp : map.eventRules.eliteExp) : 1);
   const gains: Record<string, ExpGain> = {};
   const best = Math.max(...rosterIds(state).map(id => levelOf(state.members[id])));
@@ -619,7 +633,8 @@ export function finishBattle(initial: ExpeditionState, map: MapDefinition, looku
       if (map.events.find(e => e.id === source)?.kind === 'rift') { dust = map.eventRules.riftDust; state.dust += dust; }
     }
     const data = battleData(initial, map, lookup)!;
-    const exp = gainExp(state, map, lookup, data, kind, source);
+    const summoned = data.enemies.filter(e => e.reserve && !result.enemies.find(x => x.id === e.id)?.absent).map(e => e.id);
+    const exp = gainExp(state, map, lookup, data, kind, source, summoned);
     // A mini-boss pays its own loot table instead of the zone's.
     const loot = rollLoot(state, miniBoss(map, source) ? map.eventRules.miniBoss.loot : battleLoot(state, map, kind));
     if (kind === 'elite' && optionalElite(map, source) && !state.respawns[source ?? '']) {

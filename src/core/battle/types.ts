@@ -54,16 +54,25 @@ export interface HeroDefinition {
 // nor corroded, enrage strengthens its moves below a share of its HP. Numbers come from `rules.traits`.
 export type EnemyTrait = 'thorns' | 'veilguard' | 'enrage';
 export type EnemySlot = 'f1' | 'f2' | 'b1' | 'b2';
-export interface EnemyDefinition { id: EnemySlot; row: 'front' | 'back'; large?: boolean; boss?: boolean; name: string; displayName?: string; maxHp: number; speed: number; color: number; art?: string; traits?: readonly EnemyTrait[] }
+// `reserve`: a minion that waits off the field until a boss phase summons it (owner 2026-10-22).
+export interface EnemyDefinition { id: EnemySlot; row: 'front' | 'back'; large?: boolean; boss?: boolean; reserve?: boolean; name: string; displayName?: string; maxHp: number; speed: number; color: number; art?: string; traits?: readonly EnemyTrait[] }
 // Enemy moves aim at a party slot (0-3 in deployment order), not a named hero, so any
 // mercenary in that slot is the target. The resolved hero id is stored on Intent.
 // `unstoppable` (boss signature moves, owner 2026-10-22): Bash and Sigil cannot cancel it; Guard, Ward and taunts still answer it.
-export interface IntentDefinition { sourceId: string; targetSlot: number; name: string; damage: number; kind: 'physical' | 'energy'; unstoppable?: boolean }
+// Boss phases (owner 2026-10-22): `phase` puts the move in that phase's cycle (missing = the opening cycle); `all` hits
+// every standing hero (Guard and taunts cannot redirect it); `charge` gathers power and deals no damage.
+// `special` is set only on the generated phase-change turn.
+export interface IntentDefinition { sourceId: string; targetSlot: number; name: string; damage: number; kind: 'physical' | 'energy'; unstoppable?: boolean;
+  phase?: number; all?: boolean; charge?: boolean; special?: 'phase' }
+// A boss phase: once the boss's HP falls to `below` percent, its next turn summons the `summon` reserves (if any) and
+// switches its moves to that phase's cycle. `hardSummon` reserves join only in hard mode (world `hardEncounter`).
+export interface BossPhase { sourceId: EnemySlot; below: number; summon?: readonly EnemySlot[]; hardSummon?: readonly EnemySlot[]; name: string }
 export interface EncounterDefinition {
   id: string; version: number; name: string;
   // Monster level (2D-1): the content numbers are this level's; `withLevel` rescales a copy.
   level?: number;
   heroes: readonly HeroDefinition[]; enemies: readonly EnemyDefinition[]; intents: readonly IntentDefinition[];
+  phases?: readonly BossPhase[];
   skills: Record<ActionId, SkillDefinition>;
   // corrode*: alchemist acid adds a flat bonus to every hero hit on the target for corrodeDuration rounds.
   // ambushBonus: scout ambush adds this when the target has not acted yet this round.
@@ -82,7 +91,9 @@ export interface HeroState { id: string; hp: number; barrier: number; cooldowns:
 // `delayedRound`: an archer's hindering shot sends this enemy to the end of that round's queue.
 // `corrodeBonus`: the bonus of the flask that corroded it (talents can raise it; missing = the rule's value).
 // `steadyRound` (boss steadfast): the last round a boss whose turn was cancelled cannot be interrupted again.
-export interface EnemyState { id: string; hp: number; markedUntil: number; interruptedRound?: number; steadyRound?: number; delayedRound?: number; corrodedUntil?: number; corrodeBonus?: number }
+// `absent`: a reserve not yet summoned (kept at 0 HP, so it is out of the queue and the target lists).
+// `phase`/`phaseRound`: how many boss phases have begun, and the round the latest began (its cycle counts from there).
+export interface EnemyState { id: string; hp: number; markedUntil: number; absent?: boolean; phase?: number; phaseRound?: number; interruptedRound?: number; steadyRound?: number; delayedRound?: number; corrodedUntil?: number; corrodeBonus?: number }
 export interface Intent extends IntentDefinition { targetId: string; beat: number; round: number }
 // Party condition carried in from the expedition. Missing ids start at max HP.
 export interface BattleEntry { hp: Readonly<Record<string, number>> }
@@ -118,7 +129,7 @@ export interface BattleState {
   freeCast?: string[];
 }
 export interface BattleEvent {
-  type: 'damage' | 'guard' | 'mark' | 'barrier' | 'heal' | 'interrupt' | 'cancel' | 'down' | 'outcome' | 'brace' | 'counter' | 'delay' | 'corrode' | 'haste' | 'evade' | 'dodge' | 'taunt' | 'song' | 'rally' | 'sigil' | 'sanctuary' | 'stand' | 'finale' | 'resist';
+  type: 'damage' | 'guard' | 'mark' | 'barrier' | 'heal' | 'interrupt' | 'cancel' | 'down' | 'outcome' | 'brace' | 'counter' | 'delay' | 'corrode' | 'haste' | 'evade' | 'dodge' | 'taunt' | 'song' | 'rally' | 'sigil' | 'sanctuary' | 'stand' | 'finale' | 'resist' | 'phase' | 'summon' | 'charge';
   text: string; sourceId?: string; targetId?: string; amount?: number; absorbed?: number; cause?: 'defeated' | 'interrupted' | 'sealed';
 }
 // One frame per real actor turn. Only Resolution.state is committed/saved.

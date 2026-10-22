@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest';
-import { encounters, firstClash, rearAmbush, riftWarden } from '../src/content/encounters/catalog';
+import { encounters, firstClash, rearAmbush, riftWarden, riftWarden as wardenBase } from '../src/content/encounters/catalog';
 import { createBattle, currentHeroId, previewCommand, replay, resolveCommand, targetOptions, withParty } from '../src/core/battle/engine';
 import { mercenaries } from '../src/content/heroes/mercenaries';
 import { battleLesson } from '../src/ui/tutorial';
@@ -27,7 +27,8 @@ it('rear energy hits on the Hunter turn, not after every hero, and Ward protects
  expect(r.turns[1]!.events[0]).toMatchObject({amount:9,absorbed:14});
 });
 it('boss (f1) has exactly one turn per round and alternates physical/energy by round',()=>{
- let s=createBattle(riftWarden);const intents=[];
+ // The opening cycle only; phases are covered in tests/boss-phases.test.ts.
+ const riftWarden={...wardenBase,phases:undefined};let s=createBattle(riftWarden);const intents=[];
  while(s.round<4){const id=currentHeroId(s,riftWarden)!;const r=resolveCommand(s,riftWarden,{beat:s.beat,heroId:id,action:'attack',targetId:'f1'});
   intents.push(...r.turns.filter(t=>t.actorId==='f1').map(t=>[t.round,t.intent!.kind]));s=r.state;}
  expect(intents).toEqual([[1,'physical'],[2,'energy'],[3,'physical']]);expect(new Set(encounters.map(e=>e.id)).size).toBe(encounters.length);

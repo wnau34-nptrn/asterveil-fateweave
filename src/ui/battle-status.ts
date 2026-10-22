@@ -1,7 +1,7 @@
 import {bossNames,bossDescription} from './boss-equipment';
-import { capAmount, corrodeBonus, enemyIntent, guardReductionOf, hasCap, nextIntentOf, songPower, tauntReductionOf } from '../core/battle/engine';
+import { capAmount, corrodeBonus, enemyIntent, guardReductionOf, hasCap, nextIntentOf, phaseMoves, songPower, tauntReductionOf } from '../core/battle/engine';
 import type { ActionId, BattleState, EncounterDefinition } from '../core/battle/types';
-import { actorName, intentName } from './th';
+import { actorName, intentName, phaseThai } from './th';
 
 export interface UnitStatus {
   id: string; kind: 'buff' | 'debuff'; icon: ActionId;
@@ -72,7 +72,7 @@ export interface FoeMoveRow { name: string; kind: 'physical' | 'energy'; damage:
 export interface FoeProfile { stats: { label: string; value: string }[]; position: string; moves: FoeMoveRow[] }
 export function foeProfile(s: BattleState, d: EncounterDefinition, id: string): FoeProfile | undefined {
   const def = d.enemies.find(e => e.id === id), foe = s.enemies.find(e => e.id === id);
-  if (!def || !foe) return undefined;
+  if (!def || !foe || foe.absent) return undefined;
   const standing = (row: 'front' | 'back') => s.enemies.some(e => e.id !== id && e.hp > 0 && d.enemies.find(x => x.id === e.id)?.row === row);
   const stats = [
     ...(d.level ? [{ label: 'เลเวล', value: `Lv${d.level}` }] : []),
@@ -80,17 +80,24 @@ export function foeProfile(s: BattleState, d: EncounterDefinition, id: string): 
     { label: 'SPD', value: String(def.speed) },
     { label: 'ตำแหน่ง', value: `${def.row === 'front' ? 'แถวหน้า' : 'แถวหลัง'}${def.boss ? ' · บอส' : def.large ? ' · ตัวใหญ่' : ''}` },
     ...(def.boss ? [{ label: 'ทนการควบคุม', value: 'ถูกขัดแล้ว 2 รอบถัดไปขัดซ้ำไม่ได้' }] : []),
+    // Boss phases: the next threshold and what it brings; after the last one, the current phase.
+    ...(() => {
+      const phases = d.phases?.filter(p => p.sourceId === id) ?? []; if (!phases.length) return [];
+      const done = foe.phase ?? 0, next = phases[done];
+      const brings = (p: typeof next) => p!.summon?.length ? `เรียกลูกน้อง ${p!.summon.length} ตัว` : 'เปลี่ยนชุดท่า';
+      return [{ label: 'ช่วงการต่อสู้', value: next ? `ช่วง ${done + 1}/${phases.length + 1} · เลือดต่ำกว่า ${next.below}% → ${phaseThai(next.name)} (${brings(next)})` : `ช่วงสุดท้าย ${done + 1}/${phases.length + 1}` }];
+    })(),
   ];
   const position = foe.hp <= 0 ? 'ล้มแล้ว' : def.row === 'back'
     ? standing('front') ? 'ถูกแถวหน้าบัง · ฮีโร่แนวหน้าตีไม่ถึง ยกเว้นสกิลตีทะลุ (แทงทะลวง ติดตรา แทงข้างหลัง ท้าดวล) · ฮีโร่แนวหลังตีได้' : 'แถวหน้าล้มหมดแล้ว · ทุกคนตีถึง'
     : standing('back') ? 'บังศัตรูแถวหลังอยู่ · ล้มตัวนี้ก่อนฮีโร่แนวหน้าจึงตีแถวหลังได้' : 'ทุกคนตีถึง';
-  const cycle = d.intents.filter(i => i.sourceId === id);
+  const cycle = phaseMoves(s, d, id);
   const next = foe.hp > 0 && s.outcome === 'active' ? nextIntentOf(s, d, id) : null;
-  const nextIndex = next ? (next.round - 1) % cycle.length : -1;
+  const nextIndex = next && !next.special ? ((next.round - (foe.phaseRound ?? 0) - 1) % cycle.length + cycle.length) % cycle.length : -1;
   const moves = cycle.map((m, i) => {
     const hero = d.heroes[m.targetSlot];
     const target = `${hero ? actorName(hero.id, d) : `ช่อง ${m.targetSlot + 1}`}${m.kind === 'physical' ? ' (กายภาพ: แนวหน้าก่อนถ้ายังยืน)' : ''}`;
-    return { name: intentName({ ...m, targetId: hero?.id ?? '', beat: 0, round: 0 }), kind: m.kind, damage: m.damage, target, next: i === nextIndex, unstoppable: !!m.unstoppable };
+    return { name: intentName({ ...m, targetId: hero?.id ?? '', beat: 0, round: 0 }), kind: m.kind, damage: m.damage, target: m.charge ? 'ไม่โจมตี · ท่าถัดไปแรงมาก' : m.all ? 'ทั้งทีม' : target, next: i === nextIndex, unstoppable: !!m.unstoppable };
   });
   return { stats, position, moves };
 }

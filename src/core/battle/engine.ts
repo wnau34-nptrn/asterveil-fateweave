@@ -1,4 +1,4 @@
-import type { EnemyTrait, HeroGear, ActionId, BattleEntry, GearSpecial, HeroDefinition, PassiveId, TalentCap, TalentRule, HeroState, EnemyState, BattleEvent, BattleState, Command, EncounterDefinition, Intent, Resolution, TargetOption, TurnSlot, TurnStage } from './types';
+import type { BossPhase, IntentDefinition, EnemyTrait, HeroGear, ActionId, BattleEntry, GearSpecial, HeroDefinition, PassiveId, TalentCap, TalentRule, HeroState, EnemyState, BattleEvent, BattleState, Command, EncounterDefinition, Intent, Resolution, TargetOption, TurnSlot, TurnStage } from './types';
 
 const living = (state: BattleState, id: string) => [...state.heroes, ...state.enemies].some(a => a.id === id && a.hp > 0);
 const definitions = (data: EncounterDefinition) => [...data.heroes, ...data.enemies];
@@ -77,6 +77,13 @@ export function encounterProblems(data: EncounterDefinition): string[] {
     if (!data.intents.some(i => i.sourceId === e.id)) problems.push(`${data.id}: ${e.id} has no move`);
   }
   for (const i of data.intents) if (!ids.includes(i.sourceId as never)) problems.push(`${data.id}: move from missing ${i.sourceId}`);
+  // Phases belong to a boss; they summon only reserves, and reserves come only from a phase.
+  for (const p of data.phases ?? []) {
+    if (!data.enemies.find(e => e.id === p.sourceId)?.boss) problems.push(`${data.id}: phase on a non-boss ${p.sourceId}`);
+    for (const slot of [...p.summon ?? [], ...p.hardSummon ?? []]) if (!data.enemies.find(e => e.id === slot)?.reserve) problems.push(`${data.id}: summons non-reserve ${slot}`);
+  }
+  for (const e of data.enemies.filter(x => x.reserve)) if (!(data.phases ?? []).some(p => [...p.summon ?? [], ...p.hardSummon ?? []].includes(e.id))) problems.push(`${data.id}: reserve ${e.id} is never summoned`);
+  if (!data.enemies.some(e => !e.reserve)) problems.push(`${data.id}: no foe on the field`);
   return problems;
 }
 // Bosses resist control (owner 2026-10-22): a boss (`boss`) whose turn was cancelled is steadfast for its next two rounds,
@@ -163,11 +170,31 @@ function taunted(state: BattleState, data: EncounterDefinition, enemyId: string,
   const order = round === state.round ? state.order : roundOrder(state, data, round);
   return order.indexOf(enemyId) < order.indexOf(t.heroId) ? t.heroId : undefined;
 }
+// Boss phases (owner 2026-10-22): the next phase whose HP threshold the boss has reached, still to begin.
+export function pendingPhase(state: BattleState, data: EncounterDefinition, id: string): BossPhase | undefined {
+  const foe = state.enemies.find(e => e.id === id); const def = data.enemies.find(e => e.id === id);
+  const next = data.phases?.filter(p => p.sourceId === id)[foe?.phase ?? 0];
+  return foe && def && next && foe.hp > 0 && foe.hp * 100 <= def.maxHp * next.below ? next : undefined;
+}
+// The move cycle a foe uses now: its current phase's moves (a phase without moves of its own keeps the latest earlier
+// cycle). The cycle counts from the round after the phase began.
+export function phaseMoves(state: BattleState, data: EncounterDefinition, id: string): IntentDefinition[] {
+  let p = state.enemies.find(e => e.id === id)?.phase ?? 0;
+  while (p > 0 && !data.intents.some(i => i.sourceId === id && (i.phase ?? 0) === p)) p--;
+  return data.intents.filter(i => i.sourceId === id && (i.phase ?? 0) === p);
+}
 export function enemyIntent(state: BattleState, data: EncounterDefinition, id: string, round: number): Intent | null {
-  const moves = data.intents.filter(i => i.sourceId === id);
-  const template = moves[(round - 1) % moves.length];
-  if (!template || !living(state, id)) return null;
+  const foe = state.enemies.find(e => e.id === id);
+  if (!foe || !living(state, id)) return null;
   const alive = state.heroes.filter(h => h.hp > 0);
+  // A reached phase takes the boss's next turn: it summons and changes its moves instead of attacking. It cannot be
+  // cancelled; it names no real target (the first standing hero only keeps the intent shape).
+  const phase = pendingPhase(state, data, id);
+  if (phase) return alive[0] ? { sourceId: id, targetSlot: 0, name: phase.name, damage: 0, kind: 'energy', unstoppable: true, special: 'phase', targetId: alive[0].id, beat: state.beat, round } : null;
+  // Each phase's moves cycle from the round after the phase began (the opening cycle from round 1).
+  const moves = phaseMoves(state, data, id);
+  const template = moves[((round - (foe.phaseRound ?? 0) - 1) % moves.length + moves.length) % moves.length];
+  if (!template) return null;
   const front = alive.filter(h => data.heroes.find(d => d.id === h.id)!.lane === 'front');
   const allowed = template.kind === 'physical' && front.length ? front : alive;
   const target = allowed.find(h => h.id === data.heroes[template.targetSlot]?.id) ?? allowed[0];
@@ -188,7 +215,9 @@ export function nextIntentOf(state: BattleState, data: EncounterDefinition, enem
 }
 function refreshIntent(state: BattleState, data: EncounterDefinition): void { state.intent = plannedIntents(state, data, 1)[0] ?? null; }
 function finishOrAdvance(state: BattleState, data: EncounterDefinition, events: BattleEvent[]): void {
-  if (state.enemies.every(e => e.hp <= 0)) state.outcome = 'victory';
+  // The battle is won when every foe is down, or the moment every boss falls: its minions flee (owner 2026-10-22).
+  const bosses = data.enemies.filter(e => e.boss);
+  if (state.enemies.every(e => e.hp <= 0) || (bosses.length && bosses.every(b => state.enemies.find(e => e.id === b.id)!.hp <= 0))) state.outcome = 'victory';
   else if (state.heroes.every(h => h.hp <= 0)) state.outcome = 'defeat';
   if (state.outcome !== 'active') {
     state.intent = null; state.guard = null; state.counter = null; state.taunt = null; state.song = null; state.rally = null; state.sanctuary = null; state.solace = null;
@@ -307,6 +336,17 @@ function hit(state: BattleState, data: EncounterDefinition, enemy: EnemyState, i
     if (!brace.wall) state.counter = null;
   }
 }
+// A boss phase begins on the boss's own turn: it summons its waiting reserves into their slots (they join the queue
+// next round) and its moves switch to the new phase's cycle.
+function beginPhase(state: BattleState, data: EncounterDefinition, enemy: EnemyState, events: BattleEvent[]): void {
+  const phase = pendingPhase(state, data, enemy.id); if (!phase) return;
+  enemy.phase = (enemy.phase ?? 0) + 1; enemy.phaseRound = state.round;
+  events.push({ type: 'phase', sourceId: enemy.id, targetId: enemy.id, text: phase.name });
+  for (const slot of phase.summon ?? []) {
+    const minion = state.enemies.find(e => e.id === slot); const def = data.enemies.find(e => e.id === slot);
+    if (minion?.absent && def) { delete minion.absent; minion.hp = def.maxHp; events.push({ type: 'summon', sourceId: enemy.id, targetId: slot, text: 'Reinforcements.' }); }
+  }
+}
 function automaticTurns(state: BattleState, data: EncounterDefinition, turns: TurnStage[], presentation = false): void {
   while (state.outcome === 'active' && !currentHeroId(state, data)) {
     const actorId = currentActorId(state)!;
@@ -317,11 +357,8 @@ function automaticTurns(state: BattleState, data: EncounterDefinition, turns: Tu
     const enemy = state.enemies.find(e => e.id === actorId)!;
     if (intent) {
       const g = state.guard; const guard = g && (g.sourceId === actorId || g.uses) && g.targetId === intent.targetId && living(state, g.heroId) ? g : null;
-      if (enemy.interruptedRound === state.round) {
-        events.push({ type: 'cancel', sourceId: actorId, cause: intent.kind === 'energy' ? 'sealed' : 'interrupted', text: intent.kind === 'energy' ? 'Energy move sealed.' : 'Physical attack interrupted.' });
-        if (data.enemies.find(e => e.id === actorId)?.boss) enemy.steadyRound = state.round + STEADFAST_ROUNDS;
-      } else {
-        const recipient = state.heroes.find(h => h.id === (guard?.heroId ?? intent.targetId))!;
+      // One enemy hit on one hero: a shadow step dodges it, otherwise reductions apply and it lands.
+      const strike = (recipient: HeroState, guard: BattleState['guard']) => {
         if (recipient.evading) {
           // A scout's shadow step: the whole hit misses, so nothing is absorbed and no counter triggers.
           if (recipient.evadeExtra) recipient.evadeExtra--; else delete recipient.evading;
@@ -349,7 +386,15 @@ function automaticTurns(state: BattleState, data: EncounterDefinition, turns: Tu
           if (state.song?.action === 'valor' && living(state, state.song.heroId) && hasCap(data, state.song.heroId, 'chorus')) incoming = Math.max(0, incoming - capAmount(data, state.song.heroId, 'chorus'));
           hit(state, data, enemy, intent, recipient, incoming, events, protector);
         }
-      }
+      };
+      if (intent.special === 'phase') beginPhase(state, data, enemy, events);
+      else if (enemy.interruptedRound === state.round) {
+        events.push({ type: 'cancel', sourceId: actorId, cause: intent.kind === 'energy' ? 'sealed' : 'interrupted', text: intent.kind === 'energy' ? 'Energy move sealed.' : 'Physical attack interrupted.' });
+        if (data.enemies.find(e => e.id === actorId)?.boss) enemy.steadyRound = state.round + STEADFAST_ROUNDS;
+      } else if (intent.charge) events.push({ type: 'charge', sourceId: actorId, targetId: intent.targetId, text: 'Gathering power.' });
+      // A whole-party move strikes every standing hero; Guard cannot cover it.
+      else if (intent.all) { for (const h of state.heroes.filter(x => x.hp > 0)) if (h.hp > 0) strike(h, null); }
+      else strike(state.heroes.find(h => h.id === (guard?.heroId ?? intent.targetId))!, guard);
       // A two-guard knight covers a set number of hits; a plain guard ends when its announced attacker acts.
       if (guard?.uses && events.some(e => e.type === 'damage' && e.sourceId === actorId)) { guard.uses--; if (!guard.uses) state.guard = null; }
       else if (state.guard?.sourceId === actorId && !state.guard.uses) state.guard = null;
@@ -379,7 +424,8 @@ export function beginBattle(data: EncounterDefinition, entry?: BattleEntry, pres
     encounterId: data.id, beat: 1, round: 1, turnIndex: 0, order: [], outcome: 'active', guard: null, counter: null, taunt: null, song: null,
     // Equipment can start a standing hero with a barrier.
     heroes: data.heroes.map(h => { const hp = entry?.hp[h.id] ?? h.maxHp; return { id: h.id, hp, barrier: hp > 0 ? h.gear?.barrier ?? 0 : 0, cooldowns: {} }; }),
-    enemies: data.enemies.map(e => ({ id: e.id, hp: e.maxHp, markedUntil: 0 })), intent: null, commands: [],
+    // Reserves wait off the field at 0 HP until a boss phase summons them.
+    enemies: data.enemies.map(e => e.reserve ? { id: e.id, hp: 0, markedUntil: 0, absent: true } : { id: e.id, hp: e.maxHp, markedUntil: 0 }), intent: null, commands: [],
   };
   // Wind set (4 pieces): the wearer acts before everyone in round 1.
   for (const h of state.heroes) if (h.hp > 0 && data.heroes.find(d => d.id === h.id)!.gear?.firstStrike) h.hastedRound = 1;

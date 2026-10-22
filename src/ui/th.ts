@@ -30,12 +30,25 @@ export function actorName(id: string | undefined, data: EncounterDefinition): st
   }
   return id ? names[id] ?? data.heroes.find(h => h.id === id)?.name ?? 'เป้าหมาย' : 'ทีม';
 }
+// Who an announced enemy turn affects, in words: a phase change, a charge, the whole party or one hero.
+export function intentTargetThai(intent: Intent, data: EncounterDefinition, recipient = intent.targetId): string {
+  return intent.special === 'phase' ? 'เปลี่ยนช่วงการต่อสู้' : intent.charge ? 'รวบรวมพลัง' : intent.all ? 'ทั้งทีม' : actorName(recipient, data);
+}
+// The rule line under an announced enemy turn.
+export function intentRuleThai(intent: Intent): string {
+  if (intent.special === 'phase') return 'ไม่โจมตีเทิร์นนี้ · เรียกพวก/เปลี่ยนท่า · ขัดจังหวะไม่ได้';
+  if (intent.charge) return 'ไม่ทำความเสียหาย · ท่าถัดไปแรงมาก เตรียมป้องกัน';
+  const reach = intent.all ? 'โดนทุกคน · ตั้งรับแทนไม่ได้' : intent.kind === 'physical' ? 'แนวหน้ารับก่อน' : 'ถึงแนวหลังได้';
+  return intent.unstoppable ? `${reach} · ขัดจังหวะไม่ได้` : reach;
+}
+// A boss phase's name, from the same move-name table.
+export const phaseThai = (name: string): string => intentName({ name } as Intent);
 export function intentName(intent: Intent): string {
   return ({ 'Raking Slash': 'ฟันกวาด', 'Rift Bolt': 'ลำแสงรอยแยก', 'Crushing Blow': 'ทุบหนัก', 'Shadow Knife': 'มีดเงา', 'Rift Fury': 'โทสะรอยแยก', 'War Cry': 'คำรามศึก',
     'Seed Spark': 'ประกายเมล็ด', 'Tusk Charge': 'พุ่งงา', 'Thorn Pounce': 'ตะครุบหนาม', 'Spore Hex': 'คำสาปสปอร์', 'Thorn Bloom': 'หนามผลิบาน',
     'Briar Lash': 'แส้หนาม', 'Rune Lash': 'แส้อักขระ', 'Ribbon Snare': 'ริบบิ้นรัด', 'Crystal Fist': 'หมัดผลึก', 'Horn Charge': 'พุ่งเขา', 'Shard Burst': 'ผลึกระเบิด',
     'Jelly Bounce': 'กระเด้งชน', 'Ember Spark': 'ประกายถ่าน', 'Nip': 'งับ', 'Shield Smash': 'ทุบโล่', 'Mace Swing': 'ฟาดกระบอง', 'Thorn Bite': 'กัดหนาม',
-    'Spore Dust': 'ฝุ่นสปอร์', 'Rift Beam': 'คลื่นรอยแยก', 'Star Flame': 'เปลวดาว', 'Crystal Stab': 'แทงขาผลึก' } as Record<string, string>)[intent.name] ?? intent.name;
+    'Spore Dust': 'ฝุ่นสปอร์', 'Call the Hunt': 'เรียกพวกล่า', 'Call the Rift': 'เรียกวิญญาณรอยแยก', 'Rift Awakening': 'รอยแยกตื่น', 'Thorn Rage': 'โทสะพงหนาม', 'Gather Thorns': 'รวบรวมหนาม', 'Thorn Tempest': 'พายุหนามคลั่ง', 'Rift Gathering': 'รวบรวมพลังรอยแยก', 'Rift Cataclysm': 'มหันตภัยรอยแยก', 'Rift Wave': 'คลื่นรอยแยกกวาด', 'Thorn Storm': 'พายุหนาม', 'Rift Beam': 'คลื่นรอยแยก', 'Star Flame': 'เปลวดาว', 'Crystal Stab': 'แทงขาผลึก' } as Record<string, string>)[intent.name] ?? intent.name;
 }
 export function skillDescription(action: ActionId, heroId: string, data: EncounterDefinition): string {
   const skill = { ...data.skills[action], power: skillPower(data, heroId, action) };
@@ -210,6 +223,9 @@ export function eventThai(event: BattleEvent, after: BattleState, data: Encounte
     case 'evade': return `${source}ก้าวเงา · การโจมตีครั้งแรกที่โดนจะพลาด`;
     case 'dodge': return `${target}หลบการโจมตีของ${source}ได้`;
     case 'delay': return `${target}จะลงมือท้ายสุดในรอบถัดไป`;
+    case 'phase': return `${source}เข้าสู่ช่วงใหม่ · ${phaseThai(event.text)}`;
+    case 'summon': return `${target}ถูกเรียกเข้าสนาม · เริ่มลงมือรอบหน้า`;
+    case 'charge': return `${source}รวบรวมพลัง · ท่าถัดไปจะรุนแรงและขัดจังหวะไม่ได้`;
     case 'resist': return event.text === 'Unstoppable move.' ? `${target}กำลังใช้ท่าไม้ตาย · ขัดจังหวะไม่ได้` : `${target}ไม่หวั่นไหว · เพิ่งถูกขัดจังหวะ จึงขัดซ้ำไม่ได้จนพ้น 2 รอบ`;
     case 'outcome': return after.outcome === 'victory' ? 'ชนะแล้ว! รอยแยกสงบลง' : 'แพ้แล้ว ลองจัดแผนใหม่';
   }

@@ -21,13 +21,14 @@ export function battleLesson(state:BattleState,data:EncounterDefinition):Lesson|
  const focus=(list:typeof living)=>list.find(e=>e.markedUntil>state.round)??[...list].sort((a,b)=>rank(a)-rank(b)||a.hp-b.hp)[0];
  const pick=(action:ActionId)=>focus(reach(action))??focus(reach('attack'))??living[0]!;
  const attack=()=>make('attack',pick('attack').id,'โจมตีพื้นฐาน','แตะศัตรูในสนาม');
- const intent=state.intent;
+ // A phase change or a charge-up deals no damage now: nothing to guard, ward or dodge this turn.
+ const intent=state.intent&&!state.intent.special&&!state.intent.charge?state.intent:null;
  if(heroId==='guardian'){
   // A steadfast boss or an unstoppable move cannot be bashed: guard it instead.
-  if(intent?.kind==='physical'&&!interruptBlock(state,data,intent.sourceId,intent))return make('bash',intent.sourceId,'ขัดจังหวะโจมตีกายภาพ',`${actorName(intent.sourceId,data)} จะเสียเทิร์นโจมตีกายภาพถัดไป`)
-   ??make('guard',intent.targetId,'อ่านแผนศัตรู',`รับแทนและลดพลัง ${intent.damage} → ${Math.ceil(intent.damage*(1-guardReductionOf(data,heroId)))}`)??attack();
-  if(intent)return make('guard',intent.targetId,'อ่านแผนศัตรู',`รับแทนและลดพลัง ${intent.damage} → ${Math.ceil(intent.damage*(1-guardReductionOf(data,heroId)))}`)??attack();
-  return attack();
+  // Guard covers one announced hit; a whole-party move cannot be guarded.
+  const guard=()=>intent&&!intent.all?make('guard',intent.targetId,'อ่านแผนศัตรู',`รับแทนและลดพลัง ${intent.damage} → ${Math.ceil(intent.damage*(1-guardReductionOf(data,heroId)))}`):undefined;
+  if(intent?.kind==='physical'&&!interruptBlock(state,data,intent.sourceId,intent))return make('bash',intent.sourceId,'ขัดจังหวะโจมตีกายภาพ',`${actorName(intent.sourceId,data)} จะเสียเทิร์นโจมตีกายภาพถัดไป`)??guard()??attack();
+  return guard()??attack();
  }
  if(heroId==='toma'){
   const target=pick('acid');

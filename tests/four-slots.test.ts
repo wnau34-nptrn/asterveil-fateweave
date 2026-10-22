@@ -110,7 +110,7 @@ describe('world rules for four slots', () => {
 describe('bosses resist control (owner 2026-10-22)', () => {
   // The warden alone and slow, four physical moves; the fourth is its unstoppable signature.
   const boss = riftWarden.enemies.find(e => e.boss)!;
-  const d: EncounterDefinition = { ...riftWarden, enemies: [{ ...boss, speed: 10 }],
+  const d: EncounterDefinition = { ...riftWarden, phases: undefined, enemies: [{ ...boss, speed: 10 }],
     intents: [{ sourceId: 'f1', targetSlot: 0, name: 'Crushing Blow', damage: 20, kind: 'physical' }, { sourceId: 'f1', targetSlot: 1, name: 'Crushing Blow', damage: 20, kind: 'physical' }, { sourceId: 'f1', targetSlot: 1, name: 'Crushing Blow', damage: 20, kind: 'physical' },
       { sourceId: 'f1', targetSlot: 0, name: 'Crushing Blow', damage: 30, kind: 'physical', unstoppable: true }] };
   const bash = (s: BattleState) => resolveCommand(until(s, d, 'guardian'), d, { beat: until(s, d, 'guardian').beat, heroId: 'guardian', action: 'bash', targetId: 'f1' });
@@ -138,7 +138,7 @@ describe('bosses resist control (owner 2026-10-22)', () => {
   it('every boss has one unstoppable signature and hard mode makes Rift Fury unstoppable', () => {
     for (const id of ['vanguard-captain', 'elite-briar-lord', 'rift-warden']) {
       const e = lookup(id)!; const b = e.enemies.find(x => x.boss)!;
-      expect(e.intents.filter(i => i.sourceId === b.id && i.unstoppable), id).toHaveLength(1);
+      expect(e.intents.filter(i => i.sourceId === b.id && i.unstoppable && !i.phase), id).toHaveLength(1);
     }
     expect(hardEncounter(riftWarden, 'boss', map).intents.find(i => i.name === 'Rift Fury')!.unstoppable).toBe(true);
   });

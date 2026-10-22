@@ -131,6 +131,8 @@ export class BattleScene extends Phaser.Scene {
       this.actor(hero.id, slot, this.view.state.heroes[i]!.hp, false);
     }
     for (const [i, enemy] of this.encounter.enemies.entries()) {
+      // Reserves not yet summoned are off the field.
+      if (this.view.state.enemies[i]!.absent) continue;
       const slot = slots[FOE_SLOT_INDEX[enemy.id]!]!;
       this.actorPanels.set(enemy.id, slot);
       this.actor(enemy.id, slot, this.view.state.enemies[i]!.hp, true);
