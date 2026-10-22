@@ -44,12 +44,17 @@ for (const [width,height] of [[390,844],[320,568]] as const) {
       await page.locator('#character-content').evaluate(el => el.scrollTo(0, el.scrollHeight)); await page.waitForTimeout(100);
       await page.screenshot({path:`${dir}/${name}-${width}-end.png`});
     };
+    // Scroll the sheet so an element sits `off` px below the content top (never scrolls the dialog itself).
+    const to = (sel: string, off: number) => page.locator(sel).first().evaluate((el, off) => { const c = document.querySelector('#character-content')!; c.scrollTop += el.getBoundingClientRect().top - c.getBoundingClientRect().top - off; }, off);
     await page.locator('#world-hero-guardian').click(); await expect(page.locator('#character-dialog')).toBeVisible();
     await page.locator('#character-tab-gear').click(); await shot('gear', true);
     await page.locator('#character-content').evaluate(el => el.scrollTo(0, 0));
     const pick = page.locator('#pick-found-0');
-    if (await pick.count()) { await pick.click(); await page.locator('.item-card:not(.worn-card)').evaluate(el => el.scrollIntoView({block:'end'})); await shot('gear-picked'); await page.locator('#bag-slot-weapon').click(); await page.locator('.worn-card').evaluate(el => el.scrollIntoView({block:'center'})); await shot('gear-worn'); await page.locator('#bag-slot-weapon').click(); await page.locator('#gear-chips, .gear-extra-filters summary').first().click(); await page.locator('.gear-chips').evaluate(el => el.scrollIntoView({block:'start'})); await shot('gear-filters'); await page.locator('.gear-extra-filters summary').click(); }
+    if (await pick.count()) { await pick.click(); await to('.item-card:not(.worn-card)', 120); await shot('gear-picked'); await page.locator('#bag-slot-weapon').click(); await to('.worn-card', 120); await shot('gear-worn'); await page.locator('#bag-slot-weapon').click(); await page.locator('#gear-chips, .gear-extra-filters summary').first().click(); await to('.gear-chips', 8); await shot('gear-filters'); await page.locator('.gear-extra-filters summary').click(); }
     await page.locator('#compare-found-0').click(); await page.locator('#character-content').evaluate(el => el.scrollTo(0, 0)); await shot('compare', true);
+    await to('.compare-card', 8); await shot('compare-mid');
+    await page.locator('#comparison-back').click();
+    await page.locator('.auto-settings summary').click(); await page.locator('#auto-preview').click(); await page.locator('#character-content').evaluate(el => el.scrollTo(0, 0)); await shot('auto');
     await page.locator('#comparison-back').click();
     await page.locator('#character-tab-talents').click(); await page.locator('#character-content').evaluate(el => el.scrollTo(0, 0)); await shot('tree', true);
     await context.close();

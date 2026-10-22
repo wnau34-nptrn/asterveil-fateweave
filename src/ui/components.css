@@ -106,3 +106,41 @@
 .item-card-actions { display: flex; gap: 8px; }
 .character-content .item-card-actions button { flex: 1; min-height: 48px; display: inline-flex; align-items: center; justify-content: center; gap: 4px; }
 .worn-card { border-color: #74d4ef55; }
+
+/* Item detail / comparison (board 02). */
+.comparison-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.comparison-head h3 { margin: 0; font-size: 20px; }
+.comparison-head #comparison-back, .comparison-head [id$=comparison-back] { order: 2; width: 48px; height: 48px; min-height: 48px; padding: 0; display: grid; place-items: center; }
+.character-content .comparison-head button > .icon { width: 22px; height: 22px; margin: 0; }
+.gear-comparison > .camp-note:first-of-type { margin: 2px 0 8px; }
+.item-pills { display: flex; flex-wrap: wrap; gap: 6px; }
+.item-pills .ui-pill { min-height: 34px; position: relative; }
+.item-pills .set-emblem { position: static; width: 20px; height: 20px; }
+.main-stat { position: relative; display: grid; gap: 2px; margin: 8px 0; padding: 12px 14px; border: 1px solid #e8f5ff26; border-radius: 16px; background: linear-gradient(160deg, #182b40, #0c1a2b); }
+.main-stat > span { font-size: 13px; color: var(--text-muted, #bbcadb); }
+.main-stat strong { font: 700 36px/1.1 var(--font-display, Kanit), sans-serif; color: var(--text); }
+.main-stat em { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); font: 700 18px var(--font-display, Kanit), sans-serif; font-style: normal; }
+.main-stat small { font-size: 12px; color: var(--text-muted, #bbcadb); }
+.affix-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin-top: 12px; }
+.affix-head h4 { margin: 0; font-size: 16px; } .affix-head small { font-size: 12px; color: var(--text-muted, #bbcadb); }
+.affix-list { list-style: none; margin: 6px 0; padding: 0; display: grid; gap: 10px; }
+.affix-list li { display: grid; grid-template-columns: 1fr auto; gap: 4px 8px; font-size: 14px; }
+.affix-list b { color: var(--veil-cyan, #74d4ef); font-weight: 600; }
+.affix-list .ui-meter { grid-column: 1 / -1; }
+.item-extra { margin: 6px 0; font-size: 12px; color: var(--gold-light, #f2d596); }
+.compare-card { margin: 12px 0; padding: 12px 14px; border: 1px solid #e8f5ff26; border-radius: 16px; background: linear-gradient(160deg, #182b40, #0c1a2b); }
+.compare-card h4 { margin: 0 0 4px; font-size: 16px; }
+.compare-card .comparison-table th, .compare-card .comparison-table td { padding: 7px 2px; border-bottom-color: #e8f5ff14; }
+.compare-card .comparison-table th { width: auto; }
+.compare-card .comparison-table th .icon { width: 16px; height: 16px; margin-right: 6px; vertical-align: -3px; color: var(--text-muted, #bbcadb); }
+.compare-card .comparison-table td:nth-of-type(1) { color: var(--text-muted, #bbcadb); }
+.compare-card .comparison-table td:nth-of-type(1)::after { content: ' →'; }
+.compare-card .comparison-table td:nth-of-type(2) { font-weight: 700; width: 56px; }
+.compare-card .comparison-table td:nth-of-type(3) { width: 64px; font-weight: 700; }
+.compare-card .comparison-table td.gain { color: var(--hp-mint, #68e5b6); } .compare-card .comparison-table td.loss { color: var(--danger-coral, #ed927f); }
+.compare-card .comparison-table tr.same { opacity: .55; }
+.compare-card .camp-note { margin: 6px 0 0; }
+.swap-list { list-style: none; margin: 8px 0; padding: 0; display: grid; gap: 6px; }
+.swap-list li { display: grid; grid-template-columns: auto auto auto 1fr; align-items: center; gap: 8px; padding: 8px; border: 1px solid #e8f5ff1f; border-radius: 12px; background: #0c1a2b; }
+.swap-list .gear-art { --art: 44px; } .swap-list li > span[aria-hidden] { color: var(--veil-cyan, #74d4ef); }
+.swap-list li div { display: grid; min-width: 0; } .swap-list b { font-size: 13px; } .swap-list small { font-size: 11px; color: var(--text-muted, #bbcadb); }

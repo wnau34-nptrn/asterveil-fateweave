@@ -229,10 +229,13 @@ export const slotText: Record<GearSlot, string> = { weapon: 'อาวุธ', h
 export const slotIcon = { weapon: 'gearWeapon', head: 'gearHead', body: 'gearBody', gloves: 'gearGloves', boots: 'gearBoots', charm: 'gearCharm' } as const;
 export const rarityText = ['ธรรมดา', 'ดี', 'หายาก', 'ล้ำค่า', 'ตำนาน'] as const;
 const weaponText: Record<string, string> = { guardian: 'ดาบอัศวิน', tracer: 'ดาบนักดวล', weaver: 'คทาเวท', healer: 'ไม้เท้าศักดิ์สิทธิ์', garran: 'ทวน', mira: 'ธนู', toma: 'ชุดขวดแร่', sefa: 'มีดสั้น', brann: 'ค้อนรูน', lio: 'พิณรูน' };
-const statText: Record<GearStat, (n: number) => string> = {
+export const statText: Record<GearStat, (n: number) => string> = {
   hp: n => `เลือด +${n}`, attack: n => `พลังโจมตี +${n}%`, support: n => `พลังเสริม +${n}%`, speed: n => `SPD +${n}`, armour: n => `เกราะ +${n}%`,
   resist: n => `ต้านพลังงาน +${n}%`, leech: n => `ดูดเลือด +${n}%`, barrier: n => `โล่เริ่มศึก ${n}`, regen: n => `ฟื้นฟูระหว่างเดิน +${n}`, luck: n => `โชค +${n}`,
 };
+// Name and unit of each gear stat, for big numbers with the label beside them (A7 item detail).
+export const gearStatName: Record<GearStat, readonly [string, string]> = { hp: ['เลือด', ''], attack: ['พลังโจมตี', '%'], support: ['พลังเสริม', '%'], speed: ['SPD', ''], armour: ['เกราะ', '%'],
+  resist: ['ต้านพลังงาน', '%'], leech: ['ดูดเลือด', '%'], barrier: ['โล่เริ่มศึก', ''], regen: ['ฟื้นฟูระหว่างเดิน', ''], luck: ['โชค', ''] };
 export const specialText: Record<GearSpecial, string> = {
   laststand: 'ครั้งแรกในศึกที่จะล้ม เหลือเลือด 1', markhunter: 'โจมตีศัตรูที่ติดตรา +8', renewal: 'ฟื้นเลือด 4 เมื่อเริ่มเทิร์นของตัวเอง',
 };
