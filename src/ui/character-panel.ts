@@ -1,3 +1,4 @@
+import { formation } from '../core/world/formation';
 import type { ActionId, EncounterDefinition, HeroDefinition } from '../core/battle/types';
 import { AUTO_GOALS, planEquipment, type AutoEquipmentPlan, type AutoGoal, type EquipmentEntry } from '../core/world/auto-equipment';
 import { SET_IDS, type GearSlot, type MapDefinition, type SetId, type TalentNode } from '../core/world/types';
@@ -123,7 +124,9 @@ export class CharacterPanel {
     picker.innerHTML=this.ids(model.ids.map(c=>{const member=model.state.members[c]!,free=talentPoints(this.map,member,c)-talentsSpent(member.talents);return `<button id="character-member-${c}" data-world="character-member" data-hero="${c}" class="tree-member" aria-pressed="${c===id}" aria-label="${heroText[c]!.name} · แต้มเหลือ ${free}">${portrait(c)}<small>${heroText[c]!.name}</small>${free?`<i>+${free}</i>`:''}</button>`;}).join(''));picker.scrollLeft=left;
     this.dialog.querySelector(`#${this.id('character-tabs')}`)!.innerHTML=this.ids(Object.entries(characterTabs).map(([tab,label])=>`<button id="character-tab-${tab}" data-world="character-tab" data-tab="${tab}" role="tab" aria-controls="character-content" aria-selected="${tab===this.tab}" tabindex="${tab===this.tab?0:-1}">${icon(characterTabIcons[tab as CharacterTab])}<span>${label}</span></button>`).join(''));
     const position=model.state.roster.deployed.includes(id)?`ตัวหลักช่อง ${model.state.roster.deployed.indexOf(id)+1}`:model.state.roster.reserve.includes(id)?'สำรอง':'ในค่าย';
-    let html=`<p class="character-summary">${heroText[id]!.role} · ${h.lane==='front'?'แนวหน้า':'แนวหลัง'} · ${position} · ${model.camp?'ค่ายหลัก · เลือดพร้อมออกเดินทาง':'HP'} ${model.state.hp[id]??0}/${h.maxHp}</p>`;
+    // A deployed member shows the lane it stands in (formation); others their class lane.
+    const lane=formation(model.state.roster,c=>this.heroes.find(v=>v.id===c)?.lane??'front')[id]??h.lane;
+    let html=`<p class="character-summary">${heroText[id]!.role} · ${lane==='front'?'แนวหน้า':'แนวหลัง'} · ${position} · ${model.camp?'ค่ายหลัก · เลือดพร้อมออกเดินทาง':'HP'} ${model.state.hp[id]??0}/${h.maxHp}</p>`;
     html+=this.tab==='overview'?characterOverview(model.state,this.map,h,this.template):this.tab==='skills'?characterSkills(h,base,m.stars,this.template,this.map,m):this.tab==='talents'?characterTalents(model.state,this.map,id,this.template,h,base,this.node)+(model.camp?`<button id="character-reset" data-world="character-reset" class="secondary"${talentsSpent(m.talents)?'':' disabled'}>${icon('act-reset')}รีเซ็ตแต้มฟรีที่ครูฝึก</button>`:''):this.gear(model,h);
     // Read folded panels before replacing them: a camp re-render can land before their async toggle event.
     const was=this.content().querySelector<HTMLDetailsElement>('.gear-extra-filters'),wasAuto=this.content().querySelector<HTMLDetailsElement>('.auto-settings');if(was)this.filtersExpanded=was.open;if(wasAuto)this.autoExpanded=wasAuto.open;

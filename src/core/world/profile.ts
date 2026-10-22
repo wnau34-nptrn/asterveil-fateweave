@@ -2,10 +2,11 @@ import {startBossPlan} from './boss-equipment';
 import {startHunt} from './targeted-loot';
 import {storageCap,departureBlocked} from './storage';
 import { memberTalentReason, talentsSpent } from './talents';
-import type { GuideDefinition, GuideKind, LobbyFeature, Commander, ShopItemId, SideQuestKind, ExpeditionState, Gear, GearSlot, Item, MapDefinition, PotionId, Potions, Profile, ProfileResult, RunOutcome, TalentNode } from './types';
+import type { Lane, GuideDefinition, GuideKind, LobbyFeature, Commander, ShopItemId, SideQuestKind, ExpeditionState, Gear, GearSlot, Item, MapDefinition, PotionId, Potions, Profile, ProfileResult, RunOutcome, TalentNode } from './types';
 import { rollItem, salvageValue } from './equipment';
 import { COMPANY_CAP, GEAR_SLOTS, PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS, SET_IDS } from './types';
-import { heroCatalog, levelOf, loadoutReason, memberDef, newExpedition, rollPercent, rosterIds, type EncounterLookup } from './world';
+import { heroCatalog, levelOf, loadoutReason, memberDef, newExpedition, recommendedLane, rollPercent, rosterIds, type EncounterLookup } from './world';
+import { laneReason, withLane } from './formation';
 import type { ActionId } from '../battle/types';
 
 // Pure lobby rules: the persistent mercenary company, the bank, the hiring board, the
@@ -122,7 +123,7 @@ export function dismiss(initial: Profile, map: MapDefinition, id: string): Profi
   for (const item of Object.values(profile.members[id]?.gear ?? {}).sort((a,b)=>Number(!!b?.locked)-Number(!!a?.locked))) if (item) stash(profile, map, item);
   if(profile.hunt?.target===id)delete profile.hunt.target;
   profile.company = profile.company.filter(m => m !== id); delete profile.members[id];
-  profile.party.deployed = profile.party.deployed.filter(m => m !== id); profile.party.reserve = profile.party.reserve.filter(m => m !== id);
+  profile.party.deployed = profile.party.deployed.filter(m => m !== id); profile.party.reserve = profile.party.reserve.filter(m => m !== id); if (profile.party.lanes) delete profile.party.lanes[id];
   profile.bank.gold += map.company.dismissRefund;
   return { profile, event: { type: 'dismissed', heroId: id } };
 }
@@ -221,6 +222,14 @@ export function placeMember(initial: Profile, id: string, target: Group, other?:
   }
   if (!party.deployed.length) return blocked(initial, 'last');
   return { profile, event: { type: 'party' } };
+}
+
+// Formation at the camp team page (owner 2026-10-22): a deployed member moves to the other column, or trades columns
+// with `other`. The plan travels with the party and is used in every battle.
+export function setPartyLane(initial: Profile, map: MapDefinition, lookup: EncounterLookup, id: string, lane: Lane, other?: string): ProfileResult {
+  const reason = laneReason(initial.party, recommendedLane(lookup, map), id, lane, other); if (reason) return blocked(initial, reason);
+  const profile = structuredClone(initial); profile.party = withLane(profile.party, recommendedLane(lookup, map), id, lane, other);
+  return { profile, event: { type: 'party', heroId: id, lane } };
 }
 
 // Starts an expedition with the chosen 4 + 4 at full HP and their current stars.

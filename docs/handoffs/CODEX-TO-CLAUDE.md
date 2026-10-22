@@ -1,5 +1,9 @@
 # Codex → Claude handoff
 
+## 2026-10-22 — Claude: formation (item 3b, save v36)
+
+The column a hero stands in is now its lane in the rules (owner 2026-10-22, plan `docs/design/FORMATION_PLAN_TH.md`). `core/world/formation.ts` resolves lanes (`roster.lanes` else class lane, ≤3 per column); `battleData` passes the placed party, so the resolver is unchanged; `ActiveBattle.lanes` fixes the set lanes per battle (missing in v35 battles = class lanes). Mutations: `setPartyLane` (profile, camp team sheet) and `setLane` (run, outside battle). UI `ui/formation-grid.ts` (2×3 grid) in the lobby team sheet and the camp/bag team tab; `field-layout.ts` adds trio columns (slots 8/9, `TRIO_SCALE` .8, compact panels). Tests `tests/formation.test.ts`, `tests/field-layout.test.ts`, `tests/browser/formation.spec.ts`; simulation `tests/formation-sim.test.ts` (no formation dominates; report `docs/validation/formation-sim/REPORT.md`).
+
 ## 2026-10-22 — Claude: A7 step 3 structure, 8-actor field + battle HUD
 
 `game/visuals/field-layout.ts` now lays out 8 slots (two columns per side, upper/lower rows) sized from the arena, with room reserved so a `large` foe draws 1.5× (`LARGE_SCALE`) in any slot; short arenas (<260px) keep the old grid. `BattleUI` adds per-foe next-move badges (`#field-intents`, from `nextIntentOf`), a "ถูกบัง" marker on screened targets, an 8-slot SPD queue with speed badges, and `#field-banner` for boss phase/summon/charge/all-party turns; `BattleScene.sync` repaints when a summon adds a foe mid-presentation. Review shots: `tests/browser/battle-shots.spec.ts` (BATTLE_SHOTS=dir). No rule/save change. Waiting on owner feedback; finishing polish is listed in NEW-CHAT-HANDOFF-TH.md item 3.

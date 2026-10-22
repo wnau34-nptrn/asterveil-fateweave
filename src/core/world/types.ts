@@ -338,7 +338,7 @@ export type ProfileEvent =
   | {type:'storageCollected';count:number}
   | {type:'storageExpanded'}
   | { type: 'blocked'; reason: string }
-  | { type: 'party' }
+  | { type: 'party'; heroId?: string; lane?: Lane }
   | { type: 'commander' }
   | { type: 'guide'; id: string; skipped: boolean }
   | { type: 'hired'; heroId: string; duplicate: boolean }
@@ -358,12 +358,17 @@ export interface ProfileResult { profile: Profile; event: ProfileEvent }
 // Up to 4 deployed (slot order = enemy target slots) and 4 in reserve, swapped at camps.
 export const PARTY_SLOTS = 4;
 export const RESERVE_SLOTS = 4;
-export interface Roster { deployed: string[]; reserve: string[] }
+// Formation (save v36, owner 2026-10-22): `lanes` holds the column a member was set to stand in; a member without
+// one stands in its class's recommended lane. Each column takes at most LANE_SLOTS deployed members.
+export type Lane = 'front' | 'back';
+export const LANE_SLOTS = 3;
+export interface Roster { deployed: string[]; reserve: string[]; lanes?: Record<string, Lane> }
 
 // `elite` and `event` (3A) name the elite or event in `ActiveBattle.source`.
 export type BattleKind = 'tutorial' | 'random' | 'boss' | 'elite' | 'event';
 // `level`: the monster level fixed when the battle started (missing in older saves = the encounter's own level).
-export interface ActiveBattle { kind: BattleKind; encounterId: string; entry: Record<string, number>; commands: Command[]; level?: number; source?: string }
+// `lanes`: the formation fixed when the battle started (save v36; missing = every hero in its class lane).
+export interface ActiveBattle { kind: BattleKind; encounterId: string; entry: Record<string, number>; commands: Command[]; level?: number; source?: string; lanes?: Record<string, Lane> }
 export type RecruitPoint = 'prologue' | 'camp' | 'boss';
 export type LobbyFeature = 'tree' | 'forge' | 'brew' | 'gear' | 'level' | 'quests' | 'hire' | 'team' | 'market' | 'fuse' | 'craft' | 'hunt' | 'transfer' | 'bossCharm' | 'hard';
 export interface ExpeditionState {
@@ -406,7 +411,7 @@ export type WorldEvent =
   | { type: 'talent'; heroId: string }
   | { type: 'moved'; chance: number }
   | { type: 'blocked'; reason: 'wall' | 'edge' | 'busy' | 'party' | 'sealed' | 'stone' | 'pit' }
-  | { type: 'roster' }
+  | { type: 'roster'; heroId?: string; lane?: Lane }
   | { type: 'equipped'; heroId: string }
   | { type: 'encounter'; kind: BattleKind; encounterId: string; chance: number }
   | { type: 'goal' }

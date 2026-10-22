@@ -12,8 +12,10 @@ import { withParty } from '../core/battle/engine';
 import { hardReason, activeGuides, guideDone, featureMap, featureOpen, NAME_MAX, mapUnlocked, boardOffers, brewReason, buyReason, claimReason, sealLimit, refreshReason, shopLeft, dismissReason, equip, groupOf, hireReason, talentPoints, talentsSpent, upgradeCost, upgradeReason, type Group } from '../core/world/profile';
 import { isBigTree } from '../core/world/talents';
 import { salvageValue } from '../core/world/equipment';
-import { COMPANY_CAP, PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS, SHOP_ITEMS, type GearSlot, type GuideKind, type LobbyFeature, type ShopItemId, type MapDefinition, type PotionId, type Profile, type TalentNode } from '../core/world/types';
-import { expToNext, starred, type EncounterLookup } from '../core/world/world';
+import { COMPANY_CAP, PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS, SHOP_ITEMS, type GearSlot, type GuideKind, type Lane, type LobbyFeature, type ShopItemId, type MapDefinition, type PotionId, type Profile, type TalentNode } from '../core/world/types';
+import { expToNext, recommendedLane, starred, type EncounterLookup } from '../core/world/world';
+import { formation } from '../core/world/formation';
+import { formationGrid, formationTap, laneName } from './formation-grid';
 import { actorArt, actorFootOrigins, lobbyArt, lobbyPose, NPC_IDS, npcAtlasUrl, npcBustsUrl, npcStationsUrl, unitsUrl, type LobbyPose, type NpcId } from '../game/visuals/assets';
 import { icon } from './icons';
 import { commanderBadge } from './commander-ui';
@@ -22,7 +24,7 @@ import { skillDescription, heroText, npcText, rewardText, shopText, sideQuestTex
 
 import { heroArt, portrait, starRow } from './portraits';
 
-export interface LobbyHost { autoEquip(plan: AutoEquipmentPlan): void; hire(index: number): void; refresh(): void; buy(item: ShopItemId, heroId?: string): void; smelt(dust: number): void; upgrade(id: string): void; dismiss(id: string): void; place(id: string, group: Group, other?: string): void; talent(id: string, node: TalentNode): void; loadout(id: string, actions: ActionId[]): void; resetTalents(id: string): void;
+export interface LobbyHost { autoEquip(plan: AutoEquipmentPlan): void; hire(index: number): void; refresh(): void; buy(item: ShopItemId, heroId?: string): void; smelt(dust: number): void; upgrade(id: string): void; dismiss(id: string): void; place(id: string, group: Group, other?: string): void; lane(id: string, lane: Lane, other?: string): void; talent(id: string, node: TalentNode): void; loadout(id: string, actions: ActionId[]): void; resetTalents(id: string): void;
   transfer(uid:number,index:number,donor:number,sourceIndex:number):void; huntTarget(target?:string):void; bossTarget(target:BossPower):void; craft(hero:string,level:number):void;
   collect(ids:number[]):void; recycleStored(source:StorageSource,ids:number[]):void; expandStorage():void;
   equip(id: string, uid: number): void; unequip(id: string, slot: GearSlot): void; salvage(uids: number[]): void; renameCamp(name: string): void; guide(id: string, skip: boolean): void;
@@ -64,6 +66,8 @@ export class LobbyUI {
   private confirmSalvage: number | undefined;
   private sceneDrawn = '';
   private picked: string | undefined;
+  // The member picked in the formation grid (separate from the team-card pick).
+  private lanePick: string | undefined;
   private confirmDismiss = false;
   // The broker's sheet shows the hiring board or the market (4A).
   private market = false;
@@ -102,9 +106,14 @@ export class LobbyUI {
           if (sheet === 'gear') this.picked = this.view!.profile.party.deployed[0];
           else this.picked = undefined;
           this.sheet = sheet; this.preview = undefined; this.confirmDismiss = false; this.openedLine(sheet); this.draw(); this.act(npc, 'greet', 1400); this.focus(`#npc-${npc}`); break; }
-        case 'tab': this.huntUI.cancel();this.preview = undefined; this.sheet = b.dataset.tab as 'team' | 'hire' | 'gear' | 'forge' | 'brew' | 'hunt'; this.openedLine(this.sheet); { const n = npcOfSheet(this.sheet); if (n) this.act(n, 'greet', 1400); } this.picked = this.sheet==='gear'?(this.view!.profile.party.deployed[0]??this.view!.profile.company[0]):undefined; this.confirmDismiss = false; this.draw(); this.focus(`#lobby-tab-${this.sheet}`); break;
+        case 'tab': this.huntUI.cancel();this.preview = undefined; this.lanePick = undefined; this.sheet = b.dataset.tab as 'team' | 'hire' | 'gear' | 'forge' | 'brew' | 'hunt'; this.openedLine(this.sheet); { const n = npcOfSheet(this.sheet); if (n) this.act(n, 'greet', 1400); } this.picked = this.sheet==='gear'?(this.view!.profile.party.deployed[0]??this.view!.profile.company[0]):undefined; this.confirmDismiss = false; this.draw(); this.focus(`#lobby-tab-${this.sheet}`); break;
         case 'close': this.closeSheet(); break;
         case 'pick': this.pick(id, b.dataset.group as Group); break;
+        case 'lane-pick': case 'lane-cell': {
+          const lanes = this.lanes(this.view!.profile); const tap = formationTap(this.lanePick, lanes, id, b.dataset.lane as Lane);
+          const moved = tap.move?.id; this.lanePick = tap.picked;
+          if (tap.move) this.host.lane(tap.move.id, tap.move.lane, tap.move.other); else this.draw();
+          this.focus(`#lobby-lane-${moved ?? tap.picked ?? id ?? ''}`); break; }
         case 'hire': this.host.hire(Number(b.dataset.index)); break;
         case 'hire-preview': this.preview = Number(b.dataset.index); this.draw(); this.root.querySelector('.lobby-content')?.scrollTo(0, 0); this.focus('#hire-preview-back'); break;
         case 'hire-preview-back': { const i = this.preview; this.preview = undefined; this.draw(); this.focus(`#hire-open-${i}`); break; }
@@ -308,9 +317,10 @@ export class LobbyUI {
         + `<span id="npc-art-${id}" class="lobby-npc" data-npc="${id}" style="--nx:${npcSpots[id].x}%;--npx:${npcSpots[id].px}%;--flip:${flip};--atlas:url(${npcAtlasUrl(id)});--nd:${i * -0.37}s"><b><i></i></b></span>`; }).join('');
     return `<div class="lobby-scene" aria-hidden="true" style="--lobby-bg:url(${lobbyArt('lobby_bg')});--lobby-fg:url(${lobbyArt('lobby_fg')});--lobby-pit:url(${lobbyArt('lobby_firepit')})"><div class="lobby-fire"><b></b><span class="lobby-flame"><i></i></span></div>${staff}${units}<div class="lobby-fg"></div><div class="lobby-embers">${'<i></i>'.repeat(7)}</div></div>`;
   }
+  private lanes(p: Profile): Record<string, Lane> { return formation(p.party, recommendedLane(this.lookup, this.map)); }
   private card(p: Profile, id: string | undefined, group: Group, slot: number): string {
     if (!id) return `<button class="team-card empty${this.picked ? ' target' : ''}" data-lobby="pick" data-group="${group}" aria-label="${groupName[group]} ช่อง ${slot + 1} ว่าง"${this.picked ? '' : ' disabled'}><span>ว่าง</span></button>`;
-    const h = this.hero(id); const text = heroText[id]!; const lane = h.lane === 'front' ? 'แนวหน้า' : 'แนวหลัง';
+    const h = this.hero(id); const text = heroText[id]!; const lane = laneName(this.lanes(p)[id] ?? h.lane);
     return `<button id="lobby-member-${id}" class="team-card" data-lobby="pick" data-hero="${id}" data-group="${group}" aria-pressed="${this.picked === id}"
       aria-label="${groupName[group]}${group === 'deployed' ? ` ช่อง ${slot + 1}` : ''} · ${text.name} ${p.members[id]!.stars} ดาว ${text.role} ${lane} เลือด ${h.maxHp}">${group === 'deployed' ? `<i class="slot-no">${slot + 1}</i>` : ''}${portrait(id)}<b>${text.name}</b>${this.stars(p.members[id]!.stars)}<small>Lv${p.members[id]!.level ?? 1} · เลือด ${h.maxHp}</small><small class="lane">${text.role} · ${lane}</small></button>`;
   }
@@ -318,6 +328,7 @@ export class LobbyUI {
     const row = (ids: string[], group: Group, size: number) => Array.from({ length: size }, (_, i) => this.card(p, ids[i], group, i)).join('');
     const bench = p.company.filter(id => groupOf(p, id) === 'bench');
     return `<h3>${icon('flag')} ลงสนาม <span class="camp-embers">ศัตรูเล็งตามหมายเลขช่อง</span></h3><div class="team-grid">${row(p.party.deployed, 'deployed', PARTY_SLOTS)}</div>
+      ${formationGrid({ prefix: 'lobby', attr: 'lobby', deployed: p.party.deployed, lanes: this.lanes(p), recommended: recommendedLane(this.lookup, this.map), picked: this.lanePick })}
       <h3>${icon('camp')} สำรอง <span class="camp-embers">พาเข้าด่าน สลับได้ในกระเป๋านอกการต่อสู้</span></h3><div class="team-grid">${row(p.party.reserve, 'reserve', RESERVE_SLOTS)}</div>
       <h3>${icon('rest')} ในค่าย <span class="camp-embers">ไม่ได้เข้าด่านรอบนี้</span></h3>
       <div class="team-grid bench">${bench.map((id, i) => this.card(p, id, 'bench', i)).join('')}${this.picked && groupOf(p, this.picked) !== 'bench' ? this.card(p, undefined, 'bench', bench.length) : ''}${!bench.length && !this.picked ? '<p class="camp-note">ทุกคนอยู่ในทีมที่จะพาไปแล้ว</p>' : ''}</div>

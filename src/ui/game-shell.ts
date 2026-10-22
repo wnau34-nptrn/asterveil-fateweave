@@ -7,9 +7,9 @@ import { applyCampEquipment, applyRunEquipment } from '../core/world/auto-equipm
 import { shortcutBlocked } from '../platform/keyboard';
 import type { BattleState, Outcome } from '../core/battle/types';
 import { clearLegacySaves, loadGame, saveGame, type Game } from '../core/save/expedition-save';
-import { chooseLoadout, hardReason, claimGuide, renameCamp, createCommander, depart, mapUnlocked, brew, buy, claimQuest, refreshBoard, dismiss, equip, hire, learnTalent, newProfile, placeMember, resetTalents, salvage, settle, unequip, upgrade, canWithdraw } from '../core/world/profile';
+import { setPartyLane, chooseLoadout, hardReason, claimGuide, renameCamp, createCommander, depart, mapUnlocked, brew, buy, claimQuest, refreshBoard, dismiss, equip, hire, learnTalent, newProfile, placeMember, resetTalents, salvage, settle, unequip, upgrade, canWithdraw } from '../core/world/profile';
 import type { Point, Direction, EventChoice, ExpeditionState, MapDefinition, PotionId, Profile, ProfileResult, RunOutcome, ShopItemId, WorldEvent } from '../core/world/types';
-import { travel, tileAt, startPrologue, questDone, battleData, chooseEvent, finishBattle, heroCatalog, move, moveMember, openChest, recordBattle, usePotion, rest, revive, swapMembers, takeOff, wear, type EncounterLookup } from '../core/world/world';
+import { travel, tileAt, startPrologue, questDone, battleData, chooseEvent, finishBattle, heroCatalog, move, moveMember, openChest, recordBattle, usePotion, rest, revive, setLane, swapMembers, takeOff, wear, type EncounterLookup } from '../core/world/world';
 import { Music, type Track } from '../platform/music';
 import { firstClearStory, runSummary, SummaryUI, type RunSummary } from './summary-ui';
 import { sfx, type SfxName } from '../platform/sfx';
@@ -17,6 +17,7 @@ import { browserStorage } from '../platform/browser-storage';
 import type { BattleUI } from './battle-ui';
 import { leaderArt, type NpcId } from '../game/visuals/assets';
 import { choiceText, eventText, expThai, heroText, itemLines, itemName, lootThai, potionText, rewardText, shopText } from './th';
+import { laneName } from './formation-grid';
 import { transferAffix, craftWeapon, raiseItemLevel, enhanceTo, lockEquipment, findItem, fuse, reroll, smelt } from '../core/world/forge';
 import { CommanderUI } from './commander-ui';
 import { LobbyUI } from './lobby-ui';
@@ -69,7 +70,7 @@ export class GameShell {
     this.game = loadGame(this.storage, map, lookup, maps);
     for (const id of this.game?.run?.recruited ?? []) this.recruitSeen.add(`${this.game!.run!.mapId}:${id}`);
     this.world = new WorldUI(views.world, this.map, heroCatalog(lookup, map), {
-      travel: to => this.travelTo(to), move: dir => this.move(dir), rest: () => this.rest(), revive: id => this.revive(id), swap: (a, b) => this.roster(swapMembers(this.state!, a, b)), moveMember: id => this.roster(moveMember(this.state!, id)),
+      travel: to => this.travelTo(to), move: dir => this.move(dir), rest: () => this.rest(), revive: id => this.revive(id), swap: (a, b) => this.roster(swapMembers(this.state!, a, b)), lane: (id, lane, other) => this.roster(setLane(this.state!, map, lookup, id, lane, other)), moveMember: id => this.roster(moveMember(this.state!, id)),
       withdraw: () => this.endRun('withdrawn'), openChest: () => this.openChest(), usePotion: (potion, id) => this.drink(potion, id),
       chooseEvent: choice => this.chooseEvent(choice),
       talent: (id, node) => {
@@ -95,6 +96,7 @@ export class GameShell {
       hire: i => this.profileChange(hire(this.game!.profile, map, lookup, i)), refresh: () => this.profileChange(refreshBoard(this.game!.profile, map)),
       buy: (item, hero) => this.profileChange(buy(this.game!.profile, map, item, hero)), smelt: dust => this.profileChange(smelt(this.game!.profile, map, dust)), upgrade: id => this.profileChange(upgrade(this.game!.profile, map, id)),
       dismiss: id => this.profileChange(dismiss(this.game!.profile, map, id)), place: (id, group, other) => this.profileChange(placeMember(this.game!.profile, id, group, other)),
+      lane: (id, lane, other) => this.profileChange(setPartyLane(this.game!.profile, map, lookup, id, lane, other)),
       talent: (id, node) => this.profileChange(learnTalent(this.game!.profile, map, id, node)), loadout: (id, actions) => this.profileChange(chooseLoadout(this.game!.profile, map, lookup, id, actions)), resetTalents: id => this.profileChange(resetTalents(this.game!.profile, id)),
       renameCamp: name => this.renameCamp(name), guide: (id, skip) => this.guide(id, skip),
       equip: (id, uid) => this.profileChange(equip(this.game!.profile, id, uid)), unequip: (id, slot) => this.profileChange(unequip(this.game!.profile, map, id, slot)),
@@ -253,7 +255,7 @@ export class GameShell {
       : e.type === 'smelted' ? `ลุงบอร์กหลอมแร่ดาวเป็นฝุ่นดาว ${e.dust} · มีฝุ่นดาว ${result.profile.bank.dust}`
       : e.type === 'refreshed' ? `พีโน่เปลี่ยนป้ายจ้างใหม่แล้ว · สุ่มได้อีก ${this.map.shop.refreshCosts.length - result.profile.refreshes} ครั้ง`
       : e.type === 'bought' ? this.boughtText(result.profile, e)
-      : e.type === 'claimed' ? `ได้รับรางวัลเควสต์ · ${rewardText(this.map.sideQuests.find(q => q.id === e.questId)!.reward)}` : 'จัดทีมแล้ว';
+      : e.type === 'claimed' ? `ได้รับรางวัลเควสต์ · ${rewardText(this.map.sideQuests.find(q => q.id === e.questId)!.reward)}` : e.type === 'party' && e.heroId && e.lane ? `จัดแผนแล้ว · ${name(e.heroId)}ยืน${laneName(e.lane)}` : 'จัดทีมแล้ว';
     this.lobbyCheer = e.type === 'hired' || e.type === 'upgraded' ? e.heroId : '';
     // The camp NPC whose service just succeeded cheers once.
     sfx.play(({ hired: 'coin', upgraded: 'upgrade', dismissed: 'close', talent: 'buff', equipped: 'guard', salvaged: 'anvil', forged: 'anvil', smelted: 'anvil', brewed: 'potion', claimed: 'claim', bought: 'coin', refreshed: 'coin' } as Partial<Record<string, SfxName>>)[e.type] ?? 'click');
@@ -433,7 +435,7 @@ export class GameShell {
   private roster(result: { state: ExpeditionState; event: WorldEvent }): void {
     if (!this.state || this.locked || result.event.type !== 'roster') return;
     this.state = result.state; this.persist();
-    this.message = 'จัดทีมแล้ว · ศัตรูเล็งตามหมายเลขช่อง';
+    this.message = result.event.heroId && result.event.lane ? `จัดแผนแล้ว · ${heroText[result.event.heroId]?.name ?? ''}ยืน${laneName(result.event.lane)} ใช้ในศึกถัดไป` : 'จัดทีมแล้ว · ศัตรูเล็งตามหมายเลขช่อง';
     this.renderWorld();
   }
   // Map bag gear (2026-10-17): saved at once, like every other map action.

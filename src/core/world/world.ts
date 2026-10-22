@@ -7,7 +7,8 @@ import type { RecruitPoint, ActiveBattle, BattleKind, ChestDefinition, Company, 
 import { affixPool, gearTotals } from './equipment';
 import { effectiveTalents, isBigTree, memberTalentReason } from './talents';
 import type { TalentNode } from './types';
-import { PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS, SET_IDS } from './types';
+import { PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS, SET_IDS, type Lane, type Roster } from './types';
+import { formation, laneReason, placed, withLane } from './formation';
 
 // Pure expedition rules: no DOM, Phaser, clocks or Math.random. Every roll is
 // derived from (seed, rolls) so a reload can never re-roll an outcome.
@@ -165,8 +166,16 @@ export function newExpedition(map: MapDefinition, lookup: EncounterLookup, seed:
   reveal(state, map);
   return state;
 }
+// The battle keeps the deployed members' set lanes (formation, v36); the lanes they fight in follow from them.
 const startBattle = (state: ExpeditionState, kind: BattleKind, encounterId: string, level?: number, source?: string): ActiveBattle =>
-  ({ kind, encounterId, entry: Object.fromEntries(state.roster.deployed.map(id => [id, state.hp[id]!])), commands: [], ...(level ? { level } : {}), ...(source ? { source } : {}) });
+  ({ kind, encounterId, entry: Object.fromEntries(state.roster.deployed.map(id => [id, state.hp[id]!])), commands: [], ...(level ? { level } : {}), ...(source ? { source } : {}), lanes: setLanes(state.roster) });
+const setLanes = (roster: Roster): Record<string, Lane> => Object.fromEntries(roster.deployed.flatMap(id => roster.lanes?.[id] ? [[id, roster.lanes[id]]] : []));
+export const recommendedLane = (lookup: EncounterLookup, map: MapDefinition) => (id: string): Lane => heroDef(lookup, map, id)?.lane ?? 'front';
+// The lane each deployed hero fights in. A battle saved before formations (no `lanes`) keeps every class lane.
+export function battleLanes(state: ExpeditionState, map: MapDefinition, lookup: EncounterLookup): Record<string, Lane> | undefined {
+  const lanes = state.battle ? state.battle.lanes : state.roster.lanes ?? {};
+  return lanes && formation({ ...state.roster, lanes }, recommendedLane(lookup, map));
+}
 // Prologue (lore 2026-10-16): on a company's first expedition, Vargoth's vanguard attacks at the start tile
 // before the first step. The battle is the ordinary tutorial battle; old saves still meet it on the first step.
 export function startPrologue(initial: ExpeditionState, map: MapDefinition): WorldResult {
@@ -344,6 +353,13 @@ export function swapMembers(initial: ExpeditionState, a: string, b: string): Wor
   const state = structuredClone(initial);
   state.roster.deployed[deployed.indexOf(d)] = r; state.roster.reserve[reserve.indexOf(r)] = d;
   return { state, event: { type: 'roster' } };
+}
+// Formation on the map (owner 2026-10-22): outside battle a deployed member moves to the other column, or trades
+// columns with `other`. The next battle fights in the new formation.
+export function setLane(initial: ExpeditionState, map: MapDefinition, lookup: EncounterLookup, id: string, lane: Lane, other?: string): WorldResult {
+  if (!canManage(initial) || laneReason(initial.roster, recommendedLane(lookup, map), id, lane, other)) return { state: initial, event: { type: 'blocked', reason: 'busy' } };
+  const state = structuredClone(initial); state.roster = withLane(state.roster, recommendedLane(lookup, map), id, lane, other);
+  return { state, event: { type: 'roster', heroId: id, lane } };
 }
 export function moveMember(initial: ExpeditionState, id: string): WorldResult {
   const { deployed, reserve } = initial.roster;
@@ -572,7 +588,7 @@ export function battleData(state: ExpeditionState, map: MapDefinition, lookup: E
   const staged = leveled && bossRole(leveled, state.battle!.kind, map, state.battle!.source);
   const data = staged && hard ? hardEncounter(staged, state.battle!.kind, map) : staged;
   const party = state.roster.deployed.map(id => memberDef(lookup, map, state.members, id));
-  return data && party.every(Boolean) ? withParty(data, party as HeroDefinition[]) : undefined;
+  return data && party.every(Boolean) ? withParty(data, placed(party as HeroDefinition[], battleLanes(state, map, lookup))) : undefined;
 }
 // The battle's committed commands are replayed from the recorded entry; the world
 // never trusts a supplied HP snapshot.
@@ -646,7 +662,7 @@ export function finishBattle(initial: ExpeditionState, map: MapDefinition, looku
   }
   state.defeats++;
   if (kind === 'tutorial') {
-    state.battle = { kind: 'tutorial', encounterId, entry: fullParty(lookup, map, state.roster.deployed, state.members), commands: [] };
+    state.battle = { kind: 'tutorial', encounterId, entry: fullParty(lookup, map, state.roster.deployed, state.members), commands: [], ...(state.battle!.lanes ? { lanes: state.battle!.lanes } : {}) };
     return { state, event: { type: 'defeat', kind, encounterId } };
   }
   // The fallen stay fallen; the party retreats to the last camp reached (or the entrance).

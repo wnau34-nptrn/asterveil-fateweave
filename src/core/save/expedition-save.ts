@@ -2,7 +2,7 @@ import {bossPlanValid,startBossPlan} from '../world/boss-equipment';
 import {storageCap} from '../world/storage';
 import { entryReason, withParty } from '../battle/engine';
 import type { ActionId, Command } from '../battle/types';
-import { COMPANY_CAP, PARTY_SLOTS, RESERVE_SLOTS, type ActiveBattle, type ExpeditionState, type MapDefinition, type Point, type Profile, type Roster, type RunOutcome } from '../world/types';
+import { COMPANY_CAP, PARTY_SLOTS, RESERVE_SLOTS, type ActiveBattle, type ExpeditionState, type MapDefinition, type Point, type Profile, type Lane, type Roster, type RunOutcome } from '../world/types';
 import { skillChoices, battleState, expToNext, findTiles, newExpedition, finishBattle, fullParty, heroCatalog, heroDef, memberDef, rosterIds, tileAt, type EncounterLookup } from '../world/world';
 import { affixPool, itemValid } from '../world/equipment';
 import { boulderAt, openPit, passableWall } from '../world/puzzles';
@@ -67,7 +67,9 @@ export const legacyKeys = ['asterveil.fateweave.battle.v1', 'asterveil.fateweave
 // v34 → v35 (A7 step 2): foes stand in four slots (`f1`/`f2`/`b1`/`b2`) instead of `raider`/`brute`, and encounters
 // changed. A battle in progress whose commands aim at `raider`/`brute` or no longer replay restarts from its recorded
 // entry HP (its commands are dropped); nothing else changes.
-const SAVE_VERSION = 35;
+// v35 → v36 (formation): a roster may carry `lanes` (the column each member was set to; missing = class lanes) and a
+// battle the set lanes it started with (`lanes`). A battle saved without them keeps every hero in its class lane.
+const SAVE_VERSION = 36;
 export interface Game { profile: Profile; run: ExpeditionState | null }
 const actions: readonly ActionId[] = ['attack', 'guard', 'bash', 'mark', 'execute', 'bolt', 'ward', 'heal', 'prayer', 'brace', 'pierce', 'hinder', 'volley', 'acid', 'haste', 'ambush', 'evade', 'taunt', 'slam', 'valor', 'mend',
   'rally', 'finisher', 'sigil', 'sanctuary', 'spearwall', 'weakshot', 'bomb', 'backstab', 'quake', 'finale', 'challenge', 'bulwark', 'rouse'];
@@ -99,11 +101,18 @@ function point(v: unknown, map: MapDefinition, walls = false): Point {
 }
 function rosterOf(v: unknown, lookup: EncounterLookup, map: MapDefinition): Roster {
   const r = obj(v); const { deployed, reserve } = r;
-  if (!Array.isArray(deployed) || !Array.isArray(reserve) || Object.keys(r).length !== 2) throw new Error('Invalid roster');
+  if (!Array.isArray(deployed) || !Array.isArray(reserve) || Object.keys(r).length !== (r.lanes === undefined ? 2 : 3)) throw new Error('Invalid roster');
   const ids = [...deployed, ...reserve];
   if (!deployed.length || deployed.length > PARTY_SLOTS || reserve.length > RESERVE_SLOTS || new Set(ids).size !== ids.length
     || ids.some(id => typeof id !== 'string' || !heroDef(lookup, map, id))) throw new Error('Invalid roster');
-  return { deployed: [...deployed] as string[], reserve: [...reserve] as string[] };
+  // Set lanes may name any hero (a benched member keeps its column); only the deployed ones stand on the field.
+  const lanes = r.lanes === undefined ? undefined : lanesOf(r.lanes, id => !!heroDef(lookup, map, id));
+  return { deployed: [...deployed] as string[], reserve: [...reserve] as string[], ...(lanes ? { lanes } : {}) };
+}
+function lanesOf(v: unknown, known: (id: string) => boolean): Record<string, Lane> {
+  const l = obj(v);
+  if (Object.entries(l).some(([id, lane]) => !known(id) || (lane !== 'front' && lane !== 'back'))) throw new Error('Invalid lanes');
+  return { ...l } as Record<string, Lane>;
 }
 function itemOf(v: unknown, map: MapDefinition, lookup: EncounterLookup, found = false): Item {
   const i = structuredClone(obj(v)) as unknown as Item;
@@ -277,7 +286,8 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
     // Validate against the encounter as fought by this run's deployed party (stars included).
     if (entryReason(withParty(data, roster.deployed.map(id => memberDef(lookup, map, members, id)!)), { hp: entry })) throw new Error('Invalid entry');
     if (b.level !== undefined && !isInt(b.level, 1, 99)) throw new Error('Invalid battle');
-    battle = { kind: b.kind as ActiveBattle['kind'], encounterId: data.id, entry, commands: b.commands.map(command), ...(b.level !== undefined ? { level: b.level as number } : {}), ...(typeof source === 'string' ? { source } : {}) };
+    const lanes = b.lanes === undefined ? undefined : lanesOf(b.lanes, id => roster.deployed.includes(id));
+    battle = { kind: b.kind as ActiveBattle['kind'], encounterId: data.id, entry, commands: b.commands.map(command), ...(b.level !== undefined ? { level: b.level as number } : {}), ...(typeof source === 'string' ? { source } : {}), ...(lanes ? { lanes } : {}) };
   }
   // Story recruits (v30): guests and this run's recruits are roster members from this map's recruit list, never both.
   const recruitIds = (v: unknown): string[] | undefined => {
@@ -463,7 +473,7 @@ export function parseGame(raw: string, map: MapDefinition, lookup: EncounterLook
   const envelope = obj(JSON.parse(raw)); const version = envelope.version as number;
   if (version < 21) migrateItems(envelope, map);
   if (version < 34) migrateTrees(envelope, maps.length ? maps : [map]);
-  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
+  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
   const runMap = (v: unknown): MapDefinition => maps.find(m => m.id === obj(v).mapId) ?? map;
   if (version < 5) {
     const home = runMap(envelope.state); const run = parseRun(envelope.state, version, home, lookup);

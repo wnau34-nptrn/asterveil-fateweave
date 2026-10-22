@@ -8,7 +8,7 @@ import { resolveCommand, targetOptions, currentHeroId } from '../../src/core/bat
 import { buy, buyReason, refreshBoard, refreshReason, claimQuest, claimReason, createCommander, depart, equip, hire, hireReason, boardOffers, learnTalent, newProfile, salvage, settle, talentReason, upgrade, upgradeReason, brew, brewReason, homeItems } from '../../src/core/world/profile';
 import { enhance, enhanceCost, enhanceReason, smelt, smeltReason } from '../../src/core/world/forge';
 import { boulderAt, openPit, passableWall, runePuzzleAt } from '../../src/core/world/puzzles';
-import type { BattleKind, Direction, ExpeditionState, GearSlot, Item, Point, Profile, RunOutcome } from '../../src/core/world/types';
+import type { BattleKind, Direction, ExpeditionState, GearSlot, Item, Lane, Point, Profile, RunOutcome } from '../../src/core/world/types';
 import { GEAR_SLOTS } from '../../src/core/world/types';
 import {
   atCamp, atMuster, monsterLevelAt, battleData, battleState, canOpenChest, canRest, canRevive, eliteAt, eventAt, finishBattle, findTiles, memberDef, move, openChest,
@@ -237,11 +237,13 @@ function lobby(p: Profile): { profile: Profile; claimed: string[] } {
   return { profile: p, claimed };
 }
 
-export function simulateCompany(seed: number, policy: Policy, expeditions: number, style: Style = 'advisor'): CompanyReport {
+// `lanes`: a formation set before every departure (formation comparison; missing = class lanes).
+export function simulateCompany(seed: number, policy: Policy, expeditions: number, style: Style = 'advisor', lanes?: Record<string, Lane>): CompanyReport {
   let p = createCommander(newProfile(map, seed), { name: 'จำลอง', crest: 'star', color: 'gold', camp: 'ค่ายอารี' }).profile;
   const out: ExpeditionReport[] = [];
   for (let index = 1; index <= expeditions; index++) {
     const shop = lobby(p); p = shop.profile;
+    if (lanes) p = { ...p, party: { ...p.party, lanes: { ...lanes } } };
     const d = depart(p, map, lookup, (seed * 7919 + index * 104729) >>> 0); p = d.profile; let s = d.run;
     const report: ExpeditionReport = { index, outcome: 'withdrawn', steps: 0, wins: 0, defeats: 0, lowestHp: 100, battles: {}, gained: { ore: 0, gold: 0, seal: 0, dust: 0 },
       items: [0, 0, 0, 0, 0], chests: 0, elites: 0, objectives: 0, bossBeaten: false, level: 0, stars: 0, company: p.company.length, claimed: shop.claimed };
