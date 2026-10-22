@@ -4,6 +4,7 @@ import { effectFamily, effectCaption, type CombatPrefs } from '../visuals/combat
 import { thaiFont } from '../../ui/th';
 import { palette } from '../visuals/palette';
 import { BOLT_ATLAS, boltAtlasUrls, boltCast, boltImpact, type FxContext } from '../visuals/bolt-fx';
+import { EXECUTE_ATLAS, WARD_ATLAS, executeAtlasUrls, wardAtlasUrls, executeCast, executeImpact, wardCast, wardSettle } from '../visuals/exec-ward-fx';
 import { fieldSlots, type FieldSlot } from '../visuals/field-layout';
 import { actorArt, actorFootOrigins, artOf, artUrl, mirroredArt, unitsUrl } from '../visuals/assets';
 
@@ -71,6 +72,8 @@ export class BattleScene extends Phaser.Scene {
   preload(): void {
     this.load.image('rift-ruins', artUrl('ruins'));
     this.load.atlas(BOLT_ATLAS, ...boltAtlasUrls());
+    this.load.atlas(EXECUTE_ATLAS, ...executeAtlasUrls());
+    this.load.atlas(WARD_ATLAS, ...wardAtlasUrls());
     for (const sheet of ['units', 'mercs', 'foes'] as const) this.load.spritesheet(`battle-${sheet}`, unitsUrl(sheet), { frameWidth: 512, frameHeight: 512 });
   }
   create(): void {
@@ -262,8 +265,16 @@ export class BattleScene extends Phaser.Scene {
   prepare(turn: TurnStage, contactMs: number): void {
     if (!this.ready || !contactMs || this.reducedMotion) return;
     const family = effectFamily(turn), start = this.anchor(turn.actorId);
-    const end = this.anchor(turn.events.find(e => e.type === 'damage' || e.type === 'dodge')?.targetId ?? turn.targetId);
+    const hitEvent = turn.events.find(e => e.type === 'damage' || e.type === 'dodge');
+    // Ward (A8): the thread and veil gather on each real barrier recipient (self-cast included).
+    if (turn.action === 'ward' && turn.side === 'hero') {
+      for (const e of turn.events) { const at = e.type === 'barrier' ? this.anchor(e.targetId) : undefined; if (at) wardCast(this.fx(e.targetId), at, contactMs); }
+      return;
+    }
+    const end = this.anchor(hitEvent?.targetId ?? turn.targetId);
     if (!start || !end) return;
+    // Execute (A8): blade glint, then one rose-gold cut that ends exactly at contact.
+    if (turn.action === 'execute' && turn.side === 'hero') { executeCast(this.fx(turn.actorId), start, end, contactMs, hitEvent?.type === 'dodge' ? 'dodged' : hitEvent && !hitEvent.amount ? 'blocked' : 'hit'); return; }
     // Bolt (A8 vertical slice): the Astral Thread cast replaces the generic charge ring and trail.
     if (turn.action === 'bolt' && turn.side === 'hero') { boltCast(this.fx(turn.actorId), start, end, contactMs); return; }
     const color = family === 'arcane' ? 0xc5a4ff : family === 'restore' ? 0x85e5be : family === 'mark' ? 0xffa9d4 : family === 'shield' ? palette.cyan : palette.gold;
@@ -314,10 +325,17 @@ export class BattleScene extends Phaser.Scene {
       const color = shield ? 0x8addf5 : event.type === 'heal' ? 0x85e5be : event.type === 'mark' ? 0xffa9d4 : family === 'arcane' ? 0xc5a4ff : palette.gold;
       say(id, effectCaption(event), '#' + color.toString(16).padStart(6,'0'));
       const bolt = turn.action === 'bolt' && turn.side === 'hero' && event.sourceId === turn.actorId && (event.type === 'damage' || event.type === 'dodge');
+      const execute = turn.action === 'execute' && turn.side === 'hero' && event.sourceId === turn.actorId && (event.type === 'damage' || event.type === 'dodge');
+      const ward = turn.action === 'ward' && turn.side === 'hero' && event.type === 'barrier';
+      if (execute) {
+        const enemy = turn.before?.enemies.find(e => e.id === id);
+        executeImpact(this.fx(id), p, life, event.type === 'dodge' ? 'dodged' : event.amount ? 'hit' : 'blocked', !!enemy && enemy.markedUntil >= turn.round);
+      }
+      if (ward) wardSettle(this.fx(id), p, life);
       if (bolt) boltImpact(this.fx(id), p, this.anchor(event.sourceId), life, event.type === 'dodge' ? 'dodged' : event.amount ? 'hit' : 'blocked');
       if (damage) {
         const from = this.anchor(event.sourceId);
-        if (from && !bolt) {
+        if (from && !bolt && !execute) {
           const slash = this.add.graphics().lineStyle(this.quiet ? 2 : 5, color, .9);
           if (family === 'steel' || event.type === 'counter') slash.lineBetween(from.x,from.y,p.x,p.y);
           if (!event.absorbed || event.amount) {
@@ -329,7 +347,7 @@ export class BattleScene extends Phaser.Scene {
         const body = this.bodies.get(id), sprite = body?.list.find(c => c instanceof Phaser.GameObjects.Image) as Phaser.GameObjects.Image | undefined;
         if (event.amount && sprite && !this.reducedMotion) {
           // Bolt keeps the body's detail: a short violet multiply tint instead of a white fill flash.
-          if (bolt) sprite.setTint(0xcdb8ff).setTintMode(Phaser.TintModes.MULTIPLY); else sprite.setTint(0xffffff).setTintMode(Phaser.TintModes.FILL);
+          if (bolt || execute) sprite.setTint(bolt ? 0xcdb8ff : 0xffd3dc).setTintMode(Phaser.TintModes.MULTIPLY); else sprite.setTint(0xffffff).setTintMode(Phaser.TintModes.FILL);
           this.later(90, () => { if (sprite.active) sprite.clearTint().setTintMode(Phaser.TintModes.MULTIPLY); });
           if (body && !this.quiet) this.tweens.add({ targets:body,x:body.x+(Math.sign(p.x-(from?.x ?? p.x-1)) || 1)*7,delay:hold,duration:80,yoyo:true });
         }
@@ -343,7 +361,7 @@ export class BattleScene extends Phaser.Scene {
         const enemy = turn.before?.enemies.find(e => e.id === id);
         if (turn.action === 'execute' && enemy && enemy.markedUntil >= turn.round) say(id,'โจมตีเป้าติดตรา','#ffa9d4');
       }
-      if (shield) {
+      if (ward) { /* the Aegis art above is the whole cue */ } else if (shield) {
         const g = this.add.graphics().lineStyle(3,color,.95).fillStyle(color,.12);
         const points = [{x:p.x-22,y:p.y-24},{x:p.x+22,y:p.y-24},{x:p.x+19,y:p.y+8},{x:p.x,y:p.y+26},{x:p.x-19,y:p.y+8}];
         const polygon = points.map(point => new Phaser.Math.Vector2(point.x, point.y));
@@ -352,7 +370,7 @@ export class BattleScene extends Phaser.Scene {
         this.fade(this.add.graphics().lineStyle(4,color).lineBetween(p.x-13,p.y,p.x+13,p.y).lineBetween(p.x,p.y-13,p.x,p.y+13),life);
       } else if (event.type === 'mark') {
         this.fade(this.add.graphics().lineStyle(2,color).strokeCircle(p.x,p.y,23).lineBetween(p.x-30,p.y,p.x-16,p.y).lineBetween(p.x+16,p.y,p.x+30,p.y).lineBetween(p.x,p.y-30,p.x,p.y-16).lineBetween(p.x,p.y+16,p.x,p.y+30),life);
-      } else if (!bolt) {
+      } else if (!bolt && !execute) {
         const ring = this.add.circle(p.x,p.y,damage?19:25).setStrokeStyle(2,color,.9); this.fade(ring,life);
         if (!this.quiet && !this.reducedMotion) this.tweens.add({targets:ring,scale:damage?2:1.4,duration:Math.min(350,life)});
       }
