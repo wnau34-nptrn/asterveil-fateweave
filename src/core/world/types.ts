@@ -54,6 +54,8 @@ export interface MapDefinition {
   tutorialEncounterId: string; bossEncounterId: string;
   // The boss's fight level (4E tuning; missing = the encounter's own level). Monster levels scale HP and damage only.
   bossLevel?: number;
+  // A10: the boss's foes fight with this percent of their HP and move damage (missing = 100), like `EliteDefinition.percent`.
+  bossPercent?: number;
   revealRadius: number;
   // Chests sit on floor tiles; loot tables are drafts until playtested.
   chests: readonly ChestDefinition[];
@@ -169,7 +171,8 @@ export type GuideKind = 'wear' | 'enhance' | 'talent' | 'brew' | 'itemLevel' | '
 export interface GuideDefinition { id: string; npc: string; feature: LobbyFeature; kind: GuideKind; reward: SideQuestDefinition['reward'] }
 export interface QuestDefinition { need: number; objectives: readonly QuestObjective[] }
 // `level`: the fight level (4E tuning; missing = the encounter's own level).
-export interface EliteDefinition { id: string; x: number; y: number; encounterId: string; forced: boolean; mini?: boolean; level?: number }
+// `percent` (A10): this elite's foes fight with that percent of their HP and move damage (missing = 100).
+export interface EliteDefinition { id: string; x: number; y: number; encounterId: string; forced: boolean; mini?: boolean; level?: number; percent?: number }
 export type MapEventKind = 'bandits' | 'shrine' | 'merchant' | 'traveller' | 'rift';
 export interface MapEventDefinition { id: string; x: number; y: number; kind: MapEventKind }
 export type EventChoice = 'fight' | 'sneak' | 'pray' | 'offer' | 'buy-salve' | 'buy-tonic' | 'buy-repel' | 'help';
@@ -256,7 +259,9 @@ export interface ProgressionRules {
   // `hardFirstClear` once.
   hardLevels: number; hardFirstClear: { gold: number; seal: number };
   // Hard-mode foes (A9 part 2): trait numbers for the resolver and the boss's extra move (percent of its heaviest).
-  hardTraits: { thornsPercent: number; veilguardPercent: number; enrageBelow: number; enragePercent: number; bossMovePercent: number };
+  hardTraits: { thornsPercent: number; veilguardPercent: number; enrageBelow: number; enragePercent: number; bossMovePercent: number;
+    // A10: a hard-mode boss fights this many levels above the other hard battles.
+    bossLevels: number };
   // Big skill trees (A6): the member level each tier opens at, and how many active skills go into battle.
   treeTiers: readonly number[]; loadoutSize: number;
   // Skill levels with tomes (A6 part 2, docs/design/SKILL_TOMES_TH.md, draft numbers).
@@ -399,7 +404,8 @@ export interface Roster { deployed: string[]; reserve: string[]; lanes?: Record<
 export type BattleKind = 'tutorial' | 'random' | 'boss' | 'elite' | 'event';
 // `level`: the monster level fixed when the battle started (missing in older saves = the encounter's own level).
 // `lanes`: the formation fixed when the battle started (save v36; missing = every hero in its class lane).
-export interface ActiveBattle { kind: BattleKind; encounterId: string; entry: Record<string, number>; commands: Command[]; level?: number; source?: string; lanes?: Record<string, Lane> }
+// `percent` (A10): the map strength stored at the start (foe HP and move damage; missing = 100).
+export interface ActiveBattle { kind: BattleKind; encounterId: string; entry: Record<string, number>; commands: Command[]; level?: number; percent?: number; source?: string; lanes?: Record<string, Lane> }
 export type RecruitPoint = 'prologue' | 'camp' | 'boss';
 export type LobbyFeature = 'tree' | 'forge' | 'brew' | 'gear' | 'level' | 'quests' | 'hire' | 'team' | 'market' | 'fuse' | 'craft' | 'hunt' | 'transfer' | 'bossCharm' | 'hard' | 'tomes';
 export interface ExpeditionState {

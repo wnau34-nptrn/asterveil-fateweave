@@ -14,6 +14,13 @@ const lookup = encounterById;
 const extras = ['guardian', 'tracer', 'weaver', 'healer'].map(id => ({ ...encounterById(map.tutorialEncounterId)!.heroes.find(h => h.id === id)!, id: `${id}-b` }));
 const rosterLookup = (id: string) => id === map.tutorialEncounterId ? { ...encounterById(id)!, heroes: [...encounterById(id)!.heroes, ...extras] } : encounterById(id);
 const fresh = (seed = 7) => newExpedition(map, lookup, seed);
+// A10: veil-frontier is a Lv6–10 map with a tougher warden, so its later fights are played by a party of the map's
+// level (★3, full HP) rather than the Lv1 starters.
+function seasoned(state: ExpeditionState, level = 10, stars = 3): ExpeditionState {
+  const s = structuredClone(state);
+  for (const id of Object.keys(s.members)) { s.members[id] = { ...s.members[id]!, level, stars }; s.hp[id] = memberDef(lookup, map, s.members, id)!.maxHp; }
+  return s;
+}
 // Two rift-seal objectives done (3B): the boss can be challenged.
 const sealBroken = { elitesDefeated: ['scar-golem'], eventsDone: ['scar-rift'] };
 const dirs: Record<Direction, Point> = { up: { x: 0, y: -1 }, down: { x: 0, y: 1 }, left: { x: -1, y: 0 }, right: { x: 1, y: 0 } };
@@ -191,7 +198,7 @@ describe('expedition rules', () => {
   it('the boss blocks its tile, and only its defeat opens the goal', () => {
     const [boss] = findTiles(map, 'boss'); const below = { x: boss!.x, y: boss!.y + 1 };
     // The rift seal (3B) holds until two objectives are done.
-    let s = { ...fresh(2), tutorialDone: true, position: below };
+    let s = { ...seasoned(fresh(2)), tutorialDone: true, position: below };
     expect(move(s, map, 'up').event).toEqual({ type: 'blocked', reason: 'sealed' });
     s = { ...s, ...sealBroken };
     const r = move(s, map, 'up'); expect(r.event).toMatchObject({ type: 'encounter', kind: 'boss' }); expect(r.state.position).toEqual(below);
@@ -202,7 +209,7 @@ describe('expedition rules', () => {
     expect(move(g.state, map, 'down').event).toEqual({ type: 'blocked', reason: 'busy' });
   });
   it('a full expedition from start to goal is winnable with the advisor and camp rests', () => {
-    let s = fresh(2026); const [campA, campB] = [findTiles(map, 'camp')[1]!, findTiles(map, 'camp')[0]!]; const [goal] = findTiles(map, 'goal');
+    let s = seasoned(fresh(2026), 6, 2); const [campA, campB] = [findTiles(map, 'camp')[1]!, findTiles(map, 'camp')[0]!]; const [goal] = findTiles(map, 'goal');
     const walk = (to: Point, throughBoss = false) => {
       for (let guard = 0; guard < 400 && (s.position.x !== to.x || s.position.y !== to.y) && !s.completed; guard++) {
         const dir = route(s.position, to, throughBoss || s.bossDefeated)[0]!; s = move(s, map, dir).state;
@@ -354,7 +361,7 @@ describe('resources and chests', () => {
     expect(s.resources.ore - before).toBeGreaterThanOrEqual(zone.ore[0]); expect(s.resources.ore - before).toBeLessThanOrEqual(zone.ore[1]);
     expect(s.resources.gold - goldBefore).toBeGreaterThanOrEqual(zone.gold[0]); expect(s.resources.gold - goldBefore).toBeLessThanOrEqual(zone.gold[1]);
     const [boss] = findTiles(map, 'boss');
-    let t: ExpeditionState = { ...fresh(2), tutorialDone: true, position: { x: boss!.x, y: boss!.y + 1 }, ...sealBroken };
+    let t: ExpeditionState = { ...seasoned(fresh(2)), tutorialDone: true, position: { x: boss!.x, y: boss!.y + 1 }, ...sealBroken };
     t = fight(move(t, map, 'up').state);
     expect(t.resources).toEqual({ ore: map.loot.boss.ore[0], gold: map.loot.boss.gold[0], ember: 1, seal: 2 });
   });

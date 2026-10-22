@@ -308,8 +308,9 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
     // Validate against the encounter as fought by this run's deployed party (stars included).
     if (entryReason(withParty(data, roster.deployed.map(id => memberDef(lookup, map, members, id)!)), { hp: entry })) throw new Error('Invalid entry');
     if (b.level !== undefined && !isInt(b.level, 1, 99)) throw new Error('Invalid battle');
+    if (b.percent !== undefined && !isInt(b.percent, 1, 1000)) throw new Error('Invalid battle');
     const lanes = b.lanes === undefined ? undefined : lanesOf(b.lanes, id => roster.deployed.includes(id));
-    battle = { kind: b.kind as ActiveBattle['kind'], encounterId: data.id, entry, commands: b.commands.map(command), ...(b.level !== undefined ? { level: b.level as number } : {}), ...(typeof source === 'string' ? { source } : {}), ...(lanes ? { lanes } : {}) };
+    battle = { kind: b.kind as ActiveBattle['kind'], encounterId: data.id, entry, commands: b.commands.map(command), ...(b.level !== undefined ? { level: b.level as number } : {}), ...(b.percent !== undefined ? { percent: b.percent as number } : {}), ...(typeof source === 'string' ? { source } : {}), ...(lanes ? { lanes } : {}) };
   }
   // Story recruits (v30): guests and this run's recruits are roster members from this map's recruit list, never both.
   const recruitIds = (v: unknown): string[] | undefined => {

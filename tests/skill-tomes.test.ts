@@ -48,7 +48,7 @@ describe('raising skill levels at the camp', () => {
   it('opens after map 2 and pays the table one level at a time', () => {
     const closed = { ...open(), cleared: ['ruined-border'] }; expect(skillLevelReason(closed, MAPS, map, lookup, 'guardian', 'bash')).toBe('locked');
     let p = open();
-    for (const [level, gold, bag] of [[2, 490, { small: 8, medium: 3, large: 1 }], [3, 470, { small: 4, medium: 3, large: 1 }], [4, 435, { small: 4, medium: 1, large: 1 }], [5, 375, { small: 4, medium: 1, large: 0 }]] as const) {
+    for (const [level, gold, bag] of [[2, 495, { small: 8, medium: 3, large: 1 }], [3, 487, { small: 4, medium: 3, large: 1 }], [4, 472, { small: 4, medium: 1, large: 1 }], [5, 442, { small: 4, medium: 1, large: 0 }]] as const) {
       const r = raiseSkill(p, MAPS, map, lookup, 'guardian', 'bash'); expect(r.event).toEqual({ type: 'skillLevel', heroId: 'guardian', action: 'bash', level });
       p = r.profile; expect(p.bank.gold).toBe(gold); expect(p.tomes!.bulwark).toEqual(bag);
     }
@@ -58,7 +58,7 @@ describe('raising skill levels at the camp', () => {
     const p = open();
     expect(skillLevelReason(p, MAPS, map, lookup, 'guardian', 'rally')).toBe('skill'); expect(skillLevelReason(p, MAPS, map, lookup, 'guardian', 'attack')).toBe('skill');
     expect(skillLevelReason({ ...p, tomes: emptyTomes() }, MAPS, map, lookup, 'guardian', 'bash')).toBe('tomes');
-    expect(skillLevelReason({ ...p, bank: { ...p.bank, gold: 5 } }, MAPS, map, lookup, 'guardian', 'bash')).toBe('gold');
+    expect(skillLevelReason({ ...p, bank: { ...p.bank, gold: 4 } }, MAPS, map, lookup, 'guardian', 'bash')).toBe('gold');
     const four = structuredClone(p); four.members.guardian!.skillLevels = { bash: 4 }; four.riftCore = 0;
     expect(skillLevelReason(four, MAPS, map, lookup, 'guardian', 'bash')).toBe('core');
     expect(raiseSkill(four, MAPS, map, lookup, 'guardian', 'bash').profile).toBe(four);
@@ -80,27 +80,29 @@ describe('raising skill levels at the camp', () => {
 
 describe('tome rewards', () => {
   const run = () => depart(open(), map, lookup, 9).run;
-  it('every third ordinary win pays a small tome, lines in turn; elites two; nothing on a map without tomes', () => {
-    const s = run(); const got = [1, 2, 3, 4, 5, 6, 7, 8, 9].map(() => battleTomes(s, map, 'random', s.roster.deployed).tomes);
-    expect(got.map(t => t ? Object.entries(t).find(([, v]) => v.small)![0] : '-')).toEqual(['-', '-', 'bulwark', '-', '-', 'blade', '-', '-', 'accord']);
+  it('every fourth ordinary win pays a small tome, lines in turn; elites two; nothing on a map without tomes', () => {
+    const s = run(); const got = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(() => battleTomes(s, map, 'random', s.roster.deployed).tomes);
+    expect(got.map(t => t ? Object.entries(t).find(([, v]) => v.small)![0] : '-')).toEqual(['-', '-', '-', 'bulwark', '-', '-', '-', 'blade', '-', '-', '-', 'accord']);
     expect(battleTomes(s, map, 'elite', s.roster.deployed).tomes!.bulwark.small).toBe(2);
     const ruins = MAPS[0]!; expect(battleTomes(structuredClone(s), ruins, 'random', s.roster.deployed)).toEqual({});
   });
   it('the boss pays its map’s tomes in the party’s line; hard mode ×1.5 and a rift core', () => {
     const s = run(); const b = battleTomes(s, map, 'boss', ['guardian', 'garran', 'tracer']);
-    expect(b.tomes!.bulwark).toEqual({ small: 2, medium: 2, large: 0 }); expect(b.riftCore).toBeUndefined();
+    expect(b.tomes!.bulwark).toEqual({ small: 2, medium: 3, large: 0 }); expect(b.riftCore).toBeUndefined();
     const hard = { ...run(), hard: true as const }; const h = battleTomes(hard, map, 'boss', ['tracer', 'weaver']);
-    expect(h.tomes!.blade).toEqual({ small: 3, medium: 3, large: 0 }); expect(h.riftCore).toBe(1); expect(hard.riftCore).toBe(1);
+    expect(h.tomes!.blade).toEqual({ small: 3, medium: 4, large: 0 }); expect(h.riftCore).toBe(1); expect(hard.riftCore).toBe(1);
     const forest = battleTomes(depart(open(), forestMap, lookup, 9).run, forestMap, 'boss', ['healer']);
     expect(forest.tomes!.accord).toEqual({ small: 2, medium: 1, large: 0 });
   });
-  it('chests pay small tomes; settling brings them home (a wipe keeps half) and a first clear adds its own', () => {
-    const s = run(); s.openedChests.push('x'); expect(chestTomes(s, map, 'rare')!.bulwark.small).toBe(2);
+  it('rare chests pay a small tome; settling brings them home (a wipe keeps half) and a first clear adds its own', () => {
+    const s = run(); s.openedChests.push('x'); expect(chestTomes(s, map, 'rare')!.bulwark.small).toBe(1);
     s.tomes!.blade.small = 3;
-    const home = settle(open(), s, 'withdrawn', map); expect(home.tomes!.bulwark.small).toBe(12); expect(home.tomes!.blade.small).toBe(3); expect(home.last!.tomes).toBe(5);
+    const home = settle(open(), s, 'withdrawn', map); expect(home.tomes!.bulwark.small).toBe(11); expect(home.tomes!.blade.small).toBe(3); expect(home.last!.tomes).toBe(4);
     expect(settle(open(), s, 'wiped', map).tomes!.blade.small).toBe(1);
     const first = settle(open(), { ...s, bossDefeated: true }, 'complete', map);
-    const line = partyLine(map, s.roster.deployed); expect(first.tomes![line].large).toBe(open().tomes![line].large + 1); expect(first.riftCore).toBe(2);
+    const line = partyLine(map, s.roster.deployed); expect(first.tomes![line].large).toBe(open().tomes![line].large + 1);
+    // A10: rift cores come from hard mode only, so Lv5 waits for it.
+    expect(first.riftCore).toBe(1);
   });
 });
 

@@ -185,6 +185,12 @@ export function withLevel(data: EncounterDefinition, level: number, percent = 7)
   const scale = (n: number) => Math.max(1, Math.round(n * factor));
   return { ...data, level, enemies: data.enemies.map(e => ({ ...e, maxHp: scale(e.maxHp) })), intents: data.intents.map(i => ({ ...i, damage: scale(i.damage) })) };
 }
+// A10 map tuning: a copy whose foes have `percent` of their HP and move damage (the encounter content stays the base).
+export function withStrength(data: EncounterDefinition, percent: number): EncounterDefinition {
+  if (percent === 100) return data;
+  const scale = (n: number) => n && Math.max(1, Math.round(n * percent / 100));
+  return { ...data, enemies: data.enemies.map(e => ({ ...e, maxHp: scale(e.maxHp) })), intents: data.intents.map(i => ({ ...i, damage: scale(i.damage) })) };
+}
 export function upcomingTurns(state: BattleState, data: EncounterDefinition, count = 6): TurnSlot[] {
   if (state.outcome !== 'active') return [];
   const slots: TurnSlot[] = [];

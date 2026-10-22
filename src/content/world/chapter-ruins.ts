@@ -6,7 +6,7 @@ import { gameRules } from './rules';
 // a camp rest and a small boss; no elites, events, puzzles or rift seal. Draft numbers until playtested.
 export const ruinsMap: MapDefinition = {
   ...gameRules,
-  id: 'ruined-border', version: 1, name: 'ซากชายแดน', chapter: 1, bossName: 'หัวหน้ากองหน้า', goalName: 'ประตูป้อม',
+  id: 'ruined-border', version: 2, name: 'ซากชายแดน', chapter: 1, bossName: 'หัวหน้ากองหน้า', goalName: 'ประตูป้อม',
   summary: 'ซากป้อมชายแดนที่กองหน้าของวาร์กอธบุกเข้ามา ฝึกเดินทาง เปิดหีบ สวมอุปกรณ์ แล้วขับไล่หัวหน้ากองหน้า',
   rows: [
     '##############',

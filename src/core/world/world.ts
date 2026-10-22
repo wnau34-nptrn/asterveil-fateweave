@@ -1,6 +1,6 @@
 import {bossReward} from './boss-equipment';
 import {huntedReward} from './targeted-loot';
-import { replay, withLevel, withParty } from '../battle/engine';
+import { replay, withLevel, withParty, withStrength } from '../battle/engine';
 import { boulderAt, leverPuzzleAt, openPit, passableWall, runePuzzleAt, secretAt } from './puzzles';
 import type { EnemyTrait, BattleState, Command, EncounterDefinition, HeroDefinition, HeroTalents, ActionId, PassiveId } from '../battle/types';
 import type { RecruitPoint, ActiveBattle, BattleKind, ChestDefinition, Company, Direction, ExpGain, ExpeditionState, LootTable, MapDefinition, MemberProgress, Point, PotionId, Resources, Talents, Tile, WorldEvent, WorldResult, ZoneDefinition, Gear, Item, EliteDefinition, EventChoice, MapEventDefinition, MapEventKind, GearSlot } from './types';
@@ -170,8 +170,8 @@ export function newExpedition(map: MapDefinition, lookup: EncounterLookup, seed:
   return state;
 }
 // The battle keeps the deployed members' set lanes (formation, v36); the lanes they fight in follow from them.
-const startBattle = (state: ExpeditionState, kind: BattleKind, encounterId: string, level?: number, source?: string): ActiveBattle =>
-  ({ kind, encounterId, entry: Object.fromEntries(state.roster.deployed.map(id => [id, state.hp[id]!])), commands: [], ...(level ? { level } : {}), ...(source ? { source } : {}), lanes: setLanes(state.roster) });
+const startBattle = (state: ExpeditionState, kind: BattleKind, encounterId: string, level?: number, source?: string, percent?: number): ActiveBattle =>
+  ({ kind, encounterId, entry: Object.fromEntries(state.roster.deployed.map(id => [id, state.hp[id]!])), commands: [], ...(level ? { level } : {}), ...(source ? { source } : {}), ...(percent && percent !== 100 ? { percent } : {}), lanes: setLanes(state.roster) });
 const setLanes = (roster: Roster): Record<string, Lane> => Object.fromEntries(roster.deployed.flatMap(id => roster.lanes?.[id] ? [[id, roster.lanes[id]]] : []));
 export const recommendedLane = (lookup: EncounterLookup, map: MapDefinition) => (id: string): Lane => heroDef(lookup, map, id)?.lane ?? 'front';
 // The lane each deployed hero fights in. A battle saved before formations (no `lanes`) keeps every class lane.
@@ -231,13 +231,13 @@ export function move(initial: ExpeditionState, map: MapDefinition, dir: Directio
   // Until the rift seal is broken (enough objectives), the boss cannot be challenged.
   if (tile.kind === 'boss' && !state.bossDefeated && !questComplete(state, map)) return { state: initial, event: { type: 'blocked', reason: 'sealed' } };
   if (tile.kind === 'boss' && !state.bossDefeated) {
-    state.battle = startBattle(state, 'boss', map.bossEncounterId, map.bossLevel);
+    state.battle = startBattle(state, 'boss', map.bossEncounterId, map.bossLevel, undefined, map.bossPercent);
     return { state, event: { type: 'encounter', kind: 'boss', encounterId: map.bossEncounterId, chance: 100 } };
   }
   // An elite holds its gate the same way: stepping into it starts the fight; beaten, the gate is open for the run.
   const elite = eliteBlocks(state, map, target);
   if (elite) {
-    state.battle = startBattle(state, 'elite', elite.encounterId, elite.level !== undefined ? elite.level + (state.respawns[elite.id] ?? 0) : undefined, elite.id);
+    state.battle = startBattle(state, 'elite', elite.encounterId, elite.level !== undefined ? elite.level + (state.respawns[elite.id] ?? 0) : undefined, elite.id, elite.percent);
     return { state, event: { type: 'encounter', kind: 'elite', encounterId: elite.encounterId, chance: 100 } };
   }
   state.position = target; state.steps++; reveal(state, map);
@@ -586,10 +586,12 @@ export function bossRole(data: EncounterDefinition, kind: BattleKind, map: MapDe
 }
 export function battleData(state: ExpeditionState, map: MapDefinition, lookup: EncounterLookup): EncounterDefinition | undefined {
   const base = state.battle && lookup(state.battle.encounterId);
-  // Hard mode (A9): every battle but the prologue fights `hardLevels` higher.
-  const hard = state.hard && state.battle!.kind !== 'tutorial' ? map.progression.hardLevels : 0;
+  // Hard mode (A9): every battle but the prologue fights `hardLevels` higher, a boss `hardTraits.bossLevels` more (A10).
+  const hard = state.hard && state.battle!.kind !== 'tutorial' ? map.progression.hardLevels + (state.battle!.kind === 'boss' ? map.progression.hardTraits.bossLevels : 0) : 0;
   const leveled = base && withLevel(base, (state.battle!.level ?? base.level ?? 1) + hard, map.progression.monsterLevelPercent);
-  const staged = leveled && bossRole(leveled, state.battle!.kind, map, state.battle!.source);
+  // A10: the map strength the battle started with (`map.bossPercent`, `EliteDefinition.percent`).
+  const strong = leveled && state.battle!.percent ? withStrength(leveled, state.battle!.percent) : leveled;
+  const staged = strong && bossRole(strong, state.battle!.kind, map, state.battle!.source);
   const data = staged && hard ? hardEncounter(staged, state.battle!.kind, map) : staged;
   const party = state.roster.deployed.map(id => memberDef(lookup, map, state.members, id));
   return data && party.every(Boolean) ? withParty(data, placed(party as HeroDefinition[], battleLanes(state, map, lookup))) : undefined;

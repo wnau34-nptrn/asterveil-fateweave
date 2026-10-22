@@ -94,7 +94,7 @@ export function battleTomes(state: ExpeditionState, map: MapDefinition, kind: Ba
   const bag = bagOf(turnLine(state.tomeWins / r.battleEvery - 1), 'small', 1); give(state, bag); return { tomes: bag };
 }
 export function chestTomes(state: ExpeditionState, map: MapDefinition, tier: ChestTier): TomeBag | undefined {
-  if (!map.tomes) return undefined;
+  if (!map.tomes || !map.progression.skillLevels.chest[tier]) return undefined;
   const bag = bagOf(turnLine(state.openedChests.length - 1), 'small', map.progression.skillLevels.chest[tier]); give(state, bag); return bag;
 }
 // The first clear of a tome map adds its first-clear tomes (in the party's line) when the run settles.

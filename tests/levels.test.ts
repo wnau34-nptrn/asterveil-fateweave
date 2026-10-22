@@ -36,7 +36,7 @@ describe('monster levels', () => {
     base.intents.forEach((m, i) => expect(up.intents[i]!.damage).toBe(Math.round(m.damage * 1.07)));
   });
   it('rise with depth inside each zone: entrance rows low, far rows high', () => {
-    for (const [zone, lo, hi] of [['meadow', 1, 3], ['thicket', 4, 6], ['scar', 7, 9]] as const) {
+    for (const [zone, lo, hi] of [['meadow', 6, 7], ['thicket', 7, 9], ['scar', 9, 10]] as const) {
       const rows = zoneRows(zone); const south = floorIn(zone, Math.max(...rows))!, north = floorIn(zone, Math.min(...rows))!;
       expect(monsterLevelAt(map, south)).toBe(lo); expect(monsterLevelAt(map, north)).toBe(hi);
       for (const y of rows) { const p = floorIn(zone, y); if (p) { const l = monsterLevelAt(map, p)!; expect(l).toBeGreaterThanOrEqual(lo); expect(l).toBeLessThanOrEqual(hi); } }

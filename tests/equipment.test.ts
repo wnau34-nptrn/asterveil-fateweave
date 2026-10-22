@@ -137,7 +137,10 @@ describe('drops', () => {
     let s = newExpedition(map, lookup, 8);
     s = nextBattle(s); expect(s.battle!.kind).toBe('tutorial');
     const t = win(s); expect(t.event.type === 'victory' && t.event.item).toBeFalsy();
-    const boss = { ...t.state, battle: { kind: 'boss' as const, encounterId: map.bossEncounterId, entry: Object.fromEntries(t.state.roster.deployed.map(id => [id, memberHp(t.state, id)])), commands: [] } };
+    // A10: the warden is fought by a party of the map's level (★3 Lv10), not the Lv1 starters.
+    const vets = Object.fromEntries(Object.entries(t.state.members).map(([id, m]) => [id, { ...m, level: 10, stars: 3 }]));
+    const ready = { ...t.state, members: vets };
+    const boss = { ...ready, battle: { kind: 'boss' as const, encounterId: map.bossEncounterId, entry: Object.fromEntries(ready.roster.deployed.map(id => [id, memberHp(ready, id)])), commands: [] } };
     const b = win(boss);
     if (b.event.type === 'victory') {
       expect(rules.bossDrops).toBe(3); expect(b.state.found).toHaveLength(rules.bossDrops); expect(b.event.items).toEqual(b.state.found);
