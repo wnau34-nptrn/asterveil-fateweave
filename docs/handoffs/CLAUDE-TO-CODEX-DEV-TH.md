@@ -105,6 +105,37 @@ DELIVERABLES per class (folders 01_seer … 05_dancer):
 After the PR is open, add the entry Codex owes Claude (AGENTS.md) and stop: production sprites/portraits for the chosen options are a later task after the owner chooses A or B.
 ```
 
+### C7 — ภาพอุปกรณ์หลายแบบ (เจ้าของขอ 2026-10-23: ตอนนี้ซ้ำกันหมด)
+
+ตอนนี้ `gear_items.webp` มี 1 ภาพต่อช่อง + อาวุธ 1 ภาพต่ออาชีพ (`src/game/visuals/equip-art.ts` `gearCell`) ทำให้อุปกรณ์ทุกชิ้นในช่องเดียวกันหน้าตาเหมือนกัน
+
+```text
+CODEX HANDOFF — ART-UI-EQUIP-002
+Asterveil · Fateweave: equipment art variety (painted items by set and rarity tier) + wiring into the game
+
+Read AGENTS.md and CLAUDE.md first. Base branch feature/fateweave-initial-prototype; work branch codex/equip-art-002; PR into the base branch (merge when CI passes, per AGENTS.md). Original artwork only; nothing from Asterveil: Rise Beyond. Never use the word ม่านเวล.
+
+READ FIRST: incoming/ART-UI-EQUIP-001/ (the approved item style: 128 px cells, centred item, painted, no rarity colour in the art — the UI draws rarity frames and the set emblem), src/game/visuals/equip-art.ts and src/game/visuals/equip/gear_items.json (current mapping), src/ui/equip-art.ts (how the cell is shown), src/core/world/types.ts (Item: slot, rarity, set, hero, boss) and src/content/world/rules.ts / src/content/world/sets.ts or wherever SET_IDS are described (dawn, wind, shadow, thorn, starveil, mender) so each set's look matches its theme.
+
+PROBLEM: every head/body/gloves/boots/charm piece shares one picture, and each class weapon has one picture, so loot never looks new.
+
+ART (same style, scale and lighting as ART-UI-EQUIP-001; readable at 48 px on navy #0b1730; no text, no rarity colours, no frames):
+1. Armour pieces — for each of the 5 slots (head, body, gloves, boots, charm):
+   - 3 plain tiers for pieces without a set: "worn" (rarity 1–2: cloth/leather, simple), "fine" (rarity 3: reinforced, small trim), "masterwork" (rarity 4–5: ornate, gold/silver detail).
+   - 1 look per set (6 sets): dawn, wind, shadow, thorn, starveil, mender — the set's motif must be obvious and consistent across its 5 slots (a player should recognise a full set at a glance).
+   = 5 × 9 = 45 cells.
+2. Class weapons — for each of the 10 classes (guardian, tracer, weaver, healer, garran, mira, toma, sefa, brann, lio): 3 tiers by rarity (1–2 / 3 / 4–5), same weapon family, growing in craft and glow (e.g. Lyra: plain rapier → engraved rapier → star-steel rapier). = 30 cells. Keep the current weapon as the middle tier's reference so the identity stays.
+3. Boss gear — 3 unique boss charms for Item.boss 'aegis', 'focus', 'lantern' (currently they reuse the plain charm). = 3 cells.
+Check the actual rarity range in src/core/world/types.ts and src/core/world/equipment.ts before fixing the tier thresholds; adjust the tier split to that range if it differs.
+
+WIRING (UI only, no rule/save changes):
+- New atlas public/assets/ui/equip/gear_items.webp (+ src/game/visuals/equip/gear_items.json frame names, e.g. gear_head_worn, gear_head_fine, gear_head_master, gear_head_set_dawn …, weapon_tracer_1/2/3, boss_aegis …). Keep potion_items and set_emblems unchanged.
+- gearCell(item): boss item → boss frame; weapon → weapon_<hero>_<tier>; set piece → gear_<slot>_set_<set>; otherwise gear_<slot>_<tier by rarity>. Fallback to the old frame names if a frame is missing. Update the --cols/--rows in src/ui/equip-art.ts (derive them from the JSON like the skill-icon atlas fix in PR #60) so no neighbour cell bleeds in.
+- Tests: a Vitest unit test for gearCell's mapping (every slot × tier, every set, every class weapon tier, boss items) and the existing equipment/forge/character browser tests; npm run typecheck, lint, npx vitest run, build.
+
+DELIVERABLES: incoming/ART-UI-EQUIP-002/ (png sources, preview grid at 48/64/96 px with sample rarity frames, NOTES.md with the mapping table), the runtime atlas + JSON + code change, and two 390px screenshots for the owner (bag grid with mixed loot, character sheet with a full set worn). Then add the entry Codex owes Claude (AGENTS.md).
+```
+
 ## เมื่อ Usage ของ Claude รีเซ็ต (หลัง พ. 28 ต.ค. 19:00)
 
 เปิดแชตใหม่ (Opus) แล้ววาง:
