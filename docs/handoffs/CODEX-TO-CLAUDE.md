@@ -1,5 +1,14 @@
 # Codex → Claude handoff
 
+## 2026-10-23 — ART-UI-EQUIP-002: equipment variety (verification in progress)
+
+- Branch `codex/equip-art-002`, PR into `feature/fateweave-initial-prototype`; owner explicitly requested opening the PR before remaining verification finishes. PR link and merge SHA will be added after creation/merge.
+- Implemented 78 distinct cells (45 armour, 30 class weapons, 3 boss charms), six matching set motifs, zero-based rarity split 0–1 / 2 / 3–4. Approved 001 weapon pixels remain tier 2. Original generated sources, 128px cells, previews at 48/64/96px, prompts, mapping table and reproducible packing/validation are in `incoming/ART-UI-EQUIP-002/`.
+- Runtime files: `public/assets/ui/equip/gear_items.webp` (1280×1024, 920246 bytes), `src/game/visuals/equip/gear_items.json`, `src/game/visuals/equip-art.ts`, `src/ui/equip-art.ts`. Boss → class weapon → set → plain; legacy aliases and missing-frame fallback; CSS grid size derives from JSON. Potions/emblems, rules and saves unchanged.
+- Tests: expanded `tests/equip-art.test.ts` covers every rarity/slot/set/class/boss, fallback, atlas dimensions, preserved potion/emblem coverage. Added `tests/browser/equipment-art.spec.ts` for real 390px screenshots and readonly art inspection.
+- Passed so far: typecheck, lint, build, image validation, diff whitespace. First full unit run: 862/863 passed, boss-balance simulation timed out. Two-worker rerun: 860/863 passed, three simulation/presentation tests timed out under concurrent browser load. No rule or timeout configuration changes made. Existing boss/character/comparison/refund tests pass so far; forge-phase2 timed out in all three sizes and needs diagnosis.
+- Unfinished: finish browser checks; rerun CPU-heavy unit tests without competing load; capture the two final 390px owner screenshots (new test fixture corrected for support affixes and camp unlocks); verify CI before merge. Preview grids inspected, artwork not claimed as owner-approved. No screenshots delivered to owner yet.
+
 ## 2026-10-23 — Claude: map bag swap fix (owner bug report)
 
 - In the map bag a reserve member picked on the team row now swaps in when the player taps a member of the formation grid (or deploys into an empty grid cell when the party has room); before, the grid kept its own pick and ignored the reserve pick. `src/ui/world-ui.ts` `pickLane`; hint text updated; test `tests/browser/formation.spec.ts`. The camp team page uses the same code.
