@@ -26,8 +26,8 @@ export const TRIO_SLOTS: Readonly<Record<HeroColumn, readonly [number, number, n
 // Columns of a side stand .25 of the width apart and the two sides .28 apart; a unit is at most UNIT_WIDTH of the width,
 // so neighbouring bodies never overlap and the painted figures (about four fifths of the box) keep a clear gap
 // (owner 2026-10-22).
-const COLUMNS = [.11, .36, .64, .89] as const;
-const UNIT_WIDTH = .27;
+const COLUMNS = [.115, .37, .63, .885] as const;
+const UNIT_WIDTH = .295;
 const FULL_COLUMNS = [.12, .37, .62, .865] as const;
 const columnOf = (slot: number): number => slot === 8 ? 0 : slot === 9 ? 1 : slot >> 1;
 export const partner = (slot: number): number => slot % 2 ? slot - 1 : slot + 1;

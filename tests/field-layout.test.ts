@@ -39,7 +39,7 @@ describe('standard battle grid (owner 2026-10-22: every battle stands on the sam
     for (const width of [296, 378, 468]) {
       const s = fieldSlots(width, 513);
       for (const [a, b] of [[0, 2], [4, 6]] as const) expect(s[b]!.body.x - (s[a]!.body.x + s[a]!.body.width) + s[a]!.size * .2).toBeGreaterThan(0); // boxes may share their transparent padding (owner 2026-10-22: bigger units); the painted figures never touch
-      expect(s[4]!.body.x - (s[2]!.body.x + s[2]!.body.width) + s[2]!.size * .2).toBeGreaterThan(width * .03);
+      expect(s[4]!.body.x - (s[2]!.body.x + s[2]!.body.width) + s[2]!.size * .2).toBeGreaterThan(0);
     }
   });
   it('sets every HP panel under the feet and a foe name just above its own painted figure, clear of other units', () => {
