@@ -22,7 +22,7 @@ Claude ใช้ Usage รายสัปดาห์เกือบหมด (�
 |---|---|---|---|
 | C1 | ไอคอนวาด 27 สกิลต้นไม้ใหญ่ (ART-SKILL-ICON-003) + ใส่เข้า atlas ในเกม | ภาพ + ต่อเข้าเกม | ทันที |
 | ~~C2~~ | ~~แจ้งเตือน "ทีมยังไม่มีผู้รักษา"~~ **ยกเลิก** (เจ้าของ 2026-10-23: ให้ผู้เล่นเรียนรู้การจัดทีมเองบนแผนที่ ห้ามเพิ่มแถบเตือนนี้) | — | — |
-| C3 | เอฟเฟกต์ Execute / Ward (ภาพคิว 19) | VFX | ตรวจก่อนว่าเซสชัน Claude "เอฟเฟกต์ Execute / Ward (A8)" ยังไม่ merge |
+| ~~C3~~ | ~~เอฟเฟกต์ Execute / Ward~~ **เสร็จแล้ว เจ้าของให้ผ่าน 2026-10-23** (`src/game/visuals/exec-ward-fx.ts`) | — | — |
 | C4 | งานภาพที่เหลือในคิว `docs/handoffs/CODEX-ART-QUEUE-TH.md` (ข้อ 14, 16, 17, 18, 20, 22) | ภาพ | ทันที (เปิด PR ไว้ ให้ Claude รับเข้าเกมทีหลังได้) |
 
 ไม่ใช่งานของ Codex (รอ Claude): การตัดระบบต้นไม้เล็กที่ไม่มีอาชีพใช้แล้วออกจาก `src/core/world/talents.ts`
@@ -41,13 +41,9 @@ Read AGENTS.md and CLAUDE.md first. Repository wnau34-nptrn/asterveil-fateweave,
 
 เจ้าของตัดสิน: แมพ 2 ปล่อยไว้ตามเดิม และไม่ต้องมีแถบเตือน ให้ผู้เล่นเจอเองบนแผนที่เพื่อเรียนรู้การจัดทีม
 
-### C3 — เอฟเฟกต์ Execute / Ward
+### ~~C3~~ — เสร็จแล้ว (เจ้าของให้ผ่าน 2026-10-23)
 
-```text
-TASK C3 — Asterveil · Fateweave: Execute and Ward effects (only if not already merged)
-First check the base branch feature/fateweave-initial-prototype and open PRs: if Execute/Ward effects already landed (search src/game/visuals for execute/ward fx), skip this task.
-Otherwise follow docs/handoffs/NEW-CHAT-HANDOFF-TH.md "งานที่ 3" and CLAUDE.md "VFX — status": build Execute and Ward from the painted layers on branch art/art-vfx-exec-ward-001 (read its NOTES.md) in the same language and code shape as src/game/visuals/bolt-fx.ts: unchanged timing, truthful outcomes (a cancelled or absorbed hit must look like it), reduced-motion still frames. Work branch codex/vfx-exec-ward, PR into the base branch. Record short clips for the owner the same way as docs/combat-presentation/bolt-slice/ and do not expand to other skills before the owner approves them.
-```
+เอฟเฟกต์ Execute / Ward อยู่ในเกมแล้ว (`src/game/visuals/exec-ward-fx.ts`) ไม่ต้องทำซ้ำ
 
 ### C4 — งานภาพที่เหลือ
 
