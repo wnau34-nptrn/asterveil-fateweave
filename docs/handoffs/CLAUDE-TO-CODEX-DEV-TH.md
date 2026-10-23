@@ -23,7 +23,7 @@ Claude ใช้ Usage รายสัปดาห์เกือบหมด (�
 | C1 | ไอคอนวาด 27 สกิลต้นไม้ใหญ่ (ART-SKILL-ICON-003) + ใส่เข้า atlas ในเกม | ภาพ + ต่อเข้าเกม | ทันที |
 | ~~C2~~ | ~~แจ้งเตือน "ทีมยังไม่มีผู้รักษา"~~ **ยกเลิก** (เจ้าของ 2026-10-23: ให้ผู้เล่นเรียนรู้การจัดทีมเองบนแผนที่ ห้ามเพิ่มแถบเตือนนี้) | — | — |
 | ~~C3~~ | ~~เอฟเฟกต์ Execute / Ward~~ **เสร็จแล้ว เจ้าของให้ผ่าน 2026-10-23** (`src/game/visuals/exec-ward-fx.ts`) | — | — |
-| C4 | งานภาพที่เหลือในคิว `docs/handoffs/CODEX-ART-QUEUE-TH.md` (ข้อ 14, 16, 17, 18, 20, 22) | ภาพ | ทันที (เปิด PR ไว้ ให้ Claude รับเข้าเกมทีหลังได้) |
+| ~~C4~~ | ~~งานภาพที่เหลือในคิว~~ **ส่งครบแล้ว (ตรวจ 2026-10-23)** | — | — |
 | C5 | เอฟเฟกต์ภาพวาดของสกิลที่เหลือทั้งหมด ทำเป็น 8 ตระกูล ทีละตระกูล (ภาพ + ต่อเข้าเกม + คลิปให้เจ้าของ) | VFX | ทันที ทำตระกูลละ 1 PR ห้ามข้ามไปตระกูลถัดไปก่อนเจ้าของให้ผ่าน |
 
 ไม่ใช่งานของ Codex (รอ Claude): การตัดระบบต้นไม้เล็กที่ไม่มีอาชีพใช้แล้วออกจาก `src/core/world/talents.ts`
@@ -46,9 +46,11 @@ Read AGENTS.md and CLAUDE.md first. Repository wnau34-nptrn/asterveil-fateweave,
 
 เอฟเฟกต์ Execute / Ward อยู่ในเกมแล้ว (`src/game/visuals/exec-ward-fx.ts`) ไม่ต้องทำซ้ำ
 
-### C4 — งานภาพที่เหลือ
+### ~~C4~~ — ส่งครบแล้ว (Claude ตรวจ 2026-10-23)
 
-ใช้กล่อง prompt ของแต่ละข้อใน `docs/handoffs/CODEX-ART-QUEUE-TH.md` ตามเดิม (ข้อ 14 ฉากหลังศึกแมพ 2–3, 16 tile ป่า, 17 บอสบท 1, 18 สัตว์เลี้ยง, 20 แผนที่บท 1, 22 ค้อนตีบวก) ส่งเป็น PR ภาพแยกกัน Claude จะรับเข้าเกมเมื่อกลับมา (ถ้าข้อไหนรับเข้าเกมได้ง่ายแบบ C1 ทำต่อได้เลยตามกติกาด้านบน)
+- อยู่ในเกมแล้ว: 14 ฉากหลังศึก (`battle_forest.webp`), 16 tile ป่า, 20 แผนที่บท 1 (`region_ch1.webp`), 22 ค้อนตีบวก (`forge_strike_fx.webp`)
+- ส่งแล้ว รออยู่ในสาขาภาพจนกว่าระบบของรุ่นนั้นจะมา (ไม่ต้องทำซ้ำ): 17 บอสบท 1 (`art/art-char-boss-ch1-002`, แมพ 4–10 รุ่น B–C), 18 สัตว์เลี้ยง (`art/art-pet-002`, รุ่น B), 10 รูน (`art/art-ui-rune-001`, รุ่น B), 11 คู่แข่งลานประลอง (`art/art-char-rival-001`, รุ่น B)
+- ยังไม่ส่ง: 12 หอคอยแห่งชะตา (รุ่น C ทำทีหลังได้) และ 23 ไอคอน 27 สกิล (= งาน C1)
 
 ### C5 — เอฟเฟกต์ของทุกสกิล เป็นตระกูล (เพิ่ม 2026-10-23)
 
@@ -72,6 +74,10 @@ Goal: replace the short code-drawn effects of every other skill with painted lay
 Rules (same as the approved slices): timing comes from src/ui/battle-playback.ts and must not change; outcomes must be truthful (a dodged, blocked, guarded, cancelled or absorbed hit must look like it, read from the resolved events, never guessed); reduced-motion uses a still frame; nothing in the effect may change state (no rule, save or resolver changes); the class palettes from the skill icons; readable at 390px.
 Process: family 1 first. For each family: make the art, wire it, run npm run typecheck, lint, npx vitest run, build and the battle Playwright tests, record short clips at 390px like the approved slices (one clip per skill type: hit, and where it applies blocked/dodged), put them in docs/combat-presentation/<family>-slice/, open the PR and stop. Start the next family only after the owner approves the clips (an approval is noted in docs/handoffs/CLAUDE-TO-CODEX-DEV-TH.md). Log each finished family at the top of docs/handoffs/CODEX-TO-CLAUDE.md.
 ```
+
+### C6 — concept ตัวละครอาชีพใหม่ 5 อาชีพ (เจ้าของยืนยัน 15 อาชีพ 2026-10-23)
+
+ทำ concept sheet ภาพตัวละครของ 5 อาชีพใหม่ใน `docs/MASTER_PLAN_TH.md` A6b: โหราจารย์ (หลัง), นักมวย (หน้า), นักสาป (หลัง), นักบุญรบ (หน้า), นักเต้นรำ (หลัง) สไตล์เดียวกับภาพทหารรับจ้างในเกม (`incoming/ART-CHAR-MERC-ENEMY-001/`) ให้ท่าทางและอาวุธสื่อกลไกของอาชีพ เป็น PR ภาพเท่านั้น (`art/art-char-class-new-001`, `incoming/ART-CHAR-CLASS-NEW-001/`) ห้ามแตะโค้ด กลไก ชื่อตัวละคร และสกิลรอ Claude ออกแบบ ไม่มีระบบธาตุ (อย่าใส่สัญลักษณ์ธาตุในภาพ)
 
 ## เมื่อ Usage ของ Claude รีเซ็ต (หลัง พ. 28 ต.ค. 19:00)
 
