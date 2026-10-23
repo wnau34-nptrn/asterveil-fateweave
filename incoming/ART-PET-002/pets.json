@@ -1,0 +1,191 @@
+{
+  "image": "pets.webp",
+  "width": 1024,
+  "height": 1536,
+  "facing": "right",
+  "rows": [
+    "meadow_fox",
+    "thicket_piglet",
+    "rift_crystal_moth",
+    "fort_gargoyle_pup",
+    "forest_lantern_owl",
+    "gate_starveil_slime"
+  ],
+  "columns": [
+    "idle_a",
+    "idle_b",
+    "assist",
+    "happy"
+  ],
+  "baselineConvention": "footY is local to each frame; moth uses a virtual hover baseline",
+  "frames": {
+    "meadow_fox_idle_a": {
+      "x": 0,
+      "y": 0,
+      "w": 256,
+      "h": 256,
+      "footY": 240
+    },
+    "meadow_fox_idle_b": {
+      "x": 256,
+      "y": 0,
+      "w": 256,
+      "h": 256,
+      "footY": 240
+    },
+    "meadow_fox_assist": {
+      "x": 512,
+      "y": 0,
+      "w": 256,
+      "h": 256,
+      "footY": 240
+    },
+    "meadow_fox_happy": {
+      "x": 768,
+      "y": 0,
+      "w": 256,
+      "h": 256,
+      "footY": 240
+    },
+    "thicket_piglet_idle_a": {
+      "x": 0,
+      "y": 256,
+      "w": 256,
+      "h": 256,
+      "footY": 240
+    },
+    "thicket_piglet_idle_b": {
+      "x": 256,
+      "y": 256,
+      "w": 256,
+      "h": 256,
+      "footY": 240
+    },
+    "thicket_piglet_assist": {
+      "x": 512,
+      "y": 256,
+      "w": 256,
+      "h": 256,
+      "footY": 240
+    },
+    "thicket_piglet_happy": {
+      "x": 768,
+      "y": 256,
+      "w": 256,
+      "h": 256,
+      "footY": 240
+    },
+    "rift_crystal_moth_idle_a": {
+      "x": 0,
+      "y": 512,
+      "w": 256,
+      "h": 256,
+      "footY": 240
+    },
+    "rift_crystal_moth_idle_b": {
+      "x": 256,
+      "y": 512,
+      "w": 256,
+      "h": 256,
+      "footY": 240
+    },
+    "rift_crystal_moth_assist": {
+      "x": 512,
+      "y": 512,
+      "w": 256,
+      "h": 256,
+      "footY": 240
+    },
+    "rift_crystal_moth_happy": {
+      "x": 768,
+      "y": 512,
+      "w": 256,
+      "h": 256,
+      "footY": 240
+    },
+    "fort_gargoyle_pup_idle_a": {
+      "x": 0,
+      "y": 768,
+      "w": 256,
+      "h": 256,
+      "footY": 240
+    },
+    "fort_gargoyle_pup_idle_b": {
+      "x": 256,
+      "y": 768,
+      "w": 256,
+      "h": 256,
+      "footY": 240
+    },
+    "fort_gargoyle_pup_assist": {
+      "x": 512,
+      "y": 768,
+      "w": 256,
+      "h": 256,
+      "footY": 240
+    },
+    "fort_gargoyle_pup_happy": {
+      "x": 768,
+      "y": 768,
+      "w": 256,
+      "h": 256,
+      "footY": 240
+    },
+    "forest_lantern_owl_idle_a": {
+      "x": 0,
+      "y": 1024,
+      "w": 256,
+      "h": 256,
+      "footY": 240
+    },
+    "forest_lantern_owl_idle_b": {
+      "x": 256,
+      "y": 1024,
+      "w": 256,
+      "h": 256,
+      "footY": 240
+    },
+    "forest_lantern_owl_assist": {
+      "x": 512,
+      "y": 1024,
+      "w": 256,
+      "h": 256,
+      "footY": 240
+    },
+    "forest_lantern_owl_happy": {
+      "x": 768,
+      "y": 1024,
+      "w": 256,
+      "h": 256,
+      "footY": 240
+    },
+    "gate_starveil_slime_idle_a": {
+      "x": 0,
+      "y": 1280,
+      "w": 256,
+      "h": 256,
+      "footY": 240
+    },
+    "gate_starveil_slime_idle_b": {
+      "x": 256,
+      "y": 1280,
+      "w": 256,
+      "h": 256,
+      "footY": 240
+    },
+    "gate_starveil_slime_assist": {
+      "x": 512,
+      "y": 1280,
+      "w": 256,
+      "h": 256,
+      "footY": 240
+    },
+    "gate_starveil_slime_happy": {
+      "x": 768,
+      "y": 1280,
+      "w": 256,
+      "h": 256,
+      "footY": 240
+    }
+  }
+}
