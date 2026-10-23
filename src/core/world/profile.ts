@@ -254,13 +254,18 @@ export function depart(initial: Profile, map: MapDefinition, lookup: EncounterLo
   const run = newExpedition(map, lookup, seed, { roster: structuredClone(profile.party), members: Object.fromEntries(ids.map(id => [id, { ...profile.members[id]! }])), potions }, profile.tutorialDone);
   run.hunt=startHunt(profile);if(map.bossCharm)run.bossLoot=startBossPlan(profile,map);
   if (hard) run.hard = true;
-  // Story recruits not yet in the company come along as guests, in free party slots, at the join level.
-  const guests = (map.recruits ?? []).map(r => r.hero).filter(id => !profile.company.includes(id) && !rosterIds(run).includes(id));
-  for (const id of guests) {
-    const group = run.roster.deployed.length < PARTY_SLOTS ? 'deployed' : run.roster.reserve.length < RESERVE_SLOTS ? 'reserve' : undefined;
-    if (!group) break;
-    run.roster[group].push(id); run.members[id] = { stars: 1, dupes: 0, ...(joinLevel(profile, map) > 1 ? { level: joinLevel(profile, map), exp: 0 } : {}) };
-    run.hp[id] = memberDef(lookup, map, run.members, id)!.maxHp; (run.guests ??= []).push(id);
+  // Story recruits not yet in the company (owner 2026-10-23). Before the prologue they come along as guests in free
+  // party slots and fight it with the team (world.ts `recruit` parts them after the win). Past the prologue each waits
+  // for its own point (`arrivals`), a roster slot kept for it; the prologue's own recruit joins at once.
+  const level = joinLevel(profile, map); let free = PARTY_SLOTS + RESERVE_SLOTS - rosterIds(run).length;
+  for (const { hero: id, at } of map.recruits ?? []) {
+    if (profile.company.includes(id) || rosterIds(run).includes(id) || free <= 0) continue;
+    free--;
+    if (run.tutorialDone && at !== 'prologue') { (run.arrivals ??= {})[id] = level; continue; }
+    const group = run.roster.deployed.length < PARTY_SLOTS ? 'deployed' : 'reserve';
+    run.roster[group].push(id); run.members[id] = { stars: 1, dupes: 0, ...(level > 1 ? { level, exp: 0 } : {}) };
+    run.hp[id] = memberDef(lookup, map, run.members, id)!.maxHp;
+    if (run.tutorialDone) (run.recruited ??= []).push(id); else (run.guests ??= []).push(id);
   }
   return { profile, run };
 }

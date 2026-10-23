@@ -64,12 +64,35 @@ export function heroDef(lookup: EncounterLookup, map: MapDefinition, id: string)
   return heroCatalog(lookup, map).find(h => h.id === id);
 }
 export const rosterIds = (state: ExpeditionState): string[] => [...state.roster.deployed, ...state.roster.reserve];
-// Story recruits: guests whose recruit point on this map has been reached join for good (settled into the company).
-export function recruit(state: ExpeditionState, map: MapDefinition, at: RecruitPoint): string[] {
-  const joined = (map.recruits ?? []).filter(r => r.at === at && state.guests?.includes(r.hero)).map(r => r.hero);
-  if (!joined.length) return [];
-  state.guests = state.guests!.filter(id => !joined.includes(id)); state.recruited = [...state.recruited ?? [], ...joined];
+// Story recruits (owner 2026-10-23): each joins at its own story point. A guest who fought the prologue joins for good at
+// the win; the other guests then part ways (`arrivals`) and leave the roster until their point (a camp is reached, the
+// boss fight starts). There a waiting recruit steps back in (a free party slot, else the reserve) at full HP. Both are
+// settled into the company.
+export function recruit(state: ExpeditionState, map: MapDefinition, at: RecruitPoint, lookup?: EncounterLookup): string[] {
+  const ids = (map.recruits ?? []).filter(r => r.at === at).map(r => r.hero);
+  const arriving = ids.filter(id => state.arrivals?.[id] !== undefined);
+  if (arriving.length && !lookup) throw new Error('A recruit arrives: the encounter lookup is needed');
+  for (const id of arriving) {
+    const level = state.arrivals![id]!; delete state.arrivals![id]; if (!Object.keys(state.arrivals!).length) delete state.arrivals;
+    state.roster[state.roster.deployed.length < PARTY_SLOTS ? 'deployed' : 'reserve'].push(id);
+    state.members[id] = { stars: 1, dupes: 0, ...(level > 1 ? { level, exp: 0 } : {}) }; state.hp[id] = memberDef(lookup!, map, state.members, id)!.maxHp;
+  }
+  const joined = [...ids.filter(id => state.guests?.includes(id)), ...arriving];
+  if (joined.length) { state.recruited = [...state.recruited ?? [], ...joined]; if (state.guests) state.guests = state.guests.filter(id => !joined.includes(id)); }
+  if (at === 'prologue') disband(state);
+  if (state.guests && !state.guests.length) delete state.guests;
   return joined;
+}
+// After the prologue the guests who did not join part ways: what they wore goes to the bag (finds) or the spare items.
+function disband(state: ExpeditionState): void {
+  for (const id of state.guests ?? []) {
+    (state.arrivals ??= {})[id] = state.members[id]?.level ?? 1;
+    for (const item of Object.values(state.members[id]?.gear ?? {}) as Item[]) (item.uid ? state.spare : state.found).push(item);
+    state.roster.deployed = state.roster.deployed.filter(x => x !== id); state.roster.reserve = state.roster.reserve.filter(x => x !== id);
+    if (state.roster.lanes) delete state.roster.lanes[id];
+    delete state.members[id]; delete state.hp[id];
+  }
+  delete state.guests;
 }
 // Each star above ★1 adds `starStatPercent` to max HP, Attack and skill power. SPD never
 // changes, so stars cannot reorder turns. Talents (2D-1b) add their stat percents and build
@@ -231,6 +254,9 @@ export function move(initial: ExpeditionState, map: MapDefinition, dir: Directio
   // Until the rift seal is broken (enough objectives), the boss cannot be challenged.
   if (tile.kind === 'boss' && !state.bossDefeated && !questComplete(state, map)) return { state: initial, event: { type: 'blocked', reason: 'sealed' } };
   if (tile.kind === 'boss' && !state.bossDefeated) {
+    // The boss's story recruit comes back as the fight starts and fights it with the party (owner 2026-10-23: a map-1
+    // party of three wins the boss far too rarely, docs/validation/balance-sim/CAMPAIGN.md).
+    recruit(state, map, 'boss', lookup);
     state.battle = startBattle(state, 'boss', map.bossEncounterId, map.bossLevel, undefined, map.bossPercent);
     return { state, event: { type: 'encounter', kind: 'boss', encounterId: map.bossEncounterId, chance: 100 } };
   }
@@ -269,7 +295,7 @@ export function move(initial: ExpeditionState, map: MapDefinition, dir: Directio
     }
   }
   // Reaching a camp makes it the defeat return point, whether or not the party rests.
-  if (tile.kind === 'camp') { state.camp = { ...target }; if (!state.visited.includes(key(target))) state.visited.push(key(target)); recruit(state, map, 'camp'); }
+  if (tile.kind === 'camp') { state.camp = { ...target }; if (!state.visited.includes(key(target))) state.visited.push(key(target)); recruit(state, map, 'camp', lookup); }
   if (tile.kind === 'goal') { state.completed = true; return { state, event: { type: 'goal' } }; }
   // An event tile asks for a choice instead of rolling an encounter.
   const waiting = pendingEvent(state, map, target);
@@ -645,7 +671,13 @@ export function finishBattle(initial: ExpeditionState, map: MapDefinition, looku
   if (result.outcome === 'victory') {
     for (const h of result.heroes) state.hp[h.id] = h.hp;
     state.battle = null; state.wins++; state.restReady = true;
-    if (kind === 'tutorial') { state.tutorialDone = true; recruit(state, map, 'prologue'); }
+    // The guests part ways after the prologue win; the pair left behind patches up first (owner 2026-10-23: two
+    // hurt heroes before the first camp wiped too often, docs/validation/balance-sim/CAMPAIGN.md).
+    if (kind === 'tutorial') {
+      state.tutorialDone = true;
+      if (recruit(state, map, 'prologue').length) for (const id of rosterIds(state)) state.hp[id] = memberDef(lookup, map, state.members, id)!.maxHp;
+    }
+    // A save before v38 may still carry the boss's recruit as a guest until the win.
     if (kind === 'boss') { state.bossDefeated = true; recruit(state, map, 'boss'); }
     // Elites stay beaten and events finished for the rest of the run; a rift pays veil dust.
     const source = initial.battle.source; let dust = 0;

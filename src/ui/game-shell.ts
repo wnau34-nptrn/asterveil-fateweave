@@ -360,7 +360,8 @@ export class GameShell {
     if (result.event.type === 'goal') { this.endRun('complete'); return; }
     this.persist();
     this.message = this.describe(result.event);
-    if (result.event.type === 'encounter') { this.startEncounter(result.event.kind, result.event.encounterId); return; }
+    // A recruit who steps in as the boss fight starts gets their scene first (owner 2026-10-23).
+    if (result.event.type === 'encounter') { const { kind, encounterId } = result.event; this.locked = true; this.playRecruits(() => this.startEncounter(kind, encounterId)); return; }
     this.renderWorld();
     if (result.event.type === 'event') this.world.openEvent();
     else this.playRecruits(() => this.views.world.querySelector<HTMLElement>('#move-up')?.focus({ preventScroll: true }));
@@ -529,7 +530,7 @@ export class GameShell {
     this.renderWorld();
     // After the prologue fight, Vargoth withdraws into the rift and the journey's goal is set.
     const focus = () => this.views.world.querySelector<HTMLElement>('#move-up')?.focus({ preventScroll: true });
-    if (this.prologueWon) { this.prologueWon = false; this.music.play('archway'); this.story.play(prologueEnd, 'ออกเดินทาง', () => { this.music.play('meadow'); this.playRecruits(focus); }); return; }
+    if (this.prologueWon) { this.prologueWon = false; this.music.play('archway'); this.story.play(prologueEnd(Object.keys(this.state?.arrivals ?? {})), 'ออกเดินทาง', () => { this.music.play('meadow'); this.playRecruits(focus); }); return; }
     this.playRecruits(focus);
   }
 }

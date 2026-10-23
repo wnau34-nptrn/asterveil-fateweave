@@ -90,7 +90,7 @@ describe('formation in the world and save v36', () => {
     expect(battleData(run, map, lookup)!.heroes.find(h => h.id === 'weaver')!.lane).toBe('front');
     expect(setLane(run, map, lookup, 'weaver', 'back').event.type).toBe('blocked');
     let raw = ''; saveGame({ getItem: () => null, setItem: (_k, v) => { raw = v; } }, { profile: p, run });
-    expect(JSON.parse(raw).version).toBe(37); expect(parseGame(raw, map, lookup)).toEqual({ profile: p, run });
+    expect(JSON.parse(raw).version).toBe(38); expect(parseGame(raw, map, lookup)).toEqual({ profile: p, run });
     const bad = JSON.parse(raw); bad.run.roster.lanes.weaver = 'middle'; expect(() => parseGame(JSON.stringify(bad), map, lookup)).toThrow();
     const stray = JSON.parse(raw); stray.run.battle.lanes = { mira: 'front' }; expect(() => parseGame(JSON.stringify(stray), map, lookup)).toThrow();
   });

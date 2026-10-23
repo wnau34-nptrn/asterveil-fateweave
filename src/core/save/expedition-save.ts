@@ -75,7 +75,10 @@ export const legacyKeys = ['asterveil.fateweave.battle.v1', 'asterveil.fateweave
 // small-tree ranks are refunded and star skills granted (as v34 did for the Knight; a run whose member lost ranks
 // settles home). Members may carry `skillLevels`; the profile `tomes`/`riftCore`; a run `tomes`/`riftCore`/`tomeWins`;
 // the last result `tomes`. Missing = none.
-const SAVE_VERSION = 37;
+// v37 → v38 (story recruits one at a time, owner 2026-10-23): after the prologue the guests who did not join part ways;
+// a run may carry `arrivals` (hero → join level) for recruits still on their way. Missing = none, so a v37 run whose
+// guests already travel keeps them until their point.
+const SAVE_VERSION = 38;
 // The classes whose big tree arrived in v37 (release A).
 const RELEASE_A_TREES = ['tracer', 'weaver', 'healer', 'garran', 'mira'];
 export interface Game { profile: Profile; run: ExpeditionState | null }
@@ -319,6 +322,13 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
     return idList(v, allowed);
   };
   const guests = recruitIds(s.guests), recruited = recruitIds(s.recruited);
+  // v38: recruits on their way are this map's recruits who are not on the roster.
+  let arrivals: Record<string, number> | undefined;
+  if (s.arrivals !== undefined) {
+    const a = obj(s.arrivals); const ids = Object.keys(a);
+    if (!ids.length || ids.some(id => !(map.recruits ?? []).some(r => r.hero === id && r.at !== 'prologue') || [...roster.deployed, ...roster.reserve].includes(id) || !isInt(a[id], 1, 99))) throw new Error('Invalid run');
+    arrivals = Object.fromEntries(ids.map(id => [id, a[id] as number]));
+  }
   if (s.hard !== undefined && s.hard !== true) throw new Error('Invalid run');
   // Skill tomes (v37): only a map that drops them carries them.
   if ((s.tomes !== undefined || s.riftCore !== undefined || s.tomeWins !== undefined) && !map.tomes) throw new Error('Invalid run');
@@ -326,7 +336,7 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
   const runTomes = s.tomes === undefined ? undefined : tomesOf(s.tomes);
   if (guests && recruited && guests.some(id => recruited.includes(id))) throw new Error('Invalid run');
   const state: ExpeditionState = {
-    ...(guests ? { guests } : {}), ...(recruited ? { recruited } : {}), ...(s.hard === true ? { hard: true as const } : {}),
+    ...(guests ? { guests } : {}), ...(recruited ? { recruited } : {}), ...(arrivals ? { arrivals } : {}), ...(s.hard === true ? { hard: true as const } : {}),
     ...(runTomes ? { tomes: runTomes } : {}), ...(s.riftCore !== undefined ? { riftCore: s.riftCore as number } : {}), ...(s.tomeWins !== undefined ? { tomeWins: s.tomeWins as number } : {}),
     ...(s.bossLoot===undefined?{}:{bossLoot:bossPlanOf(s.bossLoot,map)}),
     ...(s.hunt===undefined?{}:{hunt:huntPlan(s.hunt,map,lookup)}),
@@ -505,7 +515,7 @@ export function parseGame(raw: string, map: MapDefinition, lookup: EncounterLook
   if (version < 21) migrateItems(envelope, map);
   if (version < 34) migrateTrees(envelope, maps.length ? maps : [map]);
   else if (version < 37) migrateTrees(envelope, maps.length ? maps : [map], RELEASE_A_TREES);
-  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
+  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
   const runMap = (v: unknown): MapDefinition => maps.find(m => m.id === obj(v).mapId) ?? map;
   if (version < 5) {
     const home = runMap(envelope.state); const run = parseRun(envelope.state, version, home, lookup);
@@ -524,7 +534,7 @@ export function parseGame(raw: string, map: MapDefinition, lookup: EncounterLook
     return { profile: settle(profile, e.run, 'withdrawn', home), run: null };
   }
   if (run && rosterIds(run).some(id => !profile.company.includes(id) && !travelling(run, id))) throw new Error('Run member left the company');
-  if (run && [...run.guests ?? [], ...run.recruited ?? []].some(id => profile.company.includes(id))) throw new Error('Guest already in the company');
+  if (run && [...run.guests ?? [], ...run.recruited ?? [], ...Object.keys(run.arrivals ?? {})].some(id => profile.company.includes(id))) throw new Error('Guest already in the company');
   if(run?.hunt&&run.hunt.target!==profile.hunt?.target)throw new Error('Hunt target mismatch');
   if(run?.hunt?.target&&!profile.company.includes(run.hunt.target))throw new Error('Unowned hunt target');
   if(run?.bossLoot){const before=startBossPlan(profile,home),now=run.bossLoot;

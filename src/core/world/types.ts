@@ -40,8 +40,8 @@ export interface MapDefinition {
   bossDrop?: { weights: readonly number[]; zoneSets: boolean };
   // Names shown on the map, in messages and in the summary: the boss and the goal it guards.
   bossName: string; goalName: string;
-  // Story recruits (master plan A2): heroes not yet in the company travel this map as guests and join for good at
-  // the prologue win, on reaching a camp, or on beating the boss. `firstCompany`: a new company's only member.
+  // Story recruits (master plan A2, owner 2026-10-23): heroes not yet in the company fight the prologue as guests, then
+  // part ways and join one at a time: at the prologue win, on reaching a camp, or as the boss fight starts. `firstCompany`: a new company's only member.
   recruits?: readonly { hero: string; at: RecruitPoint }[]; firstCompany: readonly string[];
   // Lobby systems open by chapter (master plan A3): the chapter number whose map must be cleared first.
   unlocks: Readonly<Record<LobbyFeature, number>>;
@@ -415,6 +415,9 @@ export interface ExpeditionState {
   // Story recruits (save v30): guests travel with the run but are not company members yet; `recruited` joined
   // during this run and are added to the company when it settles (whatever the outcome). Missing = none.
   guests?: string[]; recruited?: string[];
+  // Story recruits on their way (save v38, owner 2026-10-23): hero → the level it joins at when its camp is reached or the
+  // boss fight starts (guests who parted after the prologue, or recruits of a company past the prologue). Missing = none.
+  arrivals?: Record<string, number>;
   // Hard mode (A9, save v33): set on departure, never changed during the run.
   hard?: true;
   bossLoot?:BossPlan;

@@ -1,5 +1,11 @@
 # Codex → Claude handoff
 
+## 2026-10-23 — Claude: story recruits one at a time (owner, save v38)
+
+- The prologue is still fought by four (Knight + three guests). On the win the guests who did not join part ways (`world.ts` `disband` → `run.arrivals`, hero → join level) and leave roster/members/HP; the Knight and Lyra are restored to full HP. Aira steps back in on reaching the camp; Seren as the boss fight starts (before `startBattle`, so she fights it). `recruit(state, map, at, lookup)` handles both arrivals and old guests. Past the prologue, `depart` puts camp/boss recruits straight into `arrivals`.
+- UI: `prologueEnd(parted)` adds the parting panels; `game-shell.ts` plays the recruit scene before opening the boss battle. Save v38 validates `arrivals`; a v37 run whose guests still travel keeps them until their point.
+- Balance (campaign sim, 12 companies per style): Seren after the boss left map 1's boss at 7–29% wins, so she joins as it starts (92–100%). Remaining: explorer companies wipe 17–25% on their first map-1 run before the camp (two heroes in the Lv3 zone). Numbers in `docs/MASTER_PLAN_TH.md` A2.
+
 ## 2026-10-22 — Claude: A10 small balance round (closes release A gameplay numbers)
 
 - Campaign simulation: `tests/sim/balance-sim.ts` now holds the played map in a module variable; `simulateCampaign` starts a new company (Knight alone) on map 1, plays maps 1 → 2 → 3 (recruits, first example tree build per class with its loadout, class-lane formation, tome raises before the market, trade-ups), replays veil-frontier 3× and hard 2×; `campaignReport` + `tests/campaign-sim.test.ts` → `docs/validation/balance-sim/CAMPAIGN.md` (`npm run sim`). Elite/boss fights are also replayed with blind attacks (`<label>:attack`) and bosses at −2 levels (`boss:under2`) without changing the run. The old map-3-only sweep starts its four starters at Lv5 now.

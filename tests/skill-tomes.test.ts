@@ -111,7 +111,7 @@ describe('save v37', () => {
   it('round-trips skill levels, tomes, rift cores and run finds', () => {
     const p = open(); p.members.guardian!.skillLevels = { bash: 3, guard: 2 }; const { profile, run } = depart(p, map, lookup, 4);
     battleTomes(run, map, 'elite', run.roster.deployed); run.tomeWins = 2;
-    const text = raw({ profile, run }); expect(JSON.parse(text).version).toBe(37);
+    const text = raw({ profile, run }); expect(JSON.parse(text).version).toBe(38);
     expect(parseGame(text, map, lookup, MAPS)).toEqual({ profile, run });
   });
   it('rejects levels out of range or for another class’s skill, and tomes on a map without them', () => {
