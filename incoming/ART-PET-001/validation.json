@@ -1,0 +1,198 @@
+{
+  "concept_sheet": [
+    2048,
+    1152
+  ],
+  "silhouettes": [
+    {
+      "pet": "01_meadow_fox",
+      "box": [
+        43,
+        32
+      ]
+    },
+    {
+      "pet": "01_meadow_fox",
+      "box": [
+        86,
+        64
+      ]
+    },
+    {
+      "pet": "02_thicket_piglet",
+      "box": [
+        41,
+        32
+      ]
+    },
+    {
+      "pet": "02_thicket_piglet",
+      "box": [
+        82,
+        64
+      ]
+    },
+    {
+      "pet": "03_rift_crystal_moth",
+      "box": [
+        43,
+        32
+      ]
+    },
+    {
+      "pet": "03_rift_crystal_moth",
+      "box": [
+        87,
+        64
+      ]
+    },
+    {
+      "pet": "04_fort_gargoyle_pup",
+      "box": [
+        42,
+        32
+      ]
+    },
+    {
+      "pet": "04_fort_gargoyle_pup",
+      "box": [
+        84,
+        64
+      ]
+    },
+    {
+      "pet": "05_forest_lantern_owl",
+      "box": [
+        33,
+        32
+      ]
+    },
+    {
+      "pet": "05_forest_lantern_owl",
+      "box": [
+        66,
+        64
+      ]
+    },
+    {
+      "pet": "06_gate_starveil_slime",
+      "box": [
+        44,
+        32
+      ]
+    },
+    {
+      "pet": "06_gate_starveil_slime",
+      "box": [
+        89,
+        64
+      ]
+    }
+  ],
+  "scale_preview": {
+    "01_meadow_fox": {
+      "knight_frame_px": 100,
+      "pet_battle_max_px": [
+        52,
+        44
+      ],
+      "map_tile_px": [
+        48,
+        64
+      ]
+    },
+    "02_thicket_piglet": {
+      "knight_frame_px": 100,
+      "pet_battle_max_px": [
+        52,
+        44
+      ],
+      "map_tile_px": [
+        48,
+        64
+      ]
+    },
+    "03_rift_crystal_moth": {
+      "knight_frame_px": 100,
+      "pet_battle_max_px": [
+        52,
+        44
+      ],
+      "map_tile_px": [
+        48,
+        64
+      ]
+    },
+    "04_fort_gargoyle_pup": {
+      "knight_frame_px": 100,
+      "pet_battle_max_px": [
+        52,
+        44
+      ],
+      "map_tile_px": [
+        48,
+        64
+      ]
+    },
+    "05_forest_lantern_owl": {
+      "knight_frame_px": 100,
+      "pet_battle_max_px": [
+        52,
+        44
+      ],
+      "map_tile_px": [
+        48,
+        64
+      ]
+    },
+    "06_gate_starveil_slime": {
+      "knight_frame_px": 100,
+      "pet_battle_max_px": [
+        52,
+        44
+      ],
+      "map_tile_px": [
+        48,
+        64
+      ]
+    }
+  },
+  "files": {
+    "01_meadow_fox_turnaround.png": [
+      1024,
+      1024
+    ],
+    "02_thicket_piglet_turnaround.png": [
+      1024,
+      1024
+    ],
+    "03_rift_crystal_moth_turnaround.png": [
+      1024,
+      1024
+    ],
+    "04_fort_gargoyle_pup_turnaround.png": [
+      1024,
+      1024
+    ],
+    "05_forest_lantern_owl_turnaround.png": [
+      1024,
+      1024
+    ],
+    "06_gate_starveil_slime_turnaround.png": [
+      1024,
+      1024
+    ],
+    "concept_sheet.png": [
+      2048,
+      1152
+    ],
+    "concept_source.png": [
+      1672,
+      941
+    ],
+    "scale_preview.png": [
+      1536,
+      1152
+    ]
+  }
+}
