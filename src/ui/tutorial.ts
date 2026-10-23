@@ -1,4 +1,4 @@
-import { ambushBonus, corrodeBonusOf, guardReductionOf, interruptBlock, nextIntentOf, tauntReductionOf, currentHeroId, skillPower, targetOptions } from '../core/battle/engine';
+import { CATALYST_PER_ROUND, SOLO_TIMES, TREMOR_WEAKEN, ambushBonus, corrodeBonusOf, guardReductionOf, interruptBlock, nextIntentOf, tauntReductionOf, currentHeroId, skillPower, targetOptions } from '../core/battle/engine';
 import type { ActionId, BattleState, EncounterDefinition } from '../core/battle/types';
 import { actorName } from './th';
 export interface Lesson { step:number; title:string; copy:string; heroId:string; action:ActionId; targetId:string }
@@ -75,6 +75,44 @@ export function battleLesson(state:BattleState,data:EncounterDefinition):Lesson|
    if(intent?.kind==='physical'&&intent.targetId===heroId){const d=make('disengage',intent.sourceId,'ถอยยิงหลบท่ากายภาพ','มิร่าหลบการตีครั้งถัดไป');if(d)return d;}
    const slowed=living.find(e=>(e.delayedRound??0)>=state.round);
    if(slowed){const t=make('track',slowed.id,'ศรตามรอยเป้าที่ถูกสกัด',`ยิงซ้ำตอนจบรอบ`)??make('weakshot',slowed.id,'ศรจุดอ่อนเป้าที่ถูกสกัด',`พลัง ${skillPower(data,heroId,'weakshot')+data.rules.weakshotBonus}`);if(t)return t;}
+  }
+  // Recruit trees (owner 2026-10-23): suggested only when equipped (`make` checks).
+  // A dangerous move: a whole-party move, or one that would take at least 35% of its target's max HP.
+  const heavy=!!intent&&(intent.all||intent.damage*100>=(data.heroes.find(h=>h.id===intent.targetId)?.maxHp??0)*35);
+  const strongest=[...data.heroes].filter(h=>h.id!==heroId&&state.heroes.some(x=>x.id===h.id&&x.hp>0)).sort((a,b)=>b.attack-a.attack)[0];
+  if(heroId==='toma'){
+   if(heavy&&intent){const k=make('smoke',intent.sourceId,'ขวดควันลดท่าที่กำลังมา',`${actorName(intent.sourceId,data)} เบาลง ${skillPower(data,heroId,'smoke')}%`);if(k)return k;}
+   const ripe=living.find(e=>(e.corrodedUntil??0)-state.round>=2);
+   if(ripe){const c=make('catalyst',ripe.id,'ระเบิดกร่อนด้วยตัวเร่ง',`พลัง ${skillPower(data,heroId,'catalyst')+2*CATALYST_PER_ROUND}`);if(c)return c;}
+   if(living.length>=3){const b=make('bomb','enemies','ขวดระเบิดโดนทุกตัว',`ตัวละ ${skillPower(data,heroId,'bomb')}`);if(b)return b;}
+   if(strongest&&!(intent&&intent.targetId===strongest.id)){const f=make('fury',strongest.id,'ยาคลั่งให้ตัวตีหลัก',`${actorName(strongest.id,data)} แรงขึ้น ${skillPower(data,heroId,'fury')}%`);if(f)return f;}
+  }
+  if(heroId==='sefa'){
+   const me=state.heroes.find(h=>h.id===heroId)!;
+   const aimedBack=intent&&!intent.all&&intent.targetId!==heroId&&lane(intent.targetId)==='back'&&intent.damage*100>=data.heroes.find(h=>h.id===intent.targetId)!.maxHp*35;
+   if(aimedBack&&me.hp*2>data.heroes.find(h=>h.id===heroId)!.maxHp){const d=make('decoy',intent!.targetId,'ล่อเงารับแทนแนวหลัง',`${actorName(intent!.sourceId,data)} จะตีเซฟาแทน`);if(d)return d;}
+   if(heavy&&intent&&intent.kind==='physical'&&!intent.all){const x=make('disarm',intent.sourceId,'ปลดอาวุธท่ากายภาพ',`${actorName(intent.sourceId,data)} เบาลง 50%`);if(x)return x;}
+   if(back.length&&(front.length||back.length>=2)){const k=make('knives','enemies','มีดบินใส่แถวหลัง',`ตัวละ ${skillPower(data,heroId,'knives')}`);if(k)return k;}
+   const low=reach('backstab').find(e=>e.hp<=skillPower(data,heroId,'backstab')+4);
+   if(low){const b=make('backstab',low.id,'ลอบแทงปิดฉาก',`พลัง ${skillPower(data,heroId,'backstab')}`);if(b)return b;}
+  }
+  if(heroId==='brann'){
+   if(intent&&!intent.all&&intent.targetId===heroId&&intent.damage>=15){const a=make('stonearmor',heroId,'เกราะหินรับท่าหนัก',`โล่ ${skillPower(data,heroId,'stonearmor')}%`);if(a)return a;}
+   const aimed=reach('quake').find(e=>nextIntentOf(state,data,e.id)?.targetId===heroId);
+   if(aimed){const q=make('quake',aimed.id,'ทุบปฐพีใส่ตัวที่เล็งแบรนน์',`พลัง ${skillPower(data,heroId,'quake')+data.rules.quakeBonus}`);if(q)return q;}
+   if(front.length>=2||(heavy&&intent&&row(intent.sourceId)==='front')){const t=make('tremor','enemies','ปฐพีสั่นแถวหน้า',`ท่าถัดไปเบาลง ${TREMOR_WEAKEN}%`);if(t)return t;}
+   if(intent&&!intent.all&&intent.targetId!==heroId&&state.heroes.find(h=>h.id===heroId)!.cooldowns.taunt!==undefined){const g=make('guardstone',intent.targetId,'ศิลาคุ้มกันเพื่อนที่ถูกเล็ง',`เบาลง ${skillPower(data,heroId,'guardstone')}%`);if(g)return g;}
+  }
+  if(heroId==='lio'){
+   // Healing first: a worn party keeps (or gets) the song of mending, and a mending finale when several are hurt.
+   const song=state.song?.heroId===heroId?state.song.action:undefined;
+   const hurt=state.heroes.filter(h=>h.hp>0&&h.hp<data.heroes.find(d=>d.id===h.id)!.maxHp*.5).length;
+   if(hurt&&song!=='mend')return undefined;
+   if(song==='mend'&&hurt>=2){const f=make('finale',heroId,'บทสุดท้ายฟื้นทั้งทีม',`ทุกคนฟื้นทันที`);if(f)return f;}
+   if(heavy&&(!song||song==='valor')){const d=make('dread',heroId,'เพลงสะท้านรับท่าหนัก',`ทุกท่าศัตรูเบาลง ${skillPower(data,heroId,'dread')}%`);if(d)return d;}
+   if(song==='valor'&&strongest){const o=make('solo',strongest.id,'เพลงเดี่ยวให้ตัวตีหลัก',`${actorName(strongest.id,data)} ได้เพลงกล้า ×${SOLO_TIMES}`);if(o)return o;}
+   if(song==='valor'&&living.length>=2){const f=make('finale',heroId,'บทสุดท้ายปล่อยพลังเพลง',`ตัวละ ${skillPower(data,heroId,'finale')}`);if(f)return f;}
+   if(song){const n=make('note',pick('note').id,'โน้ตคมระหว่างเพลงเล่น',`พลัง ${skillPower(data,heroId,'note')}`);if(n)return n;}
   }
   return undefined;
  }

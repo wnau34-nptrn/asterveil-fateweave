@@ -88,7 +88,7 @@ it('unique identity survives equip/development/transfer; never becomes a materia
   const locked=lockEquipment(tuned,1).profile;expect(salvage(locked,map,[1]).profile).toBe(locked);const unlocked=lockEquipment(locked,1).profile,investment=unlocked.items[0]!.investment!,recycled=salvage(unlocked,map,[1]);expect(recycled.profile.bank.ore-unlocked.bank.ore).toBe(12+investment.ore);expect(recycled.profile.bank.dust-unlocked.bank.dust).toBe(15+investment.dust);expect(salvage(recycled.profile,map,[1]).profile).toBe(recycled.profile);
 });
 it('v27 validates identity, provenance and boss counter state, preserves legacy active battle replay and never invents old-run bonus',()=>{
-  const p=newProfile(map,1);p.items=[gear('focus')];p.nextItem=2;const game=depart(equip(p,'tracer',1).profile,map,lookup,17);game.run.battle={kind:'random',encounterId:map.tutorialEncounterId,entry:{...game.run.hp},commands:[]};let raw='';saveGame({getItem:()=>null,setItem:(_k,v)=>raw=v},game);expect(JSON.parse(raw).version).toBe(38);expect(parseGame(raw,map,lookup)).toEqual(game);
+  const p=newProfile(map,1);p.items=[gear('focus')];p.nextItem=2;const game=depart(equip(p,'tracer',1).profile,map,lookup,17);game.run.battle={kind:'random',encounterId:map.tutorialEncounterId,entry:{...game.run.hp},commands:[]};let raw='';saveGame({getItem:()=>null,setItem:(_k,v)=>raw=v},game);expect(JSON.parse(raw).version).toBe(39);expect(parseGame(raw,map,lookup)).toEqual(game);
   for(const corrupt of [(g:typeof game)=>g.run.bossLoot!.misses=4,(g:typeof game)=>g.run.bossLoot!.target='focus',(g:typeof game)=>g.run.bossLoot!.rewarded=true,(g:typeof game)=>g.run.members.tracer!.gear!.charm!.boss='lantern']){const c=structuredClone(game);corrupt(c);expect(()=>parseGame(JSON.stringify({version:27,...c}),map,lookup)).toThrow();}
   for(const item of [{...gear('focus'),special:'renewal'}, {...gear('focus'),slot:'body'}, {...gear('focus'),rarity:3}, {...gear('focus'),boss:'unknown'}])expect(itemValid(map,item as Item,ids)).toBe(false);
   const legacy=depart(newProfile(map,3),map,lookup,17);delete legacy.run.bossLoot;legacy.run.battle={kind:'random',encounterId:map.tutorialEncounterId,entry:{...legacy.run.hp},commands:[]};const before=battleState(legacy.run,map,lookup);const loaded=parseGame(JSON.stringify({version:26,...legacy}),map,lookup);expect(loaded.run!.bossLoot).toBeUndefined();expect(battleState(loaded.run!,map,lookup)).toEqual(before);
@@ -108,7 +108,8 @@ it('bonus economy converges to the hard-four distribution and never adds more th
 });
 it('resolver-backed boss skill examples support every class, including Backstab against an enemy aiming at an ally',()=>{
   for(const base of heroCatalog(lookup,map)){
-    const h=starred(base,5,map,6,{}, {charm:gear('focus')});
+    // Big trees grant the old star skill to a ★5 member; the scout's loadout carries backstab.
+    const h=starred(base,5,map,6,{}, {charm:gear('focus')},base.id==='sefa'?{grants:['a3','b4'],loadout:['ambush','evade','backstab']}:undefined);
     for(const action of h.actions)expect(()=>markedSkillExample(action,h,lookup(map.tutorialEncounterId)!)).not.toThrow();
     if(h.id==='sefa')expect(markedSkillExample('backstab',h,lookup(map.tutorialEncounterId)!)).toBeGreaterThan(0);
   }

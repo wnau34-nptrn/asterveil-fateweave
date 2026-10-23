@@ -1,14 +1,4 @@
-import type { ActionId, TalentCap, TalentRule } from '../../core/battle/types';
 import type { TalentNodeDef, TalentTree } from '../../core/world/types';
-
-// Passive talent trees (2D-1b, owner-approved 2026-10-16, draft numbers). Same shape for every class:
-// root (1 rank) → branch A and B: tier 1 (2) → tier 2 (2) → capstone (1). 11 ranks, 9 points at level 10.
-const hp = (name: string, percent = 5, id: TalentNodeDef['id'] = 'b1', max = 2): TalentNodeDef => ({ id, name, max, effect: { stat: 'hp', percent } });
-const atk = (name: string, percent = 4, id: TalentNodeDef['id'] = 'a1', max = 2): TalentNodeDef => ({ id, name, max, effect: { stat: 'attack', percent } });
-const skill = (name: string, percent = 4, id: TalentNodeDef['id'] = 'a1', max = 2): TalentNodeDef => ({ id, name, max, effect: { stat: 'skill', percent } });
-const power = (id: TalentNodeDef['id'], name: string, action: ActionId, amount: number): TalentNodeDef => ({ id, name, max: 2, effect: { power: action, amount } });
-const rule = (id: TalentNodeDef['id'], name: string, r: TalentRule, amount: number): TalentNodeDef => ({ id, name, max: 2, effect: { rule: r, amount } });
-const cap = (id: 'a3' | 'b3', name: string, c: TalentCap, amount?: number): TalentNodeDef => ({ id, name, max: 1, effect: amount === undefined ? { cap: c } : { cap: c, amount } });
 
 // Big skill trees (master plan A6, owner-approved 2026-10-21, draft numbers): three branches of four tiers. A node
 // can raise a stat, unlock an active skill, modify one (pick one of two per `choice`) or switch on a passive.
@@ -134,16 +124,81 @@ export const talentTrees: Readonly<Record<string, TalentTree>> = {
     node('c3', 'ศรตามรอย', { unlock: 'track' }, { branch: 'c', tier: 3 }),
     node('c4', 'พรานเงียบ', { cap: 'stalker' }, { branch: 'c', tier: 4 }),
   ],
-  toma: [skill('สูตรพิเศษ', 4, 'root', 1),
-    power('a1', 'กรดเข้มข้น', 'acid', 2), rule('a2', 'กร่อนลึก', 'corrodeBonus', 2), cap('a3', 'กรดลาม', 'acidspread'),
-    hp('ภูมิต้านทาน'), rule('b2', 'ยาเร่งผสม', 'hasteHeal', 4), cap('b3', 'ยาคู่', 'quickbrew')],
-  sefa: [atk('ฝีเท้าเงียบ', 4, 'root', 1),
-    atk('มีดคม'), rule('a2', 'จู่โจมแรง', 'ambushBonus', 4), cap('a3', 'เงาซ้อน', 'shadowlayer'),
-    hp('ตัวเบา'), rule('b2', 'หายใจในเงา', 'dodgeHeal', 3), cap('b3', 'เงาสองชั้น', 'doubleshadow')],
-  brann: [hp('หินผา', 5, 'root', 1),
-    atk('แขนหนัก'), power('a2', 'รูนลึก', 'slam', 4), cap('a3', 'ค้อนตอบโต้', 'hammercounter', 6),
-    hp('กายหิน', 6), rule('b2', 'ท้าทายแกร่ง', 'tauntReduction', 0.05), cap('b3', 'หินฟื้นตัว', 'stoneregen', 6)],
-  lio: [skill('เสียงใส', 4, 'root', 1),
-    power('a1', 'จังหวะเร้า', 'valor', 1), atk('ท่อนเร้า', 5, 'a2'), cap('a3', 'ประสานเสียง', 'chorus', 2),
-    hp('ลมหายใจยาว'), power('b2', 'ทำนองอุ่น', 'mend', 2), cap('b3', 'เปิดม่าน', 'overture')],
+  // Recruit big trees (docs/design/SKILL_TREES_ALL_TH.md, owner 2026-10-23: moved up from release B because a new company
+  // recruits these four after the prologue). Alchemist: A corrosion, B tonics, C smoke and reactions.
+  toma: [
+    node('a1', 'สูตรพิเศษ', { stat: 'skill', percent: 4 }, { branch: 'a', tier: 1 }, 2),
+    node('a2d', 'กร่อนลึก', { rule: 'corrodeBonus', amount: 3 }, { branch: 'a', tier: 2, choice: 'acid' }),
+    node('a2s', 'กรดลาม', { cap: 'acidspread' }, { branch: 'a', tier: 2, choice: 'acid' }),
+    node('a3', 'ขวดระเบิด', { unlock: 'bomb' }, { branch: 'a', tier: 3, legacyStars: 3 }),
+    node('a4', 'สูตรเข้ม', { passive: 'potent' }, { branch: 'a', tier: 4, legacyStars: 5 }),
+    node('b1', 'ภูมิต้านทาน', { stat: 'hp', percent: 5 }, { branch: 'b', tier: 1 }, 2),
+    node('b2h', 'ยาเร่งผสม', { rule: 'hasteHeal', amount: 8 }, { branch: 'b', tier: 2, choice: 'haste' }),
+    node('b2q', 'ยาคู่', { cap: 'quickbrew' }, { branch: 'b', tier: 2, choice: 'haste' }),
+    node('b3', 'ยาคลั่ง', { unlock: 'fury' }, { branch: 'b', tier: 3 }),
+    node('b4', 'ห้องยาพกพา', { cap: 'mobilelab' }, { branch: 'b', tier: 4 }),
+    node('c1', 'ผ้ากันกรด', { stat: 'armour', percent: 5 }, { branch: 'c', tier: 1 }, 2),
+    node('c1s', 'ขวดควัน', { unlock: 'smoke' }, { branch: 'c', tier: 1 }),
+    node('c2p', 'ควันพิษ', { cap: 'smokepoison' }, { branch: 'c', tier: 2, choice: 'smoke', needs: 'c1s' }),
+    node('c2w', 'ควันกว้าง', { cap: 'smokewide', amount: 25 }, { branch: 'c', tier: 2, choice: 'smoke', needs: 'c1s' }),
+    node('c3', 'ตัวเร่งปฏิกิริยา', { unlock: 'catalyst' }, { branch: 'c', tier: 3 }),
+    node('c4', 'ปฏิกิริยาลูกโซ่', { cap: 'chainreaction' }, { branch: 'c', tier: 4 }),
+  ],
+  // Scout: A assassin, B shadow, C harrier.
+  sefa: [
+    node('a1', 'มีดคม', { stat: 'attack', percent: 4 }, { branch: 'a', tier: 1 }, 2),
+    node('a2b', 'จู่โจมแรง', { rule: 'ambushBonus', amount: 6 }, { branch: 'a', tier: 2, choice: 'ambush' }),
+    node('a2l', 'เงาซ้อน', { cap: 'shadowlayer' }, { branch: 'a', tier: 2, choice: 'ambush' }),
+    node('a3', 'ลอบแทง', { unlock: 'backstab' }, { branch: 'a', tier: 3, legacyStars: 3 }),
+    node('a4', 'ปิดฉากเงียบ', { cap: 'silentend' }, { branch: 'a', tier: 4 }),
+    node('b1', 'ตัวเบา', { stat: 'hp', percent: 5 }, { branch: 'b', tier: 1 }, 2),
+    node('b2h', 'หายใจในเงา', { rule: 'dodgeHeal', amount: 6 }, { branch: 'b', tier: 2, choice: 'evade' }),
+    node('b2d', 'เงาสองชั้น', { cap: 'doubleshadow' }, { branch: 'b', tier: 2, choice: 'evade' }),
+    node('b3', 'ล่อเงา', { unlock: 'decoy' }, { branch: 'b', tier: 3 }),
+    node('b4', 'โต้เงา', { passive: 'shadowcounter' }, { branch: 'b', tier: 4, legacyStars: 5 }),
+    node('c1', 'ผ้าคลุมรัดกุม', { stat: 'armour', percent: 5 }, { branch: 'c', tier: 1 }, 2),
+    node('c1s', 'มีดบิน', { unlock: 'knives' }, { branch: 'c', tier: 1 }),
+    node('c2t', 'มีดสองระลอก', { cap: 'twinknives' }, { branch: 'c', tier: 2, choice: 'knives', needs: 'c1s' }),
+    node('c2q', 'มีดเร็ว', { cap: 'quickknives' }, { branch: 'c', tier: 2, choice: 'knives', needs: 'c1s' }),
+    node('c3', 'ปลดอาวุธ', { unlock: 'disarm' }, { branch: 'c', tier: 3 }),
+    node('c4', 'ฉวยโอกาส', { cap: 'opportunist', amount: 4 }, { branch: 'c', tier: 4 }),
+  ],
+  // Hammer warden: A stone bulwark, B rune hammer, C guardian stone.
+  brann: [
+    node('a1', 'หินผา', { stat: 'hp', percent: 6 }, { branch: 'a', tier: 1 }, 2),
+    node('a2t', 'ท้าทายแกร่ง', { rule: 'tauntReduction', amount: 0.05 }, { branch: 'a', tier: 2, choice: 'taunt' }),
+    node('a2h', 'ค้อนตอบโต้', { cap: 'hammercounter', amount: 6 }, { branch: 'a', tier: 2, choice: 'taunt' }),
+    node('a3', 'เกราะหิน', { unlock: 'stonearmor' }, { branch: 'a', tier: 3 }),
+    node('a4', 'ผิวศิลา', { passive: 'stoneskin' }, { branch: 'a', tier: 4, legacyStars: 5 }),
+    node('b1', 'แขนหนัก', { stat: 'attack', percent: 4 }, { branch: 'b', tier: 1 }, 2),
+    node('b2', 'ทุบปฐพี', { unlock: 'quake' }, { branch: 'b', tier: 2, legacyStars: 3 }),
+    node('b3d', 'รูนลึก', { power: 'slam', amount: 6 }, { branch: 'b', tier: 3, choice: 'slam' }),
+    node('b3q', 'รูนสะเทือน', { cap: 'runequake' }, { branch: 'b', tier: 3, choice: 'slam' }),
+    node('b4', 'ค้อนสะท้านฟ้า', { cap: 'skyhammer' }, { branch: 'b', tier: 4 }),
+    node('c1', 'กายหิน', { stat: 'armour', percent: 5 }, { branch: 'c', tier: 1 }, 2),
+    node('c1s', 'ศิลาคุ้มกัน', { unlock: 'guardstone' }, { branch: 'c', tier: 1 }),
+    node('c2t', 'ศิลาคู่', { cap: 'twinstone', amount: 25 }, { branch: 'c', tier: 2, choice: 'guardstone', needs: 'c1s' }),
+    node('c2k', 'ศิลาหนา', { cap: 'thickstone', amount: 55 }, { branch: 'c', tier: 2, choice: 'guardstone', needs: 'c1s' }),
+    node('c3', 'ปฐพีสั่น', { unlock: 'tremor' }, { branch: 'c', tier: 3 }),
+    node('c4', 'หินฟื้นตัว', { cap: 'stoneregen', amount: 8 }, { branch: 'c', tier: 4 }),
+  ],
+  // Bard: A war songs, B soothing songs, C melody.
+  lio: [
+    node('a1', 'เสียงใส', { stat: 'skill', percent: 4 }, { branch: 'a', tier: 1 }, 2),
+    node('a2r', 'ท่อนเร้า', { power: 'valor', amount: 2 }, { branch: 'a', tier: 2, choice: 'valor' }),
+    node('a2c', 'ประสานเสียง', { cap: 'chorus', amount: 2 }, { branch: 'a', tier: 2, choice: 'valor' }),
+    node('a3', 'เพลงสะท้าน', { unlock: 'dread' }, { branch: 'a', tier: 3 }),
+    node('a4', 'ก้องกังวาน', { passive: 'resound' }, { branch: 'a', tier: 4, legacyStars: 5 }),
+    node('b1', 'ลมหายใจยาว', { stat: 'hp', percent: 5 }, { branch: 'b', tier: 1 }, 2),
+    node('b2w', 'ทำนองอุ่น', { power: 'mend', amount: 2 }, { branch: 'b', tier: 2, choice: 'mend' }),
+    node('b2o', 'เปิดม่าน', { cap: 'overture' }, { branch: 'b', tier: 2, choice: 'mend' }),
+    node('b3', 'บทสุดท้าย', { unlock: 'finale' }, { branch: 'b', tier: 3, legacyStars: 3 }),
+    node('b4', 'อีกสักบท', { cap: 'encore' }, { branch: 'b', tier: 4 }),
+    node('c1', 'ชุดนักเดินทาง', { stat: 'armour', percent: 5 }, { branch: 'c', tier: 1 }, 2),
+    node('c1s', 'โน้ตคม', { unlock: 'note' }, { branch: 'c', tier: 1 }),
+    node('c2s', 'โน้ตสะกด', { cap: 'spellnote', amount: 20 }, { branch: 'c', tier: 2, choice: 'note', needs: 'c1s' }),
+    node('c2d', 'โน้ตคู่', { cap: 'twinnote', amount: 70 }, { branch: 'c', tier: 2, choice: 'note', needs: 'c1s' }),
+    node('c3', 'เพลงเดี่ยว', { unlock: 'solo' }, { branch: 'c', tier: 3 }),
+    node('c4', 'จังหวะชีวิต', { cap: 'liferhythm', amount: 5 }, { branch: 'c', tier: 4 }),
+  ],
 };

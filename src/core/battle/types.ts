@@ -5,7 +5,10 @@ export type ActionId = 'attack' | 'guard' | 'bash' | 'mark' | 'execute' | 'bolt'
   | 'challenge' | 'bulwark' | 'rouse'
   // Release A big trees (docs/design/SKILL_TREES_ALL_TH.md): duelist parry/lunge/sweep, mage storm/aegis/dispel,
   // priest revive/halo/bless, spear hold/halt/warcry, archer disengage/pin/track.
-  | 'parry' | 'lunge' | 'sweep' | 'storm' | 'aegis' | 'dispel' | 'revive' | 'halo' | 'bless' | 'hold' | 'halt' | 'warcry' | 'disengage' | 'pin' | 'track';
+  | 'parry' | 'lunge' | 'sweep' | 'storm' | 'aegis' | 'dispel' | 'revive' | 'halo' | 'bless' | 'hold' | 'halt' | 'warcry' | 'disengage' | 'pin' | 'track'
+  // Recruit big trees (owner 2026-10-23, moved up from release B): alchemist smoke/fury/catalyst, scout knives/decoy/disarm,
+  // warden stonearmor/guardstone/tremor, bard dread/note/solo.
+  | 'smoke' | 'fury' | 'catalyst' | 'knives' | 'decoy' | 'disarm' | 'stonearmor' | 'guardstone' | 'tremor' | 'dread' | 'note' | 'solo';
 // ★5 passives (one per class, always on at five stars).
 export type PassiveId = 'stand' | 'keeneye' | 'echo' | 'afterglow' | 'heavycounter' | 'tailwind' | 'potent' | 'shadowcounter' | 'stoneskin' | 'resound';
 // Talent-tree capstones (2D-1b): one small rule change per branch, read by the resolver from `HeroDefinition.talents`.
@@ -19,7 +22,12 @@ export type TalentCap = 'retribution' | 'guardcounter' | 'deepmark' | 'relentles
   | 'piercebolt' | 'twinward' | 'sigilreflect' | 'sigildelay' | 'arcanecharge' | 'fateseal'
   | 'sanctuaryward' | 'longprayer' | 'quickprayer' | 'lastprayer' | 'dawn'
   | 'deeppierce' | 'spearfury' | 'holdfirm' | 'holdcounter' | 'unyielding'
-  | 'heavyhinder' | 'chase' | 'quickstep' | 'covershot' | 'stalker';
+  | 'heavyhinder' | 'chase' | 'quickstep' | 'covershot' | 'stalker'
+  // Recruit big trees: alchemist, scout, warden and bard modifiers and capstones.
+  | 'smokepoison' | 'smokewide' | 'mobilelab' | 'chainreaction'
+  | 'twinknives' | 'quickknives' | 'silentend' | 'opportunist'
+  | 'runequake' | 'twinstone' | 'thickstone' | 'skyhammer'
+  | 'spellnote' | 'twinnote' | 'encore' | 'liferhythm';
 // Talent numbers that add to a rule for this hero only (summed over ranks).
 export type TalentRule = 'guardReduction' | 'tauntReduction' | 'corrodeBonus' | 'ambushBonus' | 'executeHeal' | 'healBarrier' | 'hasteHeal' | 'dodgeHeal';
 // What a member's spent talent points do in battle (world `starred` builds it; stat nodes are already in maxHp/attack/skillBonus).
@@ -105,7 +113,10 @@ export interface EncounterDefinition {
 // battle (only those can be revived); `revivedRound` = revived this round (acts from the next one);
 // `empowered` = a percent added to this hero's hits until the end of `round` (priest blessing, spear war cry).
 export interface HeroState { id: string; hp: number; barrier: number; cooldowns: Partial<Record<ActionId, number>>; bossUsedRound?:number; hastedRound?: number; evading?: boolean; evadeExtra?: number; evadePhysical?: boolean; reflect?: { heroId: string; amount: number };
-  fell?: boolean; revivedRound?: number; empowered?: { percent: number; round: number } }
+  fell?: boolean; revivedRound?: number; empowered?: { percent: number; round: number };
+  // Recruit trees: `exposed` = hits taken are raised by a percent until the end of `round` (alchemist fury tonic);
+  // `solo` = this hero gets the bard's playing song three times over until the end of `round`.
+  exposed?: { percent: number; round: number }; solo?: { heroId: string; round: number } }
 // `delayedRound`: an archer's hindering shot sends this enemy to the end of that round's queue.
 // `corrodeBonus`: the bonus of the flask that corroded it (talents can raise it; missing = the rule's value).
 // `steadyRound` (boss steadfast): the last round a boss whose turn was cancelled cannot be interrupted again.
@@ -115,8 +126,8 @@ export interface HeroState { id: string; hp: number; barrier: number; cooldowns:
 // (archer heavy hinder). `dispelledUntil`: a mage's dispel switches off its veilguard while the round is below this.
 export interface EnemyState { id: string; hp: number; markedUntil: number; absent?: boolean; phase?: number; phaseRound?: number; interruptedRound?: number; interruptedBy?: string; steadyRound?: number; delayedRound?: number; corrodedUntil?: number; corrodeBonus?: number;
   weaken?: number; dispelledUntil?: number }
-// `held`: a spear's hold the line turned this move from a back-lane ally to him.
-export interface Intent extends IntentDefinition { targetId: string; beat: number; round: number; held?: boolean }
+// `held`: a spear's hold the line turned this move from a back-lane ally to him; `decoyed`: a scout's decoy drew it.
+export interface Intent extends IntentDefinition { targetId: string; beat: number; round: number; held?: boolean; decoyed?: boolean }
 // Party condition carried in from the expedition. Missing ids start at max HP.
 export interface BattleEntry { hp: Readonly<Record<string, number>> }
 export interface Command { beat: number; heroId: string; action: ActionId; targetId: string }
@@ -136,7 +147,8 @@ export interface BattleState {
   // Knight valor banner (A6): every hero hit is stronger for the rest of `round`.
   banner?: { heroId: string; round: number } | null;
   // Bard song (2C-2): persists until the bard switches songs, falls or the battle ends.
-  song: { heroId: string; action: 'valor' | 'mend' } | null;
+  // Recruit trees: the song of dread (`dread`) cuts every enemy move while it plays.
+  song: { heroId: string; action: SongId } | null;
   // Knight rally (★3): each listed ally's first enemy hit is reduced until the knight's next turn.
   rally?: { heroId: string; ids: string[] } | null;
   // Priest sanctuary (★3): the ally cannot drop below 1 HP until the priest's next turn.
@@ -164,7 +176,15 @@ export interface BattleState {
   pinned?: number;
   // Archer tracking shots that fire again as `round` ends (if the target is still standing).
   tracking?: { heroId: string; enemyId: string; round: number; power: number }[];
+  // ---- Recruit big trees (owner 2026-10-23) ----
+  // Scout decoy: from the cast until her next turn, the next move aimed at `targetId` turns to her.
+  decoy?: { heroId: string; targetId: string; round: number } | null;
+  // Warden guardian stone: each listed ally's first hit taken is cut by `percent` until his next turn (he heals when it holds).
+  stone?: { heroId: string; ids: string[]; percent: number } | null;
+  // Bards whose encore (capstone) has already replayed a song this battle.
+  encored?: string[];
 }
+export type SongId = 'valor' | 'mend' | 'dread';
 export interface BattleEvent {
   type: 'damage' | 'guard' | 'mark' | 'barrier' | 'heal' | 'interrupt' | 'cancel' | 'down' | 'outcome' | 'brace' | 'counter' | 'delay' | 'corrode' | 'haste' | 'evade' | 'dodge' | 'taunt' | 'song' | 'rally' | 'sigil' | 'sanctuary' | 'stand' | 'finale' | 'resist' | 'phase' | 'summon' | 'charge'
     | 'parry' | 'revive' | 'buff' | 'hold' | 'pin' | 'dispel' | 'weaken';

@@ -53,7 +53,8 @@ it('displayed damage/healing/song powers agree with real resolver events before 
     s.members[id]={stars:5,dupes:0,level:5,exp:0}; if(!s.roster.deployed.includes(id)) s.roster.reserve.push(id);
     s.found=[{uid:0,slot:'charm',rarity:1,level:9,affixes:['attack']}];
     for(const state of [s,wear(s,map,lookup,id,'found',0).state]) {
-      const hero={...starred(base,5,map,5,{},state.members[id]!.gear),speed:1000,maxHp:1000};
+      // The bard's finale comes from his big tree (granted to a ★3+ member, owner 2026-10-23).
+      const hero={...starred(base,5,map,5,{},state.members[id]!.gear,id==='lio'?{grants:['b3','a4'],loadout:['valor','mend','finale']}:undefined),speed:1000,maxHp:1000};
       const data={...withParty(template,[hero]),enemies:template.enemies.map(e=>({...e,maxHp:10000}))};
       const songs: ('valor' | 'mend' | undefined)[] = action==='finale' ? ['valor','mend'] : [undefined];
       for (const song of songs) {

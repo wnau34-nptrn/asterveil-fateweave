@@ -26,6 +26,7 @@
 | 20 | ART-WORLD-CH1-MAP-001 แผนที่ภาพรวมบทที่ 1 (หน้าเลือกแผนที่) | A | ทันที (เจ้าของอนุมัติ 2026-10-22) |
 | 21 | ART-WORLD-MAP-001 concept แผนที่โลกแอสเตอร์เวล | C | ได้รับ 2026-10-22 เจ้าของผ่านเป็นทิศทาง (ภาพจริงรุ่น C: ตำแหน่ง 10 แห่งของภูมิภาค 1 ตรงกับแผนที่บท 1, ลดความจัดของสี, ภาพแนวตั้งเห็นทั้งทวีป) |
 | 22 | ART-VFX-FORGE-STRIKE-001 เอฟเฟกต์ค้อนตีอุปกรณ์ตอนตีบวก/เพิ่ม Lv (แทนค้อนโค้ดวาดชั่วคราว) | A7 | ทันที (เจ้าของว่าของชั่วคราวไม่สวย 2026-10-22) |
+| 23 | ART-SKILL-ICON-003 ไอคอนวาดสกิลต้นไม้ใหญ่ 27 สกิล (รุ่น A 15 + ทหารรับจ้าง 4 อาชีพ 12) | A6, A7 | ทันที (เพิ่ม 2026-10-23) |
 
 **งานภาพที่เกมยังขาด (ตรวจ 2026-10-22) — เจ้าของอนุมัติให้สั่งทั้งหมด ได้เป็นข้อ 13–19 แล้ว:**
 - ศัตรูที่ยังไม่มีภาพ (ตอนนี้ใช้ภาพสำรอง): องครักษ์อสูร (ศึกแรก), อสูรส่งพลัง (ศึกเงาล่าแนวหลัง)
@@ -667,4 +668,39 @@ ALSO: preview_dark.png and preview_light.png (layers composited over a dark and 
 CONSTRAINTS: effects and the hammer only (no characters, no UI text, no numbers in the art); shapes tapered and intentional, not uniform circles or thick straight beams; no full-screen flashes; readable at phone scale; do not cover the gear art's rarity frame with opaque pixels.
 
 RETURN: incoming/ART-VFX-FORGE-STRIKE-001/
+```
+
+## 23. ART-SKILL-ICON-003 — ไอคอนวาดสกิลต้นไม้ใหญ่ 27 สกิล (เริ่มได้ทันที)
+
+ที่มา (2026-10-23): ต้นไม้ใหญ่รุ่น A (นักดาบ นักเวท นักบวช ทวน ธนู) และต้นไม้ใหญ่ของทหารรับจ้าง 4 อาชีพ (โทมะ เซฟา แบรนน์ ลิโอ — เจ้าของอนุมัติให้เลื่อนขึ้นมา) เพิ่มสกิลใหม่ 27 ตัวที่ตอนนี้ใช้ไอคอนเส้นชั่วคราว (`lineIcon()`) ต้องเป็นภาพวาดชุดเดียวกับ `public/assets/ui/skill_icons.webp`
+
+```text
+CODEX HANDOFF — ART-SKILL-ICON-003
+Asterveil · Fateweave: painted skill icons for the 27 big-tree skills
+
+Repository wnau34-nptrn/asterveil-fateweave, base branch feature/fateweave-initial-prototype. Branch art/art-skill-icon-003 from the base. Files only under incoming/ART-SKILL-ICON-003/. Do not change src/, tests/, public/, .github/ or earlier icon folders. PR into the base branch; do not merge. Original artwork only; nothing from Asterveil: Rise Beyond. Never use the word ม่านเวล.
+
+READ FIRST: incoming/ART-SKILL-ICON-001-R1/ on branch art/art-skill-icon-001-r1 (the approved revision: scale 75–80% of the cell, 40 px readability rules, per-class palettes, NOTES.md) and public/assets/ui/skill_icons.webp + src/game/visuals/skill_icons.json (the 34 icons already in the game). Match them exactly in style, light, outline, palette family per class and scale.
+
+PRESERVE
+- Painted style, top-left light, dark contour, gold trim, the class palette families of R1.
+- 256x256 RGBA PNGs, transparent background, no text/numbers/frames/rarity colours.
+- Readable at 40 px on navy #0b1730, normal and under a 61% black cooldown overlay; each new icon must differ by silhouette from the class's existing icons.
+
+NEW ICONS (id: meaning; draw what it does)
+Duelist (Lyra): parry — a sword deflecting a blow with a spark; lunge — a forward dash-thrust with a speed trail; sweep — one wide horizontal arc slash.
+Mage (Eira): storm — a vortex of arcane bolts raining down; aegis — a faceted crystal dome over several small figures; dispel — a shattering rune shield.
+Priest (Seren): revive — a rising figure silhouette in soft light (rebirth, not healing); halo — a ring of light over a shield of light; bless — a glowing hand over a raised weapon.
+Spear (Garran): hold — a spear planted in the ground with a wall line behind; halt — a thrust stopping a charging silhouette; warcry — a shout-wave over two spearheads.
+Archer (Mira): disengage — a backflip silhouette loosing an arrow; pin — arrows nailing a row line to the ground; track — an arrow following a curved dotted path to a target mark.
+Alchemist (Toma): smoke — a flask bursting into a grey-violet smoke cloud; fury — a red tonic vial with an angry flare; catalyst — a flask with a chain-reaction burst of green acid.
+Scout (Sefa): knives — three thrown knives fanning over a row; decoy — a shadow double drawing a strike away; disarm — a weapon spinning out of a gauntlet.
+Warden (Brann): stonearmor — rune-carved stone plates closing around a torso; guardstone — a floating rune stone shielding a small ally figure; tremor — a hammer striking a ground crack with a shock line.
+Bard (Lio): dread — a dark minor-key note with a shiver wave; note — one sharp glowing note shot like a dart; solo — a spotlight on one figure with a single rising melody.
+
+DELIVERABLES
+- png/<id>.png for all 27 ids above.
+- skills_atlas.webp: 256 px cells, 6 columns, row-major, containing the 34 existing icons in their current order followed by these 27 in the order listed above (61 icons); skills_atlas.json in the same format as src/game/visuals/skill_icons.json (order, cols, rows).
+- preview.png: every class row at 40/56/72 px, normal and cooldown, existing and new icons side by side.
+- NOTES.md: per-icon motif notes and any icon you were unsure about.
 ```

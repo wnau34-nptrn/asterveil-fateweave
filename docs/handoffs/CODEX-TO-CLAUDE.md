@@ -1,5 +1,11 @@
 # Codex → Claude handoff
 
+## 2026-10-23 — Claude: big trees for the four recruits (owner approved, save v39)
+
+- Alchemist, scout, warden and bard big trees (`content/heroes/talents.ts`, 16 nodes each; the doc's tables). 12 new skills (`smoke`, `fury`, `catalyst`, `knives`, `decoy`, `disarm`, `stonearmor`, `guardstone`, `tremor`, `dread`, `note`, `solo`) and 16 caps in `core/battle/engine.ts`; shared pieces: `weaken` (next move cut), `HeroState.exposed`/`solo`, `BattleState.decoy`/`stone`/`encored`, `SongId` adds `dread`. Advisor (`ui/tutorial.ts`) uses them; texts in `ui/th.ts`, status rows in `ui/battle-status.ts`, line icons aliased in `ui/icons.ts` (painted ones: Codex queue 23).
+- Save v39 refunds the four classes' small-tree ranks and grants their ★3/★5 nodes (`legacyStars`). Tests: `tests/recruit-trees-engine.test.ts`, ported `tests/talents.test.ts`.
+- Sim: the campaign now fields the priest once she joins (a player reading the team page; `SIM_NO_PRIEST=1` to disable) and the support recruits' first builds keep their sustain skill. Map 3 first runs are back to the pre-recruitment numbers (rush 92%, explorer 100%); map 2 casual first runs are still 50–58%.
+
 ## 2026-10-23 — Claude: starter recruitment after the prologue (owner approved, save v38)
 
 - After the prologue (fought by four) Aira and Seren part ways, Lyra joins, then the new company makes two free picks (pick 1 of 3 from Lio/Brann/Sefa/Toma, `MapDefinition.draft`; a support, Lio or Toma, is always offered while the team has none). Each recruit has a short scene first. Aira comes back as the map 1 boss fight starts, Seren as the map 2 boss fight starts (`prologueGuests: ['healer']` on map 1, `healer` at `boss` on map 2). No R-tier heroes.

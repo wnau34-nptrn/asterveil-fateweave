@@ -7,6 +7,7 @@ const veilSiege = openField(siegeBase);
 import { encounterById as lookup } from '../src/content/encounters/catalog';
 import { chapterOne as map } from '../src/content/world/chapter1';
 import { heroDef, newExpedition, starred } from '../src/core/world/world';
+import { isBigTree } from '../src/core/world/talents';
 import { learnTalent, newProfile, resetTalents, settle, talentReason, talentsValid } from '../src/core/world/profile';
 import { parseGame, saveGame, loadGame } from '../src/core/save/expedition-save';
 import type { Talents } from '../src/core/world/types';
@@ -37,16 +38,15 @@ const hero = (s: BattleState, id: string) => s.heroes.find(h => h.id === id)!;
 const foe = (s: BattleState, id: string) => s.enemies.find(e => e.id === id)!;
 const dealt = (r: ReturnType<typeof act>, target: string) => r.turns[0]!.events.find(e => e.type === 'damage' && e.targetId === target)!.amount!;
 const rest: [string, Talents?][] = [['tracer'], ['weaver'], ['healer']];
-const full = (a: boolean): Talents => a ? { root: 1, a1: 2, a2: 2, a3: 1 } : { root: 1, b1: 2, b2: 2, b3: 1 };
-// The Knight (A6) and the release A classes (duelist, mage, priest, spear, archer) have big trees
-// (tests/knight-tree.test.ts, tests/class-trees.test.ts); the other four keep the small tree until release B.
+// Every class has a big tree (tests/knight-tree.test.ts, tests/class-trees.test.ts); these four arrived 2026-10-23.
 const ids = ['toma', 'sefa', 'brann', 'lio'];
 
 describe('talent trees: content and stats', () => {
-  it('every class has the same 7-node shape (11 ranks)', () => {
-    for (const id of ids) {
-      const tree = map.talents[id]!;
-      expect(tree.map(n => `${n.id}${n.max}`)).toEqual(['root1', 'a12', 'a22', 'a31', 'b12', 'b22', 'b31']);
+  it('every class has a big tree (owner 2026-10-23: the recruits moved up from release B)', () => {
+    for (const id of [...ids, 'guardian', 'tracer', 'weaver', 'healer', 'garran', 'mira']) {
+      const tree = map.talents[id]!; expect(isBigTree(tree), id).toBe(true);
+      expect(new Set(tree.map(n => n.branch))).toEqual(new Set(['a', 'b', 'c']));
+      expect(tree.filter(n => 'unlock' in n.effect)).toHaveLength(id === 'guardian' ? 4 : 4);
     }
   });
   it('no talents leaves the definition unchanged; stat nodes scale max HP, Attack and skill power', () => {
@@ -67,43 +67,31 @@ describe('talent trees: content and stats', () => {
   });
 });
 
-describe('talent points, gates and reset (lobby)', () => {
+describe('talent points and reset (lobby)', () => {
   const leveled = (level: number) => { const p = newProfile(map, 3); p.members.sefa = { stars: 1, dupes: 0, level, exp: 0 }; return p; };
-  it('one point per level above 1; the root comes first; tier 2 needs tier 1; the capstone needs 4 in its branch', () => {
-    let p = leveled(1);
-    expect(talentReason(p, map, 'sefa', 'root')).toBe('points');
-    p = leveled(10);
-    expect(talentReason(p, map, 'sefa', 'a1')).toBe('locked');
-    p = learnTalent(p, map, 'sefa', 'root').profile;
-    expect(talentReason(p, map, 'sefa', 'root')).toBe('max');
-    expect(talentReason(p, map, 'sefa', 'a2')).toBe('locked');
-    for (const n of ['a1', 'a1', 'a2'] as const) p = learnTalent(p, map, 'sefa', n).profile;
-    expect(talentReason(p, map, 'sefa', 'a3')).toBe('locked');
-    p = learnTalent(p, map, 'sefa', 'a2').profile;
-    expect(talentReason(p, map, 'sefa', 'a3')).toBe('');
-    for (const n of ['a3', 'b1', 'b1', 'b2'] as const) p = learnTalent(p, map, 'sefa', n).profile;
-    // 9 points spent at level 10: nothing more, the tree cannot be completed.
-    expect(p.members.sefa!.talents).toEqual({ root: 1, a1: 2, a2: 2, a3: 1, b1: 2, b2: 1 });
-    expect(talentReason(p, map, 'sefa', 'b2')).toBe('points');
+  it('one point per level above 1; a modifier needs its branch tier; resetting refunds everything', () => {
+    expect(talentReason(leveled(1), map, 'sefa', 'a1')).toBe('points');
+    let p = leveled(10);
+    for (const n of ['a1', 'a1', 'a2b'] as const) p = learnTalent(p, map, 'sefa', n).profile;
+    expect(talentReason(p, map, 'sefa', 'a2l')).not.toBe('');
+    expect(p.members.sefa!.talents).toEqual({ a1: 2, a2b: 1 });
     const reset = resetTalents(p, 'sefa');
     expect(reset.event.type).toBe('talent'); expect(reset.profile.members.sefa!.talents).toBeUndefined();
     expect(resetTalents(reset.profile, 'sefa').event.type).toBe('blocked');
   });
   it('talents stay in the profile after an expedition and travel with the member', () => {
-    let p = learnTalent(leveled(3), map, 'sefa', 'root').profile;
+    let p = learnTalent(leveled(3), map, 'sefa', 'a1').profile;
     p = learnTalent(p, map, 'sefa', 'b1').profile;
     const run = newExpedition(map, lookup, 1, { roster: p.party, members: structuredClone(p.members) });
-    expect(run.members.sefa!.talents).toEqual({ root: 1, b1: 1 });
+    expect(run.members.sefa!.talents).toEqual({ a1: 1, b1: 1 });
     run.members.sefa = { ...run.members.sefa!, level: 4, exp: 2 };
-    expect(settle(p, run, 'wiped', map).members.sefa).toEqual({ stars: 1, dupes: 0, level: 4, exp: 2, talents: { root: 1, b1: 1 } });
+    expect(settle(p, run, 'wiped', map).members.sefa).toEqual({ stars: 1, dupes: 0, level: 4, exp: 2, talents: { a1: 1, b1: 1 } });
   });
   it.each([
-    ['too many points', 2, { root: 1, a1: 1 }],
-    ['a rank above the max', 5, { root: 2 }],
-    ['a node without the root', 5, { a1: 1 }],
-    ['tier 2 without tier 1', 5, { root: 1, a2: 1 }],
-    ['a capstone too early', 6, { root: 1, a1: 2, a2: 1, a3: 1 }],
-    ['an unknown node', 5, { root: 1, c1: 1 } as Talents],
+    ['too many points', 2, { a1: 2 }],
+    ['a rank above the max', 5, { a1: 3 }],
+    ['both choices of one skill', 9, { a1: 2, a2b: 1, a2l: 1 }],
+    ['an unknown node', 5, { root: 1 } as Talents],
   ])('rejects %s', (_, level, t) => expect(talentsValid(map, 'sefa', level, t)).toBe(false));
 });
 
@@ -122,6 +110,22 @@ describe('save v8', () => {
   it('rejects invalid talents', () => {
     const profile = newProfile(map, 4); profile.members.tracer = { stars: 1, dupes: 0, talents: { a1: 1 } };
     expect(() => parseGame(JSON.stringify({ version: 37, profile, run: null }), map, lookup)).toThrow();
+  });
+});
+
+describe('save v39 (recruit big trees)', () => {
+  it('refunds the four classes’ small-tree ranks and grants the star skills and passives they had', () => {
+    const profile = newProfile(map, 4);
+    profile.members.sefa = { stars: 3, dupes: 0, level: 6, exp: 0, talents: { root: 1, a1: 2, a2: 2 } } as never;
+    profile.members.brann = { stars: 5, dupes: 0, level: 6, exp: 0, talents: { root: 1 } } as never;
+    profile.members.lio = { stars: 5, dupes: 0 }; profile.members.toma = { stars: 1, dupes: 0, level: 2, exp: 0, talents: { root: 1 } } as never;
+    profile.company.push('sefa', 'brann', 'lio', 'toma');
+    const back = parseGame(JSON.stringify({ version: 38, profile, run: null }), map, lookup).profile;
+    expect(back.members.sefa).toEqual({ stars: 3, dupes: 0, level: 6, exp: 0, grants: ['a3'] });
+    expect(back.members.brann!.grants).toEqual(['a4', 'b2']); expect(back.members.lio!.grants).toEqual(['a4', 'b3']);
+    expect(back.members.toma).toEqual({ stars: 1, dupes: 0, level: 2, exp: 0 });
+    // The granted nodes are live: a ★3 scout can take Backstab into battle.
+    expect(heroDef(lookup, map, 'sefa') && starred(heroDef(lookup, map, 'sefa')!, 3, map, 6, {}, undefined, { grants: ['a3'], loadout: ['ambush', 'evade', 'backstab'] }).actions).toContain('backstab');
   });
 });
 
@@ -236,42 +240,45 @@ describe('archer tree modifiers (Mira)', () => {
   });
 });
 
-describe('alchemist talents (Toma)', () => {
-  it('stronger corrosion spreads to every enemy', () => {
-    const d = party([['toma', full(true)], ...rest]);
-    const s = until(createBattle(d), d, 'toma'); const r = act(s, d, 'acid', 'f1').turns[0]!;
-    for (const id of ['f1', 'b1']) expect(corrodeBonus(r.state, d, id)).toBe(d.rules.corrodeBonus + 4);
+describe('alchemist tree modifiers (Toma)', () => {
+  it('deeper corrosion is stronger; spreading acid corrodes every enemy without damage', () => {
+    const deep = party([['toma', { a2d: 1 }], ...rest]); const s = until(createBattle(deep), deep, 'toma');
+    expect(corrodeBonus(act(s, deep, 'acid', 'f1').turns[0]!.state, deep, 'f1')).toBe(deep.rules.corrodeBonus + 3);
+    const d = party([['toma', { a2s: 1 }], ...rest]);
+    const r = act(until(createBattle(d), d, 'toma'), d, 'acid', 'f1').turns[0]!;
+    for (const id of ['f1', 'b1']) expect(corrodeBonus(r.state, d, id)).toBe(d.rules.corrodeBonus);
     expect(r.events.find(e => e.type === 'damage' && e.targetId === 'b1')).toBeUndefined();
   });
-  it('haste heals the ally and is ready sooner', () => {
-    const d = party([['toma', full(false)], ...rest]);
-    const s = set(until(createBattle(d), d, 'toma'), 'tracer', { hp: 10 }); const r = act(s, d, 'haste', 'tracer').turns[0]!.state;
-    expect(hero(r, 'tracer').hp).toBe(18); expect(hero(r, 'toma').cooldowns.haste).toBe(s.round + 2);
+  it('a mixed haste heals the ally; a twin brew is ready sooner', () => {
+    const d = party([['toma', { b2h: 1 }], ...rest]);
+    const s = set(until(createBattle(d), d, 'toma'), 'tracer', { hp: 10 }); expect(hero(act(s, d, 'haste', 'tracer').turns[0]!.state, 'tracer').hp).toBe(18);
+    const q = party([['toma', { b2q: 1 }], ...rest]); const t = until(createBattle(q), q, 'toma');
+    expect(hero(act(t, q, 'haste', 'tracer').turns[0]!.state, 'toma').cooldowns.haste).toBe(t.round + 2);
   });
 });
 
-describe('scout talents (Sefa)', () => {
-  it('a stronger ambush leaves her in shadow step', () => {
-    const d = party([['guardian'], ['sefa', full(true)], ['weaver'], ['healer']]);
+describe('scout tree modifiers (Sefa)', () => {
+  it('a stronger ambush; a layered ambush leaves her in shadow step', () => {
+    const d = party([['guardian'], ['sefa', { a2b: 1 }], ['weaver'], ['healer']]);
     const s = until(createBattle(d), d, 'sefa');
-    expect(ambushBonus(s, d, 'f1', 'sefa')).toBe(s.order.indexOf('f1') > s.turnIndex ? d.rules.ambushBonus + 8 : 0);
-    expect(hero(act(s, d, 'ambush', 'f1').turns[0]!.state, 'sefa').evading).toBe(true);
+    expect(ambushBonus(s, d, 'f1', 'sefa')).toBe(s.order.indexOf('f1') > s.turnIndex ? d.rules.ambushBonus + 6 : 0);
+    const l = party([['guardian'], ['sefa', { a2l: 1 }], ['weaver'], ['healer']]);
+    expect(hero(act(until(createBattle(l), l, 'sefa'), l, 'ambush', 'f1').turns[0]!.state, 'sefa').evading).toBe(true);
   });
-  it('a doubled shadow step dodges twice and each dodge heals her', () => {
-    const d = party([['guardian'], ['sefa', full(false)], ['weaver'], ['healer']]);
-    const s = set(until(createBattle(d), d, 'sefa'), 'sefa', { hp: 30 });
-    const r = act(s, d, 'evade', 'sefa');
-    expect(hero(r.turns[0]!.state, 'sefa').evadeExtra).toBe(1);
-    const turn = r.turns.find(t => t.actorId === 'b1')!;
-    expect(turn.events.map(e => e.type)).toEqual(['dodge', 'heal']);
-    expect(hero(turn.state, 'sefa')).toMatchObject({ hp: 36, evading: true });
+  it('a doubled shadow step dodges twice; breathing in the shadow heals each dodge', () => {
+    const d = party([['guardian'], ['sefa', { b2d: 1 }], ['weaver'], ['healer']]);
+    expect(hero(act(until(createBattle(d), d, 'sefa'), d, 'evade', 'sefa').turns[0]!.state, 'sefa').evadeExtra).toBe(1);
+    const h = party([['guardian'], ['sefa', { b2h: 1 }], ['weaver'], ['healer']]);
+    const s = set(until(createBattle(h), h, 'sefa'), 'sefa', { hp: 30 });
+    const turn = act(s, h, 'evade', 'sefa').turns.find(t => t.actorId === 'b1')!;
+    expect(turn.events.map(e => e.type)).toEqual(['dodge', 'heal']); expect(hero(turn.state, 'sefa').hp).toBe(36);
   });
 });
 
-describe('warden talents (Brann)', () => {
-  it('a challenged warden hammers back every hit', () => {
-    const d = party([['brann', full(true)], ...rest]);
-    expect(skillPower(d, 'brann', 'slam')).toBe(Math.round(18 * 1.08) + 8);
+describe('warden tree modifiers (Brann)', () => {
+  it('a challenged warden hammers back every hit; a deeper rune slam is stronger', () => {
+    const d = party([['brann', { a2h: 1 }], ...rest]);
+    expect(skillPower(party([['brann', { b3d: 1 }], ...rest]), 'brann', 'slam')).toBe(18 + 6);
     let s = act(until(createBattle(d), d, 'brann'), d, 'taunt', 'brann').state; const counters: number[] = [];
     for (let i = 0; i < 12 && currentHeroId(s, d) !== 'brann'; i++) {
       const r = act(s, d, 'attack', 'f1');
@@ -280,28 +287,26 @@ describe('warden talents (Brann)', () => {
     }
     expect(counters.length).toBeGreaterThan(0); expect(counters.every(a => a === 6)).toBe(true);
   });
-  it('a tougher challenge reduces more; below half HP he recovers at his turn', () => {
-    const d = party([['brann', full(false)], ...rest]);
-    expect(tauntReductionOf(d, 'brann')).toBe(0.45);
+  it('a tougher challenge reduces more; stone regen heals below half HP at his turn', () => {
+    expect(tauntReductionOf(party([['brann', { a2t: 1 }], ...rest]), 'brann')).toBe(0.4);
+    const d = party([['brann', { c4: 1 }], ...rest]);
     let s = until(createBattle(d), d, 'brann'); s = set(s, 'brann', { hp: 30 });
     const events = []; for (let i = 0; i < 12; i++) { const r = act(s, d, currentHeroId(s, d) === 'brann' ? 'taunt' : 'attack', currentHeroId(s, d) === 'brann' ? 'brann' : 'f1'); events.push(...r.events); s = r.state; if (events.some(e => e.text === 'Stone regen.')) break; }
-    expect(events.find(e => e.text === 'Stone regen.')).toMatchObject({ targetId: 'brann', amount: 6 });
+    expect(events.find(e => e.text === 'Stone regen.')).toMatchObject({ targetId: 'brann', amount: 8 });
   });
 });
 
-describe('bard talents (Lio)', () => {
-  it('chorus: while valor plays every enemy hit is 2 lower', () => {
-    const d = party([['lio', full(true)], ...rest]);
-    expect(skillPower(d, 'lio', 'valor')).toBe(Math.round(4 * 1.04) + 2);
-    expect(member('lio', full(true)).attack).toBe(Math.round(9 * 1.14));
+describe('bard tree modifiers (Lio)', () => {
+  it('chorus: while valor plays every enemy hit is 2 lower; a rousing verse raises valor', () => {
+    expect(skillPower(party([['lio', { a2r: 1 }], ...rest]), 'lio', 'valor')).toBe(4 + 2);
+    const d = party([['lio', { a2c: 1 }], ...rest]);
     let s = act(until(createBattle(d), d, 'lio'), d, 'valor', 'lio').state; let hit;
     for (let i = 0; i < 6 && !hit; i++) { const r = act(s, d, 'attack', 'f1'); for (const t of r.turns) if (t.side === 'enemy' && !hit) hit = { e: t.events.find(e => e.type === 'damage'), damage: t.intent!.damage }; s = r.state; }
     expect(hit!.e!.amount! + hit!.e!.absorbed!).toBe(hit!.damage - 2);
   });
   it('overture: the battle opens with the song of mending', () => {
-    const d = party([['lio', full(false)], ...rest]);
-    expect(createBattle(d).song).toEqual({ heroId: 'lio', action: 'mend' });
-    expect(skillPower(d, 'lio', 'mend')).toBe(Math.round(5 * 1.04) + 4);
+    expect(createBattle(party([['lio', { b2o: 1 }], ...rest])).song).toEqual({ heroId: 'lio', action: 'mend' });
+    expect(skillPower(party([['lio', { b2w: 1 }], ...rest]), 'lio', 'mend')).toBe(5 + 2);
     expect(createBattle(party([['lio'], ...rest])).song).toBeNull();
   });
 });

@@ -4,7 +4,7 @@ import { TOME_LINES, TOME_SIZES, type TomeBag, type TomeLine, type TomeSize } fr
 import type { EquipmentRules, ExpGain, ExpeditionState, Gear, GearSlot, GearStat, Item, PotionId, PotionRules, ResourceId, Resources, SetDefinition, SetId, TalentNodeDef, MapEventKind, EventChoice, EventRules, QuestObjective, SideQuestDefinition, SideQuestKind, ShopItemId } from '../core/world/types';
 import type { GearSpecial, HeroDefinition } from '../core/battle/types';
 import { setCounts, statLines } from '../core/world/equipment';
-import { PARRY_REDUCTION, levelBarrier, rallyReductionOf, skillCooldown, skillLevel, ambushBonusOf, capAmount, corrodeBonusOf, finaleHealPower, guardReductionOf, hasCap, skillPower, songPower, talentRule, tauntReductionOf } from '../core/battle/engine';
+import { CATALYST_PER_ROUND, DISARM_PERCENT, DREAD_FINALE, FURY_EXPOSED, GUARD_STONE_HEAL, SOLO_TIMES, TREMOR_WEAKEN, PARRY_REDUCTION, levelBarrier, rallyReductionOf, skillCooldown, skillLevel, ambushBonusOf, capAmount, corrodeBonusOf, finaleHealPower, guardReductionOf, hasCap, skillPower, songPower, talentRule, tauntReductionOf } from '../core/battle/engine';
 import type { IconName } from './icons';
 export const thaiFont = '"Noto Sans Thai", "Leelawadee UI", Tahoma, sans-serif';
 export const heroText: Record<string, { name: string; role: string; help: string; icon: string }> = {
@@ -104,7 +104,19 @@ export function skillDescription(action: ActionId, heroId: string, data: Encount
     disengage: `ถอยยิง ${skill.power} แล้วมิร่าหลบการโจมตีกายภาพครั้งแรกที่โดนเธอจนถึงเทิร์นถัดไป`,
     pin: `ศรตรึงแถว ศัตรูแถวหน้าทุกตัวโดนตัวละ ${skill.power} และแถวหน้าเลิกบังแถวหลังถึงจบรอบถัดไป ทั้งทีมตีแถวหลังได้`,
     track: `ศรตามรอย ${skill.power} ถ้าเป้าหมายถูกยิงสกัดอยู่ จะยิงซ้ำอีก ${skill.power} ตอนจบรอบ`,
-    finale: `จบเพลงที่บรรเลงอยู่แล้วปล่อยพลังทันที: เพลงกล้า = โจมตีศัตรูทุกตัว ${skill.power} · เพลงฟื้น = ฟื้นเลือดทุกคน ${finaleHealPower(data, heroId)} ต้องมีเพลงของลิโอเล่นอยู่`,
+    smoke: `ขวดควัน ท่าถัดไปของเป้าหมายเบาลง ${skill.power}% ไม่ว่ากายภาพหรือพลังงาน (ลดได้แต่ไม่ยกเลิก ใช้กับท่าไม้ตายบอสได้)`,
+    fury: `ยาคลั่ง เพื่อน 1 คน (รวมตัวเอง) โจมตีแรงขึ้น ${skill.power}% จนจบรอบถัดไป แต่รับความเสียหายเพิ่ม ${FURY_EXPOSED}% ในช่วงเดียวกัน`,
+    catalyst: `ตัวเร่งปฏิกิริยา ${skill.power} ถ้าเป้าหมายถูกกัดกร่อนอยู่ ระเบิดเพิ่ม ${CATALYST_PER_ROUND} ต่อรอบที่กร่อนเหลือ แล้วกร่อนหมด`,
+    knives: `มีดบินโดนศัตรูแถวหลังทุกตัว ตัวละ ${skill.power} แม้แถวหน้าบังอยู่ (แถวหลังว่างจะโดนแถวหน้าแทน)`,
+    decoy: `ล่อเงา เลือกเพื่อน 1 คน ท่าถัดไปที่เล็งคนนั้นจะเปลี่ยนมาที่เซฟาแทน (จนถึงเทิร์นถัดไปของเซฟา) ใช้คู่กับก้าวเงา`,
+    disarm: `ปลดอาวุธ ${skill.power} ถ้าท่าถัดไปของเป้าหมายเป็นกายภาพ จะเบาลง ${DISARM_PERCENT}% (ไม่ยกเลิก)`,
+    stonearmor: `เกราะหิน แบรนน์ได้โล่ ${skill.power}% ของเลือดสูงสุด (${Math.round(hero.maxHp * skill.power / 100)}) ไม่ซ้อนกับโล่ที่หนากว่า`,
+    guardstone: `ศิลาคุ้มกัน เลือกเพื่อน 1 คน การโจมตีครั้งแรกที่โดนคนนั้นจนถึงเทิร์นถัดไปของแบรนน์เบาลง ${skill.power}% และแบรนน์ฟื้นเลือด ${GUARD_STONE_HEAL}`,
+    tremor: `ปฐพีสั่น ศัตรูแถวหน้าทุกตัวโดนตัวละ ${skill.power} และท่าถัดไปเบาลง ${TREMOR_WEAKEN}% (แถวหน้าว่างจะโดนทุกตัว)`,
+    dread: `บรรเลงเพลงสะท้านค้างไว้ ทุกการโจมตีของศัตรูเบาลง ${songPower(data, heroId, 'dread')}% (เล่นได้ทีละเพลง เพลงอยู่จนเปลี่ยนเพลง ลิโอล้ม หรือจบศึก) บทสุดท้ายของเพลงนี้: ท่าถัดไปของศัตรูทุกตัวเบาลง ${DREAD_FINALE}%`,
+    note: `โน้ตคม ${skill.power} ใส่ศัตรูหนึ่งตัว (พลังงาน)`,
+    solo: `เพลงเดี่ยว เลือกเพื่อน 1 คน ได้ผลเพลงที่ลิโอบรรเลงอยู่ ×${SOLO_TIMES} จนจบรอบถัดไป (เพลงกล้า = ตีแรงขึ้น · เพลงฟื้น = ฟื้นมากขึ้น) ต้องมีเพลงกล้าหรือเพลงฟื้นเล่นอยู่`,
+    finale: `จบเพลงที่บรรเลงอยู่แล้วปล่อยพลังทันที (เพลงสะท้าน = ท่าถัดไปของศัตรูทุกตัวเบาลง ${DREAD_FINALE}%): เพลงกล้า = โจมตีศัตรูทุกตัว ${skill.power} · เพลงฟื้น = ฟื้นเลือดทุกคน ${finaleHealPower(data, heroId)} ต้องมีเพลงของลิโอเล่นอยู่`,
   };
   const passive = hero.passive && passiveText[hero.passive].actions.includes(action) ? ` · ★5 ${passiveText[hero.passive].name}: ${passiveText[hero.passive].help(data)}` : '';
   // Skill level (tomes): the level, and the barrier a levelled skill without numbers gives its user.
@@ -118,7 +130,8 @@ export function skillDescription(action: ActionId, heroId: string, data: Encount
 // Release A trees: docs/design/SKILL_TREES_ALL_TH.md.
 export const bigBranches: Record<string, readonly [string, string, string]> = { guardian: ['ปราการ', 'ลงทัณฑ์', 'ธงนำ'],
   tracer: ['ตราล่า', 'ปลิดชีพ', 'ระบำดาบ'], weaver: ['เวทโจมตี', 'เวทป้องกัน', 'ผนึกเวท'], healer: ['เยียวยา', 'คุ้มครอง', 'พรศรัทธา'],
-  garran: ['ทวนรับ', 'ทวนรุก', 'ยึดแนว'], mira: ['แม่นธนู', 'ฝนธนู', 'พรานป่า'] };
+  garran: ['ทวนรับ', 'ทวนรุก', 'ยึดแนว'], mira: ['แม่นธนู', 'ฝนธนู', 'พรานป่า'],
+  toma: ['กรดกัดกร่อน', 'ยาเสริม', 'ควันและปฏิกิริยา'], sefa: ['ลอบสังหาร', 'เงา', 'ก่อกวน'], brann: ['ปราการศิลา', 'ค้อนรูน', 'ศิลาผู้พิทักษ์'], lio: ['เพลงรบ', 'เพลงปลอบ', 'ท่วงทำนอง'] };
 export const talentBranches: Record<string, readonly [string, string]> = {
   guardian: ['ผู้ลงทัณฑ์', 'ปราการ'], tracer: ['ดาบเจาะ', 'นักเต้นดาบ'], weaver: ['เวทโจมตี', 'เวทป้องกัน'], healer: ['ผู้เยียวยา', 'ผู้คุ้มครอง'],
   garran: ['ทวนรุก', 'ทวนรับ'], mira: ['นักแม่นธนู', 'ฝนธนู'], toma: ['กรดกัดกร่อน', 'ยาเสริม'], sefa: ['นักลอบ', 'นักหลบ'],
@@ -186,6 +199,22 @@ const capText: Record<TalentCap, { actions: readonly ActionId[]; help: (n: numbe
   quickstep: { actions: ['disengage'], help: () => 'ถอยยิงแล้วเป้าหมายถูกสกัดด้วย (ลงมือท้ายสุดรอบถัดไป)' },
   covershot: { actions: ['disengage'], help: () => 'การหลบย้ายไปให้เพื่อนที่เป้าหมายประกาศจะตีแทน' },
   stalker: { actions: [], help: () => 'เริ่มศึก ศัตรูที่เร็วที่สุดถูกสกัดให้ลงมือท้ายสุดในรอบแรก' },
+  smokepoison: { actions: ['smoke'], help: () => 'ขวดควันทำให้เป้าหมายถูกกัดกร่อนด้วย' },
+  smokewide: { actions: ['smoke'], help: n => `ขวดควันโดนศัตรูทั้งแถวของเป้าหมาย แต่เบาลงแค่ ${n}%` },
+  mobilelab: { actions: ['haste'], help: () => 'เริ่มศึก เพื่อนที่ช้าที่สุดได้ยาเร่งฟรี (ลงมือก่อนในรอบแรก)' },
+  chainreaction: { actions: ['acid', 'catalyst'], help: () => 'ศัตรูที่ถูกกัดกร่อนล้ม กร่อนย้ายไปศัตรูตัวอื่นแถวเดียวกัน (ไม่มีก็แถวอื่น)' },
+  twinknives: { actions: ['knives'], help: () => 'มีดบินโดนแถวหน้าด้วยครึ่งหนึ่ง' },
+  quickknives: { actions: ['knives'], help: () => 'มีดบินพร้อมใช้อีกครั้งเร็วขึ้น 1 รอบ' },
+  silentend: { actions: ['backstab', 'ambush'], help: () => 'ลอบแทงที่ล้มศัตรูได้ จู่โจมก่อนพร้อมใช้ทันที' },
+  opportunist: { actions: ['attack', 'ambush', 'backstab', 'knives', 'disarm'], help: n => `ทุกการโจมตีของเซฟาใส่ศัตรูที่ยังไม่ได้ลงมือในรอบนี้ +${n}` },
+  runequake: { actions: ['slam'], help: () => 'ทุบค้อนรูนโดนศัตรูอีกตัวในคอลัมน์เดียวกัน (หน้า–หลัง) ครึ่งหนึ่ง' },
+  twinstone: { actions: ['guardstone'], help: n => `ศิลาคุ้มกันเพื่อน 2 คน (คนที่เลือก + คนที่เลือดเหลือน้อยที่สุด) ลดคนละ ${n}%` },
+  thickstone: { actions: ['guardstone'], help: n => `ศิลาคุ้มกันลดความเสียหาย ${n}%` },
+  skyhammer: { actions: ['quake'], help: () => 'ทุบปฐพีที่ได้โบนัส (เป้าเล็งแบรนน์) ทำให้เป้าหมายลงมือท้ายสุดในรอบถัดไป' },
+  spellnote: { actions: ['note'], help: n => `โน้ตคมทำให้ท่าถัดไปของเป้าหมายเบาลง ${n}%` },
+  twinnote: { actions: ['note'], help: n => `โน้ตคมโดนศัตรูอีกตัวในแถวเดียวกัน ${n}%` },
+  encore: { actions: ['finale'], help: () => 'หลังบทสุดท้าย เพลงเดิมเล่นต่อทันที (1 ครั้งต่อศึก)' },
+  liferhythm: { actions: ['valor', 'mend', 'dread'], help: n => `เริ่มเพลงใหม่แต่ละครั้ง ทุกคนที่ยังยืนอยู่ได้โล่ ${n} (ไม่ซ้อนกัน)` },
 };
 const talentStatName = { hp: 'เลือดสูงสุด', attack: 'พลังโจมตี', skill: 'พลังเสริม', armour: 'เกราะ' } as const;
 // What one node does (per rank for multi-rank nodes); `data` names the skills.

@@ -18,12 +18,12 @@ describe('knight big tree: shape and gates', () => {
     for (const b of ['a', 'b', 'c']) expect(new Set(tree.filter(n => n.branch === b).map(n => n.tier))).toEqual(new Set([1, 2, 3, 4]));
     const all = Object.fromEntries(tree.map(n => [n.id, n.max]));
     expect(skillChoices(base, map, all)).toEqual(['guard', 'bash', 'bulwark', 'challenge', 'rally', 'rouse']);
-    expect(isBigTree(map.talents.toma)).toBe(false);
+    expect(isBigTree(map.talents.toma)).toBe(true);
   });
   it('points come from levels and stars', () => {
     expect(talentPoints(map, { stars: 1, dupes: 0, level: 1 }, 'guardian')).toBe(0);
     expect(talentPoints(map, { stars: 3, dupes: 0, level: 5 }, 'guardian')).toBe(6);
-    expect(talentPoints(map, { stars: 3, dupes: 0, level: 5 }, 'toma')).toBe(4);
+    expect(talentPoints(map, { stars: 3, dupes: 0, level: 5 }, 'toma')).toBe(6);
   });
   it('tiers open by level and need the branch tier before them; choices exclude each other', () => {
     let p = knightAt(4, 3);
@@ -61,7 +61,7 @@ describe('save v34', () => {
   const raw = (game: Parameters<typeof saveGame>[1]) => { let out = ''; saveGame({ getItem: () => null, setItem: (_k, v) => { out = v; } }, game); return out; };
   it('round-trips tree ranks, grants and loadouts and rejects a locked loadout', () => {
     const p = chooseLoadout(learn({ ...knightAt(6, 3), members: { ...knightAt(6, 3).members, guardian: { stars: 3, dupes: 0, level: 6, exp: 0, grants: ['c1s'] } } }, 'b1', 'b2'), map, lookup, 'guardian', ['challenge', 'rally']).profile;
-    const text = raw({ profile: p, run: null }); expect(JSON.parse(text).version).toBe(38);
+    const text = raw({ profile: p, run: null }); expect(JSON.parse(text).version).toBe(39);
     expect(parseGame(text, map, lookup).profile.members.guardian).toEqual(p.members.guardian);
     const bad = JSON.parse(text); bad.profile.members.guardian.loadout = ['rouse']; expect(() => parseGame(JSON.stringify(bad), map, lookup)).toThrow();
   });

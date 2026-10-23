@@ -7,11 +7,11 @@
 - รีโป `wnau34-nptrn/asterveil-fateweave` สาขาเกม `feature/fateweave-initial-prototype` (draft PR #1) ทุก push ผ่าน CI แล้วเผยแพร่ GitHub Pages เอง: https://wnau34-nptrn.github.io/asterveil-fateweave/
 - ถ้าระบบกำหนดสาขา `claude/...` ให้ทำงานบนสาขานั้นที่ตั้งจากสาขาเกม แล้ว push ทั้งสาขานั้นและ `feature/fateweave-initial-prototype` (เจ้าของสั่งให้ทำงานบนสาขาเกม)
 - คุยกับเจ้าของเป็นภาษาไทย ใช้ "ค่ายทหารรับจ้าง" ห้าม "บริษัท" ห้ามคำว่า ม่านเวล; เรื่องหน้าตาเจ้าของตัดสิน ส่งภาพ 390px หน้าละ 1–2 ภาพ
-- เซฟเวอร์ชัน 38 (ผู้ร่วมทางทีละคน `run.arrivals`)
+- เซฟเวอร์ชัน 39 (ต้นไม้ใหญ่ครบ 10 อาชีพ)
 - ตรวจก่อน push: `npm run typecheck`, `npm run lint`, `npx vitest run`, `npm run build` + เทสต์เบราว์เซอร์ที่เกี่ยวข้อง
   (`PLAYWRIGHT_CHROMIUM_EXECUTABLE=/opt/pw-browsers/chromium-1194/chrome-linux/chrome npx playwright test <ไฟล์> -g "<ชื่อ>"`) ชุดเต็มปล่อย CI
 - ภาพรีวิวหน้าตัวละคร: `UI_SHOTS=<โฟลเดอร์> npx playwright test tests/browser/ui-shots.spec.ts`; คลิป Bolt: `BOLT_CLIPS=1 npx playwright test tests/browser/bolt-clips.spec.ts` (ประกอบวิดีโอจาก `frames/` + `stamps.txt` ด้วย ffmpeg)
-- ข้อความ commit ห้ามใส่ชื่อรุ่นโมเดล; เซฟเวอร์ชัน 38
+- ข้อความ commit ห้ามใส่ชื่อรุ่นโมเดล; เซฟเวอร์ชัน 39
 
 ## ทำเสร็จวันนี้ (2026-10-22)
 
@@ -61,7 +61,13 @@
 - เจ้าของอนุมัติ: prologue สู้ 4 → ไอรา/เซเรนแยกย้าย → ไลราเข้าทีม → รับสมัครฟรี 2 รอบ (เลือก 1 จาก 3: ลิโอ/แบรนน์/เซฟา/โทมะ, การันตีลิโอหรือโทมะถ้าทีมยังไม่มี) → ไอรากลับมาตอนเข้าศึกบอสแมพ 1 → เซเรนกลับมาตอนเข้าศึกบอสแมพ 2 ไม่มีตัวระดับ R
 - โค้ด: `world.ts` `recruit`/`disband`/`draftOffers`/`draftPick`; `types.ts` `MapDefinition.draft`/`prologueGuests`, `run.arrivals`/`run.draft`; `profile.ts` `depart`/`settle`; `world-ui.ts` `#draft-dialog` (กด Escape ปิดไม่ได้); `game-shell.ts` ฉากก่อนเข้าทีม; `story-ui.ts` บทพูดแยกย้าย + บทพูด 4 ทหารรับจ้าง; แมพ 1 v3
 - ตัวจำลอง: `tests/starter-sim.test.ts` → `docs/validation/balance-sim/STARTERS.md` (ทุกคู่ผ่านแมพ 1) และ `CAMPAIGN.md`
-- **ปัญหาที่เหลือ (ส่งต่องานที่ 6):** แมพ 3 รอบแรก Rush advisor ผ่าน 92% → 25%, แมพ 2 casual รอบแรก 58% ตัวเลขใน `docs/MASTER_PLAN_TH.md` A2
+- ~~ปัญหาแมพ 3~~ แก้ในงานที่ 6 (ดูด้านล่าง)
+
+## ~~งานที่ 6: ต้นไม้ใหญ่ ลิโอ/แบรนน์/เซฟา/โทมะ~~ เสร็จแล้ว 2026-10-23 (Opus, ทำต่อในแชตเดิม, เซฟ v39)
+
+- ต้นไม้ใหญ่ 4 อาชีพ (16 โหนดต่ออาชีพ สกิลใหม่ 12 ตัว) สรุปและผลตัวจำลองใน `docs/design/SKILL_TREES_ALL_TH.md` หัวข้อ "ลงโค้ดแล้ว — ทหารรับจ้าง 4 อาชีพ" ตอนนี้ต้นไม้ใหญ่ครบ 10 อาชีพ (ระบบต้นไม้เล็กใน `core/world/talents.ts` ยังอยู่แต่ไม่มีอาชีพใช้แล้ว)
+- แมพ 3 แย่ลงเพราะทีมไม่มีนักบวช ไม่ใช่เพราะต้นไม้ ตัวจำลองตอนนี้ส่งเซเรนลงสนามเมื่อเข้าค่าย (`SIM_NO_PRIEST=1` ดูแบบไม่จัดทีม) และบิลด์แรกของลิโอ/โทมะเก็บสกิลฟื้น → แมพ 3 รอบแรก Rush 92% Explorer 100% (เท่าก่อนรับสมัคร) ตัวเลขใน `docs/MASTER_PLAN_TH.md` A2
+- ที่เหลือให้เจ้าของตัดสิน: แมพ 2 รอบแรกแบบ casual ผ่าน 50–58% · เสนอให้หน้าทีมแจ้ง "ทีมยังไม่มีผู้รักษา" (งาน UI ถัดไป, Sonnet) · ไอคอนวาด 27 สกิลในคิว Codex ข้อ 23
 
 ## ข้อความเปิดแชตใหม่
 
@@ -79,7 +85,14 @@
 แล้วทำ "งานถัดไป" ข้อ 3: เอฟเฟกต์ Execute / Ward จากภาพ Codex สาขา art/art-vfx-exec-ward-001 (อ่าน NOTES.md) ทำภาษาเดียวกับ game/visuals/bolt-fx.ts จังหวะเดิม ผลตรงจริง แล้วส่งคลิปให้เจ้าของดูก่อนขยาย ตอบเป็นภาษาไทย
 ```
 
-งานที่ 6 (Opus) — ต้นไม้ใหญ่ของ 4 อาชีพที่สุ่มได้ (เจ้าของอนุมัติให้เลื่อนจากรุ่น B ขึ้นมา 2026-10-23):
+งานที่ 7 (Sonnet) — แจ้งเตือนทีมไม่มีผู้รักษา (ข้อเสนอ รอเจ้าของตอบ):
+```text
+ทำงานต่อในรีโป wnau34-nptrn/asterveil-fateweave สาขา feature/fateweave-initial-prototype
+อ่าน docs/handoffs/NEW-CHAT-HANDOFF-TH.md, CLAUDE.md และ docs/MASTER_PLAN_TH.md (A2 หัวข้อ "แก้แล้ว 2026-10-23 (งานที่ 6") ก่อน
+แล้วเพิ่มคำแนะนำในหน้าทีมที่ค่ายและแท็บทีมในกระเป๋าแผนที่: เมื่อทีมที่ลงสนามไม่มีนักบวช (เซเรน) หรือกวี (ลิโอ) ให้แสดงแถบเตือนสั้นๆ "ทีมยังไม่มีผู้รักษา" พร้อมบอกว่าใครในค่ายรักษาได้ (ไม่บังคับ ไม่บล็อกการออกเดินทาง) ใช้สไตล์ UI เดิม ส่งภาพหน้าจอ 390px ให้เจ้าของดู ตรวจก่อน push ตาม CLAUDE.md ตอบเป็นภาษาไทย
+```
+
+งานที่ 6 (Opus) — เสร็จแล้ว (เก็บไว้อ้างอิง):
 ```text
 ทำงานต่อในรีโป wnau34-nptrn/asterveil-fateweave สาขา feature/fateweave-initial-prototype
 อ่าน docs/handoffs/NEW-CHAT-HANDOFF-TH.md, CLAUDE.md, docs/MASTER_PLAN_TH.md (A2 หัวข้อ "แก้แล้ว 2026-10-23" และ A6), docs/design/SKILL_TREES_ALL_TH.md และ docs/design/SKILL_TOMES_TH.md ก่อน

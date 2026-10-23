@@ -78,13 +78,17 @@ export const legacyKeys = ['asterveil.fateweave.battle.v1', 'asterveil.fateweave
 // v37 → v38 (story recruits one at a time, owner 2026-10-23): after the prologue the guests who did not join part ways;
 // a run may carry `arrivals` (hero → join level) for recruits still on their way. Missing = none, so a v37 run whose
 // guests already travel keeps them until their point.
-const SAVE_VERSION = 38;
-// The classes whose big tree arrived in v37 (release A).
+// v38 → v39 (recruit big trees, owner 2026-10-23): the alchemist, scout, warden and bard get big trees; their small-tree
+// ranks are refunded and star skills granted as in v37 (a run whose member lost ranks settles home).
+const SAVE_VERSION = 39;
+// The classes whose big tree arrived in v37 (release A) and in v39 (the recruits).
 const RELEASE_A_TREES = ['tracer', 'weaver', 'healer', 'garran', 'mira'];
+const RECRUIT_TREES = ['toma', 'sefa', 'brann', 'lio'];
 export interface Game { profile: Profile; run: ExpeditionState | null }
 const actions: readonly ActionId[] = ['attack', 'guard', 'bash', 'mark', 'execute', 'bolt', 'ward', 'heal', 'prayer', 'brace', 'pierce', 'hinder', 'volley', 'acid', 'haste', 'ambush', 'evade', 'taunt', 'slam', 'valor', 'mend',
   'rally', 'finisher', 'sigil', 'sanctuary', 'spearwall', 'weakshot', 'bomb', 'backstab', 'quake', 'finale', 'challenge', 'bulwark', 'rouse',
-  'parry', 'lunge', 'sweep', 'storm', 'aegis', 'dispel', 'revive', 'halo', 'bless', 'hold', 'halt', 'warcry', 'disengage', 'pin', 'track'];
+  'parry', 'lunge', 'sweep', 'storm', 'aegis', 'dispel', 'revive', 'halo', 'bless', 'hold', 'halt', 'warcry', 'disengage', 'pin', 'track',
+  'smoke', 'fury', 'catalyst', 'knives', 'decoy', 'disarm', 'stonearmor', 'guardstone', 'tremor', 'dread', 'note', 'solo'];
 
 // One key for profile and run, so settling an expedition is a single atomic write.
 export function saveGame(storage: StoragePort | undefined, game: Game): boolean {
@@ -524,8 +528,9 @@ export function parseGame(raw: string, map: MapDefinition, lookup: EncounterLook
   const envelope = obj(JSON.parse(raw)); const version = envelope.version as number;
   if (version < 21) migrateItems(envelope, map);
   if (version < 34) migrateTrees(envelope, maps.length ? maps : [map]);
-  else if (version < 37) migrateTrees(envelope, maps.length ? maps : [map], RELEASE_A_TREES);
-  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
+  else if (version < 37) migrateTrees(envelope, maps.length ? maps : [map], [...RELEASE_A_TREES, ...RECRUIT_TREES]);
+  else if (version < 39) migrateTrees(envelope, maps.length ? maps : [map], RECRUIT_TREES);
+  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
   const runMap = (v: unknown): MapDefinition => maps.find(m => m.id === obj(v).mapId) ?? map;
   if (version < 5) {
     const home = runMap(envelope.state); const run = parseRun(envelope.state, version, home, lookup);

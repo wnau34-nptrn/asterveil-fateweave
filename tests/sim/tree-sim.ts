@@ -1,4 +1,4 @@
-// Release A big trees (docs/design/SKILL_TREES_ALL_TH.md): each class fights the mid-game sets with no tree points and
+// Big trees (docs/design/SKILL_TREES_ALL_TH.md: release A and the recruits): each class fights the mid-game sets with no tree points and
 // with the three example builds of its section (★3 Lv10, 11 points; capstones open at Lv15), in a party with three
 // teaching members, played by the teaching advisor. A tree works when every build keeps a winning route and none is
 // strictly worse than spending nothing.
@@ -27,6 +27,20 @@ export const TREE_BUILDS: readonly TreeBuild[] = [
   { id: 'mira', name: 'นักแม่นธนู', talents: { a1: 2, a2h: 1, a3: 1, c1: 2, c1s: 1, c2q: 1, c3: 1 }, loadout: ['hinder', 'weakshot', 'track'] },
   { id: 'mira', name: 'ฝนธนู', talents: { b1: 2, b2h: 1, b3: 1, a1: 2 }, loadout: ['volley', 'pin', 'hinder'] },
   { id: 'mira', name: 'พราน', talents: { c1: 2, c1s: 1, c2c: 1, a1: 2, a2s: 1, a3: 1 }, loadout: ['disengage', 'hinder', 'weakshot'] },
+  // Recruit trees (owner 2026-10-23). The campaign follows each class's first build: the support classes keep their
+  // sustain skill there (haste, mending), as a party without a priest needs it.
+  { id: 'toma', name: 'นักปรุงยา', talents: { b1: 2, b2q: 1, b3: 1, a1: 2, c1: 2 }, loadout: ['haste', 'fury', 'acid'] },
+  { id: 'toma', name: 'นักกรด', talents: { a1: 2, a2s: 1, a3: 1, c1: 1, c1s: 1, c2p: 1, c3: 1 }, loadout: ['acid', 'bomb', 'catalyst'] },
+  { id: 'toma', name: 'ผู้ก่อกวน', talents: { c1: 2, c1s: 1, c2p: 1, a1: 2, b1: 2 }, loadout: ['smoke', 'acid', 'haste'] },
+  { id: 'sefa', name: 'นักฆ่า', talents: { a1: 2, a2b: 1, a3: 1, c1: 2, c1s: 1 }, loadout: ['ambush', 'backstab', 'knives'] },
+  { id: 'sefa', name: 'เงาล่อ', talents: { b1: 2, b2d: 1, b3: 1, a1: 2, a2l: 1 }, loadout: ['evade', 'decoy', 'ambush'] },
+  { id: 'sefa', name: 'ผู้ก่อกวน', talents: { c1: 2, c1s: 1, c2t: 1, c3: 1, b1: 2 }, loadout: ['disarm', 'knives', 'evade'] },
+  { id: 'brann', name: 'ภูผา', talents: { a1: 2, a2h: 1, a3: 1, b1: 2, b2: 1 }, loadout: ['taunt', 'stonearmor', 'quake'] },
+  { id: 'brann', name: 'ค้อนรูน', talents: { b1: 2, b2: 1, b3q: 1, a1: 2 }, loadout: ['slam', 'quake', 'taunt'] },
+  { id: 'brann', name: 'ผู้พิทักษ์', talents: { c1: 2, c1s: 1, c2t: 1, c3: 1, a1: 2 }, loadout: ['guardstone', 'tremor', 'taunt'] },
+  { id: 'lio', name: 'ผู้ปลอบ', talents: { b1: 2, b2o: 1, b3: 1, a1: 2, a2c: 1, a3: 1 }, loadout: ['mend', 'finale', 'dread'] },
+  { id: 'lio', name: 'กลองศึก', talents: { a1: 2, a2r: 1, c1: 1, c1s: 1, c2d: 1, c3: 1 }, loadout: ['valor', 'solo', 'note'] },
+  { id: 'lio', name: 'นักร้องนำ', talents: { a1: 2, a2c: 1, a3: 1, c1: 1, c1s: 1, c2s: 1, b1: 1, b2w: 1, b3: 1 }, loadout: ['dread', 'note', 'finale'] },
 ];
 const fights = ['thicket-ambush', 'shadow-stalker', 'crystal-stampede', 'rear-ambush', 'elite-tusk-chief', 'elite-briar-lord', 'beetle-wall', 'forest-swarm', 'channeler-wisps', 'crawler-pack'];
 export interface TreeRow { id: string; build: string; won: number; fought: number; partyHp: number; rounds: number; used: number }

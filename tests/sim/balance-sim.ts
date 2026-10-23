@@ -225,6 +225,13 @@ const equipped = (p: Profile, id: string): ActionId[] => { const base = heroDef(
 const score = (i: Item) => i.rarity * 10 + i.level + (i.plus ?? 0) * 2;
 function lobby(p: Profile): { profile: Profile; claimed: string[] } {
   const claimed: string[] = [];
+  // Team (owner 2026-10-23 recruitment): once the priest has joined, a party without her fields her in place of its
+  // first recruit other than the Knight, Lyra and a bard, as a player who reads the team page would (without her,
+  // map 3's first run wipes far more often: docs/MASTER_PLAN_TH.md A2). `SIM_NO_PRIEST=1` keeps the starting four.
+  if (!process.env.SIM_NO_PRIEST && p.company.includes('healer') && !p.party.deployed.includes('healer')) {
+    const out = p.party.deployed.find(id => id !== 'guardian' && id !== 'tracer' && id !== 'lio');
+    if (out) p = { ...p, party: { ...p.party, deployed: p.party.deployed.map(id => id === out ? 'healer' : id), reserve: [...p.party.reserve.filter(id => id !== 'healer'), out] } };
+  }
   for (const q of map.sideQuests) if (!claimReason(p, map, q.id)) { p = claimQuest(p, map, q.id).profile; claimed.push(q.id); }
   // Talents: a class with an example build (tests/sim/tree-sim.ts, its first one) follows it and equips its skills;
   // spare points (and classes without a build) go to the first open node.
