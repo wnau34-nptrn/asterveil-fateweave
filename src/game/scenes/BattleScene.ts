@@ -5,6 +5,7 @@ import { thaiFont } from '../../ui/th';
 import { palette } from '../visuals/palette';
 import { BOLT_ATLAS, boltAtlasUrls, boltCast, boltImpact, type FxContext } from '../visuals/bolt-fx';
 import { EXECUTE_ATLAS, WARD_ATLAS, executeAtlasUrls, wardAtlasUrls, executeCast, executeImpact, wardCast, wardSettle } from '../visuals/exec-ward-fx';
+import { BLADE_ATLAS, bladeAtlasUrls, bladeCast, bladeImpact, bladeStance, bladeCues, bladePalettes, isBladeSkill } from '../visuals/blade-fx';
 import { FOE_SLOT_INDEX, fieldSlots, slotPlan, type FieldSlot } from '../visuals/field-layout';
 import { actorArt, actorFootOrigins, artOf, artUrl, figureRise, mirroredArt, unitsUrl } from '../visuals/assets';
 
@@ -74,6 +75,7 @@ export class BattleScene extends Phaser.Scene {
     this.load.atlas(BOLT_ATLAS, ...boltAtlasUrls());
     this.load.atlas(EXECUTE_ATLAS, ...executeAtlasUrls());
     this.load.atlas(WARD_ATLAS, ...wardAtlasUrls());
+    this.load.atlas(BLADE_ATLAS, ...bladeAtlasUrls());
     for (const sheet of ['units', 'mercs', 'foes', 'foes2'] as const) this.load.spritesheet(`battle-${sheet}`, unitsUrl(sheet), { frameWidth: 512, frameHeight: 512 });
   }
   create(): void {
@@ -258,6 +260,15 @@ export class BattleScene extends Phaser.Scene {
   }
   prepare(turn: TurnStage, contactMs: number): void {
     if (!this.ready || !contactMs || this.reducedMotion) return;
+    if ((turn.side === 'hero' && isBladeSkill(turn.action)) || (turn.side === 'enemy' && turn.intent?.kind === 'physical')) {
+      const start = this.anchor(turn.actorId);
+      // No anticipation of a hit for a cancelled action or Parry's stance.
+      for (const cue of bladeCues(turn).filter(c => !c.parried).slice(0, 1)) {
+        const end = this.anchor(cue.event.targetId);
+        if (start && end) bladeCast(this.fx(turn.actorId), start, end, contactMs, bladePalettes[this.encounter.heroes.find(h => h.id === turn.actorId)?.role ?? ''] ?? palette.gold);
+      }
+      return;
+    }
     const family = effectFamily(turn), start = this.anchor(turn.actorId);
     const hitEvent = turn.events.find(e => e.type === 'damage' || e.type === 'dodge');
     // Ward (A8): the thread and veil gather on each real barrier recipient (self-cast included).
@@ -293,6 +304,7 @@ export class BattleScene extends Phaser.Scene {
   play(turn: TurnStage, remainingMs = 650): void {
     if (!this.ready) return;
     const events = turn.events, life = Math.max(100, remainingMs - 20), family = effectFamily(turn);
+    const paintedBlades = bladeCues(turn);
     const source = this.bodies.get(turn.actorId), origin = this.positions.get(turn.actorId);
     const hold = this.quiet || this.reducedMotion ? 0 : 45;
     if (source && origin) {
@@ -321,6 +333,11 @@ export class BattleScene extends Phaser.Scene {
       const bolt = turn.action === 'bolt' && turn.side === 'hero' && event.sourceId === turn.actorId && (event.type === 'damage' || event.type === 'dodge');
       const execute = turn.action === 'execute' && turn.side === 'hero' && event.sourceId === turn.actorId && (event.type === 'damage' || event.type === 'dodge');
       const ward = turn.action === 'ward' && turn.side === 'hero' && event.type === 'barrier';
+      const blade = paintedBlades.find(cue => cue.event === event);
+      const parry = event.type === 'parry';
+      if (parry && event.sourceId === event.targetId) bladeStance(this.fx(id), p, life, bladePalettes.Duelist!);
+      if (blade) bladeImpact(this.fx(id), blade, p, this.anchor(event.sourceId), life,
+        bladePalettes[this.encounter.heroes.find(h => h.id === event.sourceId)?.role ?? ''] ?? palette.gold);
       if (execute) {
         const enemy = turn.before?.enemies.find(e => e.id === id);
         executeImpact(this.fx(id), p, life, event.type === 'dodge' ? 'dodged' : event.amount ? 'hit' : 'blocked', !!enemy && enemy.markedUntil >= turn.round);
@@ -329,7 +346,7 @@ export class BattleScene extends Phaser.Scene {
       if (bolt) boltImpact(this.fx(id), p, this.anchor(event.sourceId), life, event.type === 'dodge' ? 'dodged' : event.amount ? 'hit' : 'blocked');
       if (damage) {
         const from = this.anchor(event.sourceId);
-        if (from && !bolt && !execute) {
+        if (from && !bolt && !execute && !blade) {
           const slash = this.add.graphics().lineStyle(this.quiet ? 2 : 5, color, .9);
           if (family === 'steel' || event.type === 'counter') slash.lineBetween(from.x,from.y,p.x,p.y);
           if (!event.absorbed || event.amount) {
@@ -341,7 +358,7 @@ export class BattleScene extends Phaser.Scene {
         const body = this.bodies.get(id), sprite = body?.list.find(c => c instanceof Phaser.GameObjects.Image) as Phaser.GameObjects.Image | undefined;
         if (event.amount && sprite && !this.reducedMotion) {
           // Bolt keeps the body's detail: a short violet multiply tint instead of a white fill flash.
-          if (bolt || execute) sprite.setTint(bolt ? 0xcdb8ff : 0xffd3dc).setTintMode(Phaser.TintModes.MULTIPLY); else sprite.setTint(0xffffff).setTintMode(Phaser.TintModes.FILL);
+          if (bolt || execute || blade) sprite.setTint(bolt ? 0xcdb8ff : blade ? 0xffe4c4 : 0xffd3dc).setTintMode(Phaser.TintModes.MULTIPLY); else sprite.setTint(0xffffff).setTintMode(Phaser.TintModes.FILL);
           this.later(90, () => { if (sprite.active) sprite.clearTint().setTintMode(Phaser.TintModes.MULTIPLY); });
           if (body && !this.quiet) this.tweens.add({ targets:body,x:body.x+(Math.sign(p.x-(from?.x ?? p.x-1)) || 1)*7,delay:hold,duration:80,yoyo:true });
         }
@@ -355,7 +372,7 @@ export class BattleScene extends Phaser.Scene {
         const enemy = turn.before?.enemies.find(e => e.id === id);
         if (turn.action === 'execute' && enemy && enemy.markedUntil >= turn.round) say(id,'โจมตีเป้าติดตรา','#ffa9d4');
       }
-      if (ward) { /* the Aegis art above is the whole cue */ } else if (shield) {
+      if (ward || blade || parry) { /* painted layers above are the whole contact cue */ } else if (shield) {
         const g = this.add.graphics().lineStyle(3,color,.95).fillStyle(color,.12);
         const points = [{x:p.x-22,y:p.y-24},{x:p.x+22,y:p.y-24},{x:p.x+19,y:p.y+8},{x:p.x,y:p.y+26},{x:p.x-19,y:p.y+8}];
         const polygon = points.map(point => new Phaser.Math.Vector2(point.x, point.y));

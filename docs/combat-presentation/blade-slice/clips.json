@@ -1,0 +1,164 @@
+[
+  {
+    "file": "ambush-hit-normal-390.mp4",
+    "width": 390,
+    "height": 844,
+    "duration": 3.36,
+    "capturedFrames": 178,
+    "clickOffset": 0.329,
+    "maxFrameGap": 0.217
+  },
+  {
+    "file": "attack-blocked-normal-390.mp4",
+    "width": 390,
+    "height": 844,
+    "duration": 3.48,
+    "capturedFrames": 182,
+    "clickOffset": 0.333,
+    "maxFrameGap": 0.217
+  },
+  {
+    "file": "attack-cancelled-normal-390.mp4",
+    "width": 390,
+    "height": 844,
+    "duration": 3.32,
+    "capturedFrames": 177,
+    "clickOffset": 0.329,
+    "maxFrameGap": 0.217
+  },
+  {
+    "file": "attack-dodged-normal-390.mp4",
+    "width": 390,
+    "height": 844,
+    "duration": 3.32,
+    "capturedFrames": 177,
+    "clickOffset": 0.329,
+    "maxFrameGap": 0.233
+  },
+  {
+    "file": "attack-guarded-normal-390.mp4",
+    "width": 390,
+    "height": 844,
+    "duration": 3.32,
+    "capturedFrames": 167,
+    "clickOffset": 0.311,
+    "maxFrameGap": 0.217
+  },
+  {
+    "file": "attack-hit-normal-390.mp4",
+    "width": 390,
+    "height": 844,
+    "duration": 3.16,
+    "capturedFrames": 120,
+    "clickOffset": 0.35,
+    "maxFrameGap": 0.417
+  },
+  {
+    "file": "attack-partial-normal-390.mp4",
+    "width": 390,
+    "height": 844,
+    "duration": 3.32,
+    "capturedFrames": 175,
+    "clickOffset": 0.326,
+    "maxFrameGap": 0.233
+  },
+  {
+    "file": "backstab-hit-normal-390.mp4",
+    "width": 390,
+    "height": 844,
+    "duration": 3.36,
+    "capturedFrames": 173,
+    "clickOffset": 0.343,
+    "maxFrameGap": 0.217
+  },
+  {
+    "file": "disarm-hit-normal-390.mp4",
+    "width": 390,
+    "height": 844,
+    "duration": 3.36,
+    "capturedFrames": 174,
+    "clickOffset": 0.347,
+    "maxFrameGap": 0.217
+  },
+  {
+    "file": "finisher-hit-normal-390.mp4",
+    "width": 390,
+    "height": 844,
+    "duration": 3.44,
+    "capturedFrames": 177,
+    "clickOffset": 0.424,
+    "maxFrameGap": 0.217
+  },
+  {
+    "file": "halt-hit-normal-390.mp4",
+    "width": 390,
+    "height": 844,
+    "duration": 3.4,
+    "capturedFrames": 162,
+    "clickOffset": 0.367,
+    "maxFrameGap": 0.217
+  },
+  {
+    "file": "lunge-hit-fast-390.mp4",
+    "width": 390,
+    "height": 844,
+    "duration": 3.36,
+    "capturedFrames": 177,
+    "clickOffset": 0.339,
+    "maxFrameGap": 0.233
+  },
+  {
+    "file": "lunge-hit-normal-390.mp4",
+    "width": 390,
+    "height": 844,
+    "duration": 3.32,
+    "capturedFrames": 174,
+    "clickOffset": 0.332,
+    "maxFrameGap": 0.217
+  },
+  {
+    "file": "lunge-hit-osreduce-390.mp4",
+    "width": 390,
+    "height": 844,
+    "duration": 3.36,
+    "capturedFrames": 186,
+    "clickOffset": 0.313,
+    "maxFrameGap": 0.067
+  },
+  {
+    "file": "lunge-hit-reduced-390.mp4",
+    "width": 390,
+    "height": 844,
+    "duration": 3.32,
+    "capturedFrames": 177,
+    "clickOffset": 0.327,
+    "maxFrameGap": 0.217
+  },
+  {
+    "file": "parry-hit-normal-390.mp4",
+    "width": 390,
+    "height": 844,
+    "duration": 3.32,
+    "capturedFrames": 177,
+    "clickOffset": 0.329,
+    "maxFrameGap": 0.217
+  },
+  {
+    "file": "pierce-hit-normal-390.mp4",
+    "width": 390,
+    "height": 844,
+    "duration": 3.32,
+    "capturedFrames": 178,
+    "clickOffset": 0.327,
+    "maxFrameGap": 0.217
+  },
+  {
+    "file": "sweep-hit-normal-390.mp4",
+    "width": 390,
+    "height": 844,
+    "duration": 3.32,
+    "capturedFrames": 178,
+    "clickOffset": 0.328,
+    "maxFrameGap": 0.217
+  }
+]
