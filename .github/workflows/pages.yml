@@ -25,25 +25,41 @@ jobs:
       - run: npm run lint
       - run: npm test
       - run: npm run build:pages
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  # The browser gate runs in four shards on separate machines (owner approved 2026-10-23); deploy waits for every shard.
+  browser:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run build:pages
       - run: npx playwright install --with-deps chromium
-      - name: Verify production gameplay under the Pages subpath
+      - name: Verify production gameplay under the Pages subpath (shard ${{ matrix.shard }}/4)
         env:
           PLAYWRIGHT_PAGES: 'true'
-        run: npm run test:browser
+        run: npm run test:browser -- --fully-parallel --shard=${{ matrix.shard }}/4
       # Keep failure screenshots and page snapshots so a CI-only failure can be diagnosed.
       - name: Upload browser test evidence on failure
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-results
+          name: playwright-results-${{ matrix.shard }}
           path: test-results
           retention-days: 7
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: dist
 
   deploy:
-    needs: build
+    needs: [build, browser]
     runs-on: ubuntu-latest
     permissions:
       pages: write
