@@ -41,7 +41,7 @@ it('preserves the paid ledger through full-plus fusion and excludes zero-plus in
 it('round-trips locks and exact credits through departure, run item ownership and v23 persistence',()=>{
   let p=lockEquipment(enhanceTo(setup(),map,1,3).profile,1).profile;p=equip(p,'guardian',1).profile;
   const game=depart(p,map,lookup,23);let raw='';saveGame({getItem:()=>null,setItem:(_k,s)=>{raw=s;}},game);
-  expect(JSON.parse(raw).version).toBe(39);const back=parseGame(raw,map,lookup);expect(back).toEqual(game);
+  expect(JSON.parse(raw).version).toBe(40);const back=parseGame(raw,map,lookup);expect(back).toEqual(game);
   const changed=JSON.parse(raw);changed.run.members.guardian.gear.body.investment.ore++;expect(()=>parseGame(JSON.stringify(changed),map,lookup)).toThrow();
   const legacy=JSON.parse(raw);legacy.version=21;delete legacy.profile.members.guardian.gear.body.investment;delete legacy.run.members.guardian.gear.body.investment;
   const migrated=parseGame(JSON.stringify(legacy),map,lookup);expect(migrated.run!.members.guardian!.gear).toEqual(migrated.profile.members.guardian!.gear);

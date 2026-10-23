@@ -1,5 +1,9 @@
 # Codex → Claude handoff
 
+## 2026-10-23 — Claude: haste acts now (owner, save v40)
+
+- `haste` (engine.ts): an ally still to act this round moves right after the alchemist in this round's order; an ally who has acted (or Toma herself) keeps the old rule (first next round, `hastedRound`). No turn is gained. Save v40 drops the commands of a v39 battle that used haste (restarts from entry HP). Test: tests/battle.test.ts. Full `npm run sim` not re-run (usage); the single-seed campaign guard in vitest passes.
+
 ## 2026-10-23 — Claude: big trees for the four recruits (owner approved, save v39)
 
 - Alchemist, scout, warden and bard big trees (`content/heroes/talents.ts`, 16 nodes each; the doc's tables). 12 new skills (`smoke`, `fury`, `catalyst`, `knives`, `decoy`, `disarm`, `stonearmor`, `guardstone`, `tremor`, `dread`, `note`, `solo`) and 16 caps in `core/battle/engine.ts`; shared pieces: `weaken` (next move cut), `HeroState.exposed`/`solo`, `BattleState.decoy`/`stone`/`encored`, `SongId` adds `dread`. Advisor (`ui/tutorial.ts`) uses them; texts in `ui/th.ts`, status rows in `ui/battle-status.ts`, line icons aliased in `ui/icons.ts` (painted ones: Codex queue 23).

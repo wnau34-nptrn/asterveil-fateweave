@@ -1001,8 +1001,14 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
       for (const foe of state.enemies.filter(e => e.hp > 0 && (e.id === enemy!.id || hasCap(data, hero.id, 'acidspread')))) corrode(foe);
       break;
     case 'haste': {
-      const ally = state.heroes.find(h => h.id === command.targetId)!; ally.hastedRound = state.round + 1;
-      events.push({ type: 'haste', sourceId: hero.id, targetId: ally.id, text: 'Ally acts first next round.' });
+      // Haste (owner 2026-10-23): an ally still to act this round acts right after the alchemist; one who has acted
+      // (or the alchemist herself) acts before everyone next round. Order only: nobody gains a turn.
+      const ally = state.heroes.find(h => h.id === command.targetId)!; const at = state.order.indexOf(ally.id);
+      if (at > state.turnIndex + 1) {
+        state.order.splice(at, 1); state.order.splice(state.turnIndex + 1, 0, ally.id);
+        events.push({ type: 'haste', sourceId: hero.id, targetId: ally.id, text: 'Ally acts next.' });
+      } else if (at === state.turnIndex + 1) events.push({ type: 'haste', sourceId: hero.id, targetId: ally.id, text: 'Ally acts next.' });
+      else { ally.hastedRound = state.round + 1; events.push({ type: 'haste', sourceId: hero.id, targetId: ally.id, text: 'Ally acts first next round.' }); }
       heal(ally.id, talentRule(data, hero.id, 'hasteHeal')); break;
     }
     case 'volley': case 'bomb': {
