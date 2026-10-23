@@ -17,7 +17,7 @@ import type { BattleKind, Direction, ExpeditionState, GearSlot, Item, Lane, Poin
 import { GEAR_SLOTS } from '../../src/core/world/types';
 import {
   atCamp, atMuster, monsterLevelAt, battleData, battleState, canOpenChest, canRest, canRevive, eliteAt, eventAt, finishBattle, findTiles, memberDef, move, openChest,
-  heroDef, loadoutActions, pendingEvent, questComplete, rollPercent, recordBattle, rest, revive, rosterIds, startPrologue, swapMembers, tileAt, usePotion, chooseEvent, eventChoiceReason, potionReason,
+  draftPick, heroDef, loadoutActions, pendingEvent, questComplete, rollPercent, recordBattle, rest, revive, rosterIds, startPrologue, swapMembers, tileAt, usePotion, chooseEvent, eventChoiceReason, potionReason,
 } from '../../src/core/world/world';
 import { battleLesson } from '../../src/ui/tutorial';
 
@@ -331,7 +331,8 @@ export function simulateCompany(seed: number, policy: Policy, expeditions: numbe
 // `hard` times on hard mode. Each expedition goes to the first map not yet cleared.
 export interface CampaignExpedition extends ExpeditionReport { mapId: string; hard: boolean; attempt: number; skillGold: number; mainSkill: number; skillAvg: number; topSkill: number; tomes: number; levels: number[] }
 export interface CampaignReport { seed: number; policy: Policy; style: Style; expeditions: CampaignExpedition[]; profile: Profile }
-export function simulateCampaign(seed: number, policy: Policy, style: Style = 'advisor', replays = 3, hard = 2, limit = 16): CampaignReport {
+// `starters`: the two mercenaries the new company recruits after the prologue (default: an offer chosen by the seed).
+export function simulateCampaign(seed: number, policy: Policy, style: Style = 'advisor', replays = 3, hard = 2, limit = 16, starters?: readonly string[]): CampaignReport {
   map = MAPS[0]!; checks = true; company = `${seed}:${policy}:${style}`;
   let p = createCommander(newProfile(map, seed, map.firstCompany), { name: 'จำลอง', crest: 'star', color: 'gold', camp: 'ค่ายอารี' }).profile;
   const out: CampaignExpedition[] = []; const last = MAPS[MAPS.length - 1]!;
@@ -350,6 +351,11 @@ export function simulateCampaign(seed: number, policy: Policy, style: Style = 'a
       items: [0, 0, 0, 0, 0], chests: 0, elites: 0, objectives: 0, bossBeaten: false, level: 0, stars: 0, company: p.company.length, claimed: shop.claimed,
       mapId: map.id, hard: isHard, attempt, skillGold, mainSkill: 0, skillAvg: 0, topSkill: 1, tomes: 0, levels: [] };
     if (!p.tutorialDone) { s = startPrologue(s, map).state; for (let tries = 0; s.battle && tries < 5; tries++) s = fight(s, report, style).state; }
+    // Starter recruitment (owner 2026-10-23): the chosen pair, else an offer picked by the seed.
+    for (let n = 0; s.draft; n++) {
+      const want = starters?.[n]; const d = s.draft;
+      s = draftPick(want ? { ...s, draft: { ...d, offers: [want] } } : s, map, want ? 0 : (seed + n) % d.offers.length, lookup).state;
+    }
     const r = runExpedition(s, policy, style, report); s = r.state;
     const before = { ...p.bank }; p = settle(p, s, r.outcome, map);
     if (!next) { if (isHard) hardRuns++; else normalAfter++; }

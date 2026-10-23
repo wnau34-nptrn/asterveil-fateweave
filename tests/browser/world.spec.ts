@@ -3,7 +3,7 @@ import { encounterById } from '../../src/content/encounters/catalog';
 import { chapterOne as map } from '../../src/content/world/chapter1';
 import { createBattle, currentHeroId, resolveCommand, targetOptions } from '../../src/core/battle/engine';
 import type { ExpeditionState, Item } from '../../src/core/world/types';
-import { battleData, battleState, finishBattle, findTiles, move, newExpedition, recordBattle, reveal, startOf, startPrologue, tileAt } from '../../src/core/world/world';
+import { battleData, battleState, draftPick, finishBattle, findTiles, move, newExpedition, recordBattle, reveal, startOf, startPrologue, tileAt } from '../../src/core/world/world';
 import { affixPool } from '../../src/core/world/equipment';
 import { boardOffers, depart, newProfile } from '../../src/core/world/profile';
 import { ruinsMap } from '../../src/content/world/chapter-ruins';
@@ -108,7 +108,7 @@ test('winning the first battle plays Vargoth\'s retreat, then the map', async ({
   expect((await saved(page)).tutorialDone).toBe(true);
   expect(issues).toEqual([]);
 });
-test('a new ค่ายทหารรับจ้าง: the Knight fights the prologue with three guests; they part ways and the Duelist joins for good (master plan A2)', async ({ page }) => {
+test('a new ค่ายทหารรับจ้าง: the Knight fights the prologue with three guests; they part ways, the Duelist joins and two mercenaries are recruited (owner 2026-10-23)', async ({ page }) => {
   const data = encounterById(ruinsMap.tutorialEncounterId)!; const profile = { ...newProfile(ruinsMap, 5, ruinsMap.firstCompany), commander };
   const s = depart(profile, ruinsMap, encounterById, 77).run; reveal(s, ruinsMap); expect(s.guests).toEqual(['tracer', 'weaver', 'healer']);
   const withParty = { ...data };
@@ -124,34 +124,45 @@ test('a new ค่ายทหารรับจ้าง: the Knight fights the
   await page.locator(`#action-${action}`).click(); await page.locator(`#target-${action === 'prayer' ? 'party' : target}`).click(); await finishPlayback(page);
   await page.locator('#leave-battle').click();
   await expect(page.locator('#story-view')).toHaveAttribute('data-speaker', 'vargoth'); await page.locator('#story-next').click();
-  // Seren and Aira part ways (owner 2026-10-23); Lyra's own scene follows.
-  await expect(page.locator('#story-view')).toHaveAttribute('data-speaker', 'healer'); await page.locator('#story-next').click();
+  // Aira and Seren part ways (owner 2026-10-23); Lyra's own scene follows.
   await expect(page.locator('#story-view')).toHaveAttribute('data-speaker', 'weaver'); await page.locator('#story-next').click();
+  await expect(page.locator('#story-view')).toHaveAttribute('data-speaker', 'healer'); await page.locator('#story-next').click();
   await expect(page.locator('#story-view')).toHaveAttribute('data-speaker', 'narrator'); await expect(page.locator('.story-text')).toContainText('แยกย้าย'); await page.locator('#story-next').click();
   await expect(page.locator('#story-view')).toHaveAttribute('data-speaker', 'tracer'); await expect(page.locator('.story-text')).toContainText('ไลรา');
   await page.locator('#story-next').click(); await expect(page.locator('.story-text')).toContainText('เข้าร่วมค่ายอารี');
-  await page.locator('#story-next').click(); await expect(page.locator('#world-view')).toBeVisible();
-  const run = await saved(page); expect(run.recruited).toEqual(['tracer']); expect(run.guests).toBeUndefined();
-  expect(run.arrivals).toEqual({ weaver: 1, healer: 1 }); expect(run.roster.deployed).toEqual(['guardian', 'tracer']);
-  await expect(page.locator('[data-hero="weaver"]')).toHaveCount(0);
+  await page.locator('#story-next').click();
+  // The starter recruitment: three offers, Escape cannot skip it, each pick has its scene.
+  const draft = page.locator('#draft-dialog'); await expect(draft).toBeVisible(); await expect(draft.locator('.draft-board li')).toHaveCount(3);
+  let run = await saved(page); expect(run.recruited).toEqual(['tracer']); expect(run.guests).toBeUndefined();
+  expect(run.arrivals).toEqual({ weaver: 1 }); expect(run.roster.deployed).toEqual(['guardian', 'tracer']); expect(run.draft!.left).toBe(2);
+  await page.keyboard.press('Escape'); await expect(draft).toBeVisible();
+  const first = run.draft!.offers[1]!;
+  await page.locator('#draft-1').click(); await expect(draft).toBeHidden();
+  await expect(page.locator('#story-view')).toHaveAttribute('data-speaker', first); await page.locator('#story-next').click(); await page.locator('#story-next').click();
+  await expect(draft).toBeVisible(); run = await saved(page); const second = run.draft!.offers[0]!;
+  await page.locator('#draft-0').click(); await expect(page.locator('#story-view')).toHaveAttribute('data-speaker', second);
+  await page.locator('#story-next').click(); await page.locator('#story-next').click(); await expect(page.locator('#world-view')).toBeVisible(); await expect(draft).toBeHidden();
+  run = await saved(page); expect(run.draft).toBeUndefined(); expect(run.roster.deployed).toEqual(['guardian', 'tracer', first, second]);
+  expect(run.recruited).toEqual(['tracer', first, second]); expect(run.roster.deployed.some(id => ruinsMap.draft!.support.includes(id))).toBe(true);
   expect(issues).toEqual([]);
 });
-test('Seren comes back as the map 1 boss fight starts: her scene plays first, then she fights the boss (owner 2026-10-23)', async ({ page }) => {
+test('Aira comes back as the map 1 boss fight starts: her scene plays before the battle opens (owner 2026-10-23)', async ({ page }) => {
   const profile = { ...newProfile(ruinsMap, 5, ruinsMap.firstCompany), commander };
   let s = startPrologue(depart(profile, ruinsMap, encounterById, 77).run, ruinsMap).state;
   const data = battleData(s, ruinsMap, encounterById)!; let b = battleState(s, ruinsMap, encounterById)!;
   while (b.outcome === 'active') { const l = battleLesson(b, data)!; b = resolveCommand(b, data, { beat: b.beat, heroId: l.heroId, action: l.action, targetId: l.targetId }).state; }
-  s = finishBattle(recordBattle(s, ruinsMap, encounterById, b.commands), ruinsMap, encounterById).state; expect(s.arrivals).toEqual({ weaver: 1, healer: 1 });
+  s = finishBattle(recordBattle(s, ruinsMap, encounterById, b.commands), ruinsMap, encounterById).state;
+  s = draftPick(draftPick(s, ruinsMap, 0, encounterById).state, ruinsMap, 0, encounterById).state; expect(s.arrivals).toEqual({ weaver: 1 });
   const [boss] = findTiles(ruinsMap, 'boss'); const steps = [['up', 0, 1], ['down', 0, -1], ['left', 1, 0], ['right', -1, 0]] as const;
   const [dir, dx, dy] = steps.find(([, dx, dy]) => { const k = tileAt(ruinsMap, { x: boss!.x + dx, y: boss!.y + dy })?.kind; return !!k && k !== 'wall' && k !== 'goal'; })!;
   s.position = { x: boss!.x + dx, y: boss!.y + dy }; reveal(s, ruinsMap);
   await seed(page, s, { ...profile, tutorialDone: true }); const issues: string[] = []; page.on('pageerror', e => issues.push(e.message));
   await page.goto('./'); await page.locator('#continue').click();
   await page.locator(`#move-${dir}`).click();
-  await expect(page.locator('#story-view')).toHaveAttribute('data-speaker', 'healer'); await expect(page.locator('.story-text')).toContainText('เซเรน');
-  expect((await saved(page)).battle).toMatchObject({ kind: 'boss' }); expect(Object.keys((await saved(page)).battle!.entry)).toEqual(['guardian', 'tracer', 'healer']);
+  await expect(page.locator('#story-view')).toHaveAttribute('data-speaker', 'weaver'); await expect(page.locator('.story-text')).toContainText('ไอรา');
+  expect((await saved(page)).battle).toMatchObject({ kind: 'boss' }); expect((await saved(page)).roster.reserve).toEqual(['weaver']);
   await page.locator('#story-next').click(); await expect(page.locator('.story-text')).toContainText('เข้าร่วมค่ายอารี'); await page.locator('#story-next').click();
-  await expect(page.locator('#battle-view')).not.toHaveClass(/view-off/); await expect(page.locator('#hero-healer')).toBeVisible();
+  await expect(page.locator('#battle-view')).not.toHaveClass(/view-off/);
   expect(issues).toEqual([]);
 });
 test('walking until the first encounter opens the tutorial battle in place', async ({ page }) => {

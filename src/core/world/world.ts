@@ -79,20 +79,48 @@ export function recruit(state: ExpeditionState, map: MapDefinition, at: RecruitP
   }
   const joined = [...ids.filter(id => state.guests?.includes(id)), ...arriving];
   if (joined.length) { state.recruited = [...state.recruited ?? [], ...joined]; if (state.guests) state.guests = state.guests.filter(id => !joined.includes(id)); }
-  if (at === 'prologue') disband(state);
+  if (at === 'prologue') disband(state, map);
   if (state.guests && !state.guests.length) delete state.guests;
   return joined;
 }
-// After the prologue the guests who did not join part ways: what they wore goes to the bag (finds) or the spare items.
-function disband(state: ExpeditionState): void {
+// After the prologue the guests who did not join part ways (this map's recruits come back at their point, prologue-only
+// guests on a later map): what they wore goes to the bag (finds) or the spare items.
+function disband(state: ExpeditionState, map: MapDefinition): void {
   for (const id of state.guests ?? []) {
-    (state.arrivals ??= {})[id] = state.members[id]?.level ?? 1;
+    if (map.recruits?.some(r => r.hero === id)) (state.arrivals ??= {})[id] = state.members[id]?.level ?? 1;
     for (const item of Object.values(state.members[id]?.gear ?? {}) as Item[]) (item.uid ? state.spare : state.found).push(item);
     state.roster.deployed = state.roster.deployed.filter(x => x !== id); state.roster.reserve = state.roster.reserve.filter(x => x !== id);
     if (state.roster.lanes) delete state.roster.lanes[id];
     delete state.members[id]; delete state.hp[id];
   }
   delete state.guests;
+}
+// Starter recruitment (owner 2026-10-23): the offers for the next pick, fixed by the seed and the picks made so far (no
+// encounter rolls are used). While nobody in the team is a `support` mercenary, one of them replaces the last offer.
+export function draftOffers(state: ExpeditionState, map: MapDefinition): string[] {
+  const d = map.draft; if (!d) return [];
+  const taken = rosterIds(state); const left = d.pool.filter(id => !taken.includes(id));
+  const salt = (state.seed ^ Math.imul(taken.length + 1, 0x2545f491)) >>> 0; const offers: string[] = [];
+  for (let i = 0; offers.length < Math.min(map.company.offers, left.length); i++) {
+    const rest = left.filter(id => !offers.includes(id)); offers.push(rest[(rollPercent(salt, i) * 7919 + i) % rest.length]!);
+  }
+  const support = left.filter(id => d.support.includes(id));
+  if (offers.length && support.length && !taken.some(id => d.support.includes(id)) && !offers.some(id => d.support.includes(id)))
+    offers[offers.length - 1] = support[rollPercent(salt, 99) % support.length]!;
+  return offers;
+}
+// Takes offer `index`: the mercenary joins the party (a free slot, else the reserve) at full HP and the company when the
+// run settles. Without `lookup` (settling) the HP is left out.
+export function draftPick(initial: ExpeditionState, map: MapDefinition, index: number, lookup?: EncounterLookup): WorldResult {
+  const id = initial.draft?.offers[index];
+  if (!id || initial.battle) return { state: initial, event: { type: 'blocked', reason: 'busy' } };
+  const state = structuredClone(initial); const draft = state.draft!;
+  state.roster[state.roster.deployed.length < PARTY_SLOTS ? 'deployed' : 'reserve'].push(id);
+  state.members[id] = { stars: 1, dupes: 0, ...(draft.level > 1 ? { level: draft.level, exp: 0 } : {}) };
+  if (lookup) state.hp[id] = memberDef(lookup, map, state.members, id)!.maxHp;
+  state.recruited = [...state.recruited ?? [], id];
+  if (--draft.left > 0) draft.offers = draftOffers(state, map); else delete state.draft;
+  return { state, event: { type: 'drafted', heroId: id } };
 }
 // Each star above ★1 adds `starStatPercent` to max HP, Attack and skill power. SPD never
 // changes, so stars cannot reorder turns. Talents (2D-1b) add their stat percents and build
@@ -230,6 +258,8 @@ export const pendingEvent = (state: ExpeditionState, map: MapDefinition, p: Poin
 
 // `lookup` lets gear Trail regen heal on the step (stats design); without it the step heals nobody.
 export function move(initial: ExpeditionState, map: MapDefinition, dir: Direction, lookup?: EncounterLookup): WorldResult {
+  // The starter recruitment comes first.
+  if (initial.draft) return { state: initial, event: { type: 'blocked', reason: 'busy' } };
   if (initial.battle || initial.completed) return { state: initial, event: { type: 'blocked', reason: 'busy' } };
   const target = { x: initial.position.x + offsets[dir].x, y: initial.position.y + offsets[dir].y };
   const tile = tileAt(map, target);
@@ -675,7 +705,14 @@ export function finishBattle(initial: ExpeditionState, map: MapDefinition, looku
     // hurt heroes before the first camp wiped too often, docs/validation/balance-sim/CAMPAIGN.md).
     if (kind === 'tutorial') {
       state.tutorialDone = true;
-      if (recruit(state, map, 'prologue').length) for (const id of rosterIds(state)) state.hp[id] = memberDef(lookup, map, state.members, id)!.maxHp;
+      if (recruit(state, map, 'prologue').length) {
+        for (const id of rosterIds(state)) state.hp[id] = memberDef(lookup, map, state.members, id)!.maxHp;
+        // A new company then recruits its first mercenaries (map.draft) before setting out.
+        if (map.draft) {
+          const best = Math.max(1, ...Object.values(state.members).map(m => m.level ?? 1));
+          state.draft = { left: map.draft.picks, level: Math.max(1, best - map.progression.joinBehind), offers: [] }; state.draft.offers = draftOffers(state, map);
+        }
+      }
     }
     // A save before v38 may still carry the boss's recruit as a guest until the win.
     if (kind === 'boss') { state.bossDefeated = true; recruit(state, map, 'boss'); }

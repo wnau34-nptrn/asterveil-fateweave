@@ -3,7 +3,7 @@ import {storageCap} from '../world/storage';
 import { entryReason, withParty } from '../battle/engine';
 import type { ActionId, Command } from '../battle/types';
 import { COMPANY_CAP, PARTY_SLOTS, RESERVE_SLOTS, type ActiveBattle, type ExpeditionState, type MapDefinition, type Point, type Profile, type Lane, type Roster, type RunOutcome } from '../world/types';
-import { skillChoices, battleState, expToNext, findTiles, newExpedition, finishBattle, fullParty, heroCatalog, heroDef, memberDef, rosterIds, tileAt, type EncounterLookup } from '../world/world';
+import { draftOffers, skillChoices, battleState, expToNext, findTiles, newExpedition, finishBattle, fullParty, heroCatalog, heroDef, memberDef, rosterIds, tileAt, type EncounterLookup } from '../world/world';
 import { affixPool, itemValid } from '../world/equipment';
 import { boulderAt, openPit, passableWall } from '../world/puzzles';
 import { commanderReason, defaultCamp, newProfile, settle, talentsValid } from '../world/profile';
@@ -221,7 +221,9 @@ function staleRun(s: Record<string, unknown>, map: MapDefinition, lookup: Encoun
   const members = membersOf(s.members, map, ids, lookup, true); const r = obj(s.resources);
   if (!isInt(r.ore, 0, 999999) || !isInt(r.seal, 0, 9999) || !isInt(s.steps) || !isInt(s.wins)) throw new Error('Invalid run');
   const run = newExpedition(map, lookup, 0, { roster, members });
-  return { ...run, resources: { ore: r.ore, gold: isInt(r.gold, 0, 999999) ? r.gold : 0, ember: 0, seal: r.seal }, steps: s.steps, wins: s.wins, found: foundOf(s.found, map, lookup), spare: spareOf(s.spare, map, lookup),
+  const travel = (v: unknown) => Array.isArray(v) ? v.filter((id): id is string => typeof id === 'string' && ids.includes(id)) : undefined;
+  const guests = travel(s.guests), recruited = travel(s.recruited);
+  return { ...run, ...(guests?.length ? { guests } : {}), ...(recruited?.length ? { recruited } : {}), resources: { ore: r.ore, gold: isInt(r.gold, 0, 999999) ? r.gold : 0, ember: 0, seal: r.seal }, steps: s.steps, wins: s.wins, found: foundOf(s.found, map, lookup), spare: spareOf(s.spare, map, lookup),
     potions: potionsOf(s.potions, map.potions.carry), dust: isInt(s.dust, 0, 999999) ? s.dust : 0, tutorialDone: s.tutorialDone === true };
 }
 // 3C puzzle state, validated against the map's puzzles.
@@ -316,12 +318,13 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
     battle = { kind: b.kind as ActiveBattle['kind'], encounterId: data.id, entry, commands: b.commands.map(command), ...(b.level !== undefined ? { level: b.level as number } : {}), ...(b.percent !== undefined ? { percent: b.percent as number } : {}), ...(typeof source === 'string' ? { source } : {}), ...(lanes ? { lanes } : {}) };
   }
   // Story recruits (v30): guests and this run's recruits are roster members from this map's recruit list, never both.
-  const recruitIds = (v: unknown): string[] | undefined => {
+  // v38: prologue-only guests travel too, and starter picks (`map.draft`) are recruited.
+  const recruitIds = (v: unknown, extra: readonly string[]): string[] | undefined => {
     if (v === undefined) return undefined;
-    const allowed = (map.recruits ?? []).map(r => r.hero).filter(id => [...roster.deployed, ...roster.reserve].includes(id));
+    const allowed = [...(map.recruits ?? []).map(r => r.hero), ...extra].filter(id => [...roster.deployed, ...roster.reserve].includes(id));
     return idList(v, allowed);
   };
-  const guests = recruitIds(s.guests), recruited = recruitIds(s.recruited);
+  const guests = recruitIds(s.guests, map.prologueGuests ?? []), recruited = recruitIds(s.recruited, map.draft?.pool ?? []);
   // v38: recruits on their way are this map's recruits who are not on the roster.
   let arrivals: Record<string, number> | undefined;
   if (s.arrivals !== undefined) {
@@ -335,6 +338,9 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
   if ((s.riftCore !== undefined && !isInt(s.riftCore, 1, 999)) || (s.tomeWins !== undefined && !isInt(s.tomeWins, 1, 9999))) throw new Error('Invalid run');
   const runTomes = s.tomes === undefined ? undefined : tomesOf(s.tomes);
   if (guests && recruited && guests.some(id => recruited.includes(id))) throw new Error('Invalid run');
+  // v38: a starter recruitment in progress; its offers must be the ones this state deals.
+  const d = s.draft === undefined ? undefined : obj(s.draft);
+  if (d && (!map.draft || !isInt(d.left, 1, map.draft.picks) || !isInt(d.level, 1, 99) || battle)) throw new Error('Invalid run');
   const state: ExpeditionState = {
     ...(guests ? { guests } : {}), ...(recruited ? { recruited } : {}), ...(arrivals ? { arrivals } : {}), ...(s.hard === true ? { hard: true as const } : {}),
     ...(runTomes ? { tomes: runTomes } : {}), ...(s.riftCore !== undefined ? { riftCore: s.riftCore as number } : {}), ...(s.tomeWins !== undefined ? { tomeWins: s.tomeWins as number } : {}),
@@ -357,6 +363,10 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
   if (tileAt(map, state.position)?.kind === 'wall' && !passableWall(state, map, state.position)) throw new Error('Invalid position');
   if (boulderAt(state, map, state.position) || openPit(state, map, state.position)) throw new Error('Invalid position');
   if (state.camp && tileAt(map, state.camp)?.kind !== 'camp') throw new Error('Invalid camp');
+  if (d) {
+    state.draft = { left: d.left as number, level: d.level as number, offers: [] }; state.draft.offers = draftOffers(state, map);
+    if (JSON.stringify(state.draft.offers) !== JSON.stringify(d.offers) || !state.draft.offers.length) throw new Error('Invalid run');
+  }
   // v34 commands that no longer replay against the four-slot encounters restart the battle from its entry.
   if (version < 35 && battle?.commands.length) try { battleState(state, map, lookup); } catch { battle.commands = []; }
   // A battle can end on enemy opening turns before any command; apply it now.

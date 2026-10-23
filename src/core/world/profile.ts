@@ -6,7 +6,7 @@ import type { Lane, GuideDefinition, GuideKind, LobbyFeature, Commander, ShopIte
 import { rollItem, salvageValue } from './equipment';
 import { addTomes, dismissTomes, emptyTomes, firstClearTomes, tomeCount } from './tomes';
 import { COMPANY_CAP, GEAR_SLOTS, PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS, SET_IDS } from './types';
-import { heroCatalog, levelOf, loadoutReason, memberDef, newExpedition, recommendedLane, rollPercent, rosterIds, type EncounterLookup } from './world';
+import { draftPick, heroCatalog, levelOf, loadoutReason, memberDef, newExpedition, recommendedLane, rollPercent, rosterIds, type EncounterLookup } from './world';
 import { laneReason, withLane } from './formation';
 import type { ActionId } from '../battle/types';
 
@@ -255,12 +255,15 @@ export function depart(initial: Profile, map: MapDefinition, lookup: EncounterLo
   run.hunt=startHunt(profile);if(map.bossCharm)run.bossLoot=startBossPlan(profile,map);
   if (hard) run.hard = true;
   // Story recruits not yet in the company (owner 2026-10-23). Before the prologue they come along as guests in free
-  // party slots and fight it with the team (world.ts `recruit` parts them after the win). Past the prologue each waits
-  // for its own point (`arrivals`), a roster slot kept for it; the prologue's own recruit joins at once.
+  // party slots and fight it with the team, with any prologue-only guests (world.ts `recruit` parts them after the win).
+  // Past the prologue each waits for its own point (`arrivals`), a roster slot kept for it; the prologue's own recruit
+  // joins at once.
   const level = joinLevel(profile, map); let free = PARTY_SLOTS + RESERVE_SLOTS - rosterIds(run).length;
-  for (const { hero: id, at } of map.recruits ?? []) {
-    if (profile.company.includes(id) || rosterIds(run).includes(id) || free <= 0) continue;
-    free--;
+  const temporary = run.tutorialDone ? [] : (map.prologueGuests ?? []);
+  for (const { hero: id, at } of [...map.recruits ?? [], ...temporary.map(hero => ({ hero, at: 'prologue' as const }))]) {
+    if (profile.company.includes(id) || rosterIds(run).includes(id)) continue;
+    if (temporary.includes(id) ? rosterIds(run).length >= PARTY_SLOTS + RESERVE_SLOTS : free <= 0) continue;
+    if (!temporary.includes(id)) free--;
     if (run.tutorialDone && at !== 'prologue') { (run.arrivals ??= {})[id] = level; continue; }
     const group = run.roster.deployed.length < PARTY_SLOTS ? 'deployed' : 'reserve';
     run.roster[group].push(id); run.members[id] = { stars: 1, dupes: 0, ...(level > 1 ? { level, exp: 0 } : {}) };
@@ -283,7 +286,9 @@ export function brew(initial: Profile, map: MapDefinition, potion: PotionId): Pr
 // Share of carried ore/seals kept when the expedition ends this way (embers never leave the map).
 export const keptPercent: Record<RunOutcome, number> = { complete: 100, withdrawn: 100, wiped: 50 };
 export function settle(initial: Profile, settled: ExpeditionState, outcome: RunOutcome, map: MapDefinition): Profile {
-  const profile = structuredClone(initial); const pct = keptPercent[outcome]; const run = structuredClone(settled);
+  const profile = structuredClone(initial); const pct = keptPercent[outcome]; let run = structuredClone(settled);
+  // A starter pick left open (withdrawn before choosing) takes the first offer, so the company is never short of it.
+  while (run.draft) run = draftPick(run, map, 0).state;
   // Story recruits join for good (whatever the outcome); guests who never joined leave, and what they wore goes to the
   // bag (finds) or back to the company's spare items (own items).
   for (const id of run.recruited ?? []) {

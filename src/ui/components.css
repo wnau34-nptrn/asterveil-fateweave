@@ -279,6 +279,8 @@
 .hire-board .hire-open .star-row .icon { width: 16px; height: 16px; }
 .hire-board .hire-open small { line-height: 1.35; }
 .hire-board li > button[id^="hire-"]:not(.hire-open) { position: absolute; left: 124px; right: 12px; bottom: 12px; min-height: 48px; border-radius: 12px; font: 700 17px var(--font-display, Kanit), sans-serif; background: linear-gradient(180deg, #f2d596, #d8b673); color: #1b1305; border-color: transparent; }
+.draft-board .hire-open { min-height: 140px; }
+.hire-board li > button[id^="draft-"] { position: absolute; left: 124px; right: 12px; bottom: 12px; min-height: 48px; border-radius: 12px; font: 700 17px var(--font-display, Kanit), sans-serif; background: linear-gradient(180deg, #f2d596, #d8b673); color: #1b1305; border-color: transparent; }
 .hire-board li > button[disabled] { background: #1a2b40; color: var(--text-muted, #bbcadb); }
 @container game (max-width: 400px) { .hire-board .hire-open small:not(.hire-status) { display: block; font-size: 12px; } }
 .hire-board .hire-open .hire-status { font-size: 11px; opacity: .8; }

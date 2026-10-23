@@ -1,5 +1,11 @@
 # Codex → Claude handoff
 
+## 2026-10-23 — Claude: starter recruitment after the prologue (owner approved, save v38)
+
+- After the prologue (fought by four) Aira and Seren part ways, Lyra joins, then the new company makes two free picks (pick 1 of 3 from Lio/Brann/Sefa/Toma, `MapDefinition.draft`; a support, Lio or Toma, is always offered while the team has none). Each recruit has a short scene first. Aira comes back as the map 1 boss fight starts, Seren as the map 2 boss fight starts (`prologueGuests: ['healer']` on map 1, `healer` at `boss` on map 2). No R-tier heroes.
+- `draftOffers`/`draftPick` in `world.ts` (offers from the seed, no encounter rolls); `run.draft` blocks moving; `settle` takes first offers if withdrawn; the save recomputes the offers. Map 1 is version 3 (older map 1 runs settle home). UI `#draft-dialog` (not dismissable), hire-board cards.
+- Sim: `tests/starter-sim.test.ts` (every pair clears map 1, `STARTERS.md`); campaign map 1 first runs 100%. Regressions to fix next (task 6, big trees for the four classes): map 3 first run rush advisor 92% → 25%, map 2 casual 58%.
+
 ## 2026-10-23 — Claude: story recruits one at a time (owner, save v38)
 
 - The prologue is still fought by four (Knight + three guests). On the win the guests who did not join part ways (`world.ts` `disband` → `run.arrivals`, hero → join level) and leave roster/members/HP; the Knight and Lyra are restored to full HP. Aira steps back in on reaching the camp; Seren as the boss fight starts (before `startBattle`, so she fights it). `recruit(state, map, at, lookup)` handles both arrivals and old guests. Past the prologue, `depart` puts camp/boss recruits straight into `arrivals`.

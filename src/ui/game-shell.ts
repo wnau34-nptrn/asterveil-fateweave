@@ -2,14 +2,14 @@ import {chooseBossTarget} from '../core/world/boss-equipment';
 import {chooseHuntTarget} from '../core/world/targeted-loot';
 import {departureBlocked,collectOverflow,recycleSelection,expandStorage} from '../core/world/storage';
 import { bindInfoTabs } from './info-tabs';
-import { chooseRunLoadout, learnRunTalent } from '../core/world/world';
+import { chooseRunLoadout, learnRunTalent, rosterIds } from '../core/world/world';
 import { applyCampEquipment, applyRunEquipment } from '../core/world/auto-equipment';
 import { shortcutBlocked } from '../platform/keyboard';
 import type { BattleState, Outcome } from '../core/battle/types';
 import { clearLegacySaves, loadGame, saveGame, type Game } from '../core/save/expedition-save';
 import { setPartyLane, chooseLoadout, hardReason, claimGuide, renameCamp, createCommander, depart, mapUnlocked, brew, buy, claimQuest, refreshBoard, dismiss, equip, hire, learnTalent, newProfile, placeMember, resetTalents, salvage, settle, unequip, upgrade, canWithdraw } from '../core/world/profile';
 import type { Point, Direction, EventChoice, ExpeditionState, MapDefinition, PotionId, Profile, ProfileResult, RunOutcome, ShopItemId, WorldEvent } from '../core/world/types';
-import { travel, tileAt, startPrologue, questDone, battleData, chooseEvent, finishBattle, heroCatalog, move, moveMember, openChest, recordBattle, usePotion, rest, revive, setLane, swapMembers, takeOff, wear, type EncounterLookup } from '../core/world/world';
+import { draftPick, travel, tileAt, startPrologue, questDone, battleData, chooseEvent, finishBattle, heroCatalog, move, moveMember, openChest, recordBattle, usePotion, rest, revive, setLane, swapMembers, takeOff, wear, type EncounterLookup } from '../core/world/world';
 import { Music, type Track } from '../platform/music';
 import { firstClearStory, runSummary, SummaryUI, type RunSummary } from './summary-ui';
 import { sfx, type SfxName } from '../platform/sfx';
@@ -73,7 +73,7 @@ export class GameShell {
     this.world = new WorldUI(views.world, this.map, heroCatalog(lookup, map), {
       travel: to => this.travelTo(to), move: dir => this.move(dir), rest: () => this.rest(), revive: id => this.revive(id), swap: (a, b) => this.roster(swapMembers(this.state!, a, b)), lane: (id, lane, other) => this.roster(setLane(this.state!, map, lookup, id, lane, other)), moveMember: id => this.roster(moveMember(this.state!, id)),
       withdraw: () => this.endRun('withdrawn'), openChest: () => this.openChest(), usePotion: (potion, id) => this.drink(potion, id),
-      chooseEvent: choice => this.chooseEvent(choice),
+      chooseEvent: choice => this.chooseEvent(choice), draft: index => this.draft(index),
       talent: (id, node) => {
         if (!this.state || this.locked) return;
         const result = learnRunTalent(this.state, map, lookup, id, node);
@@ -331,6 +331,19 @@ export class GameShell {
     this.message = 'กลับมาเดินทางต่อจากจุดที่บันทึกไว้';
     this.banner = undefined;
     this.renderWorld();
+    if (this.state?.draft) this.world.openDraft();
+  }
+  // Starter recruitment (owner 2026-10-23): each pick is saved at once, its recruit scene plays, then the next offers.
+  private draft(index: number): void {
+    if (!this.state || this.locked) return;
+    const result = draftPick(this.state, this.map, index, this.lookup);
+    if (result.event.type !== 'drafted') return;
+    this.state = result.state; this.persist(); this.world.closeDraft();
+    this.message = `${heroText[result.event.heroId]?.name ?? ''} เข้าร่วมทีมแล้ว`; this.renderWorld();
+    this.playRecruits(() => this.afterRecruits());
+  }
+  private afterRecruits(): void {
+    if (this.state?.draft) this.world.openDraft(); else this.views.world.querySelector<HTMLElement>('#move-up')?.focus({ preventScroll: true });
   }
   private renderWorld(): void {
     this.world.setMap(this.map, this.eliteArtOf(this.map));
@@ -350,6 +363,7 @@ export class GameShell {
   private move(dir: Direction): void {
     if (!this.state || this.locked) return;
     const result = move(this.state, this.map, dir, this.lookup);
+    if (result.event.type === 'blocked' && this.state.draft) { this.world.openDraft(); return; }
     if (result.event.type === 'blocked') {
       this.message = result.event.reason === 'wall' ? 'ทางนี้ไปต่อไม่ได้' : result.event.reason === 'party' ? 'ทีมที่ลงสนามล้มหมด · สลับตัวสำรองในกระเป๋า หรือชุบที่แคมป์ก่อนออกเดินทาง'
         : result.event.reason === 'stone' ? 'หินขยับไปทางนั้นไม่ได้' : result.event.reason === 'pit' ? 'หลุมลึกขวางทาง · ต้องหาอะไรมาถม'
@@ -530,7 +544,9 @@ export class GameShell {
     this.renderWorld();
     // After the prologue fight, Vargoth withdraws into the rift and the journey's goal is set.
     const focus = () => this.views.world.querySelector<HTMLElement>('#move-up')?.focus({ preventScroll: true });
-    if (this.prologueWon) { this.prologueWon = false; this.music.play('archway'); this.story.play(prologueEnd(Object.keys(this.state?.arrivals ?? {})), 'ออกเดินทาง', () => { this.music.play('meadow'); this.playRecruits(focus); }); return; }
-    this.playRecruits(focus);
+    // The guests who part ways after it: this map's later recruits and prologue-only guests no longer on the roster.
+    const parted = [...(this.map.recruits ?? []).filter(r => r.at !== 'prologue').map(r => r.hero), ...this.map.prologueGuests ?? []].filter(id => this.state && !rosterIds(this.state).includes(id) && !this.game?.profile.company.includes(id));
+    if (this.prologueWon) { this.prologueWon = false; this.music.play('archway'); this.story.play(prologueEnd(parted), 'ออกเดินทาง', () => { this.music.play('meadow'); this.playRecruits(() => this.afterRecruits()); }); return; }
+    this.playRecruits(this.state.draft ? () => this.afterRecruits() : focus);
   }
 }

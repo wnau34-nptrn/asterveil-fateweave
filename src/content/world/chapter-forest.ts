@@ -39,7 +39,8 @@ export const forestMap: MapDefinition = {
   // A10 (2026-10-22): plain attacks beat the thorn lord every time; its foes fight with 130% HP and move damage.
   bossPercent: 130,
   bossDrop: { weights: [0, 30, 45, 20, 5], zoneSets: true },
-  recruits: [{ hero: 'garran', at: 'camp' }],
+  // Seren, who parted after the map 1 prologue, comes back as the thorn lord's fight starts (owner 2026-10-23).
+  recruits: [{ hero: 'garran', at: 'camp' }, { hero: 'healer', at: 'boss' }],
   revealRadius: 3,
   chests: [
     { id: 'forest-west', x: 1, y: 10, tier: 'common' }, { id: 'forest-east', x: 14, y: 5, tier: 'common' },

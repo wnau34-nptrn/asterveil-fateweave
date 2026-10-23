@@ -19,12 +19,15 @@ export const prologue = (commander: string): readonly StoryPanel[] => [
   { speaker: 'tracer', text: 'มันส่งกองหน้ามาแล้ว! ผู้บัญชาการ สั่งพวกเราเถอะ ด้ายชะตาของท่านจะบอกว่าศัตรูจะโจมตีตรงไหน', scene: 'rift' },
 ];
 // `parted` (owner 2026-10-23): the guests who have not joined yet part ways after the prologue, each saying where
-// they go; they come back at their own story point (Aira at the camp, Seren as the boss fight starts).
+// they go; they come back at their own story point (Aira as the map 1 boss fight starts, Seren on map 2).
+const parting: Readonly<Record<string, string>> = {
+  weaver: 'ข้าจะล่วงหน้าไปดูทางที่ประตูป้อม ถ้าท่านไปถึงหัวหน้ากองหน้าเมื่อไร ข้าจะรออยู่ตรงนั้น',
+  healer: 'ข้าต้องพาผู้บาดเจ็บข้ามป่าทางเหนือไปที่ปลอดภัยก่อน ถ้าท่านผ่านป่าทึบมาได้ เราจะได้พบกันอีก',
+};
 export const prologueEnd = (parted: readonly string[] = []): readonly StoryPanel[] => [
   { speaker: 'vargoth', text: 'น่าสนใจ… ด้ายชะตาของเจ้ายังไม่ขาด ข้าจะรอเจ้าที่ประตูรอยแยก', scene: 'retreat' },
   ...(parted.length ? [
-    ...(parted.includes('healer') ? [{ speaker: 'healer' as const, text: 'มันถอยกลับเข้ารอยแยกแล้ว แต่หัวหน้ากองหน้าของมันยังเฝ้าประตูอยู่ ข้าต้องกลับไปดูแลผู้บาดเจ็บที่ป้อมหลังก่อน แล้วจะตามไปสมทบที่ประตูรอยแยก', scene: 'retreat' as const }] : []),
-    ...(parted.includes('weaver') ? [{ speaker: 'weaver' as const, text: 'ข้าจะล่วงหน้าไปจุดไฟที่แคมป์ในป้อม ถ้าท่านตามไปถึง ค่อยว่ากันว่าข้าจะอยู่ต่อหรือไม่', scene: 'retreat' as const }] : []),
+    ...parted.filter(id => parting[id]).map(id => ({ speaker: id as Speaker, text: parting[id]!, scene: 'retreat' as const })),
     { speaker: 'narrator' as const, text: 'ทหารที่ช่วยรบแยกย้ายกันไป เหลือเพียงเอกิสยืนอยู่เคียงข้างผู้บัญชาการ', scene: 'retreat' as const },
   ] : [
     { speaker: 'healer' as const, text: 'มันถอยกลับเข้ารอยแยกแล้ว แต่แม่ทัพของมันเฝ้าประตูอยู่ ไปตั้งหลักที่แคมป์ในป้อมก่อน แล้วขับไล่หัวหน้ากองหน้าของมันออกไป', scene: 'retreat' as const },
@@ -34,9 +37,13 @@ export const prologueEnd = (parted: readonly string[] = []): readonly StoryPanel
 // Story recruits (master plan A2): the guest steps forward and joins the ค่ายทหารรับจ้าง for good.
 const recruitLines: Readonly<Record<string, string>> = {
   tracer: 'ข้าชื่อไลรา ทหารจากป้อมตะวันออก… ถ้าท่านมองเห็นชะตาได้จริง ข้าจะตามท่านไปเอง',
-  weaver: 'แคมป์นี้อุ่นกว่าที่คิด… ไอราจะอยู่ด้วย เวทของข้าควรใช้ปกป้องคนที่ยังสู้อยู่',
+  weaver: 'ข้าบอกแล้วว่าจะรออยู่ที่นี่… ท่านมาถึงจริงๆ ไอราจะอยู่ด้วย เวทของข้าควรใช้ปกป้องคนที่ยังสู้อยู่',
+  lio: 'ข้าลิโอ นักกวีรูนที่ป้อมเก่าไม่ต้องการแล้ว… ถ้าท่านให้ข้าร่วมทาง เพลงของข้าจะทำให้ทุกคนสู้ได้นานขึ้น',
+  brann: 'ข้าแบรนน์ ค้อนของข้าเคยเฝ้าประตูป้อมตะวันตก… ให้ข้ายืนหน้าทีม แล้วศัตรูจะมองแต่ข้า',
+  sefa: 'เซฟา นักสอดแนม… ข้าเห็นท่านสู้มาตั้งแต่ซากป้อม ถ้ารับข้า ข้าจะลงมือก่อนศัตรูขยับเสมอ',
+  toma: 'ข้าโทมะ นักเล่นแร่ ยาของข้ายังเหลืออีกหลายขวด… ค่ายของท่านต้องการคนแบบข้าแน่นอน',
   garran: 'ข้าการ์แรน เฝ้าเส้นทางนี้มาคนเดียวตั้งแต่หน่วยของข้าถูกป่ากลืน… ถ้าท่านจะฝ่าไป ทวนของข้าขอไปด้วย',
-  healer: 'ข้าตามมาทันแล้ว… หัวหน้ากองหน้าอยู่ตรงหน้า ท่านพาพวกเรามาถึงที่นี่ได้จริง เซเรนขอสู้เคียงข้างและเดินทางไปกับท่าน',
+  healer: 'ข้าพาผู้บาดเจ็บถึงที่ปลอดภัยแล้ว… ท่านผ่านป่ามาถึงเจ้าป่าหนามได้จริง เซเรนขอสู้เคียงข้างและเดินทางไปกับท่าน',
 };
 export const recruitStory = (heroes: readonly string[], camp: string): readonly StoryPanel[] => heroes.flatMap(id => [
   { speaker: id as Speaker, text: recruitLines[id] ?? `${heroText[id]?.name ?? ''} ขอเข้าร่วมทางไปกับท่าน`, scene: 'retreat' as const },

@@ -43,6 +43,11 @@ export interface MapDefinition {
   // Story recruits (master plan A2, owner 2026-10-23): heroes not yet in the company fight the prologue as guests, then
   // part ways and join one at a time: at the prologue win, on reaching a camp, or as the boss fight starts. `firstCompany`: a new company's only member.
   recruits?: readonly { hero: string; at: RecruitPoint }[]; firstCompany: readonly string[];
+  // Starter recruitment (owner 2026-10-23): after a new company's prologue, `picks` free picks, each one of
+  // `company.offers` mercenaries from `pool`; while the team has no `support` member, every offer includes one.
+  draft?: { pool: readonly string[]; support: readonly string[]; picks: number };
+  // Heroes who fight this map's prologue as guests but join on a later map (they part ways after it).
+  prologueGuests?: readonly string[];
   // Lobby systems open by chapter (master plan A3): the chapter number whose map must be cleared first.
   unlocks: Readonly<Record<LobbyFeature, number>>;
   guides: readonly GuideDefinition[];
@@ -418,6 +423,9 @@ export interface ExpeditionState {
   // Story recruits on their way (save v38, owner 2026-10-23): hero → the level it joins at when its camp is reached or the
   // boss fight starts (guests who parted after the prologue, or recruits of a company past the prologue). Missing = none.
   arrivals?: Record<string, number>;
+  // Starter recruitment in progress (save v38, `MapDefinition.draft`): picks left, the level they join at and the
+  // current offers (always `draftOffers` of this state). The party cannot move on until every pick is made.
+  draft?: { left: number; level: number; offers: string[] };
   // Hard mode (A9, save v33): set on departure, never changed during the run.
   hard?: true;
   bossLoot?:BossPlan;
@@ -470,6 +478,7 @@ export type WorldEvent =
   | { type: 'secret'; secretId: string }
   | { type: 'herb'; herbId: string }
   | { type: 'travelled'; to: Point }
+  | { type: 'drafted'; heroId: string }
   | { type: 'victory'; kind: BattleKind; encounterId: string; loot: Resources; exp?: Record<string, ExpGain>; item?: Item; items?: Item[]; dust?: number; tomes?: TomeBag; riftCore?: number }
   | { type: 'defeat'; kind: BattleKind; encounterId: string; wiped?: boolean };
 // EXP from one victory for one brought member: `percent` is the level-gap multiplier.

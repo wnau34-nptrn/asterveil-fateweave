@@ -6,7 +6,7 @@ import { gameRules } from './rules';
 // a camp rest and a small boss; no elites, events, puzzles or rift seal. Draft numbers until playtested.
 export const ruinsMap: MapDefinition = {
   ...gameRules,
-  id: 'ruined-border', version: 2, name: 'ซากชายแดน', chapter: 1, bossName: 'หัวหน้ากองหน้า', goalName: 'ประตูป้อม',
+  id: 'ruined-border', version: 3, name: 'ซากชายแดน', chapter: 1, bossName: 'หัวหน้ากองหน้า', goalName: 'ประตูป้อม',
   summary: 'ซากป้อมชายแดนที่กองหน้าของวาร์กอธบุกเข้ามา ฝึกเดินทาง เปิดหีบ สวมอุปกรณ์ แล้วขับไล่หัวหน้ากองหน้า',
   rows: [
     '##############',
@@ -37,8 +37,11 @@ export const ruinsMap: MapDefinition = {
   revealRadius: 3,
   // The prologue win leaves one plain body piece in the bag, so the first lesson on the map is wearing it.
   firstFind: { slot: 'body', rarity: 1 },
-  // The three soldiers who fight beside the Knight in the prologue stay for good one by one (lore draft, act 1).
-  recruits: [{ hero: 'tracer', at: 'prologue' }, { hero: 'weaver', at: 'camp' }, { hero: 'healer', at: 'boss' }],
+  // The three soldiers who fight beside the Knight in the prologue part ways after it (owner 2026-10-23): Lyra stays,
+  // Aira comes back as the boss fight starts, Seren on map 2. A new company first recruits two mercenaries (a
+  // support among them: Lio or Toma) so each company plays different heroes.
+  recruits: [{ hero: 'tracer', at: 'prologue' }, { hero: 'weaver', at: 'boss' }],
+  draft: { pool: ['lio', 'brann', 'sefa', 'toma'], support: ['lio', 'toma'], picks: 2 }, prologueGuests: ['healer'],
   chests: [
     { id: 'ruins-west', x: 2, y: 6, tier: 'common' }, { id: 'ruins-east', x: 12, y: 7, tier: 'common' },
     { id: 'ruins-tower', x: 4, y: 3, tier: 'rare' },

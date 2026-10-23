@@ -15,7 +15,7 @@ import { canManage, wear, type BagList, travelTargets, atCamp, atMuster, canOpen
 import { PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS, type Lane } from '../core/world/types';
 import { formation } from '../core/world/formation';
 import { formationGrid, formationTap, laneName } from './formation-grid';
-import { portrait, starRow } from './portraits';
+import { heroArt, portrait, starRow } from './portraits';
 import { SOURCE_TILE, openingFrame, chestFrame, decorAt, itemFrame, floorFrame, fogLayers, landmarkAt, tileSizeFor, tileset, worldArtUrl, type Landmark } from '../game/visuals/world-art';
 import { questLine, choiceText, eventChoices, eventReasonText, eventText, heroText, itemLines, itemName, itemOwner, potionText, resourceOrder, resourceText, tomeThai } from './th';
 import { tomeCount } from '../core/world/tomes';
@@ -25,7 +25,7 @@ import { boulderPosition, doorOpen, openPit, secretAt } from '../core/world/puzz
 
 export interface WorldHost { travel(to: Point): void; move(dir: Direction): void; rest(): void; revive(heroId: string): void; swap(a: string, b: string): void; moveMember(id: string): void; lane(id: string, lane: Lane, other?: string): void; withdraw(): void; openChest(): void;
   talent(heroId: string, node: TalentNode): void; loadout(heroId: string, actions: ActionId[]): void; autoEquip(plan: AutoEquipmentPlan): void;
-  usePotion(potion: PotionId, heroId?: string): void; chooseEvent(choice: EventChoice): void;
+  usePotion(potion: PotionId, heroId?: string): void; chooseEvent(choice: EventChoice): void; draft(index: number): void;
   wear(heroId: string, from: BagList, index: number): void; takeOff(heroId: string, slot: GearSlot): void }
 export interface WorldBanner { kind: 'encounter' | 'boss' | 'elite' | 'tutorial' | 'complete'; eyebrow: string; title: string; detail: string }
 export interface WorldView { state: ExpeditionState; message: string; locked: boolean; saved: boolean; banner?: WorldBanner; effect?: 'rest' | 'loot' }
@@ -116,6 +116,7 @@ export class WorldUI {
       <dialog id="world-goals" class="world-dialog" aria-labelledby="world-goals-title"><div class="info-header"><h2 id="world-goals-title">เป้าหมายการเดินทาง</h2><button data-world="goals-close" class="quiet" aria-label="ปิดเป้าหมาย">${icon('close')}</button></div><div class="info-content" id="world-goals-content"></div></dialog>
       <dialog id="camp-dialog" class="world-dialog" aria-labelledby="camp-title"><div class="info-header"><h2 id="camp-title">${icon('camp')} แคมป์พักแรม</h2><button data-world="camp-close" class="quiet" aria-label="ปิดแคมป์">${icon('close')}</button></div><div class="info-content" id="camp-content"></div></dialog>
       <dialog id="pack-dialog" class="world-dialog" aria-labelledby="pack-title"><div class="info-header"><h2 id="pack-title">${icon('pack')} กระเป๋า</h2><button data-world="pack-close" class="quiet" aria-label="ปิดกระเป๋า">${icon('close')}</button></div><div class="info-content" id="pack-content"></div></dialog>
+      <dialog id="draft-dialog" class="world-dialog draft-dialog" aria-labelledby="draft-title"><div class="info-header"><h2 id="draft-title">${icon('gold')} รับสมัครทหารรับจ้าง</h2></div><div class="info-content" id="draft-content"></div></dialog>
       <dialog id="event-dialog" class="world-dialog" aria-labelledby="event-title"><div class="info-header"><h2 id="event-title"></h2><button data-world="event-close" class="quiet" aria-label="ปิดและเดินต่อ">${icon('close')}</button></div><div class="info-content" id="event-content"></div></dialog>
       <dialog id="world-info" class="world-dialog" aria-labelledby="world-info-title"><div class="info-header"><h2 id="world-info-title">ข้อมูลการเดินทาง</h2><button data-world="info-close" class="quiet" aria-label="ปิดข้อมูล">${icon('close')}</button></div>${infoTabs('world',false,false,true)}<div class="info-content"><section id="world-panel-settings" role="tabpanel" aria-labelledby="world-tab-settings" hidden><section class="battle-sound"><h3>เพลงและเสียงเอฟเฟกต์</h3><div id="world-sfx-controls"></div></section></section><section id="world-panel-loot" role="tabpanel" aria-labelledby="world-tab-loot" hidden><div id="world-loot-content"></div></section><section id="world-panel-guide" role="tabpanel" aria-labelledby="world-tab-guide"><div id="world-info-content"></div></section></div></dialog>`;
     if(skillData) this.characters = new CharacterPanel(root,map,heroes,skillData,{
@@ -127,6 +128,8 @@ export class WorldUI {
       restore:id=>{if(id==='pack-dialog')this.renderPack();else if(id==='camp-dialog')this.renderCamp();},
     },'',this.inventoryFilters);
     root.addEventListener('change',event=>{const control=event.target as HTMLInputElement|HTMLSelectElement;if(control.closest('.character-dialog')||!control.dataset.gearFilter||root.hidden||root.closest('[inert]')||Array.from(root.querySelectorAll('dialog[open]')).some(d=>!d.contains(control)))return;changeGearFilter(this.inventoryFilters,control);this.renderPack();root.querySelector<HTMLElement>('#'+control.id)?.focus();});
+    // The recruitment must be finished: Escape does not close it.
+    root.querySelector('#draft-dialog')!.addEventListener('cancel', e => e.preventDefault());
     for (const [id, trigger] of [['world-info', 'world-info-button'], ['world-goals', 'objective-button'], ['pack-dialog', 'world-pack'], ['camp-dialog', 'rest'], ['event-dialog', 'rest']]) {
       root.querySelector(`#${id}`)!.addEventListener('close', () => {
         if (root.querySelector('dialog[open]')) return;
@@ -171,6 +174,7 @@ export class WorldUI {
             this.salvePick = false; this.host.usePotion(potion, button.dataset.hero); this.renderPack(); this.root.querySelector<HTMLElement>(`#potion-${potion}`)?.focus();
           } break;
           case 'event-close': dialog('#event-dialog').close(); break;
+          case 'draft-pick': if (!this.view?.locked) this.host.draft(Number(button.dataset.index)); break;
           case 'event-choice': if (!this.view?.locked) { const choice = button.dataset.choice as EventChoice; this.host.chooseEvent(choice); this.root.querySelector<HTMLElement>(`#event-${choice}`)?.focus(); } break;
           case 'info': this.renderInfo(); dialog('#world-info').showModal(); break;
           case 'info-close': dialog('#world-info').close(); break;
@@ -205,6 +209,18 @@ export class WorldUI {
     else if (canOpenChest(s, this.map)) this.host.openChest();
     else if (pendingEvent(s, this.map)) this.openEvent();
   }
+  // Starter recruitment (owner 2026-10-23): a modal choice that cannot be dismissed; each pick joins the party at once.
+  openDraft(): void {
+    const dialog = this.root.querySelector<HTMLDialogElement>('#draft-dialog')!; const s = this.view?.state; if (!s?.draft) return;
+    const n = this.map.draft!.picks - s.draft.left + 1;
+    const cards = s.draft.offers.map((id, i) => { const h = this.heroes.find(x => x.id === id)!; const t = heroText[id]!;
+      return `<li><div class="hire-open">${heroArt(id)}<span>${starRow(1, this.map.company.maxStars)}<b>${t.name}</b><small>${t.role} · ${h.lane === 'front' ? 'แนวหน้า' : 'แนวหลัง'} · ${t.help}</small><small class="hire-status">HP ${h.maxHp} · SPD ${h.speed}</small></span></div>
+        <button id="draft-${i}" data-world="draft-pick" data-index="${i}" class="secondary" aria-label="รับ${t.name}เข้าทีม">รับเข้าทีม</button></li>`; }).join('');
+    this.root.querySelector('#draft-content')!.innerHTML = `<p class="event-scene">ทหารรับจ้างที่หนีภัยจากป้อมอื่นมาขอเข้าร่วมค่าย · เลือกคนที่ ${n} จาก ${this.map.draft!.picks}</p><ul class="hire-list hire-board draft-board">${cards}</ul>`;
+    if (!dialog.open) dialog.showModal();
+    this.root.querySelector<HTMLElement>('#draft-0')?.focus();
+  }
+  closeDraft(): void { const d = this.root.querySelector<HTMLDialogElement>('#draft-dialog')!; if (d.open) d.close(); }
   // Map events (3A): the dialog opens when the team steps onto one and from the action button while standing on it.
   openEvent(): void {
     const dialog = this.root.querySelector<HTMLDialogElement>('#event-dialog')!;
