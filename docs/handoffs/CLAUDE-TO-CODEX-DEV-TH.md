@@ -136,6 +136,28 @@ WIRING (UI only, no rule/save changes):
 DELIVERABLES: incoming/ART-UI-EQUIP-002/ (png sources, preview grid at 48/64/96 px with sample rarity frames, NOTES.md with the mapping table), the runtime atlas + JSON + code change, and two 390px screenshots for the owner (bag grid with mixed loot, character sheet with a full set worn). Then add the entry Codex owes Claude (AGENTS.md).
 ```
 
+### C8 — ฉากเรื่องตามสถานที่ (Claude ตรวจเกม 2026-10-23)
+
+ตอนนี้ฉากบทพูดมีแค่ 3 ฉากของแมพ 1 (`public/assets/story/story_awaken|rift|retreat.webp`) ฉากรับเข้าทีมทุกฉาก (ไลรา, ทหารรับจ้างที่รับสมัคร, ไอราที่บอสแมพ 1, การ์แรนที่แคมป์ป่า, เซเรนที่บอสแมพ 2) ใช้ฉาก "retreat" ของซากป้อมเหมือนกันหมด แม้จะอยู่ในป่า
+
+```text
+CODEX HANDOFF — ART-STORY-SCENES-002
+Asterveil · Fateweave: story backdrops per place + wiring
+
+Read AGENTS.md and CLAUDE.md first. Base branch feature/fateweave-initial-prototype; work branch codex/story-scenes-002; PR into the base branch (merge when CI passes). Original artwork only; nothing from Asterveil: Rise Beyond. Never use the word ม่านเวล; the group is the ค่ายทหารรับจ้าง.
+READ FIRST: incoming/ART-STORY-PROLOGUE-001/ (approved story backdrop style, size and NOTES), public/assets/story/, src/ui/story-ui.ts (StoryScene, prologue/prologueEnd/recruitStory: every recruit scene is hard-coded to 'retreat'), src/ui/game-shell.ts (where scenes play), docs/LORE_CHAPTER1_TH.md (places and mood), src/content/world/chapter-ruins.ts / chapter-forest.ts / chapter1.ts (map ids).
+ART (same painted style, framing and safe area for the bottom dialogue box as the prologue set; no characters baked in, no text):
+1. camp_night — the commander's camp fire inside the ruined fort at night (recruitment of the first mercenaries, Lyra's join, Aira at the gate).
+2. forest_camp — a lantern-lit camp in the deep forest (เส้นทางป่าทึบ; Garran's join).
+3. forest_gate — the thorn lord's clearing before the boss fight (Seren's return).
+4. rift_line — the violet rift front of แนวรอยแยก (map 3 scenes).
+WIRING (UI only): add the four scenes to StoryScene and the story asset loading; recruitStory takes a scene argument; game-shell chooses it from the map and the moment (ruined-border: camp_night for the starter recruitment and the boss-start return; deep-forest: forest_camp at the camp, forest_gate at the boss; veil-frontier: rift_line); keep prologue scenes unchanged; fall back to 'retreat' if a scene is missing. Update the story browser tests (tests/browser/world.spec.ts story checks) and run npm run typecheck, lint, npx vitest run, build + those tests. Two 390px screenshots for the owner (starter recruitment scene, Seren's return in the forest). Then add the entry Codex owes Claude (AGENTS.md).
+```
+
+### C9 — เสียงประกอบจริง (รอเจ้าของตัดสิน)
+
+ตอนนี้เสียงประกอบทั้งหมดเป็นเสียงสังเคราะห์ชั่วคราวจากโค้ด (`src/platform/sfx.ts` — เจ้าของเลือกไว้ 2026-10-16) ถ้าเจ้าของต้องการเสียงจริง (ดาบ เวท โล่ เดินบนแผนที่ ชนะ/แพ้ เปิดกล่อง) ให้ Claude เขียน prompt เพิ่ม — ยังไม่ต้องทำจนกว่าเจ้าของสั่ง
+
 ## เมื่อ Usage ของ Claude รีเซ็ต (หลัง พ. 28 ต.ค. 19:00)
 
 เปิดแชตใหม่ (Opus) แล้ววาง:
