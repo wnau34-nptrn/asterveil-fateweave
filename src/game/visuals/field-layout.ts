@@ -43,7 +43,7 @@ const below = (size: number) => Math.ceil(size * .04) + 2;
 // Every HP/status panel sits under the feet (owner 2026-10-22: the same height for every unit); only a foe's name
 // stands above its head. Rows are spaced for a figure that fills its frame (rise 1): its name label then still clears
 // the panel of the unit above.
-const FLOOR = .38, LABEL = 13;
+const FLOOR = .38, LABEL = 13, TRIO_STEP = .62;
 const reach = (size: number) => size + 4 + LABEL + 2;
 const stepOf = (size: number, panel: number) => reach(size) + panel + below(size);
 // The largest unit size whose three rows (name + body + panel) fit between the backdrop's floor line (the top row's
@@ -58,18 +58,24 @@ const fitSize = (width: number, height: number, panel: number, floor = true) => 
 
 export function fieldSlots(width: number, height: number, layout: SlotLayout = none): FieldSlot[] {
   // A 30px panel: the HP number over a centred bar, small status icons under it.
-  const panel = 30, size = Math.max(fitSize(width, height, panel), fitSize(width, height, panel, false));
-  if (size < 44) return shortSlots(width, height, layout);
-  // The grid is anchored to the bottom: rows are one step apart, the bottom row's feet just above the field's edge.
-  // Rows spread up to where the backdrop's floor begins (the top row's feet at FLOOR of the height) so a large foe
-  // under another unit has room; never closer than one unit + panel.
-  const bottom = height - 2 - panel - below(size), step = Math.max(stepOf(size, panel), (bottom - Math.max(height * FLOOR, reach(size))) / 2);
+  const panel = 30, fitted = Math.max(fitSize(width, height, panel), fitSize(width, height, panel, false));
+  if (fitted < 44) return shortSlots(width, height, layout);
+  // Every unit stands at one size whether a column holds two or three (owner 2026-10-23): the largest size up to the
+  // width cap whose top row keeps its head and name inside the field and whose rows leave a column of three
+  // `TRIO_STEP` of its size between feet (a trio's upper heads then overlap the HP panel above only a little).
+  // The grid is anchored to the bottom: the bottom row's feet just above the field's edge; rows spread up to where the
+  // backdrop's floor begins (the top row's feet at FLOOR of the height) when that leaves room.
+  const widthCap = Math.max(fitted, Math.min(140, Math.floor(width * UNIT_WIDTH)));
+  const geometry = (u: number) => {
+    const bottom = height - 2 - panel - below(u), available = (bottom - (u * 1.03 + 4 + LABEL + 2)) / 2;
+    const spread = (bottom - Math.max(height * FLOOR, reach(u))) / 2;
+    // At the three-row fit itself rows keep the full panel clearance, as before.
+    return { bottom, available, step: u <= fitted ? Math.max(stepOf(u, panel), spread) : Math.min(available, Math.max(u * TRIO_STEP + panel + below(u), spread)) };
+  };
+  let size = widthCap;
+  while (size > fitted && geometry(size).available < size * TRIO_STEP + panel + below(size)) size--;
+  const { bottom, step } = geometry(size);
   const rows = [bottom - 2 * step, bottom - step, bottom];
-  // Rows are spaced for three units in a column. When no column holds three, only the top and bottom rows (two steps
-  // apart) or a lone middle unit stand, so units may be drawn larger than the three-row fit allows, up to the width cap
-  // and keeping their heads inside the field (owner 2026-10-23: phones with a shorter field drew units too small).
-  const widthCap = Math.min(140, Math.floor(width * UNIT_WIDTH)), headroom = Math.floor((rows[0]! - LABEL - 6 - 4) / 1.03);
-  const unit = layout.trio.size ? size : Math.max(size, Math.min(widthCap, headroom, Math.floor(2 * step - panel - LABEL - 8)));
   const cellWidth = width * .22, iconSize = 12, compact = false;
   const maxIcons = Math.min(3, Math.floor((cellWidth - 18) / (iconSize + 2)));
   return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(slot => {
@@ -80,12 +86,12 @@ export function fieldSlots(width: number, height: number, layout: SlotLayout = n
     const above = [...layout.rows].filter(([other, r]) => other !== slot && columnOf(other) === columnOf(slot) && r < row).map(([, r]) => rows[r]!);
     const ceiling = above.length ? Math.max(...above) + below(size) + panel : 0;
     const rise = Math.min(1, layout.rise?.get(slot) ?? 1);
-    const drawn = layout.large.has(slot) ? Math.floor(Math.max(unit, Math.min(unit * LARGE_SCALE, (y - ceiling - 4 - LABEL - 2) / rise))) : unit;
+    const drawn = layout.large.has(slot) ? Math.floor(Math.max(size, Math.min(size * LARGE_SCALE, (y - ceiling - 4 - LABEL - 2) / rise))) : size;
     const top = y - drawn * 1.03 - 4;
     return {
       x, y, size: drawn, compact, tiny: false, side: false, iconSize, maxIcons,
       body: { x: x - drawn * .51, y: top, width: drawn * 1.02, height: drawn * 1.07 + 4 },
-      panel: { x: x - cellWidth / 2, y: y + below(unit), width: cellWidth, height: panel },
+      panel: { x: x - cellWidth / 2, y: y + below(size), width: cellWidth, height: panel },
       label: { x: x - cellWidth / 2, y: y - rise * drawn - 4 - LABEL - 2, width: cellWidth, height: LABEL },
     };
   });
