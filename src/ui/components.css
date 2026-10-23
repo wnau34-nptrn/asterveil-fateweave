@@ -194,7 +194,7 @@
 @container game (max-width: 380px) { .tree-grid { --node: 44px; grid-template-columns: repeat(3, minmax(0, 1fr)); } .tree-grid > span { display: none; } }
 
 /* Painted skill icons: one atlas cell scaled to the icon box; painted art keeps its own colours (no currentColor). */
-.icon.skill-art { display: inline-block; flex: none; background: no-repeat var(--sx) var(--sy) / 600% 600%; filter: drop-shadow(0 1px 1px #0009); }
+.icon.skill-art { display: inline-block; flex: none; background-repeat: no-repeat; background-position: var(--sx) var(--sy); filter: drop-shadow(0 1px 1px #0009); }
 :is(button, .skill-status)[disabled] .icon.skill-art, .skill-status.cooling .icon.skill-art { filter: grayscale(.7) brightness(.7); }
 /* Painted art needs more room than a line glyph to read: bigger in tree nodes, the node card, loadout and skill lists. */
 .character-content .node-tree .talent-node > .icon.skill-art { width: 36px; height: 36px; }

@@ -1,5 +1,15 @@
 # Codex → Claude handoff
 
+## 2026-10-23 — Codex C1: painted big-tree skill icons (ART-SKILL-ICON-003)
+
+- Work branch `codex/skill-icons-003`, based on `feature/fateweave-initial-prototype`. C1 explicitly authorizes source art plus game integration; PR stays open for review.
+- 27 original painted RGBA PNGs, prompt/source provenance, bounds, native 40/56/72 normal/cooldown preview and reproducible packaging under `incoming/ART-SKILL-ICON-003/`.
+- Runtime atlas now 61 icons: original 34 IDs in unchanged order, then section 23's 27 IDs. 256 px cells, 6 columns × 11 rows, 1536×2816. Quality-85 WebP 1,186,696 bytes; delivery/runtime bytes and metadata match. Original art uses its native R1/-002 256 px sources. Five unused cells stay transparent.
+- Fixed the previously hardcoded 6×6 CSS atlas sizing: `icon()` derives background-size from JSON dimensions, preventing adjacent-cell fragments in the taller atlas. SVG fallback aliases and line-icon modifier nodes stay intact.
+- Validation: typecheck, lint, 64 Vitest files / 751 tests, production build, focused Chromium 390×844 checks of Skills/Talents for Toma, Sefa, Brann, Lio, Lyra and weaver (requested Eira; current Thai name ไอรา). Equipped Lunge displays/selects/reloads in the battle dock without an accidental command. Dedicated `playwright.icons.config.ts` owns port 5193 so another worktree's server cannot be reused. Existing build chunk-size advisory only; no gameplay/save/rule changes.
+- Owner screenshots: `incoming/ART-SKILL-ICON-003/qa/tree-390.png` and `battle-dock-390.png`. Both visually inspected after the CSS correction; Chromium touch emulation, not real iOS/phone verification. Artistic acceptance remains the owner's judgement.
+
+
 ## 2026-10-23 — Claude: big trees for the four recruits (owner approved, save v39)
 
 - Alchemist, scout, warden and bard big trees (`content/heroes/talents.ts`, 16 nodes each; the doc's tables). 12 new skills (`smoke`, `fury`, `catalyst`, `knives`, `decoy`, `disarm`, `stonearmor`, `guardstone`, `tremor`, `dread`, `note`, `solo`) and 16 caps in `core/battle/engine.ts`; shared pieces: `weaken` (next move cut), `HeroState.exposed`/`solo`, `BattleState.decoy`/`stone`/`encored`, `SongId` adds `dread`. Advisor (`ui/tutorial.ts`) uses them; texts in `ui/th.ts`, status rows in `ui/battle-status.ts`, line icons aliased in `ui/icons.ts` (painted ones: Codex queue 23).
