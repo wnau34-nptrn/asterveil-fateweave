@@ -18,6 +18,7 @@
 - ถ้าระบบกำหนดสาขา `claude/...` ให้ทำงานบนสาขานั้นที่ตั้งจากสาขาเกม แล้ว push ทั้งสาขานั้นและ `feature/fateweave-initial-prototype` (เจ้าของสั่งให้ทำงานบนสาขาเกม)
 - คุยกับเจ้าของเป็นภาษาไทย ใช้ "ค่ายทหารรับจ้าง" ห้าม "บริษัท" ห้ามคำว่า ม่านเวล; เรื่องหน้าตาเจ้าของตัดสิน ส่งภาพ 390px หน้าละ 1–2 ภาพ
 - เซฟเวอร์ชัน 39 (ต้นไม้ใหญ่ครบ 10 อาชีพ)
+- **รอ Claude หลัง Usage รีเซ็ต (เจ้าของอนุมัติแล้ว):** ปรับสกิลตาม `docs/design/SKILL_AUDIT_TH.md` (รออนุมัติรายข้อ), แคมป์/ตัวสำรอง `docs/MASTER_PLAN_TH.md` A6c, 15 อาชีพ A6b
 - **ระหว่างรอ Usage ของ Claude (ถึง 28 ต.ค.): Codex ทำงานตาม `docs/handoffs/CLAUDE-TO-CODEX-DEV-TH.md`**
 - ตรวจก่อน push: `npm run typecheck`, `npm run lint`, `npx vitest run`, `npm run build` + เทสต์เบราว์เซอร์ที่เกี่ยวข้อง
   (`PLAYWRIGHT_CHROMIUM_EXECUTABLE=/opt/pw-browsers/chromium-1194/chrome-linux/chrome npx playwright test <ไฟล์> -g "<ชื่อ>"`) ชุดเต็มปล่อย CI
