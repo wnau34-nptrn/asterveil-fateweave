@@ -21,11 +21,11 @@ Claude ใช้ Usage รายสัปดาห์เกือบหมด (�
 | ลำดับ | งาน | ชนิด | ขึ้นกับ |
 |---|---|---|---|
 | C1 | ไอคอนวาด 27 สกิลต้นไม้ใหญ่ (ART-SKILL-ICON-003) + ใส่เข้า atlas ในเกม | ภาพ + ต่อเข้าเกม | ทันที |
-| C2 | แจ้งเตือน "ทีมยังไม่มีผู้รักษา" ที่หน้าทีมค่ายและกระเป๋าแผนที่ | UI | ทันที |
+| ~~C2~~ | ~~แจ้งเตือน "ทีมยังไม่มีผู้รักษา"~~ **ยกเลิก** (เจ้าของ 2026-10-23: ให้ผู้เล่นเรียนรู้การจัดทีมเองบนแผนที่ ห้ามเพิ่มแถบเตือนนี้) | — | — |
 | C3 | เอฟเฟกต์ Execute / Ward (ภาพคิว 19) | VFX | ตรวจก่อนว่าเซสชัน Claude "เอฟเฟกต์ Execute / Ward (A8)" ยังไม่ merge |
 | C4 | งานภาพที่เหลือในคิว `docs/handoffs/CODEX-ART-QUEUE-TH.md` (ข้อ 14, 16, 17, 18, 20, 22) | ภาพ | ทันที (เปิด PR ไว้ ให้ Claude รับเข้าเกมทีหลังได้) |
 
-ไม่ใช่งานของ Codex (รอ Claude): สมดุลแมพ 2 รอบแรกสำหรับทีมที่ไม่มีนักบวช (รอเจ้าของตัดสิน), การตัดระบบต้นไม้เล็กที่ไม่มีอาชีพใช้แล้วออกจาก `src/core/world/talents.ts`
+ไม่ใช่งานของ Codex (รอ Claude): การตัดระบบต้นไม้เล็กที่ไม่มีอาชีพใช้แล้วออกจาก `src/core/world/talents.ts`
 
 ### C1 — ไอคอนวาด 27 สกิล + ใส่เข้าเกม
 
@@ -37,15 +37,9 @@ Read AGENTS.md and CLAUDE.md first. Repository wnau34-nptrn/asterveil-fateweave,
 3. Check: npm run typecheck, lint, npx vitest run, build; open the camp character sheet "สกิล" and "ความถนัด" tabs for Toma, Sefa, Brann, Lio, Lyra and Eira and the battle dock with a tree skill equipped; send the owner two 390px screenshots (tree page, battle dock). Keep the atlas file size reasonable (WebP quality ~85).
 ```
 
-### C2 — แจ้งเตือนทีมไม่มีผู้รักษา
+### ~~C2~~ — ยกเลิก (เจ้าของ 2026-10-23)
 
-```text
-TASK C2 — Asterveil · Fateweave: "no healer in the team" hint
-Read AGENTS.md and CLAUDE.md first, then docs/MASTER_PLAN_TH.md section A2 ("แก้แล้ว 2026-10-23 (งานที่ 6"). Base branch feature/fateweave-initial-prototype, work branch codex/no-healer-hint, PR into the base branch.
-Why: since 2026-10-23 a new company recruits two mercenaries after the prologue; simulation shows a deployed team with no priest (healer = Seren) or bard (lio) wipes far more often on maps 2–3.
-Do: on the camp team page (src/ui/lobby-ui.ts, team sheet) and the map bag team tab (src/ui/world-ui.ts), when the deployed party contains neither 'healer' nor 'lio', show one short warning strip: "ทีมยังไม่มีผู้รักษา" plus who in the company can heal (names from heroText in src/ui/th.ts), e.g. "เซเรนอยู่ในตัวสำรอง". It is advice only: never block departure or movement. DOM/CSS only in the existing Luminous Veil style (src/ui/tokens.css, components.css), readable at 320px, no rule/save changes.
-Tests: a Playwright check in tests/browser/ (deploy guardian, tracer, sefa, brann → strip visible; swap in healer → hidden) for both places; npm run typecheck, lint, npx vitest run, build. Send the owner one 390px screenshot of each place.
-```
+เจ้าของตัดสิน: แมพ 2 ปล่อยไว้ตามเดิม และไม่ต้องมีแถบเตือน ให้ผู้เล่นเจอเองบนแผนที่เพื่อเรียนรู้การจัดทีม
 
 ### C3 — เอฟเฟกต์ Execute / Ward
 
@@ -66,7 +60,7 @@ Otherwise follow docs/handoffs/NEW-CHAT-HANDOFF-TH.md "งานที่ 3" and
 ```text
 ทำงานต่อในรีโป wnau34-nptrn/asterveil-fateweave สาขา feature/fateweave-initial-prototype
 อ่าน docs/handoffs/CLAUDE-TO-CODEX-DEV-TH.md, docs/handoffs/CODEX-TO-CLAUDE.md, docs/handoffs/NEW-CHAT-HANDOFF-TH.md และ CLAUDE.md ก่อน
-แล้วตรวจงานที่ Codex ทำระหว่างนี้ (PR และ commit บนสาขาเกม): รันเทสต์ ดูภาพ แก้สิ่งที่ผิดกติกา รับภาพที่ค้างเข้าเกม จากนั้นถามเจ้าของเรื่องสมดุลแมพ 2 สำหรับทีมที่ไม่มีนักบวช ตรวจก่อน push ตาม CLAUDE.md ตอบเป็นภาษาไทย
+แล้วตรวจงานที่ Codex ทำระหว่างนี้ (PR และ commit บนสาขาเกม): รันเทสต์ ดูภาพ แก้สิ่งที่ผิดกติกา รับภาพที่ค้างเข้าเกม ตรวจก่อน push ตาม CLAUDE.md ตอบเป็นภาษาไทย
 ```
 
 ## ฝากถึง Claude (Codex เขียนต่อท้าย)
