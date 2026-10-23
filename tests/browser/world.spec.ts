@@ -629,7 +629,7 @@ test('Mira (archer) volleys every enemy by tapping any of them, and the SPD queu
   expect(issues).toEqual([]);
 });
 
-test('Toma (alchemist) hastes an ally by tapping them; the SPD queue puts that ally first next round', async ({ page }, info) => {
+test('Toma (alchemist) hastes an ally by tapping them; an ally still to act this round acts right after her (save v40)', async ({ page }, info) => {
   const roster = { deployed: ['guardian', 'tracer', 'toma', 'healer'], reserve: [] as string[] };
   const members = Object.fromEntries(roster.deployed.map(id => [id, { stars: 1, dupes: 0 }]));
   const run = { ...newExpedition(map, encounterById, 33, { roster, members }, true) }; reveal(run, map);
@@ -642,9 +642,10 @@ test('Toma (alchemist) hastes an ally by tapping them; the SPD queue puts that a
   await expect(page.locator('#hero-toma')).toHaveAttribute('aria-pressed', 'true');
   await page.locator('#action-haste').click();await page.locator('#skill-details').click(); await expect(page.locator('#skill-popover')).toContainText('ลงมือก่อนทุกคน');
   await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-healer').click(); await finishPlayback(page);
-  // Rest of round 1 (Aegis, Brute, Seren), then round 2 opens with the hasted Seren.
+  // Seren had still to act this round: she moves up and acts next, before Aegis and the Brute (order only).
+  await expect(page.locator('#hero-healer')).toHaveAttribute('aria-pressed', 'true');
   const order = await page.locator('.turn-slot').evaluateAll(els => els.map(e => (e as HTMLElement).dataset.actor));
-  expect(order.slice(0, 4)).toEqual(['guardian', 'f1', 'healer', 'healer']);
+  expect(order.slice(0, 3)).toEqual(['healer', 'guardian', 'f1']);
   await page.screenshot({ path: info.outputPath('toma-haste.png') });
   expect((await saved(page)).battle!.commands.map(c => c.action)).toEqual(['attack', 'haste']);
   expect(issues).toEqual([]);
