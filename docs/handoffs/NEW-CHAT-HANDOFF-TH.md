@@ -1,5 +1,10 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
+## งานกำลังทำ 2026-10-23 — ART-UI-EQUIP-002
+
+สาขา `codex/equip-art-002`: ภาพครบ 78 ช่องและ wiring แล้ว เจ้าของขอเปิด PR ขณะตรวจสอบต่อ ดูสถานะล่าสุดและงานค้างใน `CODEX-TO-CLAUDE.md` รวม screenshot fixture, simulation timeouts และ forge-phase2 timeout ต้องตรวจ CI ก่อน merge
+
+
 ## 2026-10-23 — Codex C1: painted big-tree skill icons (ART-SKILL-ICON-003)
 
 - Work branch `codex/skill-icons-003`, based on `feature/fateweave-initial-prototype`. C1 explicitly authorizes source art plus game integration. PR #60: https://github.com/wnau34-nptrn/asterveil-fateweave/pull/60 — open for review; no merge into the game branch. Implementation commit c3e1ad2. Latest base documentation merged cleanly; no code changes from the base refresh.
