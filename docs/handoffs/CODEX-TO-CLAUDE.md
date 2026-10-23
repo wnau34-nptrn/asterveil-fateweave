@@ -1,5 +1,14 @@
 # Codex → Claude handoff
 
+## 2026-10-23 — Codex C1: painted big-tree skill icons (ART-SKILL-ICON-003)
+
+- Work branch `codex/skill-icons-003`, based on `feature/fateweave-initial-prototype`. C1 explicitly authorizes source art plus game integration. PR #60: https://github.com/wnau34-nptrn/asterveil-fateweave/pull/60 — open for review; no merge into the game branch. Implementation commit c3e1ad2. Latest base documentation merged cleanly; no code changes from the base refresh.
+- 27 original painted RGBA PNGs, prompt/source provenance, bounds, native 40/56/72 normal/cooldown preview and reproducible packaging under `incoming/ART-SKILL-ICON-003/`.
+- Runtime atlas now 61 icons: original 34 IDs in unchanged order, then section 23's 27 IDs. 256 px cells, 6 columns × 11 rows, 1536×2816. Quality-85 WebP 1,186,696 bytes; delivery/runtime bytes and metadata match. Original art uses its native R1/-002 256 px sources. Five unused cells stay transparent.
+- Fixed the previously hardcoded 6×6 CSS atlas sizing: `icon()` derives background-size from JSON dimensions, preventing adjacent-cell fragments in the taller atlas. SVG fallback aliases and line-icon modifier nodes stay intact.
+- Validation: typecheck, lint, 64 Vitest files / 751 tests, production build, focused Chromium 390×844 checks of Skills/Talents for Toma, Sefa, Brann, Lio, Lyra and weaver (requested Eira; current Thai name ไอรา). Equipped Lunge displays/selects/reloads in the battle dock without an accidental command. Dedicated `playwright.icons.config.ts` owns port 5193 so another worktree's server cannot be reused. Existing build chunk-size advisory only; no gameplay/save/rule changes.
+- Owner screenshots: `incoming/ART-SKILL-ICON-003/qa/tree-390.png` and `battle-dock-390.png`. Both visually inspected after the CSS correction; Chromium touch emulation, not real iOS/phone verification. Artistic acceptance remains the owner's judgement.
+
 ## 2026-10-23 — Claude: haste acts now (owner, save v40)
 
 - `haste` (engine.ts): an ally still to act this round moves right after the alchemist in this round's order; an ally who has acted (or Toma herself) keeps the old rule (first next round, `hastedRound`). No turn is gained. Save v40 drops the commands of a v39 battle that used haste (restarts from entry HP). Test: tests/battle.test.ts. Full `npm run sim` not re-run (usage); the single-seed campaign guard in vitest passes.

@@ -102,14 +102,14 @@ const uiSvgs = Object.fromEntries(UI_ICON_NAMES.map(n => [n, uiFiles[`./svg/${n}
 const svgs = { attack, guard, bash, mark, execute, bolt, ward, heal, prayer, brace, pierce, hinder, volley, acid, haste, ambush, evade, taunt, slam, valor, mend, rally, finisher, sigil, sanctuary, spearwall, weakshot, bomb, backstab, quake, finale, challenge: taunt, bulwark: guard, rouse: prayer, parry: guard, lunge: execute, sweep: finisher, storm: bolt, aegis: ward, dispel: sigil, revive: heal, halo: prayer, bless: heal, hold: brace, halt: pierce, warcry: rally, disengage: hinder, pin: volley, track: weakshot, smoke: acid, fury: haste, catalyst: bomb, knives: backstab, decoy: evade, disarm: bash, stonearmor: guard, guardstone: ward, tremor: quake, dread: valor, note: bolt, solo: mend, up, down, left, right, camp, rest, flag, goal, star, danger, safe, talk, info, map, boss, check, circle, close, footprints, chest, chestOpen, ore, gold, forge, enhance, fuse, reroll, salvage, brew, set, ember, seal, pack, starFilled, starBadge, starBadgeEmpty, gearWeapon, gearHead, gearBody, gearGloves, gearBoots, gearCharm, dust, potionSalve, potionTonic, potionRepel, music, musicOff, sound, soundOff } as const;
 const restartPath = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10a8 8 0 1 1 1 8M4 4v6h6"/></svg>';
 export type IconName = ActionId | keyof typeof svgs | UiIconName | 'restart';
-// Painted skill icons (ART-SKILL-ICON-001-R1 + Attack from -002, 128 px cells) replace the line icon of every skill that has one;
+// Painted skill icons (ART-SKILL-ICON-001-R1 + Attack from -002 + big trees from -003, 256 px cells) replace the line icon of every skill that has one;
 // every non-skill icon stays line art. The span keeps the `icon` class so each view's icon sizing still applies.
 const skillAtlasUrl = `${import.meta.env.BASE_URL}assets/ui/skill_icons.webp`;
 const paintedSkills = new Map(skillAtlas.order.map((id, i) => [id, i]));
 export function icon(name: IconName): string {
   const cell = paintedSkills.get(name);
   if (cell === undefined) return lineIcon(name);
-  return `<span class="icon skill-art" aria-hidden="true" style="background-image:url(${skillAtlasUrl});--sx:${cell % skillAtlas.cols / (skillAtlas.cols - 1) * 100}%;--sy:${Math.floor(cell / skillAtlas.cols) / (skillAtlas.rows - 1) * 100}%"></span>`;
+  return `<span class="icon skill-art" aria-hidden="true" style="background-image:url(${skillAtlasUrl});background-size:${skillAtlas.cols * 100}% ${skillAtlas.rows * 100}%;--sx:${cell % skillAtlas.cols / (skillAtlas.cols - 1) * 100}%;--sy:${Math.floor(cell / skillAtlas.cols) / (skillAtlas.rows - 1) * 100}%"></span>`;
 }
 // The line icon even for a painted skill (tree modifiers point at a skill without being one).
 export function lineIcon(name: IconName): string {
