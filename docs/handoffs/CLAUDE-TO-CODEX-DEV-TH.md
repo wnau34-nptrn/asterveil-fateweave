@@ -75,6 +75,10 @@ Rules (same as the approved slices): timing comes from src/ui/battle-playback.ts
 Process: family 1 first. For each family: make the art, wire it, run npm run typecheck, lint, npx vitest run, build and the battle Playwright tests, record short clips at 390px like the approved slices (one clip per skill type: hit, and where it applies blocked/dodged), put them in docs/combat-presentation/<family>-slice/, open the PR and stop. Start the next family only after the owner approves the clips (an approval is noted in docs/handoffs/CLAUDE-TO-CODEX-DEV-TH.md). Log each finished family at the top of docs/handoffs/CODEX-TO-CLAUDE.md.
 ```
 
+### C6 — concept ตัวละครใหม่ (เริ่มได้หลังเจ้าของยืนยัน 5 อาชีพใหม่ใน `docs/MASTER_PLAN_TH.md` A6b)
+
+ยังไม่ต้องเริ่มจนกว่าเจ้าของยืนยันรายชื่ออาชีพ เมื่อยืนยันแล้ว ทำ concept sheet ภาพตัวละครอาชีพใหม่ 5 ตัว (สไตล์เดียวกับ `incoming/ART-CHAR-MERC-ENEMY-001/` และภาพทหารรับจ้างในเกม) เป็น PR ภาพเท่านั้น ห้ามแตะโค้ด กลไกและสกิลรอ Claude ออกแบบ
+
 ## เมื่อ Usage ของ Claude รีเซ็ต (หลัง พ. 28 ต.ค. 19:00)
 
 เปิดแชตใหม่ (Opus) แล้ววาง:
