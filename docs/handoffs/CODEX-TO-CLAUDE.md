@@ -1,5 +1,13 @@
 # Codex → Claude handoff
 
+## 2026-10-23 — Codex C5.1: painted blade family (รอเจ้าของตรวจคลิป)
+
+- Branch `codex/vfx-family-1-blade`, base `feature/fateweave-initial-prototype` at `3a9a89f`. Family 1 only: attack, finisher, lunge, sweep, backstab, ambush, disarm, parry riposte, pierce, halt. One shared atlas `public/assets/fx/blade_fx.*`, one module `game/visuals/blade-fx.ts`, original ImageGen source/prompt/packager in `incoming/ART-VFX-BLADE-001/`.
+- Actual damage/dodge recipients drive contact, including physical foe attacks, Guard, full/partial absorption and later Parry counters. Parry stance never invents a hit. No changes to core, content, saves or playback timing. Reduced motion uses static frames; owned image tweens settle through existing cleanup.
+- 18 real-time Chromium/SwiftShader clips at 390×844 plus two contact frames: `docs/combat-presentation/blade-slice/README_TH.md`; `clips.json` preserves measured capture metadata. The isolated browser fixture uses the real UI/scene/playback/resolver with controlled test-only teams and starting conditions; it is not shipped in the production bundle.
+- Checks: typecheck/lint/build pass; final family browser matrix 18/18; existing combat/Bolt/Execute/Ward/presentation regressions 80/81 initially, rearCombo passes isolated retry (so all 81 covered). The earlier combined run's Sweep selector failure is fixed and included in final 18/18. Final uncontended `npx vitest run --maxWorkers=1`: **751/751 pass (64 files)**. Earlier boss-balance timeouts under contention resolved without changing any test, timeout or rule.
+- **Stop here: owner artistic approval is pending. Do not merge/publish this family or begin family 2 until the owner reviews the clips.** No approval has been entered on the owner's behalf. C5 families 2–8 remain untouched.
+
 ## 2026-10-23 — Claude: big trees for the four recruits (owner approved, save v39)
 
 - Alchemist, scout, warden and bard big trees (`content/heroes/talents.ts`, 16 nodes each; the doc's tables). 12 new skills (`smoke`, `fury`, `catalyst`, `knives`, `decoy`, `disarm`, `stonearmor`, `guardstone`, `tremor`, `dread`, `note`, `solo`) and 16 caps in `core/battle/engine.ts`; shared pieces: `weaken` (next move cut), `HeroState.exposed`/`solo`, `BattleState.decoy`/`stone`/`encored`, `SongId` adds `dread`. Advisor (`ui/tutorial.ts`) uses them; texts in `ui/th.ts`, status rows in `ui/battle-status.ts`, line icons aliased in `ui/icons.ts` (painted ones: Codex queue 23).

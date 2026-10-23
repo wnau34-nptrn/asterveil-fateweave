@@ -1,5 +1,7 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
+อัปเดต Codex 2026-10-23: C5.1 ฟันดาบ/แทงส่งบน `codex/vfx-family-1-blade` รอเจ้าของตรวจ [คลิป 390px](../combat-presentation/blade-slice/README_TH.md) ยังไม่ merge/publish และห้ามเริ่ม C5.2 จนเจ้าของอนุมัติคลิป อ่านบันทึกบนสุด `CODEX-TO-CLAUDE.md` และผลตรวจใน slice notes ก่อนทำต่อ
+
 อ่านไฟล์นี้ก่อน แล้วอ่าน `CLAUDE.md` (กติกาหลัก สั้นลงแล้ว) — รายละเอียดระบบเดิมอยู่ใน `docs/design/SYSTEMS_REFERENCE.md` อ่านเฉพาะหัวข้อของระบบที่จะแก้ แผนใหญ่ `docs/MASTER_PLAN_TH.md`
 
 ## ข้อมูลพื้นฐาน
