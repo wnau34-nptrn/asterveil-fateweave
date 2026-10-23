@@ -9,6 +9,9 @@
 - Validation: typecheck, lint, 64 Vitest files / 751 tests, production build, focused Chromium 390×844 checks of Skills/Talents for Toma, Sefa, Brann, Lio, Lyra and weaver (requested Eira; current Thai name ไอรา). Equipped Lunge displays/selects/reloads in the battle dock without an accidental command. Dedicated `playwright.icons.config.ts` owns port 5193 so another worktree's server cannot be reused. Existing build chunk-size advisory only; no gameplay/save/rule changes.
 - Owner screenshots: `incoming/ART-SKILL-ICON-003/qa/tree-390.png` and `battle-dock-390.png`. Both visually inspected after the CSS correction; Chromium touch emulation, not real iOS/phone verification. Artistic acceptance remains the owner's judgement.
 
+## 2026-10-23 — Claude: haste acts now (owner, save v40)
+
+- `haste` (engine.ts): an ally still to act this round moves right after the alchemist in this round's order; an ally who has acted (or Toma herself) keeps the old rule (first next round, `hastedRound`). No turn is gained. Save v40 drops the commands of a v39 battle that used haste (restarts from entry HP). Test: tests/battle.test.ts. Full `npm run sim` not re-run (usage); the single-seed campaign guard in vitest passes.
 
 ## 2026-10-23 — Claude: big trees for the four recruits (owner approved, save v39)
 

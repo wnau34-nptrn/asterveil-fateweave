@@ -80,7 +80,9 @@ export const legacyKeys = ['asterveil.fateweave.battle.v1', 'asterveil.fateweave
 // guests already travel keeps them until their point.
 // v38 → v39 (recruit big trees, owner 2026-10-23): the alchemist, scout, warden and bard get big trees; their small-tree
 // ranks are refunded and star skills granted as in v37 (a run whose member lost ranks settles home).
-const SAVE_VERSION = 39;
+// v39 → v40 (owner 2026-10-23): haste moves an ally still to act this round right after the alchemist. A battle in
+// progress that used haste restarts from its recorded entry HP (its commands are dropped), as in v35.
+const SAVE_VERSION = 40;
 // The classes whose big tree arrived in v37 (release A) and in v39 (the recruits).
 const RELEASE_A_TREES = ['tracer', 'weaver', 'healer', 'garran', 'mira'];
 const RECRUIT_TREES = ['toma', 'sefa', 'brann', 'lio'];
@@ -312,6 +314,7 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
     if (b.kind === 'event' && !map.events.some(e => e.id === source && !(s.eventsDone as unknown[]).includes(e.id))) throw new Error('Invalid battle');
     if (!['elite', 'event'].includes(b.kind as string) && source !== undefined) throw new Error('Invalid battle');
     if (version < 35 && Array.isArray(b.commands) && b.commands.some(c => ['raider', 'brute'].includes(obj(c).targetId as string))) b.commands = [];
+    if (version < 40 && Array.isArray(b.commands) && b.commands.some(c => obj(c).action === 'haste')) b.commands = [];
     if (!Array.isArray(b.commands) || b.commands.length > 5000) throw new Error('Invalid battle');
     const entry = hpRecord(b.entry, lookup, map, roster.deployed, members);
     // Validate against the encounter as fought by this run's deployed party (stars included).
@@ -530,7 +533,7 @@ export function parseGame(raw: string, map: MapDefinition, lookup: EncounterLook
   if (version < 34) migrateTrees(envelope, maps.length ? maps : [map]);
   else if (version < 37) migrateTrees(envelope, maps.length ? maps : [map], [...RELEASE_A_TREES, ...RECRUIT_TREES]);
   else if (version < 39) migrateTrees(envelope, maps.length ? maps : [map], RECRUIT_TREES);
-  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
+  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
   const runMap = (v: unknown): MapDefinition => maps.find(m => m.id === obj(v).mapId) ?? map;
   if (version < 5) {
     const home = runMap(envelope.state); const run = parseRun(envelope.state, version, home, lookup);

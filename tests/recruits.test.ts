@@ -102,7 +102,7 @@ describe('story recruits and the starter recruitment', () => {
   it('saves v38 runs with arrivals and a pending recruitment; rejects forged offers; an older map 1 run settles home', () => {
     const s = won(); const profile = fresh(); let raw = '';
     saveGame({ getItem: () => null, setItem: (_k, v) => { raw = v; } }, { profile, run: s });
-    expect(JSON.parse(raw).version).toBe(39); expect(parseGame(raw, chapterOne, lookup, MAPS).run).toEqual(s);
+    expect(JSON.parse(raw).version).toBe(40); expect(parseGame(raw, chapterOne, lookup, MAPS).run).toEqual(s);
     for (const forge of [(r: Record<string, unknown>) => { r.arrivals = { tracer: 1 }; }, (r: Record<string, unknown>) => { r.arrivals = { healer: 1 }; },
       (r: Record<string, unknown>) => { (r.draft as { offers: string[] }).offers = ['brann', 'sefa', 'garran']; }, (r: Record<string, unknown>) => { (r.draft as { left: number }).left = 3; }]) {
       const bad = JSON.parse(raw); forge(bad.run); expect(() => parseGame(JSON.stringify(bad), chapterOne, lookup, MAPS)).toThrow();
