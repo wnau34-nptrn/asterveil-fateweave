@@ -14,7 +14,7 @@ for (const id of ['slime-nest', 'rift-warden', 'veil-siege', 'vanguard-captain',
   test(`battle shot ${id} 390x844`, async ({ browser }) => {
     test.skip(!dir, 'set BATTLE_SHOTS to a folder');
     const data = encounterById(id)!;
-    const context = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true, reducedMotion: 'reduce', deviceScaleFactor: 2 }), page = await context.newPage();
+    const context = await browser.newContext({ viewport: { width: 390, height: Number(process.env.SHOT_H ?? 844) }, hasTouch: true, isMobile: true, reducedMotion: 'reduce', deviceScaleFactor: 2 }), page = await context.newPage();
     const hp = Object.fromEntries(data.heroes.map(h => [h.id, h.maxHp]));
     const s = createBattle(data, { hp });
     // A boss battle belongs to the map whose boss it is.
@@ -34,7 +34,7 @@ for (const id of ['slime-nest', 'rift-warden', 'veil-siege', 'vanguard-captain',
 // The boss phase banner: attack until the warden's next turn is its phase change, then show that turn.
 test('battle shot boss phase 390x844', async ({ browser }) => {
   test.skip(!dir, 'set BATTLE_SHOTS to a folder');
-  const context = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true, deviceScaleFactor: 2 }), page = await context.newPage();
+  const context = await browser.newContext({ viewport: { width: 390, height: Number(process.env.SHOT_H ?? 844) }, hasTouch: true, isMobile: true, deviceScaleFactor: 2 }), page = await context.newPage();
   const run = newExpedition(map, encounterById, 1234); run.tutorialDone = true;
   const base = encounterById('rift-warden')!, hp = Object.fromEntries(base.heroes.map(h => [h.id, h.maxHp]));
   run.battle = { kind: 'boss', encounterId: 'rift-warden', entry: hp, commands: [] };

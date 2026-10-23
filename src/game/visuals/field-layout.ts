@@ -65,6 +65,11 @@ export function fieldSlots(width: number, height: number, layout: SlotLayout = n
   // under another unit has room; never closer than one unit + panel.
   const bottom = height - 2 - panel - below(size), step = Math.max(stepOf(size, panel), (bottom - Math.max(height * FLOOR, reach(size))) / 2);
   const rows = [bottom - 2 * step, bottom - step, bottom];
+  // Rows are spaced for three units in a column. When no column holds three, only the top and bottom rows (two steps
+  // apart) or a lone middle unit stand, so units may be drawn larger than the three-row fit allows, up to the width cap
+  // and keeping their heads inside the field (owner 2026-10-23: phones with a shorter field drew units too small).
+  const widthCap = Math.min(140, Math.floor(width * UNIT_WIDTH)), headroom = Math.floor((rows[0]! - LABEL - 6 - 4) / 1.03);
+  const unit = layout.trio.size ? size : Math.max(size, Math.min(widthCap, headroom, Math.floor(2 * step - panel - LABEL - 8)));
   const cellWidth = width * .22, iconSize = 12, compact = false;
   const maxIcons = Math.min(3, Math.floor((cellWidth - 18) / (iconSize + 2)));
   return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(slot => {
@@ -75,12 +80,12 @@ export function fieldSlots(width: number, height: number, layout: SlotLayout = n
     const above = [...layout.rows].filter(([other, r]) => other !== slot && columnOf(other) === columnOf(slot) && r < row).map(([, r]) => rows[r]!);
     const ceiling = above.length ? Math.max(...above) + below(size) + panel : 0;
     const rise = Math.min(1, layout.rise?.get(slot) ?? 1);
-    const drawn = layout.large.has(slot) ? Math.floor(Math.max(size, Math.min(size * LARGE_SCALE, (y - ceiling - 4 - LABEL - 2) / rise))) : size;
+    const drawn = layout.large.has(slot) ? Math.floor(Math.max(unit, Math.min(unit * LARGE_SCALE, (y - ceiling - 4 - LABEL - 2) / rise))) : unit;
     const top = y - drawn * 1.03 - 4;
     return {
       x, y, size: drawn, compact, tiny: false, side: false, iconSize, maxIcons,
       body: { x: x - drawn * .51, y: top, width: drawn * 1.02, height: drawn * 1.07 + 4 },
-      panel: { x: x - cellWidth / 2, y: y + below(size), width: cellWidth, height: panel },
+      panel: { x: x - cellWidth / 2, y: y + below(unit), width: cellWidth, height: panel },
       label: { x: x - cellWidth / 2, y: y - rise * drawn - 4 - LABEL - 2, width: cellWidth, height: LABEL },
     };
   });
