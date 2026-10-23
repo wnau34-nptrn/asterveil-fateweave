@@ -250,6 +250,13 @@ export class WorldUI {
   // Formation grid: tap a member, then an empty cell or a member of the other column.
   private pickLane(id: string | undefined, lane: Lane): void {
     const s = this.view?.state; if (!s || this.view!.locked || !canManage(s)) return;
+    // A reserve member picked on the team row goes straight into the grid: onto a member (swap places) or an empty
+    // cell (deploy into that column, if the party has room).
+    if (this.picked && s.roster.reserve.includes(this.picked)) {
+      const from = this.picked; this.picked = undefined; this.lanePick = undefined;
+      if (id) this.host.swap(from, id); else { this.host.moveMember(from); if (this.view?.state.roster.deployed.includes(from)) this.host.lane(from, lane); }
+      this.focusTeam(from); return;
+    }
     const tap = formationTap(this.lanePick, this.lanes(s), id, lane); this.lanePick = tap.picked;
     if (tap.move) this.host.lane(tap.move.id, tap.move.lane, tap.move.other); else if (this.bagOpen()) this.renderPack(); else this.renderCamp();
     const focus = tap.move?.id ?? tap.picked ?? id;
@@ -508,7 +515,7 @@ export class WorldUI {
         ${formationGrid({ prefix, attr: 'world', deployed: s.roster.deployed, lanes: this.lanes(s), recommended: this.recommended, picked: this.lanePick, disabled: !!this.view?.locked || !canManage(s), hp: id => s.hp[id] ?? 0 })}
         <h3>${icon('camp')} สำรอง</h3>
         <div class="team-grid">${row(s.roster.reserve, 'reserve', RESERVE_SLOTS)}</div>
-        <p class="camp-note" id="${prefix}-hint">${this.picked ? `เลือก${heroText[this.picked]!.name}แล้ว · แตะคนหรือช่องว่างอีกฝั่งเพื่อสลับ แตะซ้ำเพื่อยกเลิก` : !deployedUp ? 'ทีมที่ลงสนามล้มหมด · สลับตัวสำรองที่ยังยืนอยู่หรือชุบก่อนออกเดินทาง' : s.roster.reserve.length ? 'แตะสมาชิก แล้วแตะคนหรือช่องว่างอีกฝั่งเพื่อสลับ' : 'ไม่ได้พาตัวสำรองมา · เลือกตัวสำรองได้ที่ค่ายก่อนออกเดินทาง'}</p>${this.picked&&rosterIds(s).includes(this.picked)?this.heroDetail(s,this.picked,prefix==='bag-team'?'bag':'camp'):''}</section>`;
+        <p class="camp-note" id="${prefix}-hint">${this.picked ? `เลือก${heroText[this.picked]!.name}แล้ว · แตะคนในทีมหรือในแผนการยืน หรือช่องว่างอีกฝั่งเพื่อสลับ แตะซ้ำเพื่อยกเลิก` : !deployedUp ? 'ทีมที่ลงสนามล้มหมด · สลับตัวสำรองที่ยังยืนอยู่หรือชุบก่อนออกเดินทาง' : s.roster.reserve.length ? 'แตะสมาชิก แล้วแตะคนหรือช่องว่างอีกฝั่งเพื่อสลับ' : 'ไม่ได้พาตัวสำรองมา · เลือกตัวสำรองได้ที่ค่ายก่อนออกเดินทาง'}</p>${this.picked&&rosterIds(s).includes(this.picked)?this.heroDetail(s,this.picked,prefix==='bag-team'?'bag':'camp'):''}</section>`;
   }
 
   private renderDanger(chance: number, before: number | undefined): void {

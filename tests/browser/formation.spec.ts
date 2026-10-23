@@ -55,6 +55,17 @@ test('map bag changes the formation outside battle and the next battle stands in
   await context.close();
 });
 
+test('map bag: a picked reserve member swaps in by tapping a member of the formation grid (owner bug 2026-10-23)', async ({ browser }) => {
+  const context = await browser.newContext(phone), page = await context.newPage();
+  const profile = camp(); profile.company.push('lio'); profile.members.lio = { stars: 1, dupes: 0 }; profile.party.reserve.push('lio');
+  const run = { ...newExpedition(map, encounterById, 77, { roster: structuredClone(profile.party), members: structuredClone(profile.members) }), tutorialDone: true }; reveal(run, map);
+  await seed(page, profile, run);
+  await page.locator('#world-pack').click(); await page.locator('#bag-tab-team').click();
+  await page.locator('#bag-team-lio').click(); await page.locator('#bag-team-lane-healer').click();
+  await expect.poll(async () => (await saved(page)).run.roster).toMatchObject({ deployed: ['guardian', 'tracer', 'weaver', 'lio'], reserve: ['healer'] });
+  await context.close();
+});
+
 for (const [name, lanes, chip] of [['3-1', { weaver: 'front' }, 'หน้า 3 · หลัง 1'], ['1-3', { tracer: 'back' }, 'หน้า 1 · หลัง 3']] as const) test(`a ${name} formation stands three full-size heroes in one column`, async ({ browser }) => {
   const context = await browser.newContext(phone), page = await context.newPage();
   const run = { ...newExpedition(map, encounterById, 1234), tutorialDone: true };

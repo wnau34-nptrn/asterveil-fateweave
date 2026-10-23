@@ -1,5 +1,9 @@
 # Codex → Claude handoff
 
+## 2026-10-23 — Claude: map bag swap fix (owner bug report)
+
+- In the map bag a reserve member picked on the team row now swaps in when the player taps a member of the formation grid (or deploys into an empty grid cell when the party has room); before, the grid kept its own pick and ignored the reserve pick. `src/ui/world-ui.ts` `pickLane`; hint text updated; test `tests/browser/formation.spec.ts`. The camp team page uses the same code.
+
 ## 2026-10-23 — Codex C1: painted big-tree skill icons (ART-SKILL-ICON-003)
 
 - Work branch `codex/skill-icons-003`, based on `feature/fateweave-initial-prototype`. C1 explicitly authorizes source art plus game integration. PR #60: https://github.com/wnau34-nptrn/asterveil-fateweave/pull/60 — open for review; no merge into the game branch. Implementation commit c3e1ad2. Latest base documentation merged cleanly; no code changes from the base refresh.
