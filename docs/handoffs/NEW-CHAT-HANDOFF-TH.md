@@ -1,5 +1,9 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
+## 2026-10-24 — C10 victory rewards
+
+Implementation on `codex/battle-rewards-001`; see CODEX-TO-CLAUDE.md for validation and PR status. Tutorial intentionally skips rewards; rules/saves unchanged.
+
 ## 2026-10-23 — Codex C1: painted big-tree skill icons (ART-SKILL-ICON-003)
 
 - Work branch `codex/skill-icons-003`, based on `feature/fateweave-initial-prototype`. C1 explicitly authorizes source art plus game integration. PR #60: https://github.com/wnau34-nptrn/asterveil-fateweave/pull/60 — open for review; no merge into the game branch. Implementation commit c3e1ad2. Latest base documentation merged cleanly; no code changes from the base refresh.
