@@ -2,7 +2,7 @@
 
 ## 2026-10-24 — Magic Power (owner-approved)
 
-Branch `codex/magic-power-scaling`: shared spell/support scaling, Magic Power UI, mage weapons/talent, encounter versions and v41 migration. See `docs/design/MAGIC_POWER_TH.md` and CODEX-TO-CLAUDE.md for tests, simulation/PR status and screenshot. Basic attacks remain physical.
+Completed `codex/magic-power-scaling`, PR #65 merged as `f0ae3cf` after both CI workflows passed: shared spell/support scaling, Magic Power UI, mage weapons/talent, encounter versions and v41 migration. Validation: 756 unit tests, 23 full simulation checks, 8 character/gear checks and 3 boss reward checks passed. See `docs/design/MAGIC_POWER_TH.md` and CODEX-TO-CLAUDE.md for tests, simulation/PR status and screenshot. Basic attacks remain physical.
 
 ## 2026-10-24 — C10 victory rewards
 
