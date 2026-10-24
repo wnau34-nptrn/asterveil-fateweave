@@ -123,16 +123,18 @@ const resistEvent = (heroId: string, enemyId: string, why: 'steadfast' | 'unstop
 // A scout's ambush strikes harder at an enemy that still has its turn ahead in the current round.
 export const ambushBonus = (state: BattleState, data: EncounterDefinition, enemyId: string, heroId?: string): number =>
   state.order.indexOf(enemyId) > state.turnIndex ? ambushBonusOf(data, heroId) : 0;
-// Support skills scale with Support (`skillBonus`); every other skill with power deals damage and scales with
-// Attack (`damageBonus`). Talents add a flat amount on top (stats design 2026-10-17).
+// Magical damage and support use Magic Power (legacy field `skillBonus`); physical damage uses
+// Attack (`damageBonus`). Flat talent bonuses and skill levels keep their existing order.
 export const SUPPORT_SKILLS: readonly ActionId[] = ['ward', 'heal', 'prayer', 'valor', 'mend', 'rouse', 'aegis'];
+export const MAGIC_DAMAGE_SKILLS: readonly ActionId[] = ['bolt', 'sigil', 'storm', 'dispel', 'acid', 'bomb', 'catalyst', 'finale', 'note'];
+export const usesMagicPower = (action: ActionId): boolean => SUPPORT_SKILLS.includes(action) || MAGIC_DAMAGE_SKILLS.includes(action);
 // Percent skills (bulwark, halo, blessing, war cry, revive): their power is a percent that only talents raise.
 export const PERCENT_SKILLS: readonly ActionId[] = ['bulwark', 'halo', 'bless', 'warcry', 'revive', 'smoke', 'fury', 'stonearmor', 'guardstone', 'dread'];
 export function skillPower(data: EncounterDefinition, heroId: string, action: ActionId): number {
   const hero = data.heroes.find(h => h.id === heroId);
   // Skill levels: a percent skill gains points, a skill with power a percent on top of its Attack/Support bonus.
   if (PERCENT_SKILLS.includes(action)) return data.skills[action].power + (hero?.talents?.power?.[action] ?? 0) + levelPoints(data, heroId, action);
-  const bonus = (SUPPORT_SKILLS.includes(action) ? hero?.skillBonus : hero?.damageBonus) ?? 0;
+  const bonus = (usesMagicPower(action) ? hero?.skillBonus : hero?.damageBonus) ?? 0;
   const level = skillLevelKind(data, action) === 'power' ? skillLevelSteps(data, heroId, action).steps * data.rules.skillLevel.powerPercent : 0;
   return Math.round(data.skills[action].power * (100 + bonus + level) / 100) + (hero?.talents?.power?.[action] ?? 0);
 }

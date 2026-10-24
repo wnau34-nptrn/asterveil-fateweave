@@ -50,7 +50,7 @@ it('rejects stale, locked, worn, wrong-type, duplicate, main and overflow donors
 });
 it('v23 preserves level capital through run provenance; v22 migration respects prior completion without inventing capital',()=>{
   const p=equip(raiseItemLevel(setup(),map,1,3).profile,'guardian',1).profile,game=depart(p,map,lookup,8);let raw='';saveGame({getItem:()=>null,setItem:(_k,s)=>{raw=s;}},game);
-  expect(JSON.parse(raw).version).toBe(40);expect(parseGame(raw,map,lookup)).toEqual(game);
+  expect(JSON.parse(raw).version).toBe(41);expect(parseGame(raw,map,lookup)).toEqual(game);
   const corrupt=JSON.parse(raw);corrupt.run.members.guardian.gear.weapon.levelInvestment.ore++;expect(()=>parseGame(JSON.stringify(corrupt),map,lookup)).toThrow();
   const legacy=setup();const old={version:22,profile:legacy,run:null};delete old.profile.forgeLevel;expect(parseGame(JSON.stringify(old),map,lookup).profile.forgeLevel).toBe(3);old.profile.completes=1;const migrated=parseGame(JSON.stringify(old),map,lookup).profile;expect(migrated.forgeLevel).toBe(10);expect(migrated.items[0]!.levelInvestment).toBeUndefined();
 });

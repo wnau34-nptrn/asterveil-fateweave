@@ -60,7 +60,7 @@ export const talentTrees: Readonly<Record<string, TalentTree>> = {
     node('b2t', 'โล่คู่', { cap: 'twinward' }, { branch: 'b', tier: 2, choice: 'ward' }),
     node('b3', 'เกราะผลึก', { unlock: 'aegis' }, { branch: 'b', tier: 3 }),
     node('b4', 'ก้องสะท้อน', { passive: 'echo' }, { branch: 'b', tier: 4, legacyStars: 5 }),
-    node('c1', 'ประกายเวท', { stat: 'attack', percent: 4 }, { branch: 'c', tier: 1 }, 2),
+    node('c1', 'ประกายเวท', { stat: 'skill', percent: 4 }, { branch: 'c', tier: 1 }, 2),
     node('c1s', 'ตรึงเวท', { unlock: 'sigil' }, { branch: 'c', tier: 1, legacyStars: 3 }),
     node('c2r', 'ผนึกสะท้อน', { cap: 'sigilreflect', amount: 30 }, { branch: 'c', tier: 2, choice: 'sigil', needs: 'c1s' }),
     node('c2d', 'ผนึกถ่วง', { cap: 'sigildelay' }, { branch: 'c', tier: 2, choice: 'sigil', needs: 'c1s' }),
