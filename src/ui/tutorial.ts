@@ -1,4 +1,4 @@
-import { CATALYST_PER_ROUND, SOLO_TIMES, isDelayed, ambushBonus, corrodeBonusOf, guardReductionOf, interruptBlock, nextIntentOf, tauntReductionOf, currentHeroId, skillPower, targetOptions } from '../core/battle/engine';
+import { CATALYST_PER_ROUND, SOLO_TIMES, isDelayed, ambushBonus, corrodeBonusOf, guardReductionOf, interruptBlock, nextIntentOf, plannedIntents, tauntReductionOf, currentHeroId, skillPower, targetOptions } from '../core/battle/engine';
 import type { ActionId, BattleState, EncounterDefinition } from '../core/battle/types';
 import { actorName } from './th';
 export interface Lesson { step:number; title:string; copy:string; heroId:string; action:ActionId; targetId:string }
@@ -33,6 +33,8 @@ export function battleLesson(state:BattleState,data:EncounterDefinition):Lesson|
  function treeAdvice():Lesson|undefined{
   if(role==='Knight'){
    if(intent?.all){const b=make('bulwark',heroId,'กำแพงโล่คุ้มแนวหน้า',`ลด ${skillPower(data,heroId,'bulwark')}%`);if(b)return b;}
+   const pending=plannedIntents(state,data,3).filter(i=>i.round===state.round&&!i.charge&&!i.special);
+   if(intent?.all||new Set(pending.map(i=>i.targetId)).size>=2){const r=make('rally',heroId,'ตั้งรับหมู่รับหลายท่า','ลดท่าแรกของเพื่อนแต่ละคน');if(r)return r;}
    const low=state.heroes.find(h=>h.id!==heroId&&h.hp>0&&h.hp<data.heroes.find(d=>d.id===h.id)!.maxHp*.6);
    if(low&&intent&&!intent.all){const r=make('rouse',heroId,'ยืนเคียงข้างเพื่อนบาดเจ็บ','รับแทนจนถึงเทิร์นถัดไป');if(r)return r;}
   }
@@ -50,8 +52,8 @@ export function battleLesson(state:BattleState,data:EncounterDefinition):Lesson|
    const bare=state.heroes.filter(h=>h.hp>0&&!h.barrier).length;
    if(intent?.all||(intent&&bare>=3&&intent.damage>=15)){const a=make('aegis','party','เกราะผลึกให้ทั้งทีม',`ทุกคนได้โล่ ${skillPower(data,heroId,'aegis')}`);if(a)return a;}
    if(intent?.kind==='energy'&&!interruptBlock(state,data,intent.sourceId,intent)&&nextIntentOf(state,data,intent.sourceId)?.kind==='energy'){const g=make('sigil',intent.sourceId,'ตรึงเวทยกเลิกท่าพลังงาน',`${actorName(intent.sourceId,data)} จะเสียท่าพลังงานถัดไป`);if(g)return g;}
-   const veiled=living.find(e=>data.enemies.find(d=>d.id===e.id)?.traits?.includes('veilguard')&&!(e.markedUntil>state.round)&&!((e.corrodedUntil??0)>state.round)&&!((e.dispelledUntil??0)>state.round));
-   if(veiled){const d=make('dispel',veiled.id,'สลายเกราะพลังงาน','ทีมตีเต็มแรงถึงจบรอบถัดไป');if(d)return d;}
+   const veiled=living.find(e=>(e.steadyRound??0)>=state.round||data.enemies.find(d=>d.id===e.id)?.traits?.includes('veilguard')&&!(e.markedUntil>state.round)&&!((e.corrodedUntil??0)>state.round)&&!((e.dispelledUntil??0)>state.round));
+   if(veiled){const d=make('dispel',veiled.id,'สลายเกราะและไม่หวั่นไหว','ลบความต้านการขัดจังหวะและปิดเกราะพลังงานถึงจบรอบถัดไป');if(d)return d;}
   }
   if(role==='Priest'){
    const fallen=state.heroes.find(h=>h.hp<=0&&h.fell);

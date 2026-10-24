@@ -39,7 +39,8 @@ export function characterStats(s: CharacterState, map: MapDefinition, h: HeroDef
 
 export function characterSkillMetric(action: ActionId, h: HeroDefinition, template: EncounterDefinition): { label: string; value?: number; secondary?: { label: string; value: number }; scaling: string; target: string } {
   const data = withParty(template, [h]);
-  const target = ({ self: 'ตัวเอง', ally: 'เพื่อน 1 คน', party: 'เพื่อนทุกคน', enemy: 'ศัตรู 1 ตัว', enemies: 'ศัตรูทุกตัว' })[targetKind(action)];
+  const effects: Partial<Record<ActionId,string>> = {bulwark:'เพื่อนแนวหน้าทุกคน',rouse:'เพื่อนเลือดต่ำสุด 1 คน',hold:'เพื่อนแนวหลังทุกคน',warcry:'เพื่อนแนวหน้าทุกคน',halo:'เพื่อนทุกคน',dread:'ทุกท่าของศัตรู',sweep:'ศัตรูแถวหน้า (แถวหลังเมื่อหน้าว่าง)',quake:'ศัตรูแถวหน้า (แถวหลังเมื่อหน้าว่าง)',tremor:'ศัตรูแถวหน้า (แถวหลังเมื่อหน้าว่าง)',pin:'ศัตรูแถวหน้า'};
+  const target = effects[action] ?? ({ self: 'ตัวเอง', ally: 'เพื่อน 1 คน', party: 'เพื่อนทุกคน', enemy: 'ศัตรู 1 ตัว', enemies: 'ศัตรูทุกตัว' })[targetKind(action)];
   if (['halo', 'fury', 'guardstone', 'dread'].includes(action)) return { label: action === 'fury' ? 'เพิ่มพลังโจมตี (%)' : 'ลดความเสียหาย (%)', value: skillPower(data, h.id, action), scaling: 'ค่าคงที่ เพิ่มด้วยเลเวลสกิล/โหนด', target };
   if (action === 'stonearmor') return { label: 'โล่ % ของเลือดสูงสุด', value: skillPower(data, h.id, action), scaling: 'อิงเลือดสูงสุด ไม่อิงพลังโจมตี', target };
   if (action === 'revive') return { label: 'เลือดที่ชุบ (% เลือดสูงสุด)', value: skillPower(data, h.id, action), scaling: 'สัดส่วนคงที่ เลเวลเพิ่มโล่ผู้ใช้/ลดคูลดาวน์', target };

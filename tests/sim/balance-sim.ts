@@ -236,7 +236,7 @@ function lobby(p: Profile): { profile: Profile; claimed: string[] } {
   // Talents: a class with an example build (tests/sim/tree-sim.ts, its first one) follows it and equips its skills;
   // spare points (and classes without a build) go to the first open node.
   for (const id of [...p.party.deployed, ...p.party.reserve]) {
-    const build = TREE_BUILDS.find(b => b.id === id);
+    const build = TREE_BUILDS.find(b => b.id === id && b.campaign !== false);
     for (const [node, want] of Object.entries(build?.talents ?? {})) while ((p.members[id]?.talents?.[node] ?? 0) < want! && !talentReason(p, map, id, node)) p = learnTalent(p, map, id, node).profile;
     for (let changed = true; changed;) {
       changed = false;

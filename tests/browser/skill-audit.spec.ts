@@ -34,5 +34,5 @@ test('C11: character sheet shows levelled row protection as a percent, inspectio
  await page.addInitScript(({key,raw})=>localStorage.setItem(key,raw),{key,raw});await page.goto('./');await page.locator('#continue').click();
  await page.locator('#lobby-tab-team').click();await page.locator('#lobby-member-guardian').click();await page.locator('#lobby-gear-open').click();await page.locator('#camp-character-tab-skills').click();
  await expect(page.locator('#camp-character-content')).toContainText('กำแพงโล่');await expect(page.locator('#camp-character-content')).toContainText('34');
- await page.screenshot({path:info.outputPath('c11-character-390.png')});expect(await page.evaluate(k=>JSON.parse(localStorage.getItem(k)!).profile.members.guardian.skillLevels.bulwark,key)).toBe(3);
+ await page.locator('#camp-character-content [data-skill=bulwark]').scrollIntoViewIfNeeded();await page.screenshot({path:info.outputPath('c11-character-390.png')});expect(await page.evaluate(k=>JSON.parse(localStorage.getItem(k)!).profile.members.guardian.skillLevels.bulwark,key)).toBe(3);
 });

@@ -10,12 +10,12 @@ import type { Talents } from '../../src/core/world/types';
 import { heroCatalog, starred } from '../../src/core/world/world';
 import { battleLesson } from '../../src/ui/tutorial';
 
-export interface TreeBuild { id: string; name: string; talents: Talents; loadout: ActionId[] }
+export interface TreeBuild { id: string; name: string; talents: Talents; loadout: ActionId[]; campaign?: boolean }
 export const TREE_BUILDS: readonly TreeBuild[] = [
-  { id: 'guardian', name: 'แนวค่าย', talents: { c1s: 1, a1: 2, a2i: 1, c2v: 1, c1: 2, a3: 1, a3s: 1 }, loadout: ['guard', 'bash', 'rally'] },
-  { id: 'guardian', name: 'กำแพงโล่', talents: { a1: 2, a2i: 1, a3: 1, a3s: 1, b1: 2, c1s: 1, c1: 2, c2v: 1 }, loadout: ['guard', 'bulwark', 'rally'] },
-  { id: 'guardian', name: 'ท้าดวล', talents: { b1: 2, b2: 1, b3r: 1, a1: 2, c1s: 1, c1: 2 }, loadout: ['guard', 'bash', 'challenge'] },
-  { id: 'guardian', name: 'ยืนเคียงข้าง', talents: { c1s: 1, c1: 2, c2v: 1, c3: 1, a1: 2, a2t: 1 }, loadout: ['rally', 'rouse', 'guard'] },
+  { id: 'guardian', campaign: false, name: 'แนวค่าย', talents: { c1s: 1, a1: 2, a2i: 1, c2v: 1, c1: 2, a3: 1, a3s: 1 }, loadout: ['guard', 'bash', 'rally'] },
+  { id: 'guardian', campaign: false, name: 'กำแพงโล่', talents: { a1: 2, a2i: 1, a3: 1, a3s: 1, b1: 2, c1s: 1, c1: 2, c2v: 1 }, loadout: ['guard', 'bulwark', 'rally'] },
+  { id: 'guardian', campaign: false, name: 'ท้าดวล', talents: { b1: 2, b2: 1, b3r: 1, a1: 2, c1s: 1, c1: 2 }, loadout: ['guard', 'bash', 'challenge'] },
+  { id: 'guardian', campaign: false, name: 'ยืนเคียงข้าง', talents: { c1s: 1, c1: 2, c2v: 1, c3: 1, a1: 2, a2t: 1 }, loadout: ['rally', 'rouse', 'guard'] },
   { id: 'tracer', name: 'นักล่าตรา', talents: { a1: 2, a2d: 1, a3: 1, a3s: 1, b1: 1, b2: 1, b3r: 1, c1: 2 }, loadout: ['mark', 'execute', 'lunge'] },
   { id: 'tracer', name: 'เพชฌฆาต', talents: { a1: 2, a2s: 1, b1: 2, b2: 1, b3d: 1, c1: 2 }, loadout: ['mark', 'execute', 'finisher'] },
   { id: 'tracer', name: 'นักดาบหน้า', talents: { c1: 2, c1s: 1, c2m: 1, c3: 1, b1: 2, a1: 2 }, loadout: ['parry', 'sweep', 'execute'] },
