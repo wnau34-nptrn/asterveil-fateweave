@@ -1,0 +1,333 @@
+[
+  {
+    "path": "01_seer/concept_A.png",
+    "bytes": 2608416,
+    "sha256": "a86ebe65edf70d49c42d1db8cfdaee8294a30965c1624eb9aa44aa210ad549aa",
+    "width": 1536,
+    "height": 1024,
+    "mode": "RGB"
+  },
+  {
+    "path": "01_seer/concept_B.png",
+    "bytes": 2726302,
+    "sha256": "5d868555453a8a27738dd9016af2fe1afaa3043c219f265e6da785b2366b5a0f",
+    "width": 1536,
+    "height": 1024,
+    "mode": "RGB"
+  },
+  {
+    "path": "01_seer/portrait_A.png",
+    "bytes": 515457,
+    "sha256": "54923355019a5ee0ccdd9561276ae9c96d1ec20b4cec1c2c9545d48d7ab7fe29",
+    "width": 512,
+    "height": 512,
+    "mode": "RGBA"
+  },
+  {
+    "path": "01_seer/portrait_A_40.png",
+    "bytes": 4829,
+    "sha256": "20086b889ec71018a2f68eaa730f780821190c9a65a992f78e9530ab4f1d106c",
+    "width": 40,
+    "height": 40,
+    "mode": "RGBA"
+  },
+  {
+    "path": "01_seer/unit_A.png",
+    "bytes": 357521,
+    "sha256": "386c898faf0cbd7e7d0108265f37e8c53bd41cb44507314cc5ecc63809867751",
+    "width": 512,
+    "height": 512,
+    "mode": "RGBA"
+  },
+  {
+    "path": "01_seer/unit_A_115.png",
+    "bytes": 25901,
+    "sha256": "c23de2decf2bd54c36136f43c835e9fcefaaf67d992aae3e0f790403f406b42c",
+    "width": 115,
+    "height": 115,
+    "mode": "RGBA"
+  },
+  {
+    "path": "01_seer/unit_A_source.png",
+    "bytes": 2243959,
+    "sha256": "0e5463546d7a7198ddda29222b55df19e633c385ff02dfca5d855db3ec3cf006",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGBA"
+  },
+  {
+    "path": "02_martial_artist/concept_A.png",
+    "bytes": 2230233,
+    "sha256": "5faf62ac9677c3191553ffb6d9da7b597b6c34a12d401a375df8d5bd255c18d8",
+    "width": 1774,
+    "height": 887,
+    "mode": "RGB"
+  },
+  {
+    "path": "02_martial_artist/concept_B.png",
+    "bytes": 2303029,
+    "sha256": "9d8e7ca689e72b82afaac4e633d8b7f36923725608632589b86977e2ae6a904d",
+    "width": 1536,
+    "height": 1024,
+    "mode": "RGB"
+  },
+  {
+    "path": "02_martial_artist/portrait_A.png",
+    "bytes": 473195,
+    "sha256": "afa3ed4bf3d7067970865e3ccfe8535d26479cbe6a4087d9f0c0f864b04dba5a",
+    "width": 512,
+    "height": 512,
+    "mode": "RGBA"
+  },
+  {
+    "path": "02_martial_artist/portrait_A_40.png",
+    "bytes": 4743,
+    "sha256": "cc108d35de7b58d5a172ef71eef8de4f5151bab45d7a0fae8e9591a7225376f2",
+    "width": 40,
+    "height": 40,
+    "mode": "RGBA"
+  },
+  {
+    "path": "02_martial_artist/unit_A.png",
+    "bytes": 246576,
+    "sha256": "7be61ff1a046ca649f6764ff31c36dd93242aba2477b52e7f8df86d2f9141b96",
+    "width": 512,
+    "height": 512,
+    "mode": "RGBA"
+  },
+  {
+    "path": "02_martial_artist/unit_A_115.png",
+    "bytes": 18701,
+    "sha256": "7dd4d627fda489c86aef93da1c8b43e4e718be1373e7e885c806d691a5064a27",
+    "width": 115,
+    "height": 115,
+    "mode": "RGBA"
+  },
+  {
+    "path": "02_martial_artist/unit_A_source.png",
+    "bytes": 1487151,
+    "sha256": "b9c2760ef180d3207e180f5c415970980f3c255837b01a2011f2ab9f9774dd84",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGBA"
+  },
+  {
+    "path": "03_hexer/concept_A.png",
+    "bytes": 2680911,
+    "sha256": "4a63dc54a1979dd0b06dc535521fd857cbe2e6f1566219bd1b86429e17aded93",
+    "width": 1536,
+    "height": 1024,
+    "mode": "RGB"
+  },
+  {
+    "path": "03_hexer/concept_B.png",
+    "bytes": 2300615,
+    "sha256": "820d7b7b1576504a2e3e8b963144b16fad6a04cec48a6610401c73bf0a240935",
+    "width": 1774,
+    "height": 887,
+    "mode": "RGB"
+  },
+  {
+    "path": "03_hexer/portrait_A.png",
+    "bytes": 479683,
+    "sha256": "40f4565c96012b2a938eaeb70c191ca6be8dc9f892df7db109c30b70fda9c39d",
+    "width": 512,
+    "height": 512,
+    "mode": "RGBA"
+  },
+  {
+    "path": "03_hexer/portrait_A_40.png",
+    "bytes": 4689,
+    "sha256": "c0e030e1cf144d50109af7c542a3bb89476af36d2c9611895c6ce4c722cb4e5f",
+    "width": 40,
+    "height": 40,
+    "mode": "RGBA"
+  },
+  {
+    "path": "03_hexer/unit_A.png",
+    "bytes": 273625,
+    "sha256": "8c3bdcf7a8270b830ab9be712bfa0aaf9ca458832284df3bcb2f89ab2a962c85",
+    "width": 512,
+    "height": 512,
+    "mode": "RGBA"
+  },
+  {
+    "path": "03_hexer/unit_A_115.png",
+    "bytes": 19526,
+    "sha256": "3b9290a493bbd4529f41de8197a378e7fc5bcf884970b90c76d10befd0b80e82",
+    "width": 115,
+    "height": 115,
+    "mode": "RGBA"
+  },
+  {
+    "path": "03_hexer/unit_A_source.png",
+    "bytes": 1692989,
+    "sha256": "1d8b6454fc489a41de49709fa45462a49d989a59fd426fdf1e7632108c41b32b",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGBA"
+  },
+  {
+    "path": "04_battle_saint/concept_A.png",
+    "bytes": 2313413,
+    "sha256": "14070a9916db05d2e0194c91583b154f9b464f4099e19fe25f0f5bf5aa23fb4d",
+    "width": 1536,
+    "height": 1024,
+    "mode": "RGB"
+  },
+  {
+    "path": "04_battle_saint/concept_B.png",
+    "bytes": 2213104,
+    "sha256": "f9468c2e9a505bc3f1240171062685a0135d95012b000f8c15d74efe084be7bc",
+    "width": 1536,
+    "height": 1024,
+    "mode": "RGB"
+  },
+  {
+    "path": "04_battle_saint/portrait_A.png",
+    "bytes": 482930,
+    "sha256": "badf30a7c955a27af31155575c911e645fe2f690b525628adc3ddaa6e2efe7b0",
+    "width": 512,
+    "height": 512,
+    "mode": "RGBA"
+  },
+  {
+    "path": "04_battle_saint/portrait_A_40.png",
+    "bytes": 4778,
+    "sha256": "99a923fe4b3ee24597bc0549753032f67b542cf5682f76d3afaa9f0b0b2a6729",
+    "width": 40,
+    "height": 40,
+    "mode": "RGBA"
+  },
+  {
+    "path": "04_battle_saint/unit_A.png",
+    "bytes": 275781,
+    "sha256": "2c2841a4e61d5f079d14ea503877b936e00f32a07f9c6a6ee7143893265cd22a",
+    "width": 512,
+    "height": 512,
+    "mode": "RGBA"
+  },
+  {
+    "path": "04_battle_saint/unit_A_115.png",
+    "bytes": 20305,
+    "sha256": "a83ef44f7b43db041bc220e259e5de5383a0821dfdaf1d7fd21a13b0a7ea6657",
+    "width": 115,
+    "height": 115,
+    "mode": "RGBA"
+  },
+  {
+    "path": "04_battle_saint/unit_A_source.png",
+    "bytes": 1713922,
+    "sha256": "53394f447fe10b3b785da5d1719c2167c05114b1a9e8e1962c06385d6fedec4b",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGBA"
+  },
+  {
+    "path": "05_dancer/concept_A.png",
+    "bytes": 2679018,
+    "sha256": "f04d8cd98c744a1711c8cc11e037dfcfadc823423c4814024ac474f55c6a85e4",
+    "width": 1536,
+    "height": 1024,
+    "mode": "RGB"
+  },
+  {
+    "path": "05_dancer/concept_B.png",
+    "bytes": 2361383,
+    "sha256": "bc4b9d15c1fd7f2741c9a08def93f72e44cdb262f863263c6a846a20f0f605a6",
+    "width": 1774,
+    "height": 887,
+    "mode": "RGB"
+  },
+  {
+    "path": "05_dancer/portrait_A.png",
+    "bytes": 457926,
+    "sha256": "cd0f847d10101751e08286f4b6733048bd47b777b8ea9f0a866a9c448b5f1876",
+    "width": 512,
+    "height": 512,
+    "mode": "RGBA"
+  },
+  {
+    "path": "05_dancer/portrait_A_40.png",
+    "bytes": 4730,
+    "sha256": "3903dd8568287a390efc4c020997dee90cac36a565f65740e201180e59b9a217",
+    "width": 40,
+    "height": 40,
+    "mode": "RGBA"
+  },
+  {
+    "path": "05_dancer/unit_A.png",
+    "bytes": 289595,
+    "sha256": "505670af1e245d7fb47294d306f18f0de99882195551bf995e062119deee3654",
+    "width": 512,
+    "height": 512,
+    "mode": "RGBA"
+  },
+  {
+    "path": "05_dancer/unit_A_115.png",
+    "bytes": 22140,
+    "sha256": "abd5c9f9c362c4b7286f87906f8c31893e8e670df84841d6b209678fd8bff058",
+    "width": 115,
+    "height": 115,
+    "mode": "RGBA"
+  },
+  {
+    "path": "05_dancer/unit_A_source.png",
+    "bytes": 1751285,
+    "sha256": "bfd4cf4f72ab4aad263af1b823de49539e38aa3cd6d681998125cea7320bc452",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGBA"
+  },
+  {
+    "path": "CODEX-TO-CLAUDE.md",
+    "bytes": 3055,
+    "sha256": "62af33d09deb05f955993f60506e5b664e2f16ff9ece5a0c5287252b99ba23e6"
+  },
+  {
+    "path": "NOTES.md",
+    "bytes": 9229,
+    "sha256": "173b0ad32b4e4723d16a18881ed7dd6e558de0a4889de7679013cfca03eb8123"
+  },
+  {
+    "path": "PROMPTS.md",
+    "bytes": 20042,
+    "sha256": "4803f83ddf00cf835d84a742456784217b3f402f8996cb6e4580ff731eb7c435"
+  },
+  {
+    "path": "provenance/export-commands.json",
+    "bytes": 25426,
+    "sha256": "b7a9f4d1d11330b1d8479d04e8dc612ccd9bf87669ebfd83e8f0a71d81fe6340"
+  },
+  {
+    "path": "provenance/generations.json",
+    "bytes": 14791,
+    "sha256": "9a1375427d24977dbc922a7d039b876ac7e7dc6969d9fdc32101772120d530b7"
+  },
+  {
+    "path": "provenance/unit-generations.json",
+    "bytes": 6833,
+    "sha256": "1d8fac73962d09b0a814c83a709d0f33bc2c8c02c2808188c46fdb17081ee252"
+  },
+  {
+    "path": "provenance/validation.json",
+    "bytes": 2191,
+    "sha256": "c0fd27f85192e387a033d25120d35494fcbcfb35dc99ed82aa67f74740f4a70b"
+  },
+  {
+    "path": "review/lineup.png",
+    "bytes": 886161,
+    "sha256": "29f2869e01205f3bfec958a36467a6e9409051b6f0939e1a3678ee99bc22f1a7",
+    "width": 1895,
+    "height": 370,
+    "mode": "RGBA"
+  },
+  {
+    "path": "review/lineup_390.png",
+    "bytes": 891222,
+    "sha256": "3d52f954a24d4aba66c459ed7026ff9419a7afa91e71b467397c3343f8ed0684",
+    "width": 390,
+    "height": 844,
+    "mode": "RGBA"
+  }
+]
