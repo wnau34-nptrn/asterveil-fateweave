@@ -9,8 +9,8 @@ export const GEAR_STATS: readonly GearStat[] = ['hp', 'attack', 'support', 'spee
 export const RARITIES = 5;
 const curve = ([base, per]: StatCurve, level: number) => base + per * (level - 1);
 // A support class's weapon has its own main stat and affix pool.
-const slotKey = (rules: EquipmentRules, slot: GearSlot, hero?: string): GearSlot | 'supportWeapon' =>
-  slot === 'weapon' && hero && rules.supportHeroes.includes(hero) ? 'supportWeapon' : slot;
+const slotKey = (rules: EquipmentRules, slot: GearSlot, hero?: string): GearSlot | 'supportWeapon' | 'magicWeapon' =>
+  slot === 'weapon' && hero && rules.magicWeaponHeroes.includes(hero) ? 'magicWeapon' : slot === 'weapon' && hero && rules.supportHeroes.includes(hero) ? 'supportWeapon' : slot;
 // The affixes an item of this slot (and, for a weapon, class) can roll.
 export const affixPool = (rules: EquipmentRules, slot: GearSlot, hero?: string): GearStat[] => [...rules.affixPools[slotKey(rules, slot, hero)]];
 export const mainStats = (rules: EquipmentRules, item: Pick<Item, 'slot' | 'hero'>): Partial<Record<GearStat, StatCurve>> => rules.slotStats[slotKey(rules, item.slot, item.hero)];

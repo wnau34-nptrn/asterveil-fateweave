@@ -1,0 +1,174 @@
+{
+  "common": "Create exactly ONE original painted fantasy JRPG skill icon. Match supplied atlas reference: polished painterly material shading, crisp bevels, thick dark navy contours, top-left light, warm gold trim, vivid luminous solid masses with restrained glow. Center isolated composition, motif fills 75-80% square, entire effects inside centered safe circle 87.5% diameter. Genuine transparent background. Readable at 40px on navy #0b1730 under 61% black cooldown. No text, numbers, border, tile, frame, watermark or scenery. ",
+  "initial": [
+    [
+      "parry",
+      "one crimson-inset silver sword deflecting a smaller blade with one ivory spark",
+      "crimson, rose, warm gold and ivory"
+    ],
+    [
+      "lunge",
+      "a crimson silver sword in a forward dash-thrust with a tapered rose speed trail",
+      "crimson, rose, warm gold and ivory"
+    ],
+    [
+      "sweep",
+      "one wide horizontal ivory arc slash edged crimson, a small silver sword at its leading end",
+      "crimson, rose, warm gold and ivory"
+    ],
+    [
+      "storm",
+      "a vortex of three arcane bolts raining downward, sky-white points with violet spiralling trails",
+      "violet, sky-white and pale gold"
+    ]
+  ],
+  "remaining": [
+    [
+      "aegis",
+      "a faceted crystal dome sheltering THREE small simple figures",
+      "violet, pearl cyan and faint gold",
+      "Mage"
+    ],
+    [
+      "dispel",
+      "a violet rune shield shattering into a few large separated crystal fragments; abstract geometric rune only",
+      "violet, pearl white and pale gold",
+      "Mage"
+    ],
+    [
+      "revive",
+      "one figure silhouette RISING upward from a soft ivory light cradle, rebirth, upward flowing ribbons, no healing cross",
+      "emerald, mint, ivory and gold",
+      "Priest"
+    ],
+    [
+      "halo",
+      "a luminous horizontal halo floating above a tall shield made of light",
+      "emerald, mint, ivory and gold",
+      "Priest"
+    ],
+    [
+      "bless",
+      "a glowing ivory gloved hand above a raised silver weapon, blessing light joining them",
+      "emerald, mint, ivory and gold",
+      "Priest"
+    ],
+    [
+      "hold",
+      "a silver spear planted in a stone ground base, one short broad defensive wall line behind",
+      "teal cloth, silver steel and bronze gold",
+      "Spear"
+    ],
+    [
+      "halt",
+      "a horizontal spear thrust stopping ONE charging dark silhouette with a bright contact spark",
+      "teal cloth, silver steel and bronze gold",
+      "Spear"
+    ],
+    [
+      "warcry",
+      "a bold shout-wave above TWO silver spearheads with teal pennants",
+      "teal cloth, silver steel and bronze gold",
+      "Spear"
+    ],
+    [
+      "disengage",
+      "a compact backflipping archer silhouette loosing ONE arrow, backwards curved motion trail",
+      "forest green, warm brown, bronze and ivory",
+      "Archer"
+    ],
+    [
+      "pin",
+      "THREE arrows nailing a single horizontal ground-row line, clear anchored arrowheads and small ground chips",
+      "forest green, warm brown, bronze and ivory",
+      "Archer"
+    ],
+    [
+      "track",
+      "ONE arrow following a curved dotted light path toward a small bronze target mark",
+      "forest green, warm brown, bronze and ivory",
+      "Archer"
+    ],
+    [
+      "smoke",
+      "an amber brass flask bursting into a bold grey-violet smoke cloud, visible flask below cloud",
+      "amber glass, brass, cream leather and grey-violet smoke",
+      "Alchemist"
+    ],
+    [
+      "fury",
+      "a red tonic vial with a bold angry flame-shaped flare, brass stopper",
+      "amber glass, brass, cream leather and crimson red tonic",
+      "Alchemist"
+    ],
+    [
+      "catalyst",
+      "a tilted acid flask producing a chain-reaction burst of THREE connected lime green acid lobes",
+      "amber glass, brass, cream leather and acid lime",
+      "Alchemist"
+    ],
+    [
+      "knives",
+      "THREE thrown silver knives fanning horizontally across a row, separated dark navy trails",
+      "navy cloth, charcoal leather, silver and cool blue",
+      "Scout"
+    ],
+    [
+      "decoy",
+      "a shadow double drawing a steel strike away from a second smaller solid scout figure",
+      "navy cloth, charcoal leather, silver and cool blue",
+      "Scout"
+    ],
+    [
+      "disarm",
+      "a silver weapon spinning out of an open dark gauntlet, one curved outward motion arc",
+      "navy cloth, charcoal leather, silver and cool blue",
+      "Scout"
+    ],
+    [
+      "stonearmor",
+      "rune-carved thick stone plates closing around a simple torso, broad squared armour silhouette",
+      "slate blue, stone grey and warm gold",
+      "Warden"
+    ],
+    [
+      "guardstone",
+      "ONE floating rune stone shielding ONE small ally figure, stone raised upper left, figure below right",
+      "slate blue, stone grey and warm gold",
+      "Warden"
+    ],
+    [
+      "tremor",
+      "a heavy rune hammer striking a long low ground crack with ONE lateral gold shock line, low wide silhouette",
+      "slate blue, stone grey and warm gold",
+      "Warden"
+    ],
+    [
+      "dread",
+      "ONE dark minor-key musical note with a broad shivering wave, ominous coral shadow, no letters",
+      "coral red cloth, honey wood, gold, ivory and dark plum",
+      "Bard"
+    ],
+    [
+      "note",
+      "ONE sharp glowing golden musical note shot diagonally like a dart, tapered coral speed tail",
+      "coral red cloth, honey wood, gold and ivory",
+      "Bard"
+    ],
+    [
+      "solo",
+      "a narrow golden spotlight on ONE small figure with a SINGLE rising curved melody note",
+      "coral red cloth, honey wood, gold and ivory",
+      "Bard"
+    ]
+  ],
+  "tool": "built-in image_gen",
+  "revision_subjects": {
+    "lunge": "ONE long straight silver rapier with a crimson inset, gripped by a small gold gauntlet, thrusting FORWARD horizontally to the RIGHT. The sword blade must be the dominant solid silhouette, with a short tapered rose speed trail behind its hilt. No rose emblem, no face, no flower, no spear, no ring.",
+    "dread": "ONE large DARK PLUM musical eighth NOTE (recognizable single note head and stem), edged warm gold, with one broad shivering sound wave in muted coral. Ominous minor-key fear motif. Main note is dark, clearly visible gold edge. No lute, no instrument, no weapon, no face.",
+    "solo": "ONE simple ivory human figure standing upright under a narrow golden SPOTLIGHT cone from above, with ONE rising curved golden musical note to the side and small coral cloth accent. Figure and spotlight are mandatory dominant silhouette. No lute, no instrument, no horn, no weapon.",
+    "guardstone": "ONE floating thick rough grey STONE monolith with carved abstract gold angular rune, in front of and shielding ONE SMALL simple ally figure below right. The stone is a rock slab with chipped edges, NOT a blue shield, not metal, no physical shield at all. Palette slate blue, stone grey and warm gold.",
+    "note": "exactly ONE musical eighth-note symbol, with a round solid golden note head and sharp straight stem ending in one small flag. It shoots diagonally like a dart, a tapered coral-red luminous speed tail behind it. Palette warm gold, ivory highlights, coral red accents. NO INSTRUMENTS: no lute, no harp, no wood instrument, no strings, no weapon, no face, no letters."
+  },
+  "revision_constraints": "Atlas is STYLE ONLY. Do not copy its motifs. Limit to bold simple readable masses. Keep all effects compact around the subject. Transparent, ONE icon."
+}

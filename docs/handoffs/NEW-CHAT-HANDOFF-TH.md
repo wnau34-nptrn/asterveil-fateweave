@@ -2,6 +2,24 @@
 
 อัปเดต Codex 2026-10-23: C5.1 ฟันดาบ/แทงส่งบน `codex/vfx-family-1-blade` รอเจ้าของตรวจ [คลิป 390px](../combat-presentation/blade-slice/README_TH.md) ยังไม่ merge/publish และห้ามเริ่ม C5.2 จนเจ้าของอนุมัติคลิป อ่านบันทึกบนสุด `CODEX-TO-CLAUDE.md` และผลตรวจใน slice notes ก่อนทำต่อ
 
+## 2026-10-24 — Magic Power (owner-approved)
+
+Completed `codex/magic-power-scaling`, PR #65 merged as `f0ae3cf` after both CI workflows passed: shared spell/support scaling, Magic Power UI, mage weapons/talent, encounter versions and v41 migration. Validation: 756 unit tests, 23 full simulation checks, 8 character/gear checks and 3 boss reward checks passed. See `docs/design/MAGIC_POWER_TH.md` and CODEX-TO-CLAUDE.md for tests, simulation/PR status and screenshot. Basic attacks remain physical.
+
+## 2026-10-24 — C10 victory rewards
+
+PR #63 merged as `5d14ca1`, CI passed. Owner requested compact two-row EXP and one-page rewards; completed in PR #64, merged as `ae6e510` after both CI workflows passed. See CODEX-TO-CLAUDE.md. Tutorial intentionally skips rewards; rules/saves unchanged.
+
+## 2026-10-23 — Codex C1: painted big-tree skill icons (ART-SKILL-ICON-003)
+
+- Work branch `codex/skill-icons-003`, based on `feature/fateweave-initial-prototype`. C1 explicitly authorizes source art plus game integration. PR #60: https://github.com/wnau34-nptrn/asterveil-fateweave/pull/60 — open for review; no merge into the game branch. Implementation commit c3e1ad2. Latest base documentation merged cleanly; no code changes from the base refresh.
+- 27 original painted RGBA PNGs, prompt/source provenance, bounds, native 40/56/72 normal/cooldown preview and reproducible packaging under `incoming/ART-SKILL-ICON-003/`.
+- Runtime atlas now 61 icons: original 34 IDs in unchanged order, then section 23's 27 IDs. 256 px cells, 6 columns × 11 rows, 1536×2816. Quality-85 WebP 1,186,696 bytes; delivery/runtime bytes and metadata match. Original art uses its native R1/-002 256 px sources. Five unused cells stay transparent.
+- Fixed the previously hardcoded 6×6 CSS atlas sizing: `icon()` derives background-size from JSON dimensions, preventing adjacent-cell fragments in the taller atlas. SVG fallback aliases and line-icon modifier nodes stay intact.
+- Validation: typecheck, lint, 64 Vitest files / 751 tests, production build, focused Chromium 390×844 checks of Skills/Talents for Toma, Sefa, Brann, Lio, Lyra and weaver (requested Eira; current Thai name ไอรา). Equipped Lunge displays/selects/reloads in the battle dock without an accidental command. Dedicated `playwright.icons.config.ts` owns port 5193 so another worktree's server cannot be reused. Existing build chunk-size advisory only; no gameplay/save/rule changes.
+- Owner screenshots: `incoming/ART-SKILL-ICON-003/qa/tree-390.png` and `battle-dock-390.png`. Both visually inspected after the CSS correction; Chromium touch emulation, not real iOS/phone verification. Artistic acceptance remains the owner's judgement.
+
+
 อ่านไฟล์นี้ก่อน แล้วอ่าน `CLAUDE.md` (กติกาหลัก สั้นลงแล้ว) — รายละเอียดระบบเดิมอยู่ใน `docs/design/SYSTEMS_REFERENCE.md` อ่านเฉพาะหัวข้อของระบบที่จะแก้ แผนใหญ่ `docs/MASTER_PLAN_TH.md`
 
 ## ข้อมูลพื้นฐาน
@@ -10,6 +28,7 @@
 - ถ้าระบบกำหนดสาขา `claude/...` ให้ทำงานบนสาขานั้นที่ตั้งจากสาขาเกม แล้ว push ทั้งสาขานั้นและ `feature/fateweave-initial-prototype` (เจ้าของสั่งให้ทำงานบนสาขาเกม)
 - คุยกับเจ้าของเป็นภาษาไทย ใช้ "ค่ายทหารรับจ้าง" ห้าม "บริษัท" ห้ามคำว่า ม่านเวล; เรื่องหน้าตาเจ้าของตัดสิน ส่งภาพ 390px หน้าละ 1–2 ภาพ
 - เซฟเวอร์ชัน 39 (ต้นไม้ใหญ่ครบ 10 อาชีพ)
+- **รอ Claude หลัง Usage รีเซ็ต (เจ้าของอนุมัติแล้ว):** ปรับสกิลตาม `docs/design/SKILL_AUDIT_TH.md` (รออนุมัติรายข้อ), แคมป์/ตัวสำรอง `docs/MASTER_PLAN_TH.md` A6c, 15 อาชีพ A6b
 - **ระหว่างรอ Usage ของ Claude (ถึง 28 ต.ค.): Codex ทำงานตาม `docs/handoffs/CLAUDE-TO-CODEX-DEV-TH.md`**
 - ตรวจก่อน push: `npm run typecheck`, `npm run lint`, `npx vitest run`, `npm run build` + เทสต์เบราว์เซอร์ที่เกี่ยวข้อง
   (`PLAYWRIGHT_CHROMIUM_EXECUTABLE=/opt/pw-browsers/chromium-1194/chrome-linux/chrome npx playwright test <ไฟล์> -g "<ชื่อ>"`) ชุดเต็มปล่อย CI

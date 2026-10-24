@@ -112,14 +112,16 @@ describe('alchemist (Toma)', () => {
     expect(t.enemies.find(e => e.id === 'f1')!.corrodedUntil).toBe(3);
     expect(corrodeBonus(t, party, 'f1')).toBe(0);
   });
-  it('haste makes an ally act before everyone next round only, and cannot be stacked', () => {
+  it('haste: an ally still to act this round acts right after Toma; one who already acted goes first next round, once', () => {
     let s = createBattle(party); s = act(s, 'attack', 'b1', party).state;
-    const r = act(s, 'haste', 'guardian', party);
-    expect(r.events.some(e => e.type === 'haste')).toBe(true);
-    expect(targetOptions(r.state, party, 'toma', 'haste').find(t => t.id === 'guardian')?.valid ?? false).toBe(false);
+    // Toma (SPD 95) acts before the Knight (SPD 80): the Knight moves up to act next, nobody gains a turn.
+    const now = act(s, 'haste', 'guardian', party);
+    expect(now.turns[0]!.events.find(e => e.type === 'haste')!.text).toBe('Ally acts next.');
+    expect(now.state.order[now.state.turnIndex]).toBe('guardian'); expect(now.state.order).toHaveLength(s.order.length);
+    // Lyra (SPD 120) has already acted: she goes first next round, and cannot be hasted twice.
+    const r = act(s, 'haste', 'tracer', party);
+    expect(targetOptions(r.state, party, 'toma', 'haste').find(t => t.id === 'tracer')?.valid ?? false).toBe(false);
     let t = r.state; while (t.round < 2) t = act(t, 'attack', 'b1', party).state;
-    expect(t.order[0]).toBe('guardian');
-    while (t.round < 3) t = act(t, 'attack', 'b1', party).state;
     expect(t.order[0]).toBe('tracer');
   });
   it('replays and previews identically', () => {

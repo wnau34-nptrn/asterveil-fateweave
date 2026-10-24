@@ -55,7 +55,7 @@ describe('talent trees: content and stats', () => {
     const t = member('garran', { a1: 2, b1: 2 });
     expect(t.maxHp).toBe(Math.round(base.maxHp * 1.10)); expect(t.attack).toBe(Math.round(base.attack * 1.08));
     // Stats design (2026-10-17): Attack % feeds damaging skills (damageBonus), not Support.
-    expect(member('weaver', { c1: 2 })).toMatchObject({ damageBonus: 8, skillBonus: 0 });
+    expect(member('weaver', { c1: 2 })).toMatchObject({ damageBonus: 0, skillBonus: 8 });
     // Talents add to stars and levels.
     expect(starred(base, 2, map, 3, { a1: 1 }).maxHp).toBe(Math.round(base.maxHp * (100 + 8 + 6 + 5) / 100));
   });
@@ -173,7 +173,7 @@ describe('mage tree modifiers (Eira)', () => {
     const d = party([['guardian'], ['tracer'], ['weaver', { a1: 1, a2s: 1 }]]);
     const r = act(until(createBattle(d), d, 'weaver'), d, 'bolt', 'f1');
     expect(dealt(r, 'b1')).toBe(Math.floor(skillPower(d, 'weaver', 'bolt') / 2));
-    expect(skillPower(d, 'weaver', 'bolt')).toBe(26);
+    expect(skillPower(d, 'weaver', 'bolt')).toBe(Math.round(26 * 1.04));
   });
   it('a reflecting ward strikes back the first hit it absorbs', () => {
     const d = party([['guardian'], ['tracer'], ['weaver', { b1: 1, b2r: 1 }], ['healer']]);

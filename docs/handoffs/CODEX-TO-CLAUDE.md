@@ -8,6 +8,55 @@
 - Checks: typecheck/lint/build pass; final family browser matrix 18/18; existing combat/Bolt/Execute/Ward/presentation regressions 80/81 initially, rearCombo passes isolated retry (so all 81 covered). The earlier combined run's Sweep selector failure is fixed and included in final 18/18. Final uncontended `npx vitest run --maxWorkers=1`: **751/751 pass (64 files)**. Earlier boss-balance timeouts under contention resolved without changing any test, timeout or rule.
 - **Stop here: owner artistic approval is pending. Do not merge/publish this family or begin family 2 until the owner reviews the clips.** No approval has been entered on the owner's behalf. C5 families 2–8 remain untouched.
 
+## 2026-10-24 — Read-only logic audit requested by owner
+
+- Branch `codex/game-logic-audit`, documentation only; no gameplay PR or merge for implementation. Owner asked what other inconsistencies remain, without requesting fixes. Findings: `docs/design/LOGIC_AUDIT_2026-10-24_TH.md`. Two confirmed UI bugs (percentage skills labelled as damage/Attack, Bulwark summary ignoring levels), plus Aegis no-op casting, full-HP overheal restriction and Revive upgrade expectations. Basic Mage attacks and loadout-independent equipment suggestions are explicit design observations.
+- Verified with a temporary resolver/metric probe: 1 Vitest test passed, probe removed; log `/tmp/fateweave-logic-audit.log`. Documentation checked with git diff --check. No screenshots or core/save/balance changes. Owner decisions remain pending for rule/design changes; questions recorded under ฝากถึง Claude.
+
+## 2026-10-24 — Owner-approved Magic Power scaling
+
+- Branch `codex/magic-power-scaling` → `feature/fateweave-initial-prototype`. Owner explicitly approved the proposed shared physical/Magic Power split after asking about Eira's damage. This authorizes resolver/content/save work for this task, superseding the earlier rewards UI-only scope and the AGENTS.md defer-to-Claude restriction for this task. Design: `docs/design/MAGIC_POWER_TH.md`.
+- Magical damage (Mage bolt/sigil/storm/dispel, Alchemist acid/bomb/catalyst, Bard note/finale) uses legacy `skillBonus` alongside healing/shields/songs. Physical/basic attacks retain Attack scaling. UI labels/help/comparison/auto-equip goals now say พลังเวท and use the resolver's classification. Control percentages, durations and cooldowns unchanged.
+- Mage weapon main stat/pool and recommendation now use Magic Power; keep leech and existing stat curves. Mage c1 talent uses Magic Power at the same percent. All encounter versions bumped. Save v41 converts old mage weapon Attack affixes before v21 migration, preserving gear metadata and duplicate profile/run copies, and resets only affected old pending battle commands to entry HP. v41 commands persist normally.
+- Files: core battle/world/save types and helpers, encounter/catalog versions, hero talents/world rules, three UI modules, unit/browser tests and generated balance reports. No base skill powers, speed or turn counts changed.
+- Validation: typecheck/lint, 65 Vitest files / 756 tests passed; final production build passed. Eight focused Chromium character/equipment/Magic Power browser checks passed at 320/390/1366 widths. Full `npm run sim` passed 23 checks across 6 files; updated reports are deterministic and committed. PR #65: https://github.com/wnau34-nptrn/asterveil-fateweave/pull/65. Initial browser CI had only 3 failing boss-victory fixtures: they generated current-rule commands but labelled them v27, correctly triggering v41 migration. These fixtures now use saveGame and passed all 3 focused Chromium widths. Full browser CI rerun and quality CI passed on `afdcc10`. Production migration unchanged. PR #65 merged as `f0ae3cf497e69ab860fa6287c14bd855b85fe31f`. No implementation left unfinished.
+- Screenshot visually inspected: `/tmp/magic-power-qa/magic-power-390px-mage-spe-e24b2-adonly-on-inspection-reload/mage-magic-power-390.png`; shows actual Eira Lv4 with Bolt 34 and Ward 18, both labelled อิงพลังเวท. Browser connector control unavailable earlier; used the explicitly authorized Playwright workflow and system Chromium. Real iOS/Safari not tested.
+
+
+## 2026-10-24 — Owner revision: compact victory rewards
+
+- Owner asked for EXP in two rows and all rewards on one page. `codex/battle-rewards-compact`: member grid sizes columns from brought-member count, compact portraits/bars/badges, two-column resources/items, a single item spans the width. Item descriptions remain available on tap. No core/content/save changes.
+- Files: battle-rewards.ts, components.css, battle-rewards.spec.ts. Added assertions for exactly two member rows and no overview scrolling at 390×844 (item and level-up wins).
+- Previous rewards PR #63 merged as `5d14ca1567436389fb96a06d1dfcbe0738b7e6fb`, with quality and full browser CI passed. All 7 combat return routes passed locally after updating dismissal expectations.
+- Compact screenshots: `/tmp/rewards-compact-final/battle-rewards-victory-rewards-item-at-390px/rewards-item.png` and `.../battle-rewards-victory-rewards-level-up-at-390px/rewards-level-up.png`. Validation: typecheck, lint, 751 Vitest tests, build, both Chromium reward specs passed. Both compact screenshots visually inspected; two-row/no-scroll assertions pass. PR #64 merged as `ae6e510cf1d75147a53f6c7d5bc53ee1e287ecd5` after quality and full browser CI passed. No unfinished implementation.
+
+
+## 2026-10-24 — UI-BATTLE-REWARDS-001
+
+- Branch `codex/battle-rewards-001` → `feature/fateweave-initial-prototype`; PR #63: https://github.com/wnau34-nptrn/asterveil-fateweave/pull/63; merged as `5d14ca1` after both CI workflows passed.
+- Added disposable DOM victory dialog after the existing battle result: actual EXP gains for every brought member (including downed/reserves), pre-finish → final EXP bars, level-up badges, level-gap note, item art/details, nonzero resources. Closing only dismisses; commitBattle saves first. Reload never recreates rewards. Tutorial skips rewards to retain the story sequence; defeat/wipe unchanged.
+- Files: `src/ui/battle-rewards.ts`, `game-shell.ts`, `components.css`; browser reward tests plus world/targeted-loot dismissal updates. No core/content/save changes.
+- Validation: typecheck, lint, 751 Vitest tests and build passed. New Chromium 390×844 item/level-up specs passed; targeted-loot specs passed at 320/390/1366px; final focused rewards/world run 6/6 passed (includes Enter/Escape, item inspection, reload while open and tutorial story). A broader local world run was interrupted after HMR caused a navigation-context failure; that test passed in the clean focused rerun. Initial full CI: 7 combat route tests still assumed immediate return to map; updated the shared test to dismiss rewards and assert unchanged save. All other CI tests passed. All 7 corrected combat routes passed locally; full browser rerun and quality CI passed. Browser extension control unavailable; used explicitly requested Playwright with system Chromium (download host denied).
+- Owner evidence: `/tmp/rewards-verified/battle-rewards-victory-rewards-item-at-390px/rewards-item.png` and `/tmp/rewards-verified/battle-rewards-victory-rewards-level-up-at-390px/rewards-level-up.png`, both visually inspected. Owner request authorizes merge after CI. No new visual approval claimed.
+
+
+## 2026-10-23 — Claude: map bag swap fix (owner bug report)
+
+- In the map bag a reserve member picked on the team row now swaps in when the player taps a member of the formation grid (or deploys into an empty grid cell when the party has room); before, the grid kept its own pick and ignored the reserve pick. `src/ui/world-ui.ts` `pickLane`; hint text updated; test `tests/browser/formation.spec.ts`. The camp team page uses the same code.
+
+## 2026-10-23 — Codex C1: painted big-tree skill icons (ART-SKILL-ICON-003)
+
+- Work branch `codex/skill-icons-003`, based on `feature/fateweave-initial-prototype`. C1 explicitly authorizes source art plus game integration. PR #60: https://github.com/wnau34-nptrn/asterveil-fateweave/pull/60 — open for review; no merge into the game branch. Implementation commit c3e1ad2. Latest base documentation merged cleanly; no code changes from the base refresh.
+- 27 original painted RGBA PNGs, prompt/source provenance, bounds, native 40/56/72 normal/cooldown preview and reproducible packaging under `incoming/ART-SKILL-ICON-003/`.
+- Runtime atlas now 61 icons: original 34 IDs in unchanged order, then section 23's 27 IDs. 256 px cells, 6 columns × 11 rows, 1536×2816. Quality-85 WebP 1,186,696 bytes; delivery/runtime bytes and metadata match. Original art uses its native R1/-002 256 px sources. Five unused cells stay transparent.
+- Fixed the previously hardcoded 6×6 CSS atlas sizing: `icon()` derives background-size from JSON dimensions, preventing adjacent-cell fragments in the taller atlas. SVG fallback aliases and line-icon modifier nodes stay intact.
+- Validation: typecheck, lint, 64 Vitest files / 751 tests, production build, focused Chromium 390×844 checks of Skills/Talents for Toma, Sefa, Brann, Lio, Lyra and weaver (requested Eira; current Thai name ไอรา). Equipped Lunge displays/selects/reloads in the battle dock without an accidental command. Dedicated `playwright.icons.config.ts` owns port 5193 so another worktree's server cannot be reused. Existing build chunk-size advisory only; no gameplay/save/rule changes.
+- Owner screenshots: `incoming/ART-SKILL-ICON-003/qa/tree-390.png` and `battle-dock-390.png`. Both visually inspected after the CSS correction; Chromium touch emulation, not real iOS/phone verification. Artistic acceptance remains the owner's judgement.
+
+## 2026-10-23 — Claude: haste acts now (owner, save v40)
+
+- `haste` (engine.ts): an ally still to act this round moves right after the alchemist in this round's order; an ally who has acted (or Toma herself) keeps the old rule (first next round, `hastedRound`). No turn is gained. Save v40 drops the commands of a v39 battle that used haste (restarts from entry HP). Test: tests/battle.test.ts. Full `npm run sim` not re-run (usage); the single-seed campaign guard in vitest passes.
+
 ## 2026-10-23 — Claude: big trees for the four recruits (owner approved, save v39)
 
 - Alchemist, scout, warden and bard big trees (`content/heroes/talents.ts`, 16 nodes each; the doc's tables). 12 new skills (`smoke`, `fury`, `catalyst`, `knives`, `decoy`, `disarm`, `stonearmor`, `guardstone`, `tremor`, `dread`, `note`, `solo`) and 16 caps in `core/battle/engine.ts`; shared pieces: `weaken` (next move cut), `HeroState.exposed`/`solo`, `BattleState.decoy`/`stone`/`encored`, `SongId` adds `dread`. Advisor (`ui/tutorial.ts`) uses them; texts in `ui/th.ts`, status rows in `ui/battle-status.ts`, line icons aliased in `ui/icons.ts` (painted ones: Codex queue 23).
