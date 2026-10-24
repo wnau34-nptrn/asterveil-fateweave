@@ -1,5 +1,15 @@
 # Codex → Claude handoff
 
+## 2026-10-24 — C5.1 R3: balanced weight and ten distinct blade gestures (PR #59)
+
+- Owner feedback: R2 is too thick and the ten moves look too similar. This revision is not artistic approval. Branch `codex/vfx-family-1-blade`, [PR #59](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/59), no family merge/publication and no family 2.
+- `blade-fx.ts` reuses the unchanged R2 shared painted atlas; no generation or Shado export was needed. Ribbon alpha is .82, core .78 with 30–50px sizes, life 235–300ms, 0–2 decorative flecks. The small table defines distinct aspect ratios, rotation, local travel and offset for all ten skills. Cuts use the screen plane; thrusts use the incoming axis. Sweep is broad/flat; Pierce a long needle; Backstab reverses; Ambush rises; Disarm hooks; Halt is short/planted. Parry remains a resolved counter. Still reduced-motion frames preserve the silhouettes.
+- `BattleScene.ts` passes the skill to its anticipation. Captions remain above paint, stars stay at actual contact, outcomes/recipients/timing remain authoritative. No authored changes to core/content/save/playback relative to the base; Bolt/Execute/Ward unchanged.
+- Visual implementation commit `4de81af`; merged current C11 base `1a50c01` as `814d607` to keep clips on the current skill semantics and PR reviewable. Resolved only handoff conflicts, preserving both histories. C11 rule/save changes are inherited from the base, not VFX edits.
+- Validation on C11: typecheck/lint/build passed, 795/795 Vitest tests (68 files) passed. 31/31 browser tests passed (18 family +13 playback); 18/18 final clip captures passed. Replaced all 18 MP4s and the two contact stills at 390×844; dimensions verified by ffprobe. Ten normal-hit contact frames were inspected, each within 6ms of renderer contact +70ms. Earlier pre-C11 31/31 browser tests passed after the orientation correction. One earlier reload test was interrupted by editing while Vite was running; the unchanged test passed on the next full run. No timeouts or production rules were relaxed.
+- Evidence: `docs/combat-presentation/blade-slice/README_TH.md` describes all ten identities, capture commands and truthful outcome matrix. Fixture inspection checks rendered alpha, aspect ratios, Backstab direction, captions, exact HP contact and cleanup. Source provenance is in `incoming/ART-VFX-BLADE-001/NOTES.md`.
+- Owner must review R3 clips; do not mark approval or begin C5.2. Shado MCP connection troubleshooting earlier in chat did not create/change game assets or weaken Sophos protection.
+
 ## 2026-10-24 — Codex C5.1 R2: stronger paint for all ten blade skills (PR #59)
 
 - Owner feedback: every effect in the latest clips was too light/thin; clarified scope is the ten sword/thrust skills only. This is a revision request, **not artistic approval**. Same branch `codex/vfx-family-1-blade`, same [PR #59](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/59); no merge/publication or family 2.

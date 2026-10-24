@@ -58,7 +58,7 @@ Read AGENTS.md and CLAUDE.md first. Repository wnau34-nptrn/asterveil-fateweave,
 
 | ลำดับ | ตระกูล | สกิล |
 |---|---|---|
-| 1 | ~~ฟันดาบ/แทง~~ ส่ง R2 แก้ความเบา/บางตาม feedback 2026-10-24 **รอเจ้าของตรวจคลิปใหม่ ยังไม่อนุมัติ** (`codex/vfx-family-1-blade`, PR #59, [คลิป](../combat-presentation/blade-slice/README_TH.md)) | attack, finisher, lunge, sweep, backstab, ambush, disarm, parry (ฟันสวน), pierce, halt |
+| 1 | ~~ฟันดาบ/แทง~~ ส่ง R3 ลดความหนาจาก R2 และแยกเอกลักษณ์ทั้ง 10 ท่า ตาม feedback 2026-10-24 **รอเจ้าของตรวจคลิปใหม่ ยังไม่อนุมัติ** (`codex/vfx-family-1-blade`, PR #59, [คลิป](../combat-presentation/blade-slice/README_TH.md)) | attack, finisher, lunge, sweep, backstab, ambush, disarm, parry (ฟันสวน), pierce, halt |
 | 2 | โล่/ป้องกัน | guard, aegis, rally, bulwark, stonearmor, guardstone, halo, sanctuary, brace, spearwall, hold |
 | 3 | แสงรักษา | heal, prayer, rouse, revive, bless, mend (เพลงฟื้น) |
 | 4 | ลูกธนู/มีดบิน | hinder, volley, weakshot, pin, track, disengage, knives |

@@ -56,7 +56,7 @@ npm run typecheck
 npm run lint
 npx vitest run --maxWorkers=1
 npm run build
-npx playwright test tests/browser/blade-fx.spec.ts tests/browser/presentation.spec.ts --output test-results/blade-r3-final
+npx playwright test tests/browser/blade-fx.spec.ts tests/browser/presentation.spec.ts --output test-results/blade-r3-c11-final
 ```
 
 อัดซ้ำใน PowerShell (อย่าอัดพร้อม simulation หรือ browser suite อื่น):
@@ -69,9 +69,11 @@ python tests/browser/fixtures/encode-blade-clips.py test-results/blade-r3-delive
 
 ใช้ Python ที่มี Pillow และ ffmpeg/ffprobe ใน PATH การ pack atlas: `python incoming/ART-VFX-BLADE-001/package.py`
 
-ผลตรวจ R3 จะบันทึกหลังตรวจชุดสุดท้าย: family tests ตรวจ HP ก่อน/ตรง contact, valid atlas frames, พีกที่ contact +80ms อยู่ระหว่าง alpha .7–.9, สัดส่วน Sweep/Pierce/Halt และทิศ Backstab จากภาพที่ render จริง, ตัวเลขอยู่เหนือแสง, skip cleanup, ผลจริงและ fast/reduced/resize รวมความกว้าง 320/390/1366px ตั้งนาฬิกาทดสอบก่อนเริ่ม Phaser เพื่อไม่เปลี่ยน clock กลาง render loop
+ผลตรวจ R3 บน C11: typecheck / lint / build ผ่าน; **31/31 browser tests ผ่าน** (family 18 + playback 13) ตรวจ HP ก่อน/ตรง contact, valid atlas frames, พีกที่ contact +80ms อยู่ระหว่าง alpha .7–.9, สัดส่วน Sweep/Pierce/Halt และทิศ Backstab จากภาพที่ render จริง, ตัวเลขอยู่เหนือแสง, skip cleanup, ผลจริงและ fast/reduced/resize รวมความกว้าง 320/390/1366px ตั้งนาฬิกาทดสอบก่อนเริ่ม Phaser เพื่อไม่เปลี่ยน clock กลาง render loop
 
-Vitest บนฐานเกมล่าสุด `a8cf3c7`, `npx vitest run --maxWorkers=1`: **756/756 ผ่าน (65 files)** ไม่มีการแก้ test timeout/กฎ/ตัวเลข ไฟล์ `src/core`, `src/content` และ `battle-playback.ts` ไม่ต่างจาก base branch
+Vitest บนฐานเกม C11 `1a50c01`, `npx vitest run --maxWorkers=1`: **795/795 ผ่าน (68 files)** ไม่มีการแก้ test timeout/กฎ/ตัวเลข ไฟล์ `src/core`, `src/content` และ `battle-playback.ts` ไม่ต่างจาก base branch
+
+อัดใหม่ R3 บนฐาน C11 ครบ **18/18 คลิป**; ffprobe ยืนยันทุกคลิป 390×844 เปิดตรวจ contact ทั้ง 10 ท่าแล้ว (เฟรมที่เลือกอยู่ภายใน 6ms จาก renderer cue +70ms) และตรวจสองภาพด้านล่างจากไฟล์ส่งจริง
 
 ## ภาพ contact จากการอัดจริง
 
