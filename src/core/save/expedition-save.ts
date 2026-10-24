@@ -1,6 +1,6 @@
 import {bossPlanValid,startBossPlan} from '../world/boss-equipment';
 import {storageCap} from '../world/storage';
-import { entryReason, withParty } from '../battle/engine';
+import { entryReason, MAGIC_DAMAGE_SKILLS, withParty } from '../battle/engine';
 import type { ActionId, Command } from '../battle/types';
 import { COMPANY_CAP, PARTY_SLOTS, RESERVE_SLOTS, type ActiveBattle, type ExpeditionState, type MapDefinition, type Point, type Profile, type Lane, type Roster, type RunOutcome } from '../world/types';
 import { draftOffers, skillChoices, battleState, expToNext, findTiles, newExpedition, finishBattle, fullParty, heroCatalog, heroDef, memberDef, rosterIds, tileAt, type EncounterLookup } from '../world/world';
@@ -82,7 +82,8 @@ export const legacyKeys = ['asterveil.fateweave.battle.v1', 'asterveil.fateweave
 // ranks are refunded and star skills granted as in v37 (a run whose member lost ranks settles home).
 // v39 → v40 (owner 2026-10-23): haste moves an ally still to act this round right after the alchemist. A battle in
 // progress that used haste restarts from its recorded entry HP (its commands are dropped), as in v35.
-const SAVE_VERSION = 40;
+// v41: Magic Power scaling; retain owned items and restart an in-progress battle from entry.
+const SAVE_VERSION = 41;
 // The classes whose big tree arrived in v37 (release A) and in v39 (the recruits).
 const RELEASE_A_TREES = ['tracer', 'weaver', 'healer', 'garran', 'mira'];
 const RECRUIT_TREES = ['toma', 'sefa', 'brann', 'lio'];
@@ -315,6 +316,15 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
     if (!['elite', 'event'].includes(b.kind as string) && source !== undefined) throw new Error('Invalid battle');
     if (version < 35 && Array.isArray(b.commands) && b.commands.some(c => ['raider', 'brute'].includes(obj(c).targetId as string))) b.commands = [];
     if (version < 40 && Array.isArray(b.commands) && b.commands.some(c => obj(c).action === 'haste')) b.commands = [];
+    // Keep replays whose actors still have identical scaling. Changed mage gear/talents or
+    // magical attacks with different Attack/Magic bonuses restart from the original entry HP.
+    if (version < 41 && Array.isArray(b.commands) && b.commands.some(c => {
+      const cmd = obj(c), id = cmd.heroId;
+      if (typeof id !== 'string' || !roster.deployed.includes(id)) return false;
+      const h = memberDef(lookup, map, members, id);
+      return id === 'weaver' && (!!members[id]?.gear?.weapon || !!members[id]?.talents?.c1)
+        || MAGIC_DAMAGE_SKILLS.includes(cmd.action as ActionId) && (h?.skillBonus ?? 0) !== (h?.damageBonus ?? 0);
+    })) b.commands = [];
     if (!Array.isArray(b.commands) || b.commands.length > 5000) throw new Error('Invalid battle');
     const entry = hpRecord(b.entry, lookup, map, roster.deployed, members);
     // Validate against the encounter as fought by this run's deployed party (stars included).
@@ -500,6 +510,17 @@ function migrateItems(v: unknown, map: MapDefinition): void {
   }
   for (const x of Object.values(o)) migrateItems(x, map);
 }
+// Only mage weapon Attack affixes change their meaning. Preserve uid, rolls, forge investments,
+// locks and every other field, across profile/run/storage/overflow/equipped copies.
+function migrateMagicWeapons(v: unknown): void {
+  if (Array.isArray(v)) { v.forEach(migrateMagicWeapons); return; }
+  if (!v || typeof v !== 'object') return;
+  const o = v as Record<string, unknown>;
+  if (o.slot === 'weapon' && o.hero === 'weaver' && Array.isArray(o.affixes)) {
+    o.affixes = o.affixes.map(a => a === 'attack' ? 'support' : a); return;
+  }
+  Object.values(o).forEach(migrateMagicWeapons);
+}
 // Companies saved before the chapters: the maps before `map` (the frontier) count as cleared once the prologue is
 // done, and the frontier itself once an expedition was completed.
 function legacyCleared(tutorialDone: boolean, completed: boolean, map: MapDefinition, maps: readonly MapDefinition[]): string[] {
@@ -529,11 +550,12 @@ function migrateTrees(envelope: Record<string, unknown>, maps: readonly MapDefin
 // `map` is the home map (the frontier); `maps` lists every map a run may have been started on.
 export function parseGame(raw: string, map: MapDefinition, lookup: EncounterLookup, maps: readonly MapDefinition[] = [map]): Game {
   const envelope = obj(JSON.parse(raw)); const version = envelope.version as number;
+  if (version < 41) migrateMagicWeapons(envelope);
   if (version < 21) migrateItems(envelope, map);
   if (version < 34) migrateTrees(envelope, maps.length ? maps : [map]);
   else if (version < 37) migrateTrees(envelope, maps.length ? maps : [map], [...RELEASE_A_TREES, ...RECRUIT_TREES]);
   else if (version < 39) migrateTrees(envelope, maps.length ? maps : [map], RECRUIT_TREES);
-  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
+  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
   const runMap = (v: unknown): MapDefinition => maps.find(m => m.id === obj(v).mapId) ?? map;
   if (version < 5) {
     const home = runMap(envelope.state); const run = parseRun(envelope.state, version, home, lookup);

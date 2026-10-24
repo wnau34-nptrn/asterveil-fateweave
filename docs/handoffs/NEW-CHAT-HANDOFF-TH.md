@@ -1,5 +1,13 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
+## 2026-10-24 — Magic Power (owner-approved)
+
+Completed `codex/magic-power-scaling`, PR #65 merged as `f0ae3cf` after both CI workflows passed: shared spell/support scaling, Magic Power UI, mage weapons/talent, encounter versions and v41 migration. Validation: 756 unit tests, 23 full simulation checks, 8 character/gear checks and 3 boss reward checks passed. See `docs/design/MAGIC_POWER_TH.md` and CODEX-TO-CLAUDE.md for tests, simulation/PR status and screenshot. Basic attacks remain physical.
+
+## 2026-10-24 — C10 victory rewards
+
+PR #63 merged as `5d14ca1`, CI passed. Owner requested compact two-row EXP and one-page rewards; completed in PR #64, merged as `ae6e510` after both CI workflows passed. See CODEX-TO-CLAUDE.md. Tutorial intentionally skips rewards; rules/saves unchanged.
+
 ## 2026-10-23 — Codex C1: painted big-tree skill icons (ART-SKILL-ICON-003)
 
 - Work branch `codex/skill-icons-003`, based on `feature/fateweave-initial-prototype`. C1 explicitly authorizes source art plus game integration. PR #60: https://github.com/wnau34-nptrn/asterveil-fateweave/pull/60 — open for review; no merge into the game branch. Implementation commit c3e1ad2. Latest base documentation merged cleanly; no code changes from the base refresh.

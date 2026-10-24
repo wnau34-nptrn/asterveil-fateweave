@@ -1,4 +1,4 @@
-import { beginBattle, resolveCommand, targetOptions, defenseOf, finaleHealPower, skillPower, songPower, SUPPORT_SKILLS, targetKind, withParty } from '../core/battle/engine';
+import { beginBattle, resolveCommand, targetOptions, defenseOf, finaleHealPower, skillPower, songPower, usesMagicPower, targetKind, withParty } from '../core/battle/engine';
 import type { ActionId, EncounterDefinition, HeroDefinition } from '../core/battle/types';
 import { gearTotals } from '../core/world/equipment';
 import type { ExpeditionState, MapDefinition } from '../core/world/types';
@@ -24,9 +24,9 @@ export function characterStats(s: CharacterState, map: MapDefinition, h: HeroDef
   const stat = (id: string, name: string, value: number, unit: string, help: string): CharacterStat => ({ id, name, value, unit, help });
   return [
     stat('hp', 'เลือดสูงสุด', h.maxHp, '', `เลือดปัจจุบัน ${s.hp[h.id] ?? 0}/${h.maxHp} · เมื่อเหลือ 0 จะล้ม เปลี่ยนอุปกรณ์เพิ่มเลือดสูงสุดไม่ฟื้นเลือดหรือชุบชีวิต บาดแผลลดเลือดสูงสุด`),
-    stat('attack', 'พลังโจมตี', h.attack, '', 'กำหนดพลังโจมตีปกติ และอัตราเติบโตของท่าทำความเสียหาย เทียบกับค่าตั้งต้นของอาชีพ ไม่เพิ่มพลังรักษาหรือโล่'),
+    stat('attack', 'พลังโจมตี', h.attack, '', 'กำหนดพลังโจมตีปกติ และอัตราเติบโตของท่าดาเมจกายภาพ เทียบกับค่าตั้งต้นของอาชีพ ไม่เพิ่มพลังรักษาหรือโล่'),
     stat('speed', 'ความเร็ว (SPD)', h.speed, '', 'ค่ามากลงมือก่อนในแต่ละรอบ ไม่เพิ่มจำนวนเทิร์น ดาวและเลเวลไม่เพิ่ม SPD เมื่อเท่ากันใช้ลำดับทีมก่อนศัตรู การเร่งหรือเลื่อนเทิร์นมีผลเหนือลำดับ SPD'),
-    stat('support', 'พลังเสริม', h.skillBonus ?? 0, '%', 'เพิ่มพลังรักษา โล่ และเพลง ไม่เพิ่มดาเมจท่าโจมตี ท่าที่เป็นเปอร์เซ็นต์ลดความเสียหายหรือผลควบคุมไม่ได้แรงขึ้นจากค่านี้'),
+    stat('support', 'พลังเวท', h.skillBonus ?? 0, '%', 'เพิ่มดาเมจเวท พลังรักษา โล่ และเพลง ไม่เพิ่มดาเมจกายภาพ ท่าที่เป็นเปอร์เซ็นต์ลดความเสียหายหรือผลควบคุมไม่ได้แรงขึ้นจากค่านี้'),
     stat('armour', 'เกราะที่ใช้จริง', defenseOf(data, h.id, 'physical'), '%', `ลดความเสียหายกายภาพก่อนใช้โล่ รวมจากอุปกรณ์ ${h.armour ?? 0}% · ใช้จริงไม่เกิน ${data.rules.defenseCap}% ไม่ลดความเสียหายพลังงาน`),
     stat('resist', 'ต้านพลังงานที่ใช้จริง', defenseOf(data, h.id, 'energy'), '%', `ลดความเสียหายพลังงานก่อนใช้โล่ รวมจากอุปกรณ์ ${h.resist ?? 0}% · ใช้จริงไม่เกิน ${data.rules.defenseCap}% ไม่ลดความเสียหายกายภาพ`),
     stat('leech', 'ดูดเลือดที่ใช้จริง', Math.min(data.rules.leechCap, h.leech ?? 0), '%', `ฟื้นเลือดจากดาเมจที่ตัวเองทำได้จริง ปัดลงและไม่เกินเลือดสูงสุด รวม ${h.leech ?? 0}% · ใช้จริงไม่เกิน ${data.rules.leechCap}%`),
@@ -42,10 +42,10 @@ export function characterSkillMetric(action: ActionId, h: HeroDefinition, templa
   const target = ({ self: 'ตัวเอง', ally: 'เพื่อน 1 คน', party: 'เพื่อนทุกคน', enemy: 'ศัตรู 1 ตัว', enemies: 'ศัตรูทุกตัว' })[targetKind(action)];
   if (action === 'rally') return { label: 'ผลพิเศษ', scaling: 'อ่านเงื่อนไขของท่า', target: 'เพื่อนทุกคน' };
   if (action === 'bulwark') return { label: 'ลดความเสียหายที่รับ (%)', value: data.skills.bulwark.power, scaling: 'ค่าคงที่ ไม่อิงค่าสถานะ', target };
-  if (action === 'rouse') return { label: 'ฟื้นเลือด % ของเลือดสูงสุดต่อคน', value: skillPower(data, h.id, action), scaling: 'อิงพลังเสริม', target };
+  if (action === 'rouse') return { label: 'ฟื้นเลือด % ของเลือดสูงสุดต่อคน', value: skillPower(data, h.id, action), scaling: 'อิงพลังเวท', target };
   if (action === 'attack') return { label: 'โจมตีพื้นฐาน', value: h.attack, scaling: 'อิงพลังโจมตี', target };
-  if (action === 'finale') return { label: 'เพลงกล้า · ดาเมจต่อเป้าหมาย', value: skillPower(data,h.id,action), secondary: { label: 'เพลงฟื้น · ฟื้นเลือดต่อคน', value: finaleHealPower(data,h.id) }, scaling: 'โจมตีอิงพลังโจมตี · รักษาอิงพลังเสริม', target: 'ศัตรู/เพื่อนทุกคน ตามเพลง' };
-  if (action === 'valor' || action === 'mend') return { label: action === 'valor' ? 'โบนัสต่อการโจมตี' : 'ฟื้นเลือดต่อคน/รอบ', value: songPower(data, h.id, action), scaling: 'อิงพลังเสริม', target: 'เพื่อนทุกคน' };
+  if (action === 'finale') return { label: 'เพลงกล้า · ดาเมจต่อเป้าหมาย', value: skillPower(data,h.id,action), secondary: { label: 'เพลงฟื้น · ฟื้นเลือดต่อคน', value: finaleHealPower(data,h.id) }, scaling: 'ดาเมจและรักษาอิงพลังเวท', target: 'ศัตรู/เพื่อนทุกคน ตามเพลง' };
+  if (action === 'valor' || action === 'mend') return { label: action === 'valor' ? 'โบนัสต่อการโจมตี' : 'ฟื้นเลือดต่อคน/รอบ', value: songPower(data, h.id, action), scaling: 'อิงพลังเวท', target: 'เพื่อนทุกคน' };
   if (!data.skills[action].power) return { label: 'ผลพิเศษ', scaling: 'อ่านเงื่อนไขของท่า', target };
-  return { label: action === 'ward' ? 'โล่พื้นฐาน' : action === 'heal' || action === 'prayer' ? 'ฟื้นเลือดพื้นฐานต่อคน' : action === 'brace' || action === 'spearwall' ? 'พลังสวนพื้นฐาน' : 'ดาเมจพื้นฐานต่อเป้าหมาย', value: skillPower(data, h.id, action), scaling: SUPPORT_SKILLS.includes(action) ? 'อิงพลังเสริม' : 'อิงพลังโจมตี', target };
+  return { label: action === 'ward' ? 'โล่พื้นฐาน' : action === 'heal' || action === 'prayer' ? 'ฟื้นเลือดพื้นฐานต่อคน' : action === 'brace' || action === 'spearwall' ? 'พลังสวนพื้นฐาน' : 'ดาเมจพื้นฐานต่อเป้าหมาย', value: skillPower(data, h.id, action), scaling: usesMagicPower(action) ? 'อิงพลังเวท' : 'อิงพลังโจมตี', target };
 }

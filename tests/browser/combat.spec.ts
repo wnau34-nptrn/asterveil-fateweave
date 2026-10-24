@@ -162,7 +162,7 @@ for(const [index,route]of routes.entries()){
   // Victory EXP may level members up (2D-1): standing members gain the max-HP difference.
   const after=await saved(page);const grown=(id:string,i:number)=>route.hp[i]!+memberDef(encounterById,chapterOne,after.members,id)!.maxHp-route.data.heroes[i]!.maxHp;
   expect(after.hp).toEqual(Object.fromEntries(route.data.heroes.map((h,i)=>[h.id,grown(h.id,i)])));
-  await page.locator('.result-card button').click();await expect(page.locator('#world-view')).toBeVisible();
+  await page.locator('.result-card button').click();await expect(page.locator('.battle-rewards')).toBeVisible();const rewardSave=await saved(page);await page.locator('.battle-rewards > button').click();expect(await saved(page)).toEqual(rewardSave);await expect(page.locator('#world-view')).toBeVisible();
   for(const [i,hero]of route.data.heroes.entries())await expect(page.locator('#world-hero-'+hero.id)).toContainText(`${grown(hero.id,i)}/${memberDef(encounterById,chapterOne,after.members,hero.id)!.maxHp}`);
   expect(issues).toEqual([]);await context.close();
  });

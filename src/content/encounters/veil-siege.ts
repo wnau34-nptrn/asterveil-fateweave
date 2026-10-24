@@ -2,7 +2,7 @@ import type { EncounterDefinition } from '../../core/battle/types';
 import { heroes } from '../heroes/team';
 import { enemies } from '../enemies/veilbound';
 export const veilSiege: EncounterDefinition = {
-  id: 'veil-siege', version: 15, level: 8, name: 'ศึกปิดรอยแยก', heroes,
+  id: 'veil-siege', version: 16, level: 8, name: 'ศึกปิดรอยแยก', heroes,
   enemies,
   intents: [
     { sourceId: 'b1', targetSlot: 1, name: 'Raking Slash', damage: 12, kind: 'physical' },

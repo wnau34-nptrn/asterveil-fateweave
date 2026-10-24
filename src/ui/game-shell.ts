@@ -1,3 +1,4 @@
+import { showBattleRewards, type BattleRewards } from './battle-rewards';
 import {chooseBossTarget} from '../core/world/boss-equipment';
 import {chooseHuntTarget} from '../core/world/targeted-loot';
 import {departureBlocked,collectOverflow,recycleSelection,expandStorage} from '../core/world/storage';
@@ -16,7 +17,7 @@ import { sfx, type SfxName } from '../platform/sfx';
 import { browserStorage } from '../platform/browser-storage';
 import type { BattleUI } from './battle-ui';
 import { leaderArt, type NpcId } from '../game/visuals/assets';
-import { choiceText, eventText, expThai, heroText, itemLines, itemName, lootThai, potionText, rewardText, shopText, tomeLineText, tomeSizeText, tomeThai } from './th';
+import { choiceText, eventText, heroText, itemLines, itemName, lootThai, potionText, rewardText, shopText, tomeLineText, tomeSizeText, tomeThai } from './th';
 import { raiseSkill, tradeTomes } from '../core/world/tomes';
 import { laneName } from './formation-grid';
 import { transferAffix, craftWeapon, raiseItemLevel, enhanceTo, lockEquipment, findItem, fuse, reroll, smelt } from '../core/world/forge';
@@ -30,6 +31,7 @@ import { icon, type IconName } from './icons';
 // Owns the authoritative game (lobby profile + current run) and switches between the
 // title, lobby, world and battle views. Every commit is saved before anything animates.
 export class GameShell {
+  private pendingRewards: BattleRewards | undefined;
   private game: Game | undefined;
   private get state(): ExpeditionState | undefined { return this.game?.run ?? undefined; }
   private set state(run: ExpeditionState | undefined) { if (this.game) this.game = { ...this.game, run: run ?? null }; }
@@ -515,14 +517,13 @@ export class GameShell {
     const kind = this.state.battle.kind;
     let next = recordBattle(this.state, this.map, this.lookup, battle.commands);
     if (battle.outcome !== 'active') {
+      const before = next;
       const result = finishBattle(next, this.map, this.lookup); next = result.state;
-      const fallen = Object.values(next.hp).filter(hp => hp <= 0).length;
       if (result.event.type === 'victory') {
         if (kind === 'tutorial') this.prologueWon = true;
-        const loot = lootThai(result.event.loot) + (result.event.item ? ` · ได้${(result.event.items ?? [result.event.item]).map(i => `${itemName(i)} Lv${i.level}`).join(', ')}` : ''); this.effect = 'loot'; const exp = expThai(result.event.exp, next);
-        const dust = (result.event.dust ? ` · ฝุ่นดาว +${result.event.dust}` : '') + (result.event.tomes || result.event.riftCore ? ` · ${tomeThai(result.event.tomes, result.event.riftCore)}` : '');
-        this.message = kind === 'boss' ? `${this.map.bossName}ล้มแล้ว · ${loot}${dust}${exp} · ทางไปประตูเปิดออก` : kind === 'elite' ? this.map.elites.find(e => e.id === next.elitesDefeated.at(-1))?.mini ? `มินิบอสล้มแล้ว · ${loot}${dust}${exp}` : (this.map.elites.find(e => e.id === next.elitesDefeated.at(-1))?.forced ? `อีลิทล้มแล้ว · ${loot}${dust}${exp} · ด่านเปิดออก` : `ท้าสู้สำเร็จ · รางวัลพิเศษ · ${loot}${dust}${exp}`) : `ชนะศึก · ${loot}${dust}${exp}${kind !== 'event' && fallen ? ` · ${fallen} คนล้มอยู่ ชุบที่แคมป์` : ''}`;
-        this.message += this.sealNote(this.state, next);
+        else this.pendingRewards = { event: result.event, before, after: next,
+          title: kind === 'boss' ? `${this.map.bossName}ล้มแล้ว` : kind === 'elite' ? this.map.elites.find(e => e.id === next.elitesDefeated.at(-1))?.mini ? 'มินิบอสล้มแล้ว' : 'ท้าสู้อีลิทสำเร็จ' : 'ชนะศึก' };
+        this.effect = 'loot'; this.message = 'ชนะศึก';
       } else if (result.event.type === 'defeat') {
         if (result.event.wiped) {
           // Every brought member is down: the expedition fails and settles home in this write.
@@ -539,6 +540,10 @@ export class GameShell {
   private leaveBattle(): void {
     if (!this.state) { this.lobbyMessage = ''; this.lobbyCheer = ''; this.locked = false; this.showSummary(); return; }
     if (this.state.battle) { this.openBattle(); return; }
+    if (this.pendingRewards) {
+      const rewards = this.pendingRewards; this.pendingRewards = undefined;
+      showBattleRewards(this.root, this.map, rewards, () => this.leaveBattle()); return;
+    }
     this.locked = false;
     this.banner = undefined;
     this.renderWorld();
