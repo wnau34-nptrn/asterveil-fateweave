@@ -181,7 +181,7 @@ Use the approved navy-glass style (src/ui/tokens.css, components.css, incoming/A
 TESTS: a Playwright test in tests/browser/ that wins a fight and checks the panel lists every brought member with +EXP, shows a level-up badge when one happens, shows items/resources, and that closing returns to the map with the same save; update any existing test that read the old map message text. Run npm run typecheck, lint, npx vitest run, build and the touched browser specs. Two 390px screenshots for the owner (normal win with an item, a level-up). Then add the entry Codex owes Claude (AGENTS.md) and merge when CI passes.
 ```
 
-### C11 — ปรับสกิลตามผลตรวจ (เจ้าของสั่ง 2026-10-24)
+### ~~C11~~ — ปรับสกิลตามผลตรวจ (เสร็จ 2026-10-24 · PR #66 merged)
 
 งานกฎ/เซฟ/สมดุล: เจ้าของอนุญาต 2026-10-24 ให้ Codex merge เองเมื่อผ่านทุกการตรวจ และดูแลสมดุลทั้งหมดเอง Claude ตรวจย้อนหลังหลัง Usage รีเซ็ต
 
@@ -202,7 +202,9 @@ TESTS: unit tests for each changed skill (effect, boundary, preview equals resol
 REPORT: in the PR and in docs/handoffs/CODEX-TO-CLAUDE.md (under "ฝากถึง Claude"): a table per changed skill (old → new, id kept/changed, numbers), sim before/after (docs/validation/balance-sim/*.md: campaign clear rates maps 1–3 + hard, TREES.md use counts per tree skill — every changed skill should now be used, e.g. Sefa's shadow build was 2/10), and the open questions. Balance is yours: tune the draft numbers of changed skills, trees and, if needed, encounter strength until the sim targets hold — every map 1–3 first-run clear rate and hard mode no worse than before, no class or tree build left unused or dominant, the balance regression suite green — and report every number you changed. FUTURE CLASSES (owner 2026-10-24: balance must cover all 15 classes and all 30 characters of MASTER_PLAN A6b): the five new classes and the second character of each class are not in the code yet, so they cannot be simulated in this PR. Prepare for them: (1) keep their mechanic groups free — no existing skill may take enemy-intent redirection onto another foe or shifting an enemy's intent cycle (โหราจารย์), a self-built combo resource (นักมวย), end-of-round curse damage or damage-on-act (นักสาป), damage converted to ally healing (นักบุญรบ), or cooldown refunds for allies (นักเต้นรำ); add these five rows to SKILL_AUDIT_TH.md section 1 as reserved. (2) Make the sim data-driven per class and per character (no hard-coded class lists), and add a per-character check: every playable character, built to the map's level with its best tree build, in a standard team of four, clears maps 1–3 within the target rate, and no character's win rate or HP left is far above the rest. Then each new class/character later only adds data and must pass the same check before release. Mark SKILL_AUDIT_TH.md rows as implemented. Merge the PR when typecheck, lint, unit tests, build, browser specs, CI and the sim targets all pass; if a target cannot be met, merge only what passes and write the remaining gap under "ฝากถึง Claude".
 ```
 
-### C11 — สถานะ 2026-10-24 (Claude เริ่มแล้วหยุด, ส่งคืน Codex)
+### C11 — สถานะ 2026-10-24 (ประวัติก่อน Codex ทำเสร็จ)
+
+> C11 ปิดแล้วด้วย PR #66 merge `abf10a8`; ข้อความส่งต่อด้านล่างเป็นประวัติ ผลทดสอบจบงานอยู่ในหัวข้อ C11 — ผลจบงาน ถัดไป
 
 ยังไม่มี C11 ที่ไหนก่อนหน้านี้ Claude เปิดสาขา `codex/skill-audit-001` จาก f56d2fb และ push คอมมิตเริ่มต้น 600683f (แก้ `src/core/battle/types.ts` เท่านั้น ยังไม่ผ่าน typecheck) แล้วหยุดตามที่เจ้าของสั่ง Codex ทำต่อด้วย prompt ข้างล่าง (ใช้แทน prompt C11 เดิม แต่ทุกข้อของเดิมยังมีผล)
 
@@ -226,6 +228,13 @@ DESIGN DECISIONS Claude had made (follow unless the sim says otherwise; record a
 - Also update every UI place that read removed state (battle-status, battle-playback, th.ts event texts, tutorial advisor, character-metrics) and LOGIC_AUDIT items 1–3 (metric labels by effect type, bulwark metric via skillPower, block Aegis when no standing ally would gain barrier).
 BASELINE: regenerate the "before" sim numbers from f56d2fb in a separate worktree (Claude's baseline run was local only).
 ```
+
+### C11 — ผลจบงาน 2026-10-24 (Codex)
+
+- PR #66 https://github.com/wnau34-nptrn/asterveil-fateweave/pull/66 · merge `abf10a8256e04040aa2b509bc6e5aa7c27c7654d` → `feature/fateweave-initial-prototype` · save v42 · 10 playable classes/characters (C12 not started).
+- typecheck/lint/unit 795/build/Pages build ผ่าน; browser CI 242 ผ่าน; exact-code sim 26 checks ผ่าน; no-regression gate 20 cells ผ่าน. ทุกตัว × แมพ 1–3 เคลียร์ 12/12 seeds ในเงื่อนไขมาตรฐานที่ระบุไว้
+- ก่อน/หลังและทุกตัวเลข: `docs/validation/balance-sim/C11.md`, `c11-before/`, `CAMPAIGN.md`, `TREES.md` (usage + ablation), `CHARACTERS.md` (build per character/map). บันทึกข้อจำกัด/ฝากถึง Claude ใน `CODEX-TO-CLAUDE.md` แล้ว ไม่มี C11 acceptance gap ค้าง
+- เงื่อนไขเริ่ม C12 เรื่อง C11 merge สำเร็จแล้ว แต่งานนี้ไม่ได้เริ่ม C12
 
 ### C12 — ครบ 15 อาชีพ 30 ตัว (เจ้าของสั่ง 2026-10-24: "ให้ codex ทำให้หมดเลย")
 

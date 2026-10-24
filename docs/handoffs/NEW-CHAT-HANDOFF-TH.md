@@ -1,5 +1,10 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
+## 2026-10-24 — C11 completed by Codex
+
+PR #66 merged to `feature/fateweave-initial-prototype`: `abf10a8256e04040aa2b509bc6e5aa7c27c7654d`. Save v42; 10 playable classes/characters. Quality CI: 795 unit tests, typecheck/lint/build pass. Full browser CI: 242 tests pass. Final sim: 26 checks pass; 20 campaign acceptance cells pass; each character clears 12/12 seeds on maps 1–3 in the documented raised-character scenario. Read `docs/validation/balance-sim/C11.md` and the top entry in `CODEX-TO-CLAUDE.md` for every changed skill/number, migrations, method and review questions. C12 was not started; its prerequisite is now met. Older entries below are historical.
+
+
 ## 2026-10-24 — Magic Power (owner-approved)
 
 Completed `codex/magic-power-scaling`, PR #65 merged as `f0ae3cf` after both CI workflows passed: shared spell/support scaling, Magic Power UI, mage weapons/talent, encounter versions and v41 migration. Validation: 756 unit tests, 23 full simulation checks, 8 character/gear checks and 3 boss reward checks passed. See `docs/design/MAGIC_POWER_TH.md` and CODEX-TO-CLAUDE.md for tests, simulation/PR status and screenshot. Basic attacks remain physical.
