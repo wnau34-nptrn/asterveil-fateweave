@@ -267,6 +267,8 @@ export function reasonThai(reason: string): string {
     'The living party is at full health.': 'ทีมที่ยังยืนอยู่มีเลือดเต็มแล้ว',
     'This ally already has this barrier.': 'มีโล่เวทเต็มแล้ว',
     'Invalid target.': 'เลือกเป้าหมายใหม่',
+    'The party already has this barrier.': 'ทุกคนมีโล่เท่านี้หรือมากกว่าแล้ว',
+    'Already evading.': 'มีก้าวเงาคุ้มกันอยู่แล้ว',
     'Already braced.': 'ตั้งทวนอยู่แล้ว',
     'Already playing this song.': 'กำลังบรรเลงเพลงนี้อยู่แล้ว',
     'Already hasted.': 'ได้ยาเร่งสำหรับรอบหน้าแล้ว',

@@ -6,7 +6,8 @@ export interface Lesson { step:number; title:string; copy:string; heroId:string;
 // never suggests commanding a hero outside the current SPD turn.
 export function battleLesson(state:BattleState,data:EncounterDefinition):Lesson|undefined {
  if(state.outcome!=='active')return;
- const heroId=currentHeroId(state,data); if(!heroId)return;
+ const turnHeroId=currentHeroId(state,data); if(!turnHeroId)return;
+ const heroId:string=turnHeroId;
  const make=(action:ActionId,targetId:string,title:string,detail:string):Lesson|undefined=>{
   if(!targetOptions(state,data,heroId,action).some(t=>t.id===targetId&&t.valid))return;
   return{step:state.commands.length+1,heroId,action,targetId,title,copy:`${actorName(heroId,data)} → ${data.skills[action].name} → ${actorName(targetId,data)} · ${detail}`};

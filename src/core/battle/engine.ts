@@ -511,7 +511,7 @@ function automaticTurns(state: BattleState, data: EncounterDefinition, turns: Tu
         // An archer's disengage dodges physical hits only.
         if (recipient.evading && !(recipient.evadePhysical && intent.kind !== 'physical')) {
           // A scout's shadow step: the whole hit misses, so nothing is absorbed and no counter triggers.
-          if (recipient.evadeExtra) recipient.evadeExtra--; else delete recipient.evading;
+          if (recipient.evadeExtra) recipient.evadeExtra--; else { delete recipient.evading; delete recipient.evadeBy; delete recipient.evadePhysical; }
           events.push({ type: 'dodge', sourceId: actorId, targetId: recipient.id, amount: 0, text: 'The attack misses the evading scout.' });
           const mend = Math.min(talentRule(data, recipient.id, 'dodgeHeal'), data.heroes.find(h => h.id === recipient.id)!.maxHp - recipient.hp);
           if (mend > 0) { recipient.hp += mend; events.push({ type: 'heal', sourceId: recipient.id, targetId: recipient.id, amount: mend, text: 'The scout recovers after dodging.' }); }
@@ -999,7 +999,7 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
     case 'taunt':
       state.taunt = { heroId: hero.id, round: state.round };
       events.push({ type: 'taunt', sourceId: hero.id, targetId: hero.id, text: 'Every enemy attack aims at the warden until his next turn.' }); break;
-    case 'evade': actor.evading = true; if (hasCap(data, hero.id, 'doubleshadow')) actor.evadeExtra = 1; events.push({ type: 'evade', sourceId: hero.id, targetId: hero.id, text: 'Scout evades the next hit until its next turn.' }); break;
+    case 'evade': actor.evading = true; delete actor.evadeBy; delete actor.evadePhysical; if (hasCap(data, hero.id, 'doubleshadow')) actor.evadeExtra = 1; events.push({ type: 'evade', sourceId: hero.id, targetId: hero.id, text: 'Scout evades the next hit until its next turn.' }); break;
     case 'hinder': {
       damage(skill.power);
       if (enemy!.hp > 0) { enemy!.delayedRound = state.round + 1; events.push({ type: 'delay', sourceId: hero.id, targetId: enemy!.id, text: 'Enemy acts last next round.' }); }

@@ -32,6 +32,10 @@ describe('C11 skill contract',()=>{
   expect(()=>resolveCommand(s,d,{...cmd,beat:cmd.beat+1})).toThrow(/stale/);
   const down=structuredClone(s);down.heroes.find(h=>h.id===id)!.hp=0;expect(targetOptions(down,d,id,action).every(t=>!t.valid)).toBe(true);
  });
+ it('own shadow step clears the giver expiry of a previously granted shadow',()=>{
+  const d=fixture('sefa','evade'),s=beginBattle(d).state;s.heroes[0]!.evadeBy='guardian';
+  const r=resolveCommand(s,d,{heroId:'sefa',action:'evade',targetId:'sefa',beat:s.beat});expect(r.turns[0]!.state.heroes[0]!.evadeBy).toBeUndefined();
+ });
  it('Aegis rejects a no-op, but allows a useful level barrier to its caster',()=>{
   const d=fixture('weaver','aegis'),s=beginBattle(d).state;
   for(const h of s.heroes)h.barrier=100;
