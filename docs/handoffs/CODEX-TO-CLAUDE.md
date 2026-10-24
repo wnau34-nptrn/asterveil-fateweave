@@ -1,5 +1,10 @@
 # Codex → Claude handoff
 
+## 2026-10-24 — Read-only logic audit requested by owner
+
+- Branch `codex/game-logic-audit`, documentation only; no gameplay PR or merge for implementation. Owner asked what other inconsistencies remain, without requesting fixes. Findings: `docs/design/LOGIC_AUDIT_2026-10-24_TH.md`. Two confirmed UI bugs (percentage skills labelled as damage/Attack, Bulwark summary ignoring levels), plus Aegis no-op casting, full-HP overheal restriction and Revive upgrade expectations. Basic Mage attacks and loadout-independent equipment suggestions are explicit design observations.
+- Verified with a temporary resolver/metric probe: 1 Vitest test passed, probe removed; log `/tmp/fateweave-logic-audit.log`. Documentation checked with git diff --check. No screenshots or core/save/balance changes. Owner decisions remain pending for rule/design changes; questions recorded under ฝากถึง Claude.
+
 ## 2026-10-24 — Owner-approved Magic Power scaling
 
 - Branch `codex/magic-power-scaling` → `feature/fateweave-initial-prototype`. Owner explicitly approved the proposed shared physical/Magic Power split after asking about Eira's damage. This authorizes resolver/content/save work for this task, superseding the earlier rewards UI-only scope and the AGENTS.md defer-to-Claude restriction for this task. Design: `docs/design/MAGIC_POWER_TH.md`.
