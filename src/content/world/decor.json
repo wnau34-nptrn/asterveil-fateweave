@@ -1,0 +1,354 @@
+{
+  "grass_tuft": {
+    "x": 0,
+    "y": 0,
+    "w": 128,
+    "h": 128,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "zone": "meadow"
+  },
+  "ivory_flowers": {
+    "x": 128,
+    "y": 0,
+    "w": 128,
+    "h": 128,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "zone": "meadow"
+  },
+  "moss_rock": {
+    "x": 256,
+    "y": 0,
+    "w": 128,
+    "h": 128,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "zone": "meadow"
+  },
+  "fern": {
+    "x": 384,
+    "y": 0,
+    "w": 128,
+    "h": 128,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "zone": "meadow"
+  },
+  "wildflowers": {
+    "x": 512,
+    "y": 0,
+    "w": 128,
+    "h": 128,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "zone": "meadow"
+  },
+  "sapling": {
+    "x": 640,
+    "y": 0,
+    "w": 128,
+    "h": 128,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "zone": "meadow"
+  },
+  "thorn_bush": {
+    "x": 0,
+    "y": 128,
+    "w": 128,
+    "h": 128,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "zone": "thicket"
+  },
+  "twisted_root": {
+    "x": 128,
+    "y": 128,
+    "w": 128,
+    "h": 128,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "zone": "thicket"
+  },
+  "veil_wisp": {
+    "x": 256,
+    "y": 128,
+    "w": 128,
+    "h": 128,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "zone": "thicket"
+  },
+  "briar_knot": {
+    "x": 384,
+    "y": 128,
+    "w": 128,
+    "h": 128,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "zone": "thicket"
+  },
+  "mushrooms": {
+    "x": 512,
+    "y": 128,
+    "w": 128,
+    "h": 128,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "zone": "thicket"
+  },
+  "teal_shrub": {
+    "x": 640,
+    "y": 128,
+    "w": 128,
+    "h": 128,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "zone": "thicket"
+  },
+  "crystal_cluster": {
+    "x": 0,
+    "y": 256,
+    "w": 128,
+    "h": 128,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "zone": "scar"
+  },
+  "rift_crack": {
+    "x": 128,
+    "y": 256,
+    "w": 128,
+    "h": 128,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "zone": "scar"
+  },
+  "shard_pile": {
+    "x": 256,
+    "y": 256,
+    "w": 128,
+    "h": 128,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "zone": "scar"
+  },
+  "scar_rock": {
+    "x": 384,
+    "y": 256,
+    "w": 128,
+    "h": 128,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "zone": "scar"
+  },
+  "rift_mote": {
+    "x": 512,
+    "y": 256,
+    "w": 128,
+    "h": 128,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "zone": "scar"
+  },
+  "broken_rune": {
+    "x": 640,
+    "y": 256,
+    "w": 128,
+    "h": 128,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "zone": "scar"
+  },
+  "broken_pillar": {
+    "x": 0,
+    "y": 384,
+    "w": 128,
+    "h": 128,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "zone": "sanctum"
+  },
+  "rune_stone": {
+    "x": 128,
+    "y": 384,
+    "w": 128,
+    "h": 128,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "zone": "sanctum"
+  },
+  "banner": {
+    "x": 256,
+    "y": 384,
+    "w": 128,
+    "h": 128,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "zone": "sanctum"
+  },
+  "arch_fragment": {
+    "x": 384,
+    "y": 384,
+    "w": 128,
+    "h": 128,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "zone": "sanctum"
+  },
+  "marble_block": {
+    "x": 512,
+    "y": 384,
+    "w": 128,
+    "h": 128,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "zone": "sanctum"
+  },
+  "rune_crystal": {
+    "x": 640,
+    "y": 384,
+    "w": 128,
+    "h": 128,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "zone": "sanctum"
+  },
+  "roots": {
+    "x": 0,
+    "y": 512,
+    "w": 128,
+    "h": 128,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "zone": "forest"
+  },
+  "thorn_arch": {
+    "x": 128,
+    "y": 512,
+    "w": 128,
+    "h": 128,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "zone": "forest"
+  },
+  "teal_fungus": {
+    "x": 256,
+    "y": 512,
+    "w": 128,
+    "h": 128,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "zone": "forest"
+  },
+  "fallen_log": {
+    "x": 384,
+    "y": 512,
+    "w": 128,
+    "h": 128,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "zone": "forest"
+  },
+  "lantern_moss": {
+    "x": 512,
+    "y": 512,
+    "w": 128,
+    "h": 128,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "zone": "forest"
+  },
+  "rift_touched_stump": {
+    "x": 640,
+    "y": 512,
+    "w": 128,
+    "h": 128,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "zone": "forest"
+  },
+  "fern_clump": {
+    "x": 0,
+    "y": 640,
+    "w": 128,
+    "h": 128,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "zone": "forest"
+  },
+  "stone_marker": {
+    "x": 128,
+    "y": 640,
+    "w": 128,
+    "h": 128,
+    "anchor": {
+      "x": 0.5,
+      "y": 1
+    },
+    "zone": "forest"
+  }
+}

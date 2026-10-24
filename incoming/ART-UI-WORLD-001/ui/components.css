@@ -1,0 +1,21 @@
+/* Suggested skin primitives. Integration developer attaches actual state and events. */
+.lv-panel{position:relative;background:var(--panel-bg);border:1px solid #d9bf8659;border-radius:var(--radius-md);box-shadow:var(--panel-shadow)}
+.lv-panel::before{content:'';position:absolute;inset:-1px;border:24px solid transparent;border-image:url(panel_frame_9slice.png) 24 fill stretch;pointer-events:none}
+.lv-primary,.lv-secondary,.lv-direction{min-width:var(--touch-min);min-height:var(--touch-min);border-radius:var(--radius-sm);font:600 var(--type-label)/var(--leading-heading) var(--font-heading);box-shadow:var(--button-shadow)}
+.lv-primary{background:var(--primary-fill);color:var(--text-on-gold);border:1px solid var(--gold-light)}
+.lv-secondary,.lv-direction{background:var(--secondary-fill);color:var(--text);border:1px solid #d9bf8665}
+.lv-direction{width:var(--dpad-phone);height:var(--dpad-phone)}
+.lv-primary:active,.lv-secondary:active,.lv-direction:active{transform:translateY(2px);filter:brightness(.92)}
+.lv-primary:focus-visible,.lv-secondary:focus-visible,.lv-direction:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+.lv-primary:disabled,.lv-secondary:disabled,.lv-direction:disabled{opacity:.55;box-shadow:none;cursor:default}
+.lv-hp-track{height:6px;border-radius:var(--radius-pill);background:var(--hp-track);position:relative;overflow:hidden}
+.lv-hp-fill{height:100%;background:var(--hp-ally);border-radius:inherit}
+.lv-hp-fill.enemy{background:var(--hp-enemy)}.lv-hp-fill.critical{background:var(--hp-critical)}
+.lv-barrier{position:absolute;right:0;top:0;height:100%;background:var(--barrier)}
+.lv-danger{--danger-color:var(--danger-low);color:var(--danger-color)}
+.lv-danger.safe{--danger-color:var(--danger-safe)}.lv-danger.mid{--danger-color:var(--danger-mid)}.lv-danger.high{--danger-color:var(--danger-high)}
+.lv-danger-track{height:6px;border-radius:var(--radius-pill);background:var(--meter-track);overflow:hidden}
+.lv-danger-fill{height:100%;border-radius:inherit;background:var(--danger-color)}
+@media(min-width:1101px){.lv-direction{width:var(--dpad-desktop);height:var(--dpad-desktop)}}
+/* Enable blur for a few HUD panels only after measuring on target devices. */
+.lv-panel.with-blur{background:#08121fe8;backdrop-filter:blur(var(--blur-panel))}

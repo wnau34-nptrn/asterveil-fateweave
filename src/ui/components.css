@@ -1,0 +1,362 @@
+/* Shared UI primitives (ART-UI-MODERN-001, Luminous Veil): pills, meters, stat chips, icon tabs, hero art and the
+   character sheet layout. Colours come from tokens.css; images keep their pixels and rarity stays a code frame. */
+.ui-pill { display: inline-flex; align-items: center; gap: 6px; min-height: 28px; padding: 4px 10px; border: 1px solid #e8f5ff33; border-radius: 99px; background: #08121fcc; color: var(--text); font: 600 12px var(--font-display, Kanit), sans-serif; }
+.ui-pill .icon { width: 16px; height: 16px; color: var(--veil-cyan, #74d4ef); }
+.ui-meter { height: 6px; border-radius: 99px; background: var(--meter-track, #24384b); overflow: hidden; }
+.ui-meter > i { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #4fc99c, var(--hp-mint, #68e5b6)); }
+.up { color: var(--hp-mint, #68e5b6); } .down { color: var(--danger-coral, #ed927f); }
+
+/* Full-body hero art from the unit atlas, sized by its box. */
+.hero-art { position: relative; display: block; overflow: hidden; width: 100%; aspect-ratio: 1; }
+.hero-art > img { position: absolute; width: 200%; height: calc(var(--art-rows, 3) * 100%); max-width: none; left: calc(var(--art-x) * -100%); top: calc(var(--art-y) * -100%); filter: drop-shadow(0 8px 10px #0008); }
+
+/* Character sheet tabs: icon above a short label, cyan underline when selected. */
+.character-tabs button { flex-direction: column; gap: 2px; padding: 4px 2px; background: transparent; border-color: transparent; font-size: 12px; }
+.character-tabs button .icon { width: 22px; height: 22px; }
+.character-tabs [aria-selected=true] { background: #183c50; border-color: var(--veil-cyan, #74d4ef); color: var(--focus, #a3edff); }
+@container game (max-width: 360px) { .character-tabs button .icon { display: inline-block; width: 18px; height: 18px; } }
+
+/* Overview: the hero in a lit ring, EXP, role chips, then a two-column grid of stat chips. */
+.overview-hero { display: grid; justify-items: center; gap: 8px; padding-top: 4px; }
+.hero-ring { position: relative; width: min(190px, 52cqw); aspect-ratio: 1; border-radius: 50%; border: 2px solid #74d4ef99; background: radial-gradient(circle at 50% 40%, #23435a, #0d1c2e 70%); box-shadow: 0 0 24px #74d4ef33, inset 0 0 30px #08121f; }
+.hero-ring .hero-art { position: absolute; left: 4%; top: 4%; width: 92%; height: 92%; aspect-ratio: auto; border-radius: 50%; }
+.hero-badge { position: absolute; left: 50%; bottom: -12px; transform: translateX(-50%); display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border: 1px solid #74d4ef66; border-radius: 99px; background: #08121fee; font: 600 15px var(--font-display, Kanit), sans-serif; white-space: nowrap; }
+.hero-badge .star-row .icon { width: 14px; height: 14px; }
+.exp-row { width: 100%; display: flex; justify-content: space-between; gap: 8px; margin-top: 12px; font-size: 12px; color: var(--text-muted, #bbcadb); }
+.overview-hero .ui-meter { width: 100%; }
+.role-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
+.hero-help { margin: 8px 0; font-size: 13px; color: var(--text-muted, #bbcadb); text-align: center; }
+.character-content .character-stat-list { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.character-content .character-stat { border: 1px solid #e8f5ff22; border-radius: 10px; background: var(--navy-800, #14243a); }
+.character-content .character-stat[open] { grid-column: 1 / -1; border-color: #74d4ef66; }
+.character-content .character-stat summary { min-height: 58px; display: grid; grid-template-columns: 1fr; align-content: center; gap: 0; padding: 8px 10px; cursor: pointer; list-style: none; }
+.character-content .character-stat summary::-webkit-details-marker { display: none; }
+.character-content .character-stat summary::after, .character-content .character-stat summary::before { display: none; }
+.character-content .character-stat summary span { font-size: 12px; color: var(--text-muted, #bbcadb); }
+.character-content .character-stat summary strong { font: 600 20px/1.15 var(--font-display, Kanit), sans-serif; color: var(--text); }
+.character-content .character-stat p { margin: 0; padding: 0 10px 10px; font-size: 12px; color: var(--text-muted, #bbcadb); }
+
+/* Equipment paper doll: three slots each side of the hero. */
+.paperdoll { display: grid !important; grid-template-columns: auto 1fr auto; align-items: center; gap: 8px; }
+.doll-col { display: grid; gap: 8px; }
+.doll-hero { position: relative; display: grid; place-items: center; min-height: 0; }
+.doll-hero::before { content: ''; position: absolute; inset: 8% 4%; border-radius: 50%; background: radial-gradient(circle, #23435a 0, transparent 70%); }
+.doll-hero .hero-art { position: relative; width: min(100%, 220px); }
+.character-content .doll-slot { width: 66px; min-height: 0; display: grid; grid-template-columns: 1fr; justify-items: center; gap: 2px; padding: 4px; text-align: center; border-radius: 12px; background: linear-gradient(145deg, #22364b, #0d1c2e); }
+.character-content .doll-slot .gear-art, .character-content .doll-slot > .icon { width: 50px; height: 50px; }
+.character-content .doll-slot > .icon { padding: 12px; color: var(--text-muted, #bbcadb); }
+.character-content .doll-slot b { font-size: 11px; font-weight: 600; }
+.character-content .doll-slot[aria-pressed=true] { border-color: var(--veil-cyan, #74d4ef); background: #183c50; box-shadow: 0 0 12px #74d4ef55; }
+.doll-stats { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin: 8px 0; }
+@container game (max-width: 360px) { .character-content .doll-slot { width: 58px; } .character-content .doll-slot .gear-art, .character-content .doll-slot > .icon { width: 44px; height: 44px; } }
+
+/* Filter chips (A7: chips instead of dropdowns). */
+.ui-chip { min-height: 44px; padding: 0 14px; border-radius: 99px; border: 1px solid #e8f5ff33; background: #102137; color: var(--text); font: 600 13px var(--font-display, Kanit), sans-serif; }
+.ui-chip[aria-pressed=true] { border-color: var(--veil-cyan, #74d4ef); background: #183c50; color: var(--focus, #a3edff); }
+.gear-chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0; }
+.gear-chips .gear-filters { display: contents; }
+.gear-chips .gear-extra-filters { margin: 0; padding: 0; border: 0; background: none; }
+.gear-chips .gear-extra-filters[open] { flex-basis: 100%; }
+.gear-chips .gear-extra-filters > summary { min-height: 44px; display: inline-flex; align-items: center; gap: 4px; padding: 0 14px; border: 1px solid #e8f5ff33; border-radius: 99px; background: #102137; font-size: 13px; color: var(--text-muted, #bbcadb); list-style: none; }
+.gear-chips .gear-extra-filters > summary::-webkit-details-marker, .gear-chips .gear-extra-filters > summary::before, .gear-chips .gear-extra-filters > summary::after { display: none; }
+.gear-chips .gear-extra-filters > summary .icon { width: 16px; height: 16px; }
+
+/* Bag (board 01): five-column tiles with Lv bottom-left, + top-right and the rarity frame from gearArt. */
+.bag-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 12px; }
+.bag-head h3 { margin: 0; } .bag-head h3 small { font-size: 13px; color: var(--text-muted, #bbcadb); font-weight: 500; }
+.character-content .bag-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; margin: 0 0 8px; }
+.character-content .bag-grid li { display: block; padding: 0; border: 0; background: none; }
+.bag-tile { position: relative; width: 100%; min-height: 0; aspect-ratio: 1; padding: 0; border: 0; border-radius: 12px; background: none; display: block; }
+.bag-tile .gear-art { width: 100%; height: 100%; --art: 100%; border-radius: 12px; }
+.bag-tile .gear-art .equip-sprite { inset: 10%; }
+.bag-tile .set-emblem { right: 2px; bottom: 2px; width: 16px; height: 16px; }
+.bag-tile .tile-lv { position: absolute; left: 6px; bottom: 3px; font: 700 11px var(--font-display, Kanit), sans-serif; color: #fff; text-shadow: 0 1px 2px #000, 0 0 4px #000; }
+.bag-tile .tile-plus { position: absolute; right: 5px; top: 2px; font: 700 11px var(--font-display, Kanit), sans-serif; font-style: normal; color: var(--gold-light, #f2d596); text-shadow: 0 1px 2px #000; }
+.bag-tile > .icon { position: absolute; right: 4px; top: 4px; width: 14px; height: 14px; color: var(--text-muted, #bbcadb); }
+.bag-tile.foreign .gear-art { opacity: .45; filter: grayscale(.6); }
+.bag-tile[aria-pressed=true] { box-shadow: 0 0 0 2px var(--veil-cyan, #74d4ef), 0 0 14px #74d4ef77; }
+.bag-tile:focus-visible { outline: 2px solid var(--gold-light, #f2d596); outline-offset: 2px; }
+
+/* Item card: the picked bag piece or the worn piece of the selected doll slot. */
+.character-content .item-card { display: grid; gap: 10px; margin: 8px 0; padding: 12px; border: 1px solid #e8f5ff26; border-radius: 16px; background: linear-gradient(160deg, #182b40, #0c1a2b); font-size: 13px; }
+.item-card-head { display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: center; }
+.item-card-head .gear-art { --art: 64px; }
+.item-card-head > div { display: grid; gap: 1px; min-width: 0; }
+.item-card-head b { font: 600 17px/1.25 var(--font-display, Kanit), sans-serif; color: var(--text); }
+.item-card-head small { font-size: 12px; color: var(--text-muted, #bbcadb); overflow-wrap: anywhere; }
+.item-card-head small[data-rarity] { color: var(--rarity-0); } .item-card-head small[data-rarity="1"] { color: var(--rarity-1); } .item-card-head small[data-rarity="2"] { color: var(--rarity-2); }
+.item-card-head small[data-rarity="3"] { color: var(--rarity-3); } .item-card-head small[data-rarity="4"] { color: var(--rarity-4); }
+.item-lock { display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid #e8f5ff33; border-radius: 12px; }
+.item-lock .icon { width: 20px; height: 20px; }
+.item-deltas { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; }
+.item-deltas > small { margin-left: auto; font-size: 12px; color: var(--text-muted, #bbcadb); }
+.item-delta { display: inline-flex; align-items: center; gap: 5px; font: 600 15px var(--font-display, Kanit), sans-serif; }
+.item-delta .icon { width: 20px; height: 20px; color: var(--text-muted, #bbcadb); }
+.item-delta em { font-style: normal; font-size: 13px; }
+.item-delta.same { font-weight: 400; font-size: 12px; color: var(--text-muted, #bbcadb); }
+.item-card .item-lines { font-size: 12px; line-height: 1.5; color: var(--text-muted, #bbcadb); }
+.item-card-actions { display: flex; gap: 8px; }
+.character-content .item-card-actions button { flex: 1; min-height: 48px; display: inline-flex; align-items: center; justify-content: center; gap: 4px; }
+.worn-card { border-color: #74d4ef55; }
+
+/* Item detail / comparison (board 02). */
+.comparison-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.comparison-head h3 { margin: 0; font-size: 20px; }
+.comparison-head #comparison-back, .comparison-head [id$=comparison-back] { order: 2; width: 48px; height: 48px; min-height: 48px; padding: 0; display: grid; place-items: center; }
+.character-content .comparison-head button > .icon { width: 22px; height: 22px; margin: 0; }
+.gear-comparison > .camp-note:first-of-type { margin: 2px 0 8px; }
+.item-pills { display: flex; flex-wrap: wrap; gap: 6px; }
+.item-pills .ui-pill { min-height: 34px; position: relative; }
+.item-pills .set-emblem { position: static; width: 20px; height: 20px; }
+.main-stat { position: relative; display: grid; gap: 2px; margin: 8px 0; padding: 12px 14px; border: 1px solid #e8f5ff26; border-radius: 16px; background: linear-gradient(160deg, #182b40, #0c1a2b); }
+.main-stat > span { font-size: 13px; color: var(--text-muted, #bbcadb); }
+.main-stat strong { font: 700 36px/1.1 var(--font-display, Kanit), sans-serif; color: var(--text); }
+.main-stat em { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); font: 700 18px var(--font-display, Kanit), sans-serif; font-style: normal; }
+.main-stat small { font-size: 12px; color: var(--text-muted, #bbcadb); }
+.affix-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin-top: 12px; }
+.affix-head h4 { margin: 0; font-size: 16px; } .affix-head small { font-size: 12px; color: var(--text-muted, #bbcadb); }
+.affix-list { list-style: none; margin: 6px 0; padding: 0; display: grid; gap: 10px; }
+.affix-list li { display: grid; grid-template-columns: 1fr auto; gap: 4px 8px; font-size: 14px; }
+.affix-list b { color: var(--veil-cyan, #74d4ef); font-weight: 600; }
+.affix-list .ui-meter { grid-column: 1 / -1; }
+.item-extra { margin: 6px 0; font-size: 12px; color: var(--gold-light, #f2d596); }
+.compare-card { margin: 12px 0; padding: 12px 14px; border: 1px solid #e8f5ff26; border-radius: 16px; background: linear-gradient(160deg, #182b40, #0c1a2b); }
+.compare-card h4 { margin: 0 0 4px; font-size: 16px; }
+.compare-card .comparison-table th, .compare-card .comparison-table td { padding: 7px 2px; border-bottom-color: #e8f5ff14; }
+.compare-card .comparison-table th { width: auto; }
+.compare-card .comparison-table th .icon { width: 16px; height: 16px; margin-right: 6px; vertical-align: -3px; color: var(--text-muted, #bbcadb); }
+.compare-card .comparison-table td:nth-of-type(1) { color: var(--text-muted, #bbcadb); }
+.compare-card .comparison-table td:nth-of-type(1)::after { content: ' →'; }
+.compare-card .comparison-table td:nth-of-type(2) { font-weight: 700; width: 56px; }
+.compare-card .comparison-table td:nth-of-type(3) { width: 64px; font-weight: 700; }
+.compare-card .comparison-table td.gain { color: var(--hp-mint, #68e5b6); } .compare-card .comparison-table td.loss { color: var(--danger-coral, #ed927f); }
+.compare-card .comparison-table tr.same { opacity: .55; }
+.compare-card .camp-note { margin: 6px 0 0; }
+.swap-list { list-style: none; margin: 8px 0; padding: 0; display: grid; gap: 6px; }
+.swap-list li { display: grid; grid-template-columns: auto auto auto 1fr; align-items: center; gap: 8px; padding: 8px; border: 1px solid #e8f5ff1f; border-radius: 12px; background: #0c1a2b; }
+.swap-list .gear-art { --art: 44px; } .swap-list li > span[aria-hidden] { color: var(--veil-cyan, #74d4ef); }
+.swap-list li div { display: grid; min-width: 0; } .swap-list b { font-size: 13px; } .swap-list small { font-size: 11px; color: var(--text-muted, #bbcadb); }
+
+/* Big tree node graph (board 04). Lines: each cell draws its upper and lower half-line through the centre;
+   gold when both tiers have ranks. Each node is a transparent 52px button whose ::before is the shape. */
+.tree-head, .loadout-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.tree-head h3, .loadout-head h3 { margin: 0; }
+.loadout-head { margin-top: 14px; } .loadout-head span { color: var(--text-muted, #bbcadb); font-size: 13px; }
+.node-tree .talent-points { min-height: 36px; padding: 4px 12px; font-size: 13px; border-color: #f2d59666; }
+.node-tree .talent-points .icon { color: var(--gold-light, #f2d596); }
+.tree-grid { --node: 50px; --line: #74d4ef55; --lit: var(--gold-light, #f2d596); display: grid; grid-template-columns: 30px repeat(3, minmax(0, 1fr)); column-gap: 4px; margin: 10px 0 4px; }
+.tree-grid h4 { margin: 0 0 4px; text-align: center; font-size: 13px; font-weight: 600; color: var(--veil-cyan, #74d4ef); }
+.tree-lv { align-self: start; padding-top: 18px; font-size: 10px; color: var(--text-muted, #bbcadb); text-align: right; }
+.tree-cell { position: relative; display: flex; justify-content: center; gap: 4px; padding: 8px 0 4px; }
+.tree-cell::before, .tree-cell::after { content: ''; position: absolute; left: calc(50% - 1px); width: 2px; background: var(--line); }
+.tree-cell::before { top: 0; height: calc(8px + var(--node) / 2); } .tree-cell::after { top: calc(8px + var(--node) / 2); bottom: 0; }
+.tree-cell[data-tier="1"]::before, .tree-cell[data-tier="4"]::after { display: none; }
+.tree-cell[data-up=lit]::before, .tree-cell[data-down=lit]::after { background: var(--lit); box-shadow: 0 0 6px #f2d59688; }
+.tree-cell.pair .node-wrap:first-child::after { content: ''; position: absolute; z-index: 0; top: calc(var(--node) / 2 - 1px); left: 50%; width: calc(100% + 4px); height: 2px; background: var(--line); }
+.node-wrap { position: relative; display: grid; justify-items: center; align-content: start; gap: 6px; width: var(--node); }
+.tree-cell.pair .node-wrap { flex: 0 1 var(--node); min-width: 44px; }
+.node-name { position: relative; z-index: 1; max-width: calc(var(--node) + 16px); padding: 0 3px; border-radius: 4px; background: #0a1524; font-size: 10px; line-height: 1.25; text-align: center; color: var(--text-muted, #bbcadb); }
+.tree-cell.pair .node-name { max-width: 100%; }
+.character-content .node-tree .talent-node { position: relative; z-index: 1; width: var(--node); height: var(--node); min-height: 44px; min-width: 44px; padding: 0; display: flex; align-items: center; justify-content: center; flex: none; border: 0; background: none; box-shadow: none; color: var(--veil-cyan, #74d4ef); }
+.node-tree .talent-node::before { content: ''; position: absolute; inset: 4px; z-index: -1; border: 2px solid #74d4ef99; background: radial-gradient(circle at 50% 40%, #1d3a52, #0d1c2e 75%); }
+.node-tree .talent-node.skill::before { border-radius: 50%; }
+.node-tree .talent-node.passive::before { inset: 7px; border-radius: 10px; }
+.node-tree .talent-node.choice::before { inset: 9px; transform: rotate(45deg); border-radius: 4px; }
+.node-tree .talent-node.capstone::before { inset: 2px 5px; border: 0; clip-path: polygon(50% 100%, 100% 72%, 100% 0, 0 0, 0 72%); background: linear-gradient(#3a5269, #1b2c40); }
+/* Beats the character sheet's 16px button-icon rule (which adds margin-right) so the glyph sits in the shape's centre. */
+.character-content .node-tree .talent-node > .icon { width: 22px; height: 22px; margin: 0; flex: none; vertical-align: middle; }
+.node-tree .talent-node i { position: absolute; left: 50%; bottom: -7px; transform: translateX(-50%); padding: 0 5px; border-radius: 6px; background: #08121f; font: 700 10px/16px var(--font-display, Kanit), sans-serif; font-style: normal; color: var(--gold-light, #f2d596); }
+.node-tree .talent-node[data-state=locked] { color: #8597aa; }
+.node-tree .talent-node[data-state=locked]::before { border-color: #e8f5ff2e; background: #101d2d; }
+.node-tree .talent-node[data-state=locked] i { color: #8597aa; }
+.node-tree .talent-node.capstone[data-state=locked]::before { background: linear-gradient(#26384b, #142233); }
+.node-tree .talent-node[data-state=open]::before { border-color: var(--veil-cyan, #74d4ef); box-shadow: 0 0 10px #74d4ef44; }
+.node-tree .talent-node[data-state=partial]::before { border-color: var(--gold-light, #f2d596); }
+.node-tree .talent-node[data-state=full] { color: #1b1305; }
+.node-tree .talent-node[data-state=full]::before { border-color: var(--gold-light, #f2d596); background: radial-gradient(circle at 50% 40%, #ffe3a3, #c99a3e 80%); box-shadow: 0 0 12px #f2d59688; }
+.node-tree .talent-node.capstone[data-state=full]::before { background: linear-gradient(#ffe3a3, #c99a3e); }
+.node-tree .talent-node[aria-pressed=true] { filter: drop-shadow(0 0 2px #fff) drop-shadow(0 0 8px var(--veil-cyan, #74d4ef)); }
+.node-tree .talent-node:focus-visible { outline: 2px solid var(--gold-light, #f2d596); outline-offset: 2px; }
+.node-card-head { display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: center; }
+.node-card-head b { font: 600 17px var(--font-display, Kanit), sans-serif; } .node-card-head small { display: block; font-size: 12px; color: var(--text-muted, #bbcadb); }
+.node-glyph { display: grid; place-items: center; width: 52px; height: 52px; border: 2px solid var(--veil-cyan, #74d4ef); border-radius: 12px; color: var(--veil-cyan, #74d4ef); background: #0d1c2e; }
+.node-glyph.skill { border-radius: 50%; } .node-glyph[data-state=full] { border-color: var(--gold-light, #f2d596); color: var(--gold-light, #f2d596); }
+.node-glyph .icon { width: 24px; height: 24px; }
+.node-card p { margin: 0; font-size: 13px; line-height: 1.55; }
+.node-card-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.node-note { font-size: 12px; color: var(--text-muted, #bbcadb); }
+.character-content .node-card-foot button { min-height: 48px; min-width: 120px; display: inline-flex; align-items: center; justify-content: center; gap: 4px; }
+.node-card-foot button[aria-disabled=true] { opacity: .5; cursor: default; }
+.tree-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; margin: 10px 0 4px; font-size: 12px; color: var(--text-muted, #bbcadb); }
+.tree-legend .lg { display: inline-block; width: 10px; height: 10px; margin-left: 6px; border: 1.5px solid var(--veil-cyan, #74d4ef); }
+.tree-legend .lg.skill { border-radius: 50%; } .tree-legend .lg.choice { transform: rotate(45deg) scale(.85); } .tree-legend .lg.passive { border-radius: 2px; }
+.tree-legend .lg.capstone { border: 0; background: var(--gold-light, #f2d596); clip-path: polygon(50% 100%, 100% 72%, 100% 0, 0 0, 0 72%); }
+@container game (max-width: 380px) { .tree-grid { --node: 44px; grid-template-columns: repeat(3, minmax(0, 1fr)); } .tree-grid > span { display: none; } }
+
+/* Painted skill icons: one atlas cell scaled to the icon box; painted art keeps its own colours (no currentColor). */
+.icon.skill-art { display: inline-block; flex: none; background-repeat: no-repeat; background-position: var(--sx) var(--sy); filter: drop-shadow(0 1px 1px #0009); }
+:is(button, .skill-status)[disabled] .icon.skill-art, .skill-status.cooling .icon.skill-art { filter: grayscale(.7) brightness(.7); }
+/* Painted art needs more room than a line glyph to read: bigger in tree nodes, the node card, loadout and skill lists. */
+.character-content .node-tree .talent-node > .icon.skill-art { width: 36px; height: 36px; }
+.node-glyph .icon.skill-art { width: 40px; height: 40px; }
+.character-content .loadout-skill .icon.skill-art { width: 32px; height: 32px; }
+.character-skills .icon.skill-art, .hire-skills .icon.skill-art { width: 36px; height: 36px; }
+#battle-view .action-option .action .icon.skill-art { width: 34px; height: 34px; }
+#battle-view .actions:has(> .action-option:nth-child(4)) .action .icon.skill-art { width: 30px; height: 30px; }
+
+/* Forge (board 05): bank pills, icon tabs, the item lit in the middle, mode chips and a result card. */
+.forge-workbench .forge-bank { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px; margin: 2px 0 4px; }
+.forge-workbench .forge-bank .ui-pill { min-height: 34px; padding: 4px 12px; font-size: 14px; }
+.forge-workbench .forge-bank .ui-pill .icon { width: 20px; height: 20px; }
+.forge-workbench .forge-tabs { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; }
+.forge-workbench .forge-tabs button { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 4px 2px; background: transparent; border-color: transparent; box-shadow: none; font: 600 12px var(--font-display, Kanit), sans-serif; color: var(--text-muted, #bbcadb); }
+.forge-workbench .forge-tabs button .icon { width: 24px; height: 24px; margin: 0; }
+.forge-workbench .forge-tabs [aria-selected=true] { background: #183c50; border-color: var(--veil-cyan, #74d4ef); color: var(--focus, #a3edff); }
+.forge-workbench .forge-tabs button[disabled] { opacity: .45; }
+.forge-workbench .forge-showcase { flex-direction: column; justify-content: center; gap: 6px; padding: 6px 8px 0; border: 0; background: radial-gradient(ellipse at 50% 38%, #23435a66, transparent 70%); text-align: center; }
+.forge-workbench .forge-showcase .gear-art { --art: 84px; flex: none; box-shadow: 0 0 22px #74d4ef33; }
+.forge-workbench .forge-showcase > div { display: grid; gap: 1px; justify-items: center; }
+.forge-workbench .forge-showcase b { font: 600 18px/1.25 var(--font-display, Kanit), sans-serif; }
+.forge-workbench .forge-showcase[data-rarity] small:first-of-type { color: var(--rarity-0); } .forge-workbench .forge-showcase[data-rarity="1"] small:first-of-type { color: var(--rarity-1); } .forge-workbench .forge-showcase[data-rarity="2"] small:first-of-type { color: var(--rarity-2); }
+.forge-workbench .forge-showcase[data-rarity="3"] small:first-of-type { color: var(--rarity-3); } .forge-workbench .forge-showcase[data-rarity="4"] small:first-of-type { color: var(--rarity-4); }
+.forge-workbench .forge-item-tools { justify-content: center; gap: 6px; margin: 2px 0; }
+.forge-workbench .forge-item-tools button { flex: 0 1 auto; display: inline-flex; align-items: center; justify-content: center; gap: 4px; padding: 0 12px; border-radius: 99px; font-size: 12px; }
+.forge-workbench .forge-item-tools button .icon { width: 18px; height: 18px; margin: 0; }
+.forge-workbench .forge-modes { display: flex; flex-wrap: nowrap; gap: 6px; overflow-x: auto; scrollbar-width: none; margin: 4px 0; padding-bottom: 2px; }
+.forge-workbench .forge-modes::-webkit-scrollbar { display: none; }
+.forge-workbench .forge-modes button { flex: 0 0 auto; min-height: 44px; padding: 0 12px; border-radius: 99px; border: 1px solid #e8f5ff33; background: #102137; box-shadow: none; color: var(--text); font: 600 13px var(--font-display, Kanit), sans-serif; }
+.forge-workbench .forge-modes [aria-pressed=true] { border-color: var(--veil-cyan, #74d4ef); background: #183c50; color: var(--focus, #a3edff); }
+.forge-workbench .forge-modes button[disabled] { opacity: .5; }
+.forge-workbench .forge-detail > h3 { margin: 6px 0 4px; text-align: center; font-size: 18px; color: var(--gold-light, #f2d596); }
+.forge-workbench .forge-detail > .camp-note { text-align: center; font-size: 12px; }
+.forge-result h4 { margin: 0 0 2px; font-size: 18px; }
+.forge-result .forge-stat-preview caption, .forge-result .forge-stat-preview thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+.forge-result .forge-stat-preview td:nth-of-type(1)::after { content: ' →'; }
+.forge-result .forge-stat-preview td { text-align: right; }
+.forge-result .forge-stat-preview td:nth-of-type(3) { width: 58px; }
+.forge-workbench .forge-footer { padding-top: 8px; border-top: 0; background: linear-gradient(#0c192b00, #0c192b 6px); }
+.forge-workbench .forge-footer > p#forge-cost { margin: 2px 0; text-align: center; font: 600 15px var(--font-display, Kanit), sans-serif; color: var(--text); }
+.forge-workbench .forge-footer > small { text-align: center; }
+.forge-workbench .forge-footer button.primary { display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+.forge-workbench .forge-footer button.primary .icon { width: 22px; height: 22px; margin: 0; }
+
+.forge-workbench .forge-detail .forge-label { margin: 4px 0; } .forge-workbench .forge-detail .forge-label select { min-height: 44px; }
+.forge-workbench .forge-result { margin: 8px 0; padding: 10px 14px; }
+.forge-workbench .forge-result .comparison-table td, .forge-workbench .forge-result .comparison-table th { padding: 6px 2px; }
+
+/* Expedition summary (board 09): stat chips, one haul card of pills, three-column item tiles, level cards. */
+.summary-card { background: linear-gradient(180deg, #14243af0, #0b1626f5); }
+.summary-card header .eyebrow { font: 600 12px var(--font-display, Kanit), sans-serif; letter-spacing: .08em; color: var(--veil-cyan, #74d4ef); }
+.summary-view .summary-stats { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
+.summary-view .summary-stats li { display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 3px 10px; border-radius: 99px; border: 1px solid #e8f5ff26; background: #08121fcc; }
+.summary-view .summary-stats .icon { width: 16px; height: 16px; grid-row: auto; }
+.summary-view .summary-stats b { font-size: 14px; } .summary-view .summary-stats small { font-size: 12px; }
+.summary-view .summary-haul { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; padding: 12px; border: 1px solid #e8f5ff26; border-radius: 16px; background: linear-gradient(160deg, #182b40, #0c1a2b); }
+.summary-view .summary-haul li { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 99px; border: 1px solid #e8f5ff33; background: #08121fcc; }
+.summary-view .summary-haul .icon { width: 22px; height: 22px; grid-row: auto; } .summary-view .summary-haul b { font-size: 17px; }
+.summary-view .summary-items { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px 6px; }
+.summary-items .tile { position: relative; display: block; width: 100%; aspect-ratio: 1; }
+.summary-items .tile .gear-art { --art: 100%; width: 100%; height: 100%; border-radius: 12px; }
+.summary-items .tile-lv { position: absolute; left: 4px; bottom: 2px; font: 700 10px var(--font-display, Kanit), sans-serif; color: #fff; text-shadow: 0 1px 2px #000, 0 0 4px #000; }
+.summary-items .tile-plus { position: absolute; right: 3px; top: 1px; font: 700 10px var(--font-display, Kanit), sans-serif; font-style: normal; color: var(--gold-light, #f2d596); text-shadow: 0 1px 2px #000; }
+.summary-items li { gap: 1px; } .summary-items small { font-size: 11px; } .summary-items em { font: normal 12px var(--font-display, Kanit), sans-serif; color: var(--rarity-0); }
+.summary-items li[data-rarity="1"] em { color: var(--rarity-1); } .summary-items li[data-rarity="2"] em { color: var(--rarity-2); } .summary-items li[data-rarity="3"] em { color: var(--rarity-3); } .summary-items li[data-rarity="4"] em { color: var(--rarity-4); }
+.summary-view .summary-levels { padding: 10px; border: 1px solid #e8f5ff26; border-radius: 16px; background: linear-gradient(160deg, #182b40, #0c1a2b); grid-template-columns: 1fr 1fr; }
+.summary-view .summary-levels li { background: none; }
+.summary-view #summary-done { min-height: 52px; width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+
+/* Hire board (board 10): the mercenary in full-body art on the left, name/role/lane and the hire button on the right. */
+.hire-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 4px 0; }
+.hire-top .hire-cost { margin: 0; flex: 1; }
+.hire-top .ui-pill { min-height: 34px; font-size: 14px; } .hire-top .ui-pill .icon { color: #f2c14e; }
+.hire-lanes { display: flex; gap: 6px; margin: 6px 0; }
+.hire-board { gap: 10px; }
+.hire-board li { position: relative; display: block; padding: 0; border-radius: 18px; border-color: #e8f5ff26; background: radial-gradient(ellipse at 22% 45%, #23435a, #0c1a2b 70%); }
+.hire-board .hire-open { position: relative; display: block; width: 100%; min-height: 150px; padding: 12px 12px 68px 124px; }
+.hire-board .hire-open .hero-art { position: absolute; left: 4px; top: 6px; width: 116px; aspect-ratio: 1; }
+.hire-board .hire-open > span { display: grid; gap: 2px; }
+.hire-board .hire-open b { font: 600 22px/1.2 var(--font-display, Kanit), sans-serif; }
+.hire-board .hire-open .star-row .icon { width: 16px; height: 16px; }
+.hire-board .hire-open small { line-height: 1.35; }
+.hire-board li > button[id^="hire-"]:not(.hire-open) { position: absolute; left: 124px; right: 12px; bottom: 12px; min-height: 48px; border-radius: 12px; font: 700 17px var(--font-display, Kanit), sans-serif; background: linear-gradient(180deg, #f2d596, #d8b673); color: #1b1305; border-color: transparent; }
+.draft-board .hire-open { min-height: 140px; }
+.hire-board li > button[id^="draft-"] { position: absolute; left: 124px; right: 12px; bottom: 12px; min-height: 48px; border-radius: 12px; font: 700 17px var(--font-display, Kanit), sans-serif; background: linear-gradient(180deg, #f2d596, #d8b673); color: #1b1305; border-color: transparent; }
+.hire-board li > button[disabled] { background: #1a2b40; color: var(--text-muted, #bbcadb); }
+@container game (max-width: 400px) { .hire-board .hire-open small:not(.hire-status) { display: block; font-size: 12px; } }
+.hire-board .hire-open .hire-status { font-size: 11px; opacity: .8; }
+.npc-fold { margin: 0 0 6px; } .npc-fold > summary { min-height: 44px; display: flex; align-items: center; gap: 8px; padding: 0 12px; border: 1px solid #e8f5ff26; border-radius: 12px; background: #0d1c2ecc; font-size: 13px; color: var(--gold-light, #f2d596); list-style: none; }
+.npc-fold > summary::-webkit-details-marker { display: none; } .npc-fold > summary .icon { width: 18px; height: 18px; }
+.npc-fold[open] > summary { margin-bottom: 6px; }
+
+/* Five-up tiles are small: the name and rarity stay for assistive tech (and the title tooltip), the rarity shows in the frame. */
+.summary-items small, .summary-items em { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+
+/* Forge strike: painted layers from forge_strike_fx.webp are placed by forge-strike.ts around the 132 px gear tile. */
+.forge-strike { position: absolute; inset: 0; z-index: 80; display: grid; place-items: center; pointer-events: none; background: radial-gradient(circle, #05101cdd, #05101c99 70%); animation: strike-fade 1.7s both; }
+.strike-card { position: relative; display: grid; justify-items: center; gap: 6px; }
+.strike-item { position: relative; z-index: 1; animation: strike-shake .7s .3s both; }
+.strike-item .gear-art { --art: 132px; box-shadow: 0 0 40px #f2d59644; }
+.strike-back, .strike-front { position: absolute; left: 50%; top: 66px; width: 0; height: 0; pointer-events: none; }
+.strike-back { z-index: 0; } .strike-front { z-index: 2; }
+.strike-card .fx { position: absolute; display: block; background-repeat: no-repeat; pointer-events: none; will-change: transform, opacity; }
+.strike-text { position: relative; z-index: 3; display: grid; place-items: center; min-height: 48px; }
+.strike-glow { position: absolute; left: 50%; top: 50%; width: 0; height: 0; z-index: -1; }
+.strike-result { font: 700 40px var(--font-display, Kanit), sans-serif; color: var(--gold-light, #f2d596); text-shadow: 0 2px 8px #000; opacity: 0; animation: strike-pop .5s .72s both; }
+.strike-card small { z-index: 3; color: var(--text, #fff); font-size: 14px; opacity: 0; animation: strike-pop .4s .8s both; }
+@keyframes strike-shake { 0%, 100% { transform: none; } 12% { transform: translateY(5px) scale(.97); } 30% { transform: translateY(-2px); } 52% { transform: translateY(7px) scale(.95); } 75% { transform: translateY(0) scale(1.05); } }
+@keyframes strike-pop { 0% { opacity: 0; transform: translateY(8px) scale(.8); } 100% { opacity: 1; transform: none; } }
+@keyframes strike-fade { 0%, 80% { opacity: 1; } 100% { opacity: 0; } }
+.forge-strike[data-reduced] { animation: strike-fade .9s both; } .forge-strike[data-reduced] * { animation: none !important; } .forge-strike[data-reduced] .strike-result, .forge-strike[data-reduced] small { opacity: 1; }
+
+/* Victory presentation stays inside the portrait frame; footer never scrolls away. */
+#app .battle-rewards[open] { display:flex; flex-direction:column; gap:16px; padding:20px; color:var(--text, #eef3ff); background:linear-gradient(150deg,#182c46f5,#091422fa); border:1px solid #7aa5ce66; box-shadow:0 20px 80px #0009; }
+.battle-rewards::backdrop { background:#030a14bb; }
+.battle-rewards h2 { color:#f4d795; margin:4px 0; }
+.battle-rewards h3 { font-size:15px; color:#b5cbe0; }
+.battle-rewards ul { list-style:none; padding:0; margin:0; }
+.rewards-scroll { overflow:auto; flex:1; min-height:0; }
+.reward-member { display:flex; gap:12px; padding:14px 0; border-bottom:1px solid #7995b733; }
+.reward-member .portrait { width:52px; height:52px; flex-shrink:0; }
+.reward-member > div { flex:1; min-width:0; }
+.reward-member span,.reward-member small,.reward-items small { display:block; }
+.reward-member small { font-size:12px; color:#b9c6d6; }
+.reward-exp { height:7px; background:#030c1c; border-radius:8px; overflow:hidden; margin:9px 0; }
+.reward-exp i { display:block; height:100%; background:#7ed9ec; animation:reward-fill 1.6s ease both; }
+.reward-level { color:#f4d795; font-size:14px; }
+.reward-items summary { display:flex; gap:12px; align-items:center; min-height:64px; cursor:pointer; }
+.reward-items li,.reward-resources li { padding:10px; margin-bottom:8px; background:#ffffff08; border:1px solid #95b7d32a; border-radius:12px; }
+.battle-rewards > button { min-height:48px; flex-shrink:0; }
+@keyframes reward-fill { 0% { width:var(--from); } 65% { width:var(--full); } }
+@media (prefers-reduced-motion:reduce) { .reward-exp i { animation:none; } }
+@container game (max-width:360px) { #app .battle-rewards[open] { padding:12px; } }
+@container game (min-height:760px) {
+  .reward-member { padding:9px 0; }
+  .battle-rewards h3 { margin:10px 0; }
+}
+
+/* Compact reward overview: members occupy two rows; loot shares the remaining page. */
+#app .battle-rewards[open] { padding:16px; gap:10px; }
+.battle-rewards header { flex-shrink:0; }
+.battle-rewards h2 { font-size:24px; margin:2px 0; }
+.battle-rewards h3 { font-size:14px; margin:10px 0 6px; }
+.reward-members { display:grid; grid-template-columns:repeat(var(--reward-columns,2),minmax(0,1fr)); gap:8px; }
+.reward-member { flex-wrap:wrap; align-content:start; gap:6px; padding:10px; border:1px solid #7995b733; border-radius:10px; background:#ffffff05; }
+.reward-member .portrait { width:36px; height:36px; }
+.reward-member > div { min-width:70px; }
+.reward-member b { font-size:14px; }
+.reward-member span { font-size:12px; }
+.reward-member small { font-size:10px; line-height:1.4; }
+.reward-exp { height:5px; margin:5px 0; }
+.reward-level { font-size:12px; }
+.reward-items,.reward-resources { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:6px; }
+.reward-items summary { gap:6px; min-height:52px; font-size:12px; }
+.reward-items .gear-art { --art:40px; flex-shrink:0; }
+.reward-items small { font-size:10px; }
+.reward-items p { font-size:12px; margin:6px 0; }
+.reward-items li,.reward-resources li { padding:8px; margin:0; border-radius:10px; }
+.reward-resources li { display:flex; align-items:center; gap:5px; font-size:12px; }
+.reward-resources li b { margin-left:auto; white-space:nowrap; }
+.reward-resources .icon { width:20px; height:20px; flex-shrink:0; }
+@container game (max-width:360px) { #app .battle-rewards[open] { padding:10px; } .reward-member { padding:6px; } }
+.reward-items > li:only-child { grid-column:1 / -1; }
+.reward-member > div { min-width:0; flex-basis:70px; }

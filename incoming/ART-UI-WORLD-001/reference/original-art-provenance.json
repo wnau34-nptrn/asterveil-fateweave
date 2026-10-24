@@ -1,0 +1,18 @@
+{
+  "repository": "wnau34-nptrn/asterveil-fateweave",
+  "ref": "feature/fateweave-initial-prototype",
+  "files": [
+    {
+      "name": "units",
+      "gitBlobSha": "ee8081a98caa037a5f48195eddbf143b3e343386"
+    },
+    {
+      "name": "portraits",
+      "gitBlobSha": "ffb6c92e17a6d6d3a6a4e1712117b850fae9f9d9"
+    },
+    {
+      "name": "ruins",
+      "gitBlobSha": "fe850c594abffccd02a16971926899ff3df9db93"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "full_body_png": 15,
+  "full_body_webp": 15,
+  "portraits_png": 15,
+  "portraits_webp": 15,
+  "atlases": 4,
+  "frame_maps": 4,
+  "footY": 496,
+  "dimensions_and_modes": "PASS",
+  "padding": "PASS",
+  "alpha_matches_png_webp": "PASS",
+  "last_foe_slots_empty": "PASS",
+  "original_hashes_match_git_base": "PASS",
+  "runtime_bytes": 1939496,
+  "budget_bytes": 2000000
+}

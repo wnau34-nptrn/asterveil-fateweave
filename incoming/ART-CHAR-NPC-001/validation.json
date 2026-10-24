@@ -1,0 +1,83 @@
+{
+  "runtime_bytes": 2027196,
+  "images": {
+    "busts/npc_busts.webp": {
+      "bytes": 341840,
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB"
+    },
+    "npc/npc_broker.webp": {
+      "bytes": 247964,
+      "size": [
+        2048,
+        1536
+      ],
+      "mode": "RGBA"
+    },
+    "npc/npc_herbalist.webp": {
+      "bytes": 249058,
+      "size": [
+        2048,
+        1536
+      ],
+      "mode": "RGBA"
+    },
+    "npc/npc_keeper.webp": {
+      "bytes": 265146,
+      "size": [
+        2048,
+        1536
+      ],
+      "mode": "RGBA"
+    },
+    "npc/npc_scout.webp": {
+      "bytes": 227198,
+      "size": [
+        2048,
+        1536
+      ],
+      "mode": "RGBA"
+    },
+    "npc/npc_smith.webp": {
+      "bytes": 251184,
+      "size": [
+        2048,
+        1536
+      ],
+      "mode": "RGBA"
+    },
+    "npc/npc_trainer.webp": {
+      "bytes": 230516,
+      "size": [
+        2048,
+        1536
+      ],
+      "mode": "RGBA"
+    },
+    "props/npc_stations.webp": {
+      "bytes": 214290,
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA"
+    }
+  },
+  "protected_sha256": {
+    "public/assets/art/portraits.webp": "f604b5f93c6526130546e194674d37f4e3265083908bbbb3448affadf4b70496",
+    "public/assets/art/portraits_foes.webp": "a0af4dc53e1413de8d161e2f454845b856ca255622a2efdc03b8439961ca841e",
+    "public/assets/art/portraits_mercs.webp": "4e52e0ebad02dee265cba112fecfe162757f4f9d4f596df09771768ade7b9ceb",
+    "public/assets/art/units.webp": "d205b57d8a4082290a3a2e5a415407245106f948033cf3c66eb7b8e537393629",
+    "public/assets/art/units_foes.webp": "a76432680856f6f45bf2c7a006124e29cc8a248ea680779194dfa339c7338860",
+    "public/assets/art/units_mercs.webp": "f56977d16167593da97b41417239ef1db4fd2d790301b230c62b8ffbb1825e54",
+    "public/assets/lobby/lobby_bg.webp": "3fbd0e041c78904fa0dc83f86e019d46124238555a250f95dc1f60e487d83f1f",
+    "public/assets/lobby/lobby_fg.webp": "dfa00861cb3220f89a23cb9570d345ae835150850e74e2ab9111d02190a2a969",
+    "public/assets/lobby/lobby_firepit.webp": "d1b0798daca8b9047c2895c75911895a172f205cc617990ddce4df805023eb26",
+    "public/assets/lobby/lobby_poses_heroes.webp": "ed95adc4ad471a182077fd21ec2031b2babd197044ab3d6ebb991044046dc40f",
+    "public/assets/lobby/lobby_poses_mercs.webp": "0b8fb22c56a0b10c9cbc26161c3859e15eb3130e5b8aad7a7b4fc0fdf2122c49"
+  },
+  "base_commit": "e3643672e0bbc89bea46b014fca87a8cb947cfd3"
+}

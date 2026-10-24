@@ -1,0 +1,1347 @@
+{
+  "version": 1,
+  "package": "ART-UI-WORLD-001",
+  "runtimeBudgetBytes": 2500000,
+  "runtimeBytesIncludingPngFallbacks": 2481173,
+  "runtimePrimaryTransferBytes": 843540,
+  "files": [
+    {
+      "path": "CLAUDE_HANDOFF.md",
+      "bytes": 8875,
+      "sha256": "f32e8c2950f9f4f20f673f4481a8450901ac0068f0404cd55b084e8848ff05b8",
+      "runtime": false
+    },
+    {
+      "path": "NOTES.md",
+      "bytes": 17824,
+      "sha256": "4895b148e69b4ce86dfa648d550c409a1d2d5715e5e6552e9591faec8c68348d",
+      "runtime": false
+    },
+    {
+      "path": "RESEARCH.md",
+      "bytes": 3898,
+      "sha256": "505daaecf2deb4398c6b3778d78594f1171750cb8dde53c5422418b1253e093e",
+      "runtime": false
+    },
+    {
+      "path": "STYLE_GUIDE.md",
+      "bytes": 14429,
+      "sha256": "84ebdb84be800ebef919aca0300d9defd3130eef3aa7061503f44585d0735a4a",
+      "runtime": false
+    },
+    {
+      "path": "fx/README.md",
+      "bytes": 3291,
+      "sha256": "0e32e55117bdf622a681cc3cf33dbb63f7343fb932bebc81f98a12af6ba2277c",
+      "runtime": false
+    },
+    {
+      "path": "fx/effects.css",
+      "bytes": 2940,
+      "sha256": "2a6d74c40b8a8e876d471a840297542b00b149ed384de0b71b36c6ee218060aa",
+      "runtime": true
+    },
+    {
+      "path": "icons/arcane-bolt.svg",
+      "bytes": 222,
+      "sha256": "8691c91fe03d3e8f94daf7fbd4158f22d27e3cba116f349469e77687d05c1e83",
+      "runtime": true
+    },
+    {
+      "path": "icons/attack.svg",
+      "bytes": 215,
+      "sha256": "490519d80d64e6266fbc8c9ae8e0829850e79f7238766dbcbb3251fd1f8e9e43",
+      "runtime": true
+    },
+    {
+      "path": "icons/bash.svg",
+      "bytes": 224,
+      "sha256": "f907c73bdfcb00557158fe708a67b5d15f12522d2b95a10ea2a42cb81ee87fc3",
+      "runtime": true
+    },
+    {
+      "path": "icons/boss.svg",
+      "bytes": 261,
+      "sha256": "df98895aa6c01ae4145a21f02620c1ba82ab5f25c377f94a0c2992c4af386585",
+      "runtime": true
+    },
+    {
+      "path": "icons/camp.svg",
+      "bytes": 214,
+      "sha256": "68771f3daed9c3a24a25b0da001bfd32bb4bdc9c5a13a76e34687916cab00926",
+      "runtime": true
+    },
+    {
+      "path": "icons/check.svg",
+      "bytes": 192,
+      "sha256": "a2a61e825c73b14dd3e35886d586227cfcd3d823d33f6fadf4bbce87803e135a",
+      "runtime": true
+    },
+    {
+      "path": "icons/circle.svg",
+      "bytes": 209,
+      "sha256": "9aaa7bd024f5b22a24ba4409a558f97078d38265b7582c3bb64916418f9a60d3",
+      "runtime": true
+    },
+    {
+      "path": "icons/close.svg",
+      "bytes": 198,
+      "sha256": "e19d1e0764c50a6a72239ab18a654b8579944372f89dbc7e04b07729ae0399bf",
+      "runtime": true
+    },
+    {
+      "path": "icons/danger.svg",
+      "bytes": 209,
+      "sha256": "0fca822171f49f2a2a8670b4f6198eb88bd413f465a13a059267ac2d53bd60e0",
+      "runtime": true
+    },
+    {
+      "path": "icons/down.svg",
+      "bytes": 191,
+      "sha256": "7cfa5bbac5d2e7214eae280127bb62ad06fc6879ad6fc4beaa0fc3761bc8b030",
+      "runtime": true
+    },
+    {
+      "path": "icons/flag.svg",
+      "bytes": 199,
+      "sha256": "8a899ebcf30d885f62e56fe8c27c56fa2a8d95fe3d0799ea880f7ea998c07a89",
+      "runtime": true
+    },
+    {
+      "path": "icons/footprints.svg",
+      "bytes": 274,
+      "sha256": "790f5ca965e5cb868290f035b671772dc281078dae7e29a4df1f04d6825833ea",
+      "runtime": true
+    },
+    {
+      "path": "icons/gate.svg",
+      "bytes": 240,
+      "sha256": "4fc6da9cd3144dedaadcbfe5712bcfe2308eeab0e9547044924e05fe5685f385",
+      "runtime": true
+    },
+    {
+      "path": "icons/guard.svg",
+      "bytes": 221,
+      "sha256": "afca3e16f3e1f5321ad305a5f9a4522fde0e39596d764cb1aedb8ec22e1ea256",
+      "runtime": true
+    },
+    {
+      "path": "icons/heal.svg",
+      "bytes": 223,
+      "sha256": "edd5279e40b95d0a4de982244af099b7253519b42107b96eabc7c12d2a72aecd",
+      "runtime": true
+    },
+    {
+      "path": "icons/info.svg",
+      "bytes": 226,
+      "sha256": "7e403b2d3016a2186ecd194cb8c0d7b8f1edfd8b2f582937f750193540c9dfe3",
+      "runtime": true
+    },
+    {
+      "path": "icons/left.svg",
+      "bytes": 192,
+      "sha256": "75f1de741800684c85dd5ed5f033eb0e7ff6cc89935f239b90104f3e774c24de",
+      "runtime": true
+    },
+    {
+      "path": "icons/map.svg",
+      "bytes": 226,
+      "sha256": "7dc5372861b974b6327795ad84686abea6c2ffe68b257e449f13e9e6b4e4d68b",
+      "runtime": true
+    },
+    {
+      "path": "icons/mark.svg",
+      "bytes": 226,
+      "sha256": "ae5461dff99320cd177e7dda6d1132e0085d46e894efbc765cfd7a3897e1aa6e",
+      "runtime": true
+    },
+    {
+      "path": "icons/prayer.svg",
+      "bytes": 230,
+      "sha256": "1787938d7eacbe12ba043efdc50140adf7f7985159844f58233ffbb5b3213ffe",
+      "runtime": true
+    },
+    {
+      "path": "icons/precision-strike.svg",
+      "bytes": 228,
+      "sha256": "a31b501b5951d5f23f081ae60c6c67ffdb30d390f14bf4164dc0c354d8317dfc",
+      "runtime": true
+    },
+    {
+      "path": "icons/rest.svg",
+      "bytes": 242,
+      "sha256": "6a7e3f24b0072d8e740896bb108ae2341b661fad2450892ad4765c0ccac9e828",
+      "runtime": true
+    },
+    {
+      "path": "icons/right.svg",
+      "bytes": 191,
+      "sha256": "7a3bb79296ae10584ac34cb734c747315a2217d5ef6784fd90695782fc802c09",
+      "runtime": true
+    },
+    {
+      "path": "icons/safe-shield.svg",
+      "bytes": 229,
+      "sha256": "18712abaed8dd353587bcecf7296785edfc0f43aef893b5963aa994ba91cb15f",
+      "runtime": true
+    },
+    {
+      "path": "icons/settings.svg",
+      "bytes": 263,
+      "sha256": "9e599086f5f088eb297fc8d0e17ea24682fd2f1c26a446d4f8eb038d8aaa257d",
+      "runtime": true
+    },
+    {
+      "path": "icons/star.svg",
+      "bytes": 249,
+      "sha256": "ae46aa5e34c6a27bbc81cd95fe2fe41aaaca2891bcf7c2def8bbac0bab8bb4f5",
+      "runtime": true
+    },
+    {
+      "path": "icons/talk.svg",
+      "bytes": 293,
+      "sha256": "80b0bb5df78a92d3c6bff7f2a0c4a9d9d8494ba94c26a7deaa04232fc62d3186",
+      "runtime": true
+    },
+    {
+      "path": "icons/up.svg",
+      "bytes": 191,
+      "sha256": "11b2d3df4dac59318a5a3a00b998334884c1e428bbfdfa1e72383ebaafe6ae08",
+      "runtime": true
+    },
+    {
+      "path": "icons/ward.svg",
+      "bytes": 250,
+      "sha256": "f19deed5ae448a730706118b63022fd221c5feaf1fd234351648f69e9a7ed415",
+      "runtime": true
+    },
+    {
+      "path": "licenses/Liberation-Serif.txt",
+      "bytes": 5756,
+      "sha256": "f32df582a2aab128c07b2f7e36e7b928dc5f6bd82657b905c04f91459f9e5cf9",
+      "runtime": false
+    },
+    {
+      "path": "licenses/Noto-packaging.txt",
+      "bytes": 5208,
+      "sha256": "075f91382875da1c4b491f1facf2586f55448705133264d98ce15cab6211b125",
+      "runtime": false
+    },
+    {
+      "path": "licenses/kanit-OFL.txt",
+      "bytes": 4384,
+      "sha256": "16dc702ee4cfe5a7b402ab917b2b9fbc1d1778c62fbe161c3f45529b07e076c1",
+      "runtime": false
+    },
+    {
+      "path": "licenses/notosansthai-OFL.txt",
+      "bytes": 4381,
+      "sha256": "6db87e563a421ba02fc1b7dabbf0d269234fb0b7908006b3efda318814fc2d88",
+      "runtime": false
+    },
+    {
+      "path": "mockups/asset-readability.png",
+      "bytes": 932541,
+      "sha256": "73574c03622540c6d908ea75ad6be2b6e6e3da78ae8dc6042047a53ac355d581",
+      "runtime": false,
+      "w": 1440,
+      "h": 1100,
+      "mode": "RGB"
+    },
+    {
+      "path": "mockups/battle-1366x768.png",
+      "bytes": 1188680,
+      "sha256": "ca55480486a0e996893fed70d7b7c145a885c98ac9e64bc155e76dbfade68b5f",
+      "runtime": false,
+      "w": 1366,
+      "h": 768,
+      "mode": "RGB"
+    },
+    {
+      "path": "mockups/battle-320x568.png",
+      "bytes": 188505,
+      "sha256": "9d3727f9b6729d4f2ad7b3671b598819348a1c6536f657340a4990cb3ccbfcaa",
+      "runtime": false,
+      "w": 320,
+      "h": 568,
+      "mode": "RGB"
+    },
+    {
+      "path": "mockups/battle-390x844.png",
+      "bytes": 351173,
+      "sha256": "4d72d9ba1f7867cd9590db0fa92796b771bc8e8be8152ac36c3e2daefe97755d",
+      "runtime": false,
+      "w": 390,
+      "h": 844,
+      "mode": "RGB"
+    },
+    {
+      "path": "mockups/battle-844x390.png",
+      "bytes": 299766,
+      "sha256": "777441891d4d6874b61d7b9421499a5408fe51234cb0425824e59413b13ef740",
+      "runtime": false,
+      "w": 844,
+      "h": 390,
+      "mode": "RGB"
+    },
+    {
+      "path": "mockups/battle-popover-390x844.png",
+      "bytes": 369766,
+      "sha256": "f981464ed1e5eedbc36adba3b4f88b5f7769476a2118c4d3b126a8a4a02ceea9",
+      "runtime": false,
+      "w": 390,
+      "h": 844,
+      "mode": "RGB"
+    },
+    {
+      "path": "mockups/battle-states.png",
+      "bytes": 631806,
+      "sha256": "5b493a40819ad85918ef27cdb47cd868d7dc1fa3f6e547e17cee1e30f76c6cde",
+      "runtime": false,
+      "w": 1440,
+      "h": 1120,
+      "mode": "RGB"
+    },
+    {
+      "path": "mockups/concept-fullscreen-1366x768.png",
+      "bytes": 3019888,
+      "sha256": "6d0b02270c59b19747d2c604120f3d983ee222be3099d612224a2f4af409f3c7",
+      "runtime": false,
+      "w": 1366,
+      "h": 768,
+      "mode": "RGB"
+    },
+    {
+      "path": "mockups/concept-fullscreen-390x844.png",
+      "bytes": 925121,
+      "sha256": "31b4bd9f636fd162013c967f1f790db6f3df1f6c37c3206145c768a61a78ed50",
+      "runtime": false,
+      "w": 390,
+      "h": 844,
+      "mode": "RGB"
+    },
+    {
+      "path": "mockups/encounter-transition.png",
+      "bytes": 1021990,
+      "sha256": "2a33c2f1947a22d6d3c28dd8d6a04def2b7109d0b2d98fbdead7446677f80a14",
+      "runtime": false,
+      "w": 1440,
+      "h": 900,
+      "mode": "RGB"
+    },
+    {
+      "path": "mockups/title-1366x768.png",
+      "bytes": 1641335,
+      "sha256": "ae096a90ab4f5f55ede57f2de7e5e013e6d18c3986bfea41ddb5692424ce8daf",
+      "runtime": false,
+      "w": 1366,
+      "h": 768,
+      "mode": "RGB"
+    },
+    {
+      "path": "mockups/title-390x844.png",
+      "bytes": 484174,
+      "sha256": "f59f461de7320f0af1ce61739d8d0aff3220fc451305c3dfc6511e1babfc2c11",
+      "runtime": false,
+      "w": 390,
+      "h": 844,
+      "mode": "RGB"
+    },
+    {
+      "path": "mockups/title-844x390.png",
+      "bytes": 537622,
+      "sha256": "da4d1f4b28d8786800e45dd20279cd9d639290c5bcb65d5db76174544d93e95b",
+      "runtime": false,
+      "w": 844,
+      "h": 390,
+      "mode": "RGB"
+    },
+    {
+      "path": "mockups/title-confirm-390x844.png",
+      "bytes": 233015,
+      "sha256": "1a0da2a239cac6f888e4a88039ab544e003bd044737da3ebfa0ff4b623644383",
+      "runtime": false,
+      "w": 390,
+      "h": 844,
+      "mode": "RGB"
+    },
+    {
+      "path": "mockups/world-1366x768.png",
+      "bytes": 1348149,
+      "sha256": "7425ea646f7c66c96a87eac2a4d85e6f2af891ecdaa07ab290baea1b8c855ed6",
+      "runtime": false,
+      "w": 1366,
+      "h": 768,
+      "mode": "RGB"
+    },
+    {
+      "path": "mockups/world-320x568.png",
+      "bytes": 397844,
+      "sha256": "c3fb575f59bbf209c2ceffd51226c57cb86b67244175b68b082d31b659f0b0b3",
+      "runtime": false,
+      "w": 320,
+      "h": 568,
+      "mode": "RGB"
+    },
+    {
+      "path": "mockups/world-390x844.png",
+      "bytes": 696084,
+      "sha256": "659d69d0b553093c53157fdb3ab0ef8bbddd01f809e45c7e0bf85171c61d29d8",
+      "runtime": false,
+      "w": 390,
+      "h": 844,
+      "mode": "RGB"
+    },
+    {
+      "path": "mockups/world-844x390.png",
+      "bytes": 571035,
+      "sha256": "9780fe70120993ab46afc2cd3b6510677a372b9206f918e236a31c565a52f48f",
+      "runtime": false,
+      "w": 844,
+      "h": 390,
+      "mode": "RGB"
+    },
+    {
+      "path": "mockups/world-camp-390x844.png",
+      "bytes": 672605,
+      "sha256": "93fe8c4eeb800b8e64564c809b495326952360c2c76d4c6efb47d5224f829081",
+      "runtime": false,
+      "w": 390,
+      "h": 844,
+      "mode": "RGB"
+    },
+    {
+      "path": "mockups/world-goals-390x844.png",
+      "bytes": 375554,
+      "sha256": "3493f64fd6869579519126dff1b024c2ce1fcafca0f7722b30a3465adc6eb56b",
+      "runtime": false,
+      "w": 390,
+      "h": 844,
+      "mode": "RGB"
+    },
+    {
+      "path": "mockups/world-high-1366x768.png",
+      "bytes": 1348297,
+      "sha256": "5118abdf63fc166c4003ddf5f134f222bb5e179541f24a7878422fbb208ed7ef",
+      "runtime": false,
+      "w": 1366,
+      "h": 768,
+      "mode": "RGB"
+    },
+    {
+      "path": "mockups/world-states.png",
+      "bytes": 650986,
+      "sha256": "d050c07242a6c1aec6567bdb5f12cd42c9296fbe8b71abee72543229a59bc3a4",
+      "runtime": false,
+      "w": 1440,
+      "h": 1160,
+      "mode": "RGB"
+    },
+    {
+      "path": "reference/DESIGN_R2.md",
+      "bytes": 3145,
+      "sha256": "45e513596567bc7706dcdc586cd1b27c7ef80ea4cff6c488cab5e691a16bf37d",
+      "runtime": false
+    },
+    {
+      "path": "reference/FIDELITY_R2.md",
+      "bytes": 3943,
+      "sha256": "936dbdc7490cd9755c07275e290798309697723a8a3f00e9384151498862e83e",
+      "runtime": false
+    },
+    {
+      "path": "reference/Kanit-SemiBold.ttf",
+      "bytes": 174796,
+      "sha256": "67e64baf1a7e6e076435518ff0e6bf25c4d74b98143cd1a2688db906c0abce11",
+      "runtime": false
+    },
+    {
+      "path": "reference/NotoSansThai-Bold.ttf",
+      "bytes": 37788,
+      "sha256": "97bbc8ea98328325285f2f552228c7aac1db39d8f38f0096a61ba7df1f1f780e",
+      "runtime": false
+    },
+    {
+      "path": "reference/NotoSansThai-Regular.ttf",
+      "bytes": 37744,
+      "sha256": "dfbd5ed0f1e68c3cbc51aa08f646d1ab0e68e7c4ceab70a69e465225ff701f93",
+      "runtime": false
+    },
+    {
+      "path": "reference/index.html",
+      "bytes": 468,
+      "sha256": "9781a81fcf9efbbabb6b2b04d1a0902245019e8691c15b8d5c4569621c0df791",
+      "runtime": false
+    },
+    {
+      "path": "reference/layout-checks.json",
+      "bytes": 8337,
+      "sha256": "7256ef931acf13c77caa39acf78502aa1dade565f053bf7d6a3cc1d75e69a217",
+      "runtime": false
+    },
+    {
+      "path": "reference/map-story.png",
+      "bytes": 696084,
+      "sha256": "659d69d0b553093c53157fdb3ab0ef8bbddd01f809e45c7e0bf85171c61d29d8",
+      "runtime": false,
+      "w": 390,
+      "h": 844,
+      "mode": "RGB"
+    },
+    {
+      "path": "reference/original-art-provenance.json",
+      "bytes": 421,
+      "sha256": "f371c358bd695b0424c67e238192d8682224aee79d8955626a33151747b3cce4",
+      "runtime": false
+    },
+    {
+      "path": "reference/portraits.webp",
+      "bytes": 393584,
+      "sha256": "f604b5f93c6526130546e194674d37f4e3265083908bbbb3448affadf4b70496",
+      "runtime": false,
+      "w": 1024,
+      "h": 1536,
+      "mode": "RGB"
+    },
+    {
+      "path": "reference/readability.html",
+      "bytes": 3868,
+      "sha256": "8acbad8315dd4b1832ec1b4bebc8af70af7197df130e16dcdd2fc9f5dcee4ebc",
+      "runtime": false
+    },
+    {
+      "path": "reference/reference.css",
+      "bytes": 28242,
+      "sha256": "20f3acefbe01b2cebb22db11f14ea86878bab61e9e58116d25a5b2accf1c54e0",
+      "runtime": false
+    },
+    {
+      "path": "reference/reference.js",
+      "bytes": 29351,
+      "sha256": "91ecf52d35a35e5e8fbcca7a9379c9bdaea4206f5a96371920634b10a9aa3aff",
+      "runtime": false
+    },
+    {
+      "path": "reference/ruins.webp",
+      "bytes": 526292,
+      "sha256": "a06f910462fb69b1a38d94c1a169274f8b28d559286ec6ae3fc7ac3db61e7868",
+      "runtime": false,
+      "w": 1536,
+      "h": 1024,
+      "mode": "RGB"
+    },
+    {
+      "path": "reference/units.webp",
+      "bytes": 682012,
+      "sha256": "d205b57d8a4082290a3a2e5a415407245106f948033cf3c66eb7b8e537393629",
+      "runtime": false,
+      "w": 1024,
+      "h": 1536,
+      "mode": "RGBA"
+    },
+    {
+      "path": "reference/validation.json",
+      "bytes": 9664,
+      "sha256": "a95735cd17e5df5d61ac27c078c683fd53f64f0dd98ef16613e8151dded2ca09",
+      "runtime": false
+    },
+    {
+      "path": "tiles/boss_pedestal.png",
+      "bytes": 27720,
+      "sha256": "604382d802643e2d40fa6fc92e357b395425c2c94c0ac4e2a48eb76f849cd394",
+      "runtime": true,
+      "w": 256,
+      "h": 256,
+      "mode": "P"
+    },
+    {
+      "path": "tiles/boss_pedestal.webp",
+      "bytes": 20716,
+      "sha256": "2c75527fc94517e2856a564a0957679f348bba578ccb4cf5f7c8204ec60d2f7d",
+      "runtime": true,
+      "w": 256,
+      "h": 256,
+      "mode": "RGBA"
+    },
+    {
+      "path": "tiles/camp_fire.json",
+      "bytes": 517,
+      "sha256": "06e312705bc7606f63e27843fbbb8328ee15e91b9f1065156b63369fa360aed3",
+      "runtime": true
+    },
+    {
+      "path": "tiles/camp_fire.png",
+      "bytes": 2853,
+      "sha256": "993456fcb2884f1e733ea2d21cfa6aa88fe07d083668374c5cc2fe97bd966bac",
+      "runtime": true,
+      "w": 512,
+      "h": 128,
+      "mode": "P"
+    },
+    {
+      "path": "tiles/camp_fire.webp",
+      "bytes": 4028,
+      "sha256": "827187544e0d318c26bb10d942efd1fc8e693b1c8b668db1a8f86eae3c51bd91",
+      "runtime": true,
+      "w": 512,
+      "h": 128,
+      "mode": "RGBA"
+    },
+    {
+      "path": "tiles/camp_fire_0.png",
+      "bytes": 1925,
+      "sha256": "bdcbdf751c7c000cd873f3217f4392d14bf54ea6f45d42206530645909ac9120",
+      "runtime": true,
+      "w": 128,
+      "h": 128,
+      "mode": "P"
+    },
+    {
+      "path": "tiles/camp_fire_0.webp",
+      "bytes": 1312,
+      "sha256": "341103f6ae37759c8824752af4d21573d9ad544064064cfaa76874ab293eea33",
+      "runtime": true,
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA"
+    },
+    {
+      "path": "tiles/camp_fire_1.png",
+      "bytes": 1976,
+      "sha256": "be7ae133d7a3f83a1426f7531550cc5a3eaabe67b8d0859083b204040de94fa1",
+      "runtime": true,
+      "w": 128,
+      "h": 128,
+      "mode": "P"
+    },
+    {
+      "path": "tiles/camp_fire_1.webp",
+      "bytes": 1352,
+      "sha256": "ebaed6ffdf598d1ecbfd8ce0a16c31192efb462a15b105d8d3af5f985b753176",
+      "runtime": true,
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA"
+    },
+    {
+      "path": "tiles/camp_fire_2.png",
+      "bytes": 1962,
+      "sha256": "b19b54f84b73c4dc1dd5f7037549f83e14af74e0597f59d0b916c39dc45e1bf6",
+      "runtime": true,
+      "w": 128,
+      "h": 128,
+      "mode": "P"
+    },
+    {
+      "path": "tiles/camp_fire_2.webp",
+      "bytes": 1358,
+      "sha256": "53b26842af97b3ec3f45fac3e97bc0a137676f93ccc6bde065bc6229f4237dc4",
+      "runtime": true,
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA"
+    },
+    {
+      "path": "tiles/camp_fire_3.png",
+      "bytes": 2020,
+      "sha256": "f10c50015b04b8df230045781b9c236735ab068b4b28be87efb854d7591cf5bf",
+      "runtime": true,
+      "w": 128,
+      "h": 128,
+      "mode": "P"
+    },
+    {
+      "path": "tiles/camp_fire_3.webp",
+      "bytes": 1338,
+      "sha256": "4f685dda5bbcb69c8dcba38849641acfc99a91a29a8a594a3fe08f1444d64fb6",
+      "runtime": true,
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA"
+    },
+    {
+      "path": "tiles/decor.json",
+      "bytes": 3635,
+      "sha256": "513c60b8d17532b49e133575a1f290a1bb00425d9e506bfed0f0e35aff18f5bf",
+      "runtime": true
+    },
+    {
+      "path": "tiles/decor.png",
+      "bytes": 138523,
+      "sha256": "ace634f21cf500d943fd9ac5c307f0a869e7b4bf419b139f72a119651ad64d0c",
+      "runtime": true,
+      "w": 768,
+      "h": 512,
+      "mode": "P"
+    },
+    {
+      "path": "tiles/decor.webp",
+      "bytes": 157382,
+      "sha256": "4b09ba9340c464ea09a0b66c8eedb9f715696d2106ae5a87ec7c00505d436928",
+      "runtime": true,
+      "w": 768,
+      "h": 512,
+      "mode": "RGBA"
+    },
+    {
+      "path": "tiles/fog_corner_ne.png",
+      "bytes": 5298,
+      "sha256": "98562d68d800e44d3709ef1d3dc7c71ae44c7dffdf7e48fa4e0472df952c82fb",
+      "runtime": true,
+      "w": 128,
+      "h": 128,
+      "mode": "P"
+    },
+    {
+      "path": "tiles/fog_corner_ne.webp",
+      "bytes": 2738,
+      "sha256": "ed2d7652e15d083552fce96cbc3ec1eebc9429806141b4106a4512b75b6e1f4a",
+      "runtime": true,
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA"
+    },
+    {
+      "path": "tiles/fog_corner_nw.png",
+      "bytes": 5350,
+      "sha256": "ae4890c4de0b6954fcb6c2b9e4258f04051ee504b1f1bd4ed7047dfc7e377f43",
+      "runtime": true,
+      "w": 128,
+      "h": 128,
+      "mode": "P"
+    },
+    {
+      "path": "tiles/fog_corner_nw.webp",
+      "bytes": 2898,
+      "sha256": "298503f500547aba6a72f151228e9c2475dfe163c066d787b7132c68f4e4a1f5",
+      "runtime": true,
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA"
+    },
+    {
+      "path": "tiles/fog_corner_se.png",
+      "bytes": 5012,
+      "sha256": "d635fabfcd7c768a1d72148df17e12ac69eb6a63e775a59287bd00f6d5493190",
+      "runtime": true,
+      "w": 128,
+      "h": 128,
+      "mode": "P"
+    },
+    {
+      "path": "tiles/fog_corner_se.webp",
+      "bytes": 2730,
+      "sha256": "8e5f0c368c23ac36967ae4930f303889bdec7f478638a0ca8ddbc75c3484631f",
+      "runtime": true,
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA"
+    },
+    {
+      "path": "tiles/fog_corner_sw.png",
+      "bytes": 5069,
+      "sha256": "5d010458ff0a95a10b26f98f58d783449e22353f536b539ff62970b50bf840e9",
+      "runtime": true,
+      "w": 128,
+      "h": 128,
+      "mode": "P"
+    },
+    {
+      "path": "tiles/fog_corner_sw.webp",
+      "bytes": 2822,
+      "sha256": "435d06c46ebaae376718b37e85d084599a490ecf11775555b103ecb0d4dcfc47",
+      "runtime": true,
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA"
+    },
+    {
+      "path": "tiles/fog_edge_e.png",
+      "bytes": 857,
+      "sha256": "74a8335e7296f1415eb802a13589f27942325d4e42864e4bedc417303600b97f",
+      "runtime": true,
+      "w": 128,
+      "h": 128,
+      "mode": "P"
+    },
+    {
+      "path": "tiles/fog_edge_e.webp",
+      "bytes": 246,
+      "sha256": "7d09b1fb7e385a9607d7d0c9f45d01dca94a47d377a969b18fdd2733f7417334",
+      "runtime": true,
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA"
+    },
+    {
+      "path": "tiles/fog_edge_n.png",
+      "bytes": 914,
+      "sha256": "33db69ca3a57892edda64afdddbd72502bfcaa8cc8d6855d5e8f40792a1ebf5d",
+      "runtime": true,
+      "w": 128,
+      "h": 128,
+      "mode": "P"
+    },
+    {
+      "path": "tiles/fog_edge_n.webp",
+      "bytes": 464,
+      "sha256": "a061f35dd6a414d65bc3ddf2f61ec247d63c894c933361d91b913a8ba443cdb3",
+      "runtime": true,
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA"
+    },
+    {
+      "path": "tiles/fog_edge_s.png",
+      "bytes": 914,
+      "sha256": "7d9232b957950e5b78ec1e663ae486f2d99ba05e927d2bbe8a6d2f001439f604",
+      "runtime": true,
+      "w": 128,
+      "h": 128,
+      "mode": "P"
+    },
+    {
+      "path": "tiles/fog_edge_s.webp",
+      "bytes": 494,
+      "sha256": "5385603b2d2515de328529a3aea60a840f1af6afb62484c5233d077210d24d38",
+      "runtime": true,
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA"
+    },
+    {
+      "path": "tiles/fog_edge_w.png",
+      "bytes": 857,
+      "sha256": "006f90d8ac02c404cd96c53b0b88e3ed464ab79eaff50580c7febf8ca2b1c0df",
+      "runtime": true,
+      "w": 128,
+      "h": 128,
+      "mode": "P"
+    },
+    {
+      "path": "tiles/fog_edge_w.webp",
+      "bytes": 244,
+      "sha256": "8a2422166cb732291adfc7095d1f07f8a73f1a5beb9f456803e1225fb0d86bed",
+      "runtime": true,
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA"
+    },
+    {
+      "path": "tiles/fog_tile.png",
+      "bytes": 4617,
+      "sha256": "c362b111e729908e6016a8e68604caec954022902dcbbe3adb0506ad76628a5b",
+      "runtime": true,
+      "w": 128,
+      "h": 128,
+      "mode": "P"
+    },
+    {
+      "path": "tiles/fog_tile.webp",
+      "bytes": 324,
+      "sha256": "f7fee7366b41db1bbb94e913ac1101ae053d1403dac9b61086133e7d05fd532f",
+      "runtime": true,
+      "w": 128,
+      "h": 128,
+      "mode": "RGB"
+    },
+    {
+      "path": "tiles/landmark_boss_cleared.png",
+      "bytes": 29908,
+      "sha256": "633896d48081b499873d51c7af5e7112d80f118ae024fa4285e24282b647d769",
+      "runtime": true,
+      "w": 256,
+      "h": 256,
+      "mode": "P"
+    },
+    {
+      "path": "tiles/landmark_boss_cleared.webp",
+      "bytes": 25234,
+      "sha256": "a7dc00358c691afc2dd071bb62ce35728d1e17bb94347bab6f1d75c02a74bbe5",
+      "runtime": true,
+      "w": 256,
+      "h": 256,
+      "mode": "RGBA"
+    },
+    {
+      "path": "tiles/landmark_camp.png",
+      "bytes": 24841,
+      "sha256": "bdb2524fc6dba47344d87e930549d4a92be7fe14e8f84acb64f4da6c955a7f1f",
+      "runtime": true,
+      "w": 256,
+      "h": 256,
+      "mode": "P"
+    },
+    {
+      "path": "tiles/landmark_camp.webp",
+      "bytes": 15688,
+      "sha256": "d7cb524e2e81d2c760b129bf373ddeee42b7840f76e7ae25f4097ae49f6a1699",
+      "runtime": true,
+      "w": 256,
+      "h": 256,
+      "mode": "RGBA"
+    },
+    {
+      "path": "tiles/landmark_gate.png",
+      "bytes": 29075,
+      "sha256": "5204e4f5cbd80b1989f49b9384d343d873f7e7e7f5a390537af0db1492c2ac37",
+      "runtime": true,
+      "w": 256,
+      "h": 256,
+      "mode": "P"
+    },
+    {
+      "path": "tiles/landmark_gate.webp",
+      "bytes": 18796,
+      "sha256": "1988cb4815adcd459bdd65cfa2d92fe9cc03b764ab91bd1533f99ed1d10d2560",
+      "runtime": true,
+      "w": 256,
+      "h": 256,
+      "mode": "RGBA"
+    },
+    {
+      "path": "tiles/landmark_gate_open.png",
+      "bytes": 27654,
+      "sha256": "d0ac3df1b5e613b82de1e94e0f97abf898e6308fa18086e66298c4c81b64975a",
+      "runtime": true,
+      "w": 256,
+      "h": 256,
+      "mode": "P"
+    },
+    {
+      "path": "tiles/landmark_gate_open.webp",
+      "bytes": 20744,
+      "sha256": "676d3aedf958e71b1fe913aba5391a71d200d048ba6a8ecf80d5f0bf38a84f39",
+      "runtime": true,
+      "w": 256,
+      "h": 256,
+      "mode": "RGBA"
+    },
+    {
+      "path": "tiles/landmark_start.png",
+      "bytes": 23611,
+      "sha256": "2ecd342079432237c6f23b2905ce3f1e04e0142bbfac929b3d4b0a17193384af",
+      "runtime": true,
+      "w": 256,
+      "h": 256,
+      "mode": "P"
+    },
+    {
+      "path": "tiles/landmark_start.webp",
+      "bytes": 17566,
+      "sha256": "8cd01dd4f0d28b7316d7a2ca977f632e4805d8903470ca319132f09affd030fd",
+      "runtime": true,
+      "w": 256,
+      "h": 256,
+      "mode": "RGBA"
+    },
+    {
+      "path": "tiles/landmarks.json",
+      "bytes": 1361,
+      "sha256": "36b7f81eb2cb3d98887e6f233194f0de1cb488b01f4071ce8c2e693d8b39b746",
+      "runtime": true
+    },
+    {
+      "path": "tiles/step_dust.json",
+      "bytes": 517,
+      "sha256": "6408b9672dcb2afe7db5c9b472d3276bb725622344f91066b89b822447e24ed3",
+      "runtime": true
+    },
+    {
+      "path": "tiles/step_dust.png",
+      "bytes": 2769,
+      "sha256": "64aee3e66b2b570e8f3099f490219b4a9ef28021a83f8dd97303b03dfe0a3845",
+      "runtime": true,
+      "w": 512,
+      "h": 128,
+      "mode": "P"
+    },
+    {
+      "path": "tiles/step_dust.webp",
+      "bytes": 1972,
+      "sha256": "93e9edca60a88ad78b29d0c72ef15edf18134ee338fad6aa04f4579551034267",
+      "runtime": true,
+      "w": 512,
+      "h": 128,
+      "mode": "RGBA"
+    },
+    {
+      "path": "tiles/step_dust_0.png",
+      "bytes": 1314,
+      "sha256": "0433f11ec6fe738f5861a0233f437cc718ced496e71ecfed3a772c5af49fbb41",
+      "runtime": true,
+      "w": 128,
+      "h": 128,
+      "mode": "P"
+    },
+    {
+      "path": "tiles/step_dust_0.webp",
+      "bytes": 558,
+      "sha256": "9364ad84403e0f026d16a894d81c23a65af545af73128065d04729ec8daaad09",
+      "runtime": true,
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA"
+    },
+    {
+      "path": "tiles/step_dust_1.png",
+      "bytes": 1196,
+      "sha256": "77e527989b1d2550384ff3161d3e75e5507c8dc21234f6736f05319f7b9dfb03",
+      "runtime": true,
+      "w": 128,
+      "h": 128,
+      "mode": "P"
+    },
+    {
+      "path": "tiles/step_dust_1.webp",
+      "bytes": 668,
+      "sha256": "2f7c130434a651000fbb18699bf34c3afacc2771dbbdaf6d3f8843a384c19e0e",
+      "runtime": true,
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA"
+    },
+    {
+      "path": "tiles/step_dust_2.png",
+      "bytes": 955,
+      "sha256": "405dae2a26acf112e254f32d27628ea1e6f786a2e5118501d96b6e335f0f3407",
+      "runtime": true,
+      "w": 128,
+      "h": 128,
+      "mode": "P"
+    },
+    {
+      "path": "tiles/step_dust_2.webp",
+      "bytes": 598,
+      "sha256": "cda6fb08216eef46152f1970441dc3f050d39ae81dbaa8bfd5c470770519a560",
+      "runtime": true,
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA"
+    },
+    {
+      "path": "tiles/step_dust_3.png",
+      "bytes": 769,
+      "sha256": "42ddbe80708454e802c53f72578e5e242e753f892b7bf7bb823a858490095b95",
+      "runtime": true,
+      "w": 128,
+      "h": 128,
+      "mode": "P"
+    },
+    {
+      "path": "tiles/step_dust_3.webp",
+      "bytes": 620,
+      "sha256": "52031d1ba43571cbef07fdab1afdc253f7ef8bd0f1c3f7e1c41da29227a4c5b7",
+      "runtime": true,
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA"
+    },
+    {
+      "path": "tiles/step_hint.png",
+      "bytes": 1183,
+      "sha256": "67bad989b5d995a82669a10185f117b4737a1f233c70100ae0c1ab291a516773",
+      "runtime": true,
+      "w": 128,
+      "h": 128,
+      "mode": "P"
+    },
+    {
+      "path": "tiles/step_hint.webp",
+      "bytes": 1264,
+      "sha256": "9be5794c2e4982dcd5d0efc4be7553b65cf41b262ea6f8ae9d96becaeb69e449",
+      "runtime": true,
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA"
+    },
+    {
+      "path": "tiles/tileset.json",
+      "bytes": 1592,
+      "sha256": "91b94693ad8585f769d9568118cee43678a1a99d7577b2e86203db20ec7f2e24",
+      "runtime": true
+    },
+    {
+      "path": "tiles/tileset.png",
+      "bytes": 227853,
+      "sha256": "6980d69ee4df4b40d9c5847315a2111fad3444c0b3ed48c4a7787c584a635042",
+      "runtime": true,
+      "w": 512,
+      "h": 768,
+      "mode": "P"
+    },
+    {
+      "path": "tiles/tileset.webp",
+      "bytes": 109148,
+      "sha256": "38b3ba3719ce3534e1e5ecee1c4ec1aa52fb1bbb16a5a05d66852e11fdb49c33",
+      "runtime": true,
+      "w": 512,
+      "h": 768,
+      "mode": "RGBA"
+    },
+    {
+      "path": "tiles/token_frame.png",
+      "bytes": 4448,
+      "sha256": "766f3ce99eaf4fa2c26ba29f0d9b98ab12cbcdfdef94efefb310002606a422bd",
+      "runtime": true,
+      "w": 128,
+      "h": 128,
+      "mode": "P"
+    },
+    {
+      "path": "tiles/token_frame.webp",
+      "bytes": 4428,
+      "sha256": "b3b6db2bf27fd711bb2e7269b88bb32dcca3fd17509d95faf9f91563ea3781f9",
+      "runtime": true,
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA"
+    },
+    {
+      "path": "title/logo.png",
+      "bytes": 7497,
+      "sha256": "1ce6282c0df314fa203d1496371322882267925f35cba418da1ee38289338389",
+      "runtime": true,
+      "w": 700,
+      "h": 224,
+      "mode": "P"
+    },
+    {
+      "path": "title/logo.source.svg",
+      "bytes": 791,
+      "sha256": "6c09c7800d91f78bca94014e4ef7e12d8e4562ebaa743cf64f10b3238fccb0dc",
+      "runtime": true
+    },
+    {
+      "path": "title/logo.svg",
+      "bytes": 4834,
+      "sha256": "01352c5a3373672653d20842a187e8ec63f325527856823bccb2e6f70f220f15",
+      "runtime": true
+    },
+    {
+      "path": "title/logo.webp",
+      "bytes": 8184,
+      "sha256": "65943a7004d148c9b6d140389e9c537cee68498ea7d20d700df84fbc56d168fc",
+      "runtime": true,
+      "w": 700,
+      "h": 224,
+      "mode": "RGBA"
+    },
+    {
+      "path": "title/title_bg.png",
+      "bytes": 1046150,
+      "sha256": "66d0a6504b3d540f32e708d07d487eb3335ace2cfc545788152dd999a8310c6b",
+      "runtime": true,
+      "w": 1920,
+      "h": 1080,
+      "mode": "P"
+    },
+    {
+      "path": "title/title_bg.webp",
+      "bytes": 375922,
+      "sha256": "f63ad252a1ccd4a5c67a896f70a6b9a0dbd847e011b5cb801e74bf958e94b556",
+      "runtime": true,
+      "w": 1920,
+      "h": 1080,
+      "mode": "RGB"
+    },
+    {
+      "path": "tokens.css",
+      "bytes": 4460,
+      "sha256": "78b7f556aed81bd9ef5a22a85ac71966dde987c30fc912fb51999612edb02004",
+      "runtime": true
+    },
+    {
+      "path": "tools/build_vectors.py",
+      "bytes": 7644,
+      "sha256": "5ed1eba61dc6129669364d111d5ebba4fea4a27d251c770ab411b2f188c4e7a3",
+      "runtime": false
+    },
+    {
+      "path": "tools/outline_logo.py",
+      "bytes": 1053,
+      "sha256": "47ff4d53dbecbbd4a2742ef8d4af8938c60be0e01376835bb5623f3a20b6c88b",
+      "runtime": false
+    },
+    {
+      "path": "tools/pack_assets.cjs",
+      "bytes": 6329,
+      "sha256": "8b2b18a50232ac8313b3a6b54d66ab02a97ff83b93abf44d6dd2bc1fe5d9163e",
+      "runtime": false
+    },
+    {
+      "path": "tools/render_mockups.cjs",
+      "bytes": 8690,
+      "sha256": "8b8197416af94b5b60bbcfa7a1493b662b1eb7298d79cf6b08db0b4f0c1f8961",
+      "runtime": false
+    },
+    {
+      "path": "tools/validate_package.py",
+      "bytes": 6635,
+      "sha256": "3375da4dd784383aa0b9ab67e43571f9156b50f18a565adba160e64c5f80945e",
+      "runtime": false
+    },
+    {
+      "path": "tools/vectors/camp_fire_0.svg",
+      "bytes": 1249,
+      "sha256": "1e97911cec383cc68edaae7903876a1394d05f107da16c9f581be22527fecd4b",
+      "runtime": false
+    },
+    {
+      "path": "tools/vectors/camp_fire_1.svg",
+      "bytes": 1249,
+      "sha256": "8b43e8f24754a468e3217f0bbaacb88bb0e4d118cca4a22da72c3cf83a08fb9f",
+      "runtime": false
+    },
+    {
+      "path": "tools/vectors/camp_fire_2.svg",
+      "bytes": 1249,
+      "sha256": "351b3434f6dc56dab713f676988cfb066fe24510466a3e6f1d0bc6220b1a88f7",
+      "runtime": false
+    },
+    {
+      "path": "tools/vectors/camp_fire_3.svg",
+      "bytes": 1249,
+      "sha256": "5d1e446cefb96dcf29e9c1a18992124d0d47c5e44624ee0d26fcf234b9826b2b",
+      "runtime": false
+    },
+    {
+      "path": "tools/vectors/fog_corner_ne.svg",
+      "bytes": 1354,
+      "sha256": "5af10239ee461de1f931cb5e0be8f5e7e1bb3065f12a3d98c6a1960855554fd2",
+      "runtime": false
+    },
+    {
+      "path": "tools/vectors/fog_corner_nw.svg",
+      "bytes": 1356,
+      "sha256": "9bcf01b39219a6a81deacebb79a653b83259094968365c4db751205e12714a4c",
+      "runtime": false
+    },
+    {
+      "path": "tools/vectors/fog_corner_se.svg",
+      "bytes": 1355,
+      "sha256": "30de1d48112ebb7bd11a3fb69a1804f918ee483838c8bd2f4a625f2cf74174e9",
+      "runtime": false
+    },
+    {
+      "path": "tools/vectors/fog_corner_sw.svg",
+      "bytes": 1356,
+      "sha256": "3f2948c4b81086100a85a9991cdc49fff2a6a3ac5636093ac02109380184ff6d",
+      "runtime": false
+    },
+    {
+      "path": "tools/vectors/fog_edge_e.svg",
+      "bytes": 1140,
+      "sha256": "880f5a148fd13428be7351ae70eef165fb2bbcedeaa66f8e72a7bfc274842332",
+      "runtime": false
+    },
+    {
+      "path": "tools/vectors/fog_edge_n.svg",
+      "bytes": 1139,
+      "sha256": "479bddbb9d971e77a25e587caa643866820aed25de92d6b7c89017c84827082a",
+      "runtime": false
+    },
+    {
+      "path": "tools/vectors/fog_edge_s.svg",
+      "bytes": 1141,
+      "sha256": "6c5cc3ef15382f81c677ba25072c2b0d6586fd55370b3d41828960fc75df0dd6",
+      "runtime": false
+    },
+    {
+      "path": "tools/vectors/fog_edge_w.svg",
+      "bytes": 1141,
+      "sha256": "3bcc023db9d6182b5fc0945c23f1e3c6209e5ecc1530a9a1eb8b380fca4756f4",
+      "runtime": false
+    },
+    {
+      "path": "tools/vectors/fog_tile.svg",
+      "bytes": 1209,
+      "sha256": "816d674c342c7725cd60eab97bd1da31ddd1297eace50eb3608c0118ec676b49",
+      "runtime": false
+    },
+    {
+      "path": "tools/vectors/panel_frame_9slice.svg",
+      "bytes": 1397,
+      "sha256": "a824d360e414f0b9136fceb0b2fbc32d1c443653bdf243b7efff108282def787",
+      "runtime": false
+    },
+    {
+      "path": "tools/vectors/step_dust_0.svg",
+      "bytes": 1735,
+      "sha256": "5e09861b12b6136b09dd442765e45c6ad949c1dc2997422db2e0cdeff63445e3",
+      "runtime": false
+    },
+    {
+      "path": "tools/vectors/step_dust_1.svg",
+      "bytes": 1846,
+      "sha256": "2e5bee768def0e44a6eff7153f1fe3d7847a15d757e8b3ffd9050adf626d1a36",
+      "runtime": false
+    },
+    {
+      "path": "tools/vectors/step_dust_2.svg",
+      "bytes": 1836,
+      "sha256": "cd21f9543c19c868db3117a3a673123ac8e602f51b5aebc01c4010a71434fd70",
+      "runtime": false
+    },
+    {
+      "path": "tools/vectors/step_dust_3.svg",
+      "bytes": 1845,
+      "sha256": "d9a0afb9d972582badeaf29c54ddd5bb54d69446ff23b20fe1095d9f5136ca78",
+      "runtime": false
+    },
+    {
+      "path": "tools/vectors/step_hint.svg",
+      "bytes": 1426,
+      "sha256": "267756166df87086ad3e206e3a1f9ff9dda558b95e60c9763d7bf0ae05863ce7",
+      "runtime": false
+    },
+    {
+      "path": "tools/vectors/token_frame.svg",
+      "bytes": 1485,
+      "sha256": "6d3bb30b1311bd8c2643d2449706bede0cc3e9fed6fb1bfcc717d315ad7596f1",
+      "runtime": false
+    },
+    {
+      "path": "ui/HUD_KIT.md",
+      "bytes": 2939,
+      "sha256": "2584c7ae5f254c32060a95ef43860840bdd0ce7ee5a45b3640af2ddd8893bf3b",
+      "runtime": false
+    },
+    {
+      "path": "ui/components.css",
+      "bytes": 2297,
+      "sha256": "5e01b6b2812f2529624fa0d4c05cd69fc0999076e12a9b7d1ed6abf2adae2f87",
+      "runtime": true
+    },
+    {
+      "path": "ui/meter_danger.svg",
+      "bytes": 261,
+      "sha256": "95857ea479113bf85891bca0d97afac0c2a4a1c8a322c782c5b4680f09d21d14",
+      "runtime": true
+    },
+    {
+      "path": "ui/panel_frame_9slice.png",
+      "bytes": 1752,
+      "sha256": "816192a1de32432256fff6b17d7e1f61195a96ac34b757adfd206de63ed7be52",
+      "runtime": true,
+      "w": 128,
+      "h": 128,
+      "mode": "P"
+    },
+    {
+      "path": "ui/panel_frame_9slice.webp",
+      "bytes": 1234,
+      "sha256": "404f99701012797234cdc9a9df0dc505677a6a31d259584c30cf56e2144e50a5",
+      "runtime": true,
+      "w": 128,
+      "h": 128,
+      "mode": "RGBA"
+    },
+    {
+      "path": "ui/world_overlay.css",
+      "bytes": 11528,
+      "sha256": "0fb1176d2b023824335bf8bf9960015335aab5bd40d39178c0aac378def33258",
+      "runtime": true
+    }
+  ]
+}

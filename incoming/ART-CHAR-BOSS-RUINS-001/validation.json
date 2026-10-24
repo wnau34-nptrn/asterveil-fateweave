@@ -1,0 +1,31 @@
+{
+  "vanguard_captain": {
+    "bounds": [
+      17,
+      35,
+      494,
+      497
+    ],
+    "source": "exec-1719b880-2827-4799-9d99-70540e462c12.png",
+    "portraitSource": "exec-edf1b867-8e3d-4783-9313-a89651edb626.png"
+  },
+  "vargoth_hunter": {
+    "bounds": [
+      29,
+      33,
+      482,
+      497
+    ],
+    "source": "exec-d107a45d-b481-46d4-a285-34e6c1c8d163.png",
+    "portraitSource": "exec-df020673-474d-4a5a-9b55-e05cb64cca8f.png"
+  },
+  "existingArtSHA256": {
+    "public\\assets\\art\\units.webp": "d205b57d8a4082290a3a2e5a415407245106f948033cf3c66eb7b8e537393629",
+    "public\\assets\\art\\portraits.webp": "f604b5f93c6526130546e194674d37f4e3265083908bbbb3448affadf4b70496",
+    "public\\assets\\art\\units_foes.webp": "a76432680856f6f45bf2c7a006124e29cc8a248ea680779194dfa339c7338860",
+    "public\\assets\\art\\portraits_foes.webp": "a0af4dc53e1413de8d161e2f454845b856ca255622a2efdc03b8439961ca841e",
+    "public\\assets\\art\\ruins.webp": "a06f910462fb69b1a38d94c1a169274f8b28d559286ec6ae3fc7ac3db61e7868"
+  },
+  "runtimeAtlasBytes": 195712,
+  "allWebPBytes": 390612
+}
