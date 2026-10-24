@@ -49,9 +49,9 @@ export interface SkillDefinition { name: string; english: string; icon: string; 
 export interface HeroDefinition {
   id: string; name: string; role: string; lane: 'front' | 'back'; maxHp: number; attack: number; speed: number;
   actions: readonly ActionId[]; color: number; empoweredByStatuses?: boolean;
-  // Support (stats 2026-10-17): percent added to support skills (heals, shields, songs) from stars, levels, talents and gear.
+  // Magic Power: percent added to magical damage, healing, shields and songs. Legacy field name retained.
   skillBonus?: number;
-  // Percent added to damaging skills: the hero's Attack growth over its class base (stars, levels, talents, gear),
+  // Percent added to physical damaging skills: the hero's Attack growth over its class base (stars, levels, talents, gear),
   // so a skill hits as hard at ★1 Lv1 as its listed power and grows with Attack.
   damageBonus?: number;
   // Defence and sustain from gear (stats step 2, percents): Armour cuts physical hits taken, Resistance energy hits,

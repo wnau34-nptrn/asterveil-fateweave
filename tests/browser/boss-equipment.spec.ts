@@ -6,6 +6,7 @@ import {bossReward,startBossPlan} from '../../src/core/world/boss-equipment';
 import {battleData,battleState,rollPercent} from '../../src/core/world/world';
 import {resolveCommand} from '../../src/core/battle/engine';
 import {battleLesson} from '../../src/ui/tutorial';
+import {saveGame} from '../../src/core/save/expedition-save';
 import {gearFor} from '../sim/class-sim';
 import type {Item} from '../../src/core/world/types';
 const key='asterveil.fateweave.expedition.v1';
@@ -35,7 +36,8 @@ for(const [width,height,touch] of [[320,568,true],[390,844,true],[1366,768,false
   let seed=1;for(;seed<100;seed++){let n=0;const item=bossReward(map,startBossPlan(p,map),()=>rollPercent((seed^0x6b05d017)>>>0,n++),11)!;if(item.set==='shadow')break;}expect(seed).toBeLessThan(100);
   const game=depart(p,map,lookup,seed),run=game.run;run.battle={kind:'boss',encounterId:map.bossEncounterId,level:11,entry:{...run.hp},commands:[]};const data=battleData(run,map,lookup)!;let battle=battleState(run,map,lookup)!;
   for(let n=0;battle.outcome==='active'&&n<200;n++){const lesson=battleLesson(battle,data)!;battle=resolveCommand(battle,data,{beat:battle.beat,heroId:lesson.heroId,action:lesson.action,targetId:lesson.targetId}).state;}expect(battle.outcome).toBe('victory');const last=battle.commands.at(-1)!;run.battle.commands=battle.commands.slice(0,-1);
-  const context=await browser.newContext({viewport:{width,height},hasTouch:touch,isMobile:touch,reducedMotion:'reduce'}),page=await context.newPage(),errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));await page.addInitScript(({key,raw})=>{if(!sessionStorage.getItem('boss-win')){localStorage.setItem(key,raw);sessionStorage.setItem('boss-win','1')}},{key,raw:JSON.stringify({version:27,...game})});
+  let raw='';saveGame({getItem:()=>null,setItem:(_k,v)=>raw=v},game);
+  const context=await browser.newContext({viewport:{width,height},hasTouch:touch,isMobile:touch,reducedMotion:'reduce'}),page=await context.newPage(),errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));await page.addInitScript(({key,raw})=>{if(!sessionStorage.getItem('boss-win')){localStorage.setItem(key,raw);sessionStorage.setItem('boss-win','1')}},{key,raw});
   await page.goto('./');await page.locator('#continue').click();if(await page.locator('#start').isVisible())await page.locator('#start').click();await expect(page.locator('#action-'+last.action)).toBeEnabled();await page.locator('#action-'+last.action).click();await page.locator('#target-'+last.targetId).click();await expect(page.locator('#leave-battle')).toBeVisible({timeout:15000});
   const saved=()=>page.evaluate(k=>localStorage.getItem(k)!,key),won=JSON.parse(await saved());expect(won.run.found.filter((i:Item)=>i.boss)).toHaveLength(1);expect(won.run.found.filter((i:Item)=>!i.boss)).toHaveLength(3);expect(won.run.found.find((i:Item)=>i.boss)).toMatchObject({boss:'focus',set:'shadow',slot:'charm',level:11,rarity:4});expect(won.run.bossLoot).toMatchObject({rewarded:true,misses:0});await page.screenshot({path:info.outputPath('boss-victory.png')});
   await page.locator('#leave-battle').click();const stable=await saved();await page.reload();await page.locator('#continue').click();expect(await saved()).toBe(stable);await page.locator('#world-info-button').click();await page.locator('#world-tab-loot').click();await expect(page.locator('.boss-progress')).toContainText('0/3');expect(errors).toEqual([]);await context.close();

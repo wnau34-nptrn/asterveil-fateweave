@@ -156,7 +156,7 @@ export function starred(base: HeroDefinition, stars: number, map: MapDefinition,
   // ★3 adds the class's third skill; ★5 switches on its passive.
   // Big trees unlock these in the tree instead (A6).
   const skill = !big && stars >= 3 && base.unlocks && !base.actions.includes(base.unlocks.skill) ? [base.unlocks.skill] : [];
-  // Damaging skills grow by the same Attack percent as the basic attack.
+  // Physical skills grow with Attack; magical skills use the separately projected skillBonus.
   const damageBonus = bonus + gained.attack + worn.attackPercent;
   return { ...base, maxHp: scale(base.maxHp, gained.hp + worn.hpPercent) + worn.hp, attack: scale(base.attack, damageBonus - bonus), speed: base.speed + worn.speed,
     skillBonus: bonus + gained.skill + worn.support, damageBonus, actions: actions ?? [...base.actions, ...skill],

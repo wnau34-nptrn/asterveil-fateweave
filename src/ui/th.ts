@@ -216,7 +216,7 @@ const capText: Record<TalentCap, { actions: readonly ActionId[]; help: (n: numbe
   encore: { actions: ['finale'], help: () => 'หลังบทสุดท้าย เพลงเดิมเล่นต่อทันที (1 ครั้งต่อศึก)' },
   liferhythm: { actions: ['valor', 'mend', 'dread'], help: n => `เริ่มเพลงใหม่แต่ละครั้ง ทุกคนที่ยังยืนอยู่ได้โล่ ${n} (ไม่ซ้อนกัน)` },
 };
-const talentStatName = { hp: 'เลือดสูงสุด', attack: 'พลังโจมตี', skill: 'พลังเสริม', armour: 'เกราะ' } as const;
+const talentStatName = { hp: 'เลือดสูงสุด', attack: 'พลังโจมตี', skill: 'พลังเวท', armour: 'เกราะ' } as const;
 // What one node does (per rank for multi-rank nodes); `data` names the skills.
 export function talentHelp(node: TalentNodeDef, data: EncounterDefinition): string {
   const e = node.effect; const per = node.max > 1 ? ' ต่อขั้น' : '';
@@ -350,17 +350,17 @@ export const slotIcon = { weapon: 'gearWeapon', head: 'gearHead', body: 'gearBod
 export const rarityText = ['ธรรมดา', 'ดี', 'หายาก', 'ล้ำค่า', 'ตำนาน'] as const;
 const weaponText: Record<string, string> = { guardian: 'ดาบอัศวิน', tracer: 'ดาบนักดวล', weaver: 'คทาเวท', healer: 'ไม้เท้าศักดิ์สิทธิ์', garran: 'ทวน', mira: 'ธนู', toma: 'ชุดขวดแร่', sefa: 'มีดสั้น', brann: 'ค้อนรูน', lio: 'พิณรูน' };
 export const statText: Record<GearStat, (n: number) => string> = {
-  hp: n => `เลือด +${n}`, attack: n => `พลังโจมตี +${n}%`, support: n => `พลังเสริม +${n}%`, speed: n => `SPD +${n}`, armour: n => `เกราะ +${n}%`,
+  hp: n => `เลือด +${n}`, attack: n => `พลังโจมตี +${n}%`, support: n => `พลังเวท +${n}%`, speed: n => `SPD +${n}`, armour: n => `เกราะ +${n}%`,
   resist: n => `ต้านพลังงาน +${n}%`, leech: n => `ดูดเลือด +${n}%`, barrier: n => `โล่เริ่มศึก ${n}`, regen: n => `ฟื้นฟูระหว่างเดิน +${n}`, luck: n => `โชค +${n}`,
 };
 // Name and unit of each gear stat, for big numbers with the label beside them (A7 item detail).
-export const gearStatName: Record<GearStat, readonly [string, string]> = { hp: ['เลือด', ''], attack: ['พลังโจมตี', '%'], support: ['พลังเสริม', '%'], speed: ['SPD', ''], armour: ['เกราะ', '%'],
+export const gearStatName: Record<GearStat, readonly [string, string]> = { hp: ['เลือด', ''], attack: ['พลังโจมตี', '%'], support: ['พลังเวท', '%'], speed: ['SPD', ''], armour: ['เกราะ', '%'],
   resist: ['ต้านพลังงาน', '%'], leech: ['ดูดเลือด', '%'], barrier: ['โล่เริ่มศึก', ''], regen: ['ฟื้นฟูระหว่างเดิน', ''], luck: ['โชค', ''] };
 export const specialText: Record<GearSpecial, string> = {
   laststand: 'ครั้งแรกในศึกที่จะล้ม เหลือเลือด 1', markhunter: 'โจมตีศัตรูที่ติดตรา +8', renewal: 'ฟื้นเลือด 4 เมื่อเริ่มเทิร์นของตัวเอง',
 };
 export const itemName = (item: Item): string => `${item.boss?bossNames[item.boss]:`${item.slot === 'weapon' ? weaponText[item.hero!] ?? 'อาวุธ' : slotText[item.slot]}${rarityText[item.rarity]}`}${item.plus ? ` +${item.plus}` : ''}`;
-export const statName: Record<GearStat, string> = { hp: 'เลือด', attack: 'พลังโจมตี', support: 'พลังเสริม', speed: 'SPD', armour: 'เกราะ', resist: 'ต้านพลังงาน', leech: 'ดูดเลือด', barrier: 'โล่เริ่มศึก', regen: 'ฟื้นฟูระหว่างเดิน', luck: 'โชค' };
+export const statName: Record<GearStat, string> = { hp: 'เลือด', attack: 'พลังโจมตี', support: 'พลังเวท', speed: 'SPD', armour: 'เกราะ', resist: 'ต้านพลังงาน', leech: 'ดูดเลือด', barrier: 'โล่เริ่มศึก', regen: 'ฟื้นฟูระหว่างเดิน', luck: 'โชค' };
 // Base stats first, then affixes; a legendary special and the set at the end.
 // Each value shows the best its roll could have been (stats design: rolls are 80–120%).
 export function itemLines(rules: EquipmentRules, item: Item): string[] {
@@ -369,7 +369,7 @@ export function itemLines(rules: EquipmentRules, item: Item): string[] {
 }
 // ---- Equipment sets (2D-3) ----
 export const setText: Record<SetId, string> = { dawn: 'ผู้พิทักษ์รุ่งอรุณ', wind: 'สายลมเร็ว', shadow: 'นักล่าเงา', thorn: 'หนามสวน', starveil: 'เวทแสงดาว', mender: 'ผู้เยียวยา' };
-const twoText = (t: SetDefinition['two']) => t.map(x => x.stat === 'speed' ? `SPD +${x.value}` : `${({ hp: 'เลือด', attack: 'พลังโจมตี', support: 'พลังเสริม' } as const)[x.stat]} +${x.value}%`).join(' · ');
+const twoText = (t: SetDefinition['two']) => t.map(x => x.stat === 'speed' ? `SPD +${x.value}` : `${({ hp: 'เลือด', attack: 'พลังโจมตี', support: 'พลังเวท' } as const)[x.stat]} +${x.value}%`).join(' · ');
 const fourText = (f: SetDefinition['four']) => ({
   barrier: `เริ่มศึกพร้อมโล่ ${f.amount}`, firstStrike: 'รอบแรกของศึกลงมือก่อนทุกคน', freshHit: `ตีศัตรูที่ยังไม่ลงมือในรอบนี้ +${f.amount}`,
   thorns: `โดนตีกายภาพแล้วสวน ${f.amount}`, freeCast: 'สกิลแรกในแต่ละศึกไม่ติดคูลดาวน์', overflow: `รักษาเกินเลือดเต็มกลายเป็นโล่ (สูงสุด ${f.amount})`,
@@ -451,6 +451,6 @@ export const shopText: Record<ShopItemId, { name: string; help: string }> = {
 
 // A member's battle stats in one line (stats design 2026-10-17); defence and leech appear only when worn.
 export function heroStatLine(h: HeroDefinition, hp?: number): string {
-  return [`เลือด ${hp !== undefined ? `${hp}/` : ''}${h.maxHp}`, `พลังโจมตี ${h.attack}`, `พลังเสริม +${h.skillBonus ?? 0}%`, `SPD ${h.speed}`,
+  return [`เลือด ${hp !== undefined ? `${hp}/` : ''}${h.maxHp}`, `พลังโจมตี ${h.attack}`, `พลังเวท +${h.skillBonus ?? 0}%`, `SPD ${h.speed}`,
     ...(h.armour ? [`เกราะ ${h.armour}%`] : []), ...(h.resist ? [`ต้านพลังงาน ${h.resist}%`] : []), ...(h.leech ? [`ดูดเลือด ${h.leech}%`] : [])].join(' · ');
 }

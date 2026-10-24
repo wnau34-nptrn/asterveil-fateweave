@@ -1,11 +1,21 @@
 # Codex → Claude handoff
 
+## 2026-10-24 — Owner-approved Magic Power scaling
+
+- Branch `codex/magic-power-scaling` → `feature/fateweave-initial-prototype`. Owner explicitly approved the proposed shared physical/Magic Power split after asking about Eira's damage. This authorizes resolver/content/save work for this task, superseding the earlier rewards UI-only scope and the AGENTS.md defer-to-Claude restriction for this task. Design: `docs/design/MAGIC_POWER_TH.md`.
+- Magical damage (Mage bolt/sigil/storm/dispel, Alchemist acid/bomb/catalyst, Bard note/finale) uses legacy `skillBonus` alongside healing/shields/songs. Physical/basic attacks retain Attack scaling. UI labels/help/comparison/auto-equip goals now say พลังเวท and use the resolver's classification. Control percentages, durations and cooldowns unchanged.
+- Mage weapon main stat/pool and recommendation now use Magic Power; keep leech and existing stat curves. Mage c1 talent uses Magic Power at the same percent. All encounter versions bumped. Save v41 converts old mage weapon Attack affixes before v21 migration, preserving gear metadata and duplicate profile/run copies, and resets only affected old pending battle commands to entry HP. v41 commands persist normally.
+- Files: core battle/world/save types and helpers, encounter/catalog versions, hero talents/world rules, three UI modules, unit/browser tests and generated balance reports. No base skill powers, speed or turn counts changed.
+- Validation: typecheck/lint, 65 Vitest files / 756 tests passed; final production build passed. Eight focused Chromium character/equipment/Magic Power browser checks passed at 320/390/1366 widths. Full `npm run sim` passed 23 checks across 6 files; updated reports are deterministic and committed. PR #65: https://github.com/wnau34-nptrn/asterveil-fateweave/pull/65. Initial browser CI had only 3 failing boss-victory fixtures: they generated current-rule commands but labelled them v27, correctly triggering v41 migration. These fixtures now use saveGame; full rerun pending. Production migration unchanged. Merge result to be appended.
+- Screenshot visually inspected: `/tmp/magic-power-qa/magic-power-390px-mage-spe-e24b2-adonly-on-inspection-reload/mage-magic-power-390.png`; shows actual Eira Lv4 with Bolt 34 and Ward 18, both labelled อิงพลังเวท. Browser connector control unavailable earlier; used the explicitly authorized Playwright workflow and system Chromium. Real iOS/Safari not tested.
+
+
 ## 2026-10-24 — Owner revision: compact victory rewards
 
 - Owner asked for EXP in two rows and all rewards on one page. `codex/battle-rewards-compact`: member grid sizes columns from brought-member count, compact portraits/bars/badges, two-column resources/items, a single item spans the width. Item descriptions remain available on tap. No core/content/save changes.
 - Files: battle-rewards.ts, components.css, battle-rewards.spec.ts. Added assertions for exactly two member rows and no overview scrolling at 390×844 (item and level-up wins).
 - Previous rewards PR #63 merged as `5d14ca1567436389fb96a06d1dfcbe0738b7e6fb`, with quality and full browser CI passed. All 7 combat return routes passed locally after updating dismissal expectations.
-- Compact screenshots: `/tmp/rewards-compact-final/battle-rewards-victory-rewards-item-at-390px/rewards-item.png` and `.../battle-rewards-victory-rewards-level-up-at-390px/rewards-level-up.png`. Validation: typecheck, lint, 751 Vitest tests, build, both Chromium reward specs passed. Both compact screenshots visually inspected; two-row/no-scroll assertions pass. PR #64 opened; merge waits for CI.
+- Compact screenshots: `/tmp/rewards-compact-final/battle-rewards-victory-rewards-item-at-390px/rewards-item.png` and `.../battle-rewards-victory-rewards-level-up-at-390px/rewards-level-up.png`. Validation: typecheck, lint, 751 Vitest tests, build, both Chromium reward specs passed. Both compact screenshots visually inspected; two-row/no-scroll assertions pass. PR #64 merged as `ae6e510cf1d75147a53f6c7d5bc53ee1e287ecd5` after quality and full browser CI passed. No unfinished implementation.
 
 
 ## 2026-10-24 — UI-BATTLE-REWARDS-001

@@ -158,7 +158,7 @@ WIRING (UI only): add the four scenes to StoryScene and the story asset loading;
 
 ตอนนี้เสียงประกอบทั้งหมดเป็นเสียงสังเคราะห์ชั่วคราวจากโค้ด (`src/platform/sfx.ts` — เจ้าของเลือกไว้ 2026-10-16) ถ้าเจ้าของต้องการเสียงจริง (ดาบ เวท โล่ เดินบนแผนที่ ชนะ/แพ้ เปิดกล่อง) ให้ Claude เขียน prompt เพิ่ม — ยังไม่ต้องทำจนกว่าเจ้าของสั่ง
 
-### C10 — หน้าสรุปผลหลังชนะศึก (done 2026-10-24; PR #63 merged; compact revision requested)
+### C10 — หน้าสรุปผลหลังชนะศึก (done 2026-10-24; PR #63 and compact revision #64 merged; CI passed)
 
 ```text
 CODEX HANDOFF — UI-BATTLE-REWARDS-001

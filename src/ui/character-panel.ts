@@ -13,7 +13,7 @@ import { heroArt, portrait } from './portraits';
 import { heroStatLine, heroText, itemLines, itemName, itemOwner, rarityText, setText, slotIcon, slotText, wornSets } from './th';
 
 // Stats an item card compares, in display order: hero field, Thai name, unit.
-const statDeltas:readonly ['maxHp'|'attack'|'skillBonus'|'speed'|'armour'|'resist'|'leech',string,string][]=[['maxHp','เลือด',''],['attack','พลังโจมตี',''],['skillBonus','พลังเสริม','%'],['speed','SPD',''],['armour','เกราะ','%'],['resist','ต้านพลังงาน','%'],['leech','ดูดเลือด','%']];
+const statDeltas:readonly ['maxHp'|'attack'|'skillBonus'|'speed'|'armour'|'resist'|'leech',string,string][]=[['maxHp','เลือด',''],['attack','พลังโจมตี',''],['skillBonus','พลังเวท','%'],['speed','SPD',''],['armour','เกราะ','%'],['resist','ต้านพลังงาน','%'],['leech','ดูดเลือด','%']];
 
 export interface CharacterModel { state: CharacterState; source: object; ids: readonly string[]; entries: EquipmentEntry[]; available: boolean; camp: boolean; capacity?:number; tomes?: SkillTomeView }
 export interface CharacterHost {
@@ -26,7 +26,7 @@ export interface CharacterHost {
   applyPlan(plan:AutoEquipmentPlan): void;
   restore?(dialogId:string): void; forge?(id:string,uid:number):void;
 }
-export const autoGoalText: Record<AutoGoal,string> = {recommended:'แนะนำตามอาชีพ',attack:'เน้นโจมตี',support:'เน้นพลังเสริม',survival:'เน้นทนทาน',speed:'เน้นความเร็ว'};
+export const autoGoalText: Record<AutoGoal,string> = {recommended:'แนะนำตามอาชีพ',attack:'เน้นโจมตี',support:'เน้นพลังเวท',survival:'เน้นทนทาน',speed:'เน้นความเร็ว'};
 
 // One controller and DOM surface for both expedition and base-camp characters. Adapters own all
 // commands/persistence; a trial is only a projection and can never save by opening or resizing.

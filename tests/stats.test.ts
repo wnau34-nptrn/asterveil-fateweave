@@ -29,17 +29,17 @@ describe('skill scaling', () => {
     expect(h.damageBonus).toBe(h.skillBonus); expect(h.skillBonus).toBe(2 * 8 + 3 * 3);
     expect(powerOf(h, 'bolt')).toBe(Math.round(26 * 1.25)); expect(powerOf(h, 'ward')).toBe(Math.round(14 * 1.25));
   });
-  it('gear Attack raises damaging skills only; gear Support (skill %) raises support skills only', () => {
+  it('gear Attack raises physical damage; Magic Power raises spells and shields', () => {
     const base = heroCatalog(lookup, map).find(h => h.id === 'weaver')!;
     const gloves: Item = { uid: 1, slot: 'gloves', rarity: 0, level: 10, affixes: [] };
     const charm: Item = { uid: 2, slot: 'charm', rarity: 0, level: 1, affixes: [] };
     const plain = starred(base, 1, map, 1); const armed = starred(base, 1, map, 1, {}, { gloves }); const charmed = starred(base, 1, map, 1, {}, { charm });
     expect(armed.attack).toBeGreaterThan(plain.attack);
-    // Gear Attack is a percent: the basic attack and Arcane Bolt both grow by it (gloves Lv10: +13%).
-    expect(armed.damageBonus).toBe(13); expect(powerOf(armed, 'bolt')).toBe(Math.round(26 * 1.13));
+    // Gear Attack is a percent: the basic attack grows by it; magical damage does not (gloves Lv10: +13%).
+    expect(armed.damageBonus).toBe(13); expect(powerOf(armed, 'bolt')).toBe(26);
     expect(powerOf(armed, 'ward')).toBe(Math.round(14 * (100 + (armed.skillBonus ?? 0)) / 100));
     expect(charmed.damageBonus).toBe(0); expect(charmed.skillBonus).toBeGreaterThan(0);
-    expect(powerOf(charmed, 'bolt')).toBe(26); expect(powerOf(charmed, 'ward')).toBeGreaterThan(14);
+    expect(powerOf(charmed, 'bolt')).toBeGreaterThan(26); expect(powerOf(charmed, 'ward')).toBeGreaterThan(14);
     // Rouse and Crystal Aegis are tree skills (A6), not base or star skills.
     for (const a of SUPPORT_SKILLS.filter(a => a !== 'rouse' && a !== 'aegis')) expect(all(heroCatalog(lookup, map).find(h => h.actions.includes(a) || h.unlocks?.skill === a)!)).toContain(a);
   });

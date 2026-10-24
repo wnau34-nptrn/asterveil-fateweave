@@ -129,10 +129,11 @@ export interface EquipmentRules {
   bagCap: number;
   // Main stats per slot (a support class's weapon uses `supportWeapon`); affix values per stat; the affixes each
   // slot can roll (`supportWeapon` again for support classes); affix count per rarity (legendary also has a special).
-  slotStats: Readonly<Record<GearSlot | 'supportWeapon', Partial<Record<GearStat, StatCurve>>>>;
+  slotStats: Readonly<Record<GearSlot | 'supportWeapon' | 'magicWeapon', Partial<Record<GearStat, StatCurve>>>>;
   affixStats: Readonly<Record<GearStat, StatCurve>>;
-  affixPools: Readonly<Record<GearSlot | 'supportWeapon', readonly GearStat[]>>;
+  affixPools: Readonly<Record<GearSlot | 'supportWeapon' | 'magicWeapon', readonly GearStat[]>>;
   supportHeroes: readonly string[];
+  magicWeaponHeroes: readonly string[];
   // Roll quality range (percent) and the map stats: regen heals every `regenSteps` steps, luck is capped.
   quality: readonly [min: number, max: number]; regenSteps: number; luckCap: number;
   affixCount: readonly number[];

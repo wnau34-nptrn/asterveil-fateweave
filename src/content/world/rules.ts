@@ -77,18 +77,19 @@ export const gameRules: GameRules = {
     // Stats design (owner-approved 2026-10-17, draft numbers): attack and support are percents; armour/resist/leech
     // are battle percents; regen and luck work on the map. Each value rolls 80–120% of its level value.
     slotStats: {
-      weapon: { attack: [8, 1.5] }, supportWeapon: { support: [8, 1.5] }, head: { hp: [4, 1], resist: [3, 0.4] }, body: { hp: [7, 2], armour: [3, 0.4] },
+      weapon: { attack: [8, 1.5] }, supportWeapon: { support: [8, 1.5] }, magicWeapon: { support: [8, 1.5] }, head: { hp: [4, 1], resist: [3, 0.4] }, body: { hp: [7, 2], armour: [3, 0.4] },
       gloves: { attack: [4, 1] }, boots: { hp: [4, 1], speed: [1, 0.25] }, charm: { support: [6, 1.2] },
     },
     affixStats: { hp: [4, 1], attack: [3, 0.7], support: [3, 0.7], speed: [1, 0.15], armour: [2, 0.4], resist: [2, 0.4], leech: [3, 0.5], barrier: [3, 0.5], regen: [2, 0.3], luck: [2, 0.3] },
     // 5–6 stats per slot so the three affixes of an epic piece are a real choice (per-class simulation 2026-10-17).
     // SPD only on boots and charms; weapons follow their class (support classes use `supportWeapon`).
     affixPools: {
+      magicWeapon: ['support', 'leech', 'hp', 'armour', 'resist', 'barrier'],
       weapon: ['attack', 'leech', 'hp', 'armour', 'resist', 'barrier'], supportWeapon: ['support', 'hp', 'resist', 'armour', 'barrier', 'luck'],
       head: ['hp', 'resist', 'support', 'luck', 'attack', 'armour'], body: ['hp', 'armour', 'resist', 'barrier', 'support', 'regen'],
       gloves: ['attack', 'leech', 'support', 'hp', 'luck'], boots: ['speed', 'hp', 'regen', 'armour', 'resist'], charm: ['support', 'attack', 'luck', 'speed', 'leech', 'hp'],
     },
-    supportHeroes: ['healer', 'toma', 'lio'],
+    supportHeroes: ['weaver', 'healer', 'toma', 'lio'], magicWeaponHeroes: ['weaver'],
     quality: [80, 120], regenSteps: 5, luckCap: 15,
     affixCount: [0, 1, 2, 3, 3],
     dropPercent: 35, pity: 6,
