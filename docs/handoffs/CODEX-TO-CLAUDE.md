@@ -5,7 +5,7 @@
 - Owner asked for EXP in two rows and all rewards on one page. `codex/battle-rewards-compact`: member grid sizes columns from brought-member count, compact portraits/bars/badges, two-column resources/items, a single item spans the width. Item descriptions remain available on tap. No core/content/save changes.
 - Files: battle-rewards.ts, components.css, battle-rewards.spec.ts. Added assertions for exactly two member rows and no overview scrolling at 390×844 (item and level-up wins).
 - Previous rewards PR #63 merged as `5d14ca1567436389fb96a06d1dfcbe0738b7e6fb`, with quality and full browser CI passed. All 7 combat return routes passed locally after updating dismissal expectations.
-- Compact screenshots: `/tmp/rewards-compact-final/battle-rewards-victory-rewards-item-at-390px/rewards-item.png` and `.../battle-rewards-victory-rewards-level-up-at-390px/rewards-level-up.png`. Validation: typecheck, lint, 751 Vitest tests, build, both Chromium reward specs passed. Both compact screenshots visually inspected; two-row/no-scroll assertions pass. PR #64 opened; merge waits for CI.
+- Compact screenshots: `/tmp/rewards-compact-final/battle-rewards-victory-rewards-item-at-390px/rewards-item.png` and `.../battle-rewards-victory-rewards-level-up-at-390px/rewards-level-up.png`. Validation: typecheck, lint, 751 Vitest tests, build, both Chromium reward specs passed. Both compact screenshots visually inspected; two-row/no-scroll assertions pass. PR #64 merged as `ae6e510cf1d75147a53f6c7d5bc53ee1e287ecd5` after quality and full browser CI passed. No unfinished implementation.
 
 
 ## 2026-10-24 — UI-BATTLE-REWARDS-001

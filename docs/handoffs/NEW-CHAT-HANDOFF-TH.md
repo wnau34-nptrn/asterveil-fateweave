@@ -2,7 +2,7 @@
 
 ## 2026-10-24 — C10 victory rewards
 
-PR #63 merged as `5d14ca1`, CI passed. Owner requested compact two-row EXP and one-page rewards; follow-up on `codex/battle-rewards-compact`. See CODEX-TO-CLAUDE.md. Tutorial intentionally skips rewards; rules/saves unchanged.
+PR #63 merged as `5d14ca1`, CI passed. Owner requested compact two-row EXP and one-page rewards; completed in PR #64, merged as `ae6e510` after both CI workflows passed. See CODEX-TO-CLAUDE.md. Tutorial intentionally skips rewards; rules/saves unchanged.
 
 ## 2026-10-23 — Codex C1: painted big-tree skill icons (ART-SKILL-ICON-003)
 
