@@ -51,6 +51,16 @@ function stage(outcome: string): TurnStage {
   }
   return outcome === 'hit' && skill !== 'parry' ? result.turns[0]! : result.turns.find(t => t.side === 'enemy' && (outcome !== 'guarded' || t.actorId === 'f1') && (skill !== 'parry' || t.events.some(e => e.type === 'counter')))!;
 }
+function painted() {
+  const images: { frame: string; alpha: number }[] = [];
+  const visit = (items: Phaser.GameObjects.GameObject[]) => {
+    for (const item of items) {
+      if (item instanceof Phaser.GameObjects.Container) visit(item.list);
+      if (item instanceof Phaser.GameObjects.Image && item.texture.key === BLADE_ATLAS) images.push({ frame: item.frame.name, alpha: item.alpha });
+    }
+  };
+  visit(scene.children.getChildren()); return images;
+}
 const qa = {
   prime: (outcome: string) => {
     const h = ui.state.heroes[0]!;
@@ -62,16 +72,8 @@ const qa = {
     ui.attach(scene);
   },
   stage, cues: (outcome: string) => bladeCues(stage(outcome)),
-  frames: () => {
-    const frames: string[] = [];
-    const visit = (items: Phaser.GameObjects.GameObject[]) => {
-      for (const item of items) {
-        if (item instanceof Phaser.GameObjects.Container) visit(item.list);
-        if (item instanceof Phaser.GameObjects.Image && item.texture.key === BLADE_ATLAS) frames.push(item.frame.name);
-      }
-    };
-    visit(scene.children.getChildren()); return frames;
-  },
+  painted,
+  frames: () => painted().map(i => i.frame),
 };
 declare global { interface Window { bladeQA: typeof qa } }
 window.bladeQA = qa;

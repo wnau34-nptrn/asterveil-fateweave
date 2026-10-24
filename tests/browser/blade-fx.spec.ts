@@ -24,6 +24,10 @@ for (const skill of skills) test(`blade ${skill} resolved contact and cleanup at
       await expect(page.locator('[data-field-unit=f1] .field-hp-value')).toHaveText(`${turn.after!.enemies.find(e => e.id === 'f1')!.hp}/500`);
       await page.clock.runFor(35);
       expect((await page.evaluate(() => window.bladeQA.frames())).some(f => /slash_|thrust_/.test(f))).toBe(true);
+      await page.clock.runFor(95);
+      const peak = (await page.evaluate(() => window.bladeQA.painted())).find(i => /^(slash|thrust)_01$/.test(i.frame));
+      expect(peak, 'painted peak remains readable 130ms after truthful contact').toBeDefined();
+      expect(peak!.alpha).toBeGreaterThan(.95);
     } else await page.clock.runFor(340);
     if (['lunge', 'sweep'].includes(skill)) await page.screenshot({ path: info.outputPath('contact-390.png') });
     await page.locator('#skip-turn').click(); await page.clock.runFor(3000);
