@@ -28,6 +28,6 @@ export function showBattleRewards(root: HTMLElement, map: MapDefinition, reward:
   const close = () => { dialog.close(); dialog.remove(); done(); };
   dialog.querySelector('button')!.onclick = close;
   dialog.addEventListener('cancel', e => { e.preventDefault(); close(); });
-  dialog.addEventListener('keydown', e => { if (e.key === 'Enter' && !(e.target instanceof HTMLElement && e.target.closest('summary'))) { e.preventDefault(); close(); } });
+  dialog.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); close(); } });
   root.append(dialog); dialog.showModal(); dialog.querySelector('button')!.focus();
 }
