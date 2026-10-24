@@ -51,7 +51,7 @@ export const gameRules: GameRules = {
   },
   // Draft 2D-1 numbers: a first full run ends near level 9; farming low levels is tapered (world `expPercent`).
   progression: { levelCap: 10, levelStatPercent: 3, monsterLevelPercent: 7, expBase: 6, expPerLevel: 2, expFoeHp: 95, summonExpPercent: 25, bossExpMultiplier: 3, nextBase: 20, nextPerLevel: 45, joinBehind: 2, reserveExpPercent: 50, catchUpBehind: 2, catchUpPercent: 50, hardLevels: 5, hardFirstClear: { gold: 30, seal: 2 },
-    hardTraits: { thornsPercent: 20, veilguardPercent: 25, enrageBelow: 50, enragePercent: 30, bossMovePercent: 130, bossLevels: 10 }, treeTiers: [1, 5, 10, 15], loadoutSize: 3,
+    hardTraits: { thornsPercent: 20, veilguardPercent: 25, enrageBelow: 50, enragePercent: 30, bossMovePercent: 130, bossLevels: 8 }, treeTiers: [1, 5, 10, 15], loadoutSize: 3,
     // Skill tomes (docs/design/SKILL_TOMES_TH.md, owner-approved 2026-10-22, draft numbers).
     skillLevels: { max: 5, costs: [{ size: 'small', tomes: 2, gold: 5 }, { size: 'small', tomes: 4, gold: 8 }, { size: 'medium', tomes: 2, gold: 15 }, { size: 'large', tomes: 1, gold: 30, core: 1 }],
       lines: { guardian: 'bulwark', garran: 'bulwark', brann: 'bulwark', tracer: 'blade', weaver: 'blade', mira: 'blade', sefa: 'blade', healer: 'accord', toma: 'accord', lio: 'accord' },

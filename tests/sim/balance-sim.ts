@@ -13,11 +13,11 @@ import { buy, buyReason, chooseLoadout, refreshBoard, refreshReason, claimQuest,
 import { enhance, enhanceCost, enhanceReason, smelt, smeltReason } from '../../src/core/world/forge';
 import { boulderAt, openPit, passableWall, runePuzzleAt } from '../../src/core/world/puzzles';
 import type { ActionId, BattleState } from '../../src/core/battle/types';
-import type { BattleKind, Direction, ExpeditionState, GearSlot, Item, Lane, Point, Profile, RunOutcome } from '../../src/core/world/types';
+import type { BattleKind, Direction, ExpeditionState, GearSlot, Item, Lane, Point, Profile, MemberProgress, RunOutcome } from '../../src/core/world/types';
 import { GEAR_SLOTS } from '../../src/core/world/types';
 import {
   atCamp, atMuster, monsterLevelAt, battleData, battleState, canOpenChest, canRest, canRevive, eliteAt, eventAt, finishBattle, findTiles, memberDef, move, openChest,
-  draftPick, heroDef, loadoutActions, pendingEvent, questComplete, rollPercent, recordBattle, rest, revive, rosterIds, startPrologue, swapMembers, tileAt, usePotion, chooseEvent, eventChoiceReason, potionReason,
+  newExpedition, draftPick, heroDef, loadoutActions, pendingEvent, questComplete, rollPercent, recordBattle, rest, revive, rosterIds, startPrologue, swapMembers, tileAt, usePotion, chooseEvent, eventChoiceReason, potionReason,
 } from '../../src/core/world/world';
 import { battleLesson } from '../../src/ui/tutorial';
 
@@ -236,7 +236,7 @@ function lobby(p: Profile): { profile: Profile; claimed: string[] } {
   // Talents: a class with an example build (tests/sim/tree-sim.ts, its first one) follows it and equips its skills;
   // spare points (and classes without a build) go to the first open node.
   for (const id of [...p.party.deployed, ...p.party.reserve]) {
-    const build = TREE_BUILDS.find(b => b.id === id);
+    const build = TREE_BUILDS.find(b => b.id === id && b.campaign !== false);
     for (const [node, want] of Object.entries(build?.talents ?? {})) while ((p.members[id]?.talents?.[node] ?? 0) < want! && !talentReason(p, map, id, node)) p = learnTalent(p, map, id, node).profile;
     for (let changed = true; changed;) {
       changed = false;
@@ -456,4 +456,16 @@ export function campaignReport(campaigns: CampaignReport[]): string {
     lines.push('', `Best equipped skill per member when departing veil-frontier run 2 / 3 / 4 (after 1 / 2 / 3 clears): ${pace(1)} / ${pace(2)} / ${pace(3)}. First skill at Lv5 departs on: ${[...new Set(five)].map(x => `${x} ×${five.filter(y => y === x).length}`).join(', ')}. Gold on skill levels: ${pct(spent, income)} of the gold gained.`, '');
   }
   return lines.join('\n');
+}
+
+// A fixed standard squad traverses the actual map, with carried HP, camp care, encounters and boss/goal rules.
+// No hiring, equipment drops or lobby optimization is applied mid-run. Story arrivals can occupy reserves only.
+export function rosterMap(m: MapDefinition, seed: number, ids: readonly string[], members: Record<string, MemberProgress>): { complete: boolean; hp: number; wins: number } {
+  map = m; checks = false;
+  const report: ExpeditionReport = { index: 1, outcome: 'withdrawn', steps: 0, wins: 0, defeats: 0, lowestHp: 100, battles: {}, gained: { ore: 0, gold: 0, seal: 0, dust: 0 }, items: [0,0,0,0,0], chests: 0, elites: 0, objectives: 0, bossBeaten: false, level: 0, stars: 1, company: 4, claimed: [] };
+  const s = newExpedition(m, lookup, seed, { roster: { deployed: [...ids], reserve: [] }, members }, true);
+  const result = runExpedition(s, 'rush', 'advisor', report);
+  const hp = hpPercent(result.state);
+  map = chapterOne;
+  return { complete: result.outcome === 'complete', hp, wins: result.state.wins };
 }

@@ -41,7 +41,7 @@ describe('skill scaling', () => {
     expect(charmed.damageBonus).toBe(0); expect(charmed.skillBonus).toBeGreaterThan(0);
     expect(powerOf(charmed, 'bolt')).toBeGreaterThan(26); expect(powerOf(charmed, 'ward')).toBeGreaterThan(14);
     // Rouse and Crystal Aegis are tree skills (A6), not base or star skills.
-    for (const a of SUPPORT_SKILLS.filter(a => a !== 'rouse' && a !== 'aegis')) expect(all(heroCatalog(lookup, map).find(h => h.actions.includes(a) || h.unlocks?.skill === a)!)).toContain(a);
+    for (const a of SUPPORT_SKILLS.filter(a => a !== 'bless' && a !== 'aegis')) expect(all(heroCatalog(lookup, map).find(h => h.actions.includes(a) || h.unlocks?.skill === a)!)).toContain(a);
   });
   it('a geared party still previews exactly what it resolves', () => {
     const party = heroCatalog(lookup, map).slice(0, 4).map(h => starred(h, 2, map, 3, {}, { gloves: { uid: 1, slot: 'gloves', rarity: 2, level: 5, affixes: ['attack', 'support'] } }));

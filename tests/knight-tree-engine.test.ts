@@ -19,15 +19,17 @@ describe('knight big tree skills', () => {
     const hits = r.events.filter(e => e.type === 'damage' && e.sourceId === foe);
     if (hits.length) expect(hits[0]!.targetId).toBe('guardian'); else expect(enemyIntent(r.state, d, foe, r.state.challenge!.round)!.targetId).toBe('guardian');
   });
-  it('bulwark pulls every move onto the knight with its own reduction', () => {
+  it('bulwark cuts front-row hits without changing targets', () => {
     const d = knight(['bulwark']); const s = knightTurn(d); const r = cast(d, s, 'bulwark', 'guardian');
-    expect(r.state.outcome === 'active' ? r.state.taunt?.reduction ?? 0.6 : 0.6).toBeCloseTo(0.6);
-    for (const e of r.events.filter(v => v.type === 'damage' && v.sourceId !== 'guardian' && !v.text.startsWith('Hero'))) expect(e.targetId).toBe('guardian');
+    expect(r.turns[0]!.state.bulwark).toEqual({ heroId: 'guardian' });
+    expect(r.turns[0]!.state.taunt).toBeNull();
+    expect(enemyIntent(r.turns[0]!.state, d, 'f1', 1)!.targetId).toBe(enemyIntent(s, d, 'f1', 1)!.targetId);
   });
-  it('rouse restores a share of every standing ally’s max HP', () => {
-    const d = knight(['rouse']); const s = knightTurn(d); for (const h of s.heroes) h.hp = 20;
-    const r = cast(d, s, 'rouse', 'party'); const heals = r.events.filter(e => e.type === 'heal' && e.sourceId === 'guardian');
-    expect(heals).toHaveLength(4); for (const e of heals) expect(e.amount).toBe(Math.round(d.heroes.find(h => h.id === e.targetId)!.maxHp * 12 / 100));
+  it('rouse guards the other standing ally with the lowest HP ratio without healing', () => {
+    const d = knight(['rouse']); const s = knightTurn(d); s.heroes.find(h => h.id === 'weaver')!.hp = 1;
+    const r = cast(d, s, 'rouse', 'guardian');
+    expect(r.turns[0]!.state.guard).toMatchObject({ heroId: 'guardian', targetId: 'weaver', all: true });
+    expect(r.turns[0]!.events.some(e => e.type === 'heal')).toBe(false);
   });
 });
 describe('knight big tree modifiers', () => {
@@ -43,11 +45,11 @@ describe('knight big tree modifiers', () => {
     expect(dealt(b)).toBe(Math.round(dealt(a) * 0.7));
     expect(b.events.some(e => e.type === 'sigil')).toBe(true); expect(a.events.some(e => e.type === 'sigil' || e.type === 'interrupt')).toBe(false);
   });
-  it('banners: bright gives every ally a barrier, valor raises hero hits this round', () => {
+  it('banners: bright gives every ally a barrier, rally banner covers two hits', () => {
     const bright = knight(['rally'], { caps: { brightbanner: 6 } }); const r = cast(bright, knightTurn(bright), 'rally', 'guardian');
     expect(r.events.filter(e => e.type === 'barrier' && e.sourceId === 'guardian')).toHaveLength(4);
-    const valor = knight(['rally'], { caps: { valorbanner: 10 } }); const v = cast(valor, knightTurn(valor), 'rally', 'guardian');
-    expect(v.turns[0]!.state.banner).toEqual({ heroId: 'guardian', round: 1 });
+    const valor = knight(['rally'], { caps: { rallybanner: 10 } }); const v = cast(valor, knightTurn(valor), 'rally', 'guardian');
+    expect(v.turns[0]!.state.rally!.ids).toEqual(['guardian', 'guardian', 'tracer', 'tracer', 'weaver', 'weaver', 'healer', 'healer']);
   });
   it('banner of fate opens the battle with a barrier for everyone', () => {
     const d = knight(['guard'], { caps: { fatebanner: 10 } }); const s = beginBattle(d).initial;

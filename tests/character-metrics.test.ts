@@ -45,7 +45,7 @@ it('all ten classes expose finite stats and meaningful active metrics, including
   const k=starred(heroCatalog(lookup,map).find(h=>h.id==='guardian')!,1,map,1,{},undefined,{grants:['a3s','b2','c3'],loadout:['bulwark','challenge','rouse']});
   expect(k.actions).toEqual(['attack','bulwark','challenge','rouse']);
   for(const a of ['bulwark','challenge','rouse'] as const){const v=characterSkillMetric(a,k,template);expect(v.target.length).toBeGreaterThan(0);}
-  expect(characterSkillMetric('bulwark',k,template).value).toBe(60);
+  expect(characterSkillMetric('bulwark',k,template).value).toBe(30);
 });
 it('displayed damage/healing/song powers agree with real resolver events before and after a gear swap', () => {
   for(const [id,action] of [['guardian','bash'],['weaver','bolt'],['healer','heal'],['lio','valor'],['lio','finale']] as const) {

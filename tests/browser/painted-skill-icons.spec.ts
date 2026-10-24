@@ -4,6 +4,7 @@ import { encounterById } from '../../src/content/encounters/catalog';
 import { depart, newProfile } from '../../src/core/world/profile';
 import { parseGame } from '../../src/core/save/expedition-save';
 import { MAPS } from '../../src/content/world/maps';
+import { currentSave } from '../fixtures/current-save';
 import atlas from '../../src/game/visuals/skill_icons.json' with { type: 'json' };
 
 const key = 'asterveil.fateweave.expedition.v1';
@@ -36,7 +37,7 @@ const dimensions = { viewport: { width: 390, height: 844 }, hasTouch: true, redu
 test('C1 painted skills appear in all six camp sheets and their trees at 390px', async ({ browser }, info) => {
   const context = await browser.newContext(dimensions), page = await context.newPage();
   const errors: string[] = []; page.on('pageerror', e => errors.push(e.message));
-  await seed(page, JSON.stringify({ version: 39, profile: profile(), run: null }));
+  await seed(page, currentSave({ profile: profile(), run: null }));
   await page.locator('#lobby-tab-team').click(); await page.locator('#lobby-member-tracer').click(); await page.locator('#lobby-tree-open').click();
   const before = await page.evaluate(k => localStorage.getItem(k), key);
   for (const [id, skills] of Object.entries(members)) {
@@ -72,7 +73,7 @@ test('C1 equipped tree skill uses painted art in the live battle dock', async ({
   const p = profile(); p.party = { deployed: ['tracer', 'weaver', 'toma', 'brann'], reserve: ['sefa', 'lio'] };
   const game = depart(p, map, encounterById, 1234);
   game.run.battle = { kind: 'random', encounterId: 'veil-siege', entry: Object.fromEntries(game.run.roster.deployed.map(id => [id, game.run.hp[id]!])), commands: [] };
-  await seed(page, JSON.stringify({ version: 39, ...game }));
+  await seed(page, currentSave(game));
   await page.locator('#start').click();
   await expect(page.locator('#action-lunge')).toBeEnabled();
   await expect(page.locator('#action-lunge .skill-art')).toHaveCount(1);
