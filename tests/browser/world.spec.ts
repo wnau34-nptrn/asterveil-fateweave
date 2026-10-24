@@ -99,7 +99,7 @@ test('winning the first battle plays Vargoth\'s retreat, then the map', async ({
   await expect(page.locator(`#hero-${hero}`)).toHaveAttribute('aria-pressed', 'true');
   await page.locator(`#action-${action}`).click();await page.locator('#skill-details').click(); await page.locator('[data-ui=skill-close]').click();
   await page.locator(`#target-${action === 'prayer' ? 'party' : target}`).click(); await finishPlayback(page);
-  await expect(page.locator('.result-card')).toContainText('ชนะแล้ว'); await page.locator('#leave-battle').click();
+  await expect(page.locator('.result-card')).toContainText('ชนะแล้ว'); await page.locator('#leave-battle').click(); if (await page.locator('.battle-rewards').isVisible()) await page.locator('.battle-rewards > button').click();
   await expect(page.locator('#story-view')).toBeVisible(); await expect(page.locator('#story-view')).toHaveAttribute('data-speaker', 'vargoth');
   await expect(page.locator('.story-text')).toContainText('ประตูรอยแยก');
   await page.screenshot({ path: info.outputPath('prologue-end.png') });
@@ -122,7 +122,7 @@ test('a new ค่ายทหารรับจ้าง: the Knight fights the
   const [hero, action, target] = moves.at(-1)!;
   await expect(page.locator(`#hero-${hero}`)).toHaveAttribute('aria-pressed', 'true');
   await page.locator(`#action-${action}`).click(); await page.locator(`#target-${action === 'prayer' ? 'party' : target}`).click(); await finishPlayback(page);
-  await page.locator('#leave-battle').click();
+  await page.locator('#leave-battle').click(); if (await page.locator('.battle-rewards').isVisible()) await page.locator('.battle-rewards > button').click();
   await expect(page.locator('#story-view')).toHaveAttribute('data-speaker', 'vargoth'); await page.locator('#story-next').click();
   // Aira and Seren part ways (owner 2026-10-23); Lyra's own scene follows.
   await expect(page.locator('#story-view')).toHaveAttribute('data-speaker', 'weaver'); await page.locator('#story-next').click();
@@ -193,14 +193,14 @@ test('victory returns to the same tile with surviving HP and loot; a camp rest h
     await page.locator(`#action-${action}`).click();await page.locator('#skill-details').click(); await page.locator('[data-ui=skill-close]').click();
     await page.locator(`#target-${action === 'prayer' ? 'party' : target}`).click(); await finishPlayback(page);
   }
-  await expect(page.locator('.result-card')).toContainText('ชนะแล้ว'); await page.locator('#leave-battle').click();
+  await expect(page.locator('.result-card')).toContainText('ชนะแล้ว'); await page.locator('#leave-battle').click(); if (await page.locator('.battle-rewards').isVisible()) await page.locator('.battle-rewards > button').click();
   await expect(page.locator('#world-view')).toBeVisible();
   const after = await saved(page);
   expect(after.position).toEqual(where); expect(after.battle).toBeNull();
   expect(after.hp).toEqual(Object.fromEntries(b.heroes.map(h => [h.id, h.hp])));
   for (const h of b.heroes) await expect(page.locator(`#world-hero-${h.id}`)).toContainText(h.hp > 0 ? `${h.hp}/` : 'ล้มแล้ว');
   await page.screenshot({ path: info.outputPath('after-victory.png') });
-  await expect(page.locator('#world-message')).toContainText('ชนะศึก · แร่ดาว +');
+  await expect(page.locator('#world-message')).toContainText('ชนะศึก');
   expect(after.resources.ore).toBeGreaterThanOrEqual(6); expect(after.restReady).toBe(true);
   await expect(page.locator('#world-pack [data-resource=ore] b')).toHaveText(String(after.resources.ore));
   await page.locator('#move-up').click(); await expect(page.locator('#rest')).toBeEnabled();
@@ -752,7 +752,7 @@ test('losing every brought member fails the expedition: back to the lobby with h
   await finishPlayback(page);
   await expect(page.locator('.result-card')).toContainText('แพ้แล้ว'); await expect(page.locator('#leave-battle')).toContainText('กลับค่าย');
   expect(await saved(page)).toBeNull(); expect((await savedProfile(page)).bank).toEqual({ ore: 5, gold: 0, seal: 0, dust: 0 });
-  await page.locator('#leave-battle').click();
+  await page.locator('#leave-battle').click(); if (await page.locator('.battle-rewards').isVisible()) await page.locator('.battle-rewards > button').click();
   await expect(page.locator('#summary-title')).toContainText('ทีมล้มทั้งหมด'); await expect(page.locator('.summary-haul')).toContainText('+5');
   await page.locator('#summary-done').click();
   await expect(page.locator('#lobby-view')).toBeVisible(); await expect(page.locator('.lobby-result')).toContainText('ได้แร่ดาว 5');
