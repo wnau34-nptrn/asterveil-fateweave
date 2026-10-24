@@ -158,6 +158,29 @@ WIRING (UI only): add the four scenes to StoryScene and the story asset loading;
 
 ตอนนี้เสียงประกอบทั้งหมดเป็นเสียงสังเคราะห์ชั่วคราวจากโค้ด (`src/platform/sfx.ts` — เจ้าของเลือกไว้ 2026-10-16) ถ้าเจ้าของต้องการเสียงจริง (ดาบ เวท โล่ เดินบนแผนที่ ชนะ/แพ้ เปิดกล่อง) ให้ Claude เขียน prompt เพิ่ม — ยังไม่ต้องทำจนกว่าเจ้าของสั่ง
 
+### C10 — หน้าสรุปผลหลังชนะศึก (เจ้าของขอ 2026-10-24)
+
+```text
+CODEX HANDOFF — UI-BATTLE-REWARDS-001
+Asterveil · Fateweave: victory rewards screen
+
+Read AGENTS.md and CLAUDE.md first. Base branch feature/fateweave-initial-prototype; work branch codex/battle-rewards-001; open a PR into the base branch. UI only: no rule, resolver, content number or save-format changes. Never use the word ม่านเวล; the group is the ค่ายทหารรับจ้าง.
+
+PROBLEM: after a victory the player only sees the small result-card in BattleUI (src/ui/battle-ui.ts, `result-card`: "ชนะแล้ว", standing count, team HP, command count) and, back on the map, one long text line built in GameShell.commitBattle (src/ui/game-shell.ts ~line 520: lootThai + item names + dust/tomes + expThai). The owner wants a proper rewards summary: what was gained and how much EXP each character got.
+
+DATA (already computed, do not recompute): finishBattle returns `{ type: 'victory', kind, loot: Resources, exp?: Record<heroId, ExpGain{gained, percent, level, levelsUp}>, item?, items?, dust?, tomes?, riftCore? }` (src/core/world/types.ts). EXP before the fight comes from the pre-finish state (next.members[id] before finishBattle) so bars can fill from old to new value; level thresholds via the existing EXP helpers used by the character sheet (src/ui/character-metrics.ts / character-view.ts EXP bar).
+
+BUILD: a victory rewards panel shown once after the battle result, before returning to the map (replaces the long text line; keep a short map message such as "ชนะศึก"):
+1. Header by kind: ชนะศึก / ท้าสู้อีลิทสำเร็จ / มินิบอสล้มแล้ว / {bossName}ล้มแล้ว.
+2. EXP per brought member: portrait (src/ui/portraits.ts), name, Lv, "+N EXP", an EXP bar animating from old to new (reduced motion: no animation), a "เลเวลอัป! Lv X" badge when levelsUp > 0, and a small note when percent < 100 ("ได้ EXP น้อยลงเพราะเลเวลสูงกว่าศัตรู"). Downed members still show what they received.
+3. Items: cards with gear art (src/ui/equip-art.ts gearArt), itemName, Lv and rarity colour (rarityText); tap for the existing item description if one exists.
+4. Resources: ore, gold, star dust, tomes, rift core, each with its existing icon; hide zeros.
+5. One primary button "ไปต่อ →" (≥44px, focused, Enter/Escape close). It must never commit anything: the battle is already saved by commitBattle before the panel opens; closing only dismisses. Reload while it is open must not duplicate rewards (it simply does not reappear).
+Use the approved navy-glass style (src/ui/tokens.css, components.css, incoming/ART-UI-MODERN-001 as reference), the portrait frame rules (@container game, 390px phone first) and DOM text, not canvas. Defeat/wipe keeps the current flow (the run summary in summary-ui.ts already covers wipes). Tutorial victory keeps the story flow (show the panel after it or skip it — state which).
+
+TESTS: a Playwright test in tests/browser/ that wins a fight and checks the panel lists every brought member with +EXP, shows a level-up badge when one happens, shows items/resources, and that closing returns to the map with the same save; update any existing test that read the old map message text. Run npm run typecheck, lint, npx vitest run, build and the touched browser specs. Two 390px screenshots for the owner (normal win with an item, a level-up). Then add the entry Codex owes Claude (AGENTS.md) and merge when CI passes.
+```
+
 ## เมื่อ Usage ของ Claude รีเซ็ต (หลัง พ. 28 ต.ค. 19:00)
 
 เปิดแชตใหม่ (Opus) แล้ววาง:
