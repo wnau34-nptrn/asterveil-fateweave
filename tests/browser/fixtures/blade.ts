@@ -59,11 +59,11 @@ function stage(outcome: string): TurnStage {
   return outcome === 'hit' && skill !== 'parry' ? result.turns[0]! : result.turns.find(t => t.side === 'enemy' && (outcome !== 'guarded' || t.actorId === 'f1') && (skill !== 'parry' || t.events.some(e => e.type === 'counter')))!;
 }
 function painted() {
-  const images: { frame: string; alpha: number }[] = [];
+  const images: { frame: string; alpha: number; width: number; height: number; rotation: number }[] = [];
   const visit = (items: Phaser.GameObjects.GameObject[]) => {
     for (const item of items) {
       if (item instanceof Phaser.GameObjects.Container) visit(item.list);
-      if (item instanceof Phaser.GameObjects.Image && item.texture.key === BLADE_ATLAS) images.push({ frame: item.frame.name, alpha: item.alpha });
+      if (item instanceof Phaser.GameObjects.Image && item.texture.key === BLADE_ATLAS) images.push({ frame: item.frame.name, alpha: item.alpha, width: item.displayWidth, height: item.displayHeight, rotation: item.rotation });
     }
   };
   visit(scene.children.getChildren()); return images;

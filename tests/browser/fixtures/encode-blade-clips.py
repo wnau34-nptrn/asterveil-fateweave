@@ -9,7 +9,7 @@ import subprocess
 import sys
 
 root = Path(__file__).resolve().parents[3]
-captures = root / (sys.argv[1] if len(sys.argv) > 1 else 'test-results/blade-r2-delivery')
+captures = root / (sys.argv[1] if len(sys.argv) > 1 else 'test-results/blade-r3-delivery')
 out = root / 'docs/combat-presentation/blade-slice'
 out.mkdir(parents=True, exist_ok=True)
 manifest = []

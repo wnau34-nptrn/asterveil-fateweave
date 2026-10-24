@@ -1,8 +1,23 @@
 # C5.1 — ฟันดาบ / แทง (Blade family)
 
-24 ตุลาคม 2026 · **R2 แก้ความเบา/บางตาม feedback — รอเจ้าของตรวจคลิปใหม่ ยังไม่อนุมัติภาพ และยังไม่เริ่มตระกูล 2**
+24 ตุลาคม 2026 · **R3 ลดความหนาจาก R2 และแยกเอกลักษณ์ทั้ง 10 ท่า — รอเจ้าของตรวจคลิปใหม่ ยังไม่อนุมัติภาพ และยังไม่เริ่มตระกูล 2**
 
-เจ้าของระบุให้ปรับเฉพาะฟัน/แทงทั้ง 10 สกิลในคลิปล่าสุด ภาพร่วมถูกวาดแก้ด้วย ImageGen ให้มีเนื้อสีทึบและคมกว้างขึ้น; รอยฟัน/แทงในเกมใหญ่ขึ้น 25% และเพิ่มน้ำหนักให้ Attack/Backstab/Ambush/Disarm/Parry ที่เล็กกว่าเพื่อน ลำดับเฟรมแยกจาก alpha แล้ว จึงคงพีกเต็มความสว่างสูงสุดประมาณ 180ms ก่อนสลาย (อายุภาพสูงสุด 350ms และไม่เกินเวลาที่เหลือของ stage) ประกายเตรียมและปะทะหนาขึ้น จำนวนเศษแสงเท่าเดิม ไม่แก้ Bolt/Execute/Ward หรือเพิ่มการโดน
+เจ้าของเห็นว่า R2 หนาเกินไปและแต่ละท่าคล้ายกัน จึงปรับสัดส่วนและการเคลื่อนจากภาพร่วมชุดเดิม ไม่สร้างภาพใหม่หรือใช้ Shado ในรอบนี้ พีกของคมเหลือ alpha .82 จาก 1, ดาวปะทะ .78 และขนาด 30–50px จาก 64px; อายุคม 235–300ms จาก 350ms และไม่เกินเวลาที่เหลือของ stage ลดเศษแสงเหลือ 0–2 ชิ้น ขณะ contact มีคมต่อเนื่องเพียงหนึ่งจังหวะกับดาวที่ผู้รับจริง ไม่เพิ่มการโดน ไม่แก้ Bolt/Execute/Ward
+
+| ท่า | เอกลักษณ์ของคมและการเคลื่อน |
+|---|---|
+| Attack | ฟันเฉียงสั้น กะทัดรัด หมุนส่งปลายคมเล็กน้อย |
+| Finisher | คมยาวตั้งเฉียง กดลงจากบน พร้อมแกนปะทะที่แน่นกว่าท่าปกติ |
+| Lunge | ลิ่มเรียวพุ่งตามแกนเข้าหาเป้าหมาย ระยะเคลื่อนมากกว่า Pierce |
+| Sweep | เสี้ยวโค้งกว้างและแบน กวาดตามแนวนอนของจอที่ผู้รับจริงแต่ละตัว |
+| Backstab | ปลายสั้นแทงย้อนเข้าจากฝั่งตรงข้ามของผู้รับ |
+| Ambush | คมโค้งฟันเสยจากล่างขึ้นบน |
+| Disarm | ตะขอคมเล็กยกสูง หมุนเกี่ยวออก ไม่มีเศษแสง |
+| Parry | เสี้ยวคมสั้นหมุนสวนกลับ เฉพาะ counter จริงหลังตั้งท่า |
+| Pierce | เข็มยาวบางที่สุด ชี้ตามแกนผู้โจมตี–ผู้รับ |
+| Halt | ปลายสั้นฐานกว้าง หยุดแน่นด้านหน้าตัว ระยะเคลื่อนน้อย ไม่มีเศษแสง |
+
+ท่าฟันใช้ระนาบจอเพื่อไม่ให้ Sweep กลายเป็นแนวแทงตามตำแหน่งสนาม ส่วนท่าแทงใช้แกนผู้โจมตี–ผู้รับ Reduced motion คงสัดส่วนและแนวของแต่ละท่าเป็นภาพนิ่ง ผล blocked/dodged ยังอ่านจาก event และมีภาพเฉพาะผลนั้น
 
 ภาพร่วมชุดเดียว `public/assets/fx/blade_fx.webp` + `.json`, โมดูล `src/game/visuals/blade-fx.ts`, ต้นฉบับและ prompt ใน `incoming/ART-VFX-BLADE-001/` ใช้ภาษาเส้นโค้งปลายเรียว แกน ivory ขอบสีตามอาชีพ เหมือน Bolt / Execute / Ward ที่ผ่านแล้ว ทุกสกิลเลือกทรง ขนาด ทิศ และจำนวนเศษแสงจากตารางเล็ก ไม่มีภาพแยกรายสกิล
 
@@ -39,22 +54,22 @@
 ```text
 npm run typecheck
 npm run lint
-npx vitest run
+npx vitest run --maxWorkers=1
 npm run build
-npx playwright test tests/browser/blade-fx.spec.ts tests/browser/combat.spec.ts tests/browser/presentation.spec.ts tests/browser/bolt-fx.spec.ts tests/browser/exec-ward-fx.spec.ts
+npx playwright test tests/browser/blade-fx.spec.ts tests/browser/presentation.spec.ts --output test-results/blade-r3-final
 ```
 
 อัดซ้ำใน PowerShell (อย่าอัดพร้อม simulation หรือ browser suite อื่น):
 
 ```powershell
 $env:FX_CLIPS='1'
-npx playwright test tests/browser/blade-clips.spec.ts --output test-results/blade-r2-delivery
-python tests/browser/fixtures/encode-blade-clips.py test-results/blade-r2-delivery
+npx playwright test tests/browser/blade-clips.spec.ts --output test-results/blade-r3-delivery
+python tests/browser/fixtures/encode-blade-clips.py test-results/blade-r3-delivery
 ```
 
 ใช้ Python ที่มี Pillow และ ffmpeg/ffprobe ใน PATH การ pack atlas: `python incoming/ART-VFX-BLADE-001/package.py`
 
-ผลตรวจ R2: typecheck / lint / build ผ่าน; **31/31 browser tests ผ่าน** (family 18 + playback 13) ตรวจ HP ก่อน/ตรง contact, valid atlas frames, พีกทึบที่ contact +130ms, ตัวเลขอยู่เหนือแสง, skip cleanup, ผลจริงและ fast/reduced/resize รวมความกว้าง 320/390/1366px ตั้งนาฬิกาทดสอบก่อนเริ่ม Phaser เพื่อไม่เปลี่ยน clock กลาง render loop
+ผลตรวจ R3 จะบันทึกหลังตรวจชุดสุดท้าย: family tests ตรวจ HP ก่อน/ตรง contact, valid atlas frames, พีกที่ contact +80ms อยู่ระหว่าง alpha .7–.9, สัดส่วน Sweep/Pierce/Halt และทิศ Backstab จากภาพที่ render จริง, ตัวเลขอยู่เหนือแสง, skip cleanup, ผลจริงและ fast/reduced/resize รวมความกว้าง 320/390/1366px ตั้งนาฬิกาทดสอบก่อนเริ่ม Phaser เพื่อไม่เปลี่ยน clock กลาง render loop
 
 Vitest บนฐานเกมล่าสุด `a8cf3c7`, `npx vitest run --maxWorkers=1`: **756/756 ผ่าน (65 files)** ไม่มีการแก้ test timeout/กฎ/ตัวเลข ไฟล์ `src/core`, `src/content` และ `battle-playback.ts` ไม่ต่างจาก base branch
 

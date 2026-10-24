@@ -265,7 +265,7 @@ export class BattleScene extends Phaser.Scene {
       // No anticipation of a hit for a cancelled action or Parry's stance.
       for (const cue of bladeCues(turn).filter(c => !c.parried).slice(0, 1)) {
         const end = this.anchor(cue.event.targetId);
-        if (start && end) bladeCast(this.fx(turn.actorId), start, end, contactMs, bladePalettes[this.encounter.heroes.find(h => h.id === turn.actorId)?.role ?? ''] ?? palette.gold);
+        if (start && end) bladeCast(this.fx(turn.actorId), start, end, contactMs, bladePalettes[this.encounter.heroes.find(h => h.id === turn.actorId)?.role ?? ''] ?? palette.gold, cue.skill);
       }
       return;
     }

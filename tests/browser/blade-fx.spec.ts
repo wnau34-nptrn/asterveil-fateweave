@@ -25,10 +25,17 @@ for (const skill of skills) test(`blade ${skill} resolved contact and cleanup at
       await expect(page.locator('[data-field-unit=f1] .field-hp-value')).toHaveText(`${turn.after!.enemies.find(e => e.id === 'f1')!.hp}/500`);
       await page.clock.runFor(35);
       expect((await page.evaluate(() => window.bladeQA.frames())).some(f => /slash_|thrust_/.test(f))).toBe(true);
-      await page.clock.runFor(95);
+      await page.clock.runFor(45);
       const peak = (await page.evaluate(() => window.bladeQA.painted())).find(i => /^(slash|thrust)_01$/.test(i.frame));
-      expect(peak, 'painted peak remains readable 130ms after truthful contact').toBeDefined();
-      expect(peak!.alpha).toBeGreaterThan(.95);
+      expect(peak, 'painted peak remains readable 80ms after truthful contact').toBeDefined();
+      expect(peak!.alpha).toBeGreaterThan(.7);
+      expect(peak!.alpha).toBeLessThan(.9);
+      // Check the rendered silhouette: broad sweep, needle pierce and planted halt remain distinct.
+      const aspect = peak!.width / peak!.height;
+      if (skill === 'sweep') expect(aspect).toBeGreaterThan(2.8);
+      if (skill === 'pierce') expect(aspect).toBeGreaterThan(4.5);
+      if (skill === 'halt') expect(aspect).toBeLessThan(1.2);
+      if (skill === 'backstab') expect(Math.cos(peak!.rotation)).toBeLessThan(0);
       expect(await page.evaluate(() => window.bladeQA.labelsAbovePaint())).toBe(true);
     } else await page.clock.runFor(340);
     if (['lunge', 'sweep'].includes(skill)) await page.screenshot({ path: info.outputPath('contact-390.png') });
