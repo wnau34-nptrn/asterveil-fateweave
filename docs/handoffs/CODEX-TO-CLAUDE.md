@@ -2,11 +2,11 @@
 
 ## 2026-10-24 — UI-BATTLE-REWARDS-001
 
-- Branch `codex/battle-rewards-001` → `feature/fateweave-initial-prototype`; PR/merge status to be appended after CI.
+- Branch `codex/battle-rewards-001` → `feature/fateweave-initial-prototype`; PR #63: https://github.com/wnau34-nptrn/asterveil-fateweave/pull/63; merge status to be appended after CI.
 - Added disposable DOM victory dialog after the existing battle result: actual EXP gains for every brought member (including downed/reserves), pre-finish → final EXP bars, level-up badges, level-gap note, item art/details, nonzero resources. Closing only dismisses; commitBattle saves first. Reload never recreates rewards. Tutorial skips rewards to retain the story sequence; defeat/wipe unchanged.
 - Files: `src/ui/battle-rewards.ts`, `game-shell.ts`, `components.css`; browser reward tests plus world/targeted-loot dismissal updates. No core/content/save changes.
-- Validation: typecheck, lint, 751 Vitest tests and build passed. New Chromium 390×844 item/level-up specs passed; existing touched browser specs running. Browser extension control unavailable; used explicitly requested Playwright with system Chromium (download host denied).
-- Owner evidence: two 390px screenshots in Playwright outputs, final paths/results to be appended. Owner request authorizes merge after CI. No new visual approval claimed.
+- Validation: typecheck, lint, 751 Vitest tests and build passed. New Chromium 390×844 item/level-up specs passed; targeted-loot specs passed at 320/390/1366px; final focused rewards/world run 6/6 passed (includes Enter/Escape, item inspection, reload while open and tutorial story). A broader local world run was interrupted after HMR caused a navigation-context failure; that test passed in the clean focused rerun. Full browser suite belongs to CI. Browser extension control unavailable; used explicitly requested Playwright with system Chromium (download host denied).
+- Owner evidence: `/tmp/rewards-verified/battle-rewards-victory-rewards-item-at-390px/rewards-item.png` and `/tmp/rewards-verified/battle-rewards-victory-rewards-level-up-at-390px/rewards-level-up.png`, both visually inspected. Owner request authorizes merge after CI. No new visual approval claimed.
 
 
 ## 2026-10-23 — Claude: map bag swap fix (owner bug report)
