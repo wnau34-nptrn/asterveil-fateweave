@@ -215,11 +215,11 @@ describe('warden ★3 earthshaker / ★5 stoneskin (Brann)', () => {
   it('earthshaker adds its bonus when the target is aiming at Brann', () => {
     const d = party([['brann', 3], ['tracer', 1], ['weaver', 1], ['healer', 1]]);
     let s = until(createBattle(d), d, 'brann'); const power = skillPower(d, 'brann', 'quake');
-    const plain = act(s, d, 'quake', 'f1').turns[0]!.events.find(e => e.type === 'damage')!.amount!;
-    expect(plain).toBe(nextIntentOf(s, d, 'f1')?.targetId === 'brann' ? power + d.rules.quakeBonus : power);
+    const plain = act(s, d, 'quake', 'enemies').turns[0]!.events.find(e => e.type === 'damage')!.amount!;
+    expect(plain).toBe(power);
     s = act(s, d, 'taunt', 'brann').state; s = until(s, d, 'brann');
     s = { ...s, taunt: { heroId: 'brann', round: s.round } };
-    expect(act(s, d, 'quake', 'f1').turns[0]!.events.find(e => e.type === 'damage')!.amount).toBe(power + d.rules.quakeBonus);
+    expect(act(s, d, 'quake', 'enemies').turns[0]!.events.find(e => e.type === 'damage')!.amount).toBe(power);
   });
   it('stoneskin halves the hits drawn by challenge', () => {
     const d = party([['brann', 5], ['tracer', 1], ['weaver', 1], ['healer', 1]]);

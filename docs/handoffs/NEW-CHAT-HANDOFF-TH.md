@@ -1,6 +1,10 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
 อัปเดต Codex 2026-10-24: C5.1 R2 บน `codex/vfx-family-1-blade`, PR #59 แก้ฟัน/แทงทั้ง 10 สกิลที่เจ้าของเห็นว่าเบา/บาง ด้วยภาพหนาขึ้นและพีกเต็มความสว่าง รอเจ้าของตรวจ [คลิปใหม่ 390px](../combat-presentation/blade-slice/README_TH.md) ยังไม่ merge/publish และห้ามเริ่ม C5.2 จนเจ้าของอนุมัติคลิป อ่านบันทึกบนสุด `CODEX-TO-CLAUDE.md` และผลตรวจใน slice notes ก่อนทำต่อ
+## 2026-10-24 — C11 completed by Codex
+
+PR #66 merged to `feature/fateweave-initial-prototype`: `abf10a8256e04040aa2b509bc6e5aa7c27c7654d`. Save v42; 10 playable classes/characters. Quality CI: 795 unit tests, typecheck/lint/build pass. Full browser CI: 242 tests pass. Final sim: 26 checks pass; 20 campaign acceptance cells pass; each character clears 12/12 seeds on maps 1–3 in the documented raised-character scenario. Read `docs/validation/balance-sim/C11.md` and the top entry in `CODEX-TO-CLAUDE.md` for every changed skill/number, migrations, method and review questions. C12 was not started; its prerequisite is now met. Older entries below are historical.
+
 
 ## 2026-10-24 — Magic Power (owner-approved)
 

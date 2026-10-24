@@ -13,23 +13,13 @@ import { heroCatalog, starred } from '../../src/core/world/world';
 import { battleLesson } from '../../src/ui/tutorial';
 
 // Section 5 of the design: the stats each class wants most (★★) and a little (★).
-export const wants: Record<string, { main: GearStat[]; some: GearStat[] }> = {
-  guardian: { main: ['hp', 'armour', 'speed'], some: ['attack', 'resist'] },
-  tracer: { main: ['attack', 'speed', 'leech'], some: ['hp'] },
-  weaver: { main: ['attack', 'support'], some: ['hp', 'speed', 'resist'] },
-  healer: { main: ['hp', 'support', 'resist'], some: ['speed'] },
-  garran: { main: ['hp', 'attack', 'armour'], some: ['leech'] },
-  mira: { main: ['attack', 'speed'], some: ['hp', 'leech'] },
-  toma: { main: ['support', 'speed'], some: ['hp', 'attack'] },
-  sefa: { main: ['attack', 'speed', 'leech'], some: ['hp'] },
-  brann: { main: ['hp', 'armour', 'resist'], some: ['attack'] },
-  lio: { main: ['support', 'speed'], some: ['hp', 'attack', 'resist'] },
-};
+import { gearPreferences as wants } from '../../src/content/heroes/balance';
 const battleStats: GearStat[] = ['hp', 'attack', 'support', 'speed', 'armour', 'resist', 'leech'];
 export type Build = 'none' | 'main' | 'off';
 // Epic pieces at `level`; affixes from the slot's pool, wanted stats first (main) or unwanted ones first (off).
 export function gearFor(id: string, build: Exclude<Build, 'none'>, level: number): Gear {
-  const w = wants[id]!; const unwanted = battleStats.filter(s => !w.main.includes(s) && !w.some.includes(s));
+  const base = heroCatalog(lookup,map).find(h=>h.id===id);
+  const w = wants[id] ?? { main: map.equipment.supportHeroes.includes(id) ? ['support','hp','speed'] as GearStat[] : ['attack','hp','armour'] as GearStat[], some: base?.lane === 'front' ? ['resist'] as GearStat[] : ['leech'] as GearStat[] }; const unwanted = battleStats.filter(s => !w.main.includes(s) && !w.some.includes(s));
   const order = build === 'main' ? [...w.main, ...w.some] : [...unwanted, ...w.some];
   const gear: Gear = {};
   GEAR_SLOTS.forEach((slot, uid) => {

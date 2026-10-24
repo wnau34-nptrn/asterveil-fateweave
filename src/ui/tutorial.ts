@@ -1,4 +1,4 @@
-import { CATALYST_PER_ROUND, SOLO_TIMES, TREMOR_WEAKEN, ambushBonus, corrodeBonusOf, guardReductionOf, interruptBlock, nextIntentOf, tauntReductionOf, currentHeroId, skillPower, targetOptions } from '../core/battle/engine';
+import { CATALYST_PER_ROUND, SOLO_TIMES, isDelayed, ambushBonus, corrodeBonusOf, guardReductionOf, interruptBlock, nextIntentOf, plannedIntents, tauntReductionOf, currentHeroId, skillPower, targetOptions } from '../core/battle/engine';
 import type { ActionId, BattleState, EncounterDefinition } from '../core/battle/types';
 import { actorName } from './th';
 export interface Lesson { step:number; title:string; copy:string; heroId:string; action:ActionId; targetId:string }
@@ -6,11 +6,13 @@ export interface Lesson { step:number; title:string; copy:string; heroId:string;
 // never suggests commanding a hero outside the current SPD turn.
 export function battleLesson(state:BattleState,data:EncounterDefinition):Lesson|undefined {
  if(state.outcome!=='active')return;
- const heroId=currentHeroId(state,data); if(!heroId)return;
+ const turnHeroId=currentHeroId(state,data); if(!turnHeroId)return;
+ const heroId:string=turnHeroId;
  const make=(action:ActionId,targetId:string,title:string,detail:string):Lesson|undefined=>{
   if(!targetOptions(state,data,heroId,action).some(t=>t.id===targetId&&t.valid))return;
   return{step:state.commands.length+1,heroId,action,targetId,title,copy:`${actorName(heroId,data)} → ${data.skills[action].name} → ${actorName(targetId,data)} · ${detail}`};
  };
+ const role=data.heroes.find(h=>h.id===heroId)!.role;
  const living=state.enemies.filter(e=>e.hp>0);
  if(!living.length)return;
  // Foes this move can reach (front-row foes screen the back row), focus: a marked foe, then the one nearest to falling.
@@ -29,7 +31,14 @@ export function battleLesson(state:BattleState,data:EncounterDefinition):Lesson|
  const front=living.filter(e=>row(e.id)==='front'),back=living.filter(e=>row(e.id)==='back');
  const tree=treeAdvice(); if(tree)return tree;
  function treeAdvice():Lesson|undefined{
-  if(heroId==='tracer'){
+  if(role==='Knight'){
+   if(intent?.all){const b=make('bulwark',heroId,'กำแพงโล่คุ้มแนวหน้า',`ลด ${skillPower(data,heroId,'bulwark')}%`);if(b)return b;}
+   const pending=plannedIntents(state,data,3).filter(i=>i.round===state.round&&!i.charge&&!i.special);
+   if(intent?.all||new Set(pending.map(i=>i.targetId)).size>=2){const r=make('rally',heroId,'ตั้งรับหมู่รับหลายท่า','ลดท่าแรกของเพื่อนแต่ละคน');if(r)return r;}
+   const low=state.heroes.find(h=>h.id!==heroId&&h.hp>0&&h.hp<data.heroes.find(d=>d.id===h.id)!.maxHp*.6);
+   if(low&&intent&&!intent.all){const r=make('rouse',heroId,'ยืนเคียงข้างเพื่อนบาดเจ็บ','รับแทนจนถึงเทิร์นถัดไป');if(r)return r;}
+  }
+  if(role==='Duelist'){
    if(intent?.kind==='physical'&&intent.targetId===heroId){const p=make('parry',heroId,'ปัดดาบรับท่ากายภาพ',`${actorName(intent.sourceId,data)} จะโดนฟันสวน`);if(p)return p;}
    if(front.length>=2){const w=make('sweep','enemies','ฟันกวาดแถวหน้า',`ตัวละ ${skillPower(data,heroId,'sweep')}`);if(w)return w;}
    const low=reach('finisher').find(e=>e.hp*100<data.enemies.find(d=>d.id===e.id)!.maxHp*40);
@@ -37,16 +46,16 @@ export function battleLesson(state:BattleState,data:EncounterDefinition):Lesson|
    const rear=back.find(e=>e.markedUntil>state.round);
    if(rear){const l=make('lunge',rear.id,'พุ่งตัดแถวหลังที่ติดตรา',`พลัง ${skillPower(data,heroId,'lunge')+data.rules.markedBonus}`);if(l)return l;}
   }
-  if(heroId==='weaver'){
+  if(role==='Mage'){
    if(living.length>=3){const st=make('storm','enemies','พายุเวทโดนทุกตัว',`ตัวละ ${skillPower(data,heroId,'storm')}`);if(st)return st;}
    // Crystal aegis before a whole-party move, or to open a fight while most allies have no barrier.
    const bare=state.heroes.filter(h=>h.hp>0&&!h.barrier).length;
    if(intent?.all||(intent&&bare>=3&&intent.damage>=15)){const a=make('aegis','party','เกราะผลึกให้ทั้งทีม',`ทุกคนได้โล่ ${skillPower(data,heroId,'aegis')}`);if(a)return a;}
    if(intent?.kind==='energy'&&!interruptBlock(state,data,intent.sourceId,intent)&&nextIntentOf(state,data,intent.sourceId)?.kind==='energy'){const g=make('sigil',intent.sourceId,'ตรึงเวทยกเลิกท่าพลังงาน',`${actorName(intent.sourceId,data)} จะเสียท่าพลังงานถัดไป`);if(g)return g;}
-   const veiled=living.find(e=>data.enemies.find(d=>d.id===e.id)?.traits?.includes('veilguard')&&!(e.markedUntil>state.round)&&!((e.corrodedUntil??0)>state.round)&&!((e.dispelledUntil??0)>state.round));
-   if(veiled){const d=make('dispel',veiled.id,'สลายเกราะพลังงาน','ทีมตีเต็มแรงถึงจบรอบถัดไป');if(d)return d;}
+   const veiled=living.find(e=>(e.steadyRound??0)>=state.round||data.enemies.find(d=>d.id===e.id)?.traits?.includes('veilguard')&&!(e.markedUntil>state.round)&&!((e.corrodedUntil??0)>state.round)&&!((e.dispelledUntil??0)>state.round));
+   if(veiled){const d=make('dispel',veiled.id,'สลายเกราะและไม่หวั่นไหว','ลบความต้านการขัดจังหวะและปิดเกราะพลังงานถึงจบรอบถัดไป');if(d)return d;}
   }
-  if(heroId==='healer'){
+  if(role==='Priest'){
    const fallen=state.heroes.find(h=>h.hp<=0&&h.fell);
    if(fallen){const r=make('revive',fallen.id,'ฟื้นคืนเพื่อนที่ล้ม',`${actorName(fallen.id,data)} กลับมาด้วยเลือด ${skillPower(data,heroId,'revive')}%`);if(r)return r;}
    // Halo a whole-party energy move, or a heavy one while nobody badly needs healing.
@@ -55,55 +64,54 @@ export function battleLesson(state:BattleState,data:EncounterDefinition):Lesson|
    const aimed=intent&&!intent.all?state.heroes.find(h=>h.id===intent.targetId):undefined;
    if(aimed&&aimed.hp+aimed.barrier<=intent!.damage){const c=make('sanctuary',aimed.id,'พรคุ้มภัยกันล้ม',`${actorName(aimed.id,data)} เลือดไม่ต่ำกว่า 1`);if(c)return c;}
    const hurt=state.heroes.some(h=>h.hp>0&&h.hp<data.heroes.find(d=>d.id===h.id)!.maxHp*.7);
-   const strong=[...data.heroes].filter(h=>h.id!==heroId&&state.heroes.some(x=>x.id===h.id&&x.hp>0)).sort((a,b)=>b.attack-a.attack)[0];
-   if(!hurt&&strong){const b=make('bless',strong.id,'พรกล้าให้ตัวตีหลัก',`${actorName(strong.id,data)} แรงขึ้น ${skillPower(data,heroId,'bless')}%`);if(b)return b;}
+   const strong=state.heroes.find(h=>h.hp>0&&!h.renew&&h.hp<data.heroes.find(d=>d.id===h.id)!.maxHp);
+   if(hurt&&strong){const b=make('bless',strong.id,'พรต่อเนื่องให้เพื่อนบาดเจ็บ',`ฟื้น ${skillPower(data,heroId,'bless')} ต่อรอบ 2 รอบ`);if(b)return b;}
   }
-  if(heroId==='garran'){
+  if(role==='Spear'){
    // Hold the line for a back-liner the move would hurt badly, while Garran has HP to spare.
    const aimed=intent&&!intent.all&&lane(intent.targetId)==='back'?state.heroes.find(h=>h.id===intent.targetId):undefined;
    const me=state.heroes.find(h=>h.id===heroId)!,myMax=data.heroes.find(h=>h.id===heroId)!.maxHp;
-   if(aimed&&intent!.damage*100>=data.heroes.find(h=>h.id===aimed.id)!.maxHp*35&&me.hp*2>myMax){const h=make('hold',heroId,'ปักหลักรับแทนแนวหลัง',`${actorName(intent!.sourceId,data)} จะตีการ์แรนแทน`);if(h)return h;}
+   if(aimed&&intent!.damage*100>=data.heroes.find(h=>h.id===aimed.id)!.maxHp*35&&me.hp*2>myMax){const h=make('hold',heroId,'ทวนโต้คุ้มแนวหลัง',`${actorName(intent!.sourceId,data)} จะโดนแทงสวน`);if(h)return h;}
    if(intent?.kind==='physical'&&lane(intent.targetId)==='front'){const w=make('spearwall',heroId,'กำแพงทวนสวนทุกท่า',`สวน ${skillPower(data,heroId,'spearwall')} ทุกครั้ง`);if(w)return w;}
    const ahead=reach('halt').find(e=>state.order.indexOf(e.id)>state.turnIndex&&nextIntentOf(state,data,e.id)?.kind==='physical'&&nextIntentOf(state,data,e.id)?.round===state.round);
-   if(ahead){const t=make('halt',ahead.id,'แทงหยุดยั้งก่อนมันตี',`${actorName(ahead.id,data)} ไปลงมือท้ายสุดรอบนี้`);if(t)return t;}
+   if(ahead){const t=make('halt',ahead.id,'แทงสวนจังหวะก่อนมันตี',`${actorName(ahead.id,data)} โดนแรงขึ้น 50%`);if(t)return t;}
    // War cry pays off while at least two other front-liners still act this round.
-   const later=state.order.slice(state.turnIndex+1).filter(id=>id!==heroId&&lane(id)==='front'&&state.heroes.some(h=>h.id===id&&h.hp>0));
-   if(later.length>=2){const c=make('warcry',heroId,'เสียงศึกปลุกแนวหน้า',`แนวหน้าแรงขึ้น ${skillPower(data,heroId,'warcry')}%`);if(c)return c;}
+   if(intent?.kind==='physical'&&lane(intent.targetId)==='front'){const c=make('warcry',heroId,'เสียงศึกปลุกแนวหน้า',`แนวหน้าสวนกายภาพ ${skillPower(data,heroId,'warcry')}`);if(c)return c;}
   }
-  if(heroId==='mira'){
+  if(role==='Archer'){
    if(front.length&&back.length&&state.heroes.some(h=>h.hp>0&&lane(h.id)==='front'&&h.id!==heroId)){const p=make('pin','enemies','ตรึงแถวหน้าเปิดแถวหลัง','ทั้งทีมตีแถวหลังได้');if(p)return p;}
-   if(intent?.kind==='physical'&&intent.targetId===heroId){const d=make('disengage',intent.sourceId,'ถอยยิงหลบท่ากายภาพ','มิร่าหลบการตีครั้งถัดไป');if(d)return d;}
-   const slowed=living.find(e=>(e.delayedRound??0)>=state.round);
+   // Tail movement helps when it lets a living ally act before a pending foe, regardless of damage kind or target.
+   const foeIndex=intent?state.order.indexOf(intent.sourceId):-1;
+   if(intent&&foeIndex>state.turnIndex&&state.order.slice(foeIndex+1).some(id=>state.heroes.some(h=>h.id===id&&h.hp>0))){const d=make('disengage',intent.sourceId,'ยิงถอยคิวเปิดจังหวะให้เพื่อน','ศัตรูไปท้ายคิวรอบนี้');if(d)return d;}
+   const slowed=living.find(e=>isDelayed(e,state.round));
    if(slowed){const t=make('track',slowed.id,'ศรตามรอยเป้าที่ถูกสกัด',`ยิงซ้ำตอนจบรอบ`)??make('weakshot',slowed.id,'ศรจุดอ่อนเป้าที่ถูกสกัด',`พลัง ${skillPower(data,heroId,'weakshot')+data.rules.weakshotBonus}`);if(t)return t;}
   }
   // Recruit trees (owner 2026-10-23): suggested only when equipped (`make` checks).
   // A dangerous move: a whole-party move, or one that would take at least 35% of its target's max HP.
   const heavy=!!intent&&(intent.all||intent.damage*100>=(data.heroes.find(h=>h.id===intent.targetId)?.maxHp??0)*35);
   const strongest=[...data.heroes].filter(h=>h.id!==heroId&&state.heroes.some(x=>x.id===h.id&&x.hp>0)).sort((a,b)=>b.attack-a.attack)[0];
-  if(heroId==='toma'){
+  if(role==='Alchemist'){
    if(heavy&&intent){const k=make('smoke',intent.sourceId,'ขวดควันลดท่าที่กำลังมา',`${actorName(intent.sourceId,data)} เบาลง ${skillPower(data,heroId,'smoke')}%`);if(k)return k;}
    const ripe=living.find(e=>(e.corrodedUntil??0)-state.round>=2);
    if(ripe){const c=make('catalyst',ripe.id,'ระเบิดกร่อนด้วยตัวเร่ง',`พลัง ${skillPower(data,heroId,'catalyst')+2*CATALYST_PER_ROUND}`);if(c)return c;}
    if(living.length>=3){const b=make('bomb','enemies','ขวดระเบิดโดนทุกตัว',`ตัวละ ${skillPower(data,heroId,'bomb')}`);if(b)return b;}
    if(strongest&&!(intent&&intent.targetId===strongest.id)){const f=make('fury',strongest.id,'ยาคลั่งให้ตัวตีหลัก',`${actorName(strongest.id,data)} แรงขึ้น ${skillPower(data,heroId,'fury')}%`);if(f)return f;}
   }
-  if(heroId==='sefa'){
-   const me=state.heroes.find(h=>h.id===heroId)!;
+  if(role==='Scout'){
    const aimedBack=intent&&!intent.all&&intent.targetId!==heroId&&lane(intent.targetId)==='back'&&intent.damage*100>=data.heroes.find(h=>h.id===intent.targetId)!.maxHp*35;
-   if(aimedBack&&me.hp*2>data.heroes.find(h=>h.id===heroId)!.maxHp){const d=make('decoy',intent!.targetId,'ล่อเงารับแทนแนวหลัง',`${actorName(intent!.sourceId,data)} จะตีเซฟาแทน`);if(d)return d;}
-   if(heavy&&intent&&intent.kind==='physical'&&!intent.all){const x=make('disarm',intent.sourceId,'ปลดอาวุธท่ากายภาพ',`${actorName(intent.sourceId,data)} เบาลง 50%`);if(x)return x;}
+   if(aimedBack){const d=make('decoy',intent!.targetId,'เงาคุ้มกันแนวหลัง',`${actorName(intent!.sourceId,data)} จะถูกหลบ`);if(d)return d;}
+   if(heavy&&intent&&intent.kind==='physical'&&!intent.all){const x=make('disarm',intent.sourceId,'ปาดตัดหน้าศัตรู',`${actorName(intent.sourceId,data)} โดนแรงขึ้นถ้ายังไม่ลงมือและเล็งเพื่อน`);if(x)return x;}
    if(back.length&&(front.length||back.length>=2)){const k=make('knives','enemies','มีดบินใส่แถวหลัง',`ตัวละ ${skillPower(data,heroId,'knives')}`);if(k)return k;}
    const low=reach('backstab').find(e=>e.hp<=skillPower(data,heroId,'backstab')+4);
    if(low){const b=make('backstab',low.id,'ลอบแทงปิดฉาก',`พลัง ${skillPower(data,heroId,'backstab')}`);if(b)return b;}
   }
-  if(heroId==='brann'){
+  if(role==='Warden'){
    if(intent&&!intent.all&&intent.targetId===heroId&&intent.damage>=15){const a=make('stonearmor',heroId,'เกราะหินรับท่าหนัก',`โล่ ${skillPower(data,heroId,'stonearmor')}%`);if(a)return a;}
-   const aimed=reach('quake').find(e=>nextIntentOf(state,data,e.id)?.targetId===heroId);
-   if(aimed){const q=make('quake',aimed.id,'ทุบปฐพีใส่ตัวที่เล็งแบรนน์',`พลัง ${skillPower(data,heroId,'quake')+data.rules.quakeBonus}`);if(q)return q;}
-   if(front.length>=2||(heavy&&intent&&row(intent.sourceId)==='front')){const t=make('tremor','enemies','ปฐพีสั่นแถวหน้า',`ท่าถัดไปเบาลง ${TREMOR_WEAKEN}%`);if(t)return t;}
-   if(intent&&!intent.all&&intent.targetId!==heroId&&state.heroes.find(h=>h.id===heroId)!.cooldowns.taunt!==undefined){const g=make('guardstone',intent.targetId,'ศิลาคุ้มกันเพื่อนที่ถูกเล็ง',`เบาลง ${skillPower(data,heroId,'guardstone')}%`);if(g)return g;}
+   if(front.length>=1){const q=make('quake','enemies','ทุบปฐพีแถวหน้า',`ตัวละ ${skillPower(data,heroId,'quake')}`);if(q)return q;}
+   if(front.length>=2||(heavy&&intent&&row(intent.sourceId)==='front')){const t=make('tremor','enemies','ปฐพีสั่นแถวหน้า',`ท่าถัดไปเล็งแบรนน์`);if(t)return t;}
+   if(intent&&!intent.all&&intent.targetId!==heroId&&state.heroes.find(h=>h.id===heroId)!.cooldowns.taunt!==undefined){const g=make('guardstone',intent.targetId,'ศิลาดึงท่าแทนเพื่อน',`เบาลง ${skillPower(data,heroId,'guardstone')}%`);if(g)return g;}
   }
-  if(heroId==='lio'){
+  if(role==='Bard'){
    // Healing first: a worn party keeps (or gets) the song of mending, and a mending finale when several are hurt.
    const song=state.song?.heroId===heroId?state.song.action:undefined;
    const hurt=state.heroes.filter(h=>h.hp>0&&h.hp<data.heroes.find(d=>d.id===h.id)!.maxHp*.5).length;
@@ -116,28 +124,28 @@ export function battleLesson(state:BattleState,data:EncounterDefinition):Lesson|
   }
   return undefined;
  }
- if(heroId==='guardian'){
+ if(role==='Knight'){
   // A steadfast boss or an unstoppable move cannot be bashed: guard it instead.
   // Guard covers one announced hit; a whole-party move cannot be guarded.
   const guard=()=>intent&&!intent.all?make('guard',intent.targetId,'อ่านแผนศัตรู',`รับแทนและลดพลัง ${intent.damage} → ${Math.ceil(intent.damage*(1-guardReductionOf(data,heroId)))}`):undefined;
   if(intent?.kind==='physical'&&!interruptBlock(state,data,intent.sourceId,intent))return make('bash',intent.sourceId,'ขัดจังหวะโจมตีกายภาพ',`${actorName(intent.sourceId,data)} จะเสียเทิร์นโจมตีกายภาพถัดไป`)??guard()??attack();
   return guard()??attack();
  }
- if(heroId==='toma'){
+ if(role==='Alchemist'){
   const target=pick('acid');
   if(!(target.corrodedUntil&&target.corrodedUntil>state.round)){const a=make('acid',target.id,'กรดกัดกร่อนเป้าหลัก',`ทุกการโจมตีของทีม +${corrodeBonusOf(data,heroId)}`);if(a)return a;}
   // Haste the hardest-hitting standing ally so it strikes first next round.
   const ally=[...data.heroes].filter(h=>h.id!==heroId&&state.heroes.some(s=>s.id===h.id&&s.hp>0)).sort((a,b)=>b.attack-a.attack)[0];
   return (ally&&make('haste',ally.id,'ยาเร่งเพื่อนตัวแรง',`${actorName(ally.id,data)} ลงมือก่อนทุกคนรอบหน้า`))??attack();
  }
- if(heroId==='mira'){
+ if(role==='Archer'){
   const living2=state.enemies.filter(e=>e.hp>0);
   if(living2.length>1){const v=make('volley','enemies','ห่าธนูโดนทุกตัว',`ตัวละ ${skillPower(data,heroId,'volley')}`);if(v)return v;}
   // Hinder the fastest living enemy so it acts last next round.
   const fast=[...living2].sort((a,b)=>data.enemies.find(e=>e.id===b.id)!.speed-data.enemies.find(e=>e.id===a.id)!.speed)[0];
   return (fast&&make('hinder',fast.id,'ยิงสกัดศัตรูที่เร็วที่สุด',`${actorName(fast.id,data)} จะลงมือท้ายสุดรอบหน้า`))??attack();
  }
- if(heroId==='lio'){
+ if(role==='Bard'){
   // Keep one song playing: mending once the party is worn down, otherwise valor; then attack.
   const song=state.song?.heroId===heroId?state.song.action:undefined;
   const worn=state.heroes.some(h=>h.hp>0&&h.hp<data.heroes.find(d=>d.id===h.id)!.maxHp*.5);
@@ -145,30 +153,30 @@ export function battleLesson(state:BattleState,data:EncounterDefinition):Lesson|
   if(!song){const v=make('valor',heroId,'เพลงกล้าเพิ่มพลังทีม',`ทุกการโจมตี +${skillPower(data,heroId,'valor')}`);if(v)return v;}
   return attack();
  }
- if(heroId==='brann'){
+ if(role==='Warden'){
   // Draw the announced hit away from an ally (reduced on him); otherwise slam the main target.
   if(intent&&intent.targetId!==heroId){const t=make('taunt',heroId,'ยั่วยุดึงการโจมตี',`${actorName(intent.sourceId,data)} จะตีแบรนน์แทน${actorName(intent.targetId,data)} และเบาลง ${Math.round(tauntReductionOf(data,heroId)*100)}%`);if(t)return t;}
   return make('slam',pick('slam').id,'ทุบค้อนรูน',`พลัง ${skillPower(data,heroId,'slam')}`)??attack();
  }
- if(heroId==='sefa'){
+ if(role==='Scout'){
   // Step aside from the announced hit; otherwise ambush an enemy that still has to act this round.
   if(intent?.targetId===heroId){const e=make('evade',heroId,'ก้าวเงาหลบการโจมตี',`${actorName(intent.sourceId,data)} จะตีพลาด`);if(e)return e;}
   const options=reach('ambush');
   const foe=options.find(e=>ambushBonus(state,data,e.id,heroId)>0)??focus(options);
   return (foe&&make('ambush',foe.id,'จู่โจมก่อนศัตรูขยับ',`พลัง ${skillPower(data,heroId,'ambush')+ambushBonus(state,data,foe.id,heroId)}`))??attack();
  }
- if(heroId==='garran'){
+ if(role==='Spear'){
   const front=intent?.kind==='physical'&&data.heroes.find(h=>h.id===intent.targetId)?.lane==='front';
   if(front)return make('brace',heroId,'ตั้งทวนรอสวน',`${actorName(intent!.sourceId,data)} จะโดนแทงสวน ${skillPower(data,heroId,'brace')}`)??make('pierce',pick('pierce').id,'แทงทะลวง',`พลัง ${skillPower(data,heroId,'pierce')}`)??attack();
   return make('pierce',pick('pierce').id,'แทงทะลวง',`พลัง ${skillPower(data,heroId,'pierce')}`)??attack();
  }
- if(heroId==='tracer'){
+ if(role==='Duelist'){
   // Mark only a foe the duelist can strike next turn.
   const target=pick('execute');
   if(target.markedUntil>state.round)return make('execute',target.id,'ตีเป้าเดิมเพื่อใช้ตรา',`พลัง ${skillPower(data,heroId,'execute')+data.rules.markedBonus}`)??make('attack',target.id,'ตีเป้าเดิมเพื่อใช้ตรา',`เพิ่มพลัง +${data.rules.markedBonus}`);
   return make('mark',target.id,'ติดตราไว้ใช้รอบถัดไป',`ยังไม่ทำความเสียหาย · ตราอยู่ ${data.rules.markDuration} รอบ`)??attack();
  }
- if(heroId==='weaver'){
+ if(role==='Mage'){
   if(intent?.kind==='energy'){const ward=make('ward',intent.targetId,'โล่รับพลังงานก่อนเลือด',`โล่ ${skillPower(data,heroId,'ward')}`);if(ward)return ward;}
   return make('bolt',pick('bolt').id,'จอมเวทโจมตีด้วยพลังงาน',`ศรเวทพลัง ${skillPower(data,heroId,'bolt')}`)??attack();
  }

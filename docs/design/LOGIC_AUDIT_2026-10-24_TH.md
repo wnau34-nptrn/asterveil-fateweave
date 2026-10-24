@@ -23,3 +23,7 @@
 เขียน temporary Vitest probe เรียก characterSkillMetric, skillPower, levelBarrier, targetOptions และ resolveCommand: 1 test ผ่าน ยืนยันตัวเลขและเงื่อนไขข้างต้น แล้วลบ probe ออกจาก repository; log `/tmp/fateweave-logic-audit.log` ไม่มีการแก้ source, balance, save หรือภาพ ไม่มีการขอให้เปลี่ยนกติกาในรอบคำถามนี้
 
 แนะนำแก้ 1–2 ก่อน เพราะทำให้หน้าข้อมูลสื่อผิดโดยตรง แล้วแก้ 3 แบบตรวจผลจริงของท่า ส่วน 4–5 ต้องเลือกกติกาที่ต้องการก่อนปรับสมดุลและย้ายเซฟ
+
+## C11 v42
+
+แก้ข้อ 1–3: metric แยกเปอร์เซ็นต์ โล่ รักษา ชุบชีวิตและ utility; Bulwark ใช้ skillPower หลังเลเวล/โหนด; Aegis บล็อกเมื่อไม่มีผู้ยืนคนใดได้โล่เพิ่ม (รวมผลรองเลเวลผู้ใช้) ข้อ 4–5 คงกติกาเดิมตามขอบเขตงาน

@@ -83,7 +83,7 @@ export const legacyKeys = ['asterveil.fateweave.battle.v1', 'asterveil.fateweave
 // v39 → v40 (owner 2026-10-23): haste moves an ally still to act this round right after the alchemist. A battle in
 // progress that used haste restarts from its recorded entry HP (its commands are dropped), as in v35.
 // v41: Magic Power scaling; retain owned items and restart an in-progress battle from entry.
-const SAVE_VERSION = 41;
+const SAVE_VERSION = 42;
 // The classes whose big tree arrived in v37 (release A) and in v39 (the recruits).
 const RELEASE_A_TREES = ['tracer', 'weaver', 'healer', 'garran', 'mira'];
 const RECRUIT_TREES = ['toma', 'sefa', 'brann', 'lio'];
@@ -325,6 +325,7 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
       return id === 'weaver' && (!!members[id]?.gear?.weapon || !!members[id]?.talents?.c1)
         || MAGIC_DAMAGE_SKILLS.includes(cmd.action as ActionId) && (h?.skillBonus ?? 0) !== (h?.damageBonus ?? 0);
     })) b.commands = [];
+    if (version < 42 && Array.isArray(b.commands) && (b.commands.some(c => AUDIT_ACTIONS.includes(obj(c).action as ActionId)) || s.hard === true && b.kind === 'boss')) b.commands = [];
     if (!Array.isArray(b.commands) || b.commands.length > 5000) throw new Error('Invalid battle');
     const entry = hpRecord(b.entry, lookup, map, roster.deployed, members);
     // Validate against the encounter as fought by this run's deployed party (stars included).
@@ -547,6 +548,26 @@ function migrateTrees(envelope: Record<string, unknown>, maps: readonly MapDefin
   const r = envelope.run as Record<string, unknown> | null | undefined;
   if (r && typeof r === 'object' && fix(r.members)) r.mapVersion = -1;
 }
+// C11 changes these trees only. Preserve grants and tome investments; unspent points are derived from level/stars.
+export const AUDIT_ACTIONS: readonly ActionId[] = ['bulwark', 'rouse', 'rally', 'sweep', 'dispel', 'sigil', 'bless', 'hold', 'halt', 'warcry', 'disengage', 'hinder', 'backstab', 'decoy', 'disarm', 'slam', 'quake', 'guardstone', 'tremor', 'dread', 'note', 'finale'];
+export const AUDIT_TREES = ['guardian', 'tracer', 'weaver', 'healer', 'garran', 'mira', 'sefa', 'brann', 'lio'];
+function refundAuditTrees(envelope: Record<string, unknown>, maps: readonly MapDefinition[]): void {
+  for (const key of ['profile', 'run']) {
+    const part = envelope[key] as Record<string, unknown> | null;
+    if (!part || typeof part !== 'object') continue;
+    const members = part.members as Record<string, Record<string, unknown>> | undefined;
+    if (!members || typeof members !== 'object') continue;
+    let changed = false;
+    for (const id of AUDIT_TREES) if (members[id]?.talents && typeof members[id]!.talents === 'object' && Object.keys(members[id]!.talents as object).length) {
+      const m = members[id]!;
+      const map = maps.find(m => m.talents[id]);
+      if (!map || !talentsValid(map, id, (m.level as number) ?? 1, m.talents as Talents, m.stars as number, m.grants as string[] | undefined)) throw new Error('Invalid talents');
+      delete m.talents; delete m.loadout; changed = true;
+    }
+    // A changed run is settled home; a run without spent changed trees can restart its battle from its recorded entry.
+    if (key === 'run' && changed) part.mapVersion = -1;
+  }
+}
 // `map` is the home map (the frontier); `maps` lists every map a run may have been started on.
 export function parseGame(raw: string, map: MapDefinition, lookup: EncounterLookup, maps: readonly MapDefinition[] = [map]): Game {
   const envelope = obj(JSON.parse(raw)); const version = envelope.version as number;
@@ -555,7 +576,8 @@ export function parseGame(raw: string, map: MapDefinition, lookup: EncounterLook
   if (version < 34) migrateTrees(envelope, maps.length ? maps : [map]);
   else if (version < 37) migrateTrees(envelope, maps.length ? maps : [map], [...RELEASE_A_TREES, ...RECRUIT_TREES]);
   else if (version < 39) migrateTrees(envelope, maps.length ? maps : [map], RECRUIT_TREES);
-  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
+  if (version < 42) refundAuditTrees(envelope, maps.length ? maps : [map]);
+  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
   const runMap = (v: unknown): MapDefinition => maps.find(m => m.id === obj(v).mapId) ?? map;
   if (version < 5) {
     const home = runMap(envelope.state); const run = parseRun(envelope.state, version, home, lookup);

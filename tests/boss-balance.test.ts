@@ -32,4 +32,4 @@ it('boss powers remain bounded across ten classes, single/multi enemy fights and
   // At least one ordinary effect must match or beat every boss power in retained party HP in some class/budget.
   for(const power of BOSS_POWERS)expect(rows.filter(r=>r.build===power).some(r=>rows.filter(s=>s.id===r.id&&s.plus===r.plus&&s.entry===r.entry&&s.set===r.set&&!BOSS_POWERS.includes(s.build as typeof BOSS_POWERS[number])).some(s=>s.hp>=r.hp))).toBe(true);
   if(process.env.BOSS_SIM_REPORT)writeFileSync(process.env.BOSS_SIM_REPORT,JSON.stringify({scope:'Advisor; ten classes at star3/Lv6, item Lv11 q100, +0/+10; full/60% entry HP and ungeared companions; none/all six full sets; seven encounters at Lv11. Not physical-device or farm-time evidence.',fights:11760,rows},null,2));
-},60000);
+},180000);

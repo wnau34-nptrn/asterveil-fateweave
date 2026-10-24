@@ -2,7 +2,7 @@ import type { EncounterDefinition } from '../../core/battle/types';
 import { heroes } from '../heroes/team';
 import { enemies } from '../enemies/veilbound';
 export const veilSiege: EncounterDefinition = {
-  id: 'veil-siege', version: 16, level: 8, name: 'ศึกปิดรอยแยก', heroes,
+  id: 'veil-siege', version: 17, level: 8, name: 'ศึกปิดรอยแยก', heroes,
   enemies,
   intents: [
     { sourceId: 'b1', targetSlot: 1, name: 'Raking Slash', damage: 12, kind: 'physical' },
@@ -55,8 +55,8 @@ export const veilSiege: EncounterDefinition = {
     // Knight big tree skills (A6, draft numbers): challenge pulls one enemy's next move, bulwark is a percent cut,
     // rouse heals a percent of each ally's max HP.
     challenge: { name: 'ท้าดวล', english: 'Challenge', icon: '⚔', power: 0, cooldown: 3 },
-    bulwark: { name: 'ปราการหิน', english: 'Bulwark', icon: '♜', power: 60, cooldown: 4 },
-    rouse: { name: 'ปลุกพล', english: 'Rouse', icon: '❋', power: 12, cooldown: 4 },
+    bulwark: { name: 'กำแพงโล่', english: 'Bulwark', icon: '♜', power: 30, cooldown: 4 },
+    rouse: { name: 'ยืนเคียงข้าง', english: 'Rouse', icon: '❋', power: 0, cooldown: 4 },
     // Release A big trees (docs/design/SKILL_TREES_ALL_TH.md, draft numbers). Parry's power is its riposte; halo,
     // blessing, war cry and revive are percents.
     parry: { name: 'ปัดดาบ', english: 'Parry', icon: '⚔', power: 10, cooldown: 3 },
@@ -67,11 +67,11 @@ export const veilSiege: EncounterDefinition = {
     dispel: { name: 'สลายเวท', english: 'Dispel', icon: '✧', power: 12, cooldown: 3 },
     revive: { name: 'ฟื้นคืน', english: 'Revive', icon: '✚', power: 25, cooldown: 5 },
     halo: { name: 'วงแสงคุ้มกัน', english: 'Halo', icon: '❋', power: 30, cooldown: 4 },
-    bless: { name: 'พรกล้า', english: 'Blessing', icon: '✚', power: 20, cooldown: 3 },
-    hold: { name: 'ปักหลัก', english: 'Hold the Line', icon: '⟋', power: 0, cooldown: 3 },
-    halt: { name: 'แทงหยุดยั้ง', english: 'Halting Thrust', icon: '➹', power: 14, cooldown: 3 },
-    warcry: { name: 'เสียงศึกทวน', english: 'War Cry', icon: '⟋', power: 15, cooldown: 3 },
-    disengage: { name: 'ถอยยิง', english: 'Disengage', icon: '⇥', power: 10, cooldown: 3 },
+    bless: { name: 'พรต่อเนื่อง', english: 'Blessing', icon: '✚', power: 8, cooldown: 3 },
+    hold: { name: 'ทวนคุ้มหลัง', english: 'Hold the Line', icon: '⟋', power: 0, cooldown: 3 },
+    halt: { name: 'แทงสวนจังหวะ', english: 'Halting Thrust', icon: '➹', power: 14, cooldown: 3 },
+    warcry: { name: 'เสียงศึก', english: 'War Cry', icon: '⟋', power: 8, cooldown: 3 },
+    disengage: { name: 'ยิงถอยคิว', english: 'Disengage', icon: '⇥', power: 10, cooldown: 3 },
     pin: { name: 'ศรตรึงแถว', english: 'Pinning Volley', icon: '⇶', power: 8, cooldown: 4 },
     track: { name: 'ศรตามรอย', english: 'Tracking Shot', icon: '➶', power: 10, cooldown: 3 },
     // Recruit big trees (docs/design/SKILL_TREES_ALL_TH.md, owner 2026-10-23, draft numbers). Smoke, fury, stone
@@ -80,12 +80,12 @@ export const veilSiege: EncounterDefinition = {
     fury: { name: 'ยาคลั่ง', english: 'Fury Tonic', icon: '⇡', power: 25, cooldown: 3 },
     catalyst: { name: 'ตัวเร่งปฏิกิริยา', english: 'Catalyst', icon: '⚗', power: 6, cooldown: 3 },
     knives: { name: 'มีดบิน', english: 'Throwing Knives', icon: '↯', power: 8, cooldown: 3 },
-    decoy: { name: 'ล่อเงา', english: 'Decoy', icon: '↯', power: 0, cooldown: 3 },
-    disarm: { name: 'ปลดอาวุธ', english: 'Disarm', icon: '⚔', power: 12, cooldown: 3 },
+    decoy: { name: 'เงาคุ้มกัน', english: 'Decoy', icon: '↯', power: 0, cooldown: 3 },
+    disarm: { name: 'ปาดตัดหน้า', english: 'Disarm', icon: '⚔', power: 12, cooldown: 3 },
     stonearmor: { name: 'เกราะหิน', english: 'Stone Armour', icon: '⛨', power: 20, cooldown: 4 },
-    guardstone: { name: 'ศิลาคุ้มกัน', english: 'Guardian Stone', icon: '⛨', power: 40, cooldown: 3 },
+    guardstone: { name: 'ศิลาดึง', english: 'Guardian Stone', icon: '⛨', power: 40, cooldown: 3 },
     tremor: { name: 'ปฐพีสั่น', english: 'Tremor', icon: '⚒', power: 6, cooldown: 4 },
-    dread: { name: 'เพลงสะท้าน', english: 'Song of Dread', icon: '♪', power: 10, cooldown: 2 },
+    dread: { name: 'เพลงสะท้าน', english: 'Song of Dread', icon: '♪', power: 15, cooldown: 2 },
     note: { name: 'โน้ตคม', english: 'Sharp Note', icon: '♫', power: 14, cooldown: 2 },
     solo: { name: 'เพลงเดี่ยว', english: 'Solo', icon: '♪', power: 0, cooldown: 3 },
   },

@@ -31,7 +31,7 @@ describe('skill levels in battle', () => {
   });
   it('a percent skill gains 2 points per level; a skill without numbers shields its user', () => {
     expect(guardReductionOf(levelled('guardian', { guard: 3 }), 'guardian')).toBeCloseTo(0.69);
-    expect(skillPower(levelled('guardian', { bulwark: 4 }, ['bulwark']), 'guardian', 'bulwark')).toBe(66);
+    expect(skillPower(levelled('guardian', { bulwark: 4 }, ['bulwark']), 'guardian', 'bulwark')).toBe(36);
     const mark = levelled('tracer', { mark: 3 }); const r = cast(mark, turnOf(mark, 'tracer'), 'tracer', 'mark', 'f1');
     expect(r.turns[0]!.state.heroes.find(h => h.id === 'tracer')!.barrier).toBe(6);
     // Lv5 mark (no cooldown) shields 12.
@@ -111,7 +111,7 @@ describe('save v37', () => {
   it('round-trips skill levels, tomes, rift cores and run finds', () => {
     const p = open(); p.members.guardian!.skillLevels = { bash: 3, guard: 2 }; const { profile, run } = depart(p, map, lookup, 4);
     battleTomes(run, map, 'elite', run.roster.deployed); run.tomeWins = 2;
-    const text = raw({ profile, run }); expect(JSON.parse(text).version).toBe(41);
+    const text = raw({ profile, run }); expect(JSON.parse(text).version).toBe(42);
     expect(parseGame(text, map, lookup, MAPS)).toEqual({ profile, run });
   });
   it('rejects levels out of range or for another class’s skill, and tomes on a map without them', () => {
@@ -129,6 +129,6 @@ describe('save v37', () => {
     old.profile.members.tracer.talents = { root: 1, a1: 2 }; old.run.members.tracer.talents = { root: 1, a1: 2 };
     const back = parseGame(JSON.stringify(old), map, lookup);
     expect(back.run).toBeNull(); expect(back.profile.members.tracer).toMatchObject({ stars: 5, grants: ['a4', 'b2'] });
-    expect(back.profile.members.tracer!.talents).toBeUndefined(); expect(back.profile.members.guardian!.talents).toEqual({ a1: 2 });
+    expect(back.profile.members.tracer!.talents).toBeUndefined(); expect(back.profile.members.guardian!.talents).toBeUndefined();
   });
 });

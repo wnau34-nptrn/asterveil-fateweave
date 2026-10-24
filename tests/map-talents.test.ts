@@ -47,7 +47,7 @@ describe('passive points during exploration', () => {
     expect(old.run!.members.tracer!.talents).toBeUndefined();
     // Release A trees (save v37) refund older duelist ranks, so learned points round-trip on the current version.
     const run = learnRunTalent(game.run, map, lookup, 'tracer', 'c1s').state;
-    const loaded = parseGame(JSON.stringify({ version: 37, profile: game.profile, run }), map, lookup);
+    const loaded = parseGame(JSON.stringify({ version: 42, profile: game.profile, run }), map, lookup);
     expect(loaded.run!.members.tracer!.talents).toEqual({ c1s: 1 });
     expect(learnRunTalent(loaded.run!, map, lookup, 'tracer', 'c1s').state).toBe(loaded.run);
     for (const outcome of ['withdrawn', 'complete', 'wiped'] as const) {

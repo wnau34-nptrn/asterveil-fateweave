@@ -1,5 +1,5 @@
 import {bossNames,bossDescription} from './boss-equipment';
-import { capAmount, corrodeBonus, enemyIntent, guardReductionOf, hasCap, nextIntentOf, phaseMoves, songPower, tauntReductionOf } from '../core/battle/engine';
+import { capAmount, corrodeBonus, enemyIntent, guardReductionOf, hasCap, nextIntentOf, phaseMoves, skillPower, rallyReductionOf, songPower, tauntReductionOf } from '../core/battle/engine';
 import type { ActionId, BattleState, EncounterDefinition } from '../core/battle/types';
 import { actorName, intentName, phaseThai } from './th';
 
@@ -23,11 +23,11 @@ export function unitStatuses(s: BattleState, d: EncounterDefinition, id: string)
     if(boss)add('boss',boss.power==='focus'?'mark':boss.power==='aegis'?'ward':'heal',bossNames[boss.power],bossDescription(boss.power,boss.amount),hero.bossUsedRound===s.round?'ใช้สิทธิ์รอบนี้แล้ว · พร้อมใหม่รอบถัดไป':'สิทธิ์รอบนี้พร้อม · ต้องตรงเงื่อนไข');
     if (hero.barrier > 0) add('barrier', 'ward', 'โล่เวท', `ดูดซับความเสียหายได้อีก ${hero.barrier} ก่อนหัก HP`, 'อยู่จนโล่ถูกใช้หมด');
     if (hero.barrier > 0 && hero.reflect && alive(hero.reflect.heroId)) add('reflect', 'ward', 'โล่สะท้อน', `สวนกลับ ${hero.reflect.amount} เมื่อโล่ดูดซับการโจมตี · จาก${name(hero.reflect.heroId)}`, 'ใช้ได้ 1 ครั้ง หรือจนโล่หมด');
-    if (hero.evading) add('evade', 'evade', 'ก้าวเงา', `หลบการโจมตีศัตรูได้อีก ${1 + (hero.evadeExtra ?? 0)} ครั้ง`, `ใช้ครบจำนวนครั้ง หรือถึงเทิร์นถัดไปของ${name(id)}`);
+    if (hero.evading) add('evade', 'evade', 'ก้าวเงา', `หลบการโจมตีศัตรูได้อีก ${1 + (hero.evadeExtra ?? 0)} ครั้ง`, `ใช้ครบจำนวนครั้ง หรือถึงเทิร์นถัดไปของ${name(hero.evadeBy ?? id)}`);
     if (hero.hastedRound !== undefined && hero.hastedRound >= s.round) add('haste', 'haste', 'เร่งจังหวะ', `ได้ลำดับลงมือก่อนกลุ่มปกติในรอบ ${hero.hastedRound} (ถ้ามีหลายคน เรียง SPD)`, `มีผลในรอบ ${hero.hastedRound} เท่านั้น`);
-    if (s.guard && alive(s.guard.heroId) && s.enemies.some(e => e.id === s.guard!.sourceId && e.hp > 0)) {
+    if (s.guard && alive(s.guard.heroId) && (s.guard.all || s.enemies.some(e => e.id === s.guard!.sourceId && e.hp > 0))) {
       const g = s.guard;
-      if (g.targetId === id || g.heroId === id) add('guard', 'guard', g.targetId === id ? 'ได้รับการคุ้มกัน' : 'กำลังคุ้มกัน', `หาก${name(g.sourceId)}โจมตี${name(g.targetId)} ${name(g.heroId)}จะรับแทน ลดความเสียหาย ${Math.round(guardReductionOf(d, g.heroId) * 100)}%`, `หมดเมื่อ${name(g.sourceId)}ลงมือ/ถูกกำจัด หรือถึงเทิร์นถัดไปของ${name(g.heroId)}`);
+      if (g.targetId === id || g.heroId === id) add('guard', 'guard', g.targetId === id ? 'ได้รับการคุ้มกัน' : 'กำลังคุ้มกัน', `${g.all ? "ทุกท่าเป้าเดี่ยวที่โจมตี" : `หาก${name(g.sourceId)}โจมตี`}${name(g.targetId)} ${name(g.heroId)}จะรับแทน ลดความเสียหาย ${Math.round(guardReductionOf(d, g.heroId) * 100)}%`, `หมดเมื่อ${name(g.sourceId)}ลงมือ/ถูกกำจัด หรือถึงเทิร์นถัดไปของ${name(g.heroId)}`);
     }
     const brace = s.counter;
     if (brace && alive(brace.heroId) && d.heroes.find(h => h.id === id)?.lane === 'front') {
@@ -40,13 +40,16 @@ export function unitStatuses(s: BattleState, d: EncounterDefinition, id: string)
       const chorus = song.action === 'valor' && hasCap(d, song.heroId, 'chorus') ? ` และลดความเสียหายที่ได้รับ ${capAmount(d, song.heroId, 'chorus')}` : '';
       add('song', song.action, d.skills[song.action].name, `${song.action === 'valor' ? `การโจมตีแต่ละครั้งแรงขึ้น ${power}${chorus}` : song.action === 'dread' ? `ทุกการโจมตีของศัตรูเบาลง ${power}%` : `ฟื้น HP ${power} เมื่อเริ่มรอบใหม่`} · จาก${name(song.heroId)} · มีผลกับเพื่อนที่ยังยืนอยู่ทุกคน`, 'จนกวีเปลี่ยนเพลง ใช้บทส่งท้าย ล้ม หรือจบศึก');
     }
-    if (s.rally?.ids.includes(id) && alive(s.rally.heroId)) add('rally', 'rally', d.skills.rally.name, `ลดความเสียหายจากการโจมตีศัตรูครั้งแรก ${Math.round(d.rules.rallyReduction * 100)}% · จาก${name(s.rally.heroId)}`, `รับการโจมตี 1 ครั้ง หรือ${untilTurn(s.rally.heroId)}`);
+    if (s.rally?.ids.includes(id) && alive(s.rally.heroId)) add('rally', 'rally', d.skills.rally.name, `ลดความเสียหายจากการโจมตีศัตรูครั้งแรก ${Math.round(rallyReductionOf(d, s.rally.heroId) * 100)}% · จาก${name(s.rally.heroId)}`, `รับการโจมตีอีก ${s.rally.ids.filter(x => x === id).length} ครั้ง หรือ${untilTurn(s.rally.heroId)}`);
     if (s.sanctuary?.targetId === id && alive(s.sanctuary.heroId)) add('sanctuary', 'sanctuary', d.skills.sanctuary.name, `HP ไม่ลดต่ำกว่า 1 · จาก${name(s.sanctuary.heroId)}`, untilTurn(s.sanctuary.heroId));
     // Recruit trees: fury tonic, solo, guardian stone and decoy.
     if ((hero.exposed?.round ?? 0) >= s.round) add('fury', 'fury', d.skills.fury.name, `โจมตีแรงขึ้น ${hero.empowered?.percent ?? 0}% แต่รับความเสียหายเพิ่ม ${hero.exposed!.percent}%`, `ถึงจบรอบ ${hero.exposed!.round}`);
     if ((hero.solo?.round ?? 0) >= s.round && alive(hero.solo!.heroId)) add('solo', 'solo', d.skills.solo.name, `ได้ผลเพลงที่บรรเลงอยู่ ×3 · จาก${name(hero.solo!.heroId)}`, `ถึงจบรอบ ${hero.solo!.round}`);
-    if (s.stone?.ids.includes(id) && alive(s.stone.heroId)) add('stone', 'guardstone', d.skills.guardstone.name, `การโจมตีครั้งแรกที่โดนเบาลง ${s.stone.percent}% · จาก${name(s.stone.heroId)}`, untilTurn(s.stone.heroId));
-    if (s.decoy?.targetId === id && alive(s.decoy.heroId)) add('decoy', 'decoy', d.skills.decoy.name, `ท่าถัดไปที่เล็งคนนี้จะเปลี่ยนไปที่${name(s.decoy.heroId)}`, untilTurn(s.decoy.heroId));
+    if (s.stone?.ids.includes(id) && alive(s.stone.heroId)) add('stone', 'guardstone', d.skills.guardstone.name, `ท่าเป้าเดี่ยวแรกเปลี่ยนไปที่${name(s.stone.heroId)} และเบาลง ${s.stone.percent}%`, untilTurn(s.stone.heroId));
+    if (hero.renew && alive(hero.renew.heroId)) add('renew', 'bless', d.skills.bless.name, `ฟื้น ${hero.renew.amount} ตอนเริ่มรอบ`, `ถึงเริ่มรอบ ${hero.renew.until} หรือผู้ใช้ล้ม`);
+    if (s.bulwark && alive(s.bulwark.heroId) && d.heroes.find(h => h.id === id)?.lane === 'front') add('bulwark', 'bulwark', d.skills.bulwark.name, `รับความเสียหายลด ${skillPower(d, s.bulwark.heroId, 'bulwark')}%`, untilTurn(s.bulwark.heroId));
+    if (s.hold && alive(s.hold.heroId) && d.heroes.find(h => h.id === id)?.lane === 'back') add('hold', 'hold', d.skills.hold.name, `${name(s.hold.heroId)}สวนกายภาพทุกท่าที่โดนคนนี้`, untilTurn(s.hold.heroId));
+    if (s.warcry?.ids.includes(id) && alive(s.warcry.heroId)) add('warcry', 'warcry', d.skills.warcry.name, `สวนกายภาพครั้งแรก ${skillPower(d, s.warcry.heroId, 'warcry')}`, untilTurn(s.warcry.heroId));
     if (s.solace?.targetId === id && alive(s.solace.heroId)) add('solace', 'heal', 'แสงปลอบประโลม', `ลดความเสียหาย ${capAmount(d, s.solace.heroId, 'solace')}% · จาก${name(s.solace.heroId)}`, untilTurn(s.solace.heroId));
   }
   if (enemy) {
@@ -61,11 +64,12 @@ export function unitStatuses(s: BattleState, d: EncounterDefinition, id: string)
       add('mark', 'mark', 'ติดตรา', `${users}ใช้โจมตีปกติหรือ${d.skills.execute.name} สร้างความเสียหายเพิ่ม ${d.rules.markedBonus} และใช้ตราหมด`, `${rounds(enemy.markedUntil)} หรือถูกใช้ตราโจมตี`, 'debuff');
     }
     if ((enemy.corrodedUntil ?? 0) > s.round) add('corrode', 'acid', 'กัดกร่อน', `การโจมตีของฝ่ายเราใส่ตัวนี้สร้างความเสียหายเพิ่ม ${corrodeBonus(s, d, id)}`, rounds(enemy.corrodedUntil!), 'debuff');
-    if (enemy.delayedRound !== undefined && enemy.delayedRound >= s.round) add('delay', 'hinder', 'ชะลอจังหวะ', `ได้ลำดับลงมือหลังกลุ่มปกติในรอบ ${enemy.delayedRound} (ถ้ามีหลายตัว เรียง SPD)`, `มีผลในรอบ ${enemy.delayedRound} เท่านั้น`, 'debuff');
+    if (Math.max(enemy.delayedRound ?? 0, enemy.delayedAlso ?? 0) >= s.round) add('delay', 'hinder', 'ชะลอจังหวะ', `ได้ลำดับลงมือหลังกลุ่มปกติในรอบ ${[enemy.delayedRound, enemy.delayedAlso].filter((n): n is number => n !== undefined && n >= s.round).join(", ")} (ถ้ามีหลายตัว เรียง SPD)`, `มีผลในรอบ ${[enemy.delayedRound, enemy.delayedAlso].filter((n): n is number => n !== undefined && n >= s.round).join(", ")} เท่านั้น`, 'debuff');
     if (enemy.interruptedRound !== undefined && enemy.interruptedRound >= s.round) {
       const energy = enemyIntent(s, d, id, enemy.interruptedRound)?.kind === 'energy';
       add('interrupt', energy ? 'sigil' : 'bash', energy ? 'ผนึกพลัง' : 'ขัดจังหวะ', `ยกเลิกท่า${energy ? 'พลังงาน' : 'กายภาพ'}ในเทิร์นที่กำหนด`, `ใช้เมื่อถึงเทิร์นของตัวนี้ในรอบ ${enemy.interruptedRound}`, 'debuff');
     }
+    if (enemy.drawnBy && alive(enemy.drawnBy.heroId)) add('drawn', 'tremor', 'ถูกดึงเป้า', `ท่าถัดไปเล็ง${name(enemy.drawnBy.heroId)}`, `รอบ ${enemy.drawnBy.round}`, 'debuff');
     if (enemy.weaken) add('weaken', 'smoke', 'ท่าเบาลง', `ท่าถัดไปเบาลง ${enemy.weaken}%`, 'หมดเมื่อตัวนี้ลงมือ', 'debuff');
     if (s.taunt && alive(s.taunt.heroId)) add('taunted', 'taunt', 'ถูกยั่วยุ', `หากลงมือก่อนเทิร์นถัดไปของ${name(s.taunt.heroId)} จะเล็งไปที่ผู้นั้น`, untilTurn(s.taunt.heroId), 'debuff');
   }

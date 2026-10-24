@@ -5,6 +5,7 @@ import { newProfile } from '../../src/core/world/profile';
 import { emptyTomes } from '../../src/core/world/tomes';
 import { parseGame } from '../../src/core/save/expedition-save';
 import { MAPS } from '../../src/content/world/maps';
+import { currentSave } from '../fixtures/current-save';
 
 // Review screenshots of the release A trees and the skill-tome tab at the camp for the owner (not a gameplay check).
 // Run with TREE_SHOTS=<dir> npx playwright test tests/browser/tree-shots.spec.ts
@@ -16,7 +17,7 @@ test('tree and skill-level shots 390x844', async ({ browser }) => {
   profile.cleared = ['ruined-border', 'deep-forest']; profile.veteran = true; profile.bank.gold = 140;
   profile.tomes = emptyTomes(); profile.tomes.blade = { small: 7, medium: 1, large: 0 }; profile.tomes.bulwark.small = 4; profile.riftCore = 0;
   profile.members.tracer = { stars: 3, dupes: 0, level: 10, exp: 0, talents: { a1: 2, a2d: 1, a3: 1, a3s: 1, b1: 1, b2: 1, b3r: 1, c1: 2 }, loadout: ['mark', 'execute', 'lunge'], skillLevels: { execute: 3, mark: 2 } };
-  const raw = JSON.stringify({ version: 37, profile, run: null }); parseGame(raw, map, encounterById, MAPS);
+  const raw = currentSave({ profile, run: null }); parseGame(raw, map, encounterById, MAPS);
   const context = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true, reducedMotion: 'reduce', deviceScaleFactor: 2 }), page = await context.newPage();
   await page.addInitScript(({ key, raw }) => { if (!sessionStorage.getItem('shots-seeded')) { localStorage.setItem(key, raw); sessionStorage.setItem('shots-seeded', 'yes'); } }, { key, raw });
   await page.goto('./'); await page.locator('#continue').click();
