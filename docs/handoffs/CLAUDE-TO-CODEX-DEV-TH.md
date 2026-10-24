@@ -181,6 +181,27 @@ Use the approved navy-glass style (src/ui/tokens.css, components.css, incoming/A
 TESTS: a Playwright test in tests/browser/ that wins a fight and checks the panel lists every brought member with +EXP, shows a level-up badge when one happens, shows items/resources, and that closing returns to the map with the same save; update any existing test that read the old map message text. Run npm run typecheck, lint, npx vitest run, build and the touched browser specs. Two 390px screenshots for the owner (normal win with an item, a level-up). Then add the entry Codex owes Claude (AGENTS.md) and merge when CI passes.
 ```
 
+### C11 — ปรับสกิลตามผลตรวจ (เจ้าของสั่ง 2026-10-24)
+
+งานกฎ/เซฟ/สมดุล: Codex เปิด PR ไว้ ไม่ merge เอง Claude ตรวจหลัง Usage รีเซ็ต (AGENTS.md)
+
+```text
+CODEX HANDOFF — RULES-SKILL-AUDIT-001
+Asterveil · Fateweave: implement the approved skill audit
+
+Read AGENTS.md, CLAUDE.md (development rules 1–6, save/encounter versioning), docs/design/SKILL_AUDIT_TH.md (the spec — owner approved 2026-10-24), docs/MASTER_PLAN_TH.md A6b (one owner class per mechanic, no elements, every character playable) and docs/design/SKILL_TREES_ALL_TH.md first. Base branch feature/fateweave-initial-prototype; work branch codex/skill-audit-001; open a PR into the base branch. This changes rules and saves: DO NOT MERGE — Claude reviews it after its usage resets. Never use the word ม่านเวล; the group is the ค่ายทหารรับจ้าง.
+
+GOAL: every ❌ (16) and ⚠ (7) row in SKILL_AUDIT_TH.md section 2 becomes its "ข้อเสนอ" column, so each mechanic group in section 1 has exactly one owner class. Where the proposal offers two options, take the first. Keep node/skill ids when only the effect changes (painted icons use the ids); give a new id only when the old one would lie, and list every id change in the PR.
+
+WHERE: src/core/battle (types.ts ActionId/caps/state, engine.ts resolution, preview uses the same resolver — never duplicate arithmetic), src/content/encounters/veil-siege.ts (skill definitions, cooldowns), src/content/heroes/talents.ts (tree nodes, mods/caps), src/ui/th.ts (Thai names, descriptions, capText — descriptions must state the real numbers and conditions), src/ui/battle-status.ts, battle-playback.ts, tutorial.ts (advisor must not recommend removed effects), src/ui/icons.ts. Pure resolver: no Phaser/browser, no clocks or random damage. Draft numbers: pick values near the existing ones (e.g. damage-reduction 20–30%, bonuses +50% as written) and validate them by simulation.
+
+SAVE/VERSIONS: bump SAVE_VERSION 40 → 41 in src/core/save/expedition-save.ts; for every class whose tree nodes changed meaning, refund that class's tree points on load (follow migrateTrees / RECRUIT_TREES); drop the commands of an in-progress battle that used a changed skill (see how v40 handled haste) or settle it safely; bump EncounterDefinition.version of every encounter whose rules change (src/content/encounters/catalog.ts and siblings) so old battle saves are rejected safely. Update every test that expects version 40.
+
+TESTS: unit tests for each changed skill (effect, boundary, preview equals resolution, deterministic replay, cooldown), the save migration (v40 save with spent points loads with a refund), and keep the existing suites green (balance regression, talents, recruit-trees-engine, battle). Update browser specs that use changed skills (grep tests/browser for each skill id). Run npm run typecheck, npm run lint, npm test, npm run build, the touched browser specs, and npm run sim.
+
+REPORT: in the PR and in docs/handoffs/CODEX-TO-CLAUDE.md (under "ฝากถึง Claude"): a table per changed skill (old → new, id kept/changed, numbers), sim before/after (docs/validation/balance-sim/*.md: campaign clear rates maps 1–3 + hard, TREES.md use counts per tree skill — every changed skill should now be used, e.g. Sefa's shadow build was 2/10), any regressions you could not fix, and the open questions. Mark SKILL_AUDIT_TH.md rows as implemented. Leave the PR open.
+```
+
 ## เมื่อ Usage ของ Claude รีเซ็ต (หลัง พ. 28 ต.ค. 19:00)
 
 เปิดแชตใหม่ (Opus) แล้ววาง:
