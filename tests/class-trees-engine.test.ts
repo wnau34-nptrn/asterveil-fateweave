@@ -113,9 +113,9 @@ describe('mage tree (Eira)', () => {
     expect(hero(st, 'guardian').barrier).toBe(14); expect(hero(st, 'healer').barrier).toBe(7);
   });
   it('sigil modifiers: the sealed move reflects onto its caster, drags it to the back of the next round, and fate seal shields the mage', () => {
-    const d = team({ weaver: { actions: ['sigil'], talents: caps({ sigilreflect: 30, sigildelay: 0, fateseal: 10 }) } });
+    const d = team({ weaver: { actions: ['sigil'], talents: caps({ sigilreflect: 30, sigilward: 10, fateseal: 10 }) } });
     const r = cast(d, turnOf(d, 'weaver'), 'weaver', 'sigil', 'f1');
-    expect(foe(r.turns[0]!.state, 'f1').delayedRound).toBe(2); expect(hero(r.turns[0]!.state, 'weaver').barrier).toBe(10);
+    expect(foe(r.turns[0]!.state, 'f1').delayedRound).toBeUndefined(); expect(hero(r.turns[0]!.state, 'weaver').barrier).toBe(10);
     // The brute's Rift Bolt (28) is sealed and strikes it back for 30%.
     const t = fromEnemy(d, r, 'f1')!; expect(t.events.map(e => e.type)).toEqual(['cancel', 'counter']);
     expect(t.events[1]).toMatchObject({ sourceId: 'weaver', targetId: 'f1', amount: Math.floor(28 * 0.3) });
@@ -151,11 +151,14 @@ describe('priest tree (Seren)', () => {
     const t = fromEnemy(d, cast(d, s, 'healer', 'halo', 'healer'), 'f1')!;
     expect(t.events.find(e => e.type === 'damage')).toMatchObject({ targetId: 'weaver', amount: Math.ceil(28 * 0.7) });
   });
-  it('blessing raises one ally’s hits until the end of the next round', () => {
+  it('renew heals at the next two round starts, capped by max HP', () => {
     const d = team({ healer: { actions: ['bless'] } }); const s = turnOf(d, 'healer');
-    expect(targetOptions(s, d, 'healer', 'bless').find(t => t.id === 'healer')!.valid).toBe(false);
-    const st = cast(d, s, 'healer', 'bless', 'tracer').state; expect(hero(st, 'tracer').empowered).toEqual({ percent: 20, round: 2 });
-    const t = turnOf(d, 'tracer', st); expect(cast(d, t, 'tracer', 'attack', 'f1').turns[0]!.events.find(e => e.type === 'damage')!.amount).toBe(Math.round(16 * 1.2));
+    hero(s, 'tracer').hp = 20;
+    expect(targetOptions(s, d, 'healer', 'bless').find(t => t.id === 'healer')!.valid).toBe(true);
+    const r = cast(d, s, 'healer', 'bless', 'tracer');
+    expect(hero(r.state, 'tracer').renew).toEqual({ heroId: 'healer', amount: 8, until: 3 });
+    expect(r.events.find(e => e.type === 'heal' && e.text === 'Renew.')).toMatchObject({ amount: 8 });
+    expect(hero(r.state, 'tracer').empowered).toBeUndefined();
   });
   it('sanctuary and prayer modifiers: a double sanctuary shields; long prayer heals again next round; quick prayer is ready sooner', () => {
     const d = team({ healer: { actions: ['sanctuary'], talents: caps({ sanctuaryward: 8 }) } });
@@ -177,30 +180,31 @@ describe('priest tree (Seren)', () => {
 describe('spear tree (Garran)', () => {
   // Party: Aegis, Garran (front), Eira, Seren. Round 1: raider, Eira, Garran, Aegis, brute (Rift Bolt at slot 2, Eira), Seren.
   const spear = (patch: Patch) => withMerc('garran', 1, { garran: patch });
-  it('hold the line turns a move aimed at the back lane onto him, firm and countering with the modifiers', () => {
-    const d = spear({ actions: ['hold', 'pierce'], talents: { caps: { holdfirm: 20, holdcounter: 0 } } });
+  it('hold counters physical hits on the back lane without redirecting energy hits', () => {
+    const base = spear({ actions: ['hold'], talents: { caps: { holdfirm: 20, holdcounter: 0 } } });
+    const d = { ...base, intents: base.intents.map(i => ({ ...i, kind: 'physical' as const })), heroes: base.heroes.map(h => ({ ...h, lane: 'back' as const })) };
     const r = cast(d, turnOf(d, 'garran'), 'garran', 'hold', 'garran');
-    expect(enemyIntent(r.turns[0]!.state, d, 'f1', 1)).toMatchObject({ targetId: 'garran', held: true });
-    const t = fromEnemy(d, r, 'f1')!; expect(t.events.find(e => e.type === 'damage')).toMatchObject({ targetId: 'garran', amount: Math.ceil(28 * 0.8) });
-    expect(t.events.find(e => e.type === 'counter')).toMatchObject({ sourceId: 'garran', amount: skillPower(d, 'garran', 'brace') });
+    expect(enemyIntent(r.turns[0]!.state, d, 'f1', 1)!.targetId).toBe('weaver');
+    const t = fromEnemy(d, r, 'f1')!;
+    expect(t.events.find(e => e.type === 'damage')).toMatchObject({ targetId: 'weaver', amount: Math.ceil(28 * .8) });
+    expect(t.events.find(e => e.type === 'counter')).toMatchObject({ sourceId: 'garran', amount: Math.round(skillPower(d, 'garran', 'brace') * 1.5) });
   });
-  it('unyielding keeps him at 1 HP once while he holds the line', () => {
-    const d = spear({ actions: ['hold'], talents: caps({ unyielding: 0 }) }); const s = turnOf(d, 'garran'); hero(s, 'garran').hp = 5;
-    const t = fromEnemy(d, cast(d, s, 'garran', 'hold', 'garran'), 'f1')!; expect(hero(t.state, 'garran').hp).toBe(1); expect(t.state.unyielding).toBe(true);
+  it('unyielding keeps him at 1 HP once during hold', () => {
+    const base = spear({ actions: ['hold'], talents: caps({ unyielding: 0 }) });
+    const d = { ...base, intents: base.intents.map(i => ({ ...i, targetSlot: 1 })) };
+    const s = turnOf(d, 'garran'); hero(s, 'garran').hp = 5;
+    const t = fromEnemy(d, cast(d, s, 'garran', 'hold', 'garran'), 'f1')!;
+    expect(hero(t.state, 'garran').hp).toBe(1); expect(t.state.unyielding).toBe(true);
   });
-  it('halting thrust sends a foe about to strike physically to the end of this round', () => {
-    const d = spear({ actions: ['halt'] }); const open = withMerc('garran', 1, { garran: { actions: ['halt'] } }, openField(veilSiege));
-    const s = turnOf(open, 'garran'); expect(s.order.indexOf('f1')).toBeGreaterThan(s.turnIndex);
-    // The brute's round-1 move is energy: no delay. Its round-2 move (Crushing Blow) is physical.
-    expect(cast(open, s, 'garran', 'halt', 'f1').turns[0]!.events.some(e => e.type === 'delay')).toBe(false);
-    const phys: EncounterDefinition = { ...open, intents: open.intents.map(i => i.sourceId === 'f1' ? { ...i, kind: 'physical' as const } : i) };
-    const r = cast(phys, turnOf(phys, 'garran'), 'garran', 'halt', 'f1'); const order = r.turns[0]!.state.order;
-    expect(order[order.length - 1]).toBe('f1'); expect(r.turns[0]!.events.find(e => e.type === 'delay')!.text).toBe('Enemy acts last this round.');
-    expect(d.heroes[1]!.actions).toContain('halt');
+  it('halt gains 50% against a physical next move and preserves the queue', () => {
+    const d = spear({ actions: ['halt'] });
+    const phys = { ...d, intents: d.intents.map(i => ({ ...i, kind: 'physical' as const })) };
+    const s = turnOf(phys, 'garran'); const r = cast(phys, s, 'garran', 'halt', 'f1').turns[0]!;
+    expect(r.state.order).toEqual(s.order); expect(r.events.find(e => e.type === 'damage')!.amount).toBe(21);
   });
-  it('war cry raises every standing front-lane ally’s hits this round', () => {
+  it('war cry covers front allies once without empowering attacks', () => {
     const d = spear({ actions: ['warcry'] }); const st = cast(d, turnOf(d, 'garran'), 'garran', 'warcry', 'garran').turns[0]!.state;
-    expect(hero(st, 'guardian').empowered).toEqual({ percent: 15, round: 1 }); expect(hero(st, 'weaver').empowered).toBeUndefined();
+    expect(st.warcry).toEqual({ heroId: 'garran', ids: ['guardian', 'garran'] }); expect(hero(st, 'guardian').empowered).toBeUndefined();
   });
   it('deep pierce hits the back row harder; spear fury readies the thrust after each counter', () => {
     const d = spear({ talents: caps({ deeppierce: 30 }) });
@@ -217,14 +221,11 @@ describe('spear tree (Garran)', () => {
 describe('archer tree (Mira)', () => {
   // Party: Aegis, Lyra, Mira (back), Seren. Round 1: Lyra, raider, Mira, Aegis, brute, Seren.
   const archer = (patch: Patch, base?: EncounterDefinition) => withMerc('mira', 2, { mira: patch }, base);
-  it('disengage dodges only the next physical hit; cover shot gives the dodge to the ally the target aims at; quick step hinders', () => {
-    const d = archer({ actions: ['disengage'] }); const s = turnOf(d, 'mira');
-    const st = cast(d, s, 'mira', 'disengage', 'f1').turns[0]!.state; expect(hero(st, 'mira')).toMatchObject({ evading: true, evadePhysical: true });
-    // The brute's Rift Bolt (energy) at slot 2, Mira, still lands.
-    expect(fromEnemy(d, cast(d, s, 'mira', 'disengage', 'f1'), 'f1')!.events.find(e => e.type === 'damage')).toMatchObject({ targetId: 'mira' });
-    const c = archer({ actions: ['disengage'], talents: caps({ covershot: 0, quickstep: 0 }) }, openField(veilSiege)); const cs = turnOf(c, 'mira');
-    const r = cast(c, cs, 'mira', 'disengage', 'b1').turns[0]!; const aim = enemyIntent(cs, c, 'b1', 2)!.targetId;
-    expect(hero(r.state, aim).evading).toBe(true); expect(foe(r.state, 'b1').delayedRound).toBe(2);
+  it('disengage delays a pending foe in this round; quickstep also delays next round, no dodge', () => {
+    const d = archer({ actions: ['disengage'], talents: caps({ covershot: 6, quickstep: 0 }) }); const s = turnOf(d, 'mira');
+    const r = cast(d, s, 'mira', 'disengage', 'f1').turns[0]!;
+    expect(r.state.order.at(-1)).toBe('f1'); expect(hero(r.state, 'mira').evading).toBeUndefined();
+    expect(foe(r.state, 'f1').delayedRound).toBe(2);
   });
   it('pinning volley hits the front row and lifts its screen to the end of the next round', () => {
     const d = archer({ actions: ['pin'] }); const r = cast(d, turnOf(d, 'mira'), 'mira', 'pin', 'enemies');
@@ -248,8 +249,8 @@ describe('archer tree (Mira)', () => {
   });
   it('heavy hinder weakens the next move; chase readies the hinder after a kill; the silent hunter delays the fastest foe in round 1', () => {
     const d = archer({ talents: caps({ heavyhinder: 15, chase: 0 }) }); const s = turnOf(d, 'mira');
-    const r = cast(d, s, 'mira', 'hinder', 'f1'); expect(foe(r.turns[0]!.state, 'f1').weaken).toBe(15);
-    const t = fromEnemy(d, r, 'f1')!; expect(t.events.find(e => e.type === 'damage')!.amount).toBe(Math.ceil(28 * 0.85)); expect(foe(t.state, 'f1').weaken).toBeUndefined();
+    const r = cast(d, s, 'mira', 'hinder', 'f1'); expect(foe(r.turns[0]!.state, 'f1')).toMatchObject({ delayedRound: 2, delayedAlso: 3 });
+    const t = fromEnemy(d, r, 'f1')!; expect(t.events.find(e => e.type === 'damage')!.amount).toBe(28); expect(foe(t.state, 'f1').weaken).toBeUndefined();
     const k = turnOf(d, 'mira'); foe(k, 'b1').hp = 3; expect(hero(cast(d, k, 'mira', 'hinder', 'b1').turns[0]!.state, 'mira').cooldowns.hinder).toBeUndefined();
     const hunter = archer({ talents: caps({ stalker: 0 }) }); const b = beginBattle(hunter).initial;
     expect(foe(b, 'b1').delayedRound).toBe(1); expect(b.order[b.order.length - 1]).toBe('b1');

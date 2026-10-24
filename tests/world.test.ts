@@ -371,7 +371,7 @@ describe('game save', () => {
   const game = (run: ExpeditionState | null = fresh(), profile = newProfile(map, 4)) => ({ profile, run });
   const v6 = (run: unknown, profile: unknown = newProfile(map, 4)) => JSON.stringify({ version: 6, profile, run });
   // Saves before v35 forgive battle commands that no longer replay (four-slot migration), so command checks use v35.
-  const current = (run: unknown, profile: unknown = newProfile(map, 4)) => JSON.stringify({ version: 35, profile, run });
+  const current = (run: unknown, profile: unknown = newProfile(map, 4)) => JSON.stringify({ version: 42, profile, run });
   it('round-trips the profile and an in-progress battle by replay', () => {
     const storage = memory(); let s = fresh(3);
     while (!s.battle) s = move(s, map, s.steps % 2 ? 'right' : 'left').state;

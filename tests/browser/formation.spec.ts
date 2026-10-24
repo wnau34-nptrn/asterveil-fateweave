@@ -30,7 +30,7 @@ test('camp team page moves a member to the front by tap and keyboard, at most th
   await expect(page.locator('#lobby-lane-weaver')).toHaveAttribute('aria-pressed', 'true');
   await grid.locator('.formation-column[data-lane=front] .formation-cell.empty.target').first().click();
   await expect.poll(async () => (await saved(page)).profile.party.lanes?.weaver).toBe('front');
-  expect((await saved(page)).version).toBe(41);
+  expect((await saved(page)).version).toBe(42);
   await expect(grid.locator('.formation-column[data-lane=front] .formation-cell[data-hero]')).toHaveCount(3);
   await expect(grid.locator('.formation-column[data-lane=front] .formation-cell.empty')).toHaveCount(0);
   await expect(page.locator('#lobby-lane-weaver .lane-warn')).toBeVisible();

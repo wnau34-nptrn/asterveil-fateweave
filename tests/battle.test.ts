@@ -255,14 +255,14 @@ describe('bard (Lio)', () => {
   };
   it('valor adds its power to every hero hit until he switches songs; one song at a time', () => {
     const r = act(toLio(), 'valor', 'lio', party);
-    expect(r.state.song).toEqual({ heroId: 'lio', action: 'valor' });
+    expect(r.state.song).toMatchObject({ heroId: 'lio', action: 'valor' });
     expect(actionReason(r.state, party, 'guardian', 'attack')).toBe('');
     const aegis = act(r.state, 'attack', 'f1', party);
     expect(aegis.events.find(e => e.sourceId === 'guardian' && e.type === 'damage')).toMatchObject({ amount: 14 }); // 10 + 4
     let t = aegis.state; while (currentHeroId(t, party) !== 'lio') t = act(t, 'attack', 'f1', party).state;
     expect(targetOptions(t, party, 'lio', 'valor')[0]!.valid).toBe(false); // valor is cooling down
     t = act(t, 'mend', 'lio', party).state;
-    expect(t.song).toEqual({ heroId: 'lio', action: 'mend' });
+    expect(t.song).toMatchObject({ heroId: 'lio', action: 'mend' });
     const after = act(t, 'attack', 'f1', party);
     expect(after.events.find(e => e.sourceId === 'guardian' && e.type === 'damage')).toMatchObject({ amount: 10 });
   });
@@ -277,7 +277,7 @@ describe('bard (Lio)', () => {
   it('the song stops when Lio falls', () => {
     // At 1 HP Lio falls to the Brute's opening bolt (after Aegis's turn), right after starting his song.
     const r = act(toLio({ hp: { guardian: 76, tracer: 56, lio: 1, healer: 46 } }), 'valor', 'lio', party);
-    expect(r.state.song).toEqual({ heroId: 'lio', action: 'valor' });
+    expect(r.state.song).toMatchObject({ heroId: 'lio', action: 'valor' });
     const after = act(r.state, 'attack', 'f1', party);
     expect(after.state.heroes.find(h => h.id === 'lio')!.hp).toBe(0); expect(after.state.song).toBeNull();
   });

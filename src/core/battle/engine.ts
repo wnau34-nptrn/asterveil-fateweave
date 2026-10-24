@@ -8,7 +8,7 @@ export function roundOrder(state: BattleState, data: EncounterDefinition, round 
   // Explicit original index breaks SPD ties, including ties across the two sides.
   // Enemies delayed for this round (archer's hindering shot) act after everyone else.
   // Heroes hasted for this round (alchemist's tonic) act before everyone else.
-  const tier = (id: string) => state.enemies.some(e => e.id === id && e.delayedRound === round) ? 1 : state.heroes.some(h => h.id === id && h.hastedRound === round) ? -1 : 0;
+  const tier = (id: string) => state.enemies.some(e => e.id === id && (e.delayedRound === round || e.delayedAlso === round)) ? 1 : state.heroes.some(h => h.id === id && h.hastedRound === round) ? -1 : 0;
   return definitions(data).map((actor, index) => ({ actor, index })).filter(({ actor }) => living(state, actor.id))
     .sort((a, b) => tier(a.actor.id) - tier(b.actor.id) || b.actor.speed - a.actor.speed || a.index - b.index).map(({ actor }) => actor.id);
 }
@@ -34,7 +34,7 @@ export const rallyReductionOf = (data: EncounterDefinition, heroId: string | und
 // ---- Skill levels (tomes, save v37, docs/design/SKILL_TOMES_TH.md) ----
 // A skill with power grows by a percent per level; a percent skill by points; a skill without numbers shields its user.
 export type SkillLevelKind = 'power' | 'percent' | 'utility';
-const PERCENT_LEVELS: readonly ActionId[] = ['guard', 'rally', 'bulwark', 'halo', 'bless', 'warcry', 'smoke', 'fury', 'stonearmor', 'guardstone', 'dread'];
+const PERCENT_LEVELS: readonly ActionId[] = ['guard', 'rally', 'bulwark', 'halo', 'smoke', 'fury', 'stonearmor', 'guardstone', 'dread'];
 export const skillLevelKind = (data: EncounterDefinition, action: ActionId): SkillLevelKind =>
   PERCENT_LEVELS.includes(action) ? 'percent' : action === 'revive' || data.skills[action].power <= 0 ? 'utility' : 'power';
 export const skillLevel = (data: EncounterDefinition, heroId: string | undefined, action: ActionId): number =>
@@ -74,9 +74,9 @@ export function songPower(data: EncounterDefinition, heroId: string, action: Son
 // Who acts on which target: the UI and the resolver share these groups.
 export type TargetKind = 'self' | 'ally' | 'party' | 'enemies' | 'enemy';
 export function targetKind(action: ActionId): TargetKind {
-  if (action === 'prayer' || action === 'rouse' || action === 'aegis') return 'party';
-  if (['volley', 'bomb', 'sweep', 'storm', 'pin', 'knives', 'tremor'].includes(action)) return 'enemies';
-  if (['brace', 'evade', 'taunt', 'valor', 'mend', 'rally', 'spearwall', 'finale', 'bulwark', 'parry', 'halo', 'hold', 'warcry', 'dread', 'stonearmor'].includes(action)) return 'self';
+  if (action === 'prayer' || action === 'aegis') return 'party';
+  if (['volley', 'bomb', 'sweep', 'storm', 'pin', 'knives', 'tremor', 'quake'].includes(action)) return 'enemies';
+  if (['brace', 'evade', 'taunt', 'valor', 'mend', 'rally', 'spearwall', 'finale', 'bulwark', 'parry', 'halo', 'hold', 'warcry', 'dread', 'stonearmor', 'rouse'].includes(action)) return 'self';
   if (['guard', 'ward', 'heal', 'haste', 'sanctuary', 'bless', 'revive', 'fury', 'decoy', 'guardstone', 'solo'].includes(action)) return 'ally';
   return 'enemy';
 }
@@ -125,11 +125,11 @@ export const ambushBonus = (state: BattleState, data: EncounterDefinition, enemy
   state.order.indexOf(enemyId) > state.turnIndex ? ambushBonusOf(data, heroId) : 0;
 // Magical damage and support use Magic Power (legacy field `skillBonus`); physical damage uses
 // Attack (`damageBonus`). Flat talent bonuses and skill levels keep their existing order.
-export const SUPPORT_SKILLS: readonly ActionId[] = ['ward', 'heal', 'prayer', 'valor', 'mend', 'rouse', 'aegis'];
+export const SUPPORT_SKILLS: readonly ActionId[] = ['ward', 'heal', 'prayer', 'valor', 'mend', 'bless', 'aegis'];
 export const MAGIC_DAMAGE_SKILLS: readonly ActionId[] = ['bolt', 'sigil', 'storm', 'dispel', 'acid', 'bomb', 'catalyst', 'finale', 'note'];
 export const usesMagicPower = (action: ActionId): boolean => SUPPORT_SKILLS.includes(action) || MAGIC_DAMAGE_SKILLS.includes(action);
 // Percent skills (bulwark, halo, blessing, war cry, revive): their power is a percent that only talents raise.
-export const PERCENT_SKILLS: readonly ActionId[] = ['bulwark', 'halo', 'bless', 'warcry', 'revive', 'smoke', 'fury', 'stonearmor', 'guardstone', 'dread'];
+export const PERCENT_SKILLS: readonly ActionId[] = ['bulwark', 'halo', 'revive', 'smoke', 'fury', 'stonearmor', 'guardstone', 'dread'];
 export function skillPower(data: EncounterDefinition, heroId: string, action: ActionId): number {
   const hero = data.heroes.find(h => h.id === heroId);
   // Skill levels: a percent skill gains points, a skill with power a percent on top of its Attack/Support bonus.
@@ -145,15 +145,17 @@ export function talentHitBonus(state: BattleState, data: EncounterDefinition, he
   const marked = enemy.markedUntil > state.round;
   const fresh = state.order.indexOf(enemy.id) > state.turnIndex ? data.heroes.find(h => h.id === heroId)?.gear?.freshHit ?? 0 : 0;
   return (marked ? capAmount(data, heroId, 'deepmark') + (hasGear(data, heroId, 'markhunter') ? GEAR_MARK_HUNTER : 0) : 0)
-    + ((enemy.delayedRound ?? 0) >= state.round ? capAmount(data, heroId, 'hunter') : 0) + fresh + (marked ? sharedMark(state, data, heroId) : 0)
+    + (isDelayed(enemy, state.round) ? capAmount(data, heroId, 'hunter') : 0) + fresh + (marked ? sharedMark(state, data, heroId) : 0)
     // Scout opportunist (capstone): her hits on a foe still to act this round.
     + (state.order.indexOf(enemy.id) > state.turnIndex ? capAmount(data, heroId, 'opportunist') : 0);
 }
 // ---- Recruit big trees (owner 2026-10-23, docs/design/SKILL_TREES_ALL_TH.md, draft numbers) ----
 // Catalyst: per corroded round left; disarm: a physical next move is cut; tremor: every front foe's next move is cut;
-// guardian stone heals the warden when it holds; a finale of dread cuts every enemy's next move; solo triples the song.
-export const CATALYST_PER_ROUND = 8; export const DISARM_PERCENT = 50; export const TREMOR_WEAKEN = 20;
-export const GUARD_STONE_HEAL = 6; export const DREAD_FINALE = 30; export const SOLO_TIMES = 3; export const FURY_EXPOSED = 10;
+// guardian stone heals the warden when it holds; a finale of dread shields allies; solo triples the song.
+export const CATALYST_PER_ROUND = 8; export const DISARM_MULTIPLIER = 1.6;
+export const NOTE_PER_ROUND = 3; export const NOTE_MAX_ROUNDS = 3;
+export const isDelayed = (enemy: EnemyState, round: number): boolean => Math.max(enemy.delayedRound ?? 0, enemy.delayedAlso ?? 0) >= round;
+export const GUARD_STONE_HEAL = 6; export const DREAD_FINALE = 10; export const SOLO_TIMES = 3; export const FURY_EXPOSED = 10;
 // Alchemist chain reaction (capstone): a corroded foe that falls passes its corrosion to another standing foe of its row
 // (else any other standing foe).
 function chainReaction(state: BattleState, data: EncounterDefinition, foe: EnemyState, events: BattleEvent[]): void {
@@ -266,11 +268,10 @@ export function enemyIntent(state: BattleState, data: EncounterDefinition, id: s
   const warden = taunted(state, data, id, round);
   const c = state.challenge; const duel = c && c.enemyId === id && c.round === round && living(state, c.heroId) ? c.heroId : undefined;
   if (!target) return null;
-  // A spear holding the line takes moves aimed at back-lane allies (not whole-party moves or charges).
-  // A scout's decoy draws the next move aimed at the covered ally (not whole-party moves or charges).
-  const decoy = !warden && !duel && !template.all && !template.charge && state.decoy?.targetId === target.id ? taunted(state, data, id, round, state.decoy) : undefined;
-  const holder = !warden && !duel && !decoy && !template.all && !template.charge && data.heroes.find(d => d.id === target.id)?.lane === 'back' ? taunted(state, data, id, round, state.hold) : undefined;
-  return { ...template, targetId: warden ?? duel ?? decoy ?? holder ?? target.id, beat: state.beat, round, ...(holder ? { held: true } : {}), ...(decoy ? { decoyed: true } : {}) };
+  const drawn = !warden && !duel ? taunted(state, data, id, round, foe.drawnBy) : undefined;
+  const stoned = !warden && !duel && !drawn && !template.all && !template.charge && state.stone?.ids.includes(target.id)
+    ? taunted(state, data, id, round, state.stone) : undefined;
+  return { ...template, targetId: warden ?? duel ?? drawn ?? stoned ?? target.id, beat: state.beat, round, ...(stoned ? { stoned: true, stoneTargetId: target.id } : {}) };
 }
 export function plannedIntents(state: BattleState, data: EncounterDefinition, count = 2): Intent[] {
   return upcomingTurns(state, data, (data.heroes.length + data.enemies.length) * (count + 1))
@@ -292,9 +293,9 @@ function settled(state: BattleState, data: EncounterDefinition, events: BattleEv
   else if (state.heroes.every(h => h.hp <= 0)) state.outcome = 'defeat';
   if (state.outcome === 'active') return false;
   state.intent = null; state.guard = null; state.counter = null; state.taunt = null; state.song = null; state.rally = null; state.sanctuary = null; state.solace = null;
-  if (state.challenge) state.challenge = null; if (state.banner) state.banner = null;
+  if (state.challenge) state.challenge = null; if (state.bulwark) state.bulwark = null; if (state.warcry) state.warcry = null;
   if (state.parry) state.parry = null; if (state.halo) state.halo = null; if (state.hold) state.hold = null; if (state.prayerEcho) state.prayerEcho = null; if (state.tracking) delete state.tracking;
-  if (state.decoy) state.decoy = null; if (state.stone) state.stone = null;
+  if (state.stone) state.stone = null;
   events.push({ type: 'outcome', text: state.outcome }); return true;
 }
 // Archer tracking shots fire again as their round ends, on a target still standing.
@@ -323,7 +324,14 @@ function finishOrAdvance(state: BattleState, data: EncounterDefinition, events: 
           if (amount) { h.hp += amount; events.push({ type: 'heal', sourceId: echo.heroId, targetId: h.id, amount, text: 'The prayer lingers.' }); }
         }
       }
-      if (state.banner) state.banner = null;
+      for (const h of state.heroes) if (h.renew) {
+        const renew = h.renew;
+        if (h.hp > 0 && renew.until >= state.round && living(state, renew.heroId)) {
+          const amount = Math.min(renew.amount, data.heroes.find(d => d.id === h.id)!.maxHp - h.hp);
+          if (amount) { h.hp += amount; events.push({ type: 'heal', sourceId: renew.heroId, targetId: h.id, amount, text: 'Renew.' }); }
+        }
+        if (renew.until <= state.round || h.hp <= 0 || !living(state, renew.heroId)) delete h.renew;
+      }
       for (const e of state.enemies) if (e.markedUntil <= state.round) e.markedUntil = 0;
       // A song of mending heals every standing ally as each new round begins.
       if (state.song?.action === 'mend' && living(state, state.song.heroId)) {
@@ -337,7 +345,7 @@ function finishOrAdvance(state: BattleState, data: EncounterDefinition, events: 
       }
     }
   } while (!acts(state, state.order[state.turnIndex]!));
-  if (state.guard && (!living(state, state.guard.heroId) || !living(state, state.guard.sourceId) || currentActorId(state) === state.guard.heroId)) state.guard = null;
+  if (state.guard && (!living(state, state.guard.heroId) || (!state.guard.all && !living(state, state.guard.sourceId)) || currentActorId(state) === state.guard.heroId)) state.guard = null;
   if (state.counter && (!living(state, state.counter.heroId) || currentActorId(state) === state.counter.heroId)) state.counter = null;
   if (state.taunt && (!living(state, state.taunt.heroId) || currentActorId(state) === state.taunt.heroId)) state.taunt = null;
   if (state.song && !living(state, state.song.heroId)) state.song = null;
@@ -347,10 +355,11 @@ function finishOrAdvance(state: BattleState, data: EncounterDefinition, events: 
   if (state.parry && (!living(state, state.parry.heroId) || currentActorId(state) === state.parry.heroId)) state.parry = null;
   if (state.halo && (!living(state, state.halo.heroId) || currentActorId(state) === state.halo.heroId)) state.halo = null;
   if (state.hold && (!living(state, state.hold.heroId) || currentActorId(state) === state.hold.heroId)) state.hold = null;
-  if (state.decoy && (!living(state, state.decoy.heroId) || currentActorId(state) === state.decoy.heroId)) state.decoy = null;
+  if (state.bulwark && (!living(state, state.bulwark.heroId) || currentActorId(state) === state.bulwark.heroId)) state.bulwark = null;
+  if (state.warcry && (!living(state, state.warcry.heroId) || currentActorId(state) === state.warcry.heroId)) state.warcry = null;
   if (state.stone && (!living(state, state.stone.heroId) || currentActorId(state) === state.stone.heroId)) state.stone = null;
   if (state.challenge && (!living(state, state.challenge.heroId) || !living(state, state.challenge.enemyId) || state.round > state.challenge.round)) state.challenge = null;
-  for (const h of state.heroes) if (h.evading && (h.hp <= 0 || currentActorId(state) === h.id)) { delete h.evading; delete h.evadeExtra; delete h.evadePhysical; }
+  for (const h of state.heroes) if (h.evading && (h.hp <= 0 || currentActorId(state) === (h.evadeBy ?? h.id) || !!h.evadeBy && !living(state, h.evadeBy))) { delete h.evading; delete h.evadeBy; delete h.evadeExtra; delete h.evadePhysical; }
   // Warden stone regen (talent): below half HP, he recovers at the start of his turn.
   const turnHero = state.heroes.find(h => h.id === currentActorId(state));
   const regen = turnHero ? capAmount(data, turnHero.id, 'stoneregen') : 0;
@@ -443,9 +452,15 @@ function hit(state: BattleState, data: EncounterDefinition, enemy: EnemyState, i
     strikeBack(state, data, recipient.id, enemy, guardCounterPower(data, recipient.id), events, 'The knight counters.');
   if (enemy.hp > 0 && state.taunt?.heroId === recipient.id && hasCap(data, recipient.id, 'hammercounter') && recipient.hp > 0)
     strikeBack(state, data, recipient.id, enemy, capAmount(data, recipient.id, 'hammercounter'), events, 'The warden hammers back.');
-  // Spear payback (tree modifier): every move his hold the line pulled is answered with the brace's power.
-  if (enemy.hp > 0 && intent.held && state.hold?.heroId === recipient.id && hasCap(data, recipient.id, 'holdcounter') && recipient.hp > 0) {
-    strikeBack(state, data, recipient.id, enemy, skillPower(data, recipient.id, 'brace'), events, 'Held spear counters.'); spearFury(state, data, recipient.id);
+  const holder = state.hold;
+  if (holder && enemy.hp > 0 && intent.kind === 'physical' && living(state, holder.heroId) && data.heroes.find(h => h.id === recipient.id)!.lane === 'back') {
+    const power = Math.round(skillPower(data, holder.heroId, 'brace') * (hasCap(data, holder.heroId, 'holdcounter') ? 1.5 : 1));
+    strikeBack(state, data, holder.heroId, enemy, power, events, 'Held spear counters.'); spearFury(state, data, holder.heroId);
+  }
+  const cry = state.warcry;
+  if (cry && cry.ids.includes(recipient.id) && intent.kind === 'physical' && living(state, cry.heroId)) {
+    cry.ids.splice(cry.ids.indexOf(recipient.id), 1);
+    if (recipient.hp > 0 && enemy.hp > 0) strikeBack(state, data, recipient.id, enemy, skillPower(data, cry.heroId, 'warcry'), events, 'War cry counter.');
   }
   // A braced spear answers the first physical hit on any front-lane ally while it stands; a spear wall answers every one.
   const brace = state.counter;
@@ -490,7 +505,7 @@ function automaticTurns(state: BattleState, data: EncounterDefinition, turns: Tu
     const events: BattleEvent[] = [];
     const enemy = state.enemies.find(e => e.id === actorId)!;
     if (intent) {
-      const g = state.guard; const guard = g && (g.sourceId === actorId || g.uses) && g.targetId === intent.targetId && living(state, g.heroId) ? g : null;
+      const g = state.guard; const guard = g && (g.sourceId === actorId || g.uses || g.all) && g.targetId === intent.targetId && living(state, g.heroId) ? g : null;
       // One enemy hit on one hero: a shadow step dodges it, otherwise reductions apply and it lands.
       const strike = (recipient: HeroState, guard: BattleState['guard']) => {
         // An archer's disengage dodges physical hits only.
@@ -504,7 +519,7 @@ function automaticTurns(state: BattleState, data: EncounterDefinition, turns: Tu
         } else {
           // Reductions apply in order: Guard, a taunting warden (stoneskin ★5 is stronger), then a knight's rally.
           const strong = enraged(state, data, enemy.id) ? Math.ceil(intent.damage * (1 + data.rules.traits!.enragePercent / 100)) : intent.damage;
-          // An archer's heavy hinder weakens the foe's next move.
+          // The alchemist's smoke weakens the foe's next move.
           const weakened = enemy.weaken ? Math.ceil(strong * (1 - enemy.weaken / 100)) : strong;
           // Recruit trees: a song of dread cuts every move; a fury tonic leaves its drinker exposed.
           const dread = state.song?.action === 'dread' && living(state, state.song.heroId) ? songPower(data, state.song.heroId, 'dread') : 0;
@@ -512,11 +527,12 @@ function automaticTurns(state: BattleState, data: EncounterDefinition, turns: Tu
           const raw = (recipient.exposed?.round ?? 0) >= state.round ? Math.ceil(quiet * (1 + recipient.exposed!.percent / 100)) : quiet;
           let incoming = guard ? Math.ceil(raw * (1 - guardReductionOf(data, guard.heroId))) : raw;
           let protector = guard?.heroId;
-          if (state.taunt?.heroId === recipient.id) incoming = Math.ceil(incoming * (1 - (state.taunt.reduction ?? tauntReductionOf(data, recipient.id))));
+          if (state.taunt?.heroId === recipient.id) incoming = Math.ceil(incoming * (1 - tauntReductionOf(data, recipient.id)));
           const rally = state.rally;
           if (rally && rally.ids.includes(recipient.id) && living(state, rally.heroId)) {
-            incoming = Math.ceil(incoming * (1 - rallyReductionOf(data, rally.heroId))); rally.ids = rally.ids.filter(id => id !== recipient.id); protector ??= rally.heroId;
+            incoming = Math.ceil(incoming * (1 - rallyReductionOf(data, rally.heroId))); rally.ids.splice(rally.ids.indexOf(recipient.id), 1); protector ??= rally.heroId;
           }
+          if (state.bulwark && living(state, state.bulwark.heroId) && data.heroes.find(h => h.id === recipient.id)!.lane === 'front') incoming = Math.ceil(incoming * (1 - skillPower(data, state.bulwark.heroId, 'bulwark') / 100));
           // Talents: a braced spear's front wall, a priest's solace, then a bard's chorus (flat).
           const brace = state.counter;
           if (brace && intent.kind === 'physical' && living(state, brace.heroId) && hasCap(data, brace.heroId, 'frontwall') && data.heroes.find(h => h.id === recipient.id)!.lane === 'front')
@@ -524,13 +540,13 @@ function automaticTurns(state: BattleState, data: EncounterDefinition, turns: Tu
           if (state.solace?.targetId === recipient.id && living(state, state.solace.heroId)) incoming = Math.ceil(incoming * (1 - capAmount(data, state.solace.heroId, 'solace') / 100));
           // Release A trees: a priest's halo (energy), a spear holding firm, then a duelist's parry.
           if (state.halo && intent.kind === 'energy' && living(state, state.halo.heroId)) incoming = Math.ceil(incoming * (1 - skillPower(data, state.halo.heroId, 'halo') / 100));
-          if (state.hold?.heroId === recipient.id && hasCap(data, recipient.id, 'holdfirm')) incoming = Math.ceil(incoming * (1 - capAmount(data, recipient.id, 'holdfirm') / 100));
+          if (state.hold && living(state, state.hold.heroId) && intent.kind === 'physical' && data.heroes.find(h => h.id === recipient.id)!.lane === 'back') incoming = Math.ceil(incoming * (1 - capAmount(data, state.hold.heroId, 'holdfirm') / 100));
           const parry = state.parry?.heroId === recipient.id && (state.parry.all || intent.kind === 'physical') ? state.parry : null;
           if (parry) incoming = Math.ceil(incoming * (1 - (parry.all ? capAmount(data, recipient.id, 'parryall') / 100 : PARRY_REDUCTION)));
           // A warden's guardian stone takes the edge off this ally's first hit, and he recovers.
           const stone = state.stone;
-          if (stone?.ids.includes(recipient.id) && living(state, stone.heroId)) {
-            incoming = Math.ceil(incoming * (1 - stone.percent / 100)); stone.ids = stone.ids.filter(id => id !== recipient.id);
+          if (intent.stoned && stone && recipient.id === stone.heroId && living(state, stone.heroId)) {
+            incoming = Math.ceil(incoming * (1 - stone.percent / 100));
             const warden = state.heroes.find(h => h.id === stone.heroId)!; const mend = Math.min(GUARD_STONE_HEAL, data.heroes.find(d => d.id === warden.id)!.maxHp - warden.hp);
             if (mend > 0) { warden.hp += mend; events.push({ type: 'heal', sourceId: warden.id, targetId: warden.id, amount: mend, text: 'Guardian stone.' }); }
           }
@@ -554,10 +570,12 @@ function automaticTurns(state: BattleState, data: EncounterDefinition, turns: Tu
       else strike(state.heroes.find(h => h.id === (guard?.heroId ?? intent.targetId))!, guard);
       // A two-guard knight covers a set number of hits; a plain guard ends when its announced attacker acts.
       if (guard?.uses && events.some(e => e.type === 'damage' && e.sourceId === actorId)) { guard.uses--; if (!guard.uses) state.guard = null; }
-      else if (state.guard?.sourceId === actorId && !state.guard.uses) state.guard = null;
+      else if (state.guard?.sourceId === actorId && !state.guard.uses && !state.guard.all) state.guard = null;
       if (state.challenge?.enemyId === actorId) state.challenge = null;
-      // A decoy draws one move.
-      if (intent.decoyed && state.decoy) state.decoy = null;
+      if (intent.stoned && state.stone) {
+        state.stone.ids = state.stone.ids.filter(id => id !== intent.stoneTargetId);
+      }
+      delete enemy.drawnBy;
     }
     delete enemy.interruptedRound; delete enemy.interruptedBy; delete enemy.weaken;
     const frame = structuredClone(state); const beat = state.beat; const round = state.round;
@@ -590,7 +608,7 @@ export function beginBattle(data: EncounterDefinition, entry?: BattleEntry, pres
   for (const h of state.heroes) if (h.hp > 0 && data.heroes.find(d => d.id === h.id)!.gear?.firstStrike) h.hastedRound = 1;
   // Bard overture (talent): the battle opens with the song of mending already playing.
   const bard = data.heroes.find(h => hasCap(data, h.id, 'overture') && state.heroes.find(s => s.id === h.id)!.hp > 0);
-  if (bard) state.song = { heroId: bard.id, action: 'mend' };
+  if (bard) state.song = { heroId: bard.id, action: 'mend', since: 1 };
   // Knight banner of fate (A6 capstone): every standing hero starts with a barrier of a share of his max HP.
   for (const k of data.heroes.filter(h => hasCap(data, h.id, 'fatebanner') && state.heroes.find(s => s.id === h.id)!.hp > 0)) {
     const amount = Math.round(k.maxHp * capAmount(data, k.id, 'fatebanner') / 100);
@@ -626,8 +644,14 @@ export function actionReason(state: BattleState, data: EncounterDefinition, hero
 }
 export function targetOptions(state: BattleState, data: EncounterDefinition, heroId: string, action: ActionId): TargetOption[] {
   const unavailable = actionReason(state, data, heroId, action);
-  if (action === 'aegis') return [{ id: 'party', name: 'Party', valid: !unavailable, reason: unavailable }];
-  if (action === 'prayer' || action === 'rouse') {
+  if (action === 'aegis') {
+    const adds = state.heroes.some(h => h.hp > 0 && h.barrier < skillPower(data, heroId, 'aegis'));
+    const user = state.heroes.find(h => h.id === heroId);
+    const secondary = !!user && user.barrier < levelBarrier(data, heroId, action);
+    const reason = unavailable || (!adds && !secondary ? 'The party already has this barrier.' : '');
+    return [{ id: 'party', name: 'Party', valid: !reason, reason }];
+  }
+  if (action === 'prayer') {
     const injured = state.heroes.some(h => h.hp > 0 && h.hp < data.heroes.find(d => d.id === h.id)!.maxHp);
     const reason = unavailable || (!injured ? 'The living party is at full health.' : '');
     return [{ id: 'party', name: 'Party', valid: !reason, reason }];
@@ -640,7 +664,7 @@ export function targetOptions(state: BattleState, data: EncounterDefinition, her
     // Self-only stances. Shadow step, challenge and rally lapse at the actor's own turn, so they cannot stack either.
     const reason = unavailable || ((action === 'brace' || action === 'spearwall') && state.counter?.heroId === heroId ? 'Already braced.' :
       (action === 'valor' || action === 'mend' || action === 'dread') && state.song?.heroId === heroId && state.song.action === action ? 'Already playing this song.' :
-      action === 'finale' && state.song?.heroId !== heroId ? 'No song is playing.' : '');
+      action === 'finale' && state.song?.heroId !== heroId ? 'No song is playing.' : action === 'rouse' && !state.heroes.some(h => h.hp > 0 && h.id !== heroId) ? 'Choose another ally.' : '');
     return [{ id: heroId, name: data.heroes.find(h => h.id === heroId)?.name ?? heroId, valid: !reason, reason }];
   }
   if (action === 'haste') return data.heroes.map(h => {
@@ -659,12 +683,12 @@ export function targetOptions(state: BattleState, data: EncounterDefinition, her
   if (['fury', 'decoy', 'guardstone', 'solo'].includes(action)) return data.heroes.map(h => {
     const ally = state.heroes.find(s => s.id === h.id)!;
     const reason = unavailable || (ally.hp <= 0 ? 'This hero is down.' : action !== 'fury' && h.id === heroId ? 'Choose another ally.' :
-      action === 'solo' && (state.song?.heroId !== heroId || state.song.action === 'dread') ? 'No song of valor or mending is playing.' : '');
+      action === 'decoy' && ally.evading ? 'Already evading.' : action === 'solo' && (state.song?.heroId !== heroId || state.song.action === 'dread') ? 'No song of valor or mending is playing.' : '');
     return { id: h.id, name: h.name, valid: !reason, reason };
   });
   if (action === 'bless') return data.heroes.map(h => {
     const ally = state.heroes.find(s => s.id === h.id)!;
-    const reason = unavailable || (ally.hp <= 0 ? 'This hero is down.' : h.id === heroId ? 'Bless another ally.' : '');
+    const reason = unavailable || (ally.hp <= 0 ? 'This hero is down.' : '');
     return { id: h.id, name: h.name, valid: !reason, reason };
   });
   if (['guard', 'ward', 'heal', 'sanctuary'].includes(action)) return data.heroes.map(h => {
@@ -678,7 +702,6 @@ export function targetOptions(state: BattleState, data: EncounterDefinition, her
   return data.enemies.map(e => {
     const actor = state.enemies.find(s => s.id === e.id);
     const reason = unavailable || (!actor || actor.hp <= 0 ? 'This enemy is down.' :
-      action === 'backstab' && nextIntentOf(state, data, e.id)?.targetId === heroId ? 'This enemy is aiming at the scout.' :
       screened(state, data, heroId, action, e.id) ? 'A front-row enemy shields this target.' : '');
     return { id: e.id, name: e.name, valid: !reason, reason };
   });
@@ -701,10 +724,7 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
   const strike = (foe: EnemyState, power: number, text: string) => {
     const boss=foe===enemy&&targetKind(command.action)==='enemy'&&power>0&&foe.markedUntil>state.round?bossPowerReady(state,data,hero.id,'focus'):0;
     if(boss)actor.bossUsedRound=state.round;
-    // A knight's valor banner raises every hero hit for the rest of the round.
-    // A priest's blessing or a spear's war cry raises this hero's own hits too.
-    const banner = (state.banner?.round === state.round && living(state, state.banner.heroId) ? capAmount(data, state.banner.heroId, 'valorbanner') : 0)
-      + ((actor.empowered?.round ?? 0) >= state.round ? actor.empowered!.percent : 0);
+    const banner = (actor.empowered?.round ?? 0) >= state.round ? actor.empowered!.percent : 0;
     const raised = banner ? Math.round(power * (100 + banner) / 100) : power;
     // A bard's solo gives this hero the song of valor twice more.
     const solo = (actor.solo?.round ?? 0) >= state.round && state.song?.action === 'valor' && living(state, state.song.heroId) ? songPower(data, state.song.heroId, 'valor') * (SOLO_TIMES - 1) : 0;
@@ -783,14 +803,17 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
     case 'sweep': {
       // The front row; with the front row down, the back row.
       const live = state.enemies.filter(e => e.hp > 0); const front = live.filter(e => row(e.id) === 'front');
-      for (const foe of front.length ? front : live) strike(foe, skill.power, 'The sweep cuts the row.');
+      const hit = front.length ? front : live;
+      for (const foe of hit) strike(foe, skill.power, 'The sweep cuts the row.');
+      const low = hit.filter(e => e.hp > 0).reduce<EnemyState | undefined>((a, e) => !a || e.hp < a.hp ? e : a, undefined);
+      if (low) { low.markedUntil = Math.max(low.markedUntil, state.round + data.rules.markDuration + (hasPassive(data, hero.id, 'keeneye') ? 1 : 0)); events.push({ type: 'mark', sourceId: hero.id, targetId: low.id, text: 'Enemy marked.' }); }
       break;
     }
     case 'storm': for (const foe of state.enemies.filter(e => e.hp > 0)) strike(foe, skill.power, 'The storm strikes every enemy.'); break;
     case 'aegis': for (const h of state.heroes) barrier(h, skill.power); break;
     case 'dispel':
       damage(skill.power);
-      if (enemy!.hp > 0) { enemy!.dispelledUntil = state.round + 2; events.push({ type: 'dispel', sourceId: hero.id, targetId: enemy!.id, text: 'Veilguard dispelled.' }); }
+      if (enemy!.hp > 0) { enemy!.dispelledUntil = state.round + 2; delete enemy!.steadyRound; events.push({ type: 'dispel', sourceId: hero.id, targetId: enemy!.id, text: 'Veilguard dispelled.' }); }
       break;
     case 'revive': {
       const ally = state.heroes.find(h => h.id === command.targetId)!; const def = data.heroes.find(h => h.id === ally.id)!;
@@ -800,31 +823,19 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
     }
     case 'halo': state.halo = { heroId: hero.id }; events.push({ type: 'buff', sourceId: hero.id, targetId: hero.id, amount: skill.power, text: 'Halo.' }); break;
     case 'bless': {
-      const ally = state.heroes.find(h => h.id === command.targetId)!; ally.empowered = { percent: Math.max(skill.power, ally.empowered?.round !== undefined && ally.empowered.round >= state.round ? ally.empowered.percent : 0), round: state.round + 1 };
-      events.push({ type: 'buff', sourceId: hero.id, targetId: ally.id, amount: skill.power, text: 'Blessing.' }); break;
+      const ally = state.heroes.find(h => h.id === command.targetId)!;
+      ally.renew = { heroId: hero.id, amount: skill.power, until: state.round + 2 };
+      events.push({ type: 'buff', sourceId: hero.id, targetId: ally.id, amount: skill.power, text: 'Renew.' }); break;
     }
     case 'hold': state.hold = { heroId: hero.id, round: state.round }; events.push({ type: 'hold', sourceId: hero.id, targetId: hero.id, text: 'Hold the line.' }); break;
-    case 'halt': {
-      // If the target's next move is physical and it still has to act this round, it acts last this round.
-      const next = nextIntent(); damage(skill.power);
-      const at = state.order.indexOf(enemy!.id);
-      if (enemy!.hp > 0 && next?.kind === 'physical' && next.round === state.round && at > state.turnIndex) {
-        state.order.splice(at, 1); state.order.push(enemy!.id); events.push({ type: 'delay', sourceId: hero.id, targetId: enemy!.id, text: 'Enemy acts last this round.' });
-      }
-      break;
-    }
+    case 'halt': damage(Math.round(skill.power * (nextIntent()?.kind === 'physical' ? 1.5 : 1))); break;
     case 'warcry':
-      for (const h of state.heroes.filter(a => a.hp > 0 && data.heroes.find(d => d.id === a.id)!.lane === 'front')) {
-        h.empowered = { percent: Math.max(skill.power, (h.empowered?.round ?? 0) >= state.round ? h.empowered!.percent : 0), round: Math.max(state.round, (h.empowered?.round ?? 0)) };
-        events.push({ type: 'buff', sourceId: hero.id, targetId: h.id, amount: skill.power, text: 'War cry.' });
-      }
-      break;
+      state.warcry = { heroId: hero.id, ids: state.heroes.filter(h => h.hp > 0 && data.heroes.find(d => d.id === h.id)!.lane === 'front').map(h => h.id) };
+      events.push({ type: 'buff', sourceId: hero.id, targetId: hero.id, amount: skill.power, text: 'War cry.' }); break;
     case 'disengage': {
-      const next = nextIntent(); damage(skill.power);
-      // Cover shot gives the dodge to the ally the target means to hit; quick step also hinders the target.
-      const cover = hasCap(data, hero.id, 'covershot') && next && !next.all ? state.heroes.find(h => h.id === next.targetId && h.hp > 0) : undefined;
-      const dodger = cover ?? actor;
-      if (!dodger.evading) { dodger.evading = true; dodger.evadePhysical = true; events.push({ type: 'evade', sourceId: hero.id, targetId: dodger.id, text: 'Dodges the next physical hit.' }); }
+      const next = nextIntent(); damage(skill.power + (next && next.targetId !== hero.id && hasCap(data, hero.id, 'covershot') ? capAmount(data, hero.id, 'covershot') : 0));
+      const at = state.order.indexOf(enemy!.id);
+      if (enemy!.hp > 0 && at > state.turnIndex) { state.order.splice(at, 1); state.order.push(enemy!.id); events.push({ type: 'delay', sourceId: hero.id, targetId: enemy!.id, text: 'Enemy acts last this round.' }); }
       if (enemy!.hp > 0 && hasCap(data, hero.id, 'quickstep')) { enemy!.delayedRound = state.round + 1; events.push({ type: 'delay', sourceId: hero.id, targetId: enemy!.id, text: 'Enemy acts last next round.' }); }
       break;
     }
@@ -833,9 +844,9 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
       state.pinned = state.round + 1; events.push({ type: 'pin', sourceId: hero.id, targetId: hero.id, text: 'The front row stops screening.' }); break;
     case 'track':
       damage(skill.power);
-      if (enemy!.hp > 0 && (enemy!.delayedRound ?? 0) >= state.round) state.tracking = [...state.tracking ?? [], { heroId: hero.id, enemyId: enemy!.id, round: state.round, power: skill.power }];
+      if (enemy!.hp > 0 && isDelayed(enemy!, state.round)) state.tracking = [...state.tracking ?? [], { heroId: hero.id, enemyId: enemy!.id, round: state.round, power: skill.power }];
       break;
-    case 'backstab': damage(skill.power); break;
+    case 'backstab': damage(skill.power + ambushBonus(state, data, enemy!.id, hero.id)); break;
     // ---- Recruit big trees ----
     case 'smoke': {
       // Smoke: the target's next move is cut whatever its kind (a wide smoke cuts the target's whole row by less; a
@@ -865,11 +876,12 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
       if (back.length && hasCap(data, hero.id, 'twinknives')) for (const foe of front.filter(e => e.hp > 0)) strike(foe, Math.floor(skill.power / 2), 'Throwing knives.');
       break;
     }
-    case 'decoy': state.decoy = { heroId: hero.id, targetId: command.targetId, round: state.round }; events.push({ type: 'taunt', sourceId: hero.id, targetId: command.targetId, text: 'Decoy.' }); break;
+    case 'decoy': {
+      const ally = state.heroes.find(h => h.id === command.targetId)!; ally.evading = true; ally.evadeBy = hero.id; delete ally.evadePhysical;
+      events.push({ type: 'evade', sourceId: hero.id, targetId: ally.id, text: 'Shadow cover.' }); break;
+    }
     case 'disarm': {
-      const next = nextIntent(); damage(skill.power);
-      if (enemy!.hp > 0 && next?.kind === 'physical') weaken(enemy!, DISARM_PERCENT);
-      break;
+      const next = nextIntent(); damage(Math.round(skill.power * (ambushBonus(state, data, enemy!.id, hero.id) && next && next.targetId !== hero.id ? DISARM_MULTIPLIER : 1))); break;
     }
     case 'stonearmor': barrier(actor, Math.round(hero.maxHp * skill.power / 100)); break;
     case 'guardstone': {
@@ -877,21 +889,22 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
       const ratio = (h: HeroState) => h.hp / data.heroes.find(d => d.id === h.id)!.maxHp;
       const twin = hasCap(data, hero.id, 'twinstone') ? state.heroes.filter(h => h.hp > 0 && h.id !== command.targetId && h.id !== hero.id).reduce<HeroState | undefined>((low, h) => !low || ratio(h) < ratio(low) ? h : low, undefined) : undefined;
       const percent = hasCap(data, hero.id, 'twinstone') ? capAmount(data, hero.id, 'twinstone') : hasCap(data, hero.id, 'thickstone') ? capAmount(data, hero.id, 'thickstone') : skill.power;
-      state.stone = { heroId: hero.id, ids: [command.targetId, ...twin ? [twin.id] : []], percent };
+      state.stone = { heroId: hero.id, ids: [command.targetId, ...twin ? [twin.id] : []], percent, round: state.round };
       for (const id of state.stone.ids) events.push({ type: 'buff', sourceId: hero.id, targetId: id, amount: percent, text: 'Guardian stone.' });
       break;
     }
     case 'tremor': {
       const live = state.enemies.filter(e => e.hp > 0); const front = live.filter(e => row(e.id) === 'front');
-      for (const foe of front.length ? front : live) { strike(foe, skill.power, 'The ground shakes.'); if (foe.hp > 0) weaken(foe, TREMOR_WEAKEN); }
+      for (const foe of front.length ? front : live) { strike(foe, skill.power, 'The ground shakes.'); if (foe.hp > 0) foe.drawnBy = { heroId: hero.id, round: nextIntentOf(state, data, foe.id)?.round ?? state.round }; }
       break;
     }
     case 'note': {
-      damage(skill.power);
-      if (enemy!.hp > 0 && hasCap(data, hero.id, 'spellnote')) weaken(enemy!, capAmount(data, hero.id, 'spellnote'));
+      const rounds = state.song?.heroId === hero.id ? Math.min(NOTE_MAX_ROUNDS, state.round - (state.song.since ?? state.round)) : 0;
+      const power = skill.power + rounds * NOTE_PER_ROUND;
+      damage(Math.round(power * (state.song?.heroId === hero.id ? 1 + capAmount(data, hero.id, 'songnote') / 100 : 1)));
       // Twin note: another standing foe of the target's row takes a share.
       const other = hasCap(data, hero.id, 'twinnote') ? state.enemies.find(e => e.hp > 0 && e.id !== enemy!.id && row(e.id) === row(enemy!.id)) : undefined;
-      if (other) strike(other, Math.floor(skill.power * capAmount(data, hero.id, 'twinnote') / 100), 'The note carries on.');
+      if (other) strike(other, Math.floor(power * capAmount(data, hero.id, 'twinnote') / 100), 'The note carries on.');
       break;
     }
     case 'solo': {
@@ -904,11 +917,10 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
       const threshold = hasCap(data, hero.id, 'deadline') ? capAmount(data, hero.id, 'deadline') / 100 : data.rules.finisherThreshold;
       damage(enemy!.hp < maxHp * threshold ? skill.power * 2 : skill.power); break;
     }
-    case 'weakshot': damage(skill.power + ((enemy!.delayedRound ?? 0) >= state.round ? data.rules.weakshotBonus : 0)); break;
+    case 'weakshot': damage(skill.power + (isDelayed(enemy!, state.round) ? data.rules.weakshotBonus : 0)); break;
     case 'quake': {
-      // Sky hammer (capstone): a quake that lands its bonus sends the target to the end of next round's queue.
-      const bonus = nextIntent()?.targetId === hero.id; damage(skill.power + (bonus ? data.rules.quakeBonus : 0));
-      if (bonus && enemy!.hp > 0 && hasCap(data, hero.id, 'skyhammer')) { enemy!.delayedRound = state.round + 1; events.push({ type: 'delay', sourceId: hero.id, targetId: enemy!.id, text: 'Enemy acts last next round.' }); }
+      const live = state.enemies.filter(e => e.hp > 0); const front = live.filter(e => row(e.id) === 'front');
+      for (const foe of front.length ? front : live) { strike(foe, skill.power, 'Earthshaker.'); if (hasCap(data, hero.id, 'skyhammer')) heal(hero.id, capAmount(data, hero.id, 'skyhammer')); }
       break;
     }
     case 'sigil': {
@@ -917,37 +929,36 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
       if (enemy!.hp > 0 && intent?.kind === 'energy' && !blocked) {
         enemy!.interruptedRound = intent.round; enemy!.interruptedBy = hero.id;
         events.push({ type: 'sigil', sourceId: hero.id, targetId: enemy!.id, text: 'Next energy move sealed.' });
+        if (intent && hasCap(data, hero.id, 'sigilward')) barrier(state.heroes.find(h => h.id === intent.targetId)!, capAmount(data, hero.id, 'sigilward'));
         // Fate seal (capstone): a seal that lands shields the mage.
         if (hasCap(data, hero.id, 'fateseal')) barrier(actor, capAmount(data, hero.id, 'fateseal'));
       } else if (enemy!.hp > 0 && intent?.kind === 'energy' && blocked) events.push(resistEvent(hero.id, enemy!.id, blocked));
-      // Sigil drag (tree modifier): the target acts last next round as well.
-      if (enemy!.hp > 0 && hasCap(data, hero.id, 'sigildelay')) { enemy!.delayedRound = state.round + 1; events.push({ type: 'delay', sourceId: hero.id, targetId: enemy!.id, text: 'Enemy acts last next round.' }); }
       break;
     }
     case 'rally':
-      state.rally = { heroId: hero.id, ids: state.heroes.filter(h => h.hp > 0).map(h => h.id) };
+      state.rally = { heroId: hero.id, ids: state.heroes.filter(h => h.hp > 0).flatMap(h => hasCap(data, hero.id, 'rallybanner') ? [h.id, h.id] : [h.id]) };
       events.push({ type: 'rally', sourceId: hero.id, targetId: hero.id, text: 'Every ally’s first hit is reduced until the knight’s next turn.' });
       // Rally modifiers (A6): a bright banner shields every standing ally; a valor banner raises hero hits this round.
       if (hasCap(data, hero.id, 'brightbanner')) for (const h of state.heroes.filter(a => a.hp > 0)) {
         const amount = Math.max(h.barrier, capAmount(data, hero.id, 'brightbanner')) - h.barrier;
         if (amount) { h.barrier += amount; events.push({ type: 'barrier', sourceId: hero.id, targetId: h.id, amount, text: 'Added barrier.' }); }
       }
-      if (hasCap(data, hero.id, 'valorbanner')) { state.banner = { heroId: hero.id, round: state.round }; events.push({ type: 'rally', sourceId: hero.id, targetId: hero.id, amount: capAmount(data, hero.id, 'valorbanner'), text: 'Valor banner.' }); }
       break;
     case 'challenge': {
-      // The challenged enemy's next move aims at the knight.
       const slot = upcomingTurns(state, data, state.order.length * 2 + data.enemies.length).find(t => t.actorId === command.targetId);
       if (slot) state.challenge = { heroId: hero.id, enemyId: command.targetId, round: slot.round };
       events.push({ type: 'taunt', sourceId: hero.id, targetId: command.targetId, text: 'Challenge.' }); break;
     }
     case 'bulwark':
-      // Like a warden's taunt, every enemy aims at the knight until his next turn, with the bulwark's own reduction.
-      state.taunt = { heroId: hero.id, round: state.round, reduction: skill.power / 100 };
-      events.push({ type: 'taunt', sourceId: hero.id, targetId: hero.id, amount: skill.power, text: 'Bulwark.' }); break;
-    case 'rouse':
-      // Restores a share of each standing ally's own max HP (the share grows with Support).
-      for (const h of state.heroes) heal(h.id, Math.round(data.heroes.find(d => d.id === h.id)!.maxHp * skill.power / 100));
-      break;
+      state.bulwark = { heroId: hero.id };
+      events.push({ type: 'buff', sourceId: hero.id, targetId: hero.id, amount: skill.power, text: 'Bulwark.' }); break;
+    case 'rouse': {
+      const allies = state.heroes.filter(h => h.hp > 0 && h.id !== hero.id);
+      const ratio = (h: HeroState) => h.hp / data.heroes.find(d => d.id === h.id)!.maxHp;
+      const low = allies.reduce((a, h) => ratio(h) < ratio(a) ? h : a);
+      state.guard = { heroId: hero.id, targetId: low.id, sourceId: state.intent!.sourceId, all: true };
+      events.push({ type: 'guard', sourceId: hero.id, targetId: low.id, text: 'Stand beside.' }); break;
+    }
     case 'sanctuary':
       state.sanctuary = { heroId: hero.id, targetId: command.targetId };
       events.push({ type: 'sanctuary', sourceId: hero.id, targetId: command.targetId, text: 'The ally cannot fall until the priest’s next turn.' });
@@ -962,13 +973,13 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
       const song = state.song!.action; state.song = null;
       events.push({ type: 'finale', sourceId: hero.id, targetId: hero.id, text: song === 'valor' ? 'Finale of valor.' : song === 'mend' ? 'Finale of mending.' : 'Finale of dread.' });
       if (song === 'valor') for (const foe of state.enemies.filter(e => e.hp > 0)) strike(foe, skill.power, 'The finale strikes every enemy.');
-      else if (song === 'dread') for (const foe of state.enemies.filter(e => e.hp > 0)) weaken(foe, DREAD_FINALE);
+      else if (song === 'dread') for (const ally of state.heroes) barrier(ally, DREAD_FINALE);
       else {
         const power = finaleHealPower(data, hero.id);
         for (const h of state.heroes) heal(h.id, power);
       }
       if (hasCap(data, hero.id, 'encore') && !state.encored?.includes(hero.id)) {
-        state.encored = [...state.encored ?? [], hero.id]; state.song = { heroId: hero.id, action: song };
+        state.encored = [...state.encored ?? [], hero.id]; state.song = { heroId: hero.id, action: song, since: state.round };
         events.push({ type: 'song', sourceId: hero.id, targetId: hero.id, amount: songPower(data, hero.id, song), text: 'Encore.' });
       }
       break;
@@ -978,9 +989,9 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
       // Scout shadow layer (talent): an ambush leaves her in shadow step.
       if (hasCap(data, hero.id, 'shadowlayer') && !actor.evading) { actor.evading = true; events.push({ type: 'evade', sourceId: hero.id, targetId: hero.id, text: 'Scout evades the next hit until its next turn.' }); }
       break;
-    case 'slam': damage(skill.power); if (hasCap(data, hero.id, 'runequake')) splash(skill.power, true); break;
+    case 'slam': damage(skill.power + (nextIntent()?.targetId === hero.id ? data.rules.quakeBonus : 0)); if (hasCap(data, hero.id, 'runequake')) splash(skill.power, true); break;
     case 'valor': case 'mend': case 'dread':
-      state.song = { heroId: hero.id, action: command.action };
+      state.song = { heroId: hero.id, action: command.action, since: state.round };
       events.push({ type: 'song', sourceId: hero.id, targetId: hero.id, amount: songPower(data, hero.id, command.action), text: command.action === 'valor' ? 'Song of valor: every hero hit is stronger.' : command.action === 'mend' ? 'Song of mending: the party heals each round.' : 'Song of dread: every enemy move is weaker.' });
       // Bard life rhythm (capstone): each new song shields every standing ally.
       if (hasCap(data, hero.id, 'liferhythm')) for (const h of state.heroes) barrier(h, capAmount(data, hero.id, 'liferhythm'));
@@ -992,8 +1003,7 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
     case 'hinder': {
       damage(skill.power);
       if (enemy!.hp > 0) { enemy!.delayedRound = state.round + 1; events.push({ type: 'delay', sourceId: hero.id, targetId: enemy!.id, text: 'Enemy acts last next round.' }); }
-      // Heavy hinder (tree modifier): its next move is weaker too.
-      if (enemy!.hp > 0 && hasCap(data, hero.id, 'heavyhinder')) { enemy!.weaken = Math.max(enemy!.weaken ?? 0, capAmount(data, hero.id, 'heavyhinder')); events.push({ type: 'weaken', sourceId: hero.id, targetId: enemy!.id, amount: enemy!.weaken, text: 'Next move weakened.' }); }
+      if (enemy!.hp > 0 && hasCap(data, hero.id, 'heavyhinder')) enemy!.delayedAlso = state.round + 2;
       break;
     }
     case 'acid':

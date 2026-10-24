@@ -109,15 +109,16 @@ export interface EncounterDefinition {
 // `hastedRound`: an alchemist's haste makes this hero act before everyone in that round.
 // `evading`: a scout's shadow step; the first enemy hit on this hero before its next turn misses.
 // Talents: `evadeExtra` = further hits a doubled shadow step dodges; `reflect` = a ward that strikes back once when it absorbs a hit.
-// Release A trees: `evadePhysical` = this dodge only takes a physical hit; `fell` = downed during this
+// `evadePhysical` is kept for serializable compatibility; `fell` = downed during this
 // battle (only those can be revived); `revivedRound` = revived this round (acts from the next one);
-// `empowered` = a percent added to this hero's hits until the end of `round` (priest blessing, spear war cry).
+// `empowered` = the alchemist fury tonic adds a percent to hits until the end of `round`.
 export interface HeroState { id: string; hp: number; barrier: number; cooldowns: Partial<Record<ActionId, number>>; bossUsedRound?:number; hastedRound?: number; evading?: boolean; evadeExtra?: number; evadePhysical?: boolean; reflect?: { heroId: string; amount: number };
   fell?: boolean; revivedRound?: number; empowered?: { percent: number; round: number };
   // Recruit trees: `exposed` = hits taken are raised by a percent until the end of `round` (alchemist fury tonic);
   // `solo` = this hero gets the bard's playing song three times over until the end of `round`.
   exposed?: { percent: number; round: number }; solo?: { heroId: string; round: number };
   // Skill audit (save v42): a priest's lasting blessing heals `amount` as each round up to `until` begins.
+  evadeBy?: string;
   renew?: { heroId: string; amount: number; until: number } }
 // `delayedRound`: an archer's hindering shot sends this enemy to the end of that round's queue (`delayedAlso`: a heavy
 // hinder's second round). `drawnBy`: a warden's tremor turns its move in `round` onto him.
@@ -130,7 +131,7 @@ export interface HeroState { id: string; hp: number; barrier: number; cooldowns:
 export interface EnemyState { id: string; hp: number; markedUntil: number; absent?: boolean; phase?: number; phaseRound?: number; interruptedRound?: number; interruptedBy?: string; steadyRound?: number; delayedRound?: number; corrodedUntil?: number; corrodeBonus?: number;
   weaken?: number; dispelledUntil?: number; delayedAlso?: number; drawnBy?: { heroId: string; round: number } }
 // `stoned`: a warden's guardian stone turned this move from the covered ally to him.
-export interface Intent extends IntentDefinition { targetId: string; beat: number; round: number; stoned?: boolean }
+export interface Intent extends IntentDefinition { targetId: string; beat: number; round: number; stoned?: boolean; stoneTargetId?: string }
 // Party condition carried in from the expedition. Missing ids start at max HP.
 export interface BattleEntry { hp: Readonly<Record<string, number>> }
 export interface Command { beat: number; heroId: string; action: ActionId; targetId: string }

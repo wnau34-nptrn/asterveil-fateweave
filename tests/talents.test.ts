@@ -305,7 +305,7 @@ describe('bard tree modifiers (Lio)', () => {
     expect(hit!.e!.amount! + hit!.e!.absorbed!).toBe(hit!.damage - 2);
   });
   it('overture: the battle opens with the song of mending', () => {
-    expect(createBattle(party([['lio', { b2o: 1 }], ...rest])).song).toEqual({ heroId: 'lio', action: 'mend' });
+    expect(createBattle(party([['lio', { b2o: 1 }], ...rest])).song).toMatchObject({ heroId: 'lio', action: 'mend' });
     expect(skillPower(party([['lio', { b2w: 1 }], ...rest]), 'lio', 'mend')).toBe(5 + 2);
     expect(createBattle(party([['lio'], ...rest])).song).toBeNull();
   });

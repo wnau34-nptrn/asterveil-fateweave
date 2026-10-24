@@ -52,7 +52,7 @@ export function effectCaption(event: BattleEvent): string {
     case 'parry': return 'ปัดดาบ';
     case 'revive': return 'ฟื้นคืน!';
     case 'buff': return 'เสริมพลัง';
-    case 'hold': return 'ปักหลัก';
+    case 'hold': return 'ทวนคุ้มหลัง';
     case 'pin': return 'ตรึงแถว';
     case 'dispel': return 'สลายเวท';
     case 'weaken': return 'อ่อนแรง';

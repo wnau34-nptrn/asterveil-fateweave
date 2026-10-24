@@ -12,6 +12,10 @@ import { battleLesson } from '../../src/ui/tutorial';
 
 export interface TreeBuild { id: string; name: string; talents: Talents; loadout: ActionId[] }
 export const TREE_BUILDS: readonly TreeBuild[] = [
+  { id: 'guardian', name: 'แนวค่าย', talents: { c1s: 1, a1: 2, a2i: 1, c2v: 1, c1: 2, a3: 1, a3s: 1 }, loadout: ['guard', 'bash', 'rally'] },
+  { id: 'guardian', name: 'กำแพงโล่', talents: { a1: 2, a2i: 1, a3: 1, a3s: 1, b1: 2, c1s: 1, c1: 2, c2v: 1 }, loadout: ['guard', 'bulwark', 'rally'] },
+  { id: 'guardian', name: 'ท้าดวล', talents: { b1: 2, b2: 1, b3r: 1, a1: 2, c1s: 1, c1: 2 }, loadout: ['guard', 'bash', 'challenge'] },
+  { id: 'guardian', name: 'ยืนเคียงข้าง', talents: { c1s: 1, c1: 2, c2v: 1, c3: 1, a1: 2, a2t: 1 }, loadout: ['rally', 'rouse', 'guard'] },
   { id: 'tracer', name: 'นักล่าตรา', talents: { a1: 2, a2d: 1, a3: 1, a3s: 1, b1: 1, b2: 1, b3r: 1, c1: 2 }, loadout: ['mark', 'execute', 'lunge'] },
   { id: 'tracer', name: 'เพชฌฆาต', talents: { a1: 2, a2s: 1, b1: 2, b2: 1, b3d: 1, c1: 2 }, loadout: ['mark', 'execute', 'finisher'] },
   { id: 'tracer', name: 'นักดาบหน้า', talents: { c1: 2, c1s: 1, c2m: 1, c3: 1, b1: 2, a1: 2 }, loadout: ['parry', 'sweep', 'execute'] },
@@ -43,7 +47,7 @@ export const TREE_BUILDS: readonly TreeBuild[] = [
   { id: 'lio', name: 'นักร้องนำ', talents: { a1: 2, a2c: 1, a3: 1, c1: 1, c1s: 1, c2s: 1, b1: 1, b2w: 1, b3: 1 }, loadout: ['dread', 'note', 'finale'] },
 ];
 const fights = ['thicket-ambush', 'shadow-stalker', 'crystal-stampede', 'rear-ambush', 'elite-tusk-chief', 'elite-briar-lord', 'beetle-wall', 'forest-swarm', 'channeler-wisps', 'crawler-pack'];
-export interface TreeRow { id: string; build: string; won: number; fought: number; partyHp: number; rounds: number; used: number }
+export interface TreeRow { id: string; build: string; won: number; fought: number; partyHp: number; rounds: number; used: number; actions: Partial<Record<ActionId, number>>; disabled: Partial<Record<ActionId, { won: number; hp: number }>> }
 export const TREE_LEVEL = 10, TREE_STARS = 3;
 export function treeSim(fightLevel = 15): TreeRow[] {
   const catalog = heroCatalog(lookup, map); const teaching = catalog.slice(0, 4);
@@ -53,13 +57,23 @@ export function treeSim(fightLevel = 15): TreeRow[] {
     const base = catalog.find(h => h.id === b.id)!; const mates = teaching.filter(h => h.id !== b.id).slice(0, 3).map(h => starred(h, TREE_STARS, map, TREE_LEVEL));
     const me = starred(base, TREE_STARS, map, TREE_LEVEL, b.talents, undefined, b.loadout.length ? { loadout: b.loadout } : undefined);
     const party = base.lane === 'front' ? [mates[0]!, me, ...mates.slice(1)] : [...mates.slice(0, 2), me, mates[2]!];
-    const row: TreeRow = { id: b.id, build: b.name, won: 0, fought: 0, partyHp: 0, rounds: 0, used: 0 };
+    const row: TreeRow = { id: b.id, build: b.name, won: 0, fought: 0, partyHp: 0, rounds: 0, used: 0, actions: {}, disabled: {} };
     for (const id of fights) {
       const data = withParty(withLevel(lookup(id)!, fightLevel, map.progression.monsterLevelPercent), party);
       let s = beginBattle(data).state;
       for (let i = 0; i < 200 && s.outcome === 'active'; i++) {
-        const l = battleLesson(s, data)!; if (l.heroId === b.id && b.loadout.includes(l.action) && !base.actions.includes(l.action)) row.used++;
+        const l = battleLesson(s, data)!; if (l.heroId === b.id) row.actions[l.action] = (row.actions[l.action] ?? 0) + 1; if (l.heroId === b.id && b.loadout.includes(l.action) && !base.actions.includes(l.action)) row.used++;
         s = resolveCommand(s, data, { beat: s.beat, heroId: l.heroId, action: l.action, targetId: l.targetId }).state;
+      }
+      for (const action of b.loadout) {
+        const without = withParty(data, data.heroes.map(h => h.id === b.id ? { ...h, actions: h.actions.filter(a => a !== action) } : h));
+        let off = beginBattle(without).state;
+        for (let i = 0; i < 200 && off.outcome === 'active'; i++) {
+          const l = battleLesson(off, without)!; off = resolveCommand(off, without, { beat: off.beat, heroId: l.heroId, action: l.action, targetId: l.targetId }).state;
+        }
+        const impact = row.disabled[action] ??= { won: 0, hp: 0 };
+        if (off.outcome === 'victory') impact.won++;
+        impact.hp += off.heroes.reduce((n, h) => n + h.hp, 0) / without.heroes.reduce((n, h) => n + h.maxHp, 0);
       }
       row.fought++; if (s.outcome === 'victory') row.won++; row.rounds += s.round;
       row.partyHp += s.heroes.reduce((n, h) => n + h.hp, 0) / data.heroes.reduce((n, h) => n + h.maxHp, 0);
@@ -71,5 +85,7 @@ export function treeSim(fightLevel = 15): TreeRow[] {
 export function treeReport(rows: TreeRow[]): string {
   const lines = ['| Class | Build | Won | Party HP left | Rounds | Tree skills used |', '|---|---|---|---|---|---|'];
   for (const r of rows) lines.push(`| ${r.id} | ${r.build} | ${r.won}/${r.fought} | ${Math.round(r.partyHp / r.fought * 100)}% | ${(r.rounds / r.fought).toFixed(1)} | ${r.used} |`);
+  lines.push('', '| Character | Build | Action usage | Won | HP |', '|---|---|---|---|---|', ...rows.map(r => `| ${r.id} | ${r.build} | ${Object.entries(r.actions).map(([id,n])=>`${id}: ${n}`).join(', ')} | ${r.won}/${r.fought} | ${Math.round(r.partyHp/r.fought*100)}% |`));
+  lines.push('', 'Ablation: the same team/fights/advisor with just this action unavailable; positive deltas mean the equipped action helped.', '', '| Character | Build | Disabled action | Uses | Win delta | Team HP delta (points) |', '|---|---|---|---|---|---|', ...rows.flatMap(r => Object.entries(r.disabled).map(([action,off]) => `| ${r.id} | ${r.build} | ${action} | ${r.actions[action as ActionId] ?? 0} | ${r.won-off.won} | ${((r.partyHp-off.hp)/r.fought*100).toFixed(1)} |`)));
   return lines.join('\n');
 }
