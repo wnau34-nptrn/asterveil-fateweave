@@ -16,10 +16,10 @@ export type TalentCap = 'retribution' | 'guardcounter' | 'deepmark' | 'relentles
   | 'pierceline' | 'frontwall' | 'hunter' | 'volleyhinder' | 'acidspread' | 'quickbrew' | 'shadowlayer' | 'doubleshadow'
   | 'hammercounter' | 'stoneregen' | 'chorus' | 'overture'
   // Knight big tree modifiers (A6): two guards, energy bash, banners at rally and at the battle start.
-  | 'twoguard' | 'reflectbash' | 'brightbanner' | 'valorbanner' | 'fatebanner'
+  | 'twoguard' | 'reflectbash' | 'brightbanner' | 'rallybanner' | 'fatebanner'
   // Release A big trees: duelist, mage, priest, spear and archer modifiers and capstones.
   | 'sharedmark' | 'parrymark' | 'parryall' | 'deadline' | 'endlessdance'
-  | 'piercebolt' | 'twinward' | 'sigilreflect' | 'sigildelay' | 'arcanecharge' | 'fateseal'
+  | 'piercebolt' | 'twinward' | 'sigilreflect' | 'sigilward' | 'arcanecharge' | 'fateseal'
   | 'sanctuaryward' | 'longprayer' | 'quickprayer' | 'lastprayer' | 'dawn'
   | 'deeppierce' | 'spearfury' | 'holdfirm' | 'holdcounter' | 'unyielding'
   | 'heavyhinder' | 'chase' | 'quickstep' | 'covershot' | 'stalker'
@@ -27,7 +27,7 @@ export type TalentCap = 'retribution' | 'guardcounter' | 'deepmark' | 'relentles
   | 'smokepoison' | 'smokewide' | 'mobilelab' | 'chainreaction'
   | 'twinknives' | 'quickknives' | 'silentend' | 'opportunist'
   | 'runequake' | 'twinstone' | 'thickstone' | 'skyhammer'
-  | 'spellnote' | 'twinnote' | 'encore' | 'liferhythm';
+  | 'songnote' | 'twinnote' | 'encore' | 'liferhythm';
 // Talent numbers that add to a rule for this hero only (summed over ranks).
 export type TalentRule = 'guardReduction' | 'tauntReduction' | 'corrodeBonus' | 'ambushBonus' | 'executeHeal' | 'healBarrier' | 'hasteHeal' | 'dodgeHeal';
 // What a member's spent talent points do in battle (world `starred` builds it; stat nodes are already in maxHp/attack/skillBonus).
@@ -109,15 +109,18 @@ export interface EncounterDefinition {
 // `hastedRound`: an alchemist's haste makes this hero act before everyone in that round.
 // `evading`: a scout's shadow step; the first enemy hit on this hero before its next turn misses.
 // Talents: `evadeExtra` = further hits a doubled shadow step dodges; `reflect` = a ward that strikes back once when it absorbs a hit.
-// Release A trees: `evadePhysical` = this dodge only takes a physical hit (archer disengage); `fell` = downed during this
+// Release A trees: `evadePhysical` = this dodge only takes a physical hit; `fell` = downed during this
 // battle (only those can be revived); `revivedRound` = revived this round (acts from the next one);
 // `empowered` = a percent added to this hero's hits until the end of `round` (priest blessing, spear war cry).
 export interface HeroState { id: string; hp: number; barrier: number; cooldowns: Partial<Record<ActionId, number>>; bossUsedRound?:number; hastedRound?: number; evading?: boolean; evadeExtra?: number; evadePhysical?: boolean; reflect?: { heroId: string; amount: number };
   fell?: boolean; revivedRound?: number; empowered?: { percent: number; round: number };
   // Recruit trees: `exposed` = hits taken are raised by a percent until the end of `round` (alchemist fury tonic);
   // `solo` = this hero gets the bard's playing song three times over until the end of `round`.
-  exposed?: { percent: number; round: number }; solo?: { heroId: string; round: number } }
-// `delayedRound`: an archer's hindering shot sends this enemy to the end of that round's queue.
+  exposed?: { percent: number; round: number }; solo?: { heroId: string; round: number };
+  // Skill audit (save v42): a priest's lasting blessing heals `amount` as each round up to `until` begins.
+  renew?: { heroId: string; amount: number; until: number } }
+// `delayedRound`: an archer's hindering shot sends this enemy to the end of that round's queue (`delayedAlso`: a heavy
+// hinder's second round). `drawnBy`: a warden's tremor turns its move in `round` onto him.
 // `corrodeBonus`: the bonus of the flask that corroded it (talents can raise it; missing = the rule's value).
 // `steadyRound` (boss steadfast): the last round a boss whose turn was cancelled cannot be interrupted again.
 // `absent`: a reserve not yet summoned (kept at 0 HP, so it is out of the queue and the target lists).
@@ -125,9 +128,9 @@ export interface HeroState { id: string; hp: number; barrier: number; cooldowns:
 // `interruptedBy`: the hero whose Bash/Sigil cancelled that turn. `weaken`: its next move is cut by this percent
 // (archer heavy hinder). `dispelledUntil`: a mage's dispel switches off its veilguard while the round is below this.
 export interface EnemyState { id: string; hp: number; markedUntil: number; absent?: boolean; phase?: number; phaseRound?: number; interruptedRound?: number; interruptedBy?: string; steadyRound?: number; delayedRound?: number; corrodedUntil?: number; corrodeBonus?: number;
-  weaken?: number; dispelledUntil?: number }
-// `held`: a spear's hold the line turned this move from a back-lane ally to him; `decoyed`: a scout's decoy drew it.
-export interface Intent extends IntentDefinition { targetId: string; beat: number; round: number; held?: boolean; decoyed?: boolean }
+  weaken?: number; dispelledUntil?: number; delayedAlso?: number; drawnBy?: { heroId: string; round: number } }
+// `stoned`: a warden's guardian stone turned this move from the covered ally to him.
+export interface Intent extends IntentDefinition { targetId: string; beat: number; round: number; stoned?: boolean }
 // Party condition carried in from the expedition. Missing ids start at max HP.
 export interface BattleEntry { hp: Readonly<Record<string, number>> }
 export interface Command { beat: number; heroId: string; action: ActionId; targetId: string }
@@ -135,21 +138,22 @@ export interface BattleState {
   encounterId: string; beat: number; round: number; order: string[]; turnIndex: number; outcome: Outcome;
   heroes: HeroState[]; enemies: EnemyState[]; intent: Intent | null; commands: Command[];
   // `uses` (Knight twoguard): the guard covers this many hits on the target from any enemy until the knight returns.
-  guard: { heroId: string; targetId: string; sourceId: string; uses?: number } | null;
+  // `all` (Knight stand beside): every hit on the target until the knight's next turn.
+  guard: { heroId: string; targetId: string; sourceId: string; uses?: number; all?: boolean } | null;
   // Spear brace (2C-2): the next physical enemy hit on a front-lane ally is countered.
   // Spear wall (★3): `wall` counters every physical hit on the front lane, not only the first.
   counter: { heroId: string; wall?: boolean } | null;
   // Hammer warden taunt (2C-2): from the cast until the warden's next turn, every enemy move aims at him.
-  // `reduction`: the Knight's bulwark uses the same pull with its own reduction.
-  taunt: { heroId: string; round: number; reduction?: number } | null;
+  taunt: { heroId: string; round: number } | null;
+  // Knight shield wall (skill audit): front-lane allies take less until his next turn; nothing is pulled.
+  bulwark?: { heroId: string } | null;
   // Knight challenge (A6): that enemy's move in `round` aims at the knight.
   challenge?: { heroId: string; enemyId: string; round: number } | null;
-  // Knight valor banner (A6): every hero hit is stronger for the rest of `round`.
-  banner?: { heroId: string; round: number } | null;
   // Bard song (2C-2): persists until the bard switches songs, falls or the battle ends.
   // Recruit trees: the song of dread (`dread`) cuts every enemy move while it plays.
-  song: { heroId: string; action: SongId } | null;
-  // Knight rally (★3): each listed ally's first enemy hit is reduced until the knight's next turn.
+  // `since`: the round it began (a sharp note grows with it).
+  song: { heroId: string; action: SongId; since?: number } | null;
+  // Knight rally (★3): each listed ally's first enemy hit is reduced until the knight's next turn (listed twice: two hits).
   rally?: { heroId: string; ids: string[] } | null;
   // Priest sanctuary (★3): the ally cannot drop below 1 HP until the priest's next turn.
   sanctuary?: { heroId: string; targetId: string } | null;
@@ -170,17 +174,18 @@ export interface BattleState {
   prayerEcho?: { heroId: string; round: number; amount: number } | null;
   // Priests who used their once-per-battle revive; `lastPrayer` = the last-prayer capstone has fired.
   revived?: string[]; lastPrayer?: boolean;
-  // Spear hold the line: from the cast until his next turn, moves aimed at back-lane allies turn to him.
+  // Spear rear guard (hold): from the cast until his next turn, he counters every physical hit on a back-lane ally.
+  // Spear war cry: each listed front-lane ally counters the first physical hit it takes until his next turn.
+  warcry?: { heroId: string; ids: string[] } | null;
   hold?: { heroId: string; round: number } | null; unyielding?: boolean;
   // Archer pinning volley: the front row screens nothing while the round is at most `round`.
   pinned?: number;
   // Archer tracking shots that fire again as `round` ends (if the target is still standing).
   tracking?: { heroId: string; enemyId: string; round: number; power: number }[];
   // ---- Recruit big trees (owner 2026-10-23) ----
-  // Scout decoy: from the cast until her next turn, the next move aimed at `targetId` turns to her.
-  decoy?: { heroId: string; targetId: string; round: number } | null;
-  // Warden guardian stone: each listed ally's first hit taken is cut by `percent` until his next turn (he heals when it holds).
-  stone?: { heroId: string; ids: string[]; percent: number } | null;
+  // Warden guardian stone: from the cast until his next turn, the first move aimed at each listed ally turns to him and
+  // is cut by `percent` (he heals when it holds).
+  stone?: { heroId: string; ids: string[]; percent: number; round: number } | null;
   // Bards whose encore (capstone) has already replayed a song this battle.
   encored?: string[];
 }
