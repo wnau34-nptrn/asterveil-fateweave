@@ -1,11 +1,19 @@
 # Codex → Claude handoff
 
+## 2026-10-24 — Owner revision: compact victory rewards
+
+- Owner asked for EXP in two rows and all rewards on one page. `codex/battle-rewards-compact`: member grid sizes columns from brought-member count, compact portraits/bars/badges, two-column resources/items, a single item spans the width. Item descriptions remain available on tap. No core/content/save changes.
+- Files: battle-rewards.ts, components.css, battle-rewards.spec.ts. Added assertions for exactly two member rows and no overview scrolling at 390×844 (item and level-up wins).
+- Previous rewards PR #63 merged as `5d14ca1567436389fb96a06d1dfcbe0738b7e6fb`, with quality and full browser CI passed. All 7 combat return routes passed locally after updating dismissal expectations.
+- Compact screenshots: `/tmp/rewards-compact-final/battle-rewards-victory-rewards-item-at-390px/rewards-item.png` and `.../battle-rewards-victory-rewards-level-up-at-390px/rewards-level-up.png`. Validation: typecheck, lint, 751 Vitest tests, build, both Chromium reward specs passed. Both compact screenshots visually inspected; two-row/no-scroll assertions pass. PR #64 opened; merge waits for CI.
+
+
 ## 2026-10-24 — UI-BATTLE-REWARDS-001
 
-- Branch `codex/battle-rewards-001` → `feature/fateweave-initial-prototype`; PR #63: https://github.com/wnau34-nptrn/asterveil-fateweave/pull/63; merge status to be appended after CI.
+- Branch `codex/battle-rewards-001` → `feature/fateweave-initial-prototype`; PR #63: https://github.com/wnau34-nptrn/asterveil-fateweave/pull/63; merged as `5d14ca1` after both CI workflows passed.
 - Added disposable DOM victory dialog after the existing battle result: actual EXP gains for every brought member (including downed/reserves), pre-finish → final EXP bars, level-up badges, level-gap note, item art/details, nonzero resources. Closing only dismisses; commitBattle saves first. Reload never recreates rewards. Tutorial skips rewards to retain the story sequence; defeat/wipe unchanged.
 - Files: `src/ui/battle-rewards.ts`, `game-shell.ts`, `components.css`; browser reward tests plus world/targeted-loot dismissal updates. No core/content/save changes.
-- Validation: typecheck, lint, 751 Vitest tests and build passed. New Chromium 390×844 item/level-up specs passed; targeted-loot specs passed at 320/390/1366px; final focused rewards/world run 6/6 passed (includes Enter/Escape, item inspection, reload while open and tutorial story). A broader local world run was interrupted after HMR caused a navigation-context failure; that test passed in the clean focused rerun. Initial full CI: 7 combat route tests still assumed immediate return to map; updated the shared test to dismiss rewards and assert unchanged save. All other CI tests passed. Full browser rerun pending. Browser extension control unavailable; used explicitly requested Playwright with system Chromium (download host denied).
+- Validation: typecheck, lint, 751 Vitest tests and build passed. New Chromium 390×844 item/level-up specs passed; targeted-loot specs passed at 320/390/1366px; final focused rewards/world run 6/6 passed (includes Enter/Escape, item inspection, reload while open and tutorial story). A broader local world run was interrupted after HMR caused a navigation-context failure; that test passed in the clean focused rerun. Initial full CI: 7 combat route tests still assumed immediate return to map; updated the shared test to dismiss rewards and assert unchanged save. All other CI tests passed. All 7 corrected combat routes passed locally; full browser rerun and quality CI passed. Browser extension control unavailable; used explicitly requested Playwright with system Chromium (download host denied).
 - Owner evidence: `/tmp/rewards-verified/battle-rewards-victory-rewards-item-at-390px/rewards-item.png` and `/tmp/rewards-verified/battle-rewards-victory-rewards-level-up-at-390px/rewards-level-up.png`, both visually inspected. Owner request authorizes merge after CI. No new visual approval claimed.
 
 

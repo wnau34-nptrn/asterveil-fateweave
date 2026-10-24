@@ -333,3 +333,30 @@
   .reward-member { padding:9px 0; }
   .battle-rewards h3 { margin:10px 0; }
 }
+
+/* Compact reward overview: members occupy two rows; loot shares the remaining page. */
+#app .battle-rewards[open] { padding:16px; gap:10px; }
+.battle-rewards header { flex-shrink:0; }
+.battle-rewards h2 { font-size:24px; margin:2px 0; }
+.battle-rewards h3 { font-size:14px; margin:10px 0 6px; }
+.reward-members { display:grid; grid-template-columns:repeat(var(--reward-columns,2),minmax(0,1fr)); gap:8px; }
+.reward-member { flex-wrap:wrap; align-content:start; gap:6px; padding:10px; border:1px solid #7995b733; border-radius:10px; background:#ffffff05; }
+.reward-member .portrait { width:36px; height:36px; }
+.reward-member > div { min-width:70px; }
+.reward-member b { font-size:14px; }
+.reward-member span { font-size:12px; }
+.reward-member small { font-size:10px; line-height:1.4; }
+.reward-exp { height:5px; margin:5px 0; }
+.reward-level { font-size:12px; }
+.reward-items,.reward-resources { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:6px; }
+.reward-items summary { gap:6px; min-height:52px; font-size:12px; }
+.reward-items .gear-art { --art:40px; flex-shrink:0; }
+.reward-items small { font-size:10px; }
+.reward-items p { font-size:12px; margin:6px 0; }
+.reward-items li,.reward-resources li { padding:8px; margin:0; border-radius:10px; }
+.reward-resources li { display:flex; align-items:center; gap:5px; font-size:12px; }
+.reward-resources li b { margin-left:auto; white-space:nowrap; }
+.reward-resources .icon { width:20px; height:20px; flex-shrink:0; }
+@container game (max-width:360px) { #app .battle-rewards[open] { padding:10px; } .reward-member { padding:6px; } }
+.reward-items > li:only-child { grid-column:1 / -1; }
+.reward-member > div { min-width:0; flex-basis:70px; }
