@@ -183,13 +183,13 @@ TESTS: a Playwright test in tests/browser/ that wins a fight and checks the pane
 
 ### C11 — ปรับสกิลตามผลตรวจ (เจ้าของสั่ง 2026-10-24)
 
-งานกฎ/เซฟ/สมดุล: Codex เปิด PR ไว้ ไม่ merge เอง Claude ตรวจหลัง Usage รีเซ็ต (AGENTS.md)
+งานกฎ/เซฟ/สมดุล: เจ้าของอนุญาต 2026-10-24 ให้ Codex merge เองเมื่อผ่านทุกการตรวจ และดูแลสมดุลทั้งหมดเอง Claude ตรวจย้อนหลังหลัง Usage รีเซ็ต
 
 ```text
 CODEX HANDOFF — RULES-SKILL-AUDIT-001
 Asterveil · Fateweave: implement the approved skill audit
 
-Read AGENTS.md, CLAUDE.md (development rules 1–6, save/encounter versioning), docs/design/SKILL_AUDIT_TH.md (the spec — owner approved 2026-10-24), docs/MASTER_PLAN_TH.md A6b (one owner class per mechanic, no elements, every character playable) and docs/design/SKILL_TREES_ALL_TH.md and docs/design/LOGIC_AUDIT_2026-10-24_TH.md (also fix its items 1–3 in this PR; magical skills now scale with Magic Power — keep that for every new or changed skill) first. Base branch feature/fateweave-initial-prototype; work branch codex/skill-audit-001; open a PR into the base branch. This changes rules and saves: DO NOT MERGE — Claude reviews it after its usage resets. Never use the word ม่านเวล; the group is the ค่ายทหารรับจ้าง.
+Read AGENTS.md, CLAUDE.md (development rules 1–6, save/encounter versioning), docs/design/SKILL_AUDIT_TH.md (the spec — owner approved 2026-10-24), docs/MASTER_PLAN_TH.md A6b (one owner class per mechanic, no elements, every character playable) and docs/design/SKILL_TREES_ALL_TH.md and docs/design/LOGIC_AUDIT_2026-10-24_TH.md (also fix its items 1–3 in this PR; magical skills now scale with Magic Power — keep that for every new or changed skill) first. Base branch feature/fateweave-initial-prototype; work branch codex/skill-audit-001; open a PR into the base branch. This changes rules and saves. The owner authorized you (2026-10-24) to own the whole balance pass and to merge it yourself once every check below passes; Claude reviews afterwards. Never use the word ม่านเวล; the group is the ค่ายทหารรับจ้าง.
 
 GOAL: every ❌ (16) and ⚠ (7) row in SKILL_AUDIT_TH.md section 2 becomes its "ข้อเสนอ" column, so each mechanic group in section 1 has exactly one owner class. Where the proposal offers two options, take the first. Keep node/skill ids when only the effect changes (painted icons use the ids); give a new id only when the old one would lie, and list every id change in the PR.
 
@@ -199,7 +199,7 @@ SAVE/VERSIONS: bump SAVE_VERSION 41 → 42 in src/core/save/expedition-save.ts (
 
 TESTS: unit tests for each changed skill (effect, boundary, preview equals resolution, deterministic replay, cooldown), the save migration (v41 save with spent points loads with a refund), and keep the existing suites green (balance regression, talents, recruit-trees-engine, battle). Update browser specs that use changed skills (grep tests/browser for each skill id). Run npm run typecheck, npm run lint, npm test, npm run build, the touched browser specs, and npm run sim.
 
-REPORT: in the PR and in docs/handoffs/CODEX-TO-CLAUDE.md (under "ฝากถึง Claude"): a table per changed skill (old → new, id kept/changed, numbers), sim before/after (docs/validation/balance-sim/*.md: campaign clear rates maps 1–3 + hard, TREES.md use counts per tree skill — every changed skill should now be used, e.g. Sefa's shadow build was 2/10), any regressions you could not fix, and the open questions. Mark SKILL_AUDIT_TH.md rows as implemented. Leave the PR open.
+REPORT: in the PR and in docs/handoffs/CODEX-TO-CLAUDE.md (under "ฝากถึง Claude"): a table per changed skill (old → new, id kept/changed, numbers), sim before/after (docs/validation/balance-sim/*.md: campaign clear rates maps 1–3 + hard, TREES.md use counts per tree skill — every changed skill should now be used, e.g. Sefa's shadow build was 2/10), and the open questions. Balance is yours: tune the draft numbers of changed skills, trees and, if needed, encounter strength until the sim targets hold — every map 1–3 first-run clear rate and hard mode no worse than before, no class or tree build left unused or dominant, the balance regression suite green — and report every number you changed. Mark SKILL_AUDIT_TH.md rows as implemented. Merge the PR when typecheck, lint, unit tests, build, browser specs, CI and the sim targets all pass; if a target cannot be met, merge only what passes and write the remaining gap under "ฝากถึง Claude".
 ```
 
 ## เมื่อ Usage ของ Claude รีเซ็ต (หลัง พ. 28 ต.ค. 19:00)
