@@ -80,7 +80,9 @@ export function battleLesson(state:BattleState,data:EncounterDefinition):Lesson|
   }
   if(role==='Archer'){
    if(front.length&&back.length&&state.heroes.some(h=>h.hp>0&&lane(h.id)==='front'&&h.id!==heroId)){const p=make('pin','enemies','ตรึงแถวหน้าเปิดแถวหลัง','ทั้งทีมตีแถวหลังได้');if(p)return p;}
-   if(intent?.kind==='physical'&&intent.targetId===heroId){const d=make('disengage',intent.sourceId,'ยิงถอยคิวศัตรู','ศัตรูไปท้ายคิวถ้ายังไม่ลงมือ');if(d)return d;}
+   // Tail movement helps when it lets a living ally act before a pending foe, regardless of damage kind or target.
+   const foeIndex=intent?state.order.indexOf(intent.sourceId):-1;
+   if(intent&&foeIndex>state.turnIndex&&state.order.slice(foeIndex+1).some(id=>state.heroes.some(h=>h.id===id&&h.hp>0))){const d=make('disengage',intent.sourceId,'ยิงถอยคิวเปิดจังหวะให้เพื่อน','ศัตรูไปท้ายคิวรอบนี้');if(d)return d;}
    const slowed=living.find(e=>isDelayed(e,state.round));
    if(slowed){const t=make('track',slowed.id,'ศรตามรอยเป้าที่ถูกสกัด',`ยิงซ้ำตอนจบรอบ`)??make('weakshot',slowed.id,'ศรจุดอ่อนเป้าที่ถูกสกัด',`พลัง ${skillPower(data,heroId,'weakshot')+data.rules.weakshotBonus}`);if(t)return t;}
   }

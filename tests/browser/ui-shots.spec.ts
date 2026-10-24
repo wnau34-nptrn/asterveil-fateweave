@@ -4,6 +4,7 @@ import { encounterById } from '../../src/content/encounters/catalog';
 import { depart, newProfile } from '../../src/core/world/profile';
 import { affixPool, GEAR_SPECIALS } from '../../src/core/world/equipment';
 import { parseGame } from '../../src/core/save/expedition-save';
+import { currentSave } from '../fixtures/current-save';
 
 // Review screenshots of the A7 character sheet for the owner (not a gameplay check).
 // Run with UI_SHOTS=<dir> npx playwright test tests/browser/ui-shots.spec.ts
@@ -28,7 +29,7 @@ async function open(page: Page) {
     { uid: 0, slot: 'boots', rarity: 0, level: 3, affixes: [] },
     { uid: 0, slot: 'weapon', hero: 'tracer', rarity: 1, level: 2, affixes: pool('weapon', 'tracer').slice(0, 1) },
   ];
-  const raw = JSON.stringify({ version: 35, ...game }); parseGame(raw, map, encounterById);
+  const raw = currentSave(game); parseGame(raw, map, encounterById);
   await page.addInitScript(({key,raw}) => { if (!sessionStorage.getItem('shots-seeded')) { localStorage.setItem(key, raw); sessionStorage.setItem('shots-seeded', 'yes'); } }, {key,raw});
   await page.goto('./'); await page.locator('#continue').click(); await expect(page.locator('#world-view')).toBeVisible();
 }

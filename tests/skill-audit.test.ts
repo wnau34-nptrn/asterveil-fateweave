@@ -9,6 +9,7 @@ import type { ActionId, EncounterDefinition } from '../src/core/battle/types';
 import { characterSkillMetric } from '../src/ui/character-metrics';
 import { newProfile, depart } from '../src/core/world/profile';
 import { parseGame, saveGame } from '../src/core/save/expedition-save';
+import { battleLesson } from '../src/ui/tutorial';
 const catalog = heroCatalog(lookup,map);
 const changed: [string, ActionId[]][] = [
  ['guardian',['bulwark','rouse','rally']], ['tracer',['sweep']], ['weaver',['dispel','sigil']], ['healer',['bless']],
@@ -65,6 +66,15 @@ describe('C11 skill contract',()=>{
   expect(roundOrder(st,d,2).at(-1)).toBe('b1');expect(roundOrder(st,d,3).at(-1)).toBe('b1');expect(roundOrder(st,d,4).at(-1)).not.toBe('b1');
   const cover=fixture('mira','disengage');cover.heroes=cover.heroes.map((h,i)=>i?h:{...h,talents:{caps:{covershot:6}}});const cs=beginBattle(cover).state;
   expect(resolveCommand(cs,cover,{heroId:'mira',action:'disengage',targetId:'f1',beat:cs.beat}).turns[0]!.events.find(e=>e.type==='damage')!.amount).toBe(16);
+ });
+ it('the archer advisor delays an energy foe aiming elsewhere only when an ally gains a turn before it',()=>{
+  const d=fixture('mira','disengage');d.enemies=d.enemies.map(e=>({...e,speed:500}));d.intents=d.intents.map(i=>({...i,kind:'energy',targetSlot:1}));
+  const s=beginBattle(d).state;expect(s.intent).toMatchObject({kind:'energy'});expect(s.intent!.targetId).not.toBe('mira');
+  const l=battleLesson(s,d)!;expect(l.action).toBe('disengage');
+  const r=resolveCommand(s,d,{beat:s.beat,heroId:l.heroId,action:l.action,targetId:l.targetId});
+  expect(r.turns[0]!.state.order.at(-1)).toBe(s.intent!.sourceId);
+  const late={...d,enemies:d.enemies.map(e=>({...e,speed:1}))};
+  expect(battleLesson(beginBattle(late).state,late)!.action).not.toBe('disengage');
  });
  it('note age caps at three full rounds and songnote modifies damage without weakening',()=>{
   const d=fixture('lio','note');d.heroes=d.heroes.map((h,i)=>i?h:{...h,talents:{caps:{songnote:20}}});const s=beginBattle(d).state;
