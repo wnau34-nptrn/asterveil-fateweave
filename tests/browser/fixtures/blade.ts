@@ -29,6 +29,13 @@ localStorage.setItem('asterveil.fateweave.tutorial.v1', 'off');
 fitViewport();
 const ui = new BattleUI(document.querySelector('#battle-view')!, data);
 const scene = new BattleScene(data, id => ui.choose(id, 'canvas'), () => ui.sceneReady(), () => ui.fieldLayoutChanged());
+// Capture the real rendered impact cue; pointer time precedes DOM/layout work and is not an impact timestamp.
+const impacts: { at: number; action?: ActionId; side: string; events: string[] }[] = [];
+const play = scene.play.bind(scene);
+scene.play = (turn, remainingMs) => {
+  impacts.push({ at: Date.now() / 1000, action: turn.action, side: turn.side, events: turn.events.map(e => e.type) });
+  play(turn, remainingMs);
+};
 ui.attach(scene);
 new Phaser.Game({ type: Phaser.AUTO, parent: 'game', transparent: true, scale: { mode: Phaser.Scale.NONE, width: 320, height: 240 }, scene: [scene], fps: { target: 60 }, audio: { noAudio: true } });
 ui.open({ kind: 'random', data, entry: { hp: Object.fromEntries(data.heroes.map(h => [h.id, h.maxHp])) }, commands: [],
@@ -62,6 +69,7 @@ function painted() {
   visit(scene.children.getChildren()); return images;
 }
 const qa = {
+  impacts,
   prime: (outcome: string) => {
     const h = ui.state.heroes[0]!;
     if (outcome === 'blocked') h.barrier = 100;
@@ -74,6 +82,16 @@ const qa = {
   stage, cues: (outcome: string) => bladeCues(stage(outcome)),
   painted,
   frames: () => painted().map(i => i.frame),
+  labelsAbovePaint: () => {
+    let above = true;
+    const visit = (items: Phaser.GameObjects.GameObject[]) => {
+      const paint = items.flatMap((i, index) => i instanceof Phaser.GameObjects.Image && i.texture.key === BLADE_ATLAS ? [index] : []);
+      const labels = items.flatMap((i, index) => i instanceof Phaser.GameObjects.Text ? [index] : []);
+      if (paint.length && labels.length && Math.min(...labels) < Math.max(...paint)) above = false;
+      for (const item of items) if (item instanceof Phaser.GameObjects.Container) visit(item.list);
+    };
+    visit(scene.children.getChildren()); return above;
+  },
 };
 declare global { interface Window { bladeQA: typeof qa } }
 window.bladeQA = qa;

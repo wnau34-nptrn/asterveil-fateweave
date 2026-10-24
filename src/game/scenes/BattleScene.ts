@@ -394,5 +394,11 @@ export class BattleScene extends Phaser.Scene {
         if (def && target.hp === def.maxHp && !events.some(e => e.type === 'heal' && e.targetId === target.id)) say(target.id,'HP เต็ม','#85e5be');
       }
     }
+    // The denser blade art must not cover the authoritative damage/outcome captions.
+    if (paintedBlades.length || turn.action === 'parry') {
+      for (const child of [...(this.effects?.list ?? [])]) {
+        if (child instanceof Phaser.GameObjects.Text) this.effects?.bringToTop(child);
+      }
+    }
   }
 }

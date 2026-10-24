@@ -1,6 +1,6 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
-อัปเดต Codex 2026-10-23: C5.1 ฟันดาบ/แทงส่งบน `codex/vfx-family-1-blade` รอเจ้าของตรวจ [คลิป 390px](../combat-presentation/blade-slice/README_TH.md) ยังไม่ merge/publish และห้ามเริ่ม C5.2 จนเจ้าของอนุมัติคลิป อ่านบันทึกบนสุด `CODEX-TO-CLAUDE.md` และผลตรวจใน slice notes ก่อนทำต่อ
+อัปเดต Codex 2026-10-24: C5.1 R2 บน `codex/vfx-family-1-blade`, PR #59 แก้ฟัน/แทงทั้ง 10 สกิลที่เจ้าของเห็นว่าเบา/บาง ด้วยภาพหนาขึ้นและพีกเต็มความสว่าง รอเจ้าของตรวจ [คลิปใหม่ 390px](../combat-presentation/blade-slice/README_TH.md) ยังไม่ merge/publish และห้ามเริ่ม C5.2 จนเจ้าของอนุมัติคลิป อ่านบันทึกบนสุด `CODEX-TO-CLAUDE.md` และผลตรวจใน slice notes ก่อนทำต่อ
 
 ## 2026-10-24 — Magic Power (owner-approved)
 

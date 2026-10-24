@@ -7,9 +7,10 @@ for (const skill of skills) test(`blade ${skill} resolved contact and cleanup at
   const page = await ctx.newPage(), errors: string[] = []; page.on('pageerror', e => errors.push(e.message));
   page.on('console', m => { if (/Texture .* has no frame/.test(m.text())) errors.push(m.text()); });
   try {
+    await page.clock.install({ time: new Date('2026-10-24T00:00:00Z') });
     await page.goto(`tests/browser/fixtures/blade.html?skill=${skill}`);
     await expect(page.locator('#start')).toBeEnabled(); await page.locator('#start').click();
-    await page.clock.install(); await page.clock.pauseAt(new Date(Date.now() + 100000));
+    await page.clock.pauseAt(new Date('2026-10-24T01:00:00Z'));
     const cues = await page.evaluate(() => window.bladeQA.cues('hit'));
     const turn = await page.evaluate(() => window.bladeQA.stage('hit'));
     expect(cues.length).toBeGreaterThan(0); expect(cues.some(c => c.skill === skill && c.outcome === 'hit')).toBe(true);
@@ -28,6 +29,7 @@ for (const skill of skills) test(`blade ${skill} resolved contact and cleanup at
       const peak = (await page.evaluate(() => window.bladeQA.painted())).find(i => /^(slash|thrust)_01$/.test(i.frame));
       expect(peak, 'painted peak remains readable 130ms after truthful contact').toBeDefined();
       expect(peak!.alpha).toBeGreaterThan(.95);
+      expect(await page.evaluate(() => window.bladeQA.labelsAbovePaint())).toBe(true);
     } else await page.clock.runFor(340);
     if (['lunge', 'sweep'].includes(skill)) await page.screenshot({ path: info.outputPath('contact-390.png') });
     await page.locator('#skip-turn').click(); await page.clock.runFor(3000);

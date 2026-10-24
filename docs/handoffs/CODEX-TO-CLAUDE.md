@@ -1,5 +1,14 @@
 # Codex → Claude handoff
 
+## 2026-10-24 — Codex C5.1 R2: stronger paint for all ten blade skills (PR #59)
+
+- Owner feedback: every effect in the latest clips was too light/thin; clarified scope is the ten sword/thrust skills only. This is a revision request, **not artistic approval**. Same branch `codex/vfx-family-1-blade`, same [PR #59](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/59); no merge/publication or family 2.
+- Built-in ImageGen revised the shared source into broader opaque ivory/silver painted masses. Preserved `generated-v1.png`; R2 prompt, source PNG, cells, preview and runtime WebP remain under `incoming/ART-VFX-BLADE-001/` and `public/assets/fx/blade_fx.*` (1056 square; WebP 438,540 bytes).
+- `blade-fx.ts`: 25% larger ribbons, stronger small variants/glints/contact cores, time-based frame progression independent of alpha, full-bright peak until 52% of a maximum 350ms lifetime. Fast/short stages bound that lifetime by their remaining time. No extra hits or fleck counts; reduced motion stays static. `BattleScene.ts` keeps captions above the denser art for blade stages. Bolt/Execute/Ward art/modules unchanged.
+- Integrated current game base `a8cf3c7` via merge `ef80b3b`, preserving both handoff histories. No authored changes to `src/core`, `src/content`, saves or `battle-playback.ts` relative to that base. Visual revision commit `7dccef6`; later caption/media/docs changes belong to this same PR.
+- Validation on refreshed base: typecheck/lint/build, **756/756 Vitest tests (65 files)** and **31/31 browser checks** (18 family +13 playback) passed. Family tests additionally verify full-opacity peak at contact +130ms and caption layering; the test clock now starts before Phaser so the check does not change clocks mid-loop. Capture **18/18 passed**, replacing all owner clips and two contact stills at 390×844; metadata and reproduction steps are in `docs/combat-presentation/blade-slice/README_TH.md`.
+- Owner still needs to review the R2 clips. Do not record approval or begin the next family on the owner's behalf.
+
 ## 2026-10-23 — Codex C5.1: painted blade family (รอเจ้าของตรวจคลิป)
 
 - Branch `codex/vfx-family-1-blade`, base `feature/fateweave-initial-prototype` at `3a9a89f`. Family 1 only: attack, finisher, lunge, sweep, backstab, ambush, disarm, parry riposte, pierce, halt. One shared atlas `public/assets/fx/blade_fx.*`, one module `game/visuals/blade-fx.ts`, original ImageGen source/prompt/packager in `incoming/ART-VFX-BLADE-001/`.

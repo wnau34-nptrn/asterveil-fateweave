@@ -14,6 +14,8 @@ for (const { skill, outcome, mode } of cases) test(`blade clip ${skill}-${outcom
     await page.goto(`tests/browser/fixtures/blade.html?skill=${skill}&speed=${mode === 'fast' ? 'fast' : 'normal'}&intensity=${mode === 'reduced' ? 'reduced' : 'standard'}`);
     await page.locator('#start').click(); await page.evaluate(o => window.bladeQA.prime(o), outcome);
     await page.locator(`#action-${skill}`).click(); await expect(page.locator(`#action-${skill}`)).toBeEnabled();
+    await page.evaluate(() => document.fonts.ready.then(() => undefined));
+    await page.waitForTimeout(350);
     // Canvas may commit on pointerdown and replace the target before a DOM click exists.
     await page.evaluate(() => document.addEventListener('pointerdown', () => {
       document.documentElement.dataset.bladeClick = String(Date.now() / 1000);
@@ -28,6 +30,7 @@ for (const { skill, outcome, mode } of cases) test(`blade clip ${skill}-${outcom
     expect(click).toBeGreaterThan(1_000_000_000);
     await page.waitForTimeout(2850);
     await cdp.send('Page.stopScreencast'); writeFileSync(info.outputPath('stamps.txt'), `click ${click}\n${stamps.join('\n')}`);
+    writeFileSync(info.outputPath('timing.json'), JSON.stringify(await page.evaluate(() => window.bladeQA.impacts), null, 2));
     expect(stamps.length).toBeGreaterThan(12);
   } finally { await ctx.close(); }
 });

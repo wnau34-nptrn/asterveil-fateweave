@@ -4,161 +4,590 @@
     "width": 390,
     "height": 844,
     "duration": 3.36,
-    "capturedFrames": 178,
-    "clickOffset": 0.329,
-    "maxFrameGap": 0.217
+    "capturedFrames": 161,
+    "clickOffset": 0.333,
+    "maxFrameGap": 0.267,
+    "impacts": [
+      {
+        "at": 0.643,
+        "action": "ambush",
+        "side": "hero",
+        "events": [
+          "damage"
+        ]
+      },
+      {
+        "at": 1.433,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ]
+      },
+      {
+        "at": 2.246,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ]
+      }
+    ]
   },
   {
     "file": "attack-blocked-normal-390.mp4",
     "width": 390,
     "height": 844,
-    "duration": 3.48,
-    "capturedFrames": 182,
-    "clickOffset": 0.333,
-    "maxFrameGap": 0.217
+    "duration": 3.36,
+    "capturedFrames": 178,
+    "clickOffset": 0.346,
+    "maxFrameGap": 0.217,
+    "impacts": [
+      {
+        "at": 0.598,
+        "action": "attack",
+        "side": "hero",
+        "events": [
+          "damage"
+        ]
+      },
+      {
+        "at": 1.28,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ]
+      },
+      {
+        "at": 2.109,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ]
+      }
+    ]
   },
   {
     "file": "attack-cancelled-normal-390.mp4",
     "width": 390,
     "height": 844,
     "duration": 3.32,
-    "capturedFrames": 177,
-    "clickOffset": 0.329,
-    "maxFrameGap": 0.217
+    "capturedFrames": 178,
+    "clickOffset": 0.326,
+    "maxFrameGap": 0.233,
+    "impacts": [
+      {
+        "at": 0.559,
+        "action": "attack",
+        "side": "hero",
+        "events": [
+          "damage"
+        ]
+      },
+      {
+        "at": 1.242,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ]
+      },
+      {
+        "at": 1.768,
+        "side": "enemy",
+        "events": [
+          "cancel"
+        ]
+      }
+    ]
   },
   {
     "file": "attack-dodged-normal-390.mp4",
     "width": 390,
     "height": 844,
-    "duration": 3.32,
+    "duration": 3.36,
     "capturedFrames": 177,
-    "clickOffset": 0.329,
-    "maxFrameGap": 0.233
+    "clickOffset": 0.346,
+    "maxFrameGap": 0.217,
+    "impacts": [
+      {
+        "at": 0.588,
+        "action": "attack",
+        "side": "hero",
+        "events": [
+          "damage"
+        ]
+      },
+      {
+        "at": 1.295,
+        "side": "enemy",
+        "events": [
+          "dodge"
+        ]
+      },
+      {
+        "at": 2.1,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ]
+      }
+    ]
   },
   {
     "file": "attack-guarded-normal-390.mp4",
     "width": 390,
     "height": 844,
-    "duration": 3.32,
-    "capturedFrames": 167,
-    "clickOffset": 0.311,
-    "maxFrameGap": 0.217
+    "duration": 3.36,
+    "capturedFrames": 179,
+    "clickOffset": 0.331,
+    "maxFrameGap": 0.217,
+    "impacts": [
+      {
+        "at": 0.579,
+        "action": "attack",
+        "side": "hero",
+        "events": [
+          "damage"
+        ]
+      },
+      {
+        "at": 1.259,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ]
+      },
+      {
+        "at": 2.082,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ]
+      }
+    ]
   },
   {
     "file": "attack-hit-normal-390.mp4",
     "width": 390,
     "height": 844,
-    "duration": 3.16,
-    "capturedFrames": 120,
-    "clickOffset": 0.35,
-    "maxFrameGap": 0.417
+    "duration": 3.36,
+    "capturedFrames": 154,
+    "clickOffset": 0.349,
+    "maxFrameGap": 0.267,
+    "impacts": [
+      {
+        "at": 0.593,
+        "action": "attack",
+        "side": "hero",
+        "events": [
+          "damage"
+        ]
+      },
+      {
+        "at": 1.288,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ]
+      },
+      {
+        "at": 2.111,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ]
+      }
+    ]
   },
   {
     "file": "attack-partial-normal-390.mp4",
     "width": 390,
     "height": 844,
-    "duration": 3.32,
-    "capturedFrames": 175,
-    "clickOffset": 0.326,
-    "maxFrameGap": 0.233
+    "duration": 3.36,
+    "capturedFrames": 177,
+    "clickOffset": 0.363,
+    "maxFrameGap": 0.217,
+    "impacts": [
+      {
+        "at": 0.616,
+        "action": "attack",
+        "side": "hero",
+        "events": [
+          "damage"
+        ]
+      },
+      {
+        "at": 1.294,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ]
+      },
+      {
+        "at": 2.108,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ]
+      }
+    ]
   },
   {
     "file": "backstab-hit-normal-390.mp4",
     "width": 390,
     "height": 844,
-    "duration": 3.36,
-    "capturedFrames": 173,
-    "clickOffset": 0.343,
-    "maxFrameGap": 0.217
+    "duration": 3.6,
+    "capturedFrames": 138,
+    "clickOffset": 0.544,
+    "maxFrameGap": 0.267,
+    "impacts": [
+      {
+        "at": 0.917,
+        "action": "backstab",
+        "side": "hero",
+        "events": [
+          "damage"
+        ]
+      },
+      {
+        "at": 1.799,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ]
+      },
+      {
+        "at": 2.609,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ]
+      }
+    ]
   },
   {
     "file": "disarm-hit-normal-390.mp4",
     "width": 390,
     "height": 844,
-    "duration": 3.36,
-    "capturedFrames": 174,
-    "clickOffset": 0.347,
-    "maxFrameGap": 0.217
+    "duration": 3.4,
+    "capturedFrames": 165,
+    "clickOffset": 0.349,
+    "maxFrameGap": 0.217,
+    "impacts": [
+      {
+        "at": 0.687,
+        "action": "disarm",
+        "side": "hero",
+        "events": [
+          "damage",
+          "weaken"
+        ]
+      },
+      {
+        "at": 1.51,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ]
+      },
+      {
+        "at": 2.32,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ]
+      }
+    ]
   },
   {
     "file": "finisher-hit-normal-390.mp4",
     "width": 390,
     "height": 844,
-    "duration": 3.44,
-    "capturedFrames": 177,
-    "clickOffset": 0.424,
-    "maxFrameGap": 0.217
+    "duration": 3.32,
+    "capturedFrames": 175,
+    "clickOffset": 0.314,
+    "maxFrameGap": 0.217,
+    "impacts": [
+      {
+        "at": 0.686,
+        "action": "finisher",
+        "side": "hero",
+        "events": [
+          "damage"
+        ]
+      },
+      {
+        "at": 1.597,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ]
+      },
+      {
+        "at": 2.407,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ]
+      }
+    ]
   },
   {
     "file": "halt-hit-normal-390.mp4",
     "width": 390,
     "height": 844,
     "duration": 3.4,
-    "capturedFrames": 162,
-    "clickOffset": 0.367,
-    "maxFrameGap": 0.217
+    "capturedFrames": 181,
+    "clickOffset": 0.362,
+    "maxFrameGap": 0.217,
+    "impacts": [
+      {
+        "at": 0.706,
+        "action": "halt",
+        "side": "hero",
+        "events": [
+          "damage",
+          "delay"
+        ]
+      },
+      {
+        "at": 1.546,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ]
+      }
+    ]
   },
   {
     "file": "lunge-hit-fast-390.mp4",
     "width": 390,
     "height": 844,
-    "duration": 3.36,
+    "duration": 3.32,
     "capturedFrames": 177,
-    "clickOffset": 0.339,
-    "maxFrameGap": 0.233
+    "clickOffset": 0.331,
+    "maxFrameGap": 0.217,
+    "impacts": [
+      {
+        "at": 0.563,
+        "action": "lunge",
+        "side": "hero",
+        "events": [
+          "damage"
+        ]
+      },
+      {
+        "at": 1.129,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ]
+      },
+      {
+        "at": 1.676,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ]
+      }
+    ]
   },
   {
     "file": "lunge-hit-normal-390.mp4",
     "width": 390,
     "height": 844,
-    "duration": 3.32,
-    "capturedFrames": 174,
-    "clickOffset": 0.332,
-    "maxFrameGap": 0.217
+    "duration": 3.36,
+    "capturedFrames": 175,
+    "clickOffset": 0.342,
+    "maxFrameGap": 0.217,
+    "impacts": [
+      {
+        "at": 0.682,
+        "action": "lunge",
+        "side": "hero",
+        "events": [
+          "damage"
+        ]
+      },
+      {
+        "at": 1.539,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ]
+      },
+      {
+        "at": 2.352,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ]
+      }
+    ]
   },
   {
     "file": "lunge-hit-osreduce-390.mp4",
     "width": 390,
     "height": 844,
-    "duration": 3.36,
-    "capturedFrames": 186,
-    "clickOffset": 0.313,
-    "maxFrameGap": 0.067
+    "duration": 3.4,
+    "capturedFrames": 180,
+    "clickOffset": 0.345,
+    "maxFrameGap": 0.1,
+    "impacts": [
+      {
+        "at": 0.38,
+        "action": "lunge",
+        "side": "hero",
+        "events": [
+          "damage"
+        ]
+      },
+      {
+        "at": 1.248,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ]
+      },
+      {
+        "at": 2.079,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ]
+      }
+    ]
   },
   {
     "file": "lunge-hit-reduced-390.mp4",
     "width": 390,
     "height": 844,
     "duration": 3.32,
-    "capturedFrames": 177,
-    "clickOffset": 0.327,
-    "maxFrameGap": 0.217
+    "capturedFrames": 178,
+    "clickOffset": 0.329,
+    "maxFrameGap": 0.217,
+    "impacts": [
+      {
+        "at": 0.662,
+        "action": "lunge",
+        "side": "hero",
+        "events": [
+          "damage"
+        ]
+      },
+      {
+        "at": 1.509,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ]
+      },
+      {
+        "at": 2.326,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ]
+      }
+    ]
   },
   {
     "file": "parry-hit-normal-390.mp4",
     "width": 390,
     "height": 844,
     "duration": 3.32,
-    "capturedFrames": 177,
-    "clickOffset": 0.329,
-    "maxFrameGap": 0.217
+    "capturedFrames": 163,
+    "clickOffset": 0.331,
+    "maxFrameGap": 0.217,
+    "impacts": [
+      {
+        "at": 0.584,
+        "action": "parry",
+        "side": "hero",
+        "events": [
+          "parry"
+        ]
+      },
+      {
+        "at": 1.231,
+        "side": "enemy",
+        "events": [
+          "damage",
+          "parry",
+          "counter"
+        ]
+      },
+      {
+        "at": 2.047,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ]
+      }
+    ]
   },
   {
     "file": "pierce-hit-normal-390.mp4",
     "width": 390,
     "height": 844,
     "duration": 3.32,
-    "capturedFrames": 178,
-    "clickOffset": 0.327,
-    "maxFrameGap": 0.217
+    "capturedFrames": 176,
+    "clickOffset": 0.332,
+    "maxFrameGap": 0.217,
+    "impacts": [
+      {
+        "at": 0.648,
+        "action": "pierce",
+        "side": "hero",
+        "events": [
+          "damage"
+        ]
+      },
+      {
+        "at": 1.47,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ]
+      },
+      {
+        "at": 2.279,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ]
+      }
+    ]
   },
   {
     "file": "sweep-hit-normal-390.mp4",
     "width": 390,
     "height": 844,
-    "duration": 3.32,
-    "capturedFrames": 178,
-    "clickOffset": 0.328,
-    "maxFrameGap": 0.217
+    "duration": 3.36,
+    "capturedFrames": 156,
+    "clickOffset": 0.362,
+    "maxFrameGap": 0.217,
+    "impacts": [
+      {
+        "at": 0.719,
+        "action": "sweep",
+        "side": "hero",
+        "events": [
+          "damage"
+        ]
+      },
+      {
+        "at": 1.604,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ]
+      },
+      {
+        "at": 2.432,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ]
+      }
+    ]
   }
 ]
