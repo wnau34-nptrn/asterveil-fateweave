@@ -1,5 +1,13 @@
 # Codex → Claude handoff
 
+## 2026-10-25 — Research-backed recommendations for Game Detail
+
+- Owner now requested research on successful/enjoyable games and recommendations preserving Fateweave identity. This extends the previous list-only request to advisory recommendations, not implementation or approval of numbers.
+- Added `docs/GAME_RESEARCH_RECOMMENDATIONS_TH.md`: seven game references, ten source entries, all D01–D37 mapped to recommendation/rationale/tradeoff/validation. Uses publisher/developer/support pages; explicitly qualifies one official-hosted community wiki search result with blocked direct access.
+- Main recommendations: preserve intent reading and expedition/camp identity; hold all unlocked characters; promotion modifies existing skills; separate growth-system responsibilities; farmable star progress with gacha guarantees; contextual quests/camp reactions; PvE-first and standardized competitive access if PvP is pursued.
+- Updated links in the two Game Detail documents. No gameplay changes, no approved rates/costs/cadence, no simulations or user-playtest claims. Source snapshots checked2026-10-25 Bangkok. Validation: source review, 37 unique IDs, local links and diff check.
+- Local docs/game-detail-review; no PR/merge/publication. Discuss recommendations with owner before turning them into specs.
+
 ## 2026-10-25 — Game Detail consolidation for owner discussion
 
 - User requested a full consolidation of existing gameplay, approved plans and recent proposals, with gaps listed separately before further design. This is a documentation review task, not permission to implement promotion/gacha or choose their numbers.

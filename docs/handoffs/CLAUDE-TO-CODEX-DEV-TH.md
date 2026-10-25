@@ -1,5 +1,9 @@
 # ส่งต่องานพัฒนาให้ Codex ระหว่างรอ Usage ของ Claude (2026-10-23)
 
+## 2026-10-25 — Comparative research advisory completed
+
+Added `docs/GAME_RESEARCH_RECOMMENDATIONS_TH.md` at owner's request: evidence from seven games and recommendations for all37 discussion topics. This is advisory, not approval to implement proposed progression/gacha or a replacement of approved C12. No runtime changes. See CODEX-TO-CLAUDE for validation.
+
 ## 2026-10-25 — Owner requested consolidated Game Detail and discussion list
 
 Documentation completed in `docs/GAME_DETAIL_TH.md` and `docs/GAME_DESIGN_DISCUSSION_TH.md` (37 open topics). No additional C12 batch or new game rules implemented. Owner wants to discuss gaps before further design; preserve existing approvals while keeping recent gacha/promotion proposals explicitly unresolved. See CODEX-TO-CLAUDE entry for audit findings and validation.

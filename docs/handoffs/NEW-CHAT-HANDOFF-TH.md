@@ -1,5 +1,9 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
+## 2026-10-25 — Research completed; discuss recommendations next
+
+Owner requested comparative game research and recommendations after the list-only consolidation. Read `docs/GAME_RESEARCH_RECOMMENDATIONS_TH.md` alongside Game Detail and D01–D37. Advisory directions are now provided for all37 topics; no numerical gacha/promotion rules approved or implemented. Keep runtime at existing C12 Batch1 scope until an implementation task is requested. Local branch docs/game-detail-review; no publication.
+
 ## 2026-10-25 — Active task: consolidate design, then discuss gaps
 
 Read `docs/GAME_DETAIL_TH.md` and `docs/GAME_DESIGN_DISCUSSION_TH.md` first. Owner explicitly requested listing missing/unclear/improvable areas before designing them. The C12 Batch2 implementation prompt below remains the earlier development handoff; do not auto-start it during this design review. Current runtime still e79e8a4/v43 with14 characters. New gacha/promotion/monthly-release numbers are proposals, not approved final rules. Documentation branch: `docs/game-detail-review`; no PR/publication yet.
