@@ -45,6 +45,7 @@ export const gameRules: GameRules = {
   company: {
     // Hiring costs gold coins only (ore pays for upgrades, brewing and the forge).
     hireCost: 20, dismissRefund: 10, offers: 3, maxStars: 5, starStatPercent: 8,
+    featured: ['metta', 'thiran', 'lalin', 'wila'],
     // (4A) see `shop` for the market and paid board refreshes.
     sealSharePercent: 50,
     starCosts: [{ dupes: 1, ore: 20 }, { dupes: 2, ore: 40 }, { dupes: 3, ore: 70 }, { dupes: 4, ore: 110 }],
@@ -54,7 +55,7 @@ export const gameRules: GameRules = {
     hardTraits: { thornsPercent: 20, veilguardPercent: 25, enrageBelow: 50, enragePercent: 30, bossMovePercent: 130, bossLevels: 8 }, treeTiers: [1, 5, 10, 15], loadoutSize: 3,
     // Skill tomes (docs/design/SKILL_TOMES_TH.md, owner-approved 2026-10-22, draft numbers).
     skillLevels: { max: 5, costs: [{ size: 'small', tomes: 2, gold: 5 }, { size: 'small', tomes: 4, gold: 8 }, { size: 'medium', tomes: 2, gold: 15 }, { size: 'large', tomes: 1, gold: 30, core: 1 }],
-      lines: { guardian: 'bulwark', garran: 'bulwark', brann: 'bulwark', tracer: 'blade', weaver: 'blade', mira: 'blade', sefa: 'blade', healer: 'accord', toma: 'accord', lio: 'accord' },
+      lines: { guardian: 'bulwark', garran: 'bulwark', brann: 'bulwark', tracer: 'blade', weaver: 'blade', mira: 'blade', sefa: 'blade', healer: 'accord', toma: 'accord', lio: 'accord', metta: 'bulwark', thiran: 'bulwark', lalin: 'accord', wila: 'accord' },
       battleEvery: 4, chest: { common: 0, rare: 1 }, elite: 2, hardPercent: 150, hardCore: 1, refundPercent: 50, tradeUp: 3, swap: 2 } },
   talents: talentTrees,
   eventRules: {

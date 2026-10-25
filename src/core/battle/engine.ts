@@ -44,7 +44,14 @@ export function skillLevelSteps(data: EncounterDefinition, heroId: string | unde
   const level = skillLevel(data, heroId, action); const master = level >= 5 && data.skills[action].cooldown >= 3;
   return { steps: master ? 3 : level - 1, cooldown: master ? 1 : 0 };
 }
-export const skillCooldown = (data: EncounterDefinition, heroId: string | undefined, action: ActionId): number => data.skills[action].cooldown - skillLevelSteps(data, heroId, action).cooldown;
+export function skillCooldown(data: EncounterDefinition, heroId: string | undefined, action: ActionId): number {
+  let cooldown = data.skills[action].cooldown - skillLevelSteps(data, heroId, action).cooldown;
+  if (action === 'cadence') cooldown -= capAmount(data, heroId, 'dancerCadenceQuick');
+  if (action === 'duet') cooldown -= capAmount(data, heroId, 'dancerDuetQuick');
+  if (action === 'deepbeat' && hasCap(data, heroId, 'dancerDeep')) cooldown++;
+  if (action === 'lastlight' && hasCap(data, heroId, 'lastlightRatio')) cooldown++;
+  return Math.max(0, cooldown);
+}
 function levelPoints(data: EncounterDefinition, heroId: string | undefined, action: ActionId): number {
   return skillLevelKind(data, action) === 'percent' ? skillLevelSteps(data, heroId, action).steps * data.rules.skillLevel.percentPoints : 0;
 }
@@ -74,10 +81,10 @@ export function songPower(data: EncounterDefinition, heroId: string, action: Son
 // Who acts on which target: the UI and the resolver share these groups.
 export type TargetKind = 'self' | 'ally' | 'party' | 'enemies' | 'enemy';
 export function targetKind(action: ActionId): TargetKind {
-  if (action === 'prayer' || action === 'aegis') return 'party';
-  if (['volley', 'bomb', 'sweep', 'storm', 'pin', 'knives', 'tremor', 'quake'].includes(action)) return 'enemies';
+  if (action === 'prayer' || action === 'aegis' || action === 'rounddance') return 'party';
+  if (['volley', 'bomb', 'sweep', 'storm', 'pin', 'knives', 'tremor', 'quake', 'saintarc'].includes(action)) return 'enemies';
   if (['brace', 'evade', 'taunt', 'valor', 'mend', 'rally', 'spearwall', 'finale', 'bulwark', 'parry', 'halo', 'hold', 'warcry', 'dread', 'stonearmor', 'rouse'].includes(action)) return 'self';
-  if (['guard', 'ward', 'heal', 'haste', 'sanctuary', 'bless', 'revive', 'fury', 'decoy', 'guardstone', 'solo'].includes(action)) return 'ally';
+  if (['guard', 'ward', 'heal', 'haste', 'sanctuary', 'bless', 'revive', 'fury', 'decoy', 'guardstone', 'solo', 'cadence', 'duet', 'deepbeat', 'closingstep'].includes(action)) return 'ally';
   return 'enemy';
 }
 // Front-row foes screen the back row (owner 2026-10-22): while a front foe stands, a front-lane hero's single-target
@@ -136,7 +143,7 @@ export function skillPower(data: EncounterDefinition, heroId: string, action: Ac
   if (PERCENT_SKILLS.includes(action)) return data.skills[action].power + (hero?.talents?.power?.[action] ?? 0) + levelPoints(data, heroId, action);
   const bonus = (usesMagicPower(action) ? hero?.skillBonus : hero?.damageBonus) ?? 0;
   const level = skillLevelKind(data, action) === 'power' ? skillLevelSteps(data, heroId, action).steps * data.rules.skillLevel.powerPercent : 0;
-  return Math.round(data.skills[action].power * (100 + bonus + level) / 100) + (hero?.talents?.power?.[action] ?? 0);
+  return Math.max(0, Math.round(data.skills[action].power * (100 + bonus + level) / 100) + (hero?.talents?.power?.[action] ?? 0) - (action === 'lastlight' && hasCap(data, heroId, 'metta4') ? 4 : 0));
 }
 export const finaleHealPower = (data: EncounterDefinition, heroId: string): number =>
   Math.round(data.rules.finaleHeal * (100 + (data.heroes.find(h => h.id === heroId)?.skillBonus ?? 0) + skillLevelSteps(data, heroId, 'finale').steps * data.rules.skillLevel.powerPercent) / 100);
@@ -177,6 +184,27 @@ function shorten(hero: HeroState | undefined, action: ActionId, round: number): 
   const at = hero?.cooldowns[action]; if (at === undefined) return;
   if (at - 1 <= round) delete hero!.cooldowns[action]; else hero!.cooldowns[action] = at - 1;
 }
+// C12: cooldowns are absolute rounds. Only equipped, still-cooling non-dance skills qualify.
+export const DANCE_SKILLS: readonly ActionId[] = ['cadence', 'duet', 'rounddance', 'deepbeat', 'echofoot', 'closingstep'];
+export function cooldownTargets(state: BattleState, data: EncounterDefinition, heroId: string): ActionId[] {
+  const actor = state.heroes.find(h => h.id === heroId); const def = data.heroes.find(h => h.id === heroId);
+  if (!actor || actor.hp <= 0 || !def) return [];
+  return def.actions.filter(a => a !== 'attack' && !DANCE_SKILLS.includes(a) && (actor.cooldowns[a] ?? 0) > state.round)
+    .sort((a, b) => actor.cooldowns[b]! - actor.cooldowns[a]! || def.actions.indexOf(a) - def.actions.indexOf(b));
+}
+function danceAllies(state: BattleState, data: EncounterDefinition, heroId: string): HeroState[] {
+  const total = (h: HeroState) => cooldownTargets(state, data, h.id).reduce((n, a) => n + h.cooldowns[a]! - state.round, 0);
+  return state.heroes.filter(h => h.id !== heroId && h.hp > 0 && cooldownTargets(state, data, h.id).length)
+    .sort((a, b) => total(b) - total(a));
+}
+// Explicit spell overrides do not gain the base-only conversion cap a second time.
+export function saintRatioOf(data: EncounterDefinition, heroId: string, action: ActionId = 'attack'): number {
+  if (action === 'communion') return 50 + capAmount(data, heroId, 'communionRatio') + capAmount(data, heroId, 'metta1');
+  if (action === 'lastlight' && hasCap(data, heroId, 'metta4')) return capAmount(data, heroId, 'metta4');
+  if (action === 'lastlight' && hasCap(data, heroId, 'lastlightRatio')) return capAmount(data, heroId, 'lastlightRatio');
+  return 30 + capAmount(data, heroId, 'saintRatio');
+}
+
 // ---- Equipment (2D-2) ----
 export const GEAR_MARK_HUNTER = 8; export const GEAR_RENEWAL = 4;
 export const hasGear = (data: EncounterDefinition, heroId: string | undefined, special: GearSpecial): boolean =>
@@ -644,6 +672,15 @@ export function actionReason(state: BattleState, data: EncounterDefinition, hero
 }
 export function targetOptions(state: BattleState, data: EncounterDefinition, heroId: string, action: ActionId): TargetOption[] {
   const unavailable = actionReason(state, data, heroId, action);
+  if (['cadence', 'duet', 'deepbeat', 'closingstep'].includes(action)) return data.heroes.map(h => {
+    const actor = state.heroes.find(a => a.id === h.id);
+    const reason = unavailable || (!actor || actor.hp <= 0 ? 'This hero is down.' : h.id === heroId ? 'Choose another ally.' : !cooldownTargets(state, data, h.id).length ? 'No eligible skill is cooling down.' : '');
+    return { id: h.id, name: h.name, valid: !reason, reason };
+  });
+  if (action === 'rounddance') {
+    const reason = unavailable || (!danceAllies(state, data, heroId).length ? 'No eligible skill is cooling down.' : '');
+    return [{ id: 'party', name: 'Party', valid: !reason, reason }];
+  }
   if (action === 'aegis') {
     const adds = state.heroes.some(h => h.hp > 0 && h.barrier < skillPower(data, heroId, 'aegis'));
     const user = state.heroes.find(h => h.id === heroId);
@@ -711,6 +748,13 @@ export function validateCommand(state: BattleState, data: EncounterDefinition, c
   if (command.beat !== state.beat) return 'The preview is stale. Select an action again.';
   const reason = actionReason(state, data, command.heroId, command.action);
   if (reason) return reason;
+  const selectsSkill = command.action === 'duet' && hasCap(data, command.heroId, 'lalin2');
+  if (selectsSkill && (!command.cooldownAction || !cooldownTargets(state, data, command.targetId).includes(command.cooldownAction))) return 'Choose an eligible cooling skill.';
+  if (!selectsSkill && command.cooldownAction !== undefined) return 'This action does not select a cooling skill.';
+  const selectsAlly = command.action === 'echofoot' && hasCap(data, command.heroId, 'dancerEchoChoose');
+  const allies = danceAllies(state, data, command.heroId);
+  if (selectsAlly && allies.length && !allies.some(h => h.id === command.cooldownTargetId)) return 'Choose an ally with an eligible cooling skill.';
+  if (command.cooldownTargetId !== undefined && (!selectsAlly || !allies.some(h => h.id === command.cooldownTargetId))) return 'Invalid cooldown recipient.';
   const target = targetOptions(state, data, command.heroId, command.action).find(t => t.id === command.targetId);
   return target?.valid ? '' : target?.reason || 'Invalid target.';
 }
@@ -720,6 +764,8 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
   const hero = data.heroes.find(h => h.id === command.heroId)!; const actor = state.heroes.find(h => h.id === hero.id)!;
   const base = data.skills[command.action]; const enemy = state.enemies.find(e => e.id === command.targetId);
   const skill = { ...base, power: skillPower(data, hero.id, command.action), cooldown: skillCooldown(data, hero.id, command.action) };
+  let directDamage = 0;
+  let cooldownAdjustment = 0;
   // Every hero hit adds corrosion, valor and its own capstone bonuses.
   const strike = (foe: EnemyState, power: number, text: string) => {
     const boss=foe===enemy&&targetKind(command.action)==='enemy'&&power>0&&foe.markedUntil>state.round?bossPowerReady(state,data,hero.id,'focus'):0;
@@ -728,7 +774,7 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
     const raised = banner ? Math.round(power * (100 + banner) / 100) : power;
     // A bard's solo gives this hero the song of valor twice more.
     const solo = (actor.solo?.round ?? 0) >= state.round && state.song?.action === 'valor' && living(state, state.song.heroId) ? songPower(data, state.song.heroId, 'valor') * (SOLO_TIMES - 1) : 0;
-    const amount = Math.min(foe.hp, veiled(state, data, foe, raised + boss + solo + hitBonus(state, data, foe.id) + talentHitBonus(state, data, hero.id, foe))); foe.hp -= amount;
+    const amount = Math.min(foe.hp, veiled(state, data, foe, raised + boss + solo + hitBonus(state, data, foe.id) + talentHitBonus(state, data, hero.id, foe))); foe.hp -= amount; directDamage += amount;
     events.push({ type: 'damage', sourceId: hero.id, targetId: foe.id, amount, text });
     if (!foe.hp) { events.push({ type: 'down', targetId: foe.id, text: 'Enemy falls.' }); chainReaction(state, data, foe, events); }
     leech(state, data, hero.id, amount, events);
@@ -764,6 +810,65 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
     events.push({ type: 'corrode', sourceId: hero.id, targetId: foe.id, amount: foe.corrodeBonus, text: 'Enemy corroded.' });
   };
   switch (command.action) {
+    case 'saintstrike': case 'communion': case 'vowstrike': case 'sharewound': case 'lastlight': {
+      let power = skill.power;
+      const hurt = (h: HeroState, percent: number) => h.id !== hero.id && h.hp > 0 && h.hp * 100 < data.heroes.find(d => d.id === h.id)!.maxHp * percent;
+      if (command.action === 'saintstrike' && state.heroes.some(h => hurt(h, 50))) power += capAmount(data, hero.id, 'metta2');
+      if (command.action === 'vowstrike' && state.heroes.filter(h => h.hp > 0 && h.hp < data.heroes.find(d => d.id === h.id)!.maxHp && data.heroes.find(d => d.id === h.id)!.lane === 'front').length >= 2) power += capAmount(data, hero.id, 'thiran3');
+      damage(power); break;
+    }
+    case 'saintarc': {
+      const foes = state.enemies.filter(e => e.hp > 0); const front = foes.filter(e => row(e.id) === 'front');
+      for (const foe of front.length ? front : foes) strike(foe, skill.power, 'Saint arc.');
+      break;
+    }
+    case 'cadence': case 'duet': case 'rounddance': case 'deepbeat': case 'echofoot': case 'closingstep': {
+      if (command.action === 'echofoot') damage(skill.power);
+      const allies = danceAllies(state, data, hero.id);
+      const chosen = state.heroes.find(h => h.id === command.targetId);
+      const reduce = (target: HeroState, amount: number, count: number, explicit?: ActionId, shortest = false) => {
+        let actions = cooldownTargets(state, data, target.id);
+        if (shortest) actions = [...actions].sort((a, b) => target.cooldowns[a]! - target.cooldowns[b]!);
+        if (explicit) actions = [explicit, ...actions.filter(a => a !== explicit)];
+        for (const action of actions.slice(0, count)) {
+          const before = target.cooldowns[action]!; const after = Math.max(state.round, before - amount);
+          if (after <= state.round) delete target.cooldowns[action]; else target.cooldowns[action] = after;
+          if (before > after) events.push({ type: 'cooldown', sourceId: hero.id, targetId: target.id, action, amount: before - after, text: 'Cooldown recovered.' });
+        }
+      };
+      switch (command.action) {
+        case 'cadence':
+          reduce(chosen!, 1, 1, undefined, hasCap(data, hero.id, 'dancerCadenceShort'));
+          if (hasCap(data, hero.id, 'lalin1') && !state.commands.some(c => c.heroId === hero.id && c.action === 'cadence')) cooldownAdjustment--;
+          break;
+        case 'duet':
+          if (hasCap(data, hero.id, 'wila4')) {
+            reduce(chosen!, 1, 1, command.cooldownAction);
+            const second = allies.find(h => h.id !== chosen!.id); if (second) reduce(second, 1, 1);
+          } else reduce(chosen!, hasCap(data, hero.id, 'dancerDuetFocus') ? 2 : 1, hasCap(data, hero.id, 'dancerDuetFocus') ? 1 : 2, command.cooldownAction);
+          break;
+        case 'rounddance': {
+          const pair = hasCap(data, hero.id, 'dancerRoundPair');
+          for (const ally of pair ? allies.slice(0, 2) : allies) reduce(ally, pair ? 2 : 1, 1);
+          if (hasCap(data, hero.id, 'wila1') && !state.commands.some(c => c.heroId === hero.id && c.action === 'rounddance')) cooldownAdjustment--;
+          if (hasCap(data, hero.id, 'wila3') && (pair ? Math.min(2, allies.length) : allies.length) >= 3) cooldownAdjustment--;
+          break;
+        }
+        case 'deepbeat':
+          reduce(chosen!, (hasCap(data, hero.id, 'dancerDeep') ? 3 : 2) + (chosen!.hp * 2 < data.heroes.find(h => h.id === chosen!.id)!.maxHp ? capAmount(data, hero.id, 'lalin3') : 0), 1); break;
+        case 'echofoot': {
+          const recipient = hasCap(data, hero.id, 'dancerEchoChoose') ? allies.find(h => h.id === command.cooldownTargetId) : allies[0];
+          if (recipient) reduce(recipient, 1, 1); break;
+        }
+        case 'closingstep': {
+          const count = cooldownTargets(state, data, chosen!.id).length;
+          reduce(chosen!, 2, hasCap(data, hero.id, 'lalin4') ? 1 : 2);
+          if (count === 1) cooldownAdjustment -= capAmount(data, hero.id, 'dancerClosingQuick');
+          cooldownAdjustment -= capAmount(data, hero.id, 'lalin4'); break;
+        }
+      }
+      break;
+    }
     case 'attack': case 'execute': case 'lunge': {
       const bonus = hero.empoweredByStatuses && enemy!.markedUntil > state.round ? data.rules.markedBonus : 0;
       damage((command.action === 'attack' ? hero.attack : skill.power) + bonus); if (bonus) enemy!.markedUntil = 0;
@@ -1068,14 +1173,38 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
       if (hasCap(data, hero.id, 'longprayer')) state.prayerEcho = { heroId: hero.id, round: state.round + 1, amount: Math.floor(skill.power / 2) };
       break;
   }
+  // Saint converts only HP removed by its direct command, once, before outcome/turn advancement.
+  // No conversion from equipment retaliation, leech, overkill or another actor's damage.
+  if (hero.role === 'Saint' && directDamage > 0 && actor.hp > 0) {
+    const ratio = (h: HeroState) => h.hp / data.heroes.find(d => d.id === h.id)!.maxHp;
+    let injured = state.heroes.filter(h => h.id !== hero.id && h.hp > 0 && ratio(h) < 1).sort((a, b) => ratio(a) - ratio(b));
+    if (hasCap(data, hero.id, 'thiran2')) injured = [...injured.filter(h => data.heroes.find(d => d.id === h.id)!.lane === 'front'), ...injured.filter(h => data.heroes.find(d => d.id === h.id)!.lane !== 'front')];
+    let percent = saintRatioOf(data, hero.id, command.action);
+    if (command.action === 'vowstrike' && injured.some(h => ratio(h) * 100 < (capAmount(data, hero.id, 'vowThreshold') || 40))) percent = 45;
+    if (command.action === 'saintstrike' && livingBefore.some(id => state.enemies.find(e => e.id === id)!.hp <= 0) && hasCap(data, hero.id, 'saintFinish')) percent = capAmount(data, hero.id, 'saintFinish');
+    const total = Math.floor(directDamage * percent / 100);
+    const share = command.action === 'sharewound';
+    const count = share && hasCap(data, hero.id, 'shareThree') ? 3 : share || hasCap(data, hero.id, 'thiran4') ? 2 : 1;
+    injured = injured.slice(0, count);
+    let left = total;
+    injured.forEach((h, i) => {
+      const priority = share && i === 0 && injured.length === 2 ? capAmount(data, hero.id, 'metta3') || capAmount(data, hero.id, 'sharePriority') : 0;
+      const part = i === injured.length - 1 ? left : priority ? Math.floor(total * priority / 100) : Math.floor(total / injured.length);
+      left -= part;
+      // Conversion cannot become an overflow shield; only actual missing HP is restored.
+      const amount = Math.min(part, data.heroes.find(d => d.id === h.id)!.maxHp - h.hp);
+      if (amount > 0) { h.hp += amount; events.push({ type: 'heal', sourceId: hero.id, targetId: h.id, amount, text: 'Damage becomes an ally’s life.' }); }
+    });
+  }
   // A levelled skill without numbers shields its user (tomes).
   const shield = levelBarrier(data, hero.id, command.action); if (shield && actor.hp > 0) barrier(actor, shield);
   const cooldown = command.action === 'volley' && hasPassive(data, hero.id, 'tailwind') || command.action === 'haste' && hasCap(data, hero.id, 'quickbrew')
     || command.action === 'prayer' && hasCap(data, hero.id, 'quickprayer') || command.action === 'knives' && hasCap(data, hero.id, 'quickknives') ? skill.cooldown - 1 : skill.cooldown;
   // Star-veil set (4 pieces): the battle's first skill with a cooldown is ready again at once.
-  const free = !!cooldown && !!hero.gear?.freeCast && !state.freeCast?.includes(hero.id);
+  const effectiveCooldown = Math.max(0, cooldown + cooldownAdjustment);
+  const free = !!effectiveCooldown && !!hero.gear?.freeCast && !state.freeCast?.includes(hero.id);
   if (free) state.freeCast = [...state.freeCast ?? [], hero.id];
-  else if (cooldown) actor.cooldowns[command.action] = state.round + cooldown;
+  else if (effectiveCooldown) actor.cooldowns[command.action] = state.round + effectiveCooldown;
   // Duelist relentless (talent): downing an enemy readies her precision strike again.
   const downed = livingBefore.some(id => state.enemies.find(e => e.id === id)!.hp <= 0);
   if (hasCap(data, hero.id, 'relentless') && downed) delete actor.cooldowns.execute;

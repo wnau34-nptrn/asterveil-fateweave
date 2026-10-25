@@ -240,6 +240,13 @@ BASELINE: regenerate the "before" sim numbers from f56d2fb in a separate worktre
 
 เริ่มหลัง C11 merge แล้ว · Codex ออกแบบ ลงโค้ด จูนสมดุล และ merge เองทีละชุด Claude ตรวจย้อนหลัง
 
+- [x] Phase 1 (ออกแบบ 2026-10-24; merged PR #67 2026-10-25, `0b0f649`, quality CI ผ่าน): ออกแบบ `docs/design/ROSTER_30_TH.md` — 15 เจ้าของกลไก, 5 ต้นไม้ × 16 โหนด, 30 ตัว/กิ่งประจำตัว, กฎขอบเขต/เซฟ/sim/ภาพ และลำดับ 5 batch; เอกสารเท่านั้น ไม่อ้างว่าตัวใหม่เล่นได้แล้ว
+- [x] Batch 1: นักบุญรบ + นักเต้นรำ 4 ตัว / กิ่ง p / เซฟ v43 — PR #68 merged 2026-10-25 (`24dfefb`), unit 838 / browser 244 / sim 28 / campaign gate 20 cells ผ่าน ดู `docs/validation/roster-30/batch-1/README.md`
+- [ ] Batch 2: นักมวย + นักสาป
+- [ ] Batch 3: โหราจารย์
+- [ ] Batch 4–5: ตัวที่สองของสิบอาชีพเดิมและกิ่ง p คู่เดิม
+
+
 ```text
 CODEX HANDOFF — ROSTER-30-001
 Asterveil · Fateweave: 15 classes × 2 unique characters — design, build and balance

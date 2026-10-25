@@ -1,7 +1,7 @@
-import { CATALYST_PER_ROUND, SOLO_TIMES, isDelayed, ambushBonus, corrodeBonusOf, guardReductionOf, interruptBlock, nextIntentOf, plannedIntents, tauntReductionOf, currentHeroId, skillPower, targetOptions } from '../core/battle/engine';
-import type { ActionId, BattleState, EncounterDefinition } from '../core/battle/types';
+import { cooldownTargets, hasCap, previewCommand, CATALYST_PER_ROUND, SOLO_TIMES, isDelayed, ambushBonus, corrodeBonusOf, guardReductionOf, interruptBlock, nextIntentOf, plannedIntents, tauntReductionOf, currentHeroId, skillPower, targetOptions } from '../core/battle/engine';
+import type { ActionId, BattleState, EncounterDefinition, Command } from '../core/battle/types';
 import { actorName } from './th';
-export interface Lesson { step:number; title:string; copy:string; heroId:string; action:ActionId; targetId:string }
+export interface Lesson { step:number; title:string; copy:string; heroId:string; action:ActionId; targetId:string; cooldownAction?:ActionId; cooldownTargetId?:string }
 // Reactive advice for the teaching battle. It reads the committed state only and
 // never suggests commanding a hero outside the current SPD turn.
 export function battleLesson(state:BattleState,data:EncounterDefinition):Lesson|undefined {
@@ -29,6 +29,40 @@ export function battleLesson(state:BattleState,data:EncounterDefinition):Lesson|
  const row=(id:string)=>data.enemies.find(d=>d.id===id)?.row;
  const lane=(id:string)=>data.heroes.find(h=>h.id===id)?.lane;
  const front=living.filter(e=>row(e.id)==='front'),back=living.filter(e=>row(e.id)==='back');
+ // New roster kits are compared through the actual resolver. This is an advisor policy,
+ // not a second implementation of healing or cooldown rules.
+ if(role==='Saint'||role==='Dancer'){
+  const candidates:Array<{command:Command;score:number;damage:number;healed:number;recovered:number}>=[];
+  const me=data.heroes.find(h=>h.id===heroId)!;
+  for(const action of me.actions){
+   for(const target of targetOptions(state,data,heroId,action).filter(t=>t.valid)){
+    const command:Command={heroId,beat:state.beat,action,targetId:target.id};
+    if(action==='duet'&&hasCap(data,heroId,'lalin2'))command.cooldownAction=cooldownTargets(state,data,target.id)[0];
+    if(action==='echofoot'&&hasCap(data,heroId,'dancerEchoChoose')){
+     const allies=state.heroes.filter(h=>h.id!==heroId&&h.hp>0&&cooldownTargets(state,data,h.id).length).sort((a,b)=>{
+      const total=(id:string)=>cooldownTargets(state,data,id).reduce((n,a)=>n+Math.max(0,(state.heroes.find(h=>h.id===id)!.cooldowns[a]??0)-state.round),0);
+      return total(b.id)-total(a.id);
+     });
+     if(allies[0])command.cooldownTargetId=allies[0].id;
+    }
+    const result=previewCommand(state,data,command),turn=result.turns.find(t=>t.side==='hero');
+    if(!turn)continue;
+    const damage=turn.events.filter(e=>e.type==='damage'&&e.sourceId===heroId&&state.enemies.some(x=>x.id===e.targetId)).reduce((n,e)=>n+(e.amount??0),0);
+    const healed=turn.events.filter(e=>e.type==='heal'&&e.sourceId===heroId).reduce((n,e)=>n+(e.amount??0),0);
+    let recovered=0,readied=0;
+    for(const ally of state.heroes.filter(h=>h.id!==heroId&&h.hp>0))for(const a of cooldownTargets(state,data,ally.id)){
+     const before=Math.max(0,(ally.cooldowns[a]??0)-state.round),after=Math.max(0,(turn.state.heroes.find(h=>h.id===ally.id)?.cooldowns[a]??0)-state.round);
+     recovered+=Math.max(0,before-after);
+     if(before>0&&after===0)readied++;
+    }
+    const kills=turn.events.filter(e=>e.type==='down'&&state.enemies.some(x=>x.id===e.targetId)).length;
+    candidates.push({command,score:damage+healed*1.5+recovered*5+readied*6+kills*8,damage,healed,recovered});
+   }
+  }
+  const best=candidates.sort((a,b)=>b.score-a.score)[0];
+  if(best){const {command,damage,healed,recovered}=best;return{...command,step:state.commands.length+1,title:role==='Saint'?'รุกพร้อมแบ่งเลือดให้เพื่อน':'เลือกจังหวะที่ช่วยทีม',copy:`${actorName(heroId,data)} → ${data.skills[command.action].name} → ${actorName(command.targetId,data)} · คาดการณ์ดาเมจ ${damage}${healed?` · ฟื้นเลือด ${healed}`:''}${recovered?` · คืนคูลดาวน์รวม ${recovered} รอบ`:''}`};}
+  return attack();
+ }
  const tree=treeAdvice(); if(tree)return tree;
  function treeAdvice():Lesson|undefined{
   if(role==='Knight'){

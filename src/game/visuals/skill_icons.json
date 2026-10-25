@@ -1,7 +1,7 @@
 {
   "cell": 256,
   "cols": 6,
-  "rows": 11,
+  "rows": 13,
   "order": [
     "guard",
     "bash",
@@ -63,6 +63,18 @@
     "tremor",
     "dread",
     "note",
-    "solo"
+    "solo",
+    "saintstrike",
+    "communion",
+    "saintarc",
+    "vowstrike",
+    "sharewound",
+    "lastlight",
+    "cadence",
+    "duet",
+    "rounddance",
+    "deepbeat",
+    "echofoot",
+    "closingstep"
   ]
 }

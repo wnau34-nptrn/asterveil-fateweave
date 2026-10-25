@@ -7,10 +7,10 @@ import { emblemCell, gearCell, potionCell } from '../src/game/visuals/equip-art'
 
 // ART-UI-EQUIP-001: every piece the rules can create has painted art.
 describe('equipment art map', () => {
-  it('every class has its weapon frame and every other slot a piece frame, all inside the 5 × 3 atlas', () => {
+  it('every class has its weapon frame and every other slot a piece frame, all inside the 7 × 3 atlas', () => {
     for (const h of heroCatalog(lookup, map)) {
       const c = gearCell({ slot: 'weapon', hero: h.id }); expect(c, h.id).toBeDefined();
-      expect(c!.row).toBeLessThan(2);
+      expect(c!.row).toBeLessThan(2); expect(c!.col).toBeLessThan(7);
     }
     for (const slot of GEAR_SLOTS.filter(s => s !== 'weapon')) { const c = gearCell({ slot }); expect(c).toEqual(expect.objectContaining({ row: 2 })); }
     expect(new Set(heroCatalog(lookup, map).map(h => JSON.stringify(gearCell({ slot: 'weapon', hero: h.id })))).size).toBe(heroCatalog(lookup, map).length);

@@ -10,4 +10,8 @@ export const gearPreferences: Record<string, { main: GearStat[]; some: GearStat[
   sefa: { main: ['attack', 'speed', 'leech'], some: ['hp'] },
   brann: { main: ['hp', 'armour', 'resist'], some: ['attack'] },
   lio: { main: ['support', 'speed'], some: ['hp', 'attack', 'resist'] },
+  metta: { main: ['attack', 'hp', 'armour'], some: ['leech', 'resist'] },
+  thiran: { main: ['attack', 'hp', 'armour'], some: ['leech', 'resist'] },
+  lalin: { main: ['hp', 'armour', 'speed'], some: ['attack', 'resist'] },
+  wila: { main: ['hp', 'armour', 'speed'], some: ['attack', 'resist'] },
 };

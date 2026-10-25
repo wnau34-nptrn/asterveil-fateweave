@@ -115,7 +115,7 @@ export function playOut(s: ExpeditionState, style: Style): { bs: BattleState; lo
   for (let guard = 0; bs.outcome === 'active' && guard < 400; guard++) {
     const follow = style === 'advisor' || (style === 'casual' && rollPercent(s.seed ^ 0x9e3779b9, s.rolls * 997 + bs.commands.length) < 70);
     const l = follow ? battleLesson(bs, data) : undefined;
-    if (l) { bs = resolveCommand(bs, data, { beat: bs.beat, heroId: l.heroId, action: l.action, targetId: l.targetId }).state; low = Math.min(low, now()); continue; }
+    if (l) { bs = resolveCommand(bs, data, { beat: bs.beat, heroId: l.heroId, action: l.action, targetId: l.targetId, ...("cooldownAction" in l ? { cooldownAction: l.cooldownAction } : {}), ...("cooldownTargetId" in l ? { cooldownTargetId: l.cooldownTargetId } : {}) }).state; low = Math.min(low, now()); continue; }
     const hero = currentHeroId(bs, data)!; const t = targetOptions(bs, data, hero, 'attack').find(o => o.valid)!;
     bs = resolveCommand(bs, data, { beat: bs.beat, heroId: hero, action: 'attack', targetId: t.id }).state; low = Math.min(low, now());
   }
@@ -267,9 +267,9 @@ function lobby(p: Profile): { profile: Profile; claimed: string[] } {
   const pick = [...p.party.deployed].sort((x, y) => p.members[y]!.stars - p.members[x]!.stars).find(id => !buyReason(p, map, 'contract', id));
   if (pick && p.bank.gold > 200) p = buy(p, map, 'contract', pick).profile;
   if (!buyReason(p, map, 'gearbox') && p.bank.gold > 150) p = buy(p, map, 'gearbox').profile;
-  // Hire everything useful on the board, redrawing it (paid) while gold is plentiful.
+  // Purchase duplicates only for the deployed party. Bench-only acquisitions are not improvements to this fixed-team campaign policy.
   for (let round = 0; ; round++) {
-    for (let i = 0; i < boardOffers(p, map, lookup).length; i++) if (!hireReason(p, map, lookup, i)) p = hire(p, map, lookup, i).profile;
+    for (const [i, id] of boardOffers(p, map, lookup).entries()) if (p.party.deployed.includes(id) && !hireReason(p, map, lookup, i)) p = hire(p, map, lookup, i).profile;
     if (round >= map.shop.refreshCosts.length || refreshReason(p, map) || p.bank.gold < 100) break;
     p = refreshBoard(p, map).profile;
   }

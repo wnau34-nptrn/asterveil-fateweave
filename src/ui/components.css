@@ -360,3 +360,16 @@
 @container game (max-width:360px) { #app .battle-rewards[open] { padding:10px; } .reward-member { padding:6px; } }
 .reward-items > li:only-child { grid-column:1 / -1; }
 .reward-member > div { min-width:0; flex-basis:70px; }
+
+/* Personal branches share the talent budget; a separate row keeps 44px nodes readable on phones. */
+.personal-tree { padding: 10px 0; margin: 8px 0; border-block: 1px solid #74d4ef33; }
+.personal-tree h4 { margin: 0; color: var(--gold-light, #f2d596); }
+.personal-tree-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+.personal-tree-grid > div { display: grid; justify-items: center; align-content: start; gap: 5px; }
+.personal-tier { color: var(--text-muted, #bbcadb); font-size: 11px; }
+.cooldown-choices { display: grid; gap: 8px; margin: 12px 0; }
+.cooldown-choices button { min-height: 48px; display: flex; gap: 10px; align-items: center; text-align: left; }
+.cooldown-choices button span { display: grid; }
+.cooldown-choices small { font-size: 12px; color: var(--text-muted, #bbcadb); }
+#cooldown-choice { max-width: min(360px, calc(100vw - 24px)); max-height: calc(100dvh - 32px); overflow: auto; }
+#cooldown-choice h2 { margin-top: 0; }

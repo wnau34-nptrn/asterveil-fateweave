@@ -52,7 +52,7 @@ export function classSim(level = 7): ClassRow[] {
         };
         take();
         for (let i = 0; i < 200 && s.outcome === 'active'; i++) {
-          const l = battleLesson(s, data)!; r = resolveCommand(s, data, { beat: s.beat, heroId: l.heroId, action: l.action, targetId: l.targetId }); s = r.state; take();
+          const l = battleLesson(s, data)!; r = resolveCommand(s, data, { beat: s.beat, heroId: l.heroId, action: l.action, targetId: l.targetId, ...("cooldownAction" in l ? { cooldownAction: l.cooldownAction } : {}), ...("cooldownTargetId" in l ? { cooldownTargetId: l.cooldownTargetId } : {}) }); s = r.state; take();
         }
         row.fought++; if (s.outcome === 'victory') row.won++; row.rounds += s.round;
         row.partyHp += s.heroes.reduce((n, h) => n + h.hp, 0) / data.heroes.reduce((n, h) => n + h.maxHp, 0);

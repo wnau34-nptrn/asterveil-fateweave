@@ -7,10 +7,31 @@ import { chapterOne as map } from '../../src/content/world/chapter1';
 import { beginBattle, resolveCommand, withLevel, withParty } from '../../src/core/battle/engine';
 import type { ActionId } from '../../src/core/battle/types';
 import type { Talents } from '../../src/core/world/types';
-import { heroCatalog, starred } from '../../src/core/world/world';
+import { memberTalentReason } from '../../src/core/world/talents';
+import { heroCatalog, skillChoices, starred } from '../../src/core/world/world';
 import { battleLesson } from '../../src/ui/tutorial';
 
 export interface TreeBuild { id: string; name: string; talents: Talents; loadout: ActionId[]; campaign?: boolean }
+// C12 examples use the same paid level/star budget and validator as the player. All four branch
+// priorities are sampled; the personal-branch comparison below removes only p ranks, keeping the same gear/team.
+const rosterIds = ['metta', 'thiran', 'lalin', 'wila'] as const;
+function rosterBuilds(): TreeBuild[] {
+  return rosterIds.flatMap(id => (['a', 'b', 'c', 'p'] as const).map(branch => {
+    const tree = map.talents[id] ?? [], talents: Talents = {}, member = { stars: 3, dupes: 0, level: 10 };
+    const ordered = [...tree].sort((a,b) => Number(b.branch === branch) - Number(a.branch === branch) || (a.tier ?? 0) - (b.tier ?? 0) || a.id.localeCompare(b.id));
+    for (let i = 0; i < 50; i++) {
+      const next = ordered.find(n => !memberTalentReason(map, id, {...member, talents}, n.id));
+      if (!next) break; talents[next.id] = (talents[next.id] ?? 0) + 1;
+    }
+    const base = heroCatalog(lookup,map).find(h => h.id === id)!;
+    const available: ActionId[] = skillChoices(base,map,talents).filter(a => a !== 'attack');
+    const wanted: ActionId[] = base.role === 'Saint'
+      ? branch === 'a' ? ['saintarc','communion','saintstrike'] : branch === 'b' ? ['vowstrike','saintstrike','communion'] : branch === 'c' ? ['sharewound','lastlight','saintstrike'] : ['communion','saintarc','sharewound']
+      : branch === 'a' ? ['rounddance','duet','cadence'] : branch === 'b' ? ['deepbeat','duet','cadence'] : branch === 'c' ? ['echofoot','closingstep','duet'] : ['duet','echofoot','cadence'];
+    const loadout = [...new Set([...wanted.filter(a => available.includes(a)),...available])].slice(0,3);
+    return {id, name: `C12 ${branch === 'p' ? 'ประจำตัว' : `กิ่ง ${branch}`}`, talents, loadout};
+  }));
+}
 export const TREE_BUILDS: readonly TreeBuild[] = [
   { id: 'guardian', campaign: false, name: 'แนวค่าย', talents: { c1s: 1, a1: 2, a2i: 1, c2v: 1, c1: 2, a3: 1, a3s: 1 }, loadout: ['guard', 'bash', 'rally'] },
   { id: 'guardian', campaign: false, name: 'กำแพงโล่', talents: { a1: 2, a2i: 1, a3: 1, a3s: 1, b1: 2, c1s: 1, c1: 2, c2v: 1 }, loadout: ['guard', 'bulwark', 'rally'] },
@@ -45,9 +66,10 @@ export const TREE_BUILDS: readonly TreeBuild[] = [
   { id: 'lio', name: 'ผู้ปลอบ', talents: { b1: 2, b2o: 1, b3: 1, a1: 2, a2c: 1, a3: 1 }, loadout: ['mend', 'finale', 'dread'] },
   { id: 'lio', name: 'กลองศึก', talents: { a1: 2, a2r: 1, c1: 1, c1s: 1, c2d: 1, c3: 1 }, loadout: ['valor', 'solo', 'note'] },
   { id: 'lio', name: 'นักร้องนำ', talents: { a1: 2, a2c: 1, a3: 1, c1: 1, c1s: 1, c2s: 1, b1: 1, b2w: 1, b3: 1 }, loadout: ['dread', 'note', 'finale'] },
+  ...rosterBuilds(),
 ];
 const fights = ['thicket-ambush', 'shadow-stalker', 'crystal-stampede', 'rear-ambush', 'elite-tusk-chief', 'elite-briar-lord', 'beetle-wall', 'forest-swarm', 'channeler-wisps', 'crawler-pack'];
-export interface TreeRow { id: string; build: string; won: number; fought: number; partyHp: number; rounds: number; used: number; actions: Partial<Record<ActionId, number>>; disabled: Partial<Record<ActionId, { won: number; hp: number }>> }
+export interface TreeRow { id: string; build: string; won: number; fought: number; partyHp: number; rounds: number; used: number; actions: Partial<Record<ActionId, number>>; disabled: Partial<Record<ActionId, { won: number; hp: number }>>; personal?: { points: number; won: number; hp: number } }
 export const TREE_LEVEL = 10, TREE_STARS = 3;
 export function treeSim(fightLevel = 15): TreeRow[] {
   const catalog = heroCatalog(lookup, map); const teaching = catalog.slice(0, 4);
@@ -63,17 +85,29 @@ export function treeSim(fightLevel = 15): TreeRow[] {
       let s = beginBattle(data).state;
       for (let i = 0; i < 200 && s.outcome === 'active'; i++) {
         const l = battleLesson(s, data)!; if (l.heroId === b.id) row.actions[l.action] = (row.actions[l.action] ?? 0) + 1; if (l.heroId === b.id && b.loadout.includes(l.action) && !base.actions.includes(l.action)) row.used++;
-        s = resolveCommand(s, data, { beat: s.beat, heroId: l.heroId, action: l.action, targetId: l.targetId }).state;
+        s = resolveCommand(s, data, { beat: s.beat, heroId: l.heroId, action: l.action, targetId: l.targetId, ...("cooldownAction" in l ? { cooldownAction: l.cooldownAction } : {}), ...("cooldownTargetId" in l ? { cooldownTargetId: l.cooldownTargetId } : {}) }).state;
       }
       for (const action of b.loadout) {
         const without = withParty(data, data.heroes.map(h => h.id === b.id ? { ...h, actions: h.actions.filter(a => a !== action) } : h));
         let off = beginBattle(without).state;
         for (let i = 0; i < 200 && off.outcome === 'active'; i++) {
-          const l = battleLesson(off, without)!; off = resolveCommand(off, without, { beat: off.beat, heroId: l.heroId, action: l.action, targetId: l.targetId }).state;
+          const l = battleLesson(off, without)!; off = resolveCommand(off, without, { beat: off.beat, heroId: l.heroId, action: l.action, targetId: l.targetId, ...("cooldownAction" in l ? { cooldownAction: l.cooldownAction } : {}), ...("cooldownTargetId" in l ? { cooldownTargetId: l.cooldownTargetId } : {}) }).state;
         }
         const impact = row.disabled[action] ??= { won: 0, hp: 0 };
         if (off.outcome === 'victory') impact.won++;
         impact.hp += off.heroes.reduce((n, h) => n + h.hp, 0) / without.heroes.reduce((n, h) => n + h.maxHp, 0);
+      }
+      const personal = Object.entries(b.talents).filter(([node]) => node.startsWith('p'));
+      if (personal.length) {
+        const shared = Object.fromEntries(Object.entries(b.talents).filter(([node]) => !node.startsWith('p')));
+        const without = withParty(data, party.map(h => h.id === b.id ? starred(base, TREE_STARS, map, TREE_LEVEL, shared, undefined, b.loadout.length ? {loadout:b.loadout} : undefined) : h));
+        let off = beginBattle(without).state;
+        for (let i = 0; i < 200 && off.outcome === 'active'; i++) {
+          const l = battleLesson(off, without)!; off = resolveCommand(off, without, {beat:off.beat,heroId:l.heroId,action:l.action,targetId:l.targetId,cooldownAction:l.cooldownAction,cooldownTargetId:l.cooldownTargetId}).state;
+        }
+        const impact = row.personal ??= {points:personal.reduce((n,[,rank]) => n+(rank??0),0),won:0,hp:0};
+        if (off.outcome === 'victory') impact.won++;
+        impact.hp += off.heroes.reduce((n,h) => n+h.hp,0) / without.heroes.reduce((n,h) => n+h.maxHp,0);
       }
       row.fought++; if (s.outcome === 'victory') row.won++; row.rounds += s.round;
       row.partyHp += s.heroes.reduce((n, h) => n + h.hp, 0) / data.heroes.reduce((n, h) => n + h.maxHp, 0);
@@ -87,5 +121,6 @@ export function treeReport(rows: TreeRow[]): string {
   for (const r of rows) lines.push(`| ${r.id} | ${r.build} | ${r.won}/${r.fought} | ${Math.round(r.partyHp / r.fought * 100)}% | ${(r.rounds / r.fought).toFixed(1)} | ${r.used} |`);
   lines.push('', '| Character | Build | Action usage | Won | HP |', '|---|---|---|---|---|', ...rows.map(r => `| ${r.id} | ${r.build} | ${Object.entries(r.actions).map(([id,n])=>`${id}: ${n}`).join(', ')} | ${r.won}/${r.fought} | ${Math.round(r.partyHp/r.fought*100)}% |`));
   lines.push('', 'Ablation: the same team/fights/advisor with just this action unavailable; positive deltas mean the equipped action helped.', '', '| Character | Build | Disabled action | Uses | Win delta | Team HP delta (points) |', '|---|---|---|---|---|---|', ...rows.flatMap(r => Object.entries(r.disabled).map(([action,off]) => `| ${r.id} | ${r.build} | ${action} | ${r.actions[action as ActionId] ?? 0} | ${r.won-off.won} | ${((r.partyHp-off.hp)/r.fought*100).toFixed(1)} |`)));
+  lines.push('', 'Personal-branch ablation: remove only paid p ranks, keep shared nodes/loadout/team/encounters unchanged. Points are not reallocated; this measures the marginal paid branch, not best alternative spending. Tier-4 personal nodes require Lv15 and are outside this Lv10 sample.', '', '| Character | Build | Removed p points | Win delta | Team HP delta (points) |', '|---|---|---|---|---|', ...rows.filter(r => r.personal).map(r => `| ${r.id} | ${r.build} | ${r.personal!.points} | ${r.won-r.personal!.won} | ${((r.partyHp-r.personal!.hp)/r.fought*100).toFixed(1)} |`));
   return lines.join('\n');
 }

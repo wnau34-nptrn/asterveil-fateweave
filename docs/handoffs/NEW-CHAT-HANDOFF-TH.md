@@ -5,6 +5,29 @@
 อัปเดต 2026-10-25: เจ้าของอนุมัติทำ artwork เฉพาะฟัน/แทงทั้ง 10 ท่าก่อนแก้ runtime ต่อ สร้าง storyboard V1 ครบ 30 จังหวะด้วย ImageGen (เจ้าของอนุญาตแทน Shado ที่เชื่อมต่อไม่ได้) ดู `docs/combat-presentation/blade-storyboards/README_TH.md` และหน้าพรีวิวเลือกท่า/ปรับน้ำหนักในโฟลเดอร์เดียวกัน ส่งใน PR #59 เดิม **รอเจ้าของตรวจแบบภาพ ยังไม่ต่อภาพชุดใหม่นี้เข้าเกม ไม่ merge/publish และไม่เริ่ม C5.2**
 
 อัปเดต Codex 2026-10-24: C5.1 R3 บน `codex/vfx-family-1-blade`, PR #59 ปรับฟัน/แทงทั้ง 10 สกิลหลังเจ้าของเห็นว่า R2 หนาและคล้ายกัน ใช้ atlas เดิม ลดความทึบ/ความหนา และแยกสัดส่วนกับการเคลื่อนแต่ละท่า รวมฐาน C11 ล่าสุด 1a50c01 แล้ว รอเจ้าของตรวจ [คลิปใหม่ 390px](../combat-presentation/blade-slice/README_TH.md) ยังไม่ merge/publish และห้ามเริ่ม C5.2 จนเจ้าของอนุมัติคลิป อ่านบันทึกบนสุด `CODEX-TO-CLAUDE.md` และผลตรวจใน slice notes ก่อนทำต่อ
+## 2026-10-25 — C12 Batch 1 merged; next Batch 2
+
+PR #68 merged `24dfefbb5777a2233ab376725fb57dbd1bac719f` into `feature/fateweave-initial-prototype`. Current game: 12 classes / 14 characters, save v43; quality CI 838 unit tests, full browser CI 244 tests, final full sim 28 checks, 42 character/map cells ×12 seeds, paired campaign gate 20/20 pass. Report: `docs/validation/roster-30/batch-1/README.md`. Original three recruit offers are preserved, one extra featured slot advertises the new cohort. Do not remove the v43 frozen-board migration or explicit cooldown replay metadata. Older Batch 1 prompts below are historical.
+
+Copy-ready next task:
+
+```text
+ทำ C12 Batch 2 ใน asterveil-fateweave จากสาขาเกมล่าสุด feature/fateweave-initial-prototype บน codex/roster-30-3 อ่าน AGENTS.md, CLAUDE.md, ROSTER_30_TH.md, SKILL_AUDIT_TH.md และรายงาน Batch 1 ก่อน เพิ่มนักมวย อรุณ/ภาคิน (Martial, arun/phakin) และนักสาป รัตติ/พิม (Hexer, ratti/pim) ตามต้นไม้/กิ่ง p/เจ้าของกลไกในแผน ไม่มีธาตุ/เพิ่มเทิร์น/เพิ่ม SPD ใช้ pure resolver+preview/replay ปราณ 0–3 คำสาปแยก source อายุและภาษีตอนลงมือ สร้างภาพ production จาก concept A ตามข้อยกเว้น C12 และตัวที่สองภาพใหม่ เซฟ v44 migration ต้องเก็บเซฟ v43/boardPool/คำสั่งเลือก cooldown เดิม เพิ่มแค็ตตาล็อกเป็น 18 ตัว 14 อาชีพ โดยไม่เปลี่ยนสามข้อเสนอเดิมและทีม 4+4 เก็บ baseline จากเกมหลัง Batch 1; เทสต์/unit/browser390/simรายตัวทุก18×แมพ1–3/แคมเปญเปรียบเทียบ20cellsด้วยpolicyเดียวกัน/ablation ต้องผ่านก่อน merge อัปเดต handoff+รายงาน+รูป2ภาพและ publish ตาม standing authorization ห้ามแตะ C5 VFX family ที่ยังรอตรวจ
+```
+
+No create_session tool is callable in this environment; no new cloud session was created automatically.
+
+## 2026-10-24 — C12 Phase 1 designed; next Batch 1
+
+เอกสารออกแบบ: `docs/design/ROSTER_30_TH.md` บน `codex/roster-30-1` ฐานเกม `1a50c012` มี 30 ตัว 15 อาชีพ กิ่งส่วนตัวและห้าชุดลงโค้ด ยังไม่เปลี่ยนเกม/เซฟ/สมดุล ตัวเล่นจริงยัง 10 คน v42 PR #67 merge แล้ว 2026-10-25 (`0b0f6496712e73fd0eb768aca6048cdfc15a85b1`), quality CI run 653 ผ่าน ก่อนเริ่มชุดถัดไปให้ดึงฐานเกมล่าสุด
+
+ข้อความเริ่มงานถัดไป:
+
+```text
+ทำ C12 Batch 1 ใน asterveil-fateweave จาก feature/fateweave-initial-prototype หลัง Phase 1 merge บน codex/roster-30-2 อ่าน AGENTS.md, CLAUDE.md, docs/design/ROSTER_30_TH.md, C12 ใน docs/handoffs/CLAUDE-TO-CODEX-DEV-TH.md และ CODEX-TO-CLAUDE.md ก่อน เพิ่มนักบุญรบเมตตา/ธีรัน นักเต้นรำลลิน/วิลา กิ่ง p แบบใช้งบแต้มเดิม กฎ pure resolver/save migration/content/UI/ภาพ production/test/sim ตามสเปก C12 อนุญาตแก้ rules/save/balance โดยเฉพาะ ตัวเลขทั้งหมดต้องจำลอง ไม่เพิ่ม SPD/เทิร์น ไม่ทับกลไกอาชีพอื่น ไม่แตะ VFX family C5 ที่รอรีวิว รูปจริง 390px สองรูปและรายงานผลก่อน/หลัง อัปเดต handoff หลังทำเสร็จ push/PR/merge เมื่อ checks ผ่านตาม standing authorization
+```
+
+
 ## 2026-10-24 — C11 completed by Codex
 
 PR #66 merged to `feature/fateweave-initial-prototype`: `abf10a8256e04040aa2b509bc6e5aa7c27c7654d`. Save v42; 10 playable classes/characters. Quality CI: 795 unit tests, typecheck/lint/build pass. Full browser CI: 242 tests pass. Final sim: 26 checks pass; 20 campaign acceptance cells pass; each character clears 12/12 seeds on maps 1–3 in the documented raised-character scenario. Read `docs/validation/balance-sim/C11.md` and the top entry in `CODEX-TO-CLAUDE.md` for every changed skill/number, migrations, method and review questions. C12 was not started; its prerequisite is now met. Older entries below are historical.

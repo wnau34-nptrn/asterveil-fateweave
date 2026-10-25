@@ -13,7 +13,7 @@ export function setEmblem(set: SetId): string {
 // The piece with a rarity frame (data-rarity) and its set emblem in the corner.
 export function gearArt(item: Item): string {
   const c = gearCell(item);
-  const art = c ? `<i class="equip-sprite" style="--atlas:url(${equipArtUrl('gear_items')});--cols:5;--rows:3;${at(c.col, c.row, 5, 3)}"></i>` : icon(slotIcon[item.slot]);
+  const art = c ? `<i class="equip-sprite" style="--atlas:url(${equipArtUrl('gear_items')});--cols:7;--rows:3;${at(c.col, c.row, 7, 3)}"></i>` : icon(slotIcon[item.slot]);
   return `<span class="gear-art" data-rarity="${item.rarity}" aria-hidden="true">${art}${item.set ? setEmblem(item.set) : ''}${item.boss?'<i class="boss-gear-marker">◆</i>':''}</span>`;
 }
 export function potionArt(id: PotionId | 'dust' | 'gold'): string {

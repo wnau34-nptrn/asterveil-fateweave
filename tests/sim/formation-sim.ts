@@ -28,7 +28,7 @@ export function formationSim(formations: readonly [string, Record<string, Lane> 
       for (let i = 0; i < 200 && s.outcome === 'active'; i++) {
         const heroId = currentHeroId(s, data)!;
         const l = style === 'advisor' ? battleLesson(s, data)! : { heroId, action: 'attack' as const, targetId: targetOptions(s, data, heroId, 'attack').find(t => t.valid)!.id };
-        r = resolveCommand(s, data, { beat: s.beat, heroId: l.heroId, action: l.action, targetId: l.targetId }); s = r.state; take();
+        r = resolveCommand(s, data, { beat: s.beat, heroId: l.heroId, action: l.action, targetId: l.targetId, ...("cooldownAction" in l ? { cooldownAction: l.cooldownAction } : {}), ...("cooldownTargetId" in l ? { cooldownTargetId: l.cooldownTargetId } : {}) }); s = r.state; take();
       }
       row.fought++; if (s.outcome === 'victory') row.won++; row.rounds += s.round; row.downs += s.heroes.filter(h => h.hp <= 0).length;
       row.partyHp += s.heroes.reduce((n, h) => n + h.hp, 0) / data.heroes.reduce((n, h) => n + h.maxHp, 0);

@@ -2,16 +2,18 @@ import type { EncounterDefinition } from '../../core/battle/types';
 
 // Each actor's full-body frame and portrait live in a 2-column atlas of 512 px cells:
 // the original cast in `units`/`portraits` (3 rows), mercenaries in `units_mercs`/`portraits_mercs`
-// (3 rows) and the Veil Frontier foes in `units_foes`/`portraits_foes` (6 rows), all from
+// (5 rows, C12 appends four new characters) and the Veil Frontier foes in `units_foes`/`portraits_foes` (6 rows), all from
 // ART-CHAR-MERC-ENEMY-001 except the original cast; foes frames 9–10 are the map-1 boss pair (ART-CHAR-BOSS-RUINS-001); the four-foe battle set (ART-CHAR-FOES-002) is `units_foes2`/`portraits_foes2`
 // (5 rows, last cell empty). Unit and portrait atlases share frame order.
 export type ArtSheet = 'units' | 'mercs' | 'foes' | 'foes2';
-export const sheetRows: Readonly<Record<ArtSheet, number>> = { units: 3, mercs: 3, foes: 6, foes2: 5 };
+export const sheetRows: Readonly<Record<ArtSheet, number>> = { units: 3, mercs: 5, foes: 6, foes2: 5 };
 export const actorArt: Readonly<Record<string, { sheet: ArtSheet; frame: number }>> = {
   guardian: { sheet: 'units', frame: 0 }, tracer: { sheet: 'units', frame: 1 }, weaver: { sheet: 'units', frame: 2 },
   healer: { sheet: 'units', frame: 3 }, raider: { sheet: 'units', frame: 4 }, brute: { sheet: 'units', frame: 5 },
   garran: { sheet: 'mercs', frame: 0 }, mira: { sheet: 'mercs', frame: 1 }, toma: { sheet: 'mercs', frame: 2 },
   sefa: { sheet: 'mercs', frame: 3 }, brann: { sheet: 'mercs', frame: 4 }, lio: { sheet: 'mercs', frame: 5 },
+  metta: { sheet: 'mercs', frame: 6 }, thiran: { sheet: 'mercs', frame: 7 },
+  lalin: { sheet: 'mercs', frame: 8 }, wila: { sheet: 'mercs', frame: 9 },
   foe_tusker: { sheet: 'foes', frame: 0 }, foe_sprite: { sheet: 'foes', frame: 1 }, foe_stalker: { sheet: 'foes', frame: 2 },
   foe_mycon: { sheet: 'foes', frame: 3 }, foe_golem: { sheet: 'foes', frame: 4 }, foe_riftweaver: { sheet: 'foes', frame: 5 },
   foe_matriarch: { sheet: 'foes', frame: 6 }, foe_juggernaut: { sheet: 'foes', frame: 7 }, foe_sentinel: { sheet: 'foes', frame: 8 },
@@ -41,7 +43,7 @@ export const actorFootOrigins: Readonly<Record<string, number>> = {
 // Top row of each frame's painted figure (alpha > 40) in its 512 px cell, measured from the atlases: a field HP panel
 // sits just above it (owner 2026-10-22). Re-measure when an atlas changes.
 const figureTops: Readonly<Record<string, number>> = {
-  guardian: 19, tracer: 17, weaver: 0, healer: 0, raider: 0, brute: 0, garran: 37, mira: 37, toma: 37, sefa: 37, brann: 37, lio: 37, foe_tusker: 57, foe_sprite: 197, foe_stalker: 57, foe_mycon: 37, foe_golem: 17, foe_riftweaver: 37, foe_matriarch: 17, foe_juggernaut: 40, foe_sentinel: 5, foe_hunter: 35, foe_captain: 37, foe_dew_slime: 182, foe_ember_slime: 227, foe_ruin_bat: 218, foe_vargoth_guard: 133, foe_thorn_beetle: 191, foe_spore_puff: 107, foe_rift_channeler: 68, foe_rift_wisp: 127, foe_shard_crawler: 191,
+  guardian: 19, tracer: 17, weaver: 0, healer: 0, raider: 0, brute: 0, garran: 37, mira: 37, toma: 37, sefa: 37, brann: 37, lio: 37, metta: 37, thiran: 37, lalin: 37, wila: 37, foe_tusker: 57, foe_sprite: 197, foe_stalker: 57, foe_mycon: 37, foe_golem: 17, foe_riftweaver: 37, foe_matriarch: 17, foe_juggernaut: 40, foe_sentinel: 5, foe_hunter: 35, foe_captain: 37, foe_dew_slime: 182, foe_ember_slime: 227, foe_ruin_bat: 218, foe_vargoth_guard: 133, foe_thorn_beetle: 191, foe_spore_puff: 107, foe_rift_channeler: 68, foe_rift_wisp: 127, foe_shard_crawler: 191,
 };
 // How far the painted figure rises above its feet, as a fraction of the drawn size.
 export const figureRise = (art: string): number => (actorFootOrigins[art] ?? 1) - (figureTops[art] ?? 0) / 512;
