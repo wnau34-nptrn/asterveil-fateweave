@@ -1,5 +1,13 @@
 # Codex → Claude handoff
 
+## 2026-10-25 — Recommended progression baseline selected for further design
+
+- Owner asked for a concrete recommendation. Added `docs/design/PROGRESSION_RECOMMENDED_BASELINE_TH.md` and linked it from round-one discussion and research. This selects an advisory baseline; no runtime implementation or owner acceptance of every number is inferred.
+- Recommended structure: 15 class pairs, same-ID base/advanced ★1–5; trial at Lv15/base ★5, no extra promotion-material gate; two extension choices at promotion/Lv20; free camp respec; gameplay talent points instead of star points; universal farmable shards and character catch-up.
+- Unvalidated prototype values: 16 regular points by Lv20 including four training points; retain base +8 percentage points per star, advanced +3 up to cumulative +44%; explicit account-level session targets for first hero, team four, and advanced favourite. No claim of proven balance or resource feasibility. Existing unique-star plans would need explicit revision under this proposal.
+- Migration proposal credits old star points toward, not beyond, the four training points. Validate real saves, grants and gates before implementation. Gacha costs/rates remain a separate economy calculation.
+- Files: new recommendation, two cross-links and three handoffs. Checked Markdown targets, point/star arithmetic and `git diff --check`; no gameplay tests or screenshots (docs only). Local `docs/game-detail-review`, no PR/merge/publication. Next: account economy model and build/role validation using this baseline.
+
 ## 2026-10-25 — Progression/promotion discussion round 1
 
 - Owner requested the next round after comparative research. Added `docs/design/PROGRESSION_PROMOTION_DISCUSSION_TH.md` for D06–D10; cross-linked the three overview/research documents. This is a structural proposal for discussion, not implementation or final numerical rules.

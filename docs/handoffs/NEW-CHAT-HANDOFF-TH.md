@@ -1,5 +1,9 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
+## 2026-10-25 — Use the recommended baseline for the next design calculation
+
+Owner requested a concrete recommendation, now in `docs/design/PROGRESSION_RECOMMENDED_BASELINE_TH.md`. It proposes Lv15 promotion, a small existing-skill extension, gameplay-based talent points, bounded advanced stars and account-level progression targets. Treat its numeric values as prototype inputs, not simulated results or implemented rules. Next design work should calculate the economy and validate builds rather than ask the owner to choose every number. Local documentation branch only; current runtime is unchanged.
+
 ## 2026-10-25 — Active discussion: stars, promotion and skill trees
 
 Next-round proposal is in `docs/design/PROGRESSION_PROMOTION_DISCUSSION_TH.md`. Base ★1–5 → advanced ★1–5, existing-skill extensions and preserved personal identity are proposed, not implemented. Review conflicts with star-derived talent points and unique-star plans before any code change. Costs, unlock levels, point/migration formulas and gacha rates remain open. Current task remains design discussion on local `docs/game-detail-review`; no publication or additional C12 batch.

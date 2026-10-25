@@ -1,5 +1,9 @@
 # ส่งต่องานพัฒนาให้ Codex ระหว่างรอ Usage ของ Claude (2026-10-23)
 
+## 2026-10-25 — Concrete progression recommendation completed
+
+Added `docs/design/PROGRESSION_RECOMMENDED_BASELINE_TH.md` at the owner's request for our recommended direction. It selects a structural baseline and clearly labels provisional point/star/session values. No runtime, save or balance edits. Preserve prior approved plans as historical authority; the new document proposes their revision rather than claiming approval. Next work is economy/build validation; see CODEX-TO-CLAUDE for details.
+
 ## 2026-10-25 — Progression/promotion proposal completed
 
 Owner requested the next discussion round. Added `docs/design/PROGRESSION_PROMOTION_DISCUSSION_TH.md` covering D06–D10 and impacts on gacha and save investments. Proposal only: no battle/save/balance changes. Existing approved C12 and unique-star directions are not silently superseded. See CODEX-TO-CLAUDE for scope and validation; unresolved formulas and structural tradeoffs are documented for the next discussion.
