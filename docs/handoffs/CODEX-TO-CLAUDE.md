@@ -1,5 +1,12 @@
 # Codex → Claude handoff
 
+## 2026-10-25 — Unit animation step 1: audit and asset scope (docs only)
+
+- Owner authorized step 1 only: inspect branches, inventory units/skills and define required poses/assets. Branch `codex/unit-animation-audit`, base `e79e8a4`; merge/PR metadata to be recorded after publication.
+- Added `docs/design/UNIT_ANIMATION_AUDIT_TH.md`: 14 heroes / 12 classes, complete ActionId coverage, 22 enemy art identities, named intent inventory, existing VFX versus missing actor poses, controller integration risks, pilot and frame budget, next-stage validation gates. Compared blade branch `91572e16` without merging it or claiming visual approval.
+- Pilot proposed: Lyra + Vargoth Hunter (42 new frames total); next caster pair Eira + Dandelion Sprite. These are planning choices, not completed art or approved C5 visuals.
+- Files: audit document and this handoff only. Validation: source-to-table ActionId/art-key coverage assertions and document review; git diff --check. No runtime tests/screenshots/clips required or claimed for docs only. No battle/save/balance changes. Steps 2–6 remain unimplemented.
+
 ## 2026-10-25 — C12 Batch 1 delivered — PR #68 merged
 
 - Branch `codex/roster-30-2` on `5a613a5`; PR #68 merged 2026-10-25 as `24dfefbb5777a2233ab376725fb57dbd1bac719f`. Owner authorized continuing Batch 1. Added Metta/Thiran Saint and Lalin/Wila Dancer, six skills per class, shared 16-node trees and paid personal branches, deterministic healing/cooldown rules, save v43 migration, hiring-board preservation, Thai UI/selectors, actual-state basic visual cues and production assets.
