@@ -1,5 +1,9 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
+## 2026-10-25 — Plan publication verified
+
+PR #70 merged as `aafec236507458f45303a6af3a26438dfb276534`; quality CI run 665 passed. `docs/DEVELOPMENT_PLAN_TH.md` and issue #69 are the delivery entrypoints. Start P00 next. Design/research documents are now published; older local-only status notes below are historical. No gameplay changes in this delivery.
+
 ## 2026-10-25 — Start here: consolidated plan published to GitHub
 
 Read `docs/DEVELOPMENT_PLAN_TH.md` and tracking issue #69 before older prompts below. The owner requested an actionable plan covering all discussion: P00–P11, task dependencies/exit gates, all D01–D37. Next work is P00 shared-level/team-five/migration specifications and baseline; do not auto-run old Batch2 with a reserved save version. The document distinguishes existing runtime from new directions and unvalidated numbers. This publication contains documentation only. Documentation PR #70 targets the game branch. Publication status is recorded in CODEX-TO-CLAUDE and issue #69.

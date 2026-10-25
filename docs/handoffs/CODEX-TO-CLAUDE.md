@@ -1,5 +1,11 @@
 # Codex → Claude handoff
 
+## 2026-10-25 — Development plan publication completed
+
+- PR #70 merged into `feature/fateweave-initial-prototype` as `aafec236507458f45303a6af3a26438dfb276534` (head `0fa6cc6`). Plan: `docs/DEVELOPMENT_PLAN_TH.md`; tracking issue #69 remains open and now links to the game branch.
+- PR quality CI run 665 / 40217513479 passed typecheck, lint, unit tests and build. Final document check: 15 Markdown files, 54 local links, all 37 discussion topics and 41 unique tasks across P00–P11; diff whitespace passed. No runtime/save/balance changes, no new sim or screenshots; browser PR workflow is path-filtered for this docs-only change.
+- Earlier local-only notes below describe historical task states; the complete design/research bundle is now on GitHub. Next task: P00 specifications/baseline/migration. This follow-up only records the completed publication; it does not claim Pages deployment of new gameplay.
+
 ## 2026-10-25 — Consolidated development plan for GitHub delivery
 
 - Owner requested all discussion information consolidated into a development plan and sent to GitHub. Added `docs/DEVELOPMENT_PLAN_TH.md`: P00–P11 delivery order, task checklists, dependencies, exit gates, old→new mapping, numerical assumptions and complete D01–D37 coverage. Entry links added to README, CLAUDE, legacy roadmap/master plan, C12 and overview/research docs.

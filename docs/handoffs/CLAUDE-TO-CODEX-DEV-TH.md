@@ -1,5 +1,9 @@
 # ส่งต่องานพัฒนาให้ Codex ระหว่างรอ Usage ของ Claude (2026-10-23)
 
+## 2026-10-25 — Plan publication verified
+
+PR #70 merged as `aafec236507458f45303a6af3a26438dfb276534`; quality CI run 665 passed. `docs/DEVELOPMENT_PLAN_TH.md` and issue #69 are the delivery entrypoints. Start P00 next. Design/research documents are now published; older local-only status notes below are historical. No gameplay changes in this delivery.
+
 ## 2026-10-25 — Consolidated delivery plan prepared for GitHub
 
 Owner requested publishing the full development plan. `docs/DEVELOPMENT_PLAN_TH.md` is the current delivery index; issue #69 tracks P00–P11 and is not closed by publishing the plan. All D01–D37 have an assigned phase. Older copy-ready implementation tasks below need reconciliation with shared camp levels and the five-member prototype; start P00 first. No runtime changes in this task. See CODEX-TO-CLAUDE for scope/validation/publication.
