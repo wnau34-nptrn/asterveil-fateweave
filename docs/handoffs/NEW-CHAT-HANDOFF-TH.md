@@ -1,5 +1,9 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
+## 2026-10-25 — Latest direction: shared levels and boss mechanics
+
+Read `docs/design/SHARED_LEVEL_TEAM_BOSSES_TH.md` first. Owner wants equal levels to enable switching. Recommended scope is every owned hero via shared camp Lv/EXP; this supersedes individual catch-up training in the earlier design baseline. Stars/builds remain individual, with baseline boss counters accessible without a particular gacha hero. Team five is still a prototype direction, runtime remains four. No game code changed; next design work must recalculate EXP/economy and validate team/encounter rules together.
+
 ## 2026-10-25 — Use the recommended baseline for the next design calculation
 
 Owner requested a concrete recommendation, now in `docs/design/PROGRESSION_RECOMMENDED_BASELINE_TH.md`. It proposes Lv15 promotion, a small existing-skill extension, gameplay-based talent points, bounded advanced stars and account-level progression targets. Treat its numeric values as prototype inputs, not simulated results or implemented rules. Next design work should calculate the economy and validate builds rather than ask the owner to choose every number. Local documentation branch only; current runtime is unchanged.

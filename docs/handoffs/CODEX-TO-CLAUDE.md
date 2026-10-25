@@ -1,5 +1,14 @@
 # Codex → Claude handoff
 
+## 2026-10-25 — Shared camp level and mechanic-based bosses
+
+- Owner requested equal character levels for free team switching and asked whether some bosses should require specific mechanics. Added `docs/design/SHARED_LEVEL_TEAM_BOSSES_TH.md`; linked Game Detail, discussion index and the prior recommended progression baseline. No runtime/save/balance changes.
+- Recommend one camp Lv/EXP for all owned heroes, including new recruits, with EXP awarded once per event. Shared level/training point entitlement, individual builds/stars/promotion/gear. This replaces individual catch-up training in the prior proposal; personal skill and gear gaps still need validation.
+- Boss direction: meaningful mechanics with at least two viable responses and at least one guaranteed-access route; no specific gacha hero or advanced-star gate for required main-story counters. Examples are concepts, not claims about implemented encounters.
+- Team five remains the proposed prototype direction from discussion (runtime four); economy targets for team four are historical and must be recalculated. Shared levels do not establish UI or balance feasibility for 5v5.
+- Migration concept: seed shared EXP from highest owned-member progression rather than sum; preserve investments and replay boundaries. Shared training credits use highest legacy star-point entitlement, not total across roster. Validate real saves before implementation.
+- Validation: document review, local Markdown link checks and `git diff --check`; no gameplay tests/screenshots for docs-only work. Local branch `docs/game-detail-review`; no PR/merge/publication. Next: combined shared-EXP/team-five economy and encounter prototype specs.
+
 ## 2026-10-25 — Recommended progression baseline selected for further design
 
 - Owner asked for a concrete recommendation. Added `docs/design/PROGRESSION_RECOMMENDED_BASELINE_TH.md` and linked it from round-one discussion and research. This selects an advisory baseline; no runtime implementation or owner acceptance of every number is inferred.

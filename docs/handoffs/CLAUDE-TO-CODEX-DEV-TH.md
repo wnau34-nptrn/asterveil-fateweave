@@ -1,5 +1,9 @@
 # ส่งต่องานพัฒนาให้ Codex ระหว่างรอ Usage ของ Claude (2026-10-23)
 
+## 2026-10-25 — Shared-level design update completed
+
+Documented owner's equal-level direction and recommendations in `docs/design/SHARED_LEVEL_TEAM_BOSSES_TH.md`: shared camp Lv/EXP/point entitlement, individual builds, multiple accessible boss-counter routes. Updated overview links and marked individual catch-up/team-four economy assumptions superseded or needing recalculation. No battle/save/balance implementation. See CODEX-TO-CLAUDE for migration concerns and validation.
+
 ## 2026-10-25 — Concrete progression recommendation completed
 
 Added `docs/design/PROGRESSION_RECOMMENDED_BASELINE_TH.md` at the owner's request for our recommended direction. It selects a structural baseline and clearly labels provisional point/star/session values. No runtime, save or balance edits. Preserve prior approved plans as historical authority; the new document proposes their revision rather than claiming approval. Next work is economy/build validation; see CODEX-TO-CLAUDE for details.
