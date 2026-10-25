@@ -10,13 +10,13 @@ anchors = json.loads((art / 'reference/anchors.json').read_text())
 specs = [
     ('ฟันเฉียงสั้น', 'คมกระชับหนึ่งครั้ง ปลายเรียวและเว้นกลางโปร่ง', 84, 76, False),
     ('ฟันกดปิดงาน', 'ตะขอคมยาวกดลง เน้นปลายคมโดยไม่ใช้ X-slash', 88, 110, False),
-    ('พุ่งตัด', 'ปลายพุ่งกับร่องลมเปิดด้านหลัง ต่างจากเข็มตรงของ Pierce', 116, 62, True),
+    ('พุ่งตัด', 'ปลายพุ่งกับร่องลมเปิดด้านหลัง ต่างจากแกนตรงและหัวหอกของ Pierce', 116, 62, True),
     ('ฟันกวาด', 'เสี้ยวแบนทอดกว้างตามแนวนอน อ่านเป็นการกวาดครั้งเดียว', 142, 54, False),
     ('ลอบแทงย้อน', 'ปลายสั้นเข้าจากด้านตรงข้าม พร้อมหางโค้งเยื้องเล็กน้อย', 76, 46, True),
     ('ฟันเสยจู่โจม', 'คมรูปตะขอเปิดพุ่งขึ้นจากล่าง เว้นช่องให้เห็นตัวเป้าหมาย', 88, 104, False),
     ('เกี่ยวปัดอาวุธ', 'ตะขอเล็กหมุนเกี่ยวออก ไม่มีภาพอาวุธแตกหรือสถานะที่ไม่ได้เกิด', 62, 72, False),
     ('ตั้งท่า → ฟันสวน', 'กรอบรับเล็กที่ต้นทาง แล้วคมคืนกลับเมื่อมี counter จริงเท่านั้น', 88, 74, False),
-    ('แทงทะลุแนว', 'เข็มยาวตรงบางที่สุด มีเพียงเส้นนำทางร่วมแกนเดียว', 130, 32, True),
+    ('แทงทะลุแนว', 'หัวหอกใบยาวมีบ่าเด่น แกนแทงหนา อ่านเป็นหอกที่พุ่งตามแกนเดียว', 130, 58, True),
     ('แทงหยุดแน่น', 'ปลายสั้นฐานแน่นและริ้วเบนกลับ ไม่ใช้สัญลักษณ์บล็อก', 74, 62, True),
 ]
 records = []
@@ -42,7 +42,7 @@ for name, (thai, identity, w, h, axial) in zip(names, specs):
         assert box, (name, 'empty phase')
         x0, y0, x1, y1 = box
         frames.append([left+x0, y0, x1-x0, y1-y0])
-    record = dict(skill=name, thai=thai, identity=identity, width=w, height=h, axial=axial,
+    record = dict(skill=name, thai=thai, identity=identity, width=w, height=h, axial=axial, crossScale=1.4 if name == 'pierce' else 1,
                   source=f'../../../incoming/ART-VFX-BLADE-STORYBOARD-001/source/{name}.png',
                   background=f'../../../incoming/ART-VFX-BLADE-STORYBOARD-001/reference/{name}-390.png',
                   sourceSize=list(im.size), alphaRange=list(a.getextrema()), frames=frames, anchors=anchors[name])

@@ -5,7 +5,7 @@ const images = new Map();
 const loadImage = src => new Promise((resolve, reject) => {
   const img = new Image(); img.onload = () => resolve(img); img.onerror = () => reject(new Error(`Missing image: ${src}`)); img.src = src;
 });
-let selected = records[0], visible = true;
+let selected = records.find(record => record.skill === window.location.hash.slice(1)) ?? records[0], visible = true;
 const weight = document.querySelector('#weight');
 const canvases = [...document.querySelectorAll('canvas')];
 function draw() {
@@ -21,11 +21,12 @@ function draw() {
     if (!visible) return;
     const [sx,sy,sw,sh] = selected.frames[phase];
     const multiplier = [0.36,1,0.76][phase];
-    const fit = Math.min(selected.width/sw, selected.height/sh) * multiplier;
+    const crossScale = selected.crossScale ?? 1;
+    const fit = Math.min(selected.width/sw, selected.height/(sh*crossScale)) * multiplier;
     const at = phase === 0 ? source : target;
     ctx.save(); ctx.translate(at.x, at.y); ctx.rotate(angle);
     ctx.globalAlpha = [.65,.88,.32][phase] * Number(weight.value)/100;
-    ctx.drawImage(images.get(selected.source), sx,sy,sw,sh, -sw*fit/2,-sh*fit/2,sw*fit,sh*fit);
+    ctx.drawImage(images.get(selected.source), sx,sy,sw,sh, -sw*fit/2,-sh*fit*crossScale/2,sw*fit,sh*fit*crossScale);
     ctx.restore();
   });
   document.documentElement.dataset.skill = selected.skill;
@@ -34,7 +35,7 @@ async function start() {
   await Promise.all([...new Set(records.flatMap(r => [r.source,r.background]))].map(async src => images.set(src, await loadImage(src))));
   for (const record of records) {
     const button = document.createElement('button'); button.textContent = record.skill; button.dataset.skill = record.skill;
-    button.addEventListener('click', () => { selected=record; draw(); }); document.querySelector('nav').append(button);
+    button.addEventListener('click', () => { selected=record; window.history.replaceState(null,'',`#${record.skill}`); draw(); }); document.querySelector('nav').append(button);
   }
   weight.addEventListener('input',draw);
   document.querySelector('#toggle').addEventListener('click', event => { visible=!visible; event.target.textContent=visible?'ดูสนามเปล่า':'แสดงแบบ VFX'; draw(); });

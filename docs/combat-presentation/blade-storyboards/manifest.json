@@ -6,6 +6,7 @@
     "width": 84,
     "height": 76,
     "axial": false,
+    "crossScale": 1,
     "source": "../../../incoming/ART-VFX-BLADE-STORYBOARD-001/source/attack.png",
     "background": "../../../incoming/ART-VFX-BLADE-STORYBOARD-001/reference/attack-390.png",
     "sourceSize": [
@@ -57,6 +58,7 @@
     "width": 88,
     "height": 110,
     "axial": false,
+    "crossScale": 1,
     "source": "../../../incoming/ART-VFX-BLADE-STORYBOARD-001/source/finisher.png",
     "background": "../../../incoming/ART-VFX-BLADE-STORYBOARD-001/reference/finisher-390.png",
     "sourceSize": [
@@ -104,10 +106,11 @@
   {
     "skill": "lunge",
     "thai": "พุ่งตัด",
-    "identity": "ปลายพุ่งกับร่องลมเปิดด้านหลัง ต่างจากเข็มตรงของ Pierce",
+    "identity": "ปลายพุ่งกับร่องลมเปิดด้านหลัง ต่างจากแกนตรงและหัวหอกของ Pierce",
     "width": 116,
     "height": 62,
     "axial": true,
+    "crossScale": 1,
     "source": "../../../incoming/ART-VFX-BLADE-STORYBOARD-001/source/lunge.png",
     "background": "../../../incoming/ART-VFX-BLADE-STORYBOARD-001/reference/lunge-390.png",
     "sourceSize": [
@@ -159,6 +162,7 @@
     "width": 142,
     "height": 54,
     "axial": false,
+    "crossScale": 1,
     "source": "../../../incoming/ART-VFX-BLADE-STORYBOARD-001/source/sweep.png",
     "background": "../../../incoming/ART-VFX-BLADE-STORYBOARD-001/reference/sweep-390.png",
     "sourceSize": [
@@ -210,6 +214,7 @@
     "width": 76,
     "height": 46,
     "axial": true,
+    "crossScale": 1,
     "source": "../../../incoming/ART-VFX-BLADE-STORYBOARD-001/source/backstab.png",
     "background": "../../../incoming/ART-VFX-BLADE-STORYBOARD-001/reference/backstab-390.png",
     "sourceSize": [
@@ -261,6 +266,7 @@
     "width": 88,
     "height": 104,
     "axial": false,
+    "crossScale": 1,
     "source": "../../../incoming/ART-VFX-BLADE-STORYBOARD-001/source/ambush.png",
     "background": "../../../incoming/ART-VFX-BLADE-STORYBOARD-001/reference/ambush-390.png",
     "sourceSize": [
@@ -312,6 +318,7 @@
     "width": 62,
     "height": 72,
     "axial": false,
+    "crossScale": 1,
     "source": "../../../incoming/ART-VFX-BLADE-STORYBOARD-001/source/disarm.png",
     "background": "../../../incoming/ART-VFX-BLADE-STORYBOARD-001/reference/disarm-390.png",
     "sourceSize": [
@@ -363,6 +370,7 @@
     "width": 88,
     "height": 74,
     "axial": false,
+    "crossScale": 1,
     "source": "../../../incoming/ART-VFX-BLADE-STORYBOARD-001/source/parry.png",
     "background": "../../../incoming/ART-VFX-BLADE-STORYBOARD-001/reference/parry-390.png",
     "sourceSize": [
@@ -410,10 +418,11 @@
   {
     "skill": "pierce",
     "thai": "แทงทะลุแนว",
-    "identity": "เข็มยาวตรงบางที่สุด มีเพียงเส้นนำทางร่วมแกนเดียว",
+    "identity": "หัวหอกใบยาวมีบ่าเด่น แกนแทงหนา อ่านเป็นหอกที่พุ่งตามแกนเดียว",
     "width": 130,
-    "height": 32,
+    "height": 58,
     "axial": true,
+    "crossScale": 1.4,
     "source": "../../../incoming/ART-VFX-BLADE-STORYBOARD-001/source/pierce.png",
     "background": "../../../incoming/ART-VFX-BLADE-STORYBOARD-001/reference/pierce-390.png",
     "sourceSize": [
@@ -422,26 +431,26 @@
     ],
     "alphaRange": [
       0,
-      252
+      254
     ],
     "frames": [
       [
-        80,
-        279,
-        419,
-        139
+        33,
+        260,
+        506,
+        194
       ],
       [
-        631,
-        279,
-        866,
-        138
+        539,
+        264,
+        989,
+        187
       ],
       [
-        1571,
-        299,
-        522,
-        93
+        1554,
+        286,
+        588,
+        140
       ]
     ],
     "anchors": {
@@ -465,6 +474,7 @@
     "width": 74,
     "height": 62,
     "axial": true,
+    "crossScale": 1,
     "source": "../../../incoming/ART-VFX-BLADE-STORYBOARD-001/source/halt.png",
     "background": "../../../incoming/ART-VFX-BLADE-STORYBOARD-001/reference/halt-390.png",
     "sourceSize": [

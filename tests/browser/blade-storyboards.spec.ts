@@ -26,13 +26,13 @@ test('capture immutable 390px game references and resolved anchors', async ({ br
   }
   writeFileSync(path.join(out, 'anchors.json'), JSON.stringify(anchors, null, 2) + '\n');
 });
-test('render ten three-phase concept boards at native 390px', async ({ page }) => {
+test('render three-phase concept boards at native 390px', async ({ page }) => {
   test.skip(process.env.FX_STORYBOARDS !== 'render');
   const errors: string[] = []; page.on('pageerror', e => errors.push(e.message));
   await page.setViewportSize({ width: 1234, height: 1060 });
   await page.goto('docs/combat-presentation/blade-storyboards/index.html');
   await page.waitForFunction(() => document.documentElement.dataset.ready === 'true');
-  for (const skill of skills) {
+  for (const skill of skills.filter(s => !process.env.FX_STORYBOARD_SKILL || process.env.FX_STORYBOARD_SKILL === s)) {
     await page.locator(`button[data-skill="${skill}"]`).click();
     await page.waitForFunction(s => document.documentElement.dataset.skill === s, skill);
     const board = page.locator('#board');

@@ -1,5 +1,12 @@
 # Codex → Claude handoff
 
+## 2026-10-25 — Pierce artwork R2: thicker spear (PR #59)
+
+- Owner feedback: Pierce is so slim that it reads as an arrow. Revised only Pierce's three-phase concept strip with built-in ImageGen (standing owner approval to use ImageGen instead of unavailable Shado).
+- Source `incoming/ART-VFX-BLADE-STORYBOARD-001/source/pierce.png`: stronger luminous axial shaft and broader elongated spearhead/shoulders, same ivory/teal palette, real transparency, 2172×724. Preserved V1 under archive/pierce-v1.png and exact edit prompt in pierce-r2.json.
+- Storyboard layout keeps 130px length, increases cross-axis weight by 1.4 and height cap 32→58px. Replaced only Pierce's 1170×950 board and 390×844 contact image; other nine artwork files and production VFX remain unchanged. Viewer supports a #pierce deep link; capture workflow accepts FX_STORYBOARD_SKILL for targeted exports.
+- Validation: visually inspected the edited source and 390px contact; targeted browser render/control check passed (1 test; reference mode intentionally skipped). Typecheck/lint/build passed; dimensions verified at 2172×724 source, 1170×950 board and 390×844 contact. No gameplay/source/save/timing changes; no new unit/battle suite needed for this concept revision. Same branch codex/vfx-family-1-blade and PR #59, not merged/published. Owner review still pending; no family 2.
+
 ## 2026-10-25 — C5.1 individual artwork/storyboards V1 (PR #59, pending owner review)
 
 - Owner approved making artwork per move before another VFX implementation pass. Scope is the same ten blade-family skills, not family 2. Shado status still returned AI Link port busy 10048; owner explicitly approved built-in ImageGen instead. Ten original generations, no external API/CLI/provider key, no security-software changes.
