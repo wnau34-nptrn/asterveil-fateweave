@@ -1,5 +1,29 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
+## 2026-10-25 — Start here: consolidated plan published to GitHub
+
+Read `docs/DEVELOPMENT_PLAN_TH.md` and tracking issue #69 before older prompts below. The owner requested an actionable plan covering all discussion: P00–P11, task dependencies/exit gates, all D01–D37. Next work is P00 shared-level/team-five/migration specifications and baseline; do not auto-run old Batch2 with a reserved save version. The document distinguishes existing runtime from new directions and unvalidated numbers. This publication contains documentation only. Documentation PR #70 targets the game branch. Publication status is recorded in CODEX-TO-CLAUDE and issue #69.
+
+## 2026-10-25 — Latest direction: shared levels and boss mechanics
+
+Read `docs/design/SHARED_LEVEL_TEAM_BOSSES_TH.md` first. Owner wants equal levels to enable switching. Recommended scope is every owned hero via shared camp Lv/EXP; this supersedes individual catch-up training in the earlier design baseline. Stars/builds remain individual, with baseline boss counters accessible without a particular gacha hero. Team five is still a prototype direction, runtime remains four. No game code changed; next design work must recalculate EXP/economy and validate team/encounter rules together.
+
+## 2026-10-25 — Use the recommended baseline for the next design calculation
+
+Owner requested a concrete recommendation, now in `docs/design/PROGRESSION_RECOMMENDED_BASELINE_TH.md`. It proposes Lv15 promotion, a small existing-skill extension, gameplay-based talent points, bounded advanced stars and account-level progression targets. Treat its numeric values as prototype inputs, not simulated results or implemented rules. Next design work should calculate the economy and validate builds rather than ask the owner to choose every number. Local documentation branch only; current runtime is unchanged.
+
+## 2026-10-25 — Active discussion: stars, promotion and skill trees
+
+Next-round proposal is in `docs/design/PROGRESSION_PROMOTION_DISCUSSION_TH.md`. Base ★1–5 → advanced ★1–5, existing-skill extensions and preserved personal identity are proposed, not implemented. Review conflicts with star-derived talent points and unique-star plans before any code change. Costs, unlock levels, point/migration formulas and gacha rates remain open. Current task remains design discussion on local `docs/game-detail-review`; no publication or additional C12 batch.
+
+## 2026-10-25 — Research completed; discuss recommendations next
+
+Owner requested comparative game research and recommendations after the list-only consolidation. Read `docs/GAME_RESEARCH_RECOMMENDATIONS_TH.md` alongside Game Detail and D01–D37. Advisory directions are now provided for all37 topics; no numerical gacha/promotion rules approved or implemented. Keep runtime at existing C12 Batch1 scope until an implementation task is requested. Local branch docs/game-detail-review; no publication.
+
+## 2026-10-25 — Active task: consolidate design, then discuss gaps
+
+Read `docs/GAME_DETAIL_TH.md` and `docs/GAME_DESIGN_DISCUSSION_TH.md` first. Owner explicitly requested listing missing/unclear/improvable areas before designing them. The C12 Batch2 implementation prompt below remains the earlier development handoff; do not auto-start it during this design review. Current runtime still e79e8a4/v43 with14 characters. New gacha/promotion/monthly-release numbers are proposals, not approved final rules. Documentation branch: `docs/game-detail-review`; no PR/publication yet.
+
 ## 2026-10-25 — C12 Batch 1 merged; next Batch 2
 
 PR #68 merged `24dfefbb5777a2233ab376725fb57dbd1bac719f` into `feature/fateweave-initial-prototype`. Current game: 12 classes / 14 characters, save v43; quality CI 838 unit tests, full browser CI 244 tests, final full sim 28 checks, 42 character/map cells ×12 seeds, paired campaign gate 20/20 pass. Report: `docs/validation/roster-30/batch-1/README.md`. Original three recruit offers are preserved, one extra featured slot advertises the new cohort. Do not remove the v43 frozen-board migration or explicit cooldown replay metadata. Older Batch 1 prompts below are historical.

@@ -6,6 +6,7 @@
 
 - เกม: `feature/fateweave-initial-prototype` ที่ `e79e8a4ebb51f33c1d79c88fa6fc35828185a6c1` (C12 Batch 1)
 - เทียบงาน VFX แยก: `codex/vfx-family-1-blade` ที่ `91572e16c0e72fe177fa7f1348e9e3ce727d3c21`; ไม่ถือว่างานใน branch นี้ merge หรือผ่านการตรวจภาพแล้ว
+- ตรวจซ้ำกับฐานเกม `aafec236507458f45303a6af3a26438dfb276534` หลัง PR #70: เปลี่ยนเฉพาะเอกสาร จึงไม่เปลี่ยนจำนวน runtime ด้านล่าง แผนรวม `docs/DEVELOPMENT_PLAN_TH.md` เสนอ roster/ทีมขยายในอนาคต; ก่อนขั้น 2 ต้องตรวจ catalog และ layout อีกครั้ง ไม่ถือว่าทีม 5 หรือ 30 ตัวมีในเกมแล้ว
 - `main` มีเพียง README ไม่ใช่ฐานเกม; งานใหม่นี้อยู่ใน `codex/unit-animation-audit`
 - ตรวจ `team.ts`, `mercenaries.ts`, `roster-batch1.ts`, `talents.ts`, `core/battle/types.ts`, enemy species/veilbound, encounter catalog/veil-siege, `visuals/assets.ts`, `BattleScene.ts`, `battle-playback.ts` และกติกา presentation ใน SYSTEMS_REFERENCE
 
