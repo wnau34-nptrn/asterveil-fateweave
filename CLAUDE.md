@@ -2,7 +2,7 @@
 
 ## Consolidated planning index — 2026-10-25
 
-Read [docs/DEVELOPMENT_PLAN_TH.md](docs/DEVELOPMENT_PLAN_TH.md) before selecting the next development task. It consolidates A–D/C12, research, shared camp levels and the proposed five-member prototype, with actual/owner-direction/recommendation/draft distinctions. Current runtime remains four-member/v43; documentation publication does not implement or validate new rules. Start with P00 before using older copy-ready C12 prompts that assume unchanged progression/save schemas. [Tracking issue #69](https://github.com/wnau34-nptrn/asterveil-fateweave/issues/69).
+Read [docs/DEVELOPMENT_PLAN_TH.md](docs/DEVELOPMENT_PLAN_TH.md) before selecting the next development task. It consolidates A–D/C12, research, shared camp levels and the proposed five-member prototype, with actual/owner-direction/recommendation/draft distinctions. Current runtime remains four-member/v43; documentation publication does not implement or validate new rules. P00 specification and baseline are complete in `docs/design/p00/` and `docs/validation/p00/`; next is P01-A/B. Reconcile older copy-ready C12 prompts that assume unchanged progression/save schemas. [Tracking issue #69](https://github.com/wnau34-nptrn/asterveil-fateweave/issues/69).
 
 ## Master plan — owner approval 2026-10-21
 
