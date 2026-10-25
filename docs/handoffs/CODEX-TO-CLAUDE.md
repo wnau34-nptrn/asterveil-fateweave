@@ -2,11 +2,12 @@
 
 ## 2026-10-24 — C12 Phase 1: roster design (docs only)
 
-- Branch `codex/roster-30-1`, base game `1a50c012`; PR/merge status recorded in the delivery entry below once available. Owner said “ดำเนินการได้” after the next step was identified as C12 design. This phase implements that design step only; no runtime/production art/simulation changes.
+- Branch `codex/roster-30-1`, base game `1a50c012`; PR [#67](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/67) merged 2026-10-25 as `0b0f6496712e73fd0eb768aca6048cdfc15a85b1` after Prototype quality run 653 succeeded (typecheck/lint/unit/build). Owner said “ดำเนินการได้” after the next step was identified as C12 design. This phase implements that design step only; no runtime/production art/simulation changes.
 - Added `docs/design/ROSTER_30_TH.md`: exclusive mechanic table; five new classes with stats, six skills each, 16-node trees; 30 unique character IDs (two per class), personal p1–p4 branches, joins/lore, five implementation batches, art intake, save/replay/trigger and balance gates. Preserved v42 story/draft identities and 4+4 team limits. Numbers are proposals, not measured balance.
 - Read concept NOTES from the separate `art/art-char-class-new-001` branch (PR #61); it is not present on the game base. Use A only under the C12 fallback; concept unit tests are not production sprites. No owner visual selection/approval was invented. Blade family PR #59 remains separate.
 - Updated MASTER_PLAN A6b, C12 checklist and NEW-CHAT handoff. CLAUDE.md systems index remains v42 / ten actual playable characters because runtime is unchanged.
 - Validation: document structure/content review (30 distinct IDs, 15 pairs, five 16-node trees, no prohibited term), `git diff --check`. No gameplay tests or screenshots needed for docs only. No new sim results claimed.
+- Session continuation: no create_session capability is available in this environment; the copy-ready next-task prompt is in NEW-CHAT-HANDOFF-TH.md.
 - Next: `codex/roster-30-2` Batch 1 (Saint + Dancer, four characters, p schema/typed actions/resolver/save/content/UI/art/tests/sim). C12 explicitly authorizes its rule/save/balance work despite the older general Codex restriction. Design still needs implementation validation of cooldown cycles, 4+4 full-roster handling and per-class trigger ordering.
 
 
