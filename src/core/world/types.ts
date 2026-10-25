@@ -305,6 +305,8 @@ export interface ShopRules {
   refreshCosts: readonly number[];
 }
 export interface CompanyRules {
+  // Optional extra recruitment slot; keeps the original offer stream/duplicate odds stable.
+  featured?: readonly string[];
   hireCost: number; dismissRefund: number; offers: number; maxStars: number; starStatPercent: number;
   starCosts: readonly { dupes: number; ore: number }[];
   // Seals may stand in for this share (percent, rounded up) of a star's duplicates.

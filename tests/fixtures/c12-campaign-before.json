@@ -1,0 +1,26 @@
+{
+  "base": "5a613a5",
+  "policy": "Same original simulation with lobby purchases restricted to deployed-member duplicates; no battle/price/reward/stat changes",
+  "cells": {
+    "Rush (objectives only), advisor battles · 12 companies / ซากชายแดน #1": 100,
+    "Rush (objectives only), advisor battles · 12 companies / เส้นทางป่าทึบ #1": 100,
+    "Rush (objectives only), advisor battles · 12 companies / แนวรอยแยก #1": 92,
+    "Rush (objectives only), advisor battles · 12 companies / แนวรอยแยก (ยาก) #1": 67,
+    "Rush (objectives only), advisor battles · 12 companies / แนวรอยแยก (ยาก) #2": 92,
+    "Explorer (everything on the map), advisor battles · 12 companies / ซากชายแดน #1": 100,
+    "Explorer (everything on the map), advisor battles · 12 companies / เส้นทางป่าทึบ #1": 83,
+    "Explorer (everything on the map), advisor battles · 12 companies / แนวรอยแยก #1": 100,
+    "Explorer (everything on the map), advisor battles · 12 companies / แนวรอยแยก (ยาก) #1": 100,
+    "Explorer (everything on the map), advisor battles · 12 companies / แนวรอยแยก (ยาก) #2": 100,
+    "Rush (objectives only), casual battles (advice on ~70% of turns) · 12 companies / ซากชายแดน #1": 92,
+    "Rush (objectives only), casual battles (advice on ~70% of turns) · 12 companies / เส้นทางป่าทึบ #1": 58,
+    "Rush (objectives only), casual battles (advice on ~70% of turns) · 12 companies / แนวรอยแยก #1": 8,
+    "Rush (objectives only), casual battles (advice on ~70% of turns) · 12 companies / แนวรอยแยก (ยาก) #1": 25,
+    "Rush (objectives only), casual battles (advice on ~70% of turns) · 12 companies / แนวรอยแยก (ยาก) #2": 58,
+    "Explorer (everything on the map), casual battles (advice on ~70% of turns) · 12 companies / ซากชายแดน #1": 83,
+    "Explorer (everything on the map), casual battles (advice on ~70% of turns) · 12 companies / เส้นทางป่าทึบ #1": 50,
+    "Explorer (everything on the map), casual battles (advice on ~70% of turns) · 12 companies / แนวรอยแยก #1": 100,
+    "Explorer (everything on the map), casual battles (advice on ~70% of turns) · 12 companies / แนวรอยแยก (ยาก) #1": 75,
+    "Explorer (everything on the map), casual battles (advice on ~70% of turns) · 12 companies / แนวรอยแยก (ยาก) #2": 75
+  }
+}

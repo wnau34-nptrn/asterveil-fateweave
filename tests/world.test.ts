@@ -269,7 +269,7 @@ describe('lobby profile', () => {
     let p = rich({ bank: { ore: 100, gold: 100, seal: 0, dust: 0 } });
     while (!p.members[boardOffers(p, map, lookup)[0]!] && p.returns < 50) p = { ...p, returns: p.returns + 1 };
     const offers = boardOffers(p, map, lookup);
-    expect(offers).toHaveLength(3); expect(new Set(offers).size).toBe(3); expect(boardOffers(p, map, lookup)).toEqual(offers);
+    expect(offers).toHaveLength(4); expect(new Set(offers).size).toBe(4); expect(boardOffers(p, map, lookup)).toEqual(offers);
     const r = hire(p, map, lookup, 0);
     expect(r.event).toEqual({ type: 'hired', heroId: offers[0], duplicate: true });
     p = r.profile; expect(p.members[offers[0]!]!.dupes).toBe(1); expect(p.bank.ore).toBe(100); expect(p.bank.gold).toBe(100 - map.company.hireCost); expect(p.taken).toEqual([0]);

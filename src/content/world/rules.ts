@@ -45,6 +45,7 @@ export const gameRules: GameRules = {
   company: {
     // Hiring costs gold coins only (ore pays for upgrades, brewing and the forge).
     hireCost: 20, dismissRefund: 10, offers: 3, maxStars: 5, starStatPercent: 8,
+    featured: ['metta', 'thiran', 'lalin', 'wila'],
     // (4A) see `shop` for the market and paid board refreshes.
     sealSharePercent: 50,
     starCosts: [{ dupes: 1, ore: 20 }, { dupes: 2, ore: 40 }, { dupes: 3, ore: 70 }, { dupes: 4, ore: 110 }],

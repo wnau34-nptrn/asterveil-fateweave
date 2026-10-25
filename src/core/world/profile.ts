@@ -57,14 +57,21 @@ export function renameCamp(initial: Profile, camp: string): ProfileResult {
 
 // The board is derived from (seed, returns): reloads cannot re-roll it and it refreshes
 // every time an expedition comes home. Company members can be offered (duplicates).
+export function boardOfferCount(map: MapDefinition, lookup: EncounterLookup, frozen = false): number {
+  return map.company.offers + (!frozen && map.company.featured?.some(id => heroCatalog(lookup, map).some(h => h.id === id)) ? 1 : 0);
+}
 export function boardOffers(profile: Profile, map: MapDefinition, lookup: EncounterLookup): string[] {
-  const pool = profile.boardPool ?? heroCatalog(lookup, map).map(h => h.id); const offers: string[] = [];
+  const catalog = heroCatalog(lookup, map).map(h => h.id);
+  const featured = profile.boardPool ? [] : (map.company.featured ?? []).filter(id => catalog.includes(id));
+  const pool = profile.boardPool ?? catalog.filter(id => !featured.includes(id)); const offers: string[] = [];
   // A paid refresh (4A) redraws the board; with no refresh it is the same board as before.
   const salt = (Math.imul(profile.returns + 1, 0x2c1b3c6d) ^ Math.imul(profile.refreshes, 0x165667b1)) >>> 0;
   for (let i = 0; offers.length < Math.min(map.company.offers, pool.length); i++) {
     const left = pool.filter(id => !offers.includes(id));
     offers.push(left[(rollPercent(profile.seed ^ salt, i) * 7919 + i) % left.length]!);
   }
+  // A separate optional audition never displaces one of the original offers. No extra price or currency.
+  if (featured.length) offers.push(featured[(rollPercent(profile.seed ^ salt ^ 0x4f1bbcdc, 0) * 7919) % featured.length]!);
   return offers;
 }
 export function hireReason(profile: Profile, map: MapDefinition, lookup: EncounterLookup, index: number): string {

@@ -6,7 +6,7 @@ import { COMPANY_CAP, PARTY_SLOTS, RESERVE_SLOTS, type ActiveBattle, type Expedi
 import { draftOffers, skillChoices, battleState, expToNext, findTiles, newExpedition, finishBattle, fullParty, heroCatalog, heroDef, memberDef, rosterIds, tileAt, type EncounterLookup } from '../world/world';
 import { affixPool, itemValid } from '../world/equipment';
 import { boulderAt, openPit, passableWall } from '../world/puzzles';
-import { commanderReason, defaultCamp, newProfile, settle, talentsValid } from '../world/profile';
+import { boardOfferCount, commanderReason, defaultCamp, newProfile, settle, talentsValid } from '../world/profile';
 import { grantsValid, isBigTree } from '../world/talents';
 import { classSkills } from '../world/tomes';
 import { TOME_LINES, TOME_SIZES, type TomeBag } from '../world/types';
@@ -445,7 +445,7 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
   const items = p.items.map(i => itemOf(i, map, lookup));
   const uids = [...items,...overflow, ...Object.values(members).flatMap(m => Object.values(m.gear ?? {}))].map(i => i!.uid);
   if (new Set(uids).size !== uids.length || uids.some(u => u >= (p.nextItem as number))) throw new Error('Invalid items');
-  if (!Array.isArray(p.taken) || new Set(p.taken).size !== p.taken.length || p.taken.some(i => !isInt(i, 0, map.company.offers - 1))) throw new Error('Invalid board');
+  if (!Array.isArray(p.taken) || new Set(p.taken).size !== p.taken.length || p.taken.some(i => !isInt(i, 0, boardOfferCount(map, lookup, boardPool !== undefined) - 1))) throw new Error('Invalid board');
   let last: Profile['last'] = null;
   if (p.last !== null) {
     const l = obj(p.last);

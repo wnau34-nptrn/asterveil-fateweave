@@ -31,6 +31,13 @@ describe('C12 Batch 1 catalog and hiring', () => {
     expect(catalog.slice(10).map(h => h.id)).toEqual(added);
     expect(ruinsMap.draft!.pool).toEqual(['lio', 'brann', 'sefa', 'toma']);
     for (const id of added) expect(ruinsMap.recruits?.some(r => r.hero === id)).toBeFalsy();
+    // New roster releases must not dilute the original three offers or their duplicate odds.
+    for (let seed = 0; seed < 100; seed++) {
+      const p = newProfile(map, seed), before = boardOffers(p, legacyMap, lookup), after = boardOffers(p, map, lookup);
+      expect(after.slice(0, 3)).toEqual(before);
+      expect(after).toHaveLength(4);
+      expect(added).toContain(after[3]);
+    }
     const seen = new Set<string>();
     for (let seed = 0; seed < 100; seed++) boardOffers(newProfile(map, seed), map, lookup).forEach(id => seen.add(id));
     for (const id of added) expect(seen.has(id)).toBe(true);
@@ -48,6 +55,7 @@ describe('C12 Batch 1 catalog and hiring', () => {
     expect(next.profile.company).toEqual([...p.company, 'metta']);
     expect(next.profile.party).toEqual(p.party);
     expect(next.profile.members.metta).toEqual({ stars: 1, dupes: 0 });
+    expect(parseGame(write({ profile: next.profile, run: null }), map, lookup).profile.taken).toEqual([index]);
     expect(placeMember(next.profile, 'metta', 'deployed').event).toEqual({ type: 'blocked', reason: 'full' });
     const swapped = placeMember(next.profile, 'metta', 'deployed', p.party.deployed[0]);
     expect(swapped.profile.party.deployed).toHaveLength(4);
