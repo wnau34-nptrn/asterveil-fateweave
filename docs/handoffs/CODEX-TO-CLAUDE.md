@@ -1,5 +1,55 @@
 # Codex → Claude handoff
 
+## 2026-10-25 — Consolidated development plan for GitHub delivery
+
+- Owner requested all discussion information consolidated into a development plan and sent to GitHub. Added `docs/DEVELOPMENT_PLAN_TH.md`: P00–P11 delivery order, task checklists, dependencies, exit gates, old→new mapping, numerical assumptions and complete D01–D37 coverage. Entry links added to README, CLAUDE, legacy roadmap/master plan, C12 and overview/research docs.
+- Tracking issue: https://github.com/wnau34-nptrn/asterveil-fateweave/issues/69 (remains open after the documentation PR). Branch `docs/game-detail-review`, target `feature/fateweave-initial-prototype`; PR #70 publishes the earlier local design/research commits. GitHub confirms base e79e8a4 already includes historical Batch1 notes; those reports are not changed by this PR and are not new simulations.
+- New task scope is documentation and GitHub publication only. Runtime/save/balance unchanged. Shared levels are the owner's requested direction; five-member teams and numerical progression details remain a prototype/recommended baseline with explicit gates. P00 is next before old Batch2 prompts that assume v44 and unchanged progression.
+- Local validation: Markdown link checks, complete D01–D37 mapping, unique task IDs, diff whitespace and docs-only file-scope review. No new local gameplay tests or screenshots; GitHub quality CI runs per existing PR workflow. PR: https://github.com/wnau34-nptrn/asterveil-fateweave/pull/70. Publication result and merge reference will be recorded in the PR/tracking issue.
+- Network: ordinary sandbox fetch initially failed reaching the proxy; permitted network mode succeeded. Used cloud-environment-runtime guidance and the connected GitHub tools; no credential or repository-setting changes.
+
+## 2026-10-25 — Shared camp level and mechanic-based bosses
+
+- Owner requested equal character levels for free team switching and asked whether some bosses should require specific mechanics. Added `docs/design/SHARED_LEVEL_TEAM_BOSSES_TH.md`; linked Game Detail, discussion index and the prior recommended progression baseline. No runtime/save/balance changes.
+- Recommend one camp Lv/EXP for all owned heroes, including new recruits, with EXP awarded once per event. Shared level/training point entitlement, individual builds/stars/promotion/gear. This replaces individual catch-up training in the prior proposal; personal skill and gear gaps still need validation.
+- Boss direction: meaningful mechanics with at least two viable responses and at least one guaranteed-access route; no specific gacha hero or advanced-star gate for required main-story counters. Examples are concepts, not claims about implemented encounters.
+- Team five remains the proposed prototype direction from discussion (runtime four); economy targets for team four are historical and must be recalculated. Shared levels do not establish UI or balance feasibility for 5v5.
+- Migration concept: seed shared EXP from highest owned-member progression rather than sum; preserve investments and replay boundaries. Shared training credits use highest legacy star-point entitlement, not total across roster. Validate real saves before implementation.
+- Validation: document review, local Markdown link checks and `git diff --check`; no gameplay tests/screenshots for docs-only work. Local branch `docs/game-detail-review`; no PR/merge/publication. Next: combined shared-EXP/team-five economy and encounter prototype specs.
+
+## 2026-10-25 — Recommended progression baseline selected for further design
+
+- Owner asked for a concrete recommendation. Added `docs/design/PROGRESSION_RECOMMENDED_BASELINE_TH.md` and linked it from round-one discussion and research. This selects an advisory baseline; no runtime implementation or owner acceptance of every number is inferred.
+- Recommended structure: 15 class pairs, same-ID base/advanced ★1–5; trial at Lv15/base ★5, no extra promotion-material gate; two extension choices at promotion/Lv20; free camp respec; gameplay talent points instead of star points; universal farmable shards and character catch-up.
+- Unvalidated prototype values: 16 regular points by Lv20 including four training points; retain base +8 percentage points per star, advanced +3 up to cumulative +44%; explicit account-level session targets for first hero, team four, and advanced favourite. No claim of proven balance or resource feasibility. Existing unique-star plans would need explicit revision under this proposal.
+- Migration proposal credits old star points toward, not beyond, the four training points. Validate real saves, grants and gates before implementation. Gacha costs/rates remain a separate economy calculation.
+- Files: new recommendation, two cross-links and three handoffs. Checked Markdown targets, point/star arithmetic and `git diff --check`; no gameplay tests or screenshots (docs only). Local `docs/game-detail-review`, no PR/merge/publication. Next: account economy model and build/role validation using this baseline.
+
+## 2026-10-25 — Progression/promotion discussion round 1
+
+- Owner requested the next round after comparative research. Added `docs/design/PROGRESSION_PROMOTION_DISCUSSION_TH.md` for D06–D10; cross-linked the three overview/research documents. This is a structural proposal for discussion, not implementation or final numerical rules.
+- Proposed: base ★1–5 → promotion → advanced ★1–5 (ten positions, nine transitions), one advanced path per class, small shared extension with two choice pairs, preserved personal branches and three equipped skills. Stars provide bounded efficiency; build access should come from gameplay. Star ★5 promotion eligibility depends on reliable non-duplicate farming.
+- Explicit unresolved changes: existing star-derived talent points and approved unique-star plans, Lv30 point budget, migration credits, role-specific star value, unlock chapter/level, costs and gacha economy. Preserve current C12 until a scoped implementation follows; promoted heroes remain the same ID.
+- Validation: reviewed the current tree/roster rules, checked local Markdown links and `git diff --check`. No runtime/save/balance edits, gameplay tests or screenshots for this documentation task.
+- Branch `docs/game-detail-review`; local documentation commit only, no PR/merge/publication. Follow-up is a character/team progression timeline and economy alternatives once the structural direction is selected.
+
+## 2026-10-25 — Research-backed recommendations for Game Detail
+
+- Owner now requested research on successful/enjoyable games and recommendations preserving Fateweave identity. This extends the previous list-only request to advisory recommendations, not implementation or approval of numbers.
+- Added `docs/GAME_RESEARCH_RECOMMENDATIONS_TH.md`: seven game references, ten source entries, all D01–D37 mapped to recommendation/rationale/tradeoff/validation. Uses publisher/developer/support pages; explicitly qualifies one official-hosted community wiki search result with blocked direct access.
+- Main recommendations: preserve intent reading and expedition/camp identity; hold all unlocked characters; promotion modifies existing skills; separate growth-system responsibilities; farmable star progress with gacha guarantees; contextual quests/camp reactions; PvE-first and standardized competitive access if PvP is pursued.
+- Updated links in the two Game Detail documents. No gameplay changes, no approved rates/costs/cadence, no simulations or user-playtest claims. Source snapshots checked2026-10-25 Bangkok. Validation: source review, 37 unique IDs, local links and diff check.
+- Local docs/game-detail-review; no PR/merge/publication. Discuss recommendations with owner before turning them into specs.
+
+## 2026-10-25 — Game Detail consolidation for owner discussion
+
+- User requested a full consolidation of existing gameplay, approved plans and recent proposals, with gaps listed separately before further design. This is a documentation review task, not permission to implement promotion/gacha or choose their numbers.
+- Added `docs/GAME_DETAIL_TH.md` (20 sections) and `docs/GAME_DESIGN_DISCUSSION_TH.md` (D01–D37). Source runtime is game branch e79e8a4 / v43; checked historical gacha/online proposal branch as well.
+- Key gaps: company cap20 versus roster30+, Mira story recruitment absent from map3 data, earlier story recruits already in starter pool, star/personal-tree/promotion overlap, competing pity drafts (80/1.5% historical versus30/10% chat), economy and save migration.
+- Recent promotion of five stars followed by another class/five stars, improving existing skills, two focus characters/month and universal shards remain discussion items. Do not silently adopt assistant suggestions or supersede approved C12/MASTER_PLAN.
+- Docs-only; no runtime/save/balance edits or new gameplay tests. Validation: source review, internal-link/ID checks and git diff --check. Earlier24 quest and148 progression checks are historical evidence from the preceding audits, not new tests for this document. No screenshots needed.
+- Local documentation branch `docs/game-detail-review`; no PR/merge/publication in this task. Follow-up: discuss open items with owner before designing their answers.
+
 ## 2026-10-25 — C12 Batch 1 delivered — PR #68 merged
 
 - Branch `codex/roster-30-2` on `5a613a5`; PR #68 merged 2026-10-25 as `24dfefbb5777a2233ab376725fb57dbd1bac719f`. Owner authorized continuing Batch 1. Added Metta/Thiran Saint and Lalin/Wila Dancer, six skills per class, shared 16-node trees and paid personal branches, deterministic healing/cooldown rules, save v43 migration, hiring-board preservation, Thai UI/selectors, actual-state basic visual cues and production assets.

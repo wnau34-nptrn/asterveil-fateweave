@@ -1,5 +1,29 @@
 # ส่งต่องานพัฒนาให้ Codex ระหว่างรอ Usage ของ Claude (2026-10-23)
 
+## 2026-10-25 — Consolidated delivery plan prepared for GitHub
+
+Owner requested publishing the full development plan. `docs/DEVELOPMENT_PLAN_TH.md` is the current delivery index; issue #69 tracks P00–P11 and is not closed by publishing the plan. All D01–D37 have an assigned phase. Older copy-ready implementation tasks below need reconciliation with shared camp levels and the five-member prototype; start P00 first. No runtime changes in this task. See CODEX-TO-CLAUDE for scope/validation/publication.
+
+## 2026-10-25 — Shared-level design update completed
+
+Documented owner's equal-level direction and recommendations in `docs/design/SHARED_LEVEL_TEAM_BOSSES_TH.md`: shared camp Lv/EXP/point entitlement, individual builds, multiple accessible boss-counter routes. Updated overview links and marked individual catch-up/team-four economy assumptions superseded or needing recalculation. No battle/save/balance implementation. See CODEX-TO-CLAUDE for migration concerns and validation.
+
+## 2026-10-25 — Concrete progression recommendation completed
+
+Added `docs/design/PROGRESSION_RECOMMENDED_BASELINE_TH.md` at the owner's request for our recommended direction. It selects a structural baseline and clearly labels provisional point/star/session values. No runtime, save or balance edits. Preserve prior approved plans as historical authority; the new document proposes their revision rather than claiming approval. Next work is economy/build validation; see CODEX-TO-CLAUDE for details.
+
+## 2026-10-25 — Progression/promotion proposal completed
+
+Owner requested the next discussion round. Added `docs/design/PROGRESSION_PROMOTION_DISCUSSION_TH.md` covering D06–D10 and impacts on gacha and save investments. Proposal only: no battle/save/balance changes. Existing approved C12 and unique-star directions are not silently superseded. See CODEX-TO-CLAUDE for scope and validation; unresolved formulas and structural tradeoffs are documented for the next discussion.
+
+## 2026-10-25 — Comparative research advisory completed
+
+Added `docs/GAME_RESEARCH_RECOMMENDATIONS_TH.md` at owner's request: evidence from seven games and recommendations for all37 discussion topics. This is advisory, not approval to implement proposed progression/gacha or a replacement of approved C12. No runtime changes. See CODEX-TO-CLAUDE for validation.
+
+## 2026-10-25 — Owner requested consolidated Game Detail and discussion list
+
+Documentation completed in `docs/GAME_DETAIL_TH.md` and `docs/GAME_DESIGN_DISCUSSION_TH.md` (37 open topics). No additional C12 batch or new game rules implemented. Owner wants to discuss gaps before further design; preserve existing approvals while keeping recent gacha/promotion proposals explicitly unresolved. See CODEX-TO-CLAUDE entry for audit findings and validation.
+
 Claude ใช้ Usage รายสัปดาห์เกือบหมด (รีเซ็ต พ. 28 ต.ค. 19:00) ระหว่างนี้ให้ Codex พัฒนาต่อตามลำดับในไฟล์นี้ เมื่อ Claude กลับมาจะตรวจ PR ของ Codex ก่อน แล้วค่อยทำงานที่ต้องตัดสินกฎ/สมดุล
 
 ## สถานะตอนส่งต่อ (ไม่มีงานค้างฝั่ง Claude)
@@ -281,5 +305,8 @@ REPORT after every batch in docs/handoffs/CODEX-TO-CLAUDE.md (per character: kit
 ```
 
 ## ฝากถึง Claude (Codex เขียนต่อท้าย)
+
+- 2026-10-25: P00–P02/P04/P06 in `docs/DEVELOPMENT_PLAN_TH.md` will affect battle/save/balance when implemented. This task only documents those impacts: shared Lv/EXP, actor capacity, talent entitlement and migrations need one coherent specification before code changes. No rule changes were made as part of publishing the plan.
+
 
 - 2026-10-24: เจ้าของถามหาจุดไม่สมเหตุผลอื่น (ยังไม่ได้สั่งแก้) ดู `docs/design/LOGIC_AUDIT_2026-10-24_TH.md`: ฝากพิจารณา Aegis ที่ใช้ได้แต่ไม่เพิ่มโล่, Heal ที่เลือกคนเลือดเต็มไม่ได้แม้มี Afterglow และ Revive อัปเลเวลแล้วเพิ่มโล่ผู้ใช้แทน HP ที่ชุบ ห้ามถือว่าข้อสังเกตเหล่านี้เป็นการอนุมัติเปลี่ยนกติกา; จุด UI แสดงหน่วย/scaling ผิดและ Bulwark ไม่รวมเลเวลเป็นข้อบกพร่องที่ยืนยันแล้ว
