@@ -1,0 +1,17 @@
+
+> asterveil-fateweave@0.1.0 sim
+> SIM_REPORT=1 vitest run tests/campaign-sim.test.ts tests/starter-sim.test.ts tests/balance-sim.test.ts tests/class-sim.test.ts tests/formation-sim.test.ts tests/tree-sim.test.ts tests/character-sim.test.ts
+
+
+ RUN  v5.0.4 /tmp/fateweave-p00-baseline
+
+
+ Test Files  7 passed (7)
+      Tests  28 passed (28)
+   Start at  23:24:45
+   Duration  367.72s (import 99%, tests 1%)
+
+     Import  43 modules were evaluated 74 times · 364.60s total, 99% of tracked time
+             ~152.74s faster with isolate: false — shared modules are evaluated once per worker instead of once per file
+             learn more: https://vitest.dev/guide/improving-performance#test-isolation
+

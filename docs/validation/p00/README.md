@@ -4,7 +4,7 @@ Source commit `e62292a7fe476cfadc5f2310073432a88b79c292` · Node24.19.0/npm11.9.
 
 ## ผลรันใหม่
 
-- `npm run sim`: **28/28 ผ่าน, 7/7 files**, 367.72วินาที ตาม [log](sim.log)
+- `npm run sim`: **28/28 ผ่าน, 7/7 files**, 367.72วินาที ตาม [log](sim-output.txt)
 - focused baseline `npx vitest run tests/roster-batch1-world.test.ts tests/formation.test.ts tests/talents.test.ts`: **55/55 ผ่าน** ตาม [summary](focused-summary.json)
 - รันจาก git archive ของcommitข้างต้นใน `/tmp/fateweave-p00-baseline` และใช้node_modulesที่ติดตั้งแล้ว ไม่แก้runtimeหรือเขียนทับรายงานvalidationเดิมในworking tree
 - [manifest](manifest.json) เก็บcommit/command/SHA256 ของartifact; ไม่ใช่การรับประกันว่าsimครอบคลุมทุกบิลด์หรือความสนุก
