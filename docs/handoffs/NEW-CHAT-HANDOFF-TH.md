@@ -1,5 +1,16 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
+## 2026-10-24 — C12 Phase 1 designed; next Batch 1
+
+เอกสารออกแบบ: `docs/design/ROSTER_30_TH.md` บน `codex/roster-30-1` ฐานเกม `1a50c012` มี 30 ตัว 15 อาชีพ กิ่งส่วนตัวและห้าชุดลงโค้ด ยังไม่เปลี่ยนเกม/เซฟ/สมดุล ตัวเล่นจริงยัง 10 คน v42 อ่านผล PR ใน CODEX-TO-CLAUDE ก่อนตั้งฐานใหม่
+
+ข้อความเริ่มงานถัดไป:
+
+```text
+ทำ C12 Batch 1 ใน asterveil-fateweave จาก feature/fateweave-initial-prototype หลัง Phase 1 merge บน codex/roster-30-2 อ่าน AGENTS.md, CLAUDE.md, docs/design/ROSTER_30_TH.md, C12 ใน docs/handoffs/CLAUDE-TO-CODEX-DEV-TH.md และ CODEX-TO-CLAUDE.md ก่อน เพิ่มนักบุญรบเมตตา/ธีรัน นักเต้นรำลลิน/วิลา กิ่ง p แบบใช้งบแต้มเดิม กฎ pure resolver/save migration/content/UI/ภาพ production/test/sim ตามสเปก C12 อนุญาตแก้ rules/save/balance โดยเฉพาะ ตัวเลขทั้งหมดต้องจำลอง ไม่เพิ่ม SPD/เทิร์น ไม่ทับกลไกอาชีพอื่น ไม่แตะ VFX family C5 ที่รอรีวิว รูปจริง 390px สองรูปและรายงานผลก่อน/หลัง อัปเดต handoff หลังทำเสร็จ push/PR/merge เมื่อ checks ผ่านตาม standing authorization
+```
+
+
 ## 2026-10-24 — C11 completed by Codex
 
 PR #66 merged to `feature/fateweave-initial-prototype`: `abf10a8256e04040aa2b509bc6e5aa7c27c7654d`. Save v42; 10 playable classes/characters. Quality CI: 795 unit tests, typecheck/lint/build pass. Full browser CI: 242 tests pass. Final sim: 26 checks pass; 20 campaign acceptance cells pass; each character clears 12/12 seeds on maps 1–3 in the documented raised-character scenario. Read `docs/validation/balance-sim/C11.md` and the top entry in `CODEX-TO-CLAUDE.md` for every changed skill/number, migrations, method and review questions. C12 was not started; its prerequisite is now met. Older entries below are historical.
