@@ -1,9 +1,16 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
-## 2026-10-25 — C12 Batch 1 under release validation
+## 2026-10-25 — C12 Batch 1 merged; next Batch 2
 
-Implementation on `codex/roster-30-2`: 14 characters / 12 classes / save v43. Read the top CODEX-TO-CLAUDE entry and `docs/validation/roster-30/batch-1/README.md` for PR/merge/gate status before continuing. Four new members and production art are implemented; original-policy economic campaign regression must be resolved before merge. Existing copy-ready Batch 1 prompt below is historical once that merge is recorded; the next batch is Martial/Hexer (four members) from ROSTER_30_TH.md.
+PR #68 merged `24dfefbb5777a2233ab376725fb57dbd1bac719f` into `feature/fateweave-initial-prototype`. Current game: 12 classes / 14 characters, save v43; quality CI 838 unit tests, full browser CI 244 tests, final full sim 28 checks, 42 character/map cells ×12 seeds, paired campaign gate 20/20 pass. Report: `docs/validation/roster-30/batch-1/README.md`. Original three recruit offers are preserved, one extra featured slot advertises the new cohort. Do not remove the v43 frozen-board migration or explicit cooldown replay metadata. Older Batch 1 prompts below are historical.
 
+Copy-ready next task:
+
+```text
+ทำ C12 Batch 2 ใน asterveil-fateweave จากสาขาเกมล่าสุด feature/fateweave-initial-prototype บน codex/roster-30-3 อ่าน AGENTS.md, CLAUDE.md, ROSTER_30_TH.md, SKILL_AUDIT_TH.md และรายงาน Batch 1 ก่อน เพิ่มนักมวย อรุณ/ภาคิน (Martial, arun/phakin) และนักสาป รัตติ/พิม (Hexer, ratti/pim) ตามต้นไม้/กิ่ง p/เจ้าของกลไกในแผน ไม่มีธาตุ/เพิ่มเทิร์น/เพิ่ม SPD ใช้ pure resolver+preview/replay ปราณ 0–3 คำสาปแยก source อายุและภาษีตอนลงมือ สร้างภาพ production จาก concept A ตามข้อยกเว้น C12 และตัวที่สองภาพใหม่ เซฟ v44 migration ต้องเก็บเซฟ v43/boardPool/คำสั่งเลือก cooldown เดิม เพิ่มแค็ตตาล็อกเป็น 18 ตัว 14 อาชีพ โดยไม่เปลี่ยนสามข้อเสนอเดิมและทีม 4+4 เก็บ baseline จากเกมหลัง Batch 1; เทสต์/unit/browser390/simรายตัวทุก18×แมพ1–3/แคมเปญเปรียบเทียบ20cellsด้วยpolicyเดียวกัน/ablation ต้องผ่านก่อน merge อัปเดต handoff+รายงาน+รูป2ภาพและ publish ตาม standing authorization ห้ามแตะ C5 VFX family ที่ยังรอตรวจ
+```
+
+No create_session tool is callable in this environment; no new cloud session was created automatically.
 
 ## 2026-10-24 — C12 Phase 1 designed; next Batch 1
 
