@@ -1,5 +1,9 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
+## 2026-10-25 — Active discussion: stars, promotion and skill trees
+
+Next-round proposal is in `docs/design/PROGRESSION_PROMOTION_DISCUSSION_TH.md`. Base ★1–5 → advanced ★1–5, existing-skill extensions and preserved personal identity are proposed, not implemented. Review conflicts with star-derived talent points and unique-star plans before any code change. Costs, unlock levels, point/migration formulas and gacha rates remain open. Current task remains design discussion on local `docs/game-detail-review`; no publication or additional C12 batch.
+
 ## 2026-10-25 — Research completed; discuss recommendations next
 
 Owner requested comparative game research and recommendations after the list-only consolidation. Read `docs/GAME_RESEARCH_RECOMMENDATIONS_TH.md` alongside Game Detail and D01–D37. Advisory directions are now provided for all37 topics; no numerical gacha/promotion rules approved or implemented. Keep runtime at existing C12 Batch1 scope until an implementation task is requested. Local branch docs/game-detail-review; no publication.

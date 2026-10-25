@@ -1,5 +1,9 @@
 # ส่งต่องานพัฒนาให้ Codex ระหว่างรอ Usage ของ Claude (2026-10-23)
 
+## 2026-10-25 — Progression/promotion proposal completed
+
+Owner requested the next discussion round. Added `docs/design/PROGRESSION_PROMOTION_DISCUSSION_TH.md` covering D06–D10 and impacts on gacha and save investments. Proposal only: no battle/save/balance changes. Existing approved C12 and unique-star directions are not silently superseded. See CODEX-TO-CLAUDE for scope and validation; unresolved formulas and structural tradeoffs are documented for the next discussion.
+
 ## 2026-10-25 — Comparative research advisory completed
 
 Added `docs/GAME_RESEARCH_RECOMMENDATIONS_TH.md` at owner's request: evidence from seven games and recommendations for all37 discussion topics. This is advisory, not approval to implement proposed progression/gacha or a replacement of approved C12. No runtime changes. See CODEX-TO-CLAUDE for validation.

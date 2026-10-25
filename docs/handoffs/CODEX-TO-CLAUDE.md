@@ -1,5 +1,13 @@
 # Codex → Claude handoff
 
+## 2026-10-25 — Progression/promotion discussion round 1
+
+- Owner requested the next round after comparative research. Added `docs/design/PROGRESSION_PROMOTION_DISCUSSION_TH.md` for D06–D10; cross-linked the three overview/research documents. This is a structural proposal for discussion, not implementation or final numerical rules.
+- Proposed: base ★1–5 → promotion → advanced ★1–5 (ten positions, nine transitions), one advanced path per class, small shared extension with two choice pairs, preserved personal branches and three equipped skills. Stars provide bounded efficiency; build access should come from gameplay. Star ★5 promotion eligibility depends on reliable non-duplicate farming.
+- Explicit unresolved changes: existing star-derived talent points and approved unique-star plans, Lv30 point budget, migration credits, role-specific star value, unlock chapter/level, costs and gacha economy. Preserve current C12 until a scoped implementation follows; promoted heroes remain the same ID.
+- Validation: reviewed the current tree/roster rules, checked local Markdown links and `git diff --check`. No runtime/save/balance edits, gameplay tests or screenshots for this documentation task.
+- Branch `docs/game-detail-review`; local documentation commit only, no PR/merge/publication. Follow-up is a character/team progression timeline and economy alternatives once the structural direction is selected.
+
 ## 2026-10-25 — Research-backed recommendations for Game Detail
 
 - Owner now requested research on successful/enjoyable games and recommendations preserving Fateweave identity. This extends the previous list-only request to advisory recommendations, not implementation or approval of numbers.

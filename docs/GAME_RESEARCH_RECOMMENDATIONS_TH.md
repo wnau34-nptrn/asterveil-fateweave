@@ -1,5 +1,7 @@
 # Fateweave — งานวิจัยเปรียบเทียบและคำแนะนำประกอบการตัดสินใจ
 
+> รอบถัดจาก research: [ข้อเสนอดาว–เลื่อนอาชีพ–ต้นไม้สกิล](design/PROGRESSION_PROMOTION_DISCUSSION_TH.md) ครอบคลุม D06–D10 เป็นโครงสำหรับหารือ ยังไม่เลือกสูตรหรือต้นทุนจริง
+
 วันที่ตรวจแหล่งข้อมูล: 25 ตุลาคม 2026 (Asia/Bangkok)
 
 อ่านร่วมกับ [Game Detail](GAME_DETAIL_TH.md) และ [ประเด็น D01–D37](GAME_DESIGN_DISCUSSION_TH.md)
