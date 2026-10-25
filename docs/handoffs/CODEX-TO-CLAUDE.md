@@ -1,5 +1,14 @@
 # Codex → Claude handoff
 
+## 2026-10-25 — Game Detail consolidation for owner discussion
+
+- User requested a full consolidation of existing gameplay, approved plans and recent proposals, with gaps listed separately before further design. This is a documentation review task, not permission to implement promotion/gacha or choose their numbers.
+- Added `docs/GAME_DETAIL_TH.md` (20 sections) and `docs/GAME_DESIGN_DISCUSSION_TH.md` (D01–D37). Source runtime is game branch e79e8a4 / v43; checked historical gacha/online proposal branch as well.
+- Key gaps: company cap20 versus roster30+, Mira story recruitment absent from map3 data, earlier story recruits already in starter pool, star/personal-tree/promotion overlap, competing pity drafts (80/1.5% historical versus30/10% chat), economy and save migration.
+- Recent promotion of five stars followed by another class/five stars, improving existing skills, two focus characters/month and universal shards remain discussion items. Do not silently adopt assistant suggestions or supersede approved C12/MASTER_PLAN.
+- Docs-only; no runtime/save/balance edits or new gameplay tests. Validation: source review, internal-link/ID checks and git diff --check. Earlier24 quest and148 progression checks are historical evidence from the preceding audits, not new tests for this document. No screenshots needed.
+- Local documentation branch `docs/game-detail-review`; no PR/merge/publication in this task. Follow-up: discuss open items with owner before designing their answers.
+
 ## 2026-10-25 — C12 Batch 1 delivered — PR #68 merged
 
 - Branch `codex/roster-30-2` on `5a613a5`; PR #68 merged 2026-10-25 as `24dfefbb5777a2233ab376725fb57dbd1bac719f`. Owner authorized continuing Batch 1. Added Metta/Thiran Saint and Lalin/Wila Dancer, six skills per class, shared 16-node trees and paid personal branches, deterministic healing/cooldown rules, save v43 migration, hiring-board preservation, Thai UI/selectors, actual-state basic visual cues and production assets.

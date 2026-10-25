@@ -1,5 +1,9 @@
 # ส่งต่องานพัฒนาให้ Codex ระหว่างรอ Usage ของ Claude (2026-10-23)
 
+## 2026-10-25 — Owner requested consolidated Game Detail and discussion list
+
+Documentation completed in `docs/GAME_DETAIL_TH.md` and `docs/GAME_DESIGN_DISCUSSION_TH.md` (37 open topics). No additional C12 batch or new game rules implemented. Owner wants to discuss gaps before further design; preserve existing approvals while keeping recent gacha/promotion proposals explicitly unresolved. See CODEX-TO-CLAUDE entry for audit findings and validation.
+
 Claude ใช้ Usage รายสัปดาห์เกือบหมด (รีเซ็ต พ. 28 ต.ค. 19:00) ระหว่างนี้ให้ Codex พัฒนาต่อตามลำดับในไฟล์นี้ เมื่อ Claude กลับมาจะตรวจ PR ของ Codex ก่อน แล้วค่อยทำงานที่ต้องตัดสินกฎ/สมดุล
 
 ## สถานะตอนส่งต่อ (ไม่มีงานค้างฝั่ง Claude)

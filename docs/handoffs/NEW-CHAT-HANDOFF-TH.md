@@ -1,5 +1,9 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
+## 2026-10-25 — Active task: consolidate design, then discuss gaps
+
+Read `docs/GAME_DETAIL_TH.md` and `docs/GAME_DESIGN_DISCUSSION_TH.md` first. Owner explicitly requested listing missing/unclear/improvable areas before designing them. The C12 Batch2 implementation prompt below remains the earlier development handoff; do not auto-start it during this design review. Current runtime still e79e8a4/v43 with14 characters. New gacha/promotion/monthly-release numbers are proposals, not approved final rules. Documentation branch: `docs/game-detail-review`; no PR/publication yet.
+
 ## 2026-10-25 — C12 Batch 1 merged; next Batch 2
 
 PR #68 merged `24dfefbb5777a2233ab376725fb57dbd1bac719f` into `feature/fateweave-initial-prototype`. Current game: 12 classes / 14 characters, save v43; quality CI 838 unit tests, full browser CI 244 tests, final full sim 28 checks, 42 character/map cells ×12 seeds, paired campaign gate 20/20 pass. Report: `docs/validation/roster-30/batch-1/README.md`. Original three recruit offers are preserved, one extra featured slot advertises the new cohort. Do not remove the v43 frozen-board migration or explicit cooldown replay metadata. Older Batch 1 prompts below are historical.
