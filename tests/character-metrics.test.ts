@@ -29,7 +29,7 @@ it('shows effective defense/leech caps and deployed team luck while keeping rese
   const reserve=characterStats(s,map,memberDef(lookup,map,s.members,'lio')!,template);
   expect(reserve.find(v=>v.id==='regen')!.value).toBeGreaterThan(0); expect(reserve.find(v=>v.id==='luck')!.value).toBeGreaterThan(0);
 });
-it('all ten classes expose finite stats and meaningful active metrics, including fixed effects and star unlocks', () => {
+it('every catalog character exposes finite stats and meaningful active metrics, including tree skills and optional star unlocks', () => {
   const s=setup();
   for(const base of heroCatalog(lookup,map)) {
     // The Knight's star skills are tree nodes now (A6); a migrated ★5 company keeps them as grants.
@@ -39,7 +39,13 @@ it('all ten classes expose finite stats and meaningful active metrics, including
     const h=memberDef(lookup,map,s.members,base.id)!;
     expect(characterStats(s,map,h,template).every(v=>Number.isFinite(v.value)&&v.help.length>10)).toBe(true);
     for(const a of h.actions) { const v=characterSkillMetric(a,h,template); expect(v.target.length).toBeGreaterThan(0); if(v.value!==undefined) expect(Number.isFinite(v.value)).toBe(true); }
-    expect(h.actions).toContain(base.unlocks!.skill);
+    if(base.unlocks) expect(h.actions).toContain(base.unlocks.skill);
+    for(const node of tree) if('unlock' in node.effect) {
+      const v=characterSkillMetric(node.effect.unlock,h,template);
+      expect(v.target.length, `${base.id}/${node.effect.unlock}`).toBeGreaterThan(0);
+      expect(v.scaling.length).toBeGreaterThan(0);
+      if(v.value!==undefined) expect(Number.isFinite(v.value)).toBe(true);
+    }
   }
   // Every Knight tree skill has a readable metric.
   const k=starred(heroCatalog(lookup,map).find(h=>h.id==='guardian')!,1,map,1,{},undefined,{grants:['a3s','b2','c3'],loadout:['bulwark','challenge','rouse']});

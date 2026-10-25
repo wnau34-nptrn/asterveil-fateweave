@@ -1,0 +1,236 @@
+{
+  "base": "5a613a5",
+  "checkedOldPixels": {
+    "units_mercs": "first six cells RGBA identical",
+    "portraits_mercs": "first six cells RGBA identical",
+    "gear_items": "all old 5x3 cells RGBA identical; four unique weapons added in columns 5-6",
+    "skill_icons": "first 61 cells RGBA identical"
+  },
+  "frames": {
+    "metta": {
+      "alphaBounds": [
+        76,
+        37,
+        435,
+        497
+      ],
+      "opaqueBounds": [
+        77,
+        37,
+        433,
+        497
+      ],
+      "footY": 496,
+      "frame": [
+        512,
+        512
+      ],
+      "sourceComponent": 1,
+      "sourceBounds": [
+        91,
+        11,
+        573,
+        629
+      ]
+    },
+    "thiran": {
+      "alphaBounds": [
+        66,
+        37,
+        446,
+        497
+      ],
+      "opaqueBounds": [
+        68,
+        37,
+        445,
+        497
+      ],
+      "footY": 496,
+      "frame": [
+        512,
+        512
+      ],
+      "sourceComponent": 2,
+      "sourceBounds": [
+        682,
+        11,
+        1192,
+        629
+      ]
+    },
+    "lalin": {
+      "alphaBounds": [
+        25,
+        37,
+        487,
+        497
+      ],
+      "opaqueBounds": [
+        27,
+        37,
+        486,
+        496
+      ],
+      "footY": 496,
+      "frame": [
+        512,
+        512
+      ],
+      "sourceComponent": 201,
+      "sourceBounds": [
+        38,
+        626,
+        652,
+        1238
+      ]
+    },
+    "wila": {
+      "alphaBounds": [
+        31,
+        37,
+        480,
+        497
+      ],
+      "opaqueBounds": [
+        32,
+        37,
+        479,
+        496
+      ],
+      "footY": 496,
+      "frame": [
+        512,
+        512
+      ],
+      "sourceComponent": 202,
+      "sourceBounds": [
+        641,
+        627,
+        1238,
+        1238
+      ]
+    },
+    "saintstrike": {
+      "alphaRadius": 106.94,
+      "opaqueExtent": 194,
+      "frame": [
+        256,
+        256
+      ]
+    },
+    "communion": {
+      "alphaRadius": 104.77,
+      "opaqueExtent": 199,
+      "frame": [
+        256,
+        256
+      ]
+    },
+    "saintarc": {
+      "alphaRadius": 104.03,
+      "opaqueExtent": 198,
+      "frame": [
+        256,
+        256
+      ]
+    },
+    "vowstrike": {
+      "alphaRadius": 107.12,
+      "opaqueExtent": 195,
+      "frame": [
+        256,
+        256
+      ]
+    },
+    "sharewound": {
+      "alphaRadius": 105.56,
+      "opaqueExtent": 199,
+      "frame": [
+        256,
+        256
+      ]
+    },
+    "lastlight": {
+      "alphaRadius": 102.71,
+      "opaqueExtent": 198,
+      "frame": [
+        256,
+        256
+      ]
+    },
+    "cadence": {
+      "alphaRadius": 106.36,
+      "opaqueExtent": 198,
+      "frame": [
+        256,
+        256
+      ]
+    },
+    "duet": {
+      "alphaRadius": 106.36,
+      "opaqueExtent": 198,
+      "frame": [
+        256,
+        256
+      ]
+    },
+    "rounddance": {
+      "alphaRadius": 104.79,
+      "opaqueExtent": 198,
+      "frame": [
+        256,
+        256
+      ]
+    },
+    "deepbeat": {
+      "alphaRadius": 105.84,
+      "opaqueExtent": 198,
+      "frame": [
+        256,
+        256
+      ]
+    },
+    "echofoot": {
+      "alphaRadius": 107.02,
+      "opaqueExtent": 195,
+      "frame": [
+        256,
+        256
+      ]
+    },
+    "closingstep": {
+      "alphaRadius": 107.23,
+      "opaqueExtent": 197,
+      "frame": [
+        256,
+        256
+      ]
+    }
+  },
+  "unitOrder": [
+    "metta",
+    "thiran",
+    "lalin",
+    "wila"
+  ],
+  "skillOrder": [
+    "saintstrike",
+    "communion",
+    "saintarc",
+    "vowstrike",
+    "sharewound",
+    "lastlight",
+    "cadence",
+    "duet",
+    "rounddance",
+    "deepbeat",
+    "echofoot",
+    "closingstep"
+  ],
+  "runtimeRows": {
+    "mercs": 5,
+    "skills": 13
+  },
+  "reviewBoundary": "packaged art only; no live browser or owner visual acceptance claimed"
+}

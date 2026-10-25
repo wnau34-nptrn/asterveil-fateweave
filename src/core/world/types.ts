@@ -245,7 +245,7 @@ export type TalentEffect =
   | { cap: TalentCap; amount?: number };
 // Big-tree nodes (A6) carry a `branch` (a/b/c) and `tier` (1–4, opening at `progression.treeTiers`); a tier needs a rank in
 // the branch's tier before it, `needs` names a node that must have a rank, and nodes sharing a `choice` exclude each other.
-export interface TalentNodeDef { id: TalentNode; name: string; max: number; effect: TalentEffect; branch?: 'a' | 'b' | 'c'; tier?: number; choice?: string; needs?: TalentNode;
+export interface TalentNodeDef { id: TalentNode; name: string; max: number; effect: TalentEffect; branch?: 'a' | 'b' | 'c' | 'p'; tier?: number; choice?: string; needs?: TalentNode;
   // Granted free (save v34 migration) to members that already had this many stars, when stars still unlocked it.
   legacyStars?: number }
 export type TalentTree = readonly TalentNodeDef[];
@@ -332,6 +332,8 @@ export interface Bank { ore: number; gold: number; seal: number; dust: number }
 // `camp`: the name of the player's ค่ายทหารรับจ้าง (owner 2026-10-21), shown in the lobby, summary and arena.
 export interface Commander { name: string; crest: string; color: string; camp: string }
 export interface Profile {
+  // Legacy hiring pool frozen until the next board refresh/return (save v43).
+  boardPool?: string[];
   bossLoot?:Record<string,BossProgress>;
   hunt?:{target?:string;pity:Record<string,number>};
   seed: number; returns: number; tutorialDone: boolean;

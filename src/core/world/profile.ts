@@ -58,7 +58,7 @@ export function renameCamp(initial: Profile, camp: string): ProfileResult {
 // The board is derived from (seed, returns): reloads cannot re-roll it and it refreshes
 // every time an expedition comes home. Company members can be offered (duplicates).
 export function boardOffers(profile: Profile, map: MapDefinition, lookup: EncounterLookup): string[] {
-  const pool = heroCatalog(lookup, map).map(h => h.id); const offers: string[] = [];
+  const pool = profile.boardPool ?? heroCatalog(lookup, map).map(h => h.id); const offers: string[] = [];
   // A paid refresh (4A) redraws the board; with no refresh it is the same board as before.
   const salt = (Math.imul(profile.returns + 1, 0x2c1b3c6d) ^ Math.imul(profile.refreshes, 0x165667b1)) >>> 0;
   for (let i = 0; offers.length < Math.min(map.company.offers, pool.length); i++) {
@@ -350,7 +350,7 @@ export function settle(initial: Profile, settled: ExpeditionState, outcome: RunO
   if (outcome === 'complete' && run.hard && !profile.clearedHard?.includes(run.mapId)) {
     (profile.clearedHard ??= []).push(run.mapId); const r = map.progression.hardFirstClear; profile.bank.gold += r.gold; profile.bank.seal += r.seal;
   }
-  profile.returns++; profile.taken = []; profile.shop = {}; profile.refreshes = 0; profile.smelted = 0;
+  profile.returns++; delete profile.boardPool; profile.taken = []; profile.shop = {}; profile.refreshes = 0; profile.smelted = 0;
   profile.last = { outcome, ore, gold, seal, steps: run.steps, wins: run.wins, items, salvaged, ...(tomeCount(tomes) ? { tomes: tomeCount(tomes) } : {}) };
   return profile;
 }
@@ -444,7 +444,7 @@ export function refreshReason(profile: Profile, map: MapDefinition): string {
 export function refreshBoard(initial: Profile, map: MapDefinition): ProfileResult {
   const reason = refreshReason(initial, map); if (reason) return blocked(initial, reason);
   const profile = structuredClone(initial);
-  profile.bank.gold -= map.shop.refreshCosts[profile.refreshes]!; profile.refreshes++; profile.taken = [];
+  profile.bank.gold -= map.shop.refreshCosts[profile.refreshes]!; profile.refreshes++; delete profile.boardPool; profile.taken = [];
   return { profile, event: { type: 'refreshed' } };
 }
 export const shopLeft = (profile: Profile, map: MapDefinition, item: ShopItemId): number => map.shop.items[item].limit - (profile.shop[item] ?? 0);

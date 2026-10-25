@@ -25,6 +25,7 @@ export function effectCaption(event: BattleEvent): string {
   switch (event.type) {
     case 'damage': return event.amount ? `−${event.amount}${event.absorbed ? ` · โล่รับ ${event.absorbed}` : ''}` : event.absorbed ? `โล่รับ ${event.absorbed}` : 'ป้องกันได้';
     case 'counter': return `สวนกลับ −${event.amount ?? 0}`;
+    case 'cooldown': return `พร้อมเร็วขึ้น ${event.amount ?? 0} รอบ`;
     case 'heal': return `+${event.amount ?? 0}`;
     case 'barrier': return `โล่ +${event.amount ?? 0}`;
     case 'mark': return 'ติดตรา';

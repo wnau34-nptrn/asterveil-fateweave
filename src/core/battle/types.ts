@@ -8,7 +8,9 @@ export type ActionId = 'attack' | 'guard' | 'bash' | 'mark' | 'execute' | 'bolt'
   | 'parry' | 'lunge' | 'sweep' | 'storm' | 'aegis' | 'dispel' | 'revive' | 'halo' | 'bless' | 'hold' | 'halt' | 'warcry' | 'disengage' | 'pin' | 'track'
   // Recruit big trees (owner 2026-10-23, moved up from release B): alchemist smoke/fury/catalyst, scout knives/decoy/disarm,
   // warden stonearmor/guardstone/tremor, bard dread/note/solo.
-  | 'smoke' | 'fury' | 'catalyst' | 'knives' | 'decoy' | 'disarm' | 'stonearmor' | 'guardstone' | 'tremor' | 'dread' | 'note' | 'solo';
+  | 'smoke' | 'fury' | 'catalyst' | 'knives' | 'decoy' | 'disarm' | 'stonearmor' | 'guardstone' | 'tremor' | 'dread' | 'note' | 'solo'
+  | 'saintstrike' | 'communion' | 'saintarc' | 'vowstrike' | 'sharewound' | 'lastlight'
+  | 'cadence' | 'duet' | 'rounddance' | 'deepbeat' | 'echofoot' | 'closingstep';
 // ★5 passives (one per class, always on at five stars).
 export type PassiveId = 'stand' | 'keeneye' | 'echo' | 'afterglow' | 'heavycounter' | 'tailwind' | 'potent' | 'shadowcounter' | 'stoneskin' | 'resound';
 // Talent-tree capstones (2D-1b): one small rule change per branch, read by the resolver from `HeroDefinition.talents`.
@@ -27,7 +29,11 @@ export type TalentCap = 'retribution' | 'guardcounter' | 'deepmark' | 'relentles
   | 'smokepoison' | 'smokewide' | 'mobilelab' | 'chainreaction'
   | 'twinknives' | 'quickknives' | 'silentend' | 'opportunist'
   | 'runequake' | 'twinstone' | 'thickstone' | 'skyhammer'
-  | 'songnote' | 'twinnote' | 'encore' | 'liferhythm';
+  | 'songnote' | 'twinnote' | 'encore' | 'liferhythm'
+  | 'communionRatio' | 'saintRatio' | 'vowThreshold' | 'saintFinish' | 'sharePriority' | 'shareThree' | 'lastlightRatio'
+  | 'dancerCadenceQuick' | 'dancerCadenceShort' | 'dancerRoundPair' | 'dancerDuetFocus' | 'dancerDuetQuick' | 'dancerDeep' | 'dancerEchoChoose' | 'dancerClosingQuick'
+  | 'metta1' | 'metta2' | 'metta3' | 'metta4' | 'thiran2' | 'thiran3' | 'thiran4'
+  | 'lalin1' | 'lalin2' | 'lalin3' | 'lalin4' | 'wila1' | 'wila3' | 'wila4';
 // Talent numbers that add to a rule for this hero only (summed over ranks).
 export type TalentRule = 'guardReduction' | 'tauntReduction' | 'corrodeBonus' | 'ambushBonus' | 'executeHeal' | 'healBarrier' | 'hasteHeal' | 'dodgeHeal';
 // What a member's spent talent points do in battle (world `starred` builds it; stat nodes are already in maxHp/attack/skillBonus).
@@ -134,7 +140,7 @@ export interface EnemyState { id: string; hp: number; markedUntil: number; absen
 export interface Intent extends IntentDefinition { targetId: string; beat: number; round: number; stoned?: boolean; stoneTargetId?: string }
 // Party condition carried in from the expedition. Missing ids start at max HP.
 export interface BattleEntry { hp: Readonly<Record<string, number>> }
-export interface Command { beat: number; heroId: string; action: ActionId; targetId: string }
+export interface Command { beat: number; heroId: string; action: ActionId; targetId: string; cooldownAction?: ActionId; cooldownTargetId?: string }
 export interface BattleState {
   encounterId: string; beat: number; round: number; order: string[]; turnIndex: number; outcome: Outcome;
   heroes: HeroState[]; enemies: EnemyState[]; intent: Intent | null; commands: Command[];
@@ -193,8 +199,8 @@ export interface BattleState {
 export type SongId = 'valor' | 'mend' | 'dread';
 export interface BattleEvent {
   type: 'damage' | 'guard' | 'mark' | 'barrier' | 'heal' | 'interrupt' | 'cancel' | 'down' | 'outcome' | 'brace' | 'counter' | 'delay' | 'corrode' | 'haste' | 'evade' | 'dodge' | 'taunt' | 'song' | 'rally' | 'sigil' | 'sanctuary' | 'stand' | 'finale' | 'resist' | 'phase' | 'summon' | 'charge'
-    | 'parry' | 'revive' | 'buff' | 'hold' | 'pin' | 'dispel' | 'weaken';
-  text: string; sourceId?: string; targetId?: string; amount?: number; absorbed?: number; cause?: 'defeated' | 'interrupted' | 'sealed';
+    | 'parry' | 'revive' | 'buff' | 'hold' | 'pin' | 'dispel' | 'weaken' | 'cooldown';
+  text: string; sourceId?: string; targetId?: string; action?: ActionId; amount?: number; absorbed?: number; cause?: 'defeated' | 'interrupted' | 'sealed';
 }
 // One frame per real actor turn. Only Resolution.state is committed/saved.
 export interface TurnStage {

@@ -1,0 +1,214 @@
+{
+  "README.md": {
+    "bytes": 4108,
+    "sha256": "a1d79e29288af8ffd090cbbaefcec32e8eaf6eebdb657944f9789b30afe3431b"
+  },
+  "icons/cadence.png": {
+    "bytes": 70181,
+    "sha256": "dd4ec4b2ab8576ddd0da4d755ef10b33e49899ac22bded7033fc5a486723110e"
+  },
+  "icons/closingstep.png": {
+    "bytes": 69768,
+    "sha256": "b7f44d180dfd11e2771cbc9959e5890e2abde59c88d50dcd514d59db305b63f8"
+  },
+  "icons/communion.png": {
+    "bytes": 59887,
+    "sha256": "8c86d160fd46f401176535a873f3153e3673371061ca8de13de11192876c1e37"
+  },
+  "icons/deepbeat.png": {
+    "bytes": 76627,
+    "sha256": "de402fdf78b5cff3afff36486e409391356492ae8392d8d947bd9b6c67f5517b"
+  },
+  "icons/duet.png": {
+    "bytes": 84703,
+    "sha256": "3192920b2f29cda6be8d7eaf35af6e2e3dedea4403e66d5052303514f5cd9ad4"
+  },
+  "icons/echofoot.png": {
+    "bytes": 69575,
+    "sha256": "964717ed18dc788ef627a364e33a741f7e27a5da94125867fe018621a52cfe9f"
+  },
+  "icons/lastlight.png": {
+    "bytes": 61113,
+    "sha256": "78f818b96d925ba457a76127fa072e8fb9aa72f5af241f51cfc7085bbebba53f"
+  },
+  "icons/rounddance.png": {
+    "bytes": 78163,
+    "sha256": "10210fcecc21c841d77093ecab635f6747c832d553980d5202d32090e07c98b6"
+  },
+  "icons/saintarc.png": {
+    "bytes": 68389,
+    "sha256": "013cafb1c3f3388a453bd86265f2c8ffcdb5d5014f6ee601baeef10fd8bdc532"
+  },
+  "icons/saintstrike.png": {
+    "bytes": 60591,
+    "sha256": "dad640c9eae99018cd27d31180b5cd72ff5cc706758d5632e792bb401f6079d4"
+  },
+  "icons/sharewound.png": {
+    "bytes": 65408,
+    "sha256": "1c4df24d1af5175bb65cef3171551df26cacb453763c62a007717692a1062009"
+  },
+  "icons/vowstrike.png": {
+    "bytes": 78414,
+    "sha256": "42fb977728a1456138af3f3f68ef18b4b4a3c113bc1cf698e1eed3b6d468e65b"
+  },
+  "icons/weapon_lalin.png": {
+    "bytes": 23209,
+    "sha256": "82cf54984255291c94e5cd70430abb614192fbd292d1bafa1303fbfdf94cc0d2"
+  },
+  "icons/weapon_metta.png": {
+    "bytes": 19972,
+    "sha256": "1e7ac69ee62bff1b779d9c22c496e861d95de32f36448ba96222c6f02dc36120"
+  },
+  "icons/weapon_thiran.png": {
+    "bytes": 17840,
+    "sha256": "cebea92ab1c2d6b51a00c47935e8948499c859a372efbf5af5699e79d99f112b"
+  },
+  "icons/weapon_wila.png": {
+    "bytes": 20094,
+    "sha256": "8aaafde549e14ca09118bacb4e09a64845dbdcf7902f844c9bfeaff912416b6f"
+  },
+  "package.py": {
+    "bytes": 9533,
+    "sha256": "d4f36451f4fb0852bcc6350601cb57fc174e147ef6731aa0cfd8e878560dbfc3"
+  },
+  "portraits/lalin.png": {
+    "bytes": 608396,
+    "sha256": "5b9a5247db3f8b2713a66134266d41ba513e43110a284485b4bc0b8f5d68d431"
+  },
+  "portraits/metta.png": {
+    "bytes": 611855,
+    "sha256": "f9b4479a67417f0355e7694b1ce80ac772b1940f2b293119d87ec19346f145c2"
+  },
+  "portraits/thiran.png": {
+    "bytes": 598842,
+    "sha256": "ef93c7c24303b4b27da22d798c8c62bbcc9676d7db1914cdb8b537c23e09e428"
+  },
+  "portraits/wila.png": {
+    "bytes": 602827,
+    "sha256": "3b28901b4cfca5aaf245529b94eec70f8f7fef38d04cc94041174878ce685ca9"
+  },
+  "portraits_mercs.json": {
+    "bytes": 431,
+    "sha256": "5e08dd0d584750c8c177bc7ab9aa17b48aeb51990c29f973587d96cd60f78051"
+  },
+  "provenance/gear-generation.json": {
+    "bytes": 1891,
+    "sha256": "f29ba32c009fc64ac75fc574d73c8f13bc1855c0ea159a69db5c248221e1a5c1"
+  },
+  "provenance/generations.json": {
+    "bytes": 7412,
+    "sha256": "b159481ed8bc961f70e243cb4c3f96d982c4dddf78d71f8bd7ab4efd6b310734"
+  },
+  "provenance/validation.json": {
+    "bytes": 3825,
+    "sha256": "2745c3703505560f68af8210a0f22af02fdd413b66dbcf7f56c9a337b91a9cf9"
+  },
+  "references/dancer_A.png": {
+    "bytes": 2679018,
+    "sha256": "f04d8cd98c744a1711c8cc11e037dfcfadc823423c4814024ac474f55c6a85e4"
+  },
+  "references/saint_A.png": {
+    "bytes": 2313413,
+    "sha256": "14070a9916db05d2e0194c91583b154f9b464f4099e19fe25f0f5bf5aa23fb4d"
+  },
+  "review/icons-160.png": {
+    "bytes": 290112,
+    "sha256": "dd1184057a5b9f13ddf512195b27d9881b3fbae41cd26ffdf2470df546a13770"
+  },
+  "review/lineup-160.png": {
+    "bytes": 324463,
+    "sha256": "a00bc4dc0dd435c1ea41fdc43921c9d3cbd6eb3b35fc18b3d52db55a6021ee91"
+  },
+  "review/native-sizes.png": {
+    "bytes": 262879,
+    "sha256": "aa259fe7645bf5c62718a51090b6e58fb8b7359239b057204010bf58dc52fb06"
+  },
+  "skills_atlas.json": {
+    "bytes": 1093,
+    "sha256": "a5add25b58e185a2226557d73dbd41eb15b07ca3ab70c6950c2c908bcb6f2be4"
+  },
+  "sources/cells/cadence.png": {
+    "bytes": 163845,
+    "sha256": "326a08533645e5ae9e4a3c449c23ba155842873183475b4412f1545b0494e4a1"
+  },
+  "sources/cells/closingstep.png": {
+    "bytes": 160331,
+    "sha256": "c475879bfec143799ac4bfa46637c1a13d90871c2a2cea6ac388efec978d6785"
+  },
+  "sources/cells/communion.png": {
+    "bytes": 141772,
+    "sha256": "e2e83fbcb453f9237c255a7b0ae6632b917d89b40025d8c4f5fb7603d0480159"
+  },
+  "sources/cells/deepbeat.png": {
+    "bytes": 182740,
+    "sha256": "a73d35905129165cd59532776727a482d7372981383872e03d7a5a05faa80bf2"
+  },
+  "sources/cells/duet.png": {
+    "bytes": 201658,
+    "sha256": "99af14548ae9c18a4887295d7965239920b016ab959c382cd49750ba3d1889f1"
+  },
+  "sources/cells/echofoot.png": {
+    "bytes": 175922,
+    "sha256": "b520edd2545579d7d7e70ef49f356b57623571123f2080bf5b974fe98c2027e1"
+  },
+  "sources/cells/lastlight.png": {
+    "bytes": 150711,
+    "sha256": "3760de3937677baa1fb1be7565a3a23d01e40d338b7e3486ed926492cf59e038"
+  },
+  "sources/cells/rounddance.png": {
+    "bytes": 185176,
+    "sha256": "73aa0f63b11601cf254e8aa8a25b0d00c32673dd022b8b2b42029f49e39833e4"
+  },
+  "sources/cells/saintarc.png": {
+    "bytes": 151524,
+    "sha256": "bd7f2fd968a91117ed6cb7e74e6378f146da200c3fb4ef28204076a3aad94b7d"
+  },
+  "sources/cells/saintstrike.png": {
+    "bytes": 151356,
+    "sha256": "6e8a687f529cdf9629e098100a9880c02e7fc38ccd0dc8ca06339995d2c1bb0b"
+  },
+  "sources/cells/sharewound.png": {
+    "bytes": 169840,
+    "sha256": "46742222fe85fc2d14570ba107af887986e1215ff9b92f25ca98627adb3058ef"
+  },
+  "sources/cells/vowstrike.png": {
+    "bytes": 159521,
+    "sha256": "58a06c508c35e752c5d885caa2d32f215269542b461868b1eb4ac42536dee8e6"
+  },
+  "sources/gear-sheet.png": {
+    "bytes": 1460312,
+    "sha256": "ffda27578719d1199b3c067527d866eb25dfb568b32c971c079149e9731f4453"
+  },
+  "sources/icons-sheet.png": {
+    "bytes": 2136991,
+    "sha256": "95b89d397be8d492e9429118e2e02638c7060a73d793162817d6dc3f32144756"
+  },
+  "sources/portraits-sheet.png": {
+    "bytes": 3234014,
+    "sha256": "452e34e5af057dae3b31af70cdd2eb360fa45eac4c746ebed4910222112914dc"
+  },
+  "sources/units-sheet.png": {
+    "bytes": 2471103,
+    "sha256": "63ac7ce08361fc0cba83c036a87536bb8fff393dbed271715d679421ad4edce9"
+  },
+  "units/lalin.png": {
+    "bytes": 387812,
+    "sha256": "e051d3c8cb2d2a01debfd660ac1eee5a99de79a07bb7a3c8f282acdeaea59d4b"
+  },
+  "units/metta.png": {
+    "bytes": 296466,
+    "sha256": "074be543bda6b537e961fcb5aff1d66f71789c9f3d5d0946f1d54679955f5f4b"
+  },
+  "units/thiran.png": {
+    "bytes": 297559,
+    "sha256": "290036d49a7f4a14854514615e5567378b8bfa798a783416651427d547e07d33"
+  },
+  "units/wila.png": {
+    "bytes": 370804,
+    "sha256": "c50c86d9a0aa0907c09964325796a0950f752e1984c0946a73a1ce3cff14a210"
+  },
+  "units_mercs.json": {
+    "bytes": 431,
+    "sha256": "5e08dd0d584750c8c177bc7ab9aa17b48aeb51990c29f973587d96cd60f78051"
+  }
+}

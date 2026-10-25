@@ -1,4 +1,4 @@
-import { beginBattle, resolveCommand, targetOptions, defenseOf, finaleHealPower, skillPower, songPower, usesMagicPower, targetKind, withParty } from '../core/battle/engine';
+import { saintRatioOf, beginBattle, resolveCommand, targetOptions, defenseOf, finaleHealPower, skillPower, songPower, usesMagicPower, targetKind, withParty } from '../core/battle/engine';
 import type { ActionId, EncounterDefinition, HeroDefinition } from '../core/battle/types';
 import { gearTotals } from '../core/world/equipment';
 import type { ExpeditionState, MapDefinition } from '../core/world/types';
@@ -39,16 +39,18 @@ export function characterStats(s: CharacterState, map: MapDefinition, h: HeroDef
 
 export function characterSkillMetric(action: ActionId, h: HeroDefinition, template: EncounterDefinition): { label: string; value?: number; secondary?: { label: string; value: number }; scaling: string; target: string } {
   const data = withParty(template, [h]);
-  const effects: Partial<Record<ActionId,string>> = {bulwark:'เพื่อนแนวหน้าทุกคน',rouse:'เพื่อนเลือดต่ำสุด 1 คน',hold:'เพื่อนแนวหลังทุกคน',warcry:'เพื่อนแนวหน้าทุกคน',halo:'เพื่อนทุกคน',dread:'ทุกท่าของศัตรู',sweep:'ศัตรูแถวหน้า (แถวหลังเมื่อหน้าว่าง)',quake:'ศัตรูแถวหน้า (แถวหลังเมื่อหน้าว่าง)',tremor:'ศัตรูแถวหน้า (แถวหลังเมื่อหน้าว่าง)',pin:'ศัตรูแถวหน้า'};
+  const effects: Partial<Record<ActionId,string>> = {bulwark:'เพื่อนแนวหน้าทุกคน',rouse:'เพื่อนเลือดต่ำสุด 1 คน',hold:'เพื่อนแนวหลังทุกคน',warcry:'เพื่อนแนวหน้าทุกคน',halo:'เพื่อนทุกคน',dread:'ทุกท่าของศัตรู',sweep:'ศัตรูแถวหน้า (แถวหลังเมื่อหน้าว่าง)',quake:'ศัตรูแถวหน้า (แถวหลังเมื่อหน้าว่าง)',tremor:'ศัตรูแถวหน้า (แถวหลังเมื่อหน้าว่าง)',pin:'ศัตรูแถวหน้า',saintarc:'ศัตรูแถวหน้า (แถวหลังเมื่อหน้าว่าง)'};
   const target = effects[action] ?? ({ self: 'ตัวเอง', ally: 'เพื่อน 1 คน', party: 'เพื่อนทุกคน', enemy: 'ศัตรู 1 ตัว', enemies: 'ศัตรูทุกตัว' })[targetKind(action)];
+  if (['cadence', 'duet', 'rounddance', 'deepbeat', 'closingstep'].includes(action)) return { label: 'คืนคูลดาวน์', scaling: 'ผลพิเศษ ไม่อิงพลังโจมตีหรือพลังเวท · ไม่เพิ่มเทิร์น', target: action === 'rounddance' ? 'เพื่อนทุกคนยกเว้นผู้ใช้' : 'เพื่อนที่ยังมีสกิลกำลังรอ' };
   if (['halo', 'fury', 'guardstone', 'dread'].includes(action)) return { label: action === 'fury' ? 'เพิ่มพลังโจมตี (%)' : 'ลดความเสียหาย (%)', value: skillPower(data, h.id, action), scaling: 'ค่าคงที่ เพิ่มด้วยเลเวลสกิล/โหนด', target };
   if (action === 'stonearmor') return { label: 'โล่ % ของเลือดสูงสุด', value: skillPower(data, h.id, action), scaling: 'อิงเลือดสูงสุด ไม่อิงพลังโจมตี', target };
   if (action === 'revive') return { label: 'เลือดที่ชุบ (% เลือดสูงสุด)', value: skillPower(data, h.id, action), scaling: 'สัดส่วนคงที่ เลเวลเพิ่มโล่ผู้ใช้/ลดคูลดาวน์', target };
   if (action === 'rally') return { label: 'ผลพิเศษ', scaling: 'อ่านเงื่อนไขของท่า', target: 'เพื่อนทุกคน' };
   if (action === 'bulwark') return { label: 'ลดความเสียหายที่รับ (%)', value: skillPower(data, h.id, action), scaling: 'ค่าคงที่ ไม่อิงค่าสถานะ', target };
-  if (action === 'attack') return { label: 'โจมตีพื้นฐาน', value: h.attack, scaling: 'อิงพลังโจมตี', target };
+  const saintMetric = h.role === 'Saint' ? { label: 'อัตราแปลงดาเมจเป็นเลือดพื้นฐาน (%)', value: saintRatioOf(data, h.id, action) } : undefined;
+  if (action === 'attack') return { secondary: saintMetric, label: 'โจมตีพื้นฐาน', value: h.attack, scaling: 'อิงพลังโจมตี', target };
   if (action === 'finale') return { label: 'เพลงกล้า · ดาเมจต่อเป้าหมาย', value: skillPower(data,h.id,action), secondary: { label: 'เพลงฟื้น · ฟื้นเลือดต่อคน', value: finaleHealPower(data,h.id) }, scaling: 'ดาเมจและรักษาอิงพลังเวท', target: 'ศัตรู/เพื่อนทุกคน ตามเพลง' };
   if (action === 'valor' || action === 'mend') return { label: action === 'valor' ? 'โบนัสต่อการโจมตี' : 'ฟื้นเลือดต่อคน/รอบ', value: songPower(data, h.id, action), scaling: 'อิงพลังเวท', target: 'เพื่อนทุกคน' };
   if (!data.skills[action].power) return { label: 'ผลพิเศษ', scaling: 'อ่านเงื่อนไขของท่า', target };
-  return { label: action === 'ward' || action === 'aegis' ? 'โล่พื้นฐาน' : action === 'heal' || action === 'prayer' || action === 'bless' ? 'ฟื้นเลือดพื้นฐานต่อคน' : action === 'brace' || action === 'spearwall' || action === 'warcry' ? 'พลังสวนพื้นฐาน' : 'ดาเมจพื้นฐานต่อเป้าหมาย', value: skillPower(data, h.id, action), scaling: usesMagicPower(action) ? 'อิงพลังเวท' : 'อิงพลังโจมตี', target };
+  return { secondary: saintMetric, label: action === 'ward' || action === 'aegis' ? 'โล่พื้นฐาน' : action === 'heal' || action === 'prayer' || action === 'bless' ? 'ฟื้นเลือดพื้นฐานต่อคน' : action === 'brace' || action === 'spearwall' || action === 'warcry' ? 'พลังสวนพื้นฐาน' : 'ดาเมจพื้นฐานต่อเป้าหมาย', value: skillPower(data, h.id, action), scaling: usesMagicPower(action) ? 'อิงพลังเวท' : 'อิงพลังโจมตี', target };
 }

@@ -1,5 +1,14 @@
 # Codex → Claude handoff
 
+## 2026-10-25 — C12 Batch 1 implementation; release checks in progress
+
+- Branch `codex/roster-30-2` on `5a613a5`; PR/merge pending. Owner authorized continuing Batch 1. Added Metta/Thiran Saint and Lalin/Wila Dancer, six skills per class, shared 16-node trees and paid personal branches, deterministic healing/cooldown rules, save v43 migration, hiring-board preservation, Thai UI/selectors, actual-state basic visual cues and production assets.
+- Files: core battle engine/types, world types/profile and save parser; content/encounters/gear/tomes; UI descriptions/metrics/advisor/personal branch; assets/atlas packaging; unit/browser/sim tests and generated reports. Original ten stay intact. No C5 blade-family approval/merge was inferred.
+- See `docs/validation/roster-30/batch-1/README.md` for precise test evidence, limitations and campaign gate. Root inspected 390px character/battle screenshots there. Full baseline/expanded sim pass generic tests; original-policy economic campaign regression discovered in six cells, under investigation before merge. Do not equate generic sim success with the release gate.
+- Save parser preserves `cooldownAction`/`cooldownTargetId` and validates them through replay; current writer is v43. Fixed zero-CD opening Cadence consuming freeCast; tests also cover wounded Thiran front-count. Dependencies installed via writable /tmp cache and permitted network after initial cache/connect failures.
+- Next after Batch 1 actually merges: Batch 2 Martial/Hexer on the latest game base. No automatic cloud-session creation tool is available here.
+
+
 ## 2026-10-24 — C12 Phase 1: roster design (docs only)
 
 - Branch `codex/roster-30-1`, base game `1a50c012`; PR [#67](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/67) merged 2026-10-25 as `0b0f6496712e73fd0eb768aca6048cdfc15a85b1` after Prototype quality run 653 succeeded (typecheck/lint/unit/build). Owner said “ดำเนินการได้” after the next step was identified as C12 design. This phase implements that design step only; no runtime/production art/simulation changes.
