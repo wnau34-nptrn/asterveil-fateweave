@@ -2,7 +2,7 @@
 
 ## 2026-10-25 — Start here: consolidated plan published to GitHub
 
-Read `docs/DEVELOPMENT_PLAN_TH.md` and tracking issue #69 before older prompts below. The owner requested an actionable plan covering all discussion: P00–P11, task dependencies/exit gates, all D01–D37. Next work is P00 shared-level/team-five/migration specifications and baseline; do not auto-run old Batch2 with a reserved save version. The document distinguishes existing runtime from new directions and unvalidated numbers. This publication contains documentation only. Branch/PR publication status is recorded in CODEX-TO-CLAUDE and issue #69.
+Read `docs/DEVELOPMENT_PLAN_TH.md` and tracking issue #69 before older prompts below. The owner requested an actionable plan covering all discussion: P00–P11, task dependencies/exit gates, all D01–D37. Next work is P00 shared-level/team-five/migration specifications and baseline; do not auto-run old Batch2 with a reserved save version. The document distinguishes existing runtime from new directions and unvalidated numbers. This publication contains documentation only. Documentation PR #70 targets the game branch. Publication status is recorded in CODEX-TO-CLAUDE and issue #69.
 
 ## 2026-10-25 — Latest direction: shared levels and boss mechanics
 

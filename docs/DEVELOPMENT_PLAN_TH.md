@@ -19,7 +19,7 @@
 
 ## 2. ฐานที่มีอยู่และเอกสารอ้างอิง
 
-ฐาน GitHub ณ ตอนจัดทำ: `feature/fateweave-initial-prototype` ที่ `24dfefbb5777a2233ab376725fb57dbd1bac719f` (PR #68) พร้อมบันทึกผลใน local commit `e79e8a4` ซึ่งส่งรวมมากับชุดเอกสารนี้ `main` ไม่ใช่ฐานเกมที่ใช้งาน
+ฐาน GitHub ตรวจอีกครั้งเมื่อเปิด PR #70: `feature/fateweave-initial-prototype` ที่ `e79e8a4ebb51f33c1d79c88fa6fc35828185a6c1` หลัง PR #68 (`24dfefb`) และบันทึกผล Batch1; `main` ไม่ใช่ฐานเกมที่ใช้งาน
 
 | ระบบ | สถานะจริงที่ใช้วางแผน |
 |---|---|
