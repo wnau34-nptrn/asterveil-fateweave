@@ -1,5 +1,10 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
+## 2026-10-25 — C12 Batch 1 under release validation
+
+Implementation on `codex/roster-30-2`: 14 characters / 12 classes / save v43. Read the top CODEX-TO-CLAUDE entry and `docs/validation/roster-30/batch-1/README.md` for PR/merge/gate status before continuing. Four new members and production art are implemented; original-policy economic campaign regression must be resolved before merge. Existing copy-ready Batch 1 prompt below is historical once that merge is recorded; the next batch is Martial/Hexer (four members) from ROSTER_30_TH.md.
+
+
 ## 2026-10-24 — C12 Phase 1 designed; next Batch 1
 
 เอกสารออกแบบ: `docs/design/ROSTER_30_TH.md` บน `codex/roster-30-1` ฐานเกม `1a50c012` มี 30 ตัว 15 อาชีพ กิ่งส่วนตัวและห้าชุดลงโค้ด ยังไม่เปลี่ยนเกม/เซฟ/สมดุล ตัวเล่นจริงยัง 10 คน v42 PR #67 merge แล้ว 2026-10-25 (`0b0f6496712e73fd0eb768aca6048cdfc15a85b1`), quality CI run 653 ผ่าน ก่อนเริ่มชุดถัดไปให้ดึงฐานเกมล่าสุด

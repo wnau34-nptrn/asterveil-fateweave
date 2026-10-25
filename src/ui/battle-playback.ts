@@ -2,6 +2,7 @@ import type { ActionId, TurnStage } from '../core/battle/types';
 
 // Presentation time only. Rule time remains resolver rounds/beats.
 const durations: Record<ActionId, number> = {
+  saintstrike:750, communion:800, saintarc:850, vowstrike:800, sharewound:800, lastlight:900, cadence:650, duet:700, rounddance:800, deepbeat:700, echofoot:800, closingstep:850,
   attack:600, guard:500, bash:800, mark:500, execute:850, bolt:850, ward:650, heal:650, prayer:700,
   brace:500, pierce:800, hinder:750, volley:900, acid:800, haste:550, ambush:750, evade:500,
   taunt:550, slam:850, valor:600, mend:600, rally:700, finisher:950, sigil:850, sanctuary:750,

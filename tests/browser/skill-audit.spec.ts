@@ -21,7 +21,7 @@ test('C11: changed skill descriptions, targeting and saved outcome agree at 390p
  await expect(page.locator('#skill-popover')).toContainText('ปาดตัดหน้า');await expect(page.locator('#skill-popover')).toContainText('ยังไม่ได้ลงมือ');
  await page.locator('[data-ui=skill-close]').click();await page.locator('#target-f1').click();
  await expect.poll(()=>page.evaluate(k=>JSON.parse(localStorage.getItem(k)!).run.battle.commands.length,key)).toBe(1);
- const saved=await page.evaluate(k=>localStorage.getItem(k)!,key);expect(JSON.parse(saved).version).toBe(42);
+ const saved=await page.evaluate(k=>localStorage.getItem(k)!,key);expect(JSON.parse(saved).version).toBe(43);
  await page.screenshot({path:info.outputPath('c11-battle-390.png')});
  await page.reload();await page.locator('#continue').click();expect(await page.evaluate(k=>localStorage.getItem(k)!,key)).toBe(saved);
  expect(errors).toEqual([]);

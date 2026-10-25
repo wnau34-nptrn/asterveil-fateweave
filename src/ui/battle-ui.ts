@@ -1,4 +1,4 @@
-import { actionReason, beginBattle, createBattle, currentHeroId, plannedIntents, replay, resolveCommand, targetOptions, targetKind, upcomingTurns, skillPower, guardReductionOf } from '../core/battle/engine';
+import { cooldownTargets, hasCap, skillCooldown, actionReason, beginBattle, createBattle, currentHeroId, plannedIntents, replay, resolveCommand, targetOptions, targetKind, upcomingTurns, skillPower, guardReductionOf } from '../core/battle/engine';
 import type { ActionId, BattleEntry, BattleState, Command, EncounterDefinition, Outcome, Resolution, TurnStage } from '../core/battle/types';
 import { gameBounds, shortcutBlocked } from '../platform/keyboard';
 import { sfx } from '../platform/sfx';
@@ -43,6 +43,7 @@ export class BattleUI {
   state: BattleState;
   private heroId = 'guardian';
   private action: ActionId = 'attack';
+  private pendingCooldown: { beat: number; heroId: string; action: ActionId; targetId: string } | undefined;
   private targeting = true;
   private inspectedActorId = '';
   private started: boolean;
@@ -101,7 +102,8 @@ export class BattleUI {
       </main><dialog id="game-info" aria-labelledby="info-title"><div class="info-header"><h2 id="info-title">ข้อมูลการต่อสู้</h2><button data-ui="info-close" class="quiet" aria-label="ปิดข้อมูล">✕</button></div>${infoTabs('battle', true, true)}<div class="info-content"><section id="battle-panel-status" role="tabpanel" aria-labelledby="battle-tab-status"><p class="status-help">เลือกยูนิตเพื่อดูบัฟและดีบัฟ · ตรวจดูได้โดยไม่ใช้เทิร์น</p><p id="status-frame" class="status-frame"></p><div id="status-units" class="status-units" role="group" aria-label="เลือกยูนิตที่ต้องการตรวจสถานะ"></div><section id="status-details" aria-live="polite" aria-atomic="true"></section></section><section id="battle-panel-settings" role="tabpanel" aria-labelledby="battle-tab-settings" hidden><section class="battle-sound" aria-labelledby="battle-sound-title"><h3 id="battle-sound-title">เพลงและเสียงเอฟเฟกต์</h3><div id="battle-sfx-controls"></div></section><section id="combat-settings" class="tutorial-settings" aria-label="ตั้งค่าภาพการต่อสู้"></section><section id="tutorial-settings" class="tutorial-settings" aria-label="ตั้งค่าคำใบ้สอนเล่น"></section></section><section id="battle-panel-guide" role="tabpanel" aria-labelledby="battle-tab-guide" hidden><section id="info-skill"></section><div id="info-host"></div></section><section id="battle-panel-history" role="tabpanel" aria-labelledby="battle-tab-history" hidden><h3>บันทึกการต่อสู้</h3><ol id="event-log" role="log" aria-live="polite"></ol></section></div></dialog>
 
       <section id="turn-detail" popover="auto" role="dialog" aria-label="รายละเอียดลำดับเทิร์น"><p></p><button data-ui="turn-close" class="quiet" aria-label="ปิดรายละเอียดเทิร์น">×</button></section>
-      <section id="skill-popover" popover="manual" role="dialog" aria-modal="false" aria-labelledby="skill-title" aria-describedby="skill-copy skill-availability" tabindex="-1"><div class="skill-popover-heading"><h2 id="skill-title"></h2><button data-ui="skill-close" class="quiet" aria-label="ปิดคำอธิบายสกิล">✕</button></div><p id="skill-copy"></p><p id="skill-availability"></p><small>อ่านแล้วแตะเป้าหมายในสนามเพื่อใช้สกิล</small></section>`;
+      <section id="skill-popover" popover="manual" role="dialog" aria-modal="false" aria-labelledby="skill-title" aria-describedby="skill-copy skill-availability" tabindex="-1"><div class="skill-popover-heading"><h2 id="skill-title"></h2><button data-ui="skill-close" class="quiet" aria-label="ปิดคำอธิบายสกิล">✕</button></div><p id="skill-copy"></p><p id="skill-availability"></p><small>อ่านแล้วแตะเป้าหมายในสนามเพื่อใช้สกิล</small></section>
+      <dialog id="cooldown-choice" aria-labelledby="cooldown-choice-title"><h2 id="cooldown-choice-title"></h2><p id="cooldown-choice-copy"></p><div id="cooldown-choice-options" class="cooldown-choices"></div><button data-ui="cooldown-cancel" class="quiet">ยกเลิก · ยังไม่ใช้เทิร์น</button></dialog>`;
     root.addEventListener('click', e => {
       const button = (e.target as HTMLElement).closest<HTMLButtonElement>('button[data-ui]');
       const popup = root.querySelector<HTMLElement>('#skill-popover')!;
@@ -126,6 +128,9 @@ export class BattleUI {
         case 'turn-info': this.showTurnInfo(button); break;
         case 'turn-close': this.root.querySelector<HTMLElement>('#turn-detail')!.hidePopover(); break;
         case 'skill-close': this.closeSkill(true); break;
+        case 'cooldown-cancel': this.root.querySelector<HTMLDialogElement>('#cooldown-choice')!.close(); break;
+        case 'cooldown-action': if (value) this.finishCooldownChoice({ cooldownAction: value as ActionId }); break;
+        case 'cooldown-ally': if (value) this.finishCooldownChoice({ cooldownTargetId: value }); break;
         case 'target': if (value) this.choose(value); break;
         case 'skip-turn': this.finishPresentation(); break;
         case 'leave': if (!this.busy && this.state.outcome !== 'active') this.session?.leave(); break;
@@ -139,6 +144,8 @@ export class BattleUI {
         case 'coach-toggle': this.setHints(!this.hintsEnabled); break;
       }
     });
+    const choiceDialog = root.querySelector<HTMLDialogElement>('#cooldown-choice')!;
+    choiceDialog.addEventListener('close', () => { if (!choiceDialog.open) this.pendingCooldown = undefined; this.canvasInputAfterInfo = performance.now() + 250; if (this.started && !this.busy) this.root.querySelector<HTMLElement>(`#action-${this.action}`)?.focus({ preventScroll: true }); });
     const infoDialog = root.querySelector<HTMLDialogElement>('#game-info')!;
     // Phaser can process the closing touch on its next input frame.
     const blockClosingTouch = () => { this.canvasInputAfterInfo = performance.now() + 250; };
@@ -216,11 +223,11 @@ export class BattleUI {
   choose(id: string, source: 'target' | 'canvas' = 'target'): void {
     if (!this.targeting || this.root.closest('[inert]') || this.root.querySelector('dialog[open]') || source === 'canvas' && performance.now() < this.canvasInputAfterInfo) return;
     if (!this.scene?.isReady || !this.started || this.busy || this.state.outcome !== 'active') return;
-    const actualTarget = this.action === 'prayer' && this.state.heroes.some(h => h.id === id && h.hp > 0) ? 'party'
+    const actualTarget = targetKind(this.action) === 'party' && this.state.heroes.some(h => h.id === id && h.hp > 0) ? 'party'
       : targetKind(this.action) === 'enemies' && this.state.enemies.some(e => e.id === id && e.hp > 0) ? 'enemies' : id;
     const target = targetOptions(this.state, this.data, this.heroId, this.action).find(t => t.id === actualTarget);
     if (target?.valid) {
-      this.execute(actualTarget);
+      if (!this.openCooldownChoice(actualTarget)) this.execute(actualTarget);
     } else if (targetKind(this.action) === 'enemy' && this.data.heroes.some(h => h.id === id)) this.selectHero(id);
   }
 
@@ -323,9 +330,36 @@ export class BattleUI {
     }
   }
 
-  private execute(targetId: string): void {
+  private openCooldownChoice(targetId: string): boolean {
+    const chooseAction = this.action === 'duet' && hasCap(this.data, this.heroId, 'lalin2');
+    const chooseAlly = this.action === 'echofoot' && hasCap(this.data, this.heroId, 'dancerEchoChoose');
+    if (!chooseAction && !chooseAlly) return false;
+    const actions = chooseAction ? cooldownTargets(this.state, this.data, targetId) : [];
+    const allies = chooseAlly ? this.state.heroes.filter(h => h.id !== this.heroId && h.hp > 0 && cooldownTargets(this.state, this.data, h.id).length > 0) : [];
+    if (!actions.length && !allies.length) return false;
+    this.pendingCooldown = { beat: this.state.beat, heroId: this.heroId, action: this.action, targetId };
+    this.root.querySelector('#cooldown-choice-title')!.textContent = chooseAction ? 'เลือกสกิลแรกที่จะพร้อมเร็วขึ้น' : 'เลือกเพื่อนรับจังหวะสะท้อน';
+    this.root.querySelector('#cooldown-choice-copy')!.textContent = chooseAction ? `คู่จังหวะ → ${actorName(targetId, this.data)} · เลือกสกิลเพื่อยืนยันหนึ่งคำสั่ง` : `ก้าวสะท้อน → ${actorName(targetId, this.data)} · เลือกเพื่อนเพื่อยืนยันหนึ่งคำสั่ง`;
+    this.root.querySelector('#cooldown-choice-options')!.innerHTML = chooseAction
+      ? actions.map(a => `<button data-ui="cooldown-action" data-value="${a}">${icon(a)}<span><b>${this.data.skills[a].name}</b><small>ยังรอ ${cooling(this.state, targetId, a)} รอบ</small></span></button>`).join('')
+      : allies.map(h => `<button data-ui="cooldown-ally" data-value="${h.id}"><span><b>${actorName(h.id, this.data)}</b><small>${cooldownTargets(this.state, this.data, h.id).map(a => this.data.skills[a].name).join(' · ')}</small></span></button>`).join('');
+    this.closeSkill();
+    this.root.querySelector<HTMLDialogElement>('#cooldown-choice')!.showModal();
+    this.root.querySelector<HTMLButtonElement>('#cooldown-choice-options button')?.focus({ preventScroll: true });
+    return true;
+  }
+
+  private finishCooldownChoice(extra: Pick<Command, 'cooldownAction' | 'cooldownTargetId'>): void {
+    const pending = this.pendingCooldown;
+    this.pendingCooldown = undefined;
+    this.root.querySelector<HTMLDialogElement>('#cooldown-choice')!.close();
+    if (!pending || pending.beat !== this.state.beat || pending.heroId !== this.heroId || pending.action !== this.action) return;
+    this.execute(pending.targetId, extra);
+  }
+
+  private execute(targetId: string, extra: Pick<Command, 'cooldownAction' | 'cooldownTargetId'> = {}): void {
     if (!this.scene?.isReady || !this.started || this.busy || this.state.outcome !== 'active') return;
-    const command: Command = { beat: this.state.beat, heroId: this.heroId, action: this.action, targetId };
+    const command: Command = { beat: this.state.beat, heroId: this.heroId, action: this.action, targetId, ...extra };
     this.present(resolveCommand(this.state, this.data, command, true));
   }
 
@@ -491,10 +525,10 @@ export class BattleUI {
 
     this.root.querySelector<HTMLElement>('.command-dock')!.dataset.ready = String(!disabled);
     this.set('commands', `<h2 class="step-heading"><span>2</span>${heroText[this.heroId]!.role} · เลือกคำสั่ง</h2><div class="actions">${hero.actions.map((action, index) => {
-      const text = d.skills[action]; const reason = actionReason(s, d, this.heroId, action);
+      const text = { ...d.skills[action], cooldown: skillCooldown(d, this.heroId, action) }; const reason = actionReason(s, d, this.heroId, action);
       const info = this.targeting && action === this.action ? `<button id="skill-details" data-ui="skill-info" class="skill-info" aria-label="ดูคำอธิบายสกิล${text.name}" aria-haspopup="dialog" aria-controls="skill-popover"${!this.started || this.busy || s.outcome !== 'active' || disabled ? ' disabled' : ''}>ⓘ</button>` : '';
-      return `<div class="action-option">${info}<button id="action-${action}" data-ui="action" data-value="${action}" aria-keyshortcuts="${index + 1}" class="action ${action} ${this.targeting && this.action === action ? 'selected' : ''}" aria-pressed="${this.targeting && this.action === action}" aria-describedby="reason-${action}" ${disabled ? 'disabled' : ''} data-unavailable="${!!reason}"><kbd class="key-hint">${index + 1}</kbd>${icon(action)}<strong>${text.name}</strong><small>${text.english}</small><span class="skill-value">${action === 'attack' ? `พลัง ${hero.attack}` : action === 'mark' ? `โบนัส +${d.rules.markedBonus}` : action === 'guard' ? `ลด ${Math.round(guardReductionOf(d, this.heroId) * 100)}%` : action === 'rally' ? `ลด ${d.rules.rallyReduction * 100}%` : action === 'sanctuary' ? 'กันล้ม' : `พลัง ${skillPower(d, this.heroId, action)}`}</span></button>${cooling(s, this.heroId, action) ? `<span class="cd-badge" aria-hidden="true">รอ ${cooling(s, this.heroId, action)}</span>` : ''}<p id="reason-${action}" class="${reason ? 'unavailable-reason' : ''}">${escapeHtml(reason ? reasonThai(reason) : text.cooldown ? `คูลดาวน์ ${text.cooldown} รอบ` : 'ใช้ได้ทุกเทิร์น')}</p></div>`;
-    }).join('')}</div><details class="action-help"><summary>วิธีใช้${d.skills[this.action].name}</summary><p class="action-description">${skillDescription(this.action, this.heroId, d)}</p></details><p class="target-hint">${!this.targeting ? 'เลือกสกิลเพื่อเล็งเป้าหมาย' : noTarget || `${d.skills[this.action].name} — ` + (this.action === 'prayer' ? 'แตะฮีโร่ในสนามเพื่อฟื้นฟูทั้งทีม' : targetKind(this.action) === 'enemies' ? 'แตะศัตรูตัวใดก็ได้เพื่อโจมตีทุกตัว' : this.action === 'brace' ? 'แตะตัวเองในสนามเพื่อตั้งทวน' : this.action === 'evade' ? 'แตะตัวเองในสนามเพื่อก้าวเงา' : this.action === 'taunt' ? 'แตะตัวเองในสนามเพื่อยั่วยุ' : this.action === 'valor' || this.action === 'mend' ? 'แตะตัวเองในสนามเพื่อบรรเลงเพลง' : targetKind(this.action) === 'self' ? `แตะตัวเองในสนามเพื่อใช้${d.skills[this.action].name}` : targetKind(this.action) === 'ally' ? 'แตะเพื่อนในสนามที่มีเครื่องหมาย' : 'แตะศัตรูในสนามที่มีเครื่องหมาย')}</p>`);
+      return `<div class="action-option">${info}<button id="action-${action}" data-ui="action" data-value="${action}" aria-keyshortcuts="${index + 1}" class="action ${action} ${this.targeting && this.action === action ? 'selected' : ''}" aria-pressed="${this.targeting && this.action === action}" aria-describedby="reason-${action}" ${disabled ? 'disabled' : ''} data-unavailable="${!!reason}"><kbd class="key-hint">${index + 1}</kbd>${icon(action)}<strong>${text.name}</strong><small>${text.english}</small><span class="skill-value">${['cadence', 'duet', 'rounddance', 'deepbeat', 'closingstep'].includes(action) ? 'คืนคูลดาวน์' : action === 'attack' ? `พลัง ${hero.attack}` : action === 'mark' ? `โบนัส +${d.rules.markedBonus}` : action === 'guard' ? `ลด ${Math.round(guardReductionOf(d, this.heroId) * 100)}%` : action === 'rally' ? `ลด ${d.rules.rallyReduction * 100}%` : action === 'sanctuary' ? 'กันล้ม' : `พลัง ${skillPower(d, this.heroId, action)}`}</span></button>${cooling(s, this.heroId, action) ? `<span class="cd-badge" aria-hidden="true">รอ ${cooling(s, this.heroId, action)}</span>` : ''}<p id="reason-${action}" class="${reason ? 'unavailable-reason' : ''}">${escapeHtml(reason ? reasonThai(reason) : text.cooldown ? `คูลดาวน์ ${text.cooldown} รอบ` : 'ใช้ได้ทุกเทิร์น')}</p></div>`;
+    }).join('')}</div><details class="action-help"><summary>วิธีใช้${d.skills[this.action].name}</summary><p class="action-description">${skillDescription(this.action, this.heroId, d)}</p></details><p class="target-hint">${!this.targeting ? 'เลือกสกิลเพื่อเล็งเป้าหมาย' : noTarget || `${d.skills[this.action].name} — ` + (targetKind(this.action) === 'party' ? 'แตะเพื่อนในสนามเพื่อใช้สกิลกับทั้งทีม' : targetKind(this.action) === 'enemies' ? 'แตะศัตรูตัวใดก็ได้เพื่อโจมตีทุกตัว' : this.action === 'brace' ? 'แตะตัวเองในสนามเพื่อตั้งทวน' : this.action === 'evade' ? 'แตะตัวเองในสนามเพื่อก้าวเงา' : this.action === 'taunt' ? 'แตะตัวเองในสนามเพื่อยั่วยุ' : this.action === 'valor' || this.action === 'mend' ? 'แตะตัวเองในสนามเพื่อบรรเลงเพลง' : targetKind(this.action) === 'self' ? `แตะตัวเองในสนามเพื่อใช้${d.skills[this.action].name}` : targetKind(this.action) === 'ally' ? 'แตะเพื่อนในสนามที่มีเครื่องหมาย' : 'แตะศัตรูในสนามที่มีเครื่องหมาย')}</p>`);
   }
 
   private renderFieldTargets(): void {
@@ -502,14 +536,14 @@ export class BattleUI {
     const s = this.displayState; const d = this.data;
     const disabled = !this.targeting || !this.scene.isReady || !this.started || this.busy || s.outcome !== 'active';
     const options = targetOptions(s, d, this.heroId, this.action);
-    const targets = this.action === 'prayer' ? d.heroes.map(h => ({ ...options[0]!, id:h.id, valid:options[0]!.valid && s.heroes.some(v => v.id===h.id && v.hp>0) }))
+    const targets = targetKind(this.action) === 'party' ? d.heroes.map(h => ({ ...options[0]!, id:h.id, valid:options[0]!.valid && s.heroes.some(v => v.id===h.id && v.hp>0) }))
       : targetKind(this.action) === 'enemies' ? d.enemies.map(e => ({ ...options[0]!, id:e.id, valid:options[0]!.valid && s.enemies.some(v => v.id===e.id && v.hp>0) })) : options;
     this.set('field-targets', targets.map(t => {
       const position = this.scene!.actorTargets.get(t.id); if (!position) return '';
       const hero = s.heroes.find(h => h.id===t.id); const enemy = s.enemies.find(e => e.id===t.id);
       const maxHp = d.heroes.find(h => h.id===t.id)?.maxHp ?? d.enemies.find(e => e.id===t.id)?.maxHp;
-      const label = `ใช้${d.skills[this.action].name}กับ${this.action==='prayer' ? 'ทั้งทีม โดยแตะ' : targetKind(this.action)==='enemies' ? 'ศัตรูทุกตัว โดยแตะ' : ''}${actorName(t.id,d)} · เลือด ${hero?.hp ?? enemy?.hp}/${maxHp}${!t.valid ? ` · ${reasonThai(t.reason)}` : ''}`;
-      const buttonId = this.action==='prayer' ? t.id===this.heroId ? 'party' : `party-${t.id}` : targetKind(this.action)==='enemies' ? `enemies-${t.id}` : t.id;
+      const label = `ใช้${d.skills[this.action].name}กับ${targetKind(this.action)==='party' ? 'ทั้งทีม โดยแตะ' : targetKind(this.action)==='enemies' ? 'ศัตรูทุกตัว โดยแตะ' : ''}${actorName(t.id,d)} · เลือด ${hero?.hp ?? enemy?.hp}/${maxHp}${!t.valid ? ` · ${reasonThai(t.reason)}` : ''}`;
+      const buttonId = targetKind(this.action)==='party' ? t.id===this.heroId ? 'party' : `party-${t.id}` : targetKind(this.action)==='enemies' ? `enemies-${t.id}` : t.id;
       return `<button id="target-${buttonId}" data-ui="target" data-value="${t.id}" data-actor="${t.id}" class="field-target ${disabled || !t.valid ? '' : 'valid-target'}" style="left:${position.x}px;top:${position.y}px;width:${position.width}px;height:${position.height}px" aria-label="${escapeHtml(label)}" ${disabled || !t.valid ? 'disabled' : ''}></button>`;
     }).join(''));
   }

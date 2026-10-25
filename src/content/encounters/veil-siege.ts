@@ -1,8 +1,9 @@
 import type { EncounterDefinition } from '../../core/battle/types';
 import { heroes } from '../heroes/team';
+import { rosterBatch1Skills } from '../heroes/roster-batch1';
 import { enemies } from '../enemies/veilbound';
 export const veilSiege: EncounterDefinition = {
-  id: 'veil-siege', version: 17, level: 8, name: 'ศึกปิดรอยแยก', heroes,
+  id: 'veil-siege', version: 18, level: 8, name: 'ศึกปิดรอยแยก', heroes,
   enemies,
   intents: [
     { sourceId: 'b1', targetSlot: 1, name: 'Raking Slash', damage: 12, kind: 'physical' },
@@ -13,6 +14,7 @@ export const veilSiege: EncounterDefinition = {
     { sourceId: 'f1', targetSlot: 2, name: 'Rift Bolt', damage: 28, kind: 'energy' },
   ],
   skills: {
+    ...rosterBatch1Skills,
     attack: { name: 'โจมตี', english: 'Attack', icon: '⚔', power: 0, cooldown: 0 },
     guard: { name: 'ตั้งรับแทน', english: 'Guard', icon: '♜', power: 0, cooldown: 0 },
     bash: { name: 'กระแทกโล่', english: 'Shield Bash', icon: '✹', power: 18, cooldown: 2 },

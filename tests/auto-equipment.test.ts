@@ -3,7 +3,7 @@ import { expect, it } from 'vitest';
 import { chapterOne as map } from '../src/content/world/chapter1';
 import { encounterById as lookup } from '../src/content/encounters/catalog';
 import { depart, newProfile } from '../src/core/world/profile';
-import { heroDef, memberDef } from '../src/core/world/world';
+import { heroCatalog, heroDef, memberDef } from '../src/core/world/world';
 import { applyCampEquipment, applyRunEquipment, campEquipment, planEquipment, runEquipment, type AutoEquipmentPlan } from '../src/core/world/auto-equipment';
 import { setCounts } from '../src/core/world/equipment';
 import { parseGame } from '../src/core/save/expedition-save';
@@ -52,7 +52,7 @@ it('camp commits return replaced items without capacity loss, salvage, currency 
   const entries=campEquipment(p),plan:AutoEquipmentPlan={heroId:'guardian',member:structuredClone(p.members.guardian!),goal:'survival',choices:entries.slice(0,2).map(e=>({slot:e.item.slot,key:e.key,item:e.item}))};
   const out=applyCampEquipment(p,plan);expect(out.event.type).toBe('equipped');expect(out.profile.items).toHaveLength(map.equipment.bagCap);expect(out.profile.bank).toEqual(p.bank);
   const ids=[...out.profile.items,...Object.values(out.profile.members.guardian!.gear!)].map(i=>i.uid);expect(new Set(ids).size).toBe(ids.length);expect(out.profile.items.some(i=>i.uid===1)).toBe(true);
-  expect(parseGame(JSON.stringify({version:21,profile:out.profile,run:null}),map,lookup).profile).toEqual(out.profile);
+  expect(parseGame(JSON.stringify({version:21,profile:out.profile,run:null}),map,lookup).profile).toEqual({ ...out.profile, boardPool: heroCatalog(lookup, map).filter(h => !['metta', 'thiran', 'lalin', 'wila'].includes(h.id)).map(h => h.id) });
 });
 
 it('combines inventory filters and stable sorting without moving or mutating items',()=>{

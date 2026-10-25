@@ -6,7 +6,7 @@ import { COMPANY_CAP, PARTY_SLOTS, RESERVE_SLOTS, type ActiveBattle, type Expedi
 import { draftOffers, skillChoices, battleState, expToNext, findTiles, newExpedition, finishBattle, fullParty, heroCatalog, heroDef, memberDef, rosterIds, tileAt, type EncounterLookup } from '../world/world';
 import { affixPool, itemValid } from '../world/equipment';
 import { boulderAt, openPit, passableWall } from '../world/puzzles';
-import { commanderReason, defaultCamp, newProfile, settle, talentsValid } from '../world/profile';
+import { boardOfferCount, commanderReason, defaultCamp, newProfile, settle, talentsValid } from '../world/profile';
 import { grantsValid, isBigTree } from '../world/talents';
 import { classSkills } from '../world/tomes';
 import { TOME_LINES, TOME_SIZES, type TomeBag } from '../world/types';
@@ -83,7 +83,10 @@ export const legacyKeys = ['asterveil.fateweave.battle.v1', 'asterveil.fateweave
 // v39 → v40 (owner 2026-10-23): haste moves an ally still to act this round right after the alchemist. A battle in
 // progress that used haste restarts from its recorded entry HP (its commands are dropped), as in v35.
 // v41: Magic Power scaling; retain owned items and restart an in-progress battle from entry.
-const SAVE_VERSION = 42;
+// v43 (C12 batch 1): four optional roster members and personal talent branches. The original ten
+// retain their rules, talents and replays. Preserve the already-open hiring board until its next refresh.
+const SAVE_VERSION = 43;
+const BATCH_ONE_IDS = ['metta', 'thiran', 'lalin', 'wila'];
 // The classes whose big tree arrived in v37 (release A) and in v39 (the recruits).
 const RELEASE_A_TREES = ['tracer', 'weaver', 'healer', 'garran', 'mira'];
 const RECRUIT_TREES = ['toma', 'sefa', 'brann', 'lio'];
@@ -91,7 +94,9 @@ export interface Game { profile: Profile; run: ExpeditionState | null }
 const actions: readonly ActionId[] = ['attack', 'guard', 'bash', 'mark', 'execute', 'bolt', 'ward', 'heal', 'prayer', 'brace', 'pierce', 'hinder', 'volley', 'acid', 'haste', 'ambush', 'evade', 'taunt', 'slam', 'valor', 'mend',
   'rally', 'finisher', 'sigil', 'sanctuary', 'spearwall', 'weakshot', 'bomb', 'backstab', 'quake', 'finale', 'challenge', 'bulwark', 'rouse',
   'parry', 'lunge', 'sweep', 'storm', 'aegis', 'dispel', 'revive', 'halo', 'bless', 'hold', 'halt', 'warcry', 'disengage', 'pin', 'track',
-  'smoke', 'fury', 'catalyst', 'knives', 'decoy', 'disarm', 'stonearmor', 'guardstone', 'tremor', 'dread', 'note', 'solo'];
+  'smoke', 'fury', 'catalyst', 'knives', 'decoy', 'disarm', 'stonearmor', 'guardstone', 'tremor', 'dread', 'note', 'solo',
+  'saintstrike', 'communion', 'saintarc', 'vowstrike', 'sharewound', 'lastlight',
+  'cadence', 'duet', 'rounddance', 'deepbeat', 'echofoot', 'closingstep'];
 
 // One key for profile and run, so settling an expedition is a single atomic write.
 export function saveGame(storage: StoragePort | undefined, game: Game): boolean {
@@ -201,7 +206,14 @@ function hpRecord(v: unknown, lookup: EncounterLookup, map: MapDefinition, ids: 
 function command(v: unknown): Command {
   const c = obj(v);
   if (!isInt(c.beat, 1) || typeof c.heroId !== 'string' || typeof c.targetId !== 'string' || !actions.includes(c.action as ActionId)) throw new Error('Invalid command');
-  return { beat: c.beat, heroId: c.heroId, targetId: c.targetId, action: c.action as ActionId };
+  if (c.cooldownAction !== undefined && !actions.includes(c.cooldownAction as ActionId)) throw new Error('Invalid command');
+  if (c.cooldownTargetId !== undefined && typeof c.cooldownTargetId !== 'string') throw new Error('Invalid command');
+  // These selections affect the deterministic result. Keep them through save/replay;
+  // the resolver validates their action, paid personal cap and current legal recipient.
+  return { beat: c.beat, heroId: c.heroId, targetId: c.targetId, action: c.action as ActionId,
+    ...(c.cooldownAction !== undefined ? { cooldownAction: c.cooldownAction as ActionId } : {}),
+    ...(c.cooldownTargetId !== undefined ? { cooldownTargetId: c.cooldownTargetId as string } : {}) };
+
 }
 
 const badRun = (): never => { throw new Error('Invalid run'); };
@@ -405,6 +417,13 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
   const company = p.company;
   if (!Array.isArray(company) || !company.length || company.length > COMPANY_CAP || new Set(company).size !== company.length
     || company.some(id => typeof id !== 'string' || !heroDef(lookup, map, id))) throw new Error('Invalid company');
+  // Snapshot only the legacy catalog in its original order. A new profile has no snapshot;
+  // explicit refresh/return removes it, allowing newly added members onto the next board.
+  const legacyPool = heroCatalog(lookup, map).map(h => h.id).filter(id => !BATCH_ONE_IDS.includes(id));
+  if (version < 43 && p.boardPool === undefined) p.boardPool = legacyPool;
+  const boardPool = p.boardPool;
+  if (boardPool !== undefined && (!Array.isArray(boardPool) || boardPool.length !== legacyPool.length
+    || boardPool.some((id, i) => id !== legacyPool[i]))) throw new Error('Invalid board pool');
   const party = rosterOf(p.party, lookup, map);
   if ([...party.deployed, ...party.reserve].some(id => !company.includes(id))) throw new Error('Invalid party');
   if(hunt.target&&!company.includes(hunt.target))throw new Error('Unowned hunt target');
@@ -426,7 +445,7 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
   const items = p.items.map(i => itemOf(i, map, lookup));
   const uids = [...items,...overflow, ...Object.values(members).flatMap(m => Object.values(m.gear ?? {}))].map(i => i!.uid);
   if (new Set(uids).size !== uids.length || uids.some(u => u >= (p.nextItem as number))) throw new Error('Invalid items');
-  if (!Array.isArray(p.taken) || new Set(p.taken).size !== p.taken.length || p.taken.some(i => !isInt(i, 0, map.company.offers - 1))) throw new Error('Invalid board');
+  if (!Array.isArray(p.taken) || new Set(p.taken).size !== p.taken.length || p.taken.some(i => !isInt(i, 0, boardOfferCount(map, lookup, boardPool !== undefined) - 1))) throw new Error('Invalid board');
   let last: Profile['last'] = null;
   if (p.last !== null) {
     const l = obj(p.last);
@@ -457,7 +476,7 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
   const tomes = p.tomes === undefined ? undefined : tomesOf(p.tomes); const riftCore = p.riftCore === undefined ? undefined : isInt(p.riftCore, 0, 9999) ? p.riftCore : badProfile();
   const clearedHard = p.clearedHard === undefined ? undefined : clearedList(p.clearedHard, maps);
   if (clearedHard?.some(id => !cleared.includes(id))) throw new Error('Invalid profile');
-  return {...(tomes ? { tomes } : {}),...(riftCore !== undefined ? { riftCore } : {}),...(clearedHard ? { clearedHard } : {}),...(guides ? { guides } : {}),...(veteran ? { veteran: true as const } : {}),bossLoot,hunt,overflow,storageTier:p.storageTier as number, forgeLevel:p.forgeLevel as number, seed: p.seed, returns: p.returns, tutorialDone: p.tutorialDone, commander, company: [...company as string[]], members, party, cleared,
+  return {...(boardPool ? { boardPool: [...boardPool as string[]] } : {}),...(tomes ? { tomes } : {}),...(riftCore !== undefined ? { riftCore } : {}),...(clearedHard ? { clearedHard } : {}),...(guides ? { guides } : {}),...(veteran ? { veteran: true as const } : {}),bossLoot,hunt,overflow,storageTier:p.storageTier as number, forgeLevel:p.forgeLevel as number, seed: p.seed, returns: p.returns, tutorialDone: p.tutorialDone, commander, company: [...company as string[]], members, party, cleared,
     bank: { ore: bank.ore as number, gold: bank.gold as number, seal: bank.seal as number, dust: bank.dust as number }, items, nextItem: p.nextItem as number, forge: p.forge as number, potions: potionsOf(p.potions, 9999), quests, shop, refreshes: p.refreshes as number, smelted: p.smelted as number, taken: [...p.taken as number[]], expeditions: p.expeditions, completes: p.completes, last };
 }
 // Optional elite returns (4C): known optional elites only, 1..99 each.
@@ -577,7 +596,7 @@ export function parseGame(raw: string, map: MapDefinition, lookup: EncounterLook
   else if (version < 37) migrateTrees(envelope, maps.length ? maps : [map], [...RELEASE_A_TREES, ...RECRUIT_TREES]);
   else if (version < 39) migrateTrees(envelope, maps.length ? maps : [map], RECRUIT_TREES);
   if (version < 42) refundAuditTrees(envelope, maps.length ? maps : [map]);
-  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
+  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
   const runMap = (v: unknown): MapDefinition => maps.find(m => m.id === obj(v).mapId) ?? map;
   if (version < 5) {
     const home = runMap(envelope.state); const run = parseRun(envelope.state, version, home, lookup);

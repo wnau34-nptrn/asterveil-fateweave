@@ -4,7 +4,7 @@ import { TOME_LINES, TOME_SIZES, type TomeBag, type TomeLine, type TomeSize } fr
 import type { EquipmentRules, ExpGain, ExpeditionState, Gear, GearSlot, GearStat, Item, PotionId, PotionRules, ResourceId, Resources, SetDefinition, SetId, TalentNodeDef, MapEventKind, EventChoice, EventRules, QuestObjective, SideQuestDefinition, SideQuestKind, ShopItemId } from '../core/world/types';
 import type { GearSpecial, HeroDefinition } from '../core/battle/types';
 import { setCounts, statLines } from '../core/world/equipment';
-import { CATALYST_PER_ROUND, DISARM_MULTIPLIER, DREAD_FINALE, FURY_EXPOSED, GUARD_STONE_HEAL, SOLO_TIMES, PARRY_REDUCTION, levelBarrier, rallyReductionOf, skillCooldown, skillLevel, ambushBonusOf, capAmount, corrodeBonusOf, finaleHealPower, guardReductionOf, hasCap, skillPower, songPower, talentRule, tauntReductionOf } from '../core/battle/engine';
+import { saintRatioOf, CATALYST_PER_ROUND, DISARM_MULTIPLIER, DREAD_FINALE, FURY_EXPOSED, GUARD_STONE_HEAL, SOLO_TIMES, PARRY_REDUCTION, levelBarrier, rallyReductionOf, skillCooldown, skillLevel, ambushBonusOf, capAmount, corrodeBonusOf, finaleHealPower, guardReductionOf, hasCap, skillPower, songPower, talentRule, tauntReductionOf } from '../core/battle/engine';
 import type { IconName } from './icons';
 export const thaiFont = '"Noto Sans Thai", "Leelawadee UI", Tahoma, sans-serif';
 export const heroText: Record<string, { name: string; role: string; help: string; icon: string }> = {
@@ -17,6 +17,10 @@ export const heroText: Record<string, { name: string; role: string; help: string
   toma: { name: 'โทมะ', role: 'นักเล่นแร่', help: 'กรดกัดกร่อนและยาเร่งให้เพื่อนลงมือก่อน', icon: '⚗' },
   tracer: { name: 'ไลรา', role: 'นักดาบ', help: 'ติดตราแล้วฟันเจาะจุด', icon: '➶' },
   weaver: { name: 'ไอรา', role: 'จอมเวท', help: 'ศรเวทและโล่ป้องกัน', icon: '✧' },
+  metta: { name: 'เมตตา', role: 'นักบุญรบ', help: 'โจมตีแล้วแบ่งเลือดให้เพื่อนที่บาดเจ็บ', icon: '✚' },
+  thiran: { name: 'ธีรัน', role: 'นักบุญรบ', help: 'รุกแนวหน้าและเปลี่ยนดาเมจเป็นเลือดให้เพื่อน', icon: '✚' },
+  lalin: { name: 'ลลิน', role: 'นักเต้นรำ', help: 'คืนคูลดาวน์ให้เพื่อน ไม่เพิ่มเทิร์นหรือเปลี่ยนคิว', icon: '♪' },
+  wila: { name: 'วิลา', role: 'นักเต้นรำ', help: 'กระจายจังหวะให้สกิลของทีมพร้อมเร็วขึ้น', icon: '♪' },
   healer: { name: 'เซเรน', role: 'นักบวช', help: 'รักษาคนเดียวหรือฟื้นฟูทั้งทีม', icon: '✚' },
 };
 const names: Record<string, string> = { lio: 'ลิโอ', brann: 'แบรนน์', sefa: 'เซฟา', toma: 'โทมะ', mira: 'มิร่า', garran: 'การ์แรน', guardian: 'เอกิส', tracer: 'ไลรา', weaver: 'ไอรา', healer: 'เซเรน', party: 'ทั้งทีม' };
@@ -29,7 +33,7 @@ export function actorName(id: string | undefined, data: EncounterDefinition): st
     const name = twins.length > 1 ? `${label(foe)} ${'กขคง'[twins.indexOf(foe)]}` : label(foe);
     return data.level ? `Lv${data.level} ${name}` : name;
   }
-  return id ? names[id] ?? data.heroes.find(h => h.id === id)?.name ?? 'เป้าหมาย' : 'ทีม';
+  return id ? heroText[id]?.name ?? names[id] ?? data.heroes.find(h => h.id === id)?.name ?? 'เป้าหมาย' : 'ทีม';
 }
 // Who an announced enemy turn affects, in words: a phase change, a charge, the whole party or one hero.
 export function intentTargetThai(intent: Intent, data: EncounterDefinition, recipient = intent.targetId): string {
@@ -117,18 +121,31 @@ export function skillDescription(action: ActionId, heroId: string, data: Encount
     note: `โน้ตคม ${skill.power} พลังงาน เพิ่ม 3 ต่อรอบที่เพลงของผู้ใช้เล่นต่อเนื่อง สูงสุด 3 รอบ (+9)`,
     solo: `เพลงเดี่ยว เลือกเพื่อน 1 คน ได้ผลเพลงที่ลิโอบรรเลงอยู่ ×${SOLO_TIMES} จนจบรอบถัดไป (เพลงกล้า = ตีแรงขึ้น · เพลงฟื้น = ฟื้นมากขึ้น) ต้องมีเพลงกล้าหรือเพลงฟื้นเล่นอยู่`,
     finale: `จบเพลงที่บรรเลงอยู่แล้วปล่อยพลังทันที (เพลงสะท้าน = เพื่อนทุกคนได้โล่ ${DREAD_FINALE}): เพลงกล้า = โจมตีศัตรูทุกตัว ${skill.power} · เพลงฟื้น = ฟื้นเลือดทุกคน ${finaleHealPower(data, heroId)} ต้องมีเพลงของลิโอเล่นอยู่`,
+    saintstrike: `กายภาพ ${skill.power} เป้าเดียว แล้วแบ่งเลือดให้เพื่อนจากดาเมจที่ศัตรูเสียจริง`,
+    communion: `กายภาพ ${skill.power} เป้าเดียว แปลงดาเมจที่ศัตรูเสียจริง ${saintRatioOf(data, heroId, action)}% เป็นเลือดให้เพื่อนที่มีสัดส่วนเลือดต่ำสุด`,
+    saintarc: `กายภาพ ${skill.power} ใส่ศัตรูแถวหน้า ถ้าหน้าว่างโดนหลังแทน รวมดาเมจจริงก่อนแบ่งเลือดให้เพื่อน`,
+    vowstrike: `กายภาพ ${skill.power} เป้าเดียว ถ้ามีเพื่อนเลือดต่ำกว่า ${hasCap(data, heroId, 'vowThreshold') ? capAmount(data, heroId, 'vowThreshold') : 40}% แปลงดาเมจเป็นเลือด 45% แทน ${saintRatioOf(data, heroId, action)}%`,
+    sharewound: `กายภาพ ${skill.power} เป้าเดียว แบ่งเลือดที่แปลงได้ให้เพื่อนบาดเจ็บสองคน ยอดรวมเท่าเดิม ไม่รวมตัวเอง`,
+    lastlight: `กายภาพ ${skill.power} เป้าเดียว แบ่งเลือดให้เพื่อนที่บาดเจ็บ ไม่ชุบชีวิต`,
+    cadence: 'เลือกเพื่อนที่ยังยืนอยู่คนอื่น สกิลที่มีคูลดาวน์เหลือมากสุดพร้อมเร็วขึ้น 1 รอบ ไม่เพิ่มเทิร์น',
+    duet: 'เลือกเพื่อนที่ยังยืนอยู่คนอื่น สองสกิลที่กำลังรอพร้อมเร็วขึ้นสกิลละ 1 รอบ ถ้ามีเพียงสกิลเดียวก็ใช้ได้',
+    rounddance: 'เพื่อนที่ยังยืนอยู่ทุกคน ยกเว้นผู้ใช้ คนละหนึ่งสกิลพร้อมเร็วขึ้น 1 รอบ ไม่เปลี่ยนคิว SPD',
+    deepbeat: 'เพื่อนที่ยังยืนอยู่คนอื่น หนึ่งสกิลที่คูลดาวน์เหลือมากสุดพร้อมเร็วขึ้น 2 รอบ',
+    echofoot: `กายภาพ ${skill.power} เป้าเดียว แล้วเพื่อนที่มีผลรวมคูลดาวน์สูงสุด หนึ่งสกิลพร้อมเร็วขึ้น 1 รอบ`,
+    closingstep: 'เพื่อนที่ยังยืนอยู่คนอื่น สองสกิลที่กำลังรอพร้อมเร็วขึ้นสกิลละ 2 รอบ',
   };
   const passive = hero.passive && passiveText[hero.passive].actions.includes(action) ? ` · ★5 ${passiveText[hero.passive].name}: ${passiveText[hero.passive].help(data)}` : '';
   // Skill level (tomes): the level, and the barrier a levelled skill without numbers gives its user.
   const level = skillLevel(data, heroId, action); const shield = levelBarrier(data, heroId, action);
   const lv = level > 1 ? ` · Lv${level}${shield ? ` ผู้ใช้ได้โล่ ${shield}` : ''}` : '';
-  return text[action] + passive + talentNotes(action, heroId, data) + lv + cooldown;
+  const classNote = hero.role === 'Saint' && ['attack', 'saintstrike', 'saintarc', 'vowstrike', 'sharewound', 'lastlight'].includes(action) ? ` · แบ่งพื้นฐาน ${saintRatioOf(data, heroId, action)}% ของเลือดที่ศัตรูเสียจริงให้เพื่อนบาดเจ็บ ไม่นับดาเมจเกินเลือด ไม่รวมตัวเอง ไม่ชุบชีวิต` : hero.role === 'Dancer' && ['cadence', 'duet', 'rounddance', 'deepbeat', 'echofoot', 'closingstep'].includes(action) ? ' · ไม่ลดสกิลคืนคูลดาวน์ของนักเต้นรำ ป้องกันการวนซ้ำ สกิลพร้อมอยู่แล้วไม่รับผล' : '';
+  return text[action] + classNote + passive + talentNotes(action, heroId, data) + lv + cooldown;
 }
 // ---- Talent tree (2D-1b) ----
 // Branch names per class (A, B), matching docs/EXPEDITION_DESIGN.md "Talent tree".
 // Big skill trees (A6): three branch names per class, matching docs/design/SKILL_TREE_KNIGHT_TH.md.
 // Release A trees: docs/design/SKILL_TREES_ALL_TH.md.
-export const bigBranches: Record<string, readonly [string, string, string]> = { guardian: ['ปราการ', 'ลงทัณฑ์', 'ธงนำ'],
+export const bigBranches: Record<string, readonly string[]> = { metta: ['หมัดเมตตา', 'คำสัตย์', 'แบ่งบาดแผล', 'ประจำตัว'], thiran: ['หมัดเมตตา', 'คำสัตย์', 'แบ่งบาดแผล', 'ประจำตัว'], lalin: ['จังหวะเดี่ยว', 'ประสาน', 'ก้าวส่งท้าย', 'ประจำตัว'], wila: ['จังหวะเดี่ยว', 'ประสาน', 'ก้าวส่งท้าย', 'ประจำตัว'], guardian: ['ปราการ', 'ลงทัณฑ์', 'ธงนำ'],
   tracer: ['ตราล่า', 'ปลิดชีพ', 'ระบำดาบ'], weaver: ['เวทโจมตี', 'เวทป้องกัน', 'ผนึกเวท'], healer: ['เยียวยา', 'คุ้มครอง', 'พรศรัทธา'],
   garran: ['ทวนรับ', 'ทวนรุก', 'ยึดแนว'], mira: ['แม่นธนู', 'ฝนธนู', 'พรานป่า'],
   toma: ['กรดกัดกร่อน', 'ยาเสริม', 'ควันและปฏิกิริยา'], sefa: ['ลอบสังหาร', 'เงา', 'ก่อกวน'], brann: ['ปราการศิลา', 'ค้อนรูน', 'ศิลาผู้พิทักษ์'], lio: ['เพลงรบ', 'เพลงปลอบ', 'ท่วงทำนอง'] };
@@ -148,6 +165,35 @@ const ruleText: Record<TalentRule, { actions: readonly ActionId[]; help: (n: num
   dodgeHeal: { actions: ['evade'], help: n => `หลบได้แล้วฟื้นเลือดตัวเอง ${n}` },
 };
 const capText: Record<TalentCap, { actions: readonly ActionId[]; help: (n: number) => string }> = {
+  communionRatio: { actions: ['communion'], help: n => `แบ่งแรงใจแปลงดาเมจเพิ่ม ${n} จุดเปอร์เซ็นต์` },
+  saintRatio: { actions: ['attack', 'saintstrike', 'saintarc', 'vowstrike', 'sharewound', 'lastlight'], help: n => `อัตราแปลงพื้นฐานเพิ่ม ${n} จุดเปอร์เซ็นต์ ไม่บวกซ้ำกับท่าที่กำหนดอัตราเฉพาะ` },
+  vowThreshold: { actions: ['vowstrike'], help: n => `คำสัตย์ใช้เกณฑ์เลือดเพื่อนต่ำกว่า ${n}%` },
+  saintFinish: { actions: ['saintstrike'], help: n => `หมัดที่ล้มศัตรูได้แปลงดาเมจเป็นเลือด ${n}%` },
+  sharePriority: { actions: ['sharewound'], help: n => `แบ่งให้ผู้มีสัดส่วนเลือดต่ำสุด ${n}% ของยอดรักษา ที่เหลือให้คนถัดไป` },
+  shareThree: { actions: ['sharewound'], help: () => 'แบ่งยอดรักษาเดิมให้เพื่อนบาดเจ็บสามคน' },
+  lastlightRatio: { actions: ['lastlight'], help: n => `แสงสุดท้ายแปลงดาเมจเป็นเลือด ${n}% แต่คูลดาวน์เพิ่ม 1 รอบ` },
+  dancerCadenceQuick: { actions: ['cadence'], help: n => `คืนจังหวะพร้อมเร็วขึ้น ${n} รอบ` },
+  dancerCadenceShort: { actions: ['cadence'], help: () => 'คืนจังหวะเลือกสกิลที่คูลดาวน์เหลือน้อยสุดที่ยังไม่พร้อม' },
+  dancerRoundPair: { actions: ['rounddance'], help: () => 'ระบำวงเลือกเพื่อนสองคนที่รอมากสุด ลดคนละ 2 รอบแทนทั้งทีม' },
+  dancerDuetFocus: { actions: ['duet'], help: () => 'คู่จังหวะลดสกิลแรกเพิ่ม 1 รอบ แต่ไม่ลดสกิลที่สอง' },
+  dancerDuetQuick: { actions: ['duet'], help: n => `คู่จังหวะพร้อมเร็วขึ้น ${n} รอบ` },
+  dancerDeep: { actions: ['deepbeat'], help: () => 'จังหวะลึกลด 3 รอบแทน 2 แต่คูลดาวน์เพิ่ม 1 รอบ' },
+  dancerEchoChoose: { actions: ['echofoot'], help: () => 'ก้าวสะท้อนให้เลือกเพื่อนผู้รับการคืนคูลดาวน์เอง' },
+  dancerClosingQuick: { actions: ['closingstep'], help: n => `ก้าวส่งท้ายพร้อมเร็วขึ้น ${n} รอบ เมื่อเป้ามีสกิลเดียวกำลังรอ` },
+  metta1: { actions: ['communion'], help: n => `แบ่งแรงใจแปลงเพิ่ม ${n} จุดเปอร์เซ็นต์` },
+  metta2: { actions: ['saintstrike'], help: n => `หมัดเมตตาเพิ่ม ${n} เมื่อเพื่อนมีเลือดต่ำกว่าครึ่ง` },
+  metta3: { actions: ['sharewound'], help: n => `แบ่งยอดรักษาเป็น ${n}% ให้คนเลือดต่ำสุด ที่เหลือให้คนที่สอง` },
+  metta4: { actions: ['lastlight'], help: n => `แสงสุดท้ายแปลง ${n}% แต่พลังลดลง 4` },
+  thiran2: { actions: ['attack', 'saintstrike', 'communion', 'saintarc', 'vowstrike', 'sharewound', 'lastlight'], help: () => 'แบ่งเลือดให้เพื่อนบาดเจ็บแนวหน้าก่อน' },
+  thiran3: { actions: ['vowstrike'], help: n => `คำสัตย์เพิ่ม ${n} เมื่อแนวหน้าเจ็บสองคน` },
+  thiran4: { actions: ['attack', 'saintstrike', 'communion', 'saintarc', 'vowstrike', 'sharewound', 'lastlight'], help: () => 'แบ่งเลือดพื้นฐานให้สองคนแทนหนึ่ง ยอดรวมเดิม' },
+  lalin1: { actions: ['cadence'], help: n => `คืนจังหวะครั้งแรกต่อศึกคูลดาวน์ลด ${n} รอบ` },
+  lalin2: { actions: ['duet'], help: () => 'เลือกสกิลแรกที่จะคืนคูลดาวน์ก่อนยืนยันคู่จังหวะ' },
+  lalin3: { actions: ['deepbeat'], help: n => `จังหวะลึกลดเพิ่ม ${n} รอบ เมื่อเพื่อนเลือดต่ำกว่าครึ่ง` },
+  lalin4: { actions: ['closingstep'], help: n => `ก้าวส่งท้ายคูลดาวน์ลด ${n} รอบ แต่คืนให้สกิลเดียว` },
+  wila1: { actions: ['rounddance'], help: n => `ระบำวงครั้งแรกต่อศึกคูลดาวน์ลด ${n} รอบ` },
+  wila3: { actions: ['rounddance'], help: n => `ระบำวงที่คืนคูลดาวน์ได้สามคน พร้อมเร็วขึ้น ${n} รอบ` },
+  wila4: { actions: ['duet'], help: () => 'คู่จังหวะคืนให้เพื่อนสองคน คนละหนึ่งสกิล แทนคนเดียว' },
   retribution: { actions: ['bash'], help: n => `กระแทกโล่ที่หยุดท่ากายภาพได้ทำดาเมจเพิ่ม ${n}` },
   guardcounter: { actions: ['guard'], help: n => `ทุกครั้งที่รับการโจมตีแทน โต้กลับผู้โจมตี ${n} + 20% ของพลังโจมตี` },
   deepmark: { actions: ['attack', 'execute', 'finisher'], help: n => `ทุกการโจมตีของไลราใส่ศัตรูที่ติดตรา +${n}` },
@@ -266,6 +312,13 @@ export function reasonThai(reason: string): string {
     'This ally is at full health.': 'เลือดเต็มแล้ว',
     'The living party is at full health.': 'ทีมที่ยังยืนอยู่มีเลือดเต็มแล้ว',
     'This ally already has this barrier.': 'มีโล่เวทเต็มแล้ว',
+    'No eligible skill is cooling down.': 'เพื่อนไม่มีสกิลที่กำลังรอคูลดาวน์และรับจังหวะได้',
+    'Choose an eligible cooling skill.': 'เลือกสกิลที่ยังรอคูลดาวน์',
+    'Choose an ally with an eligible cooling skill.': 'เลือกเพื่อนที่มีสกิลกำลังรอคูลดาวน์',
+    'Invalid cooldown recipient.': 'เลือกเพื่อนรับการคืนคูลดาวน์ใหม่',
+    'No cooldown to reduce.': 'เพื่อนไม่มีสกิลที่กำลังรอคูลดาวน์',
+    'Choose another ally.': 'เลือกเพื่อนคนอื่นที่ยังยืนอยู่',
+    'Invalid cooldown action.': 'เลือกสกิลที่ยังรอคูลดาวน์ใหม่',
     'Invalid target.': 'เลือกเป้าหมายใหม่',
     'The party already has this barrier.': 'ทุกคนมีโล่เท่านี้หรือมากกว่าแล้ว',
     'Already evading.': 'มีก้าวเงาคุ้มกันอยู่แล้ว',
@@ -281,6 +334,7 @@ export function reasonThai(reason: string): string {
 export function eventThai(event: BattleEvent, after: BattleState, data: EncounterDefinition): string {
   const target = actorName(event.targetId, data); const source = actorName(event.sourceId, data);
   switch (event.type) {
+    case 'cooldown': return `${target} · ${event.action ? data.skills[event.action].name : 'สกิล'} พร้อมเร็วขึ้น ${event.amount ?? 0} รอบ (ไม่เพิ่มเทิร์น)`;
     case 'damage': return `${target} เสียเลือด ${event.amount ?? 0}${event.absorbed ? ` (โล่รับไว้ ${event.absorbed})` : ''}`;
     case 'guard': return `${source}${event.sourceId === event.targetId ? 'ตั้งรับ' : `รับการโจมตีแทน${target}`} ลดความเสียหาย ${Math.round(guardReductionOf(data, event.sourceId) * 100)}%`;
     case 'mark': return `${target} ติดตรา ${data.rules.markDuration} รอบ รวมรอบนี้`;

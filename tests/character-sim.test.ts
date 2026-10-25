@@ -14,3 +14,5 @@ it('no character is far above or below its peers in the standard team', () => {
   }
 });
 if(full) it('writes the roster report including every chosen build',()=>{mkdirSync('docs/validation/balance-sim',{recursive:true});writeFileSync('docs/validation/balance-sim/CHARACTERS.md',characterReport(rows));});
+
+if (full) it('C12 batch release: all catalog characters clear all twelve traversal seeds',()=>{for(const row of rows)expect(row.won,`${row.id}/${row.map}`).toBe(row.tried);});

@@ -108,7 +108,7 @@ describe('C11 save v41 → v42',()=>{
   const game=parseGame(JSON.stringify(old),map,lookup);
   expect(game.profile.members.guardian!.talents).toBeUndefined();expect(game.profile.members.guardian!.loadout).toBeUndefined();
   expect(game.profile.members.guardian!.skillLevels).toEqual({rally:2});expect(game.profile.members.toma!.talents).toEqual({a1:1});
-  expect(JSON.parse(write(game)).version).toBe(42);expect(parseGame(write(game),map,lookup)).toEqual(game);
+  expect(JSON.parse(write(game)).version).toBe(43);expect(parseGame(write(game),map,lookup)).toEqual(game);
  });
  it('restarts a changed active skill replay from recorded entry HP without duplicating rewards',()=>{
   const p=newProfile(map,2);const game=depart(p,map,lookup,3),run=game.run;
