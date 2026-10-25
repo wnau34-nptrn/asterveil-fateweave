@@ -92,9 +92,11 @@
 
 ### P00 — สเปกและหลักฐานก่อนแก้ฐาน
 
-- [ ] **P00-01** ตรวจ remote game branch, C12, PR ค้าง และเซฟตัวอย่าง; บันทึก actual/planned พร้อมแก้ความคลาดเคลื่อน recruit Mira/บทพบคนเดิม
-- [ ] **P00-02** เขียนสเปก camp Lv/EXP, roster ownership, field 5/reserve 4, slot IDs/formation และ migration boundaries; ไม่มีอิงคำว่า company cap เป็นขนาดทีม
-- [ ] **P00-03** เก็บ baseline ศึก/แคมเปญ/เศรษฐกิจจากรุ่นก่อนแก้ ด้วย seed/policy/ทุนเดียวกัน ระบุเกณฑ์ผ่านก่อนทดลอง และออกแบบการวัดมนุษย์เรื่องอ่านสนาม/ความสนุก
+เสร็จในรอบ P00: [สเปกเลเวลค่าย/ทีม](design/p00/SHARED_PROGRESSION_TEAM_SPEC_TH.md), [migration matrix](design/p00/MIGRATION_ACCEPTANCE_TH.md), [baselineรันใหม่28+55ข้อ](validation/p00/README.md) ขั้นถัดไป P01-A/B ตามลำดับ PR ในสเปก ไม่ใช่เปิดทีม5ทันที
+
+- [x] **P00-01** ตรวจ remote game branch, C12, PR ค้าง และเซฟตัวอย่าง; บันทึก actual/planned พร้อมแก้ความคลาดเคลื่อน recruit Mira/บทพบคนเดิม
+- [x] **P00-02** เขียนสเปก camp Lv/EXP, roster ownership, field 5/reserve 4, slot IDs/formation และ migration boundaries; ไม่มีอิงคำว่า company cap เป็นขนาดทีม
+- [x] **P00-03** เก็บ baseline ศึก/แคมเปญ/เศรษฐกิจจากรุ่นก่อนแก้ ด้วย seed/policy/ทุนเดียวกัน ระบุเกณฑ์ผ่านก่อนทดลอง และออกแบบการวัดมนุษย์เรื่องอ่านสนาม/ความสนุก
 
 ### P01 — เลเวลร่วมและการถือครอง
 
@@ -235,10 +237,10 @@
 
 ## 10. งานแรกที่ควรเปิดหลังส่งแผน
 
-เริ่ม **P00 สเปกเลเวลค่าย + ทีมสูงสุดห้า + migration และ baseline** ให้ได้งานที่แบ่ง PR ทำต่อได้ แล้วเริ่ม P01 ไม่กระโดดลง Batch2 ด้วย schema/save version เก่าที่กำลังจะเปลี่ยน
+P00 จัดทำสเปกและ baseline แล้ว เริ่ม **P01-A/B เลเวลค่ายและ migration** ตามเอกสาร P00 โดยคงทีม4และสูตรดาวเดิมก่อน ไม่กระโดดลง Batch2 ด้วย schema/save version เก่าที่กำลังจะเปลี่ยน
 
 ข้อความส่งต่องาน:
 
-> ทำ P00 ตาม docs/DEVELOPMENT_PLAN_TH.md จาก game branch ล่าสุด อ่าน AGENTS.md/CLAUDE.md และเอกสารเลเวลร่วม ตรวจ actual runtime/PRค้างก่อน เก็บ baseline C12 Batch1 ออกแบบ camp Lv/EXP/point entitlement/ownership 30+ และทีม5สำรอง4เป็นต้นแบบ ระบุ reward-once, formation IDs, save/replay migration และการรักษาทุน แยก actual/owner direction/recommendation/draft numbers ไม่เปิดกาชาหรือเลื่อนขั้นทันที ส่งสเปก งานย่อย และหลักฐานที่ใช้เริ่ม P01 พร้อม handoff
+> ทำ P01-A/B ตาม docs/design/p00/SHARED_PROGRESSION_TEAM_SPEC_TH.md และ MIGRATION_ACCEPTANCE_TH.md จาก game branch ล่าสุด อ่าน AGENTS.md/CLAUDE.md ก่อน ใช้ baseline docs/validation/p00 เปลี่ยน camp Lv/EXP authority และ migration/reward-once แบบatomic โดยยัง field4/reserve4 และสูตรดาวเดิม ไม่เปิดทีม5/กาชา/เลื่อนขั้นในงานนี้ เพิ่มfixturesตามmatrixและเทียบ20campaigncellsโดยไม่ซ่อนregression เก็บสิทธิ์ผู้เล่นและรายงานผลพร้อมhandoff
 
 บล็อกภายนอกจริง: credential Cloudflare สำหรับ P09 และเครื่องจริงสำหรับข้อสรุปแพลตฟอร์ม ไม่ใช่เหตุให้หยุดงานออกแบบ/ทดสอบในเครื่องระยะก่อนหน้า ส่วน visual approval ของงานภาพที่ค้างให้คงสถานะเดิมและรายงานเมื่อถึงงานนั้น

@@ -1,5 +1,12 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
+## P00 completed — shared progression/team specification and baseline
+
+- Owner authorized proceeding after the consolidated plan. Branch `docs/p00-shared-level-team-spec` targets game branch. Added `docs/design/p00/SHARED_PROGRESSION_TEAM_SPEC_TH.md` and `MIGRATION_ACCEPTANCE_TH.md`: canonical camp XP, atomic profile/run transitions, legacy withdrawal boundary, ownership and six-position/five-live-actor vocabulary. Runtime remains unchanged; PR #59 still awaits visual review.
+- Baseline on `e62292a`: full sim 28/28 across seven files plus focused roster/save/formation/talent checks 55/55. Artifacts, hashes, policies and twenty current campaign cells are in `docs/validation/p00/`. No new browser screenshots, human playtest, new-system validation or real-device claim.
+- P00-01/02/03 marked complete in development plan. Next P01-A/B: implement shared Lv/XP and migration with field4/reserve4 and current star-point formula; five-member prototype waits P02 and star-point redesign waits P04. See the copy-ready next task in the plan.
+- Documentation-only change; link/whitespace review before publication. Migration matrix is specified, not implemented or tested against new rules. Publication PR and merge evidence are tracked through issue #69.
+
 ## 2026-10-25 — Plan publication verified
 
 PR #70 merged as `aafec236507458f45303a6af3a26438dfb276534`; quality CI run 665 passed. `docs/DEVELOPMENT_PLAN_TH.md` and issue #69 are the delivery entrypoints. Start P00 next. Design/research documents are now published; older local-only status notes below are historical. No gameplay changes in this delivery.

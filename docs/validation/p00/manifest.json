@@ -1,0 +1,19 @@
+{
+  "source_commit": "e62292a7fe476cfadc5f2310073432a88b79c292",
+  "node": "24.19.0",
+  "npm": "11.9.0",
+  "command": "npm run sim",
+  "isolated_archive": true,
+  "files": {
+    "CAMPAIGN.md": "e1f436b6dc0d4646e0f86ebb63b7fe9dd515eebba95c1f1fa958dbbc0606aba2",
+    "CHARACTERS.md": "beee9a76238fc33de09372fc584ae31bbe5e17d803e45ae8b4245e470bc603aa",
+    "CLASSES.md": "cf60ba2ed96d1212ed8db5a164b810fed25357f120161558165f49cd4fbffb28",
+    "ECONOMY.md": "026cd18ca60be01f0fa4edd0d7a8a18de63c084881e342cd29ae6998be609e19",
+    "FORMATION.md": "d952f1c9eaf4dc590ba9cb2549bf0adc523d9c782687c974e363b8f6ffeef6f9",
+    "STARTERS.md": "9c51530c68e270c37acb235abfc0f09e8e9572c83bf1fb5ca87d8f609d3e68ae",
+    "TREES.md": "ba29e102905ec0353bd45fd336055a8f69769fa9af2edb77bc597b7cf674e9ba",
+    "campaign-cells.json": "13308f920cda2c2384628c443d5a21b8d6dc9e077ce68a7edc387b48e0915b18",
+    "focused-summary.json": "a42ea72736513f1a9b53086906df40ed5ea14f3f854325ff0bad122ac616e0e0",
+    "sim.log": "3f69f17647ebde176a060065bb1076968e4c3c97ea93186f44772df53f75e199"
+  }
+}
