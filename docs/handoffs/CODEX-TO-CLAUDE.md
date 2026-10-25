@@ -1,5 +1,15 @@
 # Codex → Claude handoff
 
+## 2026-10-25 — C5.1 individual artwork/storyboards V1 (PR #59, pending owner review)
+
+- Owner approved making artwork per move before another VFX implementation pass. Scope is the same ten blade-family skills, not family 2. Shado status still returned AI Link port busy 10048; owner explicitly approved built-in ImageGen instead. Ten original generations, no external API/CLI/provider key, no security-software changes.
+- Sources: `incoming/ART-VFX-BLADE-STORYBOARD-001/` holds ten untouched 2172×724 RGBA strips (three phases each, 30 drawings), exact prompts/provenance, ten immutable 390×844 game reference screenshots and resolved source/recipient anchors. Alpha minima are 0 and maxima 252–255. No supplied concept or sibling-project assets.
+- Deliverable: `docs/combat-presentation/blade-storyboards/` has ten 1170×950 three-phase boards, ten 390×844 contact images, manifest and an interactive local HTML viewer. Select skills, compare with the bare field and adjust weight 60–110%. Browser canvas uses a fixed real screenshot so AI cannot repaint characters/UI/scenery. Native canvas exports avoid scrollbar/fractional screenshot clipping. HP/UI stay unchanged: clearly labelled concept images, not live combat captures.
+- The designs distinguish compact Attack, descending Finisher, racing Lunge, flat Sweep, reversed Backstab, rising Ambush, hooking Disarm, Parry stance→returning cut, needle Pierce and short braced Halt. Style/palettes follow the existing family/icon classes; no extra strikes/status emblems. Parry's recipient comes from a real counter cue.
+- Changed test fixture only: readonly storyboardAnchors inspection and `blade-storyboards.spec.ts` reference/render workflow. No production game/core/content/save/timing/asset atlas changes; existing R3 remains the PR implementation. One shared runtime atlas remains possible after choosing the designs. Owner has not approved these concepts or the R3 motion clips.
+- Validation: typecheck/lint/build pass. Reference capture 1/1 and final render/control check 1/1 pass (the other mode is intentionally skipped). Verified all source/board/contact dimensions and real alpha; inspected contact artwork for all ten and representative full three-phase boards. Chromium local rendering, no real-device claim. No full battle/unit rerun for art/docs-only work; prior R3 C11 verification remains documented below. Rendering fixes addressed alpha-max assumptions, a selector collision and viewport screenshot clipping; no rules/timeouts were relaxed to claim gameplay success.
+- Branch `codex/vfx-family-1-blade`, same PR #59, no merge/publication. Next: owner selects/adjusts the artwork, then prepare production painted layers/motion inside family 1 and show clips again. Do not start C5.2.
+
 ## 2026-10-24 — C5.1 R3: balanced weight and ten distinct blade gestures (PR #59)
 
 - Owner feedback: R2 is too thick and the ten moves look too similar. This revision is not artistic approval. Branch `codex/vfx-family-1-blade`, [PR #59](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/59), no family merge/publication and no family 2.

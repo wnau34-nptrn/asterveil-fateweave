@@ -70,6 +70,15 @@ function painted() {
 }
 const qa = {
   impacts,
+  storyboardAnchors: () => {
+    const cue = bladeCues(stage('hit')).find(c => c.skill === skill)!;
+    const rect = scene.game.canvas.getBoundingClientRect();
+    const point = (id: string | undefined) => {
+      const slot = scene.actorPanels.get(id ?? '')!;
+      return { x: rect.left + slot.x, y: rect.top + slot.y - slot.size * .48, size: slot.size };
+    };
+    return { source: point(cue.event.sourceId), target: point(cue.event.targetId), recipient: cue.event.targetId };
+  },
   prime: (outcome: string) => {
     const h = ui.state.heroes[0]!;
     if (outcome === 'blocked') h.barrier = 100;
