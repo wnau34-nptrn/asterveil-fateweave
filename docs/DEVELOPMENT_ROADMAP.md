@@ -1,5 +1,7 @@
 # Development roadmap
 
+> [Current consolidated development plan](DEVELOPMENT_PLAN_TH.md) is the current delivery index. The milestones below are historical prototype notes, not the current completion status.
+
 Milestone 1 is implemented. Milestone 2 now includes optional teaching, SPD round initiative, the responsive single-screen HUD, and three independently selectable data-driven battles; human balance feedback and physical-device checks remain open. Later milestones are proposals requiring their own scope/balance decisions.
 
 | Milestone | Status | Deliverable / exit criteria |

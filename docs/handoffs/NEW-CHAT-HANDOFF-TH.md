@@ -1,5 +1,9 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
+## 2026-10-25 — Start here: consolidated plan published to GitHub
+
+Read `docs/DEVELOPMENT_PLAN_TH.md` and tracking issue #69 before older prompts below. The owner requested an actionable plan covering all discussion: P00–P11, task dependencies/exit gates, all D01–D37. Next work is P00 shared-level/team-five/migration specifications and baseline; do not auto-run old Batch2 with a reserved save version. The document distinguishes existing runtime from new directions and unvalidated numbers. This publication contains documentation only. Branch/PR publication status is recorded in CODEX-TO-CLAUDE and issue #69.
+
 ## 2026-10-25 — Latest direction: shared levels and boss mechanics
 
 Read `docs/design/SHARED_LEVEL_TEAM_BOSSES_TH.md` first. Owner wants equal levels to enable switching. Recommended scope is every owned hero via shared camp Lv/EXP; this supersedes individual catch-up training in the earlier design baseline. Stars/builds remain individual, with baseline boss counters accessible without a particular gacha hero. Team five is still a prototype direction, runtime remains four. No game code changed; next design work must recalculate EXP/economy and validate team/encounter rules together.
