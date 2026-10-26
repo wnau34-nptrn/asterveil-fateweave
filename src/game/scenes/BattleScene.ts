@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
-import { pilotKey, pilotUrl, pilotClip, pilotFrame, pilotSheets } from '../visuals/unit-frames';
+import { pilotKey, pilotUrl, pilotClip, pilotSheets } from '../visuals/unit-frames';
+import { unitFrameView } from '../visuals/unit-frame-view';
 import { UnitAnimation } from '../visuals/unit-animation';
 import { unitPose, unitReactions } from '../visuals/unit-animation-map';
 import type { BattleState, EncounterDefinition, TurnStage } from '../../core/battle/types';
@@ -180,20 +181,19 @@ export class BattleScene extends Phaser.Scene {
     const sprite = this.add.image(0, 0, framed ? pilot : `battle-${art.sheet}`, framed ? hp <= 0 ? 21 : 0 : art.frame)
       .setOrigin(.5, framed ? 496 / 512 : actorFootOrigins[key] ?? 1).setDisplaySize(size * (framed ? 2 : 1), size * (framed ? 2 : 1)).setFlipX(mirroredArt.has(key));
     body.add(sprite);
+    const nextFrame = framed ? this.add.image(0, 0, pilot, 0)
+      .setOrigin(sprite.originX, sprite.originY).setDisplaySize(size * 2, size * 2).setFlipX(sprite.flipX).setVisible(false) : undefined;
+    if (nextFrame) body.add(nextFrame);
     const alive = () => [...(this.view?.state.heroes ?? []), ...(this.view?.state.enemies ?? [])].some(a => a.id === id && a.hp > 0);
     const idleStart = this.idle.length;
     if (hp > 0) this.liven(id, body, sprite, size, enemy, id === this.view!.activeActorId);
     const idleTweens = this.idle.slice(idleStart);
     this.unitAnimation.bind(id, body, size, paused => {
       for (const tween of idleTweens) { if (paused || !alive()) tween.pause(); else tween.resume(); }
-    }, framed ? {
-      show: (pose, phase, progress, clip) => {
-        const frame = pilotFrame(pose, phase, progress, clip);
-        if (frame === undefined) return false;
-        sprite.setFrame(frame); return true;
-      },
-      reset: () => { sprite.setFrame(alive() ? 0 : 21); },
-    } : undefined);
+    }, nextFrame ? unitFrameView(key, sprite, nextFrame, alive, () => {
+      nextFrame.setPosition(sprite.x, sprite.y).setScale(sprite.scaleX, sprite.scaleY).setFlipX(sprite.flipX);
+      nextFrame.setTint(sprite.tintTopLeft).setTintMode(sprite.tintMode);
+    }) : undefined);
     const hitWidth = Math.max(44, Math.min(72, size * .7));
     const hitHeight = Math.max(44, size * .9);
     this.actorTargets.set(id, { x: x - hitWidth / 2, y: y + sprite.y - hitHeight, width: hitWidth, height: hitHeight });

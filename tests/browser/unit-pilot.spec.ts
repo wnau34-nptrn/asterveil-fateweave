@@ -23,6 +23,7 @@ async function open(page:Page,skill:boolean){
  await page.clock.install({time:new Date('2026-10-26T00:00:00Z')});await page.goto('./');await page.locator('#continue').click();if(await page.locator('#start').count()){await expect(page.locator('#start')).toBeEnabled();await page.locator('#start').click();}else await expect(page.locator('#action-execute')).toBeEnabled();await page.clock.pauseAt(new Date('2026-10-26T01:00:00Z'));
 }
 for(const skill of [false,true])test(`pilot sprites 390: ${skill?'Execute and Hunter Shadow Knife':'basic slash on both sides'}`,async({browser},info)=>{
+ test.setTimeout(process.env.CAPTURE_UNIT_PILOT==='true'?120_000:45_000);
  const ctx=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true,reducedMotion:'no-preference'}),page=await ctx.newPage(),errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));
  try {
   await open(page,skill);await page.locator(`#action-${skill?'execute':'attack'}`).click();await page.locator('#target-f1').click();
@@ -30,7 +31,7 @@ for(const skill of [false,true])test(`pilot sprites 390: ${skill?'Execute and Hu
   await expect(page.locator('#turn-phase')).toHaveAttribute('data-actor','tracer');
   let frameIndex=0;
   const advance=async(ms:number)=>{
-   while(ms>0){const step=Math.min(ms,50);await page.clock.runFor(step);ms-=step;if(process.env.CAPTURE_UNIT_PILOT==='true'&&frameIndex<40)await page.screenshot({path:info.outputPath(`frames/${String(frameIndex++).padStart(3,'0')}.png`)});}
+   while(ms>0){const step=Math.min(ms,25);await page.clock.runFor(step);ms-=step;if(process.env.CAPTURE_UNIT_PILOT==='true'&&frameIndex<80)await page.screenshot({path:info.outputPath(`frames/${String(frameIndex++).padStart(3,'0')}.png`)});}
   };
   await advance(150);await page.screenshot({path:info.outputPath('hero-windup-390.png')});
   const heroEnd=skill?850:600;await advance(heroEnd-150);
