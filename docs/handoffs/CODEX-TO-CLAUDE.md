@@ -1,5 +1,11 @@
 # Codex → Claude handoff
 
+## 2026-10-26 — Handoff for next chat: C5.2 defense artwork first
+
+- Owner asked for a handoff to a new chat after discussing the next VFX family. Added `C5-FAMILY-2-DEFENSE-HANDOFF-TH.md` with a copy-ready opening prompt, exact 11 skills, approved family-1 release evidence, artwork-first review, ImageGen fallback authorization and runtime/validation boundaries. Linked it from `NEW-CHAT-HANDOFF-TH.md` without replacing unrelated development queues.
+- Branch: `codex/vfx-family-1-blade`; docs-only follow-up to merged PR #59 (`d14a3e1`). No new art/runtime, screenshots or clips; family 2 remains unstarted and unapproved. Next chat fetches current game base and creates a new family-2 branch.
+- Validation: reviewed content against C5/CLAUDE and ran `git diff --check`; no gameplay tests needed for handoff-only documentation.
+
 ## 2026-10-26 — Owner approved merging C5.1 R4 (PR #59)
 
 - Owner explicitly said “merge ได้เลย” after confirming the actual VFX were in PR #59. This is the family-1 motion/merge approval. Do not auto-start family 2 in this merge task.

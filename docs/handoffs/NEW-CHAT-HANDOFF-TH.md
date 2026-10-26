@@ -1,5 +1,7 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
+ส่งต่อ VFX โดยเฉพาะ 2026-10-26: เจ้าของขอ handoff ไปแชตใหม่สำหรับขั้นถัดไป ดู [C5.2 โล่/ป้องกัน — พร้อมข้อความเปิดแชต](C5-FAMILY-2-DEFENSE-HANDOFF-TH.md) เริ่ม artwork 11 ท่าก่อน runtime; C5.1 merge/เผยแพร่แล้ว ตระกูล 2 ยังไม่เริ่ม คิว P01 และงานอื่นด้านล่างเป็นคนละขอบเขต
+
 อัปเดต R4 2026-10-26: เจ้าของเลือกแบบภาพทั้ง 10 ท่า รวม Pierce หอกหนา และสั่งทำ VFX จริงแล้ว โมดูล blade-fx.ts ใช้ atlas เดียว 38 frames จากภาพเตรียม/ปะทะ/สลายที่เลือก เก็บต้นฉบับและ hash ไว้ครบ รวมฐาน roster batch 1 e79e8a4 แล้ว ดู CODEX-TO-CLAUDE.md บนสุดและคลิปใน docs/combat-presentation/blade-slice/ หลังส่งชุดตรวจ **เจ้าของอนุมัติและ merge R4 แล้ว 2026-10-26 ผ่าน PR #59 (`d14a3e1`) เผยแพร่สำเร็จผ่าน Pages run 40348106389 แล้ว (build +4 browser shards +deploy) HTTP200 และ hash ของ blade_fx.webp ตรง R4 ดู docs/validation/blade-vfx-release/README_TH.md; ไม่เริ่ม C5.2 อัตโนมัติในงาน merge นี้**
 
 
