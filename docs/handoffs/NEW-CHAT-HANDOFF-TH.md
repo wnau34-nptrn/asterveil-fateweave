@@ -1,5 +1,10 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
+## แอนิเมชันแก้ไขล่าสุด — 2026-10-26
+
+เจ้าของแจ้งว่าเปลี่ยนท่าโจมตียังไม่ต่อเนื่อง หลังอนุมัติภาพ pilot แล้ว แก้ลำดับดาบ Lyra, เชื่อมเฟรมช่วงสั้น, ease การคืนตัว และรับ reaction ต่อจากตำแหน่งที่ถูกโจมตี โดยใช้ atlas ที่อนุมัติเดิม PR [#75](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/75) รวมแล้วเป็น `ef9b5df13dcd69dd149f27b75ea56ec4f0f06c45` และเผยแพร่สำเร็จผ่าน [Pages run 40270097579](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/40270097579). หลักฐานอยู่ `docs/validation/unit-animation-smoothing/` (คลิป 390px และ before/after). Unit 854 / browser CI 246 ผ่าน, capture-only skips 36. รายละเอียดใน CODEX-TO-CLAUDE.md งานนี้ไม่ขยาย approval ไป C5 หรือยูนิตอื่น และไม่เริ่มงานใหม่อัตโนมัติ คิวงานหลักด้านล่างยังเป็นคนละขอบเขตกับการแก้แอนิเมชันนี้
+
+
 ## P00 publication complete — PR #72
 
 Merged into game branch as `aab276d9f7eb46f782039414a83b50c19beef8af`, head `e638f3b`. PR quality CI run 672 (`40245547986`) passed. Local baseline: full sim 28/28 and focused 55/55; final artifacts: 19 documentation/report files, 29 tracked links, hashes and whitespace validated. Issue #69 marks P00 complete and remains open. Next is P01-A/B in `docs/design/p00/SHARED_PROGRESSION_TEAM_SPEC_TH.md`; no runtime rules were changed by P00. No screenshots or human playtest were claimed. This note records delivery only.
