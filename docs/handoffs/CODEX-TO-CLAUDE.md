@@ -4,7 +4,8 @@
 
 - Owner approved all pilot art/motion, requested only a tiny slowdown, and explicitly authorized release into the live game. Applies to Lyra/Hunter pilot PR #74, not approval of unrelated C5 effects.
 - Sprite recovery 240→260ms (+20ms, ~8%); frame-progress exponent 1.08 gently holds poses a little longer. Damage/contact/end timing, fast/reduced-motion semantics, rule state and save format are unchanged.
-- Files: `unit-animation.ts`, `unit-frames.ts`, existing frame lifecycle test, handoff/approval and validation notes. Verification: typecheck/lint/build:pages and 24 focused tests pass; all seven pilot/mode/skip-resize browser cases pass. Full-unit rerun and publication outcome are recorded on PR #74 after completion.
+- Files: `unit-animation.ts`, `unit-frames.ts`, existing frame lifecycle test, handoff/approval and validation notes. Verification: typecheck/lint/build:pages, 851 unit tests and 24 focused tests pass; all seven pilot/mode/skip-resize browser cases pass. PR browser gate: 3 prechecks and 246 tests pass, 36 capture-only skips.
+- Released PR #74 as `19177ffa9e76c071b80654122f3bebeaf0f60d52`. Pages workflow [40265355688](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/40265355688) succeeded: build, all four browser shards and deploy. Live target: https://wnau34-nptrn.github.io/asterveil-fateweave/. Direct HTTP verification from this runtime was blocked by the outbound proxy (403); publication is verified by the successful deployment for the exact release SHA. This docs-only follow-up uses [skip ci] so it does not rebuild unchanged game code.
 
 ## 2026-10-26 — Unit animation step 3: Lyra/Hunter sprite pilot
 
