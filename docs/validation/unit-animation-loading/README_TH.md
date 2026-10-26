@@ -23,6 +23,7 @@
 - Unit scheduling/cache/failure/eviction และ atlas bounds/source size: 4 tests; full Vitest 858 tests / 75 files ผ่าน
 - Typecheck, lint, Pages production build ผ่าน
 - Chromium: จงใจ hold ภาพ optional ทั้งคู่ไว้ แต่ Start, commit และ skip เทิร์นยังทำงาน; จำลอง 503 ยังเล่นได้; title ไม่ร้องขอ pilot และ encounter ไม่มี Hunter ไม่โหลด Hunter
+- ทดสอบ production build ภายใต้ Pages subpath ในเครื่องเพิ่ม: loading 3/3 ผ่าน
 - Pilot basic/Execute/Shadow Knife ที่ 390px และ presentation modes/lifecycle ใช้ Playwright บน Chromium; ผลสุดท้ายบันทึกใน CODEX-TO-CLAUDE.md ภาพตัวอย่าง 390px อยู่ในโฟลเดอร์นี้
 
 ไม่ได้วัดเวลาโหลดบนมือถือจริง/iOS Safari และไม่ได้อ้าง FPS หรือเวลาโหลดเร็วขึ้นเป็นเปอร์เซ็นต์ Core unit/VFX assets เดิมยัง preload ตามเดิม งานนี้เอา pilot ออกจาก readiness gate และลดภาระภาพที่เพิ่มขึ้น
