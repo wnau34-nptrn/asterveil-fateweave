@@ -2,7 +2,7 @@
 
 ## แก้โหลด pilot — 2026-10-26
 
-เจ้าของผ่านท่าโจมตีแล้ว แต่แจ้งว่าโหลดช้า จึงเอา pilot ออกจาก preload และโหลดเบื้องหลังเฉพาะยูนิตในสนามพร้อม fallback ใช้ภาพเดิมระหว่างรอ แพ็ก lossless รักษาพิกเซล/ขนาดตัว/จุดยืนเดิม ลด decoded RGBA 48 → 9.8 MiB (79.6%) และขนาดดาวน์โหลดรวม metadata 10.4% ไม่มี pilot request ที่ title ไม่แก้กฎ/เซฟ/จังหวะที่ผ่านแล้ว Branch `codex/unit-animation-loading`; สถานะ release/หลักฐานสุดท้ายใน CODEX-TO-CLAUDE.md และ `docs/validation/unit-animation-loading/` คิว P01-A/B ด้านล่างยังคงเดิม ไม่เริ่มงานอื่นอัตโนมัติ
+เจ้าของผ่านท่าโจมตีแล้ว แต่แจ้งว่าโหลดช้า จึงเอา pilot ออกจาก preload และโหลดเบื้องหลังเฉพาะยูนิตในสนามพร้อม fallback ใช้ภาพเดิมระหว่างรอ แพ็ก lossless รักษาพิกเซล/ขนาดตัว/จุดยืนเดิม ลด decoded RGBA 48 → 9.8 MiB (79.6%) และขนาดดาวน์โหลดรวม metadata 10.4% ไม่มี pilot request ที่ title ไม่แก้กฎ/เซฟ/จังหวะที่ผ่านแล้ว PR [#76](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/76) รวมเป็น `b4433c981544e3a63aa32f8a95d7bbca078b1315` และเผยแพร่สำเร็จผ่าน [Pages run 40325728873](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/40325728873) (build + browser ครบ 4 shards + deploy) Unit 858/75 files และ browser CI 249 ผ่าน / capture-only skips 36; รายละเอียดใน CODEX-TO-CLAUDE.md และ `docs/validation/unit-animation-loading/` คิว P01-A/B ด้านล่างยังคงเดิม ไม่เริ่มงานอื่นอัตโนมัติ
 
 ## แอนิเมชันแก้ไขล่าสุด — 2026-10-26
 
