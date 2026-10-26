@@ -1,5 +1,13 @@
 # Codex → Claude handoff
 
+## 2026-10-26 — Unit animation step 2: shared controller and existing-image fallback
+
+- Owner said “จัดไป” after step 1 and “ต่อ” to resume step 2. Branch `codex/unit-animation-controller`, base `e62292a`. PR/merge result is tracked on GitHub; no visual approval of C5 or new sprite production inferred.
+- Added pure renderer-port controller and exhaustive ActionId pose map, class-specific basic attacks and enemy art/intent mapping. BattleScene owns lifecycle, starts gestures before VFX-specific returns, uses actual reaction recipients and settles transforms on existing cancellation boundaries. Idle is paused per actor and stays paused when down. No battle/save/balance changes.
+- Files: `src/game/visuals/unit-animation{,-map}.ts`, `src/game/scenes/BattleScene.ts`, `tests/unit-animation.test.ts`, `docs/validation/unit-animation-step2/README_TH.md`, this handoff. Local evidence: two reviewed 390px screenshots and a 3.6s/20fps virtual-clock capture clip (no sound); binary upload status is explicit in the validation note.
+- Validation: typecheck/lint/build pass; full Vitest 72 files/847 tests; focused 3 files/20 tests. Seven relevant Chromium presentation cases pass including a 1/1 rerun after Vite HMR interrupted the initial run. Covers authoritative contact, all four mode combinations, skip/resize/reload/hidden and motion toggles. Not a real-device/Safari claim.
+- Step 3 remains: generate the pilot sprite sheets and add frame/contact playback. No cloud-session creation capability is available here; do not launch unrelated P00/C12 work from this animation task.
+
 ## 2026-10-25 — Development plan publication completed
 
 - PR #70 merged into `feature/fateweave-initial-prototype` as `aafec236507458f45303a6af3a26438dfb276534` (head `0fa6cc6`). Plan: `docs/DEVELOPMENT_PLAN_TH.md`; tracking issue #69 remains open and now links to the game branch.
