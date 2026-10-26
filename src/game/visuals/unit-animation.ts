@@ -1,3 +1,4 @@
+import type { UnitClip, UnitFrames } from './unit-frames';
 import type { Reaction, UnitPose } from './unit-animation-map';
 
 // Small renderer port: no Phaser dependency, rules, timers, saves or input hit zones.
@@ -7,16 +8,16 @@ export interface UnitBody {
   setRotation(rotation: number): unknown;
   setScale(x: number, y: number): unknown;
 }
-interface Binding { body: UnitBody; x: number; y: number; rotation: number; sx: number; sy: number; size: number; idle(paused: boolean): void }
-interface Motion { pose: UnitPose | Reaction; direction: number; elapsed: number; duration: number; phase: 'prepare' | 'recover' | 'reaction' }
+interface Binding { body: UnitBody; x: number; y: number; rotation: number; sx: number; sy: number; size: number; frames?: UnitFrames; idle(paused: boolean): void }
+interface Motion { pose: UnitPose | Reaction; direction: number; elapsed: number; duration: number; phase: 'prepare' | 'recover' | 'reaction'; clip?: UnitClip }
 export class UnitAnimation {
   private bindings = new Map<string, Binding>();
   private motions = new Map<string, Motion>();
-  bind(id: string, body: UnitBody, size: number, idle: Binding['idle']): void {
-    this.bindings.set(id, { body, x: body.x, y: body.y, rotation: body.rotation, sx: body.scaleX, sy: body.scaleY, size, idle });
+  bind(id: string, body: UnitBody, size: number, idle: Binding['idle'], frames?: UnitFrames): void {
+    this.bindings.set(id, { body, x: body.x, y: body.y, rotation: body.rotation, sx: body.scaleX, sy: body.scaleY, size, idle, frames });
   }
-  begin(id: string, pose: UnitPose, direction: number, contactMs: number): void {
-    this.start(id, { pose, direction, elapsed: 0, duration: contactMs, phase: 'prepare' });
+  begin(id: string, pose: UnitPose, direction: number, contactMs: number, clip?: UnitClip): void {
+    this.start(id, { pose, direction, elapsed: 0, duration: contactMs, phase: 'prepare', clip });
   }
   contact(id: string, remainingMs: number): void {
     const motion = this.motions.get(id);
@@ -24,7 +25,7 @@ export class UnitAnimation {
       const rig = this.bindings.get(id)!;
       this.restore(rig); rig.idle(false); this.motions.delete(id); return;
     }
-    if (motion) { motion.phase = 'recover'; motion.elapsed = 0; motion.duration = Math.min(240, remainingMs); }
+    if (motion) { motion.phase = 'recover'; motion.elapsed = 0; motion.duration = Math.min(motion.clip ? 260 : 240, remainingMs); this.bindings.get(id)?.frames?.show(motion.pose, 'recover', 0, motion.clip); }
   }
   react(id: string, pose: Reaction, direction: number, remainingMs: number): void {
     this.start(id, { pose, direction, elapsed: 0, duration: Math.min(pose === 'down' ? 320 : 200, remainingMs), phase: 'reaction' });
@@ -34,8 +35,10 @@ export class UnitAnimation {
     if (!rig || motion.duration <= 0) return;
     this.restore(rig); rig.idle(true);
     this.motions.set(id, motion);
+    rig.frames?.show(motion.pose, motion.phase, 0, motion.clip);
   }
   private restore(rig: Binding): void {
+    rig.frames?.reset();
     rig.body.setPosition(rig.x, rig.y); rig.body.setRotation(rig.rotation); rig.body.setScale(rig.sx, rig.sy);
   }
   update(delta: number): void {
@@ -65,6 +68,8 @@ export class UnitAnimation {
         case 'down': y = 6; angle = -.18; break;
         case 'counter': x = 10; angle = .07; break;
       }
+      const framed = rig.frames?.show(motion.pose, motion.phase, p, motion.clip);
+      if (framed) { angle = 0; squash = 0; if (motion.phase === 'reaction') { x = 0; y = 0; } }
       rig.body.setPosition(rig.x + x * d * weight * scale, rig.y + y * weight * scale);
       rig.body.setRotation(rig.rotation + angle * d * weight);
       rig.body.setScale(rig.sx * (1 + squash * weight), rig.sy * (1 - squash * weight));
@@ -74,6 +79,11 @@ export class UnitAnimation {
   settle(): void {
     this.motions.clear();
     for (const rig of this.bindings.values()) { this.restore(rig); rig.idle(false); }
+  }
+  reset(id: string): void {
+    this.motions.delete(id);
+    const rig = this.bindings.get(id);
+    if (rig) { this.restore(rig); rig.idle(false); }
   }
   clear(): void { this.settle(); this.bindings.clear(); }
 }

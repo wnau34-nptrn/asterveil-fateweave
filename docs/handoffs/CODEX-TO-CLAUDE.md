@@ -1,5 +1,20 @@
 # Codex → Claude handoff
 
+## 2026-10-26 — Pilot approved: subtle pacing adjustment and game publication
+
+- Owner approved all pilot art/motion, requested only a tiny slowdown, and explicitly authorized release into the live game. Applies to Lyra/Hunter pilot PR #74, not approval of unrelated C5 effects.
+- Sprite recovery 240→260ms (+20ms, ~8%); frame-progress exponent 1.08 gently holds poses a little longer. Damage/contact/end timing, fast/reduced-motion semantics, rule state and save format are unchanged.
+- Files: `unit-animation.ts`, `unit-frames.ts`, existing frame lifecycle test, handoff/approval and validation notes. Verification: typecheck/lint/build:pages and 24 focused tests pass; all seven pilot/mode/skip-resize browser cases pass. Full-unit rerun and publication outcome are recorded on PR #74 after completion.
+
+## 2026-10-26 — Unit animation step 3: Lyra/Hunter sprite pilot
+
+- Owner said “จัดไป” after step 2. Branch `codex/unit-animation-pilot`, depends on the controller from PR #73. PR #74: https://github.com/wnau34-nptrn/asterveil-fateweave/pull/74 (CI pending at handoff). Controller PR #73 integrated as `a0d50f325be7157c7272d613268f416a45ecf032` after quality/browser CI passed. Step 3 only, not expansion to other units or approval of C5 VFX.
+- Generated whole-sheet sprites from shipped Lyra/Hunter seeds; rejected overlap/incomplete first passes, normalized 24-component sheets with shared scale/foot pivot, selected 21 sequence slots each (17 generated poses + 4 reused endpoints), plus idle. Lossless WebP runtime atlases and rebuild script/provenance included. No imported other-project/user concept assets.
+- Added `unit-frames.ts`, frame port in UnitAnimation, BattleScene preload/binding and HP-boundary down/revive reset. Contact frame is selected synchronously by existing UI contact; hit targets/HP remain stationary. Other units/actions retain procedural fallback; reduced motion uses static feedback. No rule/save/balance changes.
+- Validation: typecheck/lint/build pass, Vitest 73 files/851 tests; focused 4 files/24 tests. Chromium 390px basic pilot + round-three Execute/Shadow Knife pass; four presentation mode cases pass. Browser fixture errors corrected (TargetOption.valid, Mark fallback, resumed Start gating). Two additional 390px impact/skip/resize/reload/hidden lifecycle cases pass.
+- Evidence: `docs/validation/unit-animation-step3/{basic-390,skill-390}.mp4` plus two reviewed 390px PNGs. Virtual-clock 20fps clips, no audio; not real-device/Safari or FPS claims. Decoded atlas budget ~48 MiB for both, needs encounter-based loading before roster-wide rollout.
+- Next: owner visual feedback on the pilot, then caster pair Eira/Sprite or broader rollout according to the agreed plan. No image quality approval inferred from tests.
+
 ## 2026-10-26 — Unit animation step 2: shared controller and existing-image fallback
 
 - Owner said “จัดไป” after step 1 and “ต่อ” to resume step 2. Branch `codex/unit-animation-controller`, base `e62292a`. PR #73: https://github.com/wnau34-nptrn/asterveil-fateweave/pull/73 (CI/merge status is recorded there); no visual approval of C5 or new sprite production inferred.
