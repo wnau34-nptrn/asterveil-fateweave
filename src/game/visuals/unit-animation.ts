@@ -9,7 +9,8 @@ export interface UnitBody {
   setScale(x: number, y: number): unknown;
 }
 interface Binding { body: UnitBody; x: number; y: number; rotation: number; sx: number; sy: number; size: number; frames?: UnitFrames; idle(paused: boolean): void }
-interface Motion { pose: UnitPose | Reaction; direction: number; elapsed: number; duration: number; phase: 'prepare' | 'recover' | 'reaction'; clip?: UnitClip }
+interface Motion { pose: UnitPose | Reaction; direction: number; elapsed: number; duration: number; phase: 'prepare' | 'recover' | 'reaction'; clip?: UnitClip; entry?: { x: number; y: number; rotation: number; sx: number; sy: number } }
+const smooth = (p: number): number => p * p * (3 - 2 * p);
 export class UnitAnimation {
   private bindings = new Map<string, Binding>();
   private motions = new Map<string, Motion>();
@@ -25,7 +26,7 @@ export class UnitAnimation {
       const rig = this.bindings.get(id)!;
       this.restore(rig); rig.idle(false); this.motions.delete(id); return;
     }
-    if (motion) { motion.phase = 'recover'; motion.elapsed = 0; motion.duration = Math.min(motion.clip ? 260 : 240, remainingMs); this.bindings.get(id)?.frames?.show(motion.pose, 'recover', 0, motion.clip); }
+    if (motion) { motion.phase = 'recover'; motion.elapsed = 0; motion.entry = undefined; motion.duration = Math.min(motion.clip ? 260 : 240, remainingMs); this.bindings.get(id)?.frames?.show(motion.pose, 'recover', 0, motion.clip, motion.duration); }
   }
   react(id: string, pose: Reaction, direction: number, remainingMs: number): void {
     this.start(id, { pose, direction, elapsed: 0, duration: Math.min(pose === 'down' ? 320 : 200, remainingMs), phase: 'reaction' });
@@ -33,9 +34,14 @@ export class UnitAnimation {
   private start(id: string, motion: Motion): void {
     const rig = this.bindings.get(id);
     if (!rig || motion.duration <= 0) return;
+    motion.entry = { x: rig.body.x - rig.x, y: rig.body.y - rig.y, rotation: rig.body.rotation - rig.rotation, sx: rig.body.scaleX - rig.sx, sy: rig.body.scaleY - rig.sy };
     this.restore(rig); rig.idle(true);
+    // An interrupted lunge starts its reaction where it was hit, rather than teleporting home.
+    rig.body.setPosition(rig.x + motion.entry.x, rig.y + motion.entry.y);
+    rig.body.setRotation(rig.rotation + motion.entry.rotation);
+    rig.body.setScale(rig.sx + motion.entry.sx, rig.sy + motion.entry.sy);
     this.motions.set(id, motion);
-    rig.frames?.show(motion.pose, motion.phase, 0, motion.clip);
+    rig.frames?.show(motion.pose, motion.phase, 0, motion.clip, motion.duration);
   }
   private restore(rig: Binding): void {
     rig.frames?.reset();
@@ -47,7 +53,7 @@ export class UnitAnimation {
       motion.elapsed += Math.max(0, delta);
       const p = Math.min(1, motion.elapsed / motion.duration);
       // Prepare holds at the contact pose if render time reaches the cue first.
-      const weight = motion.phase === 'prepare' ? Math.sin(p * Math.PI / 2) : motion.phase === 'recover' ? 1 - p : Math.sin(p * Math.PI);
+      const weight = motion.phase === 'prepare' ? smooth(p) : motion.phase === 'recover' ? 1 - smooth(p) : Math.sin(p * Math.PI);
       const d = motion.direction || 1, scale = Math.min(1.25, rig.size / 96);
       let x = 0, y = 0, angle = 0, squash = 0;
       switch (motion.pose) {
@@ -68,11 +74,12 @@ export class UnitAnimation {
         case 'down': y = 6; angle = -.18; break;
         case 'counter': x = 10; angle = .07; break;
       }
-      const framed = rig.frames?.show(motion.pose, motion.phase, p, motion.clip);
+      const framed = rig.frames?.show(motion.pose, motion.phase, p, motion.clip, motion.duration);
       if (framed) { angle = 0; squash = 0; if (motion.phase === 'reaction') { x = 0; y = 0; } }
-      rig.body.setPosition(rig.x + x * d * weight * scale, rig.y + y * weight * scale);
-      rig.body.setRotation(rig.rotation + angle * d * weight);
-      rig.body.setScale(rig.sx * (1 + squash * weight), rig.sy * (1 - squash * weight));
+      const carry = 1 - smooth(Math.min(1, motion.elapsed / Math.min(80, motion.duration)));
+      rig.body.setPosition(rig.x + x * d * weight * scale + (motion.entry?.x ?? 0) * carry, rig.y + y * weight * scale + (motion.entry?.y ?? 0) * carry);
+      rig.body.setRotation(rig.rotation + angle * d * weight + (motion.entry?.rotation ?? 0) * carry);
+      rig.body.setScale(rig.sx * (1 + squash * weight) + (motion.entry?.sx ?? 0) * carry, rig.sy * (1 - squash * weight) + (motion.entry?.sy ?? 0) * carry);
       if (p === 1 && motion.phase !== 'prepare') { this.restore(rig); rig.idle(false); this.motions.delete(id); }
     }
   }
