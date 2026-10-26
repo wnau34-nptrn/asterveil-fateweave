@@ -1,0 +1,9 @@
+{
+  "date": "2026-10-25",
+  "tool": "built-in ImageGen edit",
+  "request": "Thicker spear-shaped Pierce, avoid arrow silhouette",
+  "input": "archive/pierce-v1.png",
+  "output": "source/pierce.png",
+  "originalGeneratedFilename": "exec-6478da3b-fe94-4fe4-b0be-2b07343874b9.png",
+  "prompt": "Edit this transparent 3-phase Pierce VFX concept strip ONLY. Preserve the exact three-column horizontal composition, generous transparent spacing, genuine RGBA transparency, ivory/teal painterly energy language and left-to-right thrust direction. The owner says it is too needle-thin and reads as an arrow rather than a spear. Make the SPEAR much more substantial: widen the luminous axial shaft approximately 2x, and make a clearly visible broad elongated LEAF-SHAPED SPEARHEAD at the FRONT RIGHT tip, with pronounced sloping shoulders narrowing into the shaft. Give the spearhead about 2.5x the current tip's vertical thickness, with a sharp single forward point, a small ivory ridge and translucent teal blade faces. A long narrow spear blade, NOT a tiny arrow triangle, NOT an arrowhead, no bow, no fletching, no trident. Keep ONE continuous straight thrust, not multiple hits. Left column: compact substantial spear-tip preparation glow. Centre column: one long substantial energy spear with a readable elongated broad blade at the front, solid narrow core and low-glow teal wake, restrained translucent coverage. Right column: broken fading spear shaft/ribbons with softer reduced energy, not another attack. Preserve fine tapered brushwork and empty negative space, do not inflate into a bulky white blast. No text, labels, UI, characters, background, weapon handles or scenery. Return the full strip at the original 3:1 aspect, ideally 2172x724. Keep all three effect drawings separately within their columns."
+}

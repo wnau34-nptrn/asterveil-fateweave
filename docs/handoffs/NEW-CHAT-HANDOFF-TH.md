@@ -1,5 +1,13 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
+อัปเดต R4 2026-10-26: เจ้าของเลือกแบบภาพทั้ง 10 ท่า รวม Pierce หอกหนา และสั่งทำ VFX จริงแล้ว โมดูล blade-fx.ts ใช้ atlas เดียว 38 frames จากภาพเตรียม/ปะทะ/สลายที่เลือก เก็บต้นฉบับและ hash ไว้ครบ รวมฐาน roster batch 1 e79e8a4 แล้ว ดู CODEX-TO-CLAUDE.md บนสุดและคลิปใน docs/combat-presentation/blade-slice/ หลังส่งชุดตรวจ **เจ้าของอนุมัติ merge R4 แล้ว 2026-10-26 กำลังตรวจ CI/เผยแพร่ PR #59; ไม่เริ่ม C5.2 อัตโนมัติในงาน merge นี้**
+
+
+อัปเดต Pierce R2 2026-10-25: เจ้าของให้หัวหอก/แกนแทงหนาขึ้นเพราะ V1 ดูเหมือนธนู แก้ภาพครบ 3 จังหวะและหน้าพรีวิว #pierce แล้ว ยังเป็น concept ไม่ใช่ runtime; ดูบันทึกบนสุด CODEX-TO-CLAUDE.md
+
+อัปเดต 2026-10-25: เจ้าของอนุมัติทำ artwork เฉพาะฟัน/แทงทั้ง 10 ท่าก่อนแก้ runtime ต่อ สร้าง storyboard V1 ครบ 30 จังหวะด้วย ImageGen (เจ้าของอนุญาตแทน Shado ที่เชื่อมต่อไม่ได้) ดู `docs/combat-presentation/blade-storyboards/README_TH.md` และหน้าพรีวิวเลือกท่า/ปรับน้ำหนักในโฟลเดอร์เดียวกัน ส่งใน PR #59 เดิม **รอเจ้าของตรวจแบบภาพ ยังไม่ต่อภาพชุดใหม่นี้เข้าเกม ไม่ merge/publish และไม่เริ่ม C5.2**
+
+อัปเดต Codex 2026-10-24: C5.1 R3 บน `codex/vfx-family-1-blade`, PR #59 ปรับฟัน/แทงทั้ง 10 สกิลหลังเจ้าของเห็นว่า R2 หนาและคล้ายกัน ใช้ atlas เดิม ลดความทึบ/ความหนา และแยกสัดส่วนกับการเคลื่อนแต่ละท่า รวมฐาน C11 ล่าสุด 1a50c01 แล้ว รอเจ้าของตรวจ [คลิปใหม่ 390px](../combat-presentation/blade-slice/README_TH.md) ยังไม่ merge/publish และห้ามเริ่ม C5.2 จนเจ้าของอนุมัติคลิป อ่านบันทึกบนสุด `CODEX-TO-CLAUDE.md` และผลตรวจใน slice notes ก่อนทำต่อ
 ## แก้โหลด pilot — 2026-10-26
 
 เจ้าของผ่านท่าโจมตีแล้ว แต่แจ้งว่าโหลดช้า จึงเอา pilot ออกจาก preload และโหลดเบื้องหลังเฉพาะยูนิตในสนามพร้อม fallback ใช้ภาพเดิมระหว่างรอ แพ็ก lossless รักษาพิกเซล/ขนาดตัว/จุดยืนเดิม ลด decoded RGBA 48 → 9.8 MiB (79.6%) และขนาดดาวน์โหลดรวม metadata 10.4% ไม่มี pilot request ที่ title ไม่แก้กฎ/เซฟ/จังหวะที่ผ่านแล้ว PR [#76](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/76) รวมเป็น `b4433c981544e3a63aa32f8a95d7bbca078b1315` และเผยแพร่สำเร็จผ่าน [Pages run 40325728873](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/40325728873) (build + browser ครบ 4 shards + deploy) Unit 858/75 files และ browser CI 249 ผ่าน / capture-only skips 36; รายละเอียดใน CODEX-TO-CLAUDE.md และ `docs/validation/unit-animation-loading/` คิว P01-A/B ด้านล่างยังคงเดิม ไม่เริ่มงานอื่นอัตโนมัติ

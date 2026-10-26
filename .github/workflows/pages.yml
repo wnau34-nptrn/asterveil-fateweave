@@ -45,6 +45,11 @@ jobs:
       - run: npm ci
       - run: npm run build:pages
       - run: npx playwright install --with-deps chromium
+      - name: Verify painted blade source fixture
+        if: matrix.shard == 1
+        env:
+          PLAYWRIGHT_PAGES: 'false'
+        run: npm run test:browser -- tests/browser/blade-fx.spec.ts --workers=1
       - name: Verify production gameplay under the Pages subpath (shard ${{ matrix.shard }}/4)
         env:
           PLAYWRIGHT_PAGES: 'true'
