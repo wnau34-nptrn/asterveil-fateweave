@@ -25,6 +25,8 @@
 
 ก่อน contact มีประกายเล็กที่ต้นทาง; เมื่อถึง contact เดิมจึงเห็นรอยฟัน/แทงกับดาวเล็กที่ผู้รับจริง แล้วสลาย เศษแสงไม่ใช่การตีเพิ่ม ไม่เปลี่ยน `battle-playback.ts`, resolver, กฎ, balance หรือเซฟ ภาพเป็น normal alpha ไม่มี full-screen flash หรือสีขาวทับร่าง
 
+เปิด [หน้าดูคลิป R4 เลือกทีละท่า](index.html) หรือใช้ลิงก์ด้านล่าง
+
 ## คลิป 390 × 844
 
 | สกิล | คลิปโดนจริง |
@@ -58,7 +60,7 @@ npm run typecheck
 npm run lint
 npx vitest run --maxWorkers=1
 npm run build
-npx playwright test tests/browser/blade-fx.spec.ts tests/browser/presentation.spec.ts --output test-results/blade-r4-final
+npx playwright test tests/browser/blade-fx.spec.ts tests/browser/combat.spec.ts tests/browser/presentation.spec.ts tests/browser/bolt-fx.spec.ts tests/browser/exec-ward-fx.spec.ts --output test-results/blade-r4-final
 ```
 
 อัดซ้ำใน PowerShell (อย่าอัดพร้อม simulation หรือ browser suite อื่น):
@@ -71,9 +73,13 @@ python tests/browser/fixtures/encode-blade-clips.py test-results/blade-r4-delive
 
 ใช้ Python ที่มี Pillow และ ffmpeg/ffprobe ใน PATH การ pack atlas: `python incoming/ART-VFX-BLADE-001/package-approved.py`
 
-ผลตรวจ R4 จะบันทึกหลังชุดสุดท้าย ครอบคลุม HP ก่อน/ตรง contact, ภาพเฉพาะท่า/สลาย, สัดส่วนหอกหนา, Backstab แทงย้อน, ตัวเลขอยู่เหนือภาพ และ cleanup ภาพจริงจาก blocked/partial/dodge/Guard/cancel ไม่มี core หรือคมบนตัวเมื่อไม่โดน ตรวจ OS reduced motion ของทั้ง 10 ท่าว่าเป็นภาพนิ่ง รวมการปรับความเร็ว/ความเข้ม/resize ตามเดิม
+ผลตรวจ R4: typecheck / lint / build และ **838/838 Vitest tests (71 files) ผ่าน**; family browser **28/28 ผ่าน** ครอบคลุม HP ก่อน/ตรง contact, ภาพเฉพาะท่า/สลาย, สัดส่วนหอกหนา, Backstab แทงย้อน, ตัวเลขอยู่เหนือภาพ และ cleanup ภาพจริงจาก blocked/partial/dodge/Guard/cancel ไม่มี core หรือคมบนตัวเมื่อไม่โดน ตรวจ OS reduced motion ของทั้ง 10 ท่าว่าเป็นภาพนิ่ง รวมการปรับความเร็ว/ความเข้ม/resize ตามเดิม
+
+Regression battle/Bolt/Execute/Ward/playback ตรวจครบ 81 กรณี: ชุดใหญ่ผ่าน 78/81 มี 3 timeout พร้อม browser/server disconnect ใน log; รัน playback ทั้งไฟล์ใหม่โดยไม่แก้โค้ดหรือ timeout **13/13 ผ่าน** จึงตรวจครบทุกกรณี รวม family เป็น 109 กรณีที่ผ่านอย่างน้อยหนึ่งรอบ ตรวจ bounds/alpha ของ 38 frames จาก WebP ที่ decode แล้วตรงกับ cell PNG ทุกเฟรม และ SHA-256 ของต้นฉบับที่เลือกทั้ง 10 ไฟล์ตรงกัน
 
 ฐานเกมรวม C12 batch 1 (`e79e8a4`) แล้ว การเปลี่ยนกฎ/เซฟของ C12 เป็นของ base branch งาน VFX ไม่แก้ `src/core`, `src/content` หรือ `battle-playback.ts` เพิ่ม
+
+ส่ง R4 ใหม่ครบ **18/18 คลิป** ขนาด 390×844px ทุกไฟล์ (172–189 captured frames ต่อคลิป) เปิดตรวจเฟรมปะทะทั้ง 10 ท่าที่ renderer cue +70ms โดยเฟรมใกล้สุดคลาดไม่เกิน 6ms และเปิดตรวจภาพ Pierce/Sweep ที่ส่งจริงแล้ว หน้าดูคลิปผ่านการเปิด/สลับวิดีโอ Pierce, Sweep, Dodge และ OS reduced motion โดย decoder ไม่พบ error; เป็น Chromium/SwiftShader emulation ไม่ใช่การตรวจอุปกรณ์จริงหรือ Safari
 
 ## ภาพ contact จากการอัดจริง
 
