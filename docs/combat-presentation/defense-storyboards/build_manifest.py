@@ -10,10 +10,10 @@ ART = ROOT / 'incoming/ART-VFX-DEFENSE-001'
 OUT = Path(__file__).resolve().parent
 SPECS = [
     ('guard', 'ตั้งรับแทน', 'วงเล็บรับด้านผู้ใช้ → รับแทนเป้าที่ประกาศ ไม่ใช่โล่ดูดซับ', 54, 86, 'source', 24, 0),
-    ('aegis', 'เกราะผลึก', 'กลีบโค้งผลึกโปร่งแยกรายคน เฉพาะผู้ได้รับ barrier จริง', 78, 88, 'targets', 0, 0),
+    ('aegis', 'เกราะผลึก', 'Aura ผลึกโค้งนอกเงาร่าง กลางโปร่ง ไม่วาดเกราะทับชุด; barrier ตามผู้รับจริง', 88, 112, 'targets', 0, 0),
     ('rally', 'ตั้งรับหมู่', 'ริ้วธงกางออก คุ้มการโดนครั้งแรกของเพื่อนแต่ละคน ไม่ใช่ barrier', 62, 76, 'targets', 0, -8),
     ('bulwark', 'กำแพงโล่', 'ฐานแน่นกับเสาตั้งฉาก คุ้มเฉพาะแนวหน้า ลดความเสียหาย', 80, 100, 'targets', 0, 4),
-    ('stonearmor', 'เกราะหิน', 'แผ่นหินเหลี่ยมโอบช่องลำตัว เพิ่ม barrier ให้ผู้ใช้', 92, 92, 'source', 0, 3),
+    ('stonearmor', 'เกราะหิน', 'Aura ศิลาทรงเหลี่ยมรอบนอก เว้นใบหน้าและชุดเดิม เพิ่ม barrier ให้ผู้ใช้', 110, 114, 'source', 0, 0),
     ('guardstone', 'ศิลาดึง', 'ศิลาลอยกับสายเกี่ยว เป้าเดี่ยวแรกเปลี่ยนไปผู้ใช้ ไม่ใช่ barrier', 54, 64, 'targets', 28, -12),
     ('halo', 'วงแสงคุ้มกัน', 'วงรีเหนือศีรษะ ลดเฉพาะความเสียหายพลังงานแก่ทั้งทีม', 58, 32, 'targets', 0, -48),
     ('sanctuary', 'พรคุ้มภัย', 'กลีบแสงประคองจากล่าง ป้องกัน HP ต่ำกว่า 1 ไม่ใช่ฟื้นคืนชีพ', 68, 96, 'targets', 0, 0),
@@ -26,6 +26,7 @@ def main():
     (ART / 'source').mkdir(parents=True, exist_ok=True)
     prompts = json.loads((ART / 'generation-prompts.json').read_text())
     anchors = json.loads((ART / 'reference/anchors.json').read_text())
+    previous = {r['skill']: r for r in json.loads((ART / 'archive/v1/manifest.json').read_text())}
     records = []
     for skill, thai, identity, width, height, placement, dx, dy in SPECS:
         source = ART / 'source' / f'{skill}.png'
@@ -58,6 +59,9 @@ def main():
             background=f'../../../incoming/ART-VFX-DEFENSE-001/reference/{skill}-390.png',
             sourceSize=list(im.size),alphaRange=list(alpha.getextrema()),
             sha256=hashlib.sha256(source.read_bytes()).hexdigest(),anchors=anchors[skill]))
+        if skill in previous:
+            records[-1]['previous'] = previous[skill]
+            records[-1]['revision'] = 'R2 aura'
         print(skill,im.size,frames)
     (OUT/'manifest.json').write_text(json.dumps(records,ensure_ascii=False,indent=2)+'\n')
     (OUT/'boards.js').write_text('/* global window */\nwindow.defenseStoryboards = '+json.dumps(records,ensure_ascii=False)+';\n')

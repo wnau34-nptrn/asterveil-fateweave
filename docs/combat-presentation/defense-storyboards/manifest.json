@@ -73,35 +73,35 @@
   {
     "skill": "aegis",
     "thai": "เกราะผลึก",
-    "identity": "กลีบโค้งผลึกโปร่งแยกรายคน เฉพาะผู้ได้รับ barrier จริง",
-    "width": 78,
-    "height": 88,
+    "identity": "Aura ผลึกโค้งนอกเงาร่าง กลางโปร่ง ไม่วาดเกราะทับชุด; barrier ตามผู้รับจริง",
+    "width": 88,
+    "height": 112,
     "placement": "targets",
     "dx": 0,
     "dy": 0,
     "frames": [
       [
-        136,
-        211,
-        493,
-        418
+        43,
+        100,
+        591,
+        561
       ],
       [
-        742,
-        86,
-        676,
-        556
+        739,
+        22,
+        693,
+        641
       ],
       [
-        1530,
-        129,
-        555,
-        511
+        1529,
+        73,
+        603,
+        592
       ]
     ],
     "frameMax": [
-      676,
-      556
+      693,
+      641
     ],
     "source": "../../../incoming/ART-VFX-DEFENSE-001/source/aegis.png",
     "background": "../../../incoming/ART-VFX-DEFENSE-001/reference/aegis-390.png",
@@ -113,7 +113,7 @@
       0,
       255
     ],
-    "sha256": "1b557dea418efa3feb1b06ce8aae02cd228192e7d4c4ed8122d08da785553525",
+    "sha256": "dc4cb8816bf256f2276e019c9ecceaa605f535cfb8ae218139c7fc38bbbc5f90",
     "anchors": {
       "source": {
         "id": "weaver",
@@ -179,7 +179,119 @@
       ],
       "mode": "party",
       "targetId": "party"
-    }
+    },
+    "previous": {
+      "skill": "aegis",
+      "thai": "เกราะผลึก",
+      "identity": "กลีบโค้งผลึกโปร่งแยกรายคน เฉพาะผู้ได้รับ barrier จริง",
+      "width": 78,
+      "height": 88,
+      "placement": "targets",
+      "dx": 0,
+      "dy": 0,
+      "frames": [
+        [
+          136,
+          211,
+          493,
+          418
+        ],
+        [
+          742,
+          86,
+          676,
+          556
+        ],
+        [
+          1530,
+          129,
+          555,
+          511
+        ]
+      ],
+      "frameMax": [
+        676,
+        556
+      ],
+      "source": "../../../incoming/ART-VFX-DEFENSE-001/archive/v1/aegis.png",
+      "background": "../../../incoming/ART-VFX-DEFENSE-001/reference/aegis-390.png",
+      "sourceSize": [
+        2172,
+        724
+      ],
+      "alphaRange": [
+        0,
+        255
+      ],
+      "sha256": "1b557dea418efa3feb1b06ce8aae02cd228192e7d4c4ed8122d08da785553525",
+      "anchors": {
+        "source": {
+          "id": "weaver",
+          "x": 49.47,
+          "y": 232.72,
+          "size": 111
+        },
+        "targets": [
+          {
+            "id": "weaver",
+            "x": 49.47,
+            "y": 232.72,
+            "size": 111
+          },
+          {
+            "id": "guardian",
+            "x": 145.85999999999999,
+            "y": 232.72,
+            "size": 111
+          },
+          {
+            "id": "tracer",
+            "x": 145.85999999999999,
+            "y": 566.72,
+            "size": 111
+          },
+          {
+            "id": "healer",
+            "x": 49.47,
+            "y": 566.72,
+            "size": 111
+          }
+        ],
+        "events": [
+          {
+            "type": "barrier",
+            "sourceId": "weaver",
+            "targetId": "weaver",
+            "amount": 8,
+            "text": "Added barrier."
+          },
+          {
+            "type": "barrier",
+            "sourceId": "weaver",
+            "targetId": "guardian",
+            "amount": 8,
+            "text": "Added barrier."
+          },
+          {
+            "type": "barrier",
+            "sourceId": "weaver",
+            "targetId": "tracer",
+            "amount": 8,
+            "text": "Added barrier."
+          },
+          {
+            "type": "barrier",
+            "sourceId": "weaver",
+            "targetId": "healer",
+            "amount": 8,
+            "text": "Added barrier."
+          }
+        ],
+        "mode": "party",
+        "targetId": "party"
+      }
+    },
+    "revision": "R2 aura"
   },
   {
     "skill": "rally",
@@ -351,35 +463,35 @@
   {
     "skill": "stonearmor",
     "thai": "เกราะหิน",
-    "identity": "แผ่นหินเหลี่ยมโอบช่องลำตัว เพิ่ม barrier ให้ผู้ใช้",
-    "width": 92,
-    "height": 92,
+    "identity": "Aura ศิลาทรงเหลี่ยมรอบนอก เว้นใบหน้าและชุดเดิม เพิ่ม barrier ให้ผู้ใช้",
+    "width": 110,
+    "height": 114,
     "placement": "source",
     "dx": 0,
-    "dy": 3,
+    "dy": 0,
     "frames": [
       [
-        79,
-        277,
-        558,
-        400
+        78,
+        136,
+        576,
+        540
       ],
       [
-        706,
-        63,
-        726,
-        606
+        745,
+        46,
+        707,
+        639
       ],
       [
-        1519,
-        99,
-        601,
-        560
+        1546,
+        118,
+        573,
+        556
       ]
     ],
     "frameMax": [
-      726,
-      606
+      707,
+      639
     ],
     "source": "../../../incoming/ART-VFX-DEFENSE-001/source/stonearmor.png",
     "background": "../../../incoming/ART-VFX-DEFENSE-001/reference/stonearmor-390.png",
@@ -391,7 +503,7 @@
       0,
       255
     ],
-    "sha256": "bbd28d5ee8902203036479bb95ea370b8b2f8f779c60ca2caee900b0a579b4be",
+    "sha256": "86798db9c88cdbe9cbcf9981d36252e337a1dceabda33600f08537d4e95e32cb",
     "anchors": {
       "source": {
         "id": "brann",
@@ -418,7 +530,80 @@
       ],
       "mode": "self",
       "targetId": "brann"
-    }
+    },
+    "previous": {
+      "skill": "stonearmor",
+      "thai": "เกราะหิน",
+      "identity": "แผ่นหินเหลี่ยมโอบช่องลำตัว เพิ่ม barrier ให้ผู้ใช้",
+      "width": 92,
+      "height": 92,
+      "placement": "source",
+      "dx": 0,
+      "dy": 3,
+      "frames": [
+        [
+          79,
+          277,
+          558,
+          400
+        ],
+        [
+          706,
+          63,
+          726,
+          606
+        ],
+        [
+          1519,
+          99,
+          601,
+          560
+        ]
+      ],
+      "frameMax": [
+        726,
+        606
+      ],
+      "source": "../../../incoming/ART-VFX-DEFENSE-001/archive/v1/stonearmor.png",
+      "background": "../../../incoming/ART-VFX-DEFENSE-001/reference/stonearmor-390.png",
+      "sourceSize": [
+        2172,
+        724
+      ],
+      "alphaRange": [
+        0,
+        255
+      ],
+      "sha256": "bbd28d5ee8902203036479bb95ea370b8b2f8f779c60ca2caee900b0a579b4be",
+      "anchors": {
+        "source": {
+          "id": "brann",
+          "x": 145.85999999999999,
+          "y": 232.72,
+          "size": 111
+        },
+        "targets": [
+          {
+            "id": "brann",
+            "x": 145.85999999999999,
+            "y": 232.72,
+            "size": 111
+          }
+        ],
+        "events": [
+          {
+            "type": "barrier",
+            "sourceId": "brann",
+            "targetId": "brann",
+            "amount": 18,
+            "text": "Added barrier."
+          }
+        ],
+        "mode": "self",
+        "targetId": "brann"
+      }
+    },
+    "revision": "R2 aura"
   },
   {
     "skill": "guardstone",

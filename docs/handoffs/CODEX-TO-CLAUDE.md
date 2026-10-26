@@ -1,5 +1,13 @@
 # Codex → Claude handoff
 
+## 2026-10-26 — C5.2 aura R2 after costume-overlap feedback (PR #77)
+
+- Owner proposed aura because armour over costumes looked mismatched. Revised the two clearest cases, Stone Armour and Aegis, with ImageGen edits: outside earth wisps vs bowed crystal light, open head/torso, no replacement costume. This is not approval of the new art or of runtime.
+- Same `codex/vfx-family-2-defense` / draft PR #77; no merge. Updated two source strips and their prompts/provenance, archived untouched V1 sources/390px peaks/metadata under `incoming/ART-VFX-DEFENSE-001/archive/v1/`, regenerated affected boards/manifest, and added V1/R2 comparison plus reset in the skill viewer. Other nine concepts remain V1. README/intake notes and current handoff updated.
+- Checks: lint, typecheck, diff whitespace pass; Playwright render 1/1 passes across all eleven selections, including V1/R2 difference and exact reset for both revised skills. Original references are reused; no new command, UI redraw, rules/save/balance/timing/runtime change. Headless Chromium cloud, not a real device. Two native 390px revised examples provided to the owner.
+- Continue artwork feedback in this PR; actual atlas/module/runtime clips still wait for selection. No family 3. No new gameplay suite/build was needed for this concept-only revision.
+
+
 ## 2026-10-26 — C5.2 defense: all 11 three-phase artwork concepts, awaiting selection
 
 - Branch `codex/vfx-family-2-defense`, base `5c2dbb6` on `feature/fateweave-initial-prototype`. Family-2 draft PR [#77](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/77), artwork commit `8b6d10a`; merge commit: none. The owner requested artwork first and the handoff explicitly requires selection before runtime. Do not treat family-1 approval as defense approval; continue in this same branch/PR after feedback.

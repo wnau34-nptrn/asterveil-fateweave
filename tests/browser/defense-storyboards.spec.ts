@@ -52,6 +52,18 @@ test('render three-phase concept boards at native 390px', async ({ page }) => {
     });
     for (const [suffix,data] of [['board',exports.poster],['peak-390',exports.contact]])
       writeFileSync(`docs/combat-presentation/defense-storyboards/${skill}-${suffix}.png`,Buffer.from(data!.split(',')[1]!, 'base64'));
+    if (['aegis','stonearmor'].includes(skill)) {
+      await expect(page.locator('#revision')).toHaveText('R2 aura');
+      await page.locator('#version').click();
+      await expect(page.locator('#revision')).toHaveText('V1 · แบบเดิม');
+      const previous=await page.locator('canvas').nth(1).evaluate((c:HTMLCanvasElement)=>c.toDataURL());
+      expect(previous).not.toBe(exports.contact);
+      await page.locator('#reset').click();
+      await expect(page.locator('#revision')).toHaveText('R2 aura');
+      expect(await page.locator('canvas').nth(1).evaluate((c:HTMLCanvasElement)=>c.toDataURL())).toBe(exports.contact);
+    } else {
+      await expect(page.locator('#version')).toBeHidden();
+    }
   }
   const painted = await page.locator('canvas').nth(1).evaluate((c: HTMLCanvasElement) => c.toDataURL());
   await page.locator('#toggle').click();
