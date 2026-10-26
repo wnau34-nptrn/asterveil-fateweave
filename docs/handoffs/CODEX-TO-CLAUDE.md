@@ -1,5 +1,13 @@
 # Codex → Claude handoff
 
+## 2026-10-26 — Nonblocking, trimmed pilot loading
+
+- Owner passed the smooth pilot then reported longer loading and said “ต่อ”. Branch `codex/unit-animation-loading`; PR/release evidence will be filled after CI/publication. No new-unit production or rule/save/balance changes.
+- Removed both pilot sheets from core preload. Optional per-encounter atlas loading starts only while battle is visible, with cached/pending/failed deduplication, original-art fallback, safe stage-boundary adoption and unused texture eviction. Deferred synchronous Phaser wake to microtask so requests use the newly installed encounter.
+- Lossless alpha-trimmed/deduplicated approved frames, preserve 512px logical source/pivots, hash image+atlas filenames. Total decoded RGBA 50,331,648 → 10,279,936 bytes (−79.6%); download incl JSON 2,753,042 → 2,467,380 (−10.4%). Rebuild script decodes/reconstructs all 44 frames and verifies identical alpha/visible pixels. Originals retained as source; no runtime request to originals.
+- Files: BattleScene/main, unit-frames, optional-unit-assets, atlas manifest/generated assets, packing script, unit/browser tests and validation notes. Local typecheck/lint/build:pages pass; Vitest 858/75 pass. Chromium loading/pilot/presentation: 18/18 pass (held downloads, 503 fallback, title/no-Hunter, basic/skill, fast/reduced motion, skip/resize/reload/hidden). No real-device/Safari or load-time percentage claim.
+- Evidence: `docs/validation/unit-animation-loading/` metrics, Thai explanation and selected 390px pilot screenshots. Owner received progress reports; no fresh visual approval is inferred. Remaining: exact CI/merge/Pages proof before final handoff. Main planning P01-A/B stays separate.
+
 ## 2026-10-26 — Smooth pilot pose transitions
 
 - Owner reported attack pose changes still looked uneven after release. Branch `codex/unit-animation-smooth`, base `b65c503`; PR #75: https://github.com/wnau34-nptrn/asterveil-fateweave/pull/75; merged as `ef9b5df13dcd69dd149f27b75ea56ec4f0f06c45`. Continuing the existing authorization to fix/release this presentation work; no new visual approval of C5 or other units inferred.
