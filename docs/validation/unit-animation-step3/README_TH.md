@@ -29,7 +29,7 @@ Vargoth Hunter: Raking Slash ฟันมีด / Shadow Knife ขว้าง�
 - Vitest: 73 files / 851 tests ผ่าน
 - focused unit frames/controller/playback/effects: 4 files / 24 tests ผ่าน
 - Browser: basic pilot และ Execute/Shadow Knife ผ่านทั้งสองกรณีหลังแก้ fixture ให้ใช้ TargetOption.valid, เลือก attack เมื่อ Mark ยังติดอยู่ และรองรับการ resume ศึกที่เริ่มไปแล้ว
-- presentation mode matrix 4 กรณี (fast/reduced intensity/OS reduce toggle) ผ่าน; เพิ่ม impact/skip/resize/reload ที่ 390px ตามผลรันล่าสุด
+- presentation mode matrix 4 กรณี (fast/reduced intensity/OS reduce toggle) ผ่าน; impact และ skip/resize/reload/hidden-tab ที่ 390px ผ่านอีก 2 กรณี
 - ดู preview ทั้งสองและภาพจริงของทั้งสองฝั่งแล้ว ไม่มีอาวุธถูกตัดขอบหรือภาพเฟรมข้างเคียงติดเข้ามา; ความสม่ำเสมอทางศิลป์ยังให้เจ้าของตรวจจากคลิปก่อนขยายตัวอื่น
 - Browser extension ไม่มี browser-control tool ในเซสชัน ใช้ Playwright + `/usr/bin/chromium` ของ repo ไม่อ้าง Safari/มือถือจริง
 - ต้นทุน decoded atlas ~48 MiB สำหรับสองตัว ต้องทำโหลดตาม encounter ก่อนขยายครบ roster
