@@ -1,4 +1,9 @@
 import Phaser from 'phaser';
+import { pilotKey, pilotAtlasUrls, pilotClip, type PilotSheet } from '../visuals/unit-frames';
+import { OptionalUnitAssets } from '../visuals/optional-unit-assets';
+import { unitFrameView } from '../visuals/unit-frame-view';
+import { UnitAnimation } from '../visuals/unit-animation';
+import { unitPose, unitReactions } from '../visuals/unit-animation-map';
 import type { BattleState, EncounterDefinition, TurnStage } from '../../core/battle/types';
 import { effectFamily, effectCaption, type CombatPrefs } from '../visuals/combat-effects';
 import { thaiFont } from '../../ui/th';
@@ -37,11 +42,20 @@ export class BattleScene extends Phaser.Scene {
   private nextSizeCheck = 0;
   // Idle life (breathing, auras, motes) is rebuilt with each paint and never touches state.
   private idle: Phaser.Tweens.Tween[] = [];
-  constructor(private encounter: EncounterDefinition, private readonly choose: (id: string) => void, private readonly onReady: () => void, private readonly onLayout: () => void) { super('battle'); }
+  private readonly unitAnimation = new UnitAnimation();
+  private readonly optionalUnits = new OptionalUnitAssets();
+  private optionalDirty = false;
+  private stageActive = false;
+  private battleVisible = false;
+  private optionalRequest = true;
+  constructor(private encounter: EncounterDefinition, private readonly choose: (id: string) => void, private readonly onReady: () => void, private readonly onLayout: () => void) { super('battle'); this.optionalUnits.setEncounter(encounter); }
   get isReady(): boolean { return this.ready; }
+  setBattleVisible(visible: boolean): void { this.battleVisible = visible; if (visible) this.optionalRequest = true; }
   setEncounter(data: EncounterDefinition): void {
     this.stopEffects(); this.encounter = data; this.view = undefined;
     this.actorTargets.clear(); this.actorPanels.clear();
+    this.optionalUnits.setEncounter(data);
+    this.optionalRequest = true;
   }
   refreshLayout(): void {
     // DOM teaching strips change the field without a window resize. Refresh
@@ -85,24 +99,44 @@ export class BattleScene extends Phaser.Scene {
     this.game.canvas.addEventListener('pointerdown', updateInputBounds, { capture: true, passive: true });
     this.game.canvas.addEventListener('touchstart', updateInputBounds, { capture: true, passive: true });
     this.scale.on('resize', this.paint, this);
+    this.load.on('complete', this.optionalUnitsLoaded, this);
     this.fit(true);
     this.events.once('shutdown', () => {
+      this.stopEffects(); this.unitAnimation.clear();
+      for (const tween of this.idle) tween.remove(); this.idle = [];
       this.game.canvas.removeEventListener('pointerdown', updateInputBounds, true);
       this.game.canvas.removeEventListener('touchstart', updateInputBounds, true);
       this.scale.off('resize', this.paint, this);
+      this.load.off('complete', this.optionalUnitsLoaded, this);
+      this.optionalUnits.reset(); this.optionalDirty = false;
       this.ready = false;
     });
     this.paint();
     this.onReady();
+    this.optionalRequest = true;
+  }
+  private hasOptionalUnit = (name: PilotSheet): boolean => this.textures.exists(`unit-pilot-${name}`);
+  private requestOptionalUnits(): void {
+    const names = this.optionalUnits.request(this.hasOptionalUnit);
+    for (const name of names) this.load.atlas(`unit-pilot-${name}`, ...pilotAtlasUrls(name));
+    if (names.length && !this.load.isLoading()) this.load.start();
+  }
+  private optionalUnitsLoaded(): void {
+    if (!this.load.isLoading() && this.optionalUnits.complete(this.hasOptionalUnit)) this.optionalDirty = true;
   }
   // A missed resize notification would leave the canvas stretched against the DOM targets;
   // re-measure the arena twice a second while the battle renders.
-  update(time: number): void {
+  update(time: number, delta: number): void {
+    if (this.battleVisible && this.optionalRequest) { this.optionalRequest = false; this.requestOptionalUnits(); }
+    this.unitAnimation.update(delta);
+    // Adopt newly decoded art only at a safe boundary, never repaint an actor mid-attack.
+    if (this.optionalDirty && !this.stageActive && this.view) this.paint();
     if (time < this.nextSizeCheck) return;
     this.nextSizeCheck = time + 500;
     this.fit();
   }
   sync(view: SceneView, repaint = true): void {
+    const previous = this.view?.state;
     this.view = view;
     if (!this.ready) return;
     // A summon puts a new foe on the field mid-presentation: redraw so it appears in its empty slot.
@@ -110,13 +144,16 @@ export class BattleScene extends Phaser.Scene {
     if (repaint || present.some(id => !this.bodies.has(id))) this.paint();
     else for (const [id, body] of this.bodies) {
       const hp = [...view.state.heroes, ...view.state.enemies].find(a => a.id === id)?.hp ?? 0;
+      const oldHp = [...(previous?.heroes ?? []), ...(previous?.enemies ?? [])].find(a => a.id === id)?.hp;
+      if (oldHp !== undefined && (oldHp > 0) !== (hp > 0)) this.unitAnimation.reset(id);
       const involved = !view.activeActorId || id === view.activeActorId || id === view.activeTargetId;
       body.setAlpha(hp <= 0 ? .28 : involved ? 1 : .55);
     }
   }
   private paint(): void {
     if (!this.view) return;
-    this.stopEffects(); this.bodies.clear();
+    this.optionalDirty = false;
+    this.stopEffects(); this.unitAnimation.clear(); this.bodies.clear();
     for (const t of this.idle) t.remove(); this.idle = [];
     // The camera only carries the pixel-ratio zoom; clear any effect so art and DOM targets share one origin.
     // The camera stays at its defaults; the root container alone carries the pixel-ratio scale,
@@ -125,6 +162,8 @@ export class BattleScene extends Phaser.Scene {
     this.root ??= this.add.container(0, 0);
     this.root.setPosition(0, 0).setScale(this.dpr);
     this.layer?.destroy();
+    // Old bodies are gone; release only optional textures absent from the new encounter.
+    for (const name of this.optionalUnits.unused(this.hasOptionalUnit)) this.textures.remove(`unit-pilot-${name}`);
     this.layer = this.add.container(0, 0); this.root.addAt(this.layer, 0);
     this.positions.clear(); this.actorTargets.clear(); this.actorPanels.clear();
     const w = this.viewW, h = this.viewH;
@@ -167,9 +206,23 @@ export class BattleScene extends Phaser.Scene {
       g.lineStyle(3, enemy ? 0xf19b9f : palette.cyan); g.strokeEllipse(0, 0, size * .72, size * .16);
     }
     const key = artOf(this.encounter, id); const art = actorArt[key]!;
-    const sprite = this.add.image(0, 0, `battle-${art.sheet}`, art.frame).setOrigin(0.5, actorFootOrigins[key] ?? 1).setDisplaySize(size, size).setFlipX(mirroredArt.has(key));
+    const pilot = pilotKey(key), framed = !!pilot && this.textures.exists(pilot);
+    const sprite = this.add.image(0, 0, framed ? pilot : `battle-${art.sheet}`, framed ? hp <= 0 ? 21 : 0 : art.frame)
+      .setOrigin(.5, framed ? 496 / 512 : actorFootOrigins[key] ?? 1).setDisplaySize(size * (framed ? 2 : 1), size * (framed ? 2 : 1)).setFlipX(mirroredArt.has(key));
     body.add(sprite);
+    const nextFrame = framed ? this.add.image(0, 0, pilot, 0)
+      .setOrigin(sprite.originX, sprite.originY).setDisplaySize(size * 2, size * 2).setFlipX(sprite.flipX).setVisible(false) : undefined;
+    if (nextFrame) body.add(nextFrame);
+    const alive = () => [...(this.view?.state.heroes ?? []), ...(this.view?.state.enemies ?? [])].some(a => a.id === id && a.hp > 0);
+    const idleStart = this.idle.length;
     if (hp > 0) this.liven(id, body, sprite, size, enemy, id === this.view!.activeActorId);
+    const idleTweens = this.idle.slice(idleStart);
+    this.unitAnimation.bind(id, body, size, paused => {
+      for (const tween of idleTweens) { if (paused || !alive()) tween.pause(); else tween.resume(); }
+    }, nextFrame ? unitFrameView(key, sprite, nextFrame, alive, () => {
+      nextFrame.setPosition(sprite.x, sprite.y).setScale(sprite.scaleX, sprite.scaleY).setFlipX(sprite.flipX);
+      nextFrame.setTint(sprite.tintTopLeft).setTintMode(sprite.tintMode);
+    }) : undefined);
     const hitWidth = Math.max(44, Math.min(72, size * .7));
     const hitHeight = Math.max(44, size * .9);
     this.actorTargets.set(id, { x: x - hitWidth / 2, y: y + sprite.y - hitHeight, width: hitWidth, height: hitHeight });
@@ -212,7 +265,8 @@ export class BattleScene extends Phaser.Scene {
     });
   }
   stopEffects(): void {
-    for (const tween of this.idle) tween.resume();
+    this.stageActive = false;
+    this.unitAnimation.settle();
     for (const timer of this.effectTimers) timer.remove(false);
     this.effectTimers.clear();
     if (this.shaking) { this.shaking.stop(); this.shaking = undefined; }
@@ -231,6 +285,7 @@ export class BattleScene extends Phaser.Scene {
     this.effectTimers.add(timer);
   }
   configureEffects(prefs: CombatPrefs, reducedMotion: boolean): void {
+    if (reducedMotion || prefs.intensity === 'reduced') this.unitAnimation.settle();
     this.quiet = prefs.intensity === 'reduced'; this.reducedMotion = reducedMotion;
   }
   private anchor(id: string | undefined): { x: number; y: number } | undefined {
@@ -259,7 +314,15 @@ export class BattleScene extends Phaser.Scene {
     if (!this.quiet && !this.reducedMotion) this.tweens.add({ targets: label, y: Math.max(16, label.y - 18), duration: life });
   }
   prepare(turn: TurnStage, contactMs: number): void {
+    this.stageActive = true;
     if (!this.ready || !contactMs || this.reducedMotion) return;
+    const hitEvent = turn.events.find(e => (e.type === 'damage' || e.type === 'dodge') && e.sourceId === turn.actorId);
+    const pose = unitPose(turn, this.encounter);
+    if (!this.quiet && pose) {
+      const from = this.anchor(turn.actorId), to = this.anchor(hitEvent?.targetId ?? turn.targetId);
+      const direction = from && to ? Math.sign(to.x - from.x) : turn.side === 'hero' ? 1 : -1;
+      this.unitAnimation.begin(turn.actorId, pose, direction || (turn.side === 'hero' ? 1 : -1), contactMs, pilotClip(artOf(this.encounter, turn.actorId), turn.action, turn.intent?.name));
+    }
     if ((turn.side === 'hero' && isBladeSkill(turn.action)) || (turn.side === 'enemy' && turn.intent?.kind === 'physical')) {
       const start = this.anchor(turn.actorId);
       // No anticipation of a hit for a cancelled action or Parry's stance.
@@ -270,7 +333,6 @@ export class BattleScene extends Phaser.Scene {
       return;
     }
     const family = effectFamily(turn), start = this.anchor(turn.actorId);
-    const hitEvent = turn.events.find(e => e.type === 'damage' || e.type === 'dodge');
     // Ward (A8): the thread and veil gather on each real barrier recipient (self-cast included).
     if (turn.action === 'ward' && turn.side === 'hero') {
       for (const e of turn.events) { const at = e.type === 'barrier' ? this.anchor(e.targetId) : undefined; if (at) wardCast(this.fx(e.targetId), at, contactMs); }
@@ -286,10 +348,6 @@ export class BattleScene extends Phaser.Scene {
     const charge = this.add.circle(start.x, start.y, family === 'steel' ? 9 : 18).setStrokeStyle(2, color, .9);
     this.fade(charge, contactMs);
     if (!this.quiet) this.tweens.add({ targets: charge, scale: 1.6, duration: contactMs });
-    if (family === 'steel') {
-      const source = this.bodies.get(turn.actorId);
-      if (source && !this.quiet) this.tweens.add({ targets: source, x: source.x + Math.sign(end.x - start.x) * 14, duration: contactMs, ease: 'Sine.In' });
-    }
     if (family === 'arcane' || family === 'mark') {
       const trail = this.add.graphics().lineStyle(this.quiet ? 1 : 3, color, .5).lineBetween(start.x, start.y, end.x, end.y);
       this.fade(trail, contactMs);
@@ -302,15 +360,18 @@ export class BattleScene extends Phaser.Scene {
     }
   }
   play(turn: TurnStage, remainingMs = 650): void {
+    this.stageActive = true;
     if (!this.ready) return;
     const events = turn.events, life = Math.max(100, remainingMs - 20), family = effectFamily(turn);
     const paintedBlades = bladeCues(turn);
-    const source = this.bodies.get(turn.actorId), origin = this.positions.get(turn.actorId);
     const hold = this.quiet || this.reducedMotion ? 0 : 45;
-    if (source && origin) {
-      this.tweens.killTweensOf(source);
-      if (this.reducedMotion) source.setPosition(origin.x, origin.y);
-      else this.tweens.add({ targets: source, x: origin.x, y: origin.y, delay: hold, duration: Math.min(160, life-hold), ease: 'Sine.Out' });
+    this.unitAnimation.contact(turn.actorId, remainingMs);
+    if (!this.quiet && !this.reducedMotion) {
+      for (const [id, reaction] of unitReactions(turn)) {
+        const at = this.anchor(id), from = this.anchor(reaction.sourceId);
+        const direction = at && from ? Math.sign(from.x - at.x) : this.encounter.heroes.some(h => h.id === id) ? 1 : -1;
+        this.unitAnimation.react(id, reaction.pose, direction, remainingMs);
+      }
     }
     const rows = new Map<string, number>();
     const say = (id: string, copy: string, color = '#edf4ff') => {
@@ -318,8 +379,6 @@ export class BattleScene extends Phaser.Scene {
     };
     const landed = events.some(e => (e.type === 'damage' || e.type === 'counter') && (e.amount ?? 0) > 0);
     if (landed && hold) {
-      for (const tween of this.idle) tween.pause();
-      this.later(hold, () => { for (const tween of this.idle) tween.resume(); });
       this.shake(140, events.some(e => e.type === 'down') ? 4 : 2.5);
     }
     for (const event of events) {
@@ -360,7 +419,6 @@ export class BattleScene extends Phaser.Scene {
           // Bolt keeps the body's detail: a short violet multiply tint instead of a white fill flash.
           if (bolt || execute || blade) sprite.setTint(bolt ? 0xcdb8ff : blade ? 0xffe4c4 : 0xffd3dc).setTintMode(Phaser.TintModes.MULTIPLY); else sprite.setTint(0xffffff).setTintMode(Phaser.TintModes.FILL);
           this.later(90, () => { if (sprite.active) sprite.clearTint().setTintMode(Phaser.TintModes.MULTIPLY); });
-          if (body && !this.quiet) this.tweens.add({ targets:body,x:body.x+(Math.sign(p.x-(from?.x ?? p.x-1)) || 1)*7,delay:hold,duration:80,yoyo:true });
         }
         const before = turn.before?.heroes.find(h => h.id === id), after = turn.after?.heroes.find(h => h.id === id);
         if (event.absorbed && before?.barrier && !after?.barrier) say(id,'โล่หมด','#8addf5');

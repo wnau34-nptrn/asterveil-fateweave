@@ -2,6 +2,9 @@ import { test, expect } from '@playwright/test';
 import { stageTiming } from '../../src/ui/battle-playback';
 
 const skills = ['attack', 'finisher', 'lunge', 'sweep', 'backstab', 'ambush', 'disarm', 'parry', 'pierce', 'halt'];
+// This isolated source fixture is not a shipped game/debug entry. CI runs it against Vite
+// before the separate production Pages suite, which covers the actual shipped application.
+test.skip(process.env.PLAYWRIGHT_PAGES === 'true', 'source fixture has its own dev-server CI gate');
 for (const skill of skills) test(`blade ${skill} resolved contact and cleanup at 390px`, async ({ browser }, info) => {
   const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, reducedMotion: 'no-preference' });
   const page = await ctx.newPage(), errors: string[] = []; page.on('pageerror', e => errors.push(e.message));

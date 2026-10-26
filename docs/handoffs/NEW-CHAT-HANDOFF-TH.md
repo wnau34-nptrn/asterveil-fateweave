@@ -1,6 +1,6 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
-อัปเดต R4 2026-10-26: เจ้าของเลือกแบบภาพทั้ง 10 ท่า รวม Pierce หอกหนา และสั่งทำ VFX จริงแล้ว โมดูล blade-fx.ts ใช้ atlas เดียว 38 frames จากภาพเตรียม/ปะทะ/สลายที่เลือก เก็บต้นฉบับและ hash ไว้ครบ รวมฐาน roster batch 1 e79e8a4 แล้ว ดู CODEX-TO-CLAUDE.md บนสุดและคลิปใน docs/combat-presentation/blade-slice/ หลังส่งชุดตรวจ **ยังรอเจ้าของตรวจคลิป R4 ห้ามเริ่ม C5.2 และยังไม่ merge/publish PR #59**
+อัปเดต R4 2026-10-26: เจ้าของเลือกแบบภาพทั้ง 10 ท่า รวม Pierce หอกหนา และสั่งทำ VFX จริงแล้ว โมดูล blade-fx.ts ใช้ atlas เดียว 38 frames จากภาพเตรียม/ปะทะ/สลายที่เลือก เก็บต้นฉบับและ hash ไว้ครบ รวมฐาน roster batch 1 e79e8a4 แล้ว ดู CODEX-TO-CLAUDE.md บนสุดและคลิปใน docs/combat-presentation/blade-slice/ หลังส่งชุดตรวจ **เจ้าของอนุมัติ merge R4 แล้ว 2026-10-26 กำลังตรวจ CI/เผยแพร่ PR #59; ไม่เริ่ม C5.2 อัตโนมัติในงาน merge นี้**
 
 
 อัปเดต Pierce R2 2026-10-25: เจ้าของให้หัวหอก/แกนแทงหนาขึ้นเพราะ V1 ดูเหมือนธนู แก้ภาพครบ 3 จังหวะและหน้าพรีวิว #pierce แล้ว ยังเป็น concept ไม่ใช่ runtime; ดูบันทึกบนสุด CODEX-TO-CLAUDE.md
@@ -8,6 +8,54 @@
 อัปเดต 2026-10-25: เจ้าของอนุมัติทำ artwork เฉพาะฟัน/แทงทั้ง 10 ท่าก่อนแก้ runtime ต่อ สร้าง storyboard V1 ครบ 30 จังหวะด้วย ImageGen (เจ้าของอนุญาตแทน Shado ที่เชื่อมต่อไม่ได้) ดู `docs/combat-presentation/blade-storyboards/README_TH.md` และหน้าพรีวิวเลือกท่า/ปรับน้ำหนักในโฟลเดอร์เดียวกัน ส่งใน PR #59 เดิม **รอเจ้าของตรวจแบบภาพ ยังไม่ต่อภาพชุดใหม่นี้เข้าเกม ไม่ merge/publish และไม่เริ่ม C5.2**
 
 อัปเดต Codex 2026-10-24: C5.1 R3 บน `codex/vfx-family-1-blade`, PR #59 ปรับฟัน/แทงทั้ง 10 สกิลหลังเจ้าของเห็นว่า R2 หนาและคล้ายกัน ใช้ atlas เดิม ลดความทึบ/ความหนา และแยกสัดส่วนกับการเคลื่อนแต่ละท่า รวมฐาน C11 ล่าสุด 1a50c01 แล้ว รอเจ้าของตรวจ [คลิปใหม่ 390px](../combat-presentation/blade-slice/README_TH.md) ยังไม่ merge/publish และห้ามเริ่ม C5.2 จนเจ้าของอนุมัติคลิป อ่านบันทึกบนสุด `CODEX-TO-CLAUDE.md` และผลตรวจใน slice notes ก่อนทำต่อ
+## แก้โหลด pilot — 2026-10-26
+
+เจ้าของผ่านท่าโจมตีแล้ว แต่แจ้งว่าโหลดช้า จึงเอา pilot ออกจาก preload และโหลดเบื้องหลังเฉพาะยูนิตในสนามพร้อม fallback ใช้ภาพเดิมระหว่างรอ แพ็ก lossless รักษาพิกเซล/ขนาดตัว/จุดยืนเดิม ลด decoded RGBA 48 → 9.8 MiB (79.6%) และขนาดดาวน์โหลดรวม metadata 10.4% ไม่มี pilot request ที่ title ไม่แก้กฎ/เซฟ/จังหวะที่ผ่านแล้ว PR [#76](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/76) รวมเป็น `b4433c981544e3a63aa32f8a95d7bbca078b1315` และเผยแพร่สำเร็จผ่าน [Pages run 40325728873](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/40325728873) (build + browser ครบ 4 shards + deploy) Unit 858/75 files และ browser CI 249 ผ่าน / capture-only skips 36; รายละเอียดใน CODEX-TO-CLAUDE.md และ `docs/validation/unit-animation-loading/` คิว P01-A/B ด้านล่างยังคงเดิม ไม่เริ่มงานอื่นอัตโนมัติ
+
+## แอนิเมชันแก้ไขล่าสุด — 2026-10-26
+
+เจ้าของแจ้งว่าเปลี่ยนท่าโจมตียังไม่ต่อเนื่อง หลังอนุมัติภาพ pilot แล้ว แก้ลำดับดาบ Lyra, เชื่อมเฟรมช่วงสั้น, ease การคืนตัว และรับ reaction ต่อจากตำแหน่งที่ถูกโจมตี โดยใช้ atlas ที่อนุมัติเดิม PR [#75](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/75) รวมแล้วเป็น `ef9b5df13dcd69dd149f27b75ea56ec4f0f06c45` และเผยแพร่สำเร็จผ่าน [Pages run 40270097579](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/40270097579). หลักฐานอยู่ `docs/validation/unit-animation-smoothing/` (คลิป 390px และ before/after). Unit 854 / browser CI 246 ผ่าน, capture-only skips 36. รายละเอียดใน CODEX-TO-CLAUDE.md งานนี้ไม่ขยาย approval ไป C5 หรือยูนิตอื่น และไม่เริ่มงานใหม่อัตโนมัติ คิวงานหลักด้านล่างยังเป็นคนละขอบเขตกับการแก้แอนิเมชันนี้
+
+
+## P00 publication complete — PR #72
+
+Merged into game branch as `aab276d9f7eb46f782039414a83b50c19beef8af`, head `e638f3b`. PR quality CI run 672 (`40245547986`) passed. Local baseline: full sim 28/28 and focused 55/55; final artifacts: 19 documentation/report files, 29 tracked links, hashes and whitespace validated. Issue #69 marks P00 complete and remains open. Next is P01-A/B in `docs/design/p00/SHARED_PROGRESSION_TEAM_SPEC_TH.md`; no runtime rules were changed by P00. No screenshots or human playtest were claimed. This note records delivery only.
+
+## P00 completed — shared progression/team specification and baseline
+
+- Owner authorized proceeding after the consolidated plan. Branch `docs/p00-shared-level-team-spec` targets game branch. Added `docs/design/p00/SHARED_PROGRESSION_TEAM_SPEC_TH.md` and `MIGRATION_ACCEPTANCE_TH.md`: canonical camp XP, atomic profile/run transitions, legacy withdrawal boundary, ownership and six-position/five-live-actor vocabulary. Runtime remains unchanged; PR #59 still awaits visual review.
+- Baseline on `e62292a`: full sim 28/28 across seven files plus focused roster/save/formation/talent checks 55/55. Artifacts, hashes, policies and twenty current campaign cells are in `docs/validation/p00/`. No new browser screenshots, human playtest, new-system validation or real-device claim.
+- P00-01/02/03 marked complete in development plan. Next P01-A/B: implement shared Lv/XP and migration with field4/reserve4 and current star-point formula; five-member prototype waits P02 and star-point redesign waits P04. See the copy-ready next task in the plan.
+- Documentation-only change; link/whitespace review before publication. Migration matrix is specified, not implemented or tested against new rules. Publication PR #72; merge evidence is tracked through issue #69.
+
+## 2026-10-25 — Plan publication verified
+
+PR #70 merged as `aafec236507458f45303a6af3a26438dfb276534`; quality CI run 665 passed. `docs/DEVELOPMENT_PLAN_TH.md` and issue #69 are the delivery entrypoints. Start P00 next. Design/research documents are now published; older local-only status notes below are historical. No gameplay changes in this delivery.
+
+## 2026-10-25 — Start here: consolidated plan published to GitHub
+
+Read `docs/DEVELOPMENT_PLAN_TH.md` and tracking issue #69 before older prompts below. The owner requested an actionable plan covering all discussion: P00–P11, task dependencies/exit gates, all D01–D37. Next work is P00 shared-level/team-five/migration specifications and baseline; do not auto-run old Batch2 with a reserved save version. The document distinguishes existing runtime from new directions and unvalidated numbers. This publication contains documentation only. Documentation PR #70 targets the game branch. Publication status is recorded in CODEX-TO-CLAUDE and issue #69.
+
+## 2026-10-25 — Latest direction: shared levels and boss mechanics
+
+Read `docs/design/SHARED_LEVEL_TEAM_BOSSES_TH.md` first. Owner wants equal levels to enable switching. Recommended scope is every owned hero via shared camp Lv/EXP; this supersedes individual catch-up training in the earlier design baseline. Stars/builds remain individual, with baseline boss counters accessible without a particular gacha hero. Team five is still a prototype direction, runtime remains four. No game code changed; next design work must recalculate EXP/economy and validate team/encounter rules together.
+
+## 2026-10-25 — Use the recommended baseline for the next design calculation
+
+Owner requested a concrete recommendation, now in `docs/design/PROGRESSION_RECOMMENDED_BASELINE_TH.md`. It proposes Lv15 promotion, a small existing-skill extension, gameplay-based talent points, bounded advanced stars and account-level progression targets. Treat its numeric values as prototype inputs, not simulated results or implemented rules. Next design work should calculate the economy and validate builds rather than ask the owner to choose every number. Local documentation branch only; current runtime is unchanged.
+
+## 2026-10-25 — Active discussion: stars, promotion and skill trees
+
+Next-round proposal is in `docs/design/PROGRESSION_PROMOTION_DISCUSSION_TH.md`. Base ★1–5 → advanced ★1–5, existing-skill extensions and preserved personal identity are proposed, not implemented. Review conflicts with star-derived talent points and unique-star plans before any code change. Costs, unlock levels, point/migration formulas and gacha rates remain open. Current task remains design discussion on local `docs/game-detail-review`; no publication or additional C12 batch.
+
+## 2026-10-25 — Research completed; discuss recommendations next
+
+Owner requested comparative game research and recommendations after the list-only consolidation. Read `docs/GAME_RESEARCH_RECOMMENDATIONS_TH.md` alongside Game Detail and D01–D37. Advisory directions are now provided for all37 topics; no numerical gacha/promotion rules approved or implemented. Keep runtime at existing C12 Batch1 scope until an implementation task is requested. Local branch docs/game-detail-review; no publication.
+
+## 2026-10-25 — Active task: consolidate design, then discuss gaps
+
+Read `docs/GAME_DETAIL_TH.md` and `docs/GAME_DESIGN_DISCUSSION_TH.md` first. Owner explicitly requested listing missing/unclear/improvable areas before designing them. The C12 Batch2 implementation prompt below remains the earlier development handoff; do not auto-start it during this design review. Current runtime still e79e8a4/v43 with14 characters. New gacha/promotion/monthly-release numbers are proposals, not approved final rules. Documentation branch: `docs/game-detail-review`; no PR/publication yet.
+
 ## 2026-10-25 — C12 Batch 1 merged; next Batch 2
 
 PR #68 merged `24dfefbb5777a2233ab376725fb57dbd1bac719f` into `feature/fateweave-initial-prototype`. Current game: 12 classes / 14 characters, save v43; quality CI 838 unit tests, full browser CI 244 tests, final full sim 28 checks, 42 character/map cells ×12 seeds, paired campaign gate 20/20 pass. Report: `docs/validation/roster-30/batch-1/README.md`. Original three recruit offers are preserved, one extra featured slot advertises the new cohort. Do not remove the v43 frozen-board migration or explicit cooldown replay metadata. Older Batch 1 prompts below are historical.

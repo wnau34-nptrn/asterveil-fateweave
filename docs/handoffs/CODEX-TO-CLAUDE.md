@@ -1,5 +1,12 @@
 # Codex → Claude handoff
 
+## 2026-10-26 — Owner approved merging C5.1 R4 (PR #59)
+
+- Owner explicitly said “merge ได้เลย” after confirming the actual VFX were in PR #59. This is the family-1 motion/merge approval. Do not auto-start family 2 in this merge task.
+- Refreshed base to df16f3e (includes the approved unit-animation controller, pilot sprites and nonblocking/compact loading). Resolved BattleScene integration by starting unit poses before the blade-specific early return and retaining the base contact/reaction controller, selected blade art and foreground captions. No core/save/balance/timing change.
+- Preserved both handoff histories. Added separate dev-server fixture checks in PR/Pages workflows because blade.html is intentionally not shipped in production; the production Pages suite skips those source-fixture cases, while the explicit dev gate still runs all 28.
+- Merge/publication and updated check evidence pending completion below.
+
 ## 2026-10-26 — C5.1 R4: selected artwork becomes real animated VFX (PR #59)
 
 - Owner explicitly instructed creating real VFX from the ten individual concepts after the thicker Pierce R2 revision. This approves the selected artwork for implementation; motion clip approval is still pending. Same branch `codex/vfx-family-1-blade`, same PR #59; no family 2, merge or publication.
@@ -53,6 +60,115 @@
 - 18 real-time Chromium/SwiftShader clips at 390×844 plus two contact frames: `docs/combat-presentation/blade-slice/README_TH.md`; `clips.json` preserves measured capture metadata. The isolated browser fixture uses the real UI/scene/playback/resolver with controlled test-only teams and starting conditions; it is not shipped in the production bundle.
 - Checks: typecheck/lint/build pass; final family browser matrix 18/18; existing combat/Bolt/Execute/Ward/presentation regressions 80/81 initially, rearCombo passes isolated retry (so all 81 covered). The earlier combined run's Sweep selector failure is fixed and included in final 18/18. Final uncontended `npx vitest run --maxWorkers=1`: **751/751 pass (64 files)**. Earlier boss-balance timeouts under contention resolved without changing any test, timeout or rule.
 - **Stop here: owner artistic approval is pending. Do not merge/publish this family or begin family 2 until the owner reviews the clips.** No approval has been entered on the owner's behalf. C5 families 2–8 remain untouched.
+## 2026-10-26 — Nonblocking, trimmed pilot loading
+
+- Owner passed the smooth pilot then reported longer loading and said “ต่อ”. Branch `codex/unit-animation-loading`; PR #76: https://github.com/wnau34-nptrn/asterveil-fateweave/pull/76; merged as `b4433c981544e3a63aa32f8a95d7bbca078b1315`. No new-unit production or rule/save/balance changes.
+- Removed both pilot sheets from core preload. Optional per-encounter atlas loading starts only while battle is visible, with cached/pending/failed deduplication, original-art fallback, safe stage-boundary adoption and unused texture eviction. Deferred synchronous Phaser wake to microtask so requests use the newly installed encounter.
+- Lossless alpha-trimmed/deduplicated approved frames, preserve 512px logical source/pivots, hash image+atlas filenames. Total decoded RGBA 50,331,648 → 10,279,936 bytes (−79.6%); download incl JSON 2,753,042 → 2,467,380 (−10.4%). Rebuild script decodes/reconstructs all 44 frames and verifies identical alpha/visible pixels. Originals retained as source; no runtime request to originals.
+- Files: BattleScene/main, unit-frames, optional-unit-assets, atlas manifest/generated assets, packing script, unit/browser tests and validation notes. Local typecheck/lint/build:pages pass; Vitest 858/75 pass. Chromium loading/pilot/presentation: 18/18 pass (held downloads, 503 fallback, title/no-Hunter, basic/skill, fast/reduced motion, skip/resize/reload/hidden). Additional Pages-subpath production smoke: 3/3 loading cases pass. No real-device/Safari or load-time percentage claim.
+- Evidence: `docs/validation/unit-animation-loading/` metrics, Thai explanation and selected 390px pilot screenshots. Owner received progress reports; no fresh visual approval is inferred. Publication complete; no remaining work for this loading fix. Main planning P01-A/B stays separate.
+
+- Release verification: final PR head `d8080a7d0f37796c099de4e2db8e31f492b35c55`; quality CI [40315181456](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/40315181456) passed; browser CI [40315181335](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/40315181335): 3 prechecks + 249 gameplay cases pass / 36 capture-only skips. Pages [40325728873](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/40325728873) succeeded for release `b4433c981544e3a63aa32f8a95d7bbca078b1315`: build + all four browser shards + deploy. Live: https://wnau34-nptrn.github.io/asterveil-fateweave/. Direct github.io HTTP inspection is blocked by this runtime's proxy; publication is verified by Actions for the exact release SHA. These docs-only follow-ups use [skip ci] and change no game code.
+
+## 2026-10-26 — Smooth pilot pose transitions
+
+- Owner reported attack pose changes still looked uneven after release. Branch `codex/unit-animation-smooth`, base `b65c503`; PR #75: https://github.com/wnau34-nptrn/asterveil-fateweave/pull/75; merged as `ef9b5df13dcd69dd149f27b75ea56ec4f0f06c45`. Continuing the existing authorization to fix/release this presentation work; no new visual approval of C5 or other units inferred.
+- Corrected Lyra slash order: lowered-blade frame moved after contact. Added short adjacent-frame blending via a second existing-texture image, phase-local sampling that cannot reveal contact early, smoothstep body travel/recovery, and continuous entry into an interrupted lunge's reaction. Reset clears both image layers, restores alpha, and handles death/revive/reduced motion. Original approved WebP art, battle/save/balance and contact/end timings stay unchanged.
+- Tried a whole-sheet 16-frame generation, but it retained large jumps/duplicates; not shipped. Preserved the original generated Library artifact and moved temporary references to `/tmp/asterveil-smooth-drafts/`. No unapproved replacement atlas committed.
+- Files: `unit-frame-view.ts`, `unit-frames.ts`, `unit-animation.ts`, BattleScene, frame-view unit tests, higher-frequency optional browser capture, validation clips/comparison, this handoff. Validation: typecheck/lint/build:pages; focused 5 files/27 tests; seven relevant Chromium pilot/mode/lifecycle cases pass. Final unit rerun: 854 tests/74 files pass. CI: quality pass, 3 browser prechecks pass, full browser 246 pass / 36 capture-only skips. Pages workflow [40270097579](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/40270097579) succeeded (build + all 4 browser shards + deploy) for release `ef9b5df13dcd69dd149f27b75ea56ec4f0f06c45`. Live: https://wnau34-nptrn.github.io/asterveil-fateweave/. Direct github.io HTTP inspection is blocked by this runtime's proxy; deployment is verified by Actions for the exact release SHA. This docs-only follow-up uses [skip ci] and changes no game code.
+- Evidence: `docs/validation/unit-animation-smoothing/` two 390px 40fps virtual-clock clips and one before/after sequence comparison; no audio, real-device/Safari/FPS claim. No new atlas memory. Original two-atlas budget still applies.
+
+## 2026-10-26 — Pilot approved: subtle pacing adjustment and game publication
+
+- Owner approved all pilot art/motion, requested only a tiny slowdown, and explicitly authorized release into the live game. Applies to Lyra/Hunter pilot PR #74, not approval of unrelated C5 effects.
+- Sprite recovery 240→260ms (+20ms, ~8%); frame-progress exponent 1.08 gently holds poses a little longer. Damage/contact/end timing, fast/reduced-motion semantics, rule state and save format are unchanged.
+- Files: `unit-animation.ts`, `unit-frames.ts`, existing frame lifecycle test, handoff/approval and validation notes. Verification: typecheck/lint/build:pages, 851 unit tests and 24 focused tests pass; all seven pilot/mode/skip-resize browser cases pass. PR browser gate: 3 prechecks and 246 tests pass, 36 capture-only skips.
+- Released PR #74 as `19177ffa9e76c071b80654122f3bebeaf0f60d52`. Pages workflow [40265355688](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/40265355688) succeeded: build, all four browser shards and deploy. Live target: https://wnau34-nptrn.github.io/asterveil-fateweave/. Direct HTTP verification from this runtime was blocked by the outbound proxy (403); publication is verified by the successful deployment for the exact release SHA. This docs-only follow-up uses [skip ci] so it does not rebuild unchanged game code.
+
+## 2026-10-26 — Unit animation step 3: Lyra/Hunter sprite pilot
+
+- Owner said “จัดไป” after step 2. Branch `codex/unit-animation-pilot`, depends on the controller from PR #73. PR #74: https://github.com/wnau34-nptrn/asterveil-fateweave/pull/74 (CI pending at handoff). Controller PR #73 integrated as `a0d50f325be7157c7272d613268f416a45ecf032` after quality/browser CI passed. Step 3 only, not expansion to other units or approval of C5 VFX.
+- Generated whole-sheet sprites from shipped Lyra/Hunter seeds; rejected overlap/incomplete first passes, normalized 24-component sheets with shared scale/foot pivot, selected 21 sequence slots each (17 generated poses + 4 reused endpoints), plus idle. Lossless WebP runtime atlases and rebuild script/provenance included. No imported other-project/user concept assets.
+- Added `unit-frames.ts`, frame port in UnitAnimation, BattleScene preload/binding and HP-boundary down/revive reset. Contact frame is selected synchronously by existing UI contact; hit targets/HP remain stationary. Other units/actions retain procedural fallback; reduced motion uses static feedback. No rule/save/balance changes.
+- Validation: typecheck/lint/build pass, Vitest 73 files/851 tests; focused 4 files/24 tests. Chromium 390px basic pilot + round-three Execute/Shadow Knife pass; four presentation mode cases pass. Browser fixture errors corrected (TargetOption.valid, Mark fallback, resumed Start gating). Two additional 390px impact/skip/resize/reload/hidden lifecycle cases pass.
+- Evidence: `docs/validation/unit-animation-step3/{basic-390,skill-390}.mp4` plus two reviewed 390px PNGs. Virtual-clock 20fps clips, no audio; not real-device/Safari or FPS claims. Decoded atlas budget ~48 MiB for both, needs encounter-based loading before roster-wide rollout.
+- Next: owner visual feedback on the pilot, then caster pair Eira/Sprite or broader rollout according to the agreed plan. No image quality approval inferred from tests.
+
+## 2026-10-26 — Unit animation step 2: shared controller and existing-image fallback
+
+- Owner said “จัดไป” after step 1 and “ต่อ” to resume step 2. Branch `codex/unit-animation-controller`, base `e62292a`. PR #73: https://github.com/wnau34-nptrn/asterveil-fateweave/pull/73 (CI/merge status is recorded there); no visual approval of C5 or new sprite production inferred.
+- Added pure renderer-port controller and exhaustive ActionId pose map, class-specific basic attacks and enemy art/intent mapping. BattleScene owns lifecycle, starts gestures before VFX-specific returns, uses actual reaction recipients and settles transforms on existing cancellation boundaries. Idle is paused per actor and stays paused when down. No battle/save/balance changes.
+- Files: `src/game/visuals/unit-animation{,-map}.ts`, `src/game/scenes/BattleScene.ts`, `tests/unit-animation.test.ts`, `docs/validation/unit-animation-step2/README_TH.md`, this handoff. Local evidence: two reviewed 390px screenshots and a 3.6s/20fps virtual-clock capture clip (no sound); binary upload status is explicit in the validation note.
+- Validation: typecheck/lint/build pass; full Vitest 72 files/847 tests; focused 3 files/20 tests. Seven relevant Chromium presentation cases pass including a 1/1 rerun after Vite HMR interrupted the initial run. Covers authoritative contact, all four mode combinations, skip/resize/reload/hidden and motion toggles. Not a real-device/Safari claim.
+- Step 3 remains: generate the pilot sprite sheets and add frame/contact playback. No cloud-session creation capability is available here; do not launch unrelated P00/C12 work from this animation task.
+
+## P00 publication complete — PR #72
+
+Merged into game branch as `aab276d9f7eb46f782039414a83b50c19beef8af`, head `e638f3b`. PR quality CI run 672 (`40245547986`) passed. Local baseline: full sim 28/28 and focused 55/55; final artifacts: 19 documentation/report files, 29 tracked links, hashes and whitespace validated. Issue #69 marks P00 complete and remains open. Next is P01-A/B in `docs/design/p00/SHARED_PROGRESSION_TEAM_SPEC_TH.md`; no runtime rules were changed by P00. No screenshots or human playtest were claimed. This note records delivery only.
+
+## P00 completed — shared progression/team specification and baseline
+
+- Owner authorized proceeding after the consolidated plan. Branch `docs/p00-shared-level-team-spec` targets game branch. Added `docs/design/p00/SHARED_PROGRESSION_TEAM_SPEC_TH.md` and `MIGRATION_ACCEPTANCE_TH.md`: canonical camp XP, atomic profile/run transitions, legacy withdrawal boundary, ownership and six-position/five-live-actor vocabulary. Runtime remains unchanged; PR #59 still awaits visual review.
+- Baseline on `e62292a`: full sim 28/28 across seven files plus focused roster/save/formation/talent checks 55/55. Artifacts, hashes, policies and twenty current campaign cells are in `docs/validation/p00/`. No new browser screenshots, human playtest, new-system validation or real-device claim.
+- P00-01/02/03 marked complete in development plan. Next P01-A/B: implement shared Lv/XP and migration with field4/reserve4 and current star-point formula; five-member prototype waits P02 and star-point redesign waits P04. See the copy-ready next task in the plan.
+- Documentation-only change; link/whitespace review before publication. Migration matrix is specified, not implemented or tested against new rules. Publication PR #72; merge evidence is tracked through issue #69.
+
+## 2026-10-25 — Development plan publication completed
+
+- PR #70 merged into `feature/fateweave-initial-prototype` as `aafec236507458f45303a6af3a26438dfb276534` (head `0fa6cc6`). Plan: `docs/DEVELOPMENT_PLAN_TH.md`; tracking issue #69 remains open and now links to the game branch.
+- PR quality CI run 665 / 40217513479 passed typecheck, lint, unit tests and build. Final document check: 15 Markdown files, 54 local links, all 37 discussion topics and 41 unique tasks across P00–P11; diff whitespace passed. No runtime/save/balance changes, no new sim or screenshots; browser PR workflow is path-filtered for this docs-only change.
+- Earlier local-only notes below describe historical task states; the complete design/research bundle is now on GitHub. Next task: P00 specifications/baseline/migration. This follow-up only records the completed publication; it does not claim Pages deployment of new gameplay.
+
+## 2026-10-25 — Consolidated development plan for GitHub delivery
+
+- Owner requested all discussion information consolidated into a development plan and sent to GitHub. Added `docs/DEVELOPMENT_PLAN_TH.md`: P00–P11 delivery order, task checklists, dependencies, exit gates, old→new mapping, numerical assumptions and complete D01–D37 coverage. Entry links added to README, CLAUDE, legacy roadmap/master plan, C12 and overview/research docs.
+- Tracking issue: https://github.com/wnau34-nptrn/asterveil-fateweave/issues/69 (remains open after the documentation PR). Branch `docs/game-detail-review`, target `feature/fateweave-initial-prototype`; PR #70 publishes the earlier local design/research commits. GitHub confirms base e79e8a4 already includes historical Batch1 notes; those reports are not changed by this PR and are not new simulations.
+- New task scope is documentation and GitHub publication only. Runtime/save/balance unchanged. Shared levels are the owner's requested direction; five-member teams and numerical progression details remain a prototype/recommended baseline with explicit gates. P00 is next before old Batch2 prompts that assume v44 and unchanged progression.
+- Local validation: Markdown link checks, complete D01–D37 mapping, unique task IDs, diff whitespace and docs-only file-scope review. No new local gameplay tests or screenshots; GitHub quality CI runs per existing PR workflow. PR: https://github.com/wnau34-nptrn/asterveil-fateweave/pull/70. Publication result and merge reference will be recorded in the PR/tracking issue.
+- Network: ordinary sandbox fetch initially failed reaching the proxy; permitted network mode succeeded. Used cloud-environment-runtime guidance and the connected GitHub tools; no credential or repository-setting changes.
+
+## 2026-10-25 — Shared camp level and mechanic-based bosses
+
+- Owner requested equal character levels for free team switching and asked whether some bosses should require specific mechanics. Added `docs/design/SHARED_LEVEL_TEAM_BOSSES_TH.md`; linked Game Detail, discussion index and the prior recommended progression baseline. No runtime/save/balance changes.
+- Recommend one camp Lv/EXP for all owned heroes, including new recruits, with EXP awarded once per event. Shared level/training point entitlement, individual builds/stars/promotion/gear. This replaces individual catch-up training in the prior proposal; personal skill and gear gaps still need validation.
+- Boss direction: meaningful mechanics with at least two viable responses and at least one guaranteed-access route; no specific gacha hero or advanced-star gate for required main-story counters. Examples are concepts, not claims about implemented encounters.
+- Team five remains the proposed prototype direction from discussion (runtime four); economy targets for team four are historical and must be recalculated. Shared levels do not establish UI or balance feasibility for 5v5.
+- Migration concept: seed shared EXP from highest owned-member progression rather than sum; preserve investments and replay boundaries. Shared training credits use highest legacy star-point entitlement, not total across roster. Validate real saves before implementation.
+- Validation: document review, local Markdown link checks and `git diff --check`; no gameplay tests/screenshots for docs-only work. Local branch `docs/game-detail-review`; no PR/merge/publication. Next: combined shared-EXP/team-five economy and encounter prototype specs.
+
+## 2026-10-25 — Recommended progression baseline selected for further design
+
+- Owner asked for a concrete recommendation. Added `docs/design/PROGRESSION_RECOMMENDED_BASELINE_TH.md` and linked it from round-one discussion and research. This selects an advisory baseline; no runtime implementation or owner acceptance of every number is inferred.
+- Recommended structure: 15 class pairs, same-ID base/advanced ★1–5; trial at Lv15/base ★5, no extra promotion-material gate; two extension choices at promotion/Lv20; free camp respec; gameplay talent points instead of star points; universal farmable shards and character catch-up.
+- Unvalidated prototype values: 16 regular points by Lv20 including four training points; retain base +8 percentage points per star, advanced +3 up to cumulative +44%; explicit account-level session targets for first hero, team four, and advanced favourite. No claim of proven balance or resource feasibility. Existing unique-star plans would need explicit revision under this proposal.
+- Migration proposal credits old star points toward, not beyond, the four training points. Validate real saves, grants and gates before implementation. Gacha costs/rates remain a separate economy calculation.
+- Files: new recommendation, two cross-links and three handoffs. Checked Markdown targets, point/star arithmetic and `git diff --check`; no gameplay tests or screenshots (docs only). Local `docs/game-detail-review`, no PR/merge/publication. Next: account economy model and build/role validation using this baseline.
+
+## 2026-10-25 — Progression/promotion discussion round 1
+
+- Owner requested the next round after comparative research. Added `docs/design/PROGRESSION_PROMOTION_DISCUSSION_TH.md` for D06–D10; cross-linked the three overview/research documents. This is a structural proposal for discussion, not implementation or final numerical rules.
+- Proposed: base ★1–5 → promotion → advanced ★1–5 (ten positions, nine transitions), one advanced path per class, small shared extension with two choice pairs, preserved personal branches and three equipped skills. Stars provide bounded efficiency; build access should come from gameplay. Star ★5 promotion eligibility depends on reliable non-duplicate farming.
+- Explicit unresolved changes: existing star-derived talent points and approved unique-star plans, Lv30 point budget, migration credits, role-specific star value, unlock chapter/level, costs and gacha economy. Preserve current C12 until a scoped implementation follows; promoted heroes remain the same ID.
+- Validation: reviewed the current tree/roster rules, checked local Markdown links and `git diff --check`. No runtime/save/balance edits, gameplay tests or screenshots for this documentation task.
+- Branch `docs/game-detail-review`; local documentation commit only, no PR/merge/publication. Follow-up is a character/team progression timeline and economy alternatives once the structural direction is selected.
+
+## 2026-10-25 — Research-backed recommendations for Game Detail
+
+- Owner now requested research on successful/enjoyable games and recommendations preserving Fateweave identity. This extends the previous list-only request to advisory recommendations, not implementation or approval of numbers.
+- Added `docs/GAME_RESEARCH_RECOMMENDATIONS_TH.md`: seven game references, ten source entries, all D01–D37 mapped to recommendation/rationale/tradeoff/validation. Uses publisher/developer/support pages; explicitly qualifies one official-hosted community wiki search result with blocked direct access.
+- Main recommendations: preserve intent reading and expedition/camp identity; hold all unlocked characters; promotion modifies existing skills; separate growth-system responsibilities; farmable star progress with gacha guarantees; contextual quests/camp reactions; PvE-first and standardized competitive access if PvP is pursued.
+- Updated links in the two Game Detail documents. No gameplay changes, no approved rates/costs/cadence, no simulations or user-playtest claims. Source snapshots checked2026-10-25 Bangkok. Validation: source review, 37 unique IDs, local links and diff check.
+- Local docs/game-detail-review; no PR/merge/publication. Discuss recommendations with owner before turning them into specs.
+
+## 2026-10-25 — Game Detail consolidation for owner discussion
+
+- User requested a full consolidation of existing gameplay, approved plans and recent proposals, with gaps listed separately before further design. This is a documentation review task, not permission to implement promotion/gacha or choose their numbers.
+- Added `docs/GAME_DETAIL_TH.md` (20 sections) and `docs/GAME_DESIGN_DISCUSSION_TH.md` (D01–D37). Source runtime is game branch e79e8a4 / v43; checked historical gacha/online proposal branch as well.
+- Key gaps: company cap20 versus roster30+, Mira story recruitment absent from map3 data, earlier story recruits already in starter pool, star/personal-tree/promotion overlap, competing pity drafts (80/1.5% historical versus30/10% chat), economy and save migration.
+- Recent promotion of five stars followed by another class/five stars, improving existing skills, two focus characters/month and universal shards remain discussion items. Do not silently adopt assistant suggestions or supersede approved C12/MASTER_PLAN.
+- Docs-only; no runtime/save/balance edits or new gameplay tests. Validation: source review, internal-link/ID checks and git diff --check. Earlier24 quest and148 progression checks are historical evidence from the preceding audits, not new tests for this document. No screenshots needed.
+- Local documentation branch `docs/game-detail-review`; no PR/merge/publication in this task. Follow-up: discuss open items with owner before designing their answers.
+
 ## 2026-10-25 — C12 Batch 1 delivered — PR #68 merged
 
 - Branch `codex/roster-30-2` on `5a613a5`; PR #68 merged 2026-10-25 as `24dfefbb5777a2233ab376725fb57dbd1bac719f`. Owner authorized continuing Batch 1. Added Metta/Thiran Saint and Lalin/Wila Dancer, six skills per class, shared 16-node trees and paid personal branches, deterministic healing/cooldown rules, save v43 migration, hiring-board preservation, Thai UI/selectors, actual-state basic visual cues and production assets.

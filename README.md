@@ -1,5 +1,7 @@
 # Asterveil · Fateweave
 
+> [แผนพัฒนารวมล่าสุด](docs/DEVELOPMENT_PLAN_TH.md) — รวมสถานะจริง ข้อเสนอใหม่ งานย่อย และเกณฑ์ผ่านก่อนเปิดระบบ เอกสารเดิมด้านล่างเก็บบริบทตามวันที่ ไม่ถือว่าทีม 5/เลเวลค่าย/กาชาทำงานแล้ว
+
 A small, playable **2D tile expedition with Fateweave SPD combat**. This is an independent browser-first project in `wnau34-nptrn/asterveil-fateweave`. The original Godot project is not a dependency and no code, assets, or history are imported from it.
 
 ## Play in your browser
