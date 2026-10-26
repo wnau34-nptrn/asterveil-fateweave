@@ -1,5 +1,7 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
+ล่าสุด: เจ้าของปฏิเสธ Rally R2 เพราะทับชุด มี R3 พลังบนพื้นแยกซ้าย–ขวา `docs/combat-presentation/rally-r3/README_TH.md` (90×12, feet dy27) รอเลือก artwork ยังไม่ promote runtime; PR#77 ใบเดิมไม่เริ่มตระกูล3
+
 ## 2026-10-27 — Rally เดิมไม่ผ่าน รอเลือก artwork R2 ใหม่
 
 เจ้าของไม่ชอบ Rally ในชุดคลิปและขอแก้ artwork แล้ว มีข้อเสนอริ้วพลังน้ำเงินแนวนอนช่วงขา3จังหวะที่ `docs/combat-presentation/rally-r2/README_TH.md` / `index.html` ต้นฉบับ/Promptอยู่ `incoming/ART-VFX-DEFENSE-001/proposals/rally-r2/` ยังไม่ได้แทน source/atlas/runtime/คลิปเดิม รอเลือกแบบก่อน promote/repack/อัด Rally ใหม่ใน PR#77 ใบเดิม ไม่ถือว่าท่าอื่นผ่านและยังไม่เริ่มตระกูล3

@@ -1,5 +1,12 @@
 # Codex → Claude handoff
 
+## 2026-10-27 — Rally R2 rejected for clothing overlap; floor-only R3 (PR #77)
+
+- Owner rejected R2 explicitly because it overlaps the costume. Generated a new transparent three-phase floor-only pair of blue/silver marks. No connecting ribbon across legs; footprint90×12, foot anchor dy27 keeps the actual390px composite below boots and HP bars. Do not infer other clip approvals.
+- Isolated original/prompt: `incoming/ART-VFX-DEFENSE-001/proposals/rally-r3/`; review/build/capture/manifest and native390px peak: `docs/combat-presentation/rally-r3/`. R2 remains archived with rejection notice. Same branch `codex/vfx-family-2-defense`, draft PR77; no merge.
+- Validation: exact original SHA matches; RGBA2172×724 alpha0–253, dimensions/anchors verified. Browser three-phase/field/weight/reset/phase controls pass, no page errors/storage writes. Visually checked the source and390px peak. Lint/diff checks pass. Artwork only; no new gameplay suite needed.
+- Production source/atlas/profile/runtime/clips remain unchanged until artwork selection. Next promote selected art and re-record actual Rally in the same PR. No family3.
+
 ## 2026-10-27 — Owner rejected Rally; new artwork-only R2 proposal (PR #77)
 
 - Owner explicitly dislikes Rally and asked to adjust its artwork. Do not infer that other family-2 clips passed. Same branch `codex/vfx-family-2-defense` / PR #77, no merge or new family.

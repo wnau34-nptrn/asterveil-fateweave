@@ -31,3 +31,7 @@ Runtime and eighteen real390px clips: `docs/combat-presentation/defense-slice/RE
 ## Rally artwork revision pending — 2026-10-27
 
 Owner rejected the existing Rally artwork. A new horizontal blue/silver/gold ribbon proposal is isolated in `proposals/rally-r2/`, with exact edit prompt and untouched RGBA original. Native390px composite/three-phase review is in `docs/combat-presentation/rally-r2/`. It is not promoted into `source/rally.png`, the production atlas/profile/module or any runtime clip. Other skill approvals are not implied. Continue Rally artwork review in PR#77 before repacking/re-recording it.
+
+## Rally R3 floor-only proposal — R2 rejected
+
+Owner rejected R2 because it overlaps clothing. New original/prompt in `proposals/rally-r3/`, review in `docs/combat-presentation/rally-r3/`. Paired floor marks90×12, feet dy27, below costume/boots/HP in390px composite. Not promoted; production and clips unchanged. Same draft PR77, no family3.
