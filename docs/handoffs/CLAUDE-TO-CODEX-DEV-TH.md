@@ -325,3 +325,7 @@ REPORT after every batch in docs/handoffs/CODEX-TO-CLAUDE.md (per character: kit
 
 
 - 2026-10-24: เจ้าของถามหาจุดไม่สมเหตุผลอื่น (ยังไม่ได้สั่งแก้) ดู `docs/design/LOGIC_AUDIT_2026-10-24_TH.md`: ฝากพิจารณา Aegis ที่ใช้ได้แต่ไม่เพิ่มโล่, Heal ที่เลือกคนเลือดเต็มไม่ได้แม้มี Afterglow และ Revive อัปเลเวลแล้วเพิ่มโล่ผู้ใช้แทน HP ที่ชุบ ห้ามถือว่าข้อสังเกตเหล่านี้เป็นการอนุมัติเปลี่ยนกติกา; จุด UI แสดงหน่วย/scaling ผิดและ Bulwark ไม่รวมเลเวลเป็นข้อบกพร่องที่ยืนยันแล้ว
+
+## Unit animation pilot — owner visual approval 2026-10-26
+
+เจ้าของให้ผ่าน Lyra/Vargoth Hunter ทั้งภาพและท่า และอนุญาตนำเข้าเกมจริง โดยขอช้าลงนิดเดียว ปรับคืนท่า sprite 240→260ms และ ease frame cadence เล็กน้อย คง contact/end เดิม นี่คือการอนุมัติคู่ pilot ของ PR #74 ไม่ใช่การอนุมัติ C5 blade VFX หรือขยายทุกยูนิต

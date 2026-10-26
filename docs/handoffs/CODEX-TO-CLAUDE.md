@@ -1,5 +1,11 @@
 # Codex → Claude handoff
 
+## 2026-10-26 — Pilot approved: subtle pacing adjustment and game publication
+
+- Owner approved all pilot art/motion, requested only a tiny slowdown, and explicitly authorized release into the live game. Applies to Lyra/Hunter pilot PR #74, not approval of unrelated C5 effects.
+- Sprite recovery 240→260ms (+20ms, ~8%); frame-progress exponent 1.08 gently holds poses a little longer. Damage/contact/end timing, fast/reduced-motion semantics, rule state and save format are unchanged.
+- Files: `unit-animation.ts`, `unit-frames.ts`, existing frame lifecycle test, handoff/approval and validation notes. Verification: typecheck/lint/build:pages and 24 focused tests pass; all seven pilot/mode/skip-resize browser cases pass. Full-unit rerun and publication outcome are recorded on PR #74 after completion.
+
 ## 2026-10-26 — Unit animation step 3: Lyra/Hunter sprite pilot
 
 - Owner said “จัดไป” after step 2. Branch `codex/unit-animation-pilot`, depends on the controller from PR #73. PR #74: https://github.com/wnau34-nptrn/asterveil-fateweave/pull/74 (CI pending at handoff). Controller PR #73 integrated as `a0d50f325be7157c7272d613268f416a45ecf032` after quality/browser CI passed. Step 3 only, not expansion to other units or approval of C5 VFX.

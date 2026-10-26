@@ -29,6 +29,8 @@ describe('pilot sprite playback',()=>{
   animation.bind('other',other,96,()=>{});
   animation.begin('hero','thrust',1,298,'skill');animation.update(297);expect(frame).toBe(12);
   animation.contact('hero',552);expect(frame).toBe(13);animation.update(80);expect(body.rotation).toBe(0);
+  animation.update(160);expect(body.x).toBeGreaterThan(0); // subtle 260ms sprite recovery, not the old 240ms
+  animation.update(20);expect(body.x).toBe(0);expect(frame).toBe(0);
   animation.begin('other','slash',1,100);animation.update(50);expect(other.x).toBeGreaterThan(0);
   alive=false;animation.reset('hero');expect(frame).toBe(21);expect(other.x).toBeGreaterThan(0);
   animation.react('hero','down',1,400);animation.update(100);expect(frame).toBe(19);

@@ -25,7 +25,7 @@ export class UnitAnimation {
       const rig = this.bindings.get(id)!;
       this.restore(rig); rig.idle(false); this.motions.delete(id); return;
     }
-    if (motion) { motion.phase = 'recover'; motion.elapsed = 0; motion.duration = Math.min(240, remainingMs); this.bindings.get(id)?.frames?.show(motion.pose, 'recover', 0, motion.clip); }
+    if (motion) { motion.phase = 'recover'; motion.elapsed = 0; motion.duration = Math.min(motion.clip ? 260 : 240, remainingMs); this.bindings.get(id)?.frames?.show(motion.pose, 'recover', 0, motion.clip); }
   }
   react(id: string, pose: Reaction, direction: number, remainingMs: number): void {
     this.start(id, { pose, direction, elapsed: 0, duration: Math.min(pose === 'down' ? 320 : 200, remainingMs), phase: 'reaction' });

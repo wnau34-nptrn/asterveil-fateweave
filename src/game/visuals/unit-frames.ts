@@ -16,7 +16,8 @@ export function pilotClip(art: string, action: string | undefined, intent: strin
 // 0 idle; 1..8 slash; 9..16 skill; 17..18 hurt; 19..21 down.
 // Frame 5/13 is the contact pose. UI contact remains authoritative, never sprite FPS.
 export function pilotFrame(pose: UnitPose | Reaction, phase: FramePhase, progress: number, clip?: UnitClip): number | undefined {
-  const p = Math.max(0, Math.min(1, progress));
+  // Owner feedback: a gentler frame cadence; contact/end cues stay fixed.
+  const p = Math.max(0, Math.min(1, progress)) ** 1.08;
   if (phase === 'reaction') {
     if (pose === 'hit') return 17 + Math.min(1, Math.floor(p * 2));
     if (pose === 'down') return 19 + Math.min(2, Math.floor(p * 3));
