@@ -9,7 +9,7 @@ import subprocess
 import sys
 
 root = Path(__file__).resolve().parents[3]
-captures = root / (sys.argv[1] if len(sys.argv) > 1 else 'test-results/blade-r3-delivery')
+captures = root / (sys.argv[1] if len(sys.argv) > 1 else 'test-results/blade-r4-delivery')
 out = root / 'docs/combat-presentation/blade-slice'
 out.mkdir(parents=True, exist_ok=True)
 manifest = []
@@ -33,7 +33,7 @@ for stamps in sorted(captures.glob('*/stamps.txt')):
     stream = probe['streams'][0]
     assert (stream['width'], stream['height']) == (390, 844)
     manifest.append({'file': target.name, 'width': stream['width'], 'height': stream['height'], 'duration': float(probe['format']['duration']), 'capturedFrames': len(frames), 'clickOffset': round(click - frames[0][1], 3), 'maxFrameGap': round(max(b[1] - a[1] for a, b in zip(frames, frames[1:])), 3), 'impacts': [{**impact, 'at': round(impact['at'] - frames[0][1], 3)} for impact in impacts]})
-    if name in ['lunge-hit-normal', 'sweep-hit-normal']:
+    if name in ['pierce-hit-normal', 'sweep-hit-normal']:
         # One 390px contact frame per skill, selected from actual capture time.
         impact = next(i for i in impacts if i['side'] == 'hero' and i.get('action') == name.split('-')[0])
         contact = impact['at'] + .07

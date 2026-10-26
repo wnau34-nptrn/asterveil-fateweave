@@ -4,19 +4,19 @@ import type { FxContext } from './bolt-fx';
 
 export const BLADE_ATLAS = 'blade-fx';
 export const bladeAtlasUrls = (): [string, string] => [`${import.meta.env.BASE_URL}assets/fx/blade_fx.webp`, `${import.meta.env.BASE_URL}assets/fx/blade_fx.json`];
-// One painted family, ten silhouettes and continuous gestures. Cuts use the screen plane;
-// thrusts follow the incoming axis. Count is decorative flecks, never additional strikes.
+// Selected concept silhouettes, including the thicker Pierce R2. One atlas; per-skill values
+// describe footprint and ONE continuous gesture. Decorative flecks never represent extra hits.
 export const bladeSkills = {
-  attack:   { shape: 'slash',  width: 112, height: 76, direction: -.45, turn: .35, travel: [4, 8],   offset: [0, 0],   life: 265, core: 40, count: 1 },
-  finisher: { shape: 'slash',  width: 142, height: 88, direction: 1.15, turn: -.30, travel: [0, 18],  offset: [0, -6],  life: 300, core: 50, count: 2 },
-  lunge:    { shape: 'thrust', width: 142, height: 66, direction: 0,    turn: 0,    travel: [24, 0],  offset: [-10, 0], life: 275, core: 42, count: 1 },
-  sweep:    { shape: 'slash',  width: 172, height: 56, direction: .05,  turn: .40,  travel: [12, 0],  offset: [0, 5],   life: 300, core: 38, count: 2 },
-  backstab: { shape: 'thrust', width: 104, height: 58, direction: 3.35, turn: -.12, travel: [-18, 0], offset: [12, -2], life: 235, core: 34, count: 1 },
-  ambush:   { shape: 'slash',  width: 124, height: 92, direction: -.95, turn: -.65, travel: [6, -20], offset: [0, 8],   life: 280, core: 40, count: 1 },
-  disarm:   { shape: 'slash',  width: 88,  height: 64, direction: -.65, turn: 1.05, travel: [-8, -8], offset: [-8, -8], life: 240, core: 30, count: 0 },
-  parry:    { shape: 'slash',  width: 110, height: 72, direction: .85,  turn: -.85, travel: [14, -6], offset: [-4, 0],  life: 260, core: 38, count: 1 },
-  pierce:   { shape: 'thrust', width: 184, height: 38, direction: 0,    turn: 0,    travel: [10, 0],  offset: [0, 0],   life: 260, core: 34, count: 1 },
-  halt:     { shape: 'thrust', width: 88,  height: 82, direction: -.10, turn: .10,  travel: [3, 0],   offset: [-8, 0],  life: 290, core: 44, count: 0 },
+  attack:   { width:84, height:76, axial:false, cross:1, family:'Duelist', life:270, turn:.22, travel:[4,6], core:14, count:1 },
+  finisher: { width:88, height:110, axial:false, cross:1, family:'Duelist', life:310, turn:-.16, travel:[0,12], core:18, count:2 },
+  lunge:    { width:116, height:62, axial:true, cross:1, family:'Duelist', life:285, turn:0, travel:[18,0], core:15, count:1 },
+  sweep:    { width:142, height:54, axial:false, cross:1, family:'Duelist', life:310, turn:.16, travel:[10,0], core:13, count:1 },
+  backstab: { width:76, height:46, axial:true, cross:1, family:'Scout', life:255, turn:0, travel:[-12,0], core:12, count:0 },
+  ambush:   { width:88, height:104, axial:false, cross:1, family:'Scout', life:295, turn:-.18, travel:[4,-14], core:14, count:1 },
+  disarm:   { width:62, height:72, axial:false, cross:1, family:'Scout', life:260, turn:.45, travel:[-5,-5], core:10, count:0 },
+  parry:    { width:88, height:74, axial:false, cross:1, family:'Duelist', life:280, turn:-.32, travel:[8,-3], core:13, count:1 },
+  pierce:   { width:130, height:58, axial:true, cross:1.4, family:'Spear', life:285, turn:0, travel:[12,0], core:14, count:1 },
+  halt:     { width:74, height:62, axial:true, cross:1, family:'Spear', life:300, turn:0, travel:[2,0], core:16, count:0 },
 } as const;
 export type BladeSkill = keyof typeof bladeSkills;
 export const isBladeSkill = (action: string | undefined): action is BladeSkill => !!action && Object.hasOwn(bladeSkills, action);
@@ -24,7 +24,7 @@ export const isBladeSkill = (action: string | undefined): action is BladeSkill =
 export const bladePalettes: Readonly<Record<string, number>> = {
   Knight: 0xffda93, Duelist: 0xffc8dc, Scout: 0xa7c9ec, Spear: 0x8de3d8,
   Archer: 0xb3dfa6, Alchemist: 0xffd69b, Warden: 0xc4d1df, Bard: 0xffc1af,
-  Mage: 0xd9c7ff, Priest: 0xffedbb,
+  Mage: 0xd9c7ff, Priest: 0xffedbb, Saint: 0xffedbb, Dancer: 0xf0bfdc,
 };
 export interface BladeCue { skill: BladeSkill; event: BattleEvent; outcome: 'hit' | 'blocked' | 'dodged'; parried: boolean }
 // Resolve routing from events, including Parry's later enemy-stage counter. Never synthesize a hit from a selected target.
@@ -39,72 +39,80 @@ export function bladeCues(turn: TurnStage): BladeCue[] {
   });
 }
 interface Point { x: number; y: number }
-function image(ctx: FxContext, at: Point, frame: string, size: number, tint: number): Phaser.GameObjects.Image {
-  const img = ctx.scene.add.image(at.x, at.y, BLADE_ATLAS, frame).setDisplaySize(size, size).setTint(tint);
+function image(ctx: FxContext, at: Point, frame: string, width: number, height: number, tint: number, cross = 1): Phaser.GameObjects.Image {
+  const img = ctx.scene.add.image(at.x, at.y, BLADE_ATLAS, frame).setTint(tint);
+  const fit = Math.min(width / img.width, height / (img.height * cross));
+  img.setDisplaySize(img.width * fit, img.height * fit * cross);
   ctx.add(img); return img;
 }
-// All tweens target owned images, so BattleScene.stopEffects cancels every pending animation.
-function play(ctx: FxContext, img: Phaser.GameObjects.Image, name: string, life: number, travel: Point = { x: 0, y: 0 }, turn = 0): void {
-  const peak = img.alpha;
-  ctx.scene.tweens.add({ targets: img, alpha: 0, x: img.x + travel.x, y: img.y + travel.y, rotation: img.rotation + turn, duration: Math.max(1, life), ease: 'Cubic.Out',
-    onUpdate: tween => {
-      if (!img.active) return;
-      const p = tween.progress, index = p < .08 ? 0 : p < .42 ? 1 : p < .74 ? 2 : 3;
-      img.setFrame(`${name}_${String(index).padStart(2, '0')}`).setAlpha(peak * (p < .42 ? 1 : (1 - p) / .58));
-    },
-    onComplete: () => img.destroy() });
+const ease = (p: number) => 1 - (1 - Phaser.Math.Clamp(p, 0, 1)) ** 3;
+const ramp = (p: number, start: number, end: number) => Phaser.Math.Clamp((p - start) / (end - start), 0, 1);
+// The selected boards use fixed CSS footprints at a large 390px slot (the context's 1.25 scale).
+const scale = (ctx: FxContext) => ctx.scale / 1.25 * (ctx.quiet ? .9 : 1);
+const artTint = (skill: BladeSkill, tint: number) => tint === bladePalettes[bladeSkills[skill].family] ? 0xffffff : tint;
+function paint(ctx: FxContext, at: Point, skill: BladeSkill, phase: string, size: number, tint: number): Phaser.GameObjects.Image {
+  const spec = bladeSkills[skill];
+  return image(ctx, at, `${skill}_${phase}`, spec.width * size, spec.height * size, artTint(skill, tint), spec.cross);
 }
+// Every tween targets an owned image. stopEffects kills it and destroys its paired tail as well.
 function settle(ctx: FxContext, img: Phaser.GameObjects.Image, life: number): void {
-  const hold = Math.min(life * .3, 90);
-  ctx.scene.tweens.add({ targets: img, alpha: 0, delay: hold, duration: Math.max(1, life - hold), onComplete: () => img.destroy() });
+  ctx.scene.tweens.add({ targets: img, alpha: 0, duration: Math.max(1, life), onComplete: () => img.destroy() });
 }
 export function bladeCast(ctx: FxContext, from: Point, to: Point, contactMs: number, tint: number, skill: BladeSkill): void {
   if (ctx.reduced) return;
-  const angle = Math.atan2(to.y - from.y, to.x - from.x), spec = bladeSkills[skill], s = ctx.scale;
-  const facing = spec.shape === 'thrust' ? angle : 0;
-  const glint = image(ctx, { x: from.x + Math.cos(angle) * 18 * s, y: from.y - 4 * s }, 'glint', 42 * s, tint).setAlpha(.3);
-  glint.setDisplaySize((spec.shape === 'thrust' ? 58 : 38) * s, 26 * s).setRotation(facing + spec.direction - spec.turn);
-  ctx.scene.tweens.add({ targets: glint, rotation: facing + spec.direction, alpha: .75, duration: contactMs, ease: 'Sine.In', onComplete: () => glint.destroy() });
+  const angle = Math.atan2(to.y - from.y, to.x - from.x), spec = bladeSkills[skill], s = scale(ctx);
+  const at = { x: from.x + Math.cos(angle) * 18 * s, y: from.y + Math.sin(angle) * 18 * s - 4 * s };
+  const glint = paint(ctx, at, skill, 'prepare', s * .36, tint).setAlpha(.3);
+  const facing = spec.axial ? angle : 0;
+  glint.setRotation(facing - spec.turn * .5);
+  ctx.scene.tweens.add({ targets: glint, rotation: facing, alpha: .65, duration: Math.max(1, contactMs), ease: 'Sine.In', onComplete: () => glint.destroy() });
 }
 export function bladeStance(ctx: FxContext, at: Point, life: number, tint: number): void {
-  const glint = image(ctx, at, 'glint', 48 * ctx.scale, tint).setRotation(-.7).setAlpha(.7);
-  if (!ctx.reduced) settle(ctx, glint, Math.min(life, 320));
+  const brace = paint(ctx, at, 'parry', 'prepare', scale(ctx) * .45, tint).setAlpha(.7);
+  if (!ctx.reduced) settle(ctx, brace, Math.min(life, 320));
 }
 export function bladeImpact(ctx: FxContext, cue: BladeCue, at: Point, from: Point | undefined, life: number, tint: number): void {
-  const spec = bladeSkills[cue.skill], s = ctx.scale * (ctx.quiet ? .9 : 1);
+  const spec = bladeSkills[cue.skill], s = scale(ctx);
   const angle = from ? Math.atan2(at.y - from.y, at.x - from.x) : 0;
-  const facing = spec.shape === 'thrust' ? angle : 0;
-  const local = (x: number, y: number): Point => ({ x: (Math.cos(facing) * x - Math.sin(facing) * y) * s, y: (Math.sin(facing) * x + Math.cos(facing) * y) * s });
-  const offset = local(spec.offset[0], spec.offset[1]), travel = local(spec.travel[0], spec.travel[1]);
-  const cutAt = { x: at.x + offset.x, y: at.y + offset.y };
+  const facing = spec.axial ? angle : 0;
   const blocked = cue.outcome === 'blocked', dodged = cue.outcome === 'dodged';
-  // Shield contact faces the source; a miss passes outside the body without a contact star.
   const edge = { x: at.x - Math.cos(angle) * 18 * s, y: at.y - Math.sin(angle) * 18 * s };
-  const miss = { x: at.x + Math.cos(angle) * 18 * s, y: at.y - 24 * s };
-  if (ctx.reduced) {
-    const still = image(ctx, dodged ? miss : blocked ? edge : cutAt, dodged ? 'pass' : blocked ? 'deflect' : `${spec.shape}_01`, 64 * s, blocked ? 0xbff3ff : tint).setRotation(dodged || blocked ? angle : facing + spec.direction).setAlpha(.72);
-    if (!dodged && !blocked) still.setDisplaySize(spec.width * .82 * s, spec.height * .82 * s);
+  // A resolved miss travels on a parallel lane outside the body, with no core or body damage flash.
+  const miss = { x: at.x + Math.cos(angle) * 16 * s - Math.sin(angle) * 48 * s, y: at.y + Math.sin(angle) * 16 * s + Math.cos(angle) * 48 * s };
+  if (dodged) {
+    const wisp = paint(ctx, miss, cue.skill, 'tail', s * .7, tint).setRotation(facing).setAlpha(.45);
+    if (!ctx.reduced) ctx.scene.tweens.add({ targets: wisp, alpha: 0, x: miss.x + Math.cos(angle) * 14 * s, y: miss.y + Math.sin(angle) * 14 * s,
+      duration: Math.max(1, Math.min(240, life)), onComplete: () => wisp.destroy() });
     return;
   }
-  if (dodged) {
-    const wisp = image(ctx, miss, 'pass', 72 * s, tint).setDisplaySize(spec.width * .7 * s, 46 * s).setRotation(angle + spec.direction).setAlpha(.6);
-    ctx.scene.tweens.add({ targets: wisp, alpha: 0, x: miss.x + Math.cos(angle) * 16 * s, duration: Math.min(280, life), onComplete: () => wisp.destroy() }); return;
-  }
   if (blocked || cue.event.absorbed) {
-    const deflect = image(ctx, edge, 'deflect', 72 * s, 0xbff3ff).setRotation(angle).setAlpha(.8);
-    settle(ctx, deflect, Math.min(320, life));
+    const deflect = image(ctx, edge, 'deflect', 52 * s, 52 * s, 0xbff3ff).setRotation(angle).setAlpha(.8);
+    if (!ctx.reduced) settle(ctx, deflect, Math.min(260, life));
     if (blocked) return;
   }
-  const ribbon = image(ctx, cutAt, `${spec.shape}_00`, spec.width * s, tint).setDisplaySize(spec.width * s, spec.height * s).setRotation(facing + spec.direction).setAlpha(.82);
-  play(ctx, ribbon, spec.shape, Math.min(life, spec.life), travel, spec.turn);
-  // Exactly one core at the resolved body contact; the travelling ribbon never creates another hit.
-  const star = image(ctx, at, 'contact_00', spec.core * s, tint).setRotation(angle).setAlpha(.78);
-  play(ctx, star, 'contact', Math.min(life, 180));
+  const peak = paint(ctx, at, cue.skill, 'peak', s, tint).setRotation(facing).setAlpha(ctx.reduced ? .72 : .88);
+  if (ctx.reduced) return;
+  const tail = paint(ctx, at, cue.skill, 'tail', s * .76, tint).setRotation(facing).setAlpha(0);
+  const w = peak.displayWidth, h = peak.displayHeight;
+  const travel = { x: (Math.cos(facing) * spec.travel[0] - Math.sin(facing) * spec.travel[1]) * s,
+    y: (Math.sin(facing) * spec.travel[0] + Math.cos(facing) * spec.travel[1]) * s };
+  ctx.scene.tweens.add({ targets: peak, alpha: 0, duration: Math.max(1, Math.min(life, spec.life)),
+    onUpdate: tween => {
+      if (!peak.active || !tail.active) return;
+      const p = tween.progress, move = ease(p), blend = ramp(p, .38, .66), grow = .92 + .08 * ease(p / .24);
+      peak.setPosition(at.x + travel.x * move, at.y + travel.y * move).setRotation(facing + spec.turn * move)
+        .setDisplaySize(w * grow, h * grow).setAlpha(.88 * (1 - blend));
+      tail.setPosition(peak.x, peak.y).setRotation(peak.rotation).setAlpha(.5 * blend * (1 - ramp(p, .7, 1)));
+    },
+    onComplete: () => { peak.destroy(); tail.destroy(); } });
+  // One tiny core at the authoritative contact, never a second burst along the travelling edge.
+  const core = image(ctx, at, 'contact_00', spec.core * s, spec.core * s, tint).setAlpha(.65);
+  settle(ctx, core, Math.min(150, life));
   if (ctx.quiet) return;
   for (let i = 0; i < spec.count; i++) {
-    const a = angle + (i - (spec.count - 1) / 2) * .7;
-    const fleck = image(ctx, at, 'flecks', 24 * s, tint).setRotation(a).setAlpha(.65);
-    ctx.scene.tweens.add({ targets: fleck, x: at.x + Math.cos(a) * 20 * s, y: at.y + 14 * s, alpha: 0,
-      duration: Math.min(life, 320), onComplete: () => fleck.destroy() });
+    const a = angle + (i - (spec.count - 1) / 2) * .6;
+    const fleck = image(ctx, at, 'flecks', 16 * s, 16 * s, tint).setRotation(a).setAlpha(.45);
+    ctx.scene.tweens.add({ targets: fleck, x: at.x + Math.cos(a) * 14 * s, y: at.y + 8 * s, alpha: 0,
+      duration: Math.max(1, Math.min(life, 240)), onComplete: () => fleck.destroy() });
   }
 }

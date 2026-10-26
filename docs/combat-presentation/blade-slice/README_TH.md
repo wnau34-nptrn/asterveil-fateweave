@@ -1,8 +1,10 @@
 # C5.1 — ฟันดาบ / แทง (Blade family)
 
-24 ตุลาคม 2026 · **R3 ลดความหนาจาก R2 และแยกเอกลักษณ์ทั้ง 10 ท่า — รอเจ้าของตรวจคลิปใหม่ ยังไม่อนุมัติภาพ และยังไม่เริ่มตระกูล 2**
+26 ตุลาคม 2026 · **R4 นำ artwork ที่เจ้าของเลือกมาสร้างเป็น VFX จริง — รอเจ้าของตรวจคลิปเคลื่อนไหว ยังไม่เริ่มตระกูล 2**
 
-เจ้าของเห็นว่า R2 หนาเกินไปและแต่ละท่าคล้ายกัน จึงปรับสัดส่วนและการเคลื่อนจากภาพร่วมชุดเดิม ไม่สร้างภาพใหม่หรือใช้ Shado ในรอบนี้ พีกของคมเหลือ alpha .82 จาก 1, ดาวปะทะ .78 และขนาด 30–50px จาก 64px; อายุคม 235–300ms จาก 350ms และไม่เกินเวลาที่เหลือของ stage ลดเศษแสงเหลือ 0–2 ชิ้น ขณะ contact มีคมต่อเนื่องเพียงหนึ่งจังหวะกับดาวที่ผู้รับจริง ไม่เพิ่มการโดน ไม่แก้ Bolt/Execute/Ward
+เจ้าของอนุมัติให้ใช้ [แบบภาพเฉพาะ 10 ท่า](../blade-storyboards/README_TH.md) รวม Pierce R2 หอกหนา แล้วสั่งทำเป็น VFX จริง ชุด R4 จึงใช้ภาพเตรียม/ปะทะ/สลายที่เลือกไว้โดยตรง แพ็กเป็น atlas เดียว 38 frames ขนาด 1584×1848px (WebP 547,354 bytes) ไม่มีการสร้างภาพใหม่ แหล่งต้นฉบับและ SHA-256 ใน `incoming/ART-VFX-BLADE-001/production-sources.json` และแพ็กซ้ำด้วย `package-approved.py`
+
+ก่อน contact แสดงภาพเตรียมที่ผู้ใช้ เมื่อถึง cue เดิมจึงแสดงภาพปะทะที่ผู้รับจริงพร้อมแกนเล็ก 10–18px เคลื่อนหนึ่งจังหวะแล้ว crossfade ไปภาพสลายเฉพาะท่า อายุภาพ 255–310ms และไม่เกินเวลาที่เหลือของ stage ตัวเลขอยู่เหนือภาพเสมอ ภาพปะทะมี peak alpha .88; ภาพสลายค่อยลดจาก .5; มีเศษแสงตกแต่ง 0–2 ชิ้น ความเข้มลดลงลดพื้นที่ 10% และไม่มีเศษแสง OS reduced motion ใช้ภาพปะทะนิ่งโดยไม่มี tween
 
 | ท่า | เอกลักษณ์ของคมและการเคลื่อน |
 |---|---|
@@ -14,12 +16,12 @@
 | Ambush | คมโค้งฟันเสยจากล่างขึ้นบน |
 | Disarm | ตะขอคมเล็กยกสูง หมุนเกี่ยวออก ไม่มีเศษแสง |
 | Parry | เสี้ยวคมสั้นหมุนสวนกลับ เฉพาะ counter จริงหลังตั้งท่า |
-| Pierce | เข็มยาวบางที่สุด ชี้ตามแกนผู้โจมตี–ผู้รับ |
+| Pierce | หัวหอกใบยาวและแกนหนารุ่น R2 ชี้ตามแกนผู้โจมตี–ผู้รับ ความยาว 130px และหน้าตัด 1.4 เท่าแบบที่เลือก |
 | Halt | ปลายสั้นฐานกว้าง หยุดแน่นด้านหน้าตัว ระยะเคลื่อนน้อย ไม่มีเศษแสง |
 
 ท่าฟันใช้ระนาบจอเพื่อไม่ให้ Sweep กลายเป็นแนวแทงตามตำแหน่งสนาม ส่วนท่าแทงใช้แกนผู้โจมตี–ผู้รับ Reduced motion คงสัดส่วนและแนวของแต่ละท่าเป็นภาพนิ่ง ผล blocked/dodged ยังอ่านจาก event และมีภาพเฉพาะผลนั้น
 
-ภาพร่วมชุดเดียว `public/assets/fx/blade_fx.webp` + `.json`, โมดูล `src/game/visuals/blade-fx.ts`, ต้นฉบับและ prompt ใน `incoming/ART-VFX-BLADE-001/` ใช้ภาษาเส้นโค้งปลายเรียว แกน ivory ขอบสีตามอาชีพ เหมือน Bolt / Execute / Ward ที่ผ่านแล้ว ทุกสกิลเลือกทรง ขนาด ทิศ และจำนวนเศษแสงจากตารางเล็ก ไม่มีภาพแยกรายสกิล
+ภาพร่วมชุดเดียว `public/assets/fx/blade_fx.webp` + `.json` และโมดูล `src/game/visuals/blade-fx.ts` ตารางเล็กเลือกภาพ ขนาด ทิศ และการเคลื่อนของท่า ส่วน contact/deflect/flecks เป็นชั้นร่วม ไม่เพิ่ม atlas หรือโมดูลแยกรายสกิล ใช้สีเดิมที่เลือกไว้สำหรับอาชีพเจ้าของ และ tint ตามตระกูล icon เมื่อใช้ภาพ Attack ร่วมกับอาชีพอื่น
 
 ก่อน contact มีประกายเล็กที่ต้นทาง; เมื่อถึง contact เดิมจึงเห็นรอยฟัน/แทงกับดาวเล็กที่ผู้รับจริง แล้วสลาย เศษแสงไม่ใช่การตีเพิ่ม ไม่เปลี่ยน `battle-playback.ts`, resolver, กฎ, balance หรือเซฟ ภาพเป็น normal alpha ไม่มี full-screen flash หรือสีขาวทับร่าง
 
@@ -56,28 +58,26 @@ npm run typecheck
 npm run lint
 npx vitest run --maxWorkers=1
 npm run build
-npx playwright test tests/browser/blade-fx.spec.ts tests/browser/presentation.spec.ts --output test-results/blade-r3-c11-final
+npx playwright test tests/browser/blade-fx.spec.ts tests/browser/presentation.spec.ts --output test-results/blade-r4-final
 ```
 
 อัดซ้ำใน PowerShell (อย่าอัดพร้อม simulation หรือ browser suite อื่น):
 
 ```powershell
 $env:FX_CLIPS='1'
-npx playwright test tests/browser/blade-clips.spec.ts --output test-results/blade-r3-delivery
-python tests/browser/fixtures/encode-blade-clips.py test-results/blade-r3-delivery
+npx playwright test tests/browser/blade-clips.spec.ts --output test-results/blade-r4-delivery
+python tests/browser/fixtures/encode-blade-clips.py test-results/blade-r4-delivery
 ```
 
-ใช้ Python ที่มี Pillow และ ffmpeg/ffprobe ใน PATH การ pack atlas: `python incoming/ART-VFX-BLADE-001/package.py`
+ใช้ Python ที่มี Pillow และ ffmpeg/ffprobe ใน PATH การ pack atlas: `python incoming/ART-VFX-BLADE-001/package-approved.py`
 
-ผลตรวจ R3 บน C11: typecheck / lint / build ผ่าน; **31/31 browser tests ผ่าน** (family 18 + playback 13) ตรวจ HP ก่อน/ตรง contact, valid atlas frames, พีกที่ contact +80ms อยู่ระหว่าง alpha .7–.9, สัดส่วน Sweep/Pierce/Halt และทิศ Backstab จากภาพที่ render จริง, ตัวเลขอยู่เหนือแสง, skip cleanup, ผลจริงและ fast/reduced/resize รวมความกว้าง 320/390/1366px ตั้งนาฬิกาทดสอบก่อนเริ่ม Phaser เพื่อไม่เปลี่ยน clock กลาง render loop
+ผลตรวจ R4 จะบันทึกหลังชุดสุดท้าย ครอบคลุม HP ก่อน/ตรง contact, ภาพเฉพาะท่า/สลาย, สัดส่วนหอกหนา, Backstab แทงย้อน, ตัวเลขอยู่เหนือภาพ และ cleanup ภาพจริงจาก blocked/partial/dodge/Guard/cancel ไม่มี core หรือคมบนตัวเมื่อไม่โดน ตรวจ OS reduced motion ของทั้ง 10 ท่าว่าเป็นภาพนิ่ง รวมการปรับความเร็ว/ความเข้ม/resize ตามเดิม
 
-Vitest บนฐานเกม C11 `1a50c01`, `npx vitest run --maxWorkers=1`: **795/795 ผ่าน (68 files)** ไม่มีการแก้ test timeout/กฎ/ตัวเลข ไฟล์ `src/core`, `src/content` และ `battle-playback.ts` ไม่ต่างจาก base branch
-
-อัดใหม่ R3 บนฐาน C11 ครบ **18/18 คลิป**; ffprobe ยืนยันทุกคลิป 390×844 เปิดตรวจ contact ทั้ง 10 ท่าแล้ว (เฟรมที่เลือกอยู่ภายใน 6ms จาก renderer cue +70ms) และตรวจสองภาพด้านล่างจากไฟล์ส่งจริง
+ฐานเกมรวม C12 batch 1 (`e79e8a4`) แล้ว การเปลี่ยนกฎ/เซฟของ C12 เป็นของ base branch งาน VFX ไม่แก้ `src/core`, `src/content` หรือ `battle-playback.ts` เพิ่ม
 
 ## ภาพ contact จากการอัดจริง
 
-![Lunge](lunge-hit-normal-390.png)
+![Pierce](pierce-hit-normal-390.png)
 
 ![Sweep](sweep-hit-normal-390.png)
 

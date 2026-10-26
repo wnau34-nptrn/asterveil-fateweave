@@ -1,5 +1,15 @@
 # Codex → Claude handoff
 
+## 2026-10-26 — C5.1 R4: selected artwork becomes real animated VFX (PR #59)
+
+- Owner explicitly instructed creating real VFX from the ten individual concepts after the thicker Pierce R2 revision. This approves the selected artwork for implementation; motion clip approval is still pending. Same branch `codex/vfx-family-1-blade`, same PR #59; no family 2, merge or publication.
+- Merged current roster batch-1 base `e79e8a4` as `8e82bab`, preserving both handoff histories. C12 core/content/save/playback additions are inherited from the base; this VFX work adds no changes to those files relative to that base.
+- `incoming/ART-VFX-BLADE-001/package-approved.py` packs ten untouched selected strips into one atlas: 30 preparation/peak/tail paintings plus 8 shared original core/deflection/fleck layers. 38 frames, 1584×1848 WebP, 547,354 bytes. One shared scale per strip, centred frames, alpha retained; normalized cells in production/ and original paths/SHA-256 in production-sources.json. Original generated source and legacy package.py remain as history. No additional generation or Shado export.
+- `blade-fx.ts` uses the selected footprint/native palette and one table of motion profiles. One contact gesture grows/moves then crossfades to its own painted tail; 255–310ms, bounded by actual stage time. Tiny 10–18px shared contact core, 0–2 decorative flecks; no invented hits. Pierce retains the leaf-shaped broad head, thicker shaft and 1.4 cross-axis scale. Backstab travels in reverse; Sweep stays shallow/horizontal; Parry stance uses its own brace and only a real matching counter gets a cut. Basic Attack palettes include the base's new Saint/Dancer roles.
+- Actual recipients/outcomes still come from resolved events: full block gets only incoming-edge deflection; partial adds HP contact; dodge passes outside the body with no core; Guard follows its recipient; cancellation produces no blade image. OS reduced motion uses selected stills with no tweens. Every tween targets owned images, so skip/resize/load cleanup destroys both peak and tail. Bolt/Execute/Ward unchanged.
+- Validation so far: typecheck/lint/build passed, 838/838 Vitest tests (71 files) passed, 28/28 family browser tests passed (including exact HP contact, selected peak→tail, Pierce width, reverse travel, rendered block/partial/dodge/Guard/cancel and static reduced frames for all ten). Broader combat/Bolt/Execute/Ward/playback regressions and final clip delivery pending. Tests/browser fixtures add only readonly/render probes of real resolved stages, never production debug access.
+- Deliver runtime evidence in docs/combat-presentation/blade-slice/ at 390px, then stop for the owner to review R4 motion. Update pending counts/clip details below before finishing this task.
+
 ## 2026-10-25 — Pierce artwork R2: thicker spear (PR #59)
 
 - Owner feedback: Pierce is so slim that it reads as an arrow. Revised only Pierce's three-phase concept strip with built-in ImageGen (standing owner approval to use ImageGen instead of unavailable Shado).

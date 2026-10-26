@@ -59,17 +59,23 @@ function stage(outcome: string): TurnStage {
   return outcome === 'hit' && skill !== 'parry' ? result.turns[0]! : result.turns.find(t => t.side === 'enemy' && (outcome !== 'guarded' || t.actorId === 'f1') && (skill !== 'parry' || t.events.some(e => e.type === 'counter')))!;
 }
 function painted() {
-  const images: { frame: string; alpha: number; width: number; height: number; rotation: number }[] = [];
+  const images: { frame: string; alpha: number; width: number; height: number; rotation: number; x: number; y: number }[] = [];
   const visit = (items: Phaser.GameObjects.GameObject[]) => {
     for (const item of items) {
       if (item instanceof Phaser.GameObjects.Container) visit(item.list);
-      if (item instanceof Phaser.GameObjects.Image && item.texture.key === BLADE_ATLAS) images.push({ frame: item.frame.name, alpha: item.alpha, width: item.displayWidth, height: item.displayHeight, rotation: item.rotation });
+      if (item instanceof Phaser.GameObjects.Image && item.texture.key === BLADE_ATLAS) images.push({ frame: item.frame.name, alpha: item.alpha, width: item.displayWidth, height: item.displayHeight, rotation: item.rotation, x: item.x, y: item.y });
     }
   };
   visit(scene.children.getChildren()); return images;
 }
 const qa = {
   impacts,
+  renderOutcome: (outcome: string) => {
+    const turn = stage(outcome), cue = bladeCues(turn)[0];
+    const slot = scene.actorPanels.get(cue?.event.targetId ?? '');
+    scene.stopEffects(); scene.play(turn, 450);
+    return slot ? { x: slot.x, y: slot.y - slot.size * .48 } : null;
+  },
   storyboardAnchors: () => {
     const cue = bladeCues(stage('hit')).find(c => c.skill === skill)!;
     const rect = scene.game.canvas.getBoundingClientRect();
