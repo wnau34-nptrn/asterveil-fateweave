@@ -1,5 +1,15 @@
 # Codex → Claude handoff
 
+## 2026-10-26 — C5.2 defense: all 11 three-phase artwork concepts, awaiting selection
+
+- Branch `codex/vfx-family-2-defense`, base `5c2dbb6` on `feature/fateweave-initial-prototype`. One family-2 draft PR; merge commit: none. The owner requested artwork first and the handoff explicitly requires selection before runtime. Do not treat family-1 approval as defense approval; continue in this same branch/PR after feedback.
+- Added eleven original transparent ImageGen strips (33 authored poses) under `incoming/ART-VFX-DEFENSE-001/`, exact prompts/original paths, real 390×844 scene references and resolver-derived events/anchors. Distinct silhouettes follow actual Guard redirect, party/first-hit/front-line mitigation, barriers, Sanctuary and front/back counter stances. No redraw of Ward or imported assets.
+- `docs/combat-presentation/defense-storyboards/` contains a skill selector, three native 390px phases, bare-field comparison, weight slider, per-skill boards and peak PNGs, alpha/dimensions/SHA-256 manifest and reproducible metadata script. Each strip shares one scale across phases. After inspecting every peak, increased four footprints for legibility and moved Spear Wall off the face; Guardian Stone/Sanctuary use contrasting legitimate allies in the fixture.
+- `tests/browser/fixtures/defense.{html,ts}` renders the real latest UI/scene and resolves a separate in-memory cast to locate recipients; no commands are committed by reference capture. `defense-storyboards.spec.ts` explicitly gates source-only reference/render capture with `DEFENSE_STORYBOARDS`. No changes to production entry points, atlas/module, playback, animation, rules, saves or balance; existing blade fixture gate preserved.
+- Local validation: typecheck, lint and production build pass (existing bundle-size advisory). Reference capture passes for all 11 skills with empty committed command lists. Render checks exercise all 11 selections, three canvases, bare/paint comparison, weight reset, phase scrolling and page errors. Browser: headless Chromium/SwiftShader in cloud, 390px, not Safari/real hardware. Browser extension JavaScript tools are unavailable; used the handoff's repository Playwright workflow. No new gameplay suite was needed for this artwork-only step.
+- Owner review delivery: two representative native 390px images plus selector/README with all 11 three-phase boards. Artwork not yet approved. Actual runtime clips are deliberately pending artwork selection as requested; no fabricated clips and no family 3 work. After selection: one shared defense atlas/module, unchanged timing and resolved outcomes, full required checks and actual runtime clips before proceeding further.
+
+
 ## 2026-10-26 — Handoff for next chat: C5.2 defense artwork first
 
 - Owner asked for a handoff to a new chat after discussing the next VFX family. Added `C5-FAMILY-2-DEFENSE-HANDOFF-TH.md` with a copy-ready opening prompt, exact 11 skills, approved family-1 release evidence, artwork-first review, ImageGen fallback authorization and runtime/validation boundaries. Linked it from `NEW-CHAT-HANDOFF-TH.md` without replacing unrelated development queues.
