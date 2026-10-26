@@ -1,6 +1,6 @@
 # C5.1 — ฟันดาบ / แทง (Blade family)
 
-26 ตุลาคม 2026 · **R4 นำ artwork ที่เจ้าของเลือกมาสร้างเป็น VFX จริง — รอเจ้าของตรวจคลิปเคลื่อนไหว ยังไม่เริ่มตระกูล 2**
+26 ตุลาคม 2026 · **R4 ผ่านเจ้าของและ merge เข้าเกมแล้ว 2026-10-26 (`d14a3e1`, PR #59) — ยังไม่เริ่มตระกูล 2**
 
 เจ้าของอนุมัติให้ใช้ [แบบภาพเฉพาะ 10 ท่า](../blade-storyboards/README_TH.md) รวม Pierce R2 หอกหนา แล้วสั่งทำเป็น VFX จริง ชุด R4 จึงใช้ภาพเตรียม/ปะทะ/สลายที่เลือกไว้โดยตรง แพ็กเป็น atlas เดียว 38 frames ขนาด 1584×1848px (WebP 547,354 bytes) ไม่มีการสร้างภาพใหม่ แหล่งต้นฉบับและ SHA-256 ใน `incoming/ART-VFX-BLADE-001/production-sources.json` และแพ็กซ้ำด้วย `package-approved.py`
 
@@ -88,3 +88,9 @@ Regression battle/Bolt/Execute/Ward/playback ตรวจครบ 81 กรณ�
 ![Sweep](sweep-hit-normal-390.png)
 
 เจ้าของตัดสินคุณภาพภาพจากคลิปก่อนอนุมัติขยายตระกูลถัดไป ผลเทสต์ไม่ใช่การอนุมัติภาพ
+
+## ผลรวมกับ animation และ loading ล่าสุด
+
+รวมฐาน `df16f3e` โดยคง unit poses ก่อนเริ่ม blade cast และคง contact/reaction poses ของฐานเดิม ผลล่าสุด: typecheck/lint/build, 858 unit tests, 46 focused browser tests ผ่าน; CI ที่ head `09c6357` ผ่าน source fixture 28, prechecks 3 และ production 249 / 84 skips หลักฐาน merge/เผยแพร่: [blade-vfx-release](../../validation/blade-vfx-release/README_TH.md)
+
+เผยแพร่ R4 สำเร็จ: [Pages run40348106389](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/40348106389) ครบ build/4shards/deploy สำหรับ merge `d14a3e1`; ไฟล์ VFX บนเว็บตอบ200และ SHA-256 ตรงกับไฟล์ที่ทดสอบ

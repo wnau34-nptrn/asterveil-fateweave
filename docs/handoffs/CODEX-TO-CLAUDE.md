@@ -5,7 +5,9 @@
 - Owner explicitly said “merge ได้เลย” after confirming the actual VFX were in PR #59. This is the family-1 motion/merge approval. Do not auto-start family 2 in this merge task.
 - Refreshed base to df16f3e (includes the approved unit-animation controller, pilot sprites and nonblocking/compact loading). Resolved BattleScene integration by starting unit poses before the blade-specific early return and retaining the base contact/reaction controller, selected blade art and foreground captions. No core/save/balance/timing change.
 - Preserved both handoff histories. Added separate dev-server fixture checks in PR/Pages workflows because blade.html is intentionally not shipped in production; the production Pages suite skips those source-fixture cases, while the explicit dev gate still runs all 28.
-- Merge/publication and updated check evidence pending completion below.
+- Merged PR #59 as `d14a3e18f93f2e39b1e077dc22f683d506852151`. Integration head `09c6357` passes quality CI 40342372811 and browser CI 40342373021 (28 fixture +3 prechecks +249 production passed /84 skips). Local integration checks: 858/75 files, typecheck/lint/build and46 browser checks pass.
+- Pages release 40348106389 succeeded for that merge SHA: build, all four browser shards, deploy. Merge-sha quality runs 40348106456 and40348117665 also passed. Live https://wnau34-nptrn.github.io/asterveil-fateweave/ ; HTTP200 live blade_fx.webp SHA-256 equals local R4 (12a2ab34f3b64cc1493dc13eb685642ec5945887199590f14579b97769c5cbc2).
+- Proof and390px integration screenshot: docs/validation/blade-vfx-release/README_TH.md. Family status/CLAUDE/slice notes updated. This release-evidence follow-up is docs-only [skip ci], no runtime changes and no family2 started.
 
 ## 2026-10-26 — C5.1 R4: selected artwork becomes real animated VFX (PR #59)
 

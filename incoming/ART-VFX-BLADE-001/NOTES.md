@@ -20,3 +20,5 @@ R3, 2026-10-24: owner found R2 too thick and the ten moves too alike. Reuses the
 - All family tweens target owned images, so scene cleanup cancels them. No delayed calls or detached tween counters. No rule, save, content balance or playback timing changes.
 
 Generation prompt is preserved in `prompt.txt`. Packaging and the navy preview were inspected separately from runtime visual review. Clips and validation notes: `docs/combat-presentation/blade-slice/README_TH.md`.
+
+2026-10-26 release: owner explicitly approved merging the actual R4 effects. PR #59 merged to the game branch as d14a3e18f93f2e39b1e077dc22f683d506852151, preserving the latest unit-animation and loading work. Earlier pending-review statements above are historical. Publication evidence: docs/validation/blade-vfx-release/README_TH.md.
