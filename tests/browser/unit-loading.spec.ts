@@ -37,8 +37,8 @@ test('optional animation failures retain playable original-art fallback without 
 test('title loads no optional unit art and an encounter without Hunter never downloads Hunter',async({page})=>{
  const names:string[]=[];page.on('request',r=>{if(r.url().includes('/assets/units/'))names.push(r.url());});
  await seed(page,veilSiege.id);await page.goto('./');await expect(page.locator('#continue')).toBeVisible();
- // The battle scene may already have core assets ready while the title is shown.
- expect(names).toEqual([]);
+ // Wait for core readiness even though the battle view is hidden behind the title.
+ await expect(page.locator('#start')).toBeEnabled();expect(names).toEqual([]);
  const loaded=page.waitForResponse(r=>r.url().endsWith(manifest.lyra.image)&&r.ok());
  await page.locator('#continue').click();await expect(page.locator('#start')).toBeEnabled();await (await loaded).finished();
  expect(names.some(n=>n.includes('lyra_pilot'))).toBe(true);expect(names.some(n=>n.includes('hunter_pilot'))).toBe(false);
