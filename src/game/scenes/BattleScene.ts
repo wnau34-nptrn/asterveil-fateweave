@@ -4,13 +4,14 @@ import { OptionalUnitAssets } from '../visuals/optional-unit-assets';
 import { unitFrameView } from '../visuals/unit-frame-view';
 import { UnitAnimation } from '../visuals/unit-animation';
 import { unitPose, unitReactions } from '../visuals/unit-animation-map';
-import type { BattleState, EncounterDefinition, TurnStage } from '../../core/battle/types';
+import type { BattleEvent, BattleState, EncounterDefinition, TurnStage } from '../../core/battle/types';
 import { effectFamily, effectCaption, type CombatPrefs } from '../visuals/combat-effects';
 import { thaiFont } from '../../ui/th';
 import { palette } from '../visuals/palette';
 import { BOLT_ATLAS, boltAtlasUrls, boltCast, boltImpact, type FxContext } from '../visuals/bolt-fx';
 import { EXECUTE_ATLAS, WARD_ATLAS, executeAtlasUrls, wardAtlasUrls, executeCast, executeImpact, wardCast, wardSettle } from '../visuals/exec-ward-fx';
 import { BLADE_ATLAS, bladeAtlasUrls, bladeCast, bladeImpact, bladeStance, bladeCues, bladePalettes, isBladeSkill } from '../visuals/blade-fx';
+import { DEFENSE_ATLAS, defenseAtlasUrls, defenseCast, defenseContact, defenseCues, isDefenseSkill } from '../visuals/defense-fx';
 import { FOE_SLOT_INDEX, fieldSlots, slotPlan, type FieldSlot } from '../visuals/field-layout';
 import { actorArt, actorFootOrigins, artOf, artUrl, figureRise, mirroredArt, unitsUrl } from '../visuals/assets';
 
@@ -90,6 +91,7 @@ export class BattleScene extends Phaser.Scene {
     this.load.atlas(EXECUTE_ATLAS, ...executeAtlasUrls());
     this.load.atlas(WARD_ATLAS, ...wardAtlasUrls());
     this.load.atlas(BLADE_ATLAS, ...bladeAtlasUrls());
+    this.load.atlas(DEFENSE_ATLAS, ...defenseAtlasUrls());
     for (const sheet of ['units', 'mercs', 'foes', 'foes2'] as const) this.load.spritesheet(`battle-${sheet}`, unitsUrl(sheet), { frameWidth: 512, frameHeight: 512 });
   }
   create(): void {
@@ -293,6 +295,10 @@ export class BattleScene extends Phaser.Scene {
     return slot ? { x: slot.x, y: slot.y - slot.size * .48 } : undefined;
   }
   // Layered skill effects (A8, Bolt first) draw into the same effect layer, sized from the actor's slot.
+  private defensePoint = (id:string) => {
+    const body=this.anchor(id),slot=this.actorPanels.get(id);
+    return body&&slot?{...body,footY:slot.y}:undefined;
+  };
   private fx(id: string | undefined): FxContext {
     const size = this.actorPanels.get(id ?? '')?.size ?? 96;
     return { scene: this, quiet: this.quiet, reduced: this.reducedMotion, scale: Phaser.Math.Clamp(size / 96, .7, 1.25),
@@ -322,6 +328,10 @@ export class BattleScene extends Phaser.Scene {
       const from = this.anchor(turn.actorId), to = this.anchor(hitEvent?.targetId ?? turn.targetId);
       const direction = from && to ? Math.sign(to.x - from.x) : turn.side === 'hero' ? 1 : -1;
       this.unitAnimation.begin(turn.actorId, pose, direction || (turn.side === 'hero' ? 1 : -1), contactMs, pilotClip(artOf(this.encounter, turn.actorId), turn.action, turn.intent?.name));
+    }
+    if (turn.side==='hero' && isDefenseSkill(turn.action) && this.textures.exists(DEFENSE_ATLAS)) {
+      for (const cue of defenseCues(turn,this.encounter)) defenseCast(this.fx(cue.targetId),cue,this.defensePoint,contactMs);
+      return;
     }
     if ((turn.side === 'hero' && isBladeSkill(turn.action)) || (turn.side === 'enemy' && turn.intent?.kind === 'physical')) {
       const start = this.anchor(turn.actorId);
@@ -363,7 +373,12 @@ export class BattleScene extends Phaser.Scene {
     this.stageActive = true;
     if (!this.ready) return;
     const events = turn.events, life = Math.max(100, remainingMs - 20), family = effectFamily(turn);
-    const paintedBlades = bladeCues(turn);
+    // Sanctuary at 1 HP can prevent HP loss without absorbing a barrier point.
+    const savedWithoutDamage = (event:BattleEvent) => event.type==='damage'&&!event.amount&&!event.absorbed&&events.some(e=>e.type==='sanctuary'&&e.targetId===event.targetId);
+    const paintedBlades = bladeCues(turn).filter(c=>!savedWithoutDamage(c.event));
+    const paintedDefense = this.textures.exists(DEFENSE_ATLAS)?defenseCues(turn,this.encounter).filter(c=>c.kind!=='absorb'||!paintedBlades.some(b=>b.event===c.event)):[];
+    const defenseEvents = new Set(paintedDefense.map(c=>c.event));
+    for(const event of events)if(savedWithoutDamage(event))defenseEvents.add(event);
     const hold = this.quiet || this.reducedMotion ? 0 : 45;
     this.unitAnimation.contact(turn.actorId, remainingMs);
     if (!this.quiet && !this.reducedMotion) {
@@ -381,6 +396,7 @@ export class BattleScene extends Phaser.Scene {
     if (landed && hold) {
       this.shake(140, events.some(e => e.type === 'down') ? 4 : 2.5);
     }
+    for (const cue of paintedDefense) defenseContact(this.fx(cue.targetId),cue,this.defensePoint,life);
     for (const event of events) {
       const id = event.targetId ?? event.sourceId, p = this.anchor(id);
       if (!id || !p || event.type === 'outcome') continue;
@@ -394,6 +410,7 @@ export class BattleScene extends Phaser.Scene {
       const ward = turn.action === 'ward' && turn.side === 'hero' && event.type === 'barrier';
       const blade = paintedBlades.find(cue => cue.event === event);
       const parry = event.type === 'parry';
+      const defense = defenseEvents.has(event);
       if (parry && event.sourceId === event.targetId) bladeStance(this.fx(id), p, life, bladePalettes.Duelist!);
       if (blade) bladeImpact(this.fx(id), blade, p, this.anchor(event.sourceId), life,
         bladePalettes[this.encounter.heroes.find(h => h.id === event.sourceId)?.role ?? ''] ?? palette.gold);
@@ -405,7 +422,7 @@ export class BattleScene extends Phaser.Scene {
       if (bolt) boltImpact(this.fx(id), p, this.anchor(event.sourceId), life, event.type === 'dodge' ? 'dodged' : event.amount ? 'hit' : 'blocked');
       if (damage) {
         const from = this.anchor(event.sourceId);
-        if (from && !bolt && !execute && !blade) {
+        if (from && !bolt && !execute && !blade && !defense) {
           const slash = this.add.graphics().lineStyle(this.quiet ? 2 : 5, color, .9);
           if (family === 'steel' || event.type === 'counter') slash.lineBetween(from.x,from.y,p.x,p.y);
           if (!event.absorbed || event.amount) {
@@ -417,7 +434,7 @@ export class BattleScene extends Phaser.Scene {
         const body = this.bodies.get(id), sprite = body?.list.find(c => c instanceof Phaser.GameObjects.Image) as Phaser.GameObjects.Image | undefined;
         if (event.amount && sprite && !this.reducedMotion) {
           // Bolt keeps the body's detail: a short violet multiply tint instead of a white fill flash.
-          if (bolt || execute || blade) sprite.setTint(bolt ? 0xcdb8ff : blade ? 0xffe4c4 : 0xffd3dc).setTintMode(Phaser.TintModes.MULTIPLY); else sprite.setTint(0xffffff).setTintMode(Phaser.TintModes.FILL);
+          if (bolt || execute || blade || defense) sprite.setTint(bolt ? 0xcdb8ff : blade ? 0xffe4c4 : defense ? 0xc6e8e2 : 0xffd3dc).setTintMode(Phaser.TintModes.MULTIPLY); else sprite.setTint(0xffffff).setTintMode(Phaser.TintModes.FILL);
           this.later(90, () => { if (sprite.active) sprite.clearTint().setTintMode(Phaser.TintModes.MULTIPLY); });
         }
         const before = turn.before?.heroes.find(h => h.id === id), after = turn.after?.heroes.find(h => h.id === id);
@@ -425,12 +442,12 @@ export class BattleScene extends Phaser.Scene {
         if (intercepted) {
           say(id,'รับแทน','#8addf5');
           const protectedAlly = this.anchor(turn.intent?.targetId);
-          if (protectedAlly) this.fade(this.add.graphics().lineStyle(3,0x8addf5,.8).lineBetween(protectedAlly.x,protectedAlly.y,p.x,p.y),life);
+          if (protectedAlly && !defense) this.fade(this.add.graphics().lineStyle(3,0x8addf5,.8).lineBetween(protectedAlly.x,protectedAlly.y,p.x,p.y),life);
         }
         const enemy = turn.before?.enemies.find(e => e.id === id);
         if (turn.action === 'execute' && enemy && enemy.markedUntil >= turn.round) say(id,'โจมตีเป้าติดตรา','#ffa9d4');
       }
-      if (ward || blade || parry) { /* painted layers above are the whole contact cue */ } else if (shield) {
+      if (ward || blade || parry || defense) { /* painted layers above are the whole contact cue */ } else if (shield) {
         const g = this.add.graphics().lineStyle(3,color,.95).fillStyle(color,.12);
         const points = [{x:p.x-22,y:p.y-24},{x:p.x+22,y:p.y-24},{x:p.x+19,y:p.y+8},{x:p.x,y:p.y+26},{x:p.x-19,y:p.y+8}];
         const polygon = points.map(point => new Phaser.Math.Vector2(point.x, point.y));
@@ -453,7 +470,7 @@ export class BattleScene extends Phaser.Scene {
       }
     }
     // The denser blade art must not cover the authoritative damage/outcome captions.
-    if (paintedBlades.length || turn.action === 'parry') {
+    if (paintedBlades.length || paintedDefense.length || turn.action === 'parry') {
       for (const child of [...(this.effects?.list ?? [])]) {
         if (child instanceof Phaser.GameObjects.Text) this.effects?.bringToTop(child);
       }

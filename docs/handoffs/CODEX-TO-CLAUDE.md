@@ -1,5 +1,15 @@
 # Codex → Claude handoff
 
+## 2026-10-26 — C5.2 runtime implementation authorized; PR #77
+
+- Owner accepted the R3 aura around feet/shins and explicitly said “จัดไป” after the plan to polish four placements, implement all eleven skills, test and submit actual clips. This authorizes implementation, not motion/merge approval. Same branch `codex/vfx-family-2-defense` and PR #77; no family 3.
+- Added reproducible shared atlas packaging under `incoming/ART-VFX-DEFENSE-001/`, one `defense_fx` WebP/JSON, a generated profile table and one `defense-fx.ts` module. Keeps common scale/bottom anchor per strip; earth/crystal aura uses actual feet. Guard rim moved outside its shield, Rally crest above the costume, Bulwark widened and Guardian Stone moved off the staff. No new generated artwork or different style was introduced for those four placement refinements.
+- BattleScene starts existing poses before the defense early return. Casts use real events/coverage snapshots; Guard/Stone redirect follows actual damaged recipient; only real spear counter events produce a thrust; absorption uses a shared neutral response without inventing barrier ownership; Sanctuary save pulses only on its real event. Fixed presentation of Sanctuary at 1 HP so zero HP damage with no absorption does not become a false shield deflection. No rule/save/content/balance/playback changes.
+- Owned image tweens/paired tails clean up through existing skip/load/resize/hidden lifecycle. OS reduced motion is static; intensity lowers opacity and gesture amplitude. Atlas failure falls back to existing graphics. Captions remain above paint; optional unit loading and animation controller remain intact.
+- Source-only defense fixture now exercises real BattleUI/Scene/playback/resolver. CI/Pages adds the defense test beside the existing blade dev-server gate; production suite explicitly skips this unshipped fixture. Added actual-timestamp CDP clip capture/encoding scripts and a one-video-at-a-time 390px review page.
+- Validation so far: 858 unit tests /75 files, typecheck/lint/build pass. All original 35 defense cases pass after correcting a QA party-button selector; no game input change. Focused final gesture/legacy presentation checks and actual clip capture are being completed in this task; final delivery record below will replace this progress note before ending. No merge, publication or clip approval yet.
+
+
 ## 2026-10-26 — C5.2 low aura R3, foot/shin height only (PR #77)
 
 - Owner clarified that aura should only surround the legs, not reach the head. Redrew Stone Armour/Aegis with ImageGen as shallow angular earth and curved crystal footprints. Bounds 88×32 / 80×28px, bottom anchored to each actual foot point. No tall aura stretched flat, and no torso/head coverage in the reviewed 390px images.
