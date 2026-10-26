@@ -1,3 +1,4 @@
+import atlasManifest from '../../src/game/visuals/unit-atlases.json' with { type: 'json' };
 import { test, expect, type Page } from '@playwright/test';
 import { firstClash, encounterById } from '../../src/content/encounters/catalog';
 import { chapterOne } from '../../src/content/world/chapter1';
@@ -19,8 +20,9 @@ function seed(skill:boolean) {
  world.battle={kind:'random',encounterId:firstClash.id,entry:hp,commands:state.commands};return JSON.stringify({version:1,state:world});
 }
 async function open(page:Page,skill:boolean){
+ const assets=Promise.all(Object.values(atlasManifest).flatMap(m=>[m.image,m.atlas]).map(name=>page.waitForResponse(r=>r.url().endsWith(name)&&r.ok()).then(r=>r.finished())));
  await page.addInitScript(({raw,key})=>{localStorage.setItem(key,raw);},{raw:seed(skill),key});
- await page.clock.install({time:new Date('2026-10-26T00:00:00Z')});await page.goto('./');await page.locator('#continue').click();if(await page.locator('#start').count()){await expect(page.locator('#start')).toBeEnabled();await page.locator('#start').click();}else await expect(page.locator('#action-execute')).toBeEnabled();await page.clock.pauseAt(new Date('2026-10-26T01:00:00Z'));
+ await page.clock.install({time:new Date('2026-10-26T00:00:00Z')});await page.goto('./');await page.locator('#continue').click();await assets;await page.clock.runFor(100);if(await page.locator('#start').count()){await expect(page.locator('#start')).toBeEnabled();await page.locator('#start').click();}else await expect(page.locator('#action-execute')).toBeEnabled();await page.clock.pauseAt(new Date('2026-10-26T01:00:00Z'));
 }
 for(const skill of [false,true])test(`pilot sprites 390: ${skill?'Execute and Hunter Shadow Knife':'basic slash on both sides'}`,async({browser},info)=>{
  test.setTimeout(process.env.CAPTURE_UNIT_PILOT==='true'?120_000:45_000);

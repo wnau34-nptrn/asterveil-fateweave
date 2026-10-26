@@ -1,5 +1,9 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
+## แก้โหลด pilot — 2026-10-26
+
+เจ้าของผ่านท่าโจมตีแล้ว แต่แจ้งว่าโหลดช้า จึงเอา pilot ออกจาก preload และโหลดเบื้องหลังเฉพาะยูนิตในสนามพร้อม fallback ใช้ภาพเดิมระหว่างรอ แพ็ก lossless รักษาพิกเซล/ขนาดตัว/จุดยืนเดิม ลด decoded RGBA 48 → 9.8 MiB (79.6%) และขนาดดาวน์โหลดรวม metadata 10.4% ไม่มี pilot request ที่ title ไม่แก้กฎ/เซฟ/จังหวะที่ผ่านแล้ว Branch `codex/unit-animation-loading`; สถานะ release/หลักฐานสุดท้ายใน CODEX-TO-CLAUDE.md และ `docs/validation/unit-animation-loading/` คิว P01-A/B ด้านล่างยังคงเดิม ไม่เริ่มงานอื่นอัตโนมัติ
+
 ## แอนิเมชันแก้ไขล่าสุด — 2026-10-26
 
 เจ้าของแจ้งว่าเปลี่ยนท่าโจมตียังไม่ต่อเนื่อง หลังอนุมัติภาพ pilot แล้ว แก้ลำดับดาบ Lyra, เชื่อมเฟรมช่วงสั้น, ease การคืนตัว และรับ reaction ต่อจากตำแหน่งที่ถูกโจมตี โดยใช้ atlas ที่อนุมัติเดิม PR [#75](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/75) รวมแล้วเป็น `ef9b5df13dcd69dd149f27b75ea56ec4f0f06c45` และเผยแพร่สำเร็จผ่าน [Pages run 40270097579](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/40270097579). หลักฐานอยู่ `docs/validation/unit-animation-smoothing/` (คลิป 390px และ before/after). Unit 854 / browser CI 246 ผ่าน, capture-only skips 36. รายละเอียดใน CODEX-TO-CLAUDE.md งานนี้ไม่ขยาย approval ไป C5 หรือยูนิตอื่น และไม่เริ่มงานใหม่อัตโนมัติ คิวงานหลักด้านล่างยังเป็นคนละขอบเขตกับการแก้แอนิเมชันนี้

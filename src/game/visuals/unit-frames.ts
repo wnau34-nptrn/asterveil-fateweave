@@ -1,4 +1,5 @@
 import type { Reaction, UnitPose } from './unit-animation-map';
+import atlasManifest from './unit-atlases.json';
 export type UnitClip = 'attack' | 'skill';
 export type FramePhase = 'prepare' | 'recover' | 'reaction';
 export interface UnitFrames {
@@ -6,8 +7,10 @@ export interface UnitFrames {
   reset(): void;
 }
 export const pilotSheets = { tracer: 'lyra', foe_hunter: 'hunter' } as const;
+export type PilotSheet = typeof pilotSheets[keyof typeof pilotSheets];
 export const pilotKey = (art: string): string | undefined => Object.hasOwn(pilotSheets, art) ? `unit-pilot-${pilotSheets[art as keyof typeof pilotSheets]}` : undefined;
-export const pilotUrl = (name: string): string => `${import.meta.env.BASE_URL}assets/units/${name}_pilot.webp`;
+export const pilotUrl = (name: PilotSheet): string => `${import.meta.env.BASE_URL}assets/units/${atlasManifest[name].image}`;
+export const pilotAtlasUrls = (name: PilotSheet): [string, string] => [pilotUrl(name), `${import.meta.env.BASE_URL}assets/units/${atlasManifest[name].atlas}`];
 export function pilotClip(art: string, action: string | undefined, intent: string | undefined): UnitClip | undefined {
   if (art === 'tracer') return action === 'attack' ? 'attack' : action === 'execute' ? 'skill' : undefined;
   if (art === 'foe_hunter') return intent === 'Raking Slash' ? 'attack' : intent === 'Shadow Knife' ? 'skill' : undefined;

@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
-import { pilotKey, pilotUrl, pilotClip, pilotSheets } from '../visuals/unit-frames';
+import { pilotKey, pilotAtlasUrls, pilotClip, type PilotSheet } from '../visuals/unit-frames';
+import { OptionalUnitAssets } from '../visuals/optional-unit-assets';
 import { unitFrameView } from '../visuals/unit-frame-view';
 import { UnitAnimation } from '../visuals/unit-animation';
 import { unitPose, unitReactions } from '../visuals/unit-animation-map';
@@ -41,11 +42,19 @@ export class BattleScene extends Phaser.Scene {
   // Idle life (breathing, auras, motes) is rebuilt with each paint and never touches state.
   private idle: Phaser.Tweens.Tween[] = [];
   private readonly unitAnimation = new UnitAnimation();
-  constructor(private encounter: EncounterDefinition, private readonly choose: (id: string) => void, private readonly onReady: () => void, private readonly onLayout: () => void) { super('battle'); }
+  private readonly optionalUnits = new OptionalUnitAssets();
+  private optionalDirty = false;
+  private stageActive = false;
+  private battleVisible = false;
+  private optionalRequest = true;
+  constructor(private encounter: EncounterDefinition, private readonly choose: (id: string) => void, private readonly onReady: () => void, private readonly onLayout: () => void) { super('battle'); this.optionalUnits.setEncounter(encounter); }
   get isReady(): boolean { return this.ready; }
+  setBattleVisible(visible: boolean): void { this.battleVisible = visible; if (visible) this.optionalRequest = true; }
   setEncounter(data: EncounterDefinition): void {
     this.stopEffects(); this.encounter = data; this.view = undefined;
     this.actorTargets.clear(); this.actorPanels.clear();
+    this.optionalUnits.setEncounter(data);
+    this.optionalRequest = true;
   }
   refreshLayout(): void {
     // DOM teaching strips change the field without a window resize. Refresh
@@ -79,7 +88,6 @@ export class BattleScene extends Phaser.Scene {
     this.load.atlas(BOLT_ATLAS, ...boltAtlasUrls());
     this.load.atlas(EXECUTE_ATLAS, ...executeAtlasUrls());
     this.load.atlas(WARD_ATLAS, ...wardAtlasUrls());
-    for (const name of Object.values(pilotSheets)) this.load.spritesheet(`unit-pilot-${name}`, pilotUrl(name), { frameWidth: 512, frameHeight: 512 });
     for (const sheet of ['units', 'mercs', 'foes', 'foes2'] as const) this.load.spritesheet(`battle-${sheet}`, unitsUrl(sheet), { frameWidth: 512, frameHeight: 512 });
   }
   create(): void {
@@ -89,6 +97,7 @@ export class BattleScene extends Phaser.Scene {
     this.game.canvas.addEventListener('pointerdown', updateInputBounds, { capture: true, passive: true });
     this.game.canvas.addEventListener('touchstart', updateInputBounds, { capture: true, passive: true });
     this.scale.on('resize', this.paint, this);
+    this.load.on('complete', this.optionalUnitsLoaded, this);
     this.fit(true);
     this.events.once('shutdown', () => {
       this.stopEffects(); this.unitAnimation.clear();
@@ -96,15 +105,30 @@ export class BattleScene extends Phaser.Scene {
       this.game.canvas.removeEventListener('pointerdown', updateInputBounds, true);
       this.game.canvas.removeEventListener('touchstart', updateInputBounds, true);
       this.scale.off('resize', this.paint, this);
+      this.load.off('complete', this.optionalUnitsLoaded, this);
+      this.optionalUnits.reset(); this.optionalDirty = false;
       this.ready = false;
     });
     this.paint();
     this.onReady();
+    this.optionalRequest = true;
+  }
+  private hasOptionalUnit = (name: PilotSheet): boolean => this.textures.exists(`unit-pilot-${name}`);
+  private requestOptionalUnits(): void {
+    const names = this.optionalUnits.request(this.hasOptionalUnit);
+    for (const name of names) this.load.atlas(`unit-pilot-${name}`, ...pilotAtlasUrls(name));
+    if (names.length && !this.load.isLoading()) this.load.start();
+  }
+  private optionalUnitsLoaded(): void {
+    if (!this.load.isLoading() && this.optionalUnits.complete(this.hasOptionalUnit)) this.optionalDirty = true;
   }
   // A missed resize notification would leave the canvas stretched against the DOM targets;
   // re-measure the arena twice a second while the battle renders.
   update(time: number, delta: number): void {
+    if (this.battleVisible && this.optionalRequest) { this.optionalRequest = false; this.requestOptionalUnits(); }
     this.unitAnimation.update(delta);
+    // Adopt newly decoded art only at a safe boundary, never repaint an actor mid-attack.
+    if (this.optionalDirty && !this.stageActive && this.view) this.paint();
     if (time < this.nextSizeCheck) return;
     this.nextSizeCheck = time + 500;
     this.fit();
@@ -126,6 +150,7 @@ export class BattleScene extends Phaser.Scene {
   }
   private paint(): void {
     if (!this.view) return;
+    this.optionalDirty = false;
     this.stopEffects(); this.unitAnimation.clear(); this.bodies.clear();
     for (const t of this.idle) t.remove(); this.idle = [];
     // The camera only carries the pixel-ratio zoom; clear any effect so art and DOM targets share one origin.
@@ -135,6 +160,8 @@ export class BattleScene extends Phaser.Scene {
     this.root ??= this.add.container(0, 0);
     this.root.setPosition(0, 0).setScale(this.dpr);
     this.layer?.destroy();
+    // Old bodies are gone; release only optional textures absent from the new encounter.
+    for (const name of this.optionalUnits.unused(this.hasOptionalUnit)) this.textures.remove(`unit-pilot-${name}`);
     this.layer = this.add.container(0, 0); this.root.addAt(this.layer, 0);
     this.positions.clear(); this.actorTargets.clear(); this.actorPanels.clear();
     const w = this.viewW, h = this.viewH;
@@ -236,6 +263,7 @@ export class BattleScene extends Phaser.Scene {
     });
   }
   stopEffects(): void {
+    this.stageActive = false;
     this.unitAnimation.settle();
     for (const timer of this.effectTimers) timer.remove(false);
     this.effectTimers.clear();
@@ -284,6 +312,7 @@ export class BattleScene extends Phaser.Scene {
     if (!this.quiet && !this.reducedMotion) this.tweens.add({ targets: label, y: Math.max(16, label.y - 18), duration: life });
   }
   prepare(turn: TurnStage, contactMs: number): void {
+    this.stageActive = true;
     if (!this.ready || !contactMs || this.reducedMotion) return;
     const hitEvent = turn.events.find(e => (e.type === 'damage' || e.type === 'dodge') && e.sourceId === turn.actorId);
     const pose = unitPose(turn, this.encounter);
@@ -320,6 +349,7 @@ export class BattleScene extends Phaser.Scene {
     }
   }
   play(turn: TurnStage, remainingMs = 650): void {
+    this.stageActive = true;
     if (!this.ready) return;
     const events = turn.events, life = Math.max(100, remainingMs - 20), family = effectFamily(turn);
     const hold = this.quiet || this.reducedMotion ? 0 : 45;
