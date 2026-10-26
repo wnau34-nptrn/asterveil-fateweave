@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { pilotKey, pilotUrl, pilotClip, pilotFrame, pilotSheets } from '../visuals/unit-frames';
 import { UnitAnimation } from '../visuals/unit-animation';
 import { unitPose, unitReactions } from '../visuals/unit-animation-map';
 import type { BattleState, EncounterDefinition, TurnStage } from '../../core/battle/types';
@@ -77,6 +78,7 @@ export class BattleScene extends Phaser.Scene {
     this.load.atlas(BOLT_ATLAS, ...boltAtlasUrls());
     this.load.atlas(EXECUTE_ATLAS, ...executeAtlasUrls());
     this.load.atlas(WARD_ATLAS, ...wardAtlasUrls());
+    for (const name of Object.values(pilotSheets)) this.load.spritesheet(`unit-pilot-${name}`, pilotUrl(name), { frameWidth: 512, frameHeight: 512 });
     for (const sheet of ['units', 'mercs', 'foes', 'foes2'] as const) this.load.spritesheet(`battle-${sheet}`, unitsUrl(sheet), { frameWidth: 512, frameHeight: 512 });
   }
   create(): void {
@@ -107,6 +109,7 @@ export class BattleScene extends Phaser.Scene {
     this.fit();
   }
   sync(view: SceneView, repaint = true): void {
+    const previous = this.view?.state;
     this.view = view;
     if (!this.ready) return;
     // A summon puts a new foe on the field mid-presentation: redraw so it appears in its empty slot.
@@ -114,6 +117,8 @@ export class BattleScene extends Phaser.Scene {
     if (repaint || present.some(id => !this.bodies.has(id))) this.paint();
     else for (const [id, body] of this.bodies) {
       const hp = [...view.state.heroes, ...view.state.enemies].find(a => a.id === id)?.hp ?? 0;
+      const oldHp = [...(previous?.heroes ?? []), ...(previous?.enemies ?? [])].find(a => a.id === id)?.hp;
+      if (oldHp !== undefined && (oldHp > 0) !== (hp > 0)) this.unitAnimation.reset(id);
       const involved = !view.activeActorId || id === view.activeActorId || id === view.activeTargetId;
       body.setAlpha(hp <= 0 ? .28 : involved ? 1 : .55);
     }
@@ -171,15 +176,24 @@ export class BattleScene extends Phaser.Scene {
       g.lineStyle(3, enemy ? 0xf19b9f : palette.cyan); g.strokeEllipse(0, 0, size * .72, size * .16);
     }
     const key = artOf(this.encounter, id); const art = actorArt[key]!;
-    const sprite = this.add.image(0, 0, `battle-${art.sheet}`, art.frame).setOrigin(0.5, actorFootOrigins[key] ?? 1).setDisplaySize(size, size).setFlipX(mirroredArt.has(key));
+    const pilot = pilotKey(key), framed = !!pilot && this.textures.exists(pilot);
+    const sprite = this.add.image(0, 0, framed ? pilot : `battle-${art.sheet}`, framed ? hp <= 0 ? 21 : 0 : art.frame)
+      .setOrigin(.5, framed ? 496 / 512 : actorFootOrigins[key] ?? 1).setDisplaySize(size * (framed ? 2 : 1), size * (framed ? 2 : 1)).setFlipX(mirroredArt.has(key));
     body.add(sprite);
+    const alive = () => [...(this.view?.state.heroes ?? []), ...(this.view?.state.enemies ?? [])].some(a => a.id === id && a.hp > 0);
     const idleStart = this.idle.length;
     if (hp > 0) this.liven(id, body, sprite, size, enemy, id === this.view!.activeActorId);
     const idleTweens = this.idle.slice(idleStart);
     this.unitAnimation.bind(id, body, size, paused => {
-      const alive = [...(this.view?.state.heroes ?? []), ...(this.view?.state.enemies ?? [])].some(a => a.id === id && a.hp > 0);
-      for (const tween of idleTweens) { if (paused || !alive) tween.pause(); else tween.resume(); }
-    });
+      for (const tween of idleTweens) { if (paused || !alive()) tween.pause(); else tween.resume(); }
+    }, framed ? {
+      show: (pose, phase, progress, clip) => {
+        const frame = pilotFrame(pose, phase, progress, clip);
+        if (frame === undefined) return false;
+        sprite.setFrame(frame); return true;
+      },
+      reset: () => { sprite.setFrame(alive() ? 0 : 21); },
+    } : undefined);
     const hitWidth = Math.max(44, Math.min(72, size * .7));
     const hitHeight = Math.max(44, size * .9);
     this.actorTargets.set(id, { x: x - hitWidth / 2, y: y + sprite.y - hitHeight, width: hitWidth, height: hitHeight });
@@ -276,7 +290,7 @@ export class BattleScene extends Phaser.Scene {
     if (!this.quiet && pose) {
       const from = this.anchor(turn.actorId), to = this.anchor(hitEvent?.targetId ?? turn.targetId);
       const direction = from && to ? Math.sign(to.x - from.x) : turn.side === 'hero' ? 1 : -1;
-      this.unitAnimation.begin(turn.actorId, pose, direction || (turn.side === 'hero' ? 1 : -1), contactMs);
+      this.unitAnimation.begin(turn.actorId, pose, direction || (turn.side === 'hero' ? 1 : -1), contactMs, pilotClip(artOf(this.encounter, turn.actorId), turn.action, turn.intent?.name));
     }
     const family = effectFamily(turn), start = this.anchor(turn.actorId);
     // Ward (A8): the thread and veil gather on each real barrier recipient (self-cast included).

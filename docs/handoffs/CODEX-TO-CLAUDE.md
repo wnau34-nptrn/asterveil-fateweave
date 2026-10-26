@@ -1,5 +1,14 @@
 # Codex → Claude handoff
 
+## 2026-10-26 — Unit animation step 3: Lyra/Hunter sprite pilot
+
+- Owner said “จัดไป” after step 2. Branch `codex/unit-animation-pilot`, depends on the controller from PR #73. PR/publication metadata is recorded on GitHub. Step 3 only, not expansion to other units or approval of C5 VFX.
+- Generated whole-sheet sprites from shipped Lyra/Hunter seeds; rejected overlap/incomplete first passes, normalized 24-component sheets with shared scale/foot pivot, selected 21 sequence slots each (17 generated poses + 4 reused endpoints), plus idle. Lossless WebP runtime atlases and rebuild script/provenance included. No imported other-project/user concept assets.
+- Added `unit-frames.ts`, frame port in UnitAnimation, BattleScene preload/binding and HP-boundary down/revive reset. Contact frame is selected synchronously by existing UI contact; hit targets/HP remain stationary. Other units/actions retain procedural fallback; reduced motion uses static feedback. No rule/save/balance changes.
+- Validation: typecheck/lint/build pass, Vitest 73 files/851 tests; focused 4 files/24 tests. Chromium 390px basic pilot + round-three Execute/Shadow Knife pass; four presentation mode cases pass. Browser fixture errors corrected (TargetOption.valid, Mark fallback, resumed Start gating). See validation README for latest lifecycle cases.
+- Evidence: `docs/validation/unit-animation-step3/{basic-390,skill-390}.mp4` plus two reviewed 390px PNGs. Virtual-clock 20fps clips, no audio; not real-device/Safari or FPS claims. Decoded atlas budget ~48 MiB for both, needs encounter-based loading before roster-wide rollout.
+- Next: owner visual feedback on the pilot, then caster pair Eira/Sprite or broader rollout according to the agreed plan. No image quality approval inferred from tests.
+
 ## 2026-10-26 — Unit animation step 2: shared controller and existing-image fallback
 
 - Owner said “จัดไป” after step 1 and “ต่อ” to resume step 2. Branch `codex/unit-animation-controller`, base `e62292a`. PR #73: https://github.com/wnau34-nptrn/asterveil-fateweave/pull/73 (CI/merge status is recorded there); no visual approval of C5 or new sprite production inferred.
