@@ -98,7 +98,7 @@ Read AGENTS.md and CLAUDE.md first. Repository wnau34-nptrn/asterveil-fateweave,
 | ลำดับ | ตระกูล | สกิล |
 |---|---|---|
 | 1 | ~~ฟันดาบ/แทง~~ R4: เจ้าของเลือก [แบบภาพ 10 ท่า](../combat-presentation/blade-storyboards/README_TH.md) รวม Pierce R2 และสั่งทำ VFX จริงแล้ว ต่อเข้าเกมครบ 2026-10-26 **ผ่านและ merge R4 แล้ว 2026-10-26 (`d14a3e1`, PR #59)** (`codex/vfx-family-1-blade`, PR #59, [คลิป](../combat-presentation/blade-slice/README_TH.md)) | attack, finisher, lunge, sweep, backstab, ambush, disarm, parry (ฟันสวน), pierce, halt |
-| 2 | โล่/ป้องกัน — [แบบภาพครบ 11 ท่า × 3 จังหวะ + low aura R3 ช่วงขาของ Stone Armour/Aegis](../combat-presentation/defense-storyboards/README_TH.md), `codex/vfx-family-2-defense`, draft PR #77; รอเจ้าของเลือก artwork ก่อนต่อ runtime/คลิป (ยังไม่ผ่าน) | guard, aegis, rally, bulwark, stonearmor, guardstone, halo, sanctuary, brace, spearwall, hold |
+| 2 | โล่/ป้องกัน — **runtime ครบ11ท่า**, low aura R3 ช่วงขาที่เจ้าของเลือก; PR #77, [18 คลิปจริงรอเจ้าของตรวจ](../combat-presentation/defense-slice/README_TH.md), `codex/vfx-family-2-defense` ยังไม่ผ่าน motion review/merge | guard, aegis, rally, bulwark, stonearmor, guardstone, halo, sanctuary, brace, spearwall, hold |
 | 3 | แสงรักษา | heal, prayer, rouse, revive, bless, mend (เพลงฟื้น) |
 | 4 | ลูกธนู/มีดบิน | hinder, volley, weakshot, pin, track, disengage, knives |
 | 5 | ทุบ/แผ่นดิน | bash, slam, quake, tremor |

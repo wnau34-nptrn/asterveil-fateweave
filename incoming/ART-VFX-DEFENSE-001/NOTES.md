@@ -21,3 +21,9 @@ Owner feedback: armour artwork painted on top of costumes looks mismatched; try 
 Owner requested aura only around the legs, not up to the head. Redrew both Stone Armour and Aegis as shallow ground-level motifs with ImageGen using R2 as the edit reference. Current proposed bounds: earth 88×32px, crystal 80×28px. The compositor anchors the bottom to each actual foot position; one shared scale per strip, no flattening/stretching of a tall effect.
 
 `archive/r2/` preserves untouched R2 strips, native peaks, metadata and prompts. `aura-r3-prompts.json` records the current exact edit prompts/provenance; `generation-prompts.json` points to the current sources. Viewer comparison now switches R2/R3 and reset selects R3. Other nine concepts remain unchanged. This remains an unapproved artwork proposal, with no runtime/rules/timing changes.
+
+## Runtime delivery — 2026-10-27 (Asia/Bangkok)
+
+Owner selected the low R3 leg-aura direction and authorized implementing all eleven moves. `package.py` now builds one35-frame1584×1584 WebP/JSON atlas and generated profile table, keeping one scale/bottom anchor per strip. Guard/Rally/Bulwark/Guardian Stone placements were polished using their existing paintings. `production-sources.json` records original hashes/rectangles; `atlas-preview.png` labels are review-only. Sources remain untouched. Two shared approved blade paintings are packed for neutral response use; no sibling-repository content.
+
+Runtime and eighteen real390px clips: `docs/combat-presentation/defense-slice/README_TH.md`. This is awaiting owner motion review, not merge/publication approval. Do not start family3.

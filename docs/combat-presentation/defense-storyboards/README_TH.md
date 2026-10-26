@@ -1,6 +1,6 @@
 # C5.2 — โล่/ป้องกัน 11 ท่า · V1 + Low Aura R3
 
-26 ตุลาคม 2026 · **รอเจ้าของเลือก/แก้ artwork ก่อนต่อ runtime**
+27 ตุลาคม 2026 · **เจ้าของเลือกแนว aura R3 ช่วงขาและสั่งทำ runtime แล้ว — [คลิปจริงรอตรวจ](../defense-slice/README_TH.md)**
 
 เปิด [หน้าเลือกท่า](index.html) เพื่อดู เตรียม → จุดเด่น/ตั้งท่า → สลาย บนสนามเกมจริงกว้าง **390px** ปุ่ม 01/02/03 เลื่อนไปจังหวะนั้นโดยไม่ย่อสนาม มีปุ่มเทียบสนามเปล่า ปรับน้ำหนัก 60–110% และคืนค่าแบบเสนอ ภาพแต่ละจังหวะใช้ screenshot เดิม ไม่มี AI วาด UI ตัวละคร หรือฉากใหม่
 
@@ -10,7 +10,7 @@
 
 หน้าเลือกท่าแสดง **R3 low aura** เป็นค่าเริ่มต้นในสองท่านี้ และมีปุ่ม **เทียบ R2 aura สูง**; คืนค่าจะกลับ R3 เก็บ R2 และภาพ 390px เดิมใน `incoming/ART-VFX-DEFENSE-001/archive/r2/` ส่วน V1 ยังอยู่ archive/v1 ตามเดิม Prompt แก้ไขครบใน `aura-r3-prompts.json` ไม่แตะ UI หรือ pixels ด้วย script
 
-ตรวจภาพ 390px ทั้งสองท่าและทั้งสามจังหวะแล้ว Lint/typecheck และ Playwright render/สลับ R2-R3/reset ผ่าน ยังเป็น artwork รอเลือก ไม่เริ่ม runtime หรือขยายตระกูล
+ตรวจภาพ 390px ทั้งสองท่าและทั้งสามจังหวะแล้ว Lint/typecheck และ Playwright render/สลับ R2-R3/reset ผ่าน เจ้าของเลือกแนวนี้และสั่งทำ runtime แล้ว ดูคลิปจริงรอตรวจใน defense-slice; ยังไม่ขยายตระกูล
 
 ## ประวัติ Aura R2 — Stone Armour / Aegis
 
@@ -18,7 +18,7 @@
 
 ในรอบ R2 เคยมีปุ่มเทียบ V1 กับ R2; ปัจจุบันแทนด้วยการเทียบ R2/R3 ตามหัวข้อด้านบน ต้นฉบับและ metadata ของ V1 เก็บใน `incoming/ART-VFX-DEFENSE-001/archive/v1/`; prompt แก้ไขเต็มอยู่ `aura-r2-prompts.json` ไม่มีการวาดแก้ UI/ตัวละครหรือแตะ pixels ด้วย script
 
-ตรวจภาพ R2 บนสนามจริง 390px ทั้งสองท่าและแผ่นสามจังหวะแล้ว Lint/typecheck และ Playwright render ผ่าน (11 ท่า พร้อมปุ่ม V1/R2 และ reset ที่คืนภาพได้ตรงเดิม) ใช้ reference เดิมโดยไม่จับผลต่อสู้ใหม่ ยังรอเจ้าของเลือกแบบก่อนต่อ runtime ใน PR #77 ใบเดิม
+ตรวจภาพ R2 บนสนามจริง 390px ทั้งสองท่าและแผ่นสามจังหวะแล้ว Lint/typecheck และ Playwright render ผ่าน (11 ท่า พร้อมปุ่ม V1/R2 และ reset ที่คืนภาพได้ตรงเดิม) ใช้ reference เดิมโดยไม่จับผลต่อสู้ใหม่ สถานะขณะรอบ R2 คือรอเลือกแบบ; ล่าสุดเลือก R3 และต่อ runtime ใน PR #77 ใบเดิมแล้ว
 
 ## เอกลักษณ์ตามกลไกจริง
 
@@ -44,8 +44,8 @@
 - ภาพนิ่งนี้ไม่ใช่ผลต่อสู้ที่กำลังทำงาน HP/UI คงเดิม ไม่มีการเพิ่ม barrier/ฮีล/ตัวเลขลง UI; ภาพการสลายหมายถึงชั้น VFX จบ ไม่หมายถึงสถานะหมดหรือโล่แตก
 - หน้าพรีวิวเป็น compositor ภาพนิ่ง ไม่เรียก playback/resolver หรือเขียนเซฟ ใช้สเกลเดียวร่วมทั้ง 3 จังหวะต่อท่าเพื่อรักษาขนาดที่วาดไว้ ไม่ยืดแต่ละ phase ให้เต็มกรอบใหม่
 - ตัวอย่างเป็นการตั้งรับ ไม่มีคลิป counter ปลอม การสวน/รับแทน/กันล้ม/ดูดซับจริงต้องอ่าน resolved events และทดสอบใน runtime หลังเลือก artwork แล้ว
-- ไม่แก้กฎ เซฟ สมดุล เวลา playback unit-animation หรือ assets ที่ใช้ใน production ไม่มี `defense_fx` หรือ `defense-fx.ts` ในขั้นนี้
-- หลังเจ้าของเลือกภาพ: รวม atlas/module เดียว ต่อ runtime แล้วตรวจ normal/fast/reduced-intensity/OS reduced motion และ cleanup ก่อนส่งคลิปจริง 390×844 ให้ตรวจ ใช้ PR ตระกูลนี้ใบเดิมและไม่เริ่มตระกูล 3
+- หน้านี้เก็บแบบภาพนิ่ง ไม่มีการเล่น resolver; runtime ล่าสุดแพ็ก `defense_fx` และต่อ `defense-fx.ts` แล้ว ดูหลักฐานใน defense-slice โดยยังไม่แก้กฎ เซฟ สมดุล หรือเวลา playback
+- เจ้าของเลือกแนวและสั่งทำแล้ว: runtime ใช้ atlas/module เดียว ตรวจ normal/fast/reduced-intensity/OS reduced motion และ cleanup พร้อมคลิปจริง390×844ใน PR#77 ใบเดิม รอตรวจคลิปก่อนตระกูล3
 
 ## ต้นฉบับและทำซ้ำ
 
@@ -63,4 +63,4 @@ DEFENSE_STORYBOARDS=render PLAYWRIGHT_CHROMIUM_EXECUTABLE=/usr/bin/chromium npx 
 
 ตรวจด้วย Chromium headless/SwiftShader ใน cloud ที่ 390px ไม่ใช่อุปกรณ์จริงหรือ Safari ใช้ Playwright ของ repository ตาม handoff เนื่องจากเซสชันนี้ไม่มี callable Browser `js`/runtime tool การตรวจแบบนิ่งและผลทดสอบไม่ใช่การอนุมัติภาพหรือคลิปจากเจ้าของ
 
-ผลตรวจชุดส่ง: source RGBA **11 strips ขนาด 2172×724px** มี alpha จริงทั้งหมด และ hash/bytes ตรง original; ภาพ 3 จังหวะ **11 แผ่น 1170×950px** (ช่องละ 390×844px) และภาพจุดเด่น **11 ภาพ 390×844px** ครบ เปิดตรวจทุกท่าและแผ่นสามจังหวะตัวแทนแล้ว Typecheck/lint/build ผ่าน; Playwright reference 1/1 และ render/selection/controls 1/1 ผ่าน โดยข้ามอีกโหมดตาม gate ไม่รัน gameplay suite ใหม่เพราะไม่มี runtime เปลี่ยน
+ผลตรวจชุดส่ง: source RGBA **11 strips ขนาด 2172×724px** มี alpha จริงทั้งหมด และ hash/bytes ตรง original; ภาพ 3 จังหวะ **11 แผ่น 1170×950px** (ช่องละ 390×844px) และภาพจุดเด่น **11 ภาพ 390×844px** ครบ เปิดตรวจทุกท่าและแผ่นสามจังหวะตัวแทนแล้ว Typecheck/lint/build ผ่าน; Playwright reference 1/1 และ render/selection/controls 1/1 ผ่าน โดยข้ามอีกโหมดตาม gate ผลส่วนนี้เป็นการตรวจแบบภาพนิ่ง; การตรวจ runtime ล่าสุดอยู่ใน defense-slice

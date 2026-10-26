@@ -1,0 +1,1367 @@
+[
+  {
+    "file": "aegis-blocked-normal-390.mp4",
+    "width": 390,
+    "height": 844,
+    "duration": 3.283333,
+    "capturedFrames": 89,
+    "clickOffset": 0.32,
+    "maxFrameGap": 0.306,
+    "impacts": [
+      {
+        "at": 0.68,
+        "action": "aegis",
+        "side": "hero",
+        "events": [
+          "barrier",
+          "barrier",
+          "barrier",
+          "barrier"
+        ],
+        "resolved": [
+          {
+            "type": "barrier",
+            "sourceId": "weaver",
+            "targetId": "weaver",
+            "amount": 8,
+            "text": "Added barrier."
+          },
+          {
+            "type": "barrier",
+            "sourceId": "weaver",
+            "targetId": "guardian",
+            "amount": 8,
+            "text": "Added barrier."
+          },
+          {
+            "type": "barrier",
+            "sourceId": "weaver",
+            "targetId": "tracer",
+            "amount": 8,
+            "text": "Added barrier."
+          },
+          {
+            "type": "barrier",
+            "sourceId": "weaver",
+            "targetId": "healer",
+            "amount": 8,
+            "text": "Added barrier."
+          }
+        ]
+      },
+      {
+        "at": 1.416,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ],
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "b1",
+            "targetId": "guardian",
+            "amount": 0,
+            "absorbed": 4,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      },
+      {
+        "at": 2.222,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ],
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "f1",
+            "targetId": "guardian",
+            "amount": 0,
+            "absorbed": 4,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "file": "aegis-normal-fast-390.mp4",
+    "width": 390,
+    "height": 844,
+    "duration": 3.366667,
+    "capturedFrames": 90,
+    "clickOffset": 0.365,
+    "maxFrameGap": 0.312,
+    "impacts": [
+      {
+        "at": 0.652,
+        "action": "aegis",
+        "side": "hero",
+        "events": [
+          "barrier",
+          "barrier",
+          "barrier",
+          "barrier"
+        ],
+        "resolved": [
+          {
+            "type": "barrier",
+            "sourceId": "weaver",
+            "targetId": "weaver",
+            "amount": 8,
+            "text": "Added barrier."
+          },
+          {
+            "type": "barrier",
+            "sourceId": "weaver",
+            "targetId": "guardian",
+            "amount": 8,
+            "text": "Added barrier."
+          },
+          {
+            "type": "barrier",
+            "sourceId": "weaver",
+            "targetId": "tracer",
+            "amount": 8,
+            "text": "Added barrier."
+          },
+          {
+            "type": "barrier",
+            "sourceId": "weaver",
+            "targetId": "healer",
+            "amount": 8,
+            "text": "Added barrier."
+          }
+        ]
+      },
+      {
+        "at": 1.09,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ],
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "b1",
+            "targetId": "guardian",
+            "amount": 4,
+            "absorbed": 8,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      },
+      {
+        "at": 1.661,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ],
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "f1",
+            "targetId": "guardian",
+            "amount": 12,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "file": "aegis-normal-normal-390.mp4",
+    "width": 390,
+    "height": 844,
+    "duration": 3.35,
+    "capturedFrames": 93,
+    "clickOffset": 0.392,
+    "maxFrameGap": 0.275,
+    "impacts": [
+      {
+        "at": 0.741,
+        "action": "aegis",
+        "side": "hero",
+        "events": [
+          "barrier",
+          "barrier",
+          "barrier",
+          "barrier"
+        ],
+        "resolved": [
+          {
+            "type": "barrier",
+            "sourceId": "weaver",
+            "targetId": "weaver",
+            "amount": 8,
+            "text": "Added barrier."
+          },
+          {
+            "type": "barrier",
+            "sourceId": "weaver",
+            "targetId": "guardian",
+            "amount": 8,
+            "text": "Added barrier."
+          },
+          {
+            "type": "barrier",
+            "sourceId": "weaver",
+            "targetId": "tracer",
+            "amount": 8,
+            "text": "Added barrier."
+          },
+          {
+            "type": "barrier",
+            "sourceId": "weaver",
+            "targetId": "healer",
+            "amount": 8,
+            "text": "Added barrier."
+          }
+        ]
+      },
+      {
+        "at": 1.501,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ],
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "b1",
+            "targetId": "guardian",
+            "amount": 4,
+            "absorbed": 8,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      },
+      {
+        "at": 2.317,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ],
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "f1",
+            "targetId": "guardian",
+            "amount": 12,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "file": "aegis-normal-osreduce-390.mp4",
+    "width": 390,
+    "height": 844,
+    "duration": 3.4,
+    "capturedFrames": 96,
+    "clickOffset": 0.375,
+    "maxFrameGap": 0.161,
+    "impacts": [
+      {
+        "at": 0.407,
+        "action": "aegis",
+        "side": "hero",
+        "events": [
+          "barrier",
+          "barrier",
+          "barrier",
+          "barrier"
+        ],
+        "resolved": [
+          {
+            "type": "barrier",
+            "sourceId": "weaver",
+            "targetId": "weaver",
+            "amount": 8,
+            "text": "Added barrier."
+          },
+          {
+            "type": "barrier",
+            "sourceId": "weaver",
+            "targetId": "guardian",
+            "amount": 8,
+            "text": "Added barrier."
+          },
+          {
+            "type": "barrier",
+            "sourceId": "weaver",
+            "targetId": "tracer",
+            "amount": 8,
+            "text": "Added barrier."
+          },
+          {
+            "type": "barrier",
+            "sourceId": "weaver",
+            "targetId": "healer",
+            "amount": 8,
+            "text": "Added barrier."
+          }
+        ]
+      },
+      {
+        "at": 1.13,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ],
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "b1",
+            "targetId": "guardian",
+            "amount": 4,
+            "absorbed": 8,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      },
+      {
+        "at": 1.98,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ],
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "f1",
+            "targetId": "guardian",
+            "amount": 12,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "file": "aegis-normal-reduced-390.mp4",
+    "width": 390,
+    "height": 844,
+    "duration": 3.283333,
+    "capturedFrames": 89,
+    "clickOffset": 0.348,
+    "maxFrameGap": 0.284,
+    "impacts": [
+      {
+        "at": 0.709,
+        "action": "aegis",
+        "side": "hero",
+        "events": [
+          "barrier",
+          "barrier",
+          "barrier",
+          "barrier"
+        ],
+        "resolved": [
+          {
+            "type": "barrier",
+            "sourceId": "weaver",
+            "targetId": "weaver",
+            "amount": 8,
+            "text": "Added barrier."
+          },
+          {
+            "type": "barrier",
+            "sourceId": "weaver",
+            "targetId": "guardian",
+            "amount": 8,
+            "text": "Added barrier."
+          },
+          {
+            "type": "barrier",
+            "sourceId": "weaver",
+            "targetId": "tracer",
+            "amount": 8,
+            "text": "Added barrier."
+          },
+          {
+            "type": "barrier",
+            "sourceId": "weaver",
+            "targetId": "healer",
+            "amount": 8,
+            "text": "Added barrier."
+          }
+        ]
+      },
+      {
+        "at": 1.425,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ],
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "b1",
+            "targetId": "guardian",
+            "amount": 4,
+            "absorbed": 8,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      },
+      {
+        "at": 2.241,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ],
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "f1",
+            "targetId": "guardian",
+            "amount": 12,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "file": "aegis-partial-normal-390.mp4",
+    "width": 390,
+    "height": 844,
+    "duration": 3.3,
+    "capturedFrames": 90,
+    "clickOffset": 0.358,
+    "maxFrameGap": 0.297,
+    "impacts": [
+      {
+        "at": 0.706,
+        "action": "aegis",
+        "side": "hero",
+        "events": [
+          "barrier",
+          "barrier",
+          "barrier",
+          "barrier"
+        ],
+        "resolved": [
+          {
+            "type": "barrier",
+            "sourceId": "weaver",
+            "targetId": "weaver",
+            "amount": 8,
+            "text": "Added barrier."
+          },
+          {
+            "type": "barrier",
+            "sourceId": "weaver",
+            "targetId": "guardian",
+            "amount": 8,
+            "text": "Added barrier."
+          },
+          {
+            "type": "barrier",
+            "sourceId": "weaver",
+            "targetId": "tracer",
+            "amount": 8,
+            "text": "Added barrier."
+          },
+          {
+            "type": "barrier",
+            "sourceId": "weaver",
+            "targetId": "healer",
+            "amount": 8,
+            "text": "Added barrier."
+          }
+        ]
+      },
+      {
+        "at": 1.429,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ],
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "b1",
+            "targetId": "guardian",
+            "amount": 12,
+            "absorbed": 8,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      },
+      {
+        "at": 2.244,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ],
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "f1",
+            "targetId": "guardian",
+            "amount": 20,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "file": "brace-counter-normal-390.mp4",
+    "width": 390,
+    "height": 844,
+    "duration": 3.35,
+    "capturedFrames": 91,
+    "clickOffset": 0.373,
+    "maxFrameGap": 0.229,
+    "impacts": [
+      {
+        "at": 0.652,
+        "action": "brace",
+        "side": "hero",
+        "events": [
+          "brace"
+        ],
+        "resolved": [
+          {
+            "type": "brace",
+            "sourceId": "garran",
+            "targetId": "garran",
+            "amount": 14,
+            "text": "Spear braced until its next turn."
+          }
+        ]
+      },
+      {
+        "at": 1.265,
+        "side": "enemy",
+        "events": [
+          "damage",
+          "counter"
+        ],
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "b1",
+            "targetId": "guardian",
+            "amount": 12,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          },
+          {
+            "type": "counter",
+            "sourceId": "garran",
+            "targetId": "b1",
+            "amount": 14,
+            "text": "Braced spear counters."
+          }
+        ]
+      },
+      {
+        "at": 2.075,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ],
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "f1",
+            "targetId": "guardian",
+            "amount": 12,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "file": "bulwark-normal-normal-390.mp4",
+    "width": 390,
+    "height": 844,
+    "duration": 3.3,
+    "capturedFrames": 95,
+    "clickOffset": 0.332,
+    "maxFrameGap": 0.247,
+    "impacts": [
+      {
+        "at": 0.689,
+        "action": "bulwark",
+        "side": "hero",
+        "events": [
+          "buff"
+        ],
+        "resolved": [
+          {
+            "type": "buff",
+            "sourceId": "guardian",
+            "targetId": "guardian",
+            "amount": 30,
+            "text": "Bulwark."
+          }
+        ]
+      },
+      {
+        "at": 1.376,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ],
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "b1",
+            "targetId": "tracer",
+            "amount": 9,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      },
+      {
+        "at": 2.196,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ],
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "f1",
+            "targetId": "tracer",
+            "amount": 9,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "file": "guard-cancelled-normal-390.mp4",
+    "width": 390,
+    "height": 844,
+    "duration": 3.366667,
+    "capturedFrames": 98,
+    "clickOffset": 0.38,
+    "maxFrameGap": 0.296,
+    "impacts": [
+      {
+        "at": 0.672,
+        "action": "guard",
+        "side": "hero",
+        "events": [
+          "guard"
+        ],
+        "resolved": [
+          {
+            "type": "guard",
+            "sourceId": "guardian",
+            "targetId": "tracer",
+            "text": "Guard until announced attacker acts or Knight returns."
+          }
+        ]
+      },
+      {
+        "at": 0.986,
+        "side": "enemy",
+        "events": [
+          "cancel"
+        ],
+        "resolved": [
+          {
+            "type": "cancel",
+            "sourceId": "b1",
+            "cause": "interrupted",
+            "text": "Physical attack interrupted."
+          }
+        ]
+      },
+      {
+        "at": 1.5,
+        "side": "enemy",
+        "events": [
+          "cancel"
+        ],
+        "resolved": [
+          {
+            "type": "cancel",
+            "sourceId": "f1",
+            "cause": "interrupted",
+            "text": "Physical attack interrupted."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "file": "guard-dodged-normal-390.mp4",
+    "width": 390,
+    "height": 844,
+    "duration": 3.266667,
+    "capturedFrames": 85,
+    "clickOffset": 0.34,
+    "maxFrameGap": 0.249,
+    "impacts": [
+      {
+        "at": 0.604,
+        "action": "guard",
+        "side": "hero",
+        "events": [
+          "guard"
+        ],
+        "resolved": [
+          {
+            "type": "guard",
+            "sourceId": "guardian",
+            "targetId": "tracer",
+            "text": "Guard until announced attacker acts or Knight returns."
+          }
+        ]
+      },
+      {
+        "at": 1.213,
+        "side": "enemy",
+        "events": [
+          "dodge"
+        ],
+        "resolved": [
+          {
+            "type": "dodge",
+            "sourceId": "b1",
+            "targetId": "guardian",
+            "amount": 0,
+            "text": "The attack misses the evading scout."
+          }
+        ]
+      },
+      {
+        "at": 2.014,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ],
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "f1",
+            "targetId": "tracer",
+            "amount": 12,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "file": "guard-normal-normal-390.mp4",
+    "width": 390,
+    "height": 844,
+    "duration": 3.3,
+    "capturedFrames": 86,
+    "clickOffset": 0.341,
+    "maxFrameGap": 0.228,
+    "impacts": [
+      {
+        "at": 0.619,
+        "action": "guard",
+        "side": "hero",
+        "events": [
+          "guard"
+        ],
+        "resolved": [
+          {
+            "type": "guard",
+            "sourceId": "guardian",
+            "targetId": "tracer",
+            "text": "Guard until announced attacker acts or Knight returns."
+          }
+        ]
+      },
+      {
+        "at": 1.226,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ],
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "b1",
+            "targetId": "guardian",
+            "amount": 5,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      },
+      {
+        "at": 2.056,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ],
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "f1",
+            "targetId": "tracer",
+            "amount": 12,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "file": "guardstone-stone-normal-390.mp4",
+    "width": 390,
+    "height": 844,
+    "duration": 3.383333,
+    "capturedFrames": 100,
+    "clickOffset": 0.393,
+    "maxFrameGap": 0.284,
+    "impacts": [
+      {
+        "at": 0.7,
+        "action": "guardstone",
+        "side": "hero",
+        "events": [
+          "buff"
+        ],
+        "resolved": [
+          {
+            "type": "buff",
+            "sourceId": "brann",
+            "targetId": "weaver",
+            "amount": 40,
+            "text": "Guardian stone."
+          }
+        ]
+      },
+      {
+        "at": 1.391,
+        "side": "enemy",
+        "events": [
+          "heal",
+          "damage"
+        ],
+        "resolved": [
+          {
+            "type": "heal",
+            "sourceId": "brann",
+            "targetId": "brann",
+            "amount": 6,
+            "text": "Guardian stone."
+          },
+          {
+            "type": "damage",
+            "sourceId": "b1",
+            "targetId": "brann",
+            "amount": 8,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      },
+      {
+        "at": 2.207,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ],
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "f1",
+            "targetId": "weaver",
+            "amount": 12,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "file": "halo-normal-normal-390.mp4",
+    "width": 390,
+    "height": 844,
+    "duration": 3.266667,
+    "capturedFrames": 93,
+    "clickOffset": 0.323,
+    "maxFrameGap": 0.297,
+    "impacts": [
+      {
+        "at": 0.699,
+        "action": "halo",
+        "side": "hero",
+        "events": [
+          "buff"
+        ],
+        "resolved": [
+          {
+            "type": "buff",
+            "sourceId": "healer",
+            "targetId": "healer",
+            "amount": 30,
+            "text": "Halo."
+          }
+        ]
+      },
+      {
+        "at": 1.417,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ],
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "b1",
+            "targetId": "guardian",
+            "amount": 9,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      },
+      {
+        "at": 2.234,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ],
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "f1",
+            "targetId": "guardian",
+            "amount": 9,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "file": "hold-counter-normal-390.mp4",
+    "width": 390,
+    "height": 844,
+    "duration": 3.3,
+    "capturedFrames": 87,
+    "clickOffset": 0.364,
+    "maxFrameGap": 0.254,
+    "impacts": [
+      {
+        "at": 0.659,
+        "action": "hold",
+        "side": "hero",
+        "events": [
+          "hold"
+        ],
+        "resolved": [
+          {
+            "type": "hold",
+            "sourceId": "garran",
+            "targetId": "garran",
+            "text": "Hold the line."
+          }
+        ]
+      },
+      {
+        "at": 1.315,
+        "side": "enemy",
+        "events": [
+          "damage",
+          "damage",
+          "damage",
+          "damage",
+          "counter"
+        ],
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "b1",
+            "targetId": "garran",
+            "amount": 12,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          },
+          {
+            "type": "damage",
+            "sourceId": "b1",
+            "targetId": "guardian",
+            "amount": 12,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          },
+          {
+            "type": "damage",
+            "sourceId": "b1",
+            "targetId": "tracer",
+            "amount": 12,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          },
+          {
+            "type": "damage",
+            "sourceId": "b1",
+            "targetId": "weaver",
+            "amount": 12,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          },
+          {
+            "type": "counter",
+            "sourceId": "garran",
+            "targetId": "b1",
+            "amount": 14,
+            "text": "Held spear counters."
+          }
+        ]
+      },
+      {
+        "at": 2.161,
+        "side": "enemy",
+        "events": [
+          "damage",
+          "damage",
+          "damage",
+          "damage",
+          "counter"
+        ],
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "f1",
+            "targetId": "garran",
+            "amount": 12,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          },
+          {
+            "type": "damage",
+            "sourceId": "f1",
+            "targetId": "guardian",
+            "amount": 12,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          },
+          {
+            "type": "damage",
+            "sourceId": "f1",
+            "targetId": "tracer",
+            "amount": 12,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          },
+          {
+            "type": "damage",
+            "sourceId": "f1",
+            "targetId": "weaver",
+            "amount": 12,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          },
+          {
+            "type": "counter",
+            "sourceId": "garran",
+            "targetId": "f1",
+            "amount": 14,
+            "text": "Held spear counters."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "file": "rally-normal-normal-390.mp4",
+    "width": 390,
+    "height": 844,
+    "duration": 3.283333,
+    "capturedFrames": 90,
+    "clickOffset": 0.367,
+    "maxFrameGap": 0.299,
+    "impacts": [
+      {
+        "at": 0.693,
+        "action": "rally",
+        "side": "hero",
+        "events": [
+          "rally"
+        ],
+        "resolved": [
+          {
+            "type": "rally",
+            "sourceId": "guardian",
+            "targetId": "guardian",
+            "text": "Every ally\u2019s first hit is reduced until the knight\u2019s next turn."
+          }
+        ]
+      },
+      {
+        "at": 1.465,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ],
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "b1",
+            "targetId": "tracer",
+            "amount": 8,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      },
+      {
+        "at": 2.263,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ],
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "f1",
+            "targetId": "tracer",
+            "amount": 12,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "file": "sanctuary-save-normal-390.mp4",
+    "width": 390,
+    "height": 844,
+    "duration": 3.3,
+    "capturedFrames": 91,
+    "clickOffset": 0.331,
+    "maxFrameGap": 0.293,
+    "impacts": [
+      {
+        "at": 0.729,
+        "action": "sanctuary",
+        "side": "hero",
+        "events": [
+          "sanctuary"
+        ],
+        "resolved": [
+          {
+            "type": "sanctuary",
+            "sourceId": "healer",
+            "targetId": "tracer",
+            "text": "The ally cannot fall until the priest\u2019s next turn."
+          }
+        ]
+      },
+      {
+        "at": 1.486,
+        "side": "enemy",
+        "events": [
+          "sanctuary",
+          "damage"
+        ],
+        "resolved": [
+          {
+            "type": "sanctuary",
+            "sourceId": "healer",
+            "targetId": "tracer",
+            "text": "Sanctuary keeps the ally standing."
+          },
+          {
+            "type": "damage",
+            "sourceId": "b1",
+            "targetId": "tracer",
+            "amount": 0,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      },
+      {
+        "at": 2.299,
+        "side": "enemy",
+        "events": [
+          "sanctuary",
+          "damage"
+        ],
+        "resolved": [
+          {
+            "type": "sanctuary",
+            "sourceId": "healer",
+            "targetId": "tracer",
+            "text": "Sanctuary keeps the ally standing."
+          },
+          {
+            "type": "damage",
+            "sourceId": "f1",
+            "targetId": "tracer",
+            "amount": 0,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "file": "spearwall-counter-normal-390.mp4",
+    "width": 390,
+    "height": 844,
+    "duration": 3.35,
+    "capturedFrames": 93,
+    "clickOffset": 0.368,
+    "maxFrameGap": 0.239,
+    "impacts": [
+      {
+        "at": 0.725,
+        "action": "spearwall",
+        "side": "hero",
+        "events": [
+          "brace"
+        ],
+        "resolved": [
+          {
+            "type": "brace",
+            "sourceId": "garran",
+            "targetId": "garran",
+            "amount": 8,
+            "text": "Spear wall until its next turn."
+          }
+        ]
+      },
+      {
+        "at": 1.476,
+        "side": "enemy",
+        "events": [
+          "damage",
+          "counter"
+        ],
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "b1",
+            "targetId": "guardian",
+            "amount": 12,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          },
+          {
+            "type": "counter",
+            "sourceId": "garran",
+            "targetId": "b1",
+            "amount": 8,
+            "text": "Spear wall counters."
+          }
+        ]
+      },
+      {
+        "at": 2.293,
+        "side": "enemy",
+        "events": [
+          "damage",
+          "counter"
+        ],
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "f1",
+            "targetId": "guardian",
+            "amount": 12,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          },
+          {
+            "type": "counter",
+            "sourceId": "garran",
+            "targetId": "f1",
+            "amount": 8,
+            "text": "Spear wall counters."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "file": "stonearmor-normal-normal-390.mp4",
+    "width": 390,
+    "height": 844,
+    "duration": 3.316667,
+    "capturedFrames": 96,
+    "clickOffset": 0.321,
+    "maxFrameGap": 0.219,
+    "impacts": [
+      {
+        "at": 0.675,
+        "action": "stonearmor",
+        "side": "hero",
+        "events": [
+          "barrier"
+        ],
+        "resolved": [
+          {
+            "type": "barrier",
+            "sourceId": "brann",
+            "targetId": "brann",
+            "amount": 18,
+            "text": "Added barrier."
+          }
+        ]
+      },
+      {
+        "at": 1.377,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ],
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "b1",
+            "targetId": "guardian",
+            "amount": 12,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      },
+      {
+        "at": 2.198,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ],
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "f1",
+            "targetId": "guardian",
+            "amount": 12,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      }
+    ]
+  }
+]

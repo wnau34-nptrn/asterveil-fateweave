@@ -1,5 +1,10 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
+## 2026-10-27 — C5.2 runtime ครบแล้ว รอตรวจ 18 คลิป
+
+PR [#77](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/77) · `codex/vfx-family-2-defense` ต่อภาพครบ11ท่าเป็น atlas/module เดียวแล้ว เจ้าของเลือก aura R3 ช่วงขาและสั่งทำ runtime เมื่อ26ต.ค. ดูคลิปจริง18ไฟล์และหน้าเลือกใน `docs/combat-presentation/defense-slice/README_TH.md` / `index.html` ครอบคลุมรับแทน ดูดซับ กันล้ม สวน หลบ ยกเลิก fast/reduced/OS reduced motion ทดสอบ858unit + defense36 + legacy16 ผ่าน ไม่มีการแก้กฎ/เซฟ/สมดุล/เวลา playback ยังไม่มี owner clip approval, merge หรือ deploy หยุดรอเจ้าของตรวจใน PR ใบนี้ก่อนตระกูล3; ตรวจสถานะ CIตามลิงก์ในsliceก่อน merge
+
+
 ## 2026-10-26 — C5.2 artwork V1 รอเลือกก่อนต่อ runtime
 
 Draft PR [#77](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/77) · สาขา `codex/vfx-family-2-defense` มี artwork โปร่งใส 11 ท่า × 3 จังหวะแล้ว; ล่าสุดปรับ Stone Armour/Aegis เป็น low aura R3 เฉพาะเท้า/หน้าแข้งตาม feedback ไม่ให้สูงถึงหัว พร้อมปุ่มเทียบ R2/R3 ดู `docs/combat-presentation/defense-storyboards/README_TH.md` และ `index.html` (หน้าเลือกท่า 390px เทียบสนามเปล่า/ปรับน้ำหนักได้) เก็บต้นฉบับและ prompts ใน `incoming/ART-VFX-DEFENSE-001/` ยังไม่มี owner artwork approval, runtime atlas/module หรือคลิปจริง งานถัดไปคือรับ feedback/เลือกแบบ แล้วทำ runtime ใน PR ตระกูล 2 ใบเดิมตาม `C5-FAMILY-2-DEFENSE-HANDOFF-TH.md` ห้ามเริ่มตระกูล 3 จนเจ้าของตรวจคลิปตระกูล 2 ผ่าน ไม่รวม/เผยแพร่ draft งานภาพนี้ก่อนขั้น review ที่ขอไว้

@@ -24,11 +24,13 @@ for stamps in sorted(captures.glob('*/stamps.txt')):
     text = []
     for i, (n, t) in enumerate(frames):
         text.append(f"file '{(stamps.parent / 'frames' / (n + '.jpg')).as_posix()}'")
+        text.append('option framerate 60')
         text.append(f'duration {max(.001, frames[i + 1][1] - t) if i + 1 < len(frames) else .05:.6f}')
     text.append(f"file '{(stamps.parent / 'frames' / (frames[-1][0] + '.jpg')).as_posix()}'")
+    text.append('option framerate 60')
     concat.write_text('\n'.join(text) + '\n')
     target = out / f'{name}-390.mp4'
-    subprocess.run(['ffmpeg', '-hide_banner', '-loglevel', 'error', '-y', '-f', 'concat', '-safe', '0', '-i', str(concat), '-fps_mode', 'vfr', '-c:v', 'libx264', '-crf', '20', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', str(target)], check=True)
+    subprocess.run(['ffmpeg', '-hide_banner', '-loglevel', 'error', '-y', '-f', 'concat', '-safe', '0', '-i', str(concat), '-fps_mode', 'vfr', '-c:v', 'libx264', '-crf', '20', '-profile:v', 'high', '-level:v', '3.1', '-pix_fmt', 'yuv420p', '-video_track_timescale', '90000', '-movflags', '+faststart', str(target)], check=True)
     probe = json.loads(subprocess.check_output(['ffprobe', '-v', 'quiet', '-show_streams', '-show_format', '-of', 'json', str(target)]))
     stream = probe['streams'][0]
     assert (stream['width'], stream['height']) == (390, 844)
@@ -36,7 +38,9 @@ for stamps in sorted(captures.glob('*/stamps.txt')):
     # Still extracted from the real cast/response cue, not from input time.
     response = any(x in name for x in ['guard-normal','-counter-','-stone-','-save-','-blocked-','-partial-','-dodged-','-cancelled-'])
     impact = next(i for i in impacts if i['side'] == ('enemy' if response else 'hero'))
-    contact = impact['at'] + .07
+    # Allow the next actual canvas paint in headless capture; do not mistake the
+    # callback itself for a captured GPU frame. Movies retain all original times.
+    contact = impact['at'] + .18
     selected = min(frames, key=lambda f: abs(f[1] - contact))
     Image.open(stamps.parent / 'frames' / (selected[0] + '.jpg')).save(out / f'{name}-390.png')
 (out / 'clips.json').write_text(json.dumps(manifest, indent=2) + '\n')
