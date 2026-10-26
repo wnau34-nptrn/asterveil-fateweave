@@ -1,5 +1,13 @@
 # Codex → Claude handoff
 
+## 2026-10-26 — C5.2 low aura R3, foot/shin height only (PR #77)
+
+- Owner clarified that aura should only surround the legs, not reach the head. Redrew Stone Armour/Aegis with ImageGen as shallow angular earth and curved crystal footprints. Bounds 88×32 / 80×28px, bottom anchored to each actual foot point. No tall aura stretched flat, and no torso/head coverage in the reviewed 390px images.
+- Same branch `codex/vfx-family-2-defense` and draft PR #77; no merge. Updated two current source strips/provenance, saved R2 originals/peaks/manifest/prompts under `incoming/ART-VFX-DEFENSE-001/archive/r2/`, regenerated the two boards/peaks and current manifest, updated viewer comparison/reset to R2/R3 and notes. V1 archive and other nine proposals preserved.
+- Validation: lint/typecheck/whitespace and Playwright render 1/1 across all eleven skills pass, including R2/R3 difference and exact reset. Source alpha/original hashes and output dimensions verified. Two actual-game 390px concept composites sent to owner; Chromium cloud, not a real device. Reused references, no newly committed battle commands or production changes; no new gameplay suite/build needed.
+- R3 is proposed, not owner visual approval. Continue feedback in PR #77, then runtime/real clips only after selection; no family 3.
+
+
 ## 2026-10-26 — C5.2 aura R2 after costume-overlap feedback (PR #77)
 
 - Owner proposed aura because armour over costumes looked mismatched. Revised the two clearest cases, Stone Armour and Aegis, with ImageGen edits: outside earth wisps vs bowed crystal light, open head/torso, no replacement costume. This is not approval of the new art or of runtime.

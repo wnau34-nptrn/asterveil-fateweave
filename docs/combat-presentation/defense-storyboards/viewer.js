@@ -12,9 +12,9 @@ function draw(){
   const painting=previous&&selected.previous?selected.previous:selected;
   document.querySelector('#name').textContent=`${selected.skill.toUpperCase()} · ${selected.thai}`;
   document.querySelector('#identity').textContent=painting.identity;
-  document.querySelector('#revision').textContent=previous&&selected.previous?'V1 · แบบเดิม':selected.revision??'V1';
+  document.querySelector('#revision').textContent=painting.revision??'V1';
   document.querySelector('#version').hidden=!selected.previous;
-  document.querySelector('#version').textContent=previous?'กลับไป R2 aura':'เทียบ V1 เกราะเดิม';
+  document.querySelector('#version').textContent=previous?'กลับไป R3 aura ช่วงขา':'เทียบ R2 aura สูง';
   document.querySelector('#version').setAttribute('aria-pressed',String(previous));
   document.querySelector('#weight-value').textContent=`${weight.value}%`;
   for(const button of document.querySelectorAll('nav button'))button.setAttribute('aria-pressed',String(button.dataset.skill===selected.skill));
@@ -28,14 +28,14 @@ function draw(){
     const recipients=phase===0||selected.placement==='source'?[source]:targets;
     for(const at of recipients){
       const x=Math.max(painting.width/2+2,Math.min(388-painting.width/2,at.x+painting.dx));
-      const bottom=at.y+painting.dy+painting.height/2;
+      const bottom=painting.anchor==='feet'?at.y+at.size*.48+painting.dy:at.y+painting.dy+painting.height/2;
       ctx.globalAlpha=[.72,.9,.42][phase]*Number(weight.value)/100;
       ctx.drawImage(images.get(painting.source),sx,sy,sw,sh,x-sw*fit/2,bottom-sh*fit,sw*fit,sh*fit);
     }
     ctx.globalAlpha=1;
   });
   document.documentElement.dataset.skill=selected.skill;
-  document.documentElement.dataset.revision=previous&&selected.previous?'v1':selected.revision?'r2':'v1';
+  document.documentElement.dataset.revision=painting.revision??'V1';
 }
 async function start(){
   await Promise.all([...new Set(records.flatMap(r=>[r.source,r.background,...(r.previous?[r.previous.source]:[])]))].map(async src=>images.set(src,await loadImage(src))));

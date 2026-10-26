@@ -73,35 +73,35 @@
   {
     "skill": "aegis",
     "thai": "เกราะผลึก",
-    "identity": "Aura ผลึกโค้งนอกเงาร่าง กลางโปร่ง ไม่วาดเกราะทับชุด; barrier ตามผู้รับจริง",
-    "width": 88,
-    "height": 112,
+    "identity": "Aura ผลึกลอยต่ำรอบเท้าและหน้าแข้ง เว้นชุดและช่วงตัว; barrier ตามผู้รับจริง",
+    "width": 80,
+    "height": 28,
     "placement": "targets",
     "dx": 0,
     "dy": 0,
     "frames": [
       [
-        43,
-        100,
-        591,
-        561
+        47,
+        486,
+        610,
+        172
       ],
       [
-        739,
-        22,
-        693,
-        641
+        741,
+        462,
+        690,
+        204
       ],
       [
-        1529,
-        73,
-        603,
-        592
+        1511,
+        483,
+        610,
+        170
       ]
     ],
     "frameMax": [
-      693,
-      641
+      690,
+      204
     ],
     "source": "../../../incoming/ART-VFX-DEFENSE-001/source/aegis.png",
     "background": "../../../incoming/ART-VFX-DEFENSE-001/reference/aegis-390.png",
@@ -111,9 +111,9 @@
     ],
     "alphaRange": [
       0,
-      255
+      253
     ],
-    "sha256": "dc4cb8816bf256f2276e019c9ecceaa605f535cfb8ae218139c7fc38bbbc5f90",
+    "sha256": "1593f0546c9989e41f729d3e2ab40abe6738422b8d035dcba3d703489d14a1c6",
     "anchors": {
       "source": {
         "id": "weaver",
@@ -183,37 +183,37 @@
     "previous": {
       "skill": "aegis",
       "thai": "เกราะผลึก",
-      "identity": "กลีบโค้งผลึกโปร่งแยกรายคน เฉพาะผู้ได้รับ barrier จริง",
-      "width": 78,
-      "height": 88,
+      "identity": "Aura ผลึกโค้งนอกเงาร่าง กลางโปร่ง ไม่วาดเกราะทับชุด; barrier ตามผู้รับจริง",
+      "width": 88,
+      "height": 112,
       "placement": "targets",
       "dx": 0,
       "dy": 0,
       "frames": [
         [
-          136,
-          211,
-          493,
-          418
+          43,
+          100,
+          591,
+          561
         ],
         [
-          742,
-          86,
-          676,
-          556
+          739,
+          22,
+          693,
+          641
         ],
         [
-          1530,
-          129,
-          555,
-          511
+          1529,
+          73,
+          603,
+          592
         ]
       ],
       "frameMax": [
-        676,
-        556
+        693,
+        641
       ],
-      "source": "../../../incoming/ART-VFX-DEFENSE-001/archive/v1/aegis.png",
+      "source": "../../../incoming/ART-VFX-DEFENSE-001/archive/r2/aegis.png",
       "background": "../../../incoming/ART-VFX-DEFENSE-001/reference/aegis-390.png",
       "sourceSize": [
         2172,
@@ -223,7 +223,7 @@
         0,
         255
       ],
-      "sha256": "1b557dea418efa3feb1b06ce8aae02cd228192e7d4c4ed8122d08da785553525",
+      "sha256": "dc4cb8816bf256f2276e019c9ecceaa605f535cfb8ae218139c7fc38bbbc5f90",
       "anchors": {
         "source": {
           "id": "weaver",
@@ -289,9 +289,11 @@
         ],
         "mode": "party",
         "targetId": "party"
-      }
+      },
+      "revision": "R2 aura"
     },
-    "revision": "R2 aura"
+    "revision": "R3 low aura",
+    "anchor": "feet"
   },
   {
     "skill": "rally",
@@ -463,35 +465,35 @@
   {
     "skill": "stonearmor",
     "thai": "เกราะหิน",
-    "identity": "Aura ศิลาทรงเหลี่ยมรอบนอก เว้นใบหน้าและชุดเดิม เพิ่ม barrier ให้ผู้ใช้",
-    "width": 110,
-    "height": 114,
+    "identity": "Aura ศิลาเหลี่ยมต่ำติดพื้นรอบเท้า ไม่เกินเข่า เพิ่ม barrier ให้ผู้ใช้",
+    "width": 88,
+    "height": 32,
     "placement": "source",
     "dx": 0,
     "dy": 0,
     "frames": [
       [
-        78,
-        136,
-        576,
-        540
+        40,
+        451,
+        647,
+        213
       ],
       [
-        745,
-        46,
-        707,
-        639
+        743,
+        429,
+        688,
+        245
       ],
       [
-        1546,
-        118,
-        573,
-        556
+        1484,
+        467,
+        654,
+        202
       ]
     ],
     "frameMax": [
-      707,
-      639
+      688,
+      245
     ],
     "source": "../../../incoming/ART-VFX-DEFENSE-001/source/stonearmor.png",
     "background": "../../../incoming/ART-VFX-DEFENSE-001/reference/stonearmor-390.png",
@@ -503,7 +505,7 @@
       0,
       255
     ],
-    "sha256": "86798db9c88cdbe9cbcf9981d36252e337a1dceabda33600f08537d4e95e32cb",
+    "sha256": "6c80000c8d06fa415412a2cb15446941ca6cdfaf33adb35ebd43731858dcd89e",
     "anchors": {
       "source": {
         "id": "brann",
@@ -534,37 +536,37 @@
     "previous": {
       "skill": "stonearmor",
       "thai": "เกราะหิน",
-      "identity": "แผ่นหินเหลี่ยมโอบช่องลำตัว เพิ่ม barrier ให้ผู้ใช้",
-      "width": 92,
-      "height": 92,
+      "identity": "Aura ศิลาทรงเหลี่ยมรอบนอก เว้นใบหน้าและชุดเดิม เพิ่ม barrier ให้ผู้ใช้",
+      "width": 110,
+      "height": 114,
       "placement": "source",
       "dx": 0,
-      "dy": 3,
+      "dy": 0,
       "frames": [
         [
-          79,
-          277,
-          558,
-          400
+          78,
+          136,
+          576,
+          540
         ],
         [
-          706,
-          63,
-          726,
-          606
+          745,
+          46,
+          707,
+          639
         ],
         [
-          1519,
-          99,
-          601,
-          560
+          1546,
+          118,
+          573,
+          556
         ]
       ],
       "frameMax": [
-        726,
-        606
+        707,
+        639
       ],
-      "source": "../../../incoming/ART-VFX-DEFENSE-001/archive/v1/stonearmor.png",
+      "source": "../../../incoming/ART-VFX-DEFENSE-001/archive/r2/stonearmor.png",
       "background": "../../../incoming/ART-VFX-DEFENSE-001/reference/stonearmor-390.png",
       "sourceSize": [
         2172,
@@ -574,7 +576,7 @@
         0,
         255
       ],
-      "sha256": "bbd28d5ee8902203036479bb95ea370b8b2f8f779c60ca2caee900b0a579b4be",
+      "sha256": "86798db9c88cdbe9cbcf9981d36252e337a1dceabda33600f08537d4e95e32cb",
       "anchors": {
         "source": {
           "id": "brann",
@@ -601,9 +603,11 @@
         ],
         "mode": "self",
         "targetId": "brann"
-      }
+      },
+      "revision": "R2 aura"
     },
-    "revision": "R2 aura"
+    "revision": "R3 low aura",
+    "anchor": "feet"
   },
   {
     "skill": "guardstone",
