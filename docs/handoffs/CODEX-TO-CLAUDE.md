@@ -1,5 +1,13 @@
 # Codex → Claude handoff
 
+## 2026-10-26 — Unit animation step 2: shared controller and existing-image fallback
+
+- Owner said “จัดไป” after step 1 and “ต่อ” to resume step 2. Branch `codex/unit-animation-controller`, base `e62292a`. PR #73: https://github.com/wnau34-nptrn/asterveil-fateweave/pull/73 (CI/merge status is recorded there); no visual approval of C5 or new sprite production inferred.
+- Added pure renderer-port controller and exhaustive ActionId pose map, class-specific basic attacks and enemy art/intent mapping. BattleScene owns lifecycle, starts gestures before VFX-specific returns, uses actual reaction recipients and settles transforms on existing cancellation boundaries. Idle is paused per actor and stays paused when down. No battle/save/balance changes.
+- Files: `src/game/visuals/unit-animation{,-map}.ts`, `src/game/scenes/BattleScene.ts`, `tests/unit-animation.test.ts`, `docs/validation/unit-animation-step2/README_TH.md`, this handoff. Local evidence: two reviewed 390px screenshots and a 3.6s/20fps virtual-clock capture clip (no sound); binary upload status is explicit in the validation note.
+- Validation: typecheck/lint/build pass; full Vitest 72 files/847 tests; focused 3 files/20 tests. Seven relevant Chromium presentation cases pass including a 1/1 rerun after Vite HMR interrupted the initial run. Covers authoritative contact, all four mode combinations, skip/resize/reload/hidden and motion toggles. Not a real-device/Safari claim.
+- Step 3 remains: generate the pilot sprite sheets and add frame/contact playback. No cloud-session creation capability is available here; do not launch unrelated P00/C12 work from this animation task.
+
 ## P00 publication complete — PR #72
 
 Merged into game branch as `aab276d9f7eb46f782039414a83b50c19beef8af`, head `e638f3b`. PR quality CI run 672 (`40245547986`) passed. Local baseline: full sim 28/28 and focused 55/55; final artifacts: 19 documentation/report files, 29 tracked links, hashes and whitespace validated. Issue #69 marks P00 complete and remains open. Next is P01-A/B in `docs/design/p00/SHARED_PROGRESSION_TEAM_SPEC_TH.md`; no runtime rules were changed by P00. No screenshots or human playtest were claimed. This note records delivery only.
