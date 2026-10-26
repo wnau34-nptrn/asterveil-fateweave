@@ -1,5 +1,10 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
+## 2026-10-27 — Rally เดิมไม่ผ่าน รอเลือก artwork R2 ใหม่
+
+เจ้าของไม่ชอบ Rally ในชุดคลิปและขอแก้ artwork แล้ว มีข้อเสนอริ้วพลังน้ำเงินแนวนอนช่วงขา3จังหวะที่ `docs/combat-presentation/rally-r2/README_TH.md` / `index.html` ต้นฉบับ/Promptอยู่ `incoming/ART-VFX-DEFENSE-001/proposals/rally-r2/` ยังไม่ได้แทน source/atlas/runtime/คลิปเดิม รอเลือกแบบก่อน promote/repack/อัด Rally ใหม่ใน PR#77 ใบเดิม ไม่ถือว่าท่าอื่นผ่านและยังไม่เริ่มตระกูล3
+
+
 ## 2026-10-27 — C5.2 runtime ครบแล้ว รอตรวจ 18 คลิป
 
 PR [#77](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/77) · `codex/vfx-family-2-defense` ต่อภาพครบ11ท่าเป็น atlas/module เดียวแล้ว เจ้าของเลือก aura R3 ช่วงขาและสั่งทำ runtime เมื่อ26ต.ค. ดูคลิปจริง18ไฟล์และหน้าเลือกใน `docs/combat-presentation/defense-slice/README_TH.md` / `index.html` ครอบคลุมรับแทน ดูดซับ กันล้ม สวน หลบ ยกเลิก fast/reduced/OS reduced motion ทดสอบ858unit + defense36 + legacy16 ผ่าน ไม่มีการแก้กฎ/เซฟ/สมดุล/เวลา playback ยังไม่มี owner clip approval, merge หรือ deploy หยุดรอเจ้าของตรวจใน PR ใบนี้ก่อนตระกูล3; ตรวจสถานะ CIตามลิงก์ในsliceก่อน merge

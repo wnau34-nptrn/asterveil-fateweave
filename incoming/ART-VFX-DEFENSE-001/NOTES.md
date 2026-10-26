@@ -27,3 +27,7 @@ Owner requested aura only around the legs, not up to the head. Redrew both Stone
 Owner selected the low R3 leg-aura direction and authorized implementing all eleven moves. `package.py` now builds one35-frame1584×1584 WebP/JSON atlas and generated profile table, keeping one scale/bottom anchor per strip. Guard/Rally/Bulwark/Guardian Stone placements were polished using their existing paintings. `production-sources.json` records original hashes/rectangles; `atlas-preview.png` labels are review-only. Sources remain untouched. Two shared approved blade paintings are packed for neutral response use; no sibling-repository content.
 
 Runtime and eighteen real390px clips: `docs/combat-presentation/defense-slice/README_TH.md`. This is awaiting owner motion review, not merge/publication approval. Do not start family3.
+
+## Rally artwork revision pending — 2026-10-27
+
+Owner rejected the existing Rally artwork. A new horizontal blue/silver/gold ribbon proposal is isolated in `proposals/rally-r2/`, with exact edit prompt and untouched RGBA original. Native390px composite/three-phase review is in `docs/combat-presentation/rally-r2/`. It is not promoted into `source/rally.png`, the production atlas/profile/module or any runtime clip. Other skill approvals are not implied. Continue Rally artwork review in PR#77 before repacking/re-recording it.

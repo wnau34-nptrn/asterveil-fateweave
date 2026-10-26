@@ -1,5 +1,15 @@
 # Codex → Claude handoff
 
+## 2026-10-27 — Owner rejected Rally; new artwork-only R2 proposal (PR #77)
+
+- Owner explicitly dislikes Rally and asked to adjust its artwork. Do not infer that other family-2 clips passed. Same branch `codex/vfx-family-2-defense` / PR #77, no merge or new family.
+- Generated a new three-phase transparent strip with ImageGen using the old Rally strip as palette/reference: removes branching crown-like upward silhouette, replaces it with blue horizontal unfolding ribbons, silver edges and restrained gold at leg level. Proposal footprint84×30px, unchanged mitigation semantics; no barrier/heal visual.
+- Candidate original/prompt are isolated under `incoming/ART-VFX-DEFENSE-001/proposals/rally-r2/`. `docs/combat-presentation/rally-r2/` provides metadata/hash, reproducible build/capture, a three-phase viewer with the existing shared compositor, native390px peak and1170×950board. Existing real screenshot/anchors reused; no new battle command or AI redraw of UI/characters.
+- Production `source/rally.png`, atlas/profile/module, gameplay/rules/saves/balance/timing and all runtime clips remain untouched pending artwork selection. Separate proposal metadata deliberately prevents normal packaging from selecting an unapproved candidate. Existing Rally clip is rejected reference only, not current owner approval.
+- Validation: genuine RGBA2172×724 with alpha0–255; source copied byte-for-byte. Browser capture at390px passes three phases, bare/weight/reset/phase controls, zero storage writes and no page errors; lint/whitespace pass. Inspected new strip and real-game composites. No new gameplay suite needed for artwork-only revision. Chromium cloud, not a real device.
+- Next after selection: archive/promote Rally source and exact prompt, update the main Rally profile to chosen84×30/dy26 placement, rebuild shared atlas, then record a new actual Rally clip and update its manifest entry without losing the other17 clips. Keep PR draft for requested clip review; no family3.
+
+
 ## 2026-10-27 — C5.2 runtime + 18 real clips delivered for owner review (PR #77)
 
 - Owner accepted the R3 aura around feet/shins on 2026-10-26 and explicitly said “จัดไป” after the runtime plan for all eleven moves. This is implementation authorization, not clip/merge approval. Same `codex/vfx-family-2-defense` and PR #77; merge commit: none, no publication or family 3. Final delivery is dated in Asia/Bangkok.

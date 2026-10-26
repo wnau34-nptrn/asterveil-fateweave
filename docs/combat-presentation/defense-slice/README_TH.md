@@ -2,6 +2,8 @@
 
 27 ตุลาคม 2026 (Asia/Bangkok) · PR [#77](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/77) · **ต่อ runtime แล้ว ยังไม่ใช่ owner motion approval และยังไม่ merge/เผยแพร่**
 
+**อัปเดต review:** เจ้าของไม่ชอบ Rally เดิมและขอปรับ artwork มี [ข้อเสนอ Rally R2 ใหม่](../rally-r2/README_TH.md) ให้เลือกก่อนแทน runtime คลิป Rally ในหน้านี้ยังเป็นแบบเดิมที่ไม่ผ่าน เก็บไว้เทียบ ไม่ใช่การอนุมัติท่าอื่น
+
 เจ้าของเลือกแนว aura R3 รอบเท้า/หน้าแข้งของ Stone Armour/Aegis และสั่ง “จัดไป” ให้ต่อ runtime หลังแผนเกลาภาพสี่ท่า รวม atlas/module ทดสอบ และส่งคลิปจริง การอนุมัตินี้ไม่ข้ามขั้นตรวจคลิปและไม่ครอบคลุมการเริ่มตระกูล 3
 
 เปิด [หน้าเลือกคลิป](index.html) เลือกดูทีละคลิปที่ขนาดจริง 390×844px มี normal/fast/reduced intensity/OS reduced motion และผลที่เกิดจริง คลิปไม่มีเสียงและไม่มีการสร้างภาพต่อสู้ปลอม
