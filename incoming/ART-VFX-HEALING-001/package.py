@@ -6,8 +6,37 @@ import hashlib
 
 ROOT = Path(__file__).resolve().parents[2]
 HERE = Path(__file__).resolve().parent
-boards = json.loads((ROOT/'docs/combat-presentation/healing-storyboards/manifest.json').read_text())
-cell_w, cell_h, gutter, cols, baseline, density = 384, 96, 4, 6, 84, 3
+# R2 preserves the original source sheets; find gutters instead of assuming perfectly uniform AI rows.
+def strips(filename, names, sizes):
+    source = HERE/'r2/source'/filename
+    im = Image.open(source).convert('RGBA'); alpha=im.getchannel('A')
+    assert alpha.getextrema()[0] == 0
+    bright=alpha.point(lambda p:255 if p>=96 else 0)
+    counts=[sum(bright.crop((0,y,im.width,y+1)).tobytes()) for y in range(im.height)]
+    cuts=[0]
+    for i in range(1,len(names)):
+        nominal=round(i*im.height/len(names));margin=round(im.height/len(names)*.4)
+        cuts.append(min(range(nominal-margin,nominal+margin),key=lambda y:(sum(counts[max(0,y-4):y+5]),abs(y-nominal))))
+    cuts.append(im.height)
+    result=[]
+    for row,(name,size) in enumerate(zip(names,sizes)):
+        frames=[]
+        for col in range(3):
+            x0,x1=round(col*im.width/3),round((col+1)*im.width/3)
+            y0,y1=cuts[row],cuts[row+1]
+            box=bright.crop((x0,y0,x1,y1)).getbbox();assert box,(name,col)
+            left,top,right,bottom=box
+            frames.append(dict(cell=[x0,y0,x1-x0,y1-y0],anchor=[(left+right)/2,bottom],brightSize=[right-left,bottom-top]))
+        result.append(dict(skill=name,source=str(source.relative_to(ROOT)),width=size[0],height=size[1],frames=frames,
+            frameMax=[max(f['brightSize'][i] for f in frames) for i in range(2)]))
+    print(filename,'row cuts',cuts)
+    return result
+boards=strips('cast-six-skills.png',['heal','prayer','rouse','revive','bless','mend'],[(152,46),(148,40),(268,42),(156,50),(124,42),(148,42)])
+ticks=strips('upkeep-two-skills.png',['bless','mend'],[(132,38),(144,38)])
+for board in boards:
+    if board['skill'] in ('bless','mend'):board['tick']=next(t for t in ticks if t['skill']==board['skill'])
+(HERE/'r2/manifest.json').write_text(json.dumps(boards,indent=2)+'\n')
+cell_w, cell_h, gutter, cols, baseline, density = 576, 288, 4, 6, 216, 3
 items, provenance = [], []
 for board in boards:
     variants = [(board['skill'], board, None)]
@@ -19,7 +48,7 @@ for board in boards:
         # A quiet cyan seed acknowledges a real barrier, never the healing blossom.
         variants.append(('barrier', board, None))
     for name, art, half in variants:
-        source = (ROOT/'docs/combat-presentation/healing-storyboards'/art['source']).resolve()
+        source = ROOT/art['source']
         image = Image.open(source).convert('RGBA')
         fx = art['width']/art['frameMax'][0]*density
         fy = art['height']/art['frameMax'][1]*density
@@ -33,10 +62,8 @@ for board in boards:
             piece = image.crop((x+left, y, x+right, y+h)).resize((round((right-left)*fx), round(h*fy)), Image.Resampling.LANCZOS)
             layer = Image.new('RGBA', (cell_w, cell_h))
             layer.paste(piece, (round(cell_w/2+(left-ax)*fx), round(baseline-ay*fy)))
-            # Same protected floor band as the selected 390px review; no clothing/HP paint.
-            projected = Image.new('RGBA', layer.size)
-            projected.paste(layer.crop((0, 27, cell_w, 90)), (0, 27))
-            items.append((name+'_'+phase, projected))
+            # Keep the painted feathered glow; the renderer places this behind the unit, at its soles.
+            items.append((name+'_'+phase, layer))
         provenance.append(dict(strip=name, source=str(source.relative_to(ROOT)), sha256=hashlib.sha256(source.read_bytes()).hexdigest(),
             scaleX=fx, scaleY=fy, half=half, frames=art['frames']))
 stride_w, stride_h = cell_w+2*gutter, cell_h+2*gutter
@@ -48,7 +75,8 @@ for i, (name, image) in enumerate(items):
     frames[name] = dict(frame=dict(x=x, y=y, w=cell_w, h=cell_h), rotated=False, trimmed=False,
         sourceSize=dict(w=cell_w, h=cell_h), spriteSourceSize=dict(x=0, y=0, w=cell_w, h=cell_h))
 out = ROOT/'public/assets/fx'
-atlas.save(out/'healing_fx.webp', quality=92, method=6, exact=True)
+atlas.save(out/'.healing_fx.next.webp', quality=92, method=6, exact=True)
+(out/'.healing_fx.next.webp').replace(out/'healing_fx.webp')
 (out/'healing_fx.json').write_text(json.dumps(dict(frames=frames, meta=dict(app='ART-VFX-HEALING-001', image='healing_fx.webp',
     size=dict(w=atlas.width, h=atlas.height), scale='1', baseline=baseline/cell_h, density=density)), indent=2)+'\n')
 (HERE/'production-sources.json').write_text(json.dumps(provenance, indent=2)+'\n')

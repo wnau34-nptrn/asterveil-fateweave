@@ -1,5 +1,12 @@
 # ART-VFX-HEALING-001 · original concept sources
 
+## R2 — owner requested stronger light, feathered tails and true unit alignment
+
+R1 wording below is historical. R2 source sheets/prompts are in `r2/`; original RGBA files remain untouched there and generated originals remain in `/workspace/generated_images`. The packager discovers real bright-row gutters (the edited sheet is not perfectly uniform), uses one shared X/Y transform per strip, retains soft painted glow, and packs30frames3504×1480. Source hashes and portable cell/pivot metadata are in `r2/manifest.json` and `production-sources.json`.
+
+Runtime core follows the rendered unit's sole transform, including sprite idle offsets, unit motion and field shake; no+34px panel offset or sideways+/-20px. Main paint and two delayed feathered tails sit behind the unit; a cropped6px base rim sits immediately below its soles in front. Tail expansion/rise stays unit-relative and ends inside existing playback time. OS reduced motion is a static core/rim without moving tails. Every image belongs to existing scene cleanup. No rules/events/state changed; Rouse remains guard and Bless/Mend cast remain non-healing.
+
+
 2026-10-27 · ImageGen originals; owner selected R1 on2026-10-27 (“ดำเนินการขั้นต่อไปได้”). Runtime clips still require review in PR78.
 
 - `source/cast-six-skills.png`: original1024×1536 RGBA,3columns×6rows heal/prayer/rouse/revive/bless/mend; left→right preparation/peak/dissolution.

@@ -1,5 +1,9 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
+## 2026-10-27 — ตระกูล3 R2 แก้แสงเบา/หางฟุ้ง/ตำแหน่งunit
+
+เจ้าของติติงR1ว่าแสงเบา ไม่มีปลายฟุ้งตามหลัง และไม่ตรงunit จึงแก้ในbranch/PR78เดิม ยึดsoleจากtransformตัวที่วาดจริงรวมidle/pose/recoil/fieldshakeทุกเฟรม แสงหลักและtail+wakeอยู่หลังตัว ขอบหน้าเฉพาะ6pxใต้เท้า ยกเลิกoffset+34px/ขยับข้าง20px/แถบบาง18px เพิ่มfootprintและImageGenปลายฟุ้งใน `incoming/ART-VFX-HEALING-001/r2/` ไม่แก้event/rules/save/balance/playback Rouseยังguard; Bless/Mendcastยังไม่ฮีล [คลิป/หลักฐานR2](../combat-presentation/healing-slice/README_TH.md) รอเจ้าของตรวจmotion ไม่merge/เผยแพร่/เริ่มตระกูล4จากข้อความอนุมัติartworkR1เก่า
+
 ## 2026-10-27 — ตระกูล3ต่อruntimeแล้ว รอตรวจคลิปในPR78
 
 เจ้าของเลือกR1ด้วย “ดำเนินการขั้นต่อไปได้” หลังภาพ6ท่า ต่อatlas/moduleเดียวครบheal/prayer/rouse/revive/bless/mendใน `codex/vfx-family-3-healing` / [draftPR78](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/78) แล้ว [หน้าเลือก29คลิปจริง390px](../combat-presentation/healing-slice/index.html) / [ผลตรวจและข้อจำกัด](../combat-presentation/healing-slice/README_TH.md) แยกcast/tickจริง Rouseguard/allรับแทนศัตรู2คน ไม่ซ้ำdefense; เมล็ด/วงเล็บแสงขยับ20pxหลบตราสถานะ ไม่แตะชุด/HP ไม่แก้rules/save/balance/playback875unit/typecheck/lint/buildผ่าน พร้อมfocusedbrowser/optional-unit/fallback/cleanup การเลือกartworkยังไม่ใช่motion approval หยุดที่PRเดิมก่อนmerge/เผยแพร่/ตระกูล4

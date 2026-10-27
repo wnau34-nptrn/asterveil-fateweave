@@ -1,6 +1,6 @@
 # Fateweave — แผนพัฒนารวมจากเกมปัจจุบันสู่ระบบใหม่
 
-สถานะ VFX 27ต.ค.2026: ตระกูล2 merge/Pagesผ่านตามrelease proofแล้ว; ตระกูล3เจ้าของเลือกartwork R1แล้ว ต่อruntime6ท่าในatlas/moduleเดียว แยกBless/Mend cast/tick และRouse guard/all; [คลิปจริง/ผลตรวจรอmotion review](combat-presentation/healing-slice/README_TH.md) ในbranch `codex/vfx-family-3-healing` / draftPR#78เดิม ยังไม่merge/เผยแพร่/เริ่มตระกูล4 ไม่เปลี่ยนbacklog P00–P11จากงานภาพนี้
+สถานะ VFX 27ต.ค.2026: ตระกูล2 merge/Pagesผ่านตามrelease proofแล้ว; ตระกูล3เจ้าของเลือกartwork R1แล้ว ต่อruntime6ท่าในatlas/moduleเดียว แยกBless/Mend cast/tick และRouse guard/all; ล่าสุดR2แก้แสงเบา/หางฟุ้ง/ยึดsoleของunitที่กำลังวาดจริงตามfeedbackเจ้าของ; [คลิปจริง/ผลตรวจรอmotion review](combat-presentation/healing-slice/README_TH.md) ในbranch `codex/vfx-family-3-healing` / draftPR#78เดิม ยังไม่merge/เผยแพร่/เริ่มตระกูล4 ไม่เปลี่ยนbacklog P00–P11จากงานภาพนี้
 
 วันที่ 25 ตุลาคม 2026 (UTC) · ฉบับ 1 · สถานะ: แผนส่งมอบและ backlog สำหรับพัฒนาต่อ
 

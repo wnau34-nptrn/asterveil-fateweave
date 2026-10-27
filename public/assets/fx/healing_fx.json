@@ -4,600 +4,600 @@
       "frame": {
         "x": 4,
         "y": 4,
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       },
       "rotated": false,
       "trimmed": false,
       "sourceSize": {
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       },
       "spriteSourceSize": {
         "x": 0,
         "y": 0,
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       }
     },
     "heal_peak": {
       "frame": {
-        "x": 396,
+        "x": 588,
         "y": 4,
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       },
       "rotated": false,
       "trimmed": false,
       "sourceSize": {
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       },
       "spriteSourceSize": {
         "x": 0,
         "y": 0,
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       }
     },
     "heal_tail": {
       "frame": {
-        "x": 788,
+        "x": 1172,
         "y": 4,
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       },
       "rotated": false,
       "trimmed": false,
       "sourceSize": {
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       },
       "spriteSourceSize": {
         "x": 0,
         "y": 0,
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       }
     },
     "prayer_prepare": {
       "frame": {
-        "x": 1180,
+        "x": 1756,
         "y": 4,
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       },
       "rotated": false,
       "trimmed": false,
       "sourceSize": {
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       },
       "spriteSourceSize": {
         "x": 0,
         "y": 0,
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       }
     },
     "prayer_peak": {
       "frame": {
-        "x": 1572,
+        "x": 2340,
         "y": 4,
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       },
       "rotated": false,
       "trimmed": false,
       "sourceSize": {
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       },
       "spriteSourceSize": {
         "x": 0,
         "y": 0,
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       }
     },
     "prayer_tail": {
       "frame": {
-        "x": 1964,
+        "x": 2924,
         "y": 4,
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       },
       "rotated": false,
       "trimmed": false,
       "sourceSize": {
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       },
       "spriteSourceSize": {
         "x": 0,
         "y": 0,
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       }
     },
     "rouse_protector_prepare": {
       "frame": {
         "x": 4,
-        "y": 108,
-        "w": 384,
-        "h": 96
+        "y": 300,
+        "w": 576,
+        "h": 288
       },
       "rotated": false,
       "trimmed": false,
       "sourceSize": {
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       },
       "spriteSourceSize": {
         "x": 0,
         "y": 0,
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       }
     },
     "rouse_protector_peak": {
       "frame": {
-        "x": 396,
-        "y": 108,
-        "w": 384,
-        "h": 96
+        "x": 588,
+        "y": 300,
+        "w": 576,
+        "h": 288
       },
       "rotated": false,
       "trimmed": false,
       "sourceSize": {
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       },
       "spriteSourceSize": {
         "x": 0,
         "y": 0,
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       }
     },
     "rouse_protector_tail": {
       "frame": {
-        "x": 788,
-        "y": 108,
-        "w": 384,
-        "h": 96
+        "x": 1172,
+        "y": 300,
+        "w": 576,
+        "h": 288
       },
       "rotated": false,
       "trimmed": false,
       "sourceSize": {
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       },
       "spriteSourceSize": {
         "x": 0,
         "y": 0,
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       }
     },
     "rouse_ally_prepare": {
       "frame": {
-        "x": 1180,
-        "y": 108,
-        "w": 384,
-        "h": 96
+        "x": 1756,
+        "y": 300,
+        "w": 576,
+        "h": 288
       },
       "rotated": false,
       "trimmed": false,
       "sourceSize": {
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       },
       "spriteSourceSize": {
         "x": 0,
         "y": 0,
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       }
     },
     "rouse_ally_peak": {
       "frame": {
-        "x": 1572,
-        "y": 108,
-        "w": 384,
-        "h": 96
+        "x": 2340,
+        "y": 300,
+        "w": 576,
+        "h": 288
       },
       "rotated": false,
       "trimmed": false,
       "sourceSize": {
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       },
       "spriteSourceSize": {
         "x": 0,
         "y": 0,
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       }
     },
     "rouse_ally_tail": {
       "frame": {
-        "x": 1964,
-        "y": 108,
-        "w": 384,
-        "h": 96
+        "x": 2924,
+        "y": 300,
+        "w": 576,
+        "h": 288
       },
       "rotated": false,
       "trimmed": false,
       "sourceSize": {
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       },
       "spriteSourceSize": {
         "x": 0,
         "y": 0,
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       }
     },
     "revive_prepare": {
       "frame": {
         "x": 4,
-        "y": 212,
-        "w": 384,
-        "h": 96
+        "y": 596,
+        "w": 576,
+        "h": 288
       },
       "rotated": false,
       "trimmed": false,
       "sourceSize": {
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       },
       "spriteSourceSize": {
         "x": 0,
         "y": 0,
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       }
     },
     "revive_peak": {
       "frame": {
-        "x": 396,
-        "y": 212,
-        "w": 384,
-        "h": 96
+        "x": 588,
+        "y": 596,
+        "w": 576,
+        "h": 288
       },
       "rotated": false,
       "trimmed": false,
       "sourceSize": {
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       },
       "spriteSourceSize": {
         "x": 0,
         "y": 0,
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       }
     },
     "revive_tail": {
       "frame": {
-        "x": 788,
-        "y": 212,
-        "w": 384,
-        "h": 96
+        "x": 1172,
+        "y": 596,
+        "w": 576,
+        "h": 288
       },
       "rotated": false,
       "trimmed": false,
       "sourceSize": {
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       },
       "spriteSourceSize": {
         "x": 0,
         "y": 0,
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       }
     },
     "bless_prepare": {
       "frame": {
-        "x": 1180,
-        "y": 212,
-        "w": 384,
-        "h": 96
+        "x": 1756,
+        "y": 596,
+        "w": 576,
+        "h": 288
       },
       "rotated": false,
       "trimmed": false,
       "sourceSize": {
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       },
       "spriteSourceSize": {
         "x": 0,
         "y": 0,
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       }
     },
     "bless_peak": {
       "frame": {
-        "x": 1572,
-        "y": 212,
-        "w": 384,
-        "h": 96
+        "x": 2340,
+        "y": 596,
+        "w": 576,
+        "h": 288
       },
       "rotated": false,
       "trimmed": false,
       "sourceSize": {
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       },
       "spriteSourceSize": {
         "x": 0,
         "y": 0,
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       }
     },
     "bless_tail": {
       "frame": {
-        "x": 1964,
-        "y": 212,
-        "w": 384,
-        "h": 96
+        "x": 2924,
+        "y": 596,
+        "w": 576,
+        "h": 288
       },
       "rotated": false,
       "trimmed": false,
       "sourceSize": {
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       },
       "spriteSourceSize": {
         "x": 0,
         "y": 0,
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       }
     },
     "bless_tick_prepare": {
       "frame": {
         "x": 4,
-        "y": 316,
-        "w": 384,
-        "h": 96
+        "y": 892,
+        "w": 576,
+        "h": 288
       },
       "rotated": false,
       "trimmed": false,
       "sourceSize": {
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       },
       "spriteSourceSize": {
         "x": 0,
         "y": 0,
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       }
     },
     "bless_tick_peak": {
       "frame": {
-        "x": 396,
-        "y": 316,
-        "w": 384,
-        "h": 96
+        "x": 588,
+        "y": 892,
+        "w": 576,
+        "h": 288
       },
       "rotated": false,
       "trimmed": false,
       "sourceSize": {
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       },
       "spriteSourceSize": {
         "x": 0,
         "y": 0,
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       }
     },
     "bless_tick_tail": {
       "frame": {
-        "x": 788,
-        "y": 316,
-        "w": 384,
-        "h": 96
+        "x": 1172,
+        "y": 892,
+        "w": 576,
+        "h": 288
       },
       "rotated": false,
       "trimmed": false,
       "sourceSize": {
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       },
       "spriteSourceSize": {
         "x": 0,
         "y": 0,
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       }
     },
     "barrier_prepare": {
       "frame": {
-        "x": 1180,
-        "y": 316,
-        "w": 384,
-        "h": 96
+        "x": 1756,
+        "y": 892,
+        "w": 576,
+        "h": 288
       },
       "rotated": false,
       "trimmed": false,
       "sourceSize": {
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       },
       "spriteSourceSize": {
         "x": 0,
         "y": 0,
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       }
     },
     "barrier_peak": {
       "frame": {
-        "x": 1572,
-        "y": 316,
-        "w": 384,
-        "h": 96
+        "x": 2340,
+        "y": 892,
+        "w": 576,
+        "h": 288
       },
       "rotated": false,
       "trimmed": false,
       "sourceSize": {
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       },
       "spriteSourceSize": {
         "x": 0,
         "y": 0,
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       }
     },
     "barrier_tail": {
       "frame": {
-        "x": 1964,
-        "y": 316,
-        "w": 384,
-        "h": 96
+        "x": 2924,
+        "y": 892,
+        "w": 576,
+        "h": 288
       },
       "rotated": false,
       "trimmed": false,
       "sourceSize": {
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       },
       "spriteSourceSize": {
         "x": 0,
         "y": 0,
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       }
     },
     "mend_prepare": {
       "frame": {
         "x": 4,
-        "y": 420,
-        "w": 384,
-        "h": 96
+        "y": 1188,
+        "w": 576,
+        "h": 288
       },
       "rotated": false,
       "trimmed": false,
       "sourceSize": {
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       },
       "spriteSourceSize": {
         "x": 0,
         "y": 0,
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       }
     },
     "mend_peak": {
       "frame": {
-        "x": 396,
-        "y": 420,
-        "w": 384,
-        "h": 96
+        "x": 588,
+        "y": 1188,
+        "w": 576,
+        "h": 288
       },
       "rotated": false,
       "trimmed": false,
       "sourceSize": {
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       },
       "spriteSourceSize": {
         "x": 0,
         "y": 0,
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       }
     },
     "mend_tail": {
       "frame": {
-        "x": 788,
-        "y": 420,
-        "w": 384,
-        "h": 96
+        "x": 1172,
+        "y": 1188,
+        "w": 576,
+        "h": 288
       },
       "rotated": false,
       "trimmed": false,
       "sourceSize": {
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       },
       "spriteSourceSize": {
         "x": 0,
         "y": 0,
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       }
     },
     "mend_tick_prepare": {
       "frame": {
-        "x": 1180,
-        "y": 420,
-        "w": 384,
-        "h": 96
+        "x": 1756,
+        "y": 1188,
+        "w": 576,
+        "h": 288
       },
       "rotated": false,
       "trimmed": false,
       "sourceSize": {
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       },
       "spriteSourceSize": {
         "x": 0,
         "y": 0,
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       }
     },
     "mend_tick_peak": {
       "frame": {
-        "x": 1572,
-        "y": 420,
-        "w": 384,
-        "h": 96
+        "x": 2340,
+        "y": 1188,
+        "w": 576,
+        "h": 288
       },
       "rotated": false,
       "trimmed": false,
       "sourceSize": {
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       },
       "spriteSourceSize": {
         "x": 0,
         "y": 0,
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       }
     },
     "mend_tick_tail": {
       "frame": {
-        "x": 1964,
-        "y": 420,
-        "w": 384,
-        "h": 96
+        "x": 2924,
+        "y": 1188,
+        "w": 576,
+        "h": 288
       },
       "rotated": false,
       "trimmed": false,
       "sourceSize": {
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       },
       "spriteSourceSize": {
         "x": 0,
         "y": 0,
-        "w": 384,
-        "h": 96
+        "w": 576,
+        "h": 288
       }
     }
   },
@@ -605,11 +605,11 @@
     "app": "ART-VFX-HEALING-001",
     "image": "healing_fx.webp",
     "size": {
-      "w": 2352,
-      "h": 520
+      "w": 3504,
+      "h": 1480
     },
     "scale": "1",
-    "baseline": 0.875,
+    "baseline": 0.75,
     "density": 3
   }
 }

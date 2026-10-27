@@ -10,6 +10,7 @@ export const isHealingSkill = (action: string | undefined): action is HealingSki
 export interface HealingCue { kind: 'cast' | 'tick' | 'redirect' | 'barrier'; skill: HealingSkill; sourceId: string; targetId: string; event: BattleEvent }
 export interface HealingPoint { x: number; y: number; footY: number }
 export type HealingLookup = (id: string) => HealingPoint | undefined;
+export interface HealingContext extends FxContext { addRim?(image: Phaser.GameObjects.Image): void }
 
 // Upkeep shares the ending actor's stage. Its existing event discriminator and authoritative
 // pre-upkeep snapshot identify the real owner; the selected action/target cannot identify it.
@@ -45,46 +46,68 @@ export function healingCues(turn: TurnStage): HealingCue[] {
   }
   return cues;
 }
-const scale = (ctx: FxContext) => ctx.scale / (111 / 96);
-const gestures: Record<HealingSkill, number> = { heal: .04, prayer: .07, rouse: 0, revive: .09, bless: .025, mend: .06 };
-function paint(ctx: FxContext, at: HealingPoint, strip: string, phase: string): Phaser.GameObjects.Image {
+const scale = (ctx: HealingContext) => ctx.scale / (111 / 96);
+const gestures: Record<HealingSkill, number> = { heal: .06, prayer: .08, rouse: .02, revive: .1, bless: .04, mend: .08 };
+// The core is centred on the rendered soles, not below the HP/status panel.
+// Follow is refreshed after unit animation, so cast/reaction/idle offsets never detach the light.
+function paint(ctx: HealingContext, lookup: HealingLookup, id: string, strip: string, phase: string, rim = false): Phaser.GameObjects.Image | undefined {
+  const at = lookup(id); if (!at) return;
   const s = scale(ctx);
-  // Real buff badges occupy the floor centre. Keep narrow seeds/brackets beside them.
-  const offset = strip === 'rouse_protector' ? -20 : strip === 'rouse_ally' || strip === 'bless' || strip === 'barrier' ? 20 : 0;
-  const image = ctx.scene.add.image(at.x + offset * s, at.footY + 34 * s, HEALING_ATLAS, `${strip}_${phase}`)
-    .setOrigin(.5, .875).setDisplaySize(128 * s, 32 * s);
-  ctx.add(image); return image;
+  const image = ctx.scene.add.image(at.x, at.footY, HEALING_ATLAS, `${strip}_${phase}`)
+    .setOrigin(.5, .75).setDisplaySize(192 * s, 96 * s);
+  image.setData('healingRise', 0); image.setData('healingRim', rim);
+  if (rim) image.setCrop(0, 198, 576, 18);
+  const follow = () => {
+    const point = lookup(id); if (!point || !image.active) return;
+    image.setPosition(point.x, point.footY + (rim ? 6 * s : 0) - (image.getData('healingRise') as number) * s);
+  };
+  image.setData('healingFollow', follow);
+  follow();
+  if (rim && ctx.addRim) ctx.addRim(image); else ctx.add(image);
+  return image;
 }
-export function healingPrepare(ctx: FxContext, cues: readonly HealingCue[], lookup: HealingLookup, contactMs: number): void {
+export function healingPrepare(ctx: HealingContext, cues: readonly HealingCue[], lookup: HealingLookup, contactMs: number): void {
   if (ctx.reduced) return;
   const cue = cues.find(c => c.kind === 'cast') ?? cues.find(c => c.kind === 'barrier');
   if (!cue) return;
-  const at = lookup(cue.sourceId); if (!at) return;
   const strip = cue.kind === 'barrier' ? 'barrier' : cue.skill === 'rouse' ? 'rouse_protector' : cue.skill;
-  const image = paint(ctx, at, strip, 'prepare').setAlpha(.18);
-  if (cue.kind === 'barrier') image.setTint(0x8addf5);
-  ctx.scene.tweens.add({ targets: image, alpha: ctx.quiet ? .42 : .72, duration: Math.max(1, contactMs), ease: 'Sine.In', onComplete: () => image.destroy() });
+  const image = paint(ctx, lookup, cue.sourceId, strip, 'prepare'); if (!image) return;
+  image.setAlpha(.3);
+  const rim = paint(ctx, lookup, cue.sourceId, strip, 'prepare', true)?.setAlpha(.3);
+  if (cue.kind === 'barrier') { image.setTint(0x8addf5); rim?.setTint(0x8addf5); }
+  ctx.scene.tweens.add({ targets: [image, ...(rim ? [rim] : [])], alpha: ctx.quiet ? .6 : .88, duration: Math.max(1, contactMs), ease: 'Sine.In', onComplete: () => { image.destroy(); rim?.destroy(); } });
 }
-export function healingContact(ctx: FxContext, cue: HealingCue, lookup: HealingLookup, life: number): void {
-  const at = lookup(cue.targetId); if (!at) return;
+export function healingContact(ctx: HealingContext, cue: HealingCue, lookup: HealingLookup, life: number): void {
   const strip = cue.kind === 'barrier' ? 'barrier' : cue.skill === 'rouse' ? cue.kind === 'redirect' ? 'rouse_protector' : 'rouse_ally'
     : cue.kind === 'tick' && cue.skill !== 'prayer' ? `${cue.skill}_tick` : cue.skill;
-  const draw = (point: HealingPoint, name: string) => {
-    const opacity = ctx.reduced ? .55 : ctx.quiet ? .6 : .94;
-    const peak = paint(ctx, point, name, 'peak').setAlpha(opacity);
-    if (cue.kind === 'barrier') peak.setTint(0x8addf5);
+  const draw = (id: string, name: string) => {
+    const opacity = ctx.reduced ? .7 : ctx.quiet ? .74 : 1;
+    const peak = paint(ctx, lookup, id, name, 'peak'); if (!peak) return;
+    peak.setAlpha(opacity);
+    const rim = paint(ctx, lookup, id, name, 'peak', true)?.setAlpha(opacity);
+    if (cue.kind === 'barrier') { peak.setTint(0x8addf5); rim?.setTint(0x8addf5); }
     if (ctx.reduced) return;
-    const tail = paint(ctx, point, name, 'tail').setAlpha(0);
-    if (cue.kind === 'barrier') tail.setTint(0x8addf5);
-    const sx = peak.scaleX, duration = Math.max(1, Math.min(life, 430));
+    const tail = paint(ctx, lookup, id, name, 'tail')!;
+    const wake = paint(ctx, lookup, id, name, 'tail')!;
+    tail.setAlpha(0); wake.setAlpha(0);
+    if (cue.kind === 'barrier') { tail.setTint(0x8addf5); wake.setTint(0x8addf5); }
+    const sx = peak.scaleX, sy = peak.scaleY, duration = Math.max(1, life);
+    // A clear core holds first; feathered tail and a delayed softer wake dissolve behind it.
+    // Timing remains inside the existing stage, with no new hit, heal or delayed callback.
     ctx.scene.tweens.add({ targets: peak, alpha: 0, duration, onUpdate: tween => {
-      if (!peak.active || !tail.active) return;
-      const p = tween.progress, blend = Phaser.Math.Clamp((p - .4) / .3, 0, 1);
-      peak.scaleX = sx * (1 - gestures[cue.skill] * (ctx.quiet ? .4 : 1) * (1 - Math.min(1, p / .4)) ** 3);
-      tail.scaleX = peak.scaleX;
-      peak.alpha = opacity * (1 - blend); tail.alpha = (ctx.quiet ? .22 : .38) * blend * (1 - Phaser.Math.Clamp((p - .75) / .25, 0, 1));
-    }, onComplete: () => { peak.destroy(); tail.destroy(); } });
+      if (!peak.active || !tail.active || !wake.active) return;
+      const p = tween.progress, blend = Phaser.Math.Clamp((p - .4) / .32, 0, 1);
+      const drift = ctx.quiet ? .35 : 1;
+      peak.scaleX = sx * (1 - gestures[cue.skill] * drift * (1 - Math.min(1, p / .35)) ** 3);
+      peak.alpha = opacity * (1 - blend); if (rim) rim.alpha = peak.alpha;
+      const trailing = Phaser.Math.Clamp((p - .2) / .3, 0, 1) * (1 - Phaser.Math.Clamp((p - .65) / .35, 0, 1));
+      const delayed = Phaser.Math.Clamp((p - .38) / .3, 0, 1) * (1 - Phaser.Math.Clamp((p - .72) / .28, 0, 1));
+      tail.setScale(sx * (1 + .4 * p * drift), sy * (1 + .18 * p * drift));
+      wake.setScale(sx * (1.12 + .35 * p * drift), sy * (1.12 + .2 * p * drift));
+      tail.setData('healingRise', p * 7 * drift); wake.setData('healingRise', p * 13 * drift);
+      tail.alpha = (ctx.quiet ? .55 : 1) * trailing; wake.alpha = (ctx.quiet ? .2 : .42) * delayed;
+    }, onComplete: () => { peak.destroy(); rim?.destroy(); tail.destroy(); wake.destroy(); } });
   };
-  draw(at, strip);
-  if (cue.skill === 'rouse' && cue.kind === 'cast') { const source = lookup(cue.sourceId); if (source) draw(source, 'rouse_protector'); }
+  draw(cue.targetId, strip);
+  if (cue.skill === 'rouse' && cue.kind === 'cast') draw(cue.sourceId, 'rouse_protector');
 }
