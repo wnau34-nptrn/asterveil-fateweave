@@ -1,5 +1,9 @@
 # Codex → Claude handoff
 
+## 2026-10-27 — Equipment market deferral published
+
+PR #81 merged as `93c9654fe9a3eb5677ccea21989eb0c087a25835`, head `ba4af05`; quality CI run719 (`40452392740`) passed. Seven Markdown files, 49 local links and status checks passed: 49 registered IDs/47 main-plan/2 deferred. Issue #69 now removes checkboxes from deferred P09-04/P11-06 (not completed) and updates P04-06 to farming/quest economy. Owner accepted deferring player equipment/material trading; chat, board, World Boss and NPC shops remain in scope. No runtime/save/balance/inventory changes or local gameplay tests/screenshots. Prior market tax/binding suggestions are superseded. P01 remains next for the base game.
+
 ## 2026-10-27 — Owner accepted deferring the equipment market
 
 Owner authorized the recommendation to preserve farming and defer player-to-player equipment trading. Updated CHAT_MARKET_QUEST_BOARD_TH, development plan, Game Detail and D41: P09-04/P11-06 are deferred (not completed); P04-06 now audits salvage/crafting/targeted farming/gear sharing and quest economy. 49 registered IDs = 47 main-plan + 2 deferred. No equipment/material fixed-price/auction/barter/direct-transfer implementation in the first release; cosmetic trading is only a possible future review, not an authorized substitute feature.
