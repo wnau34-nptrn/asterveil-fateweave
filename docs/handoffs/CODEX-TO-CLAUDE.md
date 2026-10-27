@@ -1,5 +1,14 @@
 # Codex → Claude handoff
 
+## 2026-10-27 — Next-chat handoff for C5.6 alchemy (documentation only)
+
+Owner requested a handoff for a new chat after approving/releasing family5. Added C5-FAMILY-6-ALCHEMY-HANDOFF-TH.md with copy-ready Thai opening prompt for acid/bomb/smoke/catalyst/haste/fury; verified Pages40524232794 still success for merge3196e17 and fetched gamebaseaaf9ff4. The new chat must fetch again, inspect actual resolver events with legal commands, propose6moves×3phase art at390px, then runtime after artwork selection and actualclips before merge/publication/family7. One new PR; no family6art/runtime/branch/PR created in this task.
+
+Mechanic inspection notes: Acid damage precedes corrosion and acidspread does not add damage; Bomb hits all living foes; Smoke weakens rather than cancels; Catalyst spends corrosion and reads actualstrike amount including its existing bonus; Haste can move an unacted ally next this round (no extra turn); Fury empowers/exposes; chainReaction can emit Alchemist-owned corrode events on another actor’s stage. These are inspection notes, not newly executed family6 fixture/tests. Preserve five existing source VFX gates, timing/cleanup/OSmotion and rawframe/PTS/state-equality workflow. No rules/save/content/balance changes. Preserved concurrent all-unit animation plan and other scope.
+
+Files: newfamily6handoff, NEW-CHAT, developmentstatus, C5queue and thishandoff. Checked relative links andgit diff --check; no gameplaytests for docs-only work. Commit/push directly on game branch [skip ci]; no new PR/merge/game deployment. No next family implementation started automatically.
+
+
 ## 2026-10-27 — C5.5 owner approved; PR85 merged and published
 
 Owner reviewed33actual390px clips and said “นำเข้าเกมได้”, approving family5 motion/merge/publication. PR85 merged3196e1774ad272045bfbcd2e50f54bf5fab13213 after quality40514139155 and browser40514139036 success at validated91a48c1. SourceVFX157,prechecks3,production249passed/349skipped;910unit/78files,typecheck/lint/build passed. Fetched gamebase35e39af immediately before merge; no conflicts. Approved runtime049c201 src/public/atlas match validated head and merge; tests tree also matches validated head. No core/save/content/balance/playback timing changes.

@@ -1,6 +1,6 @@
 # Fateweave — แผนพัฒนารวมจากเกมปัจจุบันสู่ระบบใหม่
 
-C5.5ล่าสุด: เจ้าของอนุญาตขั้นถัดไปหลังตระกูล4เผยแพร่แล้ว เริ่มartwork R1ทุบ/แผ่นดิน4ท่า/3จังหวะ/15กรณีจริง45ภาพ390px รอเลือกก่อนruntimeในbranch codex/vfx-family-5-earth หนึ่งdraft PR [ภาพ/หลักฐาน](combat-presentation/earth-storyboards/README_TH.md) / [handoff](handoffs/C5-FAMILY-5-EARTH-HANDOFF-TH.md) ไม่เริ่มตระกูล6
+C5.5ล่าสุด: เจ้าของอนุมัติ33คลิป “นำเข้าเกมได้” PR85 merged3196e17 Pages40524232794เผยแพร่successครบbuild/browser4shards/deploy27ต.ค.2026เวลา22:05:38กรุงเทพฯ [releaseproof](validation/earth-vfx-release/README_TH.md) เตรียม[handoffแชตใหม่ตระกูล6ขวดเล่นแร่](handoffs/C5-FAMILY-6-ALCHEMY-HANDOFF-TH.md)แล้ว ยังไม่เริ่มภาพ/runtimeตระกูล6 ไม่แก้rules/save/content/balance/playback timing
 
 C5.4ล่าสุด: เจ้าของให้ผ่าน40คลิปด้วย “เอาเข้าเกมได้” PR84 merged7c392b5หลังCIผ่าน Pages40503739046เผยแพร่successครบbuild+4browser shards+deployเวลา19:37:55น.กรุงเทพฯ [release proof](validation/projectile-vfx-release/README_TH.md) ไม่เริ่มตระกูล5 ข้อความรอตรวจด้านล่างเป็นประวัติ
 

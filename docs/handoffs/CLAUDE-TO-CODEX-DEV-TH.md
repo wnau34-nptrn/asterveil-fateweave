@@ -147,7 +147,7 @@ Read AGENTS.md and CLAUDE.md first. Repository wnau34-nptrn/asterveil-fateweave,
 | 3 | ~~แสงรักษา~~ **เจ้าของให้ผ่านR2และสั่ง “นำเข้าเกมได้” 27ต.ค.2026** PR#78 merged `1cfe874`; Pages40460582964เผยแพร่สำเร็จครบ [release proof](../validation/healing-vfx-release/README_TH.md), [29คลิป](../combat-presentation/healing-slice/README_TH.md); Rouseเป็นguard ไม่ใช่heal | heal, prayer, rouse, revive, bless, mend (เพลงฟื้น) |
 | 4 | ลูกธนู/มีดบิน — **เจ้าของให้ผ่านmotion27ต.ค.2026 “เอาเข้าเกมได้”; PR84 merged7c392b5 หลังCIผ่าน [40คลิป](../combat-presentation/projectile-slice/README_TH.md) / [release proof](../validation/projectile-vfx-release/README_TH.md)** [ภาพ/กรณีจริง](../combat-presentation/projectile-storyboards/README_TH.md) [briefและข้อความเปิดแชต](C5-FAMILY-4-PROJECTILE-HANDOFF-TH.md) เริ่มartwork3จังหวะให้เลือกก่อนruntime หนึ่งPR | hinder, volley, weakshot, pin, track, disengage, knives |
 | 5 | ทุบ/แผ่นดิน — **เจ้าของผ่านmotion “นำเข้าเกมได้” / PR85 merged3196e17 / Pagesเผยแพร่success** [33คลิปจริง390px](../combat-presentation/earth-slice/README_TH.md) / [handoff](C5-FAMILY-5-EARTH-HANDOFF-TH.md) หนึ่งPR85 | bash, slam, quake, tremor |
-| 6 | ขวดเล่นแร่ | acid, bomb, smoke, catalyst, haste, fury |
+| 6 | ขวดเล่นแร่ — [handoffแชตใหม่/ข้อความเปิด](C5-FAMILY-6-ALCHEMY-HANDOFF-TH.md) พร้อมเอกสารเท่านั้น ยังไม่เริ่มภาพ/runtime หนึ่งPRใหม่ | acid, bomb, smoke, catalyst, haste, fury |
 | 7 | ออร่า/เพลง/ตรา | mark, valor, dread, solo, warcry, taunt, challenge, decoy, evade, finale, note |
 | 8 | เวทอาร์เคนที่เหลือ | storm, sigil, dispel |
 

@@ -1,5 +1,9 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
+## แชตใหม่สำหรับ VFX ตระกูล6 — พร้อมhandoffเท่านั้น
+
+อ่าน [C5-FAMILY-6-ALCHEMY-HANDOFF-TH.md](C5-FAMILY-6-ALCHEMY-HANDOFF-TH.md) มีข้อความเปิดแชตท้ายไฟล์ acid/bomb/smoke/catalyst/haste/fury6ท่า เริ่มartwork3จังหวะให้เลือกก่อนruntime หนึ่งPRใหม่ ส่งactual390pxclipsก่อนmerge/เผยแพร่/ตระกูล7 แชตนี้ยังไม่เริ่มภาพ/runtimeตระกูล6 งานแผนanimationด้านล่างยังคงแยกscope
+
 C5.5ล่าสุด27ต.ค.2026: เจ้าของอนุมัติ33คลิปด้วย “นำเข้าเกมได้” PR85 merged3196e17หลังquality/browserผ่าน (910unit,sourceVFX157,prechecks3,production249ผ่าน/349skip) Pages40524232794เผยแพร่successครบbuild/browser4shards/deployเวลา22:05:38น.กรุงเทพฯ [releaseproof](../validation/earth-vfx-release/README_TH.md) ไม่เริ่มตระกูล6 ไม่มีcore/save/content/balance/playback timing changes
 
 ## แผนแอนิเมชันครบทุกตัว — 2026-10-27
