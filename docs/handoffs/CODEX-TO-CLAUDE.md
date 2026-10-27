@@ -1,5 +1,9 @@
 # Codex → Claude handoff
 
+## 2026-10-27 — World Boss/sweep plan published
+
+PR #79 merged as `2a12a60039823d068846ae7ead4f60f0075f1d87`, head `01a2c51`; quality CI run 708 (`40450289715`) passed. Scope is seven Markdown files only: new feature proposal, D38/D39 and three backlog tasks (44 total), with handoffs. Preserved remote VFX handoffs during merge. Local links/task IDs and diff checks passed; no local gameplay tests/screenshots needed for this planning update. Issue #69 includes the new unchecked work. Runtime World Boss/sweep is not implemented; server authority P09 is required. P01 remains next for the base-game progression work.
+
 ## 2026-10-27 — World Boss and sweep added to planning
 
 Owner requested a server-wide shared boss after proposing paid-resource sweeps for cleared stages, three per stage/day. Added `docs/design/WORLD_BOSS_SWEEP_TH.md`; D38/D39 and P04-05/P05-05/P11-04 track economy, sweep and server-raid work. Recommend asynchronous shared HP with individual squad attempts, accessible participation/shared rewards, no last-hit power prize, authoritative replay/transactions, concurrent kills and late-arrival handling. Sweeps use a separate repeat-reward table and cannot sweep the World Boss. Supply/attempt/event values remain prototypes.
