@@ -1,5 +1,12 @@
 # Codex → Claude handoff
 
+## 2026-10-27 — Rally redesigned around command and coordinated response, R4 (PR #77)
+
+- Owner asked what Rally means, then explicitly requested a new artwork design after the explanation: Knight orders the team to brace. R4 now separates the command sender from recipient response; do not infer approval of R3 or any other clips.
+- New six-cell ImageGen RGBA1536×1024 sheet (alpha0–254), original/prompt including refinement in `incoming/ART-VFX-DEFENSE-001/proposals/rally-r4/`. Command wave beside Knight → all four ground responses → dissolve. Three-phase390px viewer, peak/board, manifest/hash and reproducible metadata/capture in `docs/combat-presentation/rally-r4/`. Dedicated concept compositor supports two authored layers; no production changes.
+- Placement: command maximum68×42, body dx85/dy22, clear of costume and labels; response90×14, feet dy27 below boots/HP. Inspected actual390px composite and source. Existing real screenshot/anchors, no AI-redrawn characters/UI. Runtime source/atlas/module/clips unchanged; rule/save/balance/playback untouched.
+- Validation: original bytes/hash and dimensions verified; browser three-phase/field/weight/reset/navigation passes without pageerrors/storage writes; lint/diff checks pass. Artwork-only, no gameplay suite needed. Same `codex/vfx-family-2-defense`, draft PR77; no merge/publication. Await artwork selection, then promote/repack/re-record Rally, no family3.
+
 ## 2026-10-27 — Rally R2 rejected for clothing overlap; floor-only R3 (PR #77)
 
 - Owner rejected R2 explicitly because it overlaps the costume. Generated a new transparent three-phase floor-only pair of blue/silver marks. No connecting ribbon across legs; footprint90×12, foot anchor dy27 keeps the actual390px composite below boots and HP bars. Do not infer other clip approvals.

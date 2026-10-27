@@ -1,5 +1,7 @@
 # C5.2 — VFX โล่/ป้องกัน 11 ท่า · รอตรวจคลิป
 
+**Rally ล่าสุด:** เจ้าของขอออกแบบใหม่ตามคอนเซ็ปต์ Knight ส่งคำสั่งให้ทีมตั้งรับ ดู [R4 artwork สามจังหวะ](../rally-r4/README_TH.md) ยังไม่แทน runtime/คลิปและยังไม่ถือว่าผ่าน review
+
 27 ตุลาคม 2026 (Asia/Bangkok) · PR [#77](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/77) · **ต่อ runtime แล้ว ยังไม่ใช่ owner motion approval และยังไม่ merge/เผยแพร่**
 
 **อัปเดต review:** เจ้าของไม่ชอบ Rally เดิมและขอปรับ artwork มี [ข้อเสนอ Rally R2 ใหม่](../rally-r2/README_TH.md) ให้เลือกก่อนแทน runtime คลิป Rally ในหน้านี้ยังเป็นแบบเดิมที่ไม่ผ่าน เก็บไว้เทียบ ไม่ใช่การอนุมัติท่าอื่น

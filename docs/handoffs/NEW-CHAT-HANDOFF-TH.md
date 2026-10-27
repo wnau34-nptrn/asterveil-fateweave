@@ -1,5 +1,7 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
+ล่าสุด: เจ้าของขอออกแบบ Rally ใหม่หลังอธิบายคอนเซ็ปต์ มี R4 “Knight ส่งคำสั่ง → ทีมตั้งรับพร้อมกัน” `docs/combat-presentation/rally-r4/README_TH.md` / index.html; source/prompt6ช่องแยกในproposals/rally-r4 ยังไม่promote runtime รอเลือกภาพ PR#77ใบเดิม ไม่เริ่มตระกูล3
+
 ล่าสุด: เจ้าของปฏิเสธ Rally R2 เพราะทับชุด มี R3 พลังบนพื้นแยกซ้าย–ขวา `docs/combat-presentation/rally-r3/README_TH.md` (90×12, feet dy27) รอเลือก artwork ยังไม่ promote runtime; PR#77 ใบเดิมไม่เริ่มตระกูล3
 
 ## 2026-10-27 — Rally เดิมไม่ผ่าน รอเลือก artwork R2 ใหม่

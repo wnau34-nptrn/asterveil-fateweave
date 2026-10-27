@@ -35,3 +35,7 @@ Owner rejected the existing Rally artwork. A new horizontal blue/silver/gold rib
 ## Rally R3 floor-only proposal — R2 rejected
 
 Owner rejected R2 because it overlaps clothing. New original/prompt in `proposals/rally-r3/`, review in `docs/combat-presentation/rally-r3/`. Paired floor marks90×12, feet dy27, below costume/boots/HP in390px composite. Not promoted; production and clips unchanged. Same draft PR77, no family3.
+
+## Rally R4 command/response redesign
+
+Owner asked to redesign after discussing Rally mechanics/concept. New six-cell original and exact generation/refinement prompts in `proposals/rally-r4/`; review in `docs/combat-presentation/rally-r4/`. Command wave beside Knight then simultaneous low floor responses on allies. Distinct sender/recipient art, no costume coverage. Pending artwork selection; production source/atlas/module/clips unchanged. Same draft PR77, no family3 or inferred approval of R3/other clips.

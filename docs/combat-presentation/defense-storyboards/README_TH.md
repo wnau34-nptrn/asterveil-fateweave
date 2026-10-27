@@ -1,5 +1,7 @@
 # C5.2 — โล่/ป้องกัน 11 ท่า · V1 + Low Aura R3
 
+**Rally ล่าสุด:** เจ้าของขอออกแบบใหม่ตามคอนเซ็ปต์ Knight ส่งคำสั่งให้ทีมตั้งรับ ดู [R4 artwork สามจังหวะ](../rally-r4/README_TH.md) ยังไม่แทน runtime/คลิปและยังไม่ถือว่าผ่าน review
+
 27 ตุลาคม 2026 · **เจ้าของเลือกแนว aura R3 ช่วงขาและสั่งทำ runtime แล้ว — [คลิปจริงรอตรวจ](../defense-slice/README_TH.md)**
 
 **Rally:** เจ้าของไม่ชอบแบบเดิมแล้ว ดู [artwork R2 ใหม่](../rally-r2/README_TH.md) แยกก่อนแทน runtime ภาพ Rally ในตารางด้านล่างยังเป็น reference เดิม
