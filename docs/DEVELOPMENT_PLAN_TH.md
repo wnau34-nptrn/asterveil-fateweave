@@ -1,6 +1,6 @@
 # Fateweave — แผนพัฒนารวมจากเกมปัจจุบันสู่ระบบใหม่
 
-C5.6ล่าสุด: artworkR1ครบ6ท่า/3จังหวะ/14legalcases390pxรอเจ้าของเลือกก่อนruntime บนฐานfetch1f783f8 branch `codex/vfx-family-6-alchemy` [หน้าเลือกและหลักฐาน](combat-presentation/alchemy-storyboards/README_TH.md) ไม่มีruntime/rules/save/balance/playback timingdiff หนึ่งPR ส่งคลิปจริงก่อนmerge/เผยแพร่/ตระกูล7
+C5.6ล่าสุด: artworkR1ครบ6ท่า/3จังหวะ/14legalcases390pxรอเจ้าของเลือกก่อนruntime บนฐานfetch1f783f8 branch `codex/vfx-family-6-alchemy` / [draft PR86](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/86) [หน้าเลือกและหลักฐาน](combat-presentation/alchemy-storyboards/README_TH.md) ไม่มีruntime/rules/save/balance/playback timingdiff หนึ่งPR ส่งคลิปจริงก่อนmerge/เผยแพร่/ตระกูล7
 
 C5.5ล่าสุด: เจ้าของอนุมัติ33คลิป “นำเข้าเกมได้” PR85 merged3196e17 Pages40524232794เผยแพร่successครบbuild/browser4shards/deploy27ต.ค.2026เวลา22:05:38กรุงเทพฯ [releaseproof](validation/earth-vfx-release/README_TH.md) เตรียม[handoffแชตใหม่ตระกูล6ขวดเล่นแร่](handoffs/C5-FAMILY-6-ALCHEMY-HANDOFF-TH.md)แล้ว ยังไม่เริ่มภาพ/runtimeตระกูล6 ไม่แก้rules/save/content/balance/playback timing
 

@@ -1,6 +1,6 @@
 # C5.6 — ขวดเล่นแร่ · handoff สำหรับแชตใหม่
 
-สถานะ27ต.ค.2026: เริ่มตามคำสั่งเจ้าของแล้วบนฐานfetch1f783f8 branch `codex/vfx-family-6-alchemy` [artworkR1/3จังหวะ/14legalcases390px](../combat-presentation/alchemy-storyboards/README_TH.md) รอเจ้าของเลือกก่อนruntime ไม่มีการmerge/เผยแพร่/เริ่มตระกูล7 เนื้อหาเตรียมงานด้านล่างเก็บเป็นประวัติและข้อกำหนดruntimeต่อไป
+สถานะ27ต.ค.2026: เริ่มตามคำสั่งเจ้าของแล้วบนฐานfetch1f783f8 branch `codex/vfx-family-6-alchemy` / [draft PR86](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/86) [artworkR1/3จังหวะ/14legalcases390px](../combat-presentation/alchemy-storyboards/README_TH.md) รอเจ้าของเลือกก่อนruntime ไม่มีการmerge/เผยแพร่/เริ่มตระกูล7 เนื้อหาเตรียมงานด้านล่างเก็บเป็นประวัติและข้อกำหนดruntimeต่อไป
 
 27 ตุลาคม 2026 · เอกสารเตรียมงานเท่านั้น ยังไม่เริ่มภาพ/runtime/branch/PR ตระกูล6ในแชตนี้ ใช้ข้อความเปิดแชตท้ายเอกสารเมื่อเริ่มงาน
 
