@@ -1,5 +1,13 @@
 # Codex → Claude handoff
 
+## 2026-10-27 — C5.3 R2 approved, merged and published (PR78)
+
+- Owner reviewed29R2 runtime clips and said “นำเข้าเกมได้”, approving family3 motion and game integration. Same [PR78](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/78), merge `1cfe87493397fe30b0548857c4727971ff2844f8`. No family4 work.
+- Integrated latest game base3bf10db; only append-only handoff conflicts, preserving concurrent Cloudflare/market planning and both histories. Reviewed runtime3dc1501 and validated head194a1ff have identical src/public/tests trees; merge trees also match. No rules/save/content/balance/playback changes.
+- Premergequality40458494729 success (875unit/76files,typecheck/lint/build); browser40458494882 success (sourceVFX93,prechecks3,production249passed/204skipped). Local42unique focused cases,29captures and player decode evidence previously delivered. Owner approval is separate from these engineering checks.
+- Postmergequality40460582881 success. Pages40460582964 success: build, all4browser shards and deploy completed2026-10-27T06:37:22Z (13:37:22Bangkok); sourceVFX93,production249passed/204skipped. Atlas1376664bytes/30frames SHA256dc176c363d9b0b0a5d6af1491190572f75388c1015e2af4e9213f3a5c332e965; Pagesartifact12714776039 tied to mergeSHA/digest. Cloud HEAD blocked at executionproxyCONNECT403, so no CDNhash/HTTP200 claim.
+- Release proof: `docs/validation/healing-vfx-release/README_TH.md` and `release.json`. This follow-up changes release/planning/Claude/new-chat/slice documentation only, committed `[skip ci]`; does not alter published runtime. Earlier pending-review entries below are historical. Nothing unfinished for family3; next family remains outside this task.
+
 ## 2026-10-27 — C5.3 R2 owner approved for game integration (PR78)
 
 Owner reviewed the R2 clips and said “นำเข้าเกมได้”. This approves family3 motion and merge/Pages publication in the same PR78; family4 is outside this task. Integrated latest game base3bf10db, preserving Cloudflare/market planning work and both handoff histories; conflicts were append-only handoff entries. No runtime changes from the reviewed3dc1501. Existing local875unit and42focused browser cases remain applicable; premerge CI and release proof are being collected. Merge SHA/publication results will be recorded after verification.

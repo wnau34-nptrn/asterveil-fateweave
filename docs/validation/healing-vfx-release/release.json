@@ -1,0 +1,122 @@
+{
+  "ownerApproval": "นำเข้าเกมได้",
+  "ownerApprovalDateBangkok": "2026-10-27",
+  "pullRequest": 78,
+  "approvedRuntimeHead": "3dc1501d8525225d34351ea626ac5cdd68a7f8af",
+  "validatedHead": "194a1ff17c61c6499b7b342d406bf03d3741d6c0",
+  "qualityRun": 40458494729,
+  "qualityResult": "success",
+  "browserRun": 40458494882,
+  "browserResult": "success",
+  "atlas": {
+    "path": "public/assets/fx/healing_fx.webp",
+    "bytes": 1376664,
+    "sha256": "dc176c363d9b0b0a5d6af1491190572f75388c1015e2af4e9213f3a5c332e965",
+    "frames": 30,
+    "width": 3504,
+    "height": 1480
+  },
+  "runtimeTrees": {
+    "src": "1519f801594dfd576d607f0627af35bd7331735e",
+    "public": "f084456f1187c7b73863951720b8468c72390f64",
+    "tests": "16528ff02609ecceb71a6b3b6fe4f4cb021d2d12"
+  },
+  "localValidation": {
+    "unitPassed": 875,
+    "unitFiles": 76,
+    "focusedBrowserUniquePassed": 42,
+    "capturesPassed": 29,
+    "playerPassed": 1
+  },
+  "liveHTTPVerification": {
+    "result": "blocked_by_execution_proxy",
+    "phase": "CONNECT tunnel",
+    "status": 403,
+    "server": "envoy",
+    "observedAtUTC": "2026-10-27T06:01:50Z",
+    "url": "https://wnau34-nptrn.github.io/asterveil-fateweave/",
+    "liveCDNHashVerified": false
+  },
+  "pagesResult": "success",
+  "browserCounts": {
+    "sourceFixturePassed": 93,
+    "prechecksPassed": 3,
+    "productionPassed": 249,
+    "productionSkipped": 204
+  },
+  "mergeSHA": "1cfe87493397fe30b0548857c4727971ff2844f8",
+  "pagesRun": 40460582964,
+  "postMergeQuality": {
+    "run": 40460582881,
+    "conclusion": "success"
+  },
+  "pagesArtifact": {
+    "id": 12714776039,
+    "name": "github-pages",
+    "bytes": 50294147,
+    "digest": "sha256:635392eb61077bf2fdeeefa0b775be3e9f0ce4616d428fad8ce41f226e73b5a4",
+    "headSHA": "1cfe87493397fe30b0548857c4727971ff2844f8"
+  },
+  "publishedSHA": "1cfe87493397fe30b0548857c4727971ff2844f8",
+  "pagesUpdatedAtUTC": "2026-10-27T06:37:22Z",
+  "pagesRunURL": "https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/40460582964",
+  "pagesJobs": [
+    {
+      "name": "build",
+      "id": 122043951293,
+      "conclusion": "success"
+    },
+    {
+      "name": "browser (1)",
+      "id": 122043951520,
+      "conclusion": "success"
+    },
+    {
+      "name": "browser (2)",
+      "id": 122043951106,
+      "conclusion": "success"
+    },
+    {
+      "name": "browser (3)",
+      "id": 122043951361,
+      "conclusion": "success"
+    },
+    {
+      "name": "browser (4)",
+      "id": 122043951304,
+      "conclusion": "success"
+    },
+    {
+      "name": "deploy",
+      "id": 122049085952,
+      "conclusion": "success"
+    }
+  ],
+  "pagesBrowserCounts": {
+    "sourceFixturePassed": 93,
+    "productionPassed": 249,
+    "productionSkipped": 204,
+    "shards": [
+      {
+        "shard": 1,
+        "passed": 61,
+        "skipped": 60
+      },
+      {
+        "shard": 2,
+        "passed": 63,
+        "skipped": 136
+      },
+      {
+        "shard": 3,
+        "passed": 59,
+        "skipped": 8
+      },
+      {
+        "shard": 4,
+        "passed": 66,
+        "skipped": 0
+      }
+    ]
+  }
+}

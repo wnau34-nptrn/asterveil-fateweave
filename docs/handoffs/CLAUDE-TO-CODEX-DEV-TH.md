@@ -1,6 +1,6 @@
 # ส่งต่องานพัฒนาให้ Codex ระหว่างรอ Usage ของ Claude (2026-10-23)
 
-สถานะVFX27ต.ค.2026: เจ้าของให้ผ่านmotionตระกูล3 R2ด้วย “นำเข้าเกมได้” ดำเนินmerge/Pagesผ่านPR78เดิมหลังCI ไม่เริ่มตระกูล4 ผลreleaseจะบันทึกในhealing-vfx-release
+สถานะVFX27ต.ค.2026: เจ้าของให้ผ่านmotionตระกูล3 R2ด้วย “นำเข้าเกมได้” PR78 mergeแล้ว1cfe874หลังCIผ่าน Pages40460582964ผ่านbuild+4browser shards+deploy ไม่เริ่มตระกูล4 ผลreleaseอยู่ใน[healing-vfx-release](../validation/healing-vfx-release/README_TH.md)
 
 ## 2026-10-27 — Equipment market deferral published
 

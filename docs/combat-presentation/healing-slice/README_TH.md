@@ -1,6 +1,6 @@
 # C5.3 — แสงรักษา R2 · แสงเข้ม หางฟุ้ง ยึดเท้า unit จริง
 
-สถานะล่าสุด27ต.ค.2026: เจ้าของตรวจR2แล้วสั่ง “นำเข้าเกมได้” ให้ผ่านmotionและนำเข้าเกมผ่านPR78เดิม กำลังตรวจCI/Pagesก่อนรายงานrelease ไม่เริ่มตระกูล4 ข้อความรอตรวจด้านล่างเก็บเป็นประวัติ
+สถานะล่าสุด27ต.ค.2026: เจ้าของตรวจR2แล้วสั่ง “นำเข้าเกมได้” ให้ผ่านmotionและนำเข้าเกมผ่านPR78เดิม PR78 mergeแล้ว `1cfe874` คุณภาพ+browserผ่าน Pages40460582964สำเร็จครบbuild+4browser shards+deploy ดู [release proof](../../validation/healing-vfx-release/README_TH.md) ไม่เริ่มตระกูล4 ข้อความรอตรวจด้านล่างเก็บเป็นประวัติ
 
 27 ตุลาคม2026 · [PR#78](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/78) · `codex/vfx-family-3-healing`
 
