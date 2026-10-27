@@ -1,5 +1,11 @@
 # Codex → Claude handoff
 
+## 2026-10-27 — World Boss and sweep added to planning
+
+Owner requested a server-wide shared boss after proposing paid-resource sweeps for cleared stages, three per stage/day. Added `docs/design/WORLD_BOSS_SWEEP_TH.md`; D38/D39 and P04-05/P05-05/P11-04 track economy, sweep and server-raid work. Recommend asynchronous shared HP with individual squad attempts, accessible participation/shared rewards, no last-hit power prize, authoritative replay/transactions, concurrent kills and late-arrival handling. Sweeps use a separate repeat-reward table and cannot sweep the World Boss. Supply/attempt/event values remain prototypes.
+
+Docs-only; no runtime/save/balance/server changes, gameplay tests or screenshots. Validate local links/task IDs/diff. Branch `docs/world-boss-sweep-plan` targets game branch; publication reference follows in PR/issue #69. P01 remains next for the base game; actual World Boss requires P09 infrastructure. This does not claim a real-time many-team room exists.
+
 ## P00 publication complete — PR #72
 
 Merged into game branch as `aab276d9f7eb46f782039414a83b50c19beef8af`, head `e638f3b`. PR quality CI run 672 (`40245547986`) passed. Local baseline: full sim 28/28 and focused 55/55; final artifacts: 19 documentation/report files, 29 tracked links, hashes and whitespace validated. Issue #69 marks P00 complete and remains open. Next is P01-A/B in `docs/design/p00/SHARED_PROGRESSION_TEAM_SPEC_TH.md`; no runtime rules were changed by P00. No screenshots or human playtest were claimed. This note records delivery only.
