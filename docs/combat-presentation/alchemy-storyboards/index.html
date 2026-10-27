@@ -1,0 +1,19 @@
+<!doctype html><html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fateweave · ขวดเล่นแร่ / ตรวจ artwork</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#0b1423;color:#eaf5f2;font:16px system-ui,sans-serif}main{max-width:1202px;padding:20px 16px;margin:auto}h1{font-size:24px;margin:8px 0}p{line-height:1.6}small,.note{color:#afc5c5}nav,.controls{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0;align-items:center}button,select{min-height:44px;background:#192f3b;color:inherit;border:1px solid #45656d;border-radius:8px;padding:9px 12px;font:inherit;cursor:pointer}button[aria-pressed=true]{background:#b6e6cb;color:#10272c}input{accent-color:#b6e6cb}h2{font-size:20px}#identity{min-height:52px}.scroll{overflow:auto;scroll-snap-type:x mandatory;width:100%}#board{width:1170px;display:flex}figure{margin:0;width:390px;flex:none;scroll-snap-align:start}figcaption{height:68px;background:#1b3040;padding:10px 16px}figcaption strong{display:block}figcaption span{font-size:12px;color:#b9cbcc}canvas{display:block;width:390px;height:844px}.note{font-size:13px}a{color:#b6e6cb}#error{color:#ffb6ad}@media(max-width:600px){main{padding:16px 0}header,nav,.controls,h2,#identity,.note,#error{margin-left:16px;margin-right:16px}}
+</style></head><body><main>
+<header><small>ASTER VEIL · FATEWEAVE / C5.6 / ARTWORK R1</small><h1>ขวดเล่นแร่ · 6 ท่า</h1><p>เตรียม → เกิดผล → ปลายฟุ้ง<br>แบบภาพนิ่งบนสนามจริง 390px · รอเลือกก่อน runtime</p></header>
+<nav aria-label="เลือกท่า"></nav>
+<div class="controls"><label for="scenario">เหตุการณ์</label><select id="scenario"></select></div>
+<div class="controls"><label for="weight">น้ำหนัก</label><input id="weight" type="range" min="60" max="110" value="100"><output id="weight-value">100%</output><button id="toggle">ดูสนามเปล่า</button><button id="reset">คืนค่าแบบเสนอ</button></div>
+<div class="controls"><button data-phase="0">01 เตรียม</button><button data-phase="1">02 เกิดผล</button><button data-phase="2">03 ปลายฟุ้ง</button></div>
+<h2 id="name"></h2><p id="identity"></p><p id="error" role="alert"></p>
+<div class="scroll"><section id="board" aria-label="สามจังหวะ">
+<figure><figcaption><strong>01 · เตรียม</strong><span>แรงเตรียมจากผู้ใช้จริง / ยังไม่มี hit</span></figcaption><canvas width="390" height="844"></canvas></figure>
+<figure><figcaption><strong>02 · เกิดผล</strong><span>รูปทรงและตำแหน่งตาม event ที่ตรวจแล้ว</span></figcaption><canvas width="390" height="844"></canvas></figure>
+<figure><figcaption><strong>03 · ปลายฟุ้ง</strong><span>จบภาพชั่วคราว ไม่ได้ลบสถานะ</span></figcaption><canvas width="390" height="844"></canvas></figure>
+</section></div>
+<p class="note">ภาพนิ่งเสนอรูปทรง ไม่ใช่ runtime: สนาม/ชุด/HP/UI คง screenshot จริงทุกphase ผู้รับมาจากresolverจริง ImageGenวาดเฉพาะVFXโปร่งใส Maskจากsprite/ชื่อ/HPจริงรักษาพื้นหน้า ไม่เพิ่มhitหรือผลควบคุมตามชื่อท่า Acid spread เป็นคราบไม่ใช่ hit เพิ่ม; Smoke/Haste/Fury ไม่มี damage ตอน cast; Catalyst ใช้ Acid ด้วย legal prelude ไม่มีการยัด state/event ทุกช่องคงภาพก่อน cast ไม่ใช่ HP หลังผล</p>
+<p class="note"><a href="README_TH.md">รายละเอียด / หลักฐาน</a> · <a href="manifest.json">แหล่งภาพ alpha และ events</a></p>
+</main><script src="boards.js"></script><script src="viewer.js"></script></body></html>

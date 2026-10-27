@@ -1,5 +1,41 @@
 # Codex → Claude handoff
 
+## 2026-10-27 — C5.6 owner motion approved: “เอาเข้าเกมได้”
+
+เจ้าของตรวจ55actual390pxclipsแล้วสั่ง “เอาเข้าเกมได้” อนุมัติmotionและmerge/เผยแพร่ผ่านPR86เดิม ไม่เริ่มตระกูล7 Fetchฐานล่าสุด1f783f8แล้วไม่มีงานใหม่แทรก Approvedruntime31c5e90/validatedfixture2535454และdelivery949e129มีsrc/public/tests/workflowtreesตรงกัน AtlasSHA25618c4b740db78eb4f80c6f66bc845770f46f013e2c3dede909e27ef19ba2505a5ตรงคลิปที่ตรวจ
+
+CIquality40533376869success; fullbrowser40533376856ผ่าน6sourcegatesและ3prechecksแล้ว กำลังproduction ก่อนmergeต้องตรวจให้ครบsuccess ไม่ถือpending/skipเป็นผ่าน Local948unit/79files/typecheck/lint/build,57focusedbrowser,55state-equality/decodedplayerผ่าน เก็บ6916rawframesทั้งหมด ไม่เปลี่ยนrules/save/content/balance/playback timing ขั้นต่อไปmergePR86หลังCIผ่าน รอPagesbuild+4browser shards+deployและartifactตรงmergeSHA แล้วบันทึกreleaseproof
+
+
+## 2026-10-27 — C5.6 ส่ง55คลิปจริง390px รอ owner motion review
+
+PR86เดิม / branch `codex/vfx-family-6-alchemy`; runtime31c5e90, validated/capturefixture2535454 ไม่มีmergecommit เจ้าของเลือกartworkR1ด้วย “ไปต่อ” แล้ว แต่ยังไม่อนุมัติmotion ห้ามmerge/เผยแพร่/เริ่มตระกูล7
+
+[55คลิป/หน้าเลือก/หลักฐาน](../combat-presentation/alchemy-slice/README_TH.md): 6ท่า×4modesและ31variantsจากlegalcommandsจริง ไม่มีowner save/injectedstate/events รวมAcidspread/targetdown/potent/deeper/laterhit, Bombfront+back/backonly/corroded/down, Smokewide/poison/boss/physical/energy, Catalystplain/corroded/expired/kill/chain, Hastenotyet/nextalready/acted/self/downinvalid/heal/fullHP/quickbrew/overflow และFuryself/ally/refresh/outgoing/incoming/expiry ChainreactionบนKnightstageรักษาbladeเดิม Furyexpiryผู้รับยังยืนอยู่และactualoutgoing13รอบ1–2กลับเป็น10รอบ3 จบรอบ4HP56
+
+เปลี่ยนBattleSceneและหนึ่งalchemy-fx.ts/18frameatlas981524bytesพร้อมartbounds; ภาพตามrenderedspriteworldtransform/pose/recoil/shake/DPR ปลายฟุ้งหลังunit/ป้าย HasteHeal/overflowใช้actualhealing/barrierเดิม ทั้ง5sourceVFXgatesเดิมครบและเพิ่มalchemyในbrowser/Pagesworkflow รักษาunitanimationplan ไม่แก้core/save/content/balance/playback timing
+
+ตรวจtypecheck/lint/build,948unit/79files,57focusedbrowser,55capture/full-state-equalityและplayerdecode55uniqueclipsผ่านทั้งหมด เก็บ6916rawframes/timestamps/finalstateในtest-results/alchemy-delivery Inventory/encodedhashและdeliveryproofผูกsrc/publictreesตรงruntime/validatedhead MP4decodedcount/PTS/finalholdผ่าน errorสูงสุด0.0062ms maxgap367ms ไม่retime/interpolateหรืออ้าง60fps Chromiumcloud/SwiftShader ไม่ใช่Safari/มือถือจริง CIquality40533376869success; fullbrowser40533376856ยังinprogressขณะส่งคลิป ไม่ถือpending/skipเป็นผ่าน รายละเอียดในvalidation.json
+
+Files: src/game/scenes/BattleScene.ts, src/game/visuals/alchemy-fx.ts/alchemy-art.json, public/assets/fx/alchemy_fx.*, incoming/ART-VFX-ALCHEMY-001/package.py/production-sources.json, tests/fixtures/alchemy.ts, tests/alchemy-fx.test.ts, tests/browser/alchemy-*.spec.ts/fixtures, browser+Pagesworkflows และเอกสารC5/development/new-chat/CLAUDE งานถัดไปในscopeเดิมคือแก้motionตามเจ้าของและตรวจCIให้ครบก่อนmergeภายหลัง ห้ามเริ่มตระกูล7
+
+
+## 2026-10-27 — C5.6 artwork R1 selected; runtime validation in progress
+
+เจ้าของเลือกartwork R1ด้วย “ไปต่อ” ในแชตนี้แล้ว ต่อ6ท่าacid/bomb/smoke/catalyst/haste/furyในPR86เดิม (`codex/vfx-family-6-alchemy`) ใช้หนึ่ง18frameatlas/moduleจากoriginalRGBAเดิม1584×1128/981524bytes ไม่เปลี่ยนrules/save/content/balance/playback timing และรักษา5sourceVFXgatesก่อนหน้า เพิ่มalchemyในbrowser/Pagesworkflow
+
+AlchemyCuesอ่านactualdamage/weaken/corrode/haste/buff Acidspreadเป็นresidueไม่ใช่hitใหม่ Chainreactionอ่านeventsourceแม้stageของactorอื่น รักษาblade/earth/projectile/healingบนstageเดิม HasteHeal/gearoverflowใช้actualheal/barrierผ่านhealingเดิม เตรียม/peak/tailตามrenderedspriteworldtransformรวมDPR,pose,recoil,shake ภาพ/tweensผูกownedimageและใช้cleanupเดิม
+
+38focusedunitผ่าน กำลังตรวจtypecheck/lint/fullunit/buildและfocusedbrowser ก่อนcaptureจริง390pxแยกจากQA เตรียม55clipsครบ6ท่า4modesและ31outcomevariants รวมlaterhit/Furyoutgoing/expiryด้วยlegalfollowupcommands ไม่มีowner saveหรือinjectedstate/events ยังไม่มีowner motion approval ห้ามmerge/เผยแพร่/เริ่มตระกูล7 ส่งคลิปให้เจ้าของตรวจก่อนตามคำสั่งเปิดงาน
+
+
+## 2026-10-27 — C5.6 alchemy artwork R1 รอเลือกก่อน runtime
+
+เจ้าของเริ่มacid/bomb/smoke/catalyst/haste/fury6ท่า Explicitfetchฐานล่าสุด1f783f8แล้ว branch `codex/vfx-family-6-alchemy` / [draft PR86](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/86) หนึ่งPR ตรวจPR85merge3196e17และPages40524232794APIใหม่ build+browser4shards+deploysuccessครบ [ภาพ3จังหวะ/14legalcases390px](../combat-presentation/alchemy-storyboards/README_TH.md) มี42compositesและviewer OriginalImageGenRGBA18cells/exactprompt/provenanceอยู่incoming/ART-VFX-ALCHEMY-001 รักษาชุด/อาวุธ/HP/ชื่อด้วยactualsprite/labelmask ไม่ใช้owner saveหรือยัดstate/event Catalystcorrodedใช้legalAcidpreludeจริง Acidspreadไม่สร้างhitเพิ่ม Smoke/Haste/Furyไม่วาดdamagecast
+
+References2/2รวมDPR2/3, viewer/export1/1และ42pixel-preservationchecksผ่าน Typecheck/lint/buildและ910unit/78filesผ่าน ไม่มีruntime/src/public/rules/save/content/balance/playback timingdiff Ownerยังไม่ได้เลือกภาพ รอตรวจartworkก่อนหนึ่งatlas/moduleในPRเดิม แล้วส่งactual390pxclips6ท่าnormal/fast/reduced/OS-reducedและcasesครบhandoffก่อนmerge/เผยแพร่/ตระกูล7 รักษา5sourceVFXgatesและเพิ่มalchemyเมื่อทำruntime ไม่แตะunitanimation/P01–P03 รายการเก่าเป็นประวัติ
+
+
 ## 2026-10-27 — Next-chat handoff for C5.6 alchemy (documentation only)
 
 Owner requested a handoff for a new chat after approving/releasing family5. Added C5-FAMILY-6-ALCHEMY-HANDOFF-TH.md with copy-ready Thai opening prompt for acid/bomb/smoke/catalyst/haste/fury; verified Pages40524232794 still success for merge3196e17 and fetched gamebaseaaf9ff4. The new chat must fetch again, inspect actual resolver events with legal commands, propose6moves×3phase art at390px, then runtime after artwork selection and actualclips before merge/publication/family7. One new PR; no family6art/runtime/branch/PR created in this task.

@@ -1,0 +1,28 @@
+<!doctype html><html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Fateweave · Alchemy runtime review</title>
+<style>*{box-sizing:border-box}body{margin:0;background:#0b1423;color:#eaf5f2;font:16px system-ui,sans-serif}main{max-width:700px;margin:auto;padding:18px 16px}h1{font-size:23px;margin:8px 0}p{line-height:1.5;color:#b7ceca;font-size:14px}nav,.controls{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0;align-items:center}button,select{min-height:44px;padding:9px 12px;border:1px solid #45656d;border-radius:8px;background:#19313b;color:inherit;font:inherit}button{cursor:pointer}button[aria-pressed=true]{background:#b6e6cb;color:#10272c}video{display:block;width:390px;max-width:100%;height:auto;background:#101c30}a{color:#b6e6cb}h2{font-size:17px}label{font-size:14px}@media(max-width:430px){main{padding:14px 0}h1,p,nav,.controls,h2{margin-left:16px;margin-right:16px}}</style></head><body><main>
+<h1>ตระกูล 6 · VFX R1 ในเกมจริง</h1><p>ขวดเล่นแร่ · ปลายฟุ้ง · ผู้รับจาก event จริง<br>6 ท่า · เลือกดูทีละคลิปที่390px<br>Acid คราบไม่ใช่ hit เพิ่ม · Haste/Fury ไม่มี damage ตอน cast</p>
+<nav aria-label="เลือกท่า"></nav>
+<div class="controls"><label for="mode">โหมด</label><select id="mode"><option value="normal">ปกติ</option><option value="fast">เร็ว</option><option value="reduced">ลดความเข้ม</option><option value="osreduce">OS ลดการเคลื่อนไหว</option></select></div>
+<div class="controls"><label for="scenario">กรณี</label><select id="scenario"></select></div>
+<h2 id="name"></h2><video controls playsinline preload="metadata" width="390" height="844"></video>
+<p>renderer / playback / resolver จริง เก็บเวลาของเฟรมตามที่จับได้ ไม่เร่ง ไม่ชะลอ ไม่สร้างเฟรมแทรก ไม่มีเสียง Chromium cloud ไม่ใช่มือถือจริงหรือ Safari</p>
+<p><a href="README_TH.md">รายละเอียดและหลักฐาน</a> · <a href="clips.json">เวลาและผล resolved จริง</a></p>
+</main><script src="clips.js"></script><script>
+/* global window, document */
+const clips=window.alchemyClips,mode=document.querySelector('#mode'),scenario=document.querySelector('#scenario');
+const labels={normal:'ผลปกติ',spread:'กระจายคราบ ไม่มี hit เพิ่ม',potent:'Potent ยืดอายุจริง',deeper:'กร่อนลึก bonus hit ภายหลัง',down:'เป้าล้ม',chainother:'Chain reaction บนการโจมตี Knight',laterhit:'คราบเพิ่มพลัง actual hit ถัดไป',backonly:'เหลือแถวหลัง',corroded:'มีคราบจาก Acid จริง',wide:'ควันทั้งแถว',poison:'ควัน + corrode',boss:'boss unstoppable ยัง weaken ได้',physical:'ลด physical ถัดไป',energy:'ลด energy ถัดไป',expired:'คราบหมดอายุ',kill:'hit เดียวล้ม',chain:'Chain reaction แถวเดียวกัน',chainfallback:'Chain reaction ส่งไปแถวอื่น',nextalready:'ally เป็นคนถัดไปอยู่แล้ว',acted:'ally เดินไปแล้ว เร่งรอบหน้า',self:'ใส่ตนเอง',heal:'actual HasteHeal8',fullhp:'HP เต็ม ไม่มี heal event',overflow:'actual overflow barrier8',quickbrew:'Quickbrew cooldown จริง',downinvalid:'ally ล้มใช้ไม่ได้ แล้วใช้กับตนเองจริง',refresh:'refresh Fury บน buff จริง',outgoing:'actual hit หลัง Fury',expiry:'actual damage/exposure และหมดอายุ'};
+let skill='acid';
+function draw(reset){
+  const available=clips.filter(c=>c.file.startsWith(skill+'-')&&c.file.split('-')[2]===mode.value);
+  const old=reset?'normal':scenario.value;scenario.replaceChildren();
+  for(const c of available){const value=c.file.split('-')[1],o=document.createElement('option');o.value=value;o.textContent=labels[value]||value;scenario.append(o);}
+  scenario.value=available.some(c=>c.file.split('-')[1]===old)?old:'normal';
+  const selected=available.find(c=>c.file.split('-')[1]===scenario.value);
+  document.querySelector('#name').textContent=selected.file.replace('-390.mp4','');
+  document.querySelector('video').src=selected.file;
+  for(const b of document.querySelectorAll('nav button'))b.setAttribute('aria-pressed',String(b.dataset.skill===skill));
+  document.documentElement.dataset.clip=selected.file;
+}
+for(const name of ['acid','bomb','smoke','catalyst','haste','fury']){const b=document.createElement('button');b.textContent=name;b.dataset.skill=name;b.addEventListener('click',()=>{skill=name;draw(true);});document.querySelector('nav').append(b);}
+mode.addEventListener('change',()=>draw(true));scenario.addEventListener('change',()=>draw(false));draw(true);
+</script></body></html>
