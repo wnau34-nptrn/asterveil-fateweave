@@ -37,6 +37,8 @@ for (const { skill, scenario, mode } of cases) test(`projectile clip ${skill}-${
     writeFileSync(info.outputPath('stamps.txt'), `click ${click}\n${stamps.join('\n')}`);
     writeFileSync(info.outputPath('timing.json'), JSON.stringify(impacts, null, 2));
     expect(stamps.length).toBeGreaterThan(12);
-    writeFileSync(info.outputPath('final-state.json'),JSON.stringify(await page.evaluate(()=>window.projectileQA.state()),null,2)); expect(errors).toEqual([]);
+    const actual=await page.evaluate(()=>window.projectileQA.state());
+    expect(actual).toEqual(await page.evaluate(()=>window.projectileQA.expectedCaptureState()));
+    writeFileSync(info.outputPath('final-state.json'),JSON.stringify(actual,null,2)); expect(errors).toEqual([]);
   } finally { await ctx.close(); }
 });

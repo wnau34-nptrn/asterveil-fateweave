@@ -38,7 +38,10 @@ function painted(atlas = PROJECTILE_ATLAS) {
     if (item instanceof Phaser.GameObjects.Image && item.texture.key === atlas) items.push({ frame: item.frame.name, x: item.x, y: item.y, width: item.displayWidth, height: item.displayHeight, alpha: item.alpha, rim: !!item.getData('healingRim') });
   } }; visit(scene.children.getChildren()); return items;
 }
-const qa = { impacts,painted,sequence:()=>fixture.turns,commands:()=>fixture.commands,prelude:()=>fixture.prelude,
+const qa = { impacts,painted,rings:()=>{
+    let count=0;const visit=(items:Phaser.GameObjects.GameObject[])=>{for(const item of items){if(item instanceof Phaser.GameObjects.Container)visit(item.list);if(item instanceof Phaser.GameObjects.Arc)count++;}};const effects=(scene as unknown as {effects?:Phaser.GameObjects.Container}).effects;visit(effects?.list??[]);return count;
+  },sequence:()=>fixture.turns,commands:()=>fixture.commands,prelude:()=>fixture.prelude,
+  expectedCaptureState:()=>params.get('skill')==='track'&&params.get('scenario')!=='normal'&&params.has('scenario')?fixture.finalState:fixture.cast.state,
   target:()=>fixture.targetId==='enemies'?`enemies-${fixture.data.enemies[0]!.id}`:fixture.targetId,state:()=>ui.state,cues:()=>fixture.turns.flatMap(projectileCues),
   point:(id:string)=>scene.projectileAnchor(id)!,stop:()=>scene.stopEffects(),
   load:()=>ui.open({kind:'random',data:fixture.data,entry:fixture.entry,commands:ui.state.commands,commit:()=>true,leaveLabel:()=>'',leave:()=>{}}),

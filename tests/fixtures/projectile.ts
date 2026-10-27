@@ -45,5 +45,5 @@ for (let i=0; i<12 && next.round === state.round && next.outcome === 'active'; i
   later.push(...result.turns); next=result.state;
 }
 const followup = later.flatMap(t => t.events).filter(e => e.sourceId === actor.id && e.text === 'Tracking shot.');
-return {data,entry,actor,prelude,state,command,targetId,cast,turn,commands,turns:[turn,...later],followup};
+return {finalState:next,data,entry,actor,prelude,state,command,targetId,cast,turn,commands,turns:[turn,...later],followup};
 }
