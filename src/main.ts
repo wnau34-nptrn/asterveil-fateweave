@@ -44,8 +44,11 @@ window.addEventListener('resize', () => scene.refreshLayout());
 // Pause the battle renderer while exploring; resume and re-measure on entry.
 shell.setBattleVisibilityListener(visible => {
   battleVisible = visible;
+  scene.setBattleVisible(visible);
   if (!scene.isReady) return;
-  if (visible) { game.loop.wake(); scene.refreshLayout(); } else game.loop.sleep();
+  // wake() steps synchronously. Let GameShell.open() install the new encounter first.
+  if (visible) queueMicrotask(() => { if (battleVisible && scene.isReady) { game.loop.wake(); scene.refreshLayout(); } });
+  else game.loop.sleep();
 });
 // Startup finished: index.html's boot guard stands down.
 (window as unknown as { __fateweaveReady?: boolean }).__fateweaveReady = true;

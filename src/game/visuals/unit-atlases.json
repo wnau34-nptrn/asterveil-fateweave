@@ -1,0 +1,20 @@
+{
+  "lyra": {
+    "image": "lyra_pilot.ef0437415fe7.webp",
+    "atlas": "lyra_pilot.7c7a19c3f3d0.json",
+    "width": 1280,
+    "height": 1211,
+    "frames": 22,
+    "decodedBytes": 6200320,
+    "downloadBytes": 1535966
+  },
+  "hunter": {
+    "image": "hunter_pilot.a2500d3fa495.webp",
+    "atlas": "hunter_pilot.0ca0445de5c5.json",
+    "width": 1536,
+    "height": 664,
+    "frames": 22,
+    "decodedBytes": 4079616,
+    "downloadBytes": 931414
+  }
+}

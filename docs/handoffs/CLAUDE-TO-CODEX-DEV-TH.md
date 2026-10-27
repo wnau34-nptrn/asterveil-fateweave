@@ -103,9 +103,9 @@ Read AGENTS.md and CLAUDE.md first. Repository wnau34-nptrn/asterveil-fateweave,
 
 | ลำดับ | ตระกูล | สกิล |
 |---|---|---|
-| 1 | ฟันดาบ/แทง | attack, finisher, lunge, sweep, backstab, ambush, disarm, parry (ฟันสวน), pierce, halt |
-| 2 | โล่/ป้องกัน | guard, aegis, rally, bulwark, stonearmor, guardstone, halo, sanctuary, brace, spearwall, hold |
-| 3 | แสงรักษา | heal, prayer, rouse, revive, bless, mend (เพลงฟื้น) |
+| 1 | ~~ฟันดาบ/แทง~~ R4: เจ้าของเลือก [แบบภาพ 10 ท่า](../combat-presentation/blade-storyboards/README_TH.md) รวม Pierce R2 และสั่งทำ VFX จริงแล้ว ต่อเข้าเกมครบ 2026-10-26 **ผ่านและ merge R4 แล้ว 2026-10-26 (`d14a3e1`, PR #59)** (`codex/vfx-family-1-blade`, PR #59, [คลิป](../combat-presentation/blade-slice/README_TH.md)) | attack, finisher, lunge, sweep, backstab, ambush, disarm, parry (ฟันสวน), pierce, halt |
+| 2 | ~~โล่/ป้องกัน~~ **เจ้าของให้ผ่าน27ต.ค.2026** หลังRally R5วงพื้นเท่านั้น, PR#77 merged `afeef4a`; Pagesเผยแพร่สำเร็จ [release proof](../validation/defense-vfx-release/README_TH.md) | guard, aegis, rally, bulwark, stonearmor, guardstone, halo, sanctuary, brace, spearwall, hold |
+| 3 | แสงรักษา — **ขั้นถัดไป [handoff artworkก่อนruntime](C5-FAMILY-3-HEALING-HANDOFF-TH.md)**, Rouseเป็นguard ไม่ใช่heal | heal, prayer, rouse, revive, bless, mend (เพลงฟื้น) |
 | 4 | ลูกธนู/มีดบิน | hinder, volley, weakshot, pin, track, disengage, knives |
 | 5 | ทุบ/แผ่นดิน | bash, slam, quake, tremor |
 | 6 | ขวดเล่นแร่ | acid, bomb, smoke, catalyst, haste, fury |
@@ -331,3 +331,7 @@ REPORT after every batch in docs/handoffs/CODEX-TO-CLAUDE.md (per character: kit
 
 
 - 2026-10-24: เจ้าของถามหาจุดไม่สมเหตุผลอื่น (ยังไม่ได้สั่งแก้) ดู `docs/design/LOGIC_AUDIT_2026-10-24_TH.md`: ฝากพิจารณา Aegis ที่ใช้ได้แต่ไม่เพิ่มโล่, Heal ที่เลือกคนเลือดเต็มไม่ได้แม้มี Afterglow และ Revive อัปเลเวลแล้วเพิ่มโล่ผู้ใช้แทน HP ที่ชุบ ห้ามถือว่าข้อสังเกตเหล่านี้เป็นการอนุมัติเปลี่ยนกติกา; จุด UI แสดงหน่วย/scaling ผิดและ Bulwark ไม่รวมเลเวลเป็นข้อบกพร่องที่ยืนยันแล้ว
+
+## Unit animation pilot — owner visual approval 2026-10-26
+
+เจ้าของให้ผ่าน Lyra/Vargoth Hunter ทั้งภาพและท่า และอนุญาตนำเข้าเกมจริง โดยขอช้าลงนิดเดียว ปรับคืนท่า sprite 240→260ms และ ease frame cadence เล็กน้อย คง contact/end เดิม นี่คือการอนุมัติคู่ pilot ของ PR #74 ไม่ใช่การอนุมัติ C5 blade VFX หรือขยายทุกยูนิต

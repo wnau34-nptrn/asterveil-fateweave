@@ -30,6 +30,10 @@ jobs:
       - run: npm ci
       - run: npm run build:pages
       - run: npx playwright install --with-deps chromium
+      - name: Verify painted blade and defense source fixtures
+        env:
+          PLAYWRIGHT_PAGES: 'false'
+        run: npm run test:browser -- tests/browser/blade-fx.spec.ts tests/browser/defense-fx.spec.ts --workers=1
       - name: Verify dialog focus and frame-relative map input
         env:
           PLAYWRIGHT_PAGES: 'true'
