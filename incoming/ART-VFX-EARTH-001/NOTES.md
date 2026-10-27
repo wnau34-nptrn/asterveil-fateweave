@@ -15,3 +15,5 @@ Runtimeหลังเจ้าของเลือก: ต่อหนึ่�
 Authorship: original built-inImageGen artwork for the owner's Fateweave request under existing permission. No new third-party art/license dependency.
 
 Runtime: `package.py` packs12losslesscells1584×1152; production-sources.json recordsoriginalsource/cells/hash. See docs/combat-presentation/earth-slice/README_TH.md. Runequake splash is half skill.power floor (18→9), corrected prose only; original engine unchanged.
+
+Owner motion approval2026-10-27: “นำเข้าเกมได้”; PR85 merged3196e17 after quality/browser success. Pages40524232794 published successfully at22:05:38Bangkok (build+fourbrowser shards+deploy). See docs/validation/earth-vfx-release/README_TH.md. No family6.

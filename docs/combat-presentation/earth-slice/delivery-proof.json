@@ -1,9 +1,9 @@
 {
   "artworkApproval": {
     "dateBangkok": "2026-10-27",
-    "quote": "\u0e44\u0e1b\u0e15\u0e48\u0e2d"
+    "quote": "ไปต่อ"
   },
-  "runtimeApproval": "pending_owner_motion_review",
+  "runtimeApproval": "owner_approved",
   "pullRequest": 85,
   "runtimeHead": "049c2014356aae3fdfa22bf6d0a276e37768e2e1",
   "srcTree": "8b5ba7da226a1f9ab3734d19a4c6e2a7be39bf8d",
@@ -19,5 +19,11 @@
     "src/core",
     "src/content",
     "src/ui/battle-playback.ts"
-  ]
+  ],
+  "ownerMotionApproval": {
+    "dateBangkok": "2026-10-27",
+    "quote": "นำเข้าเกมได้"
+  },
+  "mergeSHA": "3196e1774ad272045bfbcd2e50f54bf5fab13213",
+  "releaseProof": "../../validation/earth-vfx-release/release.json"
 }

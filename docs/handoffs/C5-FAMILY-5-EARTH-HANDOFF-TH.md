@@ -1,5 +1,7 @@
 # C5.5 — ทุบ / แผ่นดิน · handoff
 
+ล่าสุด: เจ้าของอนุมัติmotion “นำเข้าเกมได้” PR85 merged3196e17หลังquality/browserผ่าน Pages40524232794เผยแพร่successครบbuild/browser4shards/deployเวลา22:05:38น.กรุงเทพฯ ดู[releaseproof](../validation/earth-vfx-release/README_TH.md) ไม่เริ่มfamily6 ข้อความรอตรวจด้านล่างเป็นประวัติขั้นก่อนอนุมัติ
+
 27ตุลาคม2026 · เจ้าของสั่ง “เริ่มขั้นต่อไปได้” หลังตระกูล4ให้ผ่าน/merge/เผยแพร่แล้ว จึงเริ่มตระกูล5เท่านั้น
 
 - ฐาน35e39afที่fetchล่าสุด; family4PR84merge7c392b5/Pages40503739046successครบbuild+4browser+deploy19:37:55กรุงเทพฯ ตรวจAPI/releaseproofและcheckoutatlasSHAตรงกัน
@@ -38,3 +40,5 @@ References2/2 (15legalcases+DPR2/3), viewer/control/export1/1,45pixel-preservati
 049c201: sharedatlas/module12framesและactualworldanchorsครบ4ท่า Skyhammerใช้actualhealแยกจากearthcontactและไม่ปลอมhealเมื่อเต็มHP รักษาdeathringเดิมต่อactualdown 910unit/78filesและ38focusedbrowserผ่าน typecheck/lint/buildผ่าน PR85draftเดิม ไม่แก้core/save/content/balance/playback timing ส่ง33actualclips/4,345rawframesครบ state equality/PTS/count/finalholdผ่านทุกไฟล์ maxPTSerror0.0062ms/maxgap307ms และplayer ดูearth-slice READMEเพื่อผลส่งมอบล่าสุด
 
 Player1/1ผ่านครบ33uniqueclips/nooverflow390px/noerrors ส่ง33MP4พร้อมproof/inventoryและrawคงอยู่ครบ การตรวจlocalไม่ใช่motionapproval CIqualityruntime049c201success แต่fullbrowserยังpendingขณะส่ง; ตรวจlatestPRchecksก่อนmerge ห้ามเผยแพร่/เริ่มfamily6ก่อนเจ้าของตรวจmotion
+
+หมายเหตุfetchในworkspaceนี้: remoteเดิมติดตามเฉพาะbranchงาน ใช้ `git fetch origin feature/fateweave-initial-prototype:refs/remotes/origin/feature/fateweave-initial-prototype` เพื่ออัปเดตฐานจริงก่อนงานถัดไป ไม่อ่านremote-tracking refเก่าหลังfetchที่เขียนเฉพาะFETCH_HEAD

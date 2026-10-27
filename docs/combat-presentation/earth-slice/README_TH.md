@@ -1,5 +1,7 @@
 # C5.5 · ทุบ / แผ่นดิน R1 ใน runtime
 
+สถานะล่าสุด: เจ้าของอนุมัติ33คลิปด้วย “นำเข้าเกมได้” PR85 merged3196e17หลังquality/browser success Pages40524232794เผยแพร่successเวลา22:05:38น.กรุงเทพฯ [releaseproof](../../validation/earth-vfx-release/README_TH.md) ข้อความรออนุมัติด้านล่างเก็บเป็นประวัติ
+
 เจ้าของเลือก artwork R1 ด้วย “ไปต่อ” วันที่27ตุลาคม2026 ต่อใน [draft PR85](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/85) เดิม [เปิดหน้าเลือกคลิป](index.html) เพื่อดู4ท่าและ33กรณี390×844 ก่อนอนุมัติ motion / merge / เผยแพร่ / เริ่มตระกูล6
 
 | ท่า | คลิปปกติ | ผลจริง |

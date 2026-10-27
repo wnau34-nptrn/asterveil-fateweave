@@ -1,5 +1,11 @@
 # Codex → Claude handoff
 
+## 2026-10-27 — C5.5 owner approved; PR85 merged and published
+
+Owner reviewed33actual390px clips and said “นำเข้าเกมได้”, approving family5 motion/merge/publication. PR85 merged3196e1774ad272045bfbcd2e50f54bf5fab13213 after quality40514139155 and browser40514139036 success at validated91a48c1. SourceVFX157,prechecks3,production249passed/349skipped;910unit/78files,typecheck/lint/build passed. Fetched gamebase35e39af immediately before merge; no conflicts. Approved runtime049c201 src/public/atlas match validated head and merge; tests tree also matches validated head. No core/save/content/balance/playback timing changes.
+
+Pages40524232794 succeeded at merge3196e17: build+fourbrowser shards+deploy, published2026-10-27 22:05:38Bangkok. SourceVFX157 andproduction249passed/349skipped (shards61/63/59/66). Artifact12743825389/52,705,088bytes digestsha256:e1f130996a3734bcb647f82aa5f3f6c9f19115b6693077ea614a79884acb0376 ties to mergeSHA. Postmergequality40524232637/40524250575 also succeeded. This follow-up is docs-only [skip ci], preserving validated source/public/tests. Docs only: releaseproof, approval/source notes, review delivery status and handoffs/CLAUDE. No family6 work. Prior33clips/4,345rawframes remain available with exact timestamps/decodedPTS/state equality; local38focusedbrowser+player33uniquevideos passed. Cloudnetworkpolicy excludesgithub.io so no new liveHTTP/CDNhash claim. See docs/validation/earth-vfx-release/README_TH.md.
+
 ## 2026-10-27 — All-unit animation rollout plan (documentation only)
 
 - Owner asked for an implementation plan covering every unit after the loading optimization. Inspected latest game branch `3196e17` after fetching/fast-forwarding; the roster/art registry remains 14 current heroes + 22 enemy visual identities, while the roster target is 30 heroes. Existing C5 work/approvals are preserved and separate from unit-body production.

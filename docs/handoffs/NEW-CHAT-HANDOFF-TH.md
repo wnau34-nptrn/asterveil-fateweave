@@ -1,10 +1,10 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
+C5.5ล่าสุด27ต.ค.2026: เจ้าของอนุมัติ33คลิปด้วย “นำเข้าเกมได้” PR85 merged3196e17หลังquality/browserผ่าน (910unit,sourceVFX157,prechecks3,production249ผ่าน/349skip) Pages40524232794เผยแพร่successครบbuild/browser4shards/deployเวลา22:05:38น.กรุงเทพฯ [releaseproof](../validation/earth-vfx-release/README_TH.md) ไม่เริ่มตระกูล6 ไม่มีcore/save/content/balance/playback timing changes
+
 ## แผนแอนิเมชันครบทุกตัว — 2026-10-27
 
 เจ้าของขอแผนทุกยูนิตหลังแก้โหลดช้า แผนพร้อมใน [UNIT_ANIMATION_ROLLOUT_TH.md](../design/UNIT_ANIMATION_ROLLOUT_TH.md): 14 ตัวฝ่ายเรา/ศัตรู 22 ภาพปัจจุบัน และคิวต่อยอดครบ 30 ตัวฝ่ายเรา (อีก 16 ยังไม่อยู่ runtime) แบ่ง A0–A11 พร้อมงบภาพและเกณฑ์ทดสอบ แนะนำ A0/A1 ไอรา + ภูตแดนดิไลออนเมื่อเจ้าของสั่งเริ่ม งานนี้เอกสารเท่านั้น ไม่มีภาพ/runtime ใหม่ ไม่เริ่มผลิตทุกชุดอัตโนมัติ และไม่เปลี่ยนคิว P01–P03 หรืองาน/approval C5 เดิม
-
-C5.5ล่าสุด27ต.ค.2026: เจ้าของเลือกartwork R1ด้วย “ไปต่อ” แล้ว ต่อruntime bash/slam/quake/tremorหนึ่งatlas/moduleใน [draft PR85](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/85) เดิม [คลิปจริง390px/หน้าเลือก](../combat-presentation/earth-slice/README_TH.md) รอตรวจmotionก่อนmerge/เผยแพร่/ตระกูล6 ไม่มีcore/save/content/balance/playback timing diff Runequake splashครึ่งskill.powerปัดลง(18→9) แก้proseเดิมเท่านั้น [handoff](C5-FAMILY-5-EARTH-HANDOFF-TH.md)
 
 C5.4ล่าสุด27ต.ค.2026: เจ้าของตรวจ40คลิปแล้วสั่ง “เอาเข้าเกมได้” PR84 merged `7c392b5` หลังquality/browserผ่าน (890unit,sourceVFX119,prechecks3,production249ผ่าน/274skip) Pages40503739046เผยแพร่successครบbuild+4browser shards+deployเวลา19:37:55น.กรุงเทพฯ build+4browser shards+deploy [release proof](../validation/projectile-vfx-release/README_TH.md) ไม่เริ่มตระกูล5
 
