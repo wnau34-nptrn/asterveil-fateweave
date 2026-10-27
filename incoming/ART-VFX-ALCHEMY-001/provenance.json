@@ -1,0 +1,22 @@
+{
+  "source": "incoming/ART-VFX-ALCHEMY-001/source/six-skills.png",
+  "sha256": "c1ff5d6a901f2b8454b4442fc1766df916a0ec78f9c473baf6fa0199d6afefae",
+  "original": "/workspace/generated_images/exec-e1126bfe-3a8e-4882-b047-53316d9ebc39.png",
+  "byteIdentical": true,
+  "base": "1f783f83417f4d8b641040e04cc4be209c265f8b",
+  "previousRelease": {
+    "pr": 85,
+    "merged": true,
+    "merge": "3196e1774ad272045bfbcd2e50f54bf5fab13213",
+    "pages": 40524232794,
+    "jobs": {
+      "build": "success",
+      "browser1": "success",
+      "browser2": "success",
+      "browser3": "success",
+      "browser4": "success",
+      "deploy": "success"
+    },
+    "verifiedVia": "GitHub connector get_pr_info and fetch_workflow_run_jobs; no live CDN request"
+  }
+}

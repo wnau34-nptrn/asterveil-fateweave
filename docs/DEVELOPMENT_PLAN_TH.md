@@ -1,5 +1,15 @@
 # Fateweave — แผนพัฒนารวมจากเกมปัจจุบันสู่ระบบใหม่
 
+C5.6เสร็จแล้ว: เจ้าของอนุมัติ55คลิปด้วย “เอาเข้าเกมได้” PR86 merged5ad4475 Pages40598822074เผยแพร่successครบbuild/browser4shards/deployเมื่อ2026-10-28 06:17:56น.กรุงเทพฯ [releaseproof](validation/alchemy-vfx-release/README_TH.md) ไม่เริ่มตระกูล7 ข้อความรอreview/merge/เผยแพร่ด้านล่างเป็นประวัติ
+
+C5.6ล่าสุด: เจ้าของตรวจ55คลิปจริงและอนุมัติ “เอาเข้าเกมได้” แล้ว27ต.ค.2026 อนุญาตmerge/เผยแพร่PR86หลังCIครบผ่าน ไม่เริ่มตระกูล7 ข้อความรอmotionด้านล่างเป็นประวัติ
+
+C5.6ส่งมอบ: [55คลิปจริง390px/6ท่า/4modesและ31variants](combat-presentation/alchemy-slice/README_TH.md) ในPR86เดิม รอเจ้าของตรวจmotionก่อนmerge/เผยแพร่/ตระกูล7 ตรวจ948unit/57focusedbrowser/55state-equality/playerdecodeครบผ่าน CIqualitysuccess/fullbrowserยังinprogress ไม่เปลี่ยนrules/save/balance/playback timing
+
+C5.6: เจ้าของเลือกartworkR1ด้วย “ไปต่อ” แล้ว กำลังต่อruntime6ท่าในPR86เดิมและตรวจคลิปจริง390pxก่อนmerge/เผยแพร่/ตระกูล7 ไม่เปลี่ยนrules/save/balance/playback timing
+
+C5.6ล่าสุด: artworkR1ครบ6ท่า/3จังหวะ/14legalcases390pxรอเจ้าของเลือกก่อนruntime บนฐานfetch1f783f8 branch `codex/vfx-family-6-alchemy` / [draft PR86](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/86) [หน้าเลือกและหลักฐาน](combat-presentation/alchemy-storyboards/README_TH.md) ไม่มีruntime/rules/save/balance/playback timingdiff หนึ่งPR ส่งคลิปจริงก่อนmerge/เผยแพร่/ตระกูล7
+
 C5.5ล่าสุด: เจ้าของอนุมัติ33คลิป “นำเข้าเกมได้” PR85 merged3196e17 Pages40524232794เผยแพร่successครบbuild/browser4shards/deploy27ต.ค.2026เวลา22:05:38กรุงเทพฯ [releaseproof](validation/earth-vfx-release/README_TH.md) เตรียม[handoffแชตใหม่ตระกูล6ขวดเล่นแร่](handoffs/C5-FAMILY-6-ALCHEMY-HANDOFF-TH.md)แล้ว ยังไม่เริ่มภาพ/runtimeตระกูล6 ไม่แก้rules/save/content/balance/playback timing
 
 C5.4ล่าสุด: เจ้าของให้ผ่าน40คลิปด้วย “เอาเข้าเกมได้” PR84 merged7c392b5หลังCIผ่าน Pages40503739046เผยแพร่successครบbuild+4browser shards+deployเวลา19:37:55น.กรุงเทพฯ [release proof](validation/projectile-vfx-release/README_TH.md) ไม่เริ่มตระกูล5 ข้อความรอตรวจด้านล่างเป็นประวัติ

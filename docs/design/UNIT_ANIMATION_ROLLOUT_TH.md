@@ -6,6 +6,8 @@
 
 เจ้าของสั่งเริ่มเฉพาะA0/A1แล้ว: generalized art/clip registry และspriteไอรา/ภูตแดนดิไลออนพร้อมในbranch `codex/animation-a0-a1` รวม7ActionIdของไอราและSeedSpark [บัญชีท่า/fallback/16คลิปจริง390px/ผลตรวจ](../combat-presentation/unit-a1-slice/README_TH.md) Eira3.88MiB/1.38MB, Sprite1.19MiB/0.36MB ต่ำกว่างบ; ไม่เพิ่มcriticalpreload ไม่แก้rules/save/balance/playbacktiming และคงpixel/timing/approvalของpilotและC5เดิม งานA2–A11/rosterอนาคตยังไม่เริ่ม สถานะPR/CI/เผยแพร่ให้อ่านผลล่าสุดในsliceREADME; การมีคลิปหรือtestsผ่านไม่ใช่บันทึกowner visual approval
 
+28ตุลาคม2026: รวมฐานC5.6ที่เจ้าของผ่านและเผยแพร่แล้วถึงa2993dfในPR87เดิม รักษาทุกapproval/gateและแก้landmarkบนEiraให้ตรงnormalizationใหม่ ตรวจ958unit/82focusedbrowserและอัด16คลิปใหม่ ผลreleaseล่าสุดอยู่sliceREADME ไม่เริ่มA2/ตระกูล7
+
 ## 1. ขอบเขตและฐานปัจจุบัน
 
 ตรวจจาก `src/content/heroes/{team,mercenaries,roster-batch1}.ts`, `src/content/enemies/`, encounter catalog และ `src/game/visuals/assets.ts` บน game branch `3196e17` (หลัง PR #76 และงาน C5 ที่ตามมา); registry ยูนิต/roster ยังเป็นชุดเดิม

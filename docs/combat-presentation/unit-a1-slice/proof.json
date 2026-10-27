@@ -23,137 +23,138 @@
     }
   },
   "clips": 16,
-  "capturedFrames": 1262,
-  "maxFrameGap": 0.315,
+  "capturedFrames": 1547,
+  "maxFrameGap": 0.3,
   "maxTimestampErrorMs": 0.0061,
   "files": {
-    "aegis-normal-390.mp4": "eac05c3f72d68c6d083a7eaab078dd5f8967d646a1dddd4d5a7f9bdf6d8be309",
-    "attack-fast-390.mp4": "2f1517fad3c249794eda942a48a44729f05a6a5e19018381fd0c54496797219f",
-    "attack-normal-390.mp4": "009e700fd11ef97bf591a77ff2e6c90fa21556c16a32601e0aa91377439c9ecd",
-    "attack-osreduce-390.mp4": "18cff4e71db544410636ca621bbf7d473054bce91d9adce3e07435fbeab93d4e",
-    "attack-reduced-390.mp4": "b51a897a5b20682c0356866a42cb69176daad4d132f8e15dce47413815ce80fc",
-    "bolt-fast-390.mp4": "5a304b20c4d7d6580218b84e142a66da3b565db989132e44418cdbee4d10a763",
-    "bolt-normal-390.mp4": "2b82be55a7ca43af8047bdad03eca9db0fdecebbc4834c1c59abc1f286de8162",
-    "bolt-osreduce-390.mp4": "1432db178876a39daa0bf4a4a6afa98ad48e660a3b9cde298f48b24dac5ce09e",
-    "bolt-reduced-390.mp4": "4f9f827311db1cb2476cba65b4dc279dc8e61c59ed570382418e735fe3478ff8",
-    "dispel-normal-390.mp4": "30e888fcbb3ed262b757cf5915d31191f7428effe9b0518ba5c76f9f71f822ce",
-    "sigil-normal-390.mp4": "2fba7b93876c2ef15d4305b0d808d4e1fffe57018917f58a076656a72b10d77c",
-    "storm-normal-390.mp4": "8ae315270288887282fa188706bfb8958ddfce59e572ea7abae01808fc74923b",
-    "ward-fast-390.mp4": "8d03965d6a60660e05c08f45eec518d22eec6e40cd877a8425a3e4c640e9a830",
-    "ward-normal-390.mp4": "b18c9d0fbfebaa11570d13c6b2376176e69241e194f08bd13ddefdbbe5120471",
-    "ward-osreduce-390.mp4": "21ef39768f05c60385457351ea3c1dd3b121dc99a04df6b75355fb31ef5a6238",
-    "ward-reduced-390.mp4": "3fa782ab408a27ae23ab76e796a9b791645fb50d0d110968c0b71464d6aff8a2"
+    "aegis-normal-390.mp4": "298ee61fcea36b40e724a4f95cd2f91c7730989c7f8a56a3353bb8c2527ad97a",
+    "attack-fast-390.mp4": "d0c9fa27c0e6ed80bf13eeafa5660b5158166902c03dfde00a52c0ba9de4c22f",
+    "attack-normal-390.mp4": "b5970c84d89ddb5e6ca88f844e07d55888bcf8df877f7bd5cd4d2b87e7655fe5",
+    "attack-osreduce-390.mp4": "748c12bda48b251689e14f53d501baaba3b87d07aa80cdef0d04bb6f5e4a7929",
+    "attack-reduced-390.mp4": "f6294c0fb553c7b0525b3d738ccfd80232818ef82f3fe9036261cfc112d3d164",
+    "bolt-fast-390.mp4": "0ff2e74b111deec2adbef61f0f9dd21ce55fadb452826fa1f0bc3c3e462f6edf",
+    "bolt-normal-390.mp4": "7aac3cf2b01490a1b8b80ae336aa34100bb45ea138353fb1a1fc2b31155cd62f",
+    "bolt-osreduce-390.mp4": "e5e0660f47b209a053e6ccd18da94f8ed1e488d30679d942fa72eb045501a754",
+    "bolt-reduced-390.mp4": "dc367521617ef533231bb733de79fefa269704be75045235b99d4d600b765ea0",
+    "dispel-normal-390.mp4": "7e695edfa4509e38d713c21270800c0de8833093186668edc0dc0d982bd53cfb",
+    "sigil-normal-390.mp4": "91e7cdf7051e6a72954fdfc0dc02cb9d3a3958eceb7e7c47efbfe6a6adb65f83",
+    "storm-normal-390.mp4": "9b5b4c0ac22543c736b2a60e29eb68e278ef5f4e6f35efdc5a39ae7b648a9726",
+    "ward-fast-390.mp4": "4f405d7f5d5b4a31e0ef88854ac949471af2d2c5e701ecd047b61d4179f32815",
+    "ward-normal-390.mp4": "559b0c151189784fa3dcce2d67a13ca393ea80d57f8c4f8b34e819305de1c019",
+    "ward-osreduce-390.mp4": "2189999d3c42e9d9f6c416dc1eb0fdb891995f05d9e2ef48a478801391c6c81a",
+    "ward-reduced-390.mp4": "0e0a03a675426720fab59f3ccb591e9100a7a6a8a3437d22952ad8e87249a228"
   },
   "rawCaptures": [
     {
-      "path": "test-results/unit-a1-delivery/unit-a1-clips-unit-A1-clip-aegis-normal",
-      "frames": 87,
-      "stampsSha256": "26cb011f11e0d7a374400fa959c0ae74ef4cc7341651d349643f7b3de975ad73",
+      "path": "test-results/unit-a1-integrated-delivery/unit-a1-clips-unit-A1-clip-aegis-normal",
+      "frames": 104,
+      "stampsSha256": "dfaebcab856f3637ae67bb358bc1815c493d9dbb1db1ccfd6d220a5cb06644e8",
       "stateSha256": "4728928ad1be6b7069c3a06ac299c81d9a77516dcfb7baa0e8021c0c7c830054"
     },
     {
-      "path": "test-results/unit-a1-delivery/unit-a1-clips-unit-A1-clip-attack-fast",
-      "frames": 33,
-      "stampsSha256": "2872da222a6875163507a651a780f2d900199c3d3f82ef6a0504a2674dce485a",
+      "path": "test-results/unit-a1-integrated-delivery/unit-a1-clips-unit-A1-clip-attack-fast",
+      "frames": 55,
+      "stampsSha256": "db13da8e1e7826ac6f722d079ef21c42fd520f67db2aa135e2594b99e11cc48e",
       "stateSha256": "6a88a07c965620fe04ad2aa43001b317551321854cc6f6895556e2e18bee110e"
     },
     {
-      "path": "test-results/unit-a1-delivery/unit-a1-clips-unit-A1-clip-attack-normal",
-      "frames": 31,
-      "stampsSha256": "591f55c08efa4625042be44b2fa79bef5a1b087cbbaaae721935eb969689618f",
+      "path": "test-results/unit-a1-integrated-delivery/unit-a1-clips-unit-A1-clip-attack-normal",
+      "frames": 103,
+      "stampsSha256": "9b9e61b422d8148ad5b1b32f7ef449cb0f499577d367f5a9083a14532b7f5671",
       "stateSha256": "6a88a07c965620fe04ad2aa43001b317551321854cc6f6895556e2e18bee110e"
     },
     {
-      "path": "test-results/unit-a1-delivery/unit-a1-clips-unit-A1-clip-attack-osreduce",
-      "frames": 101,
-      "stampsSha256": "043747b720895d93da645293998a90c9cb8b7375fff67495e4436322a17ce8f5",
+      "path": "test-results/unit-a1-integrated-delivery/unit-a1-clips-unit-A1-clip-attack-osreduce",
+      "frames": 109,
+      "stampsSha256": "0b63c72d93b8567aecf47b48effc6d207774c5c7413314dc7d2f3c3d83846ce4",
       "stateSha256": "6a88a07c965620fe04ad2aa43001b317551321854cc6f6895556e2e18bee110e"
     },
     {
-      "path": "test-results/unit-a1-delivery/unit-a1-clips-unit-A1-clip-attack-reduced",
-      "frames": 46,
-      "stampsSha256": "e57978d374e81197e413e933d3e862960a12e667044431e419f710bbd4d28c9f",
+      "path": "test-results/unit-a1-integrated-delivery/unit-a1-clips-unit-A1-clip-attack-reduced",
+      "frames": 107,
+      "stampsSha256": "f118c837616696b34134d8e52b4b2429f3c6ae7a90c29a05761a5ab6dd93b433",
       "stateSha256": "6a88a07c965620fe04ad2aa43001b317551321854cc6f6895556e2e18bee110e"
     },
     {
-      "path": "test-results/unit-a1-delivery/unit-a1-clips-unit-A1-clip-bolt-fast",
+      "path": "test-results/unit-a1-integrated-delivery/unit-a1-clips-unit-A1-clip-bolt-fast",
       "frames": 71,
-      "stampsSha256": "727c3c68cf89ed9c05e8ba9646d8eb395ce9a3917116d4bf841dffc789e2d1cf",
+      "stampsSha256": "8533dbfbe45dba34ff2b9639c46f6846f4f8f36ed36061609f334ad77a11a405",
       "stateSha256": "de9499fad5eca8f856d5fac1d231d9939c6bc9725718d7dff6a84a53d6e6daba"
     },
     {
-      "path": "test-results/unit-a1-delivery/unit-a1-clips-unit-A1-clip-bolt-normal",
-      "frames": 92,
-      "stampsSha256": "45e0e894b9d0d82feef95d77eedadcf40c08700482d57bc2dc72dff48b4462a1",
+      "path": "test-results/unit-a1-integrated-delivery/unit-a1-clips-unit-A1-clip-bolt-normal",
+      "frames": 105,
+      "stampsSha256": "c382c767231709ac55d2e08f18cc6d8b13506c4ae53e2bf843a378c0eb6dfdd4",
       "stateSha256": "de9499fad5eca8f856d5fac1d231d9939c6bc9725718d7dff6a84a53d6e6daba"
     },
     {
-      "path": "test-results/unit-a1-delivery/unit-a1-clips-unit-A1-clip-bolt-osreduce",
-      "frames": 92,
-      "stampsSha256": "2605382d61445f5e09d522efc0251944f20604edf79a341e2ed0aef775f8dbd1",
+      "path": "test-results/unit-a1-integrated-delivery/unit-a1-clips-unit-A1-clip-bolt-osreduce",
+      "frames": 113,
+      "stampsSha256": "b0e273043013c37636a4b72794a9437228231de679075c10acd086c1b13b4157",
       "stateSha256": "de9499fad5eca8f856d5fac1d231d9939c6bc9725718d7dff6a84a53d6e6daba"
     },
     {
-      "path": "test-results/unit-a1-delivery/unit-a1-clips-unit-A1-clip-bolt-reduced",
-      "frames": 90,
-      "stampsSha256": "d7ce934bc5d794401f1ea9604153cdd4ad2faab7516cd18dc32752cb2d719bc7",
+      "path": "test-results/unit-a1-integrated-delivery/unit-a1-clips-unit-A1-clip-bolt-reduced",
+      "frames": 97,
+      "stampsSha256": "e55c7143c79458e1565c2413cb2b761848d13d15fbfd4480070ca0377ba9bfc2",
       "stateSha256": "de9499fad5eca8f856d5fac1d231d9939c6bc9725718d7dff6a84a53d6e6daba"
     },
     {
-      "path": "test-results/unit-a1-delivery/unit-a1-clips-unit-A1-clip-dispel-normal",
-      "frames": 96,
-      "stampsSha256": "fac95319f99cb5d311bf17f08f263ee39260da6948a594ea5f715e1bae5d5718",
+      "path": "test-results/unit-a1-integrated-delivery/unit-a1-clips-unit-A1-clip-dispel-normal",
+      "frames": 98,
+      "stampsSha256": "d5a8895d1e9ee95471b3e6ad5b1a426e336db3742cb041fafd9ef2a9f4efb1aa",
       "stateSha256": "38465f6b80d0504096b3b504bf4d4337b8e516e2dade0ab3ef3a942202de365c"
     },
     {
-      "path": "test-results/unit-a1-delivery/unit-a1-clips-unit-A1-clip-sigil-normal",
-      "frames": 76,
-      "stampsSha256": "1730e905d5704cb25d9321a0b78a94bb420d8228565beb3fb60b5f03e3523717",
+      "path": "test-results/unit-a1-integrated-delivery/unit-a1-clips-unit-A1-clip-sigil-normal",
+      "frames": 105,
+      "stampsSha256": "7156e28ac3d109fac2290258ba80b905d7fe8369717ec48f6ca403046907649d",
       "stateSha256": "82f6ca3b9aaab50a26616dee7245e3253c071cff1929f8147a43b887d567cb3f"
     },
     {
-      "path": "test-results/unit-a1-delivery/unit-a1-clips-unit-A1-clip-storm-normal",
-      "frames": 101,
-      "stampsSha256": "a60024b7210e8f36c513917887f790eeef4edf66da6aaa00b49e5d3489ecc546",
+      "path": "test-results/unit-a1-integrated-delivery/unit-a1-clips-unit-A1-clip-storm-normal",
+      "frames": 102,
+      "stampsSha256": "73d9c23f9bdb9f309482cd553daa9b3fa91f760538eb0bab9e172a162fd291c1",
       "stateSha256": "fd89a43f86533a1abcc3c2054beac4e0ad8574ff9ae13c530483de49eee7d929"
     },
     {
-      "path": "test-results/unit-a1-delivery/unit-a1-clips-unit-A1-clip-ward-fast",
-      "frames": 73,
-      "stampsSha256": "c6219462a9e2934cd3bfa84765d7b534d16a6aacdcd1789e52e877714cc1f922",
+      "path": "test-results/unit-a1-integrated-delivery/unit-a1-clips-unit-A1-clip-ward-fast",
+      "frames": 74,
+      "stampsSha256": "7d1114afb980e3fbdde01f661b91d471ce96448801db0fb73e5e27850e6ebd1b",
       "stateSha256": "bf855fa8aa3c7506dd6129d457bd489ef3b18dbdee7c5c4cadaf876a1fd7197f"
     },
     {
-      "path": "test-results/unit-a1-delivery/unit-a1-clips-unit-A1-clip-ward-normal",
-      "frames": 81,
-      "stampsSha256": "67389f7127d6b8ad5c510847ad60f940caf71a3e42313fd0418eabc07c82ccd6",
+      "path": "test-results/unit-a1-integrated-delivery/unit-a1-clips-unit-A1-clip-ward-normal",
+      "frames": 103,
+      "stampsSha256": "4d529df814d7688dffa3624ee61a625842a80ce0fc90bebab588cfde5b332d63",
       "stateSha256": "bf855fa8aa3c7506dd6129d457bd489ef3b18dbdee7c5c4cadaf876a1fd7197f"
     },
     {
-      "path": "test-results/unit-a1-delivery/unit-a1-clips-unit-A1-clip-ward-osreduce",
-      "frames": 97,
-      "stampsSha256": "b14fb123e3e13b2441fd30dda6abc24631eeebb04a05ebc394b344cd6fd6d057",
+      "path": "test-results/unit-a1-integrated-delivery/unit-a1-clips-unit-A1-clip-ward-osreduce",
+      "frames": 102,
+      "stampsSha256": "fef3f8d856e0e2dec0cd121850c2473fdd9c18e35f574b4cc6639166bd4802f1",
       "stateSha256": "bf855fa8aa3c7506dd6129d457bd489ef3b18dbdee7c5c4cadaf876a1fd7197f"
     },
     {
-      "path": "test-results/unit-a1-delivery/unit-a1-clips-unit-A1-clip-ward-reduced",
-      "frames": 95,
-      "stampsSha256": "dd1022a374fce36219bce8acee063cfd184504181b39221df78bcc571c0b18ca",
+      "path": "test-results/unit-a1-integrated-delivery/unit-a1-clips-unit-A1-clip-ward-reduced",
+      "frames": 99,
+      "stampsSha256": "79fdcd8b3654725c0ad4552de7cfb9aa5e8067d66f52feab3aee939c4de3404d",
       "stateSha256": "bf855fa8aa3c7506dd6129d457bd489ef3b18dbdee7c5c4cadaf876a1fd7197f"
     }
   ],
-  "integratedBase": "1f783f83417f4d8b641040e04cc4be209c265f8b",
-  "baseUpdates": "documentation only; runtime/content/tests unchanged",
+  "integratedBase": "a2993df534a16e97c4e363200834f3a17803e7a0",
+  "baseUpdates": "Published C5.6 preserved; alchemy recipient landmark uses per-art normalization; existing C5 modules/atlases unchanged",
   "localVerification": {
     "typecheck": "pass",
     "lint": "pass",
     "build": "pass",
     "unit": {
-      "passed": 920,
-      "files": 79
+      "passed": 958,
+      "files": 80
     },
     "focusedBrowser": {
-      "passed": 36
+      "passed": 82,
+      "includes": "57 inherited alchemy +20 A1 +3 optional loading +2 pilots; earlier13 presentation passed before C5.6 integration"
     },
     "capture": {
       "passed": 16
@@ -162,5 +163,7 @@
       "passed": 1
     },
     "browser": "Chromium cloud SwiftShader; emulated390px, no real device/Safari claim"
-  }
+  },
+  "captureSrcTree": "2cc19a463691cc04b036b52397ff1c473d9b00a9",
+  "capturePublicTree": "dd09494dc0205b529221890ffa637af313cb1795"
 }

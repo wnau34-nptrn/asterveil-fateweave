@@ -86,3 +86,13 @@ test('A1 encounter replacement releases Eira and Sprite textures',async({page})=
  await expect.poll(()=>page.evaluate(()=>window.unitA1QA.cached())).toEqual([]);
  await expect(page.locator('#start')).toBeEnabled();
 });
+
+for(const dpr of [2,3])test(`A1 inherited alchemy recipient anchor follows Eira normalization at ${dpr}x DPR`,async({browser})=>{
+ const ctx=await browser.newContext({viewport:{width:390,height:844},deviceScaleFactor:dpr,reducedMotion:'no-preference'});
+ try{
+ const page=await ctx.newPage();await page.clock.install();await ready(page,'skill=bolt');await page.clock.pauseAt(new Date(Date.now()+100000));
+ await page.locator('#action-bolt').click();await page.locator('#target-b1').click();await page.clock.runFor(80);
+ const p=await page.evaluate(()=>window.unitA1QA.alchemyPoint());
+ expect(p.actual.x).toBeCloseTo(p.expected.x,2);expect(p.actual.y).toBeCloseTo(p.expected.y,2);
+ }finally{await ctx.close();}
+});

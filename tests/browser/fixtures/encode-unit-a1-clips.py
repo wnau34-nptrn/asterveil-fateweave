@@ -1,9 +1,9 @@
 """Preserve every CDP frame and timestamp; verify the MP4 by decoding it again."""
 from pathlib import Path
 from PIL import Image
-import json, subprocess
+import json, subprocess, sys
 ROOT=Path(__file__).resolve().parents[3]
-CAP=ROOT/'test-results/unit-a1-delivery';OUT=ROOT/'docs/combat-presentation/unit-a1-slice';OUT.mkdir(parents=True,exist_ok=True)
+CAP=ROOT/(sys.argv[1] if len(sys.argv)>1 else 'test-results/unit-a1-delivery');OUT=ROOT/'docs/combat-presentation/unit-a1-slice';OUT.mkdir(parents=True,exist_ok=True)
 manifest=[]
 for stamps in sorted(CAP.glob('*/stamps.txt')):
  lines=stamps.read_text().splitlines();click=float(lines[0].split()[1]);frames=sorted([(n,float(t)) for n,t in (s.split() for s in lines[1:])],key=lambda f:f[1]);assert frames[0][1]<=click<=frames[-1][1]
@@ -19,6 +19,6 @@ for stamps in sorted(CAP.glob('*/stamps.txt')):
  error=max(abs(float(f['best_effort_timestamp_time'])-t) for f,t in zip(decoded,expected));assert error<.0005;assert float(probe['format']['duration'])>=expected[-1]-.001
  for label,impact in [('eira',next(i for i in impacts if i['turn']['side']=='hero')),('sprite',next((i for i in impacts if i['turn']['side']=='enemy'),None))]:
   if impact and (name,label) in [('bolt-normal','eira'),('attack-normal','sprite')]:
-   selected=min(frames,key=lambda f:abs(f[1]-(impact['at']+.03)));Image.open(stamps.parent/'frames'/f'{selected[0]}.jpg').save(OUT/f'{name}-{label}-390.png')
+   selected=min(frames,key=lambda f:abs(f[1]-(impact['at']+.18)));Image.open(stamps.parent/'frames'/f'{selected[0]}.jpg').save(OUT/f'{name}-{label}-390.png')
  manifest.append({'file':target.name,'duration':float(probe['format']['duration']),'capturedFrames':len(frames),'maxFrameGap':round(max(b[1]-a[1] for a,b in zip(frames,frames[1:])),3),'maxTimestampErrorMs':round(error*1000,4),'clickOffset':round(click-frames[0][1],3),'rawCapture':str(stamps.parent.relative_to(ROOT)),'captureStartUTCSeconds':frames[0][1],'impacts':[{**i,'at':round(i['at']-frames[0][1],3)} for i in impacts]})
 (OUT/'clips.json').write_text(json.dumps(manifest,indent=2)+'\n');(OUT/'clips.js').write_text('/* global window */\nwindow.unitA1Clips='+json.dumps(manifest)+';\n');print(f'Encoded and independently decoded {len(manifest)} actual-timestamp clips')

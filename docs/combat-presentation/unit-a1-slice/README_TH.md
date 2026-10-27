@@ -1,6 +1,6 @@
 # A0/A1 — ไอรา + ภูตแดนดิไลออน
 
-27 ตุลาคม 2026 (Asia/Bangkok) · branch `codex/animation-a0-a1` · ฐานเกม `afddd84`
+27–28 ตุลาคม 2026 (Asia/Bangkok) · branch `codex/animation-a0-a1` · ฐานเริ่ม `afddd84` / ฐานรวมส่งท้าย `a2993df`
 
 [เปิดหน้าเลือกคลิป390px](index.html) · [ข้อมูลเฟรม/เวลา/eventจริง](clips.json) · [ต้นฉบับ/การแพ็ก](../../../incoming/ART-UNIT-ANIMATION-A1-001/NOTES.md)
 
@@ -65,4 +65,14 @@ Chromium cloud/SwiftShader emulation เท่านั้น ไม่ใช่
 
 ผลที่ตรวจแล้ว: typecheck/lint/build ผ่าน; `npm test -- --maxWorkers=2` ผ่าน920tests/79files และ focused unit21/21ผ่าน (รวมการเทียบทุกactiveunlockกับcontentจริง) การตรวจ lifecycle/late arrival3/3, pilot+loading5/5 และ playerเล่น/decodeครบ16คลิป1/1ผ่าน; focused regressionรวม36/36เคสผ่าน Full browser รันในCIตามกฎrepository ผลCI/merge/publicationยังไม่ถูกอ้างว่าผ่าน
 
-คลิป16รายการ: attack/Bolt/Ward × normal/fast/reduced/OS-reduced และ Sigil/Storm/Aegis/Dispel normal จำนวนrawframesรวม1,262; maxframegap0.315s; maxPTSerror0.0061ms หลังdecodeกลับ ทุกคลิปเก็บทุกcapturedframe+finalhold ไม่แทรกภาพ/เร่งเวลา [proof.json](proof.json) บันทึกhashวิดีโอและrawcaptureที่ยังอยู่ในworkspace; rawframesไม่ใช่ไฟล์ที่commitหรือเผยแพร่ [ภาพBolt](bolt-normal-eira-390.png) / [ภาพSeedSpark](attack-normal-sprite-390.png) เป็นสองstillจากคลิปจริง
+หลักฐานรอบแรกก่อนรวมC5.6 (`a719936`; หลักฐานปัจจุบันอยู่หัวข้อ28ตุลาคมและproof.json): attack/Bolt/Ward × normal/fast/reduced/OS-reduced และ Sigil/Storm/Aegis/Dispel normal จำนวนrawframesรวม1,262; maxframegap0.315s; maxPTSerror0.0061ms หลังdecodeกลับ ทุกคลิปเก็บทุกcapturedframe+finalhold ไม่แทรกภาพ/เร่งเวลา [proof.json](proof.json) บันทึกhashวิดีโอและrawcaptureที่ยังอยู่ในworkspace; rawframesไม่ใช่ไฟล์ที่commitหรือเผยแพร่ [ภาพBolt](bolt-normal-eira-390.png) / [ภาพSeedSpark](attack-normal-sprite-390.png) เป็นสองstillจากคลิปจริง
+
+
+## 28 ตุลาคม2026 — รวมฐานC5.6ที่เผยแพร่แล้ว
+
+หัวเดิม`a719936`ผ่านquality40532299467และfullbrowser40532299933ครบ175source/3prechecks/249productionผ่าน/384skip แต่ขณะรันมีC5.6PR86ที่เจ้าของผ่านและเผยแพร่เข้าฐานถึง`a2993df`แล้ว จึงรวมฐานใหม่ในPR87เดิม รักษาalchemyatlas/module/approvalและทุกCIgateครบ แก้เฉพาะalchemyAnchorให้อ่านdisplayratioของEiraใหม่อย่างถูกต้อง (pilotเดิม2/originalart1เท่าเดิม) เพิ่มanchorcheckที่2x/3xDPR ไม่แก้timing/rules/save/balance ขณะนี้กำลังตรวจmergedsourceและปรับหลักฐานให้ตรงฐานสุดท้าย ผลCIหัวเดิมไม่ใช่ผลของหัวใหม่
+
+
+ผลmergedsource: typecheck/lint/buildผ่าน;958unit/80filesและ82focusedbrowserผ่านครบ (รวม57alchemyเดิม,20A1,3loading,2pilot) อัดใหม่16clipsจากฐานรวมแล้ว ทุกstateเทียบresolverตรงและMP4decodedPTS/count/endผ่าน มี1547rawframes maxgap0.3s/maxPTSerror0.0061ms บันทึกsource/publictreeและhashในproof.json ผลfullCI/merge/Pagesของหัวรวมยังรอขั้นส่งจริง
+
+หน้าเล่นคลิปปัจจุบันตรวจdecode/controlsครบ16ไฟล์ผ่าน1/1ที่390pxด้วย

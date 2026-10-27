@@ -1,0 +1,141 @@
+{
+  "ownerApproval": "เอาเข้าเกมได้",
+  "ownerApprovalDateBangkok": "2026-10-27",
+  "pullRequest": 86,
+  "approvedRuntimeHead": "31c5e90691164b9d85820ef61a92f63975635b8a",
+  "validatedHead": "25354540874a0d797e027e4e2c71d7833301df66",
+  "approvedHead": "45244c401bb8a8c1e132df1730ba7b19c3f4decb",
+  "baseFetchedBeforeMerge": "1f783f83417f4d8b641040e04cc4be209c265f8b",
+  "mergeSHA": "5ad447568b34ecd432760a80701d04cfe6f15e81",
+  "qualityRun": 40533376869,
+  "qualityResult": "success",
+  "browserRun": 40533376856,
+  "browserResult": "success",
+  "atlas": {
+    "path": "public/assets/fx/alchemy_fx.webp",
+    "bytes": 981524,
+    "sha256": "18c4b740db78eb4f80c6f66bc845770f46f013e2c3dede909e27ef19ba2505a5",
+    "frames": 18,
+    "width": 1584,
+    "height": 1128
+  },
+  "runtimeTrees": {
+    "src": "7e2c1e8336d002e8d870c2e91f8d0d1ce2539320",
+    "public": "020b47453cea14fd5e6b99c1b826169a1bd99e1e",
+    "tests": "086ecad792fe5493d8c68a894df53e2a4ed16860"
+  },
+  "localValidation": {
+    "unitPassed": 948,
+    "unitFiles": 79,
+    "focusedBrowserPassed": 57,
+    "capturesPassed": 55,
+    "rawFrames": 6916,
+    "playerPassed": 1,
+    "maxTimestampErrorMs": 0.0062,
+    "maxFrameGapMs": 367
+  },
+  "family7Started": false,
+  "liveHTTPVerification": {
+    "result": "not_performed_network_policy",
+    "reason": "Cloud egress policy excludes wnau34-nptrn.github.io. Publication proof uses successful Pages jobs and artifact tied to the merge SHA.",
+    "liveCDNHashVerified": false
+  },
+  "browserCounts": {
+    "sourceFixturePassed": 214,
+    "prechecksPassed": 3,
+    "productionPassed": 249,
+    "productionSkipped": 465
+  },
+  "pagesRun": 40598822074,
+  "pagesResult": "success",
+  "pagesArtifact": {
+    "id": 12777099123,
+    "name": "github-pages",
+    "bytes": 53689733,
+    "digest": "sha256:a5dc706292feb3ac44b1a2ea19df6fd0fb4012b68fbd6ff0c46112d86b938706",
+    "headSHA": "5ad447568b34ecd432760a80701d04cfe6f15e81"
+  },
+  "mergedAtUTC": "2026-10-27T22:58:46Z",
+  "mergedAtBangkok": "2026-10-28T05:58:46+07:00",
+  "postMergeQuality": {
+    "runs": [
+      40598822102,
+      40598832843
+    ],
+    "conclusion": "success"
+  },
+  "publishedSHA": "5ad447568b34ecd432760a80701d04cfe6f15e81",
+  "pagesUpdatedAtUTC": "2026-10-27T23:17:56Z",
+  "pagesRunURL": "https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/40598822074",
+  "pagesJobs": [
+    {
+      "name": "browser (4)",
+      "id": 122521509445,
+      "conclusion": "success",
+      "completedAtUTC": "2026-10-27T23:06:49Z"
+    },
+    {
+      "name": "build",
+      "id": 122521509720,
+      "conclusion": "success",
+      "completedAtUTC": "2026-10-27T23:00:34Z"
+    },
+    {
+      "name": "browser (2)",
+      "id": 122521509723,
+      "conclusion": "success",
+      "completedAtUTC": "2026-10-27T23:08:03Z"
+    },
+    {
+      "name": "browser (3)",
+      "id": 122521509739,
+      "conclusion": "success",
+      "completedAtUTC": "2026-10-27T23:07:08Z"
+    },
+    {
+      "name": "browser (1)",
+      "id": 122521509830,
+      "conclusion": "success",
+      "completedAtUTC": "2026-10-27T23:17:06Z"
+    },
+    {
+      "name": "deploy",
+      "id": 122528991466,
+      "conclusion": "success",
+      "completedAtUTC": "2026-10-27T23:17:56Z"
+    }
+  ],
+  "publishedAtUTC": "2026-10-27T23:17:56Z",
+  "pagesBrowserCounts": {
+    "sourceFixturePassed": 214,
+    "productionPassed": 249,
+    "productionSkipped": 465,
+    "shards": [
+      {
+        "shard": 1,
+        "jobId": 122521509830,
+        "passed": 61,
+        "skipped": 176
+      },
+      {
+        "shard": 2,
+        "jobId": 122521509723,
+        "passed": 63,
+        "skipped": 211
+      },
+      {
+        "shard": 3,
+        "jobId": 122521509739,
+        "passed": 59,
+        "skipped": 78
+      },
+      {
+        "shard": 4,
+        "jobId": 122521509445,
+        "passed": 66,
+        "skipped": 0
+      }
+    ]
+  },
+  "publishedAtBangkok": "2026-10-28T06:17:56+07:00"
+}

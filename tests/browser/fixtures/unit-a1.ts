@@ -34,7 +34,14 @@ const load=()=>{ui.open({kind:'random',data:fixture.data,entry:fixture.entry,com
 load();
 new ResizeObserver(()=>scene.refreshLayout()).observe(document.querySelector('#game')!);
 void document.fonts.ready.then(()=>scene.refreshLayout());
-const qa={impacts,turns:()=>fixture.result.turns,otherEncounter:()=>{
+const qa={alchemyPoint:()=>{
+ const body=(scene as unknown as {bodies:Map<string,Phaser.GameObjects.Container>}).bodies.get('weaver')!;
+ const sprite=body.list.find((c):c is Phaser.GameObjects.Image=>c instanceof Phaser.GameObjects.Image)!;
+ // Independently use the documented seed normalization, including the live world matrix.
+ const point=sprite.getWorldTransformMatrix().transformPoint(.4*512*.42,-.35*512*.42);
+ const dpr=scene.game.canvas.width/scene.game.canvas.getBoundingClientRect().width;
+ return {actual:scene.alchemyAnchor('weaver','fury')!,expected:{x:point.x/dpr,y:point.y/dpr}};
+ },impacts,turns:()=>fixture.result.turns,otherEncounter:()=>{
  const data={...fixture.data,heroes:fixture.data.heroes.filter(h=>h.id==='guardian'),enemies:fixture.data.enemies.map(e=>({...e,art:'brute'}))};
  ui.open({kind:'random',data,entry:{hp:{guardian:76}},commands:[],commit:()=>true,leaveLabel:()=>'',leave:()=>{}});
  },target:()=>fixture.command.targetId==='enemies'?`enemies-b1`:fixture.command.targetId,
