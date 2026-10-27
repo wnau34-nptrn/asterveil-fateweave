@@ -1,5 +1,14 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
+## 2026-10-28 — C5.6 merged and published / ตระกูล6เสร็จแล้ว
+
+เจ้าของอนุมัติ55actual390pxclipsด้วย “เอาเข้าเกมได้” (27ต.ค.2026) PR86 merged5ad447568b34ecd432760a80701d04cfe6f15e81 หลังCIquality40533376869/browser40533376856success (948unit/79files,214sourceVFX,3prechecks,249productionผ่าน/465skip) Fetchฐาน1f783f8ก่อนmerge src/public/tests/workflowtreesตรงvalidatedhead2535454และapprovedruntime31c5e90 AtlasSHA25618c4b740db78eb4f80c6f66bc845770f46f013e2c3dede909e27ef19ba2505a5ตรง55คลิป
+
+[Releaseproof](../validation/alchemy-vfx-release/README_TH.md): Pages40598822074successครบbuild+browser4shards+deployเมื่อ2026-10-28 06:17:56น.กรุงเทพฯ PublishmergeSHA5ad4475 Artifact12777099123/53,689,733bytes/digesta5dc706292feb3ac44b1a2ea19df6fd0fb4012b68fbd6ff0c46112d86b938706ผูกSHAเดียวกัน Postmergequality40598822102/40598832843success ไม่อ้างliveCDNhashหรือมือถือจริง
+
+55clips/state-equality/decodedplayerผ่าน เก็บ6916rawframesครบ MP4PTS/count/finalholdผ่าน maxerror0.0062ms/maxgap367ms ไม่retime/interpolate Filesที่อัปเดตรอบปิดงาน: releaseREADME/JSON, alchemyvalidation/proofgenerator, CLAUDE.md, CODEX-TO-CLAUDE, development/new-chat/C5handoffและart/runtimeREADMEs เป็นdocs-onlyfollow-up ไม่มีcore/save/content/balance/playback timingdiff รักษาunitanimationplanครบ ไม่มีงานค้างตระกูล6 ไม่เริ่มตระกูล7ตามscopeเจ้าของ
+
+
 ## 2026-10-27 — C5.6 owner motion approved: “เอาเข้าเกมได้”
 
 เจ้าของตรวจ55actual390pxclipsแล้วสั่ง “เอาเข้าเกมได้” อนุมัติmotionและmerge/เผยแพร่ผ่านPR86เดิม ไม่เริ่มตระกูล7 Fetchฐานล่าสุด1f783f8แล้วไม่มีงานใหม่แทรก Approvedruntime31c5e90/validatedfixture2535454และdelivery949e129มีsrc/public/tests/workflowtreesตรงกัน AtlasSHA25618c4b740db78eb4f80c6f66bc845770f46f013e2c3dede909e27ef19ba2505a5ตรงคลิปที่ตรวจ

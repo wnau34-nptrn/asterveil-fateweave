@@ -6,8 +6,12 @@
   },
   "browser": {
     "run": 40533376856,
-    "status": "in_progress",
-    "conclusion": null
+    "status": "completed",
+    "conclusion": "success",
+    "sourceFixturePassed": 214,
+    "prechecksPassed": 3,
+    "productionPassed": 249,
+    "productionSkipped": 465
   },
   "local": {
     "unitTests": 948,
@@ -24,5 +28,14 @@
     "quote": "เอาเข้าเกมได้",
     "clipsReviewed": 55
   },
-  "mergePublication": "owner_authorized_after_required_CI_success"
+  "mergePublication": "merged_and_published",
+  "mergeSHA": "5ad447568b34ecd432760a80701d04cfe6f15e81",
+  "pages": {
+    "run": 40598822074,
+    "status": "completed",
+    "conclusion": "success",
+    "publishedSHA": "5ad447568b34ecd432760a80701d04cfe6f15e81",
+    "publishedAtUTC": "2026-10-27T23:17:56Z"
+  },
+  "releaseProof": "../../validation/alchemy-vfx-release/README_TH.md"
 }

@@ -1,5 +1,7 @@
 # ART-VFX-ALCHEMY-001 · artwork R1 รอเจ้าของเลือก
 
+C5.6เสร็จแล้ว: เจ้าของอนุมัติ55คลิปด้วย “เอาเข้าเกมได้” PR86 merged5ad4475 Pages40598822074เผยแพร่successครบbuild/browser4shards/deployเมื่อ2026-10-28 06:17:56น.กรุงเทพฯ [releaseproof](../../docs/validation/alchemy-vfx-release/README_TH.md) ไม่เริ่มตระกูล7 ข้อความรอreview/merge/เผยแพร่ด้านล่างเป็นประวัติ
+
 C5.6ล่าสุด: เจ้าของตรวจ55คลิปจริงและอนุมัติ “เอาเข้าเกมได้” แล้ว27ต.ค.2026 อนุญาตmerge/เผยแพร่PR86หลังCIครบผ่าน ไม่เริ่มตระกูล7 ข้อความรอmotionด้านล่างเป็นประวัติ
 
 RuntimeR1/18frameatlasเสร็จในPR86เดิม ส่ง55actual390pxclipsแล้ว รอowner motion review รายละเอียดdocs/combat-presentation/alchemy-slice/README_TH.md ไม่merge/เผยแพร่/ตระกูล7
