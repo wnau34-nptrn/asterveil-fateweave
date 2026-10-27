@@ -2,7 +2,7 @@
 
 ## 2026-10-27 — C5.5 earth artwork R1 for selection; no runtime
 
-Owner said “เริ่มขั้นต่อไปได้” after family4release, authorizing family5. Fetched gamebase35e39af; independently confirmed Pages40503739046success at merge7c392b5 and prior atlas SHA against releaseproof. New branch `codex/vfx-family-5-earth`, one draft PR for the entire family (link recorded after creation), no merge/publication.
+Owner said “เริ่มขั้นต่อไปได้” after family4release, authorizing family5. Fetched gamebase35e39af; independently confirmed Pages40503739046success at merge7c392b5 and prior atlas SHA against releaseproof. New branch `codex/vfx-family-5-earth`, [draft PR85](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/85) for the entire family, no merge/publication.
 
 Added original effect-only ImageGen12cells/1536×1024 RGBA/exactprompt/provenance under incoming/ART-VFX-EARTH-001; real renderer/resolver15case screenshots, sprite/DOMalpha masks, events/snapshots and45static390pxcomposites plus4skill/3phase review viewer under docs/combat-presentation/earth-storyboards. Bash ivory/gold collision crescent, Slam narrow bronze downward rune impact, Quake low amber fractured fan, Tremor converging jade stone ribs. Body-edge and shallow ground placements differ per move, feathered dissolution, rear masks preserve costume/weapon/name/HPpixels. HP/UI fixed before cast is explicitly a static concept, not post-hit state or runtime motion.
 

@@ -3,7 +3,7 @@
 27ตุลาคม2026 · เจ้าของสั่ง “เริ่มขั้นต่อไปได้” หลังตระกูล4ให้ผ่าน/merge/เผยแพร่แล้ว จึงเริ่มตระกูล5เท่านั้น
 
 - ฐาน35e39afที่fetchล่าสุด; family4PR84merge7c392b5/Pages40503739046successครบbuild+4browser+deploy19:37:55กรุงเทพฯ ตรวจAPI/releaseproofและcheckoutatlasSHAตรงกัน
-- Branch `codex/vfx-family-5-earth` หนึ่งdraft PRต่อทั้งตระกูล ไม่ใช้PR84ต่อ ไม่merge/เผยแพร่/เริ่มตระกูล6ก่อนตรวจคลิปจริง
+- Branch `codex/vfx-family-5-earth` [draft PR85](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/85) ต่อทั้งตระกูล ไม่ใช้PR84ต่อ ไม่merge/เผยแพร่/เริ่มตระกูล6ก่อนตรวจคลิปจริง
 - [Artwork R1](../combat-presentation/earth-storyboards/README_TH.md) ครบ4ท่า×3จังหวะและ15กรณีจริง รวม45composites390×844 หน้าเลือกท่า/กรณี/phase เทียบสนามเปล่า น้ำหนัก60–110% คืนค่า100% ยังไม่มีartworkที่เจ้าของเลือกและยังไม่มีearth runtime
 - Originaleffect-onlyImageGen RGBA1536×1024/4rows×3columns พร้อมexactprompt/provenanceใน `incoming/ART-VFX-EARTH-001/` สร้างเฉพาะVFX ไม่ให้AIวาดสนาม/ชุด/UIใหม่ ใช้sprite/DOMmasksจริงรักษาพื้นหน้า
 

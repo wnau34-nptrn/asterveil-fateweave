@@ -1,6 +1,6 @@
 # C5.5 — ทุบ / แผ่นดิน · artwork R1 รอเจ้าของเลือก
 
-27 ตุลาคม 2026 · `codex/vfx-family-5-earth` → `feature/fateweave-initial-prototype` · ตระกูล5หนึ่งPR ตั้งแต่artworkถึงruntimeภายหลัง
+27 ตุลาคม 2026 · `codex/vfx-family-5-earth` → `feature/fateweave-initial-prototype` · [draft PR85](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/85) ตระกูล5หนึ่งPR ตั้งแต่artworkถึงruntimeภายหลัง
 
 เจ้าของอนุญาต “เริ่มขั้นต่อไปได้” หลังตระกูล4เผยแพร่แล้ว งานนี้เริ่มartwork3จังหวะของbash/slam/quake/tremorให้เลือกก่อนต่อruntime ยังไม่มีearth atlas/moduleในเกม ไม่มีการmerge/เผยแพร่หรือเริ่มตระกูล6
 
