@@ -1307,13 +1307,13 @@
     "file": "rally-normal-fast-390.mp4",
     "width": 390,
     "height": 844,
-    "duration": 3.383333,
-    "capturedFrames": 94,
-    "clickOffset": 0.411,
-    "maxFrameGap": 0.341,
+    "duration": 3.466667,
+    "capturedFrames": 83,
+    "clickOffset": 0.483,
+    "maxFrameGap": 0.277,
     "impacts": [
       {
-        "at": 0.637,
+        "at": 0.758,
         "action": "rally",
         "side": "hero",
         "events": [
@@ -1329,7 +1329,7 @@
         ]
       },
       {
-        "at": 1.123,
+        "at": 1.215,
         "side": "enemy",
         "events": [
           "damage"
@@ -1346,7 +1346,7 @@
         ]
       },
       {
-        "at": 1.694,
+        "at": 1.792,
         "side": "enemy",
         "events": [
           "damage"
@@ -1368,13 +1368,13 @@
     "file": "rally-normal-normal-390.mp4",
     "width": 390,
     "height": 844,
-    "duration": 3.366667,
-    "capturedFrames": 85,
-    "clickOffset": 0.376,
-    "maxFrameGap": 0.3,
+    "duration": 3.266667,
+    "capturedFrames": 86,
+    "clickOffset": 0.315,
+    "maxFrameGap": 0.307,
     "impacts": [
       {
-        "at": 0.702,
+        "at": 0.646,
         "action": "rally",
         "side": "hero",
         "events": [
@@ -1390,7 +1390,7 @@
         ]
       },
       {
-        "at": 1.408,
+        "at": 1.401,
         "side": "enemy",
         "events": [
           "damage"
@@ -1407,7 +1407,7 @@
         ]
       },
       {
-        "at": 2.223,
+        "at": 2.206,
         "side": "enemy",
         "events": [
           "damage"
@@ -1429,13 +1429,13 @@
     "file": "rally-normal-osreduce-390.mp4",
     "width": 390,
     "height": 844,
-    "duration": 3.366667,
-    "capturedFrames": 103,
-    "clickOffset": 0.356,
-    "maxFrameGap": 0.141,
+    "duration": 3.333333,
+    "capturedFrames": 104,
+    "clickOffset": 0.381,
+    "maxFrameGap": 0.134,
     "impacts": [
       {
-        "at": 0.39,
+        "at": 0.417,
         "action": "rally",
         "side": "hero",
         "events": [
@@ -1451,7 +1451,7 @@
         ]
       },
       {
-        "at": 1.11,
+        "at": 1.131,
         "side": "enemy",
         "events": [
           "damage"
@@ -1468,7 +1468,7 @@
         ]
       },
       {
-        "at": 1.952,
+        "at": 2.003,
         "side": "enemy",
         "events": [
           "damage"
@@ -1490,13 +1490,13 @@
     "file": "rally-normal-reduced-390.mp4",
     "width": 390,
     "height": 844,
-    "duration": 3.283333,
-    "capturedFrames": 91,
-    "clickOffset": 0.338,
-    "maxFrameGap": 0.274,
+    "duration": 3.3,
+    "capturedFrames": 93,
+    "clickOffset": 0.371,
+    "maxFrameGap": 0.291,
     "impacts": [
       {
-        "at": 0.717,
+        "at": 0.715,
         "action": "rally",
         "side": "hero",
         "events": [
@@ -1512,7 +1512,7 @@
         ]
       },
       {
-        "at": 1.443,
+        "at": 1.419,
         "side": "enemy",
         "events": [
           "damage"
@@ -1529,7 +1529,7 @@
         ]
       },
       {
-        "at": 2.26,
+        "at": 2.279,
         "side": "enemy",
         "events": [
           "damage"

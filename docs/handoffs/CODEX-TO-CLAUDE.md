@@ -1,5 +1,13 @@
 # Codex → Claude handoff
 
+## 2026-10-27 — Rally R5: floor rings only, forward wave removed (PR #77)
+
+- Owner requested only the lower ring, agreed with Knight's floor ring leading then simultaneous ally responses, and explicitly authorized “ดำเนินการได้”. Same `codex/vfx-family-2-defense`, draft PR77; no merge/deploy or family3, owner motion review remains pending.
+- Runtime/atlas/profile/packager no longer include any forward command wave. Prepare paints one floor ring at the actual caster's feet; contact paints only real covered recipients' floor rings together, then the existing dissolve. The selected bottom-row artwork and all eleven placement profiles stay unchanged; exact original1536×1024source/prompts retained, generation provenance marks R5 bottom-row selection. Shared atlas35frames1584×1584,496190bytes, three unused command frames/profile removed. Main storyboard and current review docs now show R5; R4 concept viewer is historical.
+- Tests:858unit/75files pass, typecheck/lint/build/diff checks pass. Focused defense16 unique cases covered (all11casts/cleanup, Rally reduced-motion still and3modes/resize, missing-atlas fallback). Initial run15pass/1timeout: the live skip button disappeared during the fallback test. Froze playback with Playwright clock, retaining command/fallback/skip assertions; fallback and strengthened Rally caster-foot/recipient/no-wave assertions rerun2/2pass. No game behavior/timing change for this harness repair.
+- Storyboard/control1/1 and separate Rally capture4/4pass. All four native390px actual stills inspected: floor only, costumes/boots/HP clear. Encoded videos3.27–3.47s,83–104captured frames all retained (+one final hold),max capture gaps0.134–0.307s; H264HighLevel3.1 yuv420p/tv VFR390×844. Other17manifest entries and34video/still files identical. Mobile21-clip player plays/decodes all four with no pageerrors/overflow. Chromium cloud, not hardware/Safari/FPS certification.
+- Files: defense module/profile/atlas and provenance/packager, main storyboard manifest/viewer/PNGs, Rally clip4MP4/4PNG and manifest, focused browser test plus current docs/handoffs. No core/save/content/balance/playback/BattleScene changes. Next owner reviews updated Rally normal/fast/reduced/OS-reduced clips in `docs/combat-presentation/defense-slice/`; keep this PR draft and do not infer approval of other skills.
+
 ## 2026-10-27 — Selected Rally R4 in runtime, updated real clips (PR #77)
 
 - Owner said “ไปต่อ” after the R4 artwork delivery. This selects R4 for runtime in the existing family2 PR, not approval of motion, merge/publication or other skills. Same `codex/vfx-family-2-defense`, draft PR77; merge commit none, no family3.

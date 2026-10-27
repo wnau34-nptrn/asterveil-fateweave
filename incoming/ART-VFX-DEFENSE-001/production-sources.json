@@ -52,32 +52,6 @@
     ]
   },
   {
-    "skill": "rally_command",
-    "source": "incoming/ART-VFX-DEFENSE-001/source/rally.png",
-    "sha256": "77b0f3d21262c4974f0713abeaea8ef3af04b25295185938089b67da1c9c17d2",
-    "scale": 0.5894736842105263,
-    "frames": [
-      [
-        108,
-        214,
-        234,
-        175
-      ],
-      [
-        584,
-        193,
-        380,
-        227
-      ],
-      [
-        1158,
-        196,
-        298,
-        227
-      ]
-    ]
-  },
-  {
     "skill": "rally",
     "source": "incoming/ART-VFX-DEFENSE-001/source/rally.png",
     "sha256": "77b0f3d21262c4974f0713abeaea8ef3af04b25295185938089b67da1c9c17d2",

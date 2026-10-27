@@ -100,13 +100,5 @@
       "anchor": "body",
       "fit": 0.5071009108341323
     }
-  },
-  "rallyCommand": {
-    "width": 68,
-    "height": 42,
-    "dx": 85,
-    "dy": 22,
-    "anchor": "body",
-    "fit": 0.3035714285714286
   }
 }

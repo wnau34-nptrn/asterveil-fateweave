@@ -5,8 +5,12 @@ const skills=['guard','aegis','rally','bulwark','stonearmor','guardstone','halo'
 test.skip(process.env.PLAYWRIGHT_PAGES==='true','source-only defense fixture has a separate dev-server gate');
 test('defense missing atlas falls back without changing the command',async({page})=>{
   const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));
+  // Freeze playback so the skip button cannot disappear before the assertion.
+  await page.clock.install({time:new Date('2026-10-27T00:00:00Z')});
   await page.route('**/assets/fx/defense_fx.*',route=>route.abort());
-  await page.goto('tests/browser/fixtures/defense.html?runtime=1&skill=aegis');await page.locator('#start').click();await page.locator('#action-aegis').click();await page.locator('#target-party').click();
+  await page.goto('tests/browser/fixtures/defense.html?runtime=1&skill=aegis');await page.locator('#start').click();
+  await page.clock.pauseAt(new Date('2026-10-27T01:00:00Z'));
+  await page.locator('#action-aegis').click();await page.locator('#target-party').click();
   const committed=await page.evaluate(()=>localStorage.getItem('defense-committed'));
   expect(JSON.parse(committed!).commands).toHaveLength(1);expect(await page.evaluate(()=>window.defenseQA.frames())).toEqual([]);
   await page.locator('#skip-turn').click();expect(await page.evaluate(()=>localStorage.getItem('defense-committed'))).toBe(committed);expect(errors).toEqual([]);
@@ -29,15 +33,18 @@ for(const skill of skills)test(`defense ${skill} uses truthful contact and owned
     expect((await page.evaluate(()=>window.defenseQA.frames())).some(f=>f.endsWith('_peak'))).toBe(false);
     if(skill==='rally'){
       const prepare=await page.evaluate(()=>window.defenseQA.frames());
-      expect(prepare.filter(f=>f==='rally_command_prepare')).toHaveLength(1);
-      expect(prepare).not.toContain('rally_prepare');
+      expect(prepare.filter(f=>f==='rally_prepare')).toHaveLength(1);
+      const lead=(await page.evaluate(()=>window.defenseQA.painted())).find(p=>p.frame==='rally_prepare')!;
+      const caster=await page.evaluate(id=>window.defenseQA.point(id),turn.actorId);
+      expect(lead.x).toBeCloseTo(caster.x);expect(lead.y).toBeCloseTo(caster.footY+27);
+      expect(prepare.some(f=>f.startsWith('rally_command_'))).toBe(false);
     }
     await page.clock.runFor(61);
     const peaks=(await page.evaluate(()=>window.defenseQA.painted())).filter(p=>p.frame===`${skill}_peak`);
     expect(peaks).toHaveLength(cues.length);expect(peaks.every(p=>p.alpha>.7)).toBe(true);
     expect(await page.evaluate(()=>window.defenseQA.labelsAbovePaint())).toBe(true);
     if(skill==='rally'){
-      expect((await page.evaluate(()=>window.defenseQA.frames())).filter(f=>f==='rally_command_peak')).toHaveLength(1);
+      expect((await page.evaluate(()=>window.defenseQA.frames())).some(f=>f.startsWith('rally_command_'))).toBe(false);
       for(const [i,cue]of cues.entries()){
         const foot=(await page.evaluate(id=>window.defenseQA.point(id),cue.targetId)).footY;
         expect(peaks[i]!.y).toBeCloseTo(foot+27);

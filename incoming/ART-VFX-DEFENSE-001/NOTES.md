@@ -43,3 +43,7 @@ Owner asked to redesign after discussing Rally mechanics/concept. New six-cell o
 ## Rally R4 selected and promoted — 2026-10-27
 
 Owner said “ไปต่อ” after the R4 artwork delivery: proceed with this artwork into runtime, same draft PR77. Exact six-cell original promoted to `source/rally.png` and prompts; old production Rally source/prompt/metadata archived in `archive/rally-pre-r4/`. Main manifest/packager support separate command and response rows with shared scale per row. One38-frame1584×1848 atlas546404bytes, eleven skill profiles plus a separate command profile. Prepare draws one command beside caster only; contact draws one command plus actual recipients' low floor responses. Reduced motion static, quiet opacity/motion, existing cleanup/timing preserved. Updated actual Rally clips normal/fast/reduced/OS-reduced await owner motion review. No family3/merge or inferred other approvals.
+
+## Rally R5 — floor rings only, owner authorized 2026-10-27
+
+Owner requested only lower rings, no forward wave, and said “ดำเนินการได้”. Reuse exact authored bottom row of R4; source original/prompt remain untouched. Remove top command row from shipped atlas/profile/runtime, leaving35frames1584×1584/496190bytes. Prepare is a single floor ring on Knight; at contact actual covered allies acknowledge together, then fade. Placement90×14 feet dy27 and all resolved outcomes/timing/cleanup preserved. R4 concept viewer is historical; main storyboards/runtime clips show R5. Same draft PR77, no merge/deploy/family3 before clip review.

@@ -298,8 +298,8 @@
   {
     "skill": "rally",
     "thai": "ตั้งรับหมู่",
-    "identity": "Knight ส่งคำสั่งข้างตัว → ทีมตอบรับพร้อมกันที่พื้น ไม่พาดชุด ไม่ใช่ barrier",
-    "revision": "Rally R4 command/response",
+    "identity": "วงที่พื้นของ Knight สว่างนำ → วงของทีมตอบรับพร้อมกัน ไม่มีคลื่นด้านหน้า ไม่ใช่ barrier",
+    "revision": "Rally R5 floor rings only",
     "width": 90,
     "height": 14,
     "placement": "targets",
@@ -330,37 +330,6 @@
       503,
       88
     ],
-    "command": {
-      "frames": [
-        [
-          108,
-          214,
-          234,
-          175
-        ],
-        [
-          584,
-          193,
-          380,
-          227
-        ],
-        [
-          1158,
-          196,
-          298,
-          227
-        ]
-      ],
-      "frameMax": [
-        380,
-        227
-      ],
-      "width": 68,
-      "height": 42,
-      "dx": 85,
-      "dy": 22,
-      "anchor": "body"
-    },
     "source": "../../../incoming/ART-VFX-DEFENSE-001/source/rally.png",
     "background": "../../../incoming/ART-VFX-DEFENSE-001/reference/rally-390.png",
     "sourceSize": [

@@ -59,19 +59,19 @@ const gestures:Record<DefenseSkill,{x:number;y:number;spread:number}>={
   halo:{x:0,y:-2,spread:.05},sanctuary:{x:0,y:-4,spread:.08},brace:{x:2,y:0,spread:.03},
   spearwall:{x:0,y:4,spread:.06},hold:{x:0,y:1,spread:.08},
 };
-function paint(ctx:FxContext,skill:DefenseSkill,phase:'prepare'|'peak'|'tail',point:DefensePoint,command=false):Phaser.GameObjects.Image {
-  const p=command?meta.rallyCommand:meta.profiles[skill],s=scale(ctx);
+function paint(ctx:FxContext,skill:DefenseSkill,phase:'prepare'|'peak'|'tail',point:DefensePoint):Phaser.GameObjects.Image {
+  const p=meta.profiles[skill],s=scale(ctx);
   const bottom=p.anchor==='feet'?point.footY+p.dy*s:point.y+(p.dy+p.height/2)*s;
-  const image=ctx.scene.add.image(point.x+p.dx*s,bottom,DEFENSE_ATLAS,`${command?'rally_command':skill}_${phase}`).setOrigin(.5,meta.baseline).setScale(p.fit*s);
+  const image=ctx.scene.add.image(point.x+p.dx*s,bottom,DEFENSE_ATLAS,`${skill}_${phase}`).setOrigin(.5,meta.baseline).setScale(p.fit*s);
   ctx.add(image);return image;
 }
 // All tweens target owned images; stopEffects kills them. No unowned timers/callback counters.
 export function defenseCast(ctx:FxContext,cue:DefenseCue,lookup:DefenseLookup,contactMs:number):void {
   if(ctx.reduced||cue.kind!=='cast')return;
-  // One command from the caster; recipients only acknowledge at contact.
+  // The caster leads with a floor ring; allies acknowledge at contact.
   if(cue.skill==='rally'&&cue.targetId!==cue.sourceId)return;
   const at=lookup(cue.targetId);if(!at)return;
-  const image=paint(ctx,cue.skill,'prepare',at,cue.skill==='rally').setAlpha(.18);
+  const image=paint(ctx,cue.skill,'prepare',at).setAlpha(.18);
   ctx.scene.tweens.add({targets:image,alpha:ctx.quiet?.42:.7,duration:Math.max(1,contactMs),ease:'Sine.In',onComplete:()=>image.destroy()});
 }
 export function defenseContact(ctx:FxContext,cue:DefenseCue,lookup:DefenseLookup,life:number):void {
@@ -85,10 +85,6 @@ export function defenseContact(ctx:FxContext,cue:DefenseCue,lookup:DefenseLookup
     ctx.add(image);
     if(!ctx.reduced)ctx.scene.tweens.add({targets:image,alpha:0,x:image.x+(counter?Math.cos(angle)*10*s:0),y:image.y+(counter?Math.sin(angle)*10*s:0),duration:Math.min(duration,280),ease:'Sine.Out',onComplete:()=>image.destroy()});
     return;
-  }
-  if(cue.skill==='rally'&&cue.sourceId===cue.targetId){
-    const command=paint(ctx,'rally','peak',at,true).setAlpha(opacity);
-    if(!ctx.reduced)animatePaint(ctx,command,paint(ctx,'rally','tail',at,true).setAlpha(0),{x:4,y:0,spread:.1},duration,opacity);
   }
   const peak=paint(ctx,cue.skill,'peak',at).setAlpha(opacity);
   if(ctx.reduced)return;

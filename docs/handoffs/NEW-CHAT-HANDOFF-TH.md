@@ -1,5 +1,9 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
+## 2026-10-27 — Rally R5 วงพื้นเท่านั้น รอตรวจคลิป
+
+เจ้าของขอมีแค่วงด้านล่าง ไม่เอาคลื่นด้านหน้า และอนุญาต “ดำเนินการได้” แล้ว ตัดcommand layerออกจากatlas/profile/runtime ใช้วงKnightนำ→วงทีมตอบรับพร้อมกันที่contact (coverageจริง) อัดRallynormal/fast/reduced/OS-reducedใหม่ในdefense-slice PR#77เดิมยังdraft รอตรวจmotionก่อนmerge/เผยแพร่/ตระกูล3 เอกสารR4ด้านล่างเป็นประวัติก่อนแก้
+
 ## 2026-10-27 — Rally R4 เลือกแล้ว ต่อ runtime/คลิปจริง รอตรวจ motion
 
 เจ้าของสั่ง “ไปต่อ” หลังดูR4 จึงpromoteคำสั่งจากKnight→ทีมตอบรับที่พื้นเข้าatlas/moduleเดียวของตระกูล2 เก็บต้นฉบับRallyเดิมที่archive/rally-pre-r4 ไม่แก้กฎ/เซฟ/สมดุล/เวลาplayback คลิปใหม่normal/fast/reduced/OS-reducedใน `docs/combat-presentation/defense-slice/` / index.html รวมหลักฐาน21คลิป (อีก17คลิปคงเดิม) PR#77ใบเดิมยังdraft รอเจ้าของตรวจคลิปก่อนmerge/เผยแพร่/ตระกูล3 การเลือกartworkไม่ใช่การอนุมัติmotionหรือท่าอื่น

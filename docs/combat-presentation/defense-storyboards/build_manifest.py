@@ -50,9 +50,9 @@ def main():
                     x0,y0,x1,y1 = box
                     frames.append([left+x0,top+y0,x1-x0,y1-y0])
                 layers.append(dict(frames=frames,frameMax=[max(f[2] for f in frames),max(f[3] for f in frames)]))
-            records.append(dict(skill=skill,thai=thai,identity='Knight ส่งคำสั่งข้างตัว → ทีมตอบรับพร้อมกันที่พื้น ไม่พาดชุด ไม่ใช่ barrier',
-                revision='Rally R4 command/response',width=90,height=14,placement='targets',dx=0,dy=27,anchor='feet',
-                **layers[1],command=dict(**layers[0],width=68,height=42,dx=85,dy=22,anchor='body'),
+            records.append(dict(skill=skill,thai=thai,identity='วงที่พื้นของ Knight สว่างนำ → วงของทีมตอบรับพร้อมกัน ไม่มีคลื่นด้านหน้า ไม่ใช่ barrier',
+                revision='Rally R5 floor rings only',width=90,height=14,placement='targets',dx=0,dy=27,anchor='feet',
+                **layers[1],
                 source='../../../incoming/ART-VFX-DEFENSE-001/source/rally.png',
                 background='../../../incoming/ART-VFX-DEFENSE-001/reference/rally-390.png',
                 sourceSize=list(im.size),alphaRange=list(alpha.getextrema()),sha256=hashlib.sha256(source.read_bytes()).hexdigest(),anchors=anchors[skill]))
