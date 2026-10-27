@@ -1,5 +1,11 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
+## 2026-10-27 — World Boss and sweep added to planning
+
+Owner requested a server-wide shared boss after proposing paid-resource sweeps for cleared stages, three per stage/day. Added `docs/design/WORLD_BOSS_SWEEP_TH.md`; D38/D39 and P04-05/P05-05/P11-04 track economy, sweep and server-raid work. Recommend asynchronous shared HP with individual squad attempts, accessible participation/shared rewards, no last-hit power prize, authoritative replay/transactions, concurrent kills and late-arrival handling. Sweeps use a separate repeat-reward table and cannot sweep the World Boss. Supply/attempt/event values remain prototypes.
+
+Docs-only; no runtime/save/balance/server changes, gameplay tests or screenshots. Validate local links/task IDs/diff. Branch `docs/world-boss-sweep-plan` targets game branch; publication reference follows in PR/issue #69. P01 remains next for the base game; actual World Boss requires P09 infrastructure. This does not claim a real-time many-team room exists.
+
 ## 2026-10-27 — ตระกูล2ผ่าน/mergeแล้ว ขั้นถัดไปตระกูล3
 
 เจ้าของสั่ง “ดำเนินการขั้นต่อไปได้” หลังคลิปRally R5วงพื้น PR#77 merged `afeef4a3e356046efe4814803fb1c8161509e5c6` คุณภาพ+browserครบผ่าน Pages40441295039เผยแพร่สำเร็จครบbuild+4browser shards+deploy ดูrelease proofล่าสุด `docs/validation/defense-vfx-release/README_TH.md`

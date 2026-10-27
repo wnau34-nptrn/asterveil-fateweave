@@ -1,5 +1,11 @@
 # Codex → Claude handoff
 
+## 2026-10-27 — World Boss and sweep added to planning
+
+Owner requested a server-wide shared boss after proposing paid-resource sweeps for cleared stages, three per stage/day. Added `docs/design/WORLD_BOSS_SWEEP_TH.md`; D38/D39 and P04-05/P05-05/P11-04 track economy, sweep and server-raid work. Recommend asynchronous shared HP with individual squad attempts, accessible participation/shared rewards, no last-hit power prize, authoritative replay/transactions, concurrent kills and late-arrival handling. Sweeps use a separate repeat-reward table and cannot sweep the World Boss. Supply/attempt/event values remain prototypes.
+
+Docs-only; no runtime/save/balance/server changes, gameplay tests or screenshots. Validate local links/task IDs/diff. Branch `docs/world-boss-sweep-plan` targets game branch; publication reference follows in PR/issue #69. P01 remains next for the base game; actual World Boss requires P09 infrastructure. This does not claim a real-time many-team room exists.
+
 ## 2026-10-27 — Family2 approved and merged; release and family3 handoff
 
 - Branch `codex/vfx-family-2-defense`, PR#77; docs-only release follow-up on `codex/defense-release-proof-20261027` to the feature base. Owner said “ดำเนินการขั้นต่อไปได้” after the final Rally R5 floor-only clips. Recorded this as approval to close the family2 review and proceed with merge/publication under standing authorization. PR#77 marked ready and merged into `feature/fateweave-initial-prototype` as `afeef4a3e356046efe4814803fb1c8161509e5c6`; expected head was `f518dceb0c1a127e4628d329c3f44a08dc8af441`. Git confirms identical trees: no runtime changes during release.
