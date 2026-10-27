@@ -1,0 +1,277 @@
+{
+  "sourceSha256": "c1ff5d6a901f2b8454b4442fc1766df916a0ec78f9c473baf6fa0199d6afefae",
+  "atlasSha256": "18c4b740db78eb4f80c6f66bc845770f46f013e2c3dede909e27ef19ba2505a5",
+  "source": "source/six-skills.png",
+  "frames": [
+    {
+      "frame": "acid_prepare",
+      "sourceCell": [
+        0,
+        0,
+        512,
+        172
+      ],
+      "bright": [
+        192,
+        51,
+        311,
+        156
+      ]
+    },
+    {
+      "frame": "acid_peak",
+      "sourceCell": [
+        512,
+        0,
+        512,
+        172
+      ],
+      "bright": [
+        96,
+        22,
+        340,
+        161
+      ]
+    },
+    {
+      "frame": "acid_tail",
+      "sourceCell": [
+        1024,
+        0,
+        512,
+        172
+      ],
+      "bright": [
+        64,
+        37,
+        387,
+        168
+      ]
+    },
+    {
+      "frame": "bomb_prepare",
+      "sourceCell": [
+        0,
+        172,
+        512,
+        170
+      ],
+      "bright": [
+        187,
+        38,
+        301,
+        135
+      ]
+    },
+    {
+      "frame": "bomb_peak",
+      "sourceCell": [
+        512,
+        172,
+        512,
+        170
+      ],
+      "bright": [
+        100,
+        6,
+        354,
+        165
+      ]
+    },
+    {
+      "frame": "bomb_tail",
+      "sourceCell": [
+        1024,
+        172,
+        512,
+        170
+      ],
+      "bright": [
+        29,
+        25,
+        462,
+        170
+      ]
+    },
+    {
+      "frame": "smoke_prepare",
+      "sourceCell": [
+        0,
+        342,
+        512,
+        170
+      ],
+      "bright": [
+        196,
+        17,
+        327,
+        151
+      ]
+    },
+    {
+      "frame": "smoke_peak",
+      "sourceCell": [
+        512,
+        342,
+        512,
+        170
+      ],
+      "bright": [
+        103,
+        9,
+        335,
+        151
+      ]
+    },
+    {
+      "frame": "smoke_tail",
+      "sourceCell": [
+        1024,
+        342,
+        512,
+        170
+      ],
+      "bright": [
+        21,
+        0,
+        416,
+        148
+      ]
+    },
+    {
+      "frame": "catalyst_prepare",
+      "sourceCell": [
+        0,
+        512,
+        512,
+        171
+      ],
+      "bright": [
+        182,
+        23,
+        315,
+        140
+      ]
+    },
+    {
+      "frame": "catalyst_peak",
+      "sourceCell": [
+        512,
+        512,
+        512,
+        171
+      ],
+      "bright": [
+        126,
+        4,
+        342,
+        171
+      ]
+    },
+    {
+      "frame": "catalyst_tail",
+      "sourceCell": [
+        1024,
+        512,
+        512,
+        171
+      ],
+      "bright": [
+        32,
+        17,
+        458,
+        171
+      ]
+    },
+    {
+      "frame": "haste_prepare",
+      "sourceCell": [
+        0,
+        683,
+        512,
+        170
+      ],
+      "bright": [
+        164,
+        5,
+        306,
+        140
+      ]
+    },
+    {
+      "frame": "haste_peak",
+      "sourceCell": [
+        512,
+        683,
+        512,
+        170
+      ],
+      "bright": [
+        75,
+        0,
+        372,
+        170
+      ]
+    },
+    {
+      "frame": "haste_tail",
+      "sourceCell": [
+        1024,
+        683,
+        512,
+        170
+      ],
+      "bright": [
+        33,
+        0,
+        417,
+        170
+      ]
+    },
+    {
+      "frame": "fury_prepare",
+      "sourceCell": [
+        0,
+        853,
+        512,
+        171
+      ],
+      "bright": [
+        169,
+        2,
+        299,
+        121
+      ]
+    },
+    {
+      "frame": "fury_peak",
+      "sourceCell": [
+        512,
+        853,
+        512,
+        171
+      ],
+      "bright": [
+        99,
+        0,
+        330,
+        150
+      ]
+    },
+    {
+      "frame": "fury_tail",
+      "sourceCell": [
+        1024,
+        853,
+        512,
+        171
+      ],
+      "bright": [
+        41,
+        0,
+        365,
+        131
+      ]
+    }
+  ]
+}

@@ -1,5 +1,14 @@
 # ส่งต่องานพัฒนาให้ Codex ระหว่างรอ Usage ของ Claude (2026-10-23)
 
+## 2026-10-27 — C5.6 artwork R1 selected; runtime validation in progress
+
+เจ้าของเลือกartwork R1ด้วย “ไปต่อ” ในแชตนี้แล้ว ต่อ6ท่าacid/bomb/smoke/catalyst/haste/furyในPR86เดิม (`codex/vfx-family-6-alchemy`) ใช้หนึ่ง18frameatlas/moduleจากoriginalRGBAเดิม1584×1128/981524bytes ไม่เปลี่ยนrules/save/content/balance/playback timing และรักษา5sourceVFXgatesก่อนหน้า เพิ่มalchemyในbrowser/Pagesworkflow
+
+AlchemyCuesอ่านactualdamage/weaken/corrode/haste/buff Acidspreadเป็นresidueไม่ใช่hitใหม่ Chainreactionอ่านeventsourceแม้stageของactorอื่น รักษาblade/earth/projectile/healingบนstageเดิม HasteHeal/gearoverflowใช้actualheal/barrierผ่านhealingเดิม เตรียม/peak/tailตามrenderedspriteworldtransformรวมDPR,pose,recoil,shake ภาพ/tweensผูกownedimageและใช้cleanupเดิม
+
+38focusedunitผ่าน กำลังตรวจtypecheck/lint/fullunit/buildและfocusedbrowser ก่อนcaptureจริง390pxแยกจากQA เตรียม55clipsครบ6ท่า4modesและ31outcomevariants รวมlaterhit/Furyoutgoing/expiryด้วยlegalfollowupcommands ไม่มีowner saveหรือinjectedstate/events ยังไม่มีowner motion approval ห้ามmerge/เผยแพร่/เริ่มตระกูล7 ส่งคลิปให้เจ้าของตรวจก่อนตามคำสั่งเปิดงาน
+
+
 ## 2026-10-27 — C5.6 alchemy artwork R1 รอเลือกก่อน runtime
 
 เจ้าของเริ่มacid/bomb/smoke/catalyst/haste/fury6ท่า Explicitfetchฐานล่าสุด1f783f8แล้ว branch `codex/vfx-family-6-alchemy` / [draft PR86](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/86) หนึ่งPR ตรวจPR85merge3196e17และPages40524232794APIใหม่ build+browser4shards+deploysuccessครบ [ภาพ3จังหวะ/14legalcases390px](../combat-presentation/alchemy-storyboards/README_TH.md) มี42compositesและviewer OriginalImageGenRGBA18cells/exactprompt/provenanceอยู่incoming/ART-VFX-ALCHEMY-001 รักษาชุด/อาวุธ/HP/ชื่อด้วยactualsprite/labelmask ไม่ใช้owner saveหรือยัดstate/event Catalystcorrodedใช้legalAcidpreludeจริง Acidspreadไม่สร้างhitเพิ่ม Smoke/Haste/Furyไม่วาดdamagecast

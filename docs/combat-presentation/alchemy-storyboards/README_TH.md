@@ -1,5 +1,7 @@
 # C5.6 — ขวดเล่นแร่ · artwork R1 รอเลือกก่อน runtime
 
+อัปเดต: เจ้าของเลือกartworkR1ด้วย “ไปต่อ” แล้ว27ต.ค.2026 กำลังต่อruntimeในPR86เดิม ก่อนส่งคลิปจริงให้ตรวจ ไม่มีmotionapproval/merge/เผยแพร่/ตระกูล7 ข้อความรอเลือกด้านล่างเป็นประวัติ
+
 27 ตุลาคม 2026 · `codex/vfx-family-6-alchemy` / [draft PR86](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/86) → `feature/fateweave-initial-prototype` · หนึ่งPRตระกูล6ตั้งแต่artworkจนruntimeภายหลัง
 
 [หน้าเลือก6ท่า / 3จังหวะ / 14กรณีจริง](index.html) — เตรียม → เกิดผล → ปลายฟุ้ง แต่ละภาพ390×844px มีปุ่มเทียบสนามเปล่าและน้ำหนัก60–110% ต้นฉบับImageGenวาดเฉพาะeffectโปร่งใส ไม่วาดชุด/สนาม/UIใหม่
