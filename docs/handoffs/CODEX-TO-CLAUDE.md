@@ -1,5 +1,12 @@
 # Codex → Claude handoff
 
+## 2026-10-27 — All-unit animation rollout plan (documentation only)
+
+- Owner asked for an implementation plan covering every unit after the loading optimization. Inspected latest game branch `3196e17` after fetching/fast-forwarding; the roster/art registry remains 14 current heroes + 22 enemy visual identities, while the roster target is 30 heroes. Existing C5 work/approvals are preserved and separate from unit-body production.
+- Added `docs/design/UNIT_ANIMATION_ROLLOUT_TH.md`: A0–A11 waves, current-unit coverage, all 30 named planned heroes (14 live/16 future), all 22 enemy art IDs, shared motion sets with per-skill mapping, encounter-based loading/cache, proposed per-art/encounter budgets and real-device validation gates. Pilot does not imply full Lyra skill coverage; reuse of class timing never means reusing another character's pixels.
+- Planning only: no new artwork, runtime, rules, saves, balance, visual approval or gameplay-test success claimed. Suggested next requested animation work: A0/A1 Eira + Dandelion Sprite. P01–P03 sequencing and ongoing C5 scope remain intact; no new task/session started automatically.
+- Validation: registry/roster coverage and relative links checked; git diff --check. No gameplay tests for documentation-only work. Commit is made directly on game branch with [skip ci]; no PR/merge or new game deployment is needed. Owner receives a phased summary and the full plan; implementation is not started by this plan request.
+
 ## 2026-10-27 — C5.5 selected R1 → earth runtime; owner motion review pending
 
 Owner selected the shown family5 artwork R1 with “ไปต่อ”. Continue in `codex/vfx-family-5-earth` / [draft PR85](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/85); fetched base remains35e39af and family4releaseproof unchanged. No merge/publication/family6 without owner motion review.
