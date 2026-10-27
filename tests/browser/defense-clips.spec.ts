@@ -6,7 +6,7 @@ const cases = [
   ...['guard','aegis','rally','bulwark','stonearmor','guardstone','halo','sanctuary','brace','spearwall','hold'].map(skill => ({skill,outcome:skill==='guardstone'?'stone':skill==='sanctuary'?'save':['brace','spearwall','hold'].includes(skill)?'counter':'normal',mode:'normal'})),
   ...['blocked','partial'].map(outcome=>({skill:'aegis',outcome,mode:'normal'})),
   ...['dodged','cancelled'].map(outcome=>({skill:'guard',outcome,mode:'normal'})),
-  ...['fast','reduced','osreduce'].map(mode=>({skill:'aegis',outcome:'normal',mode})),
+  ...['aegis','rally'].flatMap(skill=>['fast','reduced','osreduce'].map(mode=>({skill,outcome:'normal',mode}))),
 ];
 for (const { skill, outcome, mode } of cases) test(`defense clip ${skill}-${outcome}-${mode}`, async ({ browser }, info) => {
   const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, reducedMotion: mode === 'osreduce' ? 'reduce' : 'no-preference' });

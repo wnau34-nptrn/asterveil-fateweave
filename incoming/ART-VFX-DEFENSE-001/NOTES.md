@@ -39,3 +39,7 @@ Owner rejected R2 because it overlaps clothing. New original/prompt in `proposal
 ## Rally R4 command/response redesign
 
 Owner asked to redesign after discussing Rally mechanics/concept. New six-cell original and exact generation/refinement prompts in `proposals/rally-r4/`; review in `docs/combat-presentation/rally-r4/`. Command wave beside Knight then simultaneous low floor responses on allies. Distinct sender/recipient art, no costume coverage. Pending artwork selection; production source/atlas/module/clips unchanged. Same draft PR77, no family3 or inferred approval of R3/other clips.
+
+## Rally R4 selected and promoted — 2026-10-27
+
+Owner said “ไปต่อ” after the R4 artwork delivery: proceed with this artwork into runtime, same draft PR77. Exact six-cell original promoted to `source/rally.png` and prompts; old production Rally source/prompt/metadata archived in `archive/rally-pre-r4/`. Main manifest/packager support separate command and response rows with shared scale per row. One38-frame1584×1848 atlas546404bytes, eleven skill profiles plus a separate command profile. Prepare draws one command beside caster only; contact draws one command plus actual recipients' low floor responses. Reduced motion static, quiet opacity/motion, existing cleanup/timing preserved. Updated actual Rally clips normal/fast/reduced/OS-reduced await owner motion review. No family3/merge or inferred other approvals.

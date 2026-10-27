@@ -1,6 +1,6 @@
 # Rally R4 — คำสั่งตั้งรับพร้อมกัน
 
-27 ตุลาคม2026 · **ออกแบบใหม่ตามคำขอเจ้าของ · artwork proposal ยังไม่แทน runtime**
+27 ตุลาคม2026 · **เจ้าของเลือกให้ต่อ runtime ด้วย “ไปต่อ” · รวมใน PR#77 แล้ว ยังรอตรวจคลิป**
 
 [เปิดดูสามจังหวะที่390px](index.html) · [ภาพจุดเด่น](rally-peak-390.png) · [แผ่นสามจังหวะ](rally-board.png)
 
@@ -26,4 +26,4 @@ node docs/combat-presentation/rally-r4/capture.mjs
 
 ตรวจต้นฉบับและcompositeสามจังหวะที่390pxด้วยตา ผ่านcontrolเทียบสนามเปล่า/น้ำหนัก/คืนค่า/เลื่อนphase ไม่มีpageerrorหรือstorage write; lint/diffผ่าน Chromium cloud ไม่ใช่เครื่องจริง
 
-R4เป็นข้อเสนอใหม่ตามคำขอออกแบบ ไม่ได้อนุมานว่าเจ้าของอนุมัติR3หรือท่าอื่น Production source/atlas/moduleและคลิปเดิมยังไม่เปลี่ยน รอเลือกภาพแล้วจึงต่อruntime/อัดRallyใหม่ในPR#77ใบเดิม ไม่เริ่มตระกูล3
+เจ้าของสั่ง “ไปต่อ” หลังดูR4 จึงpromoteภาพต้นฉบับนี้เข้าsource/atlas/moduleและอัดRallyใหม่ในPR#77ใบเดิม ดู [คลิปruntime](../defense-slice/README_TH.md) เก็บRallyก่อนR4ในarchive/rally-pre-r4 ไม่ถือว่าท่าอื่นผ่านหรืออนุมัติmerge ไม่เริ่มตระกูล3

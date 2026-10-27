@@ -52,28 +52,54 @@
     ]
   },
   {
-    "skill": "rally",
+    "skill": "rally_command",
     "source": "incoming/ART-VFX-DEFENSE-001/source/rally.png",
-    "sha256": "be6dd0a4e3b4e85d3beb0ffc847e50285dcdcfd04d84a1aaedd1ba1688480f4d",
-    "scale": 0.26762246117084826,
+    "sha256": "77b0f3d21262c4974f0713abeaea8ef3af04b25295185938089b67da1c9c17d2",
+    "scale": 0.5894736842105263,
     "frames": [
       [
-        224,
-        128,
-        428,
-        567
+        108,
+        214,
+        234,
+        175
       ],
       [
-        652,
-        97,
-        837,
-        569
+        584,
+        193,
+        380,
+        227
       ],
       [
-        1575,
-        237,
-        534,
-        413
+        1158,
+        196,
+        298,
+        227
+      ]
+    ]
+  },
+  {
+    "skill": "rally",
+    "source": "incoming/ART-VFX-DEFENSE-001/source/rally.png",
+    "sha256": "77b0f3d21262c4974f0713abeaea8ef3af04b25295185938089b67da1c9c17d2",
+    "scale": 0.44532803180914515,
+    "frames": [
+      [
+        35,
+        740,
+        413,
+        64
+      ],
+      [
+        521,
+        724,
+        503,
+        88
+      ],
+      [
+        1024,
+        740,
+        477,
+        63
       ]
     ]
   },

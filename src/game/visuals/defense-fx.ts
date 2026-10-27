@@ -51,25 +51,27 @@ export function defenseCues(turn:TurnStage,data:EncounterDefinition):DefenseCue[
   return cues;
 }
 const scale=(ctx:FxContext)=>ctx.scale/(111/96);
-// Small, local gestures: planted earth, unfurling banner, hovering stone, quiet low crystal.
+// Small, local gestures: planted earth, coordinated readiness, hovering stone, quiet low crystal.
 // The leg auras never move their baseline or grow vertically.
 const gestures:Record<DefenseSkill,{x:number;y:number;spread:number}>={
-  guard:{x:5,y:0,spread:.04},aegis:{x:0,y:0,spread:.06},rally:{x:0,y:3,spread:.16},
+  guard:{x:5,y:0,spread:.04},aegis:{x:0,y:0,spread:.06},rally:{x:0,y:0,spread:.08},
   bulwark:{x:0,y:6,spread:.04},stonearmor:{x:0,y:0,spread:.04},guardstone:{x:0,y:-3,spread:.05},
   halo:{x:0,y:-2,spread:.05},sanctuary:{x:0,y:-4,spread:.08},brace:{x:2,y:0,spread:.03},
   spearwall:{x:0,y:4,spread:.06},hold:{x:0,y:1,spread:.08},
 };
-function paint(ctx:FxContext,skill:DefenseSkill,phase:'prepare'|'peak'|'tail',point:DefensePoint):Phaser.GameObjects.Image {
-  const p=meta.profiles[skill],s=scale(ctx);
+function paint(ctx:FxContext,skill:DefenseSkill,phase:'prepare'|'peak'|'tail',point:DefensePoint,command=false):Phaser.GameObjects.Image {
+  const p=command?meta.rallyCommand:meta.profiles[skill],s=scale(ctx);
   const bottom=p.anchor==='feet'?point.footY+p.dy*s:point.y+(p.dy+p.height/2)*s;
-  const image=ctx.scene.add.image(point.x+p.dx*s,bottom,DEFENSE_ATLAS,`${skill}_${phase}`).setOrigin(.5,meta.baseline).setScale(p.fit*s);
+  const image=ctx.scene.add.image(point.x+p.dx*s,bottom,DEFENSE_ATLAS,`${command?'rally_command':skill}_${phase}`).setOrigin(.5,meta.baseline).setScale(p.fit*s);
   ctx.add(image);return image;
 }
 // All tweens target owned images; stopEffects kills them. No unowned timers/callback counters.
 export function defenseCast(ctx:FxContext,cue:DefenseCue,lookup:DefenseLookup,contactMs:number):void {
   if(ctx.reduced||cue.kind!=='cast')return;
+  // One command from the caster; recipients only acknowledge at contact.
+  if(cue.skill==='rally'&&cue.targetId!==cue.sourceId)return;
   const at=lookup(cue.targetId);if(!at)return;
-  const image=paint(ctx,cue.skill,'prepare',at).setAlpha(.18);
+  const image=paint(ctx,cue.skill,'prepare',at,cue.skill==='rally').setAlpha(.18);
   ctx.scene.tweens.add({targets:image,alpha:ctx.quiet?.42:.7,duration:Math.max(1,contactMs),ease:'Sine.In',onComplete:()=>image.destroy()});
 }
 export function defenseContact(ctx:FxContext,cue:DefenseCue,lookup:DefenseLookup,life:number):void {
@@ -84,10 +86,16 @@ export function defenseContact(ctx:FxContext,cue:DefenseCue,lookup:DefenseLookup
     if(!ctx.reduced)ctx.scene.tweens.add({targets:image,alpha:0,x:image.x+(counter?Math.cos(angle)*10*s:0),y:image.y+(counter?Math.sin(angle)*10*s:0),duration:Math.min(duration,280),ease:'Sine.Out',onComplete:()=>image.destroy()});
     return;
   }
+  if(cue.skill==='rally'&&cue.sourceId===cue.targetId){
+    const command=paint(ctx,'rally','peak',at,true).setAlpha(opacity);
+    if(!ctx.reduced)animatePaint(ctx,command,paint(ctx,'rally','tail',at,true).setAlpha(0),{x:4,y:0,spread:.1},duration,opacity);
+  }
   const peak=paint(ctx,cue.skill,'peak',at).setAlpha(opacity);
   if(ctx.reduced)return;
-  const tail=paint(ctx,cue.skill,'tail',at).setAlpha(0);
-  const gesture=gestures[cue.skill],x=peak.x,y=peak.y,sx=peak.scaleX,sy=peak.scaleY,s=scale(ctx)*(ctx.quiet?.5:1);
+  animatePaint(ctx,peak,paint(ctx,cue.skill,'tail',at).setAlpha(0),gestures[cue.skill],duration,opacity);
+}
+function animatePaint(ctx:FxContext,peak:Phaser.GameObjects.Image,tail:Phaser.GameObjects.Image,gesture:{x:number;y:number;spread:number},duration:number,opacity:number):void {
+  const x=peak.x,y=peak.y,sx=peak.scaleX,sy=peak.scaleY,s=scale(ctx)*(ctx.quiet?.5:1);
   ctx.scene.tweens.add({targets:peak,alpha:0,duration,onUpdate:tween=>{
     if(!peak.active||!tail.active)return;
     const p=tween.progress,blend=Phaser.Math.Clamp((p-.42)/.3,0,1);

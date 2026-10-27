@@ -27,10 +27,22 @@ for(const skill of skills)test(`defense ${skill} uses truthful contact and owned
     const committed=await page.evaluate(()=>localStorage.getItem('defense-committed'));
     const timing=stageTiming(turn,false);await page.clock.runFor(timing.contact-1);
     expect((await page.evaluate(()=>window.defenseQA.frames())).some(f=>f.endsWith('_peak'))).toBe(false);
+    if(skill==='rally'){
+      const prepare=await page.evaluate(()=>window.defenseQA.frames());
+      expect(prepare.filter(f=>f==='rally_command_prepare')).toHaveLength(1);
+      expect(prepare).not.toContain('rally_prepare');
+    }
     await page.clock.runFor(61);
     const peaks=(await page.evaluate(()=>window.defenseQA.painted())).filter(p=>p.frame===`${skill}_peak`);
     expect(peaks).toHaveLength(cues.length);expect(peaks.every(p=>p.alpha>.7)).toBe(true);
     expect(await page.evaluate(()=>window.defenseQA.labelsAbovePaint())).toBe(true);
+    if(skill==='rally'){
+      expect((await page.evaluate(()=>window.defenseQA.frames())).filter(f=>f==='rally_command_peak')).toHaveLength(1);
+      for(const [i,cue]of cues.entries()){
+        const foot=(await page.evaluate(id=>window.defenseQA.point(id),cue.targetId)).footY;
+        expect(peaks[i]!.y).toBeCloseTo(foot+27);
+      }
+    }
     if(['stonearmor','aegis'].includes(skill)){
       for(const [i,cue]of cues.entries())expect(peaks[i]!.y).toBeCloseTo((await page.evaluate(id=>window.defenseQA.point(id),cue.targetId)).footY);
     }
@@ -83,11 +95,11 @@ for(const skill of skills)test(`defense ${skill} reduced motion is a stable stil
     await page.waitForTimeout(80);expect(await page.evaluate(()=>window.defenseQA.painted())).toEqual(still);
   }finally{await ctx.close();}
 });
-for(const mode of ['fast','reduced','osreduce'])test(`defense ${mode} resize preserves the committed result`,async({browser})=>{
+for(const skill of ['aegis','rally'])for(const mode of ['fast','reduced','osreduce'])test(`defense ${skill} ${mode} resize preserves the committed result`,async({browser})=>{
   const ctx=await browser.newContext({viewport:{width:390,height:844},reducedMotion:mode==='osreduce'?'reduce':'no-preference'}),page=await ctx.newPage();
   try{
-    await page.goto(`tests/browser/fixtures/defense.html?runtime=1&skill=aegis&speed=${mode==='fast'?'fast':'normal'}&intensity=${mode==='reduced'?'reduced':'standard'}`);
-    await page.locator('#start').click();await page.locator('#action-aegis').click();await page.locator(`#target-${await page.evaluate(()=>window.defenseQA.target())}`).click();
+    await page.goto(`tests/browser/fixtures/defense.html?runtime=1&skill=${skill}&speed=${mode==='fast'?'fast':'normal'}&intensity=${mode==='reduced'?'reduced':'standard'}`);
+    await page.locator('#start').click();await page.locator(`#action-${skill}`).click();await page.locator(`#target-${await page.evaluate(()=>window.defenseQA.target())}`).click();
     const committed=await page.evaluate(()=>localStorage.getItem('defense-committed'));await page.setViewportSize({width:391,height:844});await page.waitForTimeout(1400);
     expect(await page.evaluate(()=>localStorage.getItem('defense-committed'))).toBe(committed);
   }finally{await ctx.close();}

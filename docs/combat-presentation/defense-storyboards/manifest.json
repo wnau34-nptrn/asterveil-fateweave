@@ -298,47 +298,80 @@
   {
     "skill": "rally",
     "thai": "ตั้งรับหมู่",
-    "identity": "ริ้วธงกางเหนือชุดให้เห็นทรง คุ้มการโดนครั้งแรกของแต่ละคน ไม่ใช่ barrier",
-    "width": 62,
-    "height": 76,
+    "identity": "Knight ส่งคำสั่งข้างตัว → ทีมตอบรับพร้อมกันที่พื้น ไม่พาดชุด ไม่ใช่ barrier",
+    "revision": "Rally R4 command/response",
+    "width": 90,
+    "height": 14,
     "placement": "targets",
     "dx": 0,
-    "dy": -78,
+    "dy": 27,
+    "anchor": "feet",
     "frames": [
       [
-        224,
-        128,
-        428,
-        567
+        35,
+        740,
+        413,
+        64
       ],
       [
-        652,
-        97,
-        837,
-        569
+        521,
+        724,
+        503,
+        88
       ],
       [
-        1575,
-        237,
-        534,
-        413
+        1024,
+        740,
+        477,
+        63
       ]
     ],
     "frameMax": [
-      837,
-      569
+      503,
+      88
     ],
+    "command": {
+      "frames": [
+        [
+          108,
+          214,
+          234,
+          175
+        ],
+        [
+          584,
+          193,
+          380,
+          227
+        ],
+        [
+          1158,
+          196,
+          298,
+          227
+        ]
+      ],
+      "frameMax": [
+        380,
+        227
+      ],
+      "width": 68,
+      "height": 42,
+      "dx": 85,
+      "dy": 22,
+      "anchor": "body"
+    },
     "source": "../../../incoming/ART-VFX-DEFENSE-001/source/rally.png",
     "background": "../../../incoming/ART-VFX-DEFENSE-001/reference/rally-390.png",
     "sourceSize": [
-      2172,
-      724
+      1536,
+      1024
     ],
     "alphaRange": [
       0,
-      255
+      254
     ],
-    "sha256": "be6dd0a4e3b4e85d3beb0ffc847e50285dcdcfd04d84a1aaedd1ba1688480f4d",
+    "sha256": "77b0f3d21262c4974f0713abeaea8ef3af04b25295185938089b67da1c9c17d2",
     "anchors": {
       "source": {
         "id": "guardian",

@@ -11,7 +11,7 @@ OUT = Path(__file__).resolve().parent
 SPECS = [
     ('guard', 'ตั้งรับแทน', 'วงเล็บรับนอกโล่เดิมด้านผู้ใช้ → รับแทนเป้าที่ประกาศ ไม่ใช่โล่ดูดซับ', 62, 88, 'source', 42, 0),
     ('aegis', 'เกราะผลึก', 'Aura ผลึกลอยต่ำรอบเท้าและหน้าแข้ง เว้นชุดและช่วงตัว; barrier ตามผู้รับจริง', 80, 28, 'targets', 0, 0),
-    ('rally', 'ตั้งรับหมู่', 'ริ้วธงกางเหนือชุดให้เห็นทรง คุ้มการโดนครั้งแรกของแต่ละคน ไม่ใช่ barrier', 62, 76, 'targets', 0, -78),
+    ('rally', 'ตั้งรับหมู่', 'Knight ส่งคำสั่ง ทีมตอบรับที่พื้น คุ้มการโดนครั้งแรก ไม่ใช่ barrier', 90, 14, 'targets', 0, 27),
     ('bulwark', 'กำแพงโล่', 'ฐานตั้งรับหนักแน่นเว้นกลางโปร่ง คุ้มเฉพาะแนวหน้า ลดความเสียหาย', 88, 100, 'targets', 0, 4),
     ('stonearmor', 'เกราะหิน', 'Aura ศิลาเหลี่ยมต่ำติดพื้นรอบเท้า ไม่เกินเข่า เพิ่ม barrier ให้ผู้ใช้', 88, 32, 'source', 0, 0),
     ('guardstone', 'ศิลาดึง', 'ศิลาลอยพ้นอาวุธกับสายเกี่ยว เป้าเดี่ยวแรกเปลี่ยนไปผู้ใช้ ไม่ใช่ barrier', 62, 64, 'targets', 54, -4),
@@ -37,6 +37,26 @@ def main():
         assert im.mode == 'RGBA', (skill, im.mode)
         alpha = im.getchannel('A')
         assert alpha.getextrema()[0] == 0 and alpha.getextrema()[1] >= 128
+        if skill == 'rally':
+            # Selected R4 has separate three-phase command/response rows.
+            assert im.size == (1536, 1024)
+            layers = []
+            for row in range(2):
+                frames = []
+                for col in range(3):
+                    left, top = col * 512, row * 512
+                    box = alpha.crop((left, top, left+512, top+512)).point(lambda p: 255 if p > 24 else 0).getbbox()
+                    assert box
+                    x0,y0,x1,y1 = box
+                    frames.append([left+x0,top+y0,x1-x0,y1-y0])
+                layers.append(dict(frames=frames,frameMax=[max(f[2] for f in frames),max(f[3] for f in frames)]))
+            records.append(dict(skill=skill,thai=thai,identity='Knight ส่งคำสั่งข้างตัว → ทีมตอบรับพร้อมกันที่พื้น ไม่พาดชุด ไม่ใช่ barrier',
+                revision='Rally R4 command/response',width=90,height=14,placement='targets',dx=0,dy=27,anchor='feet',
+                **layers[1],command=dict(**layers[0],width=68,height=42,dx=85,dy=22,anchor='body'),
+                source='../../../incoming/ART-VFX-DEFENSE-001/source/rally.png',
+                background='../../../incoming/ART-VFX-DEFENSE-001/reference/rally-390.png',
+                sourceSize=list(im.size),alphaRange=list(alpha.getextrema()),sha256=hashlib.sha256(source.read_bytes()).hexdigest(),anchors=anchors[skill]))
+            continue
         assert 2.5 < im.width / im.height < 3.5
         occupied = alpha.point(lambda p: 255 if p > 24 else 0)
         columns = [sum(occupied.crop((x, 0, x+1, im.height)).tobytes()) for x in range(im.width)]

@@ -1,10 +1,6 @@
 # C5.2 — VFX โล่/ป้องกัน 11 ท่า · รอตรวจคลิป
 
-**Rally ล่าสุด:** เจ้าของขอออกแบบใหม่ตามคอนเซ็ปต์ Knight ส่งคำสั่งให้ทีมตั้งรับ ดู [R4 artwork สามจังหวะ](../rally-r4/README_TH.md) ยังไม่แทน runtime/คลิปและยังไม่ถือว่าผ่าน review
-
-27 ตุลาคม 2026 (Asia/Bangkok) · PR [#77](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/77) · **ต่อ runtime แล้ว ยังไม่ใช่ owner motion approval และยังไม่ merge/เผยแพร่**
-
-**อัปเดต review:** เจ้าของไม่ชอบ Rally เดิมและขอปรับ artwork มี [ข้อเสนอ Rally R2 ใหม่](../rally-r2/README_TH.md) ให้เลือกก่อนแทน runtime คลิป Rally ในหน้านี้ยังเป็นแบบเดิมที่ไม่ผ่าน เก็บไว้เทียบ ไม่ใช่การอนุมัติท่าอื่น
+**อัปเดต27ตุลาคม2026:** เจ้าของสั่ง “ไปต่อ” หลังดู [Rally R4 คำสั่งตั้งรับ](../rally-r4/README_TH.md) จึงเลือกภาพนี้ต่อ runtime ในPR#77เดิม คลิป Rally ในหน้านี้แทนแบบเก่าด้วย R4 แล้ว: Knight ส่งคลื่นข้างตัว → ทีมตอบรับที่พื้น → สลาย ยังรอตรวจคลิป ไม่ใช่การอนุมัติmergeหรือท่าอื่น
 
 เจ้าของเลือกแนว aura R3 รอบเท้า/หน้าแข้งของ Stone Armour/Aegis และสั่ง “จัดไป” ให้ต่อ runtime หลังแผนเกลาภาพสี่ท่า รวม atlas/module ทดสอบ และส่งคลิปจริง การอนุมัตินี้ไม่ข้ามขั้นตรวจคลิปและไม่ครอบคลุมการเริ่มตระกูล 3
 
@@ -16,7 +12,7 @@
 |---|---|---|
 | Guard | วงเล็บนอกโล่เดิมตอนตั้งรับ แล้วภาพรับแทนติดผู้ได้รับ damage จริง | [Guard + รับแทน](guard-normal-normal-390.mp4) |
 | Aegis | Aura ผลึกต่ำรอบเท้าของผู้ได้รับ barrier จริงแต่ละคน | [Aegis](aegis-normal-normal-390.mp4) |
-| Rally | ริ้วรวมพลเหนือชุด อ่านเป็นการคุ้มครั้งแรกของแต่ละคน ไม่เพิ่มโล่เอง | [Rally](rally-normal-normal-390.mp4) |
+| Rally | คลื่นคำสั่งข้าง Knight ชุดเดียว → เส้นโค้งตอบรับที่พื้นทั้งทีม เว้นชุด/รองเท้า/HP ไม่เพิ่มโล่เอง | [Rally](rally-normal-normal-390.mp4) |
 | Bulwark | ฐานหนัก/กลางโปร่งเฉพาะแนวหน้า ไม่ใช่ barrier | [Bulwark](bulwark-normal-normal-390.mp4) |
 | Stone Armour | Aura ศิลาต่ำ 88×32px รอบขาและ barrier ของผู้ใช้ | [Stone Armour](stonearmor-normal-normal-390.mp4) |
 | Guardian Stone | ศิลาพ้นอาวุธที่ผู้รับพร แล้วรับแทน/ฟื้นผู้ใช้เมื่อเกิดผลจริง | [Guardian Stone](guardstone-stone-normal-390.mp4) |
@@ -38,7 +34,7 @@
 
 ## การต่อและขอบเขต
 
-- `public/assets/fx/defense_fx.webp` + `.json`: atlas เดียว 35 frames, 1584×1584px, 521,936 bytes; ภาพหลัก 33 จังหวะจาก 11 strips กับ shared paintings จาก blade ของ repository นี้ `defense-art.json` เป็นตารางขนาด/anchor ที่สร้างซ้ำได้
+- `public/assets/fx/defense_fx.webp` + `.json`: atlas เดียว 38 frames, 1584×1848px, 546,404 bytes; ภาพหลัก36จังหวะ (Rallyมีคำสั่ง/ตอบรับแยกกัน) กับ shared paintings จาก blade ของ repository นี้ `defense-art.json` เป็นตารางขนาด/anchor ที่สร้างซ้ำได้
 - `src/game/visuals/defense-fx.ts`: module เดียว ใช้ตารางเล็กเลือกทรง/ขนาด/ทิศ/gesture พื้นที่โปร่งตาม artwork ที่เลือก แต่ละ strip ใช้สเกล/ฐานเดียวกันทั้งสามจังหวะ ไม่ยืดแต่ละภาพให้เต็มกรอบใหม่
 - Earth/crystal aura ยึด foot anchor จริง ความสูงไม่เกิน 32/28px ที่ reference 390px ไม่ขยับฐานหรือขยายแนวตั้งตอนเคลื่อนไหว
 - Cast recipients มาจาก event หรือ coverage state จริง; Guard/Stone อิง damage recipient จริง; ทวนสวนจาก `counter` จริงเท่านั้น Absorption ไม่เดาว่าบาเรียมาจากสกิลใดเพราะ state ไม่มีข้อมูลเจ้าของบาเรีย
@@ -52,11 +48,13 @@
 
 Guardian Stone ใช้ energy แบบเป้าเดี่ยวที่เล็งผู้รับพร เพื่อให้เกิด redirect จริง Hold ใช้ physical แบบหมู่ที่โดนแนวหลังจริง เพราะ physical แบบเป้าเดี่ยวถูกแนวหน้าบังอยู่ กรณีหลบ/ยกเลิกใช้ initial status ของ fixture ส่วน barrier และ counter เกิดจากการกดสกิลผ่าน UI จริงทั้งหมด ไม่ใส่ event สำเร็จรูป ไม่มี fixture/debug surface ส่งเข้า production
 
-[clips.json](clips.json) เก็บจำนวนเฟรม ระยะเวลา ช่องว่างเฟรม และ cue timestamps/ผล resolved จริง CDP จับเฟรมตามเวลาจริงแล้ว encode H.264 High Level 3.1 / VFR ด้วย time base 60Hz เพื่อเล่นในเบราว์เซอร์ ไม่มีการเร่ง/ชะลอหรือ interpolation เก็บเฟรมที่จับได้ไว้ครบในวิดีโอ (บวก hold เฟรมท้าย) ไม่ใช่หลักฐาน FPS ของเครื่องจริงหรือ Safari ช่องว่างเฟรมสูงสุดของ capture อยู่ประมาณ 0.16–0.31 วินาทีตาม manifest
+[clips.json](clips.json) เก็บจำนวนเฟรม ระยะเวลา ช่องว่างเฟรม และ cue timestamps/ผล resolved จริง CDP จับเฟรมตามเวลาจริงแล้ว encode H.264 High Level 3.1 / VFR ด้วย time base 60Hz เพื่อเล่นในเบราว์เซอร์ ไม่มีการเร่ง/ชะลอหรือ interpolation เก็บเฟรมที่จับได้ไว้ครบในวิดีโอ (บวก hold เฟรมท้าย) ไม่ใช่หลักฐาน FPS ของเครื่องจริงหรือ Safari ช่องว่างเฟรมสูงสุดของแต่ละ capture ระบุใน manifest
 
-PNG ของแต่ละคลิปดึงจาก cue จริง +180ms เพื่อให้ผ่านการวาด canvas ใน cloud แล้ว ไม่ประมาณจากเวลาที่กดปุ่ม วิดีโอคงเวลาจริงทั้งหมดและยังแสดงช่วงเตรียมก่อน cue ตามปกติ
+PNG ของแต่ละคลิปดึงใกล้ cue จริง +180ms เพื่อให้ผ่านการวาด canvas ใน cloud แล้ว; Rally R4เลือกเฟรมจริงแรกที่ถึง/เกินเกณฑ์นี้ แทนเฟรมก่อนหน้าที่ยังไม่แสดงการตอบรับเมื่อCDPมีช่องว่าง ไม่ประมาณจากเวลาที่กดปุ่ม วิดีโอคงเวลาจริงทั้งหมดและยังแสดงช่วงเตรียมก่อน cue ตามปกติ
 
-## ตรวจซ้ำและผลทดสอบ
+## ตรวจซ้ำและผลทดสอบชุดแรก
+
+ผลชุดแรกด้านล่างเป็นหลักฐานก่อน Rally R4; การตรวจและคลิป R4 ระบุในรายการอัปเดตล่าสุด
 
 ```sh
 python docs/combat-presentation/defense-storyboards/build_manifest.py
@@ -77,3 +75,20 @@ python tests/browser/fixtures/encode-defense-clips.py
 - Runtime head `7df3af2`: [Quality CI 40364495891](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/40364495891) ผ่าน; [Browser CI 40364495605](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/40364495605) ผ่าน dev-source blade+defense gate และ production prechecks แล้ว ส่วน production regression เต็มยังทำงานขณะจัดชุดส่ง
 
 การผ่าน tests เป็นหลักฐานทางเทคนิคเท่านั้น **รอเจ้าของตรวจคลิปก่อน merge และก่อนเริ่มตระกูลถัดไป**
+
+## Rally R4 — คลิปที่เปลี่ยนเฉพาะท่านี้
+
+[Normal](rally-normal-normal-390.mp4) · [Fast](rally-normal-fast-390.mp4) · [Reduced intensity](rally-normal-reduced-390.mp4) · [OS reduced motion](rally-normal-osreduce-390.mp4)
+
+R4ใช้คำสั่งเพียงหนึ่งชุดจากผู้ใช้ ไม่วางprepareบนเพื่อนก่อนcontact ทุกrecipientอ่านจากcoverageจริงและdeduplicateเมื่อtalentให้สองครั้ง OS reduced motionแสดงภาพนิ่งของคำสั่งและการตอบรับ ทุกภาพอยู่ในeffects layerเดิมและล้างผ่านระบบเดิม ไม่มีการเพิ่มเวลาplaybackหรือpersistent aura
+
+อัดซ้ำเฉพาะRallyและรวมmanifestโดยเก็บอีก17คลิปเดิม:
+
+```sh
+DEFENSE_CLIPS=1 PLAYWRIGHT_CHROMIUM_EXECUTABLE=/usr/bin/chromium npx playwright test tests/browser/defense-clips.spec.ts -g 'defense clip rally-' --output test-results/defense-rally-r4-clips
+python tests/browser/fixtures/encode-defense-clips.py test-results/defense-rally-r4-clips --merge
+```
+
+ผลตรวจ R4ล่าสุด: typecheck/lint/buildผ่าน, unit858/75filesผ่าน, defense browser39/39ผ่าน (ทั้ง11ท่าและresponseเดิม พร้อมRallycommand/recipient/foot offset/cleanupและmodesใหม่) ตรวจatlas/profile38frames/11skillsผ่าน
+
+Storyboard/control1/1 และcaptureRally4/4ผ่าน วิดีโอใหม่ทั้ง4เป็น390×844 H264HighLevel3.1/yuv420p limited range (แปลงfull-rangeJPEGอย่างชัดเจน)85–103captured framesเก็บครบ+holdท้าย1เฟรม ระยะเวลา3.28–3.38วินาที maxgap0.141–0.341วินาที ตรวจstillsทั้ง4แล้ว Player21คลิปเล่นRallyทั้ง4ได้ ไม่มีpageerror/overflowที่390px อีก17คลิป/17ภาพและprofile10ท่าเดิมbyte/dataเหมือนเดิม

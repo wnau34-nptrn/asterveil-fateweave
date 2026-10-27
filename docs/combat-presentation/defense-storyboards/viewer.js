@@ -24,6 +24,14 @@ function draw(){
   canvases.forEach((canvas,phase)=>{
     const ctx=canvas.getContext('2d');ctx.clearRect(0,0,390,844);ctx.drawImage(images.get(selected.background),0,0,390,844);
     if(!visible)return;
+    if(selected.command){
+      const c=selected.command,[cx,cy,cw,ch]=c.frames[phase];
+      const cf=Math.min(c.width/c.frameMax[0],c.height/c.frameMax[1]);
+      ctx.globalAlpha=[.88,.95,.25][phase]*Number(weight.value)/100;
+      ctx.drawImage(images.get(selected.source),cx,cy,cw,ch,source.x+c.dx-cw*cf/2,source.y+c.dy+c.height/2-ch*cf,cw*cf,ch*cf);
+      ctx.globalAlpha=1;
+      if(phase===0)return;
+    }
     const [sx,sy,sw,sh]=painting.frames[phase];
     const recipients=phase===0||selected.placement==='source'?[source]:targets;
     for(const at of recipients){

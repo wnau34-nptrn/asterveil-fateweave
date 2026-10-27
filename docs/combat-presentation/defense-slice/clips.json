@@ -1089,67 +1089,6 @@
     ]
   },
   {
-    "file": "rally-normal-normal-390.mp4",
-    "width": 390,
-    "height": 844,
-    "duration": 3.283333,
-    "capturedFrames": 90,
-    "clickOffset": 0.367,
-    "maxFrameGap": 0.299,
-    "impacts": [
-      {
-        "at": 0.693,
-        "action": "rally",
-        "side": "hero",
-        "events": [
-          "rally"
-        ],
-        "resolved": [
-          {
-            "type": "rally",
-            "sourceId": "guardian",
-            "targetId": "guardian",
-            "text": "Every ally\u2019s first hit is reduced until the knight\u2019s next turn."
-          }
-        ]
-      },
-      {
-        "at": 1.465,
-        "side": "enemy",
-        "events": [
-          "damage"
-        ],
-        "resolved": [
-          {
-            "type": "damage",
-            "sourceId": "b1",
-            "targetId": "tracer",
-            "amount": 8,
-            "absorbed": 0,
-            "text": "Enemy attacks on its own turn."
-          }
-        ]
-      },
-      {
-        "at": 2.263,
-        "side": "enemy",
-        "events": [
-          "damage"
-        ],
-        "resolved": [
-          {
-            "type": "damage",
-            "sourceId": "f1",
-            "targetId": "tracer",
-            "amount": 12,
-            "absorbed": 0,
-            "text": "Enemy attacks on its own turn."
-          }
-        ]
-      }
-    ]
-  },
-  {
     "file": "sanctuary-save-normal-390.mp4",
     "width": 390,
     "height": 844,
@@ -1356,6 +1295,250 @@
             "type": "damage",
             "sourceId": "f1",
             "targetId": "guardian",
+            "amount": 12,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "file": "rally-normal-fast-390.mp4",
+    "width": 390,
+    "height": 844,
+    "duration": 3.383333,
+    "capturedFrames": 94,
+    "clickOffset": 0.411,
+    "maxFrameGap": 0.341,
+    "impacts": [
+      {
+        "at": 0.637,
+        "action": "rally",
+        "side": "hero",
+        "events": [
+          "rally"
+        ],
+        "resolved": [
+          {
+            "type": "rally",
+            "sourceId": "guardian",
+            "targetId": "guardian",
+            "text": "Every ally\u2019s first hit is reduced until the knight\u2019s next turn."
+          }
+        ]
+      },
+      {
+        "at": 1.123,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ],
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "b1",
+            "targetId": "tracer",
+            "amount": 8,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      },
+      {
+        "at": 1.694,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ],
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "f1",
+            "targetId": "tracer",
+            "amount": 12,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "file": "rally-normal-normal-390.mp4",
+    "width": 390,
+    "height": 844,
+    "duration": 3.366667,
+    "capturedFrames": 85,
+    "clickOffset": 0.376,
+    "maxFrameGap": 0.3,
+    "impacts": [
+      {
+        "at": 0.702,
+        "action": "rally",
+        "side": "hero",
+        "events": [
+          "rally"
+        ],
+        "resolved": [
+          {
+            "type": "rally",
+            "sourceId": "guardian",
+            "targetId": "guardian",
+            "text": "Every ally\u2019s first hit is reduced until the knight\u2019s next turn."
+          }
+        ]
+      },
+      {
+        "at": 1.408,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ],
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "b1",
+            "targetId": "tracer",
+            "amount": 8,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      },
+      {
+        "at": 2.223,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ],
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "f1",
+            "targetId": "tracer",
+            "amount": 12,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "file": "rally-normal-osreduce-390.mp4",
+    "width": 390,
+    "height": 844,
+    "duration": 3.366667,
+    "capturedFrames": 103,
+    "clickOffset": 0.356,
+    "maxFrameGap": 0.141,
+    "impacts": [
+      {
+        "at": 0.39,
+        "action": "rally",
+        "side": "hero",
+        "events": [
+          "rally"
+        ],
+        "resolved": [
+          {
+            "type": "rally",
+            "sourceId": "guardian",
+            "targetId": "guardian",
+            "text": "Every ally\u2019s first hit is reduced until the knight\u2019s next turn."
+          }
+        ]
+      },
+      {
+        "at": 1.11,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ],
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "b1",
+            "targetId": "tracer",
+            "amount": 8,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      },
+      {
+        "at": 1.952,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ],
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "f1",
+            "targetId": "tracer",
+            "amount": 12,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "file": "rally-normal-reduced-390.mp4",
+    "width": 390,
+    "height": 844,
+    "duration": 3.283333,
+    "capturedFrames": 91,
+    "clickOffset": 0.338,
+    "maxFrameGap": 0.274,
+    "impacts": [
+      {
+        "at": 0.717,
+        "action": "rally",
+        "side": "hero",
+        "events": [
+          "rally"
+        ],
+        "resolved": [
+          {
+            "type": "rally",
+            "sourceId": "guardian",
+            "targetId": "guardian",
+            "text": "Every ally\u2019s first hit is reduced until the knight\u2019s next turn."
+          }
+        ]
+      },
+      {
+        "at": 1.443,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ],
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "b1",
+            "targetId": "tracer",
+            "amount": 8,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      },
+      {
+        "at": 2.26,
+        "side": "enemy",
+        "events": [
+          "damage"
+        ],
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "f1",
+            "targetId": "tracer",
             "amount": 12,
             "absorbed": 0,
             "text": "Enemy attacks on its own turn."

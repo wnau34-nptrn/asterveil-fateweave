@@ -20,13 +20,13 @@
       "fit": 0.3571428571428572
     },
     "rally": {
-      "width": 62,
-      "height": 76,
+      "width": 90,
+      "height": 14,
       "dx": 0,
-      "dy": -78,
+      "dy": 27,
       "placement": "targets",
-      "anchor": "body",
-      "fit": 0.2767857142857143
+      "anchor": "feet",
+      "fit": 0.3572443181818182
     },
     "bulwark": {
       "width": 88,
@@ -100,5 +100,13 @@
       "anchor": "body",
       "fit": 0.5071009108341323
     }
+  },
+  "rallyCommand": {
+    "width": 68,
+    "height": 42,
+    "dx": 85,
+    "dy": 22,
+    "anchor": "body",
+    "fit": 0.3035714285714286
   }
 }
