@@ -1,5 +1,7 @@
 # ส่งต่องานพัฒนาให้ Codex ระหว่างรอ Usage ของ Claude (2026-10-23)
 
+C5.5ล่าสุด27ต.ค.2026: เจ้าของสั่ง “เริ่มขั้นต่อไปได้” หลังตระกูล4releaseแล้ว เริ่มartwork R1 bash/slam/quake/tremorครบ4ท่า/3จังหวะ/15กรณีจริง45composites390px [ภาพ/หน้าเลือก](../combat-presentation/earth-storyboards/README_TH.md) branch codex/vfx-family-5-earth หนึ่งdraft PR รอเลือกภาพก่อนearth runtimeและคลิปจริง ไม่มีcore/save/content/balance/playback timing diff [handoff](C5-FAMILY-5-EARTH-HANDOFF-TH.md) ข้อความห้ามเริ่มตระกูล5ด้านล่างเป็นประวัติของreleaseตระกูล4
+
 C5.4ล่าสุด27ต.ค.2026: เจ้าของตรวจ40คลิปแล้วสั่ง “เอาเข้าเกมได้” PR84 merged `7c392b5` หลังquality/browserผ่าน (890unit,sourceVFX119,prechecks3,production249ผ่าน/274skip) Pages40503739046เผยแพร่successครบbuild+4browser shards+deployเวลา19:37:55น.กรุงเทพฯ build+4browser shards+deploy [release proof](../validation/projectile-vfx-release/README_TH.md) ไม่เริ่มตระกูล5
 
 สถานะส่งมอบ C5.4: runtime R1ครบ7ท่า/atlas-moduleเดียวในPR84เดิม เจ้าของเลือกartworkแล้ว ขณะนี้ [40คลิปจริง390px/หน้าเลือก](../combat-presentation/projectile-slice/README_TH.md) รอตรวจmotionก่อนmerge/เผยแพร่/ตระกูล5 ตรวจ890unit/26focusedbrowser/40capture+state equalityและdecodedPTS/countผ่าน ไม่มีcore/save/content/balance/playback timing diff ผลCIfullbrowserให้ตรวจchecksบนPR ไม่ถือว่าpendingคือผ่าน
@@ -144,7 +146,7 @@ Read AGENTS.md and CLAUDE.md first. Repository wnau34-nptrn/asterveil-fateweave,
 | 2 | ~~โล่/ป้องกัน~~ **เจ้าของให้ผ่าน27ต.ค.2026** หลังRally R5วงพื้นเท่านั้น, PR#77 merged `afeef4a`; Pagesเผยแพร่สำเร็จ [release proof](../validation/defense-vfx-release/README_TH.md) | guard, aegis, rally, bulwark, stonearmor, guardstone, halo, sanctuary, brace, spearwall, hold |
 | 3 | ~~แสงรักษา~~ **เจ้าของให้ผ่านR2และสั่ง “นำเข้าเกมได้” 27ต.ค.2026** PR#78 merged `1cfe874`; Pages40460582964เผยแพร่สำเร็จครบ [release proof](../validation/healing-vfx-release/README_TH.md), [29คลิป](../combat-presentation/healing-slice/README_TH.md); Rouseเป็นguard ไม่ใช่heal | heal, prayer, rouse, revive, bless, mend (เพลงฟื้น) |
 | 4 | ลูกธนู/มีดบิน — **เจ้าของให้ผ่านmotion27ต.ค.2026 “เอาเข้าเกมได้”; PR84 merged7c392b5 หลังCIผ่าน [40คลิป](../combat-presentation/projectile-slice/README_TH.md) / [release proof](../validation/projectile-vfx-release/README_TH.md)** [ภาพ/กรณีจริง](../combat-presentation/projectile-storyboards/README_TH.md) [briefและข้อความเปิดแชต](C5-FAMILY-4-PROJECTILE-HANDOFF-TH.md) เริ่มartwork3จังหวะให้เลือกก่อนruntime หนึ่งPR | hinder, volley, weakshot, pin, track, disengage, knives |
-| 5 | ทุบ/แผ่นดิน | bash, slam, quake, tremor |
+| 5 | ทุบ/แผ่นดิน — **artwork R1ครบ4ท่า/3จังหวะ รอเจ้าของเลือกก่อนruntime** [ภาพ/กรณีจริง](../combat-presentation/earth-storyboards/README_TH.md) / [handoff](C5-FAMILY-5-EARTH-HANDOFF-TH.md) หนึ่งdraft PR | bash, slam, quake, tremor |
 | 6 | ขวดเล่นแร่ | acid, bomb, smoke, catalyst, haste, fury |
 | 7 | ออร่า/เพลง/ตรา | mark, valor, dread, solo, warcry, taunt, challenge, decoy, evade, finale, note |
 | 8 | เวทอาร์เคนที่เหลือ | storm, sigil, dispel |
@@ -363,6 +365,8 @@ REPORT after every batch in docs/handoffs/CODEX-TO-CLAUDE.md (per character: kit
 ```
 
 ## ฝากถึง Claude (Codex เขียนต่อท้าย)
+
+- 2026-10-27 C5.5: commentที่src/core/battle/engine.tsบรรทัด160กล่าวว่าTremorตัดnextmove แต่case tremorจริงตั้งdrawnBy/ดึงintent ไม่ได้weaken; commentveil-siege.tsบอกSlamplainแต่engineมีnextintent-target-selfbonusและrunequake โปรดตรวจcomment/docกลไกแยก งานภาพยึดengine ไม่แก้core/content/rulesหรือเปลี่ยนTremorเป็นpowercut
 
 - 2026-10-27 C5.3: `src/content/encounters/veil-siege.ts` มีcommentเก่าว่าRouseฮีล แต่engineปัจจุบันสร้างguard/all เลือกเพื่อนHP ratioต่ำสุด งานภาพยึดengine ไม่แก้rules/save/balance/content โปรดตรวจcommentแยกเมื่อแก้เอกสารกลไก ไม่ใช่คำขอเปลี่ยนRouseเป็นheal
 

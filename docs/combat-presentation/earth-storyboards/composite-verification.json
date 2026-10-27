@@ -1,0 +1,542 @@
+[
+  {
+    "key": "bash-base",
+    "phase": 0,
+    "changedPixels": 306,
+    "bounds": [
+      139,
+      156,
+      175,
+      185
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "bash-base",
+    "phase": 1,
+    "changedPixels": 1307,
+    "bounds": [
+      146,
+      126,
+      207,
+      172
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "bash-base",
+    "phase": 2,
+    "changedPixels": 1173,
+    "bounds": [
+      134,
+      124,
+      200,
+      170
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "bash-energy",
+    "phase": 0,
+    "changedPixels": 311,
+    "bounds": [
+      139,
+      156,
+      175,
+      185
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "bash-energy",
+    "phase": 1,
+    "changedPixels": 1309,
+    "bounds": [
+      146,
+      126,
+      207,
+      172
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "bash-energy",
+    "phase": 2,
+    "changedPixels": 1194,
+    "bounds": [
+      134,
+      123,
+      200,
+      170
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "bash-reflect",
+    "phase": 0,
+    "changedPixels": 311,
+    "bounds": [
+      139,
+      156,
+      175,
+      185
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "bash-reflect",
+    "phase": 1,
+    "changedPixels": 1309,
+    "bounds": [
+      146,
+      126,
+      207,
+      172
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "bash-reflect",
+    "phase": 2,
+    "changedPixels": 1194,
+    "bounds": [
+      134,
+      123,
+      200,
+      170
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "bash-unstoppable",
+    "phase": 0,
+    "changedPixels": 311,
+    "bounds": [
+      139,
+      156,
+      175,
+      185
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "bash-unstoppable",
+    "phase": 1,
+    "changedPixels": 1309,
+    "bounds": [
+      146,
+      126,
+      207,
+      172
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "bash-unstoppable",
+    "phase": 2,
+    "changedPixels": 1194,
+    "bounds": [
+      134,
+      123,
+      200,
+      170
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "bash-retribution",
+    "phase": 0,
+    "changedPixels": 311,
+    "bounds": [
+      139,
+      156,
+      175,
+      185
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "bash-retribution",
+    "phase": 1,
+    "changedPixels": 1309,
+    "bounds": [
+      146,
+      126,
+      207,
+      172
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "bash-retribution",
+    "phase": 2,
+    "changedPixels": 1194,
+    "bounds": [
+      134,
+      123,
+      200,
+      170
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "bash-down",
+    "phase": 0,
+    "changedPixels": 311,
+    "bounds": [
+      139,
+      156,
+      175,
+      185
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "bash-down",
+    "phase": 1,
+    "changedPixels": 1309,
+    "bounds": [
+      146,
+      126,
+      207,
+      172
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "bash-down",
+    "phase": 2,
+    "changedPixels": 1194,
+    "bounds": [
+      134,
+      123,
+      200,
+      170
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "slam-base",
+    "phase": 0,
+    "changedPixels": 2030,
+    "bounds": [
+      51,
+      122,
+      179,
+      221
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "slam-base",
+    "phase": 1,
+    "changedPixels": 1240,
+    "bounds": [
+      132,
+      111,
+      206,
+      180
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "slam-base",
+    "phase": 2,
+    "changedPixels": 434,
+    "bounds": [
+      136,
+      126,
+      207,
+      182
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "slam-incoming",
+    "phase": 0,
+    "changedPixels": 2030,
+    "bounds": [
+      51,
+      122,
+      179,
+      221
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "slam-incoming",
+    "phase": 1,
+    "changedPixels": 1240,
+    "bounds": [
+      132,
+      111,
+      206,
+      180
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "slam-incoming",
+    "phase": 2,
+    "changedPixels": 434,
+    "bounds": [
+      136,
+      126,
+      207,
+      182
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "slam-runequake",
+    "phase": 0,
+    "changedPixels": 2030,
+    "bounds": [
+      51,
+      122,
+      179,
+      221
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "slam-runequake",
+    "phase": 1,
+    "changedPixels": 1391,
+    "bounds": [
+      132,
+      111,
+      361,
+      193
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "slam-runequake",
+    "phase": 2,
+    "changedPixels": 447,
+    "bounds": [
+      136,
+      126,
+      330,
+      182
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "quake-base",
+    "phase": 0,
+    "changedPixels": 152,
+    "bounds": [
+      144,
+      169,
+      171,
+      183
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "quake-base",
+    "phase": 1,
+    "changedPixels": 2031,
+    "bounds": [
+      183,
+      264,
+      293,
+      627
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "quake-base",
+    "phase": 2,
+    "changedPixels": 2320,
+    "bounds": [
+      170,
+      268,
+      303,
+      628
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "quake-backonly",
+    "phase": 0,
+    "changedPixels": 171,
+    "bounds": [
+      144,
+      169,
+      183,
+      183
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "quake-backonly",
+    "phase": 1,
+    "changedPixels": 1163,
+    "bounds": [
+      301,
+      273,
+      380,
+      625
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "quake-backonly",
+    "phase": 2,
+    "changedPixels": 1151,
+    "bounds": [
+      290,
+      272,
+      376,
+      625
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "quake-skyhammer",
+    "phase": 0,
+    "changedPixels": 152,
+    "bounds": [
+      144,
+      169,
+      171,
+      183
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "quake-skyhammer",
+    "phase": 1,
+    "changedPixels": 2031,
+    "bounds": [
+      183,
+      264,
+      293,
+      627
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "quake-skyhammer",
+    "phase": 2,
+    "changedPixels": 2320,
+    "bounds": [
+      170,
+      268,
+      303,
+      628
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "tremor-base",
+    "phase": 0,
+    "changedPixels": 102,
+    "bounds": [
+      144,
+      172,
+      170,
+      184
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "tremor-base",
+    "phase": 1,
+    "changedPixels": 2476,
+    "bounds": [
+      187,
+      267,
+      312,
+      628
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "tremor-base",
+    "phase": 2,
+    "changedPixels": 2085,
+    "bounds": [
+      187,
+      268,
+      309,
+      628
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "tremor-backonly",
+    "phase": 0,
+    "changedPixels": 102,
+    "bounds": [
+      144,
+      172,
+      170,
+      184
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "tremor-backonly",
+    "phase": 1,
+    "changedPixels": 1321,
+    "bounds": [
+      301,
+      273,
+      384,
+      626
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "tremor-backonly",
+    "phase": 2,
+    "changedPixels": 1049,
+    "bounds": [
+      301,
+      276,
+      382,
+      626
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "tremor-redirect",
+    "phase": 0,
+    "changedPixels": 102,
+    "bounds": [
+      144,
+      172,
+      170,
+      184
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "tremor-redirect",
+    "phase": 1,
+    "changedPixels": 2476,
+    "bounds": [
+      187,
+      267,
+      312,
+      628
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "tremor-redirect",
+    "phase": 2,
+    "changedPixels": 2085,
+    "bounds": [
+      187,
+      268,
+      309,
+      628
+    ],
+    "costumePixelsChanged": 0
+  }
+]

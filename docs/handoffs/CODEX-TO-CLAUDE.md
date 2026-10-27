@@ -1,5 +1,15 @@
 # Codex → Claude handoff
 
+## 2026-10-27 — C5.5 earth artwork R1 for selection; no runtime
+
+Owner said “เริ่มขั้นต่อไปได้” after family4release, authorizing family5. Fetched gamebase35e39af; independently confirmed Pages40503739046success at merge7c392b5 and prior atlas SHA against releaseproof. New branch `codex/vfx-family-5-earth`, one draft PR for the entire family (link recorded after creation), no merge/publication.
+
+Added original effect-only ImageGen12cells/1536×1024 RGBA/exactprompt/provenance under incoming/ART-VFX-EARTH-001; real renderer/resolver15case screenshots, sprite/DOMalpha masks, events/snapshots and45static390pxcomposites plus4skill/3phase review viewer under docs/combat-presentation/earth-storyboards. Bash ivory/gold collision crescent, Slam narrow bronze downward rune impact, Quake low amber fractured fan, Tremor converging jade stone ribs. Body-edge and shallow ground placements differ per move, feathered dissolution, rear masks preserve costume/weapon/name/HPpixels. HP/UI fixed before cast is explicitly a static concept, not post-hit state or runtime motion.
+
+Actual mechanics checked: Bash physical interrupt, energy no-stop, reflect energy sigil (reduced damage), unstoppable resist, retribution bonus onehit, down no interrupt; later actual cancel matches eligible cases. Slam nextintent-on-self bonus and runequake same-slot-index pair (notall). Quake front/backfallback, Skyhammer twoactualheal4events in hurt-source fixture. Tremor front/backfallback+drawnBy changes later intents from anotherfrontKnight toWarden; no weaken/powercut, no state/events injected. Stale comments reported to Claude separately, no core/content changes.
+
+Files: new earth-art fixture/spec, original/source/prompts/reference, build_manifest/viewer/index/verification/45PNGs/metadata and handoff docs only. typecheck/lint/build passed;890unit/77files passed; references2/2 (15cases+independent2×/3×CSSworldpivot),viewer1/1,45pixel-preservation checks passed (no costume/weapon/name/HP or outside-field pixels changed; allphases visible). Mode-specific skips are not passes. Browser tool unavailable, used existing project PlaywrightChromiumcloud/SwiftShader, notSafari/realdevices. No src/public/runtime/core/save/content/balance/playback change, no new deployment. Owner has not selected R1 or approved motion. Show1–2images390px plus viewer; await selection/revision before shared atlas/module in same PR, then actualclips before merge/publication/family6. [Detailed handoff](C5-FAMILY-5-EARTH-HANDOFF-TH.md).
+
 ## 2026-10-27 — C5.4 owner approved, PR84 merged and published
 
 Owner reviewed40actual390px runtime clips and said “เอาเข้าเกมได้”, approving family4 motion and integration/publication. PR84 merged as `7c392b5cf427b620059d7844c4374c6baf0b827b`, validated head15f8295. Latest base8f00428 fetched again before merge, no conflicts; src/public/tests trees match approved runtime0353b8f and validated head exactly. No rules/save/content/balance/playback changes.
