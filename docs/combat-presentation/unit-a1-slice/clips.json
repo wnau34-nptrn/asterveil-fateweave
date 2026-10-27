@@ -1,0 +1,7181 @@
+[
+  {
+    "file": "aegis-normal-390.mp4",
+    "duration": 2.632711,
+    "capturedFrames": 87,
+    "maxFrameGap": 0.296,
+    "maxTimestampErrorMs": 0.0061,
+    "clickOffset": 0.34,
+    "rawCapture": "test-results/unit-a1-delivery/unit-a1-clips-unit-A1-clip-aegis-normal",
+    "captureStartUTCSeconds": 1793114735.739218,
+    "impacts": [
+      {
+        "at": 0.694,
+        "remainingMs": 420,
+        "turn": {
+          "actorId": "weaver",
+          "side": "hero",
+          "beat": 1,
+          "round": 1,
+          "action": "aegis",
+          "targetId": "party",
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 0,
+            "name": "Seed Spark",
+            "damage": 11,
+            "kind": "energy",
+            "targetId": "weaver",
+            "beat": 1,
+            "round": 1
+          },
+          "state": {
+            "encounterId": "scout-patrol",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 8,
+                "cooldowns": {
+                  "aegis": 5
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 8,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 8,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 64,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "aegis",
+                "targetId": "party"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "barrier",
+              "sourceId": "weaver",
+              "targetId": "weaver",
+              "amount": 8,
+              "text": "Added barrier."
+            },
+            {
+              "type": "barrier",
+              "sourceId": "weaver",
+              "targetId": "guardian",
+              "amount": 8,
+              "text": "Added barrier."
+            },
+            {
+              "type": "barrier",
+              "sourceId": "weaver",
+              "targetId": "healer",
+              "amount": 8,
+              "text": "Added barrier."
+            }
+          ],
+          "before": {
+            "encounterId": "scout-patrol",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 64,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": []
+          },
+          "after": {
+            "encounterId": "scout-patrol",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 8,
+                "cooldowns": {
+                  "aegis": 5
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 8,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 8,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 64,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "aegis",
+                "targetId": "party"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "at": 1.403,
+        "remainingMs": 520,
+        "turn": {
+          "actorId": "b1",
+          "side": "enemy",
+          "beat": 2,
+          "round": 1,
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 0,
+            "name": "Seed Spark",
+            "damage": 11,
+            "kind": "energy",
+            "targetId": "weaver",
+            "beat": 2,
+            "round": 1
+          },
+          "targetId": "weaver",
+          "state": {
+            "encounterId": "scout-patrol",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 45,
+                "barrier": 0,
+                "cooldowns": {
+                  "aegis": 5
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 8,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 8,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 64,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "aegis",
+                "targetId": "party"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "b1",
+              "targetId": "weaver",
+              "amount": 3,
+              "absorbed": 8,
+              "text": "Enemy attacks on its own turn."
+            }
+          ],
+          "before": {
+            "encounterId": "scout-patrol",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 8,
+                "cooldowns": {
+                  "aegis": 5
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 8,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 8,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 64,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "aegis",
+                "targetId": "party"
+              }
+            ]
+          },
+          "after": {
+            "encounterId": "scout-patrol",
+            "beat": 3,
+            "round": 1,
+            "turnIndex": 2,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 45,
+                "barrier": 0,
+                "cooldowns": {
+                  "aegis": 5
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 8,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 8,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 64,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 12,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 3,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "aegis",
+                "targetId": "party"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "file": "attack-fast-390.mp4",
+    "duration": 1.661656,
+    "capturedFrames": 33,
+    "maxFrameGap": 0.218,
+    "maxTimestampErrorMs": 0.0051,
+    "clickOffset": 0.314,
+    "rawCapture": "test-results/unit-a1-delivery/unit-a1-clips-unit-A1-clip-attack-fast",
+    "captureStartUTCSeconds": 1793114656.519603,
+    "impacts": [
+      {
+        "at": 0.509,
+        "remainingMs": 253,
+        "turn": {
+          "actorId": "weaver",
+          "side": "hero",
+          "beat": 1,
+          "round": 1,
+          "action": "attack",
+          "targetId": "b1",
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 0,
+            "name": "Seed Spark",
+            "damage": 11,
+            "kind": "energy",
+            "targetId": "weaver",
+            "beat": 1,
+            "round": 1
+          },
+          "state": {
+            "encounterId": "scout-patrol",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 53,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "attack",
+                "targetId": "b1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "weaver",
+              "targetId": "b1",
+              "amount": 11,
+              "text": "Hero attacks."
+            }
+          ],
+          "before": {
+            "encounterId": "scout-patrol",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 64,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": []
+          },
+          "after": {
+            "encounterId": "scout-patrol",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 53,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "attack",
+                "targetId": "b1"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "at": 0.947,
+        "remainingMs": 338,
+        "turn": {
+          "actorId": "b1",
+          "side": "enemy",
+          "beat": 2,
+          "round": 1,
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 0,
+            "name": "Seed Spark",
+            "damage": 11,
+            "kind": "energy",
+            "targetId": "weaver",
+            "beat": 2,
+            "round": 1
+          },
+          "targetId": "weaver",
+          "state": {
+            "encounterId": "scout-patrol",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 37,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 53,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "attack",
+                "targetId": "b1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "b1",
+              "targetId": "weaver",
+              "amount": 11,
+              "absorbed": 0,
+              "text": "Enemy attacks on its own turn."
+            }
+          ],
+          "before": {
+            "encounterId": "scout-patrol",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 53,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "attack",
+                "targetId": "b1"
+              }
+            ]
+          },
+          "after": {
+            "encounterId": "scout-patrol",
+            "beat": 3,
+            "round": 1,
+            "turnIndex": 2,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 37,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 53,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 12,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 3,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "attack",
+                "targetId": "b1"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "file": "attack-normal-390.mp4",
+    "duration": 1.922911,
+    "capturedFrames": 31,
+    "maxFrameGap": 0.204,
+    "maxTimestampErrorMs": 0.0051,
+    "clickOffset": 0.261,
+    "rawCapture": "test-results/unit-a1-delivery/unit-a1-clips-unit-A1-clip-attack-normal",
+    "captureStartUTCSeconds": 1793114648.279867,
+    "impacts": [
+      {
+        "at": 0.557,
+        "remainingMs": 390,
+        "turn": {
+          "actorId": "weaver",
+          "side": "hero",
+          "beat": 1,
+          "round": 1,
+          "action": "attack",
+          "targetId": "b1",
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 0,
+            "name": "Seed Spark",
+            "damage": 11,
+            "kind": "energy",
+            "targetId": "weaver",
+            "beat": 1,
+            "round": 1
+          },
+          "state": {
+            "encounterId": "scout-patrol",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 53,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "attack",
+                "targetId": "b1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "weaver",
+              "targetId": "b1",
+              "amount": 11,
+              "text": "Hero attacks."
+            }
+          ],
+          "before": {
+            "encounterId": "scout-patrol",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 64,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": []
+          },
+          "after": {
+            "encounterId": "scout-patrol",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 53,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "attack",
+                "targetId": "b1"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "at": 1.259,
+        "remainingMs": 520,
+        "turn": {
+          "actorId": "b1",
+          "side": "enemy",
+          "beat": 2,
+          "round": 1,
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 0,
+            "name": "Seed Spark",
+            "damage": 11,
+            "kind": "energy",
+            "targetId": "weaver",
+            "beat": 2,
+            "round": 1
+          },
+          "targetId": "weaver",
+          "state": {
+            "encounterId": "scout-patrol",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 37,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 53,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "attack",
+                "targetId": "b1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "b1",
+              "targetId": "weaver",
+              "amount": 11,
+              "absorbed": 0,
+              "text": "Enemy attacks on its own turn."
+            }
+          ],
+          "before": {
+            "encounterId": "scout-patrol",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 53,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "attack",
+                "targetId": "b1"
+              }
+            ]
+          },
+          "after": {
+            "encounterId": "scout-patrol",
+            "beat": 3,
+            "round": 1,
+            "turnIndex": 2,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 37,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 53,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 12,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 3,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "attack",
+                "targetId": "b1"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "file": "attack-osreduce-390.mp4",
+    "duration": 2.6177,
+    "capturedFrames": 101,
+    "maxFrameGap": 0.232,
+    "maxTimestampErrorMs": 0.0051,
+    "clickOffset": 0.337,
+    "rawCapture": "test-results/unit-a1-delivery/unit-a1-clips-unit-A1-clip-attack-osreduce",
+    "captureStartUTCSeconds": 1793114670.280117,
+    "impacts": [
+      {
+        "at": 0.37,
+        "remainingMs": 600,
+        "turn": {
+          "actorId": "weaver",
+          "side": "hero",
+          "beat": 1,
+          "round": 1,
+          "action": "attack",
+          "targetId": "b1",
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 0,
+            "name": "Seed Spark",
+            "damage": 11,
+            "kind": "energy",
+            "targetId": "weaver",
+            "beat": 1,
+            "round": 1
+          },
+          "state": {
+            "encounterId": "scout-patrol",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 53,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "attack",
+                "targetId": "b1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "weaver",
+              "targetId": "b1",
+              "amount": 11,
+              "text": "Hero attacks."
+            }
+          ],
+          "before": {
+            "encounterId": "scout-patrol",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 64,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": []
+          },
+          "after": {
+            "encounterId": "scout-patrol",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 53,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "attack",
+                "targetId": "b1"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "at": 0.99,
+        "remainingMs": 800,
+        "turn": {
+          "actorId": "b1",
+          "side": "enemy",
+          "beat": 2,
+          "round": 1,
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 0,
+            "name": "Seed Spark",
+            "damage": 11,
+            "kind": "energy",
+            "targetId": "weaver",
+            "beat": 2,
+            "round": 1
+          },
+          "targetId": "weaver",
+          "state": {
+            "encounterId": "scout-patrol",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 37,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 53,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "attack",
+                "targetId": "b1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "b1",
+              "targetId": "weaver",
+              "amount": 11,
+              "absorbed": 0,
+              "text": "Enemy attacks on its own turn."
+            }
+          ],
+          "before": {
+            "encounterId": "scout-patrol",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 53,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "attack",
+                "targetId": "b1"
+              }
+            ]
+          },
+          "after": {
+            "encounterId": "scout-patrol",
+            "beat": 3,
+            "round": 1,
+            "turnIndex": 2,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 37,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 53,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 12,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 3,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "attack",
+                "targetId": "b1"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "file": "attack-reduced-390.mp4",
+    "duration": 2.1513,
+    "capturedFrames": 46,
+    "maxFrameGap": 0.278,
+    "maxTimestampErrorMs": 0.0052,
+    "clickOffset": 0.261,
+    "rawCapture": "test-results/unit-a1-delivery/unit-a1-clips-unit-A1-clip-attack-reduced",
+    "captureStartUTCSeconds": 1793114663.676108,
+    "impacts": [
+      {
+        "at": 0.552,
+        "remainingMs": 390,
+        "turn": {
+          "actorId": "weaver",
+          "side": "hero",
+          "beat": 1,
+          "round": 1,
+          "action": "attack",
+          "targetId": "b1",
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 0,
+            "name": "Seed Spark",
+            "damage": 11,
+            "kind": "energy",
+            "targetId": "weaver",
+            "beat": 1,
+            "round": 1
+          },
+          "state": {
+            "encounterId": "scout-patrol",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 53,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "attack",
+                "targetId": "b1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "weaver",
+              "targetId": "b1",
+              "amount": 11,
+              "text": "Hero attacks."
+            }
+          ],
+          "before": {
+            "encounterId": "scout-patrol",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 64,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": []
+          },
+          "after": {
+            "encounterId": "scout-patrol",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 53,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "attack",
+                "targetId": "b1"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "at": 1.266,
+        "remainingMs": 520,
+        "turn": {
+          "actorId": "b1",
+          "side": "enemy",
+          "beat": 2,
+          "round": 1,
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 0,
+            "name": "Seed Spark",
+            "damage": 11,
+            "kind": "energy",
+            "targetId": "weaver",
+            "beat": 2,
+            "round": 1
+          },
+          "targetId": "weaver",
+          "state": {
+            "encounterId": "scout-patrol",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 37,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 53,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "attack",
+                "targetId": "b1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "b1",
+              "targetId": "weaver",
+              "amount": 11,
+              "absorbed": 0,
+              "text": "Enemy attacks on its own turn."
+            }
+          ],
+          "before": {
+            "encounterId": "scout-patrol",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 53,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "attack",
+                "targetId": "b1"
+              }
+            ]
+          },
+          "after": {
+            "encounterId": "scout-patrol",
+            "beat": 3,
+            "round": 1,
+            "turnIndex": 2,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 37,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 53,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 12,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 3,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "attack",
+                "targetId": "b1"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "file": "bolt-fast-390.mp4",
+    "duration": 2.161211,
+    "capturedFrames": 71,
+    "maxFrameGap": 0.299,
+    "maxTimestampErrorMs": 0.0052,
+    "clickOffset": 0.404,
+    "rawCapture": "test-results/unit-a1-delivery/unit-a1-clips-unit-A1-clip-bolt-fast",
+    "captureStartUTCSeconds": 1793114682.239911,
+    "impacts": [
+      {
+        "at": 0.627,
+        "remainingMs": 359,
+        "turn": {
+          "actorId": "weaver",
+          "side": "hero",
+          "beat": 1,
+          "round": 1,
+          "action": "bolt",
+          "targetId": "b1",
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 0,
+            "name": "Seed Spark",
+            "damage": 11,
+            "kind": "energy",
+            "targetId": "weaver",
+            "beat": 1,
+            "round": 1
+          },
+          "state": {
+            "encounterId": "scout-patrol",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {
+                  "bolt": 3
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 38,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "bolt",
+                "targetId": "b1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "weaver",
+              "targetId": "b1",
+              "amount": 26,
+              "text": "Hero attacks."
+            }
+          ],
+          "before": {
+            "encounterId": "scout-patrol",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 64,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": []
+          },
+          "after": {
+            "encounterId": "scout-patrol",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {
+                  "bolt": 3
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 38,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "bolt",
+                "targetId": "b1"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "at": 1.184,
+        "remainingMs": 338,
+        "turn": {
+          "actorId": "b1",
+          "side": "enemy",
+          "beat": 2,
+          "round": 1,
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 0,
+            "name": "Seed Spark",
+            "damage": 11,
+            "kind": "energy",
+            "targetId": "weaver",
+            "beat": 2,
+            "round": 1
+          },
+          "targetId": "weaver",
+          "state": {
+            "encounterId": "scout-patrol",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 37,
+                "barrier": 0,
+                "cooldowns": {
+                  "bolt": 3
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 38,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "bolt",
+                "targetId": "b1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "b1",
+              "targetId": "weaver",
+              "amount": 11,
+              "absorbed": 0,
+              "text": "Enemy attacks on its own turn."
+            }
+          ],
+          "before": {
+            "encounterId": "scout-patrol",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {
+                  "bolt": 3
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 38,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "bolt",
+                "targetId": "b1"
+              }
+            ]
+          },
+          "after": {
+            "encounterId": "scout-patrol",
+            "beat": 3,
+            "round": 1,
+            "turnIndex": 2,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 37,
+                "barrier": 0,
+                "cooldowns": {
+                  "bolt": 3
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 38,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 12,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 3,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "bolt",
+                "targetId": "b1"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "file": "bolt-normal-390.mp4",
+    "duration": 2.6405,
+    "capturedFrames": 92,
+    "maxFrameGap": 0.257,
+    "maxTimestampErrorMs": 0.0052,
+    "clickOffset": 0.307,
+    "rawCapture": "test-results/unit-a1-delivery/unit-a1-clips-unit-A1-clip-bolt-normal",
+    "captureStartUTCSeconds": 1793114676.52694,
+    "impacts": [
+      {
+        "at": 0.657,
+        "remainingMs": 552,
+        "turn": {
+          "actorId": "weaver",
+          "side": "hero",
+          "beat": 1,
+          "round": 1,
+          "action": "bolt",
+          "targetId": "b1",
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 0,
+            "name": "Seed Spark",
+            "damage": 11,
+            "kind": "energy",
+            "targetId": "weaver",
+            "beat": 1,
+            "round": 1
+          },
+          "state": {
+            "encounterId": "scout-patrol",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {
+                  "bolt": 3
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 38,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "bolt",
+                "targetId": "b1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "weaver",
+              "targetId": "b1",
+              "amount": 26,
+              "text": "Hero attacks."
+            }
+          ],
+          "before": {
+            "encounterId": "scout-patrol",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 64,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": []
+          },
+          "after": {
+            "encounterId": "scout-patrol",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {
+                  "bolt": 3
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 38,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "bolt",
+                "targetId": "b1"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "at": 1.536,
+        "remainingMs": 520,
+        "turn": {
+          "actorId": "b1",
+          "side": "enemy",
+          "beat": 2,
+          "round": 1,
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 0,
+            "name": "Seed Spark",
+            "damage": 11,
+            "kind": "energy",
+            "targetId": "weaver",
+            "beat": 2,
+            "round": 1
+          },
+          "targetId": "weaver",
+          "state": {
+            "encounterId": "scout-patrol",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 37,
+                "barrier": 0,
+                "cooldowns": {
+                  "bolt": 3
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 38,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "bolt",
+                "targetId": "b1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "b1",
+              "targetId": "weaver",
+              "amount": 11,
+              "absorbed": 0,
+              "text": "Enemy attacks on its own turn."
+            }
+          ],
+          "before": {
+            "encounterId": "scout-patrol",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {
+                  "bolt": 3
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 38,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "bolt",
+                "targetId": "b1"
+              }
+            ]
+          },
+          "after": {
+            "encounterId": "scout-patrol",
+            "beat": 3,
+            "round": 1,
+            "turnIndex": 2,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 37,
+                "barrier": 0,
+                "cooldowns": {
+                  "bolt": 3
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 38,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 12,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 3,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "bolt",
+                "targetId": "b1"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "file": "bolt-osreduce-390.mp4",
+    "duration": 2.556522,
+    "capturedFrames": 92,
+    "maxFrameGap": 0.265,
+    "maxTimestampErrorMs": 0.0051,
+    "clickOffset": 0.283,
+    "rawCapture": "test-results/unit-a1-delivery/unit-a1-clips-unit-A1-clip-bolt-osreduce",
+    "captureStartUTCSeconds": 1793114693.574023,
+    "impacts": [
+      {
+        "at": 0.31,
+        "remainingMs": 850,
+        "turn": {
+          "actorId": "weaver",
+          "side": "hero",
+          "beat": 1,
+          "round": 1,
+          "action": "bolt",
+          "targetId": "b1",
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 0,
+            "name": "Seed Spark",
+            "damage": 11,
+            "kind": "energy",
+            "targetId": "weaver",
+            "beat": 1,
+            "round": 1
+          },
+          "state": {
+            "encounterId": "scout-patrol",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {
+                  "bolt": 3
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 38,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "bolt",
+                "targetId": "b1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "weaver",
+              "targetId": "b1",
+              "amount": 26,
+              "text": "Hero attacks."
+            }
+          ],
+          "before": {
+            "encounterId": "scout-patrol",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 64,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": []
+          },
+          "after": {
+            "encounterId": "scout-patrol",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {
+                  "bolt": 3
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 38,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "bolt",
+                "targetId": "b1"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "at": 1.184,
+        "remainingMs": 800,
+        "turn": {
+          "actorId": "b1",
+          "side": "enemy",
+          "beat": 2,
+          "round": 1,
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 0,
+            "name": "Seed Spark",
+            "damage": 11,
+            "kind": "energy",
+            "targetId": "weaver",
+            "beat": 2,
+            "round": 1
+          },
+          "targetId": "weaver",
+          "state": {
+            "encounterId": "scout-patrol",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 37,
+                "barrier": 0,
+                "cooldowns": {
+                  "bolt": 3
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 38,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "bolt",
+                "targetId": "b1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "b1",
+              "targetId": "weaver",
+              "amount": 11,
+              "absorbed": 0,
+              "text": "Enemy attacks on its own turn."
+            }
+          ],
+          "before": {
+            "encounterId": "scout-patrol",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {
+                  "bolt": 3
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 38,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "bolt",
+                "targetId": "b1"
+              }
+            ]
+          },
+          "after": {
+            "encounterId": "scout-patrol",
+            "beat": 3,
+            "round": 1,
+            "turnIndex": 2,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 37,
+                "barrier": 0,
+                "cooldowns": {
+                  "bolt": 3
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 38,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 12,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 3,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "bolt",
+                "targetId": "b1"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "file": "bolt-reduced-390.mp4",
+    "duration": 2.622856,
+    "capturedFrames": 90,
+    "maxFrameGap": 0.278,
+    "maxTimestampErrorMs": 0.0061,
+    "clickOffset": 0.301,
+    "rawCapture": "test-results/unit-a1-delivery/unit-a1-clips-unit-A1-clip-bolt-reduced",
+    "captureStartUTCSeconds": 1793114687.679192,
+    "impacts": [
+      {
+        "at": 0.662,
+        "remainingMs": 552,
+        "turn": {
+          "actorId": "weaver",
+          "side": "hero",
+          "beat": 1,
+          "round": 1,
+          "action": "bolt",
+          "targetId": "b1",
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 0,
+            "name": "Seed Spark",
+            "damage": 11,
+            "kind": "energy",
+            "targetId": "weaver",
+            "beat": 1,
+            "round": 1
+          },
+          "state": {
+            "encounterId": "scout-patrol",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {
+                  "bolt": 3
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 38,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "bolt",
+                "targetId": "b1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "weaver",
+              "targetId": "b1",
+              "amount": 26,
+              "text": "Hero attacks."
+            }
+          ],
+          "before": {
+            "encounterId": "scout-patrol",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 64,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": []
+          },
+          "after": {
+            "encounterId": "scout-patrol",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {
+                  "bolt": 3
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 38,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "bolt",
+                "targetId": "b1"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "at": 1.575,
+        "remainingMs": 520,
+        "turn": {
+          "actorId": "b1",
+          "side": "enemy",
+          "beat": 2,
+          "round": 1,
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 0,
+            "name": "Seed Spark",
+            "damage": 11,
+            "kind": "energy",
+            "targetId": "weaver",
+            "beat": 2,
+            "round": 1
+          },
+          "targetId": "weaver",
+          "state": {
+            "encounterId": "scout-patrol",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 37,
+                "barrier": 0,
+                "cooldowns": {
+                  "bolt": 3
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 38,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "bolt",
+                "targetId": "b1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "b1",
+              "targetId": "weaver",
+              "amount": 11,
+              "absorbed": 0,
+              "text": "Enemy attacks on its own turn."
+            }
+          ],
+          "before": {
+            "encounterId": "scout-patrol",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {
+                  "bolt": 3
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 38,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "bolt",
+                "targetId": "b1"
+              }
+            ]
+          },
+          "after": {
+            "encounterId": "scout-patrol",
+            "beat": 3,
+            "round": 1,
+            "turnIndex": 2,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 37,
+                "barrier": 0,
+                "cooldowns": {
+                  "bolt": 3
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 38,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 12,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 3,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "bolt",
+                "targetId": "b1"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "file": "dispel-normal-390.mp4",
+    "duration": 2.568444,
+    "capturedFrames": 96,
+    "maxFrameGap": 0.302,
+    "maxTimestampErrorMs": 0.0051,
+    "clickOffset": 0.298,
+    "rawCapture": "test-results/unit-a1-delivery/unit-a1-clips-unit-A1-clip-dispel-normal",
+    "captureStartUTCSeconds": 1793114741.842129,
+    "impacts": [
+      {
+        "at": 0.634,
+        "remainingMs": 552,
+        "turn": {
+          "actorId": "weaver",
+          "side": "hero",
+          "beat": 1,
+          "round": 1,
+          "action": "dispel",
+          "targetId": "b1",
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 0,
+            "name": "Seed Spark",
+            "damage": 11,
+            "kind": "energy",
+            "targetId": "weaver",
+            "beat": 1,
+            "round": 1
+          },
+          "state": {
+            "encounterId": "scout-patrol",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {
+                  "dispel": 4
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 52,
+                "markedUntil": 0,
+                "dispelledUntil": 3
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "dispel",
+                "targetId": "b1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "weaver",
+              "targetId": "b1",
+              "amount": 12,
+              "text": "Hero attacks."
+            },
+            {
+              "type": "dispel",
+              "sourceId": "weaver",
+              "targetId": "b1",
+              "text": "Veilguard dispelled."
+            }
+          ],
+          "before": {
+            "encounterId": "scout-patrol",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 64,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": []
+          },
+          "after": {
+            "encounterId": "scout-patrol",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {
+                  "dispel": 4
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 52,
+                "markedUntil": 0,
+                "dispelledUntil": 3
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "dispel",
+                "targetId": "b1"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "at": 1.492,
+        "remainingMs": 520,
+        "turn": {
+          "actorId": "b1",
+          "side": "enemy",
+          "beat": 2,
+          "round": 1,
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 0,
+            "name": "Seed Spark",
+            "damage": 11,
+            "kind": "energy",
+            "targetId": "weaver",
+            "beat": 2,
+            "round": 1
+          },
+          "targetId": "weaver",
+          "state": {
+            "encounterId": "scout-patrol",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 37,
+                "barrier": 0,
+                "cooldowns": {
+                  "dispel": 4
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 52,
+                "markedUntil": 0,
+                "dispelledUntil": 3
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "dispel",
+                "targetId": "b1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "b1",
+              "targetId": "weaver",
+              "amount": 11,
+              "absorbed": 0,
+              "text": "Enemy attacks on its own turn."
+            }
+          ],
+          "before": {
+            "encounterId": "scout-patrol",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {
+                  "dispel": 4
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 52,
+                "markedUntil": 0,
+                "dispelledUntil": 3
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "dispel",
+                "targetId": "b1"
+              }
+            ]
+          },
+          "after": {
+            "encounterId": "scout-patrol",
+            "beat": 3,
+            "round": 1,
+            "turnIndex": 2,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 37,
+                "barrier": 0,
+                "cooldowns": {
+                  "dispel": 4
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 52,
+                "markedUntil": 0,
+                "dispelledUntil": 3
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 12,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 3,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "dispel",
+                "targetId": "b1"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "file": "sigil-normal-390.mp4",
+    "duration": 2.086544,
+    "capturedFrames": 76,
+    "maxFrameGap": 0.295,
+    "maxTimestampErrorMs": 0.0051,
+    "clickOffset": 0.256,
+    "rawCapture": "test-results/unit-a1-delivery/unit-a1-clips-unit-A1-clip-sigil-normal",
+    "captureStartUTCSeconds": 1793114724.229527,
+    "impacts": [
+      {
+        "at": 0.62,
+        "remainingMs": 552,
+        "turn": {
+          "actorId": "weaver",
+          "side": "hero",
+          "beat": 1,
+          "round": 1,
+          "action": "sigil",
+          "targetId": "b1",
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 0,
+            "name": "Seed Spark",
+            "damage": 11,
+            "kind": "energy",
+            "targetId": "weaver",
+            "beat": 1,
+            "round": 1
+          },
+          "state": {
+            "encounterId": "scout-patrol",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {
+                  "sigil": 4
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 56,
+                "markedUntil": 0,
+                "interruptedRound": 1,
+                "interruptedBy": "weaver"
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "sigil",
+                "targetId": "b1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "weaver",
+              "targetId": "b1",
+              "amount": 8,
+              "text": "Hero attacks."
+            },
+            {
+              "type": "sigil",
+              "sourceId": "weaver",
+              "targetId": "b1",
+              "text": "Next energy move sealed."
+            }
+          ],
+          "before": {
+            "encounterId": "scout-patrol",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 64,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": []
+          },
+          "after": {
+            "encounterId": "scout-patrol",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {
+                  "sigil": 4
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 56,
+                "markedUntil": 0,
+                "interruptedRound": 1,
+                "interruptedBy": "weaver"
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "sigil",
+                "targetId": "b1"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "at": 1.199,
+        "remainingMs": 500,
+        "turn": {
+          "actorId": "b1",
+          "side": "enemy",
+          "beat": 2,
+          "round": 1,
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 0,
+            "name": "Seed Spark",
+            "damage": 11,
+            "kind": "energy",
+            "targetId": "weaver",
+            "beat": 2,
+            "round": 1
+          },
+          "targetId": "weaver",
+          "state": {
+            "encounterId": "scout-patrol",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {
+                  "sigil": 4
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 56,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "sigil",
+                "targetId": "b1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "cancel",
+              "sourceId": "b1",
+              "cause": "sealed",
+              "text": "Energy move sealed."
+            }
+          ],
+          "before": {
+            "encounterId": "scout-patrol",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {
+                  "sigil": 4
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 56,
+                "markedUntil": 0,
+                "interruptedRound": 1,
+                "interruptedBy": "weaver"
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "sigil",
+                "targetId": "b1"
+              }
+            ]
+          },
+          "after": {
+            "encounterId": "scout-patrol",
+            "beat": 3,
+            "round": 1,
+            "turnIndex": 2,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {
+                  "sigil": 4
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 56,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 12,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 3,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "sigil",
+                "targetId": "b1"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "file": "storm-normal-390.mp4",
+    "duration": 2.543189,
+    "capturedFrames": 101,
+    "maxFrameGap": 0.261,
+    "maxTimestampErrorMs": 0.006,
+    "clickOffset": 0.305,
+    "rawCapture": "test-results/unit-a1-delivery/unit-a1-clips-unit-A1-clip-storm-normal",
+    "captureStartUTCSeconds": 1793114729.927413,
+    "impacts": [
+      {
+        "at": 0.711,
+        "remainingMs": 617,
+        "turn": {
+          "actorId": "weaver",
+          "side": "hero",
+          "beat": 1,
+          "round": 1,
+          "action": "storm",
+          "targetId": "enemies",
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 0,
+            "name": "Seed Spark",
+            "damage": 11,
+            "kind": "energy",
+            "targetId": "weaver",
+            "beat": 1,
+            "round": 1
+          },
+          "state": {
+            "encounterId": "scout-patrol",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {
+                  "storm": 5
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 54,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "storm",
+                "targetId": "enemies"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "weaver",
+              "targetId": "b1",
+              "amount": 10,
+              "text": "The storm strikes every enemy."
+            }
+          ],
+          "before": {
+            "encounterId": "scout-patrol",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 64,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": []
+          },
+          "after": {
+            "encounterId": "scout-patrol",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {
+                  "storm": 5
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 54,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "storm",
+                "targetId": "enemies"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "at": 1.597,
+        "remainingMs": 520,
+        "turn": {
+          "actorId": "b1",
+          "side": "enemy",
+          "beat": 2,
+          "round": 1,
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 0,
+            "name": "Seed Spark",
+            "damage": 11,
+            "kind": "energy",
+            "targetId": "weaver",
+            "beat": 2,
+            "round": 1
+          },
+          "targetId": "weaver",
+          "state": {
+            "encounterId": "scout-patrol",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 37,
+                "barrier": 0,
+                "cooldowns": {
+                  "storm": 5
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 54,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "storm",
+                "targetId": "enemies"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "b1",
+              "targetId": "weaver",
+              "amount": 11,
+              "absorbed": 0,
+              "text": "Enemy attacks on its own turn."
+            }
+          ],
+          "before": {
+            "encounterId": "scout-patrol",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {
+                  "storm": 5
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 54,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "storm",
+                "targetId": "enemies"
+              }
+            ]
+          },
+          "after": {
+            "encounterId": "scout-patrol",
+            "beat": 3,
+            "round": 1,
+            "turnIndex": 2,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 37,
+                "barrier": 0,
+                "cooldowns": {
+                  "storm": 5
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 54,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 12,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 3,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "storm",
+                "targetId": "enemies"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "file": "ward-fast-390.mp4",
+    "duration": 2.131467,
+    "capturedFrames": 73,
+    "maxFrameGap": 0.294,
+    "maxTimestampErrorMs": 0.0052,
+    "clickOffset": 0.341,
+    "rawCapture": "test-results/unit-a1-delivery/unit-a1-clips-unit-A1-clip-ward-fast",
+    "captureStartUTCSeconds": 1793114706.837814,
+    "impacts": [
+      {
+        "at": 0.59,
+        "remainingMs": 254,
+        "turn": {
+          "actorId": "weaver",
+          "side": "hero",
+          "beat": 1,
+          "round": 1,
+          "action": "ward",
+          "targetId": "weaver",
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 0,
+            "name": "Seed Spark",
+            "damage": 11,
+            "kind": "energy",
+            "targetId": "weaver",
+            "beat": 1,
+            "round": 1
+          },
+          "state": {
+            "encounterId": "scout-patrol",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 14,
+                "cooldowns": {
+                  "ward": 3
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 64,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "weaver"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "barrier",
+              "sourceId": "weaver",
+              "targetId": "weaver",
+              "amount": 14,
+              "text": "Added barrier."
+            }
+          ],
+          "before": {
+            "encounterId": "scout-patrol",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 64,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": []
+          },
+          "after": {
+            "encounterId": "scout-patrol",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 14,
+                "cooldowns": {
+                  "ward": 3
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 64,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "weaver"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "at": 1.026,
+        "remainingMs": 338,
+        "turn": {
+          "actorId": "b1",
+          "side": "enemy",
+          "beat": 2,
+          "round": 1,
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 0,
+            "name": "Seed Spark",
+            "damage": 11,
+            "kind": "energy",
+            "targetId": "weaver",
+            "beat": 2,
+            "round": 1
+          },
+          "targetId": "weaver",
+          "state": {
+            "encounterId": "scout-patrol",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 3,
+                "cooldowns": {
+                  "ward": 3
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 64,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "weaver"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "b1",
+              "targetId": "weaver",
+              "amount": 0,
+              "absorbed": 11,
+              "text": "Enemy attacks on its own turn."
+            }
+          ],
+          "before": {
+            "encounterId": "scout-patrol",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 14,
+                "cooldowns": {
+                  "ward": 3
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 64,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "weaver"
+              }
+            ]
+          },
+          "after": {
+            "encounterId": "scout-patrol",
+            "beat": 3,
+            "round": 1,
+            "turnIndex": 2,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 3,
+                "cooldowns": {
+                  "ward": 3
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 64,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 12,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 3,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "weaver"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "file": "ward-normal-390.mp4",
+    "duration": 2.624278,
+    "capturedFrames": 81,
+    "maxFrameGap": 0.279,
+    "maxTimestampErrorMs": 0.0059,
+    "clickOffset": 0.321,
+    "rawCapture": "test-results/unit-a1-delivery/unit-a1-clips-unit-A1-clip-ward-normal",
+    "captureStartUTCSeconds": 1793114700.164358,
+    "impacts": [
+      {
+        "at": 0.673,
+        "remainingMs": 390,
+        "turn": {
+          "actorId": "weaver",
+          "side": "hero",
+          "beat": 1,
+          "round": 1,
+          "action": "ward",
+          "targetId": "weaver",
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 0,
+            "name": "Seed Spark",
+            "damage": 11,
+            "kind": "energy",
+            "targetId": "weaver",
+            "beat": 1,
+            "round": 1
+          },
+          "state": {
+            "encounterId": "scout-patrol",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 14,
+                "cooldowns": {
+                  "ward": 3
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 64,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "weaver"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "barrier",
+              "sourceId": "weaver",
+              "targetId": "weaver",
+              "amount": 14,
+              "text": "Added barrier."
+            }
+          ],
+          "before": {
+            "encounterId": "scout-patrol",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 64,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": []
+          },
+          "after": {
+            "encounterId": "scout-patrol",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 14,
+                "cooldowns": {
+                  "ward": 3
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 64,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "weaver"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "at": 1.367,
+        "remainingMs": 520,
+        "turn": {
+          "actorId": "b1",
+          "side": "enemy",
+          "beat": 2,
+          "round": 1,
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 0,
+            "name": "Seed Spark",
+            "damage": 11,
+            "kind": "energy",
+            "targetId": "weaver",
+            "beat": 2,
+            "round": 1
+          },
+          "targetId": "weaver",
+          "state": {
+            "encounterId": "scout-patrol",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 3,
+                "cooldowns": {
+                  "ward": 3
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 64,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "weaver"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "b1",
+              "targetId": "weaver",
+              "amount": 0,
+              "absorbed": 11,
+              "text": "Enemy attacks on its own turn."
+            }
+          ],
+          "before": {
+            "encounterId": "scout-patrol",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 14,
+                "cooldowns": {
+                  "ward": 3
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 64,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "weaver"
+              }
+            ]
+          },
+          "after": {
+            "encounterId": "scout-patrol",
+            "beat": 3,
+            "round": 1,
+            "turnIndex": 2,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 3,
+                "cooldowns": {
+                  "ward": 3
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 64,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 12,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 3,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "weaver"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "file": "ward-osreduce-390.mp4",
+    "duration": 2.7204,
+    "capturedFrames": 97,
+    "maxFrameGap": 0.273,
+    "maxTimestampErrorMs": 0.0051,
+    "clickOffset": 0.362,
+    "rawCapture": "test-results/unit-a1-delivery/unit-a1-clips-unit-A1-clip-ward-osreduce",
+    "captureStartUTCSeconds": 1793114718.078269,
+    "impacts": [
+      {
+        "at": 0.397,
+        "remainingMs": 650,
+        "turn": {
+          "actorId": "weaver",
+          "side": "hero",
+          "beat": 1,
+          "round": 1,
+          "action": "ward",
+          "targetId": "weaver",
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 0,
+            "name": "Seed Spark",
+            "damage": 11,
+            "kind": "energy",
+            "targetId": "weaver",
+            "beat": 1,
+            "round": 1
+          },
+          "state": {
+            "encounterId": "scout-patrol",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 14,
+                "cooldowns": {
+                  "ward": 3
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 64,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "weaver"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "barrier",
+              "sourceId": "weaver",
+              "targetId": "weaver",
+              "amount": 14,
+              "text": "Added barrier."
+            }
+          ],
+          "before": {
+            "encounterId": "scout-patrol",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 64,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": []
+          },
+          "after": {
+            "encounterId": "scout-patrol",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 14,
+                "cooldowns": {
+                  "ward": 3
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 64,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "weaver"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "at": 1.062,
+        "remainingMs": 800,
+        "turn": {
+          "actorId": "b1",
+          "side": "enemy",
+          "beat": 2,
+          "round": 1,
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 0,
+            "name": "Seed Spark",
+            "damage": 11,
+            "kind": "energy",
+            "targetId": "weaver",
+            "beat": 2,
+            "round": 1
+          },
+          "targetId": "weaver",
+          "state": {
+            "encounterId": "scout-patrol",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 3,
+                "cooldowns": {
+                  "ward": 3
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 64,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "weaver"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "b1",
+              "targetId": "weaver",
+              "amount": 0,
+              "absorbed": 11,
+              "text": "Enemy attacks on its own turn."
+            }
+          ],
+          "before": {
+            "encounterId": "scout-patrol",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 14,
+                "cooldowns": {
+                  "ward": 3
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 64,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "weaver"
+              }
+            ]
+          },
+          "after": {
+            "encounterId": "scout-patrol",
+            "beat": 3,
+            "round": 1,
+            "turnIndex": 2,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 3,
+                "cooldowns": {
+                  "ward": 3
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 64,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 12,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 3,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "weaver"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "file": "ward-reduced-390.mp4",
+    "duration": 2.672511,
+    "capturedFrames": 95,
+    "maxFrameGap": 0.315,
+    "maxTimestampErrorMs": 0.0061,
+    "clickOffset": 0.37,
+    "rawCapture": "test-results/unit-a1-delivery/unit-a1-clips-unit-A1-clip-ward-reduced",
+    "captureStartUTCSeconds": 1793114712.260688,
+    "impacts": [
+      {
+        "at": 0.673,
+        "remainingMs": 390,
+        "turn": {
+          "actorId": "weaver",
+          "side": "hero",
+          "beat": 1,
+          "round": 1,
+          "action": "ward",
+          "targetId": "weaver",
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 0,
+            "name": "Seed Spark",
+            "damage": 11,
+            "kind": "energy",
+            "targetId": "weaver",
+            "beat": 1,
+            "round": 1
+          },
+          "state": {
+            "encounterId": "scout-patrol",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 14,
+                "cooldowns": {
+                  "ward": 3
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 64,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "weaver"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "barrier",
+              "sourceId": "weaver",
+              "targetId": "weaver",
+              "amount": 14,
+              "text": "Added barrier."
+            }
+          ],
+          "before": {
+            "encounterId": "scout-patrol",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 64,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": []
+          },
+          "after": {
+            "encounterId": "scout-patrol",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 14,
+                "cooldowns": {
+                  "ward": 3
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 64,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "weaver"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "at": 1.36,
+        "remainingMs": 520,
+        "turn": {
+          "actorId": "b1",
+          "side": "enemy",
+          "beat": 2,
+          "round": 1,
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 0,
+            "name": "Seed Spark",
+            "damage": 11,
+            "kind": "energy",
+            "targetId": "weaver",
+            "beat": 2,
+            "round": 1
+          },
+          "targetId": "weaver",
+          "state": {
+            "encounterId": "scout-patrol",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 3,
+                "cooldowns": {
+                  "ward": 3
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 64,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "weaver"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "b1",
+              "targetId": "weaver",
+              "amount": 0,
+              "absorbed": 11,
+              "text": "Enemy attacks on its own turn."
+            }
+          ],
+          "before": {
+            "encounterId": "scout-patrol",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 14,
+                "cooldowns": {
+                  "ward": 3
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 64,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 11,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "weaver"
+              }
+            ]
+          },
+          "after": {
+            "encounterId": "scout-patrol",
+            "beat": 3,
+            "round": 1,
+            "turnIndex": 2,
+            "order": [
+              "weaver",
+              "b1",
+              "guardian",
+              "healer"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 3,
+                "cooldowns": {
+                  "ward": 3
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "healer",
+                "hp": 46,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "b1",
+                "hp": 64,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "b1",
+              "targetSlot": 0,
+              "name": "Seed Spark",
+              "damage": 12,
+              "kind": "energy",
+              "targetId": "weaver",
+              "beat": 3,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "weaver"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  }
+]

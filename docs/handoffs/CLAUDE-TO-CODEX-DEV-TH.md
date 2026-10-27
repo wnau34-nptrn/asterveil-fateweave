@@ -1,5 +1,12 @@
 # ส่งต่องานพัฒนาให้ Codex ระหว่างรอ Usage ของ Claude (2026-10-23)
 
+## A0/A1 unit animation — 2026-10-27
+
+- [x] A0 registry/clip mapping audit + A1ไอรา/ภูตแดนดิไลออน implementationและ16คลิปจริง390px ใน `codex/animation-a0-a1` ฐานล่าสุด1f783f8 (interveningdocs-only) [mapping/fallback/หลักฐาน/สถานะส่งจริง](../combat-presentation/unit-a1-slice/README_TH.md)
+- ครบ7ActionIdของไอราและSeedSpark; hit/down sprite, block/dodge/counter procedural, revive resetseedตามHPจริง ไม่มีcriticalpreloadเพิ่ม ไม่เปลี่ยนpilotpixels/timingหรือrules/save/balance/playback งบEira3.88MiB/1.38MB, Sprite1.19MiB/0.36MB
+- localunit920, typecheck/lint/buildผ่าน;16captureและplayerdecodeผ่าน; focusedregression36/36ผ่าน; CI/merge/publicationกำลังเก็บผลและจะอัปเดตตามจริง ไม่ถือว่ามีowner motionapprovalจากtests ไม่เริ่มA2/ยูนิตอื่นหรือVFXfamilyใหม่ งาน/approval/release C5.5 และhandofffamily6เดิมเก็บครบ
+
+
 C5.5ล่าสุด27ต.ค.2026: เจ้าของอนุมัติ33คลิปด้วย “นำเข้าเกมได้” PR85 merged3196e17หลังquality/browserผ่าน (910unit,sourceVFX157,prechecks3,production249ผ่าน/349skip) Pages40524232794เผยแพร่successครบbuild/browser4shards/deployเวลา22:05:38น.กรุงเทพฯ [releaseproof](../validation/earth-vfx-release/README_TH.md) ไม่เริ่มตระกูล6 ไม่มีcore/save/content/balance/playback timing changes
 
 C5.4ล่าสุด27ต.ค.2026: เจ้าของตรวจ40คลิปแล้วสั่ง “เอาเข้าเกมได้” PR84 merged `7c392b5` หลังquality/browserผ่าน (890unit,sourceVFX119,prechecks3,production249ผ่าน/274skip) Pages40503739046เผยแพร่successครบbuild+4browser shards+deployเวลา19:37:55น.กรุงเทพฯ build+4browser shards+deploy [release proof](../validation/projectile-vfx-release/README_TH.md) ไม่เริ่มตระกูล5

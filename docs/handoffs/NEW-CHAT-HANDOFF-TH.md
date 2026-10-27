@@ -1,5 +1,12 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
+## A0/A1 unit animation — 2026-10-27
+
+- [x] A0 registry/clip mapping audit + A1ไอรา/ภูตแดนดิไลออน implementationและ16คลิปจริง390px ใน `codex/animation-a0-a1` ฐานล่าสุด1f783f8 (interveningdocs-only) [mapping/fallback/หลักฐาน/สถานะส่งจริง](../combat-presentation/unit-a1-slice/README_TH.md)
+- ครบ7ActionIdของไอราและSeedSpark; hit/down sprite, block/dodge/counter procedural, revive resetseedตามHPจริง ไม่มีcriticalpreloadเพิ่ม ไม่เปลี่ยนpilotpixels/timingหรือrules/save/balance/playback งบEira3.88MiB/1.38MB, Sprite1.19MiB/0.36MB
+- localunit920, typecheck/lint/buildผ่าน;16captureและplayerdecodeผ่าน; focusedregression36/36ผ่าน; CI/merge/publicationกำลังเก็บผลและจะอัปเดตตามจริง ไม่ถือว่ามีowner motionapprovalจากtests ไม่เริ่มA2/ยูนิตอื่นหรือVFXfamilyใหม่ งาน/approval/release C5.5 และhandofffamily6เดิมเก็บครบ
+
+
 ## แชตใหม่สำหรับ VFX ตระกูล6 — พร้อมhandoffเท่านั้น
 
 อ่าน [C5-FAMILY-6-ALCHEMY-HANDOFF-TH.md](C5-FAMILY-6-ALCHEMY-HANDOFF-TH.md) มีข้อความเปิดแชตท้ายไฟล์ acid/bomb/smoke/catalyst/haste/fury6ท่า เริ่มartwork3จังหวะให้เลือกก่อนruntime หนึ่งPRใหม่ ส่งactual390pxclipsก่อนmerge/เผยแพร่/ตระกูล7 แชตนี้ยังไม่เริ่มภาพ/runtimeตระกูล6 งานแผนanimationด้านล่างยังคงแยกscope

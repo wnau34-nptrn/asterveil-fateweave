@@ -1,5 +1,20 @@
 # Codex → Claude handoff
 
+## 2026-10-27 — A0/A1 Eira + Dandelion Sprite implementation and actual clips
+
+Owner explicitly requested A0/A1 only and completion under standing authorization. Branch `codex/animation-a0-a1`; source/captures based on `afddd84`, fast-forwarded to latest game `1f783f8` after verifying the intervening commits change documentation only. C5.5 approval/release and family6 handoff preserved intact; no new C5 work/approval or A2/other units started. PR/merge/CI/release IDs will be recorded after those actions actually finish.
+
+Generalized art-keyed registry/clip mapping and optional sheet scheduler from two pilots to four identities. Lyra/Hunter URLs, pixels, special frame sequence, cadence/dissolve and timing unchanged. Eira's7current starting/star/tree ActionIds audited: attack/Bolt/Storm/Dispel share staff release; Ward/Sigil/Aegis share support/seal. Sprite uses prepare→SeedSpark→return; it has no separate named basic attack in current content. Hit/down strips, dead-frame persistence and revive reset supported; block/dodge/counter remain explicitly procedural. [Full action/intent/pilot fallback audit and16clips](../combat-presentation/unit-a1-slice/README_TH.md).
+
+Used sprite-pipeline with shipped seed edits (whole strips together), shared per-character scale/foot anchor, seed lockback, lossless trim/dedup/pack with full visible-RGBA/alpha reconstruction. Eira first pack1.89MB exceeded budget; normalized once to215px, compensated display ratio to keep field size. Final Eira3.88MiB/1,382,688bytes, Sprite1.19MiB/357,984bytes, below6MiB/1.5MB each. Counts are atlas decoded RGBA, not total game RAM/GPU or mobile measurements. No critical preload; old-art fallback, safe-boundary adoption, request dedup/failure suppression and encounter eviction preserved/tested.
+
+Local typecheck/lint/build pass; full unit920/79files, focused unit21/21, lifecycle/late arrival3/3, pilot/loading5/5, actual capture16/16 and playerall16decode1/1 passed. Final combined36focusedbrowser regression passed; full browser is CI-only. Dev harness fixes: setBattleVisible like game shell; initial replay must use actual prelude rather than BattleUI constructor's empty commands; stable shared dev server avoids another suite shutting it down. These are QA-only, no rule/timing workaround. Source fixtures gated in CI/Pages alongside every existing C5 source gate.
+
+Captured390×844 actual UI/Phaser/playback/resolver, real clocks/CDP timestamps;16MP4,1,262rawframes, every capturedframe+finalhold retained, decodedPTS/count/end verified (maxgap0.315s, maxPTSerror0.0061ms). Two actual stills supplied; `proof.json` records hashes and rawworkspace paths. Chromiumcloud/SwiftShader only, no Safari/device/60fps claim. Passing tests/generation is not an owner motion-approval record. Current owner's instruction authorizes finishing this scope without a separate confirmation checkpoint.
+
+Files: registry/scheduler/frameview/BattleScene displayratio + landmarks; two hashed atlases/JSON; incoming seeds/rawstrips/previews/normalizer/provenance; pilot packer preserves other manifest entries; unit/browser/real-capture/player fixtures and encoder; CI/Pages additive source gate; rollout and three handoffs. No `src/core`, `src/content`, saves, balance or `battle-playback.ts` diff. No questions requiring battle-rule edits.
+
+
 ## 2026-10-27 — Next-chat handoff for C5.6 alchemy (documentation only)
 
 Owner requested a handoff for a new chat after approving/releasing family5. Added C5-FAMILY-6-ALCHEMY-HANDOFF-TH.md with copy-ready Thai opening prompt for acid/bomb/smoke/catalyst/haste/fury; verified Pages40524232794 still success for merge3196e17 and fetched gamebaseaaf9ff4. The new chat must fetch again, inspect actual resolver events with legal commands, propose6moves×3phase art at390px, then runtime after artwork selection and actualclips before merge/publication/family7. One new PR; no family6art/runtime/branch/PR created in this task.

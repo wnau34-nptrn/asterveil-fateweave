@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { pilotClip, pilotFrame, pilotKey } from '../src/game/visuals/unit-frames';
+import { unitClip, unitFrame, unitKey } from '../src/game/visuals/unit-frames';
 import { UnitAnimation, type UnitBody } from '../src/game/visuals/unit-animation';
 import { existsSync, readFileSync } from 'node:fs';
 
@@ -11,21 +11,21 @@ class Body implements UnitBody {
 }
 describe('pilot sprite playback',()=>{
  it('only routes the pilot actions, retaining procedural fallback for all others',()=>{
-  expect(pilotKey('tracer')).toBe('unit-pilot-lyra');expect(pilotKey('foe_hunter')).toBe('unit-pilot-hunter');expect(pilotKey('raider')).toBeUndefined();
-  expect(pilotClip('tracer','attack',undefined)).toBe('attack');expect(pilotClip('tracer','execute',undefined)).toBe('skill');expect(pilotClip('tracer','sweep',undefined)).toBeUndefined();
-  expect(pilotClip('foe_hunter',undefined,'Shadow Knife')).toBe('skill');expect(pilotClip('foe_hunter',undefined,'Raking Slash')).toBe('attack');
+  expect(unitKey('tracer')).toBe('unit-pilot-lyra');expect(unitKey('foe_hunter')).toBe('unit-pilot-hunter');expect(unitKey('raider')).toBeUndefined();
+  expect(unitClip('tracer','attack',undefined)).toBe('attack');expect(unitClip('tracer','execute',undefined)).toBe('skill');expect(unitClip('tracer','sweep',undefined)).toBeUndefined();
+  expect(unitClip('foe_hunter',undefined,'Shadow Knife')).toBe('skill');expect(unitClip('foe_hunter',undefined,'Raking Slash')).toBe('attack');
  });
  it('never reveals contact before the UI cue, at either speed',()=>{
   for(const clip of ['attack','skill'] as const){
    const start=clip==='attack'?1:9;
-   for(const p of [0,.2,.5,.999,1])expect(pilotFrame('thrust','prepare',p,clip)).toBeLessThan(start+4);
-   expect(pilotFrame('thrust','recover',0,clip)).toBe(start+4);expect(pilotFrame('thrust','recover',1,clip)).toBe(start+7);
+   for(const p of [0,.2,.5,.999,1])expect(unitFrame('thrust','prepare',p,clip)).toBeLessThan(start+4);
+   expect(unitFrame('thrust','recover',0,clip)).toBe(start+4);expect(unitFrame('thrust','recover',1,clip)).toBe(start+7);
   }
-  expect(pilotFrame('down','reaction',1)).toBe(21);expect(pilotFrame('hit','reaction',1)).toBe(18);expect(pilotFrame('block','reaction',.5)).toBeUndefined();
+  expect(unitFrame('down','reaction',1)).toBe(21);expect(unitFrame('hit','reaction',1)).toBe(18);expect(unitFrame('block','reaction',.5)).toBeUndefined();
  });
  it('switches to contact synchronously and resets on skip/death/revive without disturbing another actor',()=>{
   const animation=new UnitAnimation(), body=new Body(),other=new Body();let frame=0,alive=true;
-  animation.bind('hero',body,96,()=>{}, {show:(pose,phase,p,clip)=>{const f=pilotFrame(pose,phase,p,clip);if(f===undefined)return false;frame=f;return true;},reset:()=>{frame=alive?0:21;}});
+  animation.bind('hero',body,96,()=>{}, {show:(pose,phase,p,clip)=>{const f=unitFrame(pose,phase,p,clip);if(f===undefined)return false;frame=f;return true;},reset:()=>{frame=alive?0:21;}});
   animation.bind('other',other,96,()=>{});
   animation.begin('hero','thrust',1,298,'skill');animation.update(297);expect(frame).toBe(12);
   animation.contact('hero',552);expect(frame).toBe(13);animation.update(80);expect(body.rotation).toBe(0);

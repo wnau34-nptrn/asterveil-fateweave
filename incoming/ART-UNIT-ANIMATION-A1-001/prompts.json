@@ -1,0 +1,21 @@
+{
+  "eira": {
+    "tool": "image_gen.imagegen",
+    "source": "exec-93462c80-a438-4bd6-bed9-6d07212a703b.png",
+    "references": [
+      "eira-seed.png",
+      "eira-template.png"
+    ],
+    "transparent_background": true,
+    "prompt": "Production game animation spritesheet edit using the exact supplied Eira character, not concept art. Output a transparent RGBA 1536x1536 canvas in EXACTLY 4 columns x 6 rows of equal 384px cells, 24 isolated whole-body figures with generous transparent gutters; no labels, scenery, UI or background. Each character about 240px tall, soles on row local y=352 and centered at local x=192. Preserve reference identity precisely: lilac silver long hair, violet eyes, large purple pointed witch hat with gold star trim, flowing purple gold-lined coat, black stockings, boots, same gold staff with purple crystal held on her RIGHT side, facing right toward enemy. Same face, palette, silhouette family, outfit proportions, scale and foot anchor in every cell. Whole strips at once with smooth subtle changes. Rows1-2 form ONE continuous 8-frame energy-cast strip in reading order: exact neutral, slight gather/retract staff, lift staff, aim staff right (windup); extend free left hand and tilt crystal forward to release (contact), gentle followthrough, settle, exact neutral. Rows3-4 form ONE continuous 8-frame support/ward strip: neutral, bring free hand inward, lift open palm near chest, raise staff upright (windup); spread protective palm outward with upright staff (contact), hold, lower palm, neutral. Row5: four subtle hurt recoil frames preserving feet. Row6: four progressively slumped defeated poses (kneel/lower head), keep staff/hat visible and no injury. Do NOT draw any projectiles, beam, detached light, magic circles or VFX: body gestures only, original purple crystal glow allowed. Never overlap adjacent cells. Render same polished painted chibi art as seed."
+  },
+  "sprite": {
+    "tool": "image_gen.imagegen",
+    "source": "exec-08321194-6313-4028-b479-fffc51e1bf99.png",
+    "references": [
+      "sprite-seed.png"
+    ],
+    "transparent_background": true,
+    "prompt": "Production animation sprite sheet of EXACT supplied Dandelion Sprite. Preserve face, huge ivory dandelion puff hair crown, mint green eyes, pale short hair, leaf green dress, teal chest jewel, little leaf boots, translucent mint wings with dandelion seed tips, exact painted chibi style. Faces LEFT throughout. Transparent RGBA canvas 4 columns x 4 rows, SIXTEEN isolated whole-body figures in equal cells, no labels/scenery/background/shadows/UI. Full strips generated together, consistent scale and feet anchored same baseline within every cell, no overlap, generous gutters. Rows1-2 ONE continuous 8-frame cast/release/return strip reading left to right: 1 neutral floating with open hand left as reference, 2 draw both little hands near jewel, 3 cup hands close to jewel concentrating, 4 draw hands back preparing to cast; 5 extend left-facing hand forward/release Seed Spark (no projectile or magic effect painted), 6 gentle followthrough with wing tips trailing, 7 relax wings, 8 original neutral. Row3 four subtle hurt/recoil poses with face/wings recoiling and eyes closing then recovering. Row4 four defeated poses: droop wings/head, slump lower, kneel folded leaf feet, head bowed eyes closed. Preserve crown and wings even when defeated. No flames, magic circles, projectiles, VFX or detached seeds; body animation only. Same identity/outfit/silhouette family/proportions/facing and stable scale in every frame."
+  }
+}

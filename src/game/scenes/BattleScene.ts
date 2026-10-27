@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { pilotKey, pilotAtlasUrls, pilotClip, type PilotSheet } from '../visuals/unit-frames';
+import { unitKey, unitDisplayRatio, unitAtlasUrls, unitClip, type UnitSheet } from '../visuals/unit-frames';
 import { OptionalUnitAssets } from '../visuals/optional-unit-assets';
 import { unitFrameView } from '../visuals/unit-frame-view';
 import { UnitAnimation } from '../visuals/unit-animation';
@@ -124,10 +124,10 @@ export class BattleScene extends Phaser.Scene {
     this.onReady();
     this.optionalRequest = true;
   }
-  private hasOptionalUnit = (name: PilotSheet): boolean => this.textures.exists(`unit-pilot-${name}`);
+  private hasOptionalUnit = (name: UnitSheet): boolean => this.textures.exists(`unit-pilot-${name}`);
   private requestOptionalUnits(): void {
     const names = this.optionalUnits.request(this.hasOptionalUnit);
-    for (const name of names) this.load.atlas(`unit-pilot-${name}`, ...pilotAtlasUrls(name));
+    for (const name of names) this.load.atlas(`unit-pilot-${name}`, ...unitAtlasUrls(name));
     if (names.length && !this.load.isLoading()) this.load.start();
   }
   private optionalUnitsLoaded(): void {
@@ -221,12 +221,13 @@ export class BattleScene extends Phaser.Scene {
       g.lineStyle(3, enemy ? 0xf19b9f : palette.cyan); g.strokeEllipse(0, 0, size * .72, size * .16);
     }
     const key = artOf(this.encounter, id); const art = actorArt[key]!;
-    const pilot = pilotKey(key), framed = !!pilot && this.textures.exists(pilot);
+    const ratio = unitDisplayRatio(key);
+    const pilot = unitKey(key), framed = !!pilot && this.textures.exists(pilot);
     const sprite = this.add.image(0, 0, framed ? pilot : `battle-${art.sheet}`, framed ? hp <= 0 ? 21 : 0 : art.frame)
-      .setOrigin(.5, framed ? 496 / 512 : actorFootOrigins[key] ?? 1).setDisplaySize(size * (framed ? 2 : 1), size * (framed ? 2 : 1)).setFlipX(mirroredArt.has(key));
+      .setOrigin(.5, framed ? 496 / 512 : actorFootOrigins[key] ?? 1).setDisplaySize(size * (framed ? ratio : 1), size * (framed ? ratio : 1)).setFlipX(mirroredArt.has(key));
     body.add(sprite);
     const nextFrame = framed ? this.add.image(0, 0, pilot, 0)
-      .setOrigin(sprite.originX, sprite.originY).setDisplaySize(size * 2, size * 2).setFlipX(sprite.flipX).setVisible(false) : undefined;
+      .setOrigin(sprite.originX, sprite.originY).setDisplaySize(size * ratio, size * ratio).setFlipX(sprite.flipX).setVisible(false) : undefined;
     if (nextFrame) body.add(nextFrame);
     const alive = () => [...(this.view?.state.heroes ?? []), ...(this.view?.state.enemies ?? [])].some(a => a.id === id && a.hp > 0);
     const idleStart = this.idle.length;
@@ -330,7 +331,7 @@ export class BattleScene extends Phaser.Scene {
     if(!sprite||!slot)return;
     const knife=this.encounter.heroes.find(h=>h.id===id)?.role==='Scout';
     const matrix=sprite.getWorldTransformMatrix();
-    const ratio=sprite.texture.key.startsWith('unit-pilot-')?2:1;
+    const ratio=sprite.texture.key.startsWith('unit-pilot-')?unitDisplayRatio(artOf(this.encounter,id)):1;
     const point=(x:number,y:number)=>{const p=matrix.transformPoint(x*sprite.width/ratio,y*sprite.height/ratio);return {x:p.x/this.dpr,y:p.y/this.dpr};};
     const bodyAt=point(0,-.48),release=point(knife?-.4:.36,-(knife?.58:.86));
     return {...bodyAt,releaseX:release.x,releaseY:release.y,size:slot.size};
@@ -339,7 +340,7 @@ export class BattleScene extends Phaser.Scene {
     const body=this.bodies.get(id),slot=this.actorPanels.get(id);
     const sprite=body?.list.find(c=>c instanceof Phaser.GameObjects.Image) as Phaser.GameObjects.Image|undefined;
     if(!sprite||!slot)return;
-    const ratio=sprite.texture.key.startsWith('unit-pilot-')?2:1;
+    const ratio=sprite.texture.key.startsWith('unit-pilot-')?unitDisplayRatio(artOf(this.encounter,id)):1;
     const x=prepare?.10:skill==='bash'?-.31:skill==='slam'?-.30:0;
     const y=prepare?-.98:skill==='bash'?-.80:skill==='slam'?-.62:.04;
     const p=sprite.getWorldTransformMatrix().transformPoint(x*sprite.width/ratio,y*sprite.height/ratio);
@@ -385,7 +386,7 @@ export class BattleScene extends Phaser.Scene {
     if (!this.quiet && pose) {
       const from = this.anchor(turn.actorId), to = this.anchor(hitEvent?.targetId ?? turn.targetId);
       const direction = from && to ? Math.sign(to.x - from.x) : turn.side === 'hero' ? 1 : -1;
-      this.unitAnimation.begin(turn.actorId, pose, direction || (turn.side === 'hero' ? 1 : -1), contactMs, pilotClip(artOf(this.encounter, turn.actorId), turn.action, turn.intent?.name));
+      this.unitAnimation.begin(turn.actorId, pose, direction || (turn.side === 'hero' ? 1 : -1), contactMs, unitClip(artOf(this.encounter, turn.actorId), turn.action, turn.intent?.name));
     }
     if(this.textures.exists(PROJECTILE_ATLAS)){
       const seen=new Set<string>();

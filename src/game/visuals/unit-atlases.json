@@ -16,5 +16,23 @@
     "frames": 22,
     "decodedBytes": 4079616,
     "downloadBytes": 931414
+  },
+  "eira": {
+    "image": "eira_a1.573c1cfd9b43.webp",
+    "atlas": "eira_a1.bd1097cc0ed3.json",
+    "width": 1536,
+    "height": 662,
+    "frames": 22,
+    "decodedBytes": 4067328,
+    "downloadBytes": 1382688
+  },
+  "sprite": {
+    "image": "sprite_a1.12710bff0f5a.webp",
+    "atlas": "sprite_a1.7dfbdd0f7092.json",
+    "width": 512,
+    "height": 611,
+    "frames": 22,
+    "decodedBytes": 1251328,
+    "downloadBytes": 357984
   }
 }
