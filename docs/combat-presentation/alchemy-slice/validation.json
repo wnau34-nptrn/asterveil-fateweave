@@ -1,0 +1,24 @@
+{
+  "validatedHead": "25354540874a0d797e027e4e2c71d7833301df66",
+  "quality": {
+    "run": 40533376869,
+    "conclusion": "success"
+  },
+  "browser": {
+    "run": 40533376856,
+    "status": "in_progress",
+    "conclusion": null
+  },
+  "local": {
+    "unitTests": 948,
+    "unitFiles": 79,
+    "focusedBrowser": 57,
+    "captureStateEquality": 55,
+    "decodedPlayerClips": 55,
+    "typecheck": "pass",
+    "lint": "pass",
+    "build": "pass"
+  },
+  "runtimeApproval": "pending_owner_motion_review",
+  "mergePublication": "not_authorized_before_owner_motion_review"
+}

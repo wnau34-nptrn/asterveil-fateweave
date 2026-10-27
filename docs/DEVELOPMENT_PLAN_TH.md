@@ -1,5 +1,7 @@
 # Fateweave — แผนพัฒนารวมจากเกมปัจจุบันสู่ระบบใหม่
 
+C5.6ส่งมอบ: [55คลิปจริง390px/6ท่า/4modesและ31variants](combat-presentation/alchemy-slice/README_TH.md) ในPR86เดิม รอเจ้าของตรวจmotionก่อนmerge/เผยแพร่/ตระกูล7 ตรวจ948unit/57focusedbrowser/55state-equality/playerdecodeครบผ่าน CIqualitysuccess/fullbrowserยังinprogress ไม่เปลี่ยนrules/save/balance/playback timing
+
 C5.6: เจ้าของเลือกartworkR1ด้วย “ไปต่อ” แล้ว กำลังต่อruntime6ท่าในPR86เดิมและตรวจคลิปจริง390pxก่อนmerge/เผยแพร่/ตระกูล7 ไม่เปลี่ยนrules/save/balance/playback timing
 
 C5.6ล่าสุด: artworkR1ครบ6ท่า/3จังหวะ/14legalcases390pxรอเจ้าของเลือกก่อนruntime บนฐานfetch1f783f8 branch `codex/vfx-family-6-alchemy` / [draft PR86](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/86) [หน้าเลือกและหลักฐาน](combat-presentation/alchemy-storyboards/README_TH.md) ไม่มีruntime/rules/save/balance/playback timingdiff หนึ่งPR ส่งคลิปจริงก่อนmerge/เผยแพร่/ตระกูล7

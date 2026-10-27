@@ -1,5 +1,18 @@
 # ส่งต่องานพัฒนาให้ Codex ระหว่างรอ Usage ของ Claude (2026-10-23)
 
+## 2026-10-27 — C5.6 ส่ง55คลิปจริง390px รอ owner motion review
+
+PR86เดิม / branch `codex/vfx-family-6-alchemy`; runtime31c5e90, validated/capturefixture2535454 ไม่มีmergecommit เจ้าของเลือกartworkR1ด้วย “ไปต่อ” แล้ว แต่ยังไม่อนุมัติmotion ห้ามmerge/เผยแพร่/เริ่มตระกูล7
+
+[55คลิป/หน้าเลือก/หลักฐาน](../combat-presentation/alchemy-slice/README_TH.md): 6ท่า×4modesและ31variantsจากlegalcommandsจริง ไม่มีowner save/injectedstate/events รวมAcidspread/targetdown/potent/deeper/laterhit, Bombfront+back/backonly/corroded/down, Smokewide/poison/boss/physical/energy, Catalystplain/corroded/expired/kill/chain, Hastenotyet/nextalready/acted/self/downinvalid/heal/fullHP/quickbrew/overflow และFuryself/ally/refresh/outgoing/incoming/expiry ChainreactionบนKnightstageรักษาbladeเดิม Furyexpiryผู้รับยังยืนอยู่และactualoutgoing13รอบ1–2กลับเป็น10รอบ3 จบรอบ4HP56
+
+เปลี่ยนBattleSceneและหนึ่งalchemy-fx.ts/18frameatlas981524bytesพร้อมartbounds; ภาพตามrenderedspriteworldtransform/pose/recoil/shake/DPR ปลายฟุ้งหลังunit/ป้าย HasteHeal/overflowใช้actualhealing/barrierเดิม ทั้ง5sourceVFXgatesเดิมครบและเพิ่มalchemyในbrowser/Pagesworkflow รักษาunitanimationplan ไม่แก้core/save/content/balance/playback timing
+
+ตรวจtypecheck/lint/build,948unit/79files,57focusedbrowser,55capture/full-state-equalityและplayerdecode55uniqueclipsผ่านทั้งหมด เก็บ6916rawframes/timestamps/finalstateในtest-results/alchemy-delivery Inventory/encodedhashและdeliveryproofผูกsrc/publictreesตรงruntime/validatedhead MP4decodedcount/PTS/finalholdผ่าน errorสูงสุด0.0062ms maxgap367ms ไม่retime/interpolateหรืออ้าง60fps Chromiumcloud/SwiftShader ไม่ใช่Safari/มือถือจริง CIquality40533376869success; fullbrowser40533376856ยังinprogressขณะส่งคลิป ไม่ถือpending/skipเป็นผ่าน รายละเอียดในvalidation.json
+
+Files: src/game/scenes/BattleScene.ts, src/game/visuals/alchemy-fx.ts/alchemy-art.json, public/assets/fx/alchemy_fx.*, incoming/ART-VFX-ALCHEMY-001/package.py/production-sources.json, tests/fixtures/alchemy.ts, tests/alchemy-fx.test.ts, tests/browser/alchemy-*.spec.ts/fixtures, browser+Pagesworkflows และเอกสารC5/development/new-chat/CLAUDE งานถัดไปในscopeเดิมคือแก้motionตามเจ้าของและตรวจCIให้ครบก่อนmergeภายหลัง ห้ามเริ่มตระกูล7
+
+
 ## 2026-10-27 — C5.6 artwork R1 selected; runtime validation in progress
 
 เจ้าของเลือกartwork R1ด้วย “ไปต่อ” ในแชตนี้แล้ว ต่อ6ท่าacid/bomb/smoke/catalyst/haste/furyในPR86เดิม (`codex/vfx-family-6-alchemy`) ใช้หนึ่ง18frameatlas/moduleจากoriginalRGBAเดิม1584×1128/981524bytes ไม่เปลี่ยนrules/save/content/balance/playback timing และรักษา5sourceVFXgatesก่อนหน้า เพิ่มalchemyในbrowser/Pagesworkflow
