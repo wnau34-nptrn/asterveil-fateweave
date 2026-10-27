@@ -12,6 +12,7 @@ import { BOLT_ATLAS, boltAtlasUrls, boltCast, boltImpact, type FxContext } from 
 import { EXECUTE_ATLAS, WARD_ATLAS, executeAtlasUrls, wardAtlasUrls, executeCast, executeImpact, wardCast, wardSettle } from '../visuals/exec-ward-fx';
 import { BLADE_ATLAS, bladeAtlasUrls, bladeCast, bladeImpact, bladeStance, bladeCues, bladePalettes, isBladeSkill } from '../visuals/blade-fx';
 import { DEFENSE_ATLAS, defenseAtlasUrls, defenseCast, defenseContact, defenseCues, isDefenseSkill } from '../visuals/defense-fx';
+import { HEALING_ATLAS, healingAtlasUrls, healingPrepare, healingContact, healingCues, isHealingSkill, type HealingContext } from '../visuals/healing-fx';
 import { FOE_SLOT_INDEX, fieldSlots, slotPlan, type FieldSlot } from '../visuals/field-layout';
 import { actorArt, actorFootOrigins, artOf, artUrl, figureRise, mirroredArt, unitsUrl } from '../visuals/assets';
 
@@ -28,6 +29,7 @@ export class BattleScene extends Phaser.Scene {
   readonly actorPanels = new Map<string, FieldSlot>();
   private bodies = new Map<string, Phaser.GameObjects.Container>();
   private effects: Phaser.GameObjects.Container | undefined;
+  private healingLayer: Phaser.GameObjects.Container | undefined;
   private ready = false;
   private quiet = false;
   private reducedMotion = false;
@@ -92,6 +94,7 @@ export class BattleScene extends Phaser.Scene {
     this.load.atlas(WARD_ATLAS, ...wardAtlasUrls());
     this.load.atlas(BLADE_ATLAS, ...bladeAtlasUrls());
     this.load.atlas(DEFENSE_ATLAS, ...defenseAtlasUrls());
+    this.load.atlas(HEALING_ATLAS, ...healingAtlasUrls());
     for (const sheet of ['units', 'mercs', 'foes', 'foes2'] as const) this.load.spritesheet(`battle-${sheet}`, unitsUrl(sheet), { frameWidth: 512, frameHeight: 512 });
   }
   create(): void {
@@ -131,6 +134,10 @@ export class BattleScene extends Phaser.Scene {
   update(time: number, delta: number): void {
     if (this.battleVisible && this.optionalRequest) { this.optionalRequest = false; this.requestOptionalUnits(); }
     this.unitAnimation.update(delta);
+    for (const image of [...(this.healingLayer?.list ?? []), ...(this.effects?.list ?? [])]) {
+      const follow = image.getData('healingFollow') as (() => void) | undefined;
+      follow?.();
+    }
     // Adopt newly decoded art only at a safe boundary, never repaint an actor mid-attack.
     if (this.optionalDirty && !this.stageActive && this.view) this.paint();
     if (time < this.nextSizeCheck) return;
@@ -277,10 +284,12 @@ export class BattleScene extends Phaser.Scene {
       const origin = this.positions.get(id); if (origin) body.setPosition(origin.x, origin.y);
       for (const child of body.list) if (child instanceof Phaser.GameObjects.Image) child.clearTint().setTintMode(Phaser.TintModes.MULTIPLY);
     }
-    if (this.effects) {
-      for (const child of this.effects.list) this.tweens.killTweensOf(child);
-      this.effects.destroy(); this.effects = undefined;
+    for (const layer of [this.effects, this.healingLayer]) {
+      if (!layer) continue;
+      for (const child of layer.list) this.tweens.killTweensOf(child);
+      layer.destroy();
     }
+    this.effects = undefined; this.healingLayer = undefined;
   }
   private later(ms: number, run: () => void): void {
     const timer = this.time.delayedCall(ms, () => { this.effectTimers.delete(timer); run(); });
@@ -299,6 +308,21 @@ export class BattleScene extends Phaser.Scene {
     const body=this.anchor(id),slot=this.actorPanels.get(id);
     return body&&slot?{...body,footY:slot.y}:undefined;
   };
+  // Unit-local sole position, including cast/reaction/idle offsets and field shake.
+  // Input/HP stay at the stationary slot; healing paint follows the rendered unit instead.
+  healingAnchor(id: string) {
+    const body = this.bodies.get(id), slot = this.actorPanels.get(id);
+    if (!body || !slot) return;
+    const sprite = body.list.find(child => child instanceof Phaser.GameObjects.Image) as Phaser.GameObjects.Image | undefined;
+    const foot = body.getLocalTransformMatrix().transformPoint(sprite?.x ?? 0, sprite?.y ?? 0);
+    return { x: foot.x + (this.layer?.x ?? 0), footY: foot.y + (this.layer?.y ?? 0), y: foot.y - slot.size * .48 };
+  }
+  private healingFx(id: string): HealingContext {
+    return { ...this.fx(id), addRim: item => this.fx(id).add(item), add: item => {
+      if (!this.healingLayer) { this.healingLayer = this.add.container(0, 0); this.root?.addAt(this.healingLayer, 0); }
+      this.healingLayer.add(item);
+    } };
+  }
   private fx(id: string | undefined): FxContext {
     const size = this.actorPanels.get(id ?? '')?.size ?? 96;
     return { scene: this, quiet: this.quiet, reduced: this.reducedMotion, scale: Phaser.Math.Clamp(size / 96, .7, 1.25),
@@ -328,6 +352,10 @@ export class BattleScene extends Phaser.Scene {
       const from = this.anchor(turn.actorId), to = this.anchor(hitEvent?.targetId ?? turn.targetId);
       const direction = from && to ? Math.sign(to.x - from.x) : turn.side === 'hero' ? 1 : -1;
       this.unitAnimation.begin(turn.actorId, pose, direction || (turn.side === 'hero' ? 1 : -1), contactMs, pilotClip(artOf(this.encounter, turn.actorId), turn.action, turn.intent?.name));
+    }
+    if (turn.side === 'hero' && isHealingSkill(turn.action) && this.textures.exists(HEALING_ATLAS)) {
+      healingPrepare(this.healingFx(turn.actorId), healingCues(turn), id => this.healingAnchor(id), contactMs);
+      return;
     }
     if (turn.side==='hero' && isDefenseSkill(turn.action) && this.textures.exists(DEFENSE_ATLAS)) {
       for (const cue of defenseCues(turn,this.encounter)) defenseCast(this.fx(cue.targetId),cue,this.defensePoint,contactMs);
@@ -377,6 +405,8 @@ export class BattleScene extends Phaser.Scene {
     const savedWithoutDamage = (event:BattleEvent) => event.type==='damage'&&!event.amount&&!event.absorbed&&events.some(e=>e.type==='sanctuary'&&e.targetId===event.targetId);
     const paintedBlades = bladeCues(turn).filter(c=>!savedWithoutDamage(c.event));
     const paintedDefense = this.textures.exists(DEFENSE_ATLAS)?defenseCues(turn,this.encounter).filter(c=>c.kind!=='absorb'||!paintedBlades.some(b=>b.event===c.event)):[];
+    const paintedHealing = this.textures.exists(HEALING_ATLAS) ? healingCues(turn) : [];
+    const healingEvents = new Set(paintedHealing.map(c => c.event));
     const defenseEvents = new Set(paintedDefense.map(c=>c.event));
     for(const event of events)if(savedWithoutDamage(event))defenseEvents.add(event);
     const hold = this.quiet || this.reducedMotion ? 0 : 45;
@@ -396,6 +426,7 @@ export class BattleScene extends Phaser.Scene {
     if (landed && hold) {
       this.shake(140, events.some(e => e.type === 'down') ? 4 : 2.5);
     }
+    for (const cue of paintedHealing) healingContact(this.healingFx(cue.targetId), cue, id => this.healingAnchor(id), life);
     for (const cue of paintedDefense) defenseContact(this.fx(cue.targetId),cue,this.defensePoint,life);
     for (const event of events) {
       const id = event.targetId ?? event.sourceId, p = this.anchor(id);
@@ -410,7 +441,7 @@ export class BattleScene extends Phaser.Scene {
       const ward = turn.action === 'ward' && turn.side === 'hero' && event.type === 'barrier';
       const blade = paintedBlades.find(cue => cue.event === event);
       const parry = event.type === 'parry';
-      const defense = defenseEvents.has(event);
+      const defense = defenseEvents.has(event) || healingEvents.has(event);
       if (parry && event.sourceId === event.targetId) bladeStance(this.fx(id), p, life, bladePalettes.Duelist!);
       if (blade) bladeImpact(this.fx(id), blade, p, this.anchor(event.sourceId), life,
         bladePalettes[this.encounter.heroes.find(h => h.id === event.sourceId)?.role ?? ''] ?? palette.gold);
@@ -470,7 +501,7 @@ export class BattleScene extends Phaser.Scene {
       }
     }
     // The denser blade art must not cover the authoritative damage/outcome captions.
-    if (paintedBlades.length || paintedDefense.length || turn.action === 'parry') {
+    if (paintedBlades.length || paintedDefense.length || paintedHealing.length || turn.action === 'parry') {
       for (const child of [...(this.effects?.list ?? [])]) {
         if (child instanceof Phaser.GameObjects.Text) this.effects?.bringToTop(child);
       }

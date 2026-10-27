@@ -41,7 +41,7 @@ export function defenseCues(turn:TurnStage,data:EncounterDefinition):DefenseCue[
     if(event.type==='damage'&&turn.side==='enemy'){
       if((event.absorbed??0)>0)cues.push({kind:'absorb',sourceId,targetId,event});
       // A guarded dodge has no damage event and cannot fabricate an interception hit.
-      if(before?.guard?.heroId===targetId&&before.guard.sourceId===sourceId&&turn.intent?.targetId!==targetId&&alive(targetId))
+      if(before?.guard?.heroId===targetId&&!before.guard.all&&before.guard.sourceId===sourceId&&turn.intent?.targetId!==targetId&&alive(targetId))
         cues.push({kind:'redirect',skill:'guard',sourceId,targetId,event});
       if(turn.intent?.stoned&&before?.stone?.heroId===targetId&&alive(targetId))
         cues.push({kind:'redirect',skill:'guardstone',sourceId,targetId,event});

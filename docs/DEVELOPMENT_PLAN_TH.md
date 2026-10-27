@@ -1,5 +1,7 @@
 # Fateweave — แผนพัฒนารวมจากเกมปัจจุบันสู่ระบบใหม่
 
+สถานะ VFX 27ต.ค.2026: ตระกูล2 merge/Pagesผ่านตามrelease proofแล้ว; ตระกูล3เจ้าของเลือกartwork R1แล้ว ต่อruntime6ท่าในatlas/moduleเดียว แยกBless/Mend cast/tick และRouse guard/all; ล่าสุดR2แก้แสงเบา/หางฟุ้ง/ยึดsoleของunitที่กำลังวาดจริงตามfeedbackเจ้าของ; [คลิปจริง/ผลตรวจ เจ้าของให้ผ่านR2แล้ว](combat-presentation/healing-slice/README_TH.md) ในbranch `codex/vfx-family-3-healing` / PR#78เดิม เจ้าของสั่ง “นำเข้าเกมได้” กำลังตรวจCIก่อนmerge/เผยแพร่ ยังไม่เริ่มตระกูล4 ไม่เปลี่ยนbacklog P00–P11จากงานภาพนี้
+
 วันที่ 25 ตุลาคม 2026 (UTC) · ฉบับ 1 · สถานะ: แผนส่งมอบและ backlog สำหรับพัฒนาต่อ
 
 ติดตามความคืบหน้า: [GitHub issue #69](https://github.com/wnau34-nptrn/asterveil-fateweave/issues/69)

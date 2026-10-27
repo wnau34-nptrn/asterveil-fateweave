@@ -1,5 +1,24 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
+## 2026-10-27 — ตระกูล3 R2 เจ้าของให้ผ่านแล้ว กำลังนำเข้าเกม
+
+เจ้าของตรวจคลิปแล้วสั่ง “นำเข้าเกมได้” ให้ผ่านmotion R2ทั้ง6ท่าในPR78เดิม เตรียมmergeและเผยแพร่PagesหลังCIครบ รวมฐาน3bf10dbโดยเก็บงานCloudflare/แผนตลาดและประวัติhandoffทั้งสองฝั่ง ไม่เปลี่ยนruntimeจากรุ่นที่ตรวจ3dc1501 ยังไม่เริ่มตระกูล4 ผลreleaseจะบันทึกหลังตรวจสำเร็จ ข้อความรอตรวจR2ด้านล่างเป็นประวัติ
+
+## 2026-10-27 — ตระกูล3 R2 แก้แสงเบา/หางฟุ้ง/ตำแหน่งunit
+
+เจ้าของติติงR1ว่าแสงเบา ไม่มีปลายฟุ้งตามหลัง และไม่ตรงunit จึงแก้ในbranch/PR78เดิม ยึดsoleจากtransformตัวที่วาดจริงรวมidle/pose/recoil/fieldshakeทุกเฟรม แสงหลักและtail+wakeอยู่หลังตัว ขอบหน้าเฉพาะ6pxใต้เท้า ยกเลิกoffset+34px/ขยับข้าง20px/แถบบาง18px เพิ่มfootprintและImageGenปลายฟุ้งใน `incoming/ART-VFX-HEALING-001/r2/` ไม่แก้event/rules/save/balance/playback Rouseยังguard; Bless/Mendcastยังไม่ฮีล [คลิป/หลักฐานR2](../combat-presentation/healing-slice/README_TH.md) รอเจ้าของตรวจmotion ไม่merge/เผยแพร่/เริ่มตระกูล4จากข้อความอนุมัติartworkR1เก่า
+
+## 2026-10-27 — ตระกูล3ต่อruntimeแล้ว รอตรวจคลิปในPR78
+
+เจ้าของเลือกR1ด้วย “ดำเนินการขั้นต่อไปได้” หลังภาพ6ท่า ต่อatlas/moduleเดียวครบheal/prayer/rouse/revive/bless/mendใน `codex/vfx-family-3-healing` / [draftPR78](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/78) แล้ว [หน้าเลือก29คลิปจริง390px](../combat-presentation/healing-slice/index.html) / [ผลตรวจและข้อจำกัด](../combat-presentation/healing-slice/README_TH.md) แยกcast/tickจริง Rouseguard/allรับแทนศัตรู2คน ไม่ซ้ำdefense; เมล็ด/วงเล็บแสงขยับ20pxหลบตราสถานะ ไม่แตะชุด/HP ไม่แก้rules/save/balance/playback875unit/typecheck/lint/buildผ่าน พร้อมfocusedbrowser/optional-unit/fallback/cleanup การเลือกartworkยังไม่ใช่motion approval หยุดที่PRเดิมก่อนmerge/เผยแพร่/ตระกูล4
+
+ทำต่อ: รับผลตรวจคลิปจากเจ้าของ ปรับเฉพาะท่าที่ขอในPR78 อัดซ้ำเฉพาะคลิปที่เปลี่ยนและmerge manifestโดยเก็บคลิปอื่น เมื่อเจ้าของให้ผ่านmotionจึงทำขั้นreleaseตามstanding authorizationและตรวจCI/Pages อย่าเริ่มตระกูล4จากข้อความเลือกartworkR1
+
+## 2026-10-27 — ตระกูล3 artwork R1 รอเจ้าของเลือก
+
+branch `codex/vfx-family-3-healing`, draft [PR#78](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/78) ใบเดียวของตระกูล3; [หน้าเลือก6ท่า/3phase](../combat-presentation/healing-storyboards/index.html) / [รายละเอียด](../combat-presentation/healing-storyboards/README_TH.md) มี18cast+6tickภาพ390px แยก Bless/Mend cast/tick และ Rouse guard/all จาก engine จริง Revive preludeทำให้เพื่อนล้มจากคำสั่งจริง ImageGenต้นฉบับ/prompt/alphaครบ ตรวจ858unit+typecheck/lint/buildและreference/viewerผ่าน ไม่มีhealingruntime/คลิปจริง/merge/deploy รอเลือก/แก้artworkก่อนต่อatlas/moduleและอัดคลิปในPRเดิม หยุดก่อนตระกูล4 ไม่ถือว่าภาพใหม่ผ่านแล้วเพราะตระกูล2ผ่าน
+
+ข้อความทำต่อ: อ่าน C5-FAMILY-3-HEALING-HANDOFF-TH.md และ healing-storyboards/README_TH.md แล้วรับคำเลือก/แก้artworkR1จากเจ้าของ ต่อเฉพาะตระกูล3ในbranch/PRเดิม ห้ามข้ามการตรวจภาพ แยกcastกับtick, Rouseไม่ฮีล, ไม่แก้rules/save/balance/playback timing ส่งคลิปจริงก่อนตระกูลถัดไป
 ## 2026-10-27 — Cloudflare development deployment probe
 
 Owner completed Cloudflare signup and reports adding CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID as GitHub repository secrets. Secrets were not read or copied into code. Branch `codex/cloudflare-dev-probe` targets `feature/fateweave-initial-prototype`; PR #82 merged as `07c5cbbdac1da19be81ec2b0b5be13d488f6334e` (head `6df8304`). Premerge quality run `40455747302` and Cloudflare validation run `40455747334` passed.

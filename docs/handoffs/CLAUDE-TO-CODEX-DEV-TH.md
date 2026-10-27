@@ -1,5 +1,7 @@
 # ส่งต่องานพัฒนาให้ Codex ระหว่างรอ Usage ของ Claude (2026-10-23)
 
+สถานะVFX27ต.ค.2026: เจ้าของให้ผ่านmotionตระกูล3 R2ด้วย “นำเข้าเกมได้” ดำเนินmerge/Pagesผ่านPR78เดิมหลังCI ไม่เริ่มตระกูล4 ผลreleaseจะบันทึกในhealing-vfx-release
+
 ## 2026-10-27 — Equipment market deferral published
 
 PR #81 merged as `93c9654fe9a3eb5677ccea21989eb0c087a25835`, head `ba4af05`; quality CI run719 (`40452392740`) passed. Seven Markdown files, 49 local links and status checks passed: 49 registered IDs/47 main-plan/2 deferred. Issue #69 now removes checkboxes from deferred P09-04/P11-06 (not completed) and updates P04-06 to farming/quest economy. Owner accepted deferring player equipment/material trading; chat, board, World Boss and NPC shops remain in scope. No runtime/save/balance/inventory changes or local gameplay tests/screenshots. Prior market tax/binding suggestions are superseded. P01 remains next for the base game.
@@ -129,7 +131,7 @@ Read AGENTS.md and CLAUDE.md first. Repository wnau34-nptrn/asterveil-fateweave,
 |---|---|---|
 | 1 | ~~ฟันดาบ/แทง~~ R4: เจ้าของเลือก [แบบภาพ 10 ท่า](../combat-presentation/blade-storyboards/README_TH.md) รวม Pierce R2 และสั่งทำ VFX จริงแล้ว ต่อเข้าเกมครบ 2026-10-26 **ผ่านและ merge R4 แล้ว 2026-10-26 (`d14a3e1`, PR #59)** (`codex/vfx-family-1-blade`, PR #59, [คลิป](../combat-presentation/blade-slice/README_TH.md)) | attack, finisher, lunge, sweep, backstab, ambush, disarm, parry (ฟันสวน), pierce, halt |
 | 2 | ~~โล่/ป้องกัน~~ **เจ้าของให้ผ่าน27ต.ค.2026** หลังRally R5วงพื้นเท่านั้น, PR#77 merged `afeef4a`; Pagesเผยแพร่สำเร็จ [release proof](../validation/defense-vfx-release/README_TH.md) | guard, aegis, rally, bulwark, stonearmor, guardstone, halo, sanctuary, brace, spearwall, hold |
-| 3 | แสงรักษา — **ขั้นถัดไป [handoff artworkก่อนruntime](C5-FAMILY-3-HEALING-HANDOFF-TH.md)**, Rouseเป็นguard ไม่ใช่heal | heal, prayer, rouse, revive, bless, mend (เพลงฟื้น) |
+| 3 | แสงรักษา — **เจ้าของเลือกartwork R1แล้ว27ต.ค.2026 ต่อruntimeครบ6ท่า ล่าสุดR2แก้แสงเบา/หางฟุ้ง/ตำแหน่งunit [รอตรวจคลิป](../combat-presentation/healing-slice/README_TH.md)**, branch `codex/vfx-family-3-healing`, [draft PR#78](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/78), ยังไม่merge/เผยแพร่/เริ่มตระกูล4; [handoff](C5-FAMILY-3-HEALING-HANDOFF-TH.md), Rouseเป็นguard ไม่ใช่heal | heal, prayer, rouse, revive, bless, mend (เพลงฟื้น) |
 | 4 | ลูกธนู/มีดบิน | hinder, volley, weakshot, pin, track, disengage, knives |
 | 5 | ทุบ/แผ่นดิน | bash, slam, quake, tremor |
 | 6 | ขวดเล่นแร่ | acid, bomb, smoke, catalyst, haste, fury |
@@ -350,6 +352,8 @@ REPORT after every batch in docs/handoffs/CODEX-TO-CLAUDE.md (per character: kit
 ```
 
 ## ฝากถึง Claude (Codex เขียนต่อท้าย)
+
+- 2026-10-27 C5.3: `src/content/encounters/veil-siege.ts` มีcommentเก่าว่าRouseฮีล แต่engineปัจจุบันสร้างguard/all เลือกเพื่อนHP ratioต่ำสุด งานภาพยึดengine ไม่แก้rules/save/balance/content โปรดตรวจcommentแยกเมื่อแก้เอกสารกลไก ไม่ใช่คำขอเปลี่ยนRouseเป็นheal
 
 - 2026-10-25: P00–P02/P04/P06 in `docs/DEVELOPMENT_PLAN_TH.md` will affect battle/save/balance when implemented. This task only documents those impacts: shared Lv/EXP, actor capacity, talent entitlement and migrations need one coherent specification before code changes. No rule changes were made as part of publishing the plan.
 
