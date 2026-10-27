@@ -1,5 +1,7 @@
 # C5.6 — ขวดเล่นแร่ R1 · runtime รอตรวจ motion
 
+เจ้าของอนุมัติ55คลิปด้วย **“เอาเข้าเกมได้”** แล้ว27ต.ค.2026 อนุญาตmerge/เผยแพร่ผ่านPR86หลังCIครบผ่าน ไม่เริ่มตระกูล7 ข้อความรอmotionด้านล่างเป็นประวัติ
+
 27ตุลาคม2026 · `codex/vfx-family-6-alchemy` / [PR86](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/86) เดิม · เจ้าของเลือกartwork R1ด้วย **“ไปต่อ”** แล้ว ไม่มีmotionapproval/merge/เผยแพร่/ตระกูล7
 
 [หน้าเลือกคลิปจริง390px](index.html) · [เวลาและevents](clips.json) · [deliveryproof](delivery-proof.json)

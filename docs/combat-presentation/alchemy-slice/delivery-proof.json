@@ -1,9 +1,13 @@
 {
   "artworkApproval": {
     "dateBangkok": "2026-10-27",
-    "quote": "\u0e44\u0e1b\u0e15\u0e48\u0e2d"
+    "quote": "ไปต่อ"
   },
-  "runtimeApproval": "pending_owner_motion_review",
+  "runtimeApproval": {
+    "dateBangkok": "2026-10-27",
+    "quote": "เอาเข้าเกมได้",
+    "clipsReviewed": 55
+  },
   "pullRequest": 86,
   "runtimeHead": "31c5e90691164b9d85820ef61a92f63975635b8a",
   "captureFixtureHead": "25354540874a0d797e027e4e2c71d7833301df66",

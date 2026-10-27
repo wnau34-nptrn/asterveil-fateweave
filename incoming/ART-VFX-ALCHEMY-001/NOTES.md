@@ -1,5 +1,7 @@
 # ART-VFX-ALCHEMY-001 · artwork R1 รอเจ้าของเลือก
 
+C5.6ล่าสุด: เจ้าของตรวจ55คลิปจริงและอนุมัติ “เอาเข้าเกมได้” แล้ว27ต.ค.2026 อนุญาตmerge/เผยแพร่PR86หลังCIครบผ่าน ไม่เริ่มตระกูล7 ข้อความรอmotionด้านล่างเป็นประวัติ
+
 RuntimeR1/18frameatlasเสร็จในPR86เดิม ส่ง55actual390pxclipsแล้ว รอowner motion review รายละเอียดdocs/combat-presentation/alchemy-slice/README_TH.md ไม่merge/เผยแพร่/ตระกูล7
 
 อัปเดต: เจ้าของเลือกartworkR1ด้วย “ไปต่อ” แล้ว27ต.ค.2026 กำลังต่อruntimeในPR86เดิม ก่อนส่งคลิปจริงให้ตรวจ ไม่มีmotionapproval/merge/เผยแพร่/ตระกูล7 ข้อความรอเลือกด้านล่างเป็นประวัติ

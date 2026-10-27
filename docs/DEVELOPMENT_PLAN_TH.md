@@ -1,5 +1,7 @@
 # Fateweave — แผนพัฒนารวมจากเกมปัจจุบันสู่ระบบใหม่
 
+C5.6ล่าสุด: เจ้าของตรวจ55คลิปจริงและอนุมัติ “เอาเข้าเกมได้” แล้ว27ต.ค.2026 อนุญาตmerge/เผยแพร่PR86หลังCIครบผ่าน ไม่เริ่มตระกูล7 ข้อความรอmotionด้านล่างเป็นประวัติ
+
 C5.6ส่งมอบ: [55คลิปจริง390px/6ท่า/4modesและ31variants](combat-presentation/alchemy-slice/README_TH.md) ในPR86เดิม รอเจ้าของตรวจmotionก่อนmerge/เผยแพร่/ตระกูล7 ตรวจ948unit/57focusedbrowser/55state-equality/playerdecodeครบผ่าน CIqualitysuccess/fullbrowserยังinprogress ไม่เปลี่ยนrules/save/balance/playback timing
 
 C5.6: เจ้าของเลือกartworkR1ด้วย “ไปต่อ” แล้ว กำลังต่อruntime6ท่าในPR86เดิมและตรวจคลิปจริง390pxก่อนmerge/เผยแพร่/ตระกูล7 ไม่เปลี่ยนrules/save/balance/playback timing

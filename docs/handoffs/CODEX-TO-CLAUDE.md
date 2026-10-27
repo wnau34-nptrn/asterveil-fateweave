@@ -1,5 +1,12 @@
 # Codex → Claude handoff
 
+## 2026-10-27 — C5.6 owner motion approved: “เอาเข้าเกมได้”
+
+เจ้าของตรวจ55actual390pxclipsแล้วสั่ง “เอาเข้าเกมได้” อนุมัติmotionและmerge/เผยแพร่ผ่านPR86เดิม ไม่เริ่มตระกูล7 Fetchฐานล่าสุด1f783f8แล้วไม่มีงานใหม่แทรก Approvedruntime31c5e90/validatedfixture2535454และdelivery949e129มีsrc/public/tests/workflowtreesตรงกัน AtlasSHA25618c4b740db78eb4f80c6f66bc845770f46f013e2c3dede909e27ef19ba2505a5ตรงคลิปที่ตรวจ
+
+CIquality40533376869success; fullbrowser40533376856ผ่าน6sourcegatesและ3prechecksแล้ว กำลังproduction ก่อนmergeต้องตรวจให้ครบsuccess ไม่ถือpending/skipเป็นผ่าน Local948unit/79files/typecheck/lint/build,57focusedbrowser,55state-equality/decodedplayerผ่าน เก็บ6916rawframesทั้งหมด ไม่เปลี่ยนrules/save/content/balance/playback timing ขั้นต่อไปmergePR86หลังCIผ่าน รอPagesbuild+4browser shards+deployและartifactตรงmergeSHA แล้วบันทึกreleaseproof
+
+
 ## 2026-10-27 — C5.6 ส่ง55คลิปจริง390px รอ owner motion review
 
 PR86เดิม / branch `codex/vfx-family-6-alchemy`; runtime31c5e90, validated/capturefixture2535454 ไม่มีmergecommit เจ้าของเลือกartworkR1ด้วย “ไปต่อ” แล้ว แต่ยังไม่อนุมัติmotion ห้ามmerge/เผยแพร่/เริ่มตระกูล7

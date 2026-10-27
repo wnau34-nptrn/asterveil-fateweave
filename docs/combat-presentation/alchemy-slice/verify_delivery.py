@@ -33,7 +33,7 @@ for cell in sources['frames']:
  for band in ImageChops.difference(original.convert('RGB'),packed.convert('RGB')).split():
   assert ImageChops.multiply(band,visible).getextrema()==(0,0)
 rev=lambda name:subprocess.check_output(['git','rev-parse',name],cwd=ROOT,text=True).strip()
-proof={'artworkApproval':{'dateBangkok':'2026-10-27','quote':'ไปต่อ'},'runtimeApproval':'pending_owner_motion_review','pullRequest':86,
+proof={'artworkApproval':{'dateBangkok':'2026-10-27','quote':'ไปต่อ'},'runtimeApproval':{'dateBangkok':'2026-10-27','quote':'เอาเข้าเกมได้','clipsReviewed':55},'pullRequest':86,
  'runtimeHead':rev('31c5e90'),'captureFixtureHead':rev('2535454'),'validatedHead':rev('HEAD'),'srcTree':rev('HEAD:src'),'publicTree':rev('HEAD:public'),
  'atlasSha256':hashlib.sha256((ROOT/'public/assets/fx/alchemy_fx.webp').read_bytes()).hexdigest(),
  'resolverStateEqualityVerifiedInCapture':True,'clips':len(clips),'rawFrames':sum(c['capturedFrames'] for c in clips),'largestCapturedFrameGapMs':max(c['maxFrameGap'] for c in clips)*1000,
