@@ -1,5 +1,7 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
+สถานะล่าสุด C5.4: เจ้าของเลือกartwork R1ด้วย “ดำเนินการขั้นต่อไป” แล้ว ต่อruntime7ท่าในPR84เดิม atlas/moduleเดียว ตรวจ890unitและ26focusedbrowserผ่าน กำลังอัดคลิปจริงแยกจากtests ห้ามmerge/เผยแพร่/ตระกูล5ก่อนเจ้าของตรวจmotion ไม่มีrules/save/content/balance/playback timing diff
+
 ## 2026-10-27 — C5.4 artwork R1 รอเลือกก่อน runtime
 
 เจ้าของเริ่มตระกูล4แล้วบนฐานล่าสุด8f00428, branch `codex/vfx-family-4-projectile` / [draft PR#84](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/84) เดียว ยังไม่mergeหรือเผยแพร่ [หน้าเลือก7ท่า/3จังหวะ/14กรณีจริง](../combat-presentation/projectile-storyboards/index.html), [ภาพและหลักฐาน](../combat-presentation/projectile-storyboards/README_TH.md) และ42composites390px จากeffect-onlyImageGen+renderer/resolverจริง; คงชุด/HP/ชื่อด้วยsprite/label masks ตรวจDPR2/3และcontrolsผ่าน typecheck/lint/build/875unitผ่าน ไม่มีruntime/core/save/balance/playback diff Trackท้ายรอบเป็นcounterจริงไม่ใช่damage ยังไม่มีการเลือกภาพโดยเจ้าของ ขั้นต่อไปเลือก/แก้ภาพก่อนsharedatlas/moduleและคลิปจริงครบ7ท่าในPRเดิม ส่งตรวจก่อนmerge/เผยแพร่/ตระกูล5 ตามคำสั่งเจ้าของ ไม่ใช้standingauthorizationข้ามcheckpointภาพนี้

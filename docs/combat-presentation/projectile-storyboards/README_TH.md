@@ -1,4 +1,6 @@
-# C5.4 — ลูกธนู / มีดบิน · artwork R1 รอเจ้าของเลือก
+# C5.4 — ลูกธนู / มีดบิน · artwork R1 ที่เจ้าของเลือกแล้ว
+
+เจ้าของเลือก R1ด้วย “ดำเนินการขั้นต่อไป” แล้ว27ต.ค.2026 ต่อruntimeในPR84เดิม; ขั้นเสนอเดิมด้านล่างเป็นประวัติ ยังต้องส่งคลิปจริงให้ตรวจ ก่อนmerge/เผยแพร่/ตระกูล5
 
 27 ตุลาคม 2026 · `codex/vfx-family-4-projectile` → `feature/fateweave-initial-prototype` · [draft PR#84](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/84) ตระกูล4หนึ่งPR ตั้งแต่ artwork ถึงคลิป runtime ภายหลัง
 

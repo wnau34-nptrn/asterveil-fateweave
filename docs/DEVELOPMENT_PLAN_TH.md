@@ -1,5 +1,7 @@
 # Fateweave — แผนพัฒนารวมจากเกมปัจจุบันสู่ระบบใหม่
 
+C5.4ล่าสุด: เจ้าของเลือกR1แล้ว ต่อruntime7ท่าในPR84เดิม กำลังส่งคลิปจริงให้ตรวจmotionก่อนmerge/เผยแพร่/ตระกูล5 ตรวจ890unit/26focusedbrowserผ่าน ไม่เปลี่ยนrules/save/balance/playback timing ข้อความรอเลือกด้านล่างเป็นประวัติ
+
 สถานะล่าสุด C5.4: artwork R1ครบ7ท่า/3จังหวะ/14กรณีจริงบนฐาน8f00428 รอเจ้าของเลือกก่อนruntime ในbranch codex/vfx-family-4-projectile หนึ่งdraft PR ไม่merge/เผยแพร่/ตระกูล5ก่อนตรวจคลิปจริง [ภาพ/หลักฐาน](combat-presentation/projectile-storyboards/README_TH.md) ข้อความเตรียมhandoffด้านล่างเป็นประวัติ
 
 งานVFXถัดไป: ตระกูล4ลูกธนู/มีดบิน7ท่า [handoffแชตใหม่](handoffs/C5-FAMILY-4-PROJECTILE-HANDOFF-TH.md) พร้อมข้อความเปิดแชต เริ่มartwork3จังหวะให้เลือกก่อนruntime ยังไม่มีงานภาพ/runtimeตระกูล4ในแชตที่เตรียมhandoffนี้

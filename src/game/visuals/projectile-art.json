@@ -1,0 +1,128 @@
+{
+  "hinder_prepare": [
+    91,
+    89,
+    205,
+    173
+  ],
+  "hinder_flight": [
+    83,
+    70,
+    426,
+    186
+  ],
+  "hinder_tail": [
+    36,
+    89,
+    237,
+    170
+  ],
+  "volley_prepare": [
+    91,
+    48,
+    197,
+    156
+  ],
+  "volley_flight": [
+    66,
+    29,
+    422,
+    160
+  ],
+  "volley_tail": [
+    12,
+    67,
+    260,
+    155
+  ],
+  "weakshot_prepare": [
+    87,
+    55,
+    210,
+    128
+  ],
+  "weakshot_flight": [
+    87,
+    52,
+    438,
+    118
+  ],
+  "weakshot_tail": [
+    46,
+    61,
+    252,
+    124
+  ],
+  "pin_prepare": [
+    77,
+    83,
+    212,
+    136
+  ],
+  "pin_flight": [
+    50,
+    56,
+    449,
+    164
+  ],
+  "pin_tail": [
+    52,
+    50,
+    239,
+    184
+  ],
+  "track_prepare": [
+    97,
+    56,
+    189,
+    170
+  ],
+  "track_flight": [
+    54,
+    65,
+    447,
+    156
+  ],
+  "track_tail": [
+    58,
+    80,
+    240,
+    151
+  ],
+  "disengage_prepare": [
+    96,
+    73,
+    223,
+    152
+  ],
+  "disengage_flight": [
+    67,
+    71,
+    448,
+    160
+  ],
+  "disengage_tail": [
+    61,
+    83,
+    232,
+    154
+  ],
+  "knives_prepare": [
+    88,
+    73,
+    198,
+    145
+  ],
+  "knives_flight": [
+    64,
+    61,
+    447,
+    145
+  ],
+  "knives_tail": [
+    56,
+    60,
+    238,
+    154
+  ]
+}

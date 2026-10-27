@@ -1,5 +1,11 @@
 # Codex → Claude handoff
 
+## 2026-10-27 — C5.4 artwork R1 selected; runtime integration in PR84
+
+Owner said “ดำเนินการขั้นต่อไป”, selecting R1 and authorizing the next runtime step. One shared21-frame1440×2016 lossless alpha atlas and `projectile-fx.ts` now cover all7skills. Actual damage/dodge recipients and Tracking counter events own every cue; no selected-target guesses, extra strikes or fake responses. Dynamic sprite-world source/body landmarks include pose/scale/rotation/fieldshake/DPR; flights, contact wisps and delayed soft tails render behind units and DOM labels. Missing atlas falls back; OS reduced motion is immediate static feedback. Every flight/tail tween targets a scene-owned image and ends/cleans within existing playback stages. Added explicit projectile source gate beside existing blade/defense/healing gates in PR/Pages workflows.
+
+Local890unit/77files,typecheck/lint/build and26focusedbrowser cases passed; subsequent8focused checks also passed after raising knives' arc to stay readable over the screened front row and asserting cleanup preserves actual commands. A harness-only correction maps resolver's canonical `enemies` target to the real DOM `target-enemies-f1` button; ordinary UI clicks remain used. No runtime timing/rule workaround. Actual timestamp capture underway separately; no clip approval/merge/publication/family5 yet. Raw captures will remain in test-results/projectile-delivery. Full browser suite runs in CI. No changes to core/save/content/balance/battle-playback.
+
 ## 2026-10-27 — C5.4 projectile artwork R1, awaiting owner selection
 
 Branch `codex/vfx-family-4-projectile`, [draft PR#84](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/84) for family4, no merge commit/publication. Fetched actual game base `8f00428`; independently confirmed PR78 merged1cfe874, Pages40460582964 completed/success at13:37:22Bangkok, and checkout healing atlas SHA256 matches release.json. Preserved Cloudflare/planning work; main is bootstrap, not game base.
