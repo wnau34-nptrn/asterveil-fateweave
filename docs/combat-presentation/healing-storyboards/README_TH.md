@@ -1,4 +1,6 @@
-# C5.3 — แสงรักษา / artwork R1 รอเลือกก่อน runtime
+# C5.3 — แสงรักษา / artwork R1 ที่เลือกแล้ว
+
+เจ้าของเลือกR1ด้วย “ดำเนินการขั้นต่อไปได้” วันที่27ต.ค.2026 ต่อruntimeในPRเดิมแล้ว [ตรวจคลิปจริง](../healing-slice/README_TH.md) ยังรอตรวจmotionก่อนตระกูล4 ข้อความขั้นเสนอดั้งเดิมด้านล่างเป็นประวัติ
 
 27 ตุลาคม 2026 · `codex/vfx-family-3-healing` → `feature/fateweave-initial-prototype` · [draft PR#78](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/78) ใบเดียวตลอดตระกูล3
 

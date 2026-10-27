@@ -1,5 +1,11 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
+## 2026-10-27 — ตระกูล3ต่อruntimeแล้ว รอตรวจคลิปในPR78
+
+เจ้าของเลือกR1ด้วย “ดำเนินการขั้นต่อไปได้” หลังภาพ6ท่า ต่อatlas/moduleเดียวครบheal/prayer/rouse/revive/bless/mendใน `codex/vfx-family-3-healing` / [draftPR78](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/78) แล้ว [หน้าเลือก29คลิปจริง390px](../combat-presentation/healing-slice/index.html) / [ผลตรวจและข้อจำกัด](../combat-presentation/healing-slice/README_TH.md) แยกcast/tickจริง Rouseguard/allรับแทนศัตรู2คน ไม่ซ้ำdefense; เมล็ด/วงเล็บแสงขยับ20pxหลบตราสถานะ ไม่แตะชุด/HP ไม่แก้rules/save/balance/playback875unit/typecheck/lint/buildผ่าน พร้อมfocusedbrowser/optional-unit/fallback/cleanup การเลือกartworkยังไม่ใช่motion approval หยุดที่PRเดิมก่อนmerge/เผยแพร่/ตระกูล4
+
+ทำต่อ: รับผลตรวจคลิปจากเจ้าของ ปรับเฉพาะท่าที่ขอในPR78 อัดซ้ำเฉพาะคลิปที่เปลี่ยนและmerge manifestโดยเก็บคลิปอื่น เมื่อเจ้าของให้ผ่านmotionจึงทำขั้นreleaseตามstanding authorizationและตรวจCI/Pages อย่าเริ่มตระกูล4จากข้อความเลือกartworkR1
+
 ## 2026-10-27 — ตระกูล3 artwork R1 รอเจ้าของเลือก
 
 branch `codex/vfx-family-3-healing`, draft [PR#78](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/78) ใบเดียวของตระกูล3; [หน้าเลือก6ท่า/3phase](../combat-presentation/healing-storyboards/index.html) / [รายละเอียด](../combat-presentation/healing-storyboards/README_TH.md) มี18cast+6tickภาพ390px แยก Bless/Mend cast/tick และ Rouse guard/all จาก engine จริง Revive preludeทำให้เพื่อนล้มจากคำสั่งจริง ImageGenต้นฉบับ/prompt/alphaครบ ตรวจ858unit+typecheck/lint/buildและreference/viewerผ่าน ไม่มีhealingruntime/คลิปจริง/merge/deploy รอเลือก/แก้artworkก่อนต่อatlas/moduleและอัดคลิปในPRเดิม หยุดก่อนตระกูล4 ไม่ถือว่าภาพใหม่ผ่านแล้วเพราะตระกูล2ผ่าน
