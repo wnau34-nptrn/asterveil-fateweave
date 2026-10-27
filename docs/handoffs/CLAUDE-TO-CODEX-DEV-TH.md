@@ -131,8 +131,8 @@ Read AGENTS.md and CLAUDE.md first. Repository wnau34-nptrn/asterveil-fateweave,
 |---|---|---|
 | 1 | ~~ฟันดาบ/แทง~~ R4: เจ้าของเลือก [แบบภาพ 10 ท่า](../combat-presentation/blade-storyboards/README_TH.md) รวม Pierce R2 และสั่งทำ VFX จริงแล้ว ต่อเข้าเกมครบ 2026-10-26 **ผ่านและ merge R4 แล้ว 2026-10-26 (`d14a3e1`, PR #59)** (`codex/vfx-family-1-blade`, PR #59, [คลิป](../combat-presentation/blade-slice/README_TH.md)) | attack, finisher, lunge, sweep, backstab, ambush, disarm, parry (ฟันสวน), pierce, halt |
 | 2 | ~~โล่/ป้องกัน~~ **เจ้าของให้ผ่าน27ต.ค.2026** หลังRally R5วงพื้นเท่านั้น, PR#77 merged `afeef4a`; Pagesเผยแพร่สำเร็จ [release proof](../validation/defense-vfx-release/README_TH.md) | guard, aegis, rally, bulwark, stonearmor, guardstone, halo, sanctuary, brace, spearwall, hold |
-| 3 | แสงรักษา — **เจ้าของเลือกartwork R1แล้ว27ต.ค.2026 ต่อruntimeครบ6ท่า ล่าสุดR2แก้แสงเบา/หางฟุ้ง/ตำแหน่งunit [รอตรวจคลิป](../combat-presentation/healing-slice/README_TH.md)**, branch `codex/vfx-family-3-healing`, [draft PR#78](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/78), ยังไม่merge/เผยแพร่/เริ่มตระกูล4; [handoff](C5-FAMILY-3-HEALING-HANDOFF-TH.md), Rouseเป็นguard ไม่ใช่heal | heal, prayer, rouse, revive, bless, mend (เพลงฟื้น) |
-| 4 | ลูกธนู/มีดบิน | hinder, volley, weakshot, pin, track, disengage, knives |
+| 3 | ~~แสงรักษา~~ **เจ้าของให้ผ่านR2และสั่ง “นำเข้าเกมได้” 27ต.ค.2026** PR#78 merged `1cfe874`; Pages40460582964เผยแพร่สำเร็จครบ [release proof](../validation/healing-vfx-release/README_TH.md), [29คลิป](../combat-presentation/healing-slice/README_TH.md); Rouseเป็นguard ไม่ใช่heal | heal, prayer, rouse, revive, bless, mend (เพลงฟื้น) |
+| 4 | ลูกธนู/มีดบิน — **handoffสำหรับแชตใหม่พร้อม ยังไม่เริ่มartwork/runtime** [briefและข้อความเปิดแชต](C5-FAMILY-4-PROJECTILE-HANDOFF-TH.md) เริ่มartwork3จังหวะให้เลือกก่อนruntime หนึ่งPR | hinder, volley, weakshot, pin, track, disengage, knives |
 | 5 | ทุบ/แผ่นดิน | bash, slam, quake, tremor |
 | 6 | ขวดเล่นแร่ | acid, bomb, smoke, catalyst, haste, fury |
 | 7 | ออร่า/เพลง/ตรา | mark, valor, dread, solo, warcry, taunt, challenge, decoy, evade, finale, note |

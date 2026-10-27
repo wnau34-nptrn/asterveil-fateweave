@@ -1,5 +1,9 @@
 # Codex → Claude handoff
 
+## 2026-10-27 — C5.4 next-chat handoff prepared (documentation only)
+
+Owner asked “ขอ Handoff ขึ้น Chat ใหม่ที” after family3 release. Added `C5-FAMILY-4-PROJECTILE-HANDOFF-TH.md`: seven skills, latest healing release proof/SHA/CI/Pages, actual resolver caveats (track round-end shot, pin front row, knives back/front/twin routing, disengage actual delay rather than guessed dodge), artwork-first selection, medium readable weight/wispy trails/live unit anchoring, one shared atlas/module and onePR, truthful outcomes/unchanged timing, QA/capture/release requirements and copy-ready Thai opening prompt. No family4 artwork/runtime/PR started; no approval of unseen family4 art. Updated new-chat/development/C5 links and reconciled stale family3 table row to its approved merged/published state. Docs reviewed against engine1cfe874/20854ba; `git diff --check` and local Markdown-link existence checks passed. No gameplay tests needed for docs-only change. Same authorized release documentation follow-up to PR78, no second family3 PR.
+
 ## 2026-10-27 — C5.3 R2 approved, merged and published (PR78)
 
 - Owner reviewed29R2 runtime clips and said “นำเข้าเกมได้”, approving family3 motion and game integration. Same [PR78](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/78), merge `1cfe87493397fe30b0548857c4727971ff2844f8`. No family4 work.

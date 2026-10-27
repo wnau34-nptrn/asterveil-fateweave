@@ -1,5 +1,9 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
+## 2026-10-27 — handoffแชตใหม่: C5.4 ลูกธนู/มีดบิน
+
+เจ้าของขอhandoffหลังตระกูล3เผยแพร่สำเร็จ อ่าน [C5-FAMILY-4-PROJECTILE-HANDOFF-TH.md](C5-FAMILY-4-PROJECTILE-HANDOFF-TH.md) เป็นbriefหลัก มีข้อความเปิดแชตท้ายเอกสาร ฐานเกมfeature/fateweave-initial-prototype; branchใหม่codex/vfx-family-4-projectile หนึ่งPRเฉพาะ7ท่า hinder/volley/weakshot/pin/track/disengage/knives เริ่มartwork3จังหวะให้เลือกก่อนruntime ตรวจrelease proofตระกูล3และengineฐานล่าสุด ไม่เริ่มตระกูล4ในแชตที่เตรียมhandoffนี้ และไม่ถือว่ามีภาพตระกูล4ผ่านแล้ว
+
 ## 2026-10-27 — ตระกูล3 R2 ผ่านเจ้าของและเผยแพร่แล้ว
 
 เจ้าของตรวจ29คลิปแล้วสั่ง “นำเข้าเกมได้” PR78 merged `1cfe87493397fe30b0548857c4727971ff2844f8`; premergequality/browserผ่านครบ Pages40460582964สำเร็จbuild+4browser shards+deploy เวลา13:37:22น.กรุงเทพฯ sourceVFX93/93 production249ผ่าน/204skip runtimeตรงรุ่นที่เจ้าของตรวจ3dc1501หลังรวมฐานล่าสุด3bf10dbโดยเก็บงานอื่นครบ ดู [release proof](../validation/healing-vfx-release/README_TH.md) และ [29คลิป](../combat-presentation/healing-slice/README_TH.md) งานตระกูล3จบ ไม่เริ่มตระกูล4ในงานนี้ ข้อความรอตรวจ/รอเผยแพร่ด้านล่างเป็นประวัติ
