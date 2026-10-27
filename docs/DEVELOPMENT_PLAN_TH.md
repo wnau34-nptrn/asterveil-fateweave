@@ -1,5 +1,7 @@
 # Fateweave — แผนพัฒนารวมจากเกมปัจจุบันสู่ระบบใหม่
 
+C5.4ส่งมอบ: [40คลิปruntime R1จริง390px](combat-presentation/projectile-slice/README_TH.md) ในPR84เดิม รอเจ้าของตรวจmotionก่อนmerge/เผยแพร่/ตระกูล5 ภาพR1เลือกแล้ว ตรวจ890unit/26focusedbrowser/40captureและdecodedPTS/countผ่าน ข้อความก่อนหน้าด้านล่างเป็นประวัติ ไม่มีrules/save/balance/playback timing diff
+
 C5.4ล่าสุด: เจ้าของเลือกR1แล้ว ต่อruntime7ท่าในPR84เดิม กำลังส่งคลิปจริงให้ตรวจmotionก่อนmerge/เผยแพร่/ตระกูล5 ตรวจ890unit/26focusedbrowserผ่าน ไม่เปลี่ยนrules/save/balance/playback timing ข้อความรอเลือกด้านล่างเป็นประวัติ
 
 สถานะล่าสุด C5.4: artwork R1ครบ7ท่า/3จังหวะ/14กรณีจริงบนฐาน8f00428 รอเจ้าของเลือกก่อนruntime ในbranch codex/vfx-family-4-projectile หนึ่งdraft PR ไม่merge/เผยแพร่/ตระกูล5ก่อนตรวจคลิปจริง [ภาพ/หลักฐาน](combat-presentation/projectile-storyboards/README_TH.md) ข้อความเตรียมhandoffด้านล่างเป็นประวัติ
