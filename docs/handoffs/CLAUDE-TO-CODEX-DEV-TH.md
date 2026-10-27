@@ -1,5 +1,11 @@
 # ส่งต่องานพัฒนาให้ Codex ระหว่างรอ Usage ของ Claude (2026-10-23)
 
+## 2026-10-27 — World chat, central market and daily/weekly board planning
+
+Owner requested all three features and recommendations. Added `docs/design/CHAT_MARKET_QUEST_BOARD_TH.md`, D40–D42 and five tasks (49 total): P04-06/P05-06/P09-04/P11-05/P11-06. Recommend fixed-price server-verified gold/equipment market with escrow/binding, extensible item allowlist; world chat with identity/block/report/moderation; one quest board with daily/weekly/contracts, automatic progress and catch-up. Costs/counts/binding details are proposed baselines, not owner approval of every value.
+
+Docs-only: no runtime/save/balance/backend changes, local gameplay tests or screenshots. Link/task/whitespace checks required. Branch `docs/chat-market-quest-board`, target game branch; publication tracked in PR/issue #69. P01 remains the next base-game task. Online trade needs P09 asset trust and atomic multi-account transactions; older editable local balances cannot be accepted without a migration policy.
+
 ## 2026-10-27 — World Boss/sweep plan published
 
 PR #79 merged as `2a12a60039823d068846ae7ead4f60f0075f1d87`, head `01a2c51`; quality CI run 708 (`40450289715`) passed. Scope is seven Markdown files only: new feature proposal, D38/D39 and three backlog tasks (44 total), with handoffs. Preserved remote VFX handoffs during merge. Local links/task IDs and diff checks passed; no local gameplay tests/screenshots needed for this planning update. Issue #69 includes the new unchecked work. Runtime World Boss/sweep is not implemented; server authority P09 is required. P01 remains next for the base-game progression work.

@@ -96,3 +96,13 @@
 | D39 | World Boss ทั้งเซิร์ฟเวอร์ | HPร่วมและทุกบัญชีร่วมผลงาน; เลือกรอบกิจกรรม/สิทธิ์/รางวัล/loadtestและlatearrivalใน P11 หลังserver P09 |
 
 รายละเอียด: [World Boss และกวาดล้าง](design/WORLD_BOSS_SWEEP_TH.md) การกำหนดค่าต้นแบบยังไม่ใช่ผลทดสอบหรือระบบที่เปิดแล้ว
+
+## G. แชต ตลาด และเป้าหมายการเล่นเพิ่มเติม
+
+| ID | หัวข้อ | ขอบเขตและงานต่อ |
+|---|---|---|
+| D40 | แชตโลก | channel/identity/ดูแลชุมชน/block/report/rate limits และUIที่ไม่รบกวนศึก หลังP09 |
+| D41 | ตลาดกลาง | fixedpriceด้วยทองเป็นMVP, eligibleitem/escrow/binding/tax/legacytrust และconcurrenttransactions P04/P09/P11 |
+| D42 | กระดานdaily/weekly | objectiveevents/period/rewards/catch-up, ไม่บังคับเข้าเจ็ดวัน, ไม่รับเควสต์สะสมเก่าซ้ำ P04/P05/P09 |
+
+รายละเอียด: [แชตโลก ตลาดกลาง และกระดานเควสต์](design/CHAT_MARKET_QUEST_BOARD_TH.md) ตัวเลข/รายการซื้อขายเป็นข้อเสนอที่ต้องพิสูจน์ก่อนเปิดจริง
