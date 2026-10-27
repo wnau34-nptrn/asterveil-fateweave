@@ -1,5 +1,37 @@
 # ส่งต่องานพัฒนาให้ Codex ระหว่างรอ Usage ของ Claude (2026-10-23)
 
+สถานะVFX27ต.ค.2026: เจ้าของให้ผ่านmotionตระกูล3 R2ด้วย “นำเข้าเกมได้” ดำเนินmerge/Pagesผ่านPR78เดิมหลังCI ไม่เริ่มตระกูล4 ผลreleaseจะบันทึกในhealing-vfx-release
+
+## 2026-10-27 — Equipment market deferral published
+
+PR #81 merged as `93c9654fe9a3eb5677ccea21989eb0c087a25835`, head `ba4af05`; quality CI run719 (`40452392740`) passed. Seven Markdown files, 49 local links and status checks passed: 49 registered IDs/47 main-plan/2 deferred. Issue #69 now removes checkboxes from deferred P09-04/P11-06 (not completed) and updates P04-06 to farming/quest economy. Owner accepted deferring player equipment/material trading; chat, board, World Boss and NPC shops remain in scope. No runtime/save/balance/inventory changes or local gameplay tests/screenshots. Prior market tax/binding suggestions are superseded. P01 remains next for the base game.
+
+## 2026-10-27 — Owner accepted deferring the equipment market
+
+Owner authorized the recommendation to preserve farming and defer player-to-player equipment trading. Updated CHAT_MARKET_QUEST_BOARD_TH, development plan, Game Detail and D41: P09-04/P11-06 are deferred (not completed); P04-06 now audits salvage/crafting/targeted farming/gear sharing and quest economy. 49 registered IDs = 47 main-plan + 2 deferred. No equipment/material fixed-price/auction/barter/direct-transfer implementation in the first release; cosmetic trading is only a possible future review, not an authorized substitute feature.
+
+World chat, daily/weekly board, World Boss and NPC shops remain in scope. Previous proposed market binding/tax rules are superseded and must not be applied to player gear. Generic account/reward trust P09 remains required. Docs-only; no runtime/save/balance changes or local gameplay tests/screenshots. Branch `docs/defer-equipment-market` targets game branch; link/status/diff checks before publication. Issue #69 must mark tasks deferred without checking them as done. P01 is still next for the base game.
+
+## 2026-10-27 — Chat/market/quest-board plan published
+
+PR #80 merged as `dd91f60f5964b9a8642bb947d37a5a3e990fe64e`, head `40eba0f`; quality CI run 714 (`40451360676`) passed. Seven Markdown files only; 49 local links, 49 unique tasks and diff whitespace checked. Issue #69 includes five new unchecked tasks/D40–D42. No runtime/backend/save/balance edits or new local gameplay tests/screenshots. The item binding/tax/daily counts are proposed baselines; server trade requires asset eligibility and atomic ledger before launch. P01 is still the next base-game task. This note records publication, not implementation of the features.
+
+## 2026-10-27 — World chat, central market and daily/weekly board planning
+
+Owner requested all three features and recommendations. Added `docs/design/CHAT_MARKET_QUEST_BOARD_TH.md`, D40–D42 and five tasks (49 total): P04-06/P05-06/P09-04/P11-05/P11-06. Recommend fixed-price server-verified gold/equipment market with escrow/binding, extensible item allowlist; world chat with identity/block/report/moderation; one quest board with daily/weekly/contracts, automatic progress and catch-up. Costs/counts/binding details are proposed baselines, not owner approval of every value.
+
+Docs-only: no runtime/save/balance/backend changes, local gameplay tests or screenshots. Link/task/whitespace checks required. Branch `docs/chat-market-quest-board`, target game branch; publication tracked in PR/issue #69. P01 remains the next base-game task. Online trade needs P09 asset trust and atomic multi-account transactions; older editable local balances cannot be accepted without a migration policy.
+
+## 2026-10-27 — World Boss/sweep plan published
+
+PR #79 merged as `2a12a60039823d068846ae7ead4f60f0075f1d87`, head `01a2c51`; quality CI run 708 (`40450289715`) passed. Scope is seven Markdown files only: new feature proposal, D38/D39 and three backlog tasks (44 total), with handoffs. Preserved remote VFX handoffs during merge. Local links/task IDs and diff checks passed; no local gameplay tests/screenshots needed for this planning update. Issue #69 includes the new unchecked work. Runtime World Boss/sweep is not implemented; server authority P09 is required. P01 remains next for the base-game progression work.
+
+## 2026-10-27 — World Boss and sweep added to planning
+
+Owner requested a server-wide shared boss after proposing paid-resource sweeps for cleared stages, three per stage/day. Added `docs/design/WORLD_BOSS_SWEEP_TH.md`; D38/D39 and P04-05/P05-05/P11-04 track economy, sweep and server-raid work. Recommend asynchronous shared HP with individual squad attempts, accessible participation/shared rewards, no last-hit power prize, authoritative replay/transactions, concurrent kills and late-arrival handling. Sweeps use a separate repeat-reward table and cannot sweep the World Boss. Supply/attempt/event values remain prototypes.
+
+Docs-only; no runtime/save/balance/server changes, gameplay tests or screenshots. Validate local links/task IDs/diff. Branch `docs/world-boss-sweep-plan` targets game branch; publication reference follows in PR/issue #69. P01 remains next for the base game; actual World Boss requires P09 infrastructure. This does not claim a real-time many-team room exists.
+
 ## P00 publication complete — PR #72
 
 Merged into game branch as `aab276d9f7eb46f782039414a83b50c19beef8af`, head `e638f3b`. PR quality CI run 672 (`40245547986`) passed. Local baseline: full sim 28/28 and focused 55/55; final artifacts: 19 documentation/report files, 29 tracked links, hashes and whitespace validated. Issue #69 marks P00 complete and remains open. Next is P01-A/B in `docs/design/p00/SHARED_PROGRESSION_TEAM_SPEC_TH.md`; no runtime rules were changed by P00. No screenshots or human playtest were claimed. This note records delivery only.

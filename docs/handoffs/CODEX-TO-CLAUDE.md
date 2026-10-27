@@ -1,5 +1,9 @@
 # Codex → Claude handoff
 
+## 2026-10-27 — C5.3 R2 owner approved for game integration (PR78)
+
+Owner reviewed the R2 clips and said “นำเข้าเกมได้”. This approves family3 motion and merge/Pages publication in the same PR78; family4 is outside this task. Integrated latest game base3bf10db, preserving Cloudflare/market planning work and both handoff histories; conflicts were append-only handoff entries. No runtime changes from the reviewed3dc1501. Existing local875unit and42focused browser cases remain applicable; premerge CI and release proof are being collected. Merge SHA/publication results will be recorded after verification.
+
 ## 2026-10-27 — C5.3 R2: stronger light, wispy wake and rendered-unit sole anchoring (PR78)
 
 - Owner feedback: “แสง ยังเบาไป ต้องมีปลายฟุ้งๆ ตามหลัง และไม่ตรงตำแหน่ง unit ตรวจสอบและแก้ไขที”. Continue `codex/vfx-family-3-healing` / draftPR78, no merge/publication/family4. R1 motion was not approved; R2 remains for owner review.
@@ -29,6 +33,44 @@
 - Delivery: local interactive `docs/combat-presentation/healing-storyboards/index.html`, all24PNG and8peak links inREADME; two390px examples supplied to owner. Artwork R1 NOT selected/approved yet. Runtime/atlas/module/source gate and actual six-skill clips normal/fast/reduced/OS-reduced remain next after selection, in same PR. Stop before family4. Do not merge/publish this unfinished family or infer approval from tests.
 - ฝาก Claude: content comment still says Rouse heals although current engine implements guard/all. No rule/content correction made; preserve mechanics and review stale explanatory comment separately.
 
+## 2026-10-27 — Cloudflare development deployment probe
+
+Owner completed Cloudflare signup and reports adding CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID as GitHub repository secrets. Secrets were not read or copied into code. Branch `codex/cloudflare-dev-probe` targets `feature/fateweave-initial-prototype`; PR #82 merged as `07c5cbbdac1da19be81ec2b0b5be13d488f6334e` (head `6df8304`). Premerge quality run `40455747302` and Cloudflare validation run `40455747334` passed.
+
+Added `cloudflare/index.mjs`, `health.node.mjs`, `wrangler.json`, `README_TH.md` and `.github/workflows/cloudflare-dev.yml`. Public GET/HEAD `/health` only; no player data, D1/DO bindings, account/save/reward/gameplay/balance edits. PRs validate without secrets; only pushes to the game branch deploy `asterveil-api-dev`, then verify the public response and record its URL in the Actions summary. Wrangler pinned to 4.153.0. P09 remains unfinished and P01 remains next for the base game.
+
+Local Node 24 handler tests 4/4 passed; workflow YAML/JSON parse and credential separation checked. Full project quality and Wrangler dry-run delegated to CI because this executor cannot connect to its configured network proxy; no local full-game or Cloudflare runtime validation claimed. No screenshots needed for this infrastructure change. Deployment run `40455943755` passed validation and secret presence/Account ID format checks, then reached Cloudflare's account subdomain lookup. Deployment failed because no workers.dev subdomain is registered; Wrangler explicitly declined registration in noninteractive CI. No live endpoint or successful HTTP smoke test exists yet; upload permissions remain unproven. Owner action: open Cloudflare Account → Compute → Workers & Pages or `https://dash.cloudflare.com/<ACCOUNT_ID>/workers/onboarding`, choose an available workers.dev subdomain, then rerun failed jobs on run `40455943755`. No new token or paid domain is required by this error. After deployment passes, scope P09-01 before any player data service.
+
+
+## 2026-10-27 — Equipment market deferral published
+
+PR #81 merged as `93c9654fe9a3eb5677ccea21989eb0c087a25835`, head `ba4af05`; quality CI run719 (`40452392740`) passed. Seven Markdown files, 49 local links and status checks passed: 49 registered IDs/47 main-plan/2 deferred. Issue #69 now removes checkboxes from deferred P09-04/P11-06 (not completed) and updates P04-06 to farming/quest economy. Owner accepted deferring player equipment/material trading; chat, board, World Boss and NPC shops remain in scope. No runtime/save/balance/inventory changes or local gameplay tests/screenshots. Prior market tax/binding suggestions are superseded. P01 remains next for the base game.
+
+## 2026-10-27 — Owner accepted deferring the equipment market
+
+Owner authorized the recommendation to preserve farming and defer player-to-player equipment trading. Updated CHAT_MARKET_QUEST_BOARD_TH, development plan, Game Detail and D41: P09-04/P11-06 are deferred (not completed); P04-06 now audits salvage/crafting/targeted farming/gear sharing and quest economy. 49 registered IDs = 47 main-plan + 2 deferred. No equipment/material fixed-price/auction/barter/direct-transfer implementation in the first release; cosmetic trading is only a possible future review, not an authorized substitute feature.
+
+World chat, daily/weekly board, World Boss and NPC shops remain in scope. Previous proposed market binding/tax rules are superseded and must not be applied to player gear. Generic account/reward trust P09 remains required. Docs-only; no runtime/save/balance changes or local gameplay tests/screenshots. Branch `docs/defer-equipment-market` targets game branch; link/status/diff checks before publication. Issue #69 must mark tasks deferred without checking them as done. P01 is still next for the base game.
+
+## 2026-10-27 — Chat/market/quest-board plan published
+
+PR #80 merged as `dd91f60f5964b9a8642bb947d37a5a3e990fe64e`, head `40eba0f`; quality CI run 714 (`40451360676`) passed. Seven Markdown files only; 49 local links, 49 unique tasks and diff whitespace checked. Issue #69 includes five new unchecked tasks/D40–D42. No runtime/backend/save/balance edits or new local gameplay tests/screenshots. The item binding/tax/daily counts are proposed baselines; server trade requires asset eligibility and atomic ledger before launch. P01 is still the next base-game task. This note records publication, not implementation of the features.
+
+## 2026-10-27 — World chat, central market and daily/weekly board planning
+
+Owner requested all three features and recommendations. Added `docs/design/CHAT_MARKET_QUEST_BOARD_TH.md`, D40–D42 and five tasks (49 total): P04-06/P05-06/P09-04/P11-05/P11-06. Recommend fixed-price server-verified gold/equipment market with escrow/binding, extensible item allowlist; world chat with identity/block/report/moderation; one quest board with daily/weekly/contracts, automatic progress and catch-up. Costs/counts/binding details are proposed baselines, not owner approval of every value.
+
+Docs-only: no runtime/save/balance/backend changes, local gameplay tests or screenshots. Link/task/whitespace checks required. Branch `docs/chat-market-quest-board`, target game branch; publication tracked in PR/issue #69. P01 remains the next base-game task. Online trade needs P09 asset trust and atomic multi-account transactions; older editable local balances cannot be accepted without a migration policy.
+
+## 2026-10-27 — World Boss/sweep plan published
+
+PR #79 merged as `2a12a60039823d068846ae7ead4f60f0075f1d87`, head `01a2c51`; quality CI run 708 (`40450289715`) passed. Scope is seven Markdown files only: new feature proposal, D38/D39 and three backlog tasks (44 total), with handoffs. Preserved remote VFX handoffs during merge. Local links/task IDs and diff checks passed; no local gameplay tests/screenshots needed for this planning update. Issue #69 includes the new unchecked work. Runtime World Boss/sweep is not implemented; server authority P09 is required. P01 remains next for the base-game progression work.
+
+## 2026-10-27 — World Boss and sweep added to planning
+
+Owner requested a server-wide shared boss after proposing paid-resource sweeps for cleared stages, three per stage/day. Added `docs/design/WORLD_BOSS_SWEEP_TH.md`; D38/D39 and P04-05/P05-05/P11-04 track economy, sweep and server-raid work. Recommend asynchronous shared HP with individual squad attempts, accessible participation/shared rewards, no last-hit power prize, authoritative replay/transactions, concurrent kills and late-arrival handling. Sweeps use a separate repeat-reward table and cannot sweep the World Boss. Supply/attempt/event values remain prototypes.
+
+Docs-only; no runtime/save/balance/server changes, gameplay tests or screenshots. Validate local links/task IDs/diff. Branch `docs/world-boss-sweep-plan` targets game branch; publication reference follows in PR/issue #69. P01 remains next for the base game; actual World Boss requires P09 infrastructure. This does not claim a real-time many-team room exists.
 
 ## 2026-10-27 — Family2 approved and merged; release and family3 handoff
 
