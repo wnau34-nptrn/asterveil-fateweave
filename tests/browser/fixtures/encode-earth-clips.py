@@ -39,10 +39,9 @@ for stamps in sorted(captures.glob('*/stamps.txt')):
     manifest = [entry for entry in manifest if entry['file'] != target.name]
     encoded += 1
     manifest.append({'file': target.name, 'width': stream['width'], 'height': stream['height'], 'duration': float(probe['format']['duration']), 'capturedFrames': len(frames), 'clickOffset': round(click - frames[0][1], 3), 'maxFrameGap': round(max(b[1] - a[1] for a, b in zip(frames, frames[1:])), 3), 'impacts': [{**impact, 'at': round(impact['at'] - frames[0][1], 3)} for impact in impacts]})
-    # Export real cast and upkeep frames separately. Each uses the first captured paint
+    # Export real cast frames. Each uses the first captured paint
     # at/after its actual callback+180ms; no generated frames or timing interpolation.
-    for label, cue in [('cast', next(i for i in impacts if i['side']=='hero' and i.get('action') in ['bash','slam','quake','tremor'])),
-                       ('followup', None)]:
+    for label, cue in [('cast', next(i for i in impacts if i['side']=='hero' and i.get('action') in ['bash','slam','quake','tremor']))]:
         if cue is None:
             continue
         selected = next((f for f in frames if f[1] >= cue['at']+.18), frames[-1])
@@ -52,10 +51,10 @@ for stamps in sorted(captures.glob('*/stamps.txt')):
         when = cue['at'] + cue.get('remainingMs', 390)*.6/1000
         selected = next((f for f in frames if f[1]>=when), frames[-1])
         Image.open(stamps.parent/'frames'/(selected[0]+'.jpg')).save(out/f'{name}-afterglow-390.png')
-    # Keep the actual pre-contact flight frame and original raw capture location.
+    # Keep the actual pre-contact preparation frame and original raw capture location.
     cast=next(i for i in impacts if i['side']=='hero' and i.get('action') in ['bash','slam','quake','tremor'])
     selected=min(frames,key=lambda f:abs(f[1]-(cast['at']-.09)))
-    Image.open(stamps.parent/'frames'/(selected[0]+'.jpg')).save(out/f'{name}-flight-390.png')
+    Image.open(stamps.parent/'frames'/(selected[0]+'.jpg')).save(out/f'{name}-prepare-390.png')
     manifest[-1]['rawCapture']=str(stamps.parent.relative_to(root))
     manifest[-1]['captureStartUTCSeconds']=frames[0][1]
     assert int(stream['nb_frames']) == len(frames)+1, 'All captured frames plus final hold must survive'

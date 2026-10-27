@@ -32,3 +32,9 @@ Tremor: strikeหน้า/หลังfallbackตามlivinglistเหมื�
 ## ผลตรวจartwork
 
 References2/2 (15legalcases+DPR2/3), viewer/control/export1/1,45pixel-preservationผ่าน; typecheck/lint/buildและ890unit/77filesผ่าน ไม่มีsrc/publicdiff Chromiumcloud/SwiftShaderไม่ใช่Safariหรือเครื่องจริง Testsไม่ใช่การอนุมัติartwork/motion
+
+## RuntimeหลังเลือกR1
+
+049c201: sharedatlas/module12framesและactualworldanchorsครบ4ท่า Skyhammerใช้actualhealแยกจากearthcontactและไม่ปลอมhealเมื่อเต็มHP รักษาdeathringเดิมต่อactualdown 910unit/78filesและ38focusedbrowserผ่าน typecheck/lint/buildผ่าน PR85draftเดิม ไม่แก้core/save/content/balance/playback timing ส่ง33actualclips/4,345rawframesครบ state equality/PTS/count/finalholdผ่านทุกไฟล์ maxPTSerror0.0062ms/maxgap307ms และplayer ดูearth-slice READMEเพื่อผลส่งมอบล่าสุด
+
+Player1/1ผ่านครบ33uniqueclips/nooverflow390px/noerrors ส่ง33MP4พร้อมproof/inventoryและrawคงอยู่ครบ การตรวจlocalไม่ใช่motionapproval CIqualityruntime049c201success แต่fullbrowserยังpendingขณะส่ง; ตรวจlatestPRchecksก่อนmerge ห้ามเผยแพร่/เริ่มfamily6ก่อนเจ้าของตรวจmotion

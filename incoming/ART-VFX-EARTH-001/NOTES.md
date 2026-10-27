@@ -10,7 +10,7 @@
 - แยกแต่ละท่าด้วยshape/ทิศ/footprint ไม่ใช้วงกลมเดียวเปลี่ยนสี มีปลายฝุ้ง/afterglowโปร่ง ลดobstruction ขนาดนี้เป็นข้อเสนอให้เลือกก่อนruntime
 - Truth: Bashretributionหนึ่งhitเพิ่มpowerไม่ใช่ทุบซ้ำ; reflectenergyเป็นsigilจริง; Slamincomingbonusและrunequakeคู่slotจริง; Quakefront/backfallback+skyhammerhealจริง; Tremorเป็นdrawnByไม่ใช่ลดpowerตามcommentเก่า ไม่แก้core/content
 
-หลังเจ้าของเลือก: ต่อหนึ่งatlas/moduleของตระกูล5ในPRเดิม รักษาplayback timing/rules/save/content/balanceและ4sourceVFXgatesเดิม เพิ่มearthgateตรงไปตรงมา อัดactual390pxclipsครบ4ท่า/ผลจริง/normal-fast-reduced-OS-reducedพร้อมrawframes/timestamps ให้ตรวจก่อนmerge/เผยแพร่/ตระกูล6
+Runtimeหลังเจ้าของเลือก: ต่อหนึ่งatlas/moduleของตระกูล5ในPRเดิม รักษาplayback timing/rules/save/content/balanceและ4sourceVFXgatesเดิม เพิ่มearthgateตรงไปตรงมา อัดactual390pxclipsครบ4ท่า/ผลจริง/normal-fast-reduced-OS-reducedพร้อมrawframes/timestamps ให้ตรวจก่อนmerge/เผยแพร่/ตระกูล6
 
 Authorship: original built-inImageGen artwork for the owner's Fateweave request under existing permission. No new third-party art/license dependency.
 

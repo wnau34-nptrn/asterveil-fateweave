@@ -1,0 +1,23 @@
+{
+  "artworkApproval": {
+    "dateBangkok": "2026-10-27",
+    "quote": "\u0e44\u0e1b\u0e15\u0e48\u0e2d"
+  },
+  "runtimeApproval": "pending_owner_motion_review",
+  "pullRequest": 85,
+  "runtimeHead": "049c2014356aae3fdfa22bf6d0a276e37768e2e1",
+  "srcTree": "8b5ba7da226a1f9ab3734d19a4c6e2a7be39bf8d",
+  "publicTree": "712b0aaa76d27c867224d6440bed8bc154210bf4",
+  "atlasSha256": "96702f00e0998df20ece729fad25326fc7a29fcde0d1185f06b38379f11779e4",
+  "resolverStateEqualityVerifiedInCapture": true,
+  "clips": 33,
+  "rawFrames": 4345,
+  "largestCapturedFrameGapMs": 307.0,
+  "maximumTimestampErrorMs": 0.0062,
+  "rawFramesRetained": true,
+  "unchangedAreas": [
+    "src/core",
+    "src/content",
+    "src/ui/battle-playback.ts"
+  ]
+}
