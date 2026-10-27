@@ -1,6 +1,6 @@
 # C5.3 — แสงรักษา / artwork R1 รอเลือกก่อน runtime
 
-27 ตุลาคม 2026 · `codex/vfx-family-3-healing` → `feature/fateweave-initial-prototype` · หนึ่ง PR ตลอดตระกูล3
+27 ตุลาคม 2026 · `codex/vfx-family-3-healing` → `feature/fateweave-initial-prototype` · [draft PR#78](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/78) ใบเดียวตลอดตระกูล3
 
 เปิด [หน้าเลือก 6 ท่า / 3 จังหวะ](index.html) ขนาดสนามจริง390×844 มีเลือกท่า/phase, เทียบสนามเปล่า, ปรับน้ำหนัก60–110% และคืนค่า แบบเริ่มต้น100% คือข้อเสนอ ไม่ใช่ภาพที่เจ้าของเลือกแล้ว
 
