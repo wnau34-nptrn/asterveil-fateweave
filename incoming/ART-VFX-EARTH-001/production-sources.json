@@ -1,0 +1,187 @@
+{
+  "sourceSha256": "0208437443269ccc47580a207ee25f72e55ba7b23f510f6f86b09d1255a273b0",
+  "atlasSha256": "96702f00e0998df20ece729fad25326fc7a29fcde0d1185f06b38379f11779e4",
+  "source": "source/four-skills.png",
+  "frames": [
+    {
+      "frame": "bash_prepare",
+      "sourceCell": [
+        0,
+        0,
+        512,
+        260
+      ],
+      "bright": [
+        149,
+        49,
+        334,
+        221
+      ]
+    },
+    {
+      "frame": "bash_peak",
+      "sourceCell": [
+        512,
+        0,
+        512,
+        260
+      ],
+      "bright": [
+        15,
+        27,
+        428,
+        250
+      ]
+    },
+    {
+      "frame": "bash_tail",
+      "sourceCell": [
+        1024,
+        0,
+        512,
+        260
+      ],
+      "bright": [
+        87,
+        70,
+        449,
+        235
+      ]
+    },
+    {
+      "frame": "slam_prepare",
+      "sourceCell": [
+        0,
+        260,
+        512,
+        265
+      ],
+      "bright": [
+        218,
+        22,
+        279,
+        237
+      ]
+    },
+    {
+      "frame": "slam_peak",
+      "sourceCell": [
+        512,
+        260,
+        512,
+        265
+      ],
+      "bright": [
+        90,
+        16,
+        359,
+        260
+      ]
+    },
+    {
+      "frame": "slam_tail",
+      "sourceCell": [
+        1024,
+        260,
+        512,
+        265
+      ],
+      "bright": [
+        106,
+        45,
+        409,
+        258
+      ]
+    },
+    {
+      "frame": "quake_prepare",
+      "sourceCell": [
+        0,
+        525,
+        512,
+        245
+      ],
+      "bright": [
+        77,
+        78,
+        369,
+        186
+      ]
+    },
+    {
+      "frame": "quake_peak",
+      "sourceCell": [
+        512,
+        525,
+        512,
+        245
+      ],
+      "bright": [
+        14,
+        22,
+        497,
+        245
+      ]
+    },
+    {
+      "frame": "quake_tail",
+      "sourceCell": [
+        1024,
+        525,
+        512,
+        245
+      ],
+      "bright": [
+        90,
+        50,
+        477,
+        203
+      ]
+    },
+    {
+      "frame": "tremor_prepare",
+      "sourceCell": [
+        0,
+        770,
+        512,
+        254
+      ],
+      "bright": [
+        89,
+        12,
+        512,
+        174
+      ]
+    },
+    {
+      "frame": "tremor_peak",
+      "sourceCell": [
+        512,
+        770,
+        512,
+        254
+      ],
+      "bright": [
+        0,
+        0,
+        456,
+        213
+      ]
+    },
+    {
+      "frame": "tremor_tail",
+      "sourceCell": [
+        1024,
+        770,
+        512,
+        254
+      ],
+      "bright": [
+        22,
+        44,
+        431,
+        198
+      ]
+    }
+  ]
+}

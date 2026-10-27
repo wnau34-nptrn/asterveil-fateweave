@@ -1,5 +1,7 @@
 # Fateweave — แผนพัฒนารวมจากเกมปัจจุบันสู่ระบบใหม่
 
+C5.5ล่าสุด: เจ้าของอนุญาตขั้นถัดไปหลังตระกูล4เผยแพร่แล้ว เริ่มartwork R1ทุบ/แผ่นดิน4ท่า/3จังหวะ/15กรณีจริง45ภาพ390px รอเลือกก่อนruntimeในbranch codex/vfx-family-5-earth หนึ่งdraft PR [ภาพ/หลักฐาน](combat-presentation/earth-storyboards/README_TH.md) / [handoff](handoffs/C5-FAMILY-5-EARTH-HANDOFF-TH.md) ไม่เริ่มตระกูล6
+
 C5.4ล่าสุด: เจ้าของให้ผ่าน40คลิปด้วย “เอาเข้าเกมได้” PR84 merged7c392b5หลังCIผ่าน Pages40503739046เผยแพร่successครบbuild+4browser shards+deployเวลา19:37:55น.กรุงเทพฯ [release proof](validation/projectile-vfx-release/README_TH.md) ไม่เริ่มตระกูล5 ข้อความรอตรวจด้านล่างเป็นประวัติ
 
 C5.4ส่งมอบ: [40คลิปruntime R1จริง390px](combat-presentation/projectile-slice/README_TH.md) ในPR84เดิม รอเจ้าของตรวจmotionก่อนmerge/เผยแพร่/ตระกูล5 ภาพR1เลือกแล้ว ตรวจ890unit/26focusedbrowser/40captureและdecodedPTS/countผ่าน ข้อความก่อนหน้าด้านล่างเป็นประวัติ ไม่มีrules/save/balance/playback timing diff
