@@ -16,7 +16,7 @@
 ## กลไกที่ตรวจบนฐาน35e39af
 
 - Bash: damageเดี่ยว; interruptเฉพาะphysicalถัดไปที่หยุดได้และเป้ารอด Energyปกติไม่หยุด Reflectbashลดpower30%แต่ส่งsigilหยุดenergyได้; Retributionเพิ่ม8เมื่อstopsจริง **ไม่เพิ่มจำนวนhit** Unstoppable/steadfastต้านได้; เป้าล้มไม่สร้างinterrupt/sigil
-- Slam: damageเดี่ยว+bonus10เมื่อintentถัดไปเล็งผู้ใช้ Runequakeเพิ่มstrikeเต็มskill.powerให้ศัตรูอื่นที่slotหมายเลขเดียวกัน (`f1↔b1` / `f2↔b2`) ไม่ใช่ตีทุกตัวและไม่พาbonusของprimaryไปเพิ่มsplash
+- Slam: damageเดี่ยว+bonus10เมื่อintentถัดไปเล็งผู้ใช้ Runequakeเพิ่มstrikeครึ่งskill.powerปัดลงให้ศัตรูอื่นที่slotหมายเลขเดียวกัน (`f1↔b1` / `f2↔b2`) ไม่ใช่ตีทุกตัวและไม่พาbonusของprimaryไปเพิ่มsplash
 - Quake: strikeแถวหน้าที่มีชีวิต; ถ้าหน้าไม่มีจึงstrikeผู้มีชีวิตที่เหลือ Skyhammerเรียกhealผู้ใช้ต่อstrikeตามengine เฉพาะamountที่คืนHPจริง กรณีเสนอให้ผู้ใช้ขาด15HPจึงเกิดheal4สองครั้งรวม8 Conceptนี้เสนอเฉพาะภาพทุบ ไม่วาดแสงhealปลอมตอนHPเต็ม; รายการhealอยู่ในmanifestเพื่อคงroutingของจริงตอนruntime
 - Tremor: strikeหน้า/หลังเมื่อหน้าว่าง แล้วตั้งdrawnByให้เป้าที่รอดเล็งผู้ใช้ในintentถัดไปตามอายุจริง **ไม่ได้ลดpowerหรือหยุดเทิร์น** ตรวจbeforeintentเล็งKnightคนอื่น และactual later intentsของผู้รับถูกเปลี่ยนมาWarden ไม่มีการแก้state/eventsเพื่อภาพ
 

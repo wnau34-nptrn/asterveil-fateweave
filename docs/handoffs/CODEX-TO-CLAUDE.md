@@ -1,5 +1,16 @@
 # Codex → Claude handoff
 
+## 2026-10-27 — C5.5 selected R1 → earth runtime; owner motion review pending
+
+Owner selected the shown family5 artwork R1 with “ไปต่อ”. Continue in `codex/vfx-family-5-earth` / [draft PR85](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/85); fetched base remains35e39af and family4releaseproof unchanged. No merge/publication/family6 without owner motion review.
+
+Added one12-frame1584×1152 losslessRGBAatlas (1,391,888bytes, SHA25696702f00e0998df20ece729fad25326fc7a29fcde0d1185f06b38379f11779e4) with original cell/hash provenance, earth-fx module, BattleScene rear artwork routing/actual sprite-world anchors and follow/cleanup. Bash/Slam body-edge; Quake/Tremor shallow ground shape, wispy owned tails. Actual damage recipients only; actual Skyhammer heals bridge to existing healing art, one simultaneous visual while retaining all actual amounts/captions/HP changes. Existing death indicators preserved. Fast/reduced/OS motion and stage times unchanged; no new module timers/listeners. Missing assets retain fallback. All prior blade/defense/healing/projectile source gates preserved; earth gate added to both browser and Pages workflows.
+
+Corrected my earlier Runequake prose: splash is floor(skill.power/2), e.g.18→9, not fullpower. The actual artwork reference events were already9; engine unchanged. Tests cover eligible physical/energy/Reflectbash/retribution/down/Unstoppable and bossSteadfast from a legal round1→3 command prelude; Slamintentbonus/same-slot splash; Quakefront/back/deaths/Skyhammer4+4/full/1HP; Tremor actual nextintent/drawnBy/source+targetdown. Stale Tremor/core/content comments remain reported under ฝากถึง Claude, not changed.
+
+Files: Scene, new earth visuals/art atlas/provenance, reusable legal fixture, unit/browser/real capture/player/encoder specs,33clip review delivery and sourcegate workflow updates, handoffs/CLAUDE/source notes. [Actual390px clips and review details](../combat-presentation/earth-slice/README_TH.md). Capture uses realUI and clock, rawframes/timestamps retained, VFR90kHz/noBframes/nointerpolation; state equality and decodedPTS verified before delivery. Chromiumcloud/SwiftShader, notSafari/realdevices. Runtime is awaiting owner motion review. Validation totals and CI status are recorded with the final delivery update below.
+
+
 ## 2026-10-27 — C5.5 earth artwork R1 for selection; no runtime
 
 Owner said “เริ่มขั้นต่อไปได้” after family4release, authorizing family5. Fetched gamebase35e39af; independently confirmed Pages40503739046success at merge7c392b5 and prior atlas SHA against releaseproof. New branch `codex/vfx-family-5-earth`, [draft PR85](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/85) for the entire family, no merge/publication.

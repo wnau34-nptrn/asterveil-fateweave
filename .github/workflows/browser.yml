@@ -30,10 +30,10 @@ jobs:
       - run: npm ci
       - run: npm run build:pages
       - run: npx playwright install --with-deps chromium
-      - name: Verify painted blade, defense, healing and projectile source fixtures
+      - name: Verify painted blade, defense, healing, projectile and earth source fixtures
         env:
           PLAYWRIGHT_PAGES: 'false'
-        run: npm run test:browser -- tests/browser/blade-fx.spec.ts tests/browser/defense-fx.spec.ts tests/browser/healing-fx.spec.ts tests/browser/projectile-fx.spec.ts --workers=1
+        run: npm run test:browser -- tests/browser/blade-fx.spec.ts tests/browser/defense-fx.spec.ts tests/browser/healing-fx.spec.ts tests/browser/projectile-fx.spec.ts tests/browser/earth-fx.spec.ts --workers=1
       - name: Verify dialog focus and frame-relative map input
         env:
           PLAYWRIGHT_PAGES: 'true'

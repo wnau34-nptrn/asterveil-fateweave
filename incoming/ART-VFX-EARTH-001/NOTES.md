@@ -1,6 +1,6 @@
-# ART-VFX-EARTH-001 · artwork R1 เสนอเลือก
+# ART-VFX-EARTH-001 · artwork R1 selected / runtime motion pending
 
-2026-10-27 · เจ้าของอนุญาตเริ่มตระกูล5แล้ว ยังไม่เลือกartwork R1และยังไม่มีearth runtime
+2026-10-27 · เจ้าของเลือกartwork R1ด้วย “ไปต่อ” แล้ว ต่อruntime4ท่าในPR85เดิม รอตรวจคลิปจริงก่อนmerge/เผยแพร่/ตระกูล6
 
 - `source/four-skills.png`: built-inImageGen original1536×1024 RGBA,3columns×4rows bash/slam/quake/tremor: prepare/peak/dissolve เก็บสำเนาbyte-identical ไม่ลบoriginalใน `/workspace/generated_images`
 - `generation-prompts.json`: exactprompt/transparent_background/tool/originalpath ไม่มีฉาก/ตัวละคร/UIที่AIวาดใหม่ ไม่ใช้external/sibling art
@@ -13,3 +13,5 @@
 หลังเจ้าของเลือก: ต่อหนึ่งatlas/moduleของตระกูล5ในPRเดิม รักษาplayback timing/rules/save/content/balanceและ4sourceVFXgatesเดิม เพิ่มearthgateตรงไปตรงมา อัดactual390pxclipsครบ4ท่า/ผลจริง/normal-fast-reduced-OS-reducedพร้อมrawframes/timestamps ให้ตรวจก่อนmerge/เผยแพร่/ตระกูล6
 
 Authorship: original built-inImageGen artwork for the owner's Fateweave request under existing permission. No new third-party art/license dependency.
+
+Runtime: `package.py` packs12losslesscells1584×1152; production-sources.json recordsoriginalsource/cells/hash. See docs/combat-presentation/earth-slice/README_TH.md. Runequake splash is half skill.power floor (18→9), corrected prose only; original engine unchanged.

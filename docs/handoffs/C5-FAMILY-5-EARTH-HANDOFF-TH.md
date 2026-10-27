@@ -4,14 +4,14 @@
 
 - ฐาน35e39afที่fetchล่าสุด; family4PR84merge7c392b5/Pages40503739046successครบbuild+4browser+deploy19:37:55กรุงเทพฯ ตรวจAPI/releaseproofและcheckoutatlasSHAตรงกัน
 - Branch `codex/vfx-family-5-earth` [draft PR85](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/85) ต่อทั้งตระกูล ไม่ใช้PR84ต่อ ไม่merge/เผยแพร่/เริ่มตระกูล6ก่อนตรวจคลิปจริง
-- [Artwork R1](../combat-presentation/earth-storyboards/README_TH.md) ครบ4ท่า×3จังหวะและ15กรณีจริง รวม45composites390×844 หน้าเลือกท่า/กรณี/phase เทียบสนามเปล่า น้ำหนัก60–110% คืนค่า100% ยังไม่มีartworkที่เจ้าของเลือกและยังไม่มีearth runtime
+- [Artwork R1](../combat-presentation/earth-storyboards/README_TH.md) ครบ4ท่า×3จังหวะและ15กรณีจริง รวม45composites390×844 หน้าเลือกท่า/กรณี/phase เทียบสนามเปล่า น้ำหนัก60–110% คืนค่า100% เจ้าของเลือกR1ด้วย “ไปต่อ” แล้ว ต่อruntime4ท่า/12-frameatlasในPR85เดิม [คลิปจริง390px](../combat-presentation/earth-slice/README_TH.md) รอเจ้าของตรวจmotionก่อนmerge/เผยแพร่/ตระกูล6
 - Originaleffect-onlyImageGen RGBA1536×1024/4rows×3columns พร้อมexactprompt/provenanceใน `incoming/ART-VFX-EARTH-001/` สร้างเฉพาะVFX ไม่ให้AIวาดสนาม/ชุด/UIใหม่ ใช้sprite/DOMmasksจริงรักษาพื้นหน้า
 
 ## กลไกจริง ห้ามเดาจากชื่อ/comment
 
 Bash: damageเดี่ยว; physicalที่หยุดได้และเป้ารอดจึงinterrupt Energyปกติไม่หยุด reflectbashลดpowerและส่งsigilหยุดenergyที่หยุดได้ retributionเพิ่มpowerเมื่อstopsจริง ไม่เพิ่มhit Unstoppable/steadfastต้านได้ เป้าล้มไม่สร้างinterrupt ต้องดูactualcancelภายหลังแยกจากcast
 
-Slam: power+quakeBonusเมื่อnextintentของเป้าเล็งผู้ใช้ Runequakeส่งstrikeเต็มskill.powerให้ศัตรูอื่นที่slotหมายเลขเดียวกัน f1↔b1/f2↔b2 ไม่ใช่allและไม่คูณbonusprimaryให้splash
+Slam: power+quakeBonusเมื่อnextintentของเป้าเล็งผู้ใช้ Runequakeส่งstrikeครึ่งskill.powerปัดลงให้ศัตรูอื่นที่slotหมายเลขเดียวกัน f1↔b1/f2↔b2 ไม่ใช่allและไม่คูณbonusprimaryให้splash
 
 Quake: strikeหน้าในlivinglist ณ action ถ้าหน้าไม่มีจึงlivingที่เหลือ Skyhammerเรียกhealผู้ใช้ต่อstrike อ่านactualhealamountไม่ปลอมhealเมื่อเต็มHP/อย่าเดาจากชื่อearthshakerว่าinterruptอัตโนมัติ
 
@@ -27,7 +27,7 @@ Tremor: strikeหน้า/หลังfallbackตามlivinglistเหมื�
 - คงstageTimingเดิม/fast65%, OSreducedภาพนิ่ง, reducedintensityเบาลง, optionalassets/fallback/cleanupskip-load-resize-hiddenครบ ไม่มีunownedtimer/listener
 - typecheck/lint/unit/buildและfocusedbrowserตามงาน ให้CIรันfullbrowser ไม่มีrules/save/content/balance/playback timing changes
 - ส่งactual390pxclipsครบ4ท่า+กรณีจริง+normal/fast/reduced/OS-reducedในPRเดิมก่อนmerge/เผยแพร่/ตระกูล6 เก็บrawframes/timestampsทุกframe ใช้90kHz/noBframes/VFR ตรวจdecodedPTS/count/ปลายคลิปและplayerหลังpackเสร็จ ไม่มีretiming/interpolation
-- อัปเดตCODEX-TO-CLAUDE/development/new-chat/C5ทุกงาน ภาพR1ตอนนี้เป็นข้อเสนอ การเริ่มงานไม่ใช่การเลือกภาพที่ยังไม่ได้เห็น
+- อัปเดตCODEX-TO-CLAUDE/development/new-chat/C5ทุกงาน ภาพR1เจ้าของเลือกแล้วด้วย “ไปต่อ”; motionยังไม่อนุมัติ
 
 ## ผลตรวจartwork
 

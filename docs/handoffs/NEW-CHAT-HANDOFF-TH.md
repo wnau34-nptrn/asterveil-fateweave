@@ -1,6 +1,6 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
-C5.5ล่าสุด27ต.ค.2026: เจ้าของสั่ง “เริ่มขั้นต่อไปได้” หลังตระกูล4releaseแล้ว เริ่มartwork R1 bash/slam/quake/tremorครบ4ท่า/3จังหวะ/15กรณีจริง45composites390px [ภาพ/หน้าเลือก](../combat-presentation/earth-storyboards/README_TH.md) branch codex/vfx-family-5-earth / [draft PR85](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/85) รอเลือกภาพก่อนearth runtimeและคลิปจริง ไม่มีcore/save/content/balance/playback timing diff [handoff](C5-FAMILY-5-EARTH-HANDOFF-TH.md) ข้อความห้ามเริ่มตระกูล5ด้านล่างเป็นประวัติของreleaseตระกูล4
+C5.5ล่าสุด27ต.ค.2026: เจ้าของเลือกartwork R1ด้วย “ไปต่อ” แล้ว ต่อruntime bash/slam/quake/tremorหนึ่งatlas/moduleใน [draft PR85](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/85) เดิม [คลิปจริง390px/หน้าเลือก](../combat-presentation/earth-slice/README_TH.md) รอตรวจmotionก่อนmerge/เผยแพร่/ตระกูล6 ไม่มีcore/save/content/balance/playback timing diff Runequake splashครึ่งskill.powerปัดลง(18→9) แก้proseเดิมเท่านั้น [handoff](C5-FAMILY-5-EARTH-HANDOFF-TH.md)
 
 C5.4ล่าสุด27ต.ค.2026: เจ้าของตรวจ40คลิปแล้วสั่ง “เอาเข้าเกมได้” PR84 merged `7c392b5` หลังquality/browserผ่าน (890unit,sourceVFX119,prechecks3,production249ผ่าน/274skip) Pages40503739046เผยแพร่successครบbuild+4browser shards+deployเวลา19:37:55น.กรุงเทพฯ build+4browser shards+deploy [release proof](../validation/projectile-vfx-release/README_TH.md) ไม่เริ่มตระกูล5
 
