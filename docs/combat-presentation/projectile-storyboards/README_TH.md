@@ -1,6 +1,6 @@
 # C5.4 — ลูกธนู / มีดบิน · artwork R1 รอเจ้าของเลือก
 
-27 ตุลาคม 2026 · `codex/vfx-family-4-projectile` → `feature/fateweave-initial-prototype` · ตระกูล4หนึ่งPR ตั้งแต่ artwork ถึงคลิป runtime ภายหลัง
+27 ตุลาคม 2026 · `codex/vfx-family-4-projectile` → `feature/fateweave-initial-prototype` · [draft PR#84](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/84) ตระกูล4หนึ่งPR ตั้งแต่ artwork ถึงคลิป runtime ภายหลัง
 
 [หน้าเลือก 7 ท่า / 3 จังหวะ / 14 กรณีจริง](index.html) มีเตรียม/จุดเด่น/สลาย เลือก phase, เทียบสนามเปล่า, น้ำหนัก60–110% และคืนค่า100% ภาพทุกช่อง390×844px เลือกหรือแก้ artwork ก่อนต่อ runtime ตามคำสั่งเจ้าของ งานนี้ยังไม่มี projectile module/atlas ในเกม ไม่มีคลิป runtime ใหม่ และยังไม่ merge/เผยแพร่/เริ่มตระกูล5
 
@@ -44,3 +44,5 @@ python docs/combat-presentation/projectile-storyboards/verify_composites.py
 ```
 
 ใช้ Chromium cloud/SwiftShader ไม่ใช่ Safari/มือถือจริง Browser skill ถูกอ่านแล้ว แต่ไม่มี callable browser-control tool ในsessionนี้ จึงใช้ Playwright ตาม workflow โครงการ Screenshot/UI จริงผ่าน fixture; originals/prompt/provenance อยู่ใน [ART-VFX-PROJECTILE-001](../../../incoming/ART-VFX-PROJECTILE-001/NOTES.md) รายละเอียดผลตรวจรอบส่งมอบบันทึกใน handoff และ composite-verification.json การผ่าน tests ไม่ใช่การอนุมัติ artwork โดยเจ้าของ
+
+ผลตรวจรอบส่งมอบ: typecheck/lint/buildผ่าน,875unit/76filesผ่าน, references2/2 (14กรณี+DPR2/3), viewer1/1,42pixel-preservationผ่าน ไม่มีmode skipที่นับเป็นpass เจ้าของยังไม่เลือกartwork R1

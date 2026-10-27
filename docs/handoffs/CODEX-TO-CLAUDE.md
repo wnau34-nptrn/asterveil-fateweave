@@ -2,7 +2,7 @@
 
 ## 2026-10-27 — C5.4 projectile artwork R1, awaiting owner selection
 
-Branch `codex/vfx-family-4-projectile`, one draft PR for family4 (PR link to be recorded after creation), no merge commit/publication. Fetched actual game base `8f00428`; independently confirmed PR78 merged1cfe874, Pages40460582964 completed/success at13:37:22Bangkok, and checkout healing atlas SHA256 matches release.json. Preserved Cloudflare/planning work; main is bootstrap, not game base.
+Branch `codex/vfx-family-4-projectile`, [draft PR#84](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/84) for family4, no merge commit/publication. Fetched actual game base `8f00428`; independently confirmed PR78 merged1cfe874, Pages40460582964 completed/success at13:37:22Bangkok, and checkout healing atlas SHA256 matches release.json. Preserved Cloudflare/planning work; main is bootstrap, not game base.
 
 Added effect-only original ImageGen21cell RGBA + exact prompt/provenance under incoming/ART-VFX-PROJECTILE-001, real renderer/resolver14case references/masks and42static390×844composites with a seven-skill viewer in docs/combat-presentation/projectile-storyboards. Controls select skill/scenario/phase, bare field, weight60–110%, reset100%. Distinct shapes: teal barbed hinder, golden feather volley, narrow amber weakshot, crossbar pin, lavender twin-ribbon track, jade swept disengage and rose/silver knives. Source landmarks follow rendered units (Mira bow/Sefa knife-side hand), sprites/HP/names remain in front through independently extracted sprite+label masks. Three phases describe preparation/travel/afterglow; fixed screenshot HP/UI is explicitly not a post-hit sequence or runtime clip.
 
