@@ -1,5 +1,11 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
+## 2026-10-27 — Owner accepted deferring the equipment market
+
+Owner authorized the recommendation to preserve farming and defer player-to-player equipment trading. Updated CHAT_MARKET_QUEST_BOARD_TH, development plan, Game Detail and D41: P09-04/P11-06 are deferred (not completed); P04-06 now audits salvage/crafting/targeted farming/gear sharing and quest economy. 49 registered IDs = 47 main-plan + 2 deferred. No equipment/material fixed-price/auction/barter/direct-transfer implementation in the first release; cosmetic trading is only a possible future review, not an authorized substitute feature.
+
+World chat, daily/weekly board, World Boss and NPC shops remain in scope. Previous proposed market binding/tax rules are superseded and must not be applied to player gear. Generic account/reward trust P09 remains required. Docs-only; no runtime/save/balance changes or local gameplay tests/screenshots. Branch `docs/defer-equipment-market` targets game branch; link/status/diff checks before publication. Issue #69 must mark tasks deferred without checking them as done. P01 is still next for the base game.
+
 ## 2026-10-27 — Chat/market/quest-board plan published
 
 PR #80 merged as `dd91f60f5964b9a8642bb947d37a5a3e990fe64e`, head `40eba0f`; quality CI run 714 (`40451360676`) passed. Seven Markdown files only; 49 local links, 49 unique tasks and diff whitespace checked. Issue #69 includes five new unchecked tasks/D40–D42. No runtime/backend/save/balance edits or new local gameplay tests/screenshots. The item binding/tax/daily counts are proposed baselines; server trade requires asset eligibility and atomic ledger before launch. P01 is still the next base-game task. This note records publication, not implementation of the features.
