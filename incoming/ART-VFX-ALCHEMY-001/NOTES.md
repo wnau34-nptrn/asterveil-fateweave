@@ -1,0 +1,11 @@
+# ART-VFX-ALCHEMY-001 · artwork R1 รอเจ้าของเลือก
+
+27 ตุลาคม 2026 · branch `codex/vfx-family-6-alchemy` บนฐานล่าสุด `1f783f8`
+
+ต้นฉบับ built-in ImageGen RGBA1536×1024 effect-only 6แถว×3จังหวะ acid/bomb/smoke/catalyst/haste/fury เก็บbyte-identicalในsource/six-skills.png และคงoriginalใน/workspace/generated_images ไว้ Exact prompt/tool/originalpathอยู่generation-prompts.json ไม่มีตัวละคร/สนาม/UIที่AIวาดใหม่ ไม่มีthird-party assetsใหม่
+
+reference/ มี14กรณีจริง: screenshots390×844, sprite/label alpha masks และanchors.jsonที่เก็บcommands/prelude/events/before/afterจากresolver ไม่มีowner saveหรือinjectedBattleState/events ตัวเลข/HPในทุกภาพเป็นภาพก่อนcast ไม่ใช่ผลHPหลังcontact
+
+Storyboards: docs/combat-presentation/alchemy-storyboards/ มี3จังหวะทุกท่าและviewer น้ำหนัก60–110% ปิดภาพ/คืนค่า/เลือกphase ใช้alphaเดิมไม่keying/repaint Maskจากactualspriteและlabelsรักษาชุด/อาวุธ/HP/ชื่อ ขอบcontactมาจากrenderedunitanchorกับsizeและพื้นที่canvas ไม่ใช้offsetslotตายตัว ทั้งนี้staticreferenceยังไม่พิสูจน์การตามpose/recoil/shakeขณะruntime ต้องตรวจต่อหลังเลือกภาพ
+
+รอเจ้าของเลือกartworkก่อนruntime ตามคำสั่งเปิดงานและhandoff ไม่ได้อนุมัติภาพเพียงเพราะอนุญาตImageGen ขั้นต่อไปหนึ่งatlas/moduleในPRเดิม รักษา5sourceVFXgatesแล้วเพิ่มalchemy ส่งactual390pxclips6ท่าnormal/fast/reduced/OS-reducedและcasesในhandoffก่อนmerge/เผยแพร่/ตระกูล7 ไม่แก้rules/save/content/balance/playback timing

@@ -1,5 +1,12 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
+## 2026-10-27 — C5.6 alchemy artwork R1 รอเลือกก่อน runtime
+
+เจ้าของเริ่มacid/bomb/smoke/catalyst/haste/fury6ท่า Explicitfetchฐานล่าสุด1f783f8แล้ว branch `codex/vfx-family-6-alchemy` หนึ่งPR ตรวจPR85merge3196e17และPages40524232794APIใหม่ build+browser4shards+deploysuccessครบ [ภาพ3จังหวะ/14legalcases390px](../combat-presentation/alchemy-storyboards/README_TH.md) มี42compositesและviewer OriginalImageGenRGBA18cells/exactprompt/provenanceอยู่incoming/ART-VFX-ALCHEMY-001 รักษาชุด/อาวุธ/HP/ชื่อด้วยactualsprite/labelmask ไม่ใช้owner saveหรือยัดstate/event Catalystcorrodedใช้legalAcidpreludeจริง Acidspreadไม่สร้างhitเพิ่ม Smoke/Haste/Furyไม่วาดdamagecast
+
+References2/2รวมDPR2/3, viewer/export1/1และ42pixel-preservationchecksผ่าน Typecheck/lint/buildและ910unit/78filesผ่าน ไม่มีruntime/src/public/rules/save/content/balance/playback timingdiff Ownerยังไม่ได้เลือกภาพ รอตรวจartworkก่อนหนึ่งatlas/moduleในPRเดิม แล้วส่งactual390pxclips6ท่าnormal/fast/reduced/OS-reducedและcasesครบhandoffก่อนmerge/เผยแพร่/ตระกูล7 รักษา5sourceVFXgatesและเพิ่มalchemyเมื่อทำruntime ไม่แตะunitanimation/P01–P03 รายการเก่าเป็นประวัติ
+
+
 ## แชตใหม่สำหรับ VFX ตระกูล6 — พร้อมhandoffเท่านั้น
 
 อ่าน [C5-FAMILY-6-ALCHEMY-HANDOFF-TH.md](C5-FAMILY-6-ALCHEMY-HANDOFF-TH.md) มีข้อความเปิดแชตท้ายไฟล์ acid/bomb/smoke/catalyst/haste/fury6ท่า เริ่มartwork3จังหวะให้เลือกก่อนruntime หนึ่งPRใหม่ ส่งactual390pxclipsก่อนmerge/เผยแพร่/ตระกูล7 แชตนี้ยังไม่เริ่มภาพ/runtimeตระกูล6 งานแผนanimationด้านล่างยังคงแยกscope

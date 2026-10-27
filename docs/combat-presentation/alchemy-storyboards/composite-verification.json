@@ -1,0 +1,506 @@
+[
+  {
+    "key": "acid-base",
+    "phase": 0,
+    "changedPixels": 460,
+    "bounds": [
+      44,
+      158,
+      115,
+      190
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "acid-base",
+    "phase": 1,
+    "changedPixels": 2419,
+    "bounds": [
+      118,
+      147,
+      192,
+      211
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "acid-base",
+    "phase": 2,
+    "changedPixels": 841,
+    "bounds": [
+      121,
+      162,
+      176,
+      199
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "acid-spread",
+    "phase": 0,
+    "changedPixels": 460,
+    "bounds": [
+      44,
+      157,
+      114,
+      190
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "acid-spread",
+    "phase": 1,
+    "changedPixels": 2866,
+    "bounds": [
+      100,
+      147,
+      384,
+      548
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "acid-spread",
+    "phase": 2,
+    "changedPixels": 1240,
+    "bounds": [
+      121,
+      163,
+      384,
+      548
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "acid-down",
+    "phase": 0,
+    "changedPixels": 460,
+    "bounds": [
+      44,
+      157,
+      114,
+      190
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "acid-down",
+    "phase": 1,
+    "changedPixels": 2413,
+    "bounds": [
+      100,
+      147,
+      192,
+      210
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "acid-down",
+    "phase": 2,
+    "changedPixels": 830,
+    "bounds": [
+      121,
+      163,
+      176,
+      199
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "bomb-base",
+    "phase": 0,
+    "changedPixels": 469,
+    "bounds": [
+      45,
+      160,
+      113,
+      190
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "bomb-base",
+    "phase": 1,
+    "changedPixels": 7808,
+    "bounds": [
+      99,
+      143,
+      384,
+      573
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "bomb-base",
+    "phase": 2,
+    "changedPixels": 2301,
+    "bounds": [
+      115,
+      156,
+      384,
+      548
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "bomb-backonly",
+    "phase": 0,
+    "changedPixels": 470,
+    "bounds": [
+      45,
+      160,
+      117,
+      190
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "bomb-backonly",
+    "phase": 1,
+    "changedPixels": 846,
+    "bounds": [
+      349,
+      191,
+      384,
+      573
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "bomb-backonly",
+    "phase": 2,
+    "changedPixels": 209,
+    "bounds": [
+      369,
+      199,
+      384,
+      548
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "smoke-base",
+    "phase": 0,
+    "changedPixels": 558,
+    "bounds": [
+      46,
+      161,
+      100,
+      193
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "smoke-base",
+    "phase": 1,
+    "changedPixels": 4737,
+    "bounds": [
+      64,
+      137,
+      323,
+      227
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "smoke-base",
+    "phase": 2,
+    "changedPixels": 1807,
+    "bounds": [
+      104,
+      166,
+      177,
+      208
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "smoke-wide",
+    "phase": 0,
+    "changedPixels": 558,
+    "bounds": [
+      46,
+      161,
+      100,
+      193
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "smoke-wide",
+    "phase": 1,
+    "changedPixels": 9466,
+    "bounds": [
+      64,
+      137,
+      323,
+      561
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "smoke-wide",
+    "phase": 2,
+    "changedPixels": 3673,
+    "bounds": [
+      104,
+      166,
+      177,
+      542
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "smoke-poison",
+    "phase": 0,
+    "changedPixels": 558,
+    "bounds": [
+      46,
+      161,
+      100,
+      193
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "smoke-poison",
+    "phase": 1,
+    "changedPixels": 4737,
+    "bounds": [
+      64,
+      137,
+      323,
+      227
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "smoke-poison",
+    "phase": 2,
+    "changedPixels": 1807,
+    "bounds": [
+      104,
+      166,
+      177,
+      208
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "catalyst-base",
+    "phase": 0,
+    "changedPixels": 421,
+    "bounds": [
+      44,
+      164,
+      105,
+      195
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "catalyst-base",
+    "phase": 1,
+    "changedPixels": 3514,
+    "bounds": [
+      112,
+      142,
+      200,
+      216
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "catalyst-base",
+    "phase": 2,
+    "changedPixels": 1047,
+    "bounds": [
+      121,
+      161,
+      176,
+      195
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "catalyst-corroded",
+    "phase": 0,
+    "changedPixels": 421,
+    "bounds": [
+      44,
+      164,
+      105,
+      195
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "catalyst-corroded",
+    "phase": 1,
+    "changedPixels": 3514,
+    "bounds": [
+      112,
+      142,
+      200,
+      216
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "catalyst-corroded",
+    "phase": 2,
+    "changedPixels": 1047,
+    "bounds": [
+      121,
+      161,
+      176,
+      195
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "haste-base",
+    "phase": 0,
+    "changedPixels": 417,
+    "bounds": [
+      46,
+      164,
+      75,
+      196
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "haste-base",
+    "phase": 1,
+    "changedPixels": 1212,
+    "bounds": [
+      178,
+      390,
+      265,
+      438
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "haste-base",
+    "phase": 2,
+    "changedPixels": 938,
+    "bounds": [
+      190,
+      396,
+      240,
+      432
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "haste-self",
+    "phase": 0,
+    "changedPixels": 417,
+    "bounds": [
+      46,
+      164,
+      75,
+      196
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "haste-self",
+    "phase": 1,
+    "changedPixels": 2364,
+    "bounds": [
+      66,
+      223,
+      140,
+      271
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "haste-self",
+    "phase": 2,
+    "changedPixels": 1688,
+    "bounds": [
+      66,
+      229,
+      144,
+      265
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "fury-base",
+    "phase": 0,
+    "changedPixels": 412,
+    "bounds": [
+      47,
+      165,
+      106,
+      190
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "fury-base",
+    "phase": 1,
+    "changedPixels": 1323,
+    "bounds": [
+      151,
+      387,
+      268,
+      448
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "fury-base",
+    "phase": 2,
+    "changedPixels": 752,
+    "bounds": [
+      191,
+      398,
+      242,
+      427
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "fury-self",
+    "phase": 0,
+    "changedPixels": 412,
+    "bounds": [
+      47,
+      165,
+      106,
+      190
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "fury-self",
+    "phase": 1,
+    "changedPixels": 2771,
+    "bounds": [
+      51,
+      220,
+      139,
+      278
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "fury-self",
+    "phase": 2,
+    "changedPixels": 1616,
+    "bounds": [
+      65,
+      231,
+      152,
+      266
+    ],
+    "costumePixelsChanged": 0
+  }
+]
