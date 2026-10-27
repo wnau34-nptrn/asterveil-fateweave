@@ -1,5 +1,9 @@
 # ส่งต่องานพัฒนาให้ Codex ระหว่างรอ Usage ของ Claude (2026-10-23)
 
+## 2026-10-27 — Chat/market/quest-board plan published
+
+PR #80 merged as `dd91f60f5964b9a8642bb947d37a5a3e990fe64e`, head `40eba0f`; quality CI run 714 (`40451360676`) passed. Seven Markdown files only; 49 local links, 49 unique tasks and diff whitespace checked. Issue #69 includes five new unchecked tasks/D40–D42. No runtime/backend/save/balance edits or new local gameplay tests/screenshots. The item binding/tax/daily counts are proposed baselines; server trade requires asset eligibility and atomic ledger before launch. P01 is still the next base-game task. This note records publication, not implementation of the features.
+
 ## 2026-10-27 — World chat, central market and daily/weekly board planning
 
 Owner requested all three features and recommendations. Added `docs/design/CHAT_MARKET_QUEST_BOARD_TH.md`, D40–D42 and five tasks (49 total): P04-06/P05-06/P09-04/P11-05/P11-06. Recommend fixed-price server-verified gold/equipment market with escrow/binding, extensible item allowlist; world chat with identity/block/report/moderation; one quest board with daily/weekly/contracts, automatic progress and catch-up. Costs/counts/binding details are proposed baselines, not owner approval of every value.
