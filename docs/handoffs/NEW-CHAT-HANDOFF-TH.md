@@ -1,5 +1,32 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
+## 2026-10-27 — Rally R5 วงพื้นเท่านั้น รอตรวจคลิป
+
+เจ้าของขอมีแค่วงด้านล่าง ไม่เอาคลื่นด้านหน้า และอนุญาต “ดำเนินการได้” แล้ว ตัดcommand layerออกจากatlas/profile/runtime ใช้วงKnightนำ→วงทีมตอบรับพร้อมกันที่contact (coverageจริง) อัดRallynormal/fast/reduced/OS-reducedใหม่ในdefense-slice PR#77เดิมยังdraft รอตรวจmotionก่อนmerge/เผยแพร่/ตระกูล3 เอกสารR4ด้านล่างเป็นประวัติก่อนแก้
+
+## 2026-10-27 — Rally R4 เลือกแล้ว ต่อ runtime/คลิปจริง รอตรวจ motion
+
+เจ้าของสั่ง “ไปต่อ” หลังดูR4 จึงpromoteคำสั่งจากKnight→ทีมตอบรับที่พื้นเข้าatlas/moduleเดียวของตระกูล2 เก็บต้นฉบับRallyเดิมที่archive/rally-pre-r4 ไม่แก้กฎ/เซฟ/สมดุล/เวลาplayback คลิปใหม่normal/fast/reduced/OS-reducedใน `docs/combat-presentation/defense-slice/` / index.html รวมหลักฐาน21คลิป (อีก17คลิปคงเดิม) PR#77ใบเดิมยังdraft รอเจ้าของตรวจคลิปก่อนmerge/เผยแพร่/ตระกูล3 การเลือกartworkไม่ใช่การอนุมัติmotionหรือท่าอื่น
+
+ก่อนหน้า: เจ้าของขอออกแบบ Rally ใหม่หลังอธิบายคอนเซ็ปต์ มี R4 “Knight ส่งคำสั่ง → ทีมตั้งรับพร้อมกัน” `docs/combat-presentation/rally-r4/README_TH.md` / index.html; source/prompt6ช่องแยกในproposals/rally-r4 ยังไม่promote runtime รอเลือกภาพ PR#77ใบเดิม ไม่เริ่มตระกูล3
+
+ก่อนหน้า: เจ้าของปฏิเสธ Rally R2 เพราะทับชุด มี R3 พลังบนพื้นแยกซ้าย–ขวา `docs/combat-presentation/rally-r3/README_TH.md` (90×12, feet dy27) รอเลือก artwork ยังไม่ promote runtime; PR#77 ใบเดิมไม่เริ่มตระกูล3
+
+## 2026-10-27 — Rally เดิมไม่ผ่าน รอเลือก artwork R2 ใหม่
+
+เจ้าของไม่ชอบ Rally ในชุดคลิปและขอแก้ artwork แล้ว มีข้อเสนอริ้วพลังน้ำเงินแนวนอนช่วงขา3จังหวะที่ `docs/combat-presentation/rally-r2/README_TH.md` / `index.html` ต้นฉบับ/Promptอยู่ `incoming/ART-VFX-DEFENSE-001/proposals/rally-r2/` ยังไม่ได้แทน source/atlas/runtime/คลิปเดิม รอเลือกแบบก่อน promote/repack/อัด Rally ใหม่ใน PR#77 ใบเดิม ไม่ถือว่าท่าอื่นผ่านและยังไม่เริ่มตระกูล3
+
+
+## 2026-10-27 — C5.2 runtime ครบแล้ว รอตรวจ 18 คลิป
+
+PR [#77](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/77) · `codex/vfx-family-2-defense` ต่อภาพครบ11ท่าเป็น atlas/module เดียวแล้ว เจ้าของเลือก aura R3 ช่วงขาและสั่งทำ runtime เมื่อ26ต.ค. ดูคลิปจริง18ไฟล์และหน้าเลือกใน `docs/combat-presentation/defense-slice/README_TH.md` / `index.html` ครอบคลุมรับแทน ดูดซับ กันล้ม สวน หลบ ยกเลิก fast/reduced/OS reduced motion ทดสอบ858unit + defense36 + legacy16 ผ่าน ไม่มีการแก้กฎ/เซฟ/สมดุล/เวลา playback ยังไม่มี owner clip approval, merge หรือ deploy หยุดรอเจ้าของตรวจใน PR ใบนี้ก่อนตระกูล3; ตรวจสถานะ CIตามลิงก์ในsliceก่อน merge
+
+
+## 2026-10-26 — C5.2 artwork V1 รอเลือกก่อนต่อ runtime
+
+Draft PR [#77](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/77) · สาขา `codex/vfx-family-2-defense` มี artwork โปร่งใส 11 ท่า × 3 จังหวะแล้ว; ล่าสุดปรับ Stone Armour/Aegis เป็น low aura R3 เฉพาะเท้า/หน้าแข้งตาม feedback ไม่ให้สูงถึงหัว พร้อมปุ่มเทียบ R2/R3 ดู `docs/combat-presentation/defense-storyboards/README_TH.md` และ `index.html` (หน้าเลือกท่า 390px เทียบสนามเปล่า/ปรับน้ำหนักได้) เก็บต้นฉบับและ prompts ใน `incoming/ART-VFX-DEFENSE-001/` ยังไม่มี owner artwork approval, runtime atlas/module หรือคลิปจริง งานถัดไปคือรับ feedback/เลือกแบบ แล้วทำ runtime ใน PR ตระกูล 2 ใบเดิมตาม `C5-FAMILY-2-DEFENSE-HANDOFF-TH.md` ห้ามเริ่มตระกูล 3 จนเจ้าของตรวจคลิปตระกูล 2 ผ่าน ไม่รวม/เผยแพร่ draft งานภาพนี้ก่อนขั้น review ที่ขอไว้
+
+
 ส่งต่อ VFX โดยเฉพาะ 2026-10-26: เจ้าของขอ handoff ไปแชตใหม่สำหรับขั้นถัดไป ดู [C5.2 โล่/ป้องกัน — พร้อมข้อความเปิดแชต](C5-FAMILY-2-DEFENSE-HANDOFF-TH.md) เริ่ม artwork 11 ท่าก่อน runtime; C5.1 merge/เผยแพร่แล้ว ตระกูล 2 ยังไม่เริ่ม คิว P01 และงานอื่นด้านล่างเป็นคนละขอบเขต
 
 อัปเดต R4 2026-10-26: เจ้าของเลือกแบบภาพทั้ง 10 ท่า รวม Pierce หอกหนา และสั่งทำ VFX จริงแล้ว โมดูล blade-fx.ts ใช้ atlas เดียว 38 frames จากภาพเตรียม/ปะทะ/สลายที่เลือก เก็บต้นฉบับและ hash ไว้ครบ รวมฐาน roster batch 1 e79e8a4 แล้ว ดู CODEX-TO-CLAUDE.md บนสุดและคลิปใน docs/combat-presentation/blade-slice/ หลังส่งชุดตรวจ **เจ้าของอนุมัติและ merge R4 แล้ว 2026-10-26 ผ่าน PR #59 (`d14a3e1`) เผยแพร่สำเร็จผ่าน Pages run 40348106389 แล้ว (build +4 browser shards +deploy) HTTP200 และ hash ของ blade_fx.webp ตรง R4 ดู docs/validation/blade-vfx-release/README_TH.md; ไม่เริ่ม C5.2 อัตโนมัติในงาน merge นี้**

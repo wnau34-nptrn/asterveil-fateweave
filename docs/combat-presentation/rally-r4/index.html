@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fateweave · Rally R4 artwork review</title>
+<style>
+@font-face{font-family:Kanit;src:url('../../../public/assets/fonts/kanit-thai-400.woff2')}*{box-sizing:border-box}body{margin:0;background:#0b1223;color:#edf1fb;font:16px system-ui,sans-serif}main{max-width:1234px;margin:auto;padding:24px 32px}small,.note{color:#b3bfd3}h1{font-size:26px;margin:6px 0 10px}p{line-height:1.6;margin:8px 0}nav{display:flex;flex-wrap:wrap;gap:6px;margin:18px 0}button{min-height:44px;padding:10px 14px;background:#1b2941;border:1px solid #354763;border-radius:8px;color:inherit;cursor:pointer;font:inherit}button[aria-pressed=true]{background:#e3c6a0;color:#171a23;border-color:#e3c6a0}.controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:12px 0 18px}input{accent-color:#e3c6a0}h2{font-size:22px;margin:10px 0 4px}.scroll{overflow:auto;max-width:100%;scroll-snap-type:x mandatory;border-radius:12px}#board{width:1170px;display:grid;grid-template-columns:repeat(3,390px);background:#101c30}figure{scroll-snap-align:start;margin:0;width:390px}figcaption{height:62px;padding:12px 16px;background:#17243a;border-right:1px solid #35435a}figcaption strong{display:block;font-size:16px}figcaption span{font-size:12px;color:#b6c2d5}canvas{display:block;width:390px;height:844px}#identity{min-height:28px}.footer{font-size:12px;padding:12px 16px;grid-column:1/-1;color:#bdc9dd}.note{max-width:900px;font-size:14px;margin-top:14px}a{color:#d9bf9e}#error{color:#ffc5be}@media(max-width:600px){main{padding:18px 0}header,.controls,nav,h2,#identity,.note,#error{margin-left:16px;margin-right:16px}h1{font-size:22px}.scroll{border-radius:0}}
+</style></head><body><main>
+<header><small>ASTER VEIL · FATEWEAVE / C5.2 / RALLY / ARTWORK R4</small><h1>Rally R4 · คำสั่งตั้งรับ</h1><p>ข้อเสนอใหม่เฉพาะ Rally · Knight ส่งสัญญาณ → ทีมตั้งรับพร้อมกัน → สลาย · แต่ละช่องแสดงสนามจริงกว้าง 390px</p></header>
+<nav aria-label="เลือกสกิล"></nav>
+<div class="controls"><label for="weight">น้ำหนักภาพ</label><input id="weight" type="range" min="60" max="110" value="100"><output id="weight-value">100%</output><button id="toggle">ดูสนามเปล่า</button><button id="reset">คืนค่าแบบเสนอ</button></div>
+<div class="controls"><button data-phase="0">01 เตรียม</button><button data-phase="1">02 จุดเด่น</button><button data-phase="2">03 สลาย</button></div>
+<div class="controls"><strong id="revision"></strong><button id="version" hidden aria-pressed="false">เทียบแบบเดิม</button></div>
+<h2 id="name"></h2><p id="identity"></p><p id="error" role="alert"></p>
+<div class="scroll"><section id="board" aria-label="storyboard สามจังหวะ">
+<figure><figcaption><strong>01 · Knight ส่งคำสั่ง</strong><span>คลื่นสั้นข้าง Knight ไม่พาดตัวละคร</span></figcaption><canvas width="390" height="844"></canvas></figure>
+<figure><figcaption><strong>02 · ทีมตั้งรับพร้อมกัน</strong><span>แสงตอบรับบนพื้นของเพื่อนทุกคน</span></figcaption><canvas width="390" height="844"></canvas></figure>
+<figure><figcaption><strong>03 · สลาย</strong><span>กลับสู่ความโปร่ง ไม่สื่อว่าสถานะหมดหรือโล่แตก</span></figcaption><canvas width="390" height="844"></canvas></figure>
+<div class="footer">แบบภาพสำหรับตรวจรูปร่างและน้ำหนัก · ยังไม่ใช่ภาพ VFX ที่ทำงานจริง · HP และ UI ในภาพอ้างอิงคงเดิมทุกช่อง</div></section></div>
+<p class="note">ข้อเสนอ artwork ใหม่เฉพาะ Rally ใช้คลื่นคำสั่งข้าง Knight และแสงตอบรับที่พื้นของทีม เว้นชุดและตัวละคร กลไกยังเป็นลดการโดนครั้งแรกของแต่ละคน ไม่ใช่ barrier; วางภาพใหม่บนสนามจริงเดิมโดยไม่วาด UI/ตัวละครใหม่ ยังไม่ได้แทน atlas/module หรือคลิป runtime ใน PR #77</p>
+<p class="note"><a href="README_TH.md">รายละเอียด / เทียบแบบเดิม</a> · <a href="manifest.json">ขนาดภาพและพิกัดอ้างอิง</a></p>
+</main><script src="boards.js"></script><script src="viewer.js"></script></body></html>

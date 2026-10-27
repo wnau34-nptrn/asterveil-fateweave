@@ -1,0 +1,89 @@
+{
+  "skill": "rally",
+  "thai": "ตั้งรับหมู่",
+  "identity": "ริ้วธงกางเหนือชุดให้เห็นทรง คุ้มการโดนครั้งแรกของแต่ละคน ไม่ใช่ barrier",
+  "width": 62,
+  "height": 76,
+  "placement": "targets",
+  "dx": 0,
+  "dy": -78,
+  "frames": [
+    [
+      224,
+      128,
+      428,
+      567
+    ],
+    [
+      652,
+      97,
+      837,
+      569
+    ],
+    [
+      1575,
+      237,
+      534,
+      413
+    ]
+  ],
+  "frameMax": [
+    837,
+    569
+  ],
+  "source": "../../../incoming/ART-VFX-DEFENSE-001/source/rally.png",
+  "background": "../../../incoming/ART-VFX-DEFENSE-001/reference/rally-390.png",
+  "sourceSize": [
+    2172,
+    724
+  ],
+  "alphaRange": [
+    0,
+    255
+  ],
+  "sha256": "be6dd0a4e3b4e85d3beb0ffc847e50285dcdcfd04d84a1aaedd1ba1688480f4d",
+  "anchors": {
+    "source": {
+      "id": "guardian",
+      "x": 145.85999999999999,
+      "y": 232.72,
+      "size": 111
+    },
+    "targets": [
+      {
+        "id": "guardian",
+        "x": 145.85999999999999,
+        "y": 232.72,
+        "size": 111
+      },
+      {
+        "id": "tracer",
+        "x": 145.85999999999999,
+        "y": 566.72,
+        "size": 111
+      },
+      {
+        "id": "weaver",
+        "x": 49.47,
+        "y": 232.72,
+        "size": 111
+      },
+      {
+        "id": "healer",
+        "x": 49.47,
+        "y": 566.72,
+        "size": 111
+      }
+    ],
+    "events": [
+      {
+        "type": "rally",
+        "sourceId": "guardian",
+        "targetId": "guardian",
+        "text": "Every ally’s first hit is reduced until the knight’s next turn."
+      }
+    ],
+    "mode": "self",
+    "targetId": "guardian"
+  }
+}
