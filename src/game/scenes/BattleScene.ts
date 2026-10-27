@@ -13,6 +13,7 @@ import { EXECUTE_ATLAS, WARD_ATLAS, executeAtlasUrls, wardAtlasUrls, executeCast
 import { BLADE_ATLAS, bladeAtlasUrls, bladeCast, bladeImpact, bladeStance, bladeCues, bladePalettes, isBladeSkill } from '../visuals/blade-fx';
 import { DEFENSE_ATLAS, defenseAtlasUrls, defenseCast, defenseContact, defenseCues, isDefenseSkill } from '../visuals/defense-fx';
 import { HEALING_ATLAS, healingAtlasUrls, healingPrepare, healingContact, healingCues, isHealingSkill, type HealingContext } from '../visuals/healing-fx';
+import { PROJECTILE_ATLAS, projectileAtlasUrls, projectileCues, projectilePrepare, projectileContact, isProjectileSkill } from '../visuals/projectile-fx';
 import { FOE_SLOT_INDEX, fieldSlots, slotPlan, type FieldSlot } from '../visuals/field-layout';
 import { actorArt, actorFootOrigins, artOf, artUrl, figureRise, mirroredArt, unitsUrl } from '../visuals/assets';
 
@@ -93,6 +94,7 @@ export class BattleScene extends Phaser.Scene {
     this.load.atlas(EXECUTE_ATLAS, ...executeAtlasUrls());
     this.load.atlas(WARD_ATLAS, ...wardAtlasUrls());
     this.load.atlas(BLADE_ATLAS, ...bladeAtlasUrls());
+    this.load.atlas(PROJECTILE_ATLAS, ...projectileAtlasUrls());
     this.load.atlas(DEFENSE_ATLAS, ...defenseAtlasUrls());
     this.load.atlas(HEALING_ATLAS, ...healingAtlasUrls());
     for (const sheet of ['units', 'mercs', 'foes', 'foes2'] as const) this.load.spritesheet(`battle-${sheet}`, unitsUrl(sheet), { frameWidth: 512, frameHeight: 512 });
@@ -137,6 +139,7 @@ export class BattleScene extends Phaser.Scene {
     for (const image of [...(this.healingLayer?.list ?? []), ...(this.effects?.list ?? [])]) {
       const follow = image.getData('healingFollow') as (() => void) | undefined;
       follow?.();
+      (image.getData('projectileFollow') as (() => void) | undefined)?.();
     }
     // Adopt newly decoded art only at a safe boundary, never repaint an actor mid-attack.
     if (this.optionalDirty && !this.stageActive && this.view) this.paint();
@@ -317,6 +320,24 @@ export class BattleScene extends Phaser.Scene {
     const foot = body.getLocalTransformMatrix().transformPoint(sprite?.x ?? 0, sprite?.y ?? 0);
     return { x: foot.x + (this.layer?.x ?? 0), footY: foot.y + (this.layer?.y ?? 0), y: foot.y - slot.size * .48 };
   }
+  // Landmarks are transformed with the actual sprite, including pose scale/rotation and root DPR.
+  projectileAnchor(id: string) {
+    const body=this.bodies.get(id),slot=this.actorPanels.get(id);
+    const sprite=body?.list.find(c=>c instanceof Phaser.GameObjects.Image) as Phaser.GameObjects.Image|undefined;
+    if(!sprite||!slot)return;
+    const knife=this.encounter.heroes.find(h=>h.id===id)?.role==='Scout';
+    const matrix=sprite.getWorldTransformMatrix();
+    const ratio=sprite.texture.key.startsWith('unit-pilot-')?2:1;
+    const point=(x:number,y:number)=>{const p=matrix.transformPoint(x*sprite.width/ratio,y*sprite.height/ratio);return {x:p.x/this.dpr,y:p.y/this.dpr};};
+    const bodyAt=point(0,-.48),release=point(knife?-.4:.36,-(knife?.58:.86));
+    return {...bodyAt,releaseX:release.x,releaseY:release.y,size:slot.size};
+  }
+  private projectileFx(id:string):FxContext {
+    return {...this.fx(id),add:item=>{
+      if(!this.healingLayer){this.healingLayer=this.add.container(0,0);this.root?.addAt(this.healingLayer,0);}
+      this.healingLayer.add(item);
+    }};
+  }
   private healingFx(id: string): HealingContext {
     return { ...this.fx(id), addRim: item => this.fx(id).add(item), add: item => {
       if (!this.healingLayer) { this.healingLayer = this.add.container(0, 0); this.root?.addAt(this.healingLayer, 0); }
@@ -352,6 +373,11 @@ export class BattleScene extends Phaser.Scene {
       const from = this.anchor(turn.actorId), to = this.anchor(hitEvent?.targetId ?? turn.targetId);
       const direction = from && to ? Math.sign(to.x - from.x) : turn.side === 'hero' ? 1 : -1;
       this.unitAnimation.begin(turn.actorId, pose, direction || (turn.side === 'hero' ? 1 : -1), contactMs, pilotClip(artOf(this.encounter, turn.actorId), turn.action, turn.intent?.name));
+    }
+    if(this.textures.exists(PROJECTILE_ATLAS)){
+      const seen=new Set<string>();
+      for(const cue of projectileCues(turn)){const key=cue.sourceId+cue.skill;projectilePrepare(this.projectileFx(cue.sourceId),cue,id=>this.projectileAnchor(id),contactMs,!seen.has(key));seen.add(key);}
+      if(turn.side==='hero'&&isProjectileSkill(turn.action))return;
     }
     if (turn.side === 'hero' && isHealingSkill(turn.action) && this.textures.exists(HEALING_ATLAS)) {
       healingPrepare(this.healingFx(turn.actorId), healingCues(turn), id => this.healingAnchor(id), contactMs);
@@ -406,6 +432,8 @@ export class BattleScene extends Phaser.Scene {
     const paintedBlades = bladeCues(turn).filter(c=>!savedWithoutDamage(c.event));
     const paintedDefense = this.textures.exists(DEFENSE_ATLAS)?defenseCues(turn,this.encounter).filter(c=>c.kind!=='absorb'||!paintedBlades.some(b=>b.event===c.event)):[];
     const paintedHealing = this.textures.exists(HEALING_ATLAS) ? healingCues(turn) : [];
+    const paintedProjectiles=this.textures.exists(PROJECTILE_ATLAS)?projectileCues(turn):[];
+    const projectileEvents=new Set(paintedProjectiles.map(c=>c.event));
     const healingEvents = new Set(paintedHealing.map(c => c.event));
     const defenseEvents = new Set(paintedDefense.map(c=>c.event));
     for(const event of events)if(savedWithoutDamage(event))defenseEvents.add(event);
@@ -426,6 +454,8 @@ export class BattleScene extends Phaser.Scene {
     if (landed && hold) {
       this.shake(140, events.some(e => e.type === 'down') ? 4 : 2.5);
     }
+    for(const image of [...(this.healingLayer?.list??[])])if(projectileEvents.has(image.getData('projectileEvent') as BattleEvent)){this.tweens.killTweensOf(image);image.destroy();}
+    for(const cue of paintedProjectiles)projectileContact(this.projectileFx(cue.targetId),cue,id=>this.projectileAnchor(id),life);
     for (const cue of paintedHealing) healingContact(this.healingFx(cue.targetId), cue, id => this.healingAnchor(id), life);
     for (const cue of paintedDefense) defenseContact(this.fx(cue.targetId),cue,this.defensePoint,life);
     for (const event of events) {
@@ -441,6 +471,7 @@ export class BattleScene extends Phaser.Scene {
       const ward = turn.action === 'ward' && turn.side === 'hero' && event.type === 'barrier';
       const blade = paintedBlades.find(cue => cue.event === event);
       const parry = event.type === 'parry';
+      const projectile=projectileEvents.has(event);
       const defense = defenseEvents.has(event) || healingEvents.has(event);
       if (parry && event.sourceId === event.targetId) bladeStance(this.fx(id), p, life, bladePalettes.Duelist!);
       if (blade) bladeImpact(this.fx(id), blade, p, this.anchor(event.sourceId), life,
@@ -453,7 +484,7 @@ export class BattleScene extends Phaser.Scene {
       if (bolt) boltImpact(this.fx(id), p, this.anchor(event.sourceId), life, event.type === 'dodge' ? 'dodged' : event.amount ? 'hit' : 'blocked');
       if (damage) {
         const from = this.anchor(event.sourceId);
-        if (from && !bolt && !execute && !blade && !defense) {
+        if (from && !bolt && !execute && !blade && !defense && !projectile) {
           const slash = this.add.graphics().lineStyle(this.quiet ? 2 : 5, color, .9);
           if (family === 'steel' || event.type === 'counter') slash.lineBetween(from.x,from.y,p.x,p.y);
           if (!event.absorbed || event.amount) {
@@ -465,7 +496,7 @@ export class BattleScene extends Phaser.Scene {
         const body = this.bodies.get(id), sprite = body?.list.find(c => c instanceof Phaser.GameObjects.Image) as Phaser.GameObjects.Image | undefined;
         if (event.amount && sprite && !this.reducedMotion) {
           // Bolt keeps the body's detail: a short violet multiply tint instead of a white fill flash.
-          if (bolt || execute || blade || defense) sprite.setTint(bolt ? 0xcdb8ff : blade ? 0xffe4c4 : defense ? 0xc6e8e2 : 0xffd3dc).setTintMode(Phaser.TintModes.MULTIPLY); else sprite.setTint(0xffffff).setTintMode(Phaser.TintModes.FILL);
+          if (bolt || execute || blade || defense || projectile) sprite.setTint(bolt ? 0xcdb8ff : blade ? 0xffe4c4 : defense ? 0xc6e8e2 : 0xffd3dc).setTintMode(Phaser.TintModes.MULTIPLY); else sprite.setTint(0xffffff).setTintMode(Phaser.TintModes.FILL);
           this.later(90, () => { if (sprite.active) sprite.clearTint().setTintMode(Phaser.TintModes.MULTIPLY); });
         }
         const before = turn.before?.heroes.find(h => h.id === id), after = turn.after?.heroes.find(h => h.id === id);
@@ -478,7 +509,8 @@ export class BattleScene extends Phaser.Scene {
         const enemy = turn.before?.enemies.find(e => e.id === id);
         if (turn.action === 'execute' && enemy && enemy.markedUntil >= turn.round) say(id,'โจมตีเป้าติดตรา','#ffa9d4');
       }
-      if (ward || blade || parry || defense) { /* painted layers above are the whole contact cue */ } else if (shield) {
+      const projectileStatus=paintedProjectiles.length>0&&turn.side==='hero'&&event.sourceId===turn.actorId&&(event.type==='delay'||event.type==='pin');
+      if (ward || blade || parry || defense || projectile || projectileStatus) { /* painted layers above are the whole contact cue */ } else if (shield) {
         const g = this.add.graphics().lineStyle(3,color,.95).fillStyle(color,.12);
         const points = [{x:p.x-22,y:p.y-24},{x:p.x+22,y:p.y-24},{x:p.x+19,y:p.y+8},{x:p.x,y:p.y+26},{x:p.x-19,y:p.y+8}];
         const polygon = points.map(point => new Phaser.Math.Vector2(point.x, point.y));
@@ -501,7 +533,7 @@ export class BattleScene extends Phaser.Scene {
       }
     }
     // The denser blade art must not cover the authoritative damage/outcome captions.
-    if (paintedBlades.length || paintedDefense.length || paintedHealing.length || turn.action === 'parry') {
+    if (paintedBlades.length || paintedDefense.length || paintedHealing.length || paintedProjectiles.length || turn.action === 'parry') {
       for (const child of [...(this.effects?.list ?? [])]) {
         if (child instanceof Phaser.GameObjects.Text) this.effects?.bringToTop(child);
       }

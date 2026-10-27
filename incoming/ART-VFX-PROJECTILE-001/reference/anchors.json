@@ -1,0 +1,4643 @@
+{
+  "hinder-base": {
+    "source": {
+      "id": "mira",
+      "x": 49.470001220703125,
+      "y": 232.72,
+      "footY": 286,
+      "size": 111,
+      "releaseX": 89.43000122070313,
+      "releaseY": 190.54000000000002
+    },
+    "targets": [
+      {
+        "id": "f1",
+        "x": 244.13999938964844,
+        "y": 206.32,
+        "footY": 286,
+        "size": 166,
+        "releaseX": 244.13999938964844,
+        "releaseY": 143.24
+      }
+    ],
+    "units": [
+      {
+        "id": "mira",
+        "x": 49.470001220703125,
+        "y": 232.72,
+        "footY": 286,
+        "size": 111,
+        "releaseX": 89.43000122070313,
+        "releaseY": 190.54000000000002
+      },
+      {
+        "id": "guardian",
+        "x": 145.86000061035156,
+        "y": 232.72,
+        "footY": 286,
+        "size": 111,
+        "releaseX": 145.86000061035156,
+        "releaseY": 190.54000000000002
+      },
+      {
+        "id": "tracer",
+        "x": 145.86000061035156,
+        "y": 566.72,
+        "footY": 620,
+        "size": 111,
+        "releaseX": 145.86000061035156,
+        "releaseY": 524.54
+      },
+      {
+        "id": "weaver",
+        "x": 49.470001220703125,
+        "y": 566.72,
+        "footY": 620,
+        "size": 111,
+        "releaseX": 49.470001220703125,
+        "releaseY": 524.54
+      },
+      {
+        "id": "f1",
+        "x": 244.13999938964844,
+        "y": 206.32,
+        "footY": 286,
+        "size": 166,
+        "releaseX": 244.13999938964844,
+        "releaseY": 143.24
+      },
+      {
+        "id": "f2",
+        "x": 244.13999938964844,
+        "y": 540.3199999999999,
+        "footY": 620,
+        "size": 166,
+        "releaseX": 244.13999938964844,
+        "releaseY": 477.24
+      },
+      {
+        "id": "b1",
+        "x": 340.5299987792969,
+        "y": 232.72,
+        "footY": 286,
+        "size": 111,
+        "releaseX": 340.5299987792969,
+        "releaseY": 190.54000000000002
+      },
+      {
+        "id": "b2",
+        "x": 340.5299987792969,
+        "y": 566.72,
+        "footY": 620,
+        "size": 111,
+        "releaseX": 340.5299987792969,
+        "releaseY": 524.54
+      }
+    ],
+    "events": [
+      {
+        "type": "damage",
+        "sourceId": "mira",
+        "targetId": "f1",
+        "amount": 12,
+        "text": "Hero attacks."
+      },
+      {
+        "type": "delay",
+        "sourceId": "mira",
+        "targetId": "f1",
+        "text": "Enemy acts last next round."
+      }
+    ],
+    "castEvents": [
+      {
+        "type": "damage",
+        "sourceId": "mira",
+        "targetId": "f1",
+        "amount": 12,
+        "text": "Hero attacks."
+      },
+      {
+        "type": "delay",
+        "sourceId": "mira",
+        "targetId": "f1",
+        "text": "Enemy acts last next round."
+      }
+    ],
+    "followup": [],
+    "prelude": [],
+    "command": {
+      "beat": 1,
+      "heroId": "mira",
+      "action": "hinder",
+      "targetId": "f1"
+    },
+    "before": {
+      "encounterId": "veil-siege",
+      "beat": 1,
+      "round": 1,
+      "turnIndex": 0,
+      "order": [
+        "mira",
+        "f1",
+        "f2",
+        "b1",
+        "b2",
+        "guardian",
+        "tracer",
+        "weaver"
+      ],
+      "outcome": "active",
+      "guard": null,
+      "counter": null,
+      "taunt": null,
+      "song": null,
+      "heroes": [
+        {
+          "id": "mira",
+          "hp": 50,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "guardian",
+          "hp": 76,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "tracer",
+          "hp": 56,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "weaver",
+          "hp": 48,
+          "barrier": 0,
+          "cooldowns": {}
+        }
+      ],
+      "enemies": [
+        {
+          "id": "f1",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "f2",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "b1",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "b2",
+          "hp": 9999,
+          "markedUntil": 0
+        }
+      ],
+      "intent": {
+        "sourceId": "f1",
+        "targetSlot": 0,
+        "name": "QA announced attack",
+        "damage": 1,
+        "kind": "energy",
+        "targetId": "mira",
+        "beat": 1,
+        "round": 1
+      },
+      "commands": []
+    },
+    "after": {
+      "encounterId": "veil-siege",
+      "beat": 1,
+      "round": 1,
+      "turnIndex": 0,
+      "order": [
+        "mira",
+        "f1",
+        "f2",
+        "b1",
+        "b2",
+        "guardian",
+        "tracer",
+        "weaver"
+      ],
+      "outcome": "active",
+      "guard": null,
+      "counter": null,
+      "taunt": null,
+      "song": null,
+      "heroes": [
+        {
+          "id": "mira",
+          "hp": 50,
+          "barrier": 0,
+          "cooldowns": {
+            "hinder": 3
+          }
+        },
+        {
+          "id": "guardian",
+          "hp": 76,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "tracer",
+          "hp": 56,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "weaver",
+          "hp": 48,
+          "barrier": 0,
+          "cooldowns": {}
+        }
+      ],
+      "enemies": [
+        {
+          "id": "f1",
+          "hp": 9987,
+          "markedUntil": 0,
+          "delayedRound": 2
+        },
+        {
+          "id": "f2",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "b1",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "b2",
+          "hp": 9999,
+          "markedUntil": 0
+        }
+      ],
+      "intent": {
+        "sourceId": "f1",
+        "targetSlot": 0,
+        "name": "QA announced attack",
+        "damage": 1,
+        "kind": "energy",
+        "targetId": "mira",
+        "beat": 1,
+        "round": 1
+      },
+      "commands": [
+        {
+          "beat": 1,
+          "heroId": "mira",
+          "action": "hinder",
+          "targetId": "f1"
+        }
+      ]
+    },
+    "scenario": "base",
+    "skill": "hinder",
+    "committed": [],
+    "canvas": {
+      "left": 6,
+      "top": 102,
+      "width": 378,
+      "height": 557
+    }
+  },
+  "volley-base": {
+    "source": {
+      "id": "mira",
+      "x": 49.470001220703125,
+      "y": 232.72,
+      "footY": 286,
+      "size": 111,
+      "releaseX": 89.43000122070313,
+      "releaseY": 190.54000000000002
+    },
+    "targets": [
+      {
+        "id": "f1",
+        "x": 244.13999938964844,
+        "y": 206.32,
+        "footY": 286,
+        "size": 166,
+        "releaseX": 244.13999938964844,
+        "releaseY": 143.24
+      },
+      {
+        "id": "f2",
+        "x": 244.13999938964844,
+        "y": 540.3199999999999,
+        "footY": 620,
+        "size": 166,
+        "releaseX": 244.13999938964844,
+        "releaseY": 477.24
+      },
+      {
+        "id": "b1",
+        "x": 340.5299987792969,
+        "y": 232.72,
+        "footY": 286,
+        "size": 111,
+        "releaseX": 340.5299987792969,
+        "releaseY": 190.54000000000002
+      },
+      {
+        "id": "b2",
+        "x": 340.5299987792969,
+        "y": 566.72,
+        "footY": 620,
+        "size": 111,
+        "releaseX": 340.5299987792969,
+        "releaseY": 524.54
+      }
+    ],
+    "units": [
+      {
+        "id": "mira",
+        "x": 49.470001220703125,
+        "y": 232.72,
+        "footY": 286,
+        "size": 111,
+        "releaseX": 89.43000122070313,
+        "releaseY": 190.54000000000002
+      },
+      {
+        "id": "guardian",
+        "x": 145.86000061035156,
+        "y": 232.72,
+        "footY": 286,
+        "size": 111,
+        "releaseX": 145.86000061035156,
+        "releaseY": 190.54000000000002
+      },
+      {
+        "id": "tracer",
+        "x": 145.86000061035156,
+        "y": 566.72,
+        "footY": 620,
+        "size": 111,
+        "releaseX": 145.86000061035156,
+        "releaseY": 524.54
+      },
+      {
+        "id": "weaver",
+        "x": 49.470001220703125,
+        "y": 566.72,
+        "footY": 620,
+        "size": 111,
+        "releaseX": 49.470001220703125,
+        "releaseY": 524.54
+      },
+      {
+        "id": "f1",
+        "x": 244.13999938964844,
+        "y": 206.32,
+        "footY": 286,
+        "size": 166,
+        "releaseX": 244.13999938964844,
+        "releaseY": 143.24
+      },
+      {
+        "id": "f2",
+        "x": 244.13999938964844,
+        "y": 540.3199999999999,
+        "footY": 620,
+        "size": 166,
+        "releaseX": 244.13999938964844,
+        "releaseY": 477.24
+      },
+      {
+        "id": "b1",
+        "x": 340.5299987792969,
+        "y": 232.72,
+        "footY": 286,
+        "size": 111,
+        "releaseX": 340.5299987792969,
+        "releaseY": 190.54000000000002
+      },
+      {
+        "id": "b2",
+        "x": 340.5299987792969,
+        "y": 566.72,
+        "footY": 620,
+        "size": 111,
+        "releaseX": 340.5299987792969,
+        "releaseY": 524.54
+      }
+    ],
+    "events": [
+      {
+        "type": "damage",
+        "sourceId": "mira",
+        "targetId": "f1",
+        "amount": 10,
+        "text": "Volley hits every enemy."
+      },
+      {
+        "type": "damage",
+        "sourceId": "mira",
+        "targetId": "f2",
+        "amount": 10,
+        "text": "Volley hits every enemy."
+      },
+      {
+        "type": "damage",
+        "sourceId": "mira",
+        "targetId": "b1",
+        "amount": 10,
+        "text": "Volley hits every enemy."
+      },
+      {
+        "type": "damage",
+        "sourceId": "mira",
+        "targetId": "b2",
+        "amount": 10,
+        "text": "Volley hits every enemy."
+      }
+    ],
+    "castEvents": [
+      {
+        "type": "damage",
+        "sourceId": "mira",
+        "targetId": "f1",
+        "amount": 10,
+        "text": "Volley hits every enemy."
+      },
+      {
+        "type": "damage",
+        "sourceId": "mira",
+        "targetId": "f2",
+        "amount": 10,
+        "text": "Volley hits every enemy."
+      },
+      {
+        "type": "damage",
+        "sourceId": "mira",
+        "targetId": "b1",
+        "amount": 10,
+        "text": "Volley hits every enemy."
+      },
+      {
+        "type": "damage",
+        "sourceId": "mira",
+        "targetId": "b2",
+        "amount": 10,
+        "text": "Volley hits every enemy."
+      }
+    ],
+    "followup": [],
+    "prelude": [],
+    "command": {
+      "beat": 1,
+      "heroId": "mira",
+      "action": "volley",
+      "targetId": "enemies"
+    },
+    "before": {
+      "encounterId": "veil-siege",
+      "beat": 1,
+      "round": 1,
+      "turnIndex": 0,
+      "order": [
+        "mira",
+        "f1",
+        "f2",
+        "b1",
+        "b2",
+        "guardian",
+        "tracer",
+        "weaver"
+      ],
+      "outcome": "active",
+      "guard": null,
+      "counter": null,
+      "taunt": null,
+      "song": null,
+      "heroes": [
+        {
+          "id": "mira",
+          "hp": 50,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "guardian",
+          "hp": 76,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "tracer",
+          "hp": 56,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "weaver",
+          "hp": 48,
+          "barrier": 0,
+          "cooldowns": {}
+        }
+      ],
+      "enemies": [
+        {
+          "id": "f1",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "f2",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "b1",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "b2",
+          "hp": 9999,
+          "markedUntil": 0
+        }
+      ],
+      "intent": {
+        "sourceId": "f1",
+        "targetSlot": 0,
+        "name": "QA announced attack",
+        "damage": 1,
+        "kind": "energy",
+        "targetId": "mira",
+        "beat": 1,
+        "round": 1
+      },
+      "commands": []
+    },
+    "after": {
+      "encounterId": "veil-siege",
+      "beat": 1,
+      "round": 1,
+      "turnIndex": 0,
+      "order": [
+        "mira",
+        "f1",
+        "f2",
+        "b1",
+        "b2",
+        "guardian",
+        "tracer",
+        "weaver"
+      ],
+      "outcome": "active",
+      "guard": null,
+      "counter": null,
+      "taunt": null,
+      "song": null,
+      "heroes": [
+        {
+          "id": "mira",
+          "hp": 50,
+          "barrier": 0,
+          "cooldowns": {
+            "volley": 4
+          }
+        },
+        {
+          "id": "guardian",
+          "hp": 76,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "tracer",
+          "hp": 56,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "weaver",
+          "hp": 48,
+          "barrier": 0,
+          "cooldowns": {}
+        }
+      ],
+      "enemies": [
+        {
+          "id": "f1",
+          "hp": 9989,
+          "markedUntil": 0
+        },
+        {
+          "id": "f2",
+          "hp": 9989,
+          "markedUntil": 0
+        },
+        {
+          "id": "b1",
+          "hp": 9989,
+          "markedUntil": 0
+        },
+        {
+          "id": "b2",
+          "hp": 9989,
+          "markedUntil": 0
+        }
+      ],
+      "intent": {
+        "sourceId": "f1",
+        "targetSlot": 0,
+        "name": "QA announced attack",
+        "damage": 1,
+        "kind": "energy",
+        "targetId": "mira",
+        "beat": 1,
+        "round": 1
+      },
+      "commands": [
+        {
+          "beat": 1,
+          "heroId": "mira",
+          "action": "volley",
+          "targetId": "enemies"
+        }
+      ]
+    },
+    "scenario": "base",
+    "skill": "volley",
+    "committed": [],
+    "canvas": {
+      "left": 6,
+      "top": 102,
+      "width": 378,
+      "height": 557
+    }
+  },
+  "weakshot-base": {
+    "source": {
+      "id": "mira",
+      "x": 49.470001220703125,
+      "y": 232.72,
+      "footY": 286,
+      "size": 111,
+      "releaseX": 89.43000122070313,
+      "releaseY": 190.54000000000002
+    },
+    "targets": [
+      {
+        "id": "f1",
+        "x": 244.13999938964844,
+        "y": 206.32,
+        "footY": 286,
+        "size": 166,
+        "releaseX": 244.13999938964844,
+        "releaseY": 143.24
+      }
+    ],
+    "units": [
+      {
+        "id": "mira",
+        "x": 49.470001220703125,
+        "y": 232.72,
+        "footY": 286,
+        "size": 111,
+        "releaseX": 89.43000122070313,
+        "releaseY": 190.54000000000002
+      },
+      {
+        "id": "guardian",
+        "x": 145.86000061035156,
+        "y": 232.72,
+        "footY": 286,
+        "size": 111,
+        "releaseX": 145.86000061035156,
+        "releaseY": 190.54000000000002
+      },
+      {
+        "id": "tracer",
+        "x": 145.86000061035156,
+        "y": 566.72,
+        "footY": 620,
+        "size": 111,
+        "releaseX": 145.86000061035156,
+        "releaseY": 524.54
+      },
+      {
+        "id": "weaver",
+        "x": 49.470001220703125,
+        "y": 566.72,
+        "footY": 620,
+        "size": 111,
+        "releaseX": 49.470001220703125,
+        "releaseY": 524.54
+      },
+      {
+        "id": "f1",
+        "x": 244.13999938964844,
+        "y": 206.32,
+        "footY": 286,
+        "size": 166,
+        "releaseX": 244.13999938964844,
+        "releaseY": 143.24
+      },
+      {
+        "id": "f2",
+        "x": 244.13999938964844,
+        "y": 540.3199999999999,
+        "footY": 620,
+        "size": 166,
+        "releaseX": 244.13999938964844,
+        "releaseY": 477.24
+      },
+      {
+        "id": "b1",
+        "x": 340.5299987792969,
+        "y": 232.72,
+        "footY": 286,
+        "size": 111,
+        "releaseX": 340.5299987792969,
+        "releaseY": 190.54000000000002
+      },
+      {
+        "id": "b2",
+        "x": 340.5299987792969,
+        "y": 566.72,
+        "footY": 620,
+        "size": 111,
+        "releaseX": 340.5299987792969,
+        "releaseY": 524.54
+      }
+    ],
+    "events": [
+      {
+        "type": "damage",
+        "sourceId": "mira",
+        "targetId": "f1",
+        "amount": 16,
+        "text": "Hero attacks."
+      }
+    ],
+    "castEvents": [
+      {
+        "type": "damage",
+        "sourceId": "mira",
+        "targetId": "f1",
+        "amount": 16,
+        "text": "Hero attacks."
+      }
+    ],
+    "followup": [],
+    "prelude": [],
+    "command": {
+      "beat": 1,
+      "heroId": "mira",
+      "action": "weakshot",
+      "targetId": "f1"
+    },
+    "before": {
+      "encounterId": "veil-siege",
+      "beat": 1,
+      "round": 1,
+      "turnIndex": 0,
+      "order": [
+        "mira",
+        "f1",
+        "f2",
+        "b1",
+        "b2",
+        "guardian",
+        "tracer",
+        "weaver"
+      ],
+      "outcome": "active",
+      "guard": null,
+      "counter": null,
+      "taunt": null,
+      "song": null,
+      "heroes": [
+        {
+          "id": "mira",
+          "hp": 50,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "guardian",
+          "hp": 76,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "tracer",
+          "hp": 56,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "weaver",
+          "hp": 48,
+          "barrier": 0,
+          "cooldowns": {}
+        }
+      ],
+      "enemies": [
+        {
+          "id": "f1",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "f2",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "b1",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "b2",
+          "hp": 9999,
+          "markedUntil": 0
+        }
+      ],
+      "intent": {
+        "sourceId": "f1",
+        "targetSlot": 0,
+        "name": "QA announced attack",
+        "damage": 1,
+        "kind": "energy",
+        "targetId": "mira",
+        "beat": 1,
+        "round": 1
+      },
+      "commands": []
+    },
+    "after": {
+      "encounterId": "veil-siege",
+      "beat": 1,
+      "round": 1,
+      "turnIndex": 0,
+      "order": [
+        "mira",
+        "f1",
+        "f2",
+        "b1",
+        "b2",
+        "guardian",
+        "tracer",
+        "weaver"
+      ],
+      "outcome": "active",
+      "guard": null,
+      "counter": null,
+      "taunt": null,
+      "song": null,
+      "heroes": [
+        {
+          "id": "mira",
+          "hp": 50,
+          "barrier": 0,
+          "cooldowns": {
+            "weakshot": 3
+          }
+        },
+        {
+          "id": "guardian",
+          "hp": 76,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "tracer",
+          "hp": 56,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "weaver",
+          "hp": 48,
+          "barrier": 0,
+          "cooldowns": {}
+        }
+      ],
+      "enemies": [
+        {
+          "id": "f1",
+          "hp": 9983,
+          "markedUntil": 0
+        },
+        {
+          "id": "f2",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "b1",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "b2",
+          "hp": 9999,
+          "markedUntil": 0
+        }
+      ],
+      "intent": {
+        "sourceId": "f1",
+        "targetSlot": 0,
+        "name": "QA announced attack",
+        "damage": 1,
+        "kind": "energy",
+        "targetId": "mira",
+        "beat": 1,
+        "round": 1
+      },
+      "commands": [
+        {
+          "beat": 1,
+          "heroId": "mira",
+          "action": "weakshot",
+          "targetId": "f1"
+        }
+      ]
+    },
+    "scenario": "base",
+    "skill": "weakshot",
+    "committed": [],
+    "canvas": {
+      "left": 6,
+      "top": 102,
+      "width": 378,
+      "height": 557
+    }
+  },
+  "pin-base": {
+    "source": {
+      "id": "mira",
+      "x": 49.470001220703125,
+      "y": 232.72,
+      "footY": 286,
+      "size": 111,
+      "releaseX": 89.43000122070313,
+      "releaseY": 190.54000000000002
+    },
+    "targets": [
+      {
+        "id": "f1",
+        "x": 244.13999938964844,
+        "y": 206.32,
+        "footY": 286,
+        "size": 166,
+        "releaseX": 244.13999938964844,
+        "releaseY": 143.24
+      },
+      {
+        "id": "f2",
+        "x": 244.13999938964844,
+        "y": 540.3199999999999,
+        "footY": 620,
+        "size": 166,
+        "releaseX": 244.13999938964844,
+        "releaseY": 477.24
+      }
+    ],
+    "units": [
+      {
+        "id": "mira",
+        "x": 49.470001220703125,
+        "y": 232.72,
+        "footY": 286,
+        "size": 111,
+        "releaseX": 89.43000122070313,
+        "releaseY": 190.54000000000002
+      },
+      {
+        "id": "guardian",
+        "x": 145.86000061035156,
+        "y": 232.72,
+        "footY": 286,
+        "size": 111,
+        "releaseX": 145.86000061035156,
+        "releaseY": 190.54000000000002
+      },
+      {
+        "id": "tracer",
+        "x": 145.86000061035156,
+        "y": 566.72,
+        "footY": 620,
+        "size": 111,
+        "releaseX": 145.86000061035156,
+        "releaseY": 524.54
+      },
+      {
+        "id": "weaver",
+        "x": 49.470001220703125,
+        "y": 566.72,
+        "footY": 620,
+        "size": 111,
+        "releaseX": 49.470001220703125,
+        "releaseY": 524.54
+      },
+      {
+        "id": "f1",
+        "x": 244.13999938964844,
+        "y": 206.32,
+        "footY": 286,
+        "size": 166,
+        "releaseX": 244.13999938964844,
+        "releaseY": 143.24
+      },
+      {
+        "id": "f2",
+        "x": 244.13999938964844,
+        "y": 540.3199999999999,
+        "footY": 620,
+        "size": 166,
+        "releaseX": 244.13999938964844,
+        "releaseY": 477.24
+      },
+      {
+        "id": "b1",
+        "x": 340.5299987792969,
+        "y": 232.72,
+        "footY": 286,
+        "size": 111,
+        "releaseX": 340.5299987792969,
+        "releaseY": 190.54000000000002
+      },
+      {
+        "id": "b2",
+        "x": 340.5299987792969,
+        "y": 566.72,
+        "footY": 620,
+        "size": 111,
+        "releaseX": 340.5299987792969,
+        "releaseY": 524.54
+      }
+    ],
+    "events": [
+      {
+        "type": "damage",
+        "sourceId": "mira",
+        "targetId": "f1",
+        "amount": 8,
+        "text": "The volley pins the front row."
+      },
+      {
+        "type": "damage",
+        "sourceId": "mira",
+        "targetId": "f2",
+        "amount": 8,
+        "text": "The volley pins the front row."
+      },
+      {
+        "type": "pin",
+        "sourceId": "mira",
+        "targetId": "mira",
+        "text": "The front row stops screening."
+      }
+    ],
+    "castEvents": [
+      {
+        "type": "damage",
+        "sourceId": "mira",
+        "targetId": "f1",
+        "amount": 8,
+        "text": "The volley pins the front row."
+      },
+      {
+        "type": "damage",
+        "sourceId": "mira",
+        "targetId": "f2",
+        "amount": 8,
+        "text": "The volley pins the front row."
+      },
+      {
+        "type": "pin",
+        "sourceId": "mira",
+        "targetId": "mira",
+        "text": "The front row stops screening."
+      }
+    ],
+    "followup": [],
+    "prelude": [],
+    "command": {
+      "beat": 1,
+      "heroId": "mira",
+      "action": "pin",
+      "targetId": "enemies"
+    },
+    "before": {
+      "encounterId": "veil-siege",
+      "beat": 1,
+      "round": 1,
+      "turnIndex": 0,
+      "order": [
+        "mira",
+        "f1",
+        "f2",
+        "b1",
+        "b2",
+        "guardian",
+        "tracer",
+        "weaver"
+      ],
+      "outcome": "active",
+      "guard": null,
+      "counter": null,
+      "taunt": null,
+      "song": null,
+      "heroes": [
+        {
+          "id": "mira",
+          "hp": 50,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "guardian",
+          "hp": 76,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "tracer",
+          "hp": 56,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "weaver",
+          "hp": 48,
+          "barrier": 0,
+          "cooldowns": {}
+        }
+      ],
+      "enemies": [
+        {
+          "id": "f1",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "f2",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "b1",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "b2",
+          "hp": 9999,
+          "markedUntil": 0
+        }
+      ],
+      "intent": {
+        "sourceId": "f1",
+        "targetSlot": 0,
+        "name": "QA announced attack",
+        "damage": 1,
+        "kind": "energy",
+        "targetId": "mira",
+        "beat": 1,
+        "round": 1
+      },
+      "commands": []
+    },
+    "after": {
+      "encounterId": "veil-siege",
+      "beat": 1,
+      "round": 1,
+      "turnIndex": 0,
+      "order": [
+        "mira",
+        "f1",
+        "f2",
+        "b1",
+        "b2",
+        "guardian",
+        "tracer",
+        "weaver"
+      ],
+      "outcome": "active",
+      "guard": null,
+      "counter": null,
+      "taunt": null,
+      "song": null,
+      "heroes": [
+        {
+          "id": "mira",
+          "hp": 50,
+          "barrier": 0,
+          "cooldowns": {
+            "pin": 5
+          }
+        },
+        {
+          "id": "guardian",
+          "hp": 76,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "tracer",
+          "hp": 56,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "weaver",
+          "hp": 48,
+          "barrier": 0,
+          "cooldowns": {}
+        }
+      ],
+      "enemies": [
+        {
+          "id": "f1",
+          "hp": 9991,
+          "markedUntil": 0
+        },
+        {
+          "id": "f2",
+          "hp": 9991,
+          "markedUntil": 0
+        },
+        {
+          "id": "b1",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "b2",
+          "hp": 9999,
+          "markedUntil": 0
+        }
+      ],
+      "intent": {
+        "sourceId": "f1",
+        "targetSlot": 0,
+        "name": "QA announced attack",
+        "damage": 1,
+        "kind": "energy",
+        "targetId": "mira",
+        "beat": 1,
+        "round": 1
+      },
+      "commands": [
+        {
+          "beat": 1,
+          "heroId": "mira",
+          "action": "pin",
+          "targetId": "enemies"
+        }
+      ],
+      "pinned": 2
+    },
+    "scenario": "base",
+    "skill": "pin",
+    "committed": [],
+    "canvas": {
+      "left": 6,
+      "top": 102,
+      "width": 378,
+      "height": 557
+    }
+  },
+  "track-base": {
+    "source": {
+      "id": "mira",
+      "x": 49.470001220703125,
+      "y": 232.72,
+      "footY": 286,
+      "size": 111,
+      "releaseX": 89.43000122070313,
+      "releaseY": 190.54000000000002
+    },
+    "targets": [
+      {
+        "id": "f1",
+        "x": 244.13999938964844,
+        "y": 206.32,
+        "footY": 286,
+        "size": 166,
+        "releaseX": 244.13999938964844,
+        "releaseY": 143.24
+      }
+    ],
+    "units": [
+      {
+        "id": "mira",
+        "x": 49.470001220703125,
+        "y": 232.72,
+        "footY": 286,
+        "size": 111,
+        "releaseX": 89.43000122070313,
+        "releaseY": 190.54000000000002
+      },
+      {
+        "id": "guardian",
+        "x": 145.86000061035156,
+        "y": 232.72,
+        "footY": 286,
+        "size": 111,
+        "releaseX": 145.86000061035156,
+        "releaseY": 190.54000000000002
+      },
+      {
+        "id": "tracer",
+        "x": 145.86000061035156,
+        "y": 566.72,
+        "footY": 620,
+        "size": 111,
+        "releaseX": 145.86000061035156,
+        "releaseY": 524.54
+      },
+      {
+        "id": "weaver",
+        "x": 49.470001220703125,
+        "y": 566.72,
+        "footY": 620,
+        "size": 111,
+        "releaseX": 49.470001220703125,
+        "releaseY": 524.54
+      },
+      {
+        "id": "f1",
+        "x": 244.13999938964844,
+        "y": 206.32,
+        "footY": 286,
+        "size": 166,
+        "releaseX": 244.13999938964844,
+        "releaseY": 143.24
+      },
+      {
+        "id": "f2",
+        "x": 244.13999938964844,
+        "y": 540.3199999999999,
+        "footY": 620,
+        "size": 166,
+        "releaseX": 244.13999938964844,
+        "releaseY": 477.24
+      },
+      {
+        "id": "b1",
+        "x": 340.5299987792969,
+        "y": 232.72,
+        "footY": 286,
+        "size": 111,
+        "releaseX": 340.5299987792969,
+        "releaseY": 190.54000000000002
+      },
+      {
+        "id": "b2",
+        "x": 340.5299987792969,
+        "y": 566.72,
+        "footY": 620,
+        "size": 111,
+        "releaseX": 340.5299987792969,
+        "releaseY": 524.54
+      }
+    ],
+    "events": [
+      {
+        "type": "damage",
+        "sourceId": "mira",
+        "targetId": "f1",
+        "amount": 10,
+        "text": "Hero attacks."
+      }
+    ],
+    "castEvents": [
+      {
+        "type": "damage",
+        "sourceId": "mira",
+        "targetId": "f1",
+        "amount": 10,
+        "text": "Hero attacks."
+      }
+    ],
+    "followup": [],
+    "prelude": [],
+    "command": {
+      "beat": 1,
+      "heroId": "mira",
+      "action": "track",
+      "targetId": "f1"
+    },
+    "before": {
+      "encounterId": "veil-siege",
+      "beat": 1,
+      "round": 1,
+      "turnIndex": 0,
+      "order": [
+        "mira",
+        "f1",
+        "f2",
+        "b1",
+        "b2",
+        "guardian",
+        "tracer",
+        "weaver"
+      ],
+      "outcome": "active",
+      "guard": null,
+      "counter": null,
+      "taunt": null,
+      "song": null,
+      "heroes": [
+        {
+          "id": "mira",
+          "hp": 50,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "guardian",
+          "hp": 76,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "tracer",
+          "hp": 56,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "weaver",
+          "hp": 48,
+          "barrier": 0,
+          "cooldowns": {}
+        }
+      ],
+      "enemies": [
+        {
+          "id": "f1",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "f2",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "b1",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "b2",
+          "hp": 9999,
+          "markedUntil": 0
+        }
+      ],
+      "intent": {
+        "sourceId": "f1",
+        "targetSlot": 0,
+        "name": "QA announced attack",
+        "damage": 1,
+        "kind": "energy",
+        "targetId": "mira",
+        "beat": 1,
+        "round": 1
+      },
+      "commands": []
+    },
+    "after": {
+      "encounterId": "veil-siege",
+      "beat": 1,
+      "round": 1,
+      "turnIndex": 0,
+      "order": [
+        "mira",
+        "f1",
+        "f2",
+        "b1",
+        "b2",
+        "guardian",
+        "tracer",
+        "weaver"
+      ],
+      "outcome": "active",
+      "guard": null,
+      "counter": null,
+      "taunt": null,
+      "song": null,
+      "heroes": [
+        {
+          "id": "mira",
+          "hp": 50,
+          "barrier": 0,
+          "cooldowns": {
+            "track": 4
+          }
+        },
+        {
+          "id": "guardian",
+          "hp": 76,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "tracer",
+          "hp": 56,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "weaver",
+          "hp": 48,
+          "barrier": 0,
+          "cooldowns": {}
+        }
+      ],
+      "enemies": [
+        {
+          "id": "f1",
+          "hp": 9989,
+          "markedUntil": 0
+        },
+        {
+          "id": "f2",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "b1",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "b2",
+          "hp": 9999,
+          "markedUntil": 0
+        }
+      ],
+      "intent": {
+        "sourceId": "f1",
+        "targetSlot": 0,
+        "name": "QA announced attack",
+        "damage": 1,
+        "kind": "energy",
+        "targetId": "mira",
+        "beat": 1,
+        "round": 1
+      },
+      "commands": [
+        {
+          "beat": 1,
+          "heroId": "mira",
+          "action": "track",
+          "targetId": "f1"
+        }
+      ]
+    },
+    "scenario": "base",
+    "skill": "track",
+    "committed": [],
+    "canvas": {
+      "left": 6,
+      "top": 102,
+      "width": 378,
+      "height": 557
+    }
+  },
+  "disengage-base": {
+    "source": {
+      "id": "mira",
+      "x": 49.470001220703125,
+      "y": 232.72,
+      "footY": 286,
+      "size": 111,
+      "releaseX": 89.43000122070313,
+      "releaseY": 190.54000000000002
+    },
+    "targets": [
+      {
+        "id": "f1",
+        "x": 244.13999938964844,
+        "y": 206.32,
+        "footY": 286,
+        "size": 166,
+        "releaseX": 244.13999938964844,
+        "releaseY": 143.24
+      }
+    ],
+    "units": [
+      {
+        "id": "mira",
+        "x": 49.470001220703125,
+        "y": 232.72,
+        "footY": 286,
+        "size": 111,
+        "releaseX": 89.43000122070313,
+        "releaseY": 190.54000000000002
+      },
+      {
+        "id": "guardian",
+        "x": 145.86000061035156,
+        "y": 232.72,
+        "footY": 286,
+        "size": 111,
+        "releaseX": 145.86000061035156,
+        "releaseY": 190.54000000000002
+      },
+      {
+        "id": "tracer",
+        "x": 145.86000061035156,
+        "y": 566.72,
+        "footY": 620,
+        "size": 111,
+        "releaseX": 145.86000061035156,
+        "releaseY": 524.54
+      },
+      {
+        "id": "weaver",
+        "x": 49.470001220703125,
+        "y": 566.72,
+        "footY": 620,
+        "size": 111,
+        "releaseX": 49.470001220703125,
+        "releaseY": 524.54
+      },
+      {
+        "id": "f1",
+        "x": 244.13999938964844,
+        "y": 206.32,
+        "footY": 286,
+        "size": 166,
+        "releaseX": 244.13999938964844,
+        "releaseY": 143.24
+      },
+      {
+        "id": "f2",
+        "x": 244.13999938964844,
+        "y": 540.3199999999999,
+        "footY": 620,
+        "size": 166,
+        "releaseX": 244.13999938964844,
+        "releaseY": 477.24
+      },
+      {
+        "id": "b1",
+        "x": 340.5299987792969,
+        "y": 232.72,
+        "footY": 286,
+        "size": 111,
+        "releaseX": 340.5299987792969,
+        "releaseY": 190.54000000000002
+      },
+      {
+        "id": "b2",
+        "x": 340.5299987792969,
+        "y": 566.72,
+        "footY": 620,
+        "size": 111,
+        "releaseX": 340.5299987792969,
+        "releaseY": 524.54
+      }
+    ],
+    "events": [
+      {
+        "type": "damage",
+        "sourceId": "mira",
+        "targetId": "f1",
+        "amount": 10,
+        "text": "Hero attacks."
+      },
+      {
+        "type": "delay",
+        "sourceId": "mira",
+        "targetId": "f1",
+        "text": "Enemy acts last this round."
+      }
+    ],
+    "castEvents": [
+      {
+        "type": "damage",
+        "sourceId": "mira",
+        "targetId": "f1",
+        "amount": 10,
+        "text": "Hero attacks."
+      },
+      {
+        "type": "delay",
+        "sourceId": "mira",
+        "targetId": "f1",
+        "text": "Enemy acts last this round."
+      }
+    ],
+    "followup": [],
+    "prelude": [],
+    "command": {
+      "beat": 1,
+      "heroId": "mira",
+      "action": "disengage",
+      "targetId": "f1"
+    },
+    "before": {
+      "encounterId": "veil-siege",
+      "beat": 1,
+      "round": 1,
+      "turnIndex": 0,
+      "order": [
+        "mira",
+        "f1",
+        "f2",
+        "b1",
+        "b2",
+        "guardian",
+        "tracer",
+        "weaver"
+      ],
+      "outcome": "active",
+      "guard": null,
+      "counter": null,
+      "taunt": null,
+      "song": null,
+      "heroes": [
+        {
+          "id": "mira",
+          "hp": 50,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "guardian",
+          "hp": 76,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "tracer",
+          "hp": 56,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "weaver",
+          "hp": 48,
+          "barrier": 0,
+          "cooldowns": {}
+        }
+      ],
+      "enemies": [
+        {
+          "id": "f1",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "f2",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "b1",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "b2",
+          "hp": 9999,
+          "markedUntil": 0
+        }
+      ],
+      "intent": {
+        "sourceId": "f1",
+        "targetSlot": 0,
+        "name": "QA announced attack",
+        "damage": 1,
+        "kind": "energy",
+        "targetId": "mira",
+        "beat": 1,
+        "round": 1
+      },
+      "commands": []
+    },
+    "after": {
+      "encounterId": "veil-siege",
+      "beat": 1,
+      "round": 1,
+      "turnIndex": 0,
+      "order": [
+        "mira",
+        "f2",
+        "b1",
+        "b2",
+        "guardian",
+        "tracer",
+        "weaver",
+        "f1"
+      ],
+      "outcome": "active",
+      "guard": null,
+      "counter": null,
+      "taunt": null,
+      "song": null,
+      "heroes": [
+        {
+          "id": "mira",
+          "hp": 50,
+          "barrier": 0,
+          "cooldowns": {
+            "disengage": 4
+          }
+        },
+        {
+          "id": "guardian",
+          "hp": 76,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "tracer",
+          "hp": 56,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "weaver",
+          "hp": 48,
+          "barrier": 0,
+          "cooldowns": {}
+        }
+      ],
+      "enemies": [
+        {
+          "id": "f1",
+          "hp": 9989,
+          "markedUntil": 0
+        },
+        {
+          "id": "f2",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "b1",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "b2",
+          "hp": 9999,
+          "markedUntil": 0
+        }
+      ],
+      "intent": {
+        "sourceId": "f1",
+        "targetSlot": 0,
+        "name": "QA announced attack",
+        "damage": 1,
+        "kind": "energy",
+        "targetId": "mira",
+        "beat": 1,
+        "round": 1
+      },
+      "commands": [
+        {
+          "beat": 1,
+          "heroId": "mira",
+          "action": "disengage",
+          "targetId": "f1"
+        }
+      ]
+    },
+    "scenario": "base",
+    "skill": "disengage",
+    "committed": [],
+    "canvas": {
+      "left": 6,
+      "top": 102,
+      "width": 378,
+      "height": 557
+    }
+  },
+  "knives-base": {
+    "source": {
+      "id": "sefa",
+      "x": 145.86000061035156,
+      "y": 232.72,
+      "footY": 286,
+      "size": 111,
+      "releaseX": 101.46000061035156,
+      "releaseY": 221.62
+    },
+    "targets": [
+      {
+        "id": "b1",
+        "x": 340.5299987792969,
+        "y": 232.72,
+        "footY": 286,
+        "size": 111,
+        "releaseX": 340.5299987792969,
+        "releaseY": 221.62
+      },
+      {
+        "id": "b2",
+        "x": 340.5299987792969,
+        "y": 566.72,
+        "footY": 620,
+        "size": 111,
+        "releaseX": 340.5299987792969,
+        "releaseY": 555.62
+      }
+    ],
+    "units": [
+      {
+        "id": "sefa",
+        "x": 145.86000061035156,
+        "y": 232.72,
+        "footY": 286,
+        "size": 111,
+        "releaseX": 101.46000061035156,
+        "releaseY": 221.62
+      },
+      {
+        "id": "guardian",
+        "x": 145.86000061035156,
+        "y": 399.72,
+        "footY": 453,
+        "size": 111,
+        "releaseX": 145.86000061035156,
+        "releaseY": 388.62
+      },
+      {
+        "id": "tracer",
+        "x": 145.86000061035156,
+        "y": 566.72,
+        "footY": 620,
+        "size": 111,
+        "releaseX": 145.86000061035156,
+        "releaseY": 555.62
+      },
+      {
+        "id": "weaver",
+        "x": 49.470001220703125,
+        "y": 399.72,
+        "footY": 453,
+        "size": 111,
+        "releaseX": 49.470001220703125,
+        "releaseY": 388.62
+      },
+      {
+        "id": "f1",
+        "x": 244.13999938964844,
+        "y": 206.32,
+        "footY": 286,
+        "size": 166,
+        "releaseX": 244.13999938964844,
+        "releaseY": 189.72000000000003
+      },
+      {
+        "id": "f2",
+        "x": 244.13999938964844,
+        "y": 540.3199999999999,
+        "footY": 620,
+        "size": 166,
+        "releaseX": 244.13999938964844,
+        "releaseY": 523.72
+      },
+      {
+        "id": "b1",
+        "x": 340.5299987792969,
+        "y": 232.72,
+        "footY": 286,
+        "size": 111,
+        "releaseX": 340.5299987792969,
+        "releaseY": 221.62
+      },
+      {
+        "id": "b2",
+        "x": 340.5299987792969,
+        "y": 566.72,
+        "footY": 620,
+        "size": 111,
+        "releaseX": 340.5299987792969,
+        "releaseY": 555.62
+      }
+    ],
+    "events": [
+      {
+        "type": "damage",
+        "sourceId": "sefa",
+        "targetId": "b1",
+        "amount": 8,
+        "text": "Throwing knives."
+      },
+      {
+        "type": "damage",
+        "sourceId": "sefa",
+        "targetId": "b2",
+        "amount": 8,
+        "text": "Throwing knives."
+      }
+    ],
+    "castEvents": [
+      {
+        "type": "damage",
+        "sourceId": "sefa",
+        "targetId": "b1",
+        "amount": 8,
+        "text": "Throwing knives."
+      },
+      {
+        "type": "damage",
+        "sourceId": "sefa",
+        "targetId": "b2",
+        "amount": 8,
+        "text": "Throwing knives."
+      }
+    ],
+    "followup": [],
+    "prelude": [],
+    "command": {
+      "beat": 1,
+      "heroId": "sefa",
+      "action": "knives",
+      "targetId": "enemies"
+    },
+    "before": {
+      "encounterId": "veil-siege",
+      "beat": 1,
+      "round": 1,
+      "turnIndex": 0,
+      "order": [
+        "sefa",
+        "f1",
+        "f2",
+        "b1",
+        "b2",
+        "guardian",
+        "tracer",
+        "weaver"
+      ],
+      "outcome": "active",
+      "guard": null,
+      "counter": null,
+      "taunt": null,
+      "song": null,
+      "heroes": [
+        {
+          "id": "sefa",
+          "hp": 54,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "guardian",
+          "hp": 76,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "tracer",
+          "hp": 56,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "weaver",
+          "hp": 48,
+          "barrier": 0,
+          "cooldowns": {}
+        }
+      ],
+      "enemies": [
+        {
+          "id": "f1",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "f2",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "b1",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "b2",
+          "hp": 9999,
+          "markedUntil": 0
+        }
+      ],
+      "intent": {
+        "sourceId": "f1",
+        "targetSlot": 0,
+        "name": "QA announced attack",
+        "damage": 1,
+        "kind": "energy",
+        "targetId": "sefa",
+        "beat": 1,
+        "round": 1
+      },
+      "commands": []
+    },
+    "after": {
+      "encounterId": "veil-siege",
+      "beat": 1,
+      "round": 1,
+      "turnIndex": 0,
+      "order": [
+        "sefa",
+        "f1",
+        "f2",
+        "b1",
+        "b2",
+        "guardian",
+        "tracer",
+        "weaver"
+      ],
+      "outcome": "active",
+      "guard": null,
+      "counter": null,
+      "taunt": null,
+      "song": null,
+      "heroes": [
+        {
+          "id": "sefa",
+          "hp": 54,
+          "barrier": 0,
+          "cooldowns": {
+            "knives": 4
+          }
+        },
+        {
+          "id": "guardian",
+          "hp": 76,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "tracer",
+          "hp": 56,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "weaver",
+          "hp": 48,
+          "barrier": 0,
+          "cooldowns": {}
+        }
+      ],
+      "enemies": [
+        {
+          "id": "f1",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "f2",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "b1",
+          "hp": 9991,
+          "markedUntil": 0
+        },
+        {
+          "id": "b2",
+          "hp": 9991,
+          "markedUntil": 0
+        }
+      ],
+      "intent": {
+        "sourceId": "f1",
+        "targetSlot": 0,
+        "name": "QA announced attack",
+        "damage": 1,
+        "kind": "energy",
+        "targetId": "sefa",
+        "beat": 1,
+        "round": 1
+      },
+      "commands": [
+        {
+          "beat": 1,
+          "heroId": "sefa",
+          "action": "knives",
+          "targetId": "enemies"
+        }
+      ]
+    },
+    "scenario": "base",
+    "skill": "knives",
+    "committed": [],
+    "canvas": {
+      "left": 6,
+      "top": 102,
+      "width": 378,
+      "height": 557
+    }
+  },
+  "track-delayed": {
+    "source": {
+      "id": "mira",
+      "x": 49.470001220703125,
+      "y": 232.72,
+      "footY": 286,
+      "size": 111,
+      "releaseX": 89.43000122070313,
+      "releaseY": 190.54000000000002
+    },
+    "targets": [
+      {
+        "id": "f1",
+        "x": 244.13999938964844,
+        "y": 206.32,
+        "footY": 286,
+        "size": 166,
+        "releaseX": 244.13999938964844,
+        "releaseY": 143.24
+      }
+    ],
+    "units": [
+      {
+        "id": "guardian",
+        "x": 145.86000061035156,
+        "y": 232.72,
+        "footY": 286,
+        "size": 111,
+        "releaseX": 145.86000061035156,
+        "releaseY": 190.54000000000002
+      },
+      {
+        "id": "mira",
+        "x": 49.470001220703125,
+        "y": 232.72,
+        "footY": 286,
+        "size": 111,
+        "releaseX": 89.43000122070313,
+        "releaseY": 190.54000000000002
+      },
+      {
+        "id": "tracer",
+        "x": 145.86000061035156,
+        "y": 566.72,
+        "footY": 620,
+        "size": 111,
+        "releaseX": 145.86000061035156,
+        "releaseY": 524.54
+      },
+      {
+        "id": "weaver",
+        "x": 49.470001220703125,
+        "y": 566.72,
+        "footY": 620,
+        "size": 111,
+        "releaseX": 49.470001220703125,
+        "releaseY": 524.54
+      },
+      {
+        "id": "f1",
+        "x": 244.13999938964844,
+        "y": 206.32,
+        "footY": 286,
+        "size": 166,
+        "releaseX": 244.13999938964844,
+        "releaseY": 143.24
+      },
+      {
+        "id": "f2",
+        "x": 244.13999938964844,
+        "y": 540.3199999999999,
+        "footY": 620,
+        "size": 166,
+        "releaseX": 244.13999938964844,
+        "releaseY": 477.24
+      },
+      {
+        "id": "b1",
+        "x": 340.5299987792969,
+        "y": 232.72,
+        "footY": 286,
+        "size": 111,
+        "releaseX": 340.5299987792969,
+        "releaseY": 190.54000000000002
+      },
+      {
+        "id": "b2",
+        "x": 340.5299987792969,
+        "y": 566.72,
+        "footY": 620,
+        "size": 111,
+        "releaseX": 340.5299987792969,
+        "releaseY": 524.54
+      }
+    ],
+    "events": [
+      {
+        "type": "damage",
+        "sourceId": "mira",
+        "targetId": "f1",
+        "amount": 10,
+        "text": "Hero attacks."
+      }
+    ],
+    "castEvents": [
+      {
+        "type": "damage",
+        "sourceId": "mira",
+        "targetId": "f1",
+        "amount": 10,
+        "text": "Hero attacks."
+      }
+    ],
+    "followup": [
+      {
+        "type": "counter",
+        "sourceId": "mira",
+        "targetId": "f1",
+        "amount": 10,
+        "text": "Tracking shot."
+      }
+    ],
+    "prelude": [
+      {
+        "beat": 1,
+        "heroId": "guardian",
+        "action": "hinder",
+        "targetId": "f1"
+      }
+    ],
+    "command": {
+      "beat": 2,
+      "heroId": "mira",
+      "action": "track",
+      "targetId": "f1"
+    },
+    "before": {
+      "encounterId": "veil-siege",
+      "beat": 2,
+      "round": 1,
+      "turnIndex": 1,
+      "order": [
+        "guardian",
+        "mira",
+        "f1",
+        "f2",
+        "b1",
+        "b2",
+        "tracer",
+        "weaver"
+      ],
+      "outcome": "active",
+      "guard": null,
+      "counter": null,
+      "taunt": null,
+      "song": null,
+      "heroes": [
+        {
+          "id": "guardian",
+          "hp": 76,
+          "barrier": 0,
+          "cooldowns": {
+            "hinder": 3
+          }
+        },
+        {
+          "id": "mira",
+          "hp": 50,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "tracer",
+          "hp": 56,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "weaver",
+          "hp": 48,
+          "barrier": 0,
+          "cooldowns": {}
+        }
+      ],
+      "enemies": [
+        {
+          "id": "f1",
+          "hp": 9987,
+          "markedUntil": 0,
+          "delayedRound": 2
+        },
+        {
+          "id": "f2",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "b1",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "b2",
+          "hp": 9999,
+          "markedUntil": 0
+        }
+      ],
+      "intent": {
+        "sourceId": "f1",
+        "targetSlot": 0,
+        "name": "QA announced attack",
+        "damage": 1,
+        "kind": "energy",
+        "targetId": "guardian",
+        "beat": 2,
+        "round": 1
+      },
+      "commands": [
+        {
+          "beat": 1,
+          "heroId": "guardian",
+          "action": "hinder",
+          "targetId": "f1"
+        }
+      ]
+    },
+    "after": {
+      "encounterId": "veil-siege",
+      "beat": 2,
+      "round": 1,
+      "turnIndex": 1,
+      "order": [
+        "guardian",
+        "mira",
+        "f1",
+        "f2",
+        "b1",
+        "b2",
+        "tracer",
+        "weaver"
+      ],
+      "outcome": "active",
+      "guard": null,
+      "counter": null,
+      "taunt": null,
+      "song": null,
+      "heroes": [
+        {
+          "id": "guardian",
+          "hp": 76,
+          "barrier": 0,
+          "cooldowns": {
+            "hinder": 3
+          }
+        },
+        {
+          "id": "mira",
+          "hp": 50,
+          "barrier": 0,
+          "cooldowns": {
+            "track": 4
+          }
+        },
+        {
+          "id": "tracer",
+          "hp": 56,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "weaver",
+          "hp": 48,
+          "barrier": 0,
+          "cooldowns": {}
+        }
+      ],
+      "enemies": [
+        {
+          "id": "f1",
+          "hp": 9977,
+          "markedUntil": 0,
+          "delayedRound": 2
+        },
+        {
+          "id": "f2",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "b1",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "b2",
+          "hp": 9999,
+          "markedUntil": 0
+        }
+      ],
+      "intent": {
+        "sourceId": "f1",
+        "targetSlot": 0,
+        "name": "QA announced attack",
+        "damage": 1,
+        "kind": "energy",
+        "targetId": "guardian",
+        "beat": 2,
+        "round": 1
+      },
+      "commands": [
+        {
+          "beat": 1,
+          "heroId": "guardian",
+          "action": "hinder",
+          "targetId": "f1"
+        },
+        {
+          "beat": 2,
+          "heroId": "mira",
+          "action": "track",
+          "targetId": "f1"
+        }
+      ],
+      "tracking": [
+        {
+          "heroId": "mira",
+          "enemyId": "f1",
+          "round": 1,
+          "power": 10
+        }
+      ]
+    },
+    "scenario": "delayed",
+    "skill": "track",
+    "committed": [
+      {
+        "beat": 1,
+        "heroId": "guardian",
+        "action": "hinder",
+        "targetId": "f1"
+      }
+    ],
+    "canvas": {
+      "left": 6,
+      "top": 102,
+      "width": 378,
+      "height": 557
+    }
+  },
+  "track-followup": {
+    "source": {
+      "id": "mira",
+      "x": 49.470001220703125,
+      "y": 232.72,
+      "footY": 286,
+      "size": 111,
+      "releaseX": 89.43000122070313,
+      "releaseY": 190.54000000000002
+    },
+    "targets": [
+      {
+        "id": "f1",
+        "x": 244.13999938964844,
+        "y": 206.32,
+        "footY": 286,
+        "size": 166,
+        "releaseX": 244.13999938964844,
+        "releaseY": 143.24
+      }
+    ],
+    "units": [
+      {
+        "id": "guardian",
+        "x": 145.86000061035156,
+        "y": 232.72,
+        "footY": 286,
+        "size": 111,
+        "releaseX": 145.86000061035156,
+        "releaseY": 190.54000000000002
+      },
+      {
+        "id": "mira",
+        "x": 49.470001220703125,
+        "y": 232.72,
+        "footY": 286,
+        "size": 111,
+        "releaseX": 89.43000122070313,
+        "releaseY": 190.54000000000002
+      },
+      {
+        "id": "tracer",
+        "x": 145.86000061035156,
+        "y": 566.72,
+        "footY": 620,
+        "size": 111,
+        "releaseX": 145.86000061035156,
+        "releaseY": 524.54
+      },
+      {
+        "id": "weaver",
+        "x": 49.470001220703125,
+        "y": 566.72,
+        "footY": 620,
+        "size": 111,
+        "releaseX": 49.470001220703125,
+        "releaseY": 524.54
+      },
+      {
+        "id": "f1",
+        "x": 244.13999938964844,
+        "y": 206.32,
+        "footY": 286,
+        "size": 166,
+        "releaseX": 244.13999938964844,
+        "releaseY": 143.24
+      },
+      {
+        "id": "f2",
+        "x": 244.13999938964844,
+        "y": 540.3199999999999,
+        "footY": 620,
+        "size": 166,
+        "releaseX": 244.13999938964844,
+        "releaseY": 477.24
+      },
+      {
+        "id": "b1",
+        "x": 340.5299987792969,
+        "y": 232.72,
+        "footY": 286,
+        "size": 111,
+        "releaseX": 340.5299987792969,
+        "releaseY": 190.54000000000002
+      },
+      {
+        "id": "b2",
+        "x": 340.5299987792969,
+        "y": 566.72,
+        "footY": 620,
+        "size": 111,
+        "releaseX": 340.5299987792969,
+        "releaseY": 524.54
+      }
+    ],
+    "events": [
+      {
+        "type": "counter",
+        "sourceId": "mira",
+        "targetId": "f1",
+        "amount": 10,
+        "text": "Tracking shot."
+      }
+    ],
+    "castEvents": [
+      {
+        "type": "damage",
+        "sourceId": "mira",
+        "targetId": "f1",
+        "amount": 10,
+        "text": "Hero attacks."
+      }
+    ],
+    "followup": [
+      {
+        "type": "counter",
+        "sourceId": "mira",
+        "targetId": "f1",
+        "amount": 10,
+        "text": "Tracking shot."
+      }
+    ],
+    "prelude": [
+      {
+        "beat": 1,
+        "heroId": "guardian",
+        "action": "hinder",
+        "targetId": "f1"
+      }
+    ],
+    "command": {
+      "beat": 2,
+      "heroId": "mira",
+      "action": "track",
+      "targetId": "f1"
+    },
+    "before": {
+      "encounterId": "veil-siege",
+      "beat": 2,
+      "round": 1,
+      "turnIndex": 1,
+      "order": [
+        "guardian",
+        "mira",
+        "f1",
+        "f2",
+        "b1",
+        "b2",
+        "tracer",
+        "weaver"
+      ],
+      "outcome": "active",
+      "guard": null,
+      "counter": null,
+      "taunt": null,
+      "song": null,
+      "heroes": [
+        {
+          "id": "guardian",
+          "hp": 76,
+          "barrier": 0,
+          "cooldowns": {
+            "hinder": 3
+          }
+        },
+        {
+          "id": "mira",
+          "hp": 50,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "tracer",
+          "hp": 56,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "weaver",
+          "hp": 48,
+          "barrier": 0,
+          "cooldowns": {}
+        }
+      ],
+      "enemies": [
+        {
+          "id": "f1",
+          "hp": 9987,
+          "markedUntil": 0,
+          "delayedRound": 2
+        },
+        {
+          "id": "f2",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "b1",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "b2",
+          "hp": 9999,
+          "markedUntil": 0
+        }
+      ],
+      "intent": {
+        "sourceId": "f1",
+        "targetSlot": 0,
+        "name": "QA announced attack",
+        "damage": 1,
+        "kind": "energy",
+        "targetId": "guardian",
+        "beat": 2,
+        "round": 1
+      },
+      "commands": [
+        {
+          "beat": 1,
+          "heroId": "guardian",
+          "action": "hinder",
+          "targetId": "f1"
+        }
+      ]
+    },
+    "after": {
+      "encounterId": "veil-siege",
+      "beat": 2,
+      "round": 1,
+      "turnIndex": 1,
+      "order": [
+        "guardian",
+        "mira",
+        "f1",
+        "f2",
+        "b1",
+        "b2",
+        "tracer",
+        "weaver"
+      ],
+      "outcome": "active",
+      "guard": null,
+      "counter": null,
+      "taunt": null,
+      "song": null,
+      "heroes": [
+        {
+          "id": "guardian",
+          "hp": 76,
+          "barrier": 0,
+          "cooldowns": {
+            "hinder": 3
+          }
+        },
+        {
+          "id": "mira",
+          "hp": 50,
+          "barrier": 0,
+          "cooldowns": {
+            "track": 4
+          }
+        },
+        {
+          "id": "tracer",
+          "hp": 56,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "weaver",
+          "hp": 48,
+          "barrier": 0,
+          "cooldowns": {}
+        }
+      ],
+      "enemies": [
+        {
+          "id": "f1",
+          "hp": 9977,
+          "markedUntil": 0,
+          "delayedRound": 2
+        },
+        {
+          "id": "f2",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "b1",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "b2",
+          "hp": 9999,
+          "markedUntil": 0
+        }
+      ],
+      "intent": {
+        "sourceId": "f1",
+        "targetSlot": 0,
+        "name": "QA announced attack",
+        "damage": 1,
+        "kind": "energy",
+        "targetId": "guardian",
+        "beat": 2,
+        "round": 1
+      },
+      "commands": [
+        {
+          "beat": 1,
+          "heroId": "guardian",
+          "action": "hinder",
+          "targetId": "f1"
+        },
+        {
+          "beat": 2,
+          "heroId": "mira",
+          "action": "track",
+          "targetId": "f1"
+        }
+      ],
+      "tracking": [
+        {
+          "heroId": "mira",
+          "enemyId": "f1",
+          "round": 1,
+          "power": 10
+        }
+      ]
+    },
+    "scenario": "followup",
+    "skill": "track",
+    "committed": [
+      {
+        "beat": 1,
+        "heroId": "guardian",
+        "action": "hinder",
+        "targetId": "f1"
+      }
+    ],
+    "canvas": {
+      "left": 6,
+      "top": 102,
+      "width": 378,
+      "height": 557
+    }
+  },
+  "weakshot-delayed": {
+    "source": {
+      "id": "mira",
+      "x": 49.470001220703125,
+      "y": 232.72,
+      "footY": 286,
+      "size": 111,
+      "releaseX": 89.43000122070313,
+      "releaseY": 190.54000000000002
+    },
+    "targets": [
+      {
+        "id": "f1",
+        "x": 244.13999938964844,
+        "y": 206.32,
+        "footY": 286,
+        "size": 166,
+        "releaseX": 244.13999938964844,
+        "releaseY": 143.24
+      }
+    ],
+    "units": [
+      {
+        "id": "guardian",
+        "x": 145.86000061035156,
+        "y": 232.72,
+        "footY": 286,
+        "size": 111,
+        "releaseX": 145.86000061035156,
+        "releaseY": 190.54000000000002
+      },
+      {
+        "id": "mira",
+        "x": 49.470001220703125,
+        "y": 232.72,
+        "footY": 286,
+        "size": 111,
+        "releaseX": 89.43000122070313,
+        "releaseY": 190.54000000000002
+      },
+      {
+        "id": "tracer",
+        "x": 145.86000061035156,
+        "y": 566.72,
+        "footY": 620,
+        "size": 111,
+        "releaseX": 145.86000061035156,
+        "releaseY": 524.54
+      },
+      {
+        "id": "weaver",
+        "x": 49.470001220703125,
+        "y": 566.72,
+        "footY": 620,
+        "size": 111,
+        "releaseX": 49.470001220703125,
+        "releaseY": 524.54
+      },
+      {
+        "id": "f1",
+        "x": 244.13999938964844,
+        "y": 206.32,
+        "footY": 286,
+        "size": 166,
+        "releaseX": 244.13999938964844,
+        "releaseY": 143.24
+      },
+      {
+        "id": "f2",
+        "x": 244.13999938964844,
+        "y": 540.3199999999999,
+        "footY": 620,
+        "size": 166,
+        "releaseX": 244.13999938964844,
+        "releaseY": 477.24
+      },
+      {
+        "id": "b1",
+        "x": 340.5299987792969,
+        "y": 232.72,
+        "footY": 286,
+        "size": 111,
+        "releaseX": 340.5299987792969,
+        "releaseY": 190.54000000000002
+      },
+      {
+        "id": "b2",
+        "x": 340.5299987792969,
+        "y": 566.72,
+        "footY": 620,
+        "size": 111,
+        "releaseX": 340.5299987792969,
+        "releaseY": 524.54
+      }
+    ],
+    "events": [
+      {
+        "type": "damage",
+        "sourceId": "mira",
+        "targetId": "f1",
+        "amount": 28,
+        "text": "Hero attacks."
+      }
+    ],
+    "castEvents": [
+      {
+        "type": "damage",
+        "sourceId": "mira",
+        "targetId": "f1",
+        "amount": 28,
+        "text": "Hero attacks."
+      }
+    ],
+    "followup": [],
+    "prelude": [
+      {
+        "beat": 1,
+        "heroId": "guardian",
+        "action": "hinder",
+        "targetId": "f1"
+      }
+    ],
+    "command": {
+      "beat": 2,
+      "heroId": "mira",
+      "action": "weakshot",
+      "targetId": "f1"
+    },
+    "before": {
+      "encounterId": "veil-siege",
+      "beat": 2,
+      "round": 1,
+      "turnIndex": 1,
+      "order": [
+        "guardian",
+        "mira",
+        "f1",
+        "f2",
+        "b1",
+        "b2",
+        "tracer",
+        "weaver"
+      ],
+      "outcome": "active",
+      "guard": null,
+      "counter": null,
+      "taunt": null,
+      "song": null,
+      "heroes": [
+        {
+          "id": "guardian",
+          "hp": 76,
+          "barrier": 0,
+          "cooldowns": {
+            "hinder": 3
+          }
+        },
+        {
+          "id": "mira",
+          "hp": 50,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "tracer",
+          "hp": 56,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "weaver",
+          "hp": 48,
+          "barrier": 0,
+          "cooldowns": {}
+        }
+      ],
+      "enemies": [
+        {
+          "id": "f1",
+          "hp": 9987,
+          "markedUntil": 0,
+          "delayedRound": 2
+        },
+        {
+          "id": "f2",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "b1",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "b2",
+          "hp": 9999,
+          "markedUntil": 0
+        }
+      ],
+      "intent": {
+        "sourceId": "f1",
+        "targetSlot": 0,
+        "name": "QA announced attack",
+        "damage": 1,
+        "kind": "energy",
+        "targetId": "guardian",
+        "beat": 2,
+        "round": 1
+      },
+      "commands": [
+        {
+          "beat": 1,
+          "heroId": "guardian",
+          "action": "hinder",
+          "targetId": "f1"
+        }
+      ]
+    },
+    "after": {
+      "encounterId": "veil-siege",
+      "beat": 2,
+      "round": 1,
+      "turnIndex": 1,
+      "order": [
+        "guardian",
+        "mira",
+        "f1",
+        "f2",
+        "b1",
+        "b2",
+        "tracer",
+        "weaver"
+      ],
+      "outcome": "active",
+      "guard": null,
+      "counter": null,
+      "taunt": null,
+      "song": null,
+      "heroes": [
+        {
+          "id": "guardian",
+          "hp": 76,
+          "barrier": 0,
+          "cooldowns": {
+            "hinder": 3
+          }
+        },
+        {
+          "id": "mira",
+          "hp": 50,
+          "barrier": 0,
+          "cooldowns": {
+            "weakshot": 3
+          }
+        },
+        {
+          "id": "tracer",
+          "hp": 56,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "weaver",
+          "hp": 48,
+          "barrier": 0,
+          "cooldowns": {}
+        }
+      ],
+      "enemies": [
+        {
+          "id": "f1",
+          "hp": 9959,
+          "markedUntil": 0,
+          "delayedRound": 2
+        },
+        {
+          "id": "f2",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "b1",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "b2",
+          "hp": 9999,
+          "markedUntil": 0
+        }
+      ],
+      "intent": {
+        "sourceId": "f1",
+        "targetSlot": 0,
+        "name": "QA announced attack",
+        "damage": 1,
+        "kind": "energy",
+        "targetId": "guardian",
+        "beat": 2,
+        "round": 1
+      },
+      "commands": [
+        {
+          "beat": 1,
+          "heroId": "guardian",
+          "action": "hinder",
+          "targetId": "f1"
+        },
+        {
+          "beat": 2,
+          "heroId": "mira",
+          "action": "weakshot",
+          "targetId": "f1"
+        }
+      ]
+    },
+    "scenario": "delayed",
+    "skill": "weakshot",
+    "committed": [
+      {
+        "beat": 1,
+        "heroId": "guardian",
+        "action": "hinder",
+        "targetId": "f1"
+      }
+    ],
+    "canvas": {
+      "left": 6,
+      "top": 102,
+      "width": 378,
+      "height": 557
+    }
+  },
+  "knives-frontonly": {
+    "source": {
+      "id": "sefa",
+      "x": 145.86000061035156,
+      "y": 232.72,
+      "footY": 286,
+      "size": 111,
+      "releaseX": 101.46000061035156,
+      "releaseY": 221.62
+    },
+    "targets": [
+      {
+        "id": "f1",
+        "x": 244.13999938964844,
+        "y": 206.32,
+        "footY": 286,
+        "size": 166,
+        "releaseX": 244.13999938964844,
+        "releaseY": 189.72000000000003
+      },
+      {
+        "id": "f2",
+        "x": 244.13999938964844,
+        "y": 540.3199999999999,
+        "footY": 620,
+        "size": 166,
+        "releaseX": 244.13999938964844,
+        "releaseY": 523.72
+      }
+    ],
+    "units": [
+      {
+        "id": "sefa",
+        "x": 145.86000061035156,
+        "y": 232.72,
+        "footY": 286,
+        "size": 111,
+        "releaseX": 101.46000061035156,
+        "releaseY": 221.62
+      },
+      {
+        "id": "guardian",
+        "x": 145.86000061035156,
+        "y": 399.72,
+        "footY": 453,
+        "size": 111,
+        "releaseX": 145.86000061035156,
+        "releaseY": 388.62
+      },
+      {
+        "id": "tracer",
+        "x": 145.86000061035156,
+        "y": 566.72,
+        "footY": 620,
+        "size": 111,
+        "releaseX": 145.86000061035156,
+        "releaseY": 555.62
+      },
+      {
+        "id": "weaver",
+        "x": 49.470001220703125,
+        "y": 399.72,
+        "footY": 453,
+        "size": 111,
+        "releaseX": 49.470001220703125,
+        "releaseY": 388.62
+      },
+      {
+        "id": "f1",
+        "x": 244.13999938964844,
+        "y": 206.32,
+        "footY": 286,
+        "size": 166,
+        "releaseX": 244.13999938964844,
+        "releaseY": 189.72000000000003
+      },
+      {
+        "id": "f2",
+        "x": 244.13999938964844,
+        "y": 540.3199999999999,
+        "footY": 620,
+        "size": 166,
+        "releaseX": 244.13999938964844,
+        "releaseY": 523.72
+      }
+    ],
+    "events": [
+      {
+        "type": "damage",
+        "sourceId": "sefa",
+        "targetId": "f1",
+        "amount": 8,
+        "text": "Throwing knives."
+      },
+      {
+        "type": "damage",
+        "sourceId": "sefa",
+        "targetId": "f2",
+        "amount": 8,
+        "text": "Throwing knives."
+      }
+    ],
+    "castEvents": [
+      {
+        "type": "damage",
+        "sourceId": "sefa",
+        "targetId": "f1",
+        "amount": 8,
+        "text": "Throwing knives."
+      },
+      {
+        "type": "damage",
+        "sourceId": "sefa",
+        "targetId": "f2",
+        "amount": 8,
+        "text": "Throwing knives."
+      }
+    ],
+    "followup": [],
+    "prelude": [],
+    "command": {
+      "beat": 1,
+      "heroId": "sefa",
+      "action": "knives",
+      "targetId": "enemies"
+    },
+    "before": {
+      "encounterId": "veil-siege",
+      "beat": 1,
+      "round": 1,
+      "turnIndex": 0,
+      "order": [
+        "sefa",
+        "f1",
+        "f2",
+        "guardian",
+        "tracer",
+        "weaver"
+      ],
+      "outcome": "active",
+      "guard": null,
+      "counter": null,
+      "taunt": null,
+      "song": null,
+      "heroes": [
+        {
+          "id": "sefa",
+          "hp": 54,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "guardian",
+          "hp": 76,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "tracer",
+          "hp": 56,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "weaver",
+          "hp": 48,
+          "barrier": 0,
+          "cooldowns": {}
+        }
+      ],
+      "enemies": [
+        {
+          "id": "f1",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "f2",
+          "hp": 9999,
+          "markedUntil": 0
+        }
+      ],
+      "intent": {
+        "sourceId": "f1",
+        "targetSlot": 0,
+        "name": "QA announced attack",
+        "damage": 1,
+        "kind": "energy",
+        "targetId": "sefa",
+        "beat": 1,
+        "round": 1
+      },
+      "commands": []
+    },
+    "after": {
+      "encounterId": "veil-siege",
+      "beat": 1,
+      "round": 1,
+      "turnIndex": 0,
+      "order": [
+        "sefa",
+        "f1",
+        "f2",
+        "guardian",
+        "tracer",
+        "weaver"
+      ],
+      "outcome": "active",
+      "guard": null,
+      "counter": null,
+      "taunt": null,
+      "song": null,
+      "heroes": [
+        {
+          "id": "sefa",
+          "hp": 54,
+          "barrier": 0,
+          "cooldowns": {
+            "knives": 4
+          }
+        },
+        {
+          "id": "guardian",
+          "hp": 76,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "tracer",
+          "hp": 56,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "weaver",
+          "hp": 48,
+          "barrier": 0,
+          "cooldowns": {}
+        }
+      ],
+      "enemies": [
+        {
+          "id": "f1",
+          "hp": 9991,
+          "markedUntil": 0
+        },
+        {
+          "id": "f2",
+          "hp": 9991,
+          "markedUntil": 0
+        }
+      ],
+      "intent": {
+        "sourceId": "f1",
+        "targetSlot": 0,
+        "name": "QA announced attack",
+        "damage": 1,
+        "kind": "energy",
+        "targetId": "sefa",
+        "beat": 1,
+        "round": 1
+      },
+      "commands": [
+        {
+          "beat": 1,
+          "heroId": "sefa",
+          "action": "knives",
+          "targetId": "enemies"
+        }
+      ]
+    },
+    "scenario": "frontonly",
+    "skill": "knives",
+    "committed": [],
+    "canvas": {
+      "left": 6,
+      "top": 102,
+      "width": 378,
+      "height": 557
+    }
+  },
+  "knives-twin": {
+    "source": {
+      "id": "sefa",
+      "x": 145.86000061035156,
+      "y": 232.72,
+      "footY": 286,
+      "size": 111,
+      "releaseX": 101.46000061035156,
+      "releaseY": 221.62
+    },
+    "targets": [
+      {
+        "id": "b1",
+        "x": 340.5299987792969,
+        "y": 232.72,
+        "footY": 286,
+        "size": 111,
+        "releaseX": 340.5299987792969,
+        "releaseY": 221.62
+      },
+      {
+        "id": "b2",
+        "x": 340.5299987792969,
+        "y": 566.72,
+        "footY": 620,
+        "size": 111,
+        "releaseX": 340.5299987792969,
+        "releaseY": 555.62
+      },
+      {
+        "id": "f1",
+        "x": 244.13999938964844,
+        "y": 206.32,
+        "footY": 286,
+        "size": 166,
+        "releaseX": 244.13999938964844,
+        "releaseY": 189.72000000000003
+      },
+      {
+        "id": "f2",
+        "x": 244.13999938964844,
+        "y": 540.3199999999999,
+        "footY": 620,
+        "size": 166,
+        "releaseX": 244.13999938964844,
+        "releaseY": 523.72
+      }
+    ],
+    "units": [
+      {
+        "id": "sefa",
+        "x": 145.86000061035156,
+        "y": 232.72,
+        "footY": 286,
+        "size": 111,
+        "releaseX": 101.46000061035156,
+        "releaseY": 221.62
+      },
+      {
+        "id": "guardian",
+        "x": 145.86000061035156,
+        "y": 399.72,
+        "footY": 453,
+        "size": 111,
+        "releaseX": 145.86000061035156,
+        "releaseY": 388.62
+      },
+      {
+        "id": "tracer",
+        "x": 145.86000061035156,
+        "y": 566.72,
+        "footY": 620,
+        "size": 111,
+        "releaseX": 145.86000061035156,
+        "releaseY": 555.62
+      },
+      {
+        "id": "weaver",
+        "x": 49.470001220703125,
+        "y": 399.72,
+        "footY": 453,
+        "size": 111,
+        "releaseX": 49.470001220703125,
+        "releaseY": 388.62
+      },
+      {
+        "id": "f1",
+        "x": 244.13999938964844,
+        "y": 206.32,
+        "footY": 286,
+        "size": 166,
+        "releaseX": 244.13999938964844,
+        "releaseY": 189.72000000000003
+      },
+      {
+        "id": "f2",
+        "x": 244.13999938964844,
+        "y": 540.3199999999999,
+        "footY": 620,
+        "size": 166,
+        "releaseX": 244.13999938964844,
+        "releaseY": 523.72
+      },
+      {
+        "id": "b1",
+        "x": 340.5299987792969,
+        "y": 232.72,
+        "footY": 286,
+        "size": 111,
+        "releaseX": 340.5299987792969,
+        "releaseY": 221.62
+      },
+      {
+        "id": "b2",
+        "x": 340.5299987792969,
+        "y": 566.72,
+        "footY": 620,
+        "size": 111,
+        "releaseX": 340.5299987792969,
+        "releaseY": 555.62
+      }
+    ],
+    "events": [
+      {
+        "type": "damage",
+        "sourceId": "sefa",
+        "targetId": "b1",
+        "amount": 8,
+        "text": "Throwing knives."
+      },
+      {
+        "type": "damage",
+        "sourceId": "sefa",
+        "targetId": "b2",
+        "amount": 8,
+        "text": "Throwing knives."
+      },
+      {
+        "type": "damage",
+        "sourceId": "sefa",
+        "targetId": "f1",
+        "amount": 4,
+        "text": "Throwing knives."
+      },
+      {
+        "type": "damage",
+        "sourceId": "sefa",
+        "targetId": "f2",
+        "amount": 4,
+        "text": "Throwing knives."
+      }
+    ],
+    "castEvents": [
+      {
+        "type": "damage",
+        "sourceId": "sefa",
+        "targetId": "b1",
+        "amount": 8,
+        "text": "Throwing knives."
+      },
+      {
+        "type": "damage",
+        "sourceId": "sefa",
+        "targetId": "b2",
+        "amount": 8,
+        "text": "Throwing knives."
+      },
+      {
+        "type": "damage",
+        "sourceId": "sefa",
+        "targetId": "f1",
+        "amount": 4,
+        "text": "Throwing knives."
+      },
+      {
+        "type": "damage",
+        "sourceId": "sefa",
+        "targetId": "f2",
+        "amount": 4,
+        "text": "Throwing knives."
+      }
+    ],
+    "followup": [],
+    "prelude": [],
+    "command": {
+      "beat": 1,
+      "heroId": "sefa",
+      "action": "knives",
+      "targetId": "enemies"
+    },
+    "before": {
+      "encounterId": "veil-siege",
+      "beat": 1,
+      "round": 1,
+      "turnIndex": 0,
+      "order": [
+        "sefa",
+        "f1",
+        "f2",
+        "b1",
+        "b2",
+        "guardian",
+        "tracer",
+        "weaver"
+      ],
+      "outcome": "active",
+      "guard": null,
+      "counter": null,
+      "taunt": null,
+      "song": null,
+      "heroes": [
+        {
+          "id": "sefa",
+          "hp": 54,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "guardian",
+          "hp": 76,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "tracer",
+          "hp": 56,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "weaver",
+          "hp": 48,
+          "barrier": 0,
+          "cooldowns": {}
+        }
+      ],
+      "enemies": [
+        {
+          "id": "f1",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "f2",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "b1",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "b2",
+          "hp": 9999,
+          "markedUntil": 0
+        }
+      ],
+      "intent": {
+        "sourceId": "f1",
+        "targetSlot": 0,
+        "name": "QA announced attack",
+        "damage": 1,
+        "kind": "energy",
+        "targetId": "sefa",
+        "beat": 1,
+        "round": 1
+      },
+      "commands": []
+    },
+    "after": {
+      "encounterId": "veil-siege",
+      "beat": 1,
+      "round": 1,
+      "turnIndex": 0,
+      "order": [
+        "sefa",
+        "f1",
+        "f2",
+        "b1",
+        "b2",
+        "guardian",
+        "tracer",
+        "weaver"
+      ],
+      "outcome": "active",
+      "guard": null,
+      "counter": null,
+      "taunt": null,
+      "song": null,
+      "heroes": [
+        {
+          "id": "sefa",
+          "hp": 54,
+          "barrier": 0,
+          "cooldowns": {
+            "knives": 4
+          }
+        },
+        {
+          "id": "guardian",
+          "hp": 76,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "tracer",
+          "hp": 56,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "weaver",
+          "hp": 48,
+          "barrier": 0,
+          "cooldowns": {}
+        }
+      ],
+      "enemies": [
+        {
+          "id": "f1",
+          "hp": 9995,
+          "markedUntil": 0
+        },
+        {
+          "id": "f2",
+          "hp": 9995,
+          "markedUntil": 0
+        },
+        {
+          "id": "b1",
+          "hp": 9991,
+          "markedUntil": 0
+        },
+        {
+          "id": "b2",
+          "hp": 9991,
+          "markedUntil": 0
+        }
+      ],
+      "intent": {
+        "sourceId": "f1",
+        "targetSlot": 0,
+        "name": "QA announced attack",
+        "damage": 1,
+        "kind": "energy",
+        "targetId": "sefa",
+        "beat": 1,
+        "round": 1
+      },
+      "commands": [
+        {
+          "beat": 1,
+          "heroId": "sefa",
+          "action": "knives",
+          "targetId": "enemies"
+        }
+      ]
+    },
+    "scenario": "twin",
+    "skill": "knives",
+    "committed": [],
+    "canvas": {
+      "left": 6,
+      "top": 102,
+      "width": 378,
+      "height": 557
+    }
+  },
+  "volley-volleyhinder": {
+    "source": {
+      "id": "mira",
+      "x": 49.470001220703125,
+      "y": 232.72,
+      "footY": 286,
+      "size": 111,
+      "releaseX": 89.43000122070313,
+      "releaseY": 190.54000000000002
+    },
+    "targets": [
+      {
+        "id": "f1",
+        "x": 244.13999938964844,
+        "y": 206.32,
+        "footY": 286,
+        "size": 166,
+        "releaseX": 244.13999938964844,
+        "releaseY": 143.24
+      },
+      {
+        "id": "f2",
+        "x": 244.13999938964844,
+        "y": 540.3199999999999,
+        "footY": 620,
+        "size": 166,
+        "releaseX": 244.13999938964844,
+        "releaseY": 477.24
+      },
+      {
+        "id": "b1",
+        "x": 340.5299987792969,
+        "y": 232.72,
+        "footY": 286,
+        "size": 111,
+        "releaseX": 340.5299987792969,
+        "releaseY": 190.54000000000002
+      },
+      {
+        "id": "b2",
+        "x": 340.5299987792969,
+        "y": 566.72,
+        "footY": 620,
+        "size": 111,
+        "releaseX": 340.5299987792969,
+        "releaseY": 524.54
+      }
+    ],
+    "units": [
+      {
+        "id": "mira",
+        "x": 49.470001220703125,
+        "y": 232.72,
+        "footY": 286,
+        "size": 111,
+        "releaseX": 89.43000122070313,
+        "releaseY": 190.54000000000002
+      },
+      {
+        "id": "guardian",
+        "x": 145.86000061035156,
+        "y": 232.72,
+        "footY": 286,
+        "size": 111,
+        "releaseX": 145.86000061035156,
+        "releaseY": 190.54000000000002
+      },
+      {
+        "id": "tracer",
+        "x": 145.86000061035156,
+        "y": 566.72,
+        "footY": 620,
+        "size": 111,
+        "releaseX": 145.86000061035156,
+        "releaseY": 524.54
+      },
+      {
+        "id": "weaver",
+        "x": 49.470001220703125,
+        "y": 566.72,
+        "footY": 620,
+        "size": 111,
+        "releaseX": 49.470001220703125,
+        "releaseY": 524.54
+      },
+      {
+        "id": "f1",
+        "x": 244.13999938964844,
+        "y": 206.32,
+        "footY": 286,
+        "size": 166,
+        "releaseX": 244.13999938964844,
+        "releaseY": 143.24
+      },
+      {
+        "id": "f2",
+        "x": 244.13999938964844,
+        "y": 540.3199999999999,
+        "footY": 620,
+        "size": 166,
+        "releaseX": 244.13999938964844,
+        "releaseY": 477.24
+      },
+      {
+        "id": "b1",
+        "x": 340.5299987792969,
+        "y": 232.72,
+        "footY": 286,
+        "size": 111,
+        "releaseX": 340.5299987792969,
+        "releaseY": 190.54000000000002
+      },
+      {
+        "id": "b2",
+        "x": 340.5299987792969,
+        "y": 566.72,
+        "footY": 620,
+        "size": 111,
+        "releaseX": 340.5299987792969,
+        "releaseY": 524.54
+      }
+    ],
+    "events": [
+      {
+        "type": "damage",
+        "sourceId": "mira",
+        "targetId": "f1",
+        "amount": 10,
+        "text": "Volley hits every enemy."
+      },
+      {
+        "type": "damage",
+        "sourceId": "mira",
+        "targetId": "f2",
+        "amount": 10,
+        "text": "Volley hits every enemy."
+      },
+      {
+        "type": "damage",
+        "sourceId": "mira",
+        "targetId": "b1",
+        "amount": 10,
+        "text": "Volley hits every enemy."
+      },
+      {
+        "type": "damage",
+        "sourceId": "mira",
+        "targetId": "b2",
+        "amount": 10,
+        "text": "Volley hits every enemy."
+      },
+      {
+        "type": "delay",
+        "sourceId": "mira",
+        "targetId": "f1",
+        "text": "Enemy acts last next round."
+      }
+    ],
+    "castEvents": [
+      {
+        "type": "damage",
+        "sourceId": "mira",
+        "targetId": "f1",
+        "amount": 10,
+        "text": "Volley hits every enemy."
+      },
+      {
+        "type": "damage",
+        "sourceId": "mira",
+        "targetId": "f2",
+        "amount": 10,
+        "text": "Volley hits every enemy."
+      },
+      {
+        "type": "damage",
+        "sourceId": "mira",
+        "targetId": "b1",
+        "amount": 10,
+        "text": "Volley hits every enemy."
+      },
+      {
+        "type": "damage",
+        "sourceId": "mira",
+        "targetId": "b2",
+        "amount": 10,
+        "text": "Volley hits every enemy."
+      },
+      {
+        "type": "delay",
+        "sourceId": "mira",
+        "targetId": "f1",
+        "text": "Enemy acts last next round."
+      }
+    ],
+    "followup": [],
+    "prelude": [],
+    "command": {
+      "beat": 1,
+      "heroId": "mira",
+      "action": "volley",
+      "targetId": "enemies"
+    },
+    "before": {
+      "encounterId": "veil-siege",
+      "beat": 1,
+      "round": 1,
+      "turnIndex": 0,
+      "order": [
+        "mira",
+        "f1",
+        "f2",
+        "b1",
+        "b2",
+        "guardian",
+        "tracer",
+        "weaver"
+      ],
+      "outcome": "active",
+      "guard": null,
+      "counter": null,
+      "taunt": null,
+      "song": null,
+      "heroes": [
+        {
+          "id": "mira",
+          "hp": 50,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "guardian",
+          "hp": 76,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "tracer",
+          "hp": 56,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "weaver",
+          "hp": 48,
+          "barrier": 0,
+          "cooldowns": {}
+        }
+      ],
+      "enemies": [
+        {
+          "id": "f1",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "f2",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "b1",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "b2",
+          "hp": 9999,
+          "markedUntil": 0
+        }
+      ],
+      "intent": {
+        "sourceId": "f1",
+        "targetSlot": 0,
+        "name": "QA announced attack",
+        "damage": 1,
+        "kind": "energy",
+        "targetId": "mira",
+        "beat": 1,
+        "round": 1
+      },
+      "commands": []
+    },
+    "after": {
+      "encounterId": "veil-siege",
+      "beat": 1,
+      "round": 1,
+      "turnIndex": 0,
+      "order": [
+        "mira",
+        "f1",
+        "f2",
+        "b1",
+        "b2",
+        "guardian",
+        "tracer",
+        "weaver"
+      ],
+      "outcome": "active",
+      "guard": null,
+      "counter": null,
+      "taunt": null,
+      "song": null,
+      "heroes": [
+        {
+          "id": "mira",
+          "hp": 50,
+          "barrier": 0,
+          "cooldowns": {
+            "volley": 4
+          }
+        },
+        {
+          "id": "guardian",
+          "hp": 76,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "tracer",
+          "hp": 56,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "weaver",
+          "hp": 48,
+          "barrier": 0,
+          "cooldowns": {}
+        }
+      ],
+      "enemies": [
+        {
+          "id": "f1",
+          "hp": 9989,
+          "markedUntil": 0,
+          "delayedRound": 2
+        },
+        {
+          "id": "f2",
+          "hp": 9989,
+          "markedUntil": 0
+        },
+        {
+          "id": "b1",
+          "hp": 9989,
+          "markedUntil": 0
+        },
+        {
+          "id": "b2",
+          "hp": 9989,
+          "markedUntil": 0
+        }
+      ],
+      "intent": {
+        "sourceId": "f1",
+        "targetSlot": 0,
+        "name": "QA announced attack",
+        "damage": 1,
+        "kind": "energy",
+        "targetId": "mira",
+        "beat": 1,
+        "round": 1
+      },
+      "commands": [
+        {
+          "beat": 1,
+          "heroId": "mira",
+          "action": "volley",
+          "targetId": "enemies"
+        }
+      ]
+    },
+    "scenario": "volleyhinder",
+    "skill": "volley",
+    "committed": [],
+    "canvas": {
+      "left": 6,
+      "top": 102,
+      "width": 378,
+      "height": 557
+    }
+  },
+  "disengage-quickstep": {
+    "source": {
+      "id": "mira",
+      "x": 49.470001220703125,
+      "y": 232.72,
+      "footY": 286,
+      "size": 111,
+      "releaseX": 89.43000122070313,
+      "releaseY": 190.54000000000002
+    },
+    "targets": [
+      {
+        "id": "f1",
+        "x": 244.13999938964844,
+        "y": 206.32,
+        "footY": 286,
+        "size": 166,
+        "releaseX": 244.13999938964844,
+        "releaseY": 143.24
+      }
+    ],
+    "units": [
+      {
+        "id": "mira",
+        "x": 49.470001220703125,
+        "y": 232.72,
+        "footY": 286,
+        "size": 111,
+        "releaseX": 89.43000122070313,
+        "releaseY": 190.54000000000002
+      },
+      {
+        "id": "guardian",
+        "x": 145.86000061035156,
+        "y": 232.72,
+        "footY": 286,
+        "size": 111,
+        "releaseX": 145.86000061035156,
+        "releaseY": 190.54000000000002
+      },
+      {
+        "id": "tracer",
+        "x": 145.86000061035156,
+        "y": 566.72,
+        "footY": 620,
+        "size": 111,
+        "releaseX": 145.86000061035156,
+        "releaseY": 524.54
+      },
+      {
+        "id": "weaver",
+        "x": 49.470001220703125,
+        "y": 566.72,
+        "footY": 620,
+        "size": 111,
+        "releaseX": 49.470001220703125,
+        "releaseY": 524.54
+      },
+      {
+        "id": "f1",
+        "x": 244.13999938964844,
+        "y": 206.32,
+        "footY": 286,
+        "size": 166,
+        "releaseX": 244.13999938964844,
+        "releaseY": 143.24
+      },
+      {
+        "id": "f2",
+        "x": 244.13999938964844,
+        "y": 540.3199999999999,
+        "footY": 620,
+        "size": 166,
+        "releaseX": 244.13999938964844,
+        "releaseY": 477.24
+      },
+      {
+        "id": "b1",
+        "x": 340.5299987792969,
+        "y": 232.72,
+        "footY": 286,
+        "size": 111,
+        "releaseX": 340.5299987792969,
+        "releaseY": 190.54000000000002
+      },
+      {
+        "id": "b2",
+        "x": 340.5299987792969,
+        "y": 566.72,
+        "footY": 620,
+        "size": 111,
+        "releaseX": 340.5299987792969,
+        "releaseY": 524.54
+      }
+    ],
+    "events": [
+      {
+        "type": "damage",
+        "sourceId": "mira",
+        "targetId": "f1",
+        "amount": 10,
+        "text": "Hero attacks."
+      },
+      {
+        "type": "delay",
+        "sourceId": "mira",
+        "targetId": "f1",
+        "text": "Enemy acts last this round."
+      },
+      {
+        "type": "delay",
+        "sourceId": "mira",
+        "targetId": "f1",
+        "text": "Enemy acts last next round."
+      }
+    ],
+    "castEvents": [
+      {
+        "type": "damage",
+        "sourceId": "mira",
+        "targetId": "f1",
+        "amount": 10,
+        "text": "Hero attacks."
+      },
+      {
+        "type": "delay",
+        "sourceId": "mira",
+        "targetId": "f1",
+        "text": "Enemy acts last this round."
+      },
+      {
+        "type": "delay",
+        "sourceId": "mira",
+        "targetId": "f1",
+        "text": "Enemy acts last next round."
+      }
+    ],
+    "followup": [],
+    "prelude": [],
+    "command": {
+      "beat": 1,
+      "heroId": "mira",
+      "action": "disengage",
+      "targetId": "f1"
+    },
+    "before": {
+      "encounterId": "veil-siege",
+      "beat": 1,
+      "round": 1,
+      "turnIndex": 0,
+      "order": [
+        "mira",
+        "f1",
+        "f2",
+        "b1",
+        "b2",
+        "guardian",
+        "tracer",
+        "weaver"
+      ],
+      "outcome": "active",
+      "guard": null,
+      "counter": null,
+      "taunt": null,
+      "song": null,
+      "heroes": [
+        {
+          "id": "mira",
+          "hp": 50,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "guardian",
+          "hp": 76,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "tracer",
+          "hp": 56,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "weaver",
+          "hp": 48,
+          "barrier": 0,
+          "cooldowns": {}
+        }
+      ],
+      "enemies": [
+        {
+          "id": "f1",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "f2",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "b1",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "b2",
+          "hp": 9999,
+          "markedUntil": 0
+        }
+      ],
+      "intent": {
+        "sourceId": "f1",
+        "targetSlot": 0,
+        "name": "QA announced attack",
+        "damage": 1,
+        "kind": "energy",
+        "targetId": "mira",
+        "beat": 1,
+        "round": 1
+      },
+      "commands": []
+    },
+    "after": {
+      "encounterId": "veil-siege",
+      "beat": 1,
+      "round": 1,
+      "turnIndex": 0,
+      "order": [
+        "mira",
+        "f2",
+        "b1",
+        "b2",
+        "guardian",
+        "tracer",
+        "weaver",
+        "f1"
+      ],
+      "outcome": "active",
+      "guard": null,
+      "counter": null,
+      "taunt": null,
+      "song": null,
+      "heroes": [
+        {
+          "id": "mira",
+          "hp": 50,
+          "barrier": 0,
+          "cooldowns": {
+            "disengage": 4
+          }
+        },
+        {
+          "id": "guardian",
+          "hp": 76,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "tracer",
+          "hp": 56,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "weaver",
+          "hp": 48,
+          "barrier": 0,
+          "cooldowns": {}
+        }
+      ],
+      "enemies": [
+        {
+          "id": "f1",
+          "hp": 9989,
+          "markedUntil": 0,
+          "delayedRound": 2
+        },
+        {
+          "id": "f2",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "b1",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "b2",
+          "hp": 9999,
+          "markedUntil": 0
+        }
+      ],
+      "intent": {
+        "sourceId": "f1",
+        "targetSlot": 0,
+        "name": "QA announced attack",
+        "damage": 1,
+        "kind": "energy",
+        "targetId": "mira",
+        "beat": 1,
+        "round": 1
+      },
+      "commands": [
+        {
+          "beat": 1,
+          "heroId": "mira",
+          "action": "disengage",
+          "targetId": "f1"
+        }
+      ]
+    },
+    "scenario": "quickstep",
+    "skill": "disengage",
+    "committed": [],
+    "canvas": {
+      "left": 6,
+      "top": 102,
+      "width": 378,
+      "height": 557
+    }
+  }
+}

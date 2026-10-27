@@ -1,5 +1,11 @@
 # Fateweave — แผนพัฒนารวมจากเกมปัจจุบันสู่ระบบใหม่
 
+C5.4ส่งมอบ: [40คลิปruntime R1จริง390px](combat-presentation/projectile-slice/README_TH.md) ในPR84เดิม รอเจ้าของตรวจmotionก่อนmerge/เผยแพร่/ตระกูล5 ภาพR1เลือกแล้ว ตรวจ890unit/26focusedbrowser/40captureและdecodedPTS/countผ่าน ข้อความก่อนหน้าด้านล่างเป็นประวัติ ไม่มีrules/save/balance/playback timing diff
+
+C5.4ล่าสุด: เจ้าของเลือกR1แล้ว ต่อruntime7ท่าในPR84เดิม กำลังส่งคลิปจริงให้ตรวจmotionก่อนmerge/เผยแพร่/ตระกูล5 ตรวจ890unit/26focusedbrowserผ่าน ไม่เปลี่ยนrules/save/balance/playback timing ข้อความรอเลือกด้านล่างเป็นประวัติ
+
+สถานะล่าสุด C5.4: artwork R1ครบ7ท่า/3จังหวะ/14กรณีจริงบนฐาน8f00428 รอเจ้าของเลือกก่อนruntime ในbranch codex/vfx-family-4-projectile หนึ่งdraft PR ไม่merge/เผยแพร่/ตระกูล5ก่อนตรวจคลิปจริง [ภาพ/หลักฐาน](combat-presentation/projectile-storyboards/README_TH.md) ข้อความเตรียมhandoffด้านล่างเป็นประวัติ
+
 งานVFXถัดไป: ตระกูล4ลูกธนู/มีดบิน7ท่า [handoffแชตใหม่](handoffs/C5-FAMILY-4-PROJECTILE-HANDOFF-TH.md) พร้อมข้อความเปิดแชต เริ่มartwork3จังหวะให้เลือกก่อนruntime ยังไม่มีงานภาพ/runtimeตระกูล4ในแชตที่เตรียมhandoffนี้
 
 สถานะ VFX 27ต.ค.2026: ตระกูล2 merge/Pagesผ่านตามrelease proofแล้ว; ตระกูล3เจ้าของเลือกartwork R1แล้ว ต่อruntime6ท่าในatlas/moduleเดียว แยกBless/Mend cast/tick และRouse guard/all; ล่าสุดR2แก้แสงเบา/หางฟุ้ง/ยึดsoleของunitที่กำลังวาดจริงตามfeedbackเจ้าของ; [คลิปจริง/ผลตรวจ เจ้าของให้ผ่านR2แล้ว](combat-presentation/healing-slice/README_TH.md) ในbranch `codex/vfx-family-3-healing` / PR#78เดิม เจ้าของสั่ง “นำเข้าเกมได้” PR78 mergeแล้ว1cfe874หลังquality/browserผ่าน Pages40460582964เผยแพร่สำเร็จครบbuild+4browser shards+deploy [release proof](validation/healing-vfx-release/README_TH.md) ยังไม่เริ่มตระกูล4 ไม่เปลี่ยนbacklog P00–P11จากงานภาพนี้

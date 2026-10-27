@@ -1,0 +1,506 @@
+[
+  {
+    "key": "hinder-base",
+    "phase": 0,
+    "changedPixels": 448,
+    "bounds": [
+      59,
+      162,
+      120,
+      211
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "hinder-base",
+    "phase": 1,
+    "changedPixels": 1265,
+    "bounds": [
+      113,
+      124,
+      197,
+      166
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "hinder-base",
+    "phase": 2,
+    "changedPixels": 916,
+    "bounds": [
+      131,
+      122,
+      189,
+      161
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "volley-base",
+    "phase": 0,
+    "changedPixels": 913,
+    "bounds": [
+      75,
+      159,
+      126,
+      216
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "volley-base",
+    "phase": 1,
+    "changedPixels": 5318,
+    "bounds": [
+      125,
+      102,
+      267,
+      352
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "volley-base",
+    "phase": 2,
+    "changedPixels": 2006,
+    "bounds": [
+      139,
+      102,
+      239,
+      318
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "volley-volleyhinder",
+    "phase": 0,
+    "changedPixels": 913,
+    "bounds": [
+      75,
+      159,
+      126,
+      216
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "volley-volleyhinder",
+    "phase": 1,
+    "changedPixels": 5318,
+    "bounds": [
+      125,
+      102,
+      267,
+      352
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "volley-volleyhinder",
+    "phase": 2,
+    "changedPixels": 2006,
+    "bounds": [
+      139,
+      102,
+      239,
+      318
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "weakshot-base",
+    "phase": 0,
+    "changedPixels": 648,
+    "bounds": [
+      74,
+      168,
+      120,
+      211
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "weakshot-base",
+    "phase": 1,
+    "changedPixels": 985,
+    "bounds": [
+      111,
+      150,
+      176,
+      182
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "weakshot-base",
+    "phase": 2,
+    "changedPixels": 536,
+    "bounds": [
+      133,
+      146,
+      176,
+      183
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "weakshot-delayed",
+    "phase": 0,
+    "changedPixels": 648,
+    "bounds": [
+      74,
+      168,
+      120,
+      211
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "weakshot-delayed",
+    "phase": 1,
+    "changedPixels": 985,
+    "bounds": [
+      111,
+      150,
+      176,
+      182
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "weakshot-delayed",
+    "phase": 2,
+    "changedPixels": 536,
+    "bounds": [
+      133,
+      146,
+      176,
+      183
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "pin-base",
+    "phase": 0,
+    "changedPixels": 528,
+    "bounds": [
+      77,
+      165,
+      119,
+      209
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "pin-base",
+    "phase": 1,
+    "changedPixels": 2662,
+    "bounds": [
+      121,
+      105,
+      205,
+      355
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "pin-base",
+    "phase": 2,
+    "changedPixels": 2455,
+    "bounds": [
+      125,
+      107,
+      199,
+      332
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "track-base",
+    "phase": 0,
+    "changedPixels": 1210,
+    "bounds": [
+      57,
+      151,
+      131,
+      219
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "track-base",
+    "phase": 1,
+    "changedPixels": 1157,
+    "bounds": [
+      121,
+      119,
+      198,
+      157
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "track-base",
+    "phase": 2,
+    "changedPixels": 918,
+    "bounds": [
+      123,
+      122,
+      187,
+      160
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "track-delayed",
+    "phase": 0,
+    "changedPixels": 1210,
+    "bounds": [
+      57,
+      151,
+      131,
+      219
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "track-delayed",
+    "phase": 1,
+    "changedPixels": 1157,
+    "bounds": [
+      121,
+      119,
+      198,
+      157
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "track-delayed",
+    "phase": 2,
+    "changedPixels": 918,
+    "bounds": [
+      123,
+      122,
+      187,
+      160
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "track-followup",
+    "phase": 0,
+    "changedPixels": 1210,
+    "bounds": [
+      57,
+      151,
+      131,
+      219
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "track-followup",
+    "phase": 1,
+    "changedPixels": 1157,
+    "bounds": [
+      121,
+      119,
+      198,
+      157
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "track-followup",
+    "phase": 2,
+    "changedPixels": 918,
+    "bounds": [
+      123,
+      122,
+      187,
+      160
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "disengage-base",
+    "phase": 0,
+    "changedPixels": 573,
+    "bounds": [
+      62,
+      161,
+      117,
+      212
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "disengage-base",
+    "phase": 1,
+    "changedPixels": 847,
+    "bounds": [
+      117,
+      128,
+      192,
+      171
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "disengage-base",
+    "phase": 2,
+    "changedPixels": 850,
+    "bounds": [
+      122,
+      124,
+      187,
+      172
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "disengage-quickstep",
+    "phase": 0,
+    "changedPixels": 573,
+    "bounds": [
+      62,
+      161,
+      117,
+      212
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "disengage-quickstep",
+    "phase": 1,
+    "changedPixels": 847,
+    "bounds": [
+      117,
+      128,
+      192,
+      171
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "disengage-quickstep",
+    "phase": 2,
+    "changedPixels": 850,
+    "bounds": [
+      122,
+      124,
+      187,
+      172
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "knives-base",
+    "phase": 0,
+    "changedPixels": 352,
+    "bounds": [
+      69,
+      189,
+      116,
+      244
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "knives-base",
+    "phase": 1,
+    "changedPixels": 1028,
+    "bounds": [
+      130,
+      159,
+      250,
+      376
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "knives-base",
+    "phase": 2,
+    "changedPixels": 1426,
+    "bounds": [
+      126,
+      156,
+      260,
+      355
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "knives-frontonly",
+    "phase": 0,
+    "changedPixels": 352,
+    "bounds": [
+      69,
+      189,
+      116,
+      244
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "knives-frontonly",
+    "phase": 1,
+    "changedPixels": 1077,
+    "bounds": [
+      104,
+      133,
+      194,
+      361
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "knives-frontonly",
+    "phase": 2,
+    "changedPixels": 1377,
+    "bounds": [
+      99,
+      124,
+      198,
+      345
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "knives-twin",
+    "phase": 0,
+    "changedPixels": 352,
+    "bounds": [
+      69,
+      189,
+      116,
+      244
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "knives-twin",
+    "phase": 1,
+    "changedPixels": 2105,
+    "bounds": [
+      104,
+      133,
+      250,
+      376
+    ],
+    "costumePixelsChanged": 0
+  },
+  {
+    "key": "knives-twin",
+    "phase": 2,
+    "changedPixels": 2753,
+    "bounds": [
+      99,
+      124,
+      260,
+      355
+    ],
+    "costumePixelsChanged": 0
+  }
+]

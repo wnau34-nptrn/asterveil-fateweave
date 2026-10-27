@@ -1,0 +1,24 @@
+{
+  "artworkApproval": {
+    "dateBangkok": "2026-10-27",
+    "quote": "\u0e14\u0e33\u0e40\u0e19\u0e34\u0e19\u0e01\u0e32\u0e23\u0e02\u0e31\u0e49\u0e19\u0e15\u0e48\u0e2d\u0e44\u0e1b"
+  },
+  "runtimeApproval": "pending_owner_motion_review",
+  "pullRequest": 84,
+  "runtimeHead": "0353b8f8890673882d14e6875714b721b56174cb",
+  "srcTree": "327135df18facc6a359884fa54516025bb9d7aed",
+  "publicTree": "65bd6995354109f935fa0f875ce4fc19cf2f59c6",
+  "atlasSha256": "d9a46b5189187cd779b4ee5ad2b2520fe4533a9d160f017796fe1e880bcc169d",
+  "resolverStateEqualityVerifiedInCapture": true,
+  "clips": 40,
+  "rawFrames": 5479,
+  "largestCapturedFrameGapMs": 367.0,
+  "maximumTimestampErrorMs": 0.0062,
+  "rawFramesRetained": true,
+  "initialDiagnosticCaptureRetained": "test-results/projectile-delivery-pre-ring-fix",
+  "unchangedAreas": [
+    "src/core",
+    "src/content",
+    "src/ui/battle-playback.ts"
+  ]
+}
