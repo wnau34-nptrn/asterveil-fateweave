@@ -1,5 +1,7 @@
 # Handoff — C5.2 โล่/ป้องกัน (2026-10-26)
 
+**งานตระกูล2เสร็จและเจ้าของให้ผ่านแล้ว27ต.ค.2026 — PR#77 merged `afeef4a`; ดู [release proof](../validation/defense-vfx-release/README_TH.md) และเริ่มงานใหม่ตาม [ตระกูล3](C5-FAMILY-3-HEALING-HANDOFF-TH.md) เอกสารด้านล่างเป็นbriefตอนเริ่มตระกูล2**
+
 ## ข้อความเปิดแชตใหม่ — คัดลอกได้เลย
 
 ```text

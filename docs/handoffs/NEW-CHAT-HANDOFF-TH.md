@@ -1,5 +1,11 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
+## 2026-10-27 — ตระกูล2ผ่าน/mergeแล้ว ขั้นถัดไปตระกูล3
+
+เจ้าของสั่ง “ดำเนินการขั้นต่อไปได้” หลังคลิปRally R5วงพื้น PR#77 merged `afeef4a3e356046efe4814803fb1c8161509e5c6` คุณภาพ+browserครบผ่าน Pages40441295039เผยแพร่สำเร็จครบbuild+4browser shards+deploy ดูrelease proofล่าสุด `docs/validation/defense-vfx-release/README_TH.md`
+
+งานใหม่: [C5-FAMILY-3-HEALING-HANDOFF-TH.md](C5-FAMILY-3-HEALING-HANDOFF-TH.md) มีข้อความเปิดแชต เตรียมartwork3จังหวะ6ท่าก่อนruntime หนึ่งbranch/PRใหม่ อย่าเริ่มจากhand-offตระกูล2เก่า Rouseจริงเป็นguard; Bless/Mendต้องแยกcastและtickฟื้นจริง เอกสารด้านล่างเป็นประวัติระหว่างreview
+
 ## 2026-10-27 — Rally R5 วงพื้นเท่านั้น รอตรวจคลิป
 
 เจ้าของขอมีแค่วงด้านล่าง ไม่เอาคลื่นด้านหน้า และอนุญาต “ดำเนินการได้” แล้ว ตัดcommand layerออกจากatlas/profile/runtime ใช้วงKnightนำ→วงทีมตอบรับพร้อมกันที่contact (coverageจริง) อัดRallynormal/fast/reduced/OS-reducedใหม่ในdefense-slice PR#77เดิมยังdraft รอตรวจmotionก่อนmerge/เผยแพร่/ตระกูล3 เอกสารR4ด้านล่างเป็นประวัติก่อนแก้

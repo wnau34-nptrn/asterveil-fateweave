@@ -98,8 +98,8 @@ Read AGENTS.md and CLAUDE.md first. Repository wnau34-nptrn/asterveil-fateweave,
 | ลำดับ | ตระกูล | สกิล |
 |---|---|---|
 | 1 | ~~ฟันดาบ/แทง~~ R4: เจ้าของเลือก [แบบภาพ 10 ท่า](../combat-presentation/blade-storyboards/README_TH.md) รวม Pierce R2 และสั่งทำ VFX จริงแล้ว ต่อเข้าเกมครบ 2026-10-26 **ผ่านและ merge R4 แล้ว 2026-10-26 (`d14a3e1`, PR #59)** (`codex/vfx-family-1-blade`, PR #59, [คลิป](../combat-presentation/blade-slice/README_TH.md)) | attack, finisher, lunge, sweep, backstab, ambush, disarm, parry (ฟันสวน), pierce, halt |
-| 2 | โล่/ป้องกัน — **runtime ครบ11ท่า**, low aura R3 ช่วงขาที่เจ้าของเลือก; PR #77, [คลิปจริงรวม Rally R4 รอเจ้าของตรวจ](../combat-presentation/defense-slice/README_TH.md), `codex/vfx-family-2-defense` ยังไม่ผ่าน motion review/merge; Rally R5เจ้าของขอวงพื้นเท่านั้นและให้ดำเนินการ ตัดคลื่นด้านหน้าแล้ว รอตรวจmotion [คลิปR5](../combat-presentation/defense-slice/README_TH.md) | guard, aegis, rally, bulwark, stonearmor, guardstone, halo, sanctuary, brace, spearwall, hold |
-| 3 | แสงรักษา | heal, prayer, rouse, revive, bless, mend (เพลงฟื้น) |
+| 2 | ~~โล่/ป้องกัน~~ **เจ้าของให้ผ่าน27ต.ค.2026** หลังRally R5วงพื้นเท่านั้น, PR#77 merged `afeef4a`; Pagesเผยแพร่สำเร็จ [release proof](../validation/defense-vfx-release/README_TH.md) | guard, aegis, rally, bulwark, stonearmor, guardstone, halo, sanctuary, brace, spearwall, hold |
+| 3 | แสงรักษา — **ขั้นถัดไป [handoff artworkก่อนruntime](C5-FAMILY-3-HEALING-HANDOFF-TH.md)**, Rouseเป็นguard ไม่ใช่heal | heal, prayer, rouse, revive, bless, mend (เพลงฟื้น) |
 | 4 | ลูกธนู/มีดบิน | hinder, volley, weakshot, pin, track, disengage, knives |
 | 5 | ทุบ/แผ่นดิน | bash, slam, quake, tremor |
 | 6 | ขวดเล่นแร่ | acid, bomb, smoke, catalyst, haste, fury |

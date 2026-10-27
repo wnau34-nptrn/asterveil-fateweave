@@ -1,0 +1,113 @@
+{
+  "approvedRuntimeHead": "f518dceb0c1a127e4628d329c3f44a08dc8af441",
+  "ownerApproval": "ดำเนินการขั้นต่อไปได้",
+  "ownerApprovalDateBangkok": "2026-10-27",
+  "pullRequest": 77,
+  "atlas": {
+    "path": "public/assets/fx/defense_fx.webp",
+    "bytes": 496190,
+    "sha256": "f618e519eb083d85e7493b51f762666a6dd52224cc7157c648d89de1de526e20",
+    "frames": 35,
+    "size": {
+      "w": 1584,
+      "h": 1584
+    }
+  },
+  "qualityRun": 40438279773,
+  "browserRun": 40438279808,
+  "mergeSHA": "afeef4a3e356046efe4814803fb1c8161509e5c6",
+  "pagesRun": 40441295039,
+  "qualityResult": "success",
+  "browserResult": "success",
+  "approvedRuntimeTree": "bbafb7fe1462654d82255d3bb49cf682c15ba18d",
+  "mergedTree": "bbafb7fe1462654d82255d3bb49cf682c15ba18d",
+  "pagesArtifact": {
+    "id": 12706272320,
+    "name": "github-pages",
+    "bytes": 48923201,
+    "digest": "sha256:0977489ff6bf4e8e54731cb1e589bcbe56cf8e02ee277392205c1b8e41703c06",
+    "headSHA": "afeef4a3e356046efe4814803fb1c8161509e5c6"
+  },
+  "browserCounts": {
+    "sourceFixturePassed": 67,
+    "prechecksPassed": 3,
+    "productionPassed": 249,
+    "productionSkipped": 146
+  },
+  "liveHTTPVerification": {
+    "result": "blocked_by_execution_proxy",
+    "phase": "CONNECT tunnel",
+    "status": 403,
+    "server": "envoy",
+    "url": "https://wnau34-nptrn.github.io/asterveil-fateweave/",
+    "observedAtUTC": "2026-10-27T03:01:32Z",
+    "liveCDNHashVerified": false
+  },
+  "postMergeQuality": {
+    "run": 40441295054,
+    "conclusion": "success"
+  },
+  "pagesResult": "success",
+  "pagesRunURL": "https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/40441295039",
+  "publishedSHA": "afeef4a3e356046efe4814803fb1c8161509e5c6",
+  "pagesUpdatedAtUTC": "2026-10-27T03:09:41Z",
+  "pagesJobs": [
+    {
+      "name": "build",
+      "id": 121982012884,
+      "conclusion": "success"
+    },
+    {
+      "name": "browser (2)",
+      "id": 121982012989,
+      "conclusion": "success"
+    },
+    {
+      "name": "browser (4)",
+      "id": 121982013083,
+      "conclusion": "success"
+    },
+    {
+      "name": "browser (3)",
+      "id": 121982013098,
+      "conclusion": "success"
+    },
+    {
+      "name": "browser (1)",
+      "id": 121982013124,
+      "conclusion": "success"
+    },
+    {
+      "name": "deploy",
+      "id": 121986148514,
+      "conclusion": "success"
+    }
+  ],
+  "pagesBrowserCounts": {
+    "sourceFixturePassed": 67,
+    "productionPassed": 249,
+    "productionSkipped": 146,
+    "shards": [
+      {
+        "shard": 1,
+        "passed": 61,
+        "skipped": 60
+      },
+      {
+        "shard": 2,
+        "passed": 63,
+        "skipped": 78
+      },
+      {
+        "shard": 3,
+        "passed": 59,
+        "skipped": 8
+      },
+      {
+        "shard": 4,
+        "passed": 66,
+        "skipped": 0
+      }
+    ]
+  }
+}

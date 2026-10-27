@@ -47,3 +47,7 @@ Owner said “ไปต่อ” after the R4 artwork delivery: proceed with thi
 ## Rally R5 — floor rings only, owner authorized 2026-10-27
 
 Owner requested only lower rings, no forward wave, and said “ดำเนินการได้”. Reuse exact authored bottom row of R4; source original/prompt remain untouched. Remove top command row from shipped atlas/profile/runtime, leaving35frames1584×1584/496190bytes. Prepare is a single floor ring on Knight; at contact actual covered allies acknowledge together, then fade. Placement90×14 feet dy27 and all resolved outcomes/timing/cleanup preserved. R4 concept viewer is historical; main storyboards/runtime clips show R5. Same draft PR77, no merge/deploy/family3 before clip review.
+
+## Family2 approved and merged — 2026-10-27
+
+Owner authorized next step after final R5 clips; PR77 merged afeef4a3e356046efe4814803fb1c8161509e5c6, premerge quality/full browser success. Pages40441295039 passed build+4browser shards+deploy. Release proof and family3 artwork-first handoff are in docs. Original source/atlas/runtime unchanged by this docs follow-up.
