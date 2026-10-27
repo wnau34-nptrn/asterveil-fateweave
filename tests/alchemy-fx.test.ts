@@ -70,7 +70,10 @@ describe('alchemy follows authoritative events without changing state',()=>{
   expect(fury.captureState.round).toBeGreaterThan(fury.turn.state.heroes.find(h=>h.id==='guardian')!.empowered!.round);
   expect(fury.later.flatMap(s=>s.turns).flatMap(alchemyCues)).toEqual([]);
   const incoming=fury.turns.filter(t=>t.side==='enemy').flatMap(t=>t.events).find(e=>e.type==='damage'&&e.targetId==='guardian');
-  expect(incoming?.amount).toBe(11);
+  expect(incoming?.amount).toBe(2);
+  expect(fury.captureState.heroes.find(h=>h.id==='guardian')!.hp).toBeGreaterThan(0);
+  const outgoing=fury.later.flatMap(s=>s.turns).filter(t=>t.actorId==='guardian').flatMap(t=>t.events).filter(e=>e.type==='damage'&&e.sourceId==='guardian');
+  expect(outgoing.map(e=>e.amount)).toContain(10);expect(outgoing.map(e=>e.amount)).toContain(13);
  });
 
 });

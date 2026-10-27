@@ -18,7 +18,7 @@ export function alchemyFixture(skill:AlchemySkill,scenario='normal'){
   })),
   enemies:slots.map((id,i)=>({...veilSiege.enemies.find(e=>e.id===(id.startsWith('f')?'f1':'b1'))!,id,row:id.startsWith('f')?'front' as const:'back' as const,
    maxHp:id==='f1'&&(scenario==='kill'||scenario==='down')?1:id==='f1'&&scenario.startsWith('chain')?20:9999,speed:100-i,...(scenario==='boss'&&id==='f1'?{boss:true}:{})})),
-  intents:slots.map(id=>({sourceId:id,targetSlot:1,name:'QA actual announced attack',damage:skill==='fury'||['physical','energy'].includes(scenario)?10:1,kind:scenario==='energy'?'energy' as const:'physical' as const,...(scenario==='boss'?{unstoppable:true}:{})})),
+  intents:slots.map(id=>({sourceId:id,targetSlot:1,name:'QA actual announced attack',damage:skill==='fury'&&scenario!=='expiry'||['physical','energy'].includes(scenario)?10:1,kind:scenario==='energy'?'energy' as const:'physical' as const,...(scenario==='boss'?{unstoppable:true}:{})})),
  };
  const entry={hp:Object.fromEntries(party.map(h=>[h.id,scenario==='downinvalid'&&h.id==='guardian'?0:h.maxHp-(scenario==='heal'&&h.id==='guardian'?15:0)]))};
  const prelude:Command[]=[];
@@ -47,7 +47,7 @@ export function alchemyFixture(skill:AlchemySkill,scenario='normal'){
  const cast=resolveCommand(state,data,command,true),turn=cast.turns.find(t=>t.actorId===actor.id&&t.action===action)!;
  // Additional legal commands expose later corrosion/Fury damage and expiry without altering the captured cast.
  let laterState=cast.state;const later=[];
- for(let n=0;n<16&&laterState.outcome==='active'&&laterState.round<state.round+2;n++){
+ for(let n=0;n<16&&laterState.outcome==='active'&&laterState.round<state.round+(scenario==='expiry'?3:2);n++){
   const id=currentHeroId(laterState,data);if(!id)break;
   const target=targetOptions(laterState,data,id,'attack').find(t=>t.valid&&t.id==='f1')??targetOptions(laterState,data,id,'attack').find(t=>t.valid)!;
   const c:Command={beat:laterState.beat,heroId:id,action:'attack',targetId:target.id};
