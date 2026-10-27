@@ -1,5 +1,7 @@
 # Fateweave — แผนพัฒนารวมจากเกมปัจจุบันสู่ระบบใหม่
 
+C5.4ล่าสุด: เจ้าของให้ผ่าน40คลิปด้วย “เอาเข้าเกมได้” PR84 merged7c392b5หลังCIผ่าน Pages40503739046เผยแพร่successครบbuild+4browser shards+deployเวลา19:37:55น.กรุงเทพฯ [release proof](validation/projectile-vfx-release/README_TH.md) ไม่เริ่มตระกูล5 ข้อความรอตรวจด้านล่างเป็นประวัติ
+
 C5.4ส่งมอบ: [40คลิปruntime R1จริง390px](combat-presentation/projectile-slice/README_TH.md) ในPR84เดิม รอเจ้าของตรวจmotionก่อนmerge/เผยแพร่/ตระกูล5 ภาพR1เลือกแล้ว ตรวจ890unit/26focusedbrowser/40captureและdecodedPTS/countผ่าน ข้อความก่อนหน้าด้านล่างเป็นประวัติ ไม่มีrules/save/balance/playback timing diff
 
 C5.4ล่าสุด: เจ้าของเลือกR1แล้ว ต่อruntime7ท่าในPR84เดิม กำลังส่งคลิปจริงให้ตรวจmotionก่อนmerge/เผยแพร่/ตระกูล5 ตรวจ890unit/26focusedbrowserผ่าน ไม่เปลี่ยนrules/save/balance/playback timing ข้อความรอเลือกด้านล่างเป็นประวัติ

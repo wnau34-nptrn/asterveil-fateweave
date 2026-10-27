@@ -1,9 +1,9 @@
 {
   "artworkApproval": {
     "dateBangkok": "2026-10-27",
-    "quote": "\u0e14\u0e33\u0e40\u0e19\u0e34\u0e19\u0e01\u0e32\u0e23\u0e02\u0e31\u0e49\u0e19\u0e15\u0e48\u0e2d\u0e44\u0e1b"
+    "quote": "ดำเนินการขั้นต่อไป"
   },
-  "runtimeApproval": "pending_owner_motion_review",
+  "runtimeApproval": "approved",
   "pullRequest": 84,
   "runtimeHead": "0353b8f8890673882d14e6875714b721b56174cb",
   "srcTree": "327135df18facc6a359884fa54516025bb9d7aed",
@@ -20,5 +20,7 @@
     "src/core",
     "src/content",
     "src/ui/battle-playback.ts"
-  ]
+  ],
+  "runtimeApprovalQuote": "เอาเข้าเกมได้",
+  "runtimeApprovalDateBangkok": "2026-10-27"
 }

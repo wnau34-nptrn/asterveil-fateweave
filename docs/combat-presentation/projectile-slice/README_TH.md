@@ -1,4 +1,6 @@
-# C5.4 — ลูกธนู / มีดบิน R1 · คลิป runtime รอเจ้าของตรวจ
+# C5.4 — ลูกธนู / มีดบิน R1 · เจ้าของให้ผ่าน motion แล้ว
+
+เจ้าของให้ผ่านmotion40คลิปแล้ว27ต.ค.2026 “เอาเข้าเกมได้”; PR84 merged7c392b5หลังCIผ่าน Pages40503739046เผยแพร่successครบbuild+4browser shards+deployเวลา19:37:55น.กรุงเทพฯ [release proof](../../validation/projectile-vfx-release/README_TH.md) ข้อความเสนอรอตรวจด้านล่างเป็นประวัติ ไม่เริ่มตระกูล5
 
 27 ตุลาคม 2026 · [PR#84 เดิม](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/84) → `feature/fateweave-initial-prototype`
 

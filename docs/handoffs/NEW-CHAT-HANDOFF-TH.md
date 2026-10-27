@@ -1,5 +1,7 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
+C5.4ล่าสุด27ต.ค.2026: เจ้าของตรวจ40คลิปแล้วสั่ง “เอาเข้าเกมได้” PR84 merged `7c392b5` หลังquality/browserผ่าน (890unit,sourceVFX119,prechecks3,production249ผ่าน/274skip) Pages40503739046เผยแพร่successครบbuild+4browser shards+deployเวลา19:37:55น.กรุงเทพฯ build+4browser shards+deploy [release proof](../validation/projectile-vfx-release/README_TH.md) ไม่เริ่มตระกูล5
+
 สถานะส่งมอบ C5.4: runtime R1ครบ7ท่า/atlas-moduleเดียวในPR84เดิม เจ้าของเลือกartworkแล้ว ขณะนี้ [40คลิปจริง390px/หน้าเลือก](../combat-presentation/projectile-slice/README_TH.md) รอตรวจmotionก่อนmerge/เผยแพร่/ตระกูล5 ตรวจ890unit/26focusedbrowser/40capture+state equalityและdecodedPTS/countผ่าน ไม่มีcore/save/content/balance/playback timing diff ผลCIfullbrowserให้ตรวจchecksบนPR ไม่ถือว่าpendingคือผ่าน
 
 สถานะล่าสุด C5.4: เจ้าของเลือกartwork R1ด้วย “ดำเนินการขั้นต่อไป” แล้ว ต่อruntime7ท่าในPR84เดิม atlas/moduleเดียว ตรวจ890unitและ26focusedbrowserผ่าน กำลังอัดคลิปจริงแยกจากtests ห้ามmerge/เผยแพร่/ตระกูล5ก่อนเจ้าของตรวจmotion ไม่มีrules/save/content/balance/playback timing diff

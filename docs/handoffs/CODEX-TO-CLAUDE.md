@@ -1,5 +1,11 @@
 # Codex → Claude handoff
 
+## 2026-10-27 — C5.4 owner approved, PR84 merged and published
+
+Owner reviewed40actual390px runtime clips and said “เอาเข้าเกมได้”, approving family4 motion and integration/publication. PR84 merged as `7c392b5cf427b620059d7844c4374c6baf0b827b`, validated head15f8295. Latest base8f00428 fetched again before merge, no conflicts; src/public/tests trees match approved runtime0353b8f and validated head exactly. No rules/save/content/balance/playback changes.
+
+Quality40492197706 success:890unit/77files,typecheck/lint/build. Browser40492197679 success:sourceVFX119,prechecks3,production249passed/274skipped. Kept all4sourcegates and did not count skips as passes. Atlas1013228bytes/21frames/1440×2016 SHA256d9a46b5189187cd779b4ee5ad2b2520fe4533a9d160f017796fe1e880bcc169d. Postmergequality40503738918 success; Pages40503739046 successครบbuild/browser4shards/deployสำหรับmergeSHA เสร็จ27ต.ค.2026เวลา19:37:55กรุงเทพฯ sourceVFX119,production249passed/274skipped (61/63/59/66). Artifact12734650094/51312457bytes/digest sha256:52749f2e2cb424bbaa84a9b112f08a1cca4a3761e6278dca5935e61c3d0a666f tied to mergeSHA. CloudHEAD at19:28:54Bangkok was blocked at executionproxyCONNECT403/envoy before the website, so no liveHTTP200/CDNhash claim. This docs-only follow-up uses [skip ci] and does not change approved/released src/public/tests. [Release proof](../validation/projectile-vfx-release/README_TH.md), [approved40clips](../combat-presentation/projectile-slice/README_TH.md). No family5 work or new PR. This follow-up changes docs only and records the owner's decision separately from engineering checks.
+
 ## 2026-10-27 — C5.4 runtime R1 / 40 actual clips for owner motion review (PR84)
 
 Owner selected artwork R1 with “ดำเนินการขั้นต่อไป”; this is authorization to integrate and capture, not approval to merge/publish/family5. Same [draft PR84](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/84). Runtime head `0353b8f8890673882d14e6875714b721b56174cb`; all delivered clips use this final source (includes duplicate-ring fix). Source tree `327135df18facc6a359884fa54516025bb9d7aed` / public tree `65bd6995354109f935fa0f875ce4fc19cf2f59c6`. Latest base fetched again8f00428; no concurrent base change.
