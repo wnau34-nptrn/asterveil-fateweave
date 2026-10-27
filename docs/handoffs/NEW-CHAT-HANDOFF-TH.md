@@ -1,5 +1,11 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
+## 2026-10-27 — ตระกูล3 artwork R1 รอเจ้าของเลือก
+
+branch `codex/vfx-family-3-healing`, draft PRเดียวของตระกูล3; [หน้าเลือก6ท่า/3phase](../combat-presentation/healing-storyboards/index.html) / [รายละเอียด](../combat-presentation/healing-storyboards/README_TH.md) มี18cast+6tickภาพ390px แยก Bless/Mend cast/tick และ Rouse guard/all จาก engine จริง Revive preludeทำให้เพื่อนล้มจากคำสั่งจริง ImageGenต้นฉบับ/prompt/alphaครบ ตรวจ858unit+typecheck/lint/buildและreference/viewerผ่าน ไม่มีhealingruntime/คลิปจริง/merge/deploy รอเลือก/แก้artworkก่อนต่อatlas/moduleและอัดคลิปในPRเดิม หยุดก่อนตระกูล4 ไม่ถือว่าภาพใหม่ผ่านแล้วเพราะตระกูล2ผ่าน
+
+ข้อความทำต่อ: อ่าน C5-FAMILY-3-HEALING-HANDOFF-TH.md และ healing-storyboards/README_TH.md แล้วรับคำเลือก/แก้artworkR1จากเจ้าของ ต่อเฉพาะตระกูล3ในbranch/PRเดิม ห้ามข้ามการตรวจภาพ แยกcastกับtick, Rouseไม่ฮีล, ไม่แก้rules/save/balance/playback timing ส่งคลิปจริงก่อนตระกูลถัดไป
+
 ## 2026-10-27 — ตระกูล2ผ่าน/mergeแล้ว ขั้นถัดไปตระกูล3
 
 เจ้าของสั่ง “ดำเนินการขั้นต่อไปได้” หลังคลิปRally R5วงพื้น PR#77 merged `afeef4a3e356046efe4814803fb1c8161509e5c6` คุณภาพ+browserครบผ่าน Pages40441295039เผยแพร่สำเร็จครบbuild+4browser shards+deploy ดูrelease proofล่าสุด `docs/validation/defense-vfx-release/README_TH.md`

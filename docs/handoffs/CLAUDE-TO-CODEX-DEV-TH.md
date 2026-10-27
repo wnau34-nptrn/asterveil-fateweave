@@ -99,7 +99,7 @@ Read AGENTS.md and CLAUDE.md first. Repository wnau34-nptrn/asterveil-fateweave,
 |---|---|---|
 | 1 | ~~ฟันดาบ/แทง~~ R4: เจ้าของเลือก [แบบภาพ 10 ท่า](../combat-presentation/blade-storyboards/README_TH.md) รวม Pierce R2 และสั่งทำ VFX จริงแล้ว ต่อเข้าเกมครบ 2026-10-26 **ผ่านและ merge R4 แล้ว 2026-10-26 (`d14a3e1`, PR #59)** (`codex/vfx-family-1-blade`, PR #59, [คลิป](../combat-presentation/blade-slice/README_TH.md)) | attack, finisher, lunge, sweep, backstab, ambush, disarm, parry (ฟันสวน), pierce, halt |
 | 2 | ~~โล่/ป้องกัน~~ **เจ้าของให้ผ่าน27ต.ค.2026** หลังRally R5วงพื้นเท่านั้น, PR#77 merged `afeef4a`; Pagesเผยแพร่สำเร็จ [release proof](../validation/defense-vfx-release/README_TH.md) | guard, aegis, rally, bulwark, stonearmor, guardstone, halo, sanctuary, brace, spearwall, hold |
-| 3 | แสงรักษา — **ขั้นถัดไป [handoff artworkก่อนruntime](C5-FAMILY-3-HEALING-HANDOFF-TH.md)**, Rouseเป็นguard ไม่ใช่heal | heal, prayer, rouse, revive, bless, mend (เพลงฟื้น) |
+| 3 | แสงรักษา — **[artwork R1 ครบ6ท่ารอเลือก](../combat-presentation/healing-storyboards/README_TH.md)**, branch `codex/vfx-family-3-healing`, ยังไม่ต่อruntime; [handoff](C5-FAMILY-3-HEALING-HANDOFF-TH.md), Rouseเป็นguard ไม่ใช่heal | heal, prayer, rouse, revive, bless, mend (เพลงฟื้น) |
 | 4 | ลูกธนู/มีดบิน | hinder, volley, weakshot, pin, track, disengage, knives |
 | 5 | ทุบ/แผ่นดิน | bash, slam, quake, tremor |
 | 6 | ขวดเล่นแร่ | acid, bomb, smoke, catalyst, haste, fury |
@@ -320,6 +320,8 @@ REPORT after every batch in docs/handoffs/CODEX-TO-CLAUDE.md (per character: kit
 ```
 
 ## ฝากถึง Claude (Codex เขียนต่อท้าย)
+
+- 2026-10-27 C5.3: `src/content/encounters/veil-siege.ts` มีcommentเก่าว่าRouseฮีล แต่engineปัจจุบันสร้างguard/all เลือกเพื่อนHP ratioต่ำสุด งานภาพยึดengine ไม่แก้rules/save/balance/content โปรดตรวจcommentแยกเมื่อแก้เอกสารกลไก ไม่ใช่คำขอเปลี่ยนRouseเป็นheal
 
 - 2026-10-25: P00–P02/P04/P06 in `docs/DEVELOPMENT_PLAN_TH.md` will affect battle/save/balance when implemented. This task only documents those impacts: shared Lv/EXP, actor capacity, talent entitlement and migrations need one coherent specification before code changes. No rule changes were made as part of publishing the plan.
 
