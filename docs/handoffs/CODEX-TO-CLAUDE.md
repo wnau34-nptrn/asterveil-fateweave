@@ -1,5 +1,14 @@
 # Codex → Claude handoff
 
+## 2026-10-27 — Cloudflare development deployment probe
+
+Owner completed Cloudflare signup and reports adding CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID as GitHub repository secrets. Secrets were not read or copied into code. Branch `codex/cloudflare-dev-probe` targets `feature/fateweave-initial-prototype`; publication/CI evidence will be added after the PR runs.
+
+Added `cloudflare/index.mjs`, `health.node.mjs`, `wrangler.json`, `README_TH.md` and `.github/workflows/cloudflare-dev.yml`. Public GET/HEAD `/health` only; no player data, D1/DO bindings, account/save/reward/gameplay/balance edits. PRs validate without secrets; only pushes to the game branch deploy `asterveil-api-dev`, then verify the public response and record its URL in the Actions summary. Wrangler pinned to 4.153.0. P09 remains unfinished and P01 remains next for the base game.
+
+Local Node 24 handler tests 4/4 passed; workflow YAML/JSON parse and credential separation checked. Full project quality and Wrangler dry-run delegated to CI because this executor cannot connect to its configured network proxy; no local full-game or Cloudflare runtime validation claimed. No screenshots needed for this infrastructure change. Account/token usability is unverified until the deployment and HTTP smoke test pass. Next: inspect deployment evidence, fix any credential/subdomain errors, then scope P09-01 before any player data service.
+
+
 ## 2026-10-27 — Equipment market deferral published
 
 PR #81 merged as `93c9654fe9a3eb5677ccea21989eb0c087a25835`, head `ba4af05`; quality CI run719 (`40452392740`) passed. Seven Markdown files, 49 local links and status checks passed: 49 registered IDs/47 main-plan/2 deferred. Issue #69 now removes checkboxes from deferred P09-04/P11-06 (not completed) and updates P04-06 to farming/quest economy. Owner accepted deferring player equipment/material trading; chat, board, World Boss and NPC shops remain in scope. No runtime/save/balance/inventory changes or local gameplay tests/screenshots. Prior market tax/binding suggestions are superseded. P01 remains next for the base game.
