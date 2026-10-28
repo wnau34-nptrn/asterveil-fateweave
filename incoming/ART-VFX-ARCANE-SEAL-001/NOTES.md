@@ -1,6 +1,6 @@
-# ART-VFX-ARCANE-SEAL-001 — R1 / R2 owner selection
+# ART-VFX-ARCANE-SEAL-001 — R2 selected for integration
 
-2026-10-28 (Asia/Bangkok). Art-only handoff on branch `art/art-vfx-arcane-seal-001`, targeting `feature/fateweave-initial-prototype`. Neither candidate has been selected or approved for motion. Do not merge this PR as part of this handoff.
+2026-10-28 (Asia/Bangkok). Art-only handoff on branch `art/art-vfx-arcane-seal-001`, targeting `feature/fateweave-initial-prototype`. The owner delegated artwork selection to Codex: “เอาแบบเดียวเลยได้มั้ย ไม่ต้องให้เลือก คุณแนะนำแบบไหน”. Codex selected **R2 for all four moves**, for clearer edges and distinct shapes at 390px. Claude should use only `R2/` for integration and `storyboard-R2-390.png` as the primary review board. R1 remains archived provenance, not a pending choice. Runtime motion has not been reviewed or approved. Do not merge this PR as part of this handoff.
 
 ## Contents and direction
 
@@ -42,4 +42,4 @@ Ran `python incoming/ART-VFX-ARCANE-SEAL-001/package.py`: 24 RGBA PNGs, 256×256
 
 No runtime, rules, saves, content, tests, public assets, existing artwork or workflows changed. No gameplay/browser tests were needed for this art-only package; no real-device or runtime motion verification is claimed. `AGENTS.md` and `CLAUDE.md` were read first. The current user instruction permits additions only under this intake folder, so this note carries the usual Codex-to-Claude handoff instead of editing the shared docs handoff files.
 
-**Owner decision pending:** R1 or R2 (a per-move selection is also possible). **Remaining:** owner selection, Claude integration, actual-event motion review. PR stays open and unmerged.
+**Artwork decision complete:** R2 for all four moves, selected by Codex under the owner's delegated choice. No additional R1/R2 selection is needed. **Remaining:** Claude integration and actual-event motion review. PR stays open and unmerged.
