@@ -3,6 +3,24 @@
 
 
 
+## 2026-10-28 — แชตถัดไป: W2 A4 นำภาพเข้าเกม (เปิดอัตโนมัติจากแชต A3)
+
+เจ้าของตอบ “ใช้ตาม codex แนะนำ” (2026-10-28) สำหรับ A4 (PR #91) ข้อความเปิดแชต:
+
+```text
+ทำงานต่อในรีโป wnau34-nptrn/asterveil-fateweave สาขาเกม feature/fateweave-initial-prototype (ไม่ใช่ main)
+อ่าน AGENTS.md, CLAUDE.md, docs/design/OWNER_DECISIONS_TH.md, docs/design/ANIMATION_VFX_COMPLETION_PLAN_TH.md, docs/design/UNIT_ANIMATION_ROLLOUT_TH.md และหัวข้อบนสุดของ docs/handoffs/NEW-CHAT-HANDOFF-TH.md
+งาน: W2 — A4 นำแอนิเมชัน มิร่า (mira, Archer), โทมะ (toma, Alchemist), สไลม์น้ำค้าง (foe_dew_slime), สไลม์ถ่านไฟ (foe_ember_slime), ค้างคาวซาก (foe_ruin_bat) จาก PR #91 (สาขา art/art-unit-animation-a4-001, โฟลเดอร์ incoming/ART-UNIT-ANIMATION-A4-001/) เข้าเกม
+เจ้าของตอบ “ใช้ตาม codex แนะนำ” (2026-10-28): ใช้ R2 สำหรับ Mira volley/disengage, Toma underhand และ Ruin Bat hover; ท่าอื่นใช้ candidate ที่ Codex ทำเครื่องหมาย preferred (ทอง) ใน NOTES.md/strips.json
+ไฟล์ PNG ตรวจแล้ว (decode ครบ, hash ตรง, ไม่ถูกตัด) ให้ตรวจ sha256 ซ้ำก่อนใช้
+ทำแบบ A3 (docs/combat-presentation/unit-a3-slice/README_TH.md, incoming/ART-UNIT-ANIMATION-A3-001/build_assets.py): scale เดียวต่อแถบ (แถบ generate คนละขนาด), พื้นเท้า y=496/กึ่งกลางเท้า x=256, defringe ขอบสี, ลบเศษตัวข้างเคียง, แยกตัวที่ติดกันอย่างระวัง, lossless pack, registry ใน unit-frames.ts, optional atlas ไม่อยู่ใน critical preload, fallback เมื่อโหลดช้า, งบ decoded ≤6MiB/ดาวน์โหลด ≤1.5MB ต่อตัว (ปรับ factor ถ้าเกิน)
+ข้อควรระวังจาก NOTES ของ Codex: Dew leap ห้าม bottom-align ท่ากระโดดจนหายลอย; Toma backswing ข้ามตัวให้เช็กมือ; Mira ถอยสั้น ไม่เพิ่ม teleport; Ember spit อ่านผ่านหน้า/ความสว่าง; ค้างคาวลอยตลอด (ไม่มีพื้นเท้า) ให้รักษา loop และหันซ้าย
+แมปทุก ActionId จริงของ mira/toma (team.ts + unlock + talentTrees) และทุก intent จริงของศัตรูทั้งสามใน encounters (ตรวจด้วยเทสต์เทียบ content) ใช้ VFX กระสุน/เคมีเดิม ไม่สร้างใหม่ คง rules/save/content/balance/playback timing, normal/fast/reduced motion, เทสต์ unit + browser เฉพาะที่เกี่ยว (ระวังเทสต์ A1/A2/A3/unit-loading ที่นับจำนวน optional sheet), แล้วอัดคลิปจริง 390px ส่งเจ้าของตรวจ motion ก่อน merge/เผยแพร่ ผลเทสต์ไม่ใช่การอนุมัติภาพ
+Chromium สำหรับ Playwright: export PLAYWRIGHT_CHROMIUM_EXECUTABLE=/opt/pw-browsers/chromium; สร้าง PR ใช้ gh api REST (GraphQL ใช้ไม่ได้)
+ตาม standing authorization ใน CLAUDE.md; สนามอนาคต 10 ตัว (OD-05) ให้บันทึกงบภาพ/ความจำ; อัปเดต handoff เมื่อจบ
+ภาพชุดอื่นของ Codex (#93–#98, W3–W5) ยังรอเจ้าของเลือก ไม่ต้องนำเข้า; PR #90 (A3) เนื้อหาอยู่ในเกมแล้ว; PR #100 (CI) เป็นของอีกแชต ไม่แตะ
+```
+
 ## 2026-10-28 — A3 เซเรน + เห็ดหมอผี: เผยแพร่แล้ว (PR #99, เจ้าของอนุมัติ “เอาเข้าเกมได้”)
 
 - สาขา `claude/unit-a3-seren-mycon` → PR เข้าสาขาเกม; ภาพมาจาก PR #90 (`incoming/ART-UNIT-ANIMATION-A3-001/`, sha256 12 ไฟล์ตรง validation.json) เจ้าของเลือก R2 ตามที่ Codex แนะนำ (Seren attack, Mycon cast)
