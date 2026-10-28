@@ -46,8 +46,57 @@ Modifiers ไม่ใช่ ActionId ใหม่: guardReduction/twoguard/stan
 
 ## Validation / release
 
-อยู่ระหว่างตรวจและอัดคลิป ยังไม่อ้างCI/merge/Pagesหรือvisualapprovalจากผลที่ยังไม่เสร็จ ผลสุดท้ายจะอัปเดตในส่วนนี้พร้อมreleaseproof
+[PR88](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/88) · ส่ง26คลิปชุดสุดท้ายแล้ว กำลังรอfullCIก่อนmerge/Pages ไม่อ้างผลที่ยังpending
+
+- Source snapshot `dd56ddd` / src tree `9c21ec671fa30a10236772f3819ba84aaca208a3` / public tree `f6698cd8435f2b84295c503de9db6031b1f4e218`
+- typecheck/lint/buildและ37focused unit/5filesผ่าน;42focusedbrowserผ่านบน3c66c9a และguardcounterที่กรองเฉพาะeventจริงรันซ้ำบนdd56dddผ่าน1/1 ก่อนcapture
+- ก่อนเพิ่มShieldSmashแยกและcounterpolicy:117focusedbrowserผ่าน (57C5.6+20A1+35A2+3loading+2pilot); Guardframes0–23หลังเพิ่มstripเท่ากันทุกalpha/visibleRGBA (retained-frames.json) FullCIชุดสุดท้ายตรวจ271source fixturesรวมทุกC5+A1+A2แยกจากproduction
+- ชุดสุดท้าย26/26realclockcapturesผ่านทุกfinalstateเทียบresolverและcommittedcommands; MP4decodeตรวจcount/PTS/endครบ26, playerเล่น/seek/decodeทุกไฟล์ผ่าน1/1 มี1,202capturedframes, maxgap0.377s, maxPTSerror0.0061ms ไม่interpolate/retime
+- ทุกcaptureมีคำสั่งใหม่1ครั้ง; reviveมีprelude2คำสั่งจากresolverอยู่ก่อนแล้ว รวม3คำสั่ง ไม่ยัดHP/eventกลางการเล่น
+- RawJPEGsยังอยู่ในworkspaceเท่านั้น แต่MP4/PNG/stamps/timing/final-state/hash/sourceproofเก็บในGitครบ แชตใหม่ใช้ไฟล์ในcapture-metadataและproof.jsonได้ ไม่ต้องพึ่งrawCapture workspacepath
+
+ข้อจำกัดQAที่บันทึกตามจริง: unitรอบรวมแรก974ผ่าน/1boss-simtimeoutขณะรันbrowserร่วมกัน เคสนั้นรันเดี่ยวผ่าน1/1โดยไม่แก้180s timeout/assertions รอfinalCIสำหรับfullunit975 ชุดอัดก่อนสุดท้ายเคย25/26เพราะoptionalartยังไม่พร้อมภายใน5s; A2visualQA/captureรอoptionalart15sก่อนเริ่มอัดเท่านั้น ไม่เปลี่ยนเวลาเกมหรือassertionStart/firstturnขณะhold/fail และไม่ตีความว่าเป็นผลperformanceบนมือถือจริง รอบที่เจอHMR/reloadระหว่างแก้fixtureไม่ถูกรายงานว่าผ่าน
+
+## คลิปสำคัญ
+
+- [เอกิสโจมตีปกติ + องครักษ์ทุบ/คืนท่า](attack-CrushingBlow-normal-normal-390.mp4)
+- [เอกิสกระแทกโล่ + องครักษ์ปล่อยRiftBolt/คืนท่า](bash-RiftBolt-normal-normal-390.mp4)
+- [องครักษ์ShieldSmashด้วยโล่จริง](attack-ShieldSmash-normal-normal-390.mp4)
+- [เอกิสตั้งโล่แล้วสวนกลับจริง](guard-CrushingBlow-counter-normal-390.mp4)
+- [หน้าเลือกคลิป26รายการ](index.html) / [inventory](clips.json) / [proof+hash](proof.json)
+
 
 คลิปและsource QAใช้dev-only fixtureจัดparty/speed/entryHP/actionavailability/talentcapsเพื่อเข้ากรณีทดสอบ รวมล้ม/ฟื้นและcounter แต่ทุกคำสั่งผ่านreal UI/Phaser/playback/resolverและเทียบfinalstateทุกfield ไม่เปลี่ยนcontentเกมจริง ไม่ใช้owner saveหรือยัดeventปลอม ก่อนส่งตรวจproductionผ่านCIแยกต่างหาก
 
 Browser pluginไม่มีเครื่องมือควบคุมbrowserในsessionนี้ จึงใช้repositoryPlaywright/ChromiumกับSwiftShaderตามgame-playtest ตรวจภาพcanvasจริงที่390×844 เป็นcloud/touch emulation ไม่ใช่iOS Safari/มือถือจริง/การรับรอง60fps Realclockcaptureใช้CDPtimestamps เก็บทุกcapturedframeและfinalhold ไม่interpolate/retime; decodeกลับตรวจPTS/count/endและเทียบfinalstateกับauthoritative resolverทุกfield
+
+## รายการคลิปทั้งหมด
+
+| คลิป | ระยะเวลา | captured frames |
+| --- | --- | --- |
+| [attack-CrushingBlow-normal-osreduce](attack-CrushingBlow-normal-osreduce-390.mp4) | 2.190s | 53 |
+| [attack-CrushingBlow-normal-fast](attack-CrushingBlow-normal-fast-390.mp4) | 1.678s | 35 |
+| [attack-CrushingBlow-normal-normal](attack-CrushingBlow-normal-normal-390.mp4) | 1.947s | 46 |
+| [attack-MaceSwing-normal-normal](attack-MaceSwing-normal-normal-390.mp4) | 2.274s | 46 |
+| [attack-RiftBolt-enemy-down-normal](attack-RiftBolt-enemy-down-normal-390.mp4) | 1.651s | 37 |
+| [attack-RiftBolt-normal-fast](attack-RiftBolt-normal-fast-390.mp4) | 1.825s | 35 |
+| [attack-RiftBolt-normal-normal](attack-RiftBolt-normal-normal-390.mp4) | 2.221s | 39 |
+| [attack-RiftBolt-normal-osreduce](attack-RiftBolt-normal-osreduce-390.mp4) | 2.232s | 51 |
+| [attack-RiftBolt-normal-reduced](attack-RiftBolt-normal-reduced-390.mp4) | 2.260s | 50 |
+| [attack-ShieldSmash-normal-normal](attack-ShieldSmash-normal-normal-390.mp4) | 2.275s | 50 |
+| [bash-RiftBolt-normal-fast](bash-RiftBolt-normal-fast-390.mp4) | 2.257s | 42 |
+| [bash-RiftBolt-normal-normal](bash-RiftBolt-normal-normal-390.mp4) | 2.720s | 60 |
+| [bash-RiftBolt-normal-osreduce](bash-RiftBolt-normal-osreduce-390.mp4) | 2.844s | 58 |
+| [bash-RiftBolt-normal-reduced](bash-RiftBolt-normal-reduced-390.mp4) | 2.765s | 61 |
+| [bash-RiftBolt-reflect-normal](bash-RiftBolt-reflect-normal-390.mp4) | 1.934s | 44 |
+| [bulwark-RiftBolt-normal-normal](bulwark-RiftBolt-normal-normal-390.mp4) | 2.272s | 46 |
+| [challenge-RiftBolt-normal-normal](challenge-RiftBolt-normal-normal-390.mp4) | 1.872s | 51 |
+| [attack-CrushingBlow-normal-reduced](attack-CrushingBlow-normal-reduced-390.mp4) | 1.949s | 49 |
+| [guard-CrushingBlow-counter-normal](guard-CrushingBlow-counter-normal-390.mp4) | 1.941s | 45 |
+| [guard-RiftBolt-normal-fast](guard-RiftBolt-normal-fast-390.mp4) | 1.693s | 28 |
+| [guard-RiftBolt-normal-normal](guard-RiftBolt-normal-normal-390.mp4) | 2.367s | 45 |
+| [guard-RiftBolt-normal-osreduce](guard-RiftBolt-normal-osreduce-390.mp4) | 2.099s | 44 |
+| [guard-RiftBolt-normal-reduced](guard-RiftBolt-normal-reduced-390.mp4) | 1.977s | 44 |
+| [rally-RiftBolt-normal-normal](rally-RiftBolt-normal-normal-390.mp4) | 2.689s | 53 |
+| [revive-RiftBolt-revive-normal](revive-RiftBolt-revive-normal-390.mp4) | 1.734s | 35 |
+| [rouse-RiftBolt-wounded-normal](rouse-RiftBolt-wounded-normal-390.mp4) | 2.692s | 55 |

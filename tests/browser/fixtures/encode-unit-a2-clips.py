@@ -1,13 +1,14 @@
 """Preserve every CDP frame and timestamp; verify the MP4 by decoding it again."""
 from pathlib import Path
 from PIL import Image
-import json, subprocess, sys
+import json, subprocess, sys, re
 ROOT=Path(__file__).resolve().parents[3]
 CAP=ROOT/(sys.argv[1] if len(sys.argv)>1 else 'test-results/unit-a2-delivery');OUT=ROOT/'docs/combat-presentation/unit-a2-slice';OUT.mkdir(parents=True,exist_ok=True)
 manifest=[]
 for stamps in sorted(CAP.glob('*/stamps.txt')):
  lines=stamps.read_text().splitlines();click=float(lines[0].split()[1]);frames=sorted([(n,float(t)) for n,t in (s.split() for s in lines[1:])],key=lambda f:f[1]);assert frames[0][1]<=click<=frames[-1][1]
- name=stamps.parent.name.removeprefix('unit-a2-clips-unit-A2-clip-');impacts=json.loads((stamps.parent/'timing.json').read_text());concat=[]
+ impacts=json.loads((stamps.parent/'timing.json').read_text());hero=next(i['turn'] for i in impacts if i['turn']['side']=='hero');intent=hero.get('intent') or hero['before']['intent'];suffix=re.search(r'-(enemy-down|wounded|counter|reflect|revive|normal)-(normal|fast|reduced|osreduce)$',stamps.parent.name);assert suffix,stamps.parent.name
+ name=f"{hero['action']}-{intent['name'].replace(' ','')}-{suffix[1]}-{suffix[2]}";concat=[]
  for i,(n,t) in enumerate(frames):
   concat.extend([f"file '{stamps.parent/'frames'/f'{n}.jpg'}'",'option framerate 90000',f'duration {max(1/90000,frames[i+1][1]-t) if i+1<len(frames) else .05:.6f}'])
  concat.extend([f"file '{stamps.parent/'frames'/f'{frames[-1][0]}.jpg'}'",'option framerate 90000'])
