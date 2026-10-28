@@ -142,3 +142,7 @@ Ruin Bat (`foe_ruin_bat`, Nip, physical): hover loop (4 frames), swoop-bite, fly
 
 Split into two PR-ready folders if large: heroes/ (Mira, Toma) and foes/ (slimes, bat). RETURN: seeds, raw strips (transparent PNG, one file per strip), 390px preview sheet, prompts.json, NOTES.md with frame order per strip and anything uncertain. R1, plus R2 where a move is ambiguous.
 ```
+
+## 7. Prompt ระลอก W3–W8 และการแก้ PR #90
+
+รวมไว้ที่ [CODEX-ANIMATION-VFX-PROMPTS-TH.md](../handoffs/CODEX-ANIMATION-VFX-PROMPTS-TH.md) (ท่าตรวจจากโค้ดจริง 2026-10-28)
