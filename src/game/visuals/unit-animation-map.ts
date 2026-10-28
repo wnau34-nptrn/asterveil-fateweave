@@ -52,7 +52,7 @@ export function unitReactions(turn: TurnStage, data?: EncounterDefinition): Map<
   // Aegis braces and ripostes in the SAME reaction window. His actual Guard
   // counter otherwise loses to his incoming hit/block and never shows the sword.
   // Keep down/dodge priority and every other identity's shipped reaction policy.
-  for (const e of turn.events) if (e.type === 'counter' && e.sourceId && e.sourceId !== turn.actorId
+  for (const e of turn.events) if (e.type === 'counter' && e.text === 'The knight counters.' && e.sourceId && e.sourceId !== turn.actorId
     && (data ? artOf(data, e.sourceId) : e.sourceId) === 'guardian') {
     const incoming = result.get(e.sourceId);
     if (incoming?.pose === 'hit' || incoming?.pose === 'block') result.set(e.sourceId, { pose: 'counter', sourceId: e.targetId });

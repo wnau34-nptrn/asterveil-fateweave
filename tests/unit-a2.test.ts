@@ -43,6 +43,7 @@ describe('A2 actual content, clips and lifecycle',()=>{
   expect(unitSample('counter','reaction',0,undefined,'guardian')!.from).toBe(30);expect(unitSample('counter','reaction',.5,undefined,'guardian')!.from).toBe(5);
   const dead={...reply,events:[...reply.events,{type:'down' as const,targetId:'guardian',text:''}],after:undefined};expect(unitReactions(dead,counter.data).get('guardian')!.pose).toBe('down');
   const other={...reply,events:reply.events.map(e=>({...e,sourceId:e.sourceId==='guardian'?'garran':e.sourceId,targetId:e.targetId==='guardian'?'garran':e.targetId}))};expect(unitReactions(other,counter.data).get('garran')!.pose).toBe('hit');
+  const thorns={...reply,events:reply.events.map(e=>e.type==='counter'&&e.sourceId==='guardian'?{...e,text:'Thorns strike back.'}:e)};expect(unitReactions(thorns,counter.data).get('guardian')!.pose).toBe('hit');
   const reflect=unitA2Fixture('bash','reflect');expect(reflect.result.turns.some(t=>t.events.some(e=>e.type==='cancel'))).toBe(true);
   const rouse=unitA2Fixture('rouse','wounded');expect(rouse.result.turns[0]!.events.some(e=>e.type==='guard')).toBe(true);
  });
