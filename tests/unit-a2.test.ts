@@ -39,7 +39,10 @@ describe('A2 actual content, clips and lifecycle',()=>{
  it('uses actual down/revive, counter, cancellation and Rouse guard events',()=>{
   const revive=unitA2Fixture('revive','revive');expect(revive.state.heroes[0]!.hp).toBe(0);expect(revive.result.state.heroes[0]!.hp).toBeGreaterThan(0);
   const down=unitA2Fixture('attack','enemy-down');expect(down.result.turns.some(t=>unitReactions(t).get('f1')?.pose==='down')).toBe(true);
-  const counter=unitA2Fixture('guard','counter','Crushing Blow');expect(counter.result.turns.some(t=>t.events.some(e=>e.type==='counter'&&e.sourceId==='guardian'))).toBe(true);
+  const counter=unitA2Fixture('guard','counter','Crushing Blow');const reply=counter.result.turns.find(t=>t.events.some(e=>e.type==='counter'&&e.sourceId==='guardian'))!;expect(reply).toBeDefined();expect(unitReactions(reply,counter.data).get('guardian')!.pose).toBe('counter');
+  expect(unitSample('counter','reaction',0,undefined,'guardian')!.from).toBe(30);expect(unitSample('counter','reaction',.5,undefined,'guardian')!.from).toBe(5);
+  const dead={...reply,events:[...reply.events,{type:'down' as const,targetId:'guardian',text:''}],after:undefined};expect(unitReactions(dead,counter.data).get('guardian')!.pose).toBe('down');
+  const other={...reply,events:reply.events.map(e=>({...e,sourceId:e.sourceId==='guardian'?'garran':e.sourceId,targetId:e.targetId==='guardian'?'garran':e.targetId}))};expect(unitReactions(other,counter.data).get('garran')!.pose).toBe('hit');
   const reflect=unitA2Fixture('bash','reflect');expect(reflect.result.turns.some(t=>t.events.some(e=>e.type==='cancel'))).toBe(true);
   const rouse=unitA2Fixture('rouse','wounded');expect(rouse.result.turns[0]!.events.some(e=>e.type==='guard')).toBe(true);
  });

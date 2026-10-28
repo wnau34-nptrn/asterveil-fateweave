@@ -6,7 +6,8 @@ const saved=(page:Page)=>page.evaluate(()=>localStorage.getItem('unit-a2-committ
 async function ready(page:Page,query:string){
  await page.goto(`tests/browser/fixtures/unit-a2.html?${query}`);
  await expect(page.locator('canvas')).toBeVisible();
- await expect.poll(()=>page.evaluate(()=>window.unitA2QA.frames().guardian?.[0]?.texture)).toBe('unit-pilot-aegis');
+ // Wait for optional art before visual QA; this is not a Start/performance gate.
+ await expect.poll(()=>page.evaluate(()=>window.unitA2QA.frames().guardian?.[0]?.texture),{timeout:15000}).toBe('unit-pilot-aegis');
  if(await page.locator('#start').count())await page.locator('#start').click();
 }
 for(const action of aegisActions)test(`A2 ${action}: windup, release, guard intent and exact committed result at 390px`,async({browser},info)=>{
@@ -135,5 +136,17 @@ test('A2 repeated guard art shares one texture and preserves independent actor p
  const turns=await page.evaluate(()=>window.unitA2QA.turns());await page.clock.runFor(stageTiming(turns[0]!,false).end+100);
  expect(await page.evaluate(()=>window.unitA2QA.frames().f1![0]!.frame)).not.toBe('0');expect(await page.evaluate(()=>window.unitA2QA.frames().f2![0]!.frame)).toBe('0');
  await page.clock.runFor(5000);expect(await saved(page)).toBe(committed);expect(await page.evaluate(()=>window.unitA2QA.state())).toEqual(await page.evaluate(()=>window.unitA2QA.expected()));
+ }finally{await ctx.close();}
+});
+
+test('A2 actual guardcounter braces then ripostes inside the existing reaction window',async({browser})=>{
+ const ctx=await browser.newContext({viewport:{width:390,height:844},reducedMotion:'no-preference'});
+ try{const page=await ctx.newPage();await page.clock.install();await ready(page,'skill=guard&scenario=counter&intent=Crushing%20Blow');await page.clock.pauseAt(new Date(Date.now()+100000));
+ await page.locator('#action-guard').click();await page.locator(`#target-${await page.evaluate(()=>window.unitA2QA.target())}`).click();const committed=await saved(page);
+ const turns=await page.evaluate(()=>window.unitA2QA.turns());await page.clock.runFor(stageTiming(turns[0]!,false).end+stageTiming(turns[1]!,false).contact);
+ expect(await page.evaluate(()=>window.unitA2QA.frames().guardian![0]!.frame)).toBe('30');
+ await page.clock.runFor(80);expect(await page.evaluate(()=>window.unitA2QA.frames().guardian![0]!.frame)).toBe('5');
+ await page.clock.runFor(120);expect(await page.evaluate(()=>window.unitA2QA.frames().guardian![0]!.frame)).toBe('0');
+ await page.clock.runFor(3000);expect(await saved(page)).toBe(committed);expect(await page.evaluate(()=>window.unitA2QA.state())).toEqual(await page.evaluate(()=>window.unitA2QA.expected()));
  }finally{await ctx.close();}
 });

@@ -46,7 +46,7 @@ function sequence(pose: UnitPose | Reaction, phase: FramePhase, clip?: UnitClip,
     if (pose === 'down') return [19, 20, 21];
     if (art === 'guardian' || art === 'foe_vargoth_guard') {
       if (pose === 'block') return art === 'guardian' ? [30, 31] : [22, 23];
-      if (pose === 'counter' && art === 'guardian') return [2, 5, 7];
+      if (pose === 'counter' && art === 'guardian') return [30, 5, 7];
     }
     return;
   }

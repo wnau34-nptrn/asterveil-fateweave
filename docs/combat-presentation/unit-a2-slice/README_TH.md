@@ -24,7 +24,7 @@
 | องครักษ์ `Rift Bolt` | shield-hand release9–16; สัมผัส13 | **generic energy VFX เดิม** บน actual recipient/guard/barrier/dodge | ไม่ใช่ไฟ แม้เกราะมีลายส้ม; ไม่ใช่ painted Bolt ของMage และไม่ผลิต familyใหม่ |
 | hurt ทั้งคู่ | 17–18 | damage event/HPจริง | ไม่แก้ state จากแอนิเมชัน |
 | block เอกิส/องครักษ์ | 30–31 / 22–23 | shield brace + actual absorbed/zero-damage event | ใช้ reaction poses สั้นร่วมจาก raw ไม่สร้างท่าแยกทุกแหล่งโล่ |
-| เอกิส guardcounter | sword reaction2→5→7ร่วม | counter event จริงจาก talent; generic counter VFX เดิม | ไม่เพิ่มคำสั่ง/เทิร์น/ฮิต; ไม่ใช่ ActionId ใหม่ |
+| เอกิส guardcounter | brace30→sword5→recover7ร่วม | counter event จริงจาก talent; generic counter VFX เดิม ภายในreaction200msเดิม รับhit/blockแล้วสวนโดยไม่ถูกhurtpriorityบัง; downยังชนะ | ไม่เพิ่มคำสั่ง/เทิร์น/ฮิต; ไม่ใช่ ActionId ใหม่ |
 | dodge ทั้งคู่ / counterศัตรู | **proceduralเดิม** | dodge/counter event จริง | ไม่มี stripเฉพาะ; current Guardไม่มี counter talentของตัวเอง |
 | down ทั้งคู่ | 19–21 ค้าง21เมื่อHP0 | actual down/authoritativeHP | skip/resize/reloadคงภาพล้ม |
 | revive เอกิส | resetseed0เมื่อHP>0 | Reviveเดิมโดยผู้ร่ายจริง | **ไม่มี stand-up stripใหม่**; ศัตรูไม่มี revive actionในcontent |
