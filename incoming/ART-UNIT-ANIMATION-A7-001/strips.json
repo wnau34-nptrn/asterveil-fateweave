@@ -1,0 +1,3942 @@
+[
+  {
+    "identity": "metta",
+    "move": "punch",
+    "revision": "r1",
+    "file": "saints/metta/raw/metta-punch-r1.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "protective ready",
+      "draw rear fist",
+      "straight punch right",
+      "extended shoulder follow-through",
+      "retract fist",
+      "regain guard"
+    ],
+    "routes_or_intents": [
+      "attack",
+      "saintstrike",
+      "vowstrike"
+    ],
+    "preferred_candidate": true,
+    "source": "saints/metta/source-sheets/metta-actions-source.png",
+    "source_row_1based": 1,
+    "source_crop_xyxy": [
+      0,
+      5,
+      1536,
+      275
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        25,
+        10,
+        246,
+        259
+      ],
+      [
+        279,
+        11,
+        496,
+        258
+      ],
+      [
+        530,
+        22,
+        791,
+        258
+      ],
+      [
+        776,
+        19,
+        1031,
+        257
+      ],
+      [
+        1046,
+        18,
+        1272,
+        258
+      ],
+      [
+        1308,
+        16,
+        1505,
+        260
+      ]
+    ],
+    "size": [
+      1536,
+      270
+    ],
+    "mode": "RGBA",
+    "sha256": "954add4792d5e824eb7e6a15c32e290ff5da92189ff36dbeb94bab9c6b07fa89",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "saints/metta/spaced/metta-punch-r1.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        192,
+        237
+      ],
+      [
+        576,
+        237
+      ],
+      [
+        960,
+        237
+      ],
+      [
+        1344,
+        237
+      ],
+      [
+        1728,
+        237
+      ],
+      [
+        2112,
+        237
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      1,
+      1.2,
+      0.75,
+      1,
+      0.8,
+      1
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  },
+  {
+    "identity": "metta",
+    "move": "sweeping-arc",
+    "revision": "r1",
+    "file": "saints/metta/raw/metta-sweeping-arc-r1.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "ready",
+      "load shoulder and coil",
+      "sweep forearm across front",
+      "broad horizontal follow-through",
+      "unwind",
+      "guard"
+    ],
+    "routes_or_intents": [
+      "saintarc"
+    ],
+    "preferred_candidate": true,
+    "source": "saints/metta/source-sheets/metta-actions-source.png",
+    "source_row_1based": 2,
+    "source_crop_xyxy": [
+      0,
+      259,
+      1536,
+      526
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        15,
+        10,
+        222,
+        254
+      ],
+      [
+        273,
+        18,
+        488,
+        255
+      ],
+      [
+        518,
+        26,
+        771,
+        255
+      ],
+      [
+        779,
+        13,
+        1027,
+        257
+      ],
+      [
+        1055,
+        20,
+        1270,
+        257
+      ],
+      [
+        1308,
+        15,
+        1512,
+        256
+      ]
+    ],
+    "size": [
+      1536,
+      267
+    ],
+    "mode": "RGBA",
+    "sha256": "00b85d02557edbb47317fee70de7cbcfd8705abebb54bfbd0ee3de8d92af0cae",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "saints/metta/spaced/metta-sweeping-arc-r1.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        192,
+        240
+      ],
+      [
+        576,
+        240
+      ],
+      [
+        960,
+        240
+      ],
+      [
+        1344,
+        240
+      ],
+      [
+        1728,
+        240
+      ],
+      [
+        2112,
+        240
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      1,
+      1.2,
+      0.75,
+      1,
+      0.8,
+      1
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  },
+  {
+    "identity": "metta",
+    "move": "communion",
+    "revision": "r1",
+    "file": "saints/metta/raw/metta-communion-r1.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "gather hands at chest",
+      "bow into gathering",
+      "open palm offering",
+      "extended open palm",
+      "soften offering",
+      "guard"
+    ],
+    "routes_or_intents": [
+      "communion",
+      "sharewound"
+    ],
+    "preferred_candidate": true,
+    "source": "saints/metta/source-sheets/metta-actions-source.png",
+    "source_row_1based": 3,
+    "source_crop_xyxy": [
+      0,
+      508,
+      1536,
+      774
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        16,
+        12,
+        237,
+        255
+      ],
+      [
+        280,
+        10,
+        478,
+        255
+      ],
+      [
+        509,
+        14,
+        757,
+        255
+      ],
+      [
+        769,
+        21,
+        1026,
+        255
+      ],
+      [
+        1058,
+        21,
+        1285,
+        255
+      ],
+      [
+        1309,
+        17,
+        1512,
+        256
+      ]
+    ],
+    "size": [
+      1536,
+      266
+    ],
+    "mode": "RGBA",
+    "sha256": "8be58f046e0831298bc101f3a340fbd317df89029ebf2747661323ddb94a1b21",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "saints/metta/spaced/metta-communion-r1.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        192,
+        241
+      ],
+      [
+        576,
+        241
+      ],
+      [
+        960,
+        241
+      ],
+      [
+        1344,
+        241
+      ],
+      [
+        1728,
+        241
+      ],
+      [
+        2112,
+        241
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      1,
+      1.2,
+      0.75,
+      1,
+      0.8,
+      1
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  },
+  {
+    "identity": "metta",
+    "move": "lastlight",
+    "revision": "r1",
+    "file": "saints/metta/raw/metta-lastlight-r1.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "ready",
+      "deep gathered fists",
+      "drive heavy low punch",
+      "extended heavy follow-through",
+      "lift out of stance",
+      "guard"
+    ],
+    "routes_or_intents": [
+      "lastlight"
+    ],
+    "preferred_candidate": false,
+    "source": "saints/metta/source-sheets/metta-actions-source.png",
+    "source_row_1based": 4,
+    "source_crop_xyxy": [
+      0,
+      756,
+      1536,
+      1016
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        20,
+        14,
+        235,
+        250
+      ],
+      [
+        258,
+        29,
+        483,
+        249
+      ],
+      [
+        506,
+        30,
+        752,
+        248
+      ],
+      [
+        758,
+        30,
+        1037,
+        247
+      ],
+      [
+        1066,
+        10,
+        1273,
+        248
+      ],
+      [
+        1308,
+        12,
+        1512,
+        250
+      ]
+    ],
+    "size": [
+      1536,
+      260
+    ],
+    "mode": "RGBA",
+    "sha256": "42170f2f493616bd730da8dab69f82be34e18ef92bf9ab0401fd6c280ca92aa3",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "saints/metta/spaced/metta-lastlight-r1.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        192,
+        247
+      ],
+      [
+        576,
+        247
+      ],
+      [
+        960,
+        247
+      ],
+      [
+        1344,
+        247
+      ],
+      [
+        1728,
+        247
+      ],
+      [
+        2112,
+        247
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      1,
+      1.2,
+      0.75,
+      1,
+      0.8,
+      1
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  },
+  {
+    "identity": "metta",
+    "move": "hit",
+    "revision": "r1",
+    "file": "saints/metta/raw/metta-hit-r1.png",
+    "frame_count": 4,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "ready",
+      "recoil and wince",
+      "catch balance",
+      "guard"
+    ],
+    "routes_or_intents": [
+      "hit"
+    ],
+    "preferred_candidate": true,
+    "source": "saints/metta/source-sheets/metta-reactions-source.png",
+    "source_row_1based": 1,
+    "source_crop_xyxy": [
+      0,
+      26,
+      1448,
+      398
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        32,
+        10,
+        343,
+        362
+      ],
+      [
+        379,
+        32,
+        720,
+        362
+      ],
+      [
+        746,
+        39,
+        1042,
+        362
+      ],
+      [
+        1120,
+        10,
+        1424,
+        362
+      ]
+    ],
+    "size": [
+      1448,
+      372
+    ],
+    "mode": "RGBA",
+    "sha256": "813f5045b440aece04cf21cfe5b9c7431fc778c65f0ead268429e6df4b9e02a4",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "saints/metta/spaced/metta-hit-r1.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        139,
+        135
+      ],
+      [
+        417,
+        135
+      ],
+      [
+        695,
+        135
+      ],
+      [
+        973,
+        135
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      0.8,
+      1,
+      0.9,
+      1
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  },
+  {
+    "identity": "metta",
+    "move": "block",
+    "revision": "r1",
+    "file": "saints/metta/raw/metta-block-r1.png",
+    "frame_count": 4,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "raise protective arms",
+      "brace behind crossed gauntlets or fans",
+      "absorb weight low",
+      "reset guard"
+    ],
+    "routes_or_intents": [
+      "block"
+    ],
+    "preferred_candidate": true,
+    "source": "saints/metta/source-sheets/metta-reactions-source.png",
+    "source_row_1based": 2,
+    "source_crop_xyxy": [
+      0,
+      394,
+      1448,
+      763
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        25,
+        14,
+        353,
+        358
+      ],
+      [
+        394,
+        18,
+        710,
+        358
+      ],
+      [
+        738,
+        62,
+        1061,
+        359
+      ],
+      [
+        1120,
+        10,
+        1427,
+        358
+      ]
+    ],
+    "size": [
+      1448,
+      369
+    ],
+    "mode": "RGBA",
+    "sha256": "91cd1ce6961622fd3ecbce58df3c46214acc50692e1e0889643edcb920945524",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "saints/metta/spaced/metta-block-r1.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        139,
+        138
+      ],
+      [
+        417,
+        138
+      ],
+      [
+        695,
+        138
+      ],
+      [
+        973,
+        138
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      0.8,
+      1,
+      0.9,
+      1
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  },
+  {
+    "identity": "metta",
+    "move": "down",
+    "revision": "r1",
+    "file": "saints/metta/raw/metta-down-r1.png",
+    "frame_count": 4,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "knees give way",
+      "hand and knee reach ground",
+      "sink to seated slump",
+      "lie unconscious and hold"
+    ],
+    "routes_or_intents": [
+      "down"
+    ],
+    "preferred_candidate": true,
+    "source": "saints/metta/source-sheets/metta-reactions-source.png",
+    "source_row_1based": 3,
+    "source_crop_xyxy": [
+      0,
+      760,
+      1448,
+      1063
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        20,
+        10,
+        382,
+        291
+      ],
+      [
+        359,
+        38,
+        666,
+        290
+      ],
+      [
+        701,
+        42,
+        983,
+        293
+      ],
+      [
+        992,
+        145,
+        1427,
+        291
+      ]
+    ],
+    "size": [
+      1448,
+      303
+    ],
+    "mode": "RGBA",
+    "sha256": "6d5b7adf0381410ecd6c4d9aa735377c3bc8fc0346b1231ccd3246183f862591",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "saints/metta/spaced/metta-down-r1.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        139,
+        204
+      ],
+      [
+        417,
+        204
+      ],
+      [
+        695,
+        204
+      ],
+      [
+        973,
+        204
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      0.8,
+      1,
+      0.9,
+      1
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  },
+  {
+    "identity": "metta",
+    "move": "communion",
+    "revision": "r2",
+    "file": "saints/metta/raw/metta-communion-r2.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "gather near heart",
+      "look left and open hand",
+      "leftward palm reach",
+      "sustained leftward offering",
+      "lower offering",
+      "return right"
+    ],
+    "routes_or_intents": [
+      "communion",
+      "sharewound"
+    ],
+    "preferred_candidate": false,
+    "source": "saints/metta/source-sheets/metta-r2-source.png",
+    "source_row_1based": 1,
+    "source_crop_xyxy": [
+      0,
+      3,
+      2172,
+      381
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        22,
+        12,
+        283,
+        368
+      ],
+      [
+        389,
+        10,
+        671,
+        368
+      ],
+      [
+        757,
+        11,
+        1077,
+        367
+      ],
+      [
+        1136,
+        12,
+        1448,
+        368
+      ],
+      [
+        1538,
+        12,
+        1813,
+        368
+      ],
+      [
+        1875,
+        13,
+        2143,
+        368
+      ]
+    ],
+    "size": [
+      2172,
+      378
+    ],
+    "mode": "RGBA",
+    "sha256": "1b89eaaaf7ee6f0b1949b27da17f603fa9f424a546b7a512aa294f4035629010",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "saints/metta/spaced/metta-communion-r2.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        139,
+        129
+      ],
+      [
+        417,
+        129
+      ],
+      [
+        695,
+        129
+      ],
+      [
+        973,
+        129
+      ],
+      [
+        1251,
+        129
+      ],
+      [
+        1529,
+        129
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      1,
+      1.2,
+      0.75,
+      1,
+      0.8,
+      1
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  },
+  {
+    "identity": "metta",
+    "move": "lastlight",
+    "revision": "r2",
+    "file": "saints/metta/raw/metta-lastlight-r2.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "gathered guard",
+      "sink deeply",
+      "raise gauntlet overhead",
+      "downward heavy hammerfist right",
+      "low weighted follow-through",
+      "recover guard"
+    ],
+    "routes_or_intents": [
+      "lastlight"
+    ],
+    "preferred_candidate": true,
+    "source": "saints/metta/source-sheets/metta-r2-source.png",
+    "source_row_1based": 2,
+    "source_crop_xyxy": [
+      0,
+      365,
+      2172,
+      708
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        20,
+        14,
+        295,
+        333
+      ],
+      [
+        375,
+        48,
+        670,
+        332
+      ],
+      [
+        745,
+        10,
+        1038,
+        332
+      ],
+      [
+        1057,
+        53,
+        1383,
+        329
+      ],
+      [
+        1435,
+        79,
+        1812,
+        330
+      ],
+      [
+        1874,
+        13,
+        2143,
+        333
+      ]
+    ],
+    "size": [
+      2172,
+      343
+    ],
+    "mode": "RGBA",
+    "sha256": "4c8facb05216f3b8db9f8e9fa71c199bf114ebe7542af7c1b6bc6846c331c979",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "saints/metta/spaced/metta-lastlight-r2.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        139,
+        164
+      ],
+      [
+        417,
+        164
+      ],
+      [
+        695,
+        164
+      ],
+      [
+        973,
+        164
+      ],
+      [
+        1251,
+        164
+      ],
+      [
+        1529,
+        164
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      1,
+      1.2,
+      0.75,
+      1,
+      0.8,
+      1
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  },
+  {
+    "identity": "thiran",
+    "move": "punch",
+    "revision": "r1",
+    "file": "saints/thiran/raw/thiran-punch-r1.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "protective ready",
+      "draw rear fist",
+      "straight punch right",
+      "extended shoulder follow-through",
+      "retract fist",
+      "regain guard"
+    ],
+    "routes_or_intents": [
+      "attack",
+      "saintstrike",
+      "vowstrike"
+    ],
+    "preferred_candidate": true,
+    "source": "saints/thiran/source-sheets/thiran-actions-source.png",
+    "source_row_1based": 1,
+    "source_crop_xyxy": [
+      0,
+      8,
+      1536,
+      271
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        23,
+        10,
+        242,
+        252
+      ],
+      [
+        271,
+        29,
+        511,
+        252
+      ],
+      [
+        536,
+        26,
+        788,
+        253
+      ],
+      [
+        795,
+        33,
+        1047,
+        253
+      ],
+      [
+        1061,
+        24,
+        1281,
+        252
+      ],
+      [
+        1311,
+        11,
+        1522,
+        253
+      ]
+    ],
+    "size": [
+      1536,
+      263
+    ],
+    "mode": "RGBA",
+    "sha256": "22170560856aade9c8c2a23cda21e3f7fde74a710e959ece022d54b8fda2ff5d",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "saints/thiran/spaced/thiran-punch-r1.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        192,
+        244
+      ],
+      [
+        576,
+        244
+      ],
+      [
+        960,
+        244
+      ],
+      [
+        1344,
+        244
+      ],
+      [
+        1728,
+        244
+      ],
+      [
+        2112,
+        244
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      1,
+      1.6,
+      1,
+      1.4,
+      1.2,
+      1.2
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  },
+  {
+    "identity": "thiran",
+    "move": "sweeping-arc",
+    "revision": "r1",
+    "file": "saints/thiran/raw/thiran-sweeping-arc-r1.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "ready",
+      "load shoulder and coil",
+      "sweep forearm across front",
+      "broad horizontal follow-through",
+      "unwind",
+      "guard"
+    ],
+    "routes_or_intents": [
+      "saintarc"
+    ],
+    "preferred_candidate": true,
+    "source": "saints/thiran/source-sheets/thiran-actions-source.png",
+    "source_row_1based": 2,
+    "source_crop_xyxy": [
+      0,
+      256,
+      1536,
+      519
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        16,
+        10,
+        230,
+        252
+      ],
+      [
+        259,
+        17,
+        511,
+        253
+      ],
+      [
+        528,
+        24,
+        765,
+        250
+      ],
+      [
+        785,
+        29,
+        1054,
+        250
+      ],
+      [
+        1064,
+        25,
+        1312,
+        253
+      ],
+      [
+        1314,
+        17,
+        1520,
+        252
+      ]
+    ],
+    "size": [
+      1536,
+      263
+    ],
+    "mode": "RGBA",
+    "sha256": "9e9a87ef3efe98957e54ff5ad9c55fde4985c8156d5526749147476e7967fe14",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "saints/thiran/spaced/thiran-sweeping-arc-r1.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        192,
+        244
+      ],
+      [
+        576,
+        244
+      ],
+      [
+        960,
+        244
+      ],
+      [
+        1344,
+        244
+      ],
+      [
+        1728,
+        244
+      ],
+      [
+        2112,
+        244
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      1,
+      1.6,
+      1,
+      1.4,
+      1.2,
+      1.2
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  },
+  {
+    "identity": "thiran",
+    "move": "communion",
+    "revision": "r1",
+    "file": "saints/thiran/raw/thiran-communion-r1.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "gather hands at chest",
+      "bow into gathering",
+      "open palm offering",
+      "extended open palm",
+      "soften offering",
+      "guard"
+    ],
+    "routes_or_intents": [
+      "communion",
+      "sharewound"
+    ],
+    "preferred_candidate": true,
+    "source": "saints/thiran/source-sheets/thiran-actions-source.png",
+    "source_row_1based": 3,
+    "source_crop_xyxy": [
+      0,
+      506,
+      1536,
+      767
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        21,
+        11,
+        248,
+        250
+      ],
+      [
+        274,
+        17,
+        488,
+        251
+      ],
+      [
+        522,
+        14,
+        773,
+        249
+      ],
+      [
+        794,
+        12,
+        1050,
+        248
+      ],
+      [
+        1066,
+        13,
+        1307,
+        250
+      ],
+      [
+        1313,
+        10,
+        1522,
+        248
+      ]
+    ],
+    "size": [
+      1536,
+      261
+    ],
+    "mode": "RGBA",
+    "sha256": "22207a2f49eca2236f162814df97f6cd500652295473efa79810fd9fd496b5d1",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "saints/thiran/spaced/thiran-communion-r1.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        192,
+        246
+      ],
+      [
+        576,
+        246
+      ],
+      [
+        960,
+        246
+      ],
+      [
+        1344,
+        246
+      ],
+      [
+        1728,
+        246
+      ],
+      [
+        2112,
+        246
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      1,
+      1.6,
+      1,
+      1.4,
+      1.2,
+      1.2
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  },
+  {
+    "identity": "thiran",
+    "move": "lastlight",
+    "revision": "r1",
+    "file": "saints/thiran/raw/thiran-lastlight-r1.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "square guard",
+      "gathered two-fist brace",
+      "draw heavy fist high",
+      "heavy forward punch",
+      "low recovery",
+      "square guard"
+    ],
+    "routes_or_intents": [
+      "lastlight"
+    ],
+    "preferred_candidate": false,
+    "source": "saints/thiran/source-sheets/thiran-actions-source.png",
+    "source_row_1based": 4,
+    "source_crop_xyxy": [
+      0,
+      747,
+      1536,
+      1006
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        9,
+        10,
+        214,
+        247
+      ],
+      [
+        246,
+        28,
+        490,
+        249
+      ],
+      [
+        506,
+        12,
+        762,
+        248
+      ],
+      [
+        772,
+        33,
+        1044,
+        247
+      ],
+      [
+        1047,
+        21,
+        1301,
+        247
+      ],
+      [
+        1306,
+        11,
+        1530,
+        246
+      ]
+    ],
+    "size": [
+      1536,
+      259
+    ],
+    "mode": "RGBA",
+    "sha256": "b7b170cd418810561ba467be14c16ad6ed2153f9538486dbc7d104d5a1f5369d",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "saints/thiran/spaced/thiran-lastlight-r1.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        192,
+        248
+      ],
+      [
+        576,
+        248
+      ],
+      [
+        960,
+        248
+      ],
+      [
+        1344,
+        248
+      ],
+      [
+        1728,
+        248
+      ],
+      [
+        2112,
+        248
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      1,
+      1.6,
+      1,
+      1.4,
+      1.2,
+      1.2
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  },
+  {
+    "identity": "thiran",
+    "move": "hit",
+    "revision": "r1",
+    "file": "saints/thiran/raw/thiran-hit-r1.png",
+    "frame_count": 4,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "ready",
+      "recoil and wince",
+      "catch balance",
+      "guard"
+    ],
+    "routes_or_intents": [
+      "hit"
+    ],
+    "preferred_candidate": true,
+    "source": "saints/thiran/source-sheets/thiran-reactions-source.png",
+    "source_row_1based": 1,
+    "source_crop_xyxy": [
+      0,
+      16,
+      1448,
+      402
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        20,
+        10,
+        345,
+        376
+      ],
+      [
+        405,
+        20,
+        748,
+        376
+      ],
+      [
+        748,
+        48,
+        1084,
+        376
+      ],
+      [
+        1106,
+        11,
+        1430,
+        376
+      ]
+    ],
+    "size": [
+      1448,
+      386
+    ],
+    "mode": "RGBA",
+    "sha256": "fc5465fb307b2e8828de9b6de33282b150292f54df84743d22ab1eca0cc380d6",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "saints/thiran/spaced/thiran-hit-r1.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        139,
+        121
+      ],
+      [
+        417,
+        121
+      ],
+      [
+        695,
+        121
+      ],
+      [
+        973,
+        121
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      1.2,
+      1.5,
+      1.3,
+      1.2
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  },
+  {
+    "identity": "thiran",
+    "move": "block",
+    "revision": "r1",
+    "file": "saints/thiran/raw/thiran-block-r1.png",
+    "frame_count": 4,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "raise protective arms",
+      "brace behind crossed gauntlets or fans",
+      "absorb weight low",
+      "reset guard"
+    ],
+    "routes_or_intents": [
+      "block"
+    ],
+    "preferred_candidate": true,
+    "source": "saints/thiran/source-sheets/thiran-reactions-source.png",
+    "source_row_1based": 2,
+    "source_crop_xyxy": [
+      0,
+      385,
+      1448,
+      779
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        12,
+        10,
+        356,
+        383
+      ],
+      [
+        377,
+        17,
+        695,
+        384
+      ],
+      [
+        723,
+        58,
+        1078,
+        384
+      ],
+      [
+        1105,
+        12,
+        1428,
+        384
+      ]
+    ],
+    "size": [
+      1448,
+      394
+    ],
+    "mode": "RGBA",
+    "sha256": "2b292f3dc248e88ad21cb618d8e662c88d6d4ba9b6a933454675fffaa9e4fe91",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "saints/thiran/spaced/thiran-block-r1.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        139,
+        113
+      ],
+      [
+        417,
+        113
+      ],
+      [
+        695,
+        113
+      ],
+      [
+        973,
+        113
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      1.2,
+      1.5,
+      1.3,
+      1.2
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  },
+  {
+    "identity": "thiran",
+    "move": "down",
+    "revision": "r1",
+    "file": "saints/thiran/raw/thiran-down-r1.png",
+    "frame_count": 4,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "knees give way",
+      "hand and knee reach ground",
+      "sink to seated slump",
+      "lie unconscious and hold"
+    ],
+    "routes_or_intents": [
+      "down"
+    ],
+    "preferred_candidate": true,
+    "source": "saints/thiran/source-sheets/thiran-reactions-source.png",
+    "source_row_1based": 3,
+    "source_crop_xyxy": [
+      0,
+      757,
+      1448,
+      1075
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        5,
+        10,
+        329,
+        304
+      ],
+      [
+        370,
+        27,
+        689,
+        302
+      ],
+      [
+        695,
+        58,
+        1045,
+        303
+      ],
+      [
+        1056,
+        134,
+        1446,
+        308
+      ]
+    ],
+    "size": [
+      1448,
+      318
+    ],
+    "mode": "RGBA",
+    "sha256": "7c57d5b91c5b328db79cb5e4b435d1c938dda69f6bb17faa9ec58e46fb8c6052",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "saints/thiran/spaced/thiran-down-r1.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        139,
+        189
+      ],
+      [
+        417,
+        189
+      ],
+      [
+        695,
+        189
+      ],
+      [
+        973,
+        189
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      1.2,
+      1.5,
+      1.3,
+      1.2
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  },
+  {
+    "identity": "thiran",
+    "move": "communion",
+    "revision": "r2",
+    "file": "saints/thiran/raw/thiran-communion-r2.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "guard",
+      "gather bead hand",
+      "open palm facing front-right",
+      "extended open palm right",
+      "turn and offer palm left",
+      "return right"
+    ],
+    "routes_or_intents": [
+      "communion",
+      "sharewound"
+    ],
+    "preferred_candidate": false,
+    "source": "saints/thiran/source-sheets/thiran-r2-source.png",
+    "source_row_1based": 1,
+    "source_crop_xyxy": [
+      0,
+      15,
+      2172,
+      365
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        63,
+        10,
+        339,
+        340
+      ],
+      [
+        424,
+        19,
+        684,
+        340
+      ],
+      [
+        751,
+        22,
+        1080,
+        339
+      ],
+      [
+        1111,
+        20,
+        1448,
+        340
+      ],
+      [
+        1531,
+        20,
+        1793,
+        340
+      ],
+      [
+        1843,
+        12,
+        2118,
+        340
+      ]
+    ],
+    "size": [
+      2172,
+      350
+    ],
+    "mode": "RGBA",
+    "sha256": "25c12ed6db6d3e91b5faee42db5d4a4b18496d65ce7a654fafbf9369a3b164c4",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "saints/thiran/spaced/thiran-communion-r2.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        139,
+        157
+      ],
+      [
+        417,
+        157
+      ],
+      [
+        695,
+        157
+      ],
+      [
+        973,
+        157
+      ],
+      [
+        1251,
+        157
+      ],
+      [
+        1529,
+        157
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      1,
+      1.6,
+      1,
+      1.4,
+      1.2,
+      1.2
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  },
+  {
+    "identity": "thiran",
+    "move": "lastlight",
+    "revision": "r2",
+    "file": "saints/thiran/raw/thiran-lastlight-r2.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "gathered guard",
+      "sink deeply",
+      "raise gauntlet overhead",
+      "downward heavy hammerfist right",
+      "low weighted follow-through",
+      "recover guard"
+    ],
+    "routes_or_intents": [
+      "lastlight"
+    ],
+    "preferred_candidate": true,
+    "source": "saints/thiran/source-sheets/thiran-r2-source.png",
+    "source_row_1based": 2,
+    "source_crop_xyxy": [
+      0,
+      359,
+      2172,
+      707
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        53,
+        22,
+        333,
+        337
+      ],
+      [
+        395,
+        52,
+        675,
+        337
+      ],
+      [
+        747,
+        10,
+        1039,
+        338
+      ],
+      [
+        1093,
+        67,
+        1427,
+        338
+      ],
+      [
+        1481,
+        67,
+        1785,
+        337
+      ],
+      [
+        1844,
+        12,
+        2118,
+        338
+      ]
+    ],
+    "size": [
+      2172,
+      348
+    ],
+    "mode": "RGBA",
+    "sha256": "a297799bf9bbc2e96a7c5f38700e7b0b71db15072cc900bc0e77ce770decd428",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "saints/thiran/spaced/thiran-lastlight-r2.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        139,
+        159
+      ],
+      [
+        417,
+        159
+      ],
+      [
+        695,
+        159
+      ],
+      [
+        973,
+        159
+      ],
+      [
+        1251,
+        159
+      ],
+      [
+        1529,
+        159
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      1,
+      1.6,
+      1,
+      1.4,
+      1.2,
+      1.2
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  },
+  {
+    "identity": "lalin",
+    "move": "dance-strike",
+    "revision": "r1",
+    "file": "dancers/lalin/raw/lalin-dance-strike-r1.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "poised ready",
+      "gather fan across body",
+      "step into fan strike right",
+      "extended fan flourish",
+      "reverse weight",
+      "rightward ready"
+    ],
+    "routes_or_intents": [
+      "attack"
+    ],
+    "preferred_candidate": true,
+    "source": "dancers/lalin/source-sheets/lalin-actions-source.png",
+    "source_row_1based": 1,
+    "source_crop_xyxy": [
+      0,
+      7,
+      1536,
+      270
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        18,
+        10,
+        245,
+        250
+      ],
+      [
+        269,
+        13,
+        504,
+        251
+      ],
+      [
+        502,
+        16,
+        780,
+        250
+      ],
+      [
+        786,
+        10,
+        1082,
+        250
+      ],
+      [
+        1049,
+        17,
+        1276,
+        253
+      ],
+      [
+        1262,
+        11,
+        1525,
+        251
+      ]
+    ],
+    "size": [
+      1536,
+      263
+    ],
+    "mode": "RGBA",
+    "sha256": "b64b8833cd5f970d9f1c81b976a350dd90efaef7af20a52677ae92e6167bb952",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "dancers/lalin/spaced/lalin-dance-strike-r1.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        192,
+        244
+      ],
+      [
+        576,
+        244
+      ],
+      [
+        960,
+        244
+      ],
+      [
+        1344,
+        244
+      ],
+      [
+        1728,
+        244
+      ],
+      [
+        2112,
+        244
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      1,
+      1.2,
+      0.75,
+      1,
+      0.8,
+      1
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  },
+  {
+    "identity": "lalin",
+    "move": "partner-turn",
+    "revision": "r1",
+    "file": "dancers/lalin/raw/lalin-partner-turn-r1.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "look left",
+      "turn hips left and offer fans",
+      "small partner step",
+      "open welcoming fan presentation",
+      "upbeat raised-fan accent",
+      "return right"
+    ],
+    "routes_or_intents": [
+      "cadence",
+      "duet",
+      "deepbeat"
+    ],
+    "preferred_candidate": false,
+    "source": "dancers/lalin/source-sheets/lalin-actions-source.png",
+    "source_row_1based": 2,
+    "source_crop_xyxy": [
+      0,
+      257,
+      1536,
+      523
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        9,
+        12,
+        238,
+        251
+      ],
+      [
+        251,
+        14,
+        510,
+        253
+      ],
+      [
+        500,
+        18,
+        778,
+        256
+      ],
+      [
+        786,
+        18,
+        1068,
+        255
+      ],
+      [
+        1083,
+        10,
+        1293,
+        255
+      ],
+      [
+        1306,
+        14,
+        1528,
+        255
+      ]
+    ],
+    "size": [
+      1536,
+      266
+    ],
+    "mode": "RGBA",
+    "sha256": "d232fd63a66d61f509e16d1a33ed0874719a42486be2499eb7d99c68640376a2",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "dancers/lalin/spaced/lalin-partner-turn-r1.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        192,
+        241
+      ],
+      [
+        576,
+        241
+      ],
+      [
+        960,
+        241
+      ],
+      [
+        1344,
+        241
+      ],
+      [
+        1728,
+        241
+      ],
+      [
+        2112,
+        241
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      1,
+      1.2,
+      0.75,
+      1,
+      0.8,
+      1
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  },
+  {
+    "identity": "lalin",
+    "move": "circle-spin",
+    "revision": "r1",
+    "file": "dancers/lalin/raw/lalin-circle-spin-r1.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "gather arms",
+      "turn through side",
+      "back-facing pivot",
+      "continue through opposite side",
+      "reopen fans",
+      "settle right"
+    ],
+    "routes_or_intents": [
+      "rounddance"
+    ],
+    "preferred_candidate": true,
+    "source": "dancers/lalin/source-sheets/lalin-actions-source.png",
+    "source_row_1based": 3,
+    "source_crop_xyxy": [
+      0,
+      509,
+      1536,
+      767
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        18,
+        10,
+        228,
+        242
+      ],
+      [
+        250,
+        13,
+        485,
+        238
+      ],
+      [
+        499,
+        10,
+        771,
+        242
+      ],
+      [
+        785,
+        14,
+        1027,
+        242
+      ],
+      [
+        1035,
+        14,
+        1305,
+        243
+      ],
+      [
+        1312,
+        12,
+        1525,
+        248
+      ]
+    ],
+    "size": [
+      1536,
+      258
+    ],
+    "mode": "RGBA",
+    "sha256": "7431dfe094e2ff67b5eeaaa3d26fa5f1d05e7bd0b44077958696ab47f8bb5798",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "dancers/lalin/spaced/lalin-circle-spin-r1.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        192,
+        249
+      ],
+      [
+        576,
+        249
+      ],
+      [
+        960,
+        249
+      ],
+      [
+        1344,
+        249
+      ],
+      [
+        1728,
+        249
+      ],
+      [
+        2112,
+        249
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      1,
+      1.2,
+      0.75,
+      1,
+      0.8,
+      1
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  },
+  {
+    "identity": "lalin",
+    "move": "echo-closing-step",
+    "revision": "r1",
+    "file": "dancers/lalin/raw/lalin-echo-closing-step-r1.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "gather low",
+      "crossing foot placement",
+      "forward fan accent",
+      "rising open flourish",
+      "soften closing step",
+      "settle right"
+    ],
+    "routes_or_intents": [
+      "echofoot"
+    ],
+    "preferred_candidate": true,
+    "source": "dancers/lalin/source-sheets/lalin-actions-source.png",
+    "source_row_1based": 4,
+    "source_crop_xyxy": [
+      0,
+      739,
+      1536,
+      1020
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        25,
+        23,
+        231,
+        270
+      ],
+      [
+        250,
+        32,
+        479,
+        268
+      ],
+      [
+        502,
+        25,
+        776,
+        266
+      ],
+      [
+        786,
+        10,
+        1045,
+        255
+      ],
+      [
+        1064,
+        26,
+        1293,
+        271
+      ],
+      [
+        1304,
+        32,
+        1525,
+        270
+      ]
+    ],
+    "size": [
+      1536,
+      281
+    ],
+    "mode": "RGBA",
+    "sha256": "09671e00a5c635efaf4f98a5af2bc9a1f586a2e69b90be46870c7dd9732b8181",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "dancers/lalin/spaced/lalin-echo-closing-step-r1.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        192,
+        226
+      ],
+      [
+        576,
+        226
+      ],
+      [
+        960,
+        226
+      ],
+      [
+        1344,
+        226
+      ],
+      [
+        1728,
+        226
+      ],
+      [
+        2112,
+        226
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      1,
+      1.2,
+      0.75,
+      1,
+      0.8,
+      1
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  },
+  {
+    "identity": "lalin",
+    "move": "hit",
+    "revision": "r1",
+    "file": "dancers/lalin/raw/lalin-hit-r1.png",
+    "frame_count": 4,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "ready",
+      "recoil and wince",
+      "catch balance",
+      "guard"
+    ],
+    "routes_or_intents": [
+      "hit"
+    ],
+    "preferred_candidate": true,
+    "source": "dancers/lalin/source-sheets/lalin-reactions-source.png",
+    "source_row_1based": 1,
+    "source_crop_xyxy": [
+      0,
+      22,
+      1448,
+      386
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        19,
+        10,
+        370,
+        352
+      ],
+      [
+        381,
+        21,
+        725,
+        353
+      ],
+      [
+        723,
+        39,
+        1070,
+        354
+      ],
+      [
+        1100,
+        23,
+        1439,
+        354
+      ]
+    ],
+    "size": [
+      1448,
+      364
+    ],
+    "mode": "RGBA",
+    "sha256": "b29d7d3994edb35ca2163f80e29739428df36542ef920dbcefd97285171f8b54",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "dancers/lalin/spaced/lalin-hit-r1.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        139,
+        143
+      ],
+      [
+        417,
+        143
+      ],
+      [
+        695,
+        143
+      ],
+      [
+        973,
+        143
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      0.8,
+      1,
+      0.9,
+      1
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  },
+  {
+    "identity": "lalin",
+    "move": "block",
+    "revision": "r1",
+    "file": "dancers/lalin/raw/lalin-block-r1.png",
+    "frame_count": 4,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "raise protective arms",
+      "brace behind crossed gauntlets or fans",
+      "absorb weight low",
+      "reset guard"
+    ],
+    "routes_or_intents": [
+      "block"
+    ],
+    "preferred_candidate": true,
+    "source": "dancers/lalin/source-sheets/lalin-reactions-source.png",
+    "source_row_1based": 2,
+    "source_crop_xyxy": [
+      0,
+      370,
+      1448,
+      734
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        15,
+        10,
+        355,
+        351
+      ],
+      [
+        375,
+        19,
+        715,
+        352
+      ],
+      [
+        724,
+        47,
+        1072,
+        352
+      ],
+      [
+        1100,
+        19,
+        1440,
+        354
+      ]
+    ],
+    "size": [
+      1448,
+      364
+    ],
+    "mode": "RGBA",
+    "sha256": "8103f5f6ac3fc623fd6251088546b7331dd84cf6ac83446dc08a72bcfa932eb6",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "dancers/lalin/spaced/lalin-block-r1.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        139,
+        143
+      ],
+      [
+        417,
+        143
+      ],
+      [
+        695,
+        143
+      ],
+      [
+        973,
+        143
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      0.8,
+      1,
+      0.9,
+      1
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  },
+  {
+    "identity": "lalin",
+    "move": "down",
+    "revision": "r1",
+    "file": "dancers/lalin/raw/lalin-down-r1.png",
+    "frame_count": 4,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "knees give way",
+      "hand and knee reach ground",
+      "sink to seated slump",
+      "lie unconscious and hold"
+    ],
+    "routes_or_intents": [
+      "down"
+    ],
+    "preferred_candidate": true,
+    "source": "dancers/lalin/source-sheets/lalin-reactions-source.png",
+    "source_row_1based": 3,
+    "source_crop_xyxy": [
+      0,
+      735,
+      1448,
+      1063
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        18,
+        10,
+        322,
+        318
+      ],
+      [
+        338,
+        61,
+        704,
+        317
+      ],
+      [
+        717,
+        71,
+        1067,
+        311
+      ],
+      [
+        1064,
+        165,
+        1441,
+        317
+      ]
+    ],
+    "size": [
+      1448,
+      328
+    ],
+    "mode": "RGBA",
+    "sha256": "bbf93312a834c7edc1e749e58c6d686e6947b150e2dc761c0c73eb1bd9363d51",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "dancers/lalin/spaced/lalin-down-r1.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        139,
+        179
+      ],
+      [
+        417,
+        179
+      ],
+      [
+        695,
+        179
+      ],
+      [
+        973,
+        179
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      0.8,
+      1,
+      0.9,
+      1
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  },
+  {
+    "identity": "lalin",
+    "move": "partner-turn",
+    "revision": "r2",
+    "file": "dancers/lalin/raw/lalin-partner-turn-r2.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "ready",
+      "turn attention left",
+      "fan-led pivot",
+      "clear left-facing invitation",
+      "soften partner turn",
+      "return right"
+    ],
+    "routes_or_intents": [
+      "cadence",
+      "duet",
+      "deepbeat"
+    ],
+    "preferred_candidate": true,
+    "source": "dancers/lalin/source-sheets/lalin-r2-source.png",
+    "source_row_1based": 1,
+    "source_crop_xyxy": [
+      0,
+      29,
+      2172,
+      365
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        21,
+        10,
+        328,
+        325
+      ],
+      [
+        376,
+        14,
+        673,
+        326
+      ],
+      [
+        723,
+        18,
+        1063,
+        326
+      ],
+      [
+        1098,
+        18,
+        1449,
+        322
+      ],
+      [
+        1493,
+        25,
+        1814,
+        323
+      ],
+      [
+        1856,
+        10,
+        2163,
+        325
+      ]
+    ],
+    "size": [
+      2172,
+      336
+    ],
+    "mode": "RGBA",
+    "sha256": "ff399a94066b22b923918e507e12b33062ac9afa6050de74201bf8d6ba7c3ad3",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "dancers/lalin/spaced/lalin-partner-turn-r2.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        139,
+        171
+      ],
+      [
+        417,
+        171
+      ],
+      [
+        695,
+        171
+      ],
+      [
+        973,
+        171
+      ],
+      [
+        1251,
+        171
+      ],
+      [
+        1529,
+        171
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      1,
+      1.2,
+      0.75,
+      1,
+      0.8,
+      1
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  },
+  {
+    "identity": "lalin",
+    "move": "echo-closing-step",
+    "revision": "r2",
+    "file": "dancers/lalin/raw/lalin-echo-closing-step-r2.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "ready",
+      "gather fans low",
+      "close feet and gather chest",
+      "both fans raised in closing arch",
+      "welcoming bow",
+      "settle ready"
+    ],
+    "routes_or_intents": [
+      "closingstep"
+    ],
+    "preferred_candidate": true,
+    "source": "dancers/lalin/source-sheets/lalin-r2-source.png",
+    "source_row_1based": 2,
+    "source_crop_xyxy": [
+      0,
+      354,
+      2172,
+      719
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        25,
+        38,
+        338,
+        354
+      ],
+      [
+        389,
+        50,
+        691,
+        351
+      ],
+      [
+        740,
+        20,
+        1016,
+        355
+      ],
+      [
+        1082,
+        10,
+        1436,
+        355
+      ],
+      [
+        1468,
+        17,
+        1808,
+        354
+      ],
+      [
+        1857,
+        38,
+        2162,
+        354
+      ]
+    ],
+    "size": [
+      2172,
+      365
+    ],
+    "mode": "RGBA",
+    "sha256": "8f2ed9bf9b0fa8d541e4b26b7f3bdafe13d57adf65df7e8358c64dbbb66bec2b",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "dancers/lalin/spaced/lalin-echo-closing-step-r2.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        139,
+        142
+      ],
+      [
+        417,
+        142
+      ],
+      [
+        695,
+        142
+      ],
+      [
+        973,
+        142
+      ],
+      [
+        1251,
+        142
+      ],
+      [
+        1529,
+        142
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      1,
+      1.2,
+      0.75,
+      1,
+      0.8,
+      1
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  },
+  {
+    "identity": "wila",
+    "move": "dance-strike",
+    "revision": "r1",
+    "file": "dancers/wila/raw/wila-dance-strike-r1.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "poised ready",
+      "gather fan across body",
+      "step into fan strike right",
+      "extended fan flourish",
+      "reverse weight",
+      "rightward ready"
+    ],
+    "routes_or_intents": [
+      "attack"
+    ],
+    "preferred_candidate": true,
+    "source": "dancers/wila/source-sheets/wila-actions-source.png",
+    "source_row_1based": 1,
+    "source_crop_xyxy": [
+      0,
+      7,
+      1536,
+      276
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        19,
+        10,
+        267,
+        258
+      ],
+      [
+        283,
+        26,
+        505,
+        258
+      ],
+      [
+        521,
+        16,
+        805,
+        258
+      ],
+      [
+        806,
+        13,
+        1075,
+        259
+      ],
+      [
+        1074,
+        25,
+        1276,
+        257
+      ],
+      [
+        1290,
+        12,
+        1525,
+        259
+      ]
+    ],
+    "size": [
+      1536,
+      269
+    ],
+    "mode": "RGBA",
+    "sha256": "8742dd2c0995db2c2ceb318dea9d8ac5c0326e62e6f6ac574d3cd00fefabe005",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "dancers/wila/spaced/wila-dance-strike-r1.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        192,
+        238
+      ],
+      [
+        576,
+        238
+      ],
+      [
+        960,
+        238
+      ],
+      [
+        1344,
+        238
+      ],
+      [
+        1728,
+        238
+      ],
+      [
+        2112,
+        238
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      1,
+      1.6,
+      1,
+      1.4,
+      1.2,
+      1.2
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  },
+  {
+    "identity": "wila",
+    "move": "partner-turn",
+    "revision": "r1",
+    "file": "dancers/wila/raw/wila-partner-turn-r1.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "poised ready",
+      "open arm toward partner",
+      "raised-fan turn",
+      "lower offering fan",
+      "soft teaching step",
+      "rightward ready"
+    ],
+    "routes_or_intents": [
+      "cadence",
+      "duet",
+      "deepbeat"
+    ],
+    "preferred_candidate": false,
+    "source": "dancers/wila/source-sheets/wila-actions-source.png",
+    "source_row_1based": 2,
+    "source_crop_xyxy": [
+      0,
+      260,
+      1536,
+      532
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        22,
+        10,
+        252,
+        261
+      ],
+      [
+        271,
+        15,
+        487,
+        261
+      ],
+      [
+        527,
+        10,
+        761,
+        260
+      ],
+      [
+        773,
+        21,
+        1027,
+        261
+      ],
+      [
+        1054,
+        14,
+        1271,
+        261
+      ],
+      [
+        1290,
+        13,
+        1524,
+        262
+      ]
+    ],
+    "size": [
+      1536,
+      272
+    ],
+    "mode": "RGBA",
+    "sha256": "90063ea73edc557259418fb082668e5e69bdb9e87598965c00ca4c9afa5d0271",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "dancers/wila/spaced/wila-partner-turn-r1.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        192,
+        235
+      ],
+      [
+        576,
+        235
+      ],
+      [
+        960,
+        235
+      ],
+      [
+        1344,
+        235
+      ],
+      [
+        1728,
+        235
+      ],
+      [
+        2112,
+        235
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      1,
+      1.6,
+      1,
+      1.4,
+      1.2,
+      1.2
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  },
+  {
+    "identity": "wila",
+    "move": "circle-spin",
+    "revision": "r1",
+    "file": "dancers/wila/raw/wila-circle-spin-r1.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "gather arms",
+      "turn through side",
+      "back-facing pivot",
+      "continue through opposite side",
+      "reopen fans",
+      "settle right"
+    ],
+    "routes_or_intents": [
+      "rounddance"
+    ],
+    "preferred_candidate": true,
+    "source": "dancers/wila/source-sheets/wila-actions-source.png",
+    "source_row_1based": 3,
+    "source_crop_xyxy": [
+      0,
+      520,
+      1536,
+      780
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        11,
+        11,
+        272,
+        250
+      ],
+      [
+        283,
+        12,
+        511,
+        249
+      ],
+      [
+        523,
+        12,
+        792,
+        249
+      ],
+      [
+        800,
+        14,
+        1023,
+        249
+      ],
+      [
+        1030,
+        10,
+        1283,
+        250
+      ],
+      [
+        1294,
+        14,
+        1527,
+        250
+      ]
+    ],
+    "size": [
+      1536,
+      260
+    ],
+    "mode": "RGBA",
+    "sha256": "8810ec4911585ea1f6bcaa0daba443fed881816c8ee91dfb63739ab5e2c426ad",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "dancers/wila/spaced/wila-circle-spin-r1.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        192,
+        247
+      ],
+      [
+        576,
+        247
+      ],
+      [
+        960,
+        247
+      ],
+      [
+        1344,
+        247
+      ],
+      [
+        1728,
+        247
+      ],
+      [
+        2112,
+        247
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      1,
+      1.6,
+      1,
+      1.4,
+      1.2,
+      1.2
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  },
+  {
+    "identity": "wila",
+    "move": "echo-closing-step",
+    "revision": "r1",
+    "file": "dancers/wila/raw/wila-echo-closing-step-r1.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "gather low",
+      "crossing foot placement",
+      "forward fan accent",
+      "rising open flourish",
+      "soften closing step",
+      "settle right"
+    ],
+    "routes_or_intents": [
+      "echofoot"
+    ],
+    "preferred_candidate": true,
+    "source": "dancers/wila/source-sheets/wila-actions-source.png",
+    "source_row_1based": 4,
+    "source_crop_xyxy": [
+      0,
+      752,
+      1536,
+      1021
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        24,
+        37,
+        237,
+        257
+      ],
+      [
+        270,
+        29,
+        483,
+        258
+      ],
+      [
+        508,
+        26,
+        776,
+        257
+      ],
+      [
+        780,
+        21,
+        1038,
+        257
+      ],
+      [
+        1048,
+        10,
+        1288,
+        258
+      ],
+      [
+        1308,
+        30,
+        1518,
+        259
+      ]
+    ],
+    "size": [
+      1536,
+      269
+    ],
+    "mode": "RGBA",
+    "sha256": "90c3dc39dada00f2afe2aab321aec7d31c00f6a56c65f1ea1380c66ba54dc4da",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "dancers/wila/spaced/wila-echo-closing-step-r1.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        192,
+        238
+      ],
+      [
+        576,
+        238
+      ],
+      [
+        960,
+        238
+      ],
+      [
+        1344,
+        238
+      ],
+      [
+        1728,
+        238
+      ],
+      [
+        2112,
+        238
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      1,
+      1.6,
+      1,
+      1.4,
+      1.2,
+      1.2
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  },
+  {
+    "identity": "wila",
+    "move": "hit",
+    "revision": "r1",
+    "file": "dancers/wila/raw/wila-hit-r1.png",
+    "frame_count": 4,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "ready",
+      "recoil and wince",
+      "catch balance",
+      "guard"
+    ],
+    "routes_or_intents": [
+      "hit"
+    ],
+    "preferred_candidate": true,
+    "source": "dancers/wila/source-sheets/wila-reactions-source.png",
+    "source_row_1based": 1,
+    "source_crop_xyxy": [
+      0,
+      19,
+      1448,
+      390
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        20,
+        13,
+        366,
+        361
+      ],
+      [
+        396,
+        10,
+        718,
+        361
+      ],
+      [
+        738,
+        26,
+        1077,
+        361
+      ],
+      [
+        1086,
+        12,
+        1433,
+        361
+      ]
+    ],
+    "size": [
+      1448,
+      371
+    ],
+    "mode": "RGBA",
+    "sha256": "426ea7aa4523dc39725a14065d3167e94425f9a32cb1efda4b0a99782374f672",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "dancers/wila/spaced/wila-hit-r1.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        139,
+        136
+      ],
+      [
+        417,
+        136
+      ],
+      [
+        695,
+        136
+      ],
+      [
+        973,
+        136
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      1.2,
+      1.5,
+      1.3,
+      1.2
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  },
+  {
+    "identity": "wila",
+    "move": "block",
+    "revision": "r1",
+    "file": "dancers/wila/raw/wila-block-r1.png",
+    "frame_count": 4,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "raise protective arms",
+      "brace behind crossed gauntlets or fans",
+      "absorb weight low",
+      "reset guard"
+    ],
+    "routes_or_intents": [
+      "block"
+    ],
+    "preferred_candidate": true,
+    "source": "dancers/wila/source-sheets/wila-reactions-source.png",
+    "source_row_1based": 2,
+    "source_crop_xyxy": [
+      0,
+      384,
+      1448,
+      752
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        23,
+        12,
+        389,
+        353
+      ],
+      [
+        406,
+        12,
+        700,
+        355
+      ],
+      [
+        729,
+        53,
+        1055,
+        354
+      ],
+      [
+        1077,
+        10,
+        1436,
+        358
+      ]
+    ],
+    "size": [
+      1448,
+      368
+    ],
+    "mode": "RGBA",
+    "sha256": "ccac363eb35740a9fa35f6e9e06609431dbc5b5af3fff48b691f7991f838025f",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "dancers/wila/spaced/wila-block-r1.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        139,
+        139
+      ],
+      [
+        417,
+        139
+      ],
+      [
+        695,
+        139
+      ],
+      [
+        973,
+        139
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      1.2,
+      1.5,
+      1.3,
+      1.2
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  },
+  {
+    "identity": "wila",
+    "move": "down",
+    "revision": "r1",
+    "file": "dancers/wila/raw/wila-down-r1.png",
+    "frame_count": 4,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "knees give way",
+      "hand and knee reach ground",
+      "sink to seated slump",
+      "lie unconscious and hold"
+    ],
+    "routes_or_intents": [
+      "down"
+    ],
+    "preferred_candidate": true,
+    "source": "dancers/wila/source-sheets/wila-reactions-source.png",
+    "source_row_1based": 3,
+    "source_crop_xyxy": [
+      0,
+      742,
+      1448,
+      1054
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        24,
+        10,
+        350,
+        302
+      ],
+      [
+        360,
+        43,
+        712,
+        300
+      ],
+      [
+        724,
+        72,
+        1073,
+        298
+      ],
+      [
+        1057,
+        150,
+        1437,
+        302
+      ]
+    ],
+    "size": [
+      1448,
+      312
+    ],
+    "mode": "RGBA",
+    "sha256": "56d9075e587a1c92378d7e2f8c26d3c26b6eab5e60b23af24d990441e6230d30",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "dancers/wila/spaced/wila-down-r1.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        139,
+        195
+      ],
+      [
+        417,
+        195
+      ],
+      [
+        695,
+        195
+      ],
+      [
+        973,
+        195
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      1.2,
+      1.5,
+      1.3,
+      1.2
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  },
+  {
+    "identity": "wila",
+    "move": "partner-turn",
+    "revision": "r2",
+    "file": "dancers/wila/raw/wila-partner-turn-r2.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "ready",
+      "leftward attentive turn",
+      "clear left-facing fan offer",
+      "step through rightward",
+      "leftward teaching presentation",
+      "rightward ready"
+    ],
+    "routes_or_intents": [
+      "cadence",
+      "duet",
+      "deepbeat"
+    ],
+    "preferred_candidate": true,
+    "source": "dancers/wila/source-sheets/wila-r2-source.png",
+    "source_row_1based": 1,
+    "source_crop_xyxy": [
+      0,
+      15,
+      2172,
+      372
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        20,
+        10,
+        346,
+        345
+      ],
+      [
+        372,
+        17,
+        703,
+        344
+      ],
+      [
+        724,
+        23,
+        1081,
+        347
+      ],
+      [
+        1110,
+        22,
+        1486,
+        343
+      ],
+      [
+        1487,
+        20,
+        1830,
+        345
+      ],
+      [
+        1862,
+        12,
+        2155,
+        346
+      ]
+    ],
+    "size": [
+      2172,
+      357
+    ],
+    "mode": "RGBA",
+    "sha256": "12ae2e7b0d2f255a61d54d79de6f5592faca3fe94dac01ba5daf7a0230fbe7f2",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "dancers/wila/spaced/wila-partner-turn-r2.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        139,
+        150
+      ],
+      [
+        417,
+        150
+      ],
+      [
+        695,
+        150
+      ],
+      [
+        973,
+        150
+      ],
+      [
+        1251,
+        150
+      ],
+      [
+        1529,
+        150
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      1,
+      1.6,
+      1,
+      1.4,
+      1.2,
+      1.2
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  },
+  {
+    "identity": "wila",
+    "move": "echo-closing-step",
+    "revision": "r2",
+    "file": "dancers/wila/raw/wila-echo-closing-step-r2.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "ready",
+      "gather fans low",
+      "close feet and gather chest",
+      "both fans raised in closing arch",
+      "welcoming bow",
+      "settle ready"
+    ],
+    "routes_or_intents": [
+      "closingstep"
+    ],
+    "preferred_candidate": true,
+    "source": "dancers/wila/source-sheets/wila-r2-source.png",
+    "source_row_1based": 2,
+    "source_crop_xyxy": [
+      0,
+      365,
+      2172,
+      712
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        20,
+        11,
+        346,
+        337
+      ],
+      [
+        388,
+        33,
+        685,
+        334
+      ],
+      [
+        741,
+        23,
+        1023,
+        334
+      ],
+      [
+        1084,
+        10,
+        1468,
+        336
+      ],
+      [
+        1510,
+        52,
+        1805,
+        335
+      ],
+      [
+        1846,
+        11,
+        2159,
+        337
+      ]
+    ],
+    "size": [
+      2172,
+      347
+    ],
+    "mode": "RGBA",
+    "sha256": "956ef0b451ee34db2f56c23e3cc013b0192d45168f62801f657e6ae786c4cef4",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "dancers/wila/spaced/wila-echo-closing-step-r2.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        139,
+        160
+      ],
+      [
+        417,
+        160
+      ],
+      [
+        695,
+        160
+      ],
+      [
+        973,
+        160
+      ],
+      [
+        1251,
+        160
+      ],
+      [
+        1529,
+        160
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      1,
+      1.6,
+      1,
+      1.4,
+      1.2,
+      1.2
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  }
+]

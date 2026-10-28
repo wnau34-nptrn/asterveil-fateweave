@@ -1,0 +1,24 @@
+[
+  {
+    "identity": "metta",
+    "base_commit": "8616ad3155a179e05210fe6aa552e6d234c9bd24",
+    "atlas": "public/assets/art/units_mercs.webp",
+    "atlas_git_blob": "2f2ed2ebdca12584d9324c53fcc67694c68b0d22",
+    "cell_zero_based": 6,
+    "crop_xyxy": [
+      0,
+      1536,
+      512,
+      2048
+    ],
+    "size": [
+      512,
+      512
+    ],
+    "facing": "right",
+    "runtime_sole_reference_y": 497,
+    "file": "saints/metta/seeds/metta.png",
+    "sha256": "62126d7f84767d640e41a96515df67774fd153221fc43ad16c75e410f6b26fd2",
+    "pixel_identical_to_pinned_atlas": true
+  }
+]

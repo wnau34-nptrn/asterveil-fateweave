@@ -1,0 +1,38 @@
+[
+  {
+    "identity": "metta",
+    "kind": "actions",
+    "prompt": "Create an ORIGINAL production 2D game animation sprite sheet by editing the attached current in-game Metta seed. Preserve exactly this young brown-haired chibi martial saint's face, gold gauntlets, ivory/gold tunic, leather boots, white prayer beads and cream tassel; same painted rendering, warm amber eyes, 3/4 RIGHT-facing body and proportions. Metta protects a caravan of wounded people with fists and prayer beads: compassionate alert face, mobile protective weight shifts, fluid gathered open hands between purposeful strikes. NOT a generic monk redesign. Output a transparent RGBA sheet, landscape 3:2, highest possible resolution (3072x2048 preferred). Exactly SIX equal-width columns and FOUR equal-height rows, 24 full-body frames, one continuous animation per row. Wide transparent gutters around EACH figure, all figures same scale and baseline in their cells. No borders, labels, numbers, scenery, shadows, glow, auras, floor rings, hit sparks or VFX; only the character and their original clothing/beads. Do not crop ANY extremity. Each row has six distinct consecutive frames: prepare, deeper anticipation, release/contact, follow-through, recoil, recovered stance. ROW1 punch: tighten protective stance, draw rear fist, powerful straight rightward punch, extend weight, retract, regain guard. ROW2 sweeping arc strike across front: load leftward torso, coil, rightward horizontal forearm sweep, broad follow-through, draw back, recover. ROW3 communion/share toward an ally: glance toward left-side teammate, gather bead-bearing hands, rotate torso toward teammate, offer distinctly OPEN PALM toward teammate, linger warmly, return facing RIGHT; no healing light or magical effects. ROW4 last-light: plant both feet, gather deeply with fists at chest, drive a heavy low rightward body strike, large but controlled follow-through, exhale upright, recover to protective guard. Actual articulated changes in arms, torso and feet throughout; never translate/rotate one static pose for multiple frames. Keep necklace and bead loop attached and physically plausible, no duplicated limbs. This is a sheet of raw animation strips for owner artwork selection, not a poster.",
+    "reference": "seeds/metta.png",
+    "reference_generation_path": "/tmp/a7-metta-seed.png",
+    "original_output_path": "/workspace/generated_images/exec-114bd8cd-ffac-4d17-99b4-d0fe426a619b.png",
+    "source": "saints/metta/source-sheets/metta-actions-source.png",
+    "transparent_background_requested": true,
+    "generation_tool": "image_gen.imagegen",
+    "method": "Whole sequences generated together in one referenced edit, never frame-by-frame."
+  },
+  {
+    "identity": "metta",
+    "kind": "reactions",
+    "prompt": "Edit the attached current in-game sprite into an ORIGINAL production painted-chibi animation sprite sheet. Preserve EXACT face, costume, proportions, palette, accessories, hair and painted detail of THIS character. Transparent RGBA, no background, no shadows, text, numbers, borders, light, VFX, duplicated limbs or other characters. EXACTLY FOUR equal columns x THREE equal rows (12 full-body frames), 4:3 sheet, preferably 2048x1536. Wide transparent gutters around every full figure. Fixed scale in ALL 12 frames; same feet baseline at the bottom of each cell, with downed figure's floor at same level. No cropped fans, hair, bead tassels, boots or ribbons. Rest and recovery face 3/4 RIGHT. Each row is ONE whole sequential four-frame animation, clearly DIFFERENT articulated body poses. ROW1 HIT: braced anticipation → clear recoil from a blow arriving from RIGHT, torso leaning back and face wincing → body catches balance → returns to own right-facing guard. ROW2 BLOCK: draw arms across body → clearly raised protective crossed gauntlets/fans intercepting a blow from RIGHT → deep weight absorption → reset to own guard. ROW3 DOWN: knees give way → one knee/hand to ground → torso slumps sideways → clearly unconscious full-body lying on ground, eyes closed, NO standing recovery; last frame holds, do not stand up. Down is non-graphic. All accessories stay physically attached, no extra weapons. Metta is the young brown-haired gold-and-ivory martial saint with white prayer beads. Compassionate caravan protector. Hit: quick reactive catch on back foot. Block: fast forward protective crossed gold gauntlets, bead hand near heart. Down: reach gently toward wounded caravan before sinking onto left hip and lying sideways, retain beads.",
+    "reference": "seeds/metta.png",
+    "reference_generation_path": "/tmp/a7-metta-seed.png",
+    "original_output_path": "/workspace/generated_images/exec-2c3c432f-7d76-413d-9dbc-cc0832facfd1.png",
+    "source": "saints/metta/source-sheets/metta-reactions-source.png",
+    "transparent_background_requested": true,
+    "generation_tool": "image_gen.imagegen",
+    "method": "Whole sequences generated together in one referenced edit, never frame-by-frame."
+  },
+  {
+    "identity": "metta",
+    "kind": "r2",
+    "prompt": "Edit attached shipped character seed into ORIGINAL painted-chibi body-only game animation sheet, exact same face, hair, outfit, palette, details, proportions and accessories. These are R2 ALTERNATIVES for ambiguous moves, independently drawn articulated frames. Transparent RGBA, highest resolution. EXACTLY SIX columns x TWO rows, twelve complete separate full-body figures. Use wide 3:1 sheet with square slots if possible (3072x1024), or letterbox with transparent padding; consistent scale and soles line in all cells. Leave extremely GENEROUS empty transparent gutters between all figures and at outer edges. Shrink figures enough to keep every fan, prayer-bead tassel, fabric ribbon and foot wholly inside its slot. No labels, captions, numbers, grids, scenery, shadows, magic, glows, sparks, trails, projectiles, duplicate limbs or extra people. Each row is one continuous SIX-frame animation, prepare → gather → release/peak → follow-through → soften → ready, not six still copies. Rest/recovery is 3/4 RIGHT. Metta: young brown-haired compassionate caravan protector, ivory/gold gauntlets and tabard, white beads. ROW1 COMMUNION R2: distinct leftward-facing offering to one offscreen ALLY. Start right-facing; glance over LEFT shoulder; pivot hips left, LEFT-facing head and torso; unfold OPEN bare palm fully to LEFT side away from enemy while other hand holds white beads at heart; retain gentle leftward offering, then return RIGHT. Never turn this into a punch toward foe. ROW2 LASTLIGHT R2: ready; BOTH fists gather low at chest in deep crouch; raise gauntlet overhead; drive a heavy diagonal downward RIGHT hammerfist with full-body step, still EMPTY AIR, no impact art; lean through low follow-through; recover rightward protective guard. More compassionate and nimble than Thiran, no older beard.",
+    "reference": "seeds/metta.png",
+    "reference_generation_path": "/tmp/a7-metta-seed.png",
+    "original_output_path": "/workspace/generated_images/exec-68047510-d8d4-4a00-9ea9-0dcec5ce9cc8.png",
+    "source": "saints/metta/source-sheets/metta-r2-source.png",
+    "transparent_background_requested": true,
+    "generation_tool": "image_gen.imagegen",
+    "method": "Whole sequences generated together in one referenced edit, never frame-by-frame."
+  }
+]
