@@ -3,6 +3,16 @@
 
 
 
+## 2026-10-28 — A3 เซเรน + เห็ดหมอผีเข้าเกมแล้ว รอเจ้าของตรวจ motion (ยังไม่ merge)
+
+- สาขา `claude/unit-a3-seren-mycon` → PR เข้าสาขาเกม; ภาพมาจาก PR #90 (`incoming/ART-UNIT-ANIMATION-A3-001/`, sha256 12 ไฟล์ตรง validation.json) เจ้าของเลือก R2 ตามที่ Codex แนะนำ (Seren attack, Mycon cast)
+- ทำแบบ A2: `build_assets.py` (scale เดียวต่อแถบ, พื้นเท้า y=496, defringe, ลบเศษข้างเคียง, lossless pack), registry `healer`/`foe_mycon`, clip ใหม่ `prayer`/`sanctuary`, optional atlas ไม่อยู่ใน critical preload; ครบทุก ActionId ของ Seren (attack/heal/revive/bless/prayer/halo/sanctuary + hit/block/down) และ Spore Hex ของ Mycon (cast/hit/down) ใช้ VFX healing/energy เดิม
+- งบภาพ: Seren 4,902,912 B (4.68MiB) / ดาวน์โหลด 1,463,594 B; Mycon 2,435,072 B (2.32MiB) / 826,472 B; สนาม 10 ตัว (OD-05) ต้องวัดรวมหลัง P02 รายละเอียดใน [README A3](../combat-presentation/unit-a3-slice/README_TH.md)
+- ผล: typecheck/lint/`npm test` 1104 ผ่าน; browser `unit-a3.spec.ts` 21 + A1/A2/pilot/loading ที่ปรับตัวเลข (healer โหลด sheet เพิ่ม 1) ผ่าน; คลิปจริง 16 คลิป 390px (Chromium จำลอง ไม่ใช่มือถือจริง)
+- **ค้าง: เจ้าของตรวจ motion** (ผลเทสต์ไม่ใช่การอนุมัติ) ข้อควรถามคือขาซ้ายท่า attack follow-through (ต้นฉบับถูกไม้เท้าบัง) และหมวก Mycon; หลังอนุมัติให้ merge ตาม standing authorization รอ CI แล้ว Pages แล้วบันทึกผลที่นี่/CLAUDE.md
+- PR #92 (C5.7 arcane seal) อยู่ในแชตอื่น ไม่แตะไฟล์ arcane-seal; ถ้า BattleScene conflict ให้ merge สาขาเกมเข้ามา (A3 ไม่แก้ BattleScene)
+- ไม่มีคลิป Seren block (resolver ที่จัดได้ไม่เกิดดาเมจ 0 ต่อเซเรน) เฟรมมีและเล่นเมื่อ event เกิดจริง
+
 ## 2026-10-28 — แชตถัดไป: W1 นำภาพเข้าเกม (เปิดอัตโนมัติจากแชตก่อน)
 
 ข้อความเปิดแชต:
