@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { pilotSample } from '../src/game/visuals/unit-frames';
+import { unitSample } from '../src/game/visuals/unit-frames';
 import { unitFrameView, type FrameImage } from '../src/game/visuals/unit-frame-view';
 import { UnitAnimation, type UnitBody } from '../src/game/visuals/unit-animation';
 class Image implements FrameImage {
@@ -19,16 +19,16 @@ describe('continuous actor transitions',()=>{
   for(const art of ['tracer','foe_hunter'])for(const clip of ['attack','skill'] as const){
    const offset=clip==='attack'?0:8;
    for(let i=0;i<=100;i++){
-    const s=pilotSample('slash','prepare',i/100,clip,art,210)!;
+    const s=unitSample('slash','prepare',i/100,clip,art,210)!;
     expect(s.from).toBeLessThan(5+offset);expect(s.to).toBeLessThan(5+offset);
     if(art==='tracer'&&clip==='attack'){expect(s.from).not.toBe(4);expect(s.to).not.toBe(4);}
    }
-   const contact=pilotSample('slash','recover',0,clip,art,260)!;
+   const contact=unitSample('slash','recover',0,clip,art,260)!;
    expect(contact).toEqual({from:5+offset,to:clip==='attack'&&art==='tracer'?4:6+offset,mix:0});
   }
   const sequence=[5,4,6,7,8];let previous=-1;
   for(let i=0;i<=100;i++){
-   const s=pilotSample('slash','recover',i/100,'attack','tracer',260)!;
+   const s=unitSample('slash','recover',i/100,'attack','tracer',260)!;
    const index=sequence.indexOf(s.from);expect(index).toBeGreaterThanOrEqual(previous);previous=index;
   }
  });

@@ -6,15 +6,35 @@ export interface UnitFrames {
   show(pose: UnitPose | Reaction, phase: FramePhase, progress: number, clip?: UnitClip, durationMs?: number): boolean;
   reset(): void;
 }
-export const pilotSheets = { tracer: 'lyra', foe_hunter: 'hunter' } as const;
-export type PilotSheet = typeof pilotSheets[keyof typeof pilotSheets];
-export const pilotKey = (art: string): string | undefined => Object.hasOwn(pilotSheets, art) ? `unit-pilot-${pilotSheets[art as keyof typeof pilotSheets]}` : undefined;
-export const pilotUrl = (name: PilotSheet): string => `${import.meta.env.BASE_URL}assets/units/${atlasManifest[name].image}`;
-export const pilotAtlasUrls = (name: PilotSheet): [string, string] => [pilotUrl(name), `${import.meta.env.BASE_URL}assets/units/${atlasManifest[name].atlas}`];
-export function pilotClip(art: string, action: string | undefined, intent: string | undefined): UnitClip | undefined {
-  if (art === 'tracer') return action === 'attack' ? 'attack' : action === 'execute' ? 'skill' : undefined;
-  if (art === 'foe_hunter') return intent === 'Raking Slash' ? 'attack' : intent === 'Shadow Knife' ? 'skill' : undefined;
-  return undefined;
+// Registry is keyed by visual identity, never by an enemy's field slot.
+// Keep shipped pilot texture keys/clip sequences stable while adding identities here.
+interface UnitDefinition {
+  sheet: keyof typeof atlasManifest;
+  displayRatio: number;
+  actions?: Readonly<Record<string, UnitClip>>;
+  intents?: Readonly<Record<string, UnitClip>>;
+}
+export const unitRegistry = {
+  tracer: { sheet: 'lyra', displayRatio: 2, actions: { attack: 'attack', execute: 'skill' } },
+  foe_hunter: { sheet: 'hunter', displayRatio: 2, intents: { 'Raking Slash': 'attack', 'Shadow Knife': 'skill' } },
+  weaver: { sheet: 'eira', displayRatio: 1 / .42, actions: { attack: 'attack', bolt: 'attack', storm: 'attack', dispel: 'attack', ward: 'skill', sigil: 'skill', aegis: 'skill' } },
+  foe_sprite: { sheet: 'sprite', displayRatio: 2, intents: { 'Seed Spark': 'attack' } },
+} as const satisfies Record<string, UnitDefinition>;
+export const unitSheets = Object.fromEntries(Object.entries(unitRegistry).map(([art, definition]) => [art, definition.sheet])) as Record<keyof typeof unitRegistry, UnitSheet>;
+export type UnitSheet = typeof unitRegistry[keyof typeof unitRegistry]['sheet'];
+export function unitDefinition(art: string): UnitDefinition | undefined {
+  return Object.hasOwn(unitRegistry, art) ? unitRegistry[art as keyof typeof unitRegistry] : undefined;
+}
+export const unitKey = (art: string): string | undefined => {
+  const definition = unitDefinition(art);
+  return definition ? `unit-pilot-${definition.sheet}` : undefined;
+};
+export const unitDisplayRatio = (art: string): number => unitDefinition(art)?.displayRatio ?? 1;
+export const unitUrl = (name: UnitSheet): string => `${import.meta.env.BASE_URL}assets/units/${atlasManifest[name].image}`;
+export const unitAtlasUrls = (name: UnitSheet): [string, string] => [unitUrl(name), `${import.meta.env.BASE_URL}assets/units/${atlasManifest[name].atlas}`];
+export function unitClip(art: string, action: string | undefined, intent: string | undefined): UnitClip | undefined {
+  const definition = unitDefinition(art);
+  return action ? definition?.actions?.[action] : intent ? definition?.intents?.[intent] : undefined;
 }
 // 0 idle; 1..8 slash; 9..16 skill; 17..18 hurt; 19..21 down.
 // Frame 5/13 is the contact pose. UI contact remains authoritative, never sprite FPS.
@@ -27,7 +47,7 @@ function sequence(pose: UnitPose | Reaction, phase: FramePhase, clip?: UnitClip,
   return phase === 'prepare' ? [1, 2, 3, 4] : [5, 6, 7, 8];
 }
 export interface FrameSample { from: number; to: number; mix: number }
-export function pilotSample(pose: UnitPose | Reaction, phase: FramePhase, progress: number, clip?: UnitClip, art?: string, durationMs = 260): FrameSample | undefined {
+export function unitSample(pose: UnitPose | Reaction, phase: FramePhase, progress: number, clip?: UnitClip, art?: string, durationMs = 260): FrameSample | undefined {
   const frames = sequence(pose, phase, clip, art);
   if (!frames) return;
   // Owner feedback: a gentler frame cadence; contact/end cues stay fixed.
@@ -40,7 +60,7 @@ export function pilotSample(pose: UnitPose | Reaction, phase: FramePhase, progre
   const t = Math.max(0, Math.min(1, (position - index - (1 - window)) / window));
   return { from, to, mix: from === to ? 0 : t * t * (3 - 2 * t) };
 }
-export function pilotFrame(pose: UnitPose | Reaction, phase: FramePhase, progress: number, clip?: UnitClip): number | undefined {
-  const sample = pilotSample(pose, phase, progress, clip);
+export function unitFrame(pose: UnitPose | Reaction, phase: FramePhase, progress: number, clip?: UnitClip): number | undefined {
+  const sample = unitSample(pose, phase, progress, clip);
   return sample ? sample.mix >= .5 ? sample.to : sample.from : undefined;
 }

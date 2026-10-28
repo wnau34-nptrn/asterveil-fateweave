@@ -1,5 +1,26 @@
 # Codex → Claude handoff
 
+## 2026-10-28 — A0/A1 integrated with published C5.6 (PR87)
+
+Owner resumed with “ต่อ”. Original A1 head `a719936` passed quality40532299467 and fullbrowser40532299933 (175source/3prechecks/249productionpass,384skip). During that run the game branch advanced through owner-approved/published C5.6 PR86 to `a2993df`; merge conflict was docs/workflow only, BattleScene auto-merged. Preserve both handoff histories and every source gate, including alchemy + unit A1 together.
+
+Adapted inherited `alchemyAnchor` to the per-art display ratio, so the new Eira atlas remains at the original physical VFX landmarks. Existing pilot ratio2 and original-art ratio1 are identical; alchemy module/atlas/timing/approvedart unchanged. Added two independent Eira recipient-anchor checks at2x/3xDPR. Merged-source typecheck/lint/build and958unit/80files passed;82focusedbrowser passed (including both2x/3xEira anchors). Refreshed16real390pxclips and decodedPTS/count/end passed, 1547rawframes, maxgap0.3s/maxPTSerror0.0061ms. All16refreshedclips also passed playerdecode/controls at390px (1/1). SamePR87 will run fullCI on the merged source before release. No rules/save/content/balance/playback change and no family7/A2 started. Final CI/merge/Pages results will follow here; old passed CI covers the old head only.
+
+
+## 2026-10-27 — A0/A1 Eira + Dandelion Sprite implementation and actual clips
+
+Owner explicitly requested A0/A1 only and completion under standing authorization. Branch `codex/animation-a0-a1`; source/captures based on `afddd84`, fast-forwarded to latest game `1f783f8` after verifying the intervening commits change documentation only. C5.5 approval/release and family6 handoff preserved intact; no new C5 work/approval or A2/other units started. PR/merge/CI/release IDs will be recorded after those actions actually finish.
+
+Generalized art-keyed registry/clip mapping and optional sheet scheduler from two pilots to four identities. Lyra/Hunter URLs, pixels, special frame sequence, cadence/dissolve and timing unchanged. Eira's7current starting/star/tree ActionIds audited: attack/Bolt/Storm/Dispel share staff release; Ward/Sigil/Aegis share support/seal. Sprite uses prepare→SeedSpark→return; it has no separate named basic attack in current content. Hit/down strips, dead-frame persistence and revive reset supported; block/dodge/counter remain explicitly procedural. [Full action/intent/pilot fallback audit and16clips](../combat-presentation/unit-a1-slice/README_TH.md).
+
+Used sprite-pipeline with shipped seed edits (whole strips together), shared per-character scale/foot anchor, seed lockback, lossless trim/dedup/pack with full visible-RGBA/alpha reconstruction. Eira first pack1.89MB exceeded budget; normalized once to215px, compensated display ratio to keep field size. Final Eira3.88MiB/1,382,688bytes, Sprite1.19MiB/357,984bytes, below6MiB/1.5MB each. Counts are atlas decoded RGBA, not total game RAM/GPU or mobile measurements. No critical preload; old-art fallback, safe-boundary adoption, request dedup/failure suppression and encounter eviction preserved/tested.
+
+Local typecheck/lint/build pass; full unit920/79files, focused unit21/21, lifecycle/late arrival3/3, pilot/loading5/5, actual capture16/16 and playerall16decode1/1 passed. Final combined36focusedbrowser regression passed; full browser is CI-only. Dev harness fixes: setBattleVisible like game shell; initial replay must use actual prelude rather than BattleUI constructor's empty commands; stable shared dev server avoids another suite shutting it down. These are QA-only, no rule/timing workaround. Source fixtures gated in CI/Pages alongside every existing C5 source gate.
+
+Captured390×844 actual UI/Phaser/playback/resolver, real clocks/CDP timestamps;16MP4,1,262rawframes, every capturedframe+finalhold retained, decodedPTS/count/end verified (maxgap0.315s, maxPTSerror0.0061ms). Two actual stills supplied; `proof.json` records hashes and rawworkspace paths. Chromiumcloud/SwiftShader only, no Safari/device/60fps claim. Passing tests/generation is not an owner motion-approval record. Current owner's instruction authorizes finishing this scope without a separate confirmation checkpoint.
+
+Files: registry/scheduler/frameview/BattleScene displayratio + landmarks; two hashed atlases/JSON; incoming seeds/rawstrips/previews/normalizer/provenance; pilot packer preserves other manifest entries; unit/browser/real-capture/player fixtures and encoder; CI/Pages additive source gate; rollout and three handoffs. No `src/core`, `src/content`, saves, balance or `battle-playback.ts` diff. No questions requiring battle-rule edits.
+
 ## 2026-10-28 — C5.6 merged and published / ตระกูล6เสร็จแล้ว
 
 เจ้าของอนุมัติ55actual390pxclipsด้วย “เอาเข้าเกมได้” (27ต.ค.2026) PR86 merged5ad447568b34ecd432760a80701d04cfe6f15e81 หลังCIquality40533376869/browser40533376856success (948unit/79files,214sourceVFX,3prechecks,249productionผ่าน/465skip) Fetchฐาน1f783f8ก่อนmerge src/public/tests/workflowtreesตรงvalidatedhead2535454และapprovedruntime31c5e90 AtlasSHA25618c4b740db78eb4f80c6f66bc845770f46f013e2c3dede909e27ef19ba2505a5ตรง55คลิป

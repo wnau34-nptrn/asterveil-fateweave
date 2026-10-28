@@ -68,6 +68,8 @@ for(const [width,height,touch]of [[320,568,true],[390,844,true],[1366,768,false]
   }finally{await ctx.close()}
  });
  test(`presentation skip resize and reload keep exactly one committed command at ${width}x${height}`,async({browser})=>{
+  // Multiple reloads and software WebGL cleanup need wall-clock headroom; fake-clock timing assertions stay exact.
+  if(width===1366)test.setTimeout(75_000);
   const ctx=await browser.newContext({viewport:{width,height},isMobile:touch,hasTouch:touch,reducedMotion:'no-preference'}),page=await ctx.newPage();
   try{
    await open(page);await page.locator('#target-f1').click();const committed=await saved(page);await page.locator('#skip-turn').click();await page.clock.runFor(3000);

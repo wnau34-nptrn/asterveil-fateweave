@@ -12,7 +12,7 @@ def pack(rects,width):
   if x+tile.width+2>width:y+=height+4;x=2;height=0
   placed[key]=(x,y);x+=tile.width+4;height=max(height,tile.height)
  return placed,y+height+2
-manifest={};report={}
+manifest=json.loads((ROOT/'src/game/visuals/unit-atlases.json').read_text());report={}
 for name in ['lyra','hunter']:
  original=Image.open(OUT/(name+'_pilot.webp')).convert('RGBA');unique={};ids={};boxes={}
  for i in range(22):

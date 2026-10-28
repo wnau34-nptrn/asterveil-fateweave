@@ -1,5 +1,18 @@
 # ส่งต่องานพัฒนาให้ Codex ระหว่างรอ Usage ของ Claude (2026-10-23)
 
+## 2026-10-28 — A0/A1 integrated with published C5.6 (PR87)
+
+Owner resumed with “ต่อ”. Original A1 head `a719936` passed quality40532299467 and fullbrowser40532299933 (175source/3prechecks/249productionpass,384skip). During that run the game branch advanced through owner-approved/published C5.6 PR86 to `a2993df`; merge conflict was docs/workflow only, BattleScene auto-merged. Preserve both handoff histories and every source gate, including alchemy + unit A1 together.
+
+Adapted inherited `alchemyAnchor` to the per-art display ratio, so the new Eira atlas remains at the original physical VFX landmarks. Existing pilot ratio2 and original-art ratio1 are identical; alchemy module/atlas/timing/approvedart unchanged. Added two independent Eira recipient-anchor checks at2x/3xDPR. Merged-source typecheck/lint/build and958unit/80files passed;82focusedbrowser passed (including both2x/3xEira anchors). Refreshed16real390pxclips and decodedPTS/count/end passed, 1547rawframes, maxgap0.3s/maxPTSerror0.0061ms. All16refreshedclips also passed playerdecode/controls at390px (1/1). SamePR87 will run fullCI on the merged source before release. No rules/save/content/balance/playback change and no family7/A2 started. Final CI/merge/Pages results will follow here; old passed CI covers the old head only.
+
+
+## A0/A1 unit animation — 2026-10-27
+
+- [x] A0 registry/clip mapping audit + A1ไอรา/ภูตแดนดิไลออน implementationและ16คลิปจริง390px ใน `codex/animation-a0-a1` ฐานล่าสุด1f783f8 (interveningdocs-only) [mapping/fallback/หลักฐาน/สถานะส่งจริง](../combat-presentation/unit-a1-slice/README_TH.md)
+- ครบ7ActionIdของไอราและSeedSpark; hit/down sprite, block/dodge/counter procedural, revive resetseedตามHPจริง ไม่มีcriticalpreloadเพิ่ม ไม่เปลี่ยนpilotpixels/timingหรือrules/save/balance/playback งบEira3.88MiB/1.38MB, Sprite1.19MiB/0.36MB
+- localunit920, typecheck/lint/buildผ่าน;16captureและplayerdecodeผ่าน; focusedregression36/36ผ่าน; CI/merge/publicationกำลังเก็บผลและจะอัปเดตตามจริง ไม่ถือว่ามีowner motionapprovalจากtests ไม่เริ่มA2/ยูนิตอื่นหรือVFXfamilyใหม่ งาน/approval/release C5.5 และhandofffamily6เดิมเก็บครบ
+
 ## 2026-10-28 — C5.6 merged and published / ตระกูล6เสร็จแล้ว
 
 เจ้าของอนุมัติ55actual390pxclipsด้วย “เอาเข้าเกมได้” (27ต.ค.2026) PR86 merged5ad447568b34ecd432760a80701d04cfe6f15e81 หลังCIquality40533376869/browser40533376856success (948unit/79files,214sourceVFX,3prechecks,249productionผ่าน/465skip) Fetchฐาน1f783f8ก่อนmerge src/public/tests/workflowtreesตรงvalidatedhead2535454และapprovedruntime31c5e90 AtlasSHA25618c4b740db78eb4f80c6f66bc845770f46f013e2c3dede909e27ef19ba2505a5ตรง55คลิป
