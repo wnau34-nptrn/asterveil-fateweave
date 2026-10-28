@@ -3,13 +3,13 @@
 
 
 
-## 2026-10-28 — A3 เซเรน + เห็ดหมอผี: เจ้าของอนุมัติ “เอาเข้าเกมได้” → merge PR #99
+## 2026-10-28 — A3 เซเรน + เห็ดหมอผี: เผยแพร่แล้ว (PR #99, เจ้าของอนุมัติ “เอาเข้าเกมได้”)
 
 - สาขา `claude/unit-a3-seren-mycon` → PR เข้าสาขาเกม; ภาพมาจาก PR #90 (`incoming/ART-UNIT-ANIMATION-A3-001/`, sha256 12 ไฟล์ตรง validation.json) เจ้าของเลือก R2 ตามที่ Codex แนะนำ (Seren attack, Mycon cast)
 - ทำแบบ A2: `build_assets.py` (scale เดียวต่อแถบ, พื้นเท้า y=496, defringe, ลบเศษข้างเคียง, lossless pack), registry `healer`/`foe_mycon`, clip ใหม่ `prayer`/`sanctuary`, optional atlas ไม่อยู่ใน critical preload; ครบทุก ActionId ของ Seren (attack/heal/revive/bless/prayer/halo/sanctuary + hit/block/down) และ Spore Hex ของ Mycon (cast/hit/down) ใช้ VFX healing/energy เดิม
 - งบภาพ: Seren 4,902,912 B (4.68MiB) / ดาวน์โหลด 1,463,594 B; Mycon 2,435,072 B (2.32MiB) / 826,472 B; สนาม 10 ตัว (OD-05) ต้องวัดรวมหลัง P02 รายละเอียดใน [README A3](../combat-presentation/unit-a3-slice/README_TH.md)
 - ผล: typecheck/lint/`npm test` 1104 ผ่าน; browser `unit-a3.spec.ts` 21 + A1/A2/pilot/loading ที่ปรับตัวเลข (healer โหลด sheet เพิ่ม 1) ผ่าน; คลิปจริง 16 คลิป 390px (Chromium จำลอง ไม่ใช่มือถือจริง)
-- เจ้าของอนุมัติ motion “เอาเข้าเกมได้” (2026-10-28) หลังดูคลิป 16 คลิป (อนุมัติโดยตรง ไม่อนุมานจากเทสต์) → merge PR #99 หลัง CI ผ่าน แล้ว Pages เผยแพร่ (ผล merge/Pages บันทึกใน PR #99)
+- เจ้าของอนุมัติ motion “เอาเข้าเกมได้” (2026-10-28) หลังดูคลิป 16 คลิป (อนุมัติโดยตรง ไม่อนุมานจากเทสต์) → PR #99 merge `d610b63` (quality+browser ผ่านบน `f8ae5d2`; merge สาขาเกม 2 ครั้งหลังจากนั้นเป็นเอกสารล้วน) Pages 40741221429 เผยแพร่สำเร็จ 2026-10-29 01:31 น. (build+browser 4 shard+deploy) ไม่มีงาน A3 ค้าง
 - PR #92 (C5.7 arcane seal) merge เข้าสาขาเกมแล้ว (`4883362`); PR #99 merge สาขาเกมเข้ามา แก้ conflict เฉพาะ workflow (รวม arcane-seal + unit-a3 spec) และ handoff ไม่แตะไฟล์ arcane-seal
 - ไม่มีคลิป Seren block (resolver ที่จัดได้ไม่เกิดดาเมจ 0 ต่อเซเรน) เฟรมมีและเล่นเมื่อ event เกิดจริง
 

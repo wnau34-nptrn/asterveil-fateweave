@@ -4,7 +4,7 @@
 
 [หน้าเลือกคลิปจริง 390px](index.html) · [แหล่งภาพ/ข้อสังเกตของ Codex](../../../incoming/ART-UNIT-ANIMATION-A3-001/NOTES.md) · [สคริปต์ normalize](../../../incoming/ART-UNIT-ANIMATION-A3-001/build_assets.py) · [ผล normalize/แพ็ก](../../../incoming/ART-UNIT-ANIMATION-A3-001/validation-normalized.json)
 
-**สถานะ: เจ้าของอนุมัติ motion “เอาเข้าเกมได้” (2026-10-28) หลังดูคลิปจริง 16 คลิป** — เป็นการอนุมัติโดยตรง ไม่ได้อนุมานจากผลเทสต์; merge/เผยแพร่ผ่าน PR #99 หลัง CI ผ่าน
+**สถานะ: เจ้าของอนุมัติ motion “เอาเข้าเกมได้” (2026-10-28) หลังดูคลิปจริง 16 คลิป** — เป็นการอนุมัติโดยตรง ไม่ได้อนุมานจากผลเทสต์; เผยแพร่แล้ว: PR #99 merge `d610b63`, Pages 40741221429 สำเร็จ (build+browser 4 shard+deploy)
 
 ## การเลือกภาพ
 
