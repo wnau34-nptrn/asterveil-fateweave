@@ -1,0 +1,240 @@
+[
+  {
+    "file": "keyart_10.png",
+    "width": 1920,
+    "height": 1080,
+    "space": "srgb",
+    "bytes": 5692684
+  },
+  {
+    "file": "keyart_2.png",
+    "width": 1920,
+    "height": 1080,
+    "space": "srgb",
+    "bytes": 5472923
+  },
+  {
+    "file": "keyart_4.png",
+    "width": 1920,
+    "height": 1080,
+    "space": "srgb",
+    "bytes": 5762598
+  },
+  {
+    "file": "keyart_5.png",
+    "width": 1920,
+    "height": 1080,
+    "space": "srgb",
+    "bytes": 5859888
+  },
+  {
+    "file": "keyart_6.png",
+    "width": 1920,
+    "height": 1080,
+    "space": "srgb",
+    "bytes": 5713143
+  },
+  {
+    "file": "keyart_7.png",
+    "width": 1920,
+    "height": 1080,
+    "space": "srgb",
+    "bytes": 5551521
+  },
+  {
+    "file": "keyart_8.png",
+    "width": 1920,
+    "height": 1080,
+    "space": "srgb",
+    "bytes": 5806695
+  },
+  {
+    "file": "keyart_9.png",
+    "width": 1920,
+    "height": 1080,
+    "space": "srgb",
+    "bytes": 5779643
+  },
+  {
+    "file": "landmarks_10.png",
+    "width": 1536,
+    "height": 1024,
+    "space": "srgb",
+    "bytes": 2659220
+  },
+  {
+    "file": "landmarks_2.png",
+    "width": 1536,
+    "height": 1024,
+    "space": "srgb",
+    "bytes": 2783053
+  },
+  {
+    "file": "landmarks_4.png",
+    "width": 1536,
+    "height": 1024,
+    "space": "srgb",
+    "bytes": 2888024
+  },
+  {
+    "file": "landmarks_5.png",
+    "width": 1536,
+    "height": 1024,
+    "space": "srgb",
+    "bytes": 2948068
+  },
+  {
+    "file": "landmarks_6.png",
+    "width": 1536,
+    "height": 1024,
+    "space": "srgb",
+    "bytes": 2875368
+  },
+  {
+    "file": "landmarks_7.png",
+    "width": 1536,
+    "height": 1024,
+    "space": "srgb",
+    "bytes": 2932639
+  },
+  {
+    "file": "landmarks_8.png",
+    "width": 1536,
+    "height": 1024,
+    "space": "srgb",
+    "bytes": 2768614
+  },
+  {
+    "file": "landmarks_9.png",
+    "width": 1536,
+    "height": 1024,
+    "space": "srgb",
+    "bytes": 3060819
+  },
+  {
+    "file": "overview.png",
+    "width": 3840,
+    "height": 270,
+    "space": "srgb",
+    "bytes": 3392495
+  },
+  {
+    "file": "palette_10.png",
+    "width": 1280,
+    "height": 224,
+    "space": "srgb",
+    "bytes": 19715
+  },
+  {
+    "file": "palette_2.png",
+    "width": 1280,
+    "height": 224,
+    "space": "srgb",
+    "bytes": 18960
+  },
+  {
+    "file": "palette_4.png",
+    "width": 1280,
+    "height": 224,
+    "space": "srgb",
+    "bytes": 20482
+  },
+  {
+    "file": "palette_5.png",
+    "width": 1280,
+    "height": 224,
+    "space": "srgb",
+    "bytes": 20062
+  },
+  {
+    "file": "palette_6.png",
+    "width": 1280,
+    "height": 224,
+    "space": "srgb",
+    "bytes": 20062
+  },
+  {
+    "file": "palette_7.png",
+    "width": 1280,
+    "height": 224,
+    "space": "srgb",
+    "bytes": 19855
+  },
+  {
+    "file": "palette_8.png",
+    "width": 1280,
+    "height": 224,
+    "space": "srgb",
+    "bytes": 19649
+  },
+  {
+    "file": "palette_9.png",
+    "width": 1280,
+    "height": 224,
+    "space": "srgb",
+    "bytes": 20087
+  },
+  {
+    "file": "review.png",
+    "width": 1152,
+    "height": 3200,
+    "space": "srgb",
+    "bytes": 6973496
+  },
+  {
+    "file": "tile_mood_10.png",
+    "width": 192,
+    "height": 192,
+    "space": "srgb",
+    "bytes": 101900
+  },
+  {
+    "file": "tile_mood_2.png",
+    "width": 192,
+    "height": 192,
+    "space": "srgb",
+    "bytes": 103194
+  },
+  {
+    "file": "tile_mood_4.png",
+    "width": 192,
+    "height": 192,
+    "space": "srgb",
+    "bytes": 104682
+  },
+  {
+    "file": "tile_mood_5.png",
+    "width": 192,
+    "height": 192,
+    "space": "srgb",
+    "bytes": 105973
+  },
+  {
+    "file": "tile_mood_6.png",
+    "width": 192,
+    "height": 192,
+    "space": "srgb",
+    "bytes": 102806
+  },
+  {
+    "file": "tile_mood_7.png",
+    "width": 192,
+    "height": 192,
+    "space": "srgb",
+    "bytes": 99820
+  },
+  {
+    "file": "tile_mood_8.png",
+    "width": 192,
+    "height": 192,
+    "space": "srgb",
+    "bytes": 108279
+  },
+  {
+    "file": "tile_mood_9.png",
+    "width": 192,
+    "height": 192,
+    "space": "srgb",
+    "bytes": 105536
+  }
+]

@@ -1,0 +1,128 @@
+{
+  "method": "built-in image generation; deterministic palette assembly and mechanical PNG export",
+  "assets": [
+    {
+      "map": 4,
+      "file": "keyart_4.png",
+      "prompt": "Use case: stylized-concept. Original Asterveil Fateweave environment concept map 4: moon-shadow lake. Motifs: mirror water, floating lanterns, stone landing, broken moon shrine. Palette: silver blue, navy, pearl paths, champagne light. Shipped painterly clean fantasy mobile JRPG style, rich brush textures, broad readable shapes, soft ambient occlusion, top-left light, 3/4 front faces, bottom-centred prop anchors. High top-down 3/4 orthographic square-grid camera, not isometric diamonds. Floors clearly lighter than walls. No people, creatures, UI, text, labels, logos, watermark, other games/projects. Full-bleed single wide 1920x1080 mood painting. High camera, NO HORIZON. Large readable connected walkable route between landmarks; unobstructed paths. No panels."
+    },
+    {
+      "map": 4,
+      "file": "landmarks_4.png",
+      "prompt": "Use case: stylized-concept. Original Asterveil Fateweave environment concept map 4: moon-shadow lake. Motifs: mirror water, floating lanterns, stone landing, broken moon shrine. Palette: silver blue, navy, pearl paths, champagne light. Shipped painterly clean fantasy mobile JRPG style, rich brush textures, broad readable shapes, soft ambient occlusion, top-left light, 3/4 front faces, bottom-centred prop anchors. High top-down 3/4 orthographic square-grid camera, not isometric diamonds. Floors clearly lighter than walls. No people, creatures, UI, text, labels, logos, watermark, other games/projects. 1536x1024 concept sketch sheet, EXACTLY FOUR separated landmark/decor sketches in 2x2 arrangement on neutral pale blue-gray paper. Four distinct objects from motifs, fully visible, ample margins, matching scale, ground shadows, no scenery, no writing. Can become map props."
+    },
+    {
+      "map": 5,
+      "file": "keyart_5.png",
+      "prompt": "Use case: stylized-concept. Original Asterveil Fateweave environment concept map 5: abandoned crystal mine. Motifs: rails, crystal veins like long frozen threads, mine entrance, abandoned cart. Palette: blue slate, dusty pale paths, cyan and lilac threads. Shipped painterly clean fantasy mobile JRPG style, rich brush textures, broad readable shapes, soft ambient occlusion, top-left light, 3/4 front faces, bottom-centred prop anchors. High top-down 3/4 orthographic square-grid camera, not isometric diamonds. Floors clearly lighter than walls. No people, creatures, UI, text, labels, logos, watermark, other games/projects. Full-bleed single wide 1920x1080 mood painting. High camera, NO HORIZON. Large readable connected walkable route between landmarks; unobstructed paths. No panels.",
+      "editPrompt": "Replace all chunky gemstone spikes with hair-thin parallel frozen glowing glass filaments woven through the rock; preserve all other details."
+    },
+    {
+      "map": 5,
+      "file": "landmarks_5.png",
+      "prompt": "Use case: stylized-concept. Original Asterveil Fateweave environment concept map 5: abandoned crystal mine. Motifs: rails, crystal veins like long frozen threads, mine entrance, abandoned cart. Palette: blue slate, dusty pale paths, cyan and lilac threads. Shipped painterly clean fantasy mobile JRPG style, rich brush textures, broad readable shapes, soft ambient occlusion, top-left light, 3/4 front faces, bottom-centred prop anchors. High top-down 3/4 orthographic square-grid camera, not isometric diamonds. Floors clearly lighter than walls. No people, creatures, UI, text, labels, logos, watermark, other games/projects. 1536x1024 concept sketch sheet, EXACTLY FOUR separated landmark/decor sketches in 2x2 arrangement on neutral pale blue-gray paper. Four distinct objects from motifs, fully visible, ample margins, matching scale, ground shadows, no scenery, no writing. Can become map props.",
+      "editPrompt": "Change ONLY all chunky crystal spikes in this mine concept into thin parallel frozen glass THREADS, swept filament bundles and hair-thin crystalline strands embedded in rock. No chunky pointed gemstones. Preserve the original sheet layout, object count, square tile grid if present, pale paths, rails, cart, wooden props, shadows, top-down 3/4 camera, palette and painted style exactly. No text, people or UI."
+    },
+    {
+      "map": 4,
+      "file": "tile_mood_4.png",
+      "prompt": "Use case: stylized-concept. Original Asterveil Fateweave environment concept map 4: moon-shadow lake. Motifs: mirror water, floating lanterns, stone landing, broken moon shrine. Palette: silver blue, navy, pearl paths, champagne light. Shipped painterly clean fantasy mobile JRPG style, rich brush textures, broad readable shapes, soft ambient occlusion, top-left light, 3/4 front faces, bottom-centred prop anchors. High top-down 3/4 orthographic square-grid camera, not isometric diamonds. Floors clearly lighter than walls. No people, creatures, UI, text, labels, logos, watermark, other games/projects. Square 1024x1024 EXACTLY 4 columns by 4 rows of equal SQUARE game tiles, no gaps, margins, labels or numbers. Connected pale floor route through darker raised wall cells, simple material variants. Top surfaces square; south-facing cliff fronts only on walls. Broad material patterns readable at 48px per tile. Tile mood concept."
+    },
+    {
+      "map": 6,
+      "file": "keyart_6.png",
+      "prompt": "Use case: stylized-concept. Original Asterveil Fateweave environment concept map 6: poison mist swamp. Motifs: stilt huts, bubbling pools, reed banks, potion still. Palette: petrol teal, yellow-green poison, pale plank paths, sparse coral. Shipped painterly clean fantasy mobile JRPG style, rich brush textures, broad readable shapes, soft ambient occlusion, top-left light, 3/4 front faces, bottom-centred prop anchors. High top-down 3/4 orthographic square-grid camera, not isometric diamonds. Floors clearly lighter than walls. No people, creatures, UI, text, labels, logos, watermark, other games/projects. Full-bleed single wide 1920x1080 mood painting. High camera, NO HORIZON. Large readable connected walkable route between landmarks; unobstructed paths. No panels."
+    },
+    {
+      "map": 5,
+      "file": "tile_mood_5.png",
+      "prompt": "Use case: stylized-concept. Original Asterveil Fateweave environment concept map 5: abandoned crystal mine. Motifs: rails, crystal veins like long frozen threads, mine entrance, abandoned cart. Palette: blue slate, dusty pale paths, cyan and lilac threads. Shipped painterly clean fantasy mobile JRPG style, rich brush textures, broad readable shapes, soft ambient occlusion, top-left light, 3/4 front faces, bottom-centred prop anchors. High top-down 3/4 orthographic square-grid camera, not isometric diamonds. Floors clearly lighter than walls. No people, creatures, UI, text, labels, logos, watermark, other games/projects. Square 1024x1024 EXACTLY 4 columns by 4 rows of equal SQUARE game tiles, no gaps, margins, labels or numbers. Connected pale floor route through darker raised wall cells, simple material variants. Top surfaces square; south-facing cliff fronts only on walls. Broad material patterns readable at 48px per tile. Tile mood concept.",
+      "editPrompt": "Change ONLY all chunky crystal spikes in this mine concept into thin parallel frozen glass THREADS, swept filament bundles and hair-thin crystalline strands embedded in rock. No chunky pointed gemstones. Preserve the original sheet layout, object count, square tile grid if present, pale paths, rails, cart, wooden props, shadows, top-down 3/4 camera, palette and painted style exactly. No text, people or UI."
+    },
+    {
+      "map": 6,
+      "file": "landmarks_6.png",
+      "prompt": "Use case: stylized-concept. Original Asterveil Fateweave environment concept map 6: poison mist swamp. Motifs: stilt huts, bubbling pools, reed banks, potion still. Palette: petrol teal, yellow-green poison, pale plank paths, sparse coral. Shipped painterly clean fantasy mobile JRPG style, rich brush textures, broad readable shapes, soft ambient occlusion, top-left light, 3/4 front faces, bottom-centred prop anchors. High top-down 3/4 orthographic square-grid camera, not isometric diamonds. Floors clearly lighter than walls. No people, creatures, UI, text, labels, logos, watermark, other games/projects. 1536x1024 concept sketch sheet, EXACTLY FOUR separated landmark/decor sketches in 2x2 arrangement on neutral pale blue-gray paper. Four distinct objects from motifs, fully visible, ample margins, matching scale, ground shadows, no scenery, no writing. Can become map props."
+    },
+    {
+      "map": 7,
+      "file": "keyart_7.png",
+      "prompt": "Use case: stylized-concept. Original Asterveil Fateweave environment concept map 7: burnt fortress. Motifs: burnt gate, ash courtyard, embers, Vargoth war banners with abstract geometric insignia without writing. Palette: charcoal navy, pale warm ash paths, ember orange, muted red. Shipped painterly clean fantasy mobile JRPG style, rich brush textures, broad readable shapes, soft ambient occlusion, top-left light, 3/4 front faces, bottom-centred prop anchors. High top-down 3/4 orthographic square-grid camera, not isometric diamonds. Floors clearly lighter than walls. No people, creatures, UI, text, labels, logos, watermark, other games/projects. Full-bleed single wide 1920x1080 mood painting. High camera, NO HORIZON. Large readable connected walkable route between landmarks; unobstructed paths. No panels."
+    },
+    {
+      "map": 6,
+      "file": "tile_mood_6.png",
+      "prompt": "Use case: stylized-concept. Original Asterveil Fateweave environment concept map 6: poison mist swamp. Motifs: stilt huts, bubbling pools, reed banks, potion still. Palette: petrol teal, yellow-green poison, pale plank paths, sparse coral. Shipped painterly clean fantasy mobile JRPG style, rich brush textures, broad readable shapes, soft ambient occlusion, top-left light, 3/4 front faces, bottom-centred prop anchors. High top-down 3/4 orthographic square-grid camera, not isometric diamonds. Floors clearly lighter than walls. No people, creatures, UI, text, labels, logos, watermark, other games/projects. Square 1024x1024 EXACTLY 4 columns by 4 rows of equal SQUARE game tiles, no gaps, margins, labels or numbers. Connected pale floor route through darker raised wall cells, simple material variants. Top surfaces square; south-facing cliff fronts only on walls. Broad material patterns readable at 48px per tile. Tile mood concept."
+    },
+    {
+      "map": 7,
+      "file": "landmarks_7.png",
+      "prompt": "Use case: stylized-concept. Original Asterveil Fateweave environment concept map 7: burnt fortress. Motifs: burnt gate, ash courtyard, embers, Vargoth war banners with abstract geometric insignia without writing. Palette: charcoal navy, pale warm ash paths, ember orange, muted red. Shipped painterly clean fantasy mobile JRPG style, rich brush textures, broad readable shapes, soft ambient occlusion, top-left light, 3/4 front faces, bottom-centred prop anchors. High top-down 3/4 orthographic square-grid camera, not isometric diamonds. Floors clearly lighter than walls. No people, creatures, UI, text, labels, logos, watermark, other games/projects. 1536x1024 concept sketch sheet, EXACTLY FOUR separated landmark/decor sketches in 2x2 arrangement on neutral pale blue-gray paper. Four distinct objects from motifs, fully visible, ample margins, matching scale, ground shadows, no scenery, no writing. Can become map props."
+    },
+    {
+      "map": 8,
+      "file": "keyart_8.png",
+      "prompt": "Use case: stylized-concept. Original Asterveil Fateweave environment concept map 8: fallen floating city of the old fate-weavers. Motifs: broken high arches, floating inverted-rock islands, cyan waterfalls, gold-inlaid plaza, abandoned colonnades; closely match shipped ruins.webp visible reference. Palette: blue-violet stone, pale worn paths, gold inlays, cyan, rose-lilac. Shipped painterly clean fantasy mobile JRPG style, rich brush textures, broad readable shapes, soft ambient occlusion, top-left light, 3/4 front faces, bottom-centred prop anchors. High top-down 3/4 orthographic square-grid camera, not isometric diamonds. Floors clearly lighter than walls. No people, creatures, UI, text, labels, logos, watermark, other games/projects. Full-bleed single wide 1920x1080 mood painting. High camera, NO HORIZON. Large readable connected walkable route between landmarks; unobstructed paths. No panels."
+    },
+    {
+      "map": 7,
+      "file": "tile_mood_7.png",
+      "prompt": "Use case: stylized-concept. Original Asterveil Fateweave environment concept map 7: burnt fortress. Motifs: burnt gate, ash courtyard, embers, Vargoth war banners with abstract geometric insignia without writing. Palette: charcoal navy, pale warm ash paths, ember orange, muted red. Shipped painterly clean fantasy mobile JRPG style, rich brush textures, broad readable shapes, soft ambient occlusion, top-left light, 3/4 front faces, bottom-centred prop anchors. High top-down 3/4 orthographic square-grid camera, not isometric diamonds. Floors clearly lighter than walls. No people, creatures, UI, text, labels, logos, watermark, other games/projects. Square 1024x1024 EXACTLY 4 columns by 4 rows of equal SQUARE game tiles, no gaps, margins, labels or numbers. Connected pale floor route through darker raised wall cells, simple material variants. Top surfaces square; south-facing cliff fronts only on walls. Broad material patterns readable at 48px per tile. Tile mood concept."
+    },
+    {
+      "map": 8,
+      "file": "landmarks_8.png",
+      "prompt": "Use case: stylized-concept. Original Asterveil Fateweave environment concept map 8: fallen floating city of the old fate-weavers. Motifs: broken high arches, floating inverted-rock islands, cyan waterfalls, gold-inlaid plaza, abandoned colonnades; closely match shipped ruins.webp visible reference. Palette: blue-violet stone, pale worn paths, gold inlays, cyan, rose-lilac. Shipped painterly clean fantasy mobile JRPG style, rich brush textures, broad readable shapes, soft ambient occlusion, top-left light, 3/4 front faces, bottom-centred prop anchors. High top-down 3/4 orthographic square-grid camera, not isometric diamonds. Floors clearly lighter than walls. No people, creatures, UI, text, labels, logos, watermark, other games/projects. 1536x1024 concept sketch sheet, EXACTLY FOUR separated landmark/decor sketches in 2x2 arrangement on neutral pale blue-gray paper. Four distinct objects from motifs, fully visible, ample margins, matching scale, ground shadows, no scenery, no writing. Can become map props."
+    },
+    {
+      "map": 8,
+      "file": "tile_mood_8.png",
+      "prompt": "Use case: stylized-concept. Original Asterveil Fateweave environment concept map 8: fallen floating city of the old fate-weavers. Motifs: broken high arches, floating inverted-rock islands, cyan waterfalls, gold-inlaid plaza, abandoned colonnades; closely match shipped ruins.webp visible reference. Palette: blue-violet stone, pale worn paths, gold inlays, cyan, rose-lilac. Shipped painterly clean fantasy mobile JRPG style, rich brush textures, broad readable shapes, soft ambient occlusion, top-left light, 3/4 front faces, bottom-centred prop anchors. High top-down 3/4 orthographic square-grid camera, not isometric diamonds. Floors clearly lighter than walls. No people, creatures, UI, text, labels, logos, watermark, other games/projects. Square 1024x1024 EXACTLY 4 columns by 4 rows of equal SQUARE game tiles, no gaps, margins, labels or numbers. Connected pale floor route through darker raised wall cells, simple material variants. Top surfaces square; south-facing cliff fronts only on walls. Broad material patterns readable at 48px per tile. Tile mood concept."
+    },
+    {
+      "map": 9,
+      "file": "keyart_9.png",
+      "prompt": "Use case: stylized-concept. Original Asterveil Fateweave environment concept map 9: meteor-strewn plain at dusk. Motifs: meteor craters, star-stones, glass impact shards, low grasses. Palette: dusk mauve, indigo, pale lavender paths, cyan-white cores, copper grasses. Shipped painterly clean fantasy mobile JRPG style, rich brush textures, broad readable shapes, soft ambient occlusion, top-left light, 3/4 front faces, bottom-centred prop anchors. High top-down 3/4 orthographic square-grid camera, not isometric diamonds. Floors clearly lighter than walls. No people, creatures, UI, text, labels, logos, watermark, other games/projects. Full-bleed single wide 1920x1080 mood painting. High camera, NO HORIZON. Large readable connected walkable route between landmarks; unobstructed paths. No panels."
+    },
+    {
+      "map": 9,
+      "file": "tile_mood_9.png",
+      "prompt": "Use case: stylized-concept. Original Asterveil Fateweave environment concept map 9: meteor-strewn plain at dusk. Motifs: meteor craters, star-stones, glass impact shards, low grasses. Palette: dusk mauve, indigo, pale lavender paths, cyan-white cores, copper grasses. Shipped painterly clean fantasy mobile JRPG style, rich brush textures, broad readable shapes, soft ambient occlusion, top-left light, 3/4 front faces, bottom-centred prop anchors. High top-down 3/4 orthographic square-grid camera, not isometric diamonds. Floors clearly lighter than walls. No people, creatures, UI, text, labels, logos, watermark, other games/projects. Square 1024x1024 EXACTLY 4 columns by 4 rows of equal SQUARE game tiles, no gaps, margins, labels or numbers. Connected pale floor route through darker raised wall cells, simple material variants. Top surfaces square; south-facing cliff fronts only on walls. Broad material patterns readable at 48px per tile. Tile mood concept."
+    },
+    {
+      "map": 9,
+      "file": "landmarks_9.png",
+      "prompt": "Use case: stylized-concept. Original Asterveil Fateweave environment concept map 9: meteor-strewn plain at dusk. Motifs: meteor craters, star-stones, glass impact shards, low grasses. Palette: dusk mauve, indigo, pale lavender paths, cyan-white cores, copper grasses. Shipped painterly clean fantasy mobile JRPG style, rich brush textures, broad readable shapes, soft ambient occlusion, top-left light, 3/4 front faces, bottom-centred prop anchors. High top-down 3/4 orthographic square-grid camera, not isometric diamonds. Floors clearly lighter than walls. No people, creatures, UI, text, labels, logos, watermark, other games/projects. 1536x1024 concept sketch sheet, EXACTLY FOUR separated landmark/decor sketches in 2x2 arrangement on neutral pale blue-gray paper. Four distinct objects from motifs, fully visible, ample margins, matching scale, ground shadows, no scenery, no writing. Can become map props."
+    },
+    {
+      "map": 10,
+      "file": "keyart_10.png",
+      "prompt": "Use case: stylized-concept. Original Asterveil Fateweave environment concept map 10: throne inside the rift. Motifs: empty throne, fractured platforms, violet void, broken thread bridges, severed luminous filaments. Palette: deep violet, pale lilac walkable platforms, dark obsidian walls, sparse gold thread remnants. Shipped painterly clean fantasy mobile JRPG style, rich brush textures, broad readable shapes, soft ambient occlusion, top-left light, 3/4 front faces, bottom-centred prop anchors. High top-down 3/4 orthographic square-grid camera, not isometric diamonds. Floors clearly lighter than walls. No people, creatures, UI, text, labels, logos, watermark, other games/projects. Full-bleed single wide 1920x1080 mood painting. High camera, NO HORIZON. Large readable connected walkable route between landmarks; unobstructed paths. No panels."
+    },
+    {
+      "map": 10,
+      "file": "tile_mood_10.png",
+      "prompt": "Use case: stylized-concept. Original Asterveil Fateweave environment concept map 10: throne inside the rift. Motifs: empty throne, fractured platforms, violet void, broken thread bridges, severed luminous filaments. Palette: deep violet, pale lilac walkable platforms, dark obsidian walls, sparse gold thread remnants. Shipped painterly clean fantasy mobile JRPG style, rich brush textures, broad readable shapes, soft ambient occlusion, top-left light, 3/4 front faces, bottom-centred prop anchors. High top-down 3/4 orthographic square-grid camera, not isometric diamonds. Floors clearly lighter than walls. No people, creatures, UI, text, labels, logos, watermark, other games/projects. Square 1024x1024 EXACTLY 4 columns by 4 rows of equal SQUARE game tiles, no gaps, margins, labels or numbers. Connected pale floor route through darker raised wall cells, simple material variants. Top surfaces square; south-facing cliff fronts only on walls. Broad material patterns readable at 48px per tile. Tile mood concept."
+    },
+    {
+      "map": 10,
+      "file": "landmarks_10.png",
+      "prompt": "Use case: stylized-concept. Original Asterveil Fateweave environment concept map 10: throne inside the rift. Motifs: empty throne, fractured platforms, violet void, broken thread bridges, severed luminous filaments. Palette: deep violet, pale lilac walkable platforms, dark obsidian walls, sparse gold thread remnants. Shipped painterly clean fantasy mobile JRPG style, rich brush textures, broad readable shapes, soft ambient occlusion, top-left light, 3/4 front faces, bottom-centred prop anchors. High top-down 3/4 orthographic square-grid camera, not isometric diamonds. Floors clearly lighter than walls. No people, creatures, UI, text, labels, logos, watermark, other games/projects. 1536x1024 concept sketch sheet, EXACTLY FOUR separated landmark/decor sketches in 2x2 arrangement on neutral pale blue-gray paper. Four distinct objects from motifs, fully visible, ample margins, matching scale, ground shadows, no scenery, no writing. Can become map props."
+    },
+    {
+      "map": 2,
+      "file": "keyart_2.png",
+      "prompt": "Original keyart concept for map 2 deep forest trail, twisted thorn trees, mossy shrines, olive/teal foliage, pale readable paths, cyan wisps; painterly square-grid top-down 3/4 style. 1920x1080 full-bleed painting, no horizon. No people, UI, text, logos or watermark."
+    },
+    {
+      "map": 2,
+      "file": "landmarks_2.png",
+      "prompt": "Original landmarks concept for map 2 deep forest trail, twisted thorn trees, mossy shrines, olive/teal foliage, pale readable paths, cyan wisps; painterly square-grid top-down 3/4 style. Exactly four separated props on neutral paper, 2x2 layout. No people, UI, text, logos or watermark."
+    },
+    {
+      "map": 2,
+      "file": "tile_mood_2.png",
+      "prompt": "Original tile_mood concept for map 2 deep forest trail, twisted thorn trees, mossy shrines, olive/teal foliage, pale readable paths, cyan wisps; painterly square-grid top-down 3/4 style. Exactly 4x4 square floor/wall tile samples, broad readable shapes at 48px. No people, UI, text, logos or watermark."
+    }
+  ]
+}
