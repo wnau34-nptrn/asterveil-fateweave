@@ -1,5 +1,12 @@
 # ส่งต่องานพัฒนาให้ Codex ระหว่างรอ Usage ของ Claude (2026-10-23)
 
+## 2026-10-28 — A0/A1 เผยแพร่แล้ว
+
+- [x] A0registry/audit + A1ไอรา/ภูตแดนดิไลออนเสร็จผ่าน [PR87](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/87) merge`1ea31d5` / validated`fcf210d`; Pages40614459819ผ่านbuild+4browser+deployเมื่อ2026-10-28 08:44:29 Asia/Bangkok
+- [ผลจริง/หลักฐานrelease](../validation/unit-a1-release/README_TH.md) · [16คลิป390px/ทุกActionId-intent/fallback](../combat-presentation/unit-a1-slice/README_TH.md) Local958unit/82focusedbrowser, CI234source+3prechecks+249productionผ่าน/502skip, player16decodeผ่าน
+- Eira3.88MiB/1.38MB, Sprite1.19MiB/0.36MB เป็นdecodedRGBA/atlas+JSON ไม่ใช่RAMรวม ไม่มีcriticalpreloadเพิ่ม คงpilot/C5.6approvalและกฎ/save/balance/timingเดิม การแก้PCtestเป็น75s wall-clockเฉพาะmulti-reload; assertions/fake-clocktimingเดิม
+- Hit/downsprite; block/dodge/counterprocedural; revive resetseedตามHPจริง Eira7ActionId+SeedSparkครอบคลุมจริง ไม่มีA2/family7เริ่มโดยงานนี้ Landmarkใหม่อ่านunitDisplayRatioแทนhard-code2 ดูรายละเอียดในCODEX-TO-CLAUDE สถานะpendingด้านล่างเป็นประวัติ
+
 ## 2026-10-28 — A0/A1 integrated with published C5.6 (PR87)
 
 Owner resumed with “ต่อ”. Original A1 head `a719936` passed quality40532299467 and fullbrowser40532299933 (175source/3prechecks/249productionpass,384skip). During that run the game branch advanced through owner-approved/published C5.6 PR86 to `a2993df`; merge conflict was docs/workflow only, BattleScene auto-merged. Preserve both handoff histories and every source gate, including alchemy + unit A1 together.

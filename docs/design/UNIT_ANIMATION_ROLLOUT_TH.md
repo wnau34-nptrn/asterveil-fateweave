@@ -1,5 +1,9 @@
 # แผนแอนิเมชันยูนิตครบทุกตัว
 
+## A0/A1 released — 28 ตุลาคม2026
+
+PR87 merged `1ea31d5` และPages40614459819เผยแพร่สำเร็จเมื่อ2026-10-28 08:44:29 Asia/Bangkok ครบเฉพาะA0/A1 Eira7ActionId+SpriteSeedSparkพร้อมreaction/lifecycle/fallbackตาม [หลักฐานrelease](../validation/unit-a1-release/README_TH.md) และ [16คลิป/audit](../combat-presentation/unit-a1-slice/README_TH.md) ผ่าน958unit/82focusedbrowser/234source/249production (502skip) งบใหม่Eira3.88MiB/1.38MB, Sprite1.19MiB/0.36MB ไม่ใช่RAMรวม คงpilotpixels/timingและC5.6ที่ส่งแล้ว ไม่มีrules/save/balance/playbackdiff A2–A11และrosterอนาคตยังเป็นแผน ไม่เริ่มอัตโนมัติ
+
 วันที่ 27 ตุลาคม 2026 (Asia/Bangkok) · สถานะ: แผนงาน ไม่ใช่รายงานผลิตภาพหรือทดสอบชุดใหม่แล้ว
 
 ## ผล A0/A1 — 27 ตุลาคม2026

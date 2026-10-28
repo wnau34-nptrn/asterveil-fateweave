@@ -1,5 +1,13 @@
 # A0/A1 — ไอรา + ภูตแดนดิไลออน
 
+## Released — 28 ตุลาคม2026
+
+[PR87](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/87) merged `1ea31d5` จากvalidated`fcf210d`; Pages40614459819successครบbuild+4browser shards+deployเมื่อ2026-10-28 08:44:29 Asia/Bangkok [เล่นเกม](https://wnau34-nptrn.github.io/asterveil-fateweave/) · [Release proof/CI/artifact/tree equality](../../validation/unit-a1-release/README_TH.md)
+
+หัวสุดท้ายผ่าน958unit/80files/typecheck/lint/build,234source fixtures,3prechecks,249production (502skip) Local82focusedbrowser+16capture/state equality+player16decodeผ่าน คลิปปัจจุบัน1,547rawframes/maxgap0.300s/maxPTSerror0.0061ms Source/publicตรงรุ่นที่เผยแพร่ การเพิ่ม75sเป็นwall-clockของPCmulti-reloadtestเท่านั้น ทุกassertion/clock timingเหมือนเดิม ไม่มีgame timing/rules/save/balance/criticalpreloaddiff ไม่มีowner visualapprovalใหม่ถูกอ้างจากtests รายละเอียดfallbackและmemoryข้างล่างยังใช้ตามเดิม ข้อความpendingก่อนหน้านี้เป็นประวัติ
+
+Workspaceเดิมไม่พร้อมใช้งานหลังpush หลักฐานMP4/source/proofอยู่Gitครบ rawcapturepathsอ้างworkspaceเดิม ไม่รับรองว่ามีrawframesในsessionใหม่
+
 27–28 ตุลาคม 2026 (Asia/Bangkok) · branch `codex/animation-a0-a1` · ฐานเริ่ม `afddd84` / ฐานรวมส่งท้าย `a2993df`
 
 [เปิดหน้าเลือกคลิป390px](index.html) · [ข้อมูลเฟรม/เวลา/eventจริง](clips.json) · [ต้นฉบับ/การแพ็ก](../../../incoming/ART-UNIT-ANIMATION-A1-001/NOTES.md)

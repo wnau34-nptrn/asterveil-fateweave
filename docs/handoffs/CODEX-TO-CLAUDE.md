@@ -1,5 +1,23 @@
 # Codex → Claude handoff
 
+## 2026-10-28 — A0/A1 เสร็จและเผยแพร่แล้ว (PR87)
+
+PR87 merged `1ea31d500bad7c9ed49538699cd2b76e333e418a` จาก validated head `fcf210db06d3a7edb23ad8400e4810679d3d2f02`; รวมฐานC5.6 `a2993df` โดยรักษาart/module/approvalและทุกCIgateเดิม Pages40614459819ผ่านbuild+browser4shards+deployเมื่อ2026-10-28 08:44:29 Asia/Bangkok Artifact12784946429/55,423,967bytes/digestsha256:af0fe34d740836b805f156727c9026cf90d01693c2fa8191adfc91465ec8ccb8ผูกmergeSHAเดียวกัน [Release proof](../validation/unit-a1-release/README_TH.md) และ [16คลิป/บัญชีทุกActionId/intent+fallback](../combat-presentation/unit-a1-slice/README_TH.md)
+
+A0ขยายregistry/clip/optional-sheetsจาก2pilotเป็น4visual identities คงLyra/Hunterpixels/URLs/frame order/cadence/contact timingเดิม A1ใหม่เฉพาะEira7ActionId (attack/Bolt/Storm/Dispelใช้staff-release; Ward/Sigil/Aegisใช้support/seal) และSpriteSeedSparkจริง เตรียม→ปล่อย→คืนท่า Hit/downใช้เฟรมใหม่; block/dodge/counterยังproceduralเดิม ฟื้นresetseed0ตามHPจริง ไม่มีstand-upstripใหม่ Lyra mark/finisher/lunge/parry/sweepยังfallbackตามaudit ไม่เรียกว่าครบroster ไม่เริ่มA2หรือfamily7
+
+Seedจากภาพเกมเดิม/whole-stripImageGen/normalization scaleร่วม/seedlockback/trim-dedup-packlosslessและreconstructทุกvisibleRGBA/alphaเท่ากัน Eira18unique/22logical, Sprite12unique/22logical Eira4,067,328decodedbytes(3.88MiB)/1,382,688downloadbytes; Sprite1,251,328(1.19MiB)/357,984 ต่ำกว่า6MiB/1.5MBต่อคน รอบแรกEira1.89MBจึงลดresolutionร่วมเป็น215pxและชดเชยdisplayRatio1/.42ให้ขนาดสนามเดิม ตัวเลขไม่ใช่RAM/GPUรวมเกม ไม่มีanimationเพิ่มcriticalpreload; original-artfallback/late-safe-boundary/dedup/fail suppression/evictionผ่าน
+
+Localtypecheck/lint/build,958unit/80files,82focusedbrowser (57alchemy+20A1+3loading+2pilots) ผ่าน Premergequality40611416449/browser40611416473success:234source,3prechecks,249productionผ่าน/502skip Pagesรวม249productionผ่าน/502skipและ234source Postmergequality40614459859success Source/public/tests/.githubและwholetreeของmergeตรงvalidatedhead; source/publicตรงชุดcaptureทุกbyte ไม่มีcore/save/content/balance/UI/battle-playbackหรือexistingFXmodule/atlasdiffจากฐาน
+
+CIรอบ4ec57b1เคสPC1366x768multi-reloadหมด45sโดยstackที่ctx.close จึงให้เฉพาะเคสนี้75s wall-clockครอบคลุมsetup/render/teardown ทุกfake-clock timing/state assertionเหมือนเดิมทุกbyte ไม่มีการเพิ่มเวลากติกาหรือปิดassertions Headสุดท้ายผ่านครบ
+
+16คลิปอัดใหม่390x844บนฐานรวมด้วยrealclocks/CDPtimestamps มี1,547rawframes ทุกcapturedframe+finalholdผ่านdecodedPTS/count/end (maxgap0.300s/maxerror0.0061ms) ทุกfinalstateตรงresolver/คำสั่งเดียว Playerdecodeครบ16ผ่าน1/1 พร้อม2actualstills เก็บMP4hash/source/publictreeในproof Chromiumcloud/SwiftShaderเท่านั้น ไม่อ้างSafari/มือถือจริง/60fps/totalRAM Workspaceกลายเป็นunavailableภายหลังpush; encodedclips/rawstrips/proofsอยู่Gitครบ ส่วนrawcapturepathsเป็นworkspaceเดิมและไม่ได้upload
+
+Files: unit-frames registry, unit-atlases, optional-unit-assets, unit-frame-view, BattleScene scale/landmarks, hashed2atlases+JSON, incomingA1seeds/raw/previews/normalizer/prompts/validation, pilot packerที่preserveentriesอื่น, unit/browser/capture/player/encoder, additiveCI/Pagesgates, desktoptestwallbudget, rollout/handoffs/releaseproof เจ้าของสั่งA0/A1และ“ต่อ”ตามstandingauthorization ไม่ได้บันทึกว่าเจ้าของให้visualapprovalใหม่จากtests ไม่มีคำถามrules/saveฝากแก้
+
+ฝากClaude: landmarkของanimatedtextureต้องอ่าน `unitDisplayRatio(artOf(...))` ไม่hard-code2 เพราะEiraใช้1/.42 ส่วนpilot/Spriteใช้2; original-artใช้1 Runtime APIเป็นunitKey/unitClip/UnitSheet ส่วนtexturekeyunit-pilot-*คงcompatibilityไว้ สถานะpendingด้านล่างเป็นประวัติ
+
 ## 2026-10-28 — A0/A1 integrated with published C5.6 (PR87)
 
 Owner resumed with “ต่อ”. Original A1 head `a719936` passed quality40532299467 and fullbrowser40532299933 (175source/3prechecks/249productionpass,384skip). During that run the game branch advanced through owner-approved/published C5.6 PR86 to `a2993df`; merge conflict was docs/workflow only, BattleScene auto-merged. Preserve both handoff histories and every source gate, including alchemy + unit A1 together.
