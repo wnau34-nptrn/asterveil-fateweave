@@ -1,5 +1,5 @@
 import type { Item, PotionId, SetId } from '../core/world/types';
-import { emblemCell, equipArtUrl, gearCell, potionCell } from '../game/visuals/equip-art';
+import { emblemCell, equipArtUrl, equipAtlasSize, gearCell, potionCell } from '../game/visuals/equip-art';
 import { icon } from './icons';
 import { slotIcon } from './th';
 
@@ -8,15 +8,18 @@ import { slotIcon } from './th';
 const at = (col: number, row: number, cols: number, rows: number) => `--ax:${cols > 1 ? col / (cols - 1) * 100 : 0}%;--ay:${rows > 1 ? row / (rows - 1) * 100 : 0}%`;
 export function setEmblem(set: SetId): string {
   const c = emblemCell(set);
-  return `<i class="set-emblem" style="--atlas:url(${equipArtUrl('set_emblems')});${at(c.col, 0, 6, 1)}"></i>`;
+  const { cols, rows } = equipAtlasSize.set_emblems;
+  return `<i class="set-emblem" style="--atlas:url(${equipArtUrl('set_emblems')});${at(c.col, c.row, cols, rows)}"></i>`;
 }
 // The piece with a rarity frame (data-rarity) and its set emblem in the corner.
 export function gearArt(item: Item): string {
   const c = gearCell(item);
-  const art = c ? `<i class="equip-sprite" style="--atlas:url(${equipArtUrl('gear_items')});--cols:7;--rows:3;${at(c.col, c.row, 7, 3)}"></i>` : icon(slotIcon[item.slot]);
+  const { cols, rows } = equipAtlasSize.gear_items;
+  const art = c ? `<i class="equip-sprite" style="--atlas:url(${equipArtUrl('gear_items')});--cols:${cols};--rows:${rows};${at(c.col, c.row, cols, rows)}"></i>` : icon(slotIcon[item.slot]);
   return `<span class="gear-art" data-rarity="${item.rarity}" aria-hidden="true">${art}${item.set ? setEmblem(item.set) : ''}${item.boss?'<i class="boss-gear-marker">◆</i>':''}</span>`;
 }
 export function potionArt(id: PotionId | 'dust' | 'gold'): string {
   const c = potionCell(id);
-  return `<span class="potion-art" aria-hidden="true"><i class="equip-sprite" style="--atlas:url(${equipArtUrl('potion_items')});--cols:5;--rows:1;${at(c.col, 0, 5, 1)}"></i></span>`;
+  const { cols, rows } = equipAtlasSize.potion_items;
+  return `<span class="potion-art" aria-hidden="true"><i class="equip-sprite" style="--atlas:url(${equipArtUrl('potion_items')});--cols:${cols};--rows:${rows};${at(c.col, c.row, cols, rows)}"></i></span>`;
 }
