@@ -8,9 +8,9 @@ Design-clarification rounds are recorded in [docs/design/OWNER_DECISIONS_TH.md](
 
 Owner: finish character animation and skill VFX before other development; Codex makes the art (incoming/ only), Claude integrates in-game. Plan, waves W1–W8, remaining 30 identities / 32 hero skills without painted VFX, and copy-ready Codex prompts for W1: [docs/design/ANIMATION_VFX_COMPLETION_PLAN_TH.md](docs/design/ANIMATION_VFX_COMPLETION_PLAN_TH.md). This puts P01–P11 after W8 and supersedes the older “do not start A3/family7” notes once the owner starts a wave. Owner approved the plan 2026-10-28 and sent the W1 prompts (A3 Seren/Mycon, C5.7 arcane seal) to Codex; W2 prompt (A4) is ready in §6. Owner artwork selection and motion approval per batch remain required.
 
-## C5.7 Arcane Seal VFX — integrated, awaiting owner motion review 2026-10-28
+## C5.7 Arcane Seal VFX — published 2026-10-28
 
-R2 artwork (PR #89) is in the game on branch `codex/c5-7-arcane-seal-vfx` (mark/sigil/storm/dispel from actual events, rules/save/balance/timing unchanged); 21 real 390px clips in `docs/combat-presentation/arcane-seal-slice/`. Do not merge/publish until the owner approves the motion. A3 (PR #90) awaits the owner's R1/R2 choice; A4 (PR #91) not started.
+R2 artwork (PR #89) integrated through PR92 merge `4883362` (mark/sigil/storm/dispel from actual events; rules/save/balance/timing unchanged); owner approved motion and merge with “ทั้งสองอย่าง” on 2026-10-28 after the 21 real 390px clips in `docs/combat-presentation/arcane-seal-slice/`. PR quality+browser passed (browser re-run once after an unrelated `presentation.spec.ts` timeout); Pages run 40730511483 build/4 browser shards/deploy success (16:54–17:21 UTC). A3 (PR #90, R2 chosen) is in a separate session; A4 (PR #91) not started.
 
 ## Unit animation A2 — published 2026-10-28
 
