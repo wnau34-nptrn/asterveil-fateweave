@@ -68,6 +68,8 @@ for(const [width,height,touch]of [[320,568,true],[390,844,true],[1366,768,false]
   }finally{await ctx.close()}
  });
  test(`presentation skip resize and reload keep exactly one committed command at ${width}x${height}`,async({browser})=>{
+  // Multiple reloads and software WebGL cleanup need wall-clock headroom; fake-clock timing assertions stay exact.
+  if(width===1366)test.setTimeout(75_000);
   const ctx=await browser.newContext({viewport:{width,height},isMobile:touch,hasTouch:touch,reducedMotion:'no-preference'}),page=await ctx.newPage();
   try{
    await open(page);await page.locator('#target-f1').click();const committed=await saved(page);await page.locator('#skip-turn').click();await page.clock.runFor(3000);
@@ -81,10 +83,6 @@ for(const [width,height,touch]of [[320,568,true],[390,844,true],[1366,768,false]
    await page.clock.runFor(2500);expect(await saved(page)).toBe(third);await expect(page.locator('html')).toHaveAttribute('data-sfx',lastSound!);
    await page.evaluate(()=>{Object.defineProperty(document,'hidden',{configurable:true,value:false});document.dispatchEvent(new Event('visibilitychange'));});
    await expect(page.locator('#action-heal')).toBeEnabled();
-  }finally{
-   // Gameplay keeps its original deadline; allow the large software-rendered context to close.
-   if(width===1366)test.setTimeout(test.info().timeout+15_000);
-   await ctx.close();
-  }
+  }finally{await ctx.close()}
  });
 }
