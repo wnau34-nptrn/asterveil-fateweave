@@ -2,7 +2,7 @@
 
 ## Owner design decisions — 2026-10-28
 
-Design-clarification rounds are recorded in [docs/design/OWNER_DECISIONS_TH.md](docs/design/OWNER_DECISIONS_TH.md). Round 1 (OD-01–OD-04): base stars give stats only (advanced stars a small non-essential effect; per-character identity lives in p branches); tree points come from camp level + camp milestones, not stars; no rarity tiers, every class has at least one guaranteed free character, bosses never need gacha characters; duplicates stay character-specific plus a farmable universal star shard that replaces seals. These supersede the master plan's per-star fate effects and the SR/SSR draft; numbers remain drafts.
+Design-clarification rounds are recorded in [docs/design/OWNER_DECISIONS_TH.md](docs/design/OWNER_DECISIONS_TH.md). Round 1 (OD-01–OD-04): base stars give stats only (advanced stars a small non-essential effect; per-character identity lives in p branches); tree points come from camp level + camp milestones, not stars; no rarity tiers, every class has at least one guaranteed free character, bosses never need gacha characters; duplicates stay character-specific plus a farmable universal star shard that replaces seals. These supersede the master plan's per-star fate effects and the SR/SSR draft; numbers remain drafts. Round 2 (OD-05–OD-08): the field team is definitely 5 (P02 delivers it; this supersedes "up to 4 heroes" once P02 lands; enemy max 1–5 stays the P00 proposal); target play is 20–30 min sessions 3–5×/week with no daily obligation; a favourite reaches ★5 in about 7–10 sessions; promotion keeps the same character: base ★5 → promote → advanced ★1–5, refining existing skills (one choice from each of two pairs), no new general skills.
 
 ## Animation + VFX first — owner direction 2026-10-28
 
