@@ -1,5 +1,9 @@
 # Fateweave development instructions
 
+## Owner design decisions — 2026-10-28
+
+Design-clarification rounds are recorded in [docs/design/OWNER_DECISIONS_TH.md](docs/design/OWNER_DECISIONS_TH.md). Round 1 (OD-01–OD-04): base stars give stats only (advanced stars a small non-essential effect; per-character identity lives in p branches); tree points come from camp level + camp milestones, not stars; no rarity tiers, every class has at least one guaranteed free character, bosses never need gacha characters; duplicates stay character-specific plus a farmable universal star shard that replaces seals. These supersede the master plan's per-star fate effects and the SR/SSR draft; numbers remain drafts.
+
 ## Animation + VFX first — owner direction 2026-10-28
 
 Owner: finish character animation and skill VFX before other development; Codex makes the art (incoming/ only), Claude integrates in-game. Plan, waves W1–W8, remaining 30 identities / 32 hero skills without painted VFX, and copy-ready Codex prompts for W1: [docs/design/ANIMATION_VFX_COMPLETION_PLAN_TH.md](docs/design/ANIMATION_VFX_COMPLETION_PLAN_TH.md). This puts P01–P11 after W8 and supersedes the older “do not start A3/family7” notes once the owner starts a wave. Owner approved the plan 2026-10-28 and sent the W1 prompts (A3 Seren/Mycon, C5.7 arcane seal) to Codex; W2 prompt (A4) is ready in §6. Owner artwork selection and motion approval per batch remain required.
