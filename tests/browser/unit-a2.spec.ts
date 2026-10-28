@@ -145,8 +145,19 @@ test('A2 actual guardcounter braces then ripostes inside the existing reaction w
  await page.locator('#action-guard').click();await page.locator(`#target-${await page.evaluate(()=>window.unitA2QA.target())}`).click();const committed=await saved(page);
  const turns=await page.evaluate(()=>window.unitA2QA.turns());await page.clock.runFor(stageTiming(turns[0]!,false).end+stageTiming(turns[1]!,false).contact);
  expect(await page.evaluate(()=>window.unitA2QA.frames().guardian![0]!.frame)).toBe('30');
+ const reaction=await page.evaluate(()=>window.unitA2QA.reactionTiming());
+ expect(reaction?.duration).toBe(200);expect(reaction?.phase).toBe('reaction');
  await page.clock.runFor(80);expect(await page.evaluate(()=>window.unitA2QA.frames().guardian![0]!.frame)).toBe('5');
- await page.clock.runFor(120);expect(await page.evaluate(()=>window.unitA2QA.frames().guardian![0]!.frame)).toBe('0');
+ await page.clock.runFor(120);
+ // UI contact timers can fall between RAF ticks. The controller still owns a
+ // 200ms reaction; permit only its remaining render delta plus one final RAF.
+ const tail=await page.evaluate(()=>window.unitA2QA.reactionTiming());
+ if(tail){
+  expect(tail.duration).toBe(200);expect(tail.phase).toBe('reaction');
+  expect(tail.remaining).toBeGreaterThanOrEqual(0);expect(tail.remaining).toBeLessThanOrEqual(1000/60+1);
+  await page.clock.runFor(Math.ceil(tail.remaining)+17);
+ }
+ expect(await page.evaluate(()=>window.unitA2QA.frames().guardian![0]!.frame)).toBe('0');
  await page.clock.runFor(3000);expect(await saved(page)).toBe(committed);expect(await page.evaluate(()=>window.unitA2QA.state())).toEqual(await page.evaluate(()=>window.unitA2QA.expected()));
  }finally{await ctx.close();}
 });

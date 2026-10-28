@@ -34,7 +34,10 @@ const load=()=>{ui.open({kind:'random',data:fixture.data,entry:fixture.entry,com
 load();
 new ResizeObserver(()=>scene.refreshLayout()).observe(document.querySelector('#game')!);
 void document.fonts.ready.then(()=>scene.refreshLayout());
-const qa={alchemyPoint:()=>{
+const qa={reactionTiming:()=>{
+ const motion=(scene as unknown as {unitAnimation:{motions:Map<string,{duration:number;elapsed:number;phase:string}>}}).unitAnimation.motions.get('guardian');
+ return motion?{duration:motion.duration,remaining:motion.duration-motion.elapsed,phase:motion.phase}:null;
+ },alchemyPoint:()=>{
  const body=(scene as unknown as {bodies:Map<string,Phaser.GameObjects.Container>}).bodies.get('guardian')!;
  const sprite=body.list.find((c):c is Phaser.GameObjects.Image=>c instanceof Phaser.GameObjects.Image)!;
  // Independently use the documented seed normalization, including the live world matrix.
