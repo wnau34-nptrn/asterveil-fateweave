@@ -1,5 +1,9 @@
 # Codex → Claude handoff
 
+## 2026-10-28 — A2 in progress: เอกิส + องครักษ์อสูร
+
+Owner explicitly requested completing A2 only under standing authorization. Branch `codex/animation-a2`, base `f0ee801`; no reset/overwrite. Seven Knight ActionIds and four Guard intents audited against actual content/runtime. New whole-strip art/normalizer/trimmed lossless atlases, optional registry and A2 block/counter reactions; procedural dodge/idle/revive-reset fallback explicit. [Mapping/source/budget/verification status](../combat-presentation/unit-a2-slice/README_TH.md). Aegis4.22MiB/1,397,790bytes, Guard3.06MiB/1,026,816bytes; atlas counts, not totalRAM. No core/save/content/balance/playback or existingVFXmodule/atlas changes, pilot/A1/C5.6 approval/gates preserved. Rouse is actual guard/all, not an invented heal. Local verification/captures/CI/publication are in progress; do not read this as release or owner visual approval. Latest completion entry will supersede this paragraph. Do not start A3 or a new VFX family.
+
 ## 2026-10-28 — A0/A1 เสร็จและเผยแพร่แล้ว (PR87)
 
 PR87 merged `1ea31d500bad7c9ed49538699cd2b76e333e418a` จาก validated head `fcf210db06d3a7edb23ad8400e4810679d3d2f02`; รวมฐานC5.6 `a2993df` โดยรักษาart/module/approvalและทุกCIgateเดิม Pages40614459819ผ่านbuild+browser4shards+deployเมื่อ2026-10-28 08:44:29 Asia/Bangkok Artifact12784946429/55,423,967bytes/digestsha256:af0fe34d740836b805f156727c9026cf90d01693c2fa8191adfc91465ec8ccb8ผูกmergeSHAเดียวกัน [Release proof](../validation/unit-a1-release/README_TH.md) และ [16คลิป/บัญชีทุกActionId/intent+fallback](../combat-presentation/unit-a1-slice/README_TH.md)

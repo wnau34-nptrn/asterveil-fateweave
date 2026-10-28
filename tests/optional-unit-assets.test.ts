@@ -7,23 +7,27 @@ import { readFileSync } from 'node:fs';
 const withoutHunter={...firstClash,enemies:firstClash.enemies.filter(e=>e.art!=='foe_hunter')};
 describe('optional unit art scheduling',()=>{
  it('requests only pilot art in this encounter, never slot IDs or the entire roster',()=>{
-  expect(encounterUnitSheets(firstClash)).toEqual(['lyra','hunter','eira']);
-  expect(encounterUnitSheets(withoutHunter)).toEqual(['lyra','eira']);
-  expect(encounterUnitSheets({...withoutHunter,heroes:firstClash.heroes.filter(h=>!['tracer','weaver'].includes(h.id))})).toEqual([]);
+  expect(encounterUnitSheets(firstClash)).toEqual(['lyra','hunter','eira','aegis','vargoth']);
+  expect(encounterUnitSheets(withoutHunter)).toEqual(['lyra','eira','aegis','vargoth']);
+  expect(encounterUnitSheets({...withoutHunter,heroes:firstClash.heroes.filter(h=>!['tracer','weaver','guardian'].includes(h.id)),enemies:[]})).toEqual([]);
+ });
+ it('shares one optional texture for multiple guards',()=>{
+  const guard=firstClash.enemies.find(e=>e.art==='foe_vargoth_guard')!;
+  expect(encounterUnitSheets({...firstClash,enemies:[{...guard,id:'f1'},{...guard,id:'f2'}]}).filter(n=>n==='vargoth')).toHaveLength(1);
  });
  it('deduplicates queued/cached requests and evicts only art unused by the next encounter',()=>{
   const plan=new OptionalUnitAssets(),cache=new Set<string>();plan.setEncounter(firstClash);
-  expect(plan.request(n=>cache.has(n))).toEqual(['lyra','hunter','eira']);expect(plan.request(n=>cache.has(n))).toEqual([]);
+  expect(plan.request(n=>cache.has(n))).toEqual(['lyra','hunter','eira','aegis','vargoth']);expect(plan.request(n=>cache.has(n))).toEqual([]);
   plan.setEncounter(withoutHunter);expect(plan.request(n=>cache.has(n))).toEqual([]);
-  cache.add('lyra');cache.add('hunter');cache.add('eira');expect(plan.complete(n=>cache.has(n))).toBe(true);
+  cache.add('lyra');cache.add('hunter');cache.add('eira');cache.add('aegis');cache.add('vargoth');expect(plan.complete(n=>cache.has(n))).toBe(true);
   expect(plan.request(n=>cache.has(n))).toEqual([]);expect(plan.unused(n=>cache.has(n))).toEqual(['hunter']);
   cache.delete('hunter');plan.setEncounter(firstClash);expect(plan.request(n=>cache.has(n))).toEqual(['hunter']);
  });
  it('does not loop on a failed optional download and can retry on a later encounter/restart',()=>{
   const plan=new OptionalUnitAssets();plan.setEncounter(firstClash);plan.request(()=>false);plan.complete(()=>false);
   expect(plan.request(()=>false)).toEqual([]);expect(plan.complete(()=>false)).toBe(false);
-  plan.setEncounter(firstClash);expect(plan.request(()=>false)).toEqual(['lyra','hunter','eira']);
-  plan.reset();expect(plan.request(()=>false)).toEqual(['lyra','hunter','eira']);
+  plan.setEncounter(firstClash);expect(plan.request(()=>false)).toEqual(['lyra','hunter','eira','aegis','vargoth']);
+  plan.reset();expect(plan.request(()=>false)).toEqual(['lyra','hunter','eira','aegis','vargoth']);
  });
  it('keeps all logical frames and pivots while cutting decoded pilot memory by at least 75%',()=>{
   let decoded=0;

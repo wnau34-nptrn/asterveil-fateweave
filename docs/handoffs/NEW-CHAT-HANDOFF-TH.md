@@ -1,5 +1,9 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
+## 2026-10-28 — A2 in progress: เอกิส + องครักษ์อสูร
+
+Owner explicitly requested completing A2 only under standing authorization. Branch `codex/animation-a2`, base `f0ee801`; no reset/overwrite. Seven Knight ActionIds and four Guard intents audited against actual content/runtime. New whole-strip art/normalizer/trimmed lossless atlases, optional registry and A2 block/counter reactions; procedural dodge/idle/revive-reset fallback explicit. [Mapping/source/budget/verification status](../combat-presentation/unit-a2-slice/README_TH.md). Aegis4.22MiB/1,397,790bytes, Guard3.06MiB/1,026,816bytes; atlas counts, not totalRAM. No core/save/content/balance/playback or existingVFXmodule/atlas changes, pilot/A1/C5.6 approval/gates preserved. Rouse is actual guard/all, not an invented heal. Local verification/captures/CI/publication are in progress; do not read this as release or owner visual approval. Latest completion entry will supersede this paragraph. Do not start A3 or a new VFX family.
+
 ## 2026-10-28 — A0/A1 เผยแพร่แล้ว
 
 - [x] A0registry/audit + A1ไอรา/ภูตแดนดิไลออนเสร็จผ่าน [PR87](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/87) merge`1ea31d5` / validated`fcf210d`; Pages40614459819ผ่านbuild+4browser+deployเมื่อ2026-10-28 08:44:29 Asia/Bangkok

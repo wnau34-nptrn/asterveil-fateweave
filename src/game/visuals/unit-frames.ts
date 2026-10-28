@@ -1,6 +1,6 @@
 import type { Reaction, UnitPose } from './unit-animation-map';
 import atlasManifest from './unit-atlases.json';
-export type UnitClip = 'attack' | 'skill';
+export type UnitClip = 'attack' | 'skill' | 'bash';
 export type FramePhase = 'prepare' | 'recover' | 'reaction';
 export interface UnitFrames {
   show(pose: UnitPose | Reaction, phase: FramePhase, progress: number, clip?: UnitClip, durationMs?: number): boolean;
@@ -19,6 +19,8 @@ export const unitRegistry = {
   foe_hunter: { sheet: 'hunter', displayRatio: 2, intents: { 'Raking Slash': 'attack', 'Shadow Knife': 'skill' } },
   weaver: { sheet: 'eira', displayRatio: 1 / .42, actions: { attack: 'attack', bolt: 'attack', storm: 'attack', dispel: 'attack', ward: 'skill', sigil: 'skill', aegis: 'skill' } },
   foe_sprite: { sheet: 'sprite', displayRatio: 2, intents: { 'Seed Spark': 'attack' } },
+  guardian: { sheet: 'aegis', displayRatio: 1 / .36, actions: { attack: 'attack', bash: 'bash', guard: 'skill', rally: 'skill', challenge: 'skill', bulwark: 'skill', rouse: 'skill' } },
+  foe_vargoth_guard: { sheet: 'vargoth', displayRatio: 2, intents: { 'Crushing Blow': 'attack', 'Shield Smash': 'attack', 'Mace Swing': 'attack', 'Rift Bolt': 'skill' } },
 } as const satisfies Record<string, UnitDefinition>;
 export const unitSheets = Object.fromEntries(Object.entries(unitRegistry).map(([art, definition]) => [art, definition.sheet])) as Record<keyof typeof unitRegistry, UnitSheet>;
 export type UnitSheet = typeof unitRegistry[keyof typeof unitRegistry]['sheet'];
@@ -39,8 +41,17 @@ export function unitClip(art: string, action: string | undefined, intent: string
 // 0 idle; 1..8 slash; 9..16 skill; 17..18 hurt; 19..21 down.
 // Frame 5/13 is the contact pose. UI contact remains authoritative, never sprite FPS.
 function sequence(pose: UnitPose | Reaction, phase: FramePhase, clip?: UnitClip, art?: string): readonly number[] | undefined {
-  if (phase === 'reaction') return pose === 'hit' ? [17, 18] : pose === 'down' ? [19, 20, 21] : undefined;
+  if (phase === 'reaction') {
+    if (pose === 'hit') return [17, 18];
+    if (pose === 'down') return [19, 20, 21];
+    if (art === 'guardian' || art === 'foe_vargoth_guard') {
+      if (pose === 'block') return art === 'guardian' ? [30, 31] : [22, 23];
+      if (pose === 'counter' && art === 'guardian') return [2, 5, 7];
+    }
+    return;
+  }
   if (!clip) return;
+  if (clip === 'bash') return phase === 'prepare' ? [22, 23, 24, 25] : [26, 27, 28, 29];
   if (clip === 'skill') return phase === 'prepare' ? [9, 10, 11, 12] : [13, 14, 15, 16];
   // Lyra's lowered blade is follow-through, not windup. Never reverse the cut before contact.
   if (art === 'tracer') return phase === 'prepare' ? [1, 2, 3] : [5, 4, 6, 7, 8];

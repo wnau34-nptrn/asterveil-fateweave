@@ -1,5 +1,9 @@
 # แผนแอนิเมชันยูนิตครบทุกตัว
 
+## 2026-10-28 — A2 in progress: เอกิส + องครักษ์อสูร
+
+Owner explicitly requested completing A2 only under standing authorization. Branch `codex/animation-a2`, base `f0ee801`; no reset/overwrite. Seven Knight ActionIds and four Guard intents audited against actual content/runtime. New whole-strip art/normalizer/trimmed lossless atlases, optional registry and A2 block/counter reactions; procedural dodge/idle/revive-reset fallback explicit. [Mapping/source/budget/verification status](../combat-presentation/unit-a2-slice/README_TH.md). Aegis4.22MiB/1,397,790bytes, Guard3.06MiB/1,026,816bytes; atlas counts, not totalRAM. No core/save/content/balance/playback or existingVFXmodule/atlas changes, pilot/A1/C5.6 approval/gates preserved. Rouse is actual guard/all, not an invented heal. Local verification/captures/CI/publication are in progress; do not read this as release or owner visual approval. Latest completion entry will supersede this paragraph. Do not start A3 or a new VFX family.
+
 ## A0/A1 released — 28 ตุลาคม2026
 
 PR87 merged `1ea31d5` และPages40614459819เผยแพร่สำเร็จเมื่อ2026-10-28 08:44:29 Asia/Bangkok ครบเฉพาะA0/A1 Eira7ActionId+SpriteSeedSparkพร้อมreaction/lifecycle/fallbackตาม [หลักฐานrelease](../validation/unit-a1-release/README_TH.md) และ [16คลิป/audit](../combat-presentation/unit-a1-slice/README_TH.md) ผ่าน958unit/82focusedbrowser/234source/249production (502skip) งบใหม่Eira3.88MiB/1.38MB, Sprite1.19MiB/0.36MB ไม่ใช่RAMรวม คงpilotpixels/timingและC5.6ที่ส่งแล้ว ไม่มีrules/save/balance/playbackdiff A2–A11และrosterอนาคตยังเป็นแผน ไม่เริ่มอัตโนมัติ

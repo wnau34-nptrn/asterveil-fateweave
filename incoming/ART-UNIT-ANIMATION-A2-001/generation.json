@@ -1,0 +1,18 @@
+{
+  "aegis": {
+    "tool": "image_gen.imagegen",
+    "transparent_background": true,
+    "referencedSeed": "aegis-seed.png",
+    "originalOutput": "exec-f003d831-33e2-4145-b306-f7bf4601b81b.png",
+    "retainedOutput": "aegis-raw.png",
+    "exactPrompt": "Edit supplied shipped Aegis seed into ONE production animation sprite sheet. Preserve EXACT same blond blue-eyed chibi knight identity, ornate royal blue/gold armor, blue cape, silver-blue sword and blue/gold shield. Faces RIGHT as seed. Stable identical scale, planted feet baseline per row, full body, transparent background/gutters. EXACTLY 32 isolated figures in 4 columns by 8 rows; left-to-right then down, no text/scenery/UI/projectiles/VFX. Rows1-2 continuous8-frame SWORD SLASH: ready, draw sword back, lift, poised windup, forward slash CONTACT, follow-through, ease back, exact ready. Rows3-4 continuous8-frame SHIELD BASH: ready, crouch behind shield, draw shield toward chest, load shield, thrust shield forward CONTACT, recoil, ease back, exact ready. Rows5-6 continuous8-frame SUPPORT SHIELD RAISE: ready, lift shield, turn shield front, poised, strong raised shield CONTACT, lower a little, ease back, exact ready. Row7 four subtle HURT/BLOCK poses, shield braced. Row8 four DOWN poses: buckle knees, kneel, descend, fallen unconscious with sword/shield. No bleeding/disintegration. All action strips continuous in one image, no independent styles. Keep same face, outfit proportions, shield design, same camera and facing. Generous margins around every cell, no overlaps."
+  },
+  "vargoth": {
+    "tool": "image_gen.imagegen",
+    "transparent_background": true,
+    "referencedSeed": "vargoth-seed.png",
+    "originalOutput": "exec-32cd1de6-6f47-41e0-acf0-367ad3af7e25.png",
+    "retainedOutput": "vargoth-raw.png",
+    "exactPrompt": "Edit supplied shipped Vargoth Guard seed into ONE production animation sprite sheet. EXACT same heavy chibi horned demon enclosed in dark charcoal armor with orange molten cracks, glowing orange eyes, spiked mace on left side of image, giant shield on right side. Faces LEFT as seed. Orange cracks are armor decoration, NOT fire attack. Preserve precise armor/weapon/shield identity, proportions, palette and facing. Transparent background, full body, stable identical scale and planted foot baseline per row, generous transparent gutters, every pose isolated. EXACTLY24 figures in4 columns by6 rows read left-right then down. Rows1-2 continuous8-frame HEAVY PHYSICAL MACE SMASH: ready, draw mace back, raise mace, loaded windup, downward-forward mace smash CONTACT to LEFT, follow-through, lower and return, exact ready. Rows3-4 continuous8-frame RIFT BOLT RELEASE: ready, brace shield front, draw shield toward chest, aim hand/shield LEFT, fully extend shield-hand LEFT in energy-release CONTACT while mace stays lowered/idle, recoil, ease back, exact ready. Energy release MUST clearly differ from overhead mace smash. NO bolt/projectile/fire/blast/VFX or glow beyond existing armor cracks, game adds existing energy VFX. Row5 four HURT/BLOCK poses behind shield. Row6 four DOWN poses buckle knees, kneel, descend, collapsed unconscious armor. No disintegration/blood, no labels/scenery/UI. Continuous whole strips in one image."
+  }
+}

@@ -42,8 +42,8 @@ const qa={alchemyPoint:()=>{
  const dpr=scene.game.canvas.width/scene.game.canvas.getBoundingClientRect().width;
  return {actual:scene.alchemyAnchor('weaver','fury')!,expected:{x:point.x/dpr,y:point.y/dpr}};
  },impacts,turns:()=>fixture.result.turns,otherEncounter:()=>{
- const data={...fixture.data,heroes:fixture.data.heroes.filter(h=>h.id==='guardian'),enemies:fixture.data.enemies.map(e=>({...e,art:'brute'}))};
- ui.open({kind:'random',data,entry:{hp:{guardian:76}},commands:[],commit:()=>true,leaveLabel:()=>'',leave:()=>{}});
+ const data={...fixture.data,heroes:fixture.data.heroes.filter(h=>h.id==='healer'),enemies:fixture.data.enemies.map(e=>({...e,art:'brute'}))};
+ ui.open({kind:'random',data,entry:{hp:{healer:46}},commands:[],commit:()=>true,leaveLabel:()=>'',leave:()=>{}});
  },target:()=>fixture.command.targetId==='enemies'?`enemies-b1`:fixture.command.targetId,
  expected:()=>fixture.result.state,state:()=>ui.state,load,
  frames:()=>{
