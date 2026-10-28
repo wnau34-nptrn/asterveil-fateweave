@@ -1,0 +1,46 @@
+[
+  {
+    "family": "saint",
+    "revision": "R1",
+    "prompt": "Create an ORIGINAL hand-painted fantasy game VFX SPRITE SOURCE SHEET on a truly transparent background. Strict regular grid: 3 columns and 6 rows, 18 fully separate cells, square cells, generous completely empty transparent gutters. No borders, no labels, no text, no figures, no UI, no checkerboard painted into art. Each ROW is a separate move. Columns in order: prepare (small gathering cue), peak (readable main motif), settle (fading wisps). Every motif stays fully INSIDE its cell, nothing crosses cells. Finely painted luminous pigment, strong visible core, airy tapering ends, elegant economical silhouette for a portrait mobile RPG. Saint magic: warm amber gold and ivory ONLY, no mint/green. Rows: 1 saintstrike: compact gold impact star on foe then a fine curved light thread ending in small ally glow. 2 communion: two small soft gold glow nodes connected by shared light. 3 saintarc: curved horizontal gold slash with separate small contact spark, no giant explosion. 4 vowstrike: heavier gold impact backed by an original abstract geometric vow seal, no religious symbol or text. 5 sharewound: one gold light divides into two soft nodes, no offensive impact. 6 lastlight: large brief gold starburst then multiple tapering wispy transfer threads. Distinguish all six rows. R1 direction: flowing round organic curves, delicate narrow filaments, restrained soft bloom. Entire sheet exactly 3:6 aspect ratio; request 1536x3072 if supported. No borrowed symbols, characters, stock imagery or existing artwork.",
+    "tool": "image_gen.imagegen",
+    "settings": {
+      "transparent_background": true
+    },
+    "original_path": "/workspace/generated_images/exec-aa0809be-3676-494b-ab42-3be637c88b7d.png",
+    "delivered_source": "saint/source/R1.png"
+  },
+  {
+    "family": "saint",
+    "revision": "R2",
+    "prompt": "Create an ORIGINAL hand-painted fantasy game VFX SPRITE SOURCE SHEET on a truly transparent background. Strict regular grid: 3 columns and 6 rows, 18 fully separate cells, square cells, generous completely empty transparent gutters. No borders, no labels, no text, no figures, no UI, no checkerboard painted into art. Each ROW is a separate move. Columns in order: prepare (small gathering cue), peak (readable main motif), settle (fading wisps). Every motif stays fully INSIDE its cell, nothing crosses cells. Finely painted luminous pigment, strong visible core, airy tapering ends, elegant economical silhouette for a portrait mobile RPG. Saint magic: warm amber gold and ivory ONLY, no mint/green. Rows: 1 saintstrike: compact gold impact star on foe then a fine curved light thread ending in small ally glow. 2 communion: two small soft gold glow nodes connected by shared light. 3 saintarc: curved horizontal gold slash with separate small contact spark, no giant explosion. 4 vowstrike: heavier gold impact backed by an original abstract geometric vow seal, no religious symbol or text. 5 sharewound: one gold light divides into two soft nodes, no offensive impact. 6 lastlight: large brief gold starburst then multiple tapering wispy transfer threads. Distinguish all six rows. R2 direction: bolder clear ivory-pink or ivory-gold edges, asymmetrical swept silhouette, larger separated petals or rays, stronger contrast and reduced haze. A distinct alternate design, not just recoloring R1. Entire sheet exactly 3:6 aspect ratio; request 1536x3072 if supported. No borrowed symbols, characters, stock imagery or existing artwork.",
+    "tool": "image_gen.imagegen",
+    "settings": {
+      "transparent_background": true
+    },
+    "original_path": "/workspace/generated_images/exec-d73ff6ae-6f16-4635-be80-b7aa14b5f3b6.png",
+    "delivered_source": "saint/source/R2.png"
+  },
+  {
+    "family": "dance",
+    "revision": "R1",
+    "prompt": "Create an ORIGINAL hand-painted fantasy game VFX SPRITE SOURCE SHEET on a truly transparent background. Strict regular grid: 3 columns and 6 rows, 18 fully separate cells, square cells, generous completely empty transparent gutters. No borders, no labels, no text, no figures, no UI, no checkerboard painted into art. Each ROW is a separate move. Columns in order: prepare (small gathering cue), peak (readable main motif), settle (fading wisps). Every motif stays fully INSIDE its cell, nothing crosses cells. Finely painted luminous pigment, strong visible core, airy tapering ends, elegant economical silhouette for a portrait mobile RPG. Dance support magic: rose pink ribbons, pearly blush edges, scattered delicate petals. No gold or mint. Rows: 1 cadence: spiral ribbon curling around one ally, open circular restoration motif, no digits. 2 duet: TWO distinct intertwining ribbons linking caster and ally. 3 rounddance: broad elliptical petal circle for a whole team. 4 deepbeat: low horizontal pulse ring at ally feet. 5 echofoot: traveling curved step echoes finishing in ONE SMALL pink contact spark on foe, only damaging move. 6 closingstep: upright flourish blooming into petals on caster. Support rows have NO impact spikes or explosions. R1 direction: flowing round organic curves, delicate narrow filaments, restrained soft bloom. Entire sheet exactly 3:6 aspect ratio; request 1536x3072 if supported. No borrowed symbols, characters, stock imagery or existing artwork.",
+    "tool": "image_gen.imagegen",
+    "settings": {
+      "transparent_background": true
+    },
+    "original_path": "/workspace/generated_images/exec-d2dddf2f-59b6-402e-94f7-4b49406380bf.png",
+    "delivered_source": "dance/source/R1.png"
+  },
+  {
+    "family": "dance",
+    "revision": "R2",
+    "prompt": "Create an ORIGINAL hand-painted fantasy game VFX SPRITE SOURCE SHEET on a truly transparent background. Strict regular grid: 3 columns and 6 rows, 18 fully separate cells, square cells, generous completely empty transparent gutters. No borders, no labels, no text, no figures, no UI, no checkerboard painted into art. Each ROW is a separate move. Columns in order: prepare (small gathering cue), peak (readable main motif), settle (fading wisps). Every motif stays fully INSIDE its cell, nothing crosses cells. Finely painted luminous pigment, strong visible core, airy tapering ends, elegant economical silhouette for a portrait mobile RPG. Dance support magic: rose pink ribbons, pearly blush edges, scattered delicate petals. No gold or mint. Rows: 1 cadence: spiral ribbon curling around one ally, open circular restoration motif, no digits. 2 duet: TWO distinct intertwining ribbons linking caster and ally. 3 rounddance: broad elliptical petal circle for a whole team. 4 deepbeat: low horizontal pulse ring at ally feet. 5 echofoot: traveling curved step echoes finishing in ONE SMALL pink contact spark on foe, only damaging move. 6 closingstep: upright flourish blooming into petals on caster. Support rows have NO impact spikes or explosions. R2 direction: bolder clear ivory-pink or ivory-gold edges, asymmetrical swept silhouette, larger separated petals or rays, stronger contrast and reduced haze. A distinct alternate design, not just recoloring R1. Entire sheet exactly 3:6 aspect ratio; request 1536x3072 if supported. No borrowed symbols, characters, stock imagery or existing artwork.",
+    "tool": "image_gen.imagegen",
+    "settings": {
+      "transparent_background": true
+    },
+    "original_path": "/workspace/generated_images/exec-b60edab4-d910-4911-b3fd-62b3b9bf9a7e.png",
+    "delivered_source": "dance/source/R2.png"
+  }
+]
