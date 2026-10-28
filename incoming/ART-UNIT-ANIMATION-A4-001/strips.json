@@ -1,0 +1,1639 @@
+[
+  {
+    "identity": "mira",
+    "move": "single-arrow",
+    "revision": "r1",
+    "file": "heroes/raw/mira-single-arrow-r1.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "routes_or_intents": [
+      "attack",
+      "hinder",
+      "pin",
+      "track",
+      "weakshot"
+    ],
+    "preferred_candidate": true,
+    "source": "heroes/source-sheets/mira_r1-source.png",
+    "source_row_1based": 1,
+    "source_crop_xyxy": [
+      0,
+      0,
+      1536,
+      188
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        29,
+        8,
+        201,
+        176
+      ],
+      [
+        288,
+        10,
+        498,
+        176
+      ],
+      [
+        550,
+        1,
+        756,
+        176
+      ],
+      [
+        804,
+        5,
+        1001,
+        176
+      ],
+      [
+        1060,
+        4,
+        1260,
+        176
+      ],
+      [
+        1327,
+        10,
+        1497,
+        176
+      ]
+    ],
+    "size": [
+      1536,
+      188
+    ],
+    "mode": "RGBA",
+    "sha256": "819b4589bbdfe090162421201cd61a400109cb5ae1a1a73f777d5fcbf8c80370",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": []
+  },
+  {
+    "identity": "mira",
+    "move": "volley",
+    "revision": "r1",
+    "file": "heroes/raw/mira-volley-r1.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "routes_or_intents": [
+      "volley"
+    ],
+    "preferred_candidate": false,
+    "source": "heroes/source-sheets/mira_r1-source.png",
+    "source_row_1based": 2,
+    "source_crop_xyxy": [
+      0,
+      155,
+      1536,
+      360
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        29,
+        26,
+        201,
+        192
+      ],
+      [
+        298,
+        19,
+        474,
+        192
+      ],
+      [
+        554,
+        12,
+        731,
+        192
+      ],
+      [
+        805,
+        20,
+        992,
+        192
+      ],
+      [
+        1074,
+        15,
+        1270,
+        192
+      ],
+      [
+        1327,
+        26,
+        1497,
+        193
+      ]
+    ],
+    "size": [
+      1536,
+      205
+    ],
+    "mode": "RGBA",
+    "sha256": "28e656b3f889b78d309e7f0ca64098384951c787c6503eb7dbd7c52e55f05906",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": []
+  },
+  {
+    "identity": "mira",
+    "move": "disengage",
+    "revision": "r1",
+    "file": "heroes/raw/mira-disengage-r1.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "routes_or_intents": [
+      "disengage"
+    ],
+    "preferred_candidate": false,
+    "source": "heroes/source-sheets/mira_r1-source.png",
+    "source_row_1based": 3,
+    "source_crop_xyxy": [
+      0,
+      329,
+      1536,
+      530
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        30,
+        23,
+        201,
+        189
+      ],
+      [
+        276,
+        23,
+        475,
+        188
+      ],
+      [
+        547,
+        12,
+        756,
+        187
+      ],
+      [
+        806,
+        16,
+        1004,
+        188
+      ],
+      [
+        1060,
+        17,
+        1261,
+        188
+      ],
+      [
+        1327,
+        23,
+        1497,
+        189
+      ]
+    ],
+    "size": [
+      1536,
+      201
+    ],
+    "mode": "RGBA",
+    "sha256": "19cdf3e7ab810e583c074fc9337b3134b9baa9852d49a944b433206e3dab79ee",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": []
+  },
+  {
+    "identity": "mira",
+    "move": "hit",
+    "revision": "r1",
+    "file": "heroes/raw/mira-hit-r1.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "routes_or_intents": [
+      "hit"
+    ],
+    "preferred_candidate": true,
+    "source": "heroes/source-sheets/mira_r1-source.png",
+    "source_row_1based": 4,
+    "source_crop_xyxy": [
+      0,
+      510,
+      1536,
+      701
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        29,
+        13,
+        201,
+        179
+      ],
+      [
+        288,
+        13,
+        471,
+        178
+      ],
+      [
+        549,
+        12,
+        726,
+        178
+      ],
+      [
+        806,
+        15,
+        989,
+        178
+      ],
+      [
+        1063,
+        18,
+        1249,
+        179
+      ],
+      [
+        1327,
+        13,
+        1497,
+        179
+      ]
+    ],
+    "size": [
+      1536,
+      191
+    ],
+    "mode": "RGBA",
+    "sha256": "835b8adeb5b41d8c0d0b189cb56e0a004819d61c99e5c766a18b17fc9096e081",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": []
+  },
+  {
+    "identity": "mira",
+    "move": "block",
+    "revision": "r1",
+    "file": "heroes/raw/mira-block-r1.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "routes_or_intents": [
+      "block"
+    ],
+    "preferred_candidate": true,
+    "source": "heroes/source-sheets/mira_r1-source.png",
+    "source_row_1based": 5,
+    "source_crop_xyxy": [
+      0,
+      672,
+      1536,
+      874
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        29,
+        24,
+        201,
+        190
+      ],
+      [
+        294,
+        12,
+        467,
+        188
+      ],
+      [
+        556,
+        24,
+        723,
+        188
+      ],
+      [
+        805,
+        26,
+        988,
+        189
+      ],
+      [
+        1077,
+        25,
+        1246,
+        190
+      ],
+      [
+        1327,
+        24,
+        1497,
+        190
+      ]
+    ],
+    "size": [
+      1536,
+      202
+    ],
+    "mode": "RGBA",
+    "sha256": "b57721c4031560010ff4bfdf9d8efb9269eeea247a5d97b00d7c8916c008a3b6",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": []
+  },
+  {
+    "identity": "mira",
+    "move": "down",
+    "revision": "r1",
+    "file": "heroes/raw/mira-down-r1.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "routes_or_intents": [
+      "down"
+    ],
+    "preferred_candidate": true,
+    "source": "heroes/source-sheets/mira_down_r1_final-source.png",
+    "source_row_1based": 1,
+    "source_crop_xyxy": [
+      0,
+      352,
+      1536,
+      649
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        6,
+        12,
+        245,
+        266
+      ],
+      [
+        241,
+        28,
+        462,
+        268
+      ],
+      [
+        448,
+        80,
+        686,
+        272
+      ],
+      [
+        672,
+        123,
+        968,
+        279
+      ],
+      [
+        935,
+        167,
+        1253,
+        285
+      ],
+      [
+        1262,
+        164,
+        1530,
+        274
+      ]
+    ],
+    "size": [
+      1536,
+      297
+    ],
+    "mode": "RGBA",
+    "sha256": "277b6519ced4c483952d9dc9ae3c499852efbf51ea840eb9a025704308985c51",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": []
+  },
+  {
+    "identity": "mira",
+    "move": "volley",
+    "revision": "r2",
+    "file": "heroes/raw/mira-volley-r2.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "routes_or_intents": [
+      "volley"
+    ],
+    "preferred_candidate": true,
+    "source": "heroes/source-sheets/mira_r2_final-source.png",
+    "source_row_1based": 1,
+    "source_crop_xyxy": [
+      0,
+      90,
+      1536,
+      431
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        11,
+        91,
+        235,
+        329
+      ],
+      [
+        266,
+        42,
+        492,
+        329
+      ],
+      [
+        513,
+        12,
+        742,
+        329
+      ],
+      [
+        778,
+        15,
+        1011,
+        329
+      ],
+      [
+        1038,
+        28,
+        1270,
+        329
+      ],
+      [
+        1302,
+        92,
+        1523,
+        329
+      ]
+    ],
+    "size": [
+      1536,
+      341
+    ],
+    "mode": "RGBA",
+    "sha256": "1d2c828cd348f1bc7851efffa3724a1fd310b65a8209e5754479d8589505c6e7",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": []
+  },
+  {
+    "identity": "mira",
+    "move": "disengage",
+    "revision": "r2",
+    "file": "heroes/raw/mira-disengage-r2.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "routes_or_intents": [
+      "disengage"
+    ],
+    "preferred_candidate": true,
+    "source": "heroes/source-sheets/mira_r2_final-source.png",
+    "source_row_1based": 2,
+    "source_crop_xyxy": [
+      0,
+      570,
+      1536,
+      843
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        12,
+        20,
+        236,
+        259
+      ],
+      [
+        253,
+        39,
+        479,
+        259
+      ],
+      [
+        485,
+        12,
+        751,
+        261
+      ],
+      [
+        759,
+        22,
+        1014,
+        260
+      ],
+      [
+        1040,
+        16,
+        1280,
+        259
+      ],
+      [
+        1302,
+        20,
+        1522,
+        259
+      ]
+    ],
+    "size": [
+      1536,
+      273
+    ],
+    "mode": "RGBA",
+    "sha256": "2c9f6ea730b7fab600d493179d3a77062d96a5eedf6aa0a8dea1493a46ca592b",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": []
+  },
+  {
+    "identity": "toma",
+    "move": "overhand",
+    "revision": "r1",
+    "file": "heroes/raw/toma-overhand-r1.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "routes_or_intents": [
+      "attack",
+      "acid",
+      "bomb",
+      "smoke"
+    ],
+    "preferred_candidate": true,
+    "source": "heroes/source-sheets/toma_r1-source.png",
+    "source_row_1based": 1,
+    "source_crop_xyxy": [
+      0,
+      0,
+      1536,
+      237
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        46,
+        4,
+        222,
+        224
+      ],
+      [
+        319,
+        4,
+        466,
+        225
+      ],
+      [
+        529,
+        4,
+        711,
+        225
+      ],
+      [
+        801,
+        4,
+        993,
+        225
+      ],
+      [
+        1058,
+        10,
+        1230,
+        225
+      ],
+      [
+        1326,
+        4,
+        1501,
+        225
+      ]
+    ],
+    "size": [
+      1536,
+      237
+    ],
+    "mode": "RGBA",
+    "sha256": "85bac4a84d0b0329427952d6752dad5a574672dbad9ea3c2e8122cec548296d4",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": []
+  },
+  {
+    "identity": "toma",
+    "move": "underhand",
+    "revision": "r1",
+    "file": "heroes/raw/toma-underhand-r1.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "routes_or_intents": [
+      "haste",
+      "fury",
+      "catalyst"
+    ],
+    "preferred_candidate": false,
+    "source": "heroes/source-sheets/toma_r1-source.png",
+    "source_row_1based": 2,
+    "source_crop_xyxy": [
+      0,
+      215,
+      1536,
+      461
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        46,
+        14,
+        222,
+        233
+      ],
+      [
+        301,
+        18,
+        475,
+        233
+      ],
+      [
+        551,
+        21,
+        733,
+        234
+      ],
+      [
+        795,
+        19,
+        989,
+        233
+      ],
+      [
+        1078,
+        12,
+        1260,
+        234
+      ],
+      [
+        1326,
+        14,
+        1502,
+        233
+      ]
+    ],
+    "size": [
+      1536,
+      246
+    ],
+    "mode": "RGBA",
+    "sha256": "b80e1c63664ddf3441075ae728f4af93a0a45709252283c74ab0aff06001a916",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": []
+  },
+  {
+    "identity": "toma",
+    "move": "underhand",
+    "revision": "r2",
+    "file": "heroes/raw/toma-underhand-r2.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "routes_or_intents": [
+      "haste",
+      "fury",
+      "catalyst"
+    ],
+    "preferred_candidate": true,
+    "source": "heroes/source-sheets/toma_underhand_r2_final-source.png",
+    "source_row_1based": 1,
+    "source_crop_xyxy": [
+      0,
+      317,
+      1536,
+      657
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        34,
+        12,
+        242,
+        328
+      ],
+      [
+        299,
+        13,
+        507,
+        328
+      ],
+      [
+        542,
+        18,
+        755,
+        328
+      ],
+      [
+        805,
+        15,
+        1022,
+        328
+      ],
+      [
+        1067,
+        18,
+        1279,
+        328
+      ],
+      [
+        1299,
+        13,
+        1504,
+        328
+      ]
+    ],
+    "size": [
+      1536,
+      340
+    ],
+    "mode": "RGBA",
+    "sha256": "ad5d24760ac028f94044dc00aaabcf8829c0f3acd24a1ae711560a62720c2a13",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": []
+  },
+  {
+    "identity": "toma",
+    "move": "hit",
+    "revision": "r1",
+    "file": "heroes/raw/toma-hit-r1.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "routes_or_intents": [
+      "hit"
+    ],
+    "preferred_candidate": true,
+    "source": "heroes/source-sheets/toma_r1-source.png",
+    "source_row_1based": 3,
+    "source_crop_xyxy": [
+      0,
+      440,
+      1536,
+      689
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        46,
+        13,
+        222,
+        232
+      ],
+      [
+        300,
+        19,
+        480,
+        237
+      ],
+      [
+        547,
+        24,
+        737,
+        237
+      ],
+      [
+        797,
+        15,
+        957,
+        237
+      ],
+      [
+        1070,
+        12,
+        1238,
+        235
+      ],
+      [
+        1326,
+        13,
+        1501,
+        233
+      ]
+    ],
+    "size": [
+      1536,
+      249
+    ],
+    "mode": "RGBA",
+    "sha256": "4d3e552e63cbc59ed09ee373947d596bdc8516a91d401a9937f824a1763477ec",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": []
+  },
+  {
+    "identity": "toma",
+    "move": "block",
+    "revision": "r1",
+    "file": "heroes/raw/toma-block-r1.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "routes_or_intents": [
+      "block"
+    ],
+    "preferred_candidate": true,
+    "source": "heroes/source-sheets/toma_block_r1_final-source.png",
+    "source_row_1based": 1,
+    "source_crop_xyxy": [
+      0,
+      290,
+      1536,
+      650
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        29,
+        12,
+        255,
+        345
+      ],
+      [
+        279,
+        14,
+        490,
+        346
+      ],
+      [
+        528,
+        26,
+        766,
+        343
+      ],
+      [
+        795,
+        13,
+        1019,
+        345
+      ],
+      [
+        1044,
+        15,
+        1242,
+        345
+      ],
+      [
+        1285,
+        14,
+        1519,
+        348
+      ]
+    ],
+    "size": [
+      1536,
+      360
+    ],
+    "mode": "RGBA",
+    "sha256": "89c3600abd222793cdde0551ba4f79e9bce69ee3bf4b9132cc04a60d8a6e8481",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": []
+  },
+  {
+    "identity": "toma",
+    "move": "down",
+    "revision": "r1",
+    "file": "heroes/raw/toma-down-r1.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "routes_or_intents": [
+      "down"
+    ],
+    "preferred_candidate": true,
+    "source": "heroes/source-sheets/toma_r1-source.png",
+    "source_row_1based": 4,
+    "source_crop_xyxy": [
+      0,
+      665,
+      1536,
+      909
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        46,
+        12,
+        222,
+        232
+      ],
+      [
+        309,
+        23,
+        460,
+        223
+      ],
+      [
+        549,
+        31,
+        714,
+        216
+      ],
+      [
+        775,
+        53,
+        982,
+        216
+      ],
+      [
+        1014,
+        88,
+        1259,
+        217
+      ],
+      [
+        1277,
+        87,
+        1517,
+        217
+      ]
+    ],
+    "size": [
+      1536,
+      244
+    ],
+    "mode": "RGBA",
+    "sha256": "91f34d5d09d4a4cc1f2245e4073432f55d393e22f97a5fb218f964ddb9782493",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": []
+  },
+  {
+    "identity": "foe_dew_slime",
+    "move": "jelly-bounce",
+    "revision": "r1",
+    "file": "foes/raw/foe_dew_slime-jelly-bounce-r1.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "routes_or_intents": [
+      "Jelly Bounce"
+    ],
+    "preferred_candidate": true,
+    "source": "foes/source-sheets/dew_r1-source.png",
+    "source_row_1based": 1,
+    "source_crop_xyxy": [
+      0,
+      62,
+      1774,
+      369
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        34,
+        58,
+        295,
+        295
+      ],
+      [
+        321,
+        128,
+        615,
+        294
+      ],
+      [
+        630,
+        12,
+        903,
+        285
+      ],
+      [
+        921,
+        47,
+        1182,
+        273
+      ],
+      [
+        1197,
+        61,
+        1460,
+        295
+      ],
+      [
+        1482,
+        59,
+        1743,
+        295
+      ]
+    ],
+    "size": [
+      1774,
+      307
+    ],
+    "mode": "RGBA",
+    "sha256": "5bc1683cec8178d332b968f8e9fb6e375bac3acc0f98eb85c9ba7153751cdff5",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": []
+  },
+  {
+    "identity": "foe_dew_slime",
+    "move": "hit",
+    "revision": "r1",
+    "file": "foes/raw/foe_dew_slime-hit-r1.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "routes_or_intents": [
+      "hit"
+    ],
+    "preferred_candidate": true,
+    "source": "foes/source-sheets/dew_r1-source.png",
+    "source_row_1based": 2,
+    "source_crop_xyxy": [
+      0,
+      369,
+      1774,
+      631
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        34,
+        12,
+        295,
+        250
+      ],
+      [
+        335,
+        35,
+        607,
+        248
+      ],
+      [
+        625,
+        60,
+        900,
+        245
+      ],
+      [
+        925,
+        12,
+        1177,
+        250
+      ],
+      [
+        1200,
+        24,
+        1466,
+        250
+      ],
+      [
+        1482,
+        13,
+        1743,
+        250
+      ]
+    ],
+    "size": [
+      1774,
+      262
+    ],
+    "mode": "RGBA",
+    "sha256": "1ad56216426998c635587c5f65e41e7f70523d8d30520bd6ad5982ba376b12a3",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": []
+  },
+  {
+    "identity": "foe_dew_slime",
+    "move": "down",
+    "revision": "r1",
+    "file": "foes/raw/foe_dew_slime-down-r1.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "routes_or_intents": [
+      "down"
+    ],
+    "preferred_candidate": true,
+    "source": "foes/source-sheets/dew_r1-source.png",
+    "source_row_1based": 3,
+    "source_crop_xyxy": [
+      0,
+      617,
+      1774,
+      871
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        34,
+        12,
+        295,
+        242
+      ],
+      [
+        321,
+        49,
+        585,
+        238
+      ],
+      [
+        614,
+        86,
+        891,
+        235
+      ],
+      [
+        912,
+        90,
+        1179,
+        234
+      ],
+      [
+        1196,
+        92,
+        1462,
+        235
+      ],
+      [
+        1481,
+        99,
+        1744,
+        235
+      ]
+    ],
+    "size": [
+      1774,
+      254
+    ],
+    "mode": "RGBA",
+    "sha256": "2b4f3771e604a51153858c12a56ca9ec0579e979c83260321da47eba5e6d31ac",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": []
+  },
+  {
+    "identity": "foe_ember_slime",
+    "move": "ember-spark",
+    "revision": "r1",
+    "file": "foes/raw/foe_ember_slime-ember-spark-r1.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "routes_or_intents": [
+      "Ember Spark"
+    ],
+    "preferred_candidate": true,
+    "source": "foes/source-sheets/ember_r1-source.png",
+    "source_row_1based": 1,
+    "source_crop_xyxy": [
+      0,
+      160,
+      1536,
+      370
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        17,
+        12,
+        255,
+        195
+      ],
+      [
+        265,
+        34,
+        516,
+        195
+      ],
+      [
+        524,
+        20,
+        773,
+        195
+      ],
+      [
+        784,
+        14,
+        1031,
+        198
+      ],
+      [
+        1037,
+        12,
+        1275,
+        195
+      ],
+      [
+        1296,
+        12,
+        1531,
+        195
+      ]
+    ],
+    "size": [
+      1536,
+      210
+    ],
+    "mode": "RGBA",
+    "sha256": "991322b24c39d37c144ebdacc5b95250c673ffdc912e7a8dcb5e78b87fdc3617",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": []
+  },
+  {
+    "identity": "foe_ember_slime",
+    "move": "hit",
+    "revision": "r1",
+    "file": "foes/raw/foe_ember_slime-hit-r1.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "routes_or_intents": [
+      "hit"
+    ],
+    "preferred_candidate": true,
+    "source": "foes/source-sheets/ember_r1-source.png",
+    "source_row_1based": 2,
+    "source_crop_xyxy": [
+      0,
+      454,
+      1536,
+      665
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        17,
+        12,
+        255,
+        196
+      ],
+      [
+        272,
+        36,
+        503,
+        199
+      ],
+      [
+        515,
+        73,
+        757,
+        199
+      ],
+      [
+        773,
+        44,
+        1023,
+        198
+      ],
+      [
+        1037,
+        12,
+        1275,
+        196
+      ],
+      [
+        1295,
+        12,
+        1531,
+        196
+      ]
+    ],
+    "size": [
+      1536,
+      211
+    ],
+    "mode": "RGBA",
+    "sha256": "eb1737958ab1d4d16fc2e7384a8fb5128dcaa6aa8b90f6771e9a7de5e0217e5e",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": []
+  },
+  {
+    "identity": "foe_ember_slime",
+    "move": "down",
+    "revision": "r1",
+    "file": "foes/raw/foe_ember_slime-down-r1.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "routes_or_intents": [
+      "down"
+    ],
+    "preferred_candidate": true,
+    "source": "foes/source-sheets/ember_r1-source.png",
+    "source_row_1based": 3,
+    "source_crop_xyxy": [
+      0,
+      751,
+      1536,
+      958
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        17,
+        12,
+        256,
+        195
+      ],
+      [
+        269,
+        20,
+        514,
+        194
+      ],
+      [
+        525,
+        54,
+        768,
+        195
+      ],
+      [
+        784,
+        81,
+        1022,
+        195
+      ],
+      [
+        1038,
+        92,
+        1277,
+        194
+      ],
+      [
+        1293,
+        91,
+        1528,
+        194
+      ]
+    ],
+    "size": [
+      1536,
+      207
+    ],
+    "mode": "RGBA",
+    "sha256": "6565395e07929d52e4494a2ccb514768e640347b207fefd8f750cb7ee0bfbb56",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": []
+  },
+  {
+    "identity": "foe_ruin_bat",
+    "move": "hover",
+    "revision": "r1",
+    "file": "foes/raw/foe_ruin_bat-hover-r1.png",
+    "frame_count": 4,
+    "frame_order": "left-to-right",
+    "routes_or_intents": [
+      "hover"
+    ],
+    "preferred_candidate": false,
+    "source": "foes/source-sheets/bat_r1-source.png",
+    "source_row_1based": 1,
+    "source_crop_xyxy": [
+      0,
+      23,
+      1536,
+      253
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        27,
+        12,
+        326,
+        218
+      ],
+      [
+        334,
+        26,
+        608,
+        213
+      ],
+      [
+        618,
+        20,
+        881,
+        216
+      ],
+      [
+        888,
+        33,
+        1167,
+        216
+      ]
+    ],
+    "size": [
+      1536,
+      230
+    ],
+    "mode": "RGBA",
+    "sha256": "051f28609b1fb2fb7802895d918cbe91229795f3bfe0ac6d58ed5dbb762d5a5c",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": []
+  },
+  {
+    "identity": "foe_ruin_bat",
+    "move": "hover",
+    "revision": "r2",
+    "file": "foes/raw/foe_ruin_bat-hover-r2.png",
+    "frame_count": 4,
+    "frame_order": "left-to-right",
+    "routes_or_intents": [
+      "hover"
+    ],
+    "preferred_candidate": true,
+    "source": "foes/source-sheets/bat_hover_r2-source.png",
+    "source_row_1based": 1,
+    "source_crop_xyxy": [
+      0,
+      135,
+      2172,
+      604
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        102,
+        12,
+        496,
+        398
+      ],
+      [
+        517,
+        75,
+        1136,
+        398
+      ],
+      [
+        1159,
+        74,
+        1535,
+        457
+      ],
+      [
+        1601,
+        75,
+        2142,
+        398
+      ]
+    ],
+    "size": [
+      2172,
+      469
+    ],
+    "mode": "RGBA",
+    "sha256": "c3c55493aeaa746e1069b27ca47972c7e2219eb14cbb266e21bb45ad39e02b97",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": []
+  },
+  {
+    "identity": "foe_ruin_bat",
+    "move": "swoop-bite",
+    "revision": "r1",
+    "file": "foes/raw/foe_ruin_bat-swoop-bite-r1.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "routes_or_intents": [
+      "Nip"
+    ],
+    "preferred_candidate": true,
+    "source": "foes/source-sheets/bat_r1-source.png",
+    "source_row_1based": 2,
+    "source_crop_xyxy": [
+      0,
+      275,
+      1536,
+      500
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        16,
+        12,
+        302,
+        211
+      ],
+      [
+        296,
+        14,
+        546,
+        202
+      ],
+      [
+        528,
+        35,
+        789,
+        213
+      ],
+      [
+        785,
+        70,
+        1042,
+        213
+      ],
+      [
+        1033,
+        27,
+        1279,
+        213
+      ],
+      [
+        1285,
+        14,
+        1530,
+        207
+      ]
+    ],
+    "size": [
+      1536,
+      225
+    ],
+    "mode": "RGBA",
+    "sha256": "f13f28b77513fc9ce5aa29c689dd8e2180bb5d8db7b77ec5bd024c309d4b5700",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": []
+  },
+  {
+    "identity": "foe_ruin_bat",
+    "move": "hit",
+    "revision": "r1",
+    "file": "foes/raw/foe_ruin_bat-hit-r1.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "routes_or_intents": [
+      "hit"
+    ],
+    "preferred_candidate": true,
+    "source": "foes/source-sheets/bat_r1-source.png",
+    "source_row_1based": 3,
+    "source_crop_xyxy": [
+      0,
+      527,
+      1536,
+      753
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        16,
+        12,
+        300,
+        208
+      ],
+      [
+        295,
+        16,
+        524,
+        209
+      ],
+      [
+        534,
+        59,
+        749,
+        210
+      ],
+      [
+        762,
+        19,
+        1016,
+        214
+      ],
+      [
+        1027,
+        19,
+        1268,
+        209
+      ],
+      [
+        1279,
+        16,
+        1531,
+        206
+      ]
+    ],
+    "size": [
+      1536,
+      226
+    ],
+    "mode": "RGBA",
+    "sha256": "ec210cce1aee60ef52aa646b7224f95d093390a6a35302fb20f7a24eb0eb0d81",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": []
+  },
+  {
+    "identity": "foe_ruin_bat",
+    "move": "down",
+    "revision": "r1",
+    "file": "foes/raw/foe_ruin_bat-down-r1.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "routes_or_intents": [
+      "down"
+    ],
+    "preferred_candidate": true,
+    "source": "foes/source-sheets/bat_r1-source.png",
+    "source_row_1based": 4,
+    "source_crop_xyxy": [
+      0,
+      777,
+      1536,
+      1002
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        17,
+        12,
+        303,
+        207
+      ],
+      [
+        308,
+        18,
+        532,
+        211
+      ],
+      [
+        542,
+        57,
+        775,
+        206
+      ],
+      [
+        788,
+        82,
+        997,
+        208
+      ],
+      [
+        1013,
+        101,
+        1253,
+        213
+      ],
+      [
+        1273,
+        101,
+        1512,
+        213
+      ]
+    ],
+    "size": [
+      1536,
+      225
+    ],
+    "mode": "RGBA",
+    "sha256": "607b950691094b7fa76cccbd2f2347009d6be3cad551f7c38a19f6c682b622ef",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": []
+  }
+]

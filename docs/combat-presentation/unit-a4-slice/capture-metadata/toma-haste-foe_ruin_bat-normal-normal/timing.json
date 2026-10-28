@@ -1,0 +1,215 @@
+[
+  {
+    "at": 1793231653.328,
+    "remainingMs": 330,
+    "turn": {
+      "actorId": "toma",
+      "side": "hero",
+      "beat": 1,
+      "round": 1,
+      "action": "haste",
+      "targetId": "guardian",
+      "intent": {
+        "sourceId": "f1",
+        "targetSlot": 1,
+        "name": "Nip",
+        "damage": 5,
+        "kind": "physical",
+        "targetId": "guardian",
+        "beat": 1,
+        "round": 1
+      },
+      "state": {
+        "encounterId": "thicket-ambush",
+        "beat": 1,
+        "round": 1,
+        "turnIndex": 0,
+        "order": [
+          "toma",
+          "guardian",
+          "f1",
+          "weaver"
+        ],
+        "outcome": "active",
+        "guard": null,
+        "counter": null,
+        "taunt": null,
+        "song": null,
+        "heroes": [
+          {
+            "id": "toma",
+            "hp": 48,
+            "barrier": 0,
+            "cooldowns": {
+              "haste": 4
+            }
+          },
+          {
+            "id": "guardian",
+            "hp": 76,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "weaver",
+            "hp": 48,
+            "barrier": 0,
+            "cooldowns": {}
+          }
+        ],
+        "enemies": [
+          {
+            "id": "f1",
+            "hp": 19,
+            "markedUntil": 0
+          }
+        ],
+        "intent": {
+          "sourceId": "f1",
+          "targetSlot": 1,
+          "name": "Nip",
+          "damage": 5,
+          "kind": "physical",
+          "targetId": "guardian",
+          "beat": 1,
+          "round": 1
+        },
+        "commands": [
+          {
+            "beat": 1,
+            "heroId": "toma",
+            "action": "haste",
+            "targetId": "guardian"
+          }
+        ]
+      },
+      "events": [
+        {
+          "type": "haste",
+          "sourceId": "toma",
+          "targetId": "guardian",
+          "text": "Ally acts next."
+        }
+      ],
+      "before": {
+        "encounterId": "thicket-ambush",
+        "beat": 1,
+        "round": 1,
+        "turnIndex": 0,
+        "order": [
+          "toma",
+          "f1",
+          "guardian",
+          "weaver"
+        ],
+        "outcome": "active",
+        "guard": null,
+        "counter": null,
+        "taunt": null,
+        "song": null,
+        "heroes": [
+          {
+            "id": "toma",
+            "hp": 48,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "guardian",
+            "hp": 76,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "weaver",
+            "hp": 48,
+            "barrier": 0,
+            "cooldowns": {}
+          }
+        ],
+        "enemies": [
+          {
+            "id": "f1",
+            "hp": 19,
+            "markedUntil": 0
+          }
+        ],
+        "intent": {
+          "sourceId": "f1",
+          "targetSlot": 1,
+          "name": "Nip",
+          "damage": 5,
+          "kind": "physical",
+          "targetId": "guardian",
+          "beat": 1,
+          "round": 1
+        },
+        "commands": []
+      },
+      "after": {
+        "encounterId": "thicket-ambush",
+        "beat": 2,
+        "round": 1,
+        "turnIndex": 1,
+        "order": [
+          "toma",
+          "guardian",
+          "f1",
+          "weaver"
+        ],
+        "outcome": "active",
+        "guard": null,
+        "counter": null,
+        "taunt": null,
+        "song": null,
+        "heroes": [
+          {
+            "id": "toma",
+            "hp": 48,
+            "barrier": 0,
+            "cooldowns": {
+              "haste": 4
+            }
+          },
+          {
+            "id": "guardian",
+            "hp": 76,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "weaver",
+            "hp": 48,
+            "barrier": 0,
+            "cooldowns": {}
+          }
+        ],
+        "enemies": [
+          {
+            "id": "f1",
+            "hp": 19,
+            "markedUntil": 0
+          }
+        ],
+        "intent": {
+          "sourceId": "f1",
+          "targetSlot": 1,
+          "name": "Nip",
+          "damage": 5,
+          "kind": "physical",
+          "targetId": "guardian",
+          "beat": 2,
+          "round": 1
+        },
+        "commands": [
+          {
+            "beat": 1,
+            "heroId": "toma",
+            "action": "haste",
+            "targetId": "guardian"
+          }
+        ]
+      }
+    }
+  }
+]

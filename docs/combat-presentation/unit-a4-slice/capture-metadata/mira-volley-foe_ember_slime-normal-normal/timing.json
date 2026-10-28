@@ -1,0 +1,439 @@
+[
+  {
+    "at": 1793231598.276,
+    "remainingMs": 585,
+    "turn": {
+      "actorId": "mira",
+      "side": "hero",
+      "beat": 1,
+      "round": 1,
+      "action": "volley",
+      "targetId": "enemies",
+      "intent": {
+        "sourceId": "f1",
+        "targetSlot": 1,
+        "name": "Ember Spark",
+        "damage": 7,
+        "kind": "energy",
+        "targetId": "guardian",
+        "beat": 1,
+        "round": 1
+      },
+      "state": {
+        "encounterId": "thicket-ambush",
+        "beat": 1,
+        "round": 1,
+        "turnIndex": 0,
+        "order": [
+          "mira",
+          "f1",
+          "guardian",
+          "weaver"
+        ],
+        "outcome": "active",
+        "guard": null,
+        "counter": null,
+        "taunt": null,
+        "song": null,
+        "heroes": [
+          {
+            "id": "mira",
+            "hp": 50,
+            "barrier": 0,
+            "cooldowns": {
+              "volley": 4
+            }
+          },
+          {
+            "id": "guardian",
+            "hp": 76,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "weaver",
+            "hp": 48,
+            "barrier": 0,
+            "cooldowns": {}
+          }
+        ],
+        "enemies": [
+          {
+            "id": "f1",
+            "hp": 14,
+            "markedUntil": 0
+          }
+        ],
+        "intent": {
+          "sourceId": "f1",
+          "targetSlot": 1,
+          "name": "Ember Spark",
+          "damage": 7,
+          "kind": "energy",
+          "targetId": "guardian",
+          "beat": 1,
+          "round": 1
+        },
+        "commands": [
+          {
+            "beat": 1,
+            "heroId": "mira",
+            "action": "volley",
+            "targetId": "enemies"
+          }
+        ]
+      },
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "mira",
+          "targetId": "f1",
+          "amount": 10,
+          "text": "Volley hits every enemy."
+        }
+      ],
+      "before": {
+        "encounterId": "thicket-ambush",
+        "beat": 1,
+        "round": 1,
+        "turnIndex": 0,
+        "order": [
+          "mira",
+          "f1",
+          "guardian",
+          "weaver"
+        ],
+        "outcome": "active",
+        "guard": null,
+        "counter": null,
+        "taunt": null,
+        "song": null,
+        "heroes": [
+          {
+            "id": "mira",
+            "hp": 50,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "guardian",
+            "hp": 76,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "weaver",
+            "hp": 48,
+            "barrier": 0,
+            "cooldowns": {}
+          }
+        ],
+        "enemies": [
+          {
+            "id": "f1",
+            "hp": 24,
+            "markedUntil": 0
+          }
+        ],
+        "intent": {
+          "sourceId": "f1",
+          "targetSlot": 1,
+          "name": "Ember Spark",
+          "damage": 7,
+          "kind": "energy",
+          "targetId": "guardian",
+          "beat": 1,
+          "round": 1
+        },
+        "commands": []
+      },
+      "after": {
+        "encounterId": "thicket-ambush",
+        "beat": 2,
+        "round": 1,
+        "turnIndex": 1,
+        "order": [
+          "mira",
+          "f1",
+          "guardian",
+          "weaver"
+        ],
+        "outcome": "active",
+        "guard": null,
+        "counter": null,
+        "taunt": null,
+        "song": null,
+        "heroes": [
+          {
+            "id": "mira",
+            "hp": 50,
+            "barrier": 0,
+            "cooldowns": {
+              "volley": 4
+            }
+          },
+          {
+            "id": "guardian",
+            "hp": 76,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "weaver",
+            "hp": 48,
+            "barrier": 0,
+            "cooldowns": {}
+          }
+        ],
+        "enemies": [
+          {
+            "id": "f1",
+            "hp": 14,
+            "markedUntil": 0
+          }
+        ],
+        "intent": {
+          "sourceId": "f1",
+          "targetSlot": 1,
+          "name": "Ember Spark",
+          "damage": 7,
+          "kind": "energy",
+          "targetId": "guardian",
+          "beat": 2,
+          "round": 1
+        },
+        "commands": [
+          {
+            "beat": 1,
+            "heroId": "mira",
+            "action": "volley",
+            "targetId": "enemies"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "at": 1793231599.158,
+    "remainingMs": 520,
+    "turn": {
+      "actorId": "f1",
+      "side": "enemy",
+      "beat": 2,
+      "round": 1,
+      "intent": {
+        "sourceId": "f1",
+        "targetSlot": 1,
+        "name": "Ember Spark",
+        "damage": 7,
+        "kind": "energy",
+        "targetId": "guardian",
+        "beat": 2,
+        "round": 1
+      },
+      "targetId": "guardian",
+      "state": {
+        "encounterId": "thicket-ambush",
+        "beat": 2,
+        "round": 1,
+        "turnIndex": 1,
+        "order": [
+          "mira",
+          "f1",
+          "guardian",
+          "weaver"
+        ],
+        "outcome": "active",
+        "guard": null,
+        "counter": null,
+        "taunt": null,
+        "song": null,
+        "heroes": [
+          {
+            "id": "mira",
+            "hp": 50,
+            "barrier": 0,
+            "cooldowns": {
+              "volley": 4
+            }
+          },
+          {
+            "id": "guardian",
+            "hp": 69,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "weaver",
+            "hp": 48,
+            "barrier": 0,
+            "cooldowns": {}
+          }
+        ],
+        "enemies": [
+          {
+            "id": "f1",
+            "hp": 14,
+            "markedUntil": 0
+          }
+        ],
+        "intent": {
+          "sourceId": "f1",
+          "targetSlot": 1,
+          "name": "Ember Spark",
+          "damage": 7,
+          "kind": "energy",
+          "targetId": "guardian",
+          "beat": 2,
+          "round": 1
+        },
+        "commands": [
+          {
+            "beat": 1,
+            "heroId": "mira",
+            "action": "volley",
+            "targetId": "enemies"
+          }
+        ]
+      },
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "f1",
+          "targetId": "guardian",
+          "amount": 7,
+          "absorbed": 0,
+          "text": "Enemy attacks on its own turn."
+        }
+      ],
+      "before": {
+        "encounterId": "thicket-ambush",
+        "beat": 2,
+        "round": 1,
+        "turnIndex": 1,
+        "order": [
+          "mira",
+          "f1",
+          "guardian",
+          "weaver"
+        ],
+        "outcome": "active",
+        "guard": null,
+        "counter": null,
+        "taunt": null,
+        "song": null,
+        "heroes": [
+          {
+            "id": "mira",
+            "hp": 50,
+            "barrier": 0,
+            "cooldowns": {
+              "volley": 4
+            }
+          },
+          {
+            "id": "guardian",
+            "hp": 76,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "weaver",
+            "hp": 48,
+            "barrier": 0,
+            "cooldowns": {}
+          }
+        ],
+        "enemies": [
+          {
+            "id": "f1",
+            "hp": 14,
+            "markedUntil": 0
+          }
+        ],
+        "intent": {
+          "sourceId": "f1",
+          "targetSlot": 1,
+          "name": "Ember Spark",
+          "damage": 7,
+          "kind": "energy",
+          "targetId": "guardian",
+          "beat": 2,
+          "round": 1
+        },
+        "commands": [
+          {
+            "beat": 1,
+            "heroId": "mira",
+            "action": "volley",
+            "targetId": "enemies"
+          }
+        ]
+      },
+      "after": {
+        "encounterId": "thicket-ambush",
+        "beat": 3,
+        "round": 1,
+        "turnIndex": 2,
+        "order": [
+          "mira",
+          "f1",
+          "guardian",
+          "weaver"
+        ],
+        "outcome": "active",
+        "guard": null,
+        "counter": null,
+        "taunt": null,
+        "song": null,
+        "heroes": [
+          {
+            "id": "mira",
+            "hp": 50,
+            "barrier": 0,
+            "cooldowns": {
+              "volley": 4
+            }
+          },
+          {
+            "id": "guardian",
+            "hp": 69,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "weaver",
+            "hp": 48,
+            "barrier": 0,
+            "cooldowns": {}
+          }
+        ],
+        "enemies": [
+          {
+            "id": "f1",
+            "hp": 14,
+            "markedUntil": 0
+          }
+        ],
+        "intent": {
+          "sourceId": "f1",
+          "targetSlot": 1,
+          "name": "Ember Spark",
+          "damage": 7,
+          "kind": "energy",
+          "targetId": "guardian",
+          "beat": 3,
+          "round": 2
+        },
+        "commands": [
+          {
+            "beat": 1,
+            "heroId": "mira",
+            "action": "volley",
+            "targetId": "enemies"
+          }
+        ]
+      }
+    }
+  }
+]

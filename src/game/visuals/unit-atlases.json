@@ -70,5 +70,50 @@
     "frames": 22,
     "decodedBytes": 2435072,
     "downloadBytes": 826472
+  },
+  "mira": {
+    "image": "mira_a4.a66eff2f412e.webp",
+    "atlas": "mira_a4.fa41f1f841cc.json",
+    "width": 1024,
+    "height": 1016,
+    "frames": 32,
+    "decodedBytes": 4161536,
+    "downloadBytes": 1103668
+  },
+  "toma": {
+    "image": "toma_a4.a22b073a2df5.webp",
+    "atlas": "toma_a4.685bfa478782.json",
+    "width": 768,
+    "height": 745,
+    "frames": 24,
+    "decodedBytes": 2288640,
+    "downloadBytes": 646978
+  },
+  "dew": {
+    "image": "dew_a4.a57bd1fe4fb4.webp",
+    "atlas": "dew_a4.c105e9716176.json",
+    "width": 768,
+    "height": 461,
+    "frames": 22,
+    "decodedBytes": 1416192,
+    "downloadBytes": 357467
+  },
+  "ember": {
+    "image": "ember_a4.21283c607c4a.webp",
+    "atlas": "ember_a4.70f335f30553.json",
+    "width": 768,
+    "height": 379,
+    "frames": 22,
+    "decodedBytes": 1164288,
+    "downloadBytes": 320727
+  },
+  "bat": {
+    "image": "bat_a4.3feccaa66009.webp",
+    "atlas": "bat_a4.c9e4e10a932f.json",
+    "width": 1536,
+    "height": 321,
+    "frames": 26,
+    "decodedBytes": 1972224,
+    "downloadBytes": 430211
   }
 }

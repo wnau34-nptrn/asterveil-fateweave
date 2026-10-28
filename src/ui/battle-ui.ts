@@ -192,6 +192,8 @@ export class BattleUI {
   // Starts or resumes a battle from the expedition's recorded entry and commands.
   open(session: BattleSession): void {
     this.playback.cancel(); this.scene?.stopEffects(); this.presentation = undefined; this.busy = false;
+    // Looping idles (the A4 bat hover) follow the saved effect level and OS preference from the first frame, not only once a turn plays.
+    this.scene?.configureEffects(this.combatPrefs, window.matchMedia('(prefers-reduced-motion: reduce)').matches);
     this.closeSkill(); this.session = session; this.root.dataset.scene = session.scene ?? 'ruins'; this.action = 'attack'; this.targeting = true;
     this.canvasInputAfterInfo = performance.now() + 250;
     if (this.data !== session.data) { this.scene?.setEncounter(session.data); this.data = session.data; }

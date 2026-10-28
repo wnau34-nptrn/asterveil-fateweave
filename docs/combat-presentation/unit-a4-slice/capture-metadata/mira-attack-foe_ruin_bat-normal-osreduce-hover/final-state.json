@@ -1,0 +1,62 @@
+{
+  "encounterId": "thicket-ambush",
+  "beat": 3,
+  "round": 1,
+  "turnIndex": 2,
+  "order": [
+    "mira",
+    "f1",
+    "guardian",
+    "weaver"
+  ],
+  "outcome": "active",
+  "guard": null,
+  "counter": null,
+  "taunt": null,
+  "song": null,
+  "heroes": [
+    {
+      "id": "mira",
+      "hp": 50,
+      "barrier": 0,
+      "cooldowns": {}
+    },
+    {
+      "id": "guardian",
+      "hp": 71,
+      "barrier": 0,
+      "cooldowns": {}
+    },
+    {
+      "id": "weaver",
+      "hp": 48,
+      "barrier": 0,
+      "cooldowns": {}
+    }
+  ],
+  "enemies": [
+    {
+      "id": "f1",
+      "hp": 6,
+      "markedUntil": 0
+    }
+  ],
+  "intent": {
+    "sourceId": "f1",
+    "targetSlot": 1,
+    "name": "Nip",
+    "damage": 5,
+    "kind": "physical",
+    "targetId": "guardian",
+    "beat": 3,
+    "round": 2
+  },
+  "commands": [
+    {
+      "beat": 1,
+      "heroId": "mira",
+      "action": "attack",
+      "targetId": "f1"
+    }
+  ]
+}

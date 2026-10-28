@@ -1,5 +1,15 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
+## 2026-10-28 — W2 A4 มิร่า/โทมะ/สไลม์/ค้างคาว: นำเข้าแล้ว รอเจ้าของดูคลิป
+
+- สาขา `claude/unit-a4-mira-toma-slimes-bat` (จากสาขาเกม `7d41237`) ภาพจาก PR #91 sha256 25 ไฟล์ตรง `strips.json`; ใช้ R2 ของ Mira volley/disengage, Toma underhand, Bat hover และป้ายทองที่เหลือตามที่เจ้าของตอบ
+- ทำแบบ A3: `incoming/ART-UNIT-ANIMATION-A4-001/build_assets.py` (scale เดียวต่อแถบ; ท่าลอยของ Dew/ค้างคาวคงความสูงจริง; hover R2 ใช้พื้นที่เฉลี่ยตั้ง scale), registry 5 ตัว, clip `disengage`, optional atlas ไม่อยู่ใน critical preload; ครบ 7+7 ActionId ของ Mira/Toma + Jelly Bounce/Ember Spark/Nip ใช้ VFX เดิม
+- ใหม่: hover loop ของค้างคาว (`idleLoop` ใน registry, `UnitAnimation.setLoops`) เล่นเฉพาะเมื่อยังไม่ตายและไม่อยู่ใน motion; ปิดเมื่อ OS reduce/เอฟเฟกต์ลด; `BattleUI.open` เรียก `configureEffects` ตอนเริ่มสู้ (เดิมเรียกเฉพาะตอนเริ่มเทิร์น)
+- งบภาพ (decoded): Mira 3.97MiB, Toma 2.18MiB, Dew 1.35MiB, Ember 1.11MiB, Bat 1.88MiB; สนาม 10 ตัว (OD-05) ต้องวัดรวมหลัง P02 ([README A4](../combat-presentation/unit-a4-slice/README_TH.md))
+- ผล: typecheck/lint/`npm test` ผ่าน; browser `unit-a4.spec.ts` 34 ผ่าน; คลิปจริง 20 คลิป 390px (Chromium จำลอง ไม่ใช่มือถือจริง)
+- **ยังไม่ merge/เผยแพร่**: รอเจ้าของดูคลิปและอนุมัติ motion (จุดที่ควรดู: Dew กระโดด, Toma underhand, Mira ถอย, Ember ถ่ม, loop ปีกค้างคาว) แล้วค่อย merge PR + ตรวจ CI/Pages
+- ไม่แตะ #93–#98 (W3–W5) และ PR #100
+
 
 
 

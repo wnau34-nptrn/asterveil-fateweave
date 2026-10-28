@@ -1,0 +1,228 @@
+{
+  "package": "ART-UNIT-ANIMATION-A4-001",
+  "raw_strips": 25,
+  "raw_frames_including_alternatives": 146,
+  "preferred_strips": 21,
+  "all_retained_rgba_pixels_match_sources": true,
+  "all_raw_strips_have_transparency": true,
+  "seed_hashes_verified": 5,
+  "selected_source_silhouettes_touching_canvas_edge": 0,
+  "normalization_packing_runtime": "Not performed; assigned to Claude",
+  "review_scope": "Offline static artwork and file checks; no in-game or motion approval",
+  "previews": {
+    "preview-390.png": [
+      390,
+      3164
+    ],
+    "heroes/preview-390.png": [
+      390,
+      1800
+    ],
+    "foes/preview-390.png": [
+      390,
+      1428
+    ]
+  },
+  "files": {
+    "foes/preview-390.png": {
+      "bytes": 375674,
+      "sha256": "794b71aaf6e8c6c05a71bdf2a206d7df975d0bb9b424221717d032e0838056e3"
+    },
+    "foes/raw/foe_dew_slime-down-r1.png": {
+      "bytes": 455622,
+      "sha256": "2b4f3771e604a51153858c12a56ca9ec0579e979c83260321da47eba5e6d31ac"
+    },
+    "foes/raw/foe_dew_slime-hit-r1.png": {
+      "bytes": 590229,
+      "sha256": "1ad56216426998c635587c5f65e41e7f70523d8d30520bd6ad5982ba376b12a3"
+    },
+    "foes/raw/foe_dew_slime-jelly-bounce-r1.png": {
+      "bytes": 593649,
+      "sha256": "5bc1683cec8178d332b968f8e9fb6e375bac3acc0f98eb85c9ba7153751cdff5"
+    },
+    "foes/raw/foe_ember_slime-down-r1.png": {
+      "bytes": 443952,
+      "sha256": "6565395e07929d52e4494a2ccb514768e640347b207fefd8f750cb7ee0bfbb56"
+    },
+    "foes/raw/foe_ember_slime-ember-spark-r1.png": {
+      "bytes": 511899,
+      "sha256": "991322b24c39d37c144ebdacc5b95250c673ffdc912e7a8dcb5e78b87fdc3617"
+    },
+    "foes/raw/foe_ember_slime-hit-r1.png": {
+      "bytes": 496802,
+      "sha256": "eb1737958ab1d4d16fc2e7384a8fb5128dcaa6aa8b90f6771e9a7de5e0217e5e"
+    },
+    "foes/raw/foe_ruin_bat-down-r1.png": {
+      "bytes": 481897,
+      "sha256": "607b950691094b7fa76cccbd2f2347009d6be3cad551f7c38a19f6c682b622ef"
+    },
+    "foes/raw/foe_ruin_bat-hit-r1.png": {
+      "bytes": 547079,
+      "sha256": "ec210cce1aee60ef52aa646b7224f95d093390a6a35302fb20f7a24eb0eb0d81"
+    },
+    "foes/raw/foe_ruin_bat-hover-r1.png": {
+      "bytes": 442474,
+      "sha256": "051f28609b1fb2fb7802895d918cbe91229795f3bfe0ac6d58ed5dbb762d5a5c"
+    },
+    "foes/raw/foe_ruin_bat-hover-r2.png": {
+      "bytes": 817257,
+      "sha256": "c3c55493aeaa746e1069b27ca47972c7e2219eb14cbb266e21bb45ad39e02b97"
+    },
+    "foes/raw/foe_ruin_bat-swoop-bite-r1.png": {
+      "bytes": 531403,
+      "sha256": "f13f28b77513fc9ce5aa29c689dd8e2180bb5d8db7b77ec5bd024c309d4b5700"
+    },
+    "foes/seeds/foe_dew_slime-seed.png": {
+      "bytes": 162004,
+      "sha256": "315e85007d8a3154095872a1851c33cd293aa9d6668626c32b8a42d022cd3f7f"
+    },
+    "foes/seeds/foe_ember_slime-seed.png": {
+      "bytes": 140439,
+      "sha256": "84ff384bc2da658c846d1766867369891d88006b5bc6d3353a450bcb97fe1568"
+    },
+    "foes/seeds/foe_ruin_bat-seed.png": {
+      "bytes": 149405,
+      "sha256": "f03bb401f0d9d6f7caf7ba07706068e7c1abeb9c69ff8d566ed6c2fe0e1e24bb"
+    },
+    "foes/source-sheets/bat_hover_r2-source.png": {
+      "bytes": 870947,
+      "sha256": "99036d233f48bf9843f9852f2c10dfd2cf0b543245cd68a3f39bdbe0da222113"
+    },
+    "foes/source-sheets/bat_r1-source.png": {
+      "bytes": 2224675,
+      "sha256": "783f4b214304700cbafb875923099e9249e736f41965fc2a6218c7f4a3f39904"
+    },
+    "foes/source-sheets/dew_r1-source.png": {
+      "bytes": 1704051,
+      "sha256": "6451330258c3b42364f2b3bba4d73eb7421fd4f2a7988c9c6635209aa9744763"
+    },
+    "foes/source-sheets/ember_r1-source.png": {
+      "bytes": 1915193,
+      "sha256": "dcb2cacdd6d28664a2f768f20bb7aeb535d7408eacfec46ac52ba3f03e22dda1"
+    },
+    "foes/templates/foe_ruin_bat-1row-edit-canvas.png": {
+      "bytes": 49256,
+      "sha256": "e3ade0ce970c85b661de778bfd63979e209f75a30b57f589aeb91994ec627687"
+    },
+    "heroes/preview-390.png": {
+      "bytes": 490856,
+      "sha256": "852900ddf49b656202d15a1ff5fd0e549bdcf0b63cd97e950052c1d5e016821c"
+    },
+    "heroes/raw/mira-block-r1.png": {
+      "bytes": 491182,
+      "sha256": "b57721c4031560010ff4bfdf9d8efb9269eeea247a5d97b00d7c8916c008a3b6"
+    },
+    "heroes/raw/mira-disengage-r1.png": {
+      "bytes": 503580,
+      "sha256": "19cdf3e7ab810e583c074fc9337b3134b9baa9852d49a944b433206e3dab79ee"
+    },
+    "heroes/raw/mira-disengage-r2.png": {
+      "bytes": 782992,
+      "sha256": "2c9f6ea730b7fab600d493179d3a77062d96a5eedf6aa0a8dea1493a46ca592b"
+    },
+    "heroes/raw/mira-down-r1.png": {
+      "bytes": 754375,
+      "sha256": "277b6519ced4c483952d9dc9ae3c499852efbf51ea840eb9a025704308985c51"
+    },
+    "heroes/raw/mira-hit-r1.png": {
+      "bytes": 497687,
+      "sha256": "835b8adeb5b41d8c0d0b189cb56e0a004819d61c99e5c766a18b17fc9096e081"
+    },
+    "heroes/raw/mira-single-arrow-r1.png": {
+      "bytes": 509782,
+      "sha256": "819b4589bbdfe090162421201cd61a400109cb5ae1a1a73f777d5fcbf8c80370"
+    },
+    "heroes/raw/mira-volley-r1.png": {
+      "bytes": 500239,
+      "sha256": "28e656b3f889b78d309e7f0ca64098384951c787c6503eb7dbd7c52e55f05906"
+    },
+    "heroes/raw/mira-volley-r2.png": {
+      "bytes": 892133,
+      "sha256": "1d2c828cd348f1bc7851efffa3724a1fd310b65a8209e5754479d8589505c6e7"
+    },
+    "heroes/raw/toma-block-r1.png": {
+      "bytes": 1042548,
+      "sha256": "89c3600abd222793cdde0551ba4f79e9bce69ee3bf4b9132cc04a60d8a6e8481"
+    },
+    "heroes/raw/toma-down-r1.png": {
+      "bytes": 564935,
+      "sha256": "91f34d5d09d4a4cc1f2245e4073432f55d393e22f97a5fb218f964ddb9782493"
+    },
+    "heroes/raw/toma-hit-r1.png": {
+      "bytes": 631133,
+      "sha256": "4d3e552e63cbc59ed09ee373947d596bdc8516a91d401a9937f824a1763477ec"
+    },
+    "heroes/raw/toma-overhand-r1.png": {
+      "bytes": 624004,
+      "sha256": "85bac4a84d0b0329427952d6752dad5a574672dbad9ea3c2e8122cec548296d4"
+    },
+    "heroes/raw/toma-underhand-r1.png": {
+      "bytes": 607223,
+      "sha256": "b80e1c63664ddf3441075ae728f4af93a0a45709252283c74ab0aff06001a916"
+    },
+    "heroes/raw/toma-underhand-r2.png": {
+      "bytes": 936271,
+      "sha256": "ad5d24760ac028f94044dc00aaabcf8829c0f3acd24a1ae711560a62720c2a13"
+    },
+    "heroes/seeds/mira-seed.png": {
+      "bytes": 330533,
+      "sha256": "c0dfe376ceb6d507e915322c26a2f353b0c48e1c89a4ccadc1a67178d3d1451a"
+    },
+    "heroes/seeds/toma-seed.png": {
+      "bytes": 264267,
+      "sha256": "39edb773bacfd7a2e5335b8a204ad2157b8007b1b8655883860b8ccbd82cdc8e"
+    },
+    "heroes/source-sheets/mira_down_r1_final-source.png": {
+      "bytes": 1210563,
+      "sha256": "1ab3d25bf325505f81e83e0752bc40e0f4125945b8520016ada006ea15e802ac"
+    },
+    "heroes/source-sheets/mira_r1-source.png": {
+      "bytes": 2910758,
+      "sha256": "573572e89d6a7eef80fd6ee6e2b87ece2eae015556db592657ee0859b53a1378"
+    },
+    "heroes/source-sheets/mira_r2-source.png": {
+      "bytes": 2207371,
+      "sha256": "80039cf72baeb16d2d3dc68e6c80695892e2f4b2a3b56672589923f01d8d013f"
+    },
+    "heroes/source-sheets/mira_r2_final-source.png": {
+      "bytes": 2111330,
+      "sha256": "af185f4cd276f7cd012f180af2c63834d79ed5373c26de7dcac430e378f082c5"
+    },
+    "heroes/source-sheets/toma_block_r1-source.png": {
+      "bytes": 2184700,
+      "sha256": "32fcc7c4a3a51697046eadde1cd5c48bf423d8400ed215ea9e1d88ee7366e7a1"
+    },
+    "heroes/source-sheets/toma_block_r1_final-source.png": {
+      "bytes": 1518718,
+      "sha256": "4a2bb6cf9c849c25a3a874bbe051880826319bb0eac00e1deea1e9d800921aac"
+    },
+    "heroes/source-sheets/toma_r1-source.png": {
+      "bytes": 2576041,
+      "sha256": "583a2e0997c35361b2ee8ada211d3b7882bea1376c34ebbd20ce6131db23ac02"
+    },
+    "heroes/source-sheets/toma_underhand_r2-source.png": {
+      "bytes": 2116850,
+      "sha256": "7a20bc0c3bd7b12cbe161dd10823559201ee064f0c7dc105fec3010c108dce9c"
+    },
+    "heroes/source-sheets/toma_underhand_r2_final-source.png": {
+      "bytes": 1440029,
+      "sha256": "6f602f664a8ea3b4a34c5d570348bc5394e5ab0f2e951ac197eb87ddc14b86f6"
+    },
+    "heroes/templates/mira-1row-edit-canvas.png": {
+      "bytes": 82685,
+      "sha256": "a6b0d3b1bed5f9272b3dbed96608f5eb0dea6b75663c23340f8912097ddfc37d"
+    },
+    "heroes/templates/mira-2row-edit-canvas.png": {
+      "bytes": 159637,
+      "sha256": "57876565ba1bc183d41eaea3e0c6c79a669914a4894f187f43edfc9ee0ca81bd"
+    },
+    "heroes/templates/toma-1row-edit-canvas.png": {
+      "bytes": 67592,
+      "sha256": "814bd3a1255add5ec4bab9b1511f804ba4a35794ebdd8b39e8db9e01de84f52b"
+    },
+    "preview-390.png": {
+      "bytes": 862190,
+      "sha256": "5d1c96813c15650e37ef2ce980dd1811e719438603ddaf693062283edf6b288b"
+    }
+  }
+}
