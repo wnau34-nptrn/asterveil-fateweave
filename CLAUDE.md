@@ -1,5 +1,9 @@
 # Fateweave development instructions
 
+## Animation + VFX first — owner direction 2026-10-28
+
+Owner: finish character animation and skill VFX before other development; Codex makes the art (incoming/ only), Claude integrates in-game. Plan, waves W1–W8, remaining 30 identities / 32 hero skills without painted VFX, and copy-ready Codex prompts for W1: [docs/design/ANIMATION_VFX_COMPLETION_PLAN_TH.md](docs/design/ANIMATION_VFX_COMPLETION_PLAN_TH.md). This puts P01–P11 after W8 and supersedes the older “do not start A3/family7” notes once the owner starts a wave. Owner artwork selection and motion approval per batch remain required.
+
 ## Unit animation A2 — published 2026-10-28
 
 A2 Aegis/ Vargoth Guard published via PR88 mergee94b424 + QA-only7ff5388; Pages40671415477 build/4browser/deploy success. Full evidence: [A2 release](docs/validation/unit-a2-release/README_TH.md), [26clips/mapping/fallback](docs/combat-presentation/unit-a2-slice/README_TH.md). Pilot/A1/C5 approvals and timing retained. Owner explicitly approved A2 motion with “เอาเข้าเกมได้” on2026-10-28 after the26clip delivery; this is direct approval, not inferred from tests. A3/family7 are outside this task.
