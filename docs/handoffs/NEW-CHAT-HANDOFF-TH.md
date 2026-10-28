@@ -2,6 +2,23 @@
 
 
 
+
+## 2026-10-28 — แชตถัดไป: W1 นำภาพเข้าเกม (เปิดอัตโนมัติจากแชตก่อน)
+
+ข้อความเปิดแชต:
+
+```text
+ทำงานต่อในรีโป wnau34-nptrn/asterveil-fateweave สาขาเกม feature/fateweave-initial-prototype (ไม่ใช่ main)
+อ่าน AGENTS.md, CLAUDE.md, docs/design/OWNER_DECISIONS_TH.md, docs/design/ANIMATION_VFX_COMPLETION_PLAN_TH.md และหัวข้อบนสุดของ docs/handoffs/NEW-CHAT-HANDOFF-TH.md ก่อน
+งาน: W1 ฝั่ง Claude — นำภาพของ Codex เข้าเกม
+1) PR #89 ART-VFX-ARCANE-SEAL-001 (VFX C5.7 ผนึกอาคม: mark/sigil/storm/dispel) เลือก R2 แล้ว (เจ้าของมอบให้ Codex เลือก) ทำ atlas/module ตามแบบ alchemy/bolt, route ตาม event จริง, คง rules/save/balance/playback timing, normal/fast/reduced motion, เทสต์ แล้วอัดคลิปจริง 390px ส่งเจ้าของตรวจ motion ก่อน merge/เผยแพร่
+2) PR #90 ART-UNIT-ANIMATION-A3-001 (เซเรน + เห็ดหมอผี) ไฟล์ PNG 13 ไฟล์ถูกตัดที่ ~768KB — รอ Codex push ใหม่ ตรวจ hash เทียบ validation.json ก่อน แล้วให้เจ้าของเลือก R1/R2 (attack/Mycon cast) จากนั้น normalize/pack/registry ตามแบบ A1/A2 และอัดคลิป
+3) PR #91 A4 (W2) รอเจ้าของเลือกภาพ (ถามว่าใช้ตัวที่ Codex แนะนำป้ายทองได้ไหม) ยังไม่ต้องนำเข้า
+ทำตาม standing authorization ใน CLAUDE.md; ผลเทสต์ไม่ใช่การอนุมัติภาพ; สนามจะเป็น 10 ตัวในอนาคต (OD-05) ให้บันทึกงบภาพ; อัปเดต handoff เมื่อจบ
+```
+
+สถานะตอนส่งต่อ: PR62 merge `a213a23` (Pages run 40712485417 กำลังเผยแพร่ ณ ส่งต่อ ให้ตรวจผล), ข้อตัดสิน OD-01–OD-12 บันทึกแล้ว, prompt Codex W3–W8 + แก้ #90 อยู่ `docs/handoffs/CODEX-ANIMATION-VFX-PROMPTS-TH.md`, Issue #69 อัปเดตแล้ว ไม่มีงาน runtime ค้างในแชตก่อน
+
 ## 2026-10-28 — PR62 merge, ข้อตัดสินเจ้าของ OD-01–OD-12 และปรับเอกสารให้ตรงกัน
 
 - PR62 ART-UI-EQUIP-002 merge `a213a23` (head `e70a3d9`: quality+browser CI ผ่าน; local typecheck/lint/1091 unit/build/equipment-art browser ผ่าน; atlas 10×9 คงเฟรม PR62 ทุกพิกเซล + อาวุธ C12 metta/thiran/lalin/wila แบบภาพเดียวทุกระดับ) ภาพ 390px เป็น Chromium emulation
