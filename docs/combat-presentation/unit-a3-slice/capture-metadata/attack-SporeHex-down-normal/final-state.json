@@ -1,0 +1,63 @@
+{
+  "encounterId": "thicket-ambush",
+  "beat": 3,
+  "round": 1,
+  "turnIndex": 2,
+  "order": [
+    "healer",
+    "b1",
+    "guardian",
+    "weaver"
+  ],
+  "outcome": "active",
+  "guard": null,
+  "counter": null,
+  "taunt": null,
+  "song": null,
+  "heroes": [
+    {
+      "id": "healer",
+      "hp": 0,
+      "barrier": 0,
+      "cooldowns": {},
+      "fell": true
+    },
+    {
+      "id": "guardian",
+      "hp": 76,
+      "barrier": 0,
+      "cooldowns": {}
+    },
+    {
+      "id": "weaver",
+      "hp": 48,
+      "barrier": 0,
+      "cooldowns": {}
+    }
+  ],
+  "enemies": [
+    {
+      "id": "b1",
+      "hp": 58,
+      "markedUntil": 0
+    }
+  ],
+  "intent": {
+    "sourceId": "b1",
+    "targetSlot": 0,
+    "name": "Spore Hex",
+    "damage": 12,
+    "kind": "energy",
+    "targetId": "guardian",
+    "beat": 3,
+    "round": 2
+  },
+  "commands": [
+    {
+      "beat": 1,
+      "heroId": "healer",
+      "action": "attack",
+      "targetId": "b1"
+    }
+  ]
+}

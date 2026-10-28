@@ -3,6 +3,12 @@
 
 
 
+## 2026-10-28 — Claude: A3 เซเรน + เห็ดหมอผีกลวง เข้าเกม (เจ้าของอนุมัติ “เอาเข้าเกมได้”)
+
+- PR #99 `claude/unit-a3-seren-mycon` → สาขาเกม; ภาพจาก PR #90 (R2 attack/cast ตามที่ Codex แนะนำ) ผ่าน `incoming/ART-UNIT-ANIMATION-A3-001/build_assets.py`; registry `healer`/`foe_mycon`, clip `prayer`/`sanctuary`; VFX เดิม; rules/save/content/balance/timing ไม่เปลี่ยน
+- ผล: typecheck/lint/`npm test` 1104, browser A3 21 + A1/A2/pilot/loading; คลิปจริง 16 คลิป `docs/combat-presentation/unit-a3-slice/`; เจ้าของอนุมัติ motion โดยตรง
+- ข้อสังเกตภาพสำหรับ Codex รอบหน้า: ขอช่องไฟระหว่างท่ากว้างจริง (แถบ seren-attack-r2 ท่า 3–6 ติดกัน ไม้เท้าบังขาซ้ายท่า 5) และให้ทุกแถบวาดขนาดตัวเท่ากัน (scale ต่อแถบต่างกัน 0.31–0.60)
+
 ## 2026-10-28 — แชตถัดไป: W1 นำภาพเข้าเกม (เปิดอัตโนมัติจากแชตก่อน)
 
 ข้อความเปิดแชต:
