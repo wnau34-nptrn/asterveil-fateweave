@@ -3,8 +3,8 @@
 
 ## 2026-10-28 — เก็บกวาด PR ภาพค้าง (เจ้าของสั่ง “ดำเนินการตามที่แนะนำได้เลย”)
 
-- ปิด 11 PR ที่ของอยู่ในเกมแล้ว: PR8/9/10/49/50/51/56/58 (ทุกไฟล์ตรง blob บนสาขาเกม), PR54 (Execute/Ward runtime `4119e16`), PR11 (`map_props.webp`), PR71 (แทนด้วย `UNIT_ANIMATION_ROLLOUT_TH.md`) ไม่ลบ branch
-- merge 6 PR เป็นภาพอ้างอิงใน `incoming/` เท่านั้น ไม่แตะ src/public/tests: PR46 keyart, PR45 boss concept, PR43 pet concept, PR57 world map, PR61 class-new (ROSTER_30 อัปเดตว่าไม่ต้อง git show แล้ว), PR42 progress icons ไม่ถือเป็นการอนุมัติภาพ production หรือการนำเข้าเกม
+- ปิด 12 PR ที่ของอยู่ในเกมแล้ว: PR7/8/9/10/49/50/51/56/58 (ทุกไฟล์ตรง blob บนสาขาเกม), PR54 (Execute/Ward runtime `4119e16`), PR11 (`map_props.webp`), PR71 (แทนด้วย `UNIT_ANIMATION_ROLLOUT_TH.md`) ไม่ลบ branch
+- merge 6 PR เป็นภาพอ้างอิงใน `incoming/` เท่านั้น ไม่แตะ src/public/tests: PR46 keyart, PR45 boss concept, PR43 pet concept, PR57 world map (draft จึงต้องปิดเองหลัง merge `66744a1`), PR61 class-new (ROSTER_30 อัปเดตว่าไม่ต้อง git show แล้ว), PR42 progress icons ไม่ถือเป็นการอนุมัติภาพ production หรือการนำเข้าเกม
 - เปิดค้างรอเจ้าของ: PR53 บอส4–10/วาร์กอธ, PR55 สัตว์เลี้ยง (รอระบบ B/C), PR48 รูน, PR47 คู่แข่ง (เจ้าของยังไม่ตรวจภาพ), PR62 อุปกรณ์หลายแบบ (ยังไม่ต่อเข้าเกม) สถานะในคิวอัปเดตใน `CODEX-ART-QUEUE-TH.md`
 - docs/incoming-only: ตรวจ `git diff --check` ไม่รันทดสอบเกม
 
