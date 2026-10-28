@@ -34,7 +34,7 @@
 | `src/content/world/chapter1.ts` | ไม่มี recruit Mira | เป็น content gap P05 ไม่เพิ่มรางวัลระหว่างย้ายเซฟ |
 | `src/content/world/chapter-ruins.ts`/`chapter-forest.ts` | Lyra/Aira/Serenและdraftสองคน; Garranพักค่ายป่า | ต้องทดสอบทุกstarter route ไม่ถือว่าMiraได้รับแน่นอน |
 
-PR #59 Blade ยังเปิดและรอตรวจภาพ ณ audit ห้ามเอาภาพผ่านเองหรือรวมเข้าฐาน P00; runtime base เป็น game branch ไม่ใช่ main
+(ประวัติ ณ audit 2026-10-25 — PR #59 merge แล้ว 2026-10-26 `d14a3e1`) PR #59 Blade ยังเปิดและรอตรวจภาพ ณ audit ห้ามเอาภาพผ่านเองหรือรวมเข้าฐาน P00; runtime base เป็น game branch ไม่ใช่ main
 
 ## 3. CampProgress และการคำนวณ EXP
 

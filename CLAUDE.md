@@ -12,9 +12,9 @@ Owner: finish character animation and skill VFX before other development; Codex 
 
 A2 Aegis/ Vargoth Guard published via PR88 mergee94b424 + QA-only7ff5388; Pages40671415477 build/4browser/deploy success. Full evidence: [A2 release](docs/validation/unit-a2-release/README_TH.md), [26clips/mapping/fallback](docs/combat-presentation/unit-a2-slice/README_TH.md). Pilot/A1/C5 approvals and timing retained. Owner explicitly approved A2 motion with “เอาเข้าเกมได้” on2026-10-28 after the26clip delivery; this is direct approval, not inferred from tests. A3/family7 are outside this task.
 
-## Consolidated planning index — 2026-10-25
+## Consolidated planning index — 2026-10-25 (updated 2026-10-28)
 
-Read [docs/DEVELOPMENT_PLAN_TH.md](docs/DEVELOPMENT_PLAN_TH.md) before selecting the next development task. It consolidates A–D/C12, research, shared camp levels and the proposed five-member prototype, with actual/owner-direction/recommendation/draft distinctions. Current runtime remains four-member/v43; documentation publication does not implement or validate new rules. P00 specification and baseline are complete in `docs/design/p00/` and `docs/validation/p00/`; next is P01-A/B. Reconcile older copy-ready C12 prompts that assume unchanged progression/save schemas. [Tracking issue #69](https://github.com/wnau34-nptrn/asterveil-fateweave/issues/69).
+Read [docs/DEVELOPMENT_PLAN_TH.md](docs/DEVELOPMENT_PLAN_TH.md) and [docs/design/OWNER_DECISIONS_TH.md](docs/design/OWNER_DECISIONS_TH.md) before selecting a development task. The plan consolidates A–D/C12, research, shared camp levels and the team of five, with actual/owner-direction/recommendation/draft distinctions; the owner decisions (OD-01–OD-12) override conflicting proposals. Current runtime remains four-member/v43. P00 specification and baseline are complete in `docs/design/p00/` and `docs/validation/p00/`. Current order (owner 2026-10-28): animation + VFX waves W1–W8 first, then P01-A/B. Reconcile older copy-ready C12 prompts that assume unchanged progression/save schemas. [Tracking issue #69](https://github.com/wnau34-nptrn/asterveil-fateweave/issues/69).
 
 ## Master plan — owner approval 2026-10-21
 

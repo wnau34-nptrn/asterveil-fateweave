@@ -200,7 +200,7 @@ Claude ใช้ Usage รายสัปดาห์เกือบหมด (�
 
 ไม่ใช่งานของ Codex (รอ Claude): การตัดระบบต้นไม้เล็กที่ไม่มีอาชีพใช้แล้วออกจาก `src/core/world/talents.ts`
 
-### C1 — ส่งแล้ว: PR #60 รอรีวิว (2026-10-23)
+### C1 — เสร็จแล้ว: PR #60 merge 2026-10-23 (หัวข้อเดิม “ส่งแล้ว รอรีวิว”)
 
 ```text
 TASK C1 — Asterveil · Fateweave: painted icons for the 27 big-tree skills, delivered into the game

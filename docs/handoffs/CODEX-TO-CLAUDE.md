@@ -1,6 +1,17 @@
 # Codex → Claude handoff
 
 
+
+## 2026-10-28 — PR62 merge, ข้อตัดสินเจ้าของ OD-01–OD-12 และปรับเอกสารให้ตรงกัน
+
+- PR62 ART-UI-EQUIP-002 merge `a213a23` (head `e70a3d9`: quality+browser CI ผ่าน; local typecheck/lint/1091 unit/build/equipment-art browser ผ่าน; atlas 10×9 คงเฟรม PR62 ทุกพิกเซล + อาวุธ C12 metta/thiran/lalin/wila แบบภาพเดียวทุกระดับ) ภาพ 390px เป็น Chromium emulation
+- PR47/48 (คู่แข่ง/รูน) เจ้าของอนุมัติภาพ merge เข้า incoming; runtime รอ P07 เพราะยังไม่มีระบบ
+- เจ้าของอนุมัติแผนแอนิเมชัน+VFX W1–W8 และส่ง W1 ให้ Codex แล้ว; W2 prompt พร้อมใน `docs/design/ANIMATION_VFX_COMPLETION_PLAN_TH.md` §6; ลำดับ: W1–W8 ก่อน P01
+- รอบทำ design ให้ชัด: [OD-01–OD-12](../design/OWNER_DECISIONS_TH.md) — ดาวพื้นฐานค่าสถานะอย่างเดียว, แต้มจากเลเวลค่าย, ไม่แบ่งความหายาก/อาชีพละหนึ่งคนฟรี, ตัวซ้ำ+เศษกลาง, ทีม 5 แน่นอน, เล่น 20–30 นาที 3–5 ครั้ง/สัปดาห์, ★5 ใน 7–10 ครั้งเล่น, ขั้นสูง ★1–5 ต่อยอดท่าเดิม, บอสกลไกไม่บังคับแต่มีผลเสีย, แพ้คงเดิม, A6c+ความเหนื่อยล้า+ยาฟื้น+พก 10 คน (สำรอง 3→4→5), ผู้บัญชาการไม่มีกลไก
+- ปรับเอกสารให้ตรงกัน: CLAUDE.md planning index, DEVELOPMENT_PLAN §4/§10, หมายเหตุหัวเอกสารข้อเสนอเก่า (GAME_DETAIL/DISCUSSION/RESEARCH/PROGRESSION/SHARED_LEVEL/MASTER_PLAN), P00 spec (PR59 merge แล้ว), คิวภาพ 10/11/24, C1 ใน DEV handoff
+- Cloudflare: บันทึก PR83 ที่ว่าติด workers.dev เป็นประวัติ — run 40455943755 attempt 3 (2026-10-27 06:00 UTC) deploy และขั้น “Verify public development health endpoint” ผ่านแล้ว; ยังเป็น `/health` อย่างเดียว ไม่มีข้อมูลผู้เล่น
+- docs-only ส่วนนี้ตรวจด้วย `git diff --check` ไม่รันเทสต์เกมซ้ำ
+
 ## 2026-10-28 — เก็บกวาด PR ภาพค้าง (เจ้าของสั่ง “ดำเนินการตามที่แนะนำได้เลย”)
 
 - ปิด 12 PR ที่ของอยู่ในเกมแล้ว: PR7/8/9/10/49/50/51/56/58 (ทุกไฟล์ตรง blob บนสาขาเกม), PR54 (Execute/Ward runtime `4119e16`), PR11 (`map_props.webp`), PR71 (แทนด้วย `UNIT_ANIMATION_ROLLOUT_TH.md`) ไม่ลบ branch
