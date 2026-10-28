@@ -1,0 +1,78 @@
+{
+  "mode": "built-in image_gen",
+  "reference_images": [
+    "public/assets/world/items.webp",
+    "public/assets/ui/equip/gear_items.webp",
+    "public/assets/ui/equip/set_emblems.webp"
+  ],
+  "assets": [
+    {
+      "name": "tome_bulwark_small",
+      "prompt": "Use case: stylized-concept. Original Asterveil Fateweave mobile fantasy JRPG painted inventory asset. Match the supplied reference item/equipment atlases: richly painted small object, crisp thin dark contour, controlled brush texture, warm top-left lighting, deep lower-right shading, bright metal edge highlights, no photorealism, no pixel art, no vector flat icon. Transparent background with genuine alpha, one centered isolated motif within central 78% of canvas, nothing touching edges. Readable broad silhouette at 32px, restrained fine detail. No text, letters, numbers, watermark, logo, rarity frame, scenery, characters, or additional objects. Reference images are style references only. A single small closed battle tome. Steel-blue cover, unmistakable shield-shaped silver clasp. Same three-quarter upright book design across tiers. Simple narrow binding, plain corners, compact slim silhouette. No letters or runes."
+    },
+    {
+      "name": "tome_bulwark_medium",
+      "prompt": "Original Asterveil Fateweave painted fantasy JRPG inventory icon. Match style reference: thin dark outline, warm top-left light, bright metal highlights, rich painted brush shading. One isolated centered object occupying central 78%, readable at 32px. Genuine transparent alpha. No text, letters, numbers, logos, rarity frames, scenery, extra props. A single medium closed battle tome. Steel-blue cover, unmistakable shield-shaped silver clasp. Same three-quarter upright book design across tiers. Thicker binding, reinforced metal corners, one inset jewel. No letters or runes."
+    },
+    {
+      "name": "tome_bulwark_large",
+      "prompt": "Original Asterveil Fateweave painted fantasy JRPG inventory icon. Match style reference: thin dark outline, warm top-left light, bright metal highlights, rich painted brush shading. One isolated centered object occupying central 78%, readable at 32px. Genuine transparent alpha. No text, letters, numbers, logos, rarity frames, scenery, extra props. A single large closed battle tome. Steel-blue cover, unmistakable shield-shaped silver clasp. Same three-quarter upright book design across tiers. Thick grand binding, ornate metal corner flourishes and layered spine bands. No letters or runes."
+    },
+    {
+      "name": "tome_blade_small",
+      "prompt": "Original Asterveil Fateweave painted fantasy JRPG inventory icon. Match style reference: thin dark outline, warm top-left light, bright metal highlights, rich painted brush shading. One isolated centered object occupying central 78%, readable at 32px. Genuine transparent alpha. No text, letters, numbers, logos, rarity frames, scenery, extra props. A single small closed battle tome. Crimson cover, unmistakable sword-shaped silver clasp. Same three-quarter upright book design across tiers. Simple narrow binding, plain corners, compact slim silhouette. No letters or runes."
+    },
+    {
+      "name": "tome_blade_medium",
+      "prompt": "Original Asterveil Fateweave painted fantasy JRPG inventory icon. Match style reference: thin dark outline, warm top-left light, bright metal highlights, rich painted brush shading. One isolated centered object occupying central 78%, readable at 32px. Genuine transparent alpha. No text, letters, numbers, logos, rarity frames, scenery, extra props. A single medium closed battle tome. Crimson cover, unmistakable sword-shaped silver clasp. Same three-quarter upright book design across tiers. Thicker binding, reinforced metal corners, one inset jewel. No letters or runes."
+    },
+    {
+      "name": "tome_blade_large",
+      "prompt": "Original Asterveil Fateweave painted fantasy JRPG inventory icon. Match style references: thin dark outline, warm top-left light, bright metal highlights, rich painted shading. One isolated centered object within central 78%, readable at 32px. Genuine transparent alpha. No text, letters, numbers, logos, rarity frames, scenery, extra props. A single large closed battle tome. Crimson cover, unmistakable sword-shaped silver clasp. Same three-quarter upright book design across tiers. Thick grand binding, ornate metal corner flourishes and layered spine bands. No letters or runes."
+    },
+    {
+      "name": "tome_accord_small",
+      "prompt": "Original Asterveil Fateweave painted fantasy JRPG inventory icon. Match style references: thin dark outline, warm top-left light, bright metal highlights, rich painted shading. One isolated centered object within central 78%, readable at 32px. Genuine transparent alpha. No text, letters, numbers, logos, rarity frames, scenery, extra props. A single small closed battle tome. Mint cover with champagne gold fittings, radiant sunburst clasp. Same three-quarter upright book design across tiers. Simple narrow binding, plain corners, compact slim silhouette. No letters or runes."
+    },
+    {
+      "name": "tome_accord_medium",
+      "prompt": "Original Asterveil Fateweave painted fantasy JRPG inventory icon. Match style references: thin dark outline, warm top-left light, bright metal highlights, rich painted shading. One isolated centered object within central 78%, readable at 32px. Genuine transparent alpha. No text, letters, numbers, logos, rarity frames, scenery, extra props. A single medium closed battle tome. Mint cover with champagne gold fittings, radiant sunburst clasp. Same three-quarter upright book design across tiers. Thicker binding, reinforced metal corners, one inset jewel. No letters or runes."
+    },
+    {
+      "name": "tome_accord_large",
+      "prompt": "Original Asterveil Fateweave painted fantasy JRPG inventory icon. Match style references: thin dark outline, warm top-left light, bright metal highlights, rich painted shading. One isolated centered object within central 78%, readable at 32px. Genuine transparent alpha. No text, letters, numbers, logos, rarity frames, scenery, extra props. A single large closed battle tome. Mint cover with champagne gold fittings, radiant sunburst clasp. Same three-quarter upright book design across tiers. Thick grand binding, ornate metal corner flourishes and layered spine bands. No letters or runes."
+    },
+    {
+      "name": "rift_core",
+      "prompt": "Original Asterveil Fateweave painted fantasy JRPG inventory icon. Match style references: thin dark outline, warm top-left light, bright metal highlights, rich painted shading. One isolated centered object within central 78%, readable at 32px. Genuine transparent alpha. No text, letters, numbers, logos, rarity frames, scenery, extra props. One violet-black faceted crystal heart with one clearly visible glowing lilac thread suspended inside; angular heart silhouette."
+    },
+    {
+      "name": "star_shard",
+      "prompt": "Original Asterveil Fateweave painted fantasy JRPG inventory icon. Match style references: thin dark outline, warm top-left light, bright metal highlights, rich painted shading. One isolated centered object within central 78%, readable at 32px. Genuine transparent alpha. No text, letters, numbers, logos, rarity frames, scenery, extra props. One warm gold five-point star fragment, chipped lower-right tip and one clean crystalline fracture. Broad readable five-point silhouette."
+    },
+    {
+      "name": "honour_coin",
+      "prompt": "Original Asterveil Fateweave painted fantasy JRPG inventory icon. Match style references: thin dark outline, warm top-left light, bright metal highlights, rich painted shading. One isolated centered object within central 78%, readable at 32px. Genuine transparent alpha. No text, letters, numbers, logos, rarity frames, scenery, extra props. One silver coin at a slight angle bearing a raised crossed spear and feather quill emblem. Broad silver rim; no lettering."
+    },
+    {
+      "name": "pet_egg",
+      "prompt": "Original Asterveil Fateweave painted fantasy JRPG inventory icon. Match style references: thin dark outline, warm top-left light, bright metal highlights, rich painted shading. One isolated centered object within central 78%, readable at 32px. Genuine transparent alpha. No text, letters, numbers, logos, rarity frames, scenery, extra props. One ivory speckled egg with sparse lavender speckles and a faint luminous cyan thread pattern following the shell. No nest."
+    },
+    {
+      "name": "pet_food",
+      "prompt": "Original Asterveil Fateweave painted fantasy JRPG inventory icon. Match style references: thin dark outline, warm top-left light, bright metal highlights, rich painted shading. One isolated centered object within central 78%, readable at 32px. Genuine transparent alpha. No text, letters, numbers, logos, rarity frames, scenery, extra props. One small tied brown cloth pouch, open enough to show a few warm glowing golden grains. Rounded pouch silhouette."
+    },
+    {
+      "name": "star_fate_empty",
+      "prompt": "Original Asterveil Fateweave painted fantasy JRPG UI asset. Match reference thin dark outline, top-left lighting, champagne metal edge highlights and quiet navy. Genuine transparent alpha. No text, letters, numbers, logo, watermark, rarity frame. One empty five-point star socket, dark navy recessed interior and narrow silver-champagne bevel. Clear unlit state; no circular backing."
+    },
+    {
+      "name": "star_fate_lit",
+      "prompt": "Original Asterveil Fateweave painted fantasy JRPG UI asset. Match reference thin dark outline, top-left lighting, champagne metal edge highlights and quiet navy. Genuine transparent alpha. No text, letters, numbers, logo, watermark, rarity frame. One lit five-point star socket, warm gold filled star interior and narrow silver-champagne bevel, restrained warm inner light. Clear illuminated state; no circular backing."
+    },
+    {
+      "name": "star_fate_frame",
+      "prompt": "Original Asterveil Fateweave painted fantasy JRPG UI asset. Match reference thin dark outline, top-left lighting, champagne metal edge highlights and quiet navy. Genuine transparent alpha. No text, letters, numbers, logo, watermark, rarity frame. A single horizontal decorative UI band, aspect ratio 3.2:1, to hold exactly five 64px star sockets at evenly spaced centers. Thin champagne silver trim, quiet translucent navy ribbon, subtle thread ornament only at both ends. Five EMPTY open circular spaces, no actual stars. No text. Wide band, generous transparent outside margin."
+    }
+  ]
+}
