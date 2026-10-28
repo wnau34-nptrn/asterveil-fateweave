@@ -81,6 +81,10 @@ for(const [width,height,touch]of [[320,568,true],[390,844,true],[1366,768,false]
    await page.clock.runFor(2500);expect(await saved(page)).toBe(third);await expect(page.locator('html')).toHaveAttribute('data-sfx',lastSound!);
    await page.evaluate(()=>{Object.defineProperty(document,'hidden',{configurable:true,value:false});document.dispatchEvent(new Event('visibilitychange'));});
    await expect(page.locator('#action-heal')).toBeEnabled();
-  }finally{await ctx.close()}
+  }finally{
+   // Gameplay keeps its original deadline; allow the large software-rendered context to close.
+   if(width===1366)test.setTimeout(test.info().timeout+15_000);
+   await ctx.close();
+  }
  });
 }
