@@ -13,7 +13,11 @@
 - PR #92 (C5.7 arcane seal) merge เข้าสาขาเกมแล้ว (`4883362`); PR #99 merge สาขาเกมเข้ามา แก้ conflict เฉพาะ workflow (รวม arcane-seal + unit-a3 spec) และ handoff ไม่แตะไฟล์ arcane-seal
 - ไม่มีคลิป Seren block (resolver ที่จัดได้ไม่เกิดดาเมจ 0 ต่อเซเรน) เฟรมมีและเล่นเมื่อ event เกิดจริง
 
-## 2026-10-28 — W1 ฝั่ง Claude: C5.7 ผนึกอาคมเข้าเกมแล้ว รอเจ้าของตรวจ motion
+## 2026-10-28 — C5.7 ผนึกอาคมเผยแพร่แล้ว (PR92)
+
+เจ้าของตอบ “ทั้งสองอย่าง” = อนุมัติ motion C5.7 + เลือก A3 R2 PR92 merge `4883362` (quality+browser ผ่าน, browser re-run 1 ครั้งหลัง `presentation.spec.ts` timeout ที่ไม่เกี่ยวข้อง); Pages run 40730511483 สำเร็จครบ build/4 shards/deploy ไม่มีงาน C5.7 ค้าง; PR62 Pages 40712485417 สำเร็จแล้ว A3 อยู่ session แยก (R2: seren-attack-r2, hollow-mycon-cast-r2) PR #100 ลดเวลา CI ของ PR งานภาพล้วน (workflow + timeout 90s ของ presentation.spec) รอ CI ก่อน merge
+
+## 2026-10-28 — W1 ฝั่ง Claude: C5.7 ผนึกอาคมเข้าเกม (ประวัติ — ดูหัวข้อด้านบน)
 
 - PR #89 (R2) → สาขา `codex/c5-7-arcane-seal-vfx`, commit `7956688`: atlas lossless 12 เฟรม (`public/assets/fx/arcane_seal_fx.*`, ตรวจ sha256/พิกเซลตรงต้นฉบับ), `src/game/visuals/arcane-seal-fx.ts` + ต่อ `BattleScene`; cue มาจาก event จริง (mark / sigil bind เฉพาะมี event sigil / storm ต่อศัตรูที่โดนจริง / dispel เฉพาะมี event dispel); ไม่แก้ rules/save/content/balance/timing
 - ตรวจ local: typecheck, lint, 1100 unit (82 ไฟล์), build, browser `arcane-seal-fx.spec.ts` 10/10; เพิ่มเข้า browser.yml/pages.yml; คลิปจริง 390px 21 คลิป ใน `docs/combat-presentation/arcane-seal-slice/` (README_TH.md มีงบภาพสนาม 10 ตัวตาม OD-05) Chromium emulation เท่านั้น
