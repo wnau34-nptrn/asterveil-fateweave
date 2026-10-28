@@ -1,5 +1,9 @@
 # Fateweave development instructions
 
+## Unit animation A2 — published 2026-10-28
+
+A2 Aegis/ Vargoth Guard published via PR88 mergee94b424 + QA-only7ff5388; Pages40671415477 build/4browser/deploy success. Full evidence: [A2 release](docs/validation/unit-a2-release/README_TH.md), [26clips/mapping/fallback](docs/combat-presentation/unit-a2-slice/README_TH.md). Pilot/A1/C5 approvals and timing retained; no new owner visual approval inferred. A3/family7 are outside this task.
+
 ## Consolidated planning index — 2026-10-25
 
 Read [docs/DEVELOPMENT_PLAN_TH.md](docs/DEVELOPMENT_PLAN_TH.md) before selecting the next development task. It consolidates A–D/C12, research, shared camp levels and the proposed five-member prototype, with actual/owner-direction/recommendation/draft distinctions. Current runtime remains four-member/v43; documentation publication does not implement or validate new rules. P00 specification and baseline are complete in `docs/design/p00/` and `docs/validation/p00/`; next is P01-A/B. Reconcile older copy-ready C12 prompts that assume unchanged progression/save schemas. [Tracking issue #69](https://github.com/wnau34-nptrn/asterveil-fateweave/issues/69).

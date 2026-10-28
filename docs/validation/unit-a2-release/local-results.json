@@ -46,6 +46,30 @@
     "Initial full local unit:974passed/1boss-sim180s timeout under concurrent browser load; same unchanged simulation passed separately in175.90s",
     "Intermediate41browser:40passed/1optionalart readiness5s timeout under concurrent build",
     "Intermediate capture:25passed/1optionalart readiness5s timeout; final26all passed",
-    "Development HMR reload run:19passed/1navigation interruption; later42all passed"
-  ]
+    "Development HMR reload run:19passed/1navigation interruption; later42all passed",
+    "Initial Pages40668449459:270source passed/1counter pose failed at pending final RAF; deploy skipped. Test-only bounded RAF sampling repair7ff5388; final Pages40671415477success."
+  ],
+  "anchorRegression": {
+    "uniqueCasesVerified": 22,
+    "batch": {
+      "passed": 19,
+      "failed": 1,
+      "reason": "Bomb3x page.evaluate context closed timeout"
+    },
+    "standalone": {
+      "passed": 3,
+      "failed": 0
+    },
+    "assertionsAndTimeoutUnchanged": true
+  },
+  "finalQaRepair": {
+    "head": "7ff53885d45ed7259fddeed43103310c37439368",
+    "focusedUnitPassed": 32,
+    "files": 4,
+    "counterRepeatPassed": 5,
+    "failed": 0,
+    "typecheck": "passed",
+    "lint": "passed",
+    "build": "passed"
+  }
 }

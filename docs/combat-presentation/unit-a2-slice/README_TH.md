@@ -1,5 +1,7 @@
 # A2 — เอกิส + องครักษ์อสูร
 
+เผยแพร่แล้วผ่าน PR88 / merge `e94b424` + QA-only `7ff5388`; Pages40671415477ผ่านครบทุกgateและdeploy ดู [หลักฐานreleaseจริง](../../validation/unit-a2-release/README_TH.md) สถานะpendingในบันทึกก่อนหน้าด้านล่างเป็นประวัติ
+
 28 ตุลาคม2026 · branch `codex/animation-a2` · ฐานเกม `f0ee801792f4a0a081a2752cadfdd99d63b50dbe` (หลัง A0/A1 PR87 และ C5.6)
 
 [หน้าเลือกคลิปจริง390px](index.html) · [แหล่งภาพ/prompt/normalization](../../../incoming/ART-UNIT-ANIMATION-A2-001/NOTES.md) · [ผลแพ็กจริง](../../../incoming/ART-UNIT-ANIMATION-A2-001/validation.json)
@@ -46,7 +48,7 @@ Modifiers ไม่ใช่ ActionId ใหม่: guardReduction/twoguard/stan
 
 ## Validation / release
 
-[PR88](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/88) · ส่ง26คลิปชุดสุดท้ายแล้ว กำลังรอfullCIก่อนmerge/Pages ไม่อ้างผลที่ยังpending
+[PR88](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/88) · เผยแพร่แล้ว:975unit/271source/249productionผ่าน,566skipped; Pages40671415477success
 
 - Source snapshot `dd56ddd` / src tree `9c21ec671fa30a10236772f3819ba84aaca208a3` / public tree `f6698cd8435f2b84295c503de9db6031b1f4e218`
 - typecheck/lint/buildและ37focused unit/5filesผ่าน;42focusedbrowserผ่านบน3c66c9a และguardcounterที่กรองเฉพาะeventจริงรันซ้ำบนdd56dddผ่าน1/1 ก่อนcapture
@@ -55,7 +57,7 @@ Modifiers ไม่ใช่ ActionId ใหม่: guardReduction/twoguard/stan
 - ทุกcaptureมีคำสั่งใหม่1ครั้ง; reviveมีprelude2คำสั่งจากresolverอยู่ก่อนแล้ว รวม3คำสั่ง ไม่ยัดHP/eventกลางการเล่น
 - RawJPEGsยังอยู่ในworkspaceเท่านั้น แต่MP4/PNG/stamps/timing/final-state/hash/sourceproofเก็บในGitครบ แชตใหม่ใช้ไฟล์ในcapture-metadataและproof.jsonได้ ไม่ต้องพึ่งrawCapture workspacepath
 
-ข้อจำกัดQAที่บันทึกตามจริง: unitรอบรวมแรก974ผ่าน/1boss-simtimeoutขณะรันbrowserร่วมกัน เคสนั้นรันเดี่ยวผ่าน1/1โดยไม่แก้180s timeout/assertions รอfinalCIสำหรับfullunit975 ชุดอัดก่อนสุดท้ายเคย25/26เพราะoptionalartยังไม่พร้อมภายใน5s; A2visualQA/captureรอoptionalart15sก่อนเริ่มอัดเท่านั้น ไม่เปลี่ยนเวลาเกมหรือassertionStart/firstturnขณะhold/fail และไม่ตีความว่าเป็นผลperformanceบนมือถือจริง รอบที่เจอHMR/reloadระหว่างแก้fixtureไม่ถูกรายงานว่าผ่าน
+ข้อจำกัดQAที่บันทึกตามจริง: unitรอบรวมแรก974ผ่าน/1boss-simtimeoutขณะรันbrowserร่วมกัน เคสนั้นรันเดี่ยวผ่าน1/1โดยไม่แก้180s timeout/assertions finalCIยืนยันfullunit975ผ่านแล้ว ชุดอัดก่อนสุดท้ายเคย25/26เพราะoptionalartยังไม่พร้อมภายใน5s; A2visualQA/captureรอoptionalart15sก่อนเริ่มอัดเท่านั้น ไม่เปลี่ยนเวลาเกมหรือassertionStart/firstturnขณะhold/fail และไม่ตีความว่าเป็นผลperformanceบนมือถือจริง รอบที่เจอHMR/reloadระหว่างแก้fixtureไม่ถูกรายงานว่าผ่าน
 
 ## คลิปสำคัญ
 
