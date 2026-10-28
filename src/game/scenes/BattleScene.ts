@@ -14,6 +14,7 @@ import { BLADE_ATLAS, bladeAtlasUrls, bladeCast, bladeImpact, bladeStance, blade
 import { DEFENSE_ATLAS, defenseAtlasUrls, defenseCast, defenseContact, defenseCues, isDefenseSkill } from '../visuals/defense-fx';
 import { HEALING_ATLAS, healingAtlasUrls, healingPrepare, healingContact, healingCues, isHealingSkill, type HealingContext } from '../visuals/healing-fx';
 import { PROJECTILE_ATLAS, projectileAtlasUrls, projectileCues, projectilePrepare, projectileContact, isProjectileSkill } from '../visuals/projectile-fx';
+import { SEAL_ATLAS, sealAtlasUrls, sealCues, sealEvents, sealPrepare, sealContact, isSealSkill, type SealSpot } from '../visuals/arcane-seal-fx';
 import { ALCHEMY_ATLAS, alchemyAtlasUrls, alchemyCues, alchemyEvents, alchemyPrepare, alchemyContact, alchemyHealingCues, isAlchemySkill, type AlchemySkill } from '../visuals/alchemy-fx';
 import { EARTH_ATLAS, earthAtlasUrls, earthCues, earthPrepare, earthContact, earthHealingCues, earthHealingEvents, isEarthSkill, type EarthSkill } from '../visuals/earth-fx';
 import { FOE_SLOT_INDEX, fieldSlots, slotPlan, type FieldSlot } from '../visuals/field-layout';
@@ -99,6 +100,7 @@ export class BattleScene extends Phaser.Scene {
     this.load.atlas(PROJECTILE_ATLAS, ...projectileAtlasUrls());
     this.load.atlas(EARTH_ATLAS, ...earthAtlasUrls());
     this.load.atlas(ALCHEMY_ATLAS, ...alchemyAtlasUrls());
+    this.load.atlas(SEAL_ATLAS, ...sealAtlasUrls());
     this.load.atlas(DEFENSE_ATLAS, ...defenseAtlasUrls());
     this.load.atlas(HEALING_ATLAS, ...healingAtlasUrls());
     for (const sheet of ['units', 'mercs', 'foes', 'foes2'] as const) this.load.spritesheet(`battle-${sheet}`, unitsUrl(sheet), { frameWidth: 512, frameHeight: 512 });
@@ -146,6 +148,7 @@ export class BattleScene extends Phaser.Scene {
       (image.getData('projectileFollow') as (() => void) | undefined)?.();
       (image.getData('earthFollow') as (() => void) | undefined)?.();
       (image.getData('alchemyFollow') as (() => void) | undefined)?.();
+      (image.getData('sealFollow') as (() => void) | undefined)?.();
     }
     // Adopt newly decoded art only at a safe boundary, never repaint an actor mid-attack.
     if (this.optionalDirty && !this.stageActive && this.view) this.paint();
@@ -360,6 +363,17 @@ export class BattleScene extends Phaser.Scene {
     const p=matrix.transformPoint(x*sprite.width/ratio,y*sprite.height/ratio);
     return {x:p.x/this.dpr,y:p.y/this.dpr,size:slot.size};
   }
+  // Arcane Seal landmarks follow the rendered unit: caster hand, lower torso (waist) or sole contact.
+  sealAnchor(id:string,spot:SealSpot){
+    const body=this.bodies.get(id),slot=this.actorPanels.get(id);
+    const sprite=body?.list.find(c=>c instanceof Phaser.GameObjects.Image) as Phaser.GameObjects.Image|undefined;
+    if(!sprite||!slot)return;
+    const ratio=sprite.texture.key.startsWith('unit-pilot-')?unitDisplayRatio(artOf(this.encounter,id)):1,matrix=sprite.getWorldTransformMatrix();
+    const x=spot==='hand'?.36:0,y=spot==='hand'?-.86:spot==='centre'?-.40:.04;
+    const p=matrix.transformPoint(x*sprite.width/ratio,y*sprite.height/ratio),sole=matrix.transformPoint(0,0);
+    return {x:p.x/this.dpr,y:p.y/this.dpr,size:slot.size,side:(sole.x/this.dpr>this.viewW*.76?-1:1) as 1|-1};
+  }
+  private sealFx(id:string){return {front:this.fx(id),back:this.projectileFx(id)};}
   private projectileFx(id:string):FxContext {
     return {...this.fx(id),add:item=>{
       if(!this.healingLayer){this.healingLayer=this.add.container(0,0);this.root?.addAt(this.healingLayer,0);}
@@ -406,6 +420,9 @@ export class BattleScene extends Phaser.Scene {
       const seen=new Set<string>();
       for(const cue of projectileCues(turn)){const key=cue.sourceId+cue.skill;projectilePrepare(this.projectileFx(cue.sourceId),cue,id=>this.projectileAnchor(id),contactMs,!seen.has(key));seen.add(key);}
       if(turn.side==='hero'&&isProjectileSkill(turn.action))return;
+    }
+    if(turn.side==='hero'&&isSealSkill(turn.action)&&this.textures.exists(SEAL_ATLAS)){
+      sealPrepare(this.sealFx(turn.actorId),turn,(id,spot)=>this.sealAnchor(id,spot),contactMs);return;
     }
     if(turn.side==='hero'&&isAlchemySkill(turn.action)&&this.textures.exists(ALCHEMY_ATLAS)){
       alchemyPrepare(this.projectileFx(turn.actorId),turn,(id,skill,pre)=>this.alchemyAnchor(id,skill,pre),contactMs);return;
@@ -469,6 +486,8 @@ export class BattleScene extends Phaser.Scene {
     const paintedHealing = this.textures.exists(HEALING_ATLAS) ? [...healingCues(turn),...earthHealingCues(turn),...alchemyHealingCues(turn)] : [];
     const paintedAlchemy=this.textures.exists(ALCHEMY_ATLAS)?alchemyCues(turn):[];
     const alchemyEventSet=new Set(this.textures.exists(ALCHEMY_ATLAS)?alchemyEvents(turn):[]);
+    const paintedSeal=this.textures.exists(SEAL_ATLAS)?sealCues(turn):[];
+    const sealEventSet=new Set(this.textures.exists(SEAL_ATLAS)?sealEvents(turn):[]);
     const paintedEarth=this.textures.exists(EARTH_ATLAS)?earthCues(turn):[];
     const earthEvents=new Set(paintedEarth.map(c=>c.event));
     const paintedProjectiles=this.textures.exists(PROJECTILE_ATLAS)?projectileCues(turn):[];
@@ -496,6 +515,8 @@ export class BattleScene extends Phaser.Scene {
     for(const image of [...(this.healingLayer?.list??[])])if(projectileEvents.has(image.getData('projectileEvent') as BattleEvent)){this.tweens.killTweensOf(image);image.destroy();}
     for(const image of [...(this.healingLayer?.list??[])])if(image.getData('earthPrepare')){this.tweens.killTweensOf(image);image.destroy();}
     for(const image of [...(this.healingLayer?.list??[])])if(image.getData('alchemyPrepare')){this.tweens.killTweensOf(image);image.destroy();}
+    for(const layer of [this.healingLayer,this.effects])for(const image of [...(layer?.list??[])])if(image.getData('sealPrepare')){this.tweens.killTweensOf(image);image.destroy();}
+    for(const cue of paintedSeal)sealContact(this.sealFx(cue.targetId),cue,(id,spot)=>this.sealAnchor(id,spot),life);
     for(const cue of paintedAlchemy)alchemyContact(this.projectileFx(cue.targetId),cue,(id,skill,pre)=>this.alchemyAnchor(id,skill,pre),life);
     for(const cue of paintedEarth)earthContact(this.projectileFx(cue.targetId),cue,(id,skill,pre)=>this.earthAnchor(id,skill,pre),life);
     for(const cue of paintedProjectiles)projectileContact(this.projectileFx(cue.targetId),cue,id=>this.projectileAnchor(id),life);
@@ -514,7 +535,7 @@ export class BattleScene extends Phaser.Scene {
       const ward = turn.action === 'ward' && turn.side === 'hero' && event.type === 'barrier';
       const blade = paintedBlades.find(cue => cue.event === event);
       const parry = event.type === 'parry';
-      const projectile=projectileEvents.has(event),earth=earthEvents.has(event),alchemy=alchemyEventSet.has(event);
+      const projectile=projectileEvents.has(event),earth=earthEvents.has(event),alchemy=alchemyEventSet.has(event)||sealEventSet.has(event);
       const defense = defenseEvents.has(event) || healingEvents.has(event);
       if (parry && event.sourceId === event.targetId) bladeStance(this.fx(id), p, life, bladePalettes.Duelist!);
       if (blade) bladeImpact(this.fx(id), blade, p, this.anchor(event.sourceId), life,
@@ -554,7 +575,8 @@ export class BattleScene extends Phaser.Scene {
       }
       const projectileStatus=paintedProjectiles.length>0&&turn.side==='hero'&&event.sourceId===turn.actorId&&(event.type==='delay'||event.type==='pin');
       const earthStatus=paintedEarth.length>0&&event.sourceId===turn.actorId&&['interrupt','sigil','resist'].includes(event.type);
-      if (ward || blade || parry || defense || projectile || projectileStatus || earth || earthStatus || alchemy) { /* painted layers above are the whole contact cue */ } else if (shield) {
+      const sealStatus=paintedSeal.length>0&&event.sourceId===turn.actorId&&['sigil','dispel'].includes(event.type);
+      if (ward || blade || parry || defense || projectile || projectileStatus || earth || earthStatus || alchemy || sealStatus) { /* painted layers above are the whole contact cue */ } else if (shield) {
         const g = this.add.graphics().lineStyle(3,color,.95).fillStyle(color,.12);
         const points = [{x:p.x-22,y:p.y-24},{x:p.x+22,y:p.y-24},{x:p.x+19,y:p.y+8},{x:p.x,y:p.y+26},{x:p.x-19,y:p.y+8}];
         const polygon = points.map(point => new Phaser.Math.Vector2(point.x, point.y));
@@ -577,7 +599,7 @@ export class BattleScene extends Phaser.Scene {
       }
     }
     // The denser blade art must not cover the authoritative damage/outcome captions.
-    if (paintedBlades.length || paintedDefense.length || paintedHealing.length || paintedProjectiles.length || paintedEarth.length || paintedAlchemy.length || turn.action === 'parry') {
+    if (paintedBlades.length || paintedDefense.length || paintedHealing.length || paintedProjectiles.length || paintedEarth.length || paintedAlchemy.length || paintedSeal.length || turn.action === 'parry') {
       for (const child of [...(this.effects?.list ?? [])]) {
         if (child instanceof Phaser.GameObjects.Text) this.effects?.bringToTop(child);
       }
