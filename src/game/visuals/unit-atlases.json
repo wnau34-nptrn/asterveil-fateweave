@@ -45,12 +45,12 @@
     "downloadBytes": 1397790
   },
   "vargoth": {
-    "image": "vargoth_a2.4e3ca0abb62d.webp",
-    "atlas": "vargoth_a2.c535412a186b.json",
+    "image": "vargoth_a2.e00f4aba9301.webp",
+    "atlas": "vargoth_a2.cf090b150455.json",
     "width": 768,
-    "height": 1044,
-    "frames": 24,
-    "decodedBytes": 3207168,
-    "downloadBytes": 1026816
+    "height": 1401,
+    "frames": 32,
+    "decodedBytes": 4303872,
+    "downloadBytes": 1385751
   }
 }

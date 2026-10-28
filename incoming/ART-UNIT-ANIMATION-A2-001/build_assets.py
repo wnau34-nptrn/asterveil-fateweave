@@ -48,6 +48,20 @@ for name in ['aegis','vargoth']:
   support=[idle]+[pose(1,c) for c in [1,2,3,4,5,6]]+[idle]
   hit=[pose(2,c) for c in [0,1]];down=[pose(3,c) for c in [0,2,3]];block=[pose(2,c) for c in [0,3]]
   cells=[idle]+attack+support+hit+down+block
+  # Separate whole-strip edit has a different source resolution. Normalize the ENTIRE
+  # eight-pose strip once against its seed-sized reference, never per pose.
+  shield=Image.open(HERE/'vargoth-shield-raw.png').convert('RGBA');sa=np.array(shield);sl,_=label(sa[:,:,3]>80);sc=np.bincount(sl.ravel())
+  sr=[(i,(b[1].start,b[0].start,b[1].stop,b[0].stop)) for i,b in enumerate(find_objects(sl),1) if sc[i]>2500]
+  assert len(sr)==8
+  sr=sorted([r for r in sr if r[1][1]<512],key=lambda r:r[1][0])+sorted([r for r in sr if r[1][1]>=512],key=lambda r:r[1][0])
+  shield_scale=(bbox[3]-bbox[1])*factor/(sr[0][1][3]-sr[0][1][1]);bash=[idle]
+  for idx in range(1,7):
+   ident,(left,top,right,bottom)=sr[idx];mask=binary_dilation(sl==ident,iterations=2);pixels=sa.copy();pixels[:,:,3]=np.where(mask,pixels[:,:,3],0);pixels[:,:,3]=np.where(pixels[:,:,3]<4,0,pixels[:,:,3])
+   box=(max(0,left-2),max(0,top-2),min(shield.width,right+2),min(shield.height,bottom+2));tile=Image.fromarray(pixels).crop(box);tile=tile.resize((round(tile.width*shield_scale),round(tile.height*shield_scale)),Image.Resampling.LANCZOS)
+   anchor=(idx%4+.5)*shield.width/4;x=round(256+(box[0]-anchor)*shield_scale);y=496-round((bottom-box[1])*shield_scale)
+   assert x>=0 and y>=0 and x+tile.width<=512 and y+tile.height<=512
+   cell=Image.new('RGBA',(512,512));cell.alpha_composite(tile,(x,y));bash.append(cell);transforms.append({'source':'vargoth-shield-raw.png','column':idx%4,'row':idx//4,'scale':shield_scale,'sourceBox':box,'gridAnchorX':anchor,'position':[x,y]})
+  cells+=bash+[idle]
  unique={};ids=[];boxes=[]
  for cell in cells:
   box=cell.getchannel('A').getbbox();ident=hashlib.sha256(cell.tobytes()).hexdigest();unique.setdefault(ident,cell.crop(box));ids.append(ident);boxes.append(box)
@@ -70,5 +84,5 @@ for name in ['aegis','vargoth']:
  for i,cell in enumerate(cells):
   tile=cell.resize((128,128),Image.Resampling.LANCZOS);preview.paste(tile,((i%8)*128,(i//8)*150),tile);draw.text(((i%8)*128+4,(i//8)*150+128),str(i),fill='white')
  preview.save(HERE/f'{name}-preview.png')
- report[name]={'scale':scale,'factor':factor,'displayRatio':1/factor,'cell':512,'origin':[.5,496/512],'rawSize':raw.size,'sourceSha256':hashlib.sha256((HERE/f'{name}-raw.png').read_bytes()).hexdigest(),'transforms':transforms,'lockedToSeed':[0,1,8,9,16]+([22,29] if name=='aegis' else []),'uniqueFrames':len(unique),'losslessReconstruction':'all alpha and visible RGBA equal',**manifest[name]}
+ report[name]={'scale':scale,'factor':factor,'displayRatio':1/factor,'cell':512,'origin':[.5,496/512],'rawSize':raw.size,'sourceSha256':hashlib.sha256((HERE/f'{name}-raw.png').read_bytes()).hexdigest(),'transforms':transforms,'lockedToSeed':[0,1,8,9,16]+([22,29] if name=='aegis' else [24,31]),**({'shieldStripScale':shield_scale,'shieldRawSize':shield.size,'shieldSourceSha256':hashlib.sha256((HERE/'vargoth-shield-raw.png').read_bytes()).hexdigest()} if name=='vargoth' else {}),'uniqueFrames':len(unique),'losslessReconstruction':'all alpha and visible RGBA equal',**manifest[name]}
 (ROOT/'src/game/visuals/unit-atlases.json').write_text(json.dumps(manifest,indent=2)+'\n');(HERE/'validation.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps({k:{x:v[x] for x in ['scale','frames','uniqueFrames','decodedBytes','downloadBytes']} for k,v in report.items()},indent=2))

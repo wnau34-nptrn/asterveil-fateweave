@@ -18,7 +18,7 @@ describe('A2 actual content, clips and lifecycle',()=>{
   for(const data of encounters){
    const ids=data.enemies.filter(e=>e.art==='foe_vargoth_guard').map(e=>e.id);
    if(ids.length)usedEncounters.push(data.id);
-   for(const intent of data.intents.filter(i=>ids.some(id=>id===i.sourceId))){names.add(intent.name);expect(unitClip('foe_vargoth_guard',undefined,intent.name)).toBe(intent.kind==='energy'?'skill':'attack');}
+   for(const intent of data.intents.filter(i=>ids.some(id=>id===i.sourceId))){names.add(intent.name);expect(unitClip('foe_vargoth_guard',undefined,intent.name)).toBe(intent.kind==='energy'?'skill':intent.name==='Shield Smash'?'bash':'attack');}
   }
   for(const m of SPECIES.vargothGuard.moves)names.add(m.name);
   expect([...names].sort()).toEqual([...guardIntents].sort());expect(usedEncounters.sort()).toEqual(['first-clash','vanguard-captain']);
@@ -34,7 +34,7 @@ describe('A2 actual content, clips and lifecycle',()=>{
  for(const intent of guardIntents)it(`uses real ${intent} without inventing damage type`,()=>{
   const f=unitA2Fixture('attack','normal',intent),turn=f.result.turns.find(t=>t.side==='enemy')!;
   expect(turn.intent!.name).toBe(intent);expect(turn.intent!.kind).toBe(intent==='Rift Bolt'?'energy':'physical');
-  expect(unitClip('foe_vargoth_guard',undefined,intent)).toBe(intent==='Rift Bolt'?'skill':'attack');
+  expect(unitClip('foe_vargoth_guard',undefined,intent)).toBe(intent==='Rift Bolt'?'skill':intent==='Shield Smash'?'bash':'attack');
  });
  it('uses actual down/revive, counter, cancellation and Rouse guard events',()=>{
   const revive=unitA2Fixture('revive','revive');expect(revive.state.heroes[0]!.hp).toBe(0);expect(revive.result.state.heroes[0]!.hp).toBeGreaterThan(0);
@@ -52,8 +52,8 @@ describe('A2 actual content, clips and lifecycle',()=>{
  });
  it('keeps shared scale/pivot, lossless reconstruction and per-art budgets',()=>{
   for(const name of ['aegis','vargoth'] as const){const m=manifest[name],a=JSON.parse(readFileSync('public/assets/units/'+m.atlas,'utf8'));
-   expect(m.decodedBytes).toBe(m.width*m.height*4);expect(m.decodedBytes).toBeLessThanOrEqual(6*1024*1024);expect(m.downloadBytes).toBeLessThanOrEqual(1_500_000);expect(Object.keys(a.frames)).toHaveLength(name==='aegis'?32:24);
-   for(const i of [1,8,9,16,...(name==='aegis'?[22,29]:[])])expect(a.frames[i]).toEqual(a.frames[0]);
+   expect(m.decodedBytes).toBe(m.width*m.height*4);expect(m.decodedBytes).toBeLessThanOrEqual(6*1024*1024);expect(m.downloadBytes).toBeLessThanOrEqual(1_500_000);expect(Object.keys(a.frames)).toHaveLength(32);
+   for(const i of [1,8,9,16,...(name==='aegis'?[22,29]:[24,31])])expect(a.frames[i]).toEqual(a.frames[0]);
   }
   expect(unitDisplayRatio('guardian')*.36).toBeCloseTo(1);expect(unitDisplayRatio('foe_vargoth_guard')).toBe(2);
  });

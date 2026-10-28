@@ -19,7 +19,8 @@
 | `challenge` | supportร่วม | C5.2 ตาม taunt event บน enemy ที่เลือก/ท่าท้าดวลของผู้ใช้ | ไม่สื่อดาเมจจากการท้าดวล |
 | `bulwark` | supportร่วม | C5.2 ตาม buff จริงบนผู้ใช้ | ไม่เปลี่ยนเปอร์เซ็นต์ลดดาเมจ |
 | `rouse` | supportร่วม | C5.3 เดิม: guard/all บน actual ally และ protector/redirect ตาม event | **runtime เป็นคุ้มกัน ไม่ใช่ฮีลทันที**; ไม่อนุมาน heal จากชื่อmodule/คอมเมนต์เก่า |
-| องครักษ์ `Crushing Blow` / `Shield Smash` / `Mace Swing` | heavy physical1–8; เตรียม1–4 สัมผัส5 คืน5–8 | generic physical impact เดิมตาม actual recipients | ใช้ท่าทุบร่วม ไม่ผลิต atlas ต่อชื่อ; Shield Smash ไม่มีเฟรมโจมตีด้วยโล่แยกเฉพาะ |
+| องครักษ์ `Crushing Blow` / `Mace Swing` | heavy physical1–8; เตรียม1–4 สัมผัส5 คืน5–8 | generic physical impact เดิมตาม actual recipients | ใช้ท่าทุบร่วม ไม่ผลิต atlas ต่อชื่อ; ท่ากระบองใช้เฉพาะสอง intent นี้ |
+| องครักษ์ `Shield Smash` | shield smash24–31; เตรียม24–27 สัมผัส28 คืน28–31 | generic physical impact เดิมบน actual recipient | กระบองค้างลง โจมตีด้วยโล่ ต่างจากท่าทุบและท่าปล่อยพลังงาน |
 | องครักษ์ `Rift Bolt` | shield-hand release9–16; สัมผัส13 | **generic energy VFX เดิม** บน actual recipient/guard/barrier/dodge | ไม่ใช่ไฟ แม้เกราะมีลายส้ม; ไม่ใช่ painted Bolt ของMage และไม่ผลิต familyใหม่ |
 | hurt ทั้งคู่ | 17–18 | damage event/HPจริง | ไม่แก้ state จากแอนิเมชัน |
 | block เอกิส/องครักษ์ | 30–31 / 22–23 | shield brace + actual absorbed/zero-damage event | ใช้ reaction poses สั้นร่วมจาก raw ไม่สร้างท่าแยกทุกแหล่งโล่ |
@@ -37,7 +38,7 @@ Modifiers ไม่ใช่ ActionId ใหม่: guardReduction/twoguard/stan
 | ตัว | logical/unique | decoded atlas RGBA | atlas+JSON | display ratio |
 | --- | --- | --- | --- | --- |
 | Aegis | 32/25 | 4,423,680bytes (4.22MiB) | 1,397,790bytes | 1/.36 |
-| Vargoth Guard | 24/18 | 3,207,168bytes (3.06MiB) | 1,026,816bytes | 2 |
+| Vargoth Guard | 32/24 | 4,303,872bytes (4.10MiB) | 1,385,751bytes | 2 |
 
 ตัวเลขนี้ไม่ใช่ RAM/GPU รวมเกมหรือผลมือถือจริง Normalizeด้วยscaleร่วมทั้งตัว/จุดเท้าร่วมก่อนtrim/dedup/pack WebPlossless; reconstruct alpha/visibleRGBAตรงทุกเฟรม Source/prompt/rawstrip/การเลือกเฟรมและpacking reportเก็บในGit ขนาด/ทิศ/seedของpilot/A1ไม่เปลี่ยน Landmarkเดิมใช้unitDisplayRatioของartจริง; original artยังratio1และEira1/.42
 
@@ -46,5 +47,7 @@ Modifiers ไม่ใช่ ActionId ใหม่: guardReduction/twoguard/stan
 ## Validation / release
 
 อยู่ระหว่างตรวจและอัดคลิป ยังไม่อ้างCI/merge/Pagesหรือvisualapprovalจากผลที่ยังไม่เสร็จ ผลสุดท้ายจะอัปเดตในส่วนนี้พร้อมreleaseproof
+
+คลิปและsource QAใช้dev-only fixtureจัดparty/speed/entryHP/actionavailability/talentcapsเพื่อเข้ากรณีทดสอบ รวมล้ม/ฟื้นและcounter แต่ทุกคำสั่งผ่านreal UI/Phaser/playback/resolverและเทียบfinalstateทุกfield ไม่เปลี่ยนcontentเกมจริง ไม่ใช้owner saveหรือยัดeventปลอม ก่อนส่งตรวจproductionผ่านCIแยกต่างหาก
 
 Browser pluginไม่มีเครื่องมือควบคุมbrowserในsessionนี้ จึงใช้repositoryPlaywright/ChromiumกับSwiftShaderตามgame-playtest ตรวจภาพcanvasจริงที่390×844 เป็นcloud/touch emulation ไม่ใช่iOS Safari/มือถือจริง/การรับรอง60fps Realclockcaptureใช้CDPtimestamps เก็บทุกcapturedframeและfinalhold ไม่interpolate/retime; decodeกลับตรวจPTS/count/endและเทียบfinalstateกับauthoritative resolverทุกfield

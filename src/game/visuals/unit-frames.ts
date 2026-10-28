@@ -20,7 +20,7 @@ export const unitRegistry = {
   weaver: { sheet: 'eira', displayRatio: 1 / .42, actions: { attack: 'attack', bolt: 'attack', storm: 'attack', dispel: 'attack', ward: 'skill', sigil: 'skill', aegis: 'skill' } },
   foe_sprite: { sheet: 'sprite', displayRatio: 2, intents: { 'Seed Spark': 'attack' } },
   guardian: { sheet: 'aegis', displayRatio: 1 / .36, actions: { attack: 'attack', bash: 'bash', guard: 'skill', rally: 'skill', challenge: 'skill', bulwark: 'skill', rouse: 'skill' } },
-  foe_vargoth_guard: { sheet: 'vargoth', displayRatio: 2, intents: { 'Crushing Blow': 'attack', 'Shield Smash': 'attack', 'Mace Swing': 'attack', 'Rift Bolt': 'skill' } },
+  foe_vargoth_guard: { sheet: 'vargoth', displayRatio: 2, intents: { 'Crushing Blow': 'attack', 'Shield Smash': 'bash', 'Mace Swing': 'attack', 'Rift Bolt': 'skill' } },
 } as const satisfies Record<string, UnitDefinition>;
 export const unitSheets = Object.fromEntries(Object.entries(unitRegistry).map(([art, definition]) => [art, definition.sheet])) as Record<keyof typeof unitRegistry, UnitSheet>;
 export type UnitSheet = typeof unitRegistry[keyof typeof unitRegistry]['sheet'];
@@ -51,7 +51,10 @@ function sequence(pose: UnitPose | Reaction, phase: FramePhase, clip?: UnitClip,
     return;
   }
   if (!clip) return;
-  if (clip === 'bash') return phase === 'prepare' ? [22, 23, 24, 25] : [26, 27, 28, 29];
+  if (clip === 'bash') {
+    const start = art === 'foe_vargoth_guard' ? 24 : 22;
+    return phase === 'prepare' ? [start, start + 1, start + 2, start + 3] : [start + 4, start + 5, start + 6, start + 7];
+  }
   if (clip === 'skill') return phase === 'prepare' ? [9, 10, 11, 12] : [13, 14, 15, 16];
   // Lyra's lowered blade is follow-through, not windup. Never reverse the cut before contact.
   if (art === 'tracer') return phase === 'prepare' ? [1, 2, 3] : [5, 4, 6, 7, 8];

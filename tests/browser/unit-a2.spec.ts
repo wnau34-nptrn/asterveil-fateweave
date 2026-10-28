@@ -106,7 +106,7 @@ for(const intent of ['Rift Bolt','Crushing Blow','Shield Smash','Mace Swing'])te
  const turns=await page.evaluate(()=>window.unitA2QA.turns()),hero=stageTiming(turns[0]!,false),enemy=stageTiming(turns[1]!,false);
  await page.clock.runFor(hero.end+enemy.contact);
  expect(await page.evaluate(()=>window.unitA2QA.frames().f1![0]!.texture)).toBe('unit-pilot-vargoth');
- expect(Number(await page.evaluate(()=>window.unitA2QA.frames().f1![0]!.frame))).toBe(intent==='Rift Bolt'?13:5);
+ expect(Number(await page.evaluate(()=>window.unitA2QA.frames().f1![0]!.frame))).toBe(intent==='Rift Bolt'?13:intent==='Shield Smash'?28:5);
  await page.screenshot({path:info.outputPath('guard-contact-390.png')});await page.clock.runFor(3000);
  expect(await page.evaluate(()=>window.unitA2QA.frames().f1![0]!.frame)).toBe('0');expect(await saved(page)).toBe(committed);
  expect(await page.evaluate(()=>window.unitA2QA.state())).toEqual(await page.evaluate(()=>window.unitA2QA.expected()));
@@ -124,4 +124,16 @@ for(const [skill,scenario,intent] of [['guard','counter','Crushing Blow'],['bash
  await page.setViewportSize({width:390,height:844});await ready(page,`skill=${skill}&scenario=${scenario}&intent=${encodeURIComponent(intent!)}`);
  await page.locator(`#action-${skill}`).click();await page.locator(`#target-${await page.evaluate(()=>window.unitA2QA.target())}`).click();const committed=await saved(page);
  await expect(page.locator('#skip-turn')).toBeHidden();expect(await saved(page)).toBe(committed);expect(await page.evaluate(()=>window.unitA2QA.state())).toEqual(await page.evaluate(()=>window.unitA2QA.expected()));
+});
+
+test('A2 repeated guard art shares one texture and preserves independent actor poses',async({browser})=>{
+ const ctx=await browser.newContext({viewport:{width:390,height:844},reducedMotion:'no-preference'});
+ try{const page=await ctx.newPage();await page.clock.install();await ready(page,'skill=attack&scenario=duplicate&intent=Crushing%20Blow');await page.clock.pauseAt(new Date(Date.now()+100000));
+ await expect.poll(()=>page.evaluate(()=>window.unitA2QA.frames().f2?.[0]?.texture)).toBe('unit-pilot-vargoth');
+ expect((await page.evaluate(()=>window.unitA2QA.cached())).filter(k=>k==='unit-pilot-vargoth')).toHaveLength(1);
+ await page.locator('#action-attack').click();await page.locator('#target-f1').click();const committed=await saved(page);
+ const turns=await page.evaluate(()=>window.unitA2QA.turns());await page.clock.runFor(stageTiming(turns[0]!,false).end+100);
+ expect(await page.evaluate(()=>window.unitA2QA.frames().f1![0]!.frame)).not.toBe('0');expect(await page.evaluate(()=>window.unitA2QA.frames().f2![0]!.frame)).toBe('0');
+ await page.clock.runFor(5000);expect(await saved(page)).toBe(committed);expect(await page.evaluate(()=>window.unitA2QA.state())).toEqual(await page.evaluate(()=>window.unitA2QA.expected()));
+ }finally{await ctx.close();}
 });

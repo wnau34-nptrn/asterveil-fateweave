@@ -708,6 +708,108 @@
           151,
           324
         ]
+      },
+      {
+        "source": "vargoth-shield-raw.png",
+        "column": 1,
+        "row": 0,
+        "scale": 0.6341463414634146,
+        "sourceBox": [
+          419,
+          205,
+          730,
+          475
+        ],
+        "gridAnchorX": 576.0,
+        "position": [
+          156,
+          326
+        ]
+      },
+      {
+        "source": "vargoth-shield-raw.png",
+        "column": 2,
+        "row": 0,
+        "scale": 0.6341463414634146,
+        "sourceBox": [
+          795,
+          179,
+          1178,
+          476
+        ],
+        "gridAnchorX": 960.0,
+        "position": [
+          151,
+          309
+        ]
+      },
+      {
+        "source": "vargoth-shield-raw.png",
+        "column": 3,
+        "row": 0,
+        "scale": 0.6341463414634146,
+        "sourceBox": [
+          1217,
+          201,
+          1527,
+          476
+        ],
+        "gridAnchorX": 1344.0,
+        "position": [
+          175,
+          323
+        ]
+      },
+      {
+        "source": "vargoth-shield-raw.png",
+        "column": 0,
+        "row": 1,
+        "scale": 0.6341463414634146,
+        "sourceBox": [
+          24,
+          656,
+          380,
+          923
+        ],
+        "gridAnchorX": 192.0,
+        "position": [
+          149,
+          328
+        ]
+      },
+      {
+        "source": "vargoth-shield-raw.png",
+        "column": 1,
+        "row": 1,
+        "scale": 0.6341463414634146,
+        "sourceBox": [
+          412,
+          654,
+          760,
+          925
+        ],
+        "gridAnchorX": 576.0,
+        "position": [
+          152,
+          325
+        ]
+      },
+      {
+        "source": "vargoth-shield-raw.png",
+        "column": 2,
+        "row": 1,
+        "scale": 0.6341463414634146,
+        "sourceBox": [
+          804,
+          647,
+          1127,
+          926
+        ],
+        "gridAnchorX": 960.0,
+        "position": [
+          157,
+          320
+        ]
       }
     ],
     "lockedToSeed": [
@@ -715,16 +817,24 @@
       1,
       8,
       9,
-      16
+      16,
+      24,
+      31
     ],
-    "uniqueFrames": 18,
+    "shieldStripScale": 0.6341463414634146,
+    "shieldRawSize": [
+      1536,
+      1024
+    ],
+    "shieldSourceSha256": "97fe0703908ce81f09f150257c39192b6f167725df628aae01ab9e4dc45167ff",
+    "uniqueFrames": 24,
     "losslessReconstruction": "all alpha and visible RGBA equal",
-    "image": "vargoth_a2.4e3ca0abb62d.webp",
-    "atlas": "vargoth_a2.c535412a186b.json",
+    "image": "vargoth_a2.e00f4aba9301.webp",
+    "atlas": "vargoth_a2.cf090b150455.json",
     "width": 768,
-    "height": 1044,
-    "frames": 24,
-    "decodedBytes": 3207168,
-    "downloadBytes": 1026816
+    "height": 1401,
+    "frames": 32,
+    "decodedBytes": 4303872,
+    "downloadBytes": 1385751
   }
 }

@@ -13,6 +13,7 @@ export function unitA2Fixture(action:ActionId='attack',scenario='normal',intentN
  const data:EncounterDefinition={...structuredClone(firstClash),heroes:['guardian','weaver','healer'].map((id,i)=>({...firstClash.heroes.find(h=>h.id===id)!,speed:i===0?200:50,
   actions:id==='guardian'?[...aegisActions]:id==='healer'?['attack','heal','revive']:['attack','ward'],...(id==='guardian'?{talents:{caps}}:{})})),
   enemies:[{...foe,id:'f1',maxHp:scenario==='enemy-down'?1:foe.maxHp,speed:110}],intents:[{...intent,sourceId:'f1',targetSlot:scenario==='counter'?1:0}]};
+ if(scenario==='duplicate'){data.enemies=[...data.enemies,{...data.enemies[0]!,id:'f2'}];data.intents=[...data.intents,{...data.intents[0]!,sourceId:'f2',targetSlot:1}];}
  const entry={hp:Object.fromEntries(data.heroes.map(h=>[h.id,scenario==='revive'&&h.id==='guardian'?1:scenario==='wounded'?Math.floor(h.maxHp/2):h.maxHp]))};
  const prelude:Command[]=[];let state=beginBattle(data,entry,true).state;
  if(scenario==='revive')for(const [heroId,skill,targetId] of [['guardian','attack','f1'],['weaver','ward','weaver']] as const){

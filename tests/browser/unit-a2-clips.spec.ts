@@ -11,8 +11,8 @@ for(const {skill,mode,intent,scenario} of cases)test(`unit A2 clip ${skill}-${in
  try{
  const page=await ctx.newPage(),errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));
  await page.goto(`tests/browser/fixtures/unit-a2.html?skill=${skill}&intent=${encodeURIComponent(intent)}&scenario=${scenario}&speed=${mode==='fast'?'fast':'normal'}&intensity=${mode==='reduced'?'reduced':'standard'}`);
- if(await page.locator('#start').count())await expect(page.locator('#start')).toBeEnabled();await expect.poll(()=>page.evaluate(()=>window.unitA2QA.frames().guardian?.[0]?.texture)).toBe('unit-pilot-aegis');
- await expect.poll(()=>page.evaluate(()=>window.unitA2QA.frames().f1?.[0]?.texture)).toBe('unit-pilot-vargoth');
+ if(await page.locator('#start').count())await expect(page.locator('#start')).toBeEnabled();await expect.poll(()=>page.evaluate(()=>window.unitA2QA.frames().guardian?.[0]?.texture),{timeout:15000}).toBe('unit-pilot-aegis');
+ await expect.poll(()=>page.evaluate(()=>window.unitA2QA.frames().f1?.[0]?.texture),{timeout:15000}).toBe('unit-pilot-vargoth');
  if(await page.locator('#start').count())await page.locator('#start').click();await page.locator(`#action-${skill}`).click();await page.evaluate(()=>document.fonts.ready.then(()=>undefined));
  await page.evaluate(()=>document.addEventListener('pointerdown',()=>{document.documentElement.dataset.unitA2Click=String(Date.now()/1000);},{capture:true,once:true}));
  const dir=info.outputPath('frames');mkdirSync(dir,{recursive:true});const cdp=await ctx.newCDPSession(page),stamps:string[]=[];
