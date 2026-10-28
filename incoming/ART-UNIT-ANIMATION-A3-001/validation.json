@@ -1,0 +1,280 @@
+{
+  "previewWidth": 390,
+  "previewScaleNote": "115px = floor(390 * .295), width cap in field-layout.ts. Arena height may reduce this. Static art contact sheet, not an in-engine screenshot.",
+  "seeds": [
+    {
+      "path": "seeds/hollow-mycon-seed.png",
+      "sha256": "6ba313e6d9e12b1e11286f164d86a63abd02c8642a897612b43663f159327244"
+    },
+    {
+      "path": "seeds/seren-seed.png",
+      "sha256": "0298b7eeffbdaee5937847c7071e654286d2c2631a5f6d7bbea1598db72a6c0d"
+    }
+  ],
+  "strips": [
+    {
+      "id": "seren-attack-r1",
+      "rawSize": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "sha256": "dab97149fb925ed79a9c8371360515beddb0702b4687651edff18968d961faa5",
+      "expectedFigures": 6,
+      "layout": "one horizontal row, left to right; irregular gutters",
+      "preview": "preview/seren-attack-r1-390.png",
+      "wholeStripPreviewScale": 0.2744630071599045,
+      "firstPoseTopSole": [
+        214,
+        633
+      ],
+      "normalizationAppliedToRaw": false
+    },
+    {
+      "id": "seren-heal-r1",
+      "rawSize": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "sha256": "2461a89f3bd257c5ae092a94b7671eb39e972517c30a55a3051d1ee51cc939b0",
+      "expectedFigures": 6,
+      "layout": "one horizontal row, left to right; irregular gutters",
+      "preview": "preview/seren-heal-r1-390.png",
+      "wholeStripPreviewScale": 0.27710843373493976,
+      "firstPoseTopSole": [
+        200,
+        615
+      ],
+      "normalizationAppliedToRaw": false
+    },
+    {
+      "id": "seren-prayer-r1",
+      "rawSize": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "sha256": "6b7d56d69fa1f89b89f8243539cd74820d4cee9232c1351e563d884c9e82d1bb",
+      "expectedFigures": 6,
+      "layout": "one horizontal row, left to right; irregular gutters",
+      "preview": "preview/seren-prayer-r1-390.png",
+      "wholeStripPreviewScale": 0.24838012958963282,
+      "firstPoseTopSole": [
+        225,
+        688
+      ],
+      "normalizationAppliedToRaw": false
+    },
+    {
+      "id": "seren-sanctuary-r1",
+      "rawSize": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "sha256": "10b45a663440b9bf1d41cbac7f4074e2fbc93b325c9f15cf45891c41ba0dc74f",
+      "expectedFigures": 6,
+      "layout": "one horizontal row, left to right; irregular gutters",
+      "preview": "preview/seren-sanctuary-r1-390.png",
+      "wholeStripPreviewScale": 0.23,
+      "firstPoseTopSole": [
+        129,
+        629
+      ],
+      "normalizationAppliedToRaw": false
+    },
+    {
+      "id": "seren-hit-r1",
+      "rawSize": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "sha256": "6728dd33389b46460c67e5dac991a947dc90561092ff3502318b754a5c09cf0f",
+      "expectedFigures": 4,
+      "layout": "one horizontal row, left to right; irregular gutters",
+      "preview": "preview/seren-hit-r1-390.png",
+      "wholeStripPreviewScale": 0.18914473684210525,
+      "firstPoseTopSole": [
+        65,
+        673
+      ],
+      "normalizationAppliedToRaw": false
+    },
+    {
+      "id": "seren-block-r1",
+      "rawSize": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "sha256": "c313992f1510d4ab269bc7a5378a119b7b17896d6f8ad6bb8b7e6d9bc1cc1276",
+      "expectedFigures": 4,
+      "layout": "one horizontal row, left to right; irregular gutters",
+      "preview": "preview/seren-block-r1-390.png",
+      "wholeStripPreviewScale": 0.1936026936026936,
+      "firstPoseTopSole": [
+        77,
+        671
+      ],
+      "normalizationAppliedToRaw": false
+    },
+    {
+      "id": "seren-down-r1",
+      "rawSize": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "sha256": "e8a3d01dc475ebd9e33cf8796e051a7a813923a850f3e5febae772d6b2175f32",
+      "expectedFigures": 4,
+      "layout": "one horizontal row, left to right; irregular gutters",
+      "preview": "preview/seren-down-r1-390.png",
+      "wholeStripPreviewScale": 0.20246478873239437,
+      "firstPoseTopSole": [
+        96,
+        664
+      ],
+      "normalizationAppliedToRaw": false
+    },
+    {
+      "id": "hollow-mycon-cast-r1",
+      "rawSize": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "sha256": "97d480318a3b9893eeabce3362b1cfb3c9f27806c89e08b34fd7f246c99f1bb5",
+      "expectedFigures": 6,
+      "layout": "one horizontal row, left to right; irregular gutters",
+      "preview": "preview/hollow-mycon-cast-r1-390.png",
+      "wholeStripPreviewScale": 0.260909880050505,
+      "firstPoseTopSole": [
+        178,
+        574
+      ],
+      "normalizationAppliedToRaw": false
+    },
+    {
+      "id": "hollow-mycon-hit-r1",
+      "rawSize": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "sha256": "93f69d4bdc5eac50dbe513109edc16ba4d268969c7a2ce071b9a4998ae76add4",
+      "expectedFigures": 4,
+      "layout": "one horizontal row, left to right; irregular gutters",
+      "preview": "preview/hollow-mycon-hit-r1-390.png",
+      "wholeStripPreviewScale": 0.20062196601941748,
+      "firstPoseTopSole": [
+        117,
+        632
+      ],
+      "normalizationAppliedToRaw": false
+    },
+    {
+      "id": "hollow-mycon-down-r1",
+      "rawSize": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "sha256": "7fe95fc660143977bc08f4a59e72c9de597506a0388f2b7dec026e2bd5d6dcd8",
+      "expectedFigures": 4,
+      "layout": "one horizontal row, left to right; irregular gutters",
+      "preview": "preview/hollow-mycon-down-r1-390.png",
+      "wholeStripPreviewScale": 0.20219239236790607,
+      "firstPoseTopSole": [
+        119,
+        630
+      ],
+      "normalizationAppliedToRaw": false
+    },
+    {
+      "id": "seren-attack-r2",
+      "rawSize": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "sha256": "1748ecca3dabb8fd0d9546922bc7e4997663586bff4bf697d7a388df69b667ab",
+      "expectedFigures": 6,
+      "layout": "one horizontal row, left to right; irregular gutters",
+      "preview": "preview/seren-attack-r2-390.png",
+      "wholeStripPreviewScale": 0.25164113785557984,
+      "firstPoseTopSole": [
+        151,
+        608
+      ],
+      "normalizationAppliedToRaw": false
+    },
+    {
+      "id": "hollow-mycon-cast-r2",
+      "rawSize": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "sha256": "c0457222c4c42a4f8c181b0debb0c31bc464a609265d0c4a796c549cb11f8162",
+      "expectedFigures": 6,
+      "layout": "one horizontal row, left to right; irregular gutters",
+      "preview": "preview/hollow-mycon-cast-r2-390.png",
+      "wholeStripPreviewScale": 0.25448352832512317,
+      "firstPoseTopSole": [
+        216,
+        622
+      ],
+      "normalizationAppliedToRaw": false
+    }
+  ]
+}

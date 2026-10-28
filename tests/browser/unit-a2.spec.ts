@@ -72,7 +72,7 @@ test('A2 late optional textures cannot replace artwork during a committed cast',
  await page.goto('tests/browser/fixtures/unit-a2.html?skill=attack');await page.locator('#start').click();
  await page.clock.pauseAt(new Date(Date.now()+100000));await page.locator('#action-attack').click();await page.locator('#target-f1').click();
  const committed=await saved(page);expect(await page.evaluate(()=>window.unitA2QA.frames().guardian![0]!.texture)).toBe('battle-units');
- release();await expect.poll(()=>page.evaluate(()=>window.unitA2QA.cached().length)).toBe(3);
+ release();await expect.poll(()=>page.evaluate(()=>window.unitA2QA.cached().length)).toBe(4);
  // No renderer frame elapsed: textures have arrived while this committed stage is active.
  expect(await page.evaluate(()=>window.unitA2QA.frames().guardian![0]!.texture)).toBe('battle-units');
  await page.clock.runFor(100);expect(await page.evaluate(()=>window.unitA2QA.frames().guardian![0]!.texture)).toBe('battle-units');
@@ -82,7 +82,7 @@ test('A2 late optional textures cannot replace artwork during a committed cast',
 
 test('A2 encounter replacement releases Aegis and Guard textures',async({page})=>{
  await page.setViewportSize({width:390,height:844});await ready(page,'skill=attack');
- expect((await page.evaluate(()=>window.unitA2QA.cached())).sort()).toEqual(['unit-pilot-aegis','unit-pilot-eira','unit-pilot-vargoth']);
+ expect((await page.evaluate(()=>window.unitA2QA.cached())).sort()).toEqual(['unit-pilot-aegis','unit-pilot-eira','unit-pilot-seren','unit-pilot-vargoth']);
  await page.evaluate(()=>window.unitA2QA.otherEncounter());
  await expect.poll(()=>page.evaluate(()=>window.unitA2QA.cached())).toEqual([]);
  await expect(page.locator('#start')).toBeEnabled();

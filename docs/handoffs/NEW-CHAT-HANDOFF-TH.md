@@ -3,7 +3,39 @@
 
 
 
-## 2026-10-28 — W1 ฝั่ง Claude: C5.7 ผนึกอาคมเข้าเกมแล้ว รอเจ้าของตรวจ motion
+## 2026-10-28 — แชตถัดไป: W2 A4 นำภาพเข้าเกม (เปิดอัตโนมัติจากแชต A3)
+
+เจ้าของตอบ “ใช้ตาม codex แนะนำ” (2026-10-28) สำหรับ A4 (PR #91) ข้อความเปิดแชต:
+
+```text
+ทำงานต่อในรีโป wnau34-nptrn/asterveil-fateweave สาขาเกม feature/fateweave-initial-prototype (ไม่ใช่ main)
+อ่าน AGENTS.md, CLAUDE.md, docs/design/OWNER_DECISIONS_TH.md, docs/design/ANIMATION_VFX_COMPLETION_PLAN_TH.md, docs/design/UNIT_ANIMATION_ROLLOUT_TH.md และหัวข้อบนสุดของ docs/handoffs/NEW-CHAT-HANDOFF-TH.md
+งาน: W2 — A4 นำแอนิเมชัน มิร่า (mira, Archer), โทมะ (toma, Alchemist), สไลม์น้ำค้าง (foe_dew_slime), สไลม์ถ่านไฟ (foe_ember_slime), ค้างคาวซาก (foe_ruin_bat) จาก PR #91 (สาขา art/art-unit-animation-a4-001, โฟลเดอร์ incoming/ART-UNIT-ANIMATION-A4-001/) เข้าเกม
+เจ้าของตอบ “ใช้ตาม codex แนะนำ” (2026-10-28): ใช้ R2 สำหรับ Mira volley/disengage, Toma underhand และ Ruin Bat hover; ท่าอื่นใช้ candidate ที่ Codex ทำเครื่องหมาย preferred (ทอง) ใน NOTES.md/strips.json
+ไฟล์ PNG ตรวจแล้ว (decode ครบ, hash ตรง, ไม่ถูกตัด) ให้ตรวจ sha256 ซ้ำก่อนใช้
+ทำแบบ A3 (docs/combat-presentation/unit-a3-slice/README_TH.md, incoming/ART-UNIT-ANIMATION-A3-001/build_assets.py): scale เดียวต่อแถบ (แถบ generate คนละขนาด), พื้นเท้า y=496/กึ่งกลางเท้า x=256, defringe ขอบสี, ลบเศษตัวข้างเคียง, แยกตัวที่ติดกันอย่างระวัง, lossless pack, registry ใน unit-frames.ts, optional atlas ไม่อยู่ใน critical preload, fallback เมื่อโหลดช้า, งบ decoded ≤6MiB/ดาวน์โหลด ≤1.5MB ต่อตัว (ปรับ factor ถ้าเกิน)
+ข้อควรระวังจาก NOTES ของ Codex: Dew leap ห้าม bottom-align ท่ากระโดดจนหายลอย; Toma backswing ข้ามตัวให้เช็กมือ; Mira ถอยสั้น ไม่เพิ่ม teleport; Ember spit อ่านผ่านหน้า/ความสว่าง; ค้างคาวลอยตลอด (ไม่มีพื้นเท้า) ให้รักษา loop และหันซ้าย
+แมปทุก ActionId จริงของ mira/toma (team.ts + unlock + talentTrees) และทุก intent จริงของศัตรูทั้งสามใน encounters (ตรวจด้วยเทสต์เทียบ content) ใช้ VFX กระสุน/เคมีเดิม ไม่สร้างใหม่ คง rules/save/content/balance/playback timing, normal/fast/reduced motion, เทสต์ unit + browser เฉพาะที่เกี่ยว (ระวังเทสต์ A1/A2/A3/unit-loading ที่นับจำนวน optional sheet), แล้วอัดคลิปจริง 390px ส่งเจ้าของตรวจ motion ก่อน merge/เผยแพร่ ผลเทสต์ไม่ใช่การอนุมัติภาพ
+Chromium สำหรับ Playwright: export PLAYWRIGHT_CHROMIUM_EXECUTABLE=/opt/pw-browsers/chromium; สร้าง PR ใช้ gh api REST (GraphQL ใช้ไม่ได้)
+ตาม standing authorization ใน CLAUDE.md; สนามอนาคต 10 ตัว (OD-05) ให้บันทึกงบภาพ/ความจำ; อัปเดต handoff เมื่อจบ
+ภาพชุดอื่นของ Codex (#93–#98, W3–W5) ยังรอเจ้าของเลือก ไม่ต้องนำเข้า; PR #90 (A3) เนื้อหาอยู่ในเกมแล้ว; PR #100 (CI) เป็นของอีกแชต ไม่แตะ
+```
+
+## 2026-10-28 — A3 เซเรน + เห็ดหมอผี: เผยแพร่แล้ว (PR #99, เจ้าของอนุมัติ “เอาเข้าเกมได้”)
+
+- สาขา `claude/unit-a3-seren-mycon` → PR เข้าสาขาเกม; ภาพมาจาก PR #90 (`incoming/ART-UNIT-ANIMATION-A3-001/`, sha256 12 ไฟล์ตรง validation.json) เจ้าของเลือก R2 ตามที่ Codex แนะนำ (Seren attack, Mycon cast)
+- ทำแบบ A2: `build_assets.py` (scale เดียวต่อแถบ, พื้นเท้า y=496, defringe, ลบเศษข้างเคียง, lossless pack), registry `healer`/`foe_mycon`, clip ใหม่ `prayer`/`sanctuary`, optional atlas ไม่อยู่ใน critical preload; ครบทุก ActionId ของ Seren (attack/heal/revive/bless/prayer/halo/sanctuary + hit/block/down) และ Spore Hex ของ Mycon (cast/hit/down) ใช้ VFX healing/energy เดิม
+- งบภาพ: Seren 4,902,912 B (4.68MiB) / ดาวน์โหลด 1,463,594 B; Mycon 2,435,072 B (2.32MiB) / 826,472 B; สนาม 10 ตัว (OD-05) ต้องวัดรวมหลัง P02 รายละเอียดใน [README A3](../combat-presentation/unit-a3-slice/README_TH.md)
+- ผล: typecheck/lint/`npm test` 1104 ผ่าน; browser `unit-a3.spec.ts` 21 + A1/A2/pilot/loading ที่ปรับตัวเลข (healer โหลด sheet เพิ่ม 1) ผ่าน; คลิปจริง 16 คลิป 390px (Chromium จำลอง ไม่ใช่มือถือจริง)
+- เจ้าของอนุมัติ motion “เอาเข้าเกมได้” (2026-10-28) หลังดูคลิป 16 คลิป (อนุมัติโดยตรง ไม่อนุมานจากเทสต์) → PR #99 merge `d610b63` (quality+browser ผ่านบน `f8ae5d2`; merge สาขาเกม 2 ครั้งหลังจากนั้นเป็นเอกสารล้วน) Pages 40741221429 เผยแพร่สำเร็จ 2026-10-29 01:31 น. (build+browser 4 shard+deploy) ไม่มีงาน A3 ค้าง
+- PR #92 (C5.7 arcane seal) merge เข้าสาขาเกมแล้ว (`4883362`); PR #99 merge สาขาเกมเข้ามา แก้ conflict เฉพาะ workflow (รวม arcane-seal + unit-a3 spec) และ handoff ไม่แตะไฟล์ arcane-seal
+- ไม่มีคลิป Seren block (resolver ที่จัดได้ไม่เกิดดาเมจ 0 ต่อเซเรน) เฟรมมีและเล่นเมื่อ event เกิดจริง
+
+## 2026-10-28 — C5.7 ผนึกอาคมเผยแพร่แล้ว (PR92)
+
+เจ้าของตอบ “ทั้งสองอย่าง” = อนุมัติ motion C5.7 + เลือก A3 R2 PR92 merge `4883362` (quality+browser ผ่าน, browser re-run 1 ครั้งหลัง `presentation.spec.ts` timeout ที่ไม่เกี่ยวข้อง); Pages run 40730511483 สำเร็จครบ build/4 shards/deploy ไม่มีงาน C5.7 ค้าง; PR62 Pages 40712485417 สำเร็จแล้ว A3 อยู่ session แยก (R2: seren-attack-r2, hollow-mycon-cast-r2) PR #100 ลดเวลา CI ของ PR งานภาพล้วน (workflow + timeout 90s ของ presentation.spec) รอ CI ก่อน merge
+
+## 2026-10-28 — W1 ฝั่ง Claude: C5.7 ผนึกอาคมเข้าเกม (ประวัติ — ดูหัวข้อด้านบน)
 
 - PR #89 (R2) → สาขา `codex/c5-7-arcane-seal-vfx`, commit `7956688`: atlas lossless 12 เฟรม (`public/assets/fx/arcane_seal_fx.*`, ตรวจ sha256/พิกเซลตรงต้นฉบับ), `src/game/visuals/arcane-seal-fx.ts` + ต่อ `BattleScene`; cue มาจาก event จริง (mark / sigil bind เฉพาะมี event sigil / storm ต่อศัตรูที่โดนจริง / dispel เฉพาะมี event dispel); ไม่แก้ rules/save/content/balance/timing
 - ตรวจ local: typecheck, lint, 1100 unit (82 ไฟล์), build, browser `arcane-seal-fx.spec.ts` 10/10; เพิ่มเข้า browser.yml/pages.yml; คลิปจริง 390px 21 คลิป ใน `docs/combat-presentation/arcane-seal-slice/` (README_TH.md มีงบภาพสนาม 10 ตัวตาม OD-05) Chromium emulation เท่านั้น

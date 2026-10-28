@@ -47,8 +47,8 @@ const qa={reactionTiming:()=>{
  const projectile=sprite.getWorldTransformMatrix().transformPoint(.36*512*.36,-.86*512*.36);
  return {actual:scene.alchemyAnchor('guardian','fury')!,expected:{x:point.x/dpr,y:point.y/dpr},earthActual:scene.earthAnchor('guardian','bash')!,earthExpected:{x:earth.x/dpr,y:earth.y/dpr},projectileActual:scene.projectileAnchor('guardian')!,projectileExpected:{x:projectile.x/dpr,y:projectile.y/dpr}};
  },impacts,turns:()=>fixture.result.turns,otherEncounter:()=>{
- const data={...fixture.data,heroes:fixture.data.heroes.filter(h=>h.id==='healer'),enemies:fixture.data.enemies.map(e=>({...e,art:'brute'}))};
- ui.open({kind:'random',data,entry:{hp:{healer:46}},commands:[],commit:()=>true,leaveLabel:()=>'',leave:()=>{}});
+ const data={...fixture.data,heroes:fixture.data.heroes.filter(h=>h.id==='healer').map(h=>({...h,id:'toma'})),enemies:fixture.data.enemies.map(e=>({...e,art:'brute'}))};
+ ui.open({kind:'random',data,entry:{hp:{toma:46}},commands:[],commit:()=>true,leaveLabel:()=>'',leave:()=>{}});
  },target:()=>fixture.command.targetId==='enemies'?`enemies-f1`:fixture.command.targetId,
  expected:()=>fixture.result.state,state:()=>ui.state,load,
  frames:()=>{

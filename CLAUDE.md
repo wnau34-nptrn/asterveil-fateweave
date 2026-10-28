@@ -8,13 +8,17 @@ Design-clarification rounds are recorded in [docs/design/OWNER_DECISIONS_TH.md](
 
 Owner: finish character animation and skill VFX before other development; Codex makes the art (incoming/ only), Claude integrates in-game. Plan, waves W1–W8, remaining 30 identities / 32 hero skills without painted VFX, and copy-ready Codex prompts for W1: [docs/design/ANIMATION_VFX_COMPLETION_PLAN_TH.md](docs/design/ANIMATION_VFX_COMPLETION_PLAN_TH.md). This puts P01–P11 after W8 and supersedes the older “do not start A3/family7” notes once the owner starts a wave. Owner approved the plan 2026-10-28 and sent the W1 prompts (A3 Seren/Mycon, C5.7 arcane seal) to Codex; W2 prompt (A4) is ready in §6. Owner artwork selection and motion approval per batch remain required.
 
-## C5.7 Arcane Seal VFX — integrated, awaiting owner motion review 2026-10-28
+## C5.7 Arcane Seal VFX — published 2026-10-28
 
-R2 artwork (PR #89) is in the game on branch `codex/c5-7-arcane-seal-vfx` (mark/sigil/storm/dispel from actual events, rules/save/balance/timing unchanged); 21 real 390px clips in `docs/combat-presentation/arcane-seal-slice/`. Do not merge/publish until the owner approves the motion. A3 (PR #90) awaits the owner's R1/R2 choice; A4 (PR #91) not started.
+R2 artwork (PR #89) integrated through PR92 merge `4883362` (mark/sigil/storm/dispel from actual events; rules/save/balance/timing unchanged); owner approved motion and merge with “ทั้งสองอย่าง” on 2026-10-28 after the 21 real 390px clips in `docs/combat-presentation/arcane-seal-slice/`. PR quality+browser passed (browser re-run once after an unrelated `presentation.spec.ts` timeout); Pages run 40730511483 build/4 browser shards/deploy success (16:54–17:21 UTC). A3 (PR #90, R2 chosen) is in a separate session; A4 (PR #91) not started.
 
 ## Unit animation A2 — published 2026-10-28
 
 A2 Aegis/ Vargoth Guard published via PR88 mergee94b424 + QA-only7ff5388; Pages40671415477 build/4browser/deploy success. Full evidence: [A2 release](docs/validation/unit-a2-release/README_TH.md), [26clips/mapping/fallback](docs/combat-presentation/unit-a2-slice/README_TH.md). Pilot/A1/C5 approvals and timing retained. Owner explicitly approved A2 motion with “เอาเข้าเกมได้” on2026-10-28 after the26clip delivery; this is direct approval, not inferred from tests. A3/family7 are outside this task.
+
+## Unit animation A3 — published 2026-10-28
+
+A3 Seren (`healer`) and Hollow Mycon (`foe_mycon`) are integrated on branch `claude/unit-a3-seren-mycon` (PR into the game branch): owner selected R2 for Seren staff attack and Mycon cast (“ไปขั้นต่อไป ทั้งสองอย่าง” = Codex's recommendation), whole-strip normalizer + lossless atlases (Seren 4.68MiB / 1,463,594 B, Mycon 2.32MiB / 826,472 B decoded/download), optional registry only, existing healing/energy VFX, unchanged rules/save/content/balance/timing. 16 real 390px clips: [A3 slice](docs/combat-presentation/unit-a3-slice/README_TH.md). Owner explicitly approved the motion with “เอาเข้าเกมได้” on 2026-10-28 after the 16-clip delivery (direct approval, not inferred from tests); PR #99 merged `d610b63` (quality+browser success on `f8ae5d2`; the final two merges from the game branch were docs-only); Pages 40741221429 published successfully at 2026-10-29 01:31 Bangkok (build+four browser shards+deploy). Side effect: encounters with `healer` now load one extra optional sheet.
 
 ## Consolidated planning index — 2026-10-25 (updated 2026-10-28)
 

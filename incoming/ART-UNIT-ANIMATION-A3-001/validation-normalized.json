@@ -1,0 +1,592 @@
+{
+  "seren": {
+    "factor": 0.36,
+    "displayRatio": 2.7777777777777777,
+    "cell": 512,
+    "origin": [
+      0.5,
+      0.96875
+    ],
+    "seedArea": 150414,
+    "clipStarts": {
+      "attack": 1,
+      "heal": 9,
+      "hit": 17,
+      "down": 19,
+      "prayer": 22,
+      "sanctuary": 30,
+      "block": 38
+    },
+    "strips": {
+      "seren-attack-r2": {
+        "rawSize": [
+          2172,
+          724
+        ],
+        "sha256": "1748ecca3dabb8fd0d9546922bc7e4997663586bff4bf697d7a388df69b667ab",
+        "scale": 0.43556139078976114,
+        "firstFigureArea": 102753,
+        "splitNotes": [
+          {
+            "mergedBox": [
+              696,
+              68,
+              2166,
+              622
+            ],
+            "split": "manual ownership rules in split_attack_r2"
+          }
+        ]
+      },
+      "seren-heal-r1": {
+        "rawSize": [
+          2172,
+          724
+        ],
+        "sha256": "2461a89f3bd257c5ae092a94b7671eb39e972517c30a55a3051d1ee51cc939b0",
+        "scale": 0.4732109221520479,
+        "firstFigureArea": 87053,
+        "splitNotes": null
+      },
+      "seren-hit-r1": {
+        "rawSize": [
+          2172,
+          724
+        ],
+        "sha256": "6728dd33389b46460c67e5dac991a947dc90561092ff3502318b754a5c09cf0f",
+        "scale": 0.30841793332302403,
+        "firstFigureArea": 204934,
+        "splitNotes": null
+      },
+      "seren-down-r1": {
+        "rawSize": [
+          2172,
+          724
+        ],
+        "sha256": "e8a3d01dc475ebd9e33cf8796e051a7a813923a850f3e5febae772d6b2175f32",
+        "scale": 0.3393809214630563,
+        "firstFigureArea": 169246,
+        "splitNotes": null
+      },
+      "seren-prayer-r1": {
+        "rawSize": [
+          2172,
+          724
+        ],
+        "sha256": "6b7d56d69fa1f89b89f8243539cd74820d4cee9232c1351e563d884c9e82d1bb",
+        "scale": 0.40865890708677893,
+        "firstFigureArea": 116727,
+        "splitNotes": null
+      },
+      "seren-sanctuary-r1": {
+        "rawSize": [
+          2172,
+          724
+        ],
+        "sha256": "10b45a663440b9bf1d41cbac7f4074e2fbc93b325c9f15cf45891c41ba0dc74f",
+        "scale": 0.425830083005834,
+        "firstFigureArea": 107503,
+        "splitNotes": null
+      },
+      "seren-block-r1": {
+        "rawSize": [
+          2172,
+          724
+        ],
+        "sha256": "c313992f1510d4ab269bc7a5378a119b7b17896d6f8ad6bb8b7e6d9bc1cc1276",
+        "scale": 0.33068802007119913,
+        "firstFigureArea": 178261,
+        "splitNotes": null
+      }
+    },
+    "transforms": [
+      {
+        "strip": "seren-attack-r2",
+        "figure": 1,
+        "position": [
+          158,
+          272
+        ],
+        "footX": 98.21909362309114,
+        "soleY": 223.87855486593722
+      },
+      {
+        "strip": "seren-attack-r2",
+        "figure": 2,
+        "position": [
+          162,
+          258
+        ],
+        "footX": 93.86347971519352,
+        "soleY": 238.25208076199934
+      },
+      {
+        "strip": "seren-attack-r2",
+        "figure": 2,
+        "position": [
+          162,
+          258
+        ],
+        "footX": 93.86347971519352,
+        "soleY": 238.25208076199934
+      },
+      {
+        "strip": "seren-attack-r2",
+        "figure": 3,
+        "position": [
+          147,
+          311
+        ],
+        "footX": 108.89034769744029,
+        "soleY": 184.67802969485874
+      },
+      {
+        "strip": "seren-attack-r2",
+        "figure": 4,
+        "position": [
+          152,
+          300
+        ],
+        "footX": 103.88139170335803,
+        "soleY": 196.00262585539252
+      },
+      {
+        "strip": "seren-attack-r2",
+        "figure": 5,
+        "position": [
+          185,
+          294
+        ],
+        "footX": 71.43206808952083,
+        "soleY": 201.6649239356594
+      },
+      {
+        "strip": "seren-heal-r1",
+        "figure": 1,
+        "position": [
+          175,
+          300
+        ],
+        "footX": 80.68246222692417,
+        "soleY": 196.38253269309988
+      },
+      {
+        "strip": "seren-heal-r1",
+        "figure": 2,
+        "position": [
+          177,
+          261
+        ],
+        "footX": 79.026223999392,
+        "soleY": 234.71261738741578
+      },
+      {
+        "strip": "seren-heal-r1",
+        "figure": 2,
+        "position": [
+          177,
+          261
+        ],
+        "footX": 79.026223999392,
+        "soleY": 234.71261738741578
+      },
+      {
+        "strip": "seren-heal-r1",
+        "figure": 3,
+        "position": [
+          181,
+          266
+        ],
+        "footX": 75.47714208325164,
+        "soleY": 229.50729724374324
+      },
+      {
+        "strip": "seren-heal-r1",
+        "figure": 4,
+        "position": [
+          176,
+          272
+        ],
+        "footX": 80.20925130477212,
+        "soleY": 224.3019771000707
+      },
+      {
+        "strip": "seren-heal-r1",
+        "figure": 5,
+        "position": [
+          178,
+          300
+        ],
+        "footX": 77.60659123293586,
+        "soleY": 196.38253269309988
+      },
+      {
+        "strip": "seren-hit-r1",
+        "figure": 1,
+        "position": [
+          180,
+          328
+        ],
+        "footX": 76.02502056412543,
+        "soleY": 168.39619159437112
+      },
+      {
+        "strip": "seren-hit-r1",
+        "figure": 2,
+        "position": [
+          181,
+          335
+        ],
+        "footX": 75.25397573081786,
+        "soleY": 161.30257912794156
+      },
+      {
+        "strip": "seren-down-r1",
+        "figure": 0,
+        "position": [
+          176,
+          303
+        ],
+        "footX": 80.26358792601282,
+        "soleY": 192.76836339101598
+      },
+      {
+        "strip": "seren-down-r1",
+        "figure": 2,
+        "position": [
+          165,
+          330
+        ],
+        "footX": 90.61470603063604,
+        "soleY": 165.6178896739715
+      },
+      {
+        "strip": "seren-down-r1",
+        "figure": 3,
+        "position": [
+          140,
+          420
+        ],
+        "footX": 116.40765606182832,
+        "soleY": 76.02132640772462
+      },
+      {
+        "strip": "seren-prayer-r1",
+        "figure": 1,
+        "position": [
+          190,
+          303
+        ],
+        "footX": 65.79408404097141,
+        "soleY": 192.88700414495966
+      },
+      {
+        "strip": "seren-prayer-r1",
+        "figure": 2,
+        "position": [
+          193,
+          275
+        ],
+        "footX": 63.34213059845074,
+        "soleY": 220.67580982686061
+      },
+      {
+        "strip": "seren-prayer-r1",
+        "figure": 3,
+        "position": [
+          186,
+          244
+        ],
+        "footX": 70.08500256538258,
+        "soleY": 252.1425456725426
+      },
+      {
+        "strip": "seren-prayer-r1",
+        "figure": 4,
+        "position": [
+          190,
+          219
+        ],
+        "footX": 65.58975458742802,
+        "soleY": 276.6620800977493
+      },
+      {
+        "strip": "seren-prayer-r1",
+        "figure": 4,
+        "position": [
+          190,
+          219
+        ],
+        "footX": 65.58975458742802,
+        "soleY": 276.6620800977493
+      },
+      {
+        "strip": "seren-prayer-r1",
+        "figure": 5,
+        "position": [
+          182,
+          306
+        ],
+        "footX": 73.55860327562021,
+        "soleY": 190.0263917953522
+      },
+      {
+        "strip": "seren-sanctuary-r1",
+        "figure": 1,
+        "position": [
+          178,
+          281
+        ],
+        "footX": 77.92690519006763,
+        "soleY": 214.61836183494034
+      },
+      {
+        "strip": "seren-sanctuary-r1",
+        "figure": 2,
+        "position": [
+          179,
+          283
+        ],
+        "footX": 77.28816006555887,
+        "soleY": 213.34087158592286
+      },
+      {
+        "strip": "seren-sanctuary-r1",
+        "figure": 2,
+        "position": [
+          179,
+          283
+        ],
+        "footX": 77.28816006555887,
+        "soleY": 213.34087158592286
+      },
+      {
+        "strip": "seren-sanctuary-r1",
+        "figure": 3,
+        "position": [
+          179,
+          280
+        ],
+        "footX": 76.64941494105013,
+        "soleY": 216.32168216696368
+      },
+      {
+        "strip": "seren-sanctuary-r1",
+        "figure": 4,
+        "position": [
+          176,
+          284
+        ],
+        "footX": 80.0560556050968,
+        "soleY": 212.06338133690534
+      },
+      {
+        "strip": "seren-sanctuary-r1",
+        "figure": 5,
+        "position": [
+          173,
+          281
+        ],
+        "footX": 82.82395114463472,
+        "soleY": 214.61836183494034
+      },
+      {
+        "strip": "seren-block-r1",
+        "figure": 1,
+        "position": [
+          173,
+          309
+        ],
+        "footX": 83.49872506797777,
+        "soleY": 186.5080433201563
+      },
+      {
+        "strip": "seren-block-r1",
+        "figure": 2,
+        "position": [
+          183,
+          304
+        ],
+        "footX": 73.08205243573501,
+        "soleY": 192.1297396613667
+      }
+    ],
+    "uniqueFrames": 28,
+    "losslessReconstruction": "all alpha and visible RGBA equal",
+    "image": "seren_a3.8ee02ab5e681.webp",
+    "atlas": "seren_a3.3d911a21c2db.json",
+    "width": 1024,
+    "height": 1197,
+    "frames": 40,
+    "decodedBytes": 4902912,
+    "downloadBytes": 1463594
+  },
+  "mycon": {
+    "factor": 0.5,
+    "displayRatio": 2.0,
+    "cell": 512,
+    "origin": [
+      0.5,
+      0.96875
+    ],
+    "seedArea": 146093,
+    "clipStarts": {
+      "skill": 9,
+      "hit": 17,
+      "down": 19
+    },
+    "strips": {
+      "hollow-mycon-cast-r2": {
+        "rawSize": [
+          2172,
+          724
+        ],
+        "sha256": "c0457222c4c42a4f8c181b0debb0c31bc464a609265d0c4a796c549cb11f8162",
+        "scale": 0.5956491366058099,
+        "firstFigureArea": 102941,
+        "splitNotes": null
+      },
+      "hollow-mycon-hit-r1": {
+        "rawSize": [
+          2172,
+          724
+        ],
+        "sha256": "93f69d4bdc5eac50dbe513109edc16ba4d268969c7a2ce071b9a4998ae76add4",
+        "scale": 0.4525866394933802,
+        "firstFigureArea": 178306,
+        "splitNotes": null
+      },
+      "hollow-mycon-down-r1": {
+        "rawSize": [
+          2172,
+          724
+        ],
+        "sha256": "7fe95fc660143977bc08f4a59e72c9de597506a0388f2b7dec026e2bd5d6dcd8",
+        "scale": 0.4597419097997203,
+        "firstFigureArea": 172799,
+        "splitNotes": null
+      }
+    },
+    "transforms": [
+      {
+        "strip": "hollow-mycon-cast-r2",
+        "figure": 1,
+        "position": [
+          136,
+          274
+        ],
+        "footX": 119.72547645776778,
+        "soleY": 222.17712795396707
+      },
+      {
+        "strip": "hollow-mycon-cast-r2",
+        "figure": 2,
+        "position": [
+          112,
+          201
+        ],
+        "footX": 143.84926649030308,
+        "soleY": 295.4419717564817
+      },
+      {
+        "strip": "hollow-mycon-cast-r2",
+        "figure": 2,
+        "position": [
+          112,
+          201
+        ],
+        "footX": 143.84926649030308,
+        "soleY": 295.4419717564817
+      },
+      {
+        "strip": "hollow-mycon-cast-r2",
+        "figure": 3,
+        "position": [
+          115,
+          236
+        ],
+        "footX": 141.16884537557695,
+        "soleY": 260.2986726967389
+      },
+      {
+        "strip": "hollow-mycon-cast-r2",
+        "figure": 4,
+        "position": [
+          123,
+          256
+        ],
+        "footX": 133.4254065997014,
+        "soleY": 240.04660205214137
+      },
+      {
+        "strip": "hollow-mycon-cast-r2",
+        "figure": 4,
+        "position": [
+          123,
+          256
+        ],
+        "footX": 133.4254065997014,
+        "soleY": 240.04660205214137
+      },
+      {
+        "strip": "hollow-mycon-hit-r1",
+        "figure": 1,
+        "position": [
+          136,
+          281
+        ],
+        "footX": 120.16175278549244,
+        "soleY": 215.43124039884896
+      },
+      {
+        "strip": "hollow-mycon-hit-r1",
+        "figure": 2,
+        "position": [
+          115,
+          295
+        ],
+        "footX": 140.52815156269455,
+        "soleY": 201.4010545745542
+      },
+      {
+        "strip": "hollow-mycon-down-r1",
+        "figure": 0,
+        "position": [
+          113,
+          261
+        ],
+        "footX": 142.74986299281315,
+        "soleY": 235.3878578174568
+      },
+      {
+        "strip": "hollow-mycon-down-r1",
+        "figure": 2,
+        "position": [
+          103,
+          314
+        ],
+        "footX": 152.864185008407,
+        "soleY": 181.5980543708895
+      },
+      {
+        "strip": "hollow-mycon-down-r1",
+        "figure": 3,
+        "position": [
+          137,
+          399
+        ],
+        "footX": 119.30302559302741,
+        "soleY": 96.54580105794126
+      }
+    ],
+    "uniqueFrames": 10,
+    "losslessReconstruction": "all alpha and visible RGBA equal",
+    "image": "mycon_a3.e2b8c7771746.webp",
+    "atlas": "mycon_a3.84b234561959.json",
+    "width": 512,
+    "height": 1189,
+    "frames": 22,
+    "decodedBytes": 2435072,
+    "downloadBytes": 826472
+  }
+}

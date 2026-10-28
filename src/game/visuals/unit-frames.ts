@@ -1,6 +1,6 @@
 import type { Reaction, UnitPose } from './unit-animation-map';
 import atlasManifest from './unit-atlases.json';
-export type UnitClip = 'attack' | 'skill' | 'bash';
+export type UnitClip = 'attack' | 'skill' | 'bash' | 'prayer' | 'sanctuary';
 export type FramePhase = 'prepare' | 'recover' | 'reaction';
 export interface UnitFrames {
   show(pose: UnitPose | Reaction, phase: FramePhase, progress: number, clip?: UnitClip, durationMs?: number): boolean;
@@ -21,6 +21,9 @@ export const unitRegistry = {
   foe_sprite: { sheet: 'sprite', displayRatio: 2, intents: { 'Seed Spark': 'attack' } },
   guardian: { sheet: 'aegis', displayRatio: 1 / .36, actions: { attack: 'attack', bash: 'bash', guard: 'skill', rally: 'skill', challenge: 'skill', bulwark: 'skill', rouse: 'skill' } },
   foe_vargoth_guard: { sheet: 'vargoth', displayRatio: 2, intents: { 'Crushing Blow': 'attack', 'Shield Smash': 'bash', 'Mace Swing': 'attack', 'Rift Bolt': 'skill' } },
+  // A3: heal/revive/bless share the heal gesture, prayer/halo the prayer gesture. No new gesture for passives.
+  healer: { sheet: 'seren', displayRatio: 1 / .36, actions: { attack: 'attack', heal: 'skill', revive: 'skill', bless: 'skill', prayer: 'prayer', halo: 'prayer', sanctuary: 'sanctuary' } },
+  foe_mycon: { sheet: 'mycon', displayRatio: 2, intents: { 'Spore Hex': 'skill' } },
 } as const satisfies Record<string, UnitDefinition>;
 export const unitSheets = Object.fromEntries(Object.entries(unitRegistry).map(([art, definition]) => [art, definition.sheet])) as Record<keyof typeof unitRegistry, UnitSheet>;
 export type UnitSheet = typeof unitRegistry[keyof typeof unitRegistry]['sheet'];
@@ -38,7 +41,7 @@ export function unitClip(art: string, action: string | undefined, intent: string
   const definition = unitDefinition(art);
   return action ? definition?.actions?.[action] : intent ? definition?.intents?.[intent] : undefined;
 }
-// 0 idle; 1..8 slash; 9..16 skill; 17..18 hurt; 19..21 down.
+// 0 idle; 1..8 slash; 9..16 skill; 17..18 hurt; 19..21 down. A3 Mycon aliases 1..8 to idle (it has only skill).
 // Frame 5/13 is the contact pose. UI contact remains authoritative, never sprite FPS.
 function sequence(pose: UnitPose | Reaction, phase: FramePhase, clip?: UnitClip, art?: string): readonly number[] | undefined {
   if (phase === 'reaction') {
@@ -48,11 +51,17 @@ function sequence(pose: UnitPose | Reaction, phase: FramePhase, clip?: UnitClip,
       if (pose === 'block') return art === 'guardian' ? [30, 31] : [22, 23];
       if (pose === 'counter' && art === 'guardian') return [30, 5, 7];
     }
+    if (art === 'healer' && pose === 'block') return [38, 39];
     return;
   }
   if (!clip) return;
   if (clip === 'bash') {
     const start = art === 'foe_vargoth_guard' ? 24 : 22;
+    return phase === 'prepare' ? [start, start + 1, start + 2, start + 3] : [start + 4, start + 5, start + 6, start + 7];
+  }
+  // Seren only: prayer 22..29 and sanctuary 30..37, contact on the first recover frame like every clip.
+  if (clip === 'prayer' || clip === 'sanctuary') {
+    const start = clip === 'prayer' ? 22 : 30;
     return phase === 'prepare' ? [start, start + 1, start + 2, start + 3] : [start + 4, start + 5, start + 6, start + 7];
   }
   if (clip === 'skill') return phase === 'prepare' ? [9, 10, 11, 12] : [13, 14, 15, 16];

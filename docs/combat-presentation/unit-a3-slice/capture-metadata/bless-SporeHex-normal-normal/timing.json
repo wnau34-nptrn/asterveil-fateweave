@@ -1,0 +1,464 @@
+[
+  {
+    "at": 1793204308.395,
+    "remainingMs": 390,
+    "turn": {
+      "actorId": "healer",
+      "side": "hero",
+      "beat": 1,
+      "round": 1,
+      "action": "bless",
+      "targetId": "guardian",
+      "intent": {
+        "sourceId": "b1",
+        "targetSlot": 1,
+        "name": "Spore Hex",
+        "damage": 12,
+        "kind": "energy",
+        "targetId": "guardian",
+        "beat": 1,
+        "round": 1
+      },
+      "state": {
+        "encounterId": "thicket-ambush",
+        "beat": 1,
+        "round": 1,
+        "turnIndex": 0,
+        "order": [
+          "healer",
+          "b1",
+          "guardian",
+          "weaver"
+        ],
+        "outcome": "active",
+        "guard": null,
+        "counter": null,
+        "taunt": null,
+        "song": null,
+        "heroes": [
+          {
+            "id": "healer",
+            "hp": 23,
+            "barrier": 0,
+            "cooldowns": {
+              "bless": 4
+            }
+          },
+          {
+            "id": "guardian",
+            "hp": 38,
+            "barrier": 0,
+            "cooldowns": {},
+            "renew": {
+              "heroId": "healer",
+              "amount": 8,
+              "until": 3
+            }
+          },
+          {
+            "id": "weaver",
+            "hp": 24,
+            "barrier": 0,
+            "cooldowns": {}
+          }
+        ],
+        "enemies": [
+          {
+            "id": "b1",
+            "hp": 66,
+            "markedUntil": 0
+          }
+        ],
+        "intent": {
+          "sourceId": "b1",
+          "targetSlot": 1,
+          "name": "Spore Hex",
+          "damage": 12,
+          "kind": "energy",
+          "targetId": "guardian",
+          "beat": 1,
+          "round": 1
+        },
+        "commands": [
+          {
+            "beat": 1,
+            "heroId": "healer",
+            "action": "bless",
+            "targetId": "guardian"
+          }
+        ]
+      },
+      "events": [
+        {
+          "type": "buff",
+          "sourceId": "healer",
+          "targetId": "guardian",
+          "amount": 8,
+          "text": "Renew."
+        }
+      ],
+      "before": {
+        "encounterId": "thicket-ambush",
+        "beat": 1,
+        "round": 1,
+        "turnIndex": 0,
+        "order": [
+          "healer",
+          "b1",
+          "guardian",
+          "weaver"
+        ],
+        "outcome": "active",
+        "guard": null,
+        "counter": null,
+        "taunt": null,
+        "song": null,
+        "heroes": [
+          {
+            "id": "healer",
+            "hp": 23,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "guardian",
+            "hp": 38,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "weaver",
+            "hp": 24,
+            "barrier": 0,
+            "cooldowns": {}
+          }
+        ],
+        "enemies": [
+          {
+            "id": "b1",
+            "hp": 66,
+            "markedUntil": 0
+          }
+        ],
+        "intent": {
+          "sourceId": "b1",
+          "targetSlot": 1,
+          "name": "Spore Hex",
+          "damage": 12,
+          "kind": "energy",
+          "targetId": "guardian",
+          "beat": 1,
+          "round": 1
+        },
+        "commands": []
+      },
+      "after": {
+        "encounterId": "thicket-ambush",
+        "beat": 2,
+        "round": 1,
+        "turnIndex": 1,
+        "order": [
+          "healer",
+          "b1",
+          "guardian",
+          "weaver"
+        ],
+        "outcome": "active",
+        "guard": null,
+        "counter": null,
+        "taunt": null,
+        "song": null,
+        "heroes": [
+          {
+            "id": "healer",
+            "hp": 23,
+            "barrier": 0,
+            "cooldowns": {
+              "bless": 4
+            }
+          },
+          {
+            "id": "guardian",
+            "hp": 38,
+            "barrier": 0,
+            "cooldowns": {},
+            "renew": {
+              "heroId": "healer",
+              "amount": 8,
+              "until": 3
+            }
+          },
+          {
+            "id": "weaver",
+            "hp": 24,
+            "barrier": 0,
+            "cooldowns": {}
+          }
+        ],
+        "enemies": [
+          {
+            "id": "b1",
+            "hp": 66,
+            "markedUntil": 0
+          }
+        ],
+        "intent": {
+          "sourceId": "b1",
+          "targetSlot": 1,
+          "name": "Spore Hex",
+          "damage": 12,
+          "kind": "energy",
+          "targetId": "guardian",
+          "beat": 2,
+          "round": 1
+        },
+        "commands": [
+          {
+            "beat": 1,
+            "heroId": "healer",
+            "action": "bless",
+            "targetId": "guardian"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "at": 1793204309.085,
+    "remainingMs": 520,
+    "turn": {
+      "actorId": "b1",
+      "side": "enemy",
+      "beat": 2,
+      "round": 1,
+      "intent": {
+        "sourceId": "b1",
+        "targetSlot": 1,
+        "name": "Spore Hex",
+        "damage": 12,
+        "kind": "energy",
+        "targetId": "guardian",
+        "beat": 2,
+        "round": 1
+      },
+      "targetId": "guardian",
+      "state": {
+        "encounterId": "thicket-ambush",
+        "beat": 2,
+        "round": 1,
+        "turnIndex": 1,
+        "order": [
+          "healer",
+          "b1",
+          "guardian",
+          "weaver"
+        ],
+        "outcome": "active",
+        "guard": null,
+        "counter": null,
+        "taunt": null,
+        "song": null,
+        "heroes": [
+          {
+            "id": "healer",
+            "hp": 23,
+            "barrier": 0,
+            "cooldowns": {
+              "bless": 4
+            }
+          },
+          {
+            "id": "guardian",
+            "hp": 26,
+            "barrier": 0,
+            "cooldowns": {},
+            "renew": {
+              "heroId": "healer",
+              "amount": 8,
+              "until": 3
+            }
+          },
+          {
+            "id": "weaver",
+            "hp": 24,
+            "barrier": 0,
+            "cooldowns": {}
+          }
+        ],
+        "enemies": [
+          {
+            "id": "b1",
+            "hp": 66,
+            "markedUntil": 0
+          }
+        ],
+        "intent": {
+          "sourceId": "b1",
+          "targetSlot": 1,
+          "name": "Spore Hex",
+          "damage": 12,
+          "kind": "energy",
+          "targetId": "guardian",
+          "beat": 2,
+          "round": 1
+        },
+        "commands": [
+          {
+            "beat": 1,
+            "heroId": "healer",
+            "action": "bless",
+            "targetId": "guardian"
+          }
+        ]
+      },
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "b1",
+          "targetId": "guardian",
+          "amount": 12,
+          "absorbed": 0,
+          "text": "Enemy attacks on its own turn."
+        }
+      ],
+      "before": {
+        "encounterId": "thicket-ambush",
+        "beat": 2,
+        "round": 1,
+        "turnIndex": 1,
+        "order": [
+          "healer",
+          "b1",
+          "guardian",
+          "weaver"
+        ],
+        "outcome": "active",
+        "guard": null,
+        "counter": null,
+        "taunt": null,
+        "song": null,
+        "heroes": [
+          {
+            "id": "healer",
+            "hp": 23,
+            "barrier": 0,
+            "cooldowns": {
+              "bless": 4
+            }
+          },
+          {
+            "id": "guardian",
+            "hp": 38,
+            "barrier": 0,
+            "cooldowns": {},
+            "renew": {
+              "heroId": "healer",
+              "amount": 8,
+              "until": 3
+            }
+          },
+          {
+            "id": "weaver",
+            "hp": 24,
+            "barrier": 0,
+            "cooldowns": {}
+          }
+        ],
+        "enemies": [
+          {
+            "id": "b1",
+            "hp": 66,
+            "markedUntil": 0
+          }
+        ],
+        "intent": {
+          "sourceId": "b1",
+          "targetSlot": 1,
+          "name": "Spore Hex",
+          "damage": 12,
+          "kind": "energy",
+          "targetId": "guardian",
+          "beat": 2,
+          "round": 1
+        },
+        "commands": [
+          {
+            "beat": 1,
+            "heroId": "healer",
+            "action": "bless",
+            "targetId": "guardian"
+          }
+        ]
+      },
+      "after": {
+        "encounterId": "thicket-ambush",
+        "beat": 3,
+        "round": 1,
+        "turnIndex": 2,
+        "order": [
+          "healer",
+          "b1",
+          "guardian",
+          "weaver"
+        ],
+        "outcome": "active",
+        "guard": null,
+        "counter": null,
+        "taunt": null,
+        "song": null,
+        "heroes": [
+          {
+            "id": "healer",
+            "hp": 23,
+            "barrier": 0,
+            "cooldowns": {
+              "bless": 4
+            }
+          },
+          {
+            "id": "guardian",
+            "hp": 26,
+            "barrier": 0,
+            "cooldowns": {},
+            "renew": {
+              "heroId": "healer",
+              "amount": 8,
+              "until": 3
+            }
+          },
+          {
+            "id": "weaver",
+            "hp": 24,
+            "barrier": 0,
+            "cooldowns": {}
+          }
+        ],
+        "enemies": [
+          {
+            "id": "b1",
+            "hp": 66,
+            "markedUntil": 0
+          }
+        ],
+        "intent": {
+          "sourceId": "b1",
+          "targetSlot": 1,
+          "name": "Spore Hex",
+          "damage": 12,
+          "kind": "energy",
+          "targetId": "guardian",
+          "beat": 3,
+          "round": 2
+        },
+        "commands": [
+          {
+            "beat": 1,
+            "heroId": "healer",
+            "action": "bless",
+            "targetId": "guardian"
+          }
+        ]
+      }
+    }
+  }
+]

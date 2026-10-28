@@ -52,5 +52,23 @@
     "frames": 32,
     "decodedBytes": 4303872,
     "downloadBytes": 1385751
+  },
+  "seren": {
+    "image": "seren_a3.8ee02ab5e681.webp",
+    "atlas": "seren_a3.3d911a21c2db.json",
+    "width": 1024,
+    "height": 1197,
+    "frames": 40,
+    "decodedBytes": 4902912,
+    "downloadBytes": 1463594
+  },
+  "mycon": {
+    "image": "mycon_a3.e2b8c7771746.webp",
+    "atlas": "mycon_a3.84b234561959.json",
+    "width": 512,
+    "height": 1189,
+    "frames": 22,
+    "decodedBytes": 2435072,
+    "downloadBytes": 826472
   }
 }
