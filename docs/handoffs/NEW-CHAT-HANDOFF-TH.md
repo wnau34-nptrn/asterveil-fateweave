@@ -3,6 +3,16 @@
 
 
 
+## 2026-10-28 — W1 ฝั่ง Claude: C5.7 ผนึกอาคมเข้าเกมแล้ว รอเจ้าของตรวจ motion
+
+- PR #89 (R2) → สาขา `codex/c5-7-arcane-seal-vfx`, commit `7956688`: atlas lossless 12 เฟรม (`public/assets/fx/arcane_seal_fx.*`, ตรวจ sha256/พิกเซลตรงต้นฉบับ), `src/game/visuals/arcane-seal-fx.ts` + ต่อ `BattleScene`; cue มาจาก event จริง (mark / sigil bind เฉพาะมี event sigil / storm ต่อศัตรูที่โดนจริง / dispel เฉพาะมี event dispel); ไม่แก้ rules/save/content/balance/timing
+- ตรวจ local: typecheck, lint, 1100 unit (82 ไฟล์), build, browser `arcane-seal-fx.spec.ts` 10/10; เพิ่มเข้า browser.yml/pages.yml; คลิปจริง 390px 21 คลิป ใน `docs/combat-presentation/arcane-seal-slice/` (README_TH.md มีงบภาพสนาม 10 ตัวตาม OD-05) Chromium emulation เท่านั้น
+- **ยังไม่ merge/เผยแพร่**: ต้องให้เจ้าของดูคลิปและอนุมัติ motion ก่อน (ผล tests ไม่ใช่การอนุมัติ) เจ้าของมอบให้ Codex เลือก R2 ตามข้อความงาน แต่ motion approval ยังเป็นของเจ้าของ
+- PR #90 A3: push ใหม่ `1222a3c` ครบแล้ว — PNG raw 12 ไฟล์ decode ได้และ sha256 ตรง validation.json ทุกไฟล์ ยังเป็น draft **รอเจ้าของเลือก R1/R2** (Seren attack, Mycon cast; Codex แนะนำ R2) แล้วค่อย normalize/pack/registry แบบ A2 ไม่ได้เริ่มนำเข้า
+- PR #91 A4 (W2): ไม่ได้นำเข้า รอเจ้าของเลือกภาพ (ถามเรื่องป้ายทอง)
+- Pages run 40712485417 (PR62): ตอนตรวจ build/browser 2,3,4 ผ่านหมด; browser shard 1 ยังรันอยู่ (ขั้น fixture ผ่านแล้ว) deploy ยังไม่เสร็จ — ต้องตรวจซ้ำ
+- งานถัดไป: เมื่อเจ้าของอนุมัติคลิป → merge PR ของ C5.7 + ตรวจ CI/Pages; เมื่อเลือก A3 → นำเข้า
+
 ## 2026-10-28 — แชตถัดไป: W1 นำภาพเข้าเกม (เปิดอัตโนมัติจากแชตก่อน)
 
 ข้อความเปิดแชต:
