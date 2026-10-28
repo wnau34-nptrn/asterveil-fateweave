@@ -28,8 +28,9 @@
 | 22 | ART-VFX-FORGE-STRIKE-001 เอฟเฟกต์ค้อนตีอุปกรณ์ตอนตีบวก/เพิ่ม Lv (แทนค้อนโค้ดวาดชั่วคราว) | A7 | ทันที (เจ้าของว่าของชั่วคราวไม่สวย 2026-10-22) |
 | 23 | ART-SKILL-ICON-003 ไอคอนวาดสกิลต้นไม้ใหญ่ 27 สกิล (รุ่น A 15 + ทหารรับจ้าง 4 อาชีพ 12) | A6, A7 | ทันที (เพิ่ม 2026-10-23) |
 | 24 | ART-UI-EQUIP-002 ภาพอุปกรณ์หลายแบบ (ตามชุดและความหายาก) + ต่อเข้าเกม | A7 | ทันที — prompt อยู่ใน `docs/handoffs/CLAUDE-TO-CODEX-DEV-TH.md` ข้อ C7 — สถานะ 2026-10-28: ได้รับภาพแล้ว (PR62 เปิดค้าง) ยังไม่ต่อเข้าเกม รอเจ้าของตัดสิน |
-| 25 | ART-UNIT-ANIMATION-A3-001 แอนิเมชันเซเรน + เห็ดหมอผีกลวง (W1) | แผนแอนิเมชัน+VFX | ทันที — prompt ใน `docs/design/ANIMATION_VFX_COMPLETION_PLAN_TH.md` §5 |
-| 26 | ART-VFX-ARCANE-SEAL-001 VFX ตระกูล C5.7 ผนึกอาคม: mark/sigil/storm/dispel (W1) | แผนแอนิเมชัน+VFX | ทันที — prompt ใน `docs/design/ANIMATION_VFX_COMPLETION_PLAN_TH.md` §5 |
+| 25 | ART-UNIT-ANIMATION-A3-001 แอนิเมชันเซเรน + เห็ดหมอผีกลวง (W1) | แผนแอนิเมชัน+VFX | ส่ง Codex แล้ว 2026-10-28 — prompt ใน `docs/design/ANIMATION_VFX_COMPLETION_PLAN_TH.md` §5 |
+| 26 | ART-VFX-ARCANE-SEAL-001 VFX ตระกูล C5.7 ผนึกอาคม: mark/sigil/storm/dispel (W1) | แผนแอนิเมชัน+VFX | ส่ง Codex แล้ว 2026-10-28 — prompt ใน `docs/design/ANIMATION_VFX_COMPLETION_PLAN_TH.md` §5 |
+| 27 | ART-UNIT-ANIMATION-A4-001 แอนิเมชันมิร่า + โทมะ, สไลม์ 2 ชนิด + ค้างคาวซาก (W2) | แผนแอนิเมชัน+VFX | หลัง Codex ส่ง W1 — prompt ใน `docs/design/ANIMATION_VFX_COMPLETION_PLAN_TH.md` §6 |
 
 **งานภาพที่เกมยังขาด (ตรวจ 2026-10-22) — เจ้าของอนุมัติให้สั่งทั้งหมด ได้เป็นข้อ 13–19 แล้ว:**
 - ศัตรูที่ยังไม่มีภาพ (ตอนนี้ใช้ภาพสำรอง): องครักษ์อสูร (ศึกแรก), อสูรส่งพลัง (ศึกเงาล่าแนวหลัง)

@@ -2,7 +2,7 @@
 
 ## Animation + VFX first — owner direction 2026-10-28
 
-Owner: finish character animation and skill VFX before other development; Codex makes the art (incoming/ only), Claude integrates in-game. Plan, waves W1–W8, remaining 30 identities / 32 hero skills without painted VFX, and copy-ready Codex prompts for W1: [docs/design/ANIMATION_VFX_COMPLETION_PLAN_TH.md](docs/design/ANIMATION_VFX_COMPLETION_PLAN_TH.md). This puts P01–P11 after W8 and supersedes the older “do not start A3/family7” notes once the owner starts a wave. Owner artwork selection and motion approval per batch remain required.
+Owner: finish character animation and skill VFX before other development; Codex makes the art (incoming/ only), Claude integrates in-game. Plan, waves W1–W8, remaining 30 identities / 32 hero skills without painted VFX, and copy-ready Codex prompts for W1: [docs/design/ANIMATION_VFX_COMPLETION_PLAN_TH.md](docs/design/ANIMATION_VFX_COMPLETION_PLAN_TH.md). This puts P01–P11 after W8 and supersedes the older “do not start A3/family7” notes once the owner starts a wave. Owner approved the plan 2026-10-28 and sent the W1 prompts (A3 Seren/Mycon, C5.7 arcane seal) to Codex; W2 prompt (A4) is ready in §6. Owner artwork selection and motion approval per batch remain required.
 
 ## Unit animation A2 — published 2026-10-28
 

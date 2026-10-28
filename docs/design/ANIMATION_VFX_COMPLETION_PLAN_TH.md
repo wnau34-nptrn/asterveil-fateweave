@@ -1,6 +1,6 @@
 # แผนทำแอนิเมชันตัวละครและ VFX สกิลให้ครบ — 2026-10-28
 
-ทิศทางเจ้าของ 2026-10-28: “แผนการคือจะทำ animation ของตัวละคร กับ vfx ของสกิลต่างๆ ให้เสร็จสิ้นก่อน โดยให้ codex ทำภาพ แล้ว claude ทำในเกม” งานนี้จึงมาก่อน P01–P11 ใน [แผนพัฒนารวม](../DEVELOPMENT_PLAN_TH.md) จนจบระลอก W8 ด้านล่าง เอกสารนี้เป็นแผน; การเริ่มแต่ละระลอกตามที่เจ้าของสั่ง ส่วน approval ภาพ/การเคลื่อนไหวยังต้องผ่านเจ้าของทุกชุดเหมือนเดิม
+ทิศทางเจ้าของ 2026-10-28: “แผนการคือจะทำ animation ของตัวละคร กับ vfx ของสกิลต่างๆ ให้เสร็จสิ้นก่อน โดยให้ codex ทำภาพ แล้ว claude ทำในเกม” งานนี้จึงมาก่อน P01–P11 ใน [แผนพัฒนารวม](../DEVELOPMENT_PLAN_TH.md) จนจบระลอก W8 ด้านล่าง **เจ้าของอนุมัติแผน 2026-10-28 (“อนุมัติแผน ส่ง prompt W1 ให้ Codex แล้ว”) — W1 เริ่มแล้ว** การเริ่มแต่ละระลอกตามที่เจ้าของสั่ง ส่วน approval ภาพ/การเคลื่อนไหวยังต้องผ่านเจ้าของทุกชุดเหมือนเดิม
 
 ## 1. สถานะจริงตอนเขียน (game branch `81d0c83`)
 
@@ -109,4 +109,34 @@ Each move: 3 beats (prepare at caster, travel/peak, impact/settle) as separate t
 RETURN: layer PNGs per move and beat, a 390px storyboard preview of all four moves, generation prompts, NOTES.md with intended anchor (caster hand/target centre/target feet) and timing per beat. Provide R1 and R2 for owner selection.
 ```
 
-หลังสองงานนี้ส่งกลับ Claude เปิดแชตงาน W1 ตาม §2 และเตรียมคำสั่งภาพ W2 ไว้ให้ Codex ทำต่อทันที
+หลังสองงานนี้ส่งกลับ Claude ตรวจ package แล้วส่งให้เจ้าของเลือกภาพ จากนั้นนำเข้าเกมตาม §2
+
+## 6. คำสั่งงานภาพระลอกถัดไป (W2) — copy-ready สำหรับ Codex
+
+ส่งได้ทันทีหลัง Codex ส่ง W1 (สายพาน) W2 ไม่มี VFX ใหม่ ท่าร่างกายยึดจังหวะ VFX กระสุน (ตระกูล 4) และเคมี (ตระกูล 6) ที่ผ่านแล้ว
+
+### ART-UNIT-ANIMATION-A4-001 — มิร่า + โทมะ; สไลม์น้ำค้าง + สไลม์ถ่านไฟ + ค้างคาวซาก
+
+```text
+CODEX HANDOFF — ART-UNIT-ANIMATION-A4-001 (art only)
+Read AGENTS.md and CLAUDE.md first. Repository wnau34-nptrn/asterveil-fateweave, base branch feature/fateweave-initial-prototype. Create branch art/art-unit-animation-a4-001. Add files only under incoming/ART-UNIT-ANIMATION-A4-001/. Do not change src/, tests/, public/, .github/ or existing art. Open a PR into the base branch; do not merge. Original artwork only; nothing from Asterveil: Rise Beyond.
+
+Same package format as ART-UNIT-ANIMATION-A2-001 / A3-001. Seed = current in-game art of each unit; keep face, outfit, weapon, proportions, facing and sole line identical in every frame. Claude does normalization, packing and runtime. Projectiles, flasks in flight and impacts belong to the existing painted VFX (public/assets/fx/projectile_*, alchemy_*); bodies show only the hand/weapon motion and release pose.
+
+Mira (`mira`, Archer, back row) — 6–8 frames each, prepare → release → follow-through → recover:
+1. draw and loose one arrow (attack, hinder, pin, track, weakshot)
+2. volley: aim high, loose a fan of arrows (volley)
+3. disengage: quick backstep while loosing (disengage)
+4. reactions: hit, block, down
+
+Toma (`toma`, Alchemist, back row):
+1. overhand flask throw at an enemy (attack, acid, bomb, smoke)
+2. underhand tonic toss to an ally (haste, fury, catalyst)
+3. reactions: hit, block, down
+
+Dew Slime (`foe_dew_slime`, Jelly Bounce, physical contact): squash, leap, impact, re-form; reactions hit, down.
+Ember Slime (`foe_ember_slime`, Ember Spark, energy): glow builds inside, spit spark, settle; reactions hit, down.
+Ruin Bat (`foe_ruin_bat`, Nip, physical): hover loop (4 frames), swoop-bite, fly back; reactions hit, down.
+
+Split into two PR-ready folders if large: heroes/ (Mira, Toma) and foes/ (slimes, bat). RETURN: seeds, raw strips (transparent PNG, one file per strip), 390px preview sheet, prompts.json, NOTES.md with frame order per strip and anything uncertain. R1, plus R2 where a move is ambiguous.
+```
