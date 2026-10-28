@@ -1,0 +1,21 @@
+{
+  "pets.webp": [
+    1024,
+    1536
+  ],
+  "pet_portraits.webp": [
+    768,
+    512
+  ],
+  "preview.png": [
+    1536,
+    1320
+  ],
+  "frames": 24,
+  "footY": 240,
+  "transparent_corner_pixels": true,
+  "sourceAlphaExtrema": [
+    0,
+    254
+  ]
+}
