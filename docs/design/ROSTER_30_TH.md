@@ -282,7 +282,7 @@ stack แยกตามผู้ใช้/ศัตรู สูงสุด 3;
 | Batch 4 / codex/roster-30-5 | นริน เวคิน เนมิ มาลี ปวิน | concept ใหม่ห้าคน, sprites/portraits/icons | 25 ตัวผ่าน gate; เพิ่ม p เดิมของห้าอาชีพคู่กัน |
 | Batch 5 / codex/roster-30-6 | นาวา พิลา ริสา เขม สริน | concept ใหม่ห้าคน, sprites/portraits/icons | 30 ตัวผ่าน gate; เพิ่ม p เดิมอีกห้าอาชีพ |
 
-ภาพต้นทางอยู่ `origin/art/art-char-class-new-001:incoming/ART-CHAR-CLASS-NEW-001/` ไม่อยู่บนฐานเกม Phase 1 จึงอ่านด้วย git show; ห้ามทำเหมือน package ถูก merge แล้ว ชุด concept มี A/B และ unit_A เป็นเพียง static concept test ยังไม่ใช่ production sprite เจ้าของยังไม่เลือกให้ใช้ A ตามข้อยกเว้น C12 และบันทึกว่าเป็นค่าเริ่มต้น ไม่ถือเป็นการอนุมัติภาพ
+ภาพต้นทางอยู่ `incoming/ART-CHAR-CLASS-NEW-001/` บนฐานเกมแล้ว (PR61 merge เป็นภาพอ้างอิงเมื่อ 2026-10-28; ก่อนหน้านั้นอ่านด้วย git show) การ merge นี้เก็บภาพอ้างอิงเท่านั้น ไม่ใช่การอนุมัติภาพ production ชุด concept มี A/B และ unit_A เป็นเพียง static concept test ยังไม่ใช่ production sprite เจ้าของยังไม่เลือกให้ใช้ A ตามข้อยกเว้น C12 และบันทึกว่าเป็นค่าเริ่มต้น ไม่ถือเป็นการอนุมัติภาพ
 
 ทุก batch ต้องมี unit 512px RGBA, footY=496, center x=256, origin 497/512; atlas runtime คง frame เก่าแล้ว append; portrait ใหม่และไอคอนอ่านได้ที่ 40px; provenance/คำสั่งประกอบ/ขนาดจริง; basic VFX แสดงผลจริงตาม state ใช้ภาษาเส้น/แสงที่อนุญาต ไม่ถือว่างานนี้อนุมัติ VFX family C5 หรือข้ามการดูคลิป
 

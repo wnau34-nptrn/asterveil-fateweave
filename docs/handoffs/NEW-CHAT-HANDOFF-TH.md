@@ -1,5 +1,13 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
+
+## 2026-10-28 — เก็บกวาด PR ภาพค้าง (เจ้าของสั่ง “ดำเนินการตามที่แนะนำได้เลย”)
+
+- ปิด 11 PR ที่ของอยู่ในเกมแล้ว: PR8/9/10/49/50/51/56/58 (ทุกไฟล์ตรง blob บนสาขาเกม), PR54 (Execute/Ward runtime `4119e16`), PR11 (`map_props.webp`), PR71 (แทนด้วย `UNIT_ANIMATION_ROLLOUT_TH.md`) ไม่ลบ branch
+- merge 6 PR เป็นภาพอ้างอิงใน `incoming/` เท่านั้น ไม่แตะ src/public/tests: PR46 keyart, PR45 boss concept, PR43 pet concept, PR57 world map, PR61 class-new (ROSTER_30 อัปเดตว่าไม่ต้อง git show แล้ว), PR42 progress icons ไม่ถือเป็นการอนุมัติภาพ production หรือการนำเข้าเกม
+- เปิดค้างรอเจ้าของ: PR53 บอส4–10/วาร์กอธ, PR55 สัตว์เลี้ยง (รอระบบ B/C), PR48 รูน, PR47 คู่แข่ง (เจ้าของยังไม่ตรวจภาพ), PR62 อุปกรณ์หลายแบบ (ยังไม่ต่อเข้าเกม) สถานะในคิวอัปเดตใน `CODEX-ART-QUEUE-TH.md`
+- docs/incoming-only: ตรวจ `git diff --check` ไม่รันทดสอบเกม
+
 ## 2026-10-28 — เจ้าของอนุมัติภาพเคลื่อนไหว A2: “เอาเข้าเกมได้”
 
 เจ้าของยืนยัน “เอาเข้าเกมได้” หลังส่งมอบชุดเอกิส `guardian` และองครักษ์อสูร `foe_vargoth_guard` พร้อม26คลิปจริง390px จึงบันทึกเป็น owner visual approval ของ A2 โดยตรง ไม่ได้อนุมานจาก tests ชุดนี้อยู่ในเกมแล้วผ่าน PR88 merge `e94b424` + QA-only `7ff5388`; Pages40671415477 deploy สำเร็จ หลักฐาน release และคลิปอยู่ใน `docs/validation/unit-a2-release/` และ `docs/combat-presentation/unit-a2-slice/`
