@@ -1,0 +1,17 @@
+{
+  "atlasSha256": "454af4107ce2e491df9fa36f888a212d7a9a06b984f4c9d52fbda953dfbbf145",
+  "frames": {
+    "mark_prepare": "3879ca598328534f4da88648a54cc1ef04ffa14321b430fa1bf16ad878123a9e",
+    "mark_peak": "063cb79ad8fa58a4887845136364c2329b20cddb2ffa9bf65134c9ebb7be324c",
+    "mark_settle": "46a31265913af87466c9d9674473bdd6058eb53b4174999670eef2cc03056bcc",
+    "sigil_prepare": "bdb3bd92b80da8e9f47df1498fff41f7bb0c589382bdc5f9b2c5f4419e14f0be",
+    "sigil_peak": "c7a4663b6bdae4e21e8976eff772305dec6fdb15f1ee2e267f8f224602cab56f",
+    "sigil_settle": "36098780967b24293e0a60252d3bb8484ecdb494dfd286e2bc08ca45ec174553",
+    "storm_prepare": "1acb7f5ab9b9c3e0e8c9d676cf3f95ed36dfa97c8f1aa6f26d2d4bc8e42e06ca",
+    "storm_peak": "e76b03036be2a0f3e616af9077c77162308d62b2331d90dcdf3e2d347bcd9da7",
+    "storm_settle": "cae0dc5c1d968b11e9aae3e5c7359a55ffa56471a17dc2a473f35e6d22a7878b",
+    "dispel_prepare": "3eb25410d50a38fc792bc0b6d35e2f82ce32a23be74408388f8a50923704c302",
+    "dispel_peak": "a692cd7d22f5537d72b37039b6377191dff753fe8577f30bf6751cc89033fbb8",
+    "dispel_settle": "c6150d7cbcb8b685b8d9d0931c8e0415c9867340cc7aff65ae74c9ba05ad1c25"
+  }
+}
