@@ -4,7 +4,7 @@
 
 [หน้าเลือกคลิปจริง 390px](index.html) · [แหล่งภาพ/ข้อสังเกตของ Codex](../../../incoming/ART-UNIT-ANIMATION-A3-001/NOTES.md) · [สคริปต์ normalize](../../../incoming/ART-UNIT-ANIMATION-A3-001/build_assets.py) · [ผล normalize/แพ็ก](../../../incoming/ART-UNIT-ANIMATION-A3-001/validation-normalized.json)
 
-**สถานะ: รอเจ้าของตรวจ motion จากคลิปจริง ยังไม่ merge/เผยแพร่** ผลเทสต์ไม่ใช่การอนุมัติภาพ
+**สถานะ: เจ้าของอนุมัติ motion “เอาเข้าเกมได้” (2026-10-28) หลังดูคลิปจริง 16 คลิป** — เป็นการอนุมัติโดยตรง ไม่ได้อนุมานจากผลเทสต์; merge/เผยแพร่ผ่าน PR #99 หลัง CI ผ่าน
 
 ## การเลือกภาพ
 
@@ -63,6 +63,6 @@
 - คลิปจริง 16 คลิป 390×844 (หน้า [index](index.html)): attack/prayer ×{normal,fast,reduced,OS-reduce}, heal, sanctuary, halo, bless, hurt, down, enemy-down, revive ทุกคลิปรวมเทิร์น Spore Hex ของ Mycon (เห็ดหมอผีตอบโต้หลังเซเรนเสมอ) ถ่ายด้วย CDP timestamp จริง ไม่เร่งเวลา ไม่แทรกเฟรม; ยังไม่มีคลิป Seren block เพราะ resolver ไม่ให้เหตุการณ์ดาเมจ 0 ในฉากที่จัดได้ง่าย (เฟรมมีแต่ใช้เมื่อ event เกิดจริง)
 - หลักฐาน: [proof.json](proof.json), capture-metadata
 
-## สิ่งที่ต้องการจากเจ้าของ
+## การอนุมัติของเจ้าของ
 
-ดูคลิป (โดยเฉพาะ `attack`, `prayer`, `attack-SporeHex-down`) แล้วบอก motion ผ่านหรือขอแก้: (1) ขาซ้ายท่า follow-through ของฟาดไม้เท้า (2) หมวก Mycon พองเกินไป/ไม่พอ (3) ท่าอื่นที่ไม่พอใจ ยังไม่ merge/เผยแพร่จนกว่าจะอนุมัติ
+เจ้าของตอบ “เอาเข้าเกมได้” หลังดูคลิป (รวมจุดที่แจ้งไว้: ขาซ้ายท่า follow-through และหมวก Mycon) จึงคงภาพตามนี้ ไม่ขอ Codex gen ใหม่

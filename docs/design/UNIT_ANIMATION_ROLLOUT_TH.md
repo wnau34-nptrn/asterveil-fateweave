@@ -178,6 +178,6 @@ PR87 merged `1ea31d5` และPages40614459819เผยแพร่สำเร
 
 สถานะเมื่อเขียนแผน: ยังไม่ผลิตชุดใหม่; ผลการทำA0/A1ภายหลังอยู่หัวเอกสาร ส่วนA2–A11ยังเป็นแผน
 
-## A3 — in review 2026-10-28
+## A3 — owner approved 2026-10-28
 
-เซเรน/เห็ดหมอผีกลวงนำเข้าแล้วบนสาขา `claude/unit-a3-seren-mycon` (R2 ตามที่เจ้าของมอบให้ Codex แนะนำ) รอเจ้าของตรวจ motion จากคลิป 390px ก่อน merge: [สรุปท่า/งบ/ผลตรวจ](../combat-presentation/unit-a3-slice/README_TH.md)
+เซเรน/เห็ดหมอผีกลวงนำเข้าแล้วบนสาขา `claude/unit-a3-seren-mycon` (R2 ตามที่เจ้าของมอบให้ Codex แนะนำ) เจ้าของอนุมัติ motion “เอาเข้าเกมได้” (2026-10-28) → merge ผ่าน PR #99: [สรุปท่า/งบ/ผลตรวจ](../combat-presentation/unit-a3-slice/README_TH.md)

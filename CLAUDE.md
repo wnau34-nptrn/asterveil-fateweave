@@ -12,9 +12,9 @@ Owner: finish character animation and skill VFX before other development; Codex 
 
 A2 Aegis/ Vargoth Guard published via PR88 mergee94b424 + QA-only7ff5388; Pages40671415477 build/4browser/deploy success. Full evidence: [A2 release](docs/validation/unit-a2-release/README_TH.md), [26clips/mapping/fallback](docs/combat-presentation/unit-a2-slice/README_TH.md). Pilot/A1/C5 approvals and timing retained. Owner explicitly approved A2 motion with “เอาเข้าเกมได้” on2026-10-28 after the26clip delivery; this is direct approval, not inferred from tests. A3/family7 are outside this task.
 
-## Unit animation A3 — in review 2026-10-28
+## Unit animation A3 — owner approved 2026-10-28
 
-A3 Seren (`healer`) and Hollow Mycon (`foe_mycon`) are integrated on branch `claude/unit-a3-seren-mycon` (PR into the game branch): owner selected R2 for Seren staff attack and Mycon cast (“ไปขั้นต่อไป ทั้งสองอย่าง” = Codex's recommendation), whole-strip normalizer + lossless atlases (Seren 4.68MiB / 1,463,594 B, Mycon 2.32MiB / 826,472 B decoded/download), optional registry only, existing healing/energy VFX, unchanged rules/save/content/balance/timing. 16 real 390px clips: [A3 slice](docs/combat-presentation/unit-a3-slice/README_TH.md). **Waiting for owner motion approval; do not merge/publish before it.** Tests are not visual approval. Side effect: encounters with `healer` now load one extra optional sheet.
+A3 Seren (`healer`) and Hollow Mycon (`foe_mycon`) are integrated on branch `claude/unit-a3-seren-mycon` (PR into the game branch): owner selected R2 for Seren staff attack and Mycon cast (“ไปขั้นต่อไป ทั้งสองอย่าง” = Codex's recommendation), whole-strip normalizer + lossless atlases (Seren 4.68MiB / 1,463,594 B, Mycon 2.32MiB / 826,472 B decoded/download), optional registry only, existing healing/energy VFX, unchanged rules/save/content/balance/timing. 16 real 390px clips: [A3 slice](docs/combat-presentation/unit-a3-slice/README_TH.md). Owner explicitly approved the motion with “เอาเข้าเกมได้” on 2026-10-28 after the 16-clip delivery (direct approval, not inferred from tests); merge/publication through PR #99 after CI success. Side effect: encounters with `healer` now load one extra optional sheet.
 
 ## Consolidated planning index — 2026-10-25 (updated 2026-10-28)
 
