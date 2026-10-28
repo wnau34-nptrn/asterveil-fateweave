@@ -1,0 +1,1118 @@
+{
+  "base": "f0ee801792f4a0a081a2752cadfdd99d63b50dbe",
+  "sourceCommit": "dd56dddbaa645023cc168d3811acbd6328d2552e",
+  "sourceTree": "9c21ec671fa30a10236772f3819ba84aaca208a3",
+  "publicTree": "f6698cd8435f2b84295c503de9db6031b1f4e218",
+  "environment": "Chromium / SwiftShader / cloud 390x844 touch emulation, not a physical phone or iOS Safari",
+  "retiming": "none; every captured frame and final hold preserved using CDP timestamps",
+  "ownerVisualApproval": "No new owner visual approval is inferred from generation or tests.",
+  "clips": [
+    {
+      "file": "attack-CrushingBlow-normal-osreduce-390.mp4",
+      "sha256": "7f48698e5d0cd0eccec67781654d677af6e589facff40fc5a1a0b531efb212ab",
+      "bytes": 194571,
+      "metadata": "capture-metadata/attack-CrushingBlow-normal-osreduce",
+      "capturedFrames": 53,
+      "maxFrameGap": 0.273,
+      "maxTimestampErrorMs": 0.006,
+      "duration": 2.189789
+    },
+    {
+      "file": "attack-CrushingBlow-normal-fast-390.mp4",
+      "sha256": "039677f2cf5e765f3abe6900fcc9376b4fc80fc67b6ba2bc7baafb5549eaeb32",
+      "bytes": 321523,
+      "metadata": "capture-metadata/attack-CrushingBlow-normal-fast",
+      "capturedFrames": 35,
+      "maxFrameGap": 0.225,
+      "maxTimestampErrorMs": 0.0051,
+      "duration": 1.677922
+    },
+    {
+      "file": "attack-CrushingBlow-normal-normal-390.mp4",
+      "sha256": "bf9b254637c45f5e375eff4e2760067fa0bba01421566b1edc53da1aaf4f8339",
+      "bytes": 332906,
+      "metadata": "capture-metadata/attack-CrushingBlow-normal-normal",
+      "capturedFrames": 46,
+      "maxFrameGap": 0.13,
+      "maxTimestampErrorMs": 0.0051,
+      "duration": 1.9474
+    },
+    {
+      "file": "attack-MaceSwing-normal-normal-390.mp4",
+      "sha256": "fb7de96398880fe3b4ab0e77b66f5b1f99619a9ab0663745b51da829ab969136",
+      "bytes": 393821,
+      "metadata": "capture-metadata/attack-MaceSwing-normal-normal",
+      "capturedFrames": 46,
+      "maxFrameGap": 0.243,
+      "maxTimestampErrorMs": 0.0051,
+      "duration": 2.274211
+    },
+    {
+      "file": "attack-RiftBolt-enemy-down-normal-390.mp4",
+      "sha256": "a938434aa3f552895f3f701b85796604bb4315ea03345d4d9e77a1dbbfc43cd0",
+      "bytes": 233336,
+      "metadata": "capture-metadata/attack-RiftBolt-enemy-down-normal",
+      "capturedFrames": 37,
+      "maxFrameGap": 0.155,
+      "maxTimestampErrorMs": 0.0051,
+      "duration": 1.6508
+    },
+    {
+      "file": "attack-RiftBolt-normal-fast-390.mp4",
+      "sha256": "77bdb5018b19c49234441fc225213b8ad711d2d476ff5ce005e4007abff31d03",
+      "bytes": 328422,
+      "metadata": "capture-metadata/attack-RiftBolt-normal-fast",
+      "capturedFrames": 35,
+      "maxFrameGap": 0.302,
+      "maxTimestampErrorMs": 0.0051,
+      "duration": 1.824622
+    },
+    {
+      "file": "attack-RiftBolt-normal-normal-390.mp4",
+      "sha256": "e05dd6f49dac391abfabc6d29f7793f9b51ab455e1ed2f391f6002dae66eee1c",
+      "bytes": 356920,
+      "metadata": "capture-metadata/attack-RiftBolt-normal-normal",
+      "capturedFrames": 39,
+      "maxFrameGap": 0.313,
+      "maxTimestampErrorMs": 0.006,
+      "duration": 2.220733
+    },
+    {
+      "file": "attack-RiftBolt-normal-osreduce-390.mp4",
+      "sha256": "118aa94e57939aaa558893355f33e0b848cfd6467b2f62da5fdaf75018282688",
+      "bytes": 200455,
+      "metadata": "capture-metadata/attack-RiftBolt-normal-osreduce",
+      "capturedFrames": 51,
+      "maxFrameGap": 0.267,
+      "maxTimestampErrorMs": 0.0061,
+      "duration": 2.231578
+    },
+    {
+      "file": "attack-RiftBolt-normal-reduced-390.mp4",
+      "sha256": "2a35d9f956ab12dc3ce980935a003d33180f5eeba78cbdffa1fcd8d6d551394d",
+      "bytes": 227914,
+      "metadata": "capture-metadata/attack-RiftBolt-normal-reduced",
+      "capturedFrames": 50,
+      "maxFrameGap": 0.266,
+      "maxTimestampErrorMs": 0.006,
+      "duration": 2.259611
+    },
+    {
+      "file": "attack-ShieldSmash-normal-normal-390.mp4",
+      "sha256": "508fd0ca5d08ef7f295b378f471c8475ac856ff47ec782e2efde3e064d12ff0b",
+      "bytes": 402826,
+      "metadata": "capture-metadata/attack-ShieldSmash-normal-normal",
+      "capturedFrames": 50,
+      "maxFrameGap": 0.313,
+      "maxTimestampErrorMs": 0.0051,
+      "duration": 2.274656
+    },
+    {
+      "file": "bash-RiftBolt-normal-fast-390.mp4",
+      "sha256": "c41bbb2ff2e2494f004437f9949868e3e6f05f31d56cd3b5a58150d0f990fb9f",
+      "bytes": 367019,
+      "metadata": "capture-metadata/bash-RiftBolt-normal-fast",
+      "capturedFrames": 42,
+      "maxFrameGap": 0.302,
+      "maxTimestampErrorMs": 0.0059,
+      "duration": 2.257389
+    },
+    {
+      "file": "bash-RiftBolt-normal-normal-390.mp4",
+      "sha256": "9867bdc89959f7520ad460a3dffc5b1a7047eb36f2d9d88929fca8e6ca12aa7e",
+      "bytes": 442072,
+      "metadata": "capture-metadata/bash-RiftBolt-normal-normal",
+      "capturedFrames": 60,
+      "maxFrameGap": 0.312,
+      "maxTimestampErrorMs": 0.0051,
+      "duration": 2.7205
+    },
+    {
+      "file": "bash-RiftBolt-normal-osreduce-390.mp4",
+      "sha256": "2c5b9c40ddd0f5629e8487417f13056ca7311d0be7333db7c8fdf2768b0530f7",
+      "bytes": 227095,
+      "metadata": "capture-metadata/bash-RiftBolt-normal-osreduce",
+      "capturedFrames": 58,
+      "maxFrameGap": 0.286,
+      "maxTimestampErrorMs": 0.0051,
+      "duration": 2.844433
+    },
+    {
+      "file": "bash-RiftBolt-normal-reduced-390.mp4",
+      "sha256": "9ae43534a41ef19b9a86a3457dbde02334085818d8de52e9f27dadd2318aaf98",
+      "bytes": 255336,
+      "metadata": "capture-metadata/bash-RiftBolt-normal-reduced",
+      "capturedFrames": 61,
+      "maxFrameGap": 0.288,
+      "maxTimestampErrorMs": 0.0051,
+      "duration": 2.765378
+    },
+    {
+      "file": "bash-RiftBolt-reflect-normal-390.mp4",
+      "sha256": "281bcf1f5cf72cc9595b63c3bd45716bdfd1f6c90522096c97ad07b23cea99c5",
+      "bytes": 275808,
+      "metadata": "capture-metadata/bash-RiftBolt-reflect-normal",
+      "capturedFrames": 44,
+      "maxFrameGap": 0.174,
+      "maxTimestampErrorMs": 0.0059,
+      "duration": 1.933978
+    },
+    {
+      "file": "bulwark-RiftBolt-normal-normal-390.mp4",
+      "sha256": "d79c5d7d5457a24732170c648915b8e1f621b4dde8a11ec6cf9efe7da0a60119",
+      "bytes": 350552,
+      "metadata": "capture-metadata/bulwark-RiftBolt-normal-normal",
+      "capturedFrames": 46,
+      "maxFrameGap": 0.268,
+      "maxTimestampErrorMs": 0.006,
+      "duration": 2.271611
+    },
+    {
+      "file": "challenge-RiftBolt-normal-normal-390.mp4",
+      "sha256": "9970a9ad4b42eb33f2edc178ecf12d275b36c5380f7d32b652db2c9d8c888193",
+      "bytes": 288528,
+      "metadata": "capture-metadata/challenge-RiftBolt-normal-normal",
+      "capturedFrames": 51,
+      "maxFrameGap": 0.104,
+      "maxTimestampErrorMs": 0.0052,
+      "duration": 1.871689
+    },
+    {
+      "file": "attack-CrushingBlow-normal-reduced-390.mp4",
+      "sha256": "9086922cf39c610d80613aafa2f1ef10d9baaa06496a04504c38b5db77e64494",
+      "bytes": 174245,
+      "metadata": "capture-metadata/attack-CrushingBlow-normal-reduced",
+      "capturedFrames": 49,
+      "maxFrameGap": 0.118,
+      "maxTimestampErrorMs": 0.006,
+      "duration": 1.948722
+    },
+    {
+      "file": "guard-CrushingBlow-counter-normal-390.mp4",
+      "sha256": "47faf9fc3e90c0790cbd554cf1f63b7301cb532cfb552f4ee38c15fbe593085f",
+      "bytes": 294413,
+      "metadata": "capture-metadata/guard-CrushingBlow-counter-normal",
+      "capturedFrames": 45,
+      "maxFrameGap": 0.148,
+      "maxTimestampErrorMs": 0.0052,
+      "duration": 1.941322
+    },
+    {
+      "file": "guard-RiftBolt-normal-fast-390.mp4",
+      "sha256": "b1cf3987843e7ef93e279d7a3834606dcd56feb02d813786cbe4bbfab465511c",
+      "bytes": 314290,
+      "metadata": "capture-metadata/guard-RiftBolt-normal-fast",
+      "capturedFrames": 28,
+      "maxFrameGap": 0.224,
+      "maxTimestampErrorMs": 0.006,
+      "duration": 1.693144
+    },
+    {
+      "file": "guard-RiftBolt-normal-normal-390.mp4",
+      "sha256": "cd42a72cdef623207acbdcd12d9c12d4e38b96ef2a1a0c81c134928734e22a14",
+      "bytes": 369618,
+      "metadata": "capture-metadata/guard-RiftBolt-normal-normal",
+      "capturedFrames": 45,
+      "maxFrameGap": 0.377,
+      "maxTimestampErrorMs": 0.0059,
+      "duration": 2.366878
+    },
+    {
+      "file": "guard-RiftBolt-normal-osreduce-390.mp4",
+      "sha256": "50971683d74b7e2551c32ec7b86a533c252f4b7063c91b5c90f278a30a7bc6dd",
+      "bytes": 217657,
+      "metadata": "capture-metadata/guard-RiftBolt-normal-osreduce",
+      "capturedFrames": 44,
+      "maxFrameGap": 0.264,
+      "maxTimestampErrorMs": 0.005,
+      "duration": 2.099367
+    },
+    {
+      "file": "guard-RiftBolt-normal-reduced-390.mp4",
+      "sha256": "aa514cb56f001465955f73002df2d5ca59b0face3a842c2511d5f2bf80afc5db",
+      "bytes": 188406,
+      "metadata": "capture-metadata/guard-RiftBolt-normal-reduced",
+      "capturedFrames": 44,
+      "maxFrameGap": 0.126,
+      "maxTimestampErrorMs": 0.0051,
+      "duration": 1.976833
+    },
+    {
+      "file": "rally-RiftBolt-normal-normal-390.mp4",
+      "sha256": "4db898beadbc5f0307af34d6c2908bb508621449ac2be24447a885e7dd679dec",
+      "bytes": 390614,
+      "metadata": "capture-metadata/rally-RiftBolt-normal-normal",
+      "capturedFrames": 53,
+      "maxFrameGap": 0.357,
+      "maxTimestampErrorMs": 0.0051,
+      "duration": 2.689011
+    },
+    {
+      "file": "revive-RiftBolt-revive-normal-390.mp4",
+      "sha256": "1b06ce3df35e53c3f607113b961364a83373fc18842cc71b26d8f07294984b0b",
+      "bytes": 299114,
+      "metadata": "capture-metadata/revive-RiftBolt-revive-normal",
+      "capturedFrames": 35,
+      "maxFrameGap": 0.228,
+      "maxTimestampErrorMs": 0.005,
+      "duration": 1.733722
+    },
+    {
+      "file": "rouse-RiftBolt-wounded-normal-390.mp4",
+      "sha256": "de903579387686c6ce5716050ac13467a1b2700ff4745d1978c87ee52723432a",
+      "bytes": 407690,
+      "metadata": "capture-metadata/rouse-RiftBolt-wounded-normal",
+      "capturedFrames": 55,
+      "maxFrameGap": 0.328,
+      "maxTimestampErrorMs": 0.0052,
+      "duration": 2.691889
+    }
+  ],
+  "capturedFrames": 1202,
+  "maxFrameGap": 0.377,
+  "maxTimestampErrorMs": 0.0061,
+  "art": {
+    "aegis": {
+      "scale": 1.0501775147928993,
+      "factor": 0.36,
+      "displayRatio": 2.7777777777777777,
+      "cell": 512,
+      "origin": [
+        0.5,
+        0.96875
+      ],
+      "rawSize": [
+        1536,
+        1024
+      ],
+      "sourceSha256": "3dced9d8f503ffe5fc9f17b30e452a4f7d23819b9e1ed1368e21892192f91a13",
+      "transforms": [
+        {
+          "row": 0,
+          "column": 1,
+          "sourceBox": [
+            212,
+            176,
+            422,
+            348
+          ],
+          "gridAnchorX": 329.14285714285717,
+          "position": [
+            133,
+            317
+          ]
+        },
+        {
+          "row": 0,
+          "column": 2,
+          "sourceBox": [
+            441,
+            179,
+            647,
+            349
+          ],
+          "gridAnchorX": 548.5714285714286,
+          "position": [
+            143,
+            320
+          ]
+        },
+        {
+          "row": 0,
+          "column": 3,
+          "sourceBox": [
+            642,
+            179,
+            890,
+            350
+          ],
+          "gridAnchorX": 768.0,
+          "position": [
+            124,
+            319
+          ]
+        },
+        {
+          "row": 0,
+          "column": 4,
+          "sourceBox": [
+            863,
+            179,
+            1109,
+            349
+          ],
+          "gridAnchorX": 987.4285714285714,
+          "position": [
+            125,
+            320
+          ]
+        },
+        {
+          "row": 0,
+          "column": 5,
+          "sourceBox": [
+            1109,
+            179,
+            1289,
+            349
+          ],
+          "gridAnchorX": 1206.857142857143,
+          "position": [
+            153,
+            320
+          ]
+        },
+        {
+          "row": 0,
+          "column": 6,
+          "sourceBox": [
+            1327,
+            176,
+            1513,
+            349
+          ],
+          "gridAnchorX": 1426.2857142857142,
+          "position": [
+            152,
+            316
+          ]
+        },
+        {
+          "row": 2,
+          "column": 1,
+          "sourceBox": [
+            235,
+            514,
+            417,
+            689
+          ],
+          "gridAnchorX": 329.14285714285717,
+          "position": [
+            157,
+            314
+          ]
+        },
+        {
+          "row": 2,
+          "column": 2,
+          "sourceBox": [
+            444,
+            516,
+            627,
+            689
+          ],
+          "gridAnchorX": 548.5714285714286,
+          "position": [
+            146,
+            316
+          ]
+        },
+        {
+          "row": 2,
+          "column": 3,
+          "sourceBox": [
+            661,
+            516,
+            846,
+            689
+          ],
+          "gridAnchorX": 768.0,
+          "position": [
+            144,
+            316
+          ]
+        },
+        {
+          "row": 2,
+          "column": 4,
+          "sourceBox": [
+            882,
+            514,
+            1047,
+            689
+          ],
+          "gridAnchorX": 987.4285714285714,
+          "position": [
+            145,
+            314
+          ]
+        },
+        {
+          "row": 2,
+          "column": 5,
+          "sourceBox": [
+            1093,
+            518,
+            1291,
+            689
+          ],
+          "gridAnchorX": 1206.857142857143,
+          "position": [
+            136,
+            319
+          ]
+        },
+        {
+          "row": 2,
+          "column": 6,
+          "sourceBox": [
+            1327,
+            513,
+            1516,
+            687
+          ],
+          "gridAnchorX": 1426.2857142857142,
+          "position": [
+            152,
+            315
+          ]
+        },
+        {
+          "row": 1,
+          "column": 1,
+          "sourceBox": [
+            216,
+            359,
+            415,
+            514
+          ],
+          "gridAnchorX": 329.14285714285717,
+          "position": [
+            137,
+            335
+          ]
+        },
+        {
+          "row": 1,
+          "column": 2,
+          "sourceBox": [
+            431,
+            353,
+            607,
+            514
+          ],
+          "gridAnchorX": 548.5714285714286,
+          "position": [
+            133,
+            329
+          ]
+        },
+        {
+          "row": 1,
+          "column": 3,
+          "sourceBox": [
+            626,
+            354,
+            857,
+            515
+          ],
+          "gridAnchorX": 768.0,
+          "position": [
+            107,
+            329
+          ]
+        },
+        {
+          "row": 1,
+          "column": 4,
+          "sourceBox": [
+            865,
+            349,
+            1065,
+            515
+          ],
+          "gridAnchorX": 987.4285714285714,
+          "position": [
+            127,
+            324
+          ]
+        },
+        {
+          "row": 1,
+          "column": 5,
+          "sourceBox": [
+            1096,
+            348,
+            1292,
+            517
+          ],
+          "gridAnchorX": 1206.857142857143,
+          "position": [
+            140,
+            321
+          ]
+        },
+        {
+          "row": 1,
+          "column": 6,
+          "sourceBox": [
+            1327,
+            346,
+            1515,
+            518
+          ],
+          "gridAnchorX": 1426.2857142857142,
+          "position": [
+            152,
+            317
+          ]
+        },
+        {
+          "row": 3,
+          "column": 0,
+          "sourceBox": [
+            96,
+            687,
+            298,
+            850
+          ],
+          "gridAnchorX": 192.0,
+          "position": [
+            155,
+            327
+          ]
+        },
+        {
+          "row": 3,
+          "column": 1,
+          "sourceBox": [
+            461,
+            695,
+            662,
+            850
+          ],
+          "gridAnchorX": 576.0,
+          "position": [
+            135,
+            335
+          ]
+        },
+        {
+          "row": 4,
+          "column": 0,
+          "sourceBox": [
+            91,
+            854,
+            313,
+            1007
+          ],
+          "gridAnchorX": 192.0,
+          "position": [
+            150,
+            337
+          ]
+        },
+        {
+          "row": 4,
+          "column": 2,
+          "sourceBox": [
+            775,
+            870,
+            1096,
+            1003
+          ],
+          "gridAnchorX": 960.0,
+          "position": [
+            62,
+            358
+          ]
+        },
+        {
+          "row": 4,
+          "column": 3,
+          "sourceBox": [
+            1118,
+            891,
+            1507,
+            1007
+          ],
+          "gridAnchorX": 1344.0,
+          "position": [
+            19,
+            376
+          ]
+        },
+        {
+          "row": 3,
+          "column": 0,
+          "sourceBox": [
+            96,
+            687,
+            298,
+            850
+          ],
+          "gridAnchorX": 192.0,
+          "position": [
+            155,
+            327
+          ]
+        },
+        {
+          "row": 3,
+          "column": 3,
+          "sourceBox": [
+            1188,
+            687,
+            1387,
+            850
+          ],
+          "gridAnchorX": 1344.0,
+          "position": [
+            92,
+            327
+          ]
+        }
+      ],
+      "lockedToSeed": [
+        0,
+        1,
+        8,
+        9,
+        16,
+        22,
+        29
+      ],
+      "uniqueFrames": 25,
+      "losslessReconstruction": "all alpha and visible RGBA equal",
+      "image": "aegis_a2.1d12d3127841.webp",
+      "atlas": "aegis_a2.e88cd1ce5fe0.json",
+      "width": 1536,
+      "height": 720,
+      "frames": 32,
+      "decodedBytes": 4423680,
+      "downloadBytes": 1397790,
+      "atlasSHA256": "1d12d3127841eb08fcfb3f1d5e6382c60ff4a737ea5faeb0164dbad12c4e35aa",
+      "jsonSHA256": "e88cd1ce5fe0f47a29d81527645fb5bcd3523c63a7a7acf57e70795c7f0ab06a"
+    },
+    "vargoth": {
+      "scale": 0.9732620320855615,
+      "factor": 0.5,
+      "displayRatio": 2.0,
+      "cell": 512,
+      "origin": [
+        0.5,
+        0.96875
+      ],
+      "rawSize": [
+        1536,
+        1024
+      ],
+      "sourceSha256": "07343a655e8745fe27c8a11381fe476616282053ee0a6dc8418d8afe05c0a79a",
+      "transforms": [
+        {
+          "row": 0,
+          "column": 1,
+          "sourceBox": [
+            268,
+            39,
+            531,
+            226
+          ],
+          "gridAnchorX": 384.0,
+          "position": [
+            143,
+            316
+          ]
+        },
+        {
+          "row": 0,
+          "column": 2,
+          "sourceBox": [
+            519,
+            16,
+            778,
+            226
+          ],
+          "gridAnchorX": 640.0,
+          "position": [
+            138,
+            294
+          ]
+        },
+        {
+          "row": 0,
+          "column": 3,
+          "sourceBox": [
+            802,
+            11,
+            1008,
+            240
+          ],
+          "gridAnchorX": 896.0,
+          "position": [
+            165,
+            275
+          ]
+        },
+        {
+          "row": 0,
+          "column": 4,
+          "sourceBox": [
+            1015,
+            46,
+            1278,
+            227
+          ],
+          "gridAnchorX": 1152.0,
+          "position": [
+            123,
+            322
+          ]
+        },
+        {
+          "row": 0,
+          "column": 4,
+          "sourceBox": [
+            1015,
+            46,
+            1278,
+            227
+          ],
+          "gridAnchorX": 1152.0,
+          "position": [
+            123,
+            322
+          ]
+        },
+        {
+          "row": 0,
+          "column": 5,
+          "sourceBox": [
+            1282,
+            35,
+            1523,
+            227
+          ],
+          "gridAnchorX": 1408.0,
+          "position": [
+            133,
+            311
+          ]
+        },
+        {
+          "row": 1,
+          "column": 1,
+          "sourceBox": [
+            248,
+            449,
+            403,
+            617
+          ],
+          "gridAnchorX": 288.0,
+          "position": [
+            217,
+            334
+          ]
+        },
+        {
+          "row": 1,
+          "column": 2,
+          "sourceBox": [
+            412,
+            451,
+            585,
+            618
+          ],
+          "gridAnchorX": 480.0,
+          "position": [
+            190,
+            335
+          ]
+        },
+        {
+          "row": 1,
+          "column": 3,
+          "sourceBox": [
+            584,
+            440,
+            755,
+            613
+          ],
+          "gridAnchorX": 672.0,
+          "position": [
+            170,
+            330
+          ]
+        },
+        {
+          "row": 1,
+          "column": 4,
+          "sourceBox": [
+            763,
+            450,
+            973,
+            611
+          ],
+          "gridAnchorX": 864.0,
+          "position": [
+            158,
+            341
+          ]
+        },
+        {
+          "row": 1,
+          "column": 5,
+          "sourceBox": [
+            972,
+            445,
+            1152,
+            610
+          ],
+          "gridAnchorX": 1056.0,
+          "position": [
+            174,
+            337
+          ]
+        },
+        {
+          "row": 1,
+          "column": 6,
+          "sourceBox": [
+            1160,
+            451,
+            1325,
+            613
+          ],
+          "gridAnchorX": 1248.0,
+          "position": [
+            170,
+            340
+          ]
+        },
+        {
+          "row": 2,
+          "column": 0,
+          "sourceBox": [
+            220,
+            655,
+            467,
+            818
+          ],
+          "gridAnchorX": 344,
+          "position": [
+            135,
+            339
+          ]
+        },
+        {
+          "row": 2,
+          "column": 1,
+          "sourceBox": [
+            500,
+            653,
+            738,
+            816
+          ],
+          "gridAnchorX": 624,
+          "position": [
+            135,
+            339
+          ]
+        },
+        {
+          "row": 3,
+          "column": 0,
+          "sourceBox": [
+            144,
+            843,
+            408,
+            1001
+          ],
+          "gridAnchorX": 276,
+          "position": [
+            128,
+            344
+          ]
+        },
+        {
+          "row": 3,
+          "column": 2,
+          "sourceBox": [
+            766,
+            875,
+            1043,
+            1008
+          ],
+          "gridAnchorX": 916,
+          "position": [
+            110,
+            369
+          ]
+        },
+        {
+          "row": 3,
+          "column": 3,
+          "sourceBox": [
+            1090,
+            904,
+            1437,
+            1008
+          ],
+          "gridAnchorX": 1236,
+          "position": [
+            114,
+            397
+          ]
+        },
+        {
+          "row": 2,
+          "column": 0,
+          "sourceBox": [
+            220,
+            655,
+            467,
+            818
+          ],
+          "gridAnchorX": 344,
+          "position": [
+            135,
+            339
+          ]
+        },
+        {
+          "row": 2,
+          "column": 3,
+          "sourceBox": [
+            1076,
+            641,
+            1328,
+            820
+          ],
+          "gridAnchorX": 1184,
+          "position": [
+            151,
+            324
+          ]
+        },
+        {
+          "source": "vargoth-shield-raw.png",
+          "column": 1,
+          "row": 0,
+          "scale": 0.6341463414634146,
+          "sourceBox": [
+            419,
+            205,
+            730,
+            475
+          ],
+          "gridAnchorX": 576.0,
+          "position": [
+            156,
+            326
+          ]
+        },
+        {
+          "source": "vargoth-shield-raw.png",
+          "column": 2,
+          "row": 0,
+          "scale": 0.6341463414634146,
+          "sourceBox": [
+            795,
+            179,
+            1178,
+            476
+          ],
+          "gridAnchorX": 960.0,
+          "position": [
+            151,
+            309
+          ]
+        },
+        {
+          "source": "vargoth-shield-raw.png",
+          "column": 3,
+          "row": 0,
+          "scale": 0.6341463414634146,
+          "sourceBox": [
+            1217,
+            201,
+            1527,
+            476
+          ],
+          "gridAnchorX": 1344.0,
+          "position": [
+            175,
+            323
+          ]
+        },
+        {
+          "source": "vargoth-shield-raw.png",
+          "column": 0,
+          "row": 1,
+          "scale": 0.6341463414634146,
+          "sourceBox": [
+            24,
+            656,
+            380,
+            923
+          ],
+          "gridAnchorX": 192.0,
+          "position": [
+            149,
+            328
+          ]
+        },
+        {
+          "source": "vargoth-shield-raw.png",
+          "column": 1,
+          "row": 1,
+          "scale": 0.6341463414634146,
+          "sourceBox": [
+            412,
+            654,
+            760,
+            925
+          ],
+          "gridAnchorX": 576.0,
+          "position": [
+            152,
+            325
+          ]
+        },
+        {
+          "source": "vargoth-shield-raw.png",
+          "column": 2,
+          "row": 1,
+          "scale": 0.6341463414634146,
+          "sourceBox": [
+            804,
+            647,
+            1127,
+            926
+          ],
+          "gridAnchorX": 960.0,
+          "position": [
+            157,
+            320
+          ]
+        }
+      ],
+      "lockedToSeed": [
+        0,
+        1,
+        8,
+        9,
+        16,
+        24,
+        31
+      ],
+      "shieldStripScale": 0.6341463414634146,
+      "shieldRawSize": [
+        1536,
+        1024
+      ],
+      "shieldSourceSha256": "97fe0703908ce81f09f150257c39192b6f167725df628aae01ab9e4dc45167ff",
+      "uniqueFrames": 24,
+      "losslessReconstruction": "all alpha and visible RGBA equal",
+      "image": "vargoth_a2.e00f4aba9301.webp",
+      "atlas": "vargoth_a2.cf090b150455.json",
+      "width": 768,
+      "height": 1401,
+      "frames": 32,
+      "decodedBytes": 4303872,
+      "downloadBytes": 1385751,
+      "atlasSHA256": "e00f4aba930184d9758d9eb6bb6921d16a312c5b2c06c278f76aa1b57dc51ffb",
+      "jsonSHA256": "cf090b150455b435bdc8cc7c0537cff07d30895fb721f105fb3de32fd39d810c"
+    }
+  }
+}

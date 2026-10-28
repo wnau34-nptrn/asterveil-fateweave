@@ -17,11 +17,11 @@ test('slow optional animation downloads do not gate Start or the first committed
  await page.route('**/assets/units/*.webp',async route=>{requests++;await held;await route.continue();});
  try{
   await seed(page,firstClash.id);await page.goto('./',{waitUntil:'domcontentloaded'});await page.locator('#continue').click();
-  await expect(page.locator('#start')).toBeEnabled();await expect.poll(()=>requests).toBe(3);
+  await expect(page.locator('#start')).toBeEnabled();await expect.poll(()=>requests).toBe(5);
   await page.locator('#start').click();await page.locator('#action-attack').click();await page.locator('#target-f1').click();
   expect(await count(page)).toBe(1);
   await page.locator('#skip-turn').click();await expect(page.locator('#action-bolt')).toBeEnabled();
-  // Even with both optional responses still held, the command and its enemy stage settle.
+  // Even with all optional responses still held, the command and its enemy stage settle.
   expect(await count(page)).toBe(1);await expect(page.locator('[data-enemy=f1]')).toContainText('84 / 100');
   release();expect(errors).toEqual([]);
  }finally{release();}
@@ -32,7 +32,7 @@ test('optional animation failures retain playable original-art fallback without 
  await seed(page,firstClash.id);await page.goto('./');await page.locator('#continue').click();await expect(page.locator('#start')).toBeEnabled();
  await page.locator('#start').click();await page.locator('#target-f1').click();await page.locator('#skip-turn').click();
  await expect(page.locator('#action-bolt')).toBeEnabled();expect(await count(page)).toBe(1);
- await expect.poll(()=>requests).toBe(3);expect(errors).toEqual([]);
+ await expect.poll(()=>requests).toBe(5);expect(errors).toEqual([]);
 });
 test('title loads no optional unit art and an encounter without Hunter never downloads Hunter',async({page})=>{
  const names:string[]=[];page.on('request',r=>{if(r.url().includes('/assets/units/'))names.push(r.url());});

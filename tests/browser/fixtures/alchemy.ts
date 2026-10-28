@@ -1,5 +1,7 @@
 // Dev-only QA entry. Real UI, scene, playback and replayable resolver commands.
 import Phaser from 'phaser';
+import { unitDisplayRatio } from '../../../src/game/visuals/unit-frames';
+import { artOf } from '../../../src/game/visuals/assets';
 import { alchemyFixture } from '../../fixtures/alchemy';
 import { BattleScene } from '../../../src/game/scenes/BattleScene';
 import { BattleUI } from '../../../src/ui/battle-ui';
@@ -51,7 +53,7 @@ const qa={impacts,painted,rings:()=>{
   const body=(scene as unknown as {bodies:Map<string,Phaser.GameObjects.Container>}).bodies.get(id)!;
   const sprite=body.list.find(c=>c instanceof Phaser.GameObjects.Image) as Phaser.GameObjects.Image;
   const m=sprite.getWorldTransformMatrix(),rect=scene.game.canvas.getBoundingClientRect(),ratio=scene.game.canvas.width/rect.width;
-  const framed=sprite.texture.key.startsWith('unit-pilot-')?2:1,skill=fixture.command.action;
+  const framed=sprite.texture.key.startsWith('unit-pilot-')?unitDisplayRatio(artOf(fixture.data,id)):1,skill=fixture.command.action;
   const sole=m.transformPoint(0,0),support=skill==='haste'||skill==='fury',right=sole.x/ratio>rect.width*.76;
   const x=prepare?.10:support?.40:right?.33:-.46,y=prepare?-.98:support?-.35:-.64;
   const point=m.transformPoint(x*sprite.width/framed,y*sprite.height/framed);return {x:point.x/ratio,y:point.y/ratio};

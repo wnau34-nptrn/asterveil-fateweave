@@ -479,7 +479,7 @@ export class BattleScene extends Phaser.Scene {
     const hold = this.quiet || this.reducedMotion ? 0 : 45;
     this.unitAnimation.contact(turn.actorId, remainingMs);
     if (!this.quiet && !this.reducedMotion) {
-      for (const [id, reaction] of unitReactions(turn)) {
+      for (const [id, reaction] of unitReactions(turn, this.encounter)) {
         const at = this.anchor(id), from = this.anchor(reaction.sourceId);
         const direction = at && from ? Math.sign(from.x - at.x) : this.encounter.heroes.some(h => h.id === id) ? 1 : -1;
         this.unitAnimation.react(id, reaction.pose, direction, remainingMs);

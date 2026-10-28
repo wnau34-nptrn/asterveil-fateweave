@@ -36,7 +36,7 @@ export function unitPose(turn: TurnStage, data: EncounterDefinition): UnitPose |
 }
 
 export type Reaction = 'hit' | 'dodge' | 'block' | 'down' | 'counter';
-export function unitReactions(turn: TurnStage): Map<string, { pose: Reaction; sourceId?: string }> {
+export function unitReactions(turn: TurnStage, data?: EncounterDefinition): Map<string, { pose: Reaction; sourceId?: string }> {
   const result = new Map<string, { pose: Reaction; sourceId?: string }>();
   const rank: Record<Reaction, number> = { counter: 0, block: 1, dodge: 2, hit: 3, down: 4 };
   const add = (id: string | undefined, pose: Reaction, sourceId?: string) => {
@@ -48,6 +48,14 @@ export function unitReactions(turn: TurnStage): Map<string, { pose: Reaction; so
       if (e.type === 'counter' && e.sourceId !== turn.actorId) add(e.sourceId, 'counter', e.targetId);
     } else if (e.type === 'dodge') add(e.targetId, 'dodge', e.sourceId);
     else if (e.type === 'down') add(e.targetId, 'down', e.sourceId);
+  }
+  // Aegis braces and ripostes in the SAME reaction window. His actual Guard
+  // counter otherwise loses to his incoming hit/block and never shows the sword.
+  // Keep down/dodge priority and every other identity's shipped reaction policy.
+  for (const e of turn.events) if (e.type === 'counter' && e.text === 'The knight counters.' && e.sourceId && e.sourceId !== turn.actorId
+    && (data ? artOf(data, e.sourceId) : e.sourceId) === 'guardian') {
+    const incoming = result.get(e.sourceId);
+    if (incoming?.pose === 'hit' || incoming?.pose === 'block') result.set(e.sourceId, { pose: 'counter', sourceId: e.targetId });
   }
   // Respect the final authoritative frame if a later effect revived a downed actor.
   for (const [id, reaction] of result) if (reaction.pose === 'down') {

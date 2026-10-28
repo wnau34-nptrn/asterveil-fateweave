@@ -1,5 +1,7 @@
 // Dev-only QA entry. Real UI, scene, playback and replayable resolver commands.
 import Phaser from 'phaser';
+import { unitDisplayRatio } from '../../../src/game/visuals/unit-frames';
+import { artOf } from '../../../src/game/visuals/assets';
 import { projectileFixture } from '../../fixtures/projectile';
 import { BattleScene } from '../../../src/game/scenes/BattleScene';
 import { BattleUI } from '../../../src/ui/battle-ui';
@@ -56,7 +58,7 @@ const qa = { impacts,painted,rings:()=>{
     const bodies=(scene as unknown as {bodies:Map<string,Phaser.GameObjects.Container>}).bodies;
     const body=bodies.get(fixture.actor.id)!,sprite=body.list.find(c=>c instanceof Phaser.GameObjects.Image) as Phaser.GameObjects.Image;
     const m=sprite.getWorldTransformMatrix(),rect=scene.game.canvas.getBoundingClientRect(),ratio=scene.game.canvas.width/rect.width;
-    const pilot=sprite.texture.key.startsWith('unit-pilot-')?2:1,knife=fixture.actor.role==='Scout';
+    const pilot=sprite.texture.key.startsWith('unit-pilot-')?unitDisplayRatio(artOf(fixture.data,fixture.actor.id)):1,knife=fixture.actor.role==='Scout';
     const p=m.transformPoint(sprite.width*(knife?-.4:.36)/pilot,-sprite.height*(knife?.58:.86)/pilot);
     return {x:p.x/ratio,y:p.y/ratio};
   },
