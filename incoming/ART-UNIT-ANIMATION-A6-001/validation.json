@@ -1,0 +1,473 @@
+{
+  "package": "ART-UNIT-ANIMATION-A6-001",
+  "base_commit": "8616ad3155a179e05210fe6aa552e6d234c9bd24",
+  "seeds_exact": 4,
+  "raw_strips": 26,
+  "preferred_strips": 22,
+  "figures": 136,
+  "all_retained_rgba_exact": true,
+  "minimum_gutter_px": 73,
+  "all_pngs_decoded": true,
+  "hash_scope": "Every package file except validation.json (self-hash) and post-push-verification.json (post-push receipt); git object transport verifies those separately.",
+  "files": [
+    {
+      "path": "NOTES.md",
+      "bytes": 12818,
+      "sha256": "e62d033f1937dc935e1a2c90778ecde95350e256e1f5de4f76f80d899fdc3bdd"
+    },
+    {
+      "path": "build_handoff.py",
+      "bytes": 12621,
+      "sha256": "69037b0a5f9f7bb91c6818a61fdb85e959e24649f7e9552cfb739b97c61090d4"
+    },
+    {
+      "path": "foes/preview-390.png",
+      "bytes": 202190,
+      "sha256": "95566ff45fef93224c573219bceca39fa8148f2a9cdd97f2b04234c13a9f7351",
+      "width": 390,
+      "height": 1332,
+      "mode": "RGB"
+    },
+    {
+      "path": "foes/raw/foe_riftweaver-down-r1.png",
+      "bytes": 262992,
+      "sha256": "528994e20c69ec787d58e66c49895b49f1a65b6407d63c07914558bec56c1fbe",
+      "width": 1353,
+      "height": 227,
+      "mode": "RGBA",
+      "transparent_pixels": 209227,
+      "visible_pixels": 97904
+    },
+    {
+      "path": "foes/raw/foe_riftweaver-hit-r1.png",
+      "bytes": 334968,
+      "sha256": "0a53398e3c33f6b5ab63cad51046441435242de5b46780a6f692541d14406c0a",
+      "width": 1310,
+      "height": 275,
+      "mode": "RGBA",
+      "transparent_pixels": 235807,
+      "visible_pixels": 124443
+    },
+    {
+      "path": "foes/raw/foe_riftweaver-ribbon-snare-r1.png",
+      "bytes": 697089,
+      "sha256": "752ac4c840e25dd775c63ba7038618f2a97ca12d97c1e9156ba3679b8af33e55",
+      "width": 2008,
+      "height": 360,
+      "mode": "RGBA",
+      "transparent_pixels": 464268,
+      "visible_pixels": 258612
+    },
+    {
+      "path": "foes/raw/foe_riftweaver-ribbon-snare-r2.png",
+      "bytes": 731998,
+      "sha256": "a91ce241f21ff1824786951bbc75c1869acdf06ca6395acb67e84b59ab94b612",
+      "width": 2026,
+      "height": 368,
+      "mode": "RGBA",
+      "transparent_pixels": 473292,
+      "visible_pixels": 272276
+    },
+    {
+      "path": "foes/raw/foe_riftweaver-rift-needle-r1.png",
+      "bytes": 540572,
+      "sha256": "8275129df6f8814f2e32b90bf2beab5f8c91c577612eaa9fe0173bd4cac7ae5e",
+      "width": 2008,
+      "height": 282,
+      "mode": "RGBA",
+      "transparent_pixels": 366827,
+      "visible_pixels": 199429
+    },
+    {
+      "path": "foes/raw/foe_riftweaver-rune-lash-r1.png",
+      "bytes": 533063,
+      "sha256": "4f902aa4fd33518b2d791296f5f30f4616f552826f8276fc33878ecc67e78adc",
+      "width": 2009,
+      "height": 270,
+      "mode": "RGBA",
+      "transparent_pixels": 347855,
+      "visible_pixels": 194575
+    },
+    {
+      "path": "foes/raw/foe_spore_puff-down-r1.png",
+      "bytes": 397399,
+      "sha256": "d5e8bc2a5f64114e3f56249caca2e77fdc21b2e2eb8128ad6d96e6bc1ee9e364",
+      "width": 1463,
+      "height": 346,
+      "mode": "RGBA",
+      "transparent_pixels": 354404,
+      "visible_pixels": 151794
+    },
+    {
+      "path": "foes/raw/foe_spore_puff-hit-r1.png",
+      "bytes": 432869,
+      "sha256": "e3084a73d867b6dd442669e95d4a99692371af4e82fc6a67fccddee9e24014e3",
+      "width": 1379,
+      "height": 341,
+      "mode": "RGBA",
+      "transparent_pixels": 307011,
+      "visible_pixels": 163228
+    },
+    {
+      "path": "foes/raw/foe_spore_puff-spore-dust-r1.png",
+      "bytes": 728658,
+      "sha256": "39eec442b10ca3fd9165a9058def20dde4b6c4a0249e1387af85cbd56e30a5d4",
+      "width": 2052,
+      "height": 376,
+      "mode": "RGBA",
+      "transparent_pixels": 495625,
+      "visible_pixels": 275927
+    },
+    {
+      "path": "foes/seeds/foe_riftweaver-seed.png",
+      "bytes": 263504,
+      "sha256": "955ee68ad42ef4c6d936ade8c6ac36f635c2720b0d54e0e58372b8fa553445e7",
+      "width": 512,
+      "height": 512,
+      "mode": "RGBA",
+      "transparent_pixels": 163913,
+      "visible_pixels": 98231
+    },
+    {
+      "path": "foes/seeds/foe_spore_puff-seed.png",
+      "bytes": 216854,
+      "sha256": "64b0b00a95228e1183b268a7fb9d897d20a278f6edfec9d03a83c2889adab03e",
+      "width": 512,
+      "height": 512,
+      "mode": "RGBA",
+      "transparent_pixels": 182613,
+      "visible_pixels": 79531
+    },
+    {
+      "path": "foes/source-sheets/rift_extra.png",
+      "bytes": 2202299,
+      "sha256": "64fc639634bf850f45ddc21f7407105c48f5f1f58d276985c56916cb1f60668a",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "transparent_pixels": 1002662,
+      "visible_pixels": 570202
+    },
+    {
+      "path": "foes/source-sheets/rift_r1.png",
+      "bytes": 2805097,
+      "sha256": "a6a169dd4d56ea8a918f382f867b337b734bc85b81c724f10f08dea90fd811cb",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "transparent_pixels": 724632,
+      "visible_pixels": 848232
+    },
+    {
+      "path": "foes/source-sheets/spore_r1.png",
+      "bytes": 2269373,
+      "sha256": "149560b6e01d1ba63b27a4d1116756f1ff6fe395dfb7d3140ab66e8e693582e1",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "transparent_pixels": 969841,
+      "visible_pixels": 603023
+    },
+    {
+      "path": "foes/templates/foe_riftweaver-edit-canvas.png",
+      "bytes": 44097,
+      "sha256": "10edbe9cd413a447de4cac6ca4a72207e1529c679451af821de9655c563d981f",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "transparent_pixels": 1562436,
+      "visible_pixels": 10428
+    },
+    {
+      "path": "generation.json",
+      "bytes": 3138,
+      "sha256": "e592bdfaa8024abc22838808dae959a26b883964d7d311bdfd42aa30b586cc01"
+    },
+    {
+      "path": "heroes/preview-390.png",
+      "bytes": 292431,
+      "sha256": "7bda4da31170e45c7c913b7a387add05ba64ba1b4847338c5534a30886790ce1",
+      "width": 390,
+      "height": 2452,
+      "mode": "RGB"
+    },
+    {
+      "path": "heroes/raw/lio-block-r1.png",
+      "bytes": 201815,
+      "sha256": "218baf8cf8a604c12653df0abd76392258cb63b4004a3a07edbea559b60e150a",
+      "width": 1280,
+      "height": 212,
+      "mode": "RGBA",
+      "transparent_pixels": 198982,
+      "visible_pixels": 72378
+    },
+    {
+      "path": "heroes/raw/lio-down-r1.png",
+      "bytes": 370691,
+      "sha256": "91d1e1cef413e84eca60211cc110efe749b2a850025a02bedb0d48cc89602fb3",
+      "width": 1425,
+      "height": 322,
+      "mode": "RGBA",
+      "transparent_pixels": 326224,
+      "visible_pixels": 132626
+    },
+    {
+      "path": "heroes/raw/lio-dread-chord-r1.png",
+      "bytes": 399707,
+      "sha256": "0dee9cc813acc305e691767cfe2525cb13eb219f0a23adc244de346b388412bd",
+      "width": 1973,
+      "height": 241,
+      "mode": "RGBA",
+      "transparent_pixels": 330113,
+      "visible_pixels": 145380
+    },
+    {
+      "path": "heroes/raw/lio-finale-r1.png",
+      "bytes": 401430,
+      "sha256": "0529b8c7dfe51961d8203bae73d7dda5fa724929863c085259bfa9f4cd368cf0",
+      "width": 1967,
+      "height": 247,
+      "mode": "RGBA",
+      "transparent_pixels": 340968,
+      "visible_pixels": 144881
+    },
+    {
+      "path": "heroes/raw/lio-finale-r2.png",
+      "bytes": 690001,
+      "sha256": "d8582511beecef6df9a5b40720b383511fd3e5721e3a9372ca54ab649ac9d545",
+      "width": 2037,
+      "height": 397,
+      "mode": "RGBA",
+      "transparent_pixels": 564996,
+      "visible_pixels": 243693
+    },
+    {
+      "path": "heroes/raw/lio-hit-r1.png",
+      "bytes": 208867,
+      "sha256": "c4b11b4c623081b2909ca8be1c4df964d630bb9960b1b9c302a77631c006749c",
+      "width": 1289,
+      "height": 219,
+      "mode": "RGBA",
+      "transparent_pixels": 207259,
+      "visible_pixels": 75032
+    },
+    {
+      "path": "heroes/raw/lio-strum-strike-r1.png",
+      "bytes": 405876,
+      "sha256": "10b24730b7f1a5c8d9f3a1db380a6cf3f047f8ea82304c67f6d2d2288abf386b",
+      "width": 1977,
+      "height": 225,
+      "mode": "RGBA",
+      "transparent_pixels": 298292,
+      "visible_pixels": 146533
+    },
+    {
+      "path": "heroes/raw/lio-strum-strike-r2.png",
+      "bytes": 647397,
+      "sha256": "2f19dd98d0a8c4a6b90ecfae9ef36bcca5eed00a3c6906e4ab401647cf9e97d3",
+      "width": 2035,
+      "height": 324,
+      "mode": "RGBA",
+      "transparent_pixels": 428959,
+      "visible_pixels": 230381
+    },
+    {
+      "path": "heroes/raw/lio-sustained-song-r1.png",
+      "bytes": 395226,
+      "sha256": "44166eb54090e25a124941134206d884129d956c69f1dfc7a8c94b628ceed428",
+      "width": 1978,
+      "height": 244,
+      "mode": "RGBA",
+      "transparent_pixels": 339646,
+      "visible_pixels": 142986
+    },
+    {
+      "path": "heroes/raw/sefa-block-r1.png",
+      "bytes": 252026,
+      "sha256": "b02e52202150d06dd8b30783d76f67a56ca9bfaa5a9c5d5f458b4a14a371e4a0",
+      "width": 1397,
+      "height": 246,
+      "mode": "RGBA",
+      "transparent_pixels": 255276,
+      "visible_pixels": 88386
+    },
+    {
+      "path": "heroes/raw/sefa-double-slash-r1.png",
+      "bytes": 357513,
+      "sha256": "65ea501ec85391455a553a3c2f4736492678df2fc94d9f8327950af7ba659c8f",
+      "width": 2032,
+      "height": 223,
+      "mode": "RGBA",
+      "transparent_pixels": 326179,
+      "visible_pixels": 126957
+    },
+    {
+      "path": "heroes/raw/sefa-down-r1.png",
+      "bytes": 242911,
+      "sha256": "140f4847eed183079e3051bb7538702fab4143c49fe4934bc9892b9cba55e2ea",
+      "width": 1488,
+      "height": 235,
+      "mode": "RGBA",
+      "transparent_pixels": 264524,
+      "visible_pixels": 85156
+    },
+    {
+      "path": "heroes/raw/sefa-evade-r1.png",
+      "bytes": 518378,
+      "sha256": "bd921b4ef9d8b490d7db3858c37022c7529f64deb2ad1372f20b80fdc86fe17b",
+      "width": 2018,
+      "height": 295,
+      "mode": "RGBA",
+      "transparent_pixels": 413492,
+      "visible_pixels": 181818
+    },
+    {
+      "path": "heroes/raw/sefa-hit-r1.png",
+      "bytes": 250226,
+      "sha256": "d8f12c604a702f77200791c624f171ee71ae3c9ad9127753647ed5d28f020b2f",
+      "width": 1397,
+      "height": 239,
+      "mode": "RGBA",
+      "transparent_pixels": 246481,
+      "visible_pixels": 87402
+    },
+    {
+      "path": "heroes/raw/sefa-knives-r1.png",
+      "bytes": 352778,
+      "sha256": "ca692732e46689302959797bba8f49443d05eaf81fe0e9a99bbb8167d44c13c1",
+      "width": 2033,
+      "height": 234,
+      "mode": "RGBA",
+      "transparent_pixels": 351319,
+      "visible_pixels": 124403
+    },
+    {
+      "path": "heroes/raw/sefa-low-stab-r1.png",
+      "bytes": 345499,
+      "sha256": "8d3ef366c88512e3ab60224ef4dcf1b615aab05055814bfc8715de2c4897f5f3",
+      "width": 2031,
+      "height": 230,
+      "mode": "RGBA",
+      "transparent_pixels": 345262,
+      "visible_pixels": 121868
+    },
+    {
+      "path": "heroes/raw/sefa-low-stab-r2.png",
+      "bytes": 524129,
+      "sha256": "b2a51e1e86b47027af5facfece9c8f3af181fb565a3515978a85d9fda96c00c7",
+      "width": 2028,
+      "height": 313,
+      "mode": "RGBA",
+      "transparent_pixels": 449587,
+      "visible_pixels": 185177
+    },
+    {
+      "path": "heroes/seeds/lio-seed.png",
+      "bytes": 389693,
+      "sha256": "e6760e48b0403e13318830df87fd5891d50c9e57a972c5e9e8f3f6d729298a47",
+      "width": 512,
+      "height": 512,
+      "mode": "RGBA",
+      "transparent_pixels": 138602,
+      "visible_pixels": 123542
+    },
+    {
+      "path": "heroes/seeds/sefa-seed.png",
+      "bytes": 295164,
+      "sha256": "6cb511ce3ac8badd15e28fafecd44f8f940a718eff6a4c15adccc10a241584bc",
+      "width": 512,
+      "height": 512,
+      "mode": "RGBA",
+      "transparent_pixels": 170244,
+      "visible_pixels": 91900
+    },
+    {
+      "path": "heroes/source-sheets/lio_extra.png",
+      "bytes": 2438505,
+      "sha256": "74a7a0c6a30453b05e669f4001a1276a3e057b30b54f885c1d993efffed69f4e",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "transparent_pixels": 930918,
+      "visible_pixels": 641946
+    },
+    {
+      "path": "heroes/source-sheets/lio_r1.png",
+      "bytes": 2784618,
+      "sha256": "013a626a3be1654fcca61e8036d86d4c7be8622d571d94b9de250930903f7214",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "transparent_pixels": 730214,
+      "visible_pixels": 842650
+    },
+    {
+      "path": "heroes/source-sheets/sefa_extra.png",
+      "bytes": 1841247,
+      "sha256": "da5daa52dc22ad61f4da1bd2a1b35139321bf3fd8730fe79a391c9901fcf79a2",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "transparent_pixels": 1188505,
+      "visible_pixels": 384359
+    },
+    {
+      "path": "heroes/source-sheets/sefa_r1.png",
+      "bytes": 2495073,
+      "sha256": "47e731d57ba8996bbc418902495b2d1751e6c1c3dfe3e847bc85b160ce774201",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "transparent_pixels": 846072,
+      "visible_pixels": 726792
+    },
+    {
+      "path": "heroes/templates/lio-edit-canvas.png",
+      "bytes": 55988,
+      "sha256": "36e02c71a3e75de79bdbad4dc833d503d0d41788d00b7d630a88aaceec7e0801",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "transparent_pixels": 1559632,
+      "visible_pixels": 13232
+    },
+    {
+      "path": "heroes/templates/sefa-edit-canvas.png",
+      "bytes": 46361,
+      "sha256": "44607be3abc16abb6a262def16b8721332ee2fc2492643f27f91a681b659b057",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "transparent_pixels": 1562614,
+      "visible_pixels": 10250
+    },
+    {
+      "path": "preview-390.png",
+      "bytes": 488642,
+      "sha256": "a9abed3afa3dc48d4ad6a079f5098033293170d7ac72a8c359a4f04a83447067",
+      "width": 390,
+      "height": 3712,
+      "mode": "RGB"
+    },
+    {
+      "path": "prompts.json",
+      "bytes": 15694,
+      "sha256": "d2fc3fb9627af8b018b9b4355f273985c5f2f8175adf0a005dc014d6b2b231c8"
+    },
+    {
+      "path": "seeds.json",
+      "bytes": 1795,
+      "sha256": "63d4c151002881f097d997813c9b3a296f2cd2e6be5c1566b5f8d31854bd8215"
+    },
+    {
+      "path": "strips.json",
+      "bytes": 43756,
+      "sha256": "368129cf6902f10ee0884b4e9ea98735dbf69b4c39c419d90fd4f25fda51807c"
+    },
+    {
+      "path": "verify_pushed.py",
+      "bytes": 2341,
+      "sha256": "dd3773716e7ace55430bee0e94a3bf943802f179dc0cfc1707103fe55686dd22"
+    }
+  ]
+}

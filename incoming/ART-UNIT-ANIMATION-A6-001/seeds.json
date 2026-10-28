@@ -1,0 +1,69 @@
+{
+  "base_commit": "8616ad3155a179e05210fe6aa552e6d234c9bd24",
+  "seeds": [
+    {
+      "id": "sefa",
+      "seed": "heroes/seeds/sefa-seed.png",
+      "atlas": "public/assets/art/units_mercs.webp",
+      "atlas_blob": "2f2ed2ebdca12584d9324c53fcc67694c68b0d22",
+      "cell": 3,
+      "crop": [
+        512,
+        512,
+        1024,
+        1024
+      ],
+      "facing": "right",
+      "ground_y": 497,
+      "sha256": "6cb511ce3ac8badd15e28fafecd44f8f940a718eff6a4c15adccc10a241584bc"
+    },
+    {
+      "id": "lio",
+      "seed": "heroes/seeds/lio-seed.png",
+      "atlas": "public/assets/art/units_mercs.webp",
+      "atlas_blob": "2f2ed2ebdca12584d9324c53fcc67694c68b0d22",
+      "cell": 5,
+      "crop": [
+        512,
+        1024,
+        1024,
+        1536
+      ],
+      "facing": "right",
+      "ground_y": 497,
+      "sha256": "e6760e48b0403e13318830df87fd5891d50c9e57a972c5e9e8f3f6d729298a47"
+    },
+    {
+      "id": "foe_riftweaver",
+      "seed": "foes/seeds/foe_riftweaver-seed.png",
+      "atlas": "public/assets/art/units_foes.webp",
+      "atlas_blob": "885a4f9fe375de1f43deaf9271ee4a59cbd0cf08",
+      "cell": 5,
+      "crop": [
+        512,
+        1024,
+        1024,
+        1536
+      ],
+      "facing": "left",
+      "ground_y": 497,
+      "sha256": "955ee68ad42ef4c6d936ade8c6ac36f635c2720b0d54e0e58372b8fa553445e7"
+    },
+    {
+      "id": "foe_spore_puff",
+      "seed": "foes/seeds/foe_spore_puff-seed.png",
+      "atlas": "public/assets/art/units_foes2.webp",
+      "atlas_blob": "61622c9da3baa23ac450809d65fec820eb2dff4b",
+      "cell": 5,
+      "crop": [
+        512,
+        1024,
+        1024,
+        1536
+      ],
+      "facing": "left",
+      "ground_y": 497,
+      "sha256": "64b0b00a95228e1183b268a7fb9d897d20a278f6edfec9d03a83c2889adab03e"
+    }
+  ]
+}
