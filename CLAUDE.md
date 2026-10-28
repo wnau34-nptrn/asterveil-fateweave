@@ -2,7 +2,7 @@
 
 ## Unit animation A2 — published 2026-10-28
 
-A2 Aegis/ Vargoth Guard published via PR88 mergee94b424 + QA-only7ff5388; Pages40671415477 build/4browser/deploy success. Full evidence: [A2 release](docs/validation/unit-a2-release/README_TH.md), [26clips/mapping/fallback](docs/combat-presentation/unit-a2-slice/README_TH.md). Pilot/A1/C5 approvals and timing retained; no new owner visual approval inferred. A3/family7 are outside this task.
+A2 Aegis/ Vargoth Guard published via PR88 mergee94b424 + QA-only7ff5388; Pages40671415477 build/4browser/deploy success. Full evidence: [A2 release](docs/validation/unit-a2-release/README_TH.md), [26clips/mapping/fallback](docs/combat-presentation/unit-a2-slice/README_TH.md). Pilot/A1/C5 approvals and timing retained. Owner explicitly approved A2 motion with “เอาเข้าเกมได้” on2026-10-28 after the26clip delivery; this is direct approval, not inferred from tests. A3/family7 are outside this task.
 
 ## Consolidated planning index — 2026-10-25
 

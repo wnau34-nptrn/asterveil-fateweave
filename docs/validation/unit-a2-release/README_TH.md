@@ -1,5 +1,11 @@
 # A2 — หลักฐานส่งมอบและเผยแพร่
 
+## 2026-10-28 — เจ้าของอนุมัติภาพเคลื่อนไหว A2: “เอาเข้าเกมได้”
+
+เจ้าของยืนยัน “เอาเข้าเกมได้” หลังส่งมอบชุดเอกิส `guardian` และองครักษ์อสูร `foe_vargoth_guard` พร้อม26คลิปจริง390px จึงบันทึกเป็น owner visual approval ของ A2 โดยตรง ไม่ได้อนุมานจาก tests ชุดนี้อยู่ในเกมแล้วผ่าน PR88 merge `e94b424` + QA-only `7ff5388`; Pages40671415477 deploy สำเร็จ หลักฐาน release และคลิปอยู่ใน `docs/validation/unit-a2-release/` และ `docs/combat-presentation/unit-a2-slice/`
+
+รอบนี้แก้เฉพาะเอกสาร approval/handoff และ release.json บนสาขา `codex/a2-release-proof` ส่งเข้าสาขาเกม `feature/fateweave-initial-prototype` ไม่มี runtime/art/timing เปลี่ยน ตรวจเอกสารและ `git diff --check` ตามกฎ docs-only ไม่รันทดสอบเกมซ้ำ คงผลCI/ข้อจำกัดเดิมและ approval ของ pilot/A1/C5 ทุกชุด ไม่เริ่ม A3 หรือ VFX family ใหม่ ไม่มีงาน A2 ค้าง ข้อความก่อนหน้าที่ว่าไม่มี approval ใหม่หมายถึงสถานะก่อนเจ้าของยืนยันครั้งนี้
+
 28 ตุลาคม2026 · [PR88](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/88) merge `e94b42462c96904f67f5ddfd4e251ea765840d59` · published head `7ff53885d45ed7259fddeed43103310c37439368`
 
 [เกม](https://wnau34-nptrn.github.io/asterveil-fateweave/) · [26คลิป/ทุกActionId-intent/fallback](../../combat-presentation/unit-a2-slice/README_TH.md) · [source/prompt/normalization/packing](../../../incoming/ART-UNIT-ANIMATION-A2-001/NOTES.md) · [ผล local/ข้อผิดพลาดก่อนหน้า](local-results.json) · [release JSON/artifact/CI](release.json)

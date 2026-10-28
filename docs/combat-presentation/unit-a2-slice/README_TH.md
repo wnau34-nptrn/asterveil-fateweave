@@ -1,5 +1,11 @@
 # A2 — เอกิส + องครักษ์อสูร
 
+## 2026-10-28 — เจ้าของอนุมัติภาพเคลื่อนไหว A2: “เอาเข้าเกมได้”
+
+เจ้าของยืนยัน “เอาเข้าเกมได้” หลังส่งมอบชุดเอกิส `guardian` และองครักษ์อสูร `foe_vargoth_guard` พร้อม26คลิปจริง390px จึงบันทึกเป็น owner visual approval ของ A2 โดยตรง ไม่ได้อนุมานจาก tests ชุดนี้อยู่ในเกมแล้วผ่าน PR88 merge `e94b424` + QA-only `7ff5388`; Pages40671415477 deploy สำเร็จ หลักฐาน release และคลิปอยู่ใน `docs/validation/unit-a2-release/` และ `docs/combat-presentation/unit-a2-slice/`
+
+รอบนี้แก้เฉพาะเอกสาร approval/handoff และ release.json บนสาขา `codex/a2-release-proof` ส่งเข้าสาขาเกม `feature/fateweave-initial-prototype` ไม่มี runtime/art/timing เปลี่ยน ตรวจเอกสารและ `git diff --check` ตามกฎ docs-only ไม่รันทดสอบเกมซ้ำ คงผลCI/ข้อจำกัดเดิมและ approval ของ pilot/A1/C5 ทุกชุด ไม่เริ่ม A3 หรือ VFX family ใหม่ ไม่มีงาน A2 ค้าง ข้อความก่อนหน้าที่ว่าไม่มี approval ใหม่หมายถึงสถานะก่อนเจ้าของยืนยันครั้งนี้
+
 เผยแพร่แล้วผ่าน PR88 / merge `e94b424` + QA-only `7ff5388`; Pages40671415477ผ่านครบทุกgateและdeploy ดู [หลักฐานreleaseจริง](../../validation/unit-a2-release/README_TH.md) สถานะpendingในบันทึกก่อนหน้าด้านล่างเป็นประวัติ
 
 28 ตุลาคม2026 · branch `codex/animation-a2` · ฐานเกม `f0ee801792f4a0a081a2752cadfdd99d63b50dbe` (หลัง A0/A1 PR87 และ C5.6)

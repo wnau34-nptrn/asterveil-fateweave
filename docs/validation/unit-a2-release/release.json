@@ -153,5 +153,15 @@
     "Dodge procedural; idle seed; revive resets seed, no stand-up strip"
   ],
   "preserved": "Pilot/A1 pixels and timing; all C5 approvals/gates including C5.6; rules/save/content/balance/playback timing unchanged; no A3/new VFX family",
-  "verification": "GitHub Pages workflow build+4browser+deploy success and artifact head verified; no independent live CDN hash claim"
+  "verification": "GitHub Pages workflow build+4browser+deploy success and artifact head verified; no independent live CDN hash claim",
+  "ownerVisualApproval": {
+    "date": "2026-10-28",
+    "quote": "เอาเข้าเกมได้",
+    "scope": [
+      "guardian",
+      "foe_vargoth_guard"
+    ],
+    "basis": "Explicit owner reply after A2 delivery with26clips; not inferred from tests",
+    "runtimeChangeForApproval": false
+  }
 }
