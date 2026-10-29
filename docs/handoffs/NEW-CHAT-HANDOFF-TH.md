@@ -1,13 +1,29 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
-## 2026-10-28 — W2 A4 มิร่า/โทมะ/สไลม์/ค้างคาว: นำเข้าแล้ว รอเจ้าของดูคลิป
+## 2026-10-29 — แชตถัดไป: W3 A5 + VFX คำท้า นำภาพเข้าเกม (เปิดอัตโนมัติจากแชต A4)
+
+เจ้าของตอบ “ใช้ตาม codex แนะนำ” สำหรับ W3 และให้ Claude เลือก VFX คำท้าเอง (Codex ไม่ได้แนะนำ) → Claude เลือก R2 ข้อความเปิดแชต:
+
+```text
+ทำงานต่อในรีโป wnau34-nptrn/asterveil-fateweave สาขาเกม feature/fateweave-initial-prototype (ไม่ใช่ main)
+อ่าน AGENTS.md, CLAUDE.md, docs/design/OWNER_DECISIONS_TH.md, docs/design/ANIMATION_VFX_COMPLETION_PLAN_TH.md, docs/design/UNIT_ANIMATION_ROLLOUT_TH.md และหัวข้อบนสุดของ docs/handoffs/NEW-CHAT-HANDOFF-TH.md
+งาน: W3 นำภาพเข้าเกม 2 ส่วน
+1) A5 แอนิเมชัน การ์แรน (garran, Spear), แบรนน์ (brann, Warden), หมูป่าหลังตะไคร่ (foe_tusker), ลิงซ์หนามพราง (foe_stalker), ด้วงหนาม (foe_thorn_beetle) จาก PR #95 (สาขา art/art-unit-animation-a5-001, incoming/ART-UNIT-ANIMATION-A5-001/) เจ้าของตอบ “ใช้ตาม codex แนะนำ”: R2 สำหรับ Garran war cry, Brann taunt, Tusker Stampede (8 เฟรม); ท่าอื่นใช้ candidate preferred ใน NOTES.md/strips.json; ตรวจ sha256 ก่อนใช้ ทำแบบ A4 (incoming/ART-UNIT-ANIMATION-A4-001/build_assets.py, docs/combat-presentation/unit-a4-slice/README_TH.md): scale เดียวต่อแถบ, พื้นเท้า y=496/x=256, ท่าลอย (stalker pounce) คงความสูงจริง, defringe, lossless optional atlas, registry ใน unit-frames.ts, งบ decoded ≤6MiB/ดาวน์โหลด ≤1.5MB ต่อตัว; reaction ของ A5 เป็น 4 เฟรม; แมปทุก ActionId จริงของ garran/brann (mercenaries.ts + unlock + talentTrees) และทุก intent จริงของศัตรูทั้งสามใน encounters (เทสต์เทียบ content); Tusk Charge กับ Stampede ต้องอ่านต่างกัน
+2) VFX C5.9 ส่วนคำท้า taunt / challenge / warcry จาก PR #93 (สาขา art/art-vfx-command-001, incoming/ART-VFX-COMMAND-001/) ใช้ R2 (Claude เลือกแทนเจ้าของ: ขอบโล่หนา, เส้นด้ายชี้ขวาไม่ต้อง flip, ซี่ war cry แยกชัด) ทำ atlas/module แบบ alchemy/arcane-seal, route ตาม event จริง (Challenge เป้าเดียว; War Cry buff แนวหน้าตอนร่าย + impact เฉพาะเป้าที่ถูก counter จริง), ห้ามทำเป็นวงพื้น/ออร่าขา, ตาม anchors/pivots ใน layers.json
+คง rules/save/content/balance/playback timing, normal/fast/reduced motion, เทสต์ unit + browser เฉพาะที่เกี่ยว (ระวังเทสต์ที่นับจำนวน optional sheet), อัดคลิปจริง 390px ทำหน้า Artifact รวมคลิปให้เจ้าของดู motion ก่อน merge/เผยแพร่ ผลเทสต์ไม่ใช่การอนุมัติภาพ; ถ้าเจ้าของไม่ชอบ VFX R2 เปลี่ยนเป็น R1 ได้
+Chromium: export PLAYWRIGHT_CHROMIUM_EXECUTABLE=/opt/pw-browsers/chromium; สร้าง PR ด้วย GitHub MCP; แก้ battle-ui/ไฟล์นอก visuals จะทำให้ CI รันชุดเต็ม (~55 นาที)
+ตาม standing authorization ใน CLAUDE.md; สนามอนาคต 10 ตัว (OD-05) ให้บันทึกงบภาพ; อัปเดต handoff เมื่อจบ
+ภาพ #94/#96 (W4) และ #97/#98 (W5) ยังรอเจ้าของเลือก ไม่ต้องนำเข้า
+```
+
+## 2026-10-29 — W2 A4 มิร่า/โทมะ/สไลม์/ค้างคาว: เผยแพร่แล้ว (PR #101, เจ้าของอนุมัติ “เอาเข้าเกมได้”)
 
 - สาขา `claude/unit-a4-mira-toma-slimes-bat` (จากสาขาเกม `7d41237`) ภาพจาก PR #91 sha256 25 ไฟล์ตรง `strips.json`; ใช้ R2 ของ Mira volley/disengage, Toma underhand, Bat hover และป้ายทองที่เหลือตามที่เจ้าของตอบ
 - ทำแบบ A3: `incoming/ART-UNIT-ANIMATION-A4-001/build_assets.py` (scale เดียวต่อแถบ; ท่าลอยของ Dew/ค้างคาวคงความสูงจริง; hover R2 ใช้พื้นที่เฉลี่ยตั้ง scale), registry 5 ตัว, clip `disengage`, optional atlas ไม่อยู่ใน critical preload; ครบ 7+7 ActionId ของ Mira/Toma + Jelly Bounce/Ember Spark/Nip ใช้ VFX เดิม
 - ใหม่: hover loop ของค้างคาว (`idleLoop` ใน registry, `UnitAnimation.setLoops`) เล่นเฉพาะเมื่อยังไม่ตายและไม่อยู่ใน motion; ปิดเมื่อ OS reduce/เอฟเฟกต์ลด; `BattleUI.open` เรียก `configureEffects` ตอนเริ่มสู้ (เดิมเรียกเฉพาะตอนเริ่มเทิร์น)
 - งบภาพ (decoded): Mira 3.97MiB, Toma 2.18MiB, Dew 1.35MiB, Ember 1.11MiB, Bat 1.88MiB; สนาม 10 ตัว (OD-05) ต้องวัดรวมหลัง P02 ([README A4](../combat-presentation/unit-a4-slice/README_TH.md))
 - ผล: typecheck/lint/`npm test` ผ่าน; browser `unit-a4.spec.ts` 34 ผ่าน; คลิปจริง 20 คลิป 390px (Chromium จำลอง ไม่ใช่มือถือจริง)
-- **ยังไม่ merge/เผยแพร่**: รอเจ้าของดูคลิปและอนุมัติ motion (จุดที่ควรดู: Dew กระโดด, Toma underhand, Mira ถอย, Ember ถ่ม, loop ปีกค้างคาว) แล้วค่อย merge PR + ตรวจ CI/Pages
+- เจ้าของดูหน้ารวมคลิป (Artifact) แล้วตอบ “เอาเข้าเกมได้” (2026-10-29) → PR #101 merge `a92625a` (quality+browser ผ่านบน `eecd0e1`; browser รันซ้ำ 1 ครั้งหลัง `bolt-fx.spec.ts` error ตอนปิด context ที่ไม่เกี่ยวข้องและผ่านในเครื่อง; merge สาขาเกมเข้ามาเพื่อแก้ conflict `browser.yml` จาก PR #100) Pages run 40808184534
 - ไม่แตะ #93–#98 (W3–W5) และ PR #100
 
 

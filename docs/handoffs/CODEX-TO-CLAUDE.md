@@ -3,6 +3,13 @@
 
 
 
+## 2026-10-29 — Claude: A4 มิร่า/โทมะ/สไลม์/ค้างคาว เข้าเกม (เจ้าของอนุมัติ “เอาเข้าเกมได้”)
+
+- PR #101 `claude/unit-a4-mira-toma-slimes-bat` → สาขาเกม merge `a92625a`; ภาพจาก PR #91 (R2 Mira volley/disengage, Toma underhand, Bat hover + ป้ายทอง) ผ่าน `incoming/ART-UNIT-ANIMATION-A4-001/build_assets.py`
+- ผล: typecheck/lint/`npm test` 1138, browser A4 34 + loading/pilot; คลิปจริง 20 คลิป `docs/combat-presentation/unit-a4-slice/`; hover loop ค้างคาวเป็นของใหม่ (ปิดเมื่อลดการเคลื่อนไหว)
+- ข้อสังเกตสำหรับ Codex รอบหน้า: แถบดิบ A4 แยกตัวได้สะอาดทุกแถบ (ไม่มีตัวติดกัน) ขนาดตัวต่างกันระหว่างแถบ (scale 0.44–1.07) — ถ้าวาดขนาดใกล้ seed ทุกแถบจะคมขึ้น; ลูปบิน 4 เฟรมเฟรมแรกปีกพับทำให้ตั้ง scale จากเฟรมแรกไม่ได้
+- ถัดไป W3: A5 (PR #95) + VFX คำท้า (PR #93, R2) ในแชตใหม่ — ดู NEW-CHAT-HANDOFF-TH.md
+
 ## 2026-10-28 — Claude: A3 เซเรน + เห็ดหมอผีกลวง เข้าเกม (เจ้าของอนุมัติ “เอาเข้าเกมได้”)
 
 - PR #99 `claude/unit-a3-seren-mycon` → สาขาเกม; ภาพจาก PR #90 (R2 attack/cast ตามที่ Codex แนะนำ) ผ่าน `incoming/ART-UNIT-ANIMATION-A3-001/build_assets.py`; registry `healer`/`foe_mycon`, clip `prayer`/`sanctuary`; VFX เดิม; rules/save/content/balance/timing ไม่เปลี่ยน
