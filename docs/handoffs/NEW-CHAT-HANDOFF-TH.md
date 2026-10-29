@@ -1,11 +1,11 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
-## 2026-10-29 — W3 A5 + VFX คำท้า: นำเข้าเกมแล้ว รอเจ้าของตรวจ motion (PR เปิดจากสาขา `claude/unit-a5-garran-brann-command-vfx`)
+## 2026-10-29 — W3 A5 + VFX คำท้า: เจ้าของอนุมัติ “เอาเข้าเกมได้” → merge PR #102 `ab3e004` (quality + browser เต็มผ่านบน `7a5242c`)
 
 - A5 (PR #95): ตรวจ sha256 26 ไฟล์ตรง; R2 ของ Garran war cry/Brann taunt/Tusker Stampede ตามเจ้าของ; `build_assets.py` (scale เดียวต่อแถบ, พื้นเท้า y=496; Brann factor .37 เพราะ .42 ดาวน์โหลดเกิน 1.5MB; หัวค้อนที่ต่ำกว่าพื้นยกเฟรมขึ้นให้ไม่ถูกตัด); registry 5 ตัว + clip `stance`/`taunt`/`brace`; ครบทุก ActionId ของ garran/brann และ intent จริงของศัตรู (Tusk Charge/Stampede/Thorn Pounce/Thorn Bite) ดู [README A5](../combat-presentation/unit-a5-slice/README_TH.md)
 - VFX C5.9 (PR #93): R2 (Claude เลือก) แพ็ก 12 เลเยอร์ → `command_fx` atlas, `command-fx.ts`; ชั้นทอง additive; War Cry impact เฉพาะ event counter จริง ดู [README](../combat-presentation/command-fx-slice/README_TH.md)
 - ผล: typecheck/lint/`npm test` (1173+) ผ่าน; browser `unit-a5.spec.ts` 34 + `command-fx.spec.ts` 8 ผ่านในเครื่อง; คลิปจริง 20+14 (Chromium จำลอง) หน้า Artifact รวมคลิปส่งเจ้าของแล้ว
-- ค้าง: เจ้าของดูคลิปแล้วตอบ (เอาเข้าเกมได้ / R1 ของ VFX / แก้ท่า) → merge หลัง CI ผ่าน (BattleScene เปลี่ยน → CI ชุดเต็มราว 55 นาที) → Pages; อัปเดตหัวข้อนี้เป็น “เผยแพร่แล้ว”
+- เจ้าของอนุมัติ motion โดยตรง (2026-10-29) หลังดูหน้ารวมคลิป; Pages ตามหลัง merge (ตรวจผลแล้วบันทึกเลข run); PR #103 ทำ CI ของ PR เป็น 4 shard + ขยายขอบเขตงานภาพล้วน; prompt Codex W6–W8 ฉบับเดียวต่อท่าอยู่ `docs/handoffs/CODEX-PROMPTS-W6-W8-TH.md`
 - W4 (#94/#96) และ W5 (#97/#98) ยังรอเจ้าของเลือก ไม่ได้นำเข้า; งบภาพสนาม 10 ตัว (OD-05) ยังต้องวัดรวมหลัง P02
 
 ## 2026-10-29 — แชตถัดไป: W3 A5 + VFX คำท้า นำภาพเข้าเกม (เปิดอัตโนมัติจากแชต A4)
