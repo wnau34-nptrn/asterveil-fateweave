@@ -76,6 +76,13 @@ export const unitRegistry = {
   foe_riftweaver: { sheet: 'riftweaver', displayRatio: 2, intents: { 'Rune Lash': 'attack', 'Rift Needle': 'skill', 'Ribbon Snare': 'snare' } },
   foe_spore_puff: { sheet: 'sporepuff', displayRatio: 2, intents: { 'Spore Dust': 'attack' } },
   foe_ruin_bat: { sheet: 'bat', displayRatio: 2, intents: { Nip: 'attack' }, idleLoop: { frames: [22, 23, 24, 25], frameMs: 150 } },
+  // A8: the golem punches for both Crystal Fist and Stone Fist (attack) and slams overhead for Veil Quake (skill); the Channeler's
+  // palms release for Rift Beam and the older Rift Bolt name; Star Flame and Crystal Stab have one gesture each. The wisp hovers (idleLoop 22..24,
+  // seed / bob up / bob down) and its down frames keep the painted fade. Hit 17..18 and down 19..21 use the shared layout; 21 is the held collapse.
+  foe_golem: { sheet: 'golem', displayRatio: 2, intents: { 'Crystal Fist': 'attack', 'Stone Fist': 'attack', 'Veil Quake': 'skill' } },
+  foe_rift_channeler: { sheet: 'channeler', displayRatio: 2, intents: { 'Rift Beam': 'attack', 'Rift Bolt': 'attack' } },
+  foe_rift_wisp: { sheet: 'wisp', displayRatio: 2, intents: { 'Star Flame': 'attack' }, idleLoop: { frames: [22, 23, 24], frameMs: 160 } },
+  foe_shard_crawler: { sheet: 'crawler', displayRatio: 2, intents: { 'Crystal Stab': 'attack' } },
 } as const satisfies Record<string, UnitDefinition>;
 // Anatomy hold (animation-visual-audit-2026-10-29): an identity whose generated poses do not match its approved
 // idle model (head/torso proportions) keeps its mapping and atlas in the repository but is neither loaded nor drawn;
@@ -98,7 +105,7 @@ export function unitClip(art: string, action: string | undefined, intent: string
   const definition = unitDefinition(art);
   return action ? definition?.actions?.[action] : intent ? definition?.intents?.[intent] : undefined;
 }
-// 0 idle; 1..8 slash; 9..16 skill; 17..18 hurt; 19..21 down. Identities with one gesture alias the other clip to idle (A3 Mycon, A4 Ember/Dew/Bat, A5 Stalker/Beetle, A6 Spore Puff).
+// 0 idle; 1..8 slash; 9..16 skill; 17..18 hurt; 19..21 down. Identities with one gesture alias the other clip to idle (A3 Mycon, A4 Ember/Dew/Bat, A5 Stalker/Beetle, A6 Spore Puff, A8 Channeler/Wisp/Crawler).
 // Frame 5/13 is the contact pose. UI contact remains authoritative, never sprite FPS.
 function sequence(pose: UnitPose | Reaction, phase: FramePhase, clip?: UnitClip, art?: string): readonly number[] | undefined {
   const definition = art ? unitDefinition(art) : undefined;

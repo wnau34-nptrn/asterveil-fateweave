@@ -1,0 +1,440 @@
+{
+  "schema": 1,
+  "scope": "ART-UNIT-ANIMATION-A8-001",
+  "hash_algorithm": "sha256",
+  "self_hash_excluded": "validation.json (self-reference); git blob/commit protects manifest",
+  "files": {
+    "NOTES.md": {
+      "sha256": "c4821dd2ce755bbc102b3ea54c1e2643764ac23ce22dc397975c886a839e21b2",
+      "bytes": 8579
+    },
+    "build_handoff.py": {
+      "sha256": "99b4154c3d23730f99607caffc0045a6fccb1bbd732fc94dc3dda27d19df8e83",
+      "bytes": 9188
+    },
+    "preview-390.png": {
+      "sha256": "6b43f778d56928987df035a194e5a6799c2408bc9c7456e5d870c5a7330ec810",
+      "bytes": 748608,
+      "size": [
+        390,
+        5466
+      ],
+      "mode": "RGB",
+      "pillow_decoded": true
+    },
+    "prompts.json": {
+      "sha256": "f7c4c7fe430de2b21036ad673be8cfd2a70796148d4062dc1c4b1d4cde962cc1",
+      "bytes": 14389
+    },
+    "raw/foe_golem-down-r1.png": {
+      "sha256": "a7f1b8a68631db9bac2583f93c969c2efafdd2ea11fe05d90c849551af4f26f8",
+      "bytes": 1236131,
+      "size": [
+        4096,
+        768
+      ],
+      "mode": "RGBA",
+      "pillow_decoded": true
+    },
+    "raw/foe_golem-hit-r1.png": {
+      "sha256": "b8d2a8b935218f78c6cc9f1694316cc413f9ba7ed42d326265003e29acced6c9",
+      "bytes": 1143813,
+      "size": [
+        4096,
+        768
+      ],
+      "mode": "RGBA",
+      "pillow_decoded": true
+    },
+    "raw/foe_golem-punch-r1.png": {
+      "sha256": "eb462d423411849fb8d3c715c9f659b2ea02b4f3dbd6339f1376de4bef10151d",
+      "bytes": 2138408,
+      "size": [
+        6144,
+        768
+      ],
+      "mode": "RGBA",
+      "pillow_decoded": true
+    },
+    "raw/foe_golem-veil-quake-r1.png": {
+      "sha256": "45e66e7a1e586f27066ec1e0794c825e203e5e621801b111605abbe7b4b72bfb",
+      "bytes": 1691643,
+      "size": [
+        6144,
+        768
+      ],
+      "mode": "RGBA",
+      "pillow_decoded": true
+    },
+    "raw/foe_rift_channeler-down-r1.png": {
+      "sha256": "65e1e52749d07ed41726a4a52a95835651c308c8b5c1f6830c7e41a1608c54cd",
+      "bytes": 1091001,
+      "size": [
+        4096,
+        768
+      ],
+      "mode": "RGBA",
+      "pillow_decoded": true
+    },
+    "raw/foe_rift_channeler-hit-r1.png": {
+      "sha256": "dd23ce09ff95d34d5e707473dd5eeb3f55709c81d40ebd39d5b08cba4702cbb8",
+      "bytes": 920347,
+      "size": [
+        4096,
+        768
+      ],
+      "mode": "RGBA",
+      "pillow_decoded": true
+    },
+    "raw/foe_rift_channeler-rift-bolt-r1.png": {
+      "sha256": "b48329c76bce14bfe79f90a0c3bd5108c19c5ff0e436337b256829f6c408222e",
+      "bytes": 1320082,
+      "size": [
+        6144,
+        768
+      ],
+      "mode": "RGBA",
+      "pillow_decoded": true
+    },
+    "raw/foe_rift_wisp-down-r1.png": {
+      "sha256": "ef6a8a05c6f77835e345d482a4be4e1e947b0d1f4a7bacc46b645c9df7a3fa90",
+      "bytes": 448738,
+      "size": [
+        4096,
+        768
+      ],
+      "mode": "RGBA",
+      "pillow_decoded": true
+    },
+    "raw/foe_rift_wisp-hit-r1.png": {
+      "sha256": "8037875fb86d03da70a59749555cca63818553b261af91cc2c279b45ec8b2c80",
+      "bytes": 409061,
+      "size": [
+        4096,
+        768
+      ],
+      "mode": "RGBA",
+      "pillow_decoded": true
+    },
+    "raw/foe_rift_wisp-hover-r1.png": {
+      "sha256": "d216c8d843ac03f32016886ab0dc039e111c31faf20d6ec9251bf8abf7a8d8d9",
+      "bytes": 420134,
+      "size": [
+        4096,
+        768
+      ],
+      "mode": "RGBA",
+      "pillow_decoded": true
+    },
+    "raw/foe_rift_wisp-star-flame-r1.png": {
+      "sha256": "9512d75de2e96b93a000cb8cade445421f93ba00049302c238a96b0989765339",
+      "bytes": 667577,
+      "size": [
+        6144,
+        768
+      ],
+      "mode": "RGBA",
+      "pillow_decoded": true
+    },
+    "raw/foe_shard_crawler-crystal-stab-r1.png": {
+      "sha256": "84203283ba8f8f9b02cf01f7914395b75d828e7906d1b6b5d78d4c0cb9c018a7",
+      "bytes": 960514,
+      "size": [
+        6144,
+        768
+      ],
+      "mode": "RGBA",
+      "pillow_decoded": true
+    },
+    "raw/foe_shard_crawler-down-r1.png": {
+      "sha256": "ec781f8e01f3d3d5a5445bda9fba0d02cd49cbf3955d63c287c1e00e491acc04",
+      "bytes": 690005,
+      "size": [
+        4096,
+        768
+      ],
+      "mode": "RGBA",
+      "pillow_decoded": true
+    },
+    "raw/foe_shard_crawler-hit-r1.png": {
+      "sha256": "fb27bc3879b0c211ef23a651e47ddb2a0ae78ed3c4b3db43d81003bb1de40158",
+      "bytes": 631974,
+      "size": [
+        4096,
+        768
+      ],
+      "mode": "RGBA",
+      "pillow_decoded": true
+    },
+    "seeds/foe_golem.png": {
+      "sha256": "586c27c584320b188ce19b5d040291375dc047db1896f00eebf2fe016352c49c",
+      "bytes": 422016,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "pillow_decoded": true
+    },
+    "seeds/foe_rift_channeler.png": {
+      "sha256": "5eae9454f956b0711157d7c23909f12ba4e7f0c88e2e34d1d076cbb3d3241674",
+      "bytes": 336713,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "pillow_decoded": true
+    },
+    "seeds/foe_rift_wisp.png": {
+      "sha256": "214dc76cac21f14f3448e669f5bd0e933a085ace60fb3cd3e01cff4d1c3e9038",
+      "bytes": 134955,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "pillow_decoded": true
+    },
+    "seeds/foe_shard_crawler.png": {
+      "sha256": "ff87cb5db070fcac8fbad7ae195a1986b7d84c5fde53af1039b82dc71b200a4e",
+      "bytes": 213846,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "pillow_decoded": true
+    },
+    "seeds.json": {
+      "sha256": "9447d7f8d7a8c3e4be577e5ad5f0d32c39615fd0dd7d6a65b5e18f5e24e2a5fa",
+      "bytes": 2494
+    },
+    "source-sheets/bolt.png": {
+      "sha256": "755917718496cb5936904503c0bf3ebb816e0cd9fde2516c99c6ea6650f1501d",
+      "bytes": 1200866,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "pillow_decoded": true
+    },
+    "source-sheets/crawlerdown2.png": {
+      "sha256": "240cf7c75a58533187ac46d647535f845f6e94eabbabd93adc1ccd689f28684b",
+      "bytes": 714897,
+      "size": [
+        1774,
+        887
+      ],
+      "mode": "RGBA",
+      "pillow_decoded": true
+    },
+    "source-sheets/foe_golem-down.png": {
+      "sha256": "e12bb1e8fcc2ac30d108fb39a217f4dafba0b8af186ef2bbdcad8f257dbb79d9",
+      "bytes": 1432711,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "pillow_decoded": true
+    },
+    "source-sheets/foe_golem-hit.png": {
+      "sha256": "37600c832536240892b14e0795f27a8c5e11edc6520fedb0ce921f4a26d06326",
+      "bytes": 1758496,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "pillow_decoded": true
+    },
+    "source-sheets/foe_rift_channeler-down.png": {
+      "sha256": "c92469723b77b21ad58760864b3d9d82049e51357c4a4df3aece1534183d87fa",
+      "bytes": 1254769,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "pillow_decoded": true
+    },
+    "source-sheets/foe_rift_channeler-hit.png": {
+      "sha256": "5421245b8b04084f1cae9e0049745c836dc8864976d51c97cbbb1adc5c5c2a67",
+      "bytes": 1588075,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "pillow_decoded": true
+    },
+    "source-sheets/foe_rift_wisp-down.png": {
+      "sha256": "547549cb558cc352d50b4edd052c0959f7f91cf694f63e64cdcee8b9a367ab25",
+      "bytes": 954118,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "pillow_decoded": true
+    },
+    "source-sheets/foe_rift_wisp-hit.png": {
+      "sha256": "8178cce097ee6551bfec3cfa8e4bae2a477ec8e7b4d30b14d01d1482191d63c2",
+      "bytes": 827708,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "pillow_decoded": true
+    },
+    "source-sheets/foe_shard_crawler-hit.png": {
+      "sha256": "17a3c9fece4a2e15832131c7187c445fadfec5df0906e8ffda1150efb953582a",
+      "bytes": 1020648,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "pillow_decoded": true
+    },
+    "source-sheets/hover.png": {
+      "sha256": "7c23a2f392620a4a125da42bfb7810a5dd83def431e3bfeda404adfa3c4d515b",
+      "bytes": 899221,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "pillow_decoded": true
+    },
+    "source-sheets/punch.png": {
+      "sha256": "4c2ea360e0b2a5daee2e8fbcb55f4f7eb88062922a2da2ca08d031ac6ded6d55",
+      "bytes": 794877,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "pillow_decoded": true
+    },
+    "source-sheets/quake3.png": {
+      "sha256": "c04880437dc50e14a7c71eacff561d753169d130ff8067e5c653434af3f5e9b9",
+      "bytes": 1017029,
+      "size": [
+        1774,
+        887
+      ],
+      "mode": "RGBA",
+      "pillow_decoded": true
+    },
+    "source-sheets/stab.png": {
+      "sha256": "397a6ca493445b75188636f595bb2a8b337f705808b1eb33390f3003f8435e07",
+      "bytes": 847557,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "pillow_decoded": true
+    },
+    "source-sheets/star3.png": {
+      "sha256": "a9b3d5af1e680d2813c3495fcf02a28a132e8f81eeb4b5b8d32d65f8ca37d8ea",
+      "bytes": 677130,
+      "size": [
+        1774,
+        887
+      ],
+      "mode": "RGBA",
+      "pillow_decoded": true
+    },
+    "strips.json": {
+      "sha256": "ad17e9f50981b476531644b0782e987debad37966a3effa83a1e23d8479053a7",
+      "bytes": 23321
+    },
+    "templates/foe_golem-4.png": {
+      "sha256": "10b7d64892a8e6b8bd6b80cffea1f6854f490ae153130815de0b17673c122387",
+      "bytes": 106218,
+      "size": [
+        2048,
+        768
+      ],
+      "mode": "RGBA",
+      "pillow_decoded": true
+    },
+    "templates/foe_golem-6.png": {
+      "sha256": "7a19f6aa7f7b8fb10d47939d9192f8ef4569f1eaa05b7e3d7291b0f7cb829737",
+      "bytes": 108497,
+      "size": [
+        2048,
+        768
+      ],
+      "mode": "RGBA",
+      "pillow_decoded": true
+    },
+    "templates/foe_rift_channeler-4.png": {
+      "sha256": "21e7fd6021f8223e5bddfe5251bb8cef0df427d92b104e0d8b43852aaa3fc81b",
+      "bytes": 86754,
+      "size": [
+        2048,
+        768
+      ],
+      "mode": "RGBA",
+      "pillow_decoded": true
+    },
+    "templates/foe_rift_channeler-6.png": {
+      "sha256": "11c40ccc5e3e6639e9d81bd603fd582cd10b249abae7a4926de8887447612194",
+      "bytes": 88758,
+      "size": [
+        2048,
+        768
+      ],
+      "mode": "RGBA",
+      "pillow_decoded": true
+    },
+    "templates/foe_rift_wisp-4.png": {
+      "sha256": "832252b64bb9e8e70d9d2dd3e6b753c04ebb1ce60f68f3589e78da713eb21002",
+      "bytes": 40799,
+      "size": [
+        2048,
+        768
+      ],
+      "mode": "RGBA",
+      "pillow_decoded": true
+    },
+    "templates/foe_rift_wisp-6.png": {
+      "sha256": "dba8b35bdb33363caf6963e784c2e888e453dca0b9caee184bb67b7bc60204b7",
+      "bytes": 41918,
+      "size": [
+        2048,
+        768
+      ],
+      "mode": "RGBA",
+      "pillow_decoded": true
+    },
+    "templates/foe_shard_crawler-4.png": {
+      "sha256": "f7472d4163b51828be2b79df1f9a7f5ed05360a630b2072fef3d5c396ee6b07a",
+      "bytes": 56350,
+      "size": [
+        2048,
+        768
+      ],
+      "mode": "RGBA",
+      "pillow_decoded": true
+    },
+    "templates/foe_shard_crawler-6.png": {
+      "sha256": "348d2fa845e934331c7bbc1325389c4fe936bbfa0145b997eb6db351b27b43ee",
+      "bytes": 57856,
+      "size": [
+        2048,
+        768
+      ],
+      "mode": "RGBA",
+      "pillow_decoded": true
+    }
+  },
+  "artwork_selection": "pending owner",
+  "motion_approval": "pending owner; no runtime integration in this PR"
+}
