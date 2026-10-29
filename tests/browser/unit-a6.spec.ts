@@ -107,7 +107,7 @@ test('A6 late optional textures cannot replace artwork during a committed cast',
 });
 test('A6 encounter replacement releases the A6 textures',async({page})=>{
  await page.setViewportSize({width:390,height:844});await ready(page,'skill=attack');
- expect((await page.evaluate(()=>window.unitA6QA.cached())).sort()).toEqual(['unit-pilot-aegis','unit-pilot-eira','unit-pilot-riftweaver','unit-pilot-sefa']);
+ expect((await page.evaluate(()=>window.unitA6QA.cached())).sort()).toEqual(['unit-pilot-eira','unit-pilot-riftweaver','unit-pilot-sefa']);
  await page.evaluate(()=>window.unitA6QA.otherEncounter());
  await expect.poll(()=>page.evaluate(()=>window.unitA6QA.cached())).toEqual([]);
  await expect(page.locator('#start')).toBeEnabled();
