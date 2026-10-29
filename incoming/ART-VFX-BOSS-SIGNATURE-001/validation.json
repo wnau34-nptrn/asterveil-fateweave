@@ -1,0 +1,757 @@
+{
+  "schema": 1,
+  "pillow": "12.3.0",
+  "files": {
+    "NOTES.md": {
+      "sha256": "2445943a4721a93a29b420ce20e111f27198f940e8c70a7005e4d9e0cacb34fa",
+      "bytes": 11749
+    },
+    "build_handoff.py": {
+      "sha256": "1a741812678313a7b8a2ef9938d2229fe10534bb394776cc63d115b5e77e134a",
+      "bytes": 18888
+    },
+    "generation-prompts.json": {
+      "sha256": "252607c30ed2239c7956fd5e9ea3a938d75a6a7b2533745e04301b3867ca447b",
+      "bytes": 23327
+    },
+    "layers/call-the-hunt-peak.png": {
+      "sha256": "884eb662a2bca6db616729df515a5719fe1d9be8fe484468fdb76e9702413cc9",
+      "bytes": 32074,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "layers/call-the-hunt-prepare.png": {
+      "sha256": "1c383d1c9cca890b94c7a42ad22bef9f4c32786ac4941ddd7c976e3643924c11",
+      "bytes": 22219,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "layers/call-the-hunt-settle.png": {
+      "sha256": "e64e4ea256da537386c64df50ceabe34567591d32e7ef70b4125c77d83733ba9",
+      "bytes": 19322,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "layers/call-the-rift-peak.png": {
+      "sha256": "2191b3320f0d0790ecc4a8dc5114f2dffd69aa6aae1a051b5cd0acc8a525634a",
+      "bytes": 47873,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "layers/call-the-rift-prepare.png": {
+      "sha256": "634695e0eb2f28aef40ecb91331e00d8586a72992aecf0533373aeabe2e13b45",
+      "bytes": 24080,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "layers/call-the-rift-settle.png": {
+      "sha256": "aefabc55981b2cebb361746b968137099f4938e812433e29682b423536214334",
+      "bytes": 19929,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "layers/gather-thorns-peak.png": {
+      "sha256": "f6aba596209db8dbaa65f03ae3197d9a66725ef188b008491722e236df863e4d",
+      "bytes": 98656,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "layers/gather-thorns-prepare.png": {
+      "sha256": "cfdc1973aba3ffca1c88cd924d487302bb08ac81d02eace024662ead47983bdf",
+      "bytes": 68402,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "layers/gather-thorns-settle.png": {
+      "sha256": "c015ded67d62e9d23fd93114f995ddf5b06e7ebeac4a3c847f0fe9b417d6a0af",
+      "bytes": 58253,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "layers/horn-charge-peak.png": {
+      "sha256": "e706a58edc3d849a0ae5cfc6f578f81559cd579b7664993984cf0cd406bdcc58",
+      "bytes": 72041,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "layers/horn-charge-prepare.png": {
+      "sha256": "6719d57408ec7d8638cfec9cae75b74332dc89ebd0778c58b2ba1623f4be13b8",
+      "bytes": 26774,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "layers/horn-charge-settle.png": {
+      "sha256": "c4f1f84b5b4a8d999ee9dc2b3dceaeb9ee39f77be133d3ba9fa2818ea1a0ec99",
+      "bytes": 41425,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "layers/rift-awakening-peak.png": {
+      "sha256": "07170f0f705ba792973c9cd023cadbe2505159ac586323fb0af0deaf00b447f6",
+      "bytes": 51858,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "layers/rift-awakening-prepare.png": {
+      "sha256": "a59f04a67e6a1055bc7309d1097950782f4c7389114124f11d4153b02a27d7ab",
+      "bytes": 18717,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "layers/rift-awakening-settle.png": {
+      "sha256": "2d971c358a9bcceb5823ddd72c9bfc66ac24a0e789928ce3202f1e6714ea8353",
+      "bytes": 14604,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "layers/rift-cataclysm-peak.png": {
+      "sha256": "02640dd06b9003c3e856222a11009c1d923aa5ed72ebfa24607575ae80a4a2d0",
+      "bytes": 69556,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "layers/rift-cataclysm-prepare.png": {
+      "sha256": "92df136f5c9ce978a47d964bd9afe752fd8c84a32688c6a56cfb165d24ef536e",
+      "bytes": 47160,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "layers/rift-cataclysm-settle.png": {
+      "sha256": "8bb4b50107dd1cb79dc54c5ca51a021681d98064c87e387298a37cc38c0cb37b",
+      "bytes": 23326,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "layers/rift-gathering-peak.png": {
+      "sha256": "cc7384dfe0c03f5c79271faced2abcebb8059afd05fd17f08b23f2e86bffedfc",
+      "bytes": 53872,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "layers/rift-gathering-prepare.png": {
+      "sha256": "e9bc5dc637167aca415a9c15b777e243fc26aa8f51ef1f80b479571604deecb1",
+      "bytes": 56380,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "layers/rift-gathering-settle.png": {
+      "sha256": "dcaf487142bb9aa741c86a0116309c02562ef6e4e9faf722ae4e9c4cab1f0533",
+      "bytes": 40868,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "layers/rift-wave-peak.png": {
+      "sha256": "3364adf18465c5fbdbe1e4c3b5cd8e8f39960a32b43257cb5c3ae5a020967499",
+      "bytes": 61497,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "layers/rift-wave-prepare.png": {
+      "sha256": "afc6b92433b07ae795f577b27b248967da76c78f1126f5d4517a398aca013c7a",
+      "bytes": 28924,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "layers/rift-wave-settle.png": {
+      "sha256": "ea4485128e990d93b027ffa3ff41b2bf9da5bfd628f821f092744b0d738e5c23",
+      "bytes": 33561,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "layers/stampede-peak.png": {
+      "sha256": "6d9df7439d524a85ac4fc1cacb575e4beedc4bd38937b69812f802ffcca29677",
+      "bytes": 86412,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "layers/stampede-prepare.png": {
+      "sha256": "d754cf5cfa56f813033ed88ea2cb8c477d15510f626486d24a1ad909a5b6a68c",
+      "bytes": 49239,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "layers/stampede-settle.png": {
+      "sha256": "fa898c759dd8449a6414b9a00ac697079dcdf27d5f8d8427c1280e437559aabe",
+      "bytes": 45032,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "layers/thorn-bloom-peak.png": {
+      "sha256": "ed6992e265c326afb23f661db07cea46c84ed42924d6c96290bba138bfd6e1ec",
+      "bytes": 77021,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "layers/thorn-bloom-prepare.png": {
+      "sha256": "d6689cc90a36c8ad47a71a199a83522f0ced9d4f0f49f6e973017cd4d6dc8b81",
+      "bytes": 28874,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "layers/thorn-bloom-settle.png": {
+      "sha256": "237f70141e6bf5da97d800c0a6029e70f1629d8552d70b85f99000b0d8bf8b10",
+      "bytes": 29696,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "layers/thorn-rage-peak.png": {
+      "sha256": "4069c8b053de2424de629cba7c8d6367407c14dda9f6beb12ca6d6aa5897a5fa",
+      "bytes": 60602,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "layers/thorn-rage-prepare.png": {
+      "sha256": "b5848a3d95d9f756af6ca59b6120306d12443a537b181f4b04c810fc03f65b65",
+      "bytes": 37585,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "layers/thorn-rage-settle.png": {
+      "sha256": "0d650241155e082c099bf5cadd4497c34f3ab45dbd50e483ec79d3a3d1000fd8",
+      "bytes": 40296,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "layers/thorn-storm-peak.png": {
+      "sha256": "a2caa99f81946d8def8b5dcf423ca10027f1a0622dfdb288ecc56d40786ed643",
+      "bytes": 43512,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "layers/thorn-storm-prepare.png": {
+      "sha256": "941bb9377a494441ea602136e8c3c92608148589bff57fc786c8b6c3d4f9b0b7",
+      "bytes": 45610,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "layers/thorn-storm-settle.png": {
+      "sha256": "040e7a9780d1263635965e9918305ae3685a671ba5db5e8a54760a759474250a",
+      "bytes": 32504,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "layers/thorn-tempest-peak.png": {
+      "sha256": "81f7709ce4f937b5e5cd7d7eb8f979de594e5aba071cba961a7b86346a1bc55a",
+      "bytes": 64947,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "layers/thorn-tempest-prepare.png": {
+      "sha256": "338773fe2c0b4abb5976f5b068a67cb17e431ba9a6e97b8d34742cd5a379529a",
+      "bytes": 66063,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "layers/thorn-tempest-settle.png": {
+      "sha256": "477d0cf6c472c68369efab7467426579966306c3fbcdf13daafb0031b03d779c",
+      "bytes": 55914,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "layers/war-cry-peak.png": {
+      "sha256": "e2485aa95261bddc6603d1f0afe6e514028bb92338f763e58289dd1f2439c1e8",
+      "bytes": 59462,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "layers/war-cry-prepare.png": {
+      "sha256": "a9ede4f870978387220ba0006b1616cda8e6c86409d3f01d72c64e4973040288",
+      "bytes": 44024,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "layers/war-cry-settle.png": {
+      "sha256": "1ece559df965011790e80e5dd5cd73bc6cd82a5f65344b3a5ad3b09a071302dd",
+      "bytes": 25570,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "layers.json": {
+      "sha256": "52cf2c4b0713998f40cebb417a93f43b412507914518218b1c414972a5802eff",
+      "bytes": 89184
+    },
+    "preview-390.png": {
+      "sha256": "44284f93841da7806c2c011b16f9d55d72f5eeb346325dfa396488efe2e5a49b",
+      "bytes": 128302,
+      "size": [
+        390,
+        656
+      ],
+      "mode": "RGBA"
+    },
+    "seeds/captain.png": {
+      "sha256": "e9b391b12263ca946ff8ffa1bc8c115f043b0849463b6be30f7dcecd7cd7615c",
+      "bytes": 339433,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    "seeds/gold-hero.png": {
+      "sha256": "0e888a0d889c61f2e4005361d43121e13478944cd3438a9ed6ca3578ee0dbaff",
+      "bytes": 420757,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    "seeds/juggernaut.png": {
+      "sha256": "4886380e37d38d5fb89f4dfc916a0d30f075553b5b11baf5cb75df2ddc6b1d53",
+      "bytes": 442852,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    "seeds/matriarch.png": {
+      "sha256": "e24a75b07f1f8fcebff01f98902eb3d6075fed062280ee787a64205303a744a8",
+      "bytes": 495045,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    "seeds/sentinel.png": {
+      "sha256": "33329874d21ddd767790ac55d23b43cfb07a7272dc6f46985c1021adb64f5c2b",
+      "bytes": 492946,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    "seeds/tusker.png": {
+      "sha256": "f0b69b79a75d3a4c4222ea8be5efa310ba53292a8f410a50497250796fcb2277",
+      "bytes": 364956,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    "seeds.json": {
+      "sha256": "74e553c7236b47001042e44b012641e36f7173e88e5735fbea7da257759c56c2",
+      "bytes": 1914
+    },
+    "source/beasts.png": {
+      "sha256": "58f447e006f02d059049f522438d6097d2698fcbdde66fc0cb7637de61a07f39",
+      "bytes": 2050228,
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "source/captain.png": {
+      "sha256": "8c81ec9f04d0a2483e2d5fcc536c6fb235cf262f576cd328ac139a52a186086a",
+      "bytes": 1759202,
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "source/matriarch.png": {
+      "sha256": "92db81da172bcad27e710ad356f18f655f6132f6249d18f743b8023589f2eabc",
+      "bytes": 2477588,
+      "size": [
+        971,
+        1619
+      ],
+      "mode": "RGBA"
+    },
+    "source/rift-cataclysm.png": {
+      "sha256": "fde13ae487e06b8c3027f7ecf353e9253eee1860124016c998bfb70ee8ca7512",
+      "bytes": 1076472,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "source/rift-wave.png": {
+      "sha256": "f64f8e7c008f8744f3e9e202e5111568684da9a0bfce60ec444443f0cdb87936",
+      "bytes": 1084469,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "source/sentinel-phases.png": {
+      "sha256": "7b9ec34c68db77e514b5e3bb09f65ee40b91c8a7799c7ee15fe81833bbcb585f",
+      "bytes": 1670669,
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "source/sentinel.png": {
+      "sha256": "b961cf49e104f1ba75a53d63120cb732e42ffea426c3348ecf98dfcbcfe77afc",
+      "bytes": 1950246,
+      "size": [
+        971,
+        1619
+      ],
+      "mode": "RGBA"
+    },
+    "source/thorn-bloom.png": {
+      "sha256": "202d913e429d005c4146a9a4502e35d543e5c0cb583ef87927bdc10478f5cf26",
+      "bytes": 1054662,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "source/thorn-rage.png": {
+      "sha256": "5fecc77af0391c0ca652cbad970fbf34c05d53a78aada22046116e5bece56ead",
+      "bytes": 1971995,
+      "size": [
+        2048,
+        768
+      ],
+      "mode": "RGBA"
+    },
+    "source/thorn-storm.png": {
+      "sha256": "5c1080cb7d555bcc7ff3bc7993d992721097cf726e12ef2185e146a5d59f9646",
+      "bytes": 1028495,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "source/thorn-tempest.png": {
+      "sha256": "6e27fc2b09d32f13d9200563be0f9953bfc67ef23feb572bf9b88c7c53934c93",
+      "bytes": 1664197,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "storyboards/call-the-hunt-390.png": {
+      "sha256": "7428d8fbca58667e149b61c15690ddd9f6a6af7e7cbf009adb0d13690481abf3",
+      "bytes": 168810,
+      "size": [
+        390,
+        904
+      ],
+      "mode": "RGBA"
+    },
+    "storyboards/call-the-rift-390.png": {
+      "sha256": "60b91584a82e6b6856b21353a2b71830cd1018e0b5a10442a93bc78d2cb8dbf0",
+      "bytes": 189030,
+      "size": [
+        390,
+        904
+      ],
+      "mode": "RGBA"
+    },
+    "storyboards/contrast-captain-390.png": {
+      "sha256": "9b8401ad83d112194f8a17b436da1914f0b1a1778bf35f41624bacc98751a10c",
+      "bytes": 99923,
+      "size": [
+        390,
+        506
+      ],
+      "mode": "RGBA"
+    },
+    "storyboards/contrast-juggernaut-390.png": {
+      "sha256": "e7eddbcc12c186aedaeaf853d71a51ff03f6ea40c0dba898ecd6585e60bcd3ac",
+      "bytes": 58922,
+      "size": [
+        390,
+        288
+      ],
+      "mode": "RGBA"
+    },
+    "storyboards/contrast-matriarch-390.png": {
+      "sha256": "421f9436d7de46865e6aa3f4326fecebae213d5e198f8780dd569ea1c093846b",
+      "bytes": 300993,
+      "size": [
+        390,
+        1160
+      ],
+      "mode": "RGBA"
+    },
+    "storyboards/contrast-sentinel-390.png": {
+      "sha256": "2f70998826bb80bf12bc684a3f4ef9b6b6a4cdcc09820ae8310ae03d16a8b51e",
+      "bytes": 259662,
+      "size": [
+        390,
+        1160
+      ],
+      "mode": "RGBA"
+    },
+    "storyboards/contrast-tusker-390.png": {
+      "sha256": "d953e9f025d0ab0379e2874746bbf4f704aa92a1c893a5149f951f2ca0d94841",
+      "bytes": 64592,
+      "size": [
+        390,
+        288
+      ],
+      "mode": "RGBA"
+    },
+    "storyboards/gather-thorns-390.png": {
+      "sha256": "8d0616aab70aa7b83e266bcb6daf277382cb600bbba58eb9696a3b2ca3e50a76",
+      "bytes": 185380,
+      "size": [
+        390,
+        904
+      ],
+      "mode": "RGBA"
+    },
+    "storyboards/horn-charge-390.png": {
+      "sha256": "386a251bd0dc3c7914d2b9413e62451fb9ed93e1ba128162bbbbc599779e4626",
+      "bytes": 179260,
+      "size": [
+        390,
+        904
+      ],
+      "mode": "RGBA"
+    },
+    "storyboards/rift-awakening-390.png": {
+      "sha256": "958e23471a116108cf88390d7ff8060c80f2e2f309ddc57e5f2969dba6dbc496",
+      "bytes": 182241,
+      "size": [
+        390,
+        904
+      ],
+      "mode": "RGBA"
+    },
+    "storyboards/rift-cataclysm-390.png": {
+      "sha256": "c631c5dfc6724e31133b0686ec61e6913525be15c8e08c58fb0e52a318620b82",
+      "bytes": 188558,
+      "size": [
+        390,
+        904
+      ],
+      "mode": "RGBA"
+    },
+    "storyboards/rift-gathering-390.png": {
+      "sha256": "52279c01adf933b5c6c3f4df720b902357f14b9ee57a1fc82c6d6bfc2f71ee16",
+      "bytes": 183547,
+      "size": [
+        390,
+        904
+      ],
+      "mode": "RGBA"
+    },
+    "storyboards/rift-wave-390.png": {
+      "sha256": "f9f8afea3df8d63137949ef67a6cbea75378a07d1f39dab58ff48676ffd9a92e",
+      "bytes": 177884,
+      "size": [
+        390,
+        904
+      ],
+      "mode": "RGBA"
+    },
+    "storyboards/stampede-390.png": {
+      "sha256": "c237bfba47e7359c8e7b35023538d7c63cbbc6e8ff67fddfb2086b9105d4c92d",
+      "bytes": 170723,
+      "size": [
+        390,
+        904
+      ],
+      "mode": "RGBA"
+    },
+    "storyboards/telegraphs-390.png": {
+      "sha256": "44284f93841da7806c2c011b16f9d55d72f5eeb346325dfa396488efe2e5a49b",
+      "bytes": 128302,
+      "size": [
+        390,
+        656
+      ],
+      "mode": "RGBA"
+    },
+    "storyboards/thorn-bloom-390.png": {
+      "sha256": "43819f6b9fcca6405ed481325d83af0c60e65b739af8cbe908a9fb6b77f20eaf",
+      "bytes": 184316,
+      "size": [
+        390,
+        904
+      ],
+      "mode": "RGBA"
+    },
+    "storyboards/thorn-rage-390.png": {
+      "sha256": "06623c6715f1d59af96f3ee412d4a724562555fb1211f695fc68c9fc288c5505",
+      "bytes": 182681,
+      "size": [
+        390,
+        904
+      ],
+      "mode": "RGBA"
+    },
+    "storyboards/thorn-storm-390.png": {
+      "sha256": "d608318bfc2a1aabec3a149c83321190b538fd0661c23e6761e94bb358105508",
+      "bytes": 185000,
+      "size": [
+        390,
+        904
+      ],
+      "mode": "RGBA"
+    },
+    "storyboards/thorn-tempest-390.png": {
+      "sha256": "4b69c27790daeda141f3a883a0d1c5dd673bd0f2d408a2ec1eea00da4f39a75f",
+      "bytes": 179811,
+      "size": [
+        390,
+        904
+      ],
+      "mode": "RGBA"
+    },
+    "storyboards/war-cry-390.png": {
+      "sha256": "09299fff4e3c712ce065156c16691facaf8f105d52af6e6dbb5a890c976e8b72",
+      "bytes": 186861,
+      "size": [
+        390,
+        904
+      ],
+      "mode": "RGBA"
+    }
+  },
+  "self_exclusion": "A manifest cannot hash itself. --git-ref additionally compares SHA-256 of validation.json fetched bytes to local manifest bytes.",
+  "checks": {
+    "final_moves": 14,
+    "final_layers": 42,
+    "rgba_layers": true,
+    "transparent_border_px": 12,
+    "storyboard_width": 390,
+    "normal_blend_contrast_review": "See five contrast boards; owner artwork and motion decisions pending",
+    "runtime_tested": false,
+    "owner_motion_approved": false
+  }
+}
