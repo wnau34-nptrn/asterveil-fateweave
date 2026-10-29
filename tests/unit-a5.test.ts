@@ -67,8 +67,10 @@ describe('A5 Garran / Brann / Mossback Tusker / Briar Stalker / Thorn Beetle act
  it('adds A5 four-figure reaction sprites while preserving unknown fallback',()=>{
   for(const art of ['garran','brann',...foeArts]){
    expect(unitSample('hit','reaction',0,undefined,art)!.from).toBe(17);expect(unitSample('down','reaction',1,undefined,art)!.to).toBe(21);
-   expect(unitSample('dodge','reaction',.5,undefined,art)).toBeUndefined();expect(unitSample('counter','reaction',.5,undefined,art)).toBeUndefined();expect(unitClip(art,'future',undefined)).toBeUndefined();
+   expect(unitSample('dodge','reaction',.5,undefined,art)).toBeUndefined();if(art!=='garran')expect(unitSample('counter','reaction',.5,undefined,art)).toBeUndefined();expect(unitClip(art,'future',undefined)).toBeUndefined();
   }
+  // AV02: Garran's riposte catches on the guard (30) then drives the thrust (5, 6).
+  expect(unitSample('counter','reaction',0,undefined,'garran')!.from).toBe(30);expect(unitSample('counter','reaction',.6,undefined,'garran')!.from).toBe(5);expect(unitSample('counter','reaction',1,undefined,'garran')!.to).toBe(6);
   expect(unitSample('block','reaction',0,undefined,'garran')!.from).toBe(30);expect(unitSample('block','reaction',1,undefined,'garran')!.to).toBe(31);
   expect(unitSample('block','reaction',0,undefined,'brann')!.from).toBe(38);expect(unitSample('block','reaction',1,undefined,'brann')!.to).toBe(39);
   for(const art of foeArts)expect(unitSample('block','reaction',.5,undefined,art)).toBeUndefined();

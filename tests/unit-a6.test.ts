@@ -4,7 +4,7 @@ import {heroes} from '../src/content/heroes/team';
 import {mercenaries} from '../src/content/heroes/mercenaries';
 import {talentTrees} from '../src/content/heroes/talents';
 import {encounters} from '../src/content/encounters/catalog';
-import {unitClip,unitSample,unitDisplayRatio,unitIdleFrame,unitRegistry} from '../src/game/visuals/unit-frames';
+import {unitClip,unitSample,unitRelease,unitDisplayRatio,unitIdleFrame,unitRegistry} from '../src/game/visuals/unit-frames';
 import {unitPose,unitReactions} from '../src/game/visuals/unit-animation-map';
 import manifest from '../src/game/visuals/unit-atlases.json';
 import {readFileSync} from 'node:fs';
@@ -35,7 +35,11 @@ describe('A6 Sefa / Lio / Rift Weaver / Spore Puff actual content, clips and lay
    const f=unitA6Fixture(id,action),turn=f.result.turns[0]!,pose=unitPose(turn,f.data)!;
    expect(turn.action).toBe(action);expect(f.result.state.commands).toHaveLength(f.prelude.length+1);
    const clip=unitClip(id,action,undefined)!,contact=contactOf[clip as keyof typeof contactOf];
-   for(const p of [0,.1,.5,.99,1])expect(unitSample(pose,'prepare',p,clip,id)!.to).toBeLessThan(contact);
+   // AV04: a releasing clip reaches its release frame (= the contact frame) at RELEASE_AT, when the flight starts; others never show contact early.
+   const release=unitRelease(id,clip);
+   for(const p of [0,.1,.5,.99,1]){const s=unitSample(pose,'prepare',p,clip,id)!;
+    if(release&&p>=release.at)expect(s).toEqual({from:contact,to:contact,mix:0});else if(release)expect(s.from).toBeLessThan(contact);else expect(s.to).toBeLessThan(contact);}
+   if(release){expect(release.frame).toBe(contact);expect(unitSample(pose,'prepare',release.at-.02,clip,id)!.to).toBe(contact);}
    expect(unitSample(pose,'recover',0,clip,id)!.from).toBe(contact);
   });
  }
