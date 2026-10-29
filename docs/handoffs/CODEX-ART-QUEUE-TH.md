@@ -31,7 +31,7 @@
 | 25 | ART-UNIT-ANIMATION-A3-001 แอนิเมชันเซเรน + เห็ดหมอผีกลวง (W1) | แผนแอนิเมชัน+VFX | ส่ง Codex แล้ว 2026-10-28 — prompt ใน `docs/design/ANIMATION_VFX_COMPLETION_PLAN_TH.md` §5 |
 | 26 | ART-VFX-ARCANE-SEAL-001 VFX ตระกูล C5.7 ผนึกอาคม: mark/sigil/storm/dispel (W1) | แผนแอนิเมชัน+VFX | ส่ง Codex แล้ว 2026-10-28 — prompt ใน `docs/design/ANIMATION_VFX_COMPLETION_PLAN_TH.md` §5 |
 | 27 | ART-UNIT-ANIMATION-A4-001 แอนิเมชันมิร่า + โทมะ, สไลม์ 2 ชนิด + ค้างคาวซาก (W2) | แผนแอนิเมชัน+VFX | หลัง Codex ส่ง W1 — prompt ใน `docs/design/ANIMATION_VFX_COMPLETION_PLAN_TH.md` §6 |
-| 28 | ART-UNIT-ANIMATION-A2-002 วาดท่าอัศวิน Aegis ใหม่ 25 ท่าให้สัดส่วนหัว/ตัวตรงกับ idle (แก้หัวโตกระโดด) | แก้คุณภาพ A2 | ทันที **ก่อน W4–W8** (Claude 2026-10-29) — brief และ prompt ใน `docs/handoffs/CODEX-AEGIS-ANATOMY-REDRAW-TH.md`; ระหว่างรอ เกมพักเฟรม A2 ของ Aegis ไว้ |
+| 28 | ART-UNIT-ANIMATION-A2-002 วาดท่าอัศวิน Aegis ใหม่ 25 ท่าให้สัดส่วนหัว/ตัวตรงกับ idle (แก้หัวโตกระโดด) | แก้คุณภาพ A2 | ส่ง Codex แล้ว (เจ้าของสั่ง 2026-10-29) **ก่อน W4–W8** — brief และ prompt ใน `docs/handoffs/CODEX-AEGIS-ANATOMY-REDRAW-TH.md`; ระหว่างรอ เกมพักเฟรม A2 ของ Aegis ไว้ |
 
 **งานภาพที่เกมยังขาด (ตรวจ 2026-10-22) — เจ้าของอนุมัติให้สั่งทั้งหมด ได้เป็นข้อ 13–19 แล้ว:**
 - ศัตรูที่ยังไม่มีภาพ (ตอนนี้ใช้ภาพสำรอง): องครักษ์อสูร (ศึกแรก), อสูรส่งพลัง (ศึกเงาล่าแนวหลัง)

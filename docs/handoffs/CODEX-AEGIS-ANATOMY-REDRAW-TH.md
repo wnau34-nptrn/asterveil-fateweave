@@ -51,14 +51,53 @@
 
 Codex ไม่ต้องแก้ runtime, `build_assets.py`, atlas, rules, save, balance, ActionId หรือเวลา contact/end Claude จะ normalize/pack (สเกลเดียวทั้งชุดเทียบ seed + ตรวจ anatomy ซ้ำ), ปลด hold ใน `src/game/visuals/unit-frames.ts` (`anatomyHold`), อัดคลิป before/after จาก runtime จริงที่ 320/390/PC และส่งให้เจ้าของตรวจ motion ก่อนนำเข้าเกม
 
-## Prompt ที่คัดลอกไปใช้ได้
+## Prompt สำหรับส่ง Codex (คัดลอกทั้งกล่อง)
 
-```text
-Production game animation frames edited from the supplied approved model sheet (aegis-seed.png with guide lines). Transparent alpha background, no glow, no scenery, no labels, no motion trails, no VFX.
-Character: Aegis, blond blue-eyed young knight in ornate royal blue and gold armor with blue cape, silver-blue sword in his right hand and five-point blue-gold shield on his left arm. Faces RIGHT exactly as the model sheet. Same camera and lighting.
-PROPORTIONS ARE LOCKED TO THE MODEL SHEET: head from hair top to chin = 140px, hair width = 190px, eye line 110px below hair top, chin to belt = 110px, feet on the sole line at y=500 in a 512px cell. Do NOT draw a bigger head, bigger eyes, broader shoulders or a bigger shield than the model sheet. Crouching poses get shorter by bending the knees only; the head stays model-sheet size.
-One pose per 512x512 cell, full body visible, never overlapping, never cropped. Same sword grip in the right hand, shield on the left arm in every pose, no duplicate weapons.
-Poses: [list one set at a time from the brief table, e.g. "6-frame sword slash: draw sword back, lift, poised windup, forward slash CONTACT, follow through, ease back"].
-```
+เจ้าของสั่งส่ง 2026-10-29
 
-ส่งทีละชุด (attack ก่อน) แล้วตรวจสัดส่วนทุกชุดก่อนทำชุดถัดไป
+````text
+งาน ART-UNIT-ANIMATION-A2-002: วาดท่าอัศวิน Aegis ใหม่ให้สัดส่วนตรงกับภาพยืนที่อนุมัติ
+
+รีโป wnau34-nptrn/asterveil-fateweave สาขาเกม feature/fateweave-initial-prototype (ไม่ใช่ main)
+อ่านก่อน: AGENTS.md, CLAUDE.md, docs/handoffs/CODEX-AEGIS-ANATOMY-REDRAW-TH.md (brief ฉบับเต็ม), docs/validation/aegis-anatomy-2026-10-29/README_TH.md
+ทำเฉพาะ Aegis ห้ามแตะตัวอื่น ห้ามแก้ runtime/src, build_assets.py, atlas, rules, save, balance, ActionId หรือเวลา contact/end
+
+ปัญหา: ท่าใน incoming/ART-UNIT-ANIMATION-A2-001/aegis-raw.png วาดหัวใหญ่กว่า aegis-seed.png ~1.37 เท่า ไหล่/โล่กว้างกว่า ทำให้หัวโตกระโดดเมื่อโจมตี เกมพักเฟรมชุดนั้นไว้แล้ว ต้องวาดใหม่ทั้ง 25 ท่า
+
+ต้นแบบ: incoming/ART-UNIT-ANIMATION-A2-001/aegis-seed.png และ model sheet พร้อมเส้นนำ incoming/ART-UNIT-ANIMATION-A2-001/aegis-model-sheet-guides.png ห้ามแก้ seed
+ตัวอย่างที่ผิด: docs/validation/aegis-anatomy-2026-10-29/aegis-model-sheet-vs-rejected.png
+
+สัดส่วนบังคับ (canvas 512×512 เดียวกับ seed ฝ่าเท้า y≈500):
+- หัวจากยอดผม (ไม่นับปอยชี้) y≈40 ถึงคาง y≈180 = 140px ±6%, ผมกว้าง ≈190px, ตาที่ y≈150, คางถึงเข็มขัด ≈110px
+- ไหล่ โล่ห้าแฉก และดาบ ขนาดเท่า seed ไม่ใหญ่กว่า
+- ท่าย่อตัวเตี้ยลงด้วยการงอขาเท่านั้น หัวยังขนาดเท่า idle; หันหัว/ก้มเล็กน้อยได้ แต่รูปหน้าต้องเหมือนเดิม
+- มือขวาจับด้ามดาบตำแหน่งเดิมทุกท่า โล่ที่แขนซ้าย ไม่มีอาวุธซ้อนหรือภาพซ้อน
+- พื้นหลังโปร่งใสจริง ไม่มีแสงฟุ้ง/พื้นสี ไม่มีเส้นการเคลื่อนไหว ไม่มี VFX ทุกท่าเต็มตัว ไม่ถูกตัด ช่องละท่า
+- ตัดเศษภาพที่ขอบขวาของ seed (x 503–512, y 205–224) ไม่ให้ติดมาในภาพใหม่
+
+ท่าที่ต้องวาด หันขวา กล้องเดิม (ลำดับไฟล์ 001–025):
+1) ฟันดาบ 6 ท่า (001–006): ง้างดาบ → ยก → ตั้งท่า → ฟันไปข้างหน้า (contact) → ตามแรง → ผ่อนกลับ
+2) ยกโล่สนับสนุน 6 ท่า (007–012): ยกโล่ → หันโล่ไปหน้า → ค้าง → ยกโล่แรง (contact) → ลดเล็กน้อย → ผ่อนกลับ
+3) กระแทกโล่ 6 ท่า (013–018): ย่อหลังโล่ → ดึงโล่เข้าอก → ตั้งแรง → ดันโล่ไปหน้า (contact) → เด้งกลับ → คืนโล่
+4) โดนตี 2 ท่า (019–020): สะดุ้งหลังโล่ 2 ระดับ
+5) ล้ม 3 ท่า (021–023): เข่าทรุด → คุกเข่า → นอนหมดสติ ถือดาบ/โล่ ไม่สลายตัว
+6) ยันโล่รับการโจมตี 2 ท่า (024–025)
+
+ทำทีละชุด เริ่มที่ฟันดาบ ตรวจผ่านแล้วค่อยทำชุดถัดไป ถ้าสัดส่วนผิดให้แก้ทีละท่าบน template จนผ่าน ห้ามส่งชุดที่ไม่ผ่าน
+
+Prompt ภาพ (ใช้ต่อชุด เปลี่ยนเฉพาะบรรทัด Poses):
+Production game animation frames edited from the supplied approved model sheet (aegis-seed.png with guide lines). Transparent alpha background, no glow, no scenery, no labels, no motion trails, no VFX. Character: Aegis, blond blue-eyed young knight in ornate royal blue and gold armor with blue cape, silver-blue sword in his right hand and five-point blue-gold shield on his left arm. Faces RIGHT exactly as the model sheet. Same camera and lighting. PROPORTIONS ARE LOCKED TO THE MODEL SHEET: head from hair top to chin = 140px, hair width = 190px, eye line 110px below hair top, chin to belt = 110px, feet on the sole line at y=500 in a 512px cell. Do NOT draw a bigger head, bigger eyes, broader shoulders or a bigger shield than the model sheet. Crouching poses get shorter by bending the knees only; the head stays model-sheet size. One pose per 512x512 cell, full body visible, never overlapping, never cropped. Same sword grip in the right hand, shield on the left arm in every pose, no duplicate weapons.
+Poses: 6-frame sword slash: draw sword back, lift, poised windup, forward slash CONTACT, follow through, ease back.
+
+ส่งงาน:
+- โฟลเดอร์ใหม่ incoming/ART-UNIT-ANIMATION-A2-002/ (ห้ามเขียนทับ A2-001)
+- raw/ ไฟล์ดิบทุกไฟล์ + generation.json (prompt ที่ส่งจริงและชื่อไฟล์ผลลัพธ์)
+- cells/ PNG 512×512 RGBA: 000.png = สำเนา aegis-seed.png, 001.png–025.png ตามลำดับข้างบน พิกัดเดียวกับ seed (ฝ่าเท้า y≈500 ตัวกลางช่อง)
+- ตรวจสัดส่วนก่อนส่ง: pip install opencv-python-headless pillow numpy แล้วรัน python3 scripts/unit-anatomy-audit.py --cells incoming/ART-UNIT-ANIMATION-A2-002/cells --json incoming/ART-UNIT-ANIMATION-A2-002/anatomy.json
+  ผ่านเมื่อท่ายืน/ฟัน/ยกโล่/กระแทก/โดนตีเป็น ok (สเกลหัว 0.88–1.12 เทียบ idle เป้า 0.94–1.06) ท่าที่ขึ้น not-measured (เช่นท่าล้ม) ต้องแนบภาพเทียบด้วยตา ห้ามถือว่าผ่าน
+- contact-sheet.png: seed กับทุกท่าขนาดเดียวกัน มีเส้นนำ hair top/eye/chin/belt/sole
+- NOTES.md: ท่าไหนแก้กี่รอบ ผลตรวจรายท่า สิ่งที่ยังไม่ตรง
+- เพิ่ม entry บนสุดของ docs/handoffs/CODEX-TO-CLAUDE.md แล้ว commit/push สาขา art/art-unit-animation-a2-002 และเปิด PR เข้า feature/fateweave-initial-prototype (ภาพอย่างเดียว ไม่ merge เอง)
+
+หลังส่ง Claude จะ normalize/pack, ตรวจซ้ำ, เปิดเฟรมกลับ (anatomyHold) และอัดคลิปจริง 320/390/PC ให้เจ้าของอนุมัติก่อนเข้าเกม
+````

@@ -8,6 +8,7 @@
 - Codex: brief ART-UNIT-ANIMATION-A2-002 `docs/handoffs/CODEX-AEGIS-ANATOMY-REDRAW-TH.md` (25 ท่า, สัดส่วนล็อกเป็นตัวเลข, model sheet `incoming/ART-UNIT-ANIMATION-A2-001/aegis-model-sheet-guides.png`, ตรวจด้วย `unit-anatomy-audit.py --cells` ก่อนส่ง) + คิวข้อ 28 ใน `CODEX-ART-QUEUE-TH.md`
 - หลักฐาน: `docs/validation/aegis-anatomy-2026-10-29/README_TH.md` — คลิป before/after 12 คู่ (attack normal/fast/reduced/OS reduce, 320/390/PC, bash, guard, hit, ถูกตีหลัง guard, counter, down) + ภาพเทียบเฟรม crop เดียวกัน + เกมแคมเปญจริง `/`; capture spec `tests/browser/aegis-anatomy-clips.spec.ts` (`AEGIS_ANATOMY_CLIPS=1`), fixture scenario `down`
 - เทสต์: typecheck/lint ผ่าน; `npm test` ผ่าน; Playwright ในเครื่อง unit-a2 37/37, unit-a1/a3/a4/a5/players/pilot/loading/defense-fx/blade-fx 175 + 9 (หลังแก้จำนวน texture ที่โหลด) ผ่าน; capture before/after 12/12 ทั้งคู่; ไม่ได้ทดสอบ Safari/มือถือจริง
+- เจ้าของ (2026-10-29): “ใช้แบบชั่วคราวนี้ได้ ส่ง brief ให้ Codex เลย” — ยอมรับ hold ชั่วคราว (ภาพนิ่ง + procedural) และสั่งส่ง ART-UNIT-ANIMATION-A2-002 ให้ Codex; prompt คัดลอกได้อยู่ท้าย `docs/handoffs/CODEX-AEGIS-ANATOMY-REDRAW-TH.md`
 - ข้อแลกเปลี่ยน: ระหว่างพัก ท่าฟัน/กระแทกโล่ของ Aegis เป็นการพุ่งของภาพนิ่ง (เหมือนก่อน A2) จนกว่าภาพ A2-002 จะผ่านและปลด hold
 - ข้อระวังสำหรับ W4 (สาขา `claude/unit-a6-song-shadow-vfx`): เทสต์ที่นับ optional sheet/cached textures ต้องไม่นับ `unit-pilot-aegis` แล้ว (เปลี่ยนใน unit-a1/a3/a4/a5/a2 spec, unit-loading นับ webp 5, optional-unit-assets.test)
 ## 2026-10-29 — ข้อมูลล่าสุดก่อนแก้ animation/VFX: auditครบ36ตัว/73ActionIds

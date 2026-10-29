@@ -56,6 +56,10 @@ normalization แก้ไม่ได้: ถ้าย่อให้หัว�
 - capture spec before 12/12, after 12/12
 - ไม่ได้ทดสอบ: Safari/iOS หรือมือถือจริง; คลิปเป็น screencast ของ SwiftShader (VFR, ไม่ใช่หลักฐาน 60fps); VFX ของ Aegis ไม่ได้เปลี่ยน จึงไม่ได้ตรวจ VFX ใหม่ทั้งตระกูลในงานนี้
 
+## การตัดสินใจของเจ้าของ
+
+2026-10-29: “ใช้แบบชั่วคราวนี้ได้ ส่ง brief ให้ Codex เลย” — ยอมรับแบบชั่วคราว และส่ง brief A2-002 ให้ Codex (ยังไม่ใช่การอนุมัติภาพ A2-002)
+
 ## ยังไม่เสร็จ / ต้องทำต่อ
 
 - ภาพ Aegis ที่สัดส่วนถูกต้อง: รอ Codex ส่ง ART-UNIT-ANIMATION-A2-002 แล้ว Claude normalize/pack, ตรวจด้วย `unit-anatomy-audit.py`, ปลด `anatomyHold`, อัดคลิปด้วย `aegis-anatomy-clips.spec.ts` และให้เจ้าของตรวจ motion ก่อนนำเข้า
