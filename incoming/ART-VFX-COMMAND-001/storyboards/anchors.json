@@ -1,0 +1,63 @@
+{
+  "width": 390,
+  "stageHeight": 216,
+  "casterChest": [
+    87,
+    125
+  ],
+  "shieldFront": [
+    115,
+    131
+  ],
+  "shieldTop": [
+    115,
+    112
+  ],
+  "foeChests": [
+    [
+      242,
+      136
+    ],
+    [
+      300,
+      136
+    ],
+    [
+      352,
+      136
+    ]
+  ],
+  "protectedRects": [
+    [
+      62,
+      63,
+      112,
+      102
+    ],
+    [
+      225,
+      95,
+      259,
+      125
+    ],
+    [
+      283,
+      95,
+      317,
+      125
+    ],
+    [
+      335,
+      95,
+      369,
+      125
+    ],
+    [
+      14,
+      168,
+      378,
+      191
+    ]
+  ],
+  "note": "Illustrative art board coordinates, not measured runtime anchors; actor sprites are existing repository reference art."
+}

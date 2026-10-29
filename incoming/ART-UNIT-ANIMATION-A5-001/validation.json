@@ -1,0 +1,964 @@
+{
+  "package": "ART-UNIT-ANIMATION-A5-001",
+  "seed_base_commit": "8616ad3155a179e05210fe6aa552e6d234c9bd24",
+  "scope": "artwork review only; no runtime integration or owner selection implied",
+  "checks": {
+    "seed_crops_exact": true,
+    "transparent_raw_pngs": true,
+    "source_pixels_preserved": true,
+    "no_major_silhouette_edge_clipping": true,
+    "raw_strip_count": 26,
+    "figure_count": 134,
+    "preferred_strip_count": 23
+  },
+  "self_hash_policy": "All other package files have exact full-file SHA-256 below. validation.json cannot contain its own full-file hash; after pushing, compare its complete branch blob bytes and SHA-256 separately with the local manifest. No circular or placeholder hash is used.",
+  "files": {
+    "NOTES.md": {
+      "sha256": "8bc91081ddfe446534ca62d324a1410559e8fc3f2b23f74399f40d6b8a6ec19f",
+      "bytes": 13322
+    },
+    "build_handoff.py": {
+      "sha256": "95d67cdbe243c953b63223af6b449e68782abee4de71908569b1ebb63f3ea93d",
+      "bytes": 10551
+    },
+    "foes/preview-390.png": {
+      "sha256": "72f7e3e40ace68f23ff3939dfc56dafd30b89662b787d1b5efbab0cc577b1818",
+      "bytes": 774106,
+      "size": [
+        390,
+        3084
+      ],
+      "mode": "RGB"
+    },
+    "foes/raw/foe_stalker-down-r1.png": {
+      "sha256": "5f9b165fdcf3a31bdada144cfafc0037130cd5d34cff8390af130ed38b63da78",
+      "bytes": 572847,
+      "size": [
+        1792,
+        378
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        254
+      ],
+      "transparent_pixel_count": 471197
+    },
+    "foes/raw/foe_stalker-hit-r1.png": {
+      "sha256": "31a4d95bd2fa0347faaa0610179d5371e558a99bfa40d747ba59b920bfb7caa3",
+      "bytes": 646744,
+      "size": [
+        1664,
+        380
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        254
+      ],
+      "transparent_pixel_count": 402137
+    },
+    "foes/raw/foe_stalker-thorn-pounce-r1.png": {
+      "sha256": "c83a67ca8c0823e3c52ab76f1a6f6cb4a19f9849aa02c724ad8cb6541d9075d7",
+      "bytes": 799187,
+      "size": [
+        2592,
+        386
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 725354
+    },
+    "foes/raw/foe_thorn_beetle-down-r1.png": {
+      "sha256": "034dbb798d0c4939ea89632e27b6d2354040b007ae8b822eea716a62438d9056",
+      "bytes": 481128,
+      "size": [
+        1600,
+        331
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        254
+      ],
+      "transparent_pixel_count": 347869
+    },
+    "foes/raw/foe_thorn_beetle-hit-r1.png": {
+      "sha256": "96ff312d744aee32c1b227cae45a7d8da07f0f1b918117f079e9c2e5b67d63a8",
+      "bytes": 543468,
+      "size": [
+        1728,
+        335
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        254
+      ],
+      "transparent_pixel_count": 376776
+    },
+    "foes/raw/foe_thorn_beetle-thorn-bite-r1.png": {
+      "sha256": "67b9b4a34db5efe3d6b7729d977e50c1e54a4600cebb53521b11f52428e16f59",
+      "bytes": 601864,
+      "size": [
+        2208,
+        337
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 523586
+    },
+    "foes/raw/foe_tusker-down-r1.png": {
+      "sha256": "8662243dbbcd04e2adad2cad257e6e52d1d56309c3115b9a5ad01d6bec64e8ee",
+      "bytes": 591008,
+      "size": [
+        1856,
+        375
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        254
+      ],
+      "transparent_pixel_count": 465633
+    },
+    "foes/raw/foe_tusker-hit-r1.png": {
+      "sha256": "ae353aa9dbf19cc991b002c38010420cd18ea4ba65e506db0ee493c0a2dfa2c5",
+      "bytes": 710697,
+      "size": [
+        1664,
+        381
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        254
+      ],
+      "transparent_pixel_count": 355762
+    },
+    "foes/raw/foe_tusker-stampede-r1.png": {
+      "sha256": "8eb8bfe17ff03f0d53657fb7f7ad5cfc68bf0fdf26aa715c0aaa4e32f32584f2",
+      "bytes": 638947,
+      "size": [
+        2400,
+        313
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 508794
+    },
+    "foes/raw/foe_tusker-stampede-r2.png": {
+      "sha256": "f6d2f0590cc26e7ee35499cf97dbb0804537de54246151cf6cb13c218a357c3d",
+      "bytes": 839141,
+      "size": [
+        2944,
+        303
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 577386
+    },
+    "foes/raw/foe_tusker-tusk-charge-r1.png": {
+      "sha256": "734a2e708fce77d141ba64f28b1d9dac7af6e0f4bc8fd66279a624ec41ef9f7f",
+      "bytes": 629744,
+      "size": [
+        2496,
+        296
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 500079
+    },
+    "foes/seeds/foe_stalker-seed.png": {
+      "sha256": "ffb624618061a0ff7f94277529e92349ba8b7e900220dae9c4609fa15d823ba7",
+      "bytes": 335110,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 153786
+    },
+    "foes/seeds/foe_thorn_beetle-seed.png": {
+      "sha256": "d8a0cb6354941cf3c30aab27ab8d69d0d8c487799ddf2bfe39cfe0c51e6ee9bd",
+      "bytes": 224696,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 181824
+    },
+    "foes/seeds/foe_tusker-seed.png": {
+      "sha256": "f0b69b79a75d3a4c4222ea8be5efa310ba53292a8f410a50497250796fcb2277",
+      "bytes": 364956,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 112201
+    },
+    "foes/source-sheets/beetle_actions_r1-source.png": {
+      "sha256": "91a5c89a83b46ed7ead27a04906bab2ebc37b30007f97b99ce2917943b923fad",
+      "bytes": 682202,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 1333839
+    },
+    "foes/source-sheets/beetle_reactions_r1-source.png": {
+      "sha256": "c3389cea4236eeede2dfe9405b5b309980682d64c07f49b5528d58dcec70caf2",
+      "bytes": 1880261,
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        254
+      ],
+      "transparent_pixel_count": 1157346
+    },
+    "foes/source-sheets/stalker_actions_r1-source.png": {
+      "sha256": "603f2ee9c3491110a4e5d23e06f4fba0eff3416bda2b6b21d8c8753cde2be2d3",
+      "bytes": 915969,
+      "size": [
+        2149,
+        732
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 1253170
+    },
+    "foes/source-sheets/stalker_reactions_r1-source.png": {
+      "sha256": "0f9c8cf2a4351ca695c70c9ba5cb0b71dcb2139b710d422fc3c0cc116572d4ec",
+      "bytes": 2057348,
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        254
+      ],
+      "transparent_pixel_count": 1097321
+    },
+    "foes/source-sheets/tusker_actions_r1-source.png": {
+      "sha256": "c470e48a222a39a28854d0f1bac8ff963141d71f2ff51337b3b3b7a0e4e5cbb6",
+      "bytes": 1434057,
+      "size": [
+        1774,
+        887
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 1010260
+    },
+    "foes/source-sheets/tusker_reactions_r1-source.png": {
+      "sha256": "4474992b8bbaf944ed3c87015ff9657974dd0594d3d75db13293ea4300f78c8d",
+      "bytes": 2104096,
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        254
+      ],
+      "transparent_pixel_count": 1043771
+    },
+    "foes/source-sheets/tusker_stampede_r2-source.png": {
+      "sha256": "05e6af3ab64c5fd4b8512bdf80da2fa450a7ee66347afc18d1c94c4199c205eb",
+      "bytes": 930815,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 1231315
+    },
+    "foes/templates/foe_stalker-1row-edit-canvas.png": {
+      "sha256": "e4f37871412d022cb7a65cd40fe7f82a12ccfff0d2e867df2591d3b296a46c33",
+      "bytes": 66241,
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 1556293
+    },
+    "foes/templates/foe_stalker-2row-edit-canvas.png": {
+      "sha256": "e4f37871412d022cb7a65cd40fe7f82a12ccfff0d2e867df2591d3b296a46c33",
+      "bytes": 66241,
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 1556293
+    },
+    "foes/templates/foe_stalker-3row-edit-canvas.png": {
+      "sha256": "e4f37871412d022cb7a65cd40fe7f82a12ccfff0d2e867df2591d3b296a46c33",
+      "bytes": 66241,
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 1556293
+    },
+    "foes/templates/foe_stalker-4row-edit-canvas.png": {
+      "sha256": "e4f37871412d022cb7a65cd40fe7f82a12ccfff0d2e867df2591d3b296a46c33",
+      "bytes": 66241,
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 1556293
+    },
+    "foes/templates/foe_thorn_beetle-1row-edit-canvas.png": {
+      "sha256": "74d762da43c67a8032e7d79a4865c3cfb4adc7ebdc957b1a606607774ff9c875",
+      "bytes": 49589,
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 1560795
+    },
+    "foes/templates/foe_thorn_beetle-2row-edit-canvas.png": {
+      "sha256": "74d762da43c67a8032e7d79a4865c3cfb4adc7ebdc957b1a606607774ff9c875",
+      "bytes": 49589,
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 1560795
+    },
+    "foes/templates/foe_thorn_beetle-3row-edit-canvas.png": {
+      "sha256": "74d762da43c67a8032e7d79a4865c3cfb4adc7ebdc957b1a606607774ff9c875",
+      "bytes": 49589,
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 1560795
+    },
+    "foes/templates/foe_thorn_beetle-4row-edit-canvas.png": {
+      "sha256": "74d762da43c67a8032e7d79a4865c3cfb4adc7ebdc957b1a606607774ff9c875",
+      "bytes": 49589,
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 1560795
+    },
+    "foes/templates/foe_tusker-1row-edit-canvas.png": {
+      "sha256": "65eb82b77521925235b5ee45232850ee1e143f07a586c99af5c88b74b85a4981",
+      "bytes": 76167,
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 1550862
+    },
+    "foes/templates/foe_tusker-2row-edit-canvas.png": {
+      "sha256": "65eb82b77521925235b5ee45232850ee1e143f07a586c99af5c88b74b85a4981",
+      "bytes": 76167,
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 1550862
+    },
+    "foes/templates/foe_tusker-3row-edit-canvas.png": {
+      "sha256": "65eb82b77521925235b5ee45232850ee1e143f07a586c99af5c88b74b85a4981",
+      "bytes": 76167,
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 1550862
+    },
+    "foes/templates/foe_tusker-4row-edit-canvas.png": {
+      "sha256": "65eb82b77521925235b5ee45232850ee1e143f07a586c99af5c88b74b85a4981",
+      "bytes": 76167,
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 1550862
+    },
+    "heroes/preview-390.png": {
+      "sha256": "7607aa5c323c4ae6e6f2410053c55c1316773be12449f4df93e9ea95736ca69c",
+      "bytes": 924417,
+      "size": [
+        390,
+        4024
+      ],
+      "mode": "RGB"
+    },
+    "heroes/raw/brann-block-r1.png": {
+      "sha256": "d6ee80278aa5bfa663448da8b3adae2ac6781f7e997ecaae5b21293130db82a8",
+      "bytes": 622463,
+      "size": [
+        1600,
+        359
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        254
+      ],
+      "transparent_pixel_count": 349579
+    },
+    "heroes/raw/brann-down-r1.png": {
+      "sha256": "7632b572e2304623b56b9fe7ae4b1b68d3d97feab8af14adb69b593355a8e2dd",
+      "bytes": 565634,
+      "size": [
+        1856,
+        341
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        254
+      ],
+      "transparent_pixel_count": 428217
+    },
+    "heroes/raw/brann-ground-slam-r1.png": {
+      "sha256": "c4bf8b2bc007867296b24db8d25fba4888971aac617e6cf41ee5f1d89e28db74",
+      "bytes": 481095,
+      "size": [
+        1920,
+        336
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        254
+      ],
+      "transparent_pixel_count": 484161
+    },
+    "heroes/raw/brann-hammer-swing-r1.png": {
+      "sha256": "f55501e9b09ba617fdd7337183f655cab6e03359f18f0a90d510399f7feda03b",
+      "bytes": 469022,
+      "size": [
+        2304,
+        280
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        254
+      ],
+      "transparent_pixel_count": 489538
+    },
+    "heroes/raw/brann-hit-r1.png": {
+      "sha256": "d5592944d7b1b44ce4a1611f3f0be5e7f0a742600f1d3a71f9dc6663db065895",
+      "bytes": 582252,
+      "size": [
+        1536,
+        343
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        254
+      ],
+      "transparent_pixel_count": 318675
+    },
+    "heroes/raw/brann-stone-brace-r1.png": {
+      "sha256": "1aaa76412836a9ed7ba7f2543e7e9094279ecbf76b3f44353a3b3340c99b5926",
+      "bytes": 472183,
+      "size": [
+        1824,
+        258
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        254
+      ],
+      "transparent_pixel_count": 309121
+    },
+    "heroes/raw/brann-taunt-r1.png": {
+      "sha256": "eb597aecb58d75fc47b7558c926780e8daa7b0fcc830dd02a537c0bf0f09d8a4",
+      "bytes": 495408,
+      "size": [
+        1824,
+        297
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        254
+      ],
+      "transparent_pixel_count": 374421
+    },
+    "heroes/raw/brann-taunt-r2.png": {
+      "sha256": "6b50aeea21e6fc118d6f074063a682868560b09f0b2aa832167822c509f5efcc",
+      "bytes": 1138508,
+      "size": [
+        2688,
+        394
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 653753
+    },
+    "heroes/raw/garran-block-r1.png": {
+      "sha256": "2a619eac17c125e284c4f54013205f28cdc032cb9b297f1763381122510112af",
+      "bytes": 491608,
+      "size": [
+        1408,
+        358
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        254
+      ],
+      "transparent_pixel_count": 337058
+    },
+    "heroes/raw/garran-down-r1.png": {
+      "sha256": "c86c9fe14cdabd7eb18ae5631b3d1c39270dc6be603580237f8595e143864789",
+      "bytes": 402780,
+      "size": [
+        1792,
+        356
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        254
+      ],
+      "transparent_pixel_count": 501419
+    },
+    "heroes/raw/garran-hit-r1.png": {
+      "sha256": "a936c257673ed18f975f9c5f2b846fee75c3800e9a04bde3bc233656acdb4614",
+      "bytes": 487261,
+      "size": [
+        1472,
+        356
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        254
+      ],
+      "transparent_pixel_count": 360439
+    },
+    "heroes/raw/garran-spear-thrust-r1.png": {
+      "sha256": "a16bc2c563c0d9c832d2b9ca88f6b8e7a5fb40b45872139ccfdc81c9ed9c6d25",
+      "bytes": 529078,
+      "size": [
+        2688,
+        324
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        254
+      ],
+      "transparent_pixel_count": 694515
+    },
+    "heroes/raw/garran-spearwall-r1.png": {
+      "sha256": "e7158f89c8cc4a43eb1bfa23bec2e5be1a6d0c072e3e45a4acb8f7fb1a941783",
+      "bytes": 493779,
+      "size": [
+        2496,
+        326
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        254
+      ],
+      "transparent_pixel_count": 649594
+    },
+    "heroes/raw/garran-warcry-r1.png": {
+      "sha256": "976a87a0ff145b70cb04c4f40c28802f0bd7f18c7ad8a04bb87013b87cf85aaa",
+      "bytes": 546485,
+      "size": [
+        2016,
+        413
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        254
+      ],
+      "transparent_pixel_count": 650956
+    },
+    "heroes/raw/garran-warcry-r2.png": {
+      "sha256": "dce053facb40890d86c7e43219d5497bfe710b5f4b420e874bf06681441304e5",
+      "bytes": 1425411,
+      "size": [
+        2688,
+        717
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 1422819
+    },
+    "heroes/seeds/brann-seed.png": {
+      "sha256": "35f1aeb0f99c4d86d2b2427592ae846657d4cf413c5c217e063eaf3067bb29de",
+      "bytes": 427361,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 114906
+    },
+    "heroes/seeds/garran-seed.png": {
+      "sha256": "653fb5efb1f4b1bc4529300a9686f80577361c9f73ba294b301fe90e1b25107b",
+      "bytes": 325402,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 157961
+    },
+    "heroes/source-sheets/brann_actions_r1-source.png": {
+      "sha256": "38ef6997910c828e8f95f6dc91e274336576c939cb6a4c7e2ca7cdf7a1b4b76c",
+      "bytes": 2669269,
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        254
+      ],
+      "transparent_pixel_count": 825655
+    },
+    "heroes/source-sheets/brann_reactions_r1-source.png": {
+      "sha256": "3f173089ce82fc2200bdd50085fbeb872a42e60588abb9e1c5a937129e370b2d",
+      "bytes": 2553634,
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        254
+      ],
+      "transparent_pixel_count": 875876
+    },
+    "heroes/source-sheets/brann_taunt_r2-source.png": {
+      "sha256": "70da2499c048aca7aee10dd88e364351f534eb8afa93616e6cfd8cd58af2b0eb",
+      "bytes": 1255627,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 1138596
+    },
+    "heroes/source-sheets/garran_actions_r1-source.png": {
+      "sha256": "4c5dc98803958cad99b6eca7d08dce3ab2da970fe2d9595eac77fec0c5034b41",
+      "bytes": 2410899,
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        254
+      ],
+      "transparent_pixel_count": 970387
+    },
+    "heroes/source-sheets/garran_reactions_r1-source.png": {
+      "sha256": "a69629a15b07fe4a66b90226539afca1f09724341737385157adafb204c065bc",
+      "bytes": 2300383,
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        254
+      ],
+      "transparent_pixel_count": 1035859
+    },
+    "heroes/source-sheets/garran_warcry_r2-source.png": {
+      "sha256": "321223372739b82ee90f9731f5bcaa691fcc9e49a6173b8f2a857b410ed31d05",
+      "bytes": 1532658,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 1038990
+    },
+    "heroes/templates/brann-1row-edit-canvas.png": {
+      "sha256": "a18aa7c78b02898386491b9e6d1e71a4a7a5dc1765780640d37e4270ecd072cd",
+      "bytes": 80787,
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 1551117
+    },
+    "heroes/templates/brann-2row-edit-canvas.png": {
+      "sha256": "a18aa7c78b02898386491b9e6d1e71a4a7a5dc1765780640d37e4270ecd072cd",
+      "bytes": 80787,
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 1551117
+    },
+    "heroes/templates/brann-3row-edit-canvas.png": {
+      "sha256": "a18aa7c78b02898386491b9e6d1e71a4a7a5dc1765780640d37e4270ecd072cd",
+      "bytes": 80787,
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 1551117
+    },
+    "heroes/templates/brann-4row-edit-canvas.png": {
+      "sha256": "a18aa7c78b02898386491b9e6d1e71a4a7a5dc1765780640d37e4270ecd072cd",
+      "bytes": 80787,
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 1551117
+    },
+    "heroes/templates/garran-1row-edit-canvas.png": {
+      "sha256": "38998c76dfc8e0c2868e7f941d40bc6c2f12ad3a894cae67b671453b7cf7cc57",
+      "bytes": 63241,
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 1557054
+    },
+    "heroes/templates/garran-2row-edit-canvas.png": {
+      "sha256": "38998c76dfc8e0c2868e7f941d40bc6c2f12ad3a894cae67b671453b7cf7cc57",
+      "bytes": 63241,
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 1557054
+    },
+    "heroes/templates/garran-3row-edit-canvas.png": {
+      "sha256": "38998c76dfc8e0c2868e7f941d40bc6c2f12ad3a894cae67b671453b7cf7cc57",
+      "bytes": 63241,
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 1557054
+    },
+    "heroes/templates/garran-4row-edit-canvas.png": {
+      "sha256": "38998c76dfc8e0c2868e7f941d40bc6c2f12ad3a894cae67b671453b7cf7cc57",
+      "bytes": 63241,
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 1557054
+    },
+    "prepare_seeds.py": {
+      "sha256": "9a3bf9478832e05ee9aa7f16e93991adfd9089228fa453711fdc71a40a3f7cee",
+      "bytes": 1862
+    },
+    "preview-390.png": {
+      "sha256": "87a32a59abd597a3e959dde6d5d413965e07a81051fa6d4de5e125fc5301ae2d",
+      "bytes": 1694111,
+      "size": [
+        390,
+        7044
+      ],
+      "mode": "RGB"
+    },
+    "prompts.json": {
+      "sha256": "ce8ff50672043ca741dd37f3f32728ed7f3442167c19d8a4d58abfc1ad90715e",
+      "bytes": 43234
+    },
+    "seeds.json": {
+      "sha256": "9e290cd7ca7dd7396f885c31d2614c21dbe1025e81d23b2586aee23105f446eb",
+      "bytes": 2717
+    },
+    "strips.json": {
+      "sha256": "24bffdba9b23487fb74743bd19aa7a8eed8cd5dec24af72d3a4fed74b93a13a2",
+      "bytes": 57445
+    }
+  }
+}

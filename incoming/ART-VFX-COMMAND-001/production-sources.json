@@ -1,0 +1,18 @@
+{
+  "revision": "R2",
+  "atlasSha256": "20913f399c2b3b091bf7e77d19e6b8be3a368cccfd0097d316840d5e385eeb49",
+  "frames": {
+    "taunt_prepare": "38cba833eacfa43564de351af5087a3c4164896e176304d7244fab440acdb648",
+    "taunt_pulse": "a7387593bd2c806cd8d9efa5e97fa11a3b1505da72f67f8eabe705fd138352fe",
+    "taunt_motes": "7c0f8d7ce57e3069787f1f28dd14721ecc684d26987eb4158d64a9fd036511d5",
+    "taunt_settle": "1a11b82b0f60b2a4764dfc7b4c70e0aa963e7321071f918d724b75a7ccf0b208",
+    "challenge_prepare": "9e3596a5f0b54b2e4ffecd3f4b2ee87aeaff0d91a407e9284f36e9c5693904a1",
+    "challenge_crest": "f55ffb5fdf3f26ce883cddfd2cbf72e25ad643d9b19893cd59f13dd15f2d7dbe",
+    "challenge_thread": "ffaf9d0fae3039cd82721896603a3cf82296402aca7ac77ac7203afc8919cf33",
+    "challenge_settle": "aadd94e78cd8458c7823258b49ab7820ee60f14336a123b152578f2bf84d7aea",
+    "warcry_prepare": "bbb52e70fb9c6bf0212a5c068643e1e971be12b610bb08505b49f8e214ec4ee6",
+    "warcry_cone": "6b8ccee489464c2ad353c09cfb24435c0aa0690c1205873d2e80dc2f8e31c054",
+    "warcry_impact": "ac158085c4662bb04637b3994c56fe820fb09900700f7f62620871bca7c78d69",
+    "warcry_wisps": "3def82fbbe2d37686cf58d7ae336eada0a30c9bff320059ac1590673326f430f"
+  }
+}
