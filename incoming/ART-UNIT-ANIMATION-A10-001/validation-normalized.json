@@ -1,0 +1,540 @@
+{
+  "raider": {
+    "factor": 0.5,
+    "displayRatio": 2.0,
+    "cell": 512,
+    "origin": [
+      0.5,
+      0.96875
+    ],
+    "idlePosition": [
+      133,
+      250
+    ],
+    "facing": "left",
+    "clipStarts": {
+      "attack": 1,
+      "skill": 9,
+      "hit": 17,
+      "down": 19,
+      "block": 22
+    },
+    "strips": {
+      "raider-raking-slash-r1": {
+        "rawSize": [
+          6144,
+          704
+        ],
+        "sha256": "09311e294ac540d87b73e20044c9d771708b7926afbc42e84c90d644c4ef63f4",
+        "figures": 6,
+        "scale": 0.5
+      },
+      "raider-shadow-knife-r1": {
+        "rawSize": [
+          6144,
+          704
+        ],
+        "sha256": "7554ed47f861ec0ba8fcbca3da569c024c9dc5ad0f756f2312c118b53d01cff6",
+        "figures": 6,
+        "scale": 0.5
+      },
+      "raider-hit-r1": {
+        "rawSize": [
+          4096,
+          704
+        ],
+        "sha256": "076bb4ff4f63aec626c8c06a2fd4be2469729b8601b743c91169edb84993b66a",
+        "figures": 4,
+        "scale": 0.5
+      },
+      "raider-down-r1": {
+        "rawSize": [
+          4096,
+          704
+        ],
+        "sha256": "fece36846f1e7e531b48fce65a2bb1f6920d3c3a8650e26a5213cf357dfa848b",
+        "figures": 4,
+        "scale": 0.5
+      },
+      "raider-block-r1": {
+        "rawSize": [
+          4096,
+          704
+        ],
+        "sha256": "807fc0692d66763027dd91b66339cb0a19c83a9a0d06ef78805fe4308debaa72",
+        "figures": 4,
+        "scale": 0.5
+      }
+    },
+    "transforms": [
+      {
+        "strip": "raider-raking-slash-r1",
+        "figure": 1,
+        "position": [
+          157,
+          279
+        ],
+        "centreX": 99.25,
+        "soleY": 217.0
+      },
+      {
+        "strip": "raider-raking-slash-r1",
+        "figure": 2,
+        "position": [
+          146,
+          298
+        ],
+        "centreX": 110.0,
+        "soleY": 197.5
+      },
+      {
+        "strip": "raider-raking-slash-r1",
+        "figure": 2,
+        "position": [
+          146,
+          298
+        ],
+        "centreX": 110.0,
+        "soleY": 197.5
+      },
+      {
+        "strip": "raider-raking-slash-r1",
+        "figure": 3,
+        "position": [
+          104,
+          268
+        ],
+        "centreX": 151.75,
+        "soleY": 228.0
+      },
+      {
+        "strip": "raider-raking-slash-r1",
+        "figure": 4,
+        "position": [
+          131,
+          297
+        ],
+        "centreX": 124.75,
+        "soleY": 199.0
+      },
+      {
+        "strip": "raider-raking-slash-r1",
+        "figure": 5,
+        "position": [
+          133,
+          248
+        ],
+        "centreX": 122.75,
+        "soleY": 247.5
+      },
+      {
+        "strip": "raider-shadow-knife-r1",
+        "figure": 1,
+        "position": [
+          134,
+          282
+        ],
+        "centreX": 122.25,
+        "soleY": 214.5
+      },
+      {
+        "strip": "raider-shadow-knife-r1",
+        "figure": 2,
+        "position": [
+          130,
+          292
+        ],
+        "centreX": 126.0,
+        "soleY": 204.0
+      },
+      {
+        "strip": "raider-shadow-knife-r1",
+        "figure": 2,
+        "position": [
+          130,
+          292
+        ],
+        "centreX": 126.0,
+        "soleY": 204.0
+      },
+      {
+        "strip": "raider-shadow-knife-r1",
+        "figure": 3,
+        "position": [
+          119,
+          273
+        ],
+        "centreX": 136.75,
+        "soleY": 223.0
+      },
+      {
+        "strip": "raider-shadow-knife-r1",
+        "figure": 4,
+        "position": [
+          133,
+          284
+        ],
+        "centreX": 123.0,
+        "soleY": 212.0
+      },
+      {
+        "strip": "raider-shadow-knife-r1",
+        "figure": 5,
+        "position": [
+          133,
+          248
+        ],
+        "centreX": 122.75,
+        "soleY": 247.5
+      },
+      {
+        "strip": "raider-hit-r1",
+        "figure": 1,
+        "position": [
+          115,
+          270
+        ],
+        "centreX": 141.25,
+        "soleY": 226.0
+      },
+      {
+        "strip": "raider-hit-r1",
+        "figure": 2,
+        "position": [
+          124,
+          284
+        ],
+        "centreX": 131.5,
+        "soleY": 212.0
+      },
+      {
+        "strip": "raider-down-r1",
+        "figure": 1,
+        "position": [
+          136,
+          276
+        ],
+        "centreX": 119.75,
+        "soleY": 220.5
+      },
+      {
+        "strip": "raider-down-r1",
+        "figure": 2,
+        "position": [
+          131,
+          338
+        ],
+        "centreX": 125.25,
+        "soleY": 158.0
+      },
+      {
+        "strip": "raider-down-r1",
+        "figure": 3,
+        "position": [
+          119,
+          390
+        ],
+        "centreX": 137.0,
+        "soleY": 106.0
+      },
+      {
+        "strip": "raider-block-r1",
+        "figure": 1,
+        "position": [
+          147,
+          272
+        ],
+        "centreX": 108.75,
+        "soleY": 224.0
+      },
+      {
+        "strip": "raider-block-r1",
+        "figure": 2,
+        "position": [
+          158,
+          269
+        ],
+        "centreX": 98.5,
+        "soleY": 227.0
+      }
+    ],
+    "uniqueFrames": 17,
+    "losslessReconstruction": "all alpha and visible RGBA equal",
+    "image": "raider_a10.e753795001b9.webp",
+    "atlas": "raider_a10.6e58dfd81796.json",
+    "width": 512,
+    "height": 1905,
+    "frames": 24,
+    "decodedBytes": 3901440,
+    "downloadBytes": 1141459
+  },
+  "brute": {
+    "factor": 0.5,
+    "displayRatio": 2.0,
+    "cell": 512,
+    "origin": [
+      0.5,
+      0.96875
+    ],
+    "idlePosition": [
+      130,
+      248
+    ],
+    "facing": "left",
+    "clipStarts": {
+      "attack": 1,
+      "skill": 9,
+      "hit": 17,
+      "down": 19,
+      "block": 22
+    },
+    "strips": {
+      "brute-crushing-blow-r1": {
+        "rawSize": [
+          6144,
+          704
+        ],
+        "sha256": "963907cf67e13784998ee6d21060acaa05ae01e8d5ac7ba6eb7667963d56a9c0",
+        "figures": 6,
+        "scale": 0.5
+      },
+      "brute-rift-bolt-r1": {
+        "rawSize": [
+          6144,
+          704
+        ],
+        "sha256": "9db8c4770c1c24c4da9455cfcd6262c9c533c857dc933dd623e5885923eb1592",
+        "figures": 6,
+        "scale": 0.5
+      },
+      "brute-hit-r1": {
+        "rawSize": [
+          4096,
+          704
+        ],
+        "sha256": "d2e833d4438220a88506181a6b943274f1e2ac4b89f14872b0938ff7723fe600",
+        "figures": 4,
+        "scale": 0.5
+      },
+      "brute-down-r1": {
+        "rawSize": [
+          4096,
+          704
+        ],
+        "sha256": "83d0a1ddd8d3895a726f8dd09f5d9885a865c368f42c6ab3908af1e13981bbb6",
+        "figures": 4,
+        "scale": 0.5
+      },
+      "brute-block-r1": {
+        "rawSize": [
+          4096,
+          704
+        ],
+        "sha256": "efbadb624b184adcbd79c73d20c382a304a89c82f37d29d6f99867ac00918427",
+        "figures": 4,
+        "scale": 0.5
+      }
+    },
+    "transforms": [
+      {
+        "strip": "brute-crushing-blow-r1",
+        "figure": 1,
+        "position": [
+          133,
+          244
+        ],
+        "centreX": 123.0,
+        "soleY": 251.5
+      },
+      {
+        "strip": "brute-crushing-blow-r1",
+        "figure": 2,
+        "position": [
+          133,
+          306
+        ],
+        "centreX": 123.0,
+        "soleY": 190.0
+      },
+      {
+        "strip": "brute-crushing-blow-r1",
+        "figure": 2,
+        "position": [
+          133,
+          306
+        ],
+        "centreX": 123.0,
+        "soleY": 190.0
+      },
+      {
+        "strip": "brute-crushing-blow-r1",
+        "figure": 3,
+        "position": [
+          120,
+          271
+        ],
+        "centreX": 135.75,
+        "soleY": 225.0
+      },
+      {
+        "strip": "brute-crushing-blow-r1",
+        "figure": 4,
+        "position": [
+          122,
+          282
+        ],
+        "centreX": 133.5,
+        "soleY": 214.0
+      },
+      {
+        "strip": "brute-crushing-blow-r1",
+        "figure": 5,
+        "position": [
+          130,
+          246
+        ],
+        "centreX": 125.5,
+        "soleY": 249.5
+      },
+      {
+        "strip": "brute-rift-bolt-r1",
+        "figure": 1,
+        "position": [
+          158,
+          250
+        ],
+        "centreX": 97.5,
+        "soleY": 246.0
+      },
+      {
+        "strip": "brute-rift-bolt-r1",
+        "figure": 2,
+        "position": [
+          153,
+          278
+        ],
+        "centreX": 103.0,
+        "soleY": 218.0
+      },
+      {
+        "strip": "brute-rift-bolt-r1",
+        "figure": 2,
+        "position": [
+          153,
+          278
+        ],
+        "centreX": 103.0,
+        "soleY": 218.0
+      },
+      {
+        "strip": "brute-rift-bolt-r1",
+        "figure": 3,
+        "position": [
+          96,
+          272
+        ],
+        "centreX": 160.25,
+        "soleY": 224.5
+      },
+      {
+        "strip": "brute-rift-bolt-r1",
+        "figure": 4,
+        "position": [
+          120,
+          263
+        ],
+        "centreX": 136.25,
+        "soleY": 233.0
+      },
+      {
+        "strip": "brute-rift-bolt-r1",
+        "figure": 5,
+        "position": [
+          130,
+          246
+        ],
+        "centreX": 125.5,
+        "soleY": 249.5
+      },
+      {
+        "strip": "brute-hit-r1",
+        "figure": 1,
+        "position": [
+          153,
+          272
+        ],
+        "centreX": 102.75,
+        "soleY": 224.5
+      },
+      {
+        "strip": "brute-hit-r1",
+        "figure": 2,
+        "position": [
+          156,
+          269
+        ],
+        "centreX": 100.0,
+        "soleY": 227.0
+      },
+      {
+        "strip": "brute-down-r1",
+        "figure": 1,
+        "position": [
+          129,
+          290
+        ],
+        "centreX": 127.0,
+        "soleY": 206.5
+      },
+      {
+        "strip": "brute-down-r1",
+        "figure": 2,
+        "position": [
+          114,
+          345
+        ],
+        "centreX": 141.5,
+        "soleY": 151.0
+      },
+      {
+        "strip": "brute-down-r1",
+        "figure": 3,
+        "position": [
+          114,
+          373
+        ],
+        "centreX": 142.0,
+        "soleY": 123.0
+      },
+      {
+        "strip": "brute-block-r1",
+        "figure": 1,
+        "position": [
+          132,
+          256
+        ],
+        "centreX": 123.75,
+        "soleY": 239.5
+      },
+      {
+        "strip": "brute-block-r1",
+        "figure": 2,
+        "position": [
+          137,
+          260
+        ],
+        "centreX": 118.75,
+        "soleY": 235.5
+      }
+    ],
+    "uniqueFrames": 17,
+    "losslessReconstruction": "all alpha and visible RGBA equal",
+    "image": "brute_a10.40cde2c95f56.webp",
+    "atlas": "brute_a10.e93415ea55b0.json",
+    "width": 1536,
+    "height": 713,
+    "frames": 24,
+    "decodedBytes": 4380672,
+    "downloadBytes": 1442837
+  }
+}

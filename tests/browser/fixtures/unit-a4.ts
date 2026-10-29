@@ -40,7 +40,7 @@ const qa={reactionTiming:()=>{
  const motion=(scene as unknown as {unitAnimation:{motions:Map<string,{duration:number;elapsed:number;phase:string}>}}).unitAnimation.motions.get(hero);
  return motion?{duration:motion.duration,remaining:motion.duration-motion.elapsed,phase:motion.phase}:null;
  },impacts,turns:()=>fixture.result.turns,otherEncounter:()=>{
- const data={...fixture.data,heroes:fixture.data.heroes.filter(h=>h.id===hero).map(h=>({...h,id:'sefa'})),enemies:fixture.data.enemies.map(e=>({...e,art:'brute'}))};
+ const data={...fixture.data,heroes:fixture.data.heroes.filter(h=>h.id===hero).map(h=>({...h,id:'sefa'})),enemies:fixture.data.enemies.map(e=>({...e,art:'foe_golem'}))};
  ui.open({kind:'random',data,entry:{hp:{sefa:46}},commands:[],commit:()=>true,leaveLabel:()=>'',leave:()=>{}});
  },target:()=>fixture.command.targetId==='enemies'?`enemies-f1`:fixture.command.targetId,
  expected:()=>fixture.result.state,state:()=>ui.state,load,

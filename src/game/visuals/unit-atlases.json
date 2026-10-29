@@ -196,5 +196,23 @@
     "frames": 22,
     "decodedBytes": 1658880,
     "downloadBytes": 456125
+  },
+  "raider": {
+    "image": "raider_a10.e753795001b9.webp",
+    "atlas": "raider_a10.6e58dfd81796.json",
+    "width": 512,
+    "height": 1905,
+    "frames": 24,
+    "decodedBytes": 3901440,
+    "downloadBytes": 1141459
+  },
+  "brute": {
+    "image": "brute_a10.40cde2c95f56.webp",
+    "atlas": "brute_a10.e93415ea55b0.json",
+    "width": 1536,
+    "height": 713,
+    "frames": 24,
+    "decodedBytes": 4380672,
+    "downloadBytes": 1442837
   }
 }

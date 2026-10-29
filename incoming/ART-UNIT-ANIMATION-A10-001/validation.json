@@ -1,0 +1,145 @@
+{
+  "package": "ART-UNIT-ANIMATION-A10-001",
+  "strips": 10,
+  "frames": 48,
+  "one_final_version_per_move": true,
+  "minimum_clear_gutter_px": 444,
+  "exact_idle_lockbacks": 10,
+  "all_raw_rgba": true,
+  "validation_self_hash": "Excluded to avoid recursive self-hash; validate this manifest using the fetched Git blob.",
+  "review_scope": "Offline artwork and static 390px storyboard only; no game integration or owner motion approval.",
+  "files": {
+    "NOTES.md": {
+      "bytes": 8029,
+      "sha256": "0609417a9300bea7477270bbbdd3b7c9508248289dbaa552381475a7fc3db874"
+    },
+    "build_handoff.py": {
+      "bytes": 10661,
+      "sha256": "7fa4f11f8d5d7e65750fcf584a0406fc2f6fa12361761b0d473444211b03ec74"
+    },
+    "preview-390.png": {
+      "bytes": 741292,
+      "sha256": "c49ab76119436b93ce451d083ffd78206f99fc96ee2b0e5b933f207a24a19e9d"
+    },
+    "prompts.json": {
+      "bytes": 14691,
+      "sha256": "3b6d525b471497c52e70f7dc4c6725f9a212a80e41888a63ac503c2fd450d467"
+    },
+    "raw/brute-block-r1.png": {
+      "bytes": 1342523,
+      "sha256": "efbadb624b184adcbd79c73d20c382a304a89c82f37d29d6f99867ac00918427"
+    },
+    "raw/brute-crushing-blow-r1.png": {
+      "bytes": 2024646,
+      "sha256": "963907cf67e13784998ee6d21060acaa05ae01e8d5ac7ba6eb7667963d56a9c0"
+    },
+    "raw/brute-down-r1.png": {
+      "bytes": 1446896,
+      "sha256": "83d0a1ddd8d3895a726f8dd09f5d9885a865c368f42c6ab3908af1e13981bbb6"
+    },
+    "raw/brute-hit-r1.png": {
+      "bytes": 1240383,
+      "sha256": "d2e833d4438220a88506181a6b943274f1e2ac4b89f14872b0938ff7723fe600"
+    },
+    "raw/brute-rift-bolt-r1.png": {
+      "bytes": 1959699,
+      "sha256": "9db8c4770c1c24c4da9455cfcd6262c9c533c857dc933dd623e5885923eb1592"
+    },
+    "raw/raider-block-r1.png": {
+      "bytes": 1053479,
+      "sha256": "807fc0692d66763027dd91b66339cb0a19c83a9a0d06ef78805fe4308debaa72"
+    },
+    "raw/raider-down-r1.png": {
+      "bytes": 1215869,
+      "sha256": "fece36846f1e7e531b48fce65a2bb1f6920d3c3a8650e26a5213cf357dfa848b"
+    },
+    "raw/raider-hit-r1.png": {
+      "bytes": 1030893,
+      "sha256": "076bb4ff4f63aec626c8c06a2fd4be2469729b8601b743c91169edb84993b66a"
+    },
+    "raw/raider-raking-slash-r1.png": {
+      "bytes": 1647520,
+      "sha256": "09311e294ac540d87b73e20044c9d771708b7926afbc42e84c90d644c4ef63f4"
+    },
+    "raw/raider-shadow-knife-r1.png": {
+      "bytes": 1666096,
+      "sha256": "7554ed47f861ec0ba8fcbca3da569c024c9dc5ad0f756f2312c118b53d01cff6"
+    },
+    "seeds/brute-seed.png": {
+      "bytes": 466063,
+      "sha256": "18f5fbd94ec5f8e9cc19ea64371da49995d09b75d490625903776e2ee67d756f"
+    },
+    "seeds/raider-atlas-crop.png": {
+      "bytes": 367928,
+      "sha256": "29fe110fa75c3dd91f48f1fdef36812681a01daeb64dd08d4c52e4a7b4f73aa5"
+    },
+    "seeds/raider-seed.png": {
+      "bytes": 369742,
+      "sha256": "3afb33fff9b61a37d9117e02203182866c624365b044a0a0c64ef3035837ec97"
+    },
+    "seeds.json": {
+      "bytes": 1601,
+      "sha256": "029a83dcce08225c4a2b4a726ccd1b7c077b78101828493baa2a54daa8015007"
+    },
+    "source-sheets/brute-block-source.png": {
+      "bytes": 2094506,
+      "sha256": "dfd10615ef14f5d52619beaf3694a0f2de9a2b86b22fcdf8e8896e62b09273b0"
+    },
+    "source-sheets/brute-crushing-blow-source.png": {
+      "bytes": 1205804,
+      "sha256": "4f0c9e13aae9e9bd71e27945bdfcbdaf94a9bd1e45b306409cd9de9e7b095c00"
+    },
+    "source-sheets/brute-down-source.png": {
+      "bytes": 1443453,
+      "sha256": "978d105f51521f30dc7a05b7f5b97b7e415cf3f083d8c12fe528f0ec53f342a4"
+    },
+    "source-sheets/brute-hit-source.png": {
+      "bytes": 1995724,
+      "sha256": "91898f863e4d300de7a4731ca82bfbc2936dd42a5078d4030503ec1c81c07b95"
+    },
+    "source-sheets/brute-rift-bolt-source.png": {
+      "bytes": 1501204,
+      "sha256": "19d774a83af1d14f4b488f3879d2f4bf97024d8df54fac0513f1eac8424d7bf5"
+    },
+    "source-sheets/raider-block-source.png": {
+      "bytes": 1655014,
+      "sha256": "649636f67e58f9423f53bbadf9576de65a91de69b75058abe28b423c0dddb1d7"
+    },
+    "source-sheets/raider-down-source.png": {
+      "bytes": 1303984,
+      "sha256": "b7676ed20c3508b48cd8747d59aa6b216ac0794d384201db8b2ca39efd16c6fd"
+    },
+    "source-sheets/raider-hit-source.png": {
+      "bytes": 1467675,
+      "sha256": "5541d4ebfe88a470f207ffab26f50b1518653d376af2b9f79f48423193e3e6fc"
+    },
+    "source-sheets/raider-raking-slash-source.png": {
+      "bytes": 1373025,
+      "sha256": "c547b074dbd4d20c0b89a6c9f7c00b3d4fe5a271a25e87b498a44d0c18408562"
+    },
+    "source-sheets/raider-shadow-knife-source.png": {
+      "bytes": 1439263,
+      "sha256": "7b8073f79e2a3799a11b27b858c37ad9b762c070b2b7ff5b60cd8d4e8c20afd0"
+    },
+    "strips.json": {
+      "bytes": 30209,
+      "sha256": "cbd2fd50fd665c57f4b7ae3503437c5f113562e411d8777606d350055b65fcd5"
+    },
+    "templates/brute-4-frame.png": {
+      "bytes": 78587,
+      "sha256": "ceabc2c5df6d3a020bcd26e60a60d616bd3153e867d64fcd38b2ae1ca5008c4b"
+    },
+    "templates/brute-6-frame.png": {
+      "bytes": 80429,
+      "sha256": "14add77088c6e3eddb13da7108486af567b9b6522c1fac22b9d40ac4140618ab"
+    },
+    "templates/raider-4-frame.png": {
+      "bytes": 64680,
+      "sha256": "f9b0fde6af5602a9cc2de8a94399a84a83308823de93cffabcdf69f1da6a1a58"
+    },
+    "templates/raider-6-frame.png": {
+      "bytes": 66238,
+      "sha256": "2e70014bf10f2368a353b3057dd5748c2eeb1000fdf04932562cb01b83ee9bf6"
+    }
+  }
+}

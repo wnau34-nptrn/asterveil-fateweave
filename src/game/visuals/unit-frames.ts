@@ -70,6 +70,11 @@ export const unitRegistry = {
   lio: { sheet: 'lio', displayRatio: 1 / .42, actions: { attack: 'attack', note: 'attack', valor: 'skill', mend: 'skill', solo: 'skill', dread: 'dread', finale: 'finale' }, reactions: { block: [38, 39] } },
   foe_riftweaver: { sheet: 'riftweaver', displayRatio: 2, intents: { 'Rune Lash': 'attack', 'Rift Needle': 'skill', 'Ribbon Snare': 'snare' } },
   foe_spore_puff: { sheet: 'sporepuff', displayRatio: 2, intents: { 'Spore Dust': 'attack' } },
+  // A10 (original cast, sheet `units`): Raking Slash / Crushing Blow are the cut and the claw hammer (clip attack), Shadow Knife
+  // (free-hand throw) and Rift Bolt (paired palms) the skill clip. The Raider atlas is already mirrored to face left; a packed
+  // atlas is never flipped again. Block = the 0-damage reaction (fully absorbed hit).
+  raider: { sheet: 'raider', displayRatio: 2, intents: { 'Raking Slash': 'attack', 'Shadow Knife': 'skill' }, reactions: { block: [22, 23] } },
+  brute: { sheet: 'brute', displayRatio: 2, intents: { 'Crushing Blow': 'attack', 'Rift Bolt': 'skill' }, reactions: { block: [22, 23] } },
   foe_ruin_bat: { sheet: 'bat', displayRatio: 2, intents: { Nip: 'attack' }, idleLoop: { frames: [22, 23, 24, 25], frameMs: 150 } },
 } as const satisfies Record<string, UnitDefinition>;
 // Anatomy hold (animation-visual-audit-2026-10-29): an identity whose generated poses do not match its approved
