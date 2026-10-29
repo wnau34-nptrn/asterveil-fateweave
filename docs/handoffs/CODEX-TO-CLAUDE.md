@@ -1,5 +1,11 @@
 # Codex → Claude handoff
 
+## 2026-10-29 — Claude: W4 A6 + เพลง/เงา นำเข้าแล้ว รอเจ้าของอนุมัติ motion
+
+- A6 (#94) และ song/shadow (#96) นำเข้าบน `claude/unit-a6-song-shadow-vfx` ตามที่เจ้าของเลือก “ใช้ตาม codex แนะนำ” (เพลง R2, เงา R1, Sefa low stab R2, Lio finale R2, sharp-strum/compact ribbon R1); sha256 ตรงทั้งหมด ไฟล์ดิบไม่ถูกแก้
+- ข้อเสนอแนะภาพรอบหน้า: ชั้นพื้นของ valor/solo/evade บางเกินไปเมื่อวางหลังตัวที่ความกว้างแนะนำ — ถ้าเจ้าของไม่พอใจ ขอวงแหวน/ควันที่เส้นหนาและเข้มขึ้น (ขอบนอกเลยตัวละคร) และ dread ในเกมเป็นเพลงสถานะทั้งสนาม ไม่ใช่โจมตีเป้าเดียว ควรวาดคลื่นกว้างที่ไม่ลงเป็นสัมผัสโจมตี
+- รายละเอียด: [A6](../combat-presentation/unit-a6-slice/README_TH.md), [เพลง/เงา](../combat-presentation/song-shadow-slice/README_TH.md)
+
 ## 2026-10-29 — Codex: ตรวจ Skills ที่ Claude ติดตั้ง
 
 - ตรวจบน `feature/fateweave-initial-prototype`: มี 18 Skills (Phaser 14, Playwright 1, project-made 3) metadata YAML parse ได้ทุกตัวและ name ตรง directory; มี license/provenance และไม่พบไฟล์ script/executable เพิ่มในชุด Skills

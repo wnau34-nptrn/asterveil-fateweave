@@ -1,0 +1,12 @@
+{
+  "tool": "image_gen.imagegen",
+  "transparent_background": true,
+  "originals": [
+    {
+      "path": "source/R1.png",
+      "original_path": "/workspace/generated_images/exec-2a1e31b6-45ff-4c00-93a1-de0b96839e12.png",
+      "prompt": "Original game VFX sprite sheet, transparent background. Exactly THREE equally spaced columns and TWO rows. Six isolated art cells, wide clear gutters. Steel blue #91B5D0, slate #52657B, pale silver highlights. Painterly fantasy, airy thin strokes, no text, no UI, no real character. Row 1 EVADE: col1 two small thin smoke wisps curled at foot height; col2 low wisps with one brief narrow curved shimmer at ankle height, no shield, no impact; col3 a few dissolving thin smoke threads. Row 2 DECOY: col1 small low shadow mist ellipse; col2 ONE translucent faceless hooded scout shadow silhouette, full standing body, no weapons, softly broken edges and wispy feet, simple anonymous illusion placeholder, blue transparent ghost, no features; col3 same silhouette mostly dissolved into sparse slate wisps. No attack, no explosion, no musical symbols. Each cell isolated and similar bounding size except lower floor effects, transparent alpha, 20 percent clear outer margins, strict 3x2 grid. R1 only."
+    }
+  ],
+  "postprocessing": "Mechanical rectangular extraction, proportional resize and transparent padding only. No redrawing or background removal."
+}

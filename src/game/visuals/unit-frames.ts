@@ -1,6 +1,6 @@
 import type { Reaction, UnitPose } from './unit-animation-map';
 import atlasManifest from './unit-atlases.json';
-export type UnitClip = 'attack' | 'skill' | 'bash' | 'prayer' | 'sanctuary' | 'disengage' | 'stance' | 'taunt' | 'brace';
+export type UnitClip = 'attack' | 'skill' | 'bash' | 'prayer' | 'sanctuary' | 'disengage' | 'stance' | 'taunt' | 'brace' | 'knives' | 'evade' | 'dread' | 'finale' | 'snare';
 export type FramePhase = 'prepare' | 'recover' | 'reaction';
 export interface UnitFrames {
   show(pose: UnitPose | Reaction, phase: FramePhase, progress: number, clip?: UnitClip, durationMs?: number): boolean;
@@ -41,6 +41,12 @@ export const unitRegistry = {
   foe_tusker: { sheet: 'tusker', displayRatio: 2, intents: { 'Tusk Charge': 'attack', Stampede: 'skill' } },
   foe_stalker: { sheet: 'stalker', displayRatio: 2, intents: { 'Thorn Pounce': 'attack' } },
   foe_thorn_beetle: { sheet: 'beetle', displayRatio: 2, intents: { 'Thorn Bite': 'attack' } },
+  // A6: Sefa's double slash serves attack/ambush, the long low stab backstab/disarm; evade and decoy share the backstep.
+  // Lio strums for attack/note, plays the sustained song for valor/mend/solo; dread and finale have their own gestures.
+  sefa: { sheet: 'sefa', displayRatio: 1 / .42, actions: { attack: 'attack', ambush: 'attack', backstab: 'skill', disarm: 'skill', knives: 'knives', evade: 'evade', decoy: 'evade' } },
+  lio: { sheet: 'lio', displayRatio: 1 / .42, actions: { attack: 'attack', note: 'attack', valor: 'skill', mend: 'skill', solo: 'skill', dread: 'dread', finale: 'finale' } },
+  foe_riftweaver: { sheet: 'riftweaver', displayRatio: 2, intents: { 'Rune Lash': 'attack', 'Rift Needle': 'skill', 'Ribbon Snare': 'snare' } },
+  foe_spore_puff: { sheet: 'sporepuff', displayRatio: 2, intents: { 'Spore Dust': 'attack' } },
   foe_ruin_bat: { sheet: 'bat', displayRatio: 2, intents: { Nip: 'attack' }, idleLoop: { frames: [22, 23, 24, 25], frameMs: 150 } },
 } as const satisfies Record<string, UnitDefinition>;
 export const unitSheets = Object.fromEntries(Object.entries(unitRegistry).map(([art, definition]) => [art, definition.sheet])) as Record<keyof typeof unitRegistry, UnitSheet>;
@@ -59,7 +65,7 @@ export function unitClip(art: string, action: string | undefined, intent: string
   const definition = unitDefinition(art);
   return action ? definition?.actions?.[action] : intent ? definition?.intents?.[intent] : undefined;
 }
-// 0 idle; 1..8 slash; 9..16 skill; 17..18 hurt; 19..21 down. Identities with one gesture alias the other clip to idle (A3 Mycon, A4 Ember/Dew/Bat, A5 Stalker/Beetle).
+// 0 idle; 1..8 slash; 9..16 skill; 17..18 hurt; 19..21 down. Identities with one gesture alias the other clip to idle (A3 Mycon, A4 Ember/Dew/Bat, A5 Stalker/Beetle, A6 Spore Puff).
 // Frame 5/13 is the contact pose. UI contact remains authoritative, never sprite FPS.
 function sequence(pose: UnitPose | Reaction, phase: FramePhase, clip?: UnitClip, art?: string): readonly number[] | undefined {
   if (phase === 'reaction') {
@@ -74,6 +80,7 @@ function sequence(pose: UnitPose | Reaction, phase: FramePhase, clip?: UnitClip,
     if (art === 'toma' && pose === 'block') return [22, 23];
     if (art === 'garran' && pose === 'block') return [30, 31];
     if (art === 'brann' && pose === 'block') return [38, 39];
+    if ((art === 'sefa' || art === 'lio') && pose === 'block') return [38, 39];
     return;
   }
   if (!clip) return;
@@ -83,8 +90,10 @@ function sequence(pose: UnitPose | Reaction, phase: FramePhase, clip?: UnitClip,
   }
   // Seren: prayer 22..29 and sanctuary 30..37; Mira: disengage 22..29 (block 30..31). Contact on the first recover frame like every clip.
   // A5: Garran stance 22..29; Brann taunt 22..29 and stone brace 30..37 (block 38..39). Contact stays the first recover frame.
-  if (clip === 'prayer' || clip === 'sanctuary' || clip === 'disengage' || clip === 'stance' || clip === 'taunt' || clip === 'brace') {
-    const start = clip === 'sanctuary' || clip === 'brace' ? 30 : 22;
+  // A6: Sefa knives 22..29, evade 30..37 (block 38..39); Lio dread 22..29, finale 30..37 (block 38..39); Rift Weaver snare 22..29.
+  if (clip === 'prayer' || clip === 'sanctuary' || clip === 'disengage' || clip === 'stance' || clip === 'taunt' || clip === 'brace'
+    || clip === 'knives' || clip === 'evade' || clip === 'dread' || clip === 'finale' || clip === 'snare') {
+    const start = clip === 'sanctuary' || clip === 'brace' || clip === 'evade' || clip === 'finale' ? 30 : 22;
     return phase === 'prepare' ? [start, start + 1, start + 2, start + 3] : [start + 4, start + 5, start + 6, start + 7];
   }
   if (clip === 'skill') return phase === 'prepare' ? [9, 10, 11, 12] : [13, 14, 15, 16];

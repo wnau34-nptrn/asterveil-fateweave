@@ -160,5 +160,41 @@
     "frames": 22,
     "decodedBytes": 1863680,
     "downloadBytes": 475744
+  },
+  "sefa": {
+    "image": "sefa_a6.84128b973a5e.webp",
+    "atlas": "sefa_a6.dd4844ad09fd.json",
+    "width": 1536,
+    "height": 690,
+    "frames": 40,
+    "decodedBytes": 4239360,
+    "downloadBytes": 1066697
+  },
+  "lio": {
+    "image": "lio_a6.86a716dad3e8.webp",
+    "atlas": "lio_a6.09193c4bc99f.json",
+    "width": 768,
+    "height": 1693,
+    "frames": 40,
+    "decodedBytes": 5200896,
+    "downloadBytes": 1455863
+  },
+  "riftweaver": {
+    "image": "riftweaver_a6.8f88afac40de.webp",
+    "atlas": "riftweaver_a6.43505473120d.json",
+    "width": 768,
+    "height": 1263,
+    "frames": 30,
+    "decodedBytes": 3879936,
+    "downloadBytes": 1148424
+  },
+  "sporepuff": {
+    "image": "sporepuff_a6.1bfc88ce673f.webp",
+    "atlas": "sporepuff_a6.d542e6d2f65d.json",
+    "width": 768,
+    "height": 540,
+    "frames": 22,
+    "decodedBytes": 1658880,
+    "downloadBytes": 456125
   }
 }

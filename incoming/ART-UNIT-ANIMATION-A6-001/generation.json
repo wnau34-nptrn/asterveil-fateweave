@@ -1,0 +1,75 @@
+{
+  "package": "ART-UNIT-ANIMATION-A6-001",
+  "generator": "image_gen.imagegen",
+  "base_commit": "8616ad3155a179e05210fe6aa552e6d234c9bd24",
+  "original_art_only": true,
+  "exact_prompts": "prompts.json",
+  "generation": [
+    {
+      "id": "sefa_r1",
+      "group": "heroes",
+      "unit": "sefa",
+      "source": "heroes/source-sheets/sefa_r1.png",
+      "original_output": "/workspace/generated_images/exec-283e1d46-da13-4e53-b8cd-8910cd04c276.png",
+      "reference": "heroes/seeds/sefa-seed.png"
+    },
+    {
+      "id": "lio_r1",
+      "group": "heroes",
+      "unit": "lio",
+      "source": "heroes/source-sheets/lio_r1.png",
+      "original_output": "/workspace/generated_images/exec-0b99ddf1-d0fc-443c-be4b-a3fc50642793.png",
+      "reference": "heroes/seeds/lio-seed.png"
+    },
+    {
+      "id": "rift_r1",
+      "group": "foes",
+      "unit": "foe_riftweaver",
+      "source": "foes/source-sheets/rift_r1.png",
+      "original_output": "/workspace/generated_images/exec-ff7f0b17-61f7-4104-bd85-879bc16db19a.png",
+      "reference": "foes/seeds/foe_riftweaver-seed.png"
+    },
+    {
+      "id": "spore_r1",
+      "group": "foes",
+      "unit": "foe_spore_puff",
+      "source": "foes/source-sheets/spore_r1.png",
+      "original_output": "/workspace/generated_images/exec-4bc10feb-ed24-4cce-96bc-6cedd61fb322.png",
+      "reference": "foes/seeds/foe_spore_puff-seed.png"
+    },
+    {
+      "id": "sefa_extra",
+      "group": "heroes",
+      "unit": "sefa",
+      "source": "heroes/source-sheets/sefa_extra.png",
+      "original_output": "/workspace/generated_images/exec-0fbd85f3-82e0-4dbd-ae08-2049b3e58b21.png",
+      "reference": "heroes/templates/sefa-edit-canvas.png"
+    },
+    {
+      "id": "lio_extra",
+      "group": "heroes",
+      "unit": "lio",
+      "source": "heroes/source-sheets/lio_extra.png",
+      "original_output": "/workspace/generated_images/exec-7de43f12-eb39-42cd-a3e9-4112888a80ba.png",
+      "reference": "heroes/templates/lio-edit-canvas.png"
+    },
+    {
+      "id": "rift_extra",
+      "group": "foes",
+      "unit": "foe_riftweaver",
+      "source": "foes/source-sheets/rift_extra.png",
+      "original_output": "/workspace/generated_images/exec-ad955e44-3e05-426d-b288-4f61b526f8e6.png",
+      "reference": "foes/templates/foe_riftweaver-edit-canvas.png"
+    }
+  ],
+  "layout_exceptions": {
+    "sefa_r1": "Six observed rows: three actions and three four-frame reactions; evade omitted and supplied separately.",
+    "lio_r1": "Seven observed rows; first finale remains near face height, and bottom down row replaced by separate pass.",
+    "rift_r1": "Five rows; original ribbon row has touching figures and is excluded from raw strips.",
+    "spore_r1": "Requested six-frame action and two four-frame reactions present.",
+    "sefa_extra": "Two six-frame rows: evade R1 and low-stab R2.",
+    "lio_extra": "Two six-frame actions (finale R2 and strum swing R2), one four-frame down.",
+    "rift_extra": "Two six-frame physical ribbon variants; compact R1 and low-sidearm R2."
+  },
+  "normalization": "No runtime normalization/packing; row isolation and gutter insertion only. See NOTES.md."
+}

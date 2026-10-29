@@ -15,6 +15,7 @@ import { DEFENSE_ATLAS, defenseAtlasUrls, defenseCast, defenseContact, defenseCu
 import { HEALING_ATLAS, healingAtlasUrls, healingPrepare, healingContact, healingCues, isHealingSkill, type HealingContext } from '../visuals/healing-fx';
 import { PROJECTILE_ATLAS, projectileAtlasUrls, projectileCues, projectilePrepare, projectileContact, isProjectileSkill } from '../visuals/projectile-fx';
 import { SEAL_ATLAS, sealAtlasUrls, sealCues, sealEvents, sealPrepare, sealContact, isSealSkill, type SealSpot } from '../visuals/arcane-seal-fx';
+import { SONG_ATLAS, songAtlasUrls, isSongSkill, songPlan, songPrepare, songContact, type SongSpot } from '../visuals/song-fx';
 import { COMMAND_ATLAS, commandAtlasUrls, commandCues, commandPrepare, commandContact, isCommandSkill, type CommandSpot } from '../visuals/command-fx';
 import { ALCHEMY_ATLAS, alchemyAtlasUrls, alchemyCues, alchemyEvents, alchemyPrepare, alchemyContact, alchemyHealingCues, isAlchemySkill, type AlchemySkill } from '../visuals/alchemy-fx';
 import { EARTH_ATLAS, earthAtlasUrls, earthCues, earthPrepare, earthContact, earthHealingCues, earthHealingEvents, isEarthSkill, type EarthSkill } from '../visuals/earth-fx';
@@ -103,6 +104,7 @@ export class BattleScene extends Phaser.Scene {
     this.load.atlas(ALCHEMY_ATLAS, ...alchemyAtlasUrls());
     this.load.atlas(SEAL_ATLAS, ...sealAtlasUrls());
     this.load.atlas(COMMAND_ATLAS, ...commandAtlasUrls());
+    this.load.atlas(SONG_ATLAS, ...songAtlasUrls());
     this.load.atlas(DEFENSE_ATLAS, ...defenseAtlasUrls());
     this.load.atlas(HEALING_ATLAS, ...healingAtlasUrls());
     for (const sheet of ['units', 'mercs', 'foes', 'foes2'] as const) this.load.spritesheet(`battle-${sheet}`, unitsUrl(sheet), { frameWidth: 512, frameHeight: 512 });
@@ -144,7 +146,8 @@ export class BattleScene extends Phaser.Scene {
   update(time: number, delta: number): void {
     if (this.battleVisible && this.optionalRequest) { this.optionalRequest = false; this.requestOptionalUnits(); }
     this.unitAnimation.update(delta);
-    for (const image of [...(this.healingLayer?.list ?? []), ...(this.effects?.list ?? [])]) {
+    for (const image of this.songFloor) (image.getData('songFollow') as (() => void) | undefined)?.();
+    for (const image of [...(this.healingLayer?.list ?? []), ...(this.effects?.list ?? []), ]) {
       const follow = image.getData('healingFollow') as (() => void) | undefined;
       follow?.();
       (image.getData('projectileFollow') as (() => void) | undefined)?.();
@@ -152,6 +155,7 @@ export class BattleScene extends Phaser.Scene {
       (image.getData('alchemyFollow') as (() => void) | undefined)?.();
       (image.getData('sealFollow') as (() => void) | undefined)?.();
       (image.getData('commandFollow') as (() => void) | undefined)?.();
+      (image.getData('songFollow') as (() => void) | undefined)?.();
     }
     // Adopt newly decoded art only at a safe boundary, never repaint an actor mid-attack.
     if (this.optionalDirty && !this.stageActive && this.view) this.paint();
@@ -306,6 +310,8 @@ export class BattleScene extends Phaser.Scene {
       layer.destroy();
     }
     this.effects = undefined; this.healingLayer = undefined;
+    // Song/shadow floor layers live inside their unit's body (above its contact shadow, behind the sprite), so remove them explicitly.
+    for (const image of [...this.songFloor]) { this.tweens.killTweensOf(image); image.destroy(); }
   }
   private later(ms: number, run: () => void): void {
     const timer = this.time.delayedCall(ms, () => { this.effectTimers.delete(timer); run(); });
@@ -387,6 +393,34 @@ export class BattleScene extends Phaser.Scene {
     const p=matrix.transformPoint(at[0]!*sprite.width/ratio,at[1]!*sprite.height/ratio),sole=matrix.transformPoint(0,0);
     return {x:p.x/this.dpr,y:p.y/this.dpr,size:slot.size,side:(sole.x/this.dpr>this.viewW*.76?-1:1) as 1|-1};
   }
+  // Song/shadow landmarks (C5.8/C5.9) follow the rendered unit: caster hand, lower torso (waist) or sole contact.
+  songAnchor(id:string,spot:SongSpot){
+    const body=this.bodies.get(id),slot=this.actorPanels.get(id);
+    const sprite=body?.list.find(c=>c instanceof Phaser.GameObjects.Image) as Phaser.GameObjects.Image|undefined;
+    if(!sprite||!slot)return;
+    const ratio=sprite.texture.key.startsWith('unit-pilot-')?unitDisplayRatio(artOf(this.encounter,id)):1,matrix=sprite.getWorldTransformMatrix();
+    const x=spot==='hand'?.36:0,y=spot==='hand'?-.86:spot==='waist'?-.40:.04;
+    const p=matrix.transformPoint(x*sprite.width/ratio,y*sprite.height/ratio),sole=matrix.transformPoint(0,0);
+    return {x:p.x/this.dpr,y:p.y/this.dpr,size:slot.size,side:(sole.x/this.dpr>this.viewW*.76?-1:1) as 1|-1};
+  }
+  // Floor layers (rings, pools, wisps) sit in the actor layer just behind the unit they stand under; the shared effect layers
+  // are painted behind the whole field and would be hidden by it.
+  private songFloor = new Set<Phaser.GameObjects.Image>();
+  private songFx(id:string){
+    const front=this.fx(id);
+    return {front,back:{...front,add:(item:Phaser.GameObjects.Image)=>{
+      // The unit whose feet the layer stands under; the layer's follow() sets world coordinates, so offset by the body's origin.
+      let owner:Phaser.GameObjects.Container|undefined,best=Infinity;
+      for(const body of this.bodies.values()){const d=Math.hypot(body.x-item.x,body.y-item.y);if(d<best){best=d;owner=body;}}
+      const sprite=owner?.list.find(c=>c instanceof Phaser.GameObjects.Image);
+      if(!owner||!sprite){this.layer?.add(item);return;}
+      owner.addAt(item,owner.list.indexOf(sprite));
+      const body=owner,follow=item.getData('songFollow') as (()=>void)|undefined;
+      item.setData('songLocal',()=>({x:body.x,y:body.y}));
+      if(follow)follow();else item.setPosition(item.x-body.x,item.y-body.y);
+      this.songFloor.add(item);item.once('destroy',()=>this.songFloor.delete(item));
+    }}};
+  }
   private sealFx(id:string){return {front:this.fx(id),back:this.projectileFx(id)};}
   private projectileFx(id:string):FxContext {
     return {...this.fx(id),add:item=>{
@@ -438,6 +472,7 @@ export class BattleScene extends Phaser.Scene {
     if(turn.side==='hero'&&isCommandSkill(turn.action)&&this.textures.exists(COMMAND_ATLAS)){
       commandPrepare({front:this.fx(turn.actorId)},turn,(id,spot)=>this.commandAnchor(id,spot),contactMs);return;
     }
+    if(turn.side==='hero'&&isSongSkill(turn.action)&&this.textures.exists(SONG_ATLAS)&&songPrepare(this.songFx(turn.actorId),turn,(id,spot)=>this.songAnchor(id,spot),contactMs))return;
     if(turn.side==='hero'&&isSealSkill(turn.action)&&this.textures.exists(SEAL_ATLAS)){
       sealPrepare(this.sealFx(turn.actorId),turn,(id,spot)=>this.sealAnchor(id,spot),contactMs);return;
     }
@@ -505,6 +540,8 @@ export class BattleScene extends Phaser.Scene {
     const alchemyEventSet=new Set(this.textures.exists(ALCHEMY_ATLAS)?alchemyEvents(turn):[]);
     const paintedSeal=this.textures.exists(SEAL_ATLAS)?sealCues(turn):[];
     const sealEventSet=new Set(this.textures.exists(SEAL_ATLAS)?sealEvents(turn):[]);
+    const songReady=this.textures.exists(SONG_ATLAS),paintedSong=songReady?songPlan(turn):undefined;
+    const songEventSet=new Set(paintedSong?.events??[]);
     const commandReady=this.textures.exists(COMMAND_ATLAS);
     const paintedCommand=commandReady?commandCues(turn).filter(c=>!paintedDefense.some(d=>d.event===c.event)):[];
     const commandEventSet=new Set(commandReady?paintedCommand.map(c=>c.event):[]);
@@ -537,6 +574,8 @@ export class BattleScene extends Phaser.Scene {
     for(const image of [...(this.healingLayer?.list??[])])if(image.getData('alchemyPrepare')){this.tweens.killTweensOf(image);image.destroy();}
     for(const layer of [this.healingLayer,this.effects])for(const image of [...(layer?.list??[])])if(image.getData('sealPrepare')){this.tweens.killTweensOf(image);image.destroy();}
     for(const image of [...(this.healingLayer?.list??[]),...(this.effects?.list??[])])if(image.getData('commandTag')==='prepare'){this.tweens.killTweensOf(image);image.destroy();}
+    for(const image of [...(this.healingLayer?.list??[]),...(this.effects?.list??[]),...this.songFloor])if(image.getData('songPrepare')){this.tweens.killTweensOf(image);image.destroy();}
+    if(paintedSong)songContact(this.songFx(paintedSong.casterId),paintedSong,(id,spot)=>this.songAnchor(id,spot),life);
     for(const cue of paintedCommand)commandContact({front:this.fx(cue.kind==='cast'?cue.sourceId:cue.targetId)},cue,(id,spot)=>this.commandAnchor(id,spot),life);
     for(const cue of paintedSeal)sealContact(this.sealFx(cue.targetId),cue,(id,spot)=>this.sealAnchor(id,spot),life);
     for(const cue of paintedAlchemy)alchemyContact(this.projectileFx(cue.targetId),cue,(id,skill,pre)=>this.alchemyAnchor(id,skill,pre),life);
@@ -557,7 +596,7 @@ export class BattleScene extends Phaser.Scene {
       const ward = turn.action === 'ward' && turn.side === 'hero' && event.type === 'barrier';
       const blade = paintedBlades.find(cue => cue.event === event);
       const parry = event.type === 'parry';
-      const projectile=projectileEvents.has(event),earth=earthEvents.has(event),alchemy=alchemyEventSet.has(event)||sealEventSet.has(event)||commandEventSet.has(event);
+      const projectile=projectileEvents.has(event),earth=earthEvents.has(event),alchemy=alchemyEventSet.has(event)||sealEventSet.has(event)||commandEventSet.has(event)||songEventSet.has(event);
       const defense = defenseEvents.has(event) || healingEvents.has(event);
       if (parry && event.sourceId === event.targetId) bladeStance(this.fx(id), p, life, bladePalettes.Duelist!);
       if (blade) bladeImpact(this.fx(id), blade, p, this.anchor(event.sourceId), life,
@@ -621,7 +660,7 @@ export class BattleScene extends Phaser.Scene {
       }
     }
     // The denser blade art must not cover the authoritative damage/outcome captions.
-    if (paintedBlades.length || paintedDefense.length || paintedHealing.length || paintedProjectiles.length || paintedEarth.length || paintedAlchemy.length || paintedSeal.length || paintedCommand.length || turn.action === 'parry') {
+    if (paintedBlades.length || paintedDefense.length || paintedHealing.length || paintedProjectiles.length || paintedEarth.length || paintedAlchemy.length || paintedSeal.length || paintedCommand.length || !!paintedSong || turn.action === 'parry') {
       for (const child of [...(this.effects?.list ?? [])]) {
         if (child instanceof Phaser.GameObjects.Text) this.effects?.bringToTop(child);
       }

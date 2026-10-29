@@ -1,5 +1,15 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
+## 2026-10-29 — W4 A6 + VFX บทเพลง/เงา: นำเข้าเกมแล้ว รอเจ้าของดูคลิปและอนุมัติ motion (ยังไม่ merge)
+
+สาขา `claude/unit-a6-song-shadow-vfx` (จากสาขาเกม `1355252`) ผลเทสต์ไม่ใช่การอนุมัติภาพ — **ห้าม merge/เผยแพร่จนกว่าเจ้าของตอบอนุมัติ motion** จากหน้า Artifact รวมคลิป (53 คลิป 390px: A6 23 + เพลง/เงา 30)
+
+- A6 (PR #94): sha256 50 ไฟล์ตรง; R2 ของ Sefa low stab และ Lio finale, R1 ของ sharp-strum และ compact ribbon ตามเจ้าของ; `incoming/ART-UNIT-ANIMATION-A6-001/build_assets.py` (scale เดียวต่อแถบ, พื้นเท้า y=496, Spore Puff ลอยคงความสูง) → atlas Sefa 4.04MiB/1.07MB, Lio 4.96MiB/**1.456MB (ใกล้เพดาน 1.5MB)**, Rift Weaver 3.70MiB/1.15MB, Spore Puff 1.58MiB/0.46MB; clip ใหม่ `knives`/`evade`/`dread`/`finale`/`snare` ใน `unit-frames.ts`; ครบ 7+7 ActionId + ทุก intent ศัตรูจาก content ([README](../combat-presentation/unit-a6-slice/README_TH.md))
+- VFX (PR #96): เพลง R2 + เงา R1 → `song_shadow_fx` atlas 21 เลเยอร์ (5.24MiB decoded), `src/game/visuals/song-fx.ts` ผูก event จริงด้วย `songPlan` (บริสุทธิ์); **ส่วนที่กติกาจริงต่างจากคำบรรยายภาพ**: dread ไม่มีดาเมจ/เป้าเดียว (วาดคลื่น+รอยสั่นบนศัตรูที่ยืนอยู่ ไม่มีสัมผัสโจมตี), solo ลงที่พันธมิตรที่ได้บัฟจริง, finale เพลงฟื้นฟู/สะท้านวาดเฉพาะรวมพลัง ([README](../combat-presentation/song-shadow-slice/README_TH.md))
+- บทเรียนใหม่: (ก) ชั้น `healingLayer` (หลังสุดของฉาก) ถูกพื้นฉากทับมิดทั้งหมด เลเยอร์พื้นของ song/shadow จึงอยู่ใน body ของยูนิต (เหนือเงาพื้น ใต้สไปรต์) + สำเนาจางด้านหน้าเป็นขอบบาง ที่ความกว้างที่ Codex แนะนำมองไม่เห็นเพราะถูกตัวบัง จึงขยาย valor ×1.9/solo ×1.6/evade ×1.7 — evade/solo ยังบางเมื่อเทียบฉาก ให้เจ้าของตัดสิน (ถ้าไม่พอขอ Codex ทำชั้นพื้นที่เข้มขึ้น); (ข) Playwright ล้าง `--output` ทุกครั้งที่รัน ห้ามรันซ้ำ dir เดิมระหว่างถ่ายคลิป; (ค) อย่าแก้ไฟล์ src ระหว่างถ่ายคลิป (Vite reload); (ง) finale/solo ในเทสต์ต้องมี prelude เล่นเพลงก่อน (fixture `tests/fixtures/unit-a6.ts`, `song-fx.ts`)
+- CI: เพิ่ม `unit-a6.spec.ts` + `song-fx.spec.ts` ใน `browser.yml`/`pages.yml` (แตะ .github จึงรันชุดเต็ม ~35 นาที); optional sheet เพิ่มสำหรับ encounter ที่มี Sefa/Lio/Rift Weaver/Spore Puff
+- งบภาพสนาม 10 ตัว (OD-05) ยังต้องวัดรวมหลัง P02; ภาพ #97/#98 (W5) ยังรอเจ้าของเลือก ไม่ได้นำเข้า
+
 ## 2026-10-29 — แชตถัดไป: W4 A6 + VFX บทเพลง/เงา นำภาพเข้าเกม (เปิดอัตโนมัติจากแชต W3)
 
 เจ้าของตอบ “ดำเนินการขั้นต่อไปโดยใช้ตาม codex แนะนำ” (2026-10-29) ข้อความเปิดแชต:
