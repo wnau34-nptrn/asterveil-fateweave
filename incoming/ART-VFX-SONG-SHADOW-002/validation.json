@@ -1,0 +1,605 @@
+{
+  "batch": "ART-VFX-SONG-SHADOW-002",
+  "files": {
+    "NOTES.md": {
+      "sha256": "745e879d141e03f2d10c48040caa1ffd181a5ae8a81a8a13cedbacdc132eff3c",
+      "bytes": 7481
+    },
+    "comparison-100px.png": {
+      "sha256": "aba8c0c66149d5262a4e1d58ec9761ebe97a517d0bef3e7002fc71a1d4df1a1b",
+      "bytes": 260583,
+      "size": [
+        390,
+        2788
+      ],
+      "mode": "RGB"
+    },
+    "generation-prompts.json": {
+      "sha256": "d3bded37fb00224d744c18e78a853a8de18ba8c617171be9888431dfb34b103d",
+      "bytes": 8578
+    },
+    "layers.json": {
+      "sha256": "1ce1b66d082d0da05fac94cc01af029ab255d65b4abdfe6d9b984d2f1c33b7a2",
+      "bytes": 26295
+    },
+    "layout.json": {
+      "sha256": "564d59968aeaf2836292a91d0ddbe609d01b2c9bf817d166a39e28077a642c24",
+      "bytes": 5281
+    },
+    "package.py": {
+      "sha256": "68af47bbc2a8d3e16d43a9748126e6a73a86b7f82f7d4e09f3b73192dcfa5c9f",
+      "bytes": 7981
+    },
+    "references/ally.png": {
+      "sha256": "653fb5efb1f4b1bc4529300a9686f80577361c9f73ba294b301fe90e1b25107b",
+      "bytes": 325402,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    "references/dread-peak.png": {
+      "sha256": "5e6cd458827c38ace1a4a0c11f1fb9b25607c38344866b00675b63d94d33c116",
+      "bytes": 44917,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "references/dread-prepare.png": {
+      "sha256": "0766b10b4f1d73e38946202a93afa8aa32d1c70ee01ca1f13d7594dd67dd2b68",
+      "bytes": 61065,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "references/dread-settle.png": {
+      "sha256": "3072cbafdd0dcc028dafb03f3ad03f3c7243637aafad988def6509738fa20e46",
+      "bytes": 33398,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "references/enemy.png": {
+      "sha256": "29fe110fa75c3dd91f48f1fdef36812681a01daeb64dd08d4c52e4a7b4f73aa5",
+      "bytes": 367928,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    "references/evade-peak.png": {
+      "sha256": "98e81320bdb25a4f0b22a0c311fd586003df36553bb73fd71ad14c30c1bd9e93",
+      "bytes": 32082,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "references/evade-prepare.png": {
+      "sha256": "b10f5a291b846d0e62b3d2775b404030c2620b1bc41f40dfffac0f0d1c2386e4",
+      "bytes": 30583,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "references/evade-settle.png": {
+      "sha256": "9a6b818e9983c8f0083c73bb38b03bdeddde18d22d3ceb723dfc3626f391c471",
+      "bytes": 23321,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "references/finale-peak.png": {
+      "sha256": "bdd3ecba908ac515a72ea0cc7ba5e5625192b05538974a4be44b4bd57cb795e2",
+      "bytes": 50790,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "references/finale-prepare.png": {
+      "sha256": "27ecd2b7ed1d2f9573a3f2ffbbe706d5ef2b73275888f01c589f135a51ed356b",
+      "bytes": 73497,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "references/finale-settle.png": {
+      "sha256": "db1b9eb70c0f19de852c98c057f8b7e9d12f5f25b3f8579554e44af91e6156b3",
+      "bytes": 52936,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "references/lio.png": {
+      "sha256": "e6760e48b0403e13318830df87fd5891d50c9e57a972c5e9e8f3f6d729298a47",
+      "bytes": 389693,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    "references/sefa.png": {
+      "sha256": "6cb511ce3ac8badd15e28fafecd44f8f940a718eff6a4c15adccc10a241584bc",
+      "bytes": 295164,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    "references/solo-peak.png": {
+      "sha256": "9728a4397ffdd41e9bd9c85d6a32141e0dbb5eab78ee88b6f9adc9fa4ee2d834",
+      "bytes": 43846,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "references/solo-prepare.png": {
+      "sha256": "24f31bd8fb7912db82445b01c5025e7b96321f94d414bce9ca980c1e0de4132a",
+      "bytes": 48902,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "references/solo-settle.png": {
+      "sha256": "eecde1ae1f0ab55182574421a90e8f513dba743a9ed44d28d714dae12c6e3966",
+      "bytes": 39451,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "references/valor-peak.png": {
+      "sha256": "9bb569e3f904dfdddbd8ae92c7cc3c07d8266e43ca77bff40cee025ac1fa8370",
+      "bytes": 70182,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "references/valor-prepare.png": {
+      "sha256": "76183cd6a6819849b270d3501eda2d47879dbbe07996b8a5aff446f467dd3486",
+      "bytes": 36024,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "references/valor-settle.png": {
+      "sha256": "2b057f6798dc6856a06f35181ceb147623d27a744eae720806ccb2044f4e1ab9",
+      "bytes": 31032,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "review/dread-comparison-100px.png": {
+      "sha256": "12596cd671e4873bd0c17dca5d2b12bede56f620ea4743e08661220a304986b7",
+      "bytes": 38575,
+      "size": [
+        390,
+        448
+      ],
+      "mode": "RGB"
+    },
+    "review/dread-storyboard-390.png": {
+      "sha256": "b5c354d9fdbbebed2e4d0b50c5dda6e95d075862595fb89b2f756f56bc4d3678",
+      "bytes": 132781,
+      "size": [
+        390,
+        535
+      ],
+      "mode": "RGB"
+    },
+    "review/evade-comparison-100px.png": {
+      "sha256": "0070319bd4fffb2414c74f9e1131c64cd4853f54500f0abd56c6371f70a0f2bf",
+      "bytes": 30054,
+      "size": [
+        390,
+        448
+      ],
+      "mode": "RGB"
+    },
+    "review/evade-storyboard-390.png": {
+      "sha256": "17eda2db8b8b13f62df6d02969c11c8a0af6ac7c2752d0818ee046f2eb8b7737",
+      "bytes": 114890,
+      "size": [
+        390,
+        535
+      ],
+      "mode": "RGB"
+    },
+    "review/finale-comparison-100px.png": {
+      "sha256": "e53c0be735549d414a283ce86c988dbe3f04f6977b273b6bc7746d5fdada957d",
+      "bytes": 40879,
+      "size": [
+        390,
+        448
+      ],
+      "mode": "RGB"
+    },
+    "review/finale-dread-comparison-100px.png": {
+      "sha256": "eae0f65337646006c6cb91d74079ae03e18a7d7fe0c077158c4f6806c2b7e858",
+      "bytes": 46720,
+      "size": [
+        390,
+        448
+      ],
+      "mode": "RGB"
+    },
+    "review/finale-dread-storyboard-390.png": {
+      "sha256": "cc5de57bce8a766bf398d3b607282a1218f55b576e672ad11c002559557cec94",
+      "bytes": 117644,
+      "size": [
+        390,
+        535
+      ],
+      "mode": "RGB"
+    },
+    "review/finale-mend-comparison-100px.png": {
+      "sha256": "925ec8fafc9e16c7af0ec194b8cc465a96f88595a1d789252df265ef3af06bba",
+      "bytes": 42639,
+      "size": [
+        390,
+        448
+      ],
+      "mode": "RGB"
+    },
+    "review/finale-mend-storyboard-390.png": {
+      "sha256": "e99472c2bbecd7bdbce49097f514a0ae044f54965392824433270e75472f9798",
+      "bytes": 117374,
+      "size": [
+        390,
+        535
+      ],
+      "mode": "RGB"
+    },
+    "review/finale-storyboard-390.png": {
+      "sha256": "5ebd10fdb318c15104395eb445222ea3866dcd38285f215680d32f5271716ff9",
+      "bytes": 129841,
+      "size": [
+        390,
+        535
+      ],
+      "mode": "RGB"
+    },
+    "review/solo-comparison-100px.png": {
+      "sha256": "c888ac7568d0d4dea0a971ef1a0e15b047f8c17554b91f00259c50c76d4cc03b",
+      "bytes": 43750,
+      "size": [
+        390,
+        448
+      ],
+      "mode": "RGB"
+    },
+    "review/solo-storyboard-390.png": {
+      "sha256": "500fd1148e4f8a45ea7f5e2f270f2822ee9bc5c1e70698f0b1cb476600ea7555",
+      "bytes": 124773,
+      "size": [
+        390,
+        535
+      ],
+      "mode": "RGB"
+    },
+    "review/valor-comparison-100px.png": {
+      "sha256": "47e7ffdd2641bc1626b3a947598e64ebc4e7181a441b53644399c0cf33f6a998",
+      "bytes": 41353,
+      "size": [
+        390,
+        448
+      ],
+      "mode": "RGB"
+    },
+    "review/valor-storyboard-390.png": {
+      "sha256": "f6d127a42a822b68f841ed196e42ea97b0569d51d0f1ef3bd90a90950c8f0837",
+      "bytes": 126212,
+      "size": [
+        390,
+        535
+      ],
+      "mode": "RGB"
+    },
+    "shadow/R3/evade-peak.png": {
+      "sha256": "1def3962d08238fee9a41d10ce7916b1534b7a66c263646ce84a1b29030e163b",
+      "bytes": 48037,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "shadow/R3/evade-prepare.png": {
+      "sha256": "e400b8605f315f34ac07ab6ee4cec3f913e1c275699ada2fbd262d79bd42aec1",
+      "bytes": 31800,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "shadow/R3/evade-settle.png": {
+      "sha256": "9fbbc1ca8e6798adcb01b132d6abe4df9159c12fdb3fd0a13920b1e99c3216d8",
+      "bytes": 29182,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "song/R3/dread-peak.png": {
+      "sha256": "907b9370accd3c539dceab376e4113f6ed61a2008f0ae21728bcb15f493cbbc9",
+      "bytes": 69163,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "song/R3/dread-prepare.png": {
+      "sha256": "6c3186de8eb346dfbaeeb9c1601d31bd734eaf7b4a5291e25d51ddeb38f38e09",
+      "bytes": 28038,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "song/R3/dread-settle.png": {
+      "sha256": "68165c7a8324115ef95c65c5b8491b562ac48518f00b66a5a65ec739572141b4",
+      "bytes": 9609,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "song/R3/finale-dread-peak.png": {
+      "sha256": "88ea01e7c7b781fbbf33035f20e9f66ac10a93a585d024e8d24318e779ec8ef7",
+      "bytes": 58129,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "song/R3/finale-dread-prepare.png": {
+      "sha256": "814471df05d0450ad35acc60e5449ee601b6c755d2b209537827168fcddd5ba6",
+      "bytes": 37358,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "song/R3/finale-dread-settle.png": {
+      "sha256": "9258eb00dc1d199378a39dfd8c742f1192269088cba036da66f7b34939b054ad",
+      "bytes": 22070,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "song/R3/finale-mend-peak.png": {
+      "sha256": "fba8be392a28912a387f458bd32b025923b9ed1f12255269afb6ea71ce14a8c4",
+      "bytes": 48528,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "song/R3/finale-mend-prepare.png": {
+      "sha256": "4f3da9fce771591de463f5b4a3a6366222d9566861906df92e00a041146b8a78",
+      "bytes": 24869,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "song/R3/finale-mend-settle.png": {
+      "sha256": "d743c7a31f327ea0f5fd1c8d69b5a7bbc1dd19b1ff927c2cd53d1f740f8b4b85",
+      "bytes": 9985,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "song/R3/finale-peak.png": {
+      "sha256": "7f5599a50c6a3cf0f45e5e9019bb25840acea2610e460cf7c189c1719647face",
+      "bytes": 47755,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "song/R3/finale-prepare.png": {
+      "sha256": "c2f1f9ed337c434ceb140c3fbaa5291d22d3489f525189f7d7f65e44ffd7bf60",
+      "bytes": 11931,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "song/R3/finale-settle.png": {
+      "sha256": "e95b238ff928d83cc8a2945921541771cd91d8bdc3a1645baf1bb2a959dc5b1a",
+      "bytes": 11912,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "song/R3/solo-peak.png": {
+      "sha256": "d583f703366c4c947bc2bae7c2cf90746c1fd6bbec50498c69a2ccfd54d04aec",
+      "bytes": 67576,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "song/R3/solo-prepare.png": {
+      "sha256": "450154d75a8e2b01b7f14e351a3e8888527bbd9667abc09c9d3140bfbb91c8d4",
+      "bytes": 50080,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "song/R3/solo-settle.png": {
+      "sha256": "a8a6691361e5941df01efd7d920054df85db00bcc108ae7c7249ecc5dc74b832",
+      "bytes": 39100,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "song/R3/valor-peak.png": {
+      "sha256": "ceb57ec3f15d384ded75aef594e0a4dc75bcc5457b5cefb5bb4b14d03ce6a78d",
+      "bytes": 58419,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "song/R3/valor-prepare.png": {
+      "sha256": "529576436d96f0a789e49a0a2fb041481cec4043db7619789c92c69aea170178",
+      "bytes": 40086,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "song/R3/valor-settle.png": {
+      "sha256": "cd2835f459f653c30e1daea9c5a15889ae2925d8937f854a78cc71937b8c5750",
+      "bytes": 33124,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "source/dread.png": {
+      "sha256": "30a00f5f0f5a24adaea38b7cc7962881264cd6bcc7cfd01aec0714071f5b1af8",
+      "bytes": 1450103,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "source/evade.png": {
+      "sha256": "a681ddbaeef64f3c66e0aa2e50c57dafc180c8e8766645a02019ae7aab5728d3",
+      "bytes": 1064853,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "source/finale-dread.png": {
+      "sha256": "67d2a918125f6f734022a46cf5c2108e251f1a8cc5f83a025d2e10825f7037f1",
+      "bytes": 1242566,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "source/finale-mend.png": {
+      "sha256": "e2c9fce1bfe808cf8f262f39754f6a06137c380d940a323aa577e3f38f9c535d",
+      "bytes": 1097624,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "source/finale.png": {
+      "sha256": "36dc1dce71b658b14eeb0f850e6b1a923251c30ce423c22796fd382279b4ccfc",
+      "bytes": 1682271,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "source/solo.png": {
+      "sha256": "bf7c0fe5bcbb4d13b7b72c33e231aae30481767d337070dd0c6be256ab554011",
+      "bytes": 1419745,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "source/valor.png": {
+      "sha256": "e2335b6a89ed7eba89d823ea245f39c603e562d34cad26250b0e391c4afd21cd",
+      "bytes": 1135075,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "storyboard-390.png": {
+      "sha256": "4c2c5d33a101e0f75526d82c56206c5e21b42043cd070c00fe085112de9ddcde",
+      "bytes": 840959,
+      "size": [
+        390,
+        3415
+      ],
+      "mode": "RGB"
+    },
+    "verify.py": {
+      "sha256": "98f0c30f7b0b2644744bc05dc5f31697cc4fc26bfee65426a84f4823a9c34705",
+      "bytes": 2305
+    }
+  },
+  "checks": {
+    "layers": 21,
+    "RGBA_256": true,
+    "transparent_padding_min_px": 8,
+    "comparison_canvas_px": 100,
+    "comparison_alpha": 0.7,
+    "storyboard_width": 390
+  },
+  "approval": "Pending owner artwork selection and actual runtime motion review."
+}
