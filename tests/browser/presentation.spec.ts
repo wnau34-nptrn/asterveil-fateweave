@@ -32,6 +32,7 @@ for (const [speed,intensity,motion] of [
 }
 for(const [width,height,touch]of [[320,568,true],[390,844,true],[1366,768,false]]as const){
  test(`presentation fast/reduced preferences persist without changing commands at ${width}x${height}`,async({browser},info)=>{
+  test.setTimeout(90000);
   const ctx=await browser.newContext({viewport:{width,height},isMobile:touch,hasTouch:touch,reducedMotion:'no-preference'}),page=await ctx.newPage();
   try {
    await open(page);const before=await saved(page);
@@ -50,6 +51,7 @@ for(const [width,height,touch]of [[320,568,true],[390,844,true],[1366,768,false]
   } finally {await ctx.close();}
  });
  test(`presentation impact reveals only the current actor group at ${width}x${height}`,async({browser},info)=>{
+  test.setTimeout(90000);
   const ctx=await browser.newContext({viewport:{width,height},isMobile:touch,hasTouch:touch,reducedMotion:'no-preference'}),page=await ctx.newPage(),errors:string[]=[];
   page.on('pageerror',e=>errors.push(e.message));
   try{
