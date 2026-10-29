@@ -1,5 +1,15 @@
 # Codex → Claude handoff
 
+## 2026-10-29 — Codex: เพิ่มคู่มือคุณภาพ prompt บนสาขาเกมที่ถูกต้อง
+
+- เจ้าของชี้ว่างานเดิมไม่ได้อยู่ main; ตรวจแล้วสาขางานคือ `feature/fateweave-initial-prototype` จึงเพิ่มเอกสารที่สาขานี้โดยตรง ไม่มี PR หรือ merge แยก
+- Commits: `0764029` เพิ่ม `docs/handoffs/ANIMATION_PROMPT_QUALITY_TH.md`; `a7dd2c0` เพิ่มลิงก์ท้าย `CLAUDE.md` โดยคงเนื้อหาเดิมทั้งหมด
+- คู่มือเสริม: technical brief, seed/scale/anchor, whole strips, transparent gutters, package metadata, hash/decode หลัง push, การตรวจคลิปจริง และ handoff Codex-art/Claude-integration; คง W1–W8, owner artwork/motion decisions และ rules/save/balance/timing เดิม
+- Validation: อ่าน AGENTS/CLAUDE และแผน/brief เดิม ตรวจเนื้อหาและ whitespace diff; งานเอกสารเท่านั้น ไม่รัน gameplay/browser tests และไม่มีภาพหรือคลิปใหม่
+- ข้อควรทราบ: `main/CLAUDE.md` commit `19bfb95` เป็นคู่มือทั่วไปที่ลงก่อนตรวจสาขา ไม่ใช่สถานะของเกม ให้ใช้ CLAUDE.md และคู่มือบนสาขาเกมนี้ ข้อความใน main ที่บอกว่ายังไม่มีโค้ดเกมใช้กับ main เท่านั้น
+- ไม่เริ่ม wave ใหม่ ไม่เปลี่ยน branch งาน art/Claude ที่ค้างอยู่; Claude อ่านคู่มือเสริมก่อนเขียน brief รอบหน้า
+
+
 
 
 
