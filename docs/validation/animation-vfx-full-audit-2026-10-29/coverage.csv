@@ -1,0 +1,363 @@
+case,identity,kind,action_or_intent,reaction,mode,body_frames,state_equal,save_stable,reaction_event_verified,findings,strip
+hero-guardian-attack,guardian,hero,attack,,normal,0 2 3 4 5 6 8,True,True,,AV01,strips/hero-guardian-attack.webp
+hero-guardian-guard,guardian,hero,guard,,normal,0 10 11 12 13 14 16 9,True,True,,AV01 AV08,strips/hero-guardian-guard.webp
+hero-guardian-bash,guardian,hero,bash,,normal,0 23 24 25 26 27 29,True,True,,AV01,strips/hero-guardian-bash.webp
+hero-guardian-rally,guardian,hero,rally,,normal,0 10 11 12 13 14 16,True,True,,AV01 AV08,strips/hero-guardian-rally.webp
+hero-guardian-bulwark,guardian,hero,bulwark,,normal,0 10 11 12 13 14 16 9,True,True,,AV01 AV08,strips/hero-guardian-bulwark.webp
+hero-guardian-challenge,guardian,hero,challenge,,normal,0 10 11 12 13 14 16,True,True,,AV01,strips/hero-guardian-challenge.webp
+hero-guardian-rouse,guardian,hero,rouse,,normal,0 11 12 13 14 16 9,True,True,,AV01,strips/hero-guardian-rouse.webp
+hero-tracer-attack,tracer,hero,attack,,normal,0 1 3 4 5 6 7 8,True,True,,,strips/hero-tracer-attack.webp
+hero-tracer-mark,tracer,hero,mark,,normal,0,True,True,,AV02,strips/hero-tracer-mark.webp
+hero-tracer-execute,tracer,hero,execute,,normal,0 11 12 13 14 16 9,True,True,,,strips/hero-tracer-execute.webp
+hero-tracer-finisher,tracer,hero,finisher,,normal,0,True,True,,AV02,strips/hero-tracer-finisher.webp
+hero-tracer-lunge,tracer,hero,lunge,,normal,0,True,True,,AV02,strips/hero-tracer-lunge.webp
+hero-tracer-parry,tracer,hero,parry,,normal,0,True,True,,AV02,strips/hero-tracer-parry.webp
+hero-tracer-sweep,tracer,hero,sweep,,normal,0,True,True,,AV02,strips/hero-tracer-sweep.webp
+hero-weaver-attack,weaver,hero,attack,,normal,0 1 2 3 4 5 6 8,True,True,,,strips/hero-weaver-attack.webp
+hero-weaver-bolt,weaver,hero,bolt,,normal,0 1 2 3 4 5 6 8,True,True,,,strips/hero-weaver-bolt.webp
+hero-weaver-ward,weaver,hero,ward,,normal,0 10 11 12 13 14 16 9,True,True,,,strips/hero-weaver-ward.webp
+hero-weaver-sigil,weaver,hero,sigil,,normal,0 10 11 12 13 14 16 9,True,True,,,strips/hero-weaver-sigil.webp
+hero-weaver-storm,weaver,hero,storm,,normal,0 1 2 3 4 5 6 8,True,True,,,strips/hero-weaver-storm.webp
+hero-weaver-aegis,weaver,hero,aegis,,normal,0 10 11 12 13 14 16,True,True,,,strips/hero-weaver-aegis.webp
+hero-weaver-dispel,weaver,hero,dispel,,normal,0 1 2 3 4 5 6 8,True,True,,,strips/hero-weaver-dispel.webp
+hero-healer-attack,healer,hero,attack,,normal,0 2 3 4 5 6 8,True,True,,,strips/hero-healer-attack.webp
+hero-healer-heal,healer,hero,heal,,normal,0 10 11 12 13 14 16 9,True,True,,,strips/hero-healer-heal.webp
+hero-healer-prayer,healer,hero,prayer,,normal,0 22 23 24 25 26 27 29,True,True,,,strips/hero-healer-prayer.webp
+hero-healer-sanctuary,healer,hero,sanctuary,,normal,0 30 31 32 33 34 35 37,True,True,,,strips/hero-healer-sanctuary.webp
+hero-healer-revive,healer,hero,revive,,normal,0 11 12 13 14 16 9,True,True,,,strips/hero-healer-revive.webp
+hero-healer-halo,healer,hero,halo,,normal,0 22 23 24 25 26 27 29,True,True,,,strips/hero-healer-halo.webp
+hero-healer-bless,healer,hero,bless,,normal,0 10 11 12 13 14 16 9,True,True,,,strips/hero-healer-bless.webp
+hero-mira-attack,mira,hero,attack,,normal,0 1 2 3 4 5 6 8,True,True,,AV03,strips/hero-mira-attack.webp
+hero-mira-hinder,mira,hero,hinder,,normal,0 1 2 3 4 5 6 8,True,True,,AV04,strips/hero-mira-hinder.webp
+hero-mira-volley,mira,hero,volley,,normal,0 10 11 12 13 14 16 9,True,True,,AV04,strips/hero-mira-volley.webp
+hero-mira-weakshot,mira,hero,weakshot,,normal,0 1 2 3 4 5 6 8,True,True,,AV04,strips/hero-mira-weakshot.webp
+hero-mira-pin,mira,hero,pin,,normal,0 1 2 3 4 5 6 8,True,True,,AV04,strips/hero-mira-pin.webp
+hero-mira-disengage,mira,hero,disengage,,normal,0 23 24 25 26 27 29,True,True,,AV04,strips/hero-mira-disengage.webp
+hero-mira-track,mira,hero,track,,normal,0 1 3 4 5 6 8,True,True,,AV04,strips/hero-mira-track.webp
+hero-toma-attack,toma,hero,attack,,normal,0 2 3 4 5 6 8,True,True,,AV03,strips/hero-toma-attack.webp
+hero-toma-acid,toma,hero,acid,,normal,0 1 2 3 4 5 6 8,True,True,,,strips/hero-toma-acid.webp
+hero-toma-haste,toma,hero,haste,,normal,0 10 11 12 13 14 16,True,True,,,strips/hero-toma-haste.webp
+hero-toma-bomb,toma,hero,bomb,,normal,0 1 2 3 4 5 6 8,True,True,,,strips/hero-toma-bomb.webp
+hero-toma-fury,toma,hero,fury,,normal,0 10 11 12 13 14 16 9,True,True,,,strips/hero-toma-fury.webp
+hero-toma-smoke,toma,hero,smoke,,normal,0 2 3 4 5 6 8,True,True,,,strips/hero-toma-smoke.webp
+hero-toma-catalyst,toma,hero,catalyst,,normal,0 10 11 12 13 14 16 9,True,True,,,strips/hero-toma-catalyst.webp
+hero-sefa-attack,sefa,hero,attack,,normal,3,True,True,,AV06,strips/hero-sefa-attack.webp
+hero-sefa-ambush,sefa,hero,ambush,,normal,3,True,True,,AV06,strips/hero-sefa-ambush.webp
+hero-sefa-evade,sefa,hero,evade,,normal,3,True,True,,AV06,strips/hero-sefa-evade.webp
+hero-sefa-backstab,sefa,hero,backstab,,normal,3,True,True,,AV06,strips/hero-sefa-backstab.webp
+hero-sefa-decoy,sefa,hero,decoy,,normal,3,True,True,,AV06,strips/hero-sefa-decoy.webp
+hero-sefa-knives,sefa,hero,knives,,normal,3,True,True,,AV06,strips/hero-sefa-knives.webp
+hero-sefa-disarm,sefa,hero,disarm,,normal,3,True,True,,AV06,strips/hero-sefa-disarm.webp
+hero-brann-attack,brann,hero,attack,,normal,0 1 2 3 4 5 6 8,True,True,,,strips/hero-brann-attack.webp
+hero-brann-taunt,brann,hero,taunt,,normal,0 22 23 24 25 26 27 29,True,True,,AV08,strips/hero-brann-taunt.webp
+hero-brann-slam,brann,hero,slam,,normal,0 10 11 12 13 14 16 9,True,True,,,strips/hero-brann-slam.webp
+hero-brann-quake,brann,hero,quake,,normal,0 11 12 13 14 16 9,True,True,,,strips/hero-brann-quake.webp
+hero-brann-stonearmor,brann,hero,stonearmor,,normal,0 30 31 32 33 34 35 37,True,True,,,strips/hero-brann-stonearmor.webp
+hero-brann-guardstone,brann,hero,guardstone,,normal,0 30 31 32 33 34 35 37,True,True,,,strips/hero-brann-guardstone.webp
+hero-brann-tremor,brann,hero,tremor,,normal,0 10 11 12 13 14 16 9,True,True,,,strips/hero-brann-tremor.webp
+hero-lio-attack,lio,hero,attack,,normal,5,True,True,,AV06,strips/hero-lio-attack.webp
+hero-lio-valor,lio,hero,valor,,normal,5,True,True,,AV06,strips/hero-lio-valor.webp
+hero-lio-mend,lio,hero,mend,,normal,5,True,True,,AV06,strips/hero-lio-mend.webp
+hero-lio-finale,lio,hero,finale,,normal,5,True,True,,AV05 AV06,strips/hero-lio-finale.webp
+hero-lio-dread,lio,hero,dread,,normal,5,True,True,,AV06,strips/hero-lio-dread.webp
+hero-lio-note,lio,hero,note,,normal,5,True,True,,AV05 AV06,strips/hero-lio-note.webp
+hero-lio-solo,lio,hero,solo,,normal,5,True,True,,AV06,strips/hero-lio-solo.webp
+hero-garran-attack,garran,hero,attack,,normal,0 1 2 3 4 5 6 8,True,True,,,strips/hero-garran-attack.webp
+hero-garran-brace,garran,hero,brace,,normal,0 22 23 24 25 26 27 29,True,True,,AV08,strips/hero-garran-brace.webp
+hero-garran-pierce,garran,hero,pierce,,normal,0 1 2 3 4 5 6 8,True,True,,,strips/hero-garran-pierce.webp
+hero-garran-spearwall,garran,hero,spearwall,,normal,0 22 23 24 25 26 27 29,True,True,,AV08,strips/hero-garran-spearwall.webp
+hero-garran-halt,garran,hero,halt,,normal,0 1 2 3 4 5 6 8,True,True,,,strips/hero-garran-halt.webp
+hero-garran-hold,garran,hero,hold,,normal,0 23 24 25 26 27 29,True,True,,,strips/hero-garran-hold.webp
+hero-garran-warcry,garran,hero,warcry,,normal,0 10 11 12 13 14 16 9,True,True,,,strips/hero-garran-warcry.webp
+hero-metta-attack,metta,hero,attack,,normal,6,True,True,,AV06,strips/hero-metta-attack.webp
+hero-metta-saintstrike,metta,hero,saintstrike,,normal,6,True,True,,AV05 AV06,strips/hero-metta-saintstrike.webp
+hero-metta-communion,metta,hero,communion,,normal,6,True,True,,AV05 AV06,strips/hero-metta-communion.webp
+hero-metta-saintarc,metta,hero,saintarc,,normal,6,True,True,,AV05 AV06,strips/hero-metta-saintarc.webp
+hero-metta-vowstrike,metta,hero,vowstrike,,normal,6,True,True,,AV05 AV06,strips/hero-metta-vowstrike.webp
+hero-metta-sharewound,metta,hero,sharewound,,normal,6,True,True,,AV05 AV06,strips/hero-metta-sharewound.webp
+hero-metta-lastlight,metta,hero,lastlight,,normal,6,True,True,,AV05 AV06,strips/hero-metta-lastlight.webp
+hero-thiran-attack,thiran,hero,attack,,normal,7,True,True,,AV06,strips/hero-thiran-attack.webp
+hero-thiran-saintstrike,thiran,hero,saintstrike,,normal,7,True,True,,AV05 AV06,strips/hero-thiran-saintstrike.webp
+hero-thiran-communion,thiran,hero,communion,,normal,7,True,True,,AV05 AV06,strips/hero-thiran-communion.webp
+hero-thiran-saintarc,thiran,hero,saintarc,,normal,7,True,True,,AV05 AV06,strips/hero-thiran-saintarc.webp
+hero-thiran-vowstrike,thiran,hero,vowstrike,,normal,7,True,True,,AV05 AV06,strips/hero-thiran-vowstrike.webp
+hero-thiran-sharewound,thiran,hero,sharewound,,normal,7,True,True,,AV05 AV06,strips/hero-thiran-sharewound.webp
+hero-thiran-lastlight,thiran,hero,lastlight,,normal,7,True,True,,AV05 AV06,strips/hero-thiran-lastlight.webp
+hero-lalin-attack,lalin,hero,attack,,normal,8,True,True,,AV06,strips/hero-lalin-attack.webp
+hero-lalin-cadence,lalin,hero,cadence,,normal,8,True,True,,AV06,strips/hero-lalin-cadence.webp
+hero-lalin-duet,lalin,hero,duet,,normal,8,True,True,,AV06,strips/hero-lalin-duet.webp
+hero-lalin-rounddance,lalin,hero,rounddance,,normal,8,True,True,,AV06,strips/hero-lalin-rounddance.webp
+hero-lalin-deepbeat,lalin,hero,deepbeat,,normal,8,True,True,,AV06,strips/hero-lalin-deepbeat.webp
+hero-lalin-echofoot,lalin,hero,echofoot,,normal,8,True,True,,AV05 AV06,strips/hero-lalin-echofoot.webp
+hero-lalin-closingstep,lalin,hero,closingstep,,normal,8,True,True,,AV06,strips/hero-lalin-closingstep.webp
+hero-wila-attack,wila,hero,attack,,normal,9,True,True,,AV06,strips/hero-wila-attack.webp
+hero-wila-cadence,wila,hero,cadence,,normal,9,True,True,,AV06,strips/hero-wila-cadence.webp
+hero-wila-duet,wila,hero,duet,,normal,9,True,True,,AV06,strips/hero-wila-duet.webp
+hero-wila-rounddance,wila,hero,rounddance,,normal,9,True,True,,AV06,strips/hero-wila-rounddance.webp
+hero-wila-deepbeat,wila,hero,deepbeat,,normal,9,True,True,,AV06,strips/hero-wila-deepbeat.webp
+hero-wila-echofoot,wila,hero,echofoot,,normal,9,True,True,,AV05 AV06,strips/hero-wila-echofoot.webp
+hero-wila-closingstep,wila,hero,closingstep,,normal,9,True,True,,AV06,strips/hero-wila-closingstep.webp
+foe-foe_hunter-0,foe_hunter,foe,Raking Slash,,normal,0 1 2 3 4 5 6 8,True,True,,,strips/foe-foe_hunter-0.webp
+foe-foe_hunter-1,foe_hunter,foe,Shadow Knife,,normal,0 10 11 12 13 14 16 9,True,True,,AV05,strips/foe-foe_hunter-1.webp
+foe-foe_vargoth_guard-2,foe_vargoth_guard,foe,Rift Bolt,,normal,0 10 11 12 13 14 16,True,True,,AV05,strips/foe-foe_vargoth_guard-2.webp
+foe-foe_vargoth_guard-3,foe_vargoth_guard,foe,Crushing Blow,,normal,0 1 2 3 4 5 6 8,True,True,,,strips/foe-foe_vargoth_guard-3.webp
+foe-foe_sprite-4,foe_sprite,foe,Seed Spark,,normal,0 2 3 4 5 6 8,True,True,,AV05,strips/foe-foe_sprite-4.webp
+foe-foe_tusker-5,foe_tusker,foe,Tusk Charge,,normal,0 2 3 4 5 6 8,True,True,,,strips/foe-foe_tusker-5.webp
+foe-foe_thorn_beetle-6,foe_thorn_beetle,foe,Thorn Bite,,normal,0 2 3 4 5 6 8,True,True,,,strips/foe-foe_thorn_beetle-6.webp
+foe-foe_mycon-7,foe_mycon,foe,Spore Hex,,normal,0 10 11 12 13 14 16,True,True,,AV05,strips/foe-foe_mycon-7.webp
+foe-foe_matriarch-8,foe_matriarch,foe,Thorn Bloom,,normal,6,True,True,,AV05 AV06 AV07,strips/foe-foe_matriarch-8.webp
+foe-foe_matriarch-9,foe_matriarch,foe,Briar Lash,,normal,6,True,True,,AV06 AV07,strips/foe-foe_matriarch-9.webp
+foe-foe_stalker-10,foe_stalker,foe,Thorn Pounce,,normal,0 1 2 3 4 5 6 8,True,True,,,strips/foe-foe_stalker-10.webp
+foe-raider-11,raider,foe,Raking Slash,,normal,4,True,True,,AV06,strips/foe-raider-11.webp
+foe-raider-12,raider,foe,Shadow Knife,,normal,4,True,True,,AV05 AV06,strips/foe-raider-12.webp
+foe-brute-13,brute,foe,Rift Bolt,,normal,5,True,True,,AV05 AV06,strips/foe-brute-13.webp
+foe-brute-14,brute,foe,Crushing Blow,,normal,5,True,True,,AV06,strips/foe-brute-14.webp
+foe-foe_riftweaver-15,foe_riftweaver,foe,Rune Lash,,normal,5,True,True,,AV05 AV06,strips/foe-foe_riftweaver-15.webp
+foe-foe_riftweaver-16,foe_riftweaver,foe,Ribbon Snare,,normal,5,True,True,,AV06,strips/foe-foe_riftweaver-16.webp
+foe-foe_rift_channeler-17,foe_rift_channeler,foe,Rift Bolt,,normal,6,True,True,,AV05 AV06,strips/foe-foe_rift_channeler-17.webp
+foe-foe_golem-18,foe_golem,foe,Crystal Fist,,normal,4,True,True,,AV06,strips/foe-foe_golem-18.webp
+foe-foe_juggernaut-19,foe_juggernaut,foe,Horn Charge,,normal,7,True,True,,AV06 AV07,strips/foe-foe_juggernaut-19.webp
+foe-foe_juggernaut-20,foe_juggernaut,foe,Shard Burst,,normal,7,True,True,,AV05 AV06 AV07,strips/foe-foe_juggernaut-20.webp
+foe-foe_rift_wisp-21,foe_rift_wisp,foe,Star Flame,,normal,7,True,True,,AV05 AV06,strips/foe-foe_rift_wisp-21.webp
+foe-foe_shard_crawler-22,foe_shard_crawler,foe,Crystal Stab,,normal,8,True,True,,AV06,strips/foe-foe_shard_crawler-22.webp
+foe-foe_sentinel-23,foe_sentinel,foe,Crushing Blow,,normal,8,True,True,,AV06 AV07,strips/foe-foe_sentinel-23.webp
+foe-foe_sentinel-24,foe_sentinel,foe,Rift Bolt,,normal,8,True,True,,AV05 AV06 AV07,strips/foe-foe_sentinel-24.webp
+foe-foe_sentinel-25,foe_sentinel,foe,Crushing Blow,,normal,8,True,True,,AV06 AV07,strips/foe-foe_sentinel-25.webp
+foe-foe_sentinel-26,foe_sentinel,foe,Raking Slash,,normal,8,True,True,,AV06 AV07,strips/foe-foe_sentinel-26.webp
+foe-foe_sentinel-27,foe_sentinel,foe,Rift Gathering,,normal,8,True,True,,AV06 AV07,strips/foe-foe_sentinel-27.webp
+foe-foe_sentinel-28,foe_sentinel,foe,Rift Cataclysm,,normal,8,True,True,,AV06 AV07,strips/foe-foe_sentinel-28.webp
+foe-foe_sentinel-29,foe_sentinel,foe,Rift Wave,,normal,8,True,True,,AV05 AV06 AV07,strips/foe-foe_sentinel-29.webp
+foe-foe_sentinel-30,foe_sentinel,foe,Crushing Blow,,normal,8,True,True,,AV06 AV07,strips/foe-foe_sentinel-30.webp
+foe-foe_spore_puff-31,foe_spore_puff,foe,Spore Dust,,normal,5,True,True,,AV05 AV06,strips/foe-foe_spore_puff-31.webp
+foe-foe_tusker-32,foe_tusker,foe,Stampede,,normal,0 10 11 12 13 14 16,True,True,,,strips/foe-foe_tusker-32.webp
+foe-foe_matriarch-33,foe_matriarch,foe,Thorn Storm,,normal,6,True,True,,AV05 AV06 AV07,strips/foe-foe_matriarch-33.webp
+foe-foe_matriarch-34,foe_matriarch,foe,Gather Thorns,,normal,6,True,True,,AV06 AV07,strips/foe-foe_matriarch-34.webp
+foe-foe_matriarch-35,foe_matriarch,foe,Thorn Tempest,,normal,6,True,True,,AV05 AV06 AV07,strips/foe-foe_matriarch-35.webp
+foe-foe_matriarch-36,foe_matriarch,foe,Briar Lash,,normal,6,True,True,,AV06 AV07,strips/foe-foe_matriarch-36.webp
+foe-foe_riftweaver-37,foe_riftweaver,foe,Rift Needle,,normal,5,True,True,,AV05 AV06,strips/foe-foe_riftweaver-37.webp
+foe-foe_golem-38,foe_golem,foe,Stone Fist,,normal,4,True,True,,AV06,strips/foe-foe_golem-38.webp
+foe-foe_golem-39,foe_golem,foe,Veil Quake,,normal,4,True,True,,AV06,strips/foe-foe_golem-39.webp
+foe-foe_vargoth_guard-40,foe_vargoth_guard,foe,Shield Smash,,normal,0 24 25 26 27 28 29 31,True,True,,,strips/foe-foe_vargoth_guard-40.webp
+foe-foe_vargoth_guard-41,foe_vargoth_guard,foe,Mace Swing,,normal,0 2 3 4 5 6 8,True,True,,,strips/foe-foe_vargoth_guard-41.webp
+foe-foe_captain-42,foe_captain,foe,Crushing Blow,,normal,10,True,True,,AV06 AV07,strips/foe-foe_captain-42.webp
+foe-foe_captain-43,foe_captain,foe,War Cry,,normal,10,True,True,,AV05 AV06 AV07,strips/foe-foe_captain-43.webp
+foe-foe_dew_slime-44,foe_dew_slime,foe,Jelly Bounce,,normal,0 2 3 4 5 6 8,True,True,,,strips/foe-foe_dew_slime-44.webp
+foe-foe_ember_slime-45,foe_ember_slime,foe,Ember Spark,,normal,0 10 11 12 13 14 16 9,True,True,,AV05,strips/foe-foe_ember_slime-45.webp
+foe-foe_ruin_bat-46,foe_ruin_bat,foe,Nip,,normal,2 24 3 4 5 6 8,True,True,,,strips/foe-foe_ruin_bat-46.webp
+foe-foe_rift_channeler-47,foe_rift_channeler,foe,Rift Beam,,normal,6,True,True,,AV05 AV06,strips/foe-foe_rift_channeler-47.webp
+react-guardian-hit,guardian,hero-reaction,,hit,normal,0 17 18,True,True,True,,strips/react-guardian-hit.webp
+react-guardian-block,guardian,hero-reaction,,block,normal,0 30 31,True,True,True,,strips/react-guardian-block.webp
+react-guardian-dodge,guardian,hero-reaction,,dodge,normal,0,True,True,True,,strips/react-guardian-dodge.webp
+react-guardian-down,guardian,hero-reaction,,down,normal,0 19 20 21,True,True,True,,strips/react-guardian-down.webp
+react-tracer-hit,tracer,hero-reaction,,hit,normal,0 17 18,True,True,True,,strips/react-tracer-hit.webp
+react-tracer-block,tracer,hero-reaction,,block,normal,0,True,True,True,,strips/react-tracer-block.webp
+react-tracer-dodge,tracer,hero-reaction,,dodge,normal,0,True,True,True,,strips/react-tracer-dodge.webp
+react-tracer-down,tracer,hero-reaction,,down,normal,0 19 20 21,True,True,True,,strips/react-tracer-down.webp
+react-weaver-hit,weaver,hero-reaction,,hit,normal,0 17 18,True,True,True,,strips/react-weaver-hit.webp
+react-weaver-block,weaver,hero-reaction,,block,normal,0,True,True,True,,strips/react-weaver-block.webp
+react-weaver-dodge,weaver,hero-reaction,,dodge,normal,0,True,True,True,,strips/react-weaver-dodge.webp
+react-weaver-down,weaver,hero-reaction,,down,normal,0 19 20 21,True,True,True,,strips/react-weaver-down.webp
+react-healer-hit,healer,hero-reaction,,hit,normal,0 17 18,True,True,True,,strips/react-healer-hit.webp
+react-healer-block,healer,hero-reaction,,block,normal,0 38 39,True,True,True,,strips/react-healer-block.webp
+react-healer-dodge,healer,hero-reaction,,dodge,normal,0,True,True,True,,strips/react-healer-dodge.webp
+react-healer-down,healer,hero-reaction,,down,normal,0 19 20 21,True,True,True,,strips/react-healer-down.webp
+react-mira-hit,mira,hero-reaction,,hit,normal,0 17 18,True,True,True,,strips/react-mira-hit.webp
+react-mira-block,mira,hero-reaction,,block,normal,0 30 31,True,True,True,,strips/react-mira-block.webp
+react-mira-dodge,mira,hero-reaction,,dodge,normal,0,True,True,True,,strips/react-mira-dodge.webp
+react-mira-down,mira,hero-reaction,,down,normal,0 19 20 21,True,True,True,,strips/react-mira-down.webp
+react-toma-hit,toma,hero-reaction,,hit,normal,0 17 18,True,True,True,,strips/react-toma-hit.webp
+react-toma-block,toma,hero-reaction,,block,normal,0 22 23,True,True,True,,strips/react-toma-block.webp
+react-toma-dodge,toma,hero-reaction,,dodge,normal,0,True,True,True,,strips/react-toma-dodge.webp
+react-toma-down,toma,hero-reaction,,down,normal,0 19 20 21,True,True,True,,strips/react-toma-down.webp
+react-sefa-hit,sefa,hero-reaction,,hit,normal,3,True,True,True,AV06,strips/react-sefa-hit.webp
+react-sefa-block,sefa,hero-reaction,,block,normal,3,True,True,True,AV06,strips/react-sefa-block.webp
+react-sefa-dodge,sefa,hero-reaction,,dodge,normal,3,True,True,True,AV06,strips/react-sefa-dodge.webp
+react-sefa-down,sefa,hero-reaction,,down,normal,3,True,True,True,AV06,strips/react-sefa-down.webp
+react-brann-hit,brann,hero-reaction,,hit,normal,0 17 18,True,True,True,,strips/react-brann-hit.webp
+react-brann-block,brann,hero-reaction,,block,normal,0 38 39,True,True,True,,strips/react-brann-block.webp
+react-brann-dodge,brann,hero-reaction,,dodge,normal,0,True,True,True,,strips/react-brann-dodge.webp
+react-brann-down,brann,hero-reaction,,down,normal,0 19 20 21,True,True,True,,strips/react-brann-down.webp
+react-lio-hit,lio,hero-reaction,,hit,normal,5,True,True,True,AV06,strips/react-lio-hit.webp
+react-lio-block,lio,hero-reaction,,block,normal,5,True,True,True,AV06,strips/react-lio-block.webp
+react-lio-dodge,lio,hero-reaction,,dodge,normal,5,True,True,True,AV06,strips/react-lio-dodge.webp
+react-lio-down,lio,hero-reaction,,down,normal,5,True,True,True,AV06,strips/react-lio-down.webp
+react-garran-hit,garran,hero-reaction,,hit,normal,0 17 18,True,True,True,,strips/react-garran-hit.webp
+react-garran-block,garran,hero-reaction,,block,normal,0 30 31,True,True,True,,strips/react-garran-block.webp
+react-garran-dodge,garran,hero-reaction,,dodge,normal,0,True,True,True,,strips/react-garran-dodge.webp
+react-garran-down,garran,hero-reaction,,down,normal,0 19 20 21,True,True,True,,strips/react-garran-down.webp
+react-metta-hit,metta,hero-reaction,,hit,normal,6,True,True,True,AV06,strips/react-metta-hit.webp
+react-metta-block,metta,hero-reaction,,block,normal,6,True,True,True,AV06,strips/react-metta-block.webp
+react-metta-dodge,metta,hero-reaction,,dodge,normal,6,True,True,True,AV06,strips/react-metta-dodge.webp
+react-metta-down,metta,hero-reaction,,down,normal,6,True,True,True,AV06,strips/react-metta-down.webp
+react-thiran-hit,thiran,hero-reaction,,hit,normal,7,True,True,True,AV06,strips/react-thiran-hit.webp
+react-thiran-block,thiran,hero-reaction,,block,normal,7,True,True,True,AV06,strips/react-thiran-block.webp
+react-thiran-dodge,thiran,hero-reaction,,dodge,normal,7,True,True,True,AV06,strips/react-thiran-dodge.webp
+react-thiran-down,thiran,hero-reaction,,down,normal,7,True,True,True,AV06,strips/react-thiran-down.webp
+react-lalin-hit,lalin,hero-reaction,,hit,normal,8,True,True,True,AV06,strips/react-lalin-hit.webp
+react-lalin-block,lalin,hero-reaction,,block,normal,8,True,True,True,AV06,strips/react-lalin-block.webp
+react-lalin-dodge,lalin,hero-reaction,,dodge,normal,8,True,True,True,AV06,strips/react-lalin-dodge.webp
+react-lalin-down,lalin,hero-reaction,,down,normal,8,True,True,True,AV06,strips/react-lalin-down.webp
+react-wila-hit,wila,hero-reaction,,hit,normal,9,True,True,True,AV06,strips/react-wila-hit.webp
+react-wila-block,wila,hero-reaction,,block,normal,9,True,True,True,AV06,strips/react-wila-block.webp
+react-wila-dodge,wila,hero-reaction,,dodge,normal,9,True,True,True,AV06,strips/react-wila-dodge.webp
+react-wila-down,wila,hero-reaction,,down,normal,9,True,True,True,AV06,strips/react-wila-down.webp
+react-foe_hunter-hit,foe_hunter,foe-reaction,,hit,normal,0 1 17 18,True,True,True,,strips/react-foe_hunter-hit.webp
+react-foe_hunter-down,foe_hunter,foe-reaction,,down,normal,0 19 20 21,True,True,True,,strips/react-foe_hunter-down.webp
+react-foe_vargoth_guard-hit,foe_vargoth_guard,foe-reaction,,hit,normal,0 1 17 18,True,True,True,,strips/react-foe_vargoth_guard-hit.webp
+react-foe_vargoth_guard-down,foe_vargoth_guard,foe-reaction,,down,normal,0 19 20 21,True,True,True,,strips/react-foe_vargoth_guard-down.webp
+react-foe_sprite-hit,foe_sprite,foe-reaction,,hit,normal,0 1 17 18,True,True,True,,strips/react-foe_sprite-hit.webp
+react-foe_sprite-down,foe_sprite,foe-reaction,,down,normal,0 19 20 21,True,True,True,,strips/react-foe_sprite-down.webp
+react-foe_tusker-hit,foe_tusker,foe-reaction,,hit,normal,0 1 17 18,True,True,True,,strips/react-foe_tusker-hit.webp
+react-foe_tusker-down,foe_tusker,foe-reaction,,down,normal,0 19 20 21,True,True,True,,strips/react-foe_tusker-down.webp
+react-foe_thorn_beetle-hit,foe_thorn_beetle,foe-reaction,,hit,normal,0 1 17 18,True,True,True,,strips/react-foe_thorn_beetle-hit.webp
+react-foe_thorn_beetle-down,foe_thorn_beetle,foe-reaction,,down,normal,0 19 20 21,True,True,True,,strips/react-foe_thorn_beetle-down.webp
+react-foe_mycon-hit,foe_mycon,foe-reaction,,hit,normal,0 17 18 9,True,True,True,,strips/react-foe_mycon-hit.webp
+react-foe_mycon-down,foe_mycon,foe-reaction,,down,normal,0 19 20 21,True,True,True,,strips/react-foe_mycon-down.webp
+react-foe_matriarch-hit,foe_matriarch,foe-reaction,,hit,normal,6,True,True,True,AV06,strips/react-foe_matriarch-hit.webp
+react-foe_matriarch-down,foe_matriarch,foe-reaction,,down,normal,6,True,True,True,AV06,strips/react-foe_matriarch-down.webp
+react-foe_stalker-hit,foe_stalker,foe-reaction,,hit,normal,0 1 17 18,True,True,True,,strips/react-foe_stalker-hit.webp
+react-foe_stalker-down,foe_stalker,foe-reaction,,down,normal,0 19 20 21,True,True,True,,strips/react-foe_stalker-down.webp
+react-raider-hit,raider,foe-reaction,,hit,normal,4,True,True,True,AV06,strips/react-raider-hit.webp
+react-raider-down,raider,foe-reaction,,down,normal,4,True,True,True,AV06,strips/react-raider-down.webp
+react-brute-hit,brute,foe-reaction,,hit,normal,5,True,True,True,AV06,strips/react-brute-hit.webp
+react-brute-down,brute,foe-reaction,,down,normal,5,True,True,True,AV06,strips/react-brute-down.webp
+react-foe_riftweaver-hit,foe_riftweaver,foe-reaction,,hit,normal,5,True,True,True,AV06,strips/react-foe_riftweaver-hit.webp
+react-foe_riftweaver-down,foe_riftweaver,foe-reaction,,down,normal,5,True,True,True,AV06,strips/react-foe_riftweaver-down.webp
+react-foe_rift_channeler-hit,foe_rift_channeler,foe-reaction,,hit,normal,6,True,True,True,AV06,strips/react-foe_rift_channeler-hit.webp
+react-foe_rift_channeler-down,foe_rift_channeler,foe-reaction,,down,normal,6,True,True,True,AV06,strips/react-foe_rift_channeler-down.webp
+react-foe_golem-hit,foe_golem,foe-reaction,,hit,normal,4,True,True,True,AV06,strips/react-foe_golem-hit.webp
+react-foe_golem-down,foe_golem,foe-reaction,,down,normal,4,True,True,True,AV06,strips/react-foe_golem-down.webp
+react-foe_juggernaut-hit,foe_juggernaut,foe-reaction,,hit,normal,7,True,True,True,AV06,strips/react-foe_juggernaut-hit.webp
+react-foe_juggernaut-down,foe_juggernaut,foe-reaction,,down,normal,7,True,True,True,AV06,strips/react-foe_juggernaut-down.webp
+react-foe_rift_wisp-hit,foe_rift_wisp,foe-reaction,,hit,normal,7,True,True,True,AV06,strips/react-foe_rift_wisp-hit.webp
+react-foe_rift_wisp-down,foe_rift_wisp,foe-reaction,,down,normal,7,True,True,True,AV06,strips/react-foe_rift_wisp-down.webp
+react-foe_shard_crawler-hit,foe_shard_crawler,foe-reaction,,hit,normal,8,True,True,True,AV06,strips/react-foe_shard_crawler-hit.webp
+react-foe_shard_crawler-down,foe_shard_crawler,foe-reaction,,down,normal,8,True,True,True,AV06,strips/react-foe_shard_crawler-down.webp
+react-foe_sentinel-hit,foe_sentinel,foe-reaction,,hit,normal,8,True,True,True,AV06,strips/react-foe_sentinel-hit.webp
+react-foe_sentinel-down,foe_sentinel,foe-reaction,,down,normal,8,True,True,True,AV06,strips/react-foe_sentinel-down.webp
+react-foe_spore_puff-hit,foe_spore_puff,foe-reaction,,hit,normal,5,True,True,True,AV06,strips/react-foe_spore_puff-hit.webp
+react-foe_spore_puff-down,foe_spore_puff,foe-reaction,,down,normal,5,True,True,True,AV06,strips/react-foe_spore_puff-down.webp
+react-foe_captain-hit,foe_captain,foe-reaction,,hit,normal,10,True,True,True,AV06,strips/react-foe_captain-hit.webp
+react-foe_captain-down,foe_captain,foe-reaction,,down,normal,10,True,True,True,AV06,strips/react-foe_captain-down.webp
+react-foe_dew_slime-hit,foe_dew_slime,foe-reaction,,hit,normal,0 1 17 18,True,True,True,,strips/react-foe_dew_slime-hit.webp
+react-foe_dew_slime-down,foe_dew_slime,foe-reaction,,down,normal,0 19 20 21,True,True,True,,strips/react-foe_dew_slime-down.webp
+react-foe_ember_slime-hit,foe_ember_slime,foe-reaction,,hit,normal,0 17 18 9,True,True,True,,strips/react-foe_ember_slime-hit.webp
+react-foe_ember_slime-down,foe_ember_slime,foe-reaction,,down,normal,0 19 20 21,True,True,True,,strips/react-foe_ember_slime-down.webp
+react-foe_ruin_bat-hit,foe_ruin_bat,foe-reaction,,hit,normal,0 1 17 18 22 23,True,True,True,,strips/react-foe_ruin_bat-hit.webp
+react-foe_ruin_bat-down,foe_ruin_bat,foe-reaction,,down,normal,19 20 21 22 25,True,True,True,,strips/react-foe_ruin_bat-down.webp
+phase-rift-warden-0,foe_sentinel,phase,,,normal,8,True,True,,AV06 AV07,strips/phase-rift-warden-0.webp
+phase-rift-warden-1,foe_sentinel,phase,,,normal,8,True,True,,AV06 AV07,strips/phase-rift-warden-1.webp
+phase-elite-briar-lord-0,foe_matriarch,phase,,,normal,6,True,True,,AV06 AV07,strips/phase-elite-briar-lord-0.webp
+phase-vanguard-captain-0,foe_captain,phase,,,normal,10,True,True,,AV06 AV07,strips/phase-vanguard-captain-0.webp
+counter-guardian-guard,guardian,counter,guard,,normal,0 30 5,True,True,,,strips/counter-guardian-guard.webp
+counter-tracer-parry,tracer,counter,parry,,normal,0 17 18,True,True,,AV02,strips/counter-tracer-parry.webp
+counter-garran-brace,garran,counter,brace,,normal,0 17 18,True,True,,AV02,strips/counter-garran-brace.webp
+counter-garran-warcry,garran,counter,warcry,,normal,0 17 18,True,True,,AV02,strips/counter-garran-warcry.webp
+hero-guardian-attack--fast,guardian,hero,attack,,fast,0 1 2 3 4 5 6 8,True,True,,,strips/hero-guardian-attack--fast.webp
+hero-guardian-attack--quiet,guardian,hero,attack,,quiet,0,True,True,,,strips/hero-guardian-attack--quiet.webp
+hero-guardian-attack--osreduce,guardian,hero,attack,,osreduce,0,True,True,,,strips/hero-guardian-attack--osreduce.webp
+hero-tracer-attack--fast,tracer,hero,attack,,fast,0 1 3 4 5 6 8,True,True,,,strips/hero-tracer-attack--fast.webp
+hero-tracer-attack--quiet,tracer,hero,attack,,quiet,0,True,True,,,strips/hero-tracer-attack--quiet.webp
+hero-tracer-attack--osreduce,tracer,hero,attack,,osreduce,0,True,True,,,strips/hero-tracer-attack--osreduce.webp
+hero-weaver-attack--fast,weaver,hero,attack,,fast,0 2 3 4 5 6 8,True,True,,,strips/hero-weaver-attack--fast.webp
+hero-weaver-attack--quiet,weaver,hero,attack,,quiet,0,True,True,,,strips/hero-weaver-attack--quiet.webp
+hero-weaver-attack--osreduce,weaver,hero,attack,,osreduce,0,True,True,,,strips/hero-weaver-attack--osreduce.webp
+hero-healer-attack--fast,healer,hero,attack,,fast,0 1 2 3 4 5 6 8,True,True,,,strips/hero-healer-attack--fast.webp
+hero-healer-attack--quiet,healer,hero,attack,,quiet,0,True,True,,,strips/hero-healer-attack--quiet.webp
+hero-healer-attack--osreduce,healer,hero,attack,,osreduce,0,True,True,,,strips/hero-healer-attack--osreduce.webp
+hero-mira-attack--fast,mira,hero,attack,,fast,0 2 3 4 5 6 8,True,True,,AV03,strips/hero-mira-attack--fast.webp
+hero-mira-attack--quiet,mira,hero,attack,,quiet,0,True,True,,AV03,strips/hero-mira-attack--quiet.webp
+hero-mira-attack--osreduce,mira,hero,attack,,osreduce,0,True,True,,AV03,strips/hero-mira-attack--osreduce.webp
+hero-toma-attack--fast,toma,hero,attack,,fast,0 2 3 4 5 6 8,True,True,,AV03,strips/hero-toma-attack--fast.webp
+hero-toma-attack--quiet,toma,hero,attack,,quiet,0,True,True,,AV03,strips/hero-toma-attack--quiet.webp
+hero-toma-attack--osreduce,toma,hero,attack,,osreduce,0,True,True,,AV03,strips/hero-toma-attack--osreduce.webp
+hero-sefa-attack--fast,sefa,hero,attack,,fast,3,True,True,,AV06,strips/hero-sefa-attack--fast.webp
+hero-sefa-attack--quiet,sefa,hero,attack,,quiet,3,True,True,,AV06,strips/hero-sefa-attack--quiet.webp
+hero-sefa-attack--osreduce,sefa,hero,attack,,osreduce,3,True,True,,AV06,strips/hero-sefa-attack--osreduce.webp
+hero-brann-attack--fast,brann,hero,attack,,fast,0 1 2 3 4 5 6 8,True,True,,,strips/hero-brann-attack--fast.webp
+hero-brann-attack--quiet,brann,hero,attack,,quiet,0,True,True,,,strips/hero-brann-attack--quiet.webp
+hero-brann-attack--osreduce,brann,hero,attack,,osreduce,0,True,True,,,strips/hero-brann-attack--osreduce.webp
+hero-lio-attack--fast,lio,hero,attack,,fast,5,True,True,,AV06,strips/hero-lio-attack--fast.webp
+hero-lio-attack--quiet,lio,hero,attack,,quiet,5,True,True,,AV06,strips/hero-lio-attack--quiet.webp
+hero-lio-attack--osreduce,lio,hero,attack,,osreduce,5,True,True,,AV06,strips/hero-lio-attack--osreduce.webp
+hero-garran-attack--fast,garran,hero,attack,,fast,0 1 2 3 4 5 6 8,True,True,,,strips/hero-garran-attack--fast.webp
+hero-garran-attack--quiet,garran,hero,attack,,quiet,0,True,True,,,strips/hero-garran-attack--quiet.webp
+hero-garran-attack--osreduce,garran,hero,attack,,osreduce,0,True,True,,,strips/hero-garran-attack--osreduce.webp
+hero-metta-attack--fast,metta,hero,attack,,fast,6,True,True,,AV06,strips/hero-metta-attack--fast.webp
+hero-metta-attack--quiet,metta,hero,attack,,quiet,6,True,True,,AV06,strips/hero-metta-attack--quiet.webp
+hero-metta-attack--osreduce,metta,hero,attack,,osreduce,6,True,True,,AV06,strips/hero-metta-attack--osreduce.webp
+hero-thiran-attack--fast,thiran,hero,attack,,fast,7,True,True,,AV06,strips/hero-thiran-attack--fast.webp
+hero-thiran-attack--quiet,thiran,hero,attack,,quiet,7,True,True,,AV06,strips/hero-thiran-attack--quiet.webp
+hero-thiran-attack--osreduce,thiran,hero,attack,,osreduce,7,True,True,,AV06,strips/hero-thiran-attack--osreduce.webp
+hero-lalin-attack--fast,lalin,hero,attack,,fast,8,True,True,,AV06,strips/hero-lalin-attack--fast.webp
+hero-lalin-attack--quiet,lalin,hero,attack,,quiet,8,True,True,,AV06,strips/hero-lalin-attack--quiet.webp
+hero-lalin-attack--osreduce,lalin,hero,attack,,osreduce,8,True,True,,AV06,strips/hero-lalin-attack--osreduce.webp
+hero-wila-attack--fast,wila,hero,attack,,fast,9,True,True,,AV06,strips/hero-wila-attack--fast.webp
+hero-wila-attack--quiet,wila,hero,attack,,quiet,9,True,True,,AV06,strips/hero-wila-attack--quiet.webp
+hero-wila-attack--osreduce,wila,hero,attack,,osreduce,9,True,True,,AV06,strips/hero-wila-attack--osreduce.webp
+foe-foe_hunter-1--fast,foe_hunter,foe,Shadow Knife,,fast,0 10 11 12 13 14 16 9,True,True,,AV05,strips/foe-foe_hunter-1--fast.webp
+foe-foe_hunter-1--quiet,foe_hunter,foe,Shadow Knife,,quiet,0,True,True,,AV05,strips/foe-foe_hunter-1--quiet.webp
+foe-foe_hunter-1--osreduce,foe_hunter,foe,Shadow Knife,,osreduce,0,True,True,,,strips/foe-foe_hunter-1--osreduce.webp
+foe-foe_vargoth_guard-41--fast,foe_vargoth_guard,foe,Mace Swing,,fast,0 1 2 3 4 5 6 8,True,True,,,strips/foe-foe_vargoth_guard-41--fast.webp
+foe-foe_vargoth_guard-41--quiet,foe_vargoth_guard,foe,Mace Swing,,quiet,0,True,True,,,strips/foe-foe_vargoth_guard-41--quiet.webp
+foe-foe_vargoth_guard-41--osreduce,foe_vargoth_guard,foe,Mace Swing,,osreduce,0,True,True,,,strips/foe-foe_vargoth_guard-41--osreduce.webp
+foe-foe_sprite-4--fast,foe_sprite,foe,Seed Spark,,fast,0 1 2 3 4 5 6 8,True,True,,AV05,strips/foe-foe_sprite-4--fast.webp
+foe-foe_sprite-4--quiet,foe_sprite,foe,Seed Spark,,quiet,0,True,True,,AV05,strips/foe-foe_sprite-4--quiet.webp
+foe-foe_sprite-4--osreduce,foe_sprite,foe,Seed Spark,,osreduce,0,True,True,,,strips/foe-foe_sprite-4--osreduce.webp
+foe-foe_tusker-32--fast,foe_tusker,foe,Stampede,,fast,0 10 11 12 13 14 16 9,True,True,,,strips/foe-foe_tusker-32--fast.webp
+foe-foe_tusker-32--quiet,foe_tusker,foe,Stampede,,quiet,0,True,True,,,strips/foe-foe_tusker-32--quiet.webp
+foe-foe_tusker-32--osreduce,foe_tusker,foe,Stampede,,osreduce,0,True,True,,,strips/foe-foe_tusker-32--osreduce.webp
+foe-foe_thorn_beetle-6--fast,foe_thorn_beetle,foe,Thorn Bite,,fast,0 1 2 3 4 5 6 8,True,True,,,strips/foe-foe_thorn_beetle-6--fast.webp
+foe-foe_thorn_beetle-6--quiet,foe_thorn_beetle,foe,Thorn Bite,,quiet,0,True,True,,,strips/foe-foe_thorn_beetle-6--quiet.webp
+foe-foe_thorn_beetle-6--osreduce,foe_thorn_beetle,foe,Thorn Bite,,osreduce,0,True,True,,,strips/foe-foe_thorn_beetle-6--osreduce.webp
+foe-foe_mycon-7--fast,foe_mycon,foe,Spore Hex,,fast,0 10 11 12 13 14 16 9,True,True,,AV05,strips/foe-foe_mycon-7--fast.webp
+foe-foe_mycon-7--quiet,foe_mycon,foe,Spore Hex,,quiet,0,True,True,,AV05,strips/foe-foe_mycon-7--quiet.webp
+foe-foe_mycon-7--osreduce,foe_mycon,foe,Spore Hex,,osreduce,0,True,True,,,strips/foe-foe_mycon-7--osreduce.webp
+foe-foe_matriarch-36--fast,foe_matriarch,foe,Briar Lash,,fast,6,True,True,,AV06 AV07,strips/foe-foe_matriarch-36--fast.webp
+foe-foe_matriarch-36--quiet,foe_matriarch,foe,Briar Lash,,quiet,6,True,True,,AV06 AV07,strips/foe-foe_matriarch-36--quiet.webp
+foe-foe_matriarch-36--osreduce,foe_matriarch,foe,Briar Lash,,osreduce,6,True,True,,AV06 AV07,strips/foe-foe_matriarch-36--osreduce.webp
+foe-foe_stalker-10--fast,foe_stalker,foe,Thorn Pounce,,fast,0 1 2 3 4 5 6 8,True,True,,,strips/foe-foe_stalker-10--fast.webp
+foe-foe_stalker-10--quiet,foe_stalker,foe,Thorn Pounce,,quiet,0,True,True,,,strips/foe-foe_stalker-10--quiet.webp
+foe-foe_stalker-10--osreduce,foe_stalker,foe,Thorn Pounce,,osreduce,0,True,True,,,strips/foe-foe_stalker-10--osreduce.webp
+foe-raider-12--fast,raider,foe,Shadow Knife,,fast,4,True,True,,AV05 AV06,strips/foe-raider-12--fast.webp
+foe-raider-12--quiet,raider,foe,Shadow Knife,,quiet,4,True,True,,AV05 AV06,strips/foe-raider-12--quiet.webp
+foe-raider-12--osreduce,raider,foe,Shadow Knife,,osreduce,4,True,True,,AV06,strips/foe-raider-12--osreduce.webp
+foe-brute-14--fast,brute,foe,Crushing Blow,,fast,5,True,True,,AV06,strips/foe-brute-14--fast.webp
+foe-brute-14--quiet,brute,foe,Crushing Blow,,quiet,5,True,True,,AV06,strips/foe-brute-14--quiet.webp
+foe-brute-14--osreduce,brute,foe,Crushing Blow,,osreduce,5,True,True,,AV06,strips/foe-brute-14--osreduce.webp
+foe-foe_riftweaver-37--fast,foe_riftweaver,foe,Rift Needle,,fast,5,True,True,,AV05 AV06,strips/foe-foe_riftweaver-37--fast.webp
+foe-foe_riftweaver-37--quiet,foe_riftweaver,foe,Rift Needle,,quiet,5,True,True,,AV05 AV06,strips/foe-foe_riftweaver-37--quiet.webp
+foe-foe_riftweaver-37--osreduce,foe_riftweaver,foe,Rift Needle,,osreduce,5,True,True,,AV06,strips/foe-foe_riftweaver-37--osreduce.webp
+foe-foe_rift_channeler-47--fast,foe_rift_channeler,foe,Rift Beam,,fast,6,True,True,,AV05 AV06,strips/foe-foe_rift_channeler-47--fast.webp
+foe-foe_rift_channeler-47--quiet,foe_rift_channeler,foe,Rift Beam,,quiet,6,True,True,,AV05 AV06,strips/foe-foe_rift_channeler-47--quiet.webp
+foe-foe_rift_channeler-47--osreduce,foe_rift_channeler,foe,Rift Beam,,osreduce,6,True,True,,AV06,strips/foe-foe_rift_channeler-47--osreduce.webp
+foe-foe_golem-39--fast,foe_golem,foe,Veil Quake,,fast,4,True,True,,AV06,strips/foe-foe_golem-39--fast.webp
+foe-foe_golem-39--quiet,foe_golem,foe,Veil Quake,,quiet,4,True,True,,AV06,strips/foe-foe_golem-39--quiet.webp
+foe-foe_golem-39--osreduce,foe_golem,foe,Veil Quake,,osreduce,4,True,True,,AV06,strips/foe-foe_golem-39--osreduce.webp
+foe-foe_juggernaut-20--fast,foe_juggernaut,foe,Shard Burst,,fast,7,True,True,,AV05 AV06 AV07,strips/foe-foe_juggernaut-20--fast.webp
+foe-foe_juggernaut-20--quiet,foe_juggernaut,foe,Shard Burst,,quiet,7,True,True,,AV05 AV06 AV07,strips/foe-foe_juggernaut-20--quiet.webp
+foe-foe_juggernaut-20--osreduce,foe_juggernaut,foe,Shard Burst,,osreduce,7,True,True,,AV06 AV07,strips/foe-foe_juggernaut-20--osreduce.webp
+foe-foe_rift_wisp-21--fast,foe_rift_wisp,foe,Star Flame,,fast,7,True,True,,AV05 AV06,strips/foe-foe_rift_wisp-21--fast.webp
+foe-foe_rift_wisp-21--quiet,foe_rift_wisp,foe,Star Flame,,quiet,7,True,True,,AV05 AV06,strips/foe-foe_rift_wisp-21--quiet.webp
+foe-foe_rift_wisp-21--osreduce,foe_rift_wisp,foe,Star Flame,,osreduce,7,True,True,,AV06,strips/foe-foe_rift_wisp-21--osreduce.webp
+foe-foe_shard_crawler-22--fast,foe_shard_crawler,foe,Crystal Stab,,fast,8,True,True,,AV06,strips/foe-foe_shard_crawler-22--fast.webp
+foe-foe_shard_crawler-22--quiet,foe_shard_crawler,foe,Crystal Stab,,quiet,8,True,True,,AV06,strips/foe-foe_shard_crawler-22--quiet.webp
+foe-foe_shard_crawler-22--osreduce,foe_shard_crawler,foe,Crystal Stab,,osreduce,8,True,True,,AV06,strips/foe-foe_shard_crawler-22--osreduce.webp
+foe-foe_sentinel-30--fast,foe_sentinel,foe,Crushing Blow,,fast,8,True,True,,AV06 AV07,strips/foe-foe_sentinel-30--fast.webp
+foe-foe_sentinel-30--quiet,foe_sentinel,foe,Crushing Blow,,quiet,8,True,True,,AV06 AV07,strips/foe-foe_sentinel-30--quiet.webp
+foe-foe_sentinel-30--osreduce,foe_sentinel,foe,Crushing Blow,,osreduce,8,True,True,,AV06 AV07,strips/foe-foe_sentinel-30--osreduce.webp
+foe-foe_spore_puff-31--fast,foe_spore_puff,foe,Spore Dust,,fast,5,True,True,,AV05 AV06,strips/foe-foe_spore_puff-31--fast.webp
+foe-foe_spore_puff-31--quiet,foe_spore_puff,foe,Spore Dust,,quiet,5,True,True,,AV05 AV06,strips/foe-foe_spore_puff-31--quiet.webp
+foe-foe_spore_puff-31--osreduce,foe_spore_puff,foe,Spore Dust,,osreduce,5,True,True,,AV06,strips/foe-foe_spore_puff-31--osreduce.webp
+foe-foe_captain-43--fast,foe_captain,foe,War Cry,,fast,10,True,True,,AV05 AV06 AV07,strips/foe-foe_captain-43--fast.webp
+foe-foe_captain-43--quiet,foe_captain,foe,War Cry,,quiet,10,True,True,,AV05 AV06 AV07,strips/foe-foe_captain-43--quiet.webp
+foe-foe_captain-43--osreduce,foe_captain,foe,War Cry,,osreduce,10,True,True,,AV06 AV07,strips/foe-foe_captain-43--osreduce.webp
+foe-foe_dew_slime-44--fast,foe_dew_slime,foe,Jelly Bounce,,fast,0 1 2 3 4 5 6 8,True,True,,,strips/foe-foe_dew_slime-44--fast.webp
+foe-foe_dew_slime-44--quiet,foe_dew_slime,foe,Jelly Bounce,,quiet,0,True,True,,,strips/foe-foe_dew_slime-44--quiet.webp
+foe-foe_dew_slime-44--osreduce,foe_dew_slime,foe,Jelly Bounce,,osreduce,0,True,True,,,strips/foe-foe_dew_slime-44--osreduce.webp
+foe-foe_ember_slime-45--fast,foe_ember_slime,foe,Ember Spark,,fast,0 10 11 12 13 14 16 9,True,True,,AV05,strips/foe-foe_ember_slime-45--fast.webp
+foe-foe_ember_slime-45--quiet,foe_ember_slime,foe,Ember Spark,,quiet,0,True,True,,AV05,strips/foe-foe_ember_slime-45--quiet.webp
+foe-foe_ember_slime-45--osreduce,foe_ember_slime,foe,Ember Spark,,osreduce,0,True,True,,,strips/foe-foe_ember_slime-45--osreduce.webp
+foe-foe_ruin_bat-46--fast,foe_ruin_bat,foe,Nip,,fast,1 2 22 23 3 4 5 6 8,True,True,,,strips/foe-foe_ruin_bat-46--fast.webp
+foe-foe_ruin_bat-46--quiet,foe_ruin_bat,foe,Nip,,quiet,0,True,True,,,strips/foe-foe_ruin_bat-46--quiet.webp
+foe-foe_ruin_bat-46--osreduce,foe_ruin_bat,foe,Nip,,osreduce,0,True,True,,,strips/foe-foe_ruin_bat-46--osreduce.webp

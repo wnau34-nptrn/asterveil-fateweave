@@ -1,0 +1,20 @@
+{
+  "uniqueCases": 362,
+  "counts": {
+    "hero": 98,
+    "foe": 48,
+    "hero-reaction": 56,
+    "foe-reaction": 44,
+    "phase": 4,
+    "counter": 4,
+    "fast": 36,
+    "quiet": 36,
+    "osreduce": 36
+  },
+  "invalid": [],
+  "sourceScreenshots": 3186,
+  "allResultsEqual": true,
+  "allSavesStable": true,
+  "reactionEventsVerified": 100,
+  "pageErrors": 0
+}

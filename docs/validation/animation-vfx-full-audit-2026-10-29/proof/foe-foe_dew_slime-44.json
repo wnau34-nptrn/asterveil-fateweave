@@ -1,0 +1,441 @@
+{
+  "id": "foe-foe_dew_slime-44",
+  "status": "captured",
+  "clickOffset": 0.24561214447021484,
+  "sourceFrames": 41,
+  "decodedFrames": 42,
+  "maxTimestampError": 0.000005070495605385972,
+  "maxFrameGap": 0.2174968719482422,
+  "sameState": true,
+  "saveStable": true,
+  "info": {
+    "case": {
+      "id": "foe-foe_dew_slime-44",
+      "kind": "foe",
+      "identity": "foe_dew_slime",
+      "index": 44,
+      "intent": "Jelly Bounce",
+      "source": "slime-pair"
+    },
+    "command": {
+      "beat": 1,
+      "heroId": "guardian",
+      "action": "attack",
+      "targetId": "f1"
+    },
+    "timings": [
+      {
+        "actorId": "guardian",
+        "side": "hero",
+        "action": "attack",
+        "intent": "Jelly Bounce",
+        "at": 0,
+        "contact": 210,
+        "end": 600,
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "guardian",
+            "targetId": "f1",
+            "amount": 10,
+            "text": "Hero attacks."
+          }
+        ]
+      },
+      {
+        "actorId": "f1",
+        "side": "enemy",
+        "intent": "Jelly Bounce",
+        "at": 600,
+        "contact": 280,
+        "end": 800,
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "f1",
+            "targetId": "guardian",
+            "amount": 6,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      },
+      {
+        "actorId": "b1",
+        "side": "enemy",
+        "intent": "Shadow Knife",
+        "at": 1400,
+        "contact": 280,
+        "end": 800,
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "b1",
+            "targetId": "healer",
+            "amount": 8,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      }
+    ],
+    "focus": "f1",
+    "expectedSheets": [
+      "unit-pilot-aegis",
+      "unit-pilot-lyra",
+      "unit-pilot-eira",
+      "unit-pilot-seren",
+      "unit-pilot-dew"
+    ],
+    "dataSummary": {
+      "heroes": [
+        {
+          "id": "guardian",
+          "speed": 200,
+          "name": "Aegis",
+          "role": "Knight",
+          "lane": "front",
+          "maxHp": 76,
+          "attack": 10,
+          "actions": [
+            "attack",
+            "guard",
+            "bash",
+            "rally",
+            "bulwark",
+            "challenge",
+            "rouse"
+          ],
+          "unlocks": {
+            "skill": "rally",
+            "passive": "stand"
+          },
+          "color": 6408703
+        },
+        {
+          "id": "tracer",
+          "speed": 49,
+          "name": "Lyra",
+          "role": "Duelist",
+          "lane": "front",
+          "maxHp": 56,
+          "attack": 16,
+          "actions": [
+            "attack",
+            "mark",
+            "execute",
+            "finisher",
+            "lunge",
+            "parry",
+            "sweep"
+          ],
+          "unlocks": {
+            "skill": "finisher",
+            "passive": "keeneye"
+          },
+          "color": 16764018,
+          "empoweredByStatuses": true
+        },
+        {
+          "id": "weaver",
+          "speed": 48,
+          "name": "Eira",
+          "role": "Mage",
+          "lane": "back",
+          "maxHp": 48,
+          "attack": 11,
+          "actions": [
+            "attack",
+            "bolt",
+            "ward",
+            "sigil",
+            "storm",
+            "aegis",
+            "dispel"
+          ],
+          "unlocks": {
+            "skill": "sigil",
+            "passive": "echo"
+          },
+          "color": 11901695
+        },
+        {
+          "id": "healer",
+          "speed": 47,
+          "name": "Seren",
+          "role": "Priest",
+          "lane": "back",
+          "maxHp": 46,
+          "attack": 8,
+          "actions": [
+            "attack",
+            "heal",
+            "prayer",
+            "sanctuary",
+            "revive",
+            "halo",
+            "bless"
+          ],
+          "unlocks": {
+            "skill": "sanctuary",
+            "passive": "afterglow"
+          },
+          "color": 9493936
+        }
+      ],
+      "enemies": [
+        {
+          "id": "f1",
+          "row": "front",
+          "name": "Dew Slime",
+          "displayName": "สไลม์น้ำค้าง",
+          "maxHp": 500,
+          "speed": 110,
+          "color": 9427152,
+          "art": "foe_dew_slime",
+          "reserve": false
+        },
+        {
+          "id": "b1",
+          "row": "back",
+          "speed": 100,
+          "name": "Veil Raider",
+          "displayName": "นักจู่โจม",
+          "maxHp": 500,
+          "color": 15630525,
+          "art": "raider"
+        }
+      ],
+      "intents": [
+        {
+          "sourceId": "f1",
+          "targetSlot": 0,
+          "name": "Jelly Bounce",
+          "damage": 6,
+          "kind": "physical"
+        },
+        {
+          "sourceId": "b1",
+          "targetSlot": 3,
+          "name": "Shadow Knife",
+          "damage": 8,
+          "kind": "energy"
+        }
+      ]
+    }
+  },
+  "stamps": [
+    [
+      "00000",
+      1793286008.555388
+    ],
+    [
+      "00001",
+      1793286008.684788
+    ],
+    [
+      "00002",
+      1793286008.755178
+    ],
+    [
+      "00003",
+      1793286008.785656
+    ],
+    [
+      "00004",
+      1793286008.88185
+    ],
+    [
+      "00005",
+      1793286008.94687
+    ],
+    [
+      "00006",
+      1793286008.979069
+    ],
+    [
+      "00007",
+      1793286009.09773
+    ],
+    [
+      "00008",
+      1793286009.163117
+    ],
+    [
+      "00009",
+      1793286009.21236
+    ],
+    [
+      "00010",
+      1793286009.301358
+    ],
+    [
+      "00011",
+      1793286009.361656
+    ],
+    [
+      "00012",
+      1793286009.392343
+    ],
+    [
+      "00013",
+      1793286009.454393
+    ],
+    [
+      "00014",
+      1793286009.505717
+    ],
+    [
+      "00015",
+      1793286009.564565
+    ],
+    [
+      "00016",
+      1793286009.647483
+    ],
+    [
+      "00017",
+      1793286009.677546
+    ],
+    [
+      "00018",
+      1793286009.70647
+    ],
+    [
+      "00019",
+      1793286009.798593
+    ],
+    [
+      "00020",
+      1793286009.858234
+    ],
+    [
+      "00021",
+      1793286009.988773
+    ],
+    [
+      "00022",
+      1793286010.06077
+    ],
+    [
+      "00023",
+      1793286010.091494
+    ],
+    [
+      "00024",
+      1793286010.154276
+    ],
+    [
+      "00025",
+      1793286010.183287
+    ],
+    [
+      "00026",
+      1793286010.213397
+    ],
+    [
+      "00027",
+      1793286010.298898
+    ],
+    [
+      "00028",
+      1793286010.354268
+    ],
+    [
+      "00029",
+      1793286010.384012
+    ],
+    [
+      "00030",
+      1793286010.487586
+    ],
+    [
+      "00031",
+      1793286010.548173
+    ],
+    [
+      "00032",
+      1793286010.583441
+    ],
+    [
+      "00033",
+      1793286010.65
+    ],
+    [
+      "00034",
+      1793286010.68155
+    ],
+    [
+      "00035",
+      1793286010.899047
+    ],
+    [
+      "00036",
+      1793286010.96448
+    ],
+    [
+      "00037",
+      1793286010.998343
+    ],
+    [
+      "00038",
+      1793286011.199143
+    ],
+    [
+      "00039",
+      1793286011.266745
+    ],
+    [
+      "00040",
+      1793286011.309009
+    ]
+  ],
+  "impacts": [
+    {
+      "at": 1793286009082,
+      "actorId": "guardian",
+      "action": "attack",
+      "intent": "Jelly Bounce",
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "guardian",
+          "targetId": "f1",
+          "amount": 10,
+          "text": "Hero attacks."
+        }
+      ]
+    },
+    {
+      "at": 1793286009762,
+      "actorId": "f1",
+      "intent": "Jelly Bounce",
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "f1",
+          "targetId": "guardian",
+          "amount": 6,
+          "absorbed": 0,
+          "text": "Enemy attacks on its own turn."
+        }
+      ]
+    },
+    {
+      "at": 1793286010571,
+      "actorId": "b1",
+      "intent": "Shadow Knife",
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "b1",
+          "targetId": "healer",
+          "amount": 8,
+          "absorbed": 0,
+          "text": "Enemy attacks on its own turn."
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

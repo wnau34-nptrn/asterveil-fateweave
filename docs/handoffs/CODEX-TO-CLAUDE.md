@@ -1,5 +1,19 @@
 # Codex → Claude handoff
 
+## 2026-10-29 — ตรวจ runtime animation/VFX ครบ catalog ปัจจุบัน (ยังมี8กลุ่มงานแก้)
+
+เจ้าของสั่งให้ตรวจตัวอื่นและท่าอื่นต่อ หลังยืนยันว่า auditก่อนหน้ายังไม่ครบ รอบนี้ทำครบscopeปัจจุบันแล้ว: [รายงาน8กลุ่มปัญหา](../validation/animation-vfx-full-audit-2026-10-29/README_TH.md) · [ตารางรายตัว/รายท่า](../validation/animation-vfx-full-audit-2026-10-29/COVERAGE_TH.md) · [Promptให้Claude](../validation/animation-vfx-full-audit-2026-10-29/CLAUDE_HANDOFF_TH.md) · [72คลิป](../validation/animation-vfx-full-audit-2026-10-29/CLIPS_TH.md)
+
+- Source/branch: `feature/fateweave-initial-prototype` @ `157d6855808edbcf055929cd00f1e0b1dbfea91e`; remoteยังเป็นSHAนี้ก่อนบันทึกรอบนี้ ส่งเอกสาร/หลักฐานเข้าสาขาเกมโดยตรง ไม่มีPR/mergeแยก
+- ครบ36identities (14heroes/22foes),73ActionIds,36ชื่อintent/48variants;98hero-action +48foe +56hero reactions +44foe reactions +4phase/summon +4counter +108mode smoke = **362cases** พร้อม3,186screenshotsต้นทางและ362packagedstrips
+- แยกผลตามจริง: 250ชุดหลัก+4counterตรวจภาพbody/contact sheets;108fast/quiet/OSreduceเป็นsmokeไม่ใช่visualapprovalครบทุกสกิลทุกmode;ทุก362stateเท่าexpectedresolver/test-key committedsnapshotคงเดิม/pageerror0 และตรวจactualtype+target+amount/absorbedของ100reactioncasesถูกตัว ไม่ใช่การรับรองrealexpedition-saveทุกreload
+- **AV01/P1:** Aegis anatomy pop ทั้ง7ท่า; **AV02/P2:** Lyra mark/finisher/lunge/parry/sweep ยังframe0 transformและcounterของLyra/Garranไม่มีgestureสวนชัด; **AV03/P1:** Mira/Toma attackยังใช้VFXดาบ; **AV04/P1:** Mira projectileบินขณะbodyยังง้าง (Hinder66/171msมีflight,frame5ค่อยเข้าที่contact263ms) ต้องทวนrelease/nock anchor; **AV05/P2:** generichitflashทำผู้รับขาวทึบ90ms; **AV06/P2:**18body/19ActionIdยังfallback; **AV07/P1:**bossยังขาดsignature/persistentchargecueบนตัว (HUDเตือนเดิมมีอยู่); **AV08/P2:**captionทับหน้า/downจางตั้งแต่เริ่มล้ม
+- มี72คลิปCDPclockจริงจากทุกidentity+ท่าgestureต่าง+phase/counter;2,987source frames+72held tails=3,059decoded frames;maxPTSerrorประมาณ0.00622ms;ทุกคลิปมีpre-pointerframe;maxcapturegap.370sบนSwiftShader จึงห้ามอ้างdeviceFPS/ความลื่น60fps คงtimestampsจริง ไม่มีretime/interpolate ดูlive-validation/proofรายคลิป
+- วิธี: temporaryauditfixtureใช้BattleUI/BattleScene/UnitAnimation/VFX/resolveCommandจริง ปรับparty/loadout/HP/SPD/initialstatusเพื่อเรียกท่า ไม่มีfakeBattleEventหรือproductioncoreแก้;เก็บreproentry/scriptsเป็น.txt/diagnosticsในรายงานและเอาrootentryชั่วคราวออกก่อนcommit การยืนยันAegisจากหน้าแคมเปญจริงมีในรายงานก่อนหน้า ไม่อ้างว่ารอบนี้เดินทุกด่าน
+- Validation:362capture/state/snapshot checks,100actualreactionassertions,72MP4frame/PTS probes;406packagedimagesdecodeผ่าน,ลิงก์Markdownภายในครบ,syntaxcheck3capture scripts,scope/whitespacecheck;manifestSHA256SUMSสำหรับทุกartifact ไม่รันfullnpm/CIเพิ่มเพราะไม่มีproductionruntime/art/rules/save/balance/timingเปลี่ยน
+- Files touched: entryนี้,NEW-CHAT-HANDOFF-TH.mdและ`docs/validation/animation-vfx-full-audit-2026-10-29/`เท่านั้น หลักฐานก่อนแก้ ไม่ใช่ผลแก้หรือownerart/motionapprovalใหม่ ไม่ทำwaveintake/ไม่แก้เกมตามfindingในรอบauditนี้
+- ฝากClaude: ใช้promptในรายงาน แนะนำเริ่มAV01→AV03/04→AV02/05/08ก่อนขยายassetเพิ่ม ใช้PRภาพที่มีตามownerdecisionsจริง รักษาcontact/end/rules/saveและoptional-loadingfallback แล้วส่งbefore/afterและสถานะรายfinding;ยังไม่ได้dispatchClaudeจากเซสชันนี้ ไม่อ้างว่าเริ่มแก้แล้ว
+
 ## 2026-10-29 — P1 ยืนยัน runtime: อัศวินหัวโต/เด้งเมื่อโจมตี (ให้ Claude แก้ก่อนขยาย wave)
 
 เจ้าของชี้อาการ “ตัวอัศวิน จังหวะโจมตีธรรมดา เจอว่าหัวโตกระโดดออกมา” — รอบนี้ตรวจภาพจริงแล้ว ไม่ใช่ source coverage อย่างเดียว อ่าน [รายงานพร้อมหลักฐานและเกณฑ์แก้](../validation/animation-visual-audit-2026-10-29/README_TH.md)

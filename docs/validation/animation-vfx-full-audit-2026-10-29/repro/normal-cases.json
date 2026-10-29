@@ -1,0 +1,1840 @@
+{
+  "cases": [
+    {
+      "id": "hero-guardian-attack",
+      "kind": "hero",
+      "identity": "guardian",
+      "action": "attack"
+    },
+    {
+      "id": "hero-guardian-guard",
+      "kind": "hero",
+      "identity": "guardian",
+      "action": "guard"
+    },
+    {
+      "id": "hero-guardian-bash",
+      "kind": "hero",
+      "identity": "guardian",
+      "action": "bash"
+    },
+    {
+      "id": "hero-guardian-rally",
+      "kind": "hero",
+      "identity": "guardian",
+      "action": "rally"
+    },
+    {
+      "id": "hero-guardian-bulwark",
+      "kind": "hero",
+      "identity": "guardian",
+      "action": "bulwark"
+    },
+    {
+      "id": "hero-guardian-challenge",
+      "kind": "hero",
+      "identity": "guardian",
+      "action": "challenge"
+    },
+    {
+      "id": "hero-guardian-rouse",
+      "kind": "hero",
+      "identity": "guardian",
+      "action": "rouse"
+    },
+    {
+      "id": "hero-tracer-attack",
+      "kind": "hero",
+      "identity": "tracer",
+      "action": "attack"
+    },
+    {
+      "id": "hero-tracer-mark",
+      "kind": "hero",
+      "identity": "tracer",
+      "action": "mark"
+    },
+    {
+      "id": "hero-tracer-execute",
+      "kind": "hero",
+      "identity": "tracer",
+      "action": "execute"
+    },
+    {
+      "id": "hero-tracer-finisher",
+      "kind": "hero",
+      "identity": "tracer",
+      "action": "finisher"
+    },
+    {
+      "id": "hero-tracer-lunge",
+      "kind": "hero",
+      "identity": "tracer",
+      "action": "lunge"
+    },
+    {
+      "id": "hero-tracer-parry",
+      "kind": "hero",
+      "identity": "tracer",
+      "action": "parry"
+    },
+    {
+      "id": "hero-tracer-sweep",
+      "kind": "hero",
+      "identity": "tracer",
+      "action": "sweep"
+    },
+    {
+      "id": "hero-weaver-attack",
+      "kind": "hero",
+      "identity": "weaver",
+      "action": "attack"
+    },
+    {
+      "id": "hero-weaver-bolt",
+      "kind": "hero",
+      "identity": "weaver",
+      "action": "bolt"
+    },
+    {
+      "id": "hero-weaver-ward",
+      "kind": "hero",
+      "identity": "weaver",
+      "action": "ward"
+    },
+    {
+      "id": "hero-weaver-sigil",
+      "kind": "hero",
+      "identity": "weaver",
+      "action": "sigil"
+    },
+    {
+      "id": "hero-weaver-storm",
+      "kind": "hero",
+      "identity": "weaver",
+      "action": "storm"
+    },
+    {
+      "id": "hero-weaver-aegis",
+      "kind": "hero",
+      "identity": "weaver",
+      "action": "aegis"
+    },
+    {
+      "id": "hero-weaver-dispel",
+      "kind": "hero",
+      "identity": "weaver",
+      "action": "dispel"
+    },
+    {
+      "id": "hero-healer-attack",
+      "kind": "hero",
+      "identity": "healer",
+      "action": "attack"
+    },
+    {
+      "id": "hero-healer-heal",
+      "kind": "hero",
+      "identity": "healer",
+      "action": "heal"
+    },
+    {
+      "id": "hero-healer-prayer",
+      "kind": "hero",
+      "identity": "healer",
+      "action": "prayer"
+    },
+    {
+      "id": "hero-healer-sanctuary",
+      "kind": "hero",
+      "identity": "healer",
+      "action": "sanctuary"
+    },
+    {
+      "id": "hero-healer-revive",
+      "kind": "hero",
+      "identity": "healer",
+      "action": "revive"
+    },
+    {
+      "id": "hero-healer-halo",
+      "kind": "hero",
+      "identity": "healer",
+      "action": "halo"
+    },
+    {
+      "id": "hero-healer-bless",
+      "kind": "hero",
+      "identity": "healer",
+      "action": "bless"
+    },
+    {
+      "id": "hero-mira-attack",
+      "kind": "hero",
+      "identity": "mira",
+      "action": "attack"
+    },
+    {
+      "id": "hero-mira-hinder",
+      "kind": "hero",
+      "identity": "mira",
+      "action": "hinder"
+    },
+    {
+      "id": "hero-mira-volley",
+      "kind": "hero",
+      "identity": "mira",
+      "action": "volley"
+    },
+    {
+      "id": "hero-mira-weakshot",
+      "kind": "hero",
+      "identity": "mira",
+      "action": "weakshot"
+    },
+    {
+      "id": "hero-mira-pin",
+      "kind": "hero",
+      "identity": "mira",
+      "action": "pin"
+    },
+    {
+      "id": "hero-mira-disengage",
+      "kind": "hero",
+      "identity": "mira",
+      "action": "disengage"
+    },
+    {
+      "id": "hero-mira-track",
+      "kind": "hero",
+      "identity": "mira",
+      "action": "track"
+    },
+    {
+      "id": "hero-toma-attack",
+      "kind": "hero",
+      "identity": "toma",
+      "action": "attack"
+    },
+    {
+      "id": "hero-toma-acid",
+      "kind": "hero",
+      "identity": "toma",
+      "action": "acid"
+    },
+    {
+      "id": "hero-toma-haste",
+      "kind": "hero",
+      "identity": "toma",
+      "action": "haste"
+    },
+    {
+      "id": "hero-toma-bomb",
+      "kind": "hero",
+      "identity": "toma",
+      "action": "bomb"
+    },
+    {
+      "id": "hero-toma-fury",
+      "kind": "hero",
+      "identity": "toma",
+      "action": "fury"
+    },
+    {
+      "id": "hero-toma-smoke",
+      "kind": "hero",
+      "identity": "toma",
+      "action": "smoke"
+    },
+    {
+      "id": "hero-toma-catalyst",
+      "kind": "hero",
+      "identity": "toma",
+      "action": "catalyst"
+    },
+    {
+      "id": "hero-sefa-attack",
+      "kind": "hero",
+      "identity": "sefa",
+      "action": "attack"
+    },
+    {
+      "id": "hero-sefa-ambush",
+      "kind": "hero",
+      "identity": "sefa",
+      "action": "ambush"
+    },
+    {
+      "id": "hero-sefa-evade",
+      "kind": "hero",
+      "identity": "sefa",
+      "action": "evade"
+    },
+    {
+      "id": "hero-sefa-backstab",
+      "kind": "hero",
+      "identity": "sefa",
+      "action": "backstab"
+    },
+    {
+      "id": "hero-sefa-decoy",
+      "kind": "hero",
+      "identity": "sefa",
+      "action": "decoy"
+    },
+    {
+      "id": "hero-sefa-knives",
+      "kind": "hero",
+      "identity": "sefa",
+      "action": "knives"
+    },
+    {
+      "id": "hero-sefa-disarm",
+      "kind": "hero",
+      "identity": "sefa",
+      "action": "disarm"
+    },
+    {
+      "id": "hero-brann-attack",
+      "kind": "hero",
+      "identity": "brann",
+      "action": "attack"
+    },
+    {
+      "id": "hero-brann-taunt",
+      "kind": "hero",
+      "identity": "brann",
+      "action": "taunt"
+    },
+    {
+      "id": "hero-brann-slam",
+      "kind": "hero",
+      "identity": "brann",
+      "action": "slam"
+    },
+    {
+      "id": "hero-brann-quake",
+      "kind": "hero",
+      "identity": "brann",
+      "action": "quake"
+    },
+    {
+      "id": "hero-brann-stonearmor",
+      "kind": "hero",
+      "identity": "brann",
+      "action": "stonearmor"
+    },
+    {
+      "id": "hero-brann-guardstone",
+      "kind": "hero",
+      "identity": "brann",
+      "action": "guardstone"
+    },
+    {
+      "id": "hero-brann-tremor",
+      "kind": "hero",
+      "identity": "brann",
+      "action": "tremor"
+    },
+    {
+      "id": "hero-lio-attack",
+      "kind": "hero",
+      "identity": "lio",
+      "action": "attack"
+    },
+    {
+      "id": "hero-lio-valor",
+      "kind": "hero",
+      "identity": "lio",
+      "action": "valor"
+    },
+    {
+      "id": "hero-lio-mend",
+      "kind": "hero",
+      "identity": "lio",
+      "action": "mend"
+    },
+    {
+      "id": "hero-lio-finale",
+      "kind": "hero",
+      "identity": "lio",
+      "action": "finale"
+    },
+    {
+      "id": "hero-lio-dread",
+      "kind": "hero",
+      "identity": "lio",
+      "action": "dread"
+    },
+    {
+      "id": "hero-lio-note",
+      "kind": "hero",
+      "identity": "lio",
+      "action": "note"
+    },
+    {
+      "id": "hero-lio-solo",
+      "kind": "hero",
+      "identity": "lio",
+      "action": "solo"
+    },
+    {
+      "id": "hero-garran-attack",
+      "kind": "hero",
+      "identity": "garran",
+      "action": "attack"
+    },
+    {
+      "id": "hero-garran-brace",
+      "kind": "hero",
+      "identity": "garran",
+      "action": "brace"
+    },
+    {
+      "id": "hero-garran-pierce",
+      "kind": "hero",
+      "identity": "garran",
+      "action": "pierce"
+    },
+    {
+      "id": "hero-garran-spearwall",
+      "kind": "hero",
+      "identity": "garran",
+      "action": "spearwall"
+    },
+    {
+      "id": "hero-garran-halt",
+      "kind": "hero",
+      "identity": "garran",
+      "action": "halt"
+    },
+    {
+      "id": "hero-garran-hold",
+      "kind": "hero",
+      "identity": "garran",
+      "action": "hold"
+    },
+    {
+      "id": "hero-garran-warcry",
+      "kind": "hero",
+      "identity": "garran",
+      "action": "warcry"
+    },
+    {
+      "id": "hero-metta-attack",
+      "kind": "hero",
+      "identity": "metta",
+      "action": "attack"
+    },
+    {
+      "id": "hero-metta-saintstrike",
+      "kind": "hero",
+      "identity": "metta",
+      "action": "saintstrike"
+    },
+    {
+      "id": "hero-metta-communion",
+      "kind": "hero",
+      "identity": "metta",
+      "action": "communion"
+    },
+    {
+      "id": "hero-metta-saintarc",
+      "kind": "hero",
+      "identity": "metta",
+      "action": "saintarc"
+    },
+    {
+      "id": "hero-metta-vowstrike",
+      "kind": "hero",
+      "identity": "metta",
+      "action": "vowstrike"
+    },
+    {
+      "id": "hero-metta-sharewound",
+      "kind": "hero",
+      "identity": "metta",
+      "action": "sharewound"
+    },
+    {
+      "id": "hero-metta-lastlight",
+      "kind": "hero",
+      "identity": "metta",
+      "action": "lastlight"
+    },
+    {
+      "id": "hero-thiran-attack",
+      "kind": "hero",
+      "identity": "thiran",
+      "action": "attack"
+    },
+    {
+      "id": "hero-thiran-saintstrike",
+      "kind": "hero",
+      "identity": "thiran",
+      "action": "saintstrike"
+    },
+    {
+      "id": "hero-thiran-communion",
+      "kind": "hero",
+      "identity": "thiran",
+      "action": "communion"
+    },
+    {
+      "id": "hero-thiran-saintarc",
+      "kind": "hero",
+      "identity": "thiran",
+      "action": "saintarc"
+    },
+    {
+      "id": "hero-thiran-vowstrike",
+      "kind": "hero",
+      "identity": "thiran",
+      "action": "vowstrike"
+    },
+    {
+      "id": "hero-thiran-sharewound",
+      "kind": "hero",
+      "identity": "thiran",
+      "action": "sharewound"
+    },
+    {
+      "id": "hero-thiran-lastlight",
+      "kind": "hero",
+      "identity": "thiran",
+      "action": "lastlight"
+    },
+    {
+      "id": "hero-lalin-attack",
+      "kind": "hero",
+      "identity": "lalin",
+      "action": "attack"
+    },
+    {
+      "id": "hero-lalin-cadence",
+      "kind": "hero",
+      "identity": "lalin",
+      "action": "cadence"
+    },
+    {
+      "id": "hero-lalin-duet",
+      "kind": "hero",
+      "identity": "lalin",
+      "action": "duet"
+    },
+    {
+      "id": "hero-lalin-rounddance",
+      "kind": "hero",
+      "identity": "lalin",
+      "action": "rounddance"
+    },
+    {
+      "id": "hero-lalin-deepbeat",
+      "kind": "hero",
+      "identity": "lalin",
+      "action": "deepbeat"
+    },
+    {
+      "id": "hero-lalin-echofoot",
+      "kind": "hero",
+      "identity": "lalin",
+      "action": "echofoot"
+    },
+    {
+      "id": "hero-lalin-closingstep",
+      "kind": "hero",
+      "identity": "lalin",
+      "action": "closingstep"
+    },
+    {
+      "id": "hero-wila-attack",
+      "kind": "hero",
+      "identity": "wila",
+      "action": "attack"
+    },
+    {
+      "id": "hero-wila-cadence",
+      "kind": "hero",
+      "identity": "wila",
+      "action": "cadence"
+    },
+    {
+      "id": "hero-wila-duet",
+      "kind": "hero",
+      "identity": "wila",
+      "action": "duet"
+    },
+    {
+      "id": "hero-wila-rounddance",
+      "kind": "hero",
+      "identity": "wila",
+      "action": "rounddance"
+    },
+    {
+      "id": "hero-wila-deepbeat",
+      "kind": "hero",
+      "identity": "wila",
+      "action": "deepbeat"
+    },
+    {
+      "id": "hero-wila-echofoot",
+      "kind": "hero",
+      "identity": "wila",
+      "action": "echofoot"
+    },
+    {
+      "id": "hero-wila-closingstep",
+      "kind": "hero",
+      "identity": "wila",
+      "action": "closingstep"
+    },
+    {
+      "id": "foe-foe_hunter-0",
+      "kind": "foe",
+      "identity": "foe_hunter",
+      "index": 0,
+      "intent": "Raking Slash",
+      "source": "first-clash"
+    },
+    {
+      "id": "foe-foe_hunter-1",
+      "kind": "foe",
+      "identity": "foe_hunter",
+      "index": 1,
+      "intent": "Shadow Knife",
+      "source": "first-clash"
+    },
+    {
+      "id": "foe-foe_vargoth_guard-2",
+      "kind": "foe",
+      "identity": "foe_vargoth_guard",
+      "index": 2,
+      "intent": "Rift Bolt",
+      "source": "first-clash"
+    },
+    {
+      "id": "foe-foe_vargoth_guard-3",
+      "kind": "foe",
+      "identity": "foe_vargoth_guard",
+      "index": 3,
+      "intent": "Crushing Blow",
+      "source": "first-clash"
+    },
+    {
+      "id": "foe-foe_sprite-4",
+      "kind": "foe",
+      "identity": "foe_sprite",
+      "index": 4,
+      "intent": "Seed Spark",
+      "source": "scout-patrol"
+    },
+    {
+      "id": "foe-foe_tusker-5",
+      "kind": "foe",
+      "identity": "foe_tusker",
+      "index": 5,
+      "intent": "Tusk Charge",
+      "source": "rift-whelp"
+    },
+    {
+      "id": "foe-foe_thorn_beetle-6",
+      "kind": "foe",
+      "identity": "foe_thorn_beetle",
+      "index": 6,
+      "intent": "Thorn Bite",
+      "source": "thicket-ambush"
+    },
+    {
+      "id": "foe-foe_mycon-7",
+      "kind": "foe",
+      "identity": "foe_mycon",
+      "index": 7,
+      "intent": "Spore Hex",
+      "source": "thicket-ambush"
+    },
+    {
+      "id": "foe-foe_matriarch-8",
+      "kind": "foe",
+      "identity": "foe_matriarch",
+      "index": 8,
+      "intent": "Thorn Bloom",
+      "source": "thicket-ambush"
+    },
+    {
+      "id": "foe-foe_matriarch-9",
+      "kind": "foe",
+      "identity": "foe_matriarch",
+      "index": 9,
+      "intent": "Briar Lash",
+      "source": "thicket-ambush"
+    },
+    {
+      "id": "foe-foe_stalker-10",
+      "kind": "foe",
+      "identity": "foe_stalker",
+      "index": 10,
+      "intent": "Thorn Pounce",
+      "source": "shadow-stalker"
+    },
+    {
+      "id": "foe-raider-11",
+      "kind": "foe",
+      "identity": "raider",
+      "index": 11,
+      "intent": "Raking Slash",
+      "source": "veil-siege"
+    },
+    {
+      "id": "foe-raider-12",
+      "kind": "foe",
+      "identity": "raider",
+      "index": 12,
+      "intent": "Shadow Knife",
+      "source": "veil-siege"
+    },
+    {
+      "id": "foe-brute-13",
+      "kind": "foe",
+      "identity": "brute",
+      "index": 13,
+      "intent": "Rift Bolt",
+      "source": "veil-siege"
+    },
+    {
+      "id": "foe-brute-14",
+      "kind": "foe",
+      "identity": "brute",
+      "index": 14,
+      "intent": "Crushing Blow",
+      "source": "veil-siege"
+    },
+    {
+      "id": "foe-foe_riftweaver-15",
+      "kind": "foe",
+      "identity": "foe_riftweaver",
+      "index": 15,
+      "intent": "Rune Lash",
+      "source": "rear-ambush"
+    },
+    {
+      "id": "foe-foe_riftweaver-16",
+      "kind": "foe",
+      "identity": "foe_riftweaver",
+      "index": 16,
+      "intent": "Ribbon Snare",
+      "source": "rear-ambush"
+    },
+    {
+      "id": "foe-foe_rift_channeler-17",
+      "kind": "foe",
+      "identity": "foe_rift_channeler",
+      "index": 17,
+      "intent": "Rift Bolt",
+      "source": "rear-ambush"
+    },
+    {
+      "id": "foe-foe_golem-18",
+      "kind": "foe",
+      "identity": "foe_golem",
+      "index": 18,
+      "intent": "Crystal Fist",
+      "source": "crystal-stampede"
+    },
+    {
+      "id": "foe-foe_juggernaut-19",
+      "kind": "foe",
+      "identity": "foe_juggernaut",
+      "index": 19,
+      "intent": "Horn Charge",
+      "source": "crystal-stampede"
+    },
+    {
+      "id": "foe-foe_juggernaut-20",
+      "kind": "foe",
+      "identity": "foe_juggernaut",
+      "index": 20,
+      "intent": "Shard Burst",
+      "source": "crystal-stampede"
+    },
+    {
+      "id": "foe-foe_rift_wisp-21",
+      "kind": "foe",
+      "identity": "foe_rift_wisp",
+      "index": 21,
+      "intent": "Star Flame",
+      "source": "rift-warden"
+    },
+    {
+      "id": "foe-foe_shard_crawler-22",
+      "kind": "foe",
+      "identity": "foe_shard_crawler",
+      "index": 22,
+      "intent": "Crystal Stab",
+      "source": "rift-warden"
+    },
+    {
+      "id": "foe-foe_sentinel-23",
+      "kind": "foe",
+      "identity": "foe_sentinel",
+      "index": 23,
+      "intent": "Crushing Blow",
+      "source": "rift-warden"
+    },
+    {
+      "id": "foe-foe_sentinel-24",
+      "kind": "foe",
+      "identity": "foe_sentinel",
+      "index": 24,
+      "intent": "Rift Bolt",
+      "source": "rift-warden"
+    },
+    {
+      "id": "foe-foe_sentinel-25",
+      "kind": "foe",
+      "identity": "foe_sentinel",
+      "index": 25,
+      "intent": "Crushing Blow",
+      "source": "rift-warden"
+    },
+    {
+      "id": "foe-foe_sentinel-26",
+      "kind": "foe",
+      "identity": "foe_sentinel",
+      "index": 26,
+      "intent": "Raking Slash",
+      "source": "rift-warden"
+    },
+    {
+      "id": "foe-foe_sentinel-27",
+      "kind": "foe",
+      "identity": "foe_sentinel",
+      "index": 27,
+      "intent": "Rift Gathering",
+      "source": "rift-warden"
+    },
+    {
+      "id": "foe-foe_sentinel-28",
+      "kind": "foe",
+      "identity": "foe_sentinel",
+      "index": 28,
+      "intent": "Rift Cataclysm",
+      "source": "rift-warden"
+    },
+    {
+      "id": "foe-foe_sentinel-29",
+      "kind": "foe",
+      "identity": "foe_sentinel",
+      "index": 29,
+      "intent": "Rift Wave",
+      "source": "rift-warden"
+    },
+    {
+      "id": "foe-foe_sentinel-30",
+      "kind": "foe",
+      "identity": "foe_sentinel",
+      "index": 30,
+      "intent": "Crushing Blow",
+      "source": "rift-warden"
+    },
+    {
+      "id": "foe-foe_spore_puff-31",
+      "kind": "foe",
+      "identity": "foe_spore_puff",
+      "index": 31,
+      "intent": "Spore Dust",
+      "source": "elite-tusk-chief"
+    },
+    {
+      "id": "foe-foe_tusker-32",
+      "kind": "foe",
+      "identity": "foe_tusker",
+      "index": 32,
+      "intent": "Stampede",
+      "source": "elite-tusk-chief"
+    },
+    {
+      "id": "foe-foe_matriarch-33",
+      "kind": "foe",
+      "identity": "foe_matriarch",
+      "index": 33,
+      "intent": "Thorn Storm",
+      "source": "elite-briar-lord"
+    },
+    {
+      "id": "foe-foe_matriarch-34",
+      "kind": "foe",
+      "identity": "foe_matriarch",
+      "index": 34,
+      "intent": "Gather Thorns",
+      "source": "elite-briar-lord"
+    },
+    {
+      "id": "foe-foe_matriarch-35",
+      "kind": "foe",
+      "identity": "foe_matriarch",
+      "index": 35,
+      "intent": "Thorn Tempest",
+      "source": "elite-briar-lord"
+    },
+    {
+      "id": "foe-foe_matriarch-36",
+      "kind": "foe",
+      "identity": "foe_matriarch",
+      "index": 36,
+      "intent": "Briar Lash",
+      "source": "elite-briar-lord"
+    },
+    {
+      "id": "foe-foe_riftweaver-37",
+      "kind": "foe",
+      "identity": "foe_riftweaver",
+      "index": 37,
+      "intent": "Rift Needle",
+      "source": "mini-veil-golem"
+    },
+    {
+      "id": "foe-foe_golem-38",
+      "kind": "foe",
+      "identity": "foe_golem",
+      "index": 38,
+      "intent": "Stone Fist",
+      "source": "mini-veil-golem"
+    },
+    {
+      "id": "foe-foe_golem-39",
+      "kind": "foe",
+      "identity": "foe_golem",
+      "index": 39,
+      "intent": "Veil Quake",
+      "source": "mini-veil-golem"
+    },
+    {
+      "id": "foe-foe_vargoth_guard-40",
+      "kind": "foe",
+      "identity": "foe_vargoth_guard",
+      "index": 40,
+      "intent": "Shield Smash",
+      "source": "vanguard-captain"
+    },
+    {
+      "id": "foe-foe_vargoth_guard-41",
+      "kind": "foe",
+      "identity": "foe_vargoth_guard",
+      "index": 41,
+      "intent": "Mace Swing",
+      "source": "vanguard-captain"
+    },
+    {
+      "id": "foe-foe_captain-42",
+      "kind": "foe",
+      "identity": "foe_captain",
+      "index": 42,
+      "intent": "Crushing Blow",
+      "source": "vanguard-captain"
+    },
+    {
+      "id": "foe-foe_captain-43",
+      "kind": "foe",
+      "identity": "foe_captain",
+      "index": 43,
+      "intent": "War Cry",
+      "source": "vanguard-captain"
+    },
+    {
+      "id": "foe-foe_dew_slime-44",
+      "kind": "foe",
+      "identity": "foe_dew_slime",
+      "index": 44,
+      "intent": "Jelly Bounce",
+      "source": "slime-pair"
+    },
+    {
+      "id": "foe-foe_ember_slime-45",
+      "kind": "foe",
+      "identity": "foe_ember_slime",
+      "index": 45,
+      "intent": "Ember Spark",
+      "source": "slime-pair"
+    },
+    {
+      "id": "foe-foe_ruin_bat-46",
+      "kind": "foe",
+      "identity": "foe_ruin_bat",
+      "index": 46,
+      "intent": "Nip",
+      "source": "bat-swarm"
+    },
+    {
+      "id": "foe-foe_rift_channeler-47",
+      "kind": "foe",
+      "identity": "foe_rift_channeler",
+      "index": 47,
+      "intent": "Rift Beam",
+      "source": "channeler-wisps"
+    },
+    {
+      "id": "react-guardian-hit",
+      "kind": "hero-reaction",
+      "identity": "guardian",
+      "reaction": "hit"
+    },
+    {
+      "id": "react-guardian-block",
+      "kind": "hero-reaction",
+      "identity": "guardian",
+      "reaction": "block"
+    },
+    {
+      "id": "react-guardian-dodge",
+      "kind": "hero-reaction",
+      "identity": "guardian",
+      "reaction": "dodge"
+    },
+    {
+      "id": "react-guardian-down",
+      "kind": "hero-reaction",
+      "identity": "guardian",
+      "reaction": "down"
+    },
+    {
+      "id": "react-tracer-hit",
+      "kind": "hero-reaction",
+      "identity": "tracer",
+      "reaction": "hit"
+    },
+    {
+      "id": "react-tracer-block",
+      "kind": "hero-reaction",
+      "identity": "tracer",
+      "reaction": "block"
+    },
+    {
+      "id": "react-tracer-dodge",
+      "kind": "hero-reaction",
+      "identity": "tracer",
+      "reaction": "dodge"
+    },
+    {
+      "id": "react-tracer-down",
+      "kind": "hero-reaction",
+      "identity": "tracer",
+      "reaction": "down"
+    },
+    {
+      "id": "react-weaver-hit",
+      "kind": "hero-reaction",
+      "identity": "weaver",
+      "reaction": "hit"
+    },
+    {
+      "id": "react-weaver-block",
+      "kind": "hero-reaction",
+      "identity": "weaver",
+      "reaction": "block"
+    },
+    {
+      "id": "react-weaver-dodge",
+      "kind": "hero-reaction",
+      "identity": "weaver",
+      "reaction": "dodge"
+    },
+    {
+      "id": "react-weaver-down",
+      "kind": "hero-reaction",
+      "identity": "weaver",
+      "reaction": "down"
+    },
+    {
+      "id": "react-healer-hit",
+      "kind": "hero-reaction",
+      "identity": "healer",
+      "reaction": "hit"
+    },
+    {
+      "id": "react-healer-block",
+      "kind": "hero-reaction",
+      "identity": "healer",
+      "reaction": "block"
+    },
+    {
+      "id": "react-healer-dodge",
+      "kind": "hero-reaction",
+      "identity": "healer",
+      "reaction": "dodge"
+    },
+    {
+      "id": "react-healer-down",
+      "kind": "hero-reaction",
+      "identity": "healer",
+      "reaction": "down"
+    },
+    {
+      "id": "react-mira-hit",
+      "kind": "hero-reaction",
+      "identity": "mira",
+      "reaction": "hit"
+    },
+    {
+      "id": "react-mira-block",
+      "kind": "hero-reaction",
+      "identity": "mira",
+      "reaction": "block"
+    },
+    {
+      "id": "react-mira-dodge",
+      "kind": "hero-reaction",
+      "identity": "mira",
+      "reaction": "dodge"
+    },
+    {
+      "id": "react-mira-down",
+      "kind": "hero-reaction",
+      "identity": "mira",
+      "reaction": "down"
+    },
+    {
+      "id": "react-toma-hit",
+      "kind": "hero-reaction",
+      "identity": "toma",
+      "reaction": "hit"
+    },
+    {
+      "id": "react-toma-block",
+      "kind": "hero-reaction",
+      "identity": "toma",
+      "reaction": "block"
+    },
+    {
+      "id": "react-toma-dodge",
+      "kind": "hero-reaction",
+      "identity": "toma",
+      "reaction": "dodge"
+    },
+    {
+      "id": "react-toma-down",
+      "kind": "hero-reaction",
+      "identity": "toma",
+      "reaction": "down"
+    },
+    {
+      "id": "react-sefa-hit",
+      "kind": "hero-reaction",
+      "identity": "sefa",
+      "reaction": "hit"
+    },
+    {
+      "id": "react-sefa-block",
+      "kind": "hero-reaction",
+      "identity": "sefa",
+      "reaction": "block"
+    },
+    {
+      "id": "react-sefa-dodge",
+      "kind": "hero-reaction",
+      "identity": "sefa",
+      "reaction": "dodge"
+    },
+    {
+      "id": "react-sefa-down",
+      "kind": "hero-reaction",
+      "identity": "sefa",
+      "reaction": "down"
+    },
+    {
+      "id": "react-brann-hit",
+      "kind": "hero-reaction",
+      "identity": "brann",
+      "reaction": "hit"
+    },
+    {
+      "id": "react-brann-block",
+      "kind": "hero-reaction",
+      "identity": "brann",
+      "reaction": "block"
+    },
+    {
+      "id": "react-brann-dodge",
+      "kind": "hero-reaction",
+      "identity": "brann",
+      "reaction": "dodge"
+    },
+    {
+      "id": "react-brann-down",
+      "kind": "hero-reaction",
+      "identity": "brann",
+      "reaction": "down"
+    },
+    {
+      "id": "react-lio-hit",
+      "kind": "hero-reaction",
+      "identity": "lio",
+      "reaction": "hit"
+    },
+    {
+      "id": "react-lio-block",
+      "kind": "hero-reaction",
+      "identity": "lio",
+      "reaction": "block"
+    },
+    {
+      "id": "react-lio-dodge",
+      "kind": "hero-reaction",
+      "identity": "lio",
+      "reaction": "dodge"
+    },
+    {
+      "id": "react-lio-down",
+      "kind": "hero-reaction",
+      "identity": "lio",
+      "reaction": "down"
+    },
+    {
+      "id": "react-garran-hit",
+      "kind": "hero-reaction",
+      "identity": "garran",
+      "reaction": "hit"
+    },
+    {
+      "id": "react-garran-block",
+      "kind": "hero-reaction",
+      "identity": "garran",
+      "reaction": "block"
+    },
+    {
+      "id": "react-garran-dodge",
+      "kind": "hero-reaction",
+      "identity": "garran",
+      "reaction": "dodge"
+    },
+    {
+      "id": "react-garran-down",
+      "kind": "hero-reaction",
+      "identity": "garran",
+      "reaction": "down"
+    },
+    {
+      "id": "react-metta-hit",
+      "kind": "hero-reaction",
+      "identity": "metta",
+      "reaction": "hit"
+    },
+    {
+      "id": "react-metta-block",
+      "kind": "hero-reaction",
+      "identity": "metta",
+      "reaction": "block"
+    },
+    {
+      "id": "react-metta-dodge",
+      "kind": "hero-reaction",
+      "identity": "metta",
+      "reaction": "dodge"
+    },
+    {
+      "id": "react-metta-down",
+      "kind": "hero-reaction",
+      "identity": "metta",
+      "reaction": "down"
+    },
+    {
+      "id": "react-thiran-hit",
+      "kind": "hero-reaction",
+      "identity": "thiran",
+      "reaction": "hit"
+    },
+    {
+      "id": "react-thiran-block",
+      "kind": "hero-reaction",
+      "identity": "thiran",
+      "reaction": "block"
+    },
+    {
+      "id": "react-thiran-dodge",
+      "kind": "hero-reaction",
+      "identity": "thiran",
+      "reaction": "dodge"
+    },
+    {
+      "id": "react-thiran-down",
+      "kind": "hero-reaction",
+      "identity": "thiran",
+      "reaction": "down"
+    },
+    {
+      "id": "react-lalin-hit",
+      "kind": "hero-reaction",
+      "identity": "lalin",
+      "reaction": "hit"
+    },
+    {
+      "id": "react-lalin-block",
+      "kind": "hero-reaction",
+      "identity": "lalin",
+      "reaction": "block"
+    },
+    {
+      "id": "react-lalin-dodge",
+      "kind": "hero-reaction",
+      "identity": "lalin",
+      "reaction": "dodge"
+    },
+    {
+      "id": "react-lalin-down",
+      "kind": "hero-reaction",
+      "identity": "lalin",
+      "reaction": "down"
+    },
+    {
+      "id": "react-wila-hit",
+      "kind": "hero-reaction",
+      "identity": "wila",
+      "reaction": "hit"
+    },
+    {
+      "id": "react-wila-block",
+      "kind": "hero-reaction",
+      "identity": "wila",
+      "reaction": "block"
+    },
+    {
+      "id": "react-wila-dodge",
+      "kind": "hero-reaction",
+      "identity": "wila",
+      "reaction": "dodge"
+    },
+    {
+      "id": "react-wila-down",
+      "kind": "hero-reaction",
+      "identity": "wila",
+      "reaction": "down"
+    },
+    {
+      "id": "react-foe_hunter-hit",
+      "kind": "foe-reaction",
+      "identity": "foe_hunter",
+      "reaction": "hit"
+    },
+    {
+      "id": "react-foe_hunter-down",
+      "kind": "foe-reaction",
+      "identity": "foe_hunter",
+      "reaction": "down"
+    },
+    {
+      "id": "react-foe_vargoth_guard-hit",
+      "kind": "foe-reaction",
+      "identity": "foe_vargoth_guard",
+      "reaction": "hit"
+    },
+    {
+      "id": "react-foe_vargoth_guard-down",
+      "kind": "foe-reaction",
+      "identity": "foe_vargoth_guard",
+      "reaction": "down"
+    },
+    {
+      "id": "react-foe_sprite-hit",
+      "kind": "foe-reaction",
+      "identity": "foe_sprite",
+      "reaction": "hit"
+    },
+    {
+      "id": "react-foe_sprite-down",
+      "kind": "foe-reaction",
+      "identity": "foe_sprite",
+      "reaction": "down"
+    },
+    {
+      "id": "react-foe_tusker-hit",
+      "kind": "foe-reaction",
+      "identity": "foe_tusker",
+      "reaction": "hit"
+    },
+    {
+      "id": "react-foe_tusker-down",
+      "kind": "foe-reaction",
+      "identity": "foe_tusker",
+      "reaction": "down"
+    },
+    {
+      "id": "react-foe_thorn_beetle-hit",
+      "kind": "foe-reaction",
+      "identity": "foe_thorn_beetle",
+      "reaction": "hit"
+    },
+    {
+      "id": "react-foe_thorn_beetle-down",
+      "kind": "foe-reaction",
+      "identity": "foe_thorn_beetle",
+      "reaction": "down"
+    },
+    {
+      "id": "react-foe_mycon-hit",
+      "kind": "foe-reaction",
+      "identity": "foe_mycon",
+      "reaction": "hit"
+    },
+    {
+      "id": "react-foe_mycon-down",
+      "kind": "foe-reaction",
+      "identity": "foe_mycon",
+      "reaction": "down"
+    },
+    {
+      "id": "react-foe_matriarch-hit",
+      "kind": "foe-reaction",
+      "identity": "foe_matriarch",
+      "reaction": "hit"
+    },
+    {
+      "id": "react-foe_matriarch-down",
+      "kind": "foe-reaction",
+      "identity": "foe_matriarch",
+      "reaction": "down"
+    },
+    {
+      "id": "react-foe_stalker-hit",
+      "kind": "foe-reaction",
+      "identity": "foe_stalker",
+      "reaction": "hit"
+    },
+    {
+      "id": "react-foe_stalker-down",
+      "kind": "foe-reaction",
+      "identity": "foe_stalker",
+      "reaction": "down"
+    },
+    {
+      "id": "react-raider-hit",
+      "kind": "foe-reaction",
+      "identity": "raider",
+      "reaction": "hit"
+    },
+    {
+      "id": "react-raider-down",
+      "kind": "foe-reaction",
+      "identity": "raider",
+      "reaction": "down"
+    },
+    {
+      "id": "react-brute-hit",
+      "kind": "foe-reaction",
+      "identity": "brute",
+      "reaction": "hit"
+    },
+    {
+      "id": "react-brute-down",
+      "kind": "foe-reaction",
+      "identity": "brute",
+      "reaction": "down"
+    },
+    {
+      "id": "react-foe_riftweaver-hit",
+      "kind": "foe-reaction",
+      "identity": "foe_riftweaver",
+      "reaction": "hit"
+    },
+    {
+      "id": "react-foe_riftweaver-down",
+      "kind": "foe-reaction",
+      "identity": "foe_riftweaver",
+      "reaction": "down"
+    },
+    {
+      "id": "react-foe_rift_channeler-hit",
+      "kind": "foe-reaction",
+      "identity": "foe_rift_channeler",
+      "reaction": "hit"
+    },
+    {
+      "id": "react-foe_rift_channeler-down",
+      "kind": "foe-reaction",
+      "identity": "foe_rift_channeler",
+      "reaction": "down"
+    },
+    {
+      "id": "react-foe_golem-hit",
+      "kind": "foe-reaction",
+      "identity": "foe_golem",
+      "reaction": "hit"
+    },
+    {
+      "id": "react-foe_golem-down",
+      "kind": "foe-reaction",
+      "identity": "foe_golem",
+      "reaction": "down"
+    },
+    {
+      "id": "react-foe_juggernaut-hit",
+      "kind": "foe-reaction",
+      "identity": "foe_juggernaut",
+      "reaction": "hit"
+    },
+    {
+      "id": "react-foe_juggernaut-down",
+      "kind": "foe-reaction",
+      "identity": "foe_juggernaut",
+      "reaction": "down"
+    },
+    {
+      "id": "react-foe_rift_wisp-hit",
+      "kind": "foe-reaction",
+      "identity": "foe_rift_wisp",
+      "reaction": "hit"
+    },
+    {
+      "id": "react-foe_rift_wisp-down",
+      "kind": "foe-reaction",
+      "identity": "foe_rift_wisp",
+      "reaction": "down"
+    },
+    {
+      "id": "react-foe_shard_crawler-hit",
+      "kind": "foe-reaction",
+      "identity": "foe_shard_crawler",
+      "reaction": "hit"
+    },
+    {
+      "id": "react-foe_shard_crawler-down",
+      "kind": "foe-reaction",
+      "identity": "foe_shard_crawler",
+      "reaction": "down"
+    },
+    {
+      "id": "react-foe_sentinel-hit",
+      "kind": "foe-reaction",
+      "identity": "foe_sentinel",
+      "reaction": "hit"
+    },
+    {
+      "id": "react-foe_sentinel-down",
+      "kind": "foe-reaction",
+      "identity": "foe_sentinel",
+      "reaction": "down"
+    },
+    {
+      "id": "react-foe_spore_puff-hit",
+      "kind": "foe-reaction",
+      "identity": "foe_spore_puff",
+      "reaction": "hit"
+    },
+    {
+      "id": "react-foe_spore_puff-down",
+      "kind": "foe-reaction",
+      "identity": "foe_spore_puff",
+      "reaction": "down"
+    },
+    {
+      "id": "react-foe_captain-hit",
+      "kind": "foe-reaction",
+      "identity": "foe_captain",
+      "reaction": "hit"
+    },
+    {
+      "id": "react-foe_captain-down",
+      "kind": "foe-reaction",
+      "identity": "foe_captain",
+      "reaction": "down"
+    },
+    {
+      "id": "react-foe_dew_slime-hit",
+      "kind": "foe-reaction",
+      "identity": "foe_dew_slime",
+      "reaction": "hit"
+    },
+    {
+      "id": "react-foe_dew_slime-down",
+      "kind": "foe-reaction",
+      "identity": "foe_dew_slime",
+      "reaction": "down"
+    },
+    {
+      "id": "react-foe_ember_slime-hit",
+      "kind": "foe-reaction",
+      "identity": "foe_ember_slime",
+      "reaction": "hit"
+    },
+    {
+      "id": "react-foe_ember_slime-down",
+      "kind": "foe-reaction",
+      "identity": "foe_ember_slime",
+      "reaction": "down"
+    },
+    {
+      "id": "react-foe_ruin_bat-hit",
+      "kind": "foe-reaction",
+      "identity": "foe_ruin_bat",
+      "reaction": "hit"
+    },
+    {
+      "id": "react-foe_ruin_bat-down",
+      "kind": "foe-reaction",
+      "identity": "foe_ruin_bat",
+      "reaction": "down"
+    },
+    {
+      "id": "phase-rift-warden-0",
+      "kind": "phase",
+      "identity": "foe_sentinel",
+      "source": "rift-warden",
+      "pidx": 0
+    },
+    {
+      "id": "phase-rift-warden-1",
+      "kind": "phase",
+      "identity": "foe_sentinel",
+      "source": "rift-warden",
+      "pidx": 1
+    },
+    {
+      "id": "phase-elite-briar-lord-0",
+      "kind": "phase",
+      "identity": "foe_matriarch",
+      "source": "elite-briar-lord",
+      "pidx": 0
+    },
+    {
+      "id": "phase-vanguard-captain-0",
+      "kind": "phase",
+      "identity": "foe_captain",
+      "source": "vanguard-captain",
+      "pidx": 0
+    }
+  ],
+  "roster": [
+    {
+      "id": "guardian",
+      "role": "Knight",
+      "actions": [
+        "attack",
+        "guard",
+        "bash",
+        "rally",
+        "bulwark",
+        "challenge",
+        "rouse"
+      ],
+      "animated": true
+    },
+    {
+      "id": "tracer",
+      "role": "Duelist",
+      "actions": [
+        "attack",
+        "mark",
+        "execute",
+        "finisher",
+        "lunge",
+        "parry",
+        "sweep"
+      ],
+      "animated": true
+    },
+    {
+      "id": "weaver",
+      "role": "Mage",
+      "actions": [
+        "attack",
+        "bolt",
+        "ward",
+        "sigil",
+        "storm",
+        "aegis",
+        "dispel"
+      ],
+      "animated": true
+    },
+    {
+      "id": "healer",
+      "role": "Priest",
+      "actions": [
+        "attack",
+        "heal",
+        "prayer",
+        "sanctuary",
+        "revive",
+        "halo",
+        "bless"
+      ],
+      "animated": true
+    },
+    {
+      "id": "mira",
+      "role": "Archer",
+      "actions": [
+        "attack",
+        "hinder",
+        "volley",
+        "weakshot",
+        "pin",
+        "disengage",
+        "track"
+      ],
+      "animated": true
+    },
+    {
+      "id": "toma",
+      "role": "Alchemist",
+      "actions": [
+        "attack",
+        "acid",
+        "haste",
+        "bomb",
+        "fury",
+        "smoke",
+        "catalyst"
+      ],
+      "animated": true
+    },
+    {
+      "id": "sefa",
+      "role": "Scout",
+      "actions": [
+        "attack",
+        "ambush",
+        "evade",
+        "backstab",
+        "decoy",
+        "knives",
+        "disarm"
+      ],
+      "animated": false
+    },
+    {
+      "id": "brann",
+      "role": "Warden",
+      "actions": [
+        "attack",
+        "taunt",
+        "slam",
+        "quake",
+        "stonearmor",
+        "guardstone",
+        "tremor"
+      ],
+      "animated": true
+    },
+    {
+      "id": "lio",
+      "role": "Bard",
+      "actions": [
+        "attack",
+        "valor",
+        "mend",
+        "finale",
+        "dread",
+        "note",
+        "solo"
+      ],
+      "animated": false
+    },
+    {
+      "id": "garran",
+      "role": "Spear",
+      "actions": [
+        "attack",
+        "brace",
+        "pierce",
+        "spearwall",
+        "halt",
+        "hold",
+        "warcry"
+      ],
+      "animated": true
+    },
+    {
+      "id": "metta",
+      "role": "Saint",
+      "actions": [
+        "attack",
+        "saintstrike",
+        "communion",
+        "saintarc",
+        "vowstrike",
+        "sharewound",
+        "lastlight"
+      ],
+      "animated": false
+    },
+    {
+      "id": "thiran",
+      "role": "Saint",
+      "actions": [
+        "attack",
+        "saintstrike",
+        "communion",
+        "saintarc",
+        "vowstrike",
+        "sharewound",
+        "lastlight"
+      ],
+      "animated": false
+    },
+    {
+      "id": "lalin",
+      "role": "Dancer",
+      "actions": [
+        "attack",
+        "cadence",
+        "duet",
+        "rounddance",
+        "deepbeat",
+        "echofoot",
+        "closingstep"
+      ],
+      "animated": false
+    },
+    {
+      "id": "wila",
+      "role": "Dancer",
+      "actions": [
+        "attack",
+        "cadence",
+        "duet",
+        "rounddance",
+        "deepbeat",
+        "echofoot",
+        "closingstep"
+      ],
+      "animated": false
+    }
+  ],
+  "identities": [
+    "guardian",
+    "tracer",
+    "weaver",
+    "healer",
+    "raider",
+    "brute",
+    "garran",
+    "mira",
+    "toma",
+    "sefa",
+    "brann",
+    "lio",
+    "metta",
+    "thiran",
+    "lalin",
+    "wila",
+    "foe_tusker",
+    "foe_sprite",
+    "foe_stalker",
+    "foe_mycon",
+    "foe_golem",
+    "foe_riftweaver",
+    "foe_matriarch",
+    "foe_juggernaut",
+    "foe_sentinel",
+    "foe_hunter",
+    "foe_captain",
+    "foe_dew_slime",
+    "foe_ember_slime",
+    "foe_ruin_bat",
+    "foe_vargoth_guard",
+    "foe_thorn_beetle",
+    "foe_spore_puff",
+    "foe_rift_channeler",
+    "foe_rift_wisp",
+    "foe_shard_crawler"
+  ]
+}

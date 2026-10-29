@@ -1,0 +1,452 @@
+{
+  "id": "hero-tracer-parry",
+  "status": "captured",
+  "clickOffset": 0.26862192153930664,
+  "sourceFrames": 38,
+  "decodedFrames": 39,
+  "maxTimestampError": 0.00000510832214350998,
+  "maxFrameGap": 0.25203919410705566,
+  "sameState": true,
+  "saveStable": true,
+  "info": {
+    "case": {
+      "id": "hero-tracer-parry",
+      "kind": "hero",
+      "identity": "tracer",
+      "action": "parry"
+    },
+    "command": {
+      "beat": 1,
+      "heroId": "tracer",
+      "action": "parry",
+      "targetId": "tracer"
+    },
+    "timings": [
+      {
+        "actorId": "tracer",
+        "side": "hero",
+        "action": "parry",
+        "intent": "Crushing Blow",
+        "at": 0,
+        "contact": 220,
+        "end": 550,
+        "events": [
+          {
+            "type": "parry",
+            "sourceId": "tracer",
+            "targetId": "tracer",
+            "text": "Parry stance."
+          }
+        ]
+      },
+      {
+        "actorId": "f1",
+        "side": "enemy",
+        "intent": "Crushing Blow",
+        "at": 550,
+        "contact": 280,
+        "end": 800,
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "f1",
+            "targetId": "tracer",
+            "amount": 7,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          },
+          {
+            "type": "parry",
+            "sourceId": "tracer",
+            "targetId": "f1",
+            "text": "Parry."
+          },
+          {
+            "type": "counter",
+            "sourceId": "tracer",
+            "targetId": "f1",
+            "amount": 10,
+            "text": "The duelist ripostes."
+          }
+        ]
+      },
+      {
+        "actorId": "b1",
+        "side": "enemy",
+        "intent": "Shadow Knife",
+        "at": 1350,
+        "contact": 280,
+        "end": 800,
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "b1",
+            "targetId": "healer",
+            "amount": 8,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      }
+    ],
+    "focus": "tracer",
+    "expectedSheets": [
+      "unit-pilot-lyra",
+      "unit-pilot-aegis",
+      "unit-pilot-eira",
+      "unit-pilot-seren",
+      "unit-pilot-vargoth"
+    ],
+    "dataSummary": {
+      "heroes": [
+        {
+          "id": "tracer",
+          "speed": 200,
+          "name": "Lyra",
+          "role": "Duelist",
+          "lane": "front",
+          "maxHp": 56,
+          "attack": 16,
+          "actions": [
+            "attack",
+            "mark",
+            "execute",
+            "finisher",
+            "lunge",
+            "parry",
+            "sweep"
+          ],
+          "unlocks": {
+            "skill": "finisher",
+            "passive": "keeneye"
+          },
+          "color": 16764018,
+          "empoweredByStatuses": true
+        },
+        {
+          "id": "guardian",
+          "speed": 49,
+          "name": "Aegis",
+          "role": "Knight",
+          "lane": "front",
+          "maxHp": 76,
+          "attack": 10,
+          "actions": [
+            "attack",
+            "guard",
+            "bash",
+            "rally",
+            "bulwark",
+            "challenge",
+            "rouse"
+          ],
+          "unlocks": {
+            "skill": "rally",
+            "passive": "stand"
+          },
+          "color": 6408703
+        },
+        {
+          "id": "weaver",
+          "speed": 48,
+          "name": "Eira",
+          "role": "Mage",
+          "lane": "back",
+          "maxHp": 48,
+          "attack": 11,
+          "actions": [
+            "attack",
+            "bolt",
+            "ward",
+            "sigil",
+            "storm",
+            "aegis",
+            "dispel"
+          ],
+          "unlocks": {
+            "skill": "sigil",
+            "passive": "echo"
+          },
+          "color": 11901695
+        },
+        {
+          "id": "healer",
+          "speed": 47,
+          "name": "Seren",
+          "role": "Priest",
+          "lane": "back",
+          "maxHp": 46,
+          "attack": 8,
+          "actions": [
+            "attack",
+            "heal",
+            "prayer",
+            "sanctuary",
+            "revive",
+            "halo",
+            "bless"
+          ],
+          "unlocks": {
+            "skill": "sanctuary",
+            "passive": "afterglow"
+          },
+          "color": 9493936
+        }
+      ],
+      "enemies": [
+        {
+          "id": "f1",
+          "row": "front",
+          "large": true,
+          "speed": 110,
+          "name": "Vargoth Guard",
+          "displayName": "องครักษ์อสูร",
+          "maxHp": 500,
+          "color": 9930226,
+          "art": "foe_vargoth_guard",
+          "reserve": false
+        },
+        {
+          "id": "b1",
+          "row": "back",
+          "speed": 100,
+          "name": "Veil Raider",
+          "displayName": "นักจู่โจม",
+          "maxHp": 500,
+          "color": 15630525,
+          "art": "raider"
+        }
+      ],
+      "intents": [
+        {
+          "sourceId": "f1",
+          "targetSlot": 0,
+          "name": "Crushing Blow",
+          "damage": 14,
+          "kind": "physical"
+        },
+        {
+          "sourceId": "b1",
+          "targetSlot": 3,
+          "name": "Shadow Knife",
+          "damage": 8,
+          "kind": "energy"
+        }
+      ]
+    }
+  },
+  "stamps": [
+    [
+      "00000",
+      1793286060.482378
+    ],
+    [
+      "00001",
+      1793286060.552133
+    ],
+    [
+      "00002",
+      1793286060.671568
+    ],
+    [
+      "00003",
+      1793286060.704774
+    ],
+    [
+      "00004",
+      1793286060.772694
+    ],
+    [
+      "00005",
+      1793286060.847299
+    ],
+    [
+      "00006",
+      1793286060.872684
+    ],
+    [
+      "00007",
+      1793286060.903718
+    ],
+    [
+      "00008",
+      1793286061.000108
+    ],
+    [
+      "00009",
+      1793286061.066372
+    ],
+    [
+      "00010",
+      1793286061.097417
+    ],
+    [
+      "00011",
+      1793286061.150201
+    ],
+    [
+      "00012",
+      1793286061.211952
+    ],
+    [
+      "00013",
+      1793286061.29148
+    ],
+    [
+      "00014",
+      1793286061.351005
+    ],
+    [
+      "00015",
+      1793286061.377026
+    ],
+    [
+      "00016",
+      1793286061.469321
+    ],
+    [
+      "00017",
+      1793286061.513162
+    ],
+    [
+      "00018",
+      1793286061.765201
+    ],
+    [
+      "00019",
+      1793286061.804619
+    ],
+    [
+      "00020",
+      1793286061.988489
+    ],
+    [
+      "00021",
+      1793286062.076453
+    ],
+    [
+      "00022",
+      1793286062.110856
+    ],
+    [
+      "00023",
+      1793286062.25855
+    ],
+    [
+      "00024",
+      1793286062.290965
+    ],
+    [
+      "00025",
+      1793286062.452306
+    ],
+    [
+      "00026",
+      1793286062.480999
+    ],
+    [
+      "00027",
+      1793286062.548057
+    ],
+    [
+      "00028",
+      1793286062.577376
+    ],
+    [
+      "00029",
+      1793286062.607466
+    ],
+    [
+      "00030",
+      1793286062.762475
+    ],
+    [
+      "00031",
+      1793286062.806378
+    ],
+    [
+      "00032",
+      1793286062.873445
+    ],
+    [
+      "00033",
+      1793286062.906264
+    ],
+    [
+      "00034",
+      1793286062.979678
+    ],
+    [
+      "00035",
+      1793286063.012482
+    ],
+    [
+      "00036",
+      1793286063.081397
+    ],
+    [
+      "00037",
+      1793286063.115068
+    ]
+  ],
+  "impacts": [
+    {
+      "at": 1793286061050,
+      "actorId": "tracer",
+      "action": "parry",
+      "intent": "Crushing Blow",
+      "events": [
+        {
+          "type": "parry",
+          "sourceId": "tracer",
+          "targetId": "tracer",
+          "text": "Parry stance."
+        }
+      ]
+    },
+    {
+      "at": 1793286061665,
+      "actorId": "f1",
+      "intent": "Crushing Blow",
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "f1",
+          "targetId": "tracer",
+          "amount": 7,
+          "absorbed": 0,
+          "text": "Enemy attacks on its own turn."
+        },
+        {
+          "type": "parry",
+          "sourceId": "tracer",
+          "targetId": "f1",
+          "text": "Parry."
+        },
+        {
+          "type": "counter",
+          "sourceId": "tracer",
+          "targetId": "f1",
+          "amount": 10,
+          "text": "The duelist ripostes."
+        }
+      ]
+    },
+    {
+      "at": 1793286062496,
+      "actorId": "b1",
+      "intent": "Shadow Knife",
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "b1",
+          "targetId": "healer",
+          "amount": 8,
+          "absorbed": 0,
+          "text": "Enemy attacks on its own turn."
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

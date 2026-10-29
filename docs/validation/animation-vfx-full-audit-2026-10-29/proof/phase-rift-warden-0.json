@@ -1,0 +1,549 @@
+{
+  "id": "phase-rift-warden-0",
+  "status": "captured",
+  "clickOffset": 0.2995340824127197,
+  "sourceFrames": 34,
+  "decodedFrames": 35,
+  "maxTimestampError": 0.000005205673217822948,
+  "maxFrameGap": 0.18137001991271973,
+  "sameState": true,
+  "saveStable": true,
+  "info": {
+    "case": {
+      "id": "phase-rift-warden-0",
+      "kind": "phase",
+      "identity": "foe_sentinel",
+      "source": "rift-warden",
+      "pidx": 0
+    },
+    "command": {
+      "beat": 1,
+      "heroId": "guardian",
+      "action": "attack",
+      "targetId": "f1"
+    },
+    "timings": [
+      {
+        "actorId": "guardian",
+        "side": "hero",
+        "action": "attack",
+        "intent": "Call the Rift",
+        "at": 0,
+        "contact": 210,
+        "end": 600,
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "guardian",
+            "targetId": "f1",
+            "amount": 10,
+            "text": "Hero attacks."
+          }
+        ]
+      },
+      {
+        "actorId": "f1",
+        "side": "enemy",
+        "intent": "Call the Rift",
+        "at": 600,
+        "contact": 480,
+        "end": 1200,
+        "events": [
+          {
+            "type": "phase",
+            "sourceId": "f1",
+            "targetId": "f1",
+            "text": "Call the Rift"
+          },
+          {
+            "type": "summon",
+            "sourceId": "f1",
+            "targetId": "b1",
+            "text": "Reinforcements."
+          },
+          {
+            "type": "summon",
+            "sourceId": "f1",
+            "targetId": "b2",
+            "text": "Reinforcements."
+          }
+        ]
+      }
+    ],
+    "focus": "f1",
+    "expectedSheets": [
+      "unit-pilot-aegis",
+      "unit-pilot-lyra",
+      "unit-pilot-eira",
+      "unit-pilot-seren"
+    ],
+    "dataSummary": {
+      "heroes": [
+        {
+          "id": "guardian",
+          "speed": 200,
+          "name": "Aegis",
+          "role": "Knight",
+          "lane": "front",
+          "maxHp": 76,
+          "attack": 10,
+          "actions": [
+            "attack",
+            "guard",
+            "bash",
+            "rally",
+            "bulwark",
+            "challenge",
+            "rouse"
+          ],
+          "unlocks": {
+            "skill": "rally",
+            "passive": "stand"
+          },
+          "color": 6408703
+        },
+        {
+          "id": "tracer",
+          "speed": 49,
+          "name": "Lyra",
+          "role": "Duelist",
+          "lane": "front",
+          "maxHp": 56,
+          "attack": 16,
+          "actions": [
+            "attack",
+            "mark",
+            "execute",
+            "finisher",
+            "lunge",
+            "parry",
+            "sweep"
+          ],
+          "unlocks": {
+            "skill": "finisher",
+            "passive": "keeneye"
+          },
+          "color": 16764018,
+          "empoweredByStatuses": true
+        },
+        {
+          "id": "weaver",
+          "speed": 48,
+          "name": "Eira",
+          "role": "Mage",
+          "lane": "back",
+          "maxHp": 48,
+          "attack": 11,
+          "actions": [
+            "attack",
+            "bolt",
+            "ward",
+            "sigil",
+            "storm",
+            "aegis",
+            "dispel"
+          ],
+          "unlocks": {
+            "skill": "sigil",
+            "passive": "echo"
+          },
+          "color": 11901695
+        },
+        {
+          "id": "healer",
+          "speed": 47,
+          "name": "Seren",
+          "role": "Priest",
+          "lane": "back",
+          "maxHp": 46,
+          "attack": 8,
+          "actions": [
+            "attack",
+            "heal",
+            "prayer",
+            "sanctuary",
+            "revive",
+            "halo",
+            "bless"
+          ],
+          "unlocks": {
+            "skill": "sanctuary",
+            "passive": "afterglow"
+          },
+          "color": 9493936
+        }
+      ],
+      "enemies": [
+        {
+          "id": "b1",
+          "row": "back",
+          "name": "Rift Wisp",
+          "displayName": "วิญญาณรอยแยก",
+          "maxHp": 59,
+          "speed": 110,
+          "color": 10977008,
+          "art": "foe_rift_wisp",
+          "reserve": true
+        },
+        {
+          "id": "b2",
+          "row": "back",
+          "name": "Rift Wisp",
+          "displayName": "วิญญาณรอยแยก",
+          "maxHp": 59,
+          "speed": 110,
+          "color": 10977008,
+          "art": "foe_rift_wisp",
+          "reserve": true
+        },
+        {
+          "id": "f2",
+          "row": "front",
+          "name": "Shard Crawler",
+          "displayName": "แมงมุมเศษผลึก",
+          "maxHp": 98,
+          "speed": 110,
+          "color": 8216512,
+          "art": "foe_shard_crawler",
+          "reserve": true
+        },
+        {
+          "id": "f1",
+          "row": "front",
+          "large": true,
+          "boss": true,
+          "speed": 110,
+          "name": "Rift Warden",
+          "displayName": "ผู้คุมรอยแยก",
+          "maxHp": 350,
+          "color": 14270342,
+          "art": "foe_sentinel"
+        }
+      ],
+      "intents": [
+        {
+          "sourceId": "b1",
+          "targetSlot": 3,
+          "name": "Star Flame",
+          "damage": 11,
+          "kind": "energy"
+        },
+        {
+          "sourceId": "b1",
+          "targetSlot": 2,
+          "name": "Star Flame",
+          "damage": 11,
+          "kind": "energy"
+        },
+        {
+          "sourceId": "b1",
+          "targetSlot": 0,
+          "name": "Star Flame",
+          "damage": 13,
+          "kind": "energy"
+        },
+        {
+          "sourceId": "b2",
+          "targetSlot": 2,
+          "name": "Star Flame",
+          "damage": 11,
+          "kind": "energy"
+        },
+        {
+          "sourceId": "b2",
+          "targetSlot": 0,
+          "name": "Star Flame",
+          "damage": 13,
+          "kind": "energy"
+        },
+        {
+          "sourceId": "b2",
+          "targetSlot": 3,
+          "name": "Star Flame",
+          "damage": 11,
+          "kind": "energy"
+        },
+        {
+          "sourceId": "f2",
+          "targetSlot": 0,
+          "name": "Crystal Stab",
+          "damage": 16,
+          "kind": "physical"
+        },
+        {
+          "sourceId": "f2",
+          "targetSlot": 1,
+          "name": "Crystal Stab",
+          "damage": 16,
+          "kind": "physical"
+        },
+        {
+          "sourceId": "f2",
+          "targetSlot": 0,
+          "name": "Crystal Stab",
+          "damage": 18,
+          "kind": "physical"
+        },
+        {
+          "sourceId": "f1",
+          "targetSlot": 1,
+          "name": "Crushing Blow",
+          "damage": 29,
+          "kind": "physical"
+        },
+        {
+          "sourceId": "f1",
+          "targetSlot": 2,
+          "name": "Rift Bolt",
+          "damage": 25,
+          "kind": "energy"
+        },
+        {
+          "sourceId": "f1",
+          "targetSlot": 0,
+          "name": "Crushing Blow",
+          "damage": 33,
+          "kind": "physical",
+          "unstoppable": true
+        },
+        {
+          "sourceId": "f1",
+          "targetSlot": 3,
+          "name": "Rift Bolt",
+          "damage": 23,
+          "kind": "energy"
+        },
+        {
+          "sourceId": "f1",
+          "targetSlot": 1,
+          "name": "Raking Slash",
+          "damage": 21,
+          "kind": "physical"
+        },
+        {
+          "sourceId": "f1",
+          "targetSlot": 2,
+          "name": "Rift Bolt",
+          "damage": 29,
+          "kind": "energy"
+        },
+        {
+          "sourceId": "f1",
+          "targetSlot": 0,
+          "name": "Rift Gathering",
+          "damage": 0,
+          "kind": "energy",
+          "charge": true,
+          "phase": 2
+        },
+        {
+          "sourceId": "f1",
+          "targetSlot": 0,
+          "name": "Rift Cataclysm",
+          "damage": 52,
+          "kind": "physical",
+          "unstoppable": true,
+          "phase": 2
+        },
+        {
+          "sourceId": "f1",
+          "targetSlot": 0,
+          "name": "Rift Wave",
+          "damage": 20,
+          "kind": "energy",
+          "all": true,
+          "phase": 2
+        },
+        {
+          "sourceId": "f1",
+          "targetSlot": 1,
+          "name": "Crushing Blow",
+          "damage": 29,
+          "kind": "physical",
+          "phase": 2
+        }
+      ]
+    }
+  },
+  "stamps": [
+    [
+      "00000",
+      1793286017.016466
+    ],
+    [
+      "00001",
+      1793286017.087273
+    ],
+    [
+      "00002",
+      1793286017.180715
+    ],
+    [
+      "00003",
+      1793286017.299272
+    ],
+    [
+      "00004",
+      1793286017.3511
+    ],
+    [
+      "00005",
+      1793286017.393017
+    ],
+    [
+      "00006",
+      1793286017.451365
+    ],
+    [
+      "00007",
+      1793286017.552199
+    ],
+    [
+      "00008",
+      1793286017.604104
+    ],
+    [
+      "00009",
+      1793286017.665237
+    ],
+    [
+      "00010",
+      1793286017.767234
+    ],
+    [
+      "00011",
+      1793286017.863071
+    ],
+    [
+      "00012",
+      1793286017.89154
+    ],
+    [
+      "00013",
+      1793286017.953095
+    ],
+    [
+      "00014",
+      1793286017.987641
+    ],
+    [
+      "00015",
+      1793286018.047727
+    ],
+    [
+      "00016",
+      1793286018.110228
+    ],
+    [
+      "00017",
+      1793286018.216926
+    ],
+    [
+      "00018",
+      1793286018.274505
+    ],
+    [
+      "00019",
+      1793286018.302118
+    ],
+    [
+      "00020",
+      1793286018.389235
+    ],
+    [
+      "00021",
+      1793286018.451987
+    ],
+    [
+      "00022",
+      1793286018.486329
+    ],
+    [
+      "00023",
+      1793286018.568911
+    ],
+    [
+      "00024",
+      1793286018.750281
+    ],
+    [
+      "00025",
+      1793286018.782301
+    ],
+    [
+      "00026",
+      1793286018.813219
+    ],
+    [
+      "00027",
+      1793286018.878437
+    ],
+    [
+      "00028",
+      1793286018.91705
+    ],
+    [
+      "00029",
+      1793286018.991485
+    ],
+    [
+      "00030",
+      1793286019.057862
+    ],
+    [
+      "00031",
+      1793286019.150862
+    ],
+    [
+      "00032",
+      1793286019.182845
+    ],
+    [
+      "00033",
+      1793286019.278953
+    ]
+  ],
+  "impacts": [
+    {
+      "at": 1793286017572,
+      "actorId": "guardian",
+      "action": "attack",
+      "intent": "Call the Rift",
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "guardian",
+          "targetId": "f1",
+          "amount": 10,
+          "text": "Hero attacks."
+        }
+      ]
+    },
+    {
+      "at": 1793286018492,
+      "actorId": "f1",
+      "intent": "Call the Rift",
+      "events": [
+        {
+          "type": "phase",
+          "sourceId": "f1",
+          "targetId": "f1",
+          "text": "Call the Rift"
+        },
+        {
+          "type": "summon",
+          "sourceId": "f1",
+          "targetId": "b1",
+          "text": "Reinforcements."
+        },
+        {
+          "type": "summon",
+          "sourceId": "f1",
+          "targetId": "b2",
+          "text": "Reinforcements."
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

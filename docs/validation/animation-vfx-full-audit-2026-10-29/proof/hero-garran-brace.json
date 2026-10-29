@@ -1,0 +1,446 @@
+{
+  "id": "hero-garran-brace",
+  "status": "captured",
+  "clickOffset": 0.2143878936767578,
+  "sourceFrames": 39,
+  "decodedFrames": 40,
+  "maxTimestampError": 0.00000513960266113056,
+  "maxFrameGap": 0.23552799224853516,
+  "sameState": true,
+  "saveStable": true,
+  "info": {
+    "case": {
+      "id": "hero-garran-brace",
+      "kind": "hero",
+      "identity": "garran",
+      "action": "brace"
+    },
+    "command": {
+      "beat": 1,
+      "heroId": "garran",
+      "action": "brace",
+      "targetId": "garran"
+    },
+    "timings": [
+      {
+        "actorId": "garran",
+        "side": "hero",
+        "action": "brace",
+        "intent": "Crushing Blow",
+        "at": 0,
+        "contact": 200,
+        "end": 500,
+        "events": [
+          {
+            "type": "brace",
+            "sourceId": "garran",
+            "targetId": "garran",
+            "amount": 14,
+            "text": "Spear braced until its next turn."
+          }
+        ]
+      },
+      {
+        "actorId": "f1",
+        "side": "enemy",
+        "intent": "Crushing Blow",
+        "at": 500,
+        "contact": 280,
+        "end": 800,
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "f1",
+            "targetId": "garran",
+            "amount": 14,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          },
+          {
+            "type": "counter",
+            "sourceId": "garran",
+            "targetId": "f1",
+            "amount": 14,
+            "text": "Braced spear counters."
+          }
+        ]
+      },
+      {
+        "actorId": "b1",
+        "side": "enemy",
+        "intent": "Shadow Knife",
+        "at": 1300,
+        "contact": 280,
+        "end": 800,
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "b1",
+            "targetId": "weaver",
+            "amount": 8,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      }
+    ],
+    "focus": "garran",
+    "expectedSheets": [
+      "unit-pilot-garran",
+      "unit-pilot-aegis",
+      "unit-pilot-lyra",
+      "unit-pilot-eira",
+      "unit-pilot-vargoth"
+    ],
+    "dataSummary": {
+      "heroes": [
+        {
+          "id": "garran",
+          "speed": 200,
+          "name": "Garran",
+          "role": "Spear",
+          "lane": "front",
+          "maxHp": 70,
+          "attack": 12,
+          "actions": [
+            "attack",
+            "brace",
+            "pierce",
+            "spearwall",
+            "halt",
+            "hold",
+            "warcry"
+          ],
+          "unlocks": {
+            "skill": "spearwall",
+            "passive": "heavycounter"
+          },
+          "color": 5227444
+        },
+        {
+          "id": "guardian",
+          "speed": 49,
+          "name": "Aegis",
+          "role": "Knight",
+          "lane": "front",
+          "maxHp": 76,
+          "attack": 10,
+          "actions": [
+            "attack",
+            "guard",
+            "bash",
+            "rally",
+            "bulwark",
+            "challenge",
+            "rouse"
+          ],
+          "unlocks": {
+            "skill": "rally",
+            "passive": "stand"
+          },
+          "color": 6408703
+        },
+        {
+          "id": "tracer",
+          "speed": 48,
+          "name": "Lyra",
+          "role": "Duelist",
+          "lane": "front",
+          "maxHp": 56,
+          "attack": 16,
+          "actions": [
+            "attack",
+            "mark",
+            "execute",
+            "finisher",
+            "lunge",
+            "parry",
+            "sweep"
+          ],
+          "unlocks": {
+            "skill": "finisher",
+            "passive": "keeneye"
+          },
+          "color": 16764018,
+          "empoweredByStatuses": true
+        },
+        {
+          "id": "weaver",
+          "speed": 47,
+          "name": "Eira",
+          "role": "Mage",
+          "lane": "back",
+          "maxHp": 48,
+          "attack": 11,
+          "actions": [
+            "attack",
+            "bolt",
+            "ward",
+            "sigil",
+            "storm",
+            "aegis",
+            "dispel"
+          ],
+          "unlocks": {
+            "skill": "sigil",
+            "passive": "echo"
+          },
+          "color": 11901695
+        }
+      ],
+      "enemies": [
+        {
+          "id": "f1",
+          "row": "front",
+          "large": true,
+          "speed": 110,
+          "name": "Vargoth Guard",
+          "displayName": "องครักษ์อสูร",
+          "maxHp": 500,
+          "color": 9930226,
+          "art": "foe_vargoth_guard",
+          "reserve": false
+        },
+        {
+          "id": "b1",
+          "row": "back",
+          "speed": 100,
+          "name": "Veil Raider",
+          "displayName": "นักจู่โจม",
+          "maxHp": 500,
+          "color": 15630525,
+          "art": "raider"
+        }
+      ],
+      "intents": [
+        {
+          "sourceId": "f1",
+          "targetSlot": 0,
+          "name": "Crushing Blow",
+          "damage": 14,
+          "kind": "physical"
+        },
+        {
+          "sourceId": "b1",
+          "targetSlot": 3,
+          "name": "Shadow Knife",
+          "damage": 8,
+          "kind": "energy"
+        }
+      ]
+    }
+  },
+  "stamps": [
+    [
+      "00000",
+      1793286095.993612
+    ],
+    [
+      "00001",
+      1793286096.066593
+    ],
+    [
+      "00002",
+      1793286096.168701
+    ],
+    [
+      "00003",
+      1793286096.201455
+    ],
+    [
+      "00004",
+      1793286096.276178
+    ],
+    [
+      "00005",
+      1793286096.362031
+    ],
+    [
+      "00006",
+      1793286096.397051
+    ],
+    [
+      "00007",
+      1793286096.484696
+    ],
+    [
+      "00008",
+      1793286096.547796
+    ],
+    [
+      "00009",
+      1793286096.602375
+    ],
+    [
+      "00010",
+      1793286096.681158
+    ],
+    [
+      "00011",
+      1793286096.710714
+    ],
+    [
+      "00012",
+      1793286096.801061
+    ],
+    [
+      "00013",
+      1793286096.868652
+    ],
+    [
+      "00014",
+      1793286096.901577
+    ],
+    [
+      "00015",
+      1793286096.983477
+    ],
+    [
+      "00016",
+      1793286097.013384
+    ],
+    [
+      "00017",
+      1793286097.099154
+    ],
+    [
+      "00018",
+      1793286097.165785
+    ],
+    [
+      "00019",
+      1793286097.199013
+    ],
+    [
+      "00020",
+      1793286097.277175
+    ],
+    [
+      "00021",
+      1793286097.306488
+    ],
+    [
+      "00022",
+      1793286097.382277
+    ],
+    [
+      "00023",
+      1793286097.411642
+    ],
+    [
+      "00024",
+      1793286097.47106
+    ],
+    [
+      "00025",
+      1793286097.501849
+    ],
+    [
+      "00026",
+      1793286097.561114
+    ],
+    [
+      "00027",
+      1793286097.593054
+    ],
+    [
+      "00028",
+      1793286097.683625
+    ],
+    [
+      "00029",
+      1793286097.747467
+    ],
+    [
+      "00030",
+      1793286097.855271
+    ],
+    [
+      "00031",
+      1793286098.001175
+    ],
+    [
+      "00032",
+      1793286098.079083
+    ],
+    [
+      "00033",
+      1793286098.119524
+    ],
+    [
+      "00034",
+      1793286098.355052
+    ],
+    [
+      "00035",
+      1793286098.40272
+    ],
+    [
+      "00036",
+      1793286098.489982
+    ],
+    [
+      "00037",
+      1793286098.566109
+    ],
+    [
+      "00038",
+      1793286098.601497
+    ]
+  ],
+  "impacts": [
+    {
+      "at": 1793286096471,
+      "actorId": "garran",
+      "action": "brace",
+      "intent": "Crushing Blow",
+      "events": [
+        {
+          "type": "brace",
+          "sourceId": "garran",
+          "targetId": "garran",
+          "amount": 14,
+          "text": "Spear braced until its next turn."
+        }
+      ]
+    },
+    {
+      "at": 1793286097081,
+      "actorId": "f1",
+      "intent": "Crushing Blow",
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "f1",
+          "targetId": "garran",
+          "amount": 14,
+          "absorbed": 0,
+          "text": "Enemy attacks on its own turn."
+        },
+        {
+          "type": "counter",
+          "sourceId": "garran",
+          "targetId": "f1",
+          "amount": 14,
+          "text": "Braced spear counters."
+        }
+      ]
+    },
+    {
+      "at": 1793286097904,
+      "actorId": "b1",
+      "intent": "Shadow Knife",
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "b1",
+          "targetId": "weaver",
+          "amount": 8,
+          "absorbed": 0,
+          "text": "Enemy attacks on its own turn."
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

@@ -1,0 +1,445 @@
+{
+  "id": "foe-foe_mycon-7",
+  "status": "captured",
+  "clickOffset": 0.23750019073486328,
+  "sourceFrames": 42,
+  "decodedFrames": 43,
+  "maxTimestampError": 0.0000052274169921595615,
+  "maxFrameGap": 0.15996503829956055,
+  "sameState": true,
+  "saveStable": true,
+  "info": {
+    "case": {
+      "id": "foe-foe_mycon-7",
+      "kind": "foe",
+      "identity": "foe_mycon",
+      "index": 7,
+      "intent": "Spore Hex",
+      "source": "thicket-ambush"
+    },
+    "command": {
+      "beat": 1,
+      "heroId": "guardian",
+      "action": "attack",
+      "targetId": "f1"
+    },
+    "timings": [
+      {
+        "actorId": "guardian",
+        "side": "hero",
+        "action": "attack",
+        "intent": "Spore Hex",
+        "at": 0,
+        "contact": 210,
+        "end": 600,
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "guardian",
+            "targetId": "f1",
+            "amount": 10,
+            "text": "Hero attacks."
+          }
+        ]
+      },
+      {
+        "actorId": "f1",
+        "side": "enemy",
+        "intent": "Spore Hex",
+        "at": 600,
+        "contact": 280,
+        "end": 800,
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "f1",
+            "targetId": "guardian",
+            "amount": 12,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      },
+      {
+        "actorId": "b1",
+        "side": "enemy",
+        "intent": "Shadow Knife",
+        "at": 1400,
+        "contact": 280,
+        "end": 800,
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "b1",
+            "targetId": "healer",
+            "amount": 8,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      }
+    ],
+    "focus": "f1",
+    "expectedSheets": [
+      "unit-pilot-aegis",
+      "unit-pilot-lyra",
+      "unit-pilot-eira",
+      "unit-pilot-seren",
+      "unit-pilot-mycon"
+    ],
+    "dataSummary": {
+      "heroes": [
+        {
+          "id": "guardian",
+          "speed": 200,
+          "name": "Aegis",
+          "role": "Knight",
+          "lane": "front",
+          "maxHp": 76,
+          "attack": 10,
+          "actions": [
+            "attack",
+            "guard",
+            "bash",
+            "rally",
+            "bulwark",
+            "challenge",
+            "rouse"
+          ],
+          "unlocks": {
+            "skill": "rally",
+            "passive": "stand"
+          },
+          "color": 6408703
+        },
+        {
+          "id": "tracer",
+          "speed": 49,
+          "name": "Lyra",
+          "role": "Duelist",
+          "lane": "front",
+          "maxHp": 56,
+          "attack": 16,
+          "actions": [
+            "attack",
+            "mark",
+            "execute",
+            "finisher",
+            "lunge",
+            "parry",
+            "sweep"
+          ],
+          "unlocks": {
+            "skill": "finisher",
+            "passive": "keeneye"
+          },
+          "color": 16764018,
+          "empoweredByStatuses": true
+        },
+        {
+          "id": "weaver",
+          "speed": 48,
+          "name": "Eira",
+          "role": "Mage",
+          "lane": "back",
+          "maxHp": 48,
+          "attack": 11,
+          "actions": [
+            "attack",
+            "bolt",
+            "ward",
+            "sigil",
+            "storm",
+            "aegis",
+            "dispel"
+          ],
+          "unlocks": {
+            "skill": "sigil",
+            "passive": "echo"
+          },
+          "color": 11901695
+        },
+        {
+          "id": "healer",
+          "speed": 47,
+          "name": "Seren",
+          "role": "Priest",
+          "lane": "back",
+          "maxHp": 46,
+          "attack": 8,
+          "actions": [
+            "attack",
+            "heal",
+            "prayer",
+            "sanctuary",
+            "revive",
+            "halo",
+            "bless"
+          ],
+          "unlocks": {
+            "skill": "sanctuary",
+            "passive": "afterglow"
+          },
+          "color": 9493936
+        }
+      ],
+      "enemies": [
+        {
+          "id": "f1",
+          "row": "front",
+          "speed": 110,
+          "name": "Hollow Mycon",
+          "displayName": "เห็ดหมอผีกลวง",
+          "maxHp": 500,
+          "color": 4358023,
+          "art": "foe_mycon",
+          "reserve": false
+        },
+        {
+          "id": "b1",
+          "row": "back",
+          "speed": 100,
+          "name": "Veil Raider",
+          "displayName": "นักจู่โจม",
+          "maxHp": 500,
+          "color": 15630525,
+          "art": "raider"
+        }
+      ],
+      "intents": [
+        {
+          "sourceId": "f1",
+          "targetSlot": 0,
+          "name": "Spore Hex",
+          "damage": 12,
+          "kind": "energy"
+        },
+        {
+          "sourceId": "b1",
+          "targetSlot": 3,
+          "name": "Shadow Knife",
+          "damage": 8,
+          "kind": "energy"
+        }
+      ]
+    }
+  },
+  "stamps": [
+    [
+      "00000",
+      1793285975.8535
+    ],
+    [
+      "00001",
+      1793285975.881357
+    ],
+    [
+      "00002",
+      1793285976.01557
+    ],
+    [
+      "00003",
+      1793285976.077664
+    ],
+    [
+      "00004",
+      1793285976.117471
+    ],
+    [
+      "00005",
+      1793285976.201737
+    ],
+    [
+      "00006",
+      1793285976.261806
+    ],
+    [
+      "00007",
+      1793285976.298012
+    ],
+    [
+      "00008",
+      1793285976.390342
+    ],
+    [
+      "00009",
+      1793285976.449785
+    ],
+    [
+      "00010",
+      1793285976.480475
+    ],
+    [
+      "00011",
+      1793285976.553008
+    ],
+    [
+      "00012",
+      1793285976.664056
+    ],
+    [
+      "00013",
+      1793285976.694862
+    ],
+    [
+      "00014",
+      1793285976.755285
+    ],
+    [
+      "00015",
+      1793285976.786996
+    ],
+    [
+      "00016",
+      1793285976.886303
+    ],
+    [
+      "00017",
+      1793285976.993766
+    ],
+    [
+      "00018",
+      1793285977.058579
+    ],
+    [
+      "00019",
+      1793285977.087115
+    ],
+    [
+      "00020",
+      1793285977.149466
+    ],
+    [
+      "00021",
+      1793285977.179445
+    ],
+    [
+      "00022",
+      1793285977.289299
+    ],
+    [
+      "00023",
+      1793285977.380492
+    ],
+    [
+      "00024",
+      1793285977.410475
+    ],
+    [
+      "00025",
+      1793285977.475595
+    ],
+    [
+      "00026",
+      1793285977.509996
+    ],
+    [
+      "00027",
+      1793285977.572921
+    ],
+    [
+      "00028",
+      1793285977.652661
+    ],
+    [
+      "00029",
+      1793285977.6827
+    ],
+    [
+      "00030",
+      1793285977.746961
+    ],
+    [
+      "00031",
+      1793285977.849721
+    ],
+    [
+      "00032",
+      1793285977.881467
+    ],
+    [
+      "00033",
+      1793285977.910407
+    ],
+    [
+      "00034",
+      1793285977.973212
+    ],
+    [
+      "00035",
+      1793285978.006396
+    ],
+    [
+      "00036",
+      1793285978.166361
+    ],
+    [
+      "00037",
+      1793285978.293666
+    ],
+    [
+      "00038",
+      1793285978.355991
+    ],
+    [
+      "00039",
+      1793285978.407775
+    ],
+    [
+      "00040",
+      1793285978.51208
+    ],
+    [
+      "00041",
+      1793285978.580672
+    ]
+  ],
+  "impacts": [
+    {
+      "at": 1793285976361,
+      "actorId": "guardian",
+      "action": "attack",
+      "intent": "Spore Hex",
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "guardian",
+          "targetId": "f1",
+          "amount": 10,
+          "text": "Hero attacks."
+        }
+      ]
+    },
+    {
+      "at": 1793285977054,
+      "actorId": "f1",
+      "intent": "Spore Hex",
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "f1",
+          "targetId": "guardian",
+          "amount": 12,
+          "absorbed": 0,
+          "text": "Enemy attacks on its own turn."
+        }
+      ]
+    },
+    {
+      "at": 1793285977871,
+      "actorId": "b1",
+      "intent": "Shadow Knife",
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "b1",
+          "targetId": "healer",
+          "amount": 8,
+          "absorbed": 0,
+          "text": "Enemy attacks on its own turn."
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

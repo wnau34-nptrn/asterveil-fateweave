@@ -1,0 +1,379 @@
+{
+  "id": "hero-mira-disengage",
+  "status": "captured",
+  "clickOffset": 0.22710800170898438,
+  "sourceFrames": 31,
+  "decodedFrames": 32,
+  "maxTimestampError": 0.0000061129150390470954,
+  "maxFrameGap": 0.1925489902496338,
+  "sameState": true,
+  "saveStable": true,
+  "info": {
+    "case": {
+      "id": "hero-mira-disengage",
+      "kind": "hero",
+      "identity": "mira",
+      "action": "disengage"
+    },
+    "command": {
+      "beat": 1,
+      "heroId": "mira",
+      "action": "disengage",
+      "targetId": "f1"
+    },
+    "timings": [
+      {
+        "actorId": "mira",
+        "side": "hero",
+        "action": "disengage",
+        "intent": "Crushing Blow",
+        "at": 0,
+        "contact": 280,
+        "end": 800,
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "mira",
+            "targetId": "f1",
+            "amount": 10,
+            "text": "Hero attacks."
+          },
+          {
+            "type": "delay",
+            "sourceId": "mira",
+            "targetId": "f1",
+            "text": "Enemy acts last this round."
+          }
+        ]
+      },
+      {
+        "actorId": "b1",
+        "side": "enemy",
+        "intent": "Shadow Knife",
+        "at": 800,
+        "contact": 280,
+        "end": 800,
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "b1",
+            "targetId": "weaver",
+            "amount": 8,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      }
+    ],
+    "focus": "mira",
+    "expectedSheets": [
+      "unit-pilot-mira",
+      "unit-pilot-aegis",
+      "unit-pilot-lyra",
+      "unit-pilot-eira",
+      "unit-pilot-vargoth"
+    ],
+    "dataSummary": {
+      "heroes": [
+        {
+          "id": "mira",
+          "speed": 200,
+          "name": "Mira",
+          "role": "Archer",
+          "lane": "back",
+          "maxHp": 50,
+          "attack": 13,
+          "actions": [
+            "attack",
+            "hinder",
+            "volley",
+            "weakshot",
+            "pin",
+            "disengage",
+            "track"
+          ],
+          "unlocks": {
+            "skill": "weakshot",
+            "passive": "tailwind"
+          },
+          "color": 7323507
+        },
+        {
+          "id": "guardian",
+          "speed": 49,
+          "name": "Aegis",
+          "role": "Knight",
+          "lane": "front",
+          "maxHp": 76,
+          "attack": 10,
+          "actions": [
+            "attack",
+            "guard",
+            "bash",
+            "rally",
+            "bulwark",
+            "challenge",
+            "rouse"
+          ],
+          "unlocks": {
+            "skill": "rally",
+            "passive": "stand"
+          },
+          "color": 6408703
+        },
+        {
+          "id": "tracer",
+          "speed": 48,
+          "name": "Lyra",
+          "role": "Duelist",
+          "lane": "front",
+          "maxHp": 56,
+          "attack": 16,
+          "actions": [
+            "attack",
+            "mark",
+            "execute",
+            "finisher",
+            "lunge",
+            "parry",
+            "sweep"
+          ],
+          "unlocks": {
+            "skill": "finisher",
+            "passive": "keeneye"
+          },
+          "color": 16764018,
+          "empoweredByStatuses": true
+        },
+        {
+          "id": "weaver",
+          "speed": 47,
+          "name": "Eira",
+          "role": "Mage",
+          "lane": "back",
+          "maxHp": 48,
+          "attack": 11,
+          "actions": [
+            "attack",
+            "bolt",
+            "ward",
+            "sigil",
+            "storm",
+            "aegis",
+            "dispel"
+          ],
+          "unlocks": {
+            "skill": "sigil",
+            "passive": "echo"
+          },
+          "color": 11901695
+        }
+      ],
+      "enemies": [
+        {
+          "id": "f1",
+          "row": "front",
+          "large": true,
+          "speed": 110,
+          "name": "Vargoth Guard",
+          "displayName": "องครักษ์อสูร",
+          "maxHp": 500,
+          "color": 9930226,
+          "art": "foe_vargoth_guard",
+          "reserve": false
+        },
+        {
+          "id": "b1",
+          "row": "back",
+          "speed": 100,
+          "name": "Veil Raider",
+          "displayName": "นักจู่โจม",
+          "maxHp": 500,
+          "color": 15630525,
+          "art": "raider"
+        }
+      ],
+      "intents": [
+        {
+          "sourceId": "f1",
+          "targetSlot": 0,
+          "name": "Crushing Blow",
+          "damage": 14,
+          "kind": "physical"
+        },
+        {
+          "sourceId": "b1",
+          "targetSlot": 3,
+          "name": "Shadow Knife",
+          "damage": 8,
+          "kind": "energy"
+        }
+      ]
+    }
+  },
+  "stamps": [
+    [
+      "00000",
+      1793286084.946892
+    ],
+    [
+      "00001",
+      1793286084.978167
+    ],
+    [
+      "00002",
+      1793286085.095716
+    ],
+    [
+      "00003",
+      1793286085.153929
+    ],
+    [
+      "00004",
+      1793286085.186783
+    ],
+    [
+      "00005",
+      1793286085.253214
+    ],
+    [
+      "00006",
+      1793286085.379251
+    ],
+    [
+      "00007",
+      1793286085.483852
+    ],
+    [
+      "00008",
+      1793286085.548157
+    ],
+    [
+      "00009",
+      1793286085.613467
+    ],
+    [
+      "00010",
+      1793286085.694947
+    ],
+    [
+      "00011",
+      1793286085.791005
+    ],
+    [
+      "00012",
+      1793286085.86455
+    ],
+    [
+      "00013",
+      1793286085.900337
+    ],
+    [
+      "00014",
+      1793286085.959494
+    ],
+    [
+      "00015",
+      1793286085.993476
+    ],
+    [
+      "00016",
+      1793286086.086928
+    ],
+    [
+      "00017",
+      1793286086.149647
+    ],
+    [
+      "00018",
+      1793286086.185437
+    ],
+    [
+      "00019",
+      1793286086.264889
+    ],
+    [
+      "00020",
+      1793286086.292164
+    ],
+    [
+      "00021",
+      1793286086.379042
+    ],
+    [
+      "00022",
+      1793286086.408451
+    ],
+    [
+      "00023",
+      1793286086.601
+    ],
+    [
+      "00024",
+      1793286086.690403
+    ],
+    [
+      "00025",
+      1793286086.752323
+    ],
+    [
+      "00026",
+      1793286086.783389
+    ],
+    [
+      "00027",
+      1793286086.811621
+    ],
+    [
+      "00028",
+      1793286086.885028
+    ],
+    [
+      "00029",
+      1793286086.955918
+    ],
+    [
+      "00030",
+      1793286086.989852
+    ]
+  ],
+  "impacts": [
+    {
+      "at": 1793286085501,
+      "actorId": "mira",
+      "action": "disengage",
+      "intent": "Crushing Blow",
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "mira",
+          "targetId": "f1",
+          "amount": 10,
+          "text": "Hero attacks."
+        },
+        {
+          "type": "delay",
+          "sourceId": "mira",
+          "targetId": "f1",
+          "text": "Enemy acts last this round."
+        }
+      ]
+    },
+    {
+      "at": 1793286086312,
+      "actorId": "b1",
+      "intent": "Shadow Knife",
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "b1",
+          "targetId": "weaver",
+          "amount": 8,
+          "absorbed": 0,
+          "text": "Enemy attacks on its own turn."
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

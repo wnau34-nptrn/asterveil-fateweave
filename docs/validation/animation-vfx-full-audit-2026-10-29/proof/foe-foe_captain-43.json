@@ -1,0 +1,447 @@
+{
+  "id": "foe-foe_captain-43",
+  "status": "captured",
+  "clickOffset": 0.2358720302581787,
+  "sourceFrames": 42,
+  "decodedFrames": 43,
+  "maxTimestampError": 0.000005154174804688355,
+  "maxFrameGap": 0.15070009231567383,
+  "sameState": true,
+  "saveStable": true,
+  "info": {
+    "case": {
+      "id": "foe-foe_captain-43",
+      "kind": "foe",
+      "identity": "foe_captain",
+      "index": 43,
+      "intent": "War Cry",
+      "source": "vanguard-captain"
+    },
+    "command": {
+      "beat": 1,
+      "heroId": "guardian",
+      "action": "attack",
+      "targetId": "f1"
+    },
+    "timings": [
+      {
+        "actorId": "guardian",
+        "side": "hero",
+        "action": "attack",
+        "intent": "War Cry",
+        "at": 0,
+        "contact": 210,
+        "end": 600,
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "guardian",
+            "targetId": "f1",
+            "amount": 10,
+            "text": "Hero attacks."
+          }
+        ]
+      },
+      {
+        "actorId": "f1",
+        "side": "enemy",
+        "intent": "War Cry",
+        "at": 600,
+        "contact": 280,
+        "end": 800,
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "f1",
+            "targetId": "guardian",
+            "amount": 22,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      },
+      {
+        "actorId": "b1",
+        "side": "enemy",
+        "intent": "Shadow Knife",
+        "at": 1400,
+        "contact": 280,
+        "end": 800,
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "b1",
+            "targetId": "healer",
+            "amount": 8,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      }
+    ],
+    "focus": "f1",
+    "expectedSheets": [
+      "unit-pilot-aegis",
+      "unit-pilot-lyra",
+      "unit-pilot-eira",
+      "unit-pilot-seren"
+    ],
+    "dataSummary": {
+      "heroes": [
+        {
+          "id": "guardian",
+          "speed": 200,
+          "name": "Aegis",
+          "role": "Knight",
+          "lane": "front",
+          "maxHp": 76,
+          "attack": 10,
+          "actions": [
+            "attack",
+            "guard",
+            "bash",
+            "rally",
+            "bulwark",
+            "challenge",
+            "rouse"
+          ],
+          "unlocks": {
+            "skill": "rally",
+            "passive": "stand"
+          },
+          "color": 6408703
+        },
+        {
+          "id": "tracer",
+          "speed": 49,
+          "name": "Lyra",
+          "role": "Duelist",
+          "lane": "front",
+          "maxHp": 56,
+          "attack": 16,
+          "actions": [
+            "attack",
+            "mark",
+            "execute",
+            "finisher",
+            "lunge",
+            "parry",
+            "sweep"
+          ],
+          "unlocks": {
+            "skill": "finisher",
+            "passive": "keeneye"
+          },
+          "color": 16764018,
+          "empoweredByStatuses": true
+        },
+        {
+          "id": "weaver",
+          "speed": 48,
+          "name": "Eira",
+          "role": "Mage",
+          "lane": "back",
+          "maxHp": 48,
+          "attack": 11,
+          "actions": [
+            "attack",
+            "bolt",
+            "ward",
+            "sigil",
+            "storm",
+            "aegis",
+            "dispel"
+          ],
+          "unlocks": {
+            "skill": "sigil",
+            "passive": "echo"
+          },
+          "color": 11901695
+        },
+        {
+          "id": "healer",
+          "speed": 47,
+          "name": "Seren",
+          "role": "Priest",
+          "lane": "back",
+          "maxHp": 46,
+          "attack": 8,
+          "actions": [
+            "attack",
+            "heal",
+            "prayer",
+            "sanctuary",
+            "revive",
+            "halo",
+            "bless"
+          ],
+          "unlocks": {
+            "skill": "sanctuary",
+            "passive": "afterglow"
+          },
+          "color": 9493936
+        }
+      ],
+      "enemies": [
+        {
+          "id": "f1",
+          "row": "front",
+          "large": true,
+          "speed": 110,
+          "boss": true,
+          "name": "Vanguard Captain",
+          "displayName": "หัวหน้ากองหน้า",
+          "maxHp": 500,
+          "color": 9930226,
+          "art": "foe_captain",
+          "reserve": false
+        },
+        {
+          "id": "b1",
+          "row": "back",
+          "speed": 100,
+          "name": "Veil Raider",
+          "displayName": "นักจู่โจม",
+          "maxHp": 500,
+          "color": 15630525,
+          "art": "raider"
+        }
+      ],
+      "intents": [
+        {
+          "sourceId": "f1",
+          "targetSlot": 0,
+          "name": "War Cry",
+          "damage": 22,
+          "kind": "energy",
+          "unstoppable": true
+        },
+        {
+          "sourceId": "b1",
+          "targetSlot": 3,
+          "name": "Shadow Knife",
+          "damage": 8,
+          "kind": "energy"
+        }
+      ]
+    }
+  },
+  "stamps": [
+    [
+      "00000",
+      1793286008.062128
+    ],
+    [
+      "00001",
+      1793286008.089367
+    ],
+    [
+      "00002",
+      1793286008.180145
+    ],
+    [
+      "00003",
+      1793286008.286001
+    ],
+    [
+      "00004",
+      1793286008.354757
+    ],
+    [
+      "00005",
+      1793286008.391509
+    ],
+    [
+      "00006",
+      1793286008.484998
+    ],
+    [
+      "00007",
+      1793286008.599151
+    ],
+    [
+      "00008",
+      1793286008.702729
+    ],
+    [
+      "00009",
+      1793286008.771606
+    ],
+    [
+      "00010",
+      1793286008.8691
+    ],
+    [
+      "00011",
+      1793286008.90044
+    ],
+    [
+      "00012",
+      1793286008.963631
+    ],
+    [
+      "00013",
+      1793286008.997161
+    ],
+    [
+      "00014",
+      1793286009.147861
+    ],
+    [
+      "00015",
+      1793286009.19908
+    ],
+    [
+      "00016",
+      1793286009.257769
+    ],
+    [
+      "00017",
+      1793286009.346928
+    ],
+    [
+      "00018",
+      1793286009.377489
+    ],
+    [
+      "00019",
+      1793286009.406352
+    ],
+    [
+      "00020",
+      1793286009.492251
+    ],
+    [
+      "00021",
+      1793286009.550993
+    ],
+    [
+      "00022",
+      1793286009.579887
+    ],
+    [
+      "00023",
+      1793286009.663304
+    ],
+    [
+      "00024",
+      1793286009.69245
+    ],
+    [
+      "00025",
+      1793286009.75284
+    ],
+    [
+      "00026",
+      1793286009.781476
+    ],
+    [
+      "00027",
+      1793286009.875053
+    ],
+    [
+      "00028",
+      1793286009.969531
+    ],
+    [
+      "00029",
+      1793286010.075525
+    ],
+    [
+      "00030",
+      1793286010.107648
+    ],
+    [
+      "00031",
+      1793286010.170011
+    ],
+    [
+      "00032",
+      1793286010.197969
+    ],
+    [
+      "00033",
+      1793286010.314564
+    ],
+    [
+      "00034",
+      1793286010.368998
+    ],
+    [
+      "00035",
+      1793286010.40097
+    ],
+    [
+      "00036",
+      1793286010.47357
+    ],
+    [
+      "00037",
+      1793286010.503495
+    ],
+    [
+      "00038",
+      1793286010.568215
+    ],
+    [
+      "00039",
+      1793286010.605104
+    ],
+    [
+      "00040",
+      1793286010.665796
+    ],
+    [
+      "00041",
+      1793286010.697976
+    ]
+  ],
+  "impacts": [
+    {
+      "at": 1793286008578,
+      "actorId": "guardian",
+      "action": "attack",
+      "intent": "War Cry",
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "guardian",
+          "targetId": "f1",
+          "amount": 10,
+          "text": "Hero attacks."
+        }
+      ]
+    },
+    {
+      "at": 1793286009274,
+      "actorId": "f1",
+      "intent": "War Cry",
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "f1",
+          "targetId": "guardian",
+          "amount": 22,
+          "absorbed": 0,
+          "text": "Enemy attacks on its own turn."
+        }
+      ]
+    },
+    {
+      "at": 1793286010098,
+      "actorId": "b1",
+      "intent": "Shadow Knife",
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "b1",
+          "targetId": "healer",
+          "amount": 8,
+          "absorbed": 0,
+          "text": "Enemy attacks on its own turn."
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

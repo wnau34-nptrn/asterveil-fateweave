@@ -1,0 +1,440 @@
+{
+  "id": "foe-foe_riftweaver-37",
+  "status": "captured",
+  "clickOffset": 0.2735879421234131,
+  "sourceFrames": 41,
+  "decodedFrames": 42,
+  "maxTimestampError": 0.000005047607421815314,
+  "maxFrameGap": 0.15532207489013672,
+  "sameState": true,
+  "saveStable": true,
+  "info": {
+    "case": {
+      "id": "foe-foe_riftweaver-37",
+      "kind": "foe",
+      "identity": "foe_riftweaver",
+      "index": 37,
+      "intent": "Rift Needle",
+      "source": "mini-veil-golem"
+    },
+    "command": {
+      "beat": 1,
+      "heroId": "guardian",
+      "action": "attack",
+      "targetId": "f1"
+    },
+    "timings": [
+      {
+        "actorId": "guardian",
+        "side": "hero",
+        "action": "attack",
+        "intent": "Rift Needle",
+        "at": 0,
+        "contact": 210,
+        "end": 600,
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "guardian",
+            "targetId": "f1",
+            "amount": 10,
+            "text": "Hero attacks."
+          }
+        ]
+      },
+      {
+        "actorId": "f1",
+        "side": "enemy",
+        "intent": "Rift Needle",
+        "at": 600,
+        "contact": 280,
+        "end": 800,
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "f1",
+            "targetId": "guardian",
+            "amount": 18,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      },
+      {
+        "actorId": "b1",
+        "side": "enemy",
+        "intent": "Shadow Knife",
+        "at": 1400,
+        "contact": 280,
+        "end": 800,
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "b1",
+            "targetId": "healer",
+            "amount": 8,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      }
+    ],
+    "focus": "f1",
+    "expectedSheets": [
+      "unit-pilot-aegis",
+      "unit-pilot-lyra",
+      "unit-pilot-eira",
+      "unit-pilot-seren"
+    ],
+    "dataSummary": {
+      "heroes": [
+        {
+          "id": "guardian",
+          "speed": 200,
+          "name": "Aegis",
+          "role": "Knight",
+          "lane": "front",
+          "maxHp": 76,
+          "attack": 10,
+          "actions": [
+            "attack",
+            "guard",
+            "bash",
+            "rally",
+            "bulwark",
+            "challenge",
+            "rouse"
+          ],
+          "unlocks": {
+            "skill": "rally",
+            "passive": "stand"
+          },
+          "color": 6408703
+        },
+        {
+          "id": "tracer",
+          "speed": 49,
+          "name": "Lyra",
+          "role": "Duelist",
+          "lane": "front",
+          "maxHp": 56,
+          "attack": 16,
+          "actions": [
+            "attack",
+            "mark",
+            "execute",
+            "finisher",
+            "lunge",
+            "parry",
+            "sweep"
+          ],
+          "unlocks": {
+            "skill": "finisher",
+            "passive": "keeneye"
+          },
+          "color": 16764018,
+          "empoweredByStatuses": true
+        },
+        {
+          "id": "weaver",
+          "speed": 48,
+          "name": "Eira",
+          "role": "Mage",
+          "lane": "back",
+          "maxHp": 48,
+          "attack": 11,
+          "actions": [
+            "attack",
+            "bolt",
+            "ward",
+            "sigil",
+            "storm",
+            "aegis",
+            "dispel"
+          ],
+          "unlocks": {
+            "skill": "sigil",
+            "passive": "echo"
+          },
+          "color": 11901695
+        },
+        {
+          "id": "healer",
+          "speed": 47,
+          "name": "Seren",
+          "role": "Priest",
+          "lane": "back",
+          "maxHp": 46,
+          "attack": 8,
+          "actions": [
+            "attack",
+            "heal",
+            "prayer",
+            "sanctuary",
+            "revive",
+            "halo",
+            "bless"
+          ],
+          "unlocks": {
+            "skill": "sanctuary",
+            "passive": "afterglow"
+          },
+          "color": 9493936
+        }
+      ],
+      "enemies": [
+        {
+          "id": "f1",
+          "row": "front",
+          "speed": 110,
+          "name": "Rift Weaver",
+          "displayName": "ผู้ถักรอยแยก",
+          "maxHp": 500,
+          "color": 9071815,
+          "art": "foe_riftweaver",
+          "reserve": false
+        },
+        {
+          "id": "b1",
+          "row": "back",
+          "speed": 100,
+          "name": "Veil Raider",
+          "displayName": "นักจู่โจม",
+          "maxHp": 500,
+          "color": 15630525,
+          "art": "raider"
+        }
+      ],
+      "intents": [
+        {
+          "sourceId": "f1",
+          "targetSlot": 0,
+          "name": "Rift Needle",
+          "damage": 18,
+          "kind": "energy"
+        },
+        {
+          "sourceId": "b1",
+          "targetSlot": 3,
+          "name": "Shadow Knife",
+          "damage": 8,
+          "kind": "energy"
+        }
+      ]
+    }
+  },
+  "stamps": [
+    [
+      "00000",
+      1793285989.496412
+    ],
+    [
+      "00001",
+      1793285989.548748
+    ],
+    [
+      "00002",
+      1793285989.658606
+    ],
+    [
+      "00003",
+      1793285989.758298
+    ],
+    [
+      "00004",
+      1793285989.806923
+    ],
+    [
+      "00005",
+      1793285989.868634
+    ],
+    [
+      "00006",
+      1793285989.895377
+    ],
+    [
+      "00007",
+      1793285990.050699
+    ],
+    [
+      "00008",
+      1793285990.084563
+    ],
+    [
+      "00009",
+      1793285990.211159
+    ],
+    [
+      "00010",
+      1793285990.310204
+    ],
+    [
+      "00011",
+      1793285990.374703
+    ],
+    [
+      "00012",
+      1793285990.411273
+    ],
+    [
+      "00013",
+      1793285990.473453
+    ],
+    [
+      "00014",
+      1793285990.509205
+    ],
+    [
+      "00015",
+      1793285990.608984
+    ],
+    [
+      "00016",
+      1793285990.667723
+    ],
+    [
+      "00017",
+      1793285990.700503
+    ],
+    [
+      "00018",
+      1793285990.76328
+    ],
+    [
+      "00019",
+      1793285990.812196
+    ],
+    [
+      "00020",
+      1793285990.892916
+    ],
+    [
+      "00021",
+      1793285990.95726
+    ],
+    [
+      "00022",
+      1793285990.986948
+    ],
+    [
+      "00023",
+      1793285991.047027
+    ],
+    [
+      "00024",
+      1793285991.148308
+    ],
+    [
+      "00025",
+      1793285991.214958
+    ],
+    [
+      "00026",
+      1793285991.277806
+    ],
+    [
+      "00027",
+      1793285991.30645
+    ],
+    [
+      "00028",
+      1793285991.458448
+    ],
+    [
+      "00029",
+      1793285991.486516
+    ],
+    [
+      "00030",
+      1793285991.554409
+    ],
+    [
+      "00031",
+      1793285991.585129
+    ],
+    [
+      "00032",
+      1793285991.652483
+    ],
+    [
+      "00033",
+      1793285991.770366
+    ],
+    [
+      "00034",
+      1793285991.85421
+    ],
+    [
+      "00035",
+      1793285991.887732
+    ],
+    [
+      "00036",
+      1793285991.947788
+    ],
+    [
+      "00037",
+      1793285991.992666
+    ],
+    [
+      "00038",
+      1793285992.057507
+    ],
+    [
+      "00039",
+      1793285992.088567
+    ],
+    [
+      "00040",
+      1793285992.151117
+    ]
+  ],
+  "impacts": [
+    {
+      "at": 1793285990004,
+      "actorId": "guardian",
+      "action": "attack",
+      "intent": "Rift Needle",
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "guardian",
+          "targetId": "f1",
+          "amount": 10,
+          "text": "Hero attacks."
+        }
+      ]
+    },
+    {
+      "at": 1793285990691,
+      "actorId": "f1",
+      "intent": "Rift Needle",
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "f1",
+          "targetId": "guardian",
+          "amount": 18,
+          "absorbed": 0,
+          "text": "Enemy attacks on its own turn."
+        }
+      ]
+    },
+    {
+      "at": 1793285991504,
+      "actorId": "b1",
+      "intent": "Shadow Knife",
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "b1",
+          "targetId": "healer",
+          "amount": 8,
+          "absorbed": 0,
+          "text": "Enemy attacks on its own turn."
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

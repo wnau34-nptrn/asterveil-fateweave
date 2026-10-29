@@ -1,0 +1,429 @@
+{
+  "id": "foe-foe_juggernaut-20",
+  "status": "captured",
+  "clickOffset": 0.24483394622802734,
+  "sourceFrames": 38,
+  "decodedFrames": 39,
+  "maxTimestampError": 0.000005219467163142255,
+  "maxFrameGap": 0.29590296745300293,
+  "sameState": true,
+  "saveStable": true,
+  "info": {
+    "case": {
+      "id": "foe-foe_juggernaut-20",
+      "kind": "foe",
+      "identity": "foe_juggernaut",
+      "index": 20,
+      "intent": "Shard Burst",
+      "source": "crystal-stampede"
+    },
+    "command": {
+      "beat": 1,
+      "heroId": "guardian",
+      "action": "attack",
+      "targetId": "f1"
+    },
+    "timings": [
+      {
+        "actorId": "guardian",
+        "side": "hero",
+        "action": "attack",
+        "intent": "Shard Burst",
+        "at": 0,
+        "contact": 210,
+        "end": 600,
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "guardian",
+            "targetId": "f1",
+            "amount": 10,
+            "text": "Hero attacks."
+          }
+        ]
+      },
+      {
+        "actorId": "f1",
+        "side": "enemy",
+        "intent": "Shard Burst",
+        "at": 600,
+        "contact": 280,
+        "end": 800,
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "f1",
+            "targetId": "guardian",
+            "amount": 22,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      },
+      {
+        "actorId": "b1",
+        "side": "enemy",
+        "intent": "Shadow Knife",
+        "at": 1400,
+        "contact": 280,
+        "end": 800,
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "b1",
+            "targetId": "healer",
+            "amount": 8,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      }
+    ],
+    "focus": "f1",
+    "expectedSheets": [
+      "unit-pilot-aegis",
+      "unit-pilot-lyra",
+      "unit-pilot-eira",
+      "unit-pilot-seren"
+    ],
+    "dataSummary": {
+      "heroes": [
+        {
+          "id": "guardian",
+          "speed": 200,
+          "name": "Aegis",
+          "role": "Knight",
+          "lane": "front",
+          "maxHp": 76,
+          "attack": 10,
+          "actions": [
+            "attack",
+            "guard",
+            "bash",
+            "rally",
+            "bulwark",
+            "challenge",
+            "rouse"
+          ],
+          "unlocks": {
+            "skill": "rally",
+            "passive": "stand"
+          },
+          "color": 6408703
+        },
+        {
+          "id": "tracer",
+          "speed": 49,
+          "name": "Lyra",
+          "role": "Duelist",
+          "lane": "front",
+          "maxHp": 56,
+          "attack": 16,
+          "actions": [
+            "attack",
+            "mark",
+            "execute",
+            "finisher",
+            "lunge",
+            "parry",
+            "sweep"
+          ],
+          "unlocks": {
+            "skill": "finisher",
+            "passive": "keeneye"
+          },
+          "color": 16764018,
+          "empoweredByStatuses": true
+        },
+        {
+          "id": "weaver",
+          "speed": 48,
+          "name": "Eira",
+          "role": "Mage",
+          "lane": "back",
+          "maxHp": 48,
+          "attack": 11,
+          "actions": [
+            "attack",
+            "bolt",
+            "ward",
+            "sigil",
+            "storm",
+            "aegis",
+            "dispel"
+          ],
+          "unlocks": {
+            "skill": "sigil",
+            "passive": "echo"
+          },
+          "color": 11901695
+        },
+        {
+          "id": "healer",
+          "speed": 47,
+          "name": "Seren",
+          "role": "Priest",
+          "lane": "back",
+          "maxHp": 46,
+          "attack": 8,
+          "actions": [
+            "attack",
+            "heal",
+            "prayer",
+            "sanctuary",
+            "revive",
+            "halo",
+            "bless"
+          ],
+          "unlocks": {
+            "skill": "sanctuary",
+            "passive": "afterglow"
+          },
+          "color": 9493936
+        }
+      ],
+      "enemies": [
+        {
+          "id": "f1",
+          "row": "front",
+          "large": true,
+          "speed": 110,
+          "name": "Crystal Juggernaut",
+          "displayName": "ด้วงเกราะผลึก",
+          "maxHp": 500,
+          "color": 9721046,
+          "art": "foe_juggernaut",
+          "reserve": false
+        },
+        {
+          "id": "b1",
+          "row": "back",
+          "speed": 100,
+          "name": "Veil Raider",
+          "displayName": "นักจู่โจม",
+          "maxHp": 500,
+          "color": 15630525,
+          "art": "raider"
+        }
+      ],
+      "intents": [
+        {
+          "sourceId": "f1",
+          "targetSlot": 0,
+          "name": "Shard Burst",
+          "damage": 22,
+          "kind": "energy"
+        },
+        {
+          "sourceId": "b1",
+          "targetSlot": 3,
+          "name": "Shadow Knife",
+          "damage": 8,
+          "kind": "energy"
+        }
+      ]
+    }
+  },
+  "stamps": [
+    [
+      "00000",
+      1793285994.570166
+    ],
+    [
+      "00001",
+      1793285994.661892
+    ],
+    [
+      "00002",
+      1793285994.767984
+    ],
+    [
+      "00003",
+      1793285994.801209
+    ],
+    [
+      "00004",
+      1793285994.901719
+    ],
+    [
+      "00005",
+      1793285994.968752
+    ],
+    [
+      "00006",
+      1793285995.001586
+    ],
+    [
+      "00007",
+      1793285995.094559
+    ],
+    [
+      "00008",
+      1793285995.173387
+    ],
+    [
+      "00009",
+      1793285995.206461
+    ],
+    [
+      "00010",
+      1793285995.301496
+    ],
+    [
+      "00011",
+      1793285995.361503
+    ],
+    [
+      "00012",
+      1793285995.41314
+    ],
+    [
+      "00013",
+      1793285995.511763
+    ],
+    [
+      "00014",
+      1793285995.57629
+    ],
+    [
+      "00015",
+      1793285995.608966
+    ],
+    [
+      "00016",
+      1793285995.69355
+    ],
+    [
+      "00017",
+      1793285995.75453
+    ],
+    [
+      "00018",
+      1793285995.798981
+    ],
+    [
+      "00019",
+      1793285995.858133
+    ],
+    [
+      "00020",
+      1793285995.893464
+    ],
+    [
+      "00021",
+      1793285995.987804
+    ],
+    [
+      "00022",
+      1793285996.048911
+    ],
+    [
+      "00023",
+      1793285996.083287
+    ],
+    [
+      "00024",
+      1793285996.14758
+    ],
+    [
+      "00025",
+      1793285996.26278
+    ],
+    [
+      "00026",
+      1793285996.368987
+    ],
+    [
+      "00027",
+      1793285996.399468
+    ],
+    [
+      "00028",
+      1793285996.459589
+    ],
+    [
+      "00029",
+      1793285996.565194
+    ],
+    [
+      "00030",
+      1793285996.606638
+    ],
+    [
+      "00031",
+      1793285996.673484
+    ],
+    [
+      "00032",
+      1793285996.703798
+    ],
+    [
+      "00033",
+      1793285996.999701
+    ],
+    [
+      "00034",
+      1793285997.076306
+    ],
+    [
+      "00035",
+      1793285997.150547
+    ],
+    [
+      "00036",
+      1793285997.254792
+    ],
+    [
+      "00037",
+      1793285997.289778
+    ]
+  ],
+  "impacts": [
+    {
+      "at": 1793285995084,
+      "actorId": "guardian",
+      "action": "attack",
+      "intent": "Shard Burst",
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "guardian",
+          "targetId": "f1",
+          "amount": 10,
+          "text": "Hero attacks."
+        }
+      ]
+    },
+    {
+      "at": 1793285995783,
+      "actorId": "f1",
+      "intent": "Shard Burst",
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "f1",
+          "targetId": "guardian",
+          "amount": 22,
+          "absorbed": 0,
+          "text": "Enemy attacks on its own turn."
+        }
+      ]
+    },
+    {
+      "at": 1793285996583,
+      "actorId": "b1",
+      "intent": "Shadow Knife",
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "b1",
+          "targetId": "healer",
+          "amount": 8,
+          "absorbed": 0,
+          "text": "Enemy attacks on its own turn."
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

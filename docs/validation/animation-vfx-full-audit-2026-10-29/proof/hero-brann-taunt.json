@@ -1,0 +1,442 @@
+{
+  "id": "hero-brann-taunt",
+  "status": "captured",
+  "clickOffset": 0.3210749626159668,
+  "sourceFrames": 42,
+  "decodedFrames": 43,
+  "maxTimestampError": 0.000006042343139667228,
+  "maxFrameGap": 0.15599799156188965,
+  "sameState": true,
+  "saveStable": true,
+  "info": {
+    "case": {
+      "id": "hero-brann-taunt",
+      "kind": "hero",
+      "identity": "brann",
+      "action": "taunt"
+    },
+    "command": {
+      "beat": 1,
+      "heroId": "brann",
+      "action": "taunt",
+      "targetId": "brann"
+    },
+    "timings": [
+      {
+        "actorId": "brann",
+        "side": "hero",
+        "action": "taunt",
+        "intent": "Crushing Blow",
+        "at": 0,
+        "contact": 220,
+        "end": 550,
+        "events": [
+          {
+            "type": "taunt",
+            "sourceId": "brann",
+            "targetId": "brann",
+            "text": "Every enemy attack aims at the warden until his next turn."
+          }
+        ]
+      },
+      {
+        "actorId": "f1",
+        "side": "enemy",
+        "intent": "Crushing Blow",
+        "at": 550,
+        "contact": 280,
+        "end": 800,
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "f1",
+            "targetId": "brann",
+            "amount": 10,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      },
+      {
+        "actorId": "b1",
+        "side": "enemy",
+        "intent": "Shadow Knife",
+        "at": 1350,
+        "contact": 280,
+        "end": 800,
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "b1",
+            "targetId": "brann",
+            "amount": 6,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      }
+    ],
+    "focus": "brann",
+    "expectedSheets": [
+      "unit-pilot-brann",
+      "unit-pilot-aegis",
+      "unit-pilot-lyra",
+      "unit-pilot-eira",
+      "unit-pilot-vargoth"
+    ],
+    "dataSummary": {
+      "heroes": [
+        {
+          "id": "brann",
+          "speed": 200,
+          "name": "Brann",
+          "role": "Warden",
+          "lane": "front",
+          "maxHp": 92,
+          "attack": 11,
+          "actions": [
+            "attack",
+            "taunt",
+            "slam",
+            "quake",
+            "stonearmor",
+            "guardstone",
+            "tremor"
+          ],
+          "unlocks": {
+            "skill": "quake",
+            "passive": "stoneskin"
+          },
+          "color": 9015448
+        },
+        {
+          "id": "guardian",
+          "speed": 49,
+          "name": "Aegis",
+          "role": "Knight",
+          "lane": "front",
+          "maxHp": 76,
+          "attack": 10,
+          "actions": [
+            "attack",
+            "guard",
+            "bash",
+            "rally",
+            "bulwark",
+            "challenge",
+            "rouse"
+          ],
+          "unlocks": {
+            "skill": "rally",
+            "passive": "stand"
+          },
+          "color": 6408703
+        },
+        {
+          "id": "tracer",
+          "speed": 48,
+          "name": "Lyra",
+          "role": "Duelist",
+          "lane": "front",
+          "maxHp": 56,
+          "attack": 16,
+          "actions": [
+            "attack",
+            "mark",
+            "execute",
+            "finisher",
+            "lunge",
+            "parry",
+            "sweep"
+          ],
+          "unlocks": {
+            "skill": "finisher",
+            "passive": "keeneye"
+          },
+          "color": 16764018,
+          "empoweredByStatuses": true
+        },
+        {
+          "id": "weaver",
+          "speed": 47,
+          "name": "Eira",
+          "role": "Mage",
+          "lane": "back",
+          "maxHp": 48,
+          "attack": 11,
+          "actions": [
+            "attack",
+            "bolt",
+            "ward",
+            "sigil",
+            "storm",
+            "aegis",
+            "dispel"
+          ],
+          "unlocks": {
+            "skill": "sigil",
+            "passive": "echo"
+          },
+          "color": 11901695
+        }
+      ],
+      "enemies": [
+        {
+          "id": "f1",
+          "row": "front",
+          "large": true,
+          "speed": 110,
+          "name": "Vargoth Guard",
+          "displayName": "องครักษ์อสูร",
+          "maxHp": 500,
+          "color": 9930226,
+          "art": "foe_vargoth_guard",
+          "reserve": false
+        },
+        {
+          "id": "b1",
+          "row": "back",
+          "speed": 100,
+          "name": "Veil Raider",
+          "displayName": "นักจู่โจม",
+          "maxHp": 500,
+          "color": 15630525,
+          "art": "raider"
+        }
+      ],
+      "intents": [
+        {
+          "sourceId": "f1",
+          "targetSlot": 0,
+          "name": "Crushing Blow",
+          "damage": 14,
+          "kind": "physical"
+        },
+        {
+          "sourceId": "b1",
+          "targetSlot": 3,
+          "name": "Shadow Knife",
+          "damage": 8,
+          "kind": "energy"
+        }
+      ]
+    }
+  },
+  "stamps": [
+    [
+      "00000",
+      1793286090.551925
+    ],
+    [
+      "00001",
+      1793286090.677417
+    ],
+    [
+      "00002",
+      1793286090.705623
+    ],
+    [
+      "00003",
+      1793286090.766468
+    ],
+    [
+      "00004",
+      1793286090.858666
+    ],
+    [
+      "00005",
+      1793286090.898312
+    ],
+    [
+      "00006",
+      1793286090.960075
+    ],
+    [
+      "00007",
+      1793286090.99117
+    ],
+    [
+      "00008",
+      1793286091.106604
+    ],
+    [
+      "00009",
+      1793286091.17405
+    ],
+    [
+      "00010",
+      1793286091.206871
+    ],
+    [
+      "00011",
+      1793286091.314454
+    ],
+    [
+      "00012",
+      1793286091.41402
+    ],
+    [
+      "00013",
+      1793286091.482185
+    ],
+    [
+      "00014",
+      1793286091.560543
+    ],
+    [
+      "00015",
+      1793286091.601402
+    ],
+    [
+      "00016",
+      1793286091.752045
+    ],
+    [
+      "00017",
+      1793286091.787737
+    ],
+    [
+      "00018",
+      1793286091.852897
+    ],
+    [
+      "00019",
+      1793286091.905113
+    ],
+    [
+      "00020",
+      1793286091.984708
+    ],
+    [
+      "00021",
+      1793286092.019136
+    ],
+    [
+      "00022",
+      1793286092.074171
+    ],
+    [
+      "00023",
+      1793286092.103149
+    ],
+    [
+      "00024",
+      1793286092.165427
+    ],
+    [
+      "00025",
+      1793286092.193283
+    ],
+    [
+      "00026",
+      1793286092.298908
+    ],
+    [
+      "00027",
+      1793286092.362704
+    ],
+    [
+      "00028",
+      1793286092.391392
+    ],
+    [
+      "00029",
+      1793286092.547355
+    ],
+    [
+      "00030",
+      1793286092.608205
+    ],
+    [
+      "00031",
+      1793286092.66975
+    ],
+    [
+      "00032",
+      1793286092.69841
+    ],
+    [
+      "00033",
+      1793286092.854408
+    ],
+    [
+      "00034",
+      1793286092.882588
+    ],
+    [
+      "00035",
+      1793286092.911945
+    ],
+    [
+      "00036",
+      1793286092.972204
+    ],
+    [
+      "00037",
+      1793286093.000273
+    ],
+    [
+      "00038",
+      1793286093.062138
+    ],
+    [
+      "00039",
+      1793286093.097544
+    ],
+    [
+      "00040",
+      1793286093.164516
+    ],
+    [
+      "00041",
+      1793286093.19222
+    ]
+  ],
+  "impacts": [
+    {
+      "at": 1793286091128,
+      "actorId": "brann",
+      "action": "taunt",
+      "intent": "Crushing Blow",
+      "events": [
+        {
+          "type": "taunt",
+          "sourceId": "brann",
+          "targetId": "brann",
+          "text": "Every enemy attack aims at the warden until his next turn."
+        }
+      ]
+    },
+    {
+      "at": 1793286091767,
+      "actorId": "f1",
+      "intent": "Crushing Blow",
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "f1",
+          "targetId": "brann",
+          "amount": 10,
+          "absorbed": 0,
+          "text": "Enemy attacks on its own turn."
+        }
+      ]
+    },
+    {
+      "at": 1793286092599,
+      "actorId": "b1",
+      "intent": "Shadow Knife",
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "b1",
+          "targetId": "brann",
+          "amount": 6,
+          "absorbed": 0,
+          "text": "Enemy attacks on its own turn."
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

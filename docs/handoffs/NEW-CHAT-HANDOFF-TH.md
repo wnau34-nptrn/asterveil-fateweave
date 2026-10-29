@@ -1,5 +1,11 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
+## 2026-10-29 — ข้อมูลล่าสุดก่อนแก้ animation/VFX: auditครบ36ตัว/73ActionIds
+
+เจ้าของขอให้ตรวจตัวอื่น/ท่าอื่นให้ครบหลังเจอAegisหัวโต ส่งผลruntimeauditแล้วที่ [README](../validation/animation-vfx-full-audit-2026-10-29/README_TH.md), [coverage](../validation/animation-vfx-full-audit-2026-10-29/COVERAGE_TH.md) และ [ข้อความเปิดงานแก้ให้Claude](../validation/animation-vfx-full-audit-2026-10-29/CLAUDE_HANDOFF_TH.md)
+
+ฐาน157d685บนfeature/fateweave-initial-prototype;362กรณี/72คลิป มี8กลุ่มปัญหาที่ต้องแก้ (anatomy,gesturemapping,basicattackFX,projectilerelease,whiteflash,fallback,bosscharge,caption/downreadability) เริ่มจากรายงานก่อนเพิ่มwaveเพื่อไม่ทำปัญหาซ้ำ ลำดับแก้เป็นคำแนะนำจากaudit ไม่ได้เปลี่ยนownerartdecisions/กฎต่อสู้/เซฟ/ลำดับงานที่เจ้าของอาจสั่งในแชตใหม่ ผลstateผ่านไม่ใช่visualapproval ข้อความW4เก่าด้านล่างยังเป็นประวัติคำสั่งเดิม ให้เทียบกับทิศทางล่าสุดของเจ้าของก่อนทำ
+
 ## 2026-10-29 — แชตถัดไป: W4 A6 + VFX บทเพลง/เงา นำภาพเข้าเกม (เปิดอัตโนมัติจากแชต W3)
 
 เจ้าของตอบ “ดำเนินการขั้นต่อไปโดยใช้ตาม codex แนะนำ” (2026-10-29) ข้อความเปิดแชต:

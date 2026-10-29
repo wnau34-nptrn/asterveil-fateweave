@@ -1,0 +1,633 @@
+{
+  "id": "phase-elite-briar-lord-0",
+  "status": "captured",
+  "clickOffset": 0.28003692626953125,
+  "sourceFrames": 52,
+  "decodedFrames": 53,
+  "maxTimestampError": 0.000005933624267484561,
+  "maxFrameGap": 0.15303397178649902,
+  "sameState": true,
+  "saveStable": true,
+  "info": {
+    "case": {
+      "id": "phase-elite-briar-lord-0",
+      "kind": "phase",
+      "identity": "foe_matriarch",
+      "source": "elite-briar-lord",
+      "pidx": 0
+    },
+    "command": {
+      "beat": 1,
+      "heroId": "guardian",
+      "action": "attack",
+      "targetId": "f1"
+    },
+    "timings": [
+      {
+        "actorId": "guardian",
+        "side": "hero",
+        "action": "attack",
+        "intent": "Thorn Rage",
+        "at": 0,
+        "contact": 210,
+        "end": 600,
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "guardian",
+            "targetId": "f1",
+            "amount": 10,
+            "text": "Hero attacks."
+          }
+        ]
+      },
+      {
+        "actorId": "b1",
+        "side": "enemy",
+        "intent": "Spore Dust",
+        "at": 600,
+        "contact": 280,
+        "end": 800,
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "b1",
+            "targetId": "healer",
+            "amount": 12,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      },
+      {
+        "actorId": "f2",
+        "side": "enemy",
+        "intent": "Thorn Pounce",
+        "at": 1400,
+        "contact": 280,
+        "end": 800,
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "f2",
+            "targetId": "tracer",
+            "amount": 19,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      },
+      {
+        "actorId": "f1",
+        "side": "enemy",
+        "intent": "Thorn Rage",
+        "at": 2200,
+        "contact": 320,
+        "end": 800,
+        "events": [
+          {
+            "type": "phase",
+            "sourceId": "f1",
+            "targetId": "f1",
+            "text": "Thorn Rage"
+          }
+        ]
+      }
+    ],
+    "focus": "f1",
+    "expectedSheets": [
+      "unit-pilot-aegis",
+      "unit-pilot-lyra",
+      "unit-pilot-eira",
+      "unit-pilot-seren",
+      "unit-pilot-stalker"
+    ],
+    "dataSummary": {
+      "heroes": [
+        {
+          "id": "guardian",
+          "speed": 200,
+          "name": "Aegis",
+          "role": "Knight",
+          "lane": "front",
+          "maxHp": 76,
+          "attack": 10,
+          "actions": [
+            "attack",
+            "guard",
+            "bash",
+            "rally",
+            "bulwark",
+            "challenge",
+            "rouse"
+          ],
+          "unlocks": {
+            "skill": "rally",
+            "passive": "stand"
+          },
+          "color": 6408703
+        },
+        {
+          "id": "tracer",
+          "speed": 49,
+          "name": "Lyra",
+          "role": "Duelist",
+          "lane": "front",
+          "maxHp": 56,
+          "attack": 16,
+          "actions": [
+            "attack",
+            "mark",
+            "execute",
+            "finisher",
+            "lunge",
+            "parry",
+            "sweep"
+          ],
+          "unlocks": {
+            "skill": "finisher",
+            "passive": "keeneye"
+          },
+          "color": 16764018,
+          "empoweredByStatuses": true
+        },
+        {
+          "id": "weaver",
+          "speed": 48,
+          "name": "Eira",
+          "role": "Mage",
+          "lane": "back",
+          "maxHp": 48,
+          "attack": 11,
+          "actions": [
+            "attack",
+            "bolt",
+            "ward",
+            "sigil",
+            "storm",
+            "aegis",
+            "dispel"
+          ],
+          "unlocks": {
+            "skill": "sigil",
+            "passive": "echo"
+          },
+          "color": 11901695
+        },
+        {
+          "id": "healer",
+          "speed": 47,
+          "name": "Seren",
+          "role": "Priest",
+          "lane": "back",
+          "maxHp": 46,
+          "attack": 8,
+          "actions": [
+            "attack",
+            "heal",
+            "prayer",
+            "sanctuary",
+            "revive",
+            "halo",
+            "bless"
+          ],
+          "unlocks": {
+            "skill": "sanctuary",
+            "passive": "afterglow"
+          },
+          "color": 9493936
+        }
+      ],
+      "enemies": [
+        {
+          "id": "b1",
+          "row": "back",
+          "name": "Spore Puff",
+          "displayName": "ภูตสปอร์",
+          "maxHp": 51,
+          "speed": 110,
+          "color": 5223334,
+          "art": "foe_spore_puff"
+        },
+        {
+          "id": "b2",
+          "row": "back",
+          "name": "Spore Puff",
+          "displayName": "ภูตสปอร์",
+          "maxHp": 51,
+          "speed": 110,
+          "color": 5223334,
+          "art": "foe_spore_puff",
+          "reserve": true
+        },
+        {
+          "id": "f2",
+          "row": "front",
+          "speed": 110,
+          "name": "Briar Stalker",
+          "displayName": "ลิงซ์หนามพราง",
+          "maxHp": 100,
+          "color": 3767927,
+          "art": "foe_stalker"
+        },
+        {
+          "id": "f1",
+          "row": "front",
+          "large": true,
+          "speed": 110,
+          "boss": true,
+          "name": "Briar Lord",
+          "displayName": "เจ้าป่าหนาม",
+          "maxHp": 200,
+          "color": 3767927,
+          "art": "foe_matriarch"
+        }
+      ],
+      "intents": [
+        {
+          "sourceId": "b1",
+          "targetSlot": 3,
+          "name": "Spore Dust",
+          "damage": 12,
+          "kind": "energy"
+        },
+        {
+          "sourceId": "b1",
+          "targetSlot": 2,
+          "name": "Spore Dust",
+          "damage": 12,
+          "kind": "energy"
+        },
+        {
+          "sourceId": "b1",
+          "targetSlot": 1,
+          "name": "Spore Dust",
+          "damage": 13,
+          "kind": "energy"
+        },
+        {
+          "sourceId": "b2",
+          "targetSlot": 2,
+          "name": "Spore Dust",
+          "damage": 12,
+          "kind": "energy"
+        },
+        {
+          "sourceId": "b2",
+          "targetSlot": 1,
+          "name": "Spore Dust",
+          "damage": 13,
+          "kind": "energy"
+        },
+        {
+          "sourceId": "b2",
+          "targetSlot": 3,
+          "name": "Spore Dust",
+          "damage": 12,
+          "kind": "energy"
+        },
+        {
+          "sourceId": "f2",
+          "targetSlot": 1,
+          "name": "Thorn Pounce",
+          "damage": 19,
+          "kind": "physical"
+        },
+        {
+          "sourceId": "f1",
+          "targetSlot": 3,
+          "name": "Thorn Bloom",
+          "damage": 22,
+          "kind": "energy"
+        },
+        {
+          "sourceId": "f2",
+          "targetSlot": 0,
+          "name": "Thorn Pounce",
+          "damage": 18,
+          "kind": "physical"
+        },
+        {
+          "sourceId": "f1",
+          "targetSlot": 2,
+          "name": "Thorn Storm",
+          "damage": 27,
+          "kind": "energy",
+          "unstoppable": true
+        },
+        {
+          "sourceId": "f2",
+          "targetSlot": 1,
+          "name": "Thorn Pounce",
+          "damage": 19,
+          "kind": "physical"
+        },
+        {
+          "sourceId": "f1",
+          "targetSlot": 1,
+          "name": "Briar Lash",
+          "damage": 22,
+          "kind": "physical"
+        },
+        {
+          "sourceId": "f1",
+          "targetSlot": 0,
+          "name": "Gather Thorns",
+          "damage": 0,
+          "kind": "energy",
+          "charge": true,
+          "phase": 1
+        },
+        {
+          "sourceId": "f1",
+          "targetSlot": 0,
+          "name": "Thorn Tempest",
+          "damage": 13,
+          "kind": "energy",
+          "all": true,
+          "unstoppable": true,
+          "phase": 1
+        },
+        {
+          "sourceId": "f1",
+          "targetSlot": 1,
+          "name": "Briar Lash",
+          "damage": 24,
+          "kind": "physical",
+          "phase": 1
+        }
+      ]
+    }
+  },
+  "stamps": [
+    [
+      "00000",
+      1793286021.111963
+    ],
+    [
+      "00001",
+      1793286021.175121
+    ],
+    [
+      "00002",
+      1793286021.310832
+    ],
+    [
+      "00003",
+      1793286021.373241
+    ],
+    [
+      "00004",
+      1793286021.501243
+    ],
+    [
+      "00005",
+      1793286021.577367
+    ],
+    [
+      "00006",
+      1793286021.685039
+    ],
+    [
+      "00007",
+      1793286021.801444
+    ],
+    [
+      "00008",
+      1793286021.910079
+    ],
+    [
+      "00009",
+      1793286022.007996
+    ],
+    [
+      "00010",
+      1793286022.079639
+    ],
+    [
+      "00011",
+      1793286022.114808
+    ],
+    [
+      "00012",
+      1793286022.205398
+    ],
+    [
+      "00013",
+      1793286022.358432
+    ],
+    [
+      "00014",
+      1793286022.393709
+    ],
+    [
+      "00015",
+      1793286022.454202
+    ],
+    [
+      "00016",
+      1793286022.561067
+    ],
+    [
+      "00017",
+      1793286022.600637
+    ],
+    [
+      "00018",
+      1793286022.659762
+    ],
+    [
+      "00019",
+      1793286022.697849
+    ],
+    [
+      "00020",
+      1793286022.760992
+    ],
+    [
+      "00021",
+      1793286022.810637
+    ],
+    [
+      "00022",
+      1793286022.878018
+    ],
+    [
+      "00023",
+      1793286022.916516
+    ],
+    [
+      "00024",
+      1793286023.0055
+    ],
+    [
+      "00025",
+      1793286023.086125
+    ],
+    [
+      "00026",
+      1793286023.169208
+    ],
+    [
+      "00027",
+      1793286023.19951
+    ],
+    [
+      "00028",
+      1793286023.260536
+    ],
+    [
+      "00029",
+      1793286023.346923
+    ],
+    [
+      "00030",
+      1793286023.377538
+    ],
+    [
+      "00031",
+      1793286023.410249
+    ],
+    [
+      "00032",
+      1793286023.483342
+    ],
+    [
+      "00033",
+      1793286023.548324
+    ],
+    [
+      "00034",
+      1793286023.575195
+    ],
+    [
+      "00035",
+      1793286023.653768
+    ],
+    [
+      "00036",
+      1793286023.686425
+    ],
+    [
+      "00037",
+      1793286023.750667
+    ],
+    [
+      "00038",
+      1793286023.810672
+    ],
+    [
+      "00039",
+      1793286023.956113
+    ],
+    [
+      "00040",
+      1793286024.002039
+    ],
+    [
+      "00041",
+      1793286024.071395
+    ],
+    [
+      "00042",
+      1793286024.105793
+    ],
+    [
+      "00043",
+      1793286024.166097
+    ],
+    [
+      "00044",
+      1793286024.292469
+    ],
+    [
+      "00045",
+      1793286024.352337
+    ],
+    [
+      "00046",
+      1793286024.387043
+    ],
+    [
+      "00047",
+      1793286024.463487
+    ],
+    [
+      "00048",
+      1793286024.4963
+    ],
+    [
+      "00049",
+      1793286024.568946
+    ],
+    [
+      "00050",
+      1793286024.615089
+    ],
+    [
+      "00051",
+      1793286024.698798
+    ]
+  ],
+  "impacts": [
+    {
+      "at": 1793286021627,
+      "actorId": "guardian",
+      "action": "attack",
+      "intent": "Thorn Rage",
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "guardian",
+          "targetId": "f1",
+          "amount": 10,
+          "text": "Hero attacks."
+        }
+      ]
+    },
+    {
+      "at": 1793286022368,
+      "actorId": "b1",
+      "intent": "Spore Dust",
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "b1",
+          "targetId": "healer",
+          "amount": 12,
+          "absorbed": 0,
+          "text": "Enemy attacks on its own turn."
+        }
+      ]
+    },
+    {
+      "at": 1793286023173,
+      "actorId": "f2",
+      "intent": "Thorn Pounce",
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "f2",
+          "targetId": "tracer",
+          "amount": 19,
+          "absorbed": 0,
+          "text": "Enemy attacks on its own turn."
+        }
+      ]
+    },
+    {
+      "at": 1793286024056,
+      "actorId": "f1",
+      "intent": "Thorn Rage",
+      "events": [
+        {
+          "type": "phase",
+          "sourceId": "f1",
+          "targetId": "f1",
+          "text": "Thorn Rage"
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

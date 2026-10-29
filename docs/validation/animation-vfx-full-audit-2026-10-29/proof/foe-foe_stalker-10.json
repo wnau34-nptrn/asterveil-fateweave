@@ -1,0 +1,445 @@
+{
+  "id": "foe-foe_stalker-10",
+  "status": "captured",
+  "clickOffset": 0.2794530391693115,
+  "sourceFrames": 42,
+  "decodedFrames": 43,
+  "maxTimestampError": 0.000005986648559552776,
+  "maxFrameGap": 0.19904303550720215,
+  "sameState": true,
+  "saveStable": true,
+  "info": {
+    "case": {
+      "id": "foe-foe_stalker-10",
+      "kind": "foe",
+      "identity": "foe_stalker",
+      "index": 10,
+      "intent": "Thorn Pounce",
+      "source": "shadow-stalker"
+    },
+    "command": {
+      "beat": 1,
+      "heroId": "guardian",
+      "action": "attack",
+      "targetId": "f1"
+    },
+    "timings": [
+      {
+        "actorId": "guardian",
+        "side": "hero",
+        "action": "attack",
+        "intent": "Thorn Pounce",
+        "at": 0,
+        "contact": 210,
+        "end": 600,
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "guardian",
+            "targetId": "f1",
+            "amount": 10,
+            "text": "Hero attacks."
+          }
+        ]
+      },
+      {
+        "actorId": "f1",
+        "side": "enemy",
+        "intent": "Thorn Pounce",
+        "at": 600,
+        "contact": 280,
+        "end": 800,
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "f1",
+            "targetId": "guardian",
+            "amount": 18,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      },
+      {
+        "actorId": "b1",
+        "side": "enemy",
+        "intent": "Shadow Knife",
+        "at": 1400,
+        "contact": 280,
+        "end": 800,
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "b1",
+            "targetId": "healer",
+            "amount": 8,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      }
+    ],
+    "focus": "f1",
+    "expectedSheets": [
+      "unit-pilot-aegis",
+      "unit-pilot-lyra",
+      "unit-pilot-eira",
+      "unit-pilot-seren",
+      "unit-pilot-stalker"
+    ],
+    "dataSummary": {
+      "heroes": [
+        {
+          "id": "guardian",
+          "speed": 200,
+          "name": "Aegis",
+          "role": "Knight",
+          "lane": "front",
+          "maxHp": 76,
+          "attack": 10,
+          "actions": [
+            "attack",
+            "guard",
+            "bash",
+            "rally",
+            "bulwark",
+            "challenge",
+            "rouse"
+          ],
+          "unlocks": {
+            "skill": "rally",
+            "passive": "stand"
+          },
+          "color": 6408703
+        },
+        {
+          "id": "tracer",
+          "speed": 49,
+          "name": "Lyra",
+          "role": "Duelist",
+          "lane": "front",
+          "maxHp": 56,
+          "attack": 16,
+          "actions": [
+            "attack",
+            "mark",
+            "execute",
+            "finisher",
+            "lunge",
+            "parry",
+            "sweep"
+          ],
+          "unlocks": {
+            "skill": "finisher",
+            "passive": "keeneye"
+          },
+          "color": 16764018,
+          "empoweredByStatuses": true
+        },
+        {
+          "id": "weaver",
+          "speed": 48,
+          "name": "Eira",
+          "role": "Mage",
+          "lane": "back",
+          "maxHp": 48,
+          "attack": 11,
+          "actions": [
+            "attack",
+            "bolt",
+            "ward",
+            "sigil",
+            "storm",
+            "aegis",
+            "dispel"
+          ],
+          "unlocks": {
+            "skill": "sigil",
+            "passive": "echo"
+          },
+          "color": 11901695
+        },
+        {
+          "id": "healer",
+          "speed": 47,
+          "name": "Seren",
+          "role": "Priest",
+          "lane": "back",
+          "maxHp": 46,
+          "attack": 8,
+          "actions": [
+            "attack",
+            "heal",
+            "prayer",
+            "sanctuary",
+            "revive",
+            "halo",
+            "bless"
+          ],
+          "unlocks": {
+            "skill": "sanctuary",
+            "passive": "afterglow"
+          },
+          "color": 9493936
+        }
+      ],
+      "enemies": [
+        {
+          "id": "f1",
+          "row": "front",
+          "speed": 110,
+          "name": "Briar Stalker",
+          "displayName": "ลิงซ์หนามพราง",
+          "maxHp": 500,
+          "color": 3767927,
+          "art": "foe_stalker",
+          "reserve": false
+        },
+        {
+          "id": "b1",
+          "row": "back",
+          "speed": 100,
+          "name": "Veil Raider",
+          "displayName": "นักจู่โจม",
+          "maxHp": 500,
+          "color": 15630525,
+          "art": "raider"
+        }
+      ],
+      "intents": [
+        {
+          "sourceId": "f1",
+          "targetSlot": 0,
+          "name": "Thorn Pounce",
+          "damage": 18,
+          "kind": "physical"
+        },
+        {
+          "sourceId": "b1",
+          "targetSlot": 3,
+          "name": "Shadow Knife",
+          "damage": 8,
+          "kind": "energy"
+        }
+      ]
+    }
+  },
+  "stamps": [
+    [
+      "00000",
+      1793285980.703547
+    ],
+    [
+      "00001",
+      1793285980.766187
+    ],
+    [
+      "00002",
+      1793285980.907326
+    ],
+    [
+      "00003",
+      1793285980.972519
+    ],
+    [
+      "00004",
+      1793285981.047417
+    ],
+    [
+      "00005",
+      1793285981.105448
+    ],
+    [
+      "00006",
+      1793285981.164143
+    ],
+    [
+      "00007",
+      1793285981.201338
+    ],
+    [
+      "00008",
+      1793285981.291873
+    ],
+    [
+      "00009",
+      1793285981.351835
+    ],
+    [
+      "00010",
+      1793285981.402422
+    ],
+    [
+      "00011",
+      1793285981.462666
+    ],
+    [
+      "00012",
+      1793285981.549785
+    ],
+    [
+      "00013",
+      1793285981.578881
+    ],
+    [
+      "00014",
+      1793285981.647693
+    ],
+    [
+      "00015",
+      1793285981.698044
+    ],
+    [
+      "00016",
+      1793285981.749867
+    ],
+    [
+      "00017",
+      1793285981.778575
+    ],
+    [
+      "00018",
+      1793285981.887906
+    ],
+    [
+      "00019",
+      1793285981.975859
+    ],
+    [
+      "00020",
+      1793285982.012224
+    ],
+    [
+      "00021",
+      1793285982.072787
+    ],
+    [
+      "00022",
+      1793285982.102447
+    ],
+    [
+      "00023",
+      1793285982.255899
+    ],
+    [
+      "00024",
+      1793285982.285699
+    ],
+    [
+      "00025",
+      1793285982.350486
+    ],
+    [
+      "00026",
+      1793285982.3818
+    ],
+    [
+      "00027",
+      1793285982.448295
+    ],
+    [
+      "00028",
+      1793285982.499989
+    ],
+    [
+      "00029",
+      1793285982.555985
+    ],
+    [
+      "00030",
+      1793285982.583297
+    ],
+    [
+      "00031",
+      1793285982.693919
+    ],
+    [
+      "00032",
+      1793285982.780371
+    ],
+    [
+      "00033",
+      1793285982.849001
+    ],
+    [
+      "00034",
+      1793285982.878127
+    ],
+    [
+      "00035",
+      1793285982.906699
+    ],
+    [
+      "00036",
+      1793285983.105742
+    ],
+    [
+      "00037",
+      1793285983.164952
+    ],
+    [
+      "00038",
+      1793285983.194928
+    ],
+    [
+      "00039",
+      1793285983.363373
+    ],
+    [
+      "00040",
+      1793285983.404106
+    ],
+    [
+      "00041",
+      1793285983.479248
+    ]
+  ],
+  "impacts": [
+    {
+      "at": 1793285981255,
+      "actorId": "guardian",
+      "action": "attack",
+      "intent": "Thorn Pounce",
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "guardian",
+          "targetId": "f1",
+          "amount": 10,
+          "text": "Hero attacks."
+        }
+      ]
+    },
+    {
+      "at": 1793285981905,
+      "actorId": "f1",
+      "intent": "Thorn Pounce",
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "f1",
+          "targetId": "guardian",
+          "amount": 18,
+          "absorbed": 0,
+          "text": "Enemy attacks on its own turn."
+        }
+      ]
+    },
+    {
+      "at": 1793285982759,
+      "actorId": "b1",
+      "intent": "Shadow Knife",
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "b1",
+          "targetId": "healer",
+          "amount": 8,
+          "absorbed": 0,
+          "text": "Enemy attacks on its own turn."
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

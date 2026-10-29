@@ -1,0 +1,78 @@
+// Temporary audit-only entry; production code and resolver are unchanged.
+import Phaser from 'phaser';
+import {heroes} from './src/content/heroes/team';
+import {mercenaries} from './src/content/heroes/mercenaries';
+import {rosterBatch1} from './src/content/heroes/roster-batch1';
+import {talentTrees} from './src/content/heroes/talents';
+import {encounters} from './src/content/encounters/catalog';
+import {veilSiege} from './src/content/encounters/veil-siege';
+import {beginBattle,resolveCommand,targetOptions,enemyIntent} from './src/core/battle/engine';
+import {BattleScene} from './src/game/scenes/BattleScene';
+import {BattleUI} from './src/ui/battle-ui';
+import {fitViewport} from './src/platform/viewport';
+import {stageTiming} from './src/ui/battle-playback';
+import {unitRegistry,unitKey} from './src/game/visuals/unit-frames';
+import {actorArt} from './src/game/visuals/assets';
+import './src/ui/styles.css';import './src/ui/tokens.css';import './src/ui/effects.css';import './src/ui/world.css';import './src/ui/battle-skin.css';import './src/ui/game-feel.css';import './src/ui/portrait.css';import './src/ui/components.css';
+localStorage.setItem('asterveil.fateweave.tutorial.v1','off');fitViewport();
+const roster=[...new Map([...heroes,...mercenaries,...rosterBatch1].map(h=>[h.id,h])).values()];
+const actions=(h:any)=>[...new Set([...h.actions,...(h.unlocks?.skill?[h.unlocks.skill]:[]),...(talentTrees[h.id]??[]).flatMap((n:any)=>n.effect.unlock?[n.effect.unlock]:[])])];
+const intents:any[]=[];for(const data of encounters)for(const e of data.enemies)for(const i of data.intents.filter(i=>i.sourceId===e.id)){
+ const art=e.art??e.id,key=[art,i.name,i.kind,!!i.all,!!i.charge,!!i.unstoppable,i.phase??0].join('|');
+ if(!intents.some(x=>x.key===key))intents.push({key,art,intent:i,enemy:e,source:data.id});}
+const cases:any[]=[];
+for(const h of roster)for(const action of actions(h))cases.push({id:`hero-${h.id}-${action}`,kind:'hero',identity:h.id,action});
+for(const [n,v]of intents.entries())cases.push({id:`foe-${v.art}-${n}`,kind:'foe',identity:v.art,index:n,intent:v.intent.name,source:v.source});
+for(const h of roster)for(const reaction of ['hit','block','dodge','down'])cases.push({id:`react-${h.id}-${reaction}`,kind:'hero-reaction',identity:h.id,reaction});
+for(const art of [...new Set(intents.map(v=>v.art))])for(const reaction of ['hit','down'])cases.push({id:`react-${art}-${reaction}`,kind:'foe-reaction',identity:art,reaction});
+for(const data of encounters)for(const[pidx,phase]of(data.phases??[]).entries())cases.push({id:`phase-${data.id}-${pidx}`,kind:'phase',identity:data.enemies.find(e=>e.id===phase.sourceId)?.art??phase.sourceId,source:data.id,pidx});
+const originalCases=[...cases];
+for(const [identity,action]of[['guardian','guard'],['tracer','parry'],['garran','brace'],['garran','warcry']])cases.push({id:`counter-${identity}-${action}`,kind:'counter',identity,action});
+for(const base of [...originalCases.filter(c=>c.kind==='hero'&&c.action==='attack'),...[...new Map(originalCases.filter(c=>c.kind==='foe').map(c=>[c.identity,c])).values()]])for(const mode of ['fast','quiet','osreduce'])cases.push({...base,id:base.id+'--'+mode,mode});
+const ui=new BattleUI(document.querySelector('#battle-view')!,veilSiege);
+const scene:any=new BattleScene(veilSiege,id=>ui.choose(id,'canvas'),()=>ui.sceneReady(),()=>ui.fieldLayoutChanged());
+ui.attach(scene);scene.setBattleVisible(true);
+new Phaser.Game({type:Phaser.AUTO,parent:'game',transparent:true,scale:{mode:Phaser.Scale.NONE,width:320,height:240},scene:[scene],fps:{target:60},audio:{noAudio:true}});
+let active:any,expected:any,expectedTurns:any[],data:any,command:any;const impacts:any[]=[];
+const oldPlay=scene.play.bind(scene);scene.play=(turn:any,remaining:any)=>{impacts.push({at:Date.now(),turn});oldPlay(turn,remaining)};
+function open(id:string,mode='normal'){
+ const c=cases.find(c=>c.id===id);if(!c)throw Error(id);active=c;impacts.length=0;
+ let h:any=roster.find(h=>h.id===(['hero','counter'].includes(c.kind)?c.identity:'guardian'))!;
+ if(c.kind==='hero-reaction'&&c.identity==='guardian')h=roster.find(h=>h.id==='tracer')!;
+ let party=[h,...roster.filter(x=>x.id!==h.id&&[c.kind==='hero-reaction'?c.identity:'healer','weaver','guardian','tracer'].includes(x.id))].slice(0,4);
+ if(c.kind==='hero-reaction')party=[h,roster.find(h=>h.id===c.identity)!,...roster.filter(x=>x.id!==h.id&&x.id!==c.identity)].slice(0,4);
+ party=party.map((h,i)=>({...h,speed:i===0?200:50-i,actions:actions(h)}));
+ let foe:any,move:any;
+ if(c.kind==='foe'){const v=intents[c.index];foe=v.enemy;move=v.intent;}
+ else {const v=intents.find(v=>v.art===(c.kind==='foe-reaction'?c.identity:'foe_vargoth_guard')&&v.intent.kind==='physical')??intents.find(v=>v.art===c.identity)??intents[0];foe=v.enemy;move=v.intent;}
+ if(c.kind==='hero-reaction'&&roster.find(h=>h.id===c.identity)?.lane==='back'){const v=intents.find(v=>v.art==='foe_vargoth_guard'&&v.intent.kind==='energy');foe=v.enemy;move=v.intent;}
+ data={...structuredClone(veilSiege),heroes:party,enemies:[{...structuredClone(foe),id:'f1',row:'front',reserve:false,maxHp:500,speed:110},{...structuredClone(veilSiege.enemies[0]),id:'b1',row:'back',maxHp:500,speed:100}],intents:[{...move,sourceId:'f1',targetSlot:c.kind==='hero-reaction'?1:0},{sourceId:'b1',targetSlot:3,name:'Shadow Knife',damage:8,kind:'energy'}],phases:undefined};
+ if(c.kind==='phase'){data={...structuredClone(encounters.find(e=>e.id===c.source)!),heroes:party,enemies:structuredClone(encounters.find(e=>e.id===c.source)!.enemies).map(e=>({...e,speed:110}))};}
+ if(c.kind==='counter'&&c.identity==='guardian')data.heroes[0].talents={caps:{guardcounter:8}};
+ const hp=Object.fromEntries(party.map((h,i)=>[h.id,Math.ceil(h.maxHp*.65)]));
+ if(c.kind==='hero-reaction'&&c.reaction==='down')hp[c.identity]=1;
+ const entry={hp};let state=beginBattle(data,entry,true).state;
+ if(c.kind==='foe')for(const e of state.enemies){if(e.id==='f1'){e.phase=move.phase??0;e.phaseRound=0;}}
+ if(c.kind==='phase'){const p=data.phases[c.pidx],e=state.enemies.find((e:any)=>e.id===p.sourceId),def=data.enemies.find((e:any)=>e.id===p.sourceId);e.phase=c.pidx;e.phaseRound=0;e.hp=Math.floor(def.maxHp*p.below/100);}
+ if(c.kind==='hero-reaction'){const r=state.heroes.find((h:any)=>h.id===c.identity);if(c.reaction==='block')r.barrier=1000;if(c.reaction==='dodge')r.evading=true;}
+ if(c.kind==='foe-reaction'&&c.reaction==='down')state.enemies[0].hp=1;
+ const action=['hero','counter'].includes(c.kind)?c.action:'attack';
+ if(action==='revive'){const t=state.heroes[1];t.hp=0;t.fell=true;}
+ if(['cadence','duet','rounddance','deepbeat','closingstep','echofoot'].includes(action))for(const t of state.heroes.slice(1))t.cooldowns[data.heroes.find((h:any)=>h.id===t.id).actions.find((a:string)=>a!=='attack')??'guard']=state.round+4;
+ if(action==='solo'||action==='finale')state.song={heroId:h.id,action:'valor',until:state.round+3};
+ if(action==='dispel')state.enemies[0].markedUntil=state.round+2;
+ state.intent=enemyIntent(state,data,'f1',state.round);
+ const opts=targetOptions(state,data,h.id,action);const target=opts.find((t:any)=>t.valid&&t.id===(c.kind==='foe'?'b1':'f1'))??opts.find((t:any)=>t.valid&&t.id!==h.id)??opts.find((t:any)=>t.valid);
+ if(!target)throw Error(`No legal target ${id}: ${JSON.stringify(opts)}`);
+ command={beat:state.beat,heroId:h.id,action,targetId:target.id};
+ const result=resolveCommand(state,data,command,true);expected=result.state;expectedTurns=result.turns;
+ ui.combatPrefs={speed:mode==='fast'?'fast':'normal',intensity:mode==='quiet'?'reduced':'standard'};
+ ui.open({kind:'random',data,entry,commands:[],commit:(s:any)=>{localStorage.setItem('audit-committed',JSON.stringify(s));return true},leaveLabel:()=>'',leave:()=>{}});
+ ui.state=state;ui.started=true;ui.attach(scene);
+ let elapsed=0;const timings=expectedTurns.map((turn:any)=>{const t=stageTiming(turn,matchMedia('(prefers-reduced-motion: reduce)').matches,mode==='fast',false),o={actorId:turn.actorId,side:turn.side,action:turn.action,intent:turn.intent?.name,at:elapsed,...t,events:turn.events};elapsed+=t.end;return o});
+ const focus=c.kind==='hero-reaction'?c.identity:['hero','counter'].includes(c.kind)?c.identity:c.kind==='phase'?data.phases[c.pidx].sourceId:'f1';
+ return {case:c,command,timings,focus,expectedSheets:[...new Set([...data.heroes.map((h:any)=>unitKey(h.id)),...data.enemies.map((e:any)=>unitKey(e.art??e.id))].filter(Boolean))],dataSummary:{heroes:data.heroes,enemies:data.enemies,intents:data.intents}};
+}
+function snap(){const rect=scene.game.canvas.getBoundingClientRect();const units=Object.fromEntries([...scene.bodies].map(([id,body]:any)=>[id,{x:body.x,y:body.y,rotation:body.rotation,scaleX:body.scaleX,scaleY:body.scaleY,slot:scene.actorPanels.get(id),images:body.list.filter((i:any)=>i instanceof Phaser.GameObjects.Image).map((i:any)=>({texture:i.texture.key,frame:i.frame.name,alpha:i.alpha,width:i.displayWidth,height:i.displayHeight,originY:i.originY,flipX:i.flipX,x:i.x,y:i.y}))}]));const fx:any[]=[];const visit=(items:any[])=>{for(const i of items){if(i instanceof Phaser.GameObjects.Container)visit(i.list);if(i instanceof Phaser.GameObjects.Image&&!i.texture.key.startsWith('unit-')&&!i.texture.key.startsWith('battle-')){const b=i.getBounds();fx.push({texture:i.texture.key,frame:i.frame.name,x:b.x,y:b.y,width:b.width,height:b.height,alpha:i.alpha})}}};visit(scene.children.getChildren());return{rect:{x:rect.x,y:rect.y,width:rect.width,height:rect.height},units,fx};}
+function canonical(v:any):any{if(Array.isArray(v))return v.map(canonical);if(v&&typeof v==='object')return Object.fromEntries(Object.keys(v).sort().map(k=>[k,canonical(v[k])]));return v;}
+window.fullAudit={cases,roster:roster.map(h=>({id:h.id,role:h.role,actions:actions(h),animated:!!unitRegistry[h.id]})),identities:Object.keys(actorArt),open,snap,ready:()=>scene.isReady&&!scene.load.isLoading()&&[...data?.heroes??[],...data?.enemies??[]].every((a:any)=>!unitKey(a.art??a.id)||scene.textures.exists(unitKey(a.art??a.id))),result:()=>({sameState:JSON.stringify(canonical(ui.state))===JSON.stringify(canonical(expected)),state:ui.state,expected,committed:localStorage.getItem('audit-committed'),impacts,expectedTurns}),scene,ui};

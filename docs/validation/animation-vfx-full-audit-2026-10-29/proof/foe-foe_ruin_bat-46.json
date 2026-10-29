@@ -1,0 +1,429 @@
+{
+  "id": "foe-foe_ruin_bat-46",
+  "status": "captured",
+  "clickOffset": 0.2824208736419678,
+  "sourceFrames": 38,
+  "decodedFrames": 39,
+  "maxTimestampError": 0.000005202423095651554,
+  "maxFrameGap": 0.25484299659729004,
+  "sameState": true,
+  "saveStable": true,
+  "info": {
+    "case": {
+      "id": "foe-foe_ruin_bat-46",
+      "kind": "foe",
+      "identity": "foe_ruin_bat",
+      "index": 46,
+      "intent": "Nip",
+      "source": "bat-swarm"
+    },
+    "command": {
+      "beat": 1,
+      "heroId": "guardian",
+      "action": "attack",
+      "targetId": "f1"
+    },
+    "timings": [
+      {
+        "actorId": "guardian",
+        "side": "hero",
+        "action": "attack",
+        "intent": "Nip",
+        "at": 0,
+        "contact": 210,
+        "end": 600,
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "guardian",
+            "targetId": "f1",
+            "amount": 10,
+            "text": "Hero attacks."
+          }
+        ]
+      },
+      {
+        "actorId": "f1",
+        "side": "enemy",
+        "intent": "Nip",
+        "at": 600,
+        "contact": 280,
+        "end": 800,
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "f1",
+            "targetId": "guardian",
+            "amount": 5,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      },
+      {
+        "actorId": "b1",
+        "side": "enemy",
+        "intent": "Shadow Knife",
+        "at": 1400,
+        "contact": 280,
+        "end": 800,
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "b1",
+            "targetId": "healer",
+            "amount": 8,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      }
+    ],
+    "focus": "f1",
+    "expectedSheets": [
+      "unit-pilot-aegis",
+      "unit-pilot-lyra",
+      "unit-pilot-eira",
+      "unit-pilot-seren",
+      "unit-pilot-bat"
+    ],
+    "dataSummary": {
+      "heroes": [
+        {
+          "id": "guardian",
+          "speed": 200,
+          "name": "Aegis",
+          "role": "Knight",
+          "lane": "front",
+          "maxHp": 76,
+          "attack": 10,
+          "actions": [
+            "attack",
+            "guard",
+            "bash",
+            "rally",
+            "bulwark",
+            "challenge",
+            "rouse"
+          ],
+          "unlocks": {
+            "skill": "rally",
+            "passive": "stand"
+          },
+          "color": 6408703
+        },
+        {
+          "id": "tracer",
+          "speed": 49,
+          "name": "Lyra",
+          "role": "Duelist",
+          "lane": "front",
+          "maxHp": 56,
+          "attack": 16,
+          "actions": [
+            "attack",
+            "mark",
+            "execute",
+            "finisher",
+            "lunge",
+            "parry",
+            "sweep"
+          ],
+          "unlocks": {
+            "skill": "finisher",
+            "passive": "keeneye"
+          },
+          "color": 16764018,
+          "empoweredByStatuses": true
+        },
+        {
+          "id": "weaver",
+          "speed": 48,
+          "name": "Eira",
+          "role": "Mage",
+          "lane": "back",
+          "maxHp": 48,
+          "attack": 11,
+          "actions": [
+            "attack",
+            "bolt",
+            "ward",
+            "sigil",
+            "storm",
+            "aegis",
+            "dispel"
+          ],
+          "unlocks": {
+            "skill": "sigil",
+            "passive": "echo"
+          },
+          "color": 11901695
+        },
+        {
+          "id": "healer",
+          "speed": 47,
+          "name": "Seren",
+          "role": "Priest",
+          "lane": "back",
+          "maxHp": 46,
+          "attack": 8,
+          "actions": [
+            "attack",
+            "heal",
+            "prayer",
+            "sanctuary",
+            "revive",
+            "halo",
+            "bless"
+          ],
+          "unlocks": {
+            "skill": "sanctuary",
+            "passive": "afterglow"
+          },
+          "color": 9493936
+        }
+      ],
+      "enemies": [
+        {
+          "id": "f1",
+          "row": "front",
+          "name": "Ruin Bat",
+          "displayName": "ค้างคาวซาก",
+          "maxHp": 500,
+          "speed": 110,
+          "color": 12101328,
+          "art": "foe_ruin_bat",
+          "reserve": false
+        },
+        {
+          "id": "b1",
+          "row": "back",
+          "speed": 100,
+          "name": "Veil Raider",
+          "displayName": "นักจู่โจม",
+          "maxHp": 500,
+          "color": 15630525,
+          "art": "raider"
+        }
+      ],
+      "intents": [
+        {
+          "sourceId": "f1",
+          "targetSlot": 0,
+          "name": "Nip",
+          "damage": 5,
+          "kind": "physical"
+        },
+        {
+          "sourceId": "b1",
+          "targetSlot": 3,
+          "name": "Shadow Knife",
+          "damage": 8,
+          "kind": "energy"
+        }
+      ]
+    }
+  },
+  "stamps": [
+    [
+      "00000",
+      1793286013.112579
+    ],
+    [
+      "00001",
+      1793286013.176592
+    ],
+    [
+      "00002",
+      1793286013.304306
+    ],
+    [
+      "00003",
+      1793286013.372092
+    ],
+    [
+      "00004",
+      1793286013.447038
+    ],
+    [
+      "00005",
+      1793286013.498249
+    ],
+    [
+      "00006",
+      1793286013.573027
+    ],
+    [
+      "00007",
+      1793286013.680236
+    ],
+    [
+      "00008",
+      1793286013.713239
+    ],
+    [
+      "00009",
+      1793286013.77411
+    ],
+    [
+      "00010",
+      1793286013.855862
+    ],
+    [
+      "00011",
+      1793286013.906708
+    ],
+    [
+      "00012",
+      1793286013.965914
+    ],
+    [
+      "00013",
+      1793286013.996619
+    ],
+    [
+      "00014",
+      1793286014.062927
+    ],
+    [
+      "00015",
+      1793286014.093075
+    ],
+    [
+      "00016",
+      1793286014.265801
+    ],
+    [
+      "00017",
+      1793286014.297831
+    ],
+    [
+      "00018",
+      1793286014.360885
+    ],
+    [
+      "00019",
+      1793286014.409064
+    ],
+    [
+      "00020",
+      1793286014.49127
+    ],
+    [
+      "00021",
+      1793286014.607205
+    ],
+    [
+      "00022",
+      1793286014.66506
+    ],
+    [
+      "00023",
+      1793286014.713691
+    ],
+    [
+      "00024",
+      1793286014.770119
+    ],
+    [
+      "00025",
+      1793286014.800645
+    ],
+    [
+      "00026",
+      1793286014.856917
+    ],
+    [
+      "00027",
+      1793286014.890263
+    ],
+    [
+      "00028",
+      1793286014.948604
+    ],
+    [
+      "00029",
+      1793286014.979615
+    ],
+    [
+      "00030",
+      1793286015.089316
+    ],
+    [
+      "00031",
+      1793286015.147546
+    ],
+    [
+      "00032",
+      1793286015.212979
+    ],
+    [
+      "00033",
+      1793286015.458712
+    ],
+    [
+      "00034",
+      1793286015.509727
+    ],
+    [
+      "00035",
+      1793286015.76457
+    ],
+    [
+      "00036",
+      1793286015.812943
+    ],
+    [
+      "00037",
+      1793286015.879658
+    ]
+  ],
+  "impacts": [
+    {
+      "at": 1793286013663,
+      "actorId": "guardian",
+      "action": "attack",
+      "intent": "Nip",
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "guardian",
+          "targetId": "f1",
+          "amount": 10,
+          "text": "Hero attacks."
+        }
+      ]
+    },
+    {
+      "at": 1793286014362,
+      "actorId": "f1",
+      "intent": "Nip",
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "f1",
+          "targetId": "guardian",
+          "amount": 5,
+          "absorbed": 0,
+          "text": "Enemy attacks on its own turn."
+        }
+      ]
+    },
+    {
+      "at": 1793286015192,
+      "actorId": "b1",
+      "intent": "Shadow Knife",
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "b1",
+          "targetId": "healer",
+          "amount": 8,
+          "absorbed": 0,
+          "text": "Enemy attacks on its own turn."
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

@@ -1,0 +1,462 @@
+{
+  "id": "foe-foe_tusker-32",
+  "status": "captured",
+  "clickOffset": 0.3737959861755371,
+  "sourceFrames": 46,
+  "decodedFrames": 47,
+  "maxTimestampError": 0.0000059736785888997446,
+  "maxFrameGap": 0.15567302703857422,
+  "sameState": true,
+  "saveStable": true,
+  "info": {
+    "case": {
+      "id": "foe-foe_tusker-32",
+      "kind": "foe",
+      "identity": "foe_tusker",
+      "index": 32,
+      "intent": "Stampede",
+      "source": "elite-tusk-chief"
+    },
+    "command": {
+      "beat": 1,
+      "heroId": "guardian",
+      "action": "attack",
+      "targetId": "f1"
+    },
+    "timings": [
+      {
+        "actorId": "guardian",
+        "side": "hero",
+        "action": "attack",
+        "intent": "Stampede",
+        "at": 0,
+        "contact": 210,
+        "end": 600,
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "guardian",
+            "targetId": "f1",
+            "amount": 10,
+            "text": "Hero attacks."
+          }
+        ]
+      },
+      {
+        "actorId": "f1",
+        "side": "enemy",
+        "intent": "Stampede",
+        "at": 600,
+        "contact": 280,
+        "end": 800,
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "f1",
+            "targetId": "guardian",
+            "amount": 26,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      },
+      {
+        "actorId": "b1",
+        "side": "enemy",
+        "intent": "Shadow Knife",
+        "at": 1400,
+        "contact": 280,
+        "end": 800,
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "b1",
+            "targetId": "healer",
+            "amount": 8,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      }
+    ],
+    "focus": "f1",
+    "expectedSheets": [
+      "unit-pilot-aegis",
+      "unit-pilot-lyra",
+      "unit-pilot-eira",
+      "unit-pilot-seren",
+      "unit-pilot-tusker"
+    ],
+    "dataSummary": {
+      "heroes": [
+        {
+          "id": "guardian",
+          "speed": 200,
+          "name": "Aegis",
+          "role": "Knight",
+          "lane": "front",
+          "maxHp": 76,
+          "attack": 10,
+          "actions": [
+            "attack",
+            "guard",
+            "bash",
+            "rally",
+            "bulwark",
+            "challenge",
+            "rouse"
+          ],
+          "unlocks": {
+            "skill": "rally",
+            "passive": "stand"
+          },
+          "color": 6408703
+        },
+        {
+          "id": "tracer",
+          "speed": 49,
+          "name": "Lyra",
+          "role": "Duelist",
+          "lane": "front",
+          "maxHp": 56,
+          "attack": 16,
+          "actions": [
+            "attack",
+            "mark",
+            "execute",
+            "finisher",
+            "lunge",
+            "parry",
+            "sweep"
+          ],
+          "unlocks": {
+            "skill": "finisher",
+            "passive": "keeneye"
+          },
+          "color": 16764018,
+          "empoweredByStatuses": true
+        },
+        {
+          "id": "weaver",
+          "speed": 48,
+          "name": "Eira",
+          "role": "Mage",
+          "lane": "back",
+          "maxHp": 48,
+          "attack": 11,
+          "actions": [
+            "attack",
+            "bolt",
+            "ward",
+            "sigil",
+            "storm",
+            "aegis",
+            "dispel"
+          ],
+          "unlocks": {
+            "skill": "sigil",
+            "passive": "echo"
+          },
+          "color": 11901695
+        },
+        {
+          "id": "healer",
+          "speed": 47,
+          "name": "Seren",
+          "role": "Priest",
+          "lane": "back",
+          "maxHp": 46,
+          "attack": 8,
+          "actions": [
+            "attack",
+            "heal",
+            "prayer",
+            "sanctuary",
+            "revive",
+            "halo",
+            "bless"
+          ],
+          "unlocks": {
+            "skill": "sanctuary",
+            "passive": "afterglow"
+          },
+          "color": 9493936
+        }
+      ],
+      "enemies": [
+        {
+          "id": "f1",
+          "row": "front",
+          "large": true,
+          "speed": 110,
+          "name": "Tusker Chief",
+          "displayName": "จ่าฝูงหมูป่าหลังตะไคร่",
+          "maxHp": 500,
+          "color": 7440198,
+          "art": "foe_tusker",
+          "reserve": false
+        },
+        {
+          "id": "b1",
+          "row": "back",
+          "speed": 100,
+          "name": "Veil Raider",
+          "displayName": "นักจู่โจม",
+          "maxHp": 500,
+          "color": 15630525,
+          "art": "raider"
+        }
+      ],
+      "intents": [
+        {
+          "sourceId": "f1",
+          "targetSlot": 0,
+          "name": "Stampede",
+          "damage": 26,
+          "kind": "physical"
+        },
+        {
+          "sourceId": "b1",
+          "targetSlot": 3,
+          "name": "Shadow Knife",
+          "damage": 8,
+          "kind": "energy"
+        }
+      ]
+    }
+  },
+  "stamps": [
+    [
+      "00000",
+      1793285970.999204
+    ],
+    [
+      "00001",
+      1793285971.152462
+    ],
+    [
+      "00002",
+      1793285971.194434
+    ],
+    [
+      "00003",
+      1793285971.301181
+    ],
+    [
+      "00004",
+      1793285971.359041
+    ],
+    [
+      "00005",
+      1793285971.466031
+    ],
+    [
+      "00006",
+      1793285971.497681
+    ],
+    [
+      "00007",
+      1793285971.559094
+    ],
+    [
+      "00008",
+      1793285971.612908
+    ],
+    [
+      "00009",
+      1793285971.7022
+    ],
+    [
+      "00010",
+      1793285971.764312
+    ],
+    [
+      "00011",
+      1793285971.794973
+    ],
+    [
+      "00012",
+      1793285971.876884
+    ],
+    [
+      "00013",
+      1793285971.955695
+    ],
+    [
+      "00014",
+      1793285971.985354
+    ],
+    [
+      "00015",
+      1793285972.05336
+    ],
+    [
+      "00016",
+      1793285972.097124
+    ],
+    [
+      "00017",
+      1793285972.161955
+    ],
+    [
+      "00018",
+      1793285972.247314
+    ],
+    [
+      "00019",
+      1793285972.312495
+    ],
+    [
+      "00020",
+      1793285972.379248
+    ],
+    [
+      "00021",
+      1793285972.411878
+    ],
+    [
+      "00022",
+      1793285972.465896
+    ],
+    [
+      "00023",
+      1793285972.499305
+    ],
+    [
+      "00024",
+      1793285972.583968
+    ],
+    [
+      "00025",
+      1793285972.613017
+    ],
+    [
+      "00026",
+      1793285972.66973
+    ],
+    [
+      "00027",
+      1793285972.701573
+    ],
+    [
+      "00028",
+      1793285972.773484
+    ],
+    [
+      "00029",
+      1793285972.803735
+    ],
+    [
+      "00030",
+      1793285972.874089
+    ],
+    [
+      "00031",
+      1793285972.905506
+    ],
+    [
+      "00032",
+      1793285972.96365
+    ],
+    [
+      "00033",
+      1793285972.991735
+    ],
+    [
+      "00034",
+      1793285973.147408
+    ],
+    [
+      "00035",
+      1793285973.184891
+    ],
+    [
+      "00036",
+      1793285973.251732
+    ],
+    [
+      "00037",
+      1793285973.286358
+    ],
+    [
+      "00038",
+      1793285973.347196
+    ],
+    [
+      "00039",
+      1793285973.4511
+    ],
+    [
+      "00040",
+      1793285973.48068
+    ],
+    [
+      "00041",
+      1793285973.513193
+    ],
+    [
+      "00042",
+      1793285973.657583
+    ],
+    [
+      "00043",
+      1793285973.696751
+    ],
+    [
+      "00044",
+      1793285973.758741
+    ],
+    [
+      "00045",
+      1793285973.790374
+    ]
+  ],
+  "impacts": [
+    {
+      "at": 1793285971653,
+      "actorId": "guardian",
+      "action": "attack",
+      "intent": "Stampede",
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "guardian",
+          "targetId": "f1",
+          "amount": 10,
+          "text": "Hero attacks."
+        }
+      ]
+    },
+    {
+      "at": 1793285972360,
+      "actorId": "f1",
+      "intent": "Stampede",
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "f1",
+          "targetId": "guardian",
+          "amount": 26,
+          "absorbed": 0,
+          "text": "Enemy attacks on its own turn."
+        }
+      ]
+    },
+    {
+      "at": 1793285973158,
+      "actorId": "b1",
+      "intent": "Shadow Knife",
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "b1",
+          "targetId": "healer",
+          "amount": 8,
+          "absorbed": 0,
+          "text": "Enemy attacks on its own turn."
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

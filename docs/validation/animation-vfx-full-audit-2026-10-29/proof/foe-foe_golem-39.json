@@ -1,0 +1,442 @@
+{
+  "id": "foe-foe_golem-39",
+  "status": "captured",
+  "clickOffset": 0.31749510765075684,
+  "sourceFrames": 41,
+  "decodedFrames": 42,
+  "maxTimestampError": 0.000005819564819320444,
+  "maxFrameGap": 0.1380748748779297,
+  "sameState": true,
+  "saveStable": true,
+  "info": {
+    "case": {
+      "id": "foe-foe_golem-39",
+      "kind": "foe",
+      "identity": "foe_golem",
+      "index": 39,
+      "intent": "Veil Quake",
+      "source": "mini-veil-golem"
+    },
+    "command": {
+      "beat": 1,
+      "heroId": "guardian",
+      "action": "attack",
+      "targetId": "f1"
+    },
+    "timings": [
+      {
+        "actorId": "guardian",
+        "side": "hero",
+        "action": "attack",
+        "intent": "Veil Quake",
+        "at": 0,
+        "contact": 210,
+        "end": 600,
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "guardian",
+            "targetId": "f1",
+            "amount": 10,
+            "text": "Hero attacks."
+          }
+        ]
+      },
+      {
+        "actorId": "f1",
+        "side": "enemy",
+        "intent": "Veil Quake",
+        "at": 600,
+        "contact": 280,
+        "end": 800,
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "f1",
+            "targetId": "guardian",
+            "amount": 30,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      },
+      {
+        "actorId": "b1",
+        "side": "enemy",
+        "intent": "Shadow Knife",
+        "at": 1400,
+        "contact": 280,
+        "end": 800,
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "b1",
+            "targetId": "healer",
+            "amount": 8,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      }
+    ],
+    "focus": "f1",
+    "expectedSheets": [
+      "unit-pilot-aegis",
+      "unit-pilot-lyra",
+      "unit-pilot-eira",
+      "unit-pilot-seren"
+    ],
+    "dataSummary": {
+      "heroes": [
+        {
+          "id": "guardian",
+          "speed": 200,
+          "name": "Aegis",
+          "role": "Knight",
+          "lane": "front",
+          "maxHp": 76,
+          "attack": 10,
+          "actions": [
+            "attack",
+            "guard",
+            "bash",
+            "rally",
+            "bulwark",
+            "challenge",
+            "rouse"
+          ],
+          "unlocks": {
+            "skill": "rally",
+            "passive": "stand"
+          },
+          "color": 6408703
+        },
+        {
+          "id": "tracer",
+          "speed": 49,
+          "name": "Lyra",
+          "role": "Duelist",
+          "lane": "front",
+          "maxHp": 56,
+          "attack": 16,
+          "actions": [
+            "attack",
+            "mark",
+            "execute",
+            "finisher",
+            "lunge",
+            "parry",
+            "sweep"
+          ],
+          "unlocks": {
+            "skill": "finisher",
+            "passive": "keeneye"
+          },
+          "color": 16764018,
+          "empoweredByStatuses": true
+        },
+        {
+          "id": "weaver",
+          "speed": 48,
+          "name": "Eira",
+          "role": "Mage",
+          "lane": "back",
+          "maxHp": 48,
+          "attack": 11,
+          "actions": [
+            "attack",
+            "bolt",
+            "ward",
+            "sigil",
+            "storm",
+            "aegis",
+            "dispel"
+          ],
+          "unlocks": {
+            "skill": "sigil",
+            "passive": "echo"
+          },
+          "color": 11901695
+        },
+        {
+          "id": "healer",
+          "speed": 47,
+          "name": "Seren",
+          "role": "Priest",
+          "lane": "back",
+          "maxHp": 46,
+          "attack": 8,
+          "actions": [
+            "attack",
+            "heal",
+            "prayer",
+            "sanctuary",
+            "revive",
+            "halo",
+            "bless"
+          ],
+          "unlocks": {
+            "skill": "sanctuary",
+            "passive": "afterglow"
+          },
+          "color": 9493936
+        }
+      ],
+      "enemies": [
+        {
+          "id": "f1",
+          "row": "front",
+          "large": true,
+          "speed": 110,
+          "boss": true,
+          "name": "Veil Golem",
+          "displayName": "ยักษ์หินรอยแยก",
+          "maxHp": 500,
+          "color": 8227478,
+          "art": "foe_golem",
+          "reserve": false
+        },
+        {
+          "id": "b1",
+          "row": "back",
+          "speed": 100,
+          "name": "Veil Raider",
+          "displayName": "นักจู่โจม",
+          "maxHp": 500,
+          "color": 15630525,
+          "art": "raider"
+        }
+      ],
+      "intents": [
+        {
+          "sourceId": "f1",
+          "targetSlot": 0,
+          "name": "Veil Quake",
+          "damage": 30,
+          "kind": "physical"
+        },
+        {
+          "sourceId": "b1",
+          "targetSlot": 3,
+          "name": "Shadow Knife",
+          "damage": 8,
+          "kind": "energy"
+        }
+      ]
+    }
+  },
+  "stamps": [
+    [
+      "00000",
+      1793285993.968505
+    ],
+    [
+      "00001",
+      1793285994.0817
+    ],
+    [
+      "00002",
+      1793285994.110682
+    ],
+    [
+      "00003",
+      1793285994.209267
+    ],
+    [
+      "00004",
+      1793285994.272134
+    ],
+    [
+      "00005",
+      1793285994.386916
+    ],
+    [
+      "00006",
+      1793285994.450555
+    ],
+    [
+      "00007",
+      1793285994.488149
+    ],
+    [
+      "00008",
+      1793285994.613775
+    ],
+    [
+      "00009",
+      1793285994.677217
+    ],
+    [
+      "00010",
+      1793285994.784568
+    ],
+    [
+      "00011",
+      1793285994.884934
+    ],
+    [
+      "00012",
+      1793285994.954565
+    ],
+    [
+      "00013",
+      1793285994.986118
+    ],
+    [
+      "00014",
+      1793285995.053772
+    ],
+    [
+      "00015",
+      1793285995.159049
+    ],
+    [
+      "00016",
+      1793285995.188559
+    ],
+    [
+      "00017",
+      1793285995.254092
+    ],
+    [
+      "00018",
+      1793285995.319587
+    ],
+    [
+      "00019",
+      1793285995.38114
+    ],
+    [
+      "00020",
+      1793285995.494087
+    ],
+    [
+      "00021",
+      1793285995.558417
+    ],
+    [
+      "00022",
+      1793285995.593209
+    ],
+    [
+      "00023",
+      1793285995.657588
+    ],
+    [
+      "00024",
+      1793285995.707625
+    ],
+    [
+      "00025",
+      1793285995.775152
+    ],
+    [
+      "00026",
+      1793285995.815599
+    ],
+    [
+      "00027",
+      1793285995.873152
+    ],
+    [
+      "00028",
+      1793285995.955117
+    ],
+    [
+      "00029",
+      1793285996.00257
+    ],
+    [
+      "00030",
+      1793285996.064752
+    ],
+    [
+      "00031",
+      1793285996.099309
+    ],
+    [
+      "00032",
+      1793285996.161841
+    ],
+    [
+      "00033",
+      1793285996.247241
+    ],
+    [
+      "00034",
+      1793285996.385316
+    ],
+    [
+      "00035",
+      1793285996.474994
+    ],
+    [
+      "00036",
+      1793285996.550327
+    ],
+    [
+      "00037",
+      1793285996.586575
+    ],
+    [
+      "00038",
+      1793285996.656265
+    ],
+    [
+      "00039",
+      1793285996.68906
+    ],
+    [
+      "00040",
+      1793285996.752914
+    ]
+  ],
+  "impacts": [
+    {
+      "at": 1793285994547,
+      "actorId": "guardian",
+      "action": "attack",
+      "intent": "Veil Quake",
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "guardian",
+          "targetId": "f1",
+          "amount": 10,
+          "text": "Hero attacks."
+        }
+      ]
+    },
+    {
+      "at": 1793285995263,
+      "actorId": "f1",
+      "intent": "Veil Quake",
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "f1",
+          "targetId": "guardian",
+          "amount": 30,
+          "absorbed": 0,
+          "text": "Enemy attacks on its own turn."
+        }
+      ]
+    },
+    {
+      "at": 1793285996085,
+      "actorId": "b1",
+      "intent": "Shadow Knife",
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "b1",
+          "targetId": "healer",
+          "amount": 8,
+          "absorbed": 0,
+          "text": "Enemy attacks on its own turn."
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

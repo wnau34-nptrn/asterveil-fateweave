@@ -1,0 +1,428 @@
+{
+  "id": "hero-guardian-bash",
+  "status": "captured",
+  "clickOffset": 0.33758997917175293,
+  "sourceFrames": 36,
+  "decodedFrames": 37,
+  "maxTimestampError": 0.000005169235229494917,
+  "maxFrameGap": 0.19212889671325684,
+  "sameState": true,
+  "saveStable": true,
+  "info": {
+    "case": {
+      "id": "hero-guardian-bash",
+      "kind": "hero",
+      "identity": "guardian",
+      "action": "bash"
+    },
+    "command": {
+      "beat": 1,
+      "heroId": "guardian",
+      "action": "bash",
+      "targetId": "f1"
+    },
+    "timings": [
+      {
+        "actorId": "guardian",
+        "side": "hero",
+        "action": "bash",
+        "intent": "Crushing Blow",
+        "at": 0,
+        "contact": 280,
+        "end": 800,
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "guardian",
+            "targetId": "f1",
+            "amount": 18,
+            "text": "Hero attacks."
+          },
+          {
+            "type": "interrupt",
+            "sourceId": "guardian",
+            "targetId": "f1",
+            "text": "Next physical attack interrupted."
+          }
+        ]
+      },
+      {
+        "actorId": "f1",
+        "side": "enemy",
+        "intent": "Crushing Blow",
+        "at": 800,
+        "contact": 0,
+        "end": 500,
+        "events": [
+          {
+            "type": "cancel",
+            "sourceId": "f1",
+            "cause": "interrupted",
+            "text": "Physical attack interrupted."
+          }
+        ]
+      },
+      {
+        "actorId": "b1",
+        "side": "enemy",
+        "intent": "Shadow Knife",
+        "at": 1300,
+        "contact": 280,
+        "end": 800,
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "b1",
+            "targetId": "healer",
+            "amount": 8,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      }
+    ],
+    "focus": "guardian",
+    "expectedSheets": [
+      "unit-pilot-aegis",
+      "unit-pilot-lyra",
+      "unit-pilot-eira",
+      "unit-pilot-seren",
+      "unit-pilot-vargoth"
+    ],
+    "dataSummary": {
+      "heroes": [
+        {
+          "id": "guardian",
+          "speed": 200,
+          "name": "Aegis",
+          "role": "Knight",
+          "lane": "front",
+          "maxHp": 76,
+          "attack": 10,
+          "actions": [
+            "attack",
+            "guard",
+            "bash",
+            "rally",
+            "bulwark",
+            "challenge",
+            "rouse"
+          ],
+          "unlocks": {
+            "skill": "rally",
+            "passive": "stand"
+          },
+          "color": 6408703
+        },
+        {
+          "id": "tracer",
+          "speed": 49,
+          "name": "Lyra",
+          "role": "Duelist",
+          "lane": "front",
+          "maxHp": 56,
+          "attack": 16,
+          "actions": [
+            "attack",
+            "mark",
+            "execute",
+            "finisher",
+            "lunge",
+            "parry",
+            "sweep"
+          ],
+          "unlocks": {
+            "skill": "finisher",
+            "passive": "keeneye"
+          },
+          "color": 16764018,
+          "empoweredByStatuses": true
+        },
+        {
+          "id": "weaver",
+          "speed": 48,
+          "name": "Eira",
+          "role": "Mage",
+          "lane": "back",
+          "maxHp": 48,
+          "attack": 11,
+          "actions": [
+            "attack",
+            "bolt",
+            "ward",
+            "sigil",
+            "storm",
+            "aegis",
+            "dispel"
+          ],
+          "unlocks": {
+            "skill": "sigil",
+            "passive": "echo"
+          },
+          "color": 11901695
+        },
+        {
+          "id": "healer",
+          "speed": 47,
+          "name": "Seren",
+          "role": "Priest",
+          "lane": "back",
+          "maxHp": 46,
+          "attack": 8,
+          "actions": [
+            "attack",
+            "heal",
+            "prayer",
+            "sanctuary",
+            "revive",
+            "halo",
+            "bless"
+          ],
+          "unlocks": {
+            "skill": "sanctuary",
+            "passive": "afterglow"
+          },
+          "color": 9493936
+        }
+      ],
+      "enemies": [
+        {
+          "id": "f1",
+          "row": "front",
+          "large": true,
+          "speed": 110,
+          "name": "Vargoth Guard",
+          "displayName": "องครักษ์อสูร",
+          "maxHp": 500,
+          "color": 9930226,
+          "art": "foe_vargoth_guard",
+          "reserve": false
+        },
+        {
+          "id": "b1",
+          "row": "back",
+          "speed": 100,
+          "name": "Veil Raider",
+          "displayName": "นักจู่โจม",
+          "maxHp": 500,
+          "color": 15630525,
+          "art": "raider"
+        }
+      ],
+      "intents": [
+        {
+          "sourceId": "f1",
+          "targetSlot": 0,
+          "name": "Crushing Blow",
+          "damage": 14,
+          "kind": "physical"
+        },
+        {
+          "sourceId": "b1",
+          "targetSlot": 3,
+          "name": "Shadow Knife",
+          "damage": 8,
+          "kind": "energy"
+        }
+      ]
+    }
+  },
+  "stamps": [
+    [
+      "00000",
+      1793286037.21041
+    ],
+    [
+      "00001",
+      1793286037.271416
+    ],
+    [
+      "00002",
+      1793286037.458809
+    ],
+    [
+      "00003",
+      1793286037.508873
+    ],
+    [
+      "00004",
+      1793286037.605322
+    ],
+    [
+      "00005",
+      1793286037.786746
+    ],
+    [
+      "00006",
+      1793286037.876456
+    ],
+    [
+      "00007",
+      1793286038.068585
+    ],
+    [
+      "00008",
+      1793286038.151307
+    ],
+    [
+      "00009",
+      1793286038.253047
+    ],
+    [
+      "00010",
+      1793286038.303935
+    ],
+    [
+      "00011",
+      1793286038.362447
+    ],
+    [
+      "00012",
+      1793286038.398374
+    ],
+    [
+      "00013",
+      1793286038.46402
+    ],
+    [
+      "00014",
+      1793286038.50051
+    ],
+    [
+      "00015",
+      1793286038.586895
+    ],
+    [
+      "00016",
+      1793286038.618604
+    ],
+    [
+      "00017",
+      1793286038.692995
+    ],
+    [
+      "00018",
+      1793286038.758473
+    ],
+    [
+      "00019",
+      1793286038.793597
+    ],
+    [
+      "00020",
+      1793286038.874336
+    ],
+    [
+      "00021",
+      1793286038.911932
+    ],
+    [
+      "00022",
+      1793286038.990337
+    ],
+    [
+      "00023",
+      1793286039.051435
+    ],
+    [
+      "00024",
+      1793286039.098047
+    ],
+    [
+      "00025",
+      1793286039.158089
+    ],
+    [
+      "00026",
+      1793286039.186348
+    ],
+    [
+      "00027",
+      1793286039.254478
+    ],
+    [
+      "00028",
+      1793286039.287423
+    ],
+    [
+      "00029",
+      1793286039.352421
+    ],
+    [
+      "00030",
+      1793286039.462639
+    ],
+    [
+      "00031",
+      1793286039.601102
+    ],
+    [
+      "00032",
+      1793286039.700297
+    ],
+    [
+      "00033",
+      1793286039.767038
+    ],
+    [
+      "00034",
+      1793286039.864227
+    ],
+    [
+      "00035",
+      1793286039.915015
+    ]
+  ],
+  "impacts": [
+    {
+      "at": 1793286037864,
+      "actorId": "guardian",
+      "action": "bash",
+      "intent": "Crushing Blow",
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "guardian",
+          "targetId": "f1",
+          "amount": 18,
+          "text": "Hero attacks."
+        },
+        {
+          "type": "interrupt",
+          "sourceId": "guardian",
+          "targetId": "f1",
+          "text": "Next physical attack interrupted."
+        }
+      ]
+    },
+    {
+      "at": 1793286038411,
+      "actorId": "f1",
+      "intent": "Crushing Blow",
+      "events": [
+        {
+          "type": "cancel",
+          "sourceId": "f1",
+          "cause": "interrupted",
+          "text": "Physical attack interrupted."
+        }
+      ]
+    },
+    {
+      "at": 1793286039197,
+      "actorId": "b1",
+      "intent": "Shadow Knife",
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "b1",
+          "targetId": "healer",
+          "amount": 8,
+          "absorbed": 0,
+          "text": "Enemy attacks on its own turn."
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

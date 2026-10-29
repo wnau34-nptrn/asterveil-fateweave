@@ -1,0 +1,494 @@
+{
+  "id": "hero-healer-prayer",
+  "status": "captured",
+  "clickOffset": 0.36861300468444824,
+  "sourceFrames": 44,
+  "decodedFrames": 45,
+  "maxTimestampError": 0.000006214004516724714,
+  "maxFrameGap": 0.18191218376159668,
+  "sameState": true,
+  "saveStable": true,
+  "info": {
+    "case": {
+      "id": "hero-healer-prayer",
+      "kind": "hero",
+      "identity": "healer",
+      "action": "prayer"
+    },
+    "command": {
+      "beat": 1,
+      "heroId": "healer",
+      "action": "prayer",
+      "targetId": "party"
+    },
+    "timings": [
+      {
+        "actorId": "healer",
+        "side": "hero",
+        "action": "prayer",
+        "intent": "Crushing Blow",
+        "at": 0,
+        "contact": 280,
+        "end": 700,
+        "events": [
+          {
+            "type": "heal",
+            "sourceId": "healer",
+            "targetId": "healer",
+            "amount": 10,
+            "text": "Restored HP."
+          },
+          {
+            "type": "heal",
+            "sourceId": "healer",
+            "targetId": "guardian",
+            "amount": 10,
+            "text": "Restored HP."
+          },
+          {
+            "type": "heal",
+            "sourceId": "healer",
+            "targetId": "tracer",
+            "amount": 10,
+            "text": "Restored HP."
+          },
+          {
+            "type": "heal",
+            "sourceId": "healer",
+            "targetId": "weaver",
+            "amount": 10,
+            "text": "Restored HP."
+          }
+        ]
+      },
+      {
+        "actorId": "f1",
+        "side": "enemy",
+        "intent": "Crushing Blow",
+        "at": 700,
+        "contact": 280,
+        "end": 800,
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "f1",
+            "targetId": "guardian",
+            "amount": 14,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      },
+      {
+        "actorId": "b1",
+        "side": "enemy",
+        "intent": "Shadow Knife",
+        "at": 1500,
+        "contact": 280,
+        "end": 800,
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "b1",
+            "targetId": "weaver",
+            "amount": 8,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      }
+    ],
+    "focus": "healer",
+    "expectedSheets": [
+      "unit-pilot-seren",
+      "unit-pilot-aegis",
+      "unit-pilot-lyra",
+      "unit-pilot-eira",
+      "unit-pilot-vargoth"
+    ],
+    "dataSummary": {
+      "heroes": [
+        {
+          "id": "healer",
+          "speed": 200,
+          "name": "Seren",
+          "role": "Priest",
+          "lane": "back",
+          "maxHp": 46,
+          "attack": 8,
+          "actions": [
+            "attack",
+            "heal",
+            "prayer",
+            "sanctuary",
+            "revive",
+            "halo",
+            "bless"
+          ],
+          "unlocks": {
+            "skill": "sanctuary",
+            "passive": "afterglow"
+          },
+          "color": 9493936
+        },
+        {
+          "id": "guardian",
+          "speed": 49,
+          "name": "Aegis",
+          "role": "Knight",
+          "lane": "front",
+          "maxHp": 76,
+          "attack": 10,
+          "actions": [
+            "attack",
+            "guard",
+            "bash",
+            "rally",
+            "bulwark",
+            "challenge",
+            "rouse"
+          ],
+          "unlocks": {
+            "skill": "rally",
+            "passive": "stand"
+          },
+          "color": 6408703
+        },
+        {
+          "id": "tracer",
+          "speed": 48,
+          "name": "Lyra",
+          "role": "Duelist",
+          "lane": "front",
+          "maxHp": 56,
+          "attack": 16,
+          "actions": [
+            "attack",
+            "mark",
+            "execute",
+            "finisher",
+            "lunge",
+            "parry",
+            "sweep"
+          ],
+          "unlocks": {
+            "skill": "finisher",
+            "passive": "keeneye"
+          },
+          "color": 16764018,
+          "empoweredByStatuses": true
+        },
+        {
+          "id": "weaver",
+          "speed": 47,
+          "name": "Eira",
+          "role": "Mage",
+          "lane": "back",
+          "maxHp": 48,
+          "attack": 11,
+          "actions": [
+            "attack",
+            "bolt",
+            "ward",
+            "sigil",
+            "storm",
+            "aegis",
+            "dispel"
+          ],
+          "unlocks": {
+            "skill": "sigil",
+            "passive": "echo"
+          },
+          "color": 11901695
+        }
+      ],
+      "enemies": [
+        {
+          "id": "f1",
+          "row": "front",
+          "large": true,
+          "speed": 110,
+          "name": "Vargoth Guard",
+          "displayName": "องครักษ์อสูร",
+          "maxHp": 500,
+          "color": 9930226,
+          "art": "foe_vargoth_guard",
+          "reserve": false
+        },
+        {
+          "id": "b1",
+          "row": "back",
+          "speed": 100,
+          "name": "Veil Raider",
+          "displayName": "นักจู่โจม",
+          "maxHp": 500,
+          "color": 15630525,
+          "art": "raider"
+        }
+      ],
+      "intents": [
+        {
+          "sourceId": "f1",
+          "targetSlot": 0,
+          "name": "Crushing Blow",
+          "damage": 14,
+          "kind": "physical"
+        },
+        {
+          "sourceId": "b1",
+          "targetSlot": 3,
+          "name": "Shadow Knife",
+          "damage": 8,
+          "kind": "energy"
+        }
+      ]
+    }
+  },
+  "stamps": [
+    [
+      "00000",
+      1793286069.998387
+    ],
+    [
+      "00001",
+      1793286070.167021
+    ],
+    [
+      "00002",
+      1793286070.197342
+    ],
+    [
+      "00003",
+      1793286070.268155
+    ],
+    [
+      "00004",
+      1793286070.297376
+    ],
+    [
+      "00005",
+      1793286070.479288
+    ],
+    [
+      "00006",
+      1793286070.56499
+    ],
+    [
+      "00007",
+      1793286070.595588
+    ],
+    [
+      "00008",
+      1793286070.726022
+    ],
+    [
+      "00009",
+      1793286070.859251
+    ],
+    [
+      "00010",
+      1793286070.9023
+    ],
+    [
+      "00011",
+      1793286070.967774
+    ],
+    [
+      "00012",
+      1793286071.13031
+    ],
+    [
+      "00013",
+      1793286071.169363
+    ],
+    [
+      "00014",
+      1793286071.28237
+    ],
+    [
+      "00015",
+      1793286071.374508
+    ],
+    [
+      "00016",
+      1793286071.450138
+    ],
+    [
+      "00017",
+      1793286071.49557
+    ],
+    [
+      "00018",
+      1793286071.574763
+    ],
+    [
+      "00019",
+      1793286071.66672
+    ],
+    [
+      "00020",
+      1793286071.703855
+    ],
+    [
+      "00021",
+      1793286071.780599
+    ],
+    [
+      "00022",
+      1793286071.816759
+    ],
+    [
+      "00023",
+      1793286071.892988
+    ],
+    [
+      "00024",
+      1793286071.956052
+    ],
+    [
+      "00025",
+      1793286071.987299
+    ],
+    [
+      "00026",
+      1793286072.051938
+    ],
+    [
+      "00027",
+      1793286072.087018
+    ],
+    [
+      "00028",
+      1793286072.149037
+    ],
+    [
+      "00029",
+      1793286072.206412
+    ],
+    [
+      "00030",
+      1793286072.287199
+    ],
+    [
+      "00031",
+      1793286072.351079
+    ],
+    [
+      "00032",
+      1793286072.399935
+    ],
+    [
+      "00033",
+      1793286072.469704
+    ],
+    [
+      "00034",
+      1793286072.503517
+    ],
+    [
+      "00035",
+      1793286072.580245
+    ],
+    [
+      "00036",
+      1793286072.611564
+    ],
+    [
+      "00037",
+      1793286072.747784
+    ],
+    [
+      "00038",
+      1793286072.78036
+    ],
+    [
+      "00039",
+      1793286072.808704
+    ],
+    [
+      "00040",
+      1793286072.868691
+    ],
+    [
+      "00041",
+      1793286072.899048
+    ],
+    [
+      "00042",
+      1793286072.958868
+    ],
+    [
+      "00043",
+      1793286073.04949
+    ]
+  ],
+  "impacts": [
+    {
+      "at": 1793286070768,
+      "actorId": "healer",
+      "action": "prayer",
+      "intent": "Crushing Blow",
+      "events": [
+        {
+          "type": "heal",
+          "sourceId": "healer",
+          "targetId": "healer",
+          "amount": 10,
+          "text": "Restored HP."
+        },
+        {
+          "type": "heal",
+          "sourceId": "healer",
+          "targetId": "guardian",
+          "amount": 10,
+          "text": "Restored HP."
+        },
+        {
+          "type": "heal",
+          "sourceId": "healer",
+          "targetId": "tracer",
+          "amount": 10,
+          "text": "Restored HP."
+        },
+        {
+          "type": "heal",
+          "sourceId": "healer",
+          "targetId": "weaver",
+          "amount": 10,
+          "text": "Restored HP."
+        }
+      ]
+    },
+    {
+      "at": 1793286071486,
+      "actorId": "f1",
+      "intent": "Crushing Blow",
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "f1",
+          "targetId": "guardian",
+          "amount": 14,
+          "absorbed": 0,
+          "text": "Enemy attacks on its own turn."
+        }
+      ]
+    },
+    {
+      "at": 1793286072299,
+      "actorId": "b1",
+      "intent": "Shadow Knife",
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "b1",
+          "targetId": "weaver",
+          "amount": 8,
+          "absorbed": 0,
+          "text": "Enemy attacks on its own turn."
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

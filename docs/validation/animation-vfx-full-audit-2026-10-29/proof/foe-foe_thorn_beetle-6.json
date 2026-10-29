@@ -1,0 +1,457 @@
+{
+  "id": "foe-foe_thorn_beetle-6",
+  "status": "captured",
+  "clickOffset": 0.27434301376342773,
+  "sourceFrames": 45,
+  "decodedFrames": 46,
+  "maxTimestampError": 0.000005096557617267905,
+  "maxFrameGap": 0.12797808647155762,
+  "sameState": true,
+  "saveStable": true,
+  "info": {
+    "case": {
+      "id": "foe-foe_thorn_beetle-6",
+      "kind": "foe",
+      "identity": "foe_thorn_beetle",
+      "index": 6,
+      "intent": "Thorn Bite",
+      "source": "thicket-ambush"
+    },
+    "command": {
+      "beat": 1,
+      "heroId": "guardian",
+      "action": "attack",
+      "targetId": "f1"
+    },
+    "timings": [
+      {
+        "actorId": "guardian",
+        "side": "hero",
+        "action": "attack",
+        "intent": "Thorn Bite",
+        "at": 0,
+        "contact": 210,
+        "end": 600,
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "guardian",
+            "targetId": "f1",
+            "amount": 10,
+            "text": "Hero attacks."
+          }
+        ]
+      },
+      {
+        "actorId": "f1",
+        "side": "enemy",
+        "intent": "Thorn Bite",
+        "at": 600,
+        "contact": 280,
+        "end": 800,
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "f1",
+            "targetId": "guardian",
+            "amount": 12,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      },
+      {
+        "actorId": "b1",
+        "side": "enemy",
+        "intent": "Shadow Knife",
+        "at": 1400,
+        "contact": 280,
+        "end": 800,
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "b1",
+            "targetId": "healer",
+            "amount": 8,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      }
+    ],
+    "focus": "f1",
+    "expectedSheets": [
+      "unit-pilot-aegis",
+      "unit-pilot-lyra",
+      "unit-pilot-eira",
+      "unit-pilot-seren",
+      "unit-pilot-beetle"
+    ],
+    "dataSummary": {
+      "heroes": [
+        {
+          "id": "guardian",
+          "speed": 200,
+          "name": "Aegis",
+          "role": "Knight",
+          "lane": "front",
+          "maxHp": 76,
+          "attack": 10,
+          "actions": [
+            "attack",
+            "guard",
+            "bash",
+            "rally",
+            "bulwark",
+            "challenge",
+            "rouse"
+          ],
+          "unlocks": {
+            "skill": "rally",
+            "passive": "stand"
+          },
+          "color": 6408703
+        },
+        {
+          "id": "tracer",
+          "speed": 49,
+          "name": "Lyra",
+          "role": "Duelist",
+          "lane": "front",
+          "maxHp": 56,
+          "attack": 16,
+          "actions": [
+            "attack",
+            "mark",
+            "execute",
+            "finisher",
+            "lunge",
+            "parry",
+            "sweep"
+          ],
+          "unlocks": {
+            "skill": "finisher",
+            "passive": "keeneye"
+          },
+          "color": 16764018,
+          "empoweredByStatuses": true
+        },
+        {
+          "id": "weaver",
+          "speed": 48,
+          "name": "Eira",
+          "role": "Mage",
+          "lane": "back",
+          "maxHp": 48,
+          "attack": 11,
+          "actions": [
+            "attack",
+            "bolt",
+            "ward",
+            "sigil",
+            "storm",
+            "aegis",
+            "dispel"
+          ],
+          "unlocks": {
+            "skill": "sigil",
+            "passive": "echo"
+          },
+          "color": 11901695
+        },
+        {
+          "id": "healer",
+          "speed": 47,
+          "name": "Seren",
+          "role": "Priest",
+          "lane": "back",
+          "maxHp": 46,
+          "attack": 8,
+          "actions": [
+            "attack",
+            "heal",
+            "prayer",
+            "sanctuary",
+            "revive",
+            "halo",
+            "bless"
+          ],
+          "unlocks": {
+            "skill": "sanctuary",
+            "passive": "afterglow"
+          },
+          "color": 9493936
+        }
+      ],
+      "enemies": [
+        {
+          "id": "f1",
+          "row": "front",
+          "name": "Thorn Beetle",
+          "displayName": "ด้วงหนาม",
+          "maxHp": 500,
+          "speed": 110,
+          "color": 7307066,
+          "art": "foe_thorn_beetle",
+          "reserve": false
+        },
+        {
+          "id": "b1",
+          "row": "back",
+          "speed": 100,
+          "name": "Veil Raider",
+          "displayName": "นักจู่โจม",
+          "maxHp": 500,
+          "color": 15630525,
+          "art": "raider"
+        }
+      ],
+      "intents": [
+        {
+          "sourceId": "f1",
+          "targetSlot": 0,
+          "name": "Thorn Bite",
+          "damage": 12,
+          "kind": "physical"
+        },
+        {
+          "sourceId": "b1",
+          "targetSlot": 3,
+          "name": "Shadow Knife",
+          "damage": 8,
+          "kind": "energy"
+        }
+      ]
+    }
+  },
+  "stamps": [
+    [
+      "00000",
+      1793285975.401657
+    ],
+    [
+      "00001",
+      1793285975.498916
+    ],
+    [
+      "00002",
+      1793285975.604454
+    ],
+    [
+      "00003",
+      1793285975.659002
+    ],
+    [
+      "00004",
+      1793285975.69714
+    ],
+    [
+      "00005",
+      1793285975.798513
+    ],
+    [
+      "00006",
+      1793285975.867386
+    ],
+    [
+      "00007",
+      1793285975.953581
+    ],
+    [
+      "00008",
+      1793285976.060521
+    ],
+    [
+      "00009",
+      1793285976.098311
+    ],
+    [
+      "00010",
+      1793285976.188293
+    ],
+    [
+      "00011",
+      1793285976.24876
+    ],
+    [
+      "00012",
+      1793285976.280102
+    ],
+    [
+      "00013",
+      1793285976.322463
+    ],
+    [
+      "00014",
+      1793285976.406939
+    ],
+    [
+      "00015",
+      1793285976.463523
+    ],
+    [
+      "00016",
+      1793285976.511244
+    ],
+    [
+      "00017",
+      1793285976.58562
+    ],
+    [
+      "00018",
+      1793285976.678718
+    ],
+    [
+      "00019",
+      1793285976.707773
+    ],
+    [
+      "00020",
+      1793285976.771895
+    ],
+    [
+      "00021",
+      1793285976.847398
+    ],
+    [
+      "00022",
+      1793285976.872927
+    ],
+    [
+      "00023",
+      1793285976.904157
+    ],
+    [
+      "00024",
+      1793285976.977399
+    ],
+    [
+      "00025",
+      1793285977.007985
+    ],
+    [
+      "00026",
+      1793285977.073492
+    ],
+    [
+      "00027",
+      1793285977.102505
+    ],
+    [
+      "00028",
+      1793285977.16509
+    ],
+    [
+      "00029",
+      1793285977.192635
+    ],
+    [
+      "00030",
+      1793285977.268352
+    ],
+    [
+      "00031",
+      1793285977.39633
+    ],
+    [
+      "00032",
+      1793285977.460286
+    ],
+    [
+      "00033",
+      1793285977.491793
+    ],
+    [
+      "00034",
+      1793285977.553237
+    ],
+    [
+      "00035",
+      1793285977.667361
+    ],
+    [
+      "00036",
+      1793285977.700246
+    ],
+    [
+      "00037",
+      1793285977.761423
+    ],
+    [
+      "00038",
+      1793285977.805243
+    ],
+    [
+      "00039",
+      1793285977.86693
+    ],
+    [
+      "00040",
+      1793285977.895855
+    ],
+    [
+      "00041",
+      1793285977.957634
+    ],
+    [
+      "00042",
+      1793285977.989358
+    ],
+    [
+      "00043",
+      1793285978.054637
+    ],
+    [
+      "00044",
+      1793285978.153696
+    ]
+  ],
+  "impacts": [
+    {
+      "at": 1793285975959,
+      "actorId": "guardian",
+      "action": "attack",
+      "intent": "Thorn Bite",
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "guardian",
+          "targetId": "f1",
+          "amount": 10,
+          "text": "Hero attacks."
+        }
+      ]
+    },
+    {
+      "at": 1793285976608,
+      "actorId": "f1",
+      "intent": "Thorn Bite",
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "f1",
+          "targetId": "guardian",
+          "amount": 12,
+          "absorbed": 0,
+          "text": "Enemy attacks on its own turn."
+        }
+      ]
+    },
+    {
+      "at": 1793285977457,
+      "actorId": "b1",
+      "intent": "Shadow Knife",
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "b1",
+          "targetId": "healer",
+          "amount": 8,
+          "absorbed": 0,
+          "text": "Enemy attacks on its own turn."
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

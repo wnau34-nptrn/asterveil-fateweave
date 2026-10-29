@@ -1,0 +1,12 @@
+{
+  "clips": 72,
+  "invalid": [],
+  "capturedFrames": 2987,
+  "decodedFrames": 3059,
+  "maxTimestampErrorSeconds": 6.214004516724714e-06,
+  "maxFrameGapSeconds": 0.37009692192077637,
+  "minimumPrePointerSeconds": 0.20369291305541992,
+  "clipsWithGapAbove200ms": 21,
+  "fpsClaim": false,
+  "note": "Actual CDP timestamps; each MP4 includes one held tail frame. SwiftShader/CDP gaps are capture limitations, not device performance measurements."
+}

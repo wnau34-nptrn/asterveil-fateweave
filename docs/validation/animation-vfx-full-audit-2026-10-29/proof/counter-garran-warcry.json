@@ -1,0 +1,438 @@
+{
+  "id": "counter-garran-warcry",
+  "status": "captured",
+  "clickOffset": 0.23948287963867188,
+  "sourceFrames": 37,
+  "decodedFrames": 38,
+  "maxTimestampError": 0.000006008773803634071,
+  "maxFrameGap": 0.25377702713012695,
+  "sameState": true,
+  "saveStable": true,
+  "info": {
+    "case": {
+      "id": "counter-garran-warcry",
+      "kind": "counter",
+      "identity": "garran",
+      "action": "warcry"
+    },
+    "command": {
+      "beat": 1,
+      "heroId": "garran",
+      "action": "warcry",
+      "targetId": "garran"
+    },
+    "timings": [
+      {
+        "actorId": "garran",
+        "side": "hero",
+        "action": "warcry",
+        "intent": "Crushing Blow",
+        "at": 0,
+        "contact": 260,
+        "end": 650,
+        "events": [
+          {
+            "type": "buff",
+            "sourceId": "garran",
+            "targetId": "garran",
+            "amount": 8,
+            "text": "War cry."
+          }
+        ]
+      },
+      {
+        "actorId": "f1",
+        "side": "enemy",
+        "intent": "Crushing Blow",
+        "at": 650,
+        "contact": 280,
+        "end": 800,
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "f1",
+            "targetId": "garran",
+            "amount": 14,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          },
+          {
+            "type": "counter",
+            "sourceId": "garran",
+            "targetId": "f1",
+            "amount": 8,
+            "text": "War cry counter."
+          }
+        ]
+      },
+      {
+        "actorId": "b1",
+        "side": "enemy",
+        "intent": "Shadow Knife",
+        "at": 1450,
+        "contact": 280,
+        "end": 800,
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "b1",
+            "targetId": "weaver",
+            "amount": 8,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      }
+    ],
+    "focus": "garran",
+    "expectedSheets": [
+      "unit-pilot-garran",
+      "unit-pilot-aegis",
+      "unit-pilot-lyra",
+      "unit-pilot-eira",
+      "unit-pilot-vargoth"
+    ],
+    "dataSummary": {
+      "heroes": [
+        {
+          "id": "garran",
+          "speed": 200,
+          "name": "Garran",
+          "role": "Spear",
+          "lane": "front",
+          "maxHp": 70,
+          "attack": 12,
+          "actions": [
+            "attack",
+            "brace",
+            "pierce",
+            "spearwall",
+            "halt",
+            "hold",
+            "warcry"
+          ],
+          "unlocks": {
+            "skill": "spearwall",
+            "passive": "heavycounter"
+          },
+          "color": 5227444
+        },
+        {
+          "id": "guardian",
+          "speed": 49,
+          "name": "Aegis",
+          "role": "Knight",
+          "lane": "front",
+          "maxHp": 76,
+          "attack": 10,
+          "actions": [
+            "attack",
+            "guard",
+            "bash",
+            "rally",
+            "bulwark",
+            "challenge",
+            "rouse"
+          ],
+          "unlocks": {
+            "skill": "rally",
+            "passive": "stand"
+          },
+          "color": 6408703
+        },
+        {
+          "id": "tracer",
+          "speed": 48,
+          "name": "Lyra",
+          "role": "Duelist",
+          "lane": "front",
+          "maxHp": 56,
+          "attack": 16,
+          "actions": [
+            "attack",
+            "mark",
+            "execute",
+            "finisher",
+            "lunge",
+            "parry",
+            "sweep"
+          ],
+          "unlocks": {
+            "skill": "finisher",
+            "passive": "keeneye"
+          },
+          "color": 16764018,
+          "empoweredByStatuses": true
+        },
+        {
+          "id": "weaver",
+          "speed": 47,
+          "name": "Eira",
+          "role": "Mage",
+          "lane": "back",
+          "maxHp": 48,
+          "attack": 11,
+          "actions": [
+            "attack",
+            "bolt",
+            "ward",
+            "sigil",
+            "storm",
+            "aegis",
+            "dispel"
+          ],
+          "unlocks": {
+            "skill": "sigil",
+            "passive": "echo"
+          },
+          "color": 11901695
+        }
+      ],
+      "enemies": [
+        {
+          "id": "f1",
+          "row": "front",
+          "large": true,
+          "speed": 110,
+          "name": "Vargoth Guard",
+          "displayName": "องครักษ์อสูร",
+          "maxHp": 500,
+          "color": 9930226,
+          "art": "foe_vargoth_guard",
+          "reserve": false
+        },
+        {
+          "id": "b1",
+          "row": "back",
+          "speed": 100,
+          "name": "Veil Raider",
+          "displayName": "นักจู่โจม",
+          "maxHp": 500,
+          "color": 15630525,
+          "art": "raider"
+        }
+      ],
+      "intents": [
+        {
+          "sourceId": "f1",
+          "targetSlot": 0,
+          "name": "Crushing Blow",
+          "damage": 14,
+          "kind": "physical"
+        },
+        {
+          "sourceId": "b1",
+          "targetSlot": 3,
+          "name": "Shadow Knife",
+          "damage": 8,
+          "kind": "energy"
+        }
+      ]
+    }
+  },
+  "stamps": [
+    [
+      "00000",
+      1793286032.567517
+    ],
+    [
+      "00001",
+      1793286032.681507
+    ],
+    [
+      "00002",
+      1793286032.713785
+    ],
+    [
+      "00003",
+      1793286032.787114
+    ],
+    [
+      "00004",
+      1793286032.897267
+    ],
+    [
+      "00005",
+      1793286032.977005
+    ],
+    [
+      "00006",
+      1793286032.99887
+    ],
+    [
+      "00007",
+      1793286033.136487
+    ],
+    [
+      "00008",
+      1793286033.173497
+    ],
+    [
+      "00009",
+      1793286033.204875
+    ],
+    [
+      "00010",
+      1793286033.291006
+    ],
+    [
+      "00011",
+      1793286033.349768
+    ],
+    [
+      "00012",
+      1793286033.385235
+    ],
+    [
+      "00013",
+      1793286033.450503
+    ],
+    [
+      "00014",
+      1793286033.482572
+    ],
+    [
+      "00015",
+      1793286033.510297
+    ],
+    [
+      "00016",
+      1793286033.686715
+    ],
+    [
+      "00017",
+      1793286033.715953
+    ],
+    [
+      "00018",
+      1793286033.849437
+    ],
+    [
+      "00019",
+      1793286033.895272
+    ],
+    [
+      "00020",
+      1793286033.956436
+    ],
+    [
+      "00021",
+      1793286034.060939
+    ],
+    [
+      "00022",
+      1793286034.092967
+    ],
+    [
+      "00023",
+      1793286034.166261
+    ],
+    [
+      "00024",
+      1793286034.200337
+    ],
+    [
+      "00025",
+      1793286034.266654
+    ],
+    [
+      "00026",
+      1793286034.295889
+    ],
+    [
+      "00027",
+      1793286034.360301
+    ],
+    [
+      "00028",
+      1793286034.497885
+    ],
+    [
+      "00029",
+      1793286034.564372
+    ],
+    [
+      "00030",
+      1793286034.818149
+    ],
+    [
+      "00031",
+      1793286034.874494
+    ],
+    [
+      "00032",
+      1793286035.011242
+    ],
+    [
+      "00033",
+      1793286035.088988
+    ],
+    [
+      "00034",
+      1793286035.170095
+    ],
+    [
+      "00035",
+      1793286035.212702
+    ],
+    [
+      "00036",
+      1793286035.286142
+    ]
+  ],
+  "impacts": [
+    {
+      "at": 1793286033136,
+      "actorId": "garran",
+      "action": "warcry",
+      "intent": "Crushing Blow",
+      "events": [
+        {
+          "type": "buff",
+          "sourceId": "garran",
+          "targetId": "garran",
+          "amount": 8,
+          "text": "War cry."
+        }
+      ]
+    },
+    {
+      "at": 1793286033848,
+      "actorId": "f1",
+      "intent": "Crushing Blow",
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "f1",
+          "targetId": "garran",
+          "amount": 14,
+          "absorbed": 0,
+          "text": "Enemy attacks on its own turn."
+        },
+        {
+          "type": "counter",
+          "sourceId": "garran",
+          "targetId": "f1",
+          "amount": 8,
+          "text": "War cry counter."
+        }
+      ]
+    },
+    {
+      "at": 1793286034674,
+      "actorId": "b1",
+      "intent": "Shadow Knife",
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "b1",
+          "targetId": "weaver",
+          "amount": 8,
+          "absorbed": 0,
+          "text": "Enemy attacks on its own turn."
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

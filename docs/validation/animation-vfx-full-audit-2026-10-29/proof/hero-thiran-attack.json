@@ -1,0 +1,437 @@
+{
+  "id": "hero-thiran-attack",
+  "status": "captured",
+  "clickOffset": 0.2239391803741455,
+  "sourceFrames": 38,
+  "decodedFrames": 39,
+  "maxTimestampError": 0.000005992752075190122,
+  "maxFrameGap": 0.18382501602172852,
+  "sameState": true,
+  "saveStable": true,
+  "info": {
+    "case": {
+      "id": "hero-thiran-attack",
+      "kind": "hero",
+      "identity": "thiran",
+      "action": "attack"
+    },
+    "command": {
+      "beat": 1,
+      "heroId": "thiran",
+      "action": "attack",
+      "targetId": "f1"
+    },
+    "timings": [
+      {
+        "actorId": "thiran",
+        "side": "hero",
+        "action": "attack",
+        "intent": "Crushing Blow",
+        "at": 0,
+        "contact": 210,
+        "end": 600,
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "thiran",
+            "targetId": "f1",
+            "amount": 11,
+            "text": "Hero attacks."
+          },
+          {
+            "type": "heal",
+            "sourceId": "thiran",
+            "targetId": "guardian",
+            "amount": 3,
+            "text": "Damage becomes an ally’s life."
+          }
+        ]
+      },
+      {
+        "actorId": "f1",
+        "side": "enemy",
+        "intent": "Crushing Blow",
+        "at": 600,
+        "contact": 280,
+        "end": 800,
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "f1",
+            "targetId": "thiran",
+            "amount": 14,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      },
+      {
+        "actorId": "b1",
+        "side": "enemy",
+        "intent": "Shadow Knife",
+        "at": 1400,
+        "contact": 280,
+        "end": 800,
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "b1",
+            "targetId": "weaver",
+            "amount": 8,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      }
+    ],
+    "focus": "thiran",
+    "expectedSheets": [
+      "unit-pilot-aegis",
+      "unit-pilot-lyra",
+      "unit-pilot-eira",
+      "unit-pilot-vargoth"
+    ],
+    "dataSummary": {
+      "heroes": [
+        {
+          "id": "thiran",
+          "name": "Thiran",
+          "role": "Saint",
+          "lane": "front",
+          "maxHp": 68,
+          "attack": 11,
+          "speed": 200,
+          "actions": [
+            "attack",
+            "saintstrike",
+            "communion",
+            "saintarc",
+            "vowstrike",
+            "sharewound",
+            "lastlight"
+          ],
+          "color": 8173228
+        },
+        {
+          "id": "guardian",
+          "speed": 49,
+          "name": "Aegis",
+          "role": "Knight",
+          "lane": "front",
+          "maxHp": 76,
+          "attack": 10,
+          "actions": [
+            "attack",
+            "guard",
+            "bash",
+            "rally",
+            "bulwark",
+            "challenge",
+            "rouse"
+          ],
+          "unlocks": {
+            "skill": "rally",
+            "passive": "stand"
+          },
+          "color": 6408703
+        },
+        {
+          "id": "tracer",
+          "speed": 48,
+          "name": "Lyra",
+          "role": "Duelist",
+          "lane": "front",
+          "maxHp": 56,
+          "attack": 16,
+          "actions": [
+            "attack",
+            "mark",
+            "execute",
+            "finisher",
+            "lunge",
+            "parry",
+            "sweep"
+          ],
+          "unlocks": {
+            "skill": "finisher",
+            "passive": "keeneye"
+          },
+          "color": 16764018,
+          "empoweredByStatuses": true
+        },
+        {
+          "id": "weaver",
+          "speed": 47,
+          "name": "Eira",
+          "role": "Mage",
+          "lane": "back",
+          "maxHp": 48,
+          "attack": 11,
+          "actions": [
+            "attack",
+            "bolt",
+            "ward",
+            "sigil",
+            "storm",
+            "aegis",
+            "dispel"
+          ],
+          "unlocks": {
+            "skill": "sigil",
+            "passive": "echo"
+          },
+          "color": 11901695
+        }
+      ],
+      "enemies": [
+        {
+          "id": "f1",
+          "row": "front",
+          "large": true,
+          "speed": 110,
+          "name": "Vargoth Guard",
+          "displayName": "องครักษ์อสูร",
+          "maxHp": 500,
+          "color": 9930226,
+          "art": "foe_vargoth_guard",
+          "reserve": false
+        },
+        {
+          "id": "b1",
+          "row": "back",
+          "speed": 100,
+          "name": "Veil Raider",
+          "displayName": "นักจู่โจม",
+          "maxHp": 500,
+          "color": 15630525,
+          "art": "raider"
+        }
+      ],
+      "intents": [
+        {
+          "sourceId": "f1",
+          "targetSlot": 0,
+          "name": "Crushing Blow",
+          "damage": 14,
+          "kind": "physical"
+        },
+        {
+          "sourceId": "b1",
+          "targetSlot": 3,
+          "name": "Shadow Knife",
+          "damage": 8,
+          "kind": "energy"
+        }
+      ]
+    }
+  },
+  "stamps": [
+    [
+      "00000",
+      1793285956.084061
+    ],
+    [
+      "00001",
+      1793285956.14949
+    ],
+    [
+      "00002",
+      1793285956.260507
+    ],
+    [
+      "00003",
+      1793285956.297453
+    ],
+    [
+      "00004",
+      1793285956.399121
+    ],
+    [
+      "00005",
+      1793285956.465211
+    ],
+    [
+      "00006",
+      1793285956.546883
+    ],
+    [
+      "00007",
+      1793285956.613937
+    ],
+    [
+      "00008",
+      1793285956.709176
+    ],
+    [
+      "00009",
+      1793285956.794283
+    ],
+    [
+      "00010",
+      1793285956.857196
+    ],
+    [
+      "00011",
+      1793285956.910945
+    ],
+    [
+      "00012",
+      1793285957.016054
+    ],
+    [
+      "00013",
+      1793285957.07241
+    ],
+    [
+      "00014",
+      1793285957.101773
+    ],
+    [
+      "00015",
+      1793285957.195314
+    ],
+    [
+      "00016",
+      1793285957.262674
+    ],
+    [
+      "00017",
+      1793285957.295042
+    ],
+    [
+      "00018",
+      1793285957.362007
+    ],
+    [
+      "00019",
+      1793285957.416045
+    ],
+    [
+      "00020",
+      1793285957.479634
+    ],
+    [
+      "00021",
+      1793285957.546808
+    ],
+    [
+      "00022",
+      1793285957.595319
+    ],
+    [
+      "00023",
+      1793285957.66154
+    ],
+    [
+      "00024",
+      1793285957.708883
+    ],
+    [
+      "00025",
+      1793285957.804018
+    ],
+    [
+      "00026",
+      1793285957.875477
+    ],
+    [
+      "00027",
+      1793285957.913474
+    ],
+    [
+      "00028",
+      1793285957.999587
+    ],
+    [
+      "00029",
+      1793285958.08636
+    ],
+    [
+      "00030",
+      1793285958.170163
+    ],
+    [
+      "00031",
+      1793285958.210327
+    ],
+    [
+      "00032",
+      1793285958.376956
+    ],
+    [
+      "00033",
+      1793285958.414128
+    ],
+    [
+      "00034",
+      1793285958.497321
+    ],
+    [
+      "00035",
+      1793285958.681146
+    ],
+    [
+      "00036",
+      1793285958.75466
+    ],
+    [
+      "00037",
+      1793285958.802504
+    ]
+  ],
+  "impacts": [
+    {
+      "at": 1793285956557,
+      "actorId": "thiran",
+      "action": "attack",
+      "intent": "Crushing Blow",
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "thiran",
+          "targetId": "f1",
+          "amount": 11,
+          "text": "Hero attacks."
+        },
+        {
+          "type": "heal",
+          "sourceId": "thiran",
+          "targetId": "guardian",
+          "amount": 3,
+          "text": "Damage becomes an ally’s life."
+        }
+      ]
+    },
+    {
+      "at": 1793285957268,
+      "actorId": "f1",
+      "intent": "Crushing Blow",
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "f1",
+          "targetId": "thiran",
+          "amount": 14,
+          "absorbed": 0,
+          "text": "Enemy attacks on its own turn."
+        }
+      ]
+    },
+    {
+      "at": 1793285958072,
+      "actorId": "b1",
+      "intent": "Shadow Knife",
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "b1",
+          "targetId": "weaver",
+          "amount": 8,
+          "absorbed": 0,
+          "text": "Enemy attacks on its own turn."
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

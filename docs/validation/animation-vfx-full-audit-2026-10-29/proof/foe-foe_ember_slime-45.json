@@ -1,0 +1,441 @@
+{
+  "id": "foe-foe_ember_slime-45",
+  "status": "captured",
+  "clickOffset": 0.2062540054321289,
+  "sourceFrames": 41,
+  "decodedFrames": 42,
+  "maxTimestampError": 0.000005871826171843786,
+  "maxFrameGap": 0.15285801887512207,
+  "sameState": true,
+  "saveStable": true,
+  "info": {
+    "case": {
+      "id": "foe-foe_ember_slime-45",
+      "kind": "foe",
+      "identity": "foe_ember_slime",
+      "index": 45,
+      "intent": "Ember Spark",
+      "source": "slime-pair"
+    },
+    "command": {
+      "beat": 1,
+      "heroId": "guardian",
+      "action": "attack",
+      "targetId": "f1"
+    },
+    "timings": [
+      {
+        "actorId": "guardian",
+        "side": "hero",
+        "action": "attack",
+        "intent": "Ember Spark",
+        "at": 0,
+        "contact": 210,
+        "end": 600,
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "guardian",
+            "targetId": "f1",
+            "amount": 10,
+            "text": "Hero attacks."
+          }
+        ]
+      },
+      {
+        "actorId": "f1",
+        "side": "enemy",
+        "intent": "Ember Spark",
+        "at": 600,
+        "contact": 280,
+        "end": 800,
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "f1",
+            "targetId": "guardian",
+            "amount": 7,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      },
+      {
+        "actorId": "b1",
+        "side": "enemy",
+        "intent": "Shadow Knife",
+        "at": 1400,
+        "contact": 280,
+        "end": 800,
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "b1",
+            "targetId": "healer",
+            "amount": 8,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      }
+    ],
+    "focus": "f1",
+    "expectedSheets": [
+      "unit-pilot-aegis",
+      "unit-pilot-lyra",
+      "unit-pilot-eira",
+      "unit-pilot-seren",
+      "unit-pilot-ember"
+    ],
+    "dataSummary": {
+      "heroes": [
+        {
+          "id": "guardian",
+          "speed": 200,
+          "name": "Aegis",
+          "role": "Knight",
+          "lane": "front",
+          "maxHp": 76,
+          "attack": 10,
+          "actions": [
+            "attack",
+            "guard",
+            "bash",
+            "rally",
+            "bulwark",
+            "challenge",
+            "rouse"
+          ],
+          "unlocks": {
+            "skill": "rally",
+            "passive": "stand"
+          },
+          "color": 6408703
+        },
+        {
+          "id": "tracer",
+          "speed": 49,
+          "name": "Lyra",
+          "role": "Duelist",
+          "lane": "front",
+          "maxHp": 56,
+          "attack": 16,
+          "actions": [
+            "attack",
+            "mark",
+            "execute",
+            "finisher",
+            "lunge",
+            "parry",
+            "sweep"
+          ],
+          "unlocks": {
+            "skill": "finisher",
+            "passive": "keeneye"
+          },
+          "color": 16764018,
+          "empoweredByStatuses": true
+        },
+        {
+          "id": "weaver",
+          "speed": 48,
+          "name": "Eira",
+          "role": "Mage",
+          "lane": "back",
+          "maxHp": 48,
+          "attack": 11,
+          "actions": [
+            "attack",
+            "bolt",
+            "ward",
+            "sigil",
+            "storm",
+            "aegis",
+            "dispel"
+          ],
+          "unlocks": {
+            "skill": "sigil",
+            "passive": "echo"
+          },
+          "color": 11901695
+        },
+        {
+          "id": "healer",
+          "speed": 47,
+          "name": "Seren",
+          "role": "Priest",
+          "lane": "back",
+          "maxHp": 46,
+          "attack": 8,
+          "actions": [
+            "attack",
+            "heal",
+            "prayer",
+            "sanctuary",
+            "revive",
+            "halo",
+            "bless"
+          ],
+          "unlocks": {
+            "skill": "sanctuary",
+            "passive": "afterglow"
+          },
+          "color": 9493936
+        }
+      ],
+      "enemies": [
+        {
+          "id": "f1",
+          "row": "front",
+          "name": "Ember Slime",
+          "displayName": "สไลม์ถ่านไฟ",
+          "maxHp": 500,
+          "speed": 110,
+          "color": 15769712,
+          "art": "foe_ember_slime",
+          "reserve": false
+        },
+        {
+          "id": "b1",
+          "row": "back",
+          "speed": 100,
+          "name": "Veil Raider",
+          "displayName": "นักจู่โจม",
+          "maxHp": 500,
+          "color": 15630525,
+          "art": "raider"
+        }
+      ],
+      "intents": [
+        {
+          "sourceId": "f1",
+          "targetSlot": 0,
+          "name": "Ember Spark",
+          "damage": 7,
+          "kind": "energy"
+        },
+        {
+          "sourceId": "b1",
+          "targetSlot": 3,
+          "name": "Shadow Knife",
+          "damage": 8,
+          "kind": "energy"
+        }
+      ]
+    }
+  },
+  "stamps": [
+    [
+      "00000",
+      1793286012.504746
+    ],
+    [
+      "00001",
+      1793286012.620246
+    ],
+    [
+      "00002",
+      1793286012.675216
+    ],
+    [
+      "00003",
+      1793286012.700748
+    ],
+    [
+      "00004",
+      1793286012.853606
+    ],
+    [
+      "00005",
+      1793286012.886708
+    ],
+    [
+      "00006",
+      1793286012.912876
+    ],
+    [
+      "00007",
+      1793286013.006596
+    ],
+    [
+      "00008",
+      1793286013.083625
+    ],
+    [
+      "00009",
+      1793286013.159779
+    ],
+    [
+      "00010",
+      1793286013.249893
+    ],
+    [
+      "00011",
+      1793286013.349756
+    ],
+    [
+      "00012",
+      1793286013.398606
+    ],
+    [
+      "00013",
+      1793286013.463439
+    ],
+    [
+      "00014",
+      1793286013.552893
+    ],
+    [
+      "00015",
+      1793286013.607138
+    ],
+    [
+      "00016",
+      1793286013.699707
+    ],
+    [
+      "00017",
+      1793286013.757909
+    ],
+    [
+      "00018",
+      1793286013.789182
+    ],
+    [
+      "00019",
+      1793286013.889957
+    ],
+    [
+      "00020",
+      1793286013.948712
+    ],
+    [
+      "00021",
+      1793286013.980083
+    ],
+    [
+      "00022",
+      1793286014.011262
+    ],
+    [
+      "00023",
+      1793286014.078543
+    ],
+    [
+      "00024",
+      1793286014.110913
+    ],
+    [
+      "00025",
+      1793286014.24852
+    ],
+    [
+      "00026",
+      1793286014.282871
+    ],
+    [
+      "00027",
+      1793286014.31222
+    ],
+    [
+      "00028",
+      1793286014.452593
+    ],
+    [
+      "00029",
+      1793286014.510061
+    ],
+    [
+      "00030",
+      1793286014.589131
+    ],
+    [
+      "00031",
+      1793286014.650828
+    ],
+    [
+      "00032",
+      1793286014.756141
+    ],
+    [
+      "00033",
+      1793286014.787045
+    ],
+    [
+      "00034",
+      1793286014.815707
+    ],
+    [
+      "00035",
+      1793286014.877151
+    ],
+    [
+      "00036",
+      1793286014.905866
+    ],
+    [
+      "00037",
+      1793286014.965422
+    ],
+    [
+      "00038",
+      1793286014.996984
+    ],
+    [
+      "00039",
+      1793286015.07145
+    ],
+    [
+      "00040",
+      1793286015.104071
+    ]
+  ],
+  "impacts": [
+    {
+      "at": 1793286012987,
+      "actorId": "guardian",
+      "action": "attack",
+      "intent": "Ember Spark",
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "guardian",
+          "targetId": "f1",
+          "amount": 10,
+          "text": "Hero attacks."
+        }
+      ]
+    },
+    {
+      "at": 1793286013679,
+      "actorId": "f1",
+      "intent": "Ember Spark",
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "f1",
+          "targetId": "guardian",
+          "amount": 7,
+          "absorbed": 0,
+          "text": "Enemy attacks on its own turn."
+        }
+      ]
+    },
+    {
+      "at": 1793286014488,
+      "actorId": "b1",
+      "intent": "Shadow Knife",
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "b1",
+          "targetId": "healer",
+          "amount": 8,
+          "absorbed": 0,
+          "text": "Enemy attacks on its own turn."
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

@@ -1,0 +1,441 @@
+{
+  "id": "hero-metta-attack",
+  "status": "captured",
+  "clickOffset": 0.2070760726928711,
+  "sourceFrames": 39,
+  "decodedFrames": 40,
+  "maxTimestampError": 0.000005159576416002842,
+  "maxFrameGap": 0.11315011978149414,
+  "sameState": true,
+  "saveStable": true,
+  "info": {
+    "case": {
+      "id": "hero-metta-attack",
+      "kind": "hero",
+      "identity": "metta",
+      "action": "attack"
+    },
+    "command": {
+      "beat": 1,
+      "heroId": "metta",
+      "action": "attack",
+      "targetId": "f1"
+    },
+    "timings": [
+      {
+        "actorId": "metta",
+        "side": "hero",
+        "action": "attack",
+        "intent": "Crushing Blow",
+        "at": 0,
+        "contact": 210,
+        "end": 600,
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "metta",
+            "targetId": "f1",
+            "amount": 11,
+            "text": "Hero attacks."
+          },
+          {
+            "type": "heal",
+            "sourceId": "metta",
+            "targetId": "guardian",
+            "amount": 3,
+            "text": "Damage becomes an ally’s life."
+          }
+        ]
+      },
+      {
+        "actorId": "f1",
+        "side": "enemy",
+        "intent": "Crushing Blow",
+        "at": 600,
+        "contact": 280,
+        "end": 800,
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "f1",
+            "targetId": "metta",
+            "amount": 14,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      },
+      {
+        "actorId": "b1",
+        "side": "enemy",
+        "intent": "Shadow Knife",
+        "at": 1400,
+        "contact": 280,
+        "end": 800,
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "b1",
+            "targetId": "weaver",
+            "amount": 8,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      }
+    ],
+    "focus": "metta",
+    "expectedSheets": [
+      "unit-pilot-aegis",
+      "unit-pilot-lyra",
+      "unit-pilot-eira",
+      "unit-pilot-vargoth"
+    ],
+    "dataSummary": {
+      "heroes": [
+        {
+          "id": "metta",
+          "name": "Metta",
+          "role": "Saint",
+          "lane": "front",
+          "maxHp": 68,
+          "attack": 11,
+          "speed": 200,
+          "actions": [
+            "attack",
+            "saintstrike",
+            "communion",
+            "saintarc",
+            "vowstrike",
+            "sharewound",
+            "lastlight"
+          ],
+          "color": 13939819
+        },
+        {
+          "id": "guardian",
+          "speed": 49,
+          "name": "Aegis",
+          "role": "Knight",
+          "lane": "front",
+          "maxHp": 76,
+          "attack": 10,
+          "actions": [
+            "attack",
+            "guard",
+            "bash",
+            "rally",
+            "bulwark",
+            "challenge",
+            "rouse"
+          ],
+          "unlocks": {
+            "skill": "rally",
+            "passive": "stand"
+          },
+          "color": 6408703
+        },
+        {
+          "id": "tracer",
+          "speed": 48,
+          "name": "Lyra",
+          "role": "Duelist",
+          "lane": "front",
+          "maxHp": 56,
+          "attack": 16,
+          "actions": [
+            "attack",
+            "mark",
+            "execute",
+            "finisher",
+            "lunge",
+            "parry",
+            "sweep"
+          ],
+          "unlocks": {
+            "skill": "finisher",
+            "passive": "keeneye"
+          },
+          "color": 16764018,
+          "empoweredByStatuses": true
+        },
+        {
+          "id": "weaver",
+          "speed": 47,
+          "name": "Eira",
+          "role": "Mage",
+          "lane": "back",
+          "maxHp": 48,
+          "attack": 11,
+          "actions": [
+            "attack",
+            "bolt",
+            "ward",
+            "sigil",
+            "storm",
+            "aegis",
+            "dispel"
+          ],
+          "unlocks": {
+            "skill": "sigil",
+            "passive": "echo"
+          },
+          "color": 11901695
+        }
+      ],
+      "enemies": [
+        {
+          "id": "f1",
+          "row": "front",
+          "large": true,
+          "speed": 110,
+          "name": "Vargoth Guard",
+          "displayName": "องครักษ์อสูร",
+          "maxHp": 500,
+          "color": 9930226,
+          "art": "foe_vargoth_guard",
+          "reserve": false
+        },
+        {
+          "id": "b1",
+          "row": "back",
+          "speed": 100,
+          "name": "Veil Raider",
+          "displayName": "นักจู่โจม",
+          "maxHp": 500,
+          "color": 15630525,
+          "art": "raider"
+        }
+      ],
+      "intents": [
+        {
+          "sourceId": "f1",
+          "targetSlot": 0,
+          "name": "Crushing Blow",
+          "damage": 14,
+          "kind": "physical"
+        },
+        {
+          "sourceId": "b1",
+          "targetSlot": 3,
+          "name": "Shadow Knife",
+          "damage": 8,
+          "kind": "energy"
+        }
+      ]
+    }
+  },
+  "stamps": [
+    [
+      "00000",
+      1793285955.792924
+    ],
+    [
+      "00001",
+      1793285955.852601
+    ],
+    [
+      "00002",
+      1793285955.962781
+    ],
+    [
+      "00003",
+      1793285955.990747
+    ],
+    [
+      "00004",
+      1793285956.100696
+    ],
+    [
+      "00005",
+      1793285956.166025
+    ],
+    [
+      "00006",
+      1793285956.279175
+    ],
+    [
+      "00007",
+      1793285956.382943
+    ],
+    [
+      "00008",
+      1793285956.447673
+    ],
+    [
+      "00009",
+      1793285956.503336
+    ],
+    [
+      "00010",
+      1793285956.572531
+    ],
+    [
+      "00011",
+      1793285956.668775
+    ],
+    [
+      "00012",
+      1793285956.755146
+    ],
+    [
+      "00013",
+      1793285956.812721
+    ],
+    [
+      "00014",
+      1793285956.894754
+    ],
+    [
+      "00015",
+      1793285956.996498
+    ],
+    [
+      "00016",
+      1793285957.057587
+    ],
+    [
+      "00017",
+      1793285957.086562
+    ],
+    [
+      "00018",
+      1793285957.161717
+    ],
+    [
+      "00019",
+      1793285957.212675
+    ],
+    [
+      "00020",
+      1793285957.279866
+    ],
+    [
+      "00021",
+      1793285957.314581
+    ],
+    [
+      "00022",
+      1793285957.378388
+    ],
+    [
+      "00023",
+      1793285957.459523
+    ],
+    [
+      "00024",
+      1793285957.495503
+    ],
+    [
+      "00025",
+      1793285957.563997
+    ],
+    [
+      "00026",
+      1793285957.61547
+    ],
+    [
+      "00027",
+      1793285957.694142
+    ],
+    [
+      "00028",
+      1793285957.758901
+    ],
+    [
+      "00029",
+      1793285957.852615
+    ],
+    [
+      "00030",
+      1793285957.895748
+    ],
+    [
+      "00031",
+      1793285957.959339
+    ],
+    [
+      "00032",
+      1793285958.065266
+    ],
+    [
+      "00033",
+      1793285958.102394
+    ],
+    [
+      "00034",
+      1793285958.193034
+    ],
+    [
+      "00035",
+      1793285958.257483
+    ],
+    [
+      "00036",
+      1793285958.357243
+    ],
+    [
+      "00037",
+      1793285958.397525
+    ],
+    [
+      "00038",
+      1793285958.45954
+    ]
+  ],
+  "impacts": [
+    {
+      "at": 1793285956260,
+      "actorId": "metta",
+      "action": "attack",
+      "intent": "Crushing Blow",
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "metta",
+          "targetId": "f1",
+          "amount": 11,
+          "text": "Hero attacks."
+        },
+        {
+          "type": "heal",
+          "sourceId": "metta",
+          "targetId": "guardian",
+          "amount": 3,
+          "text": "Damage becomes an ally’s life."
+        }
+      ]
+    },
+    {
+      "at": 1793285956956,
+      "actorId": "f1",
+      "intent": "Crushing Blow",
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "f1",
+          "targetId": "metta",
+          "amount": 14,
+          "absorbed": 0,
+          "text": "Enemy attacks on its own turn."
+        }
+      ]
+    },
+    {
+      "at": 1793285957796,
+      "actorId": "b1",
+      "intent": "Shadow Knife",
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "b1",
+          "targetId": "weaver",
+          "amount": 8,
+          "absorbed": 0,
+          "text": "Enemy attacks on its own turn."
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

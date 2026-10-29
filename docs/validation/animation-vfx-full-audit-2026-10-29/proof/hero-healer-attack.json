@@ -1,0 +1,432 @@
+{
+  "id": "hero-healer-attack",
+  "status": "captured",
+  "clickOffset": 0.2275550365447998,
+  "sourceFrames": 39,
+  "decodedFrames": 40,
+  "maxTimestampError": 0.00000515048217764047,
+  "maxFrameGap": 0.18459486961364746,
+  "sameState": true,
+  "saveStable": true,
+  "info": {
+    "case": {
+      "id": "hero-healer-attack",
+      "kind": "hero",
+      "identity": "healer",
+      "action": "attack"
+    },
+    "command": {
+      "beat": 1,
+      "heroId": "healer",
+      "action": "attack",
+      "targetId": "f1"
+    },
+    "timings": [
+      {
+        "actorId": "healer",
+        "side": "hero",
+        "action": "attack",
+        "intent": "Crushing Blow",
+        "at": 0,
+        "contact": 210,
+        "end": 600,
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "healer",
+            "targetId": "f1",
+            "amount": 8,
+            "text": "Hero attacks."
+          }
+        ]
+      },
+      {
+        "actorId": "f1",
+        "side": "enemy",
+        "intent": "Crushing Blow",
+        "at": 600,
+        "contact": 280,
+        "end": 800,
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "f1",
+            "targetId": "guardian",
+            "amount": 14,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      },
+      {
+        "actorId": "b1",
+        "side": "enemy",
+        "intent": "Shadow Knife",
+        "at": 1400,
+        "contact": 280,
+        "end": 800,
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "b1",
+            "targetId": "weaver",
+            "amount": 8,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ]
+      }
+    ],
+    "focus": "healer",
+    "expectedSheets": [
+      "unit-pilot-seren",
+      "unit-pilot-aegis",
+      "unit-pilot-lyra",
+      "unit-pilot-eira",
+      "unit-pilot-vargoth"
+    ],
+    "dataSummary": {
+      "heroes": [
+        {
+          "id": "healer",
+          "speed": 200,
+          "name": "Seren",
+          "role": "Priest",
+          "lane": "back",
+          "maxHp": 46,
+          "attack": 8,
+          "actions": [
+            "attack",
+            "heal",
+            "prayer",
+            "sanctuary",
+            "revive",
+            "halo",
+            "bless"
+          ],
+          "unlocks": {
+            "skill": "sanctuary",
+            "passive": "afterglow"
+          },
+          "color": 9493936
+        },
+        {
+          "id": "guardian",
+          "speed": 49,
+          "name": "Aegis",
+          "role": "Knight",
+          "lane": "front",
+          "maxHp": 76,
+          "attack": 10,
+          "actions": [
+            "attack",
+            "guard",
+            "bash",
+            "rally",
+            "bulwark",
+            "challenge",
+            "rouse"
+          ],
+          "unlocks": {
+            "skill": "rally",
+            "passive": "stand"
+          },
+          "color": 6408703
+        },
+        {
+          "id": "tracer",
+          "speed": 48,
+          "name": "Lyra",
+          "role": "Duelist",
+          "lane": "front",
+          "maxHp": 56,
+          "attack": 16,
+          "actions": [
+            "attack",
+            "mark",
+            "execute",
+            "finisher",
+            "lunge",
+            "parry",
+            "sweep"
+          ],
+          "unlocks": {
+            "skill": "finisher",
+            "passive": "keeneye"
+          },
+          "color": 16764018,
+          "empoweredByStatuses": true
+        },
+        {
+          "id": "weaver",
+          "speed": 47,
+          "name": "Eira",
+          "role": "Mage",
+          "lane": "back",
+          "maxHp": 48,
+          "attack": 11,
+          "actions": [
+            "attack",
+            "bolt",
+            "ward",
+            "sigil",
+            "storm",
+            "aegis",
+            "dispel"
+          ],
+          "unlocks": {
+            "skill": "sigil",
+            "passive": "echo"
+          },
+          "color": 11901695
+        }
+      ],
+      "enemies": [
+        {
+          "id": "f1",
+          "row": "front",
+          "large": true,
+          "speed": 110,
+          "name": "Vargoth Guard",
+          "displayName": "องครักษ์อสูร",
+          "maxHp": 500,
+          "color": 9930226,
+          "art": "foe_vargoth_guard",
+          "reserve": false
+        },
+        {
+          "id": "b1",
+          "row": "back",
+          "speed": 100,
+          "name": "Veil Raider",
+          "displayName": "นักจู่โจม",
+          "maxHp": 500,
+          "color": 15630525,
+          "art": "raider"
+        }
+      ],
+      "intents": [
+        {
+          "sourceId": "f1",
+          "targetSlot": 0,
+          "name": "Crushing Blow",
+          "damage": 14,
+          "kind": "physical"
+        },
+        {
+          "sourceId": "b1",
+          "targetSlot": 3,
+          "name": "Shadow Knife",
+          "damage": 8,
+          "kind": "energy"
+        }
+      ]
+    }
+  },
+  "stamps": [
+    [
+      "00000",
+      1793285936.886445
+    ],
+    [
+      "00001",
+      1793285936.996893
+    ],
+    [
+      "00002",
+      1793285937.062343
+    ],
+    [
+      "00003",
+      1793285937.096659
+    ],
+    [
+      "00004",
+      1793285937.206946
+    ],
+    [
+      "00005",
+      1793285937.276416
+    ],
+    [
+      "00006",
+      1793285937.310648
+    ],
+    [
+      "00007",
+      1793285937.461582
+    ],
+    [
+      "00008",
+      1793285937.502786
+    ],
+    [
+      "00009",
+      1793285937.570794
+    ],
+    [
+      "00010",
+      1793285937.656959
+    ],
+    [
+      "00011",
+      1793285937.752037
+    ],
+    [
+      "00012",
+      1793285937.810776
+    ],
+    [
+      "00013",
+      1793285937.88993
+    ],
+    [
+      "00014",
+      1793285937.949335
+    ],
+    [
+      "00015",
+      1793285938.002079
+    ],
+    [
+      "00016",
+      1793285938.085284
+    ],
+    [
+      "00017",
+      1793285938.150978
+    ],
+    [
+      "00018",
+      1793285938.183092
+    ],
+    [
+      "00019",
+      1793285938.262973
+    ],
+    [
+      "00020",
+      1793285938.298461
+    ],
+    [
+      "00021",
+      1793285938.367168
+    ],
+    [
+      "00022",
+      1793285938.408922
+    ],
+    [
+      "00023",
+      1793285938.478599
+    ],
+    [
+      "00024",
+      1793285938.559856
+    ],
+    [
+      "00025",
+      1793285938.588503
+    ],
+    [
+      "00026",
+      1793285938.67289
+    ],
+    [
+      "00027",
+      1793285938.704189
+    ],
+    [
+      "00028",
+      1793285938.888784
+    ],
+    [
+      "00029",
+      1793285938.952994
+    ],
+    [
+      "00030",
+      1793285938.979765
+    ],
+    [
+      "00031",
+      1793285939.009085
+    ],
+    [
+      "00032",
+      1793285939.158437
+    ],
+    [
+      "00033",
+      1793285939.191191
+    ],
+    [
+      "00034",
+      1793285939.255962
+    ],
+    [
+      "00035",
+      1793285939.307776
+    ],
+    [
+      "00036",
+      1793285939.475254
+    ],
+    [
+      "00037",
+      1793285939.559151
+    ],
+    [
+      "00038",
+      1793285939.593623
+    ]
+  ],
+  "impacts": [
+    {
+      "at": 1793285937397,
+      "actorId": "healer",
+      "action": "attack",
+      "intent": "Crushing Blow",
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "healer",
+          "targetId": "f1",
+          "amount": 8,
+          "text": "Hero attacks."
+        }
+      ]
+    },
+    {
+      "at": 1793285938090,
+      "actorId": "f1",
+      "intent": "Crushing Blow",
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "f1",
+          "targetId": "guardian",
+          "amount": 14,
+          "absorbed": 0,
+          "text": "Enemy attacks on its own turn."
+        }
+      ]
+    },
+    {
+      "at": 1793285938950,
+      "actorId": "b1",
+      "intent": "Shadow Knife",
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "b1",
+          "targetId": "weaver",
+          "amount": 8,
+          "absorbed": 0,
+          "text": "Enemy attacks on its own turn."
+        }
+      ]
+    }
+  ],
+  "errors": []
+}
