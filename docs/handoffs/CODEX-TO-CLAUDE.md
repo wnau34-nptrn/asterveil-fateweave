@@ -2,13 +2,14 @@
 
 ## 2026-10-29 — ART-UNIT-ANIMATION-A2-002: Aegis anatomy redraw (art-only)
 
-- Branch `art/art-unit-animation-a2-002` จาก game branch `feature/fateweave-initial-prototype` @ `78574820`; เปิด PR เข้าสาขาเกมหลัง push; ยังไม่ merge/ไม่มี merge commit
+- Branch `art/art-unit-animation-a2-002` จาก game branch `feature/fateweave-initial-prototype` @ `78574820`; [PR #112](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/112) เข้าสาขาเกม; art commit `b2379c6`; ยังไม่ merge/ไม่มี merge commit
 - ส่ง `incoming/ART-UNIT-ANIMATION-A2-002/`: raw ทุก36ผลลัพธ์ + generation.json (promptจริง/ชื่อไฟล์/refs), cells000–025 RGBA512, anatomy.json, contact-sheetเส้นนำ, down-visual-comparison, cell-transforms, validation SHA256 และ NOTES รายท่า/รอบแก้
 - ทำฟัน→ยกโล่→bash→hit→down→block; batchที่พื้นฟุ้ง/ล้ำช่องปฏิเสธและแก้ภาพเดี่ยว; 023แก้6รอบจนเป็นท่านอนราบ ขนาดหัวใกล้seed
 - ตรวจ `unit-anatomy-audit.py --cells … --json …`: 24ท่าok, ไม่มีdrift, 023not-measured (11inliers,fit0.975 ไม่ใช่ผ่านสถิติ) แนบภาพเทียบและตรวจด้วยตาแล้ว; 003/004/015/019/022ต่ำกว่าเป้า0.94แต่ในเกณฑ์ok0.88–1.12 ดูค่าจริงในNOTES
 - ตรวจ26PNG decode/RGBA512, seed000ตรงต้นฉบับทุกbyte; generated001–025มีalpha0จริง ไม่มีopaquepixelทับขอบบน/ซ้าย/ขวา ไม่มีcomponentแยก>10pxที่alpha>128; ดูcontact sheetและdown comparisonแล้ว; `git diff --check` ก่อนcommit
 - ขอบเขต: เฉพาะAegis incomingใหม่กับhandoffนี้ ไม่แก้A2-001/seedเดิม ตัวอื่น runtime/src build_assets.py atlas rules save balance ActionId contact/end
 - เจ้าของสั่งสร้าง25ท่าและเปิดPR ไม่merge; ยังไม่มีowner artwork/motion approvalใหม่ ไม่มีruntime clipsในงานภาพนี้
+- หลังpush: fetchสาขาartแล้วตรวจSHA256+decodePNGทั้ง64ไฟล์จากcommitที่ส่ง ตรงvalidationทั้งหมด; GitHubรายงานmergeable_state=clean
 - Claudeต่อ: ตรวจsource/สัดส่วนซ้ำ (023ต้องตรวจด้วยตา), normalize/pack, anatomyHold, คลิปจริง320/390/PCให้เจ้าของอนุมัติก่อนเข้าเกม; ตรวจความต่อเนื่องมุมดาบ001→002และล้ม022→023 ไม่ถือCIหรือauditเป็นmotion approval
 
 ## 2026-10-29 — Claude: แก้ Aegis หัวโต/ตัวเปลี่ยนสัดส่วน (พักเฟรม A2 + brief Codex วาดใหม่)
