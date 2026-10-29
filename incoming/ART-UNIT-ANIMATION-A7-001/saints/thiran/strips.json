@@ -1,0 +1,987 @@
+[
+  {
+    "identity": "thiran",
+    "move": "punch",
+    "revision": "r1",
+    "file": "saints/thiran/raw/thiran-punch-r1.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "protective ready",
+      "draw rear fist",
+      "straight punch right",
+      "extended shoulder follow-through",
+      "retract fist",
+      "regain guard"
+    ],
+    "routes_or_intents": [
+      "attack",
+      "saintstrike",
+      "vowstrike"
+    ],
+    "preferred_candidate": true,
+    "source": "saints/thiran/source-sheets/thiran-actions-source.png",
+    "source_row_1based": 1,
+    "source_crop_xyxy": [
+      0,
+      8,
+      1536,
+      271
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        23,
+        10,
+        242,
+        252
+      ],
+      [
+        271,
+        29,
+        511,
+        252
+      ],
+      [
+        536,
+        26,
+        788,
+        253
+      ],
+      [
+        795,
+        33,
+        1047,
+        253
+      ],
+      [
+        1061,
+        24,
+        1281,
+        252
+      ],
+      [
+        1311,
+        11,
+        1522,
+        253
+      ]
+    ],
+    "size": [
+      1536,
+      263
+    ],
+    "mode": "RGBA",
+    "sha256": "22170560856aade9c8c2a23cda21e3f7fde74a710e959ece022d54b8fda2ff5d",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "saints/thiran/spaced/thiran-punch-r1.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        192,
+        244
+      ],
+      [
+        576,
+        244
+      ],
+      [
+        960,
+        244
+      ],
+      [
+        1344,
+        244
+      ],
+      [
+        1728,
+        244
+      ],
+      [
+        2112,
+        244
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      1,
+      1.6,
+      1,
+      1.4,
+      1.2,
+      1.2
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  },
+  {
+    "identity": "thiran",
+    "move": "sweeping-arc",
+    "revision": "r1",
+    "file": "saints/thiran/raw/thiran-sweeping-arc-r1.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "ready",
+      "load shoulder and coil",
+      "sweep forearm across front",
+      "broad horizontal follow-through",
+      "unwind",
+      "guard"
+    ],
+    "routes_or_intents": [
+      "saintarc"
+    ],
+    "preferred_candidate": true,
+    "source": "saints/thiran/source-sheets/thiran-actions-source.png",
+    "source_row_1based": 2,
+    "source_crop_xyxy": [
+      0,
+      256,
+      1536,
+      519
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        16,
+        10,
+        230,
+        252
+      ],
+      [
+        259,
+        17,
+        511,
+        253
+      ],
+      [
+        528,
+        24,
+        765,
+        250
+      ],
+      [
+        785,
+        29,
+        1054,
+        250
+      ],
+      [
+        1064,
+        25,
+        1312,
+        253
+      ],
+      [
+        1314,
+        17,
+        1520,
+        252
+      ]
+    ],
+    "size": [
+      1536,
+      263
+    ],
+    "mode": "RGBA",
+    "sha256": "9e9a87ef3efe98957e54ff5ad9c55fde4985c8156d5526749147476e7967fe14",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "saints/thiran/spaced/thiran-sweeping-arc-r1.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        192,
+        244
+      ],
+      [
+        576,
+        244
+      ],
+      [
+        960,
+        244
+      ],
+      [
+        1344,
+        244
+      ],
+      [
+        1728,
+        244
+      ],
+      [
+        2112,
+        244
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      1,
+      1.6,
+      1,
+      1.4,
+      1.2,
+      1.2
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  },
+  {
+    "identity": "thiran",
+    "move": "communion",
+    "revision": "r1",
+    "file": "saints/thiran/raw/thiran-communion-r1.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "gather hands at chest",
+      "bow into gathering",
+      "open palm offering",
+      "extended open palm",
+      "soften offering",
+      "guard"
+    ],
+    "routes_or_intents": [
+      "communion",
+      "sharewound"
+    ],
+    "preferred_candidate": true,
+    "source": "saints/thiran/source-sheets/thiran-actions-source.png",
+    "source_row_1based": 3,
+    "source_crop_xyxy": [
+      0,
+      506,
+      1536,
+      767
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        21,
+        11,
+        248,
+        250
+      ],
+      [
+        274,
+        17,
+        488,
+        251
+      ],
+      [
+        522,
+        14,
+        773,
+        249
+      ],
+      [
+        794,
+        12,
+        1050,
+        248
+      ],
+      [
+        1066,
+        13,
+        1307,
+        250
+      ],
+      [
+        1313,
+        10,
+        1522,
+        248
+      ]
+    ],
+    "size": [
+      1536,
+      261
+    ],
+    "mode": "RGBA",
+    "sha256": "22207a2f49eca2236f162814df97f6cd500652295473efa79810fd9fd496b5d1",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "saints/thiran/spaced/thiran-communion-r1.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        192,
+        246
+      ],
+      [
+        576,
+        246
+      ],
+      [
+        960,
+        246
+      ],
+      [
+        1344,
+        246
+      ],
+      [
+        1728,
+        246
+      ],
+      [
+        2112,
+        246
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      1,
+      1.6,
+      1,
+      1.4,
+      1.2,
+      1.2
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  },
+  {
+    "identity": "thiran",
+    "move": "lastlight",
+    "revision": "r1",
+    "file": "saints/thiran/raw/thiran-lastlight-r1.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "square guard",
+      "gathered two-fist brace",
+      "draw heavy fist high",
+      "heavy forward punch",
+      "low recovery",
+      "square guard"
+    ],
+    "routes_or_intents": [
+      "lastlight"
+    ],
+    "preferred_candidate": false,
+    "source": "saints/thiran/source-sheets/thiran-actions-source.png",
+    "source_row_1based": 4,
+    "source_crop_xyxy": [
+      0,
+      747,
+      1536,
+      1006
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        9,
+        10,
+        214,
+        247
+      ],
+      [
+        246,
+        28,
+        490,
+        249
+      ],
+      [
+        506,
+        12,
+        762,
+        248
+      ],
+      [
+        772,
+        33,
+        1044,
+        247
+      ],
+      [
+        1047,
+        21,
+        1301,
+        247
+      ],
+      [
+        1306,
+        11,
+        1530,
+        246
+      ]
+    ],
+    "size": [
+      1536,
+      259
+    ],
+    "mode": "RGBA",
+    "sha256": "b7b170cd418810561ba467be14c16ad6ed2153f9538486dbc7d104d5a1f5369d",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "saints/thiran/spaced/thiran-lastlight-r1.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        192,
+        248
+      ],
+      [
+        576,
+        248
+      ],
+      [
+        960,
+        248
+      ],
+      [
+        1344,
+        248
+      ],
+      [
+        1728,
+        248
+      ],
+      [
+        2112,
+        248
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      1,
+      1.6,
+      1,
+      1.4,
+      1.2,
+      1.2
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  },
+  {
+    "identity": "thiran",
+    "move": "hit",
+    "revision": "r1",
+    "file": "saints/thiran/raw/thiran-hit-r1.png",
+    "frame_count": 4,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "ready",
+      "recoil and wince",
+      "catch balance",
+      "guard"
+    ],
+    "routes_or_intents": [
+      "hit"
+    ],
+    "preferred_candidate": true,
+    "source": "saints/thiran/source-sheets/thiran-reactions-source.png",
+    "source_row_1based": 1,
+    "source_crop_xyxy": [
+      0,
+      16,
+      1448,
+      402
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        20,
+        10,
+        345,
+        376
+      ],
+      [
+        405,
+        20,
+        748,
+        376
+      ],
+      [
+        748,
+        48,
+        1084,
+        376
+      ],
+      [
+        1106,
+        11,
+        1430,
+        376
+      ]
+    ],
+    "size": [
+      1448,
+      386
+    ],
+    "mode": "RGBA",
+    "sha256": "fc5465fb307b2e8828de9b6de33282b150292f54df84743d22ab1eca0cc380d6",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "saints/thiran/spaced/thiran-hit-r1.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        139,
+        121
+      ],
+      [
+        417,
+        121
+      ],
+      [
+        695,
+        121
+      ],
+      [
+        973,
+        121
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      1.2,
+      1.5,
+      1.3,
+      1.2
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  },
+  {
+    "identity": "thiran",
+    "move": "block",
+    "revision": "r1",
+    "file": "saints/thiran/raw/thiran-block-r1.png",
+    "frame_count": 4,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "raise protective arms",
+      "brace behind crossed gauntlets or fans",
+      "absorb weight low",
+      "reset guard"
+    ],
+    "routes_or_intents": [
+      "block"
+    ],
+    "preferred_candidate": true,
+    "source": "saints/thiran/source-sheets/thiran-reactions-source.png",
+    "source_row_1based": 2,
+    "source_crop_xyxy": [
+      0,
+      385,
+      1448,
+      779
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        12,
+        10,
+        356,
+        383
+      ],
+      [
+        377,
+        17,
+        695,
+        384
+      ],
+      [
+        723,
+        58,
+        1078,
+        384
+      ],
+      [
+        1105,
+        12,
+        1428,
+        384
+      ]
+    ],
+    "size": [
+      1448,
+      394
+    ],
+    "mode": "RGBA",
+    "sha256": "2b292f3dc248e88ad21cb618d8e662c88d6d4ba9b6a933454675fffaa9e4fe91",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "saints/thiran/spaced/thiran-block-r1.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        139,
+        113
+      ],
+      [
+        417,
+        113
+      ],
+      [
+        695,
+        113
+      ],
+      [
+        973,
+        113
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      1.2,
+      1.5,
+      1.3,
+      1.2
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  },
+  {
+    "identity": "thiran",
+    "move": "down",
+    "revision": "r1",
+    "file": "saints/thiran/raw/thiran-down-r1.png",
+    "frame_count": 4,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "knees give way",
+      "hand and knee reach ground",
+      "sink to seated slump",
+      "lie unconscious and hold"
+    ],
+    "routes_or_intents": [
+      "down"
+    ],
+    "preferred_candidate": true,
+    "source": "saints/thiran/source-sheets/thiran-reactions-source.png",
+    "source_row_1based": 3,
+    "source_crop_xyxy": [
+      0,
+      757,
+      1448,
+      1075
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        5,
+        10,
+        329,
+        304
+      ],
+      [
+        370,
+        27,
+        689,
+        302
+      ],
+      [
+        695,
+        58,
+        1045,
+        303
+      ],
+      [
+        1056,
+        134,
+        1446,
+        308
+      ]
+    ],
+    "size": [
+      1448,
+      318
+    ],
+    "mode": "RGBA",
+    "sha256": "7c57d5b91c5b328db79cb5e4b435d1c938dda69f6bb17faa9ec58e46fb8c6052",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "saints/thiran/spaced/thiran-down-r1.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        139,
+        189
+      ],
+      [
+        417,
+        189
+      ],
+      [
+        695,
+        189
+      ],
+      [
+        973,
+        189
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      1.2,
+      1.5,
+      1.3,
+      1.2
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  },
+  {
+    "identity": "thiran",
+    "move": "communion",
+    "revision": "r2",
+    "file": "saints/thiran/raw/thiran-communion-r2.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "guard",
+      "gather bead hand",
+      "open palm facing front-right",
+      "extended open palm right",
+      "turn and offer palm left",
+      "return right"
+    ],
+    "routes_or_intents": [
+      "communion",
+      "sharewound"
+    ],
+    "preferred_candidate": false,
+    "source": "saints/thiran/source-sheets/thiran-r2-source.png",
+    "source_row_1based": 1,
+    "source_crop_xyxy": [
+      0,
+      15,
+      2172,
+      365
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        63,
+        10,
+        339,
+        340
+      ],
+      [
+        424,
+        19,
+        684,
+        340
+      ],
+      [
+        751,
+        22,
+        1080,
+        339
+      ],
+      [
+        1111,
+        20,
+        1448,
+        340
+      ],
+      [
+        1531,
+        20,
+        1793,
+        340
+      ],
+      [
+        1843,
+        12,
+        2118,
+        340
+      ]
+    ],
+    "size": [
+      2172,
+      350
+    ],
+    "mode": "RGBA",
+    "sha256": "25c12ed6db6d3e91b5faee42db5d4a4b18496d65ce7a654fafbf9369a3b164c4",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "saints/thiran/spaced/thiran-communion-r2.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        139,
+        157
+      ],
+      [
+        417,
+        157
+      ],
+      [
+        695,
+        157
+      ],
+      [
+        973,
+        157
+      ],
+      [
+        1251,
+        157
+      ],
+      [
+        1529,
+        157
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      1,
+      1.6,
+      1,
+      1.4,
+      1.2,
+      1.2
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  },
+  {
+    "identity": "thiran",
+    "move": "lastlight",
+    "revision": "r2",
+    "file": "saints/thiran/raw/thiran-lastlight-r2.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "gathered guard",
+      "sink deeply",
+      "raise gauntlet overhead",
+      "downward heavy hammerfist right",
+      "low weighted follow-through",
+      "recover guard"
+    ],
+    "routes_or_intents": [
+      "lastlight"
+    ],
+    "preferred_candidate": true,
+    "source": "saints/thiran/source-sheets/thiran-r2-source.png",
+    "source_row_1based": 2,
+    "source_crop_xyxy": [
+      0,
+      359,
+      2172,
+      707
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        53,
+        22,
+        333,
+        337
+      ],
+      [
+        395,
+        52,
+        675,
+        337
+      ],
+      [
+        747,
+        10,
+        1039,
+        338
+      ],
+      [
+        1093,
+        67,
+        1427,
+        338
+      ],
+      [
+        1481,
+        67,
+        1785,
+        337
+      ],
+      [
+        1844,
+        12,
+        2118,
+        338
+      ]
+    ],
+    "size": [
+      2172,
+      348
+    ],
+    "mode": "RGBA",
+    "sha256": "a297799bf9bbc2e96a7c5f38700e7b0b71db15072cc900bc0e77ce770decd428",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "saints/thiran/spaced/thiran-lastlight-r2.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        139,
+        159
+      ],
+      [
+        417,
+        159
+      ],
+      [
+        695,
+        159
+      ],
+      [
+        973,
+        159
+      ],
+      [
+        1251,
+        159
+      ],
+      [
+        1529,
+        159
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      1,
+      1.6,
+      1,
+      1.4,
+      1.2,
+      1.2
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  }
+]

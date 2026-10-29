@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { anatomyHold, unitKey, unitDisplayRatio, unitAtlasUrls, unitClip, type UnitClip, type UnitSheet } from '../visuals/unit-frames';
+import { anatomyHold, unitDownFrame, unitKey, unitDisplayRatio, unitAtlasUrls, unitClip, type UnitClip, type UnitSheet } from '../visuals/unit-frames';
 import { OptionalUnitAssets } from '../visuals/optional-unit-assets';
 import { unitFrameView } from '../visuals/unit-frame-view';
 import { UnitAnimation } from '../visuals/unit-animation';
@@ -241,7 +241,7 @@ export class BattleScene extends Phaser.Scene {
     const ratio = unitDisplayRatio(key);
     // Packed animation atlases already face their side (A9 Matriarch, A10 Raider); only the static seed cell is mirrored.
     const pilot = unitKey(key), framed = !!pilot && this.textures.exists(pilot);
-    const sprite = this.add.image(0, 0, framed ? pilot : `battle-${art.sheet}`, framed ? hp <= 0 ? 21 : 0 : art.frame)
+    const sprite = this.add.image(0, 0, framed ? pilot : `battle-${art.sheet}`, framed ? hp <= 0 ? unitDownFrame(key) : 0 : art.frame)
       .setOrigin(.5, framed ? 496 / 512 : actorFootOrigins[key] ?? 1).setDisplaySize(size * (framed ? ratio : 1), size * (framed ? ratio : 1)).setFlipX(!framed && mirroredArt.has(key));
     body.add(sprite);
     const nextFrame = framed ? this.add.image(0, 0, pilot, 0)
