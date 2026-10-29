@@ -1,0 +1,4442 @@
+{
+  "schema": 1,
+  "id": "ART-VFX-BOSS-SIGNATURE-001",
+  "base_commit": "5e9e65026b8949f7877db12a2e70496fe2aac77b",
+  "final_versions": 1,
+  "beats": [
+    "prepare",
+    "peak",
+    "settle"
+  ],
+  "moves": [
+    {
+      "id": "gather-thorns",
+      "name": "Gather Thorns",
+      "caster": "matriarch",
+      "source": "matriarch",
+      "row": 0,
+      "route": "charge",
+      "unstoppable": false,
+      "phase_change": false
+    },
+    {
+      "id": "thorn-bloom",
+      "name": "Thorn Bloom",
+      "caster": "matriarch",
+      "source": "thorn-bloom",
+      "row": 0,
+      "route": "single",
+      "unstoppable": false,
+      "phase_change": false
+    },
+    {
+      "id": "thorn-storm",
+      "name": "Thorn Storm",
+      "caster": "matriarch",
+      "source": "thorn-storm",
+      "row": 0,
+      "route": "single",
+      "unstoppable": true,
+      "phase_change": false
+    },
+    {
+      "id": "thorn-tempest",
+      "name": "Thorn Tempest",
+      "caster": "matriarch",
+      "source": "thorn-tempest",
+      "row": 0,
+      "route": "all",
+      "unstoppable": true,
+      "phase_change": false
+    },
+    {
+      "id": "thorn-rage",
+      "name": "Thorn Rage",
+      "caster": "matriarch",
+      "source": "thorn-rage",
+      "row": 0,
+      "route": "caster",
+      "unstoppable": false,
+      "phase_change": true
+    },
+    {
+      "id": "rift-gathering",
+      "name": "Rift Gathering",
+      "caster": "sentinel",
+      "source": "sentinel",
+      "row": 0,
+      "route": "charge",
+      "unstoppable": false,
+      "phase_change": false
+    },
+    {
+      "id": "rift-wave",
+      "name": "Rift Wave",
+      "caster": "sentinel",
+      "source": "rift-wave",
+      "row": 0,
+      "route": "all",
+      "unstoppable": false,
+      "phase_change": false
+    },
+    {
+      "id": "rift-cataclysm",
+      "name": "Rift Cataclysm",
+      "caster": "sentinel",
+      "source": "rift-cataclysm",
+      "row": 0,
+      "route": "single",
+      "unstoppable": true,
+      "phase_change": false
+    },
+    {
+      "id": "rift-awakening",
+      "name": "Rift Awakening",
+      "caster": "sentinel",
+      "source": "sentinel-phases",
+      "row": 0,
+      "route": "caster",
+      "unstoppable": false,
+      "phase_change": true
+    },
+    {
+      "id": "call-the-rift",
+      "name": "Call the Rift",
+      "caster": "sentinel",
+      "source": "sentinel-phases",
+      "row": 1,
+      "route": "summon",
+      "unstoppable": false,
+      "phase_change": false
+    },
+    {
+      "id": "war-cry",
+      "name": "War Cry",
+      "caster": "captain",
+      "source": "captain",
+      "row": 0,
+      "route": "single",
+      "unstoppable": true,
+      "phase_change": false
+    },
+    {
+      "id": "call-the-hunt",
+      "name": "Call the Hunt",
+      "caster": "captain",
+      "source": "captain",
+      "row": 1,
+      "route": "summon",
+      "unstoppable": false,
+      "phase_change": false
+    },
+    {
+      "id": "horn-charge",
+      "name": "Horn Charge",
+      "caster": "juggernaut",
+      "source": "beasts",
+      "row": 0,
+      "route": "single",
+      "unstoppable": false,
+      "phase_change": false
+    },
+    {
+      "id": "stampede",
+      "name": "Stampede",
+      "caster": "tusker",
+      "source": "beasts",
+      "row": 1,
+      "route": "single",
+      "unstoppable": false,
+      "phase_change": false
+    }
+  ],
+  "sources": [
+    {
+      "file": "source/matriarch.png",
+      "size": [
+        971,
+        1619
+      ],
+      "sha256": "92db81da172bcad27e710ad356f18f655f6132f6249d18f743b8023589f2eabc"
+    },
+    {
+      "file": "source/thorn-bloom.png",
+      "size": [
+        2172,
+        724
+      ],
+      "sha256": "202d913e429d005c4146a9a4502e35d543e5c0cb583ef87927bdc10478f5cf26"
+    },
+    {
+      "file": "source/thorn-storm.png",
+      "size": [
+        2172,
+        724
+      ],
+      "sha256": "5c1080cb7d555bcc7ff3bc7993d992721097cf726e12ef2185e146a5d59f9646"
+    },
+    {
+      "file": "source/thorn-tempest.png",
+      "size": [
+        2172,
+        724
+      ],
+      "sha256": "6e27fc2b09d32f13d9200563be0f9953bfc67ef23feb572bf9b88c7c53934c93"
+    },
+    {
+      "file": "source/thorn-rage.png",
+      "size": [
+        2048,
+        768
+      ],
+      "sha256": "5fecc77af0391c0ca652cbad970fbf34c05d53a78aada22046116e5bece56ead"
+    },
+    {
+      "file": "source/sentinel.png",
+      "size": [
+        971,
+        1619
+      ],
+      "sha256": "b961cf49e104f1ba75a53d63120cb732e42ffea426c3348ecf98dfcbcfe77afc"
+    },
+    {
+      "file": "source/rift-wave.png",
+      "size": [
+        2172,
+        724
+      ],
+      "sha256": "f64f8e7c008f8744f3e9e202e5111568684da9a0bfce60ec444443f0cdb87936"
+    },
+    {
+      "file": "source/rift-cataclysm.png",
+      "size": [
+        2172,
+        724
+      ],
+      "sha256": "fde13ae487e06b8c3027f7ecf353e9253eee1860124016c998bfb70ee8ca7512"
+    },
+    {
+      "file": "source/sentinel-phases.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "sha256": "7b9ec34c68db77e514b5e3bb09f65ee40b91c8a7799c7ee15fe81833bbcb585f"
+    },
+    {
+      "file": "source/captain.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "sha256": "8c81ec9f04d0a2483e2d5fcc536c6fb235cf262f576cd328ac139a52a186086a"
+    },
+    {
+      "file": "source/beasts.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "sha256": "58f447e006f02d059049f522438d6097d2698fcbdde66fc0cb7637de61a07f39"
+    }
+  ],
+  "layers": [
+    {
+      "file": "layers/gather-thorns-prepare.png",
+      "move": "gather-thorns",
+      "beat": "prepare",
+      "source": "source/matriarch.png",
+      "source_crop": [
+        0,
+        0,
+        324,
+        324
+      ],
+      "transform": {
+        "source_alpha_bbox": [
+          0,
+          43,
+          324,
+          323
+        ],
+        "scale": 0.7160493827160493,
+        "offset": [
+          12,
+          28
+        ],
+        "resized": [
+          232,
+          200
+        ],
+        "flip_x": false
+      },
+      "sha256": "cfdc1973aba3ffca1c88cd924d487302bb08ac81d02eace024662ead47983bdf",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha": "straight",
+      "alpha_bbox": [
+        12,
+        28,
+        244,
+        228
+      ],
+      "pivot_px": [
+        128,
+        128
+      ],
+      "pivot_normalized": [
+        0.5,
+        0.5
+      ],
+      "anchor": "caster.forward_chest",
+      "suggested_ms": [
+        0,
+        140
+      ],
+      "blend": "normal",
+      "additive_intended": false,
+      "orientation": "enemy-right / release-left",
+      "depth": "behind actor except contact edge; mask every face and HP/name/status label",
+      "suggested_canvas_width_390": 64
+    },
+    {
+      "file": "layers/gather-thorns-peak.png",
+      "move": "gather-thorns",
+      "beat": "peak",
+      "source": "source/matriarch.png",
+      "source_crop": [
+        324,
+        0,
+        647,
+        324
+      ],
+      "transform": {
+        "source_alpha_bbox": [
+          0,
+          15,
+          323,
+          324
+        ],
+        "scale": 0.718266253869969,
+        "offset": [
+          12,
+          17
+        ],
+        "resized": [
+          232,
+          222
+        ],
+        "flip_x": false
+      },
+      "sha256": "f6aba596209db8dbaa65f03ae3197d9a66725ef188b008491722e236df863e4d",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha": "straight",
+      "alpha_bbox": [
+        12,
+        17,
+        244,
+        239
+      ],
+      "pivot_px": [
+        128,
+        128
+      ],
+      "pivot_normalized": [
+        0.5,
+        0.5
+      ],
+      "anchor": "caster.chest",
+      "suggested_ms": [
+        140,
+        320
+      ],
+      "blend": "normal",
+      "additive_intended": false,
+      "orientation": "enemy-right / release-left",
+      "depth": "behind actor except contact edge; mask every face and HP/name/status label",
+      "suggested_canvas_width_390": 104
+    },
+    {
+      "file": "layers/gather-thorns-settle.png",
+      "move": "gather-thorns",
+      "beat": "settle",
+      "source": "source/matriarch.png",
+      "source_crop": [
+        647,
+        0,
+        971,
+        324
+      ],
+      "transform": {
+        "source_alpha_bbox": [
+          0,
+          17,
+          306,
+          323
+        ],
+        "scale": 0.7581699346405228,
+        "offset": [
+          12,
+          12
+        ],
+        "resized": [
+          232,
+          232
+        ],
+        "flip_x": false
+      },
+      "sha256": "c015ded67d62e9d23fd93114f995ddf5b06e7ebeac4a3c847f0fe9b417d6a0af",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha": "straight",
+      "alpha_bbox": [
+        12,
+        12,
+        244,
+        244
+      ],
+      "pivot_px": [
+        128,
+        128
+      ],
+      "pivot_normalized": [
+        0.5,
+        0.5
+      ],
+      "anchor": "caster.chest",
+      "suggested_ms": [
+        320,
+        540
+      ],
+      "blend": "normal",
+      "additive_intended": false,
+      "orientation": "enemy-right / release-left",
+      "depth": "behind actor except contact edge; mask every face and HP/name/status label",
+      "suggested_canvas_width_390": 54
+    },
+    {
+      "file": "layers/thorn-bloom-prepare.png",
+      "move": "thorn-bloom",
+      "beat": "prepare",
+      "source": "source/thorn-bloom.png",
+      "source_crop": [
+        0,
+        0,
+        704,
+        724
+      ],
+      "transform": {
+        "source_alpha_bbox": [
+          35,
+          25,
+          702,
+          724
+        ],
+        "scale": 0.3319027181688126,
+        "offset": [
+          17,
+          12
+        ],
+        "resized": [
+          221,
+          232
+        ],
+        "flip_x": false
+      },
+      "sha256": "d6689cc90a36c8ad47a71a199a83522f0ced9d4f0f49f6e973017cd4d6dc8b81",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha": "straight",
+      "alpha_bbox": [
+        19,
+        43,
+        228,
+        236
+      ],
+      "pivot_px": [
+        128,
+        128
+      ],
+      "pivot_normalized": [
+        0.5,
+        0.5
+      ],
+      "anchor": "caster.forward_chest",
+      "suggested_ms": [
+        0,
+        140
+      ],
+      "blend": "normal",
+      "additive_intended": false,
+      "orientation": "enemy-right / release-left",
+      "depth": "behind actor except contact edge; mask every face and HP/name/status label",
+      "suggested_canvas_width_390": 64
+    },
+    {
+      "file": "layers/thorn-bloom-peak.png",
+      "move": "thorn-bloom",
+      "beat": "peak",
+      "source": "source/thorn-bloom.png",
+      "source_crop": [
+        704,
+        0,
+        1468,
+        724
+      ],
+      "transform": {
+        "source_alpha_bbox": [
+          1,
+          17,
+          764,
+          724
+        ],
+        "scale": 0.3040629095674967,
+        "offset": [
+          12,
+          20
+        ],
+        "resized": [
+          232,
+          215
+        ],
+        "flip_x": false
+      },
+      "sha256": "ed6992e265c326afb23f661db07cea46c84ed42924d6c96290bba138bfd6e1ec",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha": "straight",
+      "alpha_bbox": [
+        12,
+        20,
+        244,
+        228
+      ],
+      "pivot_px": [
+        128,
+        128
+      ],
+      "pivot_normalized": [
+        0.5,
+        0.5
+      ],
+      "anchor": "target.chest",
+      "suggested_ms": [
+        140,
+        320
+      ],
+      "blend": "normal",
+      "additive_intended": false,
+      "orientation": "enemy-right / release-left",
+      "depth": "behind actor except contact edge; mask every face and HP/name/status label",
+      "suggested_canvas_width_390": 104
+    },
+    {
+      "file": "layers/thorn-bloom-settle.png",
+      "move": "thorn-bloom",
+      "beat": "settle",
+      "source": "source/thorn-bloom.png",
+      "source_crop": [
+        1468,
+        0,
+        2172,
+        724
+      ],
+      "transform": {
+        "source_alpha_bbox": [
+          1,
+          55,
+          660,
+          706
+        ],
+        "scale": 0.3520485584218513,
+        "offset": [
+          12,
+          13
+        ],
+        "resized": [
+          232,
+          229
+        ],
+        "flip_x": false
+      },
+      "sha256": "237f70141e6bf5da97d800c0a6029e70f1629d8552d70b85f99000b0d8bf8b10",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha": "straight",
+      "alpha_bbox": [
+        22,
+        23,
+        226,
+        241
+      ],
+      "pivot_px": [
+        128,
+        128
+      ],
+      "pivot_normalized": [
+        0.5,
+        0.5
+      ],
+      "anchor": "target.chest",
+      "suggested_ms": [
+        320,
+        540
+      ],
+      "blend": "normal",
+      "additive_intended": false,
+      "orientation": "enemy-right / release-left",
+      "depth": "behind actor except contact edge; mask every face and HP/name/status label",
+      "suggested_canvas_width_390": 54
+    },
+    {
+      "file": "layers/thorn-storm-prepare.png",
+      "move": "thorn-storm",
+      "beat": "prepare",
+      "source": "source/thorn-storm.png",
+      "source_crop": [
+        0,
+        0,
+        738,
+        724
+      ],
+      "transform": {
+        "source_alpha_bbox": [
+          0,
+          31,
+          738,
+          724
+        ],
+        "scale": 0.3143631436314363,
+        "offset": [
+          12,
+          19
+        ],
+        "resized": [
+          232,
+          218
+        ],
+        "flip_x": false
+      },
+      "sha256": "941bb9377a494441ea602136e8c3c92608148589bff57fc786c8b6c3d4f9b0b7",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha": "straight",
+      "alpha_bbox": [
+        16,
+        26,
+        244,
+        218
+      ],
+      "pivot_px": [
+        128,
+        128
+      ],
+      "pivot_normalized": [
+        0.5,
+        0.5
+      ],
+      "anchor": "caster.forward_chest",
+      "suggested_ms": [
+        0,
+        140
+      ],
+      "blend": "normal",
+      "additive_intended": false,
+      "orientation": "enemy-right / release-left",
+      "depth": "behind actor except contact edge; mask every face and HP/name/status label",
+      "suggested_canvas_width_390": 64
+    },
+    {
+      "file": "layers/thorn-storm-peak.png",
+      "move": "thorn-storm",
+      "beat": "peak",
+      "source": "source/thorn-storm.png",
+      "source_crop": [
+        738,
+        0,
+        1494,
+        724
+      ],
+      "transform": {
+        "source_alpha_bbox": [
+          11,
+          29,
+          756,
+          724
+        ],
+        "scale": 0.31140939597315437,
+        "offset": [
+          12,
+          20
+        ],
+        "resized": [
+          232,
+          216
+        ],
+        "flip_x": false
+      },
+      "sha256": "a2caa99f81946d8def8b5dcf423ca10027f1a0622dfdb288ecc56d40786ed643",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha": "straight",
+      "alpha_bbox": [
+        21,
+        22,
+        243,
+        231
+      ],
+      "pivot_px": [
+        128,
+        128
+      ],
+      "pivot_normalized": [
+        0.5,
+        0.5
+      ],
+      "anchor": "target.chest",
+      "suggested_ms": [
+        140,
+        320
+      ],
+      "blend": "normal",
+      "additive_intended": false,
+      "orientation": "enemy-right / release-left",
+      "depth": "behind actor except contact edge; mask every face and HP/name/status label",
+      "suggested_canvas_width_390": 104
+    },
+    {
+      "file": "layers/thorn-storm-settle.png",
+      "move": "thorn-storm",
+      "beat": "settle",
+      "source": "source/thorn-storm.png",
+      "source_crop": [
+        1494,
+        0,
+        2172,
+        724
+      ],
+      "transform": {
+        "source_alpha_bbox": [
+          1,
+          9,
+          662,
+          724
+        ],
+        "scale": 0.32447552447552447,
+        "offset": [
+          21,
+          12
+        ],
+        "resized": [
+          214,
+          232
+        ],
+        "flip_x": false
+      },
+      "sha256": "040e7a9780d1263635965e9918305ae3685a671ba5db5e8a54760a759474250a",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha": "straight",
+      "alpha_bbox": [
+        27,
+        15,
+        231,
+        238
+      ],
+      "pivot_px": [
+        128,
+        128
+      ],
+      "pivot_normalized": [
+        0.5,
+        0.5
+      ],
+      "anchor": "target.chest",
+      "suggested_ms": [
+        320,
+        540
+      ],
+      "blend": "normal",
+      "additive_intended": false,
+      "orientation": "enemy-right / release-left",
+      "depth": "behind actor except contact edge; mask every face and HP/name/status label",
+      "suggested_canvas_width_390": 54
+    },
+    {
+      "file": "layers/thorn-tempest-prepare.png",
+      "move": "thorn-tempest",
+      "beat": "prepare",
+      "source": "source/thorn-tempest.png",
+      "source_crop": [
+        0,
+        0,
+        746,
+        724
+      ],
+      "transform": {
+        "source_alpha_bbox": [
+          23,
+          17,
+          746,
+          724
+        ],
+        "scale": 0.32088520055325037,
+        "offset": [
+          12,
+          14
+        ],
+        "resized": [
+          232,
+          227
+        ],
+        "flip_x": false
+      },
+      "sha256": "338773fe2c0b4abb5976f5b068a67cb17e431ba9a6e97b8d34742cd5a379529a",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha": "straight",
+      "alpha_bbox": [
+        12,
+        19,
+        244,
+        241
+      ],
+      "pivot_px": [
+        128,
+        128
+      ],
+      "pivot_normalized": [
+        0.5,
+        0.5
+      ],
+      "anchor": "caster.forward_chest",
+      "suggested_ms": [
+        0,
+        140
+      ],
+      "blend": "normal",
+      "additive_intended": false,
+      "orientation": "enemy-right / release-left",
+      "depth": "behind actor except contact edge; mask every face and HP/name/status label",
+      "suggested_canvas_width_390": 64
+    },
+    {
+      "file": "layers/thorn-tempest-peak.png",
+      "move": "thorn-tempest",
+      "beat": "peak",
+      "source": "source/thorn-tempest.png",
+      "source_crop": [
+        746,
+        0,
+        1575,
+        724
+      ],
+      "transform": {
+        "source_alpha_bbox": [
+          1,
+          15,
+          829,
+          724
+        ],
+        "scale": 0.28019323671497587,
+        "offset": [
+          12,
+          28
+        ],
+        "resized": [
+          232,
+          199
+        ],
+        "flip_x": false
+      },
+      "sha256": "81f7709ce4f937b5e5cd7d7eb8f979de594e5aba071cba961a7b86346a1bc55a",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha": "straight",
+      "alpha_bbox": [
+        14,
+        29,
+        244,
+        222
+      ],
+      "pivot_px": [
+        128,
+        128
+      ],
+      "pivot_normalized": [
+        0.5,
+        0.5
+      ],
+      "anchor": "whole_hero_side.actual_target_chests",
+      "suggested_ms": [
+        140,
+        320
+      ],
+      "blend": "normal",
+      "additive_intended": false,
+      "orientation": "enemy-right / release-left",
+      "depth": "behind actor except contact edge; mask every face and HP/name/status label",
+      "suggested_canvas_width_390": 104
+    },
+    {
+      "file": "layers/thorn-tempest-settle.png",
+      "move": "thorn-tempest",
+      "beat": "settle",
+      "source": "source/thorn-tempest.png",
+      "source_crop": [
+        1575,
+        0,
+        2172,
+        724
+      ],
+      "transform": {
+        "source_alpha_bbox": [
+          1,
+          23,
+          583,
+          724
+        ],
+        "scale": 0.3309557774607703,
+        "offset": [
+          31,
+          12
+        ],
+        "resized": [
+          193,
+          232
+        ],
+        "flip_x": false
+      },
+      "sha256": "477d0cf6c472c68369efab7467426579966306c3fbcdf13daafb0031b03d779c",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha": "straight",
+      "alpha_bbox": [
+        31,
+        13,
+        220,
+        227
+      ],
+      "pivot_px": [
+        128,
+        128
+      ],
+      "pivot_normalized": [
+        0.5,
+        0.5
+      ],
+      "anchor": "whole_hero_side.actual_target_chests",
+      "suggested_ms": [
+        320,
+        540
+      ],
+      "blend": "normal",
+      "additive_intended": false,
+      "orientation": "enemy-right / release-left",
+      "depth": "behind actor except contact edge; mask every face and HP/name/status label",
+      "suggested_canvas_width_390": 54
+    },
+    {
+      "file": "layers/thorn-rage-prepare.png",
+      "move": "thorn-rage",
+      "beat": "prepare",
+      "source": "source/thorn-rage.png",
+      "source_crop": [
+        0,
+        0,
+        592,
+        768
+      ],
+      "transform": {
+        "source_alpha_bbox": [
+          0,
+          27,
+          592,
+          768
+        ],
+        "scale": 0.31309041835357626,
+        "offset": [
+          35,
+          12
+        ],
+        "resized": [
+          185,
+          232
+        ],
+        "flip_x": false
+      },
+      "sha256": "b5848a3d95d9f756af6ca59b6120306d12443a537b181f4b04c810fc03f65b65",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha": "straight",
+      "alpha_bbox": [
+        46,
+        40,
+        220,
+        218
+      ],
+      "pivot_px": [
+        128,
+        128
+      ],
+      "pivot_normalized": [
+        0.5,
+        0.5
+      ],
+      "anchor": "caster.forward_chest",
+      "suggested_ms": [
+        0,
+        140
+      ],
+      "blend": "normal",
+      "additive_intended": false,
+      "orientation": "enemy-right / release-left",
+      "depth": "behind actor except contact edge; mask every face and HP/name/status label",
+      "suggested_canvas_width_390": 64
+    },
+    {
+      "file": "layers/thorn-rage-peak.png",
+      "move": "thorn-rage",
+      "beat": "peak",
+      "source": "source/thorn-rage.png",
+      "source_crop": [
+        592,
+        0,
+        1456,
+        768
+      ],
+      "transform": {
+        "source_alpha_bbox": [
+          1,
+          31,
+          864,
+          744
+        ],
+        "scale": 0.2688296639629201,
+        "offset": [
+          12,
+          32
+        ],
+        "resized": [
+          232,
+          192
+        ],
+        "flip_x": false
+      },
+      "sha256": "4069c8b053de2424de629cba7c8d6367407c14dda9f6beb12ca6d6aa5897a5fa",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha": "straight",
+      "alpha_bbox": [
+        12,
+        37,
+        244,
+        212
+      ],
+      "pivot_px": [
+        128,
+        128
+      ],
+      "pivot_normalized": [
+        0.5,
+        0.5
+      ],
+      "anchor": "caster.chest",
+      "suggested_ms": [
+        140,
+        320
+      ],
+      "blend": "normal",
+      "additive_intended": false,
+      "orientation": "enemy-right / release-left",
+      "depth": "behind actor except contact edge; mask every face and HP/name/status label",
+      "suggested_canvas_width_390": 104
+    },
+    {
+      "file": "layers/thorn-rage-settle.png",
+      "move": "thorn-rage",
+      "beat": "settle",
+      "source": "source/thorn-rage.png",
+      "source_crop": [
+        1456,
+        0,
+        2048,
+        768
+      ],
+      "transform": {
+        "source_alpha_bbox": [
+          1,
+          99,
+          586,
+          708
+        ],
+        "scale": 0.38095238095238093,
+        "offset": [
+          16,
+          12
+        ],
+        "resized": [
+          223,
+          232
+        ],
+        "flip_x": false
+      },
+      "sha256": "0d650241155e082c099bf5cadd4497c34f3ab45dbd50e483ec79d3a3d1000fd8",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha": "straight",
+      "alpha_bbox": [
+        19,
+        17,
+        235,
+        242
+      ],
+      "pivot_px": [
+        128,
+        128
+      ],
+      "pivot_normalized": [
+        0.5,
+        0.5
+      ],
+      "anchor": "caster.chest",
+      "suggested_ms": [
+        320,
+        540
+      ],
+      "blend": "normal",
+      "additive_intended": false,
+      "orientation": "enemy-right / release-left",
+      "depth": "behind actor except contact edge; mask every face and HP/name/status label",
+      "suggested_canvas_width_390": 54
+    },
+    {
+      "file": "layers/rift-gathering-prepare.png",
+      "move": "rift-gathering",
+      "beat": "prepare",
+      "source": "source/sentinel.png",
+      "source_crop": [
+        0,
+        0,
+        324,
+        324
+      ],
+      "transform": {
+        "source_alpha_bbox": [
+          0,
+          4,
+          324,
+          324
+        ],
+        "scale": 0.7160493827160493,
+        "offset": [
+          12,
+          13
+        ],
+        "resized": [
+          232,
+          229
+        ],
+        "flip_x": false
+      },
+      "sha256": "e9bc5dc637167aca415a9c15b777e243fc26aa8f51ef1f80b479571604deecb1",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha": "straight",
+      "alpha_bbox": [
+        12,
+        13,
+        244,
+        242
+      ],
+      "pivot_px": [
+        128,
+        128
+      ],
+      "pivot_normalized": [
+        0.5,
+        0.5
+      ],
+      "anchor": "caster.forward_chest",
+      "suggested_ms": [
+        0,
+        140
+      ],
+      "blend": "normal",
+      "additive_intended": false,
+      "orientation": "enemy-right / release-left",
+      "depth": "behind actor except contact edge; mask every face and HP/name/status label",
+      "suggested_canvas_width_390": 64
+    },
+    {
+      "file": "layers/rift-gathering-peak.png",
+      "move": "rift-gathering",
+      "beat": "peak",
+      "source": "source/sentinel.png",
+      "source_crop": [
+        324,
+        0,
+        647,
+        324
+      ],
+      "transform": {
+        "source_alpha_bbox": [
+          0,
+          7,
+          323,
+          324
+        ],
+        "scale": 0.718266253869969,
+        "offset": [
+          12,
+          14
+        ],
+        "resized": [
+          232,
+          228
+        ],
+        "flip_x": false
+      },
+      "sha256": "cc7384dfe0c03f5c79271faced2abcebb8059afd05fd17f08b23f2e86bffedfc",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha": "straight",
+      "alpha_bbox": [
+        12,
+        14,
+        244,
+        242
+      ],
+      "pivot_px": [
+        128,
+        128
+      ],
+      "pivot_normalized": [
+        0.5,
+        0.5
+      ],
+      "anchor": "caster.chest",
+      "suggested_ms": [
+        140,
+        320
+      ],
+      "blend": "normal",
+      "additive_intended": false,
+      "orientation": "enemy-right / release-left",
+      "depth": "behind actor except contact edge; mask every face and HP/name/status label",
+      "suggested_canvas_width_390": 104
+    },
+    {
+      "file": "layers/rift-gathering-settle.png",
+      "move": "rift-gathering",
+      "beat": "settle",
+      "source": "source/sentinel.png",
+      "source_crop": [
+        647,
+        0,
+        971,
+        324
+      ],
+      "transform": {
+        "source_alpha_bbox": [
+          0,
+          12,
+          323,
+          324
+        ],
+        "scale": 0.718266253869969,
+        "offset": [
+          12,
+          16
+        ],
+        "resized": [
+          232,
+          224
+        ],
+        "flip_x": false
+      },
+      "sha256": "dcaf487142bb9aa741c86a0116309c02562ef6e4e9faf722ae4e9c4cab1f0533",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha": "straight",
+      "alpha_bbox": [
+        12,
+        16,
+        244,
+        240
+      ],
+      "pivot_px": [
+        128,
+        128
+      ],
+      "pivot_normalized": [
+        0.5,
+        0.5
+      ],
+      "anchor": "caster.chest",
+      "suggested_ms": [
+        320,
+        540
+      ],
+      "blend": "normal",
+      "additive_intended": false,
+      "orientation": "enemy-right / release-left",
+      "depth": "behind actor except contact edge; mask every face and HP/name/status label",
+      "suggested_canvas_width_390": 54
+    },
+    {
+      "file": "layers/rift-wave-prepare.png",
+      "move": "rift-wave",
+      "beat": "prepare",
+      "source": "source/rift-wave.png",
+      "source_crop": [
+        0,
+        0,
+        665,
+        724
+      ],
+      "transform": {
+        "source_alpha_bbox": [
+          0,
+          9,
+          638,
+          724
+        ],
+        "scale": 0.32447552447552447,
+        "offset": [
+          24,
+          12
+        ],
+        "resized": [
+          207,
+          232
+        ],
+        "flip_x": true
+      },
+      "sha256": "afc6b92433b07ae795f577b27b248967da76c78f1126f5d4517a398aca013c7a",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha": "straight",
+      "alpha_bbox": [
+        31,
+        13,
+        213,
+        212
+      ],
+      "pivot_px": [
+        128,
+        128
+      ],
+      "pivot_normalized": [
+        0.5,
+        0.5
+      ],
+      "anchor": "caster.forward_chest",
+      "suggested_ms": [
+        0,
+        140
+      ],
+      "blend": "normal",
+      "additive_intended": false,
+      "orientation": "enemy-right / release-left",
+      "depth": "behind actor except contact edge; mask every face and HP/name/status label",
+      "suggested_canvas_width_390": 64
+    },
+    {
+      "file": "layers/rift-wave-peak.png",
+      "move": "rift-wave",
+      "beat": "peak",
+      "source": "source/rift-wave.png",
+      "source_crop": [
+        665,
+        0,
+        1561,
+        724
+      ],
+      "transform": {
+        "source_alpha_bbox": [
+          1,
+          23,
+          896,
+          702
+        ],
+        "scale": 0.25921787709497207,
+        "offset": [
+          12,
+          40
+        ],
+        "resized": [
+          232,
+          176
+        ],
+        "flip_x": true
+      },
+      "sha256": "3364adf18465c5fbdbe1e4c3b5cd8e8f39960a32b43257cb5c3ae5a020967499",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha": "straight",
+      "alpha_bbox": [
+        12,
+        49,
+        244,
+        208
+      ],
+      "pivot_px": [
+        128,
+        128
+      ],
+      "pivot_normalized": [
+        0.5,
+        0.5
+      ],
+      "anchor": "whole_hero_side.actual_target_chests",
+      "suggested_ms": [
+        140,
+        320
+      ],
+      "blend": "normal",
+      "additive_intended": false,
+      "orientation": "enemy-right / release-left",
+      "depth": "behind actor except contact edge; mask every face and HP/name/status label",
+      "suggested_canvas_width_390": 104
+    },
+    {
+      "file": "layers/rift-wave-settle.png",
+      "move": "rift-wave",
+      "beat": "settle",
+      "source": "source/rift-wave.png",
+      "source_crop": [
+        1560,
+        0,
+        2172,
+        724
+      ],
+      "transform": {
+        "source_alpha_bbox": [
+          0,
+          69,
+          583,
+          724
+        ],
+        "scale": 0.35419847328244275,
+        "offset": [
+          25,
+          12
+        ],
+        "resized": [
+          206,
+          232
+        ],
+        "flip_x": true
+      },
+      "sha256": "ea4485128e990d93b027ffa3ff41b2bf9da5bfd628f821f092744b0d738e5c23",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha": "straight",
+      "alpha_bbox": [
+        25,
+        19,
+        231,
+        232
+      ],
+      "pivot_px": [
+        128,
+        128
+      ],
+      "pivot_normalized": [
+        0.5,
+        0.5
+      ],
+      "anchor": "whole_hero_side.actual_target_chests",
+      "suggested_ms": [
+        320,
+        540
+      ],
+      "blend": "normal",
+      "additive_intended": false,
+      "orientation": "enemy-right / release-left",
+      "depth": "behind actor except contact edge; mask every face and HP/name/status label",
+      "suggested_canvas_width_390": 54
+    },
+    {
+      "file": "layers/rift-cataclysm-prepare.png",
+      "move": "rift-cataclysm",
+      "beat": "prepare",
+      "source": "source/rift-cataclysm.png",
+      "source_crop": [
+        0,
+        0,
+        724,
+        724
+      ],
+      "transform": {
+        "source_alpha_bbox": [
+          0,
+          9,
+          724,
+          724
+        ],
+        "scale": 0.32044198895027626,
+        "offset": [
+          12,
+          13
+        ],
+        "resized": [
+          232,
+          229
+        ],
+        "flip_x": false
+      },
+      "sha256": "92df136f5c9ce978a47d964bd9afe752fd8c84a32688c6a56cfb165d24ef536e",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha": "straight",
+      "alpha_bbox": [
+        31,
+        17,
+        242,
+        230
+      ],
+      "pivot_px": [
+        128,
+        128
+      ],
+      "pivot_normalized": [
+        0.5,
+        0.5
+      ],
+      "anchor": "caster.forward_chest",
+      "suggested_ms": [
+        0,
+        140
+      ],
+      "blend": "normal",
+      "additive_intended": false,
+      "orientation": "enemy-right / release-left",
+      "depth": "behind actor except contact edge; mask every face and HP/name/status label",
+      "suggested_canvas_width_390": 64
+    },
+    {
+      "file": "layers/rift-cataclysm-peak.png",
+      "move": "rift-cataclysm",
+      "beat": "peak",
+      "source": "source/rift-cataclysm.png",
+      "source_crop": [
+        724,
+        0,
+        1448,
+        724
+      ],
+      "transform": {
+        "source_alpha_bbox": [
+          1,
+          26,
+          724,
+          724
+        ],
+        "scale": 0.32088520055325037,
+        "offset": [
+          12,
+          16
+        ],
+        "resized": [
+          232,
+          224
+        ],
+        "flip_x": true
+      },
+      "sha256": "02640dd06b9003c3e856222a11009c1d923aa5ed72ebfa24607575ae80a4a2d0",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha": "straight",
+      "alpha_bbox": [
+        14,
+        17,
+        242,
+        235
+      ],
+      "pivot_px": [
+        128,
+        128
+      ],
+      "pivot_normalized": [
+        0.5,
+        0.5
+      ],
+      "anchor": "target.chest",
+      "suggested_ms": [
+        140,
+        320
+      ],
+      "blend": "normal",
+      "additive_intended": false,
+      "orientation": "enemy-right / release-left",
+      "depth": "behind actor except contact edge; mask every face and HP/name/status label",
+      "suggested_canvas_width_390": 104
+    },
+    {
+      "file": "layers/rift-cataclysm-settle.png",
+      "move": "rift-cataclysm",
+      "beat": "settle",
+      "source": "source/rift-cataclysm.png",
+      "source_crop": [
+        1448,
+        0,
+        2172,
+        724
+      ],
+      "transform": {
+        "source_alpha_bbox": [
+          1,
+          25,
+          710,
+          724
+        ],
+        "scale": 0.32722143864598024,
+        "offset": [
+          12,
+          13
+        ],
+        "resized": [
+          232,
+          229
+        ],
+        "flip_x": false
+      },
+      "sha256": "8bb4b50107dd1cb79dc54c5ca51a021681d98064c87e387298a37cc38c0cb37b",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha": "straight",
+      "alpha_bbox": [
+        12,
+        23,
+        228,
+        236
+      ],
+      "pivot_px": [
+        128,
+        128
+      ],
+      "pivot_normalized": [
+        0.5,
+        0.5
+      ],
+      "anchor": "target.chest",
+      "suggested_ms": [
+        320,
+        540
+      ],
+      "blend": "normal",
+      "additive_intended": false,
+      "orientation": "enemy-right / release-left",
+      "depth": "behind actor except contact edge; mask every face and HP/name/status label",
+      "suggested_canvas_width_390": 54
+    },
+    {
+      "file": "layers/rift-awakening-prepare.png",
+      "move": "rift-awakening",
+      "beat": "prepare",
+      "source": "source/sentinel-phases.png",
+      "source_crop": [
+        0,
+        0,
+        512,
+        512
+      ],
+      "transform": {
+        "source_alpha_bbox": [
+          0,
+          9,
+          512,
+          512
+        ],
+        "scale": 0.453125,
+        "offset": [
+          12,
+          14
+        ],
+        "resized": [
+          232,
+          228
+        ],
+        "flip_x": false
+      },
+      "sha256": "a59f04a67e6a1055bc7309d1097950782f4c7389114124f11d4153b02a27d7ab",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha": "straight",
+      "alpha_bbox": [
+        12,
+        17,
+        242,
+        242
+      ],
+      "pivot_px": [
+        128,
+        128
+      ],
+      "pivot_normalized": [
+        0.5,
+        0.5
+      ],
+      "anchor": "caster.forward_chest",
+      "suggested_ms": [
+        0,
+        140
+      ],
+      "blend": "normal",
+      "additive_intended": false,
+      "orientation": "enemy-right / release-left",
+      "depth": "behind actor except contact edge; mask every face and HP/name/status label",
+      "suggested_canvas_width_390": 64
+    },
+    {
+      "file": "layers/rift-awakening-peak.png",
+      "move": "rift-awakening",
+      "beat": "peak",
+      "source": "source/sentinel-phases.png",
+      "source_crop": [
+        512,
+        0,
+        1024,
+        512
+      ],
+      "transform": {
+        "source_alpha_bbox": [
+          0,
+          9,
+          512,
+          512
+        ],
+        "scale": 0.453125,
+        "offset": [
+          12,
+          14
+        ],
+        "resized": [
+          232,
+          228
+        ],
+        "flip_x": false
+      },
+      "sha256": "07170f0f705ba792973c9cd023cadbe2505159ac586323fb0af0deaf00b447f6",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha": "straight",
+      "alpha_bbox": [
+        13,
+        18,
+        237,
+        242
+      ],
+      "pivot_px": [
+        128,
+        128
+      ],
+      "pivot_normalized": [
+        0.5,
+        0.5
+      ],
+      "anchor": "caster.chest",
+      "suggested_ms": [
+        140,
+        320
+      ],
+      "blend": "normal",
+      "additive_intended": false,
+      "orientation": "enemy-right / release-left",
+      "depth": "behind actor except contact edge; mask every face and HP/name/status label",
+      "suggested_canvas_width_390": 104
+    },
+    {
+      "file": "layers/rift-awakening-settle.png",
+      "move": "rift-awakening",
+      "beat": "settle",
+      "source": "source/sentinel-phases.png",
+      "source_crop": [
+        1024,
+        0,
+        1536,
+        512
+      ],
+      "transform": {
+        "source_alpha_bbox": [
+          1,
+          8,
+          502,
+          512
+        ],
+        "scale": 0.4603174603174603,
+        "offset": [
+          12,
+          12
+        ],
+        "resized": [
+          231,
+          232
+        ],
+        "flip_x": false
+      },
+      "sha256": "2d971c358a9bcceb5823ddd72c9bfc66ac24a0e789928ce3202f1e6714ea8353",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha": "straight",
+      "alpha_bbox": [
+        22,
+        12,
+        240,
+        244
+      ],
+      "pivot_px": [
+        128,
+        128
+      ],
+      "pivot_normalized": [
+        0.5,
+        0.5
+      ],
+      "anchor": "caster.chest",
+      "suggested_ms": [
+        320,
+        540
+      ],
+      "blend": "normal",
+      "additive_intended": false,
+      "orientation": "enemy-right / release-left",
+      "depth": "behind actor except contact edge; mask every face and HP/name/status label",
+      "suggested_canvas_width_390": 54
+    },
+    {
+      "file": "layers/call-the-rift-prepare.png",
+      "move": "call-the-rift",
+      "beat": "prepare",
+      "source": "source/sentinel-phases.png",
+      "source_crop": [
+        0,
+        512,
+        512,
+        1024
+      ],
+      "transform": {
+        "source_alpha_bbox": [
+          0,
+          0,
+          512,
+          512
+        ],
+        "scale": 0.453125,
+        "offset": [
+          12,
+          12
+        ],
+        "resized": [
+          232,
+          232
+        ],
+        "flip_x": false
+      },
+      "sha256": "634695e0eb2f28aef40ecb91331e00d8586a72992aecf0533373aeabe2e13b45",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha": "straight",
+      "alpha_bbox": [
+        12,
+        12,
+        244,
+        244
+      ],
+      "pivot_px": [
+        128,
+        128
+      ],
+      "pivot_normalized": [
+        0.5,
+        0.5
+      ],
+      "anchor": "caster.forward_chest",
+      "suggested_ms": [
+        0,
+        140
+      ],
+      "blend": "normal",
+      "additive_intended": false,
+      "orientation": "enemy-right / release-left",
+      "depth": "behind actor except contact edge; mask every face and HP/name/status label",
+      "suggested_canvas_width_390": 64
+    },
+    {
+      "file": "layers/call-the-rift-peak.png",
+      "move": "call-the-rift",
+      "beat": "peak",
+      "source": "source/sentinel-phases.png",
+      "source_crop": [
+        512,
+        512,
+        1024,
+        1024
+      ],
+      "transform": {
+        "source_alpha_bbox": [
+          0,
+          0,
+          512,
+          512
+        ],
+        "scale": 0.453125,
+        "offset": [
+          12,
+          12
+        ],
+        "resized": [
+          232,
+          232
+        ],
+        "flip_x": false
+      },
+      "sha256": "2191b3320f0d0790ecc4a8dc5114f2dffd69aa6aae1a051b5cd0acc8a525634a",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha": "straight",
+      "alpha_bbox": [
+        12,
+        12,
+        244,
+        234
+      ],
+      "pivot_px": [
+        128,
+        128
+      ],
+      "pivot_normalized": [
+        0.5,
+        0.5
+      ],
+      "anchor": "summoned_slot.chest",
+      "suggested_ms": [
+        140,
+        320
+      ],
+      "blend": "normal",
+      "additive_intended": false,
+      "orientation": "enemy-right / release-left",
+      "depth": "behind actor except contact edge; mask every face and HP/name/status label",
+      "suggested_canvas_width_390": 104
+    },
+    {
+      "file": "layers/call-the-rift-settle.png",
+      "move": "call-the-rift",
+      "beat": "settle",
+      "source": "source/sentinel-phases.png",
+      "source_crop": [
+        1024,
+        512,
+        1536,
+        1024
+      ],
+      "transform": {
+        "source_alpha_bbox": [
+          0,
+          0,
+          511,
+          512
+        ],
+        "scale": 0.453125,
+        "offset": [
+          12,
+          12
+        ],
+        "resized": [
+          232,
+          232
+        ],
+        "flip_x": false
+      },
+      "sha256": "aefabc55981b2cebb361746b968137099f4938e812433e29682b423536214334",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha": "straight",
+      "alpha_bbox": [
+        12,
+        12,
+        244,
+        239
+      ],
+      "pivot_px": [
+        128,
+        128
+      ],
+      "pivot_normalized": [
+        0.5,
+        0.5
+      ],
+      "anchor": "summoned_slot.chest",
+      "suggested_ms": [
+        320,
+        540
+      ],
+      "blend": "normal",
+      "additive_intended": false,
+      "orientation": "enemy-right / release-left",
+      "depth": "behind actor except contact edge; mask every face and HP/name/status label",
+      "suggested_canvas_width_390": 54
+    },
+    {
+      "file": "layers/war-cry-prepare.png",
+      "move": "war-cry",
+      "beat": "prepare",
+      "source": "source/captain.png",
+      "source_crop": [
+        0,
+        0,
+        512,
+        512
+      ],
+      "transform": {
+        "source_alpha_bbox": [
+          55,
+          23,
+          512,
+          512
+        ],
+        "scale": 0.47443762781186094,
+        "offset": [
+          19,
+          12
+        ],
+        "resized": [
+          217,
+          232
+        ],
+        "flip_x": false
+      },
+      "sha256": "a9ede4f870978387220ba0006b1616cda8e6c86409d3f01d72c64e4973040288",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha": "straight",
+      "alpha_bbox": [
+        23,
+        19,
+        223,
+        214
+      ],
+      "pivot_px": [
+        128,
+        128
+      ],
+      "pivot_normalized": [
+        0.5,
+        0.5
+      ],
+      "anchor": "caster.forward_chest",
+      "suggested_ms": [
+        0,
+        140
+      ],
+      "blend": "normal",
+      "additive_intended": false,
+      "orientation": "enemy-right / release-left",
+      "depth": "behind actor except contact edge; mask every face and HP/name/status label",
+      "suggested_canvas_width_390": 64
+    },
+    {
+      "file": "layers/war-cry-peak.png",
+      "move": "war-cry",
+      "beat": "peak",
+      "source": "source/captain.png",
+      "source_crop": [
+        512,
+        0,
+        1024,
+        512
+      ],
+      "transform": {
+        "source_alpha_bbox": [
+          1,
+          23,
+          512,
+          512
+        ],
+        "scale": 0.45401174168297453,
+        "offset": [
+          12,
+          17
+        ],
+        "resized": [
+          232,
+          222
+        ],
+        "flip_x": false
+      },
+      "sha256": "e2485aa95261bddc6603d1f0afe6e514028bb92338f763e58289dd1f2439c1e8",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha": "straight",
+      "alpha_bbox": [
+        15,
+        28,
+        232,
+        239
+      ],
+      "pivot_px": [
+        226,
+        128
+      ],
+      "pivot_normalized": [
+        0.8828125,
+        0.5
+      ],
+      "anchor": "caster.forward_chest",
+      "suggested_ms": [
+        140,
+        320
+      ],
+      "blend": "normal",
+      "additive_intended": false,
+      "orientation": "enemy-right / release-left",
+      "depth": "behind actor except contact edge; mask every face and HP/name/status label",
+      "suggested_canvas_width_390": 104
+    },
+    {
+      "file": "layers/war-cry-settle.png",
+      "move": "war-cry",
+      "beat": "settle",
+      "source": "source/captain.png",
+      "source_crop": [
+        1024,
+        0,
+        1536,
+        512
+      ],
+      "transform": {
+        "source_alpha_bbox": [
+          1,
+          33,
+          506,
+          488
+        ],
+        "scale": 0.4594059405940594,
+        "offset": [
+          12,
+          23
+        ],
+        "resized": [
+          232,
+          209
+        ],
+        "flip_x": false
+      },
+      "sha256": "1ece559df965011790e80e5dd5cd73bc6cd82a5f65344b3a5ad3b09a071302dd",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha": "straight",
+      "alpha_bbox": [
+        29,
+        30,
+        237,
+        201
+      ],
+      "pivot_px": [
+        128,
+        128
+      ],
+      "pivot_normalized": [
+        0.5,
+        0.5
+      ],
+      "anchor": "target.chest",
+      "suggested_ms": [
+        320,
+        540
+      ],
+      "blend": "normal",
+      "additive_intended": false,
+      "orientation": "enemy-right / release-left",
+      "depth": "behind actor except contact edge; mask every face and HP/name/status label",
+      "suggested_canvas_width_390": 54
+    },
+    {
+      "file": "layers/call-the-hunt-prepare.png",
+      "move": "call-the-hunt",
+      "beat": "prepare",
+      "source": "source/captain.png",
+      "source_crop": [
+        0,
+        512,
+        512,
+        1024
+      ],
+      "transform": {
+        "source_alpha_bbox": [
+          31,
+          1,
+          512,
+          512
+        ],
+        "scale": 0.45401174168297453,
+        "offset": [
+          19,
+          12
+        ],
+        "resized": [
+          218,
+          232
+        ],
+        "flip_x": false
+      },
+      "sha256": "1c383d1c9cca890b94c7a42ad22bef9f4c32786ac4941ddd7c976e3643924c11",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha": "straight",
+      "alpha_bbox": [
+        48,
+        14,
+        228,
+        237
+      ],
+      "pivot_px": [
+        128,
+        128
+      ],
+      "pivot_normalized": [
+        0.5,
+        0.5
+      ],
+      "anchor": "caster.forward_chest",
+      "suggested_ms": [
+        0,
+        140
+      ],
+      "blend": "normal",
+      "additive_intended": false,
+      "orientation": "enemy-right / release-left",
+      "depth": "behind actor except contact edge; mask every face and HP/name/status label",
+      "suggested_canvas_width_390": 64
+    },
+    {
+      "file": "layers/call-the-hunt-peak.png",
+      "move": "call-the-hunt",
+      "beat": "peak",
+      "source": "source/captain.png",
+      "source_crop": [
+        512,
+        512,
+        1024,
+        1024
+      ],
+      "transform": {
+        "source_alpha_bbox": [
+          1,
+          0,
+          506,
+          512
+        ],
+        "scale": 0.453125,
+        "offset": [
+          13,
+          12
+        ],
+        "resized": [
+          229,
+          232
+        ],
+        "flip_x": false
+      },
+      "sha256": "884eb662a2bca6db616729df515a5719fe1d9be8fe484468fdb76e9702413cc9",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha": "straight",
+      "alpha_bbox": [
+        26,
+        12,
+        234,
+        230
+      ],
+      "pivot_px": [
+        128,
+        128
+      ],
+      "pivot_normalized": [
+        0.5,
+        0.5
+      ],
+      "anchor": "caster.hand",
+      "suggested_ms": [
+        140,
+        320
+      ],
+      "blend": "normal",
+      "additive_intended": false,
+      "orientation": "enemy-right / release-left",
+      "depth": "behind actor except contact edge; mask every face and HP/name/status label",
+      "suggested_canvas_width_390": 104
+    },
+    {
+      "file": "layers/call-the-hunt-settle.png",
+      "move": "call-the-hunt",
+      "beat": "settle",
+      "source": "source/captain.png",
+      "source_crop": [
+        1024,
+        512,
+        1536,
+        1024
+      ],
+      "transform": {
+        "source_alpha_bbox": [
+          1,
+          3,
+          512,
+          512
+        ],
+        "scale": 0.45401174168297453,
+        "offset": [
+          12,
+          12
+        ],
+        "resized": [
+          232,
+          231
+        ],
+        "flip_x": false
+      },
+      "sha256": "e64e4ea256da537386c64df50ceabe34567591d32e7ef70b4125c77d83733ba9",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha": "straight",
+      "alpha_bbox": [
+        16,
+        23,
+        215,
+        211
+      ],
+      "pivot_px": [
+        128,
+        128
+      ],
+      "pivot_normalized": [
+        0.5,
+        0.5
+      ],
+      "anchor": "caster.hand",
+      "suggested_ms": [
+        320,
+        540
+      ],
+      "blend": "normal",
+      "additive_intended": false,
+      "orientation": "enemy-right / release-left",
+      "depth": "behind actor except contact edge; mask every face and HP/name/status label",
+      "suggested_canvas_width_390": 54
+    },
+    {
+      "file": "layers/horn-charge-prepare.png",
+      "move": "horn-charge",
+      "beat": "prepare",
+      "source": "source/beasts.png",
+      "source_crop": [
+        0,
+        0,
+        512,
+        512
+      ],
+      "transform": {
+        "source_alpha_bbox": [
+          0,
+          0,
+          512,
+          512
+        ],
+        "scale": 0.453125,
+        "offset": [
+          12,
+          12
+        ],
+        "resized": [
+          232,
+          232
+        ],
+        "flip_x": false
+      },
+      "sha256": "6719d57408ec7d8638cfec9cae75b74332dc89ebd0778c58b2ba1623f4be13b8",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha": "straight",
+      "alpha_bbox": [
+        12,
+        20,
+        244,
+        244
+      ],
+      "pivot_px": [
+        128,
+        128
+      ],
+      "pivot_normalized": [
+        0.5,
+        0.5
+      ],
+      "anchor": "caster.forward_chest",
+      "suggested_ms": [
+        0,
+        140
+      ],
+      "blend": "normal",
+      "additive_intended": false,
+      "orientation": "enemy-right / release-left",
+      "depth": "behind actor except contact edge; mask every face and HP/name/status label",
+      "suggested_canvas_width_390": 64
+    },
+    {
+      "file": "layers/horn-charge-peak.png",
+      "move": "horn-charge",
+      "beat": "peak",
+      "source": "source/beasts.png",
+      "source_crop": [
+        512,
+        0,
+        1024,
+        512
+      ],
+      "transform": {
+        "source_alpha_bbox": [
+          0,
+          0,
+          512,
+          512
+        ],
+        "scale": 0.453125,
+        "offset": [
+          12,
+          12
+        ],
+        "resized": [
+          232,
+          232
+        ],
+        "flip_x": false
+      },
+      "sha256": "e706a58edc3d849a0ae5cfc6f578f81559cd579b7664993984cf0cd406bdcc58",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha": "straight",
+      "alpha_bbox": [
+        12,
+        12,
+        244,
+        244
+      ],
+      "pivot_px": [
+        128,
+        128
+      ],
+      "pivot_normalized": [
+        0.5,
+        0.5
+      ],
+      "anchor": "target.chest",
+      "suggested_ms": [
+        140,
+        320
+      ],
+      "blend": "normal",
+      "additive_intended": false,
+      "orientation": "enemy-right / release-left",
+      "depth": "behind actor except contact edge; mask every face and HP/name/status label",
+      "suggested_canvas_width_390": 104
+    },
+    {
+      "file": "layers/horn-charge-settle.png",
+      "move": "horn-charge",
+      "beat": "settle",
+      "source": "source/beasts.png",
+      "source_crop": [
+        1024,
+        0,
+        1536,
+        512
+      ],
+      "transform": {
+        "source_alpha_bbox": [
+          0,
+          0,
+          512,
+          512
+        ],
+        "scale": 0.453125,
+        "offset": [
+          12,
+          12
+        ],
+        "resized": [
+          232,
+          232
+        ],
+        "flip_x": false
+      },
+      "sha256": "c4f1f84b5b4a8d999ee9dc2b3dceaeb9ee39f77be133d3ba9fa2818ea1a0ec99",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha": "straight",
+      "alpha_bbox": [
+        12,
+        16,
+        244,
+        244
+      ],
+      "pivot_px": [
+        128,
+        128
+      ],
+      "pivot_normalized": [
+        0.5,
+        0.5
+      ],
+      "anchor": "target.chest",
+      "suggested_ms": [
+        320,
+        540
+      ],
+      "blend": "normal",
+      "additive_intended": false,
+      "orientation": "enemy-right / release-left",
+      "depth": "behind actor except contact edge; mask every face and HP/name/status label",
+      "suggested_canvas_width_390": 54
+    },
+    {
+      "file": "layers/stampede-prepare.png",
+      "move": "stampede",
+      "beat": "prepare",
+      "source": "source/beasts.png",
+      "source_crop": [
+        0,
+        512,
+        512,
+        1024
+      ],
+      "transform": {
+        "source_alpha_bbox": [
+          0,
+          0,
+          512,
+          512
+        ],
+        "scale": 0.453125,
+        "offset": [
+          12,
+          12
+        ],
+        "resized": [
+          232,
+          232
+        ],
+        "flip_x": false
+      },
+      "sha256": "d754cf5cfa56f813033ed88ea2cb8c477d15510f626486d24a1ad909a5b6a68c",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha": "straight",
+      "alpha_bbox": [
+        12,
+        12,
+        244,
+        232
+      ],
+      "pivot_px": [
+        128,
+        210
+      ],
+      "pivot_normalized": [
+        0.5,
+        0.8203125
+      ],
+      "anchor": "caster.feet",
+      "suggested_ms": [
+        0,
+        140
+      ],
+      "blend": "normal",
+      "additive_intended": false,
+      "orientation": "enemy-right / release-left",
+      "depth": "behind actor except contact edge; mask every face and HP/name/status label",
+      "suggested_canvas_width_390": 64
+    },
+    {
+      "file": "layers/stampede-peak.png",
+      "move": "stampede",
+      "beat": "peak",
+      "source": "source/beasts.png",
+      "source_crop": [
+        512,
+        512,
+        1071,
+        1024
+      ],
+      "transform": {
+        "source_alpha_bbox": [
+          0,
+          0,
+          559,
+          512
+        ],
+        "scale": 0.4150268336314848,
+        "offset": [
+          12,
+          22
+        ],
+        "resized": [
+          232,
+          212
+        ],
+        "flip_x": false
+      },
+      "sha256": "6d9df7439d524a85ac4fc1cacb575e4beedc4bd38937b69812f802ffcca29677",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha": "straight",
+      "alpha_bbox": [
+        12,
+        22,
+        244,
+        223
+      ],
+      "pivot_px": [
+        128,
+        210
+      ],
+      "pivot_normalized": [
+        0.5,
+        0.8203125
+      ],
+      "anchor": "target.feet",
+      "suggested_ms": [
+        140,
+        320
+      ],
+      "blend": "normal",
+      "additive_intended": false,
+      "orientation": "enemy-right / release-left",
+      "depth": "behind actor except contact edge; mask every face and HP/name/status label",
+      "suggested_canvas_width_390": 104
+    },
+    {
+      "file": "layers/stampede-settle.png",
+      "move": "stampede",
+      "beat": "settle",
+      "source": "source/beasts.png",
+      "source_crop": [
+        1071,
+        512,
+        1536,
+        1024
+      ],
+      "transform": {
+        "source_alpha_bbox": [
+          0,
+          0,
+          465,
+          512
+        ],
+        "scale": 0.453125,
+        "offset": [
+          22,
+          12
+        ],
+        "resized": [
+          211,
+          232
+        ],
+        "flip_x": false
+      },
+      "sha256": "fa898c759dd8449a6414b9a00ac697079dcdf27d5f8d8427c1280e437559aabe",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha": "straight",
+      "alpha_bbox": [
+        22,
+        12,
+        233,
+        225
+      ],
+      "pivot_px": [
+        128,
+        210
+      ],
+      "pivot_normalized": [
+        0.5,
+        0.8203125
+      ],
+      "anchor": "target.feet",
+      "suggested_ms": [
+        320,
+        540
+      ],
+      "blend": "normal",
+      "additive_intended": false,
+      "orientation": "enemy-right / release-left",
+      "depth": "behind actor except contact edge; mask every face and HP/name/status label",
+      "suggested_canvas_width_390": 54
+    }
+  ],
+  "telegraphs": [
+    {
+      "charge": "gather-thorns",
+      "normal": "layers/gather-thorns-prepare.png",
+      "unstoppable_release": "thorn-tempest",
+      "hold": "layers/thorn-tempest-prepare.png",
+      "anchor": "caster.forward_chest",
+      "pivot_px": [
+        128,
+        128
+      ],
+      "width_390": 90,
+      "offset_from_chest_390": [
+        -30,
+        0
+      ],
+      "lifetime": "authoritative waiting turn until release, interrupt, death or intent replacement",
+      "motion": "normal: slow 0.85-1 opacity breathe; unstoppable: rigid double teeth, no spin; reduced motion: static",
+      "selection": "Use unstoppable hold when the real announced release is unstoppable. Do not imply the zero-damage charge itself is uninterruptible."
+    },
+    {
+      "charge": "rift-gathering",
+      "normal": "layers/rift-gathering-prepare.png",
+      "unstoppable_release": "rift-cataclysm",
+      "hold": "layers/rift-cataclysm-prepare.png",
+      "anchor": "caster.forward_chest",
+      "pivot_px": [
+        128,
+        128
+      ],
+      "width_390": 90,
+      "offset_from_chest_390": [
+        -30,
+        0
+      ],
+      "lifetime": "authoritative waiting turn until release, interrupt, death or intent replacement",
+      "motion": "normal: slow 0.85-1 opacity breathe; unstoppable: rigid double teeth, no spin; reduced motion: static",
+      "selection": "Use unstoppable hold when the real announced release is unstoppable. Do not imply the zero-damage charge itself is uninterruptible."
+    }
+  ],
+  "storyboards": [
+    {
+      "file": "storyboards/gather-thorns-390.png",
+      "width": 390,
+      "height": 904,
+      "checks": [
+        {
+          "beat": "prepare",
+          "protected_rects": [
+            [
+              34,
+              149,
+              138,
+              160
+            ],
+            [
+              72,
+              164,
+              116,
+              208
+            ],
+            [
+              257,
+              143,
+              361,
+              154
+            ],
+            [
+              286,
+              158,
+              318,
+              202
+            ]
+          ],
+          "masked_pixels": 0,
+          "remaining_overlap": 0
+        },
+        {
+          "beat": "peak",
+          "protected_rects": [
+            [
+              34,
+              419,
+              138,
+              430
+            ],
+            [
+              72,
+              434,
+              116,
+              478
+            ],
+            [
+              257,
+              413,
+              361,
+              424
+            ],
+            [
+              286,
+              428,
+              318,
+              472
+            ]
+          ],
+          "masked_pixels": 142,
+          "remaining_overlap": 0
+        },
+        {
+          "beat": "settle",
+          "protected_rects": [
+            [
+              34,
+              689,
+              138,
+              700
+            ],
+            [
+              72,
+              704,
+              116,
+              748
+            ],
+            [
+              257,
+              683,
+              361,
+              694
+            ],
+            [
+              286,
+              698,
+              318,
+              742
+            ]
+          ],
+          "masked_pixels": 0,
+          "remaining_overlap": 0
+        }
+      ]
+    },
+    {
+      "file": "storyboards/thorn-bloom-390.png",
+      "width": 390,
+      "height": 904,
+      "checks": [
+        {
+          "beat": "prepare",
+          "protected_rects": [
+            [
+              34,
+              149,
+              138,
+              160
+            ],
+            [
+              72,
+              164,
+              116,
+              208
+            ],
+            [
+              257,
+              143,
+              361,
+              154
+            ],
+            [
+              286,
+              158,
+              318,
+              202
+            ]
+          ],
+          "masked_pixels": 0,
+          "remaining_overlap": 0
+        },
+        {
+          "beat": "peak",
+          "protected_rects": [
+            [
+              34,
+              419,
+              138,
+              430
+            ],
+            [
+              72,
+              434,
+              116,
+              478
+            ],
+            [
+              257,
+              413,
+              361,
+              424
+            ],
+            [
+              286,
+              428,
+              318,
+              472
+            ]
+          ],
+          "masked_pixels": 12,
+          "remaining_overlap": 0
+        },
+        {
+          "beat": "settle",
+          "protected_rects": [
+            [
+              34,
+              689,
+              138,
+              700
+            ],
+            [
+              72,
+              704,
+              116,
+              748
+            ],
+            [
+              257,
+              683,
+              361,
+              694
+            ],
+            [
+              286,
+              698,
+              318,
+              742
+            ]
+          ],
+          "masked_pixels": 0,
+          "remaining_overlap": 0
+        }
+      ]
+    },
+    {
+      "file": "storyboards/thorn-storm-390.png",
+      "width": 390,
+      "height": 904,
+      "checks": [
+        {
+          "beat": "prepare",
+          "protected_rects": [
+            [
+              34,
+              149,
+              138,
+              160
+            ],
+            [
+              72,
+              164,
+              116,
+              208
+            ],
+            [
+              257,
+              143,
+              361,
+              154
+            ],
+            [
+              286,
+              158,
+              318,
+              202
+            ]
+          ],
+          "masked_pixels": 4,
+          "remaining_overlap": 0
+        },
+        {
+          "beat": "peak",
+          "protected_rects": [
+            [
+              34,
+              419,
+              138,
+              430
+            ],
+            [
+              72,
+              434,
+              116,
+              478
+            ],
+            [
+              257,
+              413,
+              361,
+              424
+            ],
+            [
+              286,
+              428,
+              318,
+              472
+            ]
+          ],
+          "masked_pixels": 2,
+          "remaining_overlap": 0
+        },
+        {
+          "beat": "settle",
+          "protected_rects": [
+            [
+              34,
+              689,
+              138,
+              700
+            ],
+            [
+              72,
+              704,
+              116,
+              748
+            ],
+            [
+              257,
+              683,
+              361,
+              694
+            ],
+            [
+              286,
+              698,
+              318,
+              742
+            ]
+          ],
+          "masked_pixels": 0,
+          "remaining_overlap": 0
+        }
+      ]
+    },
+    {
+      "file": "storyboards/thorn-tempest-390.png",
+      "width": 390,
+      "height": 904,
+      "checks": [
+        {
+          "beat": "prepare",
+          "protected_rects": [
+            [
+              34,
+              149,
+              138,
+              160
+            ],
+            [
+              72,
+              164,
+              116,
+              208
+            ],
+            [
+              257,
+              143,
+              361,
+              154
+            ],
+            [
+              286,
+              158,
+              318,
+              202
+            ]
+          ],
+          "masked_pixels": 3,
+          "remaining_overlap": 0
+        },
+        {
+          "beat": "peak",
+          "protected_rects": [
+            [
+              19,
+              400,
+              69,
+              411
+            ],
+            [
+              37,
+              414,
+              60,
+              438
+            ],
+            [
+              86,
+              400,
+              136,
+              411
+            ],
+            [
+              104,
+              414,
+              127,
+              438
+            ],
+            [
+              153,
+              400,
+              203,
+              411
+            ],
+            [
+              171,
+              414,
+              194,
+              438
+            ],
+            [
+              52,
+              500,
+              102,
+              511
+            ],
+            [
+              70,
+              514,
+              93,
+              538
+            ],
+            [
+              119,
+              500,
+              169,
+              511
+            ],
+            [
+              137,
+              514,
+              160,
+              538
+            ],
+            [
+              257,
+              413,
+              361,
+              424
+            ],
+            [
+              286,
+              428,
+              318,
+              472
+            ]
+          ],
+          "masked_pixels": 792,
+          "remaining_overlap": 0
+        },
+        {
+          "beat": "settle",
+          "protected_rects": [
+            [
+              19,
+              670,
+              69,
+              681
+            ],
+            [
+              37,
+              684,
+              60,
+              708
+            ],
+            [
+              86,
+              670,
+              136,
+              681
+            ],
+            [
+              104,
+              684,
+              127,
+              708
+            ],
+            [
+              153,
+              670,
+              203,
+              681
+            ],
+            [
+              171,
+              684,
+              194,
+              708
+            ],
+            [
+              52,
+              770,
+              102,
+              781
+            ],
+            [
+              70,
+              784,
+              93,
+              808
+            ],
+            [
+              119,
+              770,
+              169,
+              781
+            ],
+            [
+              137,
+              784,
+              160,
+              808
+            ],
+            [
+              257,
+              683,
+              361,
+              694
+            ],
+            [
+              286,
+              698,
+              318,
+              742
+            ]
+          ],
+          "masked_pixels": 425,
+          "remaining_overlap": 0
+        }
+      ]
+    },
+    {
+      "file": "storyboards/thorn-rage-390.png",
+      "width": 390,
+      "height": 904,
+      "checks": [
+        {
+          "beat": "prepare",
+          "protected_rects": [
+            [
+              34,
+              149,
+              138,
+              160
+            ],
+            [
+              72,
+              164,
+              116,
+              208
+            ],
+            [
+              257,
+              143,
+              361,
+              154
+            ],
+            [
+              286,
+              158,
+              318,
+              202
+            ]
+          ],
+          "masked_pixels": 0,
+          "remaining_overlap": 0
+        },
+        {
+          "beat": "peak",
+          "protected_rects": [
+            [
+              34,
+              419,
+              138,
+              430
+            ],
+            [
+              72,
+              434,
+              116,
+              478
+            ],
+            [
+              257,
+              413,
+              361,
+              424
+            ],
+            [
+              286,
+              428,
+              318,
+              472
+            ]
+          ],
+          "masked_pixels": 62,
+          "remaining_overlap": 0
+        },
+        {
+          "beat": "settle",
+          "protected_rects": [
+            [
+              34,
+              689,
+              138,
+              700
+            ],
+            [
+              72,
+              704,
+              116,
+              748
+            ],
+            [
+              257,
+              683,
+              361,
+              694
+            ],
+            [
+              286,
+              698,
+              318,
+              742
+            ]
+          ],
+          "masked_pixels": 94,
+          "remaining_overlap": 0
+        }
+      ]
+    },
+    {
+      "file": "storyboards/rift-gathering-390.png",
+      "width": 390,
+      "height": 904,
+      "checks": [
+        {
+          "beat": "prepare",
+          "protected_rects": [
+            [
+              34,
+              149,
+              138,
+              160
+            ],
+            [
+              72,
+              164,
+              116,
+              208
+            ],
+            [
+              257,
+              143,
+              361,
+              154
+            ],
+            [
+              280,
+              158,
+              325,
+              202
+            ]
+          ],
+          "masked_pixels": 0,
+          "remaining_overlap": 0
+        },
+        {
+          "beat": "peak",
+          "protected_rects": [
+            [
+              34,
+              419,
+              138,
+              430
+            ],
+            [
+              72,
+              434,
+              116,
+              478
+            ],
+            [
+              257,
+              413,
+              361,
+              424
+            ],
+            [
+              280,
+              428,
+              325,
+              472
+            ]
+          ],
+          "masked_pixels": 268,
+          "remaining_overlap": 0
+        },
+        {
+          "beat": "settle",
+          "protected_rects": [
+            [
+              34,
+              689,
+              138,
+              700
+            ],
+            [
+              72,
+              704,
+              116,
+              748
+            ],
+            [
+              257,
+              683,
+              361,
+              694
+            ],
+            [
+              280,
+              698,
+              325,
+              742
+            ]
+          ],
+          "masked_pixels": 131,
+          "remaining_overlap": 0
+        }
+      ]
+    },
+    {
+      "file": "storyboards/rift-wave-390.png",
+      "width": 390,
+      "height": 904,
+      "checks": [
+        {
+          "beat": "prepare",
+          "protected_rects": [
+            [
+              34,
+              149,
+              138,
+              160
+            ],
+            [
+              72,
+              164,
+              116,
+              208
+            ],
+            [
+              257,
+              143,
+              361,
+              154
+            ],
+            [
+              280,
+              158,
+              325,
+              202
+            ]
+          ],
+          "masked_pixels": 0,
+          "remaining_overlap": 0
+        },
+        {
+          "beat": "peak",
+          "protected_rects": [
+            [
+              19,
+              400,
+              69,
+              411
+            ],
+            [
+              37,
+              414,
+              60,
+              438
+            ],
+            [
+              86,
+              400,
+              136,
+              411
+            ],
+            [
+              104,
+              414,
+              127,
+              438
+            ],
+            [
+              153,
+              400,
+              203,
+              411
+            ],
+            [
+              171,
+              414,
+              194,
+              438
+            ],
+            [
+              52,
+              500,
+              102,
+              511
+            ],
+            [
+              70,
+              514,
+              93,
+              538
+            ],
+            [
+              119,
+              500,
+              169,
+              511
+            ],
+            [
+              137,
+              514,
+              160,
+              538
+            ],
+            [
+              257,
+              413,
+              361,
+              424
+            ],
+            [
+              280,
+              428,
+              325,
+              472
+            ]
+          ],
+          "masked_pixels": 529,
+          "remaining_overlap": 0
+        },
+        {
+          "beat": "settle",
+          "protected_rects": [
+            [
+              19,
+              670,
+              69,
+              681
+            ],
+            [
+              37,
+              684,
+              60,
+              708
+            ],
+            [
+              86,
+              670,
+              136,
+              681
+            ],
+            [
+              104,
+              684,
+              127,
+              708
+            ],
+            [
+              153,
+              670,
+              203,
+              681
+            ],
+            [
+              171,
+              684,
+              194,
+              708
+            ],
+            [
+              52,
+              770,
+              102,
+              781
+            ],
+            [
+              70,
+              784,
+              93,
+              808
+            ],
+            [
+              119,
+              770,
+              169,
+              781
+            ],
+            [
+              137,
+              784,
+              160,
+              808
+            ],
+            [
+              257,
+              683,
+              361,
+              694
+            ],
+            [
+              280,
+              698,
+              325,
+              742
+            ]
+          ],
+          "masked_pixels": 330,
+          "remaining_overlap": 0
+        }
+      ]
+    },
+    {
+      "file": "storyboards/rift-cataclysm-390.png",
+      "width": 390,
+      "height": 904,
+      "checks": [
+        {
+          "beat": "prepare",
+          "protected_rects": [
+            [
+              34,
+              149,
+              138,
+              160
+            ],
+            [
+              72,
+              164,
+              116,
+              208
+            ],
+            [
+              257,
+              143,
+              361,
+              154
+            ],
+            [
+              280,
+              158,
+              325,
+              202
+            ]
+          ],
+          "masked_pixels": 0,
+          "remaining_overlap": 0
+        },
+        {
+          "beat": "peak",
+          "protected_rects": [
+            [
+              34,
+              419,
+              138,
+              430
+            ],
+            [
+              72,
+              434,
+              116,
+              478
+            ],
+            [
+              257,
+              413,
+              361,
+              424
+            ],
+            [
+              280,
+              428,
+              325,
+              472
+            ]
+          ],
+          "masked_pixels": 115,
+          "remaining_overlap": 0
+        },
+        {
+          "beat": "settle",
+          "protected_rects": [
+            [
+              34,
+              689,
+              138,
+              700
+            ],
+            [
+              72,
+              704,
+              116,
+              748
+            ],
+            [
+              257,
+              683,
+              361,
+              694
+            ],
+            [
+              280,
+              698,
+              325,
+              742
+            ]
+          ],
+          "masked_pixels": 0,
+          "remaining_overlap": 0
+        }
+      ]
+    },
+    {
+      "file": "storyboards/rift-awakening-390.png",
+      "width": 390,
+      "height": 904,
+      "checks": [
+        {
+          "beat": "prepare",
+          "protected_rects": [
+            [
+              34,
+              149,
+              138,
+              160
+            ],
+            [
+              72,
+              164,
+              116,
+              208
+            ],
+            [
+              257,
+              143,
+              361,
+              154
+            ],
+            [
+              280,
+              158,
+              325,
+              202
+            ]
+          ],
+          "masked_pixels": 11,
+          "remaining_overlap": 0
+        },
+        {
+          "beat": "peak",
+          "protected_rects": [
+            [
+              34,
+              419,
+              138,
+              430
+            ],
+            [
+              72,
+              434,
+              116,
+              478
+            ],
+            [
+              257,
+              413,
+              361,
+              424
+            ],
+            [
+              280,
+              428,
+              325,
+              472
+            ]
+          ],
+          "masked_pixels": 16,
+          "remaining_overlap": 0
+        },
+        {
+          "beat": "settle",
+          "protected_rects": [
+            [
+              34,
+              689,
+              138,
+              700
+            ],
+            [
+              72,
+              704,
+              116,
+              748
+            ],
+            [
+              257,
+              683,
+              361,
+              694
+            ],
+            [
+              280,
+              698,
+              325,
+              742
+            ]
+          ],
+          "masked_pixels": 84,
+          "remaining_overlap": 0
+        }
+      ]
+    },
+    {
+      "file": "storyboards/call-the-rift-390.png",
+      "width": 390,
+      "height": 904,
+      "checks": [
+        {
+          "beat": "prepare",
+          "protected_rects": [
+            [
+              34,
+              149,
+              138,
+              160
+            ],
+            [
+              72,
+              164,
+              116,
+              208
+            ],
+            [
+              257,
+              143,
+              361,
+              154
+            ],
+            [
+              280,
+              158,
+              325,
+              202
+            ]
+          ],
+          "masked_pixels": 35,
+          "remaining_overlap": 0
+        },
+        {
+          "beat": "peak",
+          "protected_rects": [
+            [
+              34,
+              419,
+              138,
+              430
+            ],
+            [
+              72,
+              434,
+              116,
+              478
+            ],
+            [
+              257,
+              413,
+              361,
+              424
+            ],
+            [
+              280,
+              428,
+              325,
+              472
+            ]
+          ],
+          "masked_pixels": 0,
+          "remaining_overlap": 0
+        },
+        {
+          "beat": "settle",
+          "protected_rects": [
+            [
+              34,
+              689,
+              138,
+              700
+            ],
+            [
+              72,
+              704,
+              116,
+              748
+            ],
+            [
+              257,
+              683,
+              361,
+              694
+            ],
+            [
+              280,
+              698,
+              325,
+              742
+            ]
+          ],
+          "masked_pixels": 0,
+          "remaining_overlap": 0
+        }
+      ]
+    },
+    {
+      "file": "storyboards/war-cry-390.png",
+      "width": 390,
+      "height": 904,
+      "checks": [
+        {
+          "beat": "prepare",
+          "protected_rects": [
+            [
+              34,
+              149,
+              138,
+              160
+            ],
+            [
+              72,
+              164,
+              116,
+              208
+            ],
+            [
+              257,
+              143,
+              361,
+              154
+            ],
+            [
+              280,
+              158,
+              325,
+              202
+            ]
+          ],
+          "masked_pixels": 1,
+          "remaining_overlap": 0
+        },
+        {
+          "beat": "peak",
+          "protected_rects": [
+            [
+              34,
+              419,
+              138,
+              430
+            ],
+            [
+              72,
+              434,
+              116,
+              478
+            ],
+            [
+              257,
+              413,
+              361,
+              424
+            ],
+            [
+              280,
+              428,
+              325,
+              472
+            ]
+          ],
+          "masked_pixels": 2,
+          "remaining_overlap": 0
+        },
+        {
+          "beat": "settle",
+          "protected_rects": [
+            [
+              34,
+              689,
+              138,
+              700
+            ],
+            [
+              72,
+              704,
+              116,
+              748
+            ],
+            [
+              257,
+              683,
+              361,
+              694
+            ],
+            [
+              280,
+              698,
+              325,
+              742
+            ]
+          ],
+          "masked_pixels": 0,
+          "remaining_overlap": 0
+        }
+      ]
+    },
+    {
+      "file": "storyboards/call-the-hunt-390.png",
+      "width": 390,
+      "height": 904,
+      "checks": [
+        {
+          "beat": "prepare",
+          "protected_rects": [
+            [
+              34,
+              149,
+              138,
+              160
+            ],
+            [
+              72,
+              164,
+              116,
+              208
+            ],
+            [
+              257,
+              143,
+              361,
+              154
+            ],
+            [
+              280,
+              158,
+              325,
+              202
+            ]
+          ],
+          "masked_pixels": 0,
+          "remaining_overlap": 0
+        },
+        {
+          "beat": "peak",
+          "protected_rects": [
+            [
+              34,
+              419,
+              138,
+              430
+            ],
+            [
+              72,
+              434,
+              116,
+              478
+            ],
+            [
+              257,
+              413,
+              361,
+              424
+            ],
+            [
+              280,
+              428,
+              325,
+              472
+            ]
+          ],
+          "masked_pixels": 0,
+          "remaining_overlap": 0
+        },
+        {
+          "beat": "settle",
+          "protected_rects": [
+            [
+              34,
+              689,
+              138,
+              700
+            ],
+            [
+              72,
+              704,
+              116,
+              748
+            ],
+            [
+              257,
+              683,
+              361,
+              694
+            ],
+            [
+              280,
+              698,
+              325,
+              742
+            ]
+          ],
+          "masked_pixels": 0,
+          "remaining_overlap": 0
+        }
+      ]
+    },
+    {
+      "file": "storyboards/horn-charge-390.png",
+      "width": 390,
+      "height": 904,
+      "checks": [
+        {
+          "beat": "prepare",
+          "protected_rects": [
+            [
+              34,
+              149,
+              138,
+              160
+            ],
+            [
+              72,
+              164,
+              116,
+              208
+            ],
+            [
+              257,
+              143,
+              361,
+              154
+            ],
+            [
+              251,
+              185,
+              309,
+              235
+            ]
+          ],
+          "masked_pixels": 808,
+          "remaining_overlap": 0
+        },
+        {
+          "beat": "peak",
+          "protected_rects": [
+            [
+              34,
+              419,
+              138,
+              430
+            ],
+            [
+              72,
+              434,
+              116,
+              478
+            ],
+            [
+              257,
+              413,
+              361,
+              424
+            ],
+            [
+              251,
+              455,
+              309,
+              505
+            ]
+          ],
+          "masked_pixels": 290,
+          "remaining_overlap": 0
+        },
+        {
+          "beat": "settle",
+          "protected_rects": [
+            [
+              34,
+              689,
+              138,
+              700
+            ],
+            [
+              72,
+              704,
+              116,
+              748
+            ],
+            [
+              257,
+              683,
+              361,
+              694
+            ],
+            [
+              251,
+              725,
+              309,
+              775
+            ]
+          ],
+          "masked_pixels": 0,
+          "remaining_overlap": 0
+        }
+      ]
+    },
+    {
+      "file": "storyboards/stampede-390.png",
+      "width": 390,
+      "height": 904,
+      "checks": [
+        {
+          "beat": "prepare",
+          "protected_rects": [
+            [
+              34,
+              149,
+              138,
+              160
+            ],
+            [
+              72,
+              164,
+              116,
+              208
+            ],
+            [
+              257,
+              143,
+              361,
+              154
+            ],
+            [
+              251,
+              185,
+              309,
+              235
+            ]
+          ],
+          "masked_pixels": 286,
+          "remaining_overlap": 0
+        },
+        {
+          "beat": "peak",
+          "protected_rects": [
+            [
+              34,
+              419,
+              138,
+              430
+            ],
+            [
+              72,
+              434,
+              116,
+              478
+            ],
+            [
+              257,
+              413,
+              361,
+              424
+            ],
+            [
+              251,
+              455,
+              309,
+              505
+            ]
+          ],
+          "masked_pixels": 378,
+          "remaining_overlap": 0
+        },
+        {
+          "beat": "settle",
+          "protected_rects": [
+            [
+              34,
+              689,
+              138,
+              700
+            ],
+            [
+              72,
+              704,
+              116,
+              748
+            ],
+            [
+              257,
+              683,
+              361,
+              694
+            ],
+            [
+              251,
+              725,
+              309,
+              775
+            ]
+          ],
+          "masked_pixels": 261,
+          "remaining_overlap": 0
+        }
+      ]
+    }
+  ],
+  "integration": "Suggestions only: preserve authoritative events and existing presentation total duration. No gameplay rules or new charge turns. All-side = one instance per actual affected hero; no damage at charge/summon/phase cue. Captain War Cry is an offensive single-target unstoppable shout, unlike Garran ally command VFX."
+}

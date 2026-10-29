@@ -1,0 +1,338 @@
+{
+  "call-the-hunt_peak": {
+    "anchor": "caster.hand",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 104
+  },
+  "call-the-hunt_prepare": {
+    "anchor": "caster.forward_chest",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 64
+  },
+  "call-the-hunt_settle": {
+    "anchor": "caster.hand",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 54
+  },
+  "call-the-rift_peak": {
+    "anchor": "summoned_slot.chest",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 104
+  },
+  "call-the-rift_prepare": {
+    "anchor": "caster.forward_chest",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 64
+  },
+  "call-the-rift_settle": {
+    "anchor": "summoned_slot.chest",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 54
+  },
+  "gather-thorns_peak": {
+    "anchor": "caster.chest",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 104
+  },
+  "gather-thorns_prepare": {
+    "anchor": "caster.forward_chest",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 64
+  },
+  "gather-thorns_settle": {
+    "anchor": "caster.chest",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 54
+  },
+  "horn-charge_peak": {
+    "anchor": "target.chest",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 104
+  },
+  "horn-charge_prepare": {
+    "anchor": "caster.forward_chest",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 64
+  },
+  "horn-charge_settle": {
+    "anchor": "target.chest",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 54
+  },
+  "rift-awakening_peak": {
+    "anchor": "caster.chest",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 104
+  },
+  "rift-awakening_prepare": {
+    "anchor": "caster.forward_chest",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 64
+  },
+  "rift-awakening_settle": {
+    "anchor": "caster.chest",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 54
+  },
+  "rift-cataclysm_peak": {
+    "anchor": "target.chest",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 104
+  },
+  "rift-cataclysm_prepare": {
+    "anchor": "caster.forward_chest",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 64
+  },
+  "rift-cataclysm_settle": {
+    "anchor": "target.chest",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 54
+  },
+  "rift-gathering_peak": {
+    "anchor": "caster.chest",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 104
+  },
+  "rift-gathering_prepare": {
+    "anchor": "caster.forward_chest",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 64
+  },
+  "rift-gathering_settle": {
+    "anchor": "caster.chest",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 54
+  },
+  "rift-wave_peak": {
+    "anchor": "whole_hero_side.actual_target_chests",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 104
+  },
+  "rift-wave_prepare": {
+    "anchor": "caster.forward_chest",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 64
+  },
+  "rift-wave_settle": {
+    "anchor": "whole_hero_side.actual_target_chests",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 54
+  },
+  "stampede_peak": {
+    "anchor": "target.feet",
+    "pivot": [
+      128,
+      210
+    ],
+    "width": 104
+  },
+  "stampede_prepare": {
+    "anchor": "caster.feet",
+    "pivot": [
+      128,
+      210
+    ],
+    "width": 64
+  },
+  "stampede_settle": {
+    "anchor": "target.feet",
+    "pivot": [
+      128,
+      210
+    ],
+    "width": 54
+  },
+  "thorn-bloom_peak": {
+    "anchor": "target.chest",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 104
+  },
+  "thorn-bloom_prepare": {
+    "anchor": "caster.forward_chest",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 64
+  },
+  "thorn-bloom_settle": {
+    "anchor": "target.chest",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 54
+  },
+  "thorn-rage_peak": {
+    "anchor": "caster.chest",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 104
+  },
+  "thorn-rage_prepare": {
+    "anchor": "caster.forward_chest",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 64
+  },
+  "thorn-rage_settle": {
+    "anchor": "caster.chest",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 54
+  },
+  "thorn-storm_peak": {
+    "anchor": "target.chest",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 104
+  },
+  "thorn-storm_prepare": {
+    "anchor": "caster.forward_chest",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 64
+  },
+  "thorn-storm_settle": {
+    "anchor": "target.chest",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 54
+  },
+  "thorn-tempest_peak": {
+    "anchor": "whole_hero_side.actual_target_chests",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 104
+  },
+  "thorn-tempest_prepare": {
+    "anchor": "caster.forward_chest",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 64
+  },
+  "thorn-tempest_settle": {
+    "anchor": "whole_hero_side.actual_target_chests",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 54
+  },
+  "war-cry_peak": {
+    "anchor": "caster.forward_chest",
+    "pivot": [
+      226,
+      128
+    ],
+    "width": 104
+  },
+  "war-cry_prepare": {
+    "anchor": "caster.forward_chest",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 64
+  },
+  "war-cry_settle": {
+    "anchor": "target.chest",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 54
+  }
+}

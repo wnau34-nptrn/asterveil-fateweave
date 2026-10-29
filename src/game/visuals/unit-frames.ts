@@ -23,9 +23,12 @@ interface UnitDefinition {
   reactions?: Readonly<Partial<Record<Reaction, readonly number[]>>>;
   // AV04: clips that let something go (arrow, thrown knife, flask). The body reaches its release frame at `at` of the
   // windup, the same instant the painted flight starts, and holds it until the authoritative contact cue.
-  release?: Readonly<Partial<Record<UnitClip, { frame: number; at: number }>>>;
+  // `point`: where the projectile leaves, measured on the release frame (arrowhead / open hand), in slot units from the
+  // sole (x toward the foe, y up negative), the same space as BattleScene's landmarks.
+  release?: Readonly<Partial<Record<UnitClip, Release>>>;
 }
 export interface FrameRange { prepare: readonly number[]; recover: readonly number[] }
+export interface Release { frame: number; at: number; point: readonly [number, number] }
 // Fraction of the windup at which a releasing clip lets go: late enough to show the draw, early enough for a readable flight.
 export const RELEASE_AT = .55;
 export const unitRegistry = {
@@ -48,10 +51,12 @@ export const unitRegistry = {
   // overhand for flasks and underhand for tonics. No new gesture for passives.
   mira: { sheet: 'mira', displayRatio: 1 / .42, actions: { attack: 'attack', hinder: 'attack', weakshot: 'attack', pin: 'attack', track: 'attack', volley: 'skill', disengage: 'disengage' },
     // AV04: the string lets go (5/13/26) when the arrow leaves; contact and end stay the UI cues.
-    reactions: { block: [30, 31] }, release: { attack: { frame: 5, at: RELEASE_AT }, skill: { frame: 13, at: RELEASE_AT }, disengage: { frame: 26, at: RELEASE_AT } } },
+    reactions: { block: [30, 31] }, release: {
+      attack: { frame: 5, at: RELEASE_AT, point: [.59, -.53] }, skill: { frame: 13, at: RELEASE_AT, point: [.43, -.90] },
+      disengage: { frame: 26, at: RELEASE_AT, point: [.52, -.55] } } },
   toma: { sheet: 'toma', displayRatio: 1 / .42, actions: { attack: 'attack', acid: 'attack', bomb: 'attack', smoke: 'attack', haste: 'skill', fury: 'skill', catalyst: 'skill' },
     // AV03/AV04: only the basic attack paints a thrown flask; its hand opens (5) as the flask leaves.
-    reactions: { block: [22, 23] }, release: { attack: { frame: 5, at: RELEASE_AT } } },
+    reactions: { block: [22, 23] }, release: { attack: { frame: 5, at: RELEASE_AT, point: [.39, -.52] } } },
   foe_dew_slime: { sheet: 'dew', displayRatio: 2, intents: { 'Jelly Bounce': 'attack' } },
   foe_ember_slime: { sheet: 'ember', displayRatio: 2, intents: { 'Ember Spark': 'skill' } },
   // A5: Garran thrusts for attack/pierce/halt, holds a low spear guard for brace/spearwall/hold and shouts for warcry.
@@ -66,7 +71,7 @@ export const unitRegistry = {
   // A6: Sefa's double slash serves attack/ambush, the long low stab backstab/disarm; evade and decoy share the backstep.
   // Lio strums for attack/note, plays the sustained song for valor/mend/solo; dread and finale have their own gestures.
   sefa: { sheet: 'sefa', displayRatio: 1 / .42, actions: { attack: 'attack', ambush: 'attack', backstab: 'skill', disarm: 'skill', knives: 'knives', evade: 'evade', decoy: 'evade' },
-    reactions: { block: [38, 39] }, release: { knives: { frame: 26, at: RELEASE_AT } } },
+    reactions: { block: [38, 39] }, release: { knives: { frame: 26, at: RELEASE_AT, point: [.52, -.45] } } },
   lio: { sheet: 'lio', displayRatio: 1 / .42, actions: { attack: 'attack', note: 'attack', valor: 'skill', mend: 'skill', solo: 'skill', dread: 'dread', finale: 'finale' }, reactions: { block: [38, 39] } },
   foe_riftweaver: { sheet: 'riftweaver', displayRatio: 2, intents: { 'Rune Lash': 'attack', 'Rift Needle': 'skill', 'Ribbon Snare': 'snare' } },
   foe_spore_puff: { sheet: 'sporepuff', displayRatio: 2, intents: { 'Spore Dust': 'attack' } },
@@ -120,7 +125,7 @@ function sequence(pose: UnitPose | Reaction, phase: FramePhase, clip?: UnitClip,
   return phase === 'prepare' ? [1, 2, 3, 4] : [5, 6, 7, 8];
 }
 // Fraction of the windup (contact cue) at which the body lets its projectile go, if this clip releases one.
-export function unitRelease(art: string, clip: UnitClip | undefined): { frame: number; at: number } | undefined {
+export function unitRelease(art: string, clip: UnitClip | undefined): Release | undefined {
   return clip ? unitDefinition(art)?.release?.[clip] : undefined;
 }
 // Hover loop frame at a given time, or undefined for identities without one.

@@ -20,6 +20,8 @@ export function effectFamily(turn: TurnStage): EffectFamily {
   }
   return 'status';
 }
+// AV05: the generic hit lift. Additive and well below white, so it brightens without replacing the painted pixels.
+export const hitLift = (energy: boolean, quiet: boolean): number => energy ? quiet ? 0x1c1430 : 0x382860 : quiet ? 0x221a10 : 0x44341f;
 // All captions come from actual resolver events. A synth recipe named crit is not a rule.
 export function effectCaption(event: BattleEvent): string {
   switch (event.type) {

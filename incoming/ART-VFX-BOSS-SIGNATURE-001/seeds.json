@@ -1,0 +1,71 @@
+{
+  "purpose": "Read-only shipped art crops for review; not regenerated bodies or effect-generator inputs",
+  "base_commit": "5e9e65026b8949f7877db12a2e70496fe2aac77b",
+  "references": [
+    {
+      "file": "seeds/matriarch.png",
+      "atlas": "public/assets/art/units_foes.webp",
+      "cell": 6,
+      "cell_size": [
+        512,
+        512
+      ],
+      "mirror_for_enemy_side": true,
+      "sha256": "e24a75b07f1f8fcebff01f98902eb3d6075fed062280ee787a64205303a744a8"
+    },
+    {
+      "file": "seeds/sentinel.png",
+      "atlas": "public/assets/art/units_foes.webp",
+      "cell": 8,
+      "cell_size": [
+        512,
+        512
+      ],
+      "mirror_for_enemy_side": false,
+      "sha256": "33329874d21ddd767790ac55d23b43cfb07a7272dc6f46985c1021adb64f5c2b"
+    },
+    {
+      "file": "seeds/captain.png",
+      "atlas": "public/assets/art/units_foes.webp",
+      "cell": 10,
+      "cell_size": [
+        512,
+        512
+      ],
+      "mirror_for_enemy_side": false,
+      "sha256": "e9b391b12263ca946ff8ffa1bc8c115f043b0849463b6be30f7dcecd7cd7615c"
+    },
+    {
+      "file": "seeds/juggernaut.png",
+      "atlas": "public/assets/art/units_foes.webp",
+      "cell": 7,
+      "cell_size": [
+        512,
+        512
+      ],
+      "mirror_for_enemy_side": false,
+      "sha256": "4886380e37d38d5fb89f4dfc916a0d30f075553b5b11baf5cb75df2ddc6b1d53"
+    },
+    {
+      "file": "seeds/tusker.png",
+      "atlas": "public/assets/art/units_foes.webp",
+      "cell": 0,
+      "cell_size": [
+        512,
+        512
+      ],
+      "mirror_for_enemy_side": false,
+      "sha256": "f0b69b79a75d3a4c4222ea8be5efa310ba53292a8f410a50497250796fcb2277"
+    },
+    {
+      "file": "seeds/gold-hero.png",
+      "atlas": "public/assets/art/units.webp",
+      "cell": 0,
+      "cell_size": [
+        512,
+        512
+      ],
+      "sha256": "0e888a0d889c61f2e4005361d43121e13478944cd3438a9ed6ca3578ee0dbaff"
+    }
+  ]
+}
