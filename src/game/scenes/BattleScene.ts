@@ -239,9 +239,10 @@ export class BattleScene extends Phaser.Scene {
     }
     const key = artOf(this.encounter, id); const art = actorArt[key]!;
     const ratio = unitDisplayRatio(key);
+    // Packed animation atlases already face their side (A9 Matriarch, A10 Raider); only the static seed cell is mirrored.
     const pilot = unitKey(key), framed = !!pilot && this.textures.exists(pilot);
     const sprite = this.add.image(0, 0, framed ? pilot : `battle-${art.sheet}`, framed ? hp <= 0 ? 21 : 0 : art.frame)
-      .setOrigin(.5, framed ? 496 / 512 : actorFootOrigins[key] ?? 1).setDisplaySize(size * (framed ? ratio : 1), size * (framed ? ratio : 1)).setFlipX(mirroredArt.has(key));
+      .setOrigin(.5, framed ? 496 / 512 : actorFootOrigins[key] ?? 1).setDisplaySize(size * (framed ? ratio : 1), size * (framed ? ratio : 1)).setFlipX(!framed && mirroredArt.has(key));
     body.add(sprite);
     const nextFrame = framed ? this.add.image(0, 0, pilot, 0)
       .setOrigin(sprite.originX, sprite.originY).setDisplaySize(size * ratio, size * ratio).setFlipX(sprite.flipX).setVisible(false) : undefined;
