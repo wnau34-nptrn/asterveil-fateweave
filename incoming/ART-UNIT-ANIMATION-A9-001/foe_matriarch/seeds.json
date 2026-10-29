@@ -1,0 +1,32 @@
+{
+  "identity": "foe_matriarch",
+  "atlas": "public/assets/art/units_foes.webp",
+  "cell_zero_based": 6,
+  "atlas_columns": 2,
+  "crop_xyxy": [
+    0,
+    1536,
+    512,
+    2048
+  ],
+  "file": "seeds/idle.png",
+  "sha256": "5f9b2394af114fc0793e87a47e6d44c1bf1d9d25fb177061a4d84cf60528f492",
+  "decoded_rgba_sha256": "78195665a8a1912db464c798aaef60639792a9d14b55d5817070ea3a2166ec4a",
+  "size": [
+    512,
+    512
+  ],
+  "atlas_seed_unchanged": true,
+  "animation_seed": "seeds/idle-left.png",
+  "animation_facing": "left",
+  "logical_sole_y": 497,
+  "padded_frame_seed_xy": [
+    256,
+    160
+  ],
+  "padded_frame_sole_y": 657,
+  "mirror_authorized_by_owner": true,
+  "mirror_decision": "2026-10-29: use left-facing animation and preserve original atlas seed",
+  "integration": "Pre-oriented LEFT frames: do not apply mirroredArt again. Original idle.png remains RIGHT-facing; animation uses exact horizontal reflection idle-left.png.",
+  "atlas_sha256": "dcf79e09f2b0b813aa03894bd65222ae3afb2df875e84870d1dba968c49a1895"
+}

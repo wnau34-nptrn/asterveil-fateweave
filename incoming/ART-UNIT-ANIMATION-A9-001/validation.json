@@ -1,0 +1,736 @@
+{
+  "schema": 1,
+  "base_commit": "5e9e65026b8949f7877db12a2e70496fe2aac77b",
+  "bosses": [
+    "foe_captain",
+    "foe_juggernaut",
+    "foe_matriarch",
+    "foe_sentinel"
+  ],
+  "validation_self_excluded": true,
+  "checks": "Full decode, SHA-256, exact first/last ready seed, >=48px gutters and unclipped margins. Artwork/motion approval belongs to owner.",
+  "files": {
+    "NOTES.md": {
+      "sha256": "579102c2e511ceb1cd19fa03eb517bdf7f8c88e63686f295ac2f5861c990311d",
+      "bytes": 11181
+    },
+    "build_handoff.py": {
+      "sha256": "1befca432ea059d06a013c13970a26b4629d3398f69f50951d50eb518dbddf84",
+      "bytes": 8367
+    },
+    "foe_captain/NOTES.md": {
+      "sha256": "8e2bf13d745bfb6ffa398759cd5d4f074710fc9f0405e612fdf44d8901694cb8",
+      "bytes": 1636
+    },
+    "foe_captain/preview-390.png": {
+      "sha256": "97018b82c7d8b88147c4b543528d7ba1553ef01195c5896b0d4429dd61760eab",
+      "bytes": 422067,
+      "size": [
+        390,
+        2842
+      ],
+      "mode": "RGBA"
+    },
+    "foe_captain/prompts.json": {
+      "sha256": "964417c4ebccd432bd7329a19ef42ed4fc7af745206ff86678fa0cd0c40dde87",
+      "bytes": 9707
+    },
+    "foe_captain/raw/call-the-hunt-r1.png": {
+      "sha256": "84f66492a7106f29b29f9338ec20d7187db233f1e0af7ef05c02edec367551d0",
+      "bytes": 1659428,
+      "size": [
+        6144,
+        896
+      ],
+      "mode": "RGBA"
+    },
+    "foe_captain/raw/crushing-blow-r1.png": {
+      "sha256": "65cb9a5e45ed8b49d86f26c0c79eb71d6e4010f171f277f2e0e63aa2a8758877",
+      "bytes": 1797796,
+      "size": [
+        6144,
+        896
+      ],
+      "mode": "RGBA"
+    },
+    "foe_captain/raw/down-r1.png": {
+      "sha256": "d8c335ed626a2796a2690c0b7b7d802f0ec5efad1d138a01905d6e6e74e9f859",
+      "bytes": 1213607,
+      "size": [
+        4096,
+        896
+      ],
+      "mode": "RGBA"
+    },
+    "foe_captain/raw/hit-r1.png": {
+      "sha256": "2270795679e3f4afd0a2a7827c65b40f03031936497f7778c09317a3a66da529",
+      "bytes": 1038132,
+      "size": [
+        4096,
+        896
+      ],
+      "mode": "RGBA"
+    },
+    "foe_captain/raw/war-cry-r1.png": {
+      "sha256": "4b277742de0cea9f1ecd552a1673346a018c887084d208eb71b9f5919bd64879",
+      "bytes": 1674906,
+      "size": [
+        6144,
+        896
+      ],
+      "mode": "RGBA"
+    },
+    "foe_captain/seeds/idle.png": {
+      "sha256": "e9b391b12263ca946ff8ffa1bc8c115f043b0849463b6be30f7dcecd7cd7615c",
+      "bytes": 339433,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    "foe_captain/seeds.json": {
+      "sha256": "0193f42a0cbe1b24a160767a4baa0d9f069c1c5efd3cc424202c4bcd5589ad4f",
+      "bytes": 710
+    },
+    "foe_captain/source-sheets/call-the-hunt-source.png": {
+      "sha256": "25bbf9fe15f64ab4afcb6c2dc07e287f5e236e487f0204cbc79a11203feb1a25",
+      "bytes": 1069924,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "foe_captain/source-sheets/crushing-blow-source.png": {
+      "sha256": "07c6996a702471c1d87f4bdb2beb8f0902a7a93a12d38488e1b56f53885a9e54",
+      "bytes": 917220,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "foe_captain/source-sheets/down-source.png": {
+      "sha256": "4731d2711a254be7506f3b778f7e918e42fd65b7abc8fd024737e46d69fa7cd3",
+      "bytes": 876304,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "foe_captain/source-sheets/hit-source.png": {
+      "sha256": "4ff856ff3d74685a3e9b7f1cb60eac1fa385c282d3234e24fbcc4d7dac4681c5",
+      "bytes": 818399,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "foe_captain/source-sheets/war-cry-source.png": {
+      "sha256": "cfbb32bfa249344d2233ba685dcad71c2fc39fcb7b08a1722717e42ec32c3eef",
+      "bytes": 833909,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "foe_captain/strips.json": {
+      "sha256": "a11d3136f3a7fd2518f67746c2bdb52435eea9da0ccd3f20b678f393cb5bc769",
+      "bytes": 13315
+    },
+    "foe_captain/templates/4-slots.png": {
+      "sha256": "741d67be528c34fd8dac5a24bfcd4980215c40ed6bc0666b4e58f92c14abe21b",
+      "bytes": 149546,
+      "size": [
+        2048,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "foe_captain/templates/6-slots.png": {
+      "sha256": "b766b670c6bab826c406e078000b6498ec377af92f5d095025ccb88153bd99ed",
+      "bytes": 157937,
+      "size": [
+        3072,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "foe_juggernaut/NOTES.md": {
+      "sha256": "a976e055912db5a0a8cada23bbc780f5da8f4ee44b7f32ddb0d34d949e96017a",
+      "bytes": 1453
+    },
+    "foe_juggernaut/preview-390.png": {
+      "sha256": "ee927b9300a5641ef6b9e98bd37ef8f86c826f623df6077aa6452213cdb8d2d9",
+      "bytes": 410875,
+      "size": [
+        390,
+        2282
+      ],
+      "mode": "RGBA"
+    },
+    "foe_juggernaut/prompts.json": {
+      "sha256": "271d4fdfc8755f514f30bf96899b1be4547b950cf6be14973a19bbe8eac1a12b",
+      "bytes": 6552
+    },
+    "foe_juggernaut/raw/down-r1.png": {
+      "sha256": "5cef248c3f603dd5ccef804608f134b4bf08fe705f3282c53813a57bd7285de7",
+      "bytes": 1618888,
+      "size": [
+        4096,
+        896
+      ],
+      "mode": "RGBA"
+    },
+    "foe_juggernaut/raw/hit-r1.png": {
+      "sha256": "15115025b90957e452bcd41e11c4d533c65f2e7294207c664c1f8e6e51aa4de5",
+      "bytes": 1400590,
+      "size": [
+        4096,
+        896
+      ],
+      "mode": "RGBA"
+    },
+    "foe_juggernaut/raw/horn-charge-r1.png": {
+      "sha256": "3f9c140d5e8699b792aea093a69df11bb34831e63610d500b4e9c18d1edcbdee",
+      "bytes": 2065045,
+      "size": [
+        6144,
+        896
+      ],
+      "mode": "RGBA"
+    },
+    "foe_juggernaut/raw/shard-burst-r1.png": {
+      "sha256": "c43510934ea0886d689f422b4b413f67f9d99ea47042b6b0193ab05d46744fd4",
+      "bytes": 2414058,
+      "size": [
+        6144,
+        896
+      ],
+      "mode": "RGBA"
+    },
+    "foe_juggernaut/seeds/idle.png": {
+      "sha256": "4886380e37d38d5fb89f4dfc916a0d30f075553b5b11baf5cb75df2ddc6b1d53",
+      "bytes": 442852,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    "foe_juggernaut/seeds.json": {
+      "sha256": "8058fccfe0411c254bb80cdedfadc0afbe55ad2a9217effa0d9ecf838a09502c",
+      "bytes": 715
+    },
+    "foe_juggernaut/source-sheets/down-source.png": {
+      "sha256": "6838755e36e539143d767c9e0431da15085ef756ada191be277e3b17d22425e6",
+      "bytes": 1115122,
+      "size": [
+        1983,
+        793
+      ],
+      "mode": "RGBA"
+    },
+    "foe_juggernaut/source-sheets/hit-source.png": {
+      "sha256": "aad0aa8198d304f68c5d292099deea1c2e1620630925e0a529ee408b421fe4b7",
+      "bytes": 1278965,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "foe_juggernaut/source-sheets/horn-charge-source.png": {
+      "sha256": "e4c87f5626ec7a2672648ad3cd49c9abe1d0beca381973b86fd73ba4eca12412",
+      "bytes": 739709,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "foe_juggernaut/source-sheets/shard-burst-source.png": {
+      "sha256": "b4497d7c464f2b32d08187fd14af356bcb86a3e1fb98aadb112658c7af8d34ee",
+      "bytes": 1076384,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "foe_juggernaut/strips.json": {
+      "sha256": "94cbea5b5b8652df38fd423782a4b95e674e779e9f22eb4b1287a508a83b8741",
+      "bytes": 10333
+    },
+    "foe_juggernaut/templates/4-slots.png": {
+      "sha256": "dcef53ffab08b6cdfd9b00fbf97b804bef86f3e9e11660f911f8abd8e65bd66f",
+      "bytes": 181939,
+      "size": [
+        2048,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "foe_juggernaut/templates/6-slots.png": {
+      "sha256": "7046c0bd52136083c689bea23da00826822fb07fcbb3ed6496f322db896c73cb",
+      "bytes": 191394,
+      "size": [
+        3072,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "foe_matriarch/NOTES.md": {
+      "sha256": "fb36a2a0d5e3a42406f78f8851cc4244e9b71f6202c47d6ee48dfde7ae12e72c",
+      "bytes": 2344
+    },
+    "foe_matriarch/preview-390.png": {
+      "sha256": "21a55c851047513b65277b8c7dcce9ce5000c5ee33ea3bc2ef06e0c9eb1fa54d",
+      "bytes": 726559,
+      "size": [
+        390,
+        3962
+      ],
+      "mode": "RGBA"
+    },
+    "foe_matriarch/prompts.json": {
+      "sha256": "f0ff899c2bf67a5a3d4e8dec169b58657d2365cdb6a4cf7f021bc97e4a37a6c7",
+      "bytes": 13623
+    },
+    "foe_matriarch/raw/briar-lash-r1.png": {
+      "sha256": "916f5425e4d52937ede243f470afff8562c4a2caa2603146995316b101c9d2e8",
+      "bytes": 2164477,
+      "size": [
+        6144,
+        896
+      ],
+      "mode": "RGBA"
+    },
+    "foe_matriarch/raw/down-r1.png": {
+      "sha256": "9ee50f9a53660be35c3b9023f64f2257a62c893629c88445652e99ad51a36f6e",
+      "bytes": 1711932,
+      "size": [
+        4096,
+        896
+      ],
+      "mode": "RGBA"
+    },
+    "foe_matriarch/raw/gather-thorns-r1.png": {
+      "sha256": "61c6ded8bb6234cc5db18d29b6f893b695f935fb6ce8814aea1e2eeea2744e75",
+      "bytes": 2042871,
+      "size": [
+        6144,
+        896
+      ],
+      "mode": "RGBA"
+    },
+    "foe_matriarch/raw/hit-r1.png": {
+      "sha256": "2a533855e5785560cd02b788522319d1ea577680164ceaa24fe4eda1f556792b",
+      "bytes": 1444078,
+      "size": [
+        4096,
+        896
+      ],
+      "mode": "RGBA"
+    },
+    "foe_matriarch/raw/thorn-bloom-storm-r1.png": {
+      "sha256": "d116edafc952a05e8a5ffdd8a49b0136d175c8ea8615c53099a60eb464d72ce0",
+      "bytes": 2031706,
+      "size": [
+        6144,
+        896
+      ],
+      "mode": "RGBA"
+    },
+    "foe_matriarch/raw/thorn-rage-r1.png": {
+      "sha256": "6da5eaf8dbb13ccd2e76b04e5c8b4ad6db48a9db1852fcddac7039f964e6237a",
+      "bytes": 2147465,
+      "size": [
+        6144,
+        896
+      ],
+      "mode": "RGBA"
+    },
+    "foe_matriarch/raw/thorn-tempest-r1.png": {
+      "sha256": "4b549435bb1fbe0f105a94bba54bcc4af587bce9b397d7b026d2e22b30e711a2",
+      "bytes": 2283736,
+      "size": [
+        6144,
+        896
+      ],
+      "mode": "RGBA"
+    },
+    "foe_matriarch/seeds/idle-left.png": {
+      "sha256": "e24a75b07f1f8fcebff01f98902eb3d6075fed062280ee787a64205303a744a8",
+      "bytes": 495045,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    "foe_matriarch/seeds/idle.png": {
+      "sha256": "5f9b2394af114fc0793e87a47e6d44c1bf1d9d25fb177061a4d84cf60528f492",
+      "bytes": 495844,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    "foe_matriarch/seeds.json": {
+      "sha256": "07d030e8b3eec0e7a258d79887dae915fbffaff00ddece1ebc3758e324cc0b63",
+      "bytes": 1025
+    },
+    "foe_matriarch/source-sheets/briar-lash-source.png": {
+      "sha256": "fd0ef708e9da6d915298b6448bc89629eb98a920ec2638ecd2e4467605c9917d",
+      "bytes": 731507,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "foe_matriarch/source-sheets/down-source.png": {
+      "sha256": "1d9ea07cc87e0dad09aa372d19ad61fd1916f38ec53ef618d7c73436e51fc8aa",
+      "bytes": 1629299,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "foe_matriarch/source-sheets/gather-thorns-source.png": {
+      "sha256": "192adf82c874fbcddbc306562568901fd76eed593c0fddb607ea4278e902d412",
+      "bytes": 1555488,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "foe_matriarch/source-sheets/hit-source.png": {
+      "sha256": "0648c75da2bad3af36444e518fd70e71f92cd062366cc6d7e4e0bec6ad7fb2f5",
+      "bytes": 1871010,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "foe_matriarch/source-sheets/thorn-bloom-storm-source.png": {
+      "sha256": "f9f0a669e45a016e0887d9504941afbee462c8683fe7b94db799b12781ac46f1",
+      "bytes": 830475,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "foe_matriarch/source-sheets/thorn-rage-source.png": {
+      "sha256": "1ec3114140fc1d3084c21b610da582aa0467430808766c17cf8b0e1d28dc3dcb",
+      "bytes": 1013879,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "foe_matriarch/source-sheets/thorn-tempest-source.png": {
+      "sha256": "4108ca0b459a4bb9df39990e55edd75fb459d6aaf680913fa1fcaa67432703cf",
+      "bytes": 1579579,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "foe_matriarch/strips.json": {
+      "sha256": "b31b43935a3398441dd2d21eacb23b89222bf111f8cecc1243b9c6dfe6a230f7",
+      "bytes": 19350
+    },
+    "foe_matriarch/templates/4-slots.png": {
+      "sha256": "2272d8e840797a5fc55144f3e470072d9c1260c1bca29d941ddfb9c703c342ef",
+      "bytes": 200004,
+      "size": [
+        2048,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "foe_matriarch/templates/6-compact-slots.png": {
+      "sha256": "9643420747eaca56a4a1cf737d9487595e1fb6d8b8da9d7e71e0405efffd6942",
+      "bytes": 93870,
+      "size": [
+        3072,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "foe_matriarch/templates/6-slots.png": {
+      "sha256": "9559b0d37e845ced41d0f2b183b153cd60d9bb4431b64056cfebf3983e97e9ef",
+      "bytes": 209098,
+      "size": [
+        3072,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "foe_sentinel/NOTES.md": {
+      "sha256": "8a6ff596e62b2e4b05df2819701783c15e7dccbf6022b94aeeed45912569ff72",
+      "bytes": 3167
+    },
+    "foe_sentinel/preview-390.png": {
+      "sha256": "3009e39792f839da3ac92f523b30e95590382e56724f655969ba5e76d02e24a3",
+      "bytes": 960186,
+      "size": [
+        390,
+        5082
+      ],
+      "mode": "RGBA"
+    },
+    "foe_sentinel/prompts.json": {
+      "sha256": "7515ff17fe5a91a3e2f45c7a66e2c99e982f010dbc9eecc0dea57beb09242bfb",
+      "bytes": 19251
+    },
+    "foe_sentinel/raw/call-the-rift-r1.png": {
+      "sha256": "f24e8b7ce2af35030a8286965ef6bf36133229a7c3e75a0a62c2e24bfcccf912",
+      "bytes": 2286184,
+      "size": [
+        6144,
+        896
+      ],
+      "mode": "RGBA"
+    },
+    "foe_sentinel/raw/crushing-blow-r1.png": {
+      "sha256": "551477d59766a31ef2f7c158658a340b6152c3a204157310b9a7bfc599ce3f24",
+      "bytes": 1976137,
+      "size": [
+        6144,
+        896
+      ],
+      "mode": "RGBA"
+    },
+    "foe_sentinel/raw/down-r1.png": {
+      "sha256": "b260947198dd1f85d138232ad5f2715e9121c1d4fcfe8d050c057f78883c5501",
+      "bytes": 1840321,
+      "size": [
+        4096,
+        896
+      ],
+      "mode": "RGBA"
+    },
+    "foe_sentinel/raw/hit-r1.png": {
+      "sha256": "200073f7af672b5be3457c9ed224f397433bbbd0cf8ca2db6312bc8e10b35501",
+      "bytes": 1541840,
+      "size": [
+        4096,
+        896
+      ],
+      "mode": "RGBA"
+    },
+    "foe_sentinel/raw/raking-slash-r1.png": {
+      "sha256": "ee1390841b489ced52529cf89e02151eec484d3b08700ebbab8ffe2c1c9307ba",
+      "bytes": 2070231,
+      "size": [
+        6144,
+        896
+      ],
+      "mode": "RGBA"
+    },
+    "foe_sentinel/raw/rift-awakening-r1.png": {
+      "sha256": "0e1a8e0094444bc3c25691e6fd9c9f1fcda744d12cb9e88e8eec7d1eceebe708",
+      "bytes": 2055790,
+      "size": [
+        6144,
+        896
+      ],
+      "mode": "RGBA"
+    },
+    "foe_sentinel/raw/rift-bolt-wave-r1.png": {
+      "sha256": "6b51466da7cab81a0942a12ed86acb38bfc1088fa5b015edac7af4ac7ce3568d",
+      "bytes": 2225427,
+      "size": [
+        6144,
+        896
+      ],
+      "mode": "RGBA"
+    },
+    "foe_sentinel/raw/rift-cataclysm-r1.png": {
+      "sha256": "3b3abaadede82acb39215867c36a66c8fc08ac30c9ef530bdb29871c0d0e7386",
+      "bytes": 2377520,
+      "size": [
+        6144,
+        896
+      ],
+      "mode": "RGBA"
+    },
+    "foe_sentinel/raw/rift-gathering-r1.png": {
+      "sha256": "a297512b8f5785eff3413cf2c59ac5baabe64b4686898d931561798d756c09ab",
+      "bytes": 2098751,
+      "size": [
+        6144,
+        896
+      ],
+      "mode": "RGBA"
+    },
+    "foe_sentinel/seeds/idle.png": {
+      "sha256": "33329874d21ddd767790ac55d23b43cfb07a7272dc6f46985c1021adb64f5c2b",
+      "bytes": 492946,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    "foe_sentinel/seeds.json": {
+      "sha256": "25227d6563a07c74950683a5ed079b8ac430c02ff9587688e77d2bb2b4cf383c",
+      "bytes": 710
+    },
+    "foe_sentinel/source-sheets/call-the-rift-source.png": {
+      "sha256": "53b0686973b3ca10800da3ec6f957f65627e12780202292beac3d52acd36033c",
+      "bytes": 1467446,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "foe_sentinel/source-sheets/crushing-blow-source.png": {
+      "sha256": "f8e9be08c56d68f177fb56edf50fffdd1e9e937b6bf3ef5cb4efc5f61a434613",
+      "bytes": 1024887,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "foe_sentinel/source-sheets/down-source.png": {
+      "sha256": "9aa6ab2e16dd0b9411c58f59fd0e297414e857e78d01bcf962bfd484068e4a6d",
+      "bytes": 1650478,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "foe_sentinel/source-sheets/hit-source.png": {
+      "sha256": "19f9298a76686da98571cf8decc5f546772e48805bc9c437040f8931ce338030",
+      "bytes": 1975561,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "foe_sentinel/source-sheets/raking-slash-source.png": {
+      "sha256": "831245d8c92f1fad4e17f5469a84e8f88b1f2235ed26dc8e39e22a8e9d1052d2",
+      "bytes": 984497,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "foe_sentinel/source-sheets/rift-awakening-source.png": {
+      "sha256": "333c7a0ae959d8f00cc02ff32fec10a9704d11feccc839754d52e8fac104178f",
+      "bytes": 1104364,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "foe_sentinel/source-sheets/rift-bolt-wave-source.png": {
+      "sha256": "3eee67755d437f803b73b93b463750ef591af5ca95da2d37382cde1fc8cbb740",
+      "bytes": 1542647,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "foe_sentinel/source-sheets/rift-cataclysm-source.png": {
+      "sha256": "f25357d2361f6818e948561fb736699bc8e0479c12d01011a9778cdbe5e8fd00",
+      "bytes": 1119613,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "foe_sentinel/source-sheets/rift-gathering-source.png": {
+      "sha256": "72abe232595b10c87f7fd01a917143a0b9841a87d56eb6f4a1aa8c2109cd2ab8",
+      "bytes": 1484295,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "foe_sentinel/strips.json": {
+      "sha256": "eab410bae9f0120cc5049c7152f2ca96d42d5cce1312f366a73866414473b902",
+      "bytes": 25319
+    },
+    "foe_sentinel/templates/4-slots.png": {
+      "sha256": "025b9271e255396b389def9d1038f5a07c8b1e712d61468e57a0e8274b506182",
+      "bytes": 194254,
+      "size": [
+        2048,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "foe_sentinel/templates/6-compact-slots.png": {
+      "sha256": "173bbea04fdc95ae074329400765c35cf4a0ee112596dd2b376aa33e441429ed",
+      "bytes": 92692,
+      "size": [
+        3072,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "foe_sentinel/templates/6-slots.png": {
+      "sha256": "691d74163fd3a3258ab2477a483ea1876c6df5ee1fc6c32e915c3cff041d3e24",
+      "bytes": 204230,
+      "size": [
+        3072,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "generation.json": {
+      "sha256": "cb52c04f13d3836dbe400974618f10e3682308a7d04bdb6352d2ef1091dc765a",
+      "bytes": 49124
+    },
+    "preview-390.png": {
+      "sha256": "20623da5be55ff505431185d1fcdabd426504e280f9cf055e904f5b2a778ea9e",
+      "bytes": 156780,
+      "size": [
+        390,
+        914
+      ],
+      "mode": "RGBA"
+    },
+    "prompts.json": {
+      "sha256": "ed4e3277b3360989abe20692335ae57c5eaa8bd15da9ef6adf7c05417b7bd0f2",
+      "bytes": 69810
+    },
+    "requirements.txt": {
+      "sha256": "d0524439f7a0da67c1283d44683e00fcc795a0657e726f22087cfcbe198f7c89",
+      "bytes": 28
+    },
+    "seeds.json": {
+      "sha256": "aaf5f91a2ee026c8f38f559e33025fc964ce5b6928fd5588d6677f096ed0a0fe",
+      "bytes": 3405
+    },
+    "strips.json": {
+      "sha256": "3189681f1a5ec7347e8a06532b0516755f4ca1e5a688cdd6daba574820cf9ee9",
+      "bytes": 69018
+    }
+  }
+}
