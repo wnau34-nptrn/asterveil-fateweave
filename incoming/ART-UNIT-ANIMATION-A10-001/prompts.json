@@ -1,0 +1,95 @@
+{
+  "generator": "image_gen.imagegen",
+  "method": "Each move generated as one entire horizontal strip; no frame-by-frame generation.",
+  "transparent_background": true,
+  "prompts": [
+    {
+      "identity": "raider",
+      "move": "raking-slash",
+      "revision": "r1",
+      "reference": "seeds/raider-seed.png",
+      "prompt": "ONE HORIZONTAL SIX-frame transparent animation strip of exact attached LEFT-facing Veil Raider. Pink-haired female horned demon chibi, curled purple-black horns, crimson eyes, black/gold armor and boots, dark magenta bat wings, heart-tipped tail, ONE hooked purple blade with gold hilt in her leading LEFT-side hand. Preserve same face/body/outfit/equipment/proportions and left facing. Six SMALL fully isolated figures, one row, vast transparent margins and wide gutters, same anatomical size, same foot baseline. Full blade, wings, horns, hair, tail and limbs remain visible attached, no clipping. No scenery/shadows/text, no VFX/projectiles/dust/rings/light bursts. Raking Slash whole body animation: 1 normal upright ready identical stance to seed, 2 knees bend and head/body coil DOWN and back RIGHT drawing blade back, 3 deeper crouch with torso twisted back and blade ready near shoulder (weapon stays attached), 4 unmistakable wide LEFTWARD diagonal slash blade arm extended to left at waist/chest level, 5 low leftward follow-through with blade clearly attached and visible, 6 recover upright ready. Strong physical contact. Keep wings naturally open at seed size, no aerial flight.",
+      "accepted_attempt": 1
+    },
+    {
+      "identity": "raider",
+      "move": "shadow-knife",
+      "revision": "r1",
+      "reference": "seeds/raider-seed.png",
+      "prompt": "ONE HORIZONTAL SIX-frame transparent animation strip of exact attached LEFT-facing Veil Raider. Pink-haired female horned demon chibi, curled purple-black horns, crimson eyes, black/gold armor and boots, dark magenta bat wings, heart-tipped tail, ONE hooked purple blade with gold hilt in her leading LEFT-side hand. Preserve same face/body/outfit/equipment/proportions and left facing. Six SMALL fully isolated figures, one row, vast transparent margins and wide gutters, same anatomical size, same foot baseline. Full blade, wings, horns, hair, tail and limbs remain visible attached, no clipping. No scenery/shadows/text, no VFX/projectiles/dust/rings/light bursts. Shadow Knife knife-throw body pose whole animation: keep main hooked purple blade in leading hand in ALL frames; throw with OTHER free hand. 1 regular upright ready like seed, 2 lower head/body coil BACK RIGHT and bring free hand holding tiny physical dark throwing knife back beside shoulder, 3 deeper bent-knee low anticipation hand/knife behind head, 4 unmistakable overhand THROW RELEASE facing LEFT free arm extended horizontally left and hand opening, main hooked blade STILL in leading hand lowered safely, 5 throwing arm follows through down-left and main blade still attached, 6 ready. No airborne knife/projectile in any frame: only knife held before release. Do not remove main weapon. Distinct from main-blade slash.",
+      "accepted_attempt": 1
+    },
+    {
+      "identity": "raider",
+      "move": "hit",
+      "revision": "r1",
+      "reference": "seeds/raider-seed.png",
+      "prompt": "ONE horizontal FOUR-frame transparent animation strip, exact attached LEFT-facing Veil Raider. Pink-haired horned chibi demon woman, curled dark-purple horns, red eyes, black/gold outfit and boots, magenta bat wings and heart-tipped tail, ONE hooked purple blade with golden hilt held in leading hand always visible attached. Same face, body, proportions, outfit, equipment, palette, wings, tail. Exactly four SMALL fully isolated figures one row, massive empty transparent margins and wide gutters. Same anatomical scale, feet share sole line. No VFX/light bursts/particles/projectiles/shadows/ground/text. Nothing clipped. HIT reaction: 1 regular ready stance matching seed, 2 sharp recoil chest/head BACK RIGHT from left impact, wince eyes squeezed and knees bent, 3 deepest backward flinch, wings tense back and main blade remains in hand lowered in front, 4 recover ready. No attacking, no casting, no blood.",
+      "accepted_attempt": 1
+    },
+    {
+      "identity": "raider",
+      "move": "block",
+      "revision": "r1",
+      "reference": "seeds/raider-seed.png",
+      "prompt": "ONE horizontal FOUR-frame transparent animation strip, exact attached LEFT-facing Veil Raider. Pink-haired horned chibi demon woman, curled dark-purple horns, red eyes, black/gold outfit and boots, magenta bat wings and heart-tipped tail, ONE hooked purple blade with golden hilt held in leading hand always visible attached. Same face, body, proportions, outfit, equipment, palette, wings, tail. Exactly four SMALL fully isolated figures one row, massive empty transparent margins and wide gutters. Same anatomical scale, feet share sole line. No VFX/light bursts/particles/projectiles/shadows/ground/text. Nothing clipped. BLOCK reaction: 1 regular ready stance like seed, 2 crouch and draw hooked blade held upright diagonally across front of chest facing LEFT, free hand braces weapon wrist, 3 tight defensive parry with blade guard protecting face/chest, 4 relax ready. Blade stays same size and attached, wings open naturally behind, distinct defensive brace, no slash.",
+      "accepted_attempt": 1
+    },
+    {
+      "identity": "raider",
+      "move": "down",
+      "revision": "r1",
+      "reference": "seeds/raider-seed.png",
+      "prompt": "ONE horizontal FOUR-frame transparent animation strip, exact attached LEFT-facing Veil Raider. Pink-haired horned chibi demon woman, curled dark-purple horns, red eyes, black/gold outfit and boots, magenta bat wings and heart-tipped tail, ONE hooked purple blade with golden hilt held in leading hand always visible attached. Same face, body, proportions, outfit, equipment, palette, wings, tail. Exactly four SMALL fully isolated figures one row, massive empty transparent margins and wide gutters. Same anatomical scale, feet share sole line. No VFX/light bursts/particles/projectiles/shadows/ground/text. Nothing clipped. DOWN non-looping defeat reaction: 1 regular ready identical stance like seed, 2 knees buckle and head lowers, wings fold gently and blade lowered still gripped, 3 fall to knees then LEFT side near floor, 4 grounded exhausted side-lying hold, closed eyes, head near floor and wing draped behind, hooked blade visibly still attached to hand resting on floor, legs naturally folded. Same body size, NOT shrink. Last frame remains fully DOWN forever, NEVER gets up. Tail still attached and visible.",
+      "accepted_attempt": 1
+    },
+    {
+      "identity": "brute",
+      "move": "crushing-blow",
+      "revision": "r1",
+      "reference": "seeds/brute-seed.png",
+      "prompt": "One horizontal SIX-frame transparent sprite animation strip, using attached exact LEFT-facing Rift Brute seed. Same charcoal-violet crystalline reptilian demon, silver spiked armor, huge claws, crystal tail, identical head/body proportions and palette. Crushing Blow heavy physical claw hammer: 1 upright ready like seed, 2 head/shoulders coil DOWN and back right and arm draws back, 3 deeper DOWNWARD crouched anticipation, 4 committed downward hammer strike toward LEFT with fully extended claw, 5 low leftward follow-through, 6 recover upright ready. Both feet stay on same baseline. Exactly six equal slots, single row, wide transparent gutters >=48px, ample margin for all claws/spines/tail. Same body size in every frame. No VFX, projectiles, light bursts, floor rings, dust, shadows, letters or scenery. All limbs remain attached and visible; no clipping. True alpha background. Generate entire strip at once.",
+      "accepted_attempt": 2,
+      "accepted_prompt": "Animation asset, ONE row of EXACTLY SIX SMALL fully isolated Rift Brute figures on TRANSPARENT canvas, much empty space. Attached seed is exact character reference LEFT facing charcoal/violet crystal reptile demon with silver spiked armor and long tail. Use only central 60% of width of EACH of six equal slots; each character only 45% of total canvas height. Leave 20% empty margin at BOTH ends of full strip and generous empty gutters between every figure: no touching, no cropping. Keep all feet at same horizontal level and SAME anatomical scale across all six. Crushing Blow sequence left to right: 1 upright regular ready like seed, 2 head DOWN/back right, elbow raised back, 3 deeper low coiled crouch looking left, 4 powerful unmistakable left-downward claw hammer with arm extended, 5 deep low forward followthrough, 6 regular upright ready. Same exact body face armor spikes claws tail and palette, detailed chibi fantasy painting. Claws and limbs always visibly attached. All silhouettes entirely within canvas. No VFX, no extra claws, no projectiles, no ground, no dust or glow burst, no shadows, no text. This is a contact sheet of six SMALL figures with vast transparent whitespace, not a poster filling the canvas.",
+      "rejected_attempts": [
+        {
+          "attempt": 1,
+          "reason": "Last figure clipped at right source edge; gutters too narrow. Excluded from delivery.",
+          "prompt": "One horizontal SIX-frame transparent sprite animation strip, using attached exact LEFT-facing Rift Brute seed. Same charcoal-violet crystalline reptilian demon, silver spiked armor, huge claws, crystal tail, identical head/body proportions and palette. Crushing Blow heavy physical claw hammer: 1 upright ready like seed, 2 head/shoulders coil DOWN and back right and arm draws back, 3 deeper DOWNWARD crouched anticipation, 4 committed downward hammer strike toward LEFT with fully extended claw, 5 low leftward follow-through, 6 recover upright ready. Both feet stay on same baseline. Exactly six equal slots, single row, wide transparent gutters >=48px, ample margin for all claws/spines/tail. Same body size in every frame. No VFX, projectiles, light bursts, floor rings, dust, shadows, letters or scenery. All limbs remain attached and visible; no clipping. True alpha background. Generate entire strip at once."
+        }
+      ]
+    },
+    {
+      "identity": "brute",
+      "move": "rift-bolt",
+      "revision": "r1",
+      "reference": "seeds/brute-seed.png",
+      "prompt": "ONE HORIZONTAL SIX-FRAME transparent sprite strip of attached exact LEFT-facing Rift Brute demon. Keep same charcoal-violet crystal reptile, silver spiked shoulder armor, face, huge claws, long crystal tail and chibi proportions. Rift Bolt BODY GESTURE ONLY: 1 normal upright ready matching seed; 2 pull BOTH claw hands inward to chest, head and shoulders coil down and back RIGHT; 3 deeper low coiled anticipation, both hands cupped together near chest; 4 unmistakable CAST RELEASE with both arms and open claw palms thrust horizontally LEFT, torso leaning left; 5 arms extended palms left then relaxing; 6 upright seed-like ready. Distinct from downward claw hammer: use paired open palms at CHEST HEIGHT. NO energy ball, beam, light burst, projectile, particles, floor effects, text, shadows or scenery. Preserve intrinsic purple crystal material only. Exactly six SMALL figures in one row, large empty transparent margins on all sides and wide empty gutters. Entire silhouette fits safely inside every slot, use only 60% of each slot width and 45% canvas height. Same anatomical scale across frames, same sole line both feet. All claws limbs tail armor visibly attached. Real alpha. Whole strip in one generation.",
+      "accepted_attempt": 1
+    },
+    {
+      "identity": "brute",
+      "move": "hit",
+      "revision": "r1",
+      "reference": "seeds/brute-seed.png",
+      "prompt": "One horizontal FOUR-frame transparent animation strip. Exact attached LEFT-facing Rift Brute: charcoal/violet crystalline reptile demon, silver spiked armor, massive clawed arms, curled crystal tail, same chibi body/head/face/equipment/proportions/palette. Exactly four SMALL full figures one row with vast transparent margins and wide gutters, not touching edges. Same body size across frames, same sole baseline. No effects/projectiles/particles/light bursts/rings/text/ground/shadows. All claws, tail, limbs remain attached visible. HIT reaction: 1 regular upright ready matching seed, 2 recoil sharply BACK RIGHT chest and face flinch from left impact with bent knees feet planted, 3 deepest rightward recoil head pulled back and arms close defensively, 4 recover ready. Clear pain flinch, not attack nor casting.",
+      "accepted_attempt": 1
+    },
+    {
+      "identity": "brute",
+      "move": "block",
+      "revision": "r1",
+      "reference": "seeds/brute-seed.png",
+      "prompt": "One horizontal FOUR-frame transparent animation strip. Exact attached LEFT-facing Rift Brute: charcoal/violet crystalline reptile demon, silver spiked armor, massive clawed arms, curled crystal tail, same chibi body/head/face/equipment/proportions/palette. Exactly four SMALL full figures one row with vast transparent margins and wide gutters, not touching edges. Same body size across frames, same sole baseline. No effects/projectiles/particles/light bursts/rings/text/ground/shadows. All claws, tail, limbs remain attached visible. BLOCK reaction: 1 regular ready matching seed, 2 crouch slightly and bring both armored forearms across face/chest facing LEFT, 3 brace tightly in crossed-forearm guard, claws visible and attached, 4 relax back ready. Defensive brace not physical attack and not casting.",
+      "accepted_attempt": 1
+    },
+    {
+      "identity": "brute",
+      "move": "down",
+      "revision": "r1",
+      "reference": "seeds/brute-seed.png",
+      "prompt": "One horizontal FOUR-frame transparent animation strip. Exact attached LEFT-facing Rift Brute: charcoal/violet crystalline reptile demon, silver spiked armor, massive clawed arms, curled crystal tail, same chibi body/head/face/equipment/proportions/palette. Exactly four SMALL full figures one row with vast transparent margins and wide gutters, not touching edges. Same body size across frames, same sole baseline. No effects/projectiles/particles/light bursts/rings/text/ground/shadows. All claws, tail, limbs remain attached visible. DOWN reaction, non-looping death: 1 regular upright ready matching seed, 2 buckle knees lower body/head with claw bracing floor, 3 topple onto LEFT SIDE body grounded tail lying behind, 4 fully grounded collapsed hold with head and belly near floor, claws relaxed, eyes closed. Last frame stays down permanently, NEVER gets up. Same anatomical size, no shrinking or detached parts. Fall to ground level, no floating.",
+      "accepted_attempt": 1
+    }
+  ]
+}
