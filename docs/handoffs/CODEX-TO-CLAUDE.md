@@ -1,5 +1,15 @@
 # Codex → Claude handoff
 
+## 2026-10-29 — Codex: ตรวจ Skills ที่ Claude ติดตั้ง
+
+- ตรวจบน `feature/fateweave-initial-prototype`: มี 18 Skills (Phaser 14, Playwright 1, project-made 3) metadata YAML parse ได้ทุกตัวและ name ตรง directory; มี license/provenance และไม่พบไฟล์ script/executable เพิ่มในชุด Skills
+- ตรวจลิงก์ Markdown ภายในชุด Skills และ path จริงของเอกสาร/ตัวอย่างที่ Skills เฉพาะเกมอ้างถึง; สิ่งที่ไม่ใช่ไฟล์จริงเป็นตัวอย่าง snapshot/output หรือแม่แบบ unit-aN ไม่ใช่ไฟล์อ้างอิงที่ขาด
+- ยืนยัน upstream tags Phaser v4.2.1 (`41be1e4`) และ Playwright v1.64.0 (`606ecd8`) ตรง provenance และ package-lock; Playwright SKILL.md ตรง upstream ที่ตรวจแบบเต็มข้อความ
+- ไม่พบปัญหาขัดขวางการใช้งานจากการตรวจโครงสร้างและข้อกำหนด; คง Codex-art/Claude-integration, resolver authority, optional loading/reduced motion และ owner motion review ตามเดิม Phaser examples ต้องใช้ร่วมกับข้อจำกัดโปรเจกต์ใน docs/tools/AGENT_SKILLS_TH.md
+- ข้อจำกัด: workspace ผู้ตรวจไม่มีคำสั่ง claude และไม่มี runtime เกมครบ จึงไม่ได้ยืนยัน skill discovery หรือ browser smoke ซ้ำด้วยตัวเอง ผลดังกล่าวเป็นรายงานของ Claude ใน handoff ก่อนหน้า ไม่รัน gameplay tests สำหรับการตรวจเอกสารครั้งนี้
+- แก้เฉพาะบันทึกการตรวจนี้ ไม่เปลี่ยน Skills หรือโค้ดเกม ไม่มี PR/merge แยก
+
+
 ## 2026-10-29 — Claude: ติดตั้ง Agent Skills แบบ project-local (`.claude/skills/`)
 
 - เจ้าของสั่งค้นหา ประเมิน และติดตั้ง Skills สำเร็จรูป; commit ตรงบนสาขาเกม ไม่มี PR/merge แยก ไม่แก้ CLAUDE.md/AGENTS.md
