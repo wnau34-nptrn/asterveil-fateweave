@@ -14,7 +14,7 @@ R2 artwork (PR #89) integrated through PR92 merge `4883362` (mark/sigil/storm/di
 
 ## Aegis anatomy hold — 2026-10-29
 
-Owner reported Aegis' head/body “pop” on a normal attack. Root cause is the A2 generated art (head ~1.37× the approved seed), not normalization. Aegis A2 frames are held at runtime (`anatomyHold` in `src/game/visuals/unit-frames.ts`): static seed + procedural motion until Codex delivers ART-UNIT-ANIMATION-A2-002 (`docs/handoffs/CODEX-AEGIS-ANATOMY-REDRAW-TH.md`). Check new unit art with `scripts/unit-anatomy-audit.py`; bbox/sole alignment is not an anatomy pass. Evidence: `docs/validation/aegis-anatomy-2026-10-29/README_TH.md`. Owner scope: fix Aegis only.
+Owner reported Aegis' head/body “pop” on a normal attack. Root cause is the A2 generated art (head ~1.37× the approved seed), not normalization. Aegis A2 frames are held at runtime (`anatomyHold` in `src/game/visuals/unit-frames.ts`): static seed + procedural motion until Codex delivers ART-UNIT-ANIMATION-A2-002 (`docs/handoffs/CODEX-AEGIS-ANATOMY-REDRAW-TH.md`). Check new unit art with `scripts/unit-anatomy-audit.py`; bbox/sole alignment is not an anatomy pass. Evidence: `docs/validation/aegis-anatomy-2026-10-29/README_TH.md`. Owner scope: fix Aegis only. Published by Pages 40903815981 at `530450a8`; owner accepted the interim hold and sent the A2-002 brief to Codex (2026-10-29).
 
 ## Unit animation A2 — published 2026-10-28
 

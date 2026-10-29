@@ -56,6 +56,10 @@ normalization แก้ไม่ได้: ถ้าย่อให้หัว�
 - capture spec before 12/12, after 12/12
 - ไม่ได้ทดสอบ: Safari/iOS หรือมือถือจริง; คลิปเป็น screencast ของ SwiftShader (VFR, ไม่ใช่หลักฐาน 60fps); VFX ของ Aegis ไม่ได้เปลี่ยน จึงไม่ได้ตรวจ VFX ใหม่ทั้งตระกูลในงานนี้
 
+## เผยแพร่
+
+เผยแพร่: quality 40903815724 และ Pages 40903815981 สำเร็จที่ `530450a8` (2026-10-29 22:39–23:14 Bangkok, build + browser shards + deploy); run แรกที่ `ff1d84fe` lint ล้มจากสคริปต์ CommonJS ใน `docs/validation/animation-vfx-full-audit-2026-10-29/repro/` จึงให้ ESLint ข้าม `docs/**` แบบเดียวกับ `incoming/**`
+
 ## การตัดสินใจของเจ้าของ
 
 2026-10-29: “ใช้แบบชั่วคราวนี้ได้ ส่ง brief ให้ Codex เลย” — ยอมรับแบบชั่วคราว และส่ง brief A2-002 ให้ Codex (ยังไม่ใช่การอนุมัติภาพ A2-002)
