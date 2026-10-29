@@ -1,5 +1,12 @@
 # Codex → Claude handoff
 
+## 2026-10-29 — Codex: แก้ชื่อเกมในคู่มือเป็น Asterveil-Fateweave
+
+- เจ้าของยืนยันชื่อเกม Asterveil-Fateweave; แก้ชื่อที่ Codex ใส่ผิดในย่อหน้าเปิด `docs/handoffs/ANIMATION_PROMPT_QUALITY_TH.md` บน `feature/fateweave-initial-prototype` และ `CLAUDE.md` ที่ Codex เพิ่มบน main
+- คงข้อห้ามอ้างอิง Asterveil: Rise Beyond ในฐานะอีกโปรเจกต์ไว้ตามเดิม ไม่เปลี่ยน scope หรือโค้ดเกม
+- ตรวจ diff ว่าเปลี่ยนเฉพาะชื่อโปรเจกต์ในคู่มือ; งานเอกสาร ไม่รัน gameplay tests ไม่มีภาพ/คลิปใหม่ ไม่มี PR หรือ merge แยก
+
+
 ## 2026-10-29 — Codex: เพิ่มคู่มือคุณภาพ prompt บนสาขาเกมที่ถูกต้อง
 
 - เจ้าของชี้ว่างานเดิมไม่ได้อยู่ main; ตรวจแล้วสาขางานคือ `feature/fateweave-initial-prototype` จึงเพิ่มเอกสารที่สาขานี้โดยตรง ไม่มี PR หรือ merge แยก
