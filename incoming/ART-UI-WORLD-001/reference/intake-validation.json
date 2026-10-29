@@ -1,0 +1,24 @@
+{
+  "passed": true,
+  "errors": [],
+  "runtimeBytesIncludingPngFallbacks": 2481173,
+  "runtimeBudgetBytes": 2500000,
+  "viewportChecks": 33,
+  "textContrastRatios": {
+    "#f4f7fc on #14243a": 14.56,
+    "#bbcadb on #14243a": 9.37,
+    "#74d4ef on #14243a": 9.24,
+    "#68e5b6 on #14243a": 10.03,
+    "#ed927f on #14243a": 6.71,
+    "#b59aff on #14243a": 6.72,
+    "#d9bf86 on #14243a": 8.75,
+    "#172135 on #d9bf86": 9.0,
+    "#f4f7fc on #39414c": 9.61,
+    "#bbcadb on #39414c": 6.19
+  },
+  "sourceArtPreservation": "reference copies only; no runtime changes",
+  "limitations": [
+    "Static art reference, not integrated gameplay",
+    "Chromium emulation; physical mobile/Safari not tested"
+  ]
+}

@@ -1,0 +1,1809 @@
+[
+  {
+    "skill": "heal",
+    "thai": "ประคองแสงเดี่ยว",
+    "identity": "กลีบมิ้นต์รวมที่ผู้รับ heal จริง ไม่แสดงฮีลเมื่อ HP เต็ม",
+    "width": 70,
+    "height": 18,
+    "source": "../../../incoming/ART-VFX-HEALING-001/source/cast-six-skills.png",
+    "frames": [
+      {
+        "cell": [
+          0,
+          0,
+          341,
+          256
+        ],
+        "anchor": [
+          179.5,
+          253
+        ],
+        "brightSize": [
+          219,
+          112
+        ]
+      },
+      {
+        "cell": [
+          341,
+          0,
+          342,
+          256
+        ],
+        "anchor": [
+          181.0,
+          256
+        ],
+        "brightSize": [
+          212,
+          163
+        ]
+      },
+      {
+        "cell": [
+          683,
+          0,
+          341,
+          256
+        ],
+        "anchor": [
+          177.5,
+          253
+        ],
+        "brightSize": [
+          117,
+          151
+        ]
+      }
+    ],
+    "frameMax": [
+      219,
+      163
+    ],
+    "sourceSize": [
+      1024,
+      1536
+    ],
+    "alphaRange": [
+      0,
+      253
+    ],
+    "transparentPixels": 629619,
+    "sha256": "277eae0369dd189d00c808acb9ae8316560f63bb5541de186a91784ae429606e",
+    "anchors": {
+      "source": {
+        "id": "healer",
+        "x": 49.47,
+        "footY": 286,
+        "size": 111
+      },
+      "targets": [
+        {
+          "id": "guardian",
+          "x": 145.85999999999999,
+          "footY": 286,
+          "size": 111
+        }
+      ],
+      "tickTargets": [],
+      "events": [
+        {
+          "type": "heal",
+          "sourceId": "healer",
+          "targetId": "guardian",
+          "amount": 18,
+          "text": "Restored HP."
+        }
+      ],
+      "tickEvents": [],
+      "guard": null,
+      "prelude": [],
+      "before": {
+        "encounterId": "veil-siege",
+        "beat": 1,
+        "round": 1,
+        "turnIndex": 0,
+        "order": [
+          "healer",
+          "b1",
+          "f1",
+          "guardian",
+          "tracer",
+          "weaver"
+        ],
+        "outcome": "active",
+        "guard": null,
+        "counter": null,
+        "taunt": null,
+        "song": null,
+        "heroes": [
+          {
+            "id": "healer",
+            "hp": 31,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "guardian",
+            "hp": 58,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "tracer",
+            "hp": 35,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "weaver",
+            "hp": 24,
+            "barrier": 0,
+            "cooldowns": {}
+          }
+        ],
+        "enemies": [
+          {
+            "id": "b1",
+            "hp": 9999,
+            "markedUntil": 0
+          },
+          {
+            "id": "f1",
+            "hp": 9999,
+            "markedUntil": 0
+          }
+        ],
+        "intent": {
+          "sourceId": "b1",
+          "targetSlot": 1,
+          "name": "QA announced attack",
+          "damage": 4,
+          "kind": "energy",
+          "targetId": "guardian",
+          "beat": 1,
+          "round": 1
+        },
+        "commands": []
+      },
+      "after": {
+        "encounterId": "veil-siege",
+        "beat": 1,
+        "round": 1,
+        "turnIndex": 0,
+        "order": [
+          "healer",
+          "b1",
+          "f1",
+          "guardian",
+          "tracer",
+          "weaver"
+        ],
+        "outcome": "active",
+        "guard": null,
+        "counter": null,
+        "taunt": null,
+        "song": null,
+        "heroes": [
+          {
+            "id": "healer",
+            "hp": 31,
+            "barrier": 0,
+            "cooldowns": {
+              "heal": 3
+            }
+          },
+          {
+            "id": "guardian",
+            "hp": 76,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "tracer",
+            "hp": 35,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "weaver",
+            "hp": 24,
+            "barrier": 0,
+            "cooldowns": {}
+          }
+        ],
+        "enemies": [
+          {
+            "id": "b1",
+            "hp": 9999,
+            "markedUntil": 0
+          },
+          {
+            "id": "f1",
+            "hp": 9999,
+            "markedUntil": 0
+          }
+        ],
+        "intent": {
+          "sourceId": "b1",
+          "targetSlot": 1,
+          "name": "QA announced attack",
+          "damage": 4,
+          "kind": "energy",
+          "targetId": "guardian",
+          "beat": 1,
+          "round": 1
+        },
+        "commands": [
+          {
+            "beat": 1,
+            "heroId": "healer",
+            "action": "heal",
+            "targetId": "guardian"
+          }
+        ]
+      }
+    },
+    "background": "../../../incoming/ART-VFX-HEALING-001/reference/heal-390.png"
+  },
+  {
+    "skill": "prayer",
+    "thai": "คำอธิษฐานหมู่",
+    "identity": "พัดแสงบางตอบรับเฉพาะเพื่อนที่มี heal event; echo เป็นอีกจังหวะในรอบถัดไป",
+    "width": 74,
+    "height": 18,
+    "source": "../../../incoming/ART-VFX-HEALING-001/source/cast-six-skills.png",
+    "frames": [
+      {
+        "cell": [
+          0,
+          256,
+          341,
+          256
+        ],
+        "anchor": [
+          185.0,
+          235
+        ],
+        "brightSize": [
+          262,
+          127
+        ]
+      },
+      {
+        "cell": [
+          341,
+          256,
+          342,
+          256
+        ],
+        "anchor": [
+          179.5,
+          239
+        ],
+        "brightSize": [
+          271,
+          239
+        ]
+      },
+      {
+        "cell": [
+          683,
+          256,
+          341,
+          256
+        ],
+        "anchor": [
+          173.5,
+          216
+        ],
+        "brightSize": [
+          163,
+          69
+        ]
+      }
+    ],
+    "frameMax": [
+      271,
+      239
+    ],
+    "sourceSize": [
+      1024,
+      1536
+    ],
+    "alphaRange": [
+      0,
+      253
+    ],
+    "transparentPixels": 629619,
+    "sha256": "277eae0369dd189d00c808acb9ae8316560f63bb5541de186a91784ae429606e",
+    "anchors": {
+      "source": {
+        "id": "healer",
+        "x": 49.47,
+        "footY": 286,
+        "size": 111
+      },
+      "targets": [
+        {
+          "id": "healer",
+          "x": 49.47,
+          "footY": 286,
+          "size": 111
+        },
+        {
+          "id": "guardian",
+          "x": 145.85999999999999,
+          "footY": 286,
+          "size": 111
+        },
+        {
+          "id": "tracer",
+          "x": 145.85999999999999,
+          "footY": 620,
+          "size": 111
+        },
+        {
+          "id": "weaver",
+          "x": 49.47,
+          "footY": 620,
+          "size": 111
+        }
+      ],
+      "tickTargets": [],
+      "events": [
+        {
+          "type": "heal",
+          "sourceId": "healer",
+          "targetId": "healer",
+          "amount": 10,
+          "text": "Restored HP."
+        },
+        {
+          "type": "heal",
+          "sourceId": "healer",
+          "targetId": "guardian",
+          "amount": 10,
+          "text": "Restored HP."
+        },
+        {
+          "type": "heal",
+          "sourceId": "healer",
+          "targetId": "tracer",
+          "amount": 10,
+          "text": "Restored HP."
+        },
+        {
+          "type": "heal",
+          "sourceId": "healer",
+          "targetId": "weaver",
+          "amount": 10,
+          "text": "Restored HP."
+        }
+      ],
+      "tickEvents": [],
+      "guard": null,
+      "prelude": [],
+      "before": {
+        "encounterId": "veil-siege",
+        "beat": 1,
+        "round": 1,
+        "turnIndex": 0,
+        "order": [
+          "healer",
+          "b1",
+          "f1",
+          "guardian",
+          "tracer",
+          "weaver"
+        ],
+        "outcome": "active",
+        "guard": null,
+        "counter": null,
+        "taunt": null,
+        "song": null,
+        "heroes": [
+          {
+            "id": "healer",
+            "hp": 31,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "guardian",
+            "hp": 58,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "tracer",
+            "hp": 35,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "weaver",
+            "hp": 24,
+            "barrier": 0,
+            "cooldowns": {}
+          }
+        ],
+        "enemies": [
+          {
+            "id": "b1",
+            "hp": 9999,
+            "markedUntil": 0
+          },
+          {
+            "id": "f1",
+            "hp": 9999,
+            "markedUntil": 0
+          }
+        ],
+        "intent": {
+          "sourceId": "b1",
+          "targetSlot": 1,
+          "name": "QA announced attack",
+          "damage": 4,
+          "kind": "energy",
+          "targetId": "guardian",
+          "beat": 1,
+          "round": 1
+        },
+        "commands": []
+      },
+      "after": {
+        "encounterId": "veil-siege",
+        "beat": 1,
+        "round": 1,
+        "turnIndex": 0,
+        "order": [
+          "healer",
+          "b1",
+          "f1",
+          "guardian",
+          "tracer",
+          "weaver"
+        ],
+        "outcome": "active",
+        "guard": null,
+        "counter": null,
+        "taunt": null,
+        "song": null,
+        "heroes": [
+          {
+            "id": "healer",
+            "hp": 41,
+            "barrier": 0,
+            "cooldowns": {
+              "prayer": 4
+            }
+          },
+          {
+            "id": "guardian",
+            "hp": 68,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "tracer",
+            "hp": 45,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "weaver",
+            "hp": 34,
+            "barrier": 0,
+            "cooldowns": {}
+          }
+        ],
+        "enemies": [
+          {
+            "id": "b1",
+            "hp": 9999,
+            "markedUntil": 0
+          },
+          {
+            "id": "f1",
+            "hp": 9999,
+            "markedUntil": 0
+          }
+        ],
+        "intent": {
+          "sourceId": "b1",
+          "targetSlot": 1,
+          "name": "QA announced attack",
+          "damage": 4,
+          "kind": "energy",
+          "targetId": "guardian",
+          "beat": 1,
+          "round": 1
+        },
+        "commands": [
+          {
+            "beat": 1,
+            "heroId": "healer",
+            "action": "prayer",
+            "targetId": "party"
+          }
+        ]
+      }
+    },
+    "background": "../../../incoming/ART-VFX-HEALING-001/reference/prayer-390.png"
+  },
+  {
+    "skill": "rouse",
+    "thai": "ยืนเคียงข้าง",
+    "identity": "ผู้คุ้มสีทองและเพื่อนสีหยกเป็นคู่ฐานข้างเท้า ตาม guard.all จริง ไม่มีฮีล",
+    "width": 104,
+    "height": 18,
+    "source": "../../../incoming/ART-VFX-HEALING-001/source/cast-six-skills.png",
+    "frames": [
+      {
+        "cell": [
+          0,
+          512,
+          341,
+          256
+        ],
+        "anchor": [
+          179.5,
+          209
+        ],
+        "brightSize": [
+          261,
+          69
+        ]
+      },
+      {
+        "cell": [
+          341,
+          512,
+          342,
+          256
+        ],
+        "anchor": [
+          174.0,
+          215
+        ],
+        "brightSize": [
+          272,
+          161
+        ]
+      },
+      {
+        "cell": [
+          683,
+          512,
+          341,
+          256
+        ],
+        "anchor": [
+          177.5,
+          200
+        ],
+        "brightSize": [
+          225,
+          77
+        ]
+      }
+    ],
+    "frameMax": [
+      272,
+      161
+    ],
+    "sourceSize": [
+      1024,
+      1536
+    ],
+    "alphaRange": [
+      0,
+      253
+    ],
+    "transparentPixels": 629619,
+    "sha256": "277eae0369dd189d00c808acb9ae8316560f63bb5541de186a91784ae429606e",
+    "anchors": {
+      "source": {
+        "id": "guardian",
+        "x": 145.85999999999999,
+        "footY": 286,
+        "size": 111
+      },
+      "targets": [
+        {
+          "id": "healer",
+          "x": 49.47,
+          "footY": 620,
+          "size": 111
+        }
+      ],
+      "tickTargets": [],
+      "events": [
+        {
+          "type": "guard",
+          "sourceId": "guardian",
+          "targetId": "healer",
+          "text": "Stand beside."
+        }
+      ],
+      "tickEvents": [],
+      "guard": {
+        "heroId": "guardian",
+        "targetId": "healer",
+        "sourceId": "b1",
+        "all": true
+      },
+      "prelude": [],
+      "before": {
+        "encounterId": "veil-siege",
+        "beat": 1,
+        "round": 1,
+        "turnIndex": 0,
+        "order": [
+          "guardian",
+          "b1",
+          "f1",
+          "tracer",
+          "weaver",
+          "healer"
+        ],
+        "outcome": "active",
+        "guard": null,
+        "counter": null,
+        "taunt": null,
+        "song": null,
+        "heroes": [
+          {
+            "id": "guardian",
+            "hp": 61,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "tracer",
+            "hp": 38,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "weaver",
+            "hp": 27,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "healer",
+            "hp": 22,
+            "barrier": 0,
+            "cooldowns": {}
+          }
+        ],
+        "enemies": [
+          {
+            "id": "b1",
+            "hp": 9999,
+            "markedUntil": 0
+          },
+          {
+            "id": "f1",
+            "hp": 9999,
+            "markedUntil": 0
+          }
+        ],
+        "intent": {
+          "sourceId": "b1",
+          "targetSlot": 1,
+          "name": "QA announced attack",
+          "damage": 4,
+          "kind": "energy",
+          "targetId": "tracer",
+          "beat": 1,
+          "round": 1
+        },
+        "commands": []
+      },
+      "after": {
+        "encounterId": "veil-siege",
+        "beat": 1,
+        "round": 1,
+        "turnIndex": 0,
+        "order": [
+          "guardian",
+          "b1",
+          "f1",
+          "tracer",
+          "weaver",
+          "healer"
+        ],
+        "outcome": "active",
+        "guard": {
+          "heroId": "guardian",
+          "targetId": "healer",
+          "sourceId": "b1",
+          "all": true
+        },
+        "counter": null,
+        "taunt": null,
+        "song": null,
+        "heroes": [
+          {
+            "id": "guardian",
+            "hp": 61,
+            "barrier": 0,
+            "cooldowns": {
+              "rouse": 5
+            }
+          },
+          {
+            "id": "tracer",
+            "hp": 38,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "weaver",
+            "hp": 27,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "healer",
+            "hp": 22,
+            "barrier": 0,
+            "cooldowns": {}
+          }
+        ],
+        "enemies": [
+          {
+            "id": "b1",
+            "hp": 9999,
+            "markedUntil": 0
+          },
+          {
+            "id": "f1",
+            "hp": 9999,
+            "markedUntil": 0
+          }
+        ],
+        "intent": {
+          "sourceId": "b1",
+          "targetSlot": 1,
+          "name": "QA announced attack",
+          "damage": 4,
+          "kind": "energy",
+          "targetId": "tracer",
+          "beat": 1,
+          "round": 1
+        },
+        "commands": [
+          {
+            "beat": 1,
+            "heroId": "guardian",
+            "action": "rouse",
+            "targetId": "guardian"
+          }
+        ]
+      }
+    },
+    "background": "../../../incoming/ART-VFX-HEALING-001/reference/rouse-390.png"
+  },
+  {
+    "skill": "revive",
+    "thai": "รุ่งแสงคืนชีพ",
+    "identity": "แสงเปิดจากฐานเท้าของเพื่อนที่ล้มในศึกนี้เท่านั้น ไม่ครอบร่างหรือศีรษะ",
+    "width": 80,
+    "height": 18,
+    "source": "../../../incoming/ART-VFX-HEALING-001/source/cast-six-skills.png",
+    "frames": [
+      {
+        "cell": [
+          0,
+          768,
+          341,
+          256
+        ],
+        "anchor": [
+          183.5,
+          230
+        ],
+        "brightSize": [
+          113,
+          61
+        ]
+      },
+      {
+        "cell": [
+          341,
+          768,
+          342,
+          256
+        ],
+        "anchor": [
+          178.0,
+          230
+        ],
+        "brightSize": [
+          322,
+          186
+        ]
+      },
+      {
+        "cell": [
+          683,
+          768,
+          341,
+          256
+        ],
+        "anchor": [
+          176.0,
+          220
+        ],
+        "brightSize": [
+          116,
+          145
+        ]
+      }
+    ],
+    "frameMax": [
+      322,
+      186
+    ],
+    "sourceSize": [
+      1024,
+      1536
+    ],
+    "alphaRange": [
+      0,
+      253
+    ],
+    "transparentPixels": 629619,
+    "sha256": "277eae0369dd189d00c808acb9ae8316560f63bb5541de186a91784ae429606e",
+    "anchors": {
+      "source": {
+        "id": "healer",
+        "x": 49.47,
+        "footY": 286,
+        "size": 111
+      },
+      "targets": [
+        {
+          "id": "guardian",
+          "x": 145.85999999999999,
+          "footY": 286,
+          "size": 111
+        }
+      ],
+      "tickTargets": [],
+      "events": [
+        {
+          "type": "revive",
+          "sourceId": "healer",
+          "targetId": "guardian",
+          "amount": 19,
+          "text": "Revived."
+        }
+      ],
+      "tickEvents": [],
+      "guard": null,
+      "prelude": [
+        {
+          "beat": 1,
+          "heroId": "healer",
+          "action": "attack",
+          "targetId": "b1"
+        },
+        {
+          "beat": 4,
+          "heroId": "tracer",
+          "action": "attack",
+          "targetId": "f1"
+        },
+        {
+          "beat": 5,
+          "heroId": "weaver",
+          "action": "attack",
+          "targetId": "b1"
+        }
+      ],
+      "before": {
+        "encounterId": "veil-siege",
+        "beat": 6,
+        "round": 2,
+        "turnIndex": 0,
+        "order": [
+          "healer",
+          "b1",
+          "f1",
+          "tracer",
+          "weaver"
+        ],
+        "outcome": "active",
+        "guard": null,
+        "counter": null,
+        "taunt": null,
+        "song": null,
+        "heroes": [
+          {
+            "id": "healer",
+            "hp": 27,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "guardian",
+            "hp": 0,
+            "barrier": 0,
+            "cooldowns": {},
+            "fell": true
+          },
+          {
+            "id": "tracer",
+            "hp": 35,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "weaver",
+            "hp": 24,
+            "barrier": 0,
+            "cooldowns": {}
+          }
+        ],
+        "enemies": [
+          {
+            "id": "b1",
+            "hp": 9980,
+            "markedUntil": 0
+          },
+          {
+            "id": "f1",
+            "hp": 9983,
+            "markedUntil": 0
+          }
+        ],
+        "intent": {
+          "sourceId": "b1",
+          "targetSlot": 1,
+          "name": "QA announced attack",
+          "damage": 4,
+          "kind": "energy",
+          "targetId": "healer",
+          "beat": 6,
+          "round": 2
+        },
+        "commands": [
+          {
+            "beat": 1,
+            "heroId": "healer",
+            "action": "attack",
+            "targetId": "b1"
+          },
+          {
+            "beat": 4,
+            "heroId": "tracer",
+            "action": "attack",
+            "targetId": "f1"
+          },
+          {
+            "beat": 5,
+            "heroId": "weaver",
+            "action": "attack",
+            "targetId": "b1"
+          }
+        ]
+      },
+      "after": {
+        "encounterId": "veil-siege",
+        "beat": 6,
+        "round": 2,
+        "turnIndex": 0,
+        "order": [
+          "healer",
+          "b1",
+          "f1",
+          "tracer",
+          "weaver"
+        ],
+        "outcome": "active",
+        "guard": null,
+        "counter": null,
+        "taunt": null,
+        "song": null,
+        "heroes": [
+          {
+            "id": "healer",
+            "hp": 27,
+            "barrier": 0,
+            "cooldowns": {
+              "revive": 7
+            }
+          },
+          {
+            "id": "guardian",
+            "hp": 19,
+            "barrier": 0,
+            "cooldowns": {},
+            "revivedRound": 2
+          },
+          {
+            "id": "tracer",
+            "hp": 35,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "weaver",
+            "hp": 24,
+            "barrier": 0,
+            "cooldowns": {}
+          }
+        ],
+        "enemies": [
+          {
+            "id": "b1",
+            "hp": 9980,
+            "markedUntil": 0
+          },
+          {
+            "id": "f1",
+            "hp": 9983,
+            "markedUntil": 0
+          }
+        ],
+        "intent": {
+          "sourceId": "b1",
+          "targetSlot": 1,
+          "name": "QA announced attack",
+          "damage": 4,
+          "kind": "energy",
+          "targetId": "healer",
+          "beat": 6,
+          "round": 2
+        },
+        "commands": [
+          {
+            "beat": 1,
+            "heroId": "healer",
+            "action": "attack",
+            "targetId": "b1"
+          },
+          {
+            "beat": 4,
+            "heroId": "tracer",
+            "action": "attack",
+            "targetId": "f1"
+          },
+          {
+            "beat": 5,
+            "heroId": "weaver",
+            "action": "attack",
+            "targetId": "b1"
+          },
+          {
+            "beat": 6,
+            "heroId": "healer",
+            "action": "revive",
+            "targetId": "guardian"
+          }
+        ],
+        "revived": [
+          "healer"
+        ]
+      }
+    },
+    "background": "../../../incoming/ART-VFX-HEALING-001/reference/revive-390.png"
+  },
+  {
+    "skill": "bless",
+    "thai": "เมล็ดพรต่อเนื่อง",
+    "identity": "cast วางเมล็ดพร Renew ไม่มีฮีลทันที; เลือก tick เพื่อดูการรักษาที่เกิดจริงภายหลัง",
+    "width": 58,
+    "height": 18,
+    "source": "../../../incoming/ART-VFX-HEALING-001/source/cast-six-skills.png",
+    "frames": [
+      {
+        "cell": [
+          0,
+          1024,
+          341,
+          256
+        ],
+        "anchor": [
+          182.5,
+          218
+        ],
+        "brightSize": [
+          123,
+          89
+        ]
+      },
+      {
+        "cell": [
+          341,
+          1024,
+          342,
+          256
+        ],
+        "anchor": [
+          176.0,
+          222
+        ],
+        "brightSize": [
+          182,
+          170
+        ]
+      },
+      {
+        "cell": [
+          683,
+          1024,
+          341,
+          256
+        ],
+        "anchor": [
+          179.5,
+          208
+        ],
+        "brightSize": [
+          109,
+          89
+        ]
+      }
+    ],
+    "frameMax": [
+      182,
+      170
+    ],
+    "sourceSize": [
+      1024,
+      1536
+    ],
+    "alphaRange": [
+      0,
+      253
+    ],
+    "transparentPixels": 629619,
+    "sha256": "277eae0369dd189d00c808acb9ae8316560f63bb5541de186a91784ae429606e",
+    "anchors": {
+      "source": {
+        "id": "healer",
+        "x": 49.47,
+        "footY": 286,
+        "size": 111
+      },
+      "targets": [
+        {
+          "id": "guardian",
+          "x": 145.85999999999999,
+          "footY": 286,
+          "size": 111
+        }
+      ],
+      "tickTargets": [
+        {
+          "id": "guardian",
+          "x": 145.85999999999999,
+          "footY": 286,
+          "size": 111
+        }
+      ],
+      "events": [
+        {
+          "type": "buff",
+          "sourceId": "healer",
+          "targetId": "guardian",
+          "amount": 8,
+          "text": "Renew."
+        }
+      ],
+      "tickEvents": [
+        {
+          "type": "heal",
+          "sourceId": "healer",
+          "targetId": "guardian",
+          "amount": 8,
+          "text": "Renew."
+        }
+      ],
+      "guard": null,
+      "prelude": [],
+      "before": {
+        "encounterId": "veil-siege",
+        "beat": 1,
+        "round": 1,
+        "turnIndex": 0,
+        "order": [
+          "healer",
+          "b1",
+          "f1",
+          "guardian",
+          "tracer",
+          "weaver"
+        ],
+        "outcome": "active",
+        "guard": null,
+        "counter": null,
+        "taunt": null,
+        "song": null,
+        "heroes": [
+          {
+            "id": "healer",
+            "hp": 31,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "guardian",
+            "hp": 58,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "tracer",
+            "hp": 35,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "weaver",
+            "hp": 24,
+            "barrier": 0,
+            "cooldowns": {}
+          }
+        ],
+        "enemies": [
+          {
+            "id": "b1",
+            "hp": 9999,
+            "markedUntil": 0
+          },
+          {
+            "id": "f1",
+            "hp": 9999,
+            "markedUntil": 0
+          }
+        ],
+        "intent": {
+          "sourceId": "b1",
+          "targetSlot": 1,
+          "name": "QA announced attack",
+          "damage": 4,
+          "kind": "energy",
+          "targetId": "guardian",
+          "beat": 1,
+          "round": 1
+        },
+        "commands": []
+      },
+      "after": {
+        "encounterId": "veil-siege",
+        "beat": 1,
+        "round": 1,
+        "turnIndex": 0,
+        "order": [
+          "healer",
+          "b1",
+          "f1",
+          "guardian",
+          "tracer",
+          "weaver"
+        ],
+        "outcome": "active",
+        "guard": null,
+        "counter": null,
+        "taunt": null,
+        "song": null,
+        "heroes": [
+          {
+            "id": "healer",
+            "hp": 31,
+            "barrier": 0,
+            "cooldowns": {
+              "bless": 4
+            }
+          },
+          {
+            "id": "guardian",
+            "hp": 58,
+            "barrier": 0,
+            "cooldowns": {},
+            "renew": {
+              "heroId": "healer",
+              "amount": 8,
+              "until": 3
+            }
+          },
+          {
+            "id": "tracer",
+            "hp": 35,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "weaver",
+            "hp": 24,
+            "barrier": 0,
+            "cooldowns": {}
+          }
+        ],
+        "enemies": [
+          {
+            "id": "b1",
+            "hp": 9999,
+            "markedUntil": 0
+          },
+          {
+            "id": "f1",
+            "hp": 9999,
+            "markedUntil": 0
+          }
+        ],
+        "intent": {
+          "sourceId": "b1",
+          "targetSlot": 1,
+          "name": "QA announced attack",
+          "damage": 4,
+          "kind": "energy",
+          "targetId": "guardian",
+          "beat": 1,
+          "round": 1
+        },
+        "commands": [
+          {
+            "beat": 1,
+            "heroId": "healer",
+            "action": "bless",
+            "targetId": "guardian"
+          }
+        ]
+      }
+    },
+    "background": "../../../incoming/ART-VFX-HEALING-001/reference/bless-390.png",
+    "tick": {
+      "source": "../../../incoming/ART-VFX-HEALING-001/source/upkeep-two-skills.png",
+      "frames": [
+        {
+          "cell": [
+            0,
+            0,
+            512,
+            512
+          ],
+          "anchor": [
+            287.5,
+            475
+          ],
+          "brightSize": [
+            369,
+            153
+          ]
+        },
+        {
+          "cell": [
+            512,
+            0,
+            512,
+            512
+          ],
+          "anchor": [
+            264.5,
+            476
+          ],
+          "brightSize": [
+            281,
+            257
+          ]
+        },
+        {
+          "cell": [
+            1024,
+            0,
+            512,
+            512
+          ],
+          "anchor": [
+            265.0,
+            479
+          ],
+          "brightSize": [
+            292,
+            159
+          ]
+        }
+      ],
+      "frameMax": [
+        369,
+        257
+      ],
+      "sourceSize": [
+        1536,
+        1024
+      ],
+      "alphaRange": [
+        0,
+        253
+      ],
+      "transparentPixels": 1225757,
+      "sha256": "1923f3b06f90f40749014c8d0d41f4044ff8dc570e8ae9b0bd30a0c0fcc055b2",
+      "width": 66,
+      "height": 16,
+      "identity": "ฮีลภายหลังเฉพาะ recipient ของ heal event จริง ไม่ใช่ผลตอน cast"
+    }
+  },
+  {
+    "skill": "mend",
+    "thai": "เริ่มเพลงฟื้น",
+    "identity": "cast เป็นริ้วเสียงเฉพาะผู้ร่าย; เลือก tick เพื่อดูการตอบรับของผู้ได้ heal จริงเมื่อเริ่มรอบ",
+    "width": 76,
+    "height": 18,
+    "source": "../../../incoming/ART-VFX-HEALING-001/source/cast-six-skills.png",
+    "frames": [
+      {
+        "cell": [
+          0,
+          1280,
+          341,
+          256
+        ],
+        "anchor": [
+          175.5,
+          178
+        ],
+        "brightSize": [
+          199,
+          73
+        ]
+      },
+      {
+        "cell": [
+          341,
+          1280,
+          342,
+          256
+        ],
+        "anchor": [
+          180.0,
+          191
+        ],
+        "brightSize": [
+          292,
+          148
+        ]
+      },
+      {
+        "cell": [
+          683,
+          1280,
+          341,
+          256
+        ],
+        "anchor": [
+          166.5,
+          177
+        ],
+        "brightSize": [
+          215,
+          82
+        ]
+      }
+    ],
+    "frameMax": [
+      292,
+      148
+    ],
+    "sourceSize": [
+      1024,
+      1536
+    ],
+    "alphaRange": [
+      0,
+      253
+    ],
+    "transparentPixels": 629619,
+    "sha256": "277eae0369dd189d00c808acb9ae8316560f63bb5541de186a91784ae429606e",
+    "anchors": {
+      "source": {
+        "id": "lio",
+        "x": 49.47,
+        "footY": 286,
+        "size": 111
+      },
+      "targets": [
+        {
+          "id": "lio",
+          "x": 49.47,
+          "footY": 286,
+          "size": 111
+        }
+      ],
+      "tickTargets": [
+        {
+          "id": "lio",
+          "x": 49.47,
+          "footY": 286,
+          "size": 111
+        },
+        {
+          "id": "guardian",
+          "x": 145.85999999999999,
+          "footY": 286,
+          "size": 111
+        },
+        {
+          "id": "tracer",
+          "x": 145.85999999999999,
+          "footY": 620,
+          "size": 111
+        },
+        {
+          "id": "weaver",
+          "x": 49.47,
+          "footY": 620,
+          "size": 111
+        }
+      ],
+      "events": [
+        {
+          "type": "song",
+          "sourceId": "lio",
+          "targetId": "lio",
+          "amount": 5,
+          "text": "Song of mending: the party heals each round."
+        }
+      ],
+      "tickEvents": [
+        {
+          "type": "heal",
+          "sourceId": "lio",
+          "targetId": "lio",
+          "amount": 5,
+          "text": "The song mends the party."
+        },
+        {
+          "type": "heal",
+          "sourceId": "lio",
+          "targetId": "guardian",
+          "amount": 5,
+          "text": "The song mends the party."
+        },
+        {
+          "type": "heal",
+          "sourceId": "lio",
+          "targetId": "tracer",
+          "amount": 5,
+          "text": "The song mends the party."
+        },
+        {
+          "type": "heal",
+          "sourceId": "lio",
+          "targetId": "weaver",
+          "amount": 5,
+          "text": "The song mends the party."
+        }
+      ],
+      "guard": null,
+      "prelude": [],
+      "before": {
+        "encounterId": "veil-siege",
+        "beat": 1,
+        "round": 1,
+        "turnIndex": 0,
+        "order": [
+          "lio",
+          "b1",
+          "f1",
+          "guardian",
+          "tracer",
+          "weaver"
+        ],
+        "outcome": "active",
+        "guard": null,
+        "counter": null,
+        "taunt": null,
+        "song": null,
+        "heroes": [
+          {
+            "id": "lio",
+            "hp": 35,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "guardian",
+            "hp": 58,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "tracer",
+            "hp": 35,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "weaver",
+            "hp": 24,
+            "barrier": 0,
+            "cooldowns": {}
+          }
+        ],
+        "enemies": [
+          {
+            "id": "b1",
+            "hp": 9999,
+            "markedUntil": 0
+          },
+          {
+            "id": "f1",
+            "hp": 9999,
+            "markedUntil": 0
+          }
+        ],
+        "intent": {
+          "sourceId": "b1",
+          "targetSlot": 1,
+          "name": "QA announced attack",
+          "damage": 4,
+          "kind": "energy",
+          "targetId": "guardian",
+          "beat": 1,
+          "round": 1
+        },
+        "commands": []
+      },
+      "after": {
+        "encounterId": "veil-siege",
+        "beat": 1,
+        "round": 1,
+        "turnIndex": 0,
+        "order": [
+          "lio",
+          "b1",
+          "f1",
+          "guardian",
+          "tracer",
+          "weaver"
+        ],
+        "outcome": "active",
+        "guard": null,
+        "counter": null,
+        "taunt": null,
+        "song": {
+          "heroId": "lio",
+          "action": "mend",
+          "since": 1
+        },
+        "heroes": [
+          {
+            "id": "lio",
+            "hp": 35,
+            "barrier": 0,
+            "cooldowns": {
+              "mend": 3
+            }
+          },
+          {
+            "id": "guardian",
+            "hp": 58,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "tracer",
+            "hp": 35,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "weaver",
+            "hp": 24,
+            "barrier": 0,
+            "cooldowns": {}
+          }
+        ],
+        "enemies": [
+          {
+            "id": "b1",
+            "hp": 9999,
+            "markedUntil": 0
+          },
+          {
+            "id": "f1",
+            "hp": 9999,
+            "markedUntil": 0
+          }
+        ],
+        "intent": {
+          "sourceId": "b1",
+          "targetSlot": 1,
+          "name": "QA announced attack",
+          "damage": 4,
+          "kind": "energy",
+          "targetId": "guardian",
+          "beat": 1,
+          "round": 1
+        },
+        "commands": [
+          {
+            "beat": 1,
+            "heroId": "lio",
+            "action": "mend",
+            "targetId": "lio"
+          }
+        ]
+      }
+    },
+    "background": "../../../incoming/ART-VFX-HEALING-001/reference/mend-390.png",
+    "tick": {
+      "source": "../../../incoming/ART-VFX-HEALING-001/source/upkeep-two-skills.png",
+      "frames": [
+        {
+          "cell": [
+            0,
+            512,
+            512,
+            512
+          ],
+          "anchor": [
+            293.5,
+            383
+          ],
+          "brightSize": [
+            407,
+            107
+          ]
+        },
+        {
+          "cell": [
+            512,
+            512,
+            512,
+            512
+          ],
+          "anchor": [
+            270.5,
+            384
+          ],
+          "brightSize": [
+            409,
+            167
+          ]
+        },
+        {
+          "cell": [
+            1024,
+            512,
+            512,
+            512
+          ],
+          "anchor": [
+            249.0,
+            381
+          ],
+          "brightSize": [
+            364,
+            103
+          ]
+        }
+      ],
+      "frameMax": [
+        409,
+        167
+      ],
+      "sourceSize": [
+        1536,
+        1024
+      ],
+      "alphaRange": [
+        0,
+        253
+      ],
+      "transparentPixels": 1225757,
+      "sha256": "1923f3b06f90f40749014c8d0d41f4044ff8dc570e8ae9b0bd30a0c0fcc055b2",
+      "width": 72,
+      "height": 16,
+      "identity": "ฮีลภายหลังเฉพาะ recipient ของ heal event จริง ไม่ใช่ผลตอน cast"
+    }
+  }
+]

@@ -1,0 +1,830 @@
+{
+  "format": "RGBA PNG; straight alpha; sRGB",
+  "source_dimensions": [
+    1086,
+    1448
+  ],
+  "note": "Mechanical crop/fit only. Pivots are normalized art anchor suggestions, not battle coordinates.",
+  "sources": {
+    "R1": "57f5a264a07f1731f669e6a48709d0d27961ed29b23ea076cebeaedd32aeeea9",
+    "R2": "ea05443f8d412336abe776096c8ebfd2abba251b376cb3de713e2cb473a7bdb1"
+  },
+  "layers": [
+    {
+      "revision": "R1",
+      "move": "mark",
+      "beat": "prepare",
+      "file": "R1/mark_prepare.png",
+      "source": "source/R1.png",
+      "source_rect": [
+        0,
+        0,
+        362,
+        362
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "alpha_bbox": [
+        19,
+        14,
+        248,
+        248
+      ],
+      "bright_bbox": [
+        95,
+        80,
+        165,
+        224
+      ],
+      "sha256": "e813244d0b2e4a244f25a6757f6e8b0ea836408f937eb71844aeb177c60b0fcb"
+    },
+    {
+      "revision": "R1",
+      "move": "mark",
+      "beat": "peak",
+      "file": "R1/mark_peak.png",
+      "source": "source/R1.png",
+      "source_rect": [
+        362,
+        0,
+        724,
+        362
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "alpha_bbox": [
+        8,
+        8,
+        248,
+        248
+      ],
+      "bright_bbox": [
+        32,
+        43,
+        223,
+        241
+      ],
+      "sha256": "82acbec9fa282b7693ba42b7278e9f004f05cf57f4cd4cbc0066469b5231604f"
+    },
+    {
+      "revision": "R1",
+      "move": "mark",
+      "beat": "settle",
+      "file": "R1/mark_settle.png",
+      "source": "source/R1.png",
+      "source_rect": [
+        724,
+        0,
+        1086,
+        362
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "alpha_bbox": [
+        8,
+        8,
+        244,
+        248
+      ],
+      "bright_bbox": [
+        77,
+        94,
+        173,
+        216
+      ],
+      "sha256": "3d71f01b8899b8daeabd98a43ae405c1e913c13e3726aec03c078cfa862b761d"
+    },
+    {
+      "revision": "R1",
+      "move": "sigil",
+      "beat": "prepare",
+      "file": "R1/sigil_prepare.png",
+      "source": "source/R1.png",
+      "source_rect": [
+        0,
+        362,
+        362,
+        700
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "alpha_bbox": [
+        8,
+        16,
+        248,
+        240
+      ],
+      "bright_bbox": [
+        74,
+        59,
+        180,
+        230
+      ],
+      "sha256": "99bf4950061ea33f277b11806d122ce2b89493a885393378a8c00ba96f1eeeca"
+    },
+    {
+      "revision": "R1",
+      "move": "sigil",
+      "beat": "peak",
+      "file": "R1/sigil_peak.png",
+      "source": "source/R1.png",
+      "source_rect": [
+        362,
+        362,
+        724,
+        700
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.72
+      ],
+      "alpha_bbox": [
+        8,
+        16,
+        248,
+        240
+      ],
+      "bright_bbox": [
+        17,
+        70,
+        240,
+        212
+      ],
+      "sha256": "2e90966b85a79b430d20fde4c50c5dcd12d7dec9048b4f2906af1ae8ef33df4b"
+    },
+    {
+      "revision": "R1",
+      "move": "sigil",
+      "beat": "settle",
+      "file": "R1/sigil_settle.png",
+      "source": "source/R1.png",
+      "source_rect": [
+        724,
+        362,
+        1086,
+        700
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.76
+      ],
+      "alpha_bbox": [
+        8,
+        16,
+        236,
+        240
+      ],
+      "bright_bbox": [
+        31,
+        148,
+        220,
+        219
+      ],
+      "sha256": "88631eece6709a8b937467527c54b1e938594dbf5d8004c4e342993ba4244c8f"
+    },
+    {
+      "revision": "R1",
+      "move": "storm",
+      "beat": "prepare",
+      "file": "R1/storm_prepare.png",
+      "source": "source/R1.png",
+      "source_rect": [
+        0,
+        700,
+        362,
+        1090
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "alpha_bbox": [
+        25,
+        8,
+        239,
+        248
+      ],
+      "bright_bbox": [
+        76,
+        76,
+        184,
+        200
+      ],
+      "sha256": "e7408aaaf0b336ca6f94f0c080c0208a3e3c34d5c9e195caf57875dcbd68c924"
+    },
+    {
+      "revision": "R1",
+      "move": "storm",
+      "beat": "peak",
+      "file": "R1/storm_peak.png",
+      "source": "source/R1.png",
+      "source_rect": [
+        362,
+        700,
+        724,
+        1090
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "alpha_bbox": [
+        16,
+        8,
+        239,
+        248
+      ],
+      "bright_bbox": [
+        33,
+        34,
+        228,
+        229
+      ],
+      "sha256": "e3557e3766d6e5e84653dfe685c1c87c3453b36ca57395f3dea0aba4c7f441ce"
+    },
+    {
+      "revision": "R1",
+      "move": "storm",
+      "beat": "settle",
+      "file": "R1/storm_settle.png",
+      "source": "source/R1.png",
+      "source_rect": [
+        724,
+        700,
+        1086,
+        1090
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.76
+      ],
+      "alpha_bbox": [
+        16,
+        8,
+        235,
+        248
+      ],
+      "bright_bbox": [
+        54,
+        82,
+        199,
+        222
+      ],
+      "sha256": "47c5d701fed4d62f1179f4290c3dbe14deb43013f6270e769fadf06ec6383414"
+    },
+    {
+      "revision": "R1",
+      "move": "dispel",
+      "beat": "prepare",
+      "file": "R1/dispel_prepare.png",
+      "source": "source/R1.png",
+      "source_rect": [
+        0,
+        1090,
+        362,
+        1448
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "alpha_bbox": [
+        8,
+        9,
+        248,
+        246
+      ],
+      "bright_bbox": [
+        49,
+        34,
+        201,
+        186
+      ],
+      "sha256": "81243f6f20ff23901124c1aeae97756afe400ad2dbfd0bc9d38ed68ef2de8c1d"
+    },
+    {
+      "revision": "R1",
+      "move": "dispel",
+      "beat": "peak",
+      "file": "R1/dispel_peak.png",
+      "source": "source/R1.png",
+      "source_rect": [
+        362,
+        1090,
+        724,
+        1448
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "alpha_bbox": [
+        8,
+        9,
+        248,
+        246
+      ],
+      "bright_bbox": [
+        20,
+        27,
+        237,
+        190
+      ],
+      "sha256": "835ad1dc3f2a31beebcb71558d8afd448710f0572920d0672038cdef560dc711"
+    },
+    {
+      "revision": "R1",
+      "move": "dispel",
+      "beat": "settle",
+      "file": "R1/dispel_settle.png",
+      "source": "source/R1.png",
+      "source_rect": [
+        724,
+        1090,
+        1086,
+        1448
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "alpha_bbox": [
+        8,
+        9,
+        248,
+        246
+      ],
+      "bright_bbox": [
+        39,
+        22,
+        225,
+        208
+      ],
+      "sha256": "a21418d19676b2f8e482c5a006ee6444cd9b2072a18b11e121e67daa30ee32e5"
+    },
+    {
+      "revision": "R2",
+      "move": "mark",
+      "beat": "prepare",
+      "file": "R2/mark_prepare.png",
+      "source": "source/R2.png",
+      "source_rect": [
+        0,
+        0,
+        362,
+        362
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "alpha_bbox": [
+        8,
+        14,
+        248,
+        248
+      ],
+      "bright_bbox": [
+        65,
+        87,
+        180,
+        223
+      ],
+      "sha256": "3879ca598328534f4da88648a54cc1ef04ffa14321b430fa1bf16ad878123a9e"
+    },
+    {
+      "revision": "R2",
+      "move": "mark",
+      "beat": "peak",
+      "file": "R2/mark_peak.png",
+      "source": "source/R2.png",
+      "source_rect": [
+        362,
+        0,
+        724,
+        362
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "alpha_bbox": [
+        8,
+        8,
+        248,
+        248
+      ],
+      "bright_bbox": [
+        24,
+        36,
+        229,
+        236
+      ],
+      "sha256": "063cb79ad8fa58a4887845136364c2329b20cddb2ffa9bf65134c9ebb7be324c"
+    },
+    {
+      "revision": "R2",
+      "move": "mark",
+      "beat": "settle",
+      "file": "R2/mark_settle.png",
+      "source": "source/R2.png",
+      "source_rect": [
+        724,
+        0,
+        1086,
+        362
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "alpha_bbox": [
+        8,
+        14,
+        239,
+        248
+      ],
+      "bright_bbox": [
+        75,
+        87,
+        194,
+        209
+      ],
+      "sha256": "46a31265913af87466c9d9674473bdd6058eb53b4174999670eef2cc03056bcc"
+    },
+    {
+      "revision": "R2",
+      "move": "sigil",
+      "beat": "prepare",
+      "file": "R2/sigil_prepare.png",
+      "source": "source/R2.png",
+      "source_rect": [
+        0,
+        362,
+        362,
+        700
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "alpha_bbox": [
+        22,
+        16,
+        248,
+        240
+      ],
+      "bright_bbox": [
+        73,
+        91,
+        248,
+        223
+      ],
+      "sha256": "bdb3bd92b80da8e9f47df1498fff41f7bb0c589382bdc5f9b2c5f4419e14f0be"
+    },
+    {
+      "revision": "R2",
+      "move": "sigil",
+      "beat": "peak",
+      "file": "R2/sigil_peak.png",
+      "source": "source/R2.png",
+      "source_rect": [
+        362,
+        362,
+        724,
+        700
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.72
+      ],
+      "alpha_bbox": [
+        8,
+        16,
+        248,
+        240
+      ],
+      "bright_bbox": [
+        8,
+        64,
+        243,
+        224
+      ],
+      "sha256": "c7a4663b6bdae4e21e8976eff772305dec6fdb15f1ee2e267f8f224602cab56f"
+    },
+    {
+      "revision": "R2",
+      "move": "sigil",
+      "beat": "settle",
+      "file": "R2/sigil_settle.png",
+      "source": "source/R2.png",
+      "source_rect": [
+        724,
+        362,
+        1086,
+        700
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.76
+      ],
+      "alpha_bbox": [
+        8,
+        16,
+        243,
+        240
+      ],
+      "bright_bbox": [
+        26,
+        122,
+        234,
+        233
+      ],
+      "sha256": "36098780967b24293e0a60252d3bb8484ecdb494dfd286e2bc08ca45ec174553"
+    },
+    {
+      "revision": "R2",
+      "move": "storm",
+      "beat": "prepare",
+      "file": "R2/storm_prepare.png",
+      "source": "source/R2.png",
+      "source_rect": [
+        0,
+        700,
+        362,
+        1090
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "alpha_bbox": [
+        16,
+        8,
+        239,
+        248
+      ],
+      "bright_bbox": [
+        75,
+        74,
+        181,
+        188
+      ],
+      "sha256": "1acb7f5ab9b9c3e0e8c9d676cf3f95ed36dfa97c8f1aa6f26d2d4bc8e42e06ca"
+    },
+    {
+      "revision": "R2",
+      "move": "storm",
+      "beat": "peak",
+      "file": "R2/storm_peak.png",
+      "source": "source/R2.png",
+      "source_rect": [
+        362,
+        700,
+        724,
+        1090
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "alpha_bbox": [
+        16,
+        8,
+        239,
+        248
+      ],
+      "bright_bbox": [
+        34,
+        34,
+        221,
+        248
+      ],
+      "sha256": "e76b03036be2a0f3e616af9077c77162308d62b2331d90dcdf3e2d347bcd9da7"
+    },
+    {
+      "revision": "R2",
+      "move": "storm",
+      "beat": "settle",
+      "file": "R2/storm_settle.png",
+      "source": "source/R2.png",
+      "source_rect": [
+        724,
+        700,
+        1086,
+        1090
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.76
+      ],
+      "alpha_bbox": [
+        16,
+        8,
+        239,
+        248
+      ],
+      "bright_bbox": [
+        47,
+        93,
+        208,
+        212
+      ],
+      "sha256": "cae0dc5c1d968b11e9aae3e5c7359a55ffa56471a17dc2a473f35e6d22a7878b"
+    },
+    {
+      "revision": "R2",
+      "move": "dispel",
+      "beat": "prepare",
+      "file": "R2/dispel_prepare.png",
+      "source": "source/R2.png",
+      "source_rect": [
+        0,
+        1090,
+        362,
+        1448
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "alpha_bbox": [
+        8,
+        9,
+        248,
+        246
+      ],
+      "bright_bbox": [
+        40,
+        38,
+        248,
+        194
+      ],
+      "sha256": "3eb25410d50a38fc792bc0b6d35e2f82ce32a23be74408388f8a50923704c302"
+    },
+    {
+      "revision": "R2",
+      "move": "dispel",
+      "beat": "peak",
+      "file": "R2/dispel_peak.png",
+      "source": "source/R2.png",
+      "source_rect": [
+        362,
+        1090,
+        724,
+        1448
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "alpha_bbox": [
+        8,
+        9,
+        248,
+        246
+      ],
+      "bright_bbox": [
+        8,
+        9,
+        248,
+        215
+      ],
+      "sha256": "a692cd7d22f5537d72b37039b6377191dff753fe8577f30bf6751cc89033fbb8"
+    },
+    {
+      "revision": "R2",
+      "move": "dispel",
+      "beat": "settle",
+      "file": "R2/dispel_settle.png",
+      "source": "source/R2.png",
+      "source_rect": [
+        724,
+        1090,
+        1086,
+        1448
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "alpha_bbox": [
+        8,
+        9,
+        248,
+        246
+      ],
+      "bright_bbox": [
+        8,
+        34,
+        222,
+        193
+      ],
+      "sha256": "c6150d7cbcb8b685b8d9d0931c8e0415c9867340cc7aff65ae74c9ba05ad1c25"
+    }
+  ]
+}

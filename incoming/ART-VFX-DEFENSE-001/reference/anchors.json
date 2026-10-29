@@ -1,0 +1,400 @@
+{
+  "guard": {
+    "source": {
+      "id": "guardian",
+      "x": 145.85999999999999,
+      "y": 232.72,
+      "size": 111
+    },
+    "targets": [
+      {
+        "id": "tracer",
+        "x": 145.85999999999999,
+        "y": 566.72,
+        "size": 111
+      }
+    ],
+    "events": [
+      {
+        "type": "guard",
+        "sourceId": "guardian",
+        "targetId": "tracer",
+        "text": "Guard until announced attacker acts or Knight returns."
+      }
+    ],
+    "mode": "ally",
+    "targetId": "tracer"
+  },
+  "aegis": {
+    "source": {
+      "id": "weaver",
+      "x": 49.47,
+      "y": 232.72,
+      "size": 111
+    },
+    "targets": [
+      {
+        "id": "weaver",
+        "x": 49.47,
+        "y": 232.72,
+        "size": 111
+      },
+      {
+        "id": "guardian",
+        "x": 145.85999999999999,
+        "y": 232.72,
+        "size": 111
+      },
+      {
+        "id": "tracer",
+        "x": 145.85999999999999,
+        "y": 566.72,
+        "size": 111
+      },
+      {
+        "id": "healer",
+        "x": 49.47,
+        "y": 566.72,
+        "size": 111
+      }
+    ],
+    "events": [
+      {
+        "type": "barrier",
+        "sourceId": "weaver",
+        "targetId": "weaver",
+        "amount": 8,
+        "text": "Added barrier."
+      },
+      {
+        "type": "barrier",
+        "sourceId": "weaver",
+        "targetId": "guardian",
+        "amount": 8,
+        "text": "Added barrier."
+      },
+      {
+        "type": "barrier",
+        "sourceId": "weaver",
+        "targetId": "tracer",
+        "amount": 8,
+        "text": "Added barrier."
+      },
+      {
+        "type": "barrier",
+        "sourceId": "weaver",
+        "targetId": "healer",
+        "amount": 8,
+        "text": "Added barrier."
+      }
+    ],
+    "mode": "party",
+    "targetId": "party"
+  },
+  "rally": {
+    "source": {
+      "id": "guardian",
+      "x": 145.85999999999999,
+      "y": 232.72,
+      "size": 111
+    },
+    "targets": [
+      {
+        "id": "guardian",
+        "x": 145.85999999999999,
+        "y": 232.72,
+        "size": 111
+      },
+      {
+        "id": "tracer",
+        "x": 145.85999999999999,
+        "y": 566.72,
+        "size": 111
+      },
+      {
+        "id": "weaver",
+        "x": 49.47,
+        "y": 232.72,
+        "size": 111
+      },
+      {
+        "id": "healer",
+        "x": 49.47,
+        "y": 566.72,
+        "size": 111
+      }
+    ],
+    "events": [
+      {
+        "type": "rally",
+        "sourceId": "guardian",
+        "targetId": "guardian",
+        "text": "Every ally’s first hit is reduced until the knight’s next turn."
+      }
+    ],
+    "mode": "self",
+    "targetId": "guardian"
+  },
+  "bulwark": {
+    "source": {
+      "id": "guardian",
+      "x": 145.85999999999999,
+      "y": 232.72,
+      "size": 111
+    },
+    "targets": [
+      {
+        "id": "guardian",
+        "x": 145.85999999999999,
+        "y": 232.72,
+        "size": 111
+      },
+      {
+        "id": "tracer",
+        "x": 145.85999999999999,
+        "y": 566.72,
+        "size": 111
+      }
+    ],
+    "events": [
+      {
+        "type": "buff",
+        "sourceId": "guardian",
+        "targetId": "guardian",
+        "amount": 30,
+        "text": "Bulwark."
+      }
+    ],
+    "mode": "self",
+    "targetId": "guardian"
+  },
+  "stonearmor": {
+    "source": {
+      "id": "brann",
+      "x": 145.85999999999999,
+      "y": 232.72,
+      "size": 111
+    },
+    "targets": [
+      {
+        "id": "brann",
+        "x": 145.85999999999999,
+        "y": 232.72,
+        "size": 111
+      }
+    ],
+    "events": [
+      {
+        "type": "barrier",
+        "sourceId": "brann",
+        "targetId": "brann",
+        "amount": 18,
+        "text": "Added barrier."
+      }
+    ],
+    "mode": "self",
+    "targetId": "brann"
+  },
+  "guardstone": {
+    "source": {
+      "id": "brann",
+      "x": 145.85999999999999,
+      "y": 232.72,
+      "size": 111
+    },
+    "targets": [
+      {
+        "id": "weaver",
+        "x": 49.47,
+        "y": 399.72,
+        "size": 111
+      }
+    ],
+    "events": [
+      {
+        "type": "buff",
+        "sourceId": "brann",
+        "targetId": "weaver",
+        "amount": 40,
+        "text": "Guardian stone."
+      }
+    ],
+    "mode": "ally",
+    "targetId": "weaver"
+  },
+  "halo": {
+    "source": {
+      "id": "healer",
+      "x": 49.47,
+      "y": 232.72,
+      "size": 111
+    },
+    "targets": [
+      {
+        "id": "healer",
+        "x": 49.47,
+        "y": 232.72,
+        "size": 111
+      },
+      {
+        "id": "guardian",
+        "x": 145.85999999999999,
+        "y": 232.72,
+        "size": 111
+      },
+      {
+        "id": "tracer",
+        "x": 145.85999999999999,
+        "y": 566.72,
+        "size": 111
+      },
+      {
+        "id": "weaver",
+        "x": 49.47,
+        "y": 566.72,
+        "size": 111
+      }
+    ],
+    "events": [
+      {
+        "type": "buff",
+        "sourceId": "healer",
+        "targetId": "healer",
+        "amount": 30,
+        "text": "Halo."
+      }
+    ],
+    "mode": "self",
+    "targetId": "healer"
+  },
+  "sanctuary": {
+    "source": {
+      "id": "healer",
+      "x": 49.47,
+      "y": 232.72,
+      "size": 111
+    },
+    "targets": [
+      {
+        "id": "tracer",
+        "x": 145.85999999999999,
+        "y": 566.72,
+        "size": 111
+      }
+    ],
+    "events": [
+      {
+        "type": "sanctuary",
+        "sourceId": "healer",
+        "targetId": "tracer",
+        "text": "The ally cannot fall until the priest’s next turn."
+      }
+    ],
+    "mode": "ally",
+    "targetId": "tracer"
+  },
+  "brace": {
+    "source": {
+      "id": "garran",
+      "x": 145.85999999999999,
+      "y": 232.72,
+      "size": 111
+    },
+    "targets": [
+      {
+        "id": "garran",
+        "x": 145.85999999999999,
+        "y": 232.72,
+        "size": 111
+      },
+      {
+        "id": "guardian",
+        "x": 145.85999999999999,
+        "y": 399.72,
+        "size": 111
+      },
+      {
+        "id": "tracer",
+        "x": 145.85999999999999,
+        "y": 566.72,
+        "size": 111
+      }
+    ],
+    "events": [
+      {
+        "type": "brace",
+        "sourceId": "garran",
+        "targetId": "garran",
+        "amount": 14,
+        "text": "Spear braced until its next turn."
+      }
+    ],
+    "mode": "self",
+    "targetId": "garran"
+  },
+  "spearwall": {
+    "source": {
+      "id": "garran",
+      "x": 145.85999999999999,
+      "y": 232.72,
+      "size": 111
+    },
+    "targets": [
+      {
+        "id": "garran",
+        "x": 145.85999999999999,
+        "y": 232.72,
+        "size": 111
+      },
+      {
+        "id": "guardian",
+        "x": 145.85999999999999,
+        "y": 399.72,
+        "size": 111
+      },
+      {
+        "id": "tracer",
+        "x": 145.85999999999999,
+        "y": 566.72,
+        "size": 111
+      }
+    ],
+    "events": [
+      {
+        "type": "brace",
+        "sourceId": "garran",
+        "targetId": "garran",
+        "amount": 8,
+        "text": "Spear wall until its next turn."
+      }
+    ],
+    "mode": "self",
+    "targetId": "garran"
+  },
+  "hold": {
+    "source": {
+      "id": "garran",
+      "x": 145.85999999999999,
+      "y": 232.72,
+      "size": 111
+    },
+    "targets": [
+      {
+        "id": "weaver",
+        "x": 49.47,
+        "y": 399.72,
+        "size": 111
+      }
+    ],
+    "events": [
+      {
+        "type": "hold",
+        "sourceId": "garran",
+        "targetId": "garran",
+        "text": "Hold the line."
+      }
+    ],
+    "mode": "self",
+    "targetId": "garran"
+  }
+}

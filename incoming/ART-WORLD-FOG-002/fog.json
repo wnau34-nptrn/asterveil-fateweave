@@ -1,0 +1,107 @@
+{
+  "fog/fog_tile.webp": {
+    "w": 128,
+    "h": 128,
+    "role": "fill",
+    "dir": "",
+    "png": "fog/fog_tile.png"
+  },
+  "fog/fog_tile_b.webp": {
+    "w": 128,
+    "h": 128,
+    "role": "fill",
+    "dir": "",
+    "png": "fog/fog_tile_b.png"
+  },
+  "fog/fog_tile_c.webp": {
+    "w": 128,
+    "h": 128,
+    "role": "fill",
+    "dir": "",
+    "png": "fog/fog_tile_c.png"
+  },
+  "fog/fog_edge_n.webp": {
+    "w": 128,
+    "h": 128,
+    "role": "edge",
+    "dir": "n",
+    "png": "fog/fog_edge_n.png"
+  },
+  "fog/fog_edge_e.webp": {
+    "w": 128,
+    "h": 128,
+    "role": "edge",
+    "dir": "e",
+    "png": "fog/fog_edge_e.png"
+  },
+  "fog/fog_edge_s.webp": {
+    "w": 128,
+    "h": 128,
+    "role": "edge",
+    "dir": "s",
+    "png": "fog/fog_edge_s.png"
+  },
+  "fog/fog_edge_w.webp": {
+    "w": 128,
+    "h": 128,
+    "role": "edge",
+    "dir": "w",
+    "png": "fog/fog_edge_w.png"
+  },
+  "fog/fog_corner_nw.webp": {
+    "w": 128,
+    "h": 128,
+    "role": "corner",
+    "dir": "nw",
+    "png": "fog/fog_corner_nw.png"
+  },
+  "fog/fog_corner_ne.webp": {
+    "w": 128,
+    "h": 128,
+    "role": "corner",
+    "dir": "ne",
+    "png": "fog/fog_corner_ne.png"
+  },
+  "fog/fog_corner_sw.webp": {
+    "w": 128,
+    "h": 128,
+    "role": "corner",
+    "dir": "sw",
+    "png": "fog/fog_corner_sw.png"
+  },
+  "fog/fog_corner_se.webp": {
+    "w": 128,
+    "h": 128,
+    "role": "corner",
+    "dir": "se",
+    "png": "fog/fog_corner_se.png"
+  },
+  "fog/fog_inner_ne.webp": {
+    "w": 128,
+    "h": 128,
+    "role": "inner",
+    "dir": "ne",
+    "png": "fog/fog_inner_ne.png"
+  },
+  "fog/fog_inner_nw.webp": {
+    "w": 128,
+    "h": 128,
+    "role": "inner",
+    "dir": "nw",
+    "png": "fog/fog_inner_nw.png"
+  },
+  "fog/fog_inner_se.webp": {
+    "w": 128,
+    "h": 128,
+    "role": "inner",
+    "dir": "se",
+    "png": "fog/fog_inner_se.png"
+  },
+  "fog/fog_inner_sw.webp": {
+    "w": 128,
+    "h": 128,
+    "role": "inner",
+    "dir": "sw",
+    "png": "fog/fog_inner_sw.png"
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "mark_prepare": [
+    0.5,
+    0.5
+  ],
+  "mark_peak": [
+    0.5,
+    0.5
+  ],
+  "mark_settle": [
+    0.5,
+    0.5
+  ],
+  "sigil_prepare": [
+    0.5,
+    0.5
+  ],
+  "sigil_peak": [
+    0.5,
+    0.72
+  ],
+  "sigil_settle": [
+    0.5,
+    0.76
+  ],
+  "storm_prepare": [
+    0.5,
+    0.5
+  ],
+  "storm_peak": [
+    0.5,
+    0.5
+  ],
+  "storm_settle": [
+    0.5,
+    0.76
+  ],
+  "dispel_prepare": [
+    0.5,
+    0.5
+  ],
+  "dispel_peak": [
+    0.5,
+    0.5
+  ],
+  "dispel_settle": [
+    0.5,
+    0.5
+  ]
+}

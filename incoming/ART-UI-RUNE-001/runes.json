@@ -1,0 +1,326 @@
+{
+  "frames": {
+    "rune_guard": {
+      "frame": {
+        "x": 2,
+        "y": 2,
+        "w": 256,
+        "h": 256
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 256,
+        "h": 256
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "family": "defence",
+      "meaning": "when guarding gain a shield"
+    },
+    "rune_mark": {
+      "frame": {
+        "x": 262,
+        "y": 2,
+        "w": 256,
+        "h": 256
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 256,
+        "h": 256
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "family": "utility",
+      "meaning": "hitting a marked foe ticks a cooldown"
+    },
+    "rune_opening": {
+      "frame": {
+        "x": 522,
+        "y": 2,
+        "w": 256,
+        "h": 256
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 256,
+        "h": 256
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "family": "offence",
+      "meaning": "first round damage up"
+    },
+    "rune_mend": {
+      "frame": {
+        "x": 782,
+        "y": 2,
+        "w": 256,
+        "h": 256
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 256,
+        "h": 256
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "family": "support",
+      "meaning": "healing grants resistance"
+    },
+    "rune_thorn": {
+      "frame": {
+        "x": 2,
+        "y": 262,
+        "w": 256,
+        "h": 256
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 256,
+        "h": 256
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "family": "offence",
+      "meaning": "reflect when hit"
+    },
+    "rune_echo": {
+      "frame": {
+        "x": 262,
+        "y": 262,
+        "w": 256,
+        "h": 256
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 256,
+        "h": 256
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "family": "utility",
+      "meaning": "repeat a small part of the first skill"
+    },
+    "rune_focus": {
+      "frame": {
+        "x": 522,
+        "y": 262,
+        "w": 256,
+        "h": 256
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 256,
+        "h": 256
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "family": "support",
+      "meaning": "support power on full HP"
+    },
+    "rune_last": {
+      "frame": {
+        "x": 782,
+        "y": 262,
+        "w": 256,
+        "h": 256
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 256,
+        "h": 256
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "family": "offence",
+      "meaning": "damage up below half HP"
+    },
+    "rune_ward": {
+      "frame": {
+        "x": 2,
+        "y": 522,
+        "w": 256,
+        "h": 256
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 256,
+        "h": 256
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "family": "defence",
+      "meaning": "start with a barrier"
+    },
+    "rune_swift": {
+      "frame": {
+        "x": 262,
+        "y": 522,
+        "w": 256,
+        "h": 256
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 256,
+        "h": 256
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "family": "utility",
+      "meaning": "act effects on the first turn, no SPD"
+    },
+    "rune_leech": {
+      "frame": {
+        "x": 522,
+        "y": 522,
+        "w": 256,
+        "h": 256
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 256,
+        "h": 256
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "family": "support",
+      "meaning": "heal on defeating a foe"
+    },
+    "rune_veil": {
+      "frame": {
+        "x": 782,
+        "y": 522,
+        "w": 256,
+        "h": 256
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 256,
+        "h": 256
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "family": "defence",
+      "meaning": "resist energy once per battle"
+    }
+  },
+  "meta": {
+    "image": "runes.webp",
+    "format": "RGBA8888",
+    "size": {
+      "w": 1040,
+      "h": 780
+    },
+    "scale": "1",
+    "padding": 2
+  }
+}

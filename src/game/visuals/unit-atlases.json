@@ -1,0 +1,119 @@
+{
+  "lyra": {
+    "image": "lyra_pilot.ef0437415fe7.webp",
+    "atlas": "lyra_pilot.7c7a19c3f3d0.json",
+    "width": 1280,
+    "height": 1211,
+    "frames": 22,
+    "decodedBytes": 6200320,
+    "downloadBytes": 1535966
+  },
+  "hunter": {
+    "image": "hunter_pilot.a2500d3fa495.webp",
+    "atlas": "hunter_pilot.0ca0445de5c5.json",
+    "width": 1536,
+    "height": 664,
+    "frames": 22,
+    "decodedBytes": 4079616,
+    "downloadBytes": 931414
+  },
+  "eira": {
+    "image": "eira_a1.573c1cfd9b43.webp",
+    "atlas": "eira_a1.bd1097cc0ed3.json",
+    "width": 1536,
+    "height": 662,
+    "frames": 22,
+    "decodedBytes": 4067328,
+    "downloadBytes": 1382688
+  },
+  "sprite": {
+    "image": "sprite_a1.12710bff0f5a.webp",
+    "atlas": "sprite_a1.7dfbdd0f7092.json",
+    "width": 512,
+    "height": 611,
+    "frames": 22,
+    "decodedBytes": 1251328,
+    "downloadBytes": 357984
+  },
+  "aegis": {
+    "image": "aegis_a2.1d12d3127841.webp",
+    "atlas": "aegis_a2.e88cd1ce5fe0.json",
+    "width": 1536,
+    "height": 720,
+    "frames": 32,
+    "decodedBytes": 4423680,
+    "downloadBytes": 1397790
+  },
+  "vargoth": {
+    "image": "vargoth_a2.e00f4aba9301.webp",
+    "atlas": "vargoth_a2.cf090b150455.json",
+    "width": 768,
+    "height": 1401,
+    "frames": 32,
+    "decodedBytes": 4303872,
+    "downloadBytes": 1385751
+  },
+  "seren": {
+    "image": "seren_a3.8ee02ab5e681.webp",
+    "atlas": "seren_a3.3d911a21c2db.json",
+    "width": 1024,
+    "height": 1197,
+    "frames": 40,
+    "decodedBytes": 4902912,
+    "downloadBytes": 1463594
+  },
+  "mycon": {
+    "image": "mycon_a3.e2b8c7771746.webp",
+    "atlas": "mycon_a3.84b234561959.json",
+    "width": 512,
+    "height": 1189,
+    "frames": 22,
+    "decodedBytes": 2435072,
+    "downloadBytes": 826472
+  },
+  "mira": {
+    "image": "mira_a4.a66eff2f412e.webp",
+    "atlas": "mira_a4.fa41f1f841cc.json",
+    "width": 1024,
+    "height": 1016,
+    "frames": 32,
+    "decodedBytes": 4161536,
+    "downloadBytes": 1103668
+  },
+  "toma": {
+    "image": "toma_a4.a22b073a2df5.webp",
+    "atlas": "toma_a4.685bfa478782.json",
+    "width": 768,
+    "height": 745,
+    "frames": 24,
+    "decodedBytes": 2288640,
+    "downloadBytes": 646978
+  },
+  "dew": {
+    "image": "dew_a4.a57bd1fe4fb4.webp",
+    "atlas": "dew_a4.c105e9716176.json",
+    "width": 768,
+    "height": 461,
+    "frames": 22,
+    "decodedBytes": 1416192,
+    "downloadBytes": 357467
+  },
+  "ember": {
+    "image": "ember_a4.21283c607c4a.webp",
+    "atlas": "ember_a4.70f335f30553.json",
+    "width": 768,
+    "height": 379,
+    "frames": 22,
+    "decodedBytes": 1164288,
+    "downloadBytes": 320727
+  },
+  "bat": {
+    "image": "bat_a4.3feccaa66009.webp",
+    "atlas": "bat_a4.c9e4e10a932f.json",
+    "width": 1536,
+    "height": 321,
+    "frames": 26,
+    "decodedBytes": 1972224,
+    "downloadBytes": 430211
+  }
+}

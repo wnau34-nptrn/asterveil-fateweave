@@ -1,0 +1,262 @@
+[
+  {
+    "skill": "attack",
+    "source": "incoming/ART-VFX-BLADE-STORYBOARD-001/source/attack.png",
+    "sha256": "0a22f32bae5f0d61c4d05d2d6ed803145e2ef61b0689aab62314ed3b62576ef5",
+    "sharedStripScale": 0.3764705882352941,
+    "phases": [
+      [
+        226,
+        221,
+        297,
+        222
+      ],
+      [
+        783,
+        110,
+        595,
+        500
+      ],
+      [
+        1592,
+        234,
+        433,
+        317
+      ]
+    ]
+  },
+  {
+    "skill": "finisher",
+    "source": "incoming/ART-VFX-BLADE-STORYBOARD-001/source/finisher.png",
+    "sha256": "64312fa279df451fa898ea357d13fb9137d0b32b3875b6137d7c8a422d35bcd7",
+    "sharedStripScale": 0.3419847328244275,
+    "phases": [
+      [
+        325,
+        47,
+        184,
+        641
+      ],
+      [
+        817,
+        35,
+        616,
+        655
+      ],
+      [
+        1664,
+        49,
+        422,
+        623
+      ]
+    ]
+  },
+  {
+    "skill": "lunge",
+    "source": "incoming/ART-VFX-BLADE-STORYBOARD-001/source/lunge.png",
+    "sha256": "dcf8af68d7d5a4fd3ac955a1ee41863b59d32f4fe850934c3824ff31e86fb1ab",
+    "sharedStripScale": 0.26291079812206575,
+    "phases": [
+      [
+        39,
+        278,
+        542,
+        110
+      ],
+      [
+        662,
+        170,
+        852,
+        356
+      ],
+      [
+        1523,
+        226,
+        615,
+        182
+      ]
+    ]
+  },
+  {
+    "skill": "sweep",
+    "source": "incoming/ART-VFX-BLADE-STORYBOARD-001/source/sweep.png",
+    "sha256": "2cde288f4bcdcf774200845e81cfbe2af7e3a01231c15e103f5a3639c5bab18d",
+    "sharedStripScale": 0.23382045929018788,
+    "phases": [
+      [
+        54,
+        312,
+        497,
+        111
+      ],
+      [
+        606,
+        253,
+        958,
+        252
+      ],
+      [
+        1622,
+        296,
+        520,
+        139
+      ]
+    ]
+  },
+  {
+    "skill": "backstab",
+    "source": "incoming/ART-VFX-BLADE-STORYBOARD-001/source/backstab.png",
+    "sha256": "04ce0457bb7088c9c6f52a58ce8f86fc41446cb569d55d3f6b4d1ef67e62cda9",
+    "sharedStripScale": 0.29668874172185433,
+    "phases": [
+      [
+        152,
+        267,
+        345,
+        223
+      ],
+      [
+        690,
+        142,
+        755,
+        456
+      ],
+      [
+        1525,
+        232,
+        526,
+        345
+      ]
+    ]
+  },
+  {
+    "skill": "ambush",
+    "source": "incoming/ART-VFX-BLADE-STORYBOARD-001/source/ambush.png",
+    "sha256": "a2b42eb85c21f001a8bfff4eed04182650303c0ca4b05a4721c4a8f165e358e5",
+    "sharedStripScale": 0.33990895295902884,
+    "phases": [
+      [
+        125,
+        261,
+        470,
+        386
+      ],
+      [
+        818,
+        29,
+        637,
+        659
+      ],
+      [
+        1692,
+        94,
+        313,
+        572
+      ]
+    ]
+  },
+  {
+    "skill": "disarm",
+    "source": "incoming/ART-VFX-BLADE-STORYBOARD-001/source/disarm.png",
+    "sha256": "3dfb4e5ef311fc5c98107e63e88e58d7de282d516d3ee0c9d9a1b691f791b088",
+    "sharedStripScale": 0.4057971014492754,
+    "phases": [
+      [
+        229,
+        242,
+        421,
+        287
+      ],
+      [
+        825,
+        86,
+        552,
+        511
+      ],
+      [
+        1656,
+        287,
+        419,
+        172
+      ]
+    ]
+  },
+  {
+    "skill": "parry",
+    "source": "incoming/ART-VFX-BLADE-STORYBOARD-001/source/parry.png",
+    "sha256": "2634944426ecf00d263067b31a91a8be9c0cb71d56a08e28448f4dd879694101",
+    "sharedStripScale": 0.2978723404255319,
+    "phases": [
+      [
+        289,
+        133,
+        269,
+        436
+      ],
+      [
+        725,
+        92,
+        752,
+        485
+      ],
+      [
+        1619,
+        193,
+        420,
+        311
+      ]
+    ]
+  },
+  {
+    "skill": "pierce",
+    "source": "incoming/ART-VFX-BLADE-STORYBOARD-001/source/pierce.png",
+    "sha256": "b86b6e0bd51d1ab4b9dae155e72e358b26614b39dead36f8aa299c978dd43805",
+    "sharedStripScale": 0.22649140546006066,
+    "phases": [
+      [
+        33,
+        260,
+        506,
+        194
+      ],
+      [
+        539,
+        264,
+        989,
+        187
+      ],
+      [
+        1554,
+        286,
+        588,
+        140
+      ]
+    ]
+  },
+  {
+    "skill": "halt",
+    "source": "incoming/ART-VFX-BLADE-STORYBOARD-001/source/halt.png",
+    "sha256": "11d73ff3b47b81710a5f94657c091327facb4d05448e9f3d29b566faa556f138",
+    "sharedStripScale": 0.36541598694942906,
+    "phases": [
+      [
+        200,
+        268,
+        327,
+        194
+      ],
+      [
+        777,
+        129,
+        613,
+        447
+      ],
+      [
+        1553,
+        262,
+        441,
+        226
+      ]
+    ]
+  }
+]

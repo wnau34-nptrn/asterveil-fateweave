@@ -1,0 +1,429 @@
+[
+  {
+    "at": 1793177811.84,
+    "remainingMs": 253,
+    "turn": {
+      "actorId": "guardian",
+      "side": "hero",
+      "beat": 1,
+      "round": 1,
+      "action": "attack",
+      "targetId": "f1",
+      "intent": {
+        "sourceId": "f1",
+        "targetSlot": 0,
+        "name": "Crushing Blow",
+        "damage": 14,
+        "kind": "physical",
+        "targetId": "guardian",
+        "beat": 1,
+        "round": 1
+      },
+      "state": {
+        "encounterId": "first-clash",
+        "beat": 1,
+        "round": 1,
+        "turnIndex": 0,
+        "order": [
+          "guardian",
+          "f1",
+          "weaver",
+          "healer"
+        ],
+        "outcome": "active",
+        "guard": null,
+        "counter": null,
+        "taunt": null,
+        "song": null,
+        "heroes": [
+          {
+            "id": "guardian",
+            "hp": 76,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "weaver",
+            "hp": 48,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "healer",
+            "hp": 46,
+            "barrier": 0,
+            "cooldowns": {}
+          }
+        ],
+        "enemies": [
+          {
+            "id": "f1",
+            "hp": 90,
+            "markedUntil": 0
+          }
+        ],
+        "intent": {
+          "sourceId": "f1",
+          "targetSlot": 0,
+          "name": "Crushing Blow",
+          "damage": 14,
+          "kind": "physical",
+          "targetId": "guardian",
+          "beat": 1,
+          "round": 1
+        },
+        "commands": [
+          {
+            "beat": 1,
+            "heroId": "guardian",
+            "action": "attack",
+            "targetId": "f1"
+          }
+        ]
+      },
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "guardian",
+          "targetId": "f1",
+          "amount": 10,
+          "text": "Hero attacks."
+        }
+      ],
+      "before": {
+        "encounterId": "first-clash",
+        "beat": 1,
+        "round": 1,
+        "turnIndex": 0,
+        "order": [
+          "guardian",
+          "f1",
+          "weaver",
+          "healer"
+        ],
+        "outcome": "active",
+        "guard": null,
+        "counter": null,
+        "taunt": null,
+        "song": null,
+        "heroes": [
+          {
+            "id": "guardian",
+            "hp": 76,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "weaver",
+            "hp": 48,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "healer",
+            "hp": 46,
+            "barrier": 0,
+            "cooldowns": {}
+          }
+        ],
+        "enemies": [
+          {
+            "id": "f1",
+            "hp": 100,
+            "markedUntil": 0
+          }
+        ],
+        "intent": {
+          "sourceId": "f1",
+          "targetSlot": 0,
+          "name": "Crushing Blow",
+          "damage": 14,
+          "kind": "physical",
+          "targetId": "guardian",
+          "beat": 1,
+          "round": 1
+        },
+        "commands": []
+      },
+      "after": {
+        "encounterId": "first-clash",
+        "beat": 2,
+        "round": 1,
+        "turnIndex": 1,
+        "order": [
+          "guardian",
+          "f1",
+          "weaver",
+          "healer"
+        ],
+        "outcome": "active",
+        "guard": null,
+        "counter": null,
+        "taunt": null,
+        "song": null,
+        "heroes": [
+          {
+            "id": "guardian",
+            "hp": 76,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "weaver",
+            "hp": 48,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "healer",
+            "hp": 46,
+            "barrier": 0,
+            "cooldowns": {}
+          }
+        ],
+        "enemies": [
+          {
+            "id": "f1",
+            "hp": 90,
+            "markedUntil": 0
+          }
+        ],
+        "intent": {
+          "sourceId": "f1",
+          "targetSlot": 0,
+          "name": "Crushing Blow",
+          "damage": 14,
+          "kind": "physical",
+          "targetId": "guardian",
+          "beat": 2,
+          "round": 1
+        },
+        "commands": [
+          {
+            "beat": 1,
+            "heroId": "guardian",
+            "action": "attack",
+            "targetId": "f1"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "at": 1793177812.331,
+    "remainingMs": 338,
+    "turn": {
+      "actorId": "f1",
+      "side": "enemy",
+      "beat": 2,
+      "round": 1,
+      "intent": {
+        "sourceId": "f1",
+        "targetSlot": 0,
+        "name": "Crushing Blow",
+        "damage": 14,
+        "kind": "physical",
+        "targetId": "guardian",
+        "beat": 2,
+        "round": 1
+      },
+      "targetId": "guardian",
+      "state": {
+        "encounterId": "first-clash",
+        "beat": 2,
+        "round": 1,
+        "turnIndex": 1,
+        "order": [
+          "guardian",
+          "f1",
+          "weaver",
+          "healer"
+        ],
+        "outcome": "active",
+        "guard": null,
+        "counter": null,
+        "taunt": null,
+        "song": null,
+        "heroes": [
+          {
+            "id": "guardian",
+            "hp": 62,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "weaver",
+            "hp": 48,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "healer",
+            "hp": 46,
+            "barrier": 0,
+            "cooldowns": {}
+          }
+        ],
+        "enemies": [
+          {
+            "id": "f1",
+            "hp": 90,
+            "markedUntil": 0
+          }
+        ],
+        "intent": {
+          "sourceId": "f1",
+          "targetSlot": 0,
+          "name": "Crushing Blow",
+          "damage": 14,
+          "kind": "physical",
+          "targetId": "guardian",
+          "beat": 2,
+          "round": 1
+        },
+        "commands": [
+          {
+            "beat": 1,
+            "heroId": "guardian",
+            "action": "attack",
+            "targetId": "f1"
+          }
+        ]
+      },
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "f1",
+          "targetId": "guardian",
+          "amount": 14,
+          "absorbed": 0,
+          "text": "Enemy attacks on its own turn."
+        }
+      ],
+      "before": {
+        "encounterId": "first-clash",
+        "beat": 2,
+        "round": 1,
+        "turnIndex": 1,
+        "order": [
+          "guardian",
+          "f1",
+          "weaver",
+          "healer"
+        ],
+        "outcome": "active",
+        "guard": null,
+        "counter": null,
+        "taunt": null,
+        "song": null,
+        "heroes": [
+          {
+            "id": "guardian",
+            "hp": 76,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "weaver",
+            "hp": 48,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "healer",
+            "hp": 46,
+            "barrier": 0,
+            "cooldowns": {}
+          }
+        ],
+        "enemies": [
+          {
+            "id": "f1",
+            "hp": 90,
+            "markedUntil": 0
+          }
+        ],
+        "intent": {
+          "sourceId": "f1",
+          "targetSlot": 0,
+          "name": "Crushing Blow",
+          "damage": 14,
+          "kind": "physical",
+          "targetId": "guardian",
+          "beat": 2,
+          "round": 1
+        },
+        "commands": [
+          {
+            "beat": 1,
+            "heroId": "guardian",
+            "action": "attack",
+            "targetId": "f1"
+          }
+        ]
+      },
+      "after": {
+        "encounterId": "first-clash",
+        "beat": 3,
+        "round": 1,
+        "turnIndex": 2,
+        "order": [
+          "guardian",
+          "f1",
+          "weaver",
+          "healer"
+        ],
+        "outcome": "active",
+        "guard": null,
+        "counter": null,
+        "taunt": null,
+        "song": null,
+        "heroes": [
+          {
+            "id": "guardian",
+            "hp": 62,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "weaver",
+            "hp": 48,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "healer",
+            "hp": 46,
+            "barrier": 0,
+            "cooldowns": {}
+          }
+        ],
+        "enemies": [
+          {
+            "id": "f1",
+            "hp": 90,
+            "markedUntil": 0
+          }
+        ],
+        "intent": {
+          "sourceId": "f1",
+          "targetSlot": 0,
+          "name": "Crushing Blow",
+          "damage": 14,
+          "kind": "physical",
+          "targetId": "guardian",
+          "beat": 3,
+          "round": 2
+        },
+        "commands": [
+          {
+            "beat": 1,
+            "heroId": "guardian",
+            "action": "attack",
+            "targetId": "f1"
+          }
+        ]
+      }
+    }
+  }
+]

@@ -1,0 +1,296 @@
+{
+  "atlasRoundtrip": "exact RGBA match",
+  "frames": [
+    {
+      "frame": "cast_thread_00",
+      "size": [
+        256,
+        256
+      ],
+      "alphaRange": [
+        0,
+        255
+      ]
+    },
+    {
+      "frame": "cast_thread_01",
+      "size": [
+        256,
+        256
+      ],
+      "alphaRange": [
+        0,
+        255
+      ]
+    },
+    {
+      "frame": "cast_thread_02",
+      "size": [
+        256,
+        256
+      ],
+      "alphaRange": [
+        0,
+        255
+      ]
+    },
+    {
+      "frame": "cast_thread_03",
+      "size": [
+        256,
+        256
+      ],
+      "alphaRange": [
+        0,
+        255
+      ]
+    },
+    {
+      "frame": "comet_core_00",
+      "size": [
+        128,
+        128
+      ],
+      "alphaRange": [
+        0,
+        253
+      ]
+    },
+    {
+      "frame": "comet_core_01",
+      "size": [
+        128,
+        128
+      ],
+      "alphaRange": [
+        0,
+        254
+      ]
+    },
+    {
+      "frame": "comet_core_02",
+      "size": [
+        128,
+        128
+      ],
+      "alphaRange": [
+        0,
+        255
+      ]
+    },
+    {
+      "frame": "comet_core_03",
+      "size": [
+        128,
+        128
+      ],
+      "alphaRange": [
+        0,
+        253
+      ]
+    },
+    {
+      "frame": "comet_core",
+      "size": [
+        128,
+        128
+      ],
+      "alphaRange": [
+        0,
+        253
+      ]
+    },
+    {
+      "frame": "tapered_wake_00",
+      "size": [
+        256,
+        64
+      ],
+      "alphaRange": [
+        0,
+        255
+      ]
+    },
+    {
+      "frame": "impact_petals_00",
+      "size": [
+        256,
+        256
+      ],
+      "alphaRange": [
+        0,
+        251
+      ]
+    },
+    {
+      "frame": "impact_petals_01",
+      "size": [
+        256,
+        256
+      ],
+      "alphaRange": [
+        0,
+        253
+      ]
+    },
+    {
+      "frame": "impact_petals_02",
+      "size": [
+        256,
+        256
+      ],
+      "alphaRange": [
+        0,
+        253
+      ]
+    },
+    {
+      "frame": "impact_petals_03",
+      "size": [
+        256,
+        256
+      ],
+      "alphaRange": [
+        0,
+        255
+      ]
+    },
+    {
+      "frame": "impact_petals_04",
+      "size": [
+        256,
+        256
+      ],
+      "alphaRange": [
+        0,
+        254
+      ]
+    },
+    {
+      "frame": "impact_petals_05",
+      "size": [
+        256,
+        256
+      ],
+      "alphaRange": [
+        0,
+        253
+      ]
+    },
+    {
+      "frame": "impact_petals_06",
+      "size": [
+        256,
+        256
+      ],
+      "alphaRange": [
+        0,
+        251
+      ]
+    },
+    {
+      "frame": "impact_petals_07",
+      "size": [
+        256,
+        256
+      ],
+      "alphaRange": [
+        0,
+        239
+      ]
+    },
+    {
+      "frame": "spark_00",
+      "size": [
+        32,
+        32
+      ],
+      "alphaRange": [
+        0,
+        255
+      ]
+    },
+    {
+      "frame": "spark_01",
+      "size": [
+        32,
+        32
+      ],
+      "alphaRange": [
+        0,
+        255
+      ]
+    },
+    {
+      "frame": "spark_02",
+      "size": [
+        32,
+        32
+      ],
+      "alphaRange": [
+        0,
+        255
+      ]
+    },
+    {
+      "frame": "dissolve_wisps_00",
+      "size": [
+        256,
+        256
+      ],
+      "alphaRange": [
+        0,
+        252
+      ]
+    },
+    {
+      "frame": "dissolve_wisps_01",
+      "size": [
+        256,
+        256
+      ],
+      "alphaRange": [
+        0,
+        252
+      ]
+    },
+    {
+      "frame": "dissolve_wisps_02",
+      "size": [
+        256,
+        256
+      ],
+      "alphaRange": [
+        0,
+        251
+      ]
+    },
+    {
+      "frame": "dissolve_wisps_03",
+      "size": [
+        256,
+        256
+      ],
+      "alphaRange": [
+        0,
+        245
+      ]
+    },
+    {
+      "frame": "light_core_00",
+      "size": [
+        128,
+        128
+      ],
+      "alphaRange": [
+        0,
+        255
+      ]
+    }
+  ],
+  "previews": [
+    390,
+    844
+  ],
+  "sha256": "a1fa9cab1f5c58bd17512d4ef182d04116a7bd45658db987cca5bf423c055314"
+}

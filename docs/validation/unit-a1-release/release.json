@@ -1,0 +1,254 @@
+{
+  "schema": 1,
+  "task": "A0/A1 Eira + Dandelion Sprite",
+  "repository": "wnau34-nptrn/asterveil-fateweave",
+  "pullRequest": 87,
+  "gameBranch": "feature/fateweave-initial-prototype",
+  "base": "a2993df534a16e97c4e363200834f3a17803e7a0",
+  "runtimeAndCaptureHead": "4ec57b18315bf22d4c23e86d7847017f0d5e38ff",
+  "validatedHead": "fcf210db06d3a7edb23ad8400e4810679d3d2f02",
+  "mergeSHA": "1ea31d500bad7c9ed49538699cd2b76e333e418a",
+  "authorization": "Owner requested A0/A1 and continuing completion under AGENTS.md/CLAUDE.md standing authorization; resumed with ต่อ. No separate new-body owner motion approval is claimed.",
+  "preservedC5Approvals": true,
+  "otherUnitWavesStarted": false,
+  "newVfxFamiliesStarted": false,
+  "runtimeTrees": {
+    ".github": "073deda524e17ada1584a81fc94251e685aeee8c",
+    "public": "dd09494dc0205b529221890ffa637af313cb1795",
+    "src": "2cc19a463691cc04b036b52397ff1c473d9b00a9",
+    "tests": "e8388a46a1419031352b38f4e81a045a9b5ebf31"
+  },
+  "mergeTreeEqualsValidatedHead": true,
+  "captureSourceAndPublicTreesMatch": true,
+  "diffAudit": {
+    "base": "a2993df534a16e97c4e363200834f3a17803e7a0",
+    "head": "1ea31d500bad7c9ed49538699cd2b76e333e418a",
+    "changedFiles": 65,
+    "forbiddenPathsChanged": [],
+    "scope": "No core/save/content/balance/UI/playback or existing C5 FX module/atlas changes"
+  },
+  "unitAtlases": {
+    "eira": {
+      "image": "eira_a1.573c1cfd9b43.webp",
+      "atlas": "eira_a1.bd1097cc0ed3.json",
+      "width": 1536,
+      "height": 662,
+      "frames": 22,
+      "decodedBytes": 4067328,
+      "downloadBytes": 1382688
+    },
+    "sprite": {
+      "image": "sprite_a1.12710bff0f5a.webp",
+      "atlas": "sprite_a1.7dfbdd0f7092.json",
+      "width": 512,
+      "height": 611,
+      "frames": 22,
+      "decodedBytes": 1251328,
+      "downloadBytes": 357984
+    }
+  },
+  "decodedRgbaIsNotTotalGameRam": true,
+  "pilotManifestUnchanged": true,
+  "coverage": {
+    "weaver": {
+      "attack": "attack",
+      "bolt": "attack",
+      "storm": "attack",
+      "dispel": "attack",
+      "ward": "skill",
+      "sigil": "skill",
+      "aegis": "skill"
+    },
+    "foe_sprite": {
+      "Seed Spark": "attack"
+    },
+    "newSpriteReactions": [
+      "hit",
+      "down"
+    ],
+    "proceduralReactions": [
+      "block",
+      "dodge",
+      "counter"
+    ],
+    "revive": "Reset to shipped seed0 when authoritative HP becomes positive; no dedicated stand-up strip",
+    "pilotSkillGaps": "Lyra mark/finisher/lunge/parry/sweep remain procedural; full audit in slice README"
+  },
+  "localVerification": {
+    "typecheck": "pass",
+    "lint": "pass",
+    "build": "pass",
+    "unit": {
+      "passed": 958,
+      "files": 80
+    },
+    "focusedBrowser": {
+      "passed": 82,
+      "includes": "57 inherited alchemy +20 A1 +3 optional loading +2 pilots; earlier13 presentation passed before C5.6 integration"
+    },
+    "capture": {
+      "passed": 16
+    },
+    "playerAll16Clips": {
+      "passed": 1
+    },
+    "browser": "Chromium cloud SwiftShader; emulated390px, no real device/Safari claim"
+  },
+  "premerge": {
+    "qualityRun": 40611416449,
+    "qualityJob": 122563580865,
+    "qualityResult": "success",
+    "unitPassed": 958,
+    "unitFiles": 80,
+    "browserRun": 40611416473,
+    "browserJob": 122564080890,
+    "browserResult": "success",
+    "sourceFixturePassed": 234,
+    "prechecksPassed": 3,
+    "productionPassed": 249,
+    "productionSkipped": 502
+  },
+  "ciRepair": {
+    "failedRun": 40605835807,
+    "failedHead": "4ec57b18315bf22d4c23e86d7847017f0d5e38ff",
+    "failure": "1366x768 multi-reload presentation case exhausted its45s total budget; stack pointed at browserContext.close in finally",
+    "finalFix": "75s end-to-end wall-clock budget only for the1366px case; all original fake-clock timing and state assertions unchanged",
+    "assertionContentVerifiedIdentical": true,
+    "intermediateCleanupOnlyPatchSuperseded": true,
+    "runtimeSourceAndPublicUnchanged": true
+  },
+  "capture": {
+    "clips": 16,
+    "rawFrames": 1547,
+    "maxFrameGapSeconds": 0.3,
+    "maxTimestampErrorMs": 0.0061,
+    "everyCapturedFramePlusFinalHoldRetained": true,
+    "noInterpolationOrRetiming": true,
+    "eachFinalStateEqualsResolver": true,
+    "playerAll16DecodePassed": true,
+    "proofPath": "docs/combat-presentation/unit-a1-slice/proof.json",
+    "mp4Sha256": {
+      "aegis-normal-390.mp4": "298ee61fcea36b40e724a4f95cd2f91c7730989c7f8a56a3353bb8c2527ad97a",
+      "attack-fast-390.mp4": "d0c9fa27c0e6ed80bf13eeafa5660b5158166902c03dfde00a52c0ba9de4c22f",
+      "attack-normal-390.mp4": "b5970c84d89ddb5e6ca88f844e07d55888bcf8df877f7bd5cd4d2b87e7655fe5",
+      "attack-osreduce-390.mp4": "748c12bda48b251689e14f53d501baaba3b87d07aa80cdef0d04bb6f5e4a7929",
+      "attack-reduced-390.mp4": "f6294c0fb553c7b0525b3d738ccfd80232818ef82f3fe9036261cfc112d3d164",
+      "bolt-fast-390.mp4": "0ff2e74b111deec2adbef61f0f9dd21ce55fadb452826fa1f0bc3c3e462f6edf",
+      "bolt-normal-390.mp4": "7aac3cf2b01490a1b8b80ae336aa34100bb45ea138353fb1a1fc2b31155cd62f",
+      "bolt-osreduce-390.mp4": "e5e0660f47b209a053e6ccd18da94f8ed1e488d30679d942fa72eb045501a754",
+      "bolt-reduced-390.mp4": "dc367521617ef533231bb733de79fefa269704be75045235b99d4d600b765ea0",
+      "dispel-normal-390.mp4": "7e695edfa4509e38d713c21270800c0de8833093186668edc0dc0d982bd53cfb",
+      "sigil-normal-390.mp4": "91e7cdf7051e6a72954fdfc0dc02cb9d3a3958eceb7e7c47efbfe6a6adb65f83",
+      "storm-normal-390.mp4": "9b5b4c0ac22543c736b2a60e29eb68e278ef5f4e6f35efdc5a39ae7b648a9726",
+      "ward-fast-390.mp4": "4f405d7f5d5b4a31e0ef88854ac949471af2d2c5e701ecd047b61d4179f32815",
+      "ward-normal-390.mp4": "559b0c151189784fa3dcce2d67a13ca393ea80d57f8c4f8b34e819305de1c019",
+      "ward-osreduce-390.mp4": "2189999d3c42e9d9f6c416dc1eb0fdb891995f05d9e2ef48a478801391c6c81a",
+      "ward-reduced-390.mp4": "0e0a03a675426720fab59f3ccb591e9100a7a6a8a3437d22952ad8e87249a228"
+    }
+  },
+  "pages": {
+    "run": 40614459819,
+    "result": "success",
+    "publishedSHA": "1ea31d500bad7c9ed49538699cd2b76e333e418a",
+    "publishedAtUTC": "2026-10-28T01:44:29Z",
+    "publishedAtBangkok": "2026-10-28 08:44:29 Asia/Bangkok",
+    "url": "https://wnau34-nptrn.github.io/asterveil-fateweave/",
+    "jobs": [
+      {
+        "id": 122573575540,
+        "name": "browser (3)",
+        "conclusion": "success",
+        "completedAtUTC": "2026-10-28T01:27:20Z"
+      },
+      {
+        "id": 122573575820,
+        "name": "build",
+        "conclusion": "success",
+        "completedAtUTC": "2026-10-28T01:22:54Z"
+      },
+      {
+        "id": 122573575906,
+        "name": "browser (2)",
+        "conclusion": "success",
+        "completedAtUTC": "2026-10-28T01:27:33Z"
+      },
+      {
+        "id": 122573575928,
+        "name": "browser (4)",
+        "conclusion": "success",
+        "completedAtUTC": "2026-10-28T01:26:17Z"
+      },
+      {
+        "id": 122573576026,
+        "name": "browser (1)",
+        "conclusion": "success",
+        "completedAtUTC": "2026-10-28T01:44:15Z"
+      },
+      {
+        "id": 122581121843,
+        "name": "deploy",
+        "conclusion": "success",
+        "completedAtUTC": "2026-10-28T01:44:29Z"
+      }
+    ],
+    "artifact": {
+      "id": 12784946429,
+      "name": "github-pages",
+      "size_in_bytes": 55423967,
+      "url": "https://api.github.com/repos/wnau34-nptrn/asterveil-fateweave/actions/artifacts/12784946429",
+      "archive_download_url": "https://api.github.com/repos/wnau34-nptrn/asterveil-fateweave/actions/artifacts/12784946429/zip",
+      "expired": false,
+      "created_at": "2026-10-28T01:22:51Z",
+      "expires_at": "2026-10-29T01:22:48Z",
+      "updated_at": "2026-10-28T01:22:51Z",
+      "digest": "sha256:af0fe34d740836b805f156727c9026cf90d01693c2fa8191adfc91465ec8ccb8",
+      "workflow_run": {
+        "id": 40614459819,
+        "repository_id": 1415664685,
+        "head_repository_id": 1415664685,
+        "head_branch": "feature/fateweave-initial-prototype",
+        "head_sha": "1ea31d500bad7c9ed49538699cd2b76e333e418a"
+      }
+    },
+    "sourceFixturePassed": 234,
+    "productionPassed": 249,
+    "productionSkipped": 502,
+    "shards": [
+      {
+        "shard": 1,
+        "jobId": 122573576026,
+        "passed": 61,
+        "skipped": 176
+      },
+      {
+        "shard": 2,
+        "jobId": 122573575906,
+        "passed": 63,
+        "skipped": 211
+      },
+      {
+        "shard": 3,
+        "jobId": 122573575540,
+        "passed": 59,
+        "skipped": 115
+      },
+      {
+        "shard": 4,
+        "jobId": 122573575928,
+        "passed": 66,
+        "skipped": 0
+      }
+    ]
+  },
+  "postmergeQuality": {
+    "run": 40614459859,
+    "job": 122573575453,
+    "result": "success"
+  },
+  "limits": {
+    "browser": "Chromium cloud / SwiftShader with390px emulation; not iOS Safari or a physical device",
+    "memory": "Atlas decoded RGBA only, not total game RAM/GPU",
+    "liveCdnHash": "No fresh live HTTP/CDN hash is claimed",
+    "workspace": "Selected workspace became unavailable after source/media were pushed. MP4s, source sheets and proofs are durable in Git; raw screencast paths refer to that workspace and were not uploaded."
+  }
+}

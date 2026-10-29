@@ -1,0 +1,19 @@
+# ART-VFX-HEALING-001 · original concept sources
+
+## R2 — owner requested stronger light, feathered tails and true unit alignment
+
+R1 wording below is historical. R2 source sheets/prompts are in `r2/`; original RGBA files remain untouched there and generated originals remain in `/workspace/generated_images`. The packager discovers real bright-row gutters (the edited sheet is not perfectly uniform), uses one shared X/Y transform per strip, retains soft painted glow, and packs30frames3504×1480. Source hashes and portable cell/pivot metadata are in `r2/manifest.json` and `production-sources.json`.
+
+Runtime core follows the rendered unit's sole transform, including sprite idle offsets, unit motion and field shake; no+34px panel offset or sideways+/-20px. Main paint and two delayed feathered tails sit behind the unit; a cropped6px base rim sits immediately below its soles in front. Tail expansion/rise stays unit-relative and ends inside existing playback time. OS reduced motion is a static core/rim without moving tails. Every image belongs to existing scene cleanup. No rules/events/state changed; Rouse remains guard and Bless/Mend cast remain non-healing.
+
+
+2026-10-27 · ImageGen originals; owner selected R1 on2026-10-27 (“ดำเนินการขั้นต่อไปได้”). Runtime clips still require review in PR78.
+
+- `source/cast-six-skills.png`: original1024×1536 RGBA,3columns×6rows heal/prayer/rouse/revive/bless/mend; left→right preparation/peak/dissolution.
+- `source/upkeep-two-skills.png`: original1536×1024 RGBA,3columns×2rows Bless actual Renew heal/Mend actual round-start heal. Separate from cast.
+- `generation-prompts.json`: exact prompts and original generated paths. Sources copied unchanged; originals remain in `/workspace/generated_images`.
+- `reference/`: real390×844 renderer/UI screenshot per skill and resolver-derived anchors/events/snapshots; synthetic QA teams, no owner saves. Revive prelude replay generates a real down event before the skill is offered.
+- `docs/combat-presentation/healing-storyboards/build_manifest.py` records original hashes/alpha, cell coordinates, bright bounds and shared strip floor projection (same X and Y factors across all three phases). Peak18px, tick16px, baseline footY+34; composite restricted to ground band footY+15…36, preserving costume/boots/HP pixels. No pixel repainting, keying or opaque-background removal. Rouse uses original left/right halves for protector/covered ally.
+- Selected projections are packed by `package.py` into one30-frame2352×520 atlas `public/assets/fx/healing_fx.*` and drawn by `src/game/visuals/healing-fx.ts`; `production-sources.json` records every strip source/transform. A cyan version of the existing Bless seed acknowledges real barrier events, separately from healing petals. Review viewer has separate cast/tick and keeps screenshot HP/UI fixed explicitly. Final runtime must map real events/snapshots and preserve playback timing.
+
+Authorship/provenance: original assets generated with the built-in ImageGen tool for this Fateweave request under owner's existing authorization, no external art or sibling assets. No new third-party asset license dependencies.

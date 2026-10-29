@@ -1,0 +1,108 @@
+{
+  "eira": {
+    "scale": 0.9864220183486239,
+    "displayRatio": 2.380952380952381,
+    "cell": 512,
+    "origin": [
+      0.5,
+      0.96875
+    ],
+    "rawSize": [
+      1254,
+      1254
+    ],
+    "sourceSha256": "fa49d4d81c85a0251a2870cc3d43da4286ca9a4fee1a601c7df8403e8a583cdc",
+    "selectedRawFrames": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      20,
+      21,
+      23
+    ],
+    "lockedToSeed": [
+      0,
+      1,
+      8,
+      9,
+      16
+    ],
+    "uniqueFrames": 18,
+    "losslessReconstruction": "all alpha and visible RGBA equal",
+    "image": "eira_a1.573c1cfd9b43.webp",
+    "atlas": "eira_a1.bd1097cc0ed3.json",
+    "width": 1536,
+    "height": 662,
+    "frames": 22,
+    "decodedBytes": 4067328,
+    "downloadBytes": 1382688
+  },
+  "sprite": {
+    "scale": 0.487012987012987,
+    "displayRatio": 2.0,
+    "cell": 512,
+    "origin": [
+      0.5,
+      0.96875
+    ],
+    "rawSize": [
+      1254,
+      1254
+    ],
+    "sourceSha256": "9121fcdeaa23683970fb9b5e5eaed4d32cb2a75bb6b7c154c2c7a213b35249c1",
+    "selectedRawFrames": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      12,
+      13,
+      15
+    ],
+    "lockedToSeed": [
+      0,
+      1,
+      8,
+      9,
+      16
+    ],
+    "uniqueFrames": 12,
+    "losslessReconstruction": "all alpha and visible RGBA equal",
+    "image": "sprite_a1.12710bff0f5a.webp",
+    "atlas": "sprite_a1.7dfbdd0f7092.json",
+    "width": 512,
+    "height": 611,
+    "frames": 22,
+    "decodedBytes": 1251328,
+    "downloadBytes": 357984
+  }
+}

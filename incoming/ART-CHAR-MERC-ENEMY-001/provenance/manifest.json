@@ -1,0 +1,289 @@
+{
+  "base_commit": "e6dfc92415f2b9bbd76ae0257e30b307c13cecf5",
+  "generator": "built-in image_gen; original Asterveil concepts; no external artwork",
+  "webp_quality": 50,
+  "runtime_color_detail_grid": 256,
+  "runtime_bytes": 1939496,
+  "characters": [
+    {
+      "id": "merc_spear",
+      "footY": 496,
+      "bounds": [
+        48,
+        37,
+        464,
+        497
+      ],
+      "facing": "right",
+      "palette": "teal #348f91 / silver / leather",
+      "description": "Garran: tanned broad spear vanguard, short dark hair, teal scale tabard, leaf spear, round buckler",
+      "body_source": "exec-e4995049-ef53-443d-8fbf-37b251695da2.png",
+      "body_source_sha256": "3635b95956bc6d2241c55710351120f3e455999c467381d0dca3d8197df1d051",
+      "portrait_source": "exec-0c6b8c78-fb5e-44e4-8279-7d6043ceec4a.png",
+      "portrait_source_sha256": "2f4770d8c0a15415089dd6e0f045f12a89ffaf0ac077fa6343fbaab0fbeb6418"
+    },
+    {
+      "id": "merc_archer",
+      "footY": 496,
+      "bounds": [
+        40,
+        37,
+        472,
+        497
+      ],
+      "facing": "right",
+      "palette": "forest #345b3c / charcoal / auburn",
+      "description": "Mira: lean auburn braid, forest hood, longbow, white-fletched arrows",
+      "body_source": "exec-900ff031-23d0-444d-a64a-aef49622ef3f.png",
+      "body_source_sha256": "bcd4f51b92d0f259ba0db9d37cafb908b09405522a0b1b0dbbc9727d37181e91",
+      "portrait_source": "exec-ff0b0985-24d7-4bc1-aa6b-53724fb408c4.png",
+      "portrait_source_sha256": "93450232943910cd41d4fcb389aa40a1f8c8d4a1f1945f3d218d6bb64436a999"
+    },
+    {
+      "id": "merc_alchemist",
+      "footY": 496,
+      "bounds": [
+        96,
+        37,
+        415,
+        497
+      ],
+      "facing": "right",
+      "palette": "brass #b78c48 / amber #e5a63c",
+      "description": "Toma: glasses, goggles, brass vial satchel, apron, amber potion",
+      "body_source": "exec-6649c8ae-994e-4751-9bec-cdc6d44eaa44.png",
+      "body_source_sha256": "fc41f1e383437ba019f8a8b949b5ce942ff2d1f25cfb56294a7226789bed26ad",
+      "portrait_source": "exec-3ff25e4c-193e-442a-9bc2-256be30874d3.png",
+      "portrait_source_sha256": "c8d9da1bad2e4b377dd745e5c37499f6285aa8558b7f3a78e49d51f91e6a9193"
+    },
+    {
+      "id": "merc_scout",
+      "footY": 496,
+      "bounds": [
+        36,
+        37,
+        475,
+        497
+      ],
+      "facing": "right",
+      "palette": "steel blue #617f9e / charcoal",
+      "description": "Sefa: silver-blue short hair, steel blue scarf, dark leather, two daggers, crouch",
+      "body_source": "exec-0344de0f-5162-4d3e-bb1a-227c6afbbca9.png",
+      "body_source_sha256": "1fe08d1b726bbfe43cdaea224b5afd5b66e0c05a80ad28c40ef6496055c9674a",
+      "portrait_source": "exec-a0f616e8-73cb-4538-9cd2-ce36babd9776.png",
+      "portrait_source_sha256": "16adc475a4da2a7c5bbdf4371076d003bac0739e28dd1c467ff4ef5e4c444148"
+    },
+    {
+      "id": "merc_warden",
+      "footY": 496,
+      "bounds": [
+        16,
+        37,
+        495,
+        497
+      ],
+      "facing": "right",
+      "palette": "stone #899098 / gold #d9bf86",
+      "description": "Brann: broad bearded stone-armored warden, gold trim, two-handed hammer",
+      "body_source": "exec-28248000-e339-4777-8c8a-34ef6bc73837.png",
+      "body_source_sha256": "ff954298eb286115535dc9132bbee21c938288b881bdead4210018e426ee1a84",
+      "portrait_source": "exec-fe07c6ad-8234-4381-9496-dbaddf0a30e6.png",
+      "portrait_source_sha256": "79e588a19c58bebcb81250233af4166230fcc9cbbf655932850ba32d9e3350c0"
+    },
+    {
+      "id": "merc_bard",
+      "footY": 496,
+      "bounds": [
+        28,
+        37,
+        483,
+        497
+      ],
+      "facing": "right",
+      "palette": "coral #ed927f / charcoal",
+      "description": "Lio: curly dark hair, coral layered coat, lute and compact floating notes",
+      "body_source": "exec-bd8da625-79e7-4370-aa9a-d2d9371f9c14.png",
+      "body_source_sha256": "77f9289cd6d31803c365734a35fad27dcd49d633522192e1ec91599d5de2a270",
+      "portrait_source": "exec-024694bf-b8d5-4230-a4bd-9d0175b4f9c5.png",
+      "portrait_source_sha256": "505477deacf088f8e2a535e7f64ce491b34e2d41d2838c9f1b6a2587306c7163"
+    },
+    {
+      "id": "foe_tusker",
+      "footY": 496,
+      "bounds": [
+        19,
+        57,
+        493,
+        497
+      ],
+      "facing": "left",
+      "palette": "moss #718746 / brown",
+      "description": "Mossback Tusker: brown boar, moss back, flower sprigs, small ivory tusks",
+      "body_source": "exec-9bd42e9e-6984-4f05-9c98-9135673919ed.png",
+      "body_source_sha256": "f1274aa150a9be5ab5d27fd5800a7020d89c400679ca6b973568c9df8cd82220",
+      "portrait_source": "exec-58fc39ea-af69-43bb-afb4-07fbc67a3853.png",
+      "portrait_source_sha256": "3b1592a96a524847888d15de73d96d0fcc2c0337ec3c258118d7f7eb04b7e328"
+    },
+    {
+      "id": "foe_sprite",
+      "footY": 496,
+      "bounds": [
+        107,
+        197,
+        405,
+        497
+      ],
+      "facing": "left",
+      "palette": "mint #a6dfce / ivory",
+      "description": "Dandelion Sprite: floating ivory seed puff, mint core, leaf body",
+      "body_source": "exec-98cf3c91-b07b-4e4c-8a76-8fd51c820788.png",
+      "body_source_sha256": "8891babe4ece40d57b5ee87d7b3a310dcf428fc2fbc65f17f8b055276606678b",
+      "portrait_source": "exec-c292879b-9e85-4838-bdb3-343c3de9362c.png",
+      "portrait_source_sha256": "2101355de6e24b981f0e78f8cc792e34ea91368c4d73f3312d5d3a298d59dbb0"
+    },
+    {
+      "id": "foe_stalker",
+      "footY": 496,
+      "bounds": [
+        37,
+        57,
+        475,
+        497
+      ],
+      "facing": "left",
+      "palette": "teal #397e77 / olive",
+      "description": "Briar Stalker: teal olive lynx, thorn spines, teal eyes",
+      "body_source": "exec-e8df86cc-9803-4cf6-8b75-978fc3a44f79.png",
+      "body_source_sha256": "f7839874f7546321fc9e32825aa8fe49266c5ccde4ec2ea00dde66ae0a24b299",
+      "portrait_source": "exec-d2c81f0d-2db0-4018-8f74-ff4b255548fd.png",
+      "portrait_source_sha256": "c8f18f83e47c3705eb5c78f7eefd57cf3f82a678432a82f2f9145a02359f8789"
+    },
+    {
+      "id": "foe_mycon",
+      "footY": 496,
+      "bounds": [
+        11,
+        37,
+        500,
+        497
+      ],
+      "facing": "left",
+      "palette": "teal #427f87 / ivory / mint",
+      "description": "Hollow Mycon: teal mushroom cap hood, mint eyes, spore staff",
+      "body_source": "exec-15f39ccb-5ca0-4014-84da-9d3877201c6f.png",
+      "body_source_sha256": "9d9174a2f86d75dcbb2c8407340fa29e2e43bb332f86a8749a4e8fd201795d44",
+      "portrait_source": "exec-bbb1a2c1-019a-49ab-bf32-5a9e45d0efdd.png",
+      "portrait_source_sha256": "3b6cc0a760df485e6fdedefdd1a6d79dd3ba54f23fef4dd2285aa9944f54ab7c"
+    },
+    {
+      "id": "foe_golem",
+      "footY": 496,
+      "bounds": [
+        16,
+        17,
+        496,
+        497
+      ],
+      "facing": "left",
+      "palette": "slate #494358 / violet #9454d6",
+      "description": "Shard Golem: chunky slate fists, violet crystals, glowing eyes",
+      "body_source": "exec-8244df71-f502-464d-a622-b40c08e5b48c.png",
+      "body_source_sha256": "79d04d91e8bc433f1f778e1956b719fdc8f069a69c445f59c3ab8da49d17d5c3",
+      "portrait_source": "exec-a224e681-0fa4-4cb5-8bad-7fef8aae8918.png",
+      "portrait_source_sha256": "5cc0a3c9ff79feb9354b40b0bc0b79ec9ecdc748d95aef4f954c034362730888"
+    },
+    {
+      "id": "foe_riftweaver",
+      "footY": 496,
+      "bounds": [
+        96,
+        37,
+        416,
+        497
+      ],
+      "facing": "left",
+      "palette": "indigo #343c70 / violet",
+      "description": "Rift Weaver: rounded indigo cloth hood, dark ceramic mask, violet core, geometric ribbons",
+      "body_source": "exec-30950a8f-53e7-4501-a921-3639cd01a810.png",
+      "body_source_sha256": "2611169186727a87c544004085131d12d6cbef38da3cde752feff12056503ddc",
+      "portrait_source": "exec-b17eb874-9065-453d-bd6b-94e25439f7c2.png",
+      "portrait_source_sha256": "ff6d7e45879b7b71589ae0540332a3f2baaff236d3ff6cac89963ed33b39e1a3"
+    },
+    {
+      "id": "foe_matriarch",
+      "footY": 496,
+      "bounds": [
+        20,
+        17,
+        491,
+        497
+      ],
+      "facing": "left",
+      "palette": "teal #397e77 / olive / gold tips",
+      "description": "Thorn Matriarch: mint hair, fully covered bark leaf armor, thorn crown with gold tips",
+      "body_source": "exec-e009e0ab-9bc1-4535-bf1e-00d71da861ab.png",
+      "body_source_sha256": "2365e6e1cb4f3932d8dea2c3c032fae40839b45227d0d0e84dd9e0128758fad2",
+      "portrait_source": "exec-46555bb1-7ddb-485a-b1b0-3f5a0798efaf.png",
+      "portrait_source_sha256": "4349cdb30783395fb00469a9a0b649d873d8a9eee53463fb757c72398482325c"
+    },
+    {
+      "id": "foe_juggernaut",
+      "footY": 496,
+      "bounds": [
+        8,
+        40,
+        504,
+        497
+      ],
+      "facing": "left",
+      "palette": "slate / violet / gold banding",
+      "description": "Crystal Juggernaut: violet crystal beetle-rhino, gold horn and shell banding",
+      "body_source": "exec-aa61387a-7758-4599-a43b-d2d4ab963779.png",
+      "body_source_sha256": "5f542eb37cebbc00a273f91c79014b91d328223ff14d1641a6c4cd9d54f7bd96",
+      "portrait_source": "exec-de2d1719-1a03-4284-9d6e-5e7bc4157ba2.png",
+      "portrait_source_sha256": "ad520673425e7161d3cdbda1dd354144f2ace75dcc45f224deb351041687df6b"
+    },
+    {
+      "id": "foe_sentinel",
+      "footY": 496,
+      "bounds": [
+        14,
+        5,
+        497,
+        497
+      ],
+      "facing": "left",
+      "palette": "pale stone #e4dfcf / gold / violet",
+      "description": "Veilbound Sentinel: pale stone gold guardian, violet cracks, halberd, floating sigil ring",
+      "body_source": "exec-35e6ee47-9da7-4a5d-8123-6fae6a704b7a.png",
+      "body_source_sha256": "6d08b7cee375244d3592835a61de42a9b339057d5bc4742dee46bce0c3b915c9",
+      "portrait_source": "exec-bd5a1ae2-7eaa-4092-b390-c74c73bf351f.png",
+      "portrait_source_sha256": "2ea47516088f3d4d4fc1cda8d3bf4148d8d8240a5ec85a3a449728c43634eb23"
+    }
+  ],
+  "unchanged_original_sha256": {
+    "public/assets/art/portraits.webp": "f604b5f93c6526130546e194674d37f4e3265083908bbbb3448affadf4b70496",
+    "public/assets/art/ruins.webp": "a06f910462fb69b1a38d94c1a169274f8b28d559286ec6ae3fc7ac3db61e7868",
+    "public/assets/art/units.webp": "d205b57d8a4082290a3a2e5a415407245106f948033cf3c66eb7b8e537393629",
+    "public/assets/world/boss_pedestal.webp": "2c75527fc94517e2856a564a0957679f348bba578ccb4cf5f7c8204ec60d2f7d",
+    "public/assets/world/decor.webp": "4b09ba9340c464ea09a0b66c8eedb9f715696d2106ae5a87ec7c00505d436928",
+    "public/assets/world/fog_corner_ne.webp": "ed2d7652e15d083552fce96cbc3ec1eebc9429806141b4106a4512b75b6e1f4a",
+    "public/assets/world/fog_corner_nw.webp": "298503f500547aba6a72f151228e9c2475dfe163c066d787b7132c68f4e4a1f5",
+    "public/assets/world/fog_corner_se.webp": "8e5f0c368c23ac36967ae4930f303889bdec7f478638a0ca8ddbc75c3484631f",
+    "public/assets/world/fog_corner_sw.webp": "435d06c46ebaae376718b37e85d084599a490ecf11775555b103ecb0d4dcfc47",
+    "public/assets/world/fog_edge_e.webp": "7d09b1fb7e385a9607d7d0c9f45d01dca94a47d377a969b18fdd2733f7417334",
+    "public/assets/world/fog_edge_n.webp": "a061f35dd6a414d65bc3ddf2f61ec247d63c894c933361d91b913a8ba443cdb3",
+    "public/assets/world/fog_edge_s.webp": "5385603b2d2515de328529a3aea60a840f1af6afb62484c5233d077210d24d38",
+    "public/assets/world/fog_edge_w.webp": "8a2422166cb732291adfc7095d1f07f8a73f1a5beb9f456803e1225fb0d86bed",
+    "public/assets/world/fog_tile.webp": "f7fee7366b41db1bbb94e913ac1101ae053d1403dac9b61086133e7d05fd532f",
+    "public/assets/world/landmark_boss_cleared.webp": "a7dc00358c691afc2dd071bb62ce35728d1e17bb94347bab6f1d75c02a74bbe5",
+    "public/assets/world/landmark_camp.webp": "d7cb524e2e81d2c760b129bf373ddeee42b7840f76e7ae25f4097ae49f6a1699",
+    "public/assets/world/landmark_gate.webp": "1988cb4815adcd459bdd65cfa2d92fe9cc03b764ab91bd1533f99ed1d10d2560",
+    "public/assets/world/landmark_gate_open.webp": "676d3aedf958e71b1fe913aba5391a71d200d048ba6a8ecf80d5f0bf38a84f39",
+    "public/assets/world/landmark_start.webp": "8cd01dd4f0d28b7316d7a2ca977f632e4805d8903470ca319132f09affd030fd",
+    "public/assets/world/step_dust.webp": "93e9edca60a88ad78b29d0c72ef15edf18134ee338fad6aa04f4579551034267",
+    "public/assets/world/step_hint.webp": "9be5794c2e4982dcd5d0efc4be7553b65cf41b262ea6f8ae9d96becaeb69e449",
+    "public/assets/world/tileset.webp": "38b3ba3719ce3534e1e5ecee1c4ec1aa52fb1bbb16a5a05d66852e11fdb49c33",
+    "public/assets/world/token_frame.webp": "b3b6db2bf27fd711bb2e7269b88bb32dcca3fd17509d95faf9f91563ea3781f9"
+  }
+}

@@ -1,0 +1,129 @@
+{
+  "ownerApproval": "เอาเข้าเกมได้",
+  "ownerApprovalDateBangkok": "2026-10-27",
+  "pullRequest": 84,
+  "approvedRuntimeHead": "0353b8f8890673882d14e6875714b721b56174cb",
+  "validatedHead": "15f82957df6221c699fadbeee70b4f75d5f19e63",
+  "mergeSHA": "7c392b5cf427b620059d7844c4374c6baf0b827b",
+  "qualityRun": 40492197706,
+  "qualityResult": "success",
+  "browserRun": 40492197679,
+  "browserResult": "success",
+  "browserCounts": {
+    "sourceFixturePassed": 119,
+    "prechecksPassed": 3,
+    "productionPassed": 249,
+    "productionSkipped": 274
+  },
+  "atlas": {
+    "path": "public/assets/fx/projectile_fx.webp",
+    "bytes": 1013228,
+    "sha256": "d9a46b5189187cd779b4ee5ad2b2520fe4533a9d160f017796fe1e880bcc169d",
+    "frames": 21,
+    "width": 1440,
+    "height": 2016
+  },
+  "runtimeTrees": {
+    "src": "327135df18facc6a359884fa54516025bb9d7aed",
+    "public": "65bd6995354109f935fa0f875ce4fc19cf2f59c6",
+    "tests": "d5093b0620114298fc2beab7225b18401fa650b7"
+  },
+  "localValidation": {
+    "unitPassed": 890,
+    "unitFiles": 77,
+    "focusedBrowserUniquePassed": 26,
+    "capturesPassed": 40,
+    "rawFrames": 5479,
+    "playerPassed": 1,
+    "maxTimestampErrorMs": 0.0062
+  },
+  "pagesRun": 40503739046,
+  "pagesResult": "success",
+  "postMergeQuality": {
+    "run": 40503738918,
+    "conclusion": "success"
+  },
+  "family5Started": false,
+  "pagesArtifact": {
+    "id": 12734650094,
+    "name": "github-pages",
+    "bytes": 51312457,
+    "digest": "sha256:52749f2e2cb424bbaa84a9b112f08a1cca4a3761e6278dca5935e61c3d0a666f",
+    "headSHA": "7c392b5cf427b620059d7844c4374c6baf0b827b"
+  },
+  "liveHTTPVerification": {
+    "result": "blocked_by_execution_proxy",
+    "phase": "CONNECT tunnel",
+    "status": 403,
+    "server": "envoy",
+    "observedAtUTC": "2026-10-27T12:28:54Z",
+    "url": "https://wnau34-nptrn.github.io/asterveil-fateweave/",
+    "liveCDNHashVerified": false
+  },
+  "publishedSHA": "7c392b5cf427b620059d7844c4374c6baf0b827b",
+  "pagesUpdatedAtUTC": "2026-10-27T12:37:55Z",
+  "pagesRunURL": "https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/40503739046",
+  "pagesJobs": [
+    {
+      "name": "build",
+      "id": 122187652110,
+      "conclusion": "success"
+    },
+    {
+      "name": "browser (4)",
+      "id": 122187652278,
+      "conclusion": "success"
+    },
+    {
+      "name": "browser (2)",
+      "id": 122187652391,
+      "conclusion": "success"
+    },
+    {
+      "name": "browser (1)",
+      "id": 122187652425,
+      "conclusion": "success"
+    },
+    {
+      "name": "browser (3)",
+      "id": 122187652621,
+      "conclusion": "success"
+    },
+    {
+      "name": "deploy",
+      "id": 122192778266,
+      "conclusion": "success"
+    }
+  ],
+  "pagesBrowserCounts": {
+    "sourceFixturePassed": 119,
+    "productionPassed": 249,
+    "productionSkipped": 274,
+    "shards": [
+      {
+        "shard": 1,
+        "jobId": 122187652425,
+        "passed": 61,
+        "skipped": 60
+      },
+      {
+        "shard": 2,
+        "jobId": 122187652391,
+        "passed": 63,
+        "skipped": 136
+      },
+      {
+        "shard": 3,
+        "jobId": 122187652621,
+        "passed": 59,
+        "skipped": 78
+      },
+      {
+        "shard": 4,
+        "jobId": 122187652278,
+        "passed": 66,
+        "skipped": 0
+      }
+    ]
+  }
+}

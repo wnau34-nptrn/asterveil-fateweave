@@ -1,0 +1,82 @@
+{
+  "encounterId": "first-clash",
+  "beat": 5,
+  "round": 2,
+  "turnIndex": 0,
+  "order": [
+    "guardian",
+    "f1",
+    "weaver",
+    "healer"
+  ],
+  "outcome": "active",
+  "guard": null,
+  "counter": null,
+  "taunt": null,
+  "song": null,
+  "heroes": [
+    {
+      "id": "guardian",
+      "hp": 19,
+      "barrier": 0,
+      "cooldowns": {},
+      "revivedRound": 1
+    },
+    {
+      "id": "weaver",
+      "hp": 48,
+      "barrier": 14,
+      "cooldowns": {
+        "ward": 3
+      }
+    },
+    {
+      "id": "healer",
+      "hp": 46,
+      "barrier": 0,
+      "cooldowns": {
+        "revive": 6
+      }
+    }
+  ],
+  "enemies": [
+    {
+      "id": "f1",
+      "hp": 90,
+      "markedUntil": 0
+    }
+  ],
+  "intent": {
+    "sourceId": "f1",
+    "targetSlot": 0,
+    "name": "Rift Bolt",
+    "damage": 16,
+    "kind": "energy",
+    "targetId": "guardian",
+    "beat": 5,
+    "round": 2
+  },
+  "commands": [
+    {
+      "beat": 1,
+      "heroId": "guardian",
+      "action": "attack",
+      "targetId": "f1"
+    },
+    {
+      "beat": 3,
+      "heroId": "weaver",
+      "action": "ward",
+      "targetId": "weaver"
+    },
+    {
+      "beat": 4,
+      "heroId": "healer",
+      "action": "revive",
+      "targetId": "guardian"
+    }
+  ],
+  "revived": [
+    "healer"
+  ]
+}

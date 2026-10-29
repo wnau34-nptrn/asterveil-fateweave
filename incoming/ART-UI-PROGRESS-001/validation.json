@@ -1,0 +1,274 @@
+{
+  "tome_bulwark_small": {
+    "size": [
+      256,
+      256
+    ],
+    "alpha_bounds": [
+      32,
+      28,
+      224,
+      228
+    ],
+    "motif_size": [
+      192,
+      200
+    ]
+  },
+  "tome_bulwark_medium": {
+    "size": [
+      256,
+      256
+    ],
+    "alpha_bounds": [
+      33,
+      28,
+      223,
+      228
+    ],
+    "motif_size": [
+      190,
+      200
+    ]
+  },
+  "tome_bulwark_large": {
+    "size": [
+      256,
+      256
+    ],
+    "alpha_bounds": [
+      30,
+      28,
+      226,
+      228
+    ],
+    "motif_size": [
+      196,
+      200
+    ]
+  },
+  "tome_blade_small": {
+    "size": [
+      256,
+      256
+    ],
+    "alpha_bounds": [
+      33,
+      28,
+      223,
+      228
+    ],
+    "motif_size": [
+      190,
+      200
+    ]
+  },
+  "tome_blade_medium": {
+    "size": [
+      256,
+      256
+    ],
+    "alpha_bounds": [
+      42,
+      28,
+      214,
+      228
+    ],
+    "motif_size": [
+      172,
+      200
+    ]
+  },
+  "tome_blade_large": {
+    "size": [
+      256,
+      256
+    ],
+    "alpha_bounds": [
+      28,
+      30,
+      228,
+      226
+    ],
+    "motif_size": [
+      200,
+      196
+    ]
+  },
+  "tome_accord_small": {
+    "size": [
+      256,
+      256
+    ],
+    "alpha_bounds": [
+      32,
+      28,
+      224,
+      228
+    ],
+    "motif_size": [
+      192,
+      200
+    ]
+  },
+  "tome_accord_medium": {
+    "size": [
+      256,
+      256
+    ],
+    "alpha_bounds": [
+      35,
+      28,
+      220,
+      228
+    ],
+    "motif_size": [
+      185,
+      200
+    ]
+  },
+  "tome_accord_large": {
+    "size": [
+      256,
+      256
+    ],
+    "alpha_bounds": [
+      33,
+      28,
+      223,
+      228
+    ],
+    "motif_size": [
+      190,
+      200
+    ]
+  },
+  "rift_core": {
+    "size": [
+      256,
+      256
+    ],
+    "alpha_bounds": [
+      28,
+      30,
+      228,
+      226
+    ],
+    "motif_size": [
+      200,
+      196
+    ]
+  },
+  "star_shard": {
+    "size": [
+      256,
+      256
+    ],
+    "alpha_bounds": [
+      28,
+      34,
+      228,
+      221
+    ],
+    "motif_size": [
+      200,
+      187
+    ]
+  },
+  "honour_coin": {
+    "size": [
+      256,
+      256
+    ],
+    "alpha_bounds": [
+      32,
+      28,
+      224,
+      228
+    ],
+    "motif_size": [
+      192,
+      200
+    ]
+  },
+  "pet_egg": {
+    "size": [
+      256,
+      256
+    ],
+    "alpha_bounds": [
+      48,
+      28,
+      207,
+      228
+    ],
+    "motif_size": [
+      159,
+      200
+    ]
+  },
+  "pet_food": {
+    "size": [
+      256,
+      256
+    ],
+    "alpha_bounds": [
+      32,
+      28,
+      224,
+      228
+    ],
+    "motif_size": [
+      192,
+      200
+    ]
+  },
+  "star_fate_empty": {
+    "size": [
+      64,
+      64
+    ],
+    "alpha_bounds": [
+      4,
+      6,
+      60,
+      58
+    ],
+    "motif_size": [
+      56,
+      52
+    ]
+  },
+  "star_fate_lit": {
+    "size": [
+      64,
+      64
+    ],
+    "alpha_bounds": [
+      4,
+      5,
+      60,
+      58
+    ],
+    "motif_size": [
+      56,
+      53
+    ]
+  },
+  "star_fate_frame": {
+    "size": [
+      512,
+      160
+    ],
+    "alpha_bounds": [
+      8,
+      36,
+      504,
+      124
+    ],
+    "motif_size": [
+      496,
+      88
+    ]
+  }
+}

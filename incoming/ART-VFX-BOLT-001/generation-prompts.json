@@ -1,0 +1,38 @@
+{
+  "mode": "built-in image_gen",
+  "transparent_background": true,
+  "prompts": [
+    {
+      "name": "cast_thread",
+      "prompt": "Use case: stylized-concept. Production 2D fantasy Phaser VFX texture for Asterveil Fateweave Bolt Astral Thread. 4-frame flipbook arranged in exactly 2 columns and 2 rows of equal square cells. Each cell centered on same staff-tip anchor (no staff). Thin violet and sky-white curved gathering threads and tapered petals curl inward from sparse to concentrated, no complete circles. Four sequential frames. Transparent background, effect-only RGBA. Clean intentional tapered shapes, delicate anime painted luminous filaments, crisp tiny white core and colored violet edges, low soft glow. Keep all art isolated inside respective cells with broad fully transparent margins; no separators. No text, labels, UI, characters, scenery, weapons, props, watermark, background, full-screen flash. Palette #F3FBFF #BCEBFF #C5A4FF #8661D9. Do not render a checkerboard."
+    },
+    {
+      "name": "comet_core",
+      "prompt": "Use case: stylized-concept. Production 2D fantasy Phaser VFX texture for Asterveil Fateweave Bolt Astral Thread. 4-frame shimmer flipbook in exactly 2 columns and 2 rows of equal square cells. Same tiny right-pointing horizontal needle / four-point star head centered identically in every cell. Sky-white sharp core, pale blue and violet edge. No long tail. Only subtle shimmer variation. Transparent background, effect-only RGBA. Clean intentional tapered shapes, delicate anime painted luminous filaments, crisp tiny white core and colored violet edges, low soft glow. Keep all art isolated inside respective cells with broad fully transparent margins; no separators. No text, labels, UI, characters, scenery, weapons, props, watermark, background, full-screen flash. Palette #F3FBFF #BCEBFF #C5A4FF #8661D9. Do not render a checkerboard."
+    },
+    {
+      "name": "tapered_wake",
+      "prompt": "Use case: stylized-concept. Production 2D fantasy Phaser VFX texture for Asterveil Fateweave Bolt Astral Thread. ONE isolated horizontal short tapered violet tail, points left and widens gently at right where head would attach, ribbon-like fine white-blue filaments. Overall shape aspect ratio 4:1. No head, no beam, no circles. Transparent background, effect-only RGBA. Clean intentional tapered shapes, delicate anime painted luminous filaments, crisp tiny white core and colored violet edges, low soft glow. Keep all art isolated inside respective cells with broad fully transparent margins; no separators. No text, labels, UI, characters, scenery, weapons, props, watermark, background, full-screen flash. Palette #F3FBFF #BCEBFF #C5A4FF #8661D9. Do not render a checkerboard."
+    },
+    {
+      "name": "impact_petals",
+      "prompt": "Use case: stylized-concept. Production 2D fantasy Phaser VFX texture for Asterveil Fateweave Bolt Astral Thread. 8-frame flipbook in exactly 4 columns and 2 rows of equal square cells. Sequential contact burst: tiny asymmetric star seed, sharp sky-white star, expanding sparse curved violet petals, peak open petal burst, separating petals, fading threads, few fragments, nearly vanished. Identical fixed center in each cell, generous padding. No uniform radial circles. Transparent background, effect-only RGBA. Clean intentional tapered shapes, delicate anime painted luminous filaments, crisp tiny white core and colored violet edges, low soft glow. Keep all art isolated inside respective cells with broad fully transparent margins; no separators. No text, labels, UI, characters, scenery, weapons, props, watermark, background, full-screen flash. Palette #F3FBFF #BCEBFF #C5A4FF #8661D9. Do not render a checkerboard."
+    },
+    {
+      "name": "spark",
+      "prompt": "Use case: stylized-concept. Production 2D fantasy Phaser VFX texture for Asterveil Fateweave Bolt Astral Thread. THREE isolated small spark sprites evenly spaced horizontally in one row, each within an equal square cell: a fine four-point star, a diagonal needle glint, a curved tapered petal. Violet edges sky-white centers. Transparent background, effect-only RGBA. Clean intentional tapered shapes, delicate anime painted luminous filaments, crisp tiny white core and colored violet edges, low soft glow. Keep all art isolated inside respective cells with broad fully transparent margins; no separators. No text, labels, UI, characters, scenery, weapons, props, watermark, background, full-screen flash. Palette #F3FBFF #BCEBFF #C5A4FF #8661D9. Do not render a checkerboard."
+    },
+    {
+      "name": "dissolve_wisps",
+      "prompt": "Use case: stylized-concept. Production 2D fantasy Phaser VFX texture for Asterveil Fateweave Bolt Astral Thread. 4-frame flipbook in exactly 2 columns and 2 rows of equal square cells. Fixed center. Thin broken crescent violet wisps and sparse blue-white fragments drift outward then dissipate to nearly invisible. No whole ring, no impact core. Sequential decreasing density. Transparent background, effect-only RGBA. Clean intentional tapered shapes, delicate anime painted luminous filaments, crisp tiny white core and colored violet edges, low soft glow. Keep all art isolated inside respective cells with broad fully transparent margins; no separators. No text, labels, UI, characters, scenery, weapons, props, watermark, background, full-screen flash. Palette #F3FBFF #BCEBFF #C5A4FF #8661D9. Do not render a checkerboard."
+    },
+    {
+      "name": "cast_thread_revision",
+      "prompt": "Production VFX transparent RGBA flipbook, effect-only. Four equal square cells in strict 2x2 grid with at least 20% empty margin inside EACH cell. Cast_thread for Astral Thread fantasy Bolt: ONLY THREE hair-thin violet and icy blue-white tapered curved filaments, with ONE tiny tapered petal, gathering inward toward exact center of each cell. Frame1 very sparse open threads distant from center, frame2 inward, frame3 closer, frame4 concentrated tiny star at exact center. No filled shapes, NO mist, NO fog, NO clouds, NO galaxy, NO vortex disc, NO opaque petals, NO background, no labels, no UI, no characters, no weapon, no staff, no circles or rings. Extremely sparse elegant luminous linework with very little glow, generous transparent negative space, crisp white tips, violet colored edge."
+    },
+    {
+      "name": "light_core",
+      "prompt": "One tiny pure sky-white four-point needle star for additive light core overlay of a 2D Phaser game magic projectile. Single isolated star centered exactly in a square canvas with 30% empty margin all sides. Horizontal right-facing elongated needle tip, tiny vertical points, subtle tight white glow only, all pixels white or pale icy blue. Transparent RGBA background. No colored violet edge (separate layer elsewhere), no halo disc, no circle, no additional spark, no tail, no UI, no text, no scene, no character."
+    }
+  ]
+}

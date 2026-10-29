@@ -1,0 +1,582 @@
+[
+  {
+    "strip": "heal",
+    "source": "incoming/ART-VFX-HEALING-001/r2/source/cast-six-skills.png",
+    "sha256": "8542bdcae584bb4213075b50e28ca79de25bee6acc6746b19fbabd7cfe3a8491",
+    "scaleX": 1.4950819672131148,
+    "scaleY": 0.6666666666666666,
+    "half": null,
+    "frames": [
+      {
+        "cell": [
+          0,
+          0,
+          341,
+          317
+        ],
+        "anchor": [
+          178.5,
+          304
+        ],
+        "brightSize": [
+          289,
+          142
+        ]
+      },
+      {
+        "cell": [
+          341,
+          0,
+          342,
+          317
+        ],
+        "anchor": [
+          173.5,
+          313
+        ],
+        "brightSize": [
+          305,
+          207
+        ]
+      },
+      {
+        "cell": [
+          683,
+          0,
+          341,
+          317
+        ],
+        "anchor": [
+          176.5,
+          308
+        ],
+        "brightSize": [
+          239,
+          196
+        ]
+      }
+    ]
+  },
+  {
+    "strip": "prayer",
+    "source": "incoming/ART-VFX-HEALING-001/r2/source/cast-six-skills.png",
+    "sha256": "8542bdcae584bb4213075b50e28ca79de25bee6acc6746b19fbabd7cfe3a8491",
+    "scaleX": 1.3293413173652695,
+    "scaleY": 0.631578947368421,
+    "half": null,
+    "frames": [
+      {
+        "cell": [
+          0,
+          317,
+          341,
+          231
+        ],
+        "anchor": [
+          175.5,
+          224
+        ],
+        "brightSize": [
+          301,
+          145
+        ]
+      },
+      {
+        "cell": [
+          341,
+          317,
+          342,
+          231
+        ],
+        "anchor": [
+          175.0,
+          227
+        ],
+        "brightSize": [
+          334,
+          190
+        ]
+      },
+      {
+        "cell": [
+          683,
+          317,
+          341,
+          231
+        ],
+        "anchor": [
+          180.5,
+          222
+        ],
+        "brightSize": [
+          255,
+          114
+        ]
+      }
+    ]
+  },
+  {
+    "strip": "rouse_protector",
+    "source": "incoming/ART-VFX-HEALING-001/r2/source/cast-six-skills.png",
+    "sha256": "8542bdcae584bb4213075b50e28ca79de25bee6acc6746b19fbabd7cfe3a8491",
+    "scaleX": 2.3716814159292037,
+    "scaleY": 0.6146341463414634,
+    "half": "left",
+    "frames": [
+      {
+        "cell": [
+          0,
+          548,
+          341,
+          233
+        ],
+        "anchor": [
+          171.0,
+          223
+        ],
+        "brightSize": [
+          290,
+          118
+        ]
+      },
+      {
+        "cell": [
+          341,
+          548,
+          342,
+          233
+        ],
+        "anchor": [
+          172.5,
+          229
+        ],
+        "brightSize": [
+          339,
+          205
+        ]
+      },
+      {
+        "cell": [
+          683,
+          548,
+          341,
+          233
+        ],
+        "anchor": [
+          157.5,
+          218
+        ],
+        "brightSize": [
+          315,
+          110
+        ]
+      }
+    ]
+  },
+  {
+    "strip": "rouse_ally",
+    "source": "incoming/ART-VFX-HEALING-001/r2/source/cast-six-skills.png",
+    "sha256": "8542bdcae584bb4213075b50e28ca79de25bee6acc6746b19fbabd7cfe3a8491",
+    "scaleX": 2.3716814159292037,
+    "scaleY": 0.6146341463414634,
+    "half": "right",
+    "frames": [
+      {
+        "cell": [
+          0,
+          548,
+          341,
+          233
+        ],
+        "anchor": [
+          171.0,
+          223
+        ],
+        "brightSize": [
+          290,
+          118
+        ]
+      },
+      {
+        "cell": [
+          341,
+          548,
+          342,
+          233
+        ],
+        "anchor": [
+          172.5,
+          229
+        ],
+        "brightSize": [
+          339,
+          205
+        ]
+      },
+      {
+        "cell": [
+          683,
+          548,
+          341,
+          233
+        ],
+        "anchor": [
+          157.5,
+          218
+        ],
+        "brightSize": [
+          315,
+          110
+        ]
+      }
+    ]
+  },
+  {
+    "strip": "revive",
+    "source": "incoming/ART-VFX-HEALING-001/r2/source/cast-six-skills.png",
+    "sha256": "8542bdcae584bb4213075b50e28ca79de25bee6acc6746b19fbabd7cfe3a8491",
+    "scaleX": 1.3684210526315788,
+    "scaleY": 0.6666666666666666,
+    "half": null,
+    "frames": [
+      {
+        "cell": [
+          0,
+          781,
+          341,
+          261
+        ],
+        "anchor": [
+          185.5,
+          247
+        ],
+        "brightSize": [
+          303,
+          127
+        ]
+      },
+      {
+        "cell": [
+          341,
+          781,
+          342,
+          261
+        ],
+        "anchor": [
+          171.0,
+          257
+        ],
+        "brightSize": [
+          342,
+          225
+        ]
+      },
+      {
+        "cell": [
+          683,
+          781,
+          341,
+          261
+        ],
+        "anchor": [
+          151.0,
+          257
+        ],
+        "brightSize": [
+          302,
+          172
+        ]
+      }
+    ]
+  },
+  {
+    "strip": "bless",
+    "source": "incoming/ART-VFX-HEALING-001/r2/source/cast-six-skills.png",
+    "sha256": "8542bdcae584bb4213075b50e28ca79de25bee6acc6746b19fbabd7cfe3a8491",
+    "scaleX": 1.4418604651162792,
+    "scaleY": 0.6774193548387096,
+    "half": null,
+    "frames": [
+      {
+        "cell": [
+          0,
+          1042,
+          341,
+          238
+        ],
+        "anchor": [
+          175.5,
+          228
+        ],
+        "brightSize": [
+          183,
+          113
+        ]
+      },
+      {
+        "cell": [
+          341,
+          1042,
+          342,
+          238
+        ],
+        "anchor": [
+          175.0,
+          227
+        ],
+        "brightSize": [
+          258,
+          186
+        ]
+      },
+      {
+        "cell": [
+          683,
+          1042,
+          341,
+          238
+        ],
+        "anchor": [
+          176.0,
+          222
+        ],
+        "brightSize": [
+          172,
+          125
+        ]
+      }
+    ]
+  },
+  {
+    "strip": "bless_tick",
+    "source": "incoming/ART-VFX-HEALING-001/r2/source/upkeep-two-skills.png",
+    "sha256": "d0dcea6c2bdd5a3e4c37995526f0fa36044ed4c601f0b959022f8888b38a65ba",
+    "scaleX": 0.7983870967741935,
+    "scaleY": 0.3486238532110092,
+    "half": null,
+    "frames": [
+      {
+        "cell": [
+          0,
+          0,
+          512,
+          516
+        ],
+        "anchor": [
+          269.5,
+          508
+        ],
+        "brightSize": [
+          485,
+          211
+        ]
+      },
+      {
+        "cell": [
+          512,
+          0,
+          512,
+          516
+        ],
+        "anchor": [
+          248.0,
+          507
+        ],
+        "brightSize": [
+          496,
+          327
+        ]
+      },
+      {
+        "cell": [
+          1024,
+          0,
+          512,
+          516
+        ],
+        "anchor": [
+          262.0,
+          512
+        ],
+        "brightSize": [
+          434,
+          208
+        ]
+      }
+    ]
+  },
+  {
+    "strip": "barrier",
+    "source": "incoming/ART-VFX-HEALING-001/r2/source/cast-six-skills.png",
+    "sha256": "8542bdcae584bb4213075b50e28ca79de25bee6acc6746b19fbabd7cfe3a8491",
+    "scaleX": 1.4418604651162792,
+    "scaleY": 0.6774193548387096,
+    "half": null,
+    "frames": [
+      {
+        "cell": [
+          0,
+          1042,
+          341,
+          238
+        ],
+        "anchor": [
+          175.5,
+          228
+        ],
+        "brightSize": [
+          183,
+          113
+        ]
+      },
+      {
+        "cell": [
+          341,
+          1042,
+          342,
+          238
+        ],
+        "anchor": [
+          175.0,
+          227
+        ],
+        "brightSize": [
+          258,
+          186
+        ]
+      },
+      {
+        "cell": [
+          683,
+          1042,
+          341,
+          238
+        ],
+        "anchor": [
+          176.0,
+          222
+        ],
+        "brightSize": [
+          172,
+          125
+        ]
+      }
+    ]
+  },
+  {
+    "strip": "mend",
+    "source": "incoming/ART-VFX-HEALING-001/r2/source/cast-six-skills.png",
+    "sha256": "8542bdcae584bb4213075b50e28ca79de25bee6acc6746b19fbabd7cfe3a8491",
+    "scaleX": 1.3058823529411765,
+    "scaleY": 0.6737967914438503,
+    "half": null,
+    "frames": [
+      {
+        "cell": [
+          0,
+          1280,
+          341,
+          256
+        ],
+        "anchor": [
+          170.5,
+          187
+        ],
+        "brightSize": [
+          275,
+          117
+        ]
+      },
+      {
+        "cell": [
+          341,
+          1280,
+          342,
+          256
+        ],
+        "anchor": [
+          172.0,
+          196
+        ],
+        "brightSize": [
+          340,
+          187
+        ]
+      },
+      {
+        "cell": [
+          683,
+          1280,
+          341,
+          256
+        ],
+        "anchor": [
+          155.0,
+          179
+        ],
+        "brightSize": [
+          310,
+          110
+        ]
+      }
+    ]
+  },
+  {
+    "strip": "mend_tick",
+    "source": "incoming/ART-VFX-HEALING-001/r2/source/upkeep-two-skills.png",
+    "sha256": "d0dcea6c2bdd5a3e4c37995526f0fa36044ed4c601f0b959022f8888b38a65ba",
+    "scaleX": 0.879837067209776,
+    "scaleY": 0.45599999999999996,
+    "half": null,
+    "frames": [
+      {
+        "cell": [
+          0,
+          516,
+          512,
+          508
+        ],
+        "anchor": [
+          270.5,
+          381
+        ],
+        "brightSize": [
+          481,
+          152
+        ]
+      },
+      {
+        "cell": [
+          512,
+          516,
+          512,
+          508
+        ],
+        "anchor": [
+          266.5,
+          386
+        ],
+        "brightSize": [
+          491,
+          250
+        ]
+      },
+      {
+        "cell": [
+          1024,
+          516,
+          512,
+          508
+        ],
+        "anchor": [
+          240.5,
+          381
+        ],
+        "brightSize": [
+          481,
+          159
+        ]
+      }
+    ]
+  }
+]

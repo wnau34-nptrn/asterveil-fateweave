@@ -1,0 +1,41 @@
+{
+  "validatedHead": "25354540874a0d797e027e4e2c71d7833301df66",
+  "quality": {
+    "run": 40533376869,
+    "conclusion": "success"
+  },
+  "browser": {
+    "run": 40533376856,
+    "status": "completed",
+    "conclusion": "success",
+    "sourceFixturePassed": 214,
+    "prechecksPassed": 3,
+    "productionPassed": 249,
+    "productionSkipped": 465
+  },
+  "local": {
+    "unitTests": 948,
+    "unitFiles": 79,
+    "focusedBrowser": 57,
+    "captureStateEquality": 55,
+    "decodedPlayerClips": 55,
+    "typecheck": "pass",
+    "lint": "pass",
+    "build": "pass"
+  },
+  "runtimeApproval": {
+    "dateBangkok": "2026-10-27",
+    "quote": "เอาเข้าเกมได้",
+    "clipsReviewed": 55
+  },
+  "mergePublication": "merged_and_published",
+  "mergeSHA": "5ad447568b34ecd432760a80701d04cfe6f15e81",
+  "pages": {
+    "run": 40598822074,
+    "status": "completed",
+    "conclusion": "success",
+    "publishedSHA": "5ad447568b34ecd432760a80701d04cfe6f15e81",
+    "publishedAtUTC": "2026-10-27T23:17:56Z"
+  },
+  "releaseProof": "../../validation/alchemy-vfx-release/README_TH.md"
+}

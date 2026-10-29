@@ -1,0 +1,167 @@
+{
+  "schema": 1,
+  "task": "A2 Aegis + Vargoth Guard",
+  "repository": "wnau34-nptrn/asterveil-fateweave",
+  "gameBranch": "feature/fateweave-initial-prototype",
+  "pullRequest": 88,
+  "base": "f0ee801792f4a0a081a2752cadfdd99d63b50dbe",
+  "mergeSHA": "e94b42462c96904f67f5ddfd4e251ea765840d59",
+  "publishedHead": "7ff53885d45ed7259fddeed43103310c37439368",
+  "captureHead": "dd56dddbaa645023cc168d3811acbd6328d2552e",
+  "trees": {
+    "src": "9c21ec671fa30a10236772f3819ba84aaca208a3",
+    "public": "f6698cd8435f2b84295c503de9db6031b1f4e218",
+    "tests": "196c37d710d331e2101602e72caa775255660912",
+    ".github": "1a7f85fffb97fd2f87ad609333f46b3497bc1fc2"
+  },
+  "captureSrcPublicEqualPublished": true,
+  "postmergeRepair": "Only QA getter and bounded final RAF sample; duration200ms, phase/frame/state/command assertions retained. No runtime changes.",
+  "premergeCI": {
+    "head": "91b2f409c6c4adfa0c6172a2ad219870504652c7",
+    "qualityRun": 40663714124,
+    "browserRun": 40663714062,
+    "unitPassed": 975,
+    "unitFiles": 81,
+    "sourcePassed": 271,
+    "prechecksPassed": 3,
+    "productionPassed": 249,
+    "productionSkipped": 566
+  },
+  "publishedCI": {
+    "qualityRuns": [
+      40671415937,
+      40671427628
+    ],
+    "pages": {
+      "id": 40671415477,
+      "html_url": "https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/40671415477",
+      "head_sha": "7ff53885d45ed7259fddeed43103310c37439368",
+      "conclusion": "success",
+      "updated_at": "2026-10-28T10:48:46Z"
+    },
+    "jobs": [
+      {
+        "id": 122758840814,
+        "name": "build",
+        "status": "completed",
+        "conclusion": "success",
+        "completed_at": "2026-10-28T10:23:38Z"
+      },
+      {
+        "id": 122758841168,
+        "name": "browser (2)",
+        "status": "completed",
+        "conclusion": "success",
+        "completed_at": "2026-10-28T10:29:11Z"
+      },
+      {
+        "id": 122758841215,
+        "name": "browser (1)",
+        "status": "completed",
+        "conclusion": "success",
+        "completed_at": "2026-10-28T10:48:28Z"
+      },
+      {
+        "id": 122758841347,
+        "name": "browser (4)",
+        "status": "completed",
+        "conclusion": "success",
+        "completed_at": "2026-10-28T10:29:07Z"
+      },
+      {
+        "id": 122758841349,
+        "name": "browser (3)",
+        "status": "completed",
+        "conclusion": "success",
+        "completed_at": "2026-10-28T10:27:50Z"
+      },
+      {
+        "id": 122771108673,
+        "name": "deploy",
+        "status": "completed",
+        "conclusion": "success",
+        "completed_at": "2026-10-28T10:48:45Z"
+      }
+    ],
+    "counts": {
+      "unitPassed": 975,
+      "unitFiles": 81,
+      "sourcePassed": 271,
+      "productionPassed": 249,
+      "productionSkipped": 566
+    },
+    "artifact": {
+      "id": 12808292493,
+      "node_id": "MDg6QXJ0aWZhY3QxMjgwODI5MjQ5Mw==",
+      "name": "github-pages",
+      "size_in_bytes": 58202500,
+      "url": "https://api.github.com/repos/wnau34-nptrn/asterveil-fateweave/actions/artifacts/12808292493",
+      "archive_download_url": "https://api.github.com/repos/wnau34-nptrn/asterveil-fateweave/actions/artifacts/12808292493/zip",
+      "expired": false,
+      "digest": "sha256:1ef7f398ec8241e94c15d68755fb5d6c49e79c657e4009076ec4e33968a58fad",
+      "created_at": "2026-10-28T10:23:35Z",
+      "updated_at": "2026-10-28T10:23:35Z",
+      "expires_at": "2026-10-29T10:23:33Z",
+      "workflow_run": {
+        "id": 40671415477,
+        "repository_id": 1415664685,
+        "head_repository_id": 1415664685,
+        "head_branch": "feature/fateweave-initial-prototype",
+        "head_sha": "7ff53885d45ed7259fddeed43103310c37439368"
+      }
+    }
+  },
+  "firstPagesAttempt": {
+    "run": 40668449459,
+    "head": "e94b42462c96904f67f5ddfd4e251ea765840d59",
+    "sourcePassed": 270,
+    "sourceFailed": 1,
+    "deploy": "skipped",
+    "reason": "Counter final pose read before pending RAF integrated at exact200ms wall clock. Fixed test sampling only in7ff5388."
+  },
+  "atlases": {
+    "aegis": {
+      "logical": 32,
+      "unique": 25,
+      "width": 2048,
+      "height": 540,
+      "decodedRgbaBytes": 4423680,
+      "atlasJsonBytes": 1397790,
+      "displayRatio": 2.7777777777777777
+    },
+    "vargothGuard": {
+      "logical": 32,
+      "unique": 24,
+      "width": 768,
+      "height": 1401,
+      "decodedRgbaBytes": 4303872,
+      "atlasJsonBytes": 1385751,
+      "displayRatio": 2
+    }
+  },
+  "clips": {
+    "count": 26,
+    "frames": 1202,
+    "maxGapSeconds": 0.377,
+    "maxPtsErrorMs": 0.0061,
+    "proof": "../../combat-presentation/unit-a2-slice/proof.json"
+  },
+  "limitations": [
+    "Chromium cloud touch/390px emulation; not physical mobile or Safari",
+    "Atlas RGBA is not total game RAM/GPU",
+    "No new owner visual approval inferred",
+    "Dodge procedural; idle seed; revive resets seed, no stand-up strip"
+  ],
+  "preserved": "Pilot/A1 pixels and timing; all C5 approvals/gates including C5.6; rules/save/content/balance/playback timing unchanged; no A3/new VFX family",
+  "verification": "GitHub Pages workflow build+4browser+deploy success and artifact head verified; no independent live CDN hash claim",
+  "ownerVisualApproval": {
+    "date": "2026-10-28",
+    "quote": "เอาเข้าเกมได้",
+    "scope": [
+      "guardian",
+      "foe_vargoth_guard"
+    ],
+    "basis": "Explicit owner reply after A2 delivery with26clips; not inferred from tests",
+    "runtimeChangeForApproval": false
+  }
+}

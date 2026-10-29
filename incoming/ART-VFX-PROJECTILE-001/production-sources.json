@@ -1,0 +1,322 @@
+{
+  "sourceSha256": "febd9fe797ad8c34ff1d80bb743d07ab909c212dd028ddde1e245b48f2800098",
+  "atlasSha256": "d9a46b5189187cd779b4ee5ad2b2520fe4533a9d160f017796fe1e880bcc169d",
+  "source": "source/seven-skills.png",
+  "frames": [
+    {
+      "frame": "hinder_prepare",
+      "sourceCell": [
+        0,
+        0,
+        256,
+        220
+      ],
+      "bright": [
+        91,
+        89,
+        205,
+        173
+      ]
+    },
+    {
+      "frame": "hinder_flight",
+      "sourceCell": [
+        256,
+        0,
+        464,
+        220
+      ],
+      "bright": [
+        83,
+        70,
+        426,
+        186
+      ]
+    },
+    {
+      "frame": "hinder_tail",
+      "sourceCell": [
+        720,
+        0,
+        304,
+        220
+      ],
+      "bright": [
+        36,
+        89,
+        237,
+        170
+      ]
+    },
+    {
+      "frame": "volley_prepare",
+      "sourceCell": [
+        0,
+        220,
+        256,
+        215
+      ],
+      "bright": [
+        91,
+        48,
+        197,
+        156
+      ]
+    },
+    {
+      "frame": "volley_flight",
+      "sourceCell": [
+        256,
+        220,
+        464,
+        215
+      ],
+      "bright": [
+        66,
+        29,
+        422,
+        160
+      ]
+    },
+    {
+      "frame": "volley_tail",
+      "sourceCell": [
+        720,
+        220,
+        304,
+        215
+      ],
+      "bright": [
+        12,
+        67,
+        260,
+        155
+      ]
+    },
+    {
+      "frame": "weakshot_prepare",
+      "sourceCell": [
+        0,
+        435,
+        256,
+        189
+      ],
+      "bright": [
+        87,
+        55,
+        210,
+        128
+      ]
+    },
+    {
+      "frame": "weakshot_flight",
+      "sourceCell": [
+        256,
+        435,
+        464,
+        189
+      ],
+      "bright": [
+        87,
+        52,
+        438,
+        118
+      ]
+    },
+    {
+      "frame": "weakshot_tail",
+      "sourceCell": [
+        720,
+        435,
+        304,
+        189
+      ],
+      "bright": [
+        46,
+        61,
+        252,
+        124
+      ]
+    },
+    {
+      "frame": "pin_prepare",
+      "sourceCell": [
+        0,
+        624,
+        256,
+        211
+      ],
+      "bright": [
+        77,
+        83,
+        212,
+        136
+      ]
+    },
+    {
+      "frame": "pin_flight",
+      "sourceCell": [
+        256,
+        624,
+        464,
+        211
+      ],
+      "bright": [
+        50,
+        56,
+        449,
+        164
+      ]
+    },
+    {
+      "frame": "pin_tail",
+      "sourceCell": [
+        720,
+        624,
+        304,
+        211
+      ],
+      "bright": [
+        52,
+        50,
+        239,
+        184
+      ]
+    },
+    {
+      "frame": "track_prepare",
+      "sourceCell": [
+        0,
+        835,
+        256,
+        220
+      ],
+      "bright": [
+        97,
+        56,
+        189,
+        170
+      ]
+    },
+    {
+      "frame": "track_flight",
+      "sourceCell": [
+        256,
+        835,
+        464,
+        220
+      ],
+      "bright": [
+        54,
+        65,
+        447,
+        156
+      ]
+    },
+    {
+      "frame": "track_tail",
+      "sourceCell": [
+        720,
+        835,
+        304,
+        220
+      ],
+      "bright": [
+        58,
+        80,
+        240,
+        151
+      ]
+    },
+    {
+      "frame": "disengage_prepare",
+      "sourceCell": [
+        0,
+        1055,
+        256,
+        215
+      ],
+      "bright": [
+        96,
+        73,
+        223,
+        152
+      ]
+    },
+    {
+      "frame": "disengage_flight",
+      "sourceCell": [
+        256,
+        1055,
+        464,
+        215
+      ],
+      "bright": [
+        67,
+        71,
+        448,
+        160
+      ]
+    },
+    {
+      "frame": "disengage_tail",
+      "sourceCell": [
+        720,
+        1055,
+        304,
+        215
+      ],
+      "bright": [
+        61,
+        83,
+        232,
+        154
+      ]
+    },
+    {
+      "frame": "knives_prepare",
+      "sourceCell": [
+        0,
+        1270,
+        256,
+        266
+      ],
+      "bright": [
+        88,
+        73,
+        198,
+        145
+      ]
+    },
+    {
+      "frame": "knives_flight",
+      "sourceCell": [
+        256,
+        1270,
+        464,
+        266
+      ],
+      "bright": [
+        64,
+        61,
+        447,
+        145
+      ]
+    },
+    {
+      "frame": "knives_tail",
+      "sourceCell": [
+        720,
+        1270,
+        304,
+        266
+      ],
+      "bright": [
+        56,
+        60,
+        238,
+        154
+      ]
+    }
+  ]
+}

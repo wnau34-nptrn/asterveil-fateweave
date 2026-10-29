@@ -1,0 +1,31 @@
+{
+  "artworkApproval": {
+    "dateBangkok": "2026-10-27",
+    "quote": "ไปต่อ"
+  },
+  "runtimeApproval": {
+    "dateBangkok": "2026-10-27",
+    "quote": "เอาเข้าเกมได้",
+    "clipsReviewed": 55
+  },
+  "pullRequest": 86,
+  "runtimeHead": "31c5e90691164b9d85820ef61a92f63975635b8a",
+  "captureFixtureHead": "25354540874a0d797e027e4e2c71d7833301df66",
+  "validatedHead": "25354540874a0d797e027e4e2c71d7833301df66",
+  "srcTree": "7e2c1e8336d002e8d870c2e91f8d0d1ce2539320",
+  "publicTree": "020b47453cea14fd5e6b99c1b826169a1bd99e1e",
+  "atlasSha256": "18c4b740db78eb4f80c6f66bc845770f46f013e2c3dede909e27ef19ba2505a5",
+  "resolverStateEqualityVerifiedInCapture": true,
+  "clips": 55,
+  "rawFrames": 6916,
+  "largestCapturedFrameGapMs": 367.0,
+  "maximumTimestampErrorMs": 0.0062,
+  "rawFramesRetained": true,
+  "atlasAlphaAndVisibleSourcePixelsEqual": true,
+  "transparentRGB": "cleared at alpha=0 by atlas packing",
+  "unchangedAreas": [
+    "src/core",
+    "src/content",
+    "src/ui/battle-playback.ts"
+  ]
+}

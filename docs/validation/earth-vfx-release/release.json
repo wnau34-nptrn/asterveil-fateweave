@@ -1,0 +1,135 @@
+{
+  "ownerApproval": "นำเข้าเกมได้",
+  "ownerApprovalDateBangkok": "2026-10-27",
+  "pullRequest": 85,
+  "approvedRuntimeHead": "049c2014356aae3fdfa22bf6d0a276e37768e2e1",
+  "validatedHead": "91a48c1d335187bee26ad82712d04dc3e9c20f49",
+  "mergeSHA": "3196e1774ad272045bfbcd2e50f54bf5fab13213",
+  "qualityRun": 40514139155,
+  "qualityResult": "success",
+  "browserRun": 40514139036,
+  "browserResult": "success",
+  "browserCounts": {
+    "sourceFixturePassed": 157,
+    "prechecksPassed": 3,
+    "productionPassed": 249,
+    "productionSkipped": 349
+  },
+  "atlas": {
+    "path": "public/assets/fx/earth_fx.webp",
+    "bytes": 1391888,
+    "sha256": "96702f00e0998df20ece729fad25326fc7a29fcde0d1185f06b38379f11779e4",
+    "frames": 12,
+    "width": 1584,
+    "height": 1152
+  },
+  "runtimeTrees": {
+    "src": "8b5ba7da226a1f9ab3734d19a4c6e2a7be39bf8d",
+    "public": "712b0aaa76d27c867224d6440bed8bc154210bf4",
+    "tests": "130be5027599813c2a7a6b1c26eca47de5d6df7d"
+  },
+  "localValidation": {
+    "unitPassed": 910,
+    "unitFiles": 78,
+    "focusedBrowserPassed": 38,
+    "capturesPassed": 33,
+    "rawFrames": 4345,
+    "playerPassed": 1,
+    "maxTimestampErrorMs": 0.0062
+  },
+  "pagesRun": 40524232794,
+  "pagesResult": "success",
+  "family6Started": false,
+  "liveHTTPVerification": {
+    "result": "not_performed_network_policy",
+    "reason": "Current enforced cloud egress policy excludes wnau34-nptrn.github.io; previous family4 CONNECT403 recorded separately. No new HTTP200 or CDNhash claim.",
+    "liveCDNHashVerified": false
+  },
+  "pagesArtifact": {
+    "id": 12743825389,
+    "name": "github-pages",
+    "bytes": 52705088,
+    "digest": "sha256:e1f130996a3734bcb647f82aa5f3f6c9f19115b6693077ea614a79884acb0376",
+    "headSHA": "3196e1774ad272045bfbcd2e50f54bf5fab13213"
+  },
+  "postMergeQuality": {
+    "runs": [
+      40524232637,
+      40524250575
+    ],
+    "conclusion": "success"
+  },
+  "publishedSHA": "3196e1774ad272045bfbcd2e50f54bf5fab13213",
+  "pagesUpdatedAtUTC": "2026-10-27T15:05:39Z",
+  "pagesRunURL": "https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/40524232794",
+  "pagesJobs": [
+    {
+      "name": "build",
+      "id": 122259254516,
+      "conclusion": "success",
+      "completedAtUTC": "2026-10-27T14:47:39Z"
+    },
+    {
+      "name": "browser (1)",
+      "id": 122259254944,
+      "conclusion": "success",
+      "completedAtUTC": "2026-10-27T15:05:19Z"
+    },
+    {
+      "name": "browser (4)",
+      "id": 122259255113,
+      "conclusion": "success",
+      "completedAtUTC": "2026-10-27T14:53:24Z"
+    },
+    {
+      "name": "browser (2)",
+      "id": 122259255153,
+      "conclusion": "success",
+      "completedAtUTC": "2026-10-27T14:53:52Z"
+    },
+    {
+      "name": "browser (3)",
+      "id": 122259255291,
+      "conclusion": "success",
+      "completedAtUTC": "2026-10-27T14:53:08Z"
+    },
+    {
+      "name": "deploy",
+      "id": 122270899087,
+      "conclusion": "success",
+      "completedAtUTC": "2026-10-27T15:05:38Z"
+    }
+  ],
+  "publishedAtUTC": "2026-10-27T15:05:38Z",
+  "pagesBrowserCounts": {
+    "sourceFixturePassed": 157,
+    "productionPassed": 249,
+    "productionSkipped": 349,
+    "shards": [
+      {
+        "shard": 1,
+        "jobId": 122259254944,
+        "passed": 61,
+        "skipped": 60
+      },
+      {
+        "shard": 2,
+        "jobId": 122259255153,
+        "passed": 63,
+        "skipped": 211
+      },
+      {
+        "shard": 3,
+        "jobId": 122259255291,
+        "passed": 59,
+        "skipped": 78
+      },
+      {
+        "shard": 4,
+        "jobId": 122259255113,
+        "passed": 66,
+        "skipped": 0
+      }
+    ]
+  }
+}

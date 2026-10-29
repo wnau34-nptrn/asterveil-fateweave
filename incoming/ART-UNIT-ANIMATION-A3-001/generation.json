@@ -1,0 +1,190 @@
+{
+  "task": "ART-UNIT-ANIMATION-A3-001",
+  "tool": "image_gen.imagegen",
+  "transparent_background": true,
+  "baseCommit": "f2a4bab098fb3838ec348a7d2c92b87a69c705b5",
+  "generations": [
+    {
+      "id": "seren-attack-r1",
+      "seed": "seeds/seren-seed.png",
+      "originalOutput": "/workspace/generated_images/exec-8b19e1b5-3226-44b7-bf92-7c346a40d48c.png",
+      "retainedOutput": "raw/seren-attack-r1.png",
+      "exactPrompt": "Use the attached shipped Seren seed as exact identity reference. Generate ONE whole horizontal animation strip, transparent PNG, EXACTLY SIX full-body frames in one row, equally spaced isolated cells with ample transparent gutters. Seren is the same brown-haired green-eyed chibi priest wearing laurel leaves and gold leaf ornaments, green hooded cape, ornate ivory/green/gold priest robes, brown boots, gold staff crowned by the identical large square emerald and gold laurel-star head. Face RIGHT throughout, same three-quarter camera, body proportions, face, outfit details, staff, scale and horizontal sole baseline in ALL frames. Ignore stray clipped neighboring artwork and background in source cell; draw only this priest. Move: physical STAFF STRIKE attack to RIGHT. Left-to-right frames: 1 exact ready stance, 2 draw staff back with both hands, 3 load a compact diagonal swing, 4 staff strikes forward-right (contact), 5 follow through keeping both feet planted, 6 recover original stance. Staff must visibly move, not a spell cast. No VFX, no glow trails, no energy, no text, no labels, no scenery, no UI, no shadows on ground. Full body and full staff visible with wide margins. Original game production painted sprite art matching supplied seed, no character redesign. Generate all SIX frames together in ONE continuous strip, never a collage or multiple rows.",
+      "frames": 6,
+      "frameOrder": [
+        "ready",
+        "draw staff back / raise",
+        "loaded windup",
+        "forward-right strike",
+        "follow-through",
+        "recover ready"
+      ]
+    },
+    {
+      "id": "seren-heal-r1",
+      "seed": "seeds/seren-seed.png",
+      "originalOutput": "/workspace/generated_images/exec-36082e3a-5711-456b-97f2-6bc6bec80d5d.png",
+      "retainedOutput": "raw/seren-heal-r1.png",
+      "exactPrompt": "Generate ONE whole continuous horizontal animation strip edited from the attached in-game seed. EXACTLY 6 full-body figures in ONE ROW read LEFT to RIGHT, equal-width cells. EXACT Seren from reference: brown hair, green eyes, green/gold leaf laurel, green cape, ornate ivory/green/gold robes, brown boots, same gold staff with large square emerald in laurel-star crown. Faces RIGHT. Ignore clipped neighbor fragments/background in reference. Same painted chibi style, same camera and proportions and outfit in EVERY frame. Frame order: 1 ready; 2 draw staff toward chest; 3 raise staff toward ally on RIGHT; 4 extend raised staff toward ally / release; 5 hold follow-through; 6 recover ready. Single-target healing cast for heal/revive/bless. Raised staff points diagonally toward an ally to RIGHT, free hand extends toward that ally. Tiny staff gem glint only. Preserve same whole-body scale and common planted sole baseline in every upright pose; down poses lower toward that SAME ground line, never change camera or zoom. TRANSPARENT background. Generous blank outer margins and gutters: each figure and entire staff must fit INSIDE its own equal-width cell with at least 15% transparent padding on BOTH sides, no touching/overlap between neighboring frames. Keep gestures compact to fit cells. No scenery, floor shadows, words, numbers, labels, grid lines, extra figures, projectiles or external VFX. Only tiny local glints/motes if specified. Preserve the seed identity exactly. Whole strip in one generation pass.",
+      "frames": 6,
+      "frameOrder": [
+        "ready",
+        "draw staff toward chest",
+        "raise staff toward ally on RIGHT",
+        "extend raised staff toward ally / release",
+        "hold follow-through",
+        "recover ready"
+      ]
+    },
+    {
+      "id": "seren-prayer-r1",
+      "seed": "seeds/seren-seed.png",
+      "originalOutput": "/workspace/generated_images/exec-a3a66039-af9d-4f01-8424-1b9d77efcfb1.png",
+      "retainedOutput": "raw/seren-prayer-r1.png",
+      "exactPrompt": "Generate ONE whole continuous horizontal animation strip edited from the attached in-game seed. EXACTLY 6 full-body figures in ONE ROW read LEFT to RIGHT, equal-width cells. EXACT Seren from reference: brown hair, green eyes, green/gold leaf laurel, green cape, ornate ivory/green/gold robes, brown boots, same gold staff with large square emerald in laurel-star crown. Faces RIGHT. Ignore clipped neighbor fragments/background in reference. Same painted chibi style, same camera and proportions and outfit in EVERY frame. Frame order: 1 ready; 2 bring BOTH hands onto staff shaft; 3 draw staff upright at chest; 4 both hands raise staff / upward release; 5 hold uplifted prayer; 6 lower to ready. Party prayer for prayer/halo: BOTH hands remain on staff through preparation and upward release; staff rises vertically. Eyes gently closed during release. Tiny staff glint only, NO halo or large light. Preserve same whole-body scale and common planted sole baseline in every upright pose; down poses lower toward that SAME ground line, never change camera or zoom. TRANSPARENT background. Generous blank outer margins and gutters: each figure and entire staff must fit INSIDE its own equal-width cell with at least 15% transparent padding on BOTH sides, no touching/overlap between neighboring frames. Keep gestures compact to fit cells. No scenery, floor shadows, words, numbers, labels, grid lines, extra figures, projectiles or external VFX. Only tiny local glints/motes if specified. Preserve the seed identity exactly. Whole strip in one generation pass.",
+      "frames": 6,
+      "frameOrder": [
+        "ready",
+        "bring BOTH hands onto staff shaft",
+        "draw staff upright at chest",
+        "both hands raise staff / upward release",
+        "hold uplifted prayer",
+        "lower to ready"
+      ]
+    },
+    {
+      "id": "seren-sanctuary-r1",
+      "seed": "seeds/seren-seed.png",
+      "originalOutput": "/workspace/generated_images/exec-31148dc5-4c49-4a10-8c4e-7a5517c2f73c.png",
+      "retainedOutput": "raw/seren-sanctuary-r1.png",
+      "exactPrompt": "Generate ONE whole continuous horizontal animation strip edited from the attached in-game seed. EXACTLY 6 full-body figures in ONE ROW read LEFT to RIGHT, equal-width cells. EXACT Seren from reference: brown hair, green eyes, green/gold leaf laurel, green cape, ornate ivory/green/gold robes, brown boots, same gold staff with large square emerald in laurel-star crown. Faces RIGHT. Ignore clipped neighbor fragments/background in reference. Same painted chibi style, same camera and proportions and outfit in EVERY frame. Frame order: 1 ready; 2 grip staff with both hands; 3 reach staff foot forward RIGHT; 4 plant staff foot forward / protective seal release; 5 brace planted staff; 6 recover ready. Protective seal sanctuary: staff lower end plants on ground forward RIGHT, body braces behind it. Clear downward planting gesture. NO painted seal, floor ring, barrier or glow beyond tiny gem glint. Preserve same whole-body scale and common planted sole baseline in every upright pose; down poses lower toward that SAME ground line, never change camera or zoom. TRANSPARENT background. Generous blank outer margins and gutters: each figure and entire staff must fit INSIDE its own equal-width cell with at least 15% transparent padding on BOTH sides, no touching/overlap between neighboring frames. Keep gestures compact to fit cells. No scenery, floor shadows, words, numbers, labels, grid lines, extra figures, projectiles or external VFX. Only tiny local glints/motes if specified. Preserve the seed identity exactly. Whole strip in one generation pass.",
+      "frames": 6,
+      "frameOrder": [
+        "ready",
+        "grip staff with both hands",
+        "reach staff foot forward RIGHT",
+        "plant staff foot forward / protective seal release",
+        "brace planted staff",
+        "recover ready"
+      ]
+    },
+    {
+      "id": "seren-hit-r1",
+      "seed": "seeds/seren-seed.png",
+      "originalOutput": "/workspace/generated_images/exec-5d719654-a259-4a23-a22c-c2a6f2fae260.png",
+      "retainedOutput": "raw/seren-hit-r1.png",
+      "exactPrompt": "Generate ONE whole continuous horizontal animation strip edited from the attached in-game seed. EXACTLY 4 full-body figures in ONE ROW read LEFT to RIGHT, equal-width cells. EXACT Seren from reference: brown hair, green eyes, green/gold leaf laurel, green cape, ornate ivory/green/gold robes, brown boots, same gold staff with large square emerald in laurel-star crown. Faces RIGHT. Ignore clipped neighbor fragments/background in reference. Same painted chibi style, same camera and proportions and outfit in EVERY frame. Frame order: 1 ready; 2 flinch backward LEFT on impact; 3 recoil with knees bent; 4 recover ready. HIT reaction. Keep staff held, no blood, no sparks, no magical effects. Preserve same whole-body scale and common planted sole baseline in every upright pose; down poses lower toward that SAME ground line, never change camera or zoom. TRANSPARENT background. Generous blank outer margins and gutters: each figure and entire staff must fit INSIDE its own equal-width cell with at least 15% transparent padding on BOTH sides, no touching/overlap between neighboring frames. Keep gestures compact to fit cells. No scenery, floor shadows, words, numbers, labels, grid lines, extra figures, projectiles or external VFX. Only tiny local glints/motes if specified. Preserve the seed identity exactly. Whole strip in one generation pass.",
+      "frames": 4,
+      "frameOrder": [
+        "ready",
+        "flinch backward LEFT on impact",
+        "recoil with knees bent",
+        "recover ready"
+      ]
+    },
+    {
+      "id": "seren-block-r1",
+      "seed": "seeds/seren-seed.png",
+      "originalOutput": "/workspace/generated_images/exec-f90c77cb-6e8c-49c7-a928-d9f182fdf0ae.png",
+      "retainedOutput": "raw/seren-block-r1.png",
+      "exactPrompt": "Generate ONE whole continuous horizontal animation strip edited from the attached in-game seed. EXACTLY 4 full-body figures in ONE ROW read LEFT to RIGHT, equal-width cells. EXACT Seren from reference: brown hair, green eyes, green/gold leaf laurel, green cape, ornate ivory/green/gold robes, brown boots, same gold staff with large square emerald in laurel-star crown. Faces RIGHT. Ignore clipped neighbor fragments/background in reference. Same painted chibi style, same camera and proportions and outfit in EVERY frame. Frame order: 1 ready; 2 bring staff across torso; 3 brace staff diagonally across body against impact from RIGHT; 4 recover ready. BLOCK reaction distinct from hit: use staff as a physical brace across torso, stable feet, no shield added. Preserve same whole-body scale and common planted sole baseline in every upright pose; down poses lower toward that SAME ground line, never change camera or zoom. TRANSPARENT background. Generous blank outer margins and gutters: each figure and entire staff must fit INSIDE its own equal-width cell with at least 15% transparent padding on BOTH sides, no touching/overlap between neighboring frames. Keep gestures compact to fit cells. No scenery, floor shadows, words, numbers, labels, grid lines, extra figures, projectiles or external VFX. Only tiny local glints/motes if specified. Preserve the seed identity exactly. Whole strip in one generation pass.",
+      "frames": 4,
+      "frameOrder": [
+        "ready",
+        "bring staff across torso",
+        "brace staff diagonally across body against impact from RIGHT",
+        "recover ready"
+      ]
+    },
+    {
+      "id": "seren-down-r1",
+      "seed": "seeds/seren-seed.png",
+      "originalOutput": "/workspace/generated_images/exec-1f168587-7453-4732-9e1d-b0e6ab30febe.png",
+      "retainedOutput": "raw/seren-down-r1.png",
+      "exactPrompt": "Generate ONE whole continuous horizontal animation strip edited from the attached in-game seed. EXACTLY 4 full-body figures in ONE ROW read LEFT to RIGHT, equal-width cells. EXACT Seren from reference: brown hair, green eyes, green/gold leaf laurel, green cape, ornate ivory/green/gold robes, brown boots, same gold staff with large square emerald in laurel-star crown. Faces RIGHT. Ignore clipped neighbor fragments/background in reference. Same painted chibi style, same camera and proportions and outfit in EVERY frame. Frame order: 1 knees buckle; 2 sink to one knee holding staff; 3 lower body toward ground; 4 collapsed unconscious with intact staff beside body. DOWN reaction, progressive collapse, no recovery in final frame. Same costume and body size; lower silhouette as character falls. No blood or disintegration. Preserve same whole-body scale and common planted sole baseline in every upright pose; down poses lower toward that SAME ground line, never change camera or zoom. TRANSPARENT background. Generous blank outer margins and gutters: each figure and entire staff must fit INSIDE its own equal-width cell with at least 15% transparent padding on BOTH sides, no touching/overlap between neighboring frames. Keep gestures compact to fit cells. No scenery, floor shadows, words, numbers, labels, grid lines, extra figures, projectiles or external VFX. Only tiny local glints/motes if specified. Preserve the seed identity exactly. Whole strip in one generation pass.",
+      "frames": 4,
+      "frameOrder": [
+        "knees buckle",
+        "sink to one knee holding staff",
+        "lower body toward ground",
+        "collapsed unconscious with intact staff beside body"
+      ]
+    },
+    {
+      "id": "hollow-mycon-cast-r1",
+      "seed": "seeds/hollow-mycon-seed.png",
+      "originalOutput": "/workspace/generated_images/exec-5189bb00-fa5c-48b4-9b81-9502d1528408.png",
+      "retainedOutput": "raw/hollow-mycon-cast-r1.png",
+      "exactPrompt": "Generate ONE whole continuous horizontal animation strip edited from the attached in-game seed. EXACTLY 6 full-body figures in ONE ROW read LEFT to RIGHT, equal-width cells. EXACT Hollow Mycon from reference: shadow-black face with two cyan oval eyes, broad drooping teal cap with mint spots, cream gills, mossy fringes, layered teal/cream robes, root-like boots, crooked wooden staff on image LEFT crowned by turquoise orb, little hanging teal droplets. Faces LEFT. Preserve staff, cap shape family, eyes and costume. Same painted chibi style, same camera and proportions and outfit in EVERY frame. Frame order: 1 ready; 2 crouch / cap begins swelling; 3 cap swells / sparse spores gather near cap edge; 4 lean and release sparse spores forward LEFT; 5 cap begins settling / follow-through; 6 settle to ready. Spore Hex energy cast toward LEFT. Cap organically swells modestly then releases. Only a few tiny local spore motes hugging cap edge and hand; NO flying cloud, projectile, beam, fog, trail or external VFX. Keep wooden staff identity intact. Preserve same whole-body scale and common planted sole baseline in every upright pose; down poses lower toward that SAME ground line, never change camera or zoom. TRANSPARENT background. Generous blank outer margins and gutters: each figure and entire staff must fit INSIDE its own equal-width cell with at least 15% transparent padding on BOTH sides, no touching/overlap between neighboring frames. Keep gestures compact to fit cells. No scenery, floor shadows, words, numbers, labels, grid lines, extra figures, projectiles or external VFX. Only tiny local glints/motes if specified. Preserve the seed identity exactly. Whole strip in one generation pass.",
+      "frames": 6,
+      "frameOrder": [
+        "ready",
+        "crouch / cap begins swelling",
+        "cap swells / sparse spores gather near cap edge",
+        "lean and release sparse spores forward LEFT",
+        "cap begins settling / follow-through",
+        "settle to ready"
+      ]
+    },
+    {
+      "id": "hollow-mycon-hit-r1",
+      "seed": "seeds/hollow-mycon-seed.png",
+      "originalOutput": "/workspace/generated_images/exec-bb1067b3-3987-4f34-806f-1e10050a80be.png",
+      "retainedOutput": "raw/hollow-mycon-hit-r1.png",
+      "exactPrompt": "Generate ONE whole continuous horizontal animation strip edited from the attached in-game seed. EXACTLY 4 full-body figures in ONE ROW read LEFT to RIGHT, equal-width cells. EXACT Hollow Mycon from reference: shadow-black face with two cyan oval eyes, broad drooping teal cap with mint spots, cream gills, mossy fringes, layered teal/cream robes, root-like boots, crooked wooden staff on image LEFT crowned by turquoise orb, little hanging teal droplets. Faces LEFT. Preserve staff, cap shape family, eyes and costume. Same painted chibi style, same camera and proportions and outfit in EVERY frame. Frame order: 1 ready; 2 cap compresses / flinch backward RIGHT; 3 recoil with bent knees; 4 recover ready. HIT reaction. Keep wooden staff held, cap squash subtle, no damage VFX or blood. Preserve same whole-body scale and common planted sole baseline in every upright pose; down poses lower toward that SAME ground line, never change camera or zoom. TRANSPARENT background. Generous blank outer margins and gutters: each figure and entire staff must fit INSIDE its own equal-width cell with at least 15% transparent padding on BOTH sides, no touching/overlap between neighboring frames. Keep gestures compact to fit cells. No scenery, floor shadows, words, numbers, labels, grid lines, extra figures, projectiles or external VFX. Only tiny local glints/motes if specified. Preserve the seed identity exactly. Whole strip in one generation pass.",
+      "frames": 4,
+      "frameOrder": [
+        "ready",
+        "cap compresses / flinch backward RIGHT",
+        "recoil with bent knees",
+        "recover ready"
+      ]
+    },
+    {
+      "id": "hollow-mycon-down-r1",
+      "seed": "seeds/hollow-mycon-seed.png",
+      "originalOutput": "/workspace/generated_images/exec-2a6dcb04-1d99-4045-b868-a25b434c5681.png",
+      "retainedOutput": "raw/hollow-mycon-down-r1.png",
+      "exactPrompt": "Generate ONE whole continuous horizontal animation strip edited from the attached in-game seed. EXACTLY 4 full-body figures in ONE ROW read LEFT to RIGHT, equal-width cells. EXACT Hollow Mycon from reference: shadow-black face with two cyan oval eyes, broad drooping teal cap with mint spots, cream gills, mossy fringes, layered teal/cream robes, root-like boots, crooked wooden staff on image LEFT crowned by turquoise orb, little hanging teal droplets. Faces LEFT. Preserve staff, cap shape family, eyes and costume. Same painted chibi style, same camera and proportions and outfit in EVERY frame. Frame order: 1 knees buckle / cap dips; 2 sink to knee with staff; 3 lower toward ground beneath cap; 4 collapsed unconscious beneath intact cap with staff beside body. DOWN reaction: progressive collapse, no recovery, no disintegration or detached cap. Preserve same whole-body scale and common planted sole baseline in every upright pose; down poses lower toward that SAME ground line, never change camera or zoom. TRANSPARENT background. Generous blank outer margins and gutters: each figure and entire staff must fit INSIDE its own equal-width cell with at least 15% transparent padding on BOTH sides, no touching/overlap between neighboring frames. Keep gestures compact to fit cells. No scenery, floor shadows, words, numbers, labels, grid lines, extra figures, projectiles or external VFX. Only tiny local glints/motes if specified. Preserve the seed identity exactly. Whole strip in one generation pass.",
+      "frames": 4,
+      "frameOrder": [
+        "knees buckle / cap dips",
+        "sink to knee with staff",
+        "lower toward ground beneath cap",
+        "collapsed unconscious beneath intact cap with staff beside body"
+      ]
+    },
+    {
+      "id": "seren-attack-r2",
+      "seed": "seeds/seren-seed.png",
+      "originalOutput": "/workspace/generated_images/exec-2fbf7679-296e-4639-a168-aa02e95f489a.png",
+      "retainedOutput": "raw/seren-attack-r2.png",
+      "exactPrompt": "Edit the attached exact Seren priest seed into ONE SIX-FRAME horizontal body-animation strip. Same brown hair green eyes gold leaf laurel ivory/green/gold robes green cape brown boots and gold emerald-laurel-star staff. Faces RIGHT in same three-quarter view throughout. SIX equally spaced full-body figures LEFT to RIGHT. This is R2 compact physical staff strike: 1 ready, 2 draw staff diagonally toward shoulder with both hands, 3 prepare short downward-forward strike, 4 short strike down and forward RIGHT with staff held DIAGONALLY, 5 compact follow-through, 6 return ready. Do not extend staff horizontally to touch next figure. Every figure including full staff must have ample blank margins on ALL sides; each occupies central 65% of its cell. SIX identical-size equally spaced cells, one row only, no overlaps. EXACT same body proportions, face, staff design, outfit and common sole baseline. Entire boots and ornament visible. Transparent background. No glow, red fringes, energy, trails, text, labels, shadows, scene or other artwork. Ignore the source's clipped neighbor fragments. Original production painted game sprites matching seed. Generate whole strip together.",
+      "frames": 6,
+      "frameOrder": [
+        "ready",
+        "draw staff diagonally back",
+        "compact windup with both hands",
+        "short downward-forward strike RIGHT",
+        "compact follow-through",
+        "recover ready"
+      ]
+    },
+    {
+      "id": "hollow-mycon-cast-r2",
+      "seed": "seeds/hollow-mycon-seed.png",
+      "originalOutput": "/workspace/generated_images/exec-2e1c41b6-3411-4c7e-b335-4c0e0baa6319.png",
+      "retainedOutput": "raw/hollow-mycon-cast-r2.png",
+      "exactPrompt": "Using attached Hollow Mycon shipped seed, produce EXACTLY SIX full body frames in ONE HORIZONTAL STRIP, left to right, transparent background. Same original teal/cream mushroom mage with mint spotted drooping cap, moss trim, cyan oval eyes on black face, robes, root boots, crooked wooden orb staff kept on image LEFT. Faces LEFT throughout. Same camera, outfit, staff, body proportions and planted feet sole baseline. This is Spore Hex BODY animation R2, show clearly readable CAP SWELL rather than mist. Frames: 1 ready exact seed identity; 2 crouch with cap slightly folded; 3 cap visibly domes/inflates upward to about 120% original cap height with same recognizable spots and gills, feet planted; 4 cap contracts as free hand opens forward LEFT in release; 5 cap settles; 6 ready. Only TWO tiny pale isolated spore specks near free fingertips in frame4, no spore fog. Absolutely NO clouds, mist, aura, energy glow, green chroma fringe, projectiles, beams, trails or ground effects. Existing cyan eyes and staff orb are flat painted ornaments, not luminous halos. Each full figure/staff within central 65% of six equal-width slots, generous transparent gutters and outside margins, no overlaps, no clipping, no labels/text/grid/scenery/shadow. Whole strip generated together in one pass.",
+      "frames": 6,
+      "frameOrder": [
+        "ready",
+        "crouch / cap gathers inward",
+        "cap visibly inflates upward while feet stay planted",
+        "cap contracts / open hand releases LEFT",
+        "cap relaxes / follow-through",
+        "recover ready"
+      ]
+    }
+  ]
+}

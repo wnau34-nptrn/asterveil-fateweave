@@ -1,0 +1,110 @@
+{
+  "parry": {
+    "opaque_extent": 196,
+    "alpha_radius": 109.35
+  },
+  "lunge": {
+    "opaque_extent": 198,
+    "alpha_radius": 100.53
+  },
+  "sweep": {
+    "opaque_extent": 198,
+    "alpha_radius": 108.11
+  },
+  "storm": {
+    "opaque_extent": 197,
+    "alpha_radius": 106.12
+  },
+  "aegis": {
+    "opaque_extent": 198,
+    "alpha_radius": 107.62
+  },
+  "dispel": {
+    "opaque_extent": 196,
+    "alpha_radius": 109.28
+  },
+  "revive": {
+    "opaque_extent": 196,
+    "alpha_radius": 104.65
+  },
+  "halo": {
+    "opaque_extent": 198,
+    "alpha_radius": 102.71
+  },
+  "bless": {
+    "opaque_extent": 197,
+    "alpha_radius": 110.81
+  },
+  "hold": {
+    "opaque_extent": 197,
+    "alpha_radius": 105.85
+  },
+  "halt": {
+    "opaque_extent": 197,
+    "alpha_radius": 104.65
+  },
+  "warcry": {
+    "opaque_extent": 199,
+    "alpha_radius": 109.08
+  },
+  "disengage": {
+    "opaque_extent": 198,
+    "alpha_radius": 105.84
+  },
+  "pin": {
+    "opaque_extent": 197,
+    "alpha_radius": 103.76
+  },
+  "track": {
+    "opaque_extent": 195,
+    "alpha_radius": 109.64
+  },
+  "smoke": {
+    "opaque_extent": 198,
+    "alpha_radius": 103.35
+  },
+  "fury": {
+    "opaque_extent": 195,
+    "alpha_radius": 110.51
+  },
+  "catalyst": {
+    "opaque_extent": 196,
+    "alpha_radius": 110.69
+  },
+  "knives": {
+    "opaque_extent": 199,
+    "alpha_radius": 102.15
+  },
+  "decoy": {
+    "opaque_extent": 197,
+    "alpha_radius": 104.67
+  },
+  "disarm": {
+    "opaque_extent": 194,
+    "alpha_radius": 109.59
+  },
+  "stonearmor": {
+    "opaque_extent": 198,
+    "alpha_radius": 102.16
+  },
+  "guardstone": {
+    "opaque_extent": 198,
+    "alpha_radius": 104.87
+  },
+  "tremor": {
+    "opaque_extent": 194,
+    "alpha_radius": 109.9
+  },
+  "dread": {
+    "opaque_extent": 198,
+    "alpha_radius": 104.11
+  },
+  "note": {
+    "opaque_extent": 199,
+    "alpha_radius": 107.87
+  },
+  "solo": {
+    "opaque_extent": 198,
+    "alpha_radius": 102.77
+  }
+}

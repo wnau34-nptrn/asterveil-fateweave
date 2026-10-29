@@ -1,0 +1,85 @@
+name: Browser regression checks
+
+on:
+  pull_request:
+    branches: [feature/fateweave-initial-prototype]
+    paths:
+      - 'src/**'
+      - 'public/**'
+      - 'tests/browser/**'
+      - 'package*.json'
+      - 'playwright.config.ts'
+      - '.github/workflows/browser.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: browser-pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run build:pages
+      - run: npx playwright install --with-deps chromium
+      - name: Verify painted blade, defense, healing, projectile, earth, alchemy and arcane seal source fixtures
+        env:
+          PLAYWRIGHT_PAGES: 'false'
+        run: npm run test:browser -- tests/browser/blade-fx.spec.ts tests/browser/defense-fx.spec.ts tests/browser/healing-fx.spec.ts tests/browser/projectile-fx.spec.ts tests/browser/earth-fx.spec.ts tests/browser/alchemy-fx.spec.ts tests/browser/arcane-seal-fx.spec.ts tests/browser/unit-a1.spec.ts tests/browser/unit-a2.spec.ts tests/browser/unit-a3.spec.ts tests/browser/unit-a4.spec.ts --workers=1
+      # Presentation-only changes (painted VFX/unit art, their modules, fixtures and docs) run the focused specs here.
+      # Anything else (rules, UI, saves, workflows, config) runs the full gate; pages.yml always runs the full gate before deploy.
+      - name: Choose browser scope
+        id: scope
+        run: |
+          changed=$(git diff --name-only "origin/${{ github.base_ref }}...HEAD")
+          printf 'Changed files:\n%s\n' "$changed"
+          if [ -n "$(printf '%s\n' "$changed" | grep -v -E '^(docs/|incoming/|public/assets/(fx|art)/|src/game/visuals/|src/game/scenes/BattleScene\.ts$|tests/browser/fixtures/|tests/fixtures/|tests/[a-z0-9-]*\.test\.ts$|tests/browser/[a-z0-9-]*-(fx|clips|player|art|storyboards)\.spec\.ts$|tests/browser/unit-[a-z0-9-]*\.spec\.ts$)')" ]; then echo scope=full >> "$GITHUB_OUTPUT"; else echo scope=visual >> "$GITHUB_OUTPUT"; fi
+      - name: Verify focused presentation specs (presentation-only change)
+        if: steps.scope.outputs.scope == 'visual'
+        env:
+          PLAYWRIGHT_PAGES: 'true'
+        run: npm run test:browser -- --workers=2 tests/browser/presentation.spec.ts tests/browser/combat.spec.ts tests/browser/unit-loading.spec.ts tests/browser/unit-pilot.spec.ts
+      - name: Verify dialog focus and frame-relative map input
+        if: steps.scope.outputs.scope == 'full'
+        env:
+          PLAYWRIGHT_PAGES: 'true'
+        run: |
+          npm run test:browser -- --workers=1 --grep 'PC: I opens battle info|lobby: hire a duplicate|world 1024x768'
+      - name: Verify production gameplay before merging
+        if: steps.scope.outputs.scope == 'full'
+        env:
+          PLAYWRIGHT_PAGES: 'true'
+        run: npm run test:browser -- --workers=2
+      - name: Print browser failure context
+        if: failure()
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          for p in Path('test-results').glob('*/error-context.md'):
+              print(f'\n{p}\n{p.read_text()}')
+          PY
+      - name: Keep failure evidence
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-results
+          path: test-results
+          retention-days: 7
+      - name: Keep portrait UI screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: portrait-ui-evidence
+          path: test-results/portrait-keyboard-*/**/*.png
+          if-no-files-found: ignore
+          retention-days: 7

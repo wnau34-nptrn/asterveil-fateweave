@@ -1,0 +1,62 @@
+{
+  "encounterId": "thicket-ambush",
+  "beat": 3,
+  "round": 1,
+  "turnIndex": 2,
+  "order": [
+    "toma",
+    "f1",
+    "guardian",
+    "weaver"
+  ],
+  "outcome": "active",
+  "guard": null,
+  "counter": null,
+  "taunt": null,
+  "song": null,
+  "heroes": [
+    {
+      "id": "toma",
+      "hp": 48,
+      "barrier": 0,
+      "cooldowns": {}
+    },
+    {
+      "id": "guardian",
+      "hp": 69,
+      "barrier": 0,
+      "cooldowns": {}
+    },
+    {
+      "id": "weaver",
+      "hp": 48,
+      "barrier": 0,
+      "cooldowns": {}
+    }
+  ],
+  "enemies": [
+    {
+      "id": "f1",
+      "hp": 15,
+      "markedUntil": 0
+    }
+  ],
+  "intent": {
+    "sourceId": "f1",
+    "targetSlot": 1,
+    "name": "Ember Spark",
+    "damage": 7,
+    "kind": "energy",
+    "targetId": "guardian",
+    "beat": 3,
+    "round": 2
+  },
+  "commands": [
+    {
+      "beat": 1,
+      "heroId": "toma",
+      "action": "attack",
+      "targetId": "f1"
+    }
+  ]
+}

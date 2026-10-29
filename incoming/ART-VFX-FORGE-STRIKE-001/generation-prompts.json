@@ -1,0 +1,43 @@
+{
+  "tool": "built-in image_gen",
+  "mode": "generate",
+  "date": "2026-10-22",
+  "prompts": [
+    {
+      "name": "hammer",
+      "prompt": "Use case: stylized-concept. Original painted fantasy mobile-game forge VFX asset. Transparent RGBA background, no background whatsoever, no text, numbers, characters, gear tile, grids, cell borders or watermark. Painterly luminous tapered brush shapes, sky-white tiny cores, molten gold ember orange rose-gold edges against cool navy steel; intentional asymmetry, sparse negative space, phone readable. One single beautifully painted forge hammer sprite centered in a square canvas, upright vertical wood handle with dark leather wraps, handle lower end exactly at normalized (0.50,0.94), steel head horizontal across upper quarter, cool navy faceted forged steel with restrained gold inlay, warm reflected highlights. Entire hammer fits within 8% margins. No trail, no sparks, no surrounding glow. Actual transparent background."
+    },
+    {
+      "name": "hit_flash_a",
+      "prompt": "Use case: stylized-concept. Original painted fantasy mobile-game forge VFX asset. Transparent RGBA background, no background whatsoever, no text, numbers, characters, gear tile, grids, cell borders or watermark. Painterly luminous tapered brush shapes, sky-white tiny cores, molten gold ember orange rose-gold edges against cool navy steel; intentional asymmetry, sparse negative space, phone readable. A horizontal strip of SIX equally spaced square animation cells in one row, no drawn borders. Same center in every cell. Small contact flash sequence at fixed center: sharp compact asymmetric star onset, tiny ivory peak, four tapered gold petals unfurl, separate orange flecks, faint wisps, nearly vanished flecks. Not an explosion ball. Sparse open gaps, no opaque disk. Each effect fits within central 65% of its cell."
+    },
+    {
+      "name": "hit_flash_b",
+      "prompt": "Use case: stylized-concept. Original painted fantasy mobile-game forge VFX asset. Transparent RGBA background, no background whatsoever, no text, numbers, characters, gear tile, grids, cell borders or watermark. Painterly luminous tapered brush shapes, sky-white tiny cores, molten gold ember orange rose-gold edges against cool navy steel; intentional asymmetry, sparse negative space, phone readable. A horizontal strip of EIGHT equally spaced square animation cells in one row, no drawn borders. Same center in every cell. Heavy forge contact burst, first frame already a sharp compact eight pointed molten gold/ivory impact star, second a brighter peak, then asymmetric tapered rose-gold petals peel outward, gold shreds separate, orange embers, wisps, sparse last flecks. Keep empty gaps between petals and no opaque circular disk. Each effect fits within central 75% of cell."
+    },
+    {
+      "name": "shock_ring",
+      "prompt": "Use case: stylized-concept. Original painted fantasy mobile-game forge VFX asset. Transparent RGBA background, no background whatsoever, no text, numbers, characters, gear tile, grids, cell borders or watermark. Painterly luminous tapered brush shapes, sky-white tiny cores, molten gold ember orange rose-gold edges against cool navy steel; intentional asymmetry, sparse negative space, phone readable. A horizontal strip of SIX equally spaced square animation cells, no borders. Thin broken elliptical gold shock ring animation, fixed center, grows from tiny crescent into larger tapering elliptical arcs, then broken faint arc fragments, finally barely visible. Painterly hand-shaped varied widths, NOT uniform concentric circles. Hollow transparent center in all frames, outer ring within 80% of cell."
+    },
+    {
+      "name": "result_glow",
+      "prompt": "Use case: stylized-concept. Original painted fantasy mobile-game forge VFX asset. Transparent RGBA background, no background whatsoever, no text, numbers, characters, gear tile, grids, cell borders or watermark. Painterly luminous tapered brush shapes, sky-white tiny cores, molten gold ember orange rose-gold edges against cool navy steel; intentional asymmetry, sparse negative space, phone readable. A horizontal strip of SIX equally spaced WIDE 2:1 animation cells, no borders. Fixed center subtle soft molten gold bloom BEHIND a future UI label with one delicate EIGHT POINT star glint slightly to the upper left. Quiet onset, gentle luminous peak, softer bloom, sparse rays, calm glow, almost faded. No text or label, no opaque patch. Each bloom contained inside central 75% of cell."
+    },
+    {
+      "name": "spark_arc",
+      "prompt": "Use case: stylized-concept. Original painted fantasy mobile-game forge VFX asset. Transparent RGBA background, no background whatsoever, no text, numbers, characters, gear tile, grids, cell borders or watermark. Painterly luminous tapered brush shapes, sky-white tiny cores, molten gold ember orange rose-gold edges against cool navy steel; intentional asymmetry, sparse negative space, phone readable. A horizontal strip of SIX equally spaced square animation cells with no borders. One isolated short tapered arcing golden ember sprite in each cell at EXACT SAME CENTER, fixed position; animation changes curl and brightness only, NO baked trajectory or travel. Small curved needle with tiny ivory tip, rose gold edges; bright then cooling orange then fading. Transparent empty surroundings."
+    },
+    {
+      "name": "hammer_smear",
+      "prompt": "Use case: stylized-concept. Original painted fantasy mobile-game forge VFX asset. Transparent RGBA background, no background whatsoever, no text, numbers, characters, gear tile, grids, cell borders or watermark. Painterly luminous tapered brush shapes, sky-white tiny cores, molten gold ember orange rose-gold edges against cool navy steel; intentional asymmetry, sparse negative space, phone readable. One isolated tapered crescent downswing motion smear of a hammer head, no hammer itself. Wide sweeping curved gold-ivory thin stroke from upper right to lower left, vanishing needle tail, restrained navy steel ghost along thick end. Transparent empty background, sprite entirely inside 10% margins."
+    },
+    {
+      "name": "result_glow_cyan_rejected",
+      "prompt": "Use case: stylized-concept. Original game result VFX transparent PNG strip, six equal wide 2:1 cells in one horizontal row. No borders grids text numbers UI gear or background. Soft calm cool cyan pearl bloom and delicate EIGHT pointed star glint upper left behind future Lv label. Fixed center throughout; onset gentle peak then calm settle and fade. Tapered painterly rays, sparse space, cool sky white tiny core, faint warm gold tips. Actual transparent alpha, no opaque patch, no green. All six frames centered and fully contained."
+    },
+    {
+      "name": "result_glow_cyan",
+      "prompt": "Original painted fantasy game result glow flipbook, actual transparent background RGBA. Arrange exactly SIX sprites in THREE COLUMNS and TWO ROWS, equal cells, generous separation and transparent margins, no lines grids borders text numbers or gear. Each sprite a WIDE LOW 2:1 soft calm pale cyan bloom, with delicate EIGHT POINT sky-white star slightly left of center and warm gold tiny tips. Restrained luminous painterly tapered rays. Cell order reading across then down: quiet onset, gentle peak, luminous peak, settle, soft, nearly faded still. Never let rays or bloom reach cell boundary; each sprite must fit within central 60% of cell. No overlapping adjacent sprites. No opaque discs. No other objects."
+    }
+  ]
+}

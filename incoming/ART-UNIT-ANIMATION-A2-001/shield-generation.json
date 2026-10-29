@@ -1,0 +1,11 @@
+{
+  "tool": "image_gen.imagegen",
+  "transparent_background": true,
+  "referencedSeeds": [
+    "vargoth-shield-template.png",
+    "vargoth-seed.png"
+  ],
+  "originalOutput": "exec-35ab30fa-9c63-4fd2-af6d-bc8b48537ac2.png",
+  "retainedOutput": "vargoth-shield-raw.png",
+  "exactPrompt": "Edit this repeated shipped Vargoth Guard reference canvas into ONE continuous eight-frame SHIELD SMASH animation in the EXACT existing 4-column by 2-row layout. Each repeated figure is an anchor for one frame. Keep SAME dark armored horned demon, orange armor cracks, same face, helmet, shield and spiked mace, SAME LEFT facing, camera, figure scale and foot baseline as references. Preserve armor/shield details. Full body and transparent background, ample transparent gutters, no labels/scenery/UI/VFX/projectiles/fire/motion trails. Mace stays DOWN AND UNUSED throughout: this action attacks with the SHIELD, not mace. Frame1 exact ready seed. Frame2 crouch and pull shield toward chest. Frame3 turn torso and bring SHIELD around toward LEFT opponent, mace idle down. Frame4 loaded windup with shield near chest aimed LEFT. Frame5 CONTACT: shield arm punches shield forcefully toward LEFT, clearly in front of torso/face toward opponent; mace must remain hanging lowered, no mace swing. Frame6 shield extended follow-through. Frame7 pull shield back and ease body upright. Frame8 return to exact ready seed. Keep consistent body/head size across all eight cells; NEVER shrink figure to fit attack, generous cell space. No duplicate extra figures. The difference from mace overhead smash and an energy release must read at small game size."
+}

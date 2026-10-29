@@ -1,0 +1,75 @@
+{
+  "runtimeSnapshot": "dd56dddbaa645023cc168d3811acbd6328d2552e",
+  "typecheck": "passed",
+  "lint": "passed",
+  "build": "passed; existing Phaser chunk-size notice",
+  "focusedUnit": {
+    "passed": 37,
+    "failed": 0,
+    "files": 5
+  },
+  "focusedBrowser": {
+    "head": "3c66c9a3395daf88e9585bb2c6104b9956594bc8",
+    "passed": 42,
+    "failed": 0,
+    "skipped": 0
+  },
+  "finalGuardcounterBrowser": {
+    "head": "dd56dddbaa645023cc168d3811acbd6328d2552e",
+    "passed": 1,
+    "failed": 0
+  },
+  "capture": {
+    "passed": 26,
+    "failed": 0,
+    "skipped": 0,
+    "frames": 1202,
+    "maxFrameGap": 0.377,
+    "maxTimestampErrorMs": 0.0061
+  },
+  "player": {
+    "passed": 1,
+    "videosDecoded": 26,
+    "failed": 0
+  },
+  "priorRegressionBrowser": {
+    "head": "60335a15da835381ddba6dfc264c2b339dd162d5",
+    "passed": 117,
+    "skipped": 0
+  },
+  "limits": [
+    "Chromium/SwiftShader cloud viewport emulation, not physical phones or iOS Safari",
+    "Atlas RGBA counts are not total game RAM/GPU",
+    "No new owner visual approval inferred"
+  ],
+  "earlierNonPassingRuns": [
+    "Initial full local unit:974passed/1boss-sim180s timeout under concurrent browser load; same unchanged simulation passed separately in175.90s",
+    "Intermediate41browser:40passed/1optionalart readiness5s timeout under concurrent build",
+    "Intermediate capture:25passed/1optionalart readiness5s timeout; final26all passed",
+    "Development HMR reload run:19passed/1navigation interruption; later42all passed",
+    "Initial Pages40668449459:270source passed/1counter pose failed at pending final RAF; deploy skipped. Test-only bounded RAF sampling repair7ff5388; final Pages40671415477success."
+  ],
+  "anchorRegression": {
+    "uniqueCasesVerified": 22,
+    "batch": {
+      "passed": 19,
+      "failed": 1,
+      "reason": "Bomb3x page.evaluate context closed timeout"
+    },
+    "standalone": {
+      "passed": 3,
+      "failed": 0
+    },
+    "assertionsAndTimeoutUnchanged": true
+  },
+  "finalQaRepair": {
+    "head": "7ff53885d45ed7259fddeed43103310c37439368",
+    "focusedUnitPassed": 32,
+    "files": 4,
+    "counterRepeatPassed": 5,
+    "failed": 0,
+    "typecheck": "passed",
+    "lint": "passed",
+    "build": "passed"
+  }
+}

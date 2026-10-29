@@ -1,0 +1,1700 @@
+{
+  "metadata": {
+    "createdUtc": "2026-10-21T07:42:52.384Z",
+    "head": "c6efee7623d58064ad813cd23cd40223bcca9d24",
+    "branch": "feature/fateweave-initial-prototype",
+    "counts": {
+      "heroes": 10,
+      "actions": 31,
+      "intents": 20,
+      "events": 23
+    },
+    "sourceSha256": {
+      "src/core/battle/types.ts": "554419602365e567d221b1612a14588cec3840e356f2fc12add7ad771e4f4aaa",
+      "src/core/battle/engine.ts": "54fac7f8cd6e390601cbe39bfd9be632b92295bd0ced829bff924cbc71224c79",
+      "src/ui/battle-ui.ts": "a6ba8cf9fb6384d8339d2b341d9acd325a19b8b992baf804d455548cf56a09ab",
+      "src/game/scenes/BattleScene.ts": "20654ad6e4e9f90867f6f67e95730f40a89628526ddca0d399737d56875bf77e",
+      "src/ui/game-shell.ts": "745b4661dae879901ab2492fa1f8ccae200b410f3d1da3c09195f3de994d82be",
+      "src/platform/sfx.ts": "b5c3a7552ebc11421deb82c3a0263f71cd67acb604e7a96f27c455f958661cae"
+    },
+    "limitations": [
+      "synthetic QA saves only",
+      "clock-controlled screenshots are not frame-time measurements",
+      "video captures visual output, not audible SFX",
+      "no physical mobile/Safari verification"
+    ]
+  },
+  "actions": [
+    {
+      "id": "attack",
+      "name": "โจมตี",
+      "owners": [
+        {
+          "id": "guardian",
+          "role": "Knight",
+          "name": "เอกิส",
+          "unlock": "base"
+        },
+        {
+          "id": "tracer",
+          "role": "Duelist",
+          "name": "ไลรา",
+          "unlock": "base"
+        },
+        {
+          "id": "weaver",
+          "role": "Mage",
+          "name": "ไอรา",
+          "unlock": "base"
+        },
+        {
+          "id": "healer",
+          "role": "Priest",
+          "name": "เซเรน",
+          "unlock": "base"
+        },
+        {
+          "id": "mira",
+          "role": "Archer",
+          "name": "มิร่า",
+          "unlock": "base"
+        },
+        {
+          "id": "toma",
+          "role": "Alchemist",
+          "name": "โทมะ",
+          "unlock": "base"
+        },
+        {
+          "id": "sefa",
+          "role": "Scout",
+          "name": "เซฟา",
+          "unlock": "base"
+        },
+        {
+          "id": "brann",
+          "role": "Warden",
+          "name": "แบรนน์",
+          "unlock": "base"
+        },
+        {
+          "id": "lio",
+          "role": "Bard",
+          "name": "ลิโอ",
+          "unlock": "base"
+        },
+        {
+          "id": "garran",
+          "role": "Spear",
+          "name": "การ์แรน",
+          "unlock": "base"
+        }
+      ],
+      "targetKind": "enemy",
+      "proposed": {
+        "visualKind": "physical-by-actor",
+        "family": "weapon-contact",
+        "durationMs": 600,
+        "assetState": "not-produced",
+        "fallback": "source-to-actual-target-line-and-contact",
+        "soundCue": "prepare/travel/contact",
+        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
+      },
+      "currentDescription": "โจมตีศัตรู 10 กำจัดผู้โจมตีได้ก็หยุดการโจมตีของมัน"
+    },
+    {
+      "id": "guard",
+      "name": "ตั้งรับแทน",
+      "owners": [
+        {
+          "id": "guardian",
+          "role": "Knight",
+          "name": "เอกิส",
+          "unlock": "base"
+        }
+      ],
+      "targetKind": "ally",
+      "proposed": {
+        "visualKind": "support",
+        "family": "guard-link",
+        "durationMs": 500,
+        "assetState": "not-produced",
+        "fallback": "recipient-icon-and-authoritative-event-text",
+        "soundCue": "apply",
+        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
+      },
+      "currentDescription": "เอกิสรับการโจมตีแทนคนที่ศัตรูเล็ง ลดความเสียหาย 65% ปัดความเสียหายที่เหลือขึ้น แล้วใช้โล่ก่อนเลือด ป้องกันการโจมตีศัตรูถัดไปที่แสดงไว้ หมดเมื่อรับการโจมตีหรือถึงเทิร์นเอกิสอีกครั้ง"
+    },
+    {
+      "id": "bash",
+      "name": "กระแทกโล่",
+      "owners": [
+        {
+          "id": "guardian",
+          "role": "Knight",
+          "name": "เอกิส",
+          "unlock": "base"
+        }
+      ],
+      "targetKind": "enemy",
+      "proposed": {
+        "visualKind": "physical",
+        "family": "shield-bash",
+        "durationMs": 800,
+        "assetState": "not-produced",
+        "fallback": "source-to-actual-target-line-and-contact",
+        "soundCue": "prepare/travel/contact",
+        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
+      },
+      "currentDescription": "โจมตี 18 และหยุดเทิร์นถัดไปของเป้าหมายหากการโจมตีนั้นเป็นกายภาพ พลังงานยังโจมตีต่อได้ ใช้แล้วพร้อมอีกครั้งใน 2 รอบ"
+    },
+    {
+      "id": "mark",
+      "name": "ติดตรา",
+      "owners": [
+        {
+          "id": "tracer",
+          "role": "Duelist",
+          "name": "ไลรา",
+          "unlock": "base"
+        }
+      ],
+      "targetKind": "enemy",
+      "proposed": {
+        "visualKind": "support",
+        "family": "mark-seal",
+        "durationMs": 500,
+        "assetState": "not-produced",
+        "fallback": "recipient-icon-and-authoritative-event-text",
+        "soundCue": "apply",
+        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
+      },
+      "currentDescription": "ยังไม่ทำความเสียหาย ติดตรา 2 รอบรวมรอบนี้ เพื่อให้ไลราโจมตีหรือฟันเจาะจุดแรงขึ้น 22 (ใช้ตราหมดเมื่อโจมตี)"
+    },
+    {
+      "id": "execute",
+      "name": "ฟันเจาะจุด",
+      "owners": [
+        {
+          "id": "tracer",
+          "role": "Duelist",
+          "name": "ไลรา",
+          "unlock": "base"
+        }
+      ],
+      "targetKind": "enemy",
+      "proposed": {
+        "visualKind": "physical",
+        "family": "precision-slash",
+        "durationMs": 850,
+        "assetState": "not-produced",
+        "fallback": "source-to-actual-target-line-and-contact",
+        "soundCue": "prepare/travel/contact",
+        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
+      },
+      "currentDescription": "ฟันเจาะจุด 28 หรือ 50 เมื่อเป้าหมายติดตรา ใช้ตราหมด ใช้แล้วพร้อมอีกครั้งใน 2 รอบ"
+    },
+    {
+      "id": "bolt",
+      "name": "ศรเวท",
+      "owners": [
+        {
+          "id": "weaver",
+          "role": "Mage",
+          "name": "ไอรา",
+          "unlock": "base"
+        }
+      ],
+      "targetKind": "enemy",
+      "proposed": {
+        "visualKind": "energy",
+        "family": "arcane-projectile",
+        "durationMs": 850,
+        "assetState": "not-produced",
+        "fallback": "source-to-actual-target-line-and-contact",
+        "soundCue": "prepare/travel/contact",
+        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
+      },
+      "currentDescription": "ยิงศรเวทสร้างความเสียหาย 26 ให้ศัตรูหนึ่งตัว ใช้แล้วพร้อมอีกครั้งใน 2 รอบ"
+    },
+    {
+      "id": "ward",
+      "name": "โล่เวท",
+      "owners": [
+        {
+          "id": "weaver",
+          "role": "Mage",
+          "name": "ไอรา",
+          "unlock": "base"
+        }
+      ],
+      "targetKind": "ally",
+      "proposed": {
+        "visualKind": "support",
+        "family": "hex-barrier",
+        "durationMs": 650,
+        "assetState": "not-produced",
+        "fallback": "recipient-icon-and-authoritative-event-text",
+        "soundCue": "apply",
+        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
+      },
+      "currentDescription": "ให้โล่ 14 แก่เพื่อนที่ยังยืนอยู่ 1 คน โล่รับความเสียหายก่อนเลือด ไม่ซ้อนกัน อยู่จนถูกใช้หมด ใช้แล้วพร้อมอีกครั้งใน 2 รอบ"
+    },
+    {
+      "id": "heal",
+      "name": "รักษา",
+      "owners": [
+        {
+          "id": "healer",
+          "role": "Priest",
+          "name": "เซเรน",
+          "unlock": "base"
+        }
+      ],
+      "targetKind": "ally",
+      "proposed": {
+        "visualKind": "support",
+        "family": "mint-heal",
+        "durationMs": 650,
+        "assetState": "not-produced",
+        "fallback": "recipient-icon-and-authoritative-event-text",
+        "soundCue": "apply",
+        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
+      },
+      "currentDescription": "ฟื้นเลือด 20 ให้เพื่อนที่ยังยืนอยู่ 1 คน ไม่เกินเลือดสูงสุด ใช้แล้วพร้อมอีกครั้งใน 2 รอบ"
+    },
+    {
+      "id": "prayer",
+      "name": "พรฟื้นฟู",
+      "owners": [
+        {
+          "id": "healer",
+          "role": "Priest",
+          "name": "เซเรน",
+          "unlock": "base"
+        }
+      ],
+      "targetKind": "party",
+      "proposed": {
+        "visualKind": "support",
+        "family": "party-heal",
+        "durationMs": 700,
+        "assetState": "not-produced",
+        "fallback": "recipient-icon-and-authoritative-event-text",
+        "soundCue": "apply",
+        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
+      },
+      "currentDescription": "ฟื้นเลือดคนละ 10 ให้ทุกคนที่ยังยืนอยู่ ไม่เกินเลือดสูงสุด ไม่ชุบชีวิต ใช้แล้วพร้อมอีกครั้งใน 3 รอบ"
+    },
+    {
+      "id": "brace",
+      "name": "ตั้งทวน",
+      "owners": [
+        {
+          "id": "garran",
+          "role": "Spear",
+          "name": "การ์แรน",
+          "unlock": "base"
+        }
+      ],
+      "targetKind": "self",
+      "proposed": {
+        "visualKind": "support",
+        "family": "spear-stance",
+        "durationMs": 500,
+        "assetState": "not-produced",
+        "fallback": "recipient-icon-and-authoritative-event-text",
+        "soundCue": "apply",
+        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
+      },
+      "currentDescription": "ตั้งทวนรอ เมื่อศัตรูโจมตีกายภาพใส่เพื่อนแนวหน้าคนใดก็ได้ (รวมตัวเอง) ครั้งแรก จะแทงสวนกลับ 14 หลังโดนตี อยู่จนสวนแล้วหรือถึงเทิร์นของตัวเองอีกครั้ง พลังงานไม่ทำให้สวน ใช้แล้วพร้อมอีกครั้งใน 2 รอบ"
+    },
+    {
+      "id": "pierce",
+      "name": "แทงทะลวง",
+      "owners": [
+        {
+          "id": "garran",
+          "role": "Spear",
+          "name": "การ์แรน",
+          "unlock": "base"
+        }
+      ],
+      "targetKind": "enemy",
+      "proposed": {
+        "visualKind": "physical",
+        "family": "spear-thrust",
+        "durationMs": 800,
+        "assetState": "not-produced",
+        "fallback": "source-to-actual-target-line-and-contact",
+        "soundCue": "prepare/travel/contact",
+        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
+      },
+      "currentDescription": "แทงทะลวงสร้างความเสียหาย 22 ให้ศัตรูหนึ่งตัว ใช้แล้วพร้อมอีกครั้งใน 2 รอบ"
+    },
+    {
+      "id": "hinder",
+      "name": "ยิงสกัด",
+      "owners": [
+        {
+          "id": "mira",
+          "role": "Archer",
+          "name": "มิร่า",
+          "unlock": "base"
+        }
+      ],
+      "targetKind": "enemy",
+      "proposed": {
+        "visualKind": "physical",
+        "family": "arrow-delay",
+        "durationMs": 750,
+        "assetState": "not-produced",
+        "fallback": "source-to-actual-target-line-and-contact",
+        "soundCue": "prepare/travel/contact",
+        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
+      },
+      "currentDescription": "ยิงสกัด 12 และเป้าหมายจะไปลงมือท้ายสุดในรอบถัดไป (ลำดับรอบนี้ไม่เปลี่ยน) ใช้ขวางศัตรูที่เร็วก่อนที่มันจะได้ตีก่อนทีม ใช้แล้วพร้อมอีกครั้งใน 2 รอบ"
+    },
+    {
+      "id": "volley",
+      "name": "ห่าธนู",
+      "owners": [
+        {
+          "id": "mira",
+          "role": "Archer",
+          "name": "มิร่า",
+          "unlock": "base"
+        }
+      ],
+      "targetKind": "enemies",
+      "proposed": {
+        "visualKind": "physical",
+        "family": "arrow-volley",
+        "durationMs": 900,
+        "assetState": "not-produced",
+        "fallback": "source-to-actual-target-line-and-contact",
+        "soundCue": "prepare/travel/contact",
+        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
+      },
+      "currentDescription": "ยิงห่าธนูใส่ศัตรูทุกตัว ตัวละ 10 ใช้แล้วพร้อมอีกครั้งใน 3 รอบ"
+    },
+    {
+      "id": "acid",
+      "name": "ขวดกรด",
+      "owners": [
+        {
+          "id": "toma",
+          "role": "Alchemist",
+          "name": "โทมะ",
+          "unlock": "base"
+        }
+      ],
+      "targetKind": "enemy",
+      "proposed": {
+        "visualKind": "energy",
+        "family": "acid-flask",
+        "durationMs": 800,
+        "assetState": "not-produced",
+        "fallback": "source-to-actual-target-line-and-contact",
+        "soundCue": "prepare/travel/contact",
+        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
+      },
+      "currentDescription": "ปาขวดกรด 8 แล้วเป้าหมายถูกกัดกร่อน 2 รอบรวมรอบนี้ ทุกการโจมตีของทีมใส่ตัวนี้แรงขึ้น +6 ใช้แล้วพร้อมอีกครั้งใน 2 รอบ"
+    },
+    {
+      "id": "haste",
+      "name": "ยาเร่ง",
+      "owners": [
+        {
+          "id": "toma",
+          "role": "Alchemist",
+          "name": "โทมะ",
+          "unlock": "base"
+        }
+      ],
+      "targetKind": "ally",
+      "proposed": {
+        "visualKind": "support",
+        "family": "haste-tonic",
+        "durationMs": 550,
+        "assetState": "not-produced",
+        "fallback": "recipient-icon-and-authoritative-event-text",
+        "soundCue": "apply",
+        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
+      },
+      "currentDescription": "ให้ยาเร่งเพื่อนที่ยังยืนอยู่ 1 คน (รวมตัวเอง) รอบถัดไปคนนั้นได้ลงมือก่อนทุกคน รอบนี้ลำดับไม่เปลี่ยน ใช้แล้วพร้อมอีกครั้งใน 3 รอบ"
+    },
+    {
+      "id": "ambush",
+      "name": "จู่โจมก่อน",
+      "owners": [
+        {
+          "id": "sefa",
+          "role": "Scout",
+          "name": "เซฟา",
+          "unlock": "base"
+        }
+      ],
+      "targetKind": "enemy",
+      "proposed": {
+        "visualKind": "physical",
+        "family": "shadow-strike",
+        "durationMs": 750,
+        "assetState": "not-produced",
+        "fallback": "source-to-actual-target-line-and-contact",
+        "soundCue": "prepare/travel/contact",
+        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
+      },
+      "currentDescription": "จู่โจม 12 หรือ 24 ถ้าเป้าหมายยังไม่ได้ลงมือในรอบนี้ (ดูคิว SPD) ใช้ได้ดีกับศัตรูที่ช้ากว่า ใช้แล้วพร้อมอีกครั้งใน 2 รอบ"
+    },
+    {
+      "id": "evade",
+      "name": "ก้าวเงา",
+      "owners": [
+        {
+          "id": "sefa",
+          "role": "Scout",
+          "name": "เซฟา",
+          "unlock": "base"
+        }
+      ],
+      "targetKind": "self",
+      "proposed": {
+        "visualKind": "support",
+        "family": "shadow-step",
+        "durationMs": 500,
+        "assetState": "not-produced",
+        "fallback": "recipient-icon-and-authoritative-event-text",
+        "soundCue": "apply",
+        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
+      },
+      "currentDescription": "ก้าวเงาเตรียมหลบ การโจมตีของศัตรูครั้งแรกที่โดนเซฟา (กายภาพหรือพลังงาน) จะพลาดทั้งหมด อยู่จนหลบแล้วหรือถึงเทิร์นของตัวเองอีกครั้ง ใช้แล้วพร้อมอีกครั้งใน 3 รอบ"
+    },
+    {
+      "id": "taunt",
+      "name": "ยั่วยุ",
+      "owners": [
+        {
+          "id": "brann",
+          "role": "Warden",
+          "name": "แบรนน์",
+          "unlock": "base"
+        }
+      ],
+      "targetKind": "self",
+      "proposed": {
+        "visualKind": "support",
+        "family": "challenge-rune",
+        "durationMs": 550,
+        "assetState": "not-produced",
+        "fallback": "recipient-icon-and-authoritative-event-text",
+        "soundCue": "apply",
+        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
+      },
+      "currentDescription": "ยั่วยุศัตรูทุกตัว ตั้งแต่ตอนนี้จนถึงเทิร์นถัดไปของแบรนน์ การโจมตีของศัตรูทุกครั้ง (กายภาพหรือพลังงาน) จะเล็งมาที่แบรนน์ และเขารับเบาลง 35% แผนโจมตีศัตรูจะแสดงเป้าใหม่ทันที ใช้แล้วพร้อมอีกครั้งใน 3 รอบ"
+    },
+    {
+      "id": "slam",
+      "name": "ทุบค้อนรูน",
+      "owners": [
+        {
+          "id": "brann",
+          "role": "Warden",
+          "name": "แบรนน์",
+          "unlock": "base"
+        }
+      ],
+      "targetKind": "enemy",
+      "proposed": {
+        "visualKind": "physical",
+        "family": "hammer-slam",
+        "durationMs": 850,
+        "assetState": "not-produced",
+        "fallback": "source-to-actual-target-line-and-contact",
+        "soundCue": "prepare/travel/contact",
+        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
+      },
+      "currentDescription": "ทุบค้อนรูนสร้างความเสียหาย 18 ให้ศัตรูหนึ่งตัว ใช้แล้วพร้อมอีกครั้งใน 2 รอบ"
+    },
+    {
+      "id": "valor",
+      "name": "เพลงกล้า",
+      "owners": [
+        {
+          "id": "lio",
+          "role": "Bard",
+          "name": "ลิโอ",
+          "unlock": "base"
+        }
+      ],
+      "targetKind": "self",
+      "proposed": {
+        "visualKind": "support",
+        "family": "valor-notes",
+        "durationMs": 600,
+        "assetState": "not-produced",
+        "fallback": "recipient-icon-and-authoritative-event-text",
+        "soundCue": "apply",
+        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
+      },
+      "currentDescription": "บรรเลงเพลงกล้าค้างไว้ ทุกการโจมตีของทีมแรงขึ้น +4 (รวมสกิลและการสวน) จนกว่าจะเปลี่ยนเพลงหรือลิโอล้ม เล่นได้ทีละเพลง ใช้แล้วพร้อมอีกครั้งใน 2 รอบ"
+    },
+    {
+      "id": "mend",
+      "name": "เพลงฟื้น",
+      "owners": [
+        {
+          "id": "lio",
+          "role": "Bard",
+          "name": "ลิโอ",
+          "unlock": "base"
+        }
+      ],
+      "targetKind": "self",
+      "proposed": {
+        "visualKind": "support",
+        "family": "mending-notes",
+        "durationMs": 600,
+        "assetState": "not-produced",
+        "fallback": "recipient-icon-and-authoritative-event-text",
+        "soundCue": "apply",
+        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
+      },
+      "currentDescription": "บรรเลงเพลงฟื้นค้างไว้ ทุกคนที่ยังยืนอยู่ฟื้นเลือด 5 เมื่อเริ่มแต่ละรอบใหม่ จนกว่าจะเปลี่ยนเพลงหรือลิโอล้ม เล่นได้ทีละเพลง ใช้แล้วพร้อมอีกครั้งใน 2 รอบ"
+    },
+    {
+      "id": "rally",
+      "name": "ตั้งรับหมู่",
+      "owners": [
+        {
+          "id": "guardian",
+          "role": "Knight",
+          "name": "เอกิส",
+          "unlock": "star3"
+        }
+      ],
+      "targetKind": "self",
+      "proposed": {
+        "visualKind": "support",
+        "family": "party-guard",
+        "durationMs": 700,
+        "assetState": "not-produced",
+        "fallback": "recipient-icon-and-authoritative-event-text",
+        "soundCue": "apply",
+        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
+      },
+      "currentDescription": "ตั้งรับหมู่ เพื่อนทุกคนที่ยังยืนอยู่ (รวมเอกิส) ลดความเสียหาย 35% จากการโจมตีครั้งแรกที่โดน จนถึงเทิร์นถัดไปของเอกิส ใช้แล้วพร้อมอีกครั้งใน 3 รอบ"
+    },
+    {
+      "id": "finisher",
+      "name": "ปลิดชีพ",
+      "owners": [
+        {
+          "id": "tracer",
+          "role": "Duelist",
+          "name": "ไลรา",
+          "unlock": "star3"
+        }
+      ],
+      "targetKind": "enemy",
+      "proposed": {
+        "visualKind": "physical",
+        "family": "finishing-lunge",
+        "durationMs": 950,
+        "assetState": "not-produced",
+        "fallback": "source-to-actual-target-line-and-contact",
+        "soundCue": "prepare/travel/contact",
+        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
+      },
+      "currentDescription": "ปลิดชีพ 16 หรือ 32 ถ้าเลือดศัตรูต่ำกว่า 40% ไม่ใช้ตรา ใช้แล้วพร้อมอีกครั้งใน 2 รอบ"
+    },
+    {
+      "id": "sigil",
+      "name": "ตรึงเวท",
+      "owners": [
+        {
+          "id": "weaver",
+          "role": "Mage",
+          "name": "ไอรา",
+          "unlock": "star3"
+        }
+      ],
+      "targetKind": "enemy",
+      "proposed": {
+        "visualKind": "energy",
+        "family": "sigil-bind",
+        "durationMs": 850,
+        "assetState": "not-produced",
+        "fallback": "source-to-actual-target-line-and-contact",
+        "soundCue": "prepare/travel/contact",
+        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
+      },
+      "currentDescription": "ตรึงเวท 8 และยกเลิกท่าพลังงานครั้งถัดไปของเป้าหมาย ท่ากายภาพยังโจมตีตามปกติ (กระแทกโล่ใช้หยุดกายภาพ) ใช้แล้วพร้อมอีกครั้งใน 3 รอบ"
+    },
+    {
+      "id": "sanctuary",
+      "name": "พรคุ้มภัย",
+      "owners": [
+        {
+          "id": "healer",
+          "role": "Priest",
+          "name": "เซเรน",
+          "unlock": "star3"
+        }
+      ],
+      "targetKind": "ally",
+      "proposed": {
+        "visualKind": "support",
+        "family": "sanctuary-seal",
+        "durationMs": 750,
+        "assetState": "not-produced",
+        "fallback": "recipient-icon-and-authoritative-event-text",
+        "soundCue": "apply",
+        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
+      },
+      "currentDescription": "อวยพรเพื่อนที่ยังยืนอยู่ 1 คน (รวมตัวเอง) เลือดจะไม่ลดต่ำกว่า 1 จนถึงเทิร์นถัดไปของเซเรน ใช้แล้วพร้อมอีกครั้งใน 3 รอบ"
+    },
+    {
+      "id": "spearwall",
+      "name": "กำแพงทวน",
+      "owners": [
+        {
+          "id": "garran",
+          "role": "Spear",
+          "name": "การ์แรน",
+          "unlock": "star3"
+        }
+      ],
+      "targetKind": "self",
+      "proposed": {
+        "visualKind": "support",
+        "family": "spear-wall",
+        "durationMs": 700,
+        "assetState": "not-produced",
+        "fallback": "recipient-icon-and-authoritative-event-text",
+        "soundCue": "apply",
+        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
+      },
+      "currentDescription": "ตั้งกำแพงทวน ทุกครั้งที่ศัตรูโจมตีกายภาพใส่เพื่อนแนวหน้า (รวมตัวเอง) จะโดนแทงสวน 8 จนถึงเทิร์นถัดไปของการ์แรน ใช้แล้วพร้อมอีกครั้งใน 3 รอบ"
+    },
+    {
+      "id": "weakshot",
+      "name": "ศรจุดอ่อน",
+      "owners": [
+        {
+          "id": "mira",
+          "role": "Archer",
+          "name": "มิร่า",
+          "unlock": "star3"
+        }
+      ],
+      "targetKind": "enemy",
+      "proposed": {
+        "visualKind": "energy",
+        "family": "weakpoint-arrow",
+        "durationMs": 850,
+        "assetState": "not-produced",
+        "fallback": "source-to-actual-target-line-and-contact",
+        "soundCue": "prepare/travel/contact",
+        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
+      },
+      "currentDescription": "ยิงศรจุดอ่อน 16 หรือ 28 ถ้าเป้าหมายถูกยิงสกัดเลื่อนเทิร์นอยู่ ใช้แล้วพร้อมอีกครั้งใน 2 รอบ"
+    },
+    {
+      "id": "bomb",
+      "name": "ขวดระเบิด",
+      "owners": [
+        {
+          "id": "toma",
+          "role": "Alchemist",
+          "name": "โทมะ",
+          "unlock": "star3"
+        }
+      ],
+      "targetKind": "enemies",
+      "proposed": {
+        "visualKind": "energy",
+        "family": "blast-flask",
+        "durationMs": 900,
+        "assetState": "not-produced",
+        "fallback": "source-to-actual-target-line-and-contact",
+        "soundCue": "prepare/travel/contact",
+        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
+      },
+      "currentDescription": "ปาขวดระเบิดใส่ศัตรูทุกตัว ตัวละ 10 ตัวที่ถูกกัดกร่อนอยู่โดนแรงขึ้นตามโบนัสกรด ใช้แล้วพร้อมอีกครั้งใน 3 รอบ"
+    },
+    {
+      "id": "backstab",
+      "name": "ลอบแทง",
+      "owners": [
+        {
+          "id": "sefa",
+          "role": "Scout",
+          "name": "เซฟา",
+          "unlock": "star3"
+        }
+      ],
+      "targetKind": "enemy",
+      "proposed": {
+        "visualKind": "physical",
+        "family": "backstab-shadow",
+        "durationMs": 900,
+        "assetState": "not-produced",
+        "fallback": "source-to-actual-target-line-and-contact",
+        "soundCue": "prepare/travel/contact",
+        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
+      },
+      "currentDescription": "ลอบแทง 20 ใส่ศัตรูที่ไม่ได้เล็งเซฟาในท่าถัดไป (ดูเป้าที่ศัตรูประกาศ) ใช้แล้วพร้อมอีกครั้งใน 2 รอบ"
+    },
+    {
+      "id": "quake",
+      "name": "ทุบปฐพี",
+      "owners": [
+        {
+          "id": "brann",
+          "role": "Warden",
+          "name": "แบรนน์",
+          "unlock": "star3"
+        }
+      ],
+      "targetKind": "enemy",
+      "proposed": {
+        "visualKind": "energy",
+        "family": "earthshaker",
+        "durationMs": 1000,
+        "assetState": "not-produced",
+        "fallback": "source-to-actual-target-line-and-contact",
+        "soundCue": "prepare/travel/contact",
+        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
+      },
+      "currentDescription": "ทุบปฐพี 14 หรือ 24 ถ้าท่าถัดไปของเป้าหมายเล็งแบรนน์อยู่ (เข้าคู่กับยั่วยุ) ใช้แล้วพร้อมอีกครั้งใน 2 รอบ"
+    },
+    {
+      "id": "finale",
+      "name": "บทสุดท้าย",
+      "owners": [
+        {
+          "id": "lio",
+          "role": "Bard",
+          "name": "ลิโอ",
+          "unlock": "star3"
+        }
+      ],
+      "targetKind": "self",
+      "proposed": {
+        "visualKind": "physical",
+        "family": "finale-wave",
+        "durationMs": 950,
+        "assetState": "not-produced",
+        "fallback": "source-to-actual-target-line-and-contact",
+        "soundCue": "prepare/travel/contact",
+        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
+      },
+      "currentDescription": "จบเพลงที่บรรเลงอยู่แล้วปล่อยพลังทันที: เพลงกล้า = โจมตีศัตรูทุกตัว 16 · เพลงฟื้น = ฟื้นเลือดทุกคน 12 ต้องมีเพลงของลิโอเล่นอยู่ ใช้แล้วพร้อมอีกครั้งใน 3 รอบ"
+    }
+  ],
+  "intents": [
+    {
+      "id": "physical:Raking Slash",
+      "name": "Raking Slash",
+      "kind": "physical",
+      "occurrences": [
+        {
+          "encounterId": "first-clash",
+          "sourceId": "raider",
+          "targetSlot": 1,
+          "damage": 10
+        },
+        {
+          "encounterId": "first-clash",
+          "sourceId": "raider",
+          "targetSlot": 0,
+          "damage": 10
+        },
+        {
+          "encounterId": "veil-siege",
+          "sourceId": "raider",
+          "targetSlot": 1,
+          "damage": 12
+        },
+        {
+          "encounterId": "veil-siege",
+          "sourceId": "raider",
+          "targetSlot": 0,
+          "damage": 12
+        },
+        {
+          "encounterId": "rift-warden",
+          "sourceId": "brute",
+          "targetSlot": 1,
+          "damage": 21
+        }
+      ],
+      "proposed": {
+        "family": "enemy-weapon-contact",
+        "durationMs": 800,
+        "assetState": "not-produced",
+        "soundCue": "prepare/travel/contact",
+        "fallback": "source-to-resolved-target; respect-guard-dodge-barrier-cancel",
+        "secondaryPolicy": "no-AoE-without-actual-target-events",
+        "overrides": [
+          {
+            "encounterId": "rift-warden",
+            "durationMs": 1200,
+            "family": "warden-raking-slash"
+          }
+        ]
+      }
+    },
+    {
+      "id": "energy:Rift Bolt",
+      "name": "Rift Bolt",
+      "kind": "energy",
+      "occurrences": [
+        {
+          "encounterId": "first-clash",
+          "sourceId": "brute",
+          "targetSlot": 2,
+          "damage": 16
+        },
+        {
+          "encounterId": "first-clash",
+          "sourceId": "brute",
+          "targetSlot": 2,
+          "damage": 16
+        },
+        {
+          "encounterId": "veil-siege",
+          "sourceId": "brute",
+          "targetSlot": 2,
+          "damage": 28
+        },
+        {
+          "encounterId": "veil-siege",
+          "sourceId": "brute",
+          "targetSlot": 2,
+          "damage": 28
+        },
+        {
+          "encounterId": "rear-ambush",
+          "sourceId": "brute",
+          "targetSlot": 2,
+          "damage": 23
+        },
+        {
+          "encounterId": "rear-ambush",
+          "sourceId": "brute",
+          "targetSlot": 3,
+          "damage": 23
+        },
+        {
+          "encounterId": "rear-ambush",
+          "sourceId": "brute",
+          "targetSlot": 2,
+          "damage": 27
+        },
+        {
+          "encounterId": "rift-warden",
+          "sourceId": "brute",
+          "targetSlot": 2,
+          "damage": 25
+        },
+        {
+          "encounterId": "rift-warden",
+          "sourceId": "brute",
+          "targetSlot": 3,
+          "damage": 23
+        },
+        {
+          "encounterId": "rift-warden",
+          "sourceId": "brute",
+          "targetSlot": 2,
+          "damage": 29
+        }
+      ],
+      "proposed": {
+        "family": "enemy-energy-projectile",
+        "durationMs": 800,
+        "assetState": "not-produced",
+        "soundCue": "prepare/travel/contact",
+        "fallback": "source-to-resolved-target; respect-guard-dodge-barrier-cancel",
+        "secondaryPolicy": "no-AoE-without-actual-target-events",
+        "overrides": [
+          {
+            "encounterId": "rift-warden",
+            "durationMs": 1200,
+            "family": "warden-rift-bolt"
+          }
+        ]
+      }
+    },
+    {
+      "id": "physical:Crushing Blow",
+      "name": "Crushing Blow",
+      "kind": "physical",
+      "occurrences": [
+        {
+          "encounterId": "first-clash",
+          "sourceId": "brute",
+          "targetSlot": 1,
+          "damage": 14
+        },
+        {
+          "encounterId": "veil-siege",
+          "sourceId": "brute",
+          "targetSlot": 1,
+          "damage": 26
+        },
+        {
+          "encounterId": "rift-warden",
+          "sourceId": "brute",
+          "targetSlot": 1,
+          "damage": 29
+        },
+        {
+          "encounterId": "rift-warden",
+          "sourceId": "brute",
+          "targetSlot": 0,
+          "damage": 33
+        }
+      ],
+      "proposed": {
+        "family": "enemy-heavy-contact",
+        "durationMs": 800,
+        "assetState": "not-produced",
+        "soundCue": "prepare/travel/contact",
+        "fallback": "source-to-resolved-target; respect-guard-dodge-barrier-cancel",
+        "secondaryPolicy": "no-AoE-without-actual-target-events",
+        "overrides": [
+          {
+            "encounterId": "rift-warden",
+            "durationMs": 1200,
+            "family": "warden-heavy-slam"
+          }
+        ]
+      }
+    },
+    {
+      "id": "energy:Shadow Knife",
+      "name": "Shadow Knife",
+      "kind": "energy",
+      "occurrences": [
+        {
+          "encounterId": "first-clash",
+          "sourceId": "raider",
+          "targetSlot": 3,
+          "damage": 12
+        },
+        {
+          "encounterId": "veil-siege",
+          "sourceId": "raider",
+          "targetSlot": 3,
+          "damage": 14
+        }
+      ],
+      "proposed": {
+        "family": "enemy-energy-projectile",
+        "durationMs": 800,
+        "assetState": "not-produced",
+        "soundCue": "prepare/travel/contact",
+        "fallback": "source-to-resolved-target; respect-guard-dodge-barrier-cancel",
+        "secondaryPolicy": "no-AoE-without-actual-target-events",
+        "overrides": []
+      }
+    },
+    {
+      "id": "energy:Seed Spark",
+      "name": "Seed Spark",
+      "kind": "energy",
+      "occurrences": [
+        {
+          "encounterId": "scout-patrol",
+          "sourceId": "raider",
+          "targetSlot": 1,
+          "damage": 11
+        },
+        {
+          "encounterId": "scout-patrol",
+          "sourceId": "raider",
+          "targetSlot": 3,
+          "damage": 12
+        },
+        {
+          "encounterId": "scout-patrol",
+          "sourceId": "raider",
+          "targetSlot": 0,
+          "damage": 11
+        },
+        {
+          "encounterId": "elite-tusk-chief",
+          "sourceId": "raider",
+          "targetSlot": 2,
+          "damage": 13
+        },
+        {
+          "encounterId": "elite-tusk-chief",
+          "sourceId": "raider",
+          "targetSlot": 3,
+          "damage": 14
+        },
+        {
+          "encounterId": "elite-tusk-chief",
+          "sourceId": "raider",
+          "targetSlot": 2,
+          "damage": 13
+        }
+      ],
+      "proposed": {
+        "family": "enemy-energy-projectile",
+        "durationMs": 800,
+        "assetState": "not-produced",
+        "soundCue": "prepare/travel/contact",
+        "fallback": "source-to-resolved-target; respect-guard-dodge-barrier-cancel",
+        "secondaryPolicy": "no-AoE-without-actual-target-events",
+        "overrides": []
+      }
+    },
+    {
+      "id": "physical:Tusk Charge",
+      "name": "Tusk Charge",
+      "kind": "physical",
+      "occurrences": [
+        {
+          "encounterId": "rift-whelp",
+          "sourceId": "brute",
+          "targetSlot": 1,
+          "damage": 18
+        },
+        {
+          "encounterId": "rift-whelp",
+          "sourceId": "brute",
+          "targetSlot": 0,
+          "damage": 16
+        },
+        {
+          "encounterId": "rift-whelp",
+          "sourceId": "brute",
+          "targetSlot": 1,
+          "damage": 18
+        },
+        {
+          "encounterId": "elite-tusk-chief",
+          "sourceId": "brute",
+          "targetSlot": 1,
+          "damage": 20
+        },
+        {
+          "encounterId": "elite-tusk-chief",
+          "sourceId": "brute",
+          "targetSlot": 1,
+          "damage": 20
+        }
+      ],
+      "proposed": {
+        "family": "enemy-weapon-contact",
+        "durationMs": 800,
+        "assetState": "not-produced",
+        "soundCue": "prepare/travel/contact",
+        "fallback": "source-to-resolved-target; respect-guard-dodge-barrier-cancel",
+        "secondaryPolicy": "no-AoE-without-actual-target-events",
+        "overrides": []
+      }
+    },
+    {
+      "id": "energy:Spore Hex",
+      "name": "Spore Hex",
+      "kind": "energy",
+      "occurrences": [
+        {
+          "encounterId": "thicket-ambush",
+          "sourceId": "raider",
+          "targetSlot": 1,
+          "damage": 12
+        },
+        {
+          "encounterId": "thicket-ambush",
+          "sourceId": "raider",
+          "targetSlot": 2,
+          "damage": 14
+        },
+        {
+          "encounterId": "thicket-ambush",
+          "sourceId": "raider",
+          "targetSlot": 0,
+          "damage": 12
+        }
+      ],
+      "proposed": {
+        "family": "enemy-energy-projectile",
+        "durationMs": 800,
+        "assetState": "not-produced",
+        "soundCue": "prepare/travel/contact",
+        "fallback": "source-to-resolved-target; respect-guard-dodge-barrier-cancel",
+        "secondaryPolicy": "no-AoE-without-actual-target-events",
+        "overrides": []
+      }
+    },
+    {
+      "id": "energy:Thorn Bloom",
+      "name": "Thorn Bloom",
+      "kind": "energy",
+      "occurrences": [
+        {
+          "encounterId": "thicket-ambush",
+          "sourceId": "brute",
+          "targetSlot": 3,
+          "damage": 20
+        },
+        {
+          "encounterId": "thicket-ambush",
+          "sourceId": "brute",
+          "targetSlot": 2,
+          "damage": 22
+        },
+        {
+          "encounterId": "elite-briar-lord",
+          "sourceId": "brute",
+          "targetSlot": 3,
+          "damage": 22
+        }
+      ],
+      "proposed": {
+        "family": "enemy-energy-projectile",
+        "durationMs": 800,
+        "assetState": "not-produced",
+        "soundCue": "prepare/travel/contact",
+        "fallback": "source-to-resolved-target; respect-guard-dodge-barrier-cancel",
+        "secondaryPolicy": "no-AoE-without-actual-target-events",
+        "overrides": []
+      }
+    },
+    {
+      "id": "physical:Briar Lash",
+      "name": "Briar Lash",
+      "kind": "physical",
+      "occurrences": [
+        {
+          "encounterId": "thicket-ambush",
+          "sourceId": "brute",
+          "targetSlot": 1,
+          "damage": 20
+        },
+        {
+          "encounterId": "elite-briar-lord",
+          "sourceId": "brute",
+          "targetSlot": 1,
+          "damage": 22
+        }
+      ],
+      "proposed": {
+        "family": "enemy-weapon-contact",
+        "durationMs": 800,
+        "assetState": "not-produced",
+        "soundCue": "prepare/travel/contact",
+        "fallback": "source-to-resolved-target; respect-guard-dodge-barrier-cancel",
+        "secondaryPolicy": "no-AoE-without-actual-target-events",
+        "overrides": []
+      }
+    },
+    {
+      "id": "physical:Thorn Pounce",
+      "name": "Thorn Pounce",
+      "kind": "physical",
+      "occurrences": [
+        {
+          "encounterId": "shadow-stalker",
+          "sourceId": "raider",
+          "targetSlot": 1,
+          "damage": 18
+        },
+        {
+          "encounterId": "shadow-stalker",
+          "sourceId": "raider",
+          "targetSlot": 0,
+          "damage": 16
+        },
+        {
+          "encounterId": "shadow-stalker",
+          "sourceId": "raider",
+          "targetSlot": 1,
+          "damage": 18
+        },
+        {
+          "encounterId": "elite-briar-lord",
+          "sourceId": "raider",
+          "targetSlot": 1,
+          "damage": 19
+        },
+        {
+          "encounterId": "elite-briar-lord",
+          "sourceId": "raider",
+          "targetSlot": 0,
+          "damage": 18
+        },
+        {
+          "encounterId": "elite-briar-lord",
+          "sourceId": "raider",
+          "targetSlot": 1,
+          "damage": 19
+        }
+      ],
+      "proposed": {
+        "family": "enemy-weapon-contact",
+        "durationMs": 800,
+        "assetState": "not-produced",
+        "soundCue": "prepare/travel/contact",
+        "fallback": "source-to-resolved-target; respect-guard-dodge-barrier-cancel",
+        "secondaryPolicy": "no-AoE-without-actual-target-events",
+        "overrides": []
+      }
+    },
+    {
+      "id": "energy:Rune Lash",
+      "name": "Rune Lash",
+      "kind": "energy",
+      "occurrences": [
+        {
+          "encounterId": "rear-ambush",
+          "sourceId": "raider",
+          "targetSlot": 3,
+          "damage": 24
+        },
+        {
+          "encounterId": "rear-ambush",
+          "sourceId": "raider",
+          "targetSlot": 2,
+          "damage": 23
+        }
+      ],
+      "proposed": {
+        "family": "enemy-energy-projectile",
+        "durationMs": 800,
+        "assetState": "not-produced",
+        "soundCue": "prepare/travel/contact",
+        "fallback": "source-to-resolved-target; respect-guard-dodge-barrier-cancel",
+        "secondaryPolicy": "no-AoE-without-actual-target-events",
+        "overrides": []
+      }
+    },
+    {
+      "id": "physical:Ribbon Snare",
+      "name": "Ribbon Snare",
+      "kind": "physical",
+      "occurrences": [
+        {
+          "encounterId": "rear-ambush",
+          "sourceId": "raider",
+          "targetSlot": 1,
+          "damage": 23
+        }
+      ],
+      "proposed": {
+        "family": "enemy-weapon-contact",
+        "durationMs": 800,
+        "assetState": "not-produced",
+        "soundCue": "prepare/travel/contact",
+        "fallback": "source-to-resolved-target; respect-guard-dodge-barrier-cancel",
+        "secondaryPolicy": "no-AoE-without-actual-target-events",
+        "overrides": []
+      }
+    },
+    {
+      "id": "physical:Crystal Fist",
+      "name": "Crystal Fist",
+      "kind": "physical",
+      "occurrences": [
+        {
+          "encounterId": "crystal-stampede",
+          "sourceId": "raider",
+          "targetSlot": 0,
+          "damage": 16
+        },
+        {
+          "encounterId": "crystal-stampede",
+          "sourceId": "raider",
+          "targetSlot": 1,
+          "damage": 18
+        },
+        {
+          "encounterId": "crystal-stampede",
+          "sourceId": "raider",
+          "targetSlot": 0,
+          "damage": 16
+        }
+      ],
+      "proposed": {
+        "family": "enemy-weapon-contact",
+        "durationMs": 800,
+        "assetState": "not-produced",
+        "soundCue": "prepare/travel/contact",
+        "fallback": "source-to-resolved-target; respect-guard-dodge-barrier-cancel",
+        "secondaryPolicy": "no-AoE-without-actual-target-events",
+        "overrides": []
+      }
+    },
+    {
+      "id": "physical:Horn Charge",
+      "name": "Horn Charge",
+      "kind": "physical",
+      "occurrences": [
+        {
+          "encounterId": "crystal-stampede",
+          "sourceId": "brute",
+          "targetSlot": 1,
+          "damage": 24
+        },
+        {
+          "encounterId": "crystal-stampede",
+          "sourceId": "brute",
+          "targetSlot": 0,
+          "damage": 26
+        }
+      ],
+      "proposed": {
+        "family": "enemy-weapon-contact",
+        "durationMs": 800,
+        "assetState": "not-produced",
+        "soundCue": "prepare/travel/contact",
+        "fallback": "source-to-resolved-target; respect-guard-dodge-barrier-cancel",
+        "secondaryPolicy": "no-AoE-without-actual-target-events",
+        "overrides": []
+      }
+    },
+    {
+      "id": "energy:Shard Burst",
+      "name": "Shard Burst",
+      "kind": "energy",
+      "occurrences": [
+        {
+          "encounterId": "crystal-stampede",
+          "sourceId": "brute",
+          "targetSlot": 2,
+          "damage": 22
+        }
+      ],
+      "proposed": {
+        "family": "enemy-energy-projectile",
+        "durationMs": 800,
+        "assetState": "not-produced",
+        "soundCue": "prepare/travel/contact",
+        "fallback": "source-to-resolved-target; respect-guard-dodge-barrier-cancel",
+        "secondaryPolicy": "no-AoE-without-actual-target-events",
+        "overrides": []
+      }
+    },
+    {
+      "id": "physical:Stampede",
+      "name": "Stampede",
+      "kind": "physical",
+      "occurrences": [
+        {
+          "encounterId": "elite-tusk-chief",
+          "sourceId": "brute",
+          "targetSlot": 0,
+          "damage": 26
+        }
+      ],
+      "proposed": {
+        "family": "enemy-weapon-contact",
+        "durationMs": 800,
+        "assetState": "not-produced",
+        "soundCue": "prepare/travel/contact",
+        "fallback": "source-to-resolved-target; respect-guard-dodge-barrier-cancel",
+        "secondaryPolicy": "no-AoE-without-actual-target-events",
+        "overrides": []
+      }
+    },
+    {
+      "id": "energy:Thorn Storm",
+      "name": "Thorn Storm",
+      "kind": "energy",
+      "occurrences": [
+        {
+          "encounterId": "elite-briar-lord",
+          "sourceId": "brute",
+          "targetSlot": 2,
+          "damage": 27
+        }
+      ],
+      "proposed": {
+        "family": "enemy-energy-projectile",
+        "durationMs": 800,
+        "assetState": "not-produced",
+        "soundCue": "prepare/travel/contact",
+        "fallback": "source-to-resolved-target; respect-guard-dodge-barrier-cancel",
+        "secondaryPolicy": "no-AoE-without-actual-target-events",
+        "overrides": []
+      }
+    },
+    {
+      "id": "energy:Rift Needle",
+      "name": "Rift Needle",
+      "kind": "energy",
+      "occurrences": [
+        {
+          "encounterId": "mini-veil-golem",
+          "sourceId": "raider",
+          "targetSlot": 2,
+          "damage": 18
+        },
+        {
+          "encounterId": "mini-veil-golem",
+          "sourceId": "raider",
+          "targetSlot": 3,
+          "damage": 18
+        },
+        {
+          "encounterId": "mini-veil-golem",
+          "sourceId": "raider",
+          "targetSlot": 2,
+          "damage": 19
+        }
+      ],
+      "proposed": {
+        "family": "enemy-energy-projectile",
+        "durationMs": 800,
+        "assetState": "not-produced",
+        "soundCue": "prepare/travel/contact",
+        "fallback": "source-to-resolved-target; respect-guard-dodge-barrier-cancel",
+        "secondaryPolicy": "no-AoE-without-actual-target-events",
+        "overrides": []
+      }
+    },
+    {
+      "id": "physical:Stone Fist",
+      "name": "Stone Fist",
+      "kind": "physical",
+      "occurrences": [
+        {
+          "encounterId": "mini-veil-golem",
+          "sourceId": "brute",
+          "targetSlot": 0,
+          "damage": 22
+        },
+        {
+          "encounterId": "mini-veil-golem",
+          "sourceId": "brute",
+          "targetSlot": 0,
+          "damage": 22
+        }
+      ],
+      "proposed": {
+        "family": "enemy-weapon-contact",
+        "durationMs": 800,
+        "assetState": "not-produced",
+        "soundCue": "prepare/travel/contact",
+        "fallback": "source-to-resolved-target; respect-guard-dodge-barrier-cancel",
+        "secondaryPolicy": "no-AoE-without-actual-target-events",
+        "overrides": []
+      }
+    },
+    {
+      "id": "physical:Veil Quake",
+      "name": "Veil Quake",
+      "kind": "physical",
+      "occurrences": [
+        {
+          "encounterId": "mini-veil-golem",
+          "sourceId": "brute",
+          "targetSlot": 1,
+          "damage": 30
+        }
+      ],
+      "proposed": {
+        "family": "enemy-weapon-contact",
+        "durationMs": 800,
+        "assetState": "not-produced",
+        "soundCue": "prepare/travel/contact",
+        "fallback": "source-to-resolved-target; respect-guard-dodge-barrier-cancel",
+        "secondaryPolicy": "no-AoE-without-actual-target-events",
+        "overrides": []
+      }
+    }
+  ],
+  "events": [
+    {
+      "id": "damage",
+      "proposedFamily": "contact-number-hp",
+      "cue": "contact",
+      "fallback": "actual-target-icon-and-event-text; exact-values-only",
+      "assetState": "not-produced",
+      "provenance": "event type alone does not prove gear/passive origin"
+    },
+    {
+      "id": "guard",
+      "proposedFamily": "guard-link",
+      "cue": "at-authoritative-event-order",
+      "fallback": "actual-target-icon-and-event-text; exact-values-only",
+      "assetState": "not-produced",
+      "provenance": "event type alone does not prove gear/passive origin"
+    },
+    {
+      "id": "mark",
+      "proposedFamily": "mark-seal",
+      "cue": "at-authoritative-event-order",
+      "fallback": "actual-target-icon-and-event-text; exact-values-only",
+      "assetState": "not-produced",
+      "provenance": "event type alone does not prove gear/passive origin"
+    },
+    {
+      "id": "barrier",
+      "proposedFamily": "barrier-gain",
+      "cue": "at-authoritative-event-order",
+      "fallback": "actual-target-icon-and-event-text; exact-values-only",
+      "assetState": "not-produced",
+      "provenance": "event type alone does not prove gear/passive origin"
+    },
+    {
+      "id": "heal",
+      "proposedFamily": "hp-restoration",
+      "cue": "at-authoritative-event-order",
+      "fallback": "actual-target-icon-and-event-text; exact-values-only",
+      "assetState": "not-produced",
+      "provenance": "event type alone does not prove gear/passive origin"
+    },
+    {
+      "id": "interrupt",
+      "proposedFamily": "intent-break",
+      "cue": "at-authoritative-event-order",
+      "fallback": "actual-target-icon-and-event-text; exact-values-only",
+      "assetState": "not-produced",
+      "provenance": "event type alone does not prove gear/passive origin"
+    },
+    {
+      "id": "cancel",
+      "proposedFamily": "canceled-action",
+      "cue": "at-authoritative-event-order",
+      "fallback": "actual-target-icon-and-event-text; exact-values-only",
+      "assetState": "not-produced",
+      "provenance": "event type alone does not prove gear/passive origin"
+    },
+    {
+      "id": "down",
+      "proposedFamily": "fall-or-dissolve",
+      "cue": "at-authoritative-event-order",
+      "fallback": "actual-target-icon-and-event-text; exact-values-only",
+      "assetState": "not-produced",
+      "provenance": "event type alone does not prove gear/passive origin"
+    },
+    {
+      "id": "outcome",
+      "proposedFamily": "result-transition",
+      "cue": "after-final-reaction",
+      "fallback": "actual-target-icon-and-event-text; exact-values-only",
+      "assetState": "not-produced",
+      "provenance": "event type alone does not prove gear/passive origin"
+    },
+    {
+      "id": "brace",
+      "proposedFamily": "spear-stance",
+      "cue": "at-authoritative-event-order",
+      "fallback": "actual-target-icon-and-event-text; exact-values-only",
+      "assetState": "not-produced",
+      "provenance": "event type alone does not prove gear/passive origin"
+    },
+    {
+      "id": "counter",
+      "proposedFamily": "return-strike",
+      "cue": "at-authoritative-event-order",
+      "fallback": "actual-target-icon-and-event-text; exact-values-only",
+      "assetState": "not-produced",
+      "provenance": "event type alone does not prove gear/passive origin"
+    },
+    {
+      "id": "delay",
+      "proposedFamily": "queue-delay",
+      "cue": "at-authoritative-event-order",
+      "fallback": "actual-target-icon-and-event-text; exact-values-only",
+      "assetState": "not-produced",
+      "provenance": "event type alone does not prove gear/passive origin"
+    },
+    {
+      "id": "corrode",
+      "proposedFamily": "acid-status",
+      "cue": "at-authoritative-event-order",
+      "fallback": "actual-target-icon-and-event-text; exact-values-only",
+      "assetState": "not-produced",
+      "provenance": "event type alone does not prove gear/passive origin"
+    },
+    {
+      "id": "haste",
+      "proposedFamily": "haste-status",
+      "cue": "at-authoritative-event-order",
+      "fallback": "actual-target-icon-and-event-text; exact-values-only",
+      "assetState": "not-produced",
+      "provenance": "event type alone does not prove gear/passive origin"
+    },
+    {
+      "id": "evade",
+      "proposedFamily": "evasion-ready",
+      "cue": "at-authoritative-event-order",
+      "fallback": "actual-target-icon-and-event-text; exact-values-only",
+      "assetState": "not-produced",
+      "provenance": "event type alone does not prove gear/passive origin"
+    },
+    {
+      "id": "dodge",
+      "proposedFamily": "miss-afterimage",
+      "cue": "at-authoritative-event-order",
+      "fallback": "actual-target-icon-and-event-text; exact-values-only",
+      "assetState": "not-produced",
+      "provenance": "event type alone does not prove gear/passive origin"
+    },
+    {
+      "id": "taunt",
+      "proposedFamily": "challenge-link",
+      "cue": "at-authoritative-event-order",
+      "fallback": "actual-target-icon-and-event-text; exact-values-only",
+      "assetState": "not-produced",
+      "provenance": "event type alone does not prove gear/passive origin"
+    },
+    {
+      "id": "song",
+      "proposedFamily": "song-state",
+      "cue": "at-authoritative-event-order",
+      "fallback": "actual-target-icon-and-event-text; exact-values-only",
+      "assetState": "not-produced",
+      "provenance": "event type alone does not prove gear/passive origin"
+    },
+    {
+      "id": "rally",
+      "proposedFamily": "party-guard",
+      "cue": "at-authoritative-event-order",
+      "fallback": "actual-target-icon-and-event-text; exact-values-only",
+      "assetState": "not-produced",
+      "provenance": "event type alone does not prove gear/passive origin"
+    },
+    {
+      "id": "sigil",
+      "proposedFamily": "sigil-status",
+      "cue": "at-authoritative-event-order",
+      "fallback": "actual-target-icon-and-event-text; exact-values-only",
+      "assetState": "not-produced",
+      "provenance": "event type alone does not prove gear/passive origin"
+    },
+    {
+      "id": "sanctuary",
+      "proposedFamily": "survival-seal",
+      "cue": "at-authoritative-event-order",
+      "fallback": "actual-target-icon-and-event-text; exact-values-only",
+      "assetState": "not-produced",
+      "provenance": "event type alone does not prove gear/passive origin"
+    },
+    {
+      "id": "stand",
+      "proposedFamily": "last-stand",
+      "cue": "at-authoritative-event-order",
+      "fallback": "actual-target-icon-and-event-text; exact-values-only",
+      "assetState": "not-produced",
+      "provenance": "event type alone does not prove gear/passive origin"
+    },
+    {
+      "id": "finale",
+      "proposedFamily": "song-finale",
+      "cue": "at-authoritative-event-order",
+      "fallback": "actual-target-icon-and-event-text; exact-values-only",
+      "assetState": "not-produced",
+      "provenance": "event type alone does not prove gear/passive origin"
+    }
+  ]
+}

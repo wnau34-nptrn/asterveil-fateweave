@@ -1,0 +1,51 @@
+{
+  "status": "dimension and PNG decode checks passed",
+  "native_generation_size": [
+    1672,
+    941
+  ],
+  "portrait_source_crop": [
+    165,
+    0,
+    599,
+    941
+  ],
+  "files": [
+    {
+      "file": "world_concept.png",
+      "width": 3840,
+      "height": 2160,
+      "bytes": 12777969,
+      "sha256": "ad6d0bf8bbc93457b44b0b7c5de68a2e8a3d1c8f5f48a0415ad1c345bde84113",
+      "mode": "RGB",
+      "color_space": "sRGB"
+    },
+    {
+      "file": "world_concept_fog.png",
+      "width": 3840,
+      "height": 2160,
+      "bytes": 9402618,
+      "sha256": "7c14d25aeb0f237375c7d1c595e860287451e6be5c3d5d711620f5f06dba9dd1",
+      "mode": "RGB",
+      "color_space": "sRGB"
+    },
+    {
+      "file": "regions.png",
+      "width": 3840,
+      "height": 2160,
+      "bytes": 11619710,
+      "sha256": "82b44e108fc5afd3969697325ac9f97e253001857dc768778a581c95797d2231",
+      "mode": "RGB",
+      "color_space": "sRGB"
+    },
+    {
+      "file": "world_portrait.png",
+      "width": 1080,
+      "height": 2340,
+      "bytes": 3973344,
+      "sha256": "7f9c175b97b12ece612d0a0a68ab9d3aabd8a1f61f887d32e2775c343be7edf1",
+      "mode": "RGB",
+      "color_space": "sRGB"
+    }
+  ]
+}

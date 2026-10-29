@@ -1,0 +1,93 @@
+[
+  {
+    "skill": "rally",
+    "thai": "ตั้งรับหมู่",
+    "identity": "เครื่องหมายพลังน้ำเงิน–เงินบนพื้นแยกซ้าย–ขวา อยู่ต่ำกว่ารองเท้าและแถบ HP ไม่พาดทับชุด ไม่สื่อว่าเพิ่ม barrier",
+    "revision": "Rally R3 artwork",
+    "width": 90,
+    "height": 12,
+    "dx": 0,
+    "dy": 27,
+    "anchor": "feet",
+    "placement": "targets",
+    "frames": [
+      [
+        92,
+        356,
+        564,
+        31
+      ],
+      [
+        759,
+        324,
+        651,
+        79
+      ],
+      [
+        1525,
+        334,
+        559,
+        54
+      ]
+    ],
+    "frameMax": [
+      651,
+      79
+    ],
+    "source": "../../../incoming/ART-VFX-DEFENSE-001/proposals/rally-r3/source.png",
+    "background": "../../../incoming/ART-VFX-DEFENSE-001/reference/rally-390.png",
+    "anchors": {
+      "source": {
+        "id": "guardian",
+        "x": 145.85999999999999,
+        "y": 232.72,
+        "size": 111
+      },
+      "targets": [
+        {
+          "id": "guardian",
+          "x": 145.85999999999999,
+          "y": 232.72,
+          "size": 111
+        },
+        {
+          "id": "tracer",
+          "x": 145.85999999999999,
+          "y": 566.72,
+          "size": 111
+        },
+        {
+          "id": "weaver",
+          "x": 49.47,
+          "y": 232.72,
+          "size": 111
+        },
+        {
+          "id": "healer",
+          "x": 49.47,
+          "y": 566.72,
+          "size": 111
+        }
+      ],
+      "events": [
+        {
+          "type": "rally",
+          "sourceId": "guardian",
+          "targetId": "guardian",
+          "text": "Every ally’s first hit is reduced until the knight’s next turn."
+        }
+      ],
+      "mode": "self",
+      "targetId": "guardian"
+    },
+    "sourceSize": [
+      2172,
+      724
+    ],
+    "alphaRange": [
+      0,
+      253
+    ],
+    "sha256": "53733b04d689558aabc85184686e953a0200fc64806e7716b78ba706bd08ba81"
+  }
+]

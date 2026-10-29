@@ -1,0 +1,840 @@
+{
+  "aegis": {
+    "scale": 1.0501775147928993,
+    "factor": 0.36,
+    "displayRatio": 2.7777777777777777,
+    "cell": 512,
+    "origin": [
+      0.5,
+      0.96875
+    ],
+    "rawSize": [
+      1536,
+      1024
+    ],
+    "sourceSha256": "3dced9d8f503ffe5fc9f17b30e452a4f7d23819b9e1ed1368e21892192f91a13",
+    "transforms": [
+      {
+        "row": 0,
+        "column": 1,
+        "sourceBox": [
+          212,
+          176,
+          422,
+          348
+        ],
+        "gridAnchorX": 329.14285714285717,
+        "position": [
+          133,
+          317
+        ]
+      },
+      {
+        "row": 0,
+        "column": 2,
+        "sourceBox": [
+          441,
+          179,
+          647,
+          349
+        ],
+        "gridAnchorX": 548.5714285714286,
+        "position": [
+          143,
+          320
+        ]
+      },
+      {
+        "row": 0,
+        "column": 3,
+        "sourceBox": [
+          642,
+          179,
+          890,
+          350
+        ],
+        "gridAnchorX": 768.0,
+        "position": [
+          124,
+          319
+        ]
+      },
+      {
+        "row": 0,
+        "column": 4,
+        "sourceBox": [
+          863,
+          179,
+          1109,
+          349
+        ],
+        "gridAnchorX": 987.4285714285714,
+        "position": [
+          125,
+          320
+        ]
+      },
+      {
+        "row": 0,
+        "column": 5,
+        "sourceBox": [
+          1109,
+          179,
+          1289,
+          349
+        ],
+        "gridAnchorX": 1206.857142857143,
+        "position": [
+          153,
+          320
+        ]
+      },
+      {
+        "row": 0,
+        "column": 6,
+        "sourceBox": [
+          1327,
+          176,
+          1513,
+          349
+        ],
+        "gridAnchorX": 1426.2857142857142,
+        "position": [
+          152,
+          316
+        ]
+      },
+      {
+        "row": 2,
+        "column": 1,
+        "sourceBox": [
+          235,
+          514,
+          417,
+          689
+        ],
+        "gridAnchorX": 329.14285714285717,
+        "position": [
+          157,
+          314
+        ]
+      },
+      {
+        "row": 2,
+        "column": 2,
+        "sourceBox": [
+          444,
+          516,
+          627,
+          689
+        ],
+        "gridAnchorX": 548.5714285714286,
+        "position": [
+          146,
+          316
+        ]
+      },
+      {
+        "row": 2,
+        "column": 3,
+        "sourceBox": [
+          661,
+          516,
+          846,
+          689
+        ],
+        "gridAnchorX": 768.0,
+        "position": [
+          144,
+          316
+        ]
+      },
+      {
+        "row": 2,
+        "column": 4,
+        "sourceBox": [
+          882,
+          514,
+          1047,
+          689
+        ],
+        "gridAnchorX": 987.4285714285714,
+        "position": [
+          145,
+          314
+        ]
+      },
+      {
+        "row": 2,
+        "column": 5,
+        "sourceBox": [
+          1093,
+          518,
+          1291,
+          689
+        ],
+        "gridAnchorX": 1206.857142857143,
+        "position": [
+          136,
+          319
+        ]
+      },
+      {
+        "row": 2,
+        "column": 6,
+        "sourceBox": [
+          1327,
+          513,
+          1516,
+          687
+        ],
+        "gridAnchorX": 1426.2857142857142,
+        "position": [
+          152,
+          315
+        ]
+      },
+      {
+        "row": 1,
+        "column": 1,
+        "sourceBox": [
+          216,
+          359,
+          415,
+          514
+        ],
+        "gridAnchorX": 329.14285714285717,
+        "position": [
+          137,
+          335
+        ]
+      },
+      {
+        "row": 1,
+        "column": 2,
+        "sourceBox": [
+          431,
+          353,
+          607,
+          514
+        ],
+        "gridAnchorX": 548.5714285714286,
+        "position": [
+          133,
+          329
+        ]
+      },
+      {
+        "row": 1,
+        "column": 3,
+        "sourceBox": [
+          626,
+          354,
+          857,
+          515
+        ],
+        "gridAnchorX": 768.0,
+        "position": [
+          107,
+          329
+        ]
+      },
+      {
+        "row": 1,
+        "column": 4,
+        "sourceBox": [
+          865,
+          349,
+          1065,
+          515
+        ],
+        "gridAnchorX": 987.4285714285714,
+        "position": [
+          127,
+          324
+        ]
+      },
+      {
+        "row": 1,
+        "column": 5,
+        "sourceBox": [
+          1096,
+          348,
+          1292,
+          517
+        ],
+        "gridAnchorX": 1206.857142857143,
+        "position": [
+          140,
+          321
+        ]
+      },
+      {
+        "row": 1,
+        "column": 6,
+        "sourceBox": [
+          1327,
+          346,
+          1515,
+          518
+        ],
+        "gridAnchorX": 1426.2857142857142,
+        "position": [
+          152,
+          317
+        ]
+      },
+      {
+        "row": 3,
+        "column": 0,
+        "sourceBox": [
+          96,
+          687,
+          298,
+          850
+        ],
+        "gridAnchorX": 192.0,
+        "position": [
+          155,
+          327
+        ]
+      },
+      {
+        "row": 3,
+        "column": 1,
+        "sourceBox": [
+          461,
+          695,
+          662,
+          850
+        ],
+        "gridAnchorX": 576.0,
+        "position": [
+          135,
+          335
+        ]
+      },
+      {
+        "row": 4,
+        "column": 0,
+        "sourceBox": [
+          91,
+          854,
+          313,
+          1007
+        ],
+        "gridAnchorX": 192.0,
+        "position": [
+          150,
+          337
+        ]
+      },
+      {
+        "row": 4,
+        "column": 2,
+        "sourceBox": [
+          775,
+          870,
+          1096,
+          1003
+        ],
+        "gridAnchorX": 960.0,
+        "position": [
+          62,
+          358
+        ]
+      },
+      {
+        "row": 4,
+        "column": 3,
+        "sourceBox": [
+          1118,
+          891,
+          1507,
+          1007
+        ],
+        "gridAnchorX": 1344.0,
+        "position": [
+          19,
+          376
+        ]
+      },
+      {
+        "row": 3,
+        "column": 0,
+        "sourceBox": [
+          96,
+          687,
+          298,
+          850
+        ],
+        "gridAnchorX": 192.0,
+        "position": [
+          155,
+          327
+        ]
+      },
+      {
+        "row": 3,
+        "column": 3,
+        "sourceBox": [
+          1188,
+          687,
+          1387,
+          850
+        ],
+        "gridAnchorX": 1344.0,
+        "position": [
+          92,
+          327
+        ]
+      }
+    ],
+    "lockedToSeed": [
+      0,
+      1,
+      8,
+      9,
+      16,
+      22,
+      29
+    ],
+    "uniqueFrames": 25,
+    "losslessReconstruction": "all alpha and visible RGBA equal",
+    "image": "aegis_a2.1d12d3127841.webp",
+    "atlas": "aegis_a2.e88cd1ce5fe0.json",
+    "width": 1536,
+    "height": 720,
+    "frames": 32,
+    "decodedBytes": 4423680,
+    "downloadBytes": 1397790
+  },
+  "vargoth": {
+    "scale": 0.9732620320855615,
+    "factor": 0.5,
+    "displayRatio": 2.0,
+    "cell": 512,
+    "origin": [
+      0.5,
+      0.96875
+    ],
+    "rawSize": [
+      1536,
+      1024
+    ],
+    "sourceSha256": "07343a655e8745fe27c8a11381fe476616282053ee0a6dc8418d8afe05c0a79a",
+    "transforms": [
+      {
+        "row": 0,
+        "column": 1,
+        "sourceBox": [
+          268,
+          39,
+          531,
+          226
+        ],
+        "gridAnchorX": 384.0,
+        "position": [
+          143,
+          316
+        ]
+      },
+      {
+        "row": 0,
+        "column": 2,
+        "sourceBox": [
+          519,
+          16,
+          778,
+          226
+        ],
+        "gridAnchorX": 640.0,
+        "position": [
+          138,
+          294
+        ]
+      },
+      {
+        "row": 0,
+        "column": 3,
+        "sourceBox": [
+          802,
+          11,
+          1008,
+          240
+        ],
+        "gridAnchorX": 896.0,
+        "position": [
+          165,
+          275
+        ]
+      },
+      {
+        "row": 0,
+        "column": 4,
+        "sourceBox": [
+          1015,
+          46,
+          1278,
+          227
+        ],
+        "gridAnchorX": 1152.0,
+        "position": [
+          123,
+          322
+        ]
+      },
+      {
+        "row": 0,
+        "column": 4,
+        "sourceBox": [
+          1015,
+          46,
+          1278,
+          227
+        ],
+        "gridAnchorX": 1152.0,
+        "position": [
+          123,
+          322
+        ]
+      },
+      {
+        "row": 0,
+        "column": 5,
+        "sourceBox": [
+          1282,
+          35,
+          1523,
+          227
+        ],
+        "gridAnchorX": 1408.0,
+        "position": [
+          133,
+          311
+        ]
+      },
+      {
+        "row": 1,
+        "column": 1,
+        "sourceBox": [
+          248,
+          449,
+          403,
+          617
+        ],
+        "gridAnchorX": 288.0,
+        "position": [
+          217,
+          334
+        ]
+      },
+      {
+        "row": 1,
+        "column": 2,
+        "sourceBox": [
+          412,
+          451,
+          585,
+          618
+        ],
+        "gridAnchorX": 480.0,
+        "position": [
+          190,
+          335
+        ]
+      },
+      {
+        "row": 1,
+        "column": 3,
+        "sourceBox": [
+          584,
+          440,
+          755,
+          613
+        ],
+        "gridAnchorX": 672.0,
+        "position": [
+          170,
+          330
+        ]
+      },
+      {
+        "row": 1,
+        "column": 4,
+        "sourceBox": [
+          763,
+          450,
+          973,
+          611
+        ],
+        "gridAnchorX": 864.0,
+        "position": [
+          158,
+          341
+        ]
+      },
+      {
+        "row": 1,
+        "column": 5,
+        "sourceBox": [
+          972,
+          445,
+          1152,
+          610
+        ],
+        "gridAnchorX": 1056.0,
+        "position": [
+          174,
+          337
+        ]
+      },
+      {
+        "row": 1,
+        "column": 6,
+        "sourceBox": [
+          1160,
+          451,
+          1325,
+          613
+        ],
+        "gridAnchorX": 1248.0,
+        "position": [
+          170,
+          340
+        ]
+      },
+      {
+        "row": 2,
+        "column": 0,
+        "sourceBox": [
+          220,
+          655,
+          467,
+          818
+        ],
+        "gridAnchorX": 344,
+        "position": [
+          135,
+          339
+        ]
+      },
+      {
+        "row": 2,
+        "column": 1,
+        "sourceBox": [
+          500,
+          653,
+          738,
+          816
+        ],
+        "gridAnchorX": 624,
+        "position": [
+          135,
+          339
+        ]
+      },
+      {
+        "row": 3,
+        "column": 0,
+        "sourceBox": [
+          144,
+          843,
+          408,
+          1001
+        ],
+        "gridAnchorX": 276,
+        "position": [
+          128,
+          344
+        ]
+      },
+      {
+        "row": 3,
+        "column": 2,
+        "sourceBox": [
+          766,
+          875,
+          1043,
+          1008
+        ],
+        "gridAnchorX": 916,
+        "position": [
+          110,
+          369
+        ]
+      },
+      {
+        "row": 3,
+        "column": 3,
+        "sourceBox": [
+          1090,
+          904,
+          1437,
+          1008
+        ],
+        "gridAnchorX": 1236,
+        "position": [
+          114,
+          397
+        ]
+      },
+      {
+        "row": 2,
+        "column": 0,
+        "sourceBox": [
+          220,
+          655,
+          467,
+          818
+        ],
+        "gridAnchorX": 344,
+        "position": [
+          135,
+          339
+        ]
+      },
+      {
+        "row": 2,
+        "column": 3,
+        "sourceBox": [
+          1076,
+          641,
+          1328,
+          820
+        ],
+        "gridAnchorX": 1184,
+        "position": [
+          151,
+          324
+        ]
+      },
+      {
+        "source": "vargoth-shield-raw.png",
+        "column": 1,
+        "row": 0,
+        "scale": 0.6341463414634146,
+        "sourceBox": [
+          419,
+          205,
+          730,
+          475
+        ],
+        "gridAnchorX": 576.0,
+        "position": [
+          156,
+          326
+        ]
+      },
+      {
+        "source": "vargoth-shield-raw.png",
+        "column": 2,
+        "row": 0,
+        "scale": 0.6341463414634146,
+        "sourceBox": [
+          795,
+          179,
+          1178,
+          476
+        ],
+        "gridAnchorX": 960.0,
+        "position": [
+          151,
+          309
+        ]
+      },
+      {
+        "source": "vargoth-shield-raw.png",
+        "column": 3,
+        "row": 0,
+        "scale": 0.6341463414634146,
+        "sourceBox": [
+          1217,
+          201,
+          1527,
+          476
+        ],
+        "gridAnchorX": 1344.0,
+        "position": [
+          175,
+          323
+        ]
+      },
+      {
+        "source": "vargoth-shield-raw.png",
+        "column": 0,
+        "row": 1,
+        "scale": 0.6341463414634146,
+        "sourceBox": [
+          24,
+          656,
+          380,
+          923
+        ],
+        "gridAnchorX": 192.0,
+        "position": [
+          149,
+          328
+        ]
+      },
+      {
+        "source": "vargoth-shield-raw.png",
+        "column": 1,
+        "row": 1,
+        "scale": 0.6341463414634146,
+        "sourceBox": [
+          412,
+          654,
+          760,
+          925
+        ],
+        "gridAnchorX": 576.0,
+        "position": [
+          152,
+          325
+        ]
+      },
+      {
+        "source": "vargoth-shield-raw.png",
+        "column": 2,
+        "row": 1,
+        "scale": 0.6341463414634146,
+        "sourceBox": [
+          804,
+          647,
+          1127,
+          926
+        ],
+        "gridAnchorX": 960.0,
+        "position": [
+          157,
+          320
+        ]
+      }
+    ],
+    "lockedToSeed": [
+      0,
+      1,
+      8,
+      9,
+      16,
+      24,
+      31
+    ],
+    "shieldStripScale": 0.6341463414634146,
+    "shieldRawSize": [
+      1536,
+      1024
+    ],
+    "shieldSourceSha256": "97fe0703908ce81f09f150257c39192b6f167725df628aae01ab9e4dc45167ff",
+    "uniqueFrames": 24,
+    "losslessReconstruction": "all alpha and visible RGBA equal",
+    "image": "vargoth_a2.e00f4aba9301.webp",
+    "atlas": "vargoth_a2.cf090b150455.json",
+    "width": 768,
+    "height": 1401,
+    "frames": 32,
+    "decodedBytes": 4303872,
+    "downloadBytes": 1385751
+  }
+}

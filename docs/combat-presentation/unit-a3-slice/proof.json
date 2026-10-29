@@ -1,0 +1,770 @@
+{
+  "base": "8616ad3155a179e05210fe6aa552e6d234c9bd24",
+  "sourceCommit": "d726ff583abeec7a1e5dc84367e1bde92425b443",
+  "sourceTree": "2a16067cb18dd720b6f7529b99e04aad638f3f65",
+  "publicTree": "4ab6fb6d1a18d7d5342d89ceb28590f866303dea",
+  "environment": "Chromium / SwiftShader / cloud 390x844 touch emulation, not a physical phone or iOS Safari",
+  "retiming": "none; every captured frame and final hold preserved using CDP timestamps",
+  "ownerVisualApproval": "No new owner visual approval is inferred from generation or tests.",
+  "clips": [
+    {
+      "file": "attack-SporeHex-down-normal-390.mp4",
+      "sha256": "3d4ae6bcf1d3f2f9e735f8a02eaa1f5c51aa826e7c3ab0173976ed952f410637",
+      "bytes": 474840,
+      "metadata": "capture-metadata/attack-SporeHex-down-normal",
+      "capturedFrames": 119,
+      "maxFrameGap": 0.275,
+      "maxTimestampErrorMs": 0.0061,
+      "duration": 2.525778
+    },
+    {
+      "file": "attack-SporeHex-enemy-down-normal-390.mp4",
+      "sha256": "62a0ee6d9c05c24e45cb7f243a7e2d7e948a9644ba5bd5f1aa744e75127d5b3e",
+      "bytes": 240640,
+      "metadata": "capture-metadata/attack-SporeHex-enemy-down-normal",
+      "capturedFrames": 65,
+      "maxFrameGap": 0.116,
+      "maxTimestampErrorMs": 0.0052,
+      "duration": 1.525667
+    },
+    {
+      "file": "attack-SporeHex-hurt-normal-390.mp4",
+      "sha256": "3ffd58592ab0ec233ccd952c3b57cafee8bb2618fab7b7c917ceab7dc927424e",
+      "bytes": 465837,
+      "metadata": "capture-metadata/attack-SporeHex-hurt-normal",
+      "capturedFrames": 115,
+      "maxFrameGap": 0.261,
+      "maxTimestampErrorMs": 0.0051,
+      "duration": 2.519967
+    },
+    {
+      "file": "attack-SporeHex-normal-fast-390.mp4",
+      "sha256": "bf2aa78d9ef9da27997bc0ff3fb0cc923d48c733af11b62d91ca676660af974f",
+      "bytes": 399557,
+      "metadata": "capture-metadata/attack-SporeHex-normal-fast",
+      "capturedFrames": 85,
+      "maxFrameGap": 0.264,
+      "maxTimestampErrorMs": 0.006,
+      "duration": 2.047067
+    },
+    {
+      "file": "attack-SporeHex-normal-normal-390.mp4",
+      "sha256": "87a8ae832afd6b2cdf80a8a789b7034c795cbd6b30ffd72073af3e3666735ddd",
+      "bytes": 451767,
+      "metadata": "capture-metadata/attack-SporeHex-normal-normal",
+      "capturedFrames": 101,
+      "maxFrameGap": 0.328,
+      "maxTimestampErrorMs": 0.0052,
+      "duration": 2.5278
+    },
+    {
+      "file": "attack-SporeHex-normal-osreduce-390.mp4",
+      "sha256": "1a5169a47c687db9285be68f46c40dce1863ae7b60cd79a4f0651e9f8425f64e",
+      "bytes": 221212,
+      "metadata": "capture-metadata/attack-SporeHex-normal-osreduce",
+      "capturedFrames": 123,
+      "maxFrameGap": 0.253,
+      "maxTimestampErrorMs": 0.0059,
+      "duration": 2.619656
+    },
+    {
+      "file": "attack-SporeHex-normal-reduced-390.mp4",
+      "sha256": "5c6a876d4c7676ad8e60023dec0fbd2173c9e0e312cafa6e0b3e4ce80fce7950",
+      "bytes": 241353,
+      "metadata": "capture-metadata/attack-SporeHex-normal-reduced",
+      "capturedFrames": 117,
+      "maxFrameGap": 0.276,
+      "maxTimestampErrorMs": 0.0061,
+      "duration": 2.501444
+    },
+    {
+      "file": "bless-SporeHex-normal-normal-390.mp4",
+      "sha256": "0f9b05a6f9d5974584945a490659011b36e7ba79e7024315ee63561f448d61cf",
+      "bytes": 437353,
+      "metadata": "capture-metadata/bless-SporeHex-normal-normal",
+      "capturedFrames": 112,
+      "maxFrameGap": 0.271,
+      "maxTimestampErrorMs": 0.0058,
+      "duration": 2.606844
+    },
+    {
+      "file": "halo-SporeHex-normal-normal-390.mp4",
+      "sha256": "8ff5a00136962c5957cba46a8549401de03fc8cc6b73334c3842f81206cb37d6",
+      "bytes": 436429,
+      "metadata": "capture-metadata/halo-SporeHex-normal-normal",
+      "capturedFrames": 113,
+      "maxFrameGap": 0.281,
+      "maxTimestampErrorMs": 0.0058,
+      "duration": 2.485133
+    },
+    {
+      "file": "heal-SporeHex-normal-normal-390.mp4",
+      "sha256": "b4d8fb48f3ea95fbfd902fac0d7cb0080c6da6a9421039e30fdb0f1db6bd49b0",
+      "bytes": 419211,
+      "metadata": "capture-metadata/heal-SporeHex-normal-normal",
+      "capturedFrames": 110,
+      "maxFrameGap": 0.262,
+      "maxTimestampErrorMs": 0.006,
+      "duration": 2.460656
+    },
+    {
+      "file": "prayer-SporeHex-normal-fast-390.mp4",
+      "sha256": "89967f11a988739980e12e1cbeeea804b1da8070b82b695e6eaaefc80c98c8a2",
+      "bytes": 376415,
+      "metadata": "capture-metadata/prayer-SporeHex-normal-fast",
+      "capturedFrames": 72,
+      "maxFrameGap": 0.273,
+      "maxTimestampErrorMs": 0.006,
+      "duration": 2.032967
+    },
+    {
+      "file": "prayer-SporeHex-normal-normal-390.mp4",
+      "sha256": "1fab43e089acc267960e2c4c07ea1880089538f94218f1726face530987c3ec7",
+      "bytes": 435446,
+      "metadata": "capture-metadata/prayer-SporeHex-normal-normal",
+      "capturedFrames": 108,
+      "maxFrameGap": 0.261,
+      "maxTimestampErrorMs": 0.0052,
+      "duration": 2.519989
+    },
+    {
+      "file": "prayer-SporeHex-normal-osreduce-390.mp4",
+      "sha256": "a519d3ef1d53a6714af445e0d0a926dd6a96b58a9143b3bc60c390973a1877eb",
+      "bytes": 229701,
+      "metadata": "capture-metadata/prayer-SporeHex-normal-osreduce",
+      "capturedFrames": 115,
+      "maxFrameGap": 0.261,
+      "maxTimestampErrorMs": 0.0051,
+      "duration": 2.532522
+    },
+    {
+      "file": "prayer-SporeHex-normal-reduced-390.mp4",
+      "sha256": "5cc66fca70a06a4a8fb6b9364690fb239088c0486567b2c6293e8279b15e3c4a",
+      "bytes": 268511,
+      "metadata": "capture-metadata/prayer-SporeHex-normal-reduced",
+      "capturedFrames": 100,
+      "maxFrameGap": 0.267,
+      "maxTimestampErrorMs": 0.0051,
+      "duration": 2.5009
+    },
+    {
+      "file": "revive-SporeHex-revive-normal-390.mp4",
+      "sha256": "84f71310fde4d8f987ea5646215029d9117c8f71ddacb89ea48398d2ff306f85",
+      "bytes": 317957,
+      "metadata": "capture-metadata/revive-SporeHex-revive-normal",
+      "capturedFrames": 92,
+      "maxFrameGap": 0.272,
+      "maxTimestampErrorMs": 0.0062,
+      "duration": 2.080133
+    },
+    {
+      "file": "sanctuary-SporeHex-normal-normal-390.mp4",
+      "sha256": "80677a2076cb9adfd83a8a0a085ce8f7927593b8f3e5f60d19f40b2fb32b6c6f",
+      "bytes": 451352,
+      "metadata": "capture-metadata/sanctuary-SporeHex-normal-normal",
+      "capturedFrames": 107,
+      "maxFrameGap": 0.306,
+      "maxTimestampErrorMs": 0.006,
+      "duration": 2.621678
+    }
+  ],
+  "capturedFrames": 1654,
+  "maxFrameGap": 0.328,
+  "maxTimestampErrorMs": 0.0062,
+  "art": {
+    "seren": {
+      "factor": 0.36,
+      "displayRatio": 2.7777777777777777,
+      "cell": 512,
+      "origin": [
+        0.5,
+        0.96875
+      ],
+      "seedArea": 150414,
+      "clipStarts": {
+        "attack": 1,
+        "heal": 9,
+        "hit": 17,
+        "down": 19,
+        "prayer": 22,
+        "sanctuary": 30,
+        "block": 38
+      },
+      "strips": {
+        "seren-attack-r2": {
+          "rawSize": [
+            2172,
+            724
+          ],
+          "sha256": "1748ecca3dabb8fd0d9546922bc7e4997663586bff4bf697d7a388df69b667ab",
+          "scale": 0.43556139078976114,
+          "firstFigureArea": 102753,
+          "splitNotes": [
+            {
+              "mergedBox": [
+                696,
+                68,
+                2166,
+                622
+              ],
+              "split": "manual ownership rules in split_attack_r2"
+            }
+          ]
+        },
+        "seren-heal-r1": {
+          "rawSize": [
+            2172,
+            724
+          ],
+          "sha256": "2461a89f3bd257c5ae092a94b7671eb39e972517c30a55a3051d1ee51cc939b0",
+          "scale": 0.4732109221520479,
+          "firstFigureArea": 87053,
+          "splitNotes": null
+        },
+        "seren-hit-r1": {
+          "rawSize": [
+            2172,
+            724
+          ],
+          "sha256": "6728dd33389b46460c67e5dac991a947dc90561092ff3502318b754a5c09cf0f",
+          "scale": 0.30841793332302403,
+          "firstFigureArea": 204934,
+          "splitNotes": null
+        },
+        "seren-down-r1": {
+          "rawSize": [
+            2172,
+            724
+          ],
+          "sha256": "e8a3d01dc475ebd9e33cf8796e051a7a813923a850f3e5febae772d6b2175f32",
+          "scale": 0.3393809214630563,
+          "firstFigureArea": 169246,
+          "splitNotes": null
+        },
+        "seren-prayer-r1": {
+          "rawSize": [
+            2172,
+            724
+          ],
+          "sha256": "6b7d56d69fa1f89b89f8243539cd74820d4cee9232c1351e563d884c9e82d1bb",
+          "scale": 0.40865890708677893,
+          "firstFigureArea": 116727,
+          "splitNotes": null
+        },
+        "seren-sanctuary-r1": {
+          "rawSize": [
+            2172,
+            724
+          ],
+          "sha256": "10b45a663440b9bf1d41cbac7f4074e2fbc93b325c9f15cf45891c41ba0dc74f",
+          "scale": 0.425830083005834,
+          "firstFigureArea": 107503,
+          "splitNotes": null
+        },
+        "seren-block-r1": {
+          "rawSize": [
+            2172,
+            724
+          ],
+          "sha256": "c313992f1510d4ab269bc7a5378a119b7b17896d6f8ad6bb8b7e6d9bc1cc1276",
+          "scale": 0.33068802007119913,
+          "firstFigureArea": 178261,
+          "splitNotes": null
+        }
+      },
+      "transforms": [
+        {
+          "strip": "seren-attack-r2",
+          "figure": 1,
+          "position": [
+            158,
+            272
+          ],
+          "footX": 98.21909362309114,
+          "soleY": 223.87855486593722
+        },
+        {
+          "strip": "seren-attack-r2",
+          "figure": 2,
+          "position": [
+            162,
+            258
+          ],
+          "footX": 93.86347971519352,
+          "soleY": 238.25208076199934
+        },
+        {
+          "strip": "seren-attack-r2",
+          "figure": 2,
+          "position": [
+            162,
+            258
+          ],
+          "footX": 93.86347971519352,
+          "soleY": 238.25208076199934
+        },
+        {
+          "strip": "seren-attack-r2",
+          "figure": 3,
+          "position": [
+            147,
+            311
+          ],
+          "footX": 108.89034769744029,
+          "soleY": 184.67802969485874
+        },
+        {
+          "strip": "seren-attack-r2",
+          "figure": 4,
+          "position": [
+            152,
+            300
+          ],
+          "footX": 103.88139170335803,
+          "soleY": 196.00262585539252
+        },
+        {
+          "strip": "seren-attack-r2",
+          "figure": 5,
+          "position": [
+            185,
+            294
+          ],
+          "footX": 71.43206808952083,
+          "soleY": 201.6649239356594
+        },
+        {
+          "strip": "seren-heal-r1",
+          "figure": 1,
+          "position": [
+            175,
+            300
+          ],
+          "footX": 80.68246222692417,
+          "soleY": 196.38253269309988
+        },
+        {
+          "strip": "seren-heal-r1",
+          "figure": 2,
+          "position": [
+            177,
+            261
+          ],
+          "footX": 79.026223999392,
+          "soleY": 234.71261738741578
+        },
+        {
+          "strip": "seren-heal-r1",
+          "figure": 2,
+          "position": [
+            177,
+            261
+          ],
+          "footX": 79.026223999392,
+          "soleY": 234.71261738741578
+        },
+        {
+          "strip": "seren-heal-r1",
+          "figure": 3,
+          "position": [
+            181,
+            266
+          ],
+          "footX": 75.47714208325164,
+          "soleY": 229.50729724374324
+        },
+        {
+          "strip": "seren-heal-r1",
+          "figure": 4,
+          "position": [
+            176,
+            272
+          ],
+          "footX": 80.20925130477212,
+          "soleY": 224.3019771000707
+        },
+        {
+          "strip": "seren-heal-r1",
+          "figure": 5,
+          "position": [
+            178,
+            300
+          ],
+          "footX": 77.60659123293586,
+          "soleY": 196.38253269309988
+        },
+        {
+          "strip": "seren-hit-r1",
+          "figure": 1,
+          "position": [
+            180,
+            328
+          ],
+          "footX": 76.02502056412543,
+          "soleY": 168.39619159437112
+        },
+        {
+          "strip": "seren-hit-r1",
+          "figure": 2,
+          "position": [
+            181,
+            335
+          ],
+          "footX": 75.25397573081786,
+          "soleY": 161.30257912794156
+        },
+        {
+          "strip": "seren-down-r1",
+          "figure": 0,
+          "position": [
+            176,
+            303
+          ],
+          "footX": 80.26358792601282,
+          "soleY": 192.76836339101598
+        },
+        {
+          "strip": "seren-down-r1",
+          "figure": 2,
+          "position": [
+            165,
+            330
+          ],
+          "footX": 90.61470603063604,
+          "soleY": 165.6178896739715
+        },
+        {
+          "strip": "seren-down-r1",
+          "figure": 3,
+          "position": [
+            140,
+            420
+          ],
+          "footX": 116.40765606182832,
+          "soleY": 76.02132640772462
+        },
+        {
+          "strip": "seren-prayer-r1",
+          "figure": 1,
+          "position": [
+            190,
+            303
+          ],
+          "footX": 65.79408404097141,
+          "soleY": 192.88700414495966
+        },
+        {
+          "strip": "seren-prayer-r1",
+          "figure": 2,
+          "position": [
+            193,
+            275
+          ],
+          "footX": 63.34213059845074,
+          "soleY": 220.67580982686061
+        },
+        {
+          "strip": "seren-prayer-r1",
+          "figure": 3,
+          "position": [
+            186,
+            244
+          ],
+          "footX": 70.08500256538258,
+          "soleY": 252.1425456725426
+        },
+        {
+          "strip": "seren-prayer-r1",
+          "figure": 4,
+          "position": [
+            190,
+            219
+          ],
+          "footX": 65.58975458742802,
+          "soleY": 276.6620800977493
+        },
+        {
+          "strip": "seren-prayer-r1",
+          "figure": 4,
+          "position": [
+            190,
+            219
+          ],
+          "footX": 65.58975458742802,
+          "soleY": 276.6620800977493
+        },
+        {
+          "strip": "seren-prayer-r1",
+          "figure": 5,
+          "position": [
+            182,
+            306
+          ],
+          "footX": 73.55860327562021,
+          "soleY": 190.0263917953522
+        },
+        {
+          "strip": "seren-sanctuary-r1",
+          "figure": 1,
+          "position": [
+            178,
+            281
+          ],
+          "footX": 77.92690519006763,
+          "soleY": 214.61836183494034
+        },
+        {
+          "strip": "seren-sanctuary-r1",
+          "figure": 2,
+          "position": [
+            179,
+            283
+          ],
+          "footX": 77.28816006555887,
+          "soleY": 213.34087158592286
+        },
+        {
+          "strip": "seren-sanctuary-r1",
+          "figure": 2,
+          "position": [
+            179,
+            283
+          ],
+          "footX": 77.28816006555887,
+          "soleY": 213.34087158592286
+        },
+        {
+          "strip": "seren-sanctuary-r1",
+          "figure": 3,
+          "position": [
+            179,
+            280
+          ],
+          "footX": 76.64941494105013,
+          "soleY": 216.32168216696368
+        },
+        {
+          "strip": "seren-sanctuary-r1",
+          "figure": 4,
+          "position": [
+            176,
+            284
+          ],
+          "footX": 80.0560556050968,
+          "soleY": 212.06338133690534
+        },
+        {
+          "strip": "seren-sanctuary-r1",
+          "figure": 5,
+          "position": [
+            173,
+            281
+          ],
+          "footX": 82.82395114463472,
+          "soleY": 214.61836183494034
+        },
+        {
+          "strip": "seren-block-r1",
+          "figure": 1,
+          "position": [
+            173,
+            309
+          ],
+          "footX": 83.49872506797777,
+          "soleY": 186.5080433201563
+        },
+        {
+          "strip": "seren-block-r1",
+          "figure": 2,
+          "position": [
+            183,
+            304
+          ],
+          "footX": 73.08205243573501,
+          "soleY": 192.1297396613667
+        }
+      ],
+      "uniqueFrames": 28,
+      "losslessReconstruction": "all alpha and visible RGBA equal",
+      "image": "seren_a3.8ee02ab5e681.webp",
+      "atlas": "seren_a3.3d911a21c2db.json",
+      "width": 1024,
+      "height": 1197,
+      "frames": 40,
+      "decodedBytes": 4902912,
+      "downloadBytes": 1463594,
+      "atlasSHA256": "8ee02ab5e6817fcdde9ba8d48ebe89558dfb94f30e60f966bb41804019f58eda",
+      "jsonSHA256": "3d911a21c2dbd561b152993c13f28c340a421a2deacb8238860be00431d02fde"
+    },
+    "mycon": {
+      "factor": 0.5,
+      "displayRatio": 2.0,
+      "cell": 512,
+      "origin": [
+        0.5,
+        0.96875
+      ],
+      "seedArea": 146093,
+      "clipStarts": {
+        "skill": 9,
+        "hit": 17,
+        "down": 19
+      },
+      "strips": {
+        "hollow-mycon-cast-r2": {
+          "rawSize": [
+            2172,
+            724
+          ],
+          "sha256": "c0457222c4c42a4f8c181b0debb0c31bc464a609265d0c4a796c549cb11f8162",
+          "scale": 0.5956491366058099,
+          "firstFigureArea": 102941,
+          "splitNotes": null
+        },
+        "hollow-mycon-hit-r1": {
+          "rawSize": [
+            2172,
+            724
+          ],
+          "sha256": "93f69d4bdc5eac50dbe513109edc16ba4d268969c7a2ce071b9a4998ae76add4",
+          "scale": 0.4525866394933802,
+          "firstFigureArea": 178306,
+          "splitNotes": null
+        },
+        "hollow-mycon-down-r1": {
+          "rawSize": [
+            2172,
+            724
+          ],
+          "sha256": "7fe95fc660143977bc08f4a59e72c9de597506a0388f2b7dec026e2bd5d6dcd8",
+          "scale": 0.4597419097997203,
+          "firstFigureArea": 172799,
+          "splitNotes": null
+        }
+      },
+      "transforms": [
+        {
+          "strip": "hollow-mycon-cast-r2",
+          "figure": 1,
+          "position": [
+            136,
+            274
+          ],
+          "footX": 119.72547645776778,
+          "soleY": 222.17712795396707
+        },
+        {
+          "strip": "hollow-mycon-cast-r2",
+          "figure": 2,
+          "position": [
+            112,
+            201
+          ],
+          "footX": 143.84926649030308,
+          "soleY": 295.4419717564817
+        },
+        {
+          "strip": "hollow-mycon-cast-r2",
+          "figure": 2,
+          "position": [
+            112,
+            201
+          ],
+          "footX": 143.84926649030308,
+          "soleY": 295.4419717564817
+        },
+        {
+          "strip": "hollow-mycon-cast-r2",
+          "figure": 3,
+          "position": [
+            115,
+            236
+          ],
+          "footX": 141.16884537557695,
+          "soleY": 260.2986726967389
+        },
+        {
+          "strip": "hollow-mycon-cast-r2",
+          "figure": 4,
+          "position": [
+            123,
+            256
+          ],
+          "footX": 133.4254065997014,
+          "soleY": 240.04660205214137
+        },
+        {
+          "strip": "hollow-mycon-cast-r2",
+          "figure": 4,
+          "position": [
+            123,
+            256
+          ],
+          "footX": 133.4254065997014,
+          "soleY": 240.04660205214137
+        },
+        {
+          "strip": "hollow-mycon-hit-r1",
+          "figure": 1,
+          "position": [
+            136,
+            281
+          ],
+          "footX": 120.16175278549244,
+          "soleY": 215.43124039884896
+        },
+        {
+          "strip": "hollow-mycon-hit-r1",
+          "figure": 2,
+          "position": [
+            115,
+            295
+          ],
+          "footX": 140.52815156269455,
+          "soleY": 201.4010545745542
+        },
+        {
+          "strip": "hollow-mycon-down-r1",
+          "figure": 0,
+          "position": [
+            113,
+            261
+          ],
+          "footX": 142.74986299281315,
+          "soleY": 235.3878578174568
+        },
+        {
+          "strip": "hollow-mycon-down-r1",
+          "figure": 2,
+          "position": [
+            103,
+            314
+          ],
+          "footX": 152.864185008407,
+          "soleY": 181.5980543708895
+        },
+        {
+          "strip": "hollow-mycon-down-r1",
+          "figure": 3,
+          "position": [
+            137,
+            399
+          ],
+          "footX": 119.30302559302741,
+          "soleY": 96.54580105794126
+        }
+      ],
+      "uniqueFrames": 10,
+      "losslessReconstruction": "all alpha and visible RGBA equal",
+      "image": "mycon_a3.e2b8c7771746.webp",
+      "atlas": "mycon_a3.84b234561959.json",
+      "width": 512,
+      "height": 1189,
+      "frames": 22,
+      "decodedBytes": 2435072,
+      "downloadBytes": 826472,
+      "atlasSHA256": "e2b8c7771746bb8d16e5b1098f21e014f2784bbba869c2f656def7f0cb24f103",
+      "jsonSHA256": "84b2345619593a4423cc6219af7130ac154ead27f7112facd2360ad4c7547f18"
+    }
+  }
+}

@@ -1,0 +1,288 @@
+[
+  {
+    "skill": "guard",
+    "source": "incoming/ART-VFX-DEFENSE-001/source/guard.png",
+    "sha256": "324fc6fce1fadf92f88009ffb9307f8747ece3064656ea85e0f57410c4ca8939",
+    "scale": 0.36661211129296234,
+    "frames": [
+      [
+        342,
+        53,
+        303,
+        606
+      ],
+      [
+        982,
+        51,
+        338,
+        611
+      ],
+      [
+        1703,
+        54,
+        321,
+        608
+      ]
+    ]
+  },
+  {
+    "skill": "aegis",
+    "source": "incoming/ART-VFX-DEFENSE-001/source/aegis.png",
+    "sha256": "1593f0546c9989e41f729d3e2ab40abe6738422b8d035dcba3d703489d14a1c6",
+    "scale": 0.32463768115942027,
+    "frames": [
+      [
+        47,
+        486,
+        610,
+        172
+      ],
+      [
+        741,
+        462,
+        690,
+        204
+      ],
+      [
+        1511,
+        483,
+        610,
+        170
+      ]
+    ]
+  },
+  {
+    "skill": "rally",
+    "source": "incoming/ART-VFX-DEFENSE-001/source/rally.png",
+    "sha256": "77b0f3d21262c4974f0713abeaea8ef3af04b25295185938089b67da1c9c17d2",
+    "scale": 0.44532803180914515,
+    "frames": [
+      [
+        35,
+        740,
+        413,
+        64
+      ],
+      [
+        521,
+        724,
+        503,
+        88
+      ],
+      [
+        1024,
+        740,
+        477,
+        63
+      ]
+    ]
+  },
+  {
+    "skill": "bulwark",
+    "source": "incoming/ART-VFX-DEFENSE-001/source/bulwark.png",
+    "sha256": "dd27900dbf04790061070ec2cc1d37858fade8a326e2c70a28805c8f5899b613",
+    "scale": 0.3209169054441261,
+    "frames": [
+      [
+        54,
+        369,
+        605,
+        249
+      ],
+      [
+        725,
+        78,
+        698,
+        548
+      ],
+      [
+        1522,
+        148,
+        593,
+        479
+      ]
+    ]
+  },
+  {
+    "skill": "stonearmor",
+    "source": "incoming/ART-VFX-DEFENSE-001/source/stonearmor.png",
+    "sha256": "6c80000c8d06fa415412a2cb15446941ca6cdfaf33adb35ebd43731858dcd89e",
+    "scale": 0.32558139534883723,
+    "frames": [
+      [
+        40,
+        451,
+        647,
+        213
+      ],
+      [
+        743,
+        429,
+        688,
+        245
+      ],
+      [
+        1484,
+        467,
+        654,
+        202
+      ]
+    ]
+  },
+  {
+    "skill": "guardstone",
+    "source": "incoming/ART-VFX-DEFENSE-001/source/guardstone.png",
+    "sha256": "2b032b568cb839b12d83643d0fa47c634a3ac24a01cbde22fca7d90231a8cf71",
+    "scale": 0.32989690721649484,
+    "frames": [
+      [
+        168,
+        203,
+        398,
+        349
+      ],
+      [
+        765,
+        87,
+        679,
+        542
+      ],
+      [
+        1631,
+        161,
+        467,
+        415
+      ]
+    ]
+  },
+  {
+    "skill": "halo",
+    "source": "incoming/ART-VFX-DEFENSE-001/source/halo.png",
+    "sha256": "5d578872c31a0011e706b401f7479c6b045f7903515131f6248cf35397bf7122",
+    "scale": 0.34408602150537637,
+    "frames": [
+      [
+        67,
+        244,
+        631,
+        231
+      ],
+      [
+        767,
+        180,
+        651,
+        319
+      ],
+      [
+        1503,
+        172,
+        618,
+        314
+      ]
+    ]
+  },
+  {
+    "skill": "sanctuary",
+    "source": "incoming/ART-VFX-DEFENSE-001/source/sanctuary.png",
+    "sha256": "0e9e6746f29d67368d623ea19d495e5358167a6b31f25b959b98954445fab7bc",
+    "scale": 0.352755905511811,
+    "frames": [
+      [
+        55,
+        380,
+        631,
+        282
+      ],
+      [
+        785,
+        35,
+        612,
+        635
+      ],
+      [
+        1530,
+        280,
+        575,
+        366
+      ]
+    ]
+  },
+  {
+    "skill": "brace",
+    "source": "incoming/ART-VFX-DEFENSE-001/source/brace.png",
+    "sha256": "7e19f6ae6b422a11b06e63c229b16f3703aaa90d0c93be7cc6f482b3c91d13a1",
+    "scale": 0.3549920760697306,
+    "frames": [
+      [
+        115,
+        222,
+        402,
+        364
+      ],
+      [
+        792,
+        71,
+        631,
+        537
+      ],
+      [
+        1557,
+        109,
+        553,
+        497
+      ]
+    ]
+  },
+  {
+    "skill": "spearwall",
+    "source": "incoming/ART-VFX-DEFENSE-001/source/spearwall.png",
+    "sha256": "d10955cfb79f7c36705e46f843d2f1eb7a4ff9400b5447fbb622444d96d6e0f9",
+    "scale": 0.3957597173144876,
+    "frames": [
+      [
+        119,
+        343,
+        457,
+        294
+      ],
+      [
+        831,
+        74,
+        512,
+        566
+      ],
+      [
+        1600,
+        275,
+        458,
+        362
+      ]
+    ]
+  },
+  {
+    "skill": "hold",
+    "source": "incoming/ART-VFX-DEFENSE-001/source/hold.png",
+    "sha256": "e944a2ebaea1e11f66ad3696d482da8a8221b8e680a6adde63d009955b805fd8",
+    "scale": 0.3308714918759232,
+    "frames": [
+      [
+        59,
+        419,
+        613,
+        124
+      ],
+      [
+        751,
+        242,
+        677,
+        298
+      ],
+      [
+        1515,
+        411,
+        599,
+        137
+      ]
+    ]
+  }
+]

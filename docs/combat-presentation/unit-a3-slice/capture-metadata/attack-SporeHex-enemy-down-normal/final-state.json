@@ -1,0 +1,56 @@
+{
+  "encounterId": "thicket-ambush",
+  "beat": 1,
+  "round": 1,
+  "turnIndex": 0,
+  "order": [
+    "healer",
+    "b1",
+    "guardian",
+    "weaver"
+  ],
+  "outcome": "victory",
+  "guard": null,
+  "counter": null,
+  "taunt": null,
+  "song": null,
+  "heroes": [
+    {
+      "id": "healer",
+      "hp": 46,
+      "barrier": 0,
+      "cooldowns": {}
+    },
+    {
+      "id": "guardian",
+      "hp": 76,
+      "barrier": 0,
+      "cooldowns": {}
+    },
+    {
+      "id": "weaver",
+      "hp": 48,
+      "barrier": 0,
+      "cooldowns": {}
+    }
+  ],
+  "enemies": [
+    {
+      "id": "b1",
+      "hp": 0,
+      "markedUntil": 0
+    }
+  ],
+  "intent": null,
+  "commands": [
+    {
+      "beat": 1,
+      "heroId": "healer",
+      "action": "attack",
+      "targetId": "b1"
+    }
+  ],
+  "rally": null,
+  "sanctuary": null,
+  "solace": null
+}

@@ -1,0 +1,1231 @@
+{
+  "heal": {
+    "source": {
+      "id": "healer",
+      "x": 49.47,
+      "footY": 286,
+      "size": 111
+    },
+    "targets": [
+      {
+        "id": "guardian",
+        "x": 145.85999999999999,
+        "footY": 286,
+        "size": 111
+      }
+    ],
+    "tickTargets": [],
+    "events": [
+      {
+        "type": "heal",
+        "sourceId": "healer",
+        "targetId": "guardian",
+        "amount": 18,
+        "text": "Restored HP."
+      }
+    ],
+    "tickEvents": [],
+    "guard": null,
+    "prelude": [],
+    "before": {
+      "encounterId": "veil-siege",
+      "beat": 1,
+      "round": 1,
+      "turnIndex": 0,
+      "order": [
+        "healer",
+        "b1",
+        "f1",
+        "guardian",
+        "tracer",
+        "weaver"
+      ],
+      "outcome": "active",
+      "guard": null,
+      "counter": null,
+      "taunt": null,
+      "song": null,
+      "heroes": [
+        {
+          "id": "healer",
+          "hp": 31,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "guardian",
+          "hp": 58,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "tracer",
+          "hp": 35,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "weaver",
+          "hp": 24,
+          "barrier": 0,
+          "cooldowns": {}
+        }
+      ],
+      "enemies": [
+        {
+          "id": "b1",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "f1",
+          "hp": 9999,
+          "markedUntil": 0
+        }
+      ],
+      "intent": {
+        "sourceId": "b1",
+        "targetSlot": 1,
+        "name": "QA announced attack",
+        "damage": 4,
+        "kind": "energy",
+        "targetId": "guardian",
+        "beat": 1,
+        "round": 1
+      },
+      "commands": []
+    },
+    "after": {
+      "encounterId": "veil-siege",
+      "beat": 1,
+      "round": 1,
+      "turnIndex": 0,
+      "order": [
+        "healer",
+        "b1",
+        "f1",
+        "guardian",
+        "tracer",
+        "weaver"
+      ],
+      "outcome": "active",
+      "guard": null,
+      "counter": null,
+      "taunt": null,
+      "song": null,
+      "heroes": [
+        {
+          "id": "healer",
+          "hp": 31,
+          "barrier": 0,
+          "cooldowns": {
+            "heal": 3
+          }
+        },
+        {
+          "id": "guardian",
+          "hp": 76,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "tracer",
+          "hp": 35,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "weaver",
+          "hp": 24,
+          "barrier": 0,
+          "cooldowns": {}
+        }
+      ],
+      "enemies": [
+        {
+          "id": "b1",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "f1",
+          "hp": 9999,
+          "markedUntil": 0
+        }
+      ],
+      "intent": {
+        "sourceId": "b1",
+        "targetSlot": 1,
+        "name": "QA announced attack",
+        "damage": 4,
+        "kind": "energy",
+        "targetId": "guardian",
+        "beat": 1,
+        "round": 1
+      },
+      "commands": [
+        {
+          "beat": 1,
+          "heroId": "healer",
+          "action": "heal",
+          "targetId": "guardian"
+        }
+      ]
+    }
+  },
+  "prayer": {
+    "source": {
+      "id": "healer",
+      "x": 49.47,
+      "footY": 286,
+      "size": 111
+    },
+    "targets": [
+      {
+        "id": "healer",
+        "x": 49.47,
+        "footY": 286,
+        "size": 111
+      },
+      {
+        "id": "guardian",
+        "x": 145.85999999999999,
+        "footY": 286,
+        "size": 111
+      },
+      {
+        "id": "tracer",
+        "x": 145.85999999999999,
+        "footY": 620,
+        "size": 111
+      },
+      {
+        "id": "weaver",
+        "x": 49.47,
+        "footY": 620,
+        "size": 111
+      }
+    ],
+    "tickTargets": [],
+    "events": [
+      {
+        "type": "heal",
+        "sourceId": "healer",
+        "targetId": "healer",
+        "amount": 10,
+        "text": "Restored HP."
+      },
+      {
+        "type": "heal",
+        "sourceId": "healer",
+        "targetId": "guardian",
+        "amount": 10,
+        "text": "Restored HP."
+      },
+      {
+        "type": "heal",
+        "sourceId": "healer",
+        "targetId": "tracer",
+        "amount": 10,
+        "text": "Restored HP."
+      },
+      {
+        "type": "heal",
+        "sourceId": "healer",
+        "targetId": "weaver",
+        "amount": 10,
+        "text": "Restored HP."
+      }
+    ],
+    "tickEvents": [],
+    "guard": null,
+    "prelude": [],
+    "before": {
+      "encounterId": "veil-siege",
+      "beat": 1,
+      "round": 1,
+      "turnIndex": 0,
+      "order": [
+        "healer",
+        "b1",
+        "f1",
+        "guardian",
+        "tracer",
+        "weaver"
+      ],
+      "outcome": "active",
+      "guard": null,
+      "counter": null,
+      "taunt": null,
+      "song": null,
+      "heroes": [
+        {
+          "id": "healer",
+          "hp": 31,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "guardian",
+          "hp": 58,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "tracer",
+          "hp": 35,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "weaver",
+          "hp": 24,
+          "barrier": 0,
+          "cooldowns": {}
+        }
+      ],
+      "enemies": [
+        {
+          "id": "b1",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "f1",
+          "hp": 9999,
+          "markedUntil": 0
+        }
+      ],
+      "intent": {
+        "sourceId": "b1",
+        "targetSlot": 1,
+        "name": "QA announced attack",
+        "damage": 4,
+        "kind": "energy",
+        "targetId": "guardian",
+        "beat": 1,
+        "round": 1
+      },
+      "commands": []
+    },
+    "after": {
+      "encounterId": "veil-siege",
+      "beat": 1,
+      "round": 1,
+      "turnIndex": 0,
+      "order": [
+        "healer",
+        "b1",
+        "f1",
+        "guardian",
+        "tracer",
+        "weaver"
+      ],
+      "outcome": "active",
+      "guard": null,
+      "counter": null,
+      "taunt": null,
+      "song": null,
+      "heroes": [
+        {
+          "id": "healer",
+          "hp": 41,
+          "barrier": 0,
+          "cooldowns": {
+            "prayer": 4
+          }
+        },
+        {
+          "id": "guardian",
+          "hp": 68,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "tracer",
+          "hp": 45,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "weaver",
+          "hp": 34,
+          "barrier": 0,
+          "cooldowns": {}
+        }
+      ],
+      "enemies": [
+        {
+          "id": "b1",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "f1",
+          "hp": 9999,
+          "markedUntil": 0
+        }
+      ],
+      "intent": {
+        "sourceId": "b1",
+        "targetSlot": 1,
+        "name": "QA announced attack",
+        "damage": 4,
+        "kind": "energy",
+        "targetId": "guardian",
+        "beat": 1,
+        "round": 1
+      },
+      "commands": [
+        {
+          "beat": 1,
+          "heroId": "healer",
+          "action": "prayer",
+          "targetId": "party"
+        }
+      ]
+    }
+  },
+  "rouse": {
+    "source": {
+      "id": "guardian",
+      "x": 145.85999999999999,
+      "footY": 286,
+      "size": 111
+    },
+    "targets": [
+      {
+        "id": "healer",
+        "x": 49.47,
+        "footY": 620,
+        "size": 111
+      }
+    ],
+    "tickTargets": [],
+    "events": [
+      {
+        "type": "guard",
+        "sourceId": "guardian",
+        "targetId": "healer",
+        "text": "Stand beside."
+      }
+    ],
+    "tickEvents": [],
+    "guard": {
+      "heroId": "guardian",
+      "targetId": "healer",
+      "sourceId": "b1",
+      "all": true
+    },
+    "prelude": [],
+    "before": {
+      "encounterId": "veil-siege",
+      "beat": 1,
+      "round": 1,
+      "turnIndex": 0,
+      "order": [
+        "guardian",
+        "b1",
+        "f1",
+        "tracer",
+        "weaver",
+        "healer"
+      ],
+      "outcome": "active",
+      "guard": null,
+      "counter": null,
+      "taunt": null,
+      "song": null,
+      "heroes": [
+        {
+          "id": "guardian",
+          "hp": 61,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "tracer",
+          "hp": 38,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "weaver",
+          "hp": 27,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "healer",
+          "hp": 22,
+          "barrier": 0,
+          "cooldowns": {}
+        }
+      ],
+      "enemies": [
+        {
+          "id": "b1",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "f1",
+          "hp": 9999,
+          "markedUntil": 0
+        }
+      ],
+      "intent": {
+        "sourceId": "b1",
+        "targetSlot": 1,
+        "name": "QA announced attack",
+        "damage": 4,
+        "kind": "energy",
+        "targetId": "tracer",
+        "beat": 1,
+        "round": 1
+      },
+      "commands": []
+    },
+    "after": {
+      "encounterId": "veil-siege",
+      "beat": 1,
+      "round": 1,
+      "turnIndex": 0,
+      "order": [
+        "guardian",
+        "b1",
+        "f1",
+        "tracer",
+        "weaver",
+        "healer"
+      ],
+      "outcome": "active",
+      "guard": {
+        "heroId": "guardian",
+        "targetId": "healer",
+        "sourceId": "b1",
+        "all": true
+      },
+      "counter": null,
+      "taunt": null,
+      "song": null,
+      "heroes": [
+        {
+          "id": "guardian",
+          "hp": 61,
+          "barrier": 0,
+          "cooldowns": {
+            "rouse": 5
+          }
+        },
+        {
+          "id": "tracer",
+          "hp": 38,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "weaver",
+          "hp": 27,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "healer",
+          "hp": 22,
+          "barrier": 0,
+          "cooldowns": {}
+        }
+      ],
+      "enemies": [
+        {
+          "id": "b1",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "f1",
+          "hp": 9999,
+          "markedUntil": 0
+        }
+      ],
+      "intent": {
+        "sourceId": "b1",
+        "targetSlot": 1,
+        "name": "QA announced attack",
+        "damage": 4,
+        "kind": "energy",
+        "targetId": "tracer",
+        "beat": 1,
+        "round": 1
+      },
+      "commands": [
+        {
+          "beat": 1,
+          "heroId": "guardian",
+          "action": "rouse",
+          "targetId": "guardian"
+        }
+      ]
+    }
+  },
+  "revive": {
+    "source": {
+      "id": "healer",
+      "x": 49.47,
+      "footY": 286,
+      "size": 111
+    },
+    "targets": [
+      {
+        "id": "guardian",
+        "x": 145.85999999999999,
+        "footY": 286,
+        "size": 111
+      }
+    ],
+    "tickTargets": [],
+    "events": [
+      {
+        "type": "revive",
+        "sourceId": "healer",
+        "targetId": "guardian",
+        "amount": 19,
+        "text": "Revived."
+      }
+    ],
+    "tickEvents": [],
+    "guard": null,
+    "prelude": [
+      {
+        "beat": 1,
+        "heroId": "healer",
+        "action": "attack",
+        "targetId": "b1"
+      },
+      {
+        "beat": 4,
+        "heroId": "tracer",
+        "action": "attack",
+        "targetId": "f1"
+      },
+      {
+        "beat": 5,
+        "heroId": "weaver",
+        "action": "attack",
+        "targetId": "b1"
+      }
+    ],
+    "before": {
+      "encounterId": "veil-siege",
+      "beat": 6,
+      "round": 2,
+      "turnIndex": 0,
+      "order": [
+        "healer",
+        "b1",
+        "f1",
+        "tracer",
+        "weaver"
+      ],
+      "outcome": "active",
+      "guard": null,
+      "counter": null,
+      "taunt": null,
+      "song": null,
+      "heroes": [
+        {
+          "id": "healer",
+          "hp": 27,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "guardian",
+          "hp": 0,
+          "barrier": 0,
+          "cooldowns": {},
+          "fell": true
+        },
+        {
+          "id": "tracer",
+          "hp": 35,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "weaver",
+          "hp": 24,
+          "barrier": 0,
+          "cooldowns": {}
+        }
+      ],
+      "enemies": [
+        {
+          "id": "b1",
+          "hp": 9980,
+          "markedUntil": 0
+        },
+        {
+          "id": "f1",
+          "hp": 9983,
+          "markedUntil": 0
+        }
+      ],
+      "intent": {
+        "sourceId": "b1",
+        "targetSlot": 1,
+        "name": "QA announced attack",
+        "damage": 4,
+        "kind": "energy",
+        "targetId": "healer",
+        "beat": 6,
+        "round": 2
+      },
+      "commands": [
+        {
+          "beat": 1,
+          "heroId": "healer",
+          "action": "attack",
+          "targetId": "b1"
+        },
+        {
+          "beat": 4,
+          "heroId": "tracer",
+          "action": "attack",
+          "targetId": "f1"
+        },
+        {
+          "beat": 5,
+          "heroId": "weaver",
+          "action": "attack",
+          "targetId": "b1"
+        }
+      ]
+    },
+    "after": {
+      "encounterId": "veil-siege",
+      "beat": 6,
+      "round": 2,
+      "turnIndex": 0,
+      "order": [
+        "healer",
+        "b1",
+        "f1",
+        "tracer",
+        "weaver"
+      ],
+      "outcome": "active",
+      "guard": null,
+      "counter": null,
+      "taunt": null,
+      "song": null,
+      "heroes": [
+        {
+          "id": "healer",
+          "hp": 27,
+          "barrier": 0,
+          "cooldowns": {
+            "revive": 7
+          }
+        },
+        {
+          "id": "guardian",
+          "hp": 19,
+          "barrier": 0,
+          "cooldowns": {},
+          "revivedRound": 2
+        },
+        {
+          "id": "tracer",
+          "hp": 35,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "weaver",
+          "hp": 24,
+          "barrier": 0,
+          "cooldowns": {}
+        }
+      ],
+      "enemies": [
+        {
+          "id": "b1",
+          "hp": 9980,
+          "markedUntil": 0
+        },
+        {
+          "id": "f1",
+          "hp": 9983,
+          "markedUntil": 0
+        }
+      ],
+      "intent": {
+        "sourceId": "b1",
+        "targetSlot": 1,
+        "name": "QA announced attack",
+        "damage": 4,
+        "kind": "energy",
+        "targetId": "healer",
+        "beat": 6,
+        "round": 2
+      },
+      "commands": [
+        {
+          "beat": 1,
+          "heroId": "healer",
+          "action": "attack",
+          "targetId": "b1"
+        },
+        {
+          "beat": 4,
+          "heroId": "tracer",
+          "action": "attack",
+          "targetId": "f1"
+        },
+        {
+          "beat": 5,
+          "heroId": "weaver",
+          "action": "attack",
+          "targetId": "b1"
+        },
+        {
+          "beat": 6,
+          "heroId": "healer",
+          "action": "revive",
+          "targetId": "guardian"
+        }
+      ],
+      "revived": [
+        "healer"
+      ]
+    }
+  },
+  "bless": {
+    "source": {
+      "id": "healer",
+      "x": 49.47,
+      "footY": 286,
+      "size": 111
+    },
+    "targets": [
+      {
+        "id": "guardian",
+        "x": 145.85999999999999,
+        "footY": 286,
+        "size": 111
+      }
+    ],
+    "tickTargets": [
+      {
+        "id": "guardian",
+        "x": 145.85999999999999,
+        "footY": 286,
+        "size": 111
+      }
+    ],
+    "events": [
+      {
+        "type": "buff",
+        "sourceId": "healer",
+        "targetId": "guardian",
+        "amount": 8,
+        "text": "Renew."
+      }
+    ],
+    "tickEvents": [
+      {
+        "type": "heal",
+        "sourceId": "healer",
+        "targetId": "guardian",
+        "amount": 8,
+        "text": "Renew."
+      }
+    ],
+    "guard": null,
+    "prelude": [],
+    "before": {
+      "encounterId": "veil-siege",
+      "beat": 1,
+      "round": 1,
+      "turnIndex": 0,
+      "order": [
+        "healer",
+        "b1",
+        "f1",
+        "guardian",
+        "tracer",
+        "weaver"
+      ],
+      "outcome": "active",
+      "guard": null,
+      "counter": null,
+      "taunt": null,
+      "song": null,
+      "heroes": [
+        {
+          "id": "healer",
+          "hp": 31,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "guardian",
+          "hp": 58,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "tracer",
+          "hp": 35,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "weaver",
+          "hp": 24,
+          "barrier": 0,
+          "cooldowns": {}
+        }
+      ],
+      "enemies": [
+        {
+          "id": "b1",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "f1",
+          "hp": 9999,
+          "markedUntil": 0
+        }
+      ],
+      "intent": {
+        "sourceId": "b1",
+        "targetSlot": 1,
+        "name": "QA announced attack",
+        "damage": 4,
+        "kind": "energy",
+        "targetId": "guardian",
+        "beat": 1,
+        "round": 1
+      },
+      "commands": []
+    },
+    "after": {
+      "encounterId": "veil-siege",
+      "beat": 1,
+      "round": 1,
+      "turnIndex": 0,
+      "order": [
+        "healer",
+        "b1",
+        "f1",
+        "guardian",
+        "tracer",
+        "weaver"
+      ],
+      "outcome": "active",
+      "guard": null,
+      "counter": null,
+      "taunt": null,
+      "song": null,
+      "heroes": [
+        {
+          "id": "healer",
+          "hp": 31,
+          "barrier": 0,
+          "cooldowns": {
+            "bless": 4
+          }
+        },
+        {
+          "id": "guardian",
+          "hp": 58,
+          "barrier": 0,
+          "cooldowns": {},
+          "renew": {
+            "heroId": "healer",
+            "amount": 8,
+            "until": 3
+          }
+        },
+        {
+          "id": "tracer",
+          "hp": 35,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "weaver",
+          "hp": 24,
+          "barrier": 0,
+          "cooldowns": {}
+        }
+      ],
+      "enemies": [
+        {
+          "id": "b1",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "f1",
+          "hp": 9999,
+          "markedUntil": 0
+        }
+      ],
+      "intent": {
+        "sourceId": "b1",
+        "targetSlot": 1,
+        "name": "QA announced attack",
+        "damage": 4,
+        "kind": "energy",
+        "targetId": "guardian",
+        "beat": 1,
+        "round": 1
+      },
+      "commands": [
+        {
+          "beat": 1,
+          "heroId": "healer",
+          "action": "bless",
+          "targetId": "guardian"
+        }
+      ]
+    }
+  },
+  "mend": {
+    "source": {
+      "id": "lio",
+      "x": 49.47,
+      "footY": 286,
+      "size": 111
+    },
+    "targets": [
+      {
+        "id": "lio",
+        "x": 49.47,
+        "footY": 286,
+        "size": 111
+      }
+    ],
+    "tickTargets": [
+      {
+        "id": "lio",
+        "x": 49.47,
+        "footY": 286,
+        "size": 111
+      },
+      {
+        "id": "guardian",
+        "x": 145.85999999999999,
+        "footY": 286,
+        "size": 111
+      },
+      {
+        "id": "tracer",
+        "x": 145.85999999999999,
+        "footY": 620,
+        "size": 111
+      },
+      {
+        "id": "weaver",
+        "x": 49.47,
+        "footY": 620,
+        "size": 111
+      }
+    ],
+    "events": [
+      {
+        "type": "song",
+        "sourceId": "lio",
+        "targetId": "lio",
+        "amount": 5,
+        "text": "Song of mending: the party heals each round."
+      }
+    ],
+    "tickEvents": [
+      {
+        "type": "heal",
+        "sourceId": "lio",
+        "targetId": "lio",
+        "amount": 5,
+        "text": "The song mends the party."
+      },
+      {
+        "type": "heal",
+        "sourceId": "lio",
+        "targetId": "guardian",
+        "amount": 5,
+        "text": "The song mends the party."
+      },
+      {
+        "type": "heal",
+        "sourceId": "lio",
+        "targetId": "tracer",
+        "amount": 5,
+        "text": "The song mends the party."
+      },
+      {
+        "type": "heal",
+        "sourceId": "lio",
+        "targetId": "weaver",
+        "amount": 5,
+        "text": "The song mends the party."
+      }
+    ],
+    "guard": null,
+    "prelude": [],
+    "before": {
+      "encounterId": "veil-siege",
+      "beat": 1,
+      "round": 1,
+      "turnIndex": 0,
+      "order": [
+        "lio",
+        "b1",
+        "f1",
+        "guardian",
+        "tracer",
+        "weaver"
+      ],
+      "outcome": "active",
+      "guard": null,
+      "counter": null,
+      "taunt": null,
+      "song": null,
+      "heroes": [
+        {
+          "id": "lio",
+          "hp": 35,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "guardian",
+          "hp": 58,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "tracer",
+          "hp": 35,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "weaver",
+          "hp": 24,
+          "barrier": 0,
+          "cooldowns": {}
+        }
+      ],
+      "enemies": [
+        {
+          "id": "b1",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "f1",
+          "hp": 9999,
+          "markedUntil": 0
+        }
+      ],
+      "intent": {
+        "sourceId": "b1",
+        "targetSlot": 1,
+        "name": "QA announced attack",
+        "damage": 4,
+        "kind": "energy",
+        "targetId": "guardian",
+        "beat": 1,
+        "round": 1
+      },
+      "commands": []
+    },
+    "after": {
+      "encounterId": "veil-siege",
+      "beat": 1,
+      "round": 1,
+      "turnIndex": 0,
+      "order": [
+        "lio",
+        "b1",
+        "f1",
+        "guardian",
+        "tracer",
+        "weaver"
+      ],
+      "outcome": "active",
+      "guard": null,
+      "counter": null,
+      "taunt": null,
+      "song": {
+        "heroId": "lio",
+        "action": "mend",
+        "since": 1
+      },
+      "heroes": [
+        {
+          "id": "lio",
+          "hp": 35,
+          "barrier": 0,
+          "cooldowns": {
+            "mend": 3
+          }
+        },
+        {
+          "id": "guardian",
+          "hp": 58,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "tracer",
+          "hp": 35,
+          "barrier": 0,
+          "cooldowns": {}
+        },
+        {
+          "id": "weaver",
+          "hp": 24,
+          "barrier": 0,
+          "cooldowns": {}
+        }
+      ],
+      "enemies": [
+        {
+          "id": "b1",
+          "hp": 9999,
+          "markedUntil": 0
+        },
+        {
+          "id": "f1",
+          "hp": 9999,
+          "markedUntil": 0
+        }
+      ],
+      "intent": {
+        "sourceId": "b1",
+        "targetSlot": 1,
+        "name": "QA announced attack",
+        "damage": 4,
+        "kind": "energy",
+        "targetId": "guardian",
+        "beat": 1,
+        "round": 1
+      },
+      "commands": [
+        {
+          "beat": 1,
+          "heroId": "lio",
+          "action": "mend",
+          "targetId": "lio"
+        }
+      ]
+    }
+  }
+}
