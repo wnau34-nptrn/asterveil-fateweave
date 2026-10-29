@@ -1,5 +1,13 @@
 # Codex → Claude handoff
 
+## 2026-10-29 — Claude: ติดตั้ง Agent Skills แบบ project-local (`.claude/skills/`)
+
+- เจ้าของสั่งค้นหา ประเมิน และติดตั้ง Skills สำเร็จรูป; commit ตรงบนสาขาเกม ไม่มี PR/merge แยก ไม่แก้ CLAUDE.md/AGENTS.md
+- ติดตั้ง 18 ตัว: Phaser ทางการ 14 ตัวจาก `phaserjs/phaser` tag `v4.2.1` (`41be1e4`, MIT, prefix `phaser-`), `playwright-cli` จาก `playwright-core@1.64.0` ที่ล็อกไว้ (Apache-2.0, copy ตรงไบต์) และ Skill ที่สร้างใหม่ 3 ตัว: `fateweave-codex-art-brief`, `fateweave-art-intake`, `fateweave-rules-and-sim`
+- ที่มา/license/การแก้ไข: `.claude/skills/README.md`; วิธีใช้กับเกม, ตั้งค่า Chromium สำหรับ `npx playwright cli` ในคลาวด์ และรายการที่ประเมินแล้วไม่ติดตั้ง: `docs/tools/AGENT_SKILLS_TH.md`; เพิ่ม `.playwright-cli/` ใน `.gitignore`
+- ตรวจ: frontmatter ทุกตัว, ลิงก์ภายใน (แก้ลิงก์เสียจาก upstream 3 จุด), `claude -p` เซสชันใหม่ (Claude Code 2.1.312) เห็นครบ 18 ตัวและโหลด `phaser-animations` ได้, smoke `npx playwright cli` เปิดเกม dev ที่ 390×844 ได้ console ไม่มี error
+- ไม่เปลี่ยน gameplay/rules/save/balance/timing ไม่สร้าง asset ใหม่ ไม่เริ่ม wave ใหม่; docs/config เท่านั้น ไม่รันเทสต์เกม (`git diff --check` ผ่าน)
+
 ## 2026-10-29 — Codex: แก้ชื่อเกมในคู่มือเป็น Asterveil-Fateweave
 
 - เจ้าของยืนยันชื่อเกม Asterveil-Fateweave; แก้ชื่อที่ Codex ใส่ผิดในย่อหน้าเปิด `docs/handoffs/ANIMATION_PROMPT_QUALITY_TH.md` บน `feature/fateweave-initial-prototype` และ `CLAUDE.md` ที่ Codex เพิ่มบน main
