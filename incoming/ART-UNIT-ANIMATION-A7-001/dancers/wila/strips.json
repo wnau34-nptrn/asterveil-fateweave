@@ -1,0 +1,987 @@
+[
+  {
+    "identity": "wila",
+    "move": "dance-strike",
+    "revision": "r1",
+    "file": "dancers/wila/raw/wila-dance-strike-r1.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "poised ready",
+      "gather fan across body",
+      "step into fan strike right",
+      "extended fan flourish",
+      "reverse weight",
+      "rightward ready"
+    ],
+    "routes_or_intents": [
+      "attack"
+    ],
+    "preferred_candidate": true,
+    "source": "dancers/wila/source-sheets/wila-actions-source.png",
+    "source_row_1based": 1,
+    "source_crop_xyxy": [
+      0,
+      7,
+      1536,
+      276
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        19,
+        10,
+        267,
+        258
+      ],
+      [
+        283,
+        26,
+        505,
+        258
+      ],
+      [
+        521,
+        16,
+        805,
+        258
+      ],
+      [
+        806,
+        13,
+        1075,
+        259
+      ],
+      [
+        1074,
+        25,
+        1276,
+        257
+      ],
+      [
+        1290,
+        12,
+        1525,
+        259
+      ]
+    ],
+    "size": [
+      1536,
+      269
+    ],
+    "mode": "RGBA",
+    "sha256": "8742dd2c0995db2c2ceb318dea9d8ac5c0326e62e6f6ac574d3cd00fefabe005",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "dancers/wila/spaced/wila-dance-strike-r1.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        192,
+        238
+      ],
+      [
+        576,
+        238
+      ],
+      [
+        960,
+        238
+      ],
+      [
+        1344,
+        238
+      ],
+      [
+        1728,
+        238
+      ],
+      [
+        2112,
+        238
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      1,
+      1.6,
+      1,
+      1.4,
+      1.2,
+      1.2
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  },
+  {
+    "identity": "wila",
+    "move": "partner-turn",
+    "revision": "r1",
+    "file": "dancers/wila/raw/wila-partner-turn-r1.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "poised ready",
+      "open arm toward partner",
+      "raised-fan turn",
+      "lower offering fan",
+      "soft teaching step",
+      "rightward ready"
+    ],
+    "routes_or_intents": [
+      "cadence",
+      "duet",
+      "deepbeat"
+    ],
+    "preferred_candidate": false,
+    "source": "dancers/wila/source-sheets/wila-actions-source.png",
+    "source_row_1based": 2,
+    "source_crop_xyxy": [
+      0,
+      260,
+      1536,
+      532
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        22,
+        10,
+        252,
+        261
+      ],
+      [
+        271,
+        15,
+        487,
+        261
+      ],
+      [
+        527,
+        10,
+        761,
+        260
+      ],
+      [
+        773,
+        21,
+        1027,
+        261
+      ],
+      [
+        1054,
+        14,
+        1271,
+        261
+      ],
+      [
+        1290,
+        13,
+        1524,
+        262
+      ]
+    ],
+    "size": [
+      1536,
+      272
+    ],
+    "mode": "RGBA",
+    "sha256": "90063ea73edc557259418fb082668e5e69bdb9e87598965c00ca4c9afa5d0271",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "dancers/wila/spaced/wila-partner-turn-r1.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        192,
+        235
+      ],
+      [
+        576,
+        235
+      ],
+      [
+        960,
+        235
+      ],
+      [
+        1344,
+        235
+      ],
+      [
+        1728,
+        235
+      ],
+      [
+        2112,
+        235
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      1,
+      1.6,
+      1,
+      1.4,
+      1.2,
+      1.2
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  },
+  {
+    "identity": "wila",
+    "move": "circle-spin",
+    "revision": "r1",
+    "file": "dancers/wila/raw/wila-circle-spin-r1.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "gather arms",
+      "turn through side",
+      "back-facing pivot",
+      "continue through opposite side",
+      "reopen fans",
+      "settle right"
+    ],
+    "routes_or_intents": [
+      "rounddance"
+    ],
+    "preferred_candidate": true,
+    "source": "dancers/wila/source-sheets/wila-actions-source.png",
+    "source_row_1based": 3,
+    "source_crop_xyxy": [
+      0,
+      520,
+      1536,
+      780
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        11,
+        11,
+        272,
+        250
+      ],
+      [
+        283,
+        12,
+        511,
+        249
+      ],
+      [
+        523,
+        12,
+        792,
+        249
+      ],
+      [
+        800,
+        14,
+        1023,
+        249
+      ],
+      [
+        1030,
+        10,
+        1283,
+        250
+      ],
+      [
+        1294,
+        14,
+        1527,
+        250
+      ]
+    ],
+    "size": [
+      1536,
+      260
+    ],
+    "mode": "RGBA",
+    "sha256": "8810ec4911585ea1f6bcaa0daba443fed881816c8ee91dfb63739ab5e2c426ad",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "dancers/wila/spaced/wila-circle-spin-r1.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        192,
+        247
+      ],
+      [
+        576,
+        247
+      ],
+      [
+        960,
+        247
+      ],
+      [
+        1344,
+        247
+      ],
+      [
+        1728,
+        247
+      ],
+      [
+        2112,
+        247
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      1,
+      1.6,
+      1,
+      1.4,
+      1.2,
+      1.2
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  },
+  {
+    "identity": "wila",
+    "move": "echo-closing-step",
+    "revision": "r1",
+    "file": "dancers/wila/raw/wila-echo-closing-step-r1.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "gather low",
+      "crossing foot placement",
+      "forward fan accent",
+      "rising open flourish",
+      "soften closing step",
+      "settle right"
+    ],
+    "routes_or_intents": [
+      "echofoot"
+    ],
+    "preferred_candidate": true,
+    "source": "dancers/wila/source-sheets/wila-actions-source.png",
+    "source_row_1based": 4,
+    "source_crop_xyxy": [
+      0,
+      752,
+      1536,
+      1021
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        24,
+        37,
+        237,
+        257
+      ],
+      [
+        270,
+        29,
+        483,
+        258
+      ],
+      [
+        508,
+        26,
+        776,
+        257
+      ],
+      [
+        780,
+        21,
+        1038,
+        257
+      ],
+      [
+        1048,
+        10,
+        1288,
+        258
+      ],
+      [
+        1308,
+        30,
+        1518,
+        259
+      ]
+    ],
+    "size": [
+      1536,
+      269
+    ],
+    "mode": "RGBA",
+    "sha256": "90c3dc39dada00f2afe2aab321aec7d31c00f6a56c65f1ea1380c66ba54dc4da",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "dancers/wila/spaced/wila-echo-closing-step-r1.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        192,
+        238
+      ],
+      [
+        576,
+        238
+      ],
+      [
+        960,
+        238
+      ],
+      [
+        1344,
+        238
+      ],
+      [
+        1728,
+        238
+      ],
+      [
+        2112,
+        238
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      1,
+      1.6,
+      1,
+      1.4,
+      1.2,
+      1.2
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  },
+  {
+    "identity": "wila",
+    "move": "hit",
+    "revision": "r1",
+    "file": "dancers/wila/raw/wila-hit-r1.png",
+    "frame_count": 4,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "ready",
+      "recoil and wince",
+      "catch balance",
+      "guard"
+    ],
+    "routes_or_intents": [
+      "hit"
+    ],
+    "preferred_candidate": true,
+    "source": "dancers/wila/source-sheets/wila-reactions-source.png",
+    "source_row_1based": 1,
+    "source_crop_xyxy": [
+      0,
+      19,
+      1448,
+      390
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        20,
+        13,
+        366,
+        361
+      ],
+      [
+        396,
+        10,
+        718,
+        361
+      ],
+      [
+        738,
+        26,
+        1077,
+        361
+      ],
+      [
+        1086,
+        12,
+        1433,
+        361
+      ]
+    ],
+    "size": [
+      1448,
+      371
+    ],
+    "mode": "RGBA",
+    "sha256": "426ea7aa4523dc39725a14065d3167e94425f9a32cb1efda4b0a99782374f672",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "dancers/wila/spaced/wila-hit-r1.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        139,
+        136
+      ],
+      [
+        417,
+        136
+      ],
+      [
+        695,
+        136
+      ],
+      [
+        973,
+        136
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      1.2,
+      1.5,
+      1.3,
+      1.2
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  },
+  {
+    "identity": "wila",
+    "move": "block",
+    "revision": "r1",
+    "file": "dancers/wila/raw/wila-block-r1.png",
+    "frame_count": 4,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "raise protective arms",
+      "brace behind crossed gauntlets or fans",
+      "absorb weight low",
+      "reset guard"
+    ],
+    "routes_or_intents": [
+      "block"
+    ],
+    "preferred_candidate": true,
+    "source": "dancers/wila/source-sheets/wila-reactions-source.png",
+    "source_row_1based": 2,
+    "source_crop_xyxy": [
+      0,
+      384,
+      1448,
+      752
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        23,
+        12,
+        389,
+        353
+      ],
+      [
+        406,
+        12,
+        700,
+        355
+      ],
+      [
+        729,
+        53,
+        1055,
+        354
+      ],
+      [
+        1077,
+        10,
+        1436,
+        358
+      ]
+    ],
+    "size": [
+      1448,
+      368
+    ],
+    "mode": "RGBA",
+    "sha256": "ccac363eb35740a9fa35f6e9e06609431dbc5b5af3fff48b691f7991f838025f",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "dancers/wila/spaced/wila-block-r1.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        139,
+        139
+      ],
+      [
+        417,
+        139
+      ],
+      [
+        695,
+        139
+      ],
+      [
+        973,
+        139
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      1.2,
+      1.5,
+      1.3,
+      1.2
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  },
+  {
+    "identity": "wila",
+    "move": "down",
+    "revision": "r1",
+    "file": "dancers/wila/raw/wila-down-r1.png",
+    "frame_count": 4,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "knees give way",
+      "hand and knee reach ground",
+      "sink to seated slump",
+      "lie unconscious and hold"
+    ],
+    "routes_or_intents": [
+      "down"
+    ],
+    "preferred_candidate": true,
+    "source": "dancers/wila/source-sheets/wila-reactions-source.png",
+    "source_row_1based": 3,
+    "source_crop_xyxy": [
+      0,
+      742,
+      1448,
+      1054
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        24,
+        10,
+        350,
+        302
+      ],
+      [
+        360,
+        43,
+        712,
+        300
+      ],
+      [
+        724,
+        72,
+        1073,
+        298
+      ],
+      [
+        1057,
+        150,
+        1437,
+        302
+      ]
+    ],
+    "size": [
+      1448,
+      312
+    ],
+    "mode": "RGBA",
+    "sha256": "56d9075e587a1c92378d7e2f8c26d3c26b6eab5e60b23af24d990441e6230d30",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "dancers/wila/spaced/wila-down-r1.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        139,
+        195
+      ],
+      [
+        417,
+        195
+      ],
+      [
+        695,
+        195
+      ],
+      [
+        973,
+        195
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      1.2,
+      1.5,
+      1.3,
+      1.2
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  },
+  {
+    "identity": "wila",
+    "move": "partner-turn",
+    "revision": "r2",
+    "file": "dancers/wila/raw/wila-partner-turn-r2.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "ready",
+      "leftward attentive turn",
+      "clear left-facing fan offer",
+      "step through rightward",
+      "leftward teaching presentation",
+      "rightward ready"
+    ],
+    "routes_or_intents": [
+      "cadence",
+      "duet",
+      "deepbeat"
+    ],
+    "preferred_candidate": true,
+    "source": "dancers/wila/source-sheets/wila-r2-source.png",
+    "source_row_1based": 1,
+    "source_crop_xyxy": [
+      0,
+      15,
+      2172,
+      372
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        20,
+        10,
+        346,
+        345
+      ],
+      [
+        372,
+        17,
+        703,
+        344
+      ],
+      [
+        724,
+        23,
+        1081,
+        347
+      ],
+      [
+        1110,
+        22,
+        1486,
+        343
+      ],
+      [
+        1487,
+        20,
+        1830,
+        345
+      ],
+      [
+        1862,
+        12,
+        2155,
+        346
+      ]
+    ],
+    "size": [
+      2172,
+      357
+    ],
+    "mode": "RGBA",
+    "sha256": "12ae2e7b0d2f255a61d54d79de6f5592faca3fe94dac01ba5daf7a0230fbe7f2",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "dancers/wila/spaced/wila-partner-turn-r2.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        139,
+        150
+      ],
+      [
+        417,
+        150
+      ],
+      [
+        695,
+        150
+      ],
+      [
+        973,
+        150
+      ],
+      [
+        1251,
+        150
+      ],
+      [
+        1529,
+        150
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      1,
+      1.6,
+      1,
+      1.4,
+      1.2,
+      1.2
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  },
+  {
+    "identity": "wila",
+    "move": "echo-closing-step",
+    "revision": "r2",
+    "file": "dancers/wila/raw/wila-echo-closing-step-r2.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "ready",
+      "gather fans low",
+      "close feet and gather chest",
+      "both fans raised in closing arch",
+      "welcoming bow",
+      "settle ready"
+    ],
+    "routes_or_intents": [
+      "closingstep"
+    ],
+    "preferred_candidate": true,
+    "source": "dancers/wila/source-sheets/wila-r2-source.png",
+    "source_row_1based": 2,
+    "source_crop_xyxy": [
+      0,
+      365,
+      2172,
+      712
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        20,
+        11,
+        346,
+        337
+      ],
+      [
+        388,
+        33,
+        685,
+        334
+      ],
+      [
+        741,
+        23,
+        1023,
+        334
+      ],
+      [
+        1084,
+        10,
+        1468,
+        336
+      ],
+      [
+        1510,
+        52,
+        1805,
+        335
+      ],
+      [
+        1846,
+        11,
+        2159,
+        337
+      ]
+    ],
+    "size": [
+      2172,
+      347
+    ],
+    "mode": "RGBA",
+    "sha256": "956ef0b451ee34db2f56c23e3cc013b0192d45168f62801f657e6ae786c4cef4",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "dancers/wila/spaced/wila-echo-closing-step-r2.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        139,
+        160
+      ],
+      [
+        417,
+        160
+      ],
+      [
+        695,
+        160
+      ],
+      [
+        973,
+        160
+      ],
+      [
+        1251,
+        160
+      ],
+      [
+        1529,
+        160
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      1,
+      1.6,
+      1,
+      1.4,
+      1.2,
+      1.2
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  }
+]

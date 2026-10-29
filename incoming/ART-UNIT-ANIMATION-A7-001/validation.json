@@ -1,0 +1,1492 @@
+{
+  "package": "ART-UNIT-ANIMATION-A7-001",
+  "base_commit": "8616ad3155a179e05210fe6aa552e6d234c9bd24",
+  "raw_strip_count": 36,
+  "figure_count_including_alternatives": 192,
+  "preferred_strip_count": 30,
+  "all_selected_source_silhouettes_inside_canvas": true,
+  "raw_retained_source_pixels_unchanged": true,
+  "files": [
+    {
+      "file": "NOTES.md",
+      "bytes": 8184,
+      "sha256": "bc36381ad8a712f585863129dd7352876d1978d59c3a9717eef2ddcd10a92599"
+    },
+    {
+      "file": "build_handoff.py",
+      "bytes": 13462,
+      "sha256": "cf70f8f26a09f34eaa53eb45f3260d0572b431e209f22d79188782cd1c869d05"
+    },
+    {
+      "file": "dancers/lalin/NOTES.md",
+      "bytes": 2730,
+      "sha256": "798ce1b8601f77d83f13ae98d2aac202246eba56e512af46366c07c9abe97e40"
+    },
+    {
+      "file": "dancers/lalin/preview-390.png",
+      "bytes": 818910,
+      "sha256": "36517378dc499379ddfaf98ce0984d02aa950bb0553df492142cd39fd8e035ad",
+      "size": [
+        390,
+        2500
+      ],
+      "mode": "RGB",
+      "decodes": true
+    },
+    {
+      "file": "dancers/lalin/prompts.json",
+      "bytes": 7812,
+      "sha256": "fb6de38c6e753e0af1c61614dbb259fb29a3a0caae38b8b4ffe561527590045d"
+    },
+    {
+      "file": "dancers/lalin/raw/lalin-block-r1.png",
+      "bytes": 890448,
+      "sha256": "8103f5f6ac3fc623fd6251088546b7331dd84cf6ac83446dc08a72bcfa932eb6",
+      "size": [
+        1448,
+        364
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "file": "dancers/lalin/raw/lalin-circle-spin-r1.png",
+      "bytes": 697268,
+      "sha256": "7431dfe094e2ff67b5eeaaa3d26fa5f1d05e7bd0b44077958696ab47f8bb5798",
+      "size": [
+        1536,
+        258
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "file": "dancers/lalin/raw/lalin-dance-strike-r1.png",
+      "bytes": 718706,
+      "sha256": "b64b8833cd5f970d9f1c81b976a350dd90efaef7af20a52677ae92e6167bb952",
+      "size": [
+        1536,
+        263
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "file": "dancers/lalin/raw/lalin-down-r1.png",
+      "bytes": 623000,
+      "sha256": "bbf93312a834c7edc1e749e58c6d686e6947b150e2dc761c0c73eb1bd9363d51",
+      "size": [
+        1448,
+        328
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "file": "dancers/lalin/raw/lalin-echo-closing-step-r1.png",
+      "bytes": 699763,
+      "sha256": "09671e00a5c635efaf4f98a5af2bc9a1f586a2e69b90be46870c7dd9732b8181",
+      "size": [
+        1536,
+        281
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "file": "dancers/lalin/raw/lalin-echo-closing-step-r2.png",
+      "bytes": 1188743,
+      "sha256": "8f2ed9bf9b0fa8d541e4b26b7f3bdafe13d57adf65df7e8358c64dbbb66bec2b",
+      "size": [
+        2172,
+        365
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "file": "dancers/lalin/raw/lalin-hit-r1.png",
+      "bytes": 937862,
+      "sha256": "b29d7d3994edb35ca2163f80e29739428df36542ef920dbcefd97285171f8b54",
+      "size": [
+        1448,
+        364
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "file": "dancers/lalin/raw/lalin-partner-turn-r1.png",
+      "bytes": 712552,
+      "sha256": "d232fd63a66d61f509e16d1a33ed0874719a42486be2499eb7d99c68640376a2",
+      "size": [
+        1536,
+        266
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "file": "dancers/lalin/raw/lalin-partner-turn-r2.png",
+      "bytes": 1190330,
+      "sha256": "ff399a94066b22b923918e507e12b33062ac9afa6050de74201bf8d6ba7c3ad3",
+      "size": [
+        2172,
+        336
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "file": "dancers/lalin/seeds/lalin.png",
+      "bytes": 388422,
+      "sha256": "3fc6f8259ca286dc11d2952c05a19518896d9cb56ea4a361d4c11c9fffccbeb6",
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "file": "dancers/lalin/seeds.json",
+      "bytes": 585,
+      "sha256": "9bac0d11eda296f64eb4196d8262c95b4a4c278272f514cdef947095bf6911e9"
+    },
+    {
+      "file": "dancers/lalin/source-sheets/lalin-actions-source.png",
+      "bytes": 3232722,
+      "sha256": "dc1c0c6f8fcfe03145e10995b40925263d80781b303b88b4036ee6a42cd8ad73",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "file": "dancers/lalin/source-sheets/lalin-r2-source.png",
+      "bytes": 2578022,
+      "sha256": "9312e8b6df35a7506a86191cb0882403e2ba231b615e9ba9acae81d6e735c6cc",
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "file": "dancers/lalin/source-sheets/lalin-reactions-source.png",
+      "bytes": 2625681,
+      "sha256": "87271de8d329654b8439f34b7188c3ead53b82384fb1d7ff26bec7c3b2b2f268",
+      "size": [
+        1448,
+        1086
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "file": "dancers/lalin/spaced/lalin-block-r1.png",
+      "bytes": 904216,
+      "sha256": "9039da7df1427e9984e16b31b57ad01579b004cd8fc6e0e17ed2f01c02eaf073",
+      "size": [
+        2560,
+        512
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "file": "dancers/lalin/spaced/lalin-circle-spin-r1.png",
+      "bytes": 718787,
+      "sha256": "64e882af785636d4915584bba40480c56bf5ee82aaf4eae8985db3a95a42a812",
+      "size": [
+        3840,
+        512
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "file": "dancers/lalin/spaced/lalin-dance-strike-r1.png",
+      "bytes": 740195,
+      "sha256": "0fc780d5d9db10901a21f56d66312c9ba9125f9a11c0700c72d60a43a7a7026c",
+      "size": [
+        3840,
+        512
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "file": "dancers/lalin/spaced/lalin-down-r1.png",
+      "bytes": 634834,
+      "sha256": "b71a682bead4db398681b657bf5a31ec8270c5d851d1b3bdc2100b27470952ee",
+      "size": [
+        2560,
+        512
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "file": "dancers/lalin/spaced/lalin-echo-closing-step-r1.png",
+      "bytes": 720183,
+      "sha256": "fae6cf5a64cc1ba08385e8c5e3e1eb0f3cca74c5e5144500f33819fbb2634e3e",
+      "size": [
+        3840,
+        512
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "file": "dancers/lalin/spaced/lalin-echo-closing-step-r2.png",
+      "bytes": 1206866,
+      "sha256": "5bc516c637ca8e72587c9ace52c1b5fff1405be65ccbff110dfe9d2705986b52",
+      "size": [
+        3840,
+        512
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "file": "dancers/lalin/spaced/lalin-hit-r1.png",
+      "bytes": 952535,
+      "sha256": "2d7b589451bfaa32c93d8b305c458177d3a5cd3b7d05bf459467a36fc555ea18",
+      "size": [
+        2560,
+        512
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "file": "dancers/lalin/spaced/lalin-partner-turn-r1.png",
+      "bytes": 733757,
+      "sha256": "f8489a1d3b61590c30ab2cfad45a88d221147ba4d421c001086c7392b10bebc0",
+      "size": [
+        3840,
+        512
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "file": "dancers/lalin/spaced/lalin-partner-turn-r2.png",
+      "bytes": 1208748,
+      "sha256": "286b38f59e7b5275ef6a5dc1581b734265b6c10130863c1fcdcfff889cf5b7a3",
+      "size": [
+        3840,
+        512
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "file": "dancers/lalin/strips.json",
+      "bytes": 19895,
+      "sha256": "0ed8d4bd89cb0dbb1ac86a745644a70cc8d75e25c82eaabd6403fae119a4a46e"
+    },
+    {
+      "file": "dancers/wila/NOTES.md",
+      "bytes": 2724,
+      "sha256": "9d067875bf05d0184ef6ec695d150e4f24babf7d348c3aeb6a6638c73bccf733"
+    },
+    {
+      "file": "dancers/wila/preview-390.png",
+      "bytes": 814174,
+      "sha256": "309b3f383f7a7bd38600161e17279465b70588b60f6c885c8617a9b300cef3b0",
+      "size": [
+        390,
+        2500
+      ],
+      "mode": "RGB",
+      "decodes": true
+    },
+    {
+      "file": "dancers/wila/prompts.json",
+      "bytes": 7860,
+      "sha256": "8b7953e76a68c5d1a3403abac8a546e4cab0a7fe5f494b4dea98567ee91f8ae0"
+    },
+    {
+      "file": "dancers/wila/raw/wila-block-r1.png",
+      "bytes": 903585,
+      "sha256": "ccac363eb35740a9fa35f6e9e06609431dbc5b5af3fff48b691f7991f838025f",
+      "size": [
+        1448,
+        368
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "file": "dancers/wila/raw/wila-circle-spin-r1.png",
+      "bytes": 770634,
+      "sha256": "8810ec4911585ea1f6bcaa0daba443fed881816c8ee91dfb63739ab5e2c426ad",
+      "size": [
+        1536,
+        260
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "file": "dancers/wila/raw/wila-dance-strike-r1.png",
+      "bytes": 768950,
+      "sha256": "8742dd2c0995db2c2ceb318dea9d8ac5c0326e62e6f6ac574d3cd00fefabe005",
+      "size": [
+        1536,
+        269
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "file": "dancers/wila/raw/wila-down-r1.png",
+      "bytes": 650643,
+      "sha256": "56d9075e587a1c92378d7e2f8c26d3c26b6eab5e60b23af24d990441e6230d30",
+      "size": [
+        1448,
+        312
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "file": "dancers/wila/raw/wila-echo-closing-step-r1.png",
+      "bytes": 682786,
+      "sha256": "90c3dc39dada00f2afe2aab321aec7d31c00f6a56c65f1ea1380c66ba54dc4da",
+      "size": [
+        1536,
+        269
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "file": "dancers/wila/raw/wila-echo-closing-step-r2.png",
+      "bytes": 1107349,
+      "sha256": "956ef0b451ee34db2f56c23e3cc013b0192d45168f62801f657e6ae786c4cef4",
+      "size": [
+        2172,
+        347
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "file": "dancers/wila/raw/wila-hit-r1.png",
+      "bytes": 946816,
+      "sha256": "426ea7aa4523dc39725a14065d3167e94425f9a32cb1efda4b0a99782374f672",
+      "size": [
+        1448,
+        371
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "file": "dancers/wila/raw/wila-partner-turn-r1.png",
+      "bytes": 740220,
+      "sha256": "90063ea73edc557259418fb082668e5e69bdb9e87598965c00ca4c9afa5d0271",
+      "size": [
+        1536,
+        272
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "file": "dancers/wila/raw/wila-partner-turn-r2.png",
+      "bytes": 1247929,
+      "sha256": "12ae2e7b0d2f255a61d54d79de6f5592faca3fe94dac01ba5daf7a0230fbe7f2",
+      "size": [
+        2172,
+        357
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "file": "dancers/wila/seeds/wila.png",
+      "bytes": 371319,
+      "sha256": "09aa9847771b968dfa1d15fb4c36816518a1e6d709d3812923559a7a7e0e212d",
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "file": "dancers/wila/seeds.json",
+      "bytes": 585,
+      "sha256": "62bd454152c3b7506e4cf43921597a1c8e75c176c9b0f7042a103e9aa7198fb1"
+    },
+    {
+      "file": "dancers/wila/source-sheets/wila-actions-source.png",
+      "bytes": 3318585,
+      "sha256": "4e26e92506ebd7c227110db884013a624209b823af0da1863cd35d9c4a84bc78",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "file": "dancers/wila/source-sheets/wila-r2-source.png",
+      "bytes": 2566808,
+      "sha256": "df4c7ac5ed1ac12ff437e5557ea3dcc4a53ea68528b912dd29baaabc808d4018",
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "file": "dancers/wila/source-sheets/wila-reactions-source.png",
+      "bytes": 2724172,
+      "sha256": "bb23f68934373922ba6e1050c9f66d5f2d96e493b2720228b7e16b9ec6a3a00d",
+      "size": [
+        1448,
+        1086
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "file": "dancers/wila/spaced/wila-block-r1.png",
+      "bytes": 918380,
+      "sha256": "cafcee00ae03285db3afbdad889f7460f7a3a4fdad9a4623d3afd43fe0cebb0a",
+      "size": [
+        2560,
+        512
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "file": "dancers/wila/spaced/wila-circle-spin-r1.png",
+      "bytes": 793672,
+      "sha256": "2d321601f8610a6dfe083f8e214a10ab935d7db5023e98bfd00cedd6908c6eef",
+      "size": [
+        3840,
+        512
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "file": "dancers/wila/spaced/wila-dance-strike-r1.png",
+      "bytes": 791781,
+      "sha256": "f6aee39dc38cbf53b0ab0aeceb3ec6bd91a5853b397ebd8c6a353da38f9fc0f4",
+      "size": [
+        3840,
+        512
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "file": "dancers/wila/spaced/wila-down-r1.png",
+      "bytes": 663229,
+      "sha256": "cfb1e53995b5c9143f775b95e034fbc0af823019788558973ebfc36fac2f162c",
+      "size": [
+        2560,
+        512
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "file": "dancers/wila/spaced/wila-echo-closing-step-r1.png",
+      "bytes": 703361,
+      "sha256": "25bebf6932da88a6029abaf23d3e35327e5ff9f7a898a9c812439174fd704dde",
+      "size": [
+        3840,
+        512
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "file": "dancers/wila/spaced/wila-echo-closing-step-r2.png",
+      "bytes": 1125985,
+      "sha256": "02b5373909261b7873edb9f9b8d4737fbcde3e1cecc0cb1bfe80040b7821da70",
+      "size": [
+        3840,
+        512
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "file": "dancers/wila/spaced/wila-hit-r1.png",
+      "bytes": 961480,
+      "sha256": "fb779ff4dd32b4ca857a1ff4379ef7b5f49cc25ecd5db52e6fc5666069a676ed",
+      "size": [
+        2560,
+        512
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "file": "dancers/wila/spaced/wila-partner-turn-r1.png",
+      "bytes": 761853,
+      "sha256": "eb67990f278ae612595255a6337eac92da0f48bd36e1869ee16b473f45eebef0",
+      "size": [
+        3840,
+        512
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "file": "dancers/wila/spaced/wila-partner-turn-r2.png",
+      "bytes": 1268396,
+      "sha256": "d747c764ab0ce73a7e1680e813684b6a503cdeae9024b2fe6097b7bbe28330ce",
+      "size": [
+        3840,
+        512
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "file": "dancers/wila/strips.json",
+      "bytes": 19855,
+      "sha256": "a4a6497f5ff858131a198c28bf40e79cecad9f6c4006a35daa0c4af8623a7852"
+    },
+    {
+      "file": "moves.json",
+      "bytes": 14223,
+      "sha256": "a829c5ec589a2d1d5c9e0075f14d578f14b8292ad04814a93470bde50a68dc7a"
+    },
+    {
+      "file": "prompts.json",
+      "bytes": 30426,
+      "sha256": "efe7ec8d730ef01964f85a0eb434eec1bfd471fbfaf342915815fc370c5f8a83"
+    },
+    {
+      "file": "saints/metta/NOTES.md",
+      "bytes": 2682,
+      "sha256": "3bf05eead0eb6cb56c9bbc0a09765ec655f3ed3ae32dea0384afd88ca18dba93"
+    },
+    {
+      "file": "saints/metta/preview-390.png",
+      "bytes": 745091,
+      "sha256": "27950c9e4d0d92719bbe1cf2e05249e27b84260bedfbf780fdae9926775098e0",
+      "size": [
+        390,
+        2500
+      ],
+      "mode": "RGB",
+      "decodes": true
+    },
+    {
+      "file": "saints/metta/prompts.json",
+      "bytes": 7358,
+      "sha256": "a5961da52fafe09217ce209a2064bf17d7d84168850dfac7614c5db563cf19d3"
+    },
+    {
+      "file": "saints/metta/raw/metta-block-r1.png",
+      "bytes": 793480,
+      "sha256": "91cd1ce6961622fd3ecbce58df3c46214acc50692e1e0889643edcb920945524",
+      "size": [
+        1448,
+        369
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "file": "saints/metta/raw/metta-communion-r1.png",
+      "bytes": 661908,
+      "sha256": "8be58f046e0831298bc101f3a340fbd317df89029ebf2747661323ddb94a1b21",
+      "size": [
+        1536,
+        266
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "file": "saints/metta/raw/metta-communion-r2.png",
+      "bytes": 1113545,
+      "sha256": "1b89eaaaf7ee6f0b1949b27da17f603fa9f424a546b7a512aa294f4035629010",
+      "size": [
+        2172,
+        378
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "file": "saints/metta/raw/metta-down-r1.png",
+      "bytes": 611267,
+      "sha256": "6d5b7adf0381410ecd6c4d9aa735377c3bc8fc0346b1231ccd3246183f862591",
+      "size": [
+        1448,
+        303
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "file": "saints/metta/raw/metta-hit-r1.png",
+      "bytes": 839277,
+      "sha256": "813f5045b440aece04cf21cfe5b9c7431fc778c65f0ead268429e6df4b9e02a4",
+      "size": [
+        1448,
+        372
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "file": "saints/metta/raw/metta-lastlight-r1.png",
+      "bytes": 648352,
+      "sha256": "42170f2f493616bd730da8dab69f82be34e18ef92bf9ab0401fd6c280ca92aa3",
+      "size": [
+        1536,
+        260
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "file": "saints/metta/raw/metta-lastlight-r2.png",
+      "bytes": 992897,
+      "sha256": "4c8facb05216f3b8db9f8e9fa71c199bf114ebe7542af7c1b6bc6846c331c979",
+      "size": [
+        2172,
+        343
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "file": "saints/metta/raw/metta-punch-r1.png",
+      "bytes": 688028,
+      "sha256": "954add4792d5e824eb7e6a15c32e290ff5da92189ff36dbeb94bab9c6b07fa89",
+      "size": [
+        1536,
+        270
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "file": "saints/metta/raw/metta-sweeping-arc-r1.png",
+      "bytes": 699422,
+      "sha256": "00b85d02557edbb47317fee70de7cbcfd8705abebb54bfbd0ee3de8d92af0cae",
+      "size": [
+        1536,
+        267
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "file": "saints/metta/seeds/metta.png",
+      "bytes": 297149,
+      "sha256": "62126d7f84767d640e41a96515df67774fd153221fc43ad16c75e410f6b26fd2",
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "file": "saints/metta/seeds.json",
+      "bytes": 584,
+      "sha256": "b2dfbb2e6f3a94145f6276bdba298710e2a6de4c30cf4cef2e370d2448ed499d"
+    },
+    {
+      "file": "saints/metta/source-sheets/metta-actions-source.png",
+      "bytes": 3105793,
+      "sha256": "d65f92b602882aa1b2575ad3fea4beba7d666bcbf9ecf2d60b74e7eeb138cb47",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "file": "saints/metta/source-sheets/metta-r2-source.png",
+      "bytes": 2252739,
+      "sha256": "e4e8fee8dc6559d8cd4903865f75760ae6a1d1c1a113905d9eb00e2ee9676052",
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "file": "saints/metta/source-sheets/metta-reactions-source.png",
+      "bytes": 2426155,
+      "sha256": "45ebef7e20ce1bbf2a814a5d0d1c9f6098b57677f0eee533bf398bb54c6a2414",
+      "size": [
+        1448,
+        1086
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "file": "saints/metta/spaced/metta-block-r1.png",
+      "bytes": 806493,
+      "sha256": "480f1f69720380a34747777250295b6e3bc75403645f801e3075c3748790edc5",
+      "size": [
+        2560,
+        512
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "file": "saints/metta/spaced/metta-communion-r1.png",
+      "bytes": 682744,
+      "sha256": "e712d552d5a2c295ed13cb491c1b28d7f7dcdfb3ca4af091025f0efe1c95fd7a",
+      "size": [
+        3840,
+        512
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "file": "saints/metta/spaced/metta-communion-r2.png",
+      "bytes": 1132063,
+      "sha256": "1f4afe8ad706afd158cb63cce0ee646c69fa544f6c2960342e8ee4997b4a8b7d",
+      "size": [
+        3840,
+        512
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "file": "saints/metta/spaced/metta-down-r1.png",
+      "bytes": 622729,
+      "sha256": "7b26e627389727951ed87df739183584dfa0aefbd924fbc4182265494cace24e",
+      "size": [
+        2560,
+        512
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "file": "saints/metta/spaced/metta-hit-r1.png",
+      "bytes": 852785,
+      "sha256": "f150945d44ac6f4dc9e1b19c9bf1c7fc6610a8eb8c43cc74449d85845fd79915",
+      "size": [
+        2560,
+        512
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "file": "saints/metta/spaced/metta-lastlight-r1.png",
+      "bytes": 668835,
+      "sha256": "90e3a26f13ef93e7038f62cb983692e0278fb28311cd7bd3e702b285b168655f",
+      "size": [
+        3840,
+        512
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "file": "saints/metta/spaced/metta-lastlight-r2.png",
+      "bytes": 1009912,
+      "sha256": "2d6d45043b2331e1f07a164da7ce73ff4f903a8e4bd765db8f128d0da41c97da",
+      "size": [
+        3840,
+        512
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "file": "saints/metta/spaced/metta-punch-r1.png",
+      "bytes": 709098,
+      "sha256": "7bdb247ac01cc80b1dbbb05847d62f4884f88d5e57b1af873108335f193e21c1",
+      "size": [
+        3840,
+        512
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "file": "saints/metta/spaced/metta-sweeping-arc-r1.png",
+      "bytes": 720198,
+      "sha256": "e7d81a24d537db1369c72f2b6207f2c6bcf15a83b4234dc15356ff6c27e2e0d2",
+      "size": [
+        3840,
+        512
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "file": "saints/metta/strips.json",
+      "bytes": 19791,
+      "sha256": "d116b63248a8b922d023dccd522d8d4a7ff65507c8b12c945afb7c615ab84ec7"
+    },
+    {
+      "file": "saints/thiran/NOTES.md",
+      "bytes": 2690,
+      "sha256": "94c4043b71c9dcf01de6d43b492630cae4e81c38bc61321ad585349608b93e0c"
+    },
+    {
+      "file": "saints/thiran/preview-390.png",
+      "bytes": 777146,
+      "sha256": "418fec7149a7735537679a2c44e1e3f45e0f44e1068a80d3ade98119c07143d8",
+      "size": [
+        390,
+        2500
+      ],
+      "mode": "RGB",
+      "decodes": true
+    },
+    {
+      "file": "saints/thiran/prompts.json",
+      "bytes": 7405,
+      "sha256": "e9344a6fecb44e36ec6d59cd555fb3191b110f7db52cdc67532a55d2daaf7db1"
+    },
+    {
+      "file": "saints/thiran/raw/thiran-block-r1.png",
+      "bytes": 883614,
+      "sha256": "2b292f3dc248e88ad21cb618d8e662c88d6d4ba9b6a933454675fffaa9e4fe91",
+      "size": [
+        1448,
+        394
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "file": "saints/thiran/raw/thiran-communion-r1.png",
+      "bytes": 650119,
+      "sha256": "22207a2f49eca2236f162814df97f6cd500652295473efa79810fd9fd496b5d1",
+      "size": [
+        1536,
+        261
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "file": "saints/thiran/raw/thiran-communion-r2.png",
+      "bytes": 1015911,
+      "sha256": "25c12ed6db6d3e91b5faee42db5d4a4b18496d65ce7a654fafbf9369a3b164c4",
+      "size": [
+        2172,
+        350
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "file": "saints/thiran/raw/thiran-down-r1.png",
+      "bytes": 672988,
+      "sha256": "7c57d5b91c5b328db79cb5e4b435d1c938dda69f6bb17faa9ec58e46fb8c6052",
+      "size": [
+        1448,
+        318
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "file": "saints/thiran/raw/thiran-hit-r1.png",
+      "bytes": 868463,
+      "sha256": "fc5465fb307b2e8828de9b6de33282b150292f54df84743d22ab1eca0cc380d6",
+      "size": [
+        1448,
+        386
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "file": "saints/thiran/raw/thiran-lastlight-r1.png",
+      "bytes": 694940,
+      "sha256": "b7b170cd418810561ba467be14c16ad6ed2153f9538486dbc7d104d5a1f5369d",
+      "size": [
+        1536,
+        259
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "file": "saints/thiran/raw/thiran-lastlight-r2.png",
+      "bytes": 987120,
+      "sha256": "a297799bf9bbc2e96a7c5f38700e7b0b71db15072cc900bc0e77ce770decd428",
+      "size": [
+        2172,
+        348
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "file": "saints/thiran/raw/thiran-punch-r1.png",
+      "bytes": 663587,
+      "sha256": "22170560856aade9c8c2a23cda21e3f7fde74a710e959ece022d54b8fda2ff5d",
+      "size": [
+        1536,
+        263
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "file": "saints/thiran/raw/thiran-sweeping-arc-r1.png",
+      "bytes": 697078,
+      "sha256": "9e9a87ef3efe98957e54ff5ad9c55fde4985c8156d5526749147476e7967fe14",
+      "size": [
+        1536,
+        263
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "file": "saints/thiran/seeds/thiran.png",
+      "bytes": 298801,
+      "sha256": "535b0b553d71c0873ba12a7995dee8d4a11f059b83fc6d19763cfe694dde9b1c",
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "file": "saints/thiran/seeds.json",
+      "bytes": 590,
+      "sha256": "69e2dcc76c1cbcb1026237cab1f56ac3b3be1002013ee955ccf6ed28f6bb9e9f"
+    },
+    {
+      "file": "saints/thiran/source-sheets/thiran-actions-source.png",
+      "bytes": 3186103,
+      "sha256": "c9e17d879148b4c3a1ed212910c2dd49623c22e1c889f32e2423c9a70f582340",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "file": "saints/thiran/source-sheets/thiran-r2-source.png",
+      "bytes": 2150880,
+      "sha256": "e3aa8db92580a1faf184ec9ff3065d36a7fb347a68d3784dcffc927a0e6acbcc",
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "file": "saints/thiran/source-sheets/thiran-reactions-source.png",
+      "bytes": 2604452,
+      "sha256": "0d94ed4c4cb8f781a06e7cf24b05e592cce432981605a04371d0d4dd93c30e10",
+      "size": [
+        1448,
+        1086
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "file": "saints/thiran/spaced/thiran-block-r1.png",
+      "bytes": 899203,
+      "sha256": "d66d0cda9d3f2fdbf23c1bbe0b8e182c2af7d3a4c432e7103e18d38fad988246",
+      "size": [
+        2560,
+        512
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "file": "saints/thiran/spaced/thiran-communion-r1.png",
+      "bytes": 669454,
+      "sha256": "cf4d430c7bece980709b4d666a1aaaa8b65b121d44dedd3c99a079f746ec7523",
+      "size": [
+        3840,
+        512
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "file": "saints/thiran/spaced/thiran-communion-r2.png",
+      "bytes": 1033301,
+      "sha256": "5cd5f1abef16ae8a96f04270fba4ec86bdf83f2ab794c8be852fdf2e41c453ac",
+      "size": [
+        3840,
+        512
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "file": "saints/thiran/spaced/thiran-down-r1.png",
+      "bytes": 685584,
+      "sha256": "c5c6c469806adaa5bc19c8062ff385b8e1c631ed3e433081479339cd4760e547",
+      "size": [
+        2560,
+        512
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "file": "saints/thiran/spaced/thiran-hit-r1.png",
+      "bytes": 882574,
+      "sha256": "7012666ab30d34fd9c4a75633dd532a6ddb5c70bbf2d1977f70d7bb25b3ab75a",
+      "size": [
+        2560,
+        512
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "file": "saints/thiran/spaced/thiran-lastlight-r1.png",
+      "bytes": 714913,
+      "sha256": "1b55ee8244378b17be104e6778409ce23073f4b16644a8836d2bbd9ab86fa294",
+      "size": [
+        3840,
+        512
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "file": "saints/thiran/spaced/thiran-lastlight-r2.png",
+      "bytes": 1003937,
+      "sha256": "fc488fcbf837aa45c6a16755c4826ce1aeaa09c3c55b77beb77aaf4cb26f636e",
+      "size": [
+        3840,
+        512
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "file": "saints/thiran/spaced/thiran-punch-r1.png",
+      "bytes": 681922,
+      "sha256": "c3859333368afdd6907f49ed4de0ab41b9fd9c01e67d36bff4d99efe7d8f0e2e",
+      "size": [
+        3840,
+        512
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "file": "saints/thiran/spaced/thiran-sweeping-arc-r1.png",
+      "bytes": 716490,
+      "sha256": "94595ad6baaa30a00325533de9cdc89fe1dade14b17e8f00f787ab3f51ef6fec",
+      "size": [
+        3840,
+        512
+      ],
+      "mode": "RGBA",
+      "decodes": true,
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "file": "saints/thiran/strips.json",
+      "bytes": 19871,
+      "sha256": "69577f0063701ef09906c7b3ffa73b0f51c1a273070f7a7cb6aa403722eb761a"
+    },
+    {
+      "file": "seeds.json",
+      "bytes": 2335,
+      "sha256": "584b891d337a2b929c8fa20b3f27adbd4ba732bf68d5826c3e9ce6a86a2bc90c"
+    },
+    {
+      "file": "strips.json",
+      "bytes": 79403,
+      "sha256": "2c3405c7b41447fabee84f0f971e9aefa8673894ce837b4a25c54412fc8b0ebd"
+    },
+    {
+      "file": "verify_remote.py",
+      "bytes": 3081,
+      "sha256": "f18fea71c4f06e8e59ab5e6eb534a45ea4784023e65dfed606e6755a485bfb5e"
+    }
+  ],
+  "manifest_exclusion": "validation.json excludes its own self-referential hash; verify its SHA-256 by direct local-versus-fetched Git blob comparison after push.",
+  "approval": "Art candidates only; owner artwork selection and in-game motion approval pending."
+}

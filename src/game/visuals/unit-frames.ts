@@ -1,6 +1,6 @@
 import type { Reaction, UnitPose } from './unit-animation-map';
 import atlasManifest from './unit-atlases.json';
-export type UnitClip = 'attack' | 'skill' | 'bash' | 'prayer' | 'sanctuary' | 'disengage' | 'stance' | 'taunt' | 'brace' | 'knives' | 'evade' | 'dread' | 'finale' | 'snare';
+export type UnitClip = 'attack' | 'skill' | 'bash' | 'prayer' | 'sanctuary' | 'disengage' | 'stance' | 'taunt' | 'brace' | 'knives' | 'evade' | 'dread' | 'finale' | 'snare' | 'arc' | 'communion' | 'lastlight' | 'partner' | 'circle' | 'closing';
 export type FramePhase = 'prepare' | 'recover' | 'reaction';
 export interface UnitFrames {
   show(pose: UnitPose | Reaction, phase: FramePhase, progress: number, clip?: UnitClip, durationMs?: number): boolean;
@@ -29,6 +29,11 @@ interface UnitDefinition {
   // `point`: where the projectile leaves, measured on the release frame (arrowhead / open hand), in slot units from the
   // sole (x toward the foe, y up negative), the same space as BattleScene's landmarks.
   release?: Readonly<Partial<Record<UnitClip, Release>>>;
+  // A7: the atlas has its own layout. Only the listed `clips`/`reactions` draw frames; anything absent (a strip held back
+  // by the anatomy gate) stays procedural instead of falling onto the shared 0..37 layout.
+  own?: true;
+  // Frame shown for a downed actor (the held prone pose). Default 21 on the shared layout, 0 (seed) on an `own` layout.
+  downFrame?: number;
 }
 export interface FrameRange { prepare: readonly number[]; recover: readonly number[] }
 export interface Release { frame: number; at: number; point: readonly [number, number] }
@@ -77,6 +82,26 @@ export const unitRegistry = {
   sefa: { sheet: 'sefa', displayRatio: 1 / .42, actions: { attack: 'attack', ambush: 'attack', backstab: 'skill', disarm: 'skill', knives: 'knives', evade: 'evade', decoy: 'evade' },
     reactions: { block: [38, 39] }, release: { knives: { frame: 26, at: RELEASE_AT, point: [.52, -.45] } } },
   lio: { sheet: 'lio', displayRatio: 1 / .42, actions: { attack: 'attack', note: 'attack', valor: 'skill', mend: 'skill', solo: 'skill', dread: 'dread', finale: 'finale' }, reactions: { block: [38, 39] } },
+  // A7 (assumed owner pick = Codex recommendation; docs/combat-presentation/unit-a7-slice/README_TH.md). Every strip is six slots with
+  // slot 0 = seed idle; contact = first recover frame. Strips failing the anatomy gate are absent (Lalin attack/circle/echo/hit/block/down,
+  // Wila echo/down) and keep the procedural body.
+  metta: { sheet: 'metta', displayRatio: 1 / .42, own: true, downFrame: 34,
+    actions: { attack: 'attack', saintstrike: 'attack', vowstrike: 'attack', saintarc: 'arc', communion: 'communion', sharewound: 'communion', lastlight: 'lastlight' },
+    clips: { attack: { prepare: [1, 2], recover: [3, 4, 5, 6] }, arc: { prepare: [7, 8], recover: [9, 10, 11, 12] }, communion: { prepare: [13, 14], recover: [15, 16, 17, 18] }, lastlight: { prepare: [19, 20, 21], recover: [22, 23, 24] } },
+    reactions: { hit: [25, 26, 27], block: [28, 29, 30], down: [31, 32, 33, 34] } },
+  thiran: { sheet: 'thiran', displayRatio: 1 / .42, own: true, downFrame: 34,
+    actions: { attack: 'attack', saintstrike: 'attack', vowstrike: 'attack', saintarc: 'arc', communion: 'communion', sharewound: 'communion', lastlight: 'lastlight' },
+    clips: { attack: { prepare: [1, 2], recover: [3, 4, 5, 6] }, arc: { prepare: [7, 8], recover: [9, 10, 11, 12] }, communion: { prepare: [13, 14], recover: [15, 16, 17, 18] }, lastlight: { prepare: [19, 20, 21], recover: [22, 23, 24] } },
+    reactions: { hit: [25, 26, 27], block: [28, 29, 30], down: [31, 32, 33, 34] } },
+  // Lalin: only the two R2 body sets passed (cadence/duet/deepbeat partner turn, closing step). Basic attack, round dance, echo foot and every reaction stay procedural.
+  lalin: { sheet: 'lalin', displayRatio: 1 / .42, own: true,
+    actions: { cadence: 'partner', duet: 'partner', deepbeat: 'partner', closingstep: 'closing' },
+    clips: { partner: { prepare: [1, 2, 3], recover: [4, 5, 6] }, closing: { prepare: [7, 8, 9], recover: [10, 11, 12] } } },
+  // Wila: no echo foot (procedural) and no down sprite (procedural fall onto the seed).
+  wila: { sheet: 'wila', displayRatio: 1 / .42, own: true,
+    actions: { attack: 'attack', cadence: 'partner', duet: 'partner', deepbeat: 'partner', rounddance: 'circle', closingstep: 'closing' },
+    clips: { attack: { prepare: [1, 2], recover: [3, 4, 5, 6] }, partner: { prepare: [7, 8, 9], recover: [10, 11, 12] }, circle: { prepare: [13, 14], recover: [15, 16, 17, 18] }, closing: { prepare: [19, 20, 21], recover: [22, 23, 24] } },
+    reactions: { hit: [25, 26, 27], block: [28, 29, 30] } },
   foe_riftweaver: { sheet: 'riftweaver', displayRatio: 2, intents: { 'Rune Lash': 'attack', 'Rift Needle': 'skill', 'Ribbon Snare': 'snare' } },
   foe_spore_puff: { sheet: 'sporepuff', displayRatio: 2, intents: { 'Spore Dust': 'attack' } },
   // A10 (original cast, sheet `units`): Raking Slash / Crushing Blow are the cut and the claw hammer (clip attack), Shadow Knife
@@ -107,6 +132,7 @@ export const unitKey = (art: string): string | undefined => {
   const definition = anatomyHold.has(art) ? undefined : unitDefinition(art);
   return definition ? `unit-pilot-${definition.sheet}` : undefined;
 };
+export const unitDownFrame = (art: string): number => { const d = unitDefinition(art); return d?.downFrame ?? (d?.own ? 0 : 21); };
 export const unitDisplayRatio = (art: string): number => unitDefinition(art)?.displayRatio ?? 1;
 export const unitUrl = (name: UnitSheet): string => `${import.meta.env.BASE_URL}assets/units/${atlasManifest[name].image}`;
 export const unitAtlasUrls = (name: UnitSheet): [string, string] => [unitUrl(name), `${import.meta.env.BASE_URL}assets/units/${atlasManifest[name].atlas}`];
@@ -121,6 +147,7 @@ function sequence(pose: UnitPose | Reaction, phase: FramePhase, clip?: UnitClip,
   if (phase === 'reaction') {
     const own = definition?.reactions?.[pose as Reaction];
     if (own) return own;
+    if (definition?.own) return;
     if (pose === 'hit') return [17, 18];
     if (pose === 'down') return [19, 20, 21];
     return;
@@ -128,6 +155,7 @@ function sequence(pose: UnitPose | Reaction, phase: FramePhase, clip?: UnitClip,
   if (!clip) return;
   const own = definition?.clips?.[clip];
   if (own) return phase === 'prepare' ? own.prepare : own.recover;
+  if (definition?.own) return;
   if (clip === 'bash') return phase === 'prepare' ? [22, 23, 24, 25] : [26, 27, 28, 29];
   // Seren: prayer 22..29 and sanctuary 30..37; Mira: disengage 22..29 (block 30..31). Contact on the first recover frame like every clip.
   // A5: Garran stance 22..29; Brann taunt 22..29 and stone brace 30..37 (block 38..39). Contact stays the first recover frame.

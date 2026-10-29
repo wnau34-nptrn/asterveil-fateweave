@@ -1,0 +1,38 @@
+[
+  {
+    "identity": "thiran",
+    "kind": "actions",
+    "prompt": "Create an ORIGINAL production 2D painted chibi game animation sprite sheet by editing the attached current in-game seed. Preserve EXACTLY this character's individual face, hairstyle, costume details, accessories, palette, proportions and rendering. Transparent RGBA background. Landscape 3:2 3072x2048 preferred, EXACTLY 6 equal columns x 4 equal rows, 24 separate FULL-BODY frames. One whole continuous 6-frame animation per row, left to right. Equal scale and aligned sole line within every cell; generous transparent gutters. No scenery, labels, numbers, grid, shadows, hit sparks, magic, auras, projectile, duplicated limbs or extra figures. Every action must be articulated across body, arms and feet, NOT rotations/translations of a static pose. All rest/recovery poses face 3/4 RIGHT. Each row progresses prepare → deeper anticipation → release/contact → follow-through → recoil → recover. No sprite may touch or cross any cell edge. Keep the reference's hand-painted gold linework and large head/small body chibi silhouette. THIRAN: mature short grey-haired, trimmed salt-and-pepper beard, green coat with ivory/gold tabard, heavy gold gauntlets and boots, dark brown prayer beads. He is a gate repairer defending the camp: square stable shoulders, deliberate grounded weight, broad practical protective motions and stern caring expression. Keep him recognisably older and sturdier than Metta; never borrow Metta poses. ROW1 punch: low planted brace, draw fist tight, short heavy rightward punch, full shoulder commitment, measured retract, restore broad guard. ROW2 front sweeping arc: deliberate wide planted load, deep torso coil, broad horizontal gauntlet sweep rightward, twist through wide arc, unwind, brace. ROW3 communion/share with ally: protective glance left, lower stance and draw bead hand to chest, turn upper body toward left-side ally, extend broad OPEN PALM toward them, steady supportive hold, return rightward guard; hands never look like closed punches during offering. ROW4 lastlight finisher: square stance, sink deeply with both fists gathered, step into crushing rightward heavy strike, follow through with entire torso, controlled reset, brace.",
+    "reference": "seeds/thiran.png",
+    "reference_generation_path": "/tmp/a7-thiran-seed.png",
+    "original_output_path": "/workspace/generated_images/exec-6a0183c2-05c8-4758-869a-90c3b2abd185.png",
+    "source": "saints/thiran/source-sheets/thiran-actions-source.png",
+    "transparent_background_requested": true,
+    "generation_tool": "image_gen.imagegen",
+    "method": "Whole sequences generated together in one referenced edit, never frame-by-frame."
+  },
+  {
+    "identity": "thiran",
+    "kind": "reactions",
+    "prompt": "Edit the attached current in-game sprite into an ORIGINAL production painted-chibi animation sprite sheet. Preserve EXACT face, costume, proportions, palette, accessories, hair and painted detail of THIS character. Transparent RGBA, no background, no shadows, text, numbers, borders, light, VFX, duplicated limbs or other characters. EXACTLY FOUR equal columns x THREE equal rows (12 full-body frames), 4:3 sheet, preferably 2048x1536. Wide transparent gutters around every full figure. Fixed scale in ALL 12 frames; same feet baseline at the bottom of each cell, with downed figure's floor at same level. No cropped fans, hair, bead tassels, boots or ribbons. Rest and recovery face 3/4 RIGHT. Each row is ONE whole sequential four-frame animation, clearly DIFFERENT articulated body poses. ROW1 HIT: braced anticipation → clear recoil from a blow arriving from RIGHT, torso leaning back and face wincing → body catches balance → returns to own right-facing guard. ROW2 BLOCK: draw arms across body → clearly raised protective crossed gauntlets/fans intercepting a blow from RIGHT → deep weight absorption → reset to own guard. ROW3 DOWN: knees give way → one knee/hand to ground → torso slumps sideways → clearly unconscious full-body lying on ground, eyes closed, NO standing recovery; last frame holds, do not stand up. Down is non-graphic. All accessories stay physically attached, no extra weapons. Thiran is the mature short grey-haired, trimmed-bearded saint in green, ivory and gold with brown prayer beads. Sturdy gate repairer protecting camp. Hit: heavy planted heels, torso absorbs impact. Block: broad squared forearms form a solid door-like guard. Down: stubborn low brace breaks, slow heavy knee fall then lies on right side. Keep his beard, larger shoulders and grey hair; never use young Metta proportions.",
+    "reference": "seeds/thiran.png",
+    "reference_generation_path": "/tmp/a7-thiran-seed.png",
+    "original_output_path": "/workspace/generated_images/exec-e9be34a0-b716-49a1-9406-8b49c64455ed.png",
+    "source": "saints/thiran/source-sheets/thiran-reactions-source.png",
+    "transparent_background_requested": true,
+    "generation_tool": "image_gen.imagegen",
+    "method": "Whole sequences generated together in one referenced edit, never frame-by-frame."
+  },
+  {
+    "identity": "thiran",
+    "kind": "r2",
+    "prompt": "Edit attached shipped character seed into ORIGINAL painted-chibi body-only game animation sheet, exact same face, hair, outfit, palette, details, proportions and accessories. These are R2 ALTERNATIVES for ambiguous moves, independently drawn articulated frames. Transparent RGBA, highest resolution. EXACTLY SIX columns x TWO rows, twelve complete separate full-body figures. Use wide 3:1 sheet with square slots if possible (3072x1024), or letterbox with transparent padding; consistent scale and soles line in all cells. Leave extremely GENEROUS empty transparent gutters between all figures and at outer edges. Shrink figures enough to keep every fan, prayer-bead tassel, fabric ribbon and foot wholly inside its slot. No labels, captions, numbers, grids, scenery, shadows, magic, glows, sparks, trails, projectiles, duplicate limbs or extra people. Each row is one continuous SIX-frame animation, prepare → gather → release/peak → follow-through → soften → ready, not six still copies. Rest/recovery is 3/4 RIGHT. Thiran: mature grey short hair with beard, green/ivory/gold coat and gold gauntlets, brown beads, sturdy practical gate repairer. ROW1 COMMUNION R2: ready right; glance LEFT; pivot chest and head LEFT while keeping broad planted feet; extend broad OPEN palm LEFT toward offscreen ally, brown beads close to other shoulder; hold left-facing protective reach; return rightward guard. Gesture must point LEFT and not attack enemy on right. ROW2 LASTLIGHT R2: feet broad and square; deep deliberate gathered two-fist stance; lift heavy gauntlet high; drive crushing downward RIGHT hammerfist using whole heavy shoulder; weight sinks into forward leg; slowly reset to broad rightward door-like guard. Separate all frames with ample empty space.",
+    "reference": "seeds/thiran.png",
+    "reference_generation_path": "/tmp/a7-thiran-seed.png",
+    "original_output_path": "/workspace/generated_images/exec-45db6090-d89e-48d9-b796-e1600b7227ff.png",
+    "source": "saints/thiran/source-sheets/thiran-r2-source.png",
+    "transparent_background_requested": true,
+    "generation_tool": "image_gen.imagegen",
+    "method": "Whole sequences generated together in one referenced edit, never frame-by-frame."
+  }
+]
