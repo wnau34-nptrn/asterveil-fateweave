@@ -31,7 +31,7 @@ Chromium: export PLAYWRIGHT_CHROMIUM_EXECUTABLE=/opt/pw-browsers/chromium; ส�
 - ใหม่: hover loop ของค้างคาว (`idleLoop` ใน registry, `UnitAnimation.setLoops`) เล่นเฉพาะเมื่อยังไม่ตายและไม่อยู่ใน motion; ปิดเมื่อ OS reduce/เอฟเฟกต์ลด; `BattleUI.open` เรียก `configureEffects` ตอนเริ่มสู้ (เดิมเรียกเฉพาะตอนเริ่มเทิร์น)
 - งบภาพ (decoded): Mira 3.97MiB, Toma 2.18MiB, Dew 1.35MiB, Ember 1.11MiB, Bat 1.88MiB; สนาม 10 ตัว (OD-05) ต้องวัดรวมหลัง P02 ([README A4](../combat-presentation/unit-a4-slice/README_TH.md))
 - ผล: typecheck/lint/`npm test` ผ่าน; browser `unit-a4.spec.ts` 34 ผ่าน; คลิปจริง 20 คลิป 390px (Chromium จำลอง ไม่ใช่มือถือจริง)
-- เจ้าของดูหน้ารวมคลิป (Artifact) แล้วตอบ “เอาเข้าเกมได้” (2026-10-29) → PR #101 merge `a92625a` (quality+browser ผ่านบน `eecd0e1`; browser รันซ้ำ 1 ครั้งหลัง `bolt-fx.spec.ts` error ตอนปิด context ที่ไม่เกี่ยวข้องและผ่านในเครื่อง; merge สาขาเกมเข้ามาเพื่อแก้ conflict `browser.yml` จาก PR #100) Pages run 40808184534
+- เจ้าของดูหน้ารวมคลิป (Artifact) แล้วตอบ “เอาเข้าเกมได้” (2026-10-29) → PR #101 merge `a92625a` (quality+browser ผ่านบน `eecd0e1`; browser รันซ้ำ 1 ครั้งหลัง `bolt-fx.spec.ts` error ตอนปิด context ที่ไม่เกี่ยวข้องและผ่านในเครื่อง; merge สาขาเกมเข้ามาเพื่อแก้ conflict `browser.yml` จาก PR #100); Pages 40808184534 ถูกยกเลิก (มี push ตามมา), 40811859734 ล้มที่เทสต์ hover ค้างคาวที่แกว่ง → แก้เทสต์ใน PR #104 `10477de` → **Pages 40817236817 เผยแพร่สำเร็จ** 2026-10-29 11:46 น. (build+browser 4 shard+deploy)
 - ไม่แตะ #93–#98 (W3–W5) และ PR #100
 
 
