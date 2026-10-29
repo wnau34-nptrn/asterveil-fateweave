@@ -1,4 +1,3 @@
-import Phaser from 'phaser';
 import type {BattleEvent,TurnStage} from '../../core/battle/types';
 import type {FxContext} from './bolt-fx';
 import art from './command-art.json';
@@ -44,6 +43,8 @@ const widths:Record<string,number>={
   challenge_prepare:56,challenge_crest:68,challenge_settle:30,
   warcry_prepare:56,warcry_cone:130,warcry_impact:56,warcry_wisps:64};
 // Gold/amber layers vanish against the gold armour at normal blend; a soft additive blend keeps them legible (art notes allow it).
+// Phaser.BlendModes.ADD; kept as a literal so this module stays importable by node unit tests (no runtime Phaser import).
+const ADD=1;
 const glow=new Set(['taunt_prepare','taunt_pulse','taunt_motes','taunt_settle','challenge_prepare','challenge_crest','challenge_thread','challenge_settle']);
 // Challenge thread: pivot at its tail; its tip reaches (237-24)/256 of the texture width.
 const THREAD_REACH=(237-24)/256,THREAD_HEIGHT=230;
@@ -56,7 +57,7 @@ function put(ctx:FxContext,id:string,spot:CommandSpot,lookup:CommandLookup,name:
   const point=lookup(id,spot);if(!point)return;
   const pivot=(art as Record<string,number[]>)[name]!;
   const img=ctx.scene.add.image(point.x,point.y,COMMAND_ATLAS,name);
-  img.setOrigin(pivot[0],pivot[1]);if(glow.has(name)&&!ctx.quiet)img.setBlendMode(Phaser.BlendModes.ADD);
+  img.setOrigin(pivot[0],pivot[1]);if(glow.has(name)&&!ctx.quiet)img.setBlendMode(ADD);
   const base=()=>widths[name]!*(lookup(id,spot)?.size??point.size)/111/img.width*(ctx.quiet?.9:1);
   img.setData('commandName',name);img.setData('commandTag',tag);img.setData('commandDx',o.dx??0);img.setData('commandDy',o.dy??0);img.setData('commandScale',o.scale??1);
   const follow=()=>{const p=lookup(id,spot);if(!p||!img.active)return;
@@ -70,7 +71,7 @@ function put(ctx:FxContext,id:string,spot:CommandSpot,lookup:CommandLookup,name:
 function putThread(ctx:FxContext,from:string,to:string,lookup:CommandLookup,tag:string):Phaser.GameObjects.Image|undefined{
   const start=lookup(from,'shield'),end=lookup(to,'foe');if(!start||!end)return;
   const pivot=(art as Record<string,number[]>)['challenge_thread']!;
-  const img=ctx.scene.add.image(start.x,start.y,COMMAND_ATLAS,'challenge_thread').setOrigin(pivot[0],pivot[1]);if(!ctx.quiet)img.setBlendMode(Phaser.BlendModes.ADD);
+  const img=ctx.scene.add.image(start.x,start.y,COMMAND_ATLAS,'challenge_thread').setOrigin(pivot[0],pivot[1]);if(!ctx.quiet)img.setBlendMode(ADD);
   img.setData('commandName','challenge_thread');img.setData('commandTag',tag);
   const follow=()=>{const a=lookup(from,'shield'),b=lookup(to,'foe');if(!a||!b||!img.active)return;
     const dx=b.x-a.x,dy=b.y-a.y,dist=Math.hypot(dx,dy);
