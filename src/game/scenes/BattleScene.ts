@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { unitKey, unitDisplayRatio, unitAtlasUrls, unitClip, type UnitSheet } from '../visuals/unit-frames';
+import { anatomyHold, unitKey, unitDisplayRatio, unitAtlasUrls, unitClip, type UnitClip, type UnitSheet } from '../visuals/unit-frames';
 import { OptionalUnitAssets } from '../visuals/optional-unit-assets';
 import { unitFrameView } from '../visuals/unit-frame-view';
 import { UnitAnimation } from '../visuals/unit-animation';
@@ -131,6 +131,10 @@ export class BattleScene extends Phaser.Scene {
     this.optionalRequest = true;
   }
   private hasOptionalUnit = (name: UnitSheet): boolean => this.textures.exists(`unit-pilot-${name}`);
+  // Held identities draw no frames, so they keep the plain procedural motion (and its recover length).
+  private framedClip(art: string, action?: string, intent?: string): UnitClip | undefined {
+    return anatomyHold.has(art) ? undefined : unitClip(art, action, intent);
+  }
   private requestOptionalUnits(): void {
     const names = this.optionalUnits.request(this.hasOptionalUnit);
     for (const name of names) this.load.atlas(`unit-pilot-${name}`, ...unitAtlasUrls(name));
@@ -428,7 +432,7 @@ export class BattleScene extends Phaser.Scene {
     if (!this.quiet && pose) {
       const from = this.anchor(turn.actorId), to = this.anchor(hitEvent?.targetId ?? turn.targetId);
       const direction = from && to ? Math.sign(to.x - from.x) : turn.side === 'hero' ? 1 : -1;
-      this.unitAnimation.begin(turn.actorId, pose, direction || (turn.side === 'hero' ? 1 : -1), contactMs, unitClip(artOf(this.encounter, turn.actorId), turn.action, turn.intent?.name));
+      this.unitAnimation.begin(turn.actorId, pose, direction || (turn.side === 'hero' ? 1 : -1), contactMs, this.framedClip(artOf(this.encounter, turn.actorId), turn.action, turn.intent?.name));
     }
     if(this.textures.exists(PROJECTILE_ATLAS)){
       const seen=new Set<string>();

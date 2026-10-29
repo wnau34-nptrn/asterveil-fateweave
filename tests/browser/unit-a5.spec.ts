@@ -99,7 +99,7 @@ test('A5 late optional textures cannot replace artwork during a committed cast',
  await page.goto('tests/browser/fixtures/unit-a5.html?skill=attack');await page.locator('#start').click();
  await page.clock.pauseAt(new Date(Date.now()+100000));await cast(page,'attack');
  const committed=await saved(page);expect(await page.evaluate(()=>window.unitA5QA.frames().garran![0]!.texture)).toBe('battle-mercs');
- release();await expect.poll(()=>page.evaluate(()=>window.unitA5QA.cached().length)).toBe(4);
+ release();await expect.poll(()=>page.evaluate(()=>window.unitA5QA.cached().length)).toBe(3); // Aegis is on anatomy hold
  expect(await page.evaluate(()=>window.unitA5QA.frames().garran![0]!.texture)).toBe('battle-mercs');
  await page.clock.runFor(100);expect(await page.evaluate(()=>window.unitA5QA.frames().garran![0]!.texture)).toBe('battle-mercs');
  await page.clock.runFor(3000);expect(await page.evaluate(()=>window.unitA5QA.frames().garran![0]!.texture)).toBe('unit-pilot-garran');expect(await saved(page)).toBe(committed);
@@ -107,7 +107,7 @@ test('A5 late optional textures cannot replace artwork during a committed cast',
 });
 test('A5 encounter replacement releases the A5 textures',async({page})=>{
  await page.setViewportSize({width:390,height:844});await ready(page,'skill=attack');
- expect((await page.evaluate(()=>window.unitA5QA.cached())).sort()).toEqual(['unit-pilot-aegis','unit-pilot-eira','unit-pilot-garran','unit-pilot-tusker']);
+ expect((await page.evaluate(()=>window.unitA5QA.cached())).sort()).toEqual(['unit-pilot-eira','unit-pilot-garran','unit-pilot-tusker']);
  await page.evaluate(()=>window.unitA5QA.otherEncounter());
  await expect.poll(()=>page.evaluate(()=>window.unitA5QA.cached())).toEqual([]);
  await expect(page.locator('#start')).toBeEnabled();

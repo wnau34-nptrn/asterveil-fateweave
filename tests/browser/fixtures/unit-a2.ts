@@ -40,11 +40,13 @@ const qa={reactionTiming:()=>{
  },alchemyPoint:()=>{
  const body=(scene as unknown as {bodies:Map<string,Phaser.GameObjects.Container>}).bodies.get('guardian')!;
  const sprite=body.list.find((c):c is Phaser.GameObjects.Image=>c instanceof Phaser.GameObjects.Image)!;
- // Independently use the documented seed normalization, including the live world matrix.
- const point=sprite.getWorldTransformMatrix().transformPoint(.4*512*.36,-.35*512*.36);
+ // Independently use the documented seed normalization, including the live world matrix. The held static seed
+ // (anatomy hold) fills its 512px cell, the A2 atlas draws it at .36.
+ const n=sprite.texture.key==='unit-pilot-aegis'?.36:1;
+ const point=sprite.getWorldTransformMatrix().transformPoint(.4*512*n,-.35*512*n);
  const dpr=scene.game.canvas.width/scene.game.canvas.getBoundingClientRect().width;
- const earth=sprite.getWorldTransformMatrix().transformPoint(-.31*512*.36,-.80*512*.36);
- const projectile=sprite.getWorldTransformMatrix().transformPoint(.36*512*.36,-.86*512*.36);
+ const earth=sprite.getWorldTransformMatrix().transformPoint(-.31*512*n,-.80*512*n);
+ const projectile=sprite.getWorldTransformMatrix().transformPoint(.36*512*n,-.86*512*n);
  return {actual:scene.alchemyAnchor('guardian','fury')!,expected:{x:point.x/dpr,y:point.y/dpr},earthActual:scene.earthAnchor('guardian','bash')!,earthExpected:{x:earth.x/dpr,y:earth.y/dpr},projectileActual:scene.projectileAnchor('guardian')!,projectileExpected:{x:projectile.x/dpr,y:projectile.y/dpr}};
  },impacts,turns:()=>fixture.result.turns,otherEncounter:()=>{
  const data={...fixture.data,heroes:fixture.data.heroes.filter(h=>h.id==='healer').map(h=>({...h,id:'toma'})),enemies:fixture.data.enemies.map(e=>({...e,art:'brute'}))};

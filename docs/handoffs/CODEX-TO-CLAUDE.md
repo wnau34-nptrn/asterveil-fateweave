@@ -1,5 +1,15 @@
 # Codex → Claude handoff
 
+## 2026-10-29 — Claude: แก้ Aegis หัวโต/ตัวเปลี่ยนสัดส่วน (พักเฟรม A2 + brief Codex วาดใหม่)
+
+- ขอบเขต: เจ้าของสั่งระหว่างงาน “แก้ไขแค่ Aegis พอ อย่างอื่นไม่ต้อง” จึงแก้เฉพาะ Aegis; Vargoth และตัวอื่นไม่แตะ
+- ต้นเหตุ (ยืนยันจากภาพ): ท่า generated ใน `incoming/ART-UNIT-ANIMATION-A2-001/aegis-raw.png` วาดหัวใหญ่กว่า seed ~1.37 เท่า (วัดด้วย `scripts/unit-anatomy-audit.py` 11 เฟรม 1.25–1.41; 14 เฟรม not-measured) ความสูงรวมเท่าเดิม → normalization แก้ไม่ได้ ต้องวาดใหม่
+- แก้แล้ว: `anatomyHold` ใน `src/game/visuals/unit-frames.ts` (guardian) → ไม่โหลด/ไม่วาด atlas `aegis_a2`; อัศวินใช้ seed นิ่ง `battle-units:0` + procedural motion; `BattleScene.framedClip` ไม่ส่ง clip ให้ตัวที่พัก; rules/save/content/balance/ActionId/contact/end ไม่เปลี่ยน
+- Codex: brief ART-UNIT-ANIMATION-A2-002 `docs/handoffs/CODEX-AEGIS-ANATOMY-REDRAW-TH.md` (25 ท่า, สัดส่วนล็อกเป็นตัวเลข, model sheet `incoming/ART-UNIT-ANIMATION-A2-001/aegis-model-sheet-guides.png`, ตรวจด้วย `unit-anatomy-audit.py --cells` ก่อนส่ง) + คิวข้อ 28 ใน `CODEX-ART-QUEUE-TH.md`
+- หลักฐาน: `docs/validation/aegis-anatomy-2026-10-29/README_TH.md` — คลิป before/after 12 คู่ (attack normal/fast/reduced/OS reduce, 320/390/PC, bash, guard, hit, ถูกตีหลัง guard, counter, down) + ภาพเทียบเฟรม crop เดียวกัน + เกมแคมเปญจริง `/`; capture spec `tests/browser/aegis-anatomy-clips.spec.ts` (`AEGIS_ANATOMY_CLIPS=1`), fixture scenario `down`
+- เทสต์: typecheck/lint ผ่าน; `npm test` ผ่าน; Playwright ในเครื่อง unit-a2 37/37, unit-a1/a3/a4/a5/players/pilot/loading/defense-fx/blade-fx 175 + 9 (หลังแก้จำนวน texture ที่โหลด) ผ่าน; capture before/after 12/12 ทั้งคู่; ไม่ได้ทดสอบ Safari/มือถือจริง
+- ข้อแลกเปลี่ยน: ระหว่างพัก ท่าฟัน/กระแทกโล่ของ Aegis เป็นการพุ่งของภาพนิ่ง (เหมือนก่อน A2) จนกว่าภาพ A2-002 จะผ่านและปลด hold
+- ข้อระวังสำหรับ W4 (สาขา `claude/unit-a6-song-shadow-vfx`): เทสต์ที่นับ optional sheet/cached textures ต้องไม่นับ `unit-pilot-aegis` แล้ว (เปลี่ยนใน unit-a1/a3/a4/a5/a2 spec, unit-loading นับ webp 5, optional-unit-assets.test)
 ## 2026-10-29 — ตรวจ runtime animation/VFX ครบ catalog ปัจจุบัน (ยังมี8กลุ่มงานแก้)
 
 เจ้าของสั่งให้ตรวจตัวอื่นและท่าอื่นต่อ หลังยืนยันว่า auditก่อนหน้ายังไม่ครบ รอบนี้ทำครบscopeปัจจุบันแล้ว: [รายงาน8กลุ่มปัญหา](../validation/animation-vfx-full-audit-2026-10-29/README_TH.md) · [ตารางรายตัว/รายท่า](../validation/animation-vfx-full-audit-2026-10-29/COVERAGE_TH.md) · [Promptให้Claude](../validation/animation-vfx-full-audit-2026-10-29/CLAUDE_HANDOFF_TH.md) · [72คลิป](../validation/animation-vfx-full-audit-2026-10-29/CLIPS_TH.md)

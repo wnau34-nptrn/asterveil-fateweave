@@ -12,6 +12,10 @@ Owner: finish character animation and skill VFX before other development; Codex 
 
 R2 artwork (PR #89) integrated through PR92 merge `4883362` (mark/sigil/storm/dispel from actual events; rules/save/balance/timing unchanged); owner approved motion and merge with “ทั้งสองอย่าง” on 2026-10-28 after the 21 real 390px clips in `docs/combat-presentation/arcane-seal-slice/`. PR quality+browser passed (browser re-run once after an unrelated `presentation.spec.ts` timeout); Pages run 40730511483 build/4 browser shards/deploy success (16:54–17:21 UTC). A3 (PR #90, R2 chosen) is in a separate session; A4 (PR #91) not started.
 
+## Aegis anatomy hold — 2026-10-29
+
+Owner reported Aegis' head/body “pop” on a normal attack. Root cause is the A2 generated art (head ~1.37× the approved seed), not normalization. Aegis A2 frames are held at runtime (`anatomyHold` in `src/game/visuals/unit-frames.ts`): static seed + procedural motion until Codex delivers ART-UNIT-ANIMATION-A2-002 (`docs/handoffs/CODEX-AEGIS-ANATOMY-REDRAW-TH.md`). Check new unit art with `scripts/unit-anatomy-audit.py`; bbox/sole alignment is not an anatomy pass. Evidence: `docs/validation/aegis-anatomy-2026-10-29/README_TH.md`. Owner scope: fix Aegis only.
+
 ## Unit animation A2 — published 2026-10-28
 
 A2 Aegis/ Vargoth Guard published via PR88 mergee94b424 + QA-only7ff5388; Pages40671415477 build/4browser/deploy success. Full evidence: [A2 release](docs/validation/unit-a2-release/README_TH.md), [26clips/mapping/fallback](docs/combat-presentation/unit-a2-slice/README_TH.md). Pilot/A1/C5 approvals and timing retained. Owner explicitly approved A2 motion with “เอาเข้าเกมได้” on2026-10-28 after the26clip delivery; this is direct approval, not inferred from tests. A3/family7 are outside this task.

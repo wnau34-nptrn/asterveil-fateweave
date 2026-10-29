@@ -62,3 +62,11 @@ describe('A2 actual content, clips and lifecycle',()=>{
   expect(unitDisplayRatio('guardian')*.36).toBeCloseTo(1);expect(unitDisplayRatio('foe_vargoth_guard')).toBe(2);
  });
 });
+describe('Aegis anatomy hold (animation-visual-audit-2026-10-29)',()=>{
+ it('draws the shipped static seed with procedural motion and never loads the mismatched A2 poses',async()=>{
+  const {anatomyHold,unitKey,unitSheets}=await import('../src/game/visuals/unit-frames');
+  expect([...anatomyHold]).toEqual(['guardian']);expect(unitKey('guardian')).toBeUndefined();expect(Object.values(unitSheets)).not.toContain('aegis');
+  // The mapping stays intact for the redraw; other identities keep their frames.
+  expect(unitClip('guardian','attack',undefined)).toBe('attack');expect(unitKey('foe_vargoth_guard')).toBe('unit-pilot-vargoth');
+ });
+});

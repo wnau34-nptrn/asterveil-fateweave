@@ -1,0 +1,264 @@
+[
+ {
+  "case": "attack-down-CrushingBlow-enemy-normal-390",
+  "before": {
+   "commands": 1,
+   "errors": [],
+   "frames": [
+    "unit-pilot-aegis:0",
+    "unit-pilot-aegis:19",
+    "unit-pilot-aegis:20",
+    "unit-pilot-aegis:21"
+   ]
+  },
+  "after": {
+   "commands": 1,
+   "errors": [],
+   "frames": [
+    "battle-units:0"
+   ]
+  }
+ },
+ {
+  "case": "attack-normal-CrushingBlow-enemy-normal-390",
+  "before": {
+   "commands": 1,
+   "errors": [],
+   "frames": [
+    "unit-pilot-aegis:0",
+    "unit-pilot-aegis:17",
+    "unit-pilot-aegis:18"
+   ]
+  },
+  "after": {
+   "commands": 1,
+   "errors": [],
+   "frames": [
+    "battle-units:0"
+   ]
+  }
+ },
+ {
+  "case": "attack-normal-RiftBolt-hero-fast-390",
+  "before": {
+   "commands": 1,
+   "errors": [],
+   "frames": [
+    "unit-pilot-aegis:0",
+    "unit-pilot-aegis:1",
+    "unit-pilot-aegis:17",
+    "unit-pilot-aegis:18",
+    "unit-pilot-aegis:2",
+    "unit-pilot-aegis:4",
+    "unit-pilot-aegis:5",
+    "unit-pilot-aegis:6",
+    "unit-pilot-aegis:7",
+    "unit-pilot-aegis:8"
+   ]
+  },
+  "after": {
+   "commands": 1,
+   "errors": [],
+   "frames": [
+    "battle-units:0"
+   ]
+  }
+ },
+ {
+  "case": "attack-normal-RiftBolt-hero-normal-1366",
+  "before": {
+   "commands": 1,
+   "errors": [],
+   "frames": [
+    "unit-pilot-aegis:0",
+    "unit-pilot-aegis:1",
+    "unit-pilot-aegis:2",
+    "unit-pilot-aegis:3",
+    "unit-pilot-aegis:4",
+    "unit-pilot-aegis:5",
+    "unit-pilot-aegis:6",
+    "unit-pilot-aegis:7",
+    "unit-pilot-aegis:8"
+   ]
+  },
+  "after": {
+   "commands": 1,
+   "errors": [],
+   "frames": [
+    "battle-units:0"
+   ]
+  }
+ },
+ {
+  "case": "attack-normal-RiftBolt-hero-normal-320",
+  "before": {
+   "commands": 1,
+   "errors": [],
+   "frames": [
+    "unit-pilot-aegis:0",
+    "unit-pilot-aegis:1",
+    "unit-pilot-aegis:2",
+    "unit-pilot-aegis:3",
+    "unit-pilot-aegis:4",
+    "unit-pilot-aegis:5",
+    "unit-pilot-aegis:6",
+    "unit-pilot-aegis:7",
+    "unit-pilot-aegis:8"
+   ]
+  },
+  "after": {
+   "commands": 1,
+   "errors": [],
+   "frames": [
+    "battle-units:0"
+   ]
+  }
+ },
+ {
+  "case": "attack-normal-RiftBolt-hero-normal-390",
+  "before": {
+   "commands": 1,
+   "errors": [],
+   "frames": [
+    "unit-pilot-aegis:0",
+    "unit-pilot-aegis:1",
+    "unit-pilot-aegis:2",
+    "unit-pilot-aegis:3",
+    "unit-pilot-aegis:4",
+    "unit-pilot-aegis:5",
+    "unit-pilot-aegis:6",
+    "unit-pilot-aegis:7",
+    "unit-pilot-aegis:8"
+   ]
+  },
+  "after": {
+   "commands": 1,
+   "errors": [],
+   "frames": [
+    "battle-units:0"
+   ]
+  }
+ },
+ {
+  "case": "attack-normal-RiftBolt-hero-osreduce-390",
+  "before": {
+   "commands": 1,
+   "errors": [],
+   "frames": [
+    "unit-pilot-aegis:0"
+   ]
+  },
+  "after": {
+   "commands": 1,
+   "errors": [],
+   "frames": [
+    "battle-units:0"
+   ]
+  }
+ },
+ {
+  "case": "attack-normal-RiftBolt-hero-reduced-390",
+  "before": {
+   "commands": 1,
+   "errors": [],
+   "frames": [
+    "unit-pilot-aegis:0"
+   ]
+  },
+  "after": {
+   "commands": 1,
+   "errors": [],
+   "frames": [
+    "battle-units:0"
+   ]
+  }
+ },
+ {
+  "case": "bash-normal-RiftBolt-hero-normal-390",
+  "before": {
+   "commands": 1,
+   "errors": [],
+   "frames": [
+    "unit-pilot-aegis:0",
+    "unit-pilot-aegis:22",
+    "unit-pilot-aegis:23",
+    "unit-pilot-aegis:24",
+    "unit-pilot-aegis:25",
+    "unit-pilot-aegis:26",
+    "unit-pilot-aegis:27",
+    "unit-pilot-aegis:28",
+    "unit-pilot-aegis:29"
+   ]
+  },
+  "after": {
+   "commands": 1,
+   "errors": [],
+   "frames": [
+    "battle-units:0"
+   ]
+  }
+ },
+ {
+  "case": "guard-counter-CrushingBlow-enemy-normal-390",
+  "before": {
+   "commands": 1,
+   "errors": [],
+   "frames": [
+    "unit-pilot-aegis:0",
+    "unit-pilot-aegis:30",
+    "unit-pilot-aegis:5",
+    "unit-pilot-aegis:7"
+   ]
+  },
+  "after": {
+   "commands": 1,
+   "errors": [],
+   "frames": [
+    "battle-units:0"
+   ]
+  }
+ },
+ {
+  "case": "guard-normal-CrushingBlow-enemy-normal-390",
+  "before": {
+   "commands": 1,
+   "errors": [],
+   "frames": [
+    "unit-pilot-aegis:0",
+    "unit-pilot-aegis:17",
+    "unit-pilot-aegis:18"
+   ]
+  },
+  "after": {
+   "commands": 1,
+   "errors": [],
+   "frames": [
+    "battle-units:0"
+   ]
+  }
+ },
+ {
+  "case": "guard-normal-CrushingBlow-hero-normal-390",
+  "before": {
+   "commands": 1,
+   "errors": [],
+   "frames": [
+    "unit-pilot-aegis:0",
+    "unit-pilot-aegis:10",
+    "unit-pilot-aegis:11",
+    "unit-pilot-aegis:13",
+    "unit-pilot-aegis:14",
+    "unit-pilot-aegis:15",
+    "unit-pilot-aegis:16",
+    "unit-pilot-aegis:9"
+   ]
+  },
+  "after": {
+   "commands": 1,
+   "errors": [],
+   "frames": [
+    "battle-units:0"
+   ]
+  }
+ }
+]

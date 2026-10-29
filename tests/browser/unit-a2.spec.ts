@@ -1,30 +1,32 @@
 import {test,expect,type Page} from '@playwright/test';
 import {stageTiming} from '../../src/ui/battle-playback';
 import {aegisActions} from '../fixtures/unit-a2';
+// Aegis is on anatomy hold (docs/validation/aegis-anatomy-2026-10-29): its A2 poses drew a larger head than the
+// approved idle model, so the knight renders the shipped static seed ('battle-units' frame 0) with procedural motion
+// until an anatomy-locked redraw is packed. Vargoth keeps its A2 frames.
 test.skip(process.env.PLAYWRIGHT_PAGES==='true','source fixture explicitly checked in CI');
 const saved=(page:Page)=>page.evaluate(()=>localStorage.getItem('unit-a2-committed'));
 async function ready(page:Page,query:string){
  await page.goto(`tests/browser/fixtures/unit-a2.html?${query}`);
  await expect(page.locator('canvas')).toBeVisible();
  // Wait for optional art before visual QA; this is not a Start/performance gate.
- await expect.poll(()=>page.evaluate(()=>window.unitA2QA.frames().guardian?.[0]?.texture),{timeout:15000}).toBe('unit-pilot-aegis');
+ await expect.poll(()=>page.evaluate(()=>window.unitA2QA.frames().f1?.[0]?.texture),{timeout:15000}).toBe('unit-pilot-vargoth');
  if(await page.locator('#start').count())await page.locator('#start').click();
 }
-for(const action of aegisActions)test(`A2 ${action}: windup, release, guard intent and exact committed result at 390px`,async({browser},info)=>{
+const seed=(page:Page)=>page.evaluate(()=>window.unitA2QA.frames().guardian!.map(f=>`${f.texture}:${f.frame}`));
+for(const action of aegisActions)test(`A2 ${action}: held seed windup, release, guard intent and exact committed result at 390px`,async({browser},info)=>{
  const ctx=await browser.newContext({viewport:{width:390,height:844},reducedMotion:'no-preference'});
  try{
  const page=await ctx.newPage(),errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));
  await page.clock.install();await ready(page,`skill=${action}`);await page.clock.pauseAt(new Date(Date.now()+100000));
  await page.locator(`#action-${action}`).click();await page.locator(`#target-${await page.evaluate(()=>window.unitA2QA.target())}`).click();
  const committed=await saved(page);expect(await page.evaluate(()=>window.unitA2QA.state())).toEqual(await page.evaluate(()=>window.unitA2QA.expected()));
- const expected=action==='attack'?5:action==='bash'?26:13;
- // Windup must never expose the release frame.
- await page.clock.runFor(80);const before=await page.evaluate(()=>window.unitA2QA.frames().guardian!);
- expect(Number(before[0]!.frame)).toBeLessThan(expected);expect(before[0]!.texture).toBe('unit-pilot-aegis');
+ // Windup is the procedural lunge of the single approved seed; no generated pose is ever drawn.
+ await page.clock.runFor(80);expect(await seed(page)).toEqual(['battle-units:0']);
+ expect((await page.evaluate(()=>window.unitA2QA.reactionTiming()))?.phase).toBe('prepare');
  await page.screenshot({path:info.outputPath('aegis-prepare-390.png')});
  const timing=stageTiming((await page.evaluate(()=>window.unitA2QA.turns()))[0]!,false);
- await page.clock.runFor(timing.contact-80);
- expect(Number(await page.evaluate(()=>window.unitA2QA.frames().guardian![0]!.frame))).toBe(expected);
+ await page.clock.runFor(timing.contact-80);expect(await seed(page)).toEqual(['battle-units:0']);
  await page.clock.runFor(450-timing.contact+80);const impacts=await page.evaluate(()=>window.unitA2QA.impacts);
  expect(impacts[0]!.turn.action).toBe(action);
  await page.clock.runFor(500);await page.screenshot({path:info.outputPath('guard-release-390.png')});
@@ -39,7 +41,7 @@ for(const [speed,intensity,motion] of [['fast','standard','no-preference'],['nor
  await page.locator('#action-attack').click();await page.locator('#target-f1').click();const committed=await saved(page);
  await expect(page.locator('#skip-turn')).toBeHidden();expect(await saved(page)).toBe(committed);
  expect(await page.evaluate(()=>window.unitA2QA.state())).toEqual(await page.evaluate(()=>window.unitA2QA.expected()));
- expect(await page.evaluate(()=>window.unitA2QA.frames().guardian![0]!.frame)).toBe('0');
+ expect(await seed(page)).toEqual(['battle-units:0']);
  }finally{await ctx.close();}
 });
 for(const change of ['skip','resize','reload','hidden'] as const)test(`A2 ${change} preserves committed command`,async({browser})=>{
@@ -47,7 +49,7 @@ for(const change of ['skip','resize','reload','hidden'] as const)test(`A2 ${chan
  try{const page=await ctx.newPage();await ready(page,'skill=attack');await page.locator('#action-attack').click();await page.locator('#target-f1').click();const committed=await saved(page);
  if(change==='skip')await page.locator('#skip-turn').click();
  if(change==='resize')await page.setViewportSize({width:391,height:844});
- if(change==='reload'){await page.reload();await expect(page.locator('canvas')).toBeVisible();await expect.poll(()=>page.evaluate(()=>window.unitA2QA.frames().guardian?.[0]?.texture)).toBe('unit-pilot-aegis');}
+ if(change==='reload'){await page.reload();await expect(page.locator('canvas')).toBeVisible();await expect.poll(()=>page.evaluate(()=>window.unitA2QA.frames().f1?.[0]?.texture)).toBe('unit-pilot-vargoth');expect(await seed(page)).toEqual(['battle-units:0']);}
  if(change==='hidden')await page.evaluate(()=>{Object.defineProperty(document,'hidden',{configurable:true,value:true});document.dispatchEvent(new Event('visibilitychange'));});
  await expect(page.locator('#skip-turn')).toBeHidden();expect(await saved(page)).toBe(committed);
  expect(await page.evaluate(()=>window.unitA2QA.state())).toEqual(await page.evaluate(()=>window.unitA2QA.expected()));
@@ -56,15 +58,16 @@ for(const change of ['skip','resize','reload','hidden'] as const)test(`A2 ${chan
 for(const scenario of ['revive','enemy-down'])test(`A2 resolver-owned ${scenario} resets vargoth lifecycle`,async({browser},info)=>{
  const ctx=await browser.newContext({viewport:{width:390,height:844},reducedMotion:'no-preference'});
  try{const page=await ctx.newPage();await ready(page,`skill=attack&scenario=${scenario}`);
- if(scenario==='revive')expect(await page.evaluate(()=>window.unitA2QA.frames().guardian![0]!.frame)).toBe('21');
+ if(scenario==='revive')expect(await seed(page)).toEqual(['battle-units:0']);
  await page.locator(`#action-${scenario==='revive'?'revive':'attack'}`).click();await page.locator(`#target-${await page.evaluate(()=>window.unitA2QA.target())}`).click();
  await expect(page.locator('#skip-turn')).toBeHidden();
- await expect.poll(()=>page.evaluate(s=>window.unitA2QA.frames()[s==='revive'?'guardian':'f1']![0]!.frame,scenario)).toBe(scenario==='revive'?'0':'21');
+ await expect.poll(()=>page.evaluate(s=>String(window.unitA2QA.frames()[s==='revive'?'guardian':'f1']![0]!.frame),scenario)).toBe(scenario==='revive'?'0':'21');
+ if(scenario==='revive')expect(await seed(page)).toEqual(['battle-units:0']);
  expect(await page.evaluate(()=>window.unitA2QA.state())).toEqual(await page.evaluate(()=>window.unitA2QA.expected()));
  await page.screenshot({path:info.outputPath(`${scenario}-390.png`)});
  }finally{await ctx.close();}
 });
-test('A2 late optional textures cannot replace artwork during a committed cast',async({browser})=>{
+test('A2 late optional textures cannot replace artwork during a committed cast, and held Aegis never loads',async({browser})=>{
  const ctx=await browser.newContext({viewport:{width:390,height:844},reducedMotion:'no-preference'});
  let release!:()=>void;const held=new Promise<void>(r=>release=r);
  try{const page=await ctx.newPage();await page.clock.install();
@@ -72,17 +75,18 @@ test('A2 late optional textures cannot replace artwork during a committed cast',
  await page.goto('tests/browser/fixtures/unit-a2.html?skill=attack');await page.locator('#start').click();
  await page.clock.pauseAt(new Date(Date.now()+100000));await page.locator('#action-attack').click();await page.locator('#target-f1').click();
  const committed=await saved(page);expect(await page.evaluate(()=>window.unitA2QA.frames().guardian![0]!.texture)).toBe('battle-units');
- release();await expect.poll(()=>page.evaluate(()=>window.unitA2QA.cached().length)).toBe(4);
+ release();await expect.poll(()=>page.evaluate(()=>window.unitA2QA.cached().length)).toBe(3);
  // No renderer frame elapsed: textures have arrived while this committed stage is active.
  expect(await page.evaluate(()=>window.unitA2QA.frames().guardian![0]!.texture)).toBe('battle-units');
  await page.clock.runFor(100);expect(await page.evaluate(()=>window.unitA2QA.frames().guardian![0]!.texture)).toBe('battle-units');
- await page.clock.runFor(3000);expect(await page.evaluate(()=>window.unitA2QA.frames().guardian![0]!.texture)).toBe('unit-pilot-aegis');expect(await saved(page)).toBe(committed);
+ await page.clock.runFor(3000);expect(await page.evaluate(()=>window.unitA2QA.frames().f1![0]!.texture)).toBe('unit-pilot-vargoth');
+ expect(await seed(page)).toEqual(['battle-units:0']);expect(await page.evaluate(()=>window.unitA2QA.cached())).not.toContain('unit-pilot-aegis');expect(await saved(page)).toBe(committed);
  }finally{release();await ctx.close();}
 });
 
-test('A2 encounter replacement releases Aegis and Guard textures',async({page})=>{
+test('A2 encounter replacement releases Guard textures',async({page})=>{
  await page.setViewportSize({width:390,height:844});await ready(page,'skill=attack');
- expect((await page.evaluate(()=>window.unitA2QA.cached())).sort()).toEqual(['unit-pilot-aegis','unit-pilot-eira','unit-pilot-seren','unit-pilot-vargoth']);
+ expect((await page.evaluate(()=>window.unitA2QA.cached())).sort()).toEqual(['unit-pilot-eira','unit-pilot-seren','unit-pilot-vargoth']);
  await page.evaluate(()=>window.unitA2QA.otherEncounter());
  await expect.poll(()=>page.evaluate(()=>window.unitA2QA.cached())).toEqual([]);
  await expect(page.locator('#start')).toBeEnabled();
@@ -139,15 +143,15 @@ test('A2 repeated guard art shares one texture and preserves independent actor p
  }finally{await ctx.close();}
 });
 
-test('A2 actual guardcounter braces then ripostes inside the existing reaction window',async({browser})=>{
+test('A2 actual guardcounter reacts on the held seed inside the existing reaction window',async({browser})=>{
  const ctx=await browser.newContext({viewport:{width:390,height:844},reducedMotion:'no-preference'});
  try{const page=await ctx.newPage();await page.clock.install();await ready(page,'skill=guard&scenario=counter&intent=Crushing%20Blow');await page.clock.pauseAt(new Date(Date.now()+100000));
  await page.locator('#action-guard').click();await page.locator(`#target-${await page.evaluate(()=>window.unitA2QA.target())}`).click();const committed=await saved(page);
  const turns=await page.evaluate(()=>window.unitA2QA.turns());await page.clock.runFor(stageTiming(turns[0]!,false).end+stageTiming(turns[1]!,false).contact);
- expect(await page.evaluate(()=>window.unitA2QA.frames().guardian![0]!.frame)).toBe('30');
+ expect(await seed(page)).toEqual(['battle-units:0']);
  const reaction=await page.evaluate(()=>window.unitA2QA.reactionTiming());
  expect(reaction?.duration).toBe(200);expect(reaction?.phase).toBe('reaction');
- await page.clock.runFor(80);expect(await page.evaluate(()=>window.unitA2QA.frames().guardian![0]!.frame)).toBe('5');
+ await page.clock.runFor(80);expect(await seed(page)).toEqual(['battle-units:0']);
  await page.clock.runFor(120);
  // UI contact timers can fall between RAF ticks. The controller still owns a
  // 200ms reaction; permit only its remaining render delta plus one final RAF.
@@ -157,7 +161,7 @@ test('A2 actual guardcounter braces then ripostes inside the existing reaction w
   expect(tail.remaining).toBeGreaterThanOrEqual(0);expect(tail.remaining).toBeLessThanOrEqual(1000/60+1);
   await page.clock.runFor(Math.ceil(tail.remaining)+17);
  }
- expect(await page.evaluate(()=>window.unitA2QA.frames().guardian![0]!.frame)).toBe('0');
+ expect(await seed(page)).toEqual(['battle-units:0']);expect(await page.evaluate(()=>window.unitA2QA.reactionTiming())).toBeNull();
  await page.clock.runFor(3000);expect(await saved(page)).toBe(committed);expect(await page.evaluate(()=>window.unitA2QA.state())).toEqual(await page.evaluate(()=>window.unitA2QA.expected()));
  }finally{await ctx.close();}
 });

@@ -7,8 +7,10 @@ import { readFileSync } from 'node:fs';
 const withoutHunter={...firstClash,enemies:firstClash.enemies.filter(e=>e.art!=='foe_hunter')};
 describe('optional unit art scheduling',()=>{
  it('requests only pilot art in this encounter, never slot IDs or the entire roster',()=>{
-  expect(encounterUnitSheets(firstClash)).toEqual(['lyra','hunter','eira','aegis','vargoth','seren']);
-  expect(encounterUnitSheets(withoutHunter)).toEqual(['lyra','eira','aegis','vargoth','seren']);
+  expect(encounterUnitSheets(firstClash)).toEqual(['lyra','hunter','eira','vargoth','seren']);
+  expect(encounterUnitSheets(withoutHunter)).toEqual(['lyra','eira','vargoth','seren']);
+  // Aegis is on anatomy hold: its A2 atlas is not requested until an anatomy-locked redraw is packed.
+  expect(encounterUnitSheets(firstClash)).not.toContain('aegis');
   expect(encounterUnitSheets({...withoutHunter,heroes:firstClash.heroes.filter(h=>!['tracer','weaver','guardian','healer'].includes(h.id)),enemies:[]})).toEqual([]);
  });
  it('shares one optional texture for multiple guards',()=>{
@@ -17,7 +19,7 @@ describe('optional unit art scheduling',()=>{
  });
  it('deduplicates queued/cached requests and evicts only art unused by the next encounter',()=>{
   const plan=new OptionalUnitAssets(),cache=new Set<string>();plan.setEncounter(firstClash);
-  expect(plan.request(n=>cache.has(n))).toEqual(['lyra','hunter','eira','aegis','vargoth','seren']);expect(plan.request(n=>cache.has(n))).toEqual([]);
+  expect(plan.request(n=>cache.has(n))).toEqual(['lyra','hunter','eira','vargoth','seren']);expect(plan.request(n=>cache.has(n))).toEqual([]);
   plan.setEncounter(withoutHunter);expect(plan.request(n=>cache.has(n))).toEqual([]);
   cache.add('lyra');cache.add('hunter');cache.add('eira');cache.add('aegis');cache.add('vargoth');cache.add('seren');expect(plan.complete(n=>cache.has(n))).toBe(true);
   expect(plan.request(n=>cache.has(n))).toEqual([]);expect(plan.unused(n=>cache.has(n))).toEqual(['hunter']);
@@ -26,8 +28,8 @@ describe('optional unit art scheduling',()=>{
  it('does not loop on a failed optional download and can retry on a later encounter/restart',()=>{
   const plan=new OptionalUnitAssets();plan.setEncounter(firstClash);plan.request(()=>false);plan.complete(()=>false);
   expect(plan.request(()=>false)).toEqual([]);expect(plan.complete(()=>false)).toBe(false);
-  plan.setEncounter(firstClash);expect(plan.request(()=>false)).toEqual(['lyra','hunter','eira','aegis','vargoth','seren']);
-  plan.reset();expect(plan.request(()=>false)).toEqual(['lyra','hunter','eira','aegis','vargoth','seren']);
+  plan.setEncounter(firstClash);expect(plan.request(()=>false)).toEqual(['lyra','hunter','eira','vargoth','seren']);
+  plan.reset();expect(plan.request(()=>false)).toEqual(['lyra','hunter','eira','vargoth','seren']);
  });
  it('keeps all logical frames and pivots while cutting decoded pilot memory by at least 75%',()=>{
   let decoded=0;

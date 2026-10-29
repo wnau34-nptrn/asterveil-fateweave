@@ -1,0 +1,239 @@
+{
+ "tolerance": 0.12,
+ "minInliers": 12,
+ "report": {
+  "aegis": [
+   {
+    "frame": 0,
+    "height": 180,
+    "scale": 1.0,
+    "inliers": 489,
+    "idle": true,
+    "status": "idle"
+   },
+   {
+    "frame": 1,
+    "height": 180,
+    "scale": 1.0,
+    "inliers": 489,
+    "idle": true,
+    "status": "idle"
+   },
+   {
+    "frame": 2,
+    "height": 180,
+    "scale": 1.375,
+    "inliers": 24,
+    "status": "drift"
+   },
+   {
+    "frame": 3,
+    "height": 179,
+    "scale": 1.369,
+    "inliers": 17,
+    "status": "drift"
+   },
+   {
+    "frame": 4,
+    "height": 180,
+    "scale": 1.254,
+    "inliers": 14,
+    "status": "drift"
+   },
+   {
+    "frame": 5,
+    "height": 179,
+    "scale": 1.185,
+    "inliers": 6,
+    "status": "not-measured"
+   },
+   {
+    "frame": 6,
+    "height": 179,
+    "scale": 1.634,
+    "inliers": 3,
+    "status": "not-measured"
+   },
+   {
+    "frame": 7,
+    "height": 182,
+    "scale": 1.354,
+    "inliers": 45,
+    "status": "drift"
+   },
+   {
+    "frame": 8,
+    "height": 180,
+    "scale": 1.0,
+    "inliers": 489,
+    "idle": true,
+    "status": "idle"
+   },
+   {
+    "frame": 9,
+    "height": 180,
+    "scale": 1.0,
+    "inliers": 489,
+    "idle": true,
+    "status": "idle"
+   },
+   {
+    "frame": 10,
+    "height": 184,
+    "scale": 1.408,
+    "inliers": 18,
+    "status": "drift"
+   },
+   {
+    "frame": 11,
+    "height": 182,
+    "scale": 1.387,
+    "inliers": 13,
+    "status": "drift"
+   },
+   {
+    "frame": 12,
+    "height": 182,
+    "scale": 1.467,
+    "inliers": 9,
+    "status": "not-measured"
+   },
+   {
+    "frame": 13,
+    "height": 184,
+    "scale": 1.522,
+    "inliers": 7,
+    "status": "not-measured"
+   },
+   {
+    "frame": 14,
+    "height": 180,
+    "scale": 1.356,
+    "inliers": 18,
+    "status": "drift"
+   },
+   {
+    "frame": 15,
+    "height": 183,
+    "scale": 1.37,
+    "inliers": 39,
+    "status": "drift"
+   },
+   {
+    "frame": 16,
+    "height": 180,
+    "scale": 1.0,
+    "inliers": 489,
+    "idle": true,
+    "status": "idle"
+   },
+   {
+    "frame": 17,
+    "height": 171,
+    "scale": 1.577,
+    "inliers": 5,
+    "status": "not-measured"
+   },
+   {
+    "frame": 18,
+    "height": 163,
+    "scale": 1.408,
+    "inliers": 5,
+    "status": "not-measured"
+   },
+   {
+    "frame": 19,
+    "height": 160,
+    "scale": 1.364,
+    "inliers": 4,
+    "status": "not-measured"
+   },
+   {
+    "frame": 20,
+    "height": 139,
+    "scale": 1.575,
+    "inliers": 3,
+    "status": "not-measured"
+   },
+   {
+    "frame": 21,
+    "height": 121,
+    "scale": 1.906,
+    "inliers": 4,
+    "status": "not-measured"
+   },
+   {
+    "frame": 22,
+    "height": 180,
+    "scale": 1.0,
+    "inliers": 489,
+    "idle": true,
+    "status": "idle"
+   },
+   {
+    "frame": 23,
+    "height": 163,
+    "scale": 1.671,
+    "inliers": 8,
+    "status": "not-measured"
+   },
+   {
+    "frame": 24,
+    "height": 169,
+    "scale": 1.356,
+    "inliers": 11,
+    "status": "not-measured"
+   },
+   {
+    "frame": 25,
+    "height": 168,
+    "scale": 1.287,
+    "inliers": 11,
+    "status": "not-measured"
+   },
+   {
+    "frame": 26,
+    "height": 174,
+    "scale": 1.335,
+    "inliers": 12,
+    "status": "drift"
+   },
+   {
+    "frame": 27,
+    "height": 177,
+    "scale": 1.388,
+    "inliers": 13,
+    "status": "drift"
+   },
+   {
+    "frame": 28,
+    "height": 180,
+    "scale": 1.38,
+    "inliers": 33,
+    "status": "drift"
+   },
+   {
+    "frame": 29,
+    "height": 180,
+    "scale": 1.0,
+    "inliers": 489,
+    "idle": true,
+    "status": "idle"
+   },
+   {
+    "frame": 30,
+    "height": 171,
+    "scale": 1.577,
+    "inliers": 5,
+    "status": "not-measured"
+   },
+   {
+    "frame": 31,
+    "height": 170,
+    "scale": 1.62,
+    "inliers": 6,
+    "status": "not-measured"
+   }
+  ]
+ }
+}
