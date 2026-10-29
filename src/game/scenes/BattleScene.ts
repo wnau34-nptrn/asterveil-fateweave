@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { anatomyHold, unitKey, unitDisplayRatio, unitAtlasUrls, unitClip, unitRelease, type Release, type UnitClip, type UnitSheet } from '../visuals/unit-frames';
+import { anatomyHold, unitKey, unitDisplayRatio, unitAtlasUrls, unitClip, unitDefinition, unitRelease, CORPSE_ALPHA, type Release, type UnitClip, type UnitSheet } from '../visuals/unit-frames';
 import { basicCues, basicPrepare, basicContact, type BasicCue } from '../visuals/basic-attack-fx';
 import { BOSS_ATLAS, bossAtlasUrls, bossCues, bossPrepare, bossContact, chargeHolds, usesBossSignature, type BossPoint } from '../visuals/boss-signature-fx';
 import { OptionalUnitAssets } from '../visuals/optional-unit-assets';
@@ -157,6 +157,10 @@ export class BattleScene extends Phaser.Scene {
     if (!this.load.isLoading() && this.optionalUnits.complete(this.hasOptionalUnit)) this.optionalDirty = true;
   }
   private bossArt = false;
+  private corpseAlpha(id: string): number {
+    const art = artOf(this.encounter, id), key = unitKey(art);
+    return key && this.textures.exists(key) ? unitDefinition(art)?.corpseAlpha ?? CORPSE_ALPHA : CORPSE_ALPHA;
+  }
   // The actor whose shown stage has passed contact (its `after` state is on screen).
   private resolvedActor: string | undefined;
   // AV07: persistent charge telegraphs, one per boss holding a charged release. Derived from the state shown, so a
@@ -239,7 +243,7 @@ export class BattleScene extends Phaser.Scene {
       // AV08: an actor that falls on this frame keeps its full body through the down motion; play() dims it afterwards.
       if (oldHp !== undefined && oldHp > 0 && hp <= 0 && !this.reducedMotion) { this.falling.add(id); body.setAlpha(involved ? 1 : .55); continue; }
       if (hp > 0) this.falling.delete(id);
-      if (!this.falling.has(id)) body.setAlpha(hp <= 0 ? .28 : involved ? 1 : .55);
+      if (!this.falling.has(id)) body.setAlpha(hp <= 0 ? this.corpseAlpha(id) : involved ? 1 : .55);
     }
   }
   private paint(): void {
@@ -288,7 +292,7 @@ export class BattleScene extends Phaser.Scene {
     this.bodies.set(id, body);
     const info = this.add.container(x, y).setDepth(this.viewH + 1); this.layer!.add(info);
     const involved = !this.view!.activeActorId || id === this.view!.activeActorId || id === this.view!.activeTargetId;
-    body.setAlpha(hp <= 0 ? 0.28 : involved ? 1 : 0.55);
+    body.setAlpha(hp <= 0 ? this.corpseAlpha(id) : involved ? 1 : 0.55);
     info.setAlpha(hp <= 0 ? 0.4 : involved ? 1 : 0.75);
     const g = this.add.graphics(); body.add(g);
     const selected = this.view!.heroId === id;
@@ -365,7 +369,7 @@ export class BattleScene extends Phaser.Scene {
     for (const timer of this.effectTimers) timer.remove(false);
     this.effectTimers.clear();
     if (this.shaking) { this.shaking.stop(); this.shaking = undefined; }
-    for (const id of this.falling) this.bodies.get(id)?.setAlpha(.28);
+    for (const id of this.falling) this.bodies.get(id)?.setAlpha(this.corpseAlpha(id));
     this.falling.clear(); this.placed = []; this.resolvedActor = undefined;
     for (const [id, body] of this.bodies) {
       this.tweens.killTweensOf(body);
@@ -724,7 +728,7 @@ export class BattleScene extends Phaser.Scene {
     for (const id of this.falling) {
       const body = this.bodies.get(id); if (!body) continue;
       const hold = Math.min(this.quiet ? 160 : 320, Math.max(0, remainingMs - 160)), fade = Math.max(1, Math.min(160, remainingMs - hold - 20));
-      this.later(hold, () => { if (body.active) this.tweens.add({ targets: body, alpha: .28, duration: fade }); });
+      this.later(hold, () => { if (body.active) this.tweens.add({ targets: body, alpha: this.corpseAlpha(id), duration: fade }); });
     }
     const rows = new Map<string, number>();
     const say = (id: string, copy: string, color = '#edf4ff') => {

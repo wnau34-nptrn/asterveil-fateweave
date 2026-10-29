@@ -17,6 +17,9 @@ interface UnitDefinition {
   intents?: Readonly<Record<string, UnitClip>>;
   // Looping hover frames and the per-frame time; the static idle (frame 0) remains the fallback.
   idleLoop?: { frames: readonly number[]; frameMs: number };
+  // Body alpha once downed while its frames are drawn. A collapse painted as fading out (A8 Rift Wisp) is already its
+  // corpse emphasis and must not be dimmed a second time. The static seed fallback always uses CORPSE_ALPHA.
+  corpseAlpha?: number;
   // Identity-specific frame ranges. A clip absent here uses the shared layout in `sequence`.
   clips?: Readonly<Partial<Record<UnitClip, FrameRange>>>;
   // Identity-specific reaction frames (block/counter, or a non-standard hit/down layout).
@@ -31,6 +34,7 @@ export interface FrameRange { prepare: readonly number[]; recover: readonly numb
 export interface Release { frame: number; at: number; point: readonly [number, number] }
 // Fraction of the windup at which a releasing clip lets go: late enough to show the draw, early enough for a readable flight.
 export const RELEASE_AT = .55;
+export const CORPSE_ALPHA = .28;
 export const unitRegistry = {
   // AV02: finisher (overhead cut) and sweep (wide cut) use the slash clip, lunge the thrust clip; the parry riposte is the
   // thrust (12 → 13). Mark and the parry stance have no matching gesture yet (brief CODEX-AV02-GESTURES-TH) and stay procedural.
@@ -81,7 +85,7 @@ export const unitRegistry = {
   // seed / bob up / bob down) and its down frames keep the painted fade. Hit 17..18 and down 19..21 use the shared layout; 21 is the held collapse.
   foe_golem: { sheet: 'golem', displayRatio: 2, intents: { 'Crystal Fist': 'attack', 'Stone Fist': 'attack', 'Veil Quake': 'skill' } },
   foe_rift_channeler: { sheet: 'channeler', displayRatio: 2, intents: { 'Rift Beam': 'attack', 'Rift Bolt': 'attack' } },
-  foe_rift_wisp: { sheet: 'wisp', displayRatio: 2, intents: { 'Star Flame': 'attack' }, idleLoop: { frames: [22, 23, 24], frameMs: 160 } },
+  foe_rift_wisp: { sheet: 'wisp', displayRatio: 2, intents: { 'Star Flame': 'attack' }, idleLoop: { frames: [22, 23, 24], frameMs: 160 }, corpseAlpha: 1 },
   foe_shard_crawler: { sheet: 'crawler', displayRatio: 2, intents: { 'Crystal Stab': 'attack' } },
 } as const satisfies Record<string, UnitDefinition>;
 // Anatomy hold (animation-visual-audit-2026-10-29): an identity whose generated poses do not match its approved
