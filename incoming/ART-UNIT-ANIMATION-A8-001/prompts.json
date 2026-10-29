@@ -1,0 +1,92 @@
+[
+  {
+    "id": "quake3",
+    "prompt": "Create a SINGLE HORIZONTAL animation strip of exactly 6 SMALL figures of the EXACT reference sprite facing LEFT. IMPORTANT COMPOSITION: each figure only 180 pixels tall in a 2048x1024 canvas, huge transparent margins, at least 100 pixels clear between silhouettes. Tiny sprites on a large transparent canvas; DO NOT ZOOM IN OR FILL CANVAS. No lighting effects, NO GLOW OUTSIDE SILHOUETTES, no ground, dust, text, backdrop or shadow. Real transparency. Keep same size and anatomy, every appendage attached and visible, consistent foot line. VEIL QUAKE. 1 ready original. 2 head DOWN and body coils back, fists draw behind hips. 3 head stays LOW but both attached arms lift fists OVERHEAD. 4 unmistakable two-fist overhead SLAM to floor LEFT, bent torso and feet planted. 5 fists remain grounded low follow-through. 6 original ready. Do not make anticipation taller torso; only arms overhead.",
+    "source": "source-sheets/quake3.png",
+    "status": "selected for final r1"
+  },
+  {
+    "id": "star3",
+    "prompt": "Create a SINGLE HORIZONTAL animation strip of exactly 6 SMALL figures of the EXACT reference sprite facing LEFT. IMPORTANT COMPOSITION: each figure only 180 pixels tall in a 2048x1024 canvas, huge transparent margins, at least 100 pixels clear between silhouettes. Tiny sprites on a large transparent canvas; DO NOT ZOOM IN OR FILL CANVAS. No lighting effects, NO GLOW OUTSIDE SILHOUETTES, no ground, dust, text, backdrop or shadow. Real transparency. Keep same size and anatomy, every appendage attached and visible, consistent foot line. STAR FLAME. No limbs added. 1 original hovering. 2 face core coils BACK RIGHT and DOWN, flame tail folds inward. 3 deeper low/right anticipation, head tilted down. 4 unmistakable body cast, face snaps LEFT and entire attached tail streams RIGHT. 5 sustained forward follow-through. 6 original ready. No separate light, flame balls or VFX; the flame is the body itself.",
+    "source": "source-sheets/star3.png",
+    "status": "selected for final r1"
+  },
+  {
+    "id": "punch",
+    "prompt": "Edit this reference layout into ONE complete horizontal animation strip. Preserve exact original character identity, LEFT facing, palette, anatomy, attached limbs, equipment and proportions. True transparent background. Keep SIX figures centered in six equal slots, SAME SCALE as template, wide empty margins on all four sides, especially outer left/right. Do not enlarge figures to fill canvas. At least 15% empty horizontal space per slot. No VFX, projectiles, dust, ground, labels. Fixed feet baseline. Each action: ready, windup low/back, deeper coiled anticipation, unmistakable contact, followthrough, recover ready. CRYSTAL FIST / STONE FIST. 1 seed ready. 2 rotates chest back RIGHT, heavy leading fist drawing BACK. 3 head lowers further and fist tightly tucked at hip in deep coil. 4 enormous LEFTWARD horizontal punch at chest height with arm fully extended and attached, rear fist stays attached near torso. 5 follows punch forward. 6 recovers seed ready. This is one fist HORIZONTAL strike, visibly different from overhead double-fist slam.",
+    "source": "source-sheets/punch.png",
+    "status": "selected for final r1"
+  },
+  {
+    "id": "bolt",
+    "prompt": "One horizontal strip of exactly 6 full-body animation sprites of EXACT referenced original unit, facing LEFT throughout, same scale/style/anatomy/palette. TRUE transparent RGBA only, no glow outside body, no scenery, no VFX, no labels. Use small figures with very wide gutters and outer margins. All limbs/tail tips visible attached and unclipped. Feet baseline identical, body size constant. RIFT BOLT (actual game's intent also called Rift Beam). 1 seed ready. 2 knees bent head lowers, open hands draw back near abdomen. 3 deeper crouched coil, both hands cup closely at chest. 4 release CONTACT pose: BOTH OPEN HANDS thrust forcefully LEFT with arms attached and elbows extending. 5 leaning left hands extended. 6 recovers ready. No emitted energy or light beyond original small hand crystal.",
+    "source": "source-sheets/bolt.png",
+    "status": "selected for final r1"
+  },
+  {
+    "id": "stab",
+    "prompt": "One horizontal strip of exactly 6 full-body animation sprites of EXACT referenced original unit, facing LEFT throughout, same scale/style/anatomy/palette. TRUE transparent RGBA only, no glow outside body, no scenery, no VFX, no labels. Use small figures with very wide gutters and outer margins. All limbs/tail tips visible attached and unclipped. Feet baseline identical, body size constant. CRYSTAL STAB. Exactly original EIGHT-legged crystal spider anatomy. 1 seed ready. 2 rear legs brace, face and abdomen lower backward RIGHT, front legs lift bent toward face. 3 deeper low anticipation and foremost leg tucked tightly ready. 4 CONTACT front pair spear-like crystal legs stab forcefully LEFT/down into ground in front, connected to thorax. 5 follows through low, front tips grounded. 6 recovers seed ready. Keep body segment sizes consistent, supporting feet grounded on fixed baseline.",
+    "source": "source-sheets/stab.png",
+    "status": "selected for final r1"
+  },
+  {
+    "id": "hover",
+    "prompt": "One horizontal strip of exactly 4 full-body animation sprites of EXACT referenced original unit, facing LEFT throughout, same scale/style/anatomy/palette. TRUE transparent RGBA only, no glow outside body, no scenery, no VFX, no labels. Use small figures with very wide gutters and outer margins. All limbs/tail tips visible attached and unclipped. Feet baseline identical, body size constant. HOVER LOOP. Exactly FOUR frames, 1 seed upright. 2 subtly bob up, tail curl inward. 3 subtly bob down, tail unfurls. 4 seed upright returning to FIRST. Preserve real floating height; no floor. Face stays left and body core does not change size. No added limbs or VFX.",
+    "source": "source-sheets/hover.png",
+    "status": "selected for final r1"
+  },
+  {
+    "id": "crawlerdown2",
+    "prompt": "Create a SINGLE HORIZONTAL animation strip of exactly 4 SMALL figures of the EXACT reference sprite facing LEFT. IMPORTANT COMPOSITION: each figure only 180 pixels tall in a 2048x1024 canvas, huge transparent margins, at least 100 pixels clear between silhouettes. Tiny sprites on a large transparent canvas; DO NOT ZOOM IN OR FILL CANVAS. No lighting effects, NO GLOW OUTSIDE SILHOUETTES, no ground, dust, text, backdrop or shadow. Real transparency. Keep same size and anatomy, every appendage attached and visible, consistent foot line. DOWN. 1 original ready. 2 knees buckle, abdomen drops halfway. 3 all legs fold low and head lies facing LEFT on floor. 4 grounded prone hold with closed eyes. NEVER STAND AGAIN, do not crop rear legs.",
+    "source": "source-sheets/crawlerdown2.png",
+    "status": "selected for final r1"
+  },
+  {
+    "id": "foe_golem-hit",
+    "prompt": "Exactly FOUR evenly spaced full-body sprites in ONE horizontal strip of the EXACT referenced foe_golem, facing LEFT. HIT REACTION only: 1 reference ready. 2 flinches backward RIGHT with head recoiling and knees/body slightly lowered, all limbs remain attached. 3 holds low braced recoil, eyes squint. 4 returns to ready. Same anatomy, body size, crystal/rock/flame detail, palette, proportions as seed. Wisp has NO limbs, preserves original floating height; others feet stay on original sole baseline. Transparent RGBA background, NO VFX, no glow outside body, no dust, no text, no projectiles, no scenery. Keep ALL figures completely inside canvas with wide clear gutters and generous outer margins. Make figures smaller if needed. Preserve silhouette identity.",
+    "source": "source-sheets/foe_golem-hit.png",
+    "status": "selected for final r1"
+  },
+  {
+    "id": "foe_golem-down",
+    "prompt": "One horizontal strip exactly FOUR full-body frames of exact referenced foe_golem, DOWN/DEFEAT reaction. Preserve original LEFT facing, scale, proportions, palette, features, equipment and crystal placements. 1 exact original standing ready. 2 knees/legs buckle, body sinks and head lowers. 3 collapses onto side LEFT with torso and limbs folded naturally and ALL limbs still attached. 4 stays lying on ground LEFT-facing, low grounded defeated hold with eyes dark/closed. NEVER recovers or stands. Keep solid body anatomy intact, no scattered shards. Transparent RGBA only, NO VFX, no glow outside body, no dust, no projectiles, no floor. Wide transparent gutters, lots of outer margins, ALL body and limbs visible inside canvas even the lying poses. Body SAME SIZE across frames; lying pose is wider, not smaller. Single row, no text.",
+    "source": "source-sheets/foe_golem-down.png",
+    "status": "selected for final r1"
+  },
+  {
+    "id": "foe_rift_channeler-hit",
+    "prompt": "Exactly FOUR evenly spaced full-body sprites in ONE horizontal strip of the EXACT referenced foe_rift_channeler, facing LEFT. HIT REACTION only: 1 reference ready. 2 flinches backward RIGHT with head recoiling and knees/body slightly lowered, all limbs remain attached. 3 holds low braced recoil, eyes squint. 4 returns to ready. Same anatomy, body size, crystal/rock/flame detail, palette, proportions as seed. Wisp has NO limbs, preserves original floating height; others feet stay on original sole baseline. Transparent RGBA background, NO VFX, no glow outside body, no dust, no text, no projectiles, no scenery. Keep ALL figures completely inside canvas with wide clear gutters and generous outer margins. Make figures smaller if needed. Preserve silhouette identity.",
+    "source": "source-sheets/foe_rift_channeler-hit.png",
+    "status": "selected for final r1"
+  },
+  {
+    "id": "foe_rift_channeler-down",
+    "prompt": "One horizontal strip exactly FOUR full-body frames of exact referenced foe_rift_channeler, DOWN/DEFEAT reaction. Preserve original LEFT facing, scale, proportions, palette, features, equipment and crystal placements. 1 exact original standing ready. 2 knees/legs buckle, body sinks and head lowers. 3 collapses onto side LEFT with torso and limbs folded naturally and ALL limbs still attached. 4 stays lying on ground LEFT-facing, low grounded defeated hold with eyes dark/closed. NEVER recovers or stands. Keep solid body anatomy intact, no scattered shards. Transparent RGBA only, NO VFX, no glow outside body, no dust, no projectiles, no floor. Wide transparent gutters, lots of outer margins, ALL body and limbs visible inside canvas even the lying poses. Body SAME SIZE across frames; lying pose is wider, not smaller. Single row, no text.",
+    "source": "source-sheets/foe_rift_channeler-down.png",
+    "status": "selected for final r1"
+  },
+  {
+    "id": "foe_rift_wisp-hit",
+    "prompt": "Exactly FOUR evenly spaced full-body sprites in ONE horizontal strip of the EXACT referenced foe_rift_wisp, facing LEFT. HIT REACTION only: 1 reference ready. 2 flinches backward RIGHT with head recoiling and knees/body slightly lowered, all limbs remain attached. 3 holds low braced recoil, eyes squint. 4 returns to ready. Same anatomy, body size, crystal/rock/flame detail, palette, proportions as seed. Wisp has NO limbs, preserves original floating height; others feet stay on original sole baseline. Transparent RGBA background, NO VFX, no glow outside body, no dust, no text, no projectiles, no scenery. Keep ALL figures completely inside canvas with wide clear gutters and generous outer margins. Make figures smaller if needed. Preserve silhouette identity.",
+    "source": "source-sheets/foe_rift_wisp-hit.png",
+    "status": "selected for final r1"
+  },
+  {
+    "id": "foe_rift_wisp-down",
+    "prompt": "One horizontal strip exactly FOUR full-body frames of exact referenced foe_rift_wisp, DOWN/DEFEAT reaction. Preserve original LEFT facing, scale, proportions, palette, features, equipment and crystal placements. 1 original upright hovering. 2 face core dips and tail droops. 3 sinks down near ground with fading body, eyes almost closed. 4 completely sunk low curled horizontal remnant with closed eyes; NO standing or recovery, grounded hold. Body stays connected, no scattered particles. Transparent RGBA only, NO VFX, no glow outside body, no dust, no projectiles, no floor. Wide transparent gutters, lots of outer margins, ALL body and limbs visible inside canvas even the lying poses. Body SAME SIZE across frames; lying pose is wider, not smaller. Single row, no text.",
+    "source": "source-sheets/foe_rift_wisp-down.png",
+    "status": "selected for final r1"
+  },
+  {
+    "id": "foe_shard_crawler-hit",
+    "prompt": "Exactly FOUR evenly spaced full-body sprites in ONE horizontal strip of the EXACT referenced foe_shard_crawler, facing LEFT. HIT REACTION only: 1 reference ready. 2 flinches backward RIGHT with head recoiling and knees/body slightly lowered, all limbs remain attached. 3 holds low braced recoil, eyes squint. 4 returns to ready. Same anatomy, body size, crystal/rock/flame detail, palette, proportions as seed. Wisp has NO limbs, preserves original floating height; others feet stay on original sole baseline. Transparent RGBA background, NO VFX, no glow outside body, no dust, no text, no projectiles, no scenery. Keep ALL figures completely inside canvas with wide clear gutters and generous outer margins. Make figures smaller if needed. Preserve silhouette identity.",
+    "source": "source-sheets/foe_shard_crawler-hit.png",
+    "status": "selected for final r1"
+  },
+  {
+    "id": "foe_shard_crawler-down",
+    "prompt": "One horizontal strip exactly FOUR full-body frames of exact referenced foe_shard_crawler, DOWN/DEFEAT reaction. Preserve original LEFT facing, scale, proportions, palette, features, equipment and crystal placements. 1 exact original standing ready. 2 knees/legs buckle, body sinks and head lowers. 3 collapses onto side LEFT with torso and limbs folded naturally and ALL limbs still attached. 4 stays lying on ground LEFT-facing, low grounded defeated hold with eyes dark/closed. NEVER recovers or stands. Keep solid body anatomy intact, no scattered shards. Transparent RGBA only, NO VFX, no glow outside body, no dust, no projectiles, no floor. Wide transparent gutters, lots of outer margins, ALL body and limbs visible inside canvas even the lying poses. Body SAME SIZE across frames; lying pose is wider, not smaller. Single row, no text.",
+    "source": null,
+    "status": "rejected; replaced by crawlerdown2"
+  }
+]

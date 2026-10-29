@@ -196,5 +196,41 @@
     "frames": 22,
     "decodedBytes": 1658880,
     "downloadBytes": 456125
+  },
+  "golem": {
+    "image": "golem_a8.347332eb22cb.webp",
+    "atlas": "golem_a8.5b47da42b1d4.json",
+    "width": 768,
+    "height": 1125,
+    "frames": 22,
+    "decodedBytes": 3456000,
+    "downloadBytes": 1077307
+  },
+  "channeler": {
+    "image": "channeler_a8.e78036e65eec.webp",
+    "atlas": "channeler_a8.030af2894ed6.json",
+    "width": 1280,
+    "height": 416,
+    "frames": 22,
+    "decodedBytes": 2129920,
+    "downloadBytes": 547872
+  },
+  "wisp": {
+    "image": "wisp_a8.f9b9ef229c93.webp",
+    "atlas": "wisp_a8.a22ecd578279.json",
+    "width": 1024,
+    "height": 334,
+    "frames": 25,
+    "decodedBytes": 1368064,
+    "downloadBytes": 336175
+  },
+  "crawler": {
+    "image": "crawler_a8.4c402f135a49.webp",
+    "atlas": "crawler_a8.61d4d6d4d1b5.json",
+    "width": 512,
+    "height": 664,
+    "frames": 22,
+    "decodedBytes": 1359872,
+    "downloadBytes": 386769
   }
 }
