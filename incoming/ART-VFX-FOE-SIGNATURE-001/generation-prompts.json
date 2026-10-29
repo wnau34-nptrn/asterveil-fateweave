@@ -1,0 +1,63 @@
+{
+  "original_art": true,
+  "prompts": [
+    {
+      "source": "source/seeds-embers.png",
+      "tool": "OpenAI ImageGen",
+      "transparent_background": true,
+      "prompt": "Original hand-painted fantasy combat VFX sprite asset sheet, true transparent background. Exactly 4 columns x 2 rows, equal square cells, wide empty transparent gutters. NO text, letters, symbols, borders, characters, floor rings, shadows or background. Each cell separate isolated energy painting with generous padding, nothing touching cell edge. Direction LEFT: foe on right shoots toward hero on left. Top row SEED SPARK: pale yellow dandelion parachute seeds, dark plum ink edging for contrast against gold armour. Cells: 1 small coiled seed bud prepare, 2 leftward stream of 5 recognisable dandelion seeds with luminous pale yellow parachute hairs and dark stems, 3 compact chest impact seed tuft spray, 4 sparse fading seed husks. Bottom row EMBER SPARK: orange ember spit with dark red charred edges, distinct from seeds. Cells: 1 tight glowing ember mouthful, 2 tapered LEFT-pointing irregular spit flame with black-red crust and orange molten core, 3 compact ember splash, 4 three cooling ember wisps. Painted jewel-like stylized game effects, strong bold silhouette, controlled glow, clearly readable at 50px, normal alpha blending. All layers straight RGBA. This is original art for Asterveil Fateweave, use no existing franchise artwork.",
+      "generated_on": "2026-10-29",
+      "untouched": true
+    },
+    {
+      "source": "source/spores.png",
+      "tool": "OpenAI ImageGen",
+      "transparent_background": true,
+      "prompt": "Original hand-painted fantasy combat VFX asset sheet, true transparent background. EXACT 4 columns x 2 rows of equal square cells, isolated art in each cell, wide clear transparent gutters and margins. Each row ONE move, columns prepare / peak projectile / independent peak impact / settle. NO text, labels, letters, real symbols, characters, faces, background, floor shadows or rings. Energy moves shoot LEFT from foe on right to hero on left, impact on chest, compact low vertical extent to avoid face. Bold jewel-like painted silhouette readable at 50px and normal alpha over BOTH dark navy and bright gold armour. Dark saturated outer contour + light coloured internal highlights, do not rely on additive blending. Nothing touching cell borders. Top row SPORE HEX, teal curse cloud: coiled luminous spore knot; leftward hooked crescent cloud with large teal nodules and deep navy edges; compact thorny spore knot impact; broken teal curling spores. Bottom row SPORE DUST, soft desaturated sage spore puff distinctly rounded and gentle: small soft puff; leftward broad rounded lobe cloud with pale cream spore beads and dark green edges; compact rounded puff impact; sparse falling round spores. All original artwork for Fateweave, no franchise art.",
+      "generated_on": "2026-10-29",
+      "untouched": true
+    },
+    {
+      "source": "source/star-rune.png",
+      "tool": "OpenAI ImageGen",
+      "transparent_background": true,
+      "prompt": "Original hand-painted fantasy combat VFX asset sheet, true transparent background. EXACT 4 columns x 2 rows of equal square cells, isolated art in each cell, wide clear transparent gutters and margins. Each row ONE move, columns prepare / peak projectile / independent peak impact / settle. NO text, labels, letters, real symbols, characters, faces, background, floor shadows or rings. Energy moves shoot LEFT from foe on right to hero on left, impact on chest, compact low vertical extent to avoid face. Bold jewel-like painted silhouette readable at 50px and normal alpha over BOTH dark navy and bright gold armour. Dark saturated outer contour + light coloured internal highlights, do not rely on additive blending. Nothing touching cell borders. Top row STAR FLAME, violet-white star fire: tiny violet flame kernel; leftward comet with unmistakable small four-point star fire at LEFT tip, deep purple edges; compact star-fire impact; three cooling violet fire tongues. Bottom row RUNE LASH, thread whip of invented abstract fragments, NO actual runes or letters: coiled magenta thread; slender LEFT-lashing curved whip with angular disconnected diamond fragments tied to it; small curled thread snap impact; unravelling thread ends. All original artwork for Fateweave, no franchise art.",
+      "generated_on": "2026-10-29",
+      "untouched": true
+    },
+    {
+      "source": "source/rift-shard.png",
+      "tool": "OpenAI ImageGen",
+      "transparent_background": true,
+      "prompt": "Original hand-painted fantasy combat VFX asset sheet, true transparent background. EXACT 4 columns x 2 rows of equal square cells, isolated art in each cell, wide clear transparent gutters and margins. Each row ONE move, columns prepare / peak projectile / independent peak impact / settle. NO text, labels, letters, real symbols, characters, faces, background, floor shadows or rings. Energy moves shoot LEFT from foe on right to hero on left, impact on chest, compact low vertical extent to avoid face. Bold jewel-like painted silhouette readable at 50px and normal alpha over BOTH dark navy and bright gold armour. Dark saturated outer contour + light coloured internal highlights, do not rely on additive blending. Nothing touching cell borders. Top row RIFT NEEDLE, thin dark rift needle: pinched black-purple slit; exceptionally THIN straight LEFT-pointing dark obsidian needle with lavender edge and two sparse filament trails; tiny needle puncture with short violet fissures; closing hairline tear. Bottom row SHARD BURST, cyan crystal shards: clustered cyan crystal charge; five sharp faceted cyan shards fanning LEFT with navy outlines; compact angular crystalline shatter impact; falling cyan crystal chips. All original artwork for Fateweave, no franchise art.",
+      "generated_on": "2026-10-29",
+      "untouched": true
+    },
+    {
+      "source": "source/bolt-quake.png",
+      "tool": "OpenAI ImageGen",
+      "transparent_background": true,
+      "prompt": "Original hand-painted fantasy combat VFX asset sheet, true transparent background. EXACT 4 columns x 2 rows of equal square cells, isolated art in each cell, wide clear transparent gutters and margins. Each row ONE move, columns prepare / peak projectile / independent peak impact / settle. NO text, labels, letters, real symbols, characters, faces, background, floor shadows or rings. Energy moves shoot LEFT from foe on right to hero on left, impact on chest, compact low vertical extent to avoid face. Bold jewel-like painted silhouette readable at 50px and normal alpha over BOTH dark navy and bright gold armour. Dark saturated outer contour + light coloured internal highlights, do not rely on additive blending. Nothing touching cell borders. Top row FOE RIFT BOLT, dark rift bolt clearly distinct from a thin needle or a normal mage fireball: dense torn purple-black knot; broad LEFT-pointing jagged serrated void wedge with split violet contour, black core, forked ragged wake; compact torn black-violet rupture impact; collapsing jagged void fragments. Bottom row VEIL QUAKE, physical GROUND effect, floor allowed ONLY this row: small bunched cracked stone energy; low horizontal LEFT-travelling jagged crack wave with stone chips and deep violet fissures; low ground fracture burst with lifted angular rocks; grounded broken crack fading. No ellipse, no ring. All original artwork for Fateweave, no franchise art.",
+      "generated_on": "2026-10-29",
+      "untouched": true
+    },
+    {
+      "source": "source/dust.png",
+      "tool": "OpenAI ImageGen",
+      "transparent_background": true,
+      "prompt": "Use ONLY the bottom row soft sage SPORE DUST look as reference. Create a new sheet of FOUR isolated components in ONE horizontal row: small prepare puff; LEFT-travelling soft round sage cloud with cream spore beads; compact chest impact rounded puff; sparse fading soft spores. No teal hex from top row. CRITICAL: Every component completely separate with at least 120px of EMPTY transparent space between its outermost pixels and next component. Each fits within its own isolated compact square with HUGE transparent margins. Never overlap or touch, no connecting trails between components. Exactly four independent paintings, fully contained, one row centered vertically, transparent background. No text, letters, runes, symbols, frames, characters or ellipses. Preserve original painted fantasy jewel-like texture and palette, strong normal-alpha contrast on navy and gold. Original artwork only.",
+      "reference": "source/spores.png",
+      "generated_on": "2026-10-29",
+      "untouched": true
+    },
+    {
+      "source": "source/quake.png",
+      "tool": "OpenAI ImageGen",
+      "transparent_background": true,
+      "prompt": "Use ONLY the bottom row VEIL QUAKE ground crack look as reference. Create a new sheet of FOUR isolated components in ONE horizontal row: small ground crack charge; low LEFT-travelling crack wave with violet fissures and physical stone chips; low cracked stone impact; grounded fading fissure. No top-row bolt, no airborne fireballs. CRITICAL: Every component completely separate with at least 120px of EMPTY transparent space between its outermost pixels and next component. Each fits within its own isolated compact square with HUGE transparent margins. Never overlap or touch, no connecting trails between components. Exactly four independent paintings, fully contained, one row centered vertically, transparent background. No text, letters, runes, symbols, frames, characters or ellipses. Preserve original painted fantasy jewel-like texture and palette, strong normal-alpha contrast on navy and gold. Original artwork only.",
+      "reference": "source/bolt-quake.png",
+      "generated_on": "2026-10-29",
+      "untouched": true
+    }
+  ]
+}

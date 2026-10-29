@@ -1,0 +1,522 @@
+{
+  "ember-spark_impact": {
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "bounds": [
+      16,
+      16,
+      240,
+      239
+    ],
+    "anchor": "target.chest"
+  },
+  "ember-spark_prepare": {
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "bounds": [
+      26,
+      16,
+      229,
+      240
+    ],
+    "anchor": "caster.chest"
+  },
+  "ember-spark_settle": {
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "bounds": [
+      16,
+      46,
+      240,
+      209
+    ],
+    "anchor": "target.chest"
+  },
+  "ember-spark_travel": {
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "bounds": [
+      16,
+      70,
+      240,
+      185
+    ],
+    "anchor": "caster.chest \u2192 target.chest"
+  },
+  "rift-bolt-foe_impact": {
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "bounds": [
+      16,
+      20,
+      240,
+      236
+    ],
+    "anchor": "target.chest"
+  },
+  "rift-bolt-foe_prepare": {
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "bounds": [
+      23,
+      16,
+      233,
+      240
+    ],
+    "anchor": "caster.chest"
+  },
+  "rift-bolt-foe_settle": {
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "bounds": [
+      16,
+      26,
+      240,
+      230
+    ],
+    "anchor": "target.chest"
+  },
+  "rift-bolt-foe_travel": {
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "bounds": [
+      16,
+      79,
+      240,
+      176
+    ],
+    "anchor": "caster.chest \u2192 target.chest"
+  },
+  "rift-needle_impact": {
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "bounds": [
+      23,
+      16,
+      232,
+      240
+    ],
+    "anchor": "target.chest"
+  },
+  "rift-needle_prepare": {
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "bounds": [
+      26,
+      16,
+      229,
+      240
+    ],
+    "anchor": "caster.chest"
+  },
+  "rift-needle_settle": {
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "bounds": [
+      91,
+      16,
+      164,
+      240
+    ],
+    "anchor": "target.chest"
+  },
+  "rift-needle_travel": {
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "bounds": [
+      16,
+      103,
+      240,
+      152
+    ],
+    "anchor": "caster.chest \u2192 target.chest"
+  },
+  "rune-lash_impact": {
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "bounds": [
+      20,
+      16,
+      235,
+      240
+    ],
+    "anchor": "target.chest"
+  },
+  "rune-lash_prepare": {
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "bounds": [
+      16,
+      28,
+      240,
+      228
+    ],
+    "anchor": "caster.chest"
+  },
+  "rune-lash_settle": {
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "bounds": [
+      16,
+      52,
+      240,
+      203
+    ],
+    "anchor": "target.chest"
+  },
+  "rune-lash_travel": {
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "bounds": [
+      16,
+      75,
+      240,
+      181
+    ],
+    "anchor": "caster.chest \u2192 target.chest"
+  },
+  "seed-spark_impact": {
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "bounds": [
+      17,
+      16,
+      238,
+      240
+    ],
+    "anchor": "target.chest"
+  },
+  "seed-spark_prepare": {
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "bounds": [
+      47,
+      36,
+      208,
+      220
+    ],
+    "anchor": "caster.chest"
+  },
+  "seed-spark_settle": {
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "bounds": [
+      16,
+      45,
+      240,
+      210
+    ],
+    "anchor": "target.chest"
+  },
+  "seed-spark_travel": {
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "bounds": [
+      16,
+      70,
+      240,
+      186
+    ],
+    "anchor": "caster.chest \u2192 target.chest"
+  },
+  "shard-burst_impact": {
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "bounds": [
+      16,
+      22,
+      240,
+      234
+    ],
+    "anchor": "target.chest"
+  },
+  "shard-burst_prepare": {
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "bounds": [
+      16,
+      18,
+      240,
+      238
+    ],
+    "anchor": "caster.chest"
+  },
+  "shard-burst_settle": {
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "bounds": [
+      43,
+      16,
+      213,
+      240
+    ],
+    "anchor": "target.chest"
+  },
+  "shard-burst_travel": {
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "bounds": [
+      16,
+      51,
+      240,
+      204
+    ],
+    "anchor": "caster.chest \u2192 target.chest"
+  },
+  "spore-dust_impact": {
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "bounds": [
+      23,
+      16,
+      233,
+      240
+    ],
+    "anchor": "target.chest"
+  },
+  "spore-dust_prepare": {
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "bounds": [
+      16,
+      19,
+      240,
+      236
+    ],
+    "anchor": "caster.chest"
+  },
+  "spore-dust_settle": {
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "bounds": [
+      16,
+      24,
+      240,
+      231
+    ],
+    "anchor": "target.chest"
+  },
+  "spore-dust_travel": {
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "bounds": [
+      16,
+      75,
+      240,
+      180
+    ],
+    "anchor": "caster.chest \u2192 target.chest"
+  },
+  "spore-hex_impact": {
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "bounds": [
+      29,
+      16,
+      226,
+      240
+    ],
+    "anchor": "target.chest"
+  },
+  "spore-hex_prepare": {
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "bounds": [
+      20,
+      20,
+      236,
+      236
+    ],
+    "anchor": "caster.chest"
+  },
+  "spore-hex_settle": {
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "bounds": [
+      16,
+      32,
+      240,
+      224
+    ],
+    "anchor": "target.chest"
+  },
+  "spore-hex_travel": {
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "bounds": [
+      16,
+      78,
+      240,
+      178
+    ],
+    "anchor": "caster.chest \u2192 target.chest"
+  },
+  "star-flame_impact": {
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "bounds": [
+      21,
+      16,
+      234,
+      240
+    ],
+    "anchor": "target.chest"
+  },
+  "star-flame_prepare": {
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "bounds": [
+      45,
+      55,
+      211,
+      200
+    ],
+    "anchor": "caster.chest"
+  },
+  "star-flame_settle": {
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "bounds": [
+      16,
+      47,
+      240,
+      209
+    ],
+    "anchor": "target.chest"
+  },
+  "star-flame_travel": {
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "bounds": [
+      16,
+      81,
+      240,
+      174
+    ],
+    "anchor": "caster.chest \u2192 target.chest"
+  },
+  "veil-quake_impact": {
+    "pivot": [
+      0.5,
+      0.875
+    ],
+    "bounds": [
+      16,
+      67,
+      240,
+      224
+    ],
+    "anchor": "target.feet"
+  },
+  "veil-quake_prepare": {
+    "pivot": [
+      0.5,
+      0.875
+    ],
+    "bounds": [
+      16,
+      62,
+      240,
+      224
+    ],
+    "anchor": "caster.feet"
+  },
+  "veil-quake_settle": {
+    "pivot": [
+      0.5,
+      0.875
+    ],
+    "bounds": [
+      16,
+      100,
+      240,
+      224
+    ],
+    "anchor": "target.feet"
+  },
+  "veil-quake_travel": {
+    "pivot": [
+      0.5,
+      0.875
+    ],
+    "bounds": [
+      16,
+      146,
+      240,
+      224
+    ],
+    "anchor": "caster.feet \u2192 target.feet"
+  }
+}
