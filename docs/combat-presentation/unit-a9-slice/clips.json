@@ -1,0 +1,5775 @@
+[
+  {
+    "file": "foe_juggernaut-horn-charge-enemy-down-normal-390.mp4",
+    "duration": 1.534811,
+    "capturedFrames": 47,
+    "maxFrameGap": 0.122,
+    "maxTimestampErrorMs": 0.006,
+    "clickOffset": 0.253,
+    "rawCapture": "test-results/unit-a9-delivery/unit-a9-clips-unit-A9-clip-08eea-rn-charge-enemy-down-normal",
+    "captureStartUTCSeconds": 1793316171.951106,
+    "impacts": [
+      {
+        "at": 0.501,
+        "remainingMs": 390,
+        "turn": {
+          "actorId": "sefa",
+          "side": "hero",
+          "beat": 1,
+          "round": 1,
+          "action": "attack",
+          "targetId": "f1",
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Horn Charge",
+            "damage": 24,
+            "kind": "physical",
+            "targetId": "guardian",
+            "beat": 1,
+            "round": 1
+          },
+          "state": {
+            "encounterId": "thicket-ambush",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "victory",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 0,
+                "markedUntil": 0
+              }
+            ],
+            "intent": null,
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "sefa",
+              "targetId": "f1",
+              "amount": 1,
+              "text": "Hero attacks."
+            },
+            {
+              "type": "down",
+              "targetId": "f1",
+              "text": "Enemy falls."
+            },
+            {
+              "type": "outcome",
+              "text": "victory"
+            }
+          ],
+          "before": {
+            "encounterId": "thicket-ambush",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 1,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Horn Charge",
+              "damage": 24,
+              "kind": "physical",
+              "targetId": "guardian",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": []
+          },
+          "after": {
+            "encounterId": "thicket-ambush",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "victory",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 0,
+                "markedUntil": 0
+              }
+            ],
+            "intent": null,
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ],
+            "rally": null,
+            "sanctuary": null,
+            "solace": null
+          }
+        }
+      }
+    ]
+  },
+  {
+    "file": "foe_juggernaut-shard-burst-normal-normal-390.mp4",
+    "duration": 2.583544,
+    "capturedFrames": 78,
+    "maxFrameGap": 0.265,
+    "maxTimestampErrorMs": 0.0052,
+    "clickOffset": 0.317,
+    "rawCapture": "test-results/unit-a9-delivery/unit-a9-clips-unit-A9-clip-23a80-t-shard-burst-normal-normal",
+    "captureStartUTCSeconds": 1793316164.397649,
+    "impacts": [
+      {
+        "at": 0.558,
+        "remainingMs": 390,
+        "turn": {
+          "actorId": "sefa",
+          "side": "hero",
+          "beat": 1,
+          "round": 1,
+          "action": "attack",
+          "targetId": "f1",
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Shard Burst",
+            "damage": 22,
+            "kind": "energy",
+            "targetId": "guardian",
+            "beat": 1,
+            "round": 1
+          },
+          "state": {
+            "encounterId": "thicket-ambush",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 168,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Shard Burst",
+              "damage": 22,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "sefa",
+              "targetId": "f1",
+              "amount": 12,
+              "text": "Hero attacks."
+            }
+          ],
+          "before": {
+            "encounterId": "thicket-ambush",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 180,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Shard Burst",
+              "damage": 22,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": []
+          },
+          "after": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 168,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Shard Burst",
+              "damage": 22,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "at": 1.25,
+        "remainingMs": 520,
+        "turn": {
+          "actorId": "f1",
+          "side": "enemy",
+          "beat": 2,
+          "round": 1,
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Shard Burst",
+            "damage": 22,
+            "kind": "energy",
+            "targetId": "guardian",
+            "beat": 2,
+            "round": 1
+          },
+          "targetId": "guardian",
+          "state": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 168,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Shard Burst",
+              "damage": 22,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "f1",
+              "targetId": "guardian",
+              "amount": 22,
+              "absorbed": 0,
+              "text": "Enemy attacks on its own turn."
+            }
+          ],
+          "before": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 168,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Shard Burst",
+              "damage": 22,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "after": {
+            "encounterId": "thicket-ambush",
+            "beat": 3,
+            "round": 1,
+            "turnIndex": 2,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 168,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Shard Burst",
+              "damage": 22,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 3,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "file": "foe_sentinel-rift-cataclysm-normal-normal-390.mp4",
+    "duration": 2.311544,
+    "capturedFrames": 51,
+    "maxFrameGap": 0.283,
+    "maxTimestampErrorMs": 0.0052,
+    "clickOffset": 0.351,
+    "rawCapture": "test-results/unit-a9-delivery/unit-a9-clips-unit-A9-clip-296a2-ift-cataclysm-normal-normal",
+    "captureStartUTCSeconds": 1793316179.289203,
+    "impacts": [
+      {
+        "at": 0.6,
+        "remainingMs": 390,
+        "turn": {
+          "actorId": "sefa",
+          "side": "hero",
+          "beat": 1,
+          "round": 1,
+          "action": "attack",
+          "targetId": "f1",
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Rift Cataclysm",
+            "damage": 52,
+            "kind": "physical",
+            "unstoppable": true,
+            "targetId": "guardian",
+            "beat": 1,
+            "round": 1
+          },
+          "state": {
+            "encounterId": "thicket-ambush",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 338,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Rift Cataclysm",
+              "damage": 52,
+              "kind": "physical",
+              "unstoppable": true,
+              "targetId": "guardian",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "sefa",
+              "targetId": "f1",
+              "amount": 12,
+              "text": "Hero attacks."
+            }
+          ],
+          "before": {
+            "encounterId": "thicket-ambush",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 350,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Rift Cataclysm",
+              "damage": 52,
+              "kind": "physical",
+              "unstoppable": true,
+              "targetId": "guardian",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": []
+          },
+          "after": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 338,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Rift Cataclysm",
+              "damage": 52,
+              "kind": "physical",
+              "unstoppable": true,
+              "targetId": "guardian",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "at": 1.284,
+        "remainingMs": 520,
+        "turn": {
+          "actorId": "f1",
+          "side": "enemy",
+          "beat": 2,
+          "round": 1,
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Rift Cataclysm",
+            "damage": 52,
+            "kind": "physical",
+            "unstoppable": true,
+            "targetId": "guardian",
+            "beat": 2,
+            "round": 1
+          },
+          "targetId": "guardian",
+          "state": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 338,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Rift Cataclysm",
+              "damage": 52,
+              "kind": "physical",
+              "unstoppable": true,
+              "targetId": "guardian",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "f1",
+              "targetId": "guardian",
+              "amount": 52,
+              "absorbed": 0,
+              "text": "Enemy attacks on its own turn."
+            }
+          ],
+          "before": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 338,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Rift Cataclysm",
+              "damage": 52,
+              "kind": "physical",
+              "unstoppable": true,
+              "targetId": "guardian",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "after": {
+            "encounterId": "thicket-ambush",
+            "beat": 3,
+            "round": 1,
+            "turnIndex": 2,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 338,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Rift Cataclysm",
+              "damage": 52,
+              "kind": "physical",
+              "unstoppable": true,
+              "targetId": "guardian",
+              "beat": 3,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "file": "foe_sentinel-raking-slash-enemy-down-normal-390.mp4",
+    "duration": 1.624311,
+    "capturedFrames": 48,
+    "maxFrameGap": 0.083,
+    "maxTimestampErrorMs": 0.0051,
+    "clickOffset": 0.359,
+    "rawCapture": "test-results/unit-a9-delivery/unit-a9-clips-unit-A9-clip-3146f-ing-slash-enemy-down-normal",
+    "captureStartUTCSeconds": 1793316204.639529,
+    "impacts": [
+      {
+        "at": 0.59,
+        "remainingMs": 390,
+        "turn": {
+          "actorId": "sefa",
+          "side": "hero",
+          "beat": 1,
+          "round": 1,
+          "action": "attack",
+          "targetId": "f1",
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Raking Slash",
+            "damage": 21,
+            "kind": "physical",
+            "targetId": "guardian",
+            "beat": 1,
+            "round": 1
+          },
+          "state": {
+            "encounterId": "thicket-ambush",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "victory",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 0,
+                "markedUntil": 0
+              }
+            ],
+            "intent": null,
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "sefa",
+              "targetId": "f1",
+              "amount": 1,
+              "text": "Hero attacks."
+            },
+            {
+              "type": "down",
+              "targetId": "f1",
+              "text": "Enemy falls."
+            },
+            {
+              "type": "outcome",
+              "text": "victory"
+            }
+          ],
+          "before": {
+            "encounterId": "thicket-ambush",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 1,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Raking Slash",
+              "damage": 21,
+              "kind": "physical",
+              "targetId": "guardian",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": []
+          },
+          "after": {
+            "encounterId": "thicket-ambush",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "victory",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 0,
+                "markedUntil": 0
+              }
+            ],
+            "intent": null,
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ],
+            "rally": null,
+            "sanctuary": null,
+            "solace": null
+          }
+        }
+      }
+    ]
+  },
+  {
+    "file": "foe_matriarch-thorn-rage-normal-normal-390.mp4",
+    "duration": 2.108411,
+    "capturedFrames": 47,
+    "maxFrameGap": 0.145,
+    "maxTimestampErrorMs": 0.0061,
+    "clickOffset": 0.482,
+    "rawCapture": "test-results/unit-a9-delivery/unit-a9-clips-unit-A9-clip-31eaf-ch-thorn-rage-normal-normal",
+    "captureStartUTCSeconds": 1793316140.086574,
+    "impacts": [
+      {
+        "at": 0.729,
+        "remainingMs": 390,
+        "turn": {
+          "actorId": "sefa",
+          "side": "hero",
+          "beat": 1,
+          "round": 1,
+          "action": "attack",
+          "targetId": "f1",
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Thorn Bloom",
+            "damage": 22,
+            "kind": "energy",
+            "targetId": "guardian",
+            "beat": 1,
+            "round": 1
+          },
+          "state": {
+            "encounterId": "thicket-ambush",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 12,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Thorn Bloom",
+              "damage": 22,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "sefa",
+              "targetId": "f1",
+              "amount": 12,
+              "text": "Hero attacks."
+            }
+          ],
+          "before": {
+            "encounterId": "thicket-ambush",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 24,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Thorn Bloom",
+              "damage": 22,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": []
+          },
+          "after": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 12,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 0,
+              "name": "Thorn Rage",
+              "damage": 0,
+              "kind": "energy",
+              "unstoppable": true,
+              "special": "phase",
+              "targetId": "sefa",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "at": 1.48,
+        "remainingMs": 480,
+        "turn": {
+          "actorId": "f1",
+          "side": "enemy",
+          "beat": 2,
+          "round": 1,
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 0,
+            "name": "Thorn Rage",
+            "damage": 0,
+            "kind": "energy",
+            "unstoppable": true,
+            "special": "phase",
+            "targetId": "sefa",
+            "beat": 2,
+            "round": 1
+          },
+          "targetId": "sefa",
+          "state": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 12,
+                "markedUntil": 0,
+                "phase": 1,
+                "phaseRound": 1
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 0,
+              "name": "Thorn Rage",
+              "damage": 0,
+              "kind": "energy",
+              "unstoppable": true,
+              "special": "phase",
+              "targetId": "sefa",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "phase",
+              "sourceId": "f1",
+              "targetId": "f1",
+              "text": "Thorn Rage"
+            }
+          ],
+          "before": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 12,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 0,
+              "name": "Thorn Rage",
+              "damage": 0,
+              "kind": "energy",
+              "unstoppable": true,
+              "special": "phase",
+              "targetId": "sefa",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "after": {
+            "encounterId": "thicket-ambush",
+            "beat": 3,
+            "round": 1,
+            "turnIndex": 2,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 12,
+                "markedUntil": 0,
+                "phase": 1,
+                "phaseRound": 1
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Thorn Bloom",
+              "damage": 22,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 3,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "file": "foe_captain-crushing-blow-normal-normal-390.mp4",
+    "duration": 2.200022,
+    "capturedFrames": 54,
+    "maxFrameGap": 0.254,
+    "maxTimestampErrorMs": 0.0062,
+    "clickOffset": 0.381,
+    "rawCapture": "test-results/unit-a9-delivery/unit-a9-clips-unit-A9-clip-331eb-crushing-blow-normal-normal",
+    "captureStartUTCSeconds": 1793316218.333337,
+    "impacts": [
+      {
+        "at": 0.612,
+        "remainingMs": 390,
+        "turn": {
+          "actorId": "sefa",
+          "side": "hero",
+          "beat": 1,
+          "round": 1,
+          "action": "attack",
+          "targetId": "f1",
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Crushing Blow",
+            "damage": 16,
+            "kind": "physical",
+            "targetId": "guardian",
+            "beat": 1,
+            "round": 1
+          },
+          "state": {
+            "encounterId": "thicket-ambush",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 158,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Crushing Blow",
+              "damage": 16,
+              "kind": "physical",
+              "targetId": "guardian",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "sefa",
+              "targetId": "f1",
+              "amount": 12,
+              "text": "Hero attacks."
+            }
+          ],
+          "before": {
+            "encounterId": "thicket-ambush",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 170,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Crushing Blow",
+              "damage": 16,
+              "kind": "physical",
+              "targetId": "guardian",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": []
+          },
+          "after": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 158,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Crushing Blow",
+              "damage": 16,
+              "kind": "physical",
+              "targetId": "guardian",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "at": 1.301,
+        "remainingMs": 520,
+        "turn": {
+          "actorId": "f1",
+          "side": "enemy",
+          "beat": 2,
+          "round": 1,
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Crushing Blow",
+            "damage": 16,
+            "kind": "physical",
+            "targetId": "guardian",
+            "beat": 2,
+            "round": 1
+          },
+          "targetId": "guardian",
+          "state": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 60,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 158,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Crushing Blow",
+              "damage": 16,
+              "kind": "physical",
+              "targetId": "guardian",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "f1",
+              "targetId": "guardian",
+              "amount": 16,
+              "absorbed": 0,
+              "text": "Enemy attacks on its own turn."
+            }
+          ],
+          "before": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 158,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Crushing Blow",
+              "damage": 16,
+              "kind": "physical",
+              "targetId": "guardian",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "after": {
+            "encounterId": "thicket-ambush",
+            "beat": 3,
+            "round": 1,
+            "turnIndex": 2,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 60,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 158,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Crushing Blow",
+              "damage": 16,
+              "kind": "physical",
+              "targetId": "guardian",
+              "beat": 3,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "file": "foe_captain-call-the-hunt-normal-normal-390.mp4",
+    "duration": 2.593089,
+    "capturedFrames": 62,
+    "maxFrameGap": 0.305,
+    "maxTimestampErrorMs": 0.0052,
+    "clickOffset": 0.356,
+    "rawCapture": "test-results/unit-a9-delivery/unit-a9-clips-unit-A9-clip-60308-call-the-hunt-normal-normal",
+    "captureStartUTCSeconds": 1793316227.189843,
+    "impacts": [
+      {
+        "at": 0.59,
+        "remainingMs": 390,
+        "turn": {
+          "actorId": "sefa",
+          "side": "hero",
+          "beat": 1,
+          "round": 1,
+          "action": "attack",
+          "targetId": "f1",
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Crushing Blow",
+            "damage": 16,
+            "kind": "physical",
+            "targetId": "guardian",
+            "beat": 1,
+            "round": 1
+          },
+          "state": {
+            "encounterId": "thicket-ambush",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 18,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Crushing Blow",
+              "damage": 16,
+              "kind": "physical",
+              "targetId": "guardian",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "sefa",
+              "targetId": "f1",
+              "amount": 12,
+              "text": "Hero attacks."
+            }
+          ],
+          "before": {
+            "encounterId": "thicket-ambush",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 30,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Crushing Blow",
+              "damage": 16,
+              "kind": "physical",
+              "targetId": "guardian",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": []
+          },
+          "after": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 18,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 0,
+              "name": "Call the Hunt",
+              "damage": 0,
+              "kind": "energy",
+              "unstoppable": true,
+              "special": "phase",
+              "targetId": "sefa",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "at": 1.322,
+        "remainingMs": 480,
+        "turn": {
+          "actorId": "f1",
+          "side": "enemy",
+          "beat": 2,
+          "round": 1,
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 0,
+            "name": "Call the Hunt",
+            "damage": 0,
+            "kind": "energy",
+            "unstoppable": true,
+            "special": "phase",
+            "targetId": "sefa",
+            "beat": 2,
+            "round": 1
+          },
+          "targetId": "sefa",
+          "state": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 18,
+                "markedUntil": 0,
+                "phase": 1,
+                "phaseRound": 1
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 0,
+              "name": "Call the Hunt",
+              "damage": 0,
+              "kind": "energy",
+              "unstoppable": true,
+              "special": "phase",
+              "targetId": "sefa",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "phase",
+              "sourceId": "f1",
+              "targetId": "f1",
+              "text": "Call the Hunt"
+            }
+          ],
+          "before": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 18,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 0,
+              "name": "Call the Hunt",
+              "damage": 0,
+              "kind": "energy",
+              "unstoppable": true,
+              "special": "phase",
+              "targetId": "sefa",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "after": {
+            "encounterId": "thicket-ambush",
+            "beat": 3,
+            "round": 1,
+            "turnIndex": 2,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 18,
+                "markedUntil": 0,
+                "phase": 1,
+                "phaseRound": 1
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Crushing Blow",
+              "damage": 16,
+              "kind": "physical",
+              "targetId": "guardian",
+              "beat": 3,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "file": "foe_matriarch-briar-lash-normal-normal-390.mp4",
+    "duration": 1.918067,
+    "capturedFrames": 54,
+    "maxFrameGap": 0.113,
+    "maxTimestampErrorMs": 0.0052,
+    "clickOffset": 0.307,
+    "rawCapture": "test-results/unit-a9-delivery/unit-a9-clips-unit-A9-clip-75343-ch-briar-lash-normal-normal",
+    "captureStartUTCSeconds": 1793316131.534531,
+    "impacts": [
+      {
+        "at": 0.557,
+        "remainingMs": 390,
+        "turn": {
+          "actorId": "sefa",
+          "side": "hero",
+          "beat": 1,
+          "round": 1,
+          "action": "attack",
+          "targetId": "f1",
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Briar Lash",
+            "damage": 20,
+            "kind": "physical",
+            "targetId": "guardian",
+            "beat": 1,
+            "round": 1
+          },
+          "state": {
+            "encounterId": "thicket-ambush",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 128,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Briar Lash",
+              "damage": 20,
+              "kind": "physical",
+              "targetId": "guardian",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "sefa",
+              "targetId": "f1",
+              "amount": 12,
+              "text": "Hero attacks."
+            }
+          ],
+          "before": {
+            "encounterId": "thicket-ambush",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 140,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Briar Lash",
+              "damage": 20,
+              "kind": "physical",
+              "targetId": "guardian",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": []
+          },
+          "after": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 128,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Briar Lash",
+              "damage": 20,
+              "kind": "physical",
+              "targetId": "guardian",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "at": 1.237,
+        "remainingMs": 520,
+        "turn": {
+          "actorId": "f1",
+          "side": "enemy",
+          "beat": 2,
+          "round": 1,
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Briar Lash",
+            "damage": 20,
+            "kind": "physical",
+            "targetId": "guardian",
+            "beat": 2,
+            "round": 1
+          },
+          "targetId": "guardian",
+          "state": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 56,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 128,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Briar Lash",
+              "damage": 20,
+              "kind": "physical",
+              "targetId": "guardian",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "f1",
+              "targetId": "guardian",
+              "amount": 20,
+              "absorbed": 0,
+              "text": "Enemy attacks on its own turn."
+            }
+          ],
+          "before": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 128,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Briar Lash",
+              "damage": 20,
+              "kind": "physical",
+              "targetId": "guardian",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "after": {
+            "encounterId": "thicket-ambush",
+            "beat": 3,
+            "round": 1,
+            "turnIndex": 2,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 56,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 128,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Briar Lash",
+              "damage": 20,
+              "kind": "physical",
+              "targetId": "guardian",
+              "beat": 3,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "file": "foe_sentinel-call-the-rift-normal-normal-390.mp4",
+    "duration": 2.243144,
+    "capturedFrames": 43,
+    "maxFrameGap": 0.294,
+    "maxTimestampErrorMs": 0.0052,
+    "clickOffset": 0.318,
+    "rawCapture": "test-results/unit-a9-delivery/unit-a9-clips-unit-A9-clip-7947f-call-the-rift-normal-normal",
+    "captureStartUTCSeconds": 1793316195.702005,
+    "impacts": [
+      {
+        "at": 0.562,
+        "remainingMs": 390,
+        "turn": {
+          "actorId": "sefa",
+          "side": "hero",
+          "beat": 1,
+          "round": 1,
+          "action": "attack",
+          "targetId": "f1",
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Crushing Blow",
+            "damage": 29,
+            "kind": "physical",
+            "targetId": "guardian",
+            "beat": 1,
+            "round": 1
+          },
+          "state": {
+            "encounterId": "thicket-ambush",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 28,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Crushing Blow",
+              "damage": 29,
+              "kind": "physical",
+              "targetId": "guardian",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "sefa",
+              "targetId": "f1",
+              "amount": 12,
+              "text": "Hero attacks."
+            }
+          ],
+          "before": {
+            "encounterId": "thicket-ambush",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 40,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Crushing Blow",
+              "damage": 29,
+              "kind": "physical",
+              "targetId": "guardian",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": []
+          },
+          "after": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 28,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 0,
+              "name": "Call the Rift",
+              "damage": 0,
+              "kind": "energy",
+              "unstoppable": true,
+              "special": "phase",
+              "targetId": "sefa",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "at": 1.29,
+        "remainingMs": 480,
+        "turn": {
+          "actorId": "f1",
+          "side": "enemy",
+          "beat": 2,
+          "round": 1,
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 0,
+            "name": "Call the Rift",
+            "damage": 0,
+            "kind": "energy",
+            "unstoppable": true,
+            "special": "phase",
+            "targetId": "sefa",
+            "beat": 2,
+            "round": 1
+          },
+          "targetId": "sefa",
+          "state": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 28,
+                "markedUntil": 0,
+                "phase": 1,
+                "phaseRound": 1
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 0,
+              "name": "Call the Rift",
+              "damage": 0,
+              "kind": "energy",
+              "unstoppable": true,
+              "special": "phase",
+              "targetId": "sefa",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "phase",
+              "sourceId": "f1",
+              "targetId": "f1",
+              "text": "Call the Rift"
+            }
+          ],
+          "before": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 28,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 0,
+              "name": "Call the Rift",
+              "damage": 0,
+              "kind": "energy",
+              "unstoppable": true,
+              "special": "phase",
+              "targetId": "sefa",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "after": {
+            "encounterId": "thicket-ambush",
+            "beat": 3,
+            "round": 1,
+            "turnIndex": 2,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 28,
+                "markedUntil": 0,
+                "phase": 1,
+                "phaseRound": 1
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Crushing Blow",
+              "damage": 29,
+              "kind": "physical",
+              "targetId": "guardian",
+              "beat": 3,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "file": "foe_sentinel-raking-slash-normal-normal-390.mp4",
+    "duration": 2.575411,
+    "capturedFrames": 72,
+    "maxFrameGap": 0.308,
+    "maxTimestampErrorMs": 0.0061,
+    "clickOffset": 0.34,
+    "rawCapture": "test-results/unit-a9-delivery/unit-a9-clips-unit-A9-clip-7d3c0--raking-slash-normal-normal",
+    "captureStartUTCSeconds": 1793316186.868163,
+    "impacts": [
+      {
+        "at": 0.577,
+        "remainingMs": 390,
+        "turn": {
+          "actorId": "sefa",
+          "side": "hero",
+          "beat": 1,
+          "round": 1,
+          "action": "attack",
+          "targetId": "f1",
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Raking Slash",
+            "damage": 21,
+            "kind": "physical",
+            "targetId": "guardian",
+            "beat": 1,
+            "round": 1
+          },
+          "state": {
+            "encounterId": "thicket-ambush",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 338,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Raking Slash",
+              "damage": 21,
+              "kind": "physical",
+              "targetId": "guardian",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "sefa",
+              "targetId": "f1",
+              "amount": 12,
+              "text": "Hero attacks."
+            }
+          ],
+          "before": {
+            "encounterId": "thicket-ambush",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 350,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Raking Slash",
+              "damage": 21,
+              "kind": "physical",
+              "targetId": "guardian",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": []
+          },
+          "after": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 338,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Raking Slash",
+              "damage": 21,
+              "kind": "physical",
+              "targetId": "guardian",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "at": 1.26,
+        "remainingMs": 520,
+        "turn": {
+          "actorId": "f1",
+          "side": "enemy",
+          "beat": 2,
+          "round": 1,
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Raking Slash",
+            "damage": 21,
+            "kind": "physical",
+            "targetId": "guardian",
+            "beat": 2,
+            "round": 1
+          },
+          "targetId": "guardian",
+          "state": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 55,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 338,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Raking Slash",
+              "damage": 21,
+              "kind": "physical",
+              "targetId": "guardian",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "f1",
+              "targetId": "guardian",
+              "amount": 21,
+              "absorbed": 0,
+              "text": "Enemy attacks on its own turn."
+            }
+          ],
+          "before": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 338,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Raking Slash",
+              "damage": 21,
+              "kind": "physical",
+              "targetId": "guardian",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "after": {
+            "encounterId": "thicket-ambush",
+            "beat": 3,
+            "round": 1,
+            "turnIndex": 2,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 55,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 338,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Raking Slash",
+              "damage": 21,
+              "kind": "physical",
+              "targetId": "guardian",
+              "beat": 3,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "file": "foe_matriarch-thorn-tempest-normal-normal-390.mp4",
+    "duration": 2.531156,
+    "capturedFrames": 74,
+    "maxFrameGap": 0.258,
+    "maxTimestampErrorMs": 0.006,
+    "clickOffset": 0.233,
+    "rawCapture": "test-results/unit-a9-delivery/unit-a9-clips-unit-A9-clip-8b0a4-thorn-tempest-normal-normal",
+    "captureStartUTCSeconds": 1793316123.688702,
+    "impacts": [
+      {
+        "at": 0.519,
+        "remainingMs": 390,
+        "turn": {
+          "actorId": "sefa",
+          "side": "hero",
+          "beat": 1,
+          "round": 1,
+          "action": "attack",
+          "targetId": "f1",
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Thorn Tempest",
+            "damage": 13,
+            "kind": "energy",
+            "all": true,
+            "unstoppable": true,
+            "targetId": "guardian",
+            "beat": 1,
+            "round": 1
+          },
+          "state": {
+            "encounterId": "thicket-ambush",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 188,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Thorn Tempest",
+              "damage": 13,
+              "kind": "energy",
+              "all": true,
+              "unstoppable": true,
+              "targetId": "guardian",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "sefa",
+              "targetId": "f1",
+              "amount": 12,
+              "text": "Hero attacks."
+            }
+          ],
+          "before": {
+            "encounterId": "thicket-ambush",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 200,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Thorn Tempest",
+              "damage": 13,
+              "kind": "energy",
+              "all": true,
+              "unstoppable": true,
+              "targetId": "guardian",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": []
+          },
+          "after": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 188,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Thorn Tempest",
+              "damage": 13,
+              "kind": "energy",
+              "all": true,
+              "unstoppable": true,
+              "targetId": "guardian",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "at": 1.165,
+        "remainingMs": 520,
+        "turn": {
+          "actorId": "f1",
+          "side": "enemy",
+          "beat": 2,
+          "round": 1,
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Thorn Tempest",
+            "damage": 13,
+            "kind": "energy",
+            "all": true,
+            "unstoppable": true,
+            "targetId": "guardian",
+            "beat": 2,
+            "round": 1
+          },
+          "targetId": "sefa",
+          "state": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 41,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 63,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 35,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 188,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Thorn Tempest",
+              "damage": 13,
+              "kind": "energy",
+              "all": true,
+              "unstoppable": true,
+              "targetId": "guardian",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "f1",
+              "targetId": "sefa",
+              "amount": 13,
+              "absorbed": 0,
+              "text": "Enemy attacks on its own turn."
+            },
+            {
+              "type": "damage",
+              "sourceId": "f1",
+              "targetId": "guardian",
+              "amount": 13,
+              "absorbed": 0,
+              "text": "Enemy attacks on its own turn."
+            },
+            {
+              "type": "damage",
+              "sourceId": "f1",
+              "targetId": "weaver",
+              "amount": 13,
+              "absorbed": 0,
+              "text": "Enemy attacks on its own turn."
+            }
+          ],
+          "before": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 188,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Thorn Tempest",
+              "damage": 13,
+              "kind": "energy",
+              "all": true,
+              "unstoppable": true,
+              "targetId": "guardian",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "after": {
+            "encounterId": "thicket-ambush",
+            "beat": 3,
+            "round": 1,
+            "turnIndex": 2,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 41,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 63,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 35,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 188,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Thorn Tempest",
+              "damage": 13,
+              "kind": "energy",
+              "all": true,
+              "unstoppable": true,
+              "targetId": "guardian",
+              "beat": 3,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "file": "foe_juggernaut-horn-charge-normal-normal-390.mp4",
+    "duration": 2.612844,
+    "capturedFrames": 83,
+    "maxFrameGap": 0.202,
+    "maxTimestampErrorMs": 0.006,
+    "clickOffset": 0.395,
+    "rawCapture": "test-results/unit-a9-delivery/unit-a9-clips-unit-A9-clip-94519-t-horn-charge-normal-normal",
+    "captureStartUTCSeconds": 1793316157.577648,
+    "impacts": [
+      {
+        "at": 0.629,
+        "remainingMs": 390,
+        "turn": {
+          "actorId": "sefa",
+          "side": "hero",
+          "beat": 1,
+          "round": 1,
+          "action": "attack",
+          "targetId": "f1",
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Horn Charge",
+            "damage": 24,
+            "kind": "physical",
+            "targetId": "guardian",
+            "beat": 1,
+            "round": 1
+          },
+          "state": {
+            "encounterId": "thicket-ambush",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 168,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Horn Charge",
+              "damage": 24,
+              "kind": "physical",
+              "targetId": "guardian",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "sefa",
+              "targetId": "f1",
+              "amount": 12,
+              "text": "Hero attacks."
+            }
+          ],
+          "before": {
+            "encounterId": "thicket-ambush",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 180,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Horn Charge",
+              "damage": 24,
+              "kind": "physical",
+              "targetId": "guardian",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": []
+          },
+          "after": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 168,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Horn Charge",
+              "damage": 24,
+              "kind": "physical",
+              "targetId": "guardian",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "at": 1.308,
+        "remainingMs": 520,
+        "turn": {
+          "actorId": "f1",
+          "side": "enemy",
+          "beat": 2,
+          "round": 1,
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Horn Charge",
+            "damage": 24,
+            "kind": "physical",
+            "targetId": "guardian",
+            "beat": 2,
+            "round": 1
+          },
+          "targetId": "guardian",
+          "state": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 52,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 168,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Horn Charge",
+              "damage": 24,
+              "kind": "physical",
+              "targetId": "guardian",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "f1",
+              "targetId": "guardian",
+              "amount": 24,
+              "absorbed": 0,
+              "text": "Enemy attacks on its own turn."
+            }
+          ],
+          "before": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 168,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Horn Charge",
+              "damage": 24,
+              "kind": "physical",
+              "targetId": "guardian",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "after": {
+            "encounterId": "thicket-ambush",
+            "beat": 3,
+            "round": 1,
+            "turnIndex": 2,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 52,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 168,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Horn Charge",
+              "damage": 24,
+              "kind": "physical",
+              "targetId": "guardian",
+              "beat": 3,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "file": "foe_captain-war-cry-enemy-down-normal-390.mp4",
+    "duration": 1.548367,
+    "capturedFrames": 47,
+    "maxFrameGap": 0.125,
+    "maxTimestampErrorMs": 0.0061,
+    "clickOffset": 0.305,
+    "rawCapture": "test-results/unit-a9-delivery/unit-a9-clips-unit-A9-clip-cf36f-n-war-cry-enemy-down-normal",
+    "captureStartUTCSeconds": 1793316235.007411,
+    "impacts": [
+      {
+        "at": 0.546,
+        "remainingMs": 390,
+        "turn": {
+          "actorId": "sefa",
+          "side": "hero",
+          "beat": 1,
+          "round": 1,
+          "action": "attack",
+          "targetId": "f1",
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "War Cry",
+            "damage": 22,
+            "kind": "energy",
+            "unstoppable": true,
+            "targetId": "guardian",
+            "beat": 1,
+            "round": 1
+          },
+          "state": {
+            "encounterId": "thicket-ambush",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "victory",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 0,
+                "markedUntil": 0
+              }
+            ],
+            "intent": null,
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "sefa",
+              "targetId": "f1",
+              "amount": 1,
+              "text": "Hero attacks."
+            },
+            {
+              "type": "down",
+              "targetId": "f1",
+              "text": "Enemy falls."
+            },
+            {
+              "type": "outcome",
+              "text": "victory"
+            }
+          ],
+          "before": {
+            "encounterId": "thicket-ambush",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 1,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "War Cry",
+              "damage": 22,
+              "kind": "energy",
+              "unstoppable": true,
+              "targetId": "guardian",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": []
+          },
+          "after": {
+            "encounterId": "thicket-ambush",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "victory",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 0,
+                "markedUntil": 0
+              }
+            ],
+            "intent": null,
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ],
+            "rally": null,
+            "sanctuary": null,
+            "solace": null
+          }
+        }
+      }
+    ]
+  },
+  {
+    "file": "foe_matriarch-briar-lash-enemy-down-normal-390.mp4",
+    "duration": 1.703278,
+    "capturedFrames": 41,
+    "maxFrameGap": 0.13,
+    "maxTimestampErrorMs": 0.0051,
+    "clickOffset": 0.434,
+    "rawCapture": "test-results/unit-a9-delivery/unit-a9-clips-unit-A9-clip-e695d-riar-lash-enemy-down-normal",
+    "captureStartUTCSeconds": 1793316149.867074,
+    "impacts": [
+      {
+        "at": 0.67,
+        "remainingMs": 390,
+        "turn": {
+          "actorId": "sefa",
+          "side": "hero",
+          "beat": 1,
+          "round": 1,
+          "action": "attack",
+          "targetId": "f1",
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Briar Lash",
+            "damage": 20,
+            "kind": "physical",
+            "targetId": "guardian",
+            "beat": 1,
+            "round": 1
+          },
+          "state": {
+            "encounterId": "thicket-ambush",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "victory",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 0,
+                "markedUntil": 0
+              }
+            ],
+            "intent": null,
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "sefa",
+              "targetId": "f1",
+              "amount": 1,
+              "text": "Hero attacks."
+            },
+            {
+              "type": "down",
+              "targetId": "f1",
+              "text": "Enemy falls."
+            },
+            {
+              "type": "outcome",
+              "text": "victory"
+            }
+          ],
+          "before": {
+            "encounterId": "thicket-ambush",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 1,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Briar Lash",
+              "damage": 20,
+              "kind": "physical",
+              "targetId": "guardian",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": []
+          },
+          "after": {
+            "encounterId": "thicket-ambush",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "victory",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 0,
+                "markedUntil": 0
+              }
+            ],
+            "intent": null,
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ],
+            "rally": null,
+            "sanctuary": null,
+            "solace": null
+          }
+        }
+      }
+    ]
+  },
+  {
+    "file": "foe_captain-war-cry-normal-normal-390.mp4",
+    "duration": 2.528967,
+    "capturedFrames": 93,
+    "maxFrameGap": 0.232,
+    "maxTimestampErrorMs": 0.0051,
+    "clickOffset": 0.296,
+    "rawCapture": "test-results/unit-a9-delivery/unit-a9-clips-unit-A9-clip-foe-captain-war-cry-normal-normal",
+    "captureStartUTCSeconds": 1793316211.061929,
+    "impacts": [
+      {
+        "at": 0.548,
+        "remainingMs": 390,
+        "turn": {
+          "actorId": "sefa",
+          "side": "hero",
+          "beat": 1,
+          "round": 1,
+          "action": "attack",
+          "targetId": "f1",
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "War Cry",
+            "damage": 22,
+            "kind": "energy",
+            "unstoppable": true,
+            "targetId": "guardian",
+            "beat": 1,
+            "round": 1
+          },
+          "state": {
+            "encounterId": "thicket-ambush",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 158,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "War Cry",
+              "damage": 22,
+              "kind": "energy",
+              "unstoppable": true,
+              "targetId": "guardian",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "sefa",
+              "targetId": "f1",
+              "amount": 12,
+              "text": "Hero attacks."
+            }
+          ],
+          "before": {
+            "encounterId": "thicket-ambush",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 170,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "War Cry",
+              "damage": 22,
+              "kind": "energy",
+              "unstoppable": true,
+              "targetId": "guardian",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": []
+          },
+          "after": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 158,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "War Cry",
+              "damage": 22,
+              "kind": "energy",
+              "unstoppable": true,
+              "targetId": "guardian",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "at": 1.213,
+        "remainingMs": 520,
+        "turn": {
+          "actorId": "f1",
+          "side": "enemy",
+          "beat": 2,
+          "round": 1,
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "War Cry",
+            "damage": 22,
+            "kind": "energy",
+            "unstoppable": true,
+            "targetId": "guardian",
+            "beat": 2,
+            "round": 1
+          },
+          "targetId": "guardian",
+          "state": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 158,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "War Cry",
+              "damage": 22,
+              "kind": "energy",
+              "unstoppable": true,
+              "targetId": "guardian",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "f1",
+              "targetId": "guardian",
+              "amount": 22,
+              "absorbed": 0,
+              "text": "Enemy attacks on its own turn."
+            }
+          ],
+          "before": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 76,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 158,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "War Cry",
+              "damage": 22,
+              "kind": "energy",
+              "unstoppable": true,
+              "targetId": "guardian",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "after": {
+            "encounterId": "thicket-ambush",
+            "beat": 3,
+            "round": 1,
+            "turnIndex": 2,
+            "order": [
+              "sefa",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "sefa",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 54,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 158,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "War Cry",
+              "damage": 22,
+              "kind": "energy",
+              "unstoppable": true,
+              "targetId": "guardian",
+              "beat": 3,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "sefa",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  }
+]

@@ -1,6 +1,6 @@
 import type { Reaction, UnitPose } from './unit-animation-map';
 import atlasManifest from './unit-atlases.json';
-export type UnitClip = 'attack' | 'skill' | 'bash' | 'prayer' | 'sanctuary' | 'disengage' | 'stance' | 'taunt' | 'brace' | 'knives' | 'evade' | 'dread' | 'finale' | 'snare';
+export type UnitClip = 'attack' | 'skill' | 'bash' | 'prayer' | 'sanctuary' | 'disengage' | 'stance' | 'taunt' | 'brace' | 'knives' | 'evade' | 'dread' | 'finale' | 'snare' | 'move1' | 'move2' | 'move3' | 'move4' | 'move5' | 'move6' | 'move7';
 export type FramePhase = 'prepare' | 'recover' | 'reaction';
 export interface UnitFrames {
   show(pose: UnitPose | Reaction, phase: FramePhase, progress: number, clip?: UnitClip, durationMs?: number): boolean;
@@ -24,10 +24,18 @@ interface UnitDefinition {
   // AV04: clips that let something go (arrow, thrown knife, flask). The body reaches its release frame at `at` of the
   // windup, the same instant the painted flight starts, and holds it until the authoritative contact cue.
   release?: Readonly<Partial<Record<UnitClip, { frame: number; at: number }>>>;
+  // A9 bosses: the atlas cell is 1024 seed units square with the soles at 7/8 of its height (the Captain's axe hangs below the
+  // soles), and the final down pose is the identity's own last frame. Both default to the shared layout (496/512, frame 21).
+  soleOrigin?: number;
+  downedFrame?: number;
 }
 export interface FrameRange { prepare: readonly number[]; recover: readonly number[] }
 // Fraction of the windup at which a releasing clip lets go: late enough to show the draw, early enough for a readable flight.
 export const RELEASE_AT = .55;
+// A9 boss strips: frame 0 is the exact seed, each move adds [wind-up, anticipation, contact, follow-through] from `base`; the
+// strip's own ready/recover frames are the seed. Prepare ends on the anticipation, contact is the first recover frame.
+const bossMove = (base: number): FrameRange => ({ prepare: [0, base, base + 1], recover: [base + 2, base + 3, 0] });
+const BOSS_SOLE = 896 / 1024;
 export const unitRegistry = {
   // AV02: finisher (overhead cut) and sweep (wide cut) use the slash clip, lunge the thrust clip; the parry riposte is the
   // thrust (12 → 13). Mark and the parry stance have no matching gesture yet (brief CODEX-AV02-GESTURES-TH) and stay procedural.
@@ -71,6 +79,24 @@ export const unitRegistry = {
   foe_riftweaver: { sheet: 'riftweaver', displayRatio: 2, intents: { 'Rune Lash': 'attack', 'Rift Needle': 'skill', 'Ribbon Snare': 'snare' } },
   foe_spore_puff: { sheet: 'sporepuff', displayRatio: 2, intents: { 'Spore Dust': 'attack' } },
   foe_ruin_bat: { sheet: 'bat', displayRatio: 2, intents: { Nip: 'attack' }, idleLoop: { frames: [22, 23, 24, 25], frameMs: 150 } },
+  // A9: boss strips are one per move (`move1`.. in the order of each atlas, see docs/combat-presentation/unit-a9-slice). Phase turns
+  // carry the phase name (Thorn Rage, Call the Rift, Rift Awakening, Call the Hunt) and play their own gesture. The Matriarch
+  // atlas already faces left (owner decision); it is never mirrored at runtime.
+  foe_matriarch: { sheet: 'matriarch', displayRatio: 2, soleOrigin: BOSS_SOLE, downedFrame: 25,
+    intents: { 'Thorn Tempest': 'move1', 'Briar Lash': 'move2', 'Gather Thorns': 'move3', 'Thorn Bloom': 'move4', 'Thorn Storm': 'move4', 'Thorn Rage': 'move5' },
+    clips: { move1: bossMove(1), move2: bossMove(5), move3: bossMove(9), move4: bossMove(13), move5: bossMove(17) },
+    reactions: { hit: [21, 22], down: [23, 24, 25] } },
+  foe_juggernaut: { sheet: 'juggernaut', displayRatio: 2, soleOrigin: BOSS_SOLE, downedFrame: 13,
+    intents: { 'Horn Charge': 'move1', 'Shard Burst': 'move2' },
+    clips: { move1: bossMove(1), move2: bossMove(5) }, reactions: { hit: [9, 10], down: [11, 12, 13] } },
+  foe_sentinel: { sheet: 'sentinel', displayRatio: 2, soleOrigin: BOSS_SOLE, downedFrame: 33,
+    intents: { 'Rift Cataclysm': 'move1', 'Raking Slash': 'move2', 'Crushing Blow': 'move3', 'Rift Bolt': 'move4', 'Rift Wave': 'move4',
+      'Rift Gathering': 'move5', 'Rift Awakening': 'move6', 'Call the Rift': 'move7' },
+    clips: { move1: bossMove(1), move2: bossMove(5), move3: bossMove(9), move4: bossMove(13), move5: bossMove(17), move6: bossMove(21), move7: bossMove(25) },
+    reactions: { hit: [29, 30], down: [31, 32, 33] } },
+  foe_captain: { sheet: 'captain', displayRatio: 2, soleOrigin: BOSS_SOLE, downedFrame: 17,
+    intents: { 'War Cry': 'move1', 'Crushing Blow': 'move2', 'Call the Hunt': 'move3' },
+    clips: { move1: bossMove(1), move2: bossMove(5), move3: bossMove(9) }, reactions: { hit: [13, 14], down: [15, 16, 17] } },
 } as const satisfies Record<string, UnitDefinition>;
 // Anatomy hold (animation-visual-audit-2026-10-29): an identity whose generated poses do not match its approved
 // idle model (head/torso proportions) keeps its mapping and atlas in the repository but is neither loaded nor drawn;
@@ -86,6 +112,9 @@ export const unitKey = (art: string): string | undefined => {
   const definition = anatomyHold.has(art) ? undefined : unitDefinition(art);
   return definition ? `unit-pilot-${definition.sheet}` : undefined;
 };
+// Final (downed) frame and soles anchor of an identity's atlas; the shared layout ends its down clip at 21 with soles at 496/512.
+export const unitDownedFrame = (art: string): number => unitDefinition(art)?.downedFrame ?? 21;
+export const unitSoleOrigin = (art: string): number => unitDefinition(art)?.soleOrigin ?? 496 / 512;
 export const unitDisplayRatio = (art: string): number => unitDefinition(art)?.displayRatio ?? 1;
 export const unitUrl = (name: UnitSheet): string => `${import.meta.env.BASE_URL}assets/units/${atlasManifest[name].image}`;
 export const unitAtlasUrls = (name: UnitSheet): [string, string] => [unitUrl(name), `${import.meta.env.BASE_URL}assets/units/${atlasManifest[name].atlas}`];

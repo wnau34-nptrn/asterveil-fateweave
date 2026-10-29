@@ -1,0 +1,29 @@
+{
+  "identity": "foe_sentinel",
+  "atlas": "public/assets/art/units_foes.webp",
+  "cell_zero_based": 8,
+  "atlas_columns": 2,
+  "crop_xyxy": [
+    0,
+    2048,
+    512,
+    2560
+  ],
+  "file": "seeds/idle.png",
+  "sha256": "33329874d21ddd767790ac55d23b43cfb07a7272dc6f46985c1021adb64f5c2b",
+  "decoded_rgba_sha256": "e74fab2ebcbf620c577902ab7d5481d993449ebc522569a543e9697350ecdcdc",
+  "size": [
+    512,
+    512
+  ],
+  "atlas_seed_unchanged": true,
+  "animation_seed": "seeds/idle.png",
+  "animation_facing": "left",
+  "logical_sole_y": 497,
+  "padded_frame_seed_xy": [
+    256,
+    160
+  ],
+  "padded_frame_sole_y": 657,
+  "atlas_sha256": "dcf79e09f2b0b813aa03894bd65222ae3afb2df875e84870d1dba968c49a1895"
+}

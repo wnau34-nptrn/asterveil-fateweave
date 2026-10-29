@@ -1,0 +1,189 @@
+[
+  {
+    "boss": "foe_sentinel",
+    "move": "rift-cataclysm",
+    "frames": 6,
+    "prompt": "Edit the provided 6-slot template into ONE complete horizontal SIX-frame animation strip. Same exact character as seed reference 2, same LEFT facing, anatomy, outfit, equipment, colours, painted chibi fantasy style. RIFT CATACLYSM signature: 1 normal upright ready; 2 bend knees, bow skull DOWN while pulling the SAME poleaxe up/back to RIGHT; 3 deep compressed DOWNWARD coil with weapon raised behind, holdable anticipation; 4 huge two-handed vertical poleaxe slam DOWN and LEFT, axe blade touching ground, unmistakable contact, feet still planted; 5 folded follow-through with both hands gripping shaft, blade grounded; 6 return upright ready. Retain entire attached poleaxe, floating circular crown, both legs, white cape in EVERY frame. Not an energy cast. No effects or cracks. Six complete figures left-to-right, no extra figures. Preserve template spacing and SMALL size: figure height only 29% of canvas height, soles at 75% height; centres at 1/12,3/12,5/12,7/12,9/12,11/12 width. Very wide empty gutters and outer margins. Do not enlarge to fill canvas. Same anatomical body scale all frames. Feet baseline constant, horizontal movement in pose contained within own slot. Transparent real alpha RGBA. NO VFX, projectiles, glows beyond reference material, dust, ground rings, scenery, shadows, text or labels. No clipping. Whole strip generated at once. Equipment attached and visible in every frame. Anticipation goes DOWN/back, never rises.",
+    "original_path": "/workspace/generated_images/exec-574d64d8-9689-4f32-8f69-1311fe399af0.png",
+    "source": "foe_sentinel/source-sheets/rift-cataclysm-source.png",
+    "accepted": true,
+    "attempt": 1,
+    "frame_order": [
+      "ready (exact seed)",
+      "wind-up",
+      "deep anticipation",
+      "contact / release / charged hold",
+      "follow-through / sustain",
+      "recover (exact seed)"
+    ],
+    "intents": [
+      "Rift Cataclysm"
+    ]
+  },
+  {
+    "boss": "foe_sentinel",
+    "move": "raking-slash",
+    "frames": 6,
+    "prompt": "Edit provided 6-slot template into ONE horizontal 6-frame full body animation strip of EXACT seed reference 2 Rift Sentinel: LEFT-facing skull helmet, gold/purple crystal armour, white torn cape, attached circular gold/purple crown behind head, SAME long crescent poleaxe. Original painted chibi fantasy style identical to seed. RAKING SLASH: 1 normal ready; 2 head bows DOWN knees flex, pull poleaxe back RIGHT horizontally at waist; 3 deeper backward coil head DOWN weapon far right; 4 sharp HORIZONTAL two-handed raking poleaxe slash toward LEFT at waist/chest height, blade extends left, unmistakable contact; 5 rotate follow-through with blade still forward left; 6 ready. Physical horizontal cut, not overhead slam. Keep poleaxe continuous and visibly gripped. Precisely 6 equally spaced full figures in a single row. SMALL template scale about 29% canvas height and very wide transparent gutters, baseline soles 75% canvas height. Do NOT enlarge to fill canvas. Same anatomical proportions/head size all frames. All equipment/limbs attached and fully visible, weapon shaft continuous hand to blade, crown never becomes an effect. Feet remain same ground line, defeat lowers naturally. No clipping. Transparent real RGBA alpha. NO VFX, energy, flying objects, bursts, floor rings, dust, ground shadows, scenery, words or labels. Whole strip in one request. CORRECTION: NEW COMPACT TEMPLATE: keep ALL SIX figures TINY, each ONLY 18% of canvas height, width of body only 9% total width. Entire extended weapon AND body occupy LESS than 15% total canvas width. WIDE EMPTY alpha vertical bands between all six figures. Large left/right outer margins; no axe/cape clipping. Do NOT enlarge template figures. Keep all weapon/cape outlines within individual slots; no overlap at all.",
+    "original_path": "/workspace/generated_images/exec-c48ff223-a0ae-4ae7-bb47-8eff59cc8195.png",
+    "source": "foe_sentinel/source-sheets/raking-slash-source.png",
+    "accepted": true,
+    "attempt": 2,
+    "frame_order": [
+      "ready (exact seed)",
+      "wind-up",
+      "deep anticipation",
+      "contact / release / charged hold",
+      "follow-through / sustain",
+      "recover (exact seed)"
+    ],
+    "intents": [
+      "Raking Slash"
+    ]
+  },
+  {
+    "boss": "foe_sentinel",
+    "move": "crushing-blow",
+    "frames": 6,
+    "prompt": "Edit this COMPACT six-slot template into ONE horizontal SIX-frame whole animation strip. Exact same LEFT-facing Rift Sentinel, skull helmet, gold-purple armour, white cape, attached circular crown, SAME crescent poleaxe, painted fantasy chibi art. CRUSHING BLOW is a SHORT TWO-HANDED POLEAXE CHOP, NOT A PUNCH: 1 upright ready with original one-hand grip; 2 free hand joins the SAME shaft visibly, knees bend, head DOWN and axe draws back diagonally RIGHT; 3 deeper downward head/body coil, both hands clearly grip shaft near chest, blade raised to head height on RIGHT; 4 decisive SHORT diagonal chop to LEFT, blade stops at CHEST HEIGHT aimed into foe, both hands still on shaft; 5 short forward follow-through with blade at WAIST height, no blade on ground; 6 return original upright one-hand ready. This differs from Cataclysm's huge overhead ground slam and Raking Slash's horizontal sweep. Keep weapon attached continuously to original gripping hand throughout, second hand only joins it. Full weapon visible every frame. Same body/head size all frames. Keep figures TINY at only 18% canvas height, large alpha gaps between ALL six figures, wide outer margins. No overlap or clipping. Real transparent RGBA. No VFX, projectiles, lights, rings, dust, ground shadows, scenery, text or labels. Whole strip in one generation.",
+    "original_path": "/workspace/generated_images/exec-ed11dab6-e406-48a0-8046-e81da0f2e7d0.png",
+    "source": "foe_sentinel/source-sheets/crushing-blow-source.png",
+    "accepted": true,
+    "attempt": 3,
+    "frame_order": [
+      "ready (exact seed)",
+      "wind-up",
+      "deep anticipation",
+      "contact / release / charged hold",
+      "follow-through / sustain",
+      "recover (exact seed)"
+    ],
+    "intents": [
+      "Crushing Blow"
+    ]
+  },
+  {
+    "boss": "foe_sentinel",
+    "move": "rift-bolt-wave",
+    "frames": 6,
+    "prompt": "Edit provided 6-slot template into ONE horizontal 6-frame full body animation strip of EXACT seed reference 2 Rift Sentinel: LEFT-facing skull helmet, gold/purple crystal armour, white torn cape, attached circular gold/purple crown behind head, SAME long crescent poleaxe. Original painted chibi fantasy style identical to seed. RIFT BOLT and RIFT WAVE shared energy CAST: 1 normal ready; 2 head bows DOWN free hand draws to chest, poleaxe remains vertical in other hand; 3 deeper downward coil palm cupped close to chest; 4 free palm thrust LEFT open fingers at shoulder height, unmistakable casting release, poleaxe held upright; 5 free hand sweeps across LEFT at chest height; 6 ready. NOT a punch, not weapon swing, not summons upward. No energy projectile or VFX. Precisely 6 equally spaced full figures in a single row. SMALL template scale about 29% canvas height and very wide transparent gutters, baseline soles 75% canvas height. Do NOT enlarge to fill canvas. Same anatomical proportions/head size all frames. All equipment/limbs attached and fully visible, weapon shaft continuous hand to blade, crown never becomes an effect. Feet remain same ground line, defeat lowers naturally. No clipping. Transparent real RGBA alpha. NO VFX, energy, flying objects, bursts, floor rings, dust, ground shadows, scenery, words or labels. Whole strip in one request. CORRECTION: NEW COMPACT TEMPLATE is the mandatory spacing/size guide: each complete figure ONLY 18% canvas height and body width ONLY 9% canvas width. Even the extended hands/weapons must stay inside their own sixth of image with fully empty vertical alpha bands. Large outer margins. Do NOT enlarge. Previous source rejected for touching / clipping. Keep poleaxe in same screen-LEFT hand always. No hand-switching. For casting or summoning, free screen-RIGHT arm crosses chest toward LEFT.",
+    "original_path": "/workspace/generated_images/exec-38d8afa0-a2b7-4833-aad6-36384467c3b2.png",
+    "source": "foe_sentinel/source-sheets/rift-bolt-wave-source.png",
+    "accepted": true,
+    "attempt": 2,
+    "frame_order": [
+      "ready (exact seed)",
+      "wind-up",
+      "deep anticipation",
+      "contact / release / charged hold",
+      "follow-through / sustain",
+      "recover (exact seed)"
+    ],
+    "intents": [
+      "Rift Bolt",
+      "Rift Wave"
+    ]
+  },
+  {
+    "boss": "foe_sentinel",
+    "move": "rift-gathering",
+    "frames": 6,
+    "prompt": "Edit provided 6-slot template into ONE horizontal 6-frame full body animation strip of EXACT seed reference 2 Rift Sentinel: LEFT-facing skull helmet, gold/purple crystal armour, white torn cape, attached circular gold/purple crown behind head, SAME long crescent poleaxe. Original painted chibi fantasy style identical to seed. RIFT GATHERING charge/telegraph: 1 normal ready; 2 knees bend head bows DOWN weapon pulls close; 3 deepest downward crouch head down, BOTH hands grip poleaxe held diagonally across chest; 4 hold this tight guarded crouch looking LEFT, halo tilts with body; 5 continue tight charged crouch hands tense, NO RELEASE; 6 ready. Frame 3 or 4 holdable for a whole turn, clearly compressed silhouette. No energy. Precisely 6 equally spaced full figures in a single row. SMALL template scale about 29% canvas height and very wide transparent gutters, baseline soles 75% canvas height. Do NOT enlarge to fill canvas. Same anatomical proportions/head size all frames. All equipment/limbs attached and fully visible, weapon shaft continuous hand to blade, crown never becomes an effect. Feet remain same ground line, defeat lowers naturally. No clipping. Transparent real RGBA alpha. NO VFX, energy, flying objects, bursts, floor rings, dust, ground shadows, scenery, words or labels. Whole strip in one request. CORRECTION: NEW COMPACT TEMPLATE is the mandatory spacing/size guide: each complete figure ONLY 18% canvas height and body width ONLY 9% canvas width. Even the extended hands/weapons must stay inside their own sixth of image with fully empty vertical alpha bands. Large outer margins. Do NOT enlarge. Previous source rejected for touching / clipping. Keep poleaxe in same screen-LEFT hand always. No hand-switching. For casting or summoning, free screen-RIGHT arm crosses chest toward LEFT.",
+    "original_path": "/workspace/generated_images/exec-c9f2c238-f406-421d-a4b8-a906cbe65189.png",
+    "source": "foe_sentinel/source-sheets/rift-gathering-source.png",
+    "accepted": true,
+    "attempt": 2,
+    "frame_order": [
+      "ready (exact seed)",
+      "wind-up",
+      "deep anticipation",
+      "contact / release / charged hold",
+      "follow-through / sustain",
+      "recover (exact seed)"
+    ],
+    "intents": [
+      "Rift Gathering"
+    ],
+    "hold_frame": 2
+  },
+  {
+    "boss": "foe_sentinel",
+    "move": "rift-awakening",
+    "frames": 6,
+    "prompt": "Edit provided 6-slot template into ONE horizontal 6-frame full body animation strip of EXACT seed reference 2 Rift Sentinel: LEFT-facing skull helmet, gold/purple crystal armour, white torn cape, attached circular gold/purple crown behind head, SAME long crescent poleaxe. Original painted chibi fantasy style identical to seed. RIFT AWAKENING phase change: 1 normal ready; 2 knees bend head DOWN free fist pulls to sternum; 3 deepest compressed head-down coil shoulders contracted; 4 grand awakening body opens chest and lifts free clenched fist overhead while roaring skull LEFT, poleaxe remains fully gripped upright in other hand, circular crown stays attached behind; 5 sustain fist-up phase proclamation with expanded chest; 6 ready. A fist-up awakening, not a palm-out cast or ground slam. No glows or effects. Precisely 6 equally spaced full figures in a single row. SMALL template scale about 29% canvas height and very wide transparent gutters, baseline soles 75% canvas height. Do NOT enlarge to fill canvas. Same anatomical proportions/head size all frames. All equipment/limbs attached and fully visible, weapon shaft continuous hand to blade, crown never becomes an effect. Feet remain same ground line, defeat lowers naturally. No clipping. Transparent real RGBA alpha. NO VFX, energy, flying objects, bursts, floor rings, dust, ground shadows, scenery, words or labels. Whole strip in one request. CORRECTION: NEW COMPACT TEMPLATE: keep ALL SIX figures TINY, each ONLY 18% of canvas height, width of body only 9% total width. Entire extended weapon AND body occupy LESS than 15% total canvas width. WIDE EMPTY alpha vertical bands between all six figures. Large left/right outer margins; no axe/cape clipping. Do NOT enlarge template figures. Keep all weapon/cape outlines within individual slots; no overlap at all.",
+    "original_path": "/workspace/generated_images/exec-9003f61c-fef2-49a2-95d2-74b7b86a06f8.png",
+    "source": "foe_sentinel/source-sheets/rift-awakening-source.png",
+    "accepted": true,
+    "attempt": 2,
+    "frame_order": [
+      "ready (exact seed)",
+      "wind-up",
+      "deep anticipation",
+      "contact / release / charged hold",
+      "follow-through / sustain",
+      "recover (exact seed)"
+    ],
+    "intents": [
+      "Rift Awakening"
+    ]
+  },
+  {
+    "boss": "foe_sentinel",
+    "move": "call-the-rift",
+    "frames": 6,
+    "prompt": "Edit provided 6-slot template into ONE horizontal 6-frame full body animation strip of EXACT seed reference 2 Rift Sentinel: LEFT-facing skull helmet, gold/purple crystal armour, white torn cape, attached circular gold/purple crown behind head, SAME long crescent poleaxe. Original painted chibi fantasy style identical to seed. CALL THE RIFT summon gesture: 1 normal ready; 2 bow skull DOWN, free hand draws to waist; 3 deeper downward coil, free palm turns UP; 4 free arm extends LEFT at waist height, palm UP fingers curled beckoning, poleaxe stays visibly held vertically in other hand; 5 curl fingers in deliberate beckon LEFT, open palm stays UP, head looks LEFT; 6 ready. Summon/beckon clearly different from palm-out Rift Bolt and fist-up Awakening. No summoned creatures or portals. Precisely 6 equally spaced full figures in a single row. SMALL template scale about 29% canvas height and very wide transparent gutters, baseline soles 75% canvas height. Do NOT enlarge to fill canvas. Same anatomical proportions/head size all frames. All equipment/limbs attached and fully visible, weapon shaft continuous hand to blade, crown never becomes an effect. Feet remain same ground line, defeat lowers naturally. No clipping. Transparent real RGBA alpha. NO VFX, energy, flying objects, bursts, floor rings, dust, ground shadows, scenery, words or labels. Whole strip in one request. CORRECTION: NEW COMPACT TEMPLATE is the mandatory spacing/size guide: each complete figure ONLY 18% canvas height and body width ONLY 9% canvas width. Even the extended hands/weapons must stay inside their own sixth of image with fully empty vertical alpha bands. Large outer margins. Do NOT enlarge. Previous source rejected for touching / clipping. Keep poleaxe in same screen-LEFT hand always. No hand-switching. For casting or summoning, free screen-RIGHT arm crosses chest toward LEFT.",
+    "original_path": "/workspace/generated_images/exec-d87ff812-3480-408b-bc5e-2d45710d2be6.png",
+    "source": "foe_sentinel/source-sheets/call-the-rift-source.png",
+    "accepted": true,
+    "attempt": 2,
+    "frame_order": [
+      "ready (exact seed)",
+      "wind-up",
+      "deep anticipation",
+      "contact / release / charged hold",
+      "follow-through / sustain",
+      "recover (exact seed)"
+    ],
+    "intents": [
+      "Call the Rift"
+    ]
+  },
+  {
+    "boss": "foe_sentinel",
+    "move": "hit",
+    "frames": 4,
+    "prompt": "Edit provided 4-slot template into ONE horizontal 4-frame full body animation strip of EXACT seed reference 2 Rift Sentinel: LEFT-facing skull helmet, gold/purple crystal armour, white torn cape, attached circular gold/purple crown behind head, SAME long crescent poleaxe. Original painted chibi fantasy style identical to seed. 1 normal ready; 2 recoil backward RIGHT from LEFT impact head tilts back, knees flex, poleaxe still gripped; 3 head bows down in hurt brace weapon near chest; 4 recover ready. Circular crown, cape, both legs and entire weapon stay intact. No effects. Precisely 4 equally spaced full figures in a single row. SMALL template scale about 29% canvas height and very wide transparent gutters, baseline soles 75% canvas height. Do NOT enlarge to fill canvas. Same anatomical proportions/head size all frames. All equipment/limbs attached and fully visible, weapon shaft continuous hand to blade, crown never becomes an effect. Feet remain same ground line, defeat lowers naturally. No clipping. Transparent real RGBA alpha. NO VFX, energy, flying objects, bursts, floor rings, dust, ground shadows, scenery, words or labels. Whole strip in one request.",
+    "original_path": "/workspace/generated_images/exec-3b413c34-65b0-4548-8e4c-2114d1e72e40.png",
+    "source": "foe_sentinel/source-sheets/hit-source.png",
+    "accepted": true,
+    "attempt": 1,
+    "frame_order": [
+      "ready (exact seed)",
+      "recoil",
+      "brace",
+      "recover (exact seed)"
+    ],
+    "intents": [
+      "hit"
+    ]
+  },
+  {
+    "boss": "foe_sentinel",
+    "move": "down",
+    "frames": 4,
+    "prompt": "Edit provided 4-slot template into ONE horizontal 4-frame full body animation strip of EXACT seed reference 2 Rift Sentinel: LEFT-facing skull helmet, gold/purple crystal armour, white torn cape, attached circular gold/purple crown behind head, SAME long crescent poleaxe. Original painted chibi fantasy style identical to seed. 1 normal ready; 2 knees buckle head drops, poleaxe still held; 3 one knee grounded skull bowed, poleaxe blade rests on ground; 4 grounded defeat HOLD, kneeling both knees folded with torso slumped and skull low LEFT, weapon gripped resting diagonally beside body, attached circular crown tilted down intact. NEVER stands up. No disappearance or shattered pieces. Precisely 4 equally spaced full figures in a single row. SMALL template scale about 29% canvas height and very wide transparent gutters, baseline soles 75% canvas height. Do NOT enlarge to fill canvas. Same anatomical proportions/head size all frames. All equipment/limbs attached and fully visible, weapon shaft continuous hand to blade, crown never becomes an effect. Feet remain same ground line, defeat lowers naturally. No clipping. Transparent real RGBA alpha. NO VFX, energy, flying objects, bursts, floor rings, dust, ground shadows, scenery, words or labels. Whole strip in one request.",
+    "original_path": "/workspace/generated_images/exec-0004408a-d225-4520-986e-7d9887ba59ce.png",
+    "source": "foe_sentinel/source-sheets/down-source.png",
+    "accepted": true,
+    "attempt": 1,
+    "frame_order": [
+      "ready (exact seed)",
+      "buckle",
+      "collapse",
+      "grounded hold (never stands)"
+    ],
+    "intents": [
+      "down"
+    ]
+  }
+]

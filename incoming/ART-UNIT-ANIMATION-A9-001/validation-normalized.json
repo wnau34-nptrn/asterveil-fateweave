@@ -1,0 +1,260 @@
+{
+  "matriarch": {
+    "factor": 0.37,
+    "cell": 379,
+    "displayRatio": 2,
+    "origin": [
+      0.5,
+      0.875
+    ],
+    "translation": [
+      0,
+      239
+    ],
+    "layout": {
+      "thorn-tempest": 1,
+      "briar-lash": 5,
+      "gather-thorns": 9,
+      "thorn-bloom-storm": 13,
+      "thorn-rage": 17,
+      "hit": 21,
+      "down": 23
+    },
+    "rawSha256": {
+      "thorn-tempest": "4b549435bb1fbe0f105a94bba54bcc4af587bce9b397d7b026d2e22b30e711a2",
+      "briar-lash": "916f5425e4d52937ede243f470afff8562c4a2caa2603146995316b101c9d2e8",
+      "gather-thorns": "61c6ded8bb6234cc5db18d29b6f893b695f935fb6ce8814aea1e2eeea2744e75",
+      "thorn-bloom-storm": "d116edafc952a05e8a5ffdd8a49b0136d175c8ea8615c53099a60eb464d72ce0",
+      "thorn-rage": "6da5eaf8dbb13ccd2e76b04e5c8b4ad6db48a9db1852fcddac7039f964e6237a",
+      "hit": "2a533855e5785560cd02b788522319d1ea577680164ceaa24fe4eda1f556792b",
+      "down": "9ee50f9a53660be35c3b9023f64f2257a62c893629c88445652e99ad51a36f6e"
+    },
+    "exactSeedFrames": {
+      "thorn-tempest": [
+        true,
+        true
+      ],
+      "briar-lash": [
+        true,
+        true
+      ],
+      "gather-thorns": [
+        true,
+        true
+      ],
+      "thorn-bloom-storm": [
+        true,
+        true
+      ],
+      "thorn-rage": [
+        true,
+        true
+      ],
+      "hit": [
+        true,
+        true
+      ],
+      "down": [
+        true,
+        null
+      ]
+    },
+    "uniqueFrames": 26,
+    "image": "matriarch_a9.9aec248e0338.webp",
+    "atlas": "matriarch_a9.869441fd964f.json",
+    "width": 1280,
+    "height": 690,
+    "frames": 26,
+    "decodedBytes": 3532800,
+    "downloadBytes": 1420295
+  },
+  "juggernaut": {
+    "factor": 0.5,
+    "cell": 512,
+    "displayRatio": 2,
+    "origin": [
+      0.5,
+      0.875
+    ],
+    "translation": [
+      0,
+      239
+    ],
+    "layout": {
+      "horn-charge": 1,
+      "shard-burst": 5,
+      "hit": 9,
+      "down": 11
+    },
+    "rawSha256": {
+      "horn-charge": "3f9c140d5e8699b792aea093a69df11bb34831e63610d500b4e9c18d1edcbdee",
+      "shard-burst": "c43510934ea0886d689f422b4b413f67f9d99ea47042b6b0193ab05d46744fd4",
+      "hit": "15115025b90957e452bcd41e11c4d533c65f2e7294207c664c1f8e6e51aa4de5",
+      "down": "5cef248c3f603dd5ccef804608f134b4bf08fe705f3282c53813a57bd7285de7"
+    },
+    "exactSeedFrames": {
+      "horn-charge": [
+        true,
+        true
+      ],
+      "shard-burst": [
+        true,
+        true
+      ],
+      "hit": [
+        true,
+        true
+      ],
+      "down": [
+        true,
+        null
+      ]
+    },
+    "uniqueFrames": 14,
+    "image": "juggernaut_a9.c874096fe87b.webp",
+    "atlas": "juggernaut_a9.8855bfee5bd8.json",
+    "width": 1536,
+    "height": 702,
+    "frames": 14,
+    "decodedBytes": 4313088,
+    "downloadBytes": 1425783
+  },
+  "sentinel": {
+    "factor": 0.31,
+    "cell": 317,
+    "displayRatio": 2,
+    "origin": [
+      0.5,
+      0.875
+    ],
+    "translation": [
+      0,
+      239
+    ],
+    "layout": {
+      "rift-cataclysm": 1,
+      "raking-slash": 5,
+      "crushing-blow": 9,
+      "rift-bolt-wave": 13,
+      "rift-gathering": 17,
+      "rift-awakening": 21,
+      "call-the-rift": 25,
+      "hit": 29,
+      "down": 31
+    },
+    "rawSha256": {
+      "rift-cataclysm": "3b3abaadede82acb39215867c36a66c8fc08ac30c9ef530bdb29871c0d0e7386",
+      "raking-slash": "ee1390841b489ced52529cf89e02151eec484d3b08700ebbab8ffe2c1c9307ba",
+      "crushing-blow": "551477d59766a31ef2f7c158658a340b6152c3a204157310b9a7bfc599ce3f24",
+      "rift-bolt-wave": "6b51466da7cab81a0942a12ed86acb38bfc1088fa5b015edac7af4ac7ce3568d",
+      "rift-gathering": "a297512b8f5785eff3413cf2c59ac5baabe64b4686898d931561798d756c09ab",
+      "rift-awakening": "0e1a8e0094444bc3c25691e6fd9c9f1fcda744d12cb9e88e8eec7d1eceebe708",
+      "call-the-rift": "f24e8b7ce2af35030a8286965ef6bf36133229a7c3e75a0a62c2e24bfcccf912",
+      "hit": "200073f7af672b5be3457c9ed224f397433bbbd0cf8ca2db6312bc8e10b35501",
+      "down": "b260947198dd1f85d138232ad5f2715e9121c1d4fcfe8d050c057f78883c5501"
+    },
+    "exactSeedFrames": {
+      "rift-cataclysm": [
+        true,
+        true
+      ],
+      "raking-slash": [
+        true,
+        true
+      ],
+      "crushing-blow": [
+        true,
+        true
+      ],
+      "rift-bolt-wave": [
+        true,
+        true
+      ],
+      "rift-gathering": [
+        true,
+        true
+      ],
+      "rift-awakening": [
+        true,
+        true
+      ],
+      "call-the-rift": [
+        true,
+        true
+      ],
+      "hit": [
+        true,
+        true
+      ],
+      "down": [
+        true,
+        null
+      ]
+    },
+    "uniqueFrames": 34,
+    "image": "sentinel_a9.616021ce3ce4.webp",
+    "atlas": "sentinel_a9.0c30c1349c42.json",
+    "width": 1024,
+    "height": 934,
+    "frames": 34,
+    "decodedBytes": 3825664,
+    "downloadBytes": 1409354
+  },
+  "captain": {
+    "factor": 0.5,
+    "cell": 512,
+    "displayRatio": 2,
+    "origin": [
+      0.5,
+      0.875
+    ],
+    "translation": [
+      0,
+      239
+    ],
+    "layout": {
+      "war-cry": 1,
+      "crushing-blow": 5,
+      "call-the-hunt": 9,
+      "hit": 13,
+      "down": 15
+    },
+    "rawSha256": {
+      "war-cry": "4b277742de0cea9f1ecd552a1673346a018c887084d208eb71b9f5919bd64879",
+      "crushing-blow": "65cb9a5e45ed8b49d86f26c0c79eb71d6e4010f171f277f2e0e63aa2a8758877",
+      "call-the-hunt": "84f66492a7106f29b29f9338ec20d7187db233f1e0af7ef05c02edec367551d0",
+      "hit": "2270795679e3f4afd0a2a7827c65b40f03031936497f7778c09317a3a66da529",
+      "down": "d8c335ed626a2796a2690c0b7b7d802f0ec5efad1d138a01905d6e6e74e9f859"
+    },
+    "exactSeedFrames": {
+      "war-cry": [
+        true,
+        true
+      ],
+      "crushing-blow": [
+        true,
+        true
+      ],
+      "call-the-hunt": [
+        true,
+        true
+      ],
+      "hit": [
+        true,
+        true
+      ],
+      "down": [
+        true,
+        null
+      ]
+    },
+    "uniqueFrames": 18,
+    "image": "captain_a9.93e9e7fb305a.webp",
+    "atlas": "captain_a9.84200ceb12ef.json",
+    "width": 768,
+    "height": 1562,
+    "frames": 18,
+    "decodedBytes": 4798464,
+    "downloadBytes": 1336077
+  }
+}

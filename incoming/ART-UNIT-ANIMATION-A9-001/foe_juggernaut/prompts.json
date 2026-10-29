@@ -1,0 +1,83 @@
+[
+  {
+    "boss": "foe_juggernaut",
+    "move": "horn-charge",
+    "frames": 6,
+    "prompt": "Edit the provided 6-slot template into ONE complete horizontal SIX-frame animation strip. Same exact character as seed reference 2, same LEFT facing, anatomy, outfit, equipment, colours, painted chibi fantasy style. HORN CHARGE signature: 1 normal tall ready from seed; 2 bend all four knees and lower horned head; 3 DEEP forward/down coil horns level aimed LEFT, rear legs loading, HOLDABLE telegraph; 4 explosive horizontal forward horn thrust LEFT with all four legs still readable, head low; 5 horns drive through left while hind legs extend; 6 recover upright ready. A heavy quadruped charge, no jumping, no new crystal fist, no detached shards. Six complete figures left-to-right, no extra figures. Preserve template spacing and SMALL size: figure height only 29% of canvas height, soles at 75% height; centres at 1/12,3/12,5/12,7/12,9/12,11/12 width. Very wide empty gutters and outer margins. Do not enlarge to fill canvas. Same anatomical body scale all frames. Feet baseline constant, horizontal movement in pose contained within own slot. Transparent real alpha RGBA. NO VFX, projectiles, glows beyond reference material, dust, ground rings, scenery, shadows, text or labels. No clipping. Whole strip generated at once. Equipment attached and visible in every frame. Anticipation goes DOWN/back, never rises.",
+    "original_path": "/workspace/generated_images/exec-ec4ebe17-8870-4b8b-9b42-32676632189f.png",
+    "source": "foe_juggernaut/source-sheets/horn-charge-source.png",
+    "accepted": true,
+    "attempt": 1,
+    "frame_order": [
+      "ready (exact seed)",
+      "wind-up",
+      "deep anticipation",
+      "contact / release / charged hold",
+      "follow-through / sustain",
+      "recover (exact seed)"
+    ],
+    "intents": [
+      "Horn Charge"
+    ],
+    "hold_frame": 2
+  },
+  {
+    "boss": "foe_juggernaut",
+    "move": "shard-burst",
+    "frames": 6,
+    "prompt": "Edit provided 6-slot template into ONE horizontal 6-frame sprite animation of EXACT supplied LEFT-facing Crystal Juggernaut: huge purple crystal quadruped beetle/rhino, gold bands, low horned head, four heavy clawed legs, faceted back shell, painted chibi fantasy style identical to seed. 1 normal upright quadruped ready; 2 lower head and flex four knees, crystal back plates fold slightly inward; 3 deep downward coil, head tucked, plates compressed; 4 release body: rear up torso only slightly while four limbs remain grounded, flare attached back crystal plates widely and open jaws to LEFT; 5 sustained open-chest braced release with attached crystals spread; 6 settle ready. No projectile shards, no free-floating crystals or VFX. This is spreading crystal back release, clearly different from low horizontal horn charge. Equal full figures in one row, template SMALL size (29% canvas height) and wide transparent spacing, soles shared baseline 75% height. Do not enlarge to fill canvas. Constant anatomical body scale, horn, shell and all limbs stay attached, complete and visible. Real transparent alpha. No scenery, floor rings, shadows, dust, light bursts, VFX, text or labels. No clipping or touching neighbouring figures. Generate whole strip at once.",
+    "original_path": "/workspace/generated_images/exec-26f9ead1-c777-4365-bb0f-889db6609267.png",
+    "source": "foe_juggernaut/source-sheets/shard-burst-source.png",
+    "accepted": true,
+    "attempt": 1,
+    "frame_order": [
+      "ready (exact seed)",
+      "wind-up",
+      "deep anticipation",
+      "contact / release / charged hold",
+      "follow-through / sustain",
+      "recover (exact seed)"
+    ],
+    "intents": [
+      "Shard Burst"
+    ]
+  },
+  {
+    "boss": "foe_juggernaut",
+    "move": "hit",
+    "frames": 4,
+    "prompt": "Edit provided 4-slot template into ONE horizontal 4-frame sprite animation of EXACT supplied LEFT-facing Crystal Juggernaut: huge purple crystal quadruped beetle/rhino, gold bands, low horned head, four heavy clawed legs, faceted back shell, painted chibi fantasy style identical to seed. 1 normal ready quadruped; 2 flinch backward RIGHT from LEFT hit, head jerks right/back, four feet visible; 3 crouched hurt brace, head low; 4 recover normal ready. No crystal loss, no debris or effects. Equal full figures in one row, template SMALL size (29% canvas height) and wide transparent spacing, soles shared baseline 75% height. Do not enlarge to fill canvas. Constant anatomical body scale, horn, shell and all limbs stay attached, complete and visible. Real transparent alpha. No scenery, floor rings, shadows, dust, light bursts, VFX, text or labels. No clipping or touching neighbouring figures. Generate whole strip at once.",
+    "original_path": "/workspace/generated_images/exec-9be73b50-9c6d-48ee-94c4-5d3a1abe61d8.png",
+    "source": "foe_juggernaut/source-sheets/hit-source.png",
+    "accepted": true,
+    "attempt": 1,
+    "frame_order": [
+      "ready (exact seed)",
+      "recoil",
+      "brace",
+      "recover (exact seed)"
+    ],
+    "intents": [
+      "hit"
+    ]
+  },
+  {
+    "boss": "foe_juggernaut",
+    "move": "down",
+    "frames": 4,
+    "prompt": "Edit provided 4-slot template into ONE horizontal 4-frame sprite animation of EXACT supplied LEFT-facing Crystal Juggernaut: huge purple crystal quadruped beetle/rhino, gold bands, low horned head, four heavy clawed legs, faceted back shell, painted chibi fantasy style identical to seed. 1 normal ready quadruped; 2 all four knees buckle, head drops; 3 heavy body lowers onto folded forelegs, jaw near ground; 4 defeated grounded HOLD, belly and horned head rest on ground, legs folded beneath body, back crystal shell intact. Never gets up. No disintegration or shards. Equal full figures in one row, template SMALL size (29% canvas height) and wide transparent spacing, soles shared baseline 75% height. Do not enlarge to fill canvas. Constant anatomical body scale, horn, shell and all limbs stay attached, complete and visible. Real transparent alpha. No scenery, floor rings, shadows, dust, light bursts, VFX, text or labels. No clipping or touching neighbouring figures. Generate whole strip at once.",
+    "original_path": "/workspace/generated_images/exec-0c533a96-8029-40b0-8e44-b148f572e5a3.png",
+    "source": "foe_juggernaut/source-sheets/down-source.png",
+    "accepted": true,
+    "attempt": 1,
+    "frame_order": [
+      "ready (exact seed)",
+      "buckle",
+      "collapse",
+      "grounded hold (never stands)"
+    ],
+    "intents": [
+      "down"
+    ]
+  }
+]

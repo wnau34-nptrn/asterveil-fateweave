@@ -1,0 +1,106 @@
+[
+  {
+    "boss": "foe_captain",
+    "move": "war-cry",
+    "frames": 6,
+    "prompt": "Create ONE complete horizontal animation sprite strip for the EXACT supplied Vanguard Captain game sprite. Original painted chibi fantasy production sprite style identical to reference, same LEFT-facing helmet with two lava horns, stern red face, gold-trimmed dark segmented armour, red tabard and cape, broad physique, and the SAME large curved lava axe held in his LEFT/screen-left hand. WAR CRY signature move, SIX equal slots left-to-right: 1 upright ready identical proportions to reference; 2 bend knees and bow helmet DOWN, brace axe beside body; 3 deepest compressed forward coil with mouth closed, free fist to chest; 4 unmistakable roar, mouth open, chest expanded, free fist thrust out LEFT at shoulder level, axe still visibly gripped; 5 sustained roaring challenge head left, fist retracting; 6 recover ready. Axeblade, handle and gripping hand visible, continuous and attached IN ALL SIX frames, axe never vanishes. It is a body roar, NOT an axe swing or summoning. Same upright anatomical body size in every slot; head size constant; planted feet use identical sole baseline. Transparent RGBA background, no scenery, no shadows on ground, no VFX, no dust, no rings, no text, no labels. One row only, precisely SIX full figures. Wide clear transparent gutters at least one fifth figure width, generous outer margin, no touching figures or clipping of horns, weapon, cape or feet. 6:1 wide composition. Draw each complete figure without cropping. This request is the whole strip, never individual frames. EDIT THE PROVIDED SIX-SLOT TEMPLATE. Keep its SMALL figure size and large transparent spacing exactly: each figure occupies only 29 percent of canvas height, soles at 75 percent canvas height. Do NOT enlarge figures to fill canvas. Keep centres at x = 1/12,3/12,5/12,7/12,9/12,11/12. Leave generous empty margins above and below and between all figures. Reference 2 is detailed character identity. Correct previous rejected attempt that cropped first axe and squeezed figures together.",
+    "original_path": "/workspace/generated_images/exec-bbfdae4b-49bb-4052-b97e-e113cf528b28.png",
+    "source": "foe_captain/source-sheets/war-cry-source.png",
+    "accepted": true,
+    "attempt": 1,
+    "frame_order": [
+      "ready (exact seed)",
+      "wind-up",
+      "deep anticipation",
+      "contact / release / charged hold",
+      "follow-through / sustain",
+      "recover (exact seed)"
+    ],
+    "intents": [
+      "War Cry"
+    ]
+  },
+  {
+    "boss": "foe_captain",
+    "move": "crushing-blow",
+    "frames": 6,
+    "prompt": "Edit 6-slot template into ONE complete horizontal strip with exactly 6 equally spaced full figures left-to-right. EXACT same original painted chibi fantasy character as detailed reference 2, LEFT-facing lava horn helmet red-face armoured Vanguard Captain with gold trim, red cape/tabard and curved lava axe. 1 upright ready; 2 knees bend and head bows DOWN while lifting AXE behind RIGHT shoulder; 3 deep squat, head down, axe high behind, two hands visibly grip shaft; 4 decisive diagonal axe chop DOWN to LEFT, blade low and forward, clear impact pose; 5 deep forward follow-through axe held low left; 6 recover ready. Whole curved axe attached to hands always. This is a physical heavy axe chop, not roar. Preserve template's SMALL body scale and VERY WIDE transparent gutters; figures occupy 29% canvas height, baseline soles at 75%. Same anatomical size across frames; sole line constant for standing frames, grounded collapse uses same ground. Leave generous margins, no clipping or overlap, every limb and weapon remains attached and visible. Transparent real alpha RGBA, no VFX, flying objects, lights, rings, dust, ground shadows, scenery, words or labels. Whole strip at once.",
+    "original_path": "/workspace/generated_images/exec-55714a43-ce06-4bd2-8e84-7583fbdb385c.png",
+    "source": "foe_captain/source-sheets/crushing-blow-source.png",
+    "accepted": true,
+    "attempt": 1,
+    "frame_order": [
+      "ready (exact seed)",
+      "wind-up",
+      "deep anticipation",
+      "contact / release / charged hold",
+      "follow-through / sustain",
+      "recover (exact seed)"
+    ],
+    "intents": [
+      "Crushing Blow"
+    ],
+    "sole_source_y": {
+      "3": 562
+    }
+  },
+  {
+    "boss": "foe_captain",
+    "move": "call-the-hunt",
+    "frames": 6,
+    "prompt": "Edit 6-slot template into ONE complete horizontal strip with exactly 6 equally spaced full figures left-to-right. EXACT same original painted chibi fantasy character as detailed reference 2, LEFT-facing lava horn helmet red-face armoured Vanguard Captain with gold trim, red cape/tabard and curved lava axe. 1 upright ready; 2 knees slightly flex head bows DOWN, free hand draws toward chest; 3 coil head down and torso back, free fist by chest; 4 free hand points decisively straight LEFT with extended forefinger to command summons, mouth issuing order, axe remains in other hand low by side; 5 hold leftward pointing command with chin lifted only slightly; 6 ready. Axe intact and attached in all frames. Not a roar with fist, not a swing. No summoned creatures. Preserve template's SMALL body scale and VERY WIDE transparent gutters; figures occupy 29% canvas height, baseline soles at 75%. Same anatomical size across frames; sole line constant for standing frames, grounded collapse uses same ground. Leave generous margins, no clipping or overlap, every limb and weapon remains attached and visible. Transparent real alpha RGBA, no VFX, flying objects, lights, rings, dust, ground shadows, scenery, words or labels. Whole strip at once. CORRECTION: weapon hand MUST NOT SWITCH SIDES. Keep axe in the SAME screen-LEFT hand throughout all six frames, hanging visibly low LEFT beside left thigh. The FREE screen-RIGHT hand reaches diagonally ACROSS the chest and points LEFT, with the finger visibly extending from the right shoulder across body. Axe blade stays on screen-LEFT in frames 4 and 5 as well. Reject any pose with axe moved to screen-RIGHT or a missing axe. This continuity matters more than dramatic arm extension.",
+    "original_path": "/workspace/generated_images/exec-df727fd9-9996-43dc-b739-700d3dbdca5b.png",
+    "source": "foe_captain/source-sheets/call-the-hunt-source.png",
+    "accepted": true,
+    "attempt": 2,
+    "frame_order": [
+      "ready (exact seed)",
+      "wind-up",
+      "deep anticipation",
+      "contact / release / charged hold",
+      "follow-through / sustain",
+      "recover (exact seed)"
+    ],
+    "intents": [
+      "Call the Hunt"
+    ]
+  },
+  {
+    "boss": "foe_captain",
+    "move": "hit",
+    "frames": 4,
+    "prompt": "Edit 4-slot template into ONE complete horizontal strip with exactly 4 equally spaced full figures left-to-right. EXACT same original painted chibi fantasy character as detailed reference 2, LEFT-facing lava horn helmet red-face armoured Vanguard Captain with gold trim, red cape/tabard and curved lava axe. 1 upright ready; 2 clear recoil from blow arriving from LEFT, torso leans BACK RIGHT, head recoils, knees buckle slightly, axe still held; 3 compressed hurt brace head down, axe still gripped; 4 recover upright ready. No wounds, sparks or effects. All equipment stays attached. Preserve template's SMALL body scale and VERY WIDE transparent gutters; figures occupy 29% canvas height, baseline soles at 75%. Same anatomical size across frames; sole line constant for standing frames, grounded collapse uses same ground. Leave generous margins, no clipping or overlap, every limb and weapon remains attached and visible. Transparent real alpha RGBA, no VFX, flying objects, lights, rings, dust, ground shadows, scenery, words or labels. Whole strip at once.",
+    "original_path": "/workspace/generated_images/exec-70a4ad74-2bc8-4e49-9c79-5b3dc6aed454.png",
+    "source": "foe_captain/source-sheets/hit-source.png",
+    "accepted": true,
+    "attempt": 1,
+    "frame_order": [
+      "ready (exact seed)",
+      "recoil",
+      "brace",
+      "recover (exact seed)"
+    ],
+    "intents": [
+      "hit"
+    ]
+  },
+  {
+    "boss": "foe_captain",
+    "move": "down",
+    "frames": 4,
+    "prompt": "Edit 4-slot template into ONE complete horizontal strip with exactly 4 equally spaced full figures left-to-right. EXACT same original painted chibi fantasy character as detailed reference 2, LEFT-facing lava horn helmet red-face armoured Vanguard Captain with gold trim, red cape/tabard and curved lava axe. 1 upright ready; 2 knees buckle and head drops DOWN, keep axe gripped; 3 collapse onto LEFT knee, torso bows, other boot planted, axe touching ground while held; 4 grounded defeat HOLD, seated slumped on ground with head bowed and legs folded, horns and axe still visible, NEVER stands up. Last frame clearly lower than standing body. No death effects. Preserve template's SMALL body scale and VERY WIDE transparent gutters; figures occupy 29% canvas height, baseline soles at 75%. Same anatomical size across frames; sole line constant for standing frames, grounded collapse uses same ground. Leave generous margins, no clipping or overlap, every limb and weapon remains attached and visible. Transparent real alpha RGBA, no VFX, flying objects, lights, rings, dust, ground shadows, scenery, words or labels. Whole strip at once.",
+    "original_path": "/workspace/generated_images/exec-acbb88d6-feff-45f2-9841-8b0b2eb2c386.png",
+    "source": "foe_captain/source-sheets/down-source.png",
+    "accepted": true,
+    "attempt": 1,
+    "frame_order": [
+      "ready (exact seed)",
+      "buckle",
+      "collapse",
+      "grounded hold (never stands)"
+    ],
+    "intents": [
+      "down"
+    ]
+  }
+]

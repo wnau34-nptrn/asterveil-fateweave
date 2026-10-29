@@ -1,4 +1,4 @@
-import { unitIdleFrame, unitSample, type UnitFrames } from './unit-frames';
+import { unitDownedFrame, unitIdleFrame, unitSample, type UnitFrames } from './unit-frames';
 
 export interface FrameImage {
   setFrame(frame: number): unknown;
@@ -24,7 +24,7 @@ export function unitFrameView(art: string, primary: FrameImage, next: FrameImage
     },
     reset: () => {
       looped = undefined;
-      primary.setFrame(alive() ? 0 : 21); primary.setAlpha(1);
+      primary.setFrame(alive() ? 0 : unitDownedFrame(art)); primary.setAlpha(1);
       next.setAlpha(0); next.setVisible(false);
     },
   };

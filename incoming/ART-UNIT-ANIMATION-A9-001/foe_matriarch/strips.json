@@ -1,0 +1,1077 @@
+[
+  {
+    "file": "raw/thorn-tempest-r1.png",
+    "move": "thorn-tempest",
+    "revision": "r1",
+    "frame_count": 6,
+    "frame_size": [
+      1024,
+      896
+    ],
+    "frame_order": [
+      "ready (exact seed)",
+      "wind-up",
+      "deep anticipation",
+      "contact / release / charged hold",
+      "follow-through / sustain",
+      "recover (exact seed)"
+    ],
+    "sha256": "4b549435bb1fbe0f105a94bba54bcc4af587bce9b397d7b026d2e22b30e711a2",
+    "suggested_intents": [
+      "Thorn Tempest"
+    ],
+    "preferred_candidate": true,
+    "source": "foe_matriarch/source-sheets/thorn-tempest-source.png",
+    "seed": "seeds/idle-left.png",
+    "logical_seed_rect_xywh": [
+      256,
+      160,
+      512,
+      512
+    ],
+    "sole_y": 657,
+    "facing": "left",
+    "shared_scale": 1.42433234421365,
+    "frame_bounds_xyxy": [
+      [
+        276,
+        177,
+        747,
+        657
+      ],
+      [
+        289,
+        213,
+        726,
+        659
+      ],
+      [
+        275,
+        240,
+        707,
+        659
+      ],
+      [
+        237,
+        177,
+        763,
+        658
+      ],
+      [
+        287,
+        193,
+        810,
+        659
+      ],
+      [
+        276,
+        177,
+        747,
+        657
+      ]
+    ],
+    "transforms": [
+      {
+        "source_crop_xyxy": [
+          40,
+          236,
+          340,
+          573
+        ],
+        "scale": 1.42433234421365,
+        "paste_xy": [
+          311,
+          178
+        ],
+        "source_sole_y": 572,
+        "seed_locked": true
+      },
+      {
+        "source_crop_xyxy": [
+          386,
+          260,
+          693,
+          573
+        ],
+        "scale": 1.42433234421365,
+        "paste_xy": [
+          289,
+          213
+        ],
+        "source_sole_y": 572,
+        "seed_locked": false
+      },
+      {
+        "source_crop_xyxy": [
+          739,
+          279,
+          1042,
+          573
+        ],
+        "scale": 1.42433234421365,
+        "paste_xy": [
+          275,
+          240
+        ],
+        "source_sole_y": 572,
+        "seed_locked": false
+      },
+      {
+        "source_crop_xyxy": [
+          1074,
+          235,
+          1443,
+          573
+        ],
+        "scale": 1.42433234421365,
+        "paste_xy": [
+          237,
+          177
+        ],
+        "source_sole_y": 572,
+        "seed_locked": false
+      },
+      {
+        "source_crop_xyxy": [
+          1471,
+          246,
+          1838,
+          573
+        ],
+        "scale": 1.42433234421365,
+        "paste_xy": [
+          287,
+          193
+        ],
+        "source_sole_y": 572,
+        "seed_locked": false
+      },
+      {
+        "source_crop_xyxy": [
+          1852,
+          236,
+          2148,
+          573
+        ],
+        "scale": 1.42433234421365,
+        "paste_xy": [
+          314,
+          178
+        ],
+        "source_sole_y": 572,
+        "seed_locked": true
+      }
+    ],
+    "hold_frame_0based": null,
+    "contact_frame_0based": 3
+  },
+  {
+    "file": "raw/briar-lash-r1.png",
+    "move": "briar-lash",
+    "revision": "r1",
+    "frame_count": 6,
+    "frame_size": [
+      1024,
+      896
+    ],
+    "frame_order": [
+      "ready (exact seed)",
+      "wind-up",
+      "deep anticipation",
+      "contact / release / charged hold",
+      "follow-through / sustain",
+      "recover (exact seed)"
+    ],
+    "sha256": "916f5425e4d52937ede243f470afff8562c4a2caa2603146995316b101c9d2e8",
+    "suggested_intents": [
+      "Briar Lash"
+    ],
+    "preferred_candidate": true,
+    "source": "foe_matriarch/source-sheets/briar-lash-source.png",
+    "seed": "seeds/idle-left.png",
+    "logical_seed_rect_xywh": [
+      256,
+      160,
+      512,
+      512
+    ],
+    "sole_y": 657,
+    "facing": "left",
+    "shared_scale": 2.318840579710145,
+    "frame_bounds_xyxy": [
+      [
+        276,
+        177,
+        747,
+        657
+      ],
+      [
+        290,
+        242,
+        816,
+        659
+      ],
+      [
+        238,
+        170,
+        704,
+        659
+      ],
+      [
+        99,
+        209,
+        892,
+        659
+      ],
+      [
+        243,
+        223,
+        860,
+        659
+      ],
+      [
+        276,
+        177,
+        747,
+        657
+      ]
+    ],
+    "transforms": [
+      {
+        "source_crop_xyxy": [
+          73,
+          333,
+          289,
+          540
+        ],
+        "scale": 2.318840579710145,
+        "paste_xy": [
+          262,
+          179
+        ],
+        "source_sole_y": 539,
+        "seed_locked": true
+      },
+      {
+        "source_crop_xyxy": [
+          447,
+          358,
+          674,
+          538
+        ],
+        "scale": 2.318840579710145,
+        "paste_xy": [
+          290,
+          242
+        ],
+        "source_sole_y": 537,
+        "seed_locked": false
+      },
+      {
+        "source_crop_xyxy": [
+          787,
+          327,
+          988,
+          538
+        ],
+        "scale": 2.318840579710145,
+        "paste_xy": [
+          238,
+          170
+        ],
+        "source_sole_y": 537,
+        "seed_locked": false
+      },
+      {
+        "source_crop_xyxy": [
+          1089,
+          344,
+          1431,
+          538
+        ],
+        "scale": 2.318840579710145,
+        "paste_xy": [
+          99,
+          209
+        ],
+        "source_sole_y": 537,
+        "seed_locked": false
+      },
+      {
+        "source_crop_xyxy": [
+          1513,
+          351,
+          1779,
+          539
+        ],
+        "scale": 2.318840579710145,
+        "paste_xy": [
+          243,
+          223
+        ],
+        "source_sole_y": 538,
+        "seed_locked": false
+      },
+      {
+        "source_crop_xyxy": [
+          1884,
+          332,
+          2099,
+          539
+        ],
+        "scale": 2.318840579710145,
+        "paste_xy": [
+          264,
+          179
+        ],
+        "source_sole_y": 538,
+        "seed_locked": true
+      }
+    ],
+    "hold_frame_0based": null,
+    "contact_frame_0based": 3
+  },
+  {
+    "file": "raw/gather-thorns-r1.png",
+    "move": "gather-thorns",
+    "revision": "r1",
+    "frame_count": 6,
+    "frame_size": [
+      1024,
+      896
+    ],
+    "frame_order": [
+      "ready (exact seed)",
+      "wind-up",
+      "deep anticipation",
+      "contact / release / charged hold",
+      "follow-through / sustain",
+      "recover (exact seed)"
+    ],
+    "sha256": "61c6ded8bb6234cc5db18d29b6f893b695f935fb6ce8814aea1e2eeea2744e75",
+    "suggested_intents": [
+      "Gather Thorns"
+    ],
+    "preferred_candidate": true,
+    "source": "foe_matriarch/source-sheets/gather-thorns-source.png",
+    "seed": "seeds/idle-left.png",
+    "logical_seed_rect_xywh": [
+      256,
+      160,
+      512,
+      512
+    ],
+    "sole_y": 657,
+    "facing": "left",
+    "shared_scale": 1.3597733711048159,
+    "frame_bounds_xyxy": [
+      [
+        276,
+        177,
+        747,
+        657
+      ],
+      [
+        327,
+        212,
+        749,
+        658
+      ],
+      [
+        309,
+        260,
+        724,
+        658
+      ],
+      [
+        306,
+        257,
+        713,
+        658
+      ],
+      [
+        278,
+        257,
+        686,
+        658
+      ],
+      [
+        276,
+        177,
+        747,
+        657
+      ]
+    ],
+    "transforms": [
+      {
+        "source_crop_xyxy": [
+          29,
+          226,
+          349,
+          579
+        ],
+        "scale": 1.3597733711048159,
+        "paste_xy": [
+          305,
+          178
+        ],
+        "source_sole_y": 578,
+        "seed_locked": true
+      },
+      {
+        "source_crop_xyxy": [
+          407,
+          251,
+          717,
+          579
+        ],
+        "scale": 1.3597733711048159,
+        "paste_xy": [
+          327,
+          212
+        ],
+        "source_sole_y": 578,
+        "seed_locked": false
+      },
+      {
+        "source_crop_xyxy": [
+          756,
+          288,
+          1061,
+          581
+        ],
+        "scale": 1.3597733711048159,
+        "paste_xy": [
+          309,
+          260
+        ],
+        "source_sole_y": 580,
+        "seed_locked": false
+      },
+      {
+        "source_crop_xyxy": [
+          1116,
+          286,
+          1415,
+          581
+        ],
+        "scale": 1.3597733711048159,
+        "paste_xy": [
+          306,
+          257
+        ],
+        "source_sole_y": 580,
+        "seed_locked": false
+      },
+      {
+        "source_crop_xyxy": [
+          1457,
+          285,
+          1757,
+          580
+        ],
+        "scale": 1.3597733711048159,
+        "paste_xy": [
+          278,
+          257
+        ],
+        "source_sole_y": 579,
+        "seed_locked": false
+      },
+      {
+        "source_crop_xyxy": [
+          1803,
+          226,
+          2125,
+          579
+        ],
+        "scale": 1.3597733711048159,
+        "paste_xy": [
+          256,
+          178
+        ],
+        "source_sole_y": 578,
+        "seed_locked": true
+      }
+    ],
+    "hold_frame_0based": 2,
+    "contact_frame_0based": 3
+  },
+  {
+    "file": "raw/thorn-bloom-storm-r1.png",
+    "move": "thorn-bloom-storm",
+    "revision": "r1",
+    "frame_count": 6,
+    "frame_size": [
+      1024,
+      896
+    ],
+    "frame_order": [
+      "ready (exact seed)",
+      "wind-up",
+      "deep anticipation",
+      "contact / release / charged hold",
+      "follow-through / sustain",
+      "recover (exact seed)"
+    ],
+    "sha256": "d116edafc952a05e8a5ffdd8a49b0136d175c8ea8615c53099a60eb464d72ce0",
+    "suggested_intents": [
+      "Thorn Bloom",
+      "Thorn Storm"
+    ],
+    "preferred_candidate": true,
+    "source": "foe_matriarch/source-sheets/thorn-bloom-storm-source.png",
+    "seed": "seeds/idle-left.png",
+    "logical_seed_rect_xywh": [
+      256,
+      160,
+      512,
+      512
+    ],
+    "sole_y": 657,
+    "facing": "left",
+    "shared_scale": 1.9753086419753085,
+    "frame_bounds_xyxy": [
+      [
+        276,
+        177,
+        747,
+        657
+      ],
+      [
+        309,
+        207,
+        704,
+        659
+      ],
+      [
+        305,
+        266,
+        710,
+        659
+      ],
+      [
+        245,
+        177,
+        709,
+        659
+      ],
+      [
+        261,
+        183,
+        701,
+        659
+      ],
+      [
+        276,
+        177,
+        747,
+        657
+      ]
+    ],
+    "transforms": [
+      {
+        "source_crop_xyxy": [
+          72,
+          336,
+          280,
+          579
+        ],
+        "scale": 1.9753086419753085,
+        "paste_xy": [
+          297,
+          179
+        ],
+        "source_sole_y": 578,
+        "seed_locked": true
+      },
+      {
+        "source_crop_xyxy": [
+          440,
+          350,
+          640,
+          579
+        ],
+        "scale": 1.9753086419753085,
+        "paste_xy": [
+          309,
+          207
+        ],
+        "source_sole_y": 578,
+        "seed_locked": false
+      },
+      {
+        "source_crop_xyxy": [
+          800,
+          380,
+          1005,
+          579
+        ],
+        "scale": 1.9753086419753085,
+        "paste_xy": [
+          305,
+          266
+        ],
+        "source_sole_y": 578,
+        "seed_locked": false
+      },
+      {
+        "source_crop_xyxy": [
+          1132,
+          336,
+          1367,
+          580
+        ],
+        "scale": 1.9753086419753085,
+        "paste_xy": [
+          245,
+          177
+        ],
+        "source_sole_y": 579,
+        "seed_locked": false
+      },
+      {
+        "source_crop_xyxy": [
+          1502,
+          338,
+          1725,
+          579
+        ],
+        "scale": 1.9753086419753085,
+        "paste_xy": [
+          261,
+          183
+        ],
+        "source_sole_y": 578,
+        "seed_locked": false
+      },
+      {
+        "source_crop_xyxy": [
+          1870,
+          335,
+          2073,
+          580
+        ],
+        "scale": 1.9753086419753085,
+        "paste_xy": [
+          273,
+          175
+        ],
+        "source_sole_y": 579,
+        "seed_locked": true
+      }
+    ],
+    "hold_frame_0based": null,
+    "contact_frame_0based": 3
+  },
+  {
+    "file": "raw/thorn-rage-r1.png",
+    "move": "thorn-rage",
+    "revision": "r1",
+    "frame_count": 6,
+    "frame_size": [
+      1024,
+      896
+    ],
+    "frame_order": [
+      "ready (exact seed)",
+      "wind-up",
+      "deep anticipation",
+      "contact / release / charged hold",
+      "follow-through / sustain",
+      "recover (exact seed)"
+    ],
+    "sha256": "6da5eaf8dbb13ccd2e76b04e5c8b4ad6db48a9db1852fcddac7039f964e6237a",
+    "suggested_intents": [
+      "Thorn Rage"
+    ],
+    "preferred_candidate": true,
+    "source": "foe_matriarch/source-sheets/thorn-rage-source.png",
+    "seed": "seeds/idle-left.png",
+    "logical_seed_rect_xywh": [
+      256,
+      160,
+      512,
+      512
+    ],
+    "sole_y": 657,
+    "facing": "left",
+    "shared_scale": 1.8045112781954886,
+    "frame_bounds_xyxy": [
+      [
+        276,
+        177,
+        747,
+        657
+      ],
+      [
+        297,
+        228,
+        717,
+        659
+      ],
+      [
+        295,
+        283,
+        719,
+        658
+      ],
+      [
+        257,
+        164,
+        705,
+        658
+      ],
+      [
+        252,
+        164,
+        710,
+        658
+      ],
+      [
+        276,
+        177,
+        747,
+        657
+      ]
+    ],
+    "transforms": [
+      {
+        "source_crop_xyxy": [
+          62,
+          253,
+          286,
+          519
+        ],
+        "scale": 1.8045112781954886,
+        "paste_xy": [
+          297,
+          179
+        ],
+        "source_sole_y": 518,
+        "seed_locked": true
+      },
+      {
+        "source_crop_xyxy": [
+          424,
+          280,
+          657,
+          519
+        ],
+        "scale": 1.8045112781954886,
+        "paste_xy": [
+          297,
+          228
+        ],
+        "source_sole_y": 518,
+        "seed_locked": false
+      },
+      {
+        "source_crop_xyxy": [
+          785,
+          311,
+          1020,
+          519
+        ],
+        "scale": 1.8045112781954886,
+        "paste_xy": [
+          295,
+          283
+        ],
+        "source_sole_y": 518,
+        "seed_locked": false
+      },
+      {
+        "source_crop_xyxy": [
+          1126,
+          246,
+          1374,
+          520
+        ],
+        "scale": 1.8045112781954886,
+        "paste_xy": [
+          257,
+          164
+        ],
+        "source_sole_y": 519,
+        "seed_locked": false
+      },
+      {
+        "source_crop_xyxy": [
+          1485,
+          246,
+          1739,
+          520
+        ],
+        "scale": 1.8045112781954886,
+        "paste_xy": [
+          252,
+          164
+        ],
+        "source_sole_y": 519,
+        "seed_locked": false
+      },
+      {
+        "source_crop_xyxy": [
+          1878,
+          253,
+          2103,
+          519
+        ],
+        "scale": 1.8045112781954886,
+        "paste_xy": [
+          308,
+          179
+        ],
+        "source_sole_y": 518,
+        "seed_locked": true
+      }
+    ],
+    "hold_frame_0based": null,
+    "contact_frame_0based": 3
+  },
+  {
+    "file": "raw/hit-r1.png",
+    "move": "hit",
+    "revision": "r1",
+    "frame_count": 4,
+    "frame_size": [
+      1024,
+      896
+    ],
+    "frame_order": [
+      "ready (exact seed)",
+      "recoil",
+      "brace",
+      "recover (exact seed)"
+    ],
+    "sha256": "2a533855e5785560cd02b788522319d1ea577680164ceaa24fe4eda1f556792b",
+    "suggested_intents": [
+      "hit"
+    ],
+    "preferred_candidate": true,
+    "source": "foe_matriarch/source-sheets/hit-source.png",
+    "seed": "seeds/idle-left.png",
+    "logical_seed_rect_xywh": [
+      256,
+      160,
+      512,
+      512
+    ],
+    "sole_y": 657,
+    "facing": "left",
+    "shared_scale": 1.0480349344978166,
+    "frame_bounds_xyxy": [
+      [
+        276,
+        177,
+        747,
+        657
+      ],
+      [
+        296,
+        184,
+        847,
+        658
+      ],
+      [
+        334,
+        203,
+        765,
+        658
+      ],
+      [
+        276,
+        177,
+        747,
+        657
+      ]
+    ],
+    "transforms": [
+      {
+        "source_crop_xyxy": [
+          37,
+          169,
+          478,
+          627
+        ],
+        "scale": 1.0480349344978166,
+        "paste_xy": [
+          266,
+          178
+        ],
+        "source_sole_y": 626,
+        "seed_locked": true
+      },
+      {
+        "source_crop_xyxy": [
+          608,
+          175,
+          1134,
+          627
+        ],
+        "scale": 1.0480349344978166,
+        "paste_xy": [
+          296,
+          184
+        ],
+        "source_sole_y": 626,
+        "seed_locked": false
+      },
+      {
+        "source_crop_xyxy": [
+          1188,
+          193,
+          1599,
+          627
+        ],
+        "scale": 1.0480349344978166,
+        "paste_xy": [
+          334,
+          203
+        ],
+        "source_sole_y": 626,
+        "seed_locked": false
+      },
+      {
+        "source_crop_xyxy": [
+          1670,
+          169,
+          2109,
+          627
+        ],
+        "scale": 1.0480349344978166,
+        "paste_xy": [
+          270,
+          178
+        ],
+        "source_sole_y": 626,
+        "seed_locked": true
+      }
+    ],
+    "hold_frame_0based": null,
+    "contact_frame_0based": null
+  },
+  {
+    "file": "raw/down-r1.png",
+    "move": "down",
+    "revision": "r1",
+    "frame_count": 4,
+    "frame_size": [
+      1024,
+      896
+    ],
+    "frame_order": [
+      "ready (exact seed)",
+      "buckle",
+      "collapse",
+      "grounded hold (never stands)"
+    ],
+    "sha256": "9ee50f9a53660be35c3b9023f64f2257a62c893629c88445652e99ad51a36f6e",
+    "suggested_intents": [
+      "down"
+    ],
+    "preferred_candidate": true,
+    "source": "foe_matriarch/source-sheets/down-source.png",
+    "seed": "seeds/idle-left.png",
+    "logical_seed_rect_xywh": [
+      256,
+      160,
+      512,
+      512
+    ],
+    "sole_y": 657,
+    "facing": "left",
+    "shared_scale": 1.0738255033557047,
+    "frame_bounds_xyxy": [
+      [
+        276,
+        177,
+        747,
+        657
+      ],
+      [
+        315,
+        215,
+        720,
+        658
+      ],
+      [
+        249,
+        285,
+        755,
+        658
+      ],
+      [
+        238,
+        308,
+        780,
+        658
+      ]
+    ],
+    "transforms": [
+      {
+        "source_crop_xyxy": [
+          68,
+          177,
+          497,
+          624
+        ],
+        "scale": 1.0738255033557047,
+        "paste_xy": [
+          293,
+          178
+        ],
+        "source_sole_y": 623,
+        "seed_locked": true
+      },
+      {
+        "source_crop_xyxy": [
+          631,
+          212,
+          1008,
+          625
+        ],
+        "scale": 1.0738255033557047,
+        "paste_xy": [
+          315,
+          215
+        ],
+        "source_sole_y": 624,
+        "seed_locked": false
+      },
+      {
+        "source_crop_xyxy": [
+          1113,
+          279,
+          1584,
+          626
+        ],
+        "scale": 1.0738255033557047,
+        "paste_xy": [
+          249,
+          285
+        ],
+        "source_sole_y": 625,
+        "seed_locked": false
+      },
+      {
+        "source_crop_xyxy": [
+          1645,
+          305,
+          2150,
+          631
+        ],
+        "scale": 1.0738255033557047,
+        "paste_xy": [
+          238,
+          308
+        ],
+        "source_sole_y": 630,
+        "seed_locked": false
+      }
+    ],
+    "hold_frame_0based": null,
+    "contact_frame_0based": null
+  }
+]

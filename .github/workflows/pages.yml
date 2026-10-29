@@ -49,7 +49,7 @@ jobs:
         if: matrix.shard == 1
         env:
           PLAYWRIGHT_PAGES: 'false'
-        run: npm run test:browser -- tests/browser/blade-fx.spec.ts tests/browser/defense-fx.spec.ts tests/browser/healing-fx.spec.ts tests/browser/projectile-fx.spec.ts tests/browser/earth-fx.spec.ts tests/browser/alchemy-fx.spec.ts tests/browser/arcane-seal-fx.spec.ts tests/browser/unit-a1.spec.ts tests/browser/unit-a2.spec.ts tests/browser/unit-a3.spec.ts tests/browser/unit-a4.spec.ts tests/browser/unit-a5.spec.ts tests/browser/unit-a6.spec.ts tests/browser/command-fx.spec.ts tests/browser/song-fx.spec.ts --workers=1
+        run: npm run test:browser -- tests/browser/blade-fx.spec.ts tests/browser/defense-fx.spec.ts tests/browser/healing-fx.spec.ts tests/browser/projectile-fx.spec.ts tests/browser/earth-fx.spec.ts tests/browser/alchemy-fx.spec.ts tests/browser/arcane-seal-fx.spec.ts tests/browser/unit-a1.spec.ts tests/browser/unit-a2.spec.ts tests/browser/unit-a3.spec.ts tests/browser/unit-a4.spec.ts tests/browser/unit-a5.spec.ts tests/browser/unit-a6.spec.ts tests/browser/unit-a9.spec.ts tests/browser/command-fx.spec.ts tests/browser/song-fx.spec.ts --workers=1
       - name: Verify production gameplay under the Pages subpath (shard ${{ matrix.shard }}/4)
         env:
           PLAYWRIGHT_PAGES: 'true'
