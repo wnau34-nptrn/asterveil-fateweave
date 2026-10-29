@@ -1,0 +1,429 @@
+[
+  {
+    "at": 1793231581.046,
+    "remainingMs": 253,
+    "turn": {
+      "actorId": "mira",
+      "side": "hero",
+      "beat": 1,
+      "round": 1,
+      "action": "attack",
+      "targetId": "f1",
+      "intent": {
+        "sourceId": "f1",
+        "targetSlot": 1,
+        "name": "Jelly Bounce",
+        "damage": 6,
+        "kind": "physical",
+        "targetId": "guardian",
+        "beat": 1,
+        "round": 1
+      },
+      "state": {
+        "encounterId": "thicket-ambush",
+        "beat": 1,
+        "round": 1,
+        "turnIndex": 0,
+        "order": [
+          "mira",
+          "f1",
+          "guardian",
+          "weaver"
+        ],
+        "outcome": "active",
+        "guard": null,
+        "counter": null,
+        "taunt": null,
+        "song": null,
+        "heroes": [
+          {
+            "id": "mira",
+            "hp": 50,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "guardian",
+            "hp": 76,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "weaver",
+            "hp": 48,
+            "barrier": 0,
+            "cooldowns": {}
+          }
+        ],
+        "enemies": [
+          {
+            "id": "f1",
+            "hp": 19,
+            "markedUntil": 0
+          }
+        ],
+        "intent": {
+          "sourceId": "f1",
+          "targetSlot": 1,
+          "name": "Jelly Bounce",
+          "damage": 6,
+          "kind": "physical",
+          "targetId": "guardian",
+          "beat": 1,
+          "round": 1
+        },
+        "commands": [
+          {
+            "beat": 1,
+            "heroId": "mira",
+            "action": "attack",
+            "targetId": "f1"
+          }
+        ]
+      },
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "mira",
+          "targetId": "f1",
+          "amount": 13,
+          "text": "Hero attacks."
+        }
+      ],
+      "before": {
+        "encounterId": "thicket-ambush",
+        "beat": 1,
+        "round": 1,
+        "turnIndex": 0,
+        "order": [
+          "mira",
+          "f1",
+          "guardian",
+          "weaver"
+        ],
+        "outcome": "active",
+        "guard": null,
+        "counter": null,
+        "taunt": null,
+        "song": null,
+        "heroes": [
+          {
+            "id": "mira",
+            "hp": 50,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "guardian",
+            "hp": 76,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "weaver",
+            "hp": 48,
+            "barrier": 0,
+            "cooldowns": {}
+          }
+        ],
+        "enemies": [
+          {
+            "id": "f1",
+            "hp": 32,
+            "markedUntil": 0
+          }
+        ],
+        "intent": {
+          "sourceId": "f1",
+          "targetSlot": 1,
+          "name": "Jelly Bounce",
+          "damage": 6,
+          "kind": "physical",
+          "targetId": "guardian",
+          "beat": 1,
+          "round": 1
+        },
+        "commands": []
+      },
+      "after": {
+        "encounterId": "thicket-ambush",
+        "beat": 2,
+        "round": 1,
+        "turnIndex": 1,
+        "order": [
+          "mira",
+          "f1",
+          "guardian",
+          "weaver"
+        ],
+        "outcome": "active",
+        "guard": null,
+        "counter": null,
+        "taunt": null,
+        "song": null,
+        "heroes": [
+          {
+            "id": "mira",
+            "hp": 50,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "guardian",
+            "hp": 76,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "weaver",
+            "hp": 48,
+            "barrier": 0,
+            "cooldowns": {}
+          }
+        ],
+        "enemies": [
+          {
+            "id": "f1",
+            "hp": 19,
+            "markedUntil": 0
+          }
+        ],
+        "intent": {
+          "sourceId": "f1",
+          "targetSlot": 1,
+          "name": "Jelly Bounce",
+          "damage": 6,
+          "kind": "physical",
+          "targetId": "guardian",
+          "beat": 2,
+          "round": 1
+        },
+        "commands": [
+          {
+            "beat": 1,
+            "heroId": "mira",
+            "action": "attack",
+            "targetId": "f1"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "at": 1793231581.487,
+    "remainingMs": 338,
+    "turn": {
+      "actorId": "f1",
+      "side": "enemy",
+      "beat": 2,
+      "round": 1,
+      "intent": {
+        "sourceId": "f1",
+        "targetSlot": 1,
+        "name": "Jelly Bounce",
+        "damage": 6,
+        "kind": "physical",
+        "targetId": "guardian",
+        "beat": 2,
+        "round": 1
+      },
+      "targetId": "guardian",
+      "state": {
+        "encounterId": "thicket-ambush",
+        "beat": 2,
+        "round": 1,
+        "turnIndex": 1,
+        "order": [
+          "mira",
+          "f1",
+          "guardian",
+          "weaver"
+        ],
+        "outcome": "active",
+        "guard": null,
+        "counter": null,
+        "taunt": null,
+        "song": null,
+        "heroes": [
+          {
+            "id": "mira",
+            "hp": 50,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "guardian",
+            "hp": 70,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "weaver",
+            "hp": 48,
+            "barrier": 0,
+            "cooldowns": {}
+          }
+        ],
+        "enemies": [
+          {
+            "id": "f1",
+            "hp": 19,
+            "markedUntil": 0
+          }
+        ],
+        "intent": {
+          "sourceId": "f1",
+          "targetSlot": 1,
+          "name": "Jelly Bounce",
+          "damage": 6,
+          "kind": "physical",
+          "targetId": "guardian",
+          "beat": 2,
+          "round": 1
+        },
+        "commands": [
+          {
+            "beat": 1,
+            "heroId": "mira",
+            "action": "attack",
+            "targetId": "f1"
+          }
+        ]
+      },
+      "events": [
+        {
+          "type": "damage",
+          "sourceId": "f1",
+          "targetId": "guardian",
+          "amount": 6,
+          "absorbed": 0,
+          "text": "Enemy attacks on its own turn."
+        }
+      ],
+      "before": {
+        "encounterId": "thicket-ambush",
+        "beat": 2,
+        "round": 1,
+        "turnIndex": 1,
+        "order": [
+          "mira",
+          "f1",
+          "guardian",
+          "weaver"
+        ],
+        "outcome": "active",
+        "guard": null,
+        "counter": null,
+        "taunt": null,
+        "song": null,
+        "heroes": [
+          {
+            "id": "mira",
+            "hp": 50,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "guardian",
+            "hp": 76,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "weaver",
+            "hp": 48,
+            "barrier": 0,
+            "cooldowns": {}
+          }
+        ],
+        "enemies": [
+          {
+            "id": "f1",
+            "hp": 19,
+            "markedUntil": 0
+          }
+        ],
+        "intent": {
+          "sourceId": "f1",
+          "targetSlot": 1,
+          "name": "Jelly Bounce",
+          "damage": 6,
+          "kind": "physical",
+          "targetId": "guardian",
+          "beat": 2,
+          "round": 1
+        },
+        "commands": [
+          {
+            "beat": 1,
+            "heroId": "mira",
+            "action": "attack",
+            "targetId": "f1"
+          }
+        ]
+      },
+      "after": {
+        "encounterId": "thicket-ambush",
+        "beat": 3,
+        "round": 1,
+        "turnIndex": 2,
+        "order": [
+          "mira",
+          "f1",
+          "guardian",
+          "weaver"
+        ],
+        "outcome": "active",
+        "guard": null,
+        "counter": null,
+        "taunt": null,
+        "song": null,
+        "heroes": [
+          {
+            "id": "mira",
+            "hp": 50,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "guardian",
+            "hp": 70,
+            "barrier": 0,
+            "cooldowns": {}
+          },
+          {
+            "id": "weaver",
+            "hp": 48,
+            "barrier": 0,
+            "cooldowns": {}
+          }
+        ],
+        "enemies": [
+          {
+            "id": "f1",
+            "hp": 19,
+            "markedUntil": 0
+          }
+        ],
+        "intent": {
+          "sourceId": "f1",
+          "targetSlot": 1,
+          "name": "Jelly Bounce",
+          "damage": 6,
+          "kind": "physical",
+          "targetId": "guardian",
+          "beat": 3,
+          "round": 2
+        },
+        "commands": [
+          {
+            "beat": 1,
+            "heroId": "mira",
+            "action": "attack",
+            "targetId": "f1"
+          }
+        ]
+      }
+    }
+  }
+]

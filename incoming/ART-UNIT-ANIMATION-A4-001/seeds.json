@@ -1,0 +1,152 @@
+[
+  {
+    "identity": "mira",
+    "seed": "heroes/seeds/mira-seed.png",
+    "source": "public/assets/art/units_mercs.webp",
+    "base_commit": "1e563999d014b5b12abcac5aeb82c3c0263d3a52",
+    "source_blob_sha": "2f2ed2ebdca12584d9324c53fcc67694c68b0d22",
+    "frame_zero_based": 1,
+    "atlas_columns": 2,
+    "cell_size": 512,
+    "crop_xyxy": [
+      512,
+      0,
+      1024,
+      512
+    ],
+    "seed_size": [
+      512,
+      512
+    ],
+    "seed_visible_bounds_alpha_gt40": [
+      40,
+      37,
+      472,
+      497
+    ],
+    "facing": "right",
+    "logical_ground_y": 497,
+    "sha256": "c0dfe376ceb6d507e915322c26a2f353b0c48e1c89a4ccadc1a67178d3d1451a",
+    "pixel_exact_shipped_crop": true
+  },
+  {
+    "identity": "toma",
+    "seed": "heroes/seeds/toma-seed.png",
+    "source": "public/assets/art/units_mercs.webp",
+    "base_commit": "1e563999d014b5b12abcac5aeb82c3c0263d3a52",
+    "source_blob_sha": "2f2ed2ebdca12584d9324c53fcc67694c68b0d22",
+    "frame_zero_based": 2,
+    "atlas_columns": 2,
+    "cell_size": 512,
+    "crop_xyxy": [
+      0,
+      512,
+      512,
+      1024
+    ],
+    "seed_size": [
+      512,
+      512
+    ],
+    "seed_visible_bounds_alpha_gt40": [
+      96,
+      37,
+      415,
+      497
+    ],
+    "facing": "right",
+    "logical_ground_y": 497,
+    "sha256": "39edb773bacfd7a2e5335b8a204ad2157b8007b1b8655883860b8ccbd82cdc8e",
+    "pixel_exact_shipped_crop": true
+  },
+  {
+    "identity": "foe_dew_slime",
+    "seed": "foes/seeds/foe_dew_slime-seed.png",
+    "source": "public/assets/art/units_foes2.webp",
+    "base_commit": "1e563999d014b5b12abcac5aeb82c3c0263d3a52",
+    "source_blob_sha": "61622c9da3baa23ac450809d65fec820eb2dff4b",
+    "frame_zero_based": 0,
+    "atlas_columns": 2,
+    "cell_size": 512,
+    "crop_xyxy": [
+      0,
+      0,
+      512,
+      512
+    ],
+    "seed_size": [
+      512,
+      512
+    ],
+    "seed_visible_bounds_alpha_gt40": [
+      81,
+      182,
+      431,
+      497
+    ],
+    "facing": "left",
+    "logical_ground_y": 497,
+    "sha256": "315e85007d8a3154095872a1851c33cd293aa9d6668626c32b8a42d022cd3f7f",
+    "pixel_exact_shipped_crop": true
+  },
+  {
+    "identity": "foe_ember_slime",
+    "seed": "foes/seeds/foe_ember_slime-seed.png",
+    "source": "public/assets/art/units_foes2.webp",
+    "base_commit": "1e563999d014b5b12abcac5aeb82c3c0263d3a52",
+    "source_blob_sha": "61622c9da3baa23ac450809d65fec820eb2dff4b",
+    "frame_zero_based": 1,
+    "atlas_columns": 2,
+    "cell_size": 512,
+    "crop_xyxy": [
+      512,
+      0,
+      1024,
+      512
+    ],
+    "seed_size": [
+      512,
+      512
+    ],
+    "seed_visible_bounds_alpha_gt40": [
+      81,
+      227,
+      431,
+      497
+    ],
+    "facing": "left",
+    "logical_ground_y": 497,
+    "sha256": "84ff384bc2da658c846d1766867369891d88006b5bc6d3353a450bcb97fe1568",
+    "pixel_exact_shipped_crop": true
+  },
+  {
+    "identity": "foe_ruin_bat",
+    "seed": "foes/seeds/foe_ruin_bat-seed.png",
+    "source": "public/assets/art/units_foes2.webp",
+    "base_commit": "1e563999d014b5b12abcac5aeb82c3c0263d3a52",
+    "source_blob_sha": "61622c9da3baa23ac450809d65fec820eb2dff4b",
+    "frame_zero_based": 2,
+    "atlas_columns": 2,
+    "cell_size": 512,
+    "crop_xyxy": [
+      0,
+      512,
+      512,
+      1024
+    ],
+    "seed_size": [
+      512,
+      512
+    ],
+    "seed_visible_bounds_alpha_gt40": [
+      36,
+      218,
+      476,
+      497
+    ],
+    "facing": "left",
+    "logical_ground_y": 497,
+    "sha256": "f03bb401f0d9d6f7caf7ba07706068e7c1abeb9c69ff8d566ed6c2fe0e1e24bb",
+    "pixel_exact_shipped_crop": true
+  }
+]

@@ -181,3 +181,7 @@ PR87 merged `1ea31d5` และPages40614459819เผยแพร่สำเร
 ## A3 — owner approved 2026-10-28
 
 เซเรน/เห็ดหมอผีกลวงนำเข้าแล้วบนสาขา `claude/unit-a3-seren-mycon` (R2 ตามที่เจ้าของมอบให้ Codex แนะนำ) เจ้าของอนุมัติ motion “เอาเข้าเกมได้” (2026-10-28) → merge ผ่าน PR #99: [สรุปท่า/งบ/ผลตรวจ](../combat-presentation/unit-a3-slice/README_TH.md)
+
+## A4 — นำเข้าแล้ว รอเจ้าของอนุมัติ motion (2026-10-28)
+
+มิร่า/โทมะ/สไลม์น้ำค้าง/สไลม์ถ่านไฟ/ค้างคาวซากนำเข้าแล้วบนสาขา `claude/unit-a4-mira-toma-slimes-bat` (R2 ของ Mira volley/disengage, Toma underhand, Bat hover ตามที่เจ้าของตอบ “ใช้ตาม codex แนะนำ”; ที่เหลือใช้ป้ายทอง) ครบ 7+7 ActionId และ intent จริงของศัตรู 3 ตัว (Jelly Bounce / Ember Spark / Nip) ใช้ VFX กระสุน/เคมีเดิม เพิ่ม hover loop ของค้างคาว (ปิดเมื่อลดการเคลื่อนไหว) ไม่แก้ rules/save/content/balance/timing คลิปจริง 20 คลิป: [A4 slice](../combat-presentation/unit-a4-slice/README_TH.md) **ยังไม่ merge/เผยแพร่ จนกว่าเจ้าของจะอนุมัติ motion**

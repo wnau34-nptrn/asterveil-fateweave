@@ -310,6 +310,7 @@ export class BattleScene extends Phaser.Scene {
   }
   configureEffects(prefs: CombatPrefs, reducedMotion: boolean): void {
     if (reducedMotion || prefs.intensity === 'reduced') this.unitAnimation.settle();
+    this.unitAnimation.setLoops(!(reducedMotion || prefs.intensity === 'reduced'));
     this.quiet = prefs.intensity === 'reduced'; this.reducedMotion = reducedMotion;
   }
   private anchor(id: string | undefined): { x: number; y: number } | undefined {

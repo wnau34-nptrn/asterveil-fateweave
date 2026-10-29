@@ -14,6 +14,9 @@ const smooth = (p: number): number => p * p * (3 - 2 * p);
 export class UnitAnimation {
   private bindings = new Map<string, Binding>();
   private motions = new Map<string, Motion>();
+  // Looping idles (A4 bat hover) are presentation only: off under reduced motion and during any motion/reaction.
+  private loops = true;
+  private clock = 0;
   bind(id: string, body: UnitBody, size: number, idle: Binding['idle'], frames?: UnitFrames): void {
     this.bindings.set(id, { body, x: body.x, y: body.y, rotation: body.rotation, sx: body.scaleX, sy: body.scaleY, size, idle, frames });
   }
@@ -47,7 +50,18 @@ export class UnitAnimation {
     rig.frames?.reset();
     rig.body.setPosition(rig.x, rig.y); rig.body.setRotation(rig.rotation); rig.body.setScale(rig.sx, rig.sy);
   }
+  setLoops(enabled: boolean): void {
+    if (this.loops === enabled) return;
+    this.loops = enabled;
+    if (!enabled) for (const [id, rig] of this.bindings) if (!this.motions.has(id)) rig.frames?.reset();
+  }
   update(delta: number): void {
+    this.clock += Math.max(0, delta);
+    if (this.loops) for (const [id, rig] of this.bindings) if (rig.frames?.idle && !this.motions.has(id)) {
+      // De-phase identities so a pair of bats does not flap in lockstep.
+      let phase = 0; for (const ch of id) phase = (phase * 31 + ch.charCodeAt(0)) % 997;
+      rig.frames.idle(this.clock + phase);
+    }
     for (const [id, motion] of this.motions) {
       const rig = this.bindings.get(id)!;
       motion.elapsed += Math.max(0, delta);
