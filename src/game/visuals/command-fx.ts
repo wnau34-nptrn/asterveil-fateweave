@@ -92,7 +92,7 @@ export function commandContact(ctxs:CommandContexts,cue:CommandCue,lookup:Comman
     const impact=keep(put(ctx,cue.targetId,'foe',lookup,'warcry_impact',tag),'impact');if(!impact)return;
     if(cue.blocked)impact.setTint(0x8addf5);
     impact.setAlpha(opacity);
-    if(reduced){ctx.scene.tweens.add({targets:impact,alpha:0,duration:d,onComplete:()=>impact.destroy()});return;}
+    if(reduced){ctx.scene.tweens.add({targets:impact,alpha:0,delay:Math.round(d*.45),duration:d,onComplete:()=>impact.destroy()});return;}
     ctx.scene.tweens.add({targets:impact,alpha:0,duration:Math.min(d,420),onUpdate:t=>{
       if(!impact.active)return;const p=t.progress;impact.setData('commandScale',.7+.35*Math.min(1,p/.3));impact.alpha=opacity*(p<.35?1:Math.max(0,1-(p-.35)/.65));},onComplete:()=>impact.destroy()});
     return;
@@ -103,7 +103,7 @@ export function commandContact(ctxs:CommandContexts,cue:CommandCue,lookup:Comman
   else{main=keep(put(ctx,cue.sourceId,'forward',lookup,'warcry_cone',tag),'cone');}
   if(!main)return;
   main.setAlpha(opacity);detail?.setAlpha(opacity);
-  if(reduced){ctx.scene.tweens.add({targets:main,alpha:0,duration:d,onUpdate:()=>{if(detail?.active)detail.alpha=main!.alpha;},onComplete:()=>{main!.destroy();detail?.destroy();}});return;}
+  if(reduced){ctx.scene.tweens.add({targets:main,alpha:0,delay:Math.round(d*.45),duration:d,onUpdate:()=>{if(detail?.active)detail.alpha=main!.alpha;},onComplete:()=>{main!.destroy();detail?.destroy();}});return;}
   const settle=keep(put(ctx,cue.sourceId,settleSpot[skill],lookup,`${skill}_${skill==='warcry'?'wisps':'settle'}`,tag),'settle');settle?.setAlpha(0);
   ctx.scene.tweens.add({targets:main,alpha:0,duration:d,onUpdate:t=>{
     if(!main!.active)return;const p=t.progress,fade=opacity*Math.max(0,1-Math.max(0,p-.32)/.4);

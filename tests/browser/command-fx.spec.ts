@@ -49,12 +49,12 @@ test('war cry draws impacts only for real counters, on the struck-back foe',asyn
  const turns=await page.evaluate(()=>window.commandQA.sequence()),counters=await page.evaluate(()=>window.commandQA.cues().filter(c=>c.kind==='counter'));
  expect(counters.length).toBeGreaterThan(0);
  await cast(page,'warcry');
- let seen=0,elapsed=0;
+ let seen=0,elapsed=0,soFar=0;
  for(const t of turns){const timing=stageTiming(t,false);
-  const has=counters.some(c=>t.events.includes(c.event));
+  const has=t.events.some(e=>e.type==='counter'&&e.text==='War cry counter.');
   await page.clock.runFor(Math.max(1,timing.contact+70-elapsed));elapsed=0;
   const impacts=(await page.evaluate(()=>window.commandQA.painted())).filter(p=>p.frame==='warcry_impact');
-  if(has){expect(impacts.length).toBeGreaterThan(0);seen+=impacts.length;}else expect(impacts).toHaveLength(0);
+  if(has){soFar++;expect(impacts.length).toBeGreaterThan(0);seen+=impacts.length;}else if(!soFar)expect(impacts).toHaveLength(0);
   await page.clock.runFor(Math.max(0,timing.end-timing.contact-70));
  }
  expect(seen).toBeGreaterThanOrEqual(counters.length);

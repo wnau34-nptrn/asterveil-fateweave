@@ -41,7 +41,7 @@ for(const [hero,actions] of [['garran',garranActions],['brann',brannActions]] as
 for(const [speed,intensity,motion] of [['fast','standard','no-preference'],['normal','reduced','no-preference'],['normal','standard','reduce']] as const)
  test(`A5 ${speed}/${intensity}/${motion} settles without extra commands`,async({browser})=>{
  const ctx=await browser.newContext({viewport:{width:390,height:844},reducedMotion:motion});
- try{const page=await ctx.newPage();await ready(page,`skill=volley&speed=${speed}&intensity=${intensity}`);
+ try{const page=await ctx.newPage();await ready(page,`skill=warcry&speed=${speed}&intensity=${intensity}`);
  await cast(page,'warcry');const committed=await saved(page);
  await expect(page.locator('#skip-turn')).toBeHidden();expect(await saved(page)).toBe(committed);
  expect(await page.evaluate(()=>window.unitA5QA.state())).toEqual(await page.evaluate(()=>window.unitA5QA.expected()));

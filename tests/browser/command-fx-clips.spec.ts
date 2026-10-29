@@ -29,6 +29,7 @@ for (const { skill, scenario, mode } of cases) test(`command clip ${skill}-${sce
     const impacts = await page.evaluate(() => window.commandQA.impacts);
     expect(impacts.some(i => i.cues.length>0)).toBe(true);
     expect(await page.evaluate(() => window.commandQA.state().commands.length)).toBe(1);
+    writeFileSync(info.outputPath('name.txt'), `${skill}-${scenario}-${mode}`);
     writeFileSync(info.outputPath('stamps.txt'), `click ${click}\n${stamps.join('\n')}`);
     writeFileSync(info.outputPath('timing.json'), JSON.stringify(impacts, null, 2));
     expect(stamps.length).toBeGreaterThan(12);
