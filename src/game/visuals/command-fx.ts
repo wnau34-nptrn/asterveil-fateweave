@@ -1,3 +1,4 @@
+import Phaser from 'phaser';
 import type {BattleEvent,TurnStage} from '../../core/battle/types';
 import type {FxContext} from './bolt-fx';
 import art from './command-art.json';
@@ -39,11 +40,13 @@ export function commandCues(turn:TurnStage):CommandCue[]{
 
 // Display widths of the full 256px texture at a 390px game / 111px unit slot (art handoff ranges).
 const widths:Record<string,number>={
-  taunt_prepare:54,taunt_pulse:88,taunt_motes:60,taunt_settle:34,
-  challenge_prepare:54,challenge_crest:60,challenge_settle:28,
-  warcry_prepare:54,warcry_cone:120,warcry_impact:48,warcry_wisps:58};
+  taunt_prepare:56,taunt_pulse:96,taunt_motes:70,taunt_settle:36,
+  challenge_prepare:56,challenge_crest:68,challenge_settle:30,
+  warcry_prepare:56,warcry_cone:130,warcry_impact:56,warcry_wisps:64};
+// Gold/amber layers vanish against the gold armour at normal blend; a soft additive blend keeps them legible (art notes allow it).
+const glow=new Set(['taunt_prepare','taunt_pulse','taunt_motes','taunt_settle','challenge_prepare','challenge_crest','challenge_thread','challenge_settle']);
 // Challenge thread: pivot at its tail; its tip reaches (237-24)/256 of the texture width.
-const THREAD_REACH=(237-24)/256,THREAD_HEIGHT=150;
+const THREAD_REACH=(237-24)/256,THREAD_HEIGHT=230;
 const prepareSpot:Record<CommandSkill,CommandSpot>={taunt:'chest',challenge:'shield',warcry:'forward'};
 const settleSpot:Record<CommandSkill,CommandSpot>={taunt:'chest',challenge:'crown',warcry:'forward'};
 const peakSpot:Record<CommandSkill,CommandSpot>={taunt:'chest',challenge:'shield',warcry:'forward'};
@@ -53,7 +56,7 @@ function put(ctx:FxContext,id:string,spot:CommandSpot,lookup:CommandLookup,name:
   const point=lookup(id,spot);if(!point)return;
   const pivot=(art as Record<string,number[]>)[name]!;
   const img=ctx.scene.add.image(point.x,point.y,COMMAND_ATLAS,name);
-  img.setOrigin(pivot[0],pivot[1]);
+  img.setOrigin(pivot[0],pivot[1]);if(glow.has(name)&&!ctx.quiet)img.setBlendMode(Phaser.BlendModes.ADD);
   const base=()=>widths[name]!*(lookup(id,spot)?.size??point.size)/111/img.width*(ctx.quiet?.9:1);
   img.setData('commandName',name);img.setData('commandTag',tag);img.setData('commandDx',o.dx??0);img.setData('commandDy',o.dy??0);img.setData('commandScale',o.scale??1);
   const follow=()=>{const p=lookup(id,spot);if(!p||!img.active)return;
@@ -67,7 +70,7 @@ function put(ctx:FxContext,id:string,spot:CommandSpot,lookup:CommandLookup,name:
 function putThread(ctx:FxContext,from:string,to:string,lookup:CommandLookup,tag:string):Phaser.GameObjects.Image|undefined{
   const start=lookup(from,'shield'),end=lookup(to,'foe');if(!start||!end)return;
   const pivot=(art as Record<string,number[]>)['challenge_thread']!;
-  const img=ctx.scene.add.image(start.x,start.y,COMMAND_ATLAS,'challenge_thread').setOrigin(pivot[0],pivot[1]);
+  const img=ctx.scene.add.image(start.x,start.y,COMMAND_ATLAS,'challenge_thread').setOrigin(pivot[0],pivot[1]);if(!ctx.quiet)img.setBlendMode(Phaser.BlendModes.ADD);
   img.setData('commandName','challenge_thread');img.setData('commandTag',tag);
   const follow=()=>{const a=lookup(from,'shield'),b=lookup(to,'foe');if(!a||!b||!img.active)return;
     const dx=b.x-a.x,dy=b.y-a.y,dist=Math.hypot(dx,dy);
