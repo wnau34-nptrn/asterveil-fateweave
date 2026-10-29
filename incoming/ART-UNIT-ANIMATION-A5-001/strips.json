@@ -1,0 +1,3647 @@
+[
+  {
+    "identity": "brann",
+    "move": "hammer-swing",
+    "revision": "r1",
+    "routes_or_intents": [
+      "attack",
+      "slam"
+    ],
+    "sequence": [
+      "ready",
+      "twist and draw hammer back",
+      "deep wind-up",
+      "horizontal swing right",
+      "low swing follow-through",
+      "recover ready"
+    ],
+    "preferred_candidate": true,
+    "file": "heroes/raw/brann-hammer-swing-r1.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "source": "heroes/source-sheets/brann_actions_r1-source.png",
+    "source_row_1based": 1,
+    "source_crop_xyxy": [
+      0,
+      63,
+      1536,
+      295
+    ],
+    "shared_transparent_padding_px": 24,
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        75,
+        40,
+        260,
+        213
+      ],
+      [
+        412,
+        41,
+        643,
+        214
+      ],
+      [
+        807,
+        47,
+        1030,
+        215
+      ],
+      [
+        1198,
+        40,
+        1498,
+        215
+      ],
+      [
+        1614,
+        67,
+        1858,
+        240
+      ],
+      [
+        1999,
+        40,
+        2183,
+        214
+      ]
+    ],
+    "low_alpha_support_radius_px": 4,
+    "slot_width_px": 384,
+    "source_nominal_slot_centres_x": [
+      128,
+      384,
+      640,
+      896,
+      1152,
+      1408
+    ],
+    "source_to_raw_frame_translation_xy": [
+      [
+        38,
+        -39
+      ],
+      [
+        166,
+        -39
+      ],
+      [
+        294,
+        -39
+      ],
+      [
+        422,
+        -39
+      ],
+      [
+        550,
+        -39
+      ],
+      [
+        678,
+        -39
+      ]
+    ],
+    "source_frame_bounds_alpha_gt80_xyxy": [
+      [
+        37,
+        79,
+        222,
+        252
+      ],
+      [
+        246,
+        80,
+        477,
+        253
+      ],
+      [
+        513,
+        86,
+        736,
+        254
+      ],
+      [
+        776,
+        79,
+        1076,
+        254
+      ],
+      [
+        1064,
+        106,
+        1308,
+        279
+      ],
+      [
+        1321,
+        79,
+        1505,
+        253
+      ]
+    ],
+    "transparent_gaps_alpha_gt80_px": [
+      152,
+      164,
+      168,
+      116,
+      141
+    ],
+    "size": [
+      2304,
+      280
+    ],
+    "mode": "RGBA",
+    "sha256": "f55501e9b09ba617fdd7337183f655cab6e03359f18f0a90d510399f7feda03b",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": []
+  },
+  {
+    "identity": "brann",
+    "move": "ground-slam",
+    "revision": "r1",
+    "routes_or_intents": [
+      "quake",
+      "tremor"
+    ],
+    "sequence": [
+      "ready",
+      "lift hammer",
+      "hammer loaded overhead",
+      "downward ground contact",
+      "deep low follow-through",
+      "recover ready"
+    ],
+    "preferred_candidate": true,
+    "file": "heroes/raw/brann-ground-slam-r1.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "source": "heroes/source-sheets/brann_actions_r1-source.png",
+    "source_row_1based": 2,
+    "source_crop_xyxy": [
+      0,
+      250,
+      1536,
+      538
+    ],
+    "shared_transparent_padding_px": 24,
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        66,
+        97,
+        251,
+        272
+      ],
+      [
+        365,
+        47,
+        574,
+        278
+      ],
+      [
+        692,
+        40,
+        886,
+        278
+      ],
+      [
+        988,
+        132,
+        1238,
+        296
+      ],
+      [
+        1312,
+        155,
+        1568,
+        289
+      ],
+      [
+        1669,
+        97,
+        1853,
+        275
+      ]
+    ],
+    "low_alpha_support_radius_px": 4,
+    "slot_width_px": 320,
+    "source_nominal_slot_centres_x": [
+      128,
+      384,
+      640,
+      896,
+      1152,
+      1408
+    ],
+    "source_to_raw_frame_translation_xy": [
+      [
+        29,
+        -226
+      ],
+      [
+        93,
+        -226
+      ],
+      [
+        157,
+        -226
+      ],
+      [
+        221,
+        -226
+      ],
+      [
+        285,
+        -226
+      ],
+      [
+        349,
+        -226
+      ]
+    ],
+    "source_frame_bounds_alpha_gt80_xyxy": [
+      [
+        37,
+        323,
+        222,
+        498
+      ],
+      [
+        272,
+        273,
+        481,
+        504
+      ],
+      [
+        535,
+        266,
+        729,
+        504
+      ],
+      [
+        767,
+        358,
+        1017,
+        522
+      ],
+      [
+        1027,
+        381,
+        1283,
+        515
+      ],
+      [
+        1320,
+        323,
+        1504,
+        501
+      ]
+    ],
+    "transparent_gaps_alpha_gt80_px": [
+      114,
+      118,
+      102,
+      74,
+      101
+    ],
+    "size": [
+      1920,
+      336
+    ],
+    "mode": "RGBA",
+    "sha256": "c4bf8b2bc007867296b24db8d25fba4888971aac617e6cf41ee5f1d89e28db74",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": []
+  },
+  {
+    "identity": "brann",
+    "move": "taunt",
+    "revision": "r1",
+    "routes_or_intents": [
+      "taunt"
+    ],
+    "sequence": [
+      "ready",
+      "lower hammer",
+      "plant hammer head",
+      "chest out, open beckon hand",
+      "curl beckon hand",
+      "recover ready"
+    ],
+    "preferred_candidate": false,
+    "file": "heroes/raw/brann-taunt-r1.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "source": "heroes/source-sheets/brann_actions_r1-source.png",
+    "source_row_1based": 3,
+    "source_crop_xyxy": [
+      0,
+      524,
+      1536,
+      773
+    ],
+    "shared_transparent_padding_px": 24,
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        39,
+        64,
+        223,
+        239
+      ],
+      [
+        336,
+        58,
+        565,
+        257
+      ],
+      [
+        636,
+        40,
+        860,
+        243
+      ],
+      [
+        956,
+        48,
+        1169,
+        242
+      ],
+      [
+        1265,
+        48,
+        1455,
+        243
+      ],
+      [
+        1562,
+        63,
+        1746,
+        239
+      ]
+    ],
+    "low_alpha_support_radius_px": 4,
+    "slot_width_px": 304,
+    "source_nominal_slot_centres_x": [
+      128,
+      384,
+      640,
+      896,
+      1152,
+      1408
+    ],
+    "source_to_raw_frame_translation_xy": [
+      [
+        1,
+        -500
+      ],
+      [
+        49,
+        -500
+      ],
+      [
+        97,
+        -500
+      ],
+      [
+        145,
+        -500
+      ],
+      [
+        193,
+        -500
+      ],
+      [
+        241,
+        -500
+      ]
+    ],
+    "source_frame_bounds_alpha_gt80_xyxy": [
+      [
+        38,
+        564,
+        222,
+        739
+      ],
+      [
+        287,
+        558,
+        516,
+        757
+      ],
+      [
+        539,
+        540,
+        763,
+        743
+      ],
+      [
+        811,
+        548,
+        1024,
+        742
+      ],
+      [
+        1072,
+        548,
+        1262,
+        743
+      ],
+      [
+        1321,
+        563,
+        1505,
+        739
+      ]
+    ],
+    "transparent_gaps_alpha_gt80_px": [
+      113,
+      71,
+      96,
+      96,
+      107
+    ],
+    "size": [
+      1824,
+      297
+    ],
+    "mode": "RGBA",
+    "sha256": "eb597aecb58d75fc47b7558c926780e8daa7b0fcc830dd02a537c0bf0f09d8a4",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": []
+  },
+  {
+    "identity": "brann",
+    "move": "stone-brace",
+    "revision": "r1",
+    "routes_or_intents": [
+      "stonearmor",
+      "guardstone"
+    ],
+    "sequence": [
+      "ready",
+      "bend knees",
+      "hammer across chest",
+      "deep low defensive crouch",
+      "hold braced hammer",
+      "recover ready"
+    ],
+    "preferred_candidate": true,
+    "file": "heroes/raw/brann-stone-brace-r1.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "source": "heroes/source-sheets/brann_actions_r1-source.png",
+    "source_row_1based": 4,
+    "source_crop_xyxy": [
+      0,
+      774,
+      1536,
+      984
+    ],
+    "shared_transparent_padding_px": 24,
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        52,
+        40,
+        236,
+        214
+      ],
+      [
+        347,
+        50,
+        563,
+        217
+      ],
+      [
+        636,
+        56,
+        868,
+        218
+      ],
+      [
+        943,
+        53,
+        1173,
+        218
+      ],
+      [
+        1257,
+        57,
+        1484,
+        218
+      ],
+      [
+        1574,
+        41,
+        1758,
+        214
+      ]
+    ],
+    "low_alpha_support_radius_px": 4,
+    "slot_width_px": 304,
+    "source_nominal_slot_centres_x": [
+      128,
+      384,
+      640,
+      896,
+      1152,
+      1408
+    ],
+    "source_to_raw_frame_translation_xy": [
+      [
+        14,
+        -750
+      ],
+      [
+        62,
+        -750
+      ],
+      [
+        110,
+        -750
+      ],
+      [
+        158,
+        -750
+      ],
+      [
+        206,
+        -750
+      ],
+      [
+        254,
+        -750
+      ]
+    ],
+    "source_frame_bounds_alpha_gt80_xyxy": [
+      [
+        38,
+        790,
+        222,
+        964
+      ],
+      [
+        285,
+        800,
+        501,
+        967
+      ],
+      [
+        526,
+        806,
+        758,
+        968
+      ],
+      [
+        785,
+        803,
+        1015,
+        968
+      ],
+      [
+        1051,
+        807,
+        1278,
+        968
+      ],
+      [
+        1320,
+        791,
+        1504,
+        964
+      ]
+    ],
+    "transparent_gaps_alpha_gt80_px": [
+      111,
+      73,
+      75,
+      84,
+      90
+    ],
+    "size": [
+      1824,
+      258
+    ],
+    "mode": "RGBA",
+    "sha256": "1aaa76412836a9ed7ba7f2543e7e9094279ecbf76b3f44353a3b3340c99b5926",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": []
+  },
+  {
+    "identity": "garran",
+    "move": "hit",
+    "revision": "r1",
+    "routes_or_intents": [
+      "hit"
+    ],
+    "sequence": [
+      "ready",
+      "head and shoulders flinch left",
+      "deep recoil, knees flex",
+      "recover ready"
+    ],
+    "preferred_candidate": true,
+    "file": "heroes/raw/garran-hit-r1.png",
+    "frame_count": 4,
+    "frame_order": "left-to-right",
+    "source": "heroes/source-sheets/garran_reactions_r1-source.png",
+    "source_row_1based": 1,
+    "source_crop_xyxy": [
+      0,
+      35,
+      1536,
+      343
+    ],
+    "shared_transparent_padding_px": 24,
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        79,
+        39,
+        318,
+        314
+      ],
+      [
+        404,
+        52,
+        700,
+        315
+      ],
+      [
+        763,
+        63,
+        1058,
+        316
+      ],
+      [
+        1176,
+        39,
+        1416,
+        315
+      ]
+    ],
+    "low_alpha_support_radius_px": 4,
+    "slot_width_px": 368,
+    "source_nominal_slot_centres_x": [
+      192,
+      576,
+      960,
+      1344
+    ],
+    "source_to_raw_frame_translation_xy": [
+      [
+        16,
+        -11
+      ],
+      [
+        0,
+        -11
+      ],
+      [
+        -16,
+        -11
+      ],
+      [
+        -32,
+        -11
+      ]
+    ],
+    "source_frame_bounds_alpha_gt80_xyxy": [
+      [
+        63,
+        50,
+        302,
+        325
+      ],
+      [
+        404,
+        63,
+        700,
+        326
+      ],
+      [
+        779,
+        74,
+        1074,
+        327
+      ],
+      [
+        1208,
+        50,
+        1448,
+        326
+      ]
+    ],
+    "transparent_gaps_alpha_gt80_px": [
+      86,
+      63,
+      118
+    ],
+    "size": [
+      1472,
+      356
+    ],
+    "mode": "RGBA",
+    "sha256": "a936c257673ed18f975f9c5f2b846fee75c3800e9a04bde3bc233656acdb4614",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": []
+  },
+  {
+    "identity": "garran",
+    "move": "block",
+    "revision": "r1",
+    "routes_or_intents": [
+      "block"
+    ],
+    "sequence": [
+      "ready",
+      "raise round shield",
+      "braced recoil behind shield",
+      "recover ready"
+    ],
+    "preferred_candidate": true,
+    "file": "heroes/raw/garran-block-r1.png",
+    "frame_count": 4,
+    "frame_order": "left-to-right",
+    "source": "heroes/source-sheets/garran_reactions_r1-source.png",
+    "source_row_1based": 2,
+    "source_crop_xyxy": [
+      0,
+      355,
+      1536,
+      665
+    ],
+    "shared_transparent_padding_px": 24,
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        69,
+        39,
+        310,
+        315
+      ],
+      [
+        420,
+        41,
+        652,
+        317
+      ],
+      [
+        731,
+        66,
+        1020,
+        318
+      ],
+      [
+        1116,
+        39,
+        1359,
+        317
+      ]
+    ],
+    "low_alpha_support_radius_px": 4,
+    "slot_width_px": 352,
+    "source_nominal_slot_centres_x": [
+      192,
+      576,
+      960,
+      1344
+    ],
+    "source_to_raw_frame_translation_xy": [
+      [
+        8,
+        -331
+      ],
+      [
+        -24,
+        -331
+      ],
+      [
+        -56,
+        -331
+      ],
+      [
+        -88,
+        -331
+      ]
+    ],
+    "source_frame_bounds_alpha_gt80_xyxy": [
+      [
+        61,
+        370,
+        302,
+        646
+      ],
+      [
+        444,
+        372,
+        676,
+        648
+      ],
+      [
+        787,
+        397,
+        1076,
+        649
+      ],
+      [
+        1204,
+        370,
+        1447,
+        648
+      ]
+    ],
+    "transparent_gaps_alpha_gt80_px": [
+      110,
+      79,
+      96
+    ],
+    "size": [
+      1408,
+      358
+    ],
+    "mode": "RGBA",
+    "sha256": "2a619eac17c125e284c4f54013205f28cdc032cb9b297f1763381122510112af",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": []
+  },
+  {
+    "identity": "garran",
+    "move": "down",
+    "revision": "r1",
+    "routes_or_intents": [
+      "down"
+    ],
+    "sequence": [
+      "ready",
+      "knees buckle",
+      "collapse onto side with spear and shield",
+      "unconscious grounded hold"
+    ],
+    "preferred_candidate": true,
+    "file": "heroes/raw/garran-down-r1.png",
+    "frame_count": 4,
+    "frame_order": "left-to-right",
+    "source": "heroes/source-sheets/garran_reactions_r1-source.png",
+    "source_row_1based": 3,
+    "source_crop_xyxy": [
+      0,
+      676,
+      1536,
+      984
+    ],
+    "shared_transparent_padding_px": 24,
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        118,
+        38,
+        360,
+        313
+      ],
+      [
+        542,
+        58,
+        821,
+        315
+      ],
+      [
+        923,
+        195,
+        1286,
+        316
+      ],
+      [
+        1384,
+        203,
+        1764,
+        316
+      ]
+    ],
+    "low_alpha_support_radius_px": 4,
+    "slot_width_px": 448,
+    "source_nominal_slot_centres_x": [
+      192,
+      576,
+      960,
+      1344
+    ],
+    "source_to_raw_frame_translation_xy": [
+      [
+        56,
+        -652
+      ],
+      [
+        120,
+        -652
+      ],
+      [
+        184,
+        -652
+      ],
+      [
+        248,
+        -652
+      ]
+    ],
+    "source_frame_bounds_alpha_gt80_xyxy": [
+      [
+        62,
+        690,
+        304,
+        965
+      ],
+      [
+        422,
+        710,
+        701,
+        967
+      ],
+      [
+        739,
+        847,
+        1102,
+        968
+      ],
+      [
+        1136,
+        855,
+        1516,
+        968
+      ]
+    ],
+    "transparent_gaps_alpha_gt80_px": [
+      182,
+      102,
+      98
+    ],
+    "size": [
+      1792,
+      356
+    ],
+    "mode": "RGBA",
+    "sha256": "c86c9fe14cdabd7eb18ae5631b3d1c39270dc6be603580237f8595e143864789",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": []
+  },
+  {
+    "identity": "brann",
+    "move": "hit",
+    "revision": "r1",
+    "routes_or_intents": [
+      "hit"
+    ],
+    "sequence": [
+      "ready",
+      "upper body flinch left",
+      "deep recoil, hammer retained",
+      "recover ready"
+    ],
+    "preferred_candidate": true,
+    "file": "heroes/raw/brann-hit-r1.png",
+    "frame_count": 4,
+    "frame_order": "left-to-right",
+    "source": "heroes/source-sheets/brann_reactions_r1-source.png",
+    "source_row_1based": 1,
+    "source_crop_xyxy": [
+      0,
+      39,
+      1536,
+      334
+    ],
+    "shared_transparent_padding_px": 24,
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        44,
+        41,
+        313,
+        298
+      ],
+      [
+        412,
+        41,
+        707,
+        299
+      ],
+      [
+        823,
+        65,
+        1093,
+        304
+      ],
+      [
+        1226,
+        40,
+        1496,
+        298
+      ]
+    ],
+    "low_alpha_support_radius_px": 4,
+    "slot_width_px": 384,
+    "source_nominal_slot_centres_x": [
+      192,
+      576,
+      960,
+      1344
+    ],
+    "source_to_raw_frame_translation_xy": [
+      [
+        14,
+        -15
+      ],
+      [
+        14,
+        -15
+      ],
+      [
+        14,
+        -15
+      ],
+      [
+        14,
+        -15
+      ]
+    ],
+    "source_frame_bounds_alpha_gt80_xyxy": [
+      [
+        30,
+        56,
+        299,
+        313
+      ],
+      [
+        398,
+        56,
+        693,
+        314
+      ],
+      [
+        809,
+        80,
+        1079,
+        319
+      ],
+      [
+        1212,
+        55,
+        1482,
+        313
+      ]
+    ],
+    "transparent_gaps_alpha_gt80_px": [
+      99,
+      116,
+      133
+    ],
+    "size": [
+      1536,
+      343
+    ],
+    "mode": "RGBA",
+    "sha256": "d5592944d7b1b44ce4a1611f3f0be5e7f0a742600f1d3a71f9dc6663db065895",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": []
+  },
+  {
+    "identity": "brann",
+    "move": "block",
+    "revision": "r1",
+    "routes_or_intents": [
+      "block"
+    ],
+    "sequence": [
+      "ready",
+      "hammer across torso",
+      "deep braced recoil",
+      "recover ready"
+    ],
+    "preferred_candidate": true,
+    "file": "heroes/raw/brann-block-r1.png",
+    "frame_count": 4,
+    "frame_order": "left-to-right",
+    "source": "heroes/source-sheets/brann_reactions_r1-source.png",
+    "source_row_1based": 2,
+    "source_crop_xyxy": [
+      0,
+      360,
+      1536,
+      671
+    ],
+    "shared_transparent_padding_px": 24,
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        56,
+        51,
+        325,
+        311
+      ],
+      [
+        426,
+        40,
+        751,
+        316
+      ],
+      [
+        847,
+        84,
+        1164,
+        319
+      ],
+      [
+        1286,
+        51,
+        1556,
+        311
+      ]
+    ],
+    "low_alpha_support_radius_px": 4,
+    "slot_width_px": 400,
+    "source_nominal_slot_centres_x": [
+      192,
+      576,
+      960,
+      1344
+    ],
+    "source_to_raw_frame_translation_xy": [
+      [
+        26,
+        -336
+      ],
+      [
+        42,
+        -336
+      ],
+      [
+        58,
+        -336
+      ],
+      [
+        74,
+        -336
+      ]
+    ],
+    "source_frame_bounds_alpha_gt80_xyxy": [
+      [
+        30,
+        387,
+        299,
+        647
+      ],
+      [
+        384,
+        376,
+        709,
+        652
+      ],
+      [
+        789,
+        420,
+        1106,
+        655
+      ],
+      [
+        1212,
+        387,
+        1482,
+        647
+      ]
+    ],
+    "transparent_gaps_alpha_gt80_px": [
+      101,
+      96,
+      122
+    ],
+    "size": [
+      1600,
+      359
+    ],
+    "mode": "RGBA",
+    "sha256": "d6ee80278aa5bfa663448da8b3adae2ac6781f7e997ecaae5b21293130db82a8",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": []
+  },
+  {
+    "identity": "brann",
+    "move": "down",
+    "revision": "r1",
+    "routes_or_intents": [
+      "down"
+    ],
+    "sequence": [
+      "ready",
+      "knees buckle, hammer lowers",
+      "kneel and slump",
+      "unconscious side collapse, hammer beside body"
+    ],
+    "preferred_candidate": true,
+    "file": "heroes/raw/brann-down-r1.png",
+    "frame_count": 4,
+    "frame_order": "left-to-right",
+    "source": "heroes/source-sheets/brann_reactions_r1-source.png",
+    "source_row_1based": 3,
+    "source_crop_xyxy": [
+      0,
+      705,
+      1536,
+      998
+    ],
+    "shared_transparent_padding_px": 24,
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        81,
+        40,
+        350,
+        299
+      ],
+      [
+        541,
+        42,
+        842,
+        301
+      ],
+      [
+        982,
+        87,
+        1309,
+        300
+      ],
+      [
+        1420,
+        148,
+        1820,
+        301
+      ]
+    ],
+    "low_alpha_support_radius_px": 4,
+    "slot_width_px": 464,
+    "source_nominal_slot_centres_x": [
+      192,
+      576,
+      960,
+      1344
+    ],
+    "source_to_raw_frame_translation_xy": [
+      [
+        51,
+        -681
+      ],
+      [
+        131,
+        -681
+      ],
+      [
+        211,
+        -681
+      ],
+      [
+        291,
+        -681
+      ]
+    ],
+    "source_frame_bounds_alpha_gt80_xyxy": [
+      [
+        30,
+        721,
+        299,
+        980
+      ],
+      [
+        410,
+        723,
+        711,
+        982
+      ],
+      [
+        771,
+        768,
+        1098,
+        981
+      ],
+      [
+        1129,
+        829,
+        1529,
+        982
+      ]
+    ],
+    "transparent_gaps_alpha_gt80_px": [
+      191,
+      140,
+      111
+    ],
+    "size": [
+      1856,
+      341
+    ],
+    "mode": "RGBA",
+    "sha256": "7632b572e2304623b56b9fe7ae4b1b68d3d97feab8af14adb69b593355a8e2dd",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": []
+  },
+  {
+    "identity": "foe_tusker",
+    "move": "tusk-charge",
+    "revision": "r1",
+    "routes_or_intents": [
+      "Tusk Charge"
+    ],
+    "sequence": [
+      "ready",
+      "lower head, front hoof paws",
+      "compressed low charge preparation",
+      "forward charge contact left",
+      "brake and rise",
+      "recover ready"
+    ],
+    "preferred_candidate": true,
+    "file": "foes/raw/foe_tusker-tusk-charge-r1.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "source": "foes/source-sheets/tusker_actions_r1-source.png",
+    "source_row_1based": 1,
+    "source_crop_xyxy": [
+      0,
+      176,
+      1774,
+      424
+    ],
+    "shared_transparent_padding_px": 24,
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        91,
+        40,
+        326,
+        256
+      ],
+      [
+        486,
+        56,
+        739,
+        253
+      ],
+      [
+        892,
+        70,
+        1137,
+        251
+      ],
+      [
+        1276,
+        59,
+        1633,
+        249
+      ],
+      [
+        1760,
+        43,
+        2034,
+        254
+      ],
+      [
+        2187,
+        40,
+        2421,
+        256
+      ]
+    ],
+    "low_alpha_support_radius_px": 4,
+    "slot_width_px": 416,
+    "source_nominal_slot_centres_x": [
+      148,
+      444,
+      739,
+      1035,
+      1330,
+      1626
+    ],
+    "source_to_raw_frame_translation_xy": [
+      [
+        60,
+        -152
+      ],
+      [
+        180,
+        -152
+      ],
+      [
+        301,
+        -152
+      ],
+      [
+        421,
+        -152
+      ],
+      [
+        542,
+        -152
+      ],
+      [
+        662,
+        -152
+      ]
+    ],
+    "source_frame_bounds_alpha_gt80_xyxy": [
+      [
+        31,
+        192,
+        266,
+        408
+      ],
+      [
+        306,
+        208,
+        559,
+        405
+      ],
+      [
+        591,
+        222,
+        836,
+        403
+      ],
+      [
+        855,
+        211,
+        1212,
+        401
+      ],
+      [
+        1218,
+        195,
+        1492,
+        406
+      ],
+      [
+        1525,
+        192,
+        1759,
+        408
+      ]
+    ],
+    "transparent_gaps_alpha_gt80_px": [
+      160,
+      153,
+      139,
+      127,
+      153
+    ],
+    "size": [
+      2496,
+      296
+    ],
+    "mode": "RGBA",
+    "sha256": "734a2e708fce77d141ba64f28b1d9dac7af6e0f4bc8fd66279a624ec41ef9f7f",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": []
+  },
+  {
+    "identity": "foe_tusker",
+    "move": "stampede",
+    "revision": "r1",
+    "routes_or_intents": [
+      "Stampede"
+    ],
+    "sequence": [
+      "ready",
+      "deeper nose-down crouch",
+      "hindquarters rise, head also rises (weak R1 anticipation)",
+      "galloping charge left",
+      "braking stance",
+      "recover ready"
+    ],
+    "preferred_candidate": false,
+    "file": "foes/raw/foe_tusker-stampede-r1.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "source": "foes/source-sheets/tusker_actions_r1-source.png",
+    "source_row_1based": 2,
+    "source_crop_xyxy": [
+      0,
+      520,
+      1774,
+      785
+    ],
+    "shared_transparent_padding_px": 24,
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        67,
+        50,
+        302,
+        266
+      ],
+      [
+        442,
+        98,
+        709,
+        264
+      ],
+      [
+        848,
+        40,
+        1096,
+        273
+      ],
+      [
+        1228,
+        61,
+        1571,
+        266
+      ],
+      [
+        1693,
+        51,
+        1972,
+        270
+      ],
+      [
+        2083,
+        50,
+        2317,
+        265
+      ]
+    ],
+    "low_alpha_support_radius_px": 4,
+    "slot_width_px": 400,
+    "source_nominal_slot_centres_x": [
+      148,
+      444,
+      739,
+      1035,
+      1330,
+      1626
+    ],
+    "source_to_raw_frame_translation_xy": [
+      [
+        36,
+        -496
+      ],
+      [
+        140,
+        -496
+      ],
+      [
+        245,
+        -496
+      ],
+      [
+        349,
+        -496
+      ],
+      [
+        454,
+        -496
+      ],
+      [
+        558,
+        -496
+      ]
+    ],
+    "source_frame_bounds_alpha_gt80_xyxy": [
+      [
+        31,
+        546,
+        266,
+        762
+      ],
+      [
+        302,
+        594,
+        569,
+        760
+      ],
+      [
+        603,
+        536,
+        851,
+        769
+      ],
+      [
+        879,
+        557,
+        1222,
+        762
+      ],
+      [
+        1239,
+        547,
+        1518,
+        766
+      ],
+      [
+        1525,
+        546,
+        1759,
+        761
+      ]
+    ],
+    "transparent_gaps_alpha_gt80_px": [
+      140,
+      139,
+      132,
+      122,
+      111
+    ],
+    "size": [
+      2400,
+      313
+    ],
+    "mode": "RGBA",
+    "sha256": "8eb8bfe17ff03f0d53657fb7f7ad5cfc68bf0fdf26aa715c0aaa4e32f32584f2",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": []
+  },
+  {
+    "identity": "foe_stalker",
+    "move": "thorn-pounce",
+    "revision": "r1",
+    "routes_or_intents": [
+      "Thorn Pounce"
+    ],
+    "sequence": [
+      "ready",
+      "deep crouch",
+      "launch left",
+      "airborne forward claw contact",
+      "land back",
+      "recover ready"
+    ],
+    "preferred_candidate": true,
+    "file": "foes/raw/foe_stalker-thorn-pounce-r1.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "source": "foes/source-sheets/stalker_actions_r1-source.png",
+    "source_row_1based": 1,
+    "source_crop_xyxy": [
+      0,
+      201,
+      2149,
+      539
+    ],
+    "shared_transparent_padding_px": 24,
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        91,
+        98,
+        349,
+        347
+      ],
+      [
+        493,
+        111,
+        784,
+        345
+      ],
+      [
+        892,
+        80,
+        1219,
+        334
+      ],
+      [
+        1333,
+        40,
+        1686,
+        278
+      ],
+      [
+        1802,
+        102,
+        2100,
+        346
+      ],
+      [
+        2253,
+        92,
+        2512,
+        346
+      ]
+    ],
+    "low_alpha_support_radius_px": 4,
+    "slot_width_px": 432,
+    "source_nominal_slot_centres_x": [
+      179,
+      537,
+      895,
+      1254,
+      1612,
+      1970
+    ],
+    "source_to_raw_frame_translation_xy": [
+      [
+        37,
+        -177
+      ],
+      [
+        111,
+        -177
+      ],
+      [
+        185,
+        -177
+      ],
+      [
+        258,
+        -177
+      ],
+      [
+        332,
+        -177
+      ],
+      [
+        406,
+        -177
+      ]
+    ],
+    "source_frame_bounds_alpha_gt80_xyxy": [
+      [
+        54,
+        275,
+        312,
+        524
+      ],
+      [
+        382,
+        288,
+        673,
+        522
+      ],
+      [
+        707,
+        257,
+        1034,
+        511
+      ],
+      [
+        1075,
+        217,
+        1428,
+        455
+      ],
+      [
+        1470,
+        279,
+        1768,
+        523
+      ],
+      [
+        1847,
+        269,
+        2106,
+        523
+      ]
+    ],
+    "transparent_gaps_alpha_gt80_px": [
+      144,
+      108,
+      114,
+      116,
+      153
+    ],
+    "size": [
+      2592,
+      386
+    ],
+    "mode": "RGBA",
+    "sha256": "c83a67ca8c0823e3c52ab76f1a6f6cb4a19f9849aa02c724ad8cb6541d9075d7",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": []
+  },
+  {
+    "identity": "foe_thorn_beetle",
+    "move": "thorn-bite",
+    "revision": "r1",
+    "routes_or_intents": [
+      "Thorn Bite"
+    ],
+    "sequence": [
+      "ready",
+      "rear up with mandibles open",
+      "forward bite contact",
+      "head retracts under shell",
+      "emerge",
+      "recover ready"
+    ],
+    "preferred_candidate": true,
+    "file": "foes/raw/foe_thorn_beetle-thorn-bite-r1.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "source": "foes/source-sheets/beetle_actions_r1-source.png",
+    "source_row_1based": 1,
+    "source_crop_xyxy": [
+      0,
+      215,
+      2172,
+      504
+    ],
+    "shared_transparent_padding_px": 24,
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        41,
+        111,
+        312,
+        298
+      ],
+      [
+        439,
+        39,
+        703,
+        294
+      ],
+      [
+        764,
+        99,
+        1076,
+        294
+      ],
+      [
+        1149,
+        116,
+        1427,
+        297
+      ],
+      [
+        1518,
+        100,
+        1789,
+        298
+      ],
+      [
+        1878,
+        111,
+        2149,
+        298
+      ]
+    ],
+    "low_alpha_support_radius_px": 4,
+    "slot_width_px": 368,
+    "source_nominal_slot_centres_x": [
+      181,
+      543,
+      905,
+      1267,
+      1629,
+      1991
+    ],
+    "source_to_raw_frame_translation_xy": [
+      [
+        -11,
+        -191
+      ],
+      [
+        -5,
+        -191
+      ],
+      [
+        1,
+        -191
+      ],
+      [
+        7,
+        -191
+      ],
+      [
+        13,
+        -191
+      ],
+      [
+        19,
+        -191
+      ]
+    ],
+    "source_frame_bounds_alpha_gt80_xyxy": [
+      [
+        52,
+        302,
+        323,
+        489
+      ],
+      [
+        444,
+        230,
+        708,
+        485
+      ],
+      [
+        763,
+        290,
+        1075,
+        485
+      ],
+      [
+        1142,
+        307,
+        1420,
+        488
+      ],
+      [
+        1505,
+        291,
+        1776,
+        489
+      ],
+      [
+        1859,
+        302,
+        2130,
+        489
+      ]
+    ],
+    "transparent_gaps_alpha_gt80_px": [
+      127,
+      61,
+      73,
+      91,
+      89
+    ],
+    "size": [
+      2208,
+      337
+    ],
+    "mode": "RGBA",
+    "sha256": "67b9b4a34db5efe3d6b7729d977e50c1e54a4600cebb53521b11f52428e16f59",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": []
+  },
+  {
+    "identity": "garran",
+    "move": "spear-thrust",
+    "revision": "r1",
+    "routes_or_intents": [
+      "attack",
+      "pierce",
+      "halt"
+    ],
+    "sequence": [
+      "ready",
+      "draw spear back and flex knees",
+      "loaded shoulder, spear horizontal",
+      "forward thrust right",
+      "extended thrust follow-through",
+      "recover ready"
+    ],
+    "preferred_candidate": true,
+    "file": "heroes/raw/garran-spear-thrust-r1.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "source": "heroes/source-sheets/garran_actions_r1-source.png",
+    "source_row_1based": 1,
+    "source_crop_xyxy": [
+      0,
+      71,
+      1536,
+      347
+    ],
+    "shared_transparent_padding_px": 24,
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        84,
+        42,
+        288,
+        284
+      ],
+      [
+        496,
+        40,
+        716,
+        283
+      ],
+      [
+        923,
+        83,
+        1196,
+        283
+      ],
+      [
+        1389,
+        90,
+        1726,
+        283
+      ],
+      [
+        1883,
+        94,
+        2200,
+        283
+      ],
+      [
+        2386,
+        41,
+        2568,
+        283
+      ]
+    ],
+    "low_alpha_support_radius_px": 4,
+    "slot_width_px": 448,
+    "source_nominal_slot_centres_x": [
+      128,
+      384,
+      640,
+      896,
+      1152,
+      1408
+    ],
+    "source_to_raw_frame_translation_xy": [
+      [
+        75,
+        -47
+      ],
+      [
+        267,
+        -47
+      ],
+      [
+        459,
+        -47
+      ],
+      [
+        651,
+        -47
+      ],
+      [
+        843,
+        -47
+      ],
+      [
+        1035,
+        -47
+      ]
+    ],
+    "source_frame_bounds_alpha_gt80_xyxy": [
+      [
+        9,
+        89,
+        213,
+        331
+      ],
+      [
+        229,
+        87,
+        449,
+        330
+      ],
+      [
+        464,
+        130,
+        737,
+        330
+      ],
+      [
+        738,
+        137,
+        1075,
+        330
+      ],
+      [
+        1040,
+        141,
+        1357,
+        330
+      ],
+      [
+        1351,
+        88,
+        1533,
+        330
+      ]
+    ],
+    "transparent_gaps_alpha_gt80_px": [
+      208,
+      207,
+      193,
+      157,
+      186
+    ],
+    "size": [
+      2688,
+      324
+    ],
+    "mode": "RGBA",
+    "sha256": "a16bc2c563c0d9c832d2b9ca88f6b8e7a5fb40b45872139ccfdc81c9ed9c6d25",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": []
+  },
+  {
+    "identity": "garran",
+    "move": "spearwall",
+    "revision": "r1",
+    "routes_or_intents": [
+      "brace",
+      "spearwall",
+      "hold"
+    ],
+    "sequence": [
+      "ready",
+      "lower centre of gravity",
+      "rear foot plants, spear lowers",
+      "low forward spear guard",
+      "hold low spear guard",
+      "recover ready"
+    ],
+    "preferred_candidate": true,
+    "file": "heroes/raw/garran-spearwall-r1.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "source": "heroes/source-sheets/garran_actions_r1-source.png",
+    "source_row_1based": 2,
+    "source_crop_xyxy": [
+      0,
+      364,
+      1536,
+      642
+    ],
+    "shared_transparent_padding_px": 24,
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        65,
+        39,
+        269,
+        283
+      ],
+      [
+        443,
+        103,
+        702,
+        286
+      ],
+      [
+        873,
+        117,
+        1157,
+        285
+      ],
+      [
+        1349,
+        114,
+        1624,
+        286
+      ],
+      [
+        1792,
+        113,
+        2053,
+        286
+      ],
+      [
+        2207,
+        39,
+        2389,
+        282
+      ]
+    ],
+    "low_alpha_support_radius_px": 4,
+    "slot_width_px": 416,
+    "source_nominal_slot_centres_x": [
+      128,
+      384,
+      640,
+      896,
+      1152,
+      1408
+    ],
+    "source_to_raw_frame_translation_xy": [
+      [
+        56,
+        -340
+      ],
+      [
+        216,
+        -340
+      ],
+      [
+        376,
+        -340
+      ],
+      [
+        536,
+        -340
+      ],
+      [
+        696,
+        -340
+      ],
+      [
+        856,
+        -340
+      ]
+    ],
+    "source_frame_bounds_alpha_gt80_xyxy": [
+      [
+        9,
+        379,
+        213,
+        623
+      ],
+      [
+        227,
+        443,
+        486,
+        626
+      ],
+      [
+        497,
+        457,
+        781,
+        625
+      ],
+      [
+        813,
+        454,
+        1088,
+        626
+      ],
+      [
+        1096,
+        453,
+        1357,
+        626
+      ],
+      [
+        1351,
+        379,
+        1533,
+        622
+      ]
+    ],
+    "transparent_gaps_alpha_gt80_px": [
+      174,
+      171,
+      192,
+      168,
+      154
+    ],
+    "size": [
+      2496,
+      326
+    ],
+    "mode": "RGBA",
+    "sha256": "e7158f89c8cc4a43eb1bfa23bec2e5be1a6d0c072e3e45a4acb8f7fb1a941783",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": []
+  },
+  {
+    "identity": "garran",
+    "move": "warcry",
+    "revision": "r1",
+    "routes_or_intents": [
+      "warcry"
+    ],
+    "sequence": [
+      "ready",
+      "chest expands; spear disappears (R1 defect)",
+      "spear rises upright",
+      "raised-spear shout",
+      "raised-spear follow-through",
+      "recover ready"
+    ],
+    "preferred_candidate": false,
+    "file": "heroes/raw/garran-warcry-r1.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "source": "heroes/source-sheets/garran_actions_r1-source.png",
+    "source_row_1based": 3,
+    "source_crop_xyxy": [
+      0,
+      619,
+      1536,
+      984
+    ],
+    "shared_transparent_padding_px": 24,
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        28,
+        126,
+        232,
+        369
+      ],
+      [
+        379,
+        155,
+        556,
+        369
+      ],
+      [
+        707,
+        60,
+        909,
+        372
+      ],
+      [
+        1073,
+        39,
+        1279,
+        373
+      ],
+      [
+        1437,
+        47,
+        1638,
+        373
+      ],
+      [
+        1770,
+        126,
+        1952,
+        368
+      ]
+    ],
+    "low_alpha_support_radius_px": 4,
+    "slot_width_px": 336,
+    "source_nominal_slot_centres_x": [
+      128,
+      384,
+      640,
+      896,
+      1152,
+      1408
+    ],
+    "source_to_raw_frame_translation_xy": [
+      [
+        19,
+        -595
+      ],
+      [
+        99,
+        -595
+      ],
+      [
+        179,
+        -595
+      ],
+      [
+        259,
+        -595
+      ],
+      [
+        339,
+        -595
+      ],
+      [
+        419,
+        -595
+      ]
+    ],
+    "source_frame_bounds_alpha_gt80_xyxy": [
+      [
+        9,
+        721,
+        213,
+        964
+      ],
+      [
+        280,
+        750,
+        457,
+        964
+      ],
+      [
+        528,
+        655,
+        730,
+        967
+      ],
+      [
+        814,
+        634,
+        1020,
+        968
+      ],
+      [
+        1098,
+        642,
+        1299,
+        968
+      ],
+      [
+        1351,
+        721,
+        1533,
+        963
+      ]
+    ],
+    "transparent_gaps_alpha_gt80_px": [
+      147,
+      151,
+      164,
+      158,
+      132
+    ],
+    "size": [
+      2016,
+      413
+    ],
+    "mode": "RGBA",
+    "sha256": "976a87a0ff145b70cb04c4f40c28802f0bd7f18c7ad8a04bb87013b87cf85aaa",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": []
+  },
+  {
+    "identity": "foe_tusker",
+    "move": "hit",
+    "revision": "r1",
+    "routes_or_intents": [
+      "hit"
+    ],
+    "sequence": [
+      "ready",
+      "head and shoulders flinch right",
+      "deep low recoil",
+      "recover ready"
+    ],
+    "preferred_candidate": true,
+    "file": "foes/raw/foe_tusker-hit-r1.png",
+    "frame_count": 4,
+    "frame_order": "left-to-right",
+    "source": "foes/source-sheets/tusker_reactions_r1-source.png",
+    "source_row_1based": 1,
+    "source_crop_xyxy": [
+      0,
+      140,
+      1536,
+      473
+    ],
+    "shared_transparent_padding_px": 24,
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        58,
+        45,
+        388,
+        340
+      ],
+      [
+        472,
+        38,
+        780,
+        336
+      ],
+      [
+        859,
+        99,
+        1189,
+        341
+      ],
+      [
+        1275,
+        46,
+        1605,
+        340
+      ]
+    ],
+    "low_alpha_support_radius_px": 4,
+    "slot_width_px": 416,
+    "source_nominal_slot_centres_x": [
+      192,
+      576,
+      960,
+      1344
+    ],
+    "source_to_raw_frame_translation_xy": [
+      [
+        12,
+        -116
+      ],
+      [
+        44,
+        -116
+      ],
+      [
+        76,
+        -116
+      ],
+      [
+        108,
+        -116
+      ]
+    ],
+    "source_frame_bounds_alpha_gt80_xyxy": [
+      [
+        46,
+        161,
+        376,
+        456
+      ],
+      [
+        428,
+        154,
+        736,
+        452
+      ],
+      [
+        783,
+        215,
+        1113,
+        457
+      ],
+      [
+        1167,
+        162,
+        1497,
+        456
+      ]
+    ],
+    "transparent_gaps_alpha_gt80_px": [
+      84,
+      79,
+      86
+    ],
+    "size": [
+      1664,
+      381
+    ],
+    "mode": "RGBA",
+    "sha256": "ae353aa9dbf19cc991b002c38010420cd18ea4ba65e506db0ee493c0a2dfa2c5",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": []
+  },
+  {
+    "identity": "foe_tusker",
+    "move": "down",
+    "revision": "r1",
+    "routes_or_intents": [
+      "down"
+    ],
+    "sequence": [
+      "ready",
+      "front legs buckle",
+      "roll onto side",
+      "unconscious side hold"
+    ],
+    "preferred_candidate": true,
+    "file": "foes/raw/foe_tusker-down-r1.png",
+    "frame_count": 4,
+    "frame_order": "left-to-right",
+    "source": "foes/source-sheets/tusker_reactions_r1-source.png",
+    "source_row_1based": 2,
+    "source_crop_xyxy": [
+      0,
+      565,
+      1536,
+      892
+    ],
+    "shared_transparent_padding_px": 24,
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        95,
+        39,
+        425,
+        334
+      ],
+      [
+        548,
+        82,
+        868,
+        331
+      ],
+      [
+        966,
+        153,
+        1332,
+        331
+      ],
+      [
+        1420,
+        177,
+        1800,
+        335
+      ]
+    ],
+    "low_alpha_support_radius_px": 4,
+    "slot_width_px": 464,
+    "source_nominal_slot_centres_x": [
+      192,
+      576,
+      960,
+      1344
+    ],
+    "source_to_raw_frame_translation_xy": [
+      [
+        49,
+        -541
+      ],
+      [
+        129,
+        -541
+      ],
+      [
+        209,
+        -541
+      ],
+      [
+        289,
+        -541
+      ]
+    ],
+    "source_frame_bounds_alpha_gt80_xyxy": [
+      [
+        46,
+        580,
+        376,
+        875
+      ],
+      [
+        419,
+        623,
+        739,
+        872
+      ],
+      [
+        757,
+        694,
+        1123,
+        872
+      ],
+      [
+        1131,
+        718,
+        1511,
+        876
+      ]
+    ],
+    "transparent_gaps_alpha_gt80_px": [
+      123,
+      98,
+      88
+    ],
+    "size": [
+      1856,
+      375
+    ],
+    "mode": "RGBA",
+    "sha256": "8662243dbbcd04e2adad2cad257e6e52d1d56309c3115b9a5ad01d6bec64e8ee",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": []
+  },
+  {
+    "identity": "foe_stalker",
+    "move": "hit",
+    "revision": "r1",
+    "routes_or_intents": [
+      "hit"
+    ],
+    "sequence": [
+      "ready",
+      "head recoils right, eyes pinch",
+      "low crouched flinch",
+      "recover ready"
+    ],
+    "preferred_candidate": true,
+    "file": "foes/raw/foe_stalker-hit-r1.png",
+    "frame_count": 4,
+    "frame_order": "left-to-right",
+    "source": "foes/source-sheets/stalker_reactions_r1-source.png",
+    "source_row_1based": 1,
+    "source_crop_xyxy": [
+      0,
+      126,
+      1536,
+      458
+    ],
+    "shared_transparent_padding_px": 24,
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        67,
+        40,
+        372,
+        338
+      ],
+      [
+        463,
+        66,
+        793,
+        338
+      ],
+      [
+        860,
+        78,
+        1189,
+        340
+      ],
+      [
+        1297,
+        40,
+        1601,
+        338
+      ]
+    ],
+    "low_alpha_support_radius_px": 4,
+    "slot_width_px": 416,
+    "source_nominal_slot_centres_x": [
+      192,
+      576,
+      960,
+      1344
+    ],
+    "source_to_raw_frame_translation_xy": [
+      [
+        12,
+        -102
+      ],
+      [
+        44,
+        -102
+      ],
+      [
+        76,
+        -102
+      ],
+      [
+        108,
+        -102
+      ]
+    ],
+    "source_frame_bounds_alpha_gt80_xyxy": [
+      [
+        55,
+        142,
+        360,
+        440
+      ],
+      [
+        419,
+        168,
+        749,
+        440
+      ],
+      [
+        784,
+        180,
+        1113,
+        442
+      ],
+      [
+        1189,
+        142,
+        1493,
+        440
+      ]
+    ],
+    "transparent_gaps_alpha_gt80_px": [
+      91,
+      67,
+      108
+    ],
+    "size": [
+      1664,
+      380
+    ],
+    "mode": "RGBA",
+    "sha256": "31a4d95bd2fa0347faaa0610179d5371e558a99bfa40d747ba59b920bfb7caa3",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": []
+  },
+  {
+    "identity": "foe_stalker",
+    "move": "down",
+    "revision": "r1",
+    "routes_or_intents": [
+      "down"
+    ],
+    "sequence": [
+      "ready",
+      "legs buckle, eyes close",
+      "lower onto side",
+      "unconscious side hold"
+    ],
+    "preferred_candidate": true,
+    "file": "foes/raw/foe_stalker-down-r1.png",
+    "frame_count": 4,
+    "frame_order": "left-to-right",
+    "source": "foes/source-sheets/stalker_reactions_r1-source.png",
+    "source_row_1based": 2,
+    "source_crop_xyxy": [
+      0,
+      574,
+      1536,
+      904
+    ],
+    "shared_transparent_padding_px": 24,
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        104,
+        40,
+        409,
+        338
+      ],
+      [
+        530,
+        99,
+        864,
+        334
+      ],
+      [
+        951,
+        156,
+        1307,
+        330
+      ],
+      [
+        1372,
+        160,
+        1759,
+        338
+      ]
+    ],
+    "low_alpha_support_radius_px": 4,
+    "slot_width_px": 448,
+    "source_nominal_slot_centres_x": [
+      192,
+      576,
+      960,
+      1344
+    ],
+    "source_to_raw_frame_translation_xy": [
+      [
+        49,
+        -550
+      ],
+      [
+        113,
+        -550
+      ],
+      [
+        177,
+        -550
+      ],
+      [
+        241,
+        -550
+      ]
+    ],
+    "source_frame_bounds_alpha_gt80_xyxy": [
+      [
+        55,
+        590,
+        360,
+        888
+      ],
+      [
+        417,
+        649,
+        751,
+        884
+      ],
+      [
+        774,
+        706,
+        1130,
+        880
+      ],
+      [
+        1131,
+        710,
+        1518,
+        888
+      ]
+    ],
+    "transparent_gaps_alpha_gt80_px": [
+      121,
+      87,
+      65
+    ],
+    "size": [
+      1792,
+      378
+    ],
+    "mode": "RGBA",
+    "sha256": "5f9b165fdcf3a31bdada144cfafc0037130cd5d34cff8390af130ed38b63da78",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": []
+  },
+  {
+    "identity": "foe_thorn_beetle",
+    "move": "hit",
+    "revision": "r1",
+    "routes_or_intents": [
+      "hit"
+    ],
+    "sequence": [
+      "ready",
+      "jolt right, legs flex",
+      "low crouch under shell",
+      "recover ready"
+    ],
+    "preferred_candidate": true,
+    "file": "foes/raw/foe_thorn_beetle-hit-r1.png",
+    "frame_count": 4,
+    "frame_order": "left-to-right",
+    "source": "foes/source-sheets/beetle_reactions_r1-source.png",
+    "source_row_1based": 1,
+    "source_crop_xyxy": [
+      0,
+      157,
+      1536,
+      444
+    ],
+    "shared_transparent_padding_px": 24,
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        59,
+        43,
+        390,
+        292
+      ],
+      [
+        505,
+        39,
+        811,
+        291
+      ],
+      [
+        923,
+        107,
+        1238,
+        295
+      ],
+      [
+        1323,
+        43,
+        1655,
+        292
+      ]
+    ],
+    "low_alpha_support_radius_px": 4,
+    "slot_width_px": 432,
+    "source_nominal_slot_centres_x": [
+      192,
+      576,
+      960,
+      1344
+    ],
+    "source_to_raw_frame_translation_xy": [
+      [
+        26,
+        -133
+      ],
+      [
+        74,
+        -133
+      ],
+      [
+        122,
+        -133
+      ],
+      [
+        170,
+        -133
+      ]
+    ],
+    "source_frame_bounds_alpha_gt80_xyxy": [
+      [
+        33,
+        176,
+        364,
+        425
+      ],
+      [
+        431,
+        172,
+        737,
+        424
+      ],
+      [
+        801,
+        240,
+        1116,
+        428
+      ],
+      [
+        1153,
+        176,
+        1485,
+        425
+      ]
+    ],
+    "transparent_gaps_alpha_gt80_px": [
+      115,
+      112,
+      85
+    ],
+    "size": [
+      1728,
+      335
+    ],
+    "mode": "RGBA",
+    "sha256": "96ff312d744aee32c1b227cae45a7d8da07f0f1b918117f079e9c2e5b67d63a8",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": []
+  },
+  {
+    "identity": "foe_thorn_beetle",
+    "move": "down",
+    "revision": "r1",
+    "routes_or_intents": [
+      "down"
+    ],
+    "sequence": [
+      "ready",
+      "legs buckle and eye closes",
+      "shell settles with legs folding",
+      "low unconscious prone hold"
+    ],
+    "preferred_candidate": true,
+    "file": "foes/raw/foe_thorn_beetle-down-r1.png",
+    "frame_count": 4,
+    "frame_order": "left-to-right",
+    "source": "foes/source-sheets/beetle_reactions_r1-source.png",
+    "source_row_1based": 2,
+    "source_crop_xyxy": [
+      0,
+      605,
+      1536,
+      888
+    ],
+    "shared_transparent_padding_px": 24,
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        40,
+        40,
+        372,
+        290
+      ],
+      [
+        437,
+        68,
+        769,
+        291
+      ],
+      [
+        840,
+        125,
+        1154,
+        291
+      ],
+      [
+        1228,
+        138,
+        1558,
+        291
+      ]
+    ],
+    "low_alpha_support_radius_px": 4,
+    "slot_width_px": 400,
+    "source_nominal_slot_centres_x": [
+      192,
+      576,
+      960,
+      1344
+    ],
+    "source_to_raw_frame_translation_xy": [
+      [
+        7,
+        -581
+      ],
+      [
+        23,
+        -581
+      ],
+      [
+        39,
+        -581
+      ],
+      [
+        55,
+        -581
+      ]
+    ],
+    "source_frame_bounds_alpha_gt80_xyxy": [
+      [
+        33,
+        621,
+        365,
+        871
+      ],
+      [
+        414,
+        649,
+        746,
+        872
+      ],
+      [
+        801,
+        706,
+        1115,
+        872
+      ],
+      [
+        1173,
+        719,
+        1503,
+        872
+      ]
+    ],
+    "transparent_gaps_alpha_gt80_px": [
+      65,
+      71,
+      74
+    ],
+    "size": [
+      1600,
+      331
+    ],
+    "mode": "RGBA",
+    "sha256": "034dbb798d0c4939ea89632e27b6d2354040b007ae8b822eea716a62438d9056",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": []
+  },
+  {
+    "identity": "garran",
+    "move": "warcry",
+    "revision": "r2",
+    "routes_or_intents": [
+      "warcry"
+    ],
+    "sequence": [
+      "ready, spear retained",
+      "chest expands, spear upright",
+      "raise spear",
+      "high spear open-mouth shout",
+      "high spear follow-through",
+      "recover ready"
+    ],
+    "preferred_candidate": true,
+    "file": "heroes/raw/garran-warcry-r2.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "source": "heroes/source-sheets/garran_warcry_r2-source.png",
+    "source_row_1based": 1,
+    "source_crop_xyxy": [
+      0,
+      22,
+      2172,
+      691
+    ],
+    "shared_transparent_padding_px": 24,
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        68,
+        267,
+        405,
+        676
+      ],
+      [
+        537,
+        153,
+        850,
+        675
+      ],
+      [
+        972,
+        98,
+        1285,
+        675
+      ],
+      [
+        1412,
+        39,
+        1735,
+        678
+      ],
+      [
+        1855,
+        84,
+        2183,
+        678
+      ],
+      [
+        2268,
+        269,
+        2602,
+        676
+      ]
+    ],
+    "low_alpha_support_radius_px": 4,
+    "slot_width_px": 448,
+    "source_nominal_slot_centres_x": [
+      181,
+      543,
+      905,
+      1267,
+      1629,
+      1991
+    ],
+    "source_to_raw_frame_translation_xy": [
+      [
+        30,
+        2
+      ],
+      [
+        116,
+        2
+      ],
+      [
+        202,
+        2
+      ],
+      [
+        288,
+        2
+      ],
+      [
+        374,
+        2
+      ],
+      [
+        460,
+        2
+      ]
+    ],
+    "source_frame_bounds_alpha_gt80_xyxy": [
+      [
+        38,
+        265,
+        375,
+        674
+      ],
+      [
+        421,
+        151,
+        734,
+        673
+      ],
+      [
+        770,
+        96,
+        1083,
+        673
+      ],
+      [
+        1124,
+        37,
+        1447,
+        676
+      ],
+      [
+        1481,
+        82,
+        1809,
+        676
+      ],
+      [
+        1808,
+        267,
+        2142,
+        674
+      ]
+    ],
+    "transparent_gaps_alpha_gt80_px": [
+      132,
+      122,
+      127,
+      120,
+      85
+    ],
+    "size": [
+      2688,
+      717
+    ],
+    "mode": "RGBA",
+    "sha256": "dce053facb40890d86c7e43219d5497bfe710b5f4b420e874bf06681441304e5",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": []
+  },
+  {
+    "identity": "brann",
+    "move": "taunt",
+    "revision": "r2",
+    "routes_or_intents": [
+      "taunt"
+    ],
+    "sequence": [
+      "ready",
+      "lower hammer to ground",
+      "plant head, grip vertical shaft",
+      "chest out, free palm beckons",
+      "curl fingers toward himself",
+      "recover ready"
+    ],
+    "preferred_candidate": true,
+    "file": "heroes/raw/brann-taunt-r2.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "source": "heroes/source-sheets/brann_taunt_r2-source.png",
+    "source_row_1based": 1,
+    "source_crop_xyxy": [
+      0,
+      190,
+      2172,
+      536
+    ],
+    "shared_transparent_padding_px": 24,
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        49,
+        55,
+        346,
+        351
+      ],
+      [
+        476,
+        56,
+        810,
+        353
+      ],
+      [
+        927,
+        40,
+        1242,
+        354
+      ],
+      [
+        1376,
+        50,
+        1757,
+        354
+      ],
+      [
+        1839,
+        43,
+        2156,
+        354
+      ],
+      [
+        2316,
+        59,
+        2605,
+        351
+      ]
+    ],
+    "low_alpha_support_radius_px": 4,
+    "slot_width_px": 448,
+    "source_nominal_slot_centres_x": [
+      181,
+      543,
+      905,
+      1267,
+      1629,
+      1991
+    ],
+    "source_to_raw_frame_translation_xy": [
+      [
+        13,
+        -166
+      ],
+      [
+        99,
+        -166
+      ],
+      [
+        185,
+        -166
+      ],
+      [
+        271,
+        -166
+      ],
+      [
+        357,
+        -166
+      ],
+      [
+        443,
+        -166
+      ]
+    ],
+    "source_frame_bounds_alpha_gt80_xyxy": [
+      [
+        36,
+        221,
+        333,
+        517
+      ],
+      [
+        377,
+        222,
+        711,
+        519
+      ],
+      [
+        742,
+        206,
+        1057,
+        520
+      ],
+      [
+        1105,
+        216,
+        1486,
+        520
+      ],
+      [
+        1482,
+        209,
+        1799,
+        520
+      ],
+      [
+        1873,
+        225,
+        2162,
+        517
+      ]
+    ],
+    "transparent_gaps_alpha_gt80_px": [
+      130,
+      117,
+      134,
+      82,
+      160
+    ],
+    "size": [
+      2688,
+      394
+    ],
+    "mode": "RGBA",
+    "sha256": "6b50aeea21e6fc118d6f074063a682868560b09f0b2aa832167822c509f5efcc",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": []
+  },
+  {
+    "identity": "foe_tusker",
+    "move": "stampede",
+    "revision": "r2",
+    "routes_or_intents": [
+      "Stampede"
+    ],
+    "sequence": [
+      "ready",
+      "nose down, shoulders sink",
+      "front hoof paws, head low",
+      "deepest coiled crouch",
+      "explosive charge contact left",
+      "second charging stride",
+      "brake and rise",
+      "recover ready"
+    ],
+    "preferred_candidate": true,
+    "file": "foes/raw/foe_tusker-stampede-r2.png",
+    "frame_count": 8,
+    "frame_order": "left-to-right",
+    "source": "foes/source-sheets/tusker_stampede_r2-source.png",
+    "source_row_1based": 1,
+    "source_crop_xyxy": [
+      0,
+      210,
+      2172,
+      465
+    ],
+    "shared_transparent_padding_px": 24,
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        72,
+        46,
+        309,
+        263
+      ],
+      [
+        429,
+        39,
+        677,
+        262
+      ],
+      [
+        792,
+        49,
+        1023,
+        260
+      ],
+      [
+        1138,
+        83,
+        1394,
+        262
+      ],
+      [
+        1500,
+        51,
+        1786,
+        259
+      ],
+      [
+        1876,
+        50,
+        2171,
+        263
+      ],
+      [
+        2271,
+        41,
+        2524,
+        263
+      ],
+      [
+        2645,
+        44,
+        2880,
+        262
+      ]
+    ],
+    "low_alpha_support_radius_px": 4,
+    "slot_width_px": 368,
+    "source_nominal_slot_centres_x": [
+      136,
+      407,
+      679,
+      950,
+      1222,
+      1493,
+      1765,
+      2036
+    ],
+    "source_to_raw_frame_translation_xy": [
+      [
+        46,
+        -186
+      ],
+      [
+        143,
+        -186
+      ],
+      [
+        239,
+        -186
+      ],
+      [
+        336,
+        -186
+      ],
+      [
+        432,
+        -186
+      ],
+      [
+        529,
+        -186
+      ],
+      [
+        625,
+        -186
+      ],
+      [
+        722,
+        -186
+      ]
+    ],
+    "source_frame_bounds_alpha_gt80_xyxy": [
+      [
+        26,
+        232,
+        263,
+        449
+      ],
+      [
+        286,
+        225,
+        534,
+        448
+      ],
+      [
+        553,
+        235,
+        784,
+        446
+      ],
+      [
+        802,
+        269,
+        1058,
+        448
+      ],
+      [
+        1068,
+        237,
+        1354,
+        445
+      ],
+      [
+        1347,
+        236,
+        1642,
+        449
+      ],
+      [
+        1646,
+        227,
+        1899,
+        449
+      ],
+      [
+        1923,
+        230,
+        2158,
+        448
+      ]
+    ],
+    "transparent_gaps_alpha_gt80_px": [
+      120,
+      115,
+      115,
+      106,
+      90,
+      100,
+      121
+    ],
+    "size": [
+      2944,
+      303
+    ],
+    "mode": "RGBA",
+    "sha256": "f6d2f0590cc26e7ee35499cf97dbb0804537de54246151cf6cb13c218a357c3d",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": []
+  }
+]

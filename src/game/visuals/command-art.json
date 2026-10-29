@@ -1,0 +1,50 @@
+{
+  "taunt_prepare": [
+    0.5,
+    0.5
+  ],
+  "taunt_pulse": [
+    0.5,
+    0.5
+  ],
+  "taunt_motes": [
+    0.5,
+    0.5
+  ],
+  "taunt_settle": [
+    0.5,
+    0.5
+  ],
+  "challenge_prepare": [
+    0.5,
+    0.5
+  ],
+  "challenge_crest": [
+    0.5,
+    0.5
+  ],
+  "challenge_thread": [
+    0.09375,
+    0.5
+  ],
+  "challenge_settle": [
+    0.5,
+    0.5
+  ],
+  "warcry_prepare": [
+    0.5,
+    0.5
+  ],
+  "warcry_cone": [
+    0.13671875,
+    0.5
+  ],
+  "warcry_impact": [
+    0.5,
+    0.5
+  ],
+  "warcry_wisps": [
+    0.5,
+    0.5
+  ]
+}

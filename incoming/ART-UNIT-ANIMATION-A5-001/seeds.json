@@ -1,0 +1,90 @@
+{
+  "base_commit": "8616ad3155a179e05210fe6aa552e6d234c9bd24",
+  "seeds": [
+    {
+      "identity": "garran",
+      "file": "heroes/seeds/garran-seed.png",
+      "atlas": "public/assets/art/units_mercs.webp",
+      "atlas_git_blob": "2f2ed2ebdca12584d9324c53fcc67694c68b0d22",
+      "cell": 0,
+      "crop_xyxy": [
+        0,
+        0,
+        512,
+        512
+      ],
+      "facing": "right",
+      "sole_y": 497,
+      "sha256": "653fb5efb1f4b1bc4529300a9686f80577361c9f73ba294b301fe90e1b25107b",
+      "rgba_sha256": "b4f62586e108499220548b57245f03f4d4ceda83f19acc062b669c907e2a34a3"
+    },
+    {
+      "identity": "brann",
+      "file": "heroes/seeds/brann-seed.png",
+      "atlas": "public/assets/art/units_mercs.webp",
+      "atlas_git_blob": "2f2ed2ebdca12584d9324c53fcc67694c68b0d22",
+      "cell": 4,
+      "crop_xyxy": [
+        0,
+        1024,
+        512,
+        1536
+      ],
+      "facing": "right",
+      "sole_y": 497,
+      "sha256": "35f1aeb0f99c4d86d2b2427592ae846657d4cf413c5c217e063eaf3067bb29de",
+      "rgba_sha256": "d3e73dd3d31a2546df7d1926fb485d4b318152c337f5033991975d0600bb303f"
+    },
+    {
+      "identity": "foe_tusker",
+      "file": "foes/seeds/foe_tusker-seed.png",
+      "atlas": "public/assets/art/units_foes.webp",
+      "atlas_git_blob": "885a4f9fe375de1f43deaf9271ee4a59cbd0cf08",
+      "cell": 0,
+      "crop_xyxy": [
+        0,
+        0,
+        512,
+        512
+      ],
+      "facing": "left",
+      "sole_y": 497,
+      "sha256": "f0b69b79a75d3a4c4222ea8be5efa310ba53292a8f410a50497250796fcb2277",
+      "rgba_sha256": "5fdbe3d603902983509be0ce6d9daa767109fd58b4d0fd3351633265a593700c"
+    },
+    {
+      "identity": "foe_stalker",
+      "file": "foes/seeds/foe_stalker-seed.png",
+      "atlas": "public/assets/art/units_foes.webp",
+      "atlas_git_blob": "885a4f9fe375de1f43deaf9271ee4a59cbd0cf08",
+      "cell": 2,
+      "crop_xyxy": [
+        0,
+        512,
+        512,
+        1024
+      ],
+      "facing": "left",
+      "sole_y": 497,
+      "sha256": "ffb624618061a0ff7f94277529e92349ba8b7e900220dae9c4609fa15d823ba7",
+      "rgba_sha256": "3368e570775309fd792cc53c2dc4937a9051d48cc83de335875146ed8853cda2"
+    },
+    {
+      "identity": "foe_thorn_beetle",
+      "file": "foes/seeds/foe_thorn_beetle-seed.png",
+      "atlas": "public/assets/art/units_foes2.webp",
+      "atlas_git_blob": "61622c9da3baa23ac450809d65fec820eb2dff4b",
+      "cell": 4,
+      "crop_xyxy": [
+        0,
+        1024,
+        512,
+        1536
+      ],
+      "facing": "left",
+      "sole_y": 497,
+      "sha256": "d8a0cb6354941cf3c30aab27ab8d69d0d8c487799ddf2bfe39cfe0c51e6ee9bd",
+      "rgba_sha256": "399506273cd00385332b7730f7431abdd9367d4d0c714114f1e1c8a8e288290f"
+    }
+  ]
+}
