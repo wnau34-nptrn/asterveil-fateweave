@@ -1,0 +1,52 @@
+[
+  {
+    "width": 320,
+    "height": 568,
+    "errors": [],
+    "frames": [
+      {
+        "texture": "unit-pilot-aegis",
+        "frame": "2",
+        "alpha": 1,
+        "visible": true,
+        "width": 183.11111111111111,
+        "height": 183.11111111111111,
+        "originY": 0.96875
+      },
+      {
+        "texture": "unit-pilot-aegis",
+        "frame": "3",
+        "alpha": 0,
+        "visible": false,
+        "width": 183.11111111111111,
+        "height": 183.11111111111111,
+        "originY": 0.96875
+      }
+    ]
+  },
+  {
+    "width": 1366,
+    "height": 1000,
+    "errors": [],
+    "frames": [
+      {
+        "texture": "unit-pilot-aegis",
+        "frame": "2",
+        "alpha": 1,
+        "visible": true,
+        "width": 383.3333333333333,
+        "height": 383.3333333333333,
+        "originY": 0.96875
+      },
+      {
+        "texture": "unit-pilot-aegis",
+        "frame": "3",
+        "alpha": 0,
+        "visible": false,
+        "width": 383.3333333333333,
+        "height": 383.3333333333333,
+        "originY": 0.96875
+      }
+    ]
+  }
+]

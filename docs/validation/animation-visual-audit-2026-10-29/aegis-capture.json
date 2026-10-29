@@ -1,0 +1,360 @@
+{
+  "url": "http://127.0.0.1:5173/tests/browser/fixtures/unit-a2.html?skill=attack",
+  "title": "",
+  "errors": [],
+  "canvas": {
+    "x": 6,
+    "y": 102,
+    "width": 378,
+    "height": 488
+  },
+  "samples": [
+    {
+      "ms": 0,
+      "guardian": [
+        {
+          "texture": "unit-pilot-aegis",
+          "frame": "1",
+          "alpha": 1,
+          "visible": true,
+          "width": 308.3333333333333,
+          "height": 308.3333333333333,
+          "originY": 0.96875
+        },
+        {
+          "texture": "unit-pilot-aegis",
+          "frame": "2",
+          "alpha": 0,
+          "visible": false,
+          "width": 308.3333333333333,
+          "height": 308.3333333333333,
+          "originY": 0.96875
+        }
+      ]
+    },
+    {
+      "ms": 50,
+      "guardian": [
+        {
+          "texture": "unit-pilot-aegis",
+          "frame": "1",
+          "alpha": 0.9318724803104518,
+          "visible": true,
+          "width": 308.3333333333333,
+          "height": 308.3333333333333,
+          "originY": 0.96875
+        },
+        {
+          "texture": "unit-pilot-aegis",
+          "frame": "2",
+          "alpha": 0.06812751968954825,
+          "visible": true,
+          "width": 308.3333333333333,
+          "height": 308.3333333333333,
+          "originY": 0.96875
+        }
+      ]
+    },
+    {
+      "ms": 80,
+      "guardian": [
+        {
+          "texture": "unit-pilot-aegis",
+          "frame": "2",
+          "alpha": 1,
+          "visible": true,
+          "width": 308.3333333333333,
+          "height": 308.3333333333333,
+          "originY": 0.96875
+        },
+        {
+          "texture": "unit-pilot-aegis",
+          "frame": "3",
+          "alpha": 0,
+          "visible": false,
+          "width": 308.3333333333333,
+          "height": 308.3333333333333,
+          "originY": 0.96875
+        }
+      ]
+    },
+    {
+      "ms": 100,
+      "guardian": [
+        {
+          "texture": "unit-pilot-aegis",
+          "frame": "2",
+          "alpha": 1,
+          "visible": true,
+          "width": 308.3333333333333,
+          "height": 308.3333333333333,
+          "originY": 0.96875
+        },
+        {
+          "texture": "unit-pilot-aegis",
+          "frame": "3",
+          "alpha": 0,
+          "visible": false,
+          "width": 308.3333333333333,
+          "height": 308.3333333333333,
+          "originY": 0.96875
+        }
+      ]
+    },
+    {
+      "ms": 130,
+      "guardian": [
+        {
+          "texture": "unit-pilot-aegis",
+          "frame": "3",
+          "alpha": 1,
+          "visible": true,
+          "width": 308.3333333333333,
+          "height": 308.3333333333333,
+          "originY": 0.96875
+        },
+        {
+          "texture": "unit-pilot-aegis",
+          "frame": "4",
+          "alpha": 0,
+          "visible": false,
+          "width": 308.3333333333333,
+          "height": 308.3333333333333,
+          "originY": 0.96875
+        }
+      ]
+    },
+    {
+      "ms": 160,
+      "guardian": [
+        {
+          "texture": "unit-pilot-aegis",
+          "frame": "3",
+          "alpha": 0.6963207953500572,
+          "visible": true,
+          "width": 308.3333333333333,
+          "height": 308.3333333333333,
+          "originY": 0.96875
+        },
+        {
+          "texture": "unit-pilot-aegis",
+          "frame": "4",
+          "alpha": 0.30367920464994275,
+          "visible": true,
+          "width": 308.3333333333333,
+          "height": 308.3333333333333,
+          "originY": 0.96875
+        }
+      ]
+    },
+    {
+      "ms": 190,
+      "guardian": [
+        {
+          "texture": "unit-pilot-aegis",
+          "frame": "4",
+          "alpha": 1,
+          "visible": true,
+          "width": 308.3333333333333,
+          "height": 308.3333333333333,
+          "originY": 0.96875
+        },
+        {
+          "texture": "unit-pilot-aegis",
+          "frame": "4",
+          "alpha": 0,
+          "visible": false,
+          "width": 308.3333333333333,
+          "height": 308.3333333333333,
+          "originY": 0.96875
+        }
+      ]
+    },
+    {
+      "ms": 210,
+      "guardian": [
+        {
+          "texture": "unit-pilot-aegis",
+          "frame": "5",
+          "alpha": 1,
+          "visible": true,
+          "width": 308.3333333333333,
+          "height": 308.3333333333333,
+          "originY": 0.96875
+        },
+        {
+          "texture": "unit-pilot-aegis",
+          "frame": "6",
+          "alpha": 0,
+          "visible": false,
+          "width": 308.3333333333333,
+          "height": 308.3333333333333,
+          "originY": 0.96875
+        }
+      ]
+    },
+    {
+      "ms": 240,
+      "guardian": [
+        {
+          "texture": "unit-pilot-aegis",
+          "frame": "5",
+          "alpha": 1,
+          "visible": true,
+          "width": 308.3333333333333,
+          "height": 308.3333333333333,
+          "originY": 0.96875
+        },
+        {
+          "texture": "unit-pilot-aegis",
+          "frame": "6",
+          "alpha": 0,
+          "visible": false,
+          "width": 308.3333333333333,
+          "height": 308.3333333333333,
+          "originY": 0.96875
+        }
+      ]
+    },
+    {
+      "ms": 280,
+      "guardian": [
+        {
+          "texture": "unit-pilot-aegis",
+          "frame": "5",
+          "alpha": 0.39972508502517534,
+          "visible": true,
+          "width": 308.3333333333333,
+          "height": 308.3333333333333,
+          "originY": 0.96875
+        },
+        {
+          "texture": "unit-pilot-aegis",
+          "frame": "6",
+          "alpha": 0.6002749149748247,
+          "visible": true,
+          "width": 308.3333333333333,
+          "height": 308.3333333333333,
+          "originY": 0.96875
+        }
+      ]
+    },
+    {
+      "ms": 320,
+      "guardian": [
+        {
+          "texture": "unit-pilot-aegis",
+          "frame": "6",
+          "alpha": 1,
+          "visible": true,
+          "width": 308.3333333333333,
+          "height": 308.3333333333333,
+          "originY": 0.96875
+        },
+        {
+          "texture": "unit-pilot-aegis",
+          "frame": "7",
+          "alpha": 0,
+          "visible": false,
+          "width": 308.3333333333333,
+          "height": 308.3333333333333,
+          "originY": 0.96875
+        }
+      ]
+    },
+    {
+      "ms": 380,
+      "guardian": [
+        {
+          "texture": "unit-pilot-aegis",
+          "frame": "7",
+          "alpha": 1,
+          "visible": true,
+          "width": 308.3333333333333,
+          "height": 308.3333333333333,
+          "originY": 0.96875
+        },
+        {
+          "texture": "unit-pilot-aegis",
+          "frame": "8",
+          "alpha": 0,
+          "visible": false,
+          "width": 308.3333333333333,
+          "height": 308.3333333333333,
+          "originY": 0.96875
+        }
+      ]
+    },
+    {
+      "ms": 450,
+      "guardian": [
+        {
+          "texture": "unit-pilot-aegis",
+          "frame": "8",
+          "alpha": 1,
+          "visible": true,
+          "width": 308.3333333333333,
+          "height": 308.3333333333333,
+          "originY": 0.96875
+        },
+        {
+          "texture": "unit-pilot-aegis",
+          "frame": "8",
+          "alpha": 0,
+          "visible": false,
+          "width": 308.3333333333333,
+          "height": 308.3333333333333,
+          "originY": 0.96875
+        }
+      ]
+    },
+    {
+      "ms": 520,
+      "guardian": [
+        {
+          "texture": "unit-pilot-aegis",
+          "frame": "0",
+          "alpha": 1,
+          "visible": true,
+          "width": 308.3333333333333,
+          "height": 308.3333333333333,
+          "originY": 0.96875
+        },
+        {
+          "texture": "unit-pilot-aegis",
+          "frame": "8",
+          "alpha": 0,
+          "visible": false,
+          "width": 308.3333333333333,
+          "height": 308.3333333333333,
+          "originY": 0.96875
+        }
+      ]
+    },
+    {
+      "ms": 600,
+      "guardian": [
+        {
+          "texture": "unit-pilot-aegis",
+          "frame": "0",
+          "alpha": 1,
+          "visible": true,
+          "width": 308.3333333333333,
+          "height": 308.3333333333333,
+          "originY": 0.96875
+        },
+        {
+          "texture": "unit-pilot-aegis",
+          "frame": "0",
+          "alpha": 0,
+          "visible": false,
+          "width": 308.3333333333333,
+          "height": 308.3333333333333,
+          "originY": 0.96875
+        }
+      ]
+    }
+  ],
+  "stateEqualsExpected": true,
+  "saveUnchanged": true
+}

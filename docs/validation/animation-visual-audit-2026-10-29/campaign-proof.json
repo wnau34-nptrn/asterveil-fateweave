@@ -1,0 +1,12 @@
+{
+  "url": "http://127.0.0.1:5173/",
+  "title": "Asterveil · Fateweave",
+  "path": "New game -> QA commander -> skip prologue -> Start -> Lyra attack -> Eira attack -> Aegis attack",
+  "errors": [],
+  "saveUnchangedAfterPresentation": true,
+  "viewport": [
+    390,
+    844
+  ],
+  "sourceCommit": "3d5d1de91c639da6a42635953333a8bd22a3bd7a"
+}

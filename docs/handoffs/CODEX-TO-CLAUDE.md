@@ -1,5 +1,21 @@
 # Codex → Claude handoff
 
+## 2026-10-29 — P1 ยืนยัน runtime: อัศวินหัวโต/เด้งเมื่อโจมตี (ให้ Claude แก้ก่อนขยาย wave)
+
+เจ้าของชี้อาการ “ตัวอัศวิน จังหวะโจมตีธรรมดา เจอว่าหัวโตกระโดดออกมา” — รอบนี้ตรวจภาพจริงแล้ว ไม่ใช่ source coverage อย่างเดียว อ่าน [รายงานพร้อมหลักฐานและเกณฑ์แก้](../validation/animation-visual-audit-2026-10-29/README_TH.md)
+
+- Base/game branch: `feature/fateweave-initial-prototype` @ `3d5d1de91c639da6a42635953333a8bd22a3bd7a`; เอกสาร/หลักฐานรอบนี้ส่งเข้า game branch โดยตรง ไม่มี PR/merge ใหม่
+- **ยืนยัน P1:** Aegis idle/frame0–1 กับ generated attack/frame2–7 มีสัดส่วนหัว/ตัวต่างกัน และ snap กลับ exact seed/frame8; 390px onset ราว 80ms, contact210ms, return450ms ขนาด sprite คงที่ 308.3333×308.3333/originY.96875 ใน 15 samples ปัญหาอยู่ใน pixels ของ generated poses ไม่ใช่การซูมทั้ง sprite
+- ยืนยันใน **เกมแคมเปญจริง `/`**: New game → QA commander → skip prologue → Start → Lyra attack → Eira attack → Aegis attack มีอาการเดียวกัน ไม่พบ pageerror และ save หลัง presentation ไม่เปลี่ยนเพิ่ม; fixture ใช้ real BattleUI/Scene/resolver เพื่อเจาะเวลาได้ซ้ำ
+- ภาพ runtime ของ bash/guard ก็มี proportion mismatch; attack reproduced ที่320×568/390×844/1366×1000 มีภาพแนบ 280msเห็น ghost silhouette จาก blending5/6 เพิ่มความรู้สึก head-pop
+- ต้นเหตุ: `incoming/ART-UNIT-ANIMATION-A2-001/build_assets.py` normalize bbox height/sole แต่ anatomy ของ seed กับ generated raw ต่างกัน แล้วล็อก endpointกลับ exact idle; ตรวจ `aegis-seed.png/aegis-raw.png`, runtime `aegis_a2.*`, unit-frames/unit-frame-view ก่อนแก้ อย่าแก้ด้วยบีบ/ขยายทั้งร่างทีละเฟรมหรือเพิ่ม dissolve
+- **งาน Claude:** เริ่มแก้สัดส่วน Aegis ก่อน intake W4–W8 เพิ่ม ล็อก head/face/neck/shoulder/weapon identity ตลอด idle→action→idle; ถ้าต้องแก้ต้นทาง artwork ให้ส่ง brief Codex ตามการแบ่งงานเดิม แล้ว Claude normalize/pack/integrate ส่ง before/afterจริง ใช้ contact/end/rules/saveเดิม ไม่ถือว่าผลเทสต์หรือ approval เก่าเป็นการปิด defect ที่เจ้าของเพิ่งชี้
+- ตรวจ sampled atlas ของ18identities (8heroes/10foes) ที่สเกลคงที่ มี contact sheets ไม่อ้างว่าอีก17ตัวผ่าน runtimeทุกท่า; ให้ขยาย visual QA ด้วยการดู head/limb/equipment/sole drift, first/last generated boundary, VFX release/contact/occlusion ไม่ใช้จำนวนที่mapแล้วเป็นตัวแทนคุณภาพ
+- ทดสอบ: existing Playwright A2 attack/guard/bash windup **3/3ผ่าน** และ real-clock capture **1/1ผ่าน** แต่ visual QA **ไม่ผ่าน** แสดงช่องว่างของ assertionsเดิม; deterministicผลเท่าexpected/saveคงเดิม; MP4VFR 87captured+1tail=88decoded frames, maxPTSerrorประมาณ0.00513ms, maxgap.301s ไม่อ้าง60fpsหรือมือถือจริง/Safari
+- หลักฐาน: campaign screenshots+proof,15-sample fixture screenshots/metadata,ภาพเทียบ atlasและruntime,full-resolution bash/guard,320/PC,actual wall-clock MP4พร้อมtimestamps/state-result metadata และ sampled18atlas ทั้งหมดอยู่ `docs/validation/animation-visual-audit-2026-10-29/`
+- รอบนี้เครือข่ายกลับมาใช้งานได้ ดึงเกมและรัน local dev ได้แล้ว ต่างจากข้อจำกัดของ entry source auditก่อนหน้า Browser runtime/jsยังไม่มี จึงใช้ Playwright Chromium/SwiftShader; ไม่มี Claude CLI/dispatch จึงเป็นการส่งเอกสารเข้าคิว ไม่อ้าง Claudeเริ่มแก้
+- Files touched: entryนี้และโฟลเดอร์หลักฐานเท่านั้น ไม่มี runtime/art production/rules/save/balance/timingเปลี่ยน ไม่แก้ ActionId/ไม่ขยาย wave/ไม่สร้าง artworkใหม่ ตรวจ whitespaceและหลักฐานก่อนcommit เจ้าของให้ตัวอย่าง defect ไม่ใช่ motion approval ใหม่
+
 ## 2026-10-29 — Animation/VFX audit และ Handoff ให้ Claude แก้ไข
 
 เจ้าของสั่ง: “ทำการตรวจสอบ animation และ vfx ที่ยังไม่ได้คุณภาพ พร้อมจัดทำข้อสรุป และ Handoff ส่งให้ Claude ทำการแก้ไข” และยืนยันให้ตรวจตัวเกมในสาขาอื่นจาก main

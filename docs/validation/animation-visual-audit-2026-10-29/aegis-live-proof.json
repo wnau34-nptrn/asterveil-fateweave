@@ -1,0 +1,535 @@
+{
+  "sourceCommit": "3d5d1de91c639da6a42635953333a8bd22a3bd7a",
+  "viewport": [
+    390,
+    844
+  ],
+  "browser": "system Chromium, SwiftShader, mobile/touch emulation",
+  "capture": "real wall-clock CDP screencast; no retiming/interpolation; VFR",
+  "sourceFrames": 87,
+  "decodedFrames": 88,
+  "maxFrameGapSeconds": 0.30134081840515137,
+  "maxTimestampErrorSeconds": 5.128601074266825e-06,
+  "clickOffsetSeconds": 0.17678403854370117,
+  "stamps": [
+    "click 1793272145.453",
+    "0000 1793272145.276216",
+    "0001 1793272145.428444",
+    "0002 1793272145.441227",
+    "0003 1793272145.464904",
+    "0004 1793272145.480309",
+    "0005 1793272145.49147",
+    "0006 1793272145.583863",
+    "0007 1793272145.603946",
+    "0008 1793272145.616767",
+    "0009 1793272145.65928",
+    "0010 1793272145.674341",
+    "0011 1793272145.693431",
+    "0012 1793272145.706745",
+    "0013 1793272145.75396",
+    "0014 1793272145.836314",
+    "0015 1793272145.858779",
+    "0016 1793272145.872334",
+    "0017 1793272145.887265",
+    "0018 1793272145.902867",
+    "0019 1793272145.948352",
+    "0020 1793272145.967589",
+    "0021 1793272145.982953",
+    "0022 1793272145.998237",
+    "0023 1793272146.01617",
+    "0024 1793272146.056728",
+    "0025 1793272146.071135",
+    "0026 1793272146.089532",
+    "0027 1793272146.111038",
+    "0028 1793272146.158802",
+    "0029 1793272146.191391",
+    "0030 1793272146.210588",
+    "0031 1793272146.255388",
+    "0032 1793272146.269917",
+    "0033 1793272146.286686",
+    "0034 1793272146.300245",
+    "0035 1793272146.315508",
+    "0036 1793272146.357234",
+    "0037 1793272146.369353",
+    "0038 1793272146.390039",
+    "0039 1793272146.405754",
+    "0040 1793272146.449509",
+    "0041 1793272146.493127",
+    "0042 1793272146.513752",
+    "0043 1793272146.559411",
+    "0044 1793272146.572899",
+    "0045 1793272146.589368",
+    "0046 1793272146.609915",
+    "0047 1793272146.64945",
+    "0048 1793272146.664931",
+    "0049 1793272146.677506",
+    "0050 1793272146.695956",
+    "0051 1793272146.706586",
+    "0052 1793272146.757384",
+    "0053 1793272146.77141",
+    "0054 1793272146.783632",
+    "0055 1793272146.796617",
+    "0056 1793272146.813081",
+    "0057 1793272146.854784",
+    "0058 1793272146.867651",
+    "0059 1793272146.880927",
+    "0060 1793272146.896706",
+    "0061 1793272146.913934",
+    "0062 1793272146.959602",
+    "0063 1793272147.260943",
+    "0064 1793272147.275642",
+    "0065 1793272147.28892",
+    "0066 1793272147.302235",
+    "0067 1793272147.317778",
+    "0068 1793272147.358665",
+    "0069 1793272147.370743",
+    "0070 1793272147.38155",
+    "0071 1793272147.398424",
+    "0072 1793272147.414454",
+    "0073 1793272147.454174",
+    "0074 1793272147.466243",
+    "0075 1793272147.481855",
+    "0076 1793272147.501413",
+    "0077 1793272147.51174",
+    "0078 1793272147.555593",
+    "0079 1793272147.566891",
+    "0080 1793272147.581971",
+    "0081 1793272147.591347",
+    "0082 1793272147.60837",
+    "0083 1793272147.653655",
+    "0084 1793272147.669649",
+    "0085 1793272147.684063",
+    "0086 1793272147.699137"
+  ],
+  "timing": [
+    {
+      "at": 1793272145.703,
+      "remainingMs": 390,
+      "turn": {
+        "actorId": "guardian",
+        "side": "hero",
+        "beat": 1,
+        "round": 1,
+        "action": "attack",
+        "targetId": "f1",
+        "intent": {
+          "sourceId": "f1",
+          "targetSlot": 0,
+          "name": "Rift Bolt",
+          "damage": 16,
+          "kind": "energy",
+          "targetId": "guardian",
+          "beat": 1,
+          "round": 1
+        },
+        "state": {
+          "encounterId": "first-clash",
+          "beat": 1,
+          "round": 1,
+          "turnIndex": 0,
+          "order": [
+            "guardian",
+            "f1",
+            "weaver",
+            "healer"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "f1",
+              "hp": 90,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 0,
+            "name": "Rift Bolt",
+            "damage": 16,
+            "kind": "energy",
+            "targetId": "guardian",
+            "beat": 1,
+            "round": 1
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "guardian",
+              "action": "attack",
+              "targetId": "f1"
+            }
+          ]
+        },
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "guardian",
+            "targetId": "f1",
+            "amount": 10,
+            "text": "Hero attacks."
+          }
+        ],
+        "before": {
+          "encounterId": "first-clash",
+          "beat": 1,
+          "round": 1,
+          "turnIndex": 0,
+          "order": [
+            "guardian",
+            "f1",
+            "weaver",
+            "healer"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "f1",
+              "hp": 100,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 0,
+            "name": "Rift Bolt",
+            "damage": 16,
+            "kind": "energy",
+            "targetId": "guardian",
+            "beat": 1,
+            "round": 1
+          },
+          "commands": []
+        },
+        "after": {
+          "encounterId": "first-clash",
+          "beat": 2,
+          "round": 1,
+          "turnIndex": 1,
+          "order": [
+            "guardian",
+            "f1",
+            "weaver",
+            "healer"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "f1",
+              "hp": 90,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 0,
+            "name": "Rift Bolt",
+            "damage": 16,
+            "kind": "energy",
+            "targetId": "guardian",
+            "beat": 2,
+            "round": 1
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "guardian",
+              "action": "attack",
+              "targetId": "f1"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "at": 1793272146.383,
+      "remainingMs": 520,
+      "turn": {
+        "actorId": "f1",
+        "side": "enemy",
+        "beat": 2,
+        "round": 1,
+        "intent": {
+          "sourceId": "f1",
+          "targetSlot": 0,
+          "name": "Rift Bolt",
+          "damage": 16,
+          "kind": "energy",
+          "targetId": "guardian",
+          "beat": 2,
+          "round": 1
+        },
+        "targetId": "guardian",
+        "state": {
+          "encounterId": "first-clash",
+          "beat": 2,
+          "round": 1,
+          "turnIndex": 1,
+          "order": [
+            "guardian",
+            "f1",
+            "weaver",
+            "healer"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 60,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "f1",
+              "hp": 90,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 0,
+            "name": "Rift Bolt",
+            "damage": 16,
+            "kind": "energy",
+            "targetId": "guardian",
+            "beat": 2,
+            "round": 1
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "guardian",
+              "action": "attack",
+              "targetId": "f1"
+            }
+          ]
+        },
+        "events": [
+          {
+            "type": "damage",
+            "sourceId": "f1",
+            "targetId": "guardian",
+            "amount": 16,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ],
+        "before": {
+          "encounterId": "first-clash",
+          "beat": 2,
+          "round": 1,
+          "turnIndex": 1,
+          "order": [
+            "guardian",
+            "f1",
+            "weaver",
+            "healer"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "f1",
+              "hp": 90,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 0,
+            "name": "Rift Bolt",
+            "damage": 16,
+            "kind": "energy",
+            "targetId": "guardian",
+            "beat": 2,
+            "round": 1
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "guardian",
+              "action": "attack",
+              "targetId": "f1"
+            }
+          ]
+        },
+        "after": {
+          "encounterId": "first-clash",
+          "beat": 3,
+          "round": 1,
+          "turnIndex": 2,
+          "order": [
+            "guardian",
+            "f1",
+            "weaver",
+            "healer"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 60,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "f1",
+              "hp": 90,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 0,
+            "name": "Rift Bolt",
+            "damage": 16,
+            "kind": "energy",
+            "targetId": "guardian",
+            "beat": 3,
+            "round": 2
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "guardian",
+              "action": "attack",
+              "targetId": "f1"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "result": "existing live-capture assertion passed: replay expected, one committed command, save unchanged, no page errors",
+  "scope": "fixture uses real BattleUI/BattleScene/resolver; not a campaign traversal or physical-device performance test"
+}
