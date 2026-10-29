@@ -95,6 +95,9 @@ test('A4 bat hover loops in normal motion and stays on the seed under reduced mo
  for(const [motion,intensity] of [['no-preference','standard'],['reduce','standard'],['no-preference','reduced']] as const){
   const ctx=await browser.newContext({viewport:{width:390,height:844},reducedMotion:motion});
   try{const page=await ctx.newPage();await ready(page,`skill=attack&intensity=${intensity}`,'mira','foe_ruin_bat');
+  // Every optional sheet must be adopted first: a late sheet repaints the field, which rebinds the bat at its seed frame for one tick.
+  await expect.poll(()=>page.evaluate(()=>window.unitA4QA.cached().length),{timeout:15000}).toBe(4);
+  if(motion==='no-preference'&&intensity==='standard')await expect.poll(()=>frame(page,'f1')).toMatch(/^2[2-5]$/);else await page.waitForTimeout(300);
   const seen=new Set<string>();const end=Date.now()+1500;
   while(Date.now()<end){seen.add(await frame(page,'f1'));await page.waitForTimeout(40);}
   if(motion==='no-preference'&&intensity==='standard'){expect([...seen].every(f=>['22','23','24','25'].includes(f))).toBe(true);expect(seen.size).toBeGreaterThanOrEqual(3);}
