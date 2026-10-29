@@ -66,6 +66,7 @@ Owner instruction, 2026-10-18 (Asia/Bangkok): "ทำการเพิ่มก
 - Inside a chat, routine self-contained work (running/fixing tests, capturing screenshots, searching code, mechanical edits with a clear spec) may go to a Sonnet subagent (`Agent` with `model: "sonnet"`); keep decisions and the final check in the main chat. Skip delegation for tiny steps.
 - Screenshots for the owner: 390px only, 1–2 per screen, unless the owner asks for more. Look at only the images you need.
 - Run focused tests locally; leave the full browser suite to CI.
+- Project skills (owner 2026-10-29): before art briefs, art/VFX intake, Phaser rendering/loading work, browser checks or rule/save/balance changes, use the matching skill in `.claude/skills/` (catalog and setup: `docs/tools/AGENT_SKILLS_TH.md`). Skills are guidance; the owner's request and this file take precedence.
 
 ## Portrait game and desktop keyboard — owner-approved 2026-10-19
 
