@@ -1,6 +1,6 @@
 import type { Reaction, UnitPose } from './unit-animation-map';
 import atlasManifest from './unit-atlases.json';
-export type UnitClip = 'attack' | 'skill' | 'bash' | 'prayer' | 'sanctuary' | 'disengage';
+export type UnitClip = 'attack' | 'skill' | 'bash' | 'prayer' | 'sanctuary' | 'disengage' | 'stance' | 'taunt' | 'brace';
 export type FramePhase = 'prepare' | 'recover' | 'reaction';
 export interface UnitFrames {
   show(pose: UnitPose | Reaction, phase: FramePhase, progress: number, clip?: UnitClip, durationMs?: number): boolean;
@@ -34,6 +34,13 @@ export const unitRegistry = {
   toma: { sheet: 'toma', displayRatio: 1 / .42, actions: { attack: 'attack', acid: 'attack', bomb: 'attack', smoke: 'attack', haste: 'skill', fury: 'skill', catalyst: 'skill' } },
   foe_dew_slime: { sheet: 'dew', displayRatio: 2, intents: { 'Jelly Bounce': 'attack' } },
   foe_ember_slime: { sheet: 'ember', displayRatio: 2, intents: { 'Ember Spark': 'skill' } },
+  // A5: Garran thrusts for attack/pierce/halt, holds a low spear guard for brace/spearwall/hold and shouts for warcry.
+  // Brann swings for attack, slams for slam/quake/tremor, plants the hammer to taunt and braces for the stone skills.
+  garran: { sheet: 'garran', displayRatio: 1 / .42, actions: { attack: 'attack', pierce: 'attack', halt: 'attack', brace: 'stance', spearwall: 'stance', hold: 'stance', warcry: 'skill' } },
+  brann: { sheet: 'brann', displayRatio: 1 / .37, actions: { attack: 'attack', slam: 'skill', quake: 'skill', tremor: 'skill', taunt: 'taunt', stonearmor: 'brace', guardstone: 'brace' } },
+  foe_tusker: { sheet: 'tusker', displayRatio: 2, intents: { 'Tusk Charge': 'attack', Stampede: 'skill' } },
+  foe_stalker: { sheet: 'stalker', displayRatio: 2, intents: { 'Thorn Pounce': 'attack' } },
+  foe_thorn_beetle: { sheet: 'beetle', displayRatio: 2, intents: { 'Thorn Bite': 'attack' } },
   foe_ruin_bat: { sheet: 'bat', displayRatio: 2, intents: { Nip: 'attack' }, idleLoop: { frames: [22, 23, 24, 25], frameMs: 150 } },
 } as const satisfies Record<string, UnitDefinition>;
 export const unitSheets = Object.fromEntries(Object.entries(unitRegistry).map(([art, definition]) => [art, definition.sheet])) as Record<keyof typeof unitRegistry, UnitSheet>;
@@ -52,7 +59,7 @@ export function unitClip(art: string, action: string | undefined, intent: string
   const definition = unitDefinition(art);
   return action ? definition?.actions?.[action] : intent ? definition?.intents?.[intent] : undefined;
 }
-// 0 idle; 1..8 slash; 9..16 skill; 17..18 hurt; 19..21 down. Identities with one gesture alias the other clip to idle (A3 Mycon, A4 Ember/Dew/Bat).
+// 0 idle; 1..8 slash; 9..16 skill; 17..18 hurt; 19..21 down. Identities with one gesture alias the other clip to idle (A3 Mycon, A4 Ember/Dew/Bat, A5 Stalker/Beetle).
 // Frame 5/13 is the contact pose. UI contact remains authoritative, never sprite FPS.
 function sequence(pose: UnitPose | Reaction, phase: FramePhase, clip?: UnitClip, art?: string): readonly number[] | undefined {
   if (phase === 'reaction') {
@@ -65,6 +72,8 @@ function sequence(pose: UnitPose | Reaction, phase: FramePhase, clip?: UnitClip,
     if (art === 'healer' && pose === 'block') return [38, 39];
     if (art === 'mira' && pose === 'block') return [30, 31];
     if (art === 'toma' && pose === 'block') return [22, 23];
+    if (art === 'garran' && pose === 'block') return [30, 31];
+    if (art === 'brann' && pose === 'block') return [38, 39];
     return;
   }
   if (!clip) return;
@@ -73,8 +82,9 @@ function sequence(pose: UnitPose | Reaction, phase: FramePhase, clip?: UnitClip,
     return phase === 'prepare' ? [start, start + 1, start + 2, start + 3] : [start + 4, start + 5, start + 6, start + 7];
   }
   // Seren: prayer 22..29 and sanctuary 30..37; Mira: disengage 22..29 (block 30..31). Contact on the first recover frame like every clip.
-  if (clip === 'prayer' || clip === 'sanctuary' || clip === 'disengage') {
-    const start = clip === 'sanctuary' ? 30 : 22;
+  // A5: Garran stance 22..29; Brann taunt 22..29 and stone brace 30..37 (block 38..39). Contact stays the first recover frame.
+  if (clip === 'prayer' || clip === 'sanctuary' || clip === 'disengage' || clip === 'stance' || clip === 'taunt' || clip === 'brace') {
+    const start = clip === 'sanctuary' || clip === 'brace' ? 30 : 22;
     return phase === 'prepare' ? [start, start + 1, start + 2, start + 3] : [start + 4, start + 5, start + 6, start + 7];
   }
   if (clip === 'skill') return phase === 'prepare' ? [9, 10, 11, 12] : [13, 14, 15, 16];

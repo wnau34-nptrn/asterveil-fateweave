@@ -1,0 +1,1532 @@
+{
+  "garran": {
+    "factor": 0.42,
+    "displayRatio": 2.380952380952381,
+    "cell": 512,
+    "origin": [
+      0.5,
+      0.96875
+    ],
+    "seedArea": 99052,
+    "clipStarts": {
+      "attack": 1,
+      "skill": 9,
+      "hit": 17,
+      "down": 19,
+      "stance": 22,
+      "block": 30
+    },
+    "strips": {
+      "garran-spear-thrust-r1": {
+        "rawSize": [
+          2688,
+          324
+        ],
+        "sha256": "a16bc2c563c0d9c832d2b9ca88f6b8e7a5fb40b45872139ccfdc81c9ed9c6d25",
+        "figures": 6,
+        "scale": 0.8059588108694035,
+        "referenceArea": 26899
+      },
+      "garran-warcry-r2": {
+        "rawSize": [
+          2688,
+          717
+        ],
+        "sha256": "dce053facb40890d86c7e43219d5497bfe710b5f4b420e874bf06681441304e5",
+        "figures": 6,
+        "scale": 0.4929037408281723,
+        "referenceArea": 71918
+      },
+      "garran-hit-r1": {
+        "rawSize": [
+          1472,
+          356
+        ],
+        "sha256": "a936c257673ed18f975f9c5f2b846fee75c3800e9a04bde3bc233656acdb4614",
+        "figures": 4,
+        "scale": 0.706163170328582,
+        "referenceArea": 35039
+      },
+      "garran-down-r1": {
+        "rawSize": [
+          1792,
+          356
+        ],
+        "sha256": "c86c9fe14cdabd7eb18ae5631b3d1c39270dc6be603580237f8595e143864789",
+        "figures": 4,
+        "scale": 0.7037670619995063,
+        "referenceArea": 35278
+      },
+      "garran-spearwall-r1": {
+        "rawSize": [
+          2496,
+          326
+        ],
+        "sha256": "e7158f89c8cc4a43eb1bfa23bec2e5be1a6d0c072e3e45a4acb8f7fb1a941783",
+        "figures": 6,
+        "scale": 0.8020326494591804,
+        "referenceArea": 27163
+      },
+      "garran-block-r1": {
+        "rawSize": [
+          1408,
+          358
+        ],
+        "sha256": "2a619eac17c125e284c4f54013205f28cdc032cb9b297f1763381122510112af",
+        "figures": 4,
+        "scale": 0.7023549320627608,
+        "referenceArea": 35420
+      }
+    },
+    "transforms": [
+      {
+        "strip": "garran-spear-thrust-r1",
+        "figure": 1,
+        "position": [
+          152,
+          299
+        ],
+        "centreX": 104.37166600758775,
+        "soleY": 197.45990866300386,
+        "natural": false,
+        "offsetPx": -0.8
+      },
+      {
+        "strip": "garran-spear-thrust-r1",
+        "figure": 2,
+        "position": [
+          158,
+          333
+        ],
+        "centreX": 98.32697492606722,
+        "soleY": 162.8036797956195,
+        "natural": false,
+        "offsetPx": -0.8
+      },
+      {
+        "strip": "garran-spear-thrust-r1",
+        "figure": 2,
+        "position": [
+          158,
+          333
+        ],
+        "centreX": 98.32697492606722,
+        "soleY": 162.8036797956195,
+        "natural": false,
+        "offsetPx": -0.8
+      },
+      {
+        "strip": "garran-spear-thrust-r1",
+        "figure": 3,
+        "position": [
+          184,
+          339
+        ],
+        "centreX": 72.13331357281162,
+        "soleY": 157.16196811953367,
+        "natural": false,
+        "offsetPx": -0.8
+      },
+      {
+        "strip": "garran-spear-thrust-r1",
+        "figure": 4,
+        "position": [
+          181,
+          342
+        ],
+        "centreX": 74.95416941085452,
+        "soleY": 153.93813287605607,
+        "natural": false,
+        "offsetPx": -0.8
+      },
+      {
+        "strip": "garran-spear-thrust-r1",
+        "figure": 5,
+        "position": [
+          177,
+          299
+        ],
+        "centreX": 78.58098405976683,
+        "soleY": 196.65394985213445,
+        "natural": false,
+        "offsetPx": -0.8
+      },
+      {
+        "strip": "garran-warcry-r2",
+        "figure": 1,
+        "position": [
+          172,
+          238
+        ],
+        "centreX": 83.54718407037521,
+        "soleY": 258.28156019396226,
+        "natural": false,
+        "offsetPx": -0.5
+      },
+      {
+        "strip": "garran-warcry-r2",
+        "figure": 2,
+        "position": [
+          178,
+          211
+        ],
+        "centreX": 77.87879105085122,
+        "soleY": 285.39126593951175,
+        "natural": false,
+        "offsetPx": -0.5
+      },
+      {
+        "strip": "garran-warcry-r2",
+        "figure": 2,
+        "position": [
+          178,
+          211
+        ],
+        "centreX": 77.87879105085122,
+        "soleY": 285.39126593951175,
+        "natural": false,
+        "offsetPx": -0.5
+      },
+      {
+        "strip": "garran-warcry-r2",
+        "figure": 3,
+        "position": [
+          173,
+          180
+        ],
+        "centreX": 83.30073219996112,
+        "soleY": 315.9512978708584,
+        "natural": false,
+        "offsetPx": 1.0
+      },
+      {
+        "strip": "garran-warcry-r2",
+        "figure": 4,
+        "position": [
+          168,
+          202
+        ],
+        "centreX": 87.73686586741466,
+        "soleY": 293.7706295335907,
+        "natural": false,
+        "offsetPx": 1.0
+      },
+      {
+        "strip": "garran-warcry-r2",
+        "figure": 5,
+        "position": [
+          159,
+          294
+        ],
+        "centreX": 96.85558507273585,
+        "soleY": 201.59762999872245,
+        "natural": false,
+        "offsetPx": 0.0
+      },
+      {
+        "strip": "garran-hit-r1",
+        "figure": 1,
+        "position": [
+          114,
+          309
+        ],
+        "centreX": 141.938797236045,
+        "soleY": 187.13324013707424,
+        "natural": false,
+        "offsetPx": 0.7
+      },
+      {
+        "strip": "garran-hit-r1",
+        "figure": 2,
+        "position": [
+          112,
+          316
+        ],
+        "centreX": 144.05728674703073,
+        "soleY": 180.0716084337884,
+        "natural": false,
+        "offsetPx": 1.4
+      },
+      {
+        "strip": "garran-down-r1",
+        "figure": 1,
+        "position": [
+          140,
+          314
+        ],
+        "centreX": 116.4734487609183,
+        "soleY": 182.27566905787214,
+        "natural": false,
+        "offsetPx": 1.4
+      },
+      {
+        "strip": "garran-down-r1",
+        "figure": 2,
+        "position": [
+          128,
+          409
+        ],
+        "centreX": 128.08560528391016,
+        "soleY": 86.56334862593928,
+        "natural": false,
+        "offsetPx": 2.1
+      },
+      {
+        "strip": "garran-down-r1",
+        "figure": 3,
+        "position": [
+          124,
+          415
+        ],
+        "centreX": 132.30820765590718,
+        "soleY": 80.93321212994323,
+        "natural": false,
+        "offsetPx": 2.1
+      },
+      {
+        "strip": "garran-spearwall-r1",
+        "figure": 1,
+        "position": [
+          145,
+          348
+        ],
+        "centreX": 111.48253827482607,
+        "soleY": 148.37604014994838,
+        "natural": false,
+        "offsetPx": 2.4
+      },
+      {
+        "strip": "garran-spearwall-r1",
+        "figure": 2,
+        "position": [
+          139,
+          360
+        ],
+        "centreX": 117.49778314576993,
+        "soleY": 136.34555040806066,
+        "natural": false,
+        "offsetPx": 1.6
+      },
+      {
+        "strip": "garran-spearwall-r1",
+        "figure": 2,
+        "position": [
+          139,
+          360
+        ],
+        "centreX": 117.49778314576993,
+        "soleY": 136.34555040806066,
+        "natural": false,
+        "offsetPx": 1.6
+      },
+      {
+        "strip": "garran-spearwall-r1",
+        "figure": 3,
+        "position": [
+          145,
+          356
+        ],
+        "centreX": 111.48253827482607,
+        "soleY": 139.5536810058974,
+        "natural": false,
+        "offsetPx": 2.4
+      },
+      {
+        "strip": "garran-spearwall-r1",
+        "figure": 4,
+        "position": [
+          150,
+          356
+        ],
+        "centreX": 105.86830972861182,
+        "soleY": 140.35571365535657,
+        "natural": false,
+        "offsetPx": 2.4
+      },
+      {
+        "strip": "garran-spearwall-r1",
+        "figure": 5,
+        "position": [
+          177,
+          300
+        ],
+        "centreX": 78.59919964699968,
+        "soleY": 196.4979991174992,
+        "natural": false,
+        "offsetPx": -0.8
+      },
+      {
+        "strip": "garran-block-r1",
+        "figure": 1,
+        "position": [
+          157,
+          301
+        ],
+        "centreX": 98.68086795481788,
+        "soleY": 195.2546711134475,
+        "natural": false,
+        "offsetPx": 1.4
+      },
+      {
+        "strip": "garran-block-r1",
+        "figure": 2,
+        "position": [
+          122,
+          318
+        ],
+        "centreX": 134.14979202398732,
+        "soleY": 178.39815274394124,
+        "natural": false,
+        "offsetPx": 2.1
+      }
+    ],
+    "uniqueFrames": 23,
+    "losslessReconstruction": "all alpha and visible RGBA equal",
+    "image": "garran_a5.247ac3883b94.webp",
+    "atlas": "garran_a5.c699363d2062.json",
+    "width": 768,
+    "height": 1314,
+    "frames": 32,
+    "decodedBytes": 4036608,
+    "downloadBytes": 1017823
+  },
+  "brann": {
+    "factor": 0.37,
+    "displayRatio": 2.7027027027027026,
+    "cell": 512,
+    "origin": [
+      0.5,
+      0.96875
+    ],
+    "seedArea": 143368,
+    "clipStarts": {
+      "attack": 1,
+      "skill": 9,
+      "hit": 17,
+      "down": 19,
+      "taunt": 22,
+      "brace": 30,
+      "block": 38
+    },
+    "strips": {
+      "brann-hammer-swing-r1": {
+        "rawSize": [
+          2304,
+          280
+        ],
+        "sha256": "f55501e9b09ba617fdd7337183f655cab6e03359f18f0a90d510399f7feda03b",
+        "figures": 6,
+        "scale": 0.9398229320956705,
+        "referenceArea": 22221
+      },
+      "brann-ground-slam-r1": {
+        "rawSize": [
+          1920,
+          336
+        ],
+        "sha256": "c4bf8b2bc007867296b24db8d25fba4888971aac617e6cf41ee5f1d89e28db74",
+        "figures": 6,
+        "scale": 0.9332936890477833,
+        "referenceArea": 22533
+      },
+      "brann-hit-r1": {
+        "rawSize": [
+          1536,
+          343
+        ],
+        "sha256": "d5592944d7b1b44ce4a1611f3f0be5e7f0a742600f1d3a71f9dc6663db065895",
+        "figures": 4,
+        "scale": 0.6410421485528575,
+        "referenceArea": 47762
+      },
+      "brann-down-r1": {
+        "rawSize": [
+          1856,
+          341
+        ],
+        "sha256": "7632b572e2304623b56b9fe7ae4b1b68d3d97feab8af14adb69b593355a8e2dd",
+        "figures": 4,
+        "scale": 0.6379442302738717,
+        "referenceArea": 48227
+      },
+      "brann-taunt-r2": {
+        "rawSize": [
+          2688,
+          394
+        ],
+        "sha256": "6b50aeea21e6fc118d6f074063a682868560b09f0b2aa832167822c509f5efcc",
+        "figures": 6,
+        "scale": 0.5753178047050791,
+        "referenceArea": 59298
+      },
+      "brann-stone-brace-r1": {
+        "rawSize": [
+          1824,
+          258
+        ],
+        "sha256": "1aaa76412836a9ed7ba7f2543e7e9094279ecbf76b3f44353a3b3340c99b5926",
+        "figures": 6,
+        "scale": 0.937589319135331,
+        "referenceArea": 22327
+      },
+      "brann-block-r1": {
+        "rawSize": [
+          1600,
+          359
+        ],
+        "sha256": "d6ee80278aa5bfa663448da8b3adae2ac6781f7e997ecaae5b21293130db82a8",
+        "figures": 4,
+        "scale": 0.6396575127516515,
+        "referenceArea": 47969
+      }
+    },
+    "transforms": [
+      {
+        "strip": "brann-hammer-swing-r1",
+        "figure": 1,
+        "position": [
+          116,
+          332
+        ],
+        "centreX": 139.56370541620706,
+        "soleY": 164.46901311674233,
+        "natural": false,
+        "offsetPx": 0.9
+      },
+      {
+        "strip": "brann-hammer-swing-r1",
+        "figure": 2,
+        "position": [
+          128,
+          336
+        ],
+        "centreX": 127.81591876501119,
+        "soleY": 159.76989845626397,
+        "natural": false,
+        "offsetPx": 1.9
+      },
+      {
+        "strip": "brann-hammer-swing-r1",
+        "figure": 2,
+        "position": [
+          128,
+          336
+        ],
+        "centreX": 127.81591876501119,
+        "soleY": 159.76989845626397,
+        "natural": false,
+        "offsetPx": 1.9
+      },
+      {
+        "strip": "brann-hammer-swing-r1",
+        "figure": 3,
+        "position": [
+          175,
+          330
+        ],
+        "centreX": 81.2946836262755,
+        "soleY": 166.34865898093366,
+        "natural": false,
+        "offsetPx": 1.9
+      },
+      {
+        "strip": "brann-hammer-swing-r1",
+        "figure": 4,
+        "position": [
+          69,
+          334
+        ],
+        "centreX": 187.02476348703843,
+        "soleY": 164.46901311674233,
+        "natural": true,
+        "offsetPx": 25.4
+      },
+      {
+        "strip": "brann-hammer-swing-r1",
+        "figure": 5,
+        "position": [
+          175,
+          331
+        ],
+        "centreX": 80.82477216022767,
+        "soleY": 165.408836048838,
+        "natural": false,
+        "offsetPx": 0.9
+      },
+      {
+        "strip": "brann-ground-slam-r1",
+        "figure": 1,
+        "position": [
+          145,
+          279
+        ],
+        "centreX": 110.59530215216232,
+        "soleY": 217.45742954813352,
+        "natural": false,
+        "offsetPx": 5.6
+      },
+      {
+        "strip": "brann-ground-slam-r1",
+        "figure": 2,
+        "position": [
+          158,
+          272
+        ],
+        "centreX": 97.52919050549336,
+        "soleY": 223.990485371468,
+        "natural": false,
+        "offsetPx": 5.6
+      },
+      {
+        "strip": "brann-ground-slam-r1",
+        "figure": 2,
+        "position": [
+          158,
+          272
+        ],
+        "centreX": 97.52919050549336,
+        "soleY": 223.990485371468,
+        "natural": false,
+        "offsetPx": 5.6
+      },
+      {
+        "strip": "brann-ground-slam-r1",
+        "figure": 3,
+        "position": [
+          137,
+          343
+        ],
+        "centreX": 118.52829850906848,
+        "soleY": 154.92675238193203,
+        "natural": true,
+        "offsetPx": 22.4
+      },
+      {
+        "strip": "brann-ground-slam-r1",
+        "figure": 4,
+        "position": [
+          135,
+          371
+        ],
+        "centreX": 120.86153273168794,
+        "soleY": 126.92794171049853,
+        "natural": true,
+        "offsetPx": 15.9
+      },
+      {
+        "strip": "brann-ground-slam-r1",
+        "figure": 5,
+        "position": [
+          175,
+          328
+        ],
+        "centreX": 81.19655094715715,
+        "soleY": 167.992864028601,
+        "natural": false,
+        "offsetPx": 2.8
+      },
+      {
+        "strip": "brann-hit-r1",
+        "figure": 1,
+        "position": [
+          154,
+          329
+        ],
+        "centreX": 101.6051805456279,
+        "soleY": 166.67095862374293,
+        "natural": false,
+        "offsetPx": 0.6
+      },
+      {
+        "strip": "brann-hit-r1",
+        "figure": 2,
+        "position": [
+          177,
+          342
+        ],
+        "centreX": 78.52766319772503,
+        "soleY": 154.49115780123864,
+        "natural": false,
+        "offsetPx": 3.8
+      },
+      {
+        "strip": "brann-down-r1",
+        "figure": 1,
+        "position": [
+          158,
+          329
+        ],
+        "centreX": 97.60546723190237,
+        "soleY": 166.5034441014805,
+        "natural": false,
+        "offsetPx": 1.3
+      },
+      {
+        "strip": "brann-down-r1",
+        "figure": 2,
+        "position": [
+          152,
+          359
+        ],
+        "centreX": 104.30388164977802,
+        "soleY": 137.15800950888243,
+        "natural": false,
+        "offsetPx": 0.6
+      },
+      {
+        "strip": "brann-down-r1",
+        "figure": 3,
+        "position": [
+          128,
+          397
+        ],
+        "centreX": 127.90781816991128,
+        "soleY": 98.88135569245011,
+        "natural": false,
+        "offsetPx": 1.3
+      },
+      {
+        "strip": "brann-taunt-r2",
+        "figure": 1,
+        "position": [
+          160,
+          324
+        ],
+        "centreX": 96.07807338574821,
+        "soleY": 172.02002360681865,
+        "natural": false,
+        "offsetPx": 1.2
+      },
+      {
+        "strip": "brann-taunt-r2",
+        "figure": 2,
+        "position": [
+          166,
+          314
+        ],
+        "centreX": 89.74957753399234,
+        "soleY": 181.800426286805,
+        "natural": false,
+        "offsetPx": 1.7
+      },
+      {
+        "strip": "brann-taunt-r2",
+        "figure": 2,
+        "position": [
+          166,
+          314
+        ],
+        "centreX": 89.74957753399234,
+        "soleY": 181.800426286805,
+        "natural": false,
+        "offsetPx": 1.7
+      },
+      {
+        "strip": "brann-taunt-r2",
+        "figure": 3,
+        "position": [
+          168,
+          320
+        ],
+        "centreX": 87.73596521752457,
+        "soleY": 176.0472482397542,
+        "natural": false,
+        "offsetPx": 1.7
+      },
+      {
+        "strip": "brann-taunt-r2",
+        "figure": 4,
+        "position": [
+          167,
+          316
+        ],
+        "centreX": 89.4619186316398,
+        "soleY": 180.07447287268977,
+        "natural": false,
+        "offsetPx": 1.7
+      },
+      {
+        "strip": "brann-taunt-r2",
+        "figure": 5,
+        "position": [
+          180,
+          327
+        ],
+        "centreX": 76.22960912342297,
+        "soleY": 169.14343458329324,
+        "natural": false,
+        "offsetPx": 0.0
+      },
+      {
+        "strip": "brann-stone-brace-r1",
+        "figure": 1,
+        "position": [
+          159,
+          338
+        ],
+        "centreX": 96.57169987093909,
+        "soleY": 158.45259493387093,
+        "natural": false,
+        "offsetPx": 2.8
+      },
+      {
+        "strip": "brann-stone-brace-r1",
+        "figure": 2,
+        "position": [
+          167,
+          342
+        ],
+        "centreX": 89.07098531785644,
+        "soleY": 153.76464833819426,
+        "natural": false,
+        "offsetPx": 3.8
+      },
+      {
+        "strip": "brann-stone-brace-r1",
+        "figure": 2,
+        "position": [
+          167,
+          342
+        ],
+        "centreX": 89.07098531785644,
+        "soleY": 153.76464833819426,
+        "natural": false,
+        "offsetPx": 3.8
+      },
+      {
+        "strip": "brann-stone-brace-r1",
+        "figure": 3,
+        "position": [
+          166,
+          339
+        ],
+        "centreX": 90.47736929655943,
+        "soleY": 156.57741629560027,
+        "natural": false,
+        "offsetPx": 3.8
+      },
+      {
+        "strip": "brann-stone-brace-r1",
+        "figure": 4,
+        "position": [
+          166,
+          343
+        ],
+        "centreX": 89.5397799774241,
+        "soleY": 152.82705901905894,
+        "natural": false,
+        "offsetPx": 3.8
+      },
+      {
+        "strip": "brann-stone-brace-r1",
+        "figure": 5,
+        "position": [
+          175,
+          332
+        ],
+        "centreX": 81.10147610520613,
+        "soleY": 164.07813084868292,
+        "natural": false,
+        "offsetPx": 0.0
+      },
+      {
+        "strip": "brann-block-r1",
+        "figure": 1,
+        "position": [
+          155,
+          318
+        ],
+        "centreX": 101.38571577113676,
+        "soleY": 177.82478854495912,
+        "natural": false,
+        "offsetPx": 3.2
+      },
+      {
+        "strip": "brann-block-r1",
+        "figure": 2,
+        "position": [
+          162,
+          344
+        ],
+        "centreX": 94.02965437449276,
+        "soleY": 151.5988305221414,
+        "natural": false,
+        "offsetPx": 5.1
+      }
+    ],
+    "uniqueFrames": 28,
+    "losslessReconstruction": "all alpha and visible RGBA equal",
+    "image": "brann_a5.75caea432f6f.webp",
+    "atlas": "brann_a5.13024341c94e.json",
+    "width": 2048,
+    "height": 563,
+    "frames": 40,
+    "decodedBytes": 4612096,
+    "downloadBytes": 1494058
+  },
+  "tusker": {
+    "factor": 0.5,
+    "displayRatio": 2.0,
+    "cell": 512,
+    "origin": [
+      0.5,
+      0.96875
+    ],
+    "seedArea": 145843,
+    "clipStarts": {
+      "attack": 1,
+      "skill": 9,
+      "hit": 17,
+      "down": 19
+    },
+    "strips": {
+      "foe_tusker-tusk-charge-r1": {
+        "rawSize": [
+          2496,
+          296
+        ],
+        "sha256": "734a2e708fce77d141ba64f28b1d9dac7af6e0f4bc8fd66279a624ec41ef9f7f",
+        "figures": 6,
+        "scale": 0.9979731706529278,
+        "referenceArea": 36609
+      },
+      "foe_tusker-stampede-r2": {
+        "rawSize": [
+          2944,
+          303
+        ],
+        "sha256": "f6d2f0590cc26e7ee35499cf97dbb0804537de54246151cf6cb13c218a357c3d",
+        "figures": 8,
+        "scale": 0.9956911546996975,
+        "referenceArea": 36777
+      },
+      "foe_tusker-hit-r1": {
+        "rawSize": [
+          1664,
+          381
+        ],
+        "sha256": "ae353aa9dbf19cc991b002c38010420cd18ea4ba65e506db0ee493c0a2dfa2c5",
+        "figures": 4,
+        "scale": 0.7300026518660987,
+        "referenceArea": 68419
+      },
+      "foe_tusker-down-r1": {
+        "rawSize": [
+          1856,
+          375
+        ],
+        "sha256": "8662243dbbcd04e2adad2cad257e6e52d1d56309c3115b9a5ad01d6bec64e8ee",
+        "figures": 4,
+        "scale": 0.7286566804846515,
+        "referenceArea": 68672
+      }
+    },
+    "transforms": [
+      {
+        "strip": "foe_tusker-tusk-charge-r1",
+        "figure": 1,
+        "position": [
+          129,
+          297
+        ],
+        "centreX": 126.74259267292183,
+        "soleY": 198.59666095993262,
+        "natural": false,
+        "offsetPx": -3.0
+      },
+      {
+        "strip": "foe_tusker-tusk-charge-r1",
+        "figure": 2,
+        "position": [
+          130,
+          313
+        ],
+        "centreX": 126.24360608759537,
+        "soleY": 182.6290902294858,
+        "natural": false,
+        "offsetPx": -5.0
+      },
+      {
+        "strip": "foe_tusker-tusk-charge-r1",
+        "figure": 2,
+        "position": [
+          130,
+          313
+        ],
+        "centreX": 126.24360608759537,
+        "soleY": 182.6290902294858,
+        "natural": false,
+        "offsetPx": -5.0
+      },
+      {
+        "strip": "foe_tusker-tusk-charge-r1",
+        "figure": 3,
+        "position": [
+          67,
+          304
+        ],
+        "centreX": 188.61692925340336,
+        "soleY": 191.61084876536214,
+        "natural": false,
+        "offsetPx": -7.0
+      },
+      {
+        "strip": "foe_tusker-tusk-charge-r1",
+        "figure": 4,
+        "position": [
+          109,
+          283
+        ],
+        "centreX": 146.7020560859804,
+        "soleY": 212.56828534907362,
+        "natural": false,
+        "offsetPx": -2.0
+      },
+      {
+        "strip": "foe_tusker-tusk-charge-r1",
+        "figure": 5,
+        "position": [
+          138,
+          278
+        ],
+        "centreX": 118.25982072237194,
+        "soleY": 217.55815120233825,
+        "natural": false,
+        "offsetPx": 0.0
+      },
+      {
+        "strip": "foe_tusker-stampede-r2",
+        "figure": 1,
+        "position": [
+          130,
+          272
+        ],
+        "centreX": 125.95493106951173,
+        "soleY": 224.03050980743194,
+        "natural": false,
+        "offsetPx": -1.0
+      },
+      {
+        "strip": "foe_tusker-stampede-r2",
+        "figure": 2,
+        "position": [
+          139,
+          284
+        ],
+        "centreX": 117.4915562545643,
+        "soleY": 212.08221595103558,
+        "natural": false,
+        "offsetPx": -3.0
+      },
+      {
+        "strip": "foe_tusker-stampede-r2",
+        "figure": 3,
+        "position": [
+          125,
+          316
+        ],
+        "centreX": 130.93338684301023,
+        "soleY": 180.22009900064523,
+        "natural": false,
+        "offsetPx": -1.0
+      },
+      {
+        "strip": "foe_tusker-stampede-r2",
+        "figure": 4,
+        "position": [
+          106,
+          287
+        ],
+        "centreX": 149.85151878230448,
+        "soleY": 209.09514248693648,
+        "natural": false,
+        "offsetPx": -4.0
+      },
+      {
+        "strip": "foe_tusker-stampede-r2",
+        "figure": 5,
+        "position": [
+          81,
+          282
+        ],
+        "centreX": 175.24164322714677,
+        "soleY": 214.07359826043495,
+        "natural": false,
+        "offsetPx": 0.0
+      },
+      {
+        "strip": "foe_tusker-stampede-r2",
+        "figure": 6,
+        "position": [
+          107,
+          273
+        ],
+        "centreX": 149.35367320495462,
+        "soleY": 223.03481865273224,
+        "natural": false,
+        "offsetPx": 0.0
+      },
+      {
+        "strip": "foe_tusker-hit-r1",
+        "figure": 1,
+        "position": [
+          131,
+          277
+        ],
+        "centreX": 125.19545479503593,
+        "soleY": 219.0007955598296,
+        "natural": false,
+        "offsetPx": -2.9
+      },
+      {
+        "strip": "foe_tusker-hit-r1",
+        "figure": 2,
+        "position": [
+          136,
+          318
+        ],
+        "centreX": 120.45043755790628,
+        "soleY": 178.12064705532808,
+        "natural": false,
+        "offsetPx": 0.7
+      },
+      {
+        "strip": "foe_tusker-down-r1",
+        "figure": 1,
+        "position": [
+          137,
+          313
+        ],
+        "centreX": 118.77103891899819,
+        "soleY": 182.89282680164752,
+        "natural": false,
+        "offsetPx": -2.2
+      },
+      {
+        "strip": "foe_tusker-down-r1",
+        "figure": 2,
+        "position": [
+          114,
+          365
+        ],
+        "centreX": 142.45238103474938,
+        "soleY": 131.15820248723728,
+        "natural": false,
+        "offsetPx": -2.2
+      },
+      {
+        "strip": "foe_tusker-down-r1",
+        "figure": 3,
+        "position": [
+          113,
+          379
+        ],
+        "centreX": 143.18103771523403,
+        "soleY": 116.58506887754424,
+        "natural": false,
+        "offsetPx": 0.7
+      }
+    ],
+    "uniqueFrames": 17,
+    "losslessReconstruction": "all alpha and visible RGBA equal",
+    "image": "tusker_a5.79780d27e234.webp",
+    "atlas": "tusker_a5.a21dae4c5b62.json",
+    "width": 1280,
+    "height": 835,
+    "frames": 22,
+    "decodedBytes": 4275200,
+    "downloadBytes": 1204923
+  },
+  "stalker": {
+    "factor": 0.5,
+    "displayRatio": 2.0,
+    "cell": 512,
+    "origin": [
+      0.5,
+      0.96875
+    ],
+    "seedArea": 101532,
+    "clipStarts": {
+      "attack": 1,
+      "hit": 17,
+      "down": 19
+    },
+    "strips": {
+      "foe_stalker-thorn-pounce-r1": {
+        "rawSize": [
+          2592,
+          386
+        ],
+        "sha256": "c83a67ca8c0823e3c52ab76f1a6f6cb4a19f9849aa02c724ad8cb6541d9075d7",
+        "figures": 6,
+        "scale": 0.8337271207679673,
+        "referenceArea": 36517
+      },
+      "foe_stalker-hit-r1": {
+        "rawSize": [
+          1664,
+          380
+        ],
+        "sha256": "31a4d95bd2fa0347faaa0610179d5371e558a99bfa40d747ba59b920bfb7caa3",
+        "figures": 4,
+        "scale": 0.7066475802293558,
+        "referenceArea": 50832
+      },
+      "foe_stalker-down-r1": {
+        "rawSize": [
+          1792,
+          378
+        ],
+        "sha256": "5f9b165fdcf3a31bdada144cfafc0037130cd5d34cff8390af130ed38b63da78",
+        "figures": 4,
+        "scale": 0.7065641852234326,
+        "referenceArea": 50844
+      }
+    },
+    "transforms": [
+      {
+        "strip": "foe_stalker-thorn-pounce-r1",
+        "figure": 1,
+        "position": [
+          158,
+          299
+        ],
+        "centreX": 98.37980025062014,
+        "soleY": 196.75960050124027,
+        "natural": false,
+        "offsetPx": -1.7
+      },
+      {
+        "strip": "foe_stalker-thorn-pounce-r1",
+        "figure": 2,
+        "position": [
+          16,
+          283
+        ],
+        "centreX": 240.1134107811746,
+        "soleY": 213.43414291659963,
+        "natural": false,
+        "offsetPx": -10.8
+      },
+      {
+        "strip": "foe_stalker-thorn-pounce-r1",
+        "figure": 2,
+        "position": [
+          16,
+          283
+        ],
+        "centreX": 240.1134107811746,
+        "soleY": 213.43414291659963,
+        "natural": false,
+        "offsetPx": -10.8
+      },
+      {
+        "strip": "foe_stalker-thorn-pounce-r1",
+        "figure": 3,
+        "position": [
+          108,
+          238
+        ],
+        "centreX": 148.40342749669819,
+        "soleY": 200.09450898431214,
+        "natural": true,
+        "offsetPx": -57.5
+      },
+      {
+        "strip": "foe_stalker-thorn-pounce-r1",
+        "figure": 4,
+        "position": [
+          146,
+          291
+        ],
+        "centreX": 110.05197994137168,
+        "soleY": 205.09687170891996,
+        "natural": false,
+        "offsetPx": -0.8
+      },
+      {
+        "strip": "foe_stalker-thorn-pounce-r1",
+        "figure": 5,
+        "position": [
+          152,
+          283
+        ],
+        "centreX": 104.21589009599592,
+        "soleY": 213.43414291659963,
+        "natural": false,
+        "offsetPx": -0.8
+      },
+      {
+        "strip": "foe_stalker-hit-r1",
+        "figure": 1,
+        "position": [
+          142,
+          302
+        ],
+        "centreX": 114.47690799715564,
+        "soleY": 193.6214369828435,
+        "natural": false,
+        "offsetPx": 0.0
+      },
+      {
+        "strip": "foe_stalker-hit-r1",
+        "figure": 2,
+        "position": [
+          139,
+          309
+        ],
+        "centreX": 116.95017452795838,
+        "soleY": 186.55496118054992,
+        "natural": false,
+        "offsetPx": 1.4
+      },
+      {
+        "strip": "foe_stalker-down-r1",
+        "figure": 1,
+        "position": [
+          139,
+          329
+        ],
+        "centreX": 117.2896547470898,
+        "soleY": 167.4557118979535,
+        "natural": false,
+        "offsetPx": -2.8
+      },
+      {
+        "strip": "foe_stalker-down-r1",
+        "figure": 2,
+        "position": [
+          145,
+          372
+        ],
+        "centreX": 111.28385917269063,
+        "soleY": 124.35529659932413,
+        "natural": false,
+        "offsetPx": -5.7
+      },
+      {
+        "strip": "foe_stalker-down-r1",
+        "figure": 3,
+        "position": [
+          126,
+          369
+        ],
+        "centreX": 130.3610921737233,
+        "soleY": 127.18155334021786,
+        "natural": false,
+        "offsetPx": 0.0
+      }
+    ],
+    "uniqueFrames": 11,
+    "losslessReconstruction": "all alpha and visible RGBA equal",
+    "image": "stalker_a5.32fe2106b8c7.webp",
+    "atlas": "stalker_a5.59e649e3e46f.json",
+    "width": 1024,
+    "height": 624,
+    "frames": 22,
+    "decodedBytes": 2555904,
+    "downloadBytes": 695922
+  },
+  "beetle": {
+    "factor": 0.5,
+    "displayRatio": 2.0,
+    "cell": 512,
+    "origin": [
+      0.5,
+      0.96875
+    ],
+    "seedArea": 77110,
+    "clipStarts": {
+      "attack": 1,
+      "hit": 17,
+      "down": 19
+    },
+    "strips": {
+      "foe_thorn_beetle-thorn-bite-r1": {
+        "rawSize": [
+          2208,
+          337
+        ],
+        "sha256": "67b9b4a34db5efe3d6b7729d977e50c1e54a4600cebb53521b11f52428e16f59",
+        "figures": 6,
+        "scale": 0.7906719598787726,
+        "referenceArea": 30836
+      },
+      "foe_thorn_beetle-hit-r1": {
+        "rawSize": [
+          1728,
+          335
+        ],
+        "sha256": "96ff312d744aee32c1b227cae45a7d8da07f0f1b918117f079e9c2e5b67d63a8",
+        "figures": 4,
+        "scale": 0.6288304907498486,
+        "referenceArea": 48751
+      },
+      "foe_thorn_beetle-down-r1": {
+        "rawSize": [
+          1600,
+          331
+        ],
+        "sha256": "034dbb798d0c4939ea89632e27b6d2354040b007ae8b822eea716a62438d9056",
+        "figures": 4,
+        "scale": 0.6276984585901962,
+        "referenceArea": 48927
+      }
+    },
+    "transforms": [
+      {
+        "strip": "foe_thorn_beetle-thorn-bite-r1",
+        "figure": 1,
+        "position": [
+          142,
+          293
+        ],
+        "centreX": 114.25209820248264,
+        "soleY": 203.20269368884456,
+        "natural": false,
+        "offsetPx": -3.2
+      },
+      {
+        "strip": "foe_thorn_beetle-thorn-bite-r1",
+        "figure": 1,
+        "position": [
+          142,
+          293
+        ],
+        "centreX": 114.25209820248264,
+        "soleY": 203.20269368884456,
+        "natural": false,
+        "offsetPx": -3.2
+      },
+      {
+        "strip": "foe_thorn_beetle-thorn-bite-r1",
+        "figure": 1,
+        "position": [
+          142,
+          293
+        ],
+        "centreX": 114.25209820248264,
+        "soleY": 203.20269368884456,
+        "natural": false,
+        "offsetPx": -3.2
+      },
+      {
+        "strip": "foe_thorn_beetle-thorn-bite-r1",
+        "figure": 2,
+        "position": [
+          115,
+          340
+        ],
+        "centreX": 141.1349448383609,
+        "soleY": 155.7623760961182,
+        "natural": false,
+        "offsetPx": -3.2
+      },
+      {
+        "strip": "foe_thorn_beetle-thorn-bite-r1",
+        "figure": 3,
+        "position": [
+          132,
+          351
+        ],
+        "centreX": 124.13549770096729,
+        "soleY": 144.69296865781538,
+        "natural": false,
+        "offsetPx": -0.8
+      },
+      {
+        "strip": "foe_thorn_beetle-thorn-bite-r1",
+        "figure": 4,
+        "position": [
+          137,
+          338
+        ],
+        "centreX": 118.60079398181588,
+        "soleY": 158.1343919757545,
+        "natural": false,
+        "offsetPx": 0.0
+      },
+      {
+        "strip": "foe_thorn_beetle-thorn-bite-r1",
+        "figure": 5,
+        "position": [
+          138,
+          347
+        ],
+        "centreX": 118.20545800187651,
+        "soleY": 149.43700041708803,
+        "natural": false,
+        "offsetPx": 0.0
+      },
+      {
+        "strip": "foe_thorn_beetle-hit-r1",
+        "figure": 1,
+        "position": [
+          136,
+          336
+        ],
+        "centreX": 120.10662373322108,
+        "soleY": 159.72294465046156,
+        "natural": false,
+        "offsetPx": -0.6
+      },
+      {
+        "strip": "foe_thorn_beetle-hit-r1",
+        "figure": 2,
+        "position": [
+          159,
+          377
+        ],
+        "centreX": 96.52548033010177,
+        "soleY": 119.47779324247124,
+        "natural": false,
+        "offsetPx": 1.9
+      },
+      {
+        "strip": "foe_thorn_beetle-down-r1",
+        "figure": 1,
+        "position": [
+          146,
+          355
+        ],
+        "centreX": 109.53338102398925,
+        "soleY": 141.23215318279415,
+        "natural": false,
+        "offsetPx": 0.6
+      },
+      {
+        "strip": "foe_thorn_beetle-down-r1",
+        "figure": 2,
+        "position": [
+          157,
+          391
+        ],
+        "centreX": 99.4902056865461,
+        "soleY": 105.45334104315297,
+        "natural": false,
+        "offsetPx": 0.6
+      },
+      {
+        "strip": "foe_thorn_beetle-down-r1",
+        "figure": 3,
+        "position": [
+          151,
+          399
+        ],
+        "centreX": 104.51179335526767,
+        "soleY": 97.29326108148042,
+        "natural": false,
+        "offsetPx": 0.6
+      }
+    ],
+    "uniqueFrames": 11,
+    "losslessReconstruction": "all alpha and visible RGBA equal",
+    "image": "beetle_a5.7e5d96178375.webp",
+    "atlas": "beetle_a5.a0583e05f41d.json",
+    "width": 512,
+    "height": 910,
+    "frames": 22,
+    "decodedBytes": 1863680,
+    "downloadBytes": 475744
+  }
+}

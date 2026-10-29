@@ -1,0 +1,1250 @@
+{
+  "schema": 1,
+  "delivery": "ART-VFX-COMMAND-001",
+  "baseCommit": "8616ad3155a179e05210fe6aa552e6d234c9bd24",
+  "status": "art proposals; owner selection and runtime review pending",
+  "canvas": [
+    256,
+    256
+  ],
+  "alpha": "straight RGBA; normal blend recommended",
+  "coordinates": "pixels from top-left; normalized pivots = pixels / 256",
+  "orientation": "caster left, foe side right; R1 challenge thread flipX=true",
+  "timing": {
+    "suggestedMs": {
+      "taunt": [
+        [
+          0,
+          140
+        ],
+        [
+          140,
+          320
+        ],
+        [
+          320,
+          520
+        ]
+      ],
+      "challenge": [
+        [
+          0,
+          100
+        ],
+        [
+          100,
+          220
+        ],
+        [
+          220,
+          420
+        ]
+      ],
+      "warcry": [
+        [
+          0,
+          120
+        ],
+        [
+          120,
+          280
+        ],
+        [
+          280,
+          460
+        ]
+      ]
+    },
+    "note": "art suggestions only; adapt to existing presentation beats"
+  },
+  "sources": [
+    {
+      "path": "source/R1-sheet.png",
+      "sha256": "68bc6f44384efb020dba2d1327dbac7fb9e77bfb9c2913f56e87d0fe4313a5f0",
+      "size": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "path": "source/R2-sheet.png",
+      "sha256": "7ce177bc6284473eda55929eb14bbadf5a9b282a8ed114c2d9c376e2d91c59a1",
+      "size": [
+        1536,
+        1024
+      ]
+    }
+  ],
+  "layers": [
+    {
+      "revision": "R1",
+      "move": "taunt",
+      "beat": "prepare",
+      "role": "prepare",
+      "path": "R1/layers/taunt_prepare.png",
+      "sha256": "f33b21853583454da07b5eb33970eeaf4397e1d0342d12be385227ee2009f483",
+      "size": [
+        256,
+        256
+      ],
+      "pivotPx": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "caster.chest",
+      "source": "source/R1-sheet.png",
+      "sourceRect": [
+        0,
+        0,
+        384,
+        341
+      ],
+      "packTransform": {
+        "size": [
+          224,
+          199
+        ],
+        "offset": [
+          16,
+          28
+        ]
+      },
+      "alphaBounds": [
+        26,
+        42,
+        240,
+        227
+      ],
+      "flipX": false,
+      "route": "cast cue; no damage implied"
+    },
+    {
+      "revision": "R1",
+      "move": "taunt",
+      "beat": "peak",
+      "role": "peak-pulse",
+      "path": "R1/layers/taunt_peak-pulse.png",
+      "sha256": "12a572931f3ab59ed48c5c54d0676087a2c4828b3d489b9b476eebff491ea3b7",
+      "size": [
+        256,
+        256
+      ],
+      "pivotPx": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "caster.chest -> foe-side corridor",
+      "source": "source/R1-sheet.png",
+      "sourceRect": [
+        384,
+        0,
+        768,
+        341
+      ],
+      "packTransform": {
+        "size": [
+          224,
+          199
+        ],
+        "offset": [
+          16,
+          28
+        ]
+      },
+      "alphaBounds": [
+        16,
+        39,
+        240,
+        227
+      ],
+      "flipX": false,
+      "route": "cast cue; no damage implied"
+    },
+    {
+      "revision": "R1",
+      "move": "taunt",
+      "beat": "peak",
+      "role": "peak-motes",
+      "path": "R1/layers/taunt_peak-motes.png",
+      "sha256": "66e0fca3638252f12b72168bb45e7d66ea4c22c92585ed3767a50597b6da0a7a",
+      "size": [
+        256,
+        256
+      ],
+      "pivotPx": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "pulse centre",
+      "source": "source/R1-sheet.png",
+      "sourceRect": [
+        768,
+        0,
+        1152,
+        341
+      ],
+      "packTransform": {
+        "size": [
+          224,
+          199
+        ],
+        "offset": [
+          16,
+          28
+        ]
+      },
+      "alphaBounds": [
+        16,
+        45,
+        240,
+        227
+      ],
+      "flipX": false,
+      "route": "cast cue; no damage implied"
+    },
+    {
+      "revision": "R1",
+      "move": "taunt",
+      "beat": "settle",
+      "role": "settle-mark",
+      "path": "R1/layers/taunt_settle-mark.png",
+      "sha256": "e9789bd1dcb88c0547de75b0df1a23c3b0aa459d7fc30e146fba8ae44e4ea389",
+      "size": [
+        256,
+        256
+      ],
+      "pivotPx": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "caster.chest",
+      "source": "source/R1-sheet.png",
+      "sourceRect": [
+        1152,
+        0,
+        1536,
+        341
+      ],
+      "packTransform": {
+        "size": [
+          224,
+          199
+        ],
+        "offset": [
+          16,
+          28
+        ]
+      },
+      "alphaBounds": [
+        16,
+        33,
+        231,
+        227
+      ],
+      "flipX": false,
+      "route": "cast cue; no damage implied"
+    },
+    {
+      "revision": "R1",
+      "move": "challenge",
+      "beat": "prepare",
+      "role": "prepare",
+      "path": "R1/layers/challenge_prepare.png",
+      "sha256": "b5c8e764aa4c600958ee72ded75f4f3cfb82d2dd5e54333e16825245a7fe9277",
+      "size": [
+        256,
+        256
+      ],
+      "pivotPx": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "caster.shield_front",
+      "source": "source/R1-sheet.png",
+      "sourceRect": [
+        0,
+        341,
+        384,
+        683
+      ],
+      "packTransform": {
+        "size": [
+          224,
+          200
+        ],
+        "offset": [
+          16,
+          28
+        ]
+      },
+      "alphaBounds": [
+        35,
+        28,
+        240,
+        228
+      ],
+      "flipX": false,
+      "route": "cast cue; no damage implied"
+    },
+    {
+      "revision": "R1",
+      "move": "challenge",
+      "beat": "peak",
+      "role": "peak-crest",
+      "path": "R1/layers/challenge_peak-crest.png",
+      "sha256": "07a0738c9a92724ae270080b3d9f5cb676e7485b74cc8e3c2f085ec4f9a05f90",
+      "size": [
+        256,
+        256
+      ],
+      "pivotPx": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "caster.shield_front",
+      "source": "source/R1-sheet.png",
+      "sourceRect": [
+        384,
+        341,
+        768,
+        683
+      ],
+      "packTransform": {
+        "size": [
+          224,
+          200
+        ],
+        "offset": [
+          16,
+          28
+        ]
+      },
+      "alphaBounds": [
+        16,
+        28,
+        240,
+        228
+      ],
+      "flipX": false,
+      "route": "cast cue; no damage implied"
+    },
+    {
+      "revision": "R1",
+      "move": "challenge",
+      "beat": "peak",
+      "role": "peak-thread",
+      "path": "R1/layers/challenge_peak-thread.png",
+      "sha256": "d216c3f2fedebedb283e1e4a43aee205dae0a0fd05e913ce2cb310b0287ab911",
+      "size": [
+        256,
+        256
+      ],
+      "pivotPx": [
+        24,
+        128
+      ],
+      "pivot": [
+        0.09375,
+        0.5
+      ],
+      "anchor": "caster.shield_front -> resolved foe.chest",
+      "source": "source/R1-sheet.png",
+      "sourceRect": [
+        790,
+        350,
+        1235,
+        680
+      ],
+      "packTransform": {
+        "size": [
+          224,
+          166
+        ],
+        "offset": [
+          16,
+          45
+        ]
+      },
+      "alphaBounds": [
+        16,
+        51,
+        239,
+        205
+      ],
+      "flipX": true,
+      "route": "cast cue; no damage implied"
+    },
+    {
+      "revision": "R1",
+      "move": "challenge",
+      "beat": "settle",
+      "role": "settle-crest",
+      "path": "R1/layers/challenge_settle-crest.png",
+      "sha256": "aaaf87c26f11829983a9bc935b3f6381b6d72a91e28da0a4c0d5109db0c13fa3",
+      "size": [
+        256,
+        256
+      ],
+      "pivotPx": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "caster.shield_top",
+      "source": "source/R1-sheet.png",
+      "sourceRect": [
+        1250,
+        350,
+        1536,
+        680
+      ],
+      "packTransform": {
+        "size": [
+          173,
+          200
+        ],
+        "offset": [
+          41,
+          28
+        ]
+      },
+      "alphaBounds": [
+        42,
+        29,
+        208,
+        228
+      ],
+      "flipX": false,
+      "route": "cast cue; no damage implied"
+    },
+    {
+      "revision": "R1",
+      "move": "warcry",
+      "beat": "prepare",
+      "role": "prepare",
+      "path": "R1/layers/warcry_prepare.png",
+      "sha256": "099b6796e1f6ee83cc489516b6002864efc810ed7cf6f71edfd15a69e5958bae",
+      "size": [
+        256,
+        256
+      ],
+      "pivotPx": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "caster.chest_forward",
+      "source": "source/R1-sheet.png",
+      "sourceRect": [
+        0,
+        683,
+        384,
+        1024
+      ],
+      "packTransform": {
+        "size": [
+          224,
+          199
+        ],
+        "offset": [
+          16,
+          28
+        ]
+      },
+      "alphaBounds": [
+        16,
+        28,
+        240,
+        227
+      ],
+      "flipX": false,
+      "route": "cast cue; no damage implied"
+    },
+    {
+      "revision": "R1",
+      "move": "warcry",
+      "beat": "peak",
+      "role": "peak-cone",
+      "path": "R1/layers/warcry_peak-cone.png",
+      "sha256": "4181d6cbade5f0aa2dfff44ba588818a7eae79648cc648d9136711c62e9df42d",
+      "size": [
+        256,
+        256
+      ],
+      "pivotPx": [
+        35,
+        128
+      ],
+      "pivot": [
+        0.13671875,
+        0.5
+      ],
+      "anchor": "caster.chest_forward -> foe-side corridor",
+      "source": "source/R1-sheet.png",
+      "sourceRect": [
+        384,
+        683,
+        768,
+        1024
+      ],
+      "packTransform": {
+        "size": [
+          224,
+          199
+        ],
+        "offset": [
+          16,
+          28
+        ]
+      },
+      "alphaBounds": [
+        16,
+        28,
+        240,
+        227
+      ],
+      "flipX": false,
+      "route": "cast cue; no damage implied"
+    },
+    {
+      "revision": "R1",
+      "move": "warcry",
+      "beat": "peak",
+      "role": "peak-impact",
+      "path": "R1/layers/warcry_peak-impact.png",
+      "sha256": "82297c5ca2cd0681412e6411b6c202f5e978a8133a75f627157ff98ddb65db9a",
+      "size": [
+        256,
+        256
+      ],
+      "pivotPx": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "resolved counter target.chest",
+      "source": "source/R1-sheet.png",
+      "sourceRect": [
+        768,
+        683,
+        1152,
+        1024
+      ],
+      "packTransform": {
+        "size": [
+          224,
+          199
+        ],
+        "offset": [
+          16,
+          28
+        ]
+      },
+      "alphaBounds": [
+        16,
+        30,
+        240,
+        227
+      ],
+      "flipX": false,
+      "route": "only actual War cry counter target; never on cast"
+    },
+    {
+      "revision": "R1",
+      "move": "warcry",
+      "beat": "settle",
+      "role": "settle-wisps",
+      "path": "R1/layers/warcry_settle-wisps.png",
+      "sha256": "6d93d89885356b3803771126ffc1f66bb10ea7bedde7dfb46c6088dfe19a1cf5",
+      "size": [
+        256,
+        256
+      ],
+      "pivotPx": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "caster.chest_forward",
+      "source": "source/R1-sheet.png",
+      "sourceRect": [
+        1152,
+        683,
+        1536,
+        1024
+      ],
+      "packTransform": {
+        "size": [
+          224,
+          199
+        ],
+        "offset": [
+          16,
+          28
+        ]
+      },
+      "alphaBounds": [
+        16,
+        28,
+        231,
+        227
+      ],
+      "flipX": false,
+      "route": "cast cue; no damage implied"
+    },
+    {
+      "revision": "R2",
+      "move": "taunt",
+      "beat": "prepare",
+      "role": "prepare",
+      "path": "R2/layers/taunt_prepare.png",
+      "sha256": "38cba833eacfa43564de351af5087a3c4164896e176304d7244fab440acdb648",
+      "size": [
+        256,
+        256
+      ],
+      "pivotPx": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "caster.chest",
+      "source": "source/R2-sheet.png",
+      "sourceRect": [
+        35,
+        0,
+        305,
+        341
+      ],
+      "packTransform": {
+        "size": [
+          158,
+          200
+        ],
+        "offset": [
+          49,
+          28
+        ]
+      },
+      "alphaBounds": [
+        49,
+        45,
+        207,
+        228
+      ],
+      "flipX": false,
+      "route": "cast cue; no damage implied"
+    },
+    {
+      "revision": "R2",
+      "move": "taunt",
+      "beat": "peak",
+      "role": "peak-pulse",
+      "path": "R2/layers/taunt_peak-pulse.png",
+      "sha256": "a7387593bd2c806cd8d9efa5e97fa11a3b1505da72f67f8eabe705fd138352fe",
+      "size": [
+        256,
+        256
+      ],
+      "pivotPx": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "caster.chest -> foe-side corridor",
+      "source": "source/R2-sheet.png",
+      "sourceRect": [
+        320,
+        0,
+        768,
+        350
+      ],
+      "packTransform": {
+        "size": [
+          224,
+          175
+        ],
+        "offset": [
+          16,
+          40
+        ]
+      },
+      "alphaBounds": [
+        16,
+        40,
+        240,
+        215
+      ],
+      "flipX": false,
+      "route": "cast cue; no damage implied"
+    },
+    {
+      "revision": "R2",
+      "move": "taunt",
+      "beat": "peak",
+      "role": "peak-motes",
+      "path": "R2/layers/taunt_peak-motes.png",
+      "sha256": "7c0f8d7ce57e3069787f1f28dd14721ecc684d26987eb4158d64a9fd036511d5",
+      "size": [
+        256,
+        256
+      ],
+      "pivotPx": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "pulse centre",
+      "source": "source/R2-sheet.png",
+      "sourceRect": [
+        768,
+        0,
+        1152,
+        341
+      ],
+      "packTransform": {
+        "size": [
+          224,
+          199
+        ],
+        "offset": [
+          16,
+          28
+        ]
+      },
+      "alphaBounds": [
+        16,
+        33,
+        240,
+        227
+      ],
+      "flipX": false,
+      "route": "cast cue; no damage implied"
+    },
+    {
+      "revision": "R2",
+      "move": "taunt",
+      "beat": "settle",
+      "role": "settle-mark",
+      "path": "R2/layers/taunt_settle-mark.png",
+      "sha256": "1a11b82b0f60b2a4764dfc7b4c70e0aa963e7321071f918d724b75a7ccf0b208",
+      "size": [
+        256,
+        256
+      ],
+      "pivotPx": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "caster.chest",
+      "source": "source/R2-sheet.png",
+      "sourceRect": [
+        1152,
+        0,
+        1536,
+        341
+      ],
+      "packTransform": {
+        "size": [
+          224,
+          199
+        ],
+        "offset": [
+          16,
+          28
+        ]
+      },
+      "alphaBounds": [
+        16,
+        28,
+        232,
+        227
+      ],
+      "flipX": false,
+      "route": "cast cue; no damage implied"
+    },
+    {
+      "revision": "R2",
+      "move": "challenge",
+      "beat": "prepare",
+      "role": "prepare",
+      "path": "R2/layers/challenge_prepare.png",
+      "sha256": "9e3596a5f0b54b2e4ffecd3f4b2ee87aeaff0d91a407e9284f36e9c5693904a1",
+      "size": [
+        256,
+        256
+      ],
+      "pivotPx": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "caster.shield_front",
+      "source": "source/R2-sheet.png",
+      "sourceRect": [
+        0,
+        341,
+        384,
+        683
+      ],
+      "packTransform": {
+        "size": [
+          224,
+          200
+        ],
+        "offset": [
+          16,
+          28
+        ]
+      },
+      "alphaBounds": [
+        16,
+        28,
+        240,
+        228
+      ],
+      "flipX": false,
+      "route": "cast cue; no damage implied"
+    },
+    {
+      "revision": "R2",
+      "move": "challenge",
+      "beat": "peak",
+      "role": "peak-crest",
+      "path": "R2/layers/challenge_peak-crest.png",
+      "sha256": "f55ffb5fdf3f26ce883cddfd2cbf72e25ad643d9b19893cd59f13dd15f2d7dbe",
+      "size": [
+        256,
+        256
+      ],
+      "pivotPx": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "caster.shield_front",
+      "source": "source/R2-sheet.png",
+      "sourceRect": [
+        384,
+        341,
+        768,
+        683
+      ],
+      "packTransform": {
+        "size": [
+          224,
+          200
+        ],
+        "offset": [
+          16,
+          28
+        ]
+      },
+      "alphaBounds": [
+        16,
+        28,
+        240,
+        228
+      ],
+      "flipX": false,
+      "route": "cast cue; no damage implied"
+    },
+    {
+      "revision": "R2",
+      "move": "challenge",
+      "beat": "peak",
+      "role": "peak-thread",
+      "path": "R2/layers/challenge_peak-thread.png",
+      "sha256": "ffaf9d0fae3039cd82721896603a3cf82296402aca7ac77ac7203afc8919cf33",
+      "size": [
+        256,
+        256
+      ],
+      "pivotPx": [
+        24,
+        128
+      ],
+      "pivot": [
+        0.09375,
+        0.5
+      ],
+      "anchor": "caster.shield_front -> resolved foe.chest",
+      "source": "source/R2-sheet.png",
+      "sourceRect": [
+        768,
+        341,
+        1152,
+        683
+      ],
+      "packTransform": {
+        "size": [
+          224,
+          200
+        ],
+        "offset": [
+          16,
+          28
+        ]
+      },
+      "alphaBounds": [
+        16,
+        28,
+        240,
+        228
+      ],
+      "flipX": false,
+      "route": "cast cue; no damage implied"
+    },
+    {
+      "revision": "R2",
+      "move": "challenge",
+      "beat": "settle",
+      "role": "settle-crest",
+      "path": "R2/layers/challenge_settle-crest.png",
+      "sha256": "aadd94e78cd8458c7823258b49ab7820ee60f14336a123b152578f2bf84d7aea",
+      "size": [
+        256,
+        256
+      ],
+      "pivotPx": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "caster.shield_top",
+      "source": "source/R2-sheet.png",
+      "sourceRect": [
+        1152,
+        341,
+        1536,
+        683
+      ],
+      "packTransform": {
+        "size": [
+          224,
+          200
+        ],
+        "offset": [
+          16,
+          28
+        ]
+      },
+      "alphaBounds": [
+        16,
+        28,
+        232,
+        228
+      ],
+      "flipX": false,
+      "route": "cast cue; no damage implied"
+    },
+    {
+      "revision": "R2",
+      "move": "warcry",
+      "beat": "prepare",
+      "role": "prepare",
+      "path": "R2/layers/warcry_prepare.png",
+      "sha256": "bbb52e70fb9c6bf0212a5c068643e1e971be12b610bb08505b49f8e214ec4ee6",
+      "size": [
+        256,
+        256
+      ],
+      "pivotPx": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "caster.chest_forward",
+      "source": "source/R2-sheet.png",
+      "sourceRect": [
+        0,
+        683,
+        384,
+        1024
+      ],
+      "packTransform": {
+        "size": [
+          224,
+          199
+        ],
+        "offset": [
+          16,
+          28
+        ]
+      },
+      "alphaBounds": [
+        16,
+        28,
+        240,
+        227
+      ],
+      "flipX": false,
+      "route": "cast cue; no damage implied"
+    },
+    {
+      "revision": "R2",
+      "move": "warcry",
+      "beat": "peak",
+      "role": "peak-cone",
+      "path": "R2/layers/warcry_peak-cone.png",
+      "sha256": "6b8ccee489464c2ad353c09cfb24435c0aa0690c1205873d2e80dc2f8e31c054",
+      "size": [
+        256,
+        256
+      ],
+      "pivotPx": [
+        35,
+        128
+      ],
+      "pivot": [
+        0.13671875,
+        0.5
+      ],
+      "anchor": "caster.chest_forward -> foe-side corridor",
+      "source": "source/R2-sheet.png",
+      "sourceRect": [
+        384,
+        683,
+        768,
+        1024
+      ],
+      "packTransform": {
+        "size": [
+          224,
+          199
+        ],
+        "offset": [
+          16,
+          28
+        ]
+      },
+      "alphaBounds": [
+        16,
+        28,
+        240,
+        227
+      ],
+      "flipX": false,
+      "route": "cast cue; no damage implied"
+    },
+    {
+      "revision": "R2",
+      "move": "warcry",
+      "beat": "peak",
+      "role": "peak-impact",
+      "path": "R2/layers/warcry_peak-impact.png",
+      "sha256": "ac158085c4662bb04637b3994c56fe820fb09900700f7f62620871bca7c78d69",
+      "size": [
+        256,
+        256
+      ],
+      "pivotPx": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "resolved counter target.chest",
+      "source": "source/R2-sheet.png",
+      "sourceRect": [
+        768,
+        683,
+        1152,
+        1024
+      ],
+      "packTransform": {
+        "size": [
+          224,
+          199
+        ],
+        "offset": [
+          16,
+          28
+        ]
+      },
+      "alphaBounds": [
+        16,
+        28,
+        240,
+        227
+      ],
+      "flipX": false,
+      "route": "only actual War cry counter target; never on cast"
+    },
+    {
+      "revision": "R2",
+      "move": "warcry",
+      "beat": "settle",
+      "role": "settle-wisps",
+      "path": "R2/layers/warcry_settle-wisps.png",
+      "sha256": "3def82fbbe2d37686cf58d7ae336eada0a30c9bff320059ac1590673326f430f",
+      "size": [
+        256,
+        256
+      ],
+      "pivotPx": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "caster.chest_forward",
+      "source": "source/R2-sheet.png",
+      "sourceRect": [
+        1152,
+        683,
+        1536,
+        1024
+      ],
+      "packTransform": {
+        "size": [
+          224,
+          199
+        ],
+        "offset": [
+          16,
+          28
+        ]
+      },
+      "alphaBounds": [
+        16,
+        28,
+        234,
+        227
+      ],
+      "flipX": false,
+      "route": "cast cue; no damage implied"
+    }
+  ],
+  "storyboards": [
+    {
+      "path": "storyboards/R1-taunt-390.png",
+      "size": [
+        390,
+        844
+      ],
+      "sha256": "ba8cfd1ccad9c99effa98c70525889340d409f8ad13b60801ba7e4318529e864"
+    },
+    {
+      "path": "storyboards/R1-challenge-390.png",
+      "size": [
+        390,
+        844
+      ],
+      "sha256": "b0968838213637394278e6e744a077dd5a974d62df262b02bf0a2c24239ff496"
+    },
+    {
+      "path": "storyboards/R1-warcry-390.png",
+      "size": [
+        390,
+        1086
+      ],
+      "sha256": "380e07d2d96201ebfe6d332f194fdc7be29ae69692af4f7f428191dc526cb77a"
+    },
+    {
+      "path": "storyboards/R1-390.png",
+      "size": [
+        390,
+        2774
+      ],
+      "sha256": "45345f161005d97f1b0e4518d2c5c0eea36ec4c0199b4e4697b8420333358d13"
+    },
+    {
+      "path": "storyboards/R2-taunt-390.png",
+      "size": [
+        390,
+        844
+      ],
+      "sha256": "a6b846153e1049cbc32a8741ea735e4344dec90cc784658e71193ce3ab84e360"
+    },
+    {
+      "path": "storyboards/R2-challenge-390.png",
+      "size": [
+        390,
+        844
+      ],
+      "sha256": "71bc9e21d673310a245074cebdb3db84ae2ae6b95a724d9a449f8bfbcba8daab"
+    },
+    {
+      "path": "storyboards/R2-warcry-390.png",
+      "size": [
+        390,
+        1086
+      ],
+      "sha256": "848bb1e084a3e32249681d9abf2371ee8ac75dad7cb46989f88a5131df97bc63"
+    },
+    {
+      "path": "storyboards/R2-390.png",
+      "size": [
+        390,
+        2774
+      ],
+      "sha256": "6caf7ebb1b121e03cba743db09475dc00ff0e0f864a24dc814f06fa39fe788af"
+    }
+  ]
+}

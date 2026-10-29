@@ -1,0 +1,628 @@
+{
+  "package": "ART-UNIT-ANIMATION-A5-001",
+  "generation_method": "whole continuous strips per row, seed edit; no independent frame generation",
+  "generations": [
+    {
+      "id": "brann_actions_r1",
+      "group": "heroes",
+      "name": "brann",
+      "rows": 4,
+      "frames": 6,
+      "reference": "/workspace/asterveil-fateweave/incoming/ART-UNIT-ANIMATION-A5-001/heroes/templates/brann-4row-edit-canvas.png",
+      "prompt": "Edit the supplied exact shipped Fateweave seed into original production painted chibi animation artwork. Preserve identical face, hair, outfit, equipment, proportions, palette, handedness, facing and sole reference throughout. This is a small character animation sheet on a LARGE transparent canvas, never a poster. Full isolated silhouettes with at least 30px clear transparent gutters between figures and 40px all edge margins. No text, labels, panels, checkerboard, background, shadows, ground, rings, auras, light bursts, projectiles, motion trails, targets, debris or impact effects. Every ROW is one whole continuous strip generated together LEFT TO RIGHT. Same scale across every figure, no camera changes; six equal-width columns for actions, four for reactions. Return to seed stance for recovery except down which stays collapsed. Preserve a shared sole/ground line; airborne poses above that line. Do not crop weapons or feet. EXACTLY FOUR ROWS x SIX COLUMNS=24 small complete figures, landscape1536x1024. BRANN always faces RIGHT. Heavy stocky mature Warden, long dark brown beard and swept hair with braid, thick eyebrows, silver plate armor with gold geometric borders, dark blue cloth, heavy double-headed angular grey/gold HAMMER in both hands. Do not add shield. Row1 HAMMER SWING attack/slam: ready; twist torso wind hammer back LEFT; deeper loaded stance; powerful horizontal hammer release to RIGHT; hammer continues arc across front body low; recover ready. Row2 OVERHEAD GROUND SLAM quake/tremor: ready; lift hammer; hammer high OVERHEAD elbows bent knees loaded; two-hand hammer head strikes ground in front RIGHT with arms downward; low crouched follow-through head still low; lift to ready. No cracks dust ground effects. Row3 TAUNT: ready; lower hammer; plant hammer HEAD on ground beside right foot holding upright shaft in LEFT hand; chest out and RIGHT free hand palm-up BECKONS opponent toward him; fingers curl in challenge chest proud; recover grip ready. Row4 STONE BRACE stonearmor/guardstone: ready; bend knees; bring hammer horizontally ACROSS chest; deep planted low crouch hammer haft protects torso; hold low guarded pose; recover ready. No stone shell or magic.",
+      "original_output": "/workspace/generated_images/exec-684038ed-04ce-405a-8b3e-97982b67bdcc.png",
+      "output": "heroes/source-sheets/brann_actions_r1-source.png",
+      "seed": "heroes/seeds/brann-seed.png",
+      "reference_canvas": "heroes/templates/brann-4row-edit-canvas.png",
+      "strips": [
+        {
+          "identity": "brann",
+          "move": "hammer-swing",
+          "revision": "r1",
+          "routes_or_intents": [
+            "attack",
+            "slam"
+          ],
+          "sequence": [
+            "ready",
+            "twist and draw hammer back",
+            "deep wind-up",
+            "horizontal swing right",
+            "low swing follow-through",
+            "recover ready"
+          ],
+          "preferred_candidate": true
+        },
+        {
+          "identity": "brann",
+          "move": "ground-slam",
+          "revision": "r1",
+          "routes_or_intents": [
+            "quake",
+            "tremor"
+          ],
+          "sequence": [
+            "ready",
+            "lift hammer",
+            "hammer loaded overhead",
+            "downward ground contact",
+            "deep low follow-through",
+            "recover ready"
+          ],
+          "preferred_candidate": true
+        },
+        {
+          "identity": "brann",
+          "move": "taunt",
+          "revision": "r1",
+          "routes_or_intents": [
+            "taunt"
+          ],
+          "sequence": [
+            "ready",
+            "lower hammer",
+            "plant hammer head",
+            "chest out, open beckon hand",
+            "curl beckon hand",
+            "recover ready"
+          ],
+          "preferred_candidate": false
+        },
+        {
+          "identity": "brann",
+          "move": "stone-brace",
+          "revision": "r1",
+          "routes_or_intents": [
+            "stonearmor",
+            "guardstone"
+          ],
+          "sequence": [
+            "ready",
+            "bend knees",
+            "hammer across chest",
+            "deep low defensive crouch",
+            "hold braced hammer",
+            "recover ready"
+          ],
+          "preferred_candidate": true
+        }
+      ]
+    },
+    {
+      "id": "garran_reactions_r1",
+      "group": "heroes",
+      "name": "garran",
+      "rows": 3,
+      "frames": 4,
+      "reference": "/workspace/asterveil-fateweave/incoming/ART-UNIT-ANIMATION-A5-001/heroes/templates/garran-3row-edit-canvas.png",
+      "prompt": "Edit the supplied exact shipped Fateweave seed into original production painted chibi animation artwork. Preserve identical face, hair, outfit, equipment, proportions, palette, handedness, facing and sole reference throughout. This is a small character animation sheet on a LARGE transparent canvas, never a poster. Full isolated silhouettes with at least 30px clear transparent gutters between figures and 40px all edge margins. No text, labels, panels, checkerboard, background, shadows, ground, rings, auras, light bursts, projectiles, motion trails, targets, debris or impact effects. Every ROW is one whole continuous strip generated together LEFT TO RIGHT. Same scale across every figure, no camera changes; six equal-width columns for actions, four for reactions. Return to seed stance for recovery except down which stays collapsed. Preserve a shared sole/ground line; airborne poses above that line. Do not crop weapons or feet. EXACTLY THREE ROWS x FOUR COLUMNS=12 small complete figures, landscape1536x1024. GARRAN faces RIGHT, young brown spiky-haired amber-eyed spearman teal scarf/tabard brown leather silver armor. Silver-tipped wooden spear with teal ribbon RIGHT hand, round steel/gold shield LEFT forearm always retained. Row1 HIT FOUR poses: ready; shoulders/head flinch backward LEFT, eyes pinch and spear tilts slightly; deepest recoil knees flex; regain original ready. Row2 BLOCK FOUR poses: ready; lift LEFT round shield clearly in front RIGHT of face/chest; impact recoil behind shield knees braced spear retained; lower shield recover ready. Row3 DOWN FOUR poses: ready; knees buckle eyes close equipment retained; fall onto side with spear and shield beside body still wholly in cell; final unconscious grounded collapsed hold. No standing recovery for down.",
+      "original_output": "/workspace/generated_images/exec-6b4296bb-9ac2-4179-aa9e-be2666404b99.png",
+      "output": "heroes/source-sheets/garran_reactions_r1-source.png",
+      "seed": "heroes/seeds/garran-seed.png",
+      "reference_canvas": "heroes/templates/garran-3row-edit-canvas.png",
+      "strips": [
+        {
+          "identity": "garran",
+          "move": "hit",
+          "revision": "r1",
+          "routes_or_intents": [
+            "hit"
+          ],
+          "sequence": [
+            "ready",
+            "head and shoulders flinch left",
+            "deep recoil, knees flex",
+            "recover ready"
+          ],
+          "preferred_candidate": true
+        },
+        {
+          "identity": "garran",
+          "move": "block",
+          "revision": "r1",
+          "routes_or_intents": [
+            "block"
+          ],
+          "sequence": [
+            "ready",
+            "raise round shield",
+            "braced recoil behind shield",
+            "recover ready"
+          ],
+          "preferred_candidate": true
+        },
+        {
+          "identity": "garran",
+          "move": "down",
+          "revision": "r1",
+          "routes_or_intents": [
+            "down"
+          ],
+          "sequence": [
+            "ready",
+            "knees buckle",
+            "collapse onto side with spear and shield",
+            "unconscious grounded hold"
+          ],
+          "preferred_candidate": true
+        }
+      ]
+    },
+    {
+      "id": "brann_reactions_r1",
+      "group": "heroes",
+      "name": "brann",
+      "rows": 3,
+      "frames": 4,
+      "reference": "/workspace/asterveil-fateweave/incoming/ART-UNIT-ANIMATION-A5-001/heroes/templates/brann-3row-edit-canvas.png",
+      "prompt": "Edit the supplied exact shipped Fateweave seed into original production painted chibi animation artwork. Preserve identical face, hair, outfit, equipment, proportions, palette, handedness, facing and sole reference throughout. This is a small character animation sheet on a LARGE transparent canvas, never a poster. Full isolated silhouettes with at least 30px clear transparent gutters between figures and 40px all edge margins. No text, labels, panels, checkerboard, background, shadows, ground, rings, auras, light bursts, projectiles, motion trails, targets, debris or impact effects. Every ROW is one whole continuous strip generated together LEFT TO RIGHT. Same scale across every figure, no camera changes; six equal-width columns for actions, four for reactions. Return to seed stance for recovery except down which stays collapsed. Preserve a shared sole/ground line; airborne poses above that line. Do not crop weapons or feet. EXACTLY THREE ROWS x FOUR COLUMNS=12 small complete figures, landscape1536x1024. BRANN always faces RIGHT, same heavy stocky mature dark brown bearded braided Warden silver gold geometric plate dark blue cloth huge double-headed angular grey/gold hammer. Row1 HIT FOUR poses: ready; upper torso flinch backward LEFT eyes pinch; deeper weighted recoil knees bend hammer retained; regain ready. Row2 BLOCK FOUR poses: ready; lift hammer haft horizontally across chest in TWO hands; braced low crouch behind hammer shoulders recoil slightly LEFT; regain ready. Row3 DOWN FOUR poses: ready; knees buckle heavy hammer lowers; slump onto knees torso lowering hammer beside body; final unconscious side collapse eyes closed with hammer grounded alongside wholly within cell. No added shield, magic or stones.",
+      "original_output": "/workspace/generated_images/exec-5370a1e6-af6e-4d3c-842d-b9dde7a3a83a.png",
+      "output": "heroes/source-sheets/brann_reactions_r1-source.png",
+      "seed": "heroes/seeds/brann-seed.png",
+      "reference_canvas": "heroes/templates/brann-3row-edit-canvas.png",
+      "strips": [
+        {
+          "identity": "brann",
+          "move": "hit",
+          "revision": "r1",
+          "routes_or_intents": [
+            "hit"
+          ],
+          "sequence": [
+            "ready",
+            "upper body flinch left",
+            "deep recoil, hammer retained",
+            "recover ready"
+          ],
+          "preferred_candidate": true
+        },
+        {
+          "identity": "brann",
+          "move": "block",
+          "revision": "r1",
+          "routes_or_intents": [
+            "block"
+          ],
+          "sequence": [
+            "ready",
+            "hammer across torso",
+            "deep braced recoil",
+            "recover ready"
+          ],
+          "preferred_candidate": true
+        },
+        {
+          "identity": "brann",
+          "move": "down",
+          "revision": "r1",
+          "routes_or_intents": [
+            "down"
+          ],
+          "sequence": [
+            "ready",
+            "knees buckle, hammer lowers",
+            "kneel and slump",
+            "unconscious side collapse, hammer beside body"
+          ],
+          "preferred_candidate": true
+        }
+      ]
+    },
+    {
+      "id": "tusker_actions_r1",
+      "group": "foes",
+      "name": "foe_tusker",
+      "rows": 2,
+      "frames": 6,
+      "reference": "/workspace/asterveil-fateweave/incoming/ART-UNIT-ANIMATION-A5-001/foes/templates/foe_tusker-2row-edit-canvas.png",
+      "prompt": "Edit the supplied exact shipped Fateweave seed into original production painted chibi animation artwork. Preserve identical face, hair, outfit, equipment, proportions, palette, handedness, facing and sole reference throughout. This is a small character animation sheet on a LARGE transparent canvas, never a poster. Full isolated silhouettes with at least 30px clear transparent gutters between figures and 40px all edge margins. No text, labels, panels, checkerboard, background, shadows, ground, rings, auras, light bursts, projectiles, motion trails, targets, debris or impact effects. Every ROW is one whole continuous strip generated together LEFT TO RIGHT. Same scale across every figure, no camera changes; six equal-width columns for actions, four for reactions. Return to seed stance for recovery except down which stays collapsed. Preserve a shared sole/ground line; airborne poses above that line. Do not crop weapons or feet. EXACTLY TWO ROWS x SIX COLUMNS=12 small complete figures. Mossback Tusker faces LEFT always. Keep same bulky brown boar, pink round snout, angry brown eye, two curved ivory tusks, cloven hooves, leafy moss green back with tiny white pink flowers and same ear shapes, weight and proportions. Row1 TUSK CHARGE: seed ready; paw FRONT hoof and lower head; compress legs weight back head low tusks forward LEFT; short powerful CHARGE CONTACT body extended forward LEFT head and tusks thrust low (no target); legs brake and head rises; return exact ready. Row2 STAMPEDE BIG WIND-UP variant: ready; deeper front crouch nose almost at hoof line; hindquarters raised front hoof paws intensely and shoulders gather; forceful heavier galloping charge LEFT with tusks down and body stretched moderately; hard braking lean legs spread; recover ready. Stampede MUST show larger anticipation than row1 but retain same boar body size. No dust rocks or trails.",
+      "original_output": "/workspace/generated_images/exec-ee965eb0-a4bb-4173-b4d0-d08d8d5348a3.png",
+      "output": "foes/source-sheets/tusker_actions_r1-source.png",
+      "seed": "foes/seeds/foe_tusker-seed.png",
+      "reference_canvas": "foes/templates/foe_tusker-2row-edit-canvas.png",
+      "strips": [
+        {
+          "identity": "foe_tusker",
+          "move": "tusk-charge",
+          "revision": "r1",
+          "routes_or_intents": [
+            "Tusk Charge"
+          ],
+          "sequence": [
+            "ready",
+            "lower head, front hoof paws",
+            "compressed low charge preparation",
+            "forward charge contact left",
+            "brake and rise",
+            "recover ready"
+          ],
+          "preferred_candidate": true
+        },
+        {
+          "identity": "foe_tusker",
+          "move": "stampede",
+          "revision": "r1",
+          "routes_or_intents": [
+            "Stampede"
+          ],
+          "sequence": [
+            "ready",
+            "deeper nose-down crouch",
+            "hindquarters rise, head also rises (weak R1 anticipation)",
+            "galloping charge left",
+            "braking stance",
+            "recover ready"
+          ],
+          "preferred_candidate": false
+        }
+      ]
+    },
+    {
+      "id": "stalker_actions_r1",
+      "group": "foes",
+      "name": "foe_stalker",
+      "rows": 1,
+      "frames": 6,
+      "reference": "/workspace/asterveil-fateweave/incoming/ART-UNIT-ANIMATION-A5-001/foes/templates/foe_stalker-1row-edit-canvas.png",
+      "prompt": "Edit the supplied exact shipped Fateweave seed into original production painted chibi animation artwork. Preserve identical face, hair, outfit, equipment, proportions, palette, handedness, facing and sole reference throughout. This is a small character animation sheet on a LARGE transparent canvas, never a poster. Full isolated silhouettes with at least 30px clear transparent gutters between figures and 40px all edge margins. No text, labels, panels, checkerboard, background, shadows, ground, rings, auras, light bursts, projectiles, motion trails, targets, debris or impact effects. Every ROW is one whole continuous strip generated together LEFT TO RIGHT. Same scale across every figure, no camera changes; six equal-width columns for actions, four for reactions. Return to seed stance for recovery except down which stays collapsed. Preserve a shared sole/ground line; airborne poses above that line. Do not crop weapons or feet. EXACTLY ONE horizontal ROW x SIX COLUMNS=6 complete figures, very small scale and large vertical empty margins. Briar Stalker always faces LEFT. Preserve exact feline wolf-like forest predator: green and cream fur, pale face chest beard, narrow teal eyes, large tufted ears with ivory inner fur, dark green leaf mantle, golden thorn spikes along back, curled bushy green thorny tail, four clawed paws. Row1 THORN POUNCE: ready; very deep crouch compress all legs head low; launch LEFT with rear legs extended and forepaws lifted; airborne contact LEFT forepaw clearly CLAWS forward/downward while mouth snarls; LAND back at local origin forepaws take weight hind legs tuck; recover seed ready. Keep natural airborne height above shared ground, no resizing or mirroring. No detached thorns or slash effects.",
+      "original_output": "/workspace/generated_images/exec-1b1b0b5e-f432-404e-971b-82cb0de5f0ea.png",
+      "output": "foes/source-sheets/stalker_actions_r1-source.png",
+      "seed": "foes/seeds/foe_stalker-seed.png",
+      "reference_canvas": "foes/templates/foe_stalker-1row-edit-canvas.png",
+      "strips": [
+        {
+          "identity": "foe_stalker",
+          "move": "thorn-pounce",
+          "revision": "r1",
+          "routes_or_intents": [
+            "Thorn Pounce"
+          ],
+          "sequence": [
+            "ready",
+            "deep crouch",
+            "launch left",
+            "airborne forward claw contact",
+            "land back",
+            "recover ready"
+          ],
+          "preferred_candidate": true
+        }
+      ]
+    },
+    {
+      "id": "beetle_actions_r1",
+      "group": "foes",
+      "name": "foe_thorn_beetle",
+      "rows": 1,
+      "frames": 6,
+      "reference": "/workspace/asterveil-fateweave/incoming/ART-UNIT-ANIMATION-A5-001/foes/templates/foe_thorn_beetle-1row-edit-canvas.png",
+      "prompt": "Edit the supplied exact shipped Fateweave seed into original production painted chibi animation artwork. Preserve identical face, hair, outfit, equipment, proportions, palette, handedness, facing and sole reference throughout. This is a small character animation sheet on a LARGE transparent canvas, never a poster. Full isolated silhouettes with at least 30px clear transparent gutters between figures and 40px all edge margins. No text, labels, panels, checkerboard, background, shadows, ground, rings, auras, light bursts, projectiles, motion trails, targets, debris or impact effects. Every ROW is one whole continuous strip generated together LEFT TO RIGHT. Same scale across every figure, no camera changes; six equal-width columns for actions, four for reactions. Return to seed stance for recovery except down which stays collapsed. Preserve a shared sole/ground line; airborne poses above that line. Do not crop weapons or feet. EXACTLY ONE horizontal ROW x SIX COLUMNS=6 complete figures, small scale and large empty margins. Thorn Beetle always faces LEFT. Preserve exact squat original beetle: olive/gold thorny armored shell with turquoise raised nodules along back and central gold shell horn, green eye visible LEFT, two curved ivory biting mandibles, six articulated brown olive legs. No redesign, extra horns or wings. Row1 THORN BITE: ready; front of body rises front legs lift; rear higher mandibles open wide LEFT; sharp forward BITE RELEASE mandibles close on empty air LEFT front extends; RETRACT head and front legs visibly UNDER thorn shell protective low tuck; emerge/recover seed ready. Keep shell scale constant, no shrinking beetle. No projectile thorns, sparks, ground, dust or impact.",
+      "original_output": "/workspace/generated_images/exec-f81fc048-7e32-420a-a4b0-4b194b49e21b.png",
+      "output": "foes/source-sheets/beetle_actions_r1-source.png",
+      "seed": "foes/seeds/foe_thorn_beetle-seed.png",
+      "reference_canvas": "foes/templates/foe_thorn_beetle-1row-edit-canvas.png",
+      "strips": [
+        {
+          "identity": "foe_thorn_beetle",
+          "move": "thorn-bite",
+          "revision": "r1",
+          "routes_or_intents": [
+            "Thorn Bite"
+          ],
+          "sequence": [
+            "ready",
+            "rear up with mandibles open",
+            "forward bite contact",
+            "head retracts under shell",
+            "emerge",
+            "recover ready"
+          ],
+          "preferred_candidate": true
+        }
+      ]
+    },
+    {
+      "id": "garran_actions_r1",
+      "prompt": "Edit the supplied exact shipped Fateweave seed into original production painted chibi animation artwork. Preserve identical face, hair, outfit, equipment, proportions, palette, handedness, facing and sole reference throughout. This is a small character animation sheet on a LARGE transparent canvas, never a poster. Full isolated silhouettes with at least 30px clear transparent gutters between figures and 40px all edge margins. No text, labels, panels, checkerboard, background, shadows, ground, rings, auras, light bursts, projectiles, motion trails, targets, debris or impact effects. Every ROW is one whole continuous strip generated together LEFT TO RIGHT. Same scale across every figure, no camera changes; six equal-width columns for actions, four for reactions. Return to seed stance for recovery except down which stays collapsed. Preserve a shared sole/ground line; airborne poses above that line. Do not crop weapons or feet. Use the small seed at upper left only as reference; REPLACE the canvas with EXACTLY THREE ROWS x SIX COLUMNS, 18 complete small figures, aspect1536x1024. GARRAN always faces RIGHT. Same young brown spiky hair, amber eyes, teal scarf and split tabard, brown leather silver armor, long wooden SPEAR with silver leaf point and teal ribbon in his RIGHT hand, round steel/gold SHIELD on LEFT forearm. Keep both spear AND shield all frames. Row1 SPEAR THRUST (attack/pierce/halt): ready; knees flex spear draws back; strong loaded back shoulder; spear shoots horizontally RIGHT arm extends thrust while shield protects torso; lean/extended thrust follow-through; recover ready. Row2 BRACED SPEARWALL (brace/spearwall/hold): ready; lower centre of gravity; plant rear foot; long spear points low-forward RIGHT tip just above ground, butt braced near rear foot; HOLD low defensive guard shield ahead spear still forward; recover ready. Distinct from active thrust, no stabbed floor. Row3 WAR CRY: ready; chest expands; raise SPEAR VERTICALLY upward in right hand shield retained left; mouth open SHOUT spear held high; proud raised-spear shout follow-through; return ready. No added VFX.",
+      "reference": "/workspace/asterveil-fateweave/incoming/ART-UNIT-ANIMATION-A5-001/heroes/templates/garran-3row-edit-canvas.png",
+      "group": "heroes",
+      "name": "garran",
+      "rows": 3,
+      "frames": 6,
+      "original_output": "/workspace/generated_images/exec-4c6f04f9-2b48-46b0-ae63-33506c3b877c.png",
+      "output": "heroes/source-sheets/garran_actions_r1-source.png",
+      "seed": "heroes/seeds/garran-seed.png",
+      "reference_canvas": "heroes/templates/garran-3row-edit-canvas.png",
+      "strips": [
+        {
+          "identity": "garran",
+          "move": "spear-thrust",
+          "revision": "r1",
+          "routes_or_intents": [
+            "attack",
+            "pierce",
+            "halt"
+          ],
+          "sequence": [
+            "ready",
+            "draw spear back and flex knees",
+            "loaded shoulder, spear horizontal",
+            "forward thrust right",
+            "extended thrust follow-through",
+            "recover ready"
+          ],
+          "preferred_candidate": true
+        },
+        {
+          "identity": "garran",
+          "move": "spearwall",
+          "revision": "r1",
+          "routes_or_intents": [
+            "brace",
+            "spearwall",
+            "hold"
+          ],
+          "sequence": [
+            "ready",
+            "lower centre of gravity",
+            "rear foot plants, spear lowers",
+            "low forward spear guard",
+            "hold low spear guard",
+            "recover ready"
+          ],
+          "preferred_candidate": true
+        },
+        {
+          "identity": "garran",
+          "move": "warcry",
+          "revision": "r1",
+          "routes_or_intents": [
+            "warcry"
+          ],
+          "sequence": [
+            "ready",
+            "chest expands; spear disappears (R1 defect)",
+            "spear rises upright",
+            "raised-spear shout",
+            "raised-spear follow-through",
+            "recover ready"
+          ],
+          "preferred_candidate": false
+        }
+      ]
+    },
+    {
+      "id": "tusker_reactions_r1",
+      "group": "foes",
+      "name": "foe_tusker",
+      "rows": 2,
+      "frames": 4,
+      "reference": "/workspace/asterveil-fateweave/incoming/ART-UNIT-ANIMATION-A5-001/foes/templates/foe_tusker-2row-edit-canvas.png",
+      "prompt": "Edit the supplied exact shipped Fateweave seed into original production painted chibi animation artwork. Preserve identical face, hair, outfit, equipment, proportions, palette, handedness, facing and sole reference throughout. This is a small character animation sheet on a LARGE transparent canvas, never a poster. Full isolated silhouettes with at least 30px clear transparent gutters between figures and 40px all edge margins. No text, labels, panels, checkerboard, background, shadows, ground, rings, auras, light bursts, projectiles, motion trails, targets, debris or impact effects. Every ROW is one whole continuous strip generated together LEFT TO RIGHT. Same scale across every figure, no camera changes; six equal-width columns for actions, four for reactions. Return to seed stance for recovery except down which stays collapsed. Preserve a shared sole/ground line; airborne poses above that line. Do not crop weapons or feet. EXACTLY TWO ROWS x FOUR COLUMNS=8 small complete figures, landscape canvas. Mossback Tusker faces LEFT, same heavy brown boar pink snout ivory tusks cloven hooves and dense moss leaf blanket with white pink flowers. Row1 HIT FOUR poses: seed ready; flinch head and shoulder RIGHT; deepest recoil legs crouch eyes pinch but tusks intact; recover exact ready. Row2 DOWN FOUR poses: seed ready; front knees buckle eyes close head dips; torso rolls gently onto side, legs fold and moss/tusks intact; final unconscious grounded boar on side eyes closed, all legs attached, same size body, no standing recovery. No blood fragments or scattered plants.",
+      "original_output": "/workspace/generated_images/exec-2a76081c-f626-4606-8baf-aea6d146d414.png",
+      "output": "foes/source-sheets/tusker_reactions_r1-source.png",
+      "seed": "foes/seeds/foe_tusker-seed.png",
+      "reference_canvas": "foes/templates/foe_tusker-2row-edit-canvas.png",
+      "strips": [
+        {
+          "identity": "foe_tusker",
+          "move": "hit",
+          "revision": "r1",
+          "routes_or_intents": [
+            "hit"
+          ],
+          "sequence": [
+            "ready",
+            "head and shoulders flinch right",
+            "deep low recoil",
+            "recover ready"
+          ],
+          "preferred_candidate": true
+        },
+        {
+          "identity": "foe_tusker",
+          "move": "down",
+          "revision": "r1",
+          "routes_or_intents": [
+            "down"
+          ],
+          "sequence": [
+            "ready",
+            "front legs buckle",
+            "roll onto side",
+            "unconscious side hold"
+          ],
+          "preferred_candidate": true
+        }
+      ]
+    },
+    {
+      "id": "stalker_reactions_r1",
+      "group": "foes",
+      "name": "foe_stalker",
+      "rows": 2,
+      "frames": 4,
+      "reference": "/workspace/asterveil-fateweave/incoming/ART-UNIT-ANIMATION-A5-001/foes/templates/foe_stalker-2row-edit-canvas.png",
+      "prompt": "Edit the supplied exact shipped Fateweave seed into original production painted chibi animation artwork. Preserve identical face, hair, outfit, equipment, proportions, palette, handedness, facing and sole reference throughout. This is a small character animation sheet on a LARGE transparent canvas, never a poster. Full isolated silhouettes with at least 30px clear transparent gutters between figures and 40px all edge margins. No text, labels, panels, checkerboard, background, shadows, ground, rings, auras, light bursts, projectiles, motion trails, targets, debris or impact effects. Every ROW is one whole continuous strip generated together LEFT TO RIGHT. Same scale across every figure, no camera changes; six equal-width columns for actions, four for reactions. Return to seed stance for recovery except down which stays collapsed. Preserve a shared sole/ground line; airborne poses above that line. Do not crop weapons or feet. EXACTLY TWO ROWS x FOUR COLUMNS=8 small complete figures, landscape canvas. Briar Stalker always faces LEFT. Exact same green cream forest feline-wolf predator tufted large ears, teal narrow eyes, pale face and chest, leaf mantle, golden thorns along back and curled bushy green thorny tail, four clawed paws. Row1 HIT FOUR poses: seed ready; head shoulders recoil RIGHT eyes pinch; low defensive flinch weight shifts rear paws tail reacts; regain seed ready. Row2 DOWN FOUR poses: ready; legs buckle eyes close; roll softly onto side keeping all four legs and curled tail attached; final grounded unconscious side collapse eyes closed thorn mantle and tail intact. No standing recovery, no extra thorns projectiles or effects.",
+      "original_output": "/workspace/generated_images/exec-cdb3163a-d809-47aa-9ab2-739ba2685cc6.png",
+      "output": "foes/source-sheets/stalker_reactions_r1-source.png",
+      "seed": "foes/seeds/foe_stalker-seed.png",
+      "reference_canvas": "foes/templates/foe_stalker-2row-edit-canvas.png",
+      "strips": [
+        {
+          "identity": "foe_stalker",
+          "move": "hit",
+          "revision": "r1",
+          "routes_or_intents": [
+            "hit"
+          ],
+          "sequence": [
+            "ready",
+            "head recoils right, eyes pinch",
+            "low crouched flinch",
+            "recover ready"
+          ],
+          "preferred_candidate": true
+        },
+        {
+          "identity": "foe_stalker",
+          "move": "down",
+          "revision": "r1",
+          "routes_or_intents": [
+            "down"
+          ],
+          "sequence": [
+            "ready",
+            "legs buckle, eyes close",
+            "lower onto side",
+            "unconscious side hold"
+          ],
+          "preferred_candidate": true
+        }
+      ]
+    },
+    {
+      "id": "beetle_reactions_r1",
+      "group": "foes",
+      "name": "foe_thorn_beetle",
+      "rows": 2,
+      "frames": 4,
+      "reference": "/workspace/asterveil-fateweave/incoming/ART-UNIT-ANIMATION-A5-001/foes/templates/foe_thorn_beetle-2row-edit-canvas.png",
+      "prompt": "Edit the supplied exact shipped Fateweave seed into original production painted chibi animation artwork. Preserve identical face, hair, outfit, equipment, proportions, palette, handedness, facing and sole reference throughout. This is a small character animation sheet on a LARGE transparent canvas, never a poster. Full isolated silhouettes with at least 30px clear transparent gutters between figures and 40px all edge margins. No text, labels, panels, checkerboard, background, shadows, ground, rings, auras, light bursts, projectiles, motion trails, targets, debris or impact effects. Every ROW is one whole continuous strip generated together LEFT TO RIGHT. Same scale across every figure, no camera changes; six equal-width columns for actions, four for reactions. Return to seed stance for recovery except down which stays collapsed. Preserve a shared sole/ground line; airborne poses above that line. Do not crop weapons or feet. EXACTLY TWO ROWS x FOUR COLUMNS=8 small complete figures, landscape canvas. Thorn Beetle faces LEFT. Exact same olive gold armored shell with gold spines and turquoise nodules, left green eye and two ivory mandibles, six brown olive articulated legs. Row1 HIT FOUR poses: ready; small jolt RIGHT eye closes legs flex; deepest brief crouch under SAME rigid shell with mandibles tucked; recover seed ready. Row2 DOWN FOUR poses: ready; legs buckle and green eye closes; body settles heavily low on ground six legs folding inward; final unconscious prone shell resting low, head and mandibles still LEFT, eye closed, six legs tucked. No flip to underside, no detaching legs, no fragments, no glow.",
+      "original_output": "/workspace/generated_images/exec-4ababa27-93fe-43ab-97ca-c8692a8a40bf.png",
+      "output": "foes/source-sheets/beetle_reactions_r1-source.png",
+      "seed": "foes/seeds/foe_thorn_beetle-seed.png",
+      "reference_canvas": "foes/templates/foe_thorn_beetle-2row-edit-canvas.png",
+      "strips": [
+        {
+          "identity": "foe_thorn_beetle",
+          "move": "hit",
+          "revision": "r1",
+          "routes_or_intents": [
+            "hit"
+          ],
+          "sequence": [
+            "ready",
+            "jolt right, legs flex",
+            "low crouch under shell",
+            "recover ready"
+          ],
+          "preferred_candidate": true
+        },
+        {
+          "identity": "foe_thorn_beetle",
+          "move": "down",
+          "revision": "r1",
+          "routes_or_intents": [
+            "down"
+          ],
+          "sequence": [
+            "ready",
+            "legs buckle and eye closes",
+            "shell settles with legs folding",
+            "low unconscious prone hold"
+          ],
+          "preferred_candidate": true
+        }
+      ]
+    },
+    {
+      "id": "garran_warcry_r2",
+      "group": "heroes",
+      "name": "garran",
+      "rows": 1,
+      "frames": 6,
+      "reference": "/workspace/asterveil-fateweave/incoming/ART-UNIT-ANIMATION-A5-001/heroes/templates/garran-1row-edit-canvas.png",
+      "prompt": "Edit the supplied exact shipped Fateweave seed into original production painted chibi animation artwork. Preserve identical face, hair, outfit, equipment, proportions, palette, handedness, facing and sole reference throughout. This is a small character animation sheet on a LARGE transparent canvas, never a poster. Full isolated silhouettes with at least 30px clear transparent gutters between figures and 40px all edge margins. No text, labels, panels, checkerboard, background, shadows, ground, rings, auras, light bursts, projectiles, motion trails, targets, debris or impact effects. Every ROW is one whole continuous strip generated together LEFT TO RIGHT. Same scale across every figure, no camera changes; six equal-width columns for actions, four for reactions. Return to seed stance for recovery except down which stays collapsed. Preserve a shared sole/ground line; airborne poses above that line. Do not crop weapons or feet. EXACTLY ONE ROW x SIX COLUMNS=6 small complete figures with very generous transparent margins. GARRAN WAR CRY R2, always RIGHT-facing same young amber-eyed spiky brown hair teal scarf/tabard leather silver armor. SPEAR MUST BE VISIBLE AND HELD IN RIGHT HAND IN ALL SIX POSES; round silver gold SHIELD remains strapped LEFT FOREARM all poses. Spear same long wooden shaft silver leaf tip teal ribbon. Pose1 seed ready spear diagonal upright; pose2 chest expands right hand still visibly grips spear at waist, tip above head; pose3 lift same spear shaft upright by raising right elbow; pose4 raise same spear high VERTICALLY RIGHT hand above shoulder, mouth wide open SHOUT, shield left; pose5 spear still held HIGH proud shout follow-through; pose6 lower SAME spear return seed ready. No vanished or duplicate spear, no magical effect or light. Preserve hand/weapon continuity, same ground line, all spear tips safely inside frame.",
+      "original_output": "/workspace/generated_images/exec-2b250168-825b-4ac6-bced-5b16cec86006.png",
+      "output": "heroes/source-sheets/garran_warcry_r2-source.png",
+      "seed": "heroes/seeds/garran-seed.png",
+      "reference_canvas": "heroes/templates/garran-1row-edit-canvas.png",
+      "strips": [
+        {
+          "identity": "garran",
+          "move": "warcry",
+          "revision": "r2",
+          "routes_or_intents": [
+            "warcry"
+          ],
+          "sequence": [
+            "ready, spear retained",
+            "chest expands, spear upright",
+            "raise spear",
+            "high spear open-mouth shout",
+            "high spear follow-through",
+            "recover ready"
+          ],
+          "preferred_candidate": true
+        }
+      ]
+    },
+    {
+      "id": "brann_taunt_r2",
+      "group": "heroes",
+      "name": "brann",
+      "rows": 1,
+      "frames": 6,
+      "reference": "/workspace/asterveil-fateweave/incoming/ART-UNIT-ANIMATION-A5-001/heroes/templates/brann-1row-edit-canvas.png",
+      "prompt": "Edit the supplied exact shipped Fateweave seed into original production painted chibi animation artwork. Preserve identical face, hair, outfit, equipment, proportions, palette, handedness, facing and sole reference throughout. This is a small character animation sheet on a LARGE transparent canvas, never a poster. Full isolated silhouettes with at least 30px clear transparent gutters between figures and 40px all edge margins. No text, labels, panels, checkerboard, background, shadows, ground, rings, auras, light bursts, projectiles, motion trails, targets, debris or impact effects. Every ROW is one whole continuous strip generated together LEFT TO RIGHT. Same scale across every figure, no camera changes; six equal-width columns for actions, four for reactions. Return to seed stance for recovery except down which stays collapsed. Preserve a shared sole/ground line; airborne poses above that line. Do not crop weapons or feet. EXACTLY ONE ROW x SIX COLUMNS=6 small complete figures, very generous transparent gutters and canvas margins. BRANN TAUNT R2 always faces RIGHT, exact stocky Warden brown beard braided hair silver gold geometric plate dark blue cloth and grey gold angular heavy double-headed hammer. ALL SIX POSES must visibly include the SAME hammer. Pose1 seed ready hammer held across chest; pose2 lower hammer head to ground on LEFT side of his body; pose3 plant heavy hammer HEAD flat at ground with shaft vertical and LEFT HAND visibly gripping top of SHAFT, free RIGHT hand at chest; pose4 LEFT hand STILL grips planted hammer shaft, chest out and free RIGHT palm extended toward RIGHT opponent, fingers beckon; pose5 same planted hammer LEFT HAND grip, RIGHT fingers curl beckoning toward himself, proud challenge face mouth open; pose6 right hand returns to hammer and recover seed ready. NO weapon release, no weapon disappearance, no shield. Brann should still face RIGHT in beckon frames, not turn frontal. No magic or floor effects.",
+      "original_output": "/workspace/generated_images/exec-cb731ea9-a6db-48d6-b8af-5f3d1c0f116e.png",
+      "output": "heroes/source-sheets/brann_taunt_r2-source.png",
+      "seed": "heroes/seeds/brann-seed.png",
+      "reference_canvas": "heroes/templates/brann-1row-edit-canvas.png",
+      "strips": [
+        {
+          "identity": "brann",
+          "move": "taunt",
+          "revision": "r2",
+          "routes_or_intents": [
+            "taunt"
+          ],
+          "sequence": [
+            "ready",
+            "lower hammer to ground",
+            "plant head, grip vertical shaft",
+            "chest out, free palm beckons",
+            "curl fingers toward himself",
+            "recover ready"
+          ],
+          "preferred_candidate": true
+        }
+      ]
+    },
+    {
+      "id": "tusker_stampede_r2",
+      "group": "foes",
+      "name": "foe_tusker",
+      "rows": 1,
+      "frames": 8,
+      "reference": "/workspace/asterveil-fateweave/incoming/ART-UNIT-ANIMATION-A5-001/foes/templates/foe_tusker-1row-edit-canvas.png",
+      "prompt": "Edit the supplied exact shipped Fateweave seed into original production painted chibi animation artwork. Preserve identical face, hair, outfit, equipment, proportions, palette, handedness, facing and sole reference throughout. This is a small character animation sheet on a LARGE transparent canvas, never a poster. Full isolated silhouettes with at least 30px clear transparent gutters between figures and 40px all edge margins. No text, labels, panels, checkerboard, background, shadows, ground, rings, auras, light bursts, projectiles, motion trails, targets, debris or impact effects. Every ROW is one whole continuous strip generated together LEFT TO RIGHT. Same scale across every figure, no camera changes; six equal-width columns for actions, four for reactions. Return to seed stance for recovery except down which stays collapsed. Preserve a shared sole/ground line; airborne poses above that line. Do not crop weapons or feet. EXCEPTION this ONE row has EXACTLY EIGHT equal-width COLUMNS, 8 full boar figures. Mossback Tusker STAMPEDE R2, heavier anticipation than ordinary Tusk Charge, always faces LEFT. Exact brown chunky boar pink snout two ivory tusks black hooves, lush moss leafy back white and pink flowers. Same size all frames, no new flowers or horns. Frame1 seed ready; frame2 front shoulders sink nose toward ground and hindquarters rise; frame3 paw near FRONT HOOF clearly lifts/back-scrapes while HEAD STAYS VERY LOW muzzle at hoof height; frame4 deepest loaded windup both front knees bent belly almost ground and powerful hind legs coiled; frame5 EXPLOSIVE LEFT CHARGE CONTACT head low tusks forward, legs extend in heavy gallop; frame6 second charging follow-through stride but no clone or shadow; frame7 brake shoulders rise hind legs catch weight; frame8 exact ready recovered. Keep all poses centred within wide isolated slots, body-only motion, NO dust, ground, trails, light or effects. Keep eight distinct coherent complete silhouettes with large margins.",
+      "original_output": "/workspace/generated_images/exec-0957fd4a-bae6-4298-aa5d-81ec51b21496.png",
+      "output": "foes/source-sheets/tusker_stampede_r2-source.png",
+      "seed": "foes/seeds/foe_tusker-seed.png",
+      "reference_canvas": "foes/templates/foe_tusker-1row-edit-canvas.png",
+      "strips": [
+        {
+          "identity": "foe_tusker",
+          "move": "stampede",
+          "revision": "r2",
+          "routes_or_intents": [
+            "Stampede"
+          ],
+          "sequence": [
+            "ready",
+            "nose down, shoulders sink",
+            "front hoof paws, head low",
+            "deepest coiled crouch",
+            "explosive charge contact left",
+            "second charging stride",
+            "brake and rise",
+            "recover ready"
+          ],
+          "preferred_candidate": true
+        }
+      ]
+    }
+  ]
+}

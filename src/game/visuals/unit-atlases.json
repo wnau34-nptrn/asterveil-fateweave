@@ -115,5 +115,50 @@
     "frames": 26,
     "decodedBytes": 1972224,
     "downloadBytes": 430211
+  },
+  "garran": {
+    "image": "garran_a5.247ac3883b94.webp",
+    "atlas": "garran_a5.c699363d2062.json",
+    "width": 768,
+    "height": 1314,
+    "frames": 32,
+    "decodedBytes": 4036608,
+    "downloadBytes": 1017823
+  },
+  "brann": {
+    "image": "brann_a5.75caea432f6f.webp",
+    "atlas": "brann_a5.13024341c94e.json",
+    "width": 2048,
+    "height": 563,
+    "frames": 40,
+    "decodedBytes": 4612096,
+    "downloadBytes": 1494058
+  },
+  "tusker": {
+    "image": "tusker_a5.79780d27e234.webp",
+    "atlas": "tusker_a5.a21dae4c5b62.json",
+    "width": 1280,
+    "height": 835,
+    "frames": 22,
+    "decodedBytes": 4275200,
+    "downloadBytes": 1204923
+  },
+  "stalker": {
+    "image": "stalker_a5.32fe2106b8c7.webp",
+    "atlas": "stalker_a5.59e649e3e46f.json",
+    "width": 1024,
+    "height": 624,
+    "frames": 22,
+    "decodedBytes": 2555904,
+    "downloadBytes": 695922
+  },
+  "beetle": {
+    "image": "beetle_a5.7e5d96178375.webp",
+    "atlas": "beetle_a5.a0583e05f41d.json",
+    "width": 512,
+    "height": 910,
+    "frames": 22,
+    "decodedBytes": 1863680,
+    "downloadBytes": 475744
   }
 }
