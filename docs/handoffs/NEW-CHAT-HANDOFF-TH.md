@@ -1,5 +1,21 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
+## 2026-10-29 — แชตถัดไป: W4 A6 + VFX บทเพลง/เงา นำภาพเข้าเกม (เปิดอัตโนมัติจากแชต W3)
+
+เจ้าของตอบ “ดำเนินการขั้นต่อไปโดยใช้ตาม codex แนะนำ” (2026-10-29) ข้อความเปิดแชต:
+
+```text
+ทำงานต่อในรีโป wnau34-nptrn/asterveil-fateweave สาขาเกม feature/fateweave-initial-prototype (ไม่ใช่ main)
+อ่าน AGENTS.md, CLAUDE.md, docs/design/OWNER_DECISIONS_TH.md, docs/design/ANIMATION_VFX_COMPLETION_PLAN_TH.md, docs/design/UNIT_ANIMATION_ROLLOUT_TH.md, หัวข้อบนสุดของ docs/handoffs/NEW-CHAT-HANDOFF-TH.md และใช้ skill fateweave-art-intake (.claude/skills/)
+งาน: W4 นำภาพเข้าเกม 2 ส่วน เจ้าของตอบ “ใช้ตาม codex แนะนำ” ทั้งสองส่วน
+1) A6 แอนิเมชัน เซฟา (sefa), ลิโอ (lio), ผู้ทอรอยแยก (foe_riftweaver), ภูตสปอร์ (foe_spore_puff) จาก PR #94 (สาขา art/art-unit-animation-a6-001, incoming/ART-UNIT-ANIMATION-A6-001/) ตาม NOTES.md/strips.json: Sefa low stab R2, Lio finale R2; sharp-strum และ compact ribbon ใช้ R1 (ตัวที่ Codex แนะนำ) ท่าอื่นใช้ candidate preferred; ตรวจ sha256 ก่อนใช้; ทำแบบ A5 (incoming/ART-UNIT-ANIMATION-A5-001/build_assets.py, docs/combat-presentation/unit-a5-slice/README_TH.md): scale เดียวต่อแถบ, พื้นเท้า y=496/x=256, ท่าลอยคงความสูงจริง, defringe, lossless optional atlas, registry ใน unit-frames.ts, งบ decoded ≤6MiB/ดาวน์โหลด ≤1.5MB ต่อตัว (ปรับ factor ถ้าเกิน), reaction 4 เฟรม; แมปทุก ActionId จริงของ sefa/lio (mercenaries.ts + unlock + talentTrees) และทุก intent จริงของศัตรูทั้งสองใน encounters (เทสต์เทียบ content)
+2) VFX C5.8 บทเพลงของลิโอ (valor, finale, dread, note, solo) + C5.9 ส่วนเงาของเซฟา (evade, decoy) จาก PR #96 (สาขา art/art-vfx-song-shadow-001, incoming/ART-VFX-SONG-SHADOW-001/): เพลงใช้ R2 (Codex แนะนำ), เงาใช้ R1 (มีแค่ R1); ทำ atlas/module แบบ command-fx (atlas.py + src/game/visuals/command-fx.ts เป็นแบบอย่าง) route ตาม event จริง (Finale: คลื่นเดียว สัมผัสหนึ่งครั้งต่อศัตรูที่โดนจริง; สถานะต้องผูก event จริง), ตาม anchors/pivots/เวลาใน layers.json ของแต่ละ family
+คง rules/save/content/balance/playback timing, normal/fast/reduced motion, เทสต์ unit + browser เฉพาะที่เกี่ยว (ระวังเทสต์ที่นับจำนวน optional sheet) อัดคลิปจริง 390px ทำหน้า Artifact รวมคลิปให้เจ้าของดู motion ก่อน merge/เผยแพร่ ผลเทสต์ไม่ใช่การอนุมัติภาพ
+บทเรียน W3: (ก) ชั้นสีทอง/อำพันกลืนกับเกราะทอง ต้องดูคลิปจริงแล้วปรับ (additive อ่อนได้ตามที่ NOTES ของ Codex อนุญาต) (ข) หัวอาวุธที่ต่ำกว่าพื้นเท้าทำให้เกิน cell: ยกเฉพาะเฟรมให้ ≤500 (ค) โมดูลที่เทสต์ใน node ห้าม import Phaser runtime (ใช้ค่าคงที่ เช่น ADD=1) (ง) CI ของ PR: ไฟล์ภาพล้วน (docs/, incoming/, public/assets/{fx,art,units}, src/game/visuals, BattleScene, tests fixtures/specs ภาพ) รันเฉพาะ spec ที่เกี่ยว ส่วนอื่นรันชุดเต็มแบบ 4 shard (~35 นาที) ถ้าเพิ่ม spec ใหม่ให้ใส่ในรายการ spec ใน .github/workflows/browser.yml และ pages.yml (ซึ่งทำให้รันชุดเต็มหนึ่งรอบ) (จ) commit ที่ลงท้าย [skip ci] จะไม่รัน CI จึงห้ามใช้เป็น head ของ PR ที่ยังไม่ผ่านเช็ก
+Chromium: export PLAYWRIGHT_CHROMIUM_EXECUTABLE=/opt/pw-browsers/chromium; ต้อง pip install scipy numpy pillow และ npm ci ก่อน; สร้าง PR ด้วย GitHub MCP; ตาม standing authorization ใน CLAUDE.md; สนามอนาคต 10 ตัว (OD-05) ให้บันทึกงบภาพ; อัปเดต handoff เมื่อจบ
+ภาพ #97/#98 (W5) ยังรอเจ้าของเลือก ไม่ต้องนำเข้า; prompt Codex W6–W8 ฉบับเดียวต่อท่า อยู่ docs/handoffs/CODEX-PROMPTS-W6-W8-TH.md (เจ้าของเป็นผู้ส่ง)
+```
+
 ## 2026-10-29 — W3 A5 + VFX คำท้า: เจ้าของอนุมัติ “เอาเข้าเกมได้” → merge PR #102 `ab3e004` (quality + browser เต็มผ่านบน `7a5242c`)
 
 - A5 (PR #95): ตรวจ sha256 26 ไฟล์ตรง; R2 ของ Garran war cry/Brann taunt/Tusker Stampede ตามเจ้าของ; `build_assets.py` (scale เดียวต่อแถบ, พื้นเท้า y=496; Brann factor .37 เพราะ .42 ดาวน์โหลดเกิน 1.5MB; หัวค้อนที่ต่ำกว่าพื้นยกเฟรมขึ้นให้ไม่ถูกตัด); registry 5 ตัว + clip `stance`/`taunt`/`brace`; ครบทุก ActionId ของ garran/brann และ intent จริงของศัตรู (Tusk Charge/Stampede/Thorn Pounce/Thorn Bite) ดู [README A5](../combat-presentation/unit-a5-slice/README_TH.md)
