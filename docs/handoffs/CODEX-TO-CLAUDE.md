@@ -1,5 +1,93 @@
 # Codex → Claude handoff
 
+## 2026-10-29 — Animation/VFX audit และ Handoff ให้ Claude แก้ไข
+
+เจ้าของสั่ง: “ทำการตรวจสอบ animation และ vfx ที่ยังไม่ได้คุณภาพ พร้อมจัดทำข้อสรุป และ Handoff ส่งให้ Claude ทำการแก้ไข” และยืนยันให้ตรวจตัวเกมในสาขาอื่นจาก main
+
+**ฐานตรวจ:** `feature/fateweave-initial-prototype` @ `1355252cceb9f6b932b9d1fe878780bdf672b5c5`, Phaser 4.2.1 ไม่ใช่ main
+**สถานะหลักฐาน:** ตรวจ source/data/registry และสถานะ PR ผ่าน GitHub connector; คำนวณ inventory จากไฟล์จริง ยังไม่ได้เปิดเกม ดู PNG/MP4 หรือรัน browser/gameplay tests รอบนี้ จึงไม่ให้คะแนนความสวย ความลื่น FPS หรืออ้างว่าภาพที่ผ่านเจ้าของแล้วตกคุณภาพ Git fetch ใน cloud ล้มเหลวเพราะต่อ proxy:8080 ไม่ได้ ไม่มี Browser connector หรือ Claude CLI/dispatch tool ในเซสชันนี้
+**การส่งต่อ:** บันทึกเอกสารเข้าคิว Claude ใน repository; ยังไม่มีหลักฐานว่า Claude รับงานหรือเริ่มทำแล้ว ไม่สร้าง session แทนเจ้าของ ไม่แก้ runtime/rules/save/balance และไม่ merge งานภาพ
+
+### ข้อสรุปที่ยืนยันจากโค้ด
+
+- มี 36 visual identities ใน actorArt; มี frame registry 18 ตัว อีก 18 ใช้ภาพนิ่งประกอบ transform fallback
+- มี 73 ActionIds; 54 อยู่ใน routing ของ painted family/เฉพาะ Bolt Execute Ward; อีก **19** ไม่มี painted family เฉพาะ การนับนี้เป็น coverage ของ routing ไม่รับรองภาพครบทุก outcome และไม่รวมการใช้ attack ร่วมผิดประเภทด้านล่าง
+- เลข “เหลือ 30 identities/32 skills” ในแผนวันที่ 28 เป็น baseline เก่า อย่านำมาใช้เป็นสถานะปัจจุบันหรือสั่งสร้างของที่นำเข้าแล้วซ้ำ
+- Pilot/A1–A5 และ VFX ที่มี owner approval เดิมคงสถานะตาม CLAUDE.md; รายการด้านล่างเป็น bug/coverage gap ที่ตรวจพบ ไม่ได้ถอน approval ชุดเดิม
+
+### AV-01 — P1: โจมตีธรรมดาของทุกอาชีพวิ่งเข้าเอฟเฟกต์ดาบ
+
+หลักฐาน: [blade-fx.ts:9](https://github.com/wnau34-nptrn/asterveil-fateweave/blob/1355252cceb9f6b932b9d1fe878780bdf672b5c5/src/game/visuals/blade-fx.ts#L9) มี attack ใน bladeSkills และ [bladeCues:35](https://github.com/wnau34-nptrn/asterveil-fateweave/blob/1355252cceb9f6b932b9d1fe878780bdf672b5c5/src/game/visuals/blade-fx.ts#L35) เลือกจาก action/side โดยไม่ดู role หรือ identity ขณะที่ [unit-frames.ts:33](https://github.com/wnau34-nptrn/asterveil-fateweave/blob/1355252cceb9f6b932b9d1fe878780bdf672b5c5/src/game/visuals/unit-frames.ts#L33) ให้ Mira ยิงและ Toma ขว้าง ส่วน projectileCues รับเฉพาะ projectileSkills ซึ่งไม่มี attack ดังนั้น body และ VFX ใช้ภาษาคนละแบบ แม้มี painted effect แล้วก็ตาม ศัตรู physical ทุกตัวก็เลือก attack ดาบร่วมกัน
+
+วิธี reproduce ที่ Claude ต้องรัน: ใช้ Mira → attack เทียบ hinder และ Toma → attack เทียบ acid ใน encounter เดียวกัน ตรวจเตรียม/ปล่อย/สัมผัสที่เวลา contact จริง ทำซ้ำ Garran, Brann, Eira, Seren, Saint/Dancer เพื่อแยกสิ่งที่ตั้งใจออกจาก fallback
+
+งานแก้: เพิ่ม presentation profile ตาม identity/role + action และ route basic attack ให้ตรงอาวุธ/ท่าร่างกาย; ห้ามเปลี่ยน ActionId หรือชนิด/จำนวน damage ของ resolver อย่าเพียงเติม attack ลง projectileSkills ทั้งหมดซึ่งจะทำให้ทุกอาชีพยิงลูกศร การเลือกผลเฉพาะ Saint/Dancer ต้องใช้ kit จริง
+เกณฑ์ตรวจรับ: Mira ปล่อยกระสุนจากมือ/คันธนู, Toma แสดงการขว้างที่เข้ากับภาพ, ทวน/ค้อน/มือเปล่ามี impact ที่ตรงประเภท; มีหนึ่ง primary impact ต่อ actual damage/dodge event; hit/block/dodge/counter/cancel ไม่มี VFX ซ้ำ และ contact/end เดิม
+
+### AV-02 — P1: บอสยังไม่มี signature และ world-space cue ค้างช่วงรอปล่อยท่า
+
+หลักฐาน: [BattleScene.prepare](https://github.com/wnau34-nptrn/asterveil-fateweave/blob/1355252cceb9f6b932b9d1fe878780bdf672b5c5/src/game/scenes/BattleScene.ts#L424) มี dedicated routes ฝั่ง hero เป็นหลัก; enemy physical เข้า blade และ energy ที่เหลือเข้า generic ring/trail/bolt [บรรทัด 479](https://github.com/wnau34-nptrn/asterveil-fateweave/blob/1355252cceb9f6b932b9d1fe878780bdf672b5c5/src/game/scenes/BattleScene.ts#L479) ทุก stage ล้าง effects ใน stopEffects [บรรทัด 292](https://github.com/wnau34-nptrn/asterveil-fateweave/blob/1355252cceb9f6b932b9d1fe878780bdf672b5c5/src/game/scenes/BattleScene.ts#L292) ไม่พบ persistent boss-charge layer จาก snapshot; catalog มี Gather Thorns และ Rift Gathering เป็น charge จริง มี HUD intent อยู่แล้ว ประเด็นนี้หมายถึง cue บนตัวบอส ไม่ใช่อ้างว่าเกมไม่มีคำเตือนเลย
+
+งานแก้: ต่อ foe/boss signature จาก PR #105/#108 กับ intent+actual events; charge cue ต้องอยู่ระหว่างเทิร์นและหายเมื่อปล่อย/ถูกยกเลิก/ตาย/เปลี่ยน phase/ออกสนาม ห้ามให้ stage cleanup ทำลาย cue ที่ยัง valid ต้องสร้างคืนจาก state จริงเมื่อ repaint/reload
+เกณฑ์ตรวจรับ: Gather Thorns → Thorn Tempest และ Rift Gathering → Rift Cataclysm อ่านเป็นคนละจังหวะ; normal กับ unstoppable แยกทรง ไม่พึ่งสีอย่างเดียว; summon/phase/charge ไม่แสดง damage ปลอม; AoE แสดงเฉพาะผู้รับผลจริง; Horn Charge/Stampede ไม่เพิ่ม charge turn ใหม่; Captain War Cry ยึด target/event จริง
+ขอบเขต: ถ้าพบ state ไม่พอให้คืน cue หลัง reload ให้แจ้ง Claude ออกแบบจาก state ที่มี ห้าม Codex เปลี่ยน rules/save เพื่อแก้ภาพ
+
+### AV-03 — P2: 18 identities ยังไม่มีเฟรมแอนิเมชันในเกม
+
+หลักฐาน: [unitRegistry](https://github.com/wnau34-nptrn/asterveil-fateweave/blob/1355252cceb9f6b932b9d1fe878780bdf672b5c5/src/game/visuals/unit-frames.ts#L21) เทียบ [actorArt](https://github.com/wnau34-nptrn/asterveil-fateweave/blob/1355252cceb9f6b932b9d1fe878780bdf672b5c5/src/game/visuals/assets.ts#L10); [unit-animation.ts:74](https://github.com/wnau34-nptrn/asterveil-fateweave/blob/1355252cceb9f6b932b9d1fe878780bdf672b5c5/src/game/visuals/unit-animation.ts#L74) ใช้ translation/rotation/squash เมื่อไม่มี framed sequence เป็น coverage gap ไม่ใช่ asset โหลดเสีย
+
+| ชุด | identities ที่ยัง fallback | งานภาพที่มีแล้ว |
+| --- | --- | --- |
+| A6 / W4 | sefa, lio, foe_riftweaver, foe_spore_puff | #94 |
+| A7 / W5 | metta, thiran, lalin, wila | #98 |
+| A8 / W6 | foe_golem, foe_rift_channeler, foe_rift_wisp, foe_shard_crawler | #106 |
+| A9 / W7 | foe_matriarch, foe_juggernaut, foe_sentinel, foe_captain | #107 |
+| A10 / W8 | raider, brute | #109 |
+
+งานแก้: intake/normalize/pack optional atlases ทีละ wave เชื่อมทุก actual action/intent/reaction และ frame endpoint แทนการเพิ่มแรงโยกภาพนิ่ง
+เกณฑ์ตรวจรับ: รูปลักษณ์/อุปกรณ์ไม่เปลี่ยน ขนาดและ sole สม่ำเสมอไม่มี crop กระตุกตอนคืน idle; down ค้าง collapsed frame; block/hit/counter/dodge ไม่สลับอาการ; โหลดช้าหรือพังยังเล่นต่อได้และไม่เปลี่ยนกลาง committed cast; เอา texture ที่ไม่ใช้แล้วออก
+ข้อระวังจาก PR metadata: Raider และ Matriarch incoming หันซ้ายแล้ว แต่ mirroredArt ใน runtime มีทั้งคู่ ต้องแยก orientation ของ animated กับ legacy fallback เพื่อไม่ flip ซ้ำ; PR #106 เรียก Rift Bolt ใน brief แต่ content ใช้ Rift Beam ต้อง map ชื่อจริง ห้าม rename gameplay เพื่อให้ตรง art
+
+### AV-04 — P2: 19 ActionIds ยังใช้ generic/shared cues แทน signature
+
+| ตระกูล | ActionIds | งานภาพที่มีแล้ว |
+| --- | --- | --- |
+| บทเพลง | valor, finale, dread, note, solo | #96 |
+| เงา | evade, decoy | #96 |
+| นักบุญ | saintstrike, communion, saintarc, vowstrike, sharewound, lastlight | #97 |
+| ระบำ | cadence, duet, rounddance, deepbeat, echofoot, closingstep | #97 |
+
+mend มี healing family แล้ว จึงไม่อยู่ใน 19 นี้; mark/sigil/storm/dispel และ taunt/challenge/warcry มี routing แล้ว อย่าสร้างซ้ำ
+งานแก้: W4 ทำ A6 + song/shadow แล้ว W5 ทำ A7 + saint/dance ร่วมกัน; cues ของ cooldown/healing/counter/upkeep ต้องยึด event ผู้รับผลจริง ไม่เดาเป้าจาก selected actor
+เกณฑ์ตรวจรับ: แยกบทบาท buff/heal/attack/cooldown ได้ที่ 390px; full HP/no effect ไม่สร้างตัวเลขหรือผลปลอม; ไม่มีภาพโดนทั้งทีมเมื่อ resolver ให้ผลรายตัว
+
+### AV-05 — P2: ต้องปิดช่องว่างหลักฐาน runtime/มือถือก่อนประกาศครบ
+
+ไม่พบหลักฐานในรอบตรวจนี้ที่จะตัดสิน foot sliding, ghost silhouette, glow กลบเกราะ, face/HP overlap, ความลื่น หรือ texture pressure ว่าผ่าน/ไม่ผ่าน งานภาพ PR เป็น static illustrative boards และ validation hashes ไม่ใช่การเล่นจริง การมี art PR เปิดอยู่ไม่ได้แปลว่ายังไม่เข้าเกมเสมอไป (A3/A4/C5.9 เข้าเกมผ่าน integration PR แยกแล้ว)
+
+Claude ต้องจัด before/after clips จาก runtime: 320×568, 390×844 และ PC; normal/fast/reduced intensity/OS reduced motion; เตรียม → contact → recovery → idle; hit/block/dodge/down/revive/counter/Guard redirect/AoE/charge/phase/summon; skip/reload/resize/hidden tab, texture failure/late load และเต็มสนาม 4v4 ปัจจุบัน ห้ามเปลี่ยนเป็น 5v5 เพื่อทำ audit ส่วนงบ 10 ตัวในแผนเป็นการเตรียมอนาคต
+วัด Start, frame-time และ texture bytes จากเครื่องทดสอบจริง แยก compressed download, decoded RGBA, GPU memory; มี decodedBytes ใน unit-atlases.json แต่ไม่ใช่ตัวเลข RAM/GPU ที่วัดบนมือถือ ห้ามอ้างว่า 60fps หรือ Safari ผ่านจาก Chromium emulation
+
+### ลำดับทำงานและ Handoff ที่ Claude เริ่มได้
+
+1. Fetch HEAD ใหม่ของสาขาเกม อ่าน AGENTS/CLAUDE/แผน completion; สร้างสาขาแก้จาก HEAD ล่าสุด เก็บ source SHA ของหลักฐานทุกชุด
+2. ทำ AV-01 เป็น bug fix แยกก่อน พร้อม routing regression และคลิปจริง ตรวจประเภทของอาวุธทุกอาชีพ
+3. ทำ W4 → W5 → W6 → W7 → W8 ตามแผน จับคู่ body/VFX; แก้ AV-02 ใน W6/W7; ใช้ PR งานภาพที่มี ไม่สร้างซ้ำหรืออ้างว่า artwork selected จาก CI การตัดสินใจภาพ/คลิปให้ยึดหลักฐานเจ้าของตาม workflow ปัจจุบัน
+4. ทวน inventory หลังแต่ละชุด: identity/action/intent → body clip/VFX/outcome/anchor/fallback/reason/owner decision/runtime clip ให้ครบ 36 identities และ 73 ActionIds โดยแยก shared design ที่ตั้งใจออกจาก missing
+5. ทดสอบ typecheck, lint, unit, build และ Playwright ที่กระทบ routing/playback/loading; เพิ่ม meaningful assertions ว่า basic attack ไม่ผ่าน family ผิด และ charge cue ค้าง/ถูกล้างตาม state; committed command/save/result เท่าเดิมทุก interruption
+6. ส่งผลพร้อม before/after, รายการค้าง, SHA, CI และข้อจำกัดเครื่องจริง อัปเดต CODEX-TO-CLAUDE/NEW-CHAT-HANDOFF และแผน; อย่ารวมงาน progression/rules/save/balance
+
+**Prompt เริ่มงานสำหรับ Claude**
+> อ่าน entry “2026-10-29 — Animation/VFX audit” ใน docs/handoffs/CODEX-TO-CLAUDE.md บน feature/fateweave-initial-prototype ก่อน งานนี้เจ้าของสั่งให้แก้ animation/VFX ของเกม เริ่ม AV-01: route basic attack ตาม visual identity/role ให้ตรงท่าร่างกาย โดยคง resolver/save/timing เดิม ยืนยันด้วย runtime clips และ meaningful tests จากนั้นทำ integration gaps ตาม W4–W8 พร้อม AV-02 เรื่อง persistent boss-charge cue ตรวจ approval และ package จริงก่อน intake; ห้ามอ้างว่า static boards หรือ tests เป็น motion approval ทำงานจนผลแก้ concrete และรายงานข้อที่ยังยืนยันไม่ได้
+
+### ชุดส่งต่อและการตรวจรอบนี้
+
+- ตรวจ tree ของสาขาเกมแบบ recursive: truncated=false และอ่าน AGENTS/CLAUDE, scene, animation/registry/assets, family modules, playback/UI, content, แผนและ handoffs
+- Inventory คำนวณจาก ActionId union เทียบ family registries + defense profiles + dedicated routes และ actorArt เทียบ unitRegistry ได้ 73/54/19 และ 36/18/18 ตามข้างต้น ตรวจจำนวนซ้ำ/รายการด้วย script ใน local audit workspace
+- ตรวจ PR #94/#96/#97/#98/#105–#109 ผ่าน GitHub metadata ว่าเป็น art-only และยังเปิดอยู่ ไม่ได้ตรวจ decode/hash/ภาพซ้ำในรอบนี้
+- ตรวจเอกสารและ whitespace เท่านั้น งานนี้ไม่มี production code เปลี่ยน ไม่รัน npm/Playwright ไม่สร้างภาพ/คลิปใหม่ ไม่เปลี่ยน owner decision
+- เอกสาร handoff นี้ถูกเพิ่มที่ต้นไฟล์โดยรักษาประวัติทั้งหมดด้านล่าง; ไม่มี PR/merge ใหม่ บันทึก commit ส่งต่อไว้ในคำตอบของแชต
+
 ## 2026-10-29 — Codex: ตรวจ Skills ที่ Claude ติดตั้ง
 
 - ตรวจบน `feature/fateweave-initial-prototype`: มี 18 Skills (Phaser 14, Playwright 1, project-made 3) metadata YAML parse ได้ทุกตัวและ name ตรง directory; มี license/provenance และไม่พบไฟล์ script/executable เพิ่มในชุด Skills
