@@ -2,7 +2,7 @@
 
 เตรียม 2026-10-29 หลัง W3 เข้าเกมแล้ว (PR #102) ปรับจาก [CODEX-ANIMATION-VFX-PROMPTS-TH.md](CODEX-ANIMATION-VFX-PROMPTS-TH.md) ให้แต่ละ prompt อ่านจบในตัว (ไม่อ้าง “as A5”) และเพิ่มบทเรียนจากการนำ A3–A5 เข้าเกม ชื่อท่า/ID/seed ตรวจกับโค้ดจริงแล้ว (`species.ts`, `encounters/`, `assets.ts`)
 
-**ที่ยังไม่ต้องส่ง:** W4 (#94/#96) และ W5 (#97/#98) Codex ส่งภาพแล้ว รอเจ้าของเลือก R1/R2 — ไม่ใช่ prompt ใหม่ **ส่งทีละระลอก** (W6 → W7 → W8) ตามลำดับแผน เพื่อใช้ feedback ของเจ้าของ
+**ที่ยังไม่ต้องส่ง:** W4 (#94/#96) และ W5 (#97/#98) Codex ส่งภาพแล้ว รอเจ้าของเลือก R1/R2 — ไม่ใช่ prompt ใหม่ **Codex ส่งฉบับเดียวต่อท่า (ไม่มี R1/R2 ให้เลือก; ปรับ 2026-10-29 ตามเจ้าของ)** **ส่งทีละระลอก** (W6 → W7 → W8) ตามลำดับแผน เพื่อใช้ feedback ของเจ้าของ
 
 ## ส่วนร่วม (วางไว้ต้นทุก prompt)
 
@@ -15,11 +15,11 @@ BODY ANIMATION RULES (unit packages)
 - Same body size in every frame and every strip, close to the seed (earlier packages drifted 0.44-1.07x between strips; do not start a strip with a folded/atypical pose that sets a different scale). Weapons/tools that extend below the feet are fine, but keep the feet on the same line in every frame.
 - Wide transparent gutters between figures (>=48 px clear), real alpha (no checkerboard), nothing clipped at the edge (leave room for weapons, hair, wings, tails). Left-facing foes stay left-facing; airborne/floating poses keep their real height (do not bottom-align them).
 - No projectiles, light bursts, floor rings, dust or other VFX in the body strips; those belong to the VFX packages.
-- When a move can be read more than one way, deliver R1 and R2 and mark the recommended one.
+- Deliver exactly ONE final version per move (file suffix -r1). Do not ship alternates or an R2: choose the best reading yourself. Generate as many internal attempts as you need and reject any attempt that fails this self-check before shipping: (1) the weapon/tool/limb stays visible and attached in every frame (an earlier war-cry strip lost its spear in one frame); (2) anticipation really coils (head/body goes down or back before a strike, not up); (3) the contact frame is unmistakable; (4) body size and sole line match the seed; (5) no clipping and >=48 px gutters; (6) it reads clearly at 390px and looks clearly different from the unit's other moves (e.g. a heavy charge must not look like a light charge). Record in NOTES.md which attempts you rejected and why.
 - Deliver, like incoming/ART-UNIT-ANIMATION-A5-001/: seeds/, templates/, source-sheets/ (untouched generator outputs), raw/ (one transparent PNG per strip), preview-390.png, prompts.json, seeds.json, strips.json (file, move, revision, frame order, sha256, suggested intents), validation.json, NOTES.md (frame order of every strip, preferred candidates, concerns) and a reproducible build_handoff.py.
 
 VFX RULES (VFX packages)
-- Transparent straight-RGBA 256x256 layers, three beats per move: prepare (on the caster), peak (one or two independent components), settle. Pivots/anchors in layers.json (caster chest/hand, target chest/feet, whole side). Suggested timing per beat. 390px-wide storyboards, readable at 390px, never covering faces or HP labels, no real letters/symbols, no floor ellipses or leg auras unless the move is truly a ground effect. Provide R1 and R2 and mark the recommended one. Follow incoming/ART-VFX-COMMAND-001/ for the file layout.
+- Transparent straight-RGBA 256x256 layers, three beats per move: prepare (on the caster), peak (one or two independent components), settle. Pivots/anchors in layers.json (caster chest/hand, target chest/feet, whole side). Suggested timing per beat. 390px-wide storyboards, readable at 390px, never covering faces or HP labels, no real letters/symbols, no floor ellipses or leg auras unless the move is truly a ground effect. Deliver ONE final version only (no R1/R2 choice): pick the strongest design yourself and reject attempts that fail a 390px legibility check on a dark battle background AND on the bright gold/armour of a hero (an earlier gold layer vanished against gold armour; make contrast work at normal blend, and note if an additive glow is intended). Follow incoming/ART-VFX-COMMAND-001/ for the file layout.
 ```
 
 ## W6-a. ART-UNIT-ANIMATION-A8-001
@@ -33,7 +33,7 @@ Seeds (all face LEFT, sole y~497):
 - Rift Channeler `foe_rift_channeler` — units_foes2.webp cell 6 (large): Rift Bolt (gather energy at the hands -> release pose -> recover), hit, down.
 - Rift Wisp `foe_rift_wisp` — units_foes2.webp cell 7 (floating): hover loop of 4 frames (last returns to the first), Star Flame (gather -> cast), hit, down as a fade/sink.
 - Shard Crawler `foe_shard_crawler` — units_foes2.webp cell 8: Crystal Stab (raise legs -> stab -> return), hit, down.
-Deliver R1 plus R2 for Veil Quake and Star Flame.
+One version only; spend the most attempts on Veil Quake and Star Flame.
 ```
 
 ## W6-b. ART-VFX-FOE-SIGNATURE-001
@@ -56,7 +56,7 @@ Large LEFT-facing boss bodies in public/assets/art/units_foes.webp. Bosses annou
 - Crystal Juggernaut `foe_juggernaut` — cell 7: Horn Charge (lower horns, charge), Shard Burst (release), hit, down.
 - Rift Warden / Sentinel `foe_sentinel` — cell 8: Raking Slash, Crushing Blow, Rift Bolt and Rift Wave (energy cast), Rift Gathering (charge/telegraph), Rift Cataclysm (slam), Rift Awakening (phase awakening), Call the Rift (summon gesture), hit, down.
 - Vanguard Captain `foe_captain` — cell 10: Crushing Blow, War Cry (roar), Call the Hunt (summon gesture), hit, down.
-Deliver R1 plus R2 for each boss's signature move (Thorn Tempest, Horn Charge, Rift Cataclysm, War Cry).
+One version only; spend the most attempts on each boss's signature move (Thorn Tempest, Horn Charge, Rift Cataclysm, War Cry).
 ```
 
 ## W7-b. ART-VFX-BOSS-SIGNATURE-001
