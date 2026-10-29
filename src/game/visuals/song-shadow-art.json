@@ -1,0 +1,86 @@
+{
+  "valor_prepare": [
+    0.5049,
+    0.7344
+  ],
+  "valor_peak": [
+    0.4551,
+    0.7872
+  ],
+  "valor_settle": [
+    0.5124,
+    0.5827
+  ],
+  "finale_prepare": [
+    0.5,
+    0.5
+  ],
+  "finale_peak": [
+    0.5,
+    0.5
+  ],
+  "finale_settle": [
+    0.5,
+    0.5
+  ],
+  "dread_prepare": [
+    0.5,
+    0.5
+  ],
+  "dread_peak": [
+    0.5,
+    0.5
+  ],
+  "dread_settle": [
+    0.5,
+    0.5
+  ],
+  "note_prepare": [
+    0.5,
+    0.5
+  ],
+  "note_peak": [
+    0.5,
+    0.5
+  ],
+  "note_settle": [
+    0.5,
+    0.5
+  ],
+  "solo_prepare": [
+    0.4862,
+    0.5552
+  ],
+  "solo_peak": [
+    0.4833,
+    0.7455
+  ],
+  "solo_settle": [
+    0.5059,
+    0.6039
+  ],
+  "evade_prepare": [
+    0.5,
+    0.7285
+  ],
+  "evade_peak": [
+    0.5,
+    0.7505
+  ],
+  "evade_settle": [
+    0.5,
+    0.7468
+  ],
+  "decoy_prepare": [
+    0.498,
+    0.7426
+  ],
+  "decoy_peak": [
+    0.498,
+    0.7791
+  ],
+  "decoy_settle": [
+    0.498,
+    0.7791
+  ]
+}

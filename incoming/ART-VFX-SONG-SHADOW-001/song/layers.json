@@ -1,0 +1,1404 @@
+{
+  "schema": "art-vfx-three-beat-v1",
+  "batch": "ART-VFX-SONG-SHADOW-001",
+  "family": "song",
+  "frame_size": [
+    256,
+    256
+  ],
+  "alpha": "straight",
+  "padding_min_px": 8,
+  "coordinates": "normalized canvas pivots, not battle coordinates",
+  "timing": "Art suggestions only. Preserve existing action duration and authoritative contact instant.",
+  "sources": [
+    {
+      "file": "source/R1.png",
+      "sha256": "ba1e8a8b1b2f821b96904c7f492404a30deb5abe15a80747badf301e08b34dd5",
+      "size": [
+        972,
+        1619
+      ]
+    },
+    {
+      "file": "source/R2-draft.png",
+      "sha256": "d77169e1db4ce1bc041e2b0b29798e5361c18780aff55950c702f8946793a1e1",
+      "size": [
+        971,
+        1619
+      ]
+    },
+    {
+      "file": "source/R2.png",
+      "sha256": "be2d4cc2aec3717076752bb1b68de0c17f5a24f5069cb686662a31dba3534b0c",
+      "size": [
+        971,
+        1620
+      ]
+    }
+  ],
+  "moves": {
+    "valor": {
+      "times": [
+        0,
+        120,
+        280,
+        480
+      ],
+      "anchors": [
+        "caster feet",
+        "caster feet",
+        "ally feet"
+      ],
+      "widths": [
+        58,
+        76,
+        34
+      ],
+      "description": "Self song / team buff; sparks drift to allies."
+    },
+    "finale": {
+      "times": [
+        0,
+        140,
+        300,
+        520
+      ],
+      "anchors": [
+        "caster hand",
+        "hand to enemy side",
+        "affected foe waist"
+      ],
+      "widths": [
+        42,
+        98,
+        42
+      ],
+      "description": "One release wave; one contact per affected foe."
+    },
+    "dread": {
+      "times": [
+        0,
+        120,
+        260,
+        460
+      ],
+      "anchors": [
+        "caster hand",
+        "hand to target waist",
+        "beside target waist"
+      ],
+      "widths": [
+        38,
+        78,
+        24
+      ],
+      "description": "One foe: damage, then a small tremor if applied."
+    },
+    "note": {
+      "times": [
+        0,
+        90,
+        200,
+        340
+      ],
+      "anchors": [
+        "caster hand",
+        "hand to target waist",
+        "target waist"
+      ],
+      "widths": [
+        32,
+        74,
+        34
+      ],
+      "description": "One blade / one target / one small contact."
+    },
+    "solo": {
+      "times": [
+        0,
+        100,
+        220,
+        380
+      ],
+      "anchors": [
+        "caster feet",
+        "caster feet",
+        "caster feet"
+      ],
+      "widths": [
+        56,
+        48,
+        44
+      ],
+      "description": "Self only; short gentle light, no damage."
+    }
+  },
+  "layers": [
+    {
+      "move": "valor",
+      "beat": "prepare",
+      "variant": "R1",
+      "file": "R1/valor-prepare.png",
+      "source": "source/R1.png",
+      "source_rect": [
+        0,
+        100,
+        280,
+        390
+      ],
+      "source_size": [
+        972,
+        1619
+      ],
+      "sha256": "0c02c3952e7c18759c16c761daa4965dc265e94485441ad06921636caf47d38a",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        12,
+        8,
+        244,
+        248
+      ],
+      "pivot": [
+        0.5,
+        0.7425
+      ],
+      "source_anchor": [
+        140,
+        320
+      ],
+      "anchor": "caster feet",
+      "suggested_canvas_width_at_390": 58,
+      "suggested_time_ms": [
+        0,
+        120
+      ],
+      "blend": "normal",
+      "z_order": "rear floor, foreground thin rim; protect faces and labels"
+    },
+    {
+      "move": "valor",
+      "beat": "peak",
+      "variant": "R1",
+      "file": "R1/valor-peak.png",
+      "source": "source/R1.png",
+      "source_rect": [
+        280,
+        0,
+        740,
+        390
+      ],
+      "source_size": [
+        972,
+        1619
+      ],
+      "sha256": "dd57eb997cae28d915e44d9103071cceb2b9f4f0edf07cd4a82e69818742a870",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        8,
+        26,
+        248,
+        229
+      ],
+      "pivot": [
+        0.4796,
+        0.7624
+      ],
+      "source_anchor": [
+        500,
+        325
+      ],
+      "anchor": "caster feet",
+      "suggested_canvas_width_at_390": 76,
+      "suggested_time_ms": [
+        120,
+        280
+      ],
+      "blend": "normal",
+      "z_order": "rear floor, foreground thin rim; protect faces and labels"
+    },
+    {
+      "move": "valor",
+      "beat": "settle",
+      "variant": "R1",
+      "file": "R1/valor-settle.png",
+      "source": "source/R1.png",
+      "source_rect": [
+        740,
+        100,
+        972,
+        390
+      ],
+      "source_size": [
+        972,
+        1619
+      ],
+      "sha256": "048d8b3737cb2c8f8768c874eacf8864aa1f7bea207f30e3b2d86462a2333eee",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        32,
+        8,
+        224,
+        248
+      ],
+      "pivot": [
+        0.4806,
+        0.5808
+      ],
+      "source_anchor": [
+        850,
+        270
+      ],
+      "anchor": "ally feet",
+      "suggested_canvas_width_at_390": 34,
+      "suggested_time_ms": [
+        280,
+        480
+      ],
+      "blend": "normal",
+      "z_order": "rear floor, foreground thin rim; protect faces and labels"
+    },
+    {
+      "move": "finale",
+      "beat": "prepare",
+      "variant": "R1",
+      "file": "R1/finale-prepare.png",
+      "source": "source/R1.png",
+      "source_rect": [
+        0,
+        395,
+        280,
+        670
+      ],
+      "source_size": [
+        972,
+        1619
+      ],
+      "sha256": "e004bcb05e55077bad49ea0986dc38d00ecfc5fcf94ae7f0a1e0388b332e5f0a",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        8,
+        10,
+        248,
+        246
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "source_anchor": null,
+      "anchor": "caster hand",
+      "suggested_canvas_width_at_390": 42,
+      "suggested_time_ms": [
+        0,
+        140
+      ],
+      "blend": "normal",
+      "z_order": "rear floor, foreground thin rim; protect faces and labels"
+    },
+    {
+      "move": "finale",
+      "beat": "peak",
+      "variant": "R1",
+      "file": "R1/finale-peak.png",
+      "source": "source/R1.png",
+      "source_rect": [
+        280,
+        395,
+        740,
+        670
+      ],
+      "source_size": [
+        972,
+        1619
+      ],
+      "sha256": "41fbbb43bb71611936e9b257cc5444c41afde027162aa69882bef7c59de5012b",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        8,
+        56,
+        248,
+        199
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "source_anchor": null,
+      "anchor": "hand to enemy side",
+      "suggested_canvas_width_at_390": 98,
+      "suggested_time_ms": [
+        140,
+        300
+      ],
+      "blend": "normal",
+      "z_order": "rear floor, foreground thin rim; protect faces and labels"
+    },
+    {
+      "move": "finale",
+      "beat": "settle",
+      "variant": "R1",
+      "file": "R1/finale-settle.png",
+      "source": "source/R1.png",
+      "source_rect": [
+        740,
+        395,
+        972,
+        670
+      ],
+      "source_size": [
+        972,
+        1619
+      ],
+      "sha256": "b201c277a26112f04354b3624855d740f2a2a9e348f3d8d321cb615e796e6916",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        27,
+        8,
+        229,
+        248
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "source_anchor": null,
+      "anchor": "affected foe waist",
+      "suggested_canvas_width_at_390": 42,
+      "suggested_time_ms": [
+        300,
+        520
+      ],
+      "blend": "normal",
+      "z_order": "rear floor, foreground thin rim; protect faces and labels"
+    },
+    {
+      "move": "dread",
+      "beat": "prepare",
+      "variant": "R1",
+      "file": "R1/dread-prepare.png",
+      "source": "source/R1.png",
+      "source_rect": [
+        0,
+        670,
+        270,
+        970
+      ],
+      "source_size": [
+        972,
+        1619
+      ],
+      "sha256": "9ceb0952079c6ed0af1056c28fdbc2501df14493731cde6de1330b85df8e8fae",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        20,
+        8,
+        236,
+        248
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "source_anchor": null,
+      "anchor": "caster hand",
+      "suggested_canvas_width_at_390": 38,
+      "suggested_time_ms": [
+        0,
+        120
+      ],
+      "blend": "normal",
+      "z_order": "rear floor, foreground thin rim; protect faces and labels"
+    },
+    {
+      "move": "dread",
+      "beat": "peak",
+      "variant": "R1",
+      "file": "R1/dread-peak.png",
+      "source": "source/R1.png",
+      "source_rect": [
+        270,
+        675,
+        740,
+        970
+      ],
+      "source_size": [
+        972,
+        1619
+      ],
+      "sha256": "22a3b1ae11170090e0f5ec43224af13c128ca22b1574d5a7113e3fd6c1156a77",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        8,
+        52,
+        248,
+        203
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "source_anchor": null,
+      "anchor": "hand to target waist",
+      "suggested_canvas_width_at_390": 78,
+      "suggested_time_ms": [
+        120,
+        260
+      ],
+      "blend": "normal",
+      "z_order": "rear floor, foreground thin rim; protect faces and labels"
+    },
+    {
+      "move": "dread",
+      "beat": "settle",
+      "variant": "R1",
+      "file": "R1/dread-settle.png",
+      "source": "source/R1.png",
+      "source_rect": [
+        740,
+        680,
+        972,
+        970
+      ],
+      "source_size": [
+        972,
+        1619
+      ],
+      "sha256": "e86709dce1ac1a10a014cd906405d73413ec6f8cd7f57695f919879435bc406b",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        32,
+        8,
+        224,
+        248
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "source_anchor": null,
+      "anchor": "beside target waist",
+      "suggested_canvas_width_at_390": 24,
+      "suggested_time_ms": [
+        260,
+        460
+      ],
+      "blend": "normal",
+      "z_order": "rear floor, foreground thin rim; protect faces and labels"
+    },
+    {
+      "move": "note",
+      "beat": "prepare",
+      "variant": "R1",
+      "file": "R1/note-prepare.png",
+      "source": "source/R1.png",
+      "source_rect": [
+        0,
+        975,
+        275,
+        1220
+      ],
+      "source_size": [
+        972,
+        1619
+      ],
+      "sha256": "c0163a013ef4f638ad7024485ea0bcced150025280792c5606d45c99ca9d8fbc",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        8,
+        21,
+        248,
+        235
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "source_anchor": null,
+      "anchor": "caster hand",
+      "suggested_canvas_width_at_390": 32,
+      "suggested_time_ms": [
+        0,
+        90
+      ],
+      "blend": "normal",
+      "z_order": "rear floor, foreground thin rim; protect faces and labels"
+    },
+    {
+      "move": "note",
+      "beat": "peak",
+      "variant": "R1",
+      "file": "R1/note-peak.png",
+      "source": "source/R1.png",
+      "source_rect": [
+        275,
+        970,
+        740,
+        1190
+      ],
+      "source_size": [
+        972,
+        1619
+      ],
+      "sha256": "3b1b89862dd4dbdc24a6ef9ddf1bf8353eab6b5daed3d0832498de7cfbae69ae",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        8,
+        71,
+        248,
+        185
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "source_anchor": null,
+      "anchor": "hand to target waist",
+      "suggested_canvas_width_at_390": 74,
+      "suggested_time_ms": [
+        90,
+        200
+      ],
+      "blend": "normal",
+      "z_order": "rear floor, foreground thin rim; protect faces and labels"
+    },
+    {
+      "move": "note",
+      "beat": "settle",
+      "variant": "R1",
+      "file": "R1/note-settle.png",
+      "source": "source/R1.png",
+      "source_rect": [
+        740,
+        975,
+        972,
+        1220
+      ],
+      "source_size": [
+        972,
+        1619
+      ],
+      "sha256": "0381dcb279ba8d772d9d84d663be0cb6f60e958e20fdfea5ae0175f5c50883d9",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        14,
+        8,
+        241,
+        248
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "source_anchor": null,
+      "anchor": "target waist",
+      "suggested_canvas_width_at_390": 34,
+      "suggested_time_ms": [
+        200,
+        340
+      ],
+      "blend": "normal",
+      "z_order": "rear floor, foreground thin rim; protect faces and labels"
+    },
+    {
+      "move": "solo",
+      "beat": "prepare",
+      "variant": "R1",
+      "file": "R1/solo-prepare.png",
+      "source": "source/R1.png",
+      "source_rect": [
+        0,
+        1250,
+        320,
+        1619
+      ],
+      "source_size": [
+        972,
+        1619
+      ],
+      "sha256": "2ce04d2f725a41d54b9fba008ea48a4d20d526cdabe5b5648ebf9abefa05399d",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        24,
+        8,
+        232,
+        248
+      ],
+      "pivot": [
+        0.5,
+        0.641
+      ],
+      "source_anchor": [
+        160,
+        1490
+      ],
+      "anchor": "caster feet",
+      "suggested_canvas_width_at_390": 56,
+      "suggested_time_ms": [
+        0,
+        100
+      ],
+      "blend": "normal",
+      "z_order": "rear floor, foreground thin rim; protect faces and labels"
+    },
+    {
+      "move": "solo",
+      "beat": "peak",
+      "variant": "R1",
+      "file": "R1/solo-peak.png",
+      "source": "source/R1.png",
+      "source_rect": [
+        320,
+        1190,
+        700,
+        1619
+      ],
+      "source_size": [
+        972,
+        1619
+      ],
+      "sha256": "c5766f209e887fb7cad84fd1c0b3aba2d04a0cc0310c9bb7064a39002ec55d8b",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        21,
+        8,
+        234,
+        248
+      ],
+      "pivot": [
+        0.4762,
+        0.7087
+      ],
+      "source_anchor": [
+        500,
+        1500
+      ],
+      "anchor": "caster feet",
+      "suggested_canvas_width_at_390": 48,
+      "suggested_time_ms": [
+        100,
+        220
+      ],
+      "blend": "normal",
+      "z_order": "rear floor, foreground thin rim; protect faces and labels"
+    },
+    {
+      "move": "solo",
+      "beat": "settle",
+      "variant": "R1",
+      "file": "R1/solo-settle.png",
+      "source": "source/R1.png",
+      "source_rect": [
+        700,
+        1250,
+        972,
+        1619
+      ],
+      "source_size": [
+        972,
+        1619
+      ],
+      "sha256": "bf92727185a028e8cb51c64988fe5a8aee622b05caed6275c7287e8b1fc2e0af",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        39,
+        8,
+        216,
+        248
+      ],
+      "pivot": [
+        0.5082,
+        0.6537
+      ],
+      "source_anchor": [
+        840,
+        1495
+      ],
+      "anchor": "caster feet",
+      "suggested_canvas_width_at_390": 44,
+      "suggested_time_ms": [
+        220,
+        380
+      ],
+      "blend": "normal",
+      "z_order": "rear floor, foreground thin rim; protect faces and labels"
+    },
+    {
+      "move": "valor",
+      "beat": "prepare",
+      "variant": "R2",
+      "file": "R2/valor-prepare.png",
+      "source": "source/R2.png",
+      "source_rect": [
+        0,
+        0,
+        325,
+        340
+      ],
+      "source_size": [
+        971,
+        1620
+      ],
+      "sha256": "76183cd6a6819849b270d3501eda2d47879dbbe07996b8a5aff446f467dd3486",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        13,
+        8,
+        241,
+        248
+      ],
+      "pivot": [
+        0.5049,
+        0.7344
+      ],
+      "source_anchor": [
+        165,
+        255
+      ],
+      "anchor": "caster feet",
+      "suggested_canvas_width_at_390": 58,
+      "suggested_time_ms": [
+        0,
+        120
+      ],
+      "blend": "normal",
+      "z_order": "rear floor, foreground thin rim; protect faces and labels"
+    },
+    {
+      "move": "valor",
+      "beat": "peak",
+      "variant": "R2",
+      "file": "R2/valor-peak.png",
+      "source": "source/R2.png",
+      "source_rect": [
+        325,
+        0,
+        690,
+        345
+      ],
+      "source_size": [
+        971,
+        1620
+      ],
+      "sha256": "9bb569e3f904dfdddbd8ae92c7cc3c07d8266e43ca77bff40cee025ac1fa8370",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        8,
+        25,
+        247,
+        241
+      ],
+      "pivot": [
+        0.4551,
+        0.7872
+      ],
+      "source_anchor": [
+        490,
+        285
+      ],
+      "anchor": "caster feet",
+      "suggested_canvas_width_at_390": 76,
+      "suggested_time_ms": [
+        120,
+        280
+      ],
+      "blend": "normal",
+      "z_order": "rear floor, foreground thin rim; protect faces and labels"
+    },
+    {
+      "move": "valor",
+      "beat": "settle",
+      "variant": "R2",
+      "file": "R2/valor-settle.png",
+      "source": "source/R2.png",
+      "source_rect": [
+        690,
+        0,
+        971,
+        340
+      ],
+      "source_size": [
+        971,
+        1620
+      ],
+      "sha256": "2b057f6798dc6856a06f35181ceb147623d27a744eae720806ccb2044f4e1ab9",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        34,
+        14,
+        217,
+        243
+      ],
+      "pivot": [
+        0.5124,
+        0.5827
+      ],
+      "source_anchor": [
+        835,
+        200
+      ],
+      "anchor": "ally feet",
+      "suggested_canvas_width_at_390": 34,
+      "suggested_time_ms": [
+        280,
+        480
+      ],
+      "blend": "normal",
+      "z_order": "rear floor, foreground thin rim; protect faces and labels"
+    },
+    {
+      "move": "finale",
+      "beat": "prepare",
+      "variant": "R2",
+      "file": "R2/finale-prepare.png",
+      "source": "source/R2.png",
+      "source_rect": [
+        0,
+        345,
+        325,
+        665
+      ],
+      "source_size": [
+        971,
+        1620
+      ],
+      "sha256": "27ecd2b7ed1d2f9573a3f2ffbbe706d5ef2b73275888f01c589f135a51ed356b",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        22,
+        10,
+        248,
+        246
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "source_anchor": null,
+      "anchor": "caster hand",
+      "suggested_canvas_width_at_390": 42,
+      "suggested_time_ms": [
+        0,
+        140
+      ],
+      "blend": "normal",
+      "z_order": "rear floor, foreground thin rim; protect faces and labels"
+    },
+    {
+      "move": "finale",
+      "beat": "peak",
+      "variant": "R2",
+      "file": "R2/finale-peak.png",
+      "source": "source/R2.png",
+      "source_rect": [
+        325,
+        345,
+        700,
+        665
+      ],
+      "source_size": [
+        971,
+        1620
+      ],
+      "sha256": "bdd3ecba908ac515a72ea0cc7ba5e5625192b05538974a4be44b4bd57cb795e2",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        8,
+        25,
+        248,
+        230
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "source_anchor": null,
+      "anchor": "hand to enemy side",
+      "suggested_canvas_width_at_390": 98,
+      "suggested_time_ms": [
+        140,
+        300
+      ],
+      "blend": "normal",
+      "z_order": "rear floor, foreground thin rim; protect faces and labels"
+    },
+    {
+      "move": "finale",
+      "beat": "settle",
+      "variant": "R2",
+      "file": "R2/finale-settle.png",
+      "source": "source/R2.png",
+      "source_rect": [
+        700,
+        345,
+        971,
+        665
+      ],
+      "source_size": [
+        971,
+        1620
+      ],
+      "sha256": "db1b9eb70c0f19de852c98c057f8b7e9d12f5f25b3f8579554e44af91e6156b3",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        27,
+        8,
+        220,
+        248
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "source_anchor": null,
+      "anchor": "affected foe waist",
+      "suggested_canvas_width_at_390": 42,
+      "suggested_time_ms": [
+        300,
+        520
+      ],
+      "blend": "normal",
+      "z_order": "rear floor, foreground thin rim; protect faces and labels"
+    },
+    {
+      "move": "dread",
+      "beat": "prepare",
+      "variant": "R2",
+      "file": "R2/dread-prepare.png",
+      "source": "source/R2.png",
+      "source_rect": [
+        0,
+        670,
+        325,
+        930
+      ],
+      "source_size": [
+        971,
+        1620
+      ],
+      "sha256": "0766b10b4f1d73e38946202a93afa8aa32d1c70ee01ca1f13d7594dd67dd2b68",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        32,
+        32,
+        248,
+        224
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "source_anchor": null,
+      "anchor": "caster hand",
+      "suggested_canvas_width_at_390": 38,
+      "suggested_time_ms": [
+        0,
+        120
+      ],
+      "blend": "normal",
+      "z_order": "rear floor, foreground thin rim; protect faces and labels"
+    },
+    {
+      "move": "dread",
+      "beat": "peak",
+      "variant": "R2",
+      "file": "R2/dread-peak.png",
+      "source": "source/R2.png",
+      "source_rect": [
+        325,
+        670,
+        710,
+        930
+      ],
+      "source_size": [
+        971,
+        1620
+      ],
+      "sha256": "5e6cd458827c38ace1a4a0c11f1fb9b25607c38344866b00675b63d94d33c116",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        8,
+        47,
+        247,
+        209
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "source_anchor": null,
+      "anchor": "hand to target waist",
+      "suggested_canvas_width_at_390": 78,
+      "suggested_time_ms": [
+        120,
+        260
+      ],
+      "blend": "normal",
+      "z_order": "rear floor, foreground thin rim; protect faces and labels"
+    },
+    {
+      "move": "dread",
+      "beat": "settle",
+      "variant": "R2",
+      "file": "R2/dread-settle.png",
+      "source": "source/R2.png",
+      "source_rect": [
+        710,
+        670,
+        971,
+        930
+      ],
+      "source_size": [
+        971,
+        1620
+      ],
+      "sha256": "3072cbafdd0dcc028dafb03f3ad03f3c7243637aafad988def6509738fa20e46",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        9,
+        9,
+        235,
+        247
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "source_anchor": null,
+      "anchor": "beside target waist",
+      "suggested_canvas_width_at_390": 24,
+      "suggested_time_ms": [
+        260,
+        460
+      ],
+      "blend": "normal",
+      "z_order": "rear floor, foreground thin rim; protect faces and labels"
+    },
+    {
+      "move": "note",
+      "beat": "prepare",
+      "variant": "R2",
+      "file": "R2/note-prepare.png",
+      "source": "source/R2.png",
+      "source_rect": [
+        0,
+        935,
+        325,
+        1235
+      ],
+      "source_size": [
+        971,
+        1620
+      ],
+      "sha256": "d0de256ac5508269d9fca00c55992f64571d52402a116d22252a9f80c1fc8cd8",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        22,
+        17,
+        248,
+        239
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "source_anchor": null,
+      "anchor": "caster hand",
+      "suggested_canvas_width_at_390": 32,
+      "suggested_time_ms": [
+        0,
+        90
+      ],
+      "blend": "normal",
+      "z_order": "rear floor, foreground thin rim; protect faces and labels"
+    },
+    {
+      "move": "note",
+      "beat": "peak",
+      "variant": "R2",
+      "file": "R2/note-peak.png",
+      "source": "source/R2.png",
+      "source_rect": [
+        325,
+        935,
+        715,
+        1200
+      ],
+      "source_size": [
+        971,
+        1620
+      ],
+      "sha256": "6afa88d89d999c13fa078677a80be50d51f545581d1522fc5d41b32da16f76d3",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        8,
+        46,
+        248,
+        209
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "source_anchor": null,
+      "anchor": "hand to target waist",
+      "suggested_canvas_width_at_390": 74,
+      "suggested_time_ms": [
+        90,
+        200
+      ],
+      "blend": "normal",
+      "z_order": "rear floor, foreground thin rim; protect faces and labels"
+    },
+    {
+      "move": "note",
+      "beat": "settle",
+      "variant": "R2",
+      "file": "R2/note-settle.png",
+      "source": "source/R2.png",
+      "source_rect": [
+        715,
+        935,
+        971,
+        1235
+      ],
+      "source_size": [
+        971,
+        1620
+      ],
+      "sha256": "07070feade6edf3894368c62e0bdb6f23b2663dd8d2a65974ca6323247676a42",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        25,
+        8,
+        219,
+        248
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "source_anchor": null,
+      "anchor": "target waist",
+      "suggested_canvas_width_at_390": 34,
+      "suggested_time_ms": [
+        200,
+        340
+      ],
+      "blend": "normal",
+      "z_order": "rear floor, foreground thin rim; protect faces and labels"
+    },
+    {
+      "move": "solo",
+      "beat": "prepare",
+      "variant": "R2",
+      "file": "R2/solo-prepare.png",
+      "source": "source/R2.png",
+      "source_rect": [
+        0,
+        1300,
+        340,
+        1620
+      ],
+      "source_size": [
+        971,
+        1620
+      ],
+      "sha256": "24f31bd8fb7912db82445b01c5025e7b96321f94d414bce9ca980c1e0de4132a",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        8,
+        15,
+        248,
+        241
+      ],
+      "pivot": [
+        0.4862,
+        0.5552
+      ],
+      "source_anchor": [
+        165,
+        1480
+      ],
+      "anchor": "caster feet",
+      "suggested_canvas_width_at_390": 56,
+      "suggested_time_ms": [
+        0,
+        100
+      ],
+      "blend": "normal",
+      "z_order": "rear floor, foreground thin rim; protect faces and labels"
+    },
+    {
+      "move": "solo",
+      "beat": "peak",
+      "variant": "R2",
+      "file": "R2/solo-peak.png",
+      "source": "source/R2.png",
+      "source_rect": [
+        340,
+        1200,
+        655,
+        1620
+      ],
+      "source_size": [
+        971,
+        1620
+      ],
+      "sha256": "9728a4397ffdd41e9bd9c85d6a32141e0dbb5eab78ee88b6f9adc9fa4ee2d834",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        38,
+        8,
+        218,
+        248
+      ],
+      "pivot": [
+        0.4833,
+        0.7455
+      ],
+      "source_anchor": [
+        490,
+        1520
+      ],
+      "anchor": "caster feet",
+      "suggested_canvas_width_at_390": 48,
+      "suggested_time_ms": [
+        100,
+        220
+      ],
+      "blend": "normal",
+      "z_order": "rear floor, foreground thin rim; protect faces and labels"
+    },
+    {
+      "move": "solo",
+      "beat": "settle",
+      "variant": "R2",
+      "file": "R2/solo-settle.png",
+      "source": "source/R2.png",
+      "source_rect": [
+        655,
+        1320,
+        971,
+        1620
+      ],
+      "source_size": [
+        971,
+        1620
+      ],
+      "sha256": "eecde1ae1f0ab55182574421a90e8f513dba743a9ed44d28d714dae12c6e3966",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        8,
+        14,
+        248,
+        242
+      ],
+      "pivot": [
+        0.5059,
+        0.6039
+      ],
+      "source_anchor": [
+        815,
+        1505
+      ],
+      "anchor": "caster feet",
+      "suggested_canvas_width_at_390": 44,
+      "suggested_time_ms": [
+        220,
+        380
+      ],
+      "blend": "normal",
+      "z_order": "rear floor, foreground thin rim; protect faces and labels"
+    }
+  ]
+}

@@ -1,0 +1,329 @@
+{
+  "schema": "art-vfx-three-beat-v1",
+  "batch": "ART-VFX-SONG-SHADOW-001",
+  "family": "shadow",
+  "frame_size": [
+    256,
+    256
+  ],
+  "alpha": "straight",
+  "padding_min_px": 8,
+  "coordinates": "normalized canvas pivots, not battle coordinates",
+  "timing": "Art suggestions only. Preserve existing action duration and authoritative contact instant.",
+  "sources": [
+    {
+      "file": "source/R1.png",
+      "sha256": "685c24392b246b739cf2b6045b1d6ff7fe81c8c4845b8aca7b8acc3a0aa02db3",
+      "size": [
+        1536,
+        1024
+      ]
+    }
+  ],
+  "moves": {
+    "evade": {
+      "times": [
+        0,
+        90,
+        200,
+        340
+      ],
+      "anchors": [
+        "caster feet",
+        "caster feet",
+        "caster feet"
+      ],
+      "widths": [
+        62,
+        64,
+        54
+      ],
+      "description": "Self dodge-ready cue; wisps and one shimmer."
+    },
+    "decoy": {
+      "times": [
+        0,
+        120,
+        280,
+        480
+      ],
+      "anchors": [
+        "beside caster feet",
+        "beside caster feet",
+        "beside caster feet"
+      ],
+      "widths": [
+        40,
+        46,
+        44
+      ],
+      "description": "One adjacent illusion; fade, no hit or shield."
+    }
+  },
+  "layers": [
+    {
+      "move": "evade",
+      "beat": "prepare",
+      "variant": "R1",
+      "file": "R1/evade-prepare.png",
+      "source": "source/R1.png",
+      "source_rect": [
+        0,
+        0,
+        512,
+        500
+      ],
+      "source_size": [
+        1536,
+        1024
+      ],
+      "sha256": "b10f5a291b846d0e62b3d2775b404030c2620b1bc41f40dfffac0f0d1c2386e4",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        8,
+        15,
+        248,
+        245
+      ],
+      "pivot": [
+        0.5,
+        0.7285
+      ],
+      "source_anchor": [
+        256,
+        375
+      ],
+      "anchor": "caster feet",
+      "suggested_canvas_width_at_390": 62,
+      "suggested_time_ms": [
+        0,
+        90
+      ],
+      "blend": "normal",
+      "z_order": "rear floor, foreground thin rim; protect faces and labels"
+    },
+    {
+      "move": "evade",
+      "beat": "peak",
+      "variant": "R1",
+      "file": "R1/evade-peak.png",
+      "source": "source/R1.png",
+      "source_rect": [
+        512,
+        0,
+        1024,
+        500
+      ],
+      "source_size": [
+        1536,
+        1024
+      ],
+      "sha256": "98e81320bdb25a4f0b22a0c311fd586003df36553bb73fd71ad14c30c1bd9e93",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        8,
+        13,
+        248,
+        245
+      ],
+      "pivot": [
+        0.5,
+        0.7505
+      ],
+      "source_anchor": [
+        768,
+        387
+      ],
+      "anchor": "caster feet",
+      "suggested_canvas_width_at_390": 64,
+      "suggested_time_ms": [
+        90,
+        200
+      ],
+      "blend": "normal",
+      "z_order": "rear floor, foreground thin rim; protect faces and labels"
+    },
+    {
+      "move": "evade",
+      "beat": "settle",
+      "variant": "R1",
+      "file": "R1/evade-settle.png",
+      "source": "source/R1.png",
+      "source_rect": [
+        1024,
+        0,
+        1536,
+        500
+      ],
+      "source_size": [
+        1536,
+        1024
+      ],
+      "sha256": "9a6b818e9983c8f0083c73bb38b03bdeddde18d22d3ceb723dfc3626f391c471",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        8,
+        22,
+        243,
+        245
+      ],
+      "pivot": [
+        0.5,
+        0.7468
+      ],
+      "source_anchor": [
+        1280,
+        385
+      ],
+      "anchor": "caster feet",
+      "suggested_canvas_width_at_390": 54,
+      "suggested_time_ms": [
+        200,
+        340
+      ],
+      "blend": "normal",
+      "z_order": "rear floor, foreground thin rim; protect faces and labels"
+    },
+    {
+      "move": "decoy",
+      "beat": "prepare",
+      "variant": "R1",
+      "file": "R1/decoy-prepare.png",
+      "source": "source/R1.png",
+      "source_rect": [
+        0,
+        510,
+        512,
+        1024
+      ],
+      "source_size": [
+        1536,
+        1024
+      ],
+      "sha256": "c17b412865987a5396b76f6699f2595a00a95e963d19e74b3fdf981cd80e2338",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        8,
+        8,
+        247,
+        240
+      ],
+      "pivot": [
+        0.498,
+        0.7426
+      ],
+      "source_anchor": [
+        256,
+        900
+      ],
+      "anchor": "beside caster feet",
+      "suggested_canvas_width_at_390": 40,
+      "suggested_time_ms": [
+        0,
+        120
+      ],
+      "blend": "normal",
+      "z_order": "rear floor, foreground thin rim; protect faces and labels"
+    },
+    {
+      "move": "decoy",
+      "beat": "peak",
+      "variant": "R1",
+      "file": "R1/decoy-peak.png",
+      "source": "source/R1.png",
+      "source_rect": [
+        512,
+        510,
+        1024,
+        1024
+      ],
+      "source_size": [
+        1536,
+        1024
+      ],
+      "sha256": "7f44bf76bb071a15c6e8f789d95247e8546530120943d3e648347b663e2f7925",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        8,
+        8,
+        246,
+        248
+      ],
+      "pivot": [
+        0.498,
+        0.7791
+      ],
+      "source_anchor": [
+        768,
+        920
+      ],
+      "anchor": "beside caster feet",
+      "suggested_canvas_width_at_390": 46,
+      "suggested_time_ms": [
+        120,
+        280
+      ],
+      "blend": "normal",
+      "z_order": "rear floor, foreground thin rim; protect faces and labels"
+    },
+    {
+      "move": "decoy",
+      "beat": "settle",
+      "variant": "R1",
+      "file": "R1/decoy-settle.png",
+      "source": "source/R1.png",
+      "source_rect": [
+        1024,
+        510,
+        1536,
+        1024
+      ],
+      "source_size": [
+        1536,
+        1024
+      ],
+      "sha256": "7f9ba7cc7894e8f22805d174544d9eb20889521de40c71552edc021bc3ad20c3",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        12,
+        8,
+        242,
+        242
+      ],
+      "pivot": [
+        0.498,
+        0.7791
+      ],
+      "source_anchor": [
+        1280,
+        920
+      ],
+      "anchor": "beside caster feet",
+      "suggested_canvas_width_at_390": 44,
+      "suggested_time_ms": [
+        280,
+        480
+      ],
+      "blend": "normal",
+      "z_order": "rear floor, foreground thin rim; protect faces and labels"
+    }
+  ]
+}

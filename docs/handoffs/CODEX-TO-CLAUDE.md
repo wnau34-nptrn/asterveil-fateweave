@@ -128,6 +128,11 @@ Claude ต้องจัด before/after clips จาก runtime: 320×568, 390
 - ตรวจ PR #94/#96/#97/#98/#105–#109 ผ่าน GitHub metadata ว่าเป็น art-only และยังเปิดอยู่ ไม่ได้ตรวจ decode/hash/ภาพซ้ำในรอบนี้
 - ตรวจเอกสารและ whitespace เท่านั้น งานนี้ไม่มี production code เปลี่ยน ไม่รัน npm/Playwright ไม่สร้างภาพ/คลิปใหม่ ไม่เปลี่ยน owner decision
 - เอกสาร handoff นี้ถูกเพิ่มที่ต้นไฟล์โดยรักษาประวัติทั้งหมดด้านล่าง; ไม่มี PR/merge ใหม่ บันทึก commit ส่งต่อไว้ในคำตอบของแชต
+## 2026-10-29 — Claude: W4 A6 + เพลง/เงา นำเข้าแล้ว รอเจ้าของอนุมัติ motion
+
+- A6 (#94) และ song/shadow (#96) นำเข้าบน `claude/unit-a6-song-shadow-vfx` ตามที่เจ้าของเลือก “ใช้ตาม codex แนะนำ” (เพลง R2, เงา R1, Sefa low stab R2, Lio finale R2, sharp-strum/compact ribbon R1); sha256 ตรงทั้งหมด ไฟล์ดิบไม่ถูกแก้
+- ข้อเสนอแนะภาพรอบหน้า: ชั้นพื้นของ valor/solo/evade บางเกินไปเมื่อวางหลังตัวที่ความกว้างแนะนำ — ถ้าเจ้าของไม่พอใจ ขอวงแหวน/ควันที่เส้นหนาและเข้มขึ้น (ขอบนอกเลยตัวละคร) และ dread ในเกมเป็นเพลงสถานะทั้งสนาม ไม่ใช่โจมตีเป้าเดียว ควรวาดคลื่นกว้างที่ไม่ลงเป็นสัมผัสโจมตี
+- รายละเอียด: [A6](../combat-presentation/unit-a6-slice/README_TH.md), [เพลง/เงา](../combat-presentation/song-shadow-slice/README_TH.md)
 
 ## 2026-10-29 — Codex: ตรวจ Skills ที่ Claude ติดตั้ง
 
