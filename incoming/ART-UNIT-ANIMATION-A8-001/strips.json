@@ -1,0 +1,1202 @@
+[
+  {
+    "file": "raw/foe_golem-punch-r1.png",
+    "identity": "foe_golem",
+    "move": "punch",
+    "revision": "r1",
+    "preferred": true,
+    "source": "source-sheets/punch.png",
+    "frames": 6,
+    "frame_size": [
+      1024,
+      768
+    ],
+    "frame_order": [
+      "ready",
+      "wind-up",
+      "deep anticipation",
+      "contact/release",
+      "follow-through",
+      "recover to ready"
+    ],
+    "sha256": "eb462d423411849fb8d3c715c9f659b2ea02b4f3dbd6339f1376de4bef10151d",
+    "suggested_intents": [
+      "Crystal Fist",
+      "Stone Fist"
+    ],
+    "source_uniform_scale": 2.096069868995633,
+    "logical_seed_origin": [
+      256,
+      200
+    ],
+    "logical_sole_y": 697,
+    "minimum_clear_gutter_px": 262,
+    "frame_details": [
+      {
+        "index": 0,
+        "bounds_alpha_gt0": [
+          272,
+          217,
+          752,
+          697
+        ],
+        "seed_exact": true,
+        "sole_alpha_gt40": 697
+      },
+      {
+        "index": 1,
+        "bounds_alpha_gt0": [
+          227,
+          201,
+          798,
+          702
+        ],
+        "seed_exact": false,
+        "sole_alpha_gt40": 697
+      },
+      {
+        "index": 2,
+        "bounds_alpha_gt0": [
+          265,
+          266,
+          760,
+          704
+        ],
+        "seed_exact": false,
+        "sole_alpha_gt40": 697
+      },
+      {
+        "index": 3,
+        "bounds_alpha_gt0": [
+          124,
+          222,
+          900,
+          702
+        ],
+        "seed_exact": false,
+        "sole_alpha_gt40": 697
+      },
+      {
+        "index": 4,
+        "bounds_alpha_gt0": [
+          138,
+          233,
+          884,
+          703
+        ],
+        "seed_exact": false,
+        "sole_alpha_gt40": 697
+      },
+      {
+        "index": 5,
+        "bounds_alpha_gt0": [
+          272,
+          217,
+          752,
+          697
+        ],
+        "seed_exact": true,
+        "sole_alpha_gt40": 697
+      }
+    ],
+    "loop": false
+  },
+  {
+    "file": "raw/foe_golem-veil-quake-r1.png",
+    "identity": "foe_golem",
+    "move": "veil-quake",
+    "revision": "r1",
+    "preferred": true,
+    "source": "source-sheets/quake3.png",
+    "frames": 6,
+    "frame_size": [
+      1024,
+      768
+    ],
+    "frame_order": [
+      "ready",
+      "wind-up",
+      "deep anticipation",
+      "contact/release",
+      "follow-through",
+      "recover to ready"
+    ],
+    "sha256": "45e66e7a1e586f27066ec1e0794c825e203e5e621801b111605abbe7b4b72bfb",
+    "suggested_intents": [
+      "Veil Quake"
+    ],
+    "source_uniform_scale": 1.6,
+    "logical_seed_origin": [
+      256,
+      200
+    ],
+    "logical_sole_y": 697,
+    "minimum_clear_gutter_px": 557,
+    "frame_details": [
+      {
+        "index": 0,
+        "bounds_alpha_gt0": [
+          272,
+          217,
+          752,
+          697
+        ],
+        "seed_exact": true,
+        "sole_alpha_gt40": 697
+      },
+      {
+        "index": 1,
+        "bounds_alpha_gt0": [
+          305,
+          310,
+          719,
+          702
+        ],
+        "seed_exact": false,
+        "sole_alpha_gt40": 697
+      },
+      {
+        "index": 2,
+        "bounds_alpha_gt0": [
+          308,
+          122,
+          716,
+          701
+        ],
+        "seed_exact": false,
+        "sole_alpha_gt40": 697
+      },
+      {
+        "index": 3,
+        "bounds_alpha_gt0": [
+          266,
+          341,
+          756,
+          701
+        ],
+        "seed_exact": false,
+        "sole_alpha_gt40": 697
+      },
+      {
+        "index": 4,
+        "bounds_alpha_gt0": [
+          289,
+          359,
+          735,
+          701
+        ],
+        "seed_exact": false,
+        "sole_alpha_gt40": 697
+      },
+      {
+        "index": 5,
+        "bounds_alpha_gt0": [
+          272,
+          217,
+          752,
+          697
+        ],
+        "seed_exact": true,
+        "sole_alpha_gt40": 697
+      }
+    ],
+    "loop": false
+  },
+  {
+    "file": "raw/foe_rift_channeler-rift-bolt-r1.png",
+    "identity": "foe_rift_channeler",
+    "move": "rift-bolt",
+    "revision": "r1",
+    "preferred": true,
+    "source": "source-sheets/bolt.png",
+    "frames": 6,
+    "frame_size": [
+      1024,
+      768
+    ],
+    "frame_order": [
+      "ready",
+      "wind-up",
+      "deep anticipation",
+      "contact/release",
+      "follow-through",
+      "recover to ready"
+    ],
+    "sha256": "b48329c76bce14bfe79f90a0c3bd5108c19c5ff0e436337b256829f6c408222e",
+    "suggested_intents": [
+      "Rift Bolt",
+      "Rift Beam"
+    ],
+    "source_uniform_scale": 1.1626016260162602,
+    "logical_seed_origin": [
+      256,
+      200
+    ],
+    "logical_sole_y": 697,
+    "minimum_clear_gutter_px": 531,
+    "frame_details": [
+      {
+        "index": 0,
+        "bounds_alpha_gt0": [
+          272,
+          268,
+          752,
+          697
+        ],
+        "seed_exact": true,
+        "sole_alpha_gt40": 697
+      },
+      {
+        "index": 1,
+        "bounds_alpha_gt0": [
+          348,
+          302,
+          674,
+          700
+        ],
+        "seed_exact": false,
+        "sole_alpha_gt40": 697
+      },
+      {
+        "index": 2,
+        "bounds_alpha_gt0": [
+          340,
+          320,
+          684,
+          700
+        ],
+        "seed_exact": false,
+        "sole_alpha_gt40": 697
+      },
+      {
+        "index": 3,
+        "bounds_alpha_gt0": [
+          274,
+          291,
+          750,
+          700
+        ],
+        "seed_exact": false,
+        "sole_alpha_gt40": 697
+      },
+      {
+        "index": 4,
+        "bounds_alpha_gt0": [
+          258,
+          286,
+          765,
+          700
+        ],
+        "seed_exact": false,
+        "sole_alpha_gt40": 697
+      },
+      {
+        "index": 5,
+        "bounds_alpha_gt0": [
+          272,
+          268,
+          752,
+          697
+        ],
+        "seed_exact": true,
+        "sole_alpha_gt40": 697
+      }
+    ],
+    "loop": false
+  },
+  {
+    "file": "raw/foe_rift_wisp-hover-r1.png",
+    "identity": "foe_rift_wisp",
+    "move": "hover",
+    "revision": "r1",
+    "preferred": true,
+    "source": "source-sheets/hover.png",
+    "frames": 4,
+    "frame_size": [
+      1024,
+      768
+    ],
+    "frame_order": [
+      "ready",
+      "bob up",
+      "bob down",
+      "ready"
+    ],
+    "sha256": "d216c8d843ac03f32016886ab0dc039e111c31faf20d6ec9251bf8abf7a8d8d9",
+    "suggested_intents": [
+      "hover"
+    ],
+    "source_uniform_scale": 0.7341269841269841,
+    "logical_seed_origin": [
+      256,
+      200
+    ],
+    "logical_sole_y": 697,
+    "minimum_clear_gutter_px": 739,
+    "frame_details": [
+      {
+        "index": 0,
+        "bounds_alpha_gt0": [
+          376,
+          327,
+          647,
+          697
+        ],
+        "seed_exact": true,
+        "sole_alpha_gt40": 697
+      },
+      {
+        "index": 1,
+        "bounds_alpha_gt0": [
+          370,
+          306,
+          653,
+          651
+        ],
+        "seed_exact": false,
+        "sole_alpha_gt40": 649
+      },
+      {
+        "index": 2,
+        "bounds_alpha_gt0": [
+          368,
+          348,
+          657,
+          715
+        ],
+        "seed_exact": false,
+        "sole_alpha_gt40": 713
+      },
+      {
+        "index": 3,
+        "bounds_alpha_gt0": [
+          376,
+          327,
+          647,
+          697
+        ],
+        "seed_exact": true,
+        "sole_alpha_gt40": 697
+      }
+    ],
+    "loop": true
+  },
+  {
+    "file": "raw/foe_rift_wisp-star-flame-r1.png",
+    "identity": "foe_rift_wisp",
+    "move": "star-flame",
+    "revision": "r1",
+    "preferred": true,
+    "source": "source-sheets/star3.png",
+    "frames": 6,
+    "frame_size": [
+      1024,
+      768
+    ],
+    "frame_order": [
+      "ready",
+      "wind-up",
+      "deep anticipation",
+      "contact/release",
+      "follow-through",
+      "recover to ready"
+    ],
+    "sha256": "9512d75de2e96b93a000cb8cade445421f93ba00049302c238a96b0989765339",
+    "suggested_intents": [
+      "Star Flame"
+    ],
+    "source_uniform_scale": 1.1246200607902737,
+    "logical_seed_origin": [
+      256,
+      200
+    ],
+    "logical_sole_y": 697,
+    "minimum_clear_gutter_px": 668,
+    "frame_details": [
+      {
+        "index": 0,
+        "bounds_alpha_gt0": [
+          376,
+          327,
+          647,
+          697
+        ],
+        "seed_exact": true,
+        "sole_alpha_gt40": 697
+      },
+      {
+        "index": 1,
+        "bounds_alpha_gt0": [
+          390,
+          368,
+          633,
+          682
+        ],
+        "seed_exact": false,
+        "sole_alpha_gt40": 679
+      },
+      {
+        "index": 2,
+        "bounds_alpha_gt0": [
+          384,
+          425,
+          639,
+          698
+        ],
+        "seed_exact": false,
+        "sole_alpha_gt40": 695
+      },
+      {
+        "index": 3,
+        "bounds_alpha_gt0": [
+          312,
+          395,
+          713,
+          651
+        ],
+        "seed_exact": false,
+        "sole_alpha_gt40": 648
+      },
+      {
+        "index": 4,
+        "bounds_alpha_gt0": [
+          357,
+          398,
+          667,
+          677
+        ],
+        "seed_exact": false,
+        "sole_alpha_gt40": 675
+      },
+      {
+        "index": 5,
+        "bounds_alpha_gt0": [
+          376,
+          327,
+          647,
+          697
+        ],
+        "seed_exact": true,
+        "sole_alpha_gt40": 697
+      }
+    ],
+    "loop": false
+  },
+  {
+    "file": "raw/foe_shard_crawler-crystal-stab-r1.png",
+    "identity": "foe_shard_crawler",
+    "move": "crystal-stab",
+    "revision": "r1",
+    "preferred": true,
+    "source": "source-sheets/stab.png",
+    "frames": 6,
+    "frame_size": [
+      1024,
+      768
+    ],
+    "frame_order": [
+      "ready",
+      "wind-up",
+      "deep anticipation",
+      "contact/release",
+      "follow-through",
+      "recover to ready"
+    ],
+    "sha256": "84203283ba8f8f9b02cf01f7914395b75d828e7906d1b6b5d78d4c0cb9c018a7",
+    "suggested_intents": [
+      "Crystal Stab"
+    ],
+    "source_uniform_scale": 1.2592592592592593,
+    "logical_seed_origin": [
+      256,
+      200
+    ],
+    "logical_sole_y": 697,
+    "minimum_clear_gutter_px": 566,
+    "frame_details": [
+      {
+        "index": 0,
+        "bounds_alpha_gt0": [
+          282,
+          391,
+          742,
+          697
+        ],
+        "seed_exact": true,
+        "sole_alpha_gt40": 697
+      },
+      {
+        "index": 1,
+        "bounds_alpha_gt0": [
+          310,
+          421,
+          713,
+          701
+        ],
+        "seed_exact": false,
+        "sole_alpha_gt40": 697
+      },
+      {
+        "index": 2,
+        "bounds_alpha_gt0": [
+          310,
+          450,
+          715,
+          701
+        ],
+        "seed_exact": false,
+        "sole_alpha_gt40": 697
+      },
+      {
+        "index": 3,
+        "bounds_alpha_gt0": [
+          287,
+          439,
+          737,
+          700
+        ],
+        "seed_exact": false,
+        "sole_alpha_gt40": 697
+      },
+      {
+        "index": 4,
+        "bounds_alpha_gt0": [
+          284,
+          445,
+          740,
+          701
+        ],
+        "seed_exact": false,
+        "sole_alpha_gt40": 697
+      },
+      {
+        "index": 5,
+        "bounds_alpha_gt0": [
+          282,
+          391,
+          742,
+          697
+        ],
+        "seed_exact": true,
+        "sole_alpha_gt40": 697
+      }
+    ],
+    "loop": false
+  },
+  {
+    "file": "raw/foe_golem-hit-r1.png",
+    "identity": "foe_golem",
+    "move": "hit",
+    "revision": "r1",
+    "preferred": true,
+    "source": "source-sheets/foe_golem-hit.png",
+    "frames": 4,
+    "frame_size": [
+      1024,
+      768
+    ],
+    "frame_order": [
+      "ready",
+      "recoil",
+      "brace",
+      "ready"
+    ],
+    "sha256": "b8d2a8b935218f78c6cc9f1694316cc413f9ba7ed42d326265003e29acced6c9",
+    "suggested_intents": [
+      "hit"
+    ],
+    "source_uniform_scale": 0.9393346379647749,
+    "logical_seed_origin": [
+      256,
+      200
+    ],
+    "logical_sole_y": 697,
+    "minimum_clear_gutter_px": 562,
+    "frame_details": [
+      {
+        "index": 0,
+        "bounds_alpha_gt0": [
+          272,
+          217,
+          752,
+          697
+        ],
+        "seed_exact": true,
+        "sole_alpha_gt40": 697
+      },
+      {
+        "index": 1,
+        "bounds_alpha_gt0": [
+          290,
+          265,
+          734,
+          700
+        ],
+        "seed_exact": false,
+        "sole_alpha_gt40": 697
+      },
+      {
+        "index": 2,
+        "bounds_alpha_gt0": [
+          296,
+          297,
+          729,
+          700
+        ],
+        "seed_exact": false,
+        "sole_alpha_gt40": 697
+      },
+      {
+        "index": 3,
+        "bounds_alpha_gt0": [
+          272,
+          217,
+          752,
+          697
+        ],
+        "seed_exact": true,
+        "sole_alpha_gt40": 697
+      }
+    ],
+    "loop": false
+  },
+  {
+    "file": "raw/foe_golem-down-r1.png",
+    "identity": "foe_golem",
+    "move": "down",
+    "revision": "r1",
+    "preferred": true,
+    "source": "source-sheets/foe_golem-down.png",
+    "frames": 4,
+    "frame_size": [
+      1024,
+      768
+    ],
+    "frame_order": [
+      "ready",
+      "buckle/dip",
+      "collapse/sink",
+      "grounded hold"
+    ],
+    "sha256": "a7f1b8a68631db9bac2583f93c969c2efafdd2ea11fe05d90c849551af4f26f8",
+    "suggested_intents": [
+      "down"
+    ],
+    "source_uniform_scale": 0.9266409266409267,
+    "logical_seed_origin": [
+      256,
+      200
+    ],
+    "logical_sole_y": 697,
+    "minimum_clear_gutter_px": 488,
+    "frame_details": [
+      {
+        "index": 0,
+        "bounds_alpha_gt0": [
+          272,
+          217,
+          752,
+          697
+        ],
+        "seed_exact": true,
+        "sole_alpha_gt40": 697
+      },
+      {
+        "index": 1,
+        "bounds_alpha_gt0": [
+          291,
+          304,
+          734,
+          700
+        ],
+        "seed_exact": false,
+        "sole_alpha_gt40": 697
+      },
+      {
+        "index": 2,
+        "bounds_alpha_gt0": [
+          234,
+          451,
+          790,
+          700
+        ],
+        "seed_exact": false,
+        "sole_alpha_gt40": 697
+      },
+      {
+        "index": 3,
+        "bounds_alpha_gt0": [
+          254,
+          461,
+          769,
+          699
+        ],
+        "seed_exact": false,
+        "sole_alpha_gt40": 697
+      }
+    ],
+    "loop": false
+  },
+  {
+    "file": "raw/foe_rift_channeler-hit-r1.png",
+    "identity": "foe_rift_channeler",
+    "move": "hit",
+    "revision": "r1",
+    "preferred": true,
+    "source": "source-sheets/foe_rift_channeler-hit.png",
+    "frames": 4,
+    "frame_size": [
+      1024,
+      768
+    ],
+    "frame_order": [
+      "ready",
+      "recoil",
+      "brace",
+      "ready"
+    ],
+    "sha256": "dd23ce09ff95d34d5e707473dd5eeb3f55709c81d40ebd39d5b08cba4702cbb8",
+    "suggested_intents": [
+      "hit"
+    ],
+    "source_uniform_scale": 0.8737270875763747,
+    "logical_seed_origin": [
+      256,
+      200
+    ],
+    "logical_sole_y": 697,
+    "minimum_clear_gutter_px": 562,
+    "frame_details": [
+      {
+        "index": 0,
+        "bounds_alpha_gt0": [
+          272,
+          268,
+          752,
+          697
+        ],
+        "seed_exact": true,
+        "sole_alpha_gt40": 697
+      },
+      {
+        "index": 1,
+        "bounds_alpha_gt0": [
+          290,
+          309,
+          733,
+          699
+        ],
+        "seed_exact": false,
+        "sole_alpha_gt40": 697
+      },
+      {
+        "index": 2,
+        "bounds_alpha_gt0": [
+          314,
+          330,
+          711,
+          699
+        ],
+        "seed_exact": false,
+        "sole_alpha_gt40": 697
+      },
+      {
+        "index": 3,
+        "bounds_alpha_gt0": [
+          272,
+          268,
+          752,
+          697
+        ],
+        "seed_exact": true,
+        "sole_alpha_gt40": 697
+      }
+    ],
+    "loop": false
+  },
+  {
+    "file": "raw/foe_rift_channeler-down-r1.png",
+    "identity": "foe_rift_channeler",
+    "move": "down",
+    "revision": "r1",
+    "preferred": true,
+    "source": "source-sheets/foe_rift_channeler-down.png",
+    "frames": 4,
+    "frame_size": [
+      1024,
+      768
+    ],
+    "frame_order": [
+      "ready",
+      "buckle/dip",
+      "collapse/sink",
+      "grounded hold"
+    ],
+    "sha256": "65e1e52749d07ed41726a4a52a95835651c308c8b5c1f6830c7e41a1608c54cd",
+    "suggested_intents": [
+      "down"
+    ],
+    "source_uniform_scale": 0.9387308533916849,
+    "logical_seed_origin": [
+      256,
+      200
+    ],
+    "logical_sole_y": 697,
+    "minimum_clear_gutter_px": 506,
+    "frame_details": [
+      {
+        "index": 0,
+        "bounds_alpha_gt0": [
+          272,
+          268,
+          752,
+          697
+        ],
+        "seed_exact": true,
+        "sole_alpha_gt40": 697
+      },
+      {
+        "index": 1,
+        "bounds_alpha_gt0": [
+          289,
+          315,
+          736,
+          700
+        ],
+        "seed_exact": false,
+        "sole_alpha_gt40": 697
+      },
+      {
+        "index": 2,
+        "bounds_alpha_gt0": [
+          238,
+          435,
+          786,
+          700
+        ],
+        "seed_exact": false,
+        "sole_alpha_gt40": 697
+      },
+      {
+        "index": 3,
+        "bounds_alpha_gt0": [
+          268,
+          480,
+          754,
+          700
+        ],
+        "seed_exact": false,
+        "sole_alpha_gt40": 697
+      }
+    ],
+    "loop": false
+  },
+  {
+    "file": "raw/foe_rift_wisp-hit-r1.png",
+    "identity": "foe_rift_wisp",
+    "move": "hit",
+    "revision": "r1",
+    "preferred": true,
+    "source": "source-sheets/foe_rift_wisp-hit.png",
+    "frames": 4,
+    "frame_size": [
+      1024,
+      768
+    ],
+    "frame_order": [
+      "ready",
+      "recoil",
+      "brace",
+      "ready"
+    ],
+    "sha256": "8037875fb86d03da70a59749555cca63818553b261af91cc2c279b45ec8b2c80",
+    "suggested_intents": [
+      "hit"
+    ],
+    "source_uniform_scale": 0.7613168724279835,
+    "logical_seed_origin": [
+      256,
+      200
+    ],
+    "logical_sole_y": 697,
+    "minimum_clear_gutter_px": 702,
+    "frame_details": [
+      {
+        "index": 0,
+        "bounds_alpha_gt0": [
+          376,
+          327,
+          647,
+          697
+        ],
+        "seed_exact": true,
+        "sole_alpha_gt40": 697
+      },
+      {
+        "index": 1,
+        "bounds_alpha_gt0": [
+          345,
+          359,
+          679,
+          682
+        ],
+        "seed_exact": false,
+        "sole_alpha_gt40": 680
+      },
+      {
+        "index": 2,
+        "bounds_alpha_gt0": [
+          357,
+          396,
+          667,
+          701
+        ],
+        "seed_exact": false,
+        "sole_alpha_gt40": 699
+      },
+      {
+        "index": 3,
+        "bounds_alpha_gt0": [
+          376,
+          327,
+          647,
+          697
+        ],
+        "seed_exact": true,
+        "sole_alpha_gt40": 697
+      }
+    ],
+    "loop": false
+  },
+  {
+    "file": "raw/foe_rift_wisp-down-r1.png",
+    "identity": "foe_rift_wisp",
+    "move": "down",
+    "revision": "r1",
+    "preferred": true,
+    "source": "source-sheets/foe_rift_wisp-down.png",
+    "frames": 4,
+    "frame_size": [
+      1024,
+      768
+    ],
+    "frame_order": [
+      "ready",
+      "buckle/dip",
+      "collapse/sink",
+      "grounded hold"
+    ],
+    "sha256": "ef6a8a05c6f77835e345d482a4be4e1e947b0d1f4a7bacc46b645c9df7a3fa90",
+    "suggested_intents": [
+      "down"
+    ],
+    "source_uniform_scale": 0.6208053691275168,
+    "logical_seed_origin": [
+      256,
+      200
+    ],
+    "logical_sole_y": 697,
+    "minimum_clear_gutter_px": 721,
+    "frame_details": [
+      {
+        "index": 0,
+        "bounds_alpha_gt0": [
+          376,
+          327,
+          647,
+          697
+        ],
+        "seed_exact": true,
+        "sole_alpha_gt40": 697
+      },
+      {
+        "index": 1,
+        "bounds_alpha_gt0": [
+          385,
+          354,
+          639,
+          701
+        ],
+        "seed_exact": false,
+        "sole_alpha_gt40": 699
+      },
+      {
+        "index": 2,
+        "bounds_alpha_gt0": [
+          370,
+          471,
+          653,
+          699
+        ],
+        "seed_exact": false,
+        "sole_alpha_gt40": 697
+      },
+      {
+        "index": 3,
+        "bounds_alpha_gt0": [
+          350,
+          548,
+          675,
+          701
+        ],
+        "seed_exact": false,
+        "sole_alpha_gt40": 698
+      }
+    ],
+    "loop": false
+  },
+  {
+    "file": "raw/foe_shard_crawler-hit-r1.png",
+    "identity": "foe_shard_crawler",
+    "move": "hit",
+    "revision": "r1",
+    "preferred": true,
+    "source": "source-sheets/foe_shard_crawler-hit.png",
+    "frames": 4,
+    "frame_size": [
+      1024,
+      768
+    ],
+    "frame_order": [
+      "ready",
+      "recoil",
+      "brace",
+      "ready"
+    ],
+    "sha256": "fb27bc3879b0c211ef23a651e47ddb2a0ae78ed3c4b3db43d81003bb1de40158",
+    "suggested_intents": [
+      "hit"
+    ],
+    "source_uniform_scale": 0.918918918918919,
+    "logical_seed_origin": [
+      256,
+      200
+    ],
+    "logical_sole_y": 697,
+    "minimum_clear_gutter_px": 572,
+    "frame_details": [
+      {
+        "index": 0,
+        "bounds_alpha_gt0": [
+          282,
+          391,
+          742,
+          697
+        ],
+        "seed_exact": true,
+        "sole_alpha_gt40": 697
+      },
+      {
+        "index": 1,
+        "bounds_alpha_gt0": [
+          290,
+          407,
+          735,
+          700
+        ],
+        "seed_exact": false,
+        "sole_alpha_gt40": 697
+      },
+      {
+        "index": 2,
+        "bounds_alpha_gt0": [
+          291,
+          430,
+          733,
+          699
+        ],
+        "seed_exact": false,
+        "sole_alpha_gt40": 697
+      },
+      {
+        "index": 3,
+        "bounds_alpha_gt0": [
+          282,
+          391,
+          742,
+          697
+        ],
+        "seed_exact": true,
+        "sole_alpha_gt40": 697
+      }
+    ],
+    "loop": false
+  },
+  {
+    "file": "raw/foe_shard_crawler-down-r1.png",
+    "identity": "foe_shard_crawler",
+    "move": "down",
+    "revision": "r1",
+    "preferred": true,
+    "source": "source-sheets/crawlerdown2.png",
+    "frames": 4,
+    "frame_size": [
+      1024,
+      768
+    ],
+    "frame_order": [
+      "ready",
+      "buckle/dip",
+      "collapse/sink",
+      "grounded hold"
+    ],
+    "sha256": "ec781f8e01f3d3d5a5445bda9fba0d02cd49cbf3955d63c287c1e00e491acc04",
+    "suggested_intents": [
+      "down"
+    ],
+    "source_uniform_scale": 1.0337837837837838,
+    "logical_seed_origin": [
+      256,
+      200
+    ],
+    "logical_sole_y": 697,
+    "minimum_clear_gutter_px": 570,
+    "frame_details": [
+      {
+        "index": 0,
+        "bounds_alpha_gt0": [
+          282,
+          391,
+          742,
+          697
+        ],
+        "seed_exact": true,
+        "sole_alpha_gt40": 697
+      },
+      {
+        "index": 1,
+        "bounds_alpha_gt0": [
+          288,
+          438,
+          735,
+          700
+        ],
+        "seed_exact": false,
+        "sole_alpha_gt40": 697
+      },
+      {
+        "index": 2,
+        "bounds_alpha_gt0": [
+          308,
+          507,
+          717,
+          700
+        ],
+        "seed_exact": false,
+        "sole_alpha_gt40": 697
+      },
+      {
+        "index": 3,
+        "bounds_alpha_gt0": [
+          315,
+          510,
+          709,
+          700
+        ],
+        "seed_exact": false,
+        "sole_alpha_gt40": 697
+      }
+    ],
+    "loop": false
+  }
+]
