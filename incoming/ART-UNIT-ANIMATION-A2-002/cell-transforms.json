@@ -1,0 +1,277 @@
+{
+  "001": {
+    "source": "001-r3.png",
+    "source_size": [
+      1254,
+      1254
+    ],
+    "translation": [
+      0,
+      1
+    ]
+  },
+  "002": {
+    "source": "002-r2.png",
+    "source_size": [
+      1254,
+      1254
+    ],
+    "translation": [
+      0,
+      -1
+    ]
+  },
+  "003": {
+    "source": "003-r1.png",
+    "source_size": [
+      1254,
+      1254
+    ],
+    "translation": [
+      0,
+      6
+    ]
+  },
+  "004": {
+    "source": "004-r2.png",
+    "source_size": [
+      1254,
+      1254
+    ],
+    "translation": [
+      0,
+      27
+    ]
+  },
+  "005": {
+    "source": "005-r1.png",
+    "source_size": [
+      1254,
+      1254
+    ],
+    "translation": [
+      0,
+      9
+    ]
+  },
+  "006": {
+    "source": "006-r1.png",
+    "source_size": [
+      1254,
+      1254
+    ],
+    "translation": [
+      0,
+      -1
+    ]
+  },
+  "007": {
+    "source": "007-r1.png",
+    "source_size": [
+      1254,
+      1254
+    ],
+    "translation": [
+      0,
+      2
+    ]
+  },
+  "008": {
+    "source": "008-r1.png",
+    "source_size": [
+      1254,
+      1254
+    ],
+    "translation": [
+      0,
+      -1
+    ]
+  },
+  "009": {
+    "source": "009-r1.png",
+    "source_size": [
+      1254,
+      1254
+    ],
+    "translation": [
+      0,
+      18
+    ]
+  },
+  "010": {
+    "source": "010-r1.png",
+    "source_size": [
+      1254,
+      1254
+    ],
+    "translation": [
+      0,
+      2
+    ]
+  },
+  "011": {
+    "source": "011-r1.png",
+    "source_size": [
+      1254,
+      1254
+    ],
+    "translation": [
+      0,
+      -1
+    ]
+  },
+  "012": {
+    "source": "012-r1.png",
+    "source_size": [
+      1254,
+      1254
+    ],
+    "translation": [
+      0,
+      5
+    ]
+  },
+  "013": {
+    "source": "013-r1.png",
+    "source_size": [
+      1254,
+      1254
+    ],
+    "translation": [
+      0,
+      29
+    ]
+  },
+  "014": {
+    "source": "014-r1.png",
+    "source_size": [
+      1254,
+      1254
+    ],
+    "translation": [
+      0,
+      14
+    ]
+  },
+  "015": {
+    "source": "015-r1.png",
+    "source_size": [
+      1254,
+      1254
+    ],
+    "translation": [
+      0,
+      20
+    ]
+  },
+  "016": {
+    "source": "016-r2.png",
+    "source_size": [
+      1254,
+      1254
+    ],
+    "translation": [
+      0,
+      35
+    ]
+  },
+  "017": {
+    "source": "017-r1.png",
+    "source_size": [
+      1254,
+      1254
+    ],
+    "translation": [
+      0,
+      22
+    ]
+  },
+  "018": {
+    "source": "018-r1.png",
+    "source_size": [
+      1254,
+      1254
+    ],
+    "translation": [
+      0,
+      9
+    ]
+  },
+  "019": {
+    "source": "019-r1.png",
+    "source_size": [
+      1254,
+      1254
+    ],
+    "translation": [
+      0,
+      21
+    ]
+  },
+  "020": {
+    "source": "020-r1.png",
+    "source_size": [
+      1254,
+      1254
+    ],
+    "translation": [
+      0,
+      21
+    ]
+  },
+  "021": {
+    "source": "021-r1.png",
+    "source_size": [
+      1254,
+      1254
+    ],
+    "translation": [
+      0,
+      25
+    ]
+  },
+  "022": {
+    "source": "022-r1.png",
+    "source_size": [
+      1254,
+      1254
+    ],
+    "translation": [
+      0,
+      18
+    ]
+  },
+  "023": {
+    "source": "023-r6.png",
+    "source_size": [
+      1254,
+      1254
+    ],
+    "translation": [
+      0,
+      93
+    ]
+  },
+  "024": {
+    "source": "024-r1.png",
+    "source_size": [
+      1254,
+      1254
+    ],
+    "translation": [
+      0,
+      26
+    ]
+  },
+  "025": {
+    "source": "025-r1.png",
+    "source_size": [
+      1254,
+      1254
+    ],
+    "translation": [
+      0,
+      18
+    ]
+  }
+}
