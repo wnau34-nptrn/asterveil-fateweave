@@ -16,6 +16,7 @@ import { HEALING_ATLAS, healingAtlasUrls, healingPrepare, healingContact, healin
 import { PROJECTILE_ATLAS, projectileAtlasUrls, projectileCues, projectilePrepare, projectileContact, isProjectileSkill } from '../visuals/projectile-fx';
 import { SEAL_ATLAS, sealAtlasUrls, sealCues, sealEvents, sealPrepare, sealContact, isSealSkill, type SealSpot } from '../visuals/arcane-seal-fx';
 import { SONG_ATLAS, songAtlasUrls, isSongSkill, songPlan, songPrepare, songContact, type SongSpot } from '../visuals/song-fx';
+import { SAINT_DANCE_ATLAS, saintDanceAtlasUrls, isSdSkill, sdPlan, sdPrepare, sdContact } from '../visuals/saint-dance-fx';
 import { COMMAND_ATLAS, commandAtlasUrls, commandCues, commandPrepare, commandContact, isCommandSkill, type CommandSpot } from '../visuals/command-fx';
 import { ALCHEMY_ATLAS, alchemyAtlasUrls, alchemyCues, alchemyEvents, alchemyPrepare, alchemyContact, alchemyHealingCues, isAlchemySkill, type AlchemySkill } from '../visuals/alchemy-fx';
 import { EARTH_ATLAS, earthAtlasUrls, earthCues, earthPrepare, earthContact, earthHealingCues, earthHealingEvents, isEarthSkill, type EarthSkill } from '../visuals/earth-fx';
@@ -105,6 +106,7 @@ export class BattleScene extends Phaser.Scene {
     this.load.atlas(SEAL_ATLAS, ...sealAtlasUrls());
     this.load.atlas(COMMAND_ATLAS, ...commandAtlasUrls());
     this.load.atlas(SONG_ATLAS, ...songAtlasUrls());
+    this.load.atlas(SAINT_DANCE_ATLAS, ...saintDanceAtlasUrls());
     this.load.atlas(DEFENSE_ATLAS, ...defenseAtlasUrls());
     this.load.atlas(HEALING_ATLAS, ...healingAtlasUrls());
     for (const sheet of ['units', 'mercs', 'foes', 'foes2'] as const) this.load.spritesheet(`battle-${sheet}`, unitsUrl(sheet), { frameWidth: 512, frameHeight: 512 });
@@ -401,7 +403,8 @@ export class BattleScene extends Phaser.Scene {
   // Song/shadow landmarks (C5.8/C5.9) follow the rendered unit: caster hand, lower torso (waist) or sole contact.
   songAnchor(id:string,spot:SongSpot){
     const body=this.bodies.get(id),slot=this.actorPanels.get(id);
-    const sprite=body?.list.find(c=>c instanceof Phaser.GameObjects.Image) as Phaser.GameObjects.Image|undefined;
+    // Floor layers live inside the body (flagged `songLocal`); the unit's own sprite is the first image that is not one of them.
+    const sprite=body?.list.find(c=>c instanceof Phaser.GameObjects.Image&&!c.getData('songLocal')) as Phaser.GameObjects.Image|undefined;
     if(!sprite||!slot)return;
     const ratio=sprite.texture.key.startsWith('unit-pilot-')?unitDisplayRatio(artOf(this.encounter,id)):1,matrix=sprite.getWorldTransformMatrix();
     const x=spot==='hand'?.36:0,y=spot==='hand'?-.86:spot==='waist'?-.40:.04;
@@ -417,7 +420,7 @@ export class BattleScene extends Phaser.Scene {
       // The unit whose feet the layer stands under; the layer's follow() sets world coordinates, so offset by the body's origin.
       let owner:Phaser.GameObjects.Container|undefined,best=Infinity;
       for(const body of this.bodies.values()){const d=Math.hypot(body.x-item.x,body.y-item.y);if(d<best){best=d;owner=body;}}
-      const sprite=owner?.list.find(c=>c instanceof Phaser.GameObjects.Image);
+      const sprite=owner?.list.find(c=>c instanceof Phaser.GameObjects.Image&&!c.getData('songLocal'));
       if(!owner||!sprite){this.layer?.add(item);return;}
       owner.addAt(item,owner.list.indexOf(sprite));
       const body=owner,follow=item.getData('songFollow') as (()=>void)|undefined;
@@ -478,6 +481,7 @@ export class BattleScene extends Phaser.Scene {
       commandPrepare({front:this.fx(turn.actorId)},turn,(id,spot)=>this.commandAnchor(id,spot),contactMs);return;
     }
     if(turn.side==='hero'&&isSongSkill(turn.action)&&this.textures.exists(SONG_ATLAS)&&songPrepare(this.songFx(turn.actorId),turn,(id,spot)=>this.songAnchor(id,spot),contactMs))return;
+    if(turn.side==='hero'&&isSdSkill(turn.action)&&this.textures.exists(SAINT_DANCE_ATLAS)&&sdPrepare(this.songFx(turn.actorId),turn,(id,spot)=>this.songAnchor(id,spot),contactMs))return;
     if(turn.side==='hero'&&isSealSkill(turn.action)&&this.textures.exists(SEAL_ATLAS)){
       sealPrepare(this.sealFx(turn.actorId),turn,(id,spot)=>this.sealAnchor(id,spot),contactMs);return;
     }
@@ -547,6 +551,8 @@ export class BattleScene extends Phaser.Scene {
     const sealEventSet=new Set(this.textures.exists(SEAL_ATLAS)?sealEvents(turn):[]);
     const songReady=this.textures.exists(SONG_ATLAS),paintedSong=songReady?songPlan(turn):undefined;
     const songEventSet=new Set(paintedSong?.events??[]);
+    const paintedSd=this.textures.exists(SAINT_DANCE_ATLAS)?sdPlan(turn):undefined;
+    const sdEventSet=new Set(paintedSd?.events??[]);
     const commandReady=this.textures.exists(COMMAND_ATLAS);
     const paintedCommand=commandReady?commandCues(turn).filter(c=>!paintedDefense.some(d=>d.event===c.event)):[];
     const commandEventSet=new Set(commandReady?paintedCommand.map(c=>c.event):[]);
@@ -580,6 +586,7 @@ export class BattleScene extends Phaser.Scene {
     for(const layer of [this.healingLayer,this.effects])for(const image of [...(layer?.list??[])])if(image.getData('sealPrepare')){this.tweens.killTweensOf(image);image.destroy();}
     for(const image of [...(this.healingLayer?.list??[]),...(this.effects?.list??[])])if(image.getData('commandTag')==='prepare'){this.tweens.killTweensOf(image);image.destroy();}
     for(const image of [...(this.healingLayer?.list??[]),...(this.effects?.list??[]),...this.songFloor])if(image.getData('songPrepare')){this.tweens.killTweensOf(image);image.destroy();}
+    if(paintedSd)sdContact(this.songFx(paintedSd.casterId),paintedSd,(id,spot)=>this.songAnchor(id,spot),life);
     if(paintedSong)songContact(this.songFx(paintedSong.casterId),paintedSong,(id,spot)=>this.songAnchor(id,spot),life);
     for(const cue of paintedCommand)commandContact({front:this.fx(cue.kind==='cast'?cue.sourceId:cue.targetId)},cue,(id,spot)=>this.commandAnchor(id,spot),life);
     for(const cue of paintedSeal)sealContact(this.sealFx(cue.targetId),cue,(id,spot)=>this.sealAnchor(id,spot),life);
@@ -601,7 +608,7 @@ export class BattleScene extends Phaser.Scene {
       const ward = turn.action === 'ward' && turn.side === 'hero' && event.type === 'barrier';
       const blade = paintedBlades.find(cue => cue.event === event);
       const parry = event.type === 'parry';
-      const projectile=projectileEvents.has(event),earth=earthEvents.has(event),alchemy=alchemyEventSet.has(event)||sealEventSet.has(event)||commandEventSet.has(event)||songEventSet.has(event);
+      const projectile=projectileEvents.has(event),earth=earthEvents.has(event),alchemy=alchemyEventSet.has(event)||sealEventSet.has(event)||commandEventSet.has(event)||songEventSet.has(event)||sdEventSet.has(event);
       const defense = defenseEvents.has(event) || healingEvents.has(event);
       if (parry && event.sourceId === event.targetId) bladeStance(this.fx(id), p, life, bladePalettes.Duelist!);
       if (blade) bladeImpact(this.fx(id), blade, p, this.anchor(event.sourceId), life,
@@ -665,7 +672,7 @@ export class BattleScene extends Phaser.Scene {
       }
     }
     // The denser blade art must not cover the authoritative damage/outcome captions.
-    if (paintedBlades.length || paintedDefense.length || paintedHealing.length || paintedProjectiles.length || paintedEarth.length || paintedAlchemy.length || paintedSeal.length || paintedCommand.length || !!paintedSong || turn.action === 'parry') {
+    if (paintedBlades.length || paintedDefense.length || paintedHealing.length || paintedProjectiles.length || paintedEarth.length || paintedAlchemy.length || paintedSeal.length || paintedCommand.length || !!paintedSong || !!paintedSd || turn.action === 'parry') {
       for (const child of [...(this.effects?.list ?? [])]) {
         if (child instanceof Phaser.GameObjects.Text) this.effects?.bringToTop(child);
       }
