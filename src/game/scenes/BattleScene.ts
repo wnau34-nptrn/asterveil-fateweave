@@ -18,6 +18,7 @@ import { HEALING_ATLAS, healingAtlasUrls, healingPrepare, healingContact, healin
 import { PROJECTILE_ATLAS, projectileAtlasUrls, projectileCues, projectilePrepare, projectileContact, isProjectileSkill } from '../visuals/projectile-fx';
 import { SEAL_ATLAS, sealAtlasUrls, sealCues, sealEvents, sealPrepare, sealContact, isSealSkill, type SealSpot } from '../visuals/arcane-seal-fx';
 import { SONG_ATLAS, songAtlasUrls, isSongSkill, songPlan, songPrepare, songContact, type SongSpot } from '../visuals/song-fx';
+import { FOE_SIGNATURE_ATLAS, foeSignatureAtlasUrls, foeSignatureCues, foeSignaturePrepare, foeSignatureContact, isFoeSignatureMove, type FoeSpot } from '../visuals/foe-signature-fx';
 import { COMMAND_ATLAS, commandAtlasUrls, commandCues, commandPrepare, commandContact, isCommandSkill, type CommandSpot } from '../visuals/command-fx';
 import { ALCHEMY_ATLAS, alchemyAtlasUrls, alchemyCues, alchemyEvents, alchemyPrepare, alchemyContact, alchemyHealingCues, isAlchemySkill, type AlchemySkill } from '../visuals/alchemy-fx';
 import { EARTH_ATLAS, earthAtlasUrls, earthCues, earthPrepare, earthContact, earthHealingCues, earthHealingEvents, isEarthSkill, type EarthSkill } from '../visuals/earth-fx';
@@ -108,6 +109,7 @@ export class BattleScene extends Phaser.Scene {
     this.load.atlas(ALCHEMY_ATLAS, ...alchemyAtlasUrls());
     this.load.atlas(SEAL_ATLAS, ...sealAtlasUrls());
     this.load.atlas(COMMAND_ATLAS, ...commandAtlasUrls());
+    this.load.atlas(FOE_SIGNATURE_ATLAS, ...foeSignatureAtlasUrls());
     this.load.atlas(SONG_ATLAS, ...songAtlasUrls());
     this.load.atlas(DEFENSE_ATLAS, ...defenseAtlasUrls());
     this.load.atlas(HEALING_ATLAS, ...healingAtlasUrls());
@@ -209,6 +211,7 @@ export class BattleScene extends Phaser.Scene {
       (image.getData('sealFollow') as (() => void) | undefined)?.();
       (image.getData('commandFollow') as (() => void) | undefined)?.();
       (image.getData('basicFollow') as (() => void) | undefined)?.();
+      (image.getData('foeSigFollow') as (() => void) | undefined)?.();
       (image.getData('songFollow') as (() => void) | undefined)?.();
     }
     // Adopt newly decoded art only at a safe boundary, never repaint an actor mid-attack.
@@ -461,6 +464,16 @@ export class BattleScene extends Phaser.Scene {
     const p=matrix.transformPoint(at[0]!*sprite.width/ratio,at[1]!*sprite.height/ratio),sole=matrix.transformPoint(0,0);
     return {x:p.x/this.dpr,y:p.y/this.dpr,size:slot.size,side:(sole.x/this.dpr>this.viewW*.76?-1:1) as 1|-1};
   }
+  // Foe signature landmarks (AV06) follow the rendered unit: a hero's chest, a foe's forward hand (foes face left) or the sole.
+  foeAnchor(id:string,spot:FoeSpot){
+    const body=this.bodies.get(id),slot=this.actorPanels.get(id);
+    const sprite=body?.list.find(c=>c instanceof Phaser.GameObjects.Image) as Phaser.GameObjects.Image|undefined;
+    if(!sprite||!slot)return;
+    const ratio=sprite.texture.key.startsWith('unit-pilot-')?unitDisplayRatio(artOf(this.encounter,id)):1;
+    const at={chest:[0,-.50],hand:[-.34,-.62],feet:[0,.04]}[spot];
+    const p=sprite.getWorldTransformMatrix().transformPoint(at[0]!*sprite.width/ratio,at[1]!*sprite.height/ratio);
+    return {x:p.x/this.dpr,y:p.y/this.dpr,size:slot.size};
+  }
   // Song/shadow landmarks (C5.8/C5.9) follow the rendered unit: caster hand, lower torso (waist) or sole contact.
   songAnchor(id:string,spot:SongSpot){
     const body=this.bodies.get(id),slot=this.actorPanels.get(id);
@@ -603,6 +616,10 @@ export class BattleScene extends Phaser.Scene {
     // AV03: archers and alchemists loose/throw their basic attack instead of the shared sword cut.
     const basics=basicCues(turn,this.encounter);
     if(basics.length){for(const cue of basics)basicPrepare(this.fx(turn.actorId),cue,launch,contactMs,release?.at??.55);return;}
+    // Foe signature moves (AV06): painted gather + travel to the real recipient; a cancelled turn paints nothing.
+    if(turn.side==='enemy'&&isFoeSignatureMove(turn.intent?.name)&&this.textures.exists(FOE_SIGNATURE_ATLAS)){
+      foeSignaturePrepare(this.fx(turn.actorId),foeSignatureCues(turn),(id,spot)=>this.foeAnchor(id,spot),contactMs);return;
+    }
     if(turn.side==='hero'&&isCommandSkill(turn.action)&&this.textures.exists(COMMAND_ATLAS)){
       commandPrepare({front:this.fx(turn.actorId)},turn,(id,spot)=>this.commandAnchor(id,spot),contactMs);return;
     }
@@ -670,8 +687,12 @@ export class BattleScene extends Phaser.Scene {
     const savedWithoutDamage = (event:BattleEvent) => event.type==='damage'&&!event.amount&&!event.absorbed&&events.some(e=>e.type==='sanctuary'&&e.targetId===event.targetId);
     const paintedBasic:BasicCue[] = basicCues(turn,this.encounter), basicEvents = new Set(paintedBasic.map(c=>c.event));
     const paintedBoss = this.textures.exists(BOSS_ATLAS) ? bossCues(turn) : [], bossEvents = new Set(paintedBoss.flatMap(c=>c.event?[c.event]:[]));
-    const paintedBlades = bladeCues(turn).filter(c=>!savedWithoutDamage(c.event)&&!basicEvents.has(c.event)&&!bossEvents.has(c.event));
-    const paintedDefense = this.textures.exists(DEFENSE_ATLAS)?defenseCues(turn,this.encounter).filter(c=>c.kind!=='absorb'||!paintedBlades.some(b=>b.event===c.event)):[];
+    // Veil Quake is physical but painted by the foe-signature layers, never by the generic blade slash.
+    const foeReady=this.textures.exists(FOE_SIGNATURE_ATLAS)&&turn.side==='enemy'&&isFoeSignatureMove(turn.intent?.name);
+    const paintedFoe=foeReady?foeSignatureCues(turn):[];
+    const foeEventSet=new Set(paintedFoe.map(c=>c.event));
+    const paintedBlades = bladeCues(turn).filter(c=>!savedWithoutDamage(c.event)&&!basicEvents.has(c.event)&&!bossEvents.has(c.event)&&!(foeReady&&!c.parried));
+    const paintedDefense = this.textures.exists(DEFENSE_ATLAS)?defenseCues(turn,this.encounter).filter(c=>c.kind!=='absorb'||!(paintedBlades.some(b=>b.event===c.event)||foeEventSet.has(c.event))):[];
     const earthHeals=this.textures.exists(HEALING_ATLAS)?earthHealingEvents(turn):[];
     const paintedHealing = this.textures.exists(HEALING_ATLAS) ? [...healingCues(turn),...earthHealingCues(turn),...alchemyHealingCues(turn)] : [];
     const paintedAlchemy=this.textures.exists(ALCHEMY_ATLAS)?alchemyCues(turn):[];
@@ -718,8 +739,10 @@ export class BattleScene extends Phaser.Scene {
     for(const image of [...(this.healingLayer?.list??[])])if(image.getData('alchemyPrepare')){this.tweens.killTweensOf(image);image.destroy();}
     for(const layer of [this.healingLayer,this.effects])for(const image of [...(layer?.list??[])])if(image.getData('sealPrepare')){this.tweens.killTweensOf(image);image.destroy();}
     for(const image of [...(this.healingLayer?.list??[]),...(this.effects?.list??[])])if(image.getData('commandTag')==='prepare'){this.tweens.killTweensOf(image);image.destroy();}
+    for(const image of [...(this.healingLayer?.list??[]),...(this.effects?.list??[])])if(image.getData('foeSigTag')==='prepare'){this.tweens.killTweensOf(image);image.destroy();}
     for(const image of [...(this.healingLayer?.list??[]),...(this.effects?.list??[]),...this.songFloor])if(image.getData('songPrepare')){this.tweens.killTweensOf(image);image.destroy();}
     if(paintedSong)songContact(this.songFx(paintedSong.casterId),paintedSong,(id,spot)=>this.songAnchor(id,spot),life);
+    for(const cue of paintedFoe)foeSignatureContact(this.fx(cue.targetId),cue,(id,spot)=>this.foeAnchor(id,spot),life);
     for(const cue of paintedCommand)commandContact({front:this.fx(cue.kind==='cast'?cue.sourceId:cue.targetId)},cue,(id,spot)=>this.commandAnchor(id,spot),life);
     for(const cue of paintedSeal)sealContact(this.sealFx(cue.targetId),cue,(id,spot)=>this.sealAnchor(id,spot),life);
     for(const cue of paintedAlchemy)alchemyContact(this.projectileFx(cue.targetId),cue,(id,skill,pre)=>this.alchemyAnchor(id,skill,pre),life);
@@ -746,7 +769,7 @@ export class BattleScene extends Phaser.Scene {
       const blade = paintedBlades.find(cue => cue.event === event);
       const parry = event.type === 'parry';
       const bossPainted=paintedBoss.length>0&&(event.type==='charge'||event.type==='phase'||event.type==='summon');
-      const projectile=projectileEvents.has(event)||basicEvents.has(event)||bossEvents.has(event)||bossPainted,earth=earthEvents.has(event),alchemy=alchemyEventSet.has(event)||sealEventSet.has(event)||commandEventSet.has(event)||songEventSet.has(event);
+      const projectile=projectileEvents.has(event)||basicEvents.has(event)||bossEvents.has(event)||bossPainted,earth=earthEvents.has(event),alchemy=alchemyEventSet.has(event)||sealEventSet.has(event)||commandEventSet.has(event)||songEventSet.has(event)||foeEventSet.has(event);
       const defense = defenseEvents.has(event) || healingEvents.has(event);
       if (parry && event.sourceId === event.targetId) bladeStance(this.fx(id), p, life, bladePalettes.Duelist!);
       if (blade) bladeImpact(this.fx(id), blade, p, this.anchor(event.sourceId), life,
@@ -812,7 +835,7 @@ export class BattleScene extends Phaser.Scene {
       }
     }
     // The denser blade art must not cover the authoritative damage/outcome captions.
-    if (paintedBlades.length || paintedDefense.length || paintedHealing.length || paintedProjectiles.length || paintedBasic.length || paintedBoss.length || paintedEarth.length || paintedAlchemy.length || paintedSeal.length || paintedCommand.length || !!paintedSong || turn.action === 'parry') {
+    if (paintedBlades.length || paintedDefense.length || paintedHealing.length || paintedProjectiles.length || paintedBasic.length || paintedBoss.length || paintedEarth.length || paintedAlchemy.length || paintedSeal.length || paintedCommand.length || paintedFoe.length || !!paintedSong || turn.action === 'parry') {
       for (const child of [...(this.effects?.list ?? [])]) {
         if (child instanceof Phaser.GameObjects.Text) this.effects?.bringToTop(child);
       }

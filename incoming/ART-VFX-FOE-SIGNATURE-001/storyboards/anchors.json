@@ -1,0 +1,937 @@
+{
+  "width": 390,
+  "not_runtime": true,
+  "notes": "Existing target-repository sprites for review context only; caster proxy is Riftweaver. No masking. Energy peaks terminate at hero chest. Quake uses feet.",
+  "panels": [
+    {
+      "move": "Seed Spark",
+      "beat": "prepare",
+      "face_hp_rectangles": [
+        [
+          66,
+          108,
+          135,
+          168
+        ],
+        [
+          58,
+          89,
+          135,
+          102
+        ],
+        [
+          280,
+          131,
+          331,
+          177
+        ],
+        [
+          272,
+          101,
+          340,
+          113
+        ]
+      ],
+      "zero_effect_alpha_over_protected_rectangles": true
+    },
+    {
+      "move": "Seed Spark",
+      "beat": "peak",
+      "face_hp_rectangles": [
+        [
+          66,
+          334,
+          135,
+          394
+        ],
+        [
+          58,
+          315,
+          135,
+          328
+        ],
+        [
+          280,
+          357,
+          331,
+          403
+        ],
+        [
+          272,
+          327,
+          340,
+          339
+        ]
+      ],
+      "zero_effect_alpha_over_protected_rectangles": true
+    },
+    {
+      "move": "Seed Spark",
+      "beat": "settle",
+      "face_hp_rectangles": [
+        [
+          66,
+          560,
+          135,
+          620
+        ],
+        [
+          58,
+          541,
+          135,
+          554
+        ],
+        [
+          280,
+          583,
+          331,
+          629
+        ],
+        [
+          272,
+          553,
+          340,
+          565
+        ]
+      ],
+      "zero_effect_alpha_over_protected_rectangles": true
+    },
+    {
+      "move": "Ember Spark",
+      "beat": "prepare",
+      "face_hp_rectangles": [
+        [
+          66,
+          108,
+          135,
+          168
+        ],
+        [
+          58,
+          89,
+          135,
+          102
+        ],
+        [
+          280,
+          131,
+          331,
+          177
+        ],
+        [
+          272,
+          101,
+          340,
+          113
+        ]
+      ],
+      "zero_effect_alpha_over_protected_rectangles": true
+    },
+    {
+      "move": "Ember Spark",
+      "beat": "peak",
+      "face_hp_rectangles": [
+        [
+          66,
+          334,
+          135,
+          394
+        ],
+        [
+          58,
+          315,
+          135,
+          328
+        ],
+        [
+          280,
+          357,
+          331,
+          403
+        ],
+        [
+          272,
+          327,
+          340,
+          339
+        ]
+      ],
+      "zero_effect_alpha_over_protected_rectangles": true
+    },
+    {
+      "move": "Ember Spark",
+      "beat": "settle",
+      "face_hp_rectangles": [
+        [
+          66,
+          560,
+          135,
+          620
+        ],
+        [
+          58,
+          541,
+          135,
+          554
+        ],
+        [
+          280,
+          583,
+          331,
+          629
+        ],
+        [
+          272,
+          553,
+          340,
+          565
+        ]
+      ],
+      "zero_effect_alpha_over_protected_rectangles": true
+    },
+    {
+      "move": "Spore Hex",
+      "beat": "prepare",
+      "face_hp_rectangles": [
+        [
+          66,
+          108,
+          135,
+          168
+        ],
+        [
+          58,
+          89,
+          135,
+          102
+        ],
+        [
+          280,
+          131,
+          331,
+          177
+        ],
+        [
+          272,
+          101,
+          340,
+          113
+        ]
+      ],
+      "zero_effect_alpha_over_protected_rectangles": true
+    },
+    {
+      "move": "Spore Hex",
+      "beat": "peak",
+      "face_hp_rectangles": [
+        [
+          66,
+          334,
+          135,
+          394
+        ],
+        [
+          58,
+          315,
+          135,
+          328
+        ],
+        [
+          280,
+          357,
+          331,
+          403
+        ],
+        [
+          272,
+          327,
+          340,
+          339
+        ]
+      ],
+      "zero_effect_alpha_over_protected_rectangles": true
+    },
+    {
+      "move": "Spore Hex",
+      "beat": "settle",
+      "face_hp_rectangles": [
+        [
+          66,
+          560,
+          135,
+          620
+        ],
+        [
+          58,
+          541,
+          135,
+          554
+        ],
+        [
+          280,
+          583,
+          331,
+          629
+        ],
+        [
+          272,
+          553,
+          340,
+          565
+        ]
+      ],
+      "zero_effect_alpha_over_protected_rectangles": true
+    },
+    {
+      "move": "Spore Dust",
+      "beat": "prepare",
+      "face_hp_rectangles": [
+        [
+          66,
+          108,
+          135,
+          168
+        ],
+        [
+          58,
+          89,
+          135,
+          102
+        ],
+        [
+          280,
+          131,
+          331,
+          177
+        ],
+        [
+          272,
+          101,
+          340,
+          113
+        ]
+      ],
+      "zero_effect_alpha_over_protected_rectangles": true
+    },
+    {
+      "move": "Spore Dust",
+      "beat": "peak",
+      "face_hp_rectangles": [
+        [
+          66,
+          334,
+          135,
+          394
+        ],
+        [
+          58,
+          315,
+          135,
+          328
+        ],
+        [
+          280,
+          357,
+          331,
+          403
+        ],
+        [
+          272,
+          327,
+          340,
+          339
+        ]
+      ],
+      "zero_effect_alpha_over_protected_rectangles": true
+    },
+    {
+      "move": "Spore Dust",
+      "beat": "settle",
+      "face_hp_rectangles": [
+        [
+          66,
+          560,
+          135,
+          620
+        ],
+        [
+          58,
+          541,
+          135,
+          554
+        ],
+        [
+          280,
+          583,
+          331,
+          629
+        ],
+        [
+          272,
+          553,
+          340,
+          565
+        ]
+      ],
+      "zero_effect_alpha_over_protected_rectangles": true
+    },
+    {
+      "move": "Star Flame",
+      "beat": "prepare",
+      "face_hp_rectangles": [
+        [
+          66,
+          108,
+          135,
+          168
+        ],
+        [
+          58,
+          89,
+          135,
+          102
+        ],
+        [
+          280,
+          131,
+          331,
+          177
+        ],
+        [
+          272,
+          101,
+          340,
+          113
+        ]
+      ],
+      "zero_effect_alpha_over_protected_rectangles": true
+    },
+    {
+      "move": "Star Flame",
+      "beat": "peak",
+      "face_hp_rectangles": [
+        [
+          66,
+          334,
+          135,
+          394
+        ],
+        [
+          58,
+          315,
+          135,
+          328
+        ],
+        [
+          280,
+          357,
+          331,
+          403
+        ],
+        [
+          272,
+          327,
+          340,
+          339
+        ]
+      ],
+      "zero_effect_alpha_over_protected_rectangles": true
+    },
+    {
+      "move": "Star Flame",
+      "beat": "settle",
+      "face_hp_rectangles": [
+        [
+          66,
+          560,
+          135,
+          620
+        ],
+        [
+          58,
+          541,
+          135,
+          554
+        ],
+        [
+          280,
+          583,
+          331,
+          629
+        ],
+        [
+          272,
+          553,
+          340,
+          565
+        ]
+      ],
+      "zero_effect_alpha_over_protected_rectangles": true
+    },
+    {
+      "move": "Rune Lash",
+      "beat": "prepare",
+      "face_hp_rectangles": [
+        [
+          66,
+          108,
+          135,
+          168
+        ],
+        [
+          58,
+          89,
+          135,
+          102
+        ],
+        [
+          280,
+          131,
+          331,
+          177
+        ],
+        [
+          272,
+          101,
+          340,
+          113
+        ]
+      ],
+      "zero_effect_alpha_over_protected_rectangles": true
+    },
+    {
+      "move": "Rune Lash",
+      "beat": "peak",
+      "face_hp_rectangles": [
+        [
+          66,
+          334,
+          135,
+          394
+        ],
+        [
+          58,
+          315,
+          135,
+          328
+        ],
+        [
+          280,
+          357,
+          331,
+          403
+        ],
+        [
+          272,
+          327,
+          340,
+          339
+        ]
+      ],
+      "zero_effect_alpha_over_protected_rectangles": true
+    },
+    {
+      "move": "Rune Lash",
+      "beat": "settle",
+      "face_hp_rectangles": [
+        [
+          66,
+          560,
+          135,
+          620
+        ],
+        [
+          58,
+          541,
+          135,
+          554
+        ],
+        [
+          280,
+          583,
+          331,
+          629
+        ],
+        [
+          272,
+          553,
+          340,
+          565
+        ]
+      ],
+      "zero_effect_alpha_over_protected_rectangles": true
+    },
+    {
+      "move": "Rift Needle",
+      "beat": "prepare",
+      "face_hp_rectangles": [
+        [
+          66,
+          108,
+          135,
+          168
+        ],
+        [
+          58,
+          89,
+          135,
+          102
+        ],
+        [
+          280,
+          131,
+          331,
+          177
+        ],
+        [
+          272,
+          101,
+          340,
+          113
+        ]
+      ],
+      "zero_effect_alpha_over_protected_rectangles": true
+    },
+    {
+      "move": "Rift Needle",
+      "beat": "peak",
+      "face_hp_rectangles": [
+        [
+          66,
+          334,
+          135,
+          394
+        ],
+        [
+          58,
+          315,
+          135,
+          328
+        ],
+        [
+          280,
+          357,
+          331,
+          403
+        ],
+        [
+          272,
+          327,
+          340,
+          339
+        ]
+      ],
+      "zero_effect_alpha_over_protected_rectangles": true
+    },
+    {
+      "move": "Rift Needle",
+      "beat": "settle",
+      "face_hp_rectangles": [
+        [
+          66,
+          560,
+          135,
+          620
+        ],
+        [
+          58,
+          541,
+          135,
+          554
+        ],
+        [
+          280,
+          583,
+          331,
+          629
+        ],
+        [
+          272,
+          553,
+          340,
+          565
+        ]
+      ],
+      "zero_effect_alpha_over_protected_rectangles": true
+    },
+    {
+      "move": "Shard Burst",
+      "beat": "prepare",
+      "face_hp_rectangles": [
+        [
+          66,
+          108,
+          135,
+          168
+        ],
+        [
+          58,
+          89,
+          135,
+          102
+        ],
+        [
+          280,
+          131,
+          331,
+          177
+        ],
+        [
+          272,
+          101,
+          340,
+          113
+        ]
+      ],
+      "zero_effect_alpha_over_protected_rectangles": true
+    },
+    {
+      "move": "Shard Burst",
+      "beat": "peak",
+      "face_hp_rectangles": [
+        [
+          66,
+          334,
+          135,
+          394
+        ],
+        [
+          58,
+          315,
+          135,
+          328
+        ],
+        [
+          280,
+          357,
+          331,
+          403
+        ],
+        [
+          272,
+          327,
+          340,
+          339
+        ]
+      ],
+      "zero_effect_alpha_over_protected_rectangles": true
+    },
+    {
+      "move": "Shard Burst",
+      "beat": "settle",
+      "face_hp_rectangles": [
+        [
+          66,
+          560,
+          135,
+          620
+        ],
+        [
+          58,
+          541,
+          135,
+          554
+        ],
+        [
+          280,
+          583,
+          331,
+          629
+        ],
+        [
+          272,
+          553,
+          340,
+          565
+        ]
+      ],
+      "zero_effect_alpha_over_protected_rectangles": true
+    },
+    {
+      "move": "Rift Bolt",
+      "beat": "prepare",
+      "face_hp_rectangles": [
+        [
+          66,
+          108,
+          135,
+          168
+        ],
+        [
+          58,
+          89,
+          135,
+          102
+        ],
+        [
+          280,
+          131,
+          331,
+          177
+        ],
+        [
+          272,
+          101,
+          340,
+          113
+        ]
+      ],
+      "zero_effect_alpha_over_protected_rectangles": true
+    },
+    {
+      "move": "Rift Bolt",
+      "beat": "peak",
+      "face_hp_rectangles": [
+        [
+          66,
+          334,
+          135,
+          394
+        ],
+        [
+          58,
+          315,
+          135,
+          328
+        ],
+        [
+          280,
+          357,
+          331,
+          403
+        ],
+        [
+          272,
+          327,
+          340,
+          339
+        ]
+      ],
+      "zero_effect_alpha_over_protected_rectangles": true
+    },
+    {
+      "move": "Rift Bolt",
+      "beat": "settle",
+      "face_hp_rectangles": [
+        [
+          66,
+          560,
+          135,
+          620
+        ],
+        [
+          58,
+          541,
+          135,
+          554
+        ],
+        [
+          280,
+          583,
+          331,
+          629
+        ],
+        [
+          272,
+          553,
+          340,
+          565
+        ]
+      ],
+      "zero_effect_alpha_over_protected_rectangles": true
+    },
+    {
+      "move": "Veil Quake",
+      "beat": "prepare",
+      "face_hp_rectangles": [
+        [
+          66,
+          108,
+          135,
+          168
+        ],
+        [
+          58,
+          89,
+          135,
+          102
+        ],
+        [
+          280,
+          131,
+          331,
+          177
+        ],
+        [
+          272,
+          101,
+          340,
+          113
+        ]
+      ],
+      "zero_effect_alpha_over_protected_rectangles": true
+    },
+    {
+      "move": "Veil Quake",
+      "beat": "peak",
+      "face_hp_rectangles": [
+        [
+          66,
+          334,
+          135,
+          394
+        ],
+        [
+          58,
+          315,
+          135,
+          328
+        ],
+        [
+          280,
+          357,
+          331,
+          403
+        ],
+        [
+          272,
+          327,
+          340,
+          339
+        ]
+      ],
+      "zero_effect_alpha_over_protected_rectangles": true
+    },
+    {
+      "move": "Veil Quake",
+      "beat": "settle",
+      "face_hp_rectangles": [
+        [
+          66,
+          560,
+          135,
+          620
+        ],
+        [
+          58,
+          541,
+          135,
+          554
+        ],
+        [
+          280,
+          583,
+          331,
+          629
+        ],
+        [
+          272,
+          553,
+          340,
+          565
+        ]
+      ],
+      "zero_effect_alpha_over_protected_rectangles": true
+    }
+  ]
+}
