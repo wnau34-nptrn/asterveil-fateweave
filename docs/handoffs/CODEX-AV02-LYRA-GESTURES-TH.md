@@ -1,6 +1,8 @@
 # Brief ให้ Codex — ART-UNIT-ANIMATION-LYRA-002: ท่า Mark และ Parry stance ของไลรา
 
-สถานะ: **Claude เขียน brief แล้ว (2026-10-29) ยังไม่ได้ส่ง/ยังไม่มีภาพ** — เจ้าของเป็นผู้ส่ง prompt ท้ายไฟล์ให้ Codex ผลตรวจที่มาของงานนี้: [audit AV02](../validation/animation-vfx-full-audit-2026-10-29/README_TH.md)
+สถานะ: **Claude เขียน brief แล้ว (2026-10-29) ยังไม่ได้ส่ง/ยังไม่มีภาพ** — เจ้าของเป็นผู้ส่ง prompt ท้ายไฟล์ให้ Codex
+
+**2026-10-30: Codex ส่งแล้ว — PR #114** (`art/art-unit-animation-lyra-002` @ `cd8a9d7`, R1 อย่างเดียว) Claude ตรวจรับ: ไฟล์อยู่ใน `incoming/ART-UNIT-ANIMATION-LYRA-002/` เท่านั้น (31 ไฟล์), manifest 30 รายการ sha256+ขนาดตรง, seed ตรงไบต์กับ PILOT-001, cell 1024×640 RGBA, `unit-anatomy-audit.py --cells` ของ Claude: Mark median 0.981 / Parry 0.936 ไม่มี drift ไม่มี not-measured → **ผ่านด่านสัดส่วน**. เฟรมซ้ำโดยตั้งใจ: Mark 3=4 (ค้างชี้), 1=6 (ท่ายกดาบย้อนกลับ), Parry 3=4 (ค้างการ์ด). พื้นเท้า seed จริง y511 (+64 padding = y575) ใช้ anchor ที่บันทึกไว้ตอน normalize. ข้อสังเกตให้เจ้าของดู: Mark อ่านออกชัดว่าชี้เป้า ไม่ฟัน/แทง; Parry ต่างจาก idle ด้วยการย่อเข่า/ดาบตั้งขวางหน้า แต่ seed ถือดาบเฉียงอยู่แล้ว ที่ 390px อาจดูใกล้ idle — ตัดสินจากคลิปจริงหลังนำเข้า. **นำเข้าเกมแล้ว** (เจ้าของ “เอาตามที่คุณแนะนำ” → R1; อนุมัติ motion “อนุมัติ” 2026-10-30; PR #115 merged `045a9bf`) ผลตรวจที่มาของงานนี้: [audit AV02](../validation/animation-vfx-full-audit-2026-10-29/README_TH.md)
 
 ## เป้าหมาย
 

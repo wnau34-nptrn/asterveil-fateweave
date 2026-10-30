@@ -3,7 +3,14 @@
 ## 2026-10-30 — Claude: Aegis A2-002 นำเข้าเกมแล้ว เจ้าของอนุมัติ motion แล้ว (“อนุมัติ” 2026-10-30)
 
 - สาขา `claude/aegis-a2-002` (PR เข้าสาขาเกม): แพ็ก A2-002 เป็น `aegis_a2` lossless, ปลด `anatomyHold`, audit หลังแพ็ก median 0.984 ไม่มี drift, คลิป 26 รายการ 390px ใน `docs/combat-presentation/unit-a2-002-slice/` (README_TH.md)
-- ยังไม่ merge: รอเจ้าของอนุมัติ motion; Lyra-002 / A7-002 ยังรอ Codex
+- Lyra-002 merged แล้ว (PR #115); เหลือ / A7-002 ยังรอ Codex
+
+## 2026-10-30 — Claude: นำ LYRA-002 (Mark / Parry stance ของไลรา, Codex PR #114 R1) เข้าเกม — เจ้าของอนุมัติ 2026-10-30, PR #115 merged `045a9bf`
+
+- เจ้าของ: “เอาตามที่คุณแนะนำ” = ใช้ R1 นำเข้าแล้วตัดสินจากคลิปจริง; branch `claude/lyra-002-mark-parry` (รวม incoming จาก #114)
+- atlas `lyra` 22 → 38 เฟรม (Mark 22–29, Parry stance 30–37), transform เดียว scale .5 วางที่ (0,208), เฟรมเดิม 0–21 ตรงพิกเซล; registry `tracer` เพิ่ม clips `mark`/`parry`; AV02 จึงครบ
+- **งบภาพเกิน:** lyra 8.51 MiB decoded / 2.31 MB (เดิม 5.91 MiB / 1.54 MB); เทสต์ `optional-unit-assets` ปรับขอบเป็น lyra+hunter < 13 MiB พร้อมเหตุผล
+- หลักฐาน: `docs/combat-presentation/lyra-002-slice/README_TH.md` (คลิปจริง 390px ก่อน/หลัง 3 กรณี)
 
 ## 2026-10-30 — Claude: แก้ animation/VFX ตาม audit AV02–AV08 (ยกเว้นอัศวิน) + นำภาพ W4–W8 เข้าเกม — PR #113 merged `42e7e6f`
 

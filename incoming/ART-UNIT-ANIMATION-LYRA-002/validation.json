@@ -1,0 +1,150 @@
+{
+  "package": "ART-UNIT-ANIMATION-LYRA-002",
+  "strips": 2,
+  "frames": 16,
+  "minimum_clear_gutter_px": 379,
+  "anatomy_tool": "scripts/unit-anatomy-audit.py --cells (unchanged)",
+  "anatomy": {
+    "mark": {
+      "report": "audit/mark.json",
+      "median_generated_head_scale": 0.981,
+      "maximum_head_scale_including_idle": 1.0,
+      "measured_cells": 8,
+      "not_measured": [],
+      "tool_tolerance": 0.12
+    },
+    "parry-stance": {
+      "report": "audit/parry-stance.json",
+      "median_generated_head_scale": 0.9365,
+      "maximum_head_scale_including_idle": 1.0,
+      "measured_cells": 8,
+      "not_measured": [],
+      "tool_tolerance": 0.12
+    }
+  },
+  "owner_artwork_approval": "pending",
+  "owner_motion_approval": "pending",
+  "manifest_self_hash": "Excluded to avoid recursion; compare the fetched manifest with its committed local bytes.",
+  "files": {
+    "NOTES.md": {
+      "sha256": "35b3d6fba54ab245f99878bf03cad1e8473d9ab2aaadd57f95e25f19d96b10af",
+      "bytes": 13683
+    },
+    "audit/mark.json": {
+      "sha256": "76095dcfb633102d609e7cc81c102ad2a56fc307d34d4003b8baa6567901f691",
+      "bytes": 946
+    },
+    "audit/parry-stance.json": {
+      "sha256": "5b765892741c66703efa2ea61c06b4f597a8960d32a482e8eaeb96e1153a562f",
+      "bytes": 953
+    },
+    "build_handoff.py": {
+      "sha256": "e0ee3bfc4606b940d713828aac9919c3219d9aa65ea6fc70b399e2eff597b4a7",
+      "bytes": 11097
+    },
+    "cells/mark/000.png": {
+      "sha256": "4c82b26bfcec8d45e2470f22b29b7a0c798e3ab5b65b86931730b6662ff96187",
+      "bytes": 441941
+    },
+    "cells/mark/001.png": {
+      "sha256": "3ec1a2eeb796aca355a6a707da688b0c63429b3ba812113c237c388c514f027e",
+      "bytes": 400549
+    },
+    "cells/mark/002.png": {
+      "sha256": "53ff485ec2529e4a9993b3695e5fdff7023b097d046e14ef33d2d720e9efc088",
+      "bytes": 388185
+    },
+    "cells/mark/003.png": {
+      "sha256": "4c3decfd66c64640817614322af3f0612f81296d4952682f4290686469bc60b0",
+      "bytes": 358697
+    },
+    "cells/mark/004.png": {
+      "sha256": "4c3decfd66c64640817614322af3f0612f81296d4952682f4290686469bc60b0",
+      "bytes": 358697
+    },
+    "cells/mark/005.png": {
+      "sha256": "38e94a599ccf4d17c4311d0cee4d3db079d40dd7b8d939c631e7a8acdae44a03",
+      "bytes": 385996
+    },
+    "cells/mark/006.png": {
+      "sha256": "3ec1a2eeb796aca355a6a707da688b0c63429b3ba812113c237c388c514f027e",
+      "bytes": 400549
+    },
+    "cells/mark/007.png": {
+      "sha256": "4c82b26bfcec8d45e2470f22b29b7a0c798e3ab5b65b86931730b6662ff96187",
+      "bytes": 441941
+    },
+    "cells/parry-stance/000.png": {
+      "sha256": "4c82b26bfcec8d45e2470f22b29b7a0c798e3ab5b65b86931730b6662ff96187",
+      "bytes": 441941
+    },
+    "cells/parry-stance/001.png": {
+      "sha256": "a9c54078c202590385b5ebedc66c66c4b9efe524bf7131e6e8c66a70a0274355",
+      "bytes": 374764
+    },
+    "cells/parry-stance/002.png": {
+      "sha256": "fd16af54d803f48d8ea41b49eed91daa51e535a9b12b454ad366955215831f08",
+      "bytes": 369527
+    },
+    "cells/parry-stance/003.png": {
+      "sha256": "8caa652181d402cc9dc3c8d1af70b9dfcd9c0e9ef5b52d7f1c52044b8063eb37",
+      "bytes": 349694
+    },
+    "cells/parry-stance/004.png": {
+      "sha256": "8caa652181d402cc9dc3c8d1af70b9dfcd9c0e9ef5b52d7f1c52044b8063eb37",
+      "bytes": 349694
+    },
+    "cells/parry-stance/005.png": {
+      "sha256": "d63adabf2fad99fd6928a243781acbdbda8f2de7975889a32833c848576edf7b",
+      "bytes": 364413
+    },
+    "cells/parry-stance/006.png": {
+      "sha256": "c8125994c56eccb7c1f13647ddc86df69467490bbfdb71e51e097d18f56fcc8e",
+      "bytes": 388492
+    },
+    "cells/parry-stance/007.png": {
+      "sha256": "4c82b26bfcec8d45e2470f22b29b7a0c798e3ab5b65b86931730b6662ff96187",
+      "bytes": 441941
+    },
+    "preview-390.png": {
+      "sha256": "ef2f6d3d738eb1d410b7926a540ae1825a408951b5a6f56ae5d2c60e3107b616",
+      "bytes": 494577
+    },
+    "prompts.json": {
+      "sha256": "c1904ca9075d512d23717e01fbde85e29c983dca2bdfa758cba8f3c08a47baca",
+      "bytes": 14027
+    },
+    "raw/lyra-mark-r1.png": {
+      "sha256": "09d0864016faa54438efb9bec7aa49cdc3215d003323462dcae01793cd0f940e",
+      "bytes": 2037294
+    },
+    "raw/lyra-parry-stance-r1.png": {
+      "sha256": "325de124bb6bdc9edce7be5918a8c305cdd10bba1f809b794268b0f7f6e8180b",
+      "bytes": 2324276
+    },
+    "seeds/eight-slot-layout.png": {
+      "sha256": "f3377b0d34e9ca972d645d499ff9fc86f28d66234491054d238eb5d4c79a16ef",
+      "bytes": 80437
+    },
+    "seeds/lyra-seed.png": {
+      "sha256": "a0d462ce8c0469fab74e267b14e7dc73fd43fc53330a648704d63ac8a086ad3e",
+      "bytes": 434095
+    },
+    "seeds.json": {
+      "sha256": "c89074533d45cb52ae00b65ac4851531b1a38b37566f5850d0685cb2a78ce295",
+      "bytes": 791
+    },
+    "source-sheets/lyra-mark-source.png": {
+      "sha256": "863b396a6642b731c6df155ad7a19a86e5d4c5bb50acbad5f111f4e6e855a7d8",
+      "bytes": 727704
+    },
+    "source-sheets/lyra-parry-stance-source.png": {
+      "sha256": "ee29095821a2a5b695d5c1e17fbfc7887b5ba27ef1dee9dad51da4517aefb42d",
+      "bytes": 1104215
+    },
+    "strips.json": {
+      "sha256": "a21faf6470f6bc09c9b1ddc2ba970c4f1ca58161d82c955b9fd172afce5e0908",
+      "bytes": 9054
+    }
+  }
+}
