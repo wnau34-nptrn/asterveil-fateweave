@@ -446,7 +446,7 @@ PR #68 merged `24dfefbb5777a2233ab376725fb57dbd1bac719f` into `feature/fateweave
 Copy-ready next task:
 
 ```text
-ทำ C12 Batch 2 ใน asterveil-fateweave จากสาขาเกมล่าสุด feature/fateweave-initial-prototype บน codex/roster-30-3 อ่าน AGENTS.md, CLAUDE.md, ROSTER_30_TH.md, SKILL_AUDIT_TH.md และรายงาน Batch 1 ก่อน เพิ่มนักมวย อรุณ/ภาคิน (Martial, arun/phakin) และนักสาป รัตติ/พิม (Hexer, ratti/pim) ตามต้นไม้/กิ่ง p/เจ้าของกลไกในแผน ไม่มีธาตุ/เพิ่มเทิร์น/เพิ่ม SPD ใช้ pure resolver+preview/replay ปราณ 0–3 คำสาปแยก source อายุและภาษีตอนลงมือ สร้างภาพ production จาก concept A ตามข้อยกเว้น C12 และตัวที่สองภาพใหม่ เซฟ v44 migration ต้องเก็บเซฟ v43/boardPool/คำสั่งเลือก cooldown เดิม เพิ่มแค็ตตาล็อกเป็น 18 ตัว 14 อาชีพ โดยไม่เปลี่ยนสามข้อเสนอเดิมและทีม 4+4 เก็บ baseline จากเกมหลัง Batch 1; เทสต์/unit/browser390/simรายตัวทุก18×แมพ1–3/แคมเปญเปรียบเทียบ20cellsด้วยpolicyเดียวกัน/ablation ต้องผ่านก่อน merge อัปเดต handoff+รายงาน+รูป2ภาพและ publish ตาม standing authorization ห้ามแตะ C5 VFX family ที่ยังรอตรวจ
+ทำ C12 Batch 2 ใน asterveil-fateweave จากสาขาเกมล่าสุด feature/fateweave-initial-prototype บน codex/roster-30-3 อ่าน AGENTS.md, CLAUDE.md, ROSTER_30_TH.md, SKILL_AUDIT_TH.md และรายงาน Batch 1 ก่อน เพิ่มนักมวย เคล/จอรี (Martial, kael/jory) และนักสาป วินน์/เฮสเปอร์ (Hexer, wynne/hesper) ตามต้นไม้/กิ่ง p/เจ้าของกลไกในแผน ไม่มีธาตุ/เพิ่มเทิร์น/เพิ่ม SPD ใช้ pure resolver+preview/replay ปราณ 0–3 คำสาปแยก source อายุและภาษีตอนลงมือ สร้างภาพ production จาก concept A ตามข้อยกเว้น C12 และตัวที่สองภาพใหม่ เซฟ v44 migration ต้องเก็บเซฟ v43/boardPool/คำสั่งเลือก cooldown เดิม เพิ่มแค็ตตาล็อกเป็น 18 ตัว 14 อาชีพ โดยไม่เปลี่ยนสามข้อเสนอเดิมและทีม 4+4 เก็บ baseline จากเกมหลัง Batch 1; เทสต์/unit/browser390/simรายตัวทุก18×แมพ1–3/แคมเปญเปรียบเทียบ20cellsด้วยpolicyเดียวกัน/ablation ต้องผ่านก่อน merge อัปเดต handoff+รายงาน+รูป2ภาพและ publish ตาม standing authorization ห้ามแตะ C5 VFX family ที่ยังรอตรวจ
 ```
 
 No create_session tool is callable in this environment; no new cloud session was created automatically.
@@ -458,7 +458,7 @@ No create_session tool is callable in this environment; no new cloud session was
 ข้อความเริ่มงานถัดไป:
 
 ```text
-ทำ C12 Batch 1 ใน asterveil-fateweave จาก feature/fateweave-initial-prototype หลัง Phase 1 merge บน codex/roster-30-2 อ่าน AGENTS.md, CLAUDE.md, docs/design/ROSTER_30_TH.md, C12 ใน docs/handoffs/CLAUDE-TO-CODEX-DEV-TH.md และ CODEX-TO-CLAUDE.md ก่อน เพิ่มนักบุญรบเมตตา/ธีรัน นักเต้นรำลลิน/วิลา กิ่ง p แบบใช้งบแต้มเดิม กฎ pure resolver/save migration/content/UI/ภาพ production/test/sim ตามสเปก C12 อนุญาตแก้ rules/save/balance โดยเฉพาะ ตัวเลขทั้งหมดต้องจำลอง ไม่เพิ่ม SPD/เทิร์น ไม่ทับกลไกอาชีพอื่น ไม่แตะ VFX family C5 ที่รอรีวิว รูปจริง 390px สองรูปและรายงานผลก่อน/หลัง อัปเดต handoff หลังทำเสร็จ push/PR/merge เมื่อ checks ผ่านตาม standing authorization
+ทำ C12 Batch 1 ใน asterveil-fateweave จาก feature/fateweave-initial-prototype หลัง Phase 1 merge บน codex/roster-30-2 อ่าน AGENTS.md, CLAUDE.md, docs/design/ROSTER_30_TH.md, C12 ใน docs/handoffs/CLAUDE-TO-CODEX-DEV-TH.md และ CODEX-TO-CLAUDE.md ก่อน เพิ่มนักบุญรบคอริน/โอดราน นักเต้นรำเซรีส/อิโซลด์ กิ่ง p แบบใช้งบแต้มเดิม กฎ pure resolver/save migration/content/UI/ภาพ production/test/sim ตามสเปก C12 อนุญาตแก้ rules/save/balance โดยเฉพาะ ตัวเลขทั้งหมดต้องจำลอง ไม่เพิ่ม SPD/เทิร์น ไม่ทับกลไกอาชีพอื่น ไม่แตะ VFX family C5 ที่รอรีวิว รูปจริง 390px สองรูปและรายงานผลก่อน/หลัง อัปเดต handoff หลังทำเสร็จ push/PR/merge เมื่อ checks ผ่านตาม standing authorization
 ```
 
 

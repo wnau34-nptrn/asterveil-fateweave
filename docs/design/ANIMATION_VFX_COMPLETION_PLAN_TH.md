@@ -23,8 +23,8 @@
 | C5.7 ผนึกอาคม | `mark` ติดตรา, `sigil` ตรึงเวท, `storm` พายุเวท, `dispel` สลายเวท | ไลรา, ไอรา |
 | C5.8 บทเพลง | `valor` เพลงกล้า, `finale` บทสุดท้าย, `dread` เพลงสะท้าน, `note` โน้ตคม, `solo` เพลงเดี่ยว | ลิโอ |
 | C5.9 เงาและคำท้า | `evade` ก้าวเงา, `decoy` เงาคุ้มกัน, `taunt` ยั่วยุ, `challenge` ท้าดวล, `warcry` เสียงศึก | เซฟา, แบรนน์ (`taunt`), เอกิส (`challenge`), การ์แรน (`warcry`) |
-| C5.10 แสงนักบุญ | `saintstrike`, `communion`, `saintarc`, `vowstrike`, `sharewound`, `lastlight` | เมตตา, ธีรัน |
-| C5.11 ระบำ | `cadence`, `duet`, `rounddance`, `deepbeat`, `echofoot`, `closingstep` | ลลิน, วิลา |
+| C5.10 แสงนักบุญ | `saintstrike`, `communion`, `saintarc`, `vowstrike`, `sharewound`, `lastlight` | คอริน, โอดราน |
+| C5.11 ระบำ | `cadence`, `duet`, `rounddance`, `deepbeat`, `echofoot`, `closingstep` | เซรีส, อิโซลด์ |
 
 ท่าศัตรูที่ยังใช้ชุดร่วมแต่ควรมีภาพเฉพาะ (C5.12): Spore Hex, Seed Spark, Thorn Bloom/Storm/Tempest/Rage, Gather Thorns, Shard Burst, Crystal Fist, Rift Needle, Rift Wave/Gathering/Cataclysm/Awakening, Veil Quake, War Cry, Stampede
 
@@ -53,7 +53,7 @@
 | W2 | A4 มิร่า + โทมะ; สไลม์น้ำค้าง/ถ่านไฟ + ค้างคาวซาก | — (ใช้ชุดกระสุน/เคมีเดิม) | งานร่างกายล้วน จังหวะยึด VFX ที่ผ่านแล้ว |
 | W3 | A5 การ์แรน + แบรนน์; หมูป่า + ลิงซ์ + ด้วงหนาม | C5.9 ส่วนคำท้า (`taunt`, `challenge`, `warcry`) | แบรนน์/การ์แรนได้ร่างพร้อมเอฟเฟกต์คำท้า; เอกิสมีร่างแล้ว |
 | W4 | A6 เซฟา + ลิโอ; ผู้ทอรอยแยก + ภูตสปอร์ | C5.8 บทเพลง + C5.9 ส่วนเงา (`evade`, `decoy`) | ท่าดีดพิณ/ถอยหลบต้องเข้ากับเอฟเฟกต์ |
-| W5 | A7 เมตตา + ธีรัน; ลลิน + วิลา | C5.10 แสงนักบุญ + C5.11 ระบำ | สกิล C12 ยังไม่มีทั้งร่างและเอฟเฟกต์ |
+| W5 | A7 คอริน + โอดราน; เซรีส + อิโซลด์ | C5.10 แสงนักบุญ + C5.11 ระบำ | สกิล C12 ยังไม่มีทั้งร่างและเอฟเฟกต์ |
 | W6 | A8 โกเลม + อสูรส่งพลัง; วิญญาณรอยแยก + แมงมุมผลึก | C5.12a ท่าศัตรูสายผลึก/รอยแยก | ท่าพลังงานของศัตรูเลิกใช้ Bolt ร่วม |
 | W7 | A9 ราชินีหนาม + ด้วงเกราะผลึก; ผู้คุมรอยแยก + หัวหน้ากองหน้า | C5.12b ท่าบอส/หนาม/เรียกกำลังเสริม | บอสต้องการร่างกายและเอฟเฟกต์ phase ไปด้วยกัน |
 | W8 | A10 Raider + Brute เดิม + A11 ตรวจสนามรวม | ตรวจครบทุก ActionId/intent | ปิดงาน: ไม่มี fallback ค้างโดยไม่ระบุ |

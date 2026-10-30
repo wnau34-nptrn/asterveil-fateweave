@@ -4,10 +4,10 @@ import type { TalentNodeDef, TalentTree } from '../../core/world/types';
 // C12 Batch 1. New members enter through the existing post-map-3 hiring board, never the prologue draft.
 // Both members of a class start from the same base; only their paid personal branch differs.
 export const rosterBatch1: readonly HeroDefinition[] = [
-  { id: 'metta', name: 'Metta', role: 'Saint', lane: 'front', maxHp: 68, attack: 11, speed: 75, actions: ['attack', 'saintstrike', 'communion'], color: 0xd4b46b },
-  { id: 'thiran', name: 'Thiran', role: 'Saint', lane: 'front', maxHp: 68, attack: 11, speed: 75, actions: ['attack', 'saintstrike', 'communion'], color: 0x7cb6ac },
-  { id: 'lalin', name: 'Lalin', role: 'Dancer', lane: 'back', maxHp: 50, attack: 9, speed: 95, actions: ['attack', 'cadence', 'duet'], color: 0xde9c9e },
-  { id: 'wila', name: 'Wila', role: 'Dancer', lane: 'back', maxHp: 50, attack: 9, speed: 95, actions: ['attack', 'cadence', 'duet'], color: 0x91a7d9 },
+  { id: 'metta', name: 'Corin', role: 'Saint', lane: 'front', maxHp: 68, attack: 11, speed: 75, actions: ['attack', 'saintstrike', 'communion'], color: 0xd4b46b },
+  { id: 'thiran', name: 'Odran', role: 'Saint', lane: 'front', maxHp: 68, attack: 11, speed: 75, actions: ['attack', 'saintstrike', 'communion'], color: 0x7cb6ac },
+  { id: 'lalin', name: 'Cerise', role: 'Dancer', lane: 'back', maxHp: 50, attack: 9, speed: 95, actions: ['attack', 'cadence', 'duet'], color: 0xde9c9e },
+  { id: 'wila', name: 'Isolde', role: 'Dancer', lane: 'back', maxHp: 50, attack: 9, speed: 95, actions: ['attack', 'cadence', 'duet'], color: 0x91a7d9 },
 ];
 
 export const rosterBatch1Skills = {

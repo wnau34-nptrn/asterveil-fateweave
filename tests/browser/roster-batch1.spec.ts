@@ -53,7 +53,7 @@ test('C12: personal branch inspection spends only on the explicit learn action a
   await page.locator('#lobby-member-metta').click();
   await page.locator('#lobby-character-open').click();
   await page.locator('#camp-character-tab-talents').click();
-  await expect(page.locator('.personal-tree')).toContainText('เส้นทางประจำตัว · เมตตา');
+  await expect(page.locator('.personal-tree')).toContainText('เส้นทางประจำตัว · คอริน');
   const before = await saved(page);
   await page.locator('.personal-tree [data-node=p1]').click();
   expect(await saved(page)).toBe(before);

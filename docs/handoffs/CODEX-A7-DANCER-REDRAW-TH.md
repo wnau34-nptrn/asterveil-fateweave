@@ -1,6 +1,6 @@
-# Brief ให้ Codex — ART-UNIT-ANIMATION-A7-002: วาดใหม่ strip นักระบำที่หัวใหญ่กว่า seed (ลลิน/วิลา)
+# Brief ให้ Codex — ART-UNIT-ANIMATION-A7-002: วาดใหม่ strip นักระบำที่หัวใหญ่กว่า seed (เซรีส/อิโซลด์)
 
-สถานะ: **Claude เขียน brief แล้ว (2026-10-29) ยังไม่ได้ส่ง/ยังไม่มีภาพ** — เจ้าของเป็นผู้ส่ง prompt ท้ายไฟล์ให้ Codex
+สถานะ: **Claude เขียน brief แล้ว (2026-10-29) ยังไม่ได้ส่ง/ยังไม่มีภาพ** · **2026-10-30: เหลือเฉพาะเซรีส (เซรีส)** — แถวอิโซลด์ (อิโซลด์) ยกเลิก เพราะเจ้าของสั่งออกแบบอิโซลด์ใหม่ทั้งตัว ชุดท่าใหม่ของเธอไปอยู่ใน A7-003 (`CODEX-ART-QUEUE-TH.md` ข้อ 29) อย่าวาด strip อิโซลด์ตามลุคเก่า — เจ้าของเป็นผู้ส่ง prompt ท้ายไฟล์ให้ Codex
 ที่มา: งานแก้ audit AV06 นำ A7 (PR #98) เข้าเกม; strip ด้านล่างไม่ผ่านด่านสัดส่วนจึงไม่ถูกส่ง ตัวละครเหล่านั้นใช้ภาพนิ่ง + motion ของโค้ดแทน ดู [A7 slice](../combat-presentation/unit-a7-slice/README_TH.md)
 
 ## ปัญหาที่วัดได้
@@ -9,14 +9,14 @@
 
 | ตัว | strip ที่ต้องวาดใหม่ (ต้นทาง `incoming/ART-UNIT-ANIMATION-A7-001/dancers/`) | head scale ที่วัดได้ |
 | --- | --- | --- |
-| ลลิน (`lalin`, units_mercs cell 8) | dance-strike R1 (attack) | 1.32 |
-| ลลิน | circle-spin R1 (rounddance) | 1.31 |
-| ลลิน | echo-closing R1 (echofoot) | 1.31 |
-| ลลิน | hit R1 / block R1 / down R1 (4 เฟรมต่อแถบ) | 1.15–1.18 / 1.14–1.25 / 1.24 |
-| วิลา (`wila`, units_mercs cell 9) | echo-closing R1 (echofoot) | 1.20–1.34 |
-| วิลา | down R1 | 1.23–1.25 |
+| เซรีส (`lalin`, units_mercs cell 8) | dance-strike R1 (attack) | 1.32 |
+| เซรีส | circle-spin R1 (rounddance) | 1.31 |
+| เซรีส | echo-closing R1 (echofoot) | 1.31 |
+| เซรีส | hit R1 / block R1 / down R1 (4 เฟรมต่อแถบ) | 1.15–1.18 / 1.14–1.25 / 1.24 |
+| อิโซลด์ (`wila`, units_mercs cell 9) | echo-closing R1 (echofoot) | 1.20–1.34 |
+| อิโซลด์ | down R1 | 1.23–1.25 |
 
-ผ่านแล้วและเข้าเกมแล้ว (ใช้เป็นแบบอ้างอิงสัดส่วนได้): ลลิน partner-turn R2 (1.06), closing-step R2 (1.08); วิลา dance-strike, partner R2, circle R1, closing R2, hit, block
+ผ่านแล้วและเข้าเกมแล้ว (ใช้เป็นแบบอ้างอิงสัดส่วนได้): เซรีส partner-turn R2 (1.06), closing-step R2 (1.08); อิโซลด์ dance-strike, partner R2, circle R1, closing R2, hit, block
 
 ## ข้อกำหนด
 
