@@ -1,0 +1,26 @@
+{
+  "pr": 118,
+  "commit": "426fbf273330b8e704a247bce154e22ba3f77cf8",
+  "files": {
+    "unit/odran.png": {
+      "sha256": "ca7a30b361eb8e7fd8764cacfd7e56b7cd3f13d3a701586b0b7ee54a92a61ccf",
+      "bytes": 377751
+    },
+    "portrait/odran.png": {
+      "sha256": "e01b821525907de100f22cbc5959b9195c8dd2263ca49d2201126213123b0ec4",
+      "bytes": 512346
+    },
+    "weapon/odran.png": {
+      "sha256": "214c42fc596715a1fc82b77797d4a7e479ec341a0d2f5d551520f5f70331bb54",
+      "bytes": 26667
+    },
+    "portrait/isolde.png": {
+      "sha256": "e1f80e27532e7c570644b52ca396157f3ef380d222972c08353a63e35f0c5971",
+      "bytes": 532637
+    },
+    "weapon/isolde.png": {
+      "sha256": "0af40c7569caf0959fea407c1d9d343046d304081050c7ee20b4cb621ac46841",
+      "bytes": 10570
+    }
+  }
+}
