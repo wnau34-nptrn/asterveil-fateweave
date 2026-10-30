@@ -1,5 +1,34 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
+## 2026-10-30 — สรุปสถานะ animation/VFX จริง และลำดับงานที่เจ้าของอนุมัติ (“เอาตามที่คุณแนะนำทั้งหมด”)
+
+ตรวจบนสาขาเกม `c41a500` (หมายเหตุ: ก่อนตอบสถานะต้อง `git fetch` และเทียบ HEAD กับ origin ทุกครั้ง แชตนี้เคยตอบผิดสองรอบเพราะเครื่องค้างที่ `0716ea0` ซึ่งตามหลังอยู่ 173 commit)
+
+- ในเกมแล้ว: atlas ตัวละคร 36/36; ActionId ฝ่ายเราทั้ง 73 ตัวมี VFX วาด; ท่าศัตรู 17/26 มีภาพเฉพาะตัว (foe/boss signature); ท่ากายภาพที่เหลือใช้ชุดดาบร่วมตามแผน; Shadow Knife ใช้ชุดพลังงานร่วม; Crystal Fist/Stone Fist ยังใช้รอยฟันร่วม
+- ปิด PR งานภาพ Codex ที่นำเข้าแล้ว 14 PR: #90 #91 #93–#98 #105–#109 #112 (ตรวจแล้วว่าไฟล์ภาพทุกไฟล์อยู่ในสาขาเกม ส่วนที่ต่างมีแค่ไฟล์ build/preview ที่ฝั่งเกมเพิ่ม)
+- ลำดับงานที่เจ้าของอนุมัติ:
+  1. นำเฉพาะส่วนเซรีส (`lalin`) จาก A7-002 (PR #117) เข้าเกม ไม่นำส่วนอิโซลด์ (`wila`) เพราะจะออกแบบอิโซลด์ใหม่ทั้งตัว → แชต `claude/cerise-a7-002`
+  2. VFX เพลง/เงา: เลือก R3 (PR #111) แทน R2/R1 ในเกม รวมชุด finale-mend/finale-dread → แชต `claude/song-shadow-r3`
+  3. โอดราน/อิโซลด์: รอ Codex ส่ง ART-CHAR-REDESIGN-001 (prompt 1 ใน `CODEX-ART-QUEUE-TH.md` ข้อ 29 เจ้าของเป็นผู้ส่ง) แล้วตามด้วย A7-003
+  4. ปิดแผน W8 หลังข้อ 1–2 merge แล้ว (ข้อความเปิดแชตอยู่ด้านล่าง)
+- ข้อสังเกตที่ให้ W8 นำไปดูต่อ: Rift Bolt/Veil Quake มืดเกินบนศัตรูสีมืด, ribbon ของนักเต้นยืดยาวที่ช่องบน, Rounddance/Deepbeat จาง, atlas ไลรา 2.31MB เกินเป้า 1.5MB, atlas ลิโอ 1.456MB ใกล้เพดาน
+
+### ข้อความเปิดแชต W8 (เปิดหลัง PR ของเซรีสและ R3 merge แล้ว, model Opus)
+
+```text
+ทำงานต่อในรีโป wnau34-nptrn/asterveil-fateweave สาขาเกม feature/fateweave-initial-prototype (ไม่ใช่ main) เริ่มด้วย git fetch แล้วยืนยันว่า HEAD ตรงกับ origin
+อ่าน AGENTS.md, CLAUDE.md, docs/design/ANIMATION_VFX_COMPLETION_PLAN_TH.md (§3 W8, §4 เกณฑ์จบ), docs/design/UNIT_ANIMATION_ROLLOUT_TH.md §7–8, หัวข้อบนสุดของ docs/handoffs/NEW-CHAT-HANDOFF-TH.md, docs/validation/animation-vfx-audit-fixes-2026-10-30/README_TH.md
+งาน W8 ปิดแผน animation/VFX (เจ้าของอนุมัติลำดับ 2026-10-30):
+1) อัปเดต docs/combat-presentation/COVERAGE_TH.md + coverage.json จากโค้ดจริง: 36 identities × ทุก ActionId/intent → ท่าร่างกาย (sprite clip / procedural ระบุเหตุผล) + VFX (module ที่วาด / ชุดร่วมโดยตั้งใจ) + เป้า + จุดเกิดผล; เขียนสคริปต์/เทสต์ที่สร้างตารางจาก registry เพื่อไม่ให้ค้างอีก
+2) A11 ตรวจสนามรวม: encounter เต็ม 8 ตัว (และทีม 5 = 9 ตัวตาม OD-05), ศัตรูชนิดซ้ำ, บอสเรียกกำลังเสริม/phase, โหลดซ้ำหลาย encounter ต่อกันโดยไม่มี texture สะสม, วัด decoded/download ต่อ encounter เทียบงบ ≤64 MiB
+3) งบรายตัว: atlas ไลรา 2.31MB เกินเป้า 1.5MB, ลิโอ 1.456MB ใกล้เพดาน → เสนอวิธีลดแบบ lossless/trim/ลดเฟรมซ้ำ โดยไม่ลดคุณภาพหน้า/อาวุธ แล้วทำถ้าไม่กระทบภาพที่เจ้าของอนุมัติ
+4) ข้อสังเกตจาก slice: Rift Bolt/Veil Quake มืดบนศัตรูมืด, ribbon นักเต้นยืดที่ช่องบน, Rounddance/Deepbeat จาง → แก้ภายใน module (tint/blend/scale) อัดคลิปก่อน/หลัง 390px
+5) หน้า debug วัดมือถือจริง (Start, เฟรมช้า/กระตุก, หน่วยความจำ) ตาม §7 พร้อมวิธีใช้สั้นๆ ให้เจ้าของเปิดบนมือถือหนึ่งเครื่อง; รายงานตามจริงว่ายังไม่ได้ทดสอบ iOS Safari/มือถือจริงจนกว่าเจ้าของส่งผล
+ไม่แก้ rules/save/content/balance/timing; โอดราน/อิโซลด์ (redesign, A7-003) อยู่นอกงานนี้ ให้ระบุเป็นงานค้างที่รู้อยู่แล้ว
+เทสต์ unit + browser ที่เกี่ยว, CI เต็มบน PR, หน้า Artifact รวมคลิป/ผลวัด ให้เจ้าของอนุมัติก่อน merge/Pages ตาม standing authorization; อัปเดต handoff และแผนเมื่อจบ
+Chromium: export PLAYWRIGHT_CHROMIUM_EXECUTABLE=/opt/pw-browsers/chromium; pip install scipy numpy pillow; npm ci
+```
+
 ## 2026-10-30 — สถานะ: Aegis A2-002 นำเข้าแล้วบน `claude/aegis-a2-002` เจ้าของอนุมัติ motion แล้ว (“อนุมัติ” 2026-10-30) → merge PR #116 หลัง CI ผ่าน
 
 ปลด anatomyHold, atlas ใหม่ 3.41MiB/1.17MB, audit หลังแพ็ก 0.984, คลิป 26 รายการ `docs/combat-presentation/unit-a2-002-slice/` — merge/Pages หลังเจ้าของอนุมัติเท่านั้น
