@@ -5,7 +5,7 @@
 - สาขา `claude/odran-isolde-redesign`: `units_mercs` (frame 7/9), `portraits_mercs` (7/9), `gear_items` ((6,0)/(6,1)) แพ็กแล้ว ช่องอื่นตรงพิกเซลเดิม ขนาดไม่เพิ่ม; hash ตรงทั้งสองแพ็กเกจ
 - ถอด entry `thiran`/`wila` + atlas `thiran_a7`/`wila_a7` ออก → seed นิ่ง + procedural จนกว่า A7-003; แก้ `tests/unit-a7.test.ts` + browser specs ให้นับเฉพาะ metta/lalin และยืนยันว่า thiran/wila ไม่มี registry/atlas
 - หลักฐาน: `docs/combat-presentation/odran-isolde-slice/README_TH.md` (ภาพ/คลิป 390px); merge/Pages หลังเจ้าของยืนยัน แล้วปิด PR #118 และ #120
-- A7-003 prompt อยู่ที่ `CODEX-ART-QUEUE-TH.md` ข้อ 29 prompt 2 (เจ้าของส่ง Codex แล้ว); เมื่อได้ PR ตรวจด้วย `scripts/unit-anatomy-audit.py` ก่อนนำเข้า
+- **A7-003 พักตาม OD-14** (2026-10-30, `docs/design/OWNER_DECISIONS_TH.md`): 15 อาชีพ อาชีพละ 1 ตัว; โอดราน/อิโซลด์ "พัก" (ยังอยู่ในเซฟเดิม ไม่รับใหม่) จึงหยุดชุดท่า A7-003; งานนี้ไม่แก้แหล่งรับตัวละคร/content (การพักใน content ทำใน P01/P03) ทั้งสองใช้ seed นิ่ง + procedural ต่อไป
 
 ## 2026-10-30 — เจ้าของอนุมัติภาพนิ่ง PR #120 (โอดราน/อิโซลด์) และสั่ง prompt A7-003
 
