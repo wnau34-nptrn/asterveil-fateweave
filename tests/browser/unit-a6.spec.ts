@@ -99,7 +99,7 @@ test('A6 late optional textures cannot replace artwork during a committed cast',
  await page.goto('tests/browser/fixtures/unit-a6.html?skill=attack');await page.locator('#start').click();
  await page.clock.pauseAt(new Date(Date.now()+100000));await cast(page,'attack');
  const committed=await saved(page);expect(await page.evaluate(()=>window.unitA6QA.frames().sefa![0]!.texture)).toBe('battle-mercs');
- release();await expect.poll(()=>page.evaluate(()=>window.unitA6QA.cached().length)).toBe(4);
+ release();await expect.poll(()=>page.evaluate(()=>window.unitA6QA.cached().length)).toBe(3); // Aegis is on anatomy hold
  expect(await page.evaluate(()=>window.unitA6QA.frames().sefa![0]!.texture)).toBe('battle-mercs');
  await page.clock.runFor(100);expect(await page.evaluate(()=>window.unitA6QA.frames().sefa![0]!.texture)).toBe('battle-mercs');
  await page.clock.runFor(3000);expect(await page.evaluate(()=>window.unitA6QA.frames().sefa![0]!.texture)).toBe('unit-pilot-sefa');expect(await saved(page)).toBe(committed);

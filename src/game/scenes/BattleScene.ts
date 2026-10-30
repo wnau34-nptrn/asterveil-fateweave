@@ -26,6 +26,10 @@ import { EARTH_ATLAS, earthAtlasUrls, earthCues, earthPrepare, earthContact, ear
 import { FOE_SLOT_INDEX, fieldSlots, slotPlan, type FieldSlot } from '../visuals/field-layout';
 import { actorArt, actorFootOrigins, artOf, artUrl, figureRise, mirroredArt, unitsUrl } from '../visuals/assets';
 
+// The unit's own sprite in its body container. Song/shadow floor layers and boss holds also live in the body (some
+// inserted before the sprite), so never take simply the first image.
+const bodySprite = (body: Phaser.GameObjects.Container | undefined): Phaser.GameObjects.Image | undefined =>
+  body?.list.find((c): c is Phaser.GameObjects.Image => c instanceof Phaser.GameObjects.Image && /^(unit-pilot-|battle-)/.test(c.texture.key));
 // Device pixels per CSS pixel for the canvas buffer (capped: 3x covers current phones).
 export const pixelRatio = (): number => Math.min(3, Math.max(1, window.devicePixelRatio || 1));
 
@@ -415,7 +419,7 @@ export class BattleScene extends Phaser.Scene {
   healingAnchor(id: string) {
     const body = this.bodies.get(id), slot = this.actorPanels.get(id);
     if (!body || !slot) return;
-    const sprite = body.list.find(child => child instanceof Phaser.GameObjects.Image) as Phaser.GameObjects.Image | undefined;
+    const sprite = bodySprite(body) as Phaser.GameObjects.Image | undefined;
     const foot = body.getLocalTransformMatrix().transformPoint(sprite?.x ?? 0, sprite?.y ?? 0);
     return { x: foot.x + (this.layer?.x ?? 0), footY: foot.y + (this.layer?.y ?? 0), y: foot.y - slot.size * .48 };
   }
@@ -424,7 +428,7 @@ export class BattleScene extends Phaser.Scene {
   // seed (atlas missing or held) keeps the older generic landmark.
   projectileAnchor(id: string, from?: Release) {
     const body=this.bodies.get(id),slot=this.actorPanels.get(id);
-    const sprite=body?.list.find(c=>c instanceof Phaser.GameObjects.Image) as Phaser.GameObjects.Image|undefined;
+    const sprite=bodySprite(body) as Phaser.GameObjects.Image|undefined;
     if(!sprite||!slot)return;
     const knife=this.encounter.heroes.find(h=>h.id===id)?.role==='Scout';
     const matrix=sprite.getWorldTransformMatrix(),framed=sprite.texture.key.startsWith('unit-pilot-');
@@ -436,7 +440,7 @@ export class BattleScene extends Phaser.Scene {
   }
   earthAnchor(id:string,skill:EarthSkill,prepare=false){
     const body=this.bodies.get(id),slot=this.actorPanels.get(id);
-    const sprite=body?.list.find(c=>c instanceof Phaser.GameObjects.Image) as Phaser.GameObjects.Image|undefined;
+    const sprite=bodySprite(body) as Phaser.GameObjects.Image|undefined;
     if(!sprite||!slot)return;
     const ratio=sprite.texture.key.startsWith('unit-pilot-')?unitDisplayRatio(artOf(this.encounter,id)):1;
     const x=prepare?.10:skill==='bash'?-.31:skill==='slam'?-.30:0;
@@ -446,7 +450,7 @@ export class BattleScene extends Phaser.Scene {
   }
   alchemyAnchor(id:string,skill:AlchemySkill,prepare=false){
     const body=this.bodies.get(id),slot=this.actorPanels.get(id);
-    const sprite=body?.list.find(c=>c instanceof Phaser.GameObjects.Image) as Phaser.GameObjects.Image|undefined;
+    const sprite=bodySprite(body) as Phaser.GameObjects.Image|undefined;
     if(!sprite||!slot)return;
     const ratio=sprite.texture.key.startsWith('unit-pilot-')?unitDisplayRatio(artOf(this.encounter,id)):1,matrix=sprite.getWorldTransformMatrix();
     const sole=matrix.transformPoint(0,0),support=skill==='haste'||skill==='fury';
@@ -458,7 +462,7 @@ export class BattleScene extends Phaser.Scene {
   // Arcane Seal landmarks follow the rendered unit: caster hand, lower torso (waist) or sole contact.
   sealAnchor(id:string,spot:SealSpot){
     const body=this.bodies.get(id),slot=this.actorPanels.get(id);
-    const sprite=body?.list.find(c=>c instanceof Phaser.GameObjects.Image) as Phaser.GameObjects.Image|undefined;
+    const sprite=bodySprite(body) as Phaser.GameObjects.Image|undefined;
     if(!sprite||!slot)return;
     const ratio=sprite.texture.key.startsWith('unit-pilot-')?unitDisplayRatio(artOf(this.encounter,id)):1,matrix=sprite.getWorldTransformMatrix();
     const x=spot==='hand'?.36:0,y=spot==='hand'?-.86:spot==='centre'?-.40:.04;
@@ -468,7 +472,7 @@ export class BattleScene extends Phaser.Scene {
   // Command landmarks (C5.9): upper body, shield front/rim and the resolved foe body; never the floor.
   commandAnchor(id:string,spot:CommandSpot){
     const body=this.bodies.get(id),slot=this.actorPanels.get(id);
-    const sprite=body?.list.find(c=>c instanceof Phaser.GameObjects.Image) as Phaser.GameObjects.Image|undefined;
+    const sprite=bodySprite(body) as Phaser.GameObjects.Image|undefined;
     if(!sprite||!slot)return;
     const ratio=sprite.texture.key.startsWith('unit-pilot-')?unitDisplayRatio(artOf(this.encounter,id)):1,matrix=sprite.getWorldTransformMatrix();
     const at={chest:[.08,-.58],forward:[.24,-.60],shield:[.30,-.50],crown:[.28,-.68],foe:[0,-.55]}[spot];
@@ -478,7 +482,7 @@ export class BattleScene extends Phaser.Scene {
   // Foe signature landmarks (AV06) follow the rendered unit: a hero's chest, a foe's forward hand (foes face left) or the sole.
   foeAnchor(id:string,spot:FoeSpot){
     const body=this.bodies.get(id),slot=this.actorPanels.get(id);
-    const sprite=body?.list.find(c=>c instanceof Phaser.GameObjects.Image) as Phaser.GameObjects.Image|undefined;
+    const sprite=bodySprite(body) as Phaser.GameObjects.Image|undefined;
     if(!sprite||!slot)return;
     const ratio=sprite.texture.key.startsWith('unit-pilot-')?unitDisplayRatio(artOf(this.encounter,id)):1;
     const at={chest:[0,-.50],hand:[-.34,-.62],feet:[0,.04]}[spot];
@@ -489,7 +493,7 @@ export class BattleScene extends Phaser.Scene {
   songAnchor(id:string,spot:SongSpot){
     const body=this.bodies.get(id),slot=this.actorPanels.get(id);
     // Floor layers live inside the body (flagged `songLocal`); the unit's own sprite is the first image that is not one of them.
-    const sprite=body?.list.find(c=>c instanceof Phaser.GameObjects.Image&&!c.getData('songLocal')) as Phaser.GameObjects.Image|undefined;
+    const sprite=bodySprite(body) as Phaser.GameObjects.Image|undefined;
     if(!sprite||!slot)return;
     const ratio=sprite.texture.key.startsWith('unit-pilot-')?unitDisplayRatio(artOf(this.encounter,id)):1,matrix=sprite.getWorldTransformMatrix();
     const x=spot==='hand'?.36:0,y=spot==='hand'?-.86:spot==='waist'?-.40:.04;
@@ -505,7 +509,7 @@ export class BattleScene extends Phaser.Scene {
       // The unit whose feet the layer stands under; the layer's follow() sets world coordinates, so offset by the body's origin.
       let owner:Phaser.GameObjects.Container|undefined,best=Infinity;
       for(const body of this.bodies.values()){const d=Math.hypot(body.x-item.x,body.y-item.y);if(d<best){best=d;owner=body;}}
-      const sprite=owner?.list.find(c=>c instanceof Phaser.GameObjects.Image&&!c.getData('songLocal'));
+      const sprite=bodySprite(owner);
       if(!owner||!sprite){this.layer?.add(item);return;}
       owner.addAt(item,owner.list.indexOf(sprite));
       const body=owner,follow=item.getData('songFollow') as (()=>void)|undefined;
@@ -541,7 +545,7 @@ export class BattleScene extends Phaser.Scene {
   // current pose's scale/rotation, the lunge offset and field shake.
   figureBox(id: string): { left: number; top: number; right: number; bottom: number } | undefined {
     const body = this.bodies.get(id), slot = this.actorPanels.get(id);
-    const sprite = body?.list.find(c => c instanceof Phaser.GameObjects.Image) as Phaser.GameObjects.Image | undefined;
+    const sprite = bodySprite(body) as Phaser.GameObjects.Image | undefined;
     if (!sprite || !slot) return;
     const frame = sprite.frame, w = frame.realWidth, h = frame.realHeight;
     const trim = frame.trimmed ? (frame as unknown as { data: { spriteSourceSize: { x: number; y: number; w: number; h: number } } }).data.spriteSourceSize : undefined;
@@ -807,7 +811,7 @@ export class BattleScene extends Phaser.Scene {
           }
           this.fade(slash,Math.min(life,260));
         }
-        const body = this.bodies.get(id), sprite = body?.list.find(c => c instanceof Phaser.GameObjects.Image) as Phaser.GameObjects.Image | undefined;
+        const body = this.bodies.get(id), sprite = bodySprite(body) as Phaser.GameObjects.Image | undefined;
         if (event.amount && sprite && !this.reducedMotion) {
           // Painted routes tint by multiply. The generic route used a white FILL that erased face and costume (AV05); it now
           // lifts the body additively (warm for physical, violet for energy) so every detail stays readable, softer in quiet.

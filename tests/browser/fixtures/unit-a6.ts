@@ -46,7 +46,7 @@ const qa={reactionTiming:()=>{
  expected:()=>fixture.result.state,prelude:()=>fixture.prelude,state:()=>ui.state,load,
  frames:()=>{
  const bodies=(scene as unknown as {bodies:Map<string,Phaser.GameObjects.Container>}).bodies;
- return Object.fromEntries([...bodies].map(([id,body])=>[id,body.list.filter((c):c is Phaser.GameObjects.Image=>c instanceof Phaser.GameObjects.Image).map(s=>({texture:s.texture.key,frame:s.frame.name,alpha:s.alpha,visible:s.visible,width:s.displayWidth,height:s.displayHeight,originY:s.originY}))]));
+ return Object.fromEntries([...bodies].map(([id,body])=>[id,body.list.filter((c):c is Phaser.GameObjects.Image=>c instanceof Phaser.GameObjects.Image&&/^(unit-pilot-|battle-)/.test(c.texture.key)).map(s=>({texture:s.texture.key,frame:s.frame.name,alpha:s.alpha,visible:s.visible,width:s.displayWidth,height:s.displayHeight,originY:s.originY}))]));
  },cached:()=>scene.textures.getTextureKeys().filter(k=>k.startsWith('unit-pilot-')),
 };
 declare global {interface Window {unitA6QA:typeof qa}}
