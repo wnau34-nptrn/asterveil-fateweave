@@ -783,6 +783,33 @@ SCOPE
 Artwork only for these two characters. No rule, save, content, balance or timing changes. The owner gives final visual approval; CI or validation results are not approval.
 ```
 
+### prompt 1-fix — ART-CHAR-REDESIGN-002 แก้อิโซลด์เท่านั้น (Claude ตรวจ PR #118 แล้ว 2026-10-30)
+
+ผลตรวจ PR #118 ของ Claude: hash 33 ไฟล์ตรง, atlas ที่แพ็กเปลี่ยนเฉพาะ mercs 7/9 และ gear (6,0)/(6,1) ส่วนอื่นตรงทุกพิกเซล, ขนาดไฟล์ไม่เพิ่ม (units_mercs 2.45MB เดิม 2.51MB, portraits 3.69MB เดิม 3.82MB, gear 0.98MB เท่าเดิม) **โอดรานผ่าน** (สัดส่วนหัวเข้าชุด, silhouette ต่างจากคอรินชัด) **อิโซลด์ต้องแก้ 2 ข้อ:** (1) ตัวเล็กกว่าเพื่อน: หัว (ผมบนถึงคาง) ≈115px เทียบเซรีส ≈157px ใน cell 512 (≈0.73) และส่วนสูงตัว ≈410px เทียบ ≈456px เพราะไม้เท้าเฉียงกินพื้นที่ bounds จึงถูกย่อทั้งตัว; สัดส่วนหัว/ตัว 0.28 ต่ำกว่าชุดเกม ≈0.34 จะดูเป็นคนละสไตล์ที่ 115px (2) ภาพนิ่งเป็นท่าหมุนยืนขาเดียว ภาพนี้จะเป็นเฟรมพักของ A7-003 ทุกท่าต้องคืนมาที่นี่ จึงต้องเป็นท่ายืนพร้อมที่เท้าสองข้างแตะพื้น และ (3) ไฟล์ `provenance/generations.json` 15MB เป็น base64 ซ้ำกับ `sources/` ให้ตัดออกเหลือ metadata
+
+```text
+CODEX HANDOFF — ART-CHAR-REDESIGN-002 (fix of ART-CHAR-REDESIGN-001, Isolde only)
+Read AGENTS.md, CLAUDE.md and docs/handoffs/ANIMATION_PROMPT_QUALITY_TH.md first. Repository wnau34-nptrn/asterveil-fateweave, base branch feature/fateweave-initial-prototype (not main). Create branch art/art-char-redesign-002. Add files only under incoming/ART-CHAR-REDESIGN-002/. Do not change src/, tests/, public/, .github/ or existing art. Open a PR into the base branch; do not merge. Original artwork only; nothing from Asterveil: Rise Beyond.
+
+Goal: keep Odran exactly as delivered in PR #118 (incoming/ART-CHAR-REDESIGN-001/unit/odran.png, portrait, weapon — copy byte-for-byte; the owner/Claude review passed him). Redraw ONLY Isolde's static battle unit (mercs frame 9, id wila) so she matches the cast's scale and serves as the rest frame for her later animation set. Her portrait (40px check passed) and bell-staff weapon icon stay as delivered unless the new unit changes the staff design; then update the icon to match.
+
+Verified facts (Claude, from the repository):
+- Units: public/assets/art/units_mercs.webp, 2 columns of 512×512 cells; Isolde = frame 9, Cerise = frame 8, Corin = 6, Odran = 7 (src/game/visuals/assets.ts). Right-facing, no baked shadow, top ≥ y37, sole at y496 inclusive, pivot (0.5, 497/512), fit within 480×460.
+- Measured on PR #118 packaged atlas: Cerise head (hair top → chin) ≈157px, body top → sole ≈456px; Isolde head ≈115px, body ≈410px; head/body ratio 0.28 vs the cast's ≈0.34. Cause: the long diagonal staff widened her bounds and the proportional fit shrank her whole figure.
+
+Requirements for the new Isolde unit:
+1. Scale: head height (hair top → chin) 145–165px and hair-top → sole 440–460px in the 512 cell, head/body ratio 0.32–0.36, same chibi proportion as Cerise/Corin/the original mercenaries. Size the figure first; the staff must fit around her, never shrink her.
+2. Pose: grounded ready stance — BOTH feet on the ground line (sole y496), weight balanced, facing right, readable at 115px. No mid-spin, no single-foot or airborne pose. This frame becomes the rest/return frame of every A7-003 move.
+3. Staff: keep the identity (bell cluster, short attached streamers, dark shaft, brass fittings). Hold it more upright (about 10–30° from vertical) or planted at her side so it stays inside 480×460 at full figure size; bells may sit above her head but stay ≥ y37. Streamers remain attached to the bell cluster.
+4. Keep all must-not rules from ART-CHAR-REDESIGN-001 NOTES (no fans, orbiting ribbons, ruffled skirt, harem trousers, braid, crescent ornament, purple/lilac/coral/teal main palette). Keep her face, short silver-streaked dark hair, ochre half-cape, cream fitted legs and navy top so the portrait still matches.
+5. Real alpha, no checkerboard, no text, full staff inside the frame.
+
+Deliverables (same structure as 001): unit/isolde.png (512×512 RGBA), unit/odran.png copied unchanged, packaged/units_mercs.webp (frames 7 and 9 replaced, every other cell and pixel identical to the base — assert it), packaged gear/portrait atlases only if the icon changed, sources/ (untouched generator output), prompts.json, validation.json (SHA-256 + bytes + measured head height, body height, head/body ratio, both-feet contact rows), review/lineup.png (Corin, Odran, Cerise, Isolde at 115px on the forest background + black silhouettes, with a horizontal guide at Cerise's chin and hair top), NOTES.md, package.py, verify_remote.py.
+Provenance: do NOT store base64 image data in JSON (PR #118's provenance/generations.json was 15 MB duplicating sources/). Record generation id/settings/paths only.
+
+Acceptance (Claude checks before owner review): head 145–165px, body 440–460px, ratio 0.32–0.36, both feet touching y≈496, untouched atlas cells pixel-identical, Odran byte-identical to PR #118, file sizes not larger than the current atlases. Push with normal git, fetch back, verify every SHA-256 and decode every image with Pillow. Owner visual approval is required; CI or these checks are not approval. No merge, no runtime integration.
+```
+
 ### prompt 2 — ชุดท่า A7-003 (ส่งหลังเจ้าของผ่านภาพนิ่งและ Claude นำเข้าเกมแล้ว)
 
 ```text
