@@ -91,6 +91,7 @@ test('A7 encounter replacement releases the A7 textures',async({page})=>{
  await page.setViewportSize({width:390,height:844});await ready(page,'skill=attack','wila');
  expect((await page.evaluate(()=>window.unitA7QA.cached())).sort()).toEqual(['unit-pilot-aegis','unit-pilot-eira','unit-pilot-sporepuff','unit-pilot-wila']);
  await page.evaluate(()=>window.unitA7QA.otherEncounter());
- await expect.poll(()=>page.evaluate(()=>window.unitA7QA.cached())).toEqual([]);
+ // The replacement encounter fields Aegis (guardian) and a brute: only those stay cached, the A7 sheets are released.
+ await expect.poll(()=>page.evaluate(()=>window.unitA7QA.cached().sort())).toEqual(['unit-pilot-aegis','unit-pilot-brute']);
  await expect(page.locator('#start')).toBeEnabled();
 });

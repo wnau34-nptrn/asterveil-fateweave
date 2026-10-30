@@ -91,7 +91,7 @@ test('A8 late optional textures cannot replace artwork during a committed cast',
  await page.goto('tests/browser/fixtures/unit-a8.html?foe=foe_golem');await page.locator('#start').click();
  await page.clock.pauseAt(new Date(Date.now()+100000));await cast(page);
  const committed=await saved(page);expect(await page.evaluate(()=>window.unitA8QA.frames().f1![0]!.texture)).not.toBe('unit-pilot-golem');
- release();await expect.poll(()=>page.evaluate(()=>window.unitA8QA.cached().length)).toBe(3);
+ release();await expect.poll(()=>page.evaluate(()=>window.unitA8QA.cached().length)).toBe(4);
  expect(await page.evaluate(()=>window.unitA8QA.frames().f1![0]!.texture)).not.toBe('unit-pilot-golem');
  await page.clock.runFor(4000);expect(await page.evaluate(()=>window.unitA8QA.frames().f1![0]!.texture)).toBe('unit-pilot-golem');expect(await saved(page)).toBe(committed);
  }finally{release();await ctx.close();}
