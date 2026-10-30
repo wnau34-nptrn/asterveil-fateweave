@@ -32,7 +32,7 @@
 | 26 | ART-VFX-ARCANE-SEAL-001 VFX ตระกูล C5.7 ผนึกอาคม: mark/sigil/storm/dispel (W1) | แผนแอนิเมชัน+VFX | ส่ง Codex แล้ว 2026-10-28 — prompt ใน `docs/design/ANIMATION_VFX_COMPLETION_PLAN_TH.md` §5 |
 | 27 | ART-UNIT-ANIMATION-A4-001 แอนิเมชันมิร่า + โทมะ, สไลม์ 2 ชนิด + ค้างคาวซาก (W2) | แผนแอนิเมชัน+VFX | หลัง Codex ส่ง W1 — prompt ใน `docs/design/ANIMATION_VFX_COMPLETION_PLAN_TH.md` §6 |
 | 28 | ART-UNIT-ANIMATION-A2-002 วาดท่าอัศวิน Aegis ใหม่ 25 ท่าให้สัดส่วนหัว/ตัวตรงกับ idle (แก้หัวโตกระโดด) | แก้คุณภาพ A2 | ส่ง Codex แล้ว (เจ้าของสั่ง 2026-10-29) **ก่อน W4–W8** — brief และ prompt ใน `docs/handoffs/CODEX-AEGIS-ANATOMY-REDRAW-TH.md`; ระหว่างรอ เกมพักเฟรม A2 ของ Aegis ไว้ |
-| 29 | ART-CHAR-REDESIGN-001 ออกแบบโอดราน (นักบุญรบ) และอิโซลด์ (นักเต้นรำ) ใหม่ให้ไม่ซ้ำคอริน/เซรีส → แล้ว ART-UNIT-ANIMATION-A7-003 ชุดท่าใหม่ | C12, A7 | ทันที (เจ้าของสั่ง 2026-10-30) |
+| 29 | ART-CHAR-REDESIGN-001 ออกแบบโอดราน (นักบุญรบ) และอิโซลด์ (นักเต้นรำ) ใหม่แบบเดียวต่อตัว ไม่ซ้ำคอริน/เซรีส → แล้ว ART-UNIT-ANIMATION-A7-003 ชุดท่าใหม่ | C12, A7 | ทันที (เจ้าของสั่ง 2026-10-30) |
 
 **งานภาพที่เกมยังขาด (ตรวจ 2026-10-22) — เจ้าของอนุมัติให้สั่งทั้งหมด ได้เป็นข้อ 13–19 แล้ว:**
 - ศัตรูที่ยังไม่มีภาพ (ตอนนี้ใช้ภาพสำรอง): องครักษ์อสูร (ศึกแรก), อสูรส่งพลัง (ศึกเงาล่าแนวหลัง)
@@ -715,73 +715,87 @@ DELIVERABLES
 
 ## 29. ART-CHAR-REDESIGN-001 — ออกแบบโอดรานและอิโซลด์ใหม่ (เริ่มได้ทันที) + ART-UNIT-ANIMATION-A7-003 (หลังเจ้าของเลือกแบบ)
 
-ที่มา (เจ้าของ 2026-10-30): C12 Batch 1 ใช้ภาพ option A เป็นต้นแบบของตัวที่สองในอาชีพเดียวกัน ทำให้ `thiran` กับ `metta` และ `wila` กับ `lalin` มีท่า รูปทรง และโครงชุดเหมือนกัน ต่างกันแค่หัวและสี เจ้าของให้เก็บลุคเดิมของ `metta` (คอริน) และ `lalin` (เซรีส) และออกแบบ `thiran` (โอดราน) กับ `wila` (อิโซลด์) ใหม่ทั้งตัว พร้อมเปลี่ยนชื่อที่แสดงทั้งสี่ตัวจากชื่อไทยเป็นชื่อแนวเดียวกับตัวเดิม ID ภายในไม่เปลี่ยนเพราะอยู่ในเซฟ ไอคอนสกิลเป็นของอาชีพ ใช้ร่วมกันทั้งคู่ จึงไม่ต้องทำใหม่ งานนี้ส่งสองแบบต่อตัวให้เจ้าของเลือกใน PR แล้ว Claude จะนำแบบที่เลือกเข้าเกม
+ที่มา (เจ้าของ 2026-10-30): C12 Batch 1 ใช้ภาพ option A เป็นต้นแบบของตัวที่สองในอาชีพเดียวกัน ทำให้ `thiran` กับ `metta` และ `wila` กับ `lalin` มีท่า รูปทรง และโครงชุดเหมือนกัน ต่างกันแค่หัวและสี เจ้าของให้เก็บลุคเดิมของ `metta` (คอริน) และ `lalin` (เซรีส) และออกแบบ `thiran` (โอดราน) กับ `wila` (อิโซลด์) ใหม่ทั้งตัว พร้อมเปลี่ยนชื่อที่แสดงทั้งสี่ตัวจากชื่อไทยเป็นชื่อแนวเดียวกับตัวเดิม ID ภายในไม่เปลี่ยนเพราะอยู่ในเซฟ ไอคอนสกิลเป็นของอาชีพ ใช้ร่วมกันทั้งคู่ จึงไม่ต้องทำใหม่ เจ้าของขอแบบเดียวไม่ต้องเลือก (2026-10-30) Codex ส่งภาพที่เสร็จแล้วแบบเดียวต่อตัว เจ้าของตรวจภาพใน PR แล้ว Claude นำเข้าเกม
 
 แอนิเมชัน: ทั้งสองตัวมีชุดท่า A7 อยู่ในเกมแล้ว (`thiran_a7`, `wila_a7`) ซึ่งวาดจากลุคเก่า เมื่อนำภาพนิ่งใหม่เข้าเกม Claude ต้องถอด entry `thiran`/`wila` ออกจาก `src/game/visuals/unit-frames.ts` พร้อมกัน เพื่อให้ใช้ท่าเคลื่อนไหวแบบโค้ดบนภาพใหม่ ไม่ให้โผล่ร่างเก่า แล้วส่ง prompt ที่สอง (A7-003) ให้ Codex วาดชุดท่าใหม่จากภาพที่เลือก แถววิลาใน `CODEX-A7-DANCER-REDRAW-TH.md` (A7-002) ยกเลิก เหลือเฉพาะลลิน
 
-### prompt 1 — ภาพนิ่ง (ส่งได้ทันที)
+### prompt 1 — ภาพนิ่ง แบบเดียว (ส่งได้ทันที)
+
+เจ้าของ 2026-10-30: ไม่ต้องทำตัวเลือก ให้ทำแบบเดียวที่ดีที่สุด Claude เลือกทิศทางให้แล้ว คือโอดรานแบบ "ช่างประตูผู้พิทักษ์" (ผูกกับเรื่องช่างซ่อมประตูค่าย ถุงมือเหล็กใหญ่และท่าตั้งรับทำให้รูปทรงต่างจากคอรินที่ต่อยไปข้างหน้า) และอิโซลด์แบบ "ไม้เท้ากระดิ่ง" (เส้นไม้เท้าแนวทแยงยาวกับตัวสูงเพรียว อ่านออกที่ 115px และไม่ใกล้พัด/ริบบิ้นของเซรีส)
 
 ```text
 CODEX HANDOFF — ART-CHAR-REDESIGN-001
-Asterveil · Fateweave: full redesign of Odran (Saint, id thiran) and Isolde (Dancer, id wila)
+Asterveil · Fateweave: one final redesign each for Odran (Saint, id thiran) and Isolde (Dancer, id wila)
 
-Repository wnau34-nptrn/asterveil-fateweave, base branch feature/fateweave-initial-prototype. Branch art/art-char-redesign-001 from the latest base. Files only under incoming/ART-CHAR-REDESIGN-001/. Do not change src/, tests/, public/, .github/ or earlier incoming folders. PR into the base branch; do not merge. Original artwork only; nothing from Asterveil: Rise Beyond or any other game. Never use the word ม่านเวล; the group is the ค่ายทหารรับจ้าง.
+GOAL
+Replace the static battle unit, portrait and weapon of two characters with ONE finished, striking design each (no option sets). The owner keeps Corin (metta) and Cerise (lalin) exactly as they are. Odran and Isolde were made by re-heading/recolouring Corin and Cerise, so at the 115 px battle size they read as the same characters; the new designs must be recognisable by silhouette alone.
 
-WHY
-C12 Batch 1 produced the second member of each new class by re-heading and recolouring the first: Odran (old name Thiran) copies Corin's (old name Metta) punch pose, gold pauldron, white tabard and prayer beads; Isolde (old name Wila) copies Cerise's (old name Lalin) twin folding fans, ribbons, ruffled skirt and harem trousers. At the 115 px battle size they read as the same character. The owner keeps Corin and Cerise exactly as they are and wants Odran and Isolde redesigned from scratch so each is recognisable by silhouette alone.
+GAME CONTEXT AND FILES (check against the repository before generating)
+- Repository wnau34-nptrn/asterveil-fateweave, base branch feature/fateweave-initial-prototype (not main). Branch art/art-char-redesign-001. Files only under incoming/ART-CHAR-REDESIGN-001/. Do not change src/, tests/, public/, .github/ or earlier incoming folders. Open a PR into the base branch; do not merge.
+- Cell mapping: src/game/visuals/assets.ts (thiran = units_mercs frame 7, wila = frame 9). Runtime atlases: public/assets/art/units_mercs.webp, portraits_mercs.webp; weapons in public/assets/ui/equip/gear_items.webp at (6,0) thiran and (6,1) wila.
+- Packaging/contract: incoming/ROSTER-30-BATCH-1/README.md and package.py (reuse its crop/normalize routine and pixel-equality checks).
+- Story rows: docs/design/ROSTER_30_TH.md (thiran, wila). Rules: Saint = front lane brawler-healer who turns real damage into healing for wounded allies; Dancer = back lane, gives allies cooldown relief, never extra turns.
 
-READ FIRST
-- incoming/ROSTER-30-BATCH-1/README.md and package.py (cell layout, pivots, bounds, lossless packaging and pixel-equality checks; reuse that routine).
-- public/assets/art/units.webp, units_mercs.webp, portraits_mercs.webp and public/assets/ui/equip/gear_items.webp (current runtime atlases).
-- docs/design/ROSTER_30_TH.md rows thiran and wila (personal story and personal branch).
-STYLE REFERENCES: use the original cast and earlier mercenaries (Aegis, Lyra, Eira, Seren, Mira, Toma, Sefa, Brann, Lio, Garran) for proportions, painted rendering, outline and light. Do NOT feed Corin's or Cerise's images (units 6/8, incoming/ROSTER-30-BATCH-1/references/*) into image generation; that is what caused the duplication. Use them only afterwards in the comparison review.
+REFERENCES
+- Style (attach to the image tool): the original heroes in units.webp frames 0–3 (Aegis, Lyra, Eira, Seren) and the mercenaries in units_mercs.webp frames 0–5 (Garran, Mira, Toma, Sefa, Brann, Lio) for chibi proportions, painted rendering, dark contour and top-left light.
+- Do NOT attach Corin, Cerise, the old Odran/Isolde cells or incoming/ROSTER-30-BATCH-1/references/* to image generation; that caused the duplication. Use them only in the comparison review after generation.
 
-CHARACTERS (names are final; ids stay thiran/wila)
-1) Odran / โอดราน — Saint (front lane, brawler-healer who turns real damage into healing for wounded allies). Story: a camp gate-repairer who stepped out to defend the camp. Mature man, broad heavy build, short dark hair grey at the temples and a beard may stay (that part of the old identity was liked); everything below the head is new.
-   Option A "Gatewright": shin-length work coat in charcoal/olive with a heavy leather apron and tool loops, oversized riveted iron work-gauntlets with hinge plates, a prayer cord wrapped around one forearm (no dangling bead string), an iron gate-ring talisman at the belt. Pose: grounded guard stance, feet planted wide, one gauntlet raised as a shield, the other fist low and ready.
-   Option B "Pilgrim warden": long hooded travel cloak over padded gambeson, cloth-wrapped fists with iron knuckle bands, a small hanging lantern or censer at the hip giving a warm glow, sturdy sandal-boots. Pose: an upward open-palm strike / blessing gesture with the body turned, cloak sweeping behind.
-   Weapon cell for the gear atlas: his own fist weapon matching the chosen option (riveted hinge gauntlet, or knuckle band with wrapping).
-
-2) Isolde / อิโซลด์ — Dancer (back lane, gives allies cooldown relief; never extra turns). Story: a dance teacher at a refugee shelter who remembers everyone. Adult woman, tall and long-limbed silhouette (clearly different from Cerise's small round one); new hairstyle (short, or a high bun), no braid.
-   Option A "Veil dancer": one long silk veil held overhead in both hands forming a large arc, fitted long dress with a side slit over leggings, short cropped cape; palette midnight blue / silver / ivory. Pose: tall arabesque or turn on one foot.
-   Option B "Bell-staff dancer": a slim ceremonial staff hung with small bells and short streamers, wrapped sash tunic over fitted trousers and soft boots, half-cape; palette slate blue / warm ochre / cream. Pose: mid-spin with the staff held diagonally.
-   Weapon cell: her own dance implement matching the chosen option (veil with weighted gold ends, or bell-staff).
-
-MUST DIFFER (both options, checked against Corin/Cerise)
-- Odran: no gold shoulder pauldron, no white/ivory tabard with a gold emblem, no front cloth panel, no bead string held in the hand, no forward-punch pose, no matching brown boot/greave set.
-- Isolde: no folding fans, no ribbons orbiting the body, no ruffled layered skirt, no harem trousers, no braid, no gold-leaf or crescent hair ornament, no purple/lilac/coral/teal main colours.
-- Different pose, silhouette mass, costume structure and main weapon/implement. A recolour or a head swap fails the task.
-- Palette is costume language only, not an element system.
-
-PRESERVE (runtime contract, same as Batch 1)
-- Unit: right-facing static combat pose, 512x512 RGBA cell, figure bounds within 480x460, alpha sole bottom at y496 inclusive, figure top >= y37, pivot (0.5, 497/512), no baked ground shadow, no text.
-- Portrait: separate 512x512 high-resolution close-up faithful to the same unit identity, painted background matching the existing portrait set (CSS crops it in the UI).
+CONFIRMED REQUIREMENTS
+- Unit: right-facing static combat pose, 512x512 RGBA with real alpha (no painted checkerboard), figure bounds within 480x460, alpha sole bottom at y496 inclusive, figure top >= y37, pivot (0.5, 497/512), no baked ground shadow, no text. Leave room for the weapon/implement and hair; nothing cropped.
+- Portrait: separate 512x512 close-up of the same identity, painted background like the existing portrait set (the UI crops it).
 - Weapon: 128x128 cell in the gear atlas style.
-- Readable at native 115 px on the battle background and at 40 px portrait size.
+- Head size relative to body matches the style references (the A7 anatomy gate later measures head scale against this seed).
+- Readable at 115 px on the battle background and 40 px portrait.
+- No elements; palette is costume language only. Original artwork only; nothing from Asterveil: Rise Beyond or any other game. Never use the word ม่านเวล.
 
-DELIVERABLES
-- options/odran_A|odran_B|isolde_A|isolde_B/: unit.png, portrait.png, weapon.png (finished, contract-ready, not sketches).
-- review/lineup.png: Corin + Odran A + Odran B and Cerise + Isolde A + Isolde B at 115 px on battle_forest and as solid black silhouettes; the silhouettes must be distinguishable at a glance.
-- review/portraits-40.png and review/native-sizes.png in the Batch 1 review format.
-- package.py: takes --odran A|B --isolde A|B, rebuilds from the current base, replaces only units_mercs/portraits_mercs frames 7 (thiran) and 9 (wila) and gear cells (6,0) and (6,1); asserts every other unit, portrait and gear cell decodes pixel-identical to the base; lossless WebP like Batch 1. Run it once with A/A and commit those packaged atlases under packaged/ (the owner may still pick B).
-- provenance/ (prompts, tool output hints, validation.json bounds/pivots, manifest.json SHA-256) as in Batch 1.
-- README.md: the design rationale for each option, the must-differ checklist ticked per option, and the exact command for re-packaging with another choice.
-The owner chooses one option per character from the PR; Claude then integrates the chosen packaged atlases.
+ASSUMPTIONS
+- Names are final (Odran / โอดราน, Isolde / อิโซลด์); ids stay thiran / wila; skill icons are class-shared and stay.
+- These static cells become the seeds for the later animation task ART-UNIT-ANIMATION-A7-003, so draw a pose that a full move set can grow from.
+
+VISUAL DESCRIPTION
+1) Odran — "Gatewright". Mature man, broad heavy build, short dark hair grey at the temples, short beard, weathered warm face, calm resolve. Shin-length charcoal work coat with olive lining, heavy scarred leather apron with tool loops and a hanging hinge-pin, oversized riveted iron work-gauntlets with hinge plates (the right one larger, like a gate brace), a prayer cord wrapped around the left forearm ending in a small iron gate-ring talisman, sturdy hobnailed work boots. Pose: grounded guard stance, feet planted wide, left gauntlet raised as a shield in front of the chest, right fist low and cocked, weight sunk; reads as "a door that will not open". Accent: a faint warm amber glow in the gauntlet seams (healing light, not fire). Weapon cell: the riveted hinge gauntlet.
+2) Isolde — "Bell-staff dancer". Adult woman, tall and long-limbed, poised and kind, short silver-streaked dark hair swept back with one loose lock. Wrapped slate-blue sash tunic over fitted cream trousers and soft wrapped dance boots, a warm ochre half-cape on one shoulder, small brass ankle bells. Implement: a slim ceremonial staff taller than her, hung with a cluster of small brass bells and short cream streamers at the top. Pose: mid-spin on the ball of one foot, staff held diagonally across the body with the bell end raised high behind her, cape flaring; one long clean diagonal line through the silhouette. Weapon cell: the bell-staff.
+
+MUST NOT (checked against Corin / Cerise)
+- Odran: no gold shoulder pauldron, no white/ivory tabard with a gold emblem, no front cloth panel, no bead string held in the hand, no forward-punch pose, no brown boot/greave set like Corin's.
+- Isolde: no folding fans, no ribbons orbiting the body, no ruffled layered skirt, no harem trousers, no braid, no gold-leaf or crescent hair ornament, no purple/lilac/coral/teal main colours.
+- A recolour or head swap fails the task.
+
+PROMPTS FOR THE IMAGE TOOL (adapt to the tool actually available; attach the style references)
+- Odran unit: "Chibi painted fantasy RPG battle unit, full body, facing right, transparent background, same proportions and rendering as the attached cast. A broad, heavy, middle-aged gate-repairer turned battle saint: short dark hair grey at the temples, short beard, charcoal shin-length work coat with olive lining, heavy leather apron with tool loops, oversized riveted iron gauntlets with hinge plates (right one larger), prayer cord wrapped on the left forearm with a small iron ring, hobnailed boots. Grounded guard stance, feet wide, left gauntlet raised like a shield, right fist low and ready. Faint warm amber light in the gauntlet seams. Dark contour, light from top-left, no ground shadow, no text."
+- Isolde unit: "Chibi painted fantasy RPG battle unit, full body, facing right, transparent background, same proportions and rendering as the attached cast. A tall, long-limbed adult dance teacher: short silver-streaked dark hair swept back, slate-blue wrapped sash tunic, fitted cream trousers, soft wrapped dance boots, warm ochre half-cape on one shoulder, brass ankle bells. Mid-spin on one foot holding a slim ceremonial staff diagonally across her body, the top hung with small brass bells and short cream streamers, raised high behind her; cape flaring. Dark contour, light from top-left, no ground shadow, no text."
+- Portraits: the same identity as a chest-up close-up, three-quarter view facing right, painted background matching the attached portrait set.
+
+ASSET AND METADATA WORK
+- unit/odran.png, unit/isolde.png, portrait/odran.png, portrait/isolde.png, weapon/odran.png, weapon/isolde.png, plus raw sources.
+- package.py: rebuild from the current base, replace only units_mercs/portraits_mercs frames 7 and 9 and gear cells (6,0)/(6,1); assert every other unit, portrait and gear cell decodes pixel-identical to the base; lossless WebP like Batch 1. Commit the packaged atlases under packaged/.
+- review/lineup.png: Corin vs Odran and Cerise vs Isolde at 115 px on public/assets/art/battle_forest.webp and as solid black silhouettes; review/native-sizes.png and review/portraits-40.png in the Batch 1 format.
+- prompts.json, provenance/ (tool output hints), validation.json (bounds, pivots, sole line, SHA-256 per file), NOTES.md (design rationale, must-not checklist ticked, anything unsure).
+
+GAME INTEGRATION (Claude, not Codex)
+Claude packs the atlases into the game, removes the old thiran/wila A7 animation entries at the same time so the old body never appears, captures real 390px screenshots, then sends ART-UNIT-ANIMATION-A7-003.
+
+ACCEPTANCE
+- Silhouettes clearly differ from Corin/Cerise at 115 px; contract bounds/sole/pivot pass; other cells pixel-identical; files decode.
+- Push with normal git, fetch back, verify every file's SHA-256 against validation.json and decode it with Pillow (an earlier PR was truncated in transit).
+
+SCOPE
+Artwork only for these two characters. No rule, save, content, balance or timing changes. The owner gives final visual approval; CI or validation results are not approval.
 ```
 
-### prompt 2 — ชุดท่า A7-003 (ส่งหลังเจ้าของเลือกแบบและ Claude นำภาพนิ่งเข้าเกมแล้ว)
+### prompt 2 — ชุดท่า A7-003 (ส่งหลังเจ้าของผ่านภาพนิ่งและ Claude นำเข้าเกมแล้ว)
 
 ```text
 CODEX HANDOFF — ART-UNIT-ANIMATION-A7-003
 Asterveil · Fateweave: battle animation strips for the redesigned Odran (thiran) and Isolde (wila)
 
-Repository wnau34-nptrn/asterveil-fateweave, base branch feature/fateweave-initial-prototype (after the chosen ART-CHAR-REDESIGN-001 option is integrated). Branch art/art-unit-animation-a7-003. Files only under incoming/ART-UNIT-ANIMATION-A7-003/. Do not change src/, tests/, public/, .github/ or earlier incoming folders. PR into the base branch; do not merge. Original artwork only. Never use the word ม่านเวล.
+Repository wnau34-nptrn/asterveil-fateweave, base branch feature/fateweave-initial-prototype (after ART-CHAR-REDESIGN-001 is integrated). Branch art/art-unit-animation-a7-003. Files only under incoming/ART-UNIT-ANIMATION-A7-003/. Do not change src/, tests/, public/, .github/ or earlier incoming folders. PR into the base branch; do not merge. Original artwork only. Never use the word ม่านเวล.
 
 SEED: the integrated idle cells units_mercs frame 7 (thiran = Odran) and frame 9 (wila = Isolde). Every frame must keep that exact face, costume, implement and the SAME head size relative to the body as the seed. Do not use the old A7-001 thiran/wila strips or Corin/Cerise as image input; reuse only their move list, frame counts and packaging (incoming/ART-UNIT-ANIMATION-A7-001/moves.json, strips.json, build_assets.py) and the A7-002 anatomy rules (docs/handoffs/CODEX-A7-DANCER-REDRAW-TH.md).
 
 MOVES (same slots as the current runtime map in src/game/visuals/unit-frames.ts, so integration only swaps atlases)
-- Odran (Saint): attack (saintstrike/vowstrike), arc (saintarc, front-row sweep), communion (communion/sharewound, healing transfer gesture), lastlight; reactions hit, block, down (ends lying, does not get up). Moves follow his chosen design: guard-stance gauntlet blows or open-palm blessing strikes, never Corin's forward punch.
-- Isolde (Dancer): attack, partner (cadence/duet/deepbeat), circle (rounddance), closing (closingstep), echo (echofoot); reactions hit, block, down. Moves use her own implement (veil or bell-staff), never fans or ribbons.
+- Odran (Saint): attack (saintstrike/vowstrike), arc (saintarc, front-row sweep), communion (communion/sharewound, healing transfer gesture), lastlight; reactions hit, block, down (ends lying, does not get up). Moves grow from his guard stance: heavy gauntlet blows and shield-like blocks, never Corin's forward punch.
+- Isolde (Dancer): attack, partner (cadence/duet/deepbeat), circle (rounddance), closing (closingstep), echo (echofoot); reactions hit, block, down. Moves use her bell-staff (spins, sweeps, staff-tap rhythm), never fans or ribbons.
 - Attack moves 6 frames (2 prepare + 4 recover; lastlight 3+3), reactions 3–4 frames, right-facing, sole at y497 in the logical 512 cell, no VFX/particles/text baked in.
 
 QUALITY GATE before delivery: python3 scripts/unit-anatomy-audit.py --cells on every strip (median head scale <= 1.15, no frame > 1.20). Do not deliver a failing strip as final; list it in NOTES.md instead.

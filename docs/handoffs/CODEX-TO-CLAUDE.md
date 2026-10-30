@@ -5,7 +5,7 @@
 เจ้าของเห็นว่าตัวที่สองของนักบุญรบและนักเต้นรำซ้ำกับตัวแรก (ต่างแค่หัวและสี) และชื่อไทยไม่เข้ากับโลกเกม
 - ชื่อที่แสดง: `metta` คอริน/Corin, `thiran` โอดราน/Odran, `lalin` เซรีส/Cerise, `wila` อิโซลด์/Isolde (`src/ui/th.ts`, `src/content/heroes/roster-batch1.ts`) ID/เซฟ/กฎ/สมดุลไม่เปลี่ยน ชื่อไม่ได้อยู่ในเซฟ จึงไม่ขึ้นเวอร์ชัน ชื่อสกิล "หมัดเมตตา"/"ใจเมตตา" เป็นคำว่าเมตตา คงไว้
 - ร่าง 16 ตัวที่ยังไม่ลงเกมเปลี่ยน ID+ชื่อในเอกสารแผน: bastian, alden, juno, rowena, dorian, wren, fenna, tamsin, ulric, ansel, kael, jory, wynne, hesper, astrid, quentin (ROSTER_30_TH ข้อ 1/5, GAME_DETAIL, DEVELOPMENT_PLAN, UNIT_ANIMATION_ROLLOUT, ANIMATION_VFX_COMPLETION_PLAN, MASTER_PLAN, PROGRESSION_*, NEW-CHAT-HANDOFF) รายงาน validation/คลิปเก่าคงชื่อเดิมเป็นประวัติ
-- ภาพ: เก็บคอริน/เซรีส; `CODEX-ART-QUEUE-TH.md` ข้อ 29: prompt 1 ART-CHAR-REDESIGN-001 (ภาพนิ่ง 2 แบบต่อตัว แทนเฉพาะเฟรม 7/9 และช่องอาวุธ (6,0)/(6,1)) แล้ว prompt 2 ART-UNIT-ANIMATION-A7-003 (ชุดท่าใหม่) ตอนนำภาพนิ่งที่เลือกเข้าเกมต้องถอด entry `thiran`/`wila` ใน `unit-frames.ts` พร้อมกัน ไม่ให้ร่าง A7 เก่าโผล่ A7-002 เหลือเฉพาะลลิน
+- ภาพ: เก็บคอริน/เซรีส; `CODEX-ART-QUEUE-TH.md` ข้อ 29: prompt 1 ART-CHAR-REDESIGN-001 (ภาพนิ่งแบบเดียวต่อตัวตามที่เจ้าของขอ: โอดราน "Gatewright" ถุงมือเหล็กท่าตั้งรับ, อิโซลด์ "Bell-staff" ไม้เท้ากระดิ่ง แทนเฉพาะเฟรม 7/9 และช่องอาวุธ (6,0)/(6,1)) แล้ว prompt 2 ART-UNIT-ANIMATION-A7-003 (ชุดท่าใหม่) ตอนนำภาพนิ่งที่เลือกเข้าเกมต้องถอด entry `thiran`/`wila` ใน `unit-frames.ts` พร้อมกัน ไม่ให้ร่าง A7 เก่าโผล่ A7-002 เหลือเฉพาะลลิน
 
 ## 2026-10-30 — Claude: Aegis A2-002 นำเข้าเกมแล้ว เจ้าของอนุมัติ motion แล้ว (“อนุมัติ” 2026-10-30)
 
