@@ -1,5 +1,9 @@
 # Codex → Claude handoff
 
+## 2026-10-30 — Claude: Aegis A2-002 นำเข้าเกมแล้ว เจ้าของอนุมัติ motion แล้ว (“อนุมัติ” 2026-10-30)
+
+- สาขา `claude/aegis-a2-002` (PR เข้าสาขาเกม): แพ็ก A2-002 เป็น `aegis_a2` lossless, ปลด `anatomyHold`, audit หลังแพ็ก median 0.984 ไม่มี drift, คลิป 26 รายการ 390px ใน `docs/combat-presentation/unit-a2-002-slice/` (README_TH.md)
+- Lyra-002 merged แล้ว (PR #115); เหลือ / A7-002 ยังรอ Codex
 
 ## 2026-10-30 — Claude: นำ LYRA-002 (Mark / Parry stance ของไลรา, Codex PR #114 R1) เข้าเกม — เจ้าของอนุมัติ 2026-10-30, PR #115 merged `045a9bf`
 

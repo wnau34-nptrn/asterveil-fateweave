@@ -1,0 +1,29 @@
+{
+  "factor": 0.36,
+  "displayRatio": 2.7777777777777777,
+  "offset": [
+    164,
+    312
+  ],
+  "seedBottomAlpha80": 512,
+  "uniqueFrames": 26,
+  "replaced": {
+    "image": "aegis_a2.1d12d3127841.webp",
+    "atlas": "aegis_a2.e88cd1ce5fe0.json",
+    "width": 1536,
+    "height": 720,
+    "frames": 32,
+    "decodedBytes": 4423680,
+    "downloadBytes": 1397790
+  },
+  "new": {
+    "image": "aegis_a2.2b9070aaeacc.webp",
+    "atlas": "aegis_a2.9136d3bfc15c.json",
+    "width": 1280,
+    "height": 699,
+    "frames": 32,
+    "decodedBytes": 3578880,
+    "downloadBytes": 1172543
+  },
+  "frameMap": "0,1=idle;2-7=001-006;8,9=idle;10-15=007-012;16=idle;17-18=019-020;19-21=021-023;22=idle;23-28=013-018;29=idle;30-31=024-025"
+}

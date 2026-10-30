@@ -40,9 +40,8 @@ const qa={reactionTiming:()=>{
  },alchemyPoint:()=>{
  const body=(scene as unknown as {bodies:Map<string,Phaser.GameObjects.Container>}).bodies.get('guardian')!;
  const sprite=body.list.find((c):c is Phaser.GameObjects.Image=>c instanceof Phaser.GameObjects.Image)!;
- // Independently use the documented seed normalization, including the live world matrix. The held static seed
- // (anatomy hold) fills its 512px cell, the A2 atlas draws it at .36.
- const n=sprite.texture.key==='unit-pilot-aegis'?.36:1;
+ // Independently use the documented seed normalization, including the live world matrix.
+ const n=.36;
  const point=sprite.getWorldTransformMatrix().transformPoint(.4*512*n,-.35*512*n);
  const dpr=scene.game.canvas.width/scene.game.canvas.getBoundingClientRect().width;
  const earth=sprite.getWorldTransformMatrix().transformPoint(-.31*512*n,-.80*512*n);

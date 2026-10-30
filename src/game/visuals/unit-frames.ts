@@ -145,18 +145,13 @@ export const unitRegistry = {
     intents: { 'War Cry': 'move1', 'Crushing Blow': 'move2', 'Call the Hunt': 'move3' },
     clips: { move1: bossMove(1), move2: bossMove(5), move3: bossMove(9) }, reactions: { hit: [13, 14], down: [15, 16, 17] } },
 } as const satisfies Record<string, UnitDefinition>;
-// Anatomy hold (animation-visual-audit-2026-10-29): an identity whose generated poses do not match its approved
-// idle model (head/torso proportions) keeps its mapping and atlas in the repository but is neither loaded nor drawn;
-// the battle shows the shipped static seed with the procedural body motion until an anatomy-locked redraw is packed.
-// Never hide the mismatch by rescaling poses or lengthening the dissolve.
-export const anatomyHold: ReadonlySet<string> = new Set(['guardian']);
-export const unitSheets = Object.fromEntries(Object.entries(unitRegistry).filter(([art]) => !anatomyHold.has(art)).map(([art, definition]) => [art, definition.sheet])) as Partial<Record<keyof typeof unitRegistry, UnitSheet>>;
+export const unitSheets = Object.fromEntries(Object.entries(unitRegistry).map(([art, definition]) => [art, definition.sheet])) as Record<keyof typeof unitRegistry, UnitSheet>;
 export type UnitSheet = typeof unitRegistry[keyof typeof unitRegistry]['sheet'];
 export function unitDefinition(art: string): UnitDefinition | undefined {
   return Object.hasOwn(unitRegistry, art) ? unitRegistry[art as keyof typeof unitRegistry] : undefined;
 }
 export const unitKey = (art: string): string | undefined => {
-  const definition = anatomyHold.has(art) ? undefined : unitDefinition(art);
+  const definition = unitDefinition(art);
   return definition ? `unit-pilot-${definition.sheet}` : undefined;
 };
 export const unitDownFrame = (art: string): number => { const d = unitDefinition(art); return d?.downFrame ?? (d?.own ? 0 : 21); };

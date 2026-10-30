@@ -1,0 +1,334 @@
+[
+  {
+    "name": "attack-r1",
+    "prompt": "Production game animation frames edited from the supplied approved model sheet (aegis-seed.png with guide lines). Transparent alpha background, no glow, no scenery, no labels, no motion trails, no VFX. Character: Aegis, blond blue-eyed young knight in ornate royal blue and gold armor with blue cape, silver-blue sword in his right hand and five-point blue-gold shield on his left arm. Faces RIGHT exactly as the model sheet. Same camera and lighting. PROPORTIONS ARE LOCKED TO THE MODEL SHEET: head from hair top to chin = 140px, hair width = 190px, eye line 110px below hair top, chin to belt = 110px, feet on the sole line at y=500 in a 512px cell. Do NOT draw a bigger head, bigger eyes, broader shoulders or a bigger shield than the model sheet. Crouching poses get shorter by bending the knees only; the head stays model-sheet size. One pose per 512x512 cell, full body visible, never overlapping, never cropped. Same sword grip in the right hand, shield on the left arm in every pose, no duplicate weapons.\nPoses: 6-frame sword slash: draw sword back, lift, poised windup, forward slash CONTACT, follow through, ease back.",
+    "source_path": "/workspace/generated_images/exec-18917d4d-61ee-4e75-a642-acaa81f5a6cd.png",
+    "output_file": "attack-r1.png",
+    "references": [
+      "aegis-seed.png",
+      "aegis-model-sheet-guides.png"
+    ]
+  },
+  {
+    "name": "001-r2",
+    "prompt": "Production game animation frames edited from the supplied approved model sheet (aegis-seed.png with guide lines). Transparent alpha background, no glow, no scenery, no labels, no motion trails, no VFX. Character: Aegis, blond blue-eyed young knight in ornate royal blue and gold armor with blue cape, silver-blue sword in his right hand and five-point blue-gold shield on his left arm. Faces RIGHT exactly as the model sheet. Same camera and lighting. PROPORTIONS ARE LOCKED TO THE MODEL SHEET: head from hair top to chin = 140px, hair width = 190px, eye line 110px below hair top, chin to belt = 110px, feet on the sole line at y=500 in a 512px cell. Do NOT draw a bigger head, bigger eyes, broader shoulders or a bigger shield than the model sheet. Crouching poses get shorter by bending the knees only; the head stays model-sheet size. One pose per 512x512 cell, full body visible, never overlapping, never cropped. Same sword grip in the right hand, shield on the left arm in every pose, no duplicate weapons.\nPoses: ONE SINGLE FRAME ONLY, sword slash frame 001: draw sword back. Edit the supplied approved seed directly, preserve its head and face exactly at original size. Keep the full figure inside one 512x512 canvas, feet at y=500. Output actual transparent alpha, not a painted checkerboard. Remove the stray fragment at the far right edge.",
+    "source_path": "/workspace/generated_images/exec-fa33ed7e-f424-4464-bd18-2b76f15497b0.png",
+    "output_file": "001-r2.png",
+    "references": [
+      "aegis-seed.png",
+      "aegis-model-sheet-guides.png"
+    ]
+  },
+  {
+    "name": "001-r3",
+    "prompt": "Production game animation frames edited from the supplied approved model sheet (aegis-seed.png with guide lines). Transparent alpha background, no glow, no scenery, no labels, no motion trails, no VFX. Character: Aegis, blond blue-eyed young knight in ornate royal blue and gold armor with blue cape, silver-blue sword in his right hand and five-point blue-gold shield on his left arm. Faces RIGHT exactly as the model sheet. Same camera and lighting. PROPORTIONS ARE LOCKED TO THE MODEL SHEET: head from hair top to chin = 140px, hair width = 190px, eye line 110px below hair top, chin to belt = 110px, feet on the sole line at y=500 in a 512px cell. Do NOT draw a bigger head, bigger eyes, broader shoulders or a bigger shield than the model sheet. Crouching poses get shorter by bending the knees only; the head stays model-sheet size. One pose per 512x512 cell, full body visible, never overlapping, never cropped. Same sword grip in the right hand, shield on the left arm in every pose, no duplicate weapons.\nPoses: ONE SINGLE FRAME 001 sword drawn BACK LOW horizontally to the left, right hand gripping same sword handle behind hip, preparing a slash. Keep original seed head PIXEL FOR PIXEL, at x195-385 and hair top y40, eyes y150, chin y180. Keep original torso and shield sizes. Full upright body with feet at y500. Do not crouch in this frame. Image must be a single square transparent frame. Do not include guide lines. The head must NOT shift down to y80 or shrink. Match the seed face exactly. Remove far-right stray fragment.",
+    "source_path": "/workspace/generated_images/exec-5f1a9782-4a1c-4679-8d36-07b62875016b.png",
+    "output_file": "001-r3.png",
+    "references": [
+      "aegis-seed.png"
+    ]
+  },
+  {
+    "name": "002-r1",
+    "prompt": "Production game animation frames edited from the supplied approved model sheet (aegis-seed.png with guide lines). Transparent alpha background, no glow, no scenery, no labels, no motion trails, no VFX. Character: Aegis, blond blue-eyed young knight in ornate royal blue and gold armor with blue cape, silver-blue sword in his right hand and five-point blue-gold shield on his left arm. Faces RIGHT exactly as the model sheet. Same camera and lighting. PROPORTIONS ARE LOCKED TO THE MODEL SHEET: head from hair top to chin = 140px, hair width = 190px, eye line 110px below hair top, chin to belt = 110px, feet on the sole line at y=500 in a 512px cell. Do NOT draw a bigger head, bigger eyes, broader shoulders or a bigger shield than the model sheet. Crouching poses get shorter by bending the knees only; the head stays model-sheet size. One pose per 512x512 cell, full body visible, never overlapping, never cropped. Same sword grip in the right hand, shield on the left arm in every pose, no duplicate weapons.\nPoses: ONE SINGLE FRAME 002 sword slash LIFT: right hand lifts the sword upward above right shoulder, blade pointing diagonally upper left; shield held on left arm. Preserve original seed head and face exactly: hair x195-385, top y40, eyes y150, chin y180. Upright stance, original body and shield proportions. Full figure in ONE square canvas, soles y500. Actual transparent alpha, no guide lines, remove far-right stray fragment.",
+    "source_path": "/workspace/generated_images/exec-32c2a7ee-4559-4aca-a37c-5549f82ea107.png",
+    "output_file": "002-r1.png",
+    "references": [
+      "aegis-seed.png"
+    ]
+  },
+  {
+    "name": "002-r2",
+    "prompt": "Production game animation frames edited from the supplied approved model sheet (aegis-seed.png with guide lines). Transparent alpha background, no glow, no scenery, no labels, no motion trails, no VFX. Character: Aegis, blond blue-eyed young knight in ornate royal blue and gold armor with blue cape, silver-blue sword in his right hand and five-point blue-gold shield on his left arm. Faces RIGHT exactly as the model sheet. Same camera and lighting. PROPORTIONS ARE LOCKED TO THE MODEL SHEET: head from hair top to chin = 140px, hair width = 190px, eye line 110px below hair top, chin to belt = 110px, feet on the sole line at y=500 in a 512px cell. Do NOT draw a bigger head, bigger eyes, broader shoulders or a bigger shield than the model sheet. Crouching poses get shorter by bending the knees only; the head stays model-sheet size. One pose per 512x512 cell, full body visible, never overlapping, never cropped. Same sword grip in the right hand, shield on the left arm in every pose, no duplicate weapons.\nPoses: ONE SINGLE FRAME 002 sword slash LIFT. Edit approved seed, keep the whole knight's original pose, exact original face, hair, head, torso, belt, legs, feet and shield UNCHANGED in position and size. ONLY bend right elbow to lift sword: right fist at x155 y230, blade rises diagonally LEFT toward x20 y50, entirely to LEFT of the head. Do not put sword over head. Preserve hair x195-385, top y40, eyes y150, chin y180, belt y290 and feet y500 in this single 512x512 cell. Exact approved head size. Actual alpha, no guide lines, no far-right stray fragment.",
+    "source_path": "/workspace/generated_images/exec-f6943a62-b4b5-442f-be1a-03304da3b265.png",
+    "output_file": "002-r2.png",
+    "references": [
+      "aegis-seed.png"
+    ]
+  },
+  {
+    "name": "004-r2",
+    "prompt": "Production game animation frames edited from the supplied approved model sheet (aegis-seed.png with guide lines). Transparent alpha background, no glow, no scenery, no labels, no motion trails, no VFX. Character: Aegis, blond blue-eyed young knight in ornate royal blue and gold armor with blue cape, silver-blue sword in his right hand and five-point blue-gold shield on his left arm. Faces RIGHT exactly as the model sheet. Same camera and lighting. PROPORTIONS ARE LOCKED TO THE MODEL SHEET: head from hair top to chin = 140px, hair width = 190px, eye line 110px below hair top, chin to belt = 110px, feet on the sole line at y=500 in a 512px cell. Do NOT draw a bigger head, bigger eyes, broader shoulders or a bigger shield than the model sheet. Crouching poses get shorter by bending the knees only; the head stays model-sheet size. One pose per 512x512 cell, full body visible, never overlapping, never cropped. Same sword grip in the right hand, shield on the left arm in every pose, no duplicate weapons.\nPoses: ONE SINGLE FRAME 004 sword slash CONTACT. Use supplied approved model exactly, do NOT miniaturize the head or knight to fit weapon. The head must remain 140px high from hair top to chin, 190px wide: approved seed's exact face. Place head x150-340 y40-180, torso at x170-310 y180-300, legs full length feet y500. Right fist x260 y260, sword SLASHING RIGHT diagonally forward and down with blade tip x490 y380, sword blade SAME LENGTH as seed. Left shield pulled close to left torso, same size as seed. Full figure, transparent alpha, no guides. Leave enough empty margin, no clipping.",
+    "source_path": "/workspace/generated_images/exec-4e8928c3-5bf7-498c-af9a-32b69d15ead4.png",
+    "output_file": "004-r2.png",
+    "references": [
+      "aegis-seed.png"
+    ]
+  },
+  {
+    "name": "support-r1",
+    "prompt": "Production game animation frames edited from the supplied approved model sheet (aegis-seed.png with guide lines). Transparent alpha background, no glow, no scenery, no labels, no motion trails, no VFX. Character: Aegis, blond blue-eyed young knight in ornate royal blue and gold armor with blue cape, silver-blue sword in his right hand and five-point blue-gold shield on his left arm. Faces RIGHT exactly as the model sheet. Same camera and lighting. PROPORTIONS ARE LOCKED TO THE MODEL SHEET: head from hair top to chin = 140px, hair width = 190px, eye line 110px below hair top, chin to belt = 110px, feet on the sole line at y=500 in a 512px cell. Do NOT draw a bigger head, bigger eyes, broader shoulders or a bigger shield than the model sheet. Crouching poses get shorter by bending the knees only; the head stays model-sheet size. One pose per 512x512 cell, full body visible, never overlapping, never cropped. Same sword grip in the right hand, shield on the left arm in every pose, no duplicate weapons.\nPoses: 6-frame shield support sequence, arranged precisely 3 columns by 2 rows, each equal square cell: 007 lift shield slightly; 008 turn shield forward; 009 hold shield forward; 010 powerful shield raise CONTACT; 011 lower shield slightly; 012 ease back. Keep sword right-hand grip and sword lowered diagonally left in every pose. Hair top/chin distance exactly 140px and width190px per512px cell, head remains same size as approved seed. Feet y500. Each figure entirely inside own cell. Use TRUE transparent alpha everywhere around figures, NO painted checkerboard and NO grid dividers. References show approved anatomy and clean alpha style.",
+    "source_path": "/workspace/generated_images/exec-eec71514-7990-4aa0-93ef-bd2351370019.png",
+    "output_file": "support-r1.png",
+    "references": [
+      "aegis-seed.png",
+      "aegis-model-sheet-guides.png",
+      "001-r3.png"
+    ]
+  },
+  {
+    "name": "003-r1",
+    "prompt": "Production game animation frames edited from the supplied approved model sheet (aegis-seed.png with guide lines). Transparent alpha background, no glow, no scenery, no labels, no motion trails, no VFX. Character: Aegis, blond blue-eyed young knight in ornate royal blue and gold armor with blue cape, silver-blue sword in his right hand and five-point blue-gold shield on his left arm. Faces RIGHT exactly as the model sheet. Same camera and lighting. PROPORTIONS ARE LOCKED TO THE MODEL SHEET: head from hair top to chin = 140px, hair width = 190px, eye line 110px below hair top, chin to belt = 110px, feet on the sole line at y=500 in a 512px cell. Do NOT draw a bigger head, bigger eyes, broader shoulders or a bigger shield than the model sheet. Crouching poses get shorter by bending the knees only; the head stays model-sheet size. One pose per 512x512 cell, full body visible, never overlapping, never cropped. Same sword grip in the right hand, shield on the left arm in every pose, no duplicate weapons.\nPoses: ONE SINGLE FRAME 003 poised windup for sword slash. Edit approved seed, keep original face, hair, head, torso, belt, feet and shield sizes. Right elbow bent outward LEFT, sword fist at x150 y220, blade diagonally left-up with tip at x15 y70, windup ready to swing right. Lean chest very slightly back. Hair x195-385, top y40, eyes y150, chin y180, belt y290, feet y500 in this ONE 512x512 square. Do not shrink figure to fit sword above head; sword stays left of head. Actual alpha, no guide lines, remove far-right stray fragment.",
+    "source_path": "/workspace/generated_images/exec-9c1af48e-1688-4507-a717-d54731df2b2a.png",
+    "output_file": "003-r1.png",
+    "references": [
+      "aegis-seed.png"
+    ]
+  },
+  {
+    "name": "004-r1",
+    "prompt": "Production game animation frames edited from the supplied approved model sheet (aegis-seed.png with guide lines). Transparent alpha background, no glow, no scenery, no labels, no motion trails, no VFX. Character: Aegis, blond blue-eyed young knight in ornate royal blue and gold armor with blue cape, silver-blue sword in his right hand and five-point blue-gold shield on his left arm. Faces RIGHT exactly as the model sheet. Same camera and lighting. PROPORTIONS ARE LOCKED TO THE MODEL SHEET: head from hair top to chin = 140px, hair width = 190px, eye line 110px below hair top, chin to belt = 110px, feet on the sole line at y=500 in a 512px cell. Do NOT draw a bigger head, bigger eyes, broader shoulders or a bigger shield than the model sheet. Crouching poses get shorter by bending the knees only; the head stays model-sheet size. One pose per 512x512 cell, full body visible, never overlapping, never cropped. Same sword grip in the right hand, shield on the left arm in every pose, no duplicate weapons.\nPoses: ONE SINGLE FRAME 004 forward sword slash CONTACT facing RIGHT. Right arm swings across chest, right fist x300 y285 and sword blade extends horizontally right to x500 y300 (foreshortened slightly to fit), shield on LEFT arm drawn close to torso, NOT duplicate. Firm forward planted legs. Preserve approved seed head and face size, hair x195-385 top y40 eyes y150 chin y180, belt y290, soles y500 in one 512x512 square. Head stays upright and unchanged size. No trails or VFX. Full sword inside cell. Actual alpha, no guides, remove far-right stray fragment.",
+    "source_path": "/workspace/generated_images/exec-d496b23e-625c-4e12-896c-c362e4d6c9be.png",
+    "output_file": "004-r1.png",
+    "references": [
+      "aegis-seed.png"
+    ]
+  },
+  {
+    "name": "005-r1",
+    "prompt": "Production game animation frames edited from the supplied approved model sheet (aegis-seed.png with guide lines). Transparent alpha background, no glow, no scenery, no labels, no motion trails, no VFX. Character: Aegis, blond blue-eyed young knight in ornate royal blue and gold armor with blue cape, silver-blue sword in his right hand and five-point blue-gold shield on his left arm. Faces RIGHT exactly as the model sheet. Same camera and lighting. PROPORTIONS ARE LOCKED TO THE MODEL SHEET: head from hair top to chin = 140px, hair width = 190px, eye line 110px below hair top, chin to belt = 110px, feet on the sole line at y=500 in a 512px cell. Do NOT draw a bigger head, bigger eyes, broader shoulders or a bigger shield than the model sheet. Crouching poses get shorter by bending the knees only; the head stays model-sheet size. One pose per 512x512 cell, full body visible, never overlapping, never cropped. Same sword grip in the right hand, shield on the left arm in every pose, no duplicate weapons.\nPoses: ONE SINGLE FRAME 005 sword slash FOLLOW THROUGH facing RIGHT. Right arm crosses forward and lowers after cut, right fist at x300 y310 sword diagonally RIGHT DOWN toward x495 y415, shield close to left chest behind sword. Knees bent slightly as weight follows swing, head original size (140px hair top to chin), face and hair exactly like seed, hair width190px. Head around x195-385 y55-195, belt y305, soles y500 in ONE square 512x512. Full sword inside cell, no trails no VFX. Actual alpha, no guides, remove far-right stray fragment.",
+    "source_path": "/workspace/generated_images/exec-a25579bd-17ca-46cf-ab43-2d873a048292.png",
+    "output_file": "005-r1.png",
+    "references": [
+      "aegis-seed.png"
+    ]
+  },
+  {
+    "name": "006-r1",
+    "prompt": "Production game animation frames edited from the supplied approved model sheet (aegis-seed.png with guide lines). Transparent alpha background, no glow, no scenery, no labels, no motion trails, no VFX. Character: Aegis, blond blue-eyed young knight in ornate royal blue and gold armor with blue cape, silver-blue sword in his right hand and five-point blue-gold shield on his left arm. Faces RIGHT exactly as the model sheet. Same camera and lighting. PROPORTIONS ARE LOCKED TO THE MODEL SHEET: head from hair top to chin = 140px, hair width = 190px, eye line 110px below hair top, chin to belt = 110px, feet on the sole line at y=500 in a 512px cell. Do NOT draw a bigger head, bigger eyes, broader shoulders or a bigger shield than the model sheet. Crouching poses get shorter by bending the knees only; the head stays model-sheet size. One pose per 512x512 cell, full body visible, never overlapping, never cropped. Same sword grip in the right hand, shield on the left arm in every pose, no duplicate weapons.\nPoses: ONE SINGLE FRAME 006 ease back after sword slash. Edit approved seed: right elbow relaxes, sword lowered diagonally left-down, fist x175 y300, tip x30 y455. Left shield settling close to original idle. Preserve exact approved face/hair/head size and torso/legs/shield proportions. Hair x195-385 top y40 eyes y150 chin y180, belt y290, soles y500 in ONE 512x512 square. Almost idle, shoulder still turned slightly forward. Full sword inside cell. Actual alpha, no guides, remove far-right stray fragment.",
+    "source_path": "/workspace/generated_images/exec-eafb60fc-ebb9-4c0c-b10f-dc5ebbef82da.png",
+    "output_file": "006-r1.png",
+    "references": [
+      "aegis-seed.png"
+    ]
+  },
+  {
+    "name": "007-r1",
+    "prompt": "Production game animation frames edited from the supplied approved model sheet (aegis-seed.png with guide lines). Transparent alpha background, no glow, no scenery, no labels, no motion trails, no VFX. Character: Aegis, blond blue-eyed young knight in ornate royal blue and gold armor with blue cape, silver-blue sword in his right hand and five-point blue-gold shield on his left arm. Faces RIGHT exactly as the model sheet. Same camera and lighting. PROPORTIONS ARE LOCKED TO THE MODEL SHEET: head from hair top to chin = 140px, hair width = 190px, eye line 110px below hair top, chin to belt = 110px, feet on the sole line at y=500 in a 512px cell. Do NOT draw a bigger head, bigger eyes, broader shoulders or a bigger shield than the model sheet. Crouching poses get shorter by bending the knees only; the head stays model-sheet size. One pose per 512x512 cell, full body visible, never overlapping, never cropped. Same sword grip in the right hand, shield on the left arm in every pose, no duplicate weapons.\nPoses: ONE SINGLE FRAME 007 shield support, begin lifting left shield, its upper point at y125, below eyes, left elbow bent. Sword lowered diagonally left in right hand same grip. Preserve seed exactly: hair x195-385 top40 eyes150 chin180 belt290 soles500 in a single512px square. Head140px high190px wide. Do not change scale or expression. Full body all weapons inside square. TRUE transparent alpha, NO background or guides. ",
+    "source_path": "/workspace/generated_images/exec-67850f42-dc15-45de-b1e2-f9a891fae121.png",
+    "output_file": "007-r1.png",
+    "references": [
+      "aegis-seed.png"
+    ]
+  },
+  {
+    "name": "008-r1",
+    "prompt": "Production game animation frames edited from the supplied approved model sheet (aegis-seed.png with guide lines). Transparent alpha background, no glow, no scenery, no labels, no motion trails, no VFX. Character: Aegis, blond blue-eyed young knight in ornate royal blue and gold armor with blue cape, silver-blue sword in his right hand and five-point blue-gold shield on his left arm. Faces RIGHT exactly as the model sheet. Same camera and lighting. PROPORTIONS ARE LOCKED TO THE MODEL SHEET: head from hair top to chin = 140px, hair width = 190px, eye line 110px below hair top, chin to belt = 110px, feet on the sole line at y=500 in a 512px cell. Do NOT draw a bigger head, bigger eyes, broader shoulders or a bigger shield than the model sheet. Crouching poses get shorter by bending the knees only; the head stays model-sheet size. One pose per 512x512 cell, full body visible, never overlapping, never cropped. Same sword grip in the right hand, shield on the left arm in every pose, no duplicate weapons.\nPoses: ONE SINGLE FRAME 008 shield support: turn left shield to face forward, top point y125, shield covering left chest. Sword stays lowered diagonally left. Edit seed directly. Preserve exact original head/face/hair and torso/shield/sword sizes: hair x195-385 top40 eyes150 chin180 belt290 soles500 in ONE 512px square. Head140px high190px wide, no scale drift. Full body, no clipping. TRUE transparent alpha, no guides or stray far-right fragment.",
+    "source_path": "/workspace/generated_images/exec-f95f9cb5-a929-4543-9007-93836842ed35.png",
+    "output_file": "008-r1.png",
+    "references": [
+      "aegis-seed.png"
+    ]
+  },
+  {
+    "name": "009-r1",
+    "prompt": "Production game animation frames edited from the supplied approved model sheet (aegis-seed.png with guide lines). Transparent alpha background, no glow, no scenery, no labels, no motion trails, no VFX. Character: Aegis, blond blue-eyed young knight in ornate royal blue and gold armor with blue cape, silver-blue sword in his right hand and five-point blue-gold shield on his left arm. Faces RIGHT exactly as the model sheet. Same camera and lighting. PROPORTIONS ARE LOCKED TO THE MODEL SHEET: head from hair top to chin = 140px, hair width = 190px, eye line 110px below hair top, chin to belt = 110px, feet on the sole line at y=500 in a 512px cell. Do NOT draw a bigger head, bigger eyes, broader shoulders or a bigger shield than the model sheet. Crouching poses get shorter by bending the knees only; the head stays model-sheet size. One pose per 512x512 cell, full body visible, never overlapping, never cropped. Same sword grip in the right hand, shield on the left arm in every pose, no duplicate weapons.\nPoses: ONE SINGLE FRAME 009 shield support: hold left shield forward in protective support stance, top point y115, left elbow firmly bent. Sword stays lowered diagonally left. Edit seed directly. Preserve exact original head/face/hair and torso/shield/sword sizes: hair x195-385 top40 eyes150 chin180 belt290 soles500 in ONE 512px square. Head140px high190px wide, no scale drift. Full body, no clipping. TRUE transparent alpha, no guides or stray far-right fragment.",
+    "source_path": "/workspace/generated_images/exec-375f87f8-f7b8-4cab-b856-fe4af648f3ac.png",
+    "output_file": "009-r1.png",
+    "references": [
+      "aegis-seed.png"
+    ]
+  },
+  {
+    "name": "010-r1",
+    "prompt": "Production game animation frames edited from the supplied approved model sheet (aegis-seed.png with guide lines). Transparent alpha background, no glow, no scenery, no labels, no motion trails, no VFX. Character: Aegis, blond blue-eyed young knight in ornate royal blue and gold armor with blue cape, silver-blue sword in his right hand and five-point blue-gold shield on his left arm. Faces RIGHT exactly as the model sheet. Same camera and lighting. PROPORTIONS ARE LOCKED TO THE MODEL SHEET: head from hair top to chin = 140px, hair width = 190px, eye line 110px below hair top, chin to belt = 110px, feet on the sole line at y=500 in a 512px cell. Do NOT draw a bigger head, bigger eyes, broader shoulders or a bigger shield than the model sheet. Crouching poses get shorter by bending the knees only; the head stays model-sheet size. One pose per 512x512 cell, full body visible, never overlapping, never cropped. Same sword grip in the right hand, shield on the left arm in every pose, no duplicate weapons.\nPoses: ONE SINGLE FRAME 010 shield support: powerful shield raise CONTACT: raise left shield to top point y70 beside head, not overhead, left elbow high. Right sword stays lowered diagonally left. Edit seed directly. Preserve exact original head/face/hair and torso/shield/sword sizes: hair x195-385 top40 eyes150 chin180 belt290 soles500 in ONE 512px square. Head140px high190px wide, no scale drift. Full body, no clipping. TRUE transparent alpha, no guides or stray far-right fragment.",
+    "source_path": "/workspace/generated_images/exec-fbd401b5-072e-429b-b835-12ab7a9d107f.png",
+    "output_file": "010-r1.png",
+    "references": [
+      "aegis-seed.png"
+    ]
+  },
+  {
+    "name": "011-r1",
+    "prompt": "Production game animation frames edited from the supplied approved model sheet (aegis-seed.png with guide lines). Transparent alpha background, no glow, no scenery, no labels, no motion trails, no VFX. Character: Aegis, blond blue-eyed young knight in ornate royal blue and gold armor with blue cape, silver-blue sword in his right hand and five-point blue-gold shield on his left arm. Faces RIGHT exactly as the model sheet. Same camera and lighting. PROPORTIONS ARE LOCKED TO THE MODEL SHEET: head from hair top to chin = 140px, hair width = 190px, eye line 110px below hair top, chin to belt = 110px, feet on the sole line at y=500 in a 512px cell. Do NOT draw a bigger head, bigger eyes, broader shoulders or a bigger shield than the model sheet. Crouching poses get shorter by bending the knees only; the head stays model-sheet size. One pose per 512x512 cell, full body visible, never overlapping, never cropped. Same sword grip in the right hand, shield on the left arm in every pose, no duplicate weapons.\nPoses: ONE SINGLE FRAME 011 shield support: lower raised left shield slightly, upper point y100, elbow relaxed from support contact. Sword stays lowered diagonally left. Edit seed directly. Preserve exact original head/face/hair and torso/shield/sword sizes: hair x195-385 top40 eyes150 chin180 belt290 soles500 in ONE 512px square. Head140px high190px wide, no scale drift. Full body, no clipping. TRUE transparent alpha, no guides or stray far-right fragment.",
+    "source_path": "/workspace/generated_images/exec-dfac7e10-5b28-44d6-9c68-b337f58f4bc5.png",
+    "output_file": "011-r1.png",
+    "references": [
+      "aegis-seed.png"
+    ]
+  },
+  {
+    "name": "012-r1",
+    "prompt": "Production game animation frames edited from the supplied approved model sheet (aegis-seed.png with guide lines). Transparent alpha background, no glow, no scenery, no labels, no motion trails, no VFX. Character: Aegis, blond blue-eyed young knight in ornate royal blue and gold armor with blue cape, silver-blue sword in his right hand and five-point blue-gold shield on his left arm. Faces RIGHT exactly as the model sheet. Same camera and lighting. PROPORTIONS ARE LOCKED TO THE MODEL SHEET: head from hair top to chin = 140px, hair width = 190px, eye line 110px below hair top, chin to belt = 110px, feet on the sole line at y=500 in a 512px cell. Do NOT draw a bigger head, bigger eyes, broader shoulders or a bigger shield than the model sheet. Crouching poses get shorter by bending the knees only; the head stays model-sheet size. One pose per 512x512 cell, full body visible, never overlapping, never cropped. Same sword grip in the right hand, shield on the left arm in every pose, no duplicate weapons.\nPoses: ONE SINGLE FRAME 012 shield support: ease left shield back toward idle after raise, top point y140, right sword lowered left, body relaxed. Edit seed directly. Preserve exact original head/face/hair and torso/shield/sword sizes: hair x195-385 top40 eyes150 chin180 belt290 soles500 in ONE 512px square. Head140px high190px wide, no scale drift. Full body, no clipping. TRUE transparent alpha, no guides or stray far-right fragment.",
+    "source_path": "/workspace/generated_images/exec-7da384b5-4421-43dd-a75b-537d1c14c259.png",
+    "output_file": "012-r1.png",
+    "references": [
+      "aegis-seed.png"
+    ]
+  },
+  {
+    "name": "013-r1",
+    "prompt": "Production game animation frames edited from the supplied approved model sheet (aegis-seed.png with guide lines). Transparent alpha background, no glow, no scenery, no labels, no motion trails, no VFX. Character: Aegis, blond blue-eyed young knight in ornate royal blue and gold armor with blue cape, silver-blue sword in his right hand and five-point blue-gold shield on his left arm. Faces RIGHT exactly as the model sheet. Same camera and lighting. PROPORTIONS ARE LOCKED TO THE MODEL SHEET: head from hair top to chin = 140px, hair width = 190px, eye line 110px below hair top, chin to belt = 110px, feet on the sole line at y=500 in a 512px cell. Do NOT draw a bigger head, bigger eyes, broader shoulders or a bigger shield than the model sheet. Crouching poses get shorter by bending the knees only; the head stays model-sheet size. One pose per 512x512 cell, full body visible, never overlapping, never cropped. Same sword grip in the right hand, shield on the left arm in every pose, no duplicate weapons.\nPoses: ONE SINGLE FRAME 013 shield bash: crouch behind left shield, bend knees only, shield upper point y150, head lowers20px but same size, sword lowered diagonally left in right hand. Edit approved seed directly. Preserve exact original face/hair and torso/shield/sword size. Head140px high190px wide; standing hair top40 eyes150 chin180 belt290, bent-knee poses translate head down without scaling; soles500 in ONE512px square. Full body and weapons inside frame with clear margins, no clipping. TRUE transparent alpha, no guides, remove stray far-right fragment.",
+    "source_path": "/workspace/generated_images/exec-54ca2fc3-151f-40c6-889e-ac0e887c8925.png",
+    "output_file": "013-r1.png",
+    "references": [
+      "aegis-seed.png"
+    ]
+  },
+  {
+    "name": "014-r1",
+    "prompt": "Production game animation frames edited from the supplied approved model sheet (aegis-seed.png with guide lines). Transparent alpha background, no glow, no scenery, no labels, no motion trails, no VFX. Character: Aegis, blond blue-eyed young knight in ornate royal blue and gold armor with blue cape, silver-blue sword in his right hand and five-point blue-gold shield on his left arm. Faces RIGHT exactly as the model sheet. Same camera and lighting. PROPORTIONS ARE LOCKED TO THE MODEL SHEET: head from hair top to chin = 140px, hair width = 190px, eye line 110px below hair top, chin to belt = 110px, feet on the sole line at y=500 in a 512px cell. Do NOT draw a bigger head, bigger eyes, broader shoulders or a bigger shield than the model sheet. Crouching poses get shorter by bending the knees only; the head stays model-sheet size. One pose per 512x512 cell, full body visible, never overlapping, never cropped. Same sword grip in the right hand, shield on the left arm in every pose, no duplicate weapons.\nPoses: ONE SINGLE FRAME 014 shield bash: pull left shield tight to chest to prepare bash, knees bent, head lowers20px but same size, right sword lowered left. Edit approved seed directly. Preserve exact original face/hair and torso/shield/sword size. Head140px high190px wide; standing hair top40 eyes150 chin180 belt290, bent-knee poses translate head down without scaling; soles500 in ONE512px square. Full body and weapons inside frame with clear margins, no clipping. TRUE transparent alpha, no guides, remove stray far-right fragment.",
+    "source_path": "/workspace/generated_images/exec-aa006f1e-c934-4afd-8812-3879aa1e7643.png",
+    "output_file": "014-r1.png",
+    "references": [
+      "aegis-seed.png"
+    ]
+  },
+  {
+    "name": "015-r1",
+    "prompt": "Production game animation frames edited from the supplied approved model sheet (aegis-seed.png with guide lines). Transparent alpha background, no glow, no scenery, no labels, no motion trails, no VFX. Character: Aegis, blond blue-eyed young knight in ornate royal blue and gold armor with blue cape, silver-blue sword in his right hand and five-point blue-gold shield on his left arm. Faces RIGHT exactly as the model sheet. Same camera and lighting. PROPORTIONS ARE LOCKED TO THE MODEL SHEET: head from hair top to chin = 140px, hair width = 190px, eye line 110px below hair top, chin to belt = 110px, feet on the sole line at y=500 in a 512px cell. Do NOT draw a bigger head, bigger eyes, broader shoulders or a bigger shield than the model sheet. Crouching poses get shorter by bending the knees only; the head stays model-sheet size. One pose per 512x512 cell, full body visible, never overlapping, never cropped. Same sword grip in the right hand, shield on the left arm in every pose, no duplicate weapons.\nPoses: ONE SINGLE FRAME 015 shield bash: brace legs to load force behind left shield, lean chest slightly back, shield near chest, head same size, sword lowered left. Edit approved seed directly. Preserve exact original face/hair and torso/shield/sword size. Head140px high190px wide; standing hair top40 eyes150 chin180 belt290, bent-knee poses translate head down without scaling; soles500 in ONE512px square. Full body and weapons inside frame with clear margins, no clipping. TRUE transparent alpha, no guides, remove stray far-right fragment.",
+    "source_path": "/workspace/generated_images/exec-04290074-6a18-4ff7-a2eb-e1f1f834d47b.png",
+    "output_file": "015-r1.png",
+    "references": [
+      "aegis-seed.png"
+    ]
+  },
+  {
+    "name": "016-r1",
+    "prompt": "Production game animation frames edited from the supplied approved model sheet (aegis-seed.png with guide lines). Transparent alpha background, no glow, no scenery, no labels, no motion trails, no VFX. Character: Aegis, blond blue-eyed young knight in ornate royal blue and gold armor with blue cape, silver-blue sword in his right hand and five-point blue-gold shield on his left arm. Faces RIGHT exactly as the model sheet. Same camera and lighting. PROPORTIONS ARE LOCKED TO THE MODEL SHEET: head from hair top to chin = 140px, hair width = 190px, eye line 110px below hair top, chin to belt = 110px, feet on the sole line at y=500 in a 512px cell. Do NOT draw a bigger head, bigger eyes, broader shoulders or a bigger shield than the model sheet. Crouching poses get shorter by bending the knees only; the head stays model-sheet size. One pose per 512x512 cell, full body visible, never overlapping, never cropped. Same sword grip in the right hand, shield on the left arm in every pose, no duplicate weapons.\nPoses: ONE SINGLE FRAME 016 shield bash: shield bash CONTACT: thrust left shield forward RIGHT, left elbow extends, shield upper point y140 outer right edge x495, bend knees for forward drive. Right sword remains lowered left. Edit approved seed directly. Preserve exact original face/hair and torso/shield/sword size. Head140px high190px wide; standing hair top40 eyes150 chin180 belt290, bent-knee poses translate head down without scaling; soles500 in ONE512px square. Full body and weapons inside frame with clear margins, no clipping. TRUE transparent alpha, no guides, remove stray far-right fragment.",
+    "source_path": "/workspace/generated_images/exec-212aabea-6db4-4ff9-a0ea-066b7b9e4123.png",
+    "output_file": "016-r1.png",
+    "references": [
+      "aegis-seed.png"
+    ]
+  },
+  {
+    "name": "017-r1",
+    "prompt": "Production game animation frames edited from the supplied approved model sheet (aegis-seed.png with guide lines). Transparent alpha background, no glow, no scenery, no labels, no motion trails, no VFX. Character: Aegis, blond blue-eyed young knight in ornate royal blue and gold armor with blue cape, silver-blue sword in his right hand and five-point blue-gold shield on his left arm. Faces RIGHT exactly as the model sheet. Same camera and lighting. PROPORTIONS ARE LOCKED TO THE MODEL SHEET: head from hair top to chin = 140px, hair width = 190px, eye line 110px below hair top, chin to belt = 110px, feet on the sole line at y=500 in a 512px cell. Do NOT draw a bigger head, bigger eyes, broader shoulders or a bigger shield than the model sheet. Crouching poses get shorter by bending the knees only; the head stays model-sheet size. One pose per 512x512 cell, full body visible, never overlapping, never cropped. Same sword grip in the right hand, shield on the left arm in every pose, no duplicate weapons.\nPoses: ONE SINGLE FRAME 017 shield bash: rebound after shield bash, left shield recoils toward chest, front knee bent, head same size, right sword lowered left. Edit approved seed directly. Preserve exact original face/hair and torso/shield/sword size. Head140px high190px wide; standing hair top40 eyes150 chin180 belt290, bent-knee poses translate head down without scaling; soles500 in ONE512px square. Full body and weapons inside frame with clear margins, no clipping. TRUE transparent alpha, no guides, remove stray far-right fragment.",
+    "source_path": "/workspace/generated_images/exec-f5fcb928-3a99-4b3d-95f0-98ee184ef71e.png",
+    "output_file": "017-r1.png",
+    "references": [
+      "aegis-seed.png"
+    ]
+  },
+  {
+    "name": "018-r1",
+    "prompt": "Production game animation frames edited from the supplied approved model sheet (aegis-seed.png with guide lines). Transparent alpha background, no glow, no scenery, no labels, no motion trails, no VFX. Character: Aegis, blond blue-eyed young knight in ornate royal blue and gold armor with blue cape, silver-blue sword in his right hand and five-point blue-gold shield on his left arm. Faces RIGHT exactly as the model sheet. Same camera and lighting. PROPORTIONS ARE LOCKED TO THE MODEL SHEET: head from hair top to chin = 140px, hair width = 190px, eye line 110px below hair top, chin to belt = 110px, feet on the sole line at y=500 in a 512px cell. Do NOT draw a bigger head, bigger eyes, broader shoulders or a bigger shield than the model sheet. Crouching poses get shorter by bending the knees only; the head stays model-sheet size. One pose per 512x512 cell, full body visible, never overlapping, never cropped. Same sword grip in the right hand, shield on the left arm in every pose, no duplicate weapons.\nPoses: ONE SINGLE FRAME 018 shield bash: return left shield toward idle after bash, knees straighten, sword lowered diagonally left, body recovers. Edit approved seed directly. Preserve exact original face/hair and torso/shield/sword size. Head140px high190px wide; standing hair top40 eyes150 chin180 belt290, bent-knee poses translate head down without scaling; soles500 in ONE512px square. Full body and weapons inside frame with clear margins, no clipping. TRUE transparent alpha, no guides, remove stray far-right fragment.",
+    "source_path": "/workspace/generated_images/exec-be67723f-daec-4673-9b9c-288e765ab75b.png",
+    "output_file": "018-r1.png",
+    "references": [
+      "aegis-seed.png"
+    ]
+  },
+  {
+    "name": "016-r2",
+    "prompt": "Production game animation frames edited from the supplied approved model sheet (aegis-seed.png with guide lines). Transparent alpha background, no glow, no scenery, no labels, no motion trails, no VFX. Character: Aegis, blond blue-eyed young knight in ornate royal blue and gold armor with blue cape, silver-blue sword in his right hand and five-point blue-gold shield on his left arm. Faces RIGHT exactly as the model sheet. Same camera and lighting. PROPORTIONS ARE LOCKED TO THE MODEL SHEET: head from hair top to chin = 140px, hair width = 190px, eye line 110px below hair top, chin to belt = 110px, feet on the sole line at y=500 in a 512px cell. Do NOT draw a bigger head, bigger eyes, broader shoulders or a bigger shield than the model sheet. Crouching poses get shorter by bending the knees only; the head stays model-sheet size. One pose per 512x512 cell, full body visible, never overlapping, never cropped. Same sword grip in the right hand, shield on the left arm in every pose, no duplicate weapons.\nPoses: ONE SINGLE FRAME 016 shield bash CONTACT, fixing composition. Head EXACTLY model size140px high190px wide at x180-370 y60-200. Shield on LEFT arm thrust to RIGHT but stops at x480, left elbow still bent. Shield original size, must not be enlarged. Right hand at x170 y300, sword points DOWN LEFT toward x35 y480, pulled close to body so it cannot reach border. Knees bend into forward drive, soles y500. Full body inside512px square with at least12px transparent margin on left/right. Preserve seed face exactly, sword/shield same size, no clipping. TRUE transparent alpha.",
+    "source_path": "/workspace/generated_images/exec-61f1cb5f-9ad0-4b33-ac06-136d18897ac5.png",
+    "output_file": "016-r2.png",
+    "references": [
+      "aegis-seed.png"
+    ]
+  },
+  {
+    "name": "019-r1",
+    "prompt": "Production game animation frames edited from the supplied approved model sheet (aegis-seed.png with guide lines). Transparent alpha background, no glow, no scenery, no labels, no motion trails, no VFX. Character: Aegis, blond blue-eyed young knight in ornate royal blue and gold armor with blue cape, silver-blue sword in his right hand and five-point blue-gold shield on his left arm. Faces RIGHT exactly as the model sheet. Same camera and lighting. PROPORTIONS ARE LOCKED TO THE MODEL SHEET: head from hair top to chin = 140px, hair width = 190px, eye line 110px below hair top, chin to belt = 110px, feet on the sole line at y=500 in a 512px cell. Do NOT draw a bigger head, bigger eyes, broader shoulders or a bigger shield than the model sheet. Crouching poses get shorter by bending the knees only; the head stays model-sheet size. One pose per 512x512 cell, full body visible, never overlapping, never cropped. Same sword grip in the right hand, shield on the left arm in every pose, no duplicate weapons.\nPoses: ONE SINGLE FRAME 019 hit reaction: mild hit flinch behind left shield, torso tilts slightly back LEFT, shoulders tense, brows wince slightly, knees flex, keep blue eyes visible. Right hand keeps sword lowered left at original grip. Preserve approved seed face shape and head size140px high190px wide, torso/shield/sword original sizes. Standing hair top40 eyes150 chin180 belt290; flinch translates/rotates head slightly without resizing. Feet y500 in ONE512px square. Full body and weapons with clear margins, TRUE transparent alpha, no guides, no stray fragment.",
+    "source_path": "/workspace/generated_images/exec-d1123dae-fd68-4d05-b1f0-3caf6c77bfd3.png",
+    "output_file": "019-r1.png",
+    "references": [
+      "aegis-seed.png"
+    ]
+  },
+  {
+    "name": "020-r1",
+    "prompt": "Production game animation frames edited from the supplied approved model sheet (aegis-seed.png with guide lines). Transparent alpha background, no glow, no scenery, no labels, no motion trails, no VFX. Character: Aegis, blond blue-eyed young knight in ornate royal blue and gold armor with blue cape, silver-blue sword in his right hand and five-point blue-gold shield on his left arm. Faces RIGHT exactly as the model sheet. Same camera and lighting. PROPORTIONS ARE LOCKED TO THE MODEL SHEET: head from hair top to chin = 140px, hair width = 190px, eye line 110px below hair top, chin to belt = 110px, feet on the sole line at y=500 in a 512px cell. Do NOT draw a bigger head, bigger eyes, broader shoulders or a bigger shield than the model sheet. Crouching poses get shorter by bending the knees only; the head stays model-sheet size. One pose per 512x512 cell, full body visible, never overlapping, never cropped. Same sword grip in the right hand, shield on the left arm in every pose, no duplicate weapons.\nPoses: ONE SINGLE FRAME 020 hit reaction: stronger hit flinch behind left shield, torso recoils back LEFT further, knees bend, eyes narrowed in pain but same face, left shield near chest, no damage effects. Right hand keeps sword lowered left at original grip. Preserve approved seed face shape and head size140px high190px wide, torso/shield/sword original sizes. Standing hair top40 eyes150 chin180 belt290; flinch translates/rotates head slightly without resizing. Feet y500 in ONE512px square. Full body and weapons with clear margins, TRUE transparent alpha, no guides, no stray fragment.",
+    "source_path": "/workspace/generated_images/exec-17b1c76d-9e1d-43bf-b43f-0851d892db92.png",
+    "output_file": "020-r1.png",
+    "references": [
+      "aegis-seed.png"
+    ]
+  },
+  {
+    "name": "021-r1",
+    "prompt": "Production game animation frames edited from the supplied approved model sheet (aegis-seed.png with guide lines). Transparent alpha background, no glow, no scenery, no labels, no motion trails, no VFX. Character: Aegis, blond blue-eyed young knight in ornate royal blue and gold armor with blue cape, silver-blue sword in his right hand and five-point blue-gold shield on his left arm. Faces RIGHT exactly as the model sheet. Same camera and lighting. PROPORTIONS ARE LOCKED TO THE MODEL SHEET: head from hair top to chin = 140px, hair width = 190px, eye line 110px below hair top, chin to belt = 110px, feet on the sole line at y=500 in a 512px cell. Do NOT draw a bigger head, bigger eyes, broader shoulders or a bigger shield than the model sheet. Crouching poses get shorter by bending the knees only; the head stays model-sheet size. One pose per 512x512 cell, full body visible, never overlapping, never cropped. Same sword grip in the right hand, shield on the left arm in every pose, no duplicate weapons.\nPoses: ONE SINGLE FRAME 021 down sequence: knees begin buckling: left knee dropping toward ground, right foot planted, torso still mostly upright, face tired, head drops to hair-top y110 chin250, same140px head height. Sword right hand points down-left safely inside cell, left shield at side. Preserve original approved seed anatomy, armor design and weapon sizes. Do NOT enlarge head when lowering the body. One512px square, ground y500, transparent margin around all edges. TRUE transparent alpha, no guides, no floor shadows or VFX, no duplicate weapons.",
+    "source_path": "/workspace/generated_images/exec-8f7d3c28-7517-4017-a002-d5e0e3eeeef5.png",
+    "output_file": "021-r1.png",
+    "references": [
+      "aegis-seed.png"
+    ]
+  },
+  {
+    "name": "022-r1",
+    "prompt": "Production game animation frames edited from the supplied approved model sheet (aegis-seed.png with guide lines). Transparent alpha background, no glow, no scenery, no labels, no motion trails, no VFX. Character: Aegis, blond blue-eyed young knight in ornate royal blue and gold armor with blue cape, silver-blue sword in his right hand and five-point blue-gold shield on his left arm. Faces RIGHT exactly as the model sheet. Same camera and lighting. PROPORTIONS ARE LOCKED TO THE MODEL SHEET: head from hair top to chin = 140px, hair width = 190px, eye line 110px below hair top, chin to belt = 110px, feet on the sole line at y=500 in a 512px cell. Do NOT draw a bigger head, bigger eyes, broader shoulders or a bigger shield than the model sheet. Crouching poses get shorter by bending the knees only; the head stays model-sheet size. One pose per 512x512 cell, full body visible, never overlapping, never cropped. Same sword grip in the right hand, shield on the left arm in every pose, no duplicate weapons.\nPoses: ONE SINGLE FRAME 022 down sequence: kneeling on both knees, hips low, torso bowed slightly, eyes closing exhausted. Head hair-top y180 chin320, same140px head height and190px width. Boots folded behind, knees on ground y495. Right hand still holds sword angled down-left, left arm still attached to shield beside body. Preserve original approved seed anatomy, armor design and weapon sizes. Do NOT enlarge head when lowering the body. One512px square, ground y500, transparent margin around all edges. TRUE transparent alpha, no guides, no floor shadows or VFX, no duplicate weapons.",
+    "source_path": "/workspace/generated_images/exec-5e351adb-31d4-4c23-bc7b-77d2ad283681.png",
+    "output_file": "022-r1.png",
+    "references": [
+      "aegis-seed.png"
+    ]
+  },
+  {
+    "name": "023-r1",
+    "prompt": "Production game animation frames edited from the supplied approved model sheet (aegis-seed.png with guide lines). Transparent alpha background, no glow, no scenery, no labels, no motion trails, no VFX. Character: Aegis, blond blue-eyed young knight in ornate royal blue and gold armor with blue cape, silver-blue sword in his right hand and five-point blue-gold shield on his left arm. Faces RIGHT exactly as the model sheet. Same camera and lighting. PROPORTIONS ARE LOCKED TO THE MODEL SHEET: head from hair top to chin = 140px, hair width = 190px, eye line 110px below hair top, chin to belt = 110px, feet on the sole line at y=500 in a 512px cell. Do NOT draw a bigger head, bigger eyes, broader shoulders or a bigger shield than the model sheet. Crouching poses get shorter by bending the knees only; the head stays model-sheet size. One pose per 512x512 cell, full body visible, never overlapping, never cropped. Same sword grip in the right hand, shield on the left arm in every pose, no duplicate weapons.\nPoses: ONE SINGLE FRAME 023 down sequence: lying unconscious on his SIDE horizontally, head at RIGHT x310-490 y300-440, eyes CLOSED, recognizable same140px hair-to-chin head size. Body extends LEFT to bent knees and boots x30-200. Blue cape pooled beneath body. Right hand still holds sword along lower body, left arm keeps blue-gold shield resting beside torso. Full body, both boots, sword tip and shield all visible inside square. No dissolution, no levitation. Preserve original approved seed anatomy, armor design and weapon sizes. Do NOT enlarge head when lowering the body. One512px square, ground y500, transparent margin around all edges. TRUE transparent alpha, no guides, no floor shadows or VFX, no duplicate weapons.",
+    "source_path": "/workspace/generated_images/exec-a3cbcec6-1a50-413a-802d-e271189c8074.png",
+    "output_file": "023-r1.png",
+    "references": [
+      "aegis-seed.png"
+    ]
+  },
+  {
+    "name": "023-r2",
+    "prompt": "Production game animation frames edited from the supplied approved model sheet (aegis-seed.png with guide lines). Transparent alpha background, no glow, no scenery, no labels, no motion trails, no VFX. Character: Aegis, blond blue-eyed young knight in ornate royal blue and gold armor with blue cape, silver-blue sword in his right hand and five-point blue-gold shield on his left arm. Faces RIGHT exactly as the model sheet. Same camera and lighting. PROPORTIONS ARE LOCKED TO THE MODEL SHEET: head from hair top to chin = 140px, hair width = 190px, eye line 110px below hair top, chin to belt = 110px, feet on the sole line at y=500 in a 512px cell. Do NOT draw a bigger head, bigger eyes, broader shoulders or a bigger shield than the model sheet. Crouching poses get shorter by bending the knees only; the head stays model-sheet size. One pose per 512x512 cell, full body visible, never overlapping, never cropped. Same sword grip in the right hand, shield on the left arm in every pose, no duplicate weapons.\nPoses: ONE SINGLE FRAME 023 lying unconscious on his side, head at RIGHT, boots LEFT, sword held in RIGHT hand and shield on LEFT forearm resting beside torso. CORRECTION: previous lying pose made head0.879 times seed. Redraw head to be same size as approved seed: hair width190px, hair-to-chin140px in512cell. Head at x300-495 y250-400. Bend both legs MORE at knees to keep full body inside cell while head remains full size. Right sword held across lower body, shield next to chest, both boots visible. Ground at y500. Same face with eyes closed, same armor, no duplicate weapons. Actual transparent alpha, no shadows or effects. Do not shrink entire figure.",
+    "source_path": "/workspace/generated_images/exec-5d6cca28-19c6-4593-bba8-108db618f6b1.png",
+    "output_file": "023-r2.png",
+    "references": [
+      "aegis-seed.png",
+      "023-r1.png"
+    ]
+  },
+  {
+    "name": "023-r3",
+    "prompt": "Production game animation frames edited from the supplied approved model sheet (aegis-seed.png with guide lines). Transparent alpha background, no glow, no scenery, no labels, no motion trails, no VFX. Character: Aegis, blond blue-eyed young knight in ornate royal blue and gold armor with blue cape, silver-blue sword in his right hand and five-point blue-gold shield on his left arm. Faces RIGHT exactly as the model sheet. Same camera and lighting. PROPORTIONS ARE LOCKED TO THE MODEL SHEET: head from hair top to chin = 140px, hair width = 190px, eye line 110px below hair top, chin to belt = 110px, feet on the sole line at y=500 in a 512px cell. Do NOT draw a bigger head, bigger eyes, broader shoulders or a bigger shield than the model sheet. Crouching poses get shorter by bending the knees only; the head stays model-sheet size. One pose per 512x512 cell, full body visible, never overlapping, never cropped. Same sword grip in the right hand, shield on the left arm in every pose, no duplicate weapons.\nPoses: ONE SINGLE FRAME 023 unconscious curled on side. Head on RIGHT, knees tucked tightly toward chest, feet LEFT. CRITICAL head must stay full approved idle size, NOT a small head: hair width190px, hairtop-to-chin140px in512canvas. Put head center at x350 y310, its whole hair shape between x250 and450, leaving60px CLEAR transparent space to right border. Both knees bent tightly, boots at x60-180 y400-470, torso compact at x200-300 y350. Right hand holds original sword along lower body, left shield rests on forearm beside chest. Same face with closed eyes. Full body and all equipment inside canvas, curled legs create room. No small whole-character scaling. Actual transparent alpha.",
+    "source_path": "/workspace/generated_images/exec-3f0753f4-38ac-478b-8220-99063aa566cf.png",
+    "output_file": "023-r3.png",
+    "references": [
+      "aegis-seed.png",
+      "aegis-model-sheet-guides.png"
+    ]
+  },
+  {
+    "name": "024-r1",
+    "prompt": "Production game animation frames edited from the supplied approved model sheet (aegis-seed.png with guide lines). Transparent alpha background, no glow, no scenery, no labels, no motion trails, no VFX. Character: Aegis, blond blue-eyed young knight in ornate royal blue and gold armor with blue cape, silver-blue sword in his right hand and five-point blue-gold shield on his left arm. Faces RIGHT exactly as the model sheet. Same camera and lighting. PROPORTIONS ARE LOCKED TO THE MODEL SHEET: head from hair top to chin = 140px, hair width = 190px, eye line 110px below hair top, chin to belt = 110px, feet on the sole line at y=500 in a 512px cell. Do NOT draw a bigger head, bigger eyes, broader shoulders or a bigger shield than the model sheet. Crouching poses get shorter by bending the knees only; the head stays model-sheet size. One pose per 512x512 cell, full body visible, never overlapping, never cropped. Same sword grip in the right hand, shield on the left arm in every pose, no duplicate weapons.\nPoses: ONE SINGLE FRAME 024 block: brace against incoming attack: left shield raised in front of left chest, upper point y130, knees flexed, torso slightly behind shield. Face alert, same blue eyes. Right sword held low diagonally left. Preserve exact approved seed face, head140px high190px wide, original armor/shield/sword sizes. Crouch only by bending knees, head same size. Standing hair top40 eyes150 chin180 belt290; knees may lower head20px, soles500. ONE512px square full body, sword and shield fully inside with12px margins. TRUE transparent alpha, no guides, no stray fragment.",
+    "source_path": "/workspace/generated_images/exec-e64d1000-0761-4c0b-b443-8cf8aee16072.png",
+    "output_file": "024-r1.png",
+    "references": [
+      "aegis-seed.png"
+    ]
+  },
+  {
+    "name": "025-r1",
+    "prompt": "Production game animation frames edited from the supplied approved model sheet (aegis-seed.png with guide lines). Transparent alpha background, no glow, no scenery, no labels, no motion trails, no VFX. Character: Aegis, blond blue-eyed young knight in ornate royal blue and gold armor with blue cape, silver-blue sword in his right hand and five-point blue-gold shield on his left arm. Faces RIGHT exactly as the model sheet. Same camera and lighting. PROPORTIONS ARE LOCKED TO THE MODEL SHEET: head from hair top to chin = 140px, hair width = 190px, eye line 110px below hair top, chin to belt = 110px, feet on the sole line at y=500 in a 512px cell. Do NOT draw a bigger head, bigger eyes, broader shoulders or a bigger shield than the model sheet. Crouching poses get shorter by bending the knees only; the head stays model-sheet size. One pose per 512x512 cell, full body visible, never overlapping, never cropped. Same sword grip in the right hand, shield on the left arm in every pose, no duplicate weapons.\nPoses: ONE SINGLE FRAME 025 block: stronger brace absorbing attack: left shield pressed closer to chest, upper point y120, both knees bend more, shoulder behind shield, determined face still visible. Right sword held low diagonally left. Preserve exact approved seed face, head140px high190px wide, original armor/shield/sword sizes. Crouch only by bending knees, head same size. Standing hair top40 eyes150 chin180 belt290; knees may lower head20px, soles500. ONE512px square full body, sword and shield fully inside with12px margins. TRUE transparent alpha, no guides, no stray fragment.",
+    "source_path": "/workspace/generated_images/exec-ee21115c-aa31-4c7c-9e1a-db3cf409c627.png",
+    "output_file": "025-r1.png",
+    "references": [
+      "aegis-seed.png"
+    ]
+  },
+  {
+    "name": "023-r4",
+    "prompt": "Production game animation frames edited from the supplied approved model sheet (aegis-seed.png with guide lines). Transparent alpha background, no glow, no scenery, no labels, no motion trails, no VFX. Character: Aegis, blond blue-eyed young knight in ornate royal blue and gold armor with blue cape, silver-blue sword in his right hand and five-point blue-gold shield on his left arm. Faces RIGHT exactly as the model sheet. Same camera and lighting. PROPORTIONS ARE LOCKED TO THE MODEL SHEET: head from hair top to chin = 140px, hair width = 190px, eye line 110px below hair top, chin to belt = 110px, feet on the sole line at y=500 in a 512px cell. Do NOT draw a bigger head, bigger eyes, broader shoulders or a bigger shield than the model sheet. Crouching poses get shorter by bending the knees only; the head stays model-sheet size. One pose per 512x512 cell, full body visible, never overlapping, never cropped. Same sword grip in the right hand, shield on the left arm in every pose, no duplicate weapons.\nPoses: ONE SINGLE FRAME 023 lying UNCONSCIOUS, FULLY FLAT ON HIS SIDE, body horizontal on ground, NOT sitting, NOT kneeling, NOT propped up on shield. Head on RIGHT rests on ground at y480, eyes closed, neck and torso extend LEFT horizontally at y380-450; both legs bent horizontally to LEFT, boots x40-150. Keep approved head FULL size, hair width190px hairtop-to-chin140px measured along rotated head axes, no shrinking. Let bent legs make space. Right hand still holds sword along body, left forearm still wears shield, shield lies FLAT beside torso below head (not upright and not used as pillow). Blue cape beneath body. Entire figure inside512square with12px margin. Same exact knight design and anatomy. Actual transparent alpha, no effects, no shadows.",
+    "source_path": "/workspace/generated_images/exec-ab91d54b-728e-4dba-9d58-34138ef6d92c.png",
+    "output_file": "023-r4.png",
+    "references": [
+      "aegis-seed.png"
+    ]
+  },
+  {
+    "name": "023-r5",
+    "prompt": "Production game animation frames edited from the supplied approved model sheet (aegis-seed.png with guide lines). Transparent alpha background, no glow, no scenery, no labels, no motion trails, no VFX. Character: Aegis, blond blue-eyed young knight in ornate royal blue and gold armor with blue cape, silver-blue sword in his right hand and five-point blue-gold shield on his left arm. Faces RIGHT exactly as the model sheet. Same camera and lighting. PROPORTIONS ARE LOCKED TO THE MODEL SHEET: head from hair top to chin = 140px, hair width = 190px, eye line 110px below hair top, chin to belt = 110px, feet on the sole line at y=500 in a 512px cell. Do NOT draw a bigger head, bigger eyes, broader shoulders or a bigger shield than the model sheet. Crouching poses get shorter by bending the knees only; the head stays model-sheet size. One pose per 512x512 cell, full body visible, never overlapping, never cropped. Same sword grip in the right hand, shield on the left arm in every pose, no duplicate weapons.\nPoses: ONE SINGLE FRAME 023 flat unconscious side-lying, head RIGHT resting on ground, torso HORIZONTAL, both knees BENT AND TUCKED to shorten body footprint. Same full-size approved head (140px hairtop-chin along rotated axis,190px hairwidth). Body and equipment occupy ONLY central85percent of square, leave wide EMPTY transparent margin ALL around. No hair, cape, sword or shield may touch any image edge. Preserve head size by tucking knees rather than shrinking. Position head center x365 y350, feet x100 y430, knees x180 y360, horizontal chest x280 y390. Sword in right hand below body, left shield flat beside torso. Eyes closed, no disintegration, no extra weapons. Actual transparent alpha. Include ALL cape tips, hair tufts, boots and blade tip with empty margin.",
+    "source_path": "/workspace/generated_images/exec-8a1dde3e-a1f2-404f-8903-c03c5ec73d8d.png",
+    "output_file": "023-r5.png",
+    "references": [
+      "aegis-seed.png",
+      "023-r4.png"
+    ]
+  },
+  {
+    "name": "023-r6",
+    "prompt": "Production game animation frames edited from the supplied approved model sheet (aegis-seed.png with guide lines). Transparent alpha background, no glow, no scenery, no labels, no motion trails, no VFX. Character: Aegis, blond blue-eyed young knight in ornate royal blue and gold armor with blue cape, silver-blue sword in his right hand and five-point blue-gold shield on his left arm. Faces RIGHT exactly as the model sheet. Same camera and lighting. PROPORTIONS ARE LOCKED TO THE MODEL SHEET: head from hair top to chin = 140px, hair width = 190px, eye line 110px below hair top, chin to belt = 110px, feet on the sole line at y=500 in a 512px cell. Do NOT draw a bigger head, bigger eyes, broader shoulders or a bigger shield than the model sheet. Crouching poses get shorter by bending the knees only; the head stays model-sheet size. One pose per 512x512 cell, full body visible, never overlapping, never cropped. Same sword grip in the right hand, shield on the left arm in every pose, no duplicate weapons.\nPoses: EDIT the supplied lying frame023. Keep the FLAT HORIZONTAL unconscious pose, sword right hand, shield left arm. IMPORTANT CORRECTION ONLY: enlarge ONLY the head/hair/face by25percent compared with supplied lying frame, keeping same face and closed eyes. Move head toward LEFT and UP to fit inside canvas with20px margins. Match approved seed head physical size140px hairtop-to-chin and190px hairwidth measured along head axes. Keep torso, armor, sword and shield original sizes; tuck knees closer to stomach to shorten silhouette if needed. Do NOT shrink whole character. Entire body horizontal, head rests on ground, NOT sitting or propped on shield. ONE transparent512px cell, no backgrounds, no text, no effects.",
+    "source_path": "/workspace/generated_images/exec-4c0cea52-6acd-432e-8a7a-15044e83bc64.png",
+    "output_file": "023-r6.png",
+    "references": [
+      "aegis-seed.png",
+      "023-r5.png"
+    ]
+  }
+]

@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { anatomyHold, unitDownFrame, unitSoleOrigin, unitKey, unitDisplayRatio, unitAtlasUrls, unitClip, unitDefinition, unitRelease, CORPSE_ALPHA, type Release, type UnitClip, type UnitSheet } from '../visuals/unit-frames';
+import { unitDownFrame, unitSoleOrigin, unitKey, unitDisplayRatio, unitAtlasUrls, unitClip, unitDefinition, unitRelease, CORPSE_ALPHA, type Release, type UnitClip, type UnitSheet } from '../visuals/unit-frames';
 import { basicCues, basicPrepare, basicContact, type BasicCue } from '../visuals/basic-attack-fx';
 import { BOSS_ATLAS, bossAtlasUrls, bossCues, bossPrepare, bossContact, chargeHolds, usesBossSignature, type BossPoint } from '../visuals/boss-signature-fx';
 import { OptionalUnitAssets } from '../visuals/optional-unit-assets';
@@ -143,9 +143,8 @@ export class BattleScene extends Phaser.Scene {
     this.optionalRequest = true;
   }
   private hasOptionalUnit = (name: UnitSheet): boolean => this.textures.exists(`unit-pilot-${name}`);
-  // Held identities draw no frames, so they keep the plain procedural motion (and its recover length).
   private framedClip(art: string, action?: string, intent?: string): UnitClip | undefined {
-    return anatomyHold.has(art) ? undefined : unitClip(art, action, intent);
+    return unitClip(art, action, intent);
   }
   private requestOptionalUnits(): void {
     const names = this.optionalUnits.request(this.hasOptionalUnit);

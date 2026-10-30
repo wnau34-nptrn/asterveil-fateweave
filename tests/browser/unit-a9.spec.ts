@@ -92,7 +92,7 @@ for(const change of ['skip','resize','reload'] as const)test(`A9 ${change} prese
 });
 test('A9 encounter replacement releases the boss texture',async({page})=>{
  await page.setViewportSize({width:390,height:844});await ready(page,'foe_juggernaut','intent=Horn%20Charge');
- expect((await page.evaluate(()=>window.unitA9QA.cached())).sort()).toEqual(['unit-pilot-eira','unit-pilot-juggernaut','unit-pilot-sefa']);
+ expect((await page.evaluate(()=>window.unitA9QA.cached())).sort()).toEqual(['unit-pilot-aegis','unit-pilot-eira','unit-pilot-juggernaut','unit-pilot-sefa']);
  await page.evaluate(()=>window.unitA9QA.otherEncounter());
  await expect.poll(()=>page.evaluate(()=>window.unitA9QA.cached())).toEqual([]);
  await expect(page.locator('#start')).toBeEnabled();

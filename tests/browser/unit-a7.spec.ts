@@ -81,16 +81,17 @@ test('A7 late optional textures cannot replace artwork during a committed cast',
  await page.goto('tests/browser/fixtures/unit-a7.html?hero=metta&skill=attack');await page.locator('#start').click();
  await page.clock.pauseAt(new Date(Date.now()+100000));await cast(page,'attack');
  const committed=await saved(page);expect(await page.evaluate(()=>window.unitA7QA.frames().metta![0]!.texture)).toBe('battle-mercs');
- release();await expect.poll(()=>page.evaluate(()=>window.unitA7QA.cached().length)).toBe(3);
+ release();await expect.poll(()=>page.evaluate(()=>window.unitA7QA.cached().length)).toBe(4);
  expect(await page.evaluate(()=>window.unitA7QA.frames().metta![0]!.texture)).toBe('battle-mercs');
  await page.clock.runFor(100);expect(await page.evaluate(()=>window.unitA7QA.frames().metta![0]!.texture)).toBe('battle-mercs');
  await page.clock.runFor(3000);expect(await page.evaluate(()=>window.unitA7QA.frames().metta![0]!.texture)).toBe('unit-pilot-metta');expect(await saved(page)).toBe(committed);
  }finally{release();await ctx.close();}
 });
-test('A7 encounter replacement releases the A7 textures (Aegis stays on hold)',async({page})=>{
+test('A7 encounter replacement releases the A7 textures',async({page})=>{
  await page.setViewportSize({width:390,height:844});await ready(page,'skill=attack','wila');
- expect((await page.evaluate(()=>window.unitA7QA.cached())).sort()).toEqual(['unit-pilot-eira','unit-pilot-sporepuff','unit-pilot-wila']);
+ expect((await page.evaluate(()=>window.unitA7QA.cached())).sort()).toEqual(['unit-pilot-aegis','unit-pilot-eira','unit-pilot-sporepuff','unit-pilot-wila']);
  await page.evaluate(()=>window.unitA7QA.otherEncounter());
- await expect.poll(()=>page.evaluate(()=>window.unitA7QA.cached())).toEqual([]);
+ // The replacement encounter fields Aegis (guardian) and a brute: only those stay cached, the A7 sheets are released.
+ await expect.poll(()=>page.evaluate(()=>window.unitA7QA.cached().sort())).toEqual(['unit-pilot-aegis','unit-pilot-brute']);
  await expect(page.locator('#start')).toBeEnabled();
 });

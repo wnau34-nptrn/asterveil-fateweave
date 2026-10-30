@@ -99,7 +99,7 @@ test('A6 late optional textures cannot replace artwork during a committed cast',
  await page.goto('tests/browser/fixtures/unit-a6.html?skill=attack');await page.locator('#start').click();
  await page.clock.pauseAt(new Date(Date.now()+100000));await cast(page,'attack');
  const committed=await saved(page);expect(await page.evaluate(()=>window.unitA6QA.frames().sefa![0]!.texture)).toBe('battle-mercs');
- release();await expect.poll(()=>page.evaluate(()=>window.unitA6QA.cached().length)).toBe(3); // Aegis is on anatomy hold
+ release();await expect.poll(()=>page.evaluate(()=>window.unitA6QA.cached().length)).toBe(4);
  expect(await page.evaluate(()=>window.unitA6QA.frames().sefa![0]!.texture)).toBe('battle-mercs');
  await page.clock.runFor(100);expect(await page.evaluate(()=>window.unitA6QA.frames().sefa![0]!.texture)).toBe('battle-mercs');
  await page.clock.runFor(3000);expect(await page.evaluate(()=>window.unitA6QA.frames().sefa![0]!.texture)).toBe('unit-pilot-sefa');expect(await saved(page)).toBe(committed);
@@ -107,7 +107,7 @@ test('A6 late optional textures cannot replace artwork during a committed cast',
 });
 test('A6 encounter replacement releases the A6 textures',async({page})=>{
  await page.setViewportSize({width:390,height:844});await ready(page,'skill=attack');
- expect((await page.evaluate(()=>window.unitA6QA.cached())).sort()).toEqual(['unit-pilot-eira','unit-pilot-riftweaver','unit-pilot-sefa']);
+ expect((await page.evaluate(()=>window.unitA6QA.cached())).sort()).toEqual(['unit-pilot-aegis','unit-pilot-eira','unit-pilot-riftweaver','unit-pilot-sefa']);
  await page.evaluate(()=>window.unitA6QA.otherEncounter());
  await expect.poll(()=>page.evaluate(()=>window.unitA6QA.cached())).toEqual([]);
  await expect(page.locator('#start')).toBeEnabled();
