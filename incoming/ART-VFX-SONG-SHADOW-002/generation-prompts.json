@@ -1,0 +1,60 @@
+{
+  "batch": "ART-VFX-SONG-SHADOW-002",
+  "reference_commit": "e56f4cb5f194302b2fb2a1cd9871da7280911302",
+  "calls": [
+    {
+      "move": "valor",
+      "prompt": "Create ONE move only: VALOR R3 fantasy game VFX. Use attached valor reference, same palette and motif as reference, but line weight ~2x thicker, brighter core, wider footprint that extends well beyond a small character standing at center, designed to be partially hidden behind a character sprite. Coral orange warm gold ivory painted angular edges. Output a horizontal three-panel source strip, three equally spaced isolated effects on true transparent background, large empty gutters, NO panels/borders/text/characters/UI/music notes. Left prepare: bold broad low elliptical floor ring gathering. Middle peak: THREE thick nested elliptical floor rings, broad low footprint; bottom ring widest, strong ivory gold cores coral glow; all rings LOW at ankle-to-knee height, NOT tall cylinder. Right settle: few short floating coral gold flecks drifting right toward allies, no impact. Maintain common scale across prepare/peak, ground baseline identical. Each panel square; all paint at least 8% from panel edges. Designed to remain clear at 100px wide alpha 0.7 against #1a2447. Generate each beat distinct and separate with generous transparent gutters.",
+      "reference": "song/R2/valor-peak.png",
+      "tool": "image_gen.imagegen",
+      "transparent_background": true,
+      "reference_copy": "references/valor-peak.png",
+      "source": "source/valor.png"
+    },
+    {
+      "move": "solo",
+      "prompt": "SOLO R3 only, fantasy painted VFX. Attached SOLO reference is palette/motif reference. same palette and motif as reference, but line weight ~2x thicker, brighter core, wider footprint that extends well beyond a small character standing at center, designed to be partially hidden behind a character sprite. Warm coral orange gold ivory, no green. This is an existing-song buff on ONE ALLY other than caster, NO damage NO healing. Produce horizontal strip of THREE separate isolated effects, prepare peak settle left-to-right, true transparent background, each within its own equal square third with at least 12% EMPTY transparent margin every side, effects never touch. No text labels borders characters UI notes or clefs. Prepare: broad bright elliptical light pool, short upward wisps. Peak: same BROAD floor pool with bright thick elliptical rim and narrow short central light column rising behind recipient, pillar height at most equal pool width, no opaque wall. Settle: smaller fading pool and few short golden flecks. Pool width stays broad at all beats, shared floor baseline, strongest rim at outer left/right beyond central sprite silhouette. Crisp thick light cores, controlled glow. Must read at 90-100px alpha .7 on dark #1a2447.",
+      "reference": "song/R2/solo-peak.png",
+      "tool": "image_gen.imagegen",
+      "transparent_background": true,
+      "reference_copy": "references/solo-peak.png",
+      "source": "source/solo.png"
+    },
+    {
+      "move": "evade",
+      "prompt": "EVADE R3 only fantasy game VFX. Use attached reference, same palette and motif as reference, but line weight ~2x thicker, brighter core, wider footprint that extends well beyond a small character standing at center, designed to be partially hidden behind a character sprite. STEEL BLUE SLATE pale blue-grey, NOT saturated cyan. Increase smoke opacity and broad bright pale steel edges for dark navy stone. Horizontal three equal square cells, separate prepare/peak/settle effects left to right on actual TRANSPARENT background; no borders text music notes UI characters silhouettes shields or attack bursts. Keep each effect inside central 75% of its cell, huge transparent gutters. ALL beats are LOW broad ankle-height smoke curling horizontally around feet, width at least 2.5 times height. Prepare: two gathering low thick wisps. Peak: broad dense low smoke pool with three thick curved steel-blue silver-grey shimmer strokes extending sideways around hidden feet. NOT tall upright crescent or slash. Settle: a few low dissolving smoke threads and small steel specks. No impact, no explosion. Same baseline all cells. Readable at 95-100px wide with alpha .7 against #1a2447.",
+      "reference": "shadow/R1/evade-peak.png",
+      "tool": "image_gen.imagegen",
+      "transparent_background": true,
+      "reference_copy": "references/evade-peak.png",
+      "source": "source/evade.png"
+    },
+    {
+      "move": "dread",
+      "prompt": "DREAD R3 only. THREE beat game VFX source strip horizontal, separate square cells left prepare / middle peak / right settle, actual transparent background. Attach reference for palette and painted angular motif ONLY; change semantics: DREAD IS NON-DAMAGING STATUS SONG affecting ALL enemies, NEVER an attack, slash, beam, single-target bolt or impact. same palette and motif as reference, but line weight ~2x thicker, brighter core. Deep violet plum with coral accents, bright lavender cores. Left: compact gathered wavering violet coral light at caster hand, no explosion. Middle: ONE wide open semicircular wavefront / broad curved fan of soft discord ripples travelling outward from hand toward entire enemy side. Rounded wavering parallel arc bands, width 2x height, no sharp arrowhead no contact point no starburst no lightning/slash. This is an airborne sound/status wave, not ground ring. Right: EXACTLY ONE small invented weakness/fear status emblem, compact drooping curved violet wisp with tiny coral glint, suitable beside ONE enemy waist, no impact; not three separate marks, no face/skull/text/music notes. Large 12% transparent margins inside EVERY cell so no adjacent effects touch. No characters labels UI panels. Readable when reduced to 100px at alpha .7 on #1a2447.",
+      "reference": "song/R2/dread-peak.png",
+      "tool": "image_gen.imagegen",
+      "transparent_background": true,
+      "reference_copy": "references/dread-peak.png",
+      "source": "source/dread.png"
+    },
+    {
+      "move": "finale",
+      "prompt": "FINALE VALOR R3 fantasy painted game VFX, attached finale reference. same palette and motif as reference, but line weight ~2x thicker, brighter core. Warm coral orange gold ivory angular painted ribbons. One move only, horizontal source strip with THREE truly SEPARATE square equal panels left prepare middle peak right settle, with NO visible panels/borders. TRUE transparent background. Keep generous 15% empty margins within every cell. No characters UI text music notes clefs. Left: small gathering curved warm ribbon at caster hand. Middle: ONE broad sweeping coral gold sound-wave ribbon, open curved fan going right toward whole enemy side, width roughly 2x height, not single-target laser/projectile. Right: ONE compact soft warm ribbon contact shimmer at waist of a damaged enemy, tiny curved glints without huge explosion or repeated slashes. No multiple impacts. Preserve painterly palette/motif. Clear at 100px alpha .7 against dark blue #1a2447.",
+      "reference": "song/R2/finale-peak.png",
+      "tool": "image_gen.imagegen",
+      "transparent_background": true,
+      "reference_copy": "references/finale-peak.png",
+      "source": "source/finale.png"
+    },
+    {
+      "move": "finale-mend",
+      "prompt": "FINALE-MEND only, optional restorative finale song variant. Use attached finale as style reference, preserve warm gold coral painted ribbon motif but add PALE SOFT GREEN for healing. same palette and motif as reference, but line weight ~2x thicker, brighter core. THREE separate compact effects in horizontal source strip prepare peak settle left to right. Equal size cells with very large TRANSPARENT empty gutters (at least 20% each side), actual transparent background, no panels lines borders labels. Left: compact gathered warm gold pale green ribbon at caster hand. Middle: gentle rounded gold-green flowing ribbons curving INWARD around a recipient ally's LOWER TORSO; open embrace wave, NO attack direction, no arrowhead, no impact, no explosion or sharp rays; will be repeated by code across actual allies receiving healing. Right: ONE tiny short soft gold-green waist sparkle cluster, no burst. Keep every effect separately centered, width at most half of its cell. No characters text UI music notes. Clear at 100px alpha .7 dark #1a2447.",
+      "reference": "song/R2/finale-peak.png",
+      "tool": "image_gen.imagegen",
+      "transparent_background": true,
+      "reference_copy": "references/finale-peak.png",
+      "source": "source/finale-mend.png"
+    }
+  ]
+}

@@ -16,7 +16,7 @@ import '../../../src/ui/portrait.css';
 import '../../../src/ui/components.css';
 
 const params = new URLSearchParams(location.search);
-const fixture = songFixture((params.get('skill') ?? 'valor') as SongSkill, (params.get('song') ?? 'valor') as 'valor'|'mend'|'dread');
+const fixture = songFixture((params.get('skill') ?? 'valor') as SongSkill, (params.get('song') ?? 'valor') as 'valor'|'mend'|'dread', 'f2', params.get('song') === 'mend');
 localStorage.setItem('asterveil.fateweave.presentation.v1', JSON.stringify({ speed: params.get('speed') ?? 'normal', intensity: params.get('intensity') ?? 'standard' }));
 localStorage.setItem('asterveil.fateweave.tutorial.v1', 'off');
 fitViewport();

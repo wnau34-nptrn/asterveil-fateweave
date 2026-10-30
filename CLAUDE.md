@@ -12,6 +12,10 @@ Owner: finish character animation and skill VFX before other development; Codex 
 
 R2 artwork (PR #89) integrated through PR92 merge `4883362` (mark/sigil/storm/dispel from actual events; rules/save/balance/timing unchanged); owner approved motion and merge with “ทั้งสองอย่าง” on 2026-10-28 after the 21 real 390px clips in `docs/combat-presentation/arcane-seal-slice/`. PR quality+browser passed (browser re-run once after an unrelated `presentation.spec.ts` timeout); Pages run 40730511483 build/4 browser shards/deploy success (16:54–17:21 UTC). A3 (PR #90, R2 chosen) is in a separate session; A4 (PR #91) not started.
 
+## Song/Shadow R3 — 2026-10-30 (owner-approved)
+
+Codex ART-VFX-SONG-SHADOW-002 R3 (PR #111) replaces song R2 / shadow R1 in `song_shadow_fx` (27-frame lossless atlas, 4.66 MiB decoded; note = song R2 and decoy = shadow R1 are not in R3 and stay). Finale of mending/dread paint only really healed/shielded allies; solo stands behind its recipient. Owner approved the motion with “อนุมัติ” on 2026-10-30 after the 22 real 390px clips (direct approval). PR #119; evidence `docs/combat-presentation/song-shadow-r3-slice/README_TH.md`. Rules/save/content/balance/timing unchanged.
+
 ## Aegis A2-002 integration — 2026-10-30 (owner-approved)
 
 Owner approved the motion with “อนุมัติ” on 2026-10-30 after the 26 clips (direct approval, not inferred from tests). Branch `claude/aegis-a2-002` packs Codex A2-002 (PR #112) as the `aegis_a2` atlas and lifts `anatomyHold` (the guardian renders its frames again; packed audit median 0.984, no drift). 26 real 390px clips in `docs/combat-presentation/unit-a2-002-slice/`. PR #116 merged `77dac23` after quality + four browser shards passed on `c40418a` (CI first caught A7/A9/A10 specs that still counted the held Aegis atlas; fixed test-only). Pages publication follows from that push. Older hold notes below are historical.

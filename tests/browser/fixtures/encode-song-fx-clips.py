@@ -10,7 +10,7 @@ import sys
 
 root = Path(__file__).resolve().parents[3]
 captures = root / next((arg for arg in sys.argv[1:] if not arg.startswith('--')), 'test-results/song-delivery')
-out = root / 'docs/combat-presentation/song-shadow-slice'
+out = root / (__import__('os').environ.get('SONG_CLIP_DIR') or 'docs/combat-presentation/song-shadow-slice')
 out.mkdir(parents=True, exist_ok=True)
 manifest = json.loads((out/'clips.json').read_text()) if '--merge' in sys.argv and (out/'clips.json').exists() else []
 encoded = 0

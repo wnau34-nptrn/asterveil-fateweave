@@ -1,0 +1,114 @@
+{
+  "revisions": "R3 for valor/solo/evade/dread/finale/finale-mend/finale-dread; note = song R2, decoy = shadow R1 (not in R3)",
+  "atlasSha256": "68eb4435b4e0174a18dd638304723dd69760f8a1618de815bf041b448976b025",
+  "frames": {
+    "valor_prepare": {
+      "sha256": "529576436d96f0a789e49a0a2fb041481cec4043db7619789c92c69aea170178",
+      "from": "002/R3"
+    },
+    "valor_peak": {
+      "sha256": "ceb57ec3f15d384ded75aef594e0a4dc75bcc5457b5cefb5bb4b14d03ce6a78d",
+      "from": "002/R3"
+    },
+    "valor_settle": {
+      "sha256": "cd2835f459f653c30e1daea9c5a15889ae2925d8937f854a78cc71937b8c5750",
+      "from": "002/R3"
+    },
+    "solo_prepare": {
+      "sha256": "450154d75a8e2b01b7f14e351a3e8888527bbd9667abc09c9d3140bfbb91c8d4",
+      "from": "002/R3"
+    },
+    "solo_peak": {
+      "sha256": "d583f703366c4c947bc2bae7c2cf90746c1fd6bbec50498c69a2ccfd54d04aec",
+      "from": "002/R3"
+    },
+    "solo_settle": {
+      "sha256": "a8a6691361e5941df01efd7d920054df85db00bcc108ae7c7249ecc5dc74b832",
+      "from": "002/R3"
+    },
+    "evade_prepare": {
+      "sha256": "e400b8605f315f34ac07ab6ee4cec3f913e1c275699ada2fbd262d79bd42aec1",
+      "from": "002/R3"
+    },
+    "evade_peak": {
+      "sha256": "1def3962d08238fee9a41d10ce7916b1534b7a66c263646ce84a1b29030e163b",
+      "from": "002/R3"
+    },
+    "evade_settle": {
+      "sha256": "9fbbc1ca8e6798adcb01b132d6abe4df9159c12fdb3fd0a13920b1e99c3216d8",
+      "from": "002/R3"
+    },
+    "dread_prepare": {
+      "sha256": "6c3186de8eb346dfbaeeb9c1601d31bd734eaf7b4a5291e25d51ddeb38f38e09",
+      "from": "002/R3"
+    },
+    "dread_peak": {
+      "sha256": "907b9370accd3c539dceab376e4113f6ed61a2008f0ae21728bcb15f493cbbc9",
+      "from": "002/R3"
+    },
+    "dread_settle": {
+      "sha256": "68165c7a8324115ef95c65c5b8491b562ac48518f00b66a5a65ec739572141b4",
+      "from": "002/R3"
+    },
+    "finale_prepare": {
+      "sha256": "c2f1f9ed337c434ceb140c3fbaa5291d22d3489f525189f7d7f65e44ffd7bf60",
+      "from": "002/R3"
+    },
+    "finale_peak": {
+      "sha256": "7f5599a50c6a3cf0f45e5e9019bb25840acea2610e460cf7c189c1719647face",
+      "from": "002/R3"
+    },
+    "finale_settle": {
+      "sha256": "e95b238ff928d83cc8a2945921541771cd91d8bdc3a1645baf1bb2a959dc5b1a",
+      "from": "002/R3"
+    },
+    "finale-mend_prepare": {
+      "sha256": "4f3da9fce771591de463f5b4a3a6366222d9566861906df92e00a041146b8a78",
+      "from": "002/R3"
+    },
+    "finale-mend_peak": {
+      "sha256": "fba8be392a28912a387f458bd32b025923b9ed1f12255269afb6ea71ce14a8c4",
+      "from": "002/R3"
+    },
+    "finale-mend_settle": {
+      "sha256": "d743c7a31f327ea0f5fd1c8d69b5a7bbc1dd19b1ff927c2cd53d1f740f8b4b85",
+      "from": "002/R3"
+    },
+    "finale-dread_prepare": {
+      "sha256": "814471df05d0450ad35acc60e5449ee601b6c755d2b209537827168fcddd5ba6",
+      "from": "002/R3"
+    },
+    "finale-dread_peak": {
+      "sha256": "88ea01e7c7b781fbbf33035f20e9f66ac10a93a585d024e8d24318e779ec8ef7",
+      "from": "002/R3"
+    },
+    "finale-dread_settle": {
+      "sha256": "9258eb00dc1d199378a39dfd8c742f1192269088cba036da66f7b34939b054ad",
+      "from": "002/R3"
+    },
+    "note_prepare": {
+      "sha256": "d0de256ac5508269d9fca00c55992f64571d52402a116d22252a9f80c1fc8cd8",
+      "from": "001/song R2"
+    },
+    "note_peak": {
+      "sha256": "6afa88d89d999c13fa078677a80be50d51f545581d1522fc5d41b32da16f76d3",
+      "from": "001/song R2"
+    },
+    "note_settle": {
+      "sha256": "07070feade6edf3894368c62e0bdb6f23b2663dd8d2a65974ca6323247676a42",
+      "from": "001/song R2"
+    },
+    "decoy_prepare": {
+      "sha256": "c17b412865987a5396b76f6699f2595a00a95e963d19e74b3fdf981cd80e2338",
+      "from": "001/shadow R1"
+    },
+    "decoy_peak": {
+      "sha256": "7f44bf76bb071a15c6e8f789d95247e8546530120943d3e648347b663e2f7925",
+      "from": "001/shadow R1"
+    },
+    "decoy_settle": {
+      "sha256": "7f9ba7cc7894e8f22805d174544d9eb20889521de40c71552edc021bc3ad20c3",
+      "from": "001/shadow R1"
+    }
+  }
+}

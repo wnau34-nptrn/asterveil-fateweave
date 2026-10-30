@@ -7,7 +7,7 @@ import type {SongSkill} from '../../src/game/visuals/song-fx';
 
 // Definitions + legal commands only. `song` is the song the bard has playing before a finale/solo (played on an earlier real beat).
 export const casterOf:Record<SongSkill,string>={valor:'lio',finale:'lio',dread:'lio',note:'lio',solo:'lio',evade:'sefa',decoy:'sefa'};
-export function songFixture(skill:SongSkill,song:'valor'|'mend'|'dread'='valor',targetFoe='f2'){
+export function songFixture(skill:SongSkill,song:'valor'|'mend'|'dread'='valor',targetFoe='f2',hurt=false){
  const caster=[...heroes,...mercenaries].find(h=>h.id===casterOf[skill])!;
  const others=heroes.filter(h=>h.id!==caster.id&&['Knight','Priest','Mage'].includes(h.role)).slice(0,2);
  const party=[caster,...others];
@@ -17,7 +17,8 @@ export function songFixture(skill:SongSkill,song:'valor'|'mend'|'dread'='valor',
   enemies:slots.map((id,i)=>({...veilSiege.enemies.find(e=>e.id===(id.startsWith('f')?'f1':'b1'))!,id,row:id.startsWith('f')?'front' as const:'back' as const,maxHp:9999,speed:100-i})),
   intents:slots.map(id=>({sourceId:id,targetSlot:1,name:'QA actual announced attack',damage:1,kind:'physical' as const})),
  };
- const entry={hp:Object.fromEntries(party.map(h=>[h.id,h.maxHp]))};
+ // `hurt`: every ally starts wounded, so a finale of mending really heals them (at full HP the resolver emits no heal event).
+ const entry={hp:Object.fromEntries(party.map(h=>[h.id,hurt?Math.max(1,h.maxHp-8):h.maxHp]))};
  const begin=beginBattle(data,entry,true).state;
  const prelude:Command[]=[];let state=begin;
  if(skill==='finale'||skill==='solo'){

@@ -1,5 +1,9 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
+## 2026-10-30 — เพลง/เงา R3 นำเข้าแล้ว (`claude/song-shadow-r3`) เจ้าของอนุมัติ motion แล้ว (“อนุมัติ” 2026-10-30)
+
+R3 (PR #111) แทนเพลง R2/เงา R1 ในเกม: atlas 27 เฟรม (R3×21 + note/decoy เดิม) 4.66 MiB decoded, finale-mend/finale-dread ตาม heal/barrier จริง, solo ที่ผู้รับ. คลิป 22 รายการ `docs/combat-presentation/song-shadow-r3-slice/` + Artifact https://claude.ai/artifact/AzESrmF88nzGGXxzi9rgJT. ค้าง: เจ้าของอนุมัติ motion → merge PR + Pages → ปิด PR #111; แชต W8 รอ PR เซรีส (`claude/cerise-a7-002`) merge ด้วย (ตอนนี้ยังไม่ตรวจพบว่า merge)
+
 ## 2026-10-30 — สรุปสถานะ animation/VFX จริง และลำดับงานที่เจ้าของอนุมัติ (“เอาตามที่คุณแนะนำทั้งหมด”)
 
 ตรวจบนสาขาเกม `c41a500` (หมายเหตุ: ก่อนตอบสถานะต้อง `git fetch` และเทียบ HEAD กับ origin ทุกครั้ง แชตนี้เคยตอบผิดสองรอบเพราะเครื่องค้างที่ `0716ea0` ซึ่งตามหลังอยู่ 173 commit)
