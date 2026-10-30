@@ -1,0 +1,1 @@
+odran-arc: median head scale 0.911; drift [(4, 0.82)]; not measured []

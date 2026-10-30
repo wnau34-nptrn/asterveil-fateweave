@@ -1,0 +1,440 @@
+{
+  "tool": "image_gen.imagegen",
+  "baseBranch": "feature/fateweave-initial-prototype",
+  "generations": [
+    {
+      "character": "odran",
+      "move": "attack",
+      "prompt": "Make ONE WHOLE continuous horizontal animation strip in a SINGLE image, transparent alpha background. Production original painted anime game sprites matching the attached seed EXACTLY. SAME face, hair, costume, implement, head size relative to body (head/body .34), including crouch/turn/fall. Camera three-quarter view facing right except intentional turns. No text, labels, panels, VFX, glows, particles, motion lines, shadows, scenery. ALL figures and implements COMPLETELY inside image, NEVER touching/overlapping adjacent figures. WIDE EMPTY TRANSPARENT GUTTERS. Use a wide 3:1 canvas with SIX equal invisible slots. Each figure must fit entirely within its own slot with 20% slot width empty margin on BOTH sides. Leave generous top/bottom space. Standing character height only about 38% of canvas height, SAME height in every move. All standing feet share one ground line. Do not enlarge any pose to fill space. Odran: broad planted gatewright, heavy deliberate leg-driven moves, huge hinge gauntlets, beard, brown apron, green coat. Never straight boxing punch or tabard swing. EXACTLY 6 chronological full-body poses left to right in first 6 slots; 1: ready seed pose; 2: draw the large right gauntlet back LOW, load legs; 3: drive heavy HOOKING gauntlet blow forward-right, curved upward path; 4: extended hooked blow with planted feet; 5: pull back into low guard; 6: ready seed pose. Return ONE STRIP. Preserve seed anatomy absolutely.",
+      "poses": [
+        "ready seed pose",
+        "draw the large right gauntlet back LOW, load legs",
+        "drive heavy HOOKING gauntlet blow forward-right, curved upward path",
+        "extended hooked blow with planted feet",
+        "pull back into low guard",
+        "ready seed pose"
+      ],
+      "references": [
+        "seeds/odran.png"
+      ],
+      "generationId": "192d20ae-5cf9-4a3b-bcc5-f6375279df12",
+      "raw": "raw/odran-attack-r1.png",
+      "source": "/workspace/generated_images/exec-192d20ae-5cf9-4a3b-bcc5-f6375279df12.png",
+      "revision": "r1",
+      "transparent_background": true,
+      "routes": [
+        "attack",
+        "saintstrike",
+        "vowstrike"
+      ]
+    },
+    {
+      "character": "odran",
+      "move": "arc",
+      "prompt": "Make ONE WHOLE continuous horizontal animation strip in a SINGLE image, transparent alpha background. Production original painted anime game sprites matching the attached seed EXACTLY. SAME face, hair, costume, implement, head size relative to body (head/body .34), including crouch/turn/fall. Camera three-quarter view facing right except intentional turns. No text, labels, panels, VFX, glows, particles, motion lines, shadows, scenery. ALL figures and implements COMPLETELY inside image, NEVER touching/overlapping adjacent figures. WIDE EMPTY TRANSPARENT GUTTERS. Use a wide 3:1 canvas with SIX equal invisible slots. Each figure must fit entirely within its own slot with 20% slot width empty margin on BOTH sides. Leave generous top/bottom space. Standing character height only about 38% of canvas height, SAME height in every move. All standing feet share one ground line. Do not enlarge any pose to fill space. Odran: broad planted gatewright, heavy deliberate leg-driven moves, huge hinge gauntlets, beard, brown apron, green coat. Never straight boxing punch or tabard swing. EXACTLY 6 chronological full-body poses left to right in first 6 slots; 1: ready seed pose; 2: load shoulder and coil LEFT; 3: sweep gauntlet FOREARM HORIZONTALLY across front; 4: broad sideways sweeping follow-through; 5: unwind; 6: ready seed pose. Return ONE STRIP. Preserve seed anatomy absolutely. CRITICAL: Maintain the SAME full-sized head in poses 2,3,4,5 as ready. NEVER shrink the head behind raised gauntlets. Head remains plainly visible in side three-quarter view; no extreme perspective or head foreshortening. ",
+      "poses": [
+        "ready seed pose",
+        "load shoulder and coil LEFT",
+        "sweep gauntlet FOREARM HORIZONTALLY across front",
+        "broad sideways sweeping follow-through",
+        "unwind",
+        "ready seed pose"
+      ],
+      "references": [
+        "seeds/odran.png"
+      ],
+      "generationId": "33e1367f-f407-4cdd-a8a8-732eac13401b",
+      "raw": "raw/odran-arc-r1-corrected.png",
+      "source": "/workspace/generated_images/exec-33e1367f-f407-4cdd-a8a8-732eac13401b.png",
+      "revision": "r1-corrected",
+      "transparent_background": true,
+      "routes": [
+        "saintarc"
+      ]
+    },
+    {
+      "character": "odran",
+      "move": "communion",
+      "prompt": "Make ONE WHOLE continuous horizontal animation strip in a SINGLE image, transparent alpha background. Production original painted anime game sprites matching the attached seed EXACTLY. SAME face, hair, costume, implement, head size relative to body (head/body .34), including crouch/turn/fall. Camera three-quarter view facing right except intentional turns. No text, labels, panels, VFX, glows, particles, motion lines, shadows, scenery. ALL figures and implements COMPLETELY inside image, NEVER touching/overlapping adjacent figures. WIDE EMPTY TRANSPARENT GUTTERS. Use a wide 3:1 canvas with SIX equal invisible slots. Each figure must fit entirely within its own slot with 20% slot width empty margin on BOTH sides. Leave generous top/bottom space. Standing character height only about 38% of canvas height, SAME height in every move. All standing feet share one ground line. Do not enlarge any pose to fill space. Odran: broad planted gatewright, heavy deliberate leg-driven moves, huge hinge gauntlets, beard, brown apron, green coat. Never straight boxing punch or tabard swing. EXACTLY 6 chronological full-body poses left to right in first 6 slots; 1: ready seed pose; 2: both gauntlets together at chest, head bowed; 3: turn screen LEFT toward ally behind and open LEFT PALM; 4: sustain open left palm offering toward screen left; 5: lower hands; 6: ready seed pose. Return ONE STRIP. Preserve seed anatomy absolutely. CRITICAL: In BOTH poses 3 AND 4 he turns toward screen LEFT and extends the LEFT palm toward screen LEFT, an ally BEHIND him. Do NOT extend offering palm screen right. Keep closed gauntlets at chest in pose2.",
+      "poses": [
+        "ready seed pose",
+        "both gauntlets together at chest, head bowed",
+        "turn screen LEFT toward ally behind and open LEFT PALM",
+        "sustain open left palm offering toward screen left",
+        "lower hands",
+        "ready seed pose"
+      ],
+      "references": [
+        "seeds/odran.png"
+      ],
+      "generationId": "51117b76-9df7-4431-a695-403d084205b3",
+      "raw": "raw/odran-communion-r1-corrected.png",
+      "source": "/workspace/generated_images/exec-51117b76-9df7-4431-a695-403d084205b3.png",
+      "revision": "r1-corrected",
+      "transparent_background": true,
+      "routes": [
+        "communion",
+        "sharewound"
+      ]
+    },
+    {
+      "character": "odran",
+      "move": "lastlight",
+      "prompt": "Make ONE WHOLE continuous horizontal animation strip in a SINGLE image, transparent alpha background. Production original painted anime game sprites matching the attached seed EXACTLY. SAME face, hair, costume, implement, head size relative to body (head/body .34), including crouch/turn/fall. Camera three-quarter view facing right except intentional turns. No text, labels, panels, VFX, glows, particles, motion lines, shadows, scenery. ALL figures and implements COMPLETELY inside image, NEVER touching/overlapping adjacent figures. WIDE EMPTY TRANSPARENT GUTTERS. Use a wide 3:1 canvas with SIX equal invisible slots. Each figure must fit entirely within its own slot with 20% slot width empty margin on BOTH sides. Leave generous top/bottom space. Standing character height only about 38% of canvas height, SAME height in every move. All standing feet share one ground line. Do not enlarge any pose to fill space. Odran: broad planted gatewright, heavy deliberate leg-driven moves, huge hinge gauntlets, beard, brown apron, green coat. Never straight boxing punch or tabard swing. EXACTLY 6 chronological full-body poses left to right in first 6 slots; 1: ready seed pose; 2: deep crouch BOTH gauntlets gathered low; 3: drive rising TWO-HANDED blow; 4: both gauntlets extended high follow-through; 5: lift from stance; 6: ready seed pose. Return ONE STRIP. Preserve seed anatomy absolutely. CRITICAL: Maintain the SAME full-sized head in poses 2,3,4,5 as ready. NEVER shrink the head behind raised gauntlets. Head remains plainly visible in side three-quarter view; no extreme perspective or head foreshortening. ",
+      "poses": [
+        "ready seed pose",
+        "deep crouch BOTH gauntlets gathered low",
+        "drive rising TWO-HANDED blow",
+        "both gauntlets extended high follow-through",
+        "lift from stance",
+        "ready seed pose"
+      ],
+      "references": [
+        "seeds/odran.png"
+      ],
+      "generationId": "e7e14e1f-2af5-4d2c-918a-908b380e8f3d",
+      "raw": "raw/odran-lastlight-r1-corrected.png",
+      "source": "/workspace/generated_images/exec-e7e14e1f-2af5-4d2c-918a-908b380e8f3d.png",
+      "revision": "r1-corrected",
+      "transparent_background": true,
+      "routes": [
+        "lastlight"
+      ]
+    },
+    {
+      "character": "odran",
+      "move": "hit",
+      "prompt": "Make ONE WHOLE continuous horizontal animation strip in a SINGLE image, transparent alpha background. Production original painted anime game sprites matching the attached seed EXACTLY. SAME face, hair, costume, implement, head size relative to body (head/body .34), including crouch/turn/fall. Camera three-quarter view facing right except intentional turns. No text, labels, panels, VFX, glows, particles, motion lines, shadows, scenery. ALL figures and implements COMPLETELY inside image, NEVER touching/overlapping adjacent figures. WIDE EMPTY TRANSPARENT GUTTERS. Use a wide 3:1 canvas with SIX equal invisible slots. Each figure must fit entirely within its own slot with 20% slot width empty margin on BOTH sides. Leave generous top/bottom space. Standing character height only about 38% of canvas height, SAME height in every move. All standing feet share one ground line. Do not enlarge any pose to fill space. Odran: broad planted gatewright, heavy deliberate leg-driven moves, huge hinge gauntlets, beard, brown apron, green coat. Never straight boxing punch or tabard swing. EXACTLY 4 chronological full-body poses left to right in first 4 slots; last two slots EMPTY TRANSPARENT. 1: ready seed pose; 2: recoil and wince, gauntlets up; 3: catch balance; 4: ready seed pose. Return ONE STRIP. Preserve seed anatomy absolutely.",
+      "poses": [
+        "ready seed pose",
+        "recoil and wince, gauntlets up",
+        "catch balance",
+        "ready seed pose"
+      ],
+      "references": [
+        "seeds/odran.png"
+      ],
+      "generationId": "3946edb2-0919-454b-a83f-15e2102332b8",
+      "raw": "raw/odran-hit-r1.png",
+      "source": "/workspace/generated_images/exec-3946edb2-0919-454b-a83f-15e2102332b8.png",
+      "revision": "r1",
+      "transparent_background": true,
+      "routes": [
+        "hit"
+      ]
+    },
+    {
+      "character": "odran",
+      "move": "block",
+      "prompt": "Make ONE WHOLE continuous horizontal animation strip in a SINGLE image, transparent alpha background. Production original painted anime game sprites matching the attached seed EXACTLY. SAME face, hair, costume, implement, head size relative to body (head/body .34), including crouch/turn/fall. Camera three-quarter view facing right except intentional turns. No text, labels, panels, VFX, glows, particles, motion lines, shadows, scenery. ALL figures and implements COMPLETELY inside image, NEVER touching/overlapping adjacent figures. WIDE EMPTY TRANSPARENT GUTTERS. Use a wide 3:1 canvas with SIX equal invisible slots. Each figure must fit entirely within its own slot with 20% slot width empty margin on BOTH sides. Leave generous top/bottom space. Standing character height only about 38% of canvas height, SAME height in every move. All standing feet share one ground line. Do not enlarge any pose to fill space. Odran: broad planted gatewright, heavy deliberate leg-driven moves, huge hinge gauntlets, beard, brown apron, green coat. Never straight boxing punch or tabard swing. EXACTLY 4 chronological full-body poses left to right in first 4 slots; last two slots EMPTY TRANSPARENT. 1: ready seed pose; 2: raise BOTH gauntlets CROSSED like a closed gate; 3: absorb weight LOW with crossed gauntlets; 4: reset seed guard. Return ONE STRIP. Preserve seed anatomy absolutely.",
+      "poses": [
+        "ready seed pose",
+        "raise BOTH gauntlets CROSSED like a closed gate",
+        "absorb weight LOW with crossed gauntlets",
+        "reset seed guard"
+      ],
+      "references": [
+        "seeds/odran.png"
+      ],
+      "generationId": "84286c5b-6429-40ca-91e7-27f4c3f2d797",
+      "raw": "raw/odran-block-r1.png",
+      "source": "/workspace/generated_images/exec-84286c5b-6429-40ca-91e7-27f4c3f2d797.png",
+      "revision": "r1",
+      "transparent_background": true,
+      "routes": [
+        "block"
+      ]
+    },
+    {
+      "character": "odran",
+      "move": "down",
+      "prompt": "Make ONE WHOLE continuous horizontal animation strip in a SINGLE image, transparent alpha background. Production original painted anime game sprites matching the attached seed EXACTLY. SAME face, hair, costume, implement, head size relative to body (head/body .34), including crouch/turn/fall. Camera three-quarter view facing right except intentional turns. No text, labels, panels, VFX, glows, particles, motion lines, shadows, scenery. ALL figures and implements COMPLETELY inside image, NEVER touching/overlapping adjacent figures. WIDE EMPTY TRANSPARENT GUTTERS. Use a wide 3:1 canvas with SIX equal invisible slots. Each figure must fit entirely within its own slot with 20% slot width empty margin on BOTH sides. Leave generous top/bottom space. Standing character height only about 38% of canvas height, SAME height in every move. All standing feet share one ground line. Do not enlarge any pose to fill space. Odran: broad planted gatewright, heavy deliberate leg-driven moves, huge hinge gauntlets, beard, brown apron, green coat. Never straight boxing punch or tabard swing. EXACTLY 4 chronological full-body poses left to right in first 4 slots; last two slots EMPTY TRANSPARENT. 1: knees give way from low guard; 2: one gauntlet AND one knee on ground; 3: sink sideways; 4: lie fully unconscious SIDEWAYS, body full standing length, never stand again. Return ONE STRIP. Preserve seed anatomy absolutely.",
+      "poses": [
+        "knees give way from low guard",
+        "one gauntlet AND one knee on ground",
+        "sink sideways",
+        "lie fully unconscious SIDEWAYS, body full standing length, never stand again"
+      ],
+      "references": [
+        "seeds/odran.png"
+      ],
+      "generationId": "fc466f0c-c0bd-4519-93d8-5910a0a16dd8",
+      "raw": "raw/odran-down-r1.png",
+      "source": "/workspace/generated_images/exec-fc466f0c-c0bd-4519-93d8-5910a0a16dd8.png",
+      "revision": "r1",
+      "transparent_background": true,
+      "routes": [
+        "down"
+      ]
+    },
+    {
+      "character": "isolde",
+      "move": "attack",
+      "prompt": "Make ONE WHOLE continuous horizontal animation strip in a SINGLE image, transparent alpha background. Production original painted anime game sprites matching the attached seed EXACTLY. SAME face, hair, costume, implement, head size relative to body (head/body .34), including crouch/turn/fall. Camera three-quarter view facing right except intentional turns. No text, labels, panels, VFX, glows, particles, motion lines, shadows, scenery. ALL figures and implements COMPLETELY inside image, NEVER touching/overlapping adjacent figures. WIDE EMPTY TRANSPARENT GUTTERS. Use a wide 3:1 canvas with SIX equal invisible slots. Each figure must fit entirely within its own slot with 20% slot width empty margin on BOTH sides. Leave generous top/bottom space. Standing character height only about 38% of canvas height, SAME height in every move. All standing feet share one ground line. Do not enlarge any pose to fill space. Isolde: narrow light dancer with BELL-STAFF, blue white gold costume, short streamers stay ATTACHED to bell cluster. Never fans or loose ribbons. Full staff stays visible. EXACTLY 6 chronological full-body poses left to right in first 6 slots; 1: ready seed pose; 2: step back with staff drawn back; 3: sweep BELL END forward screen RIGHT; 4: extended bell-staff sweep; 5: recover staff upright; 6: ready seed pose. Return ONE STRIP. Preserve seed anatomy absolutely.",
+      "poses": [
+        "ready seed pose",
+        "step back with staff drawn back",
+        "sweep BELL END forward screen RIGHT",
+        "extended bell-staff sweep",
+        "recover staff upright",
+        "ready seed pose"
+      ],
+      "references": [
+        "seeds/isolde.png"
+      ],
+      "generationId": "5ee6399c-6691-4ec7-9f34-be68835faacc",
+      "raw": "raw/isolde-attack-r1.png",
+      "source": "/workspace/generated_images/exec-5ee6399c-6691-4ec7-9f34-be68835faacc.png",
+      "revision": "r1",
+      "transparent_background": true,
+      "routes": [
+        "attack"
+      ]
+    },
+    {
+      "character": "isolde",
+      "move": "partner",
+      "prompt": "Make ONE WHOLE continuous horizontal animation strip in a SINGLE image, transparent alpha background. Production original painted anime game sprites matching the attached seed EXACTLY. SAME face, hair, costume, implement, head size relative to body (head/body .34), including crouch/turn/fall. Camera three-quarter view facing right except intentional turns. No text, labels, panels, VFX, glows, particles, motion lines, shadows, scenery. ALL figures and implements COMPLETELY inside image, NEVER touching/overlapping adjacent figures. WIDE EMPTY TRANSPARENT GUTTERS. Use a wide 3:1 canvas with SIX equal invisible slots. Each figure must fit entirely within its own slot with 20% slot width empty margin on BOTH sides. Leave generous top/bottom space. Standing character height only about 38% of canvas height, SAME height in every move. All standing feet share one ground line. Do not enlarge any pose to fill space. Isolde: narrow light dancer with BELL-STAFF, blue white gold costume, short streamers stay ATTACHED to bell cluster. Never fans or loose ribbons. Full staff stays visible. EXACTLY 6 chronological full-body poses left to right in first 6 slots; 1: ready seed pose; 2: tap STAFF BUTT on ground; 3: half turn toward ally behind SCREEN LEFT with bells raised; 4: bells held UP and small sway toward screen left; 5: turn back; 6: ready seed pose. Return ONE STRIP. Preserve seed anatomy absolutely.",
+      "poses": [
+        "ready seed pose",
+        "tap STAFF BUTT on ground",
+        "half turn toward ally behind SCREEN LEFT with bells raised",
+        "bells held UP and small sway toward screen left",
+        "turn back",
+        "ready seed pose"
+      ],
+      "references": [
+        "seeds/isolde.png"
+      ],
+      "generationId": "fde36a74-d396-4059-ae21-6dffdfca753c",
+      "raw": "raw/isolde-partner-r1.png",
+      "source": "/workspace/generated_images/exec-fde36a74-d396-4059-ae21-6dffdfca753c.png",
+      "revision": "r1",
+      "transparent_background": true,
+      "routes": [
+        "cadence",
+        "duet",
+        "deepbeat"
+      ]
+    },
+    {
+      "character": "isolde",
+      "move": "circle",
+      "prompt": "Make ONE WHOLE continuous horizontal animation strip in a SINGLE image, transparent alpha background. Production original painted anime game sprites matching the attached seed EXACTLY. SAME face, hair, costume, implement, head size relative to body (head/body .34), including crouch/turn/fall. Camera three-quarter view facing right except intentional turns. No text, labels, panels, VFX, glows, particles, motion lines, shadows, scenery. ALL figures and implements COMPLETELY inside image, NEVER touching/overlapping adjacent figures. WIDE EMPTY TRANSPARENT GUTTERS. Use a wide 3:1 canvas with SIX equal invisible slots. Each figure must fit entirely within its own slot with 20% slot width empty margin on BOTH sides. Leave generous top/bottom space. Standing character height only about 38% of canvas height, SAME height in every move. All standing feet share one ground line. Do not enlarge any pose to fill space. Isolde: narrow light dancer with BELL-STAFF, blue white gold costume, short streamers stay ATTACHED to bell cluster. Never fans or loose ribbons. Full staff stays visible. EXACTLY 6 chronological full-body poses left to right in first 6 slots; 1: ready seed pose; 2: crouch swinging staff outward; 3: full body TURN with staff circling around waist, back three-quarter visible; 4: staff finishes circle OVERHEAD; 5: land turn facing right; 6: ready seed pose. Return ONE STRIP. Preserve seed anatomy absolutely.",
+      "poses": [
+        "ready seed pose",
+        "crouch swinging staff outward",
+        "full body TURN with staff circling around waist, back three-quarter visible",
+        "staff finishes circle OVERHEAD",
+        "land turn facing right",
+        "ready seed pose"
+      ],
+      "references": [
+        "seeds/isolde.png"
+      ],
+      "generationId": "41db246b-0024-4168-8b3c-10babd6ce61c",
+      "raw": "raw/isolde-circle-r1.png",
+      "source": "/workspace/generated_images/exec-41db246b-0024-4168-8b3c-10babd6ce61c.png",
+      "revision": "r1",
+      "transparent_background": true,
+      "routes": [
+        "rounddance"
+      ]
+    },
+    {
+      "character": "isolde",
+      "move": "closing",
+      "prompt": "Make ONE WHOLE continuous horizontal animation strip in a SINGLE image, transparent alpha background. Production original painted anime game sprites matching the attached seed EXACTLY. SAME face, hair, costume, implement, head size relative to body (head/body .34), including crouch/turn/fall. Camera three-quarter view facing right except intentional turns. No text, labels, panels, VFX, glows, particles, motion lines, shadows, scenery. ALL figures and implements COMPLETELY inside image, NEVER touching/overlapping adjacent figures. WIDE EMPTY TRANSPARENT GUTTERS. Use a wide 3:1 canvas with SIX equal invisible slots. Each figure must fit entirely within its own slot with 20% slot width empty margin on BOTH sides. Leave generous top/bottom space. Standing character height only about 38% of canvas height, SAME height in every move. All standing feet share one ground line. Do not enlarge any pose to fill space. Isolde: narrow light dancer with BELL-STAFF, blue white gold costume, short streamers stay ATTACHED to bell cluster. Never fans or loose ribbons. Full staff stays visible. EXACTLY 6 chronological full-body poses left to right in first 6 slots; 1: ready seed pose; 2: light step forward-right; 3: pivot on FRONT foot, staff raised HIGH; 4: staff BUTT strikes ground in FRONT; 5: hold staff grounded strike; 6: ready seed pose. Return ONE STRIP. Preserve seed anatomy absolutely.",
+      "poses": [
+        "ready seed pose",
+        "light step forward-right",
+        "pivot on FRONT foot, staff raised HIGH",
+        "staff BUTT strikes ground in FRONT",
+        "hold staff grounded strike",
+        "ready seed pose"
+      ],
+      "references": [
+        "seeds/isolde.png"
+      ],
+      "generationId": "9885f2a7-af23-4684-9b46-f134fbfbb922",
+      "raw": "raw/isolde-closing-r1.png",
+      "source": "/workspace/generated_images/exec-9885f2a7-af23-4684-9b46-f134fbfbb922.png",
+      "revision": "r1",
+      "transparent_background": true,
+      "routes": [
+        "closingstep"
+      ]
+    },
+    {
+      "character": "isolde",
+      "move": "echo",
+      "prompt": "Make ONE WHOLE continuous horizontal animation strip in a SINGLE image, transparent alpha background. Production original painted anime game sprites matching the attached seed EXACTLY. SAME face, hair, costume, implement, head size relative to body (head/body .34), including crouch/turn/fall. Camera three-quarter view facing right except intentional turns. No text, labels, panels, VFX, glows, particles, motion lines, shadows, scenery. ALL figures and implements COMPLETELY inside image, NEVER touching/overlapping adjacent figures. WIDE EMPTY TRANSPARENT GUTTERS. Use a wide 3:1 canvas with SIX equal invisible slots. Each figure must fit entirely within its own slot with 20% slot width empty margin on BOTH sides. Leave generous top/bottom space. Standing character height only about 38% of canvas height, SAME height in every move. All standing feet share one ground line. Do not enlarge any pose to fill space. Isolde: narrow light dancer with BELL-STAFF, blue white gold costume, short streamers stay ATTACHED to bell cluster. Never fans or loose ribbons. Full staff stays visible. EXACTLY 6 chronological full-body poses left to right in first 6 slots; 1: ready seed pose; 2: lift one KNEE with staff upright; 3: STAMP foot down shaking bells; 4: second SMALLER stamp echo; 5: settle; 6: ready seed pose. Return ONE STRIP. Preserve seed anatomy absolutely.",
+      "poses": [
+        "ready seed pose",
+        "lift one KNEE with staff upright",
+        "STAMP foot down shaking bells",
+        "second SMALLER stamp echo",
+        "settle",
+        "ready seed pose"
+      ],
+      "references": [
+        "seeds/isolde.png"
+      ],
+      "generationId": "62f3d928-0fa4-4411-a7b4-cd1a8358561d",
+      "raw": "raw/isolde-echo-r1.png",
+      "source": "/workspace/generated_images/exec-62f3d928-0fa4-4411-a7b4-cd1a8358561d.png",
+      "revision": "r1",
+      "transparent_background": true,
+      "routes": [
+        "echofoot"
+      ]
+    },
+    {
+      "character": "isolde",
+      "move": "hit",
+      "prompt": "Make ONE WHOLE continuous horizontal animation strip in a SINGLE image, transparent alpha background. Production original painted anime game sprites matching the attached seed EXACTLY. SAME face, hair, costume, implement, head size relative to body (head/body .34), including crouch/turn/fall. Camera three-quarter view facing right except intentional turns. No text, labels, panels, VFX, glows, particles, motion lines, shadows, scenery. ALL figures and implements COMPLETELY inside image, NEVER touching/overlapping adjacent figures. WIDE EMPTY TRANSPARENT GUTTERS. Use a wide 3:1 canvas with SIX equal invisible slots. Each figure must fit entirely within its own slot with 20% slot width empty margin on BOTH sides. Leave generous top/bottom space. Standing character height only about 38% of canvas height, SAME height in every move. All standing feet share one ground line. Do not enlarge any pose to fill space. Isolde: narrow light dancer with BELL-STAFF, blue white gold costume, short streamers stay ATTACHED to bell cluster. Never fans or loose ribbons. Full staff stays visible. EXACTLY 4 chronological full-body poses left to right in first 4 slots; last two slots EMPTY TRANSPARENT. 1: ready seed pose; 2: recoil pulling staff close; 3: catch balance; 4: ready seed pose. Return ONE STRIP. Preserve seed anatomy absolutely.",
+      "poses": [
+        "ready seed pose",
+        "recoil pulling staff close",
+        "catch balance",
+        "ready seed pose"
+      ],
+      "references": [
+        "seeds/isolde.png"
+      ],
+      "generationId": "09b6d711-db86-43af-a958-c5c89a939b56",
+      "raw": "raw/isolde-hit-r1.png",
+      "source": "/workspace/generated_images/exec-09b6d711-db86-43af-a958-c5c89a939b56.png",
+      "revision": "r1",
+      "transparent_background": true,
+      "routes": [
+        "hit"
+      ]
+    },
+    {
+      "character": "isolde",
+      "move": "block",
+      "prompt": "Make ONE WHOLE continuous horizontal animation strip in a SINGLE image, transparent alpha background. Production original painted anime game sprites matching the attached seed EXACTLY. SAME face, hair, costume, implement, head size relative to body (head/body .34), including crouch/turn/fall. Camera three-quarter view facing right except intentional turns. No text, labels, panels, VFX, glows, particles, motion lines, shadows, scenery. ALL figures and implements COMPLETELY inside image, NEVER touching/overlapping adjacent figures. WIDE EMPTY TRANSPARENT GUTTERS. Use a wide 3:1 canvas with SIX equal invisible slots. Each figure must fit entirely within its own slot with 20% slot width empty margin on BOTH sides. Leave generous top/bottom space. Standing character height only about 38% of canvas height, SAME height in every move. All standing feet share one ground line. Do not enlarge any pose to fill space. Isolde: narrow light dancer with BELL-STAFF, blue white gold costume, short streamers stay ATTACHED to bell cluster. Never fans or loose ribbons. Full staff stays visible. EXACTLY 4 chronological full-body poses left to right in first 4 slots; last two slots EMPTY TRANSPARENT. 1: ready seed pose; 2: staff held ACROSS body with BOTH hands; 3: absorb weight LOW with transverse staff; 4: reset seed guard. Return ONE STRIP. Preserve seed anatomy absolutely.",
+      "poses": [
+        "ready seed pose",
+        "staff held ACROSS body with BOTH hands",
+        "absorb weight LOW with transverse staff",
+        "reset seed guard"
+      ],
+      "references": [
+        "seeds/isolde.png"
+      ],
+      "generationId": "1abf7eb1-4bed-4c5f-af3f-c4695e49fff6",
+      "raw": "raw/isolde-block-r1.png",
+      "source": "/workspace/generated_images/exec-1abf7eb1-4bed-4c5f-af3f-c4695e49fff6.png",
+      "revision": "r1",
+      "transparent_background": true,
+      "routes": [
+        "block"
+      ]
+    },
+    {
+      "character": "isolde",
+      "move": "down",
+      "prompt": "Make ONE WHOLE continuous horizontal animation strip in a SINGLE image, transparent alpha background. Production original painted anime game sprites matching the attached seed EXACTLY. SAME face, hair, costume, implement, head size relative to body (head/body .34), including crouch/turn/fall. Camera three-quarter view facing right except intentional turns. No text, labels, panels, VFX, glows, particles, motion lines, shadows, scenery. ALL figures and implements COMPLETELY inside image, NEVER touching/overlapping adjacent figures. WIDE EMPTY TRANSPARENT GUTTERS. Use a wide 3:1 canvas with SIX equal invisible slots. Each figure must fit entirely within its own slot with 20% slot width empty margin on BOTH sides. Leave generous top/bottom space. Standing character height only about 38% of canvas height, SAME height in every move. All standing feet share one ground line. Do not enlarge any pose to fill space. Isolde: narrow light dancer with BELL-STAFF, blue white gold costume, short streamers stay ATTACHED to bell cluster. Never fans or loose ribbons. Full staff stays visible. EXACTLY 4 chronological full-body poses left to right in first 4 slots; last two slots EMPTY TRANSPARENT. 1: knees give way; 2: staff falls to her side; 3: sink sideways; 4: lie fully UNCONSCIOUS with full-length staff BESIDE her, body length equal standing seed, never get up. Return ONE STRIP. Preserve seed anatomy absolutely.",
+      "poses": [
+        "knees give way",
+        "staff falls to her side",
+        "sink sideways",
+        "lie fully UNCONSCIOUS with full-length staff BESIDE her, body length equal standing seed, never get up"
+      ],
+      "references": [
+        "seeds/isolde.png"
+      ],
+      "generationId": "4cb8823b-d013-4881-be93-04e5b0e7761a",
+      "raw": "raw/isolde-down-r1.png",
+      "source": "/workspace/generated_images/exec-4cb8823b-d013-4881-be93-04e5b0e7761a.png",
+      "revision": "r1",
+      "transparent_background": true,
+      "routes": [
+        "down"
+      ]
+    }
+  ],
+  "rejectedGenerations": [
+    {
+      "character": "odran",
+      "move": "arc",
+      "prompt": "Make ONE WHOLE continuous horizontal animation strip in a SINGLE image, transparent alpha background. Production original painted anime game sprites matching the attached seed EXACTLY. SAME face, hair, costume, implement, head size relative to body (head/body .34), including crouch/turn/fall. Camera three-quarter view facing right except intentional turns. No text, labels, panels, VFX, glows, particles, motion lines, shadows, scenery. ALL figures and implements COMPLETELY inside image, NEVER touching/overlapping adjacent figures. WIDE EMPTY TRANSPARENT GUTTERS. Use a wide 3:1 canvas with SIX equal invisible slots. Each figure must fit entirely within its own slot with 20% slot width empty margin on BOTH sides. Leave generous top/bottom space. Standing character height only about 38% of canvas height, SAME height in every move. All standing feet share one ground line. Do not enlarge any pose to fill space. Odran: broad planted gatewright, heavy deliberate leg-driven moves, huge hinge gauntlets, beard, brown apron, green coat. Never straight boxing punch or tabard swing. EXACTLY 6 chronological full-body poses left to right in first 6 slots; 1: ready seed pose; 2: load shoulder and coil LEFT; 3: sweep gauntlet FOREARM HORIZONTALLY across front; 4: broad sideways sweeping follow-through; 5: unwind; 6: ready seed pose. Return ONE STRIP. Preserve seed anatomy absolutely.",
+      "poses": [
+        "ready seed pose",
+        "load shoulder and coil LEFT",
+        "sweep gauntlet FOREARM HORIZONTALLY across front",
+        "broad sideways sweeping follow-through",
+        "unwind",
+        "ready seed pose"
+      ],
+      "references": [
+        "seeds/odran.png"
+      ],
+      "generationId": "b24f7225-9dfc-4b04-95e6-350c5e8936f3",
+      "raw": "raw/odran-arc-r1.png",
+      "source": "/workspace/generated_images/exec-b24f7225-9dfc-4b04-95e6-350c5e8936f3.png",
+      "revision": "r1",
+      "transparent_background": true,
+      "reason": "replaced by corrective whole-strip retry; not an artwork option"
+    },
+    {
+      "character": "odran",
+      "move": "communion",
+      "prompt": "Make ONE WHOLE continuous horizontal animation strip in a SINGLE image, transparent alpha background. Production original painted anime game sprites matching the attached seed EXACTLY. SAME face, hair, costume, implement, head size relative to body (head/body .34), including crouch/turn/fall. Camera three-quarter view facing right except intentional turns. No text, labels, panels, VFX, glows, particles, motion lines, shadows, scenery. ALL figures and implements COMPLETELY inside image, NEVER touching/overlapping adjacent figures. WIDE EMPTY TRANSPARENT GUTTERS. Use a wide 3:1 canvas with SIX equal invisible slots. Each figure must fit entirely within its own slot with 20% slot width empty margin on BOTH sides. Leave generous top/bottom space. Standing character height only about 38% of canvas height, SAME height in every move. All standing feet share one ground line. Do not enlarge any pose to fill space. Odran: broad planted gatewright, heavy deliberate leg-driven moves, huge hinge gauntlets, beard, brown apron, green coat. Never straight boxing punch or tabard swing. EXACTLY 6 chronological full-body poses left to right in first 6 slots; 1: ready seed pose; 2: both gauntlets together at chest, head bowed; 3: turn screen LEFT toward ally behind and open LEFT PALM; 4: sustain open left palm offering toward screen left; 5: lower hands; 6: ready seed pose. Return ONE STRIP. Preserve seed anatomy absolutely.",
+      "poses": [
+        "ready seed pose",
+        "both gauntlets together at chest, head bowed",
+        "turn screen LEFT toward ally behind and open LEFT PALM",
+        "sustain open left palm offering toward screen left",
+        "lower hands",
+        "ready seed pose"
+      ],
+      "references": [
+        "seeds/odran.png"
+      ],
+      "generationId": "91371c48-0806-40a3-a4f0-4ce13e0400d9",
+      "raw": "raw/odran-communion-r1.png",
+      "source": "/workspace/generated_images/exec-91371c48-0806-40a3-a4f0-4ce13e0400d9.png",
+      "revision": "r1",
+      "transparent_background": true,
+      "reason": "replaced by corrective whole-strip retry; not an artwork option"
+    },
+    {
+      "character": "odran",
+      "move": "lastlight",
+      "prompt": "Make ONE WHOLE continuous horizontal animation strip in a SINGLE image, transparent alpha background. Production original painted anime game sprites matching the attached seed EXACTLY. SAME face, hair, costume, implement, head size relative to body (head/body .34), including crouch/turn/fall. Camera three-quarter view facing right except intentional turns. No text, labels, panels, VFX, glows, particles, motion lines, shadows, scenery. ALL figures and implements COMPLETELY inside image, NEVER touching/overlapping adjacent figures. WIDE EMPTY TRANSPARENT GUTTERS. Use a wide 3:1 canvas with SIX equal invisible slots. Each figure must fit entirely within its own slot with 20% slot width empty margin on BOTH sides. Leave generous top/bottom space. Standing character height only about 38% of canvas height, SAME height in every move. All standing feet share one ground line. Do not enlarge any pose to fill space. Odran: broad planted gatewright, heavy deliberate leg-driven moves, huge hinge gauntlets, beard, brown apron, green coat. Never straight boxing punch or tabard swing. EXACTLY 6 chronological full-body poses left to right in first 6 slots; 1: ready seed pose; 2: deep crouch BOTH gauntlets gathered low; 3: drive rising TWO-HANDED blow; 4: both gauntlets extended high follow-through; 5: lift from stance; 6: ready seed pose. Return ONE STRIP. Preserve seed anatomy absolutely.",
+      "poses": [
+        "ready seed pose",
+        "deep crouch BOTH gauntlets gathered low",
+        "drive rising TWO-HANDED blow",
+        "both gauntlets extended high follow-through",
+        "lift from stance",
+        "ready seed pose"
+      ],
+      "references": [
+        "seeds/odran.png"
+      ],
+      "generationId": "6cc52dc0-2416-465a-bc2b-83a2033a1e89",
+      "raw": "raw/odran-lastlight-r1.png",
+      "source": "/workspace/generated_images/exec-6cc52dc0-2416-465a-bc2b-83a2033a1e89.png",
+      "revision": "r1",
+      "transparent_background": true,
+      "reason": "replaced by corrective whole-strip retry; not an artwork option"
+    },
+    {
+      "character": "odran",
+      "move": "attack",
+      "prompt": "Create one continuous horizontal production sprite animation strip, EXACTLY SIX full-body chronological poses left to right with wide transparent gutters. Use attached Odran as exact character model: same face hair costume massive iron hinge gauntlets, same head/body ratio about .34, same head size relative to body even crouched, same three-quarter view facing screen right, planted legs. Original painted anime game sprite style identical to seed. No text, labels, VFX, glows, particles, motion lines, shadows, scenery. Full gauntlets and body never cropped. Equal scale for all six figures; standing soles share ground line. ATTACK: 1 exact seed low guard ready pose; 2 draw large right gauntlet back low with deliberate heavy weight through legs; 3 wind up hooking gauntlet forward-right; 4 contact extended heavy hooking blow forward-right with planted feet, clearly curved hook not a straight punch; 5 pull back into low guard; 6 exact seed ready. Keep seed's head proportions absolutely unchanged. One whole strip, not separate images. Transparent alpha background.",
+      "references": [
+        "seeds/odran.png"
+      ],
+      "generationId": "ab48104e-1401-499c-909c-39b44c2323df",
+      "raw": "raw/odran-attack-layout-rejected.png",
+      "revision": "layout-rejected",
+      "reason": "Narrow gutters/touching silhouettes; rejected before cell extraction. Not final.",
+      "transparent_background": true
+    }
+  ]
+}

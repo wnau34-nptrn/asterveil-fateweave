@@ -1,0 +1,44 @@
+{
+ "tolerance": 0.12,
+ "minInliers": 12,
+ "report": {
+  "isolde-down": [
+   {
+    "frame": 0,
+    "height": 460,
+    "scale": 1.0,
+    "inliers": 2659,
+    "idle": true,
+    "status": "idle"
+   },
+   {
+    "frame": 1,
+    "height": 469,
+    "scale": 1.095,
+    "inliers": 49,
+    "status": "ok"
+   },
+   {
+    "frame": 2,
+    "height": 423,
+    "scale": 1.093,
+    "inliers": 26,
+    "status": "ok"
+   },
+   {
+    "frame": 3,
+    "height": 388,
+    "scale": 0.0,
+    "inliers": 10,
+    "status": "not-measured"
+   },
+   {
+    "frame": 4,
+    "height": 252,
+    "scale": 0.0,
+    "inliers": 5,
+    "status": "not-measured"
+   }
+  ]
+ }
+}
