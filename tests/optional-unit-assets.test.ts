@@ -35,7 +35,7 @@ describe('optional unit art scheduling',()=>{
   let decoded=0;
   for(const name of ['lyra','hunter'] as const){
    const meta=manifest[name],atlas=JSON.parse(readFileSync('public/assets/units/'+meta.atlas,'utf8'));
-   expect(Object.keys(atlas.frames)).toHaveLength(22);expect(meta.decodedBytes).toBe(meta.width*meta.height*4);decoded+=meta.decodedBytes;
+   expect(Object.keys(atlas.frames)).toHaveLength(name==='lyra'?38:22);expect(meta.decodedBytes).toBe(meta.width*meta.height*4);decoded+=meta.decodedBytes;
    for(const value of Object.values(atlas.frames) as {sourceSize:{w:number;h:number};frame:{x:number;y:number;w:number;h:number};spriteSourceSize:{x:number;y:number;w:number;h:number}}[]){
     expect(value.sourceSize).toEqual({w:512,h:512});expect(value.frame.x+value.frame.w).toBeLessThanOrEqual(meta.width);expect(value.frame.y+value.frame.h).toBeLessThanOrEqual(meta.height);
     expect(value.spriteSourceSize.x+value.spriteSourceSize.w).toBeLessThanOrEqual(512);expect(value.spriteSourceSize.y+value.spriteSourceSize.h).toBeLessThanOrEqual(512);
@@ -43,6 +43,8 @@ describe('optional unit art scheduling',()=>{
    expect(unitAtlasUrls(name)[0]).toContain(meta.image);expect(unitAtlasUrls(name)[1]).toContain(meta.atlas);
    expect(meta.image).toMatch(/\.[a-f0-9]{12}\.webp$/);
   }
-  expect(decoded).toBeLessThan(50_331_648*.25);
+  // The pilot repack cut the two 22-cell grids by over 75%. LYRA-002 then added nine unique Mark/Parry stance poses
+ // (Lyra 8.5 MiB decoded, reported to the owner); keep the total below 13 MiB so further growth is a conscious choice.
+ expect(decoded).toBeLessThan(13*1024*1024);
  });
 });

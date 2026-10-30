@@ -1,5 +1,13 @@
 # Codex → Claude handoff
 
+
+## 2026-10-30 — Claude: นำ LYRA-002 (Mark / Parry stance ของไลรา, Codex PR #114 R1) เข้าเกม — รอเจ้าของดู motion
+
+- เจ้าของ: “เอาตามที่คุณแนะนำ” = ใช้ R1 นำเข้าแล้วตัดสินจากคลิปจริง; branch `claude/lyra-002-mark-parry` (รวม incoming จาก #114)
+- atlas `lyra` 22 → 38 เฟรม (Mark 22–29, Parry stance 30–37), transform เดียว scale .5 วางที่ (0,208), เฟรมเดิม 0–21 ตรงพิกเซล; registry `tracer` เพิ่ม clips `mark`/`parry`; AV02 จึงครบ
+- **งบภาพเกิน:** lyra 8.51 MiB decoded / 2.31 MB (เดิม 5.91 MiB / 1.54 MB); เทสต์ `optional-unit-assets` ปรับขอบเป็น lyra+hunter < 13 MiB พร้อมเหตุผล
+- หลักฐาน: `docs/combat-presentation/lyra-002-slice/README_TH.md` (คลิปจริง 390px ก่อน/หลัง 3 กรณี)
+
 ## 2026-10-30 — Claude: แก้ animation/VFX ตาม audit AV02–AV08 (ยกเว้นอัศวิน) + นำภาพ W4–W8 เข้าเกม — PR #113 merged `42e7e6f`
 
 - **เจ้าของอนุมัติ 2026-10-30** (“อนุมัติและทำการตรวจสอบ codex ที่ส่งเข้ามา”) = อนุมัติ motion ทุกชุดใน #113 และสมมติฐานการเลือก candidate (A7 ตาม Codex, Saint/Dance R1, song R2); CI quality + browser 4 shards ผ่านบน `8826e45` แล้ว merge เป็น `42e7e6f` (Pages เผยแพร่จาก push นี้)
