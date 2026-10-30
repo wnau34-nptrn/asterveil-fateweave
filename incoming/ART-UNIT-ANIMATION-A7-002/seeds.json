@@ -1,0 +1,48 @@
+[
+  {
+    "identity": "lalin",
+    "base_commit": "8616ad3155a179e05210fe6aa552e6d234c9bd24",
+    "atlas": "public/assets/art/units_mercs.webp",
+    "atlas_git_blob": "2f2ed2ebdca12584d9324c53fcc67694c68b0d22",
+    "cell_zero_based": 8,
+    "crop_xyxy": [
+      0,
+      2048,
+      512,
+      2560
+    ],
+    "size": [
+      512,
+      512
+    ],
+    "facing": "right",
+    "runtime_sole_reference_y": 497,
+    "file": "seeds/lalin.png",
+    "sha256": "3fc6f8259ca286dc11d2952c05a19518896d9cb56ea4a361d4c11c9fffccbeb6",
+    "pixel_identical_to_pinned_atlas": true,
+    "copied_from": "incoming/ART-UNIT-ANIMATION-A7-001/dancers/lalin/seeds/lalin.png"
+  },
+  {
+    "identity": "wila",
+    "base_commit": "8616ad3155a179e05210fe6aa552e6d234c9bd24",
+    "atlas": "public/assets/art/units_mercs.webp",
+    "atlas_git_blob": "2f2ed2ebdca12584d9324c53fcc67694c68b0d22",
+    "cell_zero_based": 9,
+    "crop_xyxy": [
+      512,
+      2048,
+      1024,
+      2560
+    ],
+    "size": [
+      512,
+      512
+    ],
+    "facing": "right",
+    "runtime_sole_reference_y": 497,
+    "file": "seeds/wila.png",
+    "sha256": "09aa9847771b968dfa1d15fb4c36816518a1e6d709d3812923559a7a7e0e212d",
+    "pixel_identical_to_pinned_atlas": true,
+    "copied_from": "incoming/ART-UNIT-ANIMATION-A7-001/dancers/wila/seeds/wila.png"
+  }
+]

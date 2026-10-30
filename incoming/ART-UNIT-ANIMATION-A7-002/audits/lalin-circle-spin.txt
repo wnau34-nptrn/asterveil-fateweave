@@ -1,0 +1,1 @@
+lalin-circle-spin: median head scale 1.073; drift []; not measured [3, 4]

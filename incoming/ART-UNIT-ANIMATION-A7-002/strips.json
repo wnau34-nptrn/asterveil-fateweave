@@ -1,0 +1,953 @@
+[
+  {
+    "identity": "lalin",
+    "move": "dance-strike",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "poised ready",
+      "gather fan across body",
+      "step into fan strike right",
+      "extended fan flourish",
+      "reverse weight",
+      "rightward ready"
+    ],
+    "routes_or_intents": [
+      "attack"
+    ],
+    "raw_file": "raw/lalin-dance-strike.png",
+    "file": "spaced/lalin-dance-strike.png",
+    "cell_size": [
+      640,
+      512
+    ],
+    "scale": 0.5389224489512571,
+    "seed_audit_factor": 0.42,
+    "shared_y_reference": 497,
+    "transforms": [
+      {
+        "frame_1based": 1,
+        "source_box": [
+          13,
+          200,
+          349,
+          548
+        ],
+        "position": [
+          230,
+          311
+        ],
+        "tile_size": [
+          181,
+          188
+        ]
+      },
+      {
+        "frame_1based": 2,
+        "source_box": [
+          370,
+          207,
+          669,
+          549
+        ],
+        "position": [
+          240,
+          315
+        ],
+        "tile_size": [
+          161,
+          184
+        ]
+      },
+      {
+        "frame_1based": 3,
+        "source_box": [
+          704,
+          207,
+          1100,
+          549
+        ],
+        "position": [
+          214,
+          315
+        ],
+        "tile_size": [
+          213,
+          184
+        ]
+      },
+      {
+        "frame_1based": 4,
+        "source_box": [
+          1089,
+          169,
+          1459,
+          548
+        ],
+        "position": [
+          220,
+          294
+        ],
+        "tile_size": [
+          199,
+          204
+        ]
+      },
+      {
+        "frame_1based": 5,
+        "source_box": [
+          1472,
+          206,
+          1788,
+          550
+        ],
+        "position": [
+          235,
+          314
+        ],
+        "tile_size": [
+          170,
+          185
+        ]
+      },
+      {
+        "frame_1based": 6,
+        "source_box": [
+          1825,
+          202,
+          2158,
+          548
+        ],
+        "position": [
+          230,
+          312
+        ],
+        "tile_size": [
+          179,
+          186
+        ]
+      }
+    ],
+    "median": 1.116,
+    "maximum_measured": 1.148,
+    "not_measured": [],
+    "numeric_gate": "pass",
+    "owner_artwork_selection": "pending",
+    "owner_motion_approval": "pending"
+  },
+  {
+    "identity": "lalin",
+    "move": "circle-spin",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "gather arms",
+      "turn through side",
+      "back-facing pivot",
+      "continue through opposite side",
+      "reopen fans",
+      "settle right"
+    ],
+    "routes_or_intents": [
+      "rounddance"
+    ],
+    "raw_file": "raw/lalin-circle-spin.png",
+    "file": "spaced/lalin-circle-spin.png",
+    "cell_size": [
+      640,
+      512
+    ],
+    "scale": 0.5107654267430516,
+    "seed_audit_factor": 0.42,
+    "shared_y_reference": 497,
+    "transforms": [
+      {
+        "frame_1based": 1,
+        "source_box": [
+          9,
+          172,
+          323,
+          635
+        ],
+        "position": [
+          240,
+          262
+        ],
+        "tile_size": [
+          160,
+          236
+        ]
+      },
+      {
+        "frame_1based": 2,
+        "source_box": [
+          306,
+          110,
+          675,
+          635
+        ],
+        "position": [
+          226,
+          230
+        ],
+        "tile_size": [
+          188,
+          268
+        ]
+      },
+      {
+        "frame_1based": 3,
+        "source_box": [
+          672,
+          134,
+          1080,
+          635
+        ],
+        "position": [
+          216,
+          243
+        ],
+        "tile_size": [
+          208,
+          256
+        ]
+      },
+      {
+        "frame_1based": 4,
+        "source_box": [
+          1042,
+          141,
+          1453,
+          633
+        ],
+        "position": [
+          215,
+          246
+        ],
+        "tile_size": [
+          210,
+          251
+        ]
+      },
+      {
+        "frame_1based": 5,
+        "source_box": [
+          1420,
+          177,
+          1827,
+          634
+        ],
+        "position": [
+          216,
+          265
+        ],
+        "tile_size": [
+          208,
+          233
+        ]
+      },
+      {
+        "frame_1based": 6,
+        "source_box": [
+          1794,
+          156,
+          2166,
+          634
+        ],
+        "position": [
+          225,
+          254
+        ],
+        "tile_size": [
+          190,
+          244
+        ]
+      }
+    ],
+    "median": 1.0725,
+    "maximum_measured": 1.085,
+    "not_measured": [
+      3,
+      4
+    ],
+    "numeric_gate": "pass",
+    "owner_artwork_selection": "pending",
+    "owner_motion_approval": "pending"
+  },
+  {
+    "identity": "lalin",
+    "move": "echo-closing-step",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "gather low",
+      "crossing foot placement",
+      "forward fan accent",
+      "rising open flourish",
+      "soften closing step",
+      "settle right"
+    ],
+    "routes_or_intents": [
+      "echofoot"
+    ],
+    "raw_file": "raw/lalin-echo-closing-step.png",
+    "file": "spaced/lalin-echo-closing-step.png",
+    "cell_size": [
+      640,
+      512
+    ],
+    "scale": 0.5067553990662148,
+    "seed_audit_factor": 0.42,
+    "shared_y_reference": 497,
+    "transforms": [
+      {
+        "frame_1based": 1,
+        "source_box": [
+          14,
+          169,
+          324,
+          658
+        ],
+        "position": [
+          242,
+          251
+        ],
+        "tile_size": [
+          157,
+          248
+        ]
+      },
+      {
+        "frame_1based": 2,
+        "source_box": [
+          317,
+          176,
+          674,
+          660
+        ],
+        "position": [
+          230,
+          254
+        ],
+        "tile_size": [
+          181,
+          245
+        ]
+      },
+      {
+        "frame_1based": 3,
+        "source_box": [
+          654,
+          171,
+          1094,
+          659
+        ],
+        "position": [
+          208,
+          252
+        ],
+        "tile_size": [
+          223,
+          247
+        ]
+      },
+      {
+        "frame_1based": 4,
+        "source_box": [
+          1101,
+          78,
+          1517,
+          661
+        ],
+        "position": [
+          214,
+          205
+        ],
+        "tile_size": [
+          211,
+          295
+        ]
+      },
+      {
+        "frame_1based": 5,
+        "source_box": [
+          1477,
+          172,
+          1808,
+          662
+        ],
+        "position": [
+          236,
+          252
+        ],
+        "tile_size": [
+          168,
+          248
+        ]
+      },
+      {
+        "frame_1based": 6,
+        "source_box": [
+          1808,
+          167,
+          2161,
+          661
+        ],
+        "position": [
+          230,
+          250
+        ],
+        "tile_size": [
+          179,
+          250
+        ]
+      }
+    ],
+    "median": 1.1324999999999998,
+    "maximum_measured": 1.169,
+    "not_measured": [],
+    "numeric_gate": "pass",
+    "owner_artwork_selection": "pending",
+    "owner_motion_approval": "pending"
+  },
+  {
+    "identity": "lalin",
+    "move": "hit",
+    "frame_count": 4,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "ready",
+      "recoil and wince",
+      "catch balance",
+      "guard"
+    ],
+    "routes_or_intents": [
+      "hit"
+    ],
+    "raw_file": "raw/lalin-hit.png",
+    "file": "spaced/lalin-hit.png",
+    "cell_size": [
+      640,
+      512
+    ],
+    "scale": 0.382675408142785,
+    "seed_audit_factor": 0.42,
+    "shared_y_reference": 497,
+    "transforms": [
+      {
+        "frame_1based": 1,
+        "source_box": [
+          26,
+          134,
+          522,
+          614
+        ],
+        "position": [
+          225,
+          314
+        ],
+        "tile_size": [
+          190,
+          184
+        ]
+      },
+      {
+        "frame_1based": 2,
+        "source_box": [
+          583,
+          155,
+          1062,
+          609
+        ],
+        "position": [
+          228,
+          323
+        ],
+        "tile_size": [
+          183,
+          174
+        ]
+      },
+      {
+        "frame_1based": 3,
+        "source_box": [
+          1137,
+          174,
+          1592,
+          608
+        ],
+        "position": [
+          233,
+          330
+        ],
+        "tile_size": [
+          174,
+          166
+        ]
+      },
+      {
+        "frame_1based": 4,
+        "source_box": [
+          1687,
+          143,
+          2159,
+          614
+        ],
+        "position": [
+          230,
+          318
+        ],
+        "tile_size": [
+          181,
+          180
+        ]
+      }
+    ],
+    "median": 1.0270000000000001,
+    "maximum_measured": 1.057,
+    "not_measured": [],
+    "numeric_gate": "pass",
+    "owner_artwork_selection": "pending",
+    "owner_motion_approval": "pending"
+  },
+  {
+    "identity": "lalin",
+    "move": "block",
+    "frame_count": 4,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "raise protective arms",
+      "brace behind crossed gauntlets or fans",
+      "absorb weight low",
+      "reset guard"
+    ],
+    "routes_or_intents": [
+      "block"
+    ],
+    "raw_file": "raw/lalin-block.png",
+    "file": "spaced/lalin-block.png",
+    "cell_size": [
+      640,
+      512
+    ],
+    "scale": 0.33919213848361895,
+    "seed_audit_factor": 0.42,
+    "shared_y_reference": 497,
+    "transforms": [
+      {
+        "frame_1based": 1,
+        "source_box": [
+          19,
+          48,
+          544,
+          688
+        ],
+        "position": [
+          231,
+          281
+        ],
+        "tile_size": [
+          178,
+          217
+        ]
+      },
+      {
+        "frame_1based": 2,
+        "source_box": [
+          566,
+          103,
+          1071,
+          689
+        ],
+        "position": [
+          234,
+          300
+        ],
+        "tile_size": [
+          171,
+          199
+        ]
+      },
+      {
+        "frame_1based": 3,
+        "source_box": [
+          1104,
+          182,
+          1587,
+          688
+        ],
+        "position": [
+          238,
+          326
+        ],
+        "tile_size": [
+          164,
+          172
+        ]
+      },
+      {
+        "frame_1based": 4,
+        "source_box": [
+          1606,
+          102,
+          2172,
+          689
+        ],
+        "position": [
+          224,
+          299
+        ],
+        "tile_size": [
+          192,
+          199
+        ]
+      }
+    ],
+    "median": 1.041,
+    "maximum_measured": 1.053,
+    "not_measured": [],
+    "numeric_gate": "pass",
+    "owner_artwork_selection": "pending",
+    "owner_motion_approval": "pending"
+  },
+  {
+    "identity": "lalin",
+    "move": "down",
+    "frame_count": 4,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "knees give way",
+      "hand and knee reach ground",
+      "sink to seated slump",
+      "lie unconscious and hold"
+    ],
+    "routes_or_intents": [
+      "down"
+    ],
+    "raw_file": "raw/lalin-down.png",
+    "file": "spaced/lalin-down.png",
+    "cell_size": [
+      640,
+      512
+    ],
+    "scale": 0.4027121705709913,
+    "seed_audit_factor": 0.42,
+    "shared_y_reference": 497,
+    "transforms": [
+      {
+        "frame_1based": 1,
+        "source_box": [
+          9,
+          135,
+          520,
+          603
+        ],
+        "position": [
+          217,
+          310
+        ],
+        "tile_size": [
+          206,
+          188
+        ]
+      },
+      {
+        "frame_1based": 2,
+        "source_box": [
+          503,
+          246,
+          1065,
+          596
+        ],
+        "position": [
+          207,
+          354
+        ],
+        "tile_size": [
+          226,
+          141
+        ]
+      },
+      {
+        "frame_1based": 3,
+        "source_box": [
+          1067,
+          258,
+          1563,
+          612
+        ],
+        "position": [
+          220,
+          359
+        ],
+        "tile_size": [
+          200,
+          143
+        ]
+      },
+      {
+        "frame_1based": 4,
+        "source_box": [
+          1553,
+          399,
+          2163,
+          610
+        ],
+        "position": [
+          197,
+          416
+        ],
+        "tile_size": [
+          246,
+          85
+        ]
+      }
+    ],
+    "median": 1.076,
+    "maximum_measured": 1.078,
+    "not_measured": [
+      4
+    ],
+    "numeric_gate": "pass",
+    "owner_artwork_selection": "pending",
+    "owner_motion_approval": "pending"
+  },
+  {
+    "identity": "wila",
+    "move": "echo-closing-step",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "gather low",
+      "crossing foot placement",
+      "forward fan accent",
+      "rising open flourish",
+      "soften closing step",
+      "settle right"
+    ],
+    "routes_or_intents": [
+      "echofoot"
+    ],
+    "raw_file": "raw/wila-echo-closing-step.png",
+    "file": "spaced/wila-echo-closing-step.png",
+    "cell_size": [
+      640,
+      512
+    ],
+    "scale": 0.498875946431134,
+    "seed_audit_factor": 0.42,
+    "shared_y_reference": 497,
+    "transforms": [
+      {
+        "frame_1based": 1,
+        "source_box": [
+          23,
+          164,
+          303,
+          662
+        ],
+        "position": [
+          250,
+          250
+        ],
+        "tile_size": [
+          140,
+          248
+        ]
+      },
+      {
+        "frame_1based": 2,
+        "source_box": [
+          340,
+          170,
+          660,
+          664
+        ],
+        "position": [
+          240,
+          253
+        ],
+        "tile_size": [
+          160,
+          246
+        ]
+      },
+      {
+        "frame_1based": 3,
+        "source_box": [
+          693,
+          163,
+          1043,
+          664
+        ],
+        "position": [
+          232,
+          250
+        ],
+        "tile_size": [
+          175,
+          250
+        ]
+      },
+      {
+        "frame_1based": 4,
+        "source_box": [
+          1064,
+          75,
+          1455,
+          669
+        ],
+        "position": [
+          222,
+          206
+        ],
+        "tile_size": [
+          195,
+          296
+        ]
+      },
+      {
+        "frame_1based": 5,
+        "source_box": [
+          1452,
+          165,
+          1773,
+          664
+        ],
+        "position": [
+          240,
+          251
+        ],
+        "tile_size": [
+          160,
+          249
+        ]
+      },
+      {
+        "frame_1based": 6,
+        "source_box": [
+          1802,
+          165,
+          2150,
+          664
+        ],
+        "position": [
+          233,
+          251
+        ],
+        "tile_size": [
+          174,
+          249
+        ]
+      }
+    ],
+    "median": 1.1275,
+    "maximum_measured": 1.163,
+    "not_measured": [],
+    "numeric_gate": "pass",
+    "owner_artwork_selection": "pending",
+    "owner_motion_approval": "pending"
+  },
+  {
+    "identity": "wila",
+    "move": "down",
+    "frame_count": 4,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "knees give way",
+      "hand and knee reach ground",
+      "sink to seated slump",
+      "lie unconscious and hold"
+    ],
+    "routes_or_intents": [
+      "down"
+    ],
+    "raw_file": "raw/wila-down.png",
+    "file": "spaced/wila-down.png",
+    "cell_size": [
+      640,
+      512
+    ],
+    "scale": 0.42709543350264234,
+    "seed_audit_factor": 0.42,
+    "shared_y_reference": 497,
+    "transforms": [
+      {
+        "frame_1based": 1,
+        "source_box": [
+          19,
+          179,
+          500,
+          572
+        ],
+        "position": [
+          218,
+          330
+        ],
+        "tile_size": [
+          205,
+          168
+        ]
+      },
+      {
+        "frame_1based": 2,
+        "source_box": [
+          539,
+          273,
+          1036,
+          580
+        ],
+        "position": [
+          214,
+          371
+        ],
+        "tile_size": [
+          212,
+          131
+        ]
+      },
+      {
+        "frame_1based": 3,
+        "source_box": [
+          1050,
+          247,
+          1523,
+          585
+        ],
+        "position": [
+          219,
+          359
+        ],
+        "tile_size": [
+          202,
+          144
+        ]
+      },
+      {
+        "frame_1based": 4,
+        "source_box": [
+          1530,
+          396,
+          2156,
+          598
+        ],
+        "position": [
+          186,
+          423
+        ],
+        "tile_size": [
+          267,
+          86
+        ]
+      }
+    ],
+    "median": 1.098,
+    "maximum_measured": 1.108,
+    "not_measured": [
+      4
+    ],
+    "numeric_gate": "pass",
+    "owner_artwork_selection": "pending",
+    "owner_motion_approval": "pending"
+  }
+]

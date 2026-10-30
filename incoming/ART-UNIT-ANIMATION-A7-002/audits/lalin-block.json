@@ -1,0 +1,44 @@
+{
+ "tolerance": 0.12,
+ "minInliers": 12,
+ "report": {
+  "lalin-block": [
+   {
+    "frame": 0,
+    "height": 198,
+    "scale": 1.0,
+    "inliers": 837,
+    "idle": true,
+    "status": "idle"
+   },
+   {
+    "frame": 1,
+    "height": 217,
+    "scale": 1.053,
+    "inliers": 105,
+    "status": "ok"
+   },
+   {
+    "frame": 2,
+    "height": 199,
+    "scale": 1.038,
+    "inliers": 129,
+    "status": "ok"
+   },
+   {
+    "frame": 3,
+    "height": 172,
+    "scale": 1.044,
+    "inliers": 159,
+    "status": "ok"
+   },
+   {
+    "frame": 4,
+    "height": 199,
+    "scale": 1.002,
+    "inliers": 267,
+    "status": "ok"
+   }
+  ]
+ }
+}
