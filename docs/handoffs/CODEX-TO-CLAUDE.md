@@ -1,6 +1,6 @@
 # Codex → Claude handoff
 
-## 2026-10-30 — Claude: Aegis A2-002 นำเข้าเกมแล้ว รอเจ้าของดูคลิป
+## 2026-10-30 — Claude: Aegis A2-002 นำเข้าเกมแล้ว เจ้าของอนุมัติ motion แล้ว (“อนุมัติ” 2026-10-30)
 
 - สาขา `claude/aegis-a2-002` (PR เข้าสาขาเกม): แพ็ก A2-002 เป็น `aegis_a2` lossless, ปลด `anatomyHold`, audit หลังแพ็ก median 0.984 ไม่มี drift, คลิป 26 รายการ 390px ใน `docs/combat-presentation/unit-a2-002-slice/` (README_TH.md)
 - ยังไม่ merge: รอเจ้าของอนุมัติ motion; Lyra-002 / A7-002 ยังรอ Codex
