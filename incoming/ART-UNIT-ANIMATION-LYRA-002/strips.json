@@ -1,0 +1,502 @@
+[
+  {
+    "identity": "tracer",
+    "move": "mark",
+    "revision": "r1",
+    "file": "raw/lyra-mark-r1.png",
+    "sha256": "09d0864016faa54438efb9bec7aa49cdc3215d003323462dcae01793cd0f940e",
+    "frames": 8,
+    "frame_size": [
+      1024,
+      640
+    ],
+    "frame_order": [
+      "idle (exact seed)",
+      "raise sword",
+      "rotate wrist / point forward",
+      "quiet chest-height point (contact)",
+      "hold point",
+      "ease sword back",
+      "reverse raised transition toward idle",
+      "idle (exact seed)"
+    ],
+    "contact_frame_one_based": 4,
+    "hold_frames_one_based": [
+      4,
+      5
+    ],
+    "source_frame_order_one_based": [
+      1,
+      2,
+      3,
+      5,
+      5,
+      6,
+      2,
+      8
+    ],
+    "facing": "right",
+    "loop": false,
+    "damage": false,
+    "suggested_action": "mark",
+    "source": "source-sheets/lyra-mark-source.png",
+    "source_sha256": "863b396a6642b731c6df155ad7a19a86e5d4c5bb50acbad5f111f4e6e855a7d8",
+    "source_raster_to_logical_scale": 2.5384615384615383,
+    "shared_logical_display_scale": 1.0,
+    "seed_offset_xy": [
+      256,
+      64
+    ],
+    "sole_y_in_original_seed": 511,
+    "sole_y_in_delivery": 575,
+    "clear_gutters_px": [
+      481,
+      409,
+      379,
+      392,
+      400,
+      428,
+      481
+    ],
+    "placements": [
+      {
+        "frame": 1,
+        "source_frame": 1,
+        "alpha_bounds": [
+          256,
+          79,
+          768,
+          576
+        ],
+        "exact_seed": true,
+        "paste_xy": [
+          256,
+          64
+        ]
+      },
+      {
+        "frame": 2,
+        "source_frame": 2,
+        "alpha_bounds": [
+          225,
+          38,
+          799,
+          576
+        ],
+        "exact_seed": false,
+        "source_crop": [
+          257,
+          366,
+          483,
+          578
+        ],
+        "paste_xy": [
+          225,
+          38
+        ],
+        "resized_size": [
+          574,
+          538
+        ]
+      },
+      {
+        "frame": 3,
+        "source_frame": 3,
+        "alpha_bounds": [
+          184,
+          51,
+          841,
+          576
+        ],
+        "exact_seed": false,
+        "source_crop": [
+          479,
+          371,
+          738,
+          578
+        ],
+        "paste_xy": [
+          184,
+          51
+        ],
+        "resized_size": [
+          657,
+          525
+        ]
+      },
+      {
+        "frame": 4,
+        "source_frame": 5,
+        "alpha_bounds": [
+          196,
+          48,
+          828,
+          576
+        ],
+        "exact_seed": false,
+        "source_crop": [
+          967,
+          370,
+          1216,
+          578
+        ],
+        "paste_xy": [
+          196,
+          48
+        ],
+        "resized_size": [
+          632,
+          528
+        ]
+      },
+      {
+        "frame": 5,
+        "source_frame": 5,
+        "alpha_bounds": [
+          196,
+          48,
+          828,
+          576
+        ],
+        "exact_seed": false,
+        "source_crop": [
+          967,
+          370,
+          1216,
+          578
+        ],
+        "paste_xy": [
+          196,
+          48
+        ],
+        "resized_size": [
+          632,
+          528
+        ]
+      },
+      {
+        "frame": 6,
+        "source_frame": 6,
+        "alpha_bounds": [
+          204,
+          45,
+          821,
+          576
+        ],
+        "exact_seed": false,
+        "source_crop": [
+          1208,
+          369,
+          1451,
+          578
+        ],
+        "paste_xy": [
+          204,
+          45
+        ],
+        "resized_size": [
+          617,
+          531
+        ]
+      },
+      {
+        "frame": 7,
+        "source_frame": 2,
+        "alpha_bounds": [
+          225,
+          38,
+          799,
+          576
+        ],
+        "exact_seed": false,
+        "source_crop": [
+          257,
+          366,
+          483,
+          578
+        ],
+        "paste_xy": [
+          225,
+          38
+        ],
+        "resized_size": [
+          574,
+          538
+        ]
+      },
+      {
+        "frame": 8,
+        "source_frame": 8,
+        "alpha_bounds": [
+          256,
+          79,
+          768,
+          576
+        ],
+        "exact_seed": true,
+        "paste_xy": [
+          256,
+          64
+        ]
+      }
+    ],
+    "anatomy": {
+      "report": "audit/mark.json",
+      "median_generated_head_scale": 0.981,
+      "maximum_head_scale_including_idle": 1.0,
+      "measured_cells": 8,
+      "not_measured": [],
+      "tool_tolerance": 0.12
+    }
+  },
+  {
+    "identity": "tracer",
+    "move": "parry-stance",
+    "revision": "r1",
+    "file": "raw/lyra-parry-stance-r1.png",
+    "sha256": "325de124bb6bdc9edce7be5918a8c305cdd10bba1f809b794268b0f7f6e8180b",
+    "frames": 8,
+    "frame_size": [
+      1024,
+      640
+    ],
+    "frame_order": [
+      "idle (exact seed)",
+      "rear-foot step / weight back",
+      "raise diagonal guard",
+      "full bent-knee guard (contact)",
+      "hold same guard",
+      "ease guard",
+      "relax toward ready",
+      "idle (exact seed)"
+    ],
+    "contact_frame_one_based": 4,
+    "hold_frames_one_based": [
+      4,
+      5
+    ],
+    "source_frame_order_one_based": [
+      1,
+      2,
+      3,
+      5,
+      5,
+      6,
+      7,
+      8
+    ],
+    "facing": "right",
+    "loop": false,
+    "damage": false,
+    "suggested_action": "parry",
+    "source": "source-sheets/lyra-parry-stance-source.png",
+    "source_sha256": "ee29095821a2a5b695d5c1e17fbfc7887b5ba27ef1dee9dad51da4517aefb42d",
+    "source_raster_to_logical_scale": 1.896551724137931,
+    "shared_logical_display_scale": 1.0,
+    "seed_offset_xy": [
+      256,
+      64
+    ],
+    "sole_y_in_original_seed": 511,
+    "sole_y_in_delivery": 575,
+    "clear_gutters_px": [
+      521,
+      538,
+      543,
+      538,
+      548,
+      545,
+      522
+    ],
+    "placements": [
+      {
+        "frame": 1,
+        "source_frame": 1,
+        "alpha_bounds": [
+          256,
+          79,
+          768,
+          576
+        ],
+        "exact_seed": true,
+        "paste_xy": [
+          256,
+          64
+        ]
+      },
+      {
+        "frame": 2,
+        "source_frame": 2,
+        "alpha_bounds": [
+          265,
+          62,
+          760,
+          576
+        ],
+        "exact_seed": false,
+        "source_crop": [
+          287,
+          274,
+          548,
+          545
+        ],
+        "paste_xy": [
+          265,
+          62
+        ],
+        "resized_size": [
+          495,
+          514
+        ]
+      },
+      {
+        "frame": 3,
+        "source_frame": 3,
+        "alpha_bounds": [
+          274,
+          62,
+          750,
+          576
+        ],
+        "exact_seed": false,
+        "source_crop": [
+          550,
+          274,
+          801,
+          545
+        ],
+        "paste_xy": [
+          274,
+          62
+        ],
+        "resized_size": [
+          476,
+          514
+        ]
+      },
+      {
+        "frame": 4,
+        "source_frame": 5,
+        "alpha_bounds": [
+          269,
+          94,
+          755,
+          576
+        ],
+        "exact_seed": false,
+        "source_crop": [
+          1096,
+          293,
+          1352,
+          547
+        ],
+        "paste_xy": [
+          269,
+          94
+        ],
+        "resized_size": [
+          486,
+          482
+        ]
+      },
+      {
+        "frame": 5,
+        "source_frame": 5,
+        "alpha_bounds": [
+          269,
+          94,
+          755,
+          576
+        ],
+        "exact_seed": false,
+        "source_crop": [
+          1096,
+          293,
+          1352,
+          547
+        ],
+        "paste_xy": [
+          269,
+          94
+        ],
+        "resized_size": [
+          486,
+          482
+        ]
+      },
+      {
+        "frame": 6,
+        "source_frame": 6,
+        "alpha_bounds": [
+          279,
+          60,
+          746,
+          576
+        ],
+        "exact_seed": false,
+        "source_crop": [
+          1363,
+          274,
+          1609,
+          546
+        ],
+        "paste_xy": [
+          279,
+          60
+        ],
+        "resized_size": [
+          467,
+          516
+        ]
+      },
+      {
+        "frame": 7,
+        "source_frame": 7,
+        "alpha_bounds": [
+          267,
+          62,
+          758,
+          576
+        ],
+        "exact_seed": false,
+        "source_crop": [
+          1623,
+          274,
+          1882,
+          545
+        ],
+        "paste_xy": [
+          267,
+          62
+        ],
+        "resized_size": [
+          491,
+          514
+        ]
+      },
+      {
+        "frame": 8,
+        "source_frame": 8,
+        "alpha_bounds": [
+          256,
+          79,
+          768,
+          576
+        ],
+        "exact_seed": true,
+        "paste_xy": [
+          256,
+          64
+        ]
+      }
+    ],
+    "anatomy": {
+      "report": "audit/parry-stance.json",
+      "median_generated_head_scale": 0.9365,
+      "maximum_head_scale_including_idle": 1.0,
+      "measured_cells": 8,
+      "not_measured": [],
+      "tool_tolerance": 0.12
+    }
+  }
+]

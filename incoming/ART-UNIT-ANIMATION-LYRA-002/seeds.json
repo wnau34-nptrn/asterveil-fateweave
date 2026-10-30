@@ -1,0 +1,33 @@
+{
+  "identity": "tracer",
+  "name": "Lyra",
+  "file": "seeds/lyra-seed.png",
+  "source": "incoming/ART-UNIT-ANIMATION-PILOT-001/lyra-seed.png",
+  "sha256": "a0d462ce8c0469fab74e267b14e7dc73fd43fc53330a648704d63ac8a086ad3e",
+  "source_blob_sha": "8fac56a67765e645a011c1e95f2cb3d350735dd5",
+  "base_commit": "0e0d74547e4c39f885acc35979f5c31db0d273fa",
+  "size": [
+    512,
+    512
+  ],
+  "facing": "right",
+  "pixel_exact_copy": true,
+  "requested_approximate_ground_y": 497,
+  "observed_alpha_gt40_body_bounds": [
+    0,
+    17,
+    501,
+    512
+  ],
+  "actual_sole_y": 511,
+  "delivery_offset_xy": [
+    256,
+    64
+  ],
+  "delivery_frame_size": [
+    1024,
+    640
+  ],
+  "delivery_sole_y": 575,
+  "anatomy_tool_sha256": "7980867467bf894fad629274639ee2769fc4920eb61aeeabcdbf312952c9a57c"
+}

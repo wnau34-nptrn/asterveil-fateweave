@@ -1,0 +1,35 @@
+{
+  "image": "lyra_pilot.b2e071012643.webp",
+  "atlas": "lyra_pilot.a6e63bff9845.json",
+  "width": 1280,
+  "height": 1743,
+  "frames": 38,
+  "decodedBytes": 8924160,
+  "downloadBytes": 2314819,
+  "uniqueFrames": 27,
+  "transform": {
+    "scale": 0.5,
+    "paste": [
+      0,
+      208
+    ]
+  },
+  "seedEndCheck": {
+    "mark/000": {
+      "meanAlphaDiff": 0.025691986083984375,
+      "maxAlphaDiff": 17
+    },
+    "mark/007": {
+      "meanAlphaDiff": 0.025691986083984375,
+      "maxAlphaDiff": 17
+    },
+    "parry-stance/000": {
+      "meanAlphaDiff": 0.025691986083984375,
+      "maxAlphaDiff": 17
+    },
+    "parry-stance/007": {
+      "meanAlphaDiff": 0.025691986083984375,
+      "maxAlphaDiff": 17
+    }
+  }
+}

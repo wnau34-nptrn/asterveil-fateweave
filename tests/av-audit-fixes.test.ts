@@ -67,13 +67,19 @@ describe('AV02 counters read as ripostes', () => {
     const down: TurnStage = { ...turn, events: [...turn.events, { type: 'down', targetId: 'garran', text: '' }], after: undefined };
     expect(unitReactions(down, f.data).get('garran')!.pose).toBe('down');
   });
-  it('maps Lyra finisher/sweep to the cut, lunge to the thrust, and leaves mark/parry stance procedural', () => {
+  it('maps Lyra finisher/sweep to the cut, lunge to the thrust, and Mark / parry stance to their LYRA-002 gestures', () => {
     expect(unitClip('tracer', 'finisher', undefined)).toBe('attack');
     expect(unitClip('tracer', 'sweep', undefined)).toBe('attack');
     expect(unitClip('tracer', 'lunge', undefined)).toBe('skill');
-    expect(unitClip('tracer', 'mark', undefined)).toBeUndefined();
-    expect(unitClip('tracer', 'parry', undefined)).toBeUndefined();
     expect(unitSample('counter', 'reaction', .5, undefined, 'tracer')!.from).toBe(13);
+    // Contact (first recover frame) is the held point / full guard; both end on the shipped idle frame's pixels.
+    for (const [action, pose, start] of [['mark', 'cast', 22], ['parry', 'guard', 30]] as const) {
+      const clip = unitClip('tracer', action, undefined)!;
+      expect(clip).toBe(action);
+      expect(unitSample(pose, 'prepare', 0, clip, 'tracer')!.from).toBe(start + 1);
+      expect(unitSample(pose, 'recover', 0, clip, 'tracer')!.from).toBe(start + 4);
+      expect(unitSample(pose, 'recover', .999, clip, 'tracer')!.from).toBe(start + 7);
+    }
   });
 });
 
