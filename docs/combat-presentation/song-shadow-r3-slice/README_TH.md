@@ -4,7 +4,7 @@
 
 [หน้าคลิปก่อน–หลัง (Artifact)](https://claude.ai/artifact/AzESrmF88nzGGXxzi9rgJT) · [index.html](index.html) · ก่อน (R2/R1): [song-shadow-slice](../song-shadow-slice/README_TH.md)
 
-**สถานะ: รอเจ้าของดูคลิปจริงและอนุมัติ motion ก่อน merge/เผยแพร่** — ผลเทสต์ไม่ใช่การอนุมัติภาพ
+**สถานะ: เจ้าของอนุมัติ motion ด้วยคำว่า “อนุมัติ” เมื่อ 2026-10-30 หลังดูคลิปจริง (อนุมัติโดยตรง ไม่ได้อนุมัติจากผลเทสต์)** — merge PR #119 หลัง CI ผ่าน แล้วปิด PR #111
 
 ## การเลือกภาพ
 
