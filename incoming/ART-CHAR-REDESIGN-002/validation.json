@@ -1,0 +1,205 @@
+{
+  "task": "ART-CHAR-REDESIGN-002",
+  "baseCommit": "e5e6b074f7c42e790e8bec097857028d30b4192a",
+  "anatomy": {
+    "alphaBoundsExclusive": [
+      94,
+      37,
+      418,
+      497
+    ],
+    "frame": [
+      512,
+      512
+    ],
+    "realAlpha": true,
+    "hairTopY": 37,
+    "chinY": 194,
+    "headHeight": 158,
+    "bodyHeight": 460,
+    "headBodyRatio": 0.34347826086956523,
+    "feet": {
+      "left": {
+        "contactRow": 496,
+        "xRoi": [
+          180,
+          225
+        ],
+        "contactPixels": 15
+      },
+      "right": {
+        "contactRow": 496,
+        "xRoi": [
+          355,
+          418
+        ],
+        "contactPixels": 17
+      }
+    },
+    "soleInclusive": 496,
+    "pivot": [
+      0.5,
+      0.970703125
+    ],
+    "measurementMethod": "Visually reviewed chin landmark; alpha hair/sole scan. Inclusive heights."
+  },
+  "normalization": {
+    "sourceBoundsExclusive": [
+      20,
+      65,
+      998,
+      1455
+    ],
+    "sourceSize": [
+      1024,
+      1536
+    ],
+    "scale": 0.33093525179856115,
+    "offset": [
+      94,
+      37
+    ],
+    "sourceComponent": 1
+  },
+  "approvedCopies": {
+    "pr": 118,
+    "commit": "426fbf273330b8e704a247bce154e22ba3f77cf8",
+    "files": {
+      "unit/odran.png": {
+        "sha256": "ca7a30b361eb8e7fd8764cacfd7e56b7cd3f13d3a701586b0b7ee54a92a61ccf",
+        "bytes": 377751
+      },
+      "portrait/odran.png": {
+        "sha256": "e01b821525907de100f22cbc5959b9195c8dd2263ca49d2201126213123b0ec4",
+        "bytes": 512346
+      },
+      "weapon/odran.png": {
+        "sha256": "214c42fc596715a1fc82b77797d4a7e479ec341a0d2f5d551520f5f70331bb54",
+        "bytes": 26667
+      },
+      "portrait/isolde.png": {
+        "sha256": "e1f80e27532e7c570644b52ca396157f3ef380d222972c08353a63e35f0c5971",
+        "bytes": 532637
+      },
+      "weapon/isolde.png": {
+        "sha256": "0af40c7569caf0959fea407c1d9d343046d304081050c7ee20b4cb621ac46841",
+        "bytes": 10570
+      }
+    }
+  },
+  "atlas": {
+    "baseSha256": "7c29334d20bd29bb120a09627af2b2c768f059c16ce35c03e4e7e5fe25ddb0f1",
+    "baseBytes": 2510564,
+    "outputBytes": 2481852,
+    "replacedFrames": [
+      7,
+      9
+    ],
+    "untouchedFramesPixelIdentical": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      8
+    ],
+    "allUntouchedPixelsIdentical": true,
+    "lossless": true,
+    "dimensions": [
+      1024,
+      2560
+    ]
+  },
+  "portraitAndWeaponDesignsChanged": false,
+  "packagedPortraitAndGearNeeded": false,
+  "ownerVisualApproval": false,
+  "runtimeIntegrated": false,
+  "files": {
+    "NOTES.md": {
+      "sha256": "5a6653502bae097b2c170fac65402613383aa6f465a65e97d91ebcfc89586273",
+      "bytes": 4892
+    },
+    "landmarks.json": {
+      "sha256": "48b8295b731682fa51557a2e91d4c6362be429eec43c057a6aea4bae81465ae9",
+      "bytes": 449
+    },
+    "package.py": {
+      "sha256": "dd1b6c86663c875b22efb4fc94481cd3785a91575a63cbc124e7bad86f2ced8b",
+      "bytes": 8982
+    },
+    "packaged/units_mercs.webp": {
+      "sha256": "4d51042436f830475d158cae01c32a168095eed9256cc1a03279dce5b0ee8ea2",
+      "bytes": 2481852
+    },
+    "portrait/isolde.png": {
+      "sha256": "e1f80e27532e7c570644b52ca396157f3ef380d222972c08353a63e35f0c5971",
+      "bytes": 532637
+    },
+    "portrait/odran.png": {
+      "sha256": "e01b821525907de100f22cbc5959b9195c8dd2263ca49d2201126213123b0ec4",
+      "bytes": 512346
+    },
+    "prompts.json": {
+      "sha256": "3fb35240a24622f61b2c3d59ee777bebc8e2c2a917777c39ccfd0e23d2afdde2",
+      "bytes": 3773
+    },
+    "provenance/approved-copies.json": {
+      "sha256": "6d0554ecaf59c544c6b67f19118b924646e1f0787ea05a7ba0b40235a7057e90",
+      "bytes": 786
+    },
+    "references/isolde-pr118.png": {
+      "sha256": "f94018437f07bbf2e1f4533c400827bc9e03ce5078a98a28a97b63b1474870f3",
+      "bytes": 231278
+    },
+    "references/style-units.png": {
+      "sha256": "105b69812b7f15b33ca31e0f75a65d9867d1c6ac47e6869b472a592253bfc88f",
+      "bytes": 841922
+    },
+    "review/anatomy-512.png": {
+      "sha256": "0266e86d8f59ea2fe9e83c7e5c325bb15b08421aa8b44d75b84448f3151b5e70",
+      "bytes": 229203
+    },
+    "review/lineup.png": {
+      "sha256": "7f4b9349b9f81637e6386711ff9e1c4ced83509bf3318324064865360d2d6a3d",
+      "bytes": 267279
+    },
+    "review/native-sizes.png": {
+      "sha256": "bbf347e805e9d086f4257293ad13a0aecacb1fabdcfa157a9d97e0bf60dbed57",
+      "bytes": 22204
+    },
+    "sources/isolde-ready-r1.png": {
+      "sha256": "dd55a0b2351a3fdc9444ad8eee657d474277b34661c8862de34f7ea154b729af",
+      "bytes": 2212466
+    },
+    "sources/isolde-ready.png": {
+      "sha256": "a7be0f6ef120fe59007e5e7c766132a5f9a3b4fbddc13f69b221d4abd8fc55ad",
+      "bytes": 2472339
+    },
+    "unit/isolde.png": {
+      "sha256": "e6d80253147ac8b0cd52edae6c211417fb30779b89b2524963ee724f12b530ba",
+      "bytes": 265035
+    },
+    "unit/odran.png": {
+      "sha256": "ca7a30b361eb8e7fd8764cacfd7e56b7cd3f13d3a701586b0b7ee54a92a61ccf",
+      "bytes": 377751
+    },
+    "verify_remote.py": {
+      "sha256": "64c53098cc851568e8ec244a0882c9d9091a72e742ec90c0171104d4f4984b2d",
+      "bytes": 1344
+    },
+    "weapon/isolde.png": {
+      "sha256": "0af40c7569caf0959fea407c1d9d343046d304081050c7ee20b4cb621ac46841",
+      "bytes": 10570
+    },
+    "weapon/odran.png": {
+      "sha256": "214c42fc596715a1fc82b77797d4a7e479ec341a0d2f5d551520f5f70331bb54",
+      "bytes": 26667
+    }
+  },
+  "manifestExcludes": [
+    "validation.json (recursive hash)"
+  ],
+  "decodedImages": 14
+}
