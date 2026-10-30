@@ -110,9 +110,7 @@ export class BattleScene extends Phaser.Scene {
     this.load.atlas(ALCHEMY_ATLAS, ...alchemyAtlasUrls());
     this.load.atlas(SEAL_ATLAS, ...sealAtlasUrls());
     this.load.atlas(COMMAND_ATLAS, ...commandAtlasUrls());
-    this.load.atlas(FOE_SIGNATURE_ATLAS, ...foeSignatureAtlasUrls());
     this.load.atlas(SONG_ATLAS, ...songAtlasUrls());
-    this.load.atlas(SAINT_DANCE_ATLAS, ...saintDanceAtlasUrls());
     this.load.atlas(DEFENSE_ATLAS, ...defenseAtlasUrls());
     this.load.atlas(HEALING_ATLAS, ...healingAtlasUrls());
     for (const sheet of ['units', 'mercs', 'foes', 'foes2'] as const) this.load.spritesheet(`battle-${sheet}`, unitsUrl(sheet), { frameWidth: 512, frameHeight: 512 });
@@ -150,9 +148,16 @@ export class BattleScene extends Phaser.Scene {
     for (const name of names) this.load.atlas(`unit-pilot-${name}`, ...unitAtlasUrls(name));
     // AV07: the boss-signature atlas is only fetched for encounters that use those moves; until then the code-drawn
     // telegraph and the older generic cues stand in.
-    const boss = usesBossSignature(this.encounter) && !this.textures.exists(BOSS_ATLAS);
-    if (boss) this.load.atlas(BOSS_ATLAS, ...bossAtlasUrls());
-    if ((names.length || boss) && !this.load.isLoading()) this.load.start();
+    // Foe-signature and Saint/Dance layers are fetched the same way: only for encounters whose foes or heroes use them,
+    // which also keeps the startup preload under the loader's parallel-download limit.
+    const data = this.encounter, fx: [string, [string, string], boolean][] = [
+      [BOSS_ATLAS, bossAtlasUrls(), usesBossSignature(data)],
+      [FOE_SIGNATURE_ATLAS, foeSignatureAtlasUrls(), data.intents.some(i => isFoeSignatureMove(i.name))],
+      [SAINT_DANCE_ATLAS, saintDanceAtlasUrls(), data.heroes.some(h => h.actions.some(a => isSdSkill(a)))],
+    ];
+    let fetching = false;
+    for (const [key, urls, used] of fx) if (used && !this.textures.exists(key)) { this.load.atlas(key, ...urls); fetching = true; }
+    if ((names.length || fetching) && !this.load.isLoading()) this.load.start();
   }
   private optionalUnitsLoaded(): void {
     if (!this.bossArt && this.textures.exists(BOSS_ATLAS)) { this.bossArt = true; this.optionalDirty = true; }

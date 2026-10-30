@@ -10,7 +10,7 @@ for (const { skill, mode } of cases) test(`saint-dance clip ${skill}-${mode}`, a
   const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, reducedMotion: mode === 'osreduce' ? 'reduce' : 'no-preference' });
   try {
     const page = await ctx.newPage(), errors: string[] = []; page.on('pageerror', e => errors.push(e.message));
-    await page.goto(`tests/browser/fixtures/saint-dance-fx.html?skill=${skill}&speed=${mode === 'fast' ? 'fast' : 'normal'}&intensity=${mode === 'reduced' ? 'reduced' : 'standard'}`);
+    await page.goto(`tests/browser/fixtures/saint-dance-fx.html?skill=${skill}&speed=${mode === 'fast' ? 'fast' : 'normal'}&intensity=${mode === 'reduced' ? 'reduced' : 'standard'}`);await page.waitForFunction(()=>window.sdQA.atlasReady());
     await page.locator('#start:visible,[data-ui=action]:visible').first().waitFor();const start=page.locator('#start');if(await start.isVisible())await start.click();
     await page.locator(`#action-${await page.evaluate(()=>window.sdQA.action())}`).click();
     await page.evaluate(() => document.fonts.ready.then(() => undefined)); await page.waitForTimeout(350);

@@ -11,7 +11,7 @@ const moves=Object.keys(foeSignatureMoves) as FoeSignatureMove[];
 const slug=(m:FoeSignatureMove)=>foeSignatureMoves[m];
 const spotOf=(m:FoeSignatureMove)=>m==='Veil Quake'?'feet':'chest';
 const open=async(page:Page,query:string)=>{
- await page.goto(`tests/browser/fixtures/foe-signature-fx.html?${query}`);const start=page.locator('#start');if(await start.isVisible())await start.click();
+ await page.goto(`tests/browser/fixtures/foe-signature-fx.html?${query}`);await page.waitForFunction(()=>window.foeQA.atlasReady());const start=page.locator('#start');if(await start.isVisible())await start.click();
 };
 const cast=async(page:Page)=>{await page.locator(`#action-${await page.evaluate(()=>window.foeQA.action())}`).click();await page.locator(`#target-${await page.evaluate(()=>window.foeQA.target())}`).click();};
 // Runs the hero turn to its end, then up to `into` ms inside the foe's turn.

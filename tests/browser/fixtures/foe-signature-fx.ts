@@ -27,6 +27,8 @@ const impacts: { at: number; remainingMs: number; actorId: string; action?: stri
 const play = scene.play.bind(scene);
 scene.play = (turn, life) => { impacts.push({ at: Date.now()/1000, remainingMs: life ?? 650, actorId: turn.actorId, action: turn.action, side: turn.side, intent: turn.intent?.name, resolved: turn.events, cues: foeSignatureCues(turn), before: turn.before, after: turn.after }); play(turn, life); };
 ui.attach(scene);
+// Like main.ts: a visible battle requests its optional art (this family's atlas is fetched only for encounters using it).
+scene.setBattleVisible(true);
 new Phaser.Game({ type: Phaser.AUTO, parent: 'game', transparent: true, scale: { mode: Phaser.Scale.NONE, width: 320, height: 240 }, scene: [scene], fps: { target: 60 }, audio: { noAudio: true } });
 ui.open({ kind: 'random', data: fixture.data, entry: fixture.entry, commands: fixture.prelude,
   commit: s => { localStorage.setItem('foe-committed', JSON.stringify(s)); return true; }, leaveLabel: () => '', leave: () => {} });
@@ -39,7 +41,7 @@ function painted(atlas = FOE_SIGNATURE_ATLAS) {
     if (item instanceof Phaser.GameObjects.Image && item.texture.key === atlas) items.push({ frame: item.frame.name, x: item.x, y: item.y, width: item.displayWidth, height: item.displayHeight, alpha: item.alpha, visible: item.visible, tint: item.tintTopLeft, rotation: item.rotation, scaleX: item.scaleX, tag: String(item.getData('foeSigTag')), target: String(item.getData('foeSigTarget')) });
   } }; visit(scene.children.getChildren()); return items;
 }
-const qa = {
+const qa = { atlasReady: () => scene.textures.exists(FOE_SIGNATURE_ATLAS),
   impacts, painted, sequence: () => fixture.turns, state: () => ui.state,
   foeTurn: () => fixture.turn, target: () => fixture.targetId, action: () => fixture.command.action,
   expectedCaptureState: () => fixture.captureState, cues: () => foeSignatureCues(fixture.turn),

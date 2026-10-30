@@ -17,7 +17,7 @@ for (const { move, scenario, mode } of cases) test(`foe signature clip ${slug(mo
   const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, reducedMotion: mode === 'osreduce' ? 'reduce' : 'no-preference' });
   try {
     const page = await ctx.newPage(), errors: string[] = []; page.on('pageerror', e => errors.push(e.message));
-    await page.goto(`tests/browser/fixtures/foe-signature-fx.html?move=${encodeURIComponent(move)}&scenario=${scenario}&speed=${mode === 'fast' ? 'fast' : 'normal'}&intensity=${mode === 'reduced' ? 'reduced' : 'standard'}`);
+    await page.goto(`tests/browser/fixtures/foe-signature-fx.html?move=${encodeURIComponent(move)}&scenario=${scenario}&speed=${mode === 'fast' ? 'fast' : 'normal'}&intensity=${mode === 'reduced' ? 'reduced' : 'standard'}`);await page.waitForFunction(()=>window.foeQA.atlasReady());
     const start = page.locator('#start'); if (await start.isVisible()) await start.click();
     await page.locator(`#action-${await page.evaluate(() => window.foeQA.action())}`).click();
     await page.evaluate(() => document.fonts.ready.then(() => undefined)); await page.waitForTimeout(350);

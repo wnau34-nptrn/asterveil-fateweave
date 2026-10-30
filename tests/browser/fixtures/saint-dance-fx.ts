@@ -26,6 +26,8 @@ const impacts: { at: number; remainingMs: number; actorId: string; action?: stri
 const play = scene.play.bind(scene);
 scene.play = (turn, life) => { impacts.push({ at: Date.now()/1000, remainingMs: life ?? 650, actorId: turn.actorId, action: turn.action, side: turn.side, resolved: turn.events, plan: sdPlan(turn), before: turn.before, after: turn.after }); play(turn, life); };
 ui.attach(scene);
+// Like main.ts: a visible battle requests its optional art (this family's atlas is fetched only for encounters using it).
+scene.setBattleVisible(true);
 new Phaser.Game({ type: Phaser.AUTO, parent: 'game', transparent: true, scale: { mode: Phaser.Scale.NONE, width: 320, height: 240 }, scene: [scene], fps: { target: 60 }, audio: { noAudio: true } });
 ui.open({ kind: 'random', data: fixture.data, entry: fixture.entry, commands: fixture.prelude,
   commit: s => { localStorage.setItem('sd-committed', JSON.stringify(s)); return true; }, leaveLabel: () => '', leave: () => {} });
@@ -38,7 +40,7 @@ function painted(atlas = SAINT_DANCE_ATLAS) {
     if (item instanceof Phaser.GameObjects.Image && item.texture.key === atlas && !item.getData('songRim')) items.push({ frame: item.frame.name, x: item.x, y: item.y, width: item.displayWidth, height: item.displayHeight, alpha: item.alpha, rim: !!item.getData('healingRim') });
   } }; visit(scene.children.getChildren()); return items;
 }
-const qa={impacts,painted,rings:()=>{
+const qa={ atlasReady: () => scene.textures.exists(SAINT_DANCE_ATLAS),impacts,painted,rings:()=>{
  const effects=(scene as unknown as {effects?:Phaser.GameObjects.Container}).effects;
  return effects?.list.filter(c=>c instanceof Phaser.GameObjects.Arc).length??0;
 },sequence:()=>fixture.turns,prelude:()=>fixture.prelude,state:()=>ui.state,

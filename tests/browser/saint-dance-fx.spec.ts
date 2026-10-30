@@ -11,7 +11,7 @@ const expected:Record<typeof skills[number],Record<string,number>>={
  cadence:{cadence_peak:1,cadence_settle:1},duet:{duet_peak:1,duet_settle:1},rounddance:{rounddance_settle:1},
  deepbeat:{deepbeat_peak:1,deepbeat_settle:1},echofoot:{echofoot_peak:1,echofoot_settle:1},closingstep:{closingstep_peak:1,closingstep_settle:1}};
 const open=async(page:Page,query:string)=>{
- await page.goto(`tests/browser/fixtures/saint-dance-fx.html?${query}`);await page.locator('#start:visible,[data-ui=action]:visible').first().waitFor();const start=page.locator('#start');if(await start.isVisible())await start.click();
+ await page.goto(`tests/browser/fixtures/saint-dance-fx.html?${query}`);await page.waitForFunction(()=>window.sdQA.atlasReady());await page.locator('#start:visible,[data-ui=action]:visible').first().waitFor();const start=page.locator('#start');if(await start.isVisible())await start.click();
 };
 const cast=async(page:Page,skill:string)=>{await page.locator(`#action-${skill}`).click();await page.locator(`#target-${await page.evaluate(()=>window.sdQA.target())}`).click();};
 const frames=(page:Page)=>page.evaluate(()=>window.sdQA.painted()).then(p=>p.map(i=>i.frame));
