@@ -1,0 +1,304 @@
+{
+  "tool": "image_gen.imagegen",
+  "original_art": true,
+  "generations": [
+    {
+      "id": "kael",
+      "prompt": "Create ONE finished original battle sprite for Kael, martial artist, using attached concept B as character reference (board only, output NOT a board). Painterly polished fantasy chibi matching attached existing mercenary cast, strong dark contour, warm painterly highlights, readable tiny. Single topknot dark brown hair, warm tan skin amber eyes, CALM focused closed-mouth expression, sleeveless burnt umber wrap vest, bare muscular forearms, cream cloth hand and forearm wraps, gold waist sash, charcoal loose trousers, cream leg wraps and leather sandals. Broadest of the three new classes. Low open-palm guard, grounded controlled ready stance, three-quarter facing RIGHT. Both separate sandal soles exactly on same horizontal baseline. NO weapon, armour plates, gold pauldrons, tabard, prayer beads, energy, glow, magic, text, ground, shadow or background. One figure only. Technical composition: square transparent RGBA canvas, figure occupies 88% height, hair-top to chin exactly one third of hair-top to soles (head 155 of body 450 at 512 canvas). Hair top around y47, chin y202, both sole bottoms y496 on 512x512. Keep entire figure inside x16..495. Large head but NOT oversized bobblehead. Size figure first, generous broad shoulders, full standing height comparable to cast, not mini. Palette #A76A3B #DCA647 #644737 #F0DFC1 #353039 #E7BC70. True transparent background.",
+      "generation_id": "exec-4b39ad87-cd12-4e1f-b364-335e3ece7ca7",
+      "output": "sources/kael.png",
+      "references": [
+        "incoming/ART-CHAR-CLASS-NEW-001/02_martial_artist/concept_B.png",
+        "public/assets/art/units_mercs.webp"
+      ],
+      "transparent_background": true,
+      "output_artifact_id": "exec-4b39ad87-cd12-4e1f-b364-335e3ece7ca7",
+      "generator_job_id": null,
+      "generation_id_note": "Tool exposes output artifact UUID, not a separate generator job ID; original PNG C2PA retained."
+    },
+    {
+      "id": "wynne",
+      "prompt": "Create ONE final original battle sprite of Wynne, young adult female Hexer doll-maker, based on attached concept A; output ONE isolated full-body figure, not board. Match painterly fantasy chibi game cast with dark clean contour, warm detailed brushwork. Quiet gentle solemn lavender eyes, short tousled dark brown hair. Plum hood with two long DROOPING tips, folded close around head not wide round mushroom brim; patched layered charcoal-plum coat, parchment hanging talismans with abstract marks (no text), cloth-wrapped careful hands hold a large cream stitched cloth doll close to chest. Doll with button eye, red stitches, clear CRIMSON THREAD LOOP beside her hand as identity. No skull, bones, necromancy, staff, hat brim, mushroom cap. Grounded ready stance three-quarter facing RIGHT, two separate boots planted on same baseline. No effects/glow/ground shadow. Character must be full size same as cast, not shrunken caster. Square RGBA transparent canvas. At 512px: hair top y47, hair-top to chin 155px, hair-top to soles 450px, both sole bottoms y496; head/body ratio .344. Hood may extend to y37 but hair head must retain specified size. Entire figure fits x16..495. Do not enlarge hood at expense of body. Soft shoulders, asymmetrical patched coat hem opening to show both boots. Palette #342D40 #675064 #A88F88 #732F43 #D3BA9A #E6D4C4. ONE figure, no labels, no background, real alpha.",
+      "generation_id": "exec-91eac30b-43ac-45cc-abae-ed9143f253fd",
+      "output": "sources/wynne.png",
+      "references": [
+        "incoming/ART-CHAR-CLASS-NEW-001/03_hexer/concept_A.png",
+        "public/assets/art/units_mercs.webp"
+      ],
+      "transparent_background": true,
+      "output_artifact_id": "exec-91eac30b-43ac-45cc-abae-ed9143f253fd",
+      "generator_job_id": null,
+      "generation_id_note": "Tool exposes output artifact UUID, not a separate generator job ID; original PNG C2PA retained."
+    },
+    {
+      "id": "astrid",
+      "prompt": "Create ONE final original battle sprite Astrid female Seer star-chart maker, based on attached concept A; ONE isolated figure, not board. Match painterly fantasy chibi existing cast, crisp dark contours warm highlights. Short silver-lavender bob, violet eyes, gold star hair pin, composed accepting confident face. Navy crescent-SPLIT mantle: two large curved outward lower lobes with cream lining and subtle gold star-chart pattern, fitted navy tunic, lavender grey trousers, boots. Small gold and silver astrolabe three intersecting rings attached to / held immediately beside RIGHT hand at hip/chest height; NOT rings orbiting body. No hat, no staff, no long hair, no large glow, no airborne pose, no ground shadow. Grounded ready stance, three-quarter facing RIGHT. Both separate boots soles on SAME baseline. Character full cast scale, not shrunken for prop. Technical square RGBA transparent: at 512 hair top y47 chin y202 (head 155), hair-top to sole 450, both soles y496. Head/body .344; entire figure and rings fit x16..495, y37..496. Keep figure tall then fit rings around it. Palette #202C50 #68608D #B6B9D3 #D9C68A #453C62 #ECE2D3. One figure only, no text, no labels, no ground or background, genuine alpha.",
+      "generation_id": "exec-f4f6e2b8-2c44-4488-8add-40f074854a5f",
+      "output": "sources/astrid.png",
+      "references": [
+        "incoming/ART-CHAR-CLASS-NEW-001/01_seer/concept_A.png",
+        "public/assets/art/units_mercs.webp"
+      ],
+      "transparent_background": true,
+      "output_artifact_id": "exec-f4f6e2b8-2c44-4488-8add-40f074854a5f",
+      "generator_job_id": null,
+      "generation_id_note": "Tool exposes output artifact UUID, not a separate generator job ID; original PNG C2PA retained."
+    },
+    {
+      "id": "kael_fix",
+      "prompt": "Refine this SAME final Kael battle sprite, preserve all identity, costume, colors, low open palm stance facing right and transparent background. Correct proportions: reduce head including entire topknot to 0.86 of current height relative to unchanged adult-chibi torso/legs, so hair-top to chin is 34% of total hair-top to sole height rather than current 39%. Keep single topknot. Extend bare forearms a little by shortening cloth bracer upper edge; wrists and hands wrapped. Both sole bottoms must share EXACT same horizontal ground line; currently right sandal lower, lift right sole and lower left sole until level. Full figure with margins, no cropped topknot, no ground shadow. One final figure no labels no effects.",
+      "generation_id": "exec-9237ed76-3897-4f88-8aa7-61f0987fa9e6",
+      "output": "sources/kael_fix.png",
+      "references": [
+        "sources/kael.png"
+      ],
+      "transparent_background": true,
+      "output_artifact_id": "exec-9237ed76-3897-4f88-8aa7-61f0987fa9e6",
+      "generator_job_id": null,
+      "generation_id_note": "Tool exposes output artifact UUID, not a separate generator job ID; original PNG C2PA retained."
+    },
+    {
+      "id": "wynne_fix",
+      "prompt": "Correct anatomy and framing of this SAME Wynne final sprite; preserve exact identity face doll hood plum palette stitched layered coat crimson loop and pose facing RIGHT. IMPORTANT HEAD SIZE: visible HAIR TOP to CHIN must be 35% of HAIR TOP to SOLE total height; currently only 27%. Enlarge actual face and hair head by 25% relative to torso while reducing oversized hood margin above hair, hood top only 3% body height above hair. Do not just enlarge hood. Keep doll close and crimson loop. Slightly simplify gold embroidery for tiny readability. Both boot sole bottoms on exact same horizontal ground baseline, align back boot DOWN to front boot bottom. Entire figure fits square with margins, transparent RGBA background, no ground shadow, no labels no glow. One final figure.",
+      "generation_id": "exec-c714a9ab-1f17-496f-8b57-5f71077a9b2a",
+      "output": "sources/wynne_fix.png",
+      "references": [
+        "sources/wynne.png"
+      ],
+      "transparent_background": true,
+      "output_artifact_id": "exec-c714a9ab-1f17-496f-8b57-5f71077a9b2a",
+      "generator_job_id": null,
+      "generation_id_note": "Tool exposes output artifact UUID, not a separate generator job ID; original PNG C2PA retained."
+    },
+    {
+      "id": "astrid_fix",
+      "prompt": "Refine SAME Astrid final sprite, exact same face hair pin mantle rings palette facing right. Correct head: hair-top to chin must be 34.5% of hair-top to soles, slightly enlarge face/head by 8% relative to torso. IMPORTANT silhouette: bring mantle lobes closer to body and ring set closer to hand, reduce total width by 20% while retaining full figure height. Kael should be broader than Astrid. Astrolabe stays held near right hand, no body orbit. BOTH boot soles share precisely the same baseline. No hat no staff no glow no text no ground shadow, genuine transparent background, square with margins, one figure.",
+      "generation_id": "exec-06519c44-8499-4207-bc50-738b25e4983b",
+      "output": "sources/astrid_fix.png",
+      "references": [
+        "sources/astrid.png"
+      ],
+      "transparent_background": true,
+      "output_artifact_id": "exec-06519c44-8499-4207-bc50-738b25e4983b",
+      "generator_job_id": null,
+      "generation_id_note": "Tool exposes output artifact UUID, not a separate generator job ID; original PNG C2PA retained."
+    },
+    {
+      "id": "wynne_fix2",
+      "prompt": "Make the head/face of Wynne SIGNIFICANTLY LARGER. This is a chibi game character. Current HAIR TOP to CHIN is 320px on this 1254px canvas. It must be 400px while total HAIR TOP to SOLE remains 1140px. Increase actual visible face and hair 25%, make doll/torso shorter to compensate, keep hood tightly fitted to head with only 15px above hair. Head is intentionally big cute chibi to match game cast. Preserve SAME dark hair violet eyes stitched doll crimson thread and drooping pointed hood tips. Whole body full height, both boot soles exactly equal baseline. No text shadow background. One transparent battle sprite facing right. Do not leave anatomy unchanged: visibly enlarge actual hair and face and shorten torso.",
+      "generation_id": null,
+      "output": "sources/wynne_fix2.png",
+      "references": [
+        "sources/wynne_fix.png"
+      ],
+      "transparent_background": true,
+      "generation_id_note": "Tool returned image_url only; no generation ID exposed. Output stored losslessly from returned bytes.",
+      "output_artifact_id": null,
+      "generator_job_id": null
+    },
+    {
+      "id": "wynne_fix3",
+      "prompt": "Proportion correction of same Wynne sprite only. Current visible head (hair-top to chin) too large (42% of total hair-top to sole). REDUCE visible head, face, hair, and fitted hood to 80% current size, increase torso height to keep total figure height the same. Target head 34% total height. Preserve same character and costume and doll, both boot soles equal baseline. Transparent square canvas, full body, no shadow text or effects. Keep facial features and pose identical. Use intermediate head between oversized current image and previous small-head version.",
+      "generation_id": "exec-838fde29-5086-4e35-a9dd-2d11ba3ebbfd",
+      "output": "sources/wynne_fix3.png",
+      "references": [
+        "sources/wynne_fix2.png",
+        "sources/wynne_fix.png"
+      ],
+      "transparent_background": true,
+      "output_artifact_id": "exec-838fde29-5086-4e35-a9dd-2d11ba3ebbfd",
+      "generator_job_id": null,
+      "generation_id_note": "Tool exposes output artifact UUID, not a separate generator job ID; original PNG C2PA retained."
+    },
+    {
+      "id": "kael_fix2",
+      "prompt": "Final art correction for Kael. Change head proportions visibly: SHRINK entire hair and face including topknot by 12% relative to torso, leaving torso and legs unchanged; render neck naturally. This sprite presently has head too big. Desired hair-top to chin 34% of full hair-top to sole. Preserve precisely same calm face tan skin dark single topknot brown sleeveless vest bare arms cream hand wraps gold sash charcoal pants sandals, broad low open palm stance RIGHT. Keep both soles aligned at exactly same baseline. ONE full figure with transparent margins at all edges, true alpha no ground shadow, no effects labels text.",
+      "generation_id": "exec-11fe484e-7743-41de-82e4-1469c1c3b733",
+      "output": "sources/kael_fix2.png",
+      "references": [
+        "sources/kael_fix.png"
+      ],
+      "transparent_background": true,
+      "output_artifact_id": "exec-11fe484e-7743-41de-82e4-1469c1c3b733",
+      "generator_job_id": null,
+      "generation_id_note": "Tool exposes output artifact UUID, not a separate generator job ID; original PNG C2PA retained."
+    },
+    {
+      "id": "wynne_fix4",
+      "prompt": "Final proportion correction SAME Wynne sprite, this time modest: enlarge actual face/hair head 18% relative to body (NOT25%, NOT big bobblehead), reduce torso height equivalently, keep full figure height. Target visible HAIR TOP to CHIN 35% of HAIR TOP to SOLE, not current27%. Fit hood tight to actual hair, only tiny gap above. Keep original doll size and careful cloth wrapped hands, doll/crimson loop identity, plum drooping two-tip hood and stitched coat, right-facing calm ready stance. Both boot soles equal horizontal baseline. Single full-body chibi on true transparent background, no shadow text or effects. Leave 4% outer margin.",
+      "generation_id": "exec-a5fa7a1d-f3f4-438f-8732-d1cbf16a1f39",
+      "output": "sources/wynne_fix4.png",
+      "references": [
+        "sources/wynne_fix3.png"
+      ],
+      "transparent_background": true,
+      "output_artifact_id": "exec-a5fa7a1d-f3f4-438f-8732-d1cbf16a1f39",
+      "generator_job_id": null,
+      "generation_id_note": "Tool exposes output artifact UUID, not a separate generator job ID; original PNG C2PA retained."
+    },
+    {
+      "id": "wynne_fix5",
+      "prompt": "Draw Wynne as a THREE-HEADS-TALL chibi, the overall standing figure height exactly THREE times the head height (head measured hair crown to chin). Not four-heads-tall. A BIG cute head, short compact torso, short legs. This attached character identity is locked: quiet young adult violet eyes short dark hair under two drooping plum hood tips, cream stitched doll held carefully with cloth wrapped hands and crimson thread loop, patched layered dark plum coat, parchment talismans, brown boots. Full body, three-quarter facing right, both boots flat on identical baseline. Same painted game style and colors as reference. The real face and hair head should fill ONE THIRD of the full height, do not use hood as head measurement. Hood fitted very closely to hair, minimal fabric above crown. Transparent square canvas, margins, one finished figure no text no shadows no glow.",
+      "generation_id": "exec-5c1823bb-9f61-4796-965a-d4884fac849c",
+      "output": "sources/wynne_fix5.png",
+      "references": [
+        "sources/wynne_fix4.png"
+      ],
+      "transparent_background": true,
+      "output_artifact_id": "exec-5c1823bb-9f61-4796-965a-d4884fac849c",
+      "generator_job_id": null,
+      "generation_id_note": "Tool exposes output artifact UUID, not a separate generator job ID; original PNG C2PA retained."
+    },
+    {
+      "id": "portraits",
+      "prompt": "Create a horizontal sheet of THREE square painted closeup portraits, equal 512px cells side by side, total 1536x512. From left to right Kael, Wynne, Astrid using the THREE attached final unit designs in that order. Same exact face/hair/eyes/costume: Kael calm tan amber-eyed martial artist dark single topknot burnt brown vest gold sash; Wynne quiet violet-eyed dark-haired doll-maker plum drooping hood, cream stitched doll visible near chin with red thread; Astrid silver-lavender short bob violet eyes gold star hair pin navy star mantle. Bust closeup: face fills 60% cell height, recognisable at 40px, distinct simple values, polished painted fantasy style matching units. Painted background for each: Kael warm ochre training courtyard, Wynne muted plum cloth workshop, Astrid deep blue night chart room with sparse stars. Each complete square background edge to edge with no intercell margins or border, no text or labels. These are ONE finished portrait each, not options. No portrait blending across cell borders. No effects covering faces.",
+      "generation_id": "exec-071eae0b-1e8e-4a55-ba6f-92c8761ee78b",
+      "output": "sources/portraits.png",
+      "references": [
+        "sources/kael_fix.png",
+        "sources/wynne_fix3.png",
+        "sources/astrid_fix.png"
+      ],
+      "transparent_background": false,
+      "output_artifact_id": "exec-071eae0b-1e8e-4a55-ba6f-92c8761ee78b",
+      "generator_job_id": null,
+      "generation_id_note": "Tool exposes output artifact UUID, not a separate generator job ID; original PNG C2PA retained."
+    },
+    {
+      "id": "gear",
+      "prompt": "Three isolated equipment icons in ONE horizontal 3-cell strip, equally sized square cells, each centered with 12% empty margin, true transparent alpha, no text no frame no shadows. LEFT: Kael pair of empty cream cloth hand/forearm wraps with dark brown palm pads, ochre binding cord, worn folded fabric, NOT metal gauntlets, NO hands or skin. MIDDLE: Wynne cream stitched cloth doll with dark button eye and crimson stitches, suspended from a single clear crimson thread loop, no skull, no needles. RIGHT: Astrid gold/silver interlocking astrolabe ring set enclosing navy star-chart disk with gold star centre, small gold plumb pendants. Match attached unit props exactly and painterly equipment atlas style attached as reference: tactile painted materials, dark contours, restrained warm rim highlights, no magical effects. Item shape must read at 40px. Separate each icon entirely, no overlaps between cells. One finished icon per item. Output 1536x512 wide strip, equal thirds.",
+      "generation_id": "exec-81ccecc4-6fef-41e4-add8-cd5e613c2eb3",
+      "output": "sources/gear.png",
+      "references": [
+        "sources/kael_fix.png",
+        "sources/wynne_fix3.png",
+        "sources/astrid_fix.png",
+        "public/assets/ui/equip/gear_items.webp"
+      ],
+      "transparent_background": true,
+      "output_artifact_id": "exec-81ccecc4-6fef-41e4-add8-cd5e613c2eb3",
+      "generator_job_id": null,
+      "generation_id_note": "Tool exposes output artifact UUID, not a separate generator job ID; original PNG C2PA retained."
+    },
+    {
+      "id": "kael_icons",
+      "prompt": "Paint SIX DISTINCT original fantasy skill icons in a strict 3 columns x 2 rows grid, equal square cells with wide empty gutters. Transparent background no text no numbers no frames. Match attached game's painted skill atlas: sharp gold/cream highlights, deep umber shadows, bold central silhouette readable at44px. These are Kael martial artist skills; CREAM CLOTH WRAPPED FISTS, no metal gauntlet no weapon no beads. Amber inner energy only in icons. Reading order: TOP LEFT gatherfist: one straight wrapped fist focused strike drawing narrow amber stream inward, ONE large round glowing pip above. TOP CENTRE releasefist: explosive outstretched wrapped fist with THREE large pips shattering outward in radial burst. TOP RIGHT flowfist: three staggered wrapped fist afterimages on elegant S-shaped energy stream, two pips gathering inward. BOTTOM LEFT circlefist: one wrapped fist on broad full circular sweep with three small dark target silhouettes across lower arc (whole front row). BOTTOM CENTRE storedfist: heavy downward clenched wrapped fist enclosing three INTACT glowing pips behind closed circular energy boundary, weight and retention. BOTTOM RIGHT perfectfist: one perfectly aligned horizontal wrapped fist finishing blow with narrow white-gold spearpoint impact, three DARK hollow depleted pip sockets trailing, no explosion. Each composition unmistakably different, ONE skill per cell, centered within inner80% of cell. No characters except fists and tiny symbolic targets. Square sheet 1536x1024, 3x2 cells.",
+      "generation_id": "exec-96661e94-0745-4b64-808d-0ed7b1b6b133",
+      "output": "sources/kael_icons.png",
+      "references": [
+        "public/assets/ui/skill_icons.webp",
+        "sources/kael_fix.png"
+      ],
+      "transparent_background": true,
+      "output_artifact_id": "exec-96661e94-0745-4b64-808d-0ed7b1b6b133",
+      "generator_job_id": null,
+      "generation_id_note": "Tool exposes output artifact UUID, not a separate generator job ID; original PNG C2PA retained."
+    },
+    {
+      "id": "wynne_icons",
+      "prompt": "Paint SIX original fantasy Hexer skill icons in a strict 3 columns x2 rows grid of equal square cells, generous empty transparent gutters. Match game's attached painted skill atlas: dark contours, rich crimson and cream cloth, restrained bright red thread highlights, muted plum shadows, gold small fittings. Bold simple silhouettes readable44px. No text letters numbers frames skulls staff. Reading order TOP LEFT threadhex: ONE crimson thread tied in ONE large simple knot around dark plum cursed token. TOP CENTRE lifetoll: ONE large cream toll tally tag attached by red thread to one dark foe silhouette stepping forward, tag tugs tight with red pulse at chest, no readable writing. TOP RIGHT wovenhex: broad lattice of interwoven red threads stretched horizontally across THREE dark foe tokens in front-row line. BOTTOM LEFT longthread: ONE single dramatically LONG trailing red thread in open elongated S curve, single little cursed token at end, no knots. BOTTOM CENTRE tollring: circular loop of red thread with FIVE large cream toll tags arranged around several dark plum foe tokens. BOTTOM RIGHT knothex: TWO chunky tight distinct crimson knots interlocked vertically, no tags. Each icon different unmistakable silhouette, centered inner78% each cell, no item crosses cell boundary. Original painted game icon style, transparent real alpha. Sheet1536x1024.",
+      "generation_id": "exec-142229b3-246e-4d1c-8f5a-6a32fbd62f00",
+      "output": "sources/wynne_icons.png",
+      "references": [
+        "public/assets/ui/skill_icons.webp",
+        "sources/wynne_fix3.png"
+      ],
+      "transparent_background": true,
+      "output_artifact_id": "exec-142229b3-246e-4d1c-8f5a-6a32fbd62f00",
+      "generator_job_id": null,
+      "generation_id_note": "Tool exposes output artifact UUID, not a separate generator job ID; original PNG C2PA retained."
+    },
+    {
+      "id": "astrid_icons",
+      "prompt": "Paint SIX original fantasy Seer skill icons, strict3 columns x2rows equal square cells with transparent generous empty gutters. Match attached painted skill atlas, bold dark contours, navy/lavender star-chart shadows gold rings cream starlight, large shapes readable44px. No text letters numbers frames, no hat staff. Reading order TOP LEFT deflectfate: incoming silver blade strike path BENDS sharply at small gold ring and redirects towards a second dark enemy token to right. Strong bent directional trail. TOP CENTRE turncycle: ONE gold/navy dial with ONE highlighted notch and a short curved turn arrow, solid simple dial. TOP RIGHT crossing: TWO bright gold/lavender fate lines form X with small white contact spark at crossing, no dial. BOTTOM LEFT doubledial: gold/navy dial with TWO adjacent highlighted notches and TWO curved turn steps, visually different double rim. BOTTOM CENTRE starneedle: single long slender diagonal golden needle bolt tipped with ONE sharp four-point star, navy wispy tail, no rings. BOTTOM RIGHT readorbit: open navy orbit chart with TWO big marked gold/lavender stars on orbit and a small revealing eye at chart centre, ring schematic, no text. ONE distinct composition per cell inner78%, no crossing between cells, painted original icon art, true alpha. Sheet1536x1024.",
+      "generation_id": "exec-e603b985-442a-4b3a-b753-158d0d125e09",
+      "output": "sources/astrid_icons.png",
+      "references": [
+        "public/assets/ui/skill_icons.webp",
+        "sources/astrid_fix.png"
+      ],
+      "transparent_background": true,
+      "output_artifact_id": "exec-e603b985-442a-4b3a-b753-158d0d125e09",
+      "generator_job_id": null,
+      "generation_id_note": "Tool exposes output artifact UUID, not a separate generator job ID; original PNG C2PA retained."
+    },
+    {
+      "id": "perfectfist",
+      "prompt": "Draw ONE isolated square painted skill icon perfectfist for Kael: a single cream CLOTH wrapped fist thrusting perfectly horizontally right, narrow white-gold piercing finishing impact, EXACTLY THREE dark hollow depleted circular pip sockets trailing behind fist in a clear row (three only). No extra round objects, no metal gauntlet. Amber dark umber gold cream palette, high-contrast dark outline, bold silhouette readable44px. Same painterly game style attached. Dark warm painted background is okay. No text no numbers no border. One icon composition, not a grid.",
+      "generation_id": "exec-54d26862-480e-45b7-a572-8be85ff07ca5",
+      "output": "sources/perfectfist.png",
+      "references": [
+        "sources/kael_icons.png"
+      ],
+      "transparent_background": false,
+      "output_artifact_id": "exec-54d26862-480e-45b7-a572-8be85ff07ca5",
+      "generator_job_id": null,
+      "generation_id_note": "Tool exposes output artifact UUID, not a separate generator job ID; original PNG C2PA retained."
+    },
+    {
+      "id": "kael_fix3",
+      "prompt": "Make SAME Kael exactly THREE HEADS TALL chibi. Current attached sprite head too small: enlarge the entire head INCLUDING single topknot, hair, face by25% and shorten torso enough to preserve total height. Overall figure hair-top to sole should be THREE TIMES hair-top to chin, so head is one third of full standing height. Big cute chibi head, short compact torso, muscular bare arms low open palm guard facing RIGHT. Same calm focused face and single topknot umber vest cream hand wraps gold sash charcoal loose trousers legwraps sandals. Both soles on SAME horizontal baseline. No shadow no aura energy weapon armor beads tabard or text. True transparent square canvas, all hair and sandals within margins, one finished sprite.",
+      "generation_id": "exec-0b0bdb69-1f11-44c1-9569-99bcf86bde6e",
+      "output": "sources/kael_fix3.png",
+      "references": [
+        "sources/kael_fix2.png"
+      ],
+      "transparent_background": true,
+      "output_artifact_id": "exec-0b0bdb69-1f11-44c1-9569-99bcf86bde6e",
+      "generator_job_id": null,
+      "generation_id_note": "Tool exposes output artifact UUID, not a separate generator job ID; original PNG C2PA retained."
+    },
+    {
+      "id": "kael_fix4",
+      "prompt": "Keep this exact Kael image nearly unchanged. Only a VERY SMALL adjustment: shrink hair+head including topknot by FIVE PERCENT (95% current size), keep body and legs same. Do not make head tiny and do not enlarge it. Same stance same facial expression same costume same broad silhouette. Both sandal soles on the same horizontal baseline. Isolated full body transparent RGBA no shadow no text no effects, square canvas margins.",
+      "generation_id": "exec-04429659-9537-4a61-b7d0-615269f42657",
+      "output": "sources/kael_fix4.png",
+      "references": [
+        "sources/kael_fix.png"
+      ],
+      "transparent_background": true,
+      "output_artifact_id": "exec-04429659-9537-4a61-b7d0-615269f42657",
+      "generator_job_id": null,
+      "generation_id_note": "Tool exposes output artifact UUID, not a separate generator job ID; original PNG C2PA retained."
+    },
+    {
+      "id": "astrid_fix2",
+      "prompt": "Final subtle head proportion adjustment SAME Astrid battle unit: enlarge face and hair head by only8% relative to torso, slightly shorter torso. Overall hair top to chin should be ONE THIRD hair top to soles, THREE heads tall chibi. Preserve exact silver lavender bob gold star pin violet eyes navy star mantle cream crescent split lining, ring set held close at right hand, right-facing stance both boots planted same baseline, no hat staff body-orbit effects shadow or text. Full figure square true alpha with margins. Keep identity and silhouette identical, only slightly larger head.",
+      "generation_id": "exec-75256f34-ac4d-4061-86c1-4ab8f24e5b72",
+      "output": "sources/astrid_fix2.png",
+      "references": [
+        "sources/astrid_fix.png"
+      ],
+      "transparent_background": true,
+      "output_artifact_id": "exec-75256f34-ac4d-4061-86c1-4ab8f24e5b72",
+      "generator_job_id": null,
+      "generation_id_note": "Tool exposes output artifact UUID, not a separate generator job ID; original PNG C2PA retained."
+    },
+    {
+      "id": "kael_fix5",
+      "prompt": "One tiny precise correction: enlarge Kael's complete head and hair by FOUR PERCENT only, 104% current size, keep body and legs same. Do not redraw proportions otherwise. Preserve identity face expression single topknot costume stance and exact colors. Both sole bottoms same horizontal baseline. Full body isolated transparent RGBA no shadows no effects no text.",
+      "generation_id": "exec-eea27d45-ed04-4ca7-ae4b-ed197b6dd023",
+      "output": "sources/kael_fix5.png",
+      "references": [
+        "sources/kael_fix4.png"
+      ],
+      "transparent_background": true,
+      "output_artifact_id": "exec-eea27d45-ed04-4ca7-ae4b-ed197b6dd023",
+      "generator_job_id": null,
+      "generation_id_note": "Tool exposes output artifact UUID, not a separate generator job ID; original PNG C2PA retained."
+    },
+    {
+      "id": "perfectfist_fix",
+      "prompt": "Remove the painted rectangular background from this perfectfist icon. Keep ONLY the cream wrapped fist, narrow golden finishing impact streak, three dark hollow depleted circular pip sockets, and close amber brushstroke trails. Genuine transparent alpha everywhere else. No brown rectangular field, no dark canvas gradient, no border. Preserve exactly THREE round sockets and same painterly icon. Tightly composed central item with generous transparent margin all around, no cut-off streak. One square RGBA icon.",
+      "generation_id": "exec-7bd7a3c4-8fab-480c-9a7d-0fdef23d2f43",
+      "output": "sources/perfectfist_fix.png",
+      "references": [
+        "sources/perfectfist.png"
+      ],
+      "transparent_background": true,
+      "output_artifact_id": "exec-7bd7a3c4-8fab-480c-9a7d-0fdef23d2f43",
+      "generator_job_id": null,
+      "generation_id_note": "Tool exposes output artifact UUID, not a separate generator job ID; original PNG C2PA retained."
+    }
+  ]
+}

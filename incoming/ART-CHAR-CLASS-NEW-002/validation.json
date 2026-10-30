@@ -1,0 +1,1473 @@
+{
+  "package": "ART-CHAR-CLASS-NEW-002",
+  "base_commit": "a748ce1d3753db2253772ee9f0678f7d5926f6be",
+  "owner_visual_approval": "pending",
+  "runtime_integrated": false,
+  "anatomy": {
+    "kael": {
+      "source": "sources/kael_fix5.png",
+      "source_landmarks": {
+        "hair": [
+          583,
+          42
+        ],
+        "chin": [
+          700,
+          460
+        ]
+      },
+      "measurement_method": "Human inspected hair-crown and chin-tip landmarks, transformed by rigid rotation and uniform scale; inclusive pixel extents (chin-crown+1 and sole-crown+1); hood excluded.",
+      "rotation_degrees": 0.08,
+      "uniform_scale": 0.3852739726027397,
+      "translation": [
+        2,
+        31
+      ],
+      "hair_top_y": 47,
+      "chin_y": 208,
+      "measured_head_height": 162,
+      "body_height": 450,
+      "head_body_ratio": 0.36,
+      "bounds": [
+        51,
+        47,
+        461,
+        497
+      ],
+      "foot_contact_y496": {
+        "columns": [
+          80,
+          81,
+          82,
+          83,
+          84,
+          408,
+          409,
+          410,
+          411,
+          412,
+          413,
+          414,
+          415,
+          416,
+          417,
+          418,
+          419,
+          420,
+          421,
+          422,
+          423,
+          424,
+          425,
+          426,
+          427,
+          428,
+          429,
+          430,
+          431,
+          432,
+          433,
+          434,
+          435,
+          436,
+          437,
+          438,
+          439,
+          440,
+          441,
+          442,
+          443,
+          444,
+          445
+        ],
+        "runs": [
+          [
+            80,
+            84
+          ],
+          [
+            408,
+            445
+          ]
+        ]
+      },
+      "runtime_pivot": [
+        0.5,
+        0.970703125
+      ]
+    },
+    "wynne": {
+      "source": "sources/wynne_fix5.png",
+      "source_landmarks": {
+        "hair": [
+          714,
+          96
+        ],
+        "chin": [
+          753,
+          493
+        ]
+      },
+      "measurement_method": "Human inspected hair-crown and chin-tip landmarks, transformed by rigid rotation and uniform scale; inclusive pixel extents (chin-crown+1 and sole-crown+1); hood excluded.",
+      "rotation_degrees": 0.0,
+      "uniform_scale": 0.39250669045495096,
+      "translation": [
+        -2,
+        19
+      ],
+      "hair_top_y": 57,
+      "chin_y": 213,
+      "measured_head_height": 157,
+      "body_height": 440,
+      "head_body_ratio": 0.356818,
+      "bounds": [
+        90,
+        37,
+        421,
+        497
+      ],
+      "foot_contact_y496": {
+        "columns": [
+          223,
+          224,
+          225,
+          226,
+          227,
+          228,
+          229,
+          230,
+          231,
+          232,
+          233,
+          234,
+          235,
+          236,
+          237,
+          238,
+          239,
+          240,
+          241,
+          242,
+          243,
+          244,
+          245,
+          246,
+          247,
+          248,
+          249,
+          250,
+          251,
+          252,
+          253,
+          254,
+          255,
+          256,
+          257,
+          258,
+          319,
+          320,
+          321,
+          322,
+          323,
+          324,
+          325,
+          326,
+          327,
+          328,
+          329,
+          330,
+          331,
+          332,
+          333,
+          334,
+          335,
+          336,
+          337,
+          338,
+          339,
+          340,
+          341,
+          342,
+          343,
+          344,
+          345,
+          346,
+          347,
+          348,
+          349
+        ],
+        "runs": [
+          [
+            223,
+            258
+          ],
+          [
+            319,
+            349
+          ]
+        ]
+      },
+      "runtime_pivot": [
+        0.5,
+        0.970703125
+      ]
+    },
+    "astrid": {
+      "source": "sources/astrid_fix2.png",
+      "source_landmarks": {
+        "hair": [
+          644,
+          25
+        ],
+        "chin": [
+          701,
+          441
+        ]
+      },
+      "measurement_method": "Human inspected hair-crown and chin-tip landmarks, transformed by rigid rotation and uniform scale; inclusive pixel extents (chin-crown+1 and sole-crown+1); hood excluded.",
+      "rotation_degrees": -0.68,
+      "uniform_scale": 0.3768844221105528,
+      "translation": [
+        0,
+        37
+      ],
+      "hair_top_y": 46,
+      "chin_y": 204,
+      "measured_head_height": 159,
+      "body_height": 451,
+      "head_body_ratio": 0.35255,
+      "bounds": [
+        84,
+        46,
+        427,
+        497
+      ],
+      "foot_contact_y496": {
+        "columns": [
+          169,
+          170,
+          171,
+          172,
+          173,
+          174,
+          175,
+          176,
+          177,
+          178,
+          179,
+          180,
+          181,
+          182,
+          183,
+          184,
+          185,
+          186,
+          187,
+          188,
+          189,
+          190,
+          191,
+          192,
+          193,
+          194,
+          195,
+          196,
+          197,
+          198,
+          199,
+          200,
+          201,
+          300,
+          301,
+          302,
+          303,
+          304,
+          305,
+          306,
+          307,
+          308,
+          309,
+          310,
+          311,
+          312,
+          313,
+          314,
+          315,
+          316,
+          317,
+          318,
+          319,
+          320,
+          321,
+          322,
+          323,
+          324,
+          325,
+          326,
+          327,
+          328,
+          329,
+          330
+        ],
+        "runs": [
+          [
+            169,
+            201
+          ],
+          [
+            300,
+            330
+          ]
+        ]
+      },
+      "runtime_pivot": [
+        0.5,
+        0.970703125
+      ]
+    }
+  },
+  "checks": {
+    "kael": {
+      "head": true,
+      "body": true,
+      "ratio": true,
+      "bounds": true,
+      "both_feet": true
+    },
+    "wynne": {
+      "head": true,
+      "body": true,
+      "ratio": true,
+      "bounds": true,
+      "both_feet": true
+    },
+    "astrid": {
+      "head": true,
+      "body": true,
+      "ratio": true,
+      "bounds": true,
+      "both_feet": true
+    }
+  },
+  "delivery_checks": {
+    "unit_count": true,
+    "unit/kael:dimensions": true,
+    "unit/kael:real_alpha": true,
+    "unit/wynne:dimensions": true,
+    "unit/wynne:real_alpha": true,
+    "unit/astrid:dimensions": true,
+    "unit/astrid:real_alpha": true,
+    "portrait_count": true,
+    "portrait/kael:dimensions": true,
+    "portrait/wynne:dimensions": true,
+    "portrait/astrid:dimensions": true,
+    "weapon_count": true,
+    "weapon/kael:dimensions": true,
+    "weapon/kael:real_alpha": true,
+    "weapon/kael:extent": true,
+    "weapon/wynne:dimensions": true,
+    "weapon/wynne:real_alpha": true,
+    "weapon/wynne:extent": true,
+    "weapon/astrid:dimensions": true,
+    "weapon/astrid:real_alpha": true,
+    "weapon/astrid:extent": true,
+    "icons_count": true,
+    "icons/gatherfist:dimensions": true,
+    "icons/releasefist:dimensions": true,
+    "icons/flowfist:dimensions": true,
+    "icons/circlefist:dimensions": true,
+    "icons/storedfist:dimensions": true,
+    "icons/perfectfist:dimensions": true,
+    "icons/threadhex:dimensions": true,
+    "icons/lifetoll:dimensions": true,
+    "icons/wovenhex:dimensions": true,
+    "icons/longthread:dimensions": true,
+    "icons/tollring:dimensions": true,
+    "icons/knothex:dimensions": true,
+    "icons/deflectfate:dimensions": true,
+    "icons/turncycle:dimensions": true,
+    "icons/crossing:dimensions": true,
+    "icons/doubledial:dimensions": true,
+    "icons/starneedle:dimensions": true,
+    "icons/readorbit:dimensions": true
+  },
+  "all_technical_checks_pass": true,
+  "files": {
+    "NOTES.md": {
+      "bytes": 6996,
+      "sha256": "966b8fd5dca1806bd913d72d9cccebb329e28d41d9566db90f42dd2a9b079f84"
+    },
+    "icons/circlefist.png": {
+      "bytes": 107884,
+      "sha256": "5b95b7e88f15b54593273f97e1107f711970d12c4ceeef3381bafe5390a43a17",
+      "decode": true,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "bounds": [
+        16,
+        19,
+        252,
+        230
+      ]
+    },
+    "icons/crossing.png": {
+      "bytes": 114045,
+      "sha256": "808a5a4050ac4f331db3685fc3a5adc4d551346755a0d630c41bccf255d32248",
+      "decode": true,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "bounds": [
+        19,
+        40,
+        240,
+        242
+      ]
+    },
+    "icons/deflectfate.png": {
+      "bytes": 105895,
+      "sha256": "a0bc7a54d332a08f3b2ea70917505e28e748cf18f7c6d50fe39600e5471b48e6",
+      "decode": true,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "bounds": [
+        16,
+        40,
+        256,
+        250
+      ]
+    },
+    "icons/doubledial.png": {
+      "bytes": 100832,
+      "sha256": "4764924094e566bb5d0421f169ccd30cc283caa155fd9afee40e063c15d65bc4",
+      "decode": true,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "bounds": [
+        14,
+        13,
+        245,
+        226
+      ]
+    },
+    "icons/flowfist.png": {
+      "bytes": 100650,
+      "sha256": "688e5c70c85b1459a50335117ca5307688ef7552fd62d7244b763cd018f1809f",
+      "decode": true,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "bounds": [
+        23,
+        29,
+        238,
+        245
+      ]
+    },
+    "icons/gatherfist.png": {
+      "bytes": 101590,
+      "sha256": "2737977ed1c77735d6d89b34d175bfd0fddd2eb5c3977500e17f31ea652b5a5e",
+      "decode": true,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "bounds": [
+        23,
+        25,
+        246,
+        253
+      ]
+    },
+    "icons/knothex.png": {
+      "bytes": 88306,
+      "sha256": "795baf216fb6a6441c1fc6f438fc64ec53bf6cefc93533caaa6c8232bec68f70",
+      "decode": true,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "bounds": [
+        30,
+        10,
+        226,
+        229
+      ]
+    },
+    "icons/lifetoll.png": {
+      "bytes": 100709,
+      "sha256": "806add4dd211eb5c56cf87e2ef8b4539c75c648b75605ed63a760429702ba831",
+      "decode": true,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "bounds": [
+        15,
+        30,
+        245,
+        234
+      ]
+    },
+    "icons/longthread.png": {
+      "bytes": 67315,
+      "sha256": "4e152c43dd119f5f46dd09277fdf5859e06539d69a1de356e8ce578267ded6f9",
+      "decode": true,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "bounds": [
+        28,
+        18,
+        242,
+        228
+      ]
+    },
+    "icons/perfectfist.png": {
+      "bytes": 81170,
+      "sha256": "67d1d7d9cef4ba975c73992aea08876f638af410d32e2e015f9cebe5ecc7cad3",
+      "decode": true,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "bounds": [
+        1,
+        40,
+        254,
+        211
+      ]
+    },
+    "icons/readorbit.png": {
+      "bytes": 113993,
+      "sha256": "30050f228032c3b21cf8b07c6ec563b5c977f1683006d376e031236746e6340d",
+      "decode": true,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "bounds": [
+        14,
+        18,
+        239,
+        222
+      ]
+    },
+    "icons/releasefist.png": {
+      "bytes": 115629,
+      "sha256": "dc35c30460da4d9426506070cc8ee1ffe7462890c37399fe0d8aa0daf14cf274",
+      "decode": true,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "bounds": [
+        11,
+        15,
+        246,
+        249
+      ]
+    },
+    "icons/starneedle.png": {
+      "bytes": 82589,
+      "sha256": "dff5080cd0bba3ba9b2a0f50166b16c87ce321fae7d26fe0f771e817bfb8bd5e",
+      "decode": true,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "bounds": [
+        11,
+        8,
+        246,
+        221
+      ]
+    },
+    "icons/storedfist.png": {
+      "bytes": 101965,
+      "sha256": "4c9ed83e6bf66ac86ecb2b24fdf9bbd078abb971ea761f4bec775ca428cfdfcb",
+      "decode": true,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "bounds": [
+        21,
+        15,
+        235,
+        226
+      ]
+    },
+    "icons/threadhex.png": {
+      "bytes": 92327,
+      "sha256": "66377334a92363addeed97948e9220331e6d9e83b57b4e604981ca43e8a447c8",
+      "decode": true,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "bounds": [
+        17,
+        36,
+        235,
+        231
+      ]
+    },
+    "icons/tollring.png": {
+      "bytes": 111815,
+      "sha256": "4cbec9d24c663e20742b4e13c01cccdcc0fa71e1c65f757f6795fc4e00485652",
+      "decode": true,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "bounds": [
+        9,
+        7,
+        247,
+        228
+      ]
+    },
+    "icons/turncycle.png": {
+      "bytes": 86466,
+      "sha256": "3de1c063ca9392dffe3a935a7686834d4b1e48ce7c6c4b3f35de164831495a88",
+      "decode": true,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "bounds": [
+        0,
+        30,
+        232,
+        249
+      ]
+    },
+    "icons/wovenhex.png": {
+      "bytes": 86889,
+      "sha256": "7d208ce2dee640ceab09b431de28f71df5132943e726e0fc69afcda4f9d943a6",
+      "decode": true,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "bounds": [
+        13,
+        56,
+        245,
+        227
+      ]
+    },
+    "package.py": {
+      "bytes": 11820,
+      "sha256": "ecec4f8246a9cac6e23d7d3d76fbccfeeb6487b0e373476b4ed88c6fbc355ce6"
+    },
+    "portrait/astrid.png": {
+      "bytes": 612918,
+      "sha256": "45b216ef5d423841c7509f777e0fb3d0cc0abc8777c3d8d582a1f82dfd62cbcd",
+      "decode": true,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        255,
+        255
+      ],
+      "bounds": [
+        0,
+        0,
+        512,
+        512
+      ]
+    },
+    "portrait/kael.png": {
+      "bytes": 525399,
+      "sha256": "ed1d3a2ca0533b745a869d22dcf2c99c83354c9170adaf74aed1508abab5bc1c",
+      "decode": true,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        255,
+        255
+      ],
+      "bounds": [
+        0,
+        0,
+        512,
+        512
+      ]
+    },
+    "portrait/wynne.png": {
+      "bytes": 578432,
+      "sha256": "7c74748bf54b93c59308606b6c60cb8b84d504cb33ec3db1fb07b968cff08c9a",
+      "decode": true,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        255,
+        255
+      ],
+      "bounds": [
+        0,
+        0,
+        512,
+        512
+      ]
+    },
+    "prompts.json": {
+      "bytes": 30524,
+      "sha256": "4497831a8239fcfcfed1cea32c4c394b780156c422e3d649d7bb503e928424cb"
+    },
+    "review/anatomy.png": {
+      "bytes": 765530,
+      "sha256": "127c7272ce3998a7b76f5b066326c26970a6ec7e8383f8440b26ba8c7987bda4",
+      "decode": true,
+      "size": [
+        1536,
+        550
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        255,
+        255
+      ],
+      "bounds": [
+        0,
+        0,
+        1536,
+        550
+      ]
+    },
+    "review/icons-44.png": {
+      "bytes": 76913,
+      "sha256": "800e48333650b0401875a853e682750fd3bb3104eb7c94ce73362b093fb547f8",
+      "decode": true,
+      "size": [
+        690,
+        270
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        255,
+        255
+      ],
+      "bounds": [
+        0,
+        0,
+        690,
+        270
+      ]
+    },
+    "review/lineup.png": {
+      "bytes": 930392,
+      "sha256": "0840ea43bd402cef3e3471270465be62368887987e9bb409ff2927e448503a96",
+      "decode": true,
+      "size": [
+        700,
+        1040
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        255,
+        255
+      ],
+      "bounds": [
+        0,
+        0,
+        700,
+        1040
+      ]
+    },
+    "review/portraits-40.png": {
+      "bytes": 39944,
+      "sha256": "030fab5deb6f82dd46be5ca2c91ce004ffdccc270166a6de15656bada80eaa79",
+      "decode": true,
+      "size": [
+        390,
+        180
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        255,
+        255
+      ],
+      "bounds": [
+        0,
+        0,
+        390,
+        180
+      ]
+    },
+    "sources/astrid.png": {
+      "bytes": 2116330,
+      "sha256": "fe78983c4fd1dccddf87b3a17530f289290a7996515858e0a54aba63d4684f25",
+      "decode": true,
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "bounds": [
+        41,
+        43,
+        1231,
+        1209
+      ]
+    },
+    "sources/astrid_fix.png": {
+      "bytes": 1720896,
+      "sha256": "ae3d05607e9c785d2f765c000ae48d07280e14eab8579c1fc687ded4f3a9996f",
+      "decode": true,
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "bounds": [
+        229,
+        47,
+        1150,
+        1205
+      ]
+    },
+    "sources/astrid_fix2.png": {
+      "bytes": 1746411,
+      "sha256": "3a40a7de8d982354cdc61b21502d7c155c760d727aed82d8a46be901013604f0",
+      "decode": true,
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "bounds": [
+        227,
+        25,
+        1132,
+        1222
+      ]
+    },
+    "sources/astrid_icons.png": {
+      "bytes": 2724448,
+      "sha256": "612825095e3a1f9991a7176fc3dd65f4f40fad1396ac0c8621e22dfcc55af4a9",
+      "decode": true,
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "bounds": [
+        28,
+        59,
+        1503,
+        964
+      ]
+    },
+    "sources/gear.png": {
+      "bytes": 1514155,
+      "sha256": "5e006ccb1c37393ba073e60357f94996fade665653906779c40a2601e49615ce",
+      "decode": true,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "bounds": [
+        43,
+        16,
+        2091,
+        699
+      ]
+    },
+    "sources/kael.png": {
+      "bytes": 1486801,
+      "sha256": "8f6e264364351a9b404912bc327d2c224c9ff9a3576f7ae51be6c7e74000090e",
+      "decode": true,
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "bounds": [
+        112,
+        9,
+        1191,
+        1222
+      ]
+    },
+    "sources/kael_fix.png": {
+      "bytes": 1327026,
+      "sha256": "8307a6bb543ce0ff2fd0b9b9295e0d61c4f95951e388e1e3a2726211c429314d",
+      "decode": true,
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "bounds": [
+        124,
+        26,
+        1186,
+        1205
+      ]
+    },
+    "sources/kael_fix2.png": {
+      "bytes": 1163832,
+      "sha256": "44c33fc8ce106e66fbd3a206443126e2a073441b25c5b2f3767f9d5f62bd3816",
+      "decode": true,
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "bounds": [
+        121,
+        81,
+        1188,
+        1197
+      ]
+    },
+    "sources/kael_fix3.png": {
+      "bytes": 1370121,
+      "sha256": "7b8f5025c0d4f8536968c30da6502bfeb737c984f7dcef5b33a3a1bf01cd3387",
+      "decode": true,
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "bounds": [
+        182,
+        19,
+        1163,
+        1245
+      ]
+    },
+    "sources/kael_fix4.png": {
+      "bytes": 1216392,
+      "sha256": "a582254408df3eee5329224fe020d166ce9b512b236898496ff4d4b3a65df6b7",
+      "decode": true,
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "bounds": [
+        125,
+        75,
+        1185,
+        1206
+      ]
+    },
+    "sources/kael_fix5.png": {
+      "bytes": 1251854,
+      "sha256": "48206d8f0032735c9e77d7ebb5c555fb82df7b9b72314b33315e2a0201ad4947",
+      "decode": true,
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "bounds": [
+        128,
+        42,
+        1190,
+        1211
+      ]
+    },
+    "sources/kael_icons.png": {
+      "bytes": 2710188,
+      "sha256": "3700fc2fccdef487e71db72550285c917c0f1bd1fed89773156b04bf32c80c82",
+      "decode": true,
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "bounds": [
+        32,
+        29,
+        1525,
+        971
+      ]
+    },
+    "sources/perfectfist.png": {
+      "bytes": 1921963,
+      "sha256": "fac5bd263092b756b8178ed3be32ba84afe10ae37d08521833c1dc0b060b30c0",
+      "decode": true,
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        255,
+        255
+      ],
+      "bounds": [
+        0,
+        0,
+        1254,
+        1254
+      ]
+    },
+    "sources/perfectfist_fix.png": {
+      "bytes": 1379330,
+      "sha256": "2b78071c3d1f3853358124ecc9a7d74e5186a740f599e9e723d8c9a41d86f76b",
+      "decode": true,
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "bounds": [
+        1,
+        193,
+        1245,
+        1035
+      ]
+    },
+    "sources/portraits.png": {
+      "bytes": 2875199,
+      "sha256": "4430438f8022f72fcd13783e825371a52f4238c1025a7a33732989a4331bf5ab",
+      "decode": true,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        255,
+        255
+      ],
+      "bounds": [
+        0,
+        0,
+        2172,
+        724
+      ]
+    },
+    "sources/wynne.png": {
+      "bytes": 1871885,
+      "sha256": "ba070f04a7fc5163133b20bf8c4c5c18cd1d76ad132a80eadcdf8a486938a2d0",
+      "decode": true,
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "bounds": [
+        164,
+        16,
+        1133,
+        1222
+      ]
+    },
+    "sources/wynne_fix.png": {
+      "bytes": 1760741,
+      "sha256": "bf014a2aba1749c4830c5b17b2517adce9642a88cb4e861df75db0868a4f2e58",
+      "decode": true,
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "bounds": [
+        178,
+        40,
+        1119,
+        1217
+      ]
+    },
+    "sources/wynne_fix2.png": {
+      "bytes": 2019988,
+      "sha256": "92f9dc88c45c278ff7987392554641c55d658cd6988ee1f7a7a472ec7f722f34",
+      "decode": true,
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "bounds": [
+        146,
+        14,
+        1157,
+        1237
+      ]
+    },
+    "sources/wynne_fix3.png": {
+      "bytes": 1596100,
+      "sha256": "6f4e4cc7d0a04ae6be964038bb4662129f66965e5b1d0b73ee0a338e03f730d0",
+      "decode": true,
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "bounds": [
+        227,
+        40,
+        1103,
+        1203
+      ]
+    },
+    "sources/wynne_fix4.png": {
+      "bytes": 1635680,
+      "sha256": "178ebbdcabb61f7b45cac190ba0ce9e3896c63c43cf04b3fcbcc5f3c8d2cc049",
+      "decode": true,
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "bounds": [
+        228,
+        41,
+        1104,
+        1214
+      ]
+    },
+    "sources/wynne_fix5.png": {
+      "bytes": 1651031,
+      "sha256": "bc6e6d3fecb6b4f09dd3663a73a50508f1bff68cfe481f347adb826587dd7004",
+      "decode": true,
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "bounds": [
+        236,
+        47,
+        1078,
+        1218
+      ]
+    },
+    "sources/wynne_icons.png": {
+      "bytes": 2483250,
+      "sha256": "4d254aee9c33693be9deb13316f38102214a87edacf1c8c58ba9abd36fdfa74e",
+      "decode": true,
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "bounds": [
+        34,
+        60,
+        1515,
+        969
+      ]
+    },
+    "unit/astrid.png": {
+      "bytes": 276250,
+      "sha256": "a2d2ac7833818ff62cc877ecd0e90e87f24d8f56365f57e6c32d9321b36f1b29",
+      "decode": true,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "bounds": [
+        84,
+        46,
+        427,
+        497
+      ]
+    },
+    "unit/kael.png": {
+      "bytes": 222337,
+      "sha256": "cff332c889f5c677a8e7aef7d6b1bd1a75d899a8e342facabb27f233f80ed0d2",
+      "decode": true,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "bounds": [
+        51,
+        47,
+        461,
+        497
+      ]
+    },
+    "unit/wynne.png": {
+      "bytes": 287571,
+      "sha256": "b2888ab61fcb39fc5e4fc508c0a6695efae1c74224c5460d32f724a24fa091e6",
+      "decode": true,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "bounds": [
+        90,
+        37,
+        421,
+        497
+      ]
+    },
+    "verify_remote.py": {
+      "bytes": 2531,
+      "sha256": "6593a8833f919c85044bf39c1010e92358650311b9b181f95c0b62f1da1d0d9e"
+    },
+    "weapon/astrid.png": {
+      "bytes": 23149,
+      "sha256": "ca6eb7d3a6c6714714368d87cd86fe3f047afd7cbf7f241f1fab18e24cab70d4",
+      "decode": true,
+      "size": [
+        128,
+        128
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "bounds": [
+        15,
+        8,
+        112,
+        120
+      ]
+    },
+    "weapon/kael.png": {
+      "bytes": 20995,
+      "sha256": "123adf52cc7e15caa7e6dd3d0b70846c51639a070c64825007162199104f0d24",
+      "decode": true,
+      "size": [
+        128,
+        128
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "bounds": [
+        8,
+        18,
+        120,
+        110
+      ]
+    },
+    "weapon/wynne.png": {
+      "bytes": 15902,
+      "sha256": "a09f7554f17ee525ced2ebb6ddf3285e17e12f594dd85fdb9531e8f0d37a86a9",
+      "decode": true,
+      "size": [
+        128,
+        128
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "bounds": [
+        28,
+        8,
+        100,
+        120
+      ]
+    }
+  }
+}
