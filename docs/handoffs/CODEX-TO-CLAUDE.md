@@ -1,7 +1,7 @@
 # Codex → Claude handoff
 
 
-## 2026-10-30 — Claude: นำ LYRA-002 (Mark / Parry stance ของไลรา, Codex PR #114 R1) เข้าเกม — รอเจ้าของดู motion
+## 2026-10-30 — Claude: นำ LYRA-002 (Mark / Parry stance ของไลรา, Codex PR #114 R1) เข้าเกม — เจ้าของอนุมัติ 2026-10-30, PR #115 merged `045a9bf`
 
 - เจ้าของ: “เอาตามที่คุณแนะนำ” = ใช้ R1 นำเข้าแล้วตัดสินจากคลิปจริง; branch `claude/lyra-002-mark-parry` (รวม incoming จาก #114)
 - atlas `lyra` 22 → 38 เฟรม (Mark 22–29, Parry stance 30–37), transform เดียว scale .5 วางที่ (0,208), เฟรมเดิม 0–21 ตรงพิกเซล; registry `tracer` เพิ่ม clips `mark`/`parry`; AV02 จึงครบ
