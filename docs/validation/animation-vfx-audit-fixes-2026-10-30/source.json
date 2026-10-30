@@ -1,0 +1,10 @@
+{
+  "branch": "claude/av-audit-fixes",
+  "pr": "https://github.com/wnau34-nptrn/asterveil-fateweave/pull/113",
+  "before": "78574820df976778345948328a378f44fdcd74b3",
+  "afterCapture": "9e41a1379e2cfaf90624b1f26ddf8bbde04816bb",
+  "afterNote": "Stills/clips captured at afterCapture. Later commit 1f7dc0d only changes how BattleScene finds a unit's own sprite during song/shadow moves (floor layers); no other case's presentation changes.",
+  "audit": "ae2d7af874f119427e05a6f9ce9f5e53c96e3def (source 157d6855808edbcf055929cd00f1e0b1dbfea91e)",
+  "harness": "docs/validation/animation-vfx-full-audit-2026-10-29/repro (run.cjs/live.cjs, chromium path and port changed for this machine; ready() also waits for the optional-art request)",
+  "viewport": "390x844, Chromium SwiftShader (not a real device)"
+}

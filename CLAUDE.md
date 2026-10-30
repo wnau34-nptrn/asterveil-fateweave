@@ -16,6 +16,10 @@ R2 artwork (PR #89) integrated through PR92 merge `4883362` (mark/sigil/storm/di
 
 Owner reported Aegis' head/body “pop” on a normal attack. Root cause is the A2 generated art (head ~1.37× the approved seed), not normalization. Aegis A2 frames are held at runtime (`anatomyHold` in `src/game/visuals/unit-frames.ts`): static seed + procedural motion until Codex delivers ART-UNIT-ANIMATION-A2-002 (`docs/handoffs/CODEX-AEGIS-ANATOMY-REDRAW-TH.md`). Check new unit art with `scripts/unit-anatomy-audit.py`; bbox/sole alignment is not an anatomy pass. Evidence: `docs/validation/aegis-anatomy-2026-10-29/README_TH.md`. Owner scope: fix Aegis only. Published by Pages 40903815981 at `530450a8`; owner accepted the interim hold and sent the A2-002 brief to Codex (2026-10-29).
 
+## Animation/VFX audit fixes AV02–AV08 — 2026-10-30 (PR #113, awaiting owner motion review)
+
+Branch `claude/av-audit-fixes` fixes the 2026-10-29 audit except AV01/Aegis (hold kept) and integrates W4–W8 art (A6–A10 bodies, foe/boss signature, saint/dance VFX) with owner picks assumed as Codex recommendations where none was recorded. Status per finding and runtime before/after: `docs/validation/animation-vfx-audit-fixes-2026-10-30/README_TH.md`. Open: Codex briefs `docs/handoffs/CODEX-AV02-LYRA-GESTURES-TH.md`, `docs/handoffs/CODEX-A7-DANCER-REDRAW-TH.md` (not yet sent). Boss/foe-signature/saint-dance atlases load only for encounters that use them; find a unit's sprite with `bodySprite()`, never the body's first image.
+
 ## Unit animation A2 — published 2026-10-28
 
 A2 Aegis/ Vargoth Guard published via PR88 mergee94b424 + QA-only7ff5388; Pages40671415477 build/4browser/deploy success. Full evidence: [A2 release](docs/validation/unit-a2-release/README_TH.md), [26clips/mapping/fallback](docs/combat-presentation/unit-a2-slice/README_TH.md). Pilot/A1/C5 approvals and timing retained. Owner explicitly approved A2 motion with “เอาเข้าเกมได้” on2026-10-28 after the26clip delivery; this is direct approval, not inferred from tests. A3/family7 are outside this task.

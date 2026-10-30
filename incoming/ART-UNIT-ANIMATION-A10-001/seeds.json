@@ -1,0 +1,64 @@
+[
+  {
+    "identity": "raider",
+    "file": "seeds/raider-seed.png",
+    "source": "public/assets/art/units.webp",
+    "source_blob_sha": "ee8081a98caa037a5f48195eddbf143b3e343386",
+    "base_commit": "5e9e65026b8949f7877db12a2e70496fe2aac77b",
+    "cell_zero_based": 4,
+    "atlas_columns": 2,
+    "cell_size": [
+      512,
+      512
+    ],
+    "crop_xyxy": [
+      0,
+      1024,
+      512,
+      1536
+    ],
+    "facing": "left",
+    "horizontal_mirror": true,
+    "owner_mirror_authorized": true,
+    "pixel_exact_shipped_crop": false,
+    "pixel_exact_mirrored_shipped_crop": true,
+    "original_crop_file": "seeds/raider-atlas-crop.png",
+    "sha256": "3afb33fff9b61a37d9117e02203182866c624365b044a0a0c64ef3035837ec97",
+    "sole_y": 493,
+    "frame_seed_offset": [
+      256,
+      64
+    ]
+  },
+  {
+    "identity": "brute",
+    "file": "seeds/brute-seed.png",
+    "source": "public/assets/art/units.webp",
+    "source_blob_sha": "ee8081a98caa037a5f48195eddbf143b3e343386",
+    "base_commit": "5e9e65026b8949f7877db12a2e70496fe2aac77b",
+    "cell_zero_based": 5,
+    "atlas_columns": 2,
+    "cell_size": [
+      512,
+      512
+    ],
+    "crop_xyxy": [
+      512,
+      1024,
+      1024,
+      1536
+    ],
+    "facing": "left",
+    "horizontal_mirror": false,
+    "owner_mirror_authorized": false,
+    "pixel_exact_shipped_crop": true,
+    "pixel_exact_mirrored_shipped_crop": false,
+    "original_crop_file": "seeds/brute-seed.png",
+    "sha256": "18f5fbd94ec5f8e9cc19ea64371da49995d09b75d490625903776e2ee67d756f",
+    "sole_y": 496,
+    "frame_seed_offset": [
+      256,
+      64
+    ]
+  }
+]

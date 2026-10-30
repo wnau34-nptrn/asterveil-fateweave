@@ -1,0 +1,11 @@
+{
+ "id": "foe-foe_sprite-4",
+ "status": "captured",
+ "clickOffset": 0.17059612274169922,
+ "sourceFrames": 77,
+ "decodedFrames": 78,
+ "maxTimestampError": 5.156204223588645e-06,
+ "maxFrameGap": 0.10082387924194336,
+ "sameState": true,
+ "saveStable": true
+}

@@ -1,0 +1,984 @@
+{
+  "golem": {
+    "factor": 0.5,
+    "displayRatio": 2.0,
+    "cell": 512,
+    "origin": [
+      0.5,
+      0.96875
+    ],
+    "seedArea": 147330,
+    "clipStarts": {
+      "attack": 1,
+      "skill": 9,
+      "hit": 17,
+      "down": 19
+    },
+    "strips": {
+      "foe_golem-punch-r1": {
+        "rawSize": [
+          6144,
+          768
+        ],
+        "sha256": "eb462d423411849fb8d3c715c9f659b2ea02b4f3dbd6339f1376de4bef10151d",
+        "figures": 6,
+        "scale": 0.5,
+        "referenceArea": 147330
+      },
+      "foe_golem-veil-quake-r1": {
+        "rawSize": [
+          6144,
+          768
+        ],
+        "sha256": "45e66e7a1e586f27066ec1e0794c825e203e5e621801b111605abbe7b4b72bfb",
+        "figures": 6,
+        "scale": 0.5,
+        "referenceArea": 147330
+      },
+      "foe_golem-hit-r1": {
+        "rawSize": [
+          4096,
+          768
+        ],
+        "sha256": "b8d2a8b935218f78c6cc9f1694316cc413f9ba7ed42d326265003e29acced6c9",
+        "figures": 4,
+        "scale": 0.5,
+        "referenceArea": 147330
+      },
+      "foe_golem-down-r1": {
+        "rawSize": [
+          4096,
+          768
+        ],
+        "sha256": "a7f1b8a68631db9bac2583f93c969c2efafdd2ea11fe05d90c849551af4f26f8",
+        "figures": 4,
+        "scale": 0.5,
+        "referenceArea": 147330
+      }
+    },
+    "transforms": [
+      {
+        "strip": "foe_golem-punch-r1",
+        "figure": 1,
+        "position": [
+          118,
+          251
+        ],
+        "slide": 0,
+        "centreX": 138.0,
+        "soleY": 245.0,
+        "natural": false,
+        "offsetPx": -0.5,
+        "lift": 0.0
+      },
+      {
+        "strip": "foe_golem-punch-r1",
+        "figure": 2,
+        "position": [
+          134,
+          282
+        ],
+        "slide": 0,
+        "centreX": 121.5,
+        "soleY": 213.5,
+        "natural": false,
+        "offsetPx": -0.5,
+        "lift": 0.0
+      },
+      {
+        "strip": "foe_golem-punch-r1",
+        "figure": 2,
+        "position": [
+          134,
+          282
+        ],
+        "slide": 0,
+        "centreX": 121.5,
+        "soleY": 213.5,
+        "natural": false,
+        "offsetPx": -0.5,
+        "lift": 0.0
+      },
+      {
+        "strip": "foe_golem-punch-r1",
+        "figure": 3,
+        "position": [
+          0,
+          260
+        ],
+        "slide": 8,
+        "centreX": 264.25,
+        "soleY": 236.0,
+        "natural": false,
+        "offsetPx": -0.5,
+        "lift": 0.0
+      },
+      {
+        "strip": "foe_golem-punch-r1",
+        "figure": 4,
+        "position": [
+          10,
+          266
+        ],
+        "slide": 0,
+        "centreX": 246.0,
+        "soleY": 230.0,
+        "natural": false,
+        "offsetPx": 0.0,
+        "lift": 0.0
+      },
+      {
+        "strip": "foe_golem-punch-r1",
+        "figure": 5,
+        "position": [
+          129,
+          255
+        ],
+        "slide": 0,
+        "centreX": 127.0,
+        "soleY": 241.0,
+        "natural": false,
+        "offsetPx": 0.0,
+        "lift": 0.0
+      },
+      {
+        "strip": "foe_golem-veil-quake-r1",
+        "figure": 1,
+        "position": [
+          153,
+          304
+        ],
+        "slide": 0,
+        "centreX": 102.75,
+        "soleY": 192.0,
+        "natural": false,
+        "offsetPx": 0.0,
+        "lift": 0.0
+      },
+      {
+        "strip": "foe_golem-veil-quake-r1",
+        "figure": 2,
+        "position": [
+          152,
+          210
+        ],
+        "slide": 0,
+        "centreX": 103.75,
+        "soleY": 285.5,
+        "natural": false,
+        "offsetPx": -0.5,
+        "lift": 0.0
+      },
+      {
+        "strip": "foe_golem-veil-quake-r1",
+        "figure": 2,
+        "position": [
+          152,
+          210
+        ],
+        "slide": 0,
+        "centreX": 103.75,
+        "soleY": 285.5,
+        "natural": false,
+        "offsetPx": -0.5,
+        "lift": 0.0
+      },
+      {
+        "strip": "foe_golem-veil-quake-r1",
+        "figure": 3,
+        "position": [
+          136,
+          320
+        ],
+        "slide": 0,
+        "centreX": 120.5,
+        "soleY": 176.0,
+        "natural": false,
+        "offsetPx": -0.5,
+        "lift": 0.0
+      },
+      {
+        "strip": "foe_golem-veil-quake-r1",
+        "figure": 4,
+        "position": [
+          146,
+          329
+        ],
+        "slide": 0,
+        "centreX": 109.5,
+        "soleY": 167.0,
+        "natural": false,
+        "offsetPx": -0.5,
+        "lift": 0.0
+      },
+      {
+        "strip": "foe_golem-veil-quake-r1",
+        "figure": 5,
+        "position": [
+          129,
+          255
+        ],
+        "slide": 0,
+        "centreX": 127.0,
+        "soleY": 241.0,
+        "natural": false,
+        "offsetPx": 0.0,
+        "lift": 0.0
+      },
+      {
+        "strip": "foe_golem-hit-r1",
+        "figure": 1,
+        "position": [
+          150,
+          280
+        ],
+        "slide": 0,
+        "centreX": 105.5,
+        "soleY": 216.0,
+        "natural": false,
+        "offsetPx": 0.0,
+        "lift": 0.0
+      },
+      {
+        "strip": "foe_golem-hit-r1",
+        "figure": 2,
+        "position": [
+          144,
+          296
+        ],
+        "slide": 0,
+        "centreX": 112.0,
+        "soleY": 199.5,
+        "natural": false,
+        "offsetPx": 0.0,
+        "lift": 0.0
+      },
+      {
+        "strip": "foe_golem-down-r1",
+        "figure": 1,
+        "position": [
+          146,
+          300
+        ],
+        "slide": 0,
+        "centreX": 110.0,
+        "soleY": 196.0,
+        "natural": false,
+        "offsetPx": 0.0,
+        "lift": 0.0
+      },
+      {
+        "strip": "foe_golem-down-r1",
+        "figure": 2,
+        "position": [
+          108,
+          374
+        ],
+        "slide": 0,
+        "centreX": 147.75,
+        "soleY": 122.5,
+        "natural": false,
+        "offsetPx": 0.0,
+        "lift": 0.0
+      },
+      {
+        "strip": "foe_golem-down-r1",
+        "figure": 3,
+        "position": [
+          121,
+          378
+        ],
+        "slide": 0,
+        "centreX": 135.0,
+        "soleY": 117.5,
+        "natural": false,
+        "offsetPx": 0.0,
+        "lift": 0.0
+      }
+    ],
+    "uniqueFrames": 14,
+    "losslessReconstruction": "all alpha and visible RGBA equal",
+    "image": "golem_a8.347332eb22cb.webp",
+    "atlas": "golem_a8.5b47da42b1d4.json",
+    "width": 768,
+    "height": 1125,
+    "frames": 22,
+    "decodedBytes": 3456000,
+    "downloadBytes": 1077307
+  },
+  "channeler": {
+    "factor": 0.5,
+    "displayRatio": 2.0,
+    "cell": 512,
+    "origin": [
+      0.5,
+      0.96875
+    ],
+    "seedArea": 116267,
+    "clipStarts": {
+      "attack": 1,
+      "hit": 17,
+      "down": 19
+    },
+    "strips": {
+      "foe_rift_channeler-rift-bolt-r1": {
+        "rawSize": [
+          6144,
+          768
+        ],
+        "sha256": "b48329c76bce14bfe79f90a0c3bd5108c19c5ff0e436337b256829f6c408222e",
+        "figures": 6,
+        "scale": 0.5,
+        "referenceArea": 116267
+      },
+      "foe_rift_channeler-hit-r1": {
+        "rawSize": [
+          4096,
+          768
+        ],
+        "sha256": "dd23ce09ff95d34d5e707473dd5eeb3f55709c81d40ebd39d5b08cba4702cbb8",
+        "figures": 4,
+        "scale": 0.5,
+        "referenceArea": 116267
+      },
+      "foe_rift_channeler-down-r1": {
+        "rawSize": [
+          4096,
+          768
+        ],
+        "sha256": "65e1e52749d07ed41726a4a52a95835651c308c8b5c1f6830c7e41a1608c54cd",
+        "figures": 4,
+        "scale": 0.5,
+        "referenceArea": 116267
+      }
+    },
+    "transforms": [
+      {
+        "strip": "foe_rift_channeler-rift-bolt-r1",
+        "figure": 1,
+        "position": [
+          168,
+          299
+        ],
+        "slide": 0,
+        "centreX": 88.5,
+        "soleY": 197.0,
+        "natural": false,
+        "offsetPx": 0.0,
+        "lift": 0.0
+      },
+      {
+        "strip": "foe_rift_channeler-rift-bolt-r1",
+        "figure": 2,
+        "position": [
+          161,
+          308
+        ],
+        "slide": 0,
+        "centreX": 94.75,
+        "soleY": 187.5,
+        "natural": false,
+        "offsetPx": 0.0,
+        "lift": 0.0
+      },
+      {
+        "strip": "foe_rift_channeler-rift-bolt-r1",
+        "figure": 2,
+        "position": [
+          161,
+          308
+        ],
+        "slide": 0,
+        "centreX": 94.75,
+        "soleY": 187.5,
+        "natural": false,
+        "offsetPx": 0.0,
+        "lift": 0.0
+      },
+      {
+        "strip": "foe_rift_channeler-rift-bolt-r1",
+        "figure": 3,
+        "position": [
+          98,
+          294
+        ],
+        "slide": 0,
+        "centreX": 157.5,
+        "soleY": 202.5,
+        "natural": false,
+        "offsetPx": 0.0,
+        "lift": 0.0
+      },
+      {
+        "strip": "foe_rift_channeler-rift-bolt-r1",
+        "figure": 4,
+        "position": [
+          86,
+          292
+        ],
+        "slide": 0,
+        "centreX": 169.5,
+        "soleY": 204.5,
+        "natural": false,
+        "offsetPx": 0.0,
+        "lift": 0.0
+      },
+      {
+        "strip": "foe_rift_channeler-rift-bolt-r1",
+        "figure": 5,
+        "position": [
+          114,
+          281
+        ],
+        "slide": 0,
+        "centreX": 141.75,
+        "soleY": 215.0,
+        "natural": false,
+        "offsetPx": 0.0,
+        "lift": 0.0
+      },
+      {
+        "strip": "foe_rift_channeler-hit-r1",
+        "figure": 1,
+        "position": [
+          160,
+          302
+        ],
+        "slide": 0,
+        "centreX": 95.5,
+        "soleY": 193.5,
+        "natural": false,
+        "offsetPx": 0.0,
+        "lift": 0.0
+      },
+      {
+        "strip": "foe_rift_channeler-hit-r1",
+        "figure": 2,
+        "position": [
+          171,
+          313
+        ],
+        "slide": 0,
+        "centreX": 84.75,
+        "soleY": 183.0,
+        "natural": false,
+        "offsetPx": -0.5,
+        "lift": 0.0
+      },
+      {
+        "strip": "foe_rift_channeler-down-r1",
+        "figure": 1,
+        "position": [
+          140,
+          306
+        ],
+        "slide": 0,
+        "centreX": 116.0,
+        "soleY": 190.5,
+        "natural": false,
+        "offsetPx": 0.0,
+        "lift": 0.0
+      },
+      {
+        "strip": "foe_rift_channeler-down-r1",
+        "figure": 2,
+        "position": [
+          120,
+          365
+        ],
+        "slide": 0,
+        "centreX": 135.75,
+        "soleY": 131.0,
+        "natural": false,
+        "offsetPx": 0.0,
+        "lift": 0.0
+      },
+      {
+        "strip": "foe_rift_channeler-down-r1",
+        "figure": 3,
+        "position": [
+          136,
+          388
+        ],
+        "slide": 0,
+        "centreX": 120.0,
+        "soleY": 107.5,
+        "natural": false,
+        "offsetPx": -0.5,
+        "lift": 0.0
+      }
+    ],
+    "uniqueFrames": 10,
+    "losslessReconstruction": "all alpha and visible RGBA equal",
+    "image": "channeler_a8.e78036e65eec.webp",
+    "atlas": "channeler_a8.030af2894ed6.json",
+    "width": 1280,
+    "height": 416,
+    "frames": 22,
+    "decodedBytes": 2129920,
+    "downloadBytes": 547872
+  },
+  "wisp": {
+    "factor": 0.5,
+    "displayRatio": 2.0,
+    "cell": 512,
+    "origin": [
+      0.5,
+      0.96875
+    ],
+    "seedArea": 43257,
+    "clipStarts": {
+      "attack": 1,
+      "hit": 17,
+      "down": 19,
+      "hover": 22
+    },
+    "strips": {
+      "foe_rift_wisp-star-flame-r1": {
+        "rawSize": [
+          6144,
+          768
+        ],
+        "sha256": "9512d75de2e96b93a000cb8cade445421f93ba00049302c238a96b0989765339",
+        "figures": 6,
+        "scale": 0.5,
+        "referenceArea": 43257
+      },
+      "foe_rift_wisp-hit-r1": {
+        "rawSize": [
+          4096,
+          768
+        ],
+        "sha256": "8037875fb86d03da70a59749555cca63818553b261af91cc2c279b45ec8b2c80",
+        "figures": 4,
+        "scale": 0.5,
+        "referenceArea": 43257
+      },
+      "foe_rift_wisp-down-r1": {
+        "rawSize": [
+          4096,
+          768
+        ],
+        "sha256": "ef6a8a05c6f77835e345d482a4be4e1e947b0d1f4a7bacc46b645c9df7a3fa90",
+        "figures": 4,
+        "scale": 0.5,
+        "referenceArea": 43257
+      },
+      "foe_rift_wisp-hover-r1": {
+        "rawSize": [
+          4096,
+          768
+        ],
+        "sha256": "d216c8d843ac03f32016886ab0dc039e111c31faf20d6ec9251bf8abf7a8d8d9",
+        "figures": 4,
+        "scale": 0.5,
+        "referenceArea": 43257
+      }
+    },
+    "transforms": [
+      {
+        "strip": "foe_rift_wisp-star-flame-r1",
+        "figure": 1,
+        "position": [
+          204,
+          332
+        ],
+        "slide": 0,
+        "centreX": 52.03940402709395,
+        "soleY": 155.0,
+        "natural": true,
+        "offsetPx": -9.0,
+        "lift": 0.0
+      },
+      {
+        "strip": "foe_rift_wisp-star-flame-r1",
+        "figure": 2,
+        "position": [
+          201,
+          360
+        ],
+        "slide": 0,
+        "centreX": 55.03940402709395,
+        "soleY": 134.5,
+        "natural": true,
+        "offsetPx": -1.0,
+        "lift": 0.0
+      },
+      {
+        "strip": "foe_rift_wisp-star-flame-r1",
+        "figure": 2,
+        "position": [
+          201,
+          360
+        ],
+        "slide": 0,
+        "centreX": 55.03940402709395,
+        "soleY": 134.5,
+        "natural": true,
+        "offsetPx": -1.0,
+        "lift": 0.0
+      },
+      {
+        "strip": "foe_rift_wisp-star-flame-r1",
+        "figure": 3,
+        "position": [
+          165,
+          345
+        ],
+        "slide": 0,
+        "centreX": 91.03940402709395,
+        "soleY": 127.0,
+        "natural": true,
+        "offsetPx": -24.0,
+        "lift": 0.0
+      },
+      {
+        "strip": "foe_rift_wisp-star-flame-r1",
+        "figure": 4,
+        "position": [
+          187,
+          347
+        ],
+        "slide": 0,
+        "centreX": 69.03940402709395,
+        "soleY": 138.0,
+        "natural": true,
+        "offsetPx": -11.0,
+        "lift": 0.0
+      },
+      {
+        "strip": "foe_rift_wisp-star-flame-r1",
+        "figure": 5,
+        "position": [
+          195,
+          310
+        ],
+        "slide": 0,
+        "centreX": 60.53940402709395,
+        "soleY": 186.0,
+        "natural": true,
+        "offsetPx": 0.0,
+        "lift": 0.0
+      },
+      {
+        "strip": "foe_rift_wisp-hit-r1",
+        "figure": 1,
+        "position": [
+          181,
+          327
+        ],
+        "slide": 0,
+        "centreX": 75.03940402709395,
+        "soleY": 160.5,
+        "natural": true,
+        "offsetPx": -8.5,
+        "lift": 0.0
+      },
+      {
+        "strip": "foe_rift_wisp-hit-r1",
+        "figure": 2,
+        "position": [
+          187,
+          346
+        ],
+        "slide": 0,
+        "centreX": 69.03940402709395,
+        "soleY": 151.5,
+        "natural": true,
+        "offsetPx": 1.0,
+        "lift": 0.0
+      },
+      {
+        "strip": "foe_rift_wisp-down-r1",
+        "figure": 1,
+        "position": [
+          201,
+          324
+        ],
+        "slide": 0,
+        "centreX": 55.03940402709395,
+        "soleY": 173.0,
+        "natural": true,
+        "offsetPx": 1.0,
+        "lift": 0.0
+      },
+      {
+        "strip": "foe_rift_wisp-down-r1",
+        "figure": 2,
+        "position": [
+          193,
+          383
+        ],
+        "slide": 0,
+        "centreX": 62.53940402709395,
+        "soleY": 113.0,
+        "natural": true,
+        "offsetPx": 0.0,
+        "lift": 0.0
+      },
+      {
+        "strip": "foe_rift_wisp-down-r1",
+        "figure": 3,
+        "position": [
+          183,
+          422
+        ],
+        "slide": 0,
+        "centreX": 72.53940402709395,
+        "soleY": 75.5,
+        "natural": true,
+        "offsetPx": 1.0,
+        "lift": 0.0
+      },
+      {
+        "strip": "foe_rift_wisp-hover-r1",
+        "figure": 1,
+        "position": [
+          193,
+          294
+        ],
+        "slide": 0,
+        "centreX": 62.53940402709395,
+        "soleY": 171.5,
+        "natural": true,
+        "offsetPx": -24.0,
+        "lift": 6.0
+      },
+      {
+        "strip": "foe_rift_wisp-hover-r1",
+        "figure": 2,
+        "position": [
+          192,
+          316
+        ],
+        "slide": 0,
+        "centreX": 64.03940402709395,
+        "soleY": 182.5,
+        "natural": true,
+        "offsetPx": 8.0,
+        "lift": 6.0
+      }
+    ],
+    "uniqueFrames": 12,
+    "losslessReconstruction": "all alpha and visible RGBA equal",
+    "image": "wisp_a8.f9b9ef229c93.webp",
+    "atlas": "wisp_a8.a22ecd578279.json",
+    "width": 1024,
+    "height": 334,
+    "frames": 25,
+    "decodedBytes": 1368064,
+    "downloadBytes": 336175
+  },
+  "crawler": {
+    "factor": 0.5,
+    "displayRatio": 2.0,
+    "cell": 512,
+    "origin": [
+      0.5,
+      0.96875
+    ],
+    "seedArea": 60730,
+    "clipStarts": {
+      "attack": 1,
+      "hit": 17,
+      "down": 19
+    },
+    "strips": {
+      "foe_shard_crawler-crystal-stab-r1": {
+        "rawSize": [
+          6144,
+          768
+        ],
+        "sha256": "84203283ba8f8f9b02cf01f7914395b75d828e7906d1b6b5d78d4c0cb9c018a7",
+        "figures": 6,
+        "scale": 0.5,
+        "referenceArea": 60730
+      },
+      "foe_shard_crawler-hit-r1": {
+        "rawSize": [
+          4096,
+          768
+        ],
+        "sha256": "fb27bc3879b0c211ef23a651e47ddb2a0ae78ed3c4b3db43d81003bb1de40158",
+        "figures": 4,
+        "scale": 0.5,
+        "referenceArea": 60730
+      },
+      "foe_shard_crawler-down-r1": {
+        "rawSize": [
+          4096,
+          768
+        ],
+        "sha256": "ec781f8e01f3d3d5a5445bda9fba0d02cd49cbf3955d63c287c1e00e491acc04",
+        "figures": 4,
+        "scale": 0.5,
+        "referenceArea": 60730
+      }
+    },
+    "transforms": [
+      {
+        "strip": "foe_shard_crawler-crystal-stab-r1",
+        "figure": 1,
+        "position": [
+          128,
+          360
+        ],
+        "slide": 0,
+        "centreX": 127.5,
+        "soleY": 136.5,
+        "natural": false,
+        "offsetPx": 0.0,
+        "lift": 0.0
+      },
+      {
+        "strip": "foe_shard_crawler-crystal-stab-r1",
+        "figure": 2,
+        "position": [
+          144,
+          374
+        ],
+        "slide": 0,
+        "centreX": 112.25,
+        "soleY": 122.5,
+        "natural": false,
+        "offsetPx": 0.0,
+        "lift": 0.0
+      },
+      {
+        "strip": "foe_shard_crawler-crystal-stab-r1",
+        "figure": 2,
+        "position": [
+          144,
+          374
+        ],
+        "slide": 0,
+        "centreX": 112.25,
+        "soleY": 122.5,
+        "natural": false,
+        "offsetPx": 0.0,
+        "lift": 0.0
+      },
+      {
+        "strip": "foe_shard_crawler-crystal-stab-r1",
+        "figure": 3,
+        "position": [
+          151,
+          368
+        ],
+        "slide": 0,
+        "centreX": 104.75,
+        "soleY": 127.5,
+        "natural": false,
+        "offsetPx": -0.5,
+        "lift": 0.0
+      },
+      {
+        "strip": "foe_shard_crawler-crystal-stab-r1",
+        "figure": 4,
+        "position": [
+          148,
+          372
+        ],
+        "slide": 0,
+        "centreX": 107.75,
+        "soleY": 124.5,
+        "natural": false,
+        "offsetPx": 0.0,
+        "lift": 0.0
+      },
+      {
+        "strip": "foe_shard_crawler-crystal-stab-r1",
+        "figure": 5,
+        "position": [
+          116,
+          342
+        ],
+        "slide": 0,
+        "centreX": 139.5,
+        "soleY": 154.0,
+        "natural": false,
+        "offsetPx": 0.0,
+        "lift": 0.0
+      },
+      {
+        "strip": "foe_shard_crawler-hit-r1",
+        "figure": 1,
+        "position": [
+          125,
+          351
+        ],
+        "slide": 0,
+        "centreX": 130.75,
+        "soleY": 145.0,
+        "natural": false,
+        "offsetPx": 0.0,
+        "lift": 0.0
+      },
+      {
+        "strip": "foe_shard_crawler-hit-r1",
+        "figure": 2,
+        "position": [
+          124,
+          363
+        ],
+        "slide": 0,
+        "centreX": 132.0,
+        "soleY": 133.0,
+        "natural": false,
+        "offsetPx": 0.0,
+        "lift": 0.0
+      },
+      {
+        "strip": "foe_shard_crawler-down-r1",
+        "figure": 1,
+        "position": [
+          145,
+          367
+        ],
+        "slide": 0,
+        "centreX": 110.75,
+        "soleY": 129.0,
+        "natural": false,
+        "offsetPx": 0.0,
+        "lift": 0.0
+      },
+      {
+        "strip": "foe_shard_crawler-down-r1",
+        "figure": 2,
+        "position": [
+          154,
+          402
+        ],
+        "slide": 0,
+        "centreX": 101.5,
+        "soleY": 94.5,
+        "natural": false,
+        "offsetPx": 0.0,
+        "lift": 0.0
+      },
+      {
+        "strip": "foe_shard_crawler-down-r1",
+        "figure": 3,
+        "position": [
+          158,
+          403
+        ],
+        "slide": 0,
+        "centreX": 97.5,
+        "soleY": 93.0,
+        "natural": false,
+        "offsetPx": 0.0,
+        "lift": 0.0
+      }
+    ],
+    "uniqueFrames": 10,
+    "losslessReconstruction": "all alpha and visible RGBA equal",
+    "image": "crawler_a8.4c402f135a49.webp",
+    "atlas": "crawler_a8.61d4d6d4d1b5.json",
+    "width": 512,
+    "height": 664,
+    "frames": 22,
+    "decodedBytes": 1359872,
+    "downloadBytes": 386769
+  }
+}

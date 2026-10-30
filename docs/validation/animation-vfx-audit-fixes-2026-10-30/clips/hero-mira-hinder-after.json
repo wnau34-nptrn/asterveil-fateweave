@@ -1,0 +1,11 @@
+{
+ "id": "hero-mira-hinder",
+ "status": "captured",
+ "clickOffset": 0.25938916206359863,
+ "sourceFrames": 56,
+ "decodedFrames": 57,
+ "maxTimestampError": 5.0984039305923545e-06,
+ "maxFrameGap": 0.2528400421142578,
+ "sameState": true,
+ "saveStable": true
+}

@@ -41,10 +41,12 @@ function edge(at:ProjectilePoint,outcome:ProjectileCue['outcome']) {
   return {x:at.x-at.size*.40,y:at.y+(outcome==='dodged'?at.size*.25:0)};
 }
 // Scene refreshes these after unit animation; both endpoints include actual pose and field shake.
-export function projectilePrepare(ctx:FxContext,cue:ProjectileCue,lookup:ProjectileLookup,contactMs:number,gather=true):void {
+// AV04: `releaseAt` is the fraction of the windup at which the caster's body lets go (unit-frames `release`); the flight
+// starts on that same frame, never while the body is still drawing. Without a body release the old .22 lead remains.
+export function projectilePrepare(ctx:FxContext,cue:ProjectileCue,lookup:ProjectileLookup,contactMs:number,gather=true,releaseAt=.22):void {
   if(ctx.reduced||!lookup(cue.sourceId)||!lookup(cue.targetId))return;
   const s=unitScale(ctx),quiet=ctx.quiet;
-  const anticipation=Math.max(1,Math.round(contactMs*.22)),travel=Math.max(1,contactMs-anticipation);
+  const anticipation=Math.max(1,Math.round(contactMs*releaseAt)),travel=Math.max(1,contactMs-anticipation);
   if(gather){
     const glint=paint(ctx,cue.skill,'prepare',30*s).setAlpha(.2);
     const follow=()=>{const p=lookup(cue.sourceId);if(p&&glint.active)glint.setPosition(p.releaseX,p.releaseY);};

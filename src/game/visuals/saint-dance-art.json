@@ -1,0 +1,122 @@
+{
+  "saintstrike_prepare": [
+    0.5,
+    0.5
+  ],
+  "saintstrike_peak": [
+    0.5,
+    0.5
+  ],
+  "saintstrike_settle": [
+    0.5,
+    0.5
+  ],
+  "communion_prepare": [
+    0.5,
+    0.5
+  ],
+  "communion_settle": [
+    0.5,
+    0.5
+  ],
+  "saintarc_prepare": [
+    0.5,
+    0.5
+  ],
+  "saintarc_peak": [
+    0.5,
+    0.5
+  ],
+  "vowstrike_prepare": [
+    0.5,
+    0.5
+  ],
+  "vowstrike_peak": [
+    0.5,
+    0.5
+  ],
+  "vowstrike_settle": [
+    0.5,
+    0.5
+  ],
+  "sharewound_prepare": [
+    0.5,
+    0.5
+  ],
+  "lastlight_prepare": [
+    0.5,
+    0.5
+  ],
+  "lastlight_peak": [
+    0.5,
+    0.5
+  ],
+  "cadence_prepare": [
+    0.5,
+    0.5
+  ],
+  "cadence_peak": [
+    0.5,
+    0.5
+  ],
+  "cadence_settle": [
+    0.5,
+    0.5
+  ],
+  "duet_prepare": [
+    0.5,
+    0.5
+  ],
+  "duet_peak": [
+    0.5,
+    0.5
+  ],
+  "duet_settle": [
+    0.5,
+    0.5
+  ],
+  "rounddance_prepare": [
+    0.5,
+    0.5
+  ],
+  "rounddance_settle": [
+    0.5,
+    0.76
+  ],
+  "deepbeat_prepare": [
+    0.5,
+    0.5
+  ],
+  "deepbeat_peak": [
+    0.5,
+    0.76
+  ],
+  "deepbeat_settle": [
+    0.5,
+    0.76
+  ],
+  "echofoot_prepare": [
+    0.5,
+    0.5
+  ],
+  "echofoot_peak": [
+    0.5,
+    0.76
+  ],
+  "echofoot_settle": [
+    0.5,
+    0.76
+  ],
+  "closingstep_prepare": [
+    0.5,
+    0.5
+  ],
+  "closingstep_peak": [
+    0.5,
+    0.76
+  ],
+  "closingstep_settle": [
+    0.5,
+    0.76
+  ]
+}

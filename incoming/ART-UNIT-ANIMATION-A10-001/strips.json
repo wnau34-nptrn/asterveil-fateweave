@@ -1,0 +1,1678 @@
+[
+  {
+    "identity": "raider",
+    "file": "raw/raider-raking-slash-r1.png",
+    "move": "raking-slash",
+    "revision": "r1",
+    "frame_count": 6,
+    "frame_size": [
+      1024,
+      704
+    ],
+    "frame_order": [
+      "ready",
+      "wind-up",
+      "deeper wind-up / anticipation",
+      "contact / release",
+      "follow-through",
+      "recover to ready"
+    ],
+    "sha256": "09311e294ac540d87b73e20044c9d771708b7926afbc42e84c90d644c4ef63f4",
+    "suggested_intents": [
+      "Raking Slash"
+    ],
+    "facing": "left",
+    "source": "source-sheets/raider-raking-slash-source.png",
+    "source_sha256": "c547b074dbd4d20c0b89a6c9f7c00b3d4fe5a271a25e87b498a44d0c18408562",
+    "source_to_delivery_shared_scale": 1.278688524590164,
+    "logical_seed_offset": [
+      256,
+      64
+    ],
+    "sole_y_in_frame": 557,
+    "clear_gutters_px": [
+      559,
+      595,
+      535,
+      483,
+      512
+    ],
+    "preferred": true,
+    "loop": false,
+    "end_behavior": "ready",
+    "frames": [
+      {
+        "frame": 1,
+        "source_visible_box": [
+          6,
+          211,
+          373,
+          577
+        ],
+        "output_alpha_box": [
+          256,
+          64,
+          768,
+          560
+        ],
+        "seed_offset": [
+          256,
+          64
+        ],
+        "pixel_exact_seed": true
+      },
+      {
+        "frame": 2,
+        "source_visible_box": [
+          418,
+          237,
+          739,
+          576
+        ],
+        "output_alpha_box": [
+          303,
+          116,
+          721,
+          563
+        ],
+        "source_crop": [
+          406,
+          225,
+          751,
+          588
+        ],
+        "resized": [
+          441,
+          464
+        ],
+        "paste_xy": [
+          292,
+          110
+        ],
+        "pixel_exact_seed": false
+      },
+      {
+        "frame": 3,
+        "source_visible_box": [
+          740,
+          267,
+          1060,
+          575
+        ],
+        "output_alpha_box": [
+          292,
+          154,
+          721,
+          565
+        ],
+        "source_crop": [
+          728,
+          255,
+          1072,
+          587
+        ],
+        "resized": [
+          440,
+          425
+        ],
+        "paste_xy": [
+          292,
+          148
+        ],
+        "pixel_exact_seed": false
+      },
+      {
+        "frame": 4,
+        "source_visible_box": [
+          1038,
+          219,
+          1454,
+          575
+        ],
+        "output_alpha_box": [
+          232,
+          88,
+          794,
+          563
+        ],
+        "source_crop": [
+          1026,
+          207,
+          1466,
+          587
+        ],
+        "resized": [
+          563,
+          486
+        ],
+        "paste_xy": [
+          231,
+          87
+        ],
+        "pixel_exact_seed": false
+      },
+      {
+        "frame": 5,
+        "source_visible_box": [
+          1426,
+          264,
+          1816,
+          573
+        ],
+        "output_alpha_box": [
+          253,
+          152,
+          768,
+          565
+        ],
+        "source_crop": [
+          1414,
+          252,
+          1828,
+          585
+        ],
+        "resized": [
+          529,
+          426
+        ],
+        "paste_xy": [
+          247,
+          147
+        ],
+        "pixel_exact_seed": false
+      },
+      {
+        "frame": 6,
+        "source_visible_box": [
+          1817,
+          210,
+          2172,
+          577
+        ],
+        "output_alpha_box": [
+          256,
+          64,
+          768,
+          560
+        ],
+        "seed_offset": [
+          256,
+          64
+        ],
+        "pixel_exact_seed": true
+      }
+    ]
+  },
+  {
+    "identity": "raider",
+    "file": "raw/raider-shadow-knife-r1.png",
+    "move": "shadow-knife",
+    "revision": "r1",
+    "frame_count": 6,
+    "frame_size": [
+      1024,
+      704
+    ],
+    "frame_order": [
+      "ready",
+      "wind-up",
+      "deeper wind-up / anticipation",
+      "contact / release",
+      "follow-through",
+      "recover to ready"
+    ],
+    "sha256": "7554ed47f861ec0ba8fcbca3da569c024c9dc5ad0f756f2312c118b53d01cff6",
+    "suggested_intents": [
+      "Shadow Knife"
+    ],
+    "facing": "left",
+    "source": "source-sheets/raider-shadow-knife-source.png",
+    "source_sha256": "7b8073f79e2a3799a11b27b858c37ad9b762c070b2b7ff5b60cd8d4e8c20afd0",
+    "source_to_delivery_shared_scale": 1.2283464566929134,
+    "logical_seed_offset": [
+      256,
+      64
+    ],
+    "sole_y_in_frame": 557,
+    "clear_gutters_px": [
+      548,
+      576,
+      562,
+      566,
+      550
+    ],
+    "preferred": true,
+    "loop": false,
+    "end_behavior": "ready",
+    "frames": [
+      {
+        "frame": 1,
+        "source_visible_box": [
+          18,
+          206,
+          375,
+          587
+        ],
+        "output_alpha_box": [
+          256,
+          64,
+          768,
+          560
+        ],
+        "seed_offset": [
+          256,
+          64
+        ],
+        "pixel_exact_seed": true
+      },
+      {
+        "frame": 2,
+        "source_visible_box": [
+          387,
+          238,
+          732,
+          587
+        ],
+        "output_alpha_box": [
+          292,
+          126,
+          738,
+          561
+        ],
+        "source_crop": [
+          375,
+          226,
+          744,
+          599
+        ],
+        "resized": [
+          453,
+          458
+        ],
+        "paste_xy": [
+          285,
+          115
+        ],
+        "pixel_exact_seed": false
+      },
+      {
+        "frame": 3,
+        "source_visible_box": [
+          748,
+          255,
+          1088,
+          586
+        ],
+        "output_alpha_box": [
+          290,
+          148,
+          730,
+          561
+        ],
+        "source_crop": [
+          736,
+          243,
+          1100,
+          598
+        ],
+        "resized": [
+          447,
+          436
+        ],
+        "paste_xy": [
+          289,
+          136
+        ],
+        "pixel_exact_seed": false
+      },
+      {
+        "frame": 4,
+        "source_visible_box": [
+          1071,
+          224,
+          1448,
+          587
+        ],
+        "output_alpha_box": [
+          268,
+          110,
+          754,
+          563
+        ],
+        "source_crop": [
+          1059,
+          212,
+          1460,
+          599
+        ],
+        "resized": [
+          493,
+          475
+        ],
+        "paste_xy": [
+          266,
+          98
+        ],
+        "pixel_exact_seed": false
+      },
+      {
+        "frame": 5,
+        "source_visible_box": [
+          1460,
+          242,
+          1790,
+          586
+        ],
+        "output_alpha_box": [
+          296,
+          132,
+          730,
+          562
+        ],
+        "source_crop": [
+          1448,
+          230,
+          1802,
+          598
+        ],
+        "resized": [
+          435,
+          452
+        ],
+        "paste_xy": [
+          295,
+          121
+        ],
+        "pixel_exact_seed": false
+      },
+      {
+        "frame": 6,
+        "source_visible_box": [
+          1803,
+          206,
+          2162,
+          587
+        ],
+        "output_alpha_box": [
+          256,
+          64,
+          768,
+          560
+        ],
+        "seed_offset": [
+          256,
+          64
+        ],
+        "pixel_exact_seed": true
+      }
+    ]
+  },
+  {
+    "identity": "raider",
+    "file": "raw/raider-hit-r1.png",
+    "move": "hit",
+    "revision": "r1",
+    "frame_count": 4,
+    "frame_size": [
+      1024,
+      704
+    ],
+    "frame_order": [
+      "ready",
+      "recoil",
+      "deep recoil",
+      "recover to ready"
+    ],
+    "sha256": "076bb4ff4f63aec626c8c06a2fd4be2469729b8601b743c91169edb84993b66a",
+    "suggested_intents": [
+      "hit"
+    ],
+    "facing": "left",
+    "source": "source-sheets/raider-hit-source.png",
+    "source_sha256": "5541d4ebfe88a470f207ffab26f50b1518653d376af2b9f79f48423193e3e6fc",
+    "source_to_delivery_shared_scale": 0.9790794979079498,
+    "logical_seed_offset": [
+      256,
+      64
+    ],
+    "sole_y_in_frame": 557,
+    "clear_gutters_px": [
+      526,
+      546,
+      526
+    ],
+    "preferred": true,
+    "loop": false,
+    "end_behavior": "ready",
+    "frames": [
+      {
+        "frame": 1,
+        "source_visible_box": [
+          35,
+          147,
+          533,
+          625
+        ],
+        "output_alpha_box": [
+          256,
+          64,
+          768,
+          560
+        ],
+        "seed_offset": [
+          256,
+          64
+        ],
+        "pixel_exact_seed": true
+      },
+      {
+        "frame": 2,
+        "source_visible_box": [
+          588,
+          172,
+          1061,
+          632
+        ],
+        "output_alpha_box": [
+          270,
+          97,
+          746,
+          561
+        ],
+        "source_crop": [
+          576,
+          160,
+          1073,
+          644
+        ],
+        "resized": [
+          487,
+          474
+        ],
+        "paste_xy": [
+          268,
+          95
+        ],
+        "pixel_exact_seed": false
+      },
+      {
+        "frame": 3,
+        "source_visible_box": [
+          1105,
+          192,
+          1583,
+          624
+        ],
+        "output_alpha_box": [
+          268,
+          133,
+          754,
+          562
+        ],
+        "source_crop": [
+          1093,
+          180,
+          1595,
+          636
+        ],
+        "resized": [
+          491,
+          446
+        ],
+        "paste_xy": [
+          267,
+          124
+        ],
+        "pixel_exact_seed": false
+      },
+      {
+        "frame": 4,
+        "source_visible_box": [
+          1664,
+          147,
+          2162,
+          625
+        ],
+        "output_alpha_box": [
+          256,
+          64,
+          768,
+          560
+        ],
+        "seed_offset": [
+          256,
+          64
+        ],
+        "pixel_exact_seed": true
+      }
+    ]
+  },
+  {
+    "identity": "raider",
+    "file": "raw/raider-block-r1.png",
+    "move": "block",
+    "revision": "r1",
+    "frame_count": 4,
+    "frame_size": [
+      1024,
+      704
+    ],
+    "frame_order": [
+      "ready",
+      "raise guard",
+      "brace / parry",
+      "recover to ready"
+    ],
+    "sha256": "807fc0692d66763027dd91b66339cb0a19c83a9a0d06ef78805fe4308debaa72",
+    "suggested_intents": [
+      "block"
+    ],
+    "facing": "left",
+    "source": "source-sheets/raider-block-source.png",
+    "source_sha256": "649636f67e58f9423f53bbadf9576de65a91de69b75058abe28b423c0dddb1d7",
+    "source_to_delivery_shared_scale": 0.9194499017681729,
+    "logical_seed_offset": [
+      256,
+      64
+    ],
+    "sole_y_in_frame": 557,
+    "clear_gutters_px": [
+      550,
+      595,
+      552
+    ],
+    "preferred": true,
+    "loop": false,
+    "end_behavior": "ready",
+    "frames": [
+      {
+        "frame": 1,
+        "source_visible_box": [
+          39,
+          121,
+          583,
+          630
+        ],
+        "output_alpha_box": [
+          256,
+          64,
+          768,
+          560
+        ],
+        "seed_offset": [
+          256,
+          64
+        ],
+        "pixel_exact_seed": true
+      },
+      {
+        "frame": 2,
+        "source_visible_box": [
+          620,
+          145,
+          1080,
+          630
+        ],
+        "output_alpha_box": [
+          294,
+          109,
+          726,
+          561
+        ],
+        "source_crop": [
+          608,
+          133,
+          1092,
+          642
+        ],
+        "resized": [
+          445,
+          468
+        ],
+        "paste_xy": [
+          290,
+          101
+        ],
+        "pixel_exact_seed": false
+      },
+      {
+        "frame": 3,
+        "source_visible_box": [
+          1134,
+          135,
+          1586,
+          628
+        ],
+        "output_alpha_box": [
+          297,
+          100,
+          728,
+          561
+        ],
+        "source_crop": [
+          1122,
+          123,
+          1598,
+          640
+        ],
+        "resized": [
+          438,
+          475
+        ],
+        "paste_xy": [
+          293,
+          94
+        ],
+        "pixel_exact_seed": false
+      },
+      {
+        "frame": 4,
+        "source_visible_box": [
+          1630,
+          121,
+          2164,
+          630
+        ],
+        "output_alpha_box": [
+          256,
+          64,
+          768,
+          560
+        ],
+        "seed_offset": [
+          256,
+          64
+        ],
+        "pixel_exact_seed": true
+      }
+    ]
+  },
+  {
+    "identity": "raider",
+    "file": "raw/raider-down-r1.png",
+    "move": "down",
+    "revision": "r1",
+    "frame_count": 4,
+    "frame_size": [
+      1024,
+      704
+    ],
+    "frame_order": [
+      "ready",
+      "buckle",
+      "collapse",
+      "grounded hold (do not loop)"
+    ],
+    "sha256": "fece36846f1e7e531b48fce65a2bb1f6920d3c3a8650e26a5213cf357dfa848b",
+    "suggested_intents": [
+      "down"
+    ],
+    "facing": "left",
+    "source": "source-sheets/raider-down-source.png",
+    "source_sha256": "b7676ed20c3508b48cd8747d59aa6b216ac0794d384201db8b2ca39efd16c6fd",
+    "source_to_delivery_shared_scale": 0.975,
+    "logical_seed_offset": [
+      256,
+      64
+    ],
+    "sole_y_in_frame": 557,
+    "clear_gutters_px": [
+      527,
+      530,
+      502
+    ],
+    "preferred": true,
+    "loop": false,
+    "end_behavior": "hold final grounded frame",
+    "frames": [
+      {
+        "frame": 1,
+        "source_visible_box": [
+          20,
+          201,
+          536,
+          681
+        ],
+        "output_alpha_box": [
+          256,
+          64,
+          768,
+          560
+        ],
+        "seed_offset": [
+          256,
+          64
+        ],
+        "pixel_exact_seed": true
+      },
+      {
+        "frame": 2,
+        "source_visible_box": [
+          557,
+          228,
+          1038,
+          679
+        ],
+        "output_alpha_box": [
+          271,
+          114,
+          754,
+          562
+        ],
+        "source_crop": [
+          545,
+          216,
+          1050,
+          691
+        ],
+        "resized": [
+          492,
+          463
+        ],
+        "paste_xy": [
+          266,
+          106
+        ],
+        "pixel_exact_seed": false
+      },
+      {
+        "frame": 3,
+        "source_visible_box": [
+          1065,
+          336,
+          1574,
+          659
+        ],
+        "output_alpha_box": [
+          260,
+          241,
+          765,
+          563
+        ],
+        "source_crop": [
+          1053,
+          324,
+          1586,
+          671
+        ],
+        "resized": [
+          520,
+          338
+        ],
+        "paste_xy": [
+          252,
+          232
+        ],
+        "pixel_exact_seed": false
+      },
+      {
+        "frame": 4,
+        "source_visible_box": [
+          1601,
+          452,
+          2141,
+          668
+        ],
+        "output_alpha_box": [
+          243,
+          344,
+          780,
+          570
+        ],
+        "source_crop": [
+          1589,
+          440,
+          2153,
+          680
+        ],
+        "resized": [
+          550,
+          234
+        ],
+        "paste_xy": [
+          238,
+          336
+        ],
+        "pixel_exact_seed": false
+      }
+    ]
+  },
+  {
+    "identity": "brute",
+    "file": "raw/brute-crushing-blow-r1.png",
+    "move": "crushing-blow",
+    "revision": "r1",
+    "frame_count": 6,
+    "frame_size": [
+      1024,
+      704
+    ],
+    "frame_order": [
+      "ready",
+      "wind-up",
+      "deeper wind-up / anticipation",
+      "contact / release",
+      "follow-through",
+      "recover to ready"
+    ],
+    "sha256": "963907cf67e13784998ee6d21060acaa05ae01e8d5ac7ba6eb7667963d56a9c0",
+    "suggested_intents": [
+      "Crushing Blow"
+    ],
+    "facing": "left",
+    "source": "source-sheets/brute-crushing-blow-source.png",
+    "source_sha256": "4f0c9e13aae9e9bd71e27945bdfcbdaf94a9bd1e45b306409cd9de9e7b095c00",
+    "source_to_delivery_shared_scale": 1.5579937304075235,
+    "logical_seed_offset": [
+      256,
+      64
+    ],
+    "sole_y_in_frame": 560,
+    "clear_gutters_px": [
+      521,
+      512,
+      475,
+      459,
+      490
+    ],
+    "preferred": true,
+    "loop": false,
+    "end_behavior": "ready",
+    "frames": [
+      {
+        "frame": 1,
+        "source_visible_box": [
+          65,
+          240,
+          378,
+          559
+        ],
+        "output_alpha_box": [
+          256,
+          64,
+          768,
+          576
+        ],
+        "seed_offset": [
+          256,
+          64
+        ],
+        "pixel_exact_seed": true
+      },
+      {
+        "frame": 2,
+        "source_visible_box": [
+          416,
+          235,
+          716,
+          556
+        ],
+        "output_alpha_box": [
+          265,
+          49,
+          763,
+          571
+        ],
+        "source_crop": [
+          404,
+          223,
+          728,
+          568
+        ],
+        "resized": [
+          505,
+          538
+        ],
+        "paste_xy": [
+          260,
+          41
+        ],
+        "pixel_exact_seed": false
+      },
+      {
+        "frame": 3,
+        "source_visible_box": [
+          753,
+          314,
+          1064,
+          558
+        ],
+        "output_alpha_box": [
+          251,
+          176,
+          770,
+          566
+        ],
+        "source_crop": [
+          741,
+          302,
+          1076,
+          570
+        ],
+        "resized": [
+          522,
+          418
+        ],
+        "paste_xy": [
+          251,
+          162
+        ],
+        "pixel_exact_seed": false
+      },
+      {
+        "frame": 4,
+        "source_visible_box": [
+          1078,
+          271,
+          1444,
+          559
+        ],
+        "output_alpha_box": [
+          221,
+          105,
+          805,
+          565
+        ],
+        "source_crop": [
+          1066,
+          259,
+          1456,
+          571
+        ],
+        "resized": [
+          608,
+          486
+        ],
+        "paste_xy": [
+          209,
+          93
+        ],
+        "pixel_exact_seed": false
+      },
+      {
+        "frame": 5,
+        "source_visible_box": [
+          1452,
+          282,
+          1791,
+          556
+        ],
+        "output_alpha_box": [
+          240,
+          125,
+          790,
+          569
+        ],
+        "source_crop": [
+          1440,
+          270,
+          1803,
+          568
+        ],
+        "resized": [
+          566,
+          464
+        ],
+        "paste_xy": [
+          229,
+          116
+        ],
+        "pixel_exact_seed": false
+      },
+      {
+        "frame": 6,
+        "source_visible_box": [
+          1825,
+          240,
+          2122,
+          558
+        ],
+        "output_alpha_box": [
+          256,
+          64,
+          768,
+          576
+        ],
+        "seed_offset": [
+          256,
+          64
+        ],
+        "pixel_exact_seed": true
+      }
+    ]
+  },
+  {
+    "identity": "brute",
+    "file": "raw/brute-rift-bolt-r1.png",
+    "move": "rift-bolt",
+    "revision": "r1",
+    "frame_count": 6,
+    "frame_size": [
+      1024,
+      704
+    ],
+    "frame_order": [
+      "ready",
+      "wind-up",
+      "deeper wind-up / anticipation",
+      "contact / release",
+      "follow-through",
+      "recover to ready"
+    ],
+    "sha256": "9db8c4770c1c24c4da9455cfcd6262c9c533c857dc933dd623e5885923eb1592",
+    "suggested_intents": [
+      "Rift Bolt"
+    ],
+    "facing": "left",
+    "source": "source-sheets/brute-rift-bolt-source.png",
+    "source_sha256": "19d774a83af1d14f4b488f3879d2f4bf97024d8df54fac0513f1eac8424d7bf5",
+    "source_to_delivery_shared_scale": 1.3078947368421052,
+    "logical_seed_offset": [
+      256,
+      64
+    ],
+    "sole_y_in_frame": 560,
+    "clear_gutters_px": [
+      559,
+      592,
+      532,
+      504,
+      515
+    ],
+    "preferred": true,
+    "loop": false,
+    "end_behavior": "ready",
+    "frames": [
+      {
+        "frame": 1,
+        "source_visible_box": [
+          17,
+          193,
+          375,
+          573
+        ],
+        "output_alpha_box": [
+          256,
+          64,
+          768,
+          576
+        ],
+        "seed_offset": [
+          256,
+          64
+        ],
+        "pixel_exact_seed": true
+      },
+      {
+        "frame": 2,
+        "source_visible_box": [
+          403,
+          199,
+          713,
+          574
+        ],
+        "output_alpha_box": [
+          303,
+          64,
+          730,
+          568
+        ],
+        "source_crop": [
+          391,
+          187,
+          725,
+          586
+        ],
+        "resized": [
+          437,
+          522
+        ],
+        "paste_xy": [
+          293,
+          55
+        ],
+        "pixel_exact_seed": false
+      },
+      {
+        "frame": 3,
+        "source_visible_box": [
+          732,
+          241,
+          1042,
+          573
+        ],
+        "output_alpha_box": [
+          298,
+          122,
+          725,
+          568
+        ],
+        "source_crop": [
+          720,
+          229,
+          1054,
+          585
+        ],
+        "resized": [
+          437,
+          466
+        ],
+        "paste_xy": [
+          294,
+          110
+        ],
+        "pixel_exact_seed": false
+      },
+      {
+        "frame": 4,
+        "source_visible_box": [
+          1038,
+          231,
+          1448,
+          574
+        ],
+        "output_alpha_box": [
+          233,
+          109,
+          784,
+          565
+        ],
+        "source_crop": [
+          1026,
+          219,
+          1460,
+          586
+        ],
+        "resized": [
+          568,
+          480
+        ],
+        "paste_xy": [
+          228,
+          97
+        ],
+        "pixel_exact_seed": false
+      },
+      {
+        "frame": 5,
+        "source_visible_box": [
+          1446,
+          218,
+          1813,
+          574
+        ],
+        "output_alpha_box": [
+          264,
+          92,
+          765,
+          565
+        ],
+        "source_crop": [
+          1434,
+          206,
+          1825,
+          586
+        ],
+        "resized": [
+          511,
+          497
+        ],
+        "paste_xy": [
+          257,
+          80
+        ],
+        "pixel_exact_seed": false
+      },
+      {
+        "frame": 6,
+        "source_visible_box": [
+          1831,
+          193,
+          2167,
+          572
+        ],
+        "output_alpha_box": [
+          256,
+          64,
+          768,
+          576
+        ],
+        "seed_offset": [
+          256,
+          64
+        ],
+        "pixel_exact_seed": true
+      }
+    ]
+  },
+  {
+    "identity": "brute",
+    "file": "raw/brute-hit-r1.png",
+    "move": "hit",
+    "revision": "r1",
+    "frame_count": 4,
+    "frame_size": [
+      1024,
+      704
+    ],
+    "frame_order": [
+      "ready",
+      "recoil",
+      "deep recoil",
+      "recover to ready"
+    ],
+    "sha256": "d2e833d4438220a88506181a6b943274f1e2ac4b89f14872b0938ff7723fe600",
+    "suggested_intents": [
+      "hit"
+    ],
+    "facing": "left",
+    "source": "source-sheets/brute-hit-source.png",
+    "source_sha256": "91898f863e4d300de7a4731ca82bfbc2936dd42a5078d4030503ec1c81c07b95",
+    "source_to_delivery_shared_scale": 0.9036363636363637,
+    "logical_seed_offset": [
+      256,
+      64
+    ],
+    "sole_y_in_frame": 560,
+    "clear_gutters_px": [
+      516,
+      527,
+      514
+    ],
+    "preferred": true,
+    "loop": false,
+    "end_behavior": "ready",
+    "frames": [
+      {
+        "frame": 1,
+        "source_visible_box": [
+          19,
+          96,
+          563,
+          646
+        ],
+        "output_alpha_box": [
+          256,
+          64,
+          768,
+          576
+        ],
+        "seed_offset": [
+          256,
+          64
+        ],
+        "pixel_exact_seed": true
+      },
+      {
+        "frame": 2,
+        "source_visible_box": [
+          576,
+          151,
+          1111,
+          646
+        ],
+        "output_alpha_box": [
+          260,
+          111,
+          758,
+          563
+        ],
+        "source_crop": [
+          564,
+          139,
+          1123,
+          658
+        ],
+        "resized": [
+          505,
+          469
+        ],
+        "paste_xy": [
+          260,
+          103
+        ],
+        "pixel_exact_seed": false
+      },
+      {
+        "frame": 3,
+        "source_visible_box": [
+          1076,
+          144,
+          1612,
+          646
+        ],
+        "output_alpha_box": [
+          261,
+          106,
+          766,
+          567
+        ],
+        "source_crop": [
+          1064,
+          132,
+          1624,
+          658
+        ],
+        "resized": [
+          506,
+          475
+        ],
+        "paste_xy": [
+          260,
+          97
+        ],
+        "pixel_exact_seed": false
+      },
+      {
+        "frame": 4,
+        "source_visible_box": [
+          1639,
+          96,
+          2171,
+          646
+        ],
+        "output_alpha_box": [
+          256,
+          64,
+          768,
+          576
+        ],
+        "seed_offset": [
+          256,
+          64
+        ],
+        "pixel_exact_seed": true
+      }
+    ]
+  },
+  {
+    "identity": "brute",
+    "file": "raw/brute-block-r1.png",
+    "move": "block",
+    "revision": "r1",
+    "frame_count": 4,
+    "frame_size": [
+      1024,
+      704
+    ],
+    "frame_order": [
+      "ready",
+      "raise guard",
+      "brace / parry",
+      "recover to ready"
+    ],
+    "sha256": "efbadb624b184adcbd79c73d20c382a304a89c82f37d29d6f99867ac00918427",
+    "suggested_intents": [
+      "block"
+    ],
+    "facing": "left",
+    "source": "source-sheets/brute-block-source.png",
+    "source_sha256": "dfd10615ef14f5d52619beaf3694a0f2de9a2b86b22fcdf8e8896e62b09273b0",
+    "source_to_delivery_shared_scale": 0.9136029411764706,
+    "logical_seed_offset": [
+      256,
+      64
+    ],
+    "sole_y_in_frame": 560,
+    "clear_gutters_px": [
+      522,
+      540,
+      528
+    ],
+    "preferred": true,
+    "loop": false,
+    "end_behavior": "ready",
+    "frames": [
+      {
+        "frame": 1,
+        "source_visible_box": [
+          15,
+          100,
+          542,
+          644
+        ],
+        "output_alpha_box": [
+          256,
+          64,
+          768,
+          576
+        ],
+        "seed_offset": [
+          256,
+          64
+        ],
+        "pixel_exact_seed": true
+      },
+      {
+        "frame": 2,
+        "source_visible_box": [
+          570,
+          121,
+          1090,
+          644
+        ],
+        "output_alpha_box": [
+          266,
+          78,
+          756,
+          564
+        ],
+        "source_crop": [
+          558,
+          109,
+          1102,
+          656
+        ],
+        "resized": [
+          497,
+          500
+        ],
+        "paste_xy": [
+          264,
+          72
+        ],
+        "pixel_exact_seed": false
+      },
+      {
+        "frame": 3,
+        "source_visible_box": [
+          1124,
+          131,
+          1626,
+          644
+        ],
+        "output_alpha_box": [
+          272,
+          89,
+          752,
+          564
+        ],
+        "source_crop": [
+          1112,
+          119,
+          1638,
+          656
+        ],
+        "resized": [
+          481,
+          491
+        ],
+        "paste_xy": [
+          272,
+          81
+        ],
+        "pixel_exact_seed": false
+      },
+      {
+        "frame": 4,
+        "source_visible_box": [
+          1635,
+          98,
+          2160,
+          644
+        ],
+        "output_alpha_box": [
+          256,
+          64,
+          768,
+          576
+        ],
+        "seed_offset": [
+          256,
+          64
+        ],
+        "pixel_exact_seed": true
+      }
+    ]
+  },
+  {
+    "identity": "brute",
+    "file": "raw/brute-down-r1.png",
+    "move": "down",
+    "revision": "r1",
+    "frame_count": 4,
+    "frame_size": [
+      1024,
+      704
+    ],
+    "frame_order": [
+      "ready",
+      "buckle",
+      "collapse",
+      "grounded hold (do not loop)"
+    ],
+    "sha256": "83d0a1ddd8d3895a726f8dd09f5d9885a865c368f42c6ab3908af1e13981bbb6",
+    "suggested_intents": [
+      "down"
+    ],
+    "facing": "left",
+    "source": "source-sheets/brute-down-source.png",
+    "source_sha256": "978d105f51521f30dc7a05b7f5b97b7e415cf3f083d8c12fe528f0ec53f342a4",
+    "source_to_delivery_shared_scale": 1.0101626016260163,
+    "logical_seed_offset": [
+      256,
+      64
+    ],
+    "sole_y_in_frame": 560,
+    "clear_gutters_px": [
+      509,
+      472,
+      444
+    ],
+    "preferred": true,
+    "loop": false,
+    "end_behavior": "hold final grounded frame",
+    "frames": [
+      {
+        "frame": 1,
+        "source_visible_box": [
+          20,
+          135,
+          511,
+          627
+        ],
+        "output_alpha_box": [
+          256,
+          64,
+          768,
+          576
+        ],
+        "seed_offset": [
+          256,
+          64
+        ],
+        "pixel_exact_seed": true
+      },
+      {
+        "frame": 2,
+        "source_visible_box": [
+          530,
+          215,
+          1037,
+          623
+        ],
+        "output_alpha_box": [
+          253,
+          144,
+          778,
+          567
+        ],
+        "source_crop": [
+          518,
+          203,
+          1049,
+          635
+        ],
+        "resized": [
+          536,
+          436
+        ],
+        "paste_xy": [
+          245,
+          137
+        ],
+        "pixel_exact_seed": false
+      },
+      {
+        "frame": 3,
+        "source_visible_box": [
+          1043,
+          324,
+          1586,
+          622
+        ],
+        "output_alpha_box": [
+          226,
+          257,
+          798,
+          565
+        ],
+        "source_crop": [
+          1031,
+          312,
+          1598,
+          634
+        ],
+        "resized": [
+          573,
+          325
+        ],
+        "paste_xy": [
+          226,
+          248
+        ],
+        "pixel_exact_seed": false
+      },
+      {
+        "frame": 4,
+        "source_visible_box": [
+          1605,
+          380,
+          2163,
+          622
+        ],
+        "output_alpha_box": [
+          218,
+          305,
+          803,
+          565
+        ],
+        "source_crop": [
+          1593,
+          368,
+          2172,
+          634
+        ],
+        "resized": [
+          585,
+          269
+        ],
+        "paste_xy": [
+          218,
+          304
+        ],
+        "pixel_exact_seed": false
+      }
+    ]
+  }
+]

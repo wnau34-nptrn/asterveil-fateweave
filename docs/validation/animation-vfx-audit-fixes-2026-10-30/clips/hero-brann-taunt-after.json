@@ -1,0 +1,11 @@
+{
+ "id": "hero-brann-taunt",
+ "status": "captured",
+ "clickOffset": 0.11301302909851074,
+ "sourceFrames": 88,
+ "decodedFrames": 89,
+ "maxTimestampError": 6.041961669867035e-06,
+ "maxFrameGap": 0.1270599365234375,
+ "sameState": true,
+ "saveStable": true
+}

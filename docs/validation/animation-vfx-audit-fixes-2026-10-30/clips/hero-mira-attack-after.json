@@ -1,0 +1,11 @@
+{
+ "id": "hero-mira-attack",
+ "status": "captured",
+ "clickOffset": 0.31766200065612793,
+ "sourceFrames": 42,
+ "decodedFrames": 43,
+ "maxTimestampError": 5.921417236320892e-06,
+ "maxFrameGap": 0.162247896194458,
+ "sameState": true,
+ "saveStable": true
+}

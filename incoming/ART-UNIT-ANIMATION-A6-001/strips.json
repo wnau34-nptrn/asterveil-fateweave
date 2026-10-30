@@ -1,0 +1,2548 @@
+{
+  "package": "ART-UNIT-ANIMATION-A6-001",
+  "base_commit": "8616ad3155a179e05210fe6aa552e6d234c9bd24",
+  "strips": [
+    {
+      "unit": "sefa",
+      "move": "double-slash",
+      "candidate": "r1",
+      "preferred": true,
+      "routes": [
+        "attack",
+        "ambush"
+      ],
+      "file": "heroes/raw/sefa-double-slash-r1.png",
+      "frames": 6,
+      "frame_order": [
+        "ready",
+        "first dagger wind-up",
+        "first slash right",
+        "second cross slash",
+        "low follow-through",
+        "recover"
+      ],
+      "source": "heroes/source-sheets/sefa_r1.png",
+      "source_row_zero_based": 0,
+      "source_bounds": [
+        [
+          34,
+          2,
+          242,
+          175
+        ],
+        [
+          277,
+          9,
+          514,
+          174
+        ],
+        [
+          547,
+          3,
+          778,
+          175
+        ],
+        [
+          785,
+          13,
+          1010,
+          174
+        ],
+        [
+          1045,
+          27,
+          1290,
+          175
+        ],
+        [
+          1317,
+          2,
+          1522,
+          175
+        ]
+      ],
+      "frame_bounds": [
+        [
+          32,
+          18,
+          240,
+          191
+        ],
+        [
+          371,
+          25,
+          608,
+          190
+        ],
+        [
+          737,
+          19,
+          968,
+          191
+        ],
+        [
+          1071,
+          29,
+          1296,
+          190
+        ],
+        [
+          1427,
+          43,
+          1672,
+          191
+        ],
+        [
+          1795,
+          18,
+          2000,
+          191
+        ]
+      ],
+      "source_y_crop": [
+        0,
+        191
+      ],
+      "gutter_insert_px": 96,
+      "minimum_alpha_gutter_px": 103,
+      "retained_source_pixels": 126957,
+      "retained_rgba_exact": true,
+      "per_frame_scale_applied": false,
+      "source_core_edge_clear": true
+    },
+    {
+      "unit": "sefa",
+      "move": "low-stab",
+      "candidate": "r1",
+      "preferred": false,
+      "routes": [
+        "backstab",
+        "disarm"
+      ],
+      "file": "heroes/raw/sefa-low-stab-r1.png",
+      "frames": 6,
+      "frame_order": [
+        "ready",
+        "crouch",
+        "coil dagger",
+        "low lunge thrust right",
+        "retract",
+        "ready"
+      ],
+      "source": "heroes/source-sheets/sefa_r1.png",
+      "source_row_zero_based": 1,
+      "source_bounds": [
+        [
+          35,
+          168,
+          239,
+          334
+        ],
+        [
+          292,
+          190,
+          483,
+          334
+        ],
+        [
+          526,
+          179,
+          707,
+          333
+        ],
+        [
+          741,
+          191,
+          1036,
+          334
+        ],
+        [
+          1043,
+          179,
+          1268,
+          334
+        ],
+        [
+          1317,
+          168,
+          1522,
+          334
+        ]
+      ],
+      "frame_bounds": [
+        [
+          32,
+          32,
+          236,
+          198
+        ],
+        [
+          385,
+          54,
+          576,
+          198
+        ],
+        [
+          715,
+          43,
+          896,
+          197
+        ],
+        [
+          1026,
+          55,
+          1321,
+          198
+        ],
+        [
+          1424,
+          43,
+          1649,
+          198
+        ],
+        [
+          1794,
+          32,
+          1999,
+          198
+        ]
+      ],
+      "source_y_crop": [
+        152,
+        350
+      ],
+      "gutter_insert_px": 96,
+      "minimum_alpha_gutter_px": 103,
+      "retained_source_pixels": 121868,
+      "retained_rgba_exact": true,
+      "per_frame_scale_applied": false,
+      "source_core_edge_clear": true
+    },
+    {
+      "unit": "sefa",
+      "move": "low-stab",
+      "candidate": "r2",
+      "preferred": true,
+      "routes": [
+        "backstab",
+        "disarm"
+      ],
+      "file": "heroes/raw/sefa-low-stab-r2.png",
+      "frames": 6,
+      "frame_order": [
+        "ready",
+        "drop low",
+        "dagger at hip",
+        "long low thrust right",
+        "retract and rise",
+        "ready"
+      ],
+      "source": "heroes/source-sheets/sefa_extra.png",
+      "source_row_zero_based": 1,
+      "source_bounds": [
+        [
+          37,
+          593,
+          272,
+          835
+        ],
+        [
+          271,
+          637,
+          493,
+          842
+        ],
+        [
+          510,
+          650,
+          710,
+          835
+        ],
+        [
+          692,
+          639,
+          1070,
+          836
+        ],
+        [
+          1063,
+          622,
+          1291,
+          842
+        ],
+        [
+          1297,
+          606,
+          1521,
+          840
+        ]
+      ],
+      "frame_bounds": [
+        [
+          32,
+          32,
+          267,
+          274
+        ],
+        [
+          362,
+          76,
+          584,
+          281
+        ],
+        [
+          697,
+          89,
+          897,
+          274
+        ],
+        [
+          975,
+          78,
+          1353,
+          275
+        ],
+        [
+          1442,
+          61,
+          1670,
+          281
+        ],
+        [
+          1772,
+          45,
+          1996,
+          279
+        ]
+      ],
+      "source_y_crop": [
+        577,
+        858
+      ],
+      "gutter_insert_px": 96,
+      "minimum_alpha_gutter_px": 78,
+      "retained_source_pixels": 185177,
+      "retained_rgba_exact": true,
+      "per_frame_scale_applied": false,
+      "source_core_edge_clear": true
+    },
+    {
+      "unit": "sefa",
+      "move": "knives",
+      "candidate": "r1",
+      "preferred": true,
+      "routes": [
+        "knives"
+      ],
+      "file": "heroes/raw/sefa-knives-r1.png",
+      "frames": 6,
+      "frame_order": [
+        "ready holding dagger",
+        "hand near shoulder",
+        "cock elbow",
+        "empty-hand release right",
+        "empty-hand follow-through",
+        "ready with next dagger"
+      ],
+      "source": "heroes/source-sheets/sefa_r1.png",
+      "source_row_zero_based": 2,
+      "source_bounds": [
+        [
+          33,
+          327,
+          240,
+          494
+        ],
+        [
+          290,
+          327,
+          482,
+          495
+        ],
+        [
+          530,
+          328,
+          738,
+          494
+        ],
+        [
+          791,
+          333,
+          1009,
+          497
+        ],
+        [
+          1056,
+          333,
+          1266,
+          495
+        ],
+        [
+          1317,
+          328,
+          1522,
+          495
+        ]
+      ],
+      "frame_bounds": [
+        [
+          32,
+          32,
+          239,
+          199
+        ],
+        [
+          385,
+          32,
+          577,
+          200
+        ],
+        [
+          721,
+          33,
+          929,
+          199
+        ],
+        [
+          1078,
+          38,
+          1296,
+          202
+        ],
+        [
+          1439,
+          38,
+          1649,
+          200
+        ],
+        [
+          1796,
+          33,
+          2001,
+          200
+        ]
+      ],
+      "source_y_crop": [
+        311,
+        513
+      ],
+      "gutter_insert_px": 96,
+      "minimum_alpha_gutter_px": 143,
+      "retained_source_pixels": 124403,
+      "retained_rgba_exact": true,
+      "per_frame_scale_applied": false,
+      "source_core_edge_clear": true
+    },
+    {
+      "unit": "sefa",
+      "move": "evade",
+      "candidate": "r1",
+      "preferred": true,
+      "routes": [
+        "evade",
+        "decoy"
+      ],
+      "file": "heroes/raw/sefa-evade-r1.png",
+      "frames": 6,
+      "frame_order": [
+        "ready",
+        "sink weight",
+        "front foot pushes off",
+        "back foot plants facing right",
+        "defensive settle",
+        "ready"
+      ],
+      "source": "heroes/source-sheets/sefa_extra.png",
+      "source_row_zero_based": 0,
+      "source_bounds": [
+        [
+          45,
+          191,
+          270,
+          420
+        ],
+        [
+          293,
+          192,
+          495,
+          417
+        ],
+        [
+          525,
+          193,
+          730,
+          420
+        ],
+        [
+          769,
+          198,
+          1006,
+          420
+        ],
+        [
+          1025,
+          199,
+          1271,
+          419
+        ],
+        [
+          1297,
+          191,
+          1519,
+          422
+        ]
+      ],
+      "frame_bounds": [
+        [
+          32,
+          32,
+          257,
+          261
+        ],
+        [
+          376,
+          33,
+          578,
+          258
+        ],
+        [
+          704,
+          34,
+          909,
+          261
+        ],
+        [
+          1044,
+          39,
+          1281,
+          261
+        ],
+        [
+          1396,
+          40,
+          1642,
+          260
+        ],
+        [
+          1764,
+          32,
+          1986,
+          263
+        ]
+      ],
+      "source_y_crop": [
+        175,
+        438
+      ],
+      "gutter_insert_px": 96,
+      "minimum_alpha_gutter_px": 115,
+      "retained_source_pixels": 181818,
+      "retained_rgba_exact": true,
+      "per_frame_scale_applied": false,
+      "source_core_edge_clear": true
+    },
+    {
+      "unit": "sefa",
+      "move": "hit",
+      "candidate": "r1",
+      "preferred": true,
+      "routes": [
+        "hit"
+      ],
+      "file": "heroes/raw/sefa-hit-r1.png",
+      "frames": 4,
+      "frame_order": [
+        "ready",
+        "recoil left",
+        "deep guarded flinch",
+        "ready"
+      ],
+      "source": "heroes/source-sheets/sefa_r1.png",
+      "source_row_zero_based": 3,
+      "source_bounds": [
+        [
+          33,
+          490,
+          249,
+          665
+        ],
+        [
+          311,
+          496,
+          535,
+          665
+        ],
+        [
+          593,
+          520,
+          778,
+          664
+        ],
+        [
+          859,
+          490,
+          1078,
+          665
+        ]
+      ],
+      "frame_bounds": [
+        [
+          32,
+          32,
+          248,
+          207
+        ],
+        [
+          406,
+          38,
+          630,
+          207
+        ],
+        [
+          784,
+          62,
+          969,
+          206
+        ],
+        [
+          1146,
+          32,
+          1365,
+          207
+        ]
+      ],
+      "source_y_crop": [
+        474,
+        681
+      ],
+      "gutter_insert_px": 96,
+      "minimum_alpha_gutter_px": 154,
+      "retained_source_pixels": 87402,
+      "retained_rgba_exact": true,
+      "per_frame_scale_applied": false,
+      "source_core_edge_clear": true
+    },
+    {
+      "unit": "sefa",
+      "move": "block",
+      "candidate": "r1",
+      "preferred": true,
+      "routes": [
+        "block"
+      ],
+      "file": "heroes/raw/sefa-block-r1.png",
+      "frames": 4,
+      "frame_order": [
+        "ready",
+        "cross daggers",
+        "braced recoil",
+        "ready"
+      ],
+      "source": "heroes/source-sheets/sefa_r1.png",
+      "source_row_zero_based": 4,
+      "source_bounds": [
+        [
+          31,
+          661,
+          249,
+          842
+        ],
+        [
+          304,
+          660,
+          495,
+          842
+        ],
+        [
+          587,
+          667,
+          758,
+          842
+        ],
+        [
+          860,
+          662,
+          1076,
+          842
+        ]
+      ],
+      "frame_bounds": [
+        [
+          32,
+          33,
+          250,
+          214
+        ],
+        [
+          401,
+          32,
+          592,
+          214
+        ],
+        [
+          780,
+          39,
+          951,
+          214
+        ],
+        [
+          1149,
+          34,
+          1365,
+          214
+        ]
+      ],
+      "source_y_crop": [
+        644,
+        858
+      ],
+      "gutter_insert_px": 96,
+      "minimum_alpha_gutter_px": 151,
+      "retained_source_pixels": 88386,
+      "retained_rgba_exact": true,
+      "per_frame_scale_applied": false,
+      "source_core_edge_clear": true
+    },
+    {
+      "unit": "sefa",
+      "move": "down",
+      "candidate": "r1",
+      "preferred": true,
+      "routes": [
+        "down"
+      ],
+      "file": "heroes/raw/sefa-down-r1.png",
+      "frames": 4,
+      "frame_order": [
+        "ready",
+        "knees buckle",
+        "lower onto side",
+        "collapsed hold"
+      ],
+      "source": "heroes/source-sheets/sefa_r1.png",
+      "source_row_zero_based": 5,
+      "source_bounds": [
+        [
+          33,
+          837,
+          246,
+          1010
+        ],
+        [
+          321,
+          840,
+          526,
+          1010
+        ],
+        [
+          559,
+          877,
+          830,
+          1007
+        ],
+        [
+          861,
+          901,
+          1169,
+          1004
+        ]
+      ],
+      "frame_bounds": [
+        [
+          32,
+          32,
+          245,
+          205
+        ],
+        [
+          416,
+          35,
+          621,
+          205
+        ],
+        [
+          750,
+          72,
+          1021,
+          202
+        ],
+        [
+          1148,
+          96,
+          1456,
+          199
+        ]
+      ],
+      "source_y_crop": [
+        821,
+        1024
+      ],
+      "gutter_insert_px": 96,
+      "minimum_alpha_gutter_px": 127,
+      "retained_source_pixels": 85156,
+      "retained_rgba_exact": true,
+      "per_frame_scale_applied": false,
+      "source_core_edge_clear": true
+    },
+    {
+      "unit": "lio",
+      "move": "strum-strike",
+      "candidate": "r1",
+      "preferred": true,
+      "routes": [
+        "attack",
+        "note"
+      ],
+      "file": "heroes/raw/lio-strum-strike-r1.png",
+      "frames": 6,
+      "frame_order": [
+        "ready",
+        "lift strum hand",
+        "prepare sharp strum",
+        "hard strum right",
+        "follow-through",
+        "ready"
+      ],
+      "source": "heroes/source-sheets/lio_r1.png",
+      "source_row_zero_based": 0,
+      "source_bounds": [
+        [
+          55,
+          0,
+          260,
+          171
+        ],
+        [
+          309,
+          0,
+          516,
+          177
+        ],
+        [
+          557,
+          1,
+          780,
+          175
+        ],
+        [
+          797,
+          2,
+          1020,
+          176
+        ],
+        [
+          1036,
+          0,
+          1258,
+          176
+        ],
+        [
+          1291,
+          0,
+          1488,
+          171
+        ]
+      ],
+      "frame_bounds": [
+        [
+          32,
+          16,
+          237,
+          187
+        ],
+        [
+          382,
+          16,
+          589,
+          193
+        ],
+        [
+          726,
+          17,
+          949,
+          191
+        ],
+        [
+          1062,
+          18,
+          1285,
+          192
+        ],
+        [
+          1397,
+          16,
+          1619,
+          192
+        ],
+        [
+          1748,
+          16,
+          1945,
+          187
+        ]
+      ],
+      "source_y_crop": [
+        0,
+        193
+      ],
+      "gutter_insert_px": 96,
+      "minimum_alpha_gutter_px": 112,
+      "retained_source_pixels": 146533,
+      "retained_rgba_exact": true,
+      "per_frame_scale_applied": false,
+      "source_core_edge_clear": true
+    },
+    {
+      "unit": "lio",
+      "move": "strum-strike",
+      "candidate": "r2",
+      "preferred": false,
+      "routes": [
+        "attack",
+        "note"
+      ],
+      "file": "heroes/raw/lio-strum-strike-r2.png",
+      "frames": 6,
+      "frame_order": [
+        "ready",
+        "draw instrument back",
+        "swing forward right",
+        "instrument strike extension",
+        "retract",
+        "ready"
+      ],
+      "source": "heroes/source-sheets/lio_extra.png",
+      "source_row_zero_based": 1,
+      "source_bounds": [
+        [
+          17,
+          400,
+          244,
+          657
+        ],
+        [
+          251,
+          421,
+          501,
+          657
+        ],
+        [
+          513,
+          432,
+          792,
+          659
+        ],
+        [
+          769,
+          434,
+          1073,
+          658
+        ],
+        [
+          1053,
+          431,
+          1278,
+          658
+        ],
+        [
+          1279,
+          399,
+          1508,
+          657
+        ]
+      ],
+      "frame_bounds": [
+        [
+          32,
+          33,
+          259,
+          290
+        ],
+        [
+          362,
+          54,
+          612,
+          290
+        ],
+        [
+          720,
+          65,
+          999,
+          292
+        ],
+        [
+          1072,
+          67,
+          1376,
+          291
+        ],
+        [
+          1452,
+          64,
+          1677,
+          291
+        ],
+        [
+          1774,
+          32,
+          2003,
+          290
+        ]
+      ],
+      "source_y_crop": [
+        383,
+        675
+      ],
+      "gutter_insert_px": 96,
+      "minimum_alpha_gutter_px": 73,
+      "retained_source_pixels": 230381,
+      "retained_rgba_exact": true,
+      "per_frame_scale_applied": false,
+      "source_core_edge_clear": true
+    },
+    {
+      "unit": "lio",
+      "move": "sustained-song",
+      "candidate": "r1",
+      "preferred": true,
+      "routes": [
+        "valor",
+        "mend",
+        "solo"
+      ],
+      "file": "heroes/raw/lio-sustained-song-r1.png",
+      "frames": 6,
+      "frame_order": [
+        "ready playing",
+        "sway left plucking",
+        "upright upstrum",
+        "sway right plucking",
+        "upright downstrum",
+        "ready playing"
+      ],
+      "source": "heroes/source-sheets/lio_r1.png",
+      "source_row_zero_based": 1,
+      "source_bounds": [
+        [
+          53,
+          155,
+          267,
+          333
+        ],
+        [
+          307,
+          161,
+          523,
+          334
+        ],
+        [
+          557,
+          157,
+          767,
+          335
+        ],
+        [
+          788,
+          164,
+          1008,
+          335
+        ],
+        [
+          1041,
+          156,
+          1250,
+          335
+        ],
+        [
+          1291,
+          155,
+          1487,
+          332
+        ]
+      ],
+      "frame_bounds": [
+        [
+          32,
+          32,
+          246,
+          210
+        ],
+        [
+          382,
+          38,
+          598,
+          211
+        ],
+        [
+          728,
+          34,
+          938,
+          212
+        ],
+        [
+          1055,
+          41,
+          1275,
+          212
+        ],
+        [
+          1404,
+          33,
+          1613,
+          212
+        ],
+        [
+          1750,
+          32,
+          1946,
+          209
+        ]
+      ],
+      "source_y_crop": [
+        139,
+        351
+      ],
+      "gutter_insert_px": 96,
+      "minimum_alpha_gutter_px": 117,
+      "retained_source_pixels": 142986,
+      "retained_rgba_exact": true,
+      "per_frame_scale_applied": false,
+      "source_core_edge_clear": true
+    },
+    {
+      "unit": "lio",
+      "move": "dread-chord",
+      "candidate": "r1",
+      "preferred": true,
+      "routes": [
+        "dread"
+      ],
+      "file": "heroes/raw/lio-dread-chord-r1.png",
+      "frames": 6,
+      "frame_order": [
+        "ready",
+        "hunch and lift hand",
+        "gather stern strum",
+        "hard downward strum",
+        "hunched follow-through",
+        "recover"
+      ],
+      "source": "heroes/source-sheets/lio_r1.png",
+      "source_row_zero_based": 2,
+      "source_bounds": [
+        [
+          57,
+          318,
+          265,
+          494
+        ],
+        [
+          303,
+          325,
+          516,
+          495
+        ],
+        [
+          547,
+          324,
+          771,
+          494
+        ],
+        [
+          797,
+          331,
+          1012,
+          494
+        ],
+        [
+          1037,
+          323,
+          1267,
+          495
+        ],
+        [
+          1288,
+          318,
+          1486,
+          494
+        ]
+      ],
+      "frame_bounds": [
+        [
+          32,
+          32,
+          240,
+          208
+        ],
+        [
+          374,
+          39,
+          587,
+          209
+        ],
+        [
+          714,
+          38,
+          938,
+          208
+        ],
+        [
+          1060,
+          45,
+          1275,
+          208
+        ],
+        [
+          1396,
+          37,
+          1626,
+          209
+        ],
+        [
+          1743,
+          32,
+          1941,
+          208
+        ]
+      ],
+      "source_y_crop": [
+        302,
+        511
+      ],
+      "gutter_insert_px": 96,
+      "minimum_alpha_gutter_px": 117,
+      "retained_source_pixels": 145380,
+      "retained_rgba_exact": true,
+      "per_frame_scale_applied": false,
+      "source_core_edge_clear": true
+    },
+    {
+      "unit": "lio",
+      "move": "finale",
+      "candidate": "r1",
+      "preferred": false,
+      "routes": [
+        "finale"
+      ],
+      "file": "heroes/raw/lio-finale-r1.png",
+      "frames": 6,
+      "frame_order": [
+        "ready",
+        "gather instrument",
+        "raise near face",
+        "high diagonal flourish",
+        "lower",
+        "recover"
+      ],
+      "source": "heroes/source-sheets/lio_r1.png",
+      "source_row_zero_based": 3,
+      "source_bounds": [
+        [
+          65,
+          483,
+          266,
+          658
+        ],
+        [
+          318,
+          481,
+          514,
+          657
+        ],
+        [
+          558,
+          477,
+          763,
+          660
+        ],
+        [
+          800,
+          483,
+          1007,
+          660
+        ],
+        [
+          1054,
+          481,
+          1250,
+          658
+        ],
+        [
+          1287,
+          482,
+          1488,
+          656
+        ]
+      ],
+      "frame_bounds": [
+        [
+          32,
+          38,
+          233,
+          213
+        ],
+        [
+          381,
+          36,
+          577,
+          212
+        ],
+        [
+          717,
+          32,
+          922,
+          215
+        ],
+        [
+          1055,
+          38,
+          1262,
+          215
+        ],
+        [
+          1405,
+          36,
+          1601,
+          213
+        ],
+        [
+          1734,
+          37,
+          1935,
+          211
+        ]
+      ],
+      "source_y_crop": [
+        461,
+        676
+      ],
+      "gutter_insert_px": 96,
+      "minimum_alpha_gutter_px": 133,
+      "retained_source_pixels": 144881,
+      "retained_rgba_exact": true,
+      "per_frame_scale_applied": false,
+      "source_core_edge_clear": true
+    },
+    {
+      "unit": "lio",
+      "move": "finale",
+      "candidate": "r2",
+      "preferred": true,
+      "routes": [
+        "finale"
+      ],
+      "file": "heroes/raw/lio-finale-r2.png",
+      "frames": 6,
+      "frame_order": [
+        "ready",
+        "gather and bend knees",
+        "lift instrument",
+        "instrument above head flourish",
+        "lower flourish",
+        "ready"
+      ],
+      "source": "heroes/source-sheets/lio_extra.png",
+      "source_row_zero_based": 0,
+      "source_bounds": [
+        [
+          15,
+          96,
+          244,
+          354
+        ],
+        [
+          261,
+          118,
+          512,
+          353
+        ],
+        [
+          531,
+          95,
+          770,
+          354
+        ],
+        [
+          779,
+          22,
+          1025,
+          354
+        ],
+        [
+          1015,
+          109,
+          1277,
+          355
+        ],
+        [
+          1279,
+          97,
+          1508,
+          354
+        ]
+      ],
+      "frame_bounds": [
+        [
+          32,
+          106,
+          261,
+          364
+        ],
+        [
+          374,
+          128,
+          625,
+          363
+        ],
+        [
+          740,
+          105,
+          979,
+          364
+        ],
+        [
+          1084,
+          32,
+          1330,
+          364
+        ],
+        [
+          1416,
+          119,
+          1678,
+          365
+        ],
+        [
+          1776,
+          107,
+          2005,
+          364
+        ]
+      ],
+      "source_y_crop": [
+        6,
+        371
+      ],
+      "gutter_insert_px": 96,
+      "minimum_alpha_gutter_px": 86,
+      "retained_source_pixels": 243693,
+      "retained_rgba_exact": true,
+      "per_frame_scale_applied": false,
+      "source_core_edge_clear": true
+    },
+    {
+      "unit": "lio",
+      "move": "hit",
+      "candidate": "r1",
+      "preferred": true,
+      "routes": [
+        "hit"
+      ],
+      "file": "heroes/raw/lio-hit-r1.png",
+      "frames": 4,
+      "frame_order": [
+        "ready",
+        "recoil clutching instrument",
+        "deep flinch",
+        "recover"
+      ],
+      "source": "heroes/source-sheets/lio_r1.png",
+      "source_row_zero_based": 4,
+      "source_bounds": [
+        [
+          67,
+          642,
+          264,
+          796
+        ],
+        [
+          330,
+          646,
+          496,
+          796
+        ],
+        [
+          560,
+          651,
+          739,
+          797
+        ],
+        [
+          806,
+          644,
+          1004,
+          796
+        ]
+      ],
+      "frame_bounds": [
+        [
+          32,
+          32,
+          229,
+          186
+        ],
+        [
+          391,
+          36,
+          557,
+          186
+        ],
+        [
+          717,
+          41,
+          896,
+          187
+        ],
+        [
+          1059,
+          34,
+          1257,
+          186
+        ]
+      ],
+      "source_y_crop": [
+        626,
+        813
+      ],
+      "gutter_insert_px": 96,
+      "minimum_alpha_gutter_px": 160,
+      "retained_source_pixels": 75032,
+      "retained_rgba_exact": true,
+      "per_frame_scale_applied": false,
+      "source_core_edge_clear": true
+    },
+    {
+      "unit": "lio",
+      "move": "block",
+      "candidate": "r1",
+      "preferred": true,
+      "routes": [
+        "block"
+      ],
+      "file": "heroes/raw/lio-block-r1.png",
+      "frames": 4,
+      "frame_order": [
+        "ready",
+        "protective brace",
+        "absorb recoil",
+        "recover"
+      ],
+      "source": "heroes/source-sheets/lio_r1.png",
+      "source_row_zero_based": 5,
+      "source_bounds": [
+        [
+          68,
+          781,
+          258,
+          929
+        ],
+        [
+          323,
+          783,
+          494,
+          929
+        ],
+        [
+          559,
+          787,
+          738,
+          926
+        ],
+        [
+          809,
+          781,
+          996,
+          929
+        ]
+      ],
+      "frame_bounds": [
+        [
+          32,
+          32,
+          222,
+          180
+        ],
+        [
+          383,
+          34,
+          554,
+          180
+        ],
+        [
+          715,
+          38,
+          894,
+          177
+        ],
+        [
+          1061,
+          32,
+          1248,
+          180
+        ]
+      ],
+      "source_y_crop": [
+        765,
+        945
+      ],
+      "gutter_insert_px": 96,
+      "minimum_alpha_gutter_px": 161,
+      "retained_source_pixels": 72378,
+      "retained_rgba_exact": true,
+      "per_frame_scale_applied": false,
+      "source_core_edge_clear": true
+    },
+    {
+      "unit": "lio",
+      "move": "down",
+      "candidate": "r1",
+      "preferred": true,
+      "routes": [
+        "down"
+      ],
+      "file": "heroes/raw/lio-down-r1.png",
+      "frames": 4,
+      "frame_order": [
+        "ready",
+        "knees buckle clutch instrument",
+        "kneel and lean on forearm",
+        "collapsed on side"
+      ],
+      "source": "heroes/source-sheets/lio_extra.png",
+      "source_row_zero_based": 2,
+      "source_bounds": [
+        [
+          17,
+          701,
+          244,
+          959
+        ],
+        [
+          255,
+          736,
+          458,
+          948
+        ],
+        [
+          468,
+          783,
+          757,
+          946
+        ],
+        [
+          749,
+          824,
+          1090,
+          946
+        ]
+      ],
+      "frame_bounds": [
+        [
+          32,
+          32,
+          259,
+          290
+        ],
+        [
+          366,
+          67,
+          569,
+          279
+        ],
+        [
+          675,
+          114,
+          964,
+          277
+        ],
+        [
+          1052,
+          155,
+          1393,
+          277
+        ]
+      ],
+      "source_y_crop": [
+        685,
+        975
+      ],
+      "gutter_insert_px": 96,
+      "minimum_alpha_gutter_px": 88,
+      "retained_source_pixels": 132626,
+      "retained_rgba_exact": true,
+      "per_frame_scale_applied": false,
+      "source_core_edge_clear": true
+    },
+    {
+      "unit": "foe_riftweaver",
+      "move": "rune-lash",
+      "candidate": "r1",
+      "preferred": true,
+      "routes": [
+        "Rune Lash"
+      ],
+      "file": "foes/raw/foe_riftweaver-rune-lash-r1.png",
+      "frames": 6,
+      "frame_order": [
+        "ready shard at chest",
+        "coil arm",
+        "raise lead elbow",
+        "open-glove whip snap left",
+        "low follow-through",
+        "recover"
+      ],
+      "source": "foes/source-sheets/rift_r1.png",
+      "source_row_zero_based": 0,
+      "source_bounds": [
+        [
+          52,
+          8,
+          244,
+          222
+        ],
+        [
+          314,
+          6,
+          499,
+          222
+        ],
+        [
+          540,
+          5,
+          754,
+          222
+        ],
+        [
+          769,
+          5,
+          1020,
+          222
+        ],
+        [
+          1039,
+          4,
+          1285,
+          222
+        ],
+        [
+          1326,
+          8,
+          1517,
+          222
+        ]
+      ],
+      "frame_bounds": [
+        [
+          32,
+          24,
+          224,
+          238
+        ],
+        [
+          390,
+          22,
+          575,
+          238
+        ],
+        [
+          712,
+          21,
+          926,
+          238
+        ],
+        [
+          1037,
+          21,
+          1288,
+          238
+        ],
+        [
+          1403,
+          20,
+          1649,
+          238
+        ],
+        [
+          1786,
+          24,
+          1977,
+          238
+        ]
+      ],
+      "source_y_crop": [
+        0,
+        238
+      ],
+      "gutter_insert_px": 96,
+      "minimum_alpha_gutter_px": 111,
+      "retained_source_pixels": 194575,
+      "retained_rgba_exact": true,
+      "per_frame_scale_applied": false,
+      "source_core_edge_clear": true
+    },
+    {
+      "unit": "foe_riftweaver",
+      "move": "rift-needle",
+      "candidate": "r1",
+      "preferred": true,
+      "routes": [
+        "Rift Needle"
+      ],
+      "file": "foes/raw/foe_riftweaver-rift-needle-r1.png",
+      "frames": 6,
+      "frame_order": [
+        "ready",
+        "pinch near shard",
+        "draw pinched wrist back",
+        "two-finger flick left",
+        "wrist follow-through",
+        "recover"
+      ],
+      "source": "foes/source-sheets/rift_r1.png",
+      "source_row_zero_based": 1,
+      "source_bounds": [
+        [
+          53,
+          219,
+          249,
+          435
+        ],
+        [
+          297,
+          219,
+          498,
+          437
+        ],
+        [
+          533,
+          219,
+          754,
+          434
+        ],
+        [
+          770,
+          222,
+          1027,
+          436
+        ],
+        [
+          1047,
+          221,
+          1296,
+          436
+        ],
+        [
+          1325,
+          221,
+          1517,
+          435
+        ]
+      ],
+      "frame_bounds": [
+        [
+          32,
+          32,
+          228,
+          248
+        ],
+        [
+          372,
+          32,
+          573,
+          250
+        ],
+        [
+          704,
+          32,
+          925,
+          247
+        ],
+        [
+          1037,
+          35,
+          1294,
+          249
+        ],
+        [
+          1410,
+          34,
+          1659,
+          249
+        ],
+        [
+          1784,
+          34,
+          1976,
+          248
+        ]
+      ],
+      "source_y_crop": [
+        203,
+        453
+      ],
+      "gutter_insert_px": 96,
+      "minimum_alpha_gutter_px": 112,
+      "retained_source_pixels": 199429,
+      "retained_rgba_exact": true,
+      "per_frame_scale_applied": false,
+      "source_core_edge_clear": true
+    },
+    {
+      "unit": "foe_riftweaver",
+      "move": "ribbon-snare",
+      "candidate": "r1",
+      "preferred": true,
+      "routes": [
+        "Ribbon Snare"
+      ],
+      "file": "foes/raw/foe_riftweaver-ribbon-snare-r1.png",
+      "frames": 6,
+      "frame_order": [
+        "ready",
+        "grasp cloth at chest",
+        "wrist toward shoulder",
+        "compact wrist cast left",
+        "low follow-through",
+        "recover"
+      ],
+      "source": "foes/source-sheets/rift_extra.png",
+      "source_row_zero_based": 0,
+      "source_bounds": [
+        [
+          42,
+          143,
+          226,
+          436
+        ],
+        [
+          293,
+          142,
+          482,
+          438
+        ],
+        [
+          541,
+          144,
+          736,
+          436
+        ],
+        [
+          739,
+          144,
+          1009,
+          438
+        ],
+        [
+          1030,
+          144,
+          1268,
+          438
+        ],
+        [
+          1317,
+          144,
+          1506,
+          437
+        ]
+      ],
+      "frame_bounds": [
+        [
+          32,
+          33,
+          216,
+          326
+        ],
+        [
+          379,
+          32,
+          568,
+          328
+        ],
+        [
+          723,
+          34,
+          918,
+          326
+        ],
+        [
+          1017,
+          34,
+          1287,
+          328
+        ],
+        [
+          1404,
+          34,
+          1642,
+          328
+        ],
+        [
+          1787,
+          34,
+          1976,
+          327
+        ]
+      ],
+      "source_y_crop": [
+        126,
+        454
+      ],
+      "gutter_insert_px": 96,
+      "minimum_alpha_gutter_px": 99,
+      "retained_source_pixels": 258612,
+      "retained_rgba_exact": true,
+      "per_frame_scale_applied": false,
+      "source_core_edge_clear": true
+    },
+    {
+      "unit": "foe_riftweaver",
+      "move": "ribbon-snare",
+      "candidate": "r2",
+      "preferred": false,
+      "routes": [
+        "Ribbon Snare"
+      ],
+      "file": "foes/raw/foe_riftweaver-ribbon-snare-r2.png",
+      "frames": 6,
+      "frame_order": [
+        "ready",
+        "hold cloth at hip",
+        "sweep elbow back",
+        "low sidearm cloth release",
+        "low follow-through",
+        "recover"
+      ],
+      "source": "foes/source-sheets/rift_extra.png",
+      "source_row_zero_based": 1,
+      "source_bounds": [
+        [
+          37,
+          558,
+          226,
+          856
+        ],
+        [
+          285,
+          559,
+          510,
+          860
+        ],
+        [
+          531,
+          559,
+          766,
+          861
+        ],
+        [
+          775,
+          559,
+          1024,
+          860
+        ],
+        [
+          1069,
+          559,
+          1282,
+          860
+        ],
+        [
+          1327,
+          557,
+          1519,
+          861
+        ]
+      ],
+      "frame_bounds": [
+        [
+          32,
+          33,
+          221,
+          331
+        ],
+        [
+          376,
+          34,
+          601,
+          335
+        ],
+        [
+          718,
+          34,
+          953,
+          336
+        ],
+        [
+          1058,
+          34,
+          1307,
+          335
+        ],
+        [
+          1448,
+          34,
+          1661,
+          335
+        ],
+        [
+          1802,
+          32,
+          1994,
+          336
+        ]
+      ],
+      "source_y_crop": [
+        541,
+        877
+      ],
+      "gutter_insert_px": 96,
+      "minimum_alpha_gutter_px": 105,
+      "retained_source_pixels": 272276,
+      "retained_rgba_exact": true,
+      "per_frame_scale_applied": false,
+      "source_core_edge_clear": true
+    },
+    {
+      "unit": "foe_riftweaver",
+      "move": "hit",
+      "candidate": "r1",
+      "preferred": true,
+      "routes": [
+        "hit"
+      ],
+      "file": "foes/raw/foe_riftweaver-hit-r1.png",
+      "frames": 4,
+      "frame_order": [
+        "ready",
+        "recoil right",
+        "hunch clutching shard",
+        "ready"
+      ],
+      "source": "foes/source-sheets/rift_r1.png",
+      "source_row_zero_based": 3,
+      "source_bounds": [
+        [
+          52,
+          646,
+          246,
+          855
+        ],
+        [
+          297,
+          645,
+          509,
+          852
+        ],
+        [
+          547,
+          667,
+          768,
+          850
+        ],
+        [
+          815,
+          645,
+          1010,
+          856
+        ]
+      ],
+      "frame_bounds": [
+        [
+          32,
+          33,
+          226,
+          242
+        ],
+        [
+          373,
+          32,
+          585,
+          239
+        ],
+        [
+          719,
+          54,
+          940,
+          237
+        ],
+        [
+          1083,
+          32,
+          1278,
+          243
+        ]
+      ],
+      "source_y_crop": [
+        629,
+        872
+      ],
+      "gutter_insert_px": 96,
+      "minimum_alpha_gutter_px": 134,
+      "retained_source_pixels": 124443,
+      "retained_rgba_exact": true,
+      "per_frame_scale_applied": false,
+      "source_core_edge_clear": true
+    },
+    {
+      "unit": "foe_riftweaver",
+      "move": "down",
+      "candidate": "r1",
+      "preferred": true,
+      "routes": [
+        "down"
+      ],
+      "file": "foes/raw/foe_riftweaver-down-r1.png",
+      "frames": 4,
+      "frame_order": [
+        "ready",
+        "hood dips knees buckle",
+        "robe sinks",
+        "collapsed robe hold"
+      ],
+      "source": "foes/source-sheets/rift_r1.png",
+      "source_row_zero_based": 4,
+      "source_bounds": [
+        [
+          51,
+          851,
+          246,
+          1024
+        ],
+        [
+          289,
+          845,
+          514,
+          1024
+        ],
+        [
+          542,
+          880,
+          782,
+          1014
+        ],
+        [
+          797,
+          884,
+          1052,
+          1012
+        ]
+      ],
+      "frame_bounds": [
+        [
+          32,
+          38,
+          227,
+          211
+        ],
+        [
+          366,
+          32,
+          591,
+          211
+        ],
+        [
+          715,
+          67,
+          955,
+          201
+        ],
+        [
+          1066,
+          71,
+          1321,
+          199
+        ]
+      ],
+      "source_y_crop": [
+        829,
+        1024
+      ],
+      "gutter_insert_px": 96,
+      "minimum_alpha_gutter_px": 111,
+      "retained_source_pixels": 97904,
+      "retained_rgba_exact": true,
+      "per_frame_scale_applied": false,
+      "source_core_edge_clear": true
+    },
+    {
+      "unit": "foe_spore_puff",
+      "move": "spore-dust",
+      "candidate": "r1",
+      "preferred": true,
+      "routes": [
+        "Spore Dust"
+      ],
+      "file": "foes/raw/foe_spore_puff-spore-dust-r1.png",
+      "frames": 6,
+      "frame_order": [
+        "ready",
+        "compress",
+        "inflate caps flare",
+        "body squeeze release without cloud",
+        "deflate",
+        "original size"
+      ],
+      "source": "foes/source-sheets/spore_r1.png",
+      "source_row_zero_based": 0,
+      "source_bounds": [
+        [
+          15,
+          91,
+          276,
+          382
+        ],
+        [
+          279,
+          143,
+          514,
+          374
+        ],
+        [
+          512,
+          74,
+          782,
+          384
+        ],
+        [
+          770,
+          96,
+          1027,
+          386
+        ],
+        [
+          1020,
+          124,
+          1281,
+          384
+        ],
+        [
+          1267,
+          96,
+          1523,
+          384
+        ]
+      ],
+      "frame_bounds": [
+        [
+          32,
+          49,
+          293,
+          340
+        ],
+        [
+          392,
+          101,
+          627,
+          332
+        ],
+        [
+          721,
+          32,
+          991,
+          342
+        ],
+        [
+          1075,
+          54,
+          1332,
+          344
+        ],
+        [
+          1421,
+          82,
+          1682,
+          342
+        ],
+        [
+          1764,
+          54,
+          2020,
+          342
+        ]
+      ],
+      "source_y_crop": [
+        58,
+        402
+      ],
+      "gutter_insert_px": 96,
+      "minimum_alpha_gutter_px": 82,
+      "retained_source_pixels": 275927,
+      "retained_rgba_exact": true,
+      "per_frame_scale_applied": false,
+      "source_core_edge_clear": true
+    },
+    {
+      "unit": "foe_spore_puff",
+      "move": "hit",
+      "candidate": "r1",
+      "preferred": true,
+      "routes": [
+        "hit"
+      ],
+      "file": "foes/raw/foe_spore_puff-hit-r1.png",
+      "frames": 4,
+      "frame_order": [
+        "ready",
+        "recoil right caps tilt",
+        "deep squash roots curl",
+        "recover"
+      ],
+      "source": "foes/source-sheets/spore_r1.png",
+      "source_row_zero_based": 1,
+      "source_bounds": [
+        [
+          14,
+          428,
+          276,
+          705
+        ],
+        [
+          301,
+          450,
+          547,
+          692
+        ],
+        [
+          562,
+          485,
+          786,
+          696
+        ],
+        [
+          775,
+          428,
+          1041,
+          704
+        ]
+      ],
+      "frame_bounds": [
+        [
+          32,
+          32,
+          294,
+          309
+        ],
+        [
+          415,
+          54,
+          661,
+          296
+        ],
+        [
+          772,
+          89,
+          996,
+          300
+        ],
+        [
+          1081,
+          32,
+          1347,
+          308
+        ]
+      ],
+      "source_y_crop": [
+        412,
+        721
+      ],
+      "gutter_insert_px": 96,
+      "minimum_alpha_gutter_px": 85,
+      "retained_source_pixels": 163228,
+      "retained_rgba_exact": true,
+      "per_frame_scale_applied": false,
+      "source_core_edge_clear": true
+    },
+    {
+      "unit": "foe_spore_puff",
+      "move": "down",
+      "candidate": "r1",
+      "preferred": true,
+      "routes": [
+        "down"
+      ],
+      "file": "foes/raw/foe_spore_puff-down-r1.png",
+      "frames": 4,
+      "frame_order": [
+        "ready",
+        "caps sag body droops",
+        "roots fold down",
+        "flattened coherent hold"
+      ],
+      "source": "foes/source-sheets/spore_r1.png",
+      "source_row_zero_based": 2,
+      "source_bounds": [
+        [
+          14,
+          718,
+          278,
+          1000
+        ],
+        [
+          283,
+          766,
+          546,
+          996
+        ],
+        [
+          553,
+          814,
+          819,
+          992
+        ],
+        [
+          813,
+          836,
+          1125,
+          994
+        ]
+      ],
+      "frame_bounds": [
+        [
+          32,
+          32,
+          296,
+          314
+        ],
+        [
+          397,
+          80,
+          660,
+          310
+        ],
+        [
+          763,
+          128,
+          1029,
+          306
+        ],
+        [
+          1119,
+          150,
+          1431,
+          308
+        ]
+      ],
+      "source_y_crop": [
+        702,
+        1016
+      ],
+      "gutter_insert_px": 96,
+      "minimum_alpha_gutter_px": 90,
+      "retained_source_pixels": 151794,
+      "retained_rgba_exact": true,
+      "per_frame_scale_applied": false,
+      "source_core_edge_clear": true
+    }
+  ],
+  "excluded_source_rows": [
+    {
+      "source": "heroes/source-sheets/lio_r1.png",
+      "row": 6,
+      "reason": "crowded bottom margin; separate down pass selected"
+    },
+    {
+      "source": "foes/source-sheets/rift_r1.png",
+      "row": 2,
+      "reason": "ribbon touches next figure; separate compact and sidearm strips selected"
+    }
+  ]
+}

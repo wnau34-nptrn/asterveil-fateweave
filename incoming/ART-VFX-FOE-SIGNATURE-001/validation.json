@@ -1,0 +1,283 @@
+{
+  "schema": 1,
+  "all_files_except_self": true,
+  "self_integrity": "Compare validation.json fetched bytes to local bytes; self-hash is reported by --verify-git (self-reference excluded).",
+  "checks": {
+    "layers": 40,
+    "moves": 10,
+    "dimensions": [
+      256,
+      256
+    ],
+    "straight_rgba": true,
+    "transparent_border_min_px": 16,
+    "storyboards_width": 390,
+    "protected_face_hp_overlap_px": 0
+  },
+  "files": {
+    "NOTES.md": {
+      "sha256": "fd40b102860f7a9bd021ddd91a4052f70d0079192534fe054d48e8c4b3376843",
+      "bytes": 8909
+    },
+    "build_handoff.py": {
+      "sha256": "1e77c8c964921ffd4c5eec5db263748f34c4790f359ef615d45485538051bcab",
+      "bytes": 9458
+    },
+    "generation-prompts.json": {
+      "sha256": "bf59855271e56fde190876875516bed42c29687839021943c847212f51d1edad",
+      "bytes": 9864
+    },
+    "layers/ember-spark_peak-impact.png": {
+      "sha256": "829b0a40784df4aa10b3fa9e642b4dd5076ee2c8162d33aeb55c7b073c3260c5",
+      "bytes": 72917
+    },
+    "layers/ember-spark_peak-travel.png": {
+      "sha256": "d68f8281c46e030e21c80fda08d8aab3cec86f2f8e327fca821314cb10f48c90",
+      "bytes": 34447
+    },
+    "layers/ember-spark_prepare.png": {
+      "sha256": "9c1b2e89aea1618dc73cf9a5d72f3140153bc7cd03e2572a85a7b530012f178b",
+      "bytes": 75313
+    },
+    "layers/ember-spark_settle.png": {
+      "sha256": "9f15af86b5f889e82f8ffab6e161b17ee8ec21e09649a36ab3985163242f39aa",
+      "bytes": 32476
+    },
+    "layers/rift-bolt-foe_peak-impact.png": {
+      "sha256": "d6cc3ac96df910a57edee75cf267be0351330b8adc6684dd5f740e99a83e677c",
+      "bytes": 76347
+    },
+    "layers/rift-bolt-foe_peak-travel.png": {
+      "sha256": "122ac9aac469645624def2eb430d70330de262f248a4eeabce48f11d841f450a",
+      "bytes": 39217
+    },
+    "layers/rift-bolt-foe_prepare.png": {
+      "sha256": "6d13abdeaffb2b5779e35d388f95a76fe14c8a86091cf476ac460907211df83c",
+      "bytes": 69636
+    },
+    "layers/rift-bolt-foe_settle.png": {
+      "sha256": "15de0a81e9c0fe7a3801326d61842e05cabdf2d5819df940b186c47b77f0f2d5",
+      "bytes": 59408
+    },
+    "layers/rift-needle_peak-impact.png": {
+      "sha256": "65369100fb5d80e51b99caab5c9bfc6b021d1a5ba1f9eb92d12f27ea44f0ec41",
+      "bytes": 50485
+    },
+    "layers/rift-needle_peak-travel.png": {
+      "sha256": "4a11627c636ca896e8b449445f27373e11975cf8bf481b89b2504e9d178d9512",
+      "bytes": 14976
+    },
+    "layers/rift-needle_prepare.png": {
+      "sha256": "cc5e3ced218053ad390573e224697d4611bc1f7df71916b7541dd35df6375219",
+      "bytes": 65096
+    },
+    "layers/rift-needle_settle.png": {
+      "sha256": "d6d8487c4467da1c370f9a1db9fd4f5fa16c8bdb477e1ec64dd460cbb9eb4dc5",
+      "bytes": 21771
+    },
+    "layers/rune-lash_peak-impact.png": {
+      "sha256": "30bf11595a5984f607f7ff0563d6b026f86752c10f857956c42fc510d1c40ad7",
+      "bytes": 76269
+    },
+    "layers/rune-lash_peak-travel.png": {
+      "sha256": "1a478b0ebcc4d1dffcdfb31f4073febc3fbd26c90f048cc49ca6ce2f507f2407",
+      "bytes": 25017
+    },
+    "layers/rune-lash_prepare.png": {
+      "sha256": "43facaddcb28c39f0190a145faffa43c2d91ca7545b5d6ddfb8885fcd2ead803",
+      "bytes": 82207
+    },
+    "layers/rune-lash_settle.png": {
+      "sha256": "68a698155fee4212dce32f474de0bb409e3a429e4c781ee86c55fd358267e0d2",
+      "bytes": 37370
+    },
+    "layers/seed-spark_peak-impact.png": {
+      "sha256": "0f18a58c07137decd9863f74fca4795ca14741c82f1d6ebc2a65de1d70fc186c",
+      "bytes": 93288
+    },
+    "layers/seed-spark_peak-travel.png": {
+      "sha256": "80684277897e3d98f38b2ba7067ca2b88eebb72fb92d41c2c310dd10f266e68a",
+      "bytes": 45471
+    },
+    "layers/seed-spark_prepare.png": {
+      "sha256": "678d60adc63930b0539cc941e7b84b28f46cca2a805451f9b2e93e2bcbe65ecc",
+      "bytes": 55758
+    },
+    "layers/seed-spark_settle.png": {
+      "sha256": "2350f844b2ae18fee7c8c092f7f7e4b5853ebb1e9646e42d35466f6578d0eb1c",
+      "bytes": 47371
+    },
+    "layers/shard-burst_peak-impact.png": {
+      "sha256": "64d73f26dce639154b457ce0a406430ae58d3cf5cbf7f27ab4ae4b86132b7474",
+      "bytes": 88795
+    },
+    "layers/shard-burst_peak-travel.png": {
+      "sha256": "985c16b64bf1883ad7bc6683994b6df64166918033401ddf75d90c3c7e70f6a0",
+      "bytes": 48442
+    },
+    "layers/shard-burst_prepare.png": {
+      "sha256": "76442fd93272d85e33b5789b6d062f57b7be14cf2b6f56476cf0030702ac4399",
+      "bytes": 77792
+    },
+    "layers/shard-burst_settle.png": {
+      "sha256": "bfabb00f5b802d4569d3d5306bb86f7661321dc837f641fb535319b255f1c3fb",
+      "bytes": 40751
+    },
+    "layers/spore-dust_peak-impact.png": {
+      "sha256": "2fea00d9a4063f63acdf5ac9d4a7ab156be9a95d48dfd2ea854cd9311506b3d0",
+      "bytes": 80026
+    },
+    "layers/spore-dust_peak-travel.png": {
+      "sha256": "ddd626cfc83b84f12d9ae14a4bcb5281c6207ae85d0c5e1ce924cdf73427a60d",
+      "bytes": 42945
+    },
+    "layers/spore-dust_prepare.png": {
+      "sha256": "92e46631f76e4abe3c55fa48136553266a0951835c597c4fe81305f7f816458e",
+      "bytes": 77542
+    },
+    "layers/spore-dust_settle.png": {
+      "sha256": "dcaea5e59a354700ae38638e8a123ce45804ee02c04ce254ea3a40990aef5891",
+      "bytes": 59637
+    },
+    "layers/spore-hex_peak-impact.png": {
+      "sha256": "d131ef7c4a9b8cef847bb12d3f5af4cda734f979a28e85232c0703683747ccf1",
+      "bytes": 68637
+    },
+    "layers/spore-hex_peak-travel.png": {
+      "sha256": "9d8b2236c8ff6c6b44037b1100d7d801f200276bac13e202c5bf6958f206eb93",
+      "bytes": 35648
+    },
+    "layers/spore-hex_prepare.png": {
+      "sha256": "851c85522bc63552ff278d63655e80b5fcf53e5112a9d6352713f85f285dd249",
+      "bytes": 76862
+    },
+    "layers/spore-hex_settle.png": {
+      "sha256": "a5c72a0416ad6e7c19287a73d10190b1001028dfe8be0effc294bfe1a4418baf",
+      "bytes": 45949
+    },
+    "layers/star-flame_peak-impact.png": {
+      "sha256": "3e0abe03184ba72887b177a0e3d9a850a8afa770b5628d245211b871c304eeba",
+      "bytes": 69282
+    },
+    "layers/star-flame_peak-travel.png": {
+      "sha256": "8332f6a5be5a16f803792d961eb1fa2163f9373ab73b8f5673305098e807b17f",
+      "bytes": 31406
+    },
+    "layers/star-flame_prepare.png": {
+      "sha256": "d24ba35199736c128257a29301f6e54a3b10b72b50a2e6ebb74cb1259b99bed7",
+      "bytes": 30750
+    },
+    "layers/star-flame_settle.png": {
+      "sha256": "521ff0d1ea4342aa16de001980983ea7296c5d6b79aec2441e2aa1788cd2c6d0",
+      "bytes": 46783
+    },
+    "layers/veil-quake_peak-impact.png": {
+      "sha256": "cf72b865856bba7a9f0daa38c0cb15005833e91205e375072627aa1b88705882",
+      "bytes": 66220
+    },
+    "layers/veil-quake_peak-travel.png": {
+      "sha256": "9df2a51c1d8e907fc68d78b69b39dc5cf18f54014efc1321a198d2df92d80de5",
+      "bytes": 33909
+    },
+    "layers/veil-quake_prepare.png": {
+      "sha256": "ee7c84f05a17e73f69661ec9ed4b81256fbd1aa74804024c3a16fc6e63796412",
+      "bytes": 58462
+    },
+    "layers/veil-quake_settle.png": {
+      "sha256": "7ff854fb4bf4268aecb804203af25960d18663723a17883df3d1836dab17aeeb",
+      "bytes": 42032
+    },
+    "layers.json": {
+      "sha256": "2e962198fd37605b88f734847a9cc10b17e09447b0238e9d6e7fcd36611e7fc9",
+      "bytes": 40994
+    },
+    "preview-390.png": {
+      "sha256": "8dc783c6a808d34904b77d89e0604ccfc82b4ed30373cd689deffb5b192a3ad0",
+      "bytes": 428895
+    },
+    "references/caster.png": {
+      "sha256": "955ee68ad42ef4c6d936ade8c6ac36f635c2720b0d54e0e58372b8fa553445e7",
+      "bytes": 263504
+    },
+    "references/hero.png": {
+      "sha256": "0e888a0d889c61f2e4005361d43121e13478944cd3438a9ed6ca3578ee0dbaff",
+      "bytes": 420757
+    },
+    "source/bolt-quake.png": {
+      "sha256": "0b5707f293fe4c1a083ceb4f8bef026fb26e176a43b12f9b289a56bb55862702",
+      "bytes": 1357542
+    },
+    "source/dust.png": {
+      "sha256": "b9ab1d6d60241dd913d236b70ef287b82bb8ed23115a6d8f33173a09feb7feef",
+      "bytes": 924947
+    },
+    "source/quake.png": {
+      "sha256": "81e1c8cebf40d50a164ddcb6143cdfae0fb32929b85766527fa0acdb89211b4e",
+      "bytes": 891233
+    },
+    "source/rift-shard.png": {
+      "sha256": "1ac23465a4e2485180fff1083d003584869109b321be276c4bc3a852d451800a",
+      "bytes": 1067422
+    },
+    "source/seeds-embers.png": {
+      "sha256": "bc297dede99f77bdb67389da853a96faccaf408ad62efab8b482b560b50205bd",
+      "bytes": 1390316
+    },
+    "source/spores.png": {
+      "sha256": "f2360760d372ad22b71626df1aed79415c62b9bae898eb0c64a33bccfa4e000c",
+      "bytes": 1324974
+    },
+    "source/star-rune.png": {
+      "sha256": "66736cd28b8773d3d18004c14d8f07843e89610cf3f85858338539cef1277a09",
+      "bytes": 999403
+    },
+    "sources.json": {
+      "sha256": "b42e218e843563b2efd8f1fc659c5e391b5906599da48526380c62a2e079d897",
+      "bytes": 965
+    },
+    "storyboards/anchors.json": {
+      "sha256": "172963006c23a08e24d19eb54951215c6a21497722d6bcb0423ed8c2f919ea10",
+      "bytes": 14579
+    },
+    "storyboards/ember-spark-390.png": {
+      "sha256": "60d9a3a12358b656368ea4ac6de7057638d36b1f48e0ec0c94226aae5aba79e8",
+      "bytes": 217635
+    },
+    "storyboards/rift-bolt-foe-390.png": {
+      "sha256": "8467318cbd0a7f136b1d9f15ec3a30b24f3c13486b6af5476f147df5dc6fa367",
+      "bytes": 216673
+    },
+    "storyboards/rift-needle-390.png": {
+      "sha256": "f9b88be4bda2a0be80f60ff7f957eff79c43eaf72d59e6a66f8ba368a5381912",
+      "bytes": 212444
+    },
+    "storyboards/rune-lash-390.png": {
+      "sha256": "4d42c701c47a3014f70c223bbc5476267f31a32f2a567b595ad5fcec10341026",
+      "bytes": 215058
+    },
+    "storyboards/seed-spark-390.png": {
+      "sha256": "66114431c187b1437182a5527f0f5cb7451db61dc0bb057b6ae35234ec54488a",
+      "bytes": 217962
+    },
+    "storyboards/shard-burst-390.png": {
+      "sha256": "84fe25ce9f5eadc0584bdf59543bd60ed72894585ed7528f0c79f9ea1f04f533",
+      "bytes": 220609
+    },
+    "storyboards/spore-dust-390.png": {
+      "sha256": "a87c0a7b8506031a352a8dc26df8576f8d1c28450fd5916e5f1ac62c0c5ca861",
+      "bytes": 218133
+    },
+    "storyboards/spore-hex-390.png": {
+      "sha256": "7fff6f8c10f1eb263bb5bcfcc83077d1371c7d0774bfd862d7f40e3a42ccc417",
+      "bytes": 216213
+    },
+    "storyboards/star-flame-390.png": {
+      "sha256": "d6ca10a3b54b0b4dc041fd6e6be6817584ae717c909cfa901df7c12b07dec459",
+      "bytes": 215559
+    },
+    "storyboards/veil-quake-390.png": {
+      "sha256": "7c16b455387b965226935b3ba59e18320370c2af1ca82e31ef00613a39a03e37",
+      "bytes": 219898
+    }
+  }
+}

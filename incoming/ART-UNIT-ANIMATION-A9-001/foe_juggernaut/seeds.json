@@ -1,0 +1,29 @@
+{
+  "identity": "foe_juggernaut",
+  "atlas": "public/assets/art/units_foes.webp",
+  "cell_zero_based": 7,
+  "atlas_columns": 2,
+  "crop_xyxy": [
+    512,
+    1536,
+    1024,
+    2048
+  ],
+  "file": "seeds/idle.png",
+  "sha256": "4886380e37d38d5fb89f4dfc916a0d30f075553b5b11baf5cb75df2ddc6b1d53",
+  "decoded_rgba_sha256": "3d8d485eed934331bf2f60c2cb013ff5a394c98cb81300b66bd4393a83f5c532",
+  "size": [
+    512,
+    512
+  ],
+  "atlas_seed_unchanged": true,
+  "animation_seed": "seeds/idle.png",
+  "animation_facing": "left",
+  "logical_sole_y": 497,
+  "padded_frame_seed_xy": [
+    256,
+    160
+  ],
+  "padded_frame_sole_y": 657,
+  "atlas_sha256": "dcf79e09f2b0b813aa03894bd65222ae3afb2df875e84870d1dba968c49a1895"
+}

@@ -1,5 +1,6 @@
 import type { ActionId, EncounterDefinition, TurnStage } from '../../core/battle/types';
 import { artOf } from './assets';
+import { unitDefinition } from './unit-frames';
 
 export type UnitPose = 'slash' | 'thrust' | 'smash' | 'shoot' | 'throw' | 'cast' | 'guard' | 'song' | 'dance' | 'punch' | 'charge' | 'pounce';
 // Actor gestures are independent of damage type and of the painted VFX family.
@@ -36,6 +37,14 @@ export function unitPose(turn: TurnStage, data: EncounterDefinition): UnitPose |
 }
 
 export type Reaction = 'hit' | 'dodge' | 'block' | 'down' | 'counter';
+// Counters each identity's riposte frames depict (resolver texts). Gear reflections (thorns, ward) keep the hurt pose.
+const riposteTexts: Readonly<Record<string, readonly string[]>> = {
+  guardian: ['The knight counters.'],
+  garran: ['Braced spear counters.', 'Spear wall counters.', 'Held spear counters.', 'War cry counter.'],
+  tracer: ['The duelist ripostes.', 'War cry counter.'],
+};
+const ripostes = (art: string, text: string | undefined): boolean =>
+  !!text && !!riposteTexts[art]?.includes(text) && !!unitDefinition(art)?.reactions?.counter;
 export function unitReactions(turn: TurnStage, data?: EncounterDefinition): Map<string, { pose: Reaction; sourceId?: string }> {
   const result = new Map<string, { pose: Reaction; sourceId?: string }>();
   const rank: Record<Reaction, number> = { counter: 0, block: 1, dodge: 2, hit: 3, down: 4 };
@@ -49,11 +58,10 @@ export function unitReactions(turn: TurnStage, data?: EncounterDefinition): Map<
     } else if (e.type === 'dodge') add(e.targetId, 'dodge', e.sourceId);
     else if (e.type === 'down') add(e.targetId, 'down', e.sourceId);
   }
-  // Aegis braces and ripostes in the SAME reaction window. His actual Guard
-  // counter otherwise loses to his incoming hit/block and never shows the sword.
-  // Keep down/dodge priority and every other identity's shipped reaction policy.
-  for (const e of turn.events) if (e.type === 'counter' && e.text === 'The knight counters.' && e.sourceId && e.sourceId !== turn.actorId
-    && (data ? artOf(data, e.sourceId) : e.sourceId) === 'guardian') {
+  // A counter with painted riposte frames (Aegis's Guard counter; AV02: Garran's braced/held spear, Lyra's parry riposte)
+  // reads in the SAME reaction window as the incoming hit/block it answers; otherwise the hurt pose hides the riposte.
+  // Down and dodge keep priority; identities without counter frames keep the shipped policy.
+  for (const e of turn.events) if (e.type === 'counter' && e.sourceId && e.sourceId !== turn.actorId && ripostes(data ? artOf(data, e.sourceId) : e.sourceId, e.text)) {
     const incoming = result.get(e.sourceId);
     if (incoming?.pose === 'hit' || incoming?.pose === 'block') result.set(e.sourceId, { pose: 'counter', sourceId: e.targetId });
   }

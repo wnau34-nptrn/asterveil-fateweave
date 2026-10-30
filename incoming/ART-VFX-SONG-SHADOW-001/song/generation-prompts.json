@@ -1,0 +1,23 @@
+{
+  "tool": "image_gen.imagegen",
+  "transparent_background": true,
+  "originals": [
+    {
+      "path": "source/R1.png",
+      "original_path": "/workspace/generated_images/exec-90b84dab-96ad-451c-b52f-22a221259da7.png",
+      "prompt": "Create an ORIGINAL game VFX production sprite sheet, transparent background, no characters, no UI, no text. Strict grid 3 columns x 5 rows with wide completely transparent gutters; every effect fully contained in its cell, consistent centered scale. Landscape cells, sheet portrait aspect 3:5. Columns are three animation beats: prepare, peak, settle. Hand-painted luminous fantasy painterly strokes, crisp visible core and fine wispy ends, coral #F88279 and warm gold #FFD28B with ivory accents. Row1 VALOR: small gathering warm ring; three rising warm elliptical rings with a few tiny sparks arcing sideways to allies; small fading warm sparks. Row2 FINALE: gathered thin song ribbons; one broad flowing coral-gold ribbon wave moving right with one leading crescent, no multiple hit explosions; one compact single starless abstract impact fan. Row3 DREAD: small violet-coral knotted ribbon; jagged discordant violet-coral wave moving right to ONE target; a small broken trembling zigzag mark in dark violet and coral, no skulls. Row4 NOTE: small bright shard seed; ONE bright abstract note-blade pointed right with slender ribbon tail; one small sharp impact slash. Row5 SOLO: gentle low warm pool; narrow translucent spotlight-like column with hollow airy center, warm ellipse base; short soft fading pool. ALL forms must be original abstract note-like ribbons and shapes, NO real musical notation, no clefs, no staff lines, no letters or symbols copied from scores. Airy layered paint, not thick opaque discs. All isolated on alpha. This is variant R1, softer flowing arcs. Save original generated image to /workspace/asterveil-fateweave/incoming/ART-VFX-SONG-SHADOW-001/song/source/R1.png"
+    },
+    {
+      "path": "source/R2-draft.png",
+      "original_path": "/workspace/generated_images/exec-4f205add-4562-49ce-988b-00ecc9e56085.png",
+      "prompt": "Original hand-painted fantasy game VFX sprite sheet on transparent alpha. STRICT EQUAL 3 columns x 5 rows grid, 15 isolated effects, every cell has SAME SIZE and at least 20% transparent margin. Portrait canvas 3:5. Do not let art touch adjacent cells. Each effect similar small scale, no text, figures, UI. Columns prepare / peak / settle. Rows: 1 valor warm ring seed / three ascending thin coral-gold elliptical rings with outward tiny ally sparks / few drifting gold flecks; 2 finale gathered ribbon knot / ONE rightward crescent song-ribbon wave / ONE compact fan impact; 3 dread violet coral seed / ONE broken zigzag discord wave pointing right / tiny trembling broken zigzag mark; 4 note little light shard / ONE sharp rightward ivory note-blade with coral trailing ribbon / ONE small slash impact; 5 solo dim ellipse pool / slim gentle warm translucent spotlight column / fading dim pool. R2 direction: stronger clean ivory edge accents, narrow translucent paint, controlled small glows and stronger negative space than soft clouds; coral #F88279 gold #FFD28B, dread #56385F. Shapes are invented abstract angular ribbon forms, NO music notation, clefs, staffs, letters or borrowed score symbols. Not pixel art. Production cutout effect art, hollow centers, wispy trailing ends. Equal-width cells are essential. No broad opaque background haze."
+    },
+    {
+      "path": "source/R2.png",
+      "original_path": "/workspace/generated_images/exec-c621e01b-5957-47fe-91f9-ee11bf94710b.png",
+      "referenced_image": "source/R2-draft.png",
+      "prompt": "Correct this transparent VFX sheet. Preserve transparent background and all existing row2-5 art. In TOP ROW ONLY: left cell replace the three rings with ONE small low warm coral-gold ring seed; center currently empty cell ADD three thin ascending luminous coral-gold ellipse rings, stacked vertically, tiny sparks drifting sideways, fully contained in middle third x=324..646, y=20..310. Right top cell keep a few small drifting sparks. Important top row center must visibly contain rising rings. All art separated by transparent gutters. Original abstract fantasy song shapes, no conventional musical notation. Keep all other rows. R2 crisp light edges."
+    }
+  ],
+  "postprocessing": "Mechanical rectangular extraction, proportional resize and transparent padding only. No redrawing or background removal."
+}

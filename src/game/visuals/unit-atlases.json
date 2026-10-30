@@ -160,5 +160,167 @@
     "frames": 22,
     "decodedBytes": 1863680,
     "downloadBytes": 475744
+  },
+  "sefa": {
+    "image": "sefa_a6.84128b973a5e.webp",
+    "atlas": "sefa_a6.dd4844ad09fd.json",
+    "width": 1536,
+    "height": 690,
+    "frames": 40,
+    "decodedBytes": 4239360,
+    "downloadBytes": 1066697
+  },
+  "lio": {
+    "image": "lio_a6.86a716dad3e8.webp",
+    "atlas": "lio_a6.09193c4bc99f.json",
+    "width": 768,
+    "height": 1693,
+    "frames": 40,
+    "decodedBytes": 5200896,
+    "downloadBytes": 1455863
+  },
+  "riftweaver": {
+    "image": "riftweaver_a6.8f88afac40de.webp",
+    "atlas": "riftweaver_a6.43505473120d.json",
+    "width": 768,
+    "height": 1263,
+    "frames": 30,
+    "decodedBytes": 3879936,
+    "downloadBytes": 1148424
+  },
+  "sporepuff": {
+    "image": "sporepuff_a6.1bfc88ce673f.webp",
+    "atlas": "sporepuff_a6.d542e6d2f65d.json",
+    "width": 768,
+    "height": 540,
+    "frames": 22,
+    "decodedBytes": 1658880,
+    "downloadBytes": 456125
+  },
+  "golem": {
+    "image": "golem_a8.347332eb22cb.webp",
+    "atlas": "golem_a8.5b47da42b1d4.json",
+    "width": 768,
+    "height": 1125,
+    "frames": 22,
+    "decodedBytes": 3456000,
+    "downloadBytes": 1077307
+  },
+  "channeler": {
+    "image": "channeler_a8.e78036e65eec.webp",
+    "atlas": "channeler_a8.030af2894ed6.json",
+    "width": 1280,
+    "height": 416,
+    "frames": 22,
+    "decodedBytes": 2129920,
+    "downloadBytes": 547872
+  },
+  "wisp": {
+    "image": "wisp_a8.f9b9ef229c93.webp",
+    "atlas": "wisp_a8.a22ecd578279.json",
+    "width": 1024,
+    "height": 334,
+    "frames": 25,
+    "decodedBytes": 1368064,
+    "downloadBytes": 336175
+  },
+  "crawler": {
+    "image": "crawler_a8.4c402f135a49.webp",
+    "atlas": "crawler_a8.61d4d6d4d1b5.json",
+    "width": 512,
+    "height": 664,
+    "frames": 22,
+    "decodedBytes": 1359872,
+    "downloadBytes": 386769
+  },
+  "raider": {
+    "image": "raider_a10.e753795001b9.webp",
+    "atlas": "raider_a10.6e58dfd81796.json",
+    "width": 512,
+    "height": 1905,
+    "frames": 24,
+    "decodedBytes": 3901440,
+    "downloadBytes": 1141459
+  },
+  "brute": {
+    "image": "brute_a10.40cde2c95f56.webp",
+    "atlas": "brute_a10.e93415ea55b0.json",
+    "width": 1536,
+    "height": 713,
+    "frames": 24,
+    "decodedBytes": 4380672,
+    "downloadBytes": 1442837
+  },
+  "metta": {
+    "image": "metta_a7.1961fbe088c4.webp",
+    "atlas": "metta_a7.b3f4b95c298f.json",
+    "width": 1024,
+    "height": 1070,
+    "frames": 35,
+    "decodedBytes": 4382720,
+    "downloadBytes": 1372287
+  },
+  "thiran": {
+    "image": "thiran_a7.6c168a27fc6d.webp",
+    "atlas": "thiran_a7.654ddcb382df.json",
+    "width": 768,
+    "height": 1399,
+    "frames": 35,
+    "decodedBytes": 4297728,
+    "downloadBytes": 1358416
+  },
+  "lalin": {
+    "image": "lalin_a7.950000b43402.webp",
+    "atlas": "lalin_a7.1aeb9538ecf6.json",
+    "width": 1280,
+    "height": 396,
+    "frames": 13,
+    "decodedBytes": 2027520,
+    "downloadBytes": 625180
+  },
+  "wila": {
+    "image": "wila_a7.c30ee2ee1a9a.webp",
+    "atlas": "wila_a7.462e814a9269.json",
+    "width": 1024,
+    "height": 1110,
+    "frames": 31,
+    "decodedBytes": 4546560,
+    "downloadBytes": 1417238
+  },
+  "matriarch": {
+    "image": "matriarch_a9.9aec248e0338.webp",
+    "atlas": "matriarch_a9.869441fd964f.json",
+    "width": 1280,
+    "height": 690,
+    "frames": 26,
+    "decodedBytes": 3532800,
+    "downloadBytes": 1420295
+  },
+  "juggernaut": {
+    "image": "juggernaut_a9.c874096fe87b.webp",
+    "atlas": "juggernaut_a9.8855bfee5bd8.json",
+    "width": 1536,
+    "height": 702,
+    "frames": 14,
+    "decodedBytes": 4313088,
+    "downloadBytes": 1425783
+  },
+  "sentinel": {
+    "image": "sentinel_a9.616021ce3ce4.webp",
+    "atlas": "sentinel_a9.0c30c1349c42.json",
+    "width": 1024,
+    "height": 934,
+    "frames": 34,
+    "decodedBytes": 3825664,
+    "downloadBytes": 1409354
+  },
+  "captain": {
+    "image": "captain_a9.93e9e7fb305a.webp",
+    "atlas": "captain_a9.84200ceb12ef.json",
+    "width": 768,
+    "height": 1562,
+    "frames": 18,
+    "decodedBytes": 4798464,
+    "downloadBytes": 1336077
   }
 }

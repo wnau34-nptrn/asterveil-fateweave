@@ -1,0 +1,11 @@
+{
+ "id": "hero-tracer-finisher",
+ "status": "captured",
+ "clickOffset": 0.24547386169433594,
+ "sourceFrames": 88,
+ "decodedFrames": 89,
+ "maxTimestampError": 6.108337402332964e-06,
+ "maxFrameGap": 0.11610102653503418,
+ "sameState": true,
+ "saveStable": true
+}

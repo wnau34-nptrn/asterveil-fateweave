@@ -1,0 +1,5908 @@
+[
+  {
+    "file": "rune-lash-hit-normal-390.mp4",
+    "width": 390,
+    "height": 844,
+    "duration": 2.841033,
+    "capturedFrames": 40,
+    "clickOffset": 0.537,
+    "maxFrameGap": 0.356,
+    "impacts": [
+      {
+        "at": 0.792,
+        "remainingMs": 390,
+        "actorId": "guardian",
+        "action": "attack",
+        "side": "hero",
+        "intent": "Rune Lash",
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "guardian",
+            "targetId": "b1",
+            "amount": 10,
+            "text": "Hero attacks."
+          }
+        ],
+        "cues": [],
+        "before": {
+          "encounterId": "veil-siege",
+          "beat": 1,
+          "round": 1,
+          "turnIndex": 0,
+          "order": [
+            "guardian",
+            "b1",
+            "healer",
+            "weaver"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "b1",
+              "hp": 9999,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 1,
+            "name": "Rune Lash",
+            "damage": 12,
+            "kind": "energy",
+            "targetId": "healer",
+            "beat": 1,
+            "round": 1
+          },
+          "commands": []
+        },
+        "after": {
+          "encounterId": "veil-siege",
+          "beat": 2,
+          "round": 1,
+          "turnIndex": 1,
+          "order": [
+            "guardian",
+            "b1",
+            "healer",
+            "weaver"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "b1",
+              "hp": 9989,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 1,
+            "name": "Rune Lash",
+            "damage": 12,
+            "kind": "energy",
+            "targetId": "healer",
+            "beat": 2,
+            "round": 1
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "guardian",
+              "action": "attack",
+              "targetId": "b1"
+            }
+          ]
+        }
+      },
+      {
+        "at": 1.635,
+        "remainingMs": 520,
+        "actorId": "b1",
+        "side": "enemy",
+        "intent": "Rune Lash",
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "b1",
+            "targetId": "healer",
+            "amount": 12,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ],
+        "cues": [
+          {
+            "move": "Rune Lash",
+            "sourceId": "b1",
+            "targetId": "healer",
+            "event": {
+              "type": "damage",
+              "sourceId": "b1",
+              "targetId": "healer",
+              "amount": 12,
+              "absorbed": 0,
+              "text": "Enemy attacks on its own turn."
+            },
+            "total": 1,
+            "outcome": "hit"
+          }
+        ],
+        "before": {
+          "encounterId": "veil-siege",
+          "beat": 2,
+          "round": 1,
+          "turnIndex": 1,
+          "order": [
+            "guardian",
+            "b1",
+            "healer",
+            "weaver"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "b1",
+              "hp": 9989,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 1,
+            "name": "Rune Lash",
+            "damage": 12,
+            "kind": "energy",
+            "targetId": "healer",
+            "beat": 2,
+            "round": 1
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "guardian",
+              "action": "attack",
+              "targetId": "b1"
+            }
+          ]
+        },
+        "after": {
+          "encounterId": "veil-siege",
+          "beat": 3,
+          "round": 1,
+          "turnIndex": 2,
+          "order": [
+            "guardian",
+            "b1",
+            "healer",
+            "weaver"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 34,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "b1",
+              "hp": 9989,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 1,
+            "name": "Rune Lash",
+            "damage": 12,
+            "kind": "energy",
+            "targetId": "healer",
+            "beat": 3,
+            "round": 2
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "guardian",
+              "action": "attack",
+              "targetId": "b1"
+            }
+          ]
+        }
+      }
+    ],
+    "rawCapture": "test-results/foe-delivery/foe-signature-fx-clips-foe-0eece-e-clip-rune-lash-hit-normal",
+    "captureStartUTCSeconds": 1793291763.987134,
+    "maxTimestampErrorMs": 0.0059
+  },
+  {
+    "file": "seed-spark-dodge-normal-390.mp4",
+    "width": 390,
+    "height": 844,
+    "duration": 2.253678,
+    "capturedFrames": 46,
+    "clickOffset": 0.399,
+    "maxFrameGap": 0.292,
+    "impacts": [
+      {
+        "at": 0.633,
+        "remainingMs": 300,
+        "actorId": "sefa",
+        "action": "evade",
+        "side": "hero",
+        "intent": "Seed Spark",
+        "resolved": [
+          {
+            "type": "evade",
+            "sourceId": "sefa",
+            "targetId": "sefa",
+            "text": "Scout evades the next hit until its next turn."
+          }
+        ],
+        "cues": [],
+        "before": {
+          "encounterId": "veil-siege",
+          "beat": 1,
+          "round": 1,
+          "turnIndex": 0,
+          "order": [
+            "sefa",
+            "b1",
+            "guardian",
+            "healer"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "sefa",
+              "hp": 54,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "b1",
+              "hp": 9999,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 0,
+            "name": "Seed Spark",
+            "damage": 12,
+            "kind": "energy",
+            "targetId": "sefa",
+            "beat": 1,
+            "round": 1
+          },
+          "commands": []
+        },
+        "after": {
+          "encounterId": "veil-siege",
+          "beat": 2,
+          "round": 1,
+          "turnIndex": 1,
+          "order": [
+            "sefa",
+            "b1",
+            "guardian",
+            "healer"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "sefa",
+              "hp": 54,
+              "barrier": 0,
+              "cooldowns": {
+                "evade": 4
+              },
+              "evading": true
+            },
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "b1",
+              "hp": 9999,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 0,
+            "name": "Seed Spark",
+            "damage": 12,
+            "kind": "energy",
+            "targetId": "sefa",
+            "beat": 2,
+            "round": 1
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "sefa",
+              "action": "evade",
+              "targetId": "sefa"
+            }
+          ]
+        }
+      },
+      {
+        "at": 1.258,
+        "remainingMs": 520,
+        "actorId": "b1",
+        "side": "enemy",
+        "intent": "Seed Spark",
+        "resolved": [
+          {
+            "type": "dodge",
+            "sourceId": "b1",
+            "targetId": "sefa",
+            "amount": 0,
+            "text": "The attack misses the evading scout."
+          }
+        ],
+        "cues": [
+          {
+            "move": "Seed Spark",
+            "sourceId": "b1",
+            "targetId": "sefa",
+            "event": {
+              "type": "dodge",
+              "sourceId": "b1",
+              "targetId": "sefa",
+              "amount": 0,
+              "text": "The attack misses the evading scout."
+            },
+            "total": 1,
+            "outcome": "dodged"
+          }
+        ],
+        "before": {
+          "encounterId": "veil-siege",
+          "beat": 2,
+          "round": 1,
+          "turnIndex": 1,
+          "order": [
+            "sefa",
+            "b1",
+            "guardian",
+            "healer"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "sefa",
+              "hp": 54,
+              "barrier": 0,
+              "cooldowns": {
+                "evade": 4
+              },
+              "evading": true
+            },
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "b1",
+              "hp": 9999,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 0,
+            "name": "Seed Spark",
+            "damage": 12,
+            "kind": "energy",
+            "targetId": "sefa",
+            "beat": 2,
+            "round": 1
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "sefa",
+              "action": "evade",
+              "targetId": "sefa"
+            }
+          ]
+        },
+        "after": {
+          "encounterId": "veil-siege",
+          "beat": 3,
+          "round": 1,
+          "turnIndex": 2,
+          "order": [
+            "sefa",
+            "b1",
+            "guardian",
+            "healer"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "sefa",
+              "hp": 54,
+              "barrier": 0,
+              "cooldowns": {
+                "evade": 4
+              }
+            },
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "b1",
+              "hp": 9999,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 0,
+            "name": "Seed Spark",
+            "damage": 12,
+            "kind": "energy",
+            "targetId": "sefa",
+            "beat": 3,
+            "round": 2
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "sefa",
+              "action": "evade",
+              "targetId": "sefa"
+            }
+          ]
+        }
+      }
+    ],
+    "rawCapture": "test-results/foe-delivery/foe-signature-fx-clips-foe-52e07-lip-seed-spark-dodge-normal",
+    "captureStartUTCSeconds": 1793291824.831348,
+    "maxTimestampErrorMs": 0.006
+  },
+  {
+    "file": "shard-burst-hit-reduced-390.mp4",
+    "width": 390,
+    "height": 844,
+    "duration": 2.600767,
+    "capturedFrames": 83,
+    "clickOffset": 0.345,
+    "maxFrameGap": 0.254,
+    "impacts": [
+      {
+        "at": 0.589,
+        "remainingMs": 390,
+        "actorId": "guardian",
+        "action": "attack",
+        "side": "hero",
+        "intent": "Shard Burst",
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "guardian",
+            "targetId": "f1",
+            "amount": 10,
+            "text": "Hero attacks."
+          }
+        ],
+        "cues": [],
+        "before": {
+          "encounterId": "veil-siege",
+          "beat": 1,
+          "round": 1,
+          "turnIndex": 0,
+          "order": [
+            "guardian",
+            "f1",
+            "healer",
+            "weaver"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "f1",
+              "hp": 9999,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Shard Burst",
+            "damage": 12,
+            "kind": "energy",
+            "targetId": "healer",
+            "beat": 1,
+            "round": 1
+          },
+          "commands": []
+        },
+        "after": {
+          "encounterId": "veil-siege",
+          "beat": 2,
+          "round": 1,
+          "turnIndex": 1,
+          "order": [
+            "guardian",
+            "f1",
+            "healer",
+            "weaver"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "f1",
+              "hp": 9989,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Shard Burst",
+            "damage": 12,
+            "kind": "energy",
+            "targetId": "healer",
+            "beat": 2,
+            "round": 1
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "guardian",
+              "action": "attack",
+              "targetId": "f1"
+            }
+          ]
+        }
+      },
+      {
+        "at": 1.28,
+        "remainingMs": 520,
+        "actorId": "f1",
+        "side": "enemy",
+        "intent": "Shard Burst",
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "f1",
+            "targetId": "healer",
+            "amount": 12,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ],
+        "cues": [
+          {
+            "move": "Shard Burst",
+            "sourceId": "f1",
+            "targetId": "healer",
+            "event": {
+              "type": "damage",
+              "sourceId": "f1",
+              "targetId": "healer",
+              "amount": 12,
+              "absorbed": 0,
+              "text": "Enemy attacks on its own turn."
+            },
+            "total": 1,
+            "outcome": "hit"
+          }
+        ],
+        "before": {
+          "encounterId": "veil-siege",
+          "beat": 2,
+          "round": 1,
+          "turnIndex": 1,
+          "order": [
+            "guardian",
+            "f1",
+            "healer",
+            "weaver"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "f1",
+              "hp": 9989,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Shard Burst",
+            "damage": 12,
+            "kind": "energy",
+            "targetId": "healer",
+            "beat": 2,
+            "round": 1
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "guardian",
+              "action": "attack",
+              "targetId": "f1"
+            }
+          ]
+        },
+        "after": {
+          "encounterId": "veil-siege",
+          "beat": 3,
+          "round": 1,
+          "turnIndex": 2,
+          "order": [
+            "guardian",
+            "f1",
+            "healer",
+            "weaver"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 34,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "f1",
+              "hp": 9989,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Shard Burst",
+            "damage": 12,
+            "kind": "energy",
+            "targetId": "healer",
+            "beat": 3,
+            "round": 2
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "guardian",
+              "action": "attack",
+              "targetId": "f1"
+            }
+          ]
+        }
+      }
+    ],
+    "rawCapture": "test-results/foe-delivery/foe-signature-fx-clips-foe-5cada-lip-shard-burst-hit-reduced",
+    "captureStartUTCSeconds": 1793291864.324158,
+    "maxTimestampErrorMs": 0.0059
+  },
+  {
+    "file": "spore-dust-hit-normal-390.mp4",
+    "width": 390,
+    "height": 844,
+    "duration": 2.898911,
+    "capturedFrames": 41,
+    "clickOffset": 0.555,
+    "maxFrameGap": 0.334,
+    "impacts": [
+      {
+        "at": 0.805,
+        "remainingMs": 390,
+        "actorId": "guardian",
+        "action": "attack",
+        "side": "hero",
+        "intent": "Spore Dust",
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "guardian",
+            "targetId": "b1",
+            "amount": 10,
+            "text": "Hero attacks."
+          }
+        ],
+        "cues": [],
+        "before": {
+          "encounterId": "veil-siege",
+          "beat": 1,
+          "round": 1,
+          "turnIndex": 0,
+          "order": [
+            "guardian",
+            "b1",
+            "healer",
+            "weaver"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "b1",
+              "hp": 9999,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 1,
+            "name": "Spore Dust",
+            "damage": 12,
+            "kind": "energy",
+            "targetId": "healer",
+            "beat": 1,
+            "round": 1
+          },
+          "commands": []
+        },
+        "after": {
+          "encounterId": "veil-siege",
+          "beat": 2,
+          "round": 1,
+          "turnIndex": 1,
+          "order": [
+            "guardian",
+            "b1",
+            "healer",
+            "weaver"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "b1",
+              "hp": 9989,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 1,
+            "name": "Spore Dust",
+            "damage": 12,
+            "kind": "energy",
+            "targetId": "healer",
+            "beat": 2,
+            "round": 1
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "guardian",
+              "action": "attack",
+              "targetId": "b1"
+            }
+          ]
+        }
+      },
+      {
+        "at": 1.517,
+        "remainingMs": 520,
+        "actorId": "b1",
+        "side": "enemy",
+        "intent": "Spore Dust",
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "b1",
+            "targetId": "healer",
+            "amount": 12,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ],
+        "cues": [
+          {
+            "move": "Spore Dust",
+            "sourceId": "b1",
+            "targetId": "healer",
+            "event": {
+              "type": "damage",
+              "sourceId": "b1",
+              "targetId": "healer",
+              "amount": 12,
+              "absorbed": 0,
+              "text": "Enemy attacks on its own turn."
+            },
+            "total": 1,
+            "outcome": "hit"
+          }
+        ],
+        "before": {
+          "encounterId": "veil-siege",
+          "beat": 2,
+          "round": 1,
+          "turnIndex": 1,
+          "order": [
+            "guardian",
+            "b1",
+            "healer",
+            "weaver"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "b1",
+              "hp": 9989,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 1,
+            "name": "Spore Dust",
+            "damage": 12,
+            "kind": "energy",
+            "targetId": "healer",
+            "beat": 2,
+            "round": 1
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "guardian",
+              "action": "attack",
+              "targetId": "b1"
+            }
+          ]
+        },
+        "after": {
+          "encounterId": "veil-siege",
+          "beat": 3,
+          "round": 1,
+          "turnIndex": 2,
+          "order": [
+            "guardian",
+            "b1",
+            "healer",
+            "weaver"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 34,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "b1",
+              "hp": 9989,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 1,
+            "name": "Spore Dust",
+            "damage": 12,
+            "kind": "energy",
+            "targetId": "healer",
+            "beat": 3,
+            "round": 2
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "guardian",
+              "action": "attack",
+              "targetId": "b1"
+            }
+          ]
+        }
+      }
+    ],
+    "rawCapture": "test-results/foe-delivery/foe-signature-fx-clips-foe-61398--clip-spore-dust-hit-normal",
+    "captureStartUTCSeconds": 1793291741.996506,
+    "maxTimestampErrorMs": 0.0051
+  },
+  {
+    "file": "shard-burst-hit-normal-390.mp4",
+    "width": 390,
+    "height": 844,
+    "duration": 2.666644,
+    "capturedFrames": 42,
+    "clickOffset": 0.351,
+    "maxFrameGap": 0.315,
+    "impacts": [
+      {
+        "at": 0.606,
+        "remainingMs": 390,
+        "actorId": "guardian",
+        "action": "attack",
+        "side": "hero",
+        "intent": "Shard Burst",
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "guardian",
+            "targetId": "f1",
+            "amount": 10,
+            "text": "Hero attacks."
+          }
+        ],
+        "cues": [],
+        "before": {
+          "encounterId": "veil-siege",
+          "beat": 1,
+          "round": 1,
+          "turnIndex": 0,
+          "order": [
+            "guardian",
+            "f1",
+            "healer",
+            "weaver"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "f1",
+              "hp": 9999,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Shard Burst",
+            "damage": 12,
+            "kind": "energy",
+            "targetId": "healer",
+            "beat": 1,
+            "round": 1
+          },
+          "commands": []
+        },
+        "after": {
+          "encounterId": "veil-siege",
+          "beat": 2,
+          "round": 1,
+          "turnIndex": 1,
+          "order": [
+            "guardian",
+            "f1",
+            "healer",
+            "weaver"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "f1",
+              "hp": 9989,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Shard Burst",
+            "damage": 12,
+            "kind": "energy",
+            "targetId": "healer",
+            "beat": 2,
+            "round": 1
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "guardian",
+              "action": "attack",
+              "targetId": "f1"
+            }
+          ]
+        }
+      },
+      {
+        "at": 1.319,
+        "remainingMs": 520,
+        "actorId": "f1",
+        "side": "enemy",
+        "intent": "Shard Burst",
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "f1",
+            "targetId": "healer",
+            "amount": 12,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ],
+        "cues": [
+          {
+            "move": "Shard Burst",
+            "sourceId": "f1",
+            "targetId": "healer",
+            "event": {
+              "type": "damage",
+              "sourceId": "f1",
+              "targetId": "healer",
+              "amount": 12,
+              "absorbed": 0,
+              "text": "Enemy attacks on its own turn."
+            },
+            "total": 1,
+            "outcome": "hit"
+          }
+        ],
+        "before": {
+          "encounterId": "veil-siege",
+          "beat": 2,
+          "round": 1,
+          "turnIndex": 1,
+          "order": [
+            "guardian",
+            "f1",
+            "healer",
+            "weaver"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "f1",
+              "hp": 9989,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Shard Burst",
+            "damage": 12,
+            "kind": "energy",
+            "targetId": "healer",
+            "beat": 2,
+            "round": 1
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "guardian",
+              "action": "attack",
+              "targetId": "f1"
+            }
+          ]
+        },
+        "after": {
+          "encounterId": "veil-siege",
+          "beat": 3,
+          "round": 1,
+          "turnIndex": 2,
+          "order": [
+            "guardian",
+            "f1",
+            "healer",
+            "weaver"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 34,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "f1",
+              "hp": 9989,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Shard Burst",
+            "damage": 12,
+            "kind": "energy",
+            "targetId": "healer",
+            "beat": 3,
+            "round": 2
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "guardian",
+              "action": "attack",
+              "targetId": "f1"
+            }
+          ]
+        }
+      }
+    ],
+    "rawCapture": "test-results/foe-delivery/foe-signature-fx-clips-foe-652f8-clip-shard-burst-hit-normal",
+    "captureStartUTCSeconds": 1793291785.273908,
+    "maxTimestampErrorMs": 0.0052
+  },
+  {
+    "file": "star-flame-hit-normal-390.mp4",
+    "width": 390,
+    "height": 844,
+    "duration": 2.481611,
+    "capturedFrames": 46,
+    "clickOffset": 0.542,
+    "maxFrameGap": 0.373,
+    "impacts": [
+      {
+        "at": 0.776,
+        "remainingMs": 390,
+        "actorId": "guardian",
+        "action": "attack",
+        "side": "hero",
+        "intent": "Star Flame",
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "guardian",
+            "targetId": "b1",
+            "amount": 10,
+            "text": "Hero attacks."
+          }
+        ],
+        "cues": [],
+        "before": {
+          "encounterId": "veil-siege",
+          "beat": 1,
+          "round": 1,
+          "turnIndex": 0,
+          "order": [
+            "guardian",
+            "b1",
+            "healer",
+            "weaver"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "b1",
+              "hp": 9999,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 1,
+            "name": "Star Flame",
+            "damage": 12,
+            "kind": "energy",
+            "targetId": "healer",
+            "beat": 1,
+            "round": 1
+          },
+          "commands": []
+        },
+        "after": {
+          "encounterId": "veil-siege",
+          "beat": 2,
+          "round": 1,
+          "turnIndex": 1,
+          "order": [
+            "guardian",
+            "b1",
+            "healer",
+            "weaver"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "b1",
+              "hp": 9989,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 1,
+            "name": "Star Flame",
+            "damage": 12,
+            "kind": "energy",
+            "targetId": "healer",
+            "beat": 2,
+            "round": 1
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "guardian",
+              "action": "attack",
+              "targetId": "b1"
+            }
+          ]
+        }
+      },
+      {
+        "at": 1.457,
+        "remainingMs": 520,
+        "actorId": "b1",
+        "side": "enemy",
+        "intent": "Star Flame",
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "b1",
+            "targetId": "healer",
+            "amount": 12,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ],
+        "cues": [
+          {
+            "move": "Star Flame",
+            "sourceId": "b1",
+            "targetId": "healer",
+            "event": {
+              "type": "damage",
+              "sourceId": "b1",
+              "targetId": "healer",
+              "amount": 12,
+              "absorbed": 0,
+              "text": "Enemy attacks on its own turn."
+            },
+            "total": 1,
+            "outcome": "hit"
+          }
+        ],
+        "before": {
+          "encounterId": "veil-siege",
+          "beat": 2,
+          "round": 1,
+          "turnIndex": 1,
+          "order": [
+            "guardian",
+            "b1",
+            "healer",
+            "weaver"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "b1",
+              "hp": 9989,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 1,
+            "name": "Star Flame",
+            "damage": 12,
+            "kind": "energy",
+            "targetId": "healer",
+            "beat": 2,
+            "round": 1
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "guardian",
+              "action": "attack",
+              "targetId": "b1"
+            }
+          ]
+        },
+        "after": {
+          "encounterId": "veil-siege",
+          "beat": 3,
+          "round": 1,
+          "turnIndex": 2,
+          "order": [
+            "guardian",
+            "b1",
+            "healer",
+            "weaver"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 34,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "b1",
+              "hp": 9989,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 1,
+            "name": "Star Flame",
+            "damage": 12,
+            "kind": "energy",
+            "targetId": "healer",
+            "beat": 3,
+            "round": 2
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "guardian",
+              "action": "attack",
+              "targetId": "b1"
+            }
+          ]
+        }
+      }
+    ],
+    "rawCapture": "test-results/foe-delivery/foe-signature-fx-clips-foe-662b8--clip-star-flame-hit-normal",
+    "captureStartUTCSeconds": 1793291753.026205,
+    "maxTimestampErrorMs": 0.0051
+  },
+  {
+    "file": "rift-bolt-hit-normal-390.mp4",
+    "width": 390,
+    "height": 844,
+    "duration": 2.634478,
+    "capturedFrames": 47,
+    "clickOffset": 0.558,
+    "maxFrameGap": 0.188,
+    "impacts": [
+      {
+        "at": 0.806,
+        "remainingMs": 390,
+        "actorId": "guardian",
+        "action": "attack",
+        "side": "hero",
+        "intent": "Rift Bolt",
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "guardian",
+            "targetId": "f1",
+            "amount": 10,
+            "text": "Hero attacks."
+          }
+        ],
+        "cues": [],
+        "before": {
+          "encounterId": "veil-siege",
+          "beat": 1,
+          "round": 1,
+          "turnIndex": 0,
+          "order": [
+            "guardian",
+            "f1",
+            "healer",
+            "weaver"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "f1",
+              "hp": 9999,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Rift Bolt",
+            "damage": 12,
+            "kind": "energy",
+            "targetId": "healer",
+            "beat": 1,
+            "round": 1
+          },
+          "commands": []
+        },
+        "after": {
+          "encounterId": "veil-siege",
+          "beat": 2,
+          "round": 1,
+          "turnIndex": 1,
+          "order": [
+            "guardian",
+            "f1",
+            "healer",
+            "weaver"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "f1",
+              "hp": 9989,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Rift Bolt",
+            "damage": 12,
+            "kind": "energy",
+            "targetId": "healer",
+            "beat": 2,
+            "round": 1
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "guardian",
+              "action": "attack",
+              "targetId": "f1"
+            }
+          ]
+        }
+      },
+      {
+        "at": 1.486,
+        "remainingMs": 520,
+        "actorId": "f1",
+        "side": "enemy",
+        "intent": "Rift Bolt",
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "f1",
+            "targetId": "healer",
+            "amount": 12,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ],
+        "cues": [
+          {
+            "move": "Rift Bolt",
+            "sourceId": "f1",
+            "targetId": "healer",
+            "event": {
+              "type": "damage",
+              "sourceId": "f1",
+              "targetId": "healer",
+              "amount": 12,
+              "absorbed": 0,
+              "text": "Enemy attacks on its own turn."
+            },
+            "total": 1,
+            "outcome": "hit"
+          }
+        ],
+        "before": {
+          "encounterId": "veil-siege",
+          "beat": 2,
+          "round": 1,
+          "turnIndex": 1,
+          "order": [
+            "guardian",
+            "f1",
+            "healer",
+            "weaver"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "f1",
+              "hp": 9989,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Rift Bolt",
+            "damage": 12,
+            "kind": "energy",
+            "targetId": "healer",
+            "beat": 2,
+            "round": 1
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "guardian",
+              "action": "attack",
+              "targetId": "f1"
+            }
+          ]
+        },
+        "after": {
+          "encounterId": "veil-siege",
+          "beat": 3,
+          "round": 1,
+          "turnIndex": 2,
+          "order": [
+            "guardian",
+            "f1",
+            "healer",
+            "weaver"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 34,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "f1",
+              "hp": 9989,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Rift Bolt",
+            "damage": 12,
+            "kind": "energy",
+            "targetId": "healer",
+            "beat": 3,
+            "round": 2
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "guardian",
+              "action": "attack",
+              "targetId": "f1"
+            }
+          ]
+        }
+      }
+    ],
+    "rawCapture": "test-results/foe-delivery/foe-signature-fx-clips-foe-98c4b-e-clip-rift-bolt-hit-normal",
+    "captureStartUTCSeconds": 1793291796.008111,
+    "maxTimestampErrorMs": 0.0061
+  },
+  {
+    "file": "rift-bolt-guard-normal-390.mp4",
+    "width": 390,
+    "height": 844,
+    "duration": 2.702656,
+    "capturedFrames": 41,
+    "clickOffset": 0.54,
+    "maxFrameGap": 0.333,
+    "impacts": [
+      {
+        "at": 0.779,
+        "remainingMs": 300,
+        "actorId": "guardian",
+        "action": "guard",
+        "side": "hero",
+        "intent": "Rift Bolt",
+        "resolved": [
+          {
+            "type": "guard",
+            "sourceId": "guardian",
+            "targetId": "weaver",
+            "text": "Guard until announced attacker acts or Knight returns."
+          }
+        ],
+        "cues": [],
+        "before": {
+          "encounterId": "veil-siege",
+          "beat": 1,
+          "round": 1,
+          "turnIndex": 0,
+          "order": [
+            "guardian",
+            "f1",
+            "weaver",
+            "healer"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "f1",
+              "hp": 9999,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Rift Bolt",
+            "damage": 12,
+            "kind": "energy",
+            "targetId": "weaver",
+            "beat": 1,
+            "round": 1
+          },
+          "commands": []
+        },
+        "after": {
+          "encounterId": "veil-siege",
+          "beat": 2,
+          "round": 1,
+          "turnIndex": 1,
+          "order": [
+            "guardian",
+            "f1",
+            "weaver",
+            "healer"
+          ],
+          "outcome": "active",
+          "guard": {
+            "heroId": "guardian",
+            "targetId": "weaver",
+            "sourceId": "f1"
+          },
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "f1",
+              "hp": 9999,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Rift Bolt",
+            "damage": 12,
+            "kind": "energy",
+            "targetId": "weaver",
+            "beat": 2,
+            "round": 1
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "guardian",
+              "action": "guard",
+              "targetId": "weaver"
+            }
+          ]
+        }
+      },
+      {
+        "at": 1.366,
+        "remainingMs": 520,
+        "actorId": "f1",
+        "side": "enemy",
+        "intent": "Rift Bolt",
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "f1",
+            "targetId": "guardian",
+            "amount": 5,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ],
+        "cues": [
+          {
+            "move": "Rift Bolt",
+            "sourceId": "f1",
+            "targetId": "guardian",
+            "event": {
+              "type": "damage",
+              "sourceId": "f1",
+              "targetId": "guardian",
+              "amount": 5,
+              "absorbed": 0,
+              "text": "Enemy attacks on its own turn."
+            },
+            "total": 1,
+            "outcome": "hit"
+          }
+        ],
+        "before": {
+          "encounterId": "veil-siege",
+          "beat": 2,
+          "round": 1,
+          "turnIndex": 1,
+          "order": [
+            "guardian",
+            "f1",
+            "weaver",
+            "healer"
+          ],
+          "outcome": "active",
+          "guard": {
+            "heroId": "guardian",
+            "targetId": "weaver",
+            "sourceId": "f1"
+          },
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "f1",
+              "hp": 9999,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Rift Bolt",
+            "damage": 12,
+            "kind": "energy",
+            "targetId": "weaver",
+            "beat": 2,
+            "round": 1
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "guardian",
+              "action": "guard",
+              "targetId": "weaver"
+            }
+          ]
+        },
+        "after": {
+          "encounterId": "veil-siege",
+          "beat": 3,
+          "round": 1,
+          "turnIndex": 2,
+          "order": [
+            "guardian",
+            "f1",
+            "weaver",
+            "healer"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 71,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "f1",
+              "hp": 9999,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Rift Bolt",
+            "damage": 12,
+            "kind": "energy",
+            "targetId": "weaver",
+            "beat": 3,
+            "round": 2
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "guardian",
+              "action": "guard",
+              "targetId": "weaver"
+            }
+          ]
+        }
+      }
+    ],
+    "rawCapture": "test-results/foe-delivery/foe-signature-fx-clips-foe-9df9d-clip-rift-bolt-guard-normal",
+    "captureStartUTCSeconds": 1793291816.666651,
+    "maxTimestampErrorMs": 0.0061
+  },
+  {
+    "file": "rift-bolt-hit-osreduce-390.mp4",
+    "width": 390,
+    "height": 844,
+    "duration": 2.658578,
+    "capturedFrames": 108,
+    "clickOffset": 0.37,
+    "maxFrameGap": 0.209,
+    "impacts": [
+      {
+        "at": 0.404,
+        "remainingMs": 600,
+        "actorId": "guardian",
+        "action": "attack",
+        "side": "hero",
+        "intent": "Rift Bolt",
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "guardian",
+            "targetId": "f1",
+            "amount": 10,
+            "text": "Hero attacks."
+          }
+        ],
+        "cues": [],
+        "before": {
+          "encounterId": "veil-siege",
+          "beat": 1,
+          "round": 1,
+          "turnIndex": 0,
+          "order": [
+            "guardian",
+            "f1",
+            "healer",
+            "weaver"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "f1",
+              "hp": 9999,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Rift Bolt",
+            "damage": 12,
+            "kind": "energy",
+            "targetId": "healer",
+            "beat": 1,
+            "round": 1
+          },
+          "commands": []
+        },
+        "after": {
+          "encounterId": "veil-siege",
+          "beat": 2,
+          "round": 1,
+          "turnIndex": 1,
+          "order": [
+            "guardian",
+            "f1",
+            "healer",
+            "weaver"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "f1",
+              "hp": 9989,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Rift Bolt",
+            "damage": 12,
+            "kind": "energy",
+            "targetId": "healer",
+            "beat": 2,
+            "round": 1
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "guardian",
+              "action": "attack",
+              "targetId": "f1"
+            }
+          ]
+        }
+      },
+      {
+        "at": 1.005,
+        "remainingMs": 800,
+        "actorId": "f1",
+        "side": "enemy",
+        "intent": "Rift Bolt",
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "f1",
+            "targetId": "healer",
+            "amount": 12,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ],
+        "cues": [
+          {
+            "move": "Rift Bolt",
+            "sourceId": "f1",
+            "targetId": "healer",
+            "event": {
+              "type": "damage",
+              "sourceId": "f1",
+              "targetId": "healer",
+              "amount": 12,
+              "absorbed": 0,
+              "text": "Enemy attacks on its own turn."
+            },
+            "total": 1,
+            "outcome": "hit"
+          }
+        ],
+        "before": {
+          "encounterId": "veil-siege",
+          "beat": 2,
+          "round": 1,
+          "turnIndex": 1,
+          "order": [
+            "guardian",
+            "f1",
+            "healer",
+            "weaver"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "f1",
+              "hp": 9989,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Rift Bolt",
+            "damage": 12,
+            "kind": "energy",
+            "targetId": "healer",
+            "beat": 2,
+            "round": 1
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "guardian",
+              "action": "attack",
+              "targetId": "f1"
+            }
+          ]
+        },
+        "after": {
+          "encounterId": "veil-siege",
+          "beat": 3,
+          "round": 1,
+          "turnIndex": 2,
+          "order": [
+            "guardian",
+            "f1",
+            "healer",
+            "weaver"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 34,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "f1",
+              "hp": 9989,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Rift Bolt",
+            "damage": 12,
+            "kind": "energy",
+            "targetId": "healer",
+            "beat": 3,
+            "round": 2
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "guardian",
+              "action": "attack",
+              "targetId": "f1"
+            }
+          ]
+        }
+      }
+    ],
+    "rawCapture": "test-results/foe-delivery/foe-signature-fx-clips-foe-a6071-clip-rift-bolt-hit-osreduce",
+    "captureStartUTCSeconds": 1793291871.476703,
+    "maxTimestampErrorMs": 0.0052
+  },
+  {
+    "file": "star-flame-all-normal-390.mp4",
+    "width": 390,
+    "height": 844,
+    "duration": 1.979422,
+    "capturedFrames": 36,
+    "clickOffset": 0.312,
+    "maxFrameGap": 0.211,
+    "impacts": [
+      {
+        "at": 0.581,
+        "remainingMs": 390,
+        "actorId": "guardian",
+        "action": "attack",
+        "side": "hero",
+        "intent": "Star Flame",
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "guardian",
+            "targetId": "b1",
+            "amount": 10,
+            "text": "Hero attacks."
+          }
+        ],
+        "cues": [],
+        "before": {
+          "encounterId": "veil-siege",
+          "beat": 1,
+          "round": 1,
+          "turnIndex": 0,
+          "order": [
+            "guardian",
+            "b1",
+            "healer",
+            "weaver"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "b1",
+              "hp": 9999,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 1,
+            "name": "Star Flame",
+            "damage": 12,
+            "kind": "energy",
+            "all": true,
+            "targetId": "healer",
+            "beat": 1,
+            "round": 1
+          },
+          "commands": []
+        },
+        "after": {
+          "encounterId": "veil-siege",
+          "beat": 2,
+          "round": 1,
+          "turnIndex": 1,
+          "order": [
+            "guardian",
+            "b1",
+            "healer",
+            "weaver"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "b1",
+              "hp": 9989,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 1,
+            "name": "Star Flame",
+            "damage": 12,
+            "kind": "energy",
+            "all": true,
+            "targetId": "healer",
+            "beat": 2,
+            "round": 1
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "guardian",
+              "action": "attack",
+              "targetId": "b1"
+            }
+          ]
+        }
+      },
+      {
+        "at": 1.291,
+        "remainingMs": 520,
+        "actorId": "b1",
+        "side": "enemy",
+        "intent": "Star Flame",
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "b1",
+            "targetId": "guardian",
+            "amount": 12,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          },
+          {
+            "type": "damage",
+            "sourceId": "b1",
+            "targetId": "healer",
+            "amount": 12,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          },
+          {
+            "type": "damage",
+            "sourceId": "b1",
+            "targetId": "weaver",
+            "amount": 12,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ],
+        "cues": [
+          {
+            "move": "Star Flame",
+            "sourceId": "b1",
+            "targetId": "guardian",
+            "event": {
+              "type": "damage",
+              "sourceId": "b1",
+              "targetId": "guardian",
+              "amount": 12,
+              "absorbed": 0,
+              "text": "Enemy attacks on its own turn."
+            },
+            "total": 3,
+            "outcome": "hit"
+          },
+          {
+            "move": "Star Flame",
+            "sourceId": "b1",
+            "targetId": "healer",
+            "event": {
+              "type": "damage",
+              "sourceId": "b1",
+              "targetId": "healer",
+              "amount": 12,
+              "absorbed": 0,
+              "text": "Enemy attacks on its own turn."
+            },
+            "total": 3,
+            "outcome": "hit"
+          },
+          {
+            "move": "Star Flame",
+            "sourceId": "b1",
+            "targetId": "weaver",
+            "event": {
+              "type": "damage",
+              "sourceId": "b1",
+              "targetId": "weaver",
+              "amount": 12,
+              "absorbed": 0,
+              "text": "Enemy attacks on its own turn."
+            },
+            "total": 3,
+            "outcome": "hit"
+          }
+        ],
+        "before": {
+          "encounterId": "veil-siege",
+          "beat": 2,
+          "round": 1,
+          "turnIndex": 1,
+          "order": [
+            "guardian",
+            "b1",
+            "healer",
+            "weaver"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "b1",
+              "hp": 9989,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 1,
+            "name": "Star Flame",
+            "damage": 12,
+            "kind": "energy",
+            "all": true,
+            "targetId": "healer",
+            "beat": 2,
+            "round": 1
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "guardian",
+              "action": "attack",
+              "targetId": "b1"
+            }
+          ]
+        },
+        "after": {
+          "encounterId": "veil-siege",
+          "beat": 3,
+          "round": 1,
+          "turnIndex": 2,
+          "order": [
+            "guardian",
+            "b1",
+            "healer",
+            "weaver"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 64,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 34,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 36,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "b1",
+              "hp": 9989,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 1,
+            "name": "Star Flame",
+            "damage": 12,
+            "kind": "energy",
+            "all": true,
+            "targetId": "healer",
+            "beat": 3,
+            "round": 2
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "guardian",
+              "action": "attack",
+              "targetId": "b1"
+            }
+          ]
+        }
+      }
+    ],
+    "rawCapture": "test-results/foe-delivery/foe-signature-fx-clips-foe-a7c4e--clip-star-flame-all-normal",
+    "captureStartUTCSeconds": 1793291849.65984,
+    "maxTimestampErrorMs": 0.0062
+  },
+  {
+    "file": "spore-hex-hit-normal-390.mp4",
+    "width": 390,
+    "height": 844,
+    "duration": 2.092533,
+    "capturedFrames": 34,
+    "clickOffset": 0.407,
+    "maxFrameGap": 0.226,
+    "impacts": [
+      {
+        "at": 0.667,
+        "remainingMs": 390,
+        "actorId": "guardian",
+        "action": "attack",
+        "side": "hero",
+        "intent": "Spore Hex",
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "guardian",
+            "targetId": "b1",
+            "amount": 10,
+            "text": "Hero attacks."
+          }
+        ],
+        "cues": [],
+        "before": {
+          "encounterId": "veil-siege",
+          "beat": 1,
+          "round": 1,
+          "turnIndex": 0,
+          "order": [
+            "guardian",
+            "b1",
+            "healer",
+            "weaver"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "b1",
+              "hp": 9999,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 1,
+            "name": "Spore Hex",
+            "damage": 12,
+            "kind": "energy",
+            "targetId": "healer",
+            "beat": 1,
+            "round": 1
+          },
+          "commands": []
+        },
+        "after": {
+          "encounterId": "veil-siege",
+          "beat": 2,
+          "round": 1,
+          "turnIndex": 1,
+          "order": [
+            "guardian",
+            "b1",
+            "healer",
+            "weaver"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "b1",
+              "hp": 9989,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 1,
+            "name": "Spore Hex",
+            "damage": 12,
+            "kind": "energy",
+            "targetId": "healer",
+            "beat": 2,
+            "round": 1
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "guardian",
+              "action": "attack",
+              "targetId": "b1"
+            }
+          ]
+        }
+      },
+      {
+        "at": 1.345,
+        "remainingMs": 520,
+        "actorId": "b1",
+        "side": "enemy",
+        "intent": "Spore Hex",
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "b1",
+            "targetId": "healer",
+            "amount": 12,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ],
+        "cues": [
+          {
+            "move": "Spore Hex",
+            "sourceId": "b1",
+            "targetId": "healer",
+            "event": {
+              "type": "damage",
+              "sourceId": "b1",
+              "targetId": "healer",
+              "amount": 12,
+              "absorbed": 0,
+              "text": "Enemy attacks on its own turn."
+            },
+            "total": 1,
+            "outcome": "hit"
+          }
+        ],
+        "before": {
+          "encounterId": "veil-siege",
+          "beat": 2,
+          "round": 1,
+          "turnIndex": 1,
+          "order": [
+            "guardian",
+            "b1",
+            "healer",
+            "weaver"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "b1",
+              "hp": 9989,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 1,
+            "name": "Spore Hex",
+            "damage": 12,
+            "kind": "energy",
+            "targetId": "healer",
+            "beat": 2,
+            "round": 1
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "guardian",
+              "action": "attack",
+              "targetId": "b1"
+            }
+          ]
+        },
+        "after": {
+          "encounterId": "veil-siege",
+          "beat": 3,
+          "round": 1,
+          "turnIndex": 2,
+          "order": [
+            "guardian",
+            "b1",
+            "healer",
+            "weaver"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 34,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "b1",
+              "hp": 9989,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 1,
+            "name": "Spore Hex",
+            "damage": 12,
+            "kind": "energy",
+            "targetId": "healer",
+            "beat": 3,
+            "round": 2
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "guardian",
+              "action": "attack",
+              "targetId": "b1"
+            }
+          ]
+        }
+      }
+    ],
+    "rawCapture": "test-results/foe-delivery/foe-signature-fx-clips-foe-c7ac4-e-clip-spore-hex-hit-normal",
+    "captureStartUTCSeconds": 1793291731.579145,
+    "maxTimestampErrorMs": 0.0051
+  },
+  {
+    "file": "veil-quake-hit-normal-390.mp4",
+    "width": 390,
+    "height": 844,
+    "duration": 1.996744,
+    "capturedFrames": 41,
+    "clickOffset": 0.392,
+    "maxFrameGap": 0.202,
+    "impacts": [
+      {
+        "at": 0.648,
+        "remainingMs": 390,
+        "actorId": "guardian",
+        "action": "attack",
+        "side": "hero",
+        "intent": "Veil Quake",
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "guardian",
+            "targetId": "f1",
+            "amount": 10,
+            "text": "Hero attacks."
+          }
+        ],
+        "cues": [],
+        "before": {
+          "encounterId": "veil-siege",
+          "beat": 1,
+          "round": 1,
+          "turnIndex": 0,
+          "order": [
+            "guardian",
+            "f1",
+            "healer",
+            "weaver"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "f1",
+              "hp": 9999,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Veil Quake",
+            "damage": 12,
+            "kind": "physical",
+            "targetId": "healer",
+            "beat": 1,
+            "round": 1
+          },
+          "commands": []
+        },
+        "after": {
+          "encounterId": "veil-siege",
+          "beat": 2,
+          "round": 1,
+          "turnIndex": 1,
+          "order": [
+            "guardian",
+            "f1",
+            "healer",
+            "weaver"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "f1",
+              "hp": 9989,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Veil Quake",
+            "damage": 12,
+            "kind": "physical",
+            "targetId": "healer",
+            "beat": 2,
+            "round": 1
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "guardian",
+              "action": "attack",
+              "targetId": "f1"
+            }
+          ]
+        }
+      },
+      {
+        "at": 1.343,
+        "remainingMs": 520,
+        "actorId": "f1",
+        "side": "enemy",
+        "intent": "Veil Quake",
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "f1",
+            "targetId": "healer",
+            "amount": 12,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ],
+        "cues": [
+          {
+            "move": "Veil Quake",
+            "sourceId": "f1",
+            "targetId": "healer",
+            "event": {
+              "type": "damage",
+              "sourceId": "f1",
+              "targetId": "healer",
+              "amount": 12,
+              "absorbed": 0,
+              "text": "Enemy attacks on its own turn."
+            },
+            "total": 1,
+            "outcome": "hit"
+          }
+        ],
+        "before": {
+          "encounterId": "veil-siege",
+          "beat": 2,
+          "round": 1,
+          "turnIndex": 1,
+          "order": [
+            "guardian",
+            "f1",
+            "healer",
+            "weaver"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "f1",
+              "hp": 9989,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Veil Quake",
+            "damage": 12,
+            "kind": "physical",
+            "targetId": "healer",
+            "beat": 2,
+            "round": 1
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "guardian",
+              "action": "attack",
+              "targetId": "f1"
+            }
+          ]
+        },
+        "after": {
+          "encounterId": "veil-siege",
+          "beat": 3,
+          "round": 1,
+          "turnIndex": 2,
+          "order": [
+            "guardian",
+            "f1",
+            "healer",
+            "weaver"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 34,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "f1",
+              "hp": 9989,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Veil Quake",
+            "damage": 12,
+            "kind": "physical",
+            "targetId": "healer",
+            "beat": 3,
+            "round": 2
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "guardian",
+              "action": "attack",
+              "targetId": "f1"
+            }
+          ]
+        }
+      }
+    ],
+    "rawCapture": "test-results/foe-delivery/foe-signature-fx-clips-foe-cf23e--clip-veil-quake-hit-normal",
+    "captureStartUTCSeconds": 1793291806.224277,
+    "maxTimestampErrorMs": 0.005
+  },
+  {
+    "file": "veil-quake-dodge-normal-390.mp4",
+    "width": 390,
+    "height": 844,
+    "duration": 2.648022,
+    "capturedFrames": 51,
+    "clickOffset": 0.6,
+    "maxFrameGap": 0.275,
+    "impacts": [
+      {
+        "at": 0.84,
+        "remainingMs": 300,
+        "actorId": "sefa",
+        "action": "evade",
+        "side": "hero",
+        "intent": "Veil Quake",
+        "resolved": [
+          {
+            "type": "evade",
+            "sourceId": "sefa",
+            "targetId": "sefa",
+            "text": "Scout evades the next hit until its next turn."
+          }
+        ],
+        "cues": [],
+        "before": {
+          "encounterId": "veil-siege",
+          "beat": 1,
+          "round": 1,
+          "turnIndex": 0,
+          "order": [
+            "sefa",
+            "f1",
+            "guardian",
+            "healer"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "sefa",
+              "hp": 54,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "f1",
+              "hp": 9999,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 0,
+            "name": "Veil Quake",
+            "damage": 12,
+            "kind": "physical",
+            "targetId": "sefa",
+            "beat": 1,
+            "round": 1
+          },
+          "commands": []
+        },
+        "after": {
+          "encounterId": "veil-siege",
+          "beat": 2,
+          "round": 1,
+          "turnIndex": 1,
+          "order": [
+            "sefa",
+            "f1",
+            "guardian",
+            "healer"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "sefa",
+              "hp": 54,
+              "barrier": 0,
+              "cooldowns": {
+                "evade": 4
+              },
+              "evading": true
+            },
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "f1",
+              "hp": 9999,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 0,
+            "name": "Veil Quake",
+            "damage": 12,
+            "kind": "physical",
+            "targetId": "sefa",
+            "beat": 2,
+            "round": 1
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "sefa",
+              "action": "evade",
+              "targetId": "sefa"
+            }
+          ]
+        }
+      },
+      {
+        "at": 1.443,
+        "remainingMs": 520,
+        "actorId": "f1",
+        "side": "enemy",
+        "intent": "Veil Quake",
+        "resolved": [
+          {
+            "type": "dodge",
+            "sourceId": "f1",
+            "targetId": "sefa",
+            "amount": 0,
+            "text": "The attack misses the evading scout."
+          }
+        ],
+        "cues": [
+          {
+            "move": "Veil Quake",
+            "sourceId": "f1",
+            "targetId": "sefa",
+            "event": {
+              "type": "dodge",
+              "sourceId": "f1",
+              "targetId": "sefa",
+              "amount": 0,
+              "text": "The attack misses the evading scout."
+            },
+            "total": 1,
+            "outcome": "dodged"
+          }
+        ],
+        "before": {
+          "encounterId": "veil-siege",
+          "beat": 2,
+          "round": 1,
+          "turnIndex": 1,
+          "order": [
+            "sefa",
+            "f1",
+            "guardian",
+            "healer"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "sefa",
+              "hp": 54,
+              "barrier": 0,
+              "cooldowns": {
+                "evade": 4
+              },
+              "evading": true
+            },
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "f1",
+              "hp": 9999,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 0,
+            "name": "Veil Quake",
+            "damage": 12,
+            "kind": "physical",
+            "targetId": "sefa",
+            "beat": 2,
+            "round": 1
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "sefa",
+              "action": "evade",
+              "targetId": "sefa"
+            }
+          ]
+        },
+        "after": {
+          "encounterId": "veil-siege",
+          "beat": 3,
+          "round": 1,
+          "turnIndex": 2,
+          "order": [
+            "sefa",
+            "f1",
+            "guardian",
+            "healer"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "sefa",
+              "hp": 54,
+              "barrier": 0,
+              "cooldowns": {
+                "evade": 4
+              }
+            },
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "f1",
+              "hp": 9999,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 0,
+            "name": "Veil Quake",
+            "damage": 12,
+            "kind": "physical",
+            "targetId": "sefa",
+            "beat": 3,
+            "round": 2
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "sefa",
+              "action": "evade",
+              "targetId": "sefa"
+            }
+          ]
+        }
+      }
+    ],
+    "rawCapture": "test-results/foe-delivery/foe-signature-fx-clips-foe-dfd0b-lip-veil-quake-dodge-normal",
+    "captureStartUTCSeconds": 1793291832.404141,
+    "maxTimestampErrorMs": 0.006
+  },
+  {
+    "file": "spore-hex-blocked-normal-390.mp4",
+    "width": 390,
+    "height": 844,
+    "duration": 2.7213,
+    "capturedFrames": 55,
+    "clickOffset": 0.599,
+    "maxFrameGap": 0.32,
+    "impacts": [
+      {
+        "at": 0.93,
+        "remainingMs": 390,
+        "actorId": "weaver",
+        "action": "ward",
+        "side": "hero",
+        "intent": "Spore Hex",
+        "resolved": [
+          {
+            "type": "barrier",
+            "sourceId": "weaver",
+            "targetId": "weaver",
+            "amount": 14,
+            "text": "Added barrier."
+          }
+        ],
+        "cues": [],
+        "before": {
+          "encounterId": "veil-siege",
+          "beat": 1,
+          "round": 1,
+          "turnIndex": 0,
+          "order": [
+            "weaver",
+            "b1",
+            "guardian",
+            "healer"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "b1",
+              "hp": 9999,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 0,
+            "name": "Spore Hex",
+            "damage": 1,
+            "kind": "energy",
+            "targetId": "weaver",
+            "beat": 1,
+            "round": 1
+          },
+          "commands": []
+        },
+        "after": {
+          "encounterId": "veil-siege",
+          "beat": 2,
+          "round": 1,
+          "turnIndex": 1,
+          "order": [
+            "weaver",
+            "b1",
+            "guardian",
+            "healer"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 14,
+              "cooldowns": {
+                "ward": 3
+              }
+            },
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "b1",
+              "hp": 9999,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 0,
+            "name": "Spore Hex",
+            "damage": 1,
+            "kind": "energy",
+            "targetId": "weaver",
+            "beat": 2,
+            "round": 1
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "weaver",
+              "action": "ward",
+              "targetId": "weaver"
+            }
+          ]
+        }
+      },
+      {
+        "at": 1.616,
+        "remainingMs": 520,
+        "actorId": "b1",
+        "side": "enemy",
+        "intent": "Spore Hex",
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "b1",
+            "targetId": "weaver",
+            "amount": 0,
+            "absorbed": 1,
+            "text": "Enemy attacks on its own turn."
+          }
+        ],
+        "cues": [
+          {
+            "move": "Spore Hex",
+            "sourceId": "b1",
+            "targetId": "weaver",
+            "event": {
+              "type": "damage",
+              "sourceId": "b1",
+              "targetId": "weaver",
+              "amount": 0,
+              "absorbed": 1,
+              "text": "Enemy attacks on its own turn."
+            },
+            "total": 1,
+            "outcome": "blocked"
+          }
+        ],
+        "before": {
+          "encounterId": "veil-siege",
+          "beat": 2,
+          "round": 1,
+          "turnIndex": 1,
+          "order": [
+            "weaver",
+            "b1",
+            "guardian",
+            "healer"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 14,
+              "cooldowns": {
+                "ward": 3
+              }
+            },
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "b1",
+              "hp": 9999,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 0,
+            "name": "Spore Hex",
+            "damage": 1,
+            "kind": "energy",
+            "targetId": "weaver",
+            "beat": 2,
+            "round": 1
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "weaver",
+              "action": "ward",
+              "targetId": "weaver"
+            }
+          ]
+        },
+        "after": {
+          "encounterId": "veil-siege",
+          "beat": 3,
+          "round": 1,
+          "turnIndex": 2,
+          "order": [
+            "weaver",
+            "b1",
+            "guardian",
+            "healer"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 13,
+              "cooldowns": {
+                "ward": 3
+              }
+            },
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "b1",
+              "hp": 9999,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 0,
+            "name": "Spore Hex",
+            "damage": 1,
+            "kind": "energy",
+            "targetId": "weaver",
+            "beat": 3,
+            "round": 2
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "weaver",
+              "action": "ward",
+              "targetId": "weaver"
+            }
+          ]
+        }
+      }
+    ],
+    "rawCapture": "test-results/foe-delivery/foe-signature-fx-clips-foe-e0bc1-ip-spore-hex-blocked-normal",
+    "captureStartUTCSeconds": 1793291841.078312,
+    "maxTimestampErrorMs": 0.0051
+  },
+  {
+    "file": "rift-needle-hit-normal-390.mp4",
+    "width": 390,
+    "height": 844,
+    "duration": 2.463811,
+    "capturedFrames": 41,
+    "clickOffset": 0.353,
+    "maxFrameGap": 0.304,
+    "impacts": [
+      {
+        "at": 0.589,
+        "remainingMs": 390,
+        "actorId": "guardian",
+        "action": "attack",
+        "side": "hero",
+        "intent": "Rift Needle",
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "guardian",
+            "targetId": "b1",
+            "amount": 10,
+            "text": "Hero attacks."
+          }
+        ],
+        "cues": [],
+        "before": {
+          "encounterId": "veil-siege",
+          "beat": 1,
+          "round": 1,
+          "turnIndex": 0,
+          "order": [
+            "guardian",
+            "b1",
+            "healer",
+            "weaver"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "b1",
+              "hp": 9999,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 1,
+            "name": "Rift Needle",
+            "damage": 12,
+            "kind": "energy",
+            "targetId": "healer",
+            "beat": 1,
+            "round": 1
+          },
+          "commands": []
+        },
+        "after": {
+          "encounterId": "veil-siege",
+          "beat": 2,
+          "round": 1,
+          "turnIndex": 1,
+          "order": [
+            "guardian",
+            "b1",
+            "healer",
+            "weaver"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "b1",
+              "hp": 9989,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 1,
+            "name": "Rift Needle",
+            "damage": 12,
+            "kind": "energy",
+            "targetId": "healer",
+            "beat": 2,
+            "round": 1
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "guardian",
+              "action": "attack",
+              "targetId": "b1"
+            }
+          ]
+        }
+      },
+      {
+        "at": 1.346,
+        "remainingMs": 520,
+        "actorId": "b1",
+        "side": "enemy",
+        "intent": "Rift Needle",
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "b1",
+            "targetId": "healer",
+            "amount": 12,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ],
+        "cues": [
+          {
+            "move": "Rift Needle",
+            "sourceId": "b1",
+            "targetId": "healer",
+            "event": {
+              "type": "damage",
+              "sourceId": "b1",
+              "targetId": "healer",
+              "amount": 12,
+              "absorbed": 0,
+              "text": "Enemy attacks on its own turn."
+            },
+            "total": 1,
+            "outcome": "hit"
+          }
+        ],
+        "before": {
+          "encounterId": "veil-siege",
+          "beat": 2,
+          "round": 1,
+          "turnIndex": 1,
+          "order": [
+            "guardian",
+            "b1",
+            "healer",
+            "weaver"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "b1",
+              "hp": 9989,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 1,
+            "name": "Rift Needle",
+            "damage": 12,
+            "kind": "energy",
+            "targetId": "healer",
+            "beat": 2,
+            "round": 1
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "guardian",
+              "action": "attack",
+              "targetId": "b1"
+            }
+          ]
+        },
+        "after": {
+          "encounterId": "veil-siege",
+          "beat": 3,
+          "round": 1,
+          "turnIndex": 2,
+          "order": [
+            "guardian",
+            "b1",
+            "healer",
+            "weaver"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 34,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "b1",
+              "hp": 9989,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 1,
+            "name": "Rift Needle",
+            "damage": 12,
+            "kind": "energy",
+            "targetId": "healer",
+            "beat": 3,
+            "round": 2
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "guardian",
+              "action": "attack",
+              "targetId": "b1"
+            }
+          ]
+        }
+      }
+    ],
+    "rawCapture": "test-results/foe-delivery/foe-signature-fx-clips-foe-e6629-clip-rift-needle-hit-normal",
+    "captureStartUTCSeconds": 1793291775.025769,
+    "maxTimestampErrorMs": 0.0051
+  },
+  {
+    "file": "ember-spark-hit-normal-390.mp4",
+    "width": 390,
+    "height": 844,
+    "duration": 2.622289,
+    "capturedFrames": 36,
+    "clickOffset": 0.585,
+    "maxFrameGap": 0.326,
+    "impacts": [
+      {
+        "at": 0.841,
+        "remainingMs": 390,
+        "actorId": "guardian",
+        "action": "attack",
+        "side": "hero",
+        "intent": "Ember Spark",
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "guardian",
+            "targetId": "b1",
+            "amount": 10,
+            "text": "Hero attacks."
+          }
+        ],
+        "cues": [],
+        "before": {
+          "encounterId": "veil-siege",
+          "beat": 1,
+          "round": 1,
+          "turnIndex": 0,
+          "order": [
+            "guardian",
+            "b1",
+            "healer",
+            "weaver"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "b1",
+              "hp": 9999,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 1,
+            "name": "Ember Spark",
+            "damage": 12,
+            "kind": "energy",
+            "targetId": "healer",
+            "beat": 1,
+            "round": 1
+          },
+          "commands": []
+        },
+        "after": {
+          "encounterId": "veil-siege",
+          "beat": 2,
+          "round": 1,
+          "turnIndex": 1,
+          "order": [
+            "guardian",
+            "b1",
+            "healer",
+            "weaver"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "b1",
+              "hp": 9989,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 1,
+            "name": "Ember Spark",
+            "damage": 12,
+            "kind": "energy",
+            "targetId": "healer",
+            "beat": 2,
+            "round": 1
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "guardian",
+              "action": "attack",
+              "targetId": "b1"
+            }
+          ]
+        }
+      },
+      {
+        "at": 1.516,
+        "remainingMs": 520,
+        "actorId": "b1",
+        "side": "enemy",
+        "intent": "Ember Spark",
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "b1",
+            "targetId": "healer",
+            "amount": 12,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ],
+        "cues": [
+          {
+            "move": "Ember Spark",
+            "sourceId": "b1",
+            "targetId": "healer",
+            "event": {
+              "type": "damage",
+              "sourceId": "b1",
+              "targetId": "healer",
+              "amount": 12,
+              "absorbed": 0,
+              "text": "Enemy attacks on its own turn."
+            },
+            "total": 1,
+            "outcome": "hit"
+          }
+        ],
+        "before": {
+          "encounterId": "veil-siege",
+          "beat": 2,
+          "round": 1,
+          "turnIndex": 1,
+          "order": [
+            "guardian",
+            "b1",
+            "healer",
+            "weaver"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "b1",
+              "hp": 9989,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 1,
+            "name": "Ember Spark",
+            "damage": 12,
+            "kind": "energy",
+            "targetId": "healer",
+            "beat": 2,
+            "round": 1
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "guardian",
+              "action": "attack",
+              "targetId": "b1"
+            }
+          ]
+        },
+        "after": {
+          "encounterId": "veil-siege",
+          "beat": 3,
+          "round": 1,
+          "turnIndex": 2,
+          "order": [
+            "guardian",
+            "b1",
+            "healer",
+            "weaver"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 34,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "b1",
+              "hp": 9989,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 1,
+            "name": "Ember Spark",
+            "damage": 12,
+            "kind": "energy",
+            "targetId": "healer",
+            "beat": 3,
+            "round": 2
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "guardian",
+              "action": "attack",
+              "targetId": "b1"
+            }
+          ]
+        }
+      }
+    ],
+    "rawCapture": "test-results/foe-delivery/foe-signature-fx-clips-foe-f7527-clip-ember-spark-hit-normal",
+    "captureStartUTCSeconds": 1793291720.793771,
+    "maxTimestampErrorMs": 0.0051
+  },
+  {
+    "file": "veil-quake-hit-osreduce-390.mp4",
+    "width": 390,
+    "height": 844,
+    "duration": 2.269089,
+    "capturedFrames": 76,
+    "clickOffset": 0.355,
+    "maxFrameGap": 0.165,
+    "impacts": [
+      {
+        "at": 0.385,
+        "remainingMs": 600,
+        "actorId": "guardian",
+        "action": "attack",
+        "side": "hero",
+        "intent": "Veil Quake",
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "guardian",
+            "targetId": "f1",
+            "amount": 10,
+            "text": "Hero attacks."
+          }
+        ],
+        "cues": [],
+        "before": {
+          "encounterId": "veil-siege",
+          "beat": 1,
+          "round": 1,
+          "turnIndex": 0,
+          "order": [
+            "guardian",
+            "f1",
+            "healer",
+            "weaver"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "f1",
+              "hp": 9999,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Veil Quake",
+            "damage": 12,
+            "kind": "physical",
+            "targetId": "healer",
+            "beat": 1,
+            "round": 1
+          },
+          "commands": []
+        },
+        "after": {
+          "encounterId": "veil-siege",
+          "beat": 2,
+          "round": 1,
+          "turnIndex": 1,
+          "order": [
+            "guardian",
+            "f1",
+            "healer",
+            "weaver"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "f1",
+              "hp": 9989,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Veil Quake",
+            "damage": 12,
+            "kind": "physical",
+            "targetId": "healer",
+            "beat": 2,
+            "round": 1
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "guardian",
+              "action": "attack",
+              "targetId": "f1"
+            }
+          ]
+        }
+      },
+      {
+        "at": 1.025,
+        "remainingMs": 800,
+        "actorId": "f1",
+        "side": "enemy",
+        "intent": "Veil Quake",
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "f1",
+            "targetId": "healer",
+            "amount": 12,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ],
+        "cues": [
+          {
+            "move": "Veil Quake",
+            "sourceId": "f1",
+            "targetId": "healer",
+            "event": {
+              "type": "damage",
+              "sourceId": "f1",
+              "targetId": "healer",
+              "amount": 12,
+              "absorbed": 0,
+              "text": "Enemy attacks on its own turn."
+            },
+            "total": 1,
+            "outcome": "hit"
+          }
+        ],
+        "before": {
+          "encounterId": "veil-siege",
+          "beat": 2,
+          "round": 1,
+          "turnIndex": 1,
+          "order": [
+            "guardian",
+            "f1",
+            "healer",
+            "weaver"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "f1",
+              "hp": 9989,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Veil Quake",
+            "damage": 12,
+            "kind": "physical",
+            "targetId": "healer",
+            "beat": 2,
+            "round": 1
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "guardian",
+              "action": "attack",
+              "targetId": "f1"
+            }
+          ]
+        },
+        "after": {
+          "encounterId": "veil-siege",
+          "beat": 3,
+          "round": 1,
+          "turnIndex": 2,
+          "order": [
+            "guardian",
+            "f1",
+            "healer",
+            "weaver"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 34,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "f1",
+              "hp": 9989,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Veil Quake",
+            "damage": 12,
+            "kind": "physical",
+            "targetId": "healer",
+            "beat": 3,
+            "round": 2
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "guardian",
+              "action": "attack",
+              "targetId": "f1"
+            }
+          ]
+        }
+      }
+    ],
+    "rawCapture": "test-results/foe-delivery/foe-signature-fx-clips-foe-f8e36-lip-veil-quake-hit-osreduce",
+    "captureStartUTCSeconds": 1793291878.510513,
+    "maxTimestampErrorMs": 0.0061
+  },
+  {
+    "file": "seed-spark-hit-normal-390.mp4",
+    "width": 390,
+    "height": 844,
+    "duration": 2.466744,
+    "capturedFrames": 23,
+    "clickOffset": 0.855,
+    "maxFrameGap": 0.387,
+    "impacts": [
+      {
+        "at": 1.105,
+        "remainingMs": 390,
+        "actorId": "guardian",
+        "action": "attack",
+        "side": "hero",
+        "intent": "Seed Spark",
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "guardian",
+            "targetId": "b1",
+            "amount": 10,
+            "text": "Hero attacks."
+          }
+        ],
+        "cues": [],
+        "before": {
+          "encounterId": "veil-siege",
+          "beat": 1,
+          "round": 1,
+          "turnIndex": 0,
+          "order": [
+            "guardian",
+            "b1",
+            "healer",
+            "weaver"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "b1",
+              "hp": 9999,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 1,
+            "name": "Seed Spark",
+            "damage": 12,
+            "kind": "energy",
+            "targetId": "healer",
+            "beat": 1,
+            "round": 1
+          },
+          "commands": []
+        },
+        "after": {
+          "encounterId": "veil-siege",
+          "beat": 2,
+          "round": 1,
+          "turnIndex": 1,
+          "order": [
+            "guardian",
+            "b1",
+            "healer",
+            "weaver"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "b1",
+              "hp": 9989,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 1,
+            "name": "Seed Spark",
+            "damage": 12,
+            "kind": "energy",
+            "targetId": "healer",
+            "beat": 2,
+            "round": 1
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "guardian",
+              "action": "attack",
+              "targetId": "b1"
+            }
+          ]
+        }
+      },
+      {
+        "at": 1.781,
+        "remainingMs": 520,
+        "actorId": "b1",
+        "side": "enemy",
+        "intent": "Seed Spark",
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "b1",
+            "targetId": "healer",
+            "amount": 12,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ],
+        "cues": [
+          {
+            "move": "Seed Spark",
+            "sourceId": "b1",
+            "targetId": "healer",
+            "event": {
+              "type": "damage",
+              "sourceId": "b1",
+              "targetId": "healer",
+              "amount": 12,
+              "absorbed": 0,
+              "text": "Enemy attacks on its own turn."
+            },
+            "total": 1,
+            "outcome": "hit"
+          }
+        ],
+        "before": {
+          "encounterId": "veil-siege",
+          "beat": 2,
+          "round": 1,
+          "turnIndex": 1,
+          "order": [
+            "guardian",
+            "b1",
+            "healer",
+            "weaver"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "b1",
+              "hp": 9989,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 1,
+            "name": "Seed Spark",
+            "damage": 12,
+            "kind": "energy",
+            "targetId": "healer",
+            "beat": 2,
+            "round": 1
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "guardian",
+              "action": "attack",
+              "targetId": "b1"
+            }
+          ]
+        },
+        "after": {
+          "encounterId": "veil-siege",
+          "beat": 3,
+          "round": 1,
+          "turnIndex": 2,
+          "order": [
+            "guardian",
+            "b1",
+            "healer",
+            "weaver"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 34,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "b1",
+              "hp": 9989,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 1,
+            "name": "Seed Spark",
+            "damage": 12,
+            "kind": "energy",
+            "targetId": "healer",
+            "beat": 3,
+            "round": 2
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "guardian",
+              "action": "attack",
+              "targetId": "b1"
+            }
+          ]
+        }
+      }
+    ],
+    "rawCapture": "test-results/foe-delivery/foe-signature-fx-clips-foe-fb011--clip-seed-spark-hit-normal",
+    "captureStartUTCSeconds": 1793291707.61749,
+    "maxTimestampErrorMs": 0.0052
+  },
+  {
+    "file": "rune-lash-hit-fast-390.mp4",
+    "width": 390,
+    "height": 844,
+    "duration": 1.494444,
+    "capturedFrames": 31,
+    "clickOffset": 0.114,
+    "maxFrameGap": 0.227,
+    "impacts": [
+      {
+        "at": 0.28,
+        "remainingMs": 253,
+        "actorId": "guardian",
+        "action": "attack",
+        "side": "hero",
+        "intent": "Rune Lash",
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "guardian",
+            "targetId": "b1",
+            "amount": 10,
+            "text": "Hero attacks."
+          }
+        ],
+        "cues": [],
+        "before": {
+          "encounterId": "veil-siege",
+          "beat": 1,
+          "round": 1,
+          "turnIndex": 0,
+          "order": [
+            "guardian",
+            "b1",
+            "healer",
+            "weaver"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "b1",
+              "hp": 9999,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 1,
+            "name": "Rune Lash",
+            "damage": 12,
+            "kind": "energy",
+            "targetId": "healer",
+            "beat": 1,
+            "round": 1
+          },
+          "commands": []
+        },
+        "after": {
+          "encounterId": "veil-siege",
+          "beat": 2,
+          "round": 1,
+          "turnIndex": 1,
+          "order": [
+            "guardian",
+            "b1",
+            "healer",
+            "weaver"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "b1",
+              "hp": 9989,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 1,
+            "name": "Rune Lash",
+            "damage": 12,
+            "kind": "energy",
+            "targetId": "healer",
+            "beat": 2,
+            "round": 1
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "guardian",
+              "action": "attack",
+              "targetId": "b1"
+            }
+          ]
+        }
+      },
+      {
+        "at": 0.733,
+        "remainingMs": 338,
+        "actorId": "b1",
+        "side": "enemy",
+        "intent": "Rune Lash",
+        "resolved": [
+          {
+            "type": "damage",
+            "sourceId": "b1",
+            "targetId": "healer",
+            "amount": 12,
+            "absorbed": 0,
+            "text": "Enemy attacks on its own turn."
+          }
+        ],
+        "cues": [
+          {
+            "move": "Rune Lash",
+            "sourceId": "b1",
+            "targetId": "healer",
+            "event": {
+              "type": "damage",
+              "sourceId": "b1",
+              "targetId": "healer",
+              "amount": 12,
+              "absorbed": 0,
+              "text": "Enemy attacks on its own turn."
+            },
+            "total": 1,
+            "outcome": "hit"
+          }
+        ],
+        "before": {
+          "encounterId": "veil-siege",
+          "beat": 2,
+          "round": 1,
+          "turnIndex": 1,
+          "order": [
+            "guardian",
+            "b1",
+            "healer",
+            "weaver"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 46,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "b1",
+              "hp": 9989,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 1,
+            "name": "Rune Lash",
+            "damage": 12,
+            "kind": "energy",
+            "targetId": "healer",
+            "beat": 2,
+            "round": 1
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "guardian",
+              "action": "attack",
+              "targetId": "b1"
+            }
+          ]
+        },
+        "after": {
+          "encounterId": "veil-siege",
+          "beat": 3,
+          "round": 1,
+          "turnIndex": 2,
+          "order": [
+            "guardian",
+            "b1",
+            "healer",
+            "weaver"
+          ],
+          "outcome": "active",
+          "guard": null,
+          "counter": null,
+          "taunt": null,
+          "song": null,
+          "heroes": [
+            {
+              "id": "guardian",
+              "hp": 76,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "healer",
+              "hp": 34,
+              "barrier": 0,
+              "cooldowns": {}
+            },
+            {
+              "id": "weaver",
+              "hp": 48,
+              "barrier": 0,
+              "cooldowns": {}
+            }
+          ],
+          "enemies": [
+            {
+              "id": "b1",
+              "hp": 9989,
+              "markedUntil": 0
+            }
+          ],
+          "intent": {
+            "sourceId": "b1",
+            "targetSlot": 1,
+            "name": "Rune Lash",
+            "damage": 12,
+            "kind": "energy",
+            "targetId": "healer",
+            "beat": 3,
+            "round": 2
+          },
+          "commands": [
+            {
+              "beat": 1,
+              "heroId": "guardian",
+              "action": "attack",
+              "targetId": "b1"
+            }
+          ]
+        }
+      }
+    ],
+    "rawCapture": "test-results/foe-delivery/foe-signature-fx-clips-foe-signature-clip-rune-lash-hit-fast",
+    "captureStartUTCSeconds": 1793291857.810034,
+    "maxTimestampErrorMs": 0.0051
+  }
+]

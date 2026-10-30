@@ -1,0 +1,86 @@
+[
+  {
+    "identity": "foe_golem",
+    "seed": "seeds/foe_golem.png",
+    "source": "public/assets/art/units_foes.webp",
+    "base_commit": "5e9e65026b8949f7877db12a2e70496fe2aac77b",
+    "frame_zero_based": 4,
+    "atlas_columns": 2,
+    "cell_size": 512,
+    "crop_xyxy": [
+      0,
+      1024,
+      512,
+      1536
+    ],
+    "source_sha256": "dcf79e09f2b0b813aa03894bd65222ae3afb2df875e84870d1dba968c49a1895",
+    "sha256": "586c27c584320b188ce19b5d040291375dc047db1896f00eebf2fe016352c49c",
+    "pixel_exact_shipped_crop": true,
+    "facing": "left",
+    "logical_ground_y": 497,
+    "floating": false
+  },
+  {
+    "identity": "foe_rift_channeler",
+    "seed": "seeds/foe_rift_channeler.png",
+    "source": "public/assets/art/units_foes2.webp",
+    "base_commit": "5e9e65026b8949f7877db12a2e70496fe2aac77b",
+    "frame_zero_based": 6,
+    "atlas_columns": 2,
+    "cell_size": 512,
+    "crop_xyxy": [
+      0,
+      1536,
+      512,
+      2048
+    ],
+    "source_sha256": "68f8c9303fe924aa33070a9404154fb79416fb2d491b608af79c80f7a8aa2136",
+    "sha256": "5eae9454f956b0711157d7c23909f12ba4e7f0c88e2e34d1d076cbb3d3241674",
+    "pixel_exact_shipped_crop": true,
+    "facing": "left",
+    "logical_ground_y": 497,
+    "floating": false
+  },
+  {
+    "identity": "foe_rift_wisp",
+    "seed": "seeds/foe_rift_wisp.png",
+    "source": "public/assets/art/units_foes2.webp",
+    "base_commit": "5e9e65026b8949f7877db12a2e70496fe2aac77b",
+    "frame_zero_based": 7,
+    "atlas_columns": 2,
+    "cell_size": 512,
+    "crop_xyxy": [
+      512,
+      1536,
+      1024,
+      2048
+    ],
+    "source_sha256": "68f8c9303fe924aa33070a9404154fb79416fb2d491b608af79c80f7a8aa2136",
+    "sha256": "214dc76cac21f14f3448e669f5bd0e933a085ace60fb3cd3e01cff4d1c3e9038",
+    "pixel_exact_shipped_crop": true,
+    "facing": "left",
+    "logical_ground_y": 497,
+    "floating": true
+  },
+  {
+    "identity": "foe_shard_crawler",
+    "seed": "seeds/foe_shard_crawler.png",
+    "source": "public/assets/art/units_foes2.webp",
+    "base_commit": "5e9e65026b8949f7877db12a2e70496fe2aac77b",
+    "frame_zero_based": 8,
+    "atlas_columns": 2,
+    "cell_size": 512,
+    "crop_xyxy": [
+      0,
+      2048,
+      512,
+      2560
+    ],
+    "source_sha256": "68f8c9303fe924aa33070a9404154fb79416fb2d491b608af79c80f7a8aa2136",
+    "sha256": "ff87cb5db070fcac8fbad7ae195a1986b7d84c5fde53af1039b82dc71b200a4e",
+    "pixel_exact_shipped_crop": true,
+    "facing": "left",
+    "logical_ground_y": 497,
+    "floating": false
+  }
+]

@@ -1,0 +1,147 @@
+[
+  {
+    "boss": "foe_matriarch",
+    "move": "thorn-tempest",
+    "frames": 6,
+    "prompt": "Edit provided SIX-slot template into ONE horizontal SIX-frame sprite animation, same original painted chibi fantasy art as reference 2. THORN TEMPEST signature BIG casting body: 1 upright ready; 2 lower head and bend knees, gather both thorn-covered hands inward at waist; 3 deepest coiled crouch head down, arms crossed tightly over chest, holdable telegraph; 4 forcefully fling BOTH arms wide outward LEFT and RIGHT at shoulder height, face LEFT mouth open, thorn cape spreads broadly but attached; 5 sweep both arms forward LEFT with extended hands and spread fingers, strongest commanding release; 6 recover ready. No summoned thorns or flying leaves, no wind or magic VFX. Crown, face, mint-green hair, green leaf dress, golden thorn armour, thorn circular back halo and boots must remain identical. Bigger gesture than smaller Bloom/Storm cast. Exact LEFT facing as references, unchanged character identity and proportions. Keep template SMALL figures, each about 29% canvas height, soles at 75% height. Six equally spaced full figures in a single row with very wide transparent gutters. Do NOT fill canvas with enlarged bodies. Same anatomical body size every frame. Feet on shared baseline. Complete attached hair/limbs/crown/thorn armour and cape in all frames. Anticipation coils DOWN not UP. Real transparent RGBA. NO VFX, projectiles, lights, floor rings, dust, shadows, scenery, text or labels. No clipping. Generate whole strip once.",
+    "original_path": "/workspace/generated_images/exec-b2936fcd-5b8a-4c7c-9652-d7cedf11ae24.png",
+    "source": "foe_matriarch/source-sheets/thorn-tempest-source.png",
+    "accepted": true,
+    "attempt": 1,
+    "frame_order": [
+      "ready (exact seed)",
+      "wind-up",
+      "deep anticipation",
+      "contact / release / charged hold",
+      "follow-through / sustain",
+      "recover (exact seed)"
+    ],
+    "intents": [
+      "Thorn Tempest"
+    ]
+  },
+  {
+    "boss": "foe_matriarch",
+    "move": "briar-lash",
+    "frames": 6,
+    "prompt": "Edit 6-slot template into ONE whole horizontal 6-frame body animation strip, precisely 6 full figures in one row. Same original painted chibi fantasy Matriarch as seed reference 2: LEFT facing pale face/mint-green hair, emerald/gold leaf dress, gold thorn crown and attached thorn back halo, clawed thorn gloves, boots. BRIAR LASH whip: 1 upright ready; 2 bend knees head DOWN pulling thorn-vine whip hand back RIGHT; 3 deeper downward/back coil with long thorn vine curled behind, whip visibly continuous from gripping hand; 4 unmistakable cracking whip stroke LEFT with arm straight and long thorn vine extended horizontally LEFT, no detached pieces; 5 follow-through across body with vine curving low LEFT; 6 recover ready. Whip and hand visibly attached throughout. Entire vine in frame. Preserve SMALL template size 29% canvas height and wide transparent gutters, baseline 75% height. Do NOT enlarge figures to fill canvas. Constant anatomical size and head scale, same identity/outfit/equipment every frame, all limbs/hair/tools attached and visible. Leave extra margin for whip/arms. Real transparent alpha RGBA. NO VFX, projectiles, light bursts, dust, ground shadows, scenery, rings, text or labels. No clipping. Generate the whole strip in this one request. CRITICAL CORRECTION: reduce ALL SIX bodies to HALF the template body's displayed size, figures only 16% canvas height. Keep SIX centres evenly spaced, huge gutters. The whip can be only one body-width long, never longer. In the contact frame the whip plus body must fit completely inside ONE sixth of image width with empty margins both sides. Whip must not extend into another slot or over another figure. Six SEPARATE non-overlapping figures with fully empty vertical bands between all six. Large empty alpha above/below intentional. Do not crop or enlarge.",
+    "original_path": "/workspace/generated_images/exec-b3ee48c5-7ba6-40c4-a6f9-5fb1cdaa7871.png",
+    "source": "foe_matriarch/source-sheets/briar-lash-source.png",
+    "accepted": true,
+    "attempt": 2,
+    "frame_order": [
+      "ready (exact seed)",
+      "wind-up",
+      "deep anticipation",
+      "contact / release / charged hold",
+      "follow-through / sustain",
+      "recover (exact seed)"
+    ],
+    "intents": [
+      "Briar Lash"
+    ]
+  },
+  {
+    "boss": "foe_matriarch",
+    "move": "gather-thorns",
+    "frames": 6,
+    "prompt": "Edit 6-slot template into ONE whole horizontal 6-frame body animation strip, precisely 6 full figures in one row. Same original painted chibi fantasy Matriarch as seed reference 2: LEFT facing pale face/mint-green hair, emerald/gold leaf dress, gold thorn crown and attached thorn back halo, clawed thorn gloves, boots. GATHER THORNS charge/telegraph: 1 normal upright ready; 2 bend knees bow head DOWN, draw both hands inward; 3 deepest tight inward coil hands cupped close at chest, head DOWN; 4 clearly held charged crouch with crossed forearms shielding chest, crown tilted down, concentrated stern face LEFT; 5 keep same crouch with hands tightening at chest, no release; 6 ready. Frame 3 or 4 can be held for a whole turn. Only attached thorn costume, no summoned thorns, no light. Preserve SMALL template size 29% canvas height and wide transparent gutters, baseline 75% height. Do NOT enlarge figures to fill canvas. Constant anatomical size and head scale, same identity/outfit/equipment every frame, all limbs/hair/tools attached and visible. Leave extra margin for whip/arms. Real transparent alpha RGBA. NO VFX, projectiles, light bursts, dust, ground shadows, scenery, rings, text or labels. No clipping. Generate the whole strip in this one request.",
+    "original_path": "/workspace/generated_images/exec-9c67658b-383f-4dcf-a140-d1f4e52f1bca.png",
+    "source": "foe_matriarch/source-sheets/gather-thorns-source.png",
+    "accepted": true,
+    "attempt": 1,
+    "frame_order": [
+      "ready (exact seed)",
+      "wind-up",
+      "deep anticipation",
+      "contact / release / charged hold",
+      "follow-through / sustain",
+      "recover (exact seed)"
+    ],
+    "intents": [
+      "Gather Thorns"
+    ],
+    "hold_frame": 2
+  },
+  {
+    "boss": "foe_matriarch",
+    "move": "thorn-bloom-storm",
+    "frames": 6,
+    "prompt": "Edit 6-slot template into ONE whole horizontal 6-frame body animation strip, precisely 6 full figures in one row. Same original painted chibi fantasy Matriarch as seed reference 2: LEFT facing pale face/mint-green hair, emerald/gold leaf dress, gold thorn crown and attached thorn back halo, clawed thorn gloves, boots. THORN BLOOM and THORN STORM shared SMALL cast: 1 ready; 2 bow head DOWN knees bend, draw RIGHT hand inward to chest; 3 deeper downward coil, single casting hand near waist; 4 one hand reaches LEFT palm open at chest height, offhand rests by waist, calm mouth closed release; 5 hand gently sweeps down LEFT; 6 ready. Restrained single-hand cast, clearly SMALLER than Tempest's two-arm wide command. No vines or flying leaves. Preserve SMALL template size 29% canvas height and wide transparent gutters, baseline 75% height. Do NOT enlarge figures to fill canvas. Constant anatomical size and head scale, same identity/outfit/equipment every frame, all limbs/hair/tools attached and visible. Leave extra margin for whip/arms. Real transparent alpha RGBA. NO VFX, projectiles, light bursts, dust, ground shadows, scenery, rings, text or labels. No clipping. Generate the whole strip in this one request. CORRECTION: KEEP the NEW compact template's TINY figures exactly this size: ONLY 18% canvas height. Huge alpha gaps surround every figure, entire figure width no more than 10% total canvas width. Last figure must have large right margin. All six complete separated figures, with completely empty vertical bands between them. Do not enlarge the bodies. Previous attempt was rejected for crowding / edge clipping.",
+    "original_path": "/workspace/generated_images/exec-6734577a-5546-457c-aa54-16caef359f7f.png",
+    "source": "foe_matriarch/source-sheets/thorn-bloom-storm-source.png",
+    "accepted": true,
+    "attempt": 2,
+    "frame_order": [
+      "ready (exact seed)",
+      "wind-up",
+      "deep anticipation",
+      "contact / release / charged hold",
+      "follow-through / sustain",
+      "recover (exact seed)"
+    ],
+    "intents": [
+      "Thorn Bloom",
+      "Thorn Storm"
+    ]
+  },
+  {
+    "boss": "foe_matriarch",
+    "move": "thorn-rage",
+    "frames": 6,
+    "prompt": "Edit 6-slot template into ONE whole horizontal 6-frame body animation strip, precisely 6 full figures in one row. Same original painted chibi fantasy Matriarch as seed reference 2: LEFT facing pale face/mint-green hair, emerald/gold leaf dress, gold thorn crown and attached thorn back halo, clawed thorn gloves, boots. THORN RAGE phase-change roar: 1 ready; 2 knees flex and head bows DOWN fists pull inward; 3 deep crouched compression head down fists tight at sternum; 4 explosive body ROAR with mouth wide open and BOTH clenched fists down at hips, shoulders lifted, chin points LEFT; 5 sustained rage open mouth and fists at sides, thorn mantle bristles but stays attached; 6 ready. NO palm-out casting gestures. No light or magical effects. Preserve SMALL template size 29% canvas height and wide transparent gutters, baseline 75% height. Do NOT enlarge figures to fill canvas. Constant anatomical size and head scale, same identity/outfit/equipment every frame, all limbs/hair/tools attached and visible. Leave extra margin for whip/arms. Real transparent alpha RGBA. NO VFX, projectiles, light bursts, dust, ground shadows, scenery, rings, text or labels. No clipping. Generate the whole strip in this one request. CORRECTION: KEEP the NEW compact template's TINY figures exactly this size: ONLY 18% canvas height. Huge alpha gaps surround every figure, entire figure width no more than 10% total canvas width. Last figure must have large right margin. All six complete separated figures, with completely empty vertical bands between them. Do not enlarge the bodies. Previous attempt was rejected for crowding / edge clipping.",
+    "original_path": "/workspace/generated_images/exec-59f8c28c-dc85-49c0-8635-4d88bde1793f.png",
+    "source": "foe_matriarch/source-sheets/thorn-rage-source.png",
+    "accepted": true,
+    "attempt": 2,
+    "frame_order": [
+      "ready (exact seed)",
+      "wind-up",
+      "deep anticipation",
+      "contact / release / charged hold",
+      "follow-through / sustain",
+      "recover (exact seed)"
+    ],
+    "intents": [
+      "Thorn Rage"
+    ]
+  },
+  {
+    "boss": "foe_matriarch",
+    "move": "hit",
+    "frames": 4,
+    "prompt": "Edit 4-slot template into ONE whole horizontal 4-frame body animation strip, precisely 4 full figures in one row. Same original painted chibi fantasy Matriarch as seed reference 2: LEFT facing pale face/mint-green hair, emerald/gold leaf dress, gold thorn crown and attached thorn back halo, clawed thorn gloves, boots. 1 ready; 2 recoil backward RIGHT from hit arriving LEFT, face winces, hair swings right, knees flex; 3 hurt brace head bowed down hands close to chest; 4 recover ready. Crown and thorn back ring stay intact. No VFX. Preserve SMALL template size 29% canvas height and wide transparent gutters, baseline 75% height. Do NOT enlarge figures to fill canvas. Constant anatomical size and head scale, same identity/outfit/equipment every frame, all limbs/hair/tools attached and visible. Leave extra margin for whip/arms. Real transparent alpha RGBA. NO VFX, projectiles, light bursts, dust, ground shadows, scenery, rings, text or labels. No clipping. Generate the whole strip in this one request.",
+    "original_path": "/workspace/generated_images/exec-b009a59d-9a9d-4309-b32a-08678e92e348.png",
+    "source": "foe_matriarch/source-sheets/hit-source.png",
+    "accepted": true,
+    "attempt": 1,
+    "frame_order": [
+      "ready (exact seed)",
+      "recoil",
+      "brace",
+      "recover (exact seed)"
+    ],
+    "intents": [
+      "hit"
+    ]
+  },
+  {
+    "boss": "foe_matriarch",
+    "move": "down",
+    "frames": 4,
+    "prompt": "Edit 4-slot template into ONE whole horizontal 4-frame body animation strip, precisely 4 full figures in one row. Same original painted chibi fantasy Matriarch as seed reference 2: LEFT facing pale face/mint-green hair, emerald/gold leaf dress, gold thorn crown and attached thorn back halo, clawed thorn gloves, boots. 1 ready; 2 knees buckle head drops; 3 kneel low with crown bowed and hands touching ground; 4 grounded defeated seated/slumped HOLD, leaf skirt pools on ground, head bowed LEFT, crown and thorn back ring and hands all intact, NEVER stands up. Last frame clearly low, no disappearance. Preserve SMALL template size 29% canvas height and wide transparent gutters, baseline 75% height. Do NOT enlarge figures to fill canvas. Constant anatomical size and head scale, same identity/outfit/equipment every frame, all limbs/hair/tools attached and visible. Leave extra margin for whip/arms. Real transparent alpha RGBA. NO VFX, projectiles, light bursts, dust, ground shadows, scenery, rings, text or labels. No clipping. Generate the whole strip in this one request.",
+    "original_path": "/workspace/generated_images/exec-d4672454-8a39-4ea1-887c-f20f5a90cc8e.png",
+    "source": "foe_matriarch/source-sheets/down-source.png",
+    "accepted": true,
+    "attempt": 1,
+    "frame_order": [
+      "ready (exact seed)",
+      "buckle",
+      "collapse",
+      "grounded hold (never stands)"
+    ],
+    "intents": [
+      "down"
+    ]
+  }
+]

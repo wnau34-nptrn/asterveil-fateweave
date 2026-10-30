@@ -1,0 +1,987 @@
+[
+  {
+    "identity": "lalin",
+    "move": "dance-strike",
+    "revision": "r1",
+    "file": "dancers/lalin/raw/lalin-dance-strike-r1.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "poised ready",
+      "gather fan across body",
+      "step into fan strike right",
+      "extended fan flourish",
+      "reverse weight",
+      "rightward ready"
+    ],
+    "routes_or_intents": [
+      "attack"
+    ],
+    "preferred_candidate": true,
+    "source": "dancers/lalin/source-sheets/lalin-actions-source.png",
+    "source_row_1based": 1,
+    "source_crop_xyxy": [
+      0,
+      7,
+      1536,
+      270
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        18,
+        10,
+        245,
+        250
+      ],
+      [
+        269,
+        13,
+        504,
+        251
+      ],
+      [
+        502,
+        16,
+        780,
+        250
+      ],
+      [
+        786,
+        10,
+        1082,
+        250
+      ],
+      [
+        1049,
+        17,
+        1276,
+        253
+      ],
+      [
+        1262,
+        11,
+        1525,
+        251
+      ]
+    ],
+    "size": [
+      1536,
+      263
+    ],
+    "mode": "RGBA",
+    "sha256": "b64b8833cd5f970d9f1c81b976a350dd90efaef7af20a52677ae92e6167bb952",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "dancers/lalin/spaced/lalin-dance-strike-r1.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        192,
+        244
+      ],
+      [
+        576,
+        244
+      ],
+      [
+        960,
+        244
+      ],
+      [
+        1344,
+        244
+      ],
+      [
+        1728,
+        244
+      ],
+      [
+        2112,
+        244
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      1,
+      1.2,
+      0.75,
+      1,
+      0.8,
+      1
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  },
+  {
+    "identity": "lalin",
+    "move": "partner-turn",
+    "revision": "r1",
+    "file": "dancers/lalin/raw/lalin-partner-turn-r1.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "look left",
+      "turn hips left and offer fans",
+      "small partner step",
+      "open welcoming fan presentation",
+      "upbeat raised-fan accent",
+      "return right"
+    ],
+    "routes_or_intents": [
+      "cadence",
+      "duet",
+      "deepbeat"
+    ],
+    "preferred_candidate": false,
+    "source": "dancers/lalin/source-sheets/lalin-actions-source.png",
+    "source_row_1based": 2,
+    "source_crop_xyxy": [
+      0,
+      257,
+      1536,
+      523
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        9,
+        12,
+        238,
+        251
+      ],
+      [
+        251,
+        14,
+        510,
+        253
+      ],
+      [
+        500,
+        18,
+        778,
+        256
+      ],
+      [
+        786,
+        18,
+        1068,
+        255
+      ],
+      [
+        1083,
+        10,
+        1293,
+        255
+      ],
+      [
+        1306,
+        14,
+        1528,
+        255
+      ]
+    ],
+    "size": [
+      1536,
+      266
+    ],
+    "mode": "RGBA",
+    "sha256": "d232fd63a66d61f509e16d1a33ed0874719a42486be2499eb7d99c68640376a2",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "dancers/lalin/spaced/lalin-partner-turn-r1.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        192,
+        241
+      ],
+      [
+        576,
+        241
+      ],
+      [
+        960,
+        241
+      ],
+      [
+        1344,
+        241
+      ],
+      [
+        1728,
+        241
+      ],
+      [
+        2112,
+        241
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      1,
+      1.2,
+      0.75,
+      1,
+      0.8,
+      1
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  },
+  {
+    "identity": "lalin",
+    "move": "circle-spin",
+    "revision": "r1",
+    "file": "dancers/lalin/raw/lalin-circle-spin-r1.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "gather arms",
+      "turn through side",
+      "back-facing pivot",
+      "continue through opposite side",
+      "reopen fans",
+      "settle right"
+    ],
+    "routes_or_intents": [
+      "rounddance"
+    ],
+    "preferred_candidate": true,
+    "source": "dancers/lalin/source-sheets/lalin-actions-source.png",
+    "source_row_1based": 3,
+    "source_crop_xyxy": [
+      0,
+      509,
+      1536,
+      767
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        18,
+        10,
+        228,
+        242
+      ],
+      [
+        250,
+        13,
+        485,
+        238
+      ],
+      [
+        499,
+        10,
+        771,
+        242
+      ],
+      [
+        785,
+        14,
+        1027,
+        242
+      ],
+      [
+        1035,
+        14,
+        1305,
+        243
+      ],
+      [
+        1312,
+        12,
+        1525,
+        248
+      ]
+    ],
+    "size": [
+      1536,
+      258
+    ],
+    "mode": "RGBA",
+    "sha256": "7431dfe094e2ff67b5eeaaa3d26fa5f1d05e7bd0b44077958696ab47f8bb5798",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "dancers/lalin/spaced/lalin-circle-spin-r1.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        192,
+        249
+      ],
+      [
+        576,
+        249
+      ],
+      [
+        960,
+        249
+      ],
+      [
+        1344,
+        249
+      ],
+      [
+        1728,
+        249
+      ],
+      [
+        2112,
+        249
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      1,
+      1.2,
+      0.75,
+      1,
+      0.8,
+      1
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  },
+  {
+    "identity": "lalin",
+    "move": "echo-closing-step",
+    "revision": "r1",
+    "file": "dancers/lalin/raw/lalin-echo-closing-step-r1.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "gather low",
+      "crossing foot placement",
+      "forward fan accent",
+      "rising open flourish",
+      "soften closing step",
+      "settle right"
+    ],
+    "routes_or_intents": [
+      "echofoot"
+    ],
+    "preferred_candidate": true,
+    "source": "dancers/lalin/source-sheets/lalin-actions-source.png",
+    "source_row_1based": 4,
+    "source_crop_xyxy": [
+      0,
+      739,
+      1536,
+      1020
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        25,
+        23,
+        231,
+        270
+      ],
+      [
+        250,
+        32,
+        479,
+        268
+      ],
+      [
+        502,
+        25,
+        776,
+        266
+      ],
+      [
+        786,
+        10,
+        1045,
+        255
+      ],
+      [
+        1064,
+        26,
+        1293,
+        271
+      ],
+      [
+        1304,
+        32,
+        1525,
+        270
+      ]
+    ],
+    "size": [
+      1536,
+      281
+    ],
+    "mode": "RGBA",
+    "sha256": "09671e00a5c635efaf4f98a5af2bc9a1f586a2e69b90be46870c7dd9732b8181",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "dancers/lalin/spaced/lalin-echo-closing-step-r1.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        192,
+        226
+      ],
+      [
+        576,
+        226
+      ],
+      [
+        960,
+        226
+      ],
+      [
+        1344,
+        226
+      ],
+      [
+        1728,
+        226
+      ],
+      [
+        2112,
+        226
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      1,
+      1.2,
+      0.75,
+      1,
+      0.8,
+      1
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  },
+  {
+    "identity": "lalin",
+    "move": "hit",
+    "revision": "r1",
+    "file": "dancers/lalin/raw/lalin-hit-r1.png",
+    "frame_count": 4,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "ready",
+      "recoil and wince",
+      "catch balance",
+      "guard"
+    ],
+    "routes_or_intents": [
+      "hit"
+    ],
+    "preferred_candidate": true,
+    "source": "dancers/lalin/source-sheets/lalin-reactions-source.png",
+    "source_row_1based": 1,
+    "source_crop_xyxy": [
+      0,
+      22,
+      1448,
+      386
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        19,
+        10,
+        370,
+        352
+      ],
+      [
+        381,
+        21,
+        725,
+        353
+      ],
+      [
+        723,
+        39,
+        1070,
+        354
+      ],
+      [
+        1100,
+        23,
+        1439,
+        354
+      ]
+    ],
+    "size": [
+      1448,
+      364
+    ],
+    "mode": "RGBA",
+    "sha256": "b29d7d3994edb35ca2163f80e29739428df36542ef920dbcefd97285171f8b54",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "dancers/lalin/spaced/lalin-hit-r1.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        139,
+        143
+      ],
+      [
+        417,
+        143
+      ],
+      [
+        695,
+        143
+      ],
+      [
+        973,
+        143
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      0.8,
+      1,
+      0.9,
+      1
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  },
+  {
+    "identity": "lalin",
+    "move": "block",
+    "revision": "r1",
+    "file": "dancers/lalin/raw/lalin-block-r1.png",
+    "frame_count": 4,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "raise protective arms",
+      "brace behind crossed gauntlets or fans",
+      "absorb weight low",
+      "reset guard"
+    ],
+    "routes_or_intents": [
+      "block"
+    ],
+    "preferred_candidate": true,
+    "source": "dancers/lalin/source-sheets/lalin-reactions-source.png",
+    "source_row_1based": 2,
+    "source_crop_xyxy": [
+      0,
+      370,
+      1448,
+      734
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        15,
+        10,
+        355,
+        351
+      ],
+      [
+        375,
+        19,
+        715,
+        352
+      ],
+      [
+        724,
+        47,
+        1072,
+        352
+      ],
+      [
+        1100,
+        19,
+        1440,
+        354
+      ]
+    ],
+    "size": [
+      1448,
+      364
+    ],
+    "mode": "RGBA",
+    "sha256": "8103f5f6ac3fc623fd6251088546b7331dd84cf6ac83446dc08a72bcfa932eb6",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "dancers/lalin/spaced/lalin-block-r1.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        139,
+        143
+      ],
+      [
+        417,
+        143
+      ],
+      [
+        695,
+        143
+      ],
+      [
+        973,
+        143
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      0.8,
+      1,
+      0.9,
+      1
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  },
+  {
+    "identity": "lalin",
+    "move": "down",
+    "revision": "r1",
+    "file": "dancers/lalin/raw/lalin-down-r1.png",
+    "frame_count": 4,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "knees give way",
+      "hand and knee reach ground",
+      "sink to seated slump",
+      "lie unconscious and hold"
+    ],
+    "routes_or_intents": [
+      "down"
+    ],
+    "preferred_candidate": true,
+    "source": "dancers/lalin/source-sheets/lalin-reactions-source.png",
+    "source_row_1based": 3,
+    "source_crop_xyxy": [
+      0,
+      735,
+      1448,
+      1063
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        18,
+        10,
+        322,
+        318
+      ],
+      [
+        338,
+        61,
+        704,
+        317
+      ],
+      [
+        717,
+        71,
+        1067,
+        311
+      ],
+      [
+        1064,
+        165,
+        1441,
+        317
+      ]
+    ],
+    "size": [
+      1448,
+      328
+    ],
+    "mode": "RGBA",
+    "sha256": "bbf93312a834c7edc1e749e58c6d686e6947b150e2dc761c0c73eb1bd9363d51",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "dancers/lalin/spaced/lalin-down-r1.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        139,
+        179
+      ],
+      [
+        417,
+        179
+      ],
+      [
+        695,
+        179
+      ],
+      [
+        973,
+        179
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      0.8,
+      1,
+      0.9,
+      1
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  },
+  {
+    "identity": "lalin",
+    "move": "partner-turn",
+    "revision": "r2",
+    "file": "dancers/lalin/raw/lalin-partner-turn-r2.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "ready",
+      "turn attention left",
+      "fan-led pivot",
+      "clear left-facing invitation",
+      "soften partner turn",
+      "return right"
+    ],
+    "routes_or_intents": [
+      "cadence",
+      "duet",
+      "deepbeat"
+    ],
+    "preferred_candidate": true,
+    "source": "dancers/lalin/source-sheets/lalin-r2-source.png",
+    "source_row_1based": 1,
+    "source_crop_xyxy": [
+      0,
+      29,
+      2172,
+      365
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        21,
+        10,
+        328,
+        325
+      ],
+      [
+        376,
+        14,
+        673,
+        326
+      ],
+      [
+        723,
+        18,
+        1063,
+        326
+      ],
+      [
+        1098,
+        18,
+        1449,
+        322
+      ],
+      [
+        1493,
+        25,
+        1814,
+        323
+      ],
+      [
+        1856,
+        10,
+        2163,
+        325
+      ]
+    ],
+    "size": [
+      2172,
+      336
+    ],
+    "mode": "RGBA",
+    "sha256": "ff399a94066b22b923918e507e12b33062ac9afa6050de74201bf8d6ba7c3ad3",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "dancers/lalin/spaced/lalin-partner-turn-r2.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        139,
+        171
+      ],
+      [
+        417,
+        171
+      ],
+      [
+        695,
+        171
+      ],
+      [
+        973,
+        171
+      ],
+      [
+        1251,
+        171
+      ],
+      [
+        1529,
+        171
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      1,
+      1.2,
+      0.75,
+      1,
+      0.8,
+      1
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  },
+  {
+    "identity": "lalin",
+    "move": "echo-closing-step",
+    "revision": "r2",
+    "file": "dancers/lalin/raw/lalin-echo-closing-step-r2.png",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "frame_descriptions": [
+      "ready",
+      "gather fans low",
+      "close feet and gather chest",
+      "both fans raised in closing arch",
+      "welcoming bow",
+      "settle ready"
+    ],
+    "routes_or_intents": [
+      "closingstep"
+    ],
+    "preferred_candidate": true,
+    "source": "dancers/lalin/source-sheets/lalin-r2-source.png",
+    "source_row_1based": 2,
+    "source_crop_xyxy": [
+      0,
+      354,
+      2172,
+      719
+    ],
+    "frame_bounds_alpha_gt80_xyxy": [
+      [
+        25,
+        38,
+        338,
+        354
+      ],
+      [
+        389,
+        50,
+        691,
+        351
+      ],
+      [
+        740,
+        20,
+        1016,
+        355
+      ],
+      [
+        1082,
+        10,
+        1436,
+        355
+      ],
+      [
+        1468,
+        17,
+        1808,
+        354
+      ],
+      [
+        1857,
+        38,
+        2162,
+        354
+      ]
+    ],
+    "size": [
+      2172,
+      365
+    ],
+    "mode": "RGBA",
+    "sha256": "8f2ed9bf9b0fa8d541e4b26b7f3bdafe13d57adf65df7e8358c64dbbb66bec2b",
+    "retained_pixels_identical_to_source": true,
+    "source_edge_clipped_frames": [],
+    "spaced_file": "dancers/lalin/spaced/lalin-echo-closing-step-r2.png",
+    "spaced_cell_size": [
+      640,
+      512
+    ],
+    "spaced_scale": 1,
+    "raw_to_spaced_translation_xy_per_frame": [
+      [
+        139,
+        142
+      ],
+      [
+        417,
+        142
+      ],
+      [
+        695,
+        142
+      ],
+      [
+        973,
+        142
+      ],
+      [
+        1251,
+        142
+      ],
+      [
+        1529,
+        142
+      ]
+    ],
+    "spaced_note": "Layout-only transparent padding; no scaling, rotation, repainting or per-frame Y alignment. Shared strip Y preserves airborne/down heights.",
+    "relative_frame_hold_weights_for_review_only": [
+      1,
+      1.2,
+      0.75,
+      1,
+      0.8,
+      1
+    ],
+    "timing_note": "Relative pose emphasis only; Claude retains existing runtime timing.",
+    "extraction_note": "Figures may cross nominal equal-width slots; use bounds and source ownership algorithm, not a naive equal-width cut."
+  }
+]

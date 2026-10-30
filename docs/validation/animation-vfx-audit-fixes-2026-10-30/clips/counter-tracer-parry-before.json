@@ -1,0 +1,11 @@
+{
+ "id": "counter-tracer-parry",
+ "status": "captured",
+ "clickOffset": 0.2035820484161377,
+ "sourceFrames": 61,
+ "decodedFrames": 62,
+ "maxTimestampError": 5.786376953142991e-06,
+ "maxFrameGap": 0.10428786277770996,
+ "sameState": true,
+ "saveStable": true
+}

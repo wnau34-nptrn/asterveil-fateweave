@@ -1,5 +1,15 @@
 # Codex → Claude handoff
 
+## 2026-10-30 — Claude: แก้ animation/VFX ตาม audit AV02–AV08 (ยกเว้นอัศวิน) + นำภาพ W4–W8 เข้าเกม — PR #113 (draft, รอเจ้าของดู motion)
+
+- สาขา `claude/av-audit-fixes` จาก `7857482` (Aegis hold คงไว้ ไม่แตะภาพ/mapping/normalization ของอัศวิน); รายงานรายข้อ + หลักฐาน runtime 390px ก่อน/หลัง: [`docs/validation/animation-vfx-audit-fixes-2026-10-30/README_TH.md`](../validation/animation-vfx-audit-fixes-2026-10-30/README_TH.md)
+- **แก้แล้ว:** AV03 (Mira ลูกธนู/Toma ขวด ไม่ใช่ดาบ), AV04 (flight เริ่มที่เฟรมปล่อย `RELEASE_AT` .55 จากปลายลูกธนู/มือที่วัดจริง), AV05 (FILL ขาว → ADD lift), AV07 (boss-signature atlas + hold ค้างจาก state จริง แยกรูปทรง unstoppable/normal, ล้างที่ release/interrupt/down/phase, คืนหลังโหลด/resize; caption รวบรวมพลังย้ายจากฮีโร่ไปที่บอส), AV08 (caption หลบหน้า/HP/ชื่อจาก bounds จริง; ท่าล้มเต็มก่อนจาง)
+- **บางส่วน:** AV02 (finisher/sweep/lunge + riposte Lyra/Garran แล้ว; Mark/Parry stance → brief `docs/handoffs/CODEX-AV02-LYRA-GESTURES-TH.md`), AV06 (W4 #110 + A7/A8/A9/A10 bodies + foe signature #105 + saint/dance #97 + boss signature #108 เข้าเกม; Lalin/Wila บาง strip หัวโตเกิน seed ไม่ส่ง → brief `docs/handoffs/CODEX-A7-DANCER-REDRAW-TH.md`) — brief ทั้งสองยังไม่ได้ส่ง Codex
+- สมมติฐานที่เจ้าของต้องยืนยัน: candidate A7 ตาม Codex แนะนำ, Saint/Dance R1 (Codex ไม่ระบุ), song/shadow R2 (R3 #111 รอเลือก); ทุกชุดรอ owner motion approval
+- registry ใหม่ใน `unit-frames.ts`: per-identity `clips`/`reactions`/`release`/`own`/`downFrame`/`soleOrigin`/`corpseAlpha`; atlas boss/foe-signature/saint-dance โหลดเฉพาะ encounter ที่ใช้ (preload เดิมเกิน 32 ไฟล์ทำ spec presentation หลัง reload ค้าง); `bodySprite()` หา sprite ของตัวด้วย texture (floor layer ของ W4 เคยถูกอ่านแทน)
+- เทสต์: tsc/eslint/vitest เต็ม 1328 ผ่าน (ก่อน merge สุดท้าย), focused หลัง merge ผ่าน, `tests/av-audit-fixes.test.ts`; Playwright ในเครื่อง presentation/foe-signature/saint-dance 50/50, unit-a6/song-fx 45/45; CI 4 shards บน PR; harness ของ audit after 160/160 (state=resolver, snapshot คงเดิม, pageerror 0), คลิปจริง 9 คู่ก่อน/หลัง — SwiftShader ไม่ใช่มือถือจริง/iOS
+- ข้อระวัง: worktree ของ subagent อยู่ใต้ `.claude/worktrees/` ทำให้ `npm run lint` ที่ root เห็นไฟล์ซ้ำ ใช้ `--ignore-pattern '.claude/**'` หรือลบ worktree; dev server port 5173 อาจถูกใช้ร่วม ใช้ config port แยก
+
 ## 2026-10-29 — Claude: แก้ Aegis หัวโต/ตัวเปลี่ยนสัดส่วน (พักเฟรม A2 + brief Codex วาดใหม่)
 
 - ขอบเขต: เจ้าของสั่งระหว่างงาน “แก้ไขแค่ Aegis พอ อย่างอื่นไม่ต้อง” จึงแก้เฉพาะ Aegis; Vargoth และตัวอื่นไม่แตะ
@@ -129,6 +139,11 @@ Claude ต้องจัด before/after clips จาก runtime: 320×568, 390
 - ตรวจ PR #94/#96/#97/#98/#105–#109 ผ่าน GitHub metadata ว่าเป็น art-only และยังเปิดอยู่ ไม่ได้ตรวจ decode/hash/ภาพซ้ำในรอบนี้
 - ตรวจเอกสารและ whitespace เท่านั้น งานนี้ไม่มี production code เปลี่ยน ไม่รัน npm/Playwright ไม่สร้างภาพ/คลิปใหม่ ไม่เปลี่ยน owner decision
 - เอกสาร handoff นี้ถูกเพิ่มที่ต้นไฟล์โดยรักษาประวัติทั้งหมดด้านล่าง; ไม่มี PR/merge ใหม่ บันทึก commit ส่งต่อไว้ในคำตอบของแชต
+## 2026-10-29 — Claude: W4 A6 + เพลง/เงา นำเข้าแล้ว รอเจ้าของอนุมัติ motion
+
+- A6 (#94) และ song/shadow (#96) นำเข้าบน `claude/unit-a6-song-shadow-vfx` ตามที่เจ้าของเลือก “ใช้ตาม codex แนะนำ” (เพลง R2, เงา R1, Sefa low stab R2, Lio finale R2, sharp-strum/compact ribbon R1); sha256 ตรงทั้งหมด ไฟล์ดิบไม่ถูกแก้
+- ข้อเสนอแนะภาพรอบหน้า: ชั้นพื้นของ valor/solo/evade บางเกินไปเมื่อวางหลังตัวที่ความกว้างแนะนำ — ถ้าเจ้าของไม่พอใจ ขอวงแหวน/ควันที่เส้นหนาและเข้มขึ้น (ขอบนอกเลยตัวละคร) และ dread ในเกมเป็นเพลงสถานะทั้งสนาม ไม่ใช่โจมตีเป้าเดียว ควรวาดคลื่นกว้างที่ไม่ลงเป็นสัมผัสโจมตี
+- รายละเอียด: [A6](../combat-presentation/unit-a6-slice/README_TH.md), [เพลง/เงา](../combat-presentation/song-shadow-slice/README_TH.md)
 
 ## 2026-10-29 — Codex: ตรวจ Skills ที่ Claude ติดตั้ง
 

@@ -1,0 +1,11 @@
+{
+ "id": "counter-garran-brace",
+ "status": "captured",
+ "clickOffset": 0.3079991340637207,
+ "sourceFrames": 44,
+ "decodedFrames": 45,
+ "maxTimestampError": 5.937438964820352e-06,
+ "maxFrameGap": 0.19822096824645996,
+ "sameState": true,
+ "saveStable": true
+}
