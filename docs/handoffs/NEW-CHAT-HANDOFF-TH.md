@@ -1,8 +1,8 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
-## 2026-10-30 — งานแก้ audit AV02–AV08 อยู่ PR #113 (รอเจ้าของดู motion)
+## 2026-10-30 — งานแก้ audit AV02–AV08 merged (PR #113 `42e7e6f`, เจ้าของอนุมัติ)
 
-ผลรายข้อ/หลักฐาน: `docs/validation/animation-vfx-audit-fixes-2026-10-30/README_TH.md` · ค้าง: brief Codex `CODEX-AV02-LYRA-GESTURES-TH.md` และ `CODEX-A7-DANCER-REDRAW-TH.md` (ยังไม่ส่ง), การเลือก candidate ตามสมมติฐาน (A7 ตาม Codex, Saint/Dance R1, song R2 vs R3 #111), owner motion approval ทุกชุด; PR #110 รวมเข้า #113 แล้ว
+งานถัดไปที่พร้อม: นำ Aegis A2-002 (PR #112 ผ่านด่านสัดส่วนแล้ว) เข้าเกม + ยก `anatomyHold` + คลิป 390px ให้เจ้าของดู (งานอัศวินแยก, ใช้ skill `fateweave-art-intake`); รอ Codex ส่ง LYRA-002 / A7-002. ข้อมูลเดิม: ผลรายข้อ/หลักฐาน: `docs/validation/animation-vfx-audit-fixes-2026-10-30/README_TH.md` · ค้าง: brief Codex `CODEX-AV02-LYRA-GESTURES-TH.md` และ `CODEX-A7-DANCER-REDRAW-TH.md` (ยังไม่ส่ง), การเลือก candidate ตามสมมติฐาน (A7 ตาม Codex, Saint/Dance R1, song R2 vs R3 #111), owner motion approval ทุกชุด; PR #110 รวมเข้า #113 แล้ว
 
 ## 2026-10-29 — แก้ Aegis หัวโต/ตัวเปลี่ยนสัดส่วน (พักเฟรม A2 + brief Codex วาดใหม่)
 

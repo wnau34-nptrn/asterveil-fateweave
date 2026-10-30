@@ -21,7 +21,7 @@
 | AV07 boss charge/release/phase/summon | **แก้แล้ว** (รอเจ้าของดู motion) | ART-VFX-BOSS-SIGNATURE-001 + hold ค้างจาก state จริง แยกรูปทรง, ล้างตาม lifecycle, คืนหลัง reload/resize |
 | AV08 caption / down | **แก้แล้ว** | caption หลบหน้า/HP/ป้ายชื่อ/ตัวอื่นจาก bounds จริง; ตัวที่ล้มเห็นท่าล้มเต็มก่อนจางภายในเวลาเดิม |
 
-ทุกข้อ **ยังไม่ยืนยันบนมือถือจริง/iOS Safari** (Chromium SwiftShader เท่านั้น) และ **ยังไม่ได้รับการอนุมัติ motion จากเจ้าของ** ผลเทสต์/CI ไม่ใช่การอนุมัติ
+ทุกข้อ **ยังไม่ยืนยันบนมือถือจริง/iOS Safari** (Chromium SwiftShader เท่านั้น) — **เจ้าของอนุมัติ motion และ candidate ตามสมมติฐานด้วย “อนุมัติ” เมื่อ 2026-10-30** (อนุมัติตรง ไม่อนุมานจากเทสต์); PR #113 merged `42e7e6f` หลัง CI ผ่าน
 
 ## หลักฐานราย finding
 
@@ -82,6 +82,6 @@ after-capture ครอบคลุม 160 กรณี (62 กรณีเท�
 
 ## งานค้าง / ส่งต่อ
 
-1. Codex: brief AV02 (Lyra Mark/Parry stance) และ A7-002 (Lalin/Wila) — ยังไม่ส่ง
-2. เจ้าของ: เลือก/ยืนยัน candidate ที่ใช้ตามสมมติฐาน (A7 ตาม Codex แนะนำ, Saint/Dance R1, Song R2 vs R3 #111) และดู motion ทุกชุดก่อนถือว่าผ่าน
+1. Codex: brief AV02 (Lyra Mark/Parry stance) และ A7-002 (Lalin/Wila) — prompt ส่งให้เจ้าของแล้ว ยังไม่มี PR
+2. ~~เจ้าของยืนยัน candidate/motion~~ อนุมัติแล้ว 2026-10-30; Song R3 (#111) ยังเปิดเป็นทางเลือก
 3. Rift Bolt/Veil Quake โทนมืดบนศัตรูมืด, ribbon ของนักระบำยืดยาวเมื่ออยู่ช่องบน, Rounddance/Deepbeat จาง — ข้อสังเกตจาก slice ที่ควรให้เจ้าของดู

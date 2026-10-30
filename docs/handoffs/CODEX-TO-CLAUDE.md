@@ -1,6 +1,10 @@
 # Codex → Claude handoff
 
-## 2026-10-30 — Claude: แก้ animation/VFX ตาม audit AV02–AV08 (ยกเว้นอัศวิน) + นำภาพ W4–W8 เข้าเกม — PR #113 (draft, รอเจ้าของดู motion)
+## 2026-10-30 — Claude: แก้ animation/VFX ตาม audit AV02–AV08 (ยกเว้นอัศวิน) + นำภาพ W4–W8 เข้าเกม — PR #113 merged `42e7e6f`
+
+- **เจ้าของอนุมัติ 2026-10-30** (“อนุมัติและทำการตรวจสอบ codex ที่ส่งเข้ามา”) = อนุมัติ motion ทุกชุดใน #113 และสมมติฐานการเลือก candidate (A7 ตาม Codex, Saint/Dance R1, song R2); CI quality + browser 4 shards ผ่านบน `8826e45` แล้ว merge เป็น `42e7e6f` (Pages เผยแพร่จาก push นี้)
+- ตรวจงาน Codex ที่ส่งเข้ามา: มีใหม่เพียง PR #112 ART-UNIT-ANIMATION-A2-002 (Aegis วาดใหม่ 25 ท่า) — sha256 64 รายการตรง, 26 cell 512×512, 000 = seed ตรงไบต์, `unit-anatomy-audit.py --cells` ของ Claude: median 0.982 ไม่มี drift, 023 (ท่านอน) not-measured แต่ตรวจด้วยตาแล้วสัดส่วนหัวใกล้ seed ไม่มีอาวุธซ้อน → **ผ่านด่านสัดส่วน**; การ pack + ยก `anatomyHold` เป็นงานอัศวินแยก (ไม่ทำในงานนี้ตามขอบเขต) และต้องมีคลิป 390px ให้เจ้าของดูก่อน
+- prompt LYRA-002 และ A7-002 ส่งให้เจ้าของแล้ว ยังไม่มี PR จาก Codex; R3 song (#111) ยังรอเลือก
 
 - สาขา `claude/av-audit-fixes` จาก `7857482` (Aegis hold คงไว้ ไม่แตะภาพ/mapping/normalization ของอัศวิน); รายงานรายข้อ + หลักฐาน runtime 390px ก่อน/หลัง: [`docs/validation/animation-vfx-audit-fixes-2026-10-30/README_TH.md`](../validation/animation-vfx-audit-fixes-2026-10-30/README_TH.md)
 - **แก้แล้ว:** AV03 (Mira ลูกธนู/Toma ขวด ไม่ใช่ดาบ), AV04 (flight เริ่มที่เฟรมปล่อย `RELEASE_AT` .55 จากปลายลูกธนู/มือที่วัดจริง), AV05 (FILL ขาว → ADD lift), AV07 (boss-signature atlas + hold ค้างจาก state จริง แยกรูปทรง unstoppable/normal, ล้างที่ release/interrupt/down/phase, คืนหลังโหลด/resize; caption รวบรวมพลังย้ายจากฮีโร่ไปที่บอส), AV08 (caption หลบหน้า/HP/ชื่อจาก bounds จริง; ท่าล้มเต็มก่อนจาง)
