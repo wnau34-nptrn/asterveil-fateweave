@@ -1,5 +1,7 @@
 # ผลตรวจ animation และ VFX ครบ catalog ปัจจุบัน — 2026-10-29
 
+> **สถานะหลังแก้ (2026-10-30):** ดู [ผลแก้ AV02–AV08](../animation-vfx-audit-fixes-2026-10-30/README_TH.md) — AV03/04/05/07/08 แก้แล้ว, AV02/AV06 บางส่วน (brief Codex ค้าง), AV01 แยกงานอัศวิน รายงานด้านล่างคงเป็นหลักฐานก่อนแก้
+
 **ผล: ยังมีจุดต้องแก้ ไม่ใช่ผ่านคุณภาพทั้งเกม** รอบนี้รัน renderer จริงครบ 36 visual identities (14 ฝ่ายเรา / 22 ศัตรู), 73 ActionIds และ 36 ชื่อ intent / 48 รูปแบบเมื่อแยก phase, charge, AoE และ unstoppable บนสาขา `feature/fateweave-initial-prototype` source `157d6855808edbcf055929cd00f1e0b1dbfea91e` ไม่ใช่การอ่านโค้ดหรือ atlas อย่างเดียว
 
 เริ่มอ่าน [งานส่งต่อ Claude](CLAUDE_HANDOFF_TH.md), [ตารางรายตัว/รายท่า](COVERAGE_TH.md), [CSV](coverage.csv), [ข้อมูลเฟรม/events](coverage.json), [ผลตรวจการบันทึก](validation.json) และ [บัญชีคลิป](CLIPS_TH.md)

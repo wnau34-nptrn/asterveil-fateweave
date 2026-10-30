@@ -1,0 +1,1122 @@
+[
+ {
+  "id": "counter-garran-brace",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "counter-garran-warcry",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "counter-guardian-guard",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "counter-tracer-parry",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "foe-brute-13",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "foe-brute-14",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "foe-foe_captain-42",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "foe-foe_captain-43--fast",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "foe-foe_captain-43--osreduce",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "foe-foe_captain-43--quiet",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "foe-foe_captain-43",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "foe-foe_golem-18",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "foe-foe_golem-38",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "foe-foe_golem-39",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "foe-foe_hunter-1--quiet",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "foe-foe_hunter-1",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "foe-foe_juggernaut-19",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "foe-foe_juggernaut-20--fast",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "foe-foe_juggernaut-20--osreduce",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "foe-foe_juggernaut-20--quiet",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "foe-foe_juggernaut-20",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "foe-foe_matriarch-33",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "foe-foe_matriarch-34",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "foe-foe_matriarch-35",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "foe-foe_matriarch-36",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "foe-foe_matriarch-8",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "foe-foe_matriarch-9",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "foe-foe_mycon-7--fast",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "foe-foe_mycon-7--osreduce",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "foe-foe_mycon-7--quiet",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "foe-foe_mycon-7",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "foe-foe_rift_channeler-17",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "foe-foe_rift_channeler-47",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "foe-foe_rift_wisp-21",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "foe-foe_riftweaver-15",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "foe-foe_riftweaver-16",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "foe-foe_riftweaver-37",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "foe-foe_sentinel-23",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "foe-foe_sentinel-24",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "foe-foe_sentinel-25",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "foe-foe_sentinel-26",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "foe-foe_sentinel-27",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "foe-foe_sentinel-28",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "foe-foe_sentinel-29",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "foe-foe_sentinel-30",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "foe-foe_shard_crawler-22",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "foe-foe_spore_puff-31",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "foe-foe_sprite-4--fast",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "foe-foe_sprite-4--osreduce",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "foe-foe_sprite-4--quiet",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "foe-foe_sprite-4",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "foe-foe_tusker-32--fast",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "foe-foe_tusker-32--osreduce",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "foe-foe_tusker-32--quiet",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "foe-foe_tusker-32",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "foe-raider-11",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "foe-raider-12",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "hero-brann-taunt",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "hero-guardian-guard",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "hero-lalin-attack",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "hero-lalin-cadence",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "hero-lalin-closingstep",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "hero-lalin-deepbeat",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "hero-lalin-duet",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "hero-lalin-echofoot",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "hero-lalin-rounddance",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "hero-lio-attack",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "hero-lio-dread",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "hero-lio-finale",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "hero-lio-mend",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "hero-lio-note",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "hero-lio-solo",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "hero-lio-valor",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "hero-metta-attack",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "hero-metta-communion",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "hero-metta-lastlight",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "hero-metta-saintarc",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "hero-metta-saintstrike",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "hero-metta-sharewound",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "hero-metta-vowstrike",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "hero-mira-attack--fast",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "hero-mira-attack--osreduce",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "hero-mira-attack--quiet",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "hero-mira-attack",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "hero-mira-disengage",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "hero-mira-hinder",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "hero-mira-volley",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "hero-sefa-ambush",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "hero-sefa-attack",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "hero-sefa-backstab",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "hero-sefa-decoy",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "hero-sefa-disarm",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "hero-sefa-evade",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "hero-sefa-knives",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "hero-thiran-attack",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "hero-thiran-communion",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "hero-thiran-lastlight",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "hero-thiran-saintarc",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "hero-thiran-saintstrike",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "hero-thiran-sharewound",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "hero-thiran-vowstrike",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "hero-toma-attack--fast",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "hero-toma-attack--osreduce",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "hero-toma-attack--quiet",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "hero-toma-attack",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "hero-tracer-finisher",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "hero-tracer-lunge",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "hero-tracer-mark",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "hero-tracer-parry",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "hero-tracer-sweep",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "hero-wila-attack",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "hero-wila-cadence",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "hero-wila-closingstep",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "hero-wila-deepbeat",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "hero-wila-duet",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "hero-wila-echofoot",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "hero-wila-rounddance",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "phase-elite-briar-lord-0",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "phase-rift-warden-0",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "phase-rift-warden-1",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "phase-vanguard-captain-0",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "react-brann-down",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "react-brute-down",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "react-brute-hit",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "react-foe_captain-down",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "react-foe_captain-hit",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "react-foe_golem-down",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "react-foe_golem-hit",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "react-foe_juggernaut-down",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "react-foe_juggernaut-hit",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "react-foe_matriarch-down",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "react-foe_matriarch-hit",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "react-foe_rift_channeler-down",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "react-foe_rift_channeler-hit",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "react-foe_rift_wisp-down",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "react-foe_rift_wisp-hit",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "react-foe_riftweaver-down",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "react-foe_riftweaver-hit",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "react-foe_sentinel-down",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "react-foe_sentinel-hit",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "react-foe_shard_crawler-down",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "react-foe_shard_crawler-hit",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "react-foe_spore_puff-down",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "react-foe_spore_puff-hit",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "react-healer-down",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "react-lalin-down",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "react-lalin-hit",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "react-lio-down",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "react-lio-hit",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "react-metta-down",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "react-metta-hit",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "react-raider-down",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "react-raider-hit",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "react-sefa-down",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "react-sefa-hit",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "react-thiran-down",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "react-thiran-hit",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "react-tracer-down",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "react-wila-down",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ },
+ {
+  "id": "react-wila-hit",
+  "status": "captured",
+  "sameState": true,
+  "saveStable": true,
+  "pageErrors": []
+ }
+]

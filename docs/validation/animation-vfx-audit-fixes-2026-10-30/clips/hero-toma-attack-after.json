@@ -1,0 +1,11 @@
+{
+ "id": "hero-toma-attack",
+ "status": "captured",
+ "clickOffset": 0.3103339672088623,
+ "sourceFrames": 44,
+ "decodedFrames": 45,
+ "maxTimestampError": 5.042205810656952e-06,
+ "maxFrameGap": 0.19716596603393555,
+ "sameState": true,
+ "saveStable": true
+}

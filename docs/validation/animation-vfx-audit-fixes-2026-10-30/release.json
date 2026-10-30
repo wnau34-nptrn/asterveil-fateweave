@@ -1,0 +1,276 @@
+{
+ "briar": {
+  "rest": [
+   {
+    "id": "f1",
+    "frame": "thorn-tempest_prepare",
+    "kind": "unstoppable",
+    "texture": "graphics",
+    "alpha": 1
+   }
+  ],
+  "stages": [
+   {
+    "k": 0,
+    "actor": "healer",
+    "intent": "Thorn Pounce",
+    "cue": "prepare",
+    "hold": [
+     "thorn-tempest_prepare"
+    ]
+   },
+   {
+    "k": 0,
+    "actor": "healer",
+    "intent": "Thorn Pounce",
+    "cue": "impact",
+    "hold": [
+     "thorn-tempest_prepare"
+    ]
+   },
+   {
+    "k": 1,
+    "actor": "tracer",
+    "intent": "Thorn Pounce",
+    "cue": "prepare",
+    "hold": [
+     "thorn-tempest_prepare"
+    ]
+   },
+   {
+    "k": 1,
+    "actor": "tracer",
+    "intent": "Thorn Pounce",
+    "cue": "impact",
+    "hold": [
+     "thorn-tempest_prepare"
+    ]
+   },
+   {
+    "k": 1,
+    "actor": "f2",
+    "intent": "Thorn Pounce",
+    "cue": "prepare",
+    "hold": [
+     "thorn-tempest_prepare"
+    ]
+   },
+   {
+    "k": 1,
+    "actor": "f2",
+    "intent": "Thorn Pounce",
+    "cue": "impact",
+    "hold": [
+     "thorn-tempest_prepare"
+    ]
+   },
+   {
+    "k": 2,
+    "actor": "weaver",
+    "intent": "Spore Dust",
+    "cue": "prepare",
+    "hold": [
+     "thorn-tempest_prepare"
+    ]
+   },
+   {
+    "k": 2,
+    "actor": "weaver",
+    "intent": "Spore Dust",
+    "cue": "impact",
+    "hold": [
+     "thorn-tempest_prepare"
+    ]
+   },
+   {
+    "k": 2,
+    "actor": "b1",
+    "intent": "Spore Dust",
+    "cue": "prepare",
+    "hold": [
+     "thorn-tempest_prepare"
+    ]
+   },
+   {
+    "k": 2,
+    "actor": "b1",
+    "intent": "Spore Dust",
+    "cue": "impact",
+    "hold": [
+     "thorn-tempest_prepare"
+    ]
+   },
+   {
+    "k": 3,
+    "actor": "guardian",
+    "intent": "Thorn Tempest",
+    "cue": "prepare",
+    "hold": [
+     "thorn-tempest_prepare"
+    ]
+   },
+   {
+    "k": 3,
+    "actor": "guardian",
+    "intent": "Thorn Tempest",
+    "cue": "impact",
+    "hold": [
+     "thorn-tempest_prepare"
+    ]
+   },
+   {
+    "k": 3,
+    "actor": "f1",
+    "intent": "Thorn Tempest",
+    "cue": "prepare",
+    "hold": [
+     "thorn-tempest_prepare"
+    ]
+   },
+   {
+    "k": 3,
+    "actor": "f1",
+    "intent": "Thorn Tempest",
+    "cue": "impact",
+    "hold": []
+   }
+  ],
+  "released": true,
+  "final": [],
+  "errors": []
+ },
+ "warden-skip": {
+  "rest": [
+   {
+    "id": "f1",
+    "frame": "rift-cataclysm_prepare",
+    "kind": "unstoppable",
+    "texture": "graphics",
+    "alpha": 1
+   }
+  ],
+  "stages": [
+   {
+    "k": 0,
+    "actor": "healer",
+    "intent": "Star Flame",
+    "cue": "prepare",
+    "hold": [
+     "rift-cataclysm_prepare"
+    ]
+   },
+   {
+    "k": 0,
+    "actor": "healer",
+    "intent": "Star Flame",
+    "cue": "impact",
+    "hold": [
+     "rift-cataclysm_prepare"
+    ]
+   },
+   {
+    "k": 1,
+    "actor": "tracer",
+    "intent": "Star Flame",
+    "cue": "prepare",
+    "hold": [
+     "rift-cataclysm_prepare"
+    ]
+   },
+   {
+    "k": 1,
+    "actor": "tracer",
+    "intent": "Star Flame",
+    "cue": "impact",
+    "hold": [
+     "rift-cataclysm_prepare"
+    ]
+   },
+   {
+    "k": 1,
+    "actor": "b1",
+    "intent": "Star Flame",
+    "cue": "prepare",
+    "hold": [
+     "rift-cataclysm_prepare"
+    ]
+   },
+   {
+    "k": 1,
+    "actor": "b1",
+    "intent": "Star Flame",
+    "cue": "impact",
+    "hold": [
+     "rift-cataclysm_prepare"
+    ]
+   },
+   {
+    "k": 1,
+    "actor": "b2",
+    "intent": "Star Flame",
+    "cue": "prepare",
+    "hold": [
+     "rift-cataclysm_prepare"
+    ]
+   },
+   {
+    "k": 1,
+    "actor": "b2",
+    "intent": "Star Flame",
+    "cue": "impact",
+    "hold": [
+     "rift-cataclysm_prepare"
+    ]
+   },
+   {
+    "k": 2,
+    "actor": "weaver",
+    "intent": "Rift Cataclysm",
+    "cue": "prepare",
+    "hold": [
+     "rift-cataclysm_prepare"
+    ]
+   },
+   {
+    "k": 2,
+    "actor": "weaver",
+    "intent": "Rift Cataclysm",
+    "cue": "impact",
+    "hold": [
+     "rift-cataclysm_prepare"
+    ]
+   },
+   {
+    "k": 3,
+    "actor": "guardian",
+    "intent": "Rift Cataclysm",
+    "cue": "prepare",
+    "hold": [
+     "rift-cataclysm_prepare"
+    ]
+   },
+   {
+    "k": 3,
+    "actor": "guardian",
+    "intent": "Rift Cataclysm",
+    "cue": "impact",
+    "hold": [
+     "rift-cataclysm_prepare"
+    ]
+   },
+   {
+    "k": 3,
+    "actor": "f1",
+    "intent": "Rift Cataclysm",
+    "cue": "prepare",
+    "hold": [
+     "rift-cataclysm_prepare"
+    ]
+   }
+  ],
+  "skipped": true,
+  "released": true,
+  "final": [],
+  "errors": []
+ }
+}

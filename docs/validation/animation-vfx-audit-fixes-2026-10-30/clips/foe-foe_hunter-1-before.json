@@ -1,0 +1,11 @@
+{
+ "id": "foe-foe_hunter-1",
+ "status": "captured",
+ "clickOffset": 0.11169004440307617,
+ "sourceFrames": 74,
+ "decodedFrames": 75,
+ "maxTimestampError": 5.992370605500952e-06,
+ "maxFrameGap": 0.09583210945129395,
+ "sameState": true,
+ "saveStable": true
+}

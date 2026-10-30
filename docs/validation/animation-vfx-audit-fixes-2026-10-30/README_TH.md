@@ -39,10 +39,10 @@ finisher/sweep/lunge ก่อน = frame 0 ตลอด → หลัง 1→2�
 ### AV05 — [av05-before-after.jpg](av05-before-after.jpg), [av05-generic-lift.jpg](av05-generic-lift.jpg)
 ก่อน: Aegis/องครักษ์กลายเป็นเงาขาวที่ contact+35ms · หลัง: หน้า/เกราะอ่านได้ (Seed Spark/Spore Hex ด้วยชั้น foe signature, Saintstrike ด้วย saint layer) และ route generic ที่ยังเหลือ (Shadow Knife) ใช้ lift ม่วงอ่อน ลดลงใน quiet
 
-### AV07 — [av07-hold.jpg](av07-hold.jpg), [av07-release.jpg](av07-release.jpg), [av07-charge-caption.jpg](av07-charge-caption.jpg), [hold.json](hold.json), [release.json](release.json)
+### AV07 — [av07-hold.jpg](av07-hold.jpg), [av07-release.jpg](av07-release.jpg), [av07-charge-caption.jpg](av07-charge-caption.jpg), [release.json](release.json)
 - hold ใช้ไฟล์ทดสอบชั่วคราวที่ขับ encounter จริง (Briar Lord, Rift Warden) ผ่าน resolver จนบอสรวบพลังเสร็จ (harness ของ audit ใช้ cycle ท่าเดียวจึงไม่มี release ให้รอ — ผลไม่มี hold ในกรณีนั้นถูกต้อง)
 - Briar: วงเล็บหนามแข็ง (Thorn Tempest prepare = unstoppable) หน้าอกฝั่งฮีโร่ ไม่ทับหน้า/ชื่อ/HP; Warden: วงเล็บผลึก Cataclysm
-- ค้างทุก stage ของตัวอื่น 4 คำสั่ง (`release.json`), อยู่ระหว่าง prepare ของ release, **ล้างที่ impact** ของ Tempest; Warden กด skip ระหว่าง prepare → ล้าง; reload/resize 360px → คืน; OS reduce → นิ่ง; atlas ยังไม่โหลด → วงเล็บวาดด้วยโค้ดแล้วเปลี่ยนเป็นภาพเมื่อโหลดเสร็จ
+- ค้างทุก stage ของตัวอื่น 4 คำสั่ง (`release.json`), อยู่ระหว่าง prepare ของ release, **ล้างที่ impact** ของ Tempest; Warden กด skip ระหว่าง prepare → ล้าง; หน้าโหลดใหม่ทุกครั้งสร้าง hold จาก state (ภาพ rest ทุกภาพคือการโหลดหน้าใหม่) และ resize 360px → คืน; OS reduce → นิ่ง; atlas ยังไม่โหลด → วงเล็บวาดด้วยโค้ดแล้วเปลี่ยนเป็นภาพเมื่อโหลดเสร็จ
 - release: ลมหนามหนึ่งชุดต่อฮีโร่ที่โดนจริงเท่านั้น; HUD banner เดิมคงอยู่
 - แก้เพิ่มที่พบ: caption “รวบรวมพลัง” เคยไปอยู่ที่ฮีโร่ (เป้าในนาม) ตอนนี้อยู่ที่บอส (`av07-charge-caption.jpg`)
 - unit tests: hold เฉพาะช่วง charge→release, interrupt/down/absent ล้าง, Horn Charge/Stampede ไม่มี hold, War Cry ไม่ใช่ buff และผู้รับ = event จริง, phase/charge ไม่มี damage
@@ -65,7 +65,7 @@ Brann Taunt: ก่อน “ยั่วยุ” บนหน้า → หล
 | VFX saintstrike…closingstep 12 ท่า | painted R1 (Claude เลือกแทน: Codex ไม่ระบุ) route ตาม event จริง; บางเลเยอร์ไม่ใช้เพราะไม่มี event รองรับ | [saint-dance](../../combat-presentation/saint-dance-slice/README_TH.md) |
 | ท่าพลังงานศัตรู 10 ท่า | painted (PR #105) | [foe-signature](../../combat-presentation/foe-signature-slice/README_TH.md) |
 
-after-capture ครอบคลุม 158 กรณี (62 กรณีเทียบ before + ทุก action/intent/hit/down ของ 18 ตัว AV06) captured 158/158 ดู [`after-results.json`](after-results.json)
+after-capture ครอบคลุม 160 กรณี (62 กรณีเทียบ before + ทุก action/intent/hit/down ของ 18 ตัว AV06) captured 160/160 (state = resolver, snapshot คงเดิม, pageerror 0) ดู [`after-results.json`](after-results.json)
 
 งบภาพ (OD-05): atlas ตัวละคร decoded แย่สุดต่อ encounter ≈32.5 MiB (ฮีโร่ 4 ตัวใหญ่สุด + ศัตรู vanguard-captain) / ≈36.9 MiB ถ้าทีม 5; atlas VFX boss (8.5 MiB) / foe signature (7 MiB) / saint-dance โหลดเฉพาะ encounter ที่ใช้
 
