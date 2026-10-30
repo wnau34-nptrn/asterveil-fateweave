@@ -1,5 +1,11 @@
 # Codex → Claude handoff
 
+## 2026-10-30 — เจ้าของอนุมัติภาพนิ่ง PR #120 (โอดราน/อิโซลด์) และสั่ง prompt A7-003
+
+- Claude ตรวจ PR #120 ผ่าน: Isolde หัว ≈157px, ตัว 460px, ratio 0.34, ยืนสองเท้าที่ y496; Odran และ portrait/อาวุธตรง #118 ทุกไบต์; atlas เปลี่ยนเฉพาะ 7/9, 2.48MB (เดิม 2.51MB); hash 20 ไฟล์ตรง
+- เจ้าของ: “อนุมัติ ขอ Prompt สร้าง animation เลย” → prompt ART-UNIT-ANIMATION-A7-003 (seed จาก #120 พร้อม sha) อยู่ `CODEX-ART-QUEUE-TH.md` ข้อ 29 prompt 2
+- นำภาพนิ่งเข้าเกมคู่ขนานในแชต `claude/odran-isolde-redesign` (ถอด thiran/wila A7 เดิมพร้อมกัน, ปิด #118/#120 หลัง merge)
+
 ## 2026-10-30 — Claude ตรวจ PR #118 ART-CHAR-REDESIGN-001: โอดรานผ่าน อิโซลด์ต้องแก้
 
 - เทคนิคผ่าน: hash 33 ไฟล์ตรง; atlas เปลี่ยนเฉพาะ mercs 7/9 และ gear (6,0)/(6,1) ที่เหลือตรงทุกพิกเซลกับเกมปัจจุบัน; ขนาดไม่เพิ่ม (units_mercs 2.45MB/เดิม 2.51MB, portraits 3.69MB/3.82MB, gear 0.98MB/0.99MB)

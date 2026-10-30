@@ -810,22 +810,47 @@ Provenance: do NOT store base64 image data in JSON (PR #118's provenance/generat
 Acceptance (Claude checks before owner review): head 145–165px, body 440–460px, ratio 0.32–0.36, both feet touching y≈496, untouched atlas cells pixel-identical, Odran byte-identical to PR #118, file sizes not larger than the current atlases. Push with normal git, fetch back, verify every SHA-256 and decode every image with Pillow. Owner visual approval is required; CI or these checks are not approval. No merge, no runtime integration.
 ```
 
-### prompt 2 — ชุดท่า A7-003 (ส่งหลังเจ้าของผ่านภาพนิ่งและ Claude นำเข้าเกมแล้ว)
+### prompt 2 — ชุดท่า A7-003 (เจ้าของอนุมัติภาพนิ่ง PR #120 และสั่งส่งทันที 2026-10-30)
+
+เจ้าของ: “อนุมัติ ขอ Prompt สร้าง animation เลย” — seed ใช้ไฟล์จาก PR #120 ได้เลย ไม่ต้องรอ Claude นำเข้าเกม (Claude นำภาพนิ่งเข้าเกมคู่ขนาน ตัวเลข/พิกเซลต้องตรง sha ด้านล่าง)
 
 ```text
-CODEX HANDOFF — ART-UNIT-ANIMATION-A7-003
-Asterveil · Fateweave: battle animation strips for the redesigned Odran (thiran) and Isolde (wila)
+CODEX HANDOFF — ART-UNIT-ANIMATION-A7-003 (art only)
+Asterveil · Fateweave: battle body animation strips for the redesigned Odran (id thiran, Saint) and Isolde (id wila, Dancer)
 
-Repository wnau34-nptrn/asterveil-fateweave, base branch feature/fateweave-initial-prototype (after ART-CHAR-REDESIGN-001 is integrated). Branch art/art-unit-animation-a7-003. Files only under incoming/ART-UNIT-ANIMATION-A7-003/. Do not change src/, tests/, public/, .github/ or earlier incoming folders. PR into the base branch; do not merge. Original artwork only. Never use the word ม่านเวล.
+Read AGENTS.md, CLAUDE.md, docs/handoffs/ANIMATION_PROMPT_QUALITY_TH.md and docs/handoffs/CODEX-A7-DANCER-REDRAW-TH.md first. Repository wnau34-nptrn/asterveil-fateweave, base branch feature/fateweave-initial-prototype (not main). Create branch art/art-unit-animation-a7-003. Add files only under incoming/ART-UNIT-ANIMATION-A7-003/. Do not change src/, tests/, public/, .github/, existing art or earlier incoming folders. Open a PR into the base branch; do not merge. Original artwork only; nothing from Asterveil: Rise Beyond. Never use the word ม่านเวล.
 
-SEED: the integrated idle cells units_mercs frame 7 (thiran = Odran) and frame 9 (wila = Isolde). Every frame must keep that exact face, costume, implement and the SAME head size relative to the body as the seed. Do not use the old A7-001 thiran/wila strips or Corin/Cerise as image input; reuse only their move list, frame counts and packaging (incoming/ART-UNIT-ANIMATION-A7-001/moves.json, strips.json, build_assets.py) and the A7-002 anatomy rules (docs/handoffs/CODEX-A7-DANCER-REDRAW-TH.md).
+SEEDS (owner-approved 2026-10-30; fetch branch art/art-char-redesign-002, PR #120):
+- Odran: incoming/ART-CHAR-REDESIGN-002/unit/odran.png  sha256 ca7a30b361eb8e7fd8764cacfd7e56b7cd3f13d3a701586b0b7ee54a92a61ccf
+- Isolde: incoming/ART-CHAR-REDESIGN-002/unit/isolde.png sha256 e6d80253147ac8b0cd52edae6c211417fb30779b89b2524963ee724f12b530ba
+Verify both hashes before use and copy them byte-for-byte into seeds/. 512×512 RGBA, facing right, sole on y496 (logical ground y497), head (hair top → chin) Odran ≈ as seed, Isolde ≈157px, head/body ≈0.34. Every frame keeps that exact face, hair, costume, implement and the SAME head size relative to the body as the seed, including crouched, spinning and fallen frames (a lying body is as long as the standing seed). Do NOT give the generator the old A7-001 thiran/wila strips, Corin (metta) or Cerise (lalin) as image input; they are a different look.
 
-MOVES (same slots as the current runtime map in src/game/visuals/unit-frames.ts, so integration only swaps atlases)
-- Odran (Saint): attack (saintstrike/vowstrike), arc (saintarc, front-row sweep), communion (communion/sharewound, healing transfer gesture), lastlight; reactions hit, block, down (ends lying, does not get up). Moves grow from his guard stance: heavy gauntlet blows and shield-like blocks, never Corin's forward punch.
-- Isolde (Dancer): attack, partner (cadence/duet/deepbeat), circle (rounddance), closing (closingstep), echo (echofoot); reactions hit, block, down. Moves use her bell-staff (spins, sweeps, staff-tap rhythm), never fans or ribbons.
-- Attack moves 6 frames (2 prepare + 4 recover; lastlight 3+3), reactions 3–4 frames, right-facing, sole at y497 in the logical 512 cell, no VFX/particles/text baked in.
+MOVES — the slots match the runtime map in src/game/visuals/unit-frames.ts so integration only swaps the atlas. Actions: 6 frames, chronological, frame 1 = ready (seed pose), frames 2–3 prepare, frame 4 = contact, 5 follow-through, 6 = back to ready. Reactions: 4 frames, frame 1 = ready. Timing weights per frame (for previews only): actions 1, 1.2, .75, 1, .8, 1; reactions .8, 1, .9, 1.
 
-QUALITY GATE before delivery: python3 scripts/unit-anatomy-audit.py --cells on every strip (median head scale <= 1.15, no frame > 1.20). Do not deliver a failing strip as final; list it in NOTES.md instead.
+Odran — broad planted gatewright; every move grows out of his low guard with the hinge gauntlets; heavy, deliberate wind-up, weight absorbed through the legs. Never Corin's straight forward punch or tabard swing.
+1. attack (attack / saintstrike / vowstrike): ready → draw the large right gauntlet back low → drive a heavy hooking gauntlet blow forward-right → extended blow with planted feet → pull back into guard → ready
+2. arc (saintarc, sweep across the front row): ready → load shoulder and coil left → sweep the gauntlet forearm horizontally across his front → broad follow-through → unwind → ready
+3. communion (communion / sharewound, heal-transfer support): ready → bring both gauntlets together at the chest, head bowed → turn and open the left palm toward an ally behind him (screen left) → sustained open-palm offering → lower → ready
+4. lastlight (heavy finisher): ready → deep crouch, both gauntlets gathered low → drive a heavy rising two-handed blow → extended follow-through → lift out of the stance → ready
+5. hit: ready → recoil and wince, gauntlets still up → catch balance → ready
+6. block: ready → raise both gauntlets crossed like a gate → absorb the weight low → reset guard
+7. down: knees give way → one gauntlet and knee reach the ground → sink sideways → lie unconscious and hold (does not get up)
 
-DELIVERABLES: seeds/, raw strips, packed atlases + json in the A7-001 format, 390px previews against the seed, anatomy audit output, prompts.json, strips.json, NOTES.md.
+Isolde — narrow, light dancer with the bell-staff; moves are staff spins, sweeps and rhythmic staff taps on the ground. Never fans or ribbons; the short streamers stay attached to the bell cluster.
+1. attack (basic attack): ready → step back, staff drawn back → sweep the bell end forward-right → extended sweep → recover the staff upright → ready
+2. partner (cadence / duet / deepbeat, ally support): ready → tap the staff butt on the ground → half-turn toward an ally behind her (screen left) with the bells raised → bells held up, small sway → turn back → ready
+3. circle (rounddance, whole party): ready → crouch and swing the staff out → full turn with the staff circling around her body → staff completes the circle overhead → land the turn → ready
+4. closing (closingstep, finishing step): ready → light step forward-right → pivot on the front foot, staff raised high → bring the staff down to strike the ground in front → hold the strike → ready
+5. echo (echofoot): ready → lift one knee, staff upright → stamp the foot down while shaking the bells → second smaller stamp/echo → settle → ready
+6. hit: ready → recoil, staff pulled in → catch balance → ready
+7. block: ready → staff held across the body in both hands → absorb the weight low → reset
+8. down: knees give way → staff falls to her side → sink → lie unconscious and hold (does not get up)
+
+GENERATION: one whole continuous strip per move in a single edit request (never frame by frame), the seed attached as the model, transparent background, wide clear gutters between figures. One shared scale per character across all strips, equal to the seed; feet on the same ground line except intended airborne frames. Body only: no VFX, glows, particles, motion lines, shadows or text baked in. Allow room for the full staff and gauntlets; never crop the implement.
+
+QUALITY GATE before delivery: run python3 scripts/unit-anatomy-audit.py --cells on every strip against its seed (median head scale <= 1.15, every measured frame <= 1.20; inspect not-measured frames by eye and say so). Do not deliver a failing strip as final; regenerate it or list it as missing in NOTES.md. Supply R2 only where a move is genuinely ambiguous, and mark the recommended one.
+
+DELIVERABLES (same layout as incoming/ART-UNIT-ANIMATION-A7-001 and A7-002): seeds/ + seeds.json, raw/ (untouched generator strips), spaced/ and cells/<character>-<move>/000.png (seed) + 001…, <character>-preview-390.png comparing every frame with the seed at one scale, audits/ (audit JSON + stdout), prompts.json (exact prompts, references, generation ids — no base64 image data in JSON), strips.json (move → frames, slot order above, shared scale, offsets), validation.json + SHA256SUMS, NOTES.md (Claude handoff), build_handoff.py, verify_remote.py.
+
+Push with normal git, fetch back, verify every SHA-256 and decode every image with Pillow. Owner artwork selection and later in-game motion approval are required; offline checks and CI are not approval. No merge, no runtime integration (Claude packs the atlases, replaces the thiran/wila entries and captures real 390px clips).
 ```
