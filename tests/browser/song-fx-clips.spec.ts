@@ -3,7 +3,7 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 
 test.skip(process.env.SONG_CLIPS !== '1', 'separate actual-runtime capture only');
 const cases = [
- ...['valor','finale','dread','note','solo','evade','decoy'].flatMap(skill=>['normal','fast','reduced','osreduce'].map(mode=>({skill,song:'valor',mode}))),
+ ...(process.env.SONG_SKILLS?.split(',')??['valor','finale','dread','note','solo','evade','decoy']).flatMap(skill=>['normal','fast','reduced','osreduce'].map(mode=>({skill,song:'valor',mode}))),
  {skill:'finale',song:'mend',mode:'normal'},{skill:'finale',song:'dread',mode:'normal'},
 ].filter(c=>!process.env.SONG_CAPTURE_FILTER||`${c.skill}-${c.song}-${c.mode}`.includes(process.env.SONG_CAPTURE_FILTER));
 for (const { skill, song, mode } of cases) test(`song clip ${skill}-${song}-${mode}`, async ({ browser }, info) => {

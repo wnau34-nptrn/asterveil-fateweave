@@ -1325,3 +1325,8 @@ The column a hero stands in is now its lane in the rules (owner 2026-10-22, plan
 - In-game screenshot validation **pending**: the sandbox prevented the Playwright web server from starting; the request for network permission was cancelled. Browser extension automation tools were not exposed, so the repository's Playwright workflow was attempted.
 - Resume with `PLAYWRIGHT_CHROMIUM_EXECUTABLE=/usr/bin/chromium npm run test:browser -- --grep 'new Veil Frontier foes'` where a local server is permitted. Inspect `foes-thicket.png` on desktop and a portrait phone; confirm the Matriarch and Mycon face left, allies face right, and selecting/attacking the Matriarch still works.
 - No merge or deployment performed by Codex.
+
+
+## 2026-10-30 — ART-VFX-SONG-SHADOW-002 R3 integrated (awaiting owner motion approval)
+
+Branch `claude/song-shadow-r3`: R3 (21 layers, 7 moves; no note/decoy in R3 so those keep song R2 / shadow R1) packed with `incoming/ART-VFX-SONG-SHADOW-002/atlas.py`; 27-frame lossless atlas 4.66 MiB decoded / 0.90 MB. Evidence: `docs/combat-presentation/song-shadow-r3-slice/README_TH.md`. Feedback for Codex: evade at Sefa's feet is still thin against the scene; note/decoy are not redrawn in R3.
