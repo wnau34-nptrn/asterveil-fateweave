@@ -102,5 +102,5 @@ test('A10 late optional textures cannot replace artwork during a committed cast'
 });
 test('A10 loads only the sheets the encounter needs',async({page})=>{
  await page.setViewportSize({width:390,height:844});await ready(page,'foe=brute','brute');
- expect((await page.evaluate(()=>window.unitA10QA.cached())).sort()).toEqual(['unit-pilot-brute','unit-pilot-eira','unit-pilot-lyra']);
+ expect((await page.evaluate(()=>window.unitA10QA.cached())).sort()).toEqual(['unit-pilot-aegis','unit-pilot-brute','unit-pilot-eira','unit-pilot-lyra']);
 });
