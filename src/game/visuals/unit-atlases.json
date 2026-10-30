@@ -36,13 +36,13 @@
     "downloadBytes": 357984
   },
   "aegis": {
-    "image": "aegis_a2.1d12d3127841.webp",
-    "atlas": "aegis_a2.e88cd1ce5fe0.json",
-    "width": 1536,
-    "height": 720,
+    "image": "aegis_a2.2b9070aaeacc.webp",
+    "atlas": "aegis_a2.9136d3bfc15c.json",
+    "width": 1280,
+    "height": 699,
     "frames": 32,
-    "decodedBytes": 4423680,
-    "downloadBytes": 1397790
+    "decodedBytes": 3578880,
+    "downloadBytes": 1172543
   },
   "vargoth": {
     "image": "vargoth_a2.e00f4aba9301.webp",

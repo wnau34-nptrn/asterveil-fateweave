@@ -20,7 +20,7 @@ function seed(skill:boolean) {
  world.battle={kind:'random',encounterId:firstClash.id,entry:hp,commands:state.commands};return JSON.stringify({version:1,state:world});
 }
 async function open(page:Page,skill:boolean){
- const assets=Promise.all([atlasManifest.lyra,atlasManifest.hunter,atlasManifest.eira,atlasManifest.vargoth].flatMap(m=>[m.image,m.atlas]).map(name=>page.waitForResponse(r=>r.url().endsWith(name)&&r.ok()).then(r=>r.finished())));
+ const assets=Promise.all([atlasManifest.lyra,atlasManifest.hunter,atlasManifest.eira,atlasManifest.aegis,atlasManifest.vargoth].flatMap(m=>[m.image,m.atlas]).map(name=>page.waitForResponse(r=>r.url().endsWith(name)&&r.ok()).then(r=>r.finished())));
  await page.addInitScript(({raw,key})=>{localStorage.setItem(key,raw);},{raw:seed(skill),key});
  await page.clock.install({time:new Date('2026-10-26T00:00:00Z')});await page.goto('./');await page.locator('#continue').click();await assets;await page.clock.runFor(100);if(await page.locator('#start').count()){await expect(page.locator('#start')).toBeEnabled();await page.locator('#start').click();}else await expect(page.locator('#action-execute')).toBeEnabled();await page.clock.pauseAt(new Date('2026-10-26T01:00:00Z'));
 }

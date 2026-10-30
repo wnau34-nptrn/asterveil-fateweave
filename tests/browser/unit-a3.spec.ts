@@ -72,13 +72,12 @@ test('A3 real Spore Hex uses the Mycon release and returns to seed',async({brows
 for(const scenario of ['hurt','down','enemy-down','revive'])test(`A3 resolver-owned ${scenario} reaction and lifecycle`,async({browser},info)=>{
  const ctx=await browser.newContext({viewport:{width:390,height:844},reducedMotion:'no-preference'});
  try{const page=await ctx.newPage();await ready(page,`skill=attack&scenario=${scenario}`);
- // Aegis is on anatomy hold: the downed knight is the static seed, not an A2 collapsed frame.
- if(scenario==='revive')expect(await page.evaluate(()=>window.unitA3QA.frames().guardian!.map(f=>`${f.texture}:${f.frame}`))).toEqual(['battle-units:0']);
+ if(scenario==='revive')expect(await page.evaluate(()=>window.unitA3QA.frames().guardian![0]!.frame)).toBe('21');
  await cast(page,scenario==='revive'?'revive':'attack');
  await expect(page.locator('#skip-turn')).toBeHidden();
  // Down keeps the collapsed last frame; revive/hurt return to the seed pose.
  const id=scenario==='down'?'healer':scenario==='enemy-down'?'b1':scenario==='revive'?'guardian':'healer';
- await expect.poll(()=>page.evaluate(i=>String(window.unitA3QA.frames()[i]![0]!.frame),id)).toBe(scenario==='down'||scenario==='enemy-down'?'21':'0');
+ await expect.poll(()=>page.evaluate(i=>window.unitA3QA.frames()[i]![0]!.frame,id)).toBe(scenario==='down'||scenario==='enemy-down'?'21':'0');
  expect(await page.evaluate(()=>window.unitA3QA.state())).toEqual(await page.evaluate(()=>window.unitA3QA.expected()));
  await page.screenshot({path:info.outputPath(`${scenario}-390.png`)});
  }finally{await ctx.close();}
@@ -91,7 +90,7 @@ test('A3 late optional textures cannot replace artwork during a committed cast',
  await page.goto('tests/browser/fixtures/unit-a3.html?skill=attack');await page.locator('#start').click();
  await page.clock.pauseAt(new Date(Date.now()+100000));await cast(page,'attack');
  const committed=await saved(page);expect(await page.evaluate(()=>window.unitA3QA.frames().healer![0]!.texture)).toBe('battle-units');
- release();await expect.poll(()=>page.evaluate(()=>window.unitA3QA.cached().length)).toBe(3); // Aegis is on anatomy hold
+ release();await expect.poll(()=>page.evaluate(()=>window.unitA3QA.cached().length)).toBe(4);
  expect(await page.evaluate(()=>window.unitA3QA.frames().healer![0]!.texture)).toBe('battle-units');
  await page.clock.runFor(100);expect(await page.evaluate(()=>window.unitA3QA.frames().healer![0]!.texture)).toBe('battle-units');
  await page.clock.runFor(3000);expect(await page.evaluate(()=>window.unitA3QA.frames().healer![0]!.texture)).toBe('unit-pilot-seren');expect(await saved(page)).toBe(committed);
@@ -99,7 +98,7 @@ test('A3 late optional textures cannot replace artwork during a committed cast',
 });
 test('A3 encounter replacement releases Seren, Aegis, Eira and Mycon textures',async({page})=>{
  await page.setViewportSize({width:390,height:844});await ready(page,'skill=attack');
- expect((await page.evaluate(()=>window.unitA3QA.cached())).sort()).toEqual(['unit-pilot-eira','unit-pilot-mycon','unit-pilot-seren']);
+ expect((await page.evaluate(()=>window.unitA3QA.cached())).sort()).toEqual(['unit-pilot-aegis','unit-pilot-eira','unit-pilot-mycon','unit-pilot-seren']);
  await page.evaluate(()=>window.unitA3QA.otherEncounter());
  await expect.poll(()=>page.evaluate(()=>window.unitA3QA.cached())).toEqual([]);
  await expect(page.locator('#start')).toBeEnabled();

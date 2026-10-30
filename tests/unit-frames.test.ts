@@ -11,7 +11,7 @@ class Body implements UnitBody {
 }
 describe('pilot sprite playback',()=>{
  it('only routes the pilot actions, retaining procedural fallback for all others',()=>{
-  expect(unitKey('tracer')).toBe('unit-pilot-lyra');expect(unitKey('foe_hunter')).toBe('unit-pilot-hunter');expect(unitKey('raider')).toBe('unit-pilot-raider');expect(unitKey('guardian')).toBeUndefined();expect(unitKey('nobody')).toBeUndefined();
+  expect(unitKey('tracer')).toBe('unit-pilot-lyra');expect(unitKey('foe_hunter')).toBe('unit-pilot-hunter');expect(unitKey('raider')).toBe('unit-pilot-raider');expect(unitKey('guardian')).toBe('unit-pilot-aegis');expect(unitKey('nobody')).toBeUndefined();
   expect(unitClip('tracer','attack',undefined)).toBe('attack');expect(unitClip('tracer','execute',undefined)).toBe('skill');expect(unitClip('tracer','sweep',undefined)).toBe('attack');expect(unitClip('tracer','lunge',undefined)).toBe('skill');expect(unitClip('tracer','mark',undefined)).toBeUndefined();expect(unitClip('tracer','parry',undefined)).toBeUndefined();
   expect(unitClip('foe_hunter',undefined,'Shadow Knife')).toBe('skill');expect(unitClip('foe_hunter',undefined,'Raking Slash')).toBe('attack');
  });

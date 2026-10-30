@@ -62,11 +62,12 @@ describe('A2 actual content, clips and lifecycle',()=>{
   expect(unitDisplayRatio('guardian')*.36).toBeCloseTo(1);expect(unitDisplayRatio('foe_vargoth_guard')).toBe(2);
  });
 });
-describe('Aegis anatomy hold (animation-visual-audit-2026-10-29)',()=>{
- it('draws the shipped static seed with procedural motion and never loads the mismatched A2 poses',async()=>{
-  const {anatomyHold,unitKey,unitSheets}=await import('../src/game/visuals/unit-frames');
-  expect([...anatomyHold]).toEqual(['guardian']);expect(unitKey('guardian')).toBeUndefined();expect(Object.values(unitSheets)).not.toContain('aegis');
-  // The mapping stays intact for the redraw; other identities keep their frames.
-  expect(unitClip('guardian','attack',undefined)).toBe('attack');expect(unitKey('foe_vargoth_guard')).toBe('unit-pilot-vargoth');
+describe('Aegis A2-002 redraw packing',()=>{
+ it('packs the anatomy-locked cells with idle on the locked frames and the unchanged frame layout',()=>{
+  const a=JSON.parse(readFileSync('public/assets/units/'+manifest.aegis.atlas,'utf8'));
+  for(const i of [1,8,9,16,22,29])expect(a.frames[i]).toEqual(a.frames[0]);
+  // contact frames come from cells 004 / 010 / 016 and differ from idle
+  for(const i of [5,13,26])expect(a.frames[i]).not.toEqual(a.frames[0]);
+  expect(manifest.aegis.image).toMatch(/^aegis_a2\./);
  });
 });

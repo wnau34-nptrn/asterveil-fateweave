@@ -96,7 +96,7 @@ test('A4 bat hover loops in normal motion and stays on the seed under reduced mo
   const ctx=await browser.newContext({viewport:{width:390,height:844},reducedMotion:motion});
   try{const page=await ctx.newPage();await ready(page,`skill=attack&intensity=${intensity}`,'mira','foe_ruin_bat');
   // Every optional sheet must be adopted first: a late sheet repaints the field, which rebinds the bat at its seed frame for one tick.
-  await expect.poll(()=>page.evaluate(()=>window.unitA4QA.cached().length),{timeout:15000}).toBe(3); // Aegis is on anatomy hold
+  await expect.poll(()=>page.evaluate(()=>window.unitA4QA.cached().length),{timeout:15000}).toBe(4);
   if(motion==='no-preference'&&intensity==='standard')await expect.poll(()=>frame(page,'f1')).toMatch(/^2[2-5]$/);else await page.waitForTimeout(300);
   const seen=new Set<string>();const end=Date.now()+1500;
   while(Date.now()<end){seen.add(await frame(page,'f1'));await page.waitForTimeout(40);}
@@ -113,7 +113,7 @@ test('A4 late optional textures cannot replace artwork during a committed cast',
  await page.goto('tests/browser/fixtures/unit-a4.html?skill=attack');await page.locator('#start').click();
  await page.clock.pauseAt(new Date(Date.now()+100000));await cast(page,'attack');
  const committed=await saved(page);expect(await page.evaluate(()=>window.unitA4QA.frames().mira![0]!.texture)).toBe('battle-mercs');
- release();await expect.poll(()=>page.evaluate(()=>window.unitA4QA.cached().length)).toBe(3); // Aegis is on anatomy hold
+ release();await expect.poll(()=>page.evaluate(()=>window.unitA4QA.cached().length)).toBe(4);
  expect(await page.evaluate(()=>window.unitA4QA.frames().mira![0]!.texture)).toBe('battle-mercs');
  await page.clock.runFor(100);expect(await page.evaluate(()=>window.unitA4QA.frames().mira![0]!.texture)).toBe('battle-mercs');
  await page.clock.runFor(3000);expect(await page.evaluate(()=>window.unitA4QA.frames().mira![0]!.texture)).toBe('unit-pilot-mira');expect(await saved(page)).toBe(committed);
@@ -121,7 +121,7 @@ test('A4 late optional textures cannot replace artwork during a committed cast',
 });
 test('A4 encounter replacement releases the A4 textures',async({page})=>{
  await page.setViewportSize({width:390,height:844});await ready(page,'skill=attack');
- expect((await page.evaluate(()=>window.unitA4QA.cached())).sort()).toEqual(['unit-pilot-dew','unit-pilot-eira','unit-pilot-mira']);
+ expect((await page.evaluate(()=>window.unitA4QA.cached())).sort()).toEqual(['unit-pilot-aegis','unit-pilot-dew','unit-pilot-eira','unit-pilot-mira']);
  await page.evaluate(()=>window.unitA4QA.otherEncounter());
  await expect.poll(()=>page.evaluate(()=>window.unitA4QA.cached())).toEqual([]);
  await expect(page.locator('#start')).toBeEnabled();

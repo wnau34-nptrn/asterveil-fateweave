@@ -98,8 +98,7 @@ test('A8 late optional textures cannot replace artwork during a committed cast',
 });
 test('A8 encounter replacement releases the A8 textures',async({page})=>{
  await page.setViewportSize({width:390,height:844});await ready(page,'',foeArts[1]);
- // Aegis is on anatomy hold and is not loaded.
- expect((await page.evaluate(()=>window.unitA8QA.cached())).sort()).toEqual(['unit-pilot-channeler','unit-pilot-eira','unit-pilot-lyra']);
+ expect((await page.evaluate(()=>window.unitA8QA.cached())).sort()).toEqual(['unit-pilot-aegis','unit-pilot-channeler','unit-pilot-eira','unit-pilot-lyra']);
  await page.evaluate(()=>window.unitA8QA.otherEncounter());
  await expect.poll(()=>page.evaluate(()=>window.unitA8QA.cached())).toEqual([]);
  await expect(page.locator('#start')).toBeEnabled();
