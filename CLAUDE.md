@@ -14,7 +14,7 @@ R2 artwork (PR #89) integrated through PR92 merge `4883362` (mark/sigil/storm/di
 
 ## Aegis A2-002 integration — 2026-10-30 (owner-approved)
 
-Owner approved the motion with “อนุมัติ” on 2026-10-30 after the 26 clips (direct approval, not inferred from tests). Branch `claude/aegis-a2-002` packs Codex A2-002 (PR #112) as the `aegis_a2` atlas and lifts `anatomyHold` (the guardian renders its frames again; packed audit median 0.984, no drift). 26 real 390px clips in `docs/combat-presentation/unit-a2-002-slice/`. Merge through PR #116 after CI passes. Older hold notes below are historical.
+Owner approved the motion with “อนุมัติ” on 2026-10-30 after the 26 clips (direct approval, not inferred from tests). Branch `claude/aegis-a2-002` packs Codex A2-002 (PR #112) as the `aegis_a2` atlas and lifts `anatomyHold` (the guardian renders its frames again; packed audit median 0.984, no drift). 26 real 390px clips in `docs/combat-presentation/unit-a2-002-slice/`. PR #116 merged `77dac23` after quality + four browser shards passed on `c40418a` (CI first caught A7/A9/A10 specs that still counted the held Aegis atlas; fixed test-only). Pages publication follows from that push. Older hold notes below are historical.
 
 ## Aegis anatomy hold — 2026-10-29
 
