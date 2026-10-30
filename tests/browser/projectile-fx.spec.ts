@@ -13,12 +13,15 @@ for(const skill of skills)test(`projectile ${skill} real flight/contact, rear la
     const turn=(await page.evaluate(()=>window.projectileQA.sequence()))[0]!,timing=stageTiming(turn,false);
     await page.locator(`#action-${skill}`).click();await page.locator(`#target-${await page.evaluate(()=>window.projectileQA.target())}`).click();
     const saved=await page.evaluate(()=>localStorage.getItem('projectile-committed'));
-    await page.clock.runFor(Math.round(timing.contact*.65));
-    const arrows=(await page.evaluate(()=>window.projectileQA.flight())).filter(p=>p.visible);
+    // AV04: the body draws until RELEASE_AT (.55) of the windup and the flight starts on that release frame, never before.
     const cues=await page.evaluate(()=>window.projectileQA.cues());
+    await page.clock.runFor(Math.round(timing.contact*.45));
+    expect((await page.evaluate(()=>window.projectileQA.flight())).filter(p=>p.visible&&cues.some(c=>c.kind==='cast'&&c.targetId===p.targetId))).toEqual([]);
+    await page.clock.runFor(Math.round(timing.contact*.82)-Math.round(timing.contact*.45));
+    const arrows=(await page.evaluate(()=>window.projectileQA.flight())).filter(p=>p.visible);
     expect(arrows.map(p=>p.targetId).sort()).toEqual(cues.filter(c=>c.kind==='cast').map(c=>c.targetId).sort());
     expect(arrows.every(a=>a.progress>0&&a.progress<1)).toBe(true);expect(await page.evaluate(()=>window.projectileQA.behindUnits())).toBe(true);
-    await page.clock.runFor(timing.contact-Math.round(timing.contact*.65)+50);
+    await page.clock.runFor(timing.contact-Math.round(timing.contact*.82)+50);
     expect(await page.evaluate(()=>window.projectileQA.flight())).toEqual([]);
     expect(await page.evaluate(()=>window.projectileQA.rings())).toBe(0);
     expect((await page.evaluate(()=>window.projectileQA.painted())).some(p=>p.frame.endsWith('_tail')&&p.alpha>.4)).toBe(true);
