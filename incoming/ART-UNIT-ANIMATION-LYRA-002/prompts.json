@@ -1,0 +1,78 @@
+{
+  "generator": "image_gen.imagegen",
+  "transparent_background": true,
+  "method": "Each source is one generated horizontal eight-pose strip; no frame-by-frame generation.",
+  "moves": [
+    {
+      "move": "mark",
+      "accepted_source_attempt": 2,
+      "accepted_prompt": "Edit this EIGHT SLOT transparent character layout into ONE horizontal 8-frame Lyra MARK gesture strip. First reference is exact character seed, second is spacing layout. KEEP FIGURES SMALL LIKE LAYOUT, each body only about 180px tall within 800px canvas, each of 8 slots 300px wide, 70px+ EMPTY space even past sword tips. NEVER enlarge characters to fill canvas, NEVER let sword touch next cape. Preserve seed anatomy precisely (hair/head/face/torso/legs); red hair red eyes black/gold armor red cape and long straight silver/red sword with gold star hilt. Do not chibify or enlarge head. All face RIGHT. Eight frames: 1 seed idle with sword diagonal UP RIGHT; 2 slowly lift sword slightly; 3 slowly rotate sword tip toward RIGHT at chest height at shallow upward angle; 4 quiet targeting hold: sword HORIZONTAL RIGHT at chest height, right elbow bent, LEFT fingertips touching blade flat just past guard, eyes fixed right; 5 identical quiet targeting hold; 6 start tilting sword back UP; 7 approach idle diagonal UP RIGHT; 8 seed idle diagonal UP RIGHT. Feet remain planted, no advance, no lunge, no attack, no swing, no slash. Same scale and feet baseline in all frames. Entire figures and swords fully visible with huge clear gutters. NO VFX, marks, circles, glow, pink light, particles, speedlines, scenery, text, shadows. Real transparent RGBA background. Make entire strip in one pass. Priority anatomy and SMALL isolated figures; empty upper canvas is intentional.",
+      "reference_images": [
+        "seeds/lyra-seed.png",
+        "seeds/eight-slot-layout.png"
+      ],
+      "final_source_frames_one_based": [
+        1,
+        2,
+        3,
+        5,
+        5,
+        6,
+        2,
+        8
+      ],
+      "attempts": [
+        {
+          "attempt": 1,
+          "prompt": "Create one HORIZONTAL EIGHT FRAME transparent sprite strip of EXACT attached Lyra Duelist seed, facing RIGHT, original detailed anime fantasy game painting. Red spiky hair, red eyes, black and gold armor, red scarf/cape with gold edging, long straight silver sword with red inlay and gold star guard. IMPORTANT anatomy: replicate seed head/face/torso/sword proportions precisely; NOT superdeformed chibi. Do NOT enlarge head or eyes. Seed head is about 170px tall for 480px character, ~35% height; keep this. Eight complete figures in one row equal slots, same scale, same foot line, wide empty gutters>=48px, ample empty margins all sides for sword/cape. Quiet NON-DAMAGING MARK TARGET gesture, no attack: 1 upright idle matching seed; 2 slowly raise sword from ready; 3 rotate wrist to bring sword tip forward RIGHT at CHEST height; 4 still pointing sword at target, RIGHT elbow softly bent sword horizontal at chest height, LEFT hand lightly touching flat near blade base, eyes focused right; 5 HOLD pointing still; 6 gently lower tip; 7 return sword toward idle; 8 exact idle. Keep body upright, NO lunge, NO thrust, NO slash or swing. Left hand follows blade flat safely, feet planted. Sword remains same length straight attached in every frame. No painted mark/sigil/circle/pink light, no VFX/glow/particles/motion lines/text/shadows/scenery/checkerboard. True transparent RGBA background. Whole strip at once, eight SMALL isolated figures, do not fill entire canvas height.",
+          "outcome": "Rejected: figures touch; only seven separate major silhouettes."
+        },
+        {
+          "attempt": 2,
+          "prompt": "Edit this EIGHT SLOT transparent character layout into ONE horizontal 8-frame Lyra MARK gesture strip. First reference is exact character seed, second is spacing layout. KEEP FIGURES SMALL LIKE LAYOUT, each body only about 180px tall within 800px canvas, each of 8 slots 300px wide, 70px+ EMPTY space even past sword tips. NEVER enlarge characters to fill canvas, NEVER let sword touch next cape. Preserve seed anatomy precisely (hair/head/face/torso/legs); red hair red eyes black/gold armor red cape and long straight silver/red sword with gold star hilt. Do not chibify or enlarge head. All face RIGHT. Eight frames: 1 seed idle with sword diagonal UP RIGHT; 2 slowly lift sword slightly; 3 slowly rotate sword tip toward RIGHT at chest height at shallow upward angle; 4 quiet targeting hold: sword HORIZONTAL RIGHT at chest height, right elbow bent, LEFT fingertips touching blade flat just past guard, eyes fixed right; 5 identical quiet targeting hold; 6 start tilting sword back UP; 7 approach idle diagonal UP RIGHT; 8 seed idle diagonal UP RIGHT. Feet remain planted, no advance, no lunge, no attack, no swing, no slash. Same scale and feet baseline in all frames. Entire figures and swords fully visible with huge clear gutters. NO VFX, marks, circles, glow, pink light, particles, speedlines, scenery, text, shadows. Real transparent RGBA background. Make entire strip in one pass. Priority anatomy and SMALL isolated figures; empty upper canvas is intentional.",
+          "outcome": "Selected whole-strip source. Use source frame5 as both contact and held point, and source frame2 reversed as recovery frame7. Original source poses4/7 were not measured reliably and are not delivered."
+        },
+        {
+          "attempt": 3,
+          "prompt": "ONE HORIZONTAL 8-FRAME GAME SPRITE STRIP, transparent. Exact Lyra seed reference attached: replicate the seed face, eyes, exact red spiky hairstyle, head silhouette and exact armor/cape detail in EVERY frame. It is the SAME MODEL with same head drawing and same head pose; only arms/sword and tiny wrist movement change. Do NOT reinterpret face, do NOT increase eye size or head size, do NOT simplify hair detail. Character faces RIGHT throughout; same original seed semi-chibi proportions, NOT extra cute. Red scarf/cape gold borders, black gold armor, silver straight sword with red inset and star-shaped gold guard, same sword length. Draw EIGHT ENTIRELY SEPARATE complete characters, wide EMPTY TRANSPARENT gaps around ALL swords/capes and outer edges. This is slow nondamaging MARK TARGET, not combat strike. Sequence: 1 original ready sword diagonal up-right; 2 gently lift sword; 3 rotate wrist toward forward-right chest-level pointing; 4 STILL POINT sword HORIZONTALLY RIGHT AT CHEST HEIGHT, RIGHT elbow bent close torso, left fingers resting on blade flat just above guard, eyes fixed target; 5 same still pointing; 6 gently tilt sword upward toward original ready; 7 almost original ready; 8 original seed ready. Feet/body stay upright and planted, no thrust, no lunge, no slashing, no swing. Keep SAME head/face pose and expression in all 8, seed face copied faithfully, no profile turn or smile change. Same body and sword scale ALL frames. Small figures, LOTS of transparent whitespace above/between, nothing touches. No VFX/marks/circles/pink light/glow/sparks/text/ground/shadows/checkerboard. Whole strip generated at once. High fidelity to exact provided seed details is critical.",
+          "outcome": "Rejected: connected silhouettes; cannot retain complete isolated eight-frame layout."
+        },
+        {
+          "attempt": 4,
+          "prompt": "Production animation strip: exactly EIGHT full-body Lyra sprites in ONE horizontal row on transparent RGBA. Faithfully EDIT attached seed, preserving face/hair detail and exact anatomy rather than redesigning. Keep seed hair/head/face pixels visually unchanged across all 8 frames, no eye enlargement, no new expression, same face orientation looking RIGHT. Same red spiky hair, black/gold armor, red gold-trim cape, long silver sword red inlay gold star hilt, same body and sword lengths. Slow MARK TARGET gesture, nondamaging: (1) original idle diagonal sword up-right; (2) raise sword a little; (3) wrist rotates tip gently toward right, blade 20 degrees above horizontal; (4) still point sword HORIZONTALLY RIGHT at chest height, right elbow flexed close body and left fingertips on blade flat just past hilt; (5) hold same point pose; (6) gently raise tip back 20 degrees; (7) bring sword back almost original ready; (8) original seed idle. Torso and feet remain in seed stance throughout, don't step or lean forward. This is designating a target, NOT thrust, not slash, no attacking. Copy seed head/body proportions, same exact head drawing throughout, don't simplify or chibify. Separate each sprite with lots of empty space, all long blades fit their own slot with wide clear gutters and generous canvas margins. Small figures in panorama, do not crop. No VFX of any kind, no glow, mark, circles, pink lights, sparks, shadow, ground, text or checkerboard. ENTIRE EIGHT FRAME STRIP generated at once.",
+          "outcome": "Rejected: only six separate major silhouettes; not an accepted source."
+        }
+      ]
+    },
+    {
+      "move": "parry-stance",
+      "accepted_source_attempt": 2,
+      "accepted_prompt": "ONE HORIZONTAL EIGHT-frame transparent sprite strip of exact provided Lyra seed model. Maintain seed original detailed face and spiky red hairstyle, EXACT head/face/torso/limb/sword proportions, no larger head or eyes, no extra chibi. All eight keep SAME FACE EXPRESSION and SAME HEAD ORIENTATION as seed, no tilt/turn/change expression. Red hair eyes scarf cape gold-edged black/gold armor silver/red sword gold star guard. PARRY STANCE is a quiet SELF GUARD, no target, no counterattack: 1 exact ready seed sword up-right; 2 rear foot slides backward LEFT, body shifts weight rearward; 3 sword raised DIAGONALLY ACROSS FRONT OF CHEST with left hand bracing right wrist; 4 FULL GUARD, knees bent, hips shifted back LEFT, torso angled slightly back, sword blocks front diagonally toward upper right, calm focused seed face; 5 HOLD this guard; 6 ease guard and straighten knees; 7 approach original ready; 8 original seed ready. Continuous gentle posture changes not strike. Blade same length all frames, both hands and all equipment attached. Eight isolated full figures one row, HUGE EMPTY GUTTERS between all figures, empty margins around every cape/sword. Keep figures SMALL on canvas, do not touch each other/edges. Same body size and foot baseline all frames. No shadows/scenery/text/background/checkerboard, no VFX, blade glow, parry spark or light. Actual RGBA transparency. Whole strip at once.",
+      "reference_images": [
+        "seeds/lyra-seed.png"
+      ],
+      "final_source_frames_one_based": [
+        1,
+        2,
+        3,
+        5,
+        5,
+        6,
+        7,
+        8
+      ],
+      "attempts": [
+        {
+          "attempt": 1,
+          "prompt": "Make ONE horizontal EIGHT-frame Lyra PARRY STANCE sprite strip. Exact character anatomy/style from seed (reference1), SMALL figures at exact SAME body/head/sword scale as reference2 Mark strip. 8 equal slots, each silhouette completely isolated with at least 60px clear gutters, generous outer margins, only 200px tall figures on 800px canvas. Red spiky hair red eyes black/gold armor red gold-edged cape, straight long silver/red sword gold star guard. Do NOT enlarge head/eyes or chibify anatomy. Facing RIGHT all frames. Defensive self stance with NO target, no enemy, no attack: 1 seed upright idle sword diagonal up-right; 2 slide rear/LEFT foot a little backwards to LEFT while torso shifts weight backward; 3 raise sword DIAGONALLY ACROSS FRONT OF TORSO, blade tip up-right, left hand braces right wrist; 4 FULL DEFENSIVE GUARD knees bent, hips sitting back LEFT, rear foot bears weight, sword diagonal across front protecting chest, calm focused eyes right; 5 HOLD identical full guard; 6 relax knees slightly and ease sword; 7 return to original footing/idle sword; 8 EXACT seed idle. Keep head/face/torso size identical to seed, same anatomical scale and sole baseline in all frames and compared with reference2. Keep sword proper original length always attached. No lunge, thrust, slash, active parry collision, sparks, glowing blade, VFX, pink light, ground, shadows, text or scenery. True RGBA alpha, no checkerboard. Eight SMALL figures with lots of transparent whitespace, don't fill canvas.",
+          "outcome": "Rejected as final source: original poses3/4 not measured by the anatomy tool."
+        },
+        {
+          "attempt": 2,
+          "prompt": "ONE HORIZONTAL EIGHT-frame transparent sprite strip of exact provided Lyra seed model. Maintain seed original detailed face and spiky red hairstyle, EXACT head/face/torso/limb/sword proportions, no larger head or eyes, no extra chibi. All eight keep SAME FACE EXPRESSION and SAME HEAD ORIENTATION as seed, no tilt/turn/change expression. Red hair eyes scarf cape gold-edged black/gold armor silver/red sword gold star guard. PARRY STANCE is a quiet SELF GUARD, no target, no counterattack: 1 exact ready seed sword up-right; 2 rear foot slides backward LEFT, body shifts weight rearward; 3 sword raised DIAGONALLY ACROSS FRONT OF CHEST with left hand bracing right wrist; 4 FULL GUARD, knees bent, hips shifted back LEFT, torso angled slightly back, sword blocks front diagonally toward upper right, calm focused seed face; 5 HOLD this guard; 6 ease guard and straighten knees; 7 approach original ready; 8 original seed ready. Continuous gentle posture changes not strike. Blade same length all frames, both hands and all equipment attached. Eight isolated full figures one row, HUGE EMPTY GUTTERS between all figures, empty margins around every cape/sword. Keep figures SMALL on canvas, do not touch each other/edges. Same body size and foot baseline all frames. No shadows/scenery/text/background/checkerboard, no VFX, blade glow, parry spark or light. Actual RGBA transparency. Whole strip at once.",
+          "outcome": "Selected source with source5 repeated as full guard/contact and held guard. Original source4 not measured reliably and not delivered."
+        }
+      ]
+    }
+  ]
+}

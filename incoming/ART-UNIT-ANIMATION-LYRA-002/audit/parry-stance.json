@@ -1,0 +1,66 @@
+{
+ "tolerance": 0.12,
+ "minInliers": 12,
+ "report": {
+  "parry-stance": [
+   {
+    "frame": 0,
+    "height": 497,
+    "scale": 1.0,
+    "inliers": 1993,
+    "idle": true,
+    "status": "idle"
+   },
+   {
+    "frame": 1,
+    "height": 514,
+    "scale": 0.938,
+    "inliers": 52,
+    "status": "ok"
+   },
+   {
+    "frame": 2,
+    "height": 514,
+    "scale": 0.941,
+    "inliers": 57,
+    "status": "ok"
+   },
+   {
+    "frame": 3,
+    "height": 482,
+    "scale": 0.935,
+    "inliers": 47,
+    "status": "ok"
+   },
+   {
+    "frame": 4,
+    "height": 482,
+    "scale": 0.935,
+    "inliers": 47,
+    "status": "ok"
+   },
+   {
+    "frame": 5,
+    "height": 516,
+    "scale": 0.924,
+    "inliers": 37,
+    "status": "ok"
+   },
+   {
+    "frame": 6,
+    "height": 514,
+    "scale": 0.94,
+    "inliers": 46,
+    "status": "ok"
+   },
+   {
+    "frame": 7,
+    "height": 497,
+    "scale": 1.0,
+    "inliers": 1993,
+    "idle": true,
+    "status": "idle"
+   }
+  ]
+ }
+}
