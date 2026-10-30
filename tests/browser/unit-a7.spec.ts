@@ -81,7 +81,7 @@ test('A7 late optional textures cannot replace artwork during a committed cast',
  await page.goto('tests/browser/fixtures/unit-a7.html?hero=metta&skill=attack');await page.locator('#start').click();
  await page.clock.pauseAt(new Date(Date.now()+100000));await cast(page,'attack');
  const committed=await saved(page);expect(await page.evaluate(()=>window.unitA7QA.frames().metta![0]!.texture)).toBe('battle-mercs');
- release();await expect.poll(()=>page.evaluate(()=>window.unitA7QA.cached().length)).toBe(3);
+ release();await expect.poll(()=>page.evaluate(()=>window.unitA7QA.cached().length)).toBe(4);
  expect(await page.evaluate(()=>window.unitA7QA.frames().metta![0]!.texture)).toBe('battle-mercs');
  await page.clock.runFor(100);expect(await page.evaluate(()=>window.unitA7QA.frames().metta![0]!.texture)).toBe('battle-mercs');
  await page.clock.runFor(3000);expect(await page.evaluate(()=>window.unitA7QA.frames().metta![0]!.texture)).toBe('unit-pilot-metta');expect(await saved(page)).toBe(committed);

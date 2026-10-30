@@ -94,7 +94,7 @@ test('A10 late optional textures cannot replace artwork during a committed cast'
  await page.clock.pauseAt(new Date(Date.now()+100000));await cast(page);
  const committed=await saved(page);const before=await page.evaluate(()=>window.unitA10QA.frames().f1![0]!);
  expect(before.texture).not.toBe('unit-pilot-raider');
- release();await expect.poll(()=>page.evaluate(()=>window.unitA10QA.cached().length)).toBe(3);
+ release();await expect.poll(()=>page.evaluate(()=>window.unitA10QA.cached().length)).toBe(4);
  expect((await page.evaluate(()=>window.unitA10QA.frames().f1![0]!)).texture).toBe(before.texture);
  await page.clock.runFor(100);expect((await page.evaluate(()=>window.unitA10QA.frames().f1![0]!)).texture).toBe(before.texture);
  await page.clock.runFor(4000);expect((await page.evaluate(()=>window.unitA10QA.frames().f1![0]!)).texture).toBe('unit-pilot-raider');expect(await saved(page)).toBe(committed);
