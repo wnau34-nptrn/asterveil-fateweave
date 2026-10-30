@@ -1,0 +1,44 @@
+{
+ "tolerance": 0.12,
+ "minInliers": 12,
+ "report": {
+  "lalin-down": [
+   {
+    "frame": 0,
+    "height": 198,
+    "scale": 1.0,
+    "inliers": 837,
+    "idle": true,
+    "status": "idle"
+   },
+   {
+    "frame": 1,
+    "height": 188,
+    "scale": 1.076,
+    "inliers": 65,
+    "status": "ok"
+   },
+   {
+    "frame": 2,
+    "height": 141,
+    "scale": 1.078,
+    "inliers": 30,
+    "status": "ok"
+   },
+   {
+    "frame": 3,
+    "height": 143,
+    "scale": 1.01,
+    "inliers": 17,
+    "status": "ok"
+   },
+   {
+    "frame": 4,
+    "height": 85,
+    "scale": 1.026,
+    "inliers": 7,
+    "status": "not-measured"
+   }
+  ]
+ }
+}

@@ -1,0 +1,1 @@
+lalin-dance-strike: median head scale 1.116; drift [(2, 1.127), (4, 1.12), (5, 1.148)]; not measured []

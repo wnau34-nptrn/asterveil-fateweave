@@ -1,0 +1,1822 @@
+{
+  "task": "ART-UNIT-ANIMATION-A7-002",
+  "base_commit": "d83cd71da71971a1ce3fed74a4b3d069636bbcd3",
+  "gate": {
+    "median_lte": 1.15,
+    "max_measured_lte": 1.2,
+    "not_measured_is_pass": false
+  },
+  "strips": [
+    {
+      "identity": "lalin",
+      "move": "dance-strike",
+      "frame_count": 6,
+      "frame_order": "left-to-right",
+      "frame_descriptions": [
+        "poised ready",
+        "gather fan across body",
+        "step into fan strike right",
+        "extended fan flourish",
+        "reverse weight",
+        "rightward ready"
+      ],
+      "routes_or_intents": [
+        "attack"
+      ],
+      "raw_file": "raw/lalin-dance-strike.png",
+      "file": "spaced/lalin-dance-strike.png",
+      "cell_size": [
+        640,
+        512
+      ],
+      "scale": 0.5389224489512571,
+      "seed_audit_factor": 0.42,
+      "shared_y_reference": 497,
+      "transforms": [
+        {
+          "frame_1based": 1,
+          "source_box": [
+            13,
+            200,
+            349,
+            548
+          ],
+          "position": [
+            230,
+            311
+          ],
+          "tile_size": [
+            181,
+            188
+          ]
+        },
+        {
+          "frame_1based": 2,
+          "source_box": [
+            370,
+            207,
+            669,
+            549
+          ],
+          "position": [
+            240,
+            315
+          ],
+          "tile_size": [
+            161,
+            184
+          ]
+        },
+        {
+          "frame_1based": 3,
+          "source_box": [
+            704,
+            207,
+            1100,
+            549
+          ],
+          "position": [
+            214,
+            315
+          ],
+          "tile_size": [
+            213,
+            184
+          ]
+        },
+        {
+          "frame_1based": 4,
+          "source_box": [
+            1089,
+            169,
+            1459,
+            548
+          ],
+          "position": [
+            220,
+            294
+          ],
+          "tile_size": [
+            199,
+            204
+          ]
+        },
+        {
+          "frame_1based": 5,
+          "source_box": [
+            1472,
+            206,
+            1788,
+            550
+          ],
+          "position": [
+            235,
+            314
+          ],
+          "tile_size": [
+            170,
+            185
+          ]
+        },
+        {
+          "frame_1based": 6,
+          "source_box": [
+            1825,
+            202,
+            2158,
+            548
+          ],
+          "position": [
+            230,
+            312
+          ],
+          "tile_size": [
+            179,
+            186
+          ]
+        }
+      ],
+      "median": 1.116,
+      "maximum_measured": 1.148,
+      "not_measured": [],
+      "numeric_gate": "pass",
+      "owner_artwork_selection": "pending",
+      "owner_motion_approval": "pending"
+    },
+    {
+      "identity": "lalin",
+      "move": "circle-spin",
+      "frame_count": 6,
+      "frame_order": "left-to-right",
+      "frame_descriptions": [
+        "gather arms",
+        "turn through side",
+        "back-facing pivot",
+        "continue through opposite side",
+        "reopen fans",
+        "settle right"
+      ],
+      "routes_or_intents": [
+        "rounddance"
+      ],
+      "raw_file": "raw/lalin-circle-spin.png",
+      "file": "spaced/lalin-circle-spin.png",
+      "cell_size": [
+        640,
+        512
+      ],
+      "scale": 0.5107654267430516,
+      "seed_audit_factor": 0.42,
+      "shared_y_reference": 497,
+      "transforms": [
+        {
+          "frame_1based": 1,
+          "source_box": [
+            9,
+            172,
+            323,
+            635
+          ],
+          "position": [
+            240,
+            262
+          ],
+          "tile_size": [
+            160,
+            236
+          ]
+        },
+        {
+          "frame_1based": 2,
+          "source_box": [
+            306,
+            110,
+            675,
+            635
+          ],
+          "position": [
+            226,
+            230
+          ],
+          "tile_size": [
+            188,
+            268
+          ]
+        },
+        {
+          "frame_1based": 3,
+          "source_box": [
+            672,
+            134,
+            1080,
+            635
+          ],
+          "position": [
+            216,
+            243
+          ],
+          "tile_size": [
+            208,
+            256
+          ]
+        },
+        {
+          "frame_1based": 4,
+          "source_box": [
+            1042,
+            141,
+            1453,
+            633
+          ],
+          "position": [
+            215,
+            246
+          ],
+          "tile_size": [
+            210,
+            251
+          ]
+        },
+        {
+          "frame_1based": 5,
+          "source_box": [
+            1420,
+            177,
+            1827,
+            634
+          ],
+          "position": [
+            216,
+            265
+          ],
+          "tile_size": [
+            208,
+            233
+          ]
+        },
+        {
+          "frame_1based": 6,
+          "source_box": [
+            1794,
+            156,
+            2166,
+            634
+          ],
+          "position": [
+            225,
+            254
+          ],
+          "tile_size": [
+            190,
+            244
+          ]
+        }
+      ],
+      "median": 1.0725,
+      "maximum_measured": 1.085,
+      "not_measured": [
+        3,
+        4
+      ],
+      "numeric_gate": "pass",
+      "owner_artwork_selection": "pending",
+      "owner_motion_approval": "pending"
+    },
+    {
+      "identity": "lalin",
+      "move": "echo-closing-step",
+      "frame_count": 6,
+      "frame_order": "left-to-right",
+      "frame_descriptions": [
+        "gather low",
+        "crossing foot placement",
+        "forward fan accent",
+        "rising open flourish",
+        "soften closing step",
+        "settle right"
+      ],
+      "routes_or_intents": [
+        "echofoot"
+      ],
+      "raw_file": "raw/lalin-echo-closing-step.png",
+      "file": "spaced/lalin-echo-closing-step.png",
+      "cell_size": [
+        640,
+        512
+      ],
+      "scale": 0.5067553990662148,
+      "seed_audit_factor": 0.42,
+      "shared_y_reference": 497,
+      "transforms": [
+        {
+          "frame_1based": 1,
+          "source_box": [
+            14,
+            169,
+            324,
+            658
+          ],
+          "position": [
+            242,
+            251
+          ],
+          "tile_size": [
+            157,
+            248
+          ]
+        },
+        {
+          "frame_1based": 2,
+          "source_box": [
+            317,
+            176,
+            674,
+            660
+          ],
+          "position": [
+            230,
+            254
+          ],
+          "tile_size": [
+            181,
+            245
+          ]
+        },
+        {
+          "frame_1based": 3,
+          "source_box": [
+            654,
+            171,
+            1094,
+            659
+          ],
+          "position": [
+            208,
+            252
+          ],
+          "tile_size": [
+            223,
+            247
+          ]
+        },
+        {
+          "frame_1based": 4,
+          "source_box": [
+            1101,
+            78,
+            1517,
+            661
+          ],
+          "position": [
+            214,
+            205
+          ],
+          "tile_size": [
+            211,
+            295
+          ]
+        },
+        {
+          "frame_1based": 5,
+          "source_box": [
+            1477,
+            172,
+            1808,
+            662
+          ],
+          "position": [
+            236,
+            252
+          ],
+          "tile_size": [
+            168,
+            248
+          ]
+        },
+        {
+          "frame_1based": 6,
+          "source_box": [
+            1808,
+            167,
+            2161,
+            661
+          ],
+          "position": [
+            230,
+            250
+          ],
+          "tile_size": [
+            179,
+            250
+          ]
+        }
+      ],
+      "median": 1.1324999999999998,
+      "maximum_measured": 1.169,
+      "not_measured": [],
+      "numeric_gate": "pass",
+      "owner_artwork_selection": "pending",
+      "owner_motion_approval": "pending"
+    },
+    {
+      "identity": "lalin",
+      "move": "hit",
+      "frame_count": 4,
+      "frame_order": "left-to-right",
+      "frame_descriptions": [
+        "ready",
+        "recoil and wince",
+        "catch balance",
+        "guard"
+      ],
+      "routes_or_intents": [
+        "hit"
+      ],
+      "raw_file": "raw/lalin-hit.png",
+      "file": "spaced/lalin-hit.png",
+      "cell_size": [
+        640,
+        512
+      ],
+      "scale": 0.382675408142785,
+      "seed_audit_factor": 0.42,
+      "shared_y_reference": 497,
+      "transforms": [
+        {
+          "frame_1based": 1,
+          "source_box": [
+            26,
+            134,
+            522,
+            614
+          ],
+          "position": [
+            225,
+            314
+          ],
+          "tile_size": [
+            190,
+            184
+          ]
+        },
+        {
+          "frame_1based": 2,
+          "source_box": [
+            583,
+            155,
+            1062,
+            609
+          ],
+          "position": [
+            228,
+            323
+          ],
+          "tile_size": [
+            183,
+            174
+          ]
+        },
+        {
+          "frame_1based": 3,
+          "source_box": [
+            1137,
+            174,
+            1592,
+            608
+          ],
+          "position": [
+            233,
+            330
+          ],
+          "tile_size": [
+            174,
+            166
+          ]
+        },
+        {
+          "frame_1based": 4,
+          "source_box": [
+            1687,
+            143,
+            2159,
+            614
+          ],
+          "position": [
+            230,
+            318
+          ],
+          "tile_size": [
+            181,
+            180
+          ]
+        }
+      ],
+      "median": 1.0270000000000001,
+      "maximum_measured": 1.057,
+      "not_measured": [],
+      "numeric_gate": "pass",
+      "owner_artwork_selection": "pending",
+      "owner_motion_approval": "pending"
+    },
+    {
+      "identity": "lalin",
+      "move": "block",
+      "frame_count": 4,
+      "frame_order": "left-to-right",
+      "frame_descriptions": [
+        "raise protective arms",
+        "brace behind crossed gauntlets or fans",
+        "absorb weight low",
+        "reset guard"
+      ],
+      "routes_or_intents": [
+        "block"
+      ],
+      "raw_file": "raw/lalin-block.png",
+      "file": "spaced/lalin-block.png",
+      "cell_size": [
+        640,
+        512
+      ],
+      "scale": 0.33919213848361895,
+      "seed_audit_factor": 0.42,
+      "shared_y_reference": 497,
+      "transforms": [
+        {
+          "frame_1based": 1,
+          "source_box": [
+            19,
+            48,
+            544,
+            688
+          ],
+          "position": [
+            231,
+            281
+          ],
+          "tile_size": [
+            178,
+            217
+          ]
+        },
+        {
+          "frame_1based": 2,
+          "source_box": [
+            566,
+            103,
+            1071,
+            689
+          ],
+          "position": [
+            234,
+            300
+          ],
+          "tile_size": [
+            171,
+            199
+          ]
+        },
+        {
+          "frame_1based": 3,
+          "source_box": [
+            1104,
+            182,
+            1587,
+            688
+          ],
+          "position": [
+            238,
+            326
+          ],
+          "tile_size": [
+            164,
+            172
+          ]
+        },
+        {
+          "frame_1based": 4,
+          "source_box": [
+            1606,
+            102,
+            2172,
+            689
+          ],
+          "position": [
+            224,
+            299
+          ],
+          "tile_size": [
+            192,
+            199
+          ]
+        }
+      ],
+      "median": 1.041,
+      "maximum_measured": 1.053,
+      "not_measured": [],
+      "numeric_gate": "pass",
+      "owner_artwork_selection": "pending",
+      "owner_motion_approval": "pending"
+    },
+    {
+      "identity": "lalin",
+      "move": "down",
+      "frame_count": 4,
+      "frame_order": "left-to-right",
+      "frame_descriptions": [
+        "knees give way",
+        "hand and knee reach ground",
+        "sink to seated slump",
+        "lie unconscious and hold"
+      ],
+      "routes_or_intents": [
+        "down"
+      ],
+      "raw_file": "raw/lalin-down.png",
+      "file": "spaced/lalin-down.png",
+      "cell_size": [
+        640,
+        512
+      ],
+      "scale": 0.4027121705709913,
+      "seed_audit_factor": 0.42,
+      "shared_y_reference": 497,
+      "transforms": [
+        {
+          "frame_1based": 1,
+          "source_box": [
+            9,
+            135,
+            520,
+            603
+          ],
+          "position": [
+            217,
+            310
+          ],
+          "tile_size": [
+            206,
+            188
+          ]
+        },
+        {
+          "frame_1based": 2,
+          "source_box": [
+            503,
+            246,
+            1065,
+            596
+          ],
+          "position": [
+            207,
+            354
+          ],
+          "tile_size": [
+            226,
+            141
+          ]
+        },
+        {
+          "frame_1based": 3,
+          "source_box": [
+            1067,
+            258,
+            1563,
+            612
+          ],
+          "position": [
+            220,
+            359
+          ],
+          "tile_size": [
+            200,
+            143
+          ]
+        },
+        {
+          "frame_1based": 4,
+          "source_box": [
+            1553,
+            399,
+            2163,
+            610
+          ],
+          "position": [
+            197,
+            416
+          ],
+          "tile_size": [
+            246,
+            85
+          ]
+        }
+      ],
+      "median": 1.076,
+      "maximum_measured": 1.078,
+      "not_measured": [
+        4
+      ],
+      "numeric_gate": "pass",
+      "owner_artwork_selection": "pending",
+      "owner_motion_approval": "pending"
+    },
+    {
+      "identity": "wila",
+      "move": "echo-closing-step",
+      "frame_count": 6,
+      "frame_order": "left-to-right",
+      "frame_descriptions": [
+        "gather low",
+        "crossing foot placement",
+        "forward fan accent",
+        "rising open flourish",
+        "soften closing step",
+        "settle right"
+      ],
+      "routes_or_intents": [
+        "echofoot"
+      ],
+      "raw_file": "raw/wila-echo-closing-step.png",
+      "file": "spaced/wila-echo-closing-step.png",
+      "cell_size": [
+        640,
+        512
+      ],
+      "scale": 0.498875946431134,
+      "seed_audit_factor": 0.42,
+      "shared_y_reference": 497,
+      "transforms": [
+        {
+          "frame_1based": 1,
+          "source_box": [
+            23,
+            164,
+            303,
+            662
+          ],
+          "position": [
+            250,
+            250
+          ],
+          "tile_size": [
+            140,
+            248
+          ]
+        },
+        {
+          "frame_1based": 2,
+          "source_box": [
+            340,
+            170,
+            660,
+            664
+          ],
+          "position": [
+            240,
+            253
+          ],
+          "tile_size": [
+            160,
+            246
+          ]
+        },
+        {
+          "frame_1based": 3,
+          "source_box": [
+            693,
+            163,
+            1043,
+            664
+          ],
+          "position": [
+            232,
+            250
+          ],
+          "tile_size": [
+            175,
+            250
+          ]
+        },
+        {
+          "frame_1based": 4,
+          "source_box": [
+            1064,
+            75,
+            1455,
+            669
+          ],
+          "position": [
+            222,
+            206
+          ],
+          "tile_size": [
+            195,
+            296
+          ]
+        },
+        {
+          "frame_1based": 5,
+          "source_box": [
+            1452,
+            165,
+            1773,
+            664
+          ],
+          "position": [
+            240,
+            251
+          ],
+          "tile_size": [
+            160,
+            249
+          ]
+        },
+        {
+          "frame_1based": 6,
+          "source_box": [
+            1802,
+            165,
+            2150,
+            664
+          ],
+          "position": [
+            233,
+            251
+          ],
+          "tile_size": [
+            174,
+            249
+          ]
+        }
+      ],
+      "median": 1.1275,
+      "maximum_measured": 1.163,
+      "not_measured": [],
+      "numeric_gate": "pass",
+      "owner_artwork_selection": "pending",
+      "owner_motion_approval": "pending"
+    },
+    {
+      "identity": "wila",
+      "move": "down",
+      "frame_count": 4,
+      "frame_order": "left-to-right",
+      "frame_descriptions": [
+        "knees give way",
+        "hand and knee reach ground",
+        "sink to seated slump",
+        "lie unconscious and hold"
+      ],
+      "routes_or_intents": [
+        "down"
+      ],
+      "raw_file": "raw/wila-down.png",
+      "file": "spaced/wila-down.png",
+      "cell_size": [
+        640,
+        512
+      ],
+      "scale": 0.42709543350264234,
+      "seed_audit_factor": 0.42,
+      "shared_y_reference": 497,
+      "transforms": [
+        {
+          "frame_1based": 1,
+          "source_box": [
+            19,
+            179,
+            500,
+            572
+          ],
+          "position": [
+            218,
+            330
+          ],
+          "tile_size": [
+            205,
+            168
+          ]
+        },
+        {
+          "frame_1based": 2,
+          "source_box": [
+            539,
+            273,
+            1036,
+            580
+          ],
+          "position": [
+            214,
+            371
+          ],
+          "tile_size": [
+            212,
+            131
+          ]
+        },
+        {
+          "frame_1based": 3,
+          "source_box": [
+            1050,
+            247,
+            1523,
+            585
+          ],
+          "position": [
+            219,
+            359
+          ],
+          "tile_size": [
+            202,
+            144
+          ]
+        },
+        {
+          "frame_1based": 4,
+          "source_box": [
+            1530,
+            396,
+            2156,
+            598
+          ],
+          "position": [
+            186,
+            423
+          ],
+          "tile_size": [
+            267,
+            86
+          ]
+        }
+      ],
+      "median": 1.098,
+      "maximum_measured": 1.108,
+      "not_measured": [
+        4
+      ],
+      "numeric_gate": "pass",
+      "owner_artwork_selection": "pending",
+      "owner_motion_approval": "pending"
+    }
+  ],
+  "files": [
+    {
+      "file": "NOTES.md",
+      "bytes": 8943,
+      "sha256": "66faf66831322e3177fd31740af0d02949ec2ce486059e8fd513eb8107cec811"
+    },
+    {
+      "file": "audits/lalin-block.json",
+      "bytes": 624,
+      "sha256": "0f11edd1563ca62be04fbc99912304978e42e860c9a29c85872c844c8ce71a84"
+    },
+    {
+      "file": "audits/lalin-block.txt",
+      "bytes": 64,
+      "sha256": "d7d6b94fb5ed4bbb3d79bd8c8bb63fcd46368e2da4e26b6d8037ec5e59fd1e87"
+    },
+    {
+      "file": "audits/lalin-circle-spin.json",
+      "bytes": 855,
+      "sha256": "c2fd6761317e76b5ec3f2ebad668c7ad8baf385b7392abd3fd7ab99a32ec9b49"
+    },
+    {
+      "file": "audits/lalin-circle-spin.txt",
+      "bytes": 74,
+      "sha256": "b57617c1de849ea4b4d78b9605294b0eebdd701e8a4ab06836d138a021d7a2f2"
+    },
+    {
+      "file": "audits/lalin-dance-strike.json",
+      "bytes": 848,
+      "sha256": "d04a2c8cda47ea9e6e2b193e39420bd1665371b623c1a5bf26b51d46cb753576"
+    },
+    {
+      "file": "audits/lalin-dance-strike.txt",
+      "bytes": 104,
+      "sha256": "d8c47b0578a91b0104b0f440adc7a4a92e02212f852f2ac513a09a56dd7a787d"
+    },
+    {
+      "file": "audits/lalin-down.json",
+      "bytes": 626,
+      "sha256": "4a59d61b83f6b4a9a051137675c87d3d738b4662dbb2a1e6ba757299c446b051"
+    },
+    {
+      "file": "audits/lalin-down.txt",
+      "bytes": 64,
+      "sha256": "ff909fe5c00c75c587e655086e372348d27b205f862e7fba78f8f5d386ffa8cf"
+    },
+    {
+      "file": "audits/lalin-echo-closing-step.json",
+      "bytes": 860,
+      "sha256": "ee7e4f66dcdb7dae24807517fbf63403f0424b702288a2e8cbc926fc9fbf3501"
+    },
+    {
+      "file": "audits/lalin-echo-closing-step.txt",
+      "bytes": 133,
+      "sha256": "ff7dbc94025eff82a6da8de32739e518f21e8efe45cc2b00bc398f662500ce15"
+    },
+    {
+      "file": "audits/lalin-hit.json",
+      "bytes": 618,
+      "sha256": "a505820ab745e52f161f9e9baf33a2972dc2d73fd69c8ebd61666b5d254a11e8"
+    },
+    {
+      "file": "audits/lalin-hit.txt",
+      "bytes": 62,
+      "sha256": "3f56ae49387a959acbd0d65484e09f43d87613cde21e80c19f8fe32b8685ee0a"
+    },
+    {
+      "file": "audits/wila-down.json",
+      "bytes": 625,
+      "sha256": "5097dc47b2532a626339697c7fa659d071896bfaee55c448898d1b01f25cb412"
+    },
+    {
+      "file": "audits/wila-down.txt",
+      "bytes": 63,
+      "sha256": "604b01be25a7c9ed0e2001000d64f9b1edfa6444c3999dd4ce6d0884d26157b2"
+    },
+    {
+      "file": "audits/wila-echo-closing-step.json",
+      "bytes": 856,
+      "sha256": "52eb33c1a2826ee813ae3cc59a553eb98e9e60270a356dc36165a1f8d8f7801a"
+    },
+    {
+      "file": "audits/wila-echo-closing-step.txt",
+      "bytes": 121,
+      "sha256": "5a3c687c5da0a4f172f7dd48a4dd0327785a66319d2b71e8939ede9ac47de719"
+    },
+    {
+      "file": "build_handoff.py",
+      "bytes": 7763,
+      "sha256": "9c1d0901ffa5dc3f7d613f8caf948c67dbc8b28432c0274c0b7adac66a876305"
+    },
+    {
+      "file": "cells/lalin-block/000.png",
+      "bytes": 84503,
+      "sha256": "286c685b7a46b0a92f2f149b8bca3106c3689bd22dd5b0a4cb8aab3f84159c01",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "cells/lalin-block/001.png",
+      "bytes": 78235,
+      "sha256": "65f6d4b50eac933c86e7a4b49b8543fb6ee3bc314fb7fe8603e3371447570106",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "cells/lalin-block/002.png",
+      "bytes": 70736,
+      "sha256": "57632f882bf942d886f3c51e0e6138e3e04d3ec8b7636cf3ff697d31e9359c62",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "cells/lalin-block/003.png",
+      "bytes": 61827,
+      "sha256": "5e3bc97c85535be49ed2071f794831a9fa22e6c80ca035c249eb4d40011a2cbc",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "cells/lalin-block/004.png",
+      "bytes": 85670,
+      "sha256": "0a0737bb4a3ab5e4b7a0c3f6f1a810e747e0db80801cf1014d68009053c7edea",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "cells/lalin-circle-spin/000.png",
+      "bytes": 84503,
+      "sha256": "286c685b7a46b0a92f2f149b8bca3106c3689bd22dd5b0a4cb8aab3f84159c01",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "cells/lalin-circle-spin/001.png",
+      "bytes": 77676,
+      "sha256": "d5b1c45351ab11916ee97215b4d87de66dba9099dd4ce43a2d43486c7774f22a",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "cells/lalin-circle-spin/002.png",
+      "bytes": 96245,
+      "sha256": "477610a5115fd4fe5f5c831a4ce7c06836b55f075a377ad5bac2d5a7e7066b3d",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "cells/lalin-circle-spin/003.png",
+      "bytes": 100470,
+      "sha256": "09fa0bbe4efa441c221129406f0a47553c45441aaf82a9c3f9ce26fef06af83e",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "cells/lalin-circle-spin/004.png",
+      "bytes": 99827,
+      "sha256": "b78fde9996af2e9db49482494e01ffca1f596ef74449373324fcac79d4f1f994",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "cells/lalin-circle-spin/005.png",
+      "bytes": 99145,
+      "sha256": "c96698399a79d66496de58fa57de5bdd2b0cfbdf5e332dbd1880bfa071a5ecd5",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "cells/lalin-circle-spin/006.png",
+      "bytes": 96274,
+      "sha256": "022c80cca99ab747c59f6e5870d6175ca17561bb9602116bf8d7df7028e77bd0",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "cells/lalin-dance-strike/000.png",
+      "bytes": 84503,
+      "sha256": "286c685b7a46b0a92f2f149b8bca3106c3689bd22dd5b0a4cb8aab3f84159c01",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "cells/lalin-dance-strike/001.png",
+      "bytes": 78100,
+      "sha256": "83f20046b6c48e9b42c74a7973759c2c9944c2a574e785fd191490aa28bef833",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "cells/lalin-dance-strike/002.png",
+      "bytes": 65244,
+      "sha256": "9acca32ddad3b309344e1c79b8492671ee6f60e8a64eab3ad52d053d49a825fb",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "cells/lalin-dance-strike/003.png",
+      "bytes": 71526,
+      "sha256": "309aedb0043a8b04bc18ec238bb5dfbaf1d12ac29148b4af7e210327fd8bc3ef",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "cells/lalin-dance-strike/004.png",
+      "bytes": 74150,
+      "sha256": "7bce31800f227785fe7c9ea9b2eaad498ee3382ba313cec497cc32ff8929aab8",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "cells/lalin-dance-strike/005.png",
+      "bytes": 65256,
+      "sha256": "b4e1cac353f916ee53a32d15630d910e310a68b20e2293e7dd9581fce4762bab",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "cells/lalin-dance-strike/006.png",
+      "bytes": 75614,
+      "sha256": "9bbfaf6e7c8d4138e281cb6c967177cb10f7572ce7a098ee0932bf48f795d681",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "cells/lalin-down/000.png",
+      "bytes": 84503,
+      "sha256": "286c685b7a46b0a92f2f149b8bca3106c3689bd22dd5b0a4cb8aab3f84159c01",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "cells/lalin-down/001.png",
+      "bytes": 79216,
+      "sha256": "c9cb2bb1f89a3ec629b0ad5e55196564b85ecf497206acc3e7a69b9ebbf2d24d",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "cells/lalin-down/002.png",
+      "bytes": 60508,
+      "sha256": "77d5dd18b061910b738358dbf5a4f1902912a313de3a63161993cc7eb85e9708",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "cells/lalin-down/003.png",
+      "bytes": 51029,
+      "sha256": "95e73aa032b5d5c6fcb14cd808620d723986f0e746070ee2983e89e12bf3bec2",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "cells/lalin-down/004.png",
+      "bytes": 46695,
+      "sha256": "765835cda80399c81fdc9b50d5334870527fab45033dc904028cbc93c9b8ece2",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "cells/lalin-echo-closing-step/000.png",
+      "bytes": 84503,
+      "sha256": "286c685b7a46b0a92f2f149b8bca3106c3689bd22dd5b0a4cb8aab3f84159c01",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "cells/lalin-echo-closing-step/001.png",
+      "bytes": 76811,
+      "sha256": "074f8882752286ef21cdfe3236a56eac142218609e7aff1cd974f8145305eba1",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "cells/lalin-echo-closing-step/002.png",
+      "bytes": 84750,
+      "sha256": "6c3405a8318daa386720fde1a48d56f3a5c8b0cedfee610f30fc42e2b2ec737a",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "cells/lalin-echo-closing-step/003.png",
+      "bytes": 104007,
+      "sha256": "bb31d95e7339091fadfac1a2b11762a19bcc109a14408ef184ad1458df559871",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "cells/lalin-echo-closing-step/004.png",
+      "bytes": 110675,
+      "sha256": "5bc3983c092845c0407f08eb3f0792a8f272047052210f769c8b6b4e14b3ca98",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "cells/lalin-echo-closing-step/005.png",
+      "bytes": 85296,
+      "sha256": "0565102e4d927b85fae1b559fd0ad33f879fd1ba28a0e7cff216076a5f63fe77",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "cells/lalin-echo-closing-step/006.png",
+      "bytes": 86085,
+      "sha256": "3a377713ec7d4a807e459a2c861310d6cff11b72d7e02bbc5443dfbfa37b7eaf",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "cells/lalin-hit/000.png",
+      "bytes": 84503,
+      "sha256": "286c685b7a46b0a92f2f149b8bca3106c3689bd22dd5b0a4cb8aab3f84159c01",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "cells/lalin-hit/001.png",
+      "bytes": 79302,
+      "sha256": "3fc073ee8710e3d91fad633ed482a5b9f967c30ce3ae7f30ba6af9f8bbf2c2ed",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "cells/lalin-hit/002.png",
+      "bytes": 65317,
+      "sha256": "e2c07e8ef13cf3152825cb2c8f6971dddb18c13180e98838595010d883c75a0d",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "cells/lalin-hit/003.png",
+      "bytes": 62793,
+      "sha256": "f6089c4f217a583974acdc89ade8c8f1919ebb18db4505fbbafff5a9e650e7b2",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "cells/lalin-hit/004.png",
+      "bytes": 75415,
+      "sha256": "b1c735d2521eb4846dcd8c49206b3f382cdde36c2850c4454ab22aa430fe85ab",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "cells/wila-down/000.png",
+      "bytes": 80265,
+      "sha256": "5e185e3987e8035f437dc8910f5226d5a42744aa97221294ff0e413586b0c91b",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "cells/wila-down/001.png",
+      "bytes": 71790,
+      "sha256": "747d5fa743347bcb519071d3e887d0a10fd79eeeae3e2551e030c53211a1d3c9",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "cells/wila-down/002.png",
+      "bytes": 54611,
+      "sha256": "22cebe8c50edb67ab78c400db8a09fe54464fa3f77c8322bb4fecd8aeb698044",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "cells/wila-down/003.png",
+      "bytes": 53286,
+      "sha256": "f3407c2531228e6cdb4423d6c8f6c6329a7fc2cde532a07d204ec0b86aba46fc",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "cells/wila-down/004.png",
+      "bytes": 48463,
+      "sha256": "3ca5f49d0f2aadda452fea148b5b8858fefeeb0224b03b3e6a32b58c2038016b",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "cells/wila-echo-closing-step/000.png",
+      "bytes": 80265,
+      "sha256": "5e185e3987e8035f437dc8910f5226d5a42744aa97221294ff0e413586b0c91b",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "cells/wila-echo-closing-step/001.png",
+      "bytes": 73320,
+      "sha256": "36a25abbb2973933e01487e42e6624dc7c8ad328b581d2a5eb3fd75192e308e6",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "cells/wila-echo-closing-step/002.png",
+      "bytes": 77668,
+      "sha256": "4827209d7ca0d4e9c977619a4c24096cf442652056c388220ad224ce08a666ae",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "cells/wila-echo-closing-step/003.png",
+      "bytes": 94010,
+      "sha256": "c57859a79c8abcc69c24aeae86717ed59387b2de0d12d19681d4433539a90c91",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "cells/wila-echo-closing-step/004.png",
+      "bytes": 102715,
+      "sha256": "ae22c8b41dc7045c2e67c0d3817f0319ff18aeb6e6b4cebabcfae1ee0eb28372",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "cells/wila-echo-closing-step/005.png",
+      "bytes": 78997,
+      "sha256": "2affaccf7a1b6112e1a030f675261b56df1cea3479e8fd2ff01bdbc06754eb74",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "cells/wila-echo-closing-step/006.png",
+      "bytes": 92123,
+      "sha256": "d6544a3206e64fbc9036c521d457ce532143382aef5984bdbcefa485a42b9842",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "lalin-preview-390.png",
+      "bytes": 335178,
+      "sha256": "80c60f408abb2dfd71b2cf112ba792bd8954a587dfc6595bd2c349f73d94d5b7",
+      "size": [
+        390,
+        2300
+      ],
+      "mode": "RGB",
+      "decoded": true
+    },
+    {
+      "file": "prompts.json",
+      "bytes": 9523,
+      "sha256": "0ea76f3d0dd7d8d71e09b7c9f9f09aaffc6645bedd822a1f51a990ecfd5260d3"
+    },
+    {
+      "file": "raw/lalin-block.png",
+      "bytes": 2171427,
+      "sha256": "7823a5289466eeda83694b1645ad172e6a070d49a70a7514d8eebe8a76e0f701",
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "raw/lalin-circle-spin.png",
+      "bytes": 2063719,
+      "sha256": "acc0a5d4549ebf6a7e060d693d435fb04c4a4e067d99a884910dc3483126197f",
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "raw/lalin-dance-strike.png",
+      "bytes": 1404619,
+      "sha256": "26f410d373a8df6c24df15937232423355e2639353873ac5d7861a6b4216bc51",
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "raw/lalin-down.png",
+      "bytes": 1291057,
+      "sha256": "41ef16e37a51448ccf0b6581f30865232a971bd3ef053c5539ae444858222a7a",
+      "size": [
+        2171,
+        724
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "raw/lalin-echo-closing-step.png",
+      "bytes": 1969267,
+      "sha256": "7b8a589303d7d9915e2c86dee5399e4058d40307c9f892754a1e8bf2cc1ddfa2",
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "raw/lalin-hit.png",
+      "bytes": 1633789,
+      "sha256": "5f9f2832ee0707f6f86d7a18f4f4d679fcbfaecca056f1d834103dbd11dfab80",
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "raw/wila-down.png",
+      "bytes": 1115765,
+      "sha256": "06ce6a9f8926b1be8092ae6a11b59e2123e817d5bbc38a0b1c06d1e1d77cab41",
+      "size": [
+        2171,
+        724
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "raw/wila-echo-closing-step.png",
+      "bytes": 1926560,
+      "sha256": "f866f6a1f563b0275159e82481851fe00941ad6826b1f2efbdad9872e0767186",
+      "size": [
+        2170,
+        725
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "seeds/lalin.png",
+      "bytes": 388422,
+      "sha256": "3fc6f8259ca286dc11d2952c05a19518896d9cb56ea4a361d4c11c9fffccbeb6",
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "seeds/wila.png",
+      "bytes": 371319,
+      "sha256": "09aa9847771b968dfa1d15fb4c36816518a1e6d709d3812923559a7a7e0e212d",
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "seeds.json",
+      "bytes": 1312,
+      "sha256": "ba4eeb71ed94bc89b54beeb265f54dc045360f97d9a2d3781d81897302dc7d88"
+    },
+    {
+      "file": "spaced/lalin-block.png",
+      "bytes": 292756,
+      "sha256": "b4212678569a101276cf3ea77b1ba6737b956cd2349bec0acf556ff7c816ad32",
+      "size": [
+        2560,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "spaced/lalin-circle-spin.png",
+      "bytes": 563273,
+      "sha256": "2c3f34c2a75031627578c52ff0476602f320775ab14787d6d6b81114be24807f",
+      "size": [
+        3840,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "spaced/lalin-dance-strike.png",
+      "bytes": 420932,
+      "sha256": "61c7a7af22624156906147a8a62b158c5e734b4467e0101eef4ff6d5365bc644",
+      "size": [
+        3840,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "spaced/lalin-down.png",
+      "bytes": 233875,
+      "sha256": "0e21b83166840f7ee804069bf1629b7c013fbafdedd35b9cb9b02fd40a429dd6",
+      "size": [
+        2560,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "spaced/lalin-echo-closing-step.png",
+      "bytes": 540298,
+      "sha256": "d58b093416010f485b8c3c9d49420bb496ee12fde4aeb88bd2e2fe22f44a4289",
+      "size": [
+        3840,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "spaced/lalin-hit.png",
+      "bytes": 278655,
+      "sha256": "473755f345503a95a0d5fdae75b25fa82bcb70affe94781c08d937564133cb80",
+      "size": [
+        2560,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "spaced/wila-down.png",
+      "bytes": 224072,
+      "sha256": "c03c5db0b492f20cbdc8d4ce327556a9a5cf0659d6565c42d6c2503de97bc803",
+      "size": [
+        2560,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "spaced/wila-echo-closing-step.png",
+      "bytes": 511880,
+      "sha256": "7c812e3fd6192ef7999ac947bd042ad92b78b187f51544ce30d4cdd52bda8a9e",
+      "size": [
+        3840,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "strips.json",
+      "bytes": 16799,
+      "sha256": "c82bf6a4fbf178edbf13c698dbc7777385fa0cd81c3d3feed14e1b1a42eec770"
+    },
+    {
+      "file": "verify_remote.py",
+      "bytes": 1582,
+      "sha256": "d90bff9d7106e4cd44f36744ff576162f16cfa1152a47ea90e196398e85a55bc"
+    },
+    {
+      "file": "wila-preview-390.png",
+      "bytes": 107387,
+      "sha256": "88f8fbf8cf49c7ae6eb0d07746031359af313d4c445cdc4b0b15c71866933263",
+      "size": [
+        390,
+        790
+      ],
+      "mode": "RGB",
+      "decoded": true
+    }
+  ]
+}

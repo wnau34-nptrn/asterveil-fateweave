@@ -1,0 +1,95 @@
+[
+  {
+    "identity": "lalin",
+    "move": "dance-strike",
+    "generation_id": "715dc804-42fc-4dfa-89c4-c2bae0366942",
+    "prompt": "Redraw Lalin dance-strike as ONE horizontal 6-frame animation strip, transparent background, six equally spaced slots, large empty transparent gaps, no text. Image 1 is the EXACT approved model; preserve its face, hairstyle, costume, fans, ribbons and exact head/body proportions. Image 2 supplies ONLY ordered poses, its head is 1.32x too big: correct that. Image 3 is a passed proportion reference. Six poses left to right: poised ready; gather fan across body; step into fan strike right; extended fan flourish; reverse weight; return rightward ready. SAME head scale relative to body as image 1 in EVERY pose; no enlarged chibi head, same body length. Same camera and right facing. Common ground line. No VFX, glow, trails or background. Keep all fans and ribbons inside each slot. Production sprite art with original seed's painted style. Whole strip at high resolution, wide landscape.",
+    "references": [
+      "incoming/ART-UNIT-ANIMATION-A7-001/dancers/lalin/seeds/lalin.png",
+      "incoming/ART-UNIT-ANIMATION-A7-001/dancers/lalin/raw/lalin-dance-strike-r1.png",
+      "incoming/ART-UNIT-ANIMATION-A7-001/dancers/lalin/raw/lalin-partner-turn-r2.png"
+    ],
+    "transparent_background": true,
+    "tool": "image_gen.imagegen"
+  },
+  {
+    "identity": "lalin",
+    "move": "circle-spin",
+    "generation_id": "42a5afed-4187-46b9-ba5d-b5a0bcbc3be3",
+    "prompt": "Create a six-frame horizontal animation strip of EXACTLY the dancer in the supplied single image. This seed is the only anatomy reference. Preserve its proportions precisely: do NOT make a shorter/chubbier chibi body; preserve seed's head-to-torso and head-to-leg size ratios. Head INCLUDING hair should be no larger than about 38% of the full standing figure height, including when turned. SAME outfit, fans, braid, teal ribbons and red gold layered skirt, same painting style. Six left-to-right poses: gather arms; turn through right side; back-facing pivot; continue spin through opposite side; reopen both fans; settle facing right. Full body figures, same physical scale every frame, ground line common. True transparent background. Six evenly spaced slots, lots of empty transparent space between figures and at edges, no overlapping or clipping. No text/VFX/glows/trails. Model fidelity is more important than cute caricature; keep limbs and torso as long as seed.",
+    "references": [
+      "incoming/ART-UNIT-ANIMATION-A7-001/dancers/lalin/seeds/lalin.png"
+    ],
+    "transparent_background": true,
+    "tool": "image_gen.imagegen"
+  },
+  {
+    "identity": "lalin",
+    "move": "echo-closing-step",
+    "generation_id": "b3453e93-0872-4562-9220-f8b0b3baf107",
+    "prompt": "Create a SIX-frame horizontal animation strip of the EXACT dancer in supplied seed image. This single seed is the only model. Preserve its exact head-to-body ratio, face, hair, teal coral gold costume, braid, TWO fans and cloth ribbons. Do NOT make short round chibi caricatures. Keep torso and legs as long as seed, head/hair no larger than 38% standing full height. SAME physical head scale all poses. Left-to-right SIX poses: gather fans low; crossing foot placement; forward fan accent toward right; rising open flourish with lifted foot; soften closing step; settle right. Motion order must read clearly. Same painting style, camera, scale and shared ground line. Whole bodies and equipment fully inside evenly spaced slots. Very wide empty transparent gutters and outer margins. TRUE transparent background. No text, glow, effects, trails or scenery.",
+    "references": [
+      "incoming/ART-UNIT-ANIMATION-A7-001/dancers/lalin/seeds/lalin.png"
+    ],
+    "transparent_background": true,
+    "tool": "image_gen.imagegen"
+  },
+  {
+    "identity": "lalin",
+    "move": "hit",
+    "generation_id": "a5637821-27d4-45d5-8d07-8146b751d101",
+    "prompt": "Redraw Lalin HIT reaction as ONE horizontal strip with EXACTLY FOUR complete figures, in order: ready; recoil and wince; catch balance; guard. Image 1 is exact approved character model. Copy its head/body proportions exactly in ALL poses; old strip image 2 has heads too big and is pose reference ONLY. Same face/hair/coral teal gold costume/two fans/ribbons. NO enlarged head, maintain body length and leg proportions. True transparent background, wide EMPTY gutters between all four figures, generous margins, each figure no more than 70% slot width. Same ground line and camera, right facing. Same painted sprite style. No text, no VFX/glow/trails, no background.",
+    "references": [
+      "incoming/ART-UNIT-ANIMATION-A7-001/dancers/lalin/seeds/lalin.png",
+      "incoming/ART-UNIT-ANIMATION-A7-001/dancers/lalin/raw/lalin-hit-r1.png"
+    ],
+    "transparent_background": true,
+    "tool": "image_gen.imagegen"
+  },
+  {
+    "identity": "lalin",
+    "move": "block",
+    "generation_id": "ae3f2233-1c20-4f58-9d7c-fac5d4d80793",
+    "prompt": "ONE horizontal FOUR-frame sprite strip: exact Lalin from seed performing BLOCK. Ordered figures: (1) raise both forearms protectively at chest, one fan near cheek and other angled high; (2) cross forearms and fans across upper chest just below chin, face VISIBLE; (3) keep forearms crossed while bending knees low to absorb force, face VISIBLE; (4) reset right-facing ready with fans apart. Exact same head/hair size relative to body as seed for ALL four figures, absolutely no bigger head in crouch or guard. Same torso and limb lengths. Preserve seed face, braid, coral teal gold costume, two fans, fabric ribbons, painted style. Consistent scale, common ground, complete figures inside four equal slots with wide EMPTY transparent gaps and outer margins. No text, effects, glow, trails or background. TRUE transparency.",
+    "references": [
+      "incoming/ART-UNIT-ANIMATION-A7-001/dancers/lalin/seeds/lalin.png"
+    ],
+    "transparent_background": true,
+    "tool": "image_gen.imagegen"
+  },
+  {
+    "identity": "lalin",
+    "move": "down",
+    "generation_id": "da34636e-7b71-45ef-9722-fd80aab85206",
+    "prompt": "Redraw Lalin DOWN as ONE horizontal strip, EXACTLY FOUR figures, left to right: knees give way; hand and knee reach ground; sink to seated slump; lie unconscious prone horizontally and STAY DOWN. Image 1 is exact approved character model. Image 2 supplies poses only: its heads are too large. Preserve EXACT seed head size relative to limbs and torso in EVERY pose, even lying. Final prone full body length must equal standing seed body length; do not bunch torso or enlarge head. Same coral teal gold costume, braid, fans and fabric ribbons. Same painted style, same camera and right-facing fall. All four complete figures with very wide empty transparent gutters and outer margins; do not crop fans/ribbons. NO effects, glows, trails, text or background. True transparent alpha.",
+    "references": [
+      "incoming/ART-UNIT-ANIMATION-A7-001/dancers/lalin/seeds/lalin.png",
+      "incoming/ART-UNIT-ANIMATION-A7-001/dancers/lalin/raw/lalin-down-r1.png"
+    ],
+    "transparent_background": true,
+    "tool": "image_gen.imagegen"
+  },
+  {
+    "identity": "wila",
+    "move": "echo-closing-step",
+    "generation_id": "a2c84b11-f1c1-45af-a7e1-262e1cc3e861",
+    "prompt": "Make a small-scale horizontal sprite strip: SIX SEPARATE FULL-BODY WILA FIGURES in a single row on transparent background. IMPORTANT empty space is mandatory: each figure only 200px wide and about 280px tall on a 2172x724 canvas; leave about 150px completely empty between figures. No figure may touch another. Seed image is exact model for face/hair/costume/head-to-body proportions, do not enlarge head, keep body and legs as long as seed. Six ordered poses: gather both fans low; crossing foot placement; forward fan accent right; rising open flourish; soften closing step; settle right. Same purple ivory gold costume, dark hair crescent, two fans and fabric ribbons. Same painted sprite style, camera and ground line. Exactly six figures, all entire bodies and fans. Transparent margins around all. No glow, text, trails, VFX, scenery.",
+    "references": [
+      "incoming/ART-UNIT-ANIMATION-A7-001/dancers/wila/seeds/wila.png"
+    ],
+    "transparent_background": true,
+    "tool": "image_gen.imagegen"
+  },
+  {
+    "identity": "wila",
+    "move": "down",
+    "generation_id": "9fb96f57-a73d-45ea-8ac8-947f4e202ce3",
+    "prompt": "Redraw Wila DOWN as ONE horizontal strip, EXACTLY FOUR complete figures. Ordered poses: knees give way; hand and knee reach ground; sink to seated slump; lie unconscious prone HORIZONTALLY and STAY DOWN. Image 1 is the EXACT approved model. Image 2 is pose reference ONLY with heads too big. Every head has EXACTLY same physical scale relative to limbs and torso as seed; NO enlarging head in crouch or fall. Final lying body length matches seed's full standing body length, legs extended, torso not shortened. Preserve face, dark hair/crescent accessory, purple ivory gold costume, two fans and ribbons. Same painted sprite style, right-facing fall and camera. TRUE transparent background, very wide EMPTY gutters between figures and generous outer margins. No cropping, touching figures, effects, glows, trails, text or scenery.",
+    "references": [
+      "incoming/ART-UNIT-ANIMATION-A7-001/dancers/wila/seeds/wila.png",
+      "incoming/ART-UNIT-ANIMATION-A7-001/dancers/wila/raw/wila-down-r1.png"
+    ],
+    "transparent_background": true,
+    "tool": "image_gen.imagegen"
+  }
+]
