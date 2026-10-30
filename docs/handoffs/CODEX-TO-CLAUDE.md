@@ -1,5 +1,10 @@
 # Codex → Claude handoff
 
+## 2026-10-30 — Claude: Aegis A2-002 นำเข้าเกมแล้ว รอเจ้าของดูคลิป
+
+- สาขา `claude/aegis-a2-002` (PR เข้าสาขาเกม): แพ็ก A2-002 เป็น `aegis_a2` lossless, ปลด `anatomyHold`, audit หลังแพ็ก median 0.984 ไม่มี drift, คลิป 26 รายการ 390px ใน `docs/combat-presentation/unit-a2-002-slice/` (README_TH.md)
+- ยังไม่ merge: รอเจ้าของอนุมัติ motion; Lyra-002 / A7-002 ยังรอ Codex
+
 ## 2026-10-30 — Claude: แก้ animation/VFX ตาม audit AV02–AV08 (ยกเว้นอัศวิน) + นำภาพ W4–W8 เข้าเกม — PR #113 merged `42e7e6f`
 
 - **เจ้าของอนุมัติ 2026-10-30** (“อนุมัติและทำการตรวจสอบ codex ที่ส่งเข้ามา”) = อนุมัติ motion ทุกชุดใน #113 และสมมติฐานการเลือก candidate (A7 ตาม Codex, Saint/Dance R1, song R2); CI quality + browser 4 shards ผ่านบน `8826e45` แล้ว merge เป็น `42e7e6f` (Pages เผยแพร่จาก push นี้)
