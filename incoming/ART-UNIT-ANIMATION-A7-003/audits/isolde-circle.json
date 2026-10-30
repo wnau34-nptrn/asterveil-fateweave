@@ -1,0 +1,60 @@
+{
+ "tolerance": 0.12,
+ "minInliers": 12,
+ "report": {
+  "isolde-circle": [
+   {
+    "frame": 0,
+    "height": 460,
+    "scale": 1.0,
+    "inliers": 2659,
+    "idle": true,
+    "status": "idle"
+   },
+   {
+    "frame": 1,
+    "height": 460,
+    "scale": 1.0,
+    "inliers": 2659,
+    "idle": true,
+    "status": "idle"
+   },
+   {
+    "frame": 2,
+    "height": 394,
+    "scale": 0.945,
+    "inliers": 48,
+    "status": "ok"
+   },
+   {
+    "frame": 3,
+    "height": 468,
+    "scale": 0.052,
+    "inliers": 6,
+    "status": "not-measured"
+   },
+   {
+    "frame": 4,
+    "height": 581,
+    "scale": 0.92,
+    "inliers": 41,
+    "status": "ok"
+   },
+   {
+    "frame": 5,
+    "height": 463,
+    "scale": 0.971,
+    "inliers": 74,
+    "status": "ok"
+   },
+   {
+    "frame": 6,
+    "height": 460,
+    "scale": 1.0,
+    "inliers": 2659,
+    "idle": true,
+    "status": "idle"
+   }
+  ]
+ }
+}

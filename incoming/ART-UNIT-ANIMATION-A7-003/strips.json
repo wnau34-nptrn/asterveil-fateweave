@@ -1,0 +1,2573 @@
+{
+  "schema": 1,
+  "sharedCharacterScale": {
+    "odran": 1.0,
+    "isolde": 1.0
+  },
+  "note": "Raw raster registration is one transform per strip; never per-frame scaling. Cells use seed-sized logical coordinates with transparent overscan.",
+  "strips": [
+    {
+      "character": "odran",
+      "runtimeId": "thiran",
+      "move": "attack",
+      "frames": 6,
+      "slotOrder": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "cellFiles": [
+        "cells/odran-attack/001.png",
+        "cells/odran-attack/002.png",
+        "cells/odran-attack/003.png",
+        "cells/odran-attack/004.png",
+        "cells/odran-attack/005.png",
+        "cells/odran-attack/006.png"
+      ],
+      "referenceCell": "cells/odran-attack/000.png",
+      "spaced": "spaced/odran-attack.png",
+      "characterScale": 1.0,
+      "rawRasterRegistrationScale": 1.3048433048433048,
+      "logicalSourceSize": [
+        512,
+        512
+      ],
+      "cellSize": [
+        1024,
+        1024
+      ],
+      "logicalOriginInCell": [
+        256,
+        256
+      ],
+      "logicalGroundY": 497,
+      "cellGroundY": 753,
+      "cellPivot": [
+        512,
+        753
+      ],
+      "timingWeights": [
+        1,
+        1.2,
+        0.75,
+        1,
+        0.8,
+        1
+      ],
+      "frameTransforms": [
+        {
+          "frame": 1,
+          "rawBounds": [
+            3,
+            214,
+            346,
+            573
+          ],
+          "opaqueBoundsXYWH": [
+            7,
+            218,
+            335,
+            351
+          ],
+          "rawToCellScale": 1.3048433048433048,
+          "offset": [
+            288,
+            290
+          ],
+          "seedLocked": true
+        },
+        {
+          "frame": 2,
+          "rawBounds": [
+            370,
+            263,
+            727,
+            577
+          ],
+          "opaqueBoundsXYWH": [
+            372,
+            267,
+            352,
+            306
+          ],
+          "rawToCellScale": 1.3048433048433048,
+          "offset": [
+            280,
+            348
+          ],
+          "seedLocked": false
+        },
+        {
+          "frame": 3,
+          "rawBounds": [
+            749,
+            226,
+            1073,
+            577
+          ],
+          "opaqueBoundsXYWH": [
+            753,
+            230,
+            316,
+            343
+          ],
+          "rawToCellScale": 1.3048433048433048,
+          "offset": [
+            301,
+            300
+          ],
+          "seedLocked": false
+        },
+        {
+          "frame": 4,
+          "rawBounds": [
+            1086,
+            221,
+            1474,
+            577
+          ],
+          "opaqueBoundsXYWH": [
+            1090,
+            225,
+            380,
+            348
+          ],
+          "rawToCellScale": 1.3048433048433048,
+          "offset": [
+            259,
+            293
+          ],
+          "seedLocked": false
+        },
+        {
+          "frame": 5,
+          "rawBounds": [
+            1480,
+            267,
+            1796,
+            577
+          ],
+          "opaqueBoundsXYWH": [
+            1484,
+            271,
+            308,
+            302
+          ],
+          "rawToCellScale": 1.3048433048433048,
+          "offset": [
+            306,
+            353
+          ],
+          "seedLocked": false
+        },
+        {
+          "frame": 6,
+          "rawBounds": [
+            1814,
+            214,
+            2156,
+            573
+          ],
+          "opaqueBoundsXYWH": [
+            1818,
+            218,
+            335,
+            351
+          ],
+          "rawToCellScale": 1.3048433048433048,
+          "offset": [
+            288,
+            290
+          ],
+          "seedLocked": true
+        }
+      ],
+      "anatomyGate": true,
+      "medianHeadScale": 0.9635,
+      "notMeasuredFrames": [],
+      "auditScriptExitCode": 0,
+      "routes": [
+        "attack",
+        "saintstrike",
+        "vowstrike"
+      ],
+      "recommended": true,
+      "status": "candidate-awaiting-owner-selection"
+    },
+    {
+      "character": "odran",
+      "runtimeId": "thiran",
+      "move": "arc",
+      "frames": 6,
+      "slotOrder": [
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "cellFiles": [
+        "cells/odran-arc/001.png",
+        "cells/odran-arc/002.png",
+        "cells/odran-arc/003.png",
+        "cells/odran-arc/004.png",
+        "cells/odran-arc/005.png",
+        "cells/odran-arc/006.png"
+      ],
+      "referenceCell": "cells/odran-arc/000.png",
+      "spaced": "spaced/odran-arc.png",
+      "characterScale": 1.0,
+      "rawRasterRegistrationScale": 1.1624365482233503,
+      "logicalSourceSize": [
+        512,
+        512
+      ],
+      "cellSize": [
+        1024,
+        1024
+      ],
+      "logicalOriginInCell": [
+        256,
+        256
+      ],
+      "logicalGroundY": 497,
+      "cellGroundY": 753,
+      "cellPivot": [
+        512,
+        753
+      ],
+      "timingWeights": [
+        1,
+        1.2,
+        0.75,
+        1,
+        0.8,
+        1
+      ],
+      "frameTransforms": [
+        {
+          "frame": 1,
+          "rawBounds": [
+            0,
+            193,
+            365,
+            594
+          ],
+          "opaqueBoundsXYWH": [
+            2,
+            196,
+            359,
+            394
+          ],
+          "rawToCellScale": 1.1624365482233503,
+          "offset": [
+            301,
+            292
+          ],
+          "seedLocked": true
+        },
+        {
+          "frame": 2,
+          "rawBounds": [
+            376,
+            199,
+            728,
+            595
+          ],
+          "opaqueBoundsXYWH": [
+            380,
+            203,
+            344,
+            389
+          ],
+          "rawToCellScale": 1.1624365482233503,
+          "offset": [
+            308,
+            297
+          ],
+          "seedLocked": false
+        },
+        {
+          "frame": 3,
+          "rawBounds": [
+            733,
+            195,
+            1107,
+            597
+          ],
+          "opaqueBoundsXYWH": [
+            737,
+            199,
+            366,
+            394
+          ],
+          "rawToCellScale": 1.1624365482233503,
+          "offset": [
+            294,
+            291
+          ],
+          "seedLocked": false
+        },
+        {
+          "frame": 4,
+          "rawBounds": [
+            1098,
+            197,
+            1479,
+            596
+          ],
+          "opaqueBoundsXYWH": [
+            1102,
+            200,
+            373,
+            393
+          ],
+          "rawToCellScale": 1.1624365482233503,
+          "offset": [
+            290,
+            292
+          ],
+          "seedLocked": false
+        },
+        {
+          "frame": 5,
+          "rawBounds": [
+            1484,
+            194,
+            1803,
+            596
+          ],
+          "opaqueBoundsXYWH": [
+            1488,
+            198,
+            311,
+            395
+          ],
+          "rawToCellScale": 1.1624365482233503,
+          "offset": [
+            326,
+            290
+          ],
+          "seedLocked": false
+        },
+        {
+          "frame": 6,
+          "rawBounds": [
+            1806,
+            192,
+            2171,
+            594
+          ],
+          "opaqueBoundsXYWH": [
+            1810,
+            196,
+            357,
+            394
+          ],
+          "rawToCellScale": 1.1624365482233503,
+          "offset": [
+            300,
+            291
+          ],
+          "seedLocked": true
+        }
+      ],
+      "anatomyGate": true,
+      "medianHeadScale": 0.9955,
+      "notMeasuredFrames": [],
+      "auditScriptExitCode": 0,
+      "routes": [
+        "saintarc"
+      ],
+      "recommended": true,
+      "status": "candidate-awaiting-owner-selection"
+    },
+    {
+      "character": "odran",
+      "runtimeId": "thiran",
+      "move": "communion",
+      "frames": 6,
+      "slotOrder": [
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "cellFiles": [
+        "cells/odran-communion/001.png",
+        "cells/odran-communion/002.png",
+        "cells/odran-communion/003.png",
+        "cells/odran-communion/004.png",
+        "cells/odran-communion/005.png",
+        "cells/odran-communion/006.png"
+      ],
+      "referenceCell": "cells/odran-communion/000.png",
+      "spaced": "spaced/odran-communion.png",
+      "characterScale": 1.0,
+      "rawRasterRegistrationScale": 1.2148541114058355,
+      "logicalSourceSize": [
+        512,
+        512
+      ],
+      "cellSize": [
+        1024,
+        1024
+      ],
+      "logicalOriginInCell": [
+        256,
+        256
+      ],
+      "logicalGroundY": 497,
+      "cellGroundY": 753,
+      "cellPivot": [
+        512,
+        753
+      ],
+      "timingWeights": [
+        1,
+        1.2,
+        0.75,
+        1,
+        0.8,
+        1
+      ],
+      "frameTransforms": [
+        {
+          "frame": 1,
+          "rawBounds": [
+            0,
+            187,
+            368,
+            572
+          ],
+          "opaqueBoundsXYWH": [
+            0,
+            191,
+            364,
+            377
+          ],
+          "rawToCellScale": 1.2148541114058355,
+          "offset": [
+            290,
+            290
+          ],
+          "seedLocked": true
+        },
+        {
+          "frame": 2,
+          "rawBounds": [
+            364,
+            190,
+            675,
+            572
+          ],
+          "opaqueBoundsXYWH": [
+            368,
+            193,
+            303,
+            375
+          ],
+          "rawToCellScale": 1.2148541114058355,
+          "offset": [
+            323,
+            294
+          ],
+          "seedLocked": false
+        },
+        {
+          "frame": 3,
+          "rawBounds": [
+            693,
+            195,
+            1107,
+            572
+          ],
+          "opaqueBoundsXYWH": [
+            696,
+            199,
+            407,
+            369
+          ],
+          "rawToCellScale": 1.2148541114058355,
+          "offset": [
+            260,
+            300
+          ],
+          "seedLocked": false
+        },
+        {
+          "frame": 4,
+          "rawBounds": [
+            1092,
+            193,
+            1495,
+            572
+          ],
+          "opaqueBoundsXYWH": [
+            1095,
+            197,
+            396,
+            371
+          ],
+          "rawToCellScale": 1.2148541114058355,
+          "offset": [
+            268,
+            298
+          ],
+          "seedLocked": false
+        },
+        {
+          "frame": 5,
+          "rawBounds": [
+            1496,
+            190,
+            1809,
+            572
+          ],
+          "opaqueBoundsXYWH": [
+            1500,
+            193,
+            305,
+            375
+          ],
+          "rawToCellScale": 1.2148541114058355,
+          "offset": [
+            322,
+            294
+          ],
+          "seedLocked": false
+        },
+        {
+          "frame": 6,
+          "rawBounds": [
+            1810,
+            188,
+            2172,
+            572
+          ],
+          "opaqueBoundsXYWH": [
+            1814,
+            192,
+            358,
+            376
+          ],
+          "rawToCellScale": 1.2148541114058355,
+          "offset": [
+            290,
+            291
+          ],
+          "seedLocked": true
+        }
+      ],
+      "anatomyGate": true,
+      "medianHeadScale": 0.9345,
+      "notMeasuredFrames": [
+        2,
+        3
+      ],
+      "auditScriptExitCode": 0,
+      "routes": [
+        "communion",
+        "sharewound"
+      ],
+      "recommended": true,
+      "status": "candidate-awaiting-owner-selection"
+    },
+    {
+      "character": "odran",
+      "runtimeId": "thiran",
+      "move": "lastlight",
+      "frames": 6,
+      "slotOrder": [
+        19,
+        20,
+        21,
+        22,
+        23,
+        24
+      ],
+      "cellFiles": [
+        "cells/odran-lastlight/001.png",
+        "cells/odran-lastlight/002.png",
+        "cells/odran-lastlight/003.png",
+        "cells/odran-lastlight/004.png",
+        "cells/odran-lastlight/005.png",
+        "cells/odran-lastlight/006.png"
+      ],
+      "referenceCell": "cells/odran-lastlight/000.png",
+      "spaced": "spaced/odran-lastlight.png",
+      "characterScale": 1.0,
+      "rawRasterRegistrationScale": 1.195822454308094,
+      "logicalSourceSize": [
+        512,
+        512
+      ],
+      "cellSize": [
+        1024,
+        1024
+      ],
+      "logicalOriginInCell": [
+        256,
+        256
+      ],
+      "logicalGroundY": 497,
+      "cellGroundY": 753,
+      "cellPivot": [
+        512,
+        753
+      ],
+      "timingWeights": [
+        1,
+        1.2,
+        0.75,
+        1,
+        0.8,
+        1
+      ],
+      "frameTransforms": [
+        {
+          "frame": 1,
+          "rawBounds": [
+            18,
+            258,
+            380,
+            649
+          ],
+          "opaqueBoundsXYWH": [
+            20,
+            262,
+            356,
+            383
+          ],
+          "rawToCellScale": 1.195822454308094,
+          "offset": [
+            296,
+            289
+          ],
+          "seedLocked": true
+        },
+        {
+          "frame": 2,
+          "rawBounds": [
+            390,
+            343,
+            772,
+            650
+          ],
+          "opaqueBoundsXYWH": [
+            394,
+            347,
+            374,
+            299
+          ],
+          "rawToCellScale": 1.195822454308094,
+          "offset": [
+            284,
+            391
+          ],
+          "seedLocked": false
+        },
+        {
+          "frame": 3,
+          "rawBounds": [
+            779,
+            244,
+            1129,
+            649
+          ],
+          "opaqueBoundsXYWH": [
+            783,
+            248,
+            343,
+            397
+          ],
+          "rawToCellScale": 1.195822454308094,
+          "offset": [
+            302,
+            273
+          ],
+          "seedLocked": false
+        },
+        {
+          "frame": 4,
+          "rawBounds": [
+            1135,
+            113,
+            1464,
+            649
+          ],
+          "opaqueBoundsXYWH": [
+            1139,
+            117,
+            321,
+            528
+          ],
+          "rawToCellScale": 1.195822454308094,
+          "offset": [
+            316,
+            116
+          ],
+          "seedLocked": false
+        },
+        {
+          "frame": 5,
+          "rawBounds": [
+            1472,
+            271,
+            1800,
+            649
+          ],
+          "opaqueBoundsXYWH": [
+            1476,
+            275,
+            320,
+            370
+          ],
+          "rawToCellScale": 1.195822454308094,
+          "offset": [
+            316,
+            305
+          ],
+          "seedLocked": false
+        },
+        {
+          "frame": 6,
+          "rawBounds": [
+            1799,
+            259,
+            2158,
+            649
+          ],
+          "opaqueBoundsXYWH": [
+            1803,
+            262,
+            352,
+            383
+          ],
+          "rawToCellScale": 1.195822454308094,
+          "offset": [
+            296,
+            291
+          ],
+          "seedLocked": true
+        }
+      ],
+      "anatomyGate": true,
+      "medianHeadScale": 1.023,
+      "notMeasuredFrames": [],
+      "auditScriptExitCode": 0,
+      "routes": [
+        "lastlight"
+      ],
+      "recommended": true,
+      "status": "candidate-awaiting-owner-selection"
+    },
+    {
+      "character": "odran",
+      "runtimeId": "thiran",
+      "move": "hit",
+      "frames": 4,
+      "slotOrder": [
+        25,
+        26,
+        27,
+        28
+      ],
+      "cellFiles": [
+        "cells/odran-hit/001.png",
+        "cells/odran-hit/002.png",
+        "cells/odran-hit/003.png",
+        "cells/odran-hit/004.png"
+      ],
+      "referenceCell": "cells/odran-hit/000.png",
+      "spaced": "spaced/odran-hit.png",
+      "characterScale": 1.0,
+      "rawRasterRegistrationScale": 1.0956937799043063,
+      "logicalSourceSize": [
+        512,
+        512
+      ],
+      "cellSize": [
+        1024,
+        1024
+      ],
+      "logicalOriginInCell": [
+        256,
+        256
+      ],
+      "logicalGroundY": 497,
+      "cellGroundY": 753,
+      "cellPivot": [
+        512,
+        753
+      ],
+      "timingWeights": [
+        0.8,
+        1,
+        0.9,
+        1
+      ],
+      "frameTransforms": [
+        {
+          "frame": 1,
+          "rawBounds": [
+            4,
+            185,
+            419,
+            611
+          ],
+          "opaqueBoundsXYWH": [
+            8,
+            189,
+            408,
+            418
+          ],
+          "rawToCellScale": 1.0956937799043063,
+          "offset": [
+            284,
+            291
+          ],
+          "seedLocked": true
+        },
+        {
+          "frame": 2,
+          "rawBounds": [
+            480,
+            202,
+            807,
+            611
+          ],
+          "opaqueBoundsXYWH": [
+            483,
+            206,
+            321,
+            401
+          ],
+          "rawToCellScale": 1.0956937799043063,
+          "offset": [
+            334,
+            309
+          ],
+          "seedLocked": false
+        },
+        {
+          "frame": 3,
+          "rawBounds": [
+            827,
+            205,
+            1236,
+            611
+          ],
+          "opaqueBoundsXYWH": [
+            831,
+            209,
+            401,
+            399
+          ],
+          "rawToCellScale": 1.0956937799043063,
+          "offset": [
+            288,
+            311
+          ],
+          "seedLocked": false
+        },
+        {
+          "frame": 4,
+          "rawBounds": [
+            1239,
+            182,
+            1653,
+            611
+          ],
+          "opaqueBoundsXYWH": [
+            1243,
+            186,
+            406,
+            421
+          ],
+          "rawToCellScale": 1.0956937799043063,
+          "offset": [
+            285,
+            287
+          ],
+          "seedLocked": true
+        }
+      ],
+      "anatomyGate": true,
+      "medianHeadScale": 0.988,
+      "notMeasuredFrames": [],
+      "auditScriptExitCode": 0,
+      "routes": [
+        "hit"
+      ],
+      "recommended": true,
+      "status": "candidate-awaiting-owner-selection"
+    },
+    {
+      "character": "odran",
+      "runtimeId": "thiran",
+      "move": "block",
+      "frames": 4,
+      "slotOrder": [
+        29,
+        30,
+        31,
+        32
+      ],
+      "cellFiles": [
+        "cells/odran-block/001.png",
+        "cells/odran-block/002.png",
+        "cells/odran-block/003.png",
+        "cells/odran-block/004.png"
+      ],
+      "referenceCell": "cells/odran-block/000.png",
+      "spaced": "spaced/odran-block.png",
+      "characterScale": 1.0,
+      "rawRasterRegistrationScale": 1.055299539170507,
+      "logicalSourceSize": [
+        512,
+        512
+      ],
+      "cellSize": [
+        1024,
+        1024
+      ],
+      "logicalOriginInCell": [
+        256,
+        256
+      ],
+      "logicalGroundY": 497,
+      "cellGroundY": 753,
+      "cellPivot": [
+        512,
+        753
+      ],
+      "timingWeights": [
+        0.8,
+        1,
+        0.9,
+        1
+      ],
+      "frameTransforms": [
+        {
+          "frame": 1,
+          "rawBounds": [
+            21,
+            165,
+            418,
+            607
+          ],
+          "opaqueBoundsXYWH": [
+            24,
+            169,
+            390,
+            434
+          ],
+          "rawToCellScale": 1.055299539170507,
+          "offset": [
+            303,
+            291
+          ],
+          "seedLocked": true
+        },
+        {
+          "frame": 2,
+          "rawBounds": [
+            427,
+            170,
+            766,
+            607
+          ],
+          "opaqueBoundsXYWH": [
+            431,
+            172,
+            331,
+            431
+          ],
+          "rawToCellScale": 1.055299539170507,
+          "offset": [
+            333,
+            296
+          ],
+          "seedLocked": false
+        },
+        {
+          "frame": 3,
+          "rawBounds": [
+            768,
+            231,
+            1138,
+            607
+          ],
+          "opaqueBoundsXYWH": [
+            771,
+            235,
+            363,
+            368
+          ],
+          "rawToCellScale": 1.055299539170507,
+          "offset": [
+            318,
+            360
+          ],
+          "seedLocked": false
+        },
+        {
+          "frame": 4,
+          "rawBounds": [
+            1114,
+            166,
+            1502,
+            607
+          ],
+          "opaqueBoundsXYWH": [
+            1118,
+            170,
+            381,
+            433
+          ],
+          "rawToCellScale": 1.055299539170507,
+          "offset": [
+            308,
+            292
+          ],
+          "seedLocked": true
+        }
+      ],
+      "anatomyGate": true,
+      "medianHeadScale": 0.9664999999999999,
+      "notMeasuredFrames": [],
+      "auditScriptExitCode": 0,
+      "routes": [
+        "block"
+      ],
+      "recommended": true,
+      "status": "candidate-awaiting-owner-selection"
+    },
+    {
+      "character": "odran",
+      "runtimeId": "thiran",
+      "move": "down",
+      "frames": 4,
+      "slotOrder": [
+        33,
+        34,
+        35,
+        36
+      ],
+      "cellFiles": [
+        "cells/odran-down/001.png",
+        "cells/odran-down/002.png",
+        "cells/odran-down/003.png",
+        "cells/odran-down/004.png"
+      ],
+      "referenceCell": "cells/odran-down/000.png",
+      "spaced": "spaced/odran-down.png",
+      "characterScale": 1.0,
+      "rawRasterRegistrationScale": 1.08274231678487,
+      "logicalSourceSize": [
+        512,
+        512
+      ],
+      "cellSize": [
+        1024,
+        1024
+      ],
+      "logicalOriginInCell": [
+        256,
+        256
+      ],
+      "logicalGroundY": 497,
+      "cellGroundY": 753,
+      "cellPivot": [
+        512,
+        753
+      ],
+      "timingWeights": [
+        0.8,
+        1,
+        0.9,
+        1
+      ],
+      "frameTransforms": [
+        {
+          "frame": 1,
+          "rawBounds": [
+            40,
+            174,
+            388,
+            605
+          ],
+          "opaqueBoundsXYWH": [
+            44,
+            178,
+            341,
+            423
+          ],
+          "rawToCellScale": 1.08274231678487,
+          "offset": [
+            323,
+            291
+          ],
+          "seedLocked": false
+        },
+        {
+          "frame": 2,
+          "rawBounds": [
+            388,
+            260,
+            783,
+            610
+          ],
+          "opaqueBoundsXYWH": [
+            392,
+            264,
+            387,
+            342
+          ],
+          "rawToCellScale": 1.08274231678487,
+          "offset": [
+            298,
+            379
+          ],
+          "seedLocked": false
+        },
+        {
+          "frame": 3,
+          "rawBounds": [
+            780,
+            326,
+            1255,
+            603
+          ],
+          "opaqueBoundsXYWH": [
+            784,
+            330,
+            467,
+            269
+          ],
+          "rawToCellScale": 1.08274231678487,
+          "offset": [
+            255,
+            457
+          ],
+          "seedLocked": false
+        },
+        {
+          "frame": 4,
+          "rawBounds": [
+            1271,
+            416,
+            1786,
+            607
+          ],
+          "opaqueBoundsXYWH": [
+            1274,
+            418,
+            509,
+            185
+          ],
+          "rawToCellScale": 1.08274231678487,
+          "offset": [
+            232,
+            550
+          ],
+          "seedLocked": false
+        }
+      ],
+      "anatomyGate": true,
+      "medianHeadScale": 0.935,
+      "notMeasuredFrames": [
+        3,
+        4
+      ],
+      "auditScriptExitCode": 0,
+      "routes": [
+        "down"
+      ],
+      "recommended": true,
+      "status": "candidate-awaiting-owner-selection"
+    },
+    {
+      "character": "isolde",
+      "runtimeId": "wila",
+      "move": "attack",
+      "frames": 6,
+      "slotOrder": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "cellFiles": [
+        "cells/isolde-attack/001.png",
+        "cells/isolde-attack/002.png",
+        "cells/isolde-attack/003.png",
+        "cells/isolde-attack/004.png",
+        "cells/isolde-attack/005.png",
+        "cells/isolde-attack/006.png"
+      ],
+      "referenceCell": "cells/isolde-attack/000.png",
+      "spaced": "spaced/isolde-attack.png",
+      "characterScale": 1.0,
+      "rawRasterRegistrationScale": 1.0874704491725768,
+      "logicalSourceSize": [
+        512,
+        512
+      ],
+      "cellSize": [
+        1024,
+        1024
+      ],
+      "logicalOriginInCell": [
+        256,
+        256
+      ],
+      "logicalGroundY": 497,
+      "cellGroundY": 753,
+      "cellPivot": [
+        512,
+        753
+      ],
+      "timingWeights": [
+        1,
+        1.2,
+        0.75,
+        1,
+        0.8,
+        1
+      ],
+      "frameTransforms": [
+        {
+          "frame": 1,
+          "rawBounds": [
+            4,
+            178,
+            306,
+            609
+          ],
+          "opaqueBoundsXYWH": [
+            8,
+            182,
+            294,
+            423
+          ],
+          "rawToCellScale": 1.0874704491725768,
+          "offset": [
+            348,
+            289
+          ],
+          "seedLocked": true
+        },
+        {
+          "frame": 2,
+          "rawBounds": [
+            348,
+            176,
+            683,
+            598
+          ],
+          "opaqueBoundsXYWH": [
+            352,
+            180,
+            327,
+            415
+          ],
+          "rawToCellScale": 1.0874704491725768,
+          "offset": [
+            330,
+            297
+          ],
+          "seedLocked": false
+        },
+        {
+          "frame": 3,
+          "rawBounds": [
+            700,
+            214,
+            1119,
+            609
+          ],
+          "opaqueBoundsXYWH": [
+            704,
+            218,
+            411,
+            387
+          ],
+          "rawToCellScale": 1.0874704491725768,
+          "offset": [
+            284,
+            328
+          ],
+          "seedLocked": false
+        },
+        {
+          "frame": 4,
+          "rawBounds": [
+            1062,
+            226,
+            1596,
+            609
+          ],
+          "opaqueBoundsXYWH": [
+            1066,
+            229,
+            527,
+            376
+          ],
+          "rawToCellScale": 1.0874704491725768,
+          "offset": [
+            222,
+            341
+          ],
+          "seedLocked": false
+        },
+        {
+          "frame": 5,
+          "rawBounds": [
+            1532,
+            131,
+            1824,
+            609
+          ],
+          "opaqueBoundsXYWH": [
+            1536,
+            135,
+            286,
+            470
+          ],
+          "rawToCellScale": 1.0874704491725768,
+          "offset": [
+            352,
+            237
+          ],
+          "seedLocked": false
+        },
+        {
+          "frame": 6,
+          "rawBounds": [
+            1839,
+            179,
+            2141,
+            609
+          ],
+          "opaqueBoundsXYWH": [
+            1843,
+            183,
+            295,
+            422
+          ],
+          "rawToCellScale": 1.0874704491725768,
+          "offset": [
+            347,
+            290
+          ],
+          "seedLocked": true
+        }
+      ],
+      "anatomyGate": true,
+      "medianHeadScale": 1.0390000000000001,
+      "notMeasuredFrames": [],
+      "auditScriptExitCode": 0,
+      "routes": [
+        "attack"
+      ],
+      "recommended": true,
+      "status": "candidate-awaiting-owner-selection"
+    },
+    {
+      "character": "isolde",
+      "runtimeId": "wila",
+      "move": "partner",
+      "frames": 6,
+      "slotOrder": [
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "cellFiles": [
+        "cells/isolde-partner/001.png",
+        "cells/isolde-partner/002.png",
+        "cells/isolde-partner/003.png",
+        "cells/isolde-partner/004.png",
+        "cells/isolde-partner/005.png",
+        "cells/isolde-partner/006.png"
+      ],
+      "referenceCell": "cells/isolde-partner/000.png",
+      "spaced": "spaced/isolde-partner.png",
+      "characterScale": 1.0,
+      "rawRasterRegistrationScale": 0.9643605870020965,
+      "logicalSourceSize": [
+        512,
+        512
+      ],
+      "cellSize": [
+        1024,
+        1024
+      ],
+      "logicalOriginInCell": [
+        256,
+        256
+      ],
+      "logicalGroundY": 497,
+      "cellGroundY": 753,
+      "cellPivot": [
+        512,
+        753
+      ],
+      "timingWeights": [
+        1,
+        1.2,
+        0.75,
+        1,
+        0.8,
+        1
+      ],
+      "frameTransforms": [
+        {
+          "frame": 1,
+          "rawBounds": [
+            5,
+            164,
+            340,
+            648
+          ],
+          "opaqueBoundsXYWH": [
+            9,
+            167,
+            327,
+            477
+          ],
+          "rawToCellScale": 0.9643605870020965,
+          "offset": [
+            350,
+            290
+          ],
+          "seedLocked": true
+        },
+        {
+          "frame": 2,
+          "rawBounds": [
+            398,
+            210,
+            715,
+            647
+          ],
+          "opaqueBoundsXYWH": [
+            402,
+            214,
+            309,
+            431
+          ],
+          "rawToCellScale": 0.9643605870020965,
+          "offset": [
+            359,
+            334
+          ],
+          "seedLocked": false
+        },
+        {
+          "frame": 3,
+          "rawBounds": [
+            709,
+            59,
+            1093,
+            648
+          ],
+          "opaqueBoundsXYWH": [
+            711,
+            63,
+            378,
+            582
+          ],
+          "rawToCellScale": 0.9643605870020965,
+          "offset": [
+            328,
+            188
+          ],
+          "seedLocked": false
+        },
+        {
+          "frame": 4,
+          "rawBounds": [
+            1111,
+            78,
+            1452,
+            648
+          ],
+          "opaqueBoundsXYWH": [
+            1115,
+            81,
+            334,
+            564
+          ],
+          "rawToCellScale": 0.9643605870020965,
+          "offset": [
+            347,
+            206
+          ],
+          "seedLocked": false
+        },
+        {
+          "frame": 5,
+          "rawBounds": [
+            1473,
+            178,
+            1776,
+            648
+          ],
+          "opaqueBoundsXYWH": [
+            1476,
+            182,
+            296,
+            463
+          ],
+          "rawToCellScale": 0.9643605870020965,
+          "offset": [
+            366,
+            303
+          ],
+          "seedLocked": false
+        },
+        {
+          "frame": 6,
+          "rawBounds": [
+            1818,
+            164,
+            2151,
+            647
+          ],
+          "opaqueBoundsXYWH": [
+            1822,
+            168,
+            325,
+            476
+          ],
+          "rawToCellScale": 0.9643605870020965,
+          "offset": [
+            352,
+            290
+          ],
+          "seedLocked": true
+        }
+      ],
+      "anatomyGate": true,
+      "medianHeadScale": 0.9575,
+      "notMeasuredFrames": [],
+      "auditScriptExitCode": 0,
+      "routes": [
+        "cadence",
+        "duet",
+        "deepbeat"
+      ],
+      "recommended": true,
+      "status": "candidate-awaiting-owner-selection"
+    },
+    {
+      "character": "isolde",
+      "runtimeId": "wila",
+      "move": "circle",
+      "frames": 6,
+      "slotOrder": [
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "cellFiles": [
+        "cells/isolde-circle/001.png",
+        "cells/isolde-circle/002.png",
+        "cells/isolde-circle/003.png",
+        "cells/isolde-circle/004.png",
+        "cells/isolde-circle/005.png",
+        "cells/isolde-circle/006.png"
+      ],
+      "referenceCell": "cells/isolde-circle/000.png",
+      "spaced": "spaced/isolde-circle.png",
+      "characterScale": 1.0,
+      "rawRasterRegistrationScale": 1.0623556581986142,
+      "logicalSourceSize": [
+        512,
+        512
+      ],
+      "cellSize": [
+        1024,
+        1024
+      ],
+      "logicalOriginInCell": [
+        256,
+        256
+      ],
+      "logicalGroundY": 497,
+      "cellGroundY": 753,
+      "cellPivot": [
+        512,
+        753
+      ],
+      "timingWeights": [
+        1,
+        1.2,
+        0.75,
+        1,
+        0.8,
+        1
+      ],
+      "frameTransforms": [
+        {
+          "frame": 1,
+          "rawBounds": [
+            18,
+            195,
+            319,
+            635
+          ],
+          "opaqueBoundsXYWH": [
+            22,
+            198,
+            293,
+            433
+          ],
+          "rawToCellScale": 1.0623556581986142,
+          "offset": [
+            352,
+            290
+          ],
+          "seedLocked": true
+        },
+        {
+          "frame": 2,
+          "rawBounds": [
+            331,
+            264,
+            873,
+            635
+          ],
+          "opaqueBoundsXYWH": [
+            335,
+            268,
+            535,
+            363
+          ],
+          "rawToCellScale": 1.0623556581986142,
+          "offset": [
+            224,
+            363
+          ],
+          "seedLocked": false
+        },
+        {
+          "frame": 3,
+          "rawBounds": [
+            724,
+            192,
+            1135,
+            633
+          ],
+          "opaqueBoundsXYWH": [
+            728,
+            194,
+            403,
+            435
+          ],
+          "rawToCellScale": 1.0623556581986142,
+          "offset": [
+            294,
+            289
+          ],
+          "seedLocked": false
+        },
+        {
+          "frame": 4,
+          "rawBounds": [
+            1114,
+            90,
+            1464,
+            637
+          ],
+          "opaqueBoundsXYWH": [
+            1118,
+            94,
+            342,
+            539
+          ],
+          "rawToCellScale": 1.0623556581986142,
+          "offset": [
+            326,
+            176
+          ],
+          "seedLocked": false
+        },
+        {
+          "frame": 5,
+          "rawBounds": [
+            1448,
+            201,
+            1827,
+            637
+          ],
+          "opaqueBoundsXYWH": [
+            1452,
+            205,
+            371,
+            428
+          ],
+          "rawToCellScale": 1.0623556581986142,
+          "offset": [
+            310,
+            294
+          ],
+          "seedLocked": false
+        },
+        {
+          "frame": 6,
+          "rawBounds": [
+            1823,
+            195,
+            2126,
+            635
+          ],
+          "opaqueBoundsXYWH": [
+            1827,
+            199,
+            296,
+            432
+          ],
+          "rawToCellScale": 1.0623556581986142,
+          "offset": [
+            351,
+            291
+          ],
+          "seedLocked": true
+        }
+      ],
+      "anatomyGate": true,
+      "medianHeadScale": 0.945,
+      "notMeasuredFrames": [
+        3
+      ],
+      "auditScriptExitCode": 0,
+      "routes": [
+        "rounddance"
+      ],
+      "recommended": true,
+      "status": "candidate-awaiting-owner-selection"
+    },
+    {
+      "character": "isolde",
+      "runtimeId": "wila",
+      "move": "closing",
+      "frames": 6,
+      "slotOrder": [
+        19,
+        20,
+        21,
+        22,
+        23,
+        24
+      ],
+      "cellFiles": [
+        "cells/isolde-closing/001.png",
+        "cells/isolde-closing/002.png",
+        "cells/isolde-closing/003.png",
+        "cells/isolde-closing/004.png",
+        "cells/isolde-closing/005.png",
+        "cells/isolde-closing/006.png"
+      ],
+      "referenceCell": "cells/isolde-closing/000.png",
+      "spaced": "spaced/isolde-closing.png",
+      "characterScale": 1.0,
+      "rawRasterRegistrationScale": 1.010989010989011,
+      "logicalSourceSize": [
+        512,
+        512
+      ],
+      "cellSize": [
+        1024,
+        1024
+      ],
+      "logicalOriginInCell": [
+        256,
+        256
+      ],
+      "logicalGroundY": 497,
+      "cellGroundY": 753,
+      "cellPivot": [
+        512,
+        753
+      ],
+      "timingWeights": [
+        1,
+        1.2,
+        0.75,
+        1,
+        0.8,
+        1
+      ],
+      "frameTransforms": [
+        {
+          "frame": 1,
+          "rawBounds": [
+            19,
+            169,
+            330,
+            631
+          ],
+          "opaqueBoundsXYWH": [
+            23,
+            173,
+            303,
+            455
+          ],
+          "rawToCellScale": 1.010989010989011,
+          "offset": [
+            355,
+            289
+          ],
+          "seedLocked": true
+        },
+        {
+          "frame": 2,
+          "rawBounds": [
+            370,
+            186,
+            697,
+            635
+          ],
+          "opaqueBoundsXYWH": [
+            374,
+            190,
+            319,
+            441
+          ],
+          "rawToCellScale": 1.010989010989011,
+          "offset": [
+            346,
+            303
+          ],
+          "seedLocked": false
+        },
+        {
+          "frame": 3,
+          "rawBounds": [
+            741,
+            88,
+            1096,
+            634
+          ],
+          "opaqueBoundsXYWH": [
+            745,
+            92,
+            348,
+            538
+          ],
+          "rawToCellScale": 1.010989010989011,
+          "offset": [
+            332,
+            205
+          ],
+          "seedLocked": false
+        },
+        {
+          "frame": 4,
+          "rawBounds": [
+            1089,
+            236,
+            1456,
+            635
+          ],
+          "opaqueBoundsXYWH": [
+            1093,
+            240,
+            360,
+            391
+          ],
+          "rawToCellScale": 1.010989010989011,
+          "offset": [
+            326,
+            355
+          ],
+          "seedLocked": false
+        },
+        {
+          "frame": 5,
+          "rawBounds": [
+            1452,
+            214,
+            1765,
+            634
+          ],
+          "opaqueBoundsXYWH": [
+            1456,
+            218,
+            305,
+            413
+          ],
+          "rawToCellScale": 1.010989010989011,
+          "offset": [
+            354,
+            331
+          ],
+          "seedLocked": false
+        },
+        {
+          "frame": 6,
+          "rawBounds": [
+            1819,
+            169,
+            2134,
+            631
+          ],
+          "opaqueBoundsXYWH": [
+            1823,
+            173,
+            307,
+            455
+          ],
+          "rawToCellScale": 1.010989010989011,
+          "offset": [
+            353,
+            289
+          ],
+          "seedLocked": true
+        }
+      ],
+      "anatomyGate": true,
+      "medianHeadScale": 0.9844999999999999,
+      "notMeasuredFrames": [],
+      "auditScriptExitCode": 0,
+      "routes": [
+        "closingstep"
+      ],
+      "recommended": true,
+      "status": "candidate-awaiting-owner-selection"
+    },
+    {
+      "character": "isolde",
+      "runtimeId": "wila",
+      "move": "echo",
+      "frames": 6,
+      "slotOrder": [
+        25,
+        26,
+        27,
+        28,
+        29,
+        30
+      ],
+      "cellFiles": [
+        "cells/isolde-echo/001.png",
+        "cells/isolde-echo/002.png",
+        "cells/isolde-echo/003.png",
+        "cells/isolde-echo/004.png",
+        "cells/isolde-echo/005.png",
+        "cells/isolde-echo/006.png"
+      ],
+      "referenceCell": "cells/isolde-echo/000.png",
+      "spaced": "spaced/isolde-echo.png",
+      "characterScale": 1.0,
+      "rawRasterRegistrationScale": 1.0,
+      "logicalSourceSize": [
+        512,
+        512
+      ],
+      "cellSize": [
+        1024,
+        1024
+      ],
+      "logicalOriginInCell": [
+        256,
+        256
+      ],
+      "logicalGroundY": 497,
+      "cellGroundY": 753,
+      "cellPivot": [
+        512,
+        753
+      ],
+      "timingWeights": [
+        1,
+        1.2,
+        0.75,
+        1,
+        0.8,
+        1
+      ],
+      "frameTransforms": [
+        {
+          "frame": 1,
+          "rawBounds": [
+            5,
+            171,
+            333,
+            637
+          ],
+          "opaqueBoundsXYWH": [
+            9,
+            173,
+            320,
+            460
+          ],
+          "rawToCellScale": 1.0,
+          "offset": [
+            348,
+            291
+          ],
+          "seedLocked": true
+        },
+        {
+          "frame": 2,
+          "rawBounds": [
+            384,
+            90,
+            703,
+            639
+          ],
+          "opaqueBoundsXYWH": [
+            387,
+            94,
+            312,
+            541
+          ],
+          "rawToCellScale": 1.0,
+          "offset": [
+            353,
+            208
+          ],
+          "seedLocked": false
+        },
+        {
+          "frame": 3,
+          "rawBounds": [
+            726,
+            144,
+            1094,
+            639
+          ],
+          "opaqueBoundsXYWH": [
+            730,
+            147,
+            360,
+            488
+          ],
+          "rawToCellScale": 1.0,
+          "offset": [
+            328,
+            262
+          ],
+          "seedLocked": false
+        },
+        {
+          "frame": 4,
+          "rawBounds": [
+            1106,
+            161,
+            1421,
+            638
+          ],
+          "opaqueBoundsXYWH": [
+            1110,
+            164,
+            307,
+            470
+          ],
+          "rawToCellScale": 1.0,
+          "offset": [
+            354,
+            280
+          ],
+          "seedLocked": false
+        },
+        {
+          "frame": 5,
+          "rawBounds": [
+            1442,
+            171,
+            1764,
+            640
+          ],
+          "opaqueBoundsXYWH": [
+            1446,
+            175,
+            314,
+            461
+          ],
+          "rawToCellScale": 1.0,
+          "offset": [
+            351,
+            288
+          ],
+          "seedLocked": false
+        },
+        {
+          "frame": 6,
+          "rawBounds": [
+            1798,
+            169,
+            2126,
+            638
+          ],
+          "opaqueBoundsXYWH": [
+            1801,
+            173,
+            321,
+            461
+          ],
+          "rawToCellScale": 1.0,
+          "offset": [
+            348,
+            288
+          ],
+          "seedLocked": true
+        }
+      ],
+      "anatomyGate": true,
+      "medianHeadScale": 0.9735,
+      "notMeasuredFrames": [],
+      "auditScriptExitCode": 0,
+      "routes": [
+        "echofoot"
+      ],
+      "recommended": true,
+      "status": "candidate-awaiting-owner-selection"
+    },
+    {
+      "character": "isolde",
+      "runtimeId": "wila",
+      "move": "hit",
+      "frames": 4,
+      "slotOrder": [
+        31,
+        32,
+        33,
+        34
+      ],
+      "cellFiles": [
+        "cells/isolde-hit/001.png",
+        "cells/isolde-hit/002.png",
+        "cells/isolde-hit/003.png",
+        "cells/isolde-hit/004.png"
+      ],
+      "referenceCell": "cells/isolde-hit/000.png",
+      "spaced": "spaced/isolde-hit.png",
+      "characterScale": 1.0,
+      "rawRasterRegistrationScale": 0.989247311827957,
+      "logicalSourceSize": [
+        512,
+        512
+      ],
+      "cellSize": [
+        1024,
+        1024
+      ],
+      "logicalOriginInCell": [
+        256,
+        256
+      ],
+      "logicalGroundY": 497,
+      "cellGroundY": 753,
+      "cellPivot": [
+        512,
+        753
+      ],
+      "timingWeights": [
+        0.8,
+        1,
+        0.9,
+        1
+      ],
+      "frameTransforms": [
+        {
+          "frame": 1,
+          "rawBounds": [
+            4,
+            152,
+            337,
+            624
+          ],
+          "opaqueBoundsXYWH": [
+            8,
+            155,
+            325,
+            465
+          ],
+          "rawToCellScale": 0.989247311827957,
+          "offset": [
+            348,
+            290
+          ],
+          "seedLocked": true
+        },
+        {
+          "frame": 2,
+          "rawBounds": [
+            382,
+            173,
+            726,
+            624
+          ],
+          "opaqueBoundsXYWH": [
+            385,
+            176,
+            337,
+            444
+          ],
+          "rawToCellScale": 0.989247311827957,
+          "offset": [
+            342,
+            311
+          ],
+          "seedLocked": false
+        },
+        {
+          "frame": 3,
+          "rawBounds": [
+            754,
+            203,
+            1120,
+            620
+          ],
+          "opaqueBoundsXYWH": [
+            756,
+            207,
+            360,
+            409
+          ],
+          "rawToCellScale": 0.989247311827957,
+          "offset": [
+            332,
+            344
+          ],
+          "seedLocked": false
+        },
+        {
+          "frame": 4,
+          "rawBounds": [
+            1120,
+            151,
+            1453,
+            624
+          ],
+          "opaqueBoundsXYWH": [
+            1124,
+            155,
+            326,
+            465
+          ],
+          "rawToCellScale": 0.989247311827957,
+          "offset": [
+            347,
+            289
+          ],
+          "seedLocked": true
+        }
+      ],
+      "anatomyGate": true,
+      "medianHeadScale": 0.9864999999999999,
+      "notMeasuredFrames": [],
+      "auditScriptExitCode": 0,
+      "routes": [
+        "hit"
+      ],
+      "recommended": true,
+      "status": "candidate-awaiting-owner-selection"
+    },
+    {
+      "character": "isolde",
+      "runtimeId": "wila",
+      "move": "block",
+      "frames": 4,
+      "slotOrder": [
+        35,
+        36,
+        37,
+        38
+      ],
+      "cellFiles": [
+        "cells/isolde-block/001.png",
+        "cells/isolde-block/002.png",
+        "cells/isolde-block/003.png",
+        "cells/isolde-block/004.png"
+      ],
+      "referenceCell": "cells/isolde-block/000.png",
+      "spaced": "spaced/isolde-block.png",
+      "characterScale": 1.0,
+      "rawRasterRegistrationScale": 0.9603340292275574,
+      "logicalSourceSize": [
+        512,
+        512
+      ],
+      "cellSize": [
+        1024,
+        1024
+      ],
+      "logicalOriginInCell": [
+        256,
+        256
+      ],
+      "logicalGroundY": 497,
+      "cellGroundY": 753,
+      "cellPivot": [
+        512,
+        753
+      ],
+      "timingWeights": [
+        0.8,
+        1,
+        0.9,
+        1
+      ],
+      "frameTransforms": [
+        {
+          "frame": 1,
+          "rawBounds": [
+            7,
+            125,
+            355,
+            611
+          ],
+          "opaqueBoundsXYWH": [
+            11,
+            128,
+            340,
+            479
+          ],
+          "rawToCellScale": 0.9603340292275574,
+          "offset": [
+            344,
+            289
+          ],
+          "seedLocked": true
+        },
+        {
+          "frame": 2,
+          "rawBounds": [
+            384,
+            151,
+            842,
+            611
+          ],
+          "opaqueBoundsXYWH": [
+            388,
+            155,
+            450,
+            452
+          ],
+          "rawToCellScale": 0.9603340292275574,
+          "offset": [
+            292,
+            315
+          ],
+          "seedLocked": false
+        },
+        {
+          "frame": 3,
+          "rawBounds": [
+            810,
+            225,
+            1241,
+            611
+          ],
+          "opaqueBoundsXYWH": [
+            814,
+            228,
+            423,
+            379
+          ],
+          "rawToCellScale": 0.9603340292275574,
+          "offset": [
+            306,
+            386
+          ],
+          "seedLocked": false
+        },
+        {
+          "frame": 4,
+          "rawBounds": [
+            1222,
+            125,
+            1544,
+            611
+          ],
+          "opaqueBoundsXYWH": [
+            1226,
+            128,
+            314,
+            479
+          ],
+          "rawToCellScale": 0.9603340292275574,
+          "offset": [
+            358,
+            290
+          ],
+          "seedLocked": true
+        }
+      ],
+      "anatomyGate": true,
+      "medianHeadScale": 0.966,
+      "notMeasuredFrames": [],
+      "auditScriptExitCode": 0,
+      "routes": [
+        "block"
+      ],
+      "recommended": true,
+      "status": "candidate-awaiting-owner-selection"
+    },
+    {
+      "character": "isolde",
+      "runtimeId": "wila",
+      "move": "down",
+      "frames": 4,
+      "slotOrder": [
+        39,
+        40,
+        41,
+        42
+      ],
+      "cellFiles": [
+        "cells/isolde-down/001.png",
+        "cells/isolde-down/002.png",
+        "cells/isolde-down/003.png",
+        "cells/isolde-down/004.png"
+      ],
+      "referenceCell": "cells/isolde-down/000.png",
+      "spaced": "spaced/isolde-down.png",
+      "characterScale": 1.0,
+      "rawRasterRegistrationScale": 1.07981220657277,
+      "logicalSourceSize": [
+        512,
+        512
+      ],
+      "cellSize": [
+        1024,
+        1024
+      ],
+      "logicalOriginInCell": [
+        256,
+        256
+      ],
+      "logicalGroundY": 497,
+      "cellGroundY": 753,
+      "cellPivot": [
+        512,
+        753
+      ],
+      "timingWeights": [
+        0.8,
+        1,
+        0.9,
+        1
+      ],
+      "frameTransforms": [
+        {
+          "frame": 1,
+          "rawBounds": [
+            15,
+            172,
+            340,
+            606
+          ],
+          "opaqueBoundsXYWH": [
+            18,
+            176,
+            319,
+            426
+          ],
+          "rawToCellScale": 1.07981220657277,
+          "offset": [
+            337,
+            289
+          ],
+          "seedLocked": false
+        },
+        {
+          "frame": 2,
+          "rawBounds": [
+            369,
+            230,
+            812,
+            622
+          ],
+          "opaqueBoundsXYWH": [
+            373,
+            234,
+            435,
+            384
+          ],
+          "rawToCellScale": 1.07981220657277,
+          "offset": [
+            274,
+            335
+          ],
+          "seedLocked": false
+        },
+        {
+          "frame": 3,
+          "rawBounds": [
+            816,
+            274,
+            1234,
+            633
+          ],
+          "opaqueBoundsXYWH": [
+            820,
+            278,
+            410,
+            351
+          ],
+          "rawToCellScale": 1.07981220657277,
+          "offset": [
+            287,
+            369
+          ],
+          "seedLocked": false
+        },
+        {
+          "frame": 4,
+          "rawBounds": [
+            1233,
+            409,
+            1773,
+            642
+          ],
+          "opaqueBoundsXYWH": [
+            1237,
+            413,
+            532,
+            225
+          ],
+          "rawToCellScale": 1.07981220657277,
+          "offset": [
+            220,
+            506
+          ],
+          "seedLocked": false
+        }
+      ],
+      "anatomyGate": true,
+      "medianHeadScale": 1.0939999999999999,
+      "notMeasuredFrames": [
+        3,
+        4
+      ],
+      "auditScriptExitCode": 0,
+      "routes": [
+        "down"
+      ],
+      "recommended": true,
+      "status": "candidate-awaiting-owner-selection"
+    }
+  ]
+}
