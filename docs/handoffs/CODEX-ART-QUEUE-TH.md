@@ -810,6 +810,8 @@ Provenance: do NOT store base64 image data in JSON (PR #118's provenance/generat
 Acceptance (Claude checks before owner review): head 145–165px, body 440–460px, ratio 0.32–0.36, both feet touching y≈496, untouched atlas cells pixel-identical, Odran byte-identical to PR #118, file sizes not larger than the current atlases. Push with normal git, fetch back, verify every SHA-256 and decode every image with Pillow. Owner visual approval is required; CI or these checks are not approval. No merge, no runtime integration.
 ```
 
+> **พัก (เจ้าของ OD-14, 2026-10-30):** จำกัดอาชีพละ 1 ตัว โอดราน/อิโซลด์พัก ห้ามส่ง/ทำ prompt 2 นี้จนกว่าเจ้าของสั่งเปิดอาชีพละ 2 ถ้า Codex เริ่มแล้วให้หยุดและเก็บงานใน branch โดยไม่ต้องเปิด PR
+
 ### prompt 2 — ชุดท่า A7-003 (เจ้าของอนุมัติภาพนิ่ง PR #120 และสั่งส่งทันที 2026-10-30)
 
 เจ้าของ: “อนุมัติ ขอ Prompt สร้าง animation เลย” — seed ใช้ไฟล์จาก PR #120 ได้เลย ไม่ต้องรอ Claude นำเข้าเกม (Claude นำภาพนิ่งเข้าเกมคู่ขนาน ตัวเลข/พิกเซลต้องตรง sha ด้านล่าง)
