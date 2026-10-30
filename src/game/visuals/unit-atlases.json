@@ -260,15 +260,6 @@
     "decodedBytes": 4382720,
     "downloadBytes": 1372287
   },
-  "thiran": {
-    "image": "thiran_a7.6c168a27fc6d.webp",
-    "atlas": "thiran_a7.654ddcb382df.json",
-    "width": 768,
-    "height": 1399,
-    "frames": 35,
-    "decodedBytes": 4297728,
-    "downloadBytes": 1358416
-  },
   "lalin": {
     "image": "lalin_a7.950000b43402.webp",
     "atlas": "lalin_a7.1aeb9538ecf6.json",
@@ -277,15 +268,6 @@
     "frames": 13,
     "decodedBytes": 2027520,
     "downloadBytes": 625180
-  },
-  "wila": {
-    "image": "wila_a7.c30ee2ee1a9a.webp",
-    "atlas": "wila_a7.462e814a9269.json",
-    "width": 1024,
-    "height": 1110,
-    "frames": 31,
-    "decodedBytes": 4546560,
-    "downloadBytes": 1417238
   },
   "matriarch": {
     "image": "matriarch_a9.9aec248e0338.webp",

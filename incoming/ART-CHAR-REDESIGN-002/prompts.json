@@ -1,0 +1,30 @@
+{
+  "tool": "image_gen.imagegen",
+  "modelVersion": "not exposed",
+  "generations": [
+    {
+      "id": "4cdcbd63-e456-4edf-b802-844544cb0291",
+      "prompt": "Redraw ONLY Isolde as ONE full-body static chibi battle REST/READY sprite. First attachment is approved identity portrait; second is cast PROPORTIONS/style; third old unit is ONLY costume/staff identity, DO NOT copy its small head or airborne pose. Original painted anime RPG art, crisp dark outline and top-left light. SAME woman: short swept dark hair, silver temple streak and one loose lock, warm brown eyes, kind adult expression, navy/slate-blue wrapped tunic, fitted narrow cream trousers, cream wrapped dance boots with small brass ankle bells, ochre ONE-shoulder half-cape. No skirt/ruffles, no harem trousers, no braid, no fans, no orbiting ribbons, no crescent/leaf ornament, no purple/lilac/coral/teal. Facing RIGHT three-quarter view, balanced grounded READY STANCE, knees softly bent, BOTH feet firmly planted flat on EXACT SAME HORIZONTAL BASELINE, visibly separated feet with soles level. No lifted foot, no spin, no tiptoe, no airborne pose. This is an animation rest/return seed. Make head deliberately LARGE matching cast: hair top to chin exactly about ONE THIRD of hair-top-to-soles height. Compact body ~3 heads tall total. Target figure 450px tall in final 512 cell and head 153px tall; figure FIRST, staff must fit around figure without reducing it. Staff held alongside viewer LEFT of her at 15 degrees from vertical, full staff inside frame, bell crown top approximately LEVEL WITH HAIR TOP (at most 8px higher in final size), bottom near ground. Keep original slim dark shaft, brass end fittings and cap, compact cluster of small brass bells and TWO SHORT cream streamers attached only at top. One hand holds staff near waist, free hand relaxed ready near chest. Cape hangs mostly downward with slight flare, calm rest pose. Full body/staff visible, generous transparent margins, figure narrow enough to fit full-scale. TRUE transparent RGBA alpha, no background/checkerboard, NO ground shadow, NO text, no grid. Do not render a guide or measurements. One character only.",
+      "settings": {
+        "transparent_background": true
+      },
+      "outputPath": "sources/isolde-ready-r1.png",
+      "references": [
+        "portrait/isolde.png",
+        "references/style-units.png",
+        "references/isolde-pr118.png"
+      ]
+    },
+    {
+      "id": "967e15fd-ca76-423b-8086-9e83c326c6eb",
+      "prompt": "Correct this single Isolde sprite with TWO precise changes. 1) REMOVE ALL painted brown/gold/navy background, haze and shadow: deliver a genuinely TRANSPARENT RGBA cutout, alpha zero everywhere outside the character/staff. No halo, no ground shadow. 2) SHORTEN THE STAFF ABOVE HER HAND so the TOP of its brass bell crown is LEVEL WITH the TOPMOST HAIR TIP, not above it. Keep exact bell cap, cluster, short attached cream streamers, dark shaft/brass fittings, 15-20 degree upright angle. Do not change staff identity. Preserve whole woman's shape, exact LARGE head size relative to compact body (~one third hair-top-to-soles), face, short silver-streaked dark hair, ochre half-cape, navy wrapped top, fitted cream pants and wrapped boots with bells. BOTH feet must remain planted on EXACT SAME horizontal baseline; align both sole bottom contours precisely, no airborne pose. Keep entire staff/boots visible and margin around everything. ONE full body unit facing RIGHT. No text, no checkerboard, no background of any kind. This is an image cutout with transparent exterior.",
+      "settings": {
+        "transparent_background": true
+      },
+      "outputPath": "sources/isolde-ready.png",
+      "references": [
+        "sources/isolde-ready-r1.png"
+      ]
+    }
+  ]
+}

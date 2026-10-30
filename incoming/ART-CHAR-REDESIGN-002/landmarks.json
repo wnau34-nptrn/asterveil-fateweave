@@ -1,0 +1,5 @@
+{
+  "method": "Manual visual landmarks on the final normalized 512 cell; alpha>=40 contact scan inside the two foot ROIs. Head height includes hair top and chin rows.",
+  "isolde": {"hairTopY": 37, "chinY": 194, "leftFootX": [180, 225], "rightFootX": [355, 418]},
+  "ceriseGuide": {"hairTopY": 40, "chinY": 182, "note": "Manually reviewed on the current base frame 8; approximate chin contour, +/-2 px. Guides are drawn across the 115px lineup."}
+}
