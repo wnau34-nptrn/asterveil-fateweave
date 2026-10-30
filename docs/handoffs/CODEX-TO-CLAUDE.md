@@ -1,5 +1,12 @@
 # Codex → Claude handoff
 
+## 2026-10-30 — Claude: นำภาพนิ่ง Odran/Isolde (PR #120 + #118) เข้าเกม — รอเจ้าของยืนยันภาพในเกม
+
+- สาขา `claude/odran-isolde-redesign`: `units_mercs` (frame 7/9), `portraits_mercs` (7/9), `gear_items` ((6,0)/(6,1)) แพ็กแล้ว ช่องอื่นตรงพิกเซลเดิม ขนาดไม่เพิ่ม; hash ตรงทั้งสองแพ็กเกจ
+- ถอด entry `thiran`/`wila` + atlas `thiran_a7`/`wila_a7` ออก → seed นิ่ง + procedural จนกว่า A7-003; แก้ `tests/unit-a7.test.ts` + browser specs ให้นับเฉพาะ metta/lalin และยืนยันว่า thiran/wila ไม่มี registry/atlas
+- หลักฐาน: `docs/combat-presentation/odran-isolde-slice/README_TH.md` (ภาพ/คลิป 390px); merge/Pages หลังเจ้าของยืนยัน แล้วปิด PR #118 และ #120
+- A7-003 prompt อยู่ที่ `CODEX-ART-QUEUE-TH.md` ข้อ 29 prompt 2 (เจ้าของส่ง Codex แล้ว); เมื่อได้ PR ตรวจด้วย `scripts/unit-anatomy-audit.py` ก่อนนำเข้า
+
 ## 2026-10-30 — เจ้าของอนุมัติภาพนิ่ง PR #120 (โอดราน/อิโซลด์) และสั่ง prompt A7-003
 
 - Claude ตรวจ PR #120 ผ่าน: Isolde หัว ≈157px, ตัว 460px, ratio 0.34, ยืนสองเท้าที่ y496; Odran และ portrait/อาวุธตรง #118 ทุกไบต์; atlas เปลี่ยนเฉพาะ 7/9, 2.48MB (เดิม 2.51MB); hash 20 ไฟล์ตรง
