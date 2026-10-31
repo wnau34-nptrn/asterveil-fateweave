@@ -5,6 +5,7 @@ import { encounterById } from '../../src/content/encounters/catalog';
 import { createBattle, currentHeroId, pendingPhase, resolveCommand, targetOptions } from '../../src/core/battle/engine';
 import { battleData, newExpedition } from '../../src/core/world/world';
 import { newProfile } from '../../src/core/world/profile';
+import { legacyEnvelope } from '../fixtures/legacy-save';
 
 // Review screenshots of the 8-actor battle field for the owner (not a gameplay check).
 // Run with BATTLE_SHOTS=<dir> npx playwright test tests/browser/battle-shots.spec.ts
@@ -21,7 +22,7 @@ for (const id of ['slime-nest', 'rift-warden', 'veil-siege', 'vanguard-captain',
     const run = newExpedition(MAPS.find(m => m.bossEncounterId === id) ?? map, encounterById, 1234); run.tutorialDone = true;
     run.battle = { kind: ['rift-warden', 'vanguard-captain', 'elite-briar-lord'].includes(id) ? 'boss' : 'random', encounterId: data.id, entry: hp, commands: s.commands };
     const profile = { ...newProfile(map, 5), tutorialDone: true, commander: { name: 'อารี', crest: 'star', color: 'gold', camp: 'ค่ายอารี' } };
-    await page.addInitScript(({ key, raw }) => localStorage.setItem(key, raw), { key, raw: JSON.stringify({ version: 21, profile, run }) });
+    await page.addInitScript(({ key, raw }) => localStorage.setItem(key, raw), { key, raw: JSON.stringify(legacyEnvelope({ version: 21, profile, run })) });
     await page.goto('./'); await page.locator('#continue').click();
     const start = page.locator('[data-ui=start]'); if (await start.isVisible().catch(() => false)) await start.click();
     await expect(page.locator('#action-attack')).toBeEnabled(); await page.waitForTimeout(400);
@@ -47,7 +48,7 @@ test('battle shot boss phase 390x844', async ({ browser }) => {
   }
   run.battle.commands = s.commands;
   const profile = { ...newProfile(map, 5), tutorialDone: true, commander: { name: 'อารี', crest: 'star', color: 'gold', camp: 'ค่ายอารี' } };
-  await page.addInitScript(({ key, raw }) => localStorage.setItem(key, raw), { key, raw: JSON.stringify({ version: 21, profile, run }) });
+  await page.addInitScript(({ key, raw }) => localStorage.setItem(key, raw), { key, raw: JSON.stringify(legacyEnvelope({ version: 21, profile, run })) });
   await page.goto('./'); await page.locator('#continue').click();
   await expect(page.locator('#action-attack')).toBeEnabled(); await page.waitForTimeout(300);
   await page.screenshot({ path: `${dir}/battle-boss-pending-390.png` });

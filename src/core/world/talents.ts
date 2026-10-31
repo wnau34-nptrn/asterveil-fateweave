@@ -3,9 +3,9 @@ import type { MapDefinition, MemberProgress, TalentNode, TalentNodeDef, TalentTr
 // Big skill trees (master plan A6) have branches and tiers; the older small trees keep the root/a/b shape.
 export const isBigTree = (tree: TalentTree | undefined): boolean => !!tree?.some(n => n.tier !== undefined);
 const treeOf = (map: MapDefinition, id: string): TalentTree => map.talents[id] ?? [];
-// One point per level above 1; a big tree adds one per star above ★1.
-export const talentPoints = (map: MapDefinition, m: MemberProgress | undefined, id?: string): number =>
-  Math.min(m?.level ?? 1, map.progression.levelCap) - 1 + (id && isBigTree(treeOf(map, id)) ? (m?.stars ?? 1) - 1 : 0);
+// One point per camp level above 1 (P01: `level` is the camp's); a big tree adds one per star above ★1 until P04.
+export const talentPoints = (map: MapDefinition, m: Pick<MemberProgress, 'stars'> | undefined, id: string | undefined, level: number): number =>
+  Math.min(level, map.progression.levelCap) - 1 + (id && isBigTree(treeOf(map, id)) ? (m?.stars ?? 1) - 1 : 0);
 export const talentsSpent = (t: Talents | undefined): number => Object.values(t ?? {}).reduce<number>((a, b) => a + (b ?? 0), 0);
 // Spent ranks plus free granted nodes at full rank (grants never cost points).
 export function effectiveTalents(tree: TalentTree, t: Talents | undefined, grants: readonly TalentNode[] = []): Talents {
@@ -33,7 +33,7 @@ function bigReason(map: MapDefinition, tree: TalentTree, level: number, t: Talen
 export function talentsValid(map: MapDefinition, heroId: string, level: number, t: Talents, stars = 1, grants: readonly TalentNode[] = []): boolean {
   const tree = treeOf(map, heroId);
   if (Object.entries(t).some(([node, rank]) => { const def = tree.find(n => n.id === node); return !def || !Number.isInteger(rank) || rank! < 1 || rank! > def.max || grants.includes(node); })) return false;
-  if (talentsSpent(t) > talentPoints(map, { stars, dupes: 0, level }, heroId)) return false;
+  if (talentsSpent(t) > talentPoints(map, { stars }, heroId, level)) return false;
   if (!isBigTree(tree)) return !grants.length && tree.every(n => !t[n.id] || talentOpen(t, n.id));
   const all = effectiveTalents(tree, t, grants);
   return tree.every(n => !t[n.id] || !bigReason(map, tree, Math.min(level, map.progression.levelCap), all, n));
@@ -42,12 +42,12 @@ export function grantsValid(map: MapDefinition, heroId: string, grants: unknown)
   const tree = treeOf(map, heroId);
   return Array.isArray(grants) && grants.length > 0 && isBigTree(tree) && new Set(grants).size === grants.length && grants.every(g => tree.some(n => n.id === g));
 }
-export function memberTalentReason(map: MapDefinition, id: string, m: MemberProgress | undefined, node: TalentNode): string {
+export function memberTalentReason(map: MapDefinition, id: string, m: MemberProgress | undefined, node: TalentNode, level: number): string {
   const tree = treeOf(map, id); const def = tree.find(n => n.id === node);
   if (!m || !def) return 'unknown';
   const t = m.talents ?? {};
   if (m.grants?.includes(node) || (t[node] ?? 0) >= def.max) return 'max';
-  if (isBigTree(tree)) { const why = bigReason(map, tree, Math.min(m.level ?? 1, map.progression.levelCap), effectiveTalents(tree, t, m.grants), def); if (why) return why; }
+  if (isBigTree(tree)) { const why = bigReason(map, tree, Math.min(level, map.progression.levelCap), effectiveTalents(tree, t, m.grants), def); if (why) return why; }
   else if (!talentOpen(t, node)) return 'locked';
-  return talentsSpent(t) >= talentPoints(map, m, id) ? 'points' : '';
+  return talentsSpent(t) >= talentPoints(map, m, id, level) ? 'points' : '';
 }

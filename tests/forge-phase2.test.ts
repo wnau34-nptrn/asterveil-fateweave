@@ -6,6 +6,7 @@ import { enhanceTo, findItem, fuse, fuseMaterials, fuseReason, fusionRefund, ite
 import { itemValid, itemStats } from '../src/core/world/equipment';
 import { parseGame, saveGame } from '../src/core/save/expedition-save';
 import type { Item } from '../src/core/world/types';
+import { xpAt } from './fixtures/camp-level';
 const piece=(uid:number,patch:Partial<Item>={}):Item=>({uid,slot:'weapon',hero:'guardian',rarity:0,level:1,affixes:[],set:'dawn',q:{main:113,affixes:[]},...patch});
 const setup=()=>({...newProfile(map,17),tutorialDone:true,items:[piece(1),piece(2),piece(3),piece(4,{locked:true}),piece(5)],nextItem:6,bank:{ore:1000,dust:1000,gold:20,seal:3}});
 it('levels atomically to the area cap, retains all rolls and +, refunds only actual paid level costs',()=>{
@@ -21,7 +22,7 @@ it('levels atomically to the area cap, retains all rolls and +, refunds only act
   const recycled=salvage(out,map,[1]).profile;expect(recycled.bank).toMatchObject({ore:1002,dust:1001});expect(salvage(recycled,map,[1]).profile).toBe(recycled);
 });
 it('unlocks only defeated area milestones permanently on return, including respawns, wipes and completion',()=>{
-  let p=setup();p.members.guardian!.level=10;expect(itemLevelCap(p,map)).toBe(3);
+  let p=setup();p.campXp=xpAt(10);expect(itemLevelCap(p,map)).toBe(3);
   let game=depart(p,map,lookup,5);expect(settle(p,game.run!,'withdrawn',map).forgeLevel).toBe(3);
   game.run!.elitesDefeated=['gate-meadow'];p=settle(p,game.run!,'wiped',map) as typeof p;expect(itemLevelCap(p,map)).toBe(6);
   game=depart(p,map,lookup,6);game.run!.respawns={'gate-meadow':1};expect(settle(p,game.run!,'withdrawn',map).forgeLevel).toBe(6);
@@ -50,7 +51,7 @@ it('rejects stale, locked, worn, wrong-type, duplicate, main and overflow donors
 });
 it('v23 preserves level capital through run provenance; v22 migration respects prior completion without inventing capital',()=>{
   const p=equip(raiseItemLevel(setup(),map,1,3).profile,'guardian',1).profile,game=depart(p,map,lookup,8);let raw='';saveGame({getItem:()=>null,setItem:(_k,s)=>{raw=s;}},game);
-  expect(JSON.parse(raw).version).toBe(43);expect(parseGame(raw,map,lookup)).toEqual(game);
+  expect(JSON.parse(raw).version).toBe(44);expect(parseGame(raw,map,lookup)).toEqual(game);
   const corrupt=JSON.parse(raw);corrupt.run.members.guardian.gear.weapon.levelInvestment.ore++;expect(()=>parseGame(JSON.stringify(corrupt),map,lookup)).toThrow();
   const legacy=setup();const old={version:22,profile:legacy,run:null};delete old.profile.forgeLevel;expect(parseGame(JSON.stringify(old),map,lookup).profile.forgeLevel).toBe(3);old.profile.completes=1;const migrated=parseGame(JSON.stringify(old),map,lookup).profile;expect(migrated.forgeLevel).toBe(10);expect(migrated.items[0]!.levelInvestment).toBeUndefined();
 });

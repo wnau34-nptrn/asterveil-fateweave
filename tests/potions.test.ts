@@ -9,7 +9,7 @@ import { encounterChance, memberDef, move, newExpedition, openChest, potionReaso
 // Map potions (2D-5, docs/EXPEDITION_DESIGN.md "Map potions").
 const P = map.potions;
 const run = (patch: Partial<ExpeditionState> = {}): ExpeditionState => ({ ...newExpedition(map, lookup, 4, undefined, true), ...patch });
-const max = (s: ExpeditionState, id: string) => memberDef(lookup, map, s.members, id)!.maxHp;
+const max = (s: ExpeditionState, id: string) => memberDef(lookup, map, s, id)!.maxHp;
 
 describe('brewing and packing', () => {
   it('brewing costs ore and dust; a departure packs up to 3 of each and the rest stays home', () => {

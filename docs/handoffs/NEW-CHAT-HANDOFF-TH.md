@@ -1,5 +1,24 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
+## 2026-10-31 — P01 เลเวลค่ายร่วม/ถือครอง/เซฟ v44 (`claude/p01-camp-level`)
+
+- ทำแล้ว: Lv/EXP ค่ายเดียว (`campXp`), EXP ครั้งเดียวต่อชัยชนะ, ถือครองไม่จำกัด + ตัวพัก OD-14 + คลังสมาชิก/ค้นหา/กรอง, migration v43→v44 (max owned ไม่ sum, เที่ยวค้างเดินต่อ, ศึกที่ Lv เปลี่ยนเริ่มใหม่จาก entry, backup) — ผล/ข้อต่างจาก S09/sim: `docs/validation/p01/README_TH.md`
+- ทีมสนามยัง 4+4; สูตรแต้มดาวคงเดิม (P04)
+
+### ข้อความเปิดแชต P02 (model Opus)
+
+```text
+ทำงานต่อในรีโป wnau34-nptrn/asterveil-fateweave สาขาเกม feature/fateweave-initial-prototype (ไม่ใช่ main) เริ่มด้วย git fetch แล้วยืนยันว่า HEAD ตรงกับ origin (P01 เลเวลค่าย/เซฟ v44 merged แล้ว — ดู docs/validation/p01/README_TH.md)
+อ่าน AGENTS.md, CLAUDE.md, docs/DEVELOPMENT_PLAN_TH.md (P02 + ลำดับ OD-13), docs/design/OWNER_DECISIONS_TH.md (OD-05, OD-11, OD-14), docs/design/p00/SHARED_PROGRESSION_TEAM_SPEC_TH.md §6–8, docs/design/FORMATION_PLAN_TH.md, docs/design/FOUR_FOES_PLAN_TH.md, หัวข้อบนสุดของ docs/handoffs/NEW-CHAT-HANDOFF-TH.md; ใช้ skill fateweave-rules-and-sim ก่อนแตะ core/battle/save/world/content และ skill phaser/playwright ที่เกี่ยวกับสนาม
+งาน P02 ทีมสูงสุดห้า (OD-05 ส่งมอบทีม 5 ไม่ใช่ทดลองแล้วถอย):
+1) P02-01 resolver/content: ฝ่ายละ 1–5 (hero IDs เดิม, foe slots เพิ่ม f3/b3 ต่อท้าย ห้าม reorder f1/f2/b1/b2), หนึ่งการกระทำ/เทิร์น, แนวละ ≤3, formation/targeting/screening/summon เมื่อเต็ม/preview=replay; encounter ใหม่แบบ versioned; 4v4 เดิมไม่ถดถอย
+2) OD-11: พกสูงสุด 10 (สนาม 5 + สำรองปลดตามบท 3→4→5) + ความเหนื่อยล้า (ลงสนาม +1/ศึก, สำรอง −1, ลดเฉพาะพลังโจมตี/การรักษาเป็นขั้น ไม่แตะ SPD/เทิร์น) + ยาฟื้นความเหนื่อย + A6c สำรองฟื้นเลือด 25% (ตัวเลขร่าง) ในกฎ pure + เซฟ bump จาก v44 + sim สลับตัวอัตโนมัติ
+3) P02-02 UI 390px สนามสิบตัวอ่านเจตนาได้ ปุ่ม ≥44px keyboard/reduced-motion; หน้าทีมค่าย/กระเป๋าแผนที่รองรับ 5+สำรอง; งบ texture สนาม 10 ตัว (W8 BUDGET) ต้องคำนวณใหม่
+ตัวเลขเป็นร่าง ตรวจด้วย npm run sim เทียบผล P01 (ทีม 4) ทั้ง seed เดิมและ seed อิสระ; รายงานเวลา/อุปกรณ์จริงตามที่มี ไม่อ้าง Chromium เป็น iOS
+เทสต์ unit + sim + browser ที่เกี่ยว, CI เต็มบน PR เข้าสาขาเกม, ส่งคลิป/ภาพ 390px ให้เจ้าของดูสนาม 5v5 ก่อน merge (งานภาพ/สนามต้องให้เจ้าของเห็น), merge/Pages ตาม standing authorization; อัปเดต handoff/แผน/issue #69 เมื่อจบ
+Chromium: export PLAYWRIGHT_CHROMIUM_EXECUTABLE=/opt/pw-browsers/chromium; npm ci
+```
+
 ## 2026-10-31 — W8 ปิดแผน animation/VFX: เจ้าของอนุมัติ, PR #125 merged `9a36736`, Pages 41168061842 สำเร็จ
 
 ### ข้อความเปิดแชต P01 (model Opus)

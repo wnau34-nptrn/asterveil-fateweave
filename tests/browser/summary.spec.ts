@@ -4,6 +4,7 @@ import { encounterById } from '../../src/content/encounters/catalog';
 import { depart, newProfile } from '../../src/core/world/profile';
 import { findTiles, reveal } from '../../src/core/world/world';
 import { parseGame } from '../../src/core/save/expedition-save';
+import { xpAt } from '../fixtures/camp-level';
 
 const key = 'asterveil.fateweave.expedition.v1';
 for (const [width, height, touch] of [[320,568,true], [390,844,true], [1366,768,false]] as const) {
@@ -11,18 +12,18 @@ for (const [width, height, touch] of [[320,568,true], [390,844,true], [1366,768,
     const context = await browser.newContext({ viewport: { width, height }, hasTouch: touch, isMobile: touch, reducedMotion: 'reduce' });
     const page = await context.newPage(), errors: string[] = [];
     page.on('pageerror', e => errors.push(e.message)); page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
-    const profile = newProfile(map, 123); profile.tutorialDone = true; profile.completes = 1;
+    const profile = newProfile(map, 123); profile.tutorialDone = true; profile.completes = 1; profile.cleared = [map.id];
     profile.commander = { name: 'อารี', crest: 'star', color: 'gold', camp: 'ค่ายอารี' };
     const game = depart(profile, map, encounterById, 1234), run = game.run;
-    // This v21 fixture represents an ongoing legacy expedition, before boss-loot snapshots existed.
+    // An ongoing expedition from before boss-loot snapshots existed (missing plan = legacy rolls).
     delete run.bossLoot;
     const [goal] = findTiles(map, 'goal'); run.position = { x: goal!.x, y: goal!.y + 1 };
     run.bossDefeated = true; run.elitesDefeated = ['scar-golem']; run.eventsDone = ['scar-rift'];
     run.resources = { ore: 20, gold: 20, ember: 2, seal: 4 };
     run.found = Array.from({ length: 12 }, () => ({ uid: 0, slot: 'body' as const, rarity: 0 as const, level: 3, affixes: [] }));
-    for (const member of Object.values(run.members)) { member.level = 6; member.exp = 0; }
+    run.campXp = xpAt(6);
     reveal(run, map);
-    const raw = JSON.stringify({ version: 21, ...game }); parseGame(raw, map, encounterById);
+    const raw = JSON.stringify({ version: 44, ...game }); parseGame(raw, map, encounterById);
     await page.addInitScript(({ key, raw }) => localStorage.setItem(key, raw), { key, raw });
     await page.goto('./'); await page.locator('#continue').click(); await page.locator('#move-up').click();
     await expect(page.locator('#summary-title')).toContainText('สำเร็จการเดินทาง');

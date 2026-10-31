@@ -5,6 +5,7 @@ import { newProfile, settle } from '../src/core/world/profile';
 import type { ExpeditionState, Item } from '../src/core/world/types';
 import { newExpedition } from '../src/core/world/world';
 import { runSummary } from '../src/ui/summary-ui';
+import { xpAt } from './fixtures/camp-level';
 
 // 4F: the summary reads the profile before and after settling plus the finished run.
 const run = (patch: Partial<ExpeditionState> = {}): ExpeditionState => ({ ...newExpedition(map, lookup, 4, undefined, true), ...patch });
@@ -15,13 +16,13 @@ describe('expedition summary', () => {
     const before = newProfile(map, 3);
     const r = run({ steps: 120, wins: 14, defeats: 1, elitesDefeated: ['gate-thicket'], openedChests: ['meadow-west'], solved: ['scar-levers'], secrets: ['meadow-secret'],
       herbs: [map.herbs[0]!.id], resources: { ore: 50, gold: 20, ember: 0, seal: 2 }, dust: 7, found: [item] });
-    r.members.guardian = { ...r.members.guardian!, level: 4, exp: 0 };
+    r.members.guardian = { ...r.members.guardian!}; r.campXp = Math.max(r.campXp, xpAt(4));
     const after = settle(before, r, 'complete', map);
     const s = runSummary(before, r, after, 'complete', map);
     expect(s).toMatchObject({ outcome: 'complete', firstClear: true, steps: 120, wins: 14, defeats: 1, elites: 1, chests: 1, puzzles: 1, secrets: 1, herbs: 1,
       kept: { ore: 50, gold: 20, seal: 2, dust: 7 } });
     expect(s.items).toHaveLength(1); expect(s.items[0]!.rarity).toBe(3);
-    expect(s.levels).toEqual([{ id: 'guardian', from: 1, to: 4 }]);
+    expect(s.campLevel).toEqual({ from: 1, to: 4 });
     expect(s.quests.find(q => q.npc === 'broker')).toMatchObject({ from: 0, to: 14, ready: false });
     // A later clear is not the first.
     expect(runSummary(after, r, settle(after, r, 'complete', map), 'complete', map).firstClear).toBe(false);

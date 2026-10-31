@@ -4,16 +4,16 @@ import { encounterById } from '../../src/content/encounters/catalog';
 import { depart, newProfile } from '../../src/core/world/profile';
 import { affixPool } from '../../src/core/world/equipment';
 import { parseGame } from '../../src/core/save/expedition-save';
+import { xpAt } from '../fixtures/camp-level';
 
 const key = 'asterveil.fateweave.expedition.v1';
 async function open(page: Page) {
   const profile = newProfile(map, 123); profile.tutorialDone = true; profile.commander = { name: 'อารี', crest: 'star', color: 'gold', camp: 'ค่ายอารี' };
-  profile.members.guardian = { stars: 1, dupes: 0, level: 6, exp: 0, gear: { body: { uid: 1, slot: 'body', rarity: 0, level: 1, affixes: [] } } }; profile.nextItem = 2;
-  profile.members.weaver!.level = 3; profile.members.weaver!.exp = 0;
-  profile.company.push('mira'); profile.members.mira = { stars: 1, dupes: 0, level: 2, exp: 0 }; profile.party.reserve = ['mira'];
+  profile.members.guardian = { stars: 1, dupes: 0, gear: { body: { uid: 1, slot: 'body', rarity: 0, level: 1, affixes: [] } } }; profile.campXp = Math.max(profile.campXp, xpAt(6)); profile.nextItem = 2;
+  profile.company.push('mira'); profile.members.mira = { stars: 1, dupes: 0}; profile.campXp = Math.max(profile.campXp, xpAt(2)); profile.party.reserve = ['mira'];
   const game = depart(profile, map, encounterById, 1234); game.run.hp.guardian = 11; game.run.hp.healer = 0;
   game.run.found = [{ uid: 0, slot: 'body', rarity: 3, level: 4, affixes: affixPool(map.equipment, 'body').slice(0, 3) }, { uid: 0, slot: 'weapon', hero: 'tracer', rarity: 0, level: 2, affixes: [] }];
-  const raw = JSON.stringify({ version: 21, ...game }); parseGame(raw, map, encounterById);
+  const raw = JSON.stringify({ version: 44, ...game }); parseGame(raw, map, encounterById);
   await page.addInitScript(({key,raw}) => { if (!sessionStorage.getItem('character-seeded')) { localStorage.setItem(key, raw); sessionStorage.setItem('character-seeded', 'yes'); } }, {key,raw});
   await page.goto('./'); await page.locator('#continue').click(); await expect(page.locator('#world-view')).toBeVisible();
 }
@@ -48,7 +48,8 @@ for (const [width,height,touch] of [[320,568,true], [390,844,true], [1366,768,fa
     // Release A: Mira has a big tree too (select, then learn).
     await page.locator('#character-member-mira').click(); await page.locator('#character-talent-a1').click(); await page.locator('#character-talent-learn').click();
     expect(parseGame(await saved(page),map,encounterById).run!.members.mira!.talents).toEqual({a1:1});
-    await page.locator('#character-member-healer').click(); await page.locator('#character-talent-a1').click(); await expect(page.locator('#character-talent-learn')).toHaveAttribute('aria-disabled','true');
+    // P01: Seren shares the camp level (Lv6), so she has points to spend like everyone else.
+    await page.locator('#character-member-healer').click(); await page.locator('#character-talent-a1').click(); await expect(page.locator('#character-talent-learn')).toHaveAttribute('aria-disabled','false');
     await page.locator('#character-member-guardian').click(); await page.screenshot({path:info.outputPath('character-talents.png')});
     await page.locator('#character-tab-skills').click(); await expect(page.locator('#character-content')).toContainText('ปลดที่โหนด ท้าดวล'); await expect(page.locator('#character-content')).toContainText('ปลดที่โหนด ยืนหยัด');
     await page.screenshot({path:info.outputPath('character-skills.png')});
@@ -70,7 +71,7 @@ for (const [width,height,touch] of [[320,568,true], [390,844,true], [1366,768,fa
     await expect(page.locator('#pack-dialog')).not.toBeVisible(); await page.keyboard.press('Escape');
     await expect(page.locator('#pack-dialog')).toBeVisible(); await expect(page.locator('#bag-member-guardian')).toBeFocused(); await expect(page.locator('#bag-tab-gear')).toHaveAttribute('aria-selected','true');
     await page.keyboard.press('Escape'); await expect(page.locator('#world-pack')).toBeFocused();
-    expect(JSON.parse(await saved(page)).version).toBe(43); expect(errors).toEqual([]); await context.close();
+    expect(JSON.parse(await saved(page)).version).toBe(44); expect(errors).toEqual([]); await context.close();
   });
 }
 

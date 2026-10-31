@@ -4,8 +4,9 @@ import { forestMap as map } from '../src/content/world/chapter-forest';
 import { resolveCommand } from '../src/core/battle/engine';
 import { depart, newProfile, settle } from '../src/core/world/profile';
 import type { Direction, ExpeditionState, Point } from '../src/core/world/types';
-import { battleData, battleState, canRest, findTiles, finishBattle, move, recordBattle, rest, startOf, tileAt } from '../src/core/world/world';
+import { battleData, battleState, canRest, findTiles, finishBattle, levelOf, move, recordBattle, rest, startOf, tileAt } from '../src/core/world/world';
 import { battleLesson } from '../src/ui/tutorial';
+import { xpAt } from './fixtures/camp-level';
 
 // Map 2 "เส้นทางป่าทึบ" (master plan A5): events, a forced elite gate, an optional elite, a secret, two camps, Garran.
 const dirs: Record<Direction, Point> = { up: { x: 0, y: -1 }, down: { x: 0, y: 1 }, left: { x: -1, y: 0 }, right: { x: 1, y: 0 } };
@@ -40,11 +41,11 @@ describe('map 2: เส้นทางป่าทึบ', () => {
     for (const e of map.events) expect(route(s, e).length).toBeGreaterThan(0);
   });
   it('a company back from map 1 wins it with the advisor; Garran joins at the first camp', () => {
-    const p = { ...newProfile(map, 6), tutorialDone: true }; for (const m of Object.values(p.members)) { m.level = 4; m.exp = 0; }
+    const p = { ...newProfile(map, 6), tutorialDone: true }; p.campXp = xpAt(4);
     for (const seed of [1, 2, 3]) {
-      let s = depart(p, map, lookup, seed).run; expect(s.guests).toBeUndefined(); expect(s.arrivals).toEqual({ garran: 2 }); expect(s.members.garran).toBeUndefined();
+      let s = depart(p, map, lookup, seed).run; expect(s.guests).toBeUndefined(); expect(s.arrivals).toEqual(['garran']); expect(s.members.garran).toBeUndefined();
       const walk = (to: Point) => { for (let g = 0; g < 300 && (s.position.x !== to.x || s.position.y !== to.y) && !s.completed; g++) { s = move(s, map, route(s.position, to, { boss: true })[0]!, lookup).state; if (s.battle) s = fight(s); } };
-      walk(findTiles(map, 'camp').find(c => c.y > 7)!); expect(s.recruited).toEqual(['garran']); expect(s.arrivals).toBeUndefined(); expect(s.members.garran!.level).toBe(2); expect(s.roster.reserve).toContain('garran'); if (canRest(s, map)) s = rest(s, map, lookup).state;
+      walk(findTiles(map, 'camp').find(c => c.y > 7)!); expect(s.recruited).toEqual(['garran']); expect(s.arrivals).toBeUndefined(); expect(levelOf(map, s)).toBeGreaterThanOrEqual(4); expect(s.roster.reserve).toContain('garran'); if (canRest(s, map)) s = rest(s, map, lookup).state;
       walk(findTiles(map, 'camp').find(c => c.y < 7)!); if (canRest(s, map)) s = rest(s, map, lookup).state;
       walk(findTiles(map, 'goal')[0]!);
       expect(s.completed).toBe(true); expect(s.elitesDefeated).toContain('forest-gate');

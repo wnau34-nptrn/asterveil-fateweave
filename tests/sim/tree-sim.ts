@@ -17,10 +17,10 @@ export interface TreeBuild { id: string; name: string; talents: Talents; loadout
 const rosterIds = ['metta', 'thiran', 'lalin', 'wila'] as const;
 function rosterBuilds(): TreeBuild[] {
   return rosterIds.flatMap(id => (['a', 'b', 'c', 'p'] as const).map(branch => {
-    const tree = map.talents[id] ?? [], talents: Talents = {}, member = { stars: 3, dupes: 0, level: 10 };
+    const tree = map.talents[id] ?? [], talents: Talents = {}, member = { stars: 3, dupes: 0 };
     const ordered = [...tree].sort((a,b) => Number(b.branch === branch) - Number(a.branch === branch) || (a.tier ?? 0) - (b.tier ?? 0) || a.id.localeCompare(b.id));
     for (let i = 0; i < 50; i++) {
-      const next = ordered.find(n => !memberTalentReason(map, id, {...member, talents}, n.id));
+      const next = ordered.find(n => !memberTalentReason(map, id, {...member, talents}, n.id, 10));
       if (!next) break; talents[next.id] = (talents[next.id] ?? 0) + 1;
     }
     const base = heroCatalog(lookup,map).find(h => h.id === id)!;

@@ -16,7 +16,7 @@ import type { ActionId, BattleState } from '../../src/core/battle/types';
 import type { BattleKind, Direction, ExpeditionState, GearSlot, Item, Lane, Point, Profile, MemberProgress, RunOutcome } from '../../src/core/world/types';
 import { GEAR_SLOTS } from '../../src/core/world/types';
 import {
-  atCamp, atMuster, monsterLevelAt, battleData, battleState, canOpenChest, canRest, canRevive, eliteAt, eventAt, finishBattle, findTiles, memberDef, move, openChest,
+  atCamp, atMuster, levelOf, levelXp, monsterLevelAt, battleData, battleState, canOpenChest, canRest, canRevive, eliteAt, eventAt, finishBattle, findTiles, memberDef, move, openChest,
   newExpedition, draftPick, heroDef, loadoutActions, pendingEvent, questComplete, rollPercent, recordBattle, rest, revive, rosterIds, startPrologue, swapMembers, tileAt, usePotion, chooseEvent, eventChoiceReason, potionReason,
 } from '../../src/core/world/world';
 import { battleLesson } from '../../src/ui/tutorial';
@@ -104,7 +104,7 @@ function firstStep(prev: Map<string, [string, Direction]>, from: Point, to: Poin
 
 const hpPercent = (s: ExpeditionState, ids = s.roster.deployed) => {
   let hp = 0, max = 0;
-  for (const id of ids) { hp += s.hp[id]!; max += memberDef(lookup, map, s.members, id)!.maxHp; }
+  for (const id of ids) { hp += s.hp[id]!; max += memberDef(lookup, map, s, id)!.maxHp; }
   return max ? hp / max * 100 : 0;
 };
 
@@ -128,8 +128,8 @@ function shadows(s: ExpeditionState, label: string, report: ExpeditionReport): v
   add(`${label}:attack`, playOut(s, 'attack').bs.outcome === 'victory');
   if (label !== 'boss') return;
   // Same HP share of the lower max HP.
-  const low = structuredClone(s); for (const id of rosterIds(low)) low.members[id]!.level = Math.max(1, (low.members[id]!.level ?? 1) - 2);
-  for (const id of Object.keys(low.battle!.entry)) low.battle!.entry[id] = Math.floor(s.battle!.entry[id]! * memberDef(lookup, map, low.members, id)!.maxHp / memberDef(lookup, map, s.members, id)!.maxHp);
+  const low = structuredClone(s); low.campXp = levelXp(map, Math.max(1, levelOf(map, s) - 2));
+  for (const id of Object.keys(low.battle!.entry)) low.battle!.entry[id] = Math.floor(s.battle!.entry[id]! * memberDef(lookup, map, low, id)!.maxHp / memberDef(lookup, map, s, id)!.maxHp);
   add(`${label}:under2`, playOut(low, 'advisor').bs.outcome === 'victory');
 }
 // The chosen style plays the battle to the end, then the world applies it.
@@ -160,7 +160,7 @@ function campCare(s: ExpeditionState): ExpeditionState {
 function patchUp(s: ExpeditionState): ExpeditionState {
   if (hpPercent(s) < 50 && !potionReason(s, map, lookup, 'tonic')) s = usePotion(s, map, lookup, 'tonic').state;
   for (const id of s.roster.deployed) {
-    const max = memberDef(lookup, map, s.members, id)!.maxHp;
+    const max = memberDef(lookup, map, s, id)!.maxHp;
     if (s.hp[id]! > 0 && s.hp[id]! < max / 3 && !potionReason(s, map, lookup, 'salve', id)) s = usePotion(s, map, lookup, 'salve', id).state;
   }
   return s;
@@ -308,7 +308,7 @@ export function simulateCompany(seed: number, policy: Policy, expeditions: numbe
   // A10: veil-frontier starts at Lv6, so the four starters arrive one level below it, as from map 2 (the campaign
   // itself is `simulateCampaign`).
   const arrive = Math.max(1, Math.min(...map.zones.filter(z => z.levels).map(z => z.levels![0])) - 1);
-  for (const m of Object.values(p.members)) m.level = arrive;
+  p.campXp = levelXp(map, arrive);
   const out: ExpeditionReport[] = [];
   for (let index = 1; index <= expeditions; index++) {
     const shop = lobby(p); p = shop.profile;
@@ -324,7 +324,7 @@ export function simulateCompany(seed: number, policy: Policy, expeditions: numbe
       outcome: r.outcome, steps: s.steps, wins: s.wins, defeats: s.defeats, chests: s.openedChests.length, elites: s.elitesDefeated.length,
       objectives: map.quest.objectives.filter(o => o.kind === 'chests' ? s.openedChests.length >= o.count : o.kind === 'elite' ? s.elitesDefeated.includes(o.target) : s.eventsDone.includes(o.target)).length,
       bossBeaten: s.bossDefeated, gained: { ore: p.bank.ore - before.ore, gold: p.bank.gold - before.gold, seal: p.bank.seal - before.seal, dust: p.bank.dust - before.dust },
-      level: Math.min(...p.party.deployed.map(id => p.members[id]!.level ?? 1)), stars: Math.max(...p.party.deployed.map(id => p.members[id]!.stars)),
+      level: levelOf(map, p), stars: Math.max(...p.party.deployed.map(id => p.members[id]!.stars)),
     });
     for (const i of homeItems(s, r.outcome, map)) report.items[i.rarity]!++;
     out.push(report);
@@ -370,7 +370,7 @@ export function simulateCampaign(seed: number, policy: Policy, style: Style = 'a
     Object.assign(report, {
       outcome: r.outcome, steps: s.steps, wins: s.wins, defeats: s.defeats, chests: s.openedChests.length, elites: s.elitesDefeated.length, bossBeaten: s.bossDefeated,
       gained: { ore: p.bank.ore - before.ore, gold: p.bank.gold - before.gold, seal: p.bank.seal - before.seal, dust: p.bank.dust - before.dust },
-      levels: ids.map(id => p.members[id]!.level ?? 1), level: Math.min(...ids.map(id => p.members[id]!.level ?? 1)), stars: Math.max(...ids.map(id => p.members[id]!.stars)), company: p.company.length,
+      levels: ids.map(() => levelOf(map, p)), level: levelOf(map, p), stars: Math.max(...ids.map(id => p.members[id]!.stars)), company: p.company.length,
       mainSkill: avg(lv.map(l => Math.max(1, ...l))), skillAvg: avg(lv.flat()), topSkill: Math.max(1, ...lv.flat()), tomes: tomeCount(p.tomes),
     });
     out.push(report);

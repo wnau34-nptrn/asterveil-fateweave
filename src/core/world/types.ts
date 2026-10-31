@@ -257,10 +257,6 @@ export interface ProgressionRules {
   expBase: number; expPerLevel: number; expFoeHp: number; summonExpPercent: number; bossExpMultiplier: number;
   // EXP to go from level L to L+1 = nextBase + nextPerLevel × L.
   nextBase: number; nextPerLevel: number;
-  // Catch-up (master plan A2, draft): a new member joins `joinBehind` levels below the company's best; reserve
-  // members gain `reserveExpPercent` of the EXP; a member `catchUpBehind`+ levels below the best brought member
-  // gains `catchUpPercent` more.
-  joinBehind: number; reserveExpPercent: number; catchUpBehind: number; catchUpPercent: number;
   // Hard mode (A9): every battle but the prologue fights `hardLevels` levels higher; the first hard clear of a map pays
   // `hardFirstClear` once.
   hardLevels: number; hardFirstClear: { gold: number; seal: number };
@@ -307,25 +303,28 @@ export interface ShopRules {
 export interface CompanyRules {
   // Optional extra recruitment slot; keeps the original offer stream/duplicate odds stable.
   featured?: readonly string[];
+  // Parked characters (owner OD-14, 2026-10-30): kept by companies that already own them, but no board, story or
+  // featured offer brings them in anew.
+  parked?: readonly string[];
   hireCost: number; dismissRefund: number; offers: number; maxStars: number; starStatPercent: number;
   starCosts: readonly { dupes: number; ore: number }[];
   // Seals may stand in for this share (percent, rounded up) of a star's duplicates.
   sealSharePercent: number;
 }
-// `level`/`exp` (2D-1) are optional for older data: missing means level 1 with no EXP.
+// Levels belong to the whole camp (P01, save v44: `Profile.campXp`/`ExpeditionState.campXp`); members carry none.
 // `talents` (2D-1b): ranks spent per node; missing means none. `gear` (2D-2): equipped items by slot.
 // `wound` (3A, run only): percent of max HP lost to a shrine prayer until the expedition ends.
 // `grants` (A6, save v34): big-tree nodes given free at full rank (skills a company had from stars before the tree).
 // `loadout` (A6): the active skills taken into battle (at most `progression.loadoutSize`; missing = the first unlocked).
 // `skillLevels` (save v37): active skills raised above Lv1 with tomes (missing = Lv1).
-export interface MemberProgress { stars: number; dupes: number; level?: number; exp?: number; talents?: Talents; gear?: Gear; wound?: number; grants?: TalentNode[]; loadout?: ActionId[];
+export interface MemberProgress { stars: number; dupes: number; talents?: Talents; gear?: Gear; wound?: number; grants?: TalentNode[]; loadout?: ActionId[];
   skillLevels?: Partial<Record<ActionId, number>> }
 // The team brought into one expedition and their star progress (fixed during the run).
 // `potions`: what the expedition packs (2D-5; missing = none).
-export interface Company { roster: Roster; members: Record<string, MemberProgress>; potions?: Potions }
+// `campXp`: the camp's EXP the expedition sets out with (P01; missing = 0).
+export interface Company { roster: Roster; members: Record<string, MemberProgress>; potions?: Potions; campXp?: number }
 
 // ---- Lobby profile (persistent between expeditions) ----
-export const COMPANY_CAP = 20;
 export type RunOutcome = 'complete' | 'withdrawn' | 'wiped';
 // `dust` (veil dust, 2D-2) comes from salvage and pays for the forge (2D-4).
 // `gold` pays for hiring only.
@@ -344,8 +343,13 @@ export interface Profile {
   veteran?: true;
   // Maps completed on hard mode (save v33; missing = none).
   clearedHard?: string[];
-  // Every owned mercenary in display order, with stars and stored duplicates.
+  // Every owned mercenary in display order, with stars and stored duplicates. P01: any unique catalog ID, no cap.
   company: string[]; members: Record<string, MemberProgress>;
+  // The camp's total EXP (P01, save v44): one level for every owned member, derived by `campLevel`. While a run is
+  // active its own `campXp` is the camp's EXP; settling hands it back (never adds to it).
+  campXp: number;
+  // Bench members put away in the camp archive (P01): hidden from the team list only, everything they own is kept.
+  archived?: string[];
   // The 4 + 4 chosen for the next expedition (subset of `company`).
   party: Roster;
   bank: Bank;
@@ -376,6 +380,9 @@ export interface Profile {
   // `tomes` (save v37): skill tomes brought home by that run (missing = none).
   last: { outcome: RunOutcome; ore: number; gold: number; seal: number; steps: number; wins: number; items: number; salvaged: number; tomes?: number } | null;
 }
+// What the v43 → v44 boundary did when an old save loaded (P01, never saved): the camp level taken from the best owned
+// member, and whether a battle in progress restarted from its entry HP.
+export interface CampMigration { from: number; level: number; campXp: number; best?: string; battle?: boolean }
 export type ProfileEvent =
   | {type:'bossTarget'}
   | {type:'huntTarget'}
@@ -383,6 +390,7 @@ export type ProfileEvent =
   | {type:'storageExpanded'}
   | { type: 'blocked'; reason: string }
   | { type: 'party'; heroId?: string; lane?: Lane }
+  | { type: 'archived'; heroId: string; archived: boolean }
   | { type: 'commander' }
   | { type: 'guide'; id: string; skipped: boolean }
   | { type: 'hired'; heroId: string; duplicate: boolean }
@@ -425,12 +433,16 @@ export interface ExpeditionState {
   // Story recruits (save v30): guests travel with the run but are not company members yet; `recruited` joined
   // during this run and are added to the company when it settles (whatever the outcome). Missing = none.
   guests?: string[]; recruited?: string[];
-  // Story recruits on their way (save v38, owner 2026-10-23): hero → the level it joins at when its camp is reached or the
-  // boss fight starts (guests who parted after the prologue, or recruits of a company past the prologue). Missing = none.
-  arrivals?: Record<string, number>;
-  // Starter recruitment in progress (save v38, `MapDefinition.draft`): picks left, the level they join at and the
-  // current offers (always `draftOffers` of this state). The party cannot move on until every pick is made.
-  draft?: { left: number; level: number; offers: string[] };
+  // Story recruits on their way (save v38, owner 2026-10-23): heroes who join when their camp is reached or the
+  // boss fight starts (guests who parted after the prologue, or recruits of a company past the prologue), at the camp
+  // level like everyone else (P01, save v44: a list). Missing = none.
+  arrivals?: string[];
+  // Starter recruitment in progress (save v38, `MapDefinition.draft`): picks left and the current offers (always
+  // `draftOffers` of this state). The party cannot move on until every pick is made.
+  draft?: { left: number; offers: string[] };
+  // The camp's EXP during this run (P01, save v44): set from the profile on departure, raised once per victory and
+  // handed back to the profile when the run settles. Every roster member fights at its level.
+  campXp: number;
   // Hard mode (A9, save v33): set on departure, never changed during the run.
   hard?: true;
   bossLoot?:BossPlan;
@@ -484,8 +496,8 @@ export type WorldEvent =
   | { type: 'herb'; herbId: string }
   | { type: 'travelled'; to: Point }
   | { type: 'drafted'; heroId: string }
-  | { type: 'victory'; kind: BattleKind; encounterId: string; loot: Resources; exp?: Record<string, ExpGain>; item?: Item; items?: Item[]; dust?: number; tomes?: TomeBag; riftCore?: number }
+  | { type: 'victory'; kind: BattleKind; encounterId: string; loot: Resources; exp?: ExpGain; item?: Item; items?: Item[]; dust?: number; tomes?: TomeBag; riftCore?: number }
   | { type: 'defeat'; kind: BattleKind; encounterId: string; wiped?: boolean };
-// EXP from one victory for one brought member: `percent` is the level-gap multiplier.
+// The camp's EXP from one victory (P01: once per victory, never per member): `percent` is the level-gap multiplier.
 export interface ExpGain { gained: number; percent: number; level: number; levelsUp: number }
 export interface WorldResult { state: ExpeditionState; event: WorldEvent }

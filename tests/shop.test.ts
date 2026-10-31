@@ -6,6 +6,7 @@ import { boardOffers, buy, buyReason, hire, newProfile, refreshBoard, refreshRea
 import { smelt, smeltLeft, smeltReason } from '../src/core/world/forge';
 import type { Profile } from '../src/core/world/types';
 import { newExpedition } from '../src/core/world/world';
+import { xpAt } from './fixtures/camp-level';
 
 // Phase 4A (docs/EXPEDITION_DESIGN.md "Camp market and board refresh").
 const rich = (gold = 1000, patch: Partial<Profile> = {}): Profile => ({ ...newProfile(map, 9), ...patch, bank: { ore: 0, gold, seal: 0, dust: 0 } });
@@ -48,8 +49,7 @@ describe('camp market', () => {
     expect(buyReason(maxed, map, 'contract', id)).toBe('maxed');
   });
   it('the gear box gives a rare-or-better piece at the company\'s highest level, fixed by the profile\'s roll counter', () => {
-    const id = newProfile(map, 9).company[1]!;
-    const p = rich(1000); p.members[id] = { ...p.members[id]!, level: 6 };
+    const p = rich(1000); p.campXp = xpAt(6);
     const a = buy(p, map, 'gearbox'); const b = buy(p, map, 'gearbox');
     expect(a).toEqual(b);
     const e = a.event; if (e.type !== 'bought') throw new Error('expected a purchase');

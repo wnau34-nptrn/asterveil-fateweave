@@ -6,10 +6,11 @@ import { forestMap } from '../src/content/world/chapter-forest';
 import { MAPS } from '../src/content/world/maps';
 import { resolveCommand } from '../src/core/battle/engine';
 import { parseGame, saveGame } from '../src/core/save/expedition-save';
-import { depart, joinLevel, newProfile, settle } from '../src/core/world/profile';
+import { depart, newProfile, settle } from '../src/core/world/profile';
 import type { Direction, ExpeditionState, Point, Profile } from '../src/core/world/types';
 import { battleData, battleState, canRest, draftOffers, draftPick, memberDef, rest, findTiles, finishBattle, move, recordBattle, startPrologue, tileAt } from '../src/core/world/world';
 import { battleLesson } from '../src/ui/tutorial';
+import { xpAt } from './fixtures/camp-level';
 
 // Master plan A2 (owner 2026-10-21, 2026-10-23): a new ค่ายทหารรับจ้าง starts with the Knight. Catch-up: join level,
 // reserve EXP, catch-up EXP.
@@ -55,10 +56,10 @@ describe('story recruits and the starter recruitment', () => {
   });
   it('after the prologue the guests part ways, Lyra joins and two mercenaries are recruited before setting out', () => {
     let s = won();
-    expect(s.recruited).toEqual(['tracer']); expect(s.guests).toBeUndefined(); expect(s.arrivals).toEqual({ weaver: 1 });
+    expect(s.recruited).toEqual(['tracer']); expect(s.guests).toBeUndefined(); expect(s.arrivals).toEqual(["weaver"]);
     expect(s.roster.deployed).toEqual(['guardian', 'tracer']); expect(s.members.healer).toBeUndefined(); expect(s.hp.weaver).toBeUndefined();
-    expect(s.hp).toEqual({ guardian: memberDef(lookup, map, s.members, 'guardian')!.maxHp, tracer: memberDef(lookup, map, s.members, 'tracer')!.maxHp });
-    expect(s.draft).toMatchObject({ left: 2, level: 1 }); expect(s.draft!.offers).toHaveLength(3);
+    expect(s.hp).toEqual({ guardian: memberDef(lookup, map, s, 'guardian')!.maxHp, tracer: memberDef(lookup, map, s, 'tracer')!.maxHp });
+    expect(s.draft).toMatchObject({ left: 2 }); expect(s.draft!.offers).toHaveLength(3);
     expect(s.draft!.offers.some(id => supports.includes(id))).toBe(true); expect(s.draft!.offers).toEqual(draftOffers(s, map));
     expect(move(s, map, 'up', lookup).event).toEqual({ type: 'blocked', reason: 'busy' });
     const first = s.draft!.offers[0]!; const r = draftPick(s, map, 0, lookup); expect(r.event).toEqual({ type: 'drafted', heroId: first }); s = r.state;
@@ -66,7 +67,7 @@ describe('story recruits and the starter recruitment', () => {
     s = draftPick(s, map, 2, lookup).state; expect(s.draft).toBeUndefined();
     expect(s.roster.deployed).toHaveLength(4); expect(s.roster.deployed.slice(0, 2)).toEqual(['guardian', 'tracer']);
     const picked = s.roster.deployed.slice(2); expect(picked.some(id => supports.includes(id))).toBe(true);
-    expect(s.recruited).toEqual(['tracer', ...picked]); for (const id of picked) expect(s.hp[id]).toBe(memberDef(lookup, map, s.members, id)!.maxHp);
+    expect(s.recruited).toEqual(['tracer', ...picked]); for (const id of picked) expect(s.hp[id]).toBe(memberDef(lookup, map, s, id)!.maxHp);
     expect(draftPick(s, map, 0, lookup).event.type).toBe('blocked');
   });
   it('every company that has not picked a support yet is offered one; offers differ between companies', () => {
@@ -82,7 +83,7 @@ describe('story recruits and the starter recruitment', () => {
   it('Aira comes back as the boss fight starts; settling adds everyone to the company; Seren joins on map 2', () => {
     let s = won(); s = draftPick(draftPick(s, map, 0, lookup).state, map, 0, lookup).state; const picked = s.roster.deployed.slice(2);
     const walk = walker(() => s, n => { s = n; });
-    walk(findTiles(map, 'camp')[0]!); expect(s.arrivals).toEqual({ weaver: 1 }); if (canRest(s, map)) s = rest(s, map, lookup).state;
+    walk(findTiles(map, 'camp')[0]!); expect(s.arrivals).toEqual(["weaver"]); if (canRest(s, map)) s = rest(s, map, lookup).state;
     const boss = findTiles(map, 'boss')[0]!; walk(stepBack(s.position, route(s.position, boss, true)), true);
     if (canRest(s, map)) s = rest(s, map, lookup).state;
     s = move(s, map, route(s.position, boss, true)[0]!, lookup).state; expect(s.battle?.kind).toBe('boss');
@@ -90,19 +91,19 @@ describe('story recruits and the starter recruitment', () => {
     s = fight(s); walk(findTiles(map, 'goal')[0]!, true); expect(s.completed).toBe(true);
     const home = settle({ ...fresh(), tutorialDone: true }, s, 'complete', map);
     expect(home.company).toEqual(['guardian', 'tracer', ...picked, 'weaver']); expect(home.members.healer).toBeUndefined();
-    const forest = depart(home, forestMap, lookup, 3).run; expect(Object.keys(forest.arrivals!).sort()).toEqual(['garran', 'healer']);
+    const forest = depart(home, forestMap, lookup, 3).run; expect([...forest.arrivals!].sort()).toEqual(['garran', 'healer']);
   });
   it('withdrawing before the picks takes the first offers; past the prologue Aira waits for her own point', () => {
     const s = won(); const offer = s.draft!.offers[0]!;
     const home = settle({ ...fresh(), tutorialDone: true }, s, 'withdrawn', map);
     expect(home.company.slice(0, 3)).toEqual(['guardian', 'tracer', offer]); expect(home.company).toHaveLength(4); expect(home.members.weaver).toBeUndefined();
     const again = depart(home, map, lookup, 5).run;
-    expect(again.guests).toBeUndefined(); expect(again.draft).toBeUndefined(); expect(again.arrivals).toEqual({ weaver: 1 });
+    expect(again.guests).toBeUndefined(); expect(again.draft).toBeUndefined(); expect(again.arrivals).toEqual(["weaver"]);
   });
   it('saves v38 runs with arrivals and a pending recruitment; rejects forged offers; an older map 1 run settles home', () => {
     const s = won(); const profile = fresh(); let raw = '';
     saveGame({ getItem: () => null, setItem: (_k, v) => { raw = v; } }, { profile, run: s });
-    expect(JSON.parse(raw).version).toBe(43); expect(parseGame(raw, chapterOne, lookup, MAPS).run).toEqual(s);
+    expect(JSON.parse(raw).version).toBe(44); expect(parseGame(raw, chapterOne, lookup, MAPS).run).toEqual(s);
     for (const forge of [(r: Record<string, unknown>) => { r.arrivals = { tracer: 1 }; }, (r: Record<string, unknown>) => { r.arrivals = { healer: 1 }; },
       (r: Record<string, unknown>) => { (r.draft as { offers: string[] }).offers = ['brann', 'sefa', 'garran']; }, (r: Record<string, unknown>) => { (r.draft as { left: number }).left = 3; }]) {
       const bad = JSON.parse(raw); forge(bad.run); expect(() => parseGame(JSON.stringify(bad), chapterOne, lookup, MAPS)).toThrow();
@@ -116,18 +117,20 @@ describe('story recruits and the starter recruitment', () => {
     expect(back.run).toBeNull(); expect(back.profile.company).toEqual(['guardian', 'tracer']); expect(back.profile.last?.outcome).toBe('withdrawn');
   });
 });
-describe('catch-up', () => {
-  it('new members join two levels below the best; reserve members learn at half; far-behind members learn faster', () => {
-    const p = newProfile(chapterOne, 3); p.members.guardian = { stars: 1, dupes: 0, level: 7, exp: 0 };
-    expect(joinLevel(p, chapterOne)).toBe(5); expect(joinLevel(newProfile(chapterOne, 3), chapterOne)).toBe(1);
+describe('camp level (P01)', () => {
+  it('everyone brought fights at the camp level; one victory pays the camp once, whatever the team size', () => {
+    const p = newProfile(chapterOne, 3); p.campXp = xpAt(7);
     p.party = { deployed: ['guardian', 'tracer', 'weaver'], reserve: ['healer'] };
-    let s = depart({ ...p, tutorialDone: true }, chapterOne, lookup, 5).run; s.members.tracer = { stars: 1, dupes: 0, level: 6, exp: 0 };
+    let s = depart({ ...p, tutorialDone: true }, chapterOne, lookup, 5).run; expect(s.campXp).toBe(xpAt(7));
     s = { ...s, battle: { kind: 'random', encounterId: 'scout-patrol', entry: Object.fromEntries(s.roster.deployed.map(id => [id, s.hp[id]!])), commands: [], level: 5 } };
     const data = battleData(s, chapterOne, lookup)!; let b = battleState(s, chapterOne, lookup)!;
     while (b.outcome === 'active') { const l = battleLesson(b, data)!; b = resolveCommand(b, data, { beat: b.beat, heroId: l.heroId, action: l.action, targetId: l.targetId }).state; }
     const ev = finishBattle(recordBattle(s, chapterOne, lookup, b.commands), chapterOne, lookup).event;
     if (ev.type !== 'victory') throw new Error('expected a win');
-    // weaver (Lv1, 6 behind) gets +50%; healer is in reserve (half) but also far behind (+50%).
-    expect(ev.exp!.weaver!.gained).toBeGreaterThan(ev.exp!.tracer!.gained); expect(ev.exp!.healer!.gained).toBeLessThan(ev.exp!.weaver!.gained);
+    expect(ev.exp!.level).toBe(7); expect(ev.exp!.gained).toBeGreaterThan(0);
+    // The same battle with a smaller roster pays exactly the same EXP: XP is per victory, not per member.
+    const solo = { ...s, roster: { deployed: s.roster.deployed, reserve: [] } }; delete solo.hp.healer; delete solo.members.healer;
+    const one = finishBattle(recordBattle(solo, chapterOne, lookup, b.commands), chapterOne, lookup).event;
+    expect(one.type === 'victory' && one.exp).toEqual(ev.exp);
   });
 });

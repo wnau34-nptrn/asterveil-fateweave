@@ -3,6 +3,7 @@ import { chapterOne as map } from '../../src/content/world/chapter1';
 import { encounterById } from '../../src/content/encounters/catalog';
 import { newProfile, depart } from '../../src/core/world/profile';
 import { mkdirSync, writeFileSync } from 'node:fs';
+import { legacyEnvelope } from '../fixtures/legacy-save';
 
 // Real-time Bolt clips for owner review (A8). Runs only with BOLT_CLIPS=1; writes video plus the click offset.
 const key = 'asterveil.fateweave.expedition.v1';
@@ -19,7 +20,7 @@ for (const [name, width, height, touch, speed, intensity, motion] of [
     const p = newProfile(map, 17); p.commander = { name: 'จังหวะ', crest: 'star', color: 'gold', camp: 'ค่ายอารี' }; p.tutorialDone = true;
     const game = depart(p, map, encounterById, 1234); game.run.battle = { kind: 'random', encounterId: 'veil-siege', entry: { ...game.run.hp }, commands: [] };
     await page.addInitScript(({ key, raw, prefs }) => { if (!sessionStorage.getItem('clip')) { localStorage.setItem(key, raw); localStorage.setItem('asterveil.fateweave.presentation.v1', prefs); sessionStorage.setItem('clip', '1'); } },
-      { key, raw: JSON.stringify({ version: 35, ...game }), prefs: JSON.stringify({ speed, intensity }) });
+      { key, raw: JSON.stringify(legacyEnvelope({ version: 35, ...game })), prefs: JSON.stringify({ speed, intensity }) });
     await page.goto('./'); await page.locator('#continue').click(); await page.locator('#start').click();
     for (let i = 0; i < 6 && !(await page.locator('#action-bolt').isVisible()); i++) { await page.locator('#target-f1').click(); await page.waitForTimeout(3500); }
     await expect(page.locator('#action-bolt')).toBeEnabled(); await page.locator('#action-bolt').click(); await page.waitForTimeout(400);

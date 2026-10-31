@@ -13,7 +13,7 @@ const R = map.eventRules;
 const dirs: Record<Direction, Point> = { up: { x: 0, y: -1 }, down: { x: 0, y: 1 }, left: { x: -1, y: 0 }, right: { x: 1, y: 0 } };
 const run = (patch: Partial<ExpeditionState> = {}): ExpeditionState => ({ ...newExpedition(map, lookup, 4, undefined, true), ...patch });
 const at = (p: Point, patch: Partial<ExpeditionState> = {}) => run({ position: { ...p }, ...patch });
-const max = (s: ExpeditionState, id: string) => memberDef(lookup, map, s.members, id)!.maxHp;
+const max = (s: ExpeditionState, id: string) => memberDef(lookup, map, s, id)!.maxHp;
 const event = (kind: string) => map.events.find(e => e.kind === kind)!;
 // A walkable neighbour of `p` that is not itself an elite gate or an event, and the step back onto `p`.
 function approach(p: Point): { from: Point; dir: Direction } {
@@ -84,7 +84,7 @@ describe('elites', () => {
     const O = R.optionalElite;
     expect(optional.event.loot.gold).toBe(forced.event.loot.gold + O.gold); expect(optional.event.loot.seal).toBe(forced.event.loot.seal + O.seal);
     expect(optional.state.resources.gold).toBe(forced.state.resources.gold + O.gold);
-    const exp = (r: typeof optional) => r.event.type === 'victory' ? Object.values(r.event.exp ?? {}).reduce((n, g) => n + g.gained, 0) : 0;
+    const exp = (r: typeof optional) => r.event.type === 'victory' ? r.event.exp?.gained ?? 0 : 0;
     expect(exp(optional)).toBeGreaterThan(exp(forced));
     // Better rarity table: no rares-only floor like the gate, and more epic/legendary weight.
     const w = O.rarityWeights; const f = R.eliteRarityWeights;

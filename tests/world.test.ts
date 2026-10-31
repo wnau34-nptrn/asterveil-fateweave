@@ -5,9 +5,10 @@ import { createBattle, currentHeroId, resolveCommand, skillPower, targetOptions 
 import { clearLegacySaves, expeditionKey, legacyKeys, loadGame, parseGame, saveGame, type StoragePort } from '../src/core/save/expedition-save';
 import { boardOffers, commanderReason, createCommander, departure, dismiss, dismissReason, groupOf, hire, hireReason, newProfile, placeMember, settle, upgrade, upgradeCost, upgradeReason } from '../src/core/world/profile';
 import type { Direction, ExpeditionState, Point, Profile } from '../src/core/world/types';
-import { startPrologue, chooseEvent, questComplete, atMuster, heroCatalog, battleData, battleState, canOpenChest, memberDef, moveMember, swapMembers, canRest, canRevive, chestAt, encounterChance, findTiles, finishBattle, isRevealed, move, newExpedition, openChest, recordBattle, rest, revive, rollPercent, startOf, tileAt } from '../src/core/world/world';
+import { levelOf, startPrologue, chooseEvent, questComplete, atMuster, heroCatalog, battleData, battleState, canOpenChest, memberDef, moveMember, swapMembers, canRest, canRevive, chestAt, encounterChance, findTiles, finishBattle, isRevealed, move, newExpedition, openChest, recordBattle, rest, revive, rollPercent, startOf, tileAt } from '../src/core/world/world';
 import { actorArt, artOf } from '../src/game/visuals/assets';
 import { battleLesson } from '../src/ui/tutorial';
+import { xpAt } from './fixtures/camp-level';
 
 const lookup = encounterById;
 // A larger hero catalog (until hiring exists) to exercise the 4 + 4 roster.
@@ -18,7 +19,7 @@ const fresh = (seed = 7) => newExpedition(map, lookup, seed);
 // level (★3, full HP) rather than the Lv1 starters.
 function seasoned(state: ExpeditionState, level = 10, stars = 3): ExpeditionState {
   const s = structuredClone(state);
-  for (const id of Object.keys(s.members)) { s.members[id] = { ...s.members[id]!, level, stars }; s.hp[id] = memberDef(lookup, map, s.members, id)!.maxHp; }
+  s.campXp = xpAt(level); for (const id of Object.keys(s.members)) { s.members[id] = { ...s.members[id]!, stars }; s.hp[id] = memberDef(lookup, map, s, id)!.maxHp; }
   return s;
 }
 // Two rift-seal objectives done (3B): the boss can be challenged.
@@ -227,7 +228,7 @@ describe('expedition rules', () => {
     walk(goal!, true);
     expect(s.completed).toBe(true); expect(s.tutorialDone).toBe(true); expect(s.bossDefeated).toBe(true); expect(s.wins).toBeGreaterThan(2);
     // Levels (2D-1): every brought member grew on the way; this short advisor route reaches level 6.
-    for (const m of Object.values(s.members)) expect(m.level).toBeGreaterThanOrEqual(4);
+    expect(levelOf(map, s)).toBeGreaterThanOrEqual(4);
     // Forced elites (3A) hold one-tile gates on the way, so the run had to beat them.
     for (const e of map.elites.filter(e => e.forced)) expect(s.elitesDefeated).toContain(e.id);
   });
@@ -257,7 +258,7 @@ describe('lobby profile', () => {
   const rich = (patch: Partial<Profile> = {}): Profile => ({ ...newProfile(map, 21), bank: { ore: 500, gold: 0, seal: 0, dust: 0 }, ...patch });
   it('stars scale max HP, Attack and skill power by 8% each but never SPD', () => {
     const p = rich({ members: { guardian: { stars: 3, dupes: 0 }, tracer: { stars: 1, dupes: 0 }, weaver: { stars: 1, dupes: 0 }, healer: { stars: 1, dupes: 0 } } });
-    const g = memberDef(lookup, map, p.members, 'guardian')!;
+    const g = memberDef(lookup, map, p, 'guardian')!;
     expect([g.maxHp, g.attack, g.speed, g.skillBonus]).toEqual([88, 12, 80, 16]);
     const run = departure(p, map, lookup, 5); expect(run.hp.guardian).toBe(88);
     run.battle = { kind: 'random', encounterId: 'veil-siege', entry: { guardian: 88, tracer: 56, weaver: 48, healer: 46 }, commands: [] };
@@ -371,7 +372,7 @@ describe('game save', () => {
   const game = (run: ExpeditionState | null = fresh(), profile = newProfile(map, 4)) => ({ profile, run });
   const v6 = (run: unknown, profile: unknown = newProfile(map, 4)) => JSON.stringify({ version: 6, profile, run });
   // Saves before v35 forgive battle commands that no longer replay (four-slot migration), so command checks use v35.
-  const current = (run: unknown, profile: unknown = newProfile(map, 4)) => JSON.stringify({ version: 43, profile, run });
+  const current = (run: unknown, profile: unknown = newProfile(map, 4)) => JSON.stringify({ version: 44, profile, run });
   it('round-trips the profile and an in-progress battle by replay', () => {
     const storage = memory(); let s = fresh(3);
     while (!s.battle) s = move(s, map, s.steps % 2 ? 'right' : 'left').state;
@@ -438,7 +439,7 @@ describe('game save', () => {
     const data = battleData(s, map, lookup)!; let b = battleState(s, map, lookup)!;
     b = resolveCommand(b, data, { beat: b.beat, heroId: 'tracer', action: 'attack', targetId: 'f1' }).state; s = recordBattle(s, map, lookup, b.commands);
     const profile = { ...newProfile(map, 4), company: ['guardian', 'tracer', 'weaver', 'healer', 'garran'], members, party: roster };
-    expect(parseGame(v6(s, profile), map, lookup)).toEqual({ profile: { ...profile, boardPool: heroCatalog(lookup, map).filter(h => !['metta', 'thiran', 'lalin', 'wila'].includes(h.id)).map(h => h.id) }, run: s });
+    expect(parseGame(current(s, profile), map, lookup)).toEqual({ profile, run: s });
     expect(s.hp.garran).toBe(76);
   });
   it('tolerates absent or denied storage and clears practice-mode slots', () => {

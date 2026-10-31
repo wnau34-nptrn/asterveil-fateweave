@@ -14,13 +14,13 @@ const same = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b)
 // Deterministic recommendation, not a combat simulation or a promise of a globally optimal loadout.
 // Search current gear plus set-seeded starts, improving one slot at a time. This lets four-piece sets
 // compete as complete loadouts instead of discarding their individually weaker first pieces.
-export function planEquipment(map: MapDefinition, data: EncounterDefinition, base: HeroDefinition, member: MemberProgress, entries: readonly EquipmentEntry[], goal: AutoGoal = 'recommended', preferred?: SetId): AutoEquipmentPlan {
+export function planEquipment(map: MapDefinition, data: EncounterDefinition, base: HeroDefinition, member: MemberProgress, entries: readonly EquipmentEntry[], goal: AutoGoal = 'recommended', preferred?: SetId, level = 1): AutoEquipmentPlan {
   const current = member.gear ?? {}, slots = GEAR_SLOTS;
   const candidates = slots.map(slot => [
     ...(current[slot] ? [{ key: `worn:${slot}`, item: current[slot]!, label: '' }] : []),
     ...entries.filter(e => e.item.slot === slot && (slot !== 'weapon' || e.item.hero === base.id)).sort((a,b)=>Number(b.item.uid>0)-Number(a.item.uid>0)),
   ].filter((e,_i,list)=>list.findIndex(v=>same({...v.item,uid:0},{...e.item,uid:0}))===_i));
-  const ref = wounded(starred(base, member.stars, map, member.level ?? 1, member.talents, undefined, member), member.wound);
+  const ref = wounded(starred(base, member.stars, map, level, member.talents, undefined, member), member.wound);
   const direction = goal === 'recommended' ? map.equipment.supportHeroes.includes(base.id) ? 'support' : base.lane === 'front' ? 'survival' : 'attack' : goal;
   const weights = { attack: [8, 0, 2, 1], support: [1, 8, 2, 1], survival: [1, 1, 8, 1], speed: [1, 1, 2, 8] }[direction]!;
   type Loadout = (EquipmentEntry | undefined)[];
@@ -29,7 +29,7 @@ export function planEquipment(map: MapDefinition, data: EncounterDefinition, bas
   const rank = (items: Loadout): number[] => {
     const key=items.map(e=>e?.key??'').join('|'),cached=cache.get(key);if(cached)return cached;
     const gear = toGear(items), totals = gearTotals(map, gear);
-    const h = wounded(starred(base, member.stars, map, member.level ?? 1, member.talents, gear, member), member.wound);
+    const h = wounded(starred(base, member.stars, map, level, member.talents, gear, member), member.wound);
     // Ranking weights only. Conditional set/legendary effects get an explicit utility value; real
     // stat/skill comparisons still come from the battle helpers and explain their conditions.
     const extra = h.gear, specials = extra?.specials ?? [];
@@ -89,7 +89,7 @@ export function applyRunEquipment(initial: ExpeditionState,map: MapDefinition,lo
   for(const choice of plan.choices){const item=old[choice.slot];if(item)(item.uid?state.spare:state.found).push(item);}
   state.members[plan.heroId]!.gear=structuredClone(gear);
   // One final HP cap, not one per item: intermediate slot order must not destroy HP.
-  state.hp[plan.heroId]=Math.min(state.hp[plan.heroId]??0,memberDef(lookup,map,state.members,plan.heroId)!.maxHp);
+  state.hp[plan.heroId]=Math.min(state.hp[plan.heroId]??0,memberDef(lookup,map,state,plan.heroId)!.maxHp);
   return {state,event:{type:'equipped',heroId:plan.heroId}};
 }
 export function applyCampEquipment(initial: Profile,plan: AutoEquipmentPlan): ProfileResult {

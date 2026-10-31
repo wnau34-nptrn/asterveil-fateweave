@@ -5,6 +5,7 @@ import { newExpedition, reveal } from '../../src/core/world/world';
 import { newProfile } from '../../src/core/world/profile';
 import type { Commander, ExpeditionState, Profile } from '../../src/core/world/types';
 import { watchPage } from './diagnostics';
+import { legacyEnvelope } from '../fixtures/legacy-save';
 test.beforeEach(({ page }) => watchPage(page));
 
 // Formation (owner 2026-10-22): set front/back at the camp team page and the map bag; ≤3 per column.
@@ -14,7 +15,7 @@ const key = 'asterveil.fateweave.expedition.v1';
 const commander: Commander = { name: 'อารี', crest: 'star', color: 'gold', camp: 'ค่ายอารี' };
 const phone = { viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true, reducedMotion: 'reduce' as const, deviceScaleFactor: 2 };
 async function seed(page: Page, profile: Profile, run: ExpeditionState | null) {
-  await page.addInitScript(({ raw, key }) => { if (sessionStorage.getItem('seeded')) return; localStorage.setItem(key, raw); sessionStorage.setItem('seeded', '1'); }, { raw: JSON.stringify({ version: 35, profile, run }), key });
+  await page.addInitScript(({ raw, key }) => { if (sessionStorage.getItem('seeded')) return; localStorage.setItem(key, raw); sessionStorage.setItem('seeded', '1'); }, { raw: JSON.stringify(legacyEnvelope({ version: 35, profile, run })), key });
   await page.goto('./'); await page.locator('#continue').click();
 }
 const saved = (page: Page) => page.evaluate(k => JSON.parse(localStorage.getItem(k)!), key);
@@ -30,7 +31,7 @@ test('camp team page moves a member to the front by tap and keyboard, at most th
   await expect(page.locator('#lobby-lane-weaver')).toHaveAttribute('aria-pressed', 'true');
   await grid.locator('.formation-column[data-lane=front] .formation-cell.empty.target').first().click();
   await expect.poll(async () => (await saved(page)).profile.party.lanes?.weaver).toBe('front');
-  expect((await saved(page)).version).toBe(43);
+  expect((await saved(page)).version).toBe(44);
   await expect(grid.locator('.formation-column[data-lane=front] .formation-cell[data-hero]')).toHaveCount(3);
   await expect(grid.locator('.formation-column[data-lane=front] .formation-cell.empty')).toHaveCount(0);
   await expect(page.locator('#lobby-lane-weaver .lane-warn')).toBeVisible();

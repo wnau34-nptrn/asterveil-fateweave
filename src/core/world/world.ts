@@ -70,12 +70,12 @@ export const rosterIds = (state: ExpeditionState): string[] => [...state.roster.
 // settled into the company.
 export function recruit(state: ExpeditionState, map: MapDefinition, at: RecruitPoint, lookup?: EncounterLookup): string[] {
   const ids = (map.recruits ?? []).filter(r => r.at === at).map(r => r.hero);
-  const arriving = ids.filter(id => state.arrivals?.[id] !== undefined);
+  const arriving = ids.filter(id => state.arrivals?.includes(id));
   if (arriving.length && !lookup) throw new Error('A recruit arrives: the encounter lookup is needed');
   for (const id of arriving) {
-    const level = state.arrivals![id]!; delete state.arrivals![id]; if (!Object.keys(state.arrivals!).length) delete state.arrivals;
+    state.arrivals = state.arrivals!.filter(x => x !== id); if (!state.arrivals.length) delete state.arrivals;
     state.roster[state.roster.deployed.length < PARTY_SLOTS ? 'deployed' : 'reserve'].push(id);
-    state.members[id] = { stars: 1, dupes: 0, ...(level > 1 ? { level, exp: 0 } : {}) }; state.hp[id] = memberDef(lookup!, map, state.members, id)!.maxHp;
+    state.members[id] = { stars: 1, dupes: 0 }; state.hp[id] = memberDef(lookup!, map, state, id)!.maxHp;
   }
   const joined = [...ids.filter(id => state.guests?.includes(id)), ...arriving];
   if (joined.length) { state.recruited = [...state.recruited ?? [], ...joined]; if (state.guests) state.guests = state.guests.filter(id => !joined.includes(id)); }
@@ -87,7 +87,7 @@ export function recruit(state: ExpeditionState, map: MapDefinition, at: RecruitP
 // guests on a later map): what they wore goes to the bag (finds) or the spare items.
 function disband(state: ExpeditionState, map: MapDefinition): void {
   for (const id of state.guests ?? []) {
-    if (map.recruits?.some(r => r.hero === id)) (state.arrivals ??= {})[id] = state.members[id]?.level ?? 1;
+    if (map.recruits?.some(r => r.hero === id)) (state.arrivals ??= []).push(id);
     for (const item of Object.values(state.members[id]?.gear ?? {}) as Item[]) (item.uid ? state.spare : state.found).push(item);
     state.roster.deployed = state.roster.deployed.filter(x => x !== id); state.roster.reserve = state.roster.reserve.filter(x => x !== id);
     if (state.roster.lanes) delete state.roster.lanes[id];
@@ -116,8 +116,8 @@ export function draftPick(initial: ExpeditionState, map: MapDefinition, index: n
   if (!id || initial.battle) return { state: initial, event: { type: 'blocked', reason: 'busy' } };
   const state = structuredClone(initial); const draft = state.draft!;
   state.roster[state.roster.deployed.length < PARTY_SLOTS ? 'deployed' : 'reserve'].push(id);
-  state.members[id] = { stars: 1, dupes: 0, ...(draft.level > 1 ? { level: draft.level, exp: 0 } : {}) };
-  if (lookup) state.hp[id] = memberDef(lookup, map, state.members, id)!.maxHp;
+  state.members[id] = { stars: 1, dupes: 0 };
+  if (lookup) state.hp[id] = memberDef(lookup, map, state, id)!.maxHp;
   state.recruited = [...state.recruited ?? [], id];
   if (--draft.left > 0) draft.offers = draftOffers(state, map); else delete state.draft;
   return { state, event: { type: 'drafted', heroId: id } };
@@ -178,14 +178,31 @@ export function talentEffects(map: MapDefinition, heroId: string, talents: Talen
   }
   return Object.keys(t).length ? { ...out, talents: t } : out;
 }
-export function memberDef(lookup: EncounterLookup, map: MapDefinition, members: ExpeditionState['members'], id: string): HeroDefinition | undefined {
-  const base = heroDef(lookup, map, id);
-  return base && wounded(starred(base, members[id]?.stars ?? 1, map, members[id]?.level ?? 1, members[id]?.talents, members[id]?.gear, members[id]), members[id]?.wound);
+// The members of a profile or a run with the camp EXP they share (P01).
+export interface Party { members: Record<string, MemberProgress>; campXp: number }
+export function memberDef(lookup: EncounterLookup, map: MapDefinition, party: Party, id: string): HeroDefinition | undefined {
+  const base = heroDef(lookup, map, id); const m = party.members[id];
+  return base && wounded(starred(base, m?.stars ?? 1, map, levelOf(map, party), m?.talents, m?.gear, m), m?.wound);
 }
-// ---- Levels (2D-1) ----
-export const levelOf = (m: MemberProgress | undefined): number => m?.level ?? 1;
+// ---- Camp level (2D-1; P01 one level for the whole camp) ----
 // EXP needed to go from `level` to the next one.
-export const expToNext = (map: MapDefinition, level: number): number => map.progression.nextBase + map.progression.nextPerLevel * level;
+export const expToNext = (map: Pick<MapDefinition, 'progression'>, level: number): number => map.progression.nextBase + map.progression.nextPerLevel * level;
+// Total camp EXP at the start of `level`: 20(L−1) + 45L(L−1)/2 with the draft numbers (Lv2 = 65, Lv10 = 2205).
+export const levelXp = (map: Pick<MapDefinition, 'progression'>, level: number): number => (level - 1) * map.progression.nextBase + map.progression.nextPerLevel * level * (level - 1) / 2;
+// Victories stop adding EXP at the cap. A save moved from per-member levels (v43) may keep the EXP a capped member had
+// towards the next level, so the camp's EXP can sit up to one level's worth above the cap without raising it.
+export const capXp = (map: Pick<MapDefinition, 'progression'>): number => levelXp(map, map.progression.levelCap);
+export const maxCampXp = (map: Pick<MapDefinition, 'progression'>): number => capXp(map) + expToNext(map, map.progression.levelCap) - 1;
+export function campLevel(map: Pick<MapDefinition, 'progression'>, xp: number): number {
+  let level = 1; while (level < map.progression.levelCap && xp >= levelXp(map, level + 1)) level++;
+  return level;
+}
+export const levelOf = (map: Pick<MapDefinition, 'progression'>, party: Pick<Party, 'campXp'>): number => campLevel(map, party.campXp);
+// The camp's progress within its level (`need` 0 at the cap).
+export function campProgress(map: Pick<MapDefinition, 'progression'>, xp: number): { level: number; exp: number; need: number } {
+  const level = campLevel(map, xp); const max = level >= map.progression.levelCap;
+  return { level, exp: max ? 0 : xp - levelXp(map, level), need: max ? 0 : expToNext(map, level) };
+}
 // Monster level of a floor tile: the zone's low end at its southern (entrance) rows, rising to the high end in the north.
 export function monsterLevelAt(map: MapDefinition, p: Point): number | undefined {
   const tile = tileAt(map, p); const zone = tile && zoneOf(map, tile.zoneId); if (!zone?.levels) return undefined;
@@ -193,14 +210,14 @@ export function monsterLevelAt(map: MapDefinition, p: Point): number | undefined
   const [lo, hi] = zone.levels; const top = Math.min(...ys), bottom = Math.max(...ys);
   return bottom === top ? lo : lo + Math.round((bottom - p.y) / (bottom - top) * (hi - lo));
 }
-// EXP multiplier by how far a member's level is above the monster's (never zero), with a bonus for fighting up.
-export function expPercent(memberLevel: number, monsterLevel: number): number {
-  const gap = memberLevel - monsterLevel;
+// EXP multiplier by how far the camp's level is above the monster's (never zero), with a bonus for fighting up.
+export function expPercent(campLevel: number, monsterLevel: number): number {
+  const gap = campLevel - monsterLevel;
   return gap <= -3 ? 110 : gap <= 2 ? 100 : gap === 3 ? 75 : gap === 4 ? 50 : gap === 5 ? 25 : 10;
 }
 // Max HP for the given members (default: the starting roster at ★1).
-export function fullParty(lookup: EncounterLookup, map: MapDefinition, ids?: readonly string[], members: ExpeditionState['members'] = {}): Record<string, number> {
-  return Object.fromEntries((ids ?? map.startingRoster).map(id => [id, memberDef(lookup, map, members, id)!.maxHp]));
+export function fullParty(lookup: EncounterLookup, map: MapDefinition, ids?: readonly string[], party: Party = { members: {}, campXp: 0 }): Record<string, number> {
+  return Object.fromEntries((ids ?? map.startingRoster).map(id => [id, memberDef(lookup, map, party, id)!.maxHp]));
 }
 // An expedition starts with the team brought from the lobby (roster + their stars) at full HP.
 export function newExpedition(map: MapDefinition, lookup: EncounterLookup, seed: number, company?: Company, tutorialDone = false): ExpeditionState {
@@ -210,7 +227,7 @@ export function newExpedition(map: MapDefinition, lookup: EncounterLookup, seed:
   const state: ExpeditionState = {
     mapId: map.id, mapVersion: map.version, seed: seed >>> 0, rolls: 0, position: startOf(map), steps: 0, pressure: 0,
     revealed: '0'.repeat(width * map.rows.length), roster, members,
-    hp: fullParty(lookup, map, [...roster.deployed, ...roster.reserve], members), camp: null,
+    hp: fullParty(lookup, map, [...roster.deployed, ...roster.reserve], { members, campXp: company?.campXp ?? 0 }), camp: null, campXp: company?.campXp ?? 0,
     resources: { ore: 0, gold: 0, ember: 0, seal: 0 }, openedChests: [], restReady: true,
     tutorialDone, bossDefeated: false, completed: false, wins: 0, defeats: 0, battle: null, found: [], dry: 0,
     potions: company?.potions ? { ...company.potions } : { salve: 0, tonic: 0, repel: 0 }, repel: 0,
@@ -363,7 +380,7 @@ const percentOf = (max: number, percent: number) => Math.max(1, Math.ceil(max * 
 // A rest heals standing members by a share of max HP; the fallen need an ember each.
 export function rest(initial: ExpeditionState, map: MapDefinition, lookup: EncounterLookup): WorldResult {
   if (!canRest(initial, map)) return { state: initial, event: { type: 'blocked', reason: 'busy' } };
-  const state = structuredClone(initial); const full = fullParty(lookup, map, rosterIds(state), state.members);
+  const state = structuredClone(initial); const full = fullParty(lookup, map, rosterIds(state), state);
   for (const [id, max] of Object.entries(full)) if (state.hp[id]! > 0) state.hp[id] = Math.min(max, state.hp[id]! + percentOf(max, map.camp.restHealPercent));
   state.pressure = 0; state.camp = { ...state.position }; state.restReady = false;
   // 4C: beaten optional elites (not gate guards, not the mini-boss) return after a rest, one level higher.
@@ -377,7 +394,7 @@ export function canRevive(state: ExpeditionState, map: MapDefinition, heroId: st
 export function revive(initial: ExpeditionState, map: MapDefinition, lookup: EncounterLookup, heroId: string): WorldResult {
   if (!canRevive(initial, map, heroId)) return { state: initial, event: { type: 'blocked', reason: 'busy' } };
   const state = structuredClone(initial);
-  state.hp[heroId] = percentOf(memberDef(lookup, map, state.members, heroId)!.maxHp, map.camp.reviveHpPercent); state.resources.ember--;
+  state.hp[heroId] = percentOf(memberDef(lookup, map, state, heroId)!.maxHp, map.camp.reviveHpPercent); state.resources.ember--;
   return { state, event: { type: 'revived', heroId } };
 }
 
@@ -386,7 +403,7 @@ export function revive(initial: ExpeditionState, map: MapDefinition, lookup: Enc
 export const canManage = (state: ExpeditionState): boolean => !state.battle && !state.completed;
 // Spend only unallocated level points during exploration. Reset remains a lobby action.
 export function learnRunTalent(initial: ExpeditionState, map: MapDefinition, lookup: EncounterLookup, id: string, node: TalentNode): WorldResult {
-  if (!canManage(initial) || !rosterIds(initial).includes(id) || memberTalentReason(map, id, initial.members[id], node)) return { state: initial, event: { type: 'blocked', reason: 'busy' } };
+  if (!canManage(initial) || !rosterIds(initial).includes(id) || memberTalentReason(map, id, initial.members[id], node, levelOf(map, initial))) return { state: initial, event: { type: 'blocked', reason: 'busy' } };
   const state = structuredClone(initial), m = state.members[id]!;
   m.talents = { ...m.talents, [node]: (m.talents?.[node] ?? 0) + 1 };
   // Learning a max-HP talent must not heal living or fallen heroes for free.
@@ -460,7 +477,7 @@ export function takeOff(initial: ExpeditionState, map: MapDefinition, lookup: En
   return { state, event: { type: 'equipped', heroId } };
 }
 function capHp(state: ExpeditionState, map: MapDefinition, lookup: EncounterLookup, id: string): void {
-  const max = memberDef(lookup, map, state.members, id)!.maxHp; state.hp[id] = Math.min(state.hp[id] ?? 0, max);
+  const max = memberDef(lookup, map, state, id)!.maxHp; state.hp[id] = Math.min(state.hp[id] ?? 0, max);
 }
 
 // Loot consumes rolls from the same (seed, rolls) stream, so it is fixed once saved.
@@ -497,7 +514,7 @@ export function openChest(initial: ExpeditionState, map: MapDefinition): WorldRe
 export function potionReason(state: ExpeditionState, map: MapDefinition, lookup: EncounterLookup, potion: PotionId, targetId?: string): string {
   if (state.battle || state.completed) return 'busy';
   if (state.potions[potion] <= 0) return 'none';
-  const hurt = (id: string) => state.hp[id]! > 0 && state.hp[id]! < memberDef(lookup, map, state.members, id)!.maxHp;
+  const hurt = (id: string) => state.hp[id]! > 0 && state.hp[id]! < memberDef(lookup, map, state, id)!.maxHp;
   if (potion === 'salve') return !targetId || !rosterIds(state).includes(targetId) ? 'target' : state.hp[targetId] === 0 ? 'down' : hurt(targetId) ? '' : 'full';
   if (potion === 'tonic') return rosterIds(state).some(hurt) ? '' : 'full';
   return state.repel > 0 ? 'active' : '';
@@ -508,7 +525,7 @@ export function usePotion(initial: ExpeditionState, map: MapDefinition, lookup: 
   if (potion === 'repel') { state.repel = map.potions.repelSteps; return { state, event: { type: 'potion', potion } }; }
   const heal: Record<string, number> = {};
   for (const id of potion === 'salve' ? [targetId!] : rosterIds(state)) {
-    const max = memberDef(lookup, map, state.members, id)!.maxHp; if (!state.hp[id]) continue;
+    const max = memberDef(lookup, map, state, id)!.maxHp; if (!state.hp[id]) continue;
     const amount = Math.min(max - state.hp[id]!, Math.ceil(max * (potion === 'salve' ? map.potions.salvePercent : map.potions.tonicPercent) / 100));
     if (amount > 0) { state.hp[id]! += amount; heal[id] = amount; }
   }
@@ -556,12 +573,12 @@ export function chooseEvent(initial: ExpeditionState, map: MapDefinition, lookup
   if (choice === 'pray') {
     // Healing first at the old maximum, then the wound lowers every brought member's maximum for the run.
     for (const id of rosterIds(state)) {
-      const max = memberDef(lookup, map, state.members, id)!.maxHp; if (!state.hp[id]) continue;
+      const max = memberDef(lookup, map, state, id)!.maxHp; if (!state.hp[id]) continue;
       const amount = Math.min(max - state.hp[id]!, Math.ceil(max * r.prayHeal / 100)); if (amount > 0) { state.hp[id]! += amount; heal[id] = amount; }
     }
     for (const id of rosterIds(state)) {
       const m = state.members[id]!; state.members[id] = { ...m, wound: Math.min(r.maxWound, (m.wound ?? 0) + r.prayWound) };
-      state.hp[id] = Math.min(state.hp[id]!, memberDef(lookup, map, state.members, id)!.maxHp);
+      state.hp[id] = Math.min(state.hp[id]!, memberDef(lookup, map, state, id)!.maxHp);
     }
   }
   if (choice === 'offer') { state.resources.ore -= r.offerOre; state.resources.seal += r.offerSeal; }
@@ -576,7 +593,7 @@ function trailRegen(state: ExpeditionState, map: MapDefinition, lookup: Encounte
   if (state.steps % map.equipment.regenSteps) return;
   for (const id of rosterIds(state)) {
     const regen = gearTotals(map, state.members[id]?.gear).regen; const hp = state.hp[id] ?? 0;
-    if (regen && hp > 0) state.hp[id] = Math.min(memberDef(lookup, map, state.members, id)!.maxHp, hp + regen);
+    if (regen && hp > 0) state.hp[id] = Math.min(memberDef(lookup, map, state, id)!.maxHp, hp + regen);
   }
 }
 export const partyLuck = (state: Pick<ExpeditionState,'members'|'roster'>, map: MapDefinition): number =>
@@ -649,7 +666,7 @@ export function battleData(state: ExpeditionState, map: MapDefinition, lookup: E
   const strong = leveled && state.battle!.percent ? withStrength(leveled, state.battle!.percent) : leveled;
   const staged = strong && bossRole(strong, state.battle!.kind, map, state.battle!.source);
   const data = staged && hard ? hardEncounter(staged, state.battle!.kind, map) : staged;
-  const party = state.roster.deployed.map(id => memberDef(lookup, map, state.members, id));
+  const party = state.roster.deployed.map(id => memberDef(lookup, map, state, id));
   return data && party.every(Boolean) ? withParty(data, placed(party as HeroDefinition[], battleLanes(state, map, lookup))) : undefined;
 }
 // The battle's committed commands are replayed from the recorded entry; the world
@@ -664,9 +681,10 @@ export function recordBattle(initial: ExpeditionState, map: MapDefinition, looku
   battleState(state, map, lookup);
   return state;
 }
-// Every brought member (deployed and reserve, standing or fallen) gains the victory's EXP, tapered by
-// their level against the monster level. Level-ups raise max HP; standing members gain the difference.
-function gainExp(state: ExpeditionState, map: MapDefinition, lookup: EncounterLookup, data: EncounterDefinition, kind: BattleKind, source?: string, summoned: readonly string[] = []): Record<string, ExpGain> {
+// P01: a victory pays the camp once, whoever was brought (no share per member), tapered by the camp level against the
+// monster level and rounded once. Victories add nothing at the cap. Level-ups raise every roster member's max HP; the
+// standing ones gain the difference, the fallen stay down.
+function gainExp(state: ExpeditionState, map: MapDefinition, lookup: EncounterLookup, data: EncounterDefinition, kind: BattleKind, source?: string, summoned: readonly string[] = []): ExpGain {
   const rules = map.progression; const level = data.level ?? 1;
   // A7 step 2: EXP follows the foes' total HP (one foe's worth per `expFoeHp` at Lv1, grown by the monster-level rule),
   // so a swarm of small foes pays like one sturdy foe.
@@ -674,22 +692,16 @@ function gainExp(state: ExpeditionState, map: MapDefinition, lookup: EncounterLo
   const hpWorth = data.enemies.reduce((n, e) => n + (!e.reserve ? e.maxHp : summoned.includes(e.id) ? e.maxHp * rules.summonExpPercent / 100 : 0), 0);
   const worth = hpWorth / (rules.expFoeHp * (1 + (level - 1) * rules.monsterLevelPercent / 100));
   const base = worth * (rules.expBase + rules.expPerLevel * level) * (kind === 'boss' ? rules.bossExpMultiplier : kind === 'elite' ? (miniBoss(map, source) ? map.eventRules.miniBoss.exp : optionalElite(map, source) ? map.eventRules.optionalElite.exp : map.eventRules.eliteExp) : 1);
-  const gains: Record<string, ExpGain> = {};
-  const best = Math.max(...rosterIds(state).map(id => levelOf(state.members[id])));
-  for (const id of rosterIds(state)) {
-    const member = state.members[id] ?? { stars: 1, dupes: 0 }; const before = memberDef(lookup, map, state.members, id)!.maxHp;
-    // Reserve members learn at a reduced rate; anyone well behind the best brought member catches up faster.
-    const share = (state.roster.reserve.includes(id) ? rules.reserveExpPercent : 100) * (best - levelOf(member) >= rules.catchUpBehind ? 100 + rules.catchUpPercent : 100) / 100;
-    const percent = Math.round(expPercent(levelOf(member), level) * share / 100); const gained = Math.round(base * percent / 100);
-    let lv = levelOf(member), exp = (member.exp ?? 0) + gained; const start = lv;
-    while (lv < rules.levelCap && exp >= expToNext(map, lv)) { exp -= expToNext(map, lv); lv++; }
-    if (lv >= rules.levelCap) exp = 0;
-    state.members[id] = { ...member, level: lv, exp };
-    const after = memberDef(lookup, map, state.members, id)!.maxHp;
-    if (state.hp[id]! > 0) state.hp[id] = Math.min(after, state.hp[id]! + after - before);
-    gains[id] = { gained, percent, level: lv, levelsUp: lv - start };
+  const start = levelOf(map, state); const percent = expPercent(start, level);
+  const gained = state.campXp >= capXp(map) ? 0 : Math.min(Math.round(base * percent / 100), capXp(map) - state.campXp);
+  const before = Object.fromEntries(rosterIds(state).map(id => [id, memberDef(lookup, map, state, id)!.maxHp]));
+  state.campXp += gained;
+  const lv = levelOf(map, state);
+  if (lv > start) for (const id of rosterIds(state)) {
+    const after = memberDef(lookup, map, state, id)!.maxHp;
+    if (state.hp[id]! > 0) state.hp[id] = Math.min(after, state.hp[id]! + after - before[id]!);
   }
-  return gains;
+  return { gained, percent, level: lv, levelsUp: lv - start };
 }
 // Applies a finished battle. Victory keeps the surviving HP, rolls loot and relights
 // the campfire; defeat leaves the deployed members down at the last camp (or entrance).
@@ -706,12 +718,9 @@ export function finishBattle(initial: ExpeditionState, map: MapDefinition, looku
     if (kind === 'tutorial') {
       state.tutorialDone = true;
       if (recruit(state, map, 'prologue').length) {
-        for (const id of rosterIds(state)) state.hp[id] = memberDef(lookup, map, state.members, id)!.maxHp;
+        for (const id of rosterIds(state)) state.hp[id] = memberDef(lookup, map, state, id)!.maxHp;
         // A new company then recruits its first mercenaries (map.draft) before setting out.
-        if (map.draft) {
-          const best = Math.max(1, ...Object.values(state.members).map(m => m.level ?? 1));
-          state.draft = { left: map.draft.picks, level: Math.max(1, best - map.progression.joinBehind), offers: [] }; state.draft.offers = draftOffers(state, map);
-        }
+        if (map.draft) { state.draft = { left: map.draft.picks, offers: [] }; state.draft.offers = draftOffers(state, map); }
       }
     }
     // A save before v38 may still carry the boss's recruit as a guest until the win.
@@ -739,7 +748,7 @@ export function finishBattle(initial: ExpeditionState, map: MapDefinition, looku
   }
   state.defeats++;
   if (kind === 'tutorial') {
-    state.battle = { kind: 'tutorial', encounterId, entry: fullParty(lookup, map, state.roster.deployed, state.members), commands: [], ...(state.battle!.lanes ? { lanes: state.battle!.lanes } : {}) };
+    state.battle = { kind: 'tutorial', encounterId, entry: fullParty(lookup, map, state.roster.deployed, state), commands: [], ...(state.battle!.lanes ? { lanes: state.battle!.lanes } : {}) };
     return { state, event: { type: 'defeat', kind, encounterId } };
   }
   // The fallen stay fallen; the party retreats to the last camp reached (or the entrance).

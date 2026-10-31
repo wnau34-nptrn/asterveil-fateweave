@@ -6,6 +6,7 @@ import { parseGame } from '../../src/core/save/expedition-save';
 import { MAPS } from '../../src/content/world/maps';
 import { currentSave } from '../fixtures/current-save';
 import atlas from '../../src/game/visuals/skill_icons.json' with { type: 'json' };
+import { xpAt } from '../fixtures/camp-level';
 
 const key = 'asterveil.fateweave.expedition.v1';
 const members = {
@@ -18,7 +19,7 @@ const profile = () => {
   p.party = { deployed: ['tracer', 'weaver', 'toma', 'sefa'], reserve: ['brann', 'lio'] };
   p.tutorialDone = true; p.commander = { name: 'อารี', crest: 'star', color: 'gold', camp: 'ค่ายอารี' };
   p.cleared = ['ruined-border', 'deep-forest']; p.veteran = true;
-  for (const id of p.company) p.members[id] = { stars: 3, dupes: 0, level: 10, exp: 0 };
+  for (const id of p.company) p.members[id] = { stars: 3, dupes: 0}; p.campXp = Math.max(p.campXp, xpAt(10));
   p.members.tracer!.talents = { a1: 2, a2d: 1, a3s: 1, c1s: 1 };
   p.members.tracer!.loadout = ['mark', 'execute', 'lunge'];
   return p;

@@ -1,10 +1,10 @@
 import type { ExpeditionState, Item, MapDefinition, Profile, RunOutcome } from '../core/world/types';
 import { tomeCount } from '../core/world/tomes';
+import { campLevel } from '../core/world/world';
 import { storyArt } from '../game/visuals/assets';
 import { gearArt } from './equip-art';
 import { icon, type IconName } from './icons';
-import { heroText, itemName, rarityText, sideQuestText } from './th';
-import { portrait } from './portraits';
+import { itemName, rarityText, sideQuestText } from './th';
 import type { StoryPanel } from './story-ui';
 
 // 4F: the expedition summary shown once when a run ends, before the lobby. It is built from the profile before
@@ -13,7 +13,8 @@ export interface RunSummary {
   outcome: RunOutcome; firstClear: boolean; mapId: string; mapName: string; camp: string;
   steps: number; wins: number; defeats: number; elites: number; chests: number; puzzles: number; secrets: number; herbs: number;
   kept: { ore: number; gold: number; seal: number; dust: number; tomes: number; core: number }; items: Item[]; salvaged: number; overflow?:number;
-  levels: { id: string; from: number; to: number }[];
+  // The camp level before and after (P01: one level for every member; missing = unchanged).
+  campLevel?: { from: number; to: number };
   quests: { id: string; npc: string; from: number; to: number; target: number; ready: boolean }[];
 }
 export function runSummary(before: Profile, run: ExpeditionState, after: Profile, outcome: RunOutcome, map: MapDefinition): RunSummary {
@@ -23,15 +24,14 @@ export function runSummary(before: Profile, run: ExpeditionState, after: Profile
   const all = (p: Profile) => [...p.items,...p.overflow??[], ...Object.values(p.members).flatMap(m => Object.values(m.gear ?? {}) as Item[])];
   const known = new Set(all(before).map(i => i.uid));
   const items = all(after).filter(i => !known.has(i.uid)).sort((a, b) => b.rarity - a.rarity);
-  const levels = Object.keys(run.members).filter(id => after.members[id])
-    .map(id => ({ id, from: before.members[id]?.level ?? 1, to: after.members[id]!.level ?? 1 })).filter(l => l.to > l.from);
+  const from = campLevel(map, before.campXp), to = campLevel(map, after.campXp);
   const quests = map.sideQuests.map(q => ({ id: q.id, npc: q.npc, from: before.quests[q.id]?.progress ?? 0, to: after.quests[q.id]?.progress ?? 0, target: q.target, ready: !after.quests[q.id]?.claimed && (after.quests[q.id]?.progress ?? 0) >= q.target }))
     .filter(q => q.to > q.from);
   return {
     outcome, firstClear: outcome === 'complete' && !before.cleared.includes(run.mapId), mapId: run.mapId, mapName: map.name, camp: after.commander?.camp ?? '',
     steps: run.steps, wins: run.wins, defeats: run.defeats, elites: run.elitesDefeated.length + Object.values(run.respawns).reduce((a, b) => a + b, 0), chests: run.openedChests.length,
     puzzles: run.solved.length, secrets: run.secrets.length, herbs: outcome === 'wiped' ? 0 : run.herbs.length,
-    kept, items, overflow:after.overflow?.length??0, salvaged: after.last?.salvaged ?? 0, levels, quests,
+    kept, items, overflow:after.overflow?.length??0, salvaged: after.last?.salvaged ?? 0, ...(to > from ? { campLevel: { from, to } } : {}), quests,
   };
 }
 
@@ -63,7 +63,7 @@ export class SummaryUI {
     const haul = ([['ore', 'แร่ดาว', s.kept.ore], ['gold', 'เหรียญทอง', s.kept.gold], ['seal', 'ตราสัญญา', s.kept.seal], ['dust', 'ฝุ่นดาว', s.kept.dust], ['tab-skills', 'ตำราศึก', s.kept.tomes], ['star', 'แก่นรอยแยก', s.kept.core]] as [IconName, string, number][])
       .filter(([, , n]) => n > 0).map(([g, l, n]) => `<li>${icon(g)}<b>+${n}</b><small>${l}</small></li>`).join('');
     const items = s.items.slice(0, 12).map(i => `<li data-rarity="${i.rarity}" title="${itemName(i)} Lv${i.level}"><span class="tile">${gearArt(i)}<span class="tile-lv">Lv${i.level}</span>${i.plus?`<i class="tile-plus">+${i.plus}</i>`:''}</span><small>${itemName(i)}</small><em>${rarityText[i.rarity]}</em></li>`).join('');
-    const levels = s.levels.map(l => `<li>${portrait(l.id)}<span><b>${heroText[l.id]?.name ?? l.id}</b><small>Lv${l.from} → <em>Lv${l.to}</em></small></span></li>`).join('');
+    const levels = s.campLevel ? `<li><span><b>เลเวลค่าย</b><small>Lv${s.campLevel.from} → <em>Lv${s.campLevel.to}</em> · ทุกคนในค่าย</small></span></li>` : '';
     const quests = s.quests.map(q => { const kind = this.map.sideQuests.find(x => x.id === q.id)!.kind;
       return `<li class="${q.ready ? 'ready' : ''}"><b>${sideQuestText[kind].name}</b><span class="summary-bar"><i style="width:${Math.round(q.to / q.target * 100)}%"></i></span><small>${q.to}/${q.target}${q.ready ? ' · พร้อมรับรางวัลที่ค่าย!' : ` (+${q.to - q.from})`}</small></li>`; }).join('');
     this.root.dataset.outcome = s.outcome;

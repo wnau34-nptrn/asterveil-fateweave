@@ -11,7 +11,7 @@ import { shortcutBlocked } from '../platform/keyboard';
 import type { ActionId, EncounterDefinition, HeroDefinition } from '../core/battle/types';
 
 import type { Direction, EventChoice, ExpeditionState, GearSlot, MapDefinition, Point, PotionId } from '../core/world/types';
-import { canManage, wear, type BagList, travelTargets, atCamp, atMuster, canOpenChest, canRest, canRevive, chestAt, eliteBlocks, questComplete, questDone, encounterChance, eventChoiceReason, isRevealed, monsterLevelAt, pendingEvent, rosterIds, starred, tileAt, wounded, zoneOf } from '../core/world/world';
+import { canManage, wear, type BagList, travelTargets, atCamp, atMuster, canOpenChest, canRest, canRevive, chestAt, eliteBlocks, questComplete, questDone, encounterChance, eventChoiceReason, isRevealed, levelOf, monsterLevelAt, pendingEvent, rosterIds, starred, tileAt, wounded, zoneOf } from '../core/world/world';
 import { PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS, type Lane } from '../core/world/types';
 import { formation } from '../core/world/formation';
 import { formationGrid, formationTap, laneName } from './formation-grid';
@@ -362,7 +362,7 @@ export class WorldUI {
     // Hard mode (A9): monsters fight `hardLevels` higher; the map name carries the mode.
     const level = base === undefined ? undefined : base + (s.hard ? this.map.progression.hardLevels : 0);
     this.root.querySelector('#map-name')!.textContent = `${this.map.name}${s.hard ? ' · ยาก' : ''}`;
-    const living = s.roster.deployed.filter(id => s.hp[id]! > 0); const team = living.length ? Math.round(living.reduce((sum, id) => sum + (s.members[id]?.level ?? 1), 0) / living.length) : 1;
+    const team = levelOf(this.map, s);
     const danger = level !== undefined && team <= level - 2;
     this.root.querySelector('#zone-name')!.innerHTML = `${tile.kind === 'camp' ? 'แคมป์พักแรม' : zone?.name ?? ''}${level !== undefined ? ` <span class="zone-level${danger ? ' danger' : ''}">Lv${level}${danger ? ' · อันตราย' : ''}</span>` : ''}`;
     this.root.dataset.zone = tile.kind === 'camp' ? 'camp' : tile.zoneId;
@@ -469,7 +469,7 @@ export class WorldUI {
   }
   private stars(s: ExpeditionState, id: string): number { return s.members[id]?.stars ?? 1; }
   // Member stats as they fight: the catalog entry scaled by the member's stars.
-  private hero(id: string, s = this.view?.state): HeroDefinition { const base = this.heroes.find(h => h.id === id)!; return s ? wounded(starred(base, this.stars(s, id), this.map, s.members[id]?.level ?? 1, s.members[id]?.talents, s.members[id]?.gear, s.members[id]), s.members[id]?.wound) : base; }
+  private hero(id: string, s = this.view?.state): HeroDefinition { const base = this.heroes.find(h => h.id === id)!; return s ? wounded(starred(base, this.stars(s, id), this.map, levelOf(this.map, s), s.members[id]?.talents, s.members[id]?.gear, s.members[id]), s.members[id]?.wound) : base; }
   private starRow(n: number): string { return starRow(n, this.map.company.maxStars); }
   private renderCamp(): void {
     const s = this.view?.state; if (!s) return;
@@ -505,7 +505,7 @@ export class WorldUI {
       if (!id) return `<button class="team-card empty${this.picked ? ' target' : ''}" data-world="team-pick" data-side="${side}" aria-label="${side === 'deployed' ? `ช่อง ${slot + 1} ว่าง` : 'ช่องสำรองว่าง'}"${this.picked ? '' : ' disabled'}><span>ว่าง</span></button>`;
       const h = this.hero(id); const hp = s.hp[id] ?? 0; const text = heroText[id]!;
       const lane = laneName(this.lanes(s)[id] ?? h.lane);
-      return `<button id="${prefix}-${id}" class="team-card${hp <= 0 ? ' fallen' : ''}" data-world="team-pick" data-hero="${id}" data-side="${side}" aria-pressed="${this.picked === id}" aria-label="${side === 'deployed' ? `ช่อง ${slot + 1} · ` : 'สำรอง · '}${text.name} ${this.stars(s, id)} ดาว ${text.role} ${lane} ${hp <= 0 ? 'ล้มแล้ว' : `เลือด ${hp} จาก ${h.maxHp}`}">${side === 'deployed' ? `<i class="slot-no">${slot + 1}</i>` : ''}${portrait(id)}<b>${text.name}</b>${this.starRow(this.stars(s, id))}<small>Lv${s.members[h.id]?.level ?? 1} · ${hp <= 0 ? 'ล้มแล้ว' : `${hp}/${h.maxHp}`}</small><small class="lane">${text.role} · ${lane}</small></button>`;
+      return `<button id="${prefix}-${id}" class="team-card${hp <= 0 ? ' fallen' : ''}" data-world="team-pick" data-hero="${id}" data-side="${side}" aria-pressed="${this.picked === id}" aria-label="${side === 'deployed' ? `ช่อง ${slot + 1} · ` : 'สำรอง · '}${text.name} ${this.stars(s, id)} ดาว ${text.role} ${lane} ${hp <= 0 ? 'ล้มแล้ว' : `เลือด ${hp} จาก ${h.maxHp}`}">${side === 'deployed' ? `<i class="slot-no">${slot + 1}</i>` : ''}${portrait(id)}<b>${text.name}</b>${this.starRow(this.stars(s, id))}<small>Lv${levelOf(this.map, s)} · ${hp <= 0 ? 'ล้มแล้ว' : `${hp}/${h.maxHp}`}</small><small class="lane">${text.role} · ${lane}</small></button>`;
     };
     const row = (ids: string[], side: 'deployed' | 'reserve', size: number) => Array.from({ length: size }, (_, i) => card(ids[i], side, i)).join('');
     const deployedUp = s.roster.deployed.some(id => s.hp[id]! > 0);
@@ -533,7 +533,7 @@ export class WorldUI {
     this.root.querySelector('#world-party')!.innerHTML = s.roster.deployed.map(id => this.hero(id, s)).map(h => {
       const hp = s.hp[h.id] ?? 0; const ratio = hp / h.maxHp; const text = heroText[h.id]!;
       const state = hp <= 0 ? 'fallen' : ratio < .25 ? 'critical' : ratio < .6 ? 'hurt' : 'healthy';
-      return `<button data-world="character-open" data-hero="${h.id}" aria-haspopup="dialog" aria-controls="character-dialog" class="world-hero ${state}${s.guests?.includes(h.id) ? ' guest' : ''}" id="world-hero-${h.id}" aria-label="${text.name}${s.guests?.includes(h.id) ? ' ผู้ร่วมทางชั่วคราว' : ''} ${this.stars(s, h.id)} ดาว เลเวล ${s.members[h.id]?.level ?? 1} ${hp <= 0 ? 'ล้มแล้ว' : `เลือด ${hp} จาก ${h.maxHp}`}">${portrait(h.id)}<span class="hero-copy"><b>${text.name}${this.stars(s, h.id) > 1 ? `<i class="hero-stars">★${this.stars(s, h.id)}</i>` : ''}<i class="hero-level">Lv${s.members[h.id]?.level ?? 1}</i></b><small>${hp <= 0 ? 'ล้มแล้ว' : `${hp}/${h.maxHp}`}</small><span class="hp"><span style="width:${ratio * 100}%"></span></span>${talentPoints(this.map, s.members[h.id]) - talentsSpent(s.members[h.id]?.talents) > 0 ? '<span class="world-talent-badge">+แต้ม</span>' : ''}</span></button>`;
+      return `<button data-world="character-open" data-hero="${h.id}" aria-haspopup="dialog" aria-controls="character-dialog" class="world-hero ${state}${s.guests?.includes(h.id) ? ' guest' : ''}" id="world-hero-${h.id}" aria-label="${text.name}${s.guests?.includes(h.id) ? ' ผู้ร่วมทางชั่วคราว' : ''} ${this.stars(s, h.id)} ดาว เลเวล ${levelOf(this.map, s)} ${hp <= 0 ? 'ล้มแล้ว' : `เลือด ${hp} จาก ${h.maxHp}`}">${portrait(h.id)}<span class="hero-copy"><b>${text.name}${this.stars(s, h.id) > 1 ? `<i class="hero-stars">★${this.stars(s, h.id)}</i>` : ''}<i class="hero-level">Lv${levelOf(this.map, s)}</i></b><small>${hp <= 0 ? 'ล้มแล้ว' : `${hp}/${h.maxHp}`}</small><span class="hp"><span style="width:${ratio * 100}%"></span></span>${talentPoints(this.map, s.members[h.id], h.id, levelOf(this.map, s)) - talentsSpent(s.members[h.id]?.talents) > 0 ? '<span class="world-talent-badge">+แต้ม</span>' : ''}</span></button>`;
     }).join('');
   }
 

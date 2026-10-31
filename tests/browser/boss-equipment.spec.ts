@@ -9,6 +9,8 @@ import {battleLesson} from '../../src/ui/tutorial';
 import {saveGame} from '../../src/core/save/expedition-save';
 import {gearFor} from '../sim/class-sim';
 import type {Item} from '../../src/core/world/types';
+import { xpAt } from '../fixtures/camp-level';
+import { legacyEnvelope } from '../fixtures/legacy-save';
 const key='asterveil.fateweave.expedition.v1';
 for(const [width,height,touch] of [[320,568,true],[390,844,true],[1366,768,false]] as const){
  test(`boss gear normal sets, readonly skill comparison, safeguards and target at ${width}x${height}`,async({browser},info)=>{
@@ -18,7 +20,7 @@ for(const [width,height,touch] of [[320,568,true],[390,844,true],[1366,768,false
   p.items=[charm,{uid:2,slot:'charm',rarity:1,level:1,affixes:['support'],q:{main:100,affixes:[120]}}];p.nextItem=5;
   p.company.push('sefa');p.members.sefa={stars:3,dupes:0,gear:{charm:{...charm,uid:5}}};p.nextItem=6;
   p.members.tracer!.gear={head:{uid:3,slot:'head',rarity:0,level:1,affixes:[],set:'shadow'},charm:{uid:4,slot:'charm',rarity:3,level:11,affixes:['attack','speed','hp'],q:{main:100,affixes:[100,100,100]}}};
-  await page.addInitScript(({key,raw})=>{if(!sessionStorage.getItem('boss-seeded')){localStorage.setItem(key,raw);sessionStorage.setItem('boss-seeded','1')}},{key,raw:JSON.stringify({version:27,profile:p,run:null})});await page.goto('./');await expect(page).toHaveTitle(/Asterveil/);await page.locator('#continue').click();const saved=()=>page.evaluate(k=>localStorage.getItem(k)!,key),original=await saved();
+  await page.addInitScript(({key,raw})=>{if(!sessionStorage.getItem('boss-seeded')){localStorage.setItem(key,raw);sessionStorage.setItem('boss-seeded','1')}},{key,raw:JSON.stringify(legacyEnvelope({version:27,profile:p,run:null}))});await page.goto('./');await expect(page).toHaveTitle(/Asterveil/);await page.locator('#continue').click();const saved=()=>page.evaluate(k=>localStorage.getItem(k)!,key),original=await saved();
   await page.locator('#lobby-tab-hunt').click();await expect(page.locator('.boss-progress')).toContainText('2/3');await page.locator('#boss-target').selectOption('focus');expect(await saved()).toBe(original);await page.locator('#boss-apply').focus();await page.keyboard.press('Escape');await page.locator('#lobby-tab-hunt').click();await expect(page.locator('#boss-target')).toHaveValue('aegis');
   await page.locator('#boss-target').selectOption('focus');if(touch){await page.setViewportSize({width:844,height:390});await expect(page.locator('#orientation-gate')).toBeVisible();await page.locator('#boss-apply').dispatchEvent('click');expect(await saved()).toBe(original);await page.setViewportSize({width,height})}
   await page.locator('#boss-apply').click();const chosen=await saved();expect(JSON.parse(chosen).profile.bossLoot[map.bossEncounterId]).toEqual({target:'focus',misses:2,rewarded:true});await page.locator('#boss-target').scrollIntoViewIfNeeded();await page.screenshot({path:info.outputPath('boss-farm-target.png')});await page.locator('[data-lobby=close]').click();
@@ -32,7 +34,7 @@ for(const [width,height,touch] of [[320,568,true],[390,844,true],[1366,768,false
  });
  test(`boss victory pays one bonus with normal set and reload cannot duplicate at ${width}x${height}`,async({browser},info)=>{
   const p=newProfile(map,17);p.commander={name:'อารี',crest:'star',color:'gold', camp: 'ค่ายอารี'};p.tutorialDone=true;p.bossLoot={[map.bossEncounterId]:{target:'focus',misses:0,rewarded:false}};let uid=1;
-  for(const id of p.company){const gear=gearFor(id,'main',11);for(const item of Object.values(gear))if(item){item.uid=uid++;item.plus=20;}p.members[id]={stars:5,dupes:0,level:10,exp:0,gear};}p.nextItem=uid;
+  for(const id of p.company){const gear=gearFor(id,'main',11);for(const item of Object.values(gear))if(item){item.uid=uid++;item.plus=20;}p.members[id]={stars:5,dupes:0,gear}; p.campXp = Math.max(p.campXp, xpAt(10));}p.nextItem=uid;
   let seed=1;for(;seed<100;seed++){let n=0;const item=bossReward(map,startBossPlan(p,map),()=>rollPercent((seed^0x6b05d017)>>>0,n++),11)!;if(item.set==='shadow')break;}expect(seed).toBeLessThan(100);
   const game=depart(p,map,lookup,seed),run=game.run;run.battle={kind:'boss',encounterId:map.bossEncounterId,level:11,entry:{...run.hp},commands:[]};const data=battleData(run,map,lookup)!;let battle=battleState(run,map,lookup)!;
   for(let n=0;battle.outcome==='active'&&n<200;n++){const lesson=battleLesson(battle,data)!;battle=resolveCommand(battle,data,{beat:battle.beat,heroId:lesson.heroId,action:lesson.action,targetId:lesson.targetId}).state;}expect(battle.outcome).toBe('victory');const last=battle.commands.at(-1)!;run.battle.commands=battle.commands.slice(0,-1);

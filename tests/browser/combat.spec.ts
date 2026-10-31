@@ -11,6 +11,7 @@ import type { BattleKind } from '../../src/core/world/types';
 import { offensive, guided, partyRoutes, type Move } from '../fixtures/party-routes';
 import { encounterRoutes } from '../fixtures/encounter-routes';
 import { watchPage } from './diagnostics';
+import { legacyEnvelope } from '../fixtures/legacy-save';
 test.beforeEach(({ page }) => watchPage(page));
 const key='asterveil.fateweave.expedition.v1';
 const full={guardian:76,tracer:56,weaver:48,healer:46};
@@ -160,10 +161,10 @@ for(const [index,route]of routes.entries()){
   for(const [i,hero]of route.data.heroes.entries())await expect(page.locator('#hero-'+hero.id)).toContainText(`${route.hp[i]} / ${hero.maxHp}`);
   await reachable(page,'.result-card button');await reachable(page,'#battle-info');await page.screenshot({path:info.outputPath('four-survivor-victory.png')});
   // Victory EXP may level members up (2D-1): standing members gain the max-HP difference.
-  const after=await saved(page);const grown=(id:string,i:number)=>route.hp[i]!+memberDef(encounterById,chapterOne,after.members,id)!.maxHp-route.data.heroes[i]!.maxHp;
+  const after=await saved(page);const grown=(id:string,i:number)=>route.hp[i]!+memberDef(encounterById, chapterOne, after, id)!.maxHp-route.data.heroes[i]!.maxHp;
   expect(after.hp).toEqual(Object.fromEntries(route.data.heroes.map((h,i)=>[h.id,grown(h.id,i)])));
   await page.locator('.result-card button').click();await expect(page.locator('.battle-rewards')).toBeVisible();const rewardSave=await saved(page);await page.locator('.battle-rewards > button').click();expect(await saved(page)).toEqual(rewardSave);await expect(page.locator('#world-view')).toBeVisible();
-  for(const [i,hero]of route.data.heroes.entries())await expect(page.locator('#world-hero-'+hero.id)).toContainText(`${grown(hero.id,i)}/${memberDef(encounterById,chapterOne,after.members,hero.id)!.maxHp}`);
+  for(const [i,hero]of route.data.heroes.entries())await expect(page.locator('#world-hero-'+hero.id)).toContainText(`${grown(hero.id,i)}/${memberDef(encounterById, chapterOne, after, hero.id)!.maxHp}`);
   expect(issues).toEqual([]);await context.close();
  });
 }
@@ -301,7 +302,7 @@ test('★3/★5 members: four command buttons fit phones and the ★3 skill cast
   const data=encounterById('veil-siege')!;
   state.battle={kind:'random',encounterId:data.id,entry:{...state.hp},commands:[]};
   const profile={...newProfile(chapterOne,5),commander:{name:'อารี',crest:'star',color:'gold', camp: 'ค่ายอารี'}};for(const id of Object.keys(state.members))profile.members[id]={stars:5,dupes:0};
-  await page.addInitScript(({raw,key})=>{localStorage.setItem(key,raw);},{raw:JSON.stringify({version:6,profile,run:state}),key});
+  await page.addInitScript(({raw,key})=>{localStorage.setItem(key,raw);},{raw:JSON.stringify(legacyEnvelope({version:6,profile,run:state})),key});
   await page.goto('./');await resume(page);if(await page.locator('#start').count())await page.locator('#start').click();
   await owner(page,'tracer');
   const buttons=page.locator('.actions .action');await expect(buttons).toHaveCount(4);

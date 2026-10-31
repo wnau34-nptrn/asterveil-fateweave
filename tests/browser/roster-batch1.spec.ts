@@ -6,6 +6,7 @@ import { replay, resolveCommand } from '../../src/core/battle/engine';
 import { battleData } from '../../src/core/world/world';
 import { parseGame, saveGame } from '../../src/core/save/expedition-save';
 import type { Profile } from '../../src/core/world/types';
+import { xpAt } from '../fixtures/camp-level';
 
 const key = 'asterveil.fateweave.expedition.v1';
 test.use({ viewport: { width: 390, height: 844 }, hasTouch: true });
@@ -17,9 +18,9 @@ function profile(): Profile {
   p.cleared = ['ruined-border', 'deep-forest', 'veil-frontier'];
   for (const id of ['metta', 'thiran', 'lalin', 'wila']) {
     p.company.push(id);
-    p.members[id] = { stars: 1, dupes: 0, level: 10, exp: 0 };
+    p.members[id] = { stars: 1, dupes: 0}; p.campXp = Math.max(p.campXp, xpAt(10));
   }
-  p.members.weaver = { stars: 1, dupes: 0, level: 10, exp: 0 };
+  p.members.weaver = { stars: 1, dupes: 0}; p.campXp = Math.max(p.campXp, xpAt(10));
   p.members.lalin!.talents = { p1: 1, p2: 1 };
   p.party = { deployed: ['weaver', 'lalin', 'metta', 'thiran'], reserve: ['guardian', 'tracer', 'healer', 'wila'] };
   return p;

@@ -10,6 +10,8 @@ import { characterSkillMetric } from '../src/ui/character-metrics';
 import { newProfile, depart } from '../src/core/world/profile';
 import { parseGame, saveGame } from '../src/core/save/expedition-save';
 import { battleLesson } from '../src/ui/tutorial';
+import { xpAt } from './fixtures/camp-level';
+import { legacyEnvelope } from './fixtures/legacy-save';
 const catalog = heroCatalog(lookup,map);
 const changed: [string, ActionId[]][] = [
  ['guardian',['bulwark','rouse','rally']], ['tracer',['sweep']], ['weaver',['dispel','sigil']], ['healer',['bless']],
@@ -102,13 +104,13 @@ describe('C11 skill contract',()=>{
 const write=(game:Parameters<typeof saveGame>[1])=>{let raw='';saveGame({getItem:()=>null,setItem:(_k,v)=>{raw=v;}},game);return raw;};
 describe('C11 save v41 → v42',()=>{
  it('refunds changed trees, keeps alchemist tree/tomes/grants and resets locked loadouts',()=>{
-  const p=newProfile(map,1);p.company.push('toma');p.members.toma={stars:1,dupes:0,level:6,exp:0,talents:{a1:1}};
-  p.members.guardian={stars:1,dupes:0,level:6,exp:0,talents:{c1:1,c1s:1},loadout:['guard','rally'],skillLevels:{rally:2}};
-  const old=JSON.parse(write({profile:p,run:null}));old.version=41;
+  const p=newProfile(map,1);p.company.push('toma');p.members.toma={stars:1,dupes:0,talents:{a1:1}}; p.campXp = Math.max(p.campXp, xpAt(6));
+  p.members.guardian={stars:1,dupes:0,talents:{c1:1,c1s:1},loadout:['guard','rally'],skillLevels:{rally:2}}; p.campXp = Math.max(p.campXp, xpAt(6));
+  const old=legacyEnvelope(JSON.parse(write({profile:p,run:null})));old.version=41;
   const game=parseGame(JSON.stringify(old),map,lookup);
   expect(game.profile.members.guardian!.talents).toBeUndefined();expect(game.profile.members.guardian!.loadout).toBeUndefined();
   expect(game.profile.members.guardian!.skillLevels).toEqual({rally:2});expect(game.profile.members.toma!.talents).toEqual({a1:1});
-  expect(JSON.parse(write(game)).version).toBe(43);expect(parseGame(write(game),map,lookup)).toEqual(game);
+  expect(JSON.parse(write(game)).version).toBe(44);expect(parseGame(write(game),map,lookup)).toEqual({profile:game.profile,run:null});
  });
  it('restarts a changed active skill replay from recorded entry HP without duplicating rewards',()=>{
   const p=newProfile(map,2);const game=depart(p,map,lookup,3),run=game.run;
@@ -125,8 +127,8 @@ describe('C11 save v41 → v42',()=>{
   expect(back.run!.hard).toBe(true);expect(back.run!.battle!.commands).toEqual([]);expect(back.run!.battle!.entry).toEqual(run.hp);
  });
  it('settles a run with refunded trees home, retaining its investment',()=>{
-  const p=newProfile(map,4);p.members.guardian={stars:1,dupes:0,level:6,exp:0,talents:{a1:1}};
-  const game=depart(p,map,lookup,3),old=JSON.parse(write(game));old.version=41;
+  const p=newProfile(map,4);p.members.guardian={stars:1,dupes:0,talents:{a1:1}}; p.campXp = Math.max(p.campXp, xpAt(6));
+  const game=depart(p,map,lookup,3),old=legacyEnvelope(JSON.parse(write(game)));old.version=41;
   const back=parseGame(JSON.stringify(old),map,lookup);expect(back.run).toBeNull();expect(back.profile.members.guardian!.talents).toBeUndefined();
  });
 });

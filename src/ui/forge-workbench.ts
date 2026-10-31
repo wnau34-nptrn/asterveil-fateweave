@@ -6,7 +6,7 @@ import type { EncounterDefinition, HeroDefinition } from '../core/battle/types';
 import { enhancementInvestment, itemStats, salvageValue, affixPool } from '../core/world/equipment';
 import { transferCandidate, transferReason, weaponBlueprint, weaponCraftCost, weaponCraftReason, enhanceTo, enhancementCostTo, findItem, fuseMaterials, fuseReason, fusionRefund, itemLevelCap, itemLevelCost, raiseItemLevel, rerollReason, smeltLeft, smeltReason } from '../core/world/forge';
 import type { LobbyFeature, Gear, Item, MapDefinition, Profile } from '../core/world/types';
-import { starred } from '../core/world/world';
+import { levelOf, starred } from '../core/world/world';
 import { filteredEquipment, gearFilters, newGearFilters, changeGearFilter } from './gear-inventory';
 import { characterStats, characterSkillMetric } from './character-metrics';
 import { gearArt } from './equip-art';
@@ -131,8 +131,8 @@ export class ForgeWorkbench {
   }
   private heroImpact(p:Profile,id:string,gear:Gear,newGear:Gear,caption:string):string {
     const m=p.members[id]!;const base=this.heroes.find(h=>h.id===id)!;
-    const h=starred(base,m.stars,this.map,m.level??1,m.talents,gear,m),n=starred(base,m.stars,this.map,m.level??1,m.talents,newGear,m);
-    const state={members:{...p.members,[id]:{...m,gear}},roster:p.party,hp:{[id]:h.maxHp}},newState={...state,members:{...p.members,[id]:{...m,gear:newGear}},hp:{[id]:n.maxHp}};
+    const lv=levelOf(this.map,p),h=starred(base,m.stars,this.map,lv,m.talents,gear,m),n=starred(base,m.stars,this.map,lv,m.talents,newGear,m);
+    const state={members:{...p.members,[id]:{...m,gear}},roster:p.party,hp:{[id]:h.maxHp},campXp:p.campXp},newState={...state,members:{...p.members,[id]:{...m,gear:newGear}},hp:{[id]:n.maxHp}};
     const old=characterStats(state,this.map,h,this.data),proposed=characterStats(newState,this.map,n,this.data);
     const effects=this.tab==='craft'?`<h4>เซ็ตและพลังพิเศษก่อน–หลัง</h4><p class="camp-note">ผลตามเงื่อนไขไม่รวมในพลังพื้นฐานด้านบน</p><div class="comparison-effects"><section><h4>สวมอยู่</h4><ul>${equipmentEffects(state,this.map,h)}</ul></section><section><h4>ถ้าใส่อาวุธนี้</h4><ul>${equipmentEffects(newState,this.map,n)}</ul></section></div>`:'';
     return `<details class="forge-impact"${this.impactOpen?' open':''}><summary>ผลต่อ${heroText[id]!.name}และสกิล</summary><p class="camp-note">${caption} · ค่ายแสดงเลือดพร้อมออกเดินทาง · พลังพื้นฐานก่อนเงื่อนไขต่อสู้</p><table class="comparison-table"><thead><tr><th>ค่า</th><th>ก่อน</th><th>หลัง</th></tr></thead><tbody>${old.map((v,i)=>`<tr><th>${v.name}</th><td>${v.value}${v.unit}</td><td>${proposed[i]!.value}${v.unit}</td></tr>`).join('')}</tbody></table><ul class="forge-skills">${h.actions.map(a=>{const v=characterSkillMetric(a,h,this.data),w=characterSkillMetric(a,n,this.data);return `<li>${this.data.skills[a].name}: ${v.value===undefined?'ผลพิเศษ · ค่าพลังคงเดิม':`${v.label} ${v.value} → ${w.value}`}${v.secondary?` · ${v.secondary.label} ${v.secondary.value} → ${w.secondary!.value}`:''}</li>`;}).join('')}</ul>${effects}</details>`;

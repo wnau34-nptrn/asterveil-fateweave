@@ -17,11 +17,11 @@ export function candidates(m: MapDefinition, hero: HeroDefinition, level: number
   const tree = m.talents[hero.id] ?? [], branches = [...new Set(tree.map(n => n.branch).filter(Boolean))];
   const out: MemberProgress[] = [];
   for (const branch of branches.length ? branches : [undefined]) for (const reverse of [false, true]) {
-    const member: MemberProgress = { stars: 1, dupes: 0, level, exp: 0 };
+    const member: MemberProgress = { stars: 1, dupes: 0 };
     const talents: Talents = {};
     const ordered = [...tree].sort((a,b) => Number(b.branch === branch) - Number(a.branch === branch) || (a.tier ?? 0) - (b.tier ?? 0) || (reverse ? b.id.localeCompare(a.id) : a.id.localeCompare(b.id)));
     for (let i = 0; i < 50; i++) {
-      const next = ordered.find(n => !memberTalentReason(m, hero.id, { ...member, talents }, n.id));
+      const next = ordered.find(n => !memberTalentReason(m, hero.id, { ...member, talents }, n.id, level));
       if (!next) break; talents[next.id] = (talents[next.id] ?? 0) + 1;
     }
     if (Object.keys(talents).length) member.talents = talents;

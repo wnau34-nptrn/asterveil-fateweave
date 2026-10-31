@@ -5,6 +5,8 @@ import { depart, newProfile } from '../../src/core/world/profile';
 import { GEAR_SLOTS, type Item } from '../../src/core/world/types';
 import { parseGame } from '../../src/core/save/expedition-save';
 import { setCounts } from '../../src/core/world/equipment';
+import { xpAt } from '../fixtures/camp-level';
+import { legacyEnvelope } from '../fixtures/legacy-save';
 const key='asterveil.fateweave.expedition.v1';
 
 for(const [width,height,touch] of [[320,568,true],[390,844,true],[1366,768,false]] as const)for(const camp of [false,true]){
@@ -12,12 +14,12 @@ for(const [width,height,touch] of [[320,568,true],[390,844,true],[1366,768,false
     const context=await browser.newContext({viewport:{width,height},hasTouch:touch,isMobile:touch,reducedMotion:'reduce'}),page=await context.newPage(),errors:string[]=[];
     page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
     const profile=newProfile(map,77);profile.tutorialDone=true;profile.commander={name:'อารี',crest:'star',color:'gold', camp: 'ค่ายอารี'};
-    profile.members.guardian={stars:3,dupes:0,level:6,exp:0,gear:{body:{uid:1,slot:'body',rarity:0,level:1,affixes:[],set:'dawn'}}};
-    profile.company.push('lio','mira');profile.members.lio={stars:3,dupes:0,level:6,exp:0};profile.members.mira={stars:1,dupes:0};profile.party.reserve=['lio'];
+    profile.members.guardian={stars:3,dupes:0,gear:{body:{uid:1,slot:'body',rarity:0,level:1,affixes:[],set:'dawn'}}}; profile.campXp = Math.max(profile.campXp, xpAt(6));
+    profile.company.push('lio','mira');profile.members.lio={stars:3,dupes:0}; profile.campXp = Math.max(profile.campXp, xpAt(6));profile.members.mira={stars:1,dupes:0};profile.party.reserve=['lio'];
     profile.items=GEAR_SLOTS.map((slot,n):Item=>({uid:n+2,slot,rarity:0,level:3,affixes:[],set:'wind',...(slot==='weapon'?{hero:'guardian'}:{})}));
     profile.items.push({uid:8,slot:'weapon',hero:'tracer',rarity:0,level:9,affixes:[]},{uid:9,slot:'body',rarity:0,level:8,affixes:[]});profile.nextItem=10;
     const game=camp?{profile,run:null}:depart(profile,map,lookup,1234);if(game.run){game.run.found=profile.items.map(i=>({...structuredClone(i),uid:0}));game.run.hp.guardian=11;}
-    const raw=JSON.stringify({version:21,...game});parseGame(raw,map,lookup);
+    const raw=JSON.stringify(legacyEnvelope({version:21,...game}));parseGame(raw,map,lookup);
     await page.addInitScript(({key,raw})=>{if(!sessionStorage.getItem('shared-equipment')){localStorage.setItem(key,raw);sessionStorage.setItem('shared-equipment','yes');}},{key,raw});
     await page.goto('./');await page.locator('#continue').click();
     const prefix=camp?'camp-':'',id=(name:string)=>page.locator('#'+prefix+name),panel=id('character-dialog'),saved=()=>page.evaluate(k=>localStorage.getItem(k)!,key);
