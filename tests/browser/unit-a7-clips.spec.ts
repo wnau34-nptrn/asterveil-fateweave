@@ -6,10 +6,8 @@ interface Clip{hero:A7Hero;skill:string;scenario:string;mode:string}
 const cases:Clip[]=[
  ...unitA7Heroes.flatMap(hero=>[{hero,skill:'attack',scenario:'normal',mode:'normal'},{hero,skill:'attack',scenario:'hurt',mode:'normal'},{hero,skill:'attack',scenario:'down',mode:'normal'}]),
  {hero:'metta',skill:'saintarc',scenario:'normal',mode:'normal'},{hero:'metta',skill:'lastlight',scenario:'normal',mode:'normal'},{hero:'metta',skill:'communion',scenario:'normal',mode:'normal'},
- {hero:'thiran',skill:'communion',scenario:'normal',mode:'normal'},{hero:'thiran',skill:'lastlight',scenario:'normal',mode:'normal'},{hero:'thiran',skill:'saintarc',scenario:'normal',mode:'normal'},
- {hero:'lalin',skill:'cadence',scenario:'normal',mode:'normal'},{hero:'lalin',skill:'closingstep',scenario:'normal',mode:'normal'},{hero:'lalin',skill:'rounddance',scenario:'normal',mode:'normal'},{hero:'lalin',skill:'attack',scenario:'block',mode:'normal'},{hero:'lalin',skill:'echofoot',scenario:'normal',mode:'normal'},{hero:'lalin',skill:'attack',scenario:'normal',mode:'fast'},{hero:'lalin',skill:'attack',scenario:'normal',mode:'osreduce'},
- {hero:'wila',skill:'rounddance',scenario:'normal',mode:'normal'},{hero:'wila',skill:'closingstep',scenario:'normal',mode:'normal'},{hero:'wila',skill:'duet',scenario:'normal',mode:'normal'},
- {hero:'metta',skill:'attack',scenario:'normal',mode:'osreduce'},{hero:'wila',skill:'attack',scenario:'normal',mode:'fast'},
+ {hero:'lalin',skill:'cadence',scenario:'normal',mode:'normal'},{hero:'lalin',skill:'closingstep',scenario:'normal',mode:'normal'},{hero:'lalin',skill:'rounddance',scenario:'normal',mode:'normal'},{hero:'lalin',skill:'attack',scenario:'block',mode:'normal'},
+ {hero:'metta',skill:'attack',scenario:'normal',mode:'osreduce'},{hero:'lalin',skill:'attack',scenario:'normal',mode:'fast'},
 ];
 for(const {hero,skill,scenario,mode} of cases)test(`unit A7 clip ${hero}-${skill}-${scenario}-${mode}`,async({browser},info)=>{
  const ctx=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true,reducedMotion:mode==='osreduce'?'reduce':'no-preference'});

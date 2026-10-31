@@ -1,0 +1,1344 @@
+{
+  "schema": "art-vfx-three-beat-v1",
+  "batch": "ART-VFX-SONG-SHADOW-002",
+  "family": "song-shadow",
+  "frame_size": [
+    256,
+    256
+  ],
+  "alpha": "straight",
+  "padding_min_px": 8,
+  "coordinates": "normalized canvas pivots, not battle coordinates",
+  "timing": "Keep previous three beat ranges and existing runtime stageTiming; no duration changes.",
+  "sources": [
+    {
+      "file": "source/valor.png",
+      "sha256": "e2335b6a89ed7eba89d823ea245f39c603e562d34cad26250b0e391c4afd21cd",
+      "size": [
+        2172,
+        724
+      ]
+    },
+    {
+      "file": "source/solo.png",
+      "sha256": "bf7c0fe5bcbb4d13b7b72c33e231aae30481767d337070dd0c6be256ab554011",
+      "size": [
+        2172,
+        724
+      ]
+    },
+    {
+      "file": "source/evade.png",
+      "sha256": "a681ddbaeef64f3c66e0aa2e50c57dafc180c8e8766645a02019ae7aab5728d3",
+      "size": [
+        2172,
+        724
+      ]
+    },
+    {
+      "file": "source/dread.png",
+      "sha256": "30a00f5f0f5a24adaea38b7cc7962881264cd6bcc7cfd01aec0714071f5b1af8",
+      "size": [
+        2172,
+        724
+      ]
+    },
+    {
+      "file": "source/finale.png",
+      "sha256": "36dc1dce71b658b14eeb0f850e6b1a923251c30ce423c22796fd382279b4ccfc",
+      "size": [
+        2172,
+        724
+      ]
+    },
+    {
+      "file": "source/finale-mend.png",
+      "sha256": "e2c9fce1bfe808cf8f262f39754f6a06137c380d940a323aa577e3f38f9c535d",
+      "size": [
+        2172,
+        724
+      ]
+    },
+    {
+      "file": "source/finale-dread.png",
+      "sha256": "67d2a918125f6f734022a46cf5c2108e251f1a8cc5f83a025d2e10825f7037f1",
+      "size": [
+        2172,
+        724
+      ]
+    }
+  ],
+  "moves": {
+    "valor": {
+      "family": "song",
+      "times": [
+        0,
+        120,
+        280,
+        480
+      ],
+      "widths": [
+        120,
+        120,
+        34
+      ],
+      "anchors": [
+        "caster feet",
+        "caster feet",
+        "ally feet"
+      ],
+      "z_order": "behind sprite above floor shadow; optional front thin rim",
+      "pivots": [
+        [
+          0.5,
+          0.69
+        ],
+        [
+          0.5,
+          0.69
+        ],
+        [
+          0.5,
+          0.5
+        ]
+      ],
+      "description": "Team buff; broad rings at caster, flecks toward allies."
+    },
+    "solo": {
+      "family": "song",
+      "times": [
+        0,
+        100,
+        220,
+        380
+      ],
+      "widths": [
+        100,
+        100,
+        90
+      ],
+      "anchors": [
+        "recipient ally feet (not Lio)",
+        "recipient ally feet (not Lio)",
+        "recipient ally feet (not Lio)"
+      ],
+      "z_order": "pool and column behind recipient sprite",
+      "pivots": [
+        [
+          0.5,
+          0.75
+        ],
+        [
+          0.5,
+          0.75
+        ],
+        [
+          0.5,
+          0.75
+        ]
+      ],
+      "description": "One ally other than caster receives current song three times; no heal/damage."
+    },
+    "evade": {
+      "family": "shadow",
+      "times": [
+        0,
+        90,
+        200,
+        340
+      ],
+      "widths": [
+        104,
+        104,
+        95
+      ],
+      "anchors": [
+        "caster feet",
+        "caster feet",
+        "caster feet"
+      ],
+      "z_order": "behind Sefa sprite above floor shadow; optional front thin rim",
+      "pivots": [
+        [
+          0.5,
+          0.7
+        ],
+        [
+          0.5,
+          0.7
+        ],
+        [
+          0.5,
+          0.7
+        ]
+      ],
+      "source_rects": [
+        [
+          0,
+          0,
+          706,
+          724
+        ],
+        [
+          706,
+          0,
+          1483,
+          724
+        ],
+        [
+          1483,
+          0,
+          2172,
+          724
+        ]
+      ],
+      "description": "Low smoke readiness at Sefa feet; no impact."
+    },
+    "dread": {
+      "family": "song",
+      "times": [
+        0,
+        120,
+        260,
+        460
+      ],
+      "widths": [
+        38,
+        110,
+        64
+      ],
+      "anchors": [
+        "caster hand",
+        "caster hand to enemy side (one shared wave)",
+        "beside each standing enemy waist"
+      ],
+      "z_order": "airborne status wave; waist emblem beside sprite",
+      "pivots": [
+        [
+          0.5,
+          0.5
+        ],
+        [
+          0.5,
+          0.5
+        ],
+        [
+          0.5,
+          0.5
+        ]
+      ],
+      "source_rects": [
+        [
+          0,
+          0,
+          670,
+          724
+        ],
+        [
+          680,
+          0,
+          1675,
+          724
+        ],
+        [
+          1685,
+          0,
+          2172,
+          724
+        ]
+      ],
+      "description": "Non-damaging status song reducing all enemy moves; one shared wave, single emblem repeated per standing enemy."
+    },
+    "finale": {
+      "family": "song",
+      "times": [
+        0,
+        140,
+        300,
+        520
+      ],
+      "widths": [
+        100,
+        110,
+        100
+      ],
+      "anchors": [
+        "caster hand",
+        "caster hand to enemy side (one shared wave)",
+        "each actually damaged enemy waist"
+      ],
+      "z_order": "one launch; contact only on actual damage",
+      "pivots": [
+        [
+          0.5,
+          0.5
+        ],
+        [
+          0.5,
+          0.5
+        ],
+        [
+          0.5,
+          0.5
+        ]
+      ],
+      "source_rects": [
+        [
+          0,
+          0,
+          461,
+          724
+        ],
+        [
+          461,
+          0,
+          1752,
+          724
+        ],
+        [
+          1752,
+          0,
+          2172,
+          724
+        ]
+      ],
+      "description": "Valor song only: all-enemy damage, one shared wave, actual damage contacts."
+    },
+    "finale-mend": {
+      "family": "song",
+      "times": [
+        0,
+        140,
+        300,
+        520
+      ],
+      "widths": [
+        42,
+        92,
+        32
+      ],
+      "anchors": [
+        "caster hand",
+        "around each actual healed ally lower torso",
+        "each actual healed ally waist"
+      ],
+      "z_order": "gentle flowing ribbons around ally lower torso; keep faces and labels clear",
+      "pivots": [
+        [
+          0.5,
+          0.5
+        ],
+        [
+          0.5,
+          0.5
+        ],
+        [
+          0.5,
+          0.5
+        ]
+      ],
+      "source_rects": [
+        [
+          0,
+          0,
+          664,
+          724
+        ],
+        [
+          664,
+          0,
+          1599,
+          724
+        ],
+        [
+          1599,
+          0,
+          2172,
+          724
+        ]
+      ],
+      "description": "All-ally healing; gentle recipient wave, no impact."
+    },
+    "finale-dread": {
+      "family": "song",
+      "times": [
+        0,
+        140,
+        300,
+        520
+      ],
+      "widths": [
+        42,
+        76,
+        30
+      ],
+      "anchors": [
+        "caster hand",
+        "around each actual shielded ally lower torso",
+        "each actual shielded ally waist"
+      ],
+      "z_order": "shield contour at lower torso; protect faces and labels",
+      "pivots": [
+        [
+          0.5,
+          0.5
+        ],
+        [
+          0.5,
+          0.5
+        ],
+        [
+          0.5,
+          0.5
+        ]
+      ],
+      "source_rects": [
+        [
+          0,
+          0,
+          672,
+          724
+        ],
+        [
+          672,
+          0,
+          1486,
+          724
+        ],
+        [
+          1486,
+          0,
+          2172,
+          724
+        ]
+      ],
+      "description": "All-ally barrier; recipient shield contour, no impact."
+    }
+  },
+  "layers": [
+    {
+      "move": "valor",
+      "beat": "prepare",
+      "variant": "R3",
+      "file": "song/R3/valor-prepare.png",
+      "source": "source/valor.png",
+      "source_rect": [
+        0,
+        0,
+        724,
+        724
+      ],
+      "source_size": [
+        2172,
+        724
+      ],
+      "sha256": "529576436d96f0a789e49a0a2fb041481cec4043db7619789c92c69aea170178",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        12,
+        28,
+        244,
+        230
+      ],
+      "pivot": [
+        0.5,
+        0.672187
+      ],
+      "source_anchor": [
+        362,
+        500
+      ],
+      "anchor": "caster feet",
+      "suggested_canvas_width_at_390": 120,
+      "suggested_time_ms": [
+        0,
+        120
+      ],
+      "blend": "normal",
+      "z_order": "behind sprite above floor shadow; optional front thin rim"
+    },
+    {
+      "move": "valor",
+      "beat": "peak",
+      "variant": "R3",
+      "file": "song/R3/valor-peak.png",
+      "source": "source/valor.png",
+      "source_rect": [
+        724,
+        0,
+        1448,
+        724
+      ],
+      "source_size": [
+        2172,
+        724
+      ],
+      "sha256": "ceb57ec3f15d384ded75aef594e0a4dc75bcc5457b5cefb5bb4b14d03ce6a78d",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        12,
+        17,
+        244,
+        230
+      ],
+      "pivot": [
+        0.5,
+        0.672187
+      ],
+      "source_anchor": [
+        1086,
+        500
+      ],
+      "anchor": "caster feet",
+      "suggested_canvas_width_at_390": 120,
+      "suggested_time_ms": [
+        120,
+        280
+      ],
+      "blend": "normal",
+      "z_order": "behind sprite above floor shadow; optional front thin rim"
+    },
+    {
+      "move": "valor",
+      "beat": "settle",
+      "variant": "R3",
+      "file": "song/R3/valor-settle.png",
+      "source": "source/valor.png",
+      "source_rect": [
+        1448,
+        0,
+        2172,
+        724
+      ],
+      "source_size": [
+        2172,
+        724
+      ],
+      "sha256": "cd2835f459f653c30e1daea9c5a15889ae2925d8937f854a78cc71937b8c5750",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        12,
+        30,
+        235,
+        244
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "source_anchor": [
+        1810,
+        362
+      ],
+      "anchor": "ally feet",
+      "suggested_canvas_width_at_390": 34,
+      "suggested_time_ms": [
+        280,
+        480
+      ],
+      "blend": "normal",
+      "z_order": "behind sprite above floor shadow; optional front thin rim"
+    },
+    {
+      "move": "solo",
+      "beat": "prepare",
+      "variant": "R3",
+      "file": "song/R3/solo-prepare.png",
+      "source": "source/solo.png",
+      "source_rect": [
+        0,
+        0,
+        724,
+        724
+      ],
+      "source_size": [
+        2172,
+        724
+      ],
+      "sha256": "450154d75a8e2b01b7f14e351a3e8888527bbd9667abc09c9d3140bfbb91c8d4",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        12,
+        45,
+        244,
+        235
+      ],
+      "pivot": [
+        0.5,
+        0.726562
+      ],
+      "source_anchor": [
+        362,
+        543
+      ],
+      "anchor": "recipient ally feet (not Lio)",
+      "suggested_canvas_width_at_390": 100,
+      "suggested_time_ms": [
+        0,
+        100
+      ],
+      "blend": "normal",
+      "z_order": "pool and column behind recipient sprite"
+    },
+    {
+      "move": "solo",
+      "beat": "peak",
+      "variant": "R3",
+      "file": "song/R3/solo-peak.png",
+      "source": "source/solo.png",
+      "source_rect": [
+        724,
+        0,
+        1448,
+        724
+      ],
+      "source_size": [
+        2172,
+        724
+      ],
+      "sha256": "d583f703366c4c947bc2bae7c2cf90746c1fd6bbec50498c69a2ccfd54d04aec",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        12,
+        12,
+        244,
+        236
+      ],
+      "pivot": [
+        0.5,
+        0.726562
+      ],
+      "source_anchor": [
+        1086,
+        543
+      ],
+      "anchor": "recipient ally feet (not Lio)",
+      "suggested_canvas_width_at_390": 100,
+      "suggested_time_ms": [
+        100,
+        220
+      ],
+      "blend": "normal",
+      "z_order": "pool and column behind recipient sprite"
+    },
+    {
+      "move": "solo",
+      "beat": "settle",
+      "variant": "R3",
+      "file": "song/R3/solo-settle.png",
+      "source": "source/solo.png",
+      "source_rect": [
+        1448,
+        0,
+        2172,
+        724
+      ],
+      "source_size": [
+        2172,
+        724
+      ],
+      "sha256": "a8a6691361e5941df01efd7d920054df85db00bcc108ae7c7249ecc5dc74b832",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        12,
+        44,
+        237,
+        233
+      ],
+      "pivot": [
+        0.5,
+        0.726562
+      ],
+      "source_anchor": [
+        1810,
+        543
+      ],
+      "anchor": "recipient ally feet (not Lio)",
+      "suggested_canvas_width_at_390": 90,
+      "suggested_time_ms": [
+        220,
+        380
+      ],
+      "blend": "normal",
+      "z_order": "pool and column behind recipient sprite"
+    },
+    {
+      "move": "evade",
+      "beat": "prepare",
+      "variant": "R3",
+      "file": "shadow/R3/evade-prepare.png",
+      "source": "source/evade.png",
+      "source_rect": [
+        0,
+        0,
+        706,
+        724
+      ],
+      "source_size": [
+        2172,
+        724
+      ],
+      "sha256": "e400b8605f315f34ac07ab6ee4cec3f913e1c275699ada2fbd262d79bd42aec1",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        28,
+        54,
+        233,
+        232
+      ],
+      "pivot": [
+        0.497657,
+        0.669229
+      ],
+      "source_anchor": [
+        353,
+        507
+      ],
+      "anchor": "caster feet",
+      "suggested_canvas_width_at_390": 104,
+      "suggested_time_ms": [
+        0,
+        90
+      ],
+      "blend": "normal",
+      "z_order": "behind Sefa sprite above floor shadow; optional front thin rim"
+    },
+    {
+      "move": "evade",
+      "beat": "peak",
+      "variant": "R3",
+      "file": "shadow/R3/evade-peak.png",
+      "source": "source/evade.png",
+      "source_rect": [
+        706,
+        0,
+        1483,
+        724
+      ],
+      "source_size": [
+        2172,
+        724
+      ],
+      "sha256": "1def3962d08238fee9a41d10ce7916b1534b7a66c263646ce84a1b29030e163b",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        12,
+        37,
+        244,
+        229
+      ],
+      "pivot": [
+        0.5,
+        0.669229
+      ],
+      "source_anchor": [
+        1094,
+        507
+      ],
+      "anchor": "caster feet",
+      "suggested_canvas_width_at_390": 104,
+      "suggested_time_ms": [
+        90,
+        200
+      ],
+      "blend": "normal",
+      "z_order": "behind Sefa sprite above floor shadow; optional front thin rim"
+    },
+    {
+      "move": "evade",
+      "beat": "settle",
+      "variant": "R3",
+      "file": "shadow/R3/evade-settle.png",
+      "source": "source/evade.png",
+      "source_rect": [
+        1483,
+        0,
+        2172,
+        724
+      ],
+      "source_size": [
+        2172,
+        724
+      ],
+      "sha256": "9fbbc1ca8e6798adcb01b132d6abe4df9159c12fdb3fd0a13920b1e99c3216d8",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        25,
+        64,
+        225,
+        229
+      ],
+      "pivot": [
+        0.499462,
+        0.669229
+      ],
+      "source_anchor": [
+        1828,
+        507
+      ],
+      "anchor": "caster feet",
+      "suggested_canvas_width_at_390": 95,
+      "suggested_time_ms": [
+        200,
+        340
+      ],
+      "blend": "normal",
+      "z_order": "behind Sefa sprite above floor shadow; optional front thin rim"
+    },
+    {
+      "move": "dread",
+      "beat": "prepare",
+      "variant": "R3",
+      "file": "song/R3/dread-prepare.png",
+      "source": "source/dread.png",
+      "source_rect": [
+        0,
+        0,
+        670,
+        724
+      ],
+      "source_size": [
+        2172,
+        724
+      ],
+      "sha256": "6c3186de8eb346dfbaeeb9c1601d31bd734eaf7b4a5291e25d51ddeb38f38e09",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        63,
+        45,
+        206,
+        207
+      ],
+      "pivot": [
+        0.500432,
+        0.49768
+      ],
+      "source_anchor": [
+        335,
+        362
+      ],
+      "anchor": "caster hand",
+      "suggested_canvas_width_at_390": 38,
+      "suggested_time_ms": [
+        0,
+        120
+      ],
+      "blend": "normal",
+      "z_order": "airborne status wave; waist emblem beside sprite"
+    },
+    {
+      "move": "dread",
+      "beat": "peak",
+      "variant": "R3",
+      "file": "song/R3/dread-peak.png",
+      "source": "source/dread.png",
+      "source_rect": [
+        680,
+        0,
+        1675,
+        724
+      ],
+      "source_size": [
+        2172,
+        724
+      ],
+      "sha256": "907b9370accd3c539dceab376e4113f6ed61a2008f0ae21728bcb15f493cbbc9",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        13,
+        52,
+        241,
+        204
+      ],
+      "pivot": [
+        0.5,
+        0.49768
+      ],
+      "source_anchor": [
+        1178,
+        362
+      ],
+      "anchor": "caster hand to enemy side (one shared wave)",
+      "suggested_canvas_width_at_390": 110,
+      "suggested_time_ms": [
+        120,
+        260
+      ],
+      "blend": "normal",
+      "z_order": "airborne status wave; waist emblem beside sprite"
+    },
+    {
+      "move": "dread",
+      "beat": "settle",
+      "variant": "R3",
+      "file": "song/R3/dread-settle.png",
+      "source": "source/dread.png",
+      "source_rect": [
+        1685,
+        0,
+        2172,
+        724
+      ],
+      "source_size": [
+        2172,
+        724
+      ],
+      "sha256": "68165c7a8324115ef95c65c5b8491b562ac48518f00b66a5a65ec739572141b4",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        71,
+        48,
+        167,
+        212
+      ],
+      "pivot": [
+        0.499125,
+        0.49768
+      ],
+      "source_anchor": [
+        1928,
+        362
+      ],
+      "anchor": "beside each standing enemy waist",
+      "suggested_canvas_width_at_390": 64,
+      "suggested_time_ms": [
+        260,
+        460
+      ],
+      "blend": "normal",
+      "z_order": "airborne status wave; waist emblem beside sprite"
+    },
+    {
+      "move": "finale",
+      "beat": "prepare",
+      "variant": "R3",
+      "file": "song/R3/finale-prepare.png",
+      "source": "source/finale.png",
+      "source_rect": [
+        0,
+        0,
+        461,
+        724
+      ],
+      "source_size": [
+        2172,
+        724
+      ],
+      "sha256": "c2f1f9ed337c434ceb140c3fbaa5291d22d3489f525189f7d7f65e44ffd7bf60",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        90,
+        67,
+        169,
+        185
+      ],
+      "pivot": [
+        0.497743,
+        0.500209
+      ],
+      "source_anchor": [
+        230,
+        362
+      ],
+      "anchor": "caster hand",
+      "suggested_canvas_width_at_390": 100,
+      "suggested_time_ms": [
+        0,
+        140
+      ],
+      "blend": "normal",
+      "z_order": "one launch; contact only on actual damage"
+    },
+    {
+      "move": "finale",
+      "beat": "peak",
+      "variant": "R3",
+      "file": "song/R3/finale-peak.png",
+      "source": "source/finale.png",
+      "source_rect": [
+        461,
+        0,
+        1752,
+        724
+      ],
+      "source_size": [
+        2172,
+        724
+      ],
+      "sha256": "7f5599a50c6a3cf0f45e5e9019bb25840acea2610e460cf7c189c1719647face",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        12,
+        67,
+        244,
+        188
+      ],
+      "pivot": [
+        0.5,
+        0.500209
+      ],
+      "source_anchor": [
+        1106,
+        362
+      ],
+      "anchor": "caster hand to enemy side (one shared wave)",
+      "suggested_canvas_width_at_390": 110,
+      "suggested_time_ms": [
+        140,
+        300
+      ],
+      "blend": "normal",
+      "z_order": "one launch; contact only on actual damage"
+    },
+    {
+      "move": "finale",
+      "beat": "settle",
+      "variant": "R3",
+      "file": "song/R3/finale-settle.png",
+      "source": "source/finale.png",
+      "source_rect": [
+        1752,
+        0,
+        2172,
+        724
+      ],
+      "source_size": [
+        2172,
+        724
+      ],
+      "sha256": "e95b238ff928d83cc8a2945921541771cd91d8bdc3a1645baf1bb2a959dc5b1a",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        90,
+        67,
+        165,
+        172
+      ],
+      "pivot": [
+        0.498977,
+        0.500209
+      ],
+      "source_anchor": [
+        1962,
+        362
+      ],
+      "anchor": "each actually damaged enemy waist",
+      "suggested_canvas_width_at_390": 100,
+      "suggested_time_ms": [
+        300,
+        520
+      ],
+      "blend": "normal",
+      "z_order": "one launch; contact only on actual damage"
+    },
+    {
+      "move": "finale-mend",
+      "beat": "prepare",
+      "variant": "R3",
+      "file": "song/R3/finale-mend-prepare.png",
+      "source": "source/finale-mend.png",
+      "source_rect": [
+        0,
+        0,
+        664,
+        724
+      ],
+      "source_size": [
+        2172,
+        724
+      ],
+      "sha256": "4f3da9fce771591de463f5b4a3a6366222d9566861906df92e00a041146b8a78",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        63,
+        53,
+        209,
+        206
+      ],
+      "pivot": [
+        0.497573,
+        0.499306
+      ],
+      "source_anchor": [
+        332,
+        362
+      ],
+      "anchor": "caster hand",
+      "suggested_canvas_width_at_390": 42,
+      "suggested_time_ms": [
+        0,
+        140
+      ],
+      "blend": "normal",
+      "z_order": "gentle flowing ribbons around ally lower torso; keep faces and labels clear"
+    },
+    {
+      "move": "finale-mend",
+      "beat": "peak",
+      "variant": "R3",
+      "file": "song/R3/finale-mend-peak.png",
+      "source": "source/finale-mend.png",
+      "source_rect": [
+        664,
+        0,
+        1599,
+        724
+      ],
+      "source_size": [
+        2172,
+        724
+      ],
+      "sha256": "fba8be392a28912a387f458bd32b025923b9ed1f12255269afb6ea71ce14a8c4",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        13,
+        44,
+        244,
+        214
+      ],
+      "pivot": [
+        0.5,
+        0.499306
+      ],
+      "source_anchor": [
+        1132,
+        362
+      ],
+      "anchor": "around each actual healed ally lower torso",
+      "suggested_canvas_width_at_390": 92,
+      "suggested_time_ms": [
+        140,
+        300
+      ],
+      "blend": "normal",
+      "z_order": "gentle flowing ribbons around ally lower torso; keep faces and labels clear"
+    },
+    {
+      "move": "finale-mend",
+      "beat": "settle",
+      "variant": "R3",
+      "file": "song/R3/finale-mend-settle.png",
+      "source": "source/finale-mend.png",
+      "source_rect": [
+        1599,
+        0,
+        2172,
+        724
+      ],
+      "source_size": [
+        2172,
+        724
+      ],
+      "sha256": "d743c7a31f327ea0f5fd1c8d69b5a7bbc1dd19b1ff927c2cd53d1f740f8b4b85",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        60,
+        66,
+        181,
+        197
+      ],
+      "pivot": [
+        0.500347,
+        0.499306
+      ],
+      "source_anchor": [
+        1886,
+        362
+      ],
+      "anchor": "each actual healed ally waist",
+      "suggested_canvas_width_at_390": 32,
+      "suggested_time_ms": [
+        300,
+        520
+      ],
+      "blend": "normal",
+      "z_order": "gentle flowing ribbons around ally lower torso; keep faces and labels clear"
+    },
+    {
+      "move": "finale-dread",
+      "beat": "prepare",
+      "variant": "R3",
+      "file": "song/R3/finale-dread-prepare.png",
+      "source": "source/finale-dread.png",
+      "source_rect": [
+        0,
+        0,
+        672,
+        724
+      ],
+      "source_size": [
+        2172,
+        724
+      ],
+      "sha256": "814471df05d0450ad35acc60e5449ee601b6c755d2b209537827168fcddd5ba6",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        53,
+        32,
+        224,
+        210
+      ],
+      "pivot": [
+        0.499079,
+        0.500681
+      ],
+      "source_anchor": [
+        336,
+        362
+      ],
+      "anchor": "caster hand",
+      "suggested_canvas_width_at_390": 42,
+      "suggested_time_ms": [
+        0,
+        140
+      ],
+      "blend": "normal",
+      "z_order": "shield contour at lower torso; protect faces and labels"
+    },
+    {
+      "move": "finale-dread",
+      "beat": "peak",
+      "variant": "R3",
+      "file": "song/R3/finale-dread-peak.png",
+      "source": "source/finale-dread.png",
+      "source_rect": [
+        672,
+        0,
+        1486,
+        724
+      ],
+      "source_size": [
+        2172,
+        724
+      ],
+      "sha256": "88ea01e7c7b781fbbf33035f20e9f66ac10a93a585d024e8d24318e779ec8ef7",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        14,
+        37,
+        244,
+        224
+      ],
+      "pivot": [
+        0.5,
+        0.500681
+      ],
+      "source_anchor": [
+        1079,
+        362
+      ],
+      "anchor": "around each actual shielded ally lower torso",
+      "suggested_canvas_width_at_390": 76,
+      "suggested_time_ms": [
+        140,
+        300
+      ],
+      "blend": "normal",
+      "z_order": "shield contour at lower torso; protect faces and labels"
+    },
+    {
+      "move": "finale-dread",
+      "beat": "settle",
+      "variant": "R3",
+      "file": "song/R3/finale-dread-settle.png",
+      "source": "source/finale-dread.png",
+      "source_rect": [
+        1486,
+        0,
+        2172,
+        724
+      ],
+      "source_size": [
+        2172,
+        724
+      ],
+      "sha256": "9258eb00dc1d199378a39dfd8c742f1192269088cba036da66f7b34939b054ad",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        38,
+        53,
+        204,
+        210
+      ],
+      "pivot": [
+        0.499059,
+        0.500681
+      ],
+      "source_anchor": [
+        1829,
+        362
+      ],
+      "anchor": "each actual shielded ally waist",
+      "suggested_canvas_width_at_390": 30,
+      "suggested_time_ms": [
+        300,
+        520
+      ],
+      "blend": "normal",
+      "z_order": "shield contour at lower torso; protect faces and labels"
+    }
+  ]
+}

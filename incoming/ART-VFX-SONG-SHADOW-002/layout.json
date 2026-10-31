@@ -1,0 +1,347 @@
+{
+  "valor": {
+    "family": "song",
+    "times": [
+      0,
+      120,
+      280,
+      480
+    ],
+    "widths": [
+      120,
+      120,
+      34
+    ],
+    "anchors": [
+      "caster feet",
+      "caster feet",
+      "ally feet"
+    ],
+    "z_order": "behind sprite above floor shadow; optional front thin rim",
+    "pivots": [
+      [
+        0.5,
+        0.69
+      ],
+      [
+        0.5,
+        0.69
+      ],
+      [
+        0.5,
+        0.5
+      ]
+    ],
+    "description": "Team buff; broad rings at caster, flecks toward allies."
+  },
+  "solo": {
+    "family": "song",
+    "times": [
+      0,
+      100,
+      220,
+      380
+    ],
+    "widths": [
+      100,
+      100,
+      90
+    ],
+    "anchors": [
+      "recipient ally feet (not Lio)",
+      "recipient ally feet (not Lio)",
+      "recipient ally feet (not Lio)"
+    ],
+    "z_order": "pool and column behind recipient sprite",
+    "pivots": [
+      [
+        0.5,
+        0.75
+      ],
+      [
+        0.5,
+        0.75
+      ],
+      [
+        0.5,
+        0.75
+      ]
+    ],
+    "description": "One ally other than caster receives current song three times; no heal/damage."
+  },
+  "evade": {
+    "family": "shadow",
+    "times": [
+      0,
+      90,
+      200,
+      340
+    ],
+    "widths": [
+      104,
+      104,
+      95
+    ],
+    "anchors": [
+      "caster feet",
+      "caster feet",
+      "caster feet"
+    ],
+    "z_order": "behind Sefa sprite above floor shadow; optional front thin rim",
+    "pivots": [
+      [
+        0.5,
+        0.7
+      ],
+      [
+        0.5,
+        0.7
+      ],
+      [
+        0.5,
+        0.7
+      ]
+    ],
+    "source_rects": [
+      [
+        0,
+        0,
+        706,
+        724
+      ],
+      [
+        706,
+        0,
+        1483,
+        724
+      ],
+      [
+        1483,
+        0,
+        2172,
+        724
+      ]
+    ],
+    "description": "Low smoke readiness at Sefa feet; no impact."
+  },
+  "dread": {
+    "family": "song",
+    "times": [
+      0,
+      120,
+      260,
+      460
+    ],
+    "widths": [
+      38,
+      110,
+      64
+    ],
+    "anchors": [
+      "caster hand",
+      "caster hand to enemy side (one shared wave)",
+      "beside each standing enemy waist"
+    ],
+    "z_order": "airborne status wave; waist emblem beside sprite",
+    "pivots": [
+      [
+        0.5,
+        0.5
+      ],
+      [
+        0.5,
+        0.5
+      ],
+      [
+        0.5,
+        0.5
+      ]
+    ],
+    "source_rects": [
+      [
+        0,
+        0,
+        670,
+        724
+      ],
+      [
+        680,
+        0,
+        1675,
+        724
+      ],
+      [
+        1685,
+        0,
+        2172,
+        724
+      ]
+    ],
+    "description": "Non-damaging status song reducing all enemy moves; one shared wave, single emblem repeated per standing enemy."
+  },
+  "finale": {
+    "family": "song",
+    "times": [
+      0,
+      140,
+      300,
+      520
+    ],
+    "widths": [
+      100,
+      110,
+      100
+    ],
+    "anchors": [
+      "caster hand",
+      "caster hand to enemy side (one shared wave)",
+      "each actually damaged enemy waist"
+    ],
+    "z_order": "one launch; contact only on actual damage",
+    "pivots": [
+      [
+        0.5,
+        0.5
+      ],
+      [
+        0.5,
+        0.5
+      ],
+      [
+        0.5,
+        0.5
+      ]
+    ],
+    "source_rects": [
+      [
+        0,
+        0,
+        461,
+        724
+      ],
+      [
+        461,
+        0,
+        1752,
+        724
+      ],
+      [
+        1752,
+        0,
+        2172,
+        724
+      ]
+    ],
+    "description": "Valor song only: all-enemy damage, one shared wave, actual damage contacts."
+  },
+  "finale-mend": {
+    "family": "song",
+    "times": [
+      0,
+      140,
+      300,
+      520
+    ],
+    "widths": [
+      42,
+      92,
+      32
+    ],
+    "anchors": [
+      "caster hand",
+      "around each actual healed ally lower torso",
+      "each actual healed ally waist"
+    ],
+    "z_order": "gentle flowing ribbons around ally lower torso; keep faces and labels clear",
+    "pivots": [
+      [
+        0.5,
+        0.5
+      ],
+      [
+        0.5,
+        0.5
+      ],
+      [
+        0.5,
+        0.5
+      ]
+    ],
+    "source_rects": [
+      [
+        0,
+        0,
+        664,
+        724
+      ],
+      [
+        664,
+        0,
+        1599,
+        724
+      ],
+      [
+        1599,
+        0,
+        2172,
+        724
+      ]
+    ],
+    "description": "All-ally healing; gentle recipient wave, no impact."
+  },
+  "finale-dread": {
+    "family": "song",
+    "times": [
+      0,
+      140,
+      300,
+      520
+    ],
+    "widths": [
+      42,
+      76,
+      30
+    ],
+    "anchors": [
+      "caster hand",
+      "around each actual shielded ally lower torso",
+      "each actual shielded ally waist"
+    ],
+    "z_order": "shield contour at lower torso; protect faces and labels",
+    "pivots": [
+      [
+        0.5,
+        0.5
+      ],
+      [
+        0.5,
+        0.5
+      ],
+      [
+        0.5,
+        0.5
+      ]
+    ],
+    "source_rects": [
+      [
+        0,
+        0,
+        672,
+        724
+      ],
+      [
+        672,
+        0,
+        1486,
+        724
+      ],
+      [
+        1486,
+        0,
+        2172,
+        724
+      ]
+    ],
+    "description": "All-ally barrier; recipient shield contour, no impact."
+  }
+}

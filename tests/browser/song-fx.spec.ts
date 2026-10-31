@@ -5,6 +5,7 @@ test.skip(process.env.PLAYWRIGHT_PAGES==='true','source-only song/shadow VFX gat
 test.use({reducedMotion:'no-preference'});
 const skills=['valor','finale','dread','note','solo','evade','decoy'] as const;
 // settle layers expected at the contact window (resolver-driven: allies for valor, three standing foes for finale/dread, one target otherwise)
+// R3 (ART-VFX-SONG-SHADOW-002): note and decoy keep the package-001 layers; the other five moves and finale-mend/finale-dread are R3.
 const settleCount={valor:2,finale:3,dread:3,note:1,solo:1,evade:1,decoy:1} as const;
 const open=async(page:Page,query:string)=>{
  await page.goto(`tests/browser/fixtures/song-fx.html?${query}`);const start=page.locator('#start');if(await start.isVisible())await start.click();
@@ -31,17 +32,23 @@ for(const skill of skills)test(`song ${skill}: prepare on the caster, one peak l
   expect(await page.evaluate(()=>localStorage.getItem('song-committed'))).toBe(saved);expect(errors).toEqual([]);
  }finally{await ctx.close();}
 });
-test('finale of mending/dread only gathers: no wave and no fabricated foe contact',async({browser})=>{
- for(const song of ['mend','dread']){
+for(const [song,art,expected] of [['mend','finale-mend','heal'],['dread','finale-dread','barrier']] as const)
+ test(`finale of ${song}: gather, one peak and one settle per really ${expected==='heal'?'healed':'shielded'} ally, no offensive contact`,async({browser})=>{
   const ctx=await browser.newContext({viewport:{width:390,height:844},reducedMotion:'no-preference'});
-  try{const page=await ctx.newPage();await page.clock.install({time:new Date('2026-10-29T00:00:00Z')});
+  try{const page=await ctx.newPage(),errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));await page.clock.install({time:new Date('2026-10-29T00:00:00Z')});
    await open(page,`skill=finale&song=${song}`);await page.clock.pauseAt(new Date('2026-10-29T01:00:00Z'));
    const turn=(await page.evaluate(()=>window.songQA.sequence())).find(t=>t.action==='finale')!,timing=stageTiming(turn,false);
-   await cast(page,'finale');await page.clock.runFor(timing.contact+120);
-   const f=await frames(page);expect(f.filter(x=>x==='finale_peak'||x==='finale_settle')).toEqual([]);
+   const allies=new Set(turn.events.filter(e=>e.type===expected&&e.text!=='Overflowing light becomes a barrier.').map(e=>e.targetId));
+   expect(allies.size).toBeGreaterThan(1);
+   await cast(page,'finale');await page.clock.runFor(timing.contact-1);
+   expect((await frames(page)).filter(f=>f===`${art}_prepare`)).toHaveLength(1);
+   await page.clock.runFor(61);
+   const f=await frames(page);
+   expect(f.filter(x=>x===`${art}_peak`)).toHaveLength(allies.size);expect(f.filter(x=>x===`${art}_settle`)).toHaveLength(allies.size);
+   expect(f.filter(x=>x==='finale_peak'||x==='finale_settle'||x==='finale_prepare')).toEqual([]);
+   await page.locator('#skip-turn').click();await page.clock.runFor(700);expect(await frames(page)).toEqual([]);expect(errors).toEqual([]);
   }finally{await ctx.close();}
- }
-});
+ });
 test('note: the blade starts at the caster hand and travels to the real target',async({page})=>{
  await page.clock.install({time:new Date('2026-10-29T00:00:00Z')});await page.setViewportSize({width:390,height:844});
  await open(page,'skill=note');await page.clock.pauseAt(new Date('2026-10-29T01:00:00Z'));

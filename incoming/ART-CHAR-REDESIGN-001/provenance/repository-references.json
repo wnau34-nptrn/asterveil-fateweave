@@ -1,0 +1,47 @@
+{
+  "public/assets/art/units_mercs.webp": {
+    "ref": "feature/fateweave-initial-prototype",
+    "blobSha": "2f2ed2ebdca12584d9324c53fcc67694c68b0d22"
+  },
+  "public/assets/art/portraits_mercs.webp": {
+    "ref": "feature/fateweave-initial-prototype",
+    "blobSha": "9f65d209f8f0ff1f67d30601043b113518646535"
+  },
+  "public/assets/ui/equip/gear_items.webp": {
+    "ref": "feature/fateweave-initial-prototype",
+    "blobSha": "d4fdb582df60312960b8c081ec1d61f524169da1"
+  },
+  "src/game/visuals/assets.ts": {
+    "ref": "feature/fateweave-initial-prototype",
+    "blobSha": "5689d1d45a475aacea31f797e0801808bd8800f2"
+  },
+  "docs/design/ROSTER_30_TH.md": {
+    "ref": "feature/fateweave-initial-prototype",
+    "blobSha": "5e6ec84a4127d226f59d8a272a11bd8a9797f99f"
+  },
+  "style_units": {
+    "originalHeroes": {
+      "path": "public/assets/art/units.webp",
+      "frames": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "blobSha": "ee8081a98caa037a5f48195eddbf143b3e343386"
+    },
+    "mercenaries": {
+      "ref": "codex/roster-30-1",
+      "path": "public/assets/art/units_mercs.webp",
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "blobSha": "5ecc8aca6cfec25b19f9a1fb80572e2137bf8ad9"
+    }
+  }
+}

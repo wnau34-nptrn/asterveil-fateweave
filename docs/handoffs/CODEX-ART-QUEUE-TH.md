@@ -783,22 +783,111 @@ SCOPE
 Artwork only for these two characters. No rule, save, content, balance or timing changes. The owner gives final visual approval; CI or validation results are not approval.
 ```
 
-### prompt 2 — ชุดท่า A7-003 (ส่งหลังเจ้าของผ่านภาพนิ่งและ Claude นำเข้าเกมแล้ว)
+### prompt 1-fix — ART-CHAR-REDESIGN-002 แก้อิโซลด์เท่านั้น (Claude ตรวจ PR #118 แล้ว 2026-10-30)
+
+ผลตรวจ PR #118 ของ Claude: hash 33 ไฟล์ตรง, atlas ที่แพ็กเปลี่ยนเฉพาะ mercs 7/9 และ gear (6,0)/(6,1) ส่วนอื่นตรงทุกพิกเซล, ขนาดไฟล์ไม่เพิ่ม (units_mercs 2.45MB เดิม 2.51MB, portraits 3.69MB เดิม 3.82MB, gear 0.98MB เท่าเดิม) **โอดรานผ่าน** (สัดส่วนหัวเข้าชุด, silhouette ต่างจากคอรินชัด) **อิโซลด์ต้องแก้ 2 ข้อ:** (1) ตัวเล็กกว่าเพื่อน: หัว (ผมบนถึงคาง) ≈115px เทียบเซรีส ≈157px ใน cell 512 (≈0.73) และส่วนสูงตัว ≈410px เทียบ ≈456px เพราะไม้เท้าเฉียงกินพื้นที่ bounds จึงถูกย่อทั้งตัว; สัดส่วนหัว/ตัว 0.28 ต่ำกว่าชุดเกม ≈0.34 จะดูเป็นคนละสไตล์ที่ 115px (2) ภาพนิ่งเป็นท่าหมุนยืนขาเดียว ภาพนี้จะเป็นเฟรมพักของ A7-003 ทุกท่าต้องคืนมาที่นี่ จึงต้องเป็นท่ายืนพร้อมที่เท้าสองข้างแตะพื้น และ (3) ไฟล์ `provenance/generations.json` 15MB เป็น base64 ซ้ำกับ `sources/` ให้ตัดออกเหลือ metadata
 
 ```text
-CODEX HANDOFF — ART-UNIT-ANIMATION-A7-003
-Asterveil · Fateweave: battle animation strips for the redesigned Odran (thiran) and Isolde (wila)
+CODEX HANDOFF — ART-CHAR-REDESIGN-002 (fix of ART-CHAR-REDESIGN-001, Isolde only)
+Read AGENTS.md, CLAUDE.md and docs/handoffs/ANIMATION_PROMPT_QUALITY_TH.md first. Repository wnau34-nptrn/asterveil-fateweave, base branch feature/fateweave-initial-prototype (not main). Create branch art/art-char-redesign-002. Add files only under incoming/ART-CHAR-REDESIGN-002/. Do not change src/, tests/, public/, .github/ or existing art. Open a PR into the base branch; do not merge. Original artwork only; nothing from Asterveil: Rise Beyond.
 
-Repository wnau34-nptrn/asterveil-fateweave, base branch feature/fateweave-initial-prototype (after ART-CHAR-REDESIGN-001 is integrated). Branch art/art-unit-animation-a7-003. Files only under incoming/ART-UNIT-ANIMATION-A7-003/. Do not change src/, tests/, public/, .github/ or earlier incoming folders. PR into the base branch; do not merge. Original artwork only. Never use the word ม่านเวล.
+Goal: keep Odran exactly as delivered in PR #118 (incoming/ART-CHAR-REDESIGN-001/unit/odran.png, portrait, weapon — copy byte-for-byte; the owner/Claude review passed him). Redraw ONLY Isolde's static battle unit (mercs frame 9, id wila) so she matches the cast's scale and serves as the rest frame for her later animation set. Her portrait (40px check passed) and bell-staff weapon icon stay as delivered unless the new unit changes the staff design; then update the icon to match.
 
-SEED: the integrated idle cells units_mercs frame 7 (thiran = Odran) and frame 9 (wila = Isolde). Every frame must keep that exact face, costume, implement and the SAME head size relative to the body as the seed. Do not use the old A7-001 thiran/wila strips or Corin/Cerise as image input; reuse only their move list, frame counts and packaging (incoming/ART-UNIT-ANIMATION-A7-001/moves.json, strips.json, build_assets.py) and the A7-002 anatomy rules (docs/handoffs/CODEX-A7-DANCER-REDRAW-TH.md).
+Verified facts (Claude, from the repository):
+- Units: public/assets/art/units_mercs.webp, 2 columns of 512×512 cells; Isolde = frame 9, Cerise = frame 8, Corin = 6, Odran = 7 (src/game/visuals/assets.ts). Right-facing, no baked shadow, top ≥ y37, sole at y496 inclusive, pivot (0.5, 497/512), fit within 480×460.
+- Measured on PR #118 packaged atlas: Cerise head (hair top → chin) ≈157px, body top → sole ≈456px; Isolde head ≈115px, body ≈410px; head/body ratio 0.28 vs the cast's ≈0.34. Cause: the long diagonal staff widened her bounds and the proportional fit shrank her whole figure.
 
-MOVES (same slots as the current runtime map in src/game/visuals/unit-frames.ts, so integration only swaps atlases)
-- Odran (Saint): attack (saintstrike/vowstrike), arc (saintarc, front-row sweep), communion (communion/sharewound, healing transfer gesture), lastlight; reactions hit, block, down (ends lying, does not get up). Moves grow from his guard stance: heavy gauntlet blows and shield-like blocks, never Corin's forward punch.
-- Isolde (Dancer): attack, partner (cadence/duet/deepbeat), circle (rounddance), closing (closingstep), echo (echofoot); reactions hit, block, down. Moves use her bell-staff (spins, sweeps, staff-tap rhythm), never fans or ribbons.
-- Attack moves 6 frames (2 prepare + 4 recover; lastlight 3+3), reactions 3–4 frames, right-facing, sole at y497 in the logical 512 cell, no VFX/particles/text baked in.
+Requirements for the new Isolde unit:
+1. Scale: head height (hair top → chin) 145–165px and hair-top → sole 440–460px in the 512 cell, head/body ratio 0.32–0.36, same chibi proportion as Cerise/Corin/the original mercenaries. Size the figure first; the staff must fit around her, never shrink her.
+2. Pose: grounded ready stance — BOTH feet on the ground line (sole y496), weight balanced, facing right, readable at 115px. No mid-spin, no single-foot or airborne pose. This frame becomes the rest/return frame of every A7-003 move.
+3. Staff: keep the identity (bell cluster, short attached streamers, dark shaft, brass fittings). Hold it more upright (about 10–30° from vertical) or planted at her side so it stays inside 480×460 at full figure size; bells may sit above her head but stay ≥ y37. Streamers remain attached to the bell cluster.
+4. Keep all must-not rules from ART-CHAR-REDESIGN-001 NOTES (no fans, orbiting ribbons, ruffled skirt, harem trousers, braid, crescent ornament, purple/lilac/coral/teal main palette). Keep her face, short silver-streaked dark hair, ochre half-cape, cream fitted legs and navy top so the portrait still matches.
+5. Real alpha, no checkerboard, no text, full staff inside the frame.
 
-QUALITY GATE before delivery: python3 scripts/unit-anatomy-audit.py --cells on every strip (median head scale <= 1.15, no frame > 1.20). Do not deliver a failing strip as final; list it in NOTES.md instead.
+Deliverables (same structure as 001): unit/isolde.png (512×512 RGBA), unit/odran.png copied unchanged, packaged/units_mercs.webp (frames 7 and 9 replaced, every other cell and pixel identical to the base — assert it), packaged gear/portrait atlases only if the icon changed, sources/ (untouched generator output), prompts.json, validation.json (SHA-256 + bytes + measured head height, body height, head/body ratio, both-feet contact rows), review/lineup.png (Corin, Odran, Cerise, Isolde at 115px on the forest background + black silhouettes, with a horizontal guide at Cerise's chin and hair top), NOTES.md, package.py, verify_remote.py.
+Provenance: do NOT store base64 image data in JSON (PR #118's provenance/generations.json was 15 MB duplicating sources/). Record generation id/settings/paths only.
 
-DELIVERABLES: seeds/, raw strips, packed atlases + json in the A7-001 format, 390px previews against the seed, anatomy audit output, prompts.json, strips.json, NOTES.md.
+Acceptance (Claude checks before owner review): head 145–165px, body 440–460px, ratio 0.32–0.36, both feet touching y≈496, untouched atlas cells pixel-identical, Odran byte-identical to PR #118, file sizes not larger than the current atlases. Push with normal git, fetch back, verify every SHA-256 and decode every image with Pillow. Owner visual approval is required; CI or these checks are not approval. No merge, no runtime integration.
+```
+
+> **พัก (เจ้าของ OD-14, 2026-10-30):** จำกัดอาชีพละ 1 ตัว โอดราน/อิโซลด์พัก ห้ามส่ง/ทำ prompt 2 นี้จนกว่าเจ้าของสั่งเปิดอาชีพละ 2 ถ้า Codex เริ่มแล้วให้หยุดและเก็บงานใน branch โดยไม่ต้องเปิด PR
+
+### prompt 2 — ชุดท่า A7-003 (เจ้าของอนุมัติภาพนิ่ง PR #120 และสั่งส่งทันที 2026-10-30)
+
+เจ้าของ: “อนุมัติ ขอ Prompt สร้าง animation เลย” — seed ใช้ไฟล์จาก PR #120 ได้เลย ไม่ต้องรอ Claude นำเข้าเกม (Claude นำภาพนิ่งเข้าเกมคู่ขนาน ตัวเลข/พิกเซลต้องตรง sha ด้านล่าง)
+
+```text
+CODEX HANDOFF — ART-UNIT-ANIMATION-A7-003 (art only)
+Asterveil · Fateweave: battle body animation strips for the redesigned Odran (id thiran, Saint) and Isolde (id wila, Dancer)
+
+Read AGENTS.md, CLAUDE.md, docs/handoffs/ANIMATION_PROMPT_QUALITY_TH.md and docs/handoffs/CODEX-A7-DANCER-REDRAW-TH.md first. Repository wnau34-nptrn/asterveil-fateweave, base branch feature/fateweave-initial-prototype (not main). Create branch art/art-unit-animation-a7-003. Add files only under incoming/ART-UNIT-ANIMATION-A7-003/. Do not change src/, tests/, public/, .github/, existing art or earlier incoming folders. Open a PR into the base branch; do not merge. Original artwork only; nothing from Asterveil: Rise Beyond. Never use the word ม่านเวล.
+
+SEEDS (owner-approved 2026-10-30; fetch branch art/art-char-redesign-002, PR #120):
+- Odran: incoming/ART-CHAR-REDESIGN-002/unit/odran.png  sha256 ca7a30b361eb8e7fd8764cacfd7e56b7cd3f13d3a701586b0b7ee54a92a61ccf
+- Isolde: incoming/ART-CHAR-REDESIGN-002/unit/isolde.png sha256 e6d80253147ac8b0cd52edae6c211417fb30779b89b2524963ee724f12b530ba
+Verify both hashes before use and copy them byte-for-byte into seeds/. 512×512 RGBA, facing right, sole on y496 (logical ground y497), head (hair top → chin) Odran ≈ as seed, Isolde ≈157px, head/body ≈0.34. Every frame keeps that exact face, hair, costume, implement and the SAME head size relative to the body as the seed, including crouched, spinning and fallen frames (a lying body is as long as the standing seed). Do NOT give the generator the old A7-001 thiran/wila strips, Corin (metta) or Cerise (lalin) as image input; they are a different look.
+
+MOVES — the slots match the runtime map in src/game/visuals/unit-frames.ts so integration only swaps the atlas. Actions: 6 frames, chronological, frame 1 = ready (seed pose), frames 2–3 prepare, frame 4 = contact, 5 follow-through, 6 = back to ready. Reactions: 4 frames, frame 1 = ready. Timing weights per frame (for previews only): actions 1, 1.2, .75, 1, .8, 1; reactions .8, 1, .9, 1.
+
+Odran — broad planted gatewright; every move grows out of his low guard with the hinge gauntlets; heavy, deliberate wind-up, weight absorbed through the legs. Never Corin's straight forward punch or tabard swing.
+1. attack (attack / saintstrike / vowstrike): ready → draw the large right gauntlet back low → drive a heavy hooking gauntlet blow forward-right → extended blow with planted feet → pull back into guard → ready
+2. arc (saintarc, sweep across the front row): ready → load shoulder and coil left → sweep the gauntlet forearm horizontally across his front → broad follow-through → unwind → ready
+3. communion (communion / sharewound, heal-transfer support): ready → bring both gauntlets together at the chest, head bowed → turn and open the left palm toward an ally behind him (screen left) → sustained open-palm offering → lower → ready
+4. lastlight (heavy finisher): ready → deep crouch, both gauntlets gathered low → drive a heavy rising two-handed blow → extended follow-through → lift out of the stance → ready
+5. hit: ready → recoil and wince, gauntlets still up → catch balance → ready
+6. block: ready → raise both gauntlets crossed like a gate → absorb the weight low → reset guard
+7. down: knees give way → one gauntlet and knee reach the ground → sink sideways → lie unconscious and hold (does not get up)
+
+Isolde — narrow, light dancer with the bell-staff; moves are staff spins, sweeps and rhythmic staff taps on the ground. Never fans or ribbons; the short streamers stay attached to the bell cluster.
+1. attack (basic attack): ready → step back, staff drawn back → sweep the bell end forward-right → extended sweep → recover the staff upright → ready
+2. partner (cadence / duet / deepbeat, ally support): ready → tap the staff butt on the ground → half-turn toward an ally behind her (screen left) with the bells raised → bells held up, small sway → turn back → ready
+3. circle (rounddance, whole party): ready → crouch and swing the staff out → full turn with the staff circling around her body → staff completes the circle overhead → land the turn → ready
+4. closing (closingstep, finishing step): ready → light step forward-right → pivot on the front foot, staff raised high → bring the staff down to strike the ground in front → hold the strike → ready
+5. echo (echofoot): ready → lift one knee, staff upright → stamp the foot down while shaking the bells → second smaller stamp/echo → settle → ready
+6. hit: ready → recoil, staff pulled in → catch balance → ready
+7. block: ready → staff held across the body in both hands → absorb the weight low → reset
+8. down: knees give way → staff falls to her side → sink → lie unconscious and hold (does not get up)
+
+GENERATION: one whole continuous strip per move in a single edit request (never frame by frame), the seed attached as the model, transparent background, wide clear gutters between figures. One shared scale per character across all strips, equal to the seed; feet on the same ground line except intended airborne frames. Body only: no VFX, glows, particles, motion lines, shadows or text baked in. Allow room for the full staff and gauntlets; never crop the implement.
+
+QUALITY GATE before delivery: run python3 scripts/unit-anatomy-audit.py --cells on every strip against its seed (median head scale <= 1.15, every measured frame <= 1.20; inspect not-measured frames by eye and say so). Do not deliver a failing strip as final; regenerate it or list it as missing in NOTES.md. Supply R2 only where a move is genuinely ambiguous, and mark the recommended one.
+
+DELIVERABLES (same layout as incoming/ART-UNIT-ANIMATION-A7-001 and A7-002): seeds/ + seeds.json, raw/ (untouched generator strips), spaced/ and cells/<character>-<move>/000.png (seed) + 001…, <character>-preview-390.png comparing every frame with the seed at one scale, audits/ (audit JSON + stdout), prompts.json (exact prompts, references, generation ids — no base64 image data in JSON), strips.json (move → frames, slot order above, shared scale, offsets), validation.json + SHA256SUMS, NOTES.md (Claude handoff), build_handoff.py, verify_remote.py.
+
+Push with normal git, fetch back, verify every SHA-256 and decode every image with Pillow. Owner artwork selection and later in-game motion approval are required; offline checks and CI are not approval. No merge, no runtime integration (Claude packs the atlases, replaces the thiran/wila entries and captures real 390px clips).
+```
+
+---
+
+## 30. ART-CHAR-CLASS-NEW-002 — เคล (นักมวย), วินน์ (นักสาป), แอสทริด (โหราจารย์) แบบเดียวต่อตัว (เจ้าของยืนยัน 2026-10-30)
+
+ที่มา: OD-14 จำกัด 15 อาชีพ อาชีพละ 1 ตัว; เจ้าของยืนยันเคล/วินน์/แอสทริด (“ยืนยัน ขอ prompt”) ทิศทางที่ Claude เลือกจาก concept ART-CHAR-CLASS-NEW-001 (เจ้าของไม่เคยเลือก A/B): เคล = Martial **B**, วินน์ = Hexer **A**, แอสทริด = Seer **A** ภาพเท่านั้น Claude นำเข้า/ต่อ atlas/ทำกฎใน P03 ภายหลัง ชุดท่าแอนิเมชันสั่งแยกหลังภาพนิ่งผ่าน
+
+```text
+CODEX HANDOFF — ART-CHAR-CLASS-NEW-002 (art only)
+Asterveil · Fateweave: one final static design each for the three new classes — Kael (Martial), Wynne (Hexer), Astrid (Seer)
+
+Read AGENTS.md, CLAUDE.md, docs/handoffs/ANIMATION_PROMPT_QUALITY_TH.md and docs/design/OWNER_DECISIONS_TH.md (OD-14) first. Repository wnau34-nptrn/asterveil-fateweave, base branch feature/fateweave-initial-prototype (not main). Create branch art/art-char-class-new-002. Add files only under incoming/ART-CHAR-CLASS-NEW-002/. Do not change src/, tests/, public/, .github/, existing art or earlier incoming folders. Open a PR into the base branch; do not merge. Original artwork only; nothing from Asterveil: Rise Beyond. The group is the ค่ายทหารรับจ้าง; never use the word ม่านเวล.
+
+GOAL: ONE finished design per character (no option sets), recognisable by silhouette at the 115px battle size and distinct from every current ally: Aegis, Lyra, Eira, Seren, Garran, Mira, Toma, Sefa, Brann, Lio, Corin, Cerise (public/assets/art/units.webp and units_mercs.webp; cell map in src/game/visuals/assets.ts). Odran and Isolde are parked; avoid copying them too.
+
+DIRECTION (develop these concept boards into final characters; boards are references, not finished art):
+1. Kael — Martial artist, front row, id kael, Thai name เคล. Base: incoming/ART-CHAR-CLASS-NEW-001/02_martial_artist/concept_B.png (single topknot, bare forearms with hand/forearm wraps, low open-palm guard, gold waist sash, leg wraps and sandals; palette #A76A3B #DCA647 #644737 #F0DFC1 #353039 #E7BC70). Story: trained discipline so he no longer fights in anger — calm, controlled, grounded. No weapon, no armour plates, no gold pauldrons, no tabard, no prayer beads (that is Corin, who also fights with fists). Inner energy is never baked into the static unit.
+2. Wynne — Hexer, back row, id wynne, Thai name วินน์. Base: incoming/ART-CHAR-CLASS-NEW-001/03_hexer/concept_A.png (hood with drooping tips, stitched cloth doll held close, hanging talismans, crimson thread; palette #342D40 #675064 #A88F88 #732F43 #D3BA9A #E6D4C4). Story: a doll-maker who gathers threads torn at the frontier. Quiet, careful hands; the doll and a crimson thread loop are her identity. Not a skull/necromancer look; no staff; not a mushroom cap shape (Hollow Mycon is a foe).
+3. Astrid — Seer, back row, id astrid, Thai name แอสทริด. Base: incoming/ART-CHAR-CLASS-NEW-001/01_seer/concept_A.png (crescent-split mantle with star pattern, astrolabe rings at the side, short silver-lavender hair, gold star pin; palette #202C50 #68608D #B6B9D3 #D9C68A #453C62 #ECE2D3). Story: a star-chart maker who accepts that fate can still choose. Must read differently from Eira (pointed hat + staff): no hat, no staff; the astrolabe rings stay attached/near her hand, not orbiting the whole body.
+
+STATIC BATTLE UNIT (rest frame for the later animation set): 512×512 RGBA per character, facing right, real alpha, no baked ground shadow, no text. Grounded ready stance with BOTH feet on the ground line (sole bottom at y496 inclusive, runtime pivot (0.5, 497/512)), figure top ≥ y37, fits 480×460. Same chibi proportion as the cast: head (hair top → chin) 145–165px, hair top → sole 440–460px, head/body ratio 0.32–0.36. Size the figure first; props must fit around the figure and never shrink it (PR #118's Isolde was shrunk by a diagonal staff). Kael is the broadest; Wynne and Astrid are back-row casters but not smaller than Seren/Eira.
+
+PORTRAIT: 512×512 painted closeup per character with a painted background, same face/hair/costume as the unit; must read at 40px (check like incoming/ART-CHAR-REDESIGN-001/review/portraits-40.png).
+
+WEAPON / GEAR ICON: 128×128 RGBA, item max extent 112px, same painted style as public/assets/ui/equip/gear_items.webp: Kael = his hand/forearm wraps (pair), Wynne = the stitched doll on its crimson thread, Astrid = the astrolabe ring set.
+
+SKILL ICONS: 256×256 painted icons in the style of public/assets/ui/skill_icons.webp (see incoming/ROSTER-30-BATCH-1/icons for the latest 12). No text, no numbers, readable at 44px, each distinct within its class:
+- Kael: gatherfist (one focused strike that gathers inner energy, 1 glowing pip), releasefist (all energy released in one blow, 3 pips bursting), flowfist (flowing combo that gathers extra energy), circlefist (circular sweep hitting the whole front row), storedfist (heavy strike holding energy in, pips kept), perfectfist (single perfect finishing blow, 3 pips consumed)
+- Wynne: threadhex (one crimson thread knot / curse stack), lifetoll (a tally/toll tag binding a cursed foe who pays when acting), wovenhex (threads woven across the whole front row), longthread (one long trailing thread, lasting curse), tollring (a ring of toll tags around several cursed foes), knothex (a double tight knot, two stacks)
+- Astrid: deflectfate (an incoming strike bent away to another foe), turncycle (a dial turning one notch), crossing (two fate lines crossing, redirect + small hit), doubledial (a dial turning two notches), starneedle (a single star needle bolt), readorbit (an orbit chart revealing the next two marks)
+
+DELIVERABLES: unit/{kael,wynne,astrid}.png, portrait/{kael,wynne,astrid}.png, weapon/{kael,wynne,astrid}.png, icons/<skill-id>.png (18), sources/ (untouched generator outputs), prompts.json (exact prompts, references, generation ids — NO base64 image data in any JSON), validation.json + SHA256SUMS (bytes, SHA-256, decode, bounds, measured head height, body height, head/body ratio, both-feet contact columns at y496), review/lineup.png (all 12 current allies + the 3 new units at 115px on the forest battle background + black silhouettes, with guides at a reference ally's hair top and chin), review/portraits-40.png, review/icons-44.png (all 18 icons at 44px on the dock navy), NOTES.md (Claude handoff), package.py, verify_remote.py. Deliver standalone cells only — do NOT repack units_mercs/portraits_mercs/gear_items/skill_icons atlases (another intake is changing them; Claude appends the new cells).
+
+ACCEPTANCE (Claude checks before owner review): head 145–165px, body 440–460px, ratio 0.32–0.36, both feet touching y≈496, every image decodes, silhouettes distinct from the current cast at 115px, icons readable at 44px, no repository file outside the package changed. Push with normal git, fetch back, verify every SHA-256 and decode every image with Pillow. Owner visual approval is required; these checks and CI are not approval. No merge, no runtime integration, no rules/content/save/balance changes.
 ```

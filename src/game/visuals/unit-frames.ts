@@ -92,15 +92,12 @@ export const unitRegistry = {
     reactions: { block: [38, 39] }, release: { knives: { frame: 26, at: RELEASE_AT, point: [.52, -.45] } } },
   lio: { sheet: 'lio', displayRatio: 1 / .42, actions: { attack: 'attack', note: 'attack', valor: 'skill', mend: 'skill', solo: 'skill', dread: 'dread', finale: 'finale' }, reactions: { block: [38, 39] } },
   // A7 (assumed owner pick = Codex recommendation; docs/combat-presentation/unit-a7-slice/README_TH.md). Every strip is six slots with
-  // slot 0 = seed idle; contact = first recover frame. Strips failing the anatomy gate are absent (Wila echo/down) and keep the procedural body.
+  // slot 0 = seed idle; contact = first recover frame. Strips failing the anatomy gate are absent and keep the procedural body.
   metta: { sheet: 'metta', displayRatio: 1 / .42, own: true, downFrame: 34,
     actions: { attack: 'attack', saintstrike: 'attack', vowstrike: 'attack', saintarc: 'arc', communion: 'communion', sharewound: 'communion', lastlight: 'lastlight' },
     clips: { attack: { prepare: [1, 2], recover: [3, 4, 5, 6] }, arc: { prepare: [7, 8], recover: [9, 10, 11, 12] }, communion: { prepare: [13, 14], recover: [15, 16, 17, 18] }, lastlight: { prepare: [19, 20, 21], recover: [22, 23, 24] } },
     reactions: { hit: [25, 26, 27], block: [28, 29, 30], down: [31, 32, 33, 34] } },
-  thiran: { sheet: 'thiran', displayRatio: 1 / .42, own: true, downFrame: 34,
-    actions: { attack: 'attack', saintstrike: 'attack', vowstrike: 'attack', saintarc: 'arc', communion: 'communion', sharewound: 'communion', lastlight: 'lastlight' },
-    clips: { attack: { prepare: [1, 2], recover: [3, 4, 5, 6] }, arc: { prepare: [7, 8], recover: [9, 10, 11, 12] }, communion: { prepare: [13, 14], recover: [15, 16, 17, 18] }, lastlight: { prepare: [19, 20, 21], recover: [22, 23, 24] } },
-    reactions: { hit: [25, 26, 27], block: [28, 29, 30], down: [31, 32, 33, 34] } },
+  // Odran (thiran) has no A7 entry: the redesigned still (PR #120) is the seed with procedural motion until ART-UNIT-ANIMATION-A7-003.
   // Lalin: partner turn R2 (cadence/duet/deepbeat) and closing step R2 from A7-001; A7-002 adds dance-strike (attack), circle-spin (rounddance),
   // echo-closing-step (echofoot) and her own hit/block/down (frames 31..40, cells already at the .42 factor).
   lalin: { sheet: 'lalin', displayRatio: 1 / .42, own: true, downFrame: 40,
@@ -108,11 +105,7 @@ export const unitRegistry = {
     clips: { partner: { prepare: [1, 2, 3], recover: [4, 5, 6] }, closing: { prepare: [7, 8, 9], recover: [10, 11, 12] },
       attack: { prepare: [13, 14], recover: [15, 16, 17, 18] }, circle: { prepare: [19, 20], recover: [21, 22, 23, 24] }, echo: { prepare: [25, 26, 27], recover: [28, 29, 30] } },
     reactions: { hit: [31, 32, 33], block: [34, 35, 36], down: [37, 38, 39, 40] } },
-  // Wila: no echo foot (procedural) and no down sprite (procedural fall onto the seed).
-  wila: { sheet: 'wila', displayRatio: 1 / .42, own: true,
-    actions: { attack: 'attack', cadence: 'partner', duet: 'partner', deepbeat: 'partner', rounddance: 'circle', closingstep: 'closing' },
-    clips: { attack: { prepare: [1, 2], recover: [3, 4, 5, 6] }, partner: { prepare: [7, 8, 9], recover: [10, 11, 12] }, circle: { prepare: [13, 14], recover: [15, 16, 17, 18] }, closing: { prepare: [19, 20, 21], recover: [22, 23, 24] } },
-    reactions: { hit: [25, 26, 27], block: [28, 29, 30] } },
+  // Isolde (wila): same, redesigned still + procedural motion until A7-003.
   foe_riftweaver: { sheet: 'riftweaver', displayRatio: 2, intents: { 'Rune Lash': 'attack', 'Rift Needle': 'skill', 'Ribbon Snare': 'snare' } },
   foe_spore_puff: { sheet: 'sporepuff', displayRatio: 2, intents: { 'Spore Dust': 'attack' } },
   // A10 (original cast, sheet `units`): Raking Slash / Crushing Blow are the cut and the claw hammer (clip attack), Shadow Knife

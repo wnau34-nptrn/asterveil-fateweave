@@ -1,5 +1,32 @@
 # Codex → Claude handoff
 
+## 2026-10-31 — Claude ตรวจ PR #124 ART-CHAR-CLASS-NEW-002 (เคล/วินน์/แอสทริด): ผ่าน เจ้าของอนุมัติภาพแล้ว
+
+- เจ้าของ “อนุมัติ” 2026-10-31 (ตรง) → PR #124 merged `3ed0f685` ภาพอยู่ใน `incoming/ART-CHAR-CLASS-NEW-002/` การ append เข้า `units_mercs`/`portraits_mercs`/`gear_items`/`skill_icons` และ actorArt ทำใน P03 (P03-01/02) พร้อมกฎ เพราะยังไม่มี content ของ kael/wynne/astrid; แอนิเมชันสั่ง Codex ตอน P03 ตาม OD-14
+
+- hash 58 ไฟล์ตรง, decode ได้ทุกภาพ, diff อยู่ใต้ package เท่านั้น; unit สองเท้าแตะ y496, สูง 450/460/451, หัว/ตัว 0.36/0.357/0.353 ผ่านเกณฑ์; อาวุธ ≤112; silhouette แยกจาก cast ชัด
+- ตอนนำเข้า: ไอคอน 18 ภาพใหญ่กว่าชุดเดิม (ขอบเขต 196–253, รัศมี 112–175) ให้ย่อ uniform เข้าเกณฑ์ ~200/≤112 ของ Batch 1 ก่อน append
+- รายละเอียด: `docs/validation/class-new-002-review/README_TH.md`
+
+## 2026-10-30 — Claude: นำภาพนิ่ง Odran/Isolde (PR #120 + #118) เข้าเกม — รอเจ้าของยืนยันภาพในเกม
+
+- สาขา `claude/odran-isolde-redesign`: `units_mercs` (frame 7/9), `portraits_mercs` (7/9), `gear_items` ((6,0)/(6,1)) แพ็กแล้ว ช่องอื่นตรงพิกเซลเดิม ขนาดไม่เพิ่ม; hash ตรงทั้งสองแพ็กเกจ
+- ถอด entry `thiran`/`wila` + atlas `thiran_a7`/`wila_a7` ออก → seed นิ่ง + procedural จนกว่า A7-003; แก้ `tests/unit-a7.test.ts` + browser specs ให้นับเฉพาะ metta/lalin และยืนยันว่า thiran/wila ไม่มี registry/atlas
+- หลักฐาน: `docs/combat-presentation/odran-isolde-slice/README_TH.md` (ภาพ/คลิป 390px); merge/Pages หลังเจ้าของยืนยัน แล้วปิด PR #118 และ #120
+- **A7-003 พักตาม OD-14** (2026-10-30, `docs/design/OWNER_DECISIONS_TH.md`): 15 อาชีพ อาชีพละ 1 ตัว; โอดราน/อิโซลด์ "พัก" (ยังอยู่ในเซฟเดิม ไม่รับใหม่) จึงหยุดชุดท่า A7-003; งานนี้ไม่แก้แหล่งรับตัวละคร/content (การพักใน content ทำใน P01/P03) ทั้งสองใช้ seed นิ่ง + procedural ต่อไป
+
+## 2026-10-30 — เจ้าของอนุมัติภาพนิ่ง PR #120 (โอดราน/อิโซลด์) และสั่ง prompt A7-003
+
+- Claude ตรวจ PR #120 ผ่าน: Isolde หัว ≈157px, ตัว 460px, ratio 0.34, ยืนสองเท้าที่ y496; Odran และ portrait/อาวุธตรง #118 ทุกไบต์; atlas เปลี่ยนเฉพาะ 7/9, 2.48MB (เดิม 2.51MB); hash 20 ไฟล์ตรง
+- เจ้าของ: “อนุมัติ ขอ Prompt สร้าง animation เลย” → prompt ART-UNIT-ANIMATION-A7-003 (seed จาก #120 พร้อม sha) อยู่ `CODEX-ART-QUEUE-TH.md` ข้อ 29 prompt 2
+- นำภาพนิ่งเข้าเกมคู่ขนานในแชต `claude/odran-isolde-redesign` (ถอด thiran/wila A7 เดิมพร้อมกัน, ปิด #118/#120 หลัง merge)
+
+## 2026-10-30 — Claude ตรวจ PR #118 ART-CHAR-REDESIGN-001: โอดรานผ่าน อิโซลด์ต้องแก้
+
+- เทคนิคผ่าน: hash 33 ไฟล์ตรง; atlas เปลี่ยนเฉพาะ mercs 7/9 และ gear (6,0)/(6,1) ที่เหลือตรงทุกพิกเซลกับเกมปัจจุบัน; ขนาดไม่เพิ่ม (units_mercs 2.45MB/เดิม 2.51MB, portraits 3.69MB/3.82MB, gear 0.98MB/0.99MB)
+- โอดรานผ่าน (สัดส่วนเข้าชุด, silhouette แยกจากคอรินชัด)
+- อิโซลด์: หัว ≈115px เทียบเซรีส ≈157px (≈0.73), ตัว ≈410 เทียบ ≈456, ท่ายืนขาเดียวไม่เหมาะเป็นเฟรมพักของ A7-003; `provenance/generations.json` 15MB base64 ซ้ำ → สั่งแก้ ART-CHAR-REDESIGN-002 (`CODEX-ART-QUEUE-TH.md` ข้อ 29 "prompt 1-fix") เจ้าของเป็นผู้ส่ง; ยังไม่นำ #118 เข้าเกม (รอชุดแก้เพื่อนำเข้าครั้งเดียว)
+
 ## 2026-10-30 — Claude: ตรวจทุกสาขา/PR ของงานภาพ Codex และปิด PR ที่นำเข้าแล้ว
 
 - ปิด 14 PR ที่ภาพอยู่ในสาขาเกมครบแล้ว: #90 #91 #93–#98 #105–#109 #112
@@ -1310,3 +1337,7 @@ The column a hero stands in is now its lane in the rules (owner 2026-10-22, plan
 ## 2026-10-30 — A7-002 เซรีส (`lalin`) นำเข้าแล้ว (รอเจ้าของอนุมัติ motion)
 
 Branch `claude/cerise-a7-002`: dance-strike/circle-spin/echo-closing-step + hit/block/down ของเซรีสเข้า atlas `lalin_a7` (41 เฟรม, lossless, เกินงบ 6.23 MiB / 2.18 MB — แจ้งเจ้าของ). **ไม่นำส่วน wila** (redesign, queue ข้อ 29). circle-spin 3–4 / down 4 วัดอัตโนมัติไม่ได้ ให้เจ้าของดูคลิป. คลิป/หลักฐาน `docs/combat-presentation/unit-a7-002-slice/README_TH.md`. หลัง merge: ปิด PR #117 พร้อมบันทึกว่า wila ไม่ใช้.
+
+## 2026-10-30 — ART-VFX-SONG-SHADOW-002 R3 integrated (awaiting owner motion approval)
+
+Branch `claude/song-shadow-r3`: R3 (21 layers, 7 moves; no note/decoy in R3 so those keep song R2 / shadow R1) packed with `incoming/ART-VFX-SONG-SHADOW-002/atlas.py`; 27-frame lossless atlas 4.66 MiB decoded / 0.90 MB. Evidence: `docs/combat-presentation/song-shadow-r3-slice/README_TH.md`. Feedback for Codex: evade at Sefa's feet is still thin against the scene; note/decoy are not redrawn in R3.

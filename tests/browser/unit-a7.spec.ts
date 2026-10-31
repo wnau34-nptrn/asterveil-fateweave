@@ -5,11 +5,10 @@ test.skip(process.env.PLAYWRIGHT_PAGES==='true','source fixture explicitly check
 const saved=(page:Page)=>page.evaluate(()=>localStorage.getItem('unit-a7-committed'));
 const saintClips={attack:'attack',saintstrike:'attack',vowstrike:'attack',saintarc:'arc',communion:'communion',sharewound:'communion',lastlight:'lastlight'} as Record<string,string>;
 // Anatomy-gated strips are absent (undefined): the body stays on the seed frame with the procedural motion.
-const clipOf:Record<A7Hero,Record<string,string|undefined>>={metta:saintClips,thiran:saintClips,
- lalin:{attack:'attack',cadence:'partner',duet:'partner',deepbeat:'partner',rounddance:'circle',echofoot:'echo',closingstep:'closing'},
- wila:{attack:'attack',cadence:'partner',duet:'partner',deepbeat:'partner',rounddance:'circle',closingstep:'closing'}};
-const contactOf:Record<A7Hero,Record<string,number>>={metta:{attack:3,arc:9,communion:15,lastlight:22},thiran:{attack:3,arc:9,communion:15,lastlight:22},lalin:{partner:4,closing:10,attack:15,circle:21,echo:28},wila:{attack:3,partner:10,circle:15,closing:22}};
-const downFrame:Record<A7Hero,string>={metta:'34',thiran:'34',lalin:'40',wila:'0'};
+const clipOf:Record<A7Hero,Record<string,string|undefined>>={metta:saintClips,
+ lalin:{attack:'attack',cadence:'partner',duet:'partner',deepbeat:'partner',rounddance:'circle',echofoot:'echo',closingstep:'closing'}};
+const contactOf:Record<A7Hero,Record<string,number>>={metta:{attack:3,arc:9,communion:15,lastlight:22},lalin:{partner:4,closing:10,attack:15,circle:21,echo:28}};
+const downFrame:Record<A7Hero,string>={metta:'34',lalin:'40'};
 async function ready(page:Page,query:string,hero:A7Hero='metta'){
  await page.goto(`tests/browser/fixtures/unit-a7.html?hero=${hero}&${query}`);
  await expect(page.locator('canvas')).toBeVisible();
@@ -55,10 +54,10 @@ for(const [speed,intensity,motion] of [['fast','standard','no-preference'],['nor
 });
 for(const change of ['skip','resize','reload','hidden'] as const)test(`A7 ${change} preserves committed command`,async({browser})=>{
  const ctx=await browser.newContext({viewport:{width:390,height:844},reducedMotion:'no-preference'});
- try{const page=await ctx.newPage();await ready(page,'skill=lastlight','thiran');await cast(page,'lastlight');const committed=await saved(page);
+ try{const page=await ctx.newPage();await ready(page,'skill=lastlight','metta');await cast(page,'lastlight');const committed=await saved(page);
  if(change==='skip')await page.locator('#skip-turn').click();
  if(change==='resize')await page.setViewportSize({width:391,height:844});
- if(change==='reload'){await page.reload();await expect(page.locator('canvas')).toBeVisible();await expect.poll(()=>page.evaluate(()=>window.unitA7QA.frames().thiran?.[0]?.texture)).toBe('unit-pilot-thiran');}
+ if(change==='reload'){await page.reload();await expect(page.locator('canvas')).toBeVisible();await expect.poll(()=>page.evaluate(()=>window.unitA7QA.frames().metta?.[0]?.texture)).toBe('unit-pilot-metta');}
  if(change==='hidden')await page.evaluate(()=>{Object.defineProperty(document,'hidden',{configurable:true,value:true});document.dispatchEvent(new Event('visibilitychange'));});
  await expect(page.locator('#skip-turn')).toBeHidden();expect(await saved(page)).toBe(committed);
  expect(await page.evaluate(()=>window.unitA7QA.state())).toEqual(await page.evaluate(()=>window.unitA7QA.expected()));
@@ -88,8 +87,8 @@ test('A7 late optional textures cannot replace artwork during a committed cast',
  }finally{release();await ctx.close();}
 });
 test('A7 encounter replacement releases the A7 textures',async({page})=>{
- await page.setViewportSize({width:390,height:844});await ready(page,'skill=attack','wila');
- expect((await page.evaluate(()=>window.unitA7QA.cached())).sort()).toEqual(['unit-pilot-aegis','unit-pilot-eira','unit-pilot-sporepuff','unit-pilot-wila']);
+ await page.setViewportSize({width:390,height:844});await ready(page,'skill=attack','lalin');
+ expect((await page.evaluate(()=>window.unitA7QA.cached())).sort()).toEqual(['unit-pilot-aegis','unit-pilot-eira','unit-pilot-lalin','unit-pilot-sporepuff']);
  await page.evaluate(()=>window.unitA7QA.otherEncounter());
  // The replacement encounter fields Aegis (guardian) and a brute: only those stay cached, the A7 sheets are released.
  await expect.poll(()=>page.evaluate(()=>window.unitA7QA.cached().sort())).toEqual(['unit-pilot-aegis','unit-pilot-brute']);

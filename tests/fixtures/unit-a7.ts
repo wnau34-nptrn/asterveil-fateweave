@@ -3,16 +3,18 @@ import {encounters,thicketAmbush} from '../../src/content/encounters/catalog';
 import {mercenaries} from '../../src/content/heroes/mercenaries';
 import {beginBattle,currentHeroId,resolveCommand,targetOptions} from '../../src/core/battle/engine';
 import type {ActionId,Command,EncounterDefinition} from '../../src/core/battle/types';
-export const unitA7Heroes=['metta','thiran','lalin','wila'] as const;
+// Identities whose A7 bodies ship. Odran (thiran) and Isolde (wila) were redesigned (PR #120) and use the seed + procedural motion until A7-003.
+export const unitA7Heroes=['metta','lalin'] as const;
 export type A7Hero=(typeof unitA7Heroes)[number];
+export const stillOnlyHeroes=['thiran','wila'] as const;
 export const saintActions=['attack','communion','lastlight','saintarc','saintstrike','sharewound','vowstrike'] as const satisfies readonly ActionId[];
 export const dancerActions=['attack','cadence','closingstep','deepbeat','duet','echofoot','rounddance'] as const satisfies readonly ActionId[];
-export const a7Actions=(hero:A7Hero):readonly ActionId[]=>hero==='metta'||hero==='thiran'?saintActions:dancerActions;
+export const a7Actions=(hero:A7Hero|(typeof stillOnlyHeroes)[number]):readonly ActionId[]=>hero==='metta'||hero==='thiran'?saintActions:dancerActions;
 // Dancer skills need an ally whose skill is cooling down: the dancer attacks and the allies use their own skills first.
 const needsCooldown:readonly ActionId[]=['cadence','duet','deepbeat','closingstep','rounddance','echofoot'];
 export const foeArt='foe_spore_puff' as const,foeIntent='Spore Dust';
 // scenario: normal (hero acts, foe hits the Knight) | hurt/down (foe hits the hero) | block (foe's hit on the hero is fully absorbed: 0 damage) | enemy-down (foe has 1 HP)
-export function unitA7Fixture(hero:A7Hero,action:ActionId='attack',scenario='normal'){
+export function unitA7Fixture(hero:A7Hero|(typeof stillOnlyHeroes)[number],action:ActionId='attack',scenario='normal'){
  const from=encounters.find(d=>d.enemies.some(e=>e.art===foeArt&&d.intents.some(i=>i.sourceId===e.id&&i.name===foeIntent)))!;
  const foe=from.enemies.find(e=>e.art===foeArt&&from.intents.some(i=>i.sourceId===e.id&&i.name===foeIntent))!;
  const intent=from.intents.find(i=>i.sourceId===foe.id&&i.name===foeIntent)!;

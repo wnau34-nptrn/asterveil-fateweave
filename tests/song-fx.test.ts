@@ -6,9 +6,11 @@ import atlas from '../public/assets/fx/song_shadow_fx.json';
 import {statSync} from 'node:fs';
 
 describe('song / shadow VFX follows authoritative events without changing state',()=>{
- it('ships the 21 layers (song R2 + shadow R1) with documented pivots and a lossless budget',()=>{
-  expect(Object.keys(atlas.frames).sort()).toEqual(Object.keys(art).sort());expect(Object.keys(art)).toHaveLength(21);
-  expect((art as Record<string,number[]>)['valor_prepare']).toEqual([.5049,.7344]);expect((art as Record<string,number[]>)['decoy_peak']).toEqual([.498,.7791]);
+ it('ships 27 layers (R3 for seven moves; note song R2 and decoy shadow R1 unchanged) with documented pivots and a lossless budget',()=>{
+  expect(Object.keys(atlas.frames).sort()).toEqual(Object.keys(art).sort());expect(Object.keys(art)).toHaveLength(27);
+  const pivots=art as Record<string,number[]>;
+  expect(pivots['valor_prepare']).toEqual([.5,.672187]);expect(pivots['finale-mend_peak']).toEqual([.5,.499306]);expect(pivots['evade_prepare']).toEqual([.497657,.669229]);
+  expect(pivots['decoy_peak']).toEqual([.498,.7791]);expect(pivots['note_peak']).toEqual([.5,.5]);
   const {w,h}=atlas.meta.size;expect(w*h*4).toBeLessThanOrEqual(6*1024*1024);expect(statSync('public/assets/fx/song_shadow_fx.webp').size+statSync('public/assets/fx/song_shadow_fx.json').size).toBeLessThan(1_000_000);
   for(const v of Object.values(atlas.frames))expect(v.sourceSize).toEqual({w:256,h:256});
  });
@@ -34,14 +36,26 @@ describe('song / shadow VFX follows authoritative events without changing state'
   expect(f.turn.events.some(e=>e.text==='Finale of valor.')).toBe(true);expect(hits.length).toBeGreaterThan(1);
   expect(plan.peak!.to!.map(t=>t.id)).toEqual(hits.map(e=>e.targetId));expect(plan.settles.map(s=>s.event)).toEqual(hits);
  });
- for(const song of ['mend','dread'] as const)it(`finale of ${song}: gather only, no wave or contact is invented`,()=>{
-  const f=songFixture('finale',song),plan=songPlan(f.turn)!;
-  expect(f.turn.events.some(e=>e.text===`Finale of ${song==='mend'?'mending':'dread'}.`)).toBe(true);
-  expect(plan.peak).toBeUndefined();expect(plan.settles).toHaveLength(0);expect(plan.events).toHaveLength(0);expect(plan.prepare).toBeDefined();
+ it('finale of mending: ribbons only on allies the resolver really healed, never an offensive contact',()=>{
+  const f=songFixture('finale','mend','f2',true),plan=songPlan(f.turn)!,heals=f.turn.events.filter(e=>e.type==='heal');
+  expect(plan.art).toBe('finale-mend');expect(f.turn.events.some(e=>e.text==='Finale of mending.')).toBe(true);expect(f.turn.events.some(e=>e.type==='damage')).toBe(false);
+  expect(plan.prepare).toEqual({id:f.actor.id,spot:'hand'});expect(plan.peak!.to).toBeUndefined();
+  expect(plan.peak!.at!.map(t=>t.id).sort()).toEqual(heals.map(e=>e.targetId!).sort());expect(plan.settles.map(s=>s.at.id).sort()).toEqual(heals.map(e=>e.targetId!).sort());
+  expect(plan.events).toEqual([f.turn.events.find(e=>e.type==='finale'),...heals]);
+ });
+ it('finale of dread: shield contour only on allies the resolver really shielded',()=>{
+  const f=songFixture('finale','dread'),plan=songPlan(f.turn)!,shields=f.turn.events.filter(e=>e.type==='barrier');
+  expect(plan.art).toBe('finale-dread');expect(f.turn.events.some(e=>e.text==='Finale of dread.')).toBe(true);expect(shields.length).toBeGreaterThan(0);
+  expect(plan.peak!.to).toBeUndefined();expect(plan.peak!.at!.map(t=>t.id).sort()).toEqual(shields.map(e=>e.targetId!).sort());
+  expect(plan.settles).toHaveLength(shields.length);expect(plan.events).toContain(shields[0]);
+ });
+ it('finale of mending with nobody hurt paints only the gather (no invented heal)',()=>{
+  const f=songFixture('finale','mend'),plan=songPlan(f.turn)!;expect(f.turn.events.some(e=>e.type==='heal')).toBe(false);
+  expect(plan.art).toBe('finale-mend');expect(plan.peak).toBeUndefined();expect(plan.settles).toHaveLength(0);expect(plan.events).toHaveLength(0);expect(plan.prepare).toBeDefined();
  });
  it('solo paints the one ally who really received the buff (no foe, no damage)',()=>{
   const f=songFixture('solo'),plan=songPlan(f.turn)!,buff=f.turn.events.find(e=>e.type==='buff')!;
-  expect(f.turn.events.some(e=>e.type==='damage')).toBe(false);expect(plan.peak!.from).toEqual({id:buff.targetId,spot:'feet'});expect(plan.settles).toEqual([{at:{id:buff.targetId,spot:'feet'},outcome:'hit'}]);
+  expect(f.turn.events.some(e=>e.type==='damage')).toBe(false);expect(buff.targetId).not.toBe(f.actor.id);expect(plan.prepare).toEqual({id:buff.targetId,spot:'feet'});expect(plan.peak!.from).toEqual({id:buff.targetId,spot:'feet'});expect(plan.settles).toEqual([{at:{id:buff.targetId,spot:'feet'},outcome:'hit'}]);
  });
  it('evade is Sefa\'s own feet; decoy is the covered ally (separate real events, one ghost)',()=>{
   const e=songFixture('evade'),pe=songPlan(e.turn)!;expect(pe.peak!.from).toEqual({id:'sefa',spot:'feet'});expect(pe.settles).toHaveLength(1);expect(e.turn.events.some(x=>x.type==='damage')).toBe(false);
