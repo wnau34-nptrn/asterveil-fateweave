@@ -4,6 +4,7 @@ import { encounterById } from '../../src/content/encounters/catalog';
 import { newExpedition } from '../../src/core/world/world';
 import { newProfile } from '../../src/core/world/profile';
 import type { ExpeditionState } from '../../src/core/world/types';
+import { legacyEnvelope } from '../fixtures/legacy-save';
 const key = 'asterveil.fateweave.expedition.v1';
 const commander = { name: 'อารี', crest: 'star', color: 'gold', camp: 'ค่ายอารี' };
 async function seed(page: Page, run: ExpeditionState | null, stars = 1) {
@@ -15,7 +16,7 @@ async function seed(page: Page, run: ExpeditionState | null, stars = 1) {
   await page.addInitScript(({ raw, key }) => {
     if (sessionStorage.getItem('portrait-seeded')) return;
     localStorage.setItem(key, raw); sessionStorage.setItem('portrait-seeded', 'yes');
-  }, { key, raw: JSON.stringify({ version: 21, profile, run }) });
+  }, { key, raw: JSON.stringify(legacyEnvelope({ version: 21, profile, run })) });
   await page.goto('./');
 }
 function battleRun() {

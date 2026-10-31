@@ -6,6 +6,7 @@ import { memberDef, wear } from '../../src/core/world/world';
 import { parseGame } from '../../src/core/save/expedition-save';
 import { characterSkillMetric } from '../../src/ui/character-metrics';
 import { currentSave } from '../fixtures/current-save';
+import { xpAt } from '../fixtures/camp-level';
 
 const key='asterveil.fateweave.expedition.v1', template=lookup(map.tutorialEncounterId)!;
 for(const [width,height,touch] of [[320,568,true],[390,844,true],[1366,768,false]] as const) {
@@ -13,9 +14,9 @@ for(const [width,height,touch] of [[320,568,true],[390,844,true],[1366,768,false
     const context=await browser.newContext({viewport:{width,height},hasTouch:touch,isMobile:touch,reducedMotion:'reduce'}),page=await context.newPage(),errors:string[]=[];
     page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
     const profile=newProfile(map,77);profile.tutorialDone=true;profile.commander={name:'อารี',crest:'star',color:'gold', camp: 'ค่ายอารี'};
-    profile.members.guardian={stars:3,dupes:0,level:6,exp:0,talents:{a1:2},gear:{body:{uid:1,slot:'body',rarity:0,level:2,affixes:[],set:'shadow'},weapon:{uid:2,slot:'weapon',hero:'guardian',rarity:0,level:1,affixes:[],set:'dawn'},boots:{uid:3,slot:'boots',rarity:0,level:1,affixes:[],set:'dawn'}}};profile.nextItem=4;
+    profile.members.guardian={stars:3,dupes:0,talents:{a1:2},gear:{body:{uid:1,slot:'body',rarity:0,level:2,affixes:[],set:'shadow'},weapon:{uid:2,slot:'weapon',hero:'guardian',rarity:0,level:1,affixes:[],set:'dawn'},boots:{uid:3,slot:'boots',rarity:0,level:1,affixes:[],set:'dawn'}}}; profile.campXp = Math.max(profile.campXp, xpAt(6));profile.nextItem=4;
     // Keep the legacy Finale grant that this equipment comparison is intended to inspect.
-    profile.company.push('lio');profile.members.lio={stars:3,dupes:0,level:6,exp:0,grants:['b3']};profile.party.reserve=['lio'];
+    profile.company.push('lio');profile.members.lio={stars:3,dupes:0,grants:['b3']}; profile.campXp = Math.max(profile.campXp, xpAt(6));profile.party.reserve=['lio'];
     const game=depart(profile,map,lookup,1234);game.run.hp.guardian=11;
     game.run.found=[{uid:0,slot:'weapon',hero:'guardian',rarity:1,level:8,affixes:['leech'],set:'shadow',plus:3},{uid:0,slot:'weapon',hero:'tracer',rarity:0,level:1,affixes:[]},{uid:0,slot:'charm',rarity:1,level:6,affixes:['support']}];
     const raw=currentSave(game);parseGame(raw,map,lookup);
@@ -30,7 +31,7 @@ for(const [width,height,touch] of [[320,568,true],[390,844,true],[1366,768,false
     await expect(page.locator('.character-skills [data-skill=rally]')).toContainText('ผลพิเศษ');
     await page.locator('#character-tab-gear').click();await page.locator('#pick-found-1').click();await expect(page.locator('#compare-found-1')).toBeDisabled();
     await page.locator('#pick-found-0').click();await page.locator('#compare-found-0').click();await expect(page.locator('#comparison-title')).toBeVisible();
-    const expected=wear(game.run,map,lookup,'guardian','found',0).state,h=memberDef(lookup,map,expected.members,'guardian')!;
+    const expected=wear(game.run,map,lookup,'guardian','found',0).state,h=memberDef(lookup, map, expected, 'guardian')!;
     await expect(page.locator('[data-stat=attack] td').nth(1)).toHaveText(String(h.attack));
     await page.locator('[data-stat=attack]').scrollIntoViewIfNeeded();
     await page.screenshot({path:info.outputPath('stat-comparison.png')});
@@ -55,7 +56,7 @@ for(const [width,height,touch] of [[320,568,true],[390,844,true],[1366,768,false
     await page.locator('#character-member-lio').click();await page.locator('#character-tab-gear').click();
     const supportIndex=equipped.found.findIndex(i=>i.slot==='charm'),beforeSupport=await saved();
     await page.locator(`#pick-found-${supportIndex}`).click();await page.locator(`#compare-found-${supportIndex}`).click();
-    const proposed=wear(equipped,map,lookup,'lio','found',supportIndex).state,nextLio=memberDef(lookup,map,proposed.members,'lio')!;
+    const proposed=wear(equipped,map,lookup,'lio','found',supportIndex).state,nextLio=memberDef(lookup, map, proposed, 'lio')!;
     const finale=characterSkillMetric('finale',nextLio,template);
     await expect(page.locator('.comparison-skills [data-skill=finale] summary')).toContainText(`→ ${finale.secondary!.value}`);
     await page.locator('.comparison-skills [data-skill=finale] summary').scrollIntoViewIfNeeded();

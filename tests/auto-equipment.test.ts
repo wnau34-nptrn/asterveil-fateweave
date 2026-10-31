@@ -22,7 +22,7 @@ it('seeds complete sets, respects class, rolls and forged stats, and plans deter
 });
 it('atomically caps HP at the final loadout, preserves all item provenance, steps and RNG, and round-trips v21',()=>{
   const game=setup(),s=game.run;s.members.guardian!.gear={body:item({uid:1,level:30}),head:item({level:1,slot:'head'})};game.profile.members.guardian!.gear={body:item({uid:1,level:30})};game.profile.nextItem=2;
-  s.found=[item({level:1}),item({level:99,slot:'head'})];s.hp.guardian=memberDef(lookup,map,s.members,'guardian')!.maxHp;
+  s.found=[item({level:1}),item({level:99,slot:'head'})];s.hp.guardian=memberDef(lookup, map, s, 'guardian')!.maxHp;
   const hp=s.hp.guardian,entries=runEquipment(s),plan:AutoEquipmentPlan={heroId:'guardian',member:structuredClone(s.members.guardian!),goal:'survival',choices:entries.map(e=>({slot:e.item.slot,key:e.key,item:structuredClone(e.item)}))};
   const out=applyRunEquipment(s,map,lookup,plan).state;expect(out.hp.guardian).toBe(hp);expect(out.members.guardian!.gear!.head!.level).toBe(99);
   expect(out.spare.map(i=>i.uid)).toEqual([1]);expect(out.found).toHaveLength(1);expect(out.found[0]!.uid).toBe(0);expect(out.steps).toBe(s.steps);expect(out.rolls).toBe(s.rolls);
@@ -31,7 +31,7 @@ it('atomically caps HP at the final loadout, preserves all item provenance, step
 it('rejects stale items/members, duplicate slots, foreign weapons, nonmembers, battle and ended runs without partial equips',()=>{
   const s=setup().run;s.found=[item({level:8})];const plan=planEquipment(map,data,base,s.members.guardian!,runEquipment(s),'survival');
   const altered=structuredClone(s);altered.found[0]!.level=9;expect(applyRunEquipment(altered,map,lookup,plan).state).toBe(altered);
-  const ranked=structuredClone(s);ranked.members.guardian!.level=2;expect(applyRunEquipment(ranked,map,lookup,plan).state).toBe(ranked);
+  const ranked=structuredClone(s);ranked.members.guardian!.stars=2;expect(applyRunEquipment(ranked,map,lookup,plan).state).toBe(ranked);
   expect(applyRunEquipment(s,map,lookup,{...plan,choices:[...plan.choices,...plan.choices]}).state).toBe(s);
   const weapon=item({slot:'weapon',hero:'tracer'}),wrong=structuredClone(s);wrong.found=[weapon];
   expect(applyRunEquipment(wrong,map,lookup,{...plan,choices:[{slot:'weapon',key:'found:0',item:weapon}]}).state).toBe(wrong);

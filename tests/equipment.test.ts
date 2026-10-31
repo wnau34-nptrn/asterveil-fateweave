@@ -10,7 +10,7 @@ import { loadGame, parseGame, saveGame } from '../src/core/save/expedition-save'
 import { affixPool, gearTotals, itemStats, itemValid, rollItem } from '../src/core/world/equipment';
 import { dismiss, equip, newProfile, salvage, settle, unequip } from '../src/core/world/profile';
 import type { ExpeditionState, Gear, Item } from '../src/core/world/types';
-import { battleData, battleState, finishBattle, heroDef, move, newExpedition, recordBattle, rollPercent, starred } from '../src/core/world/world';
+import { battleData, battleState, finishBattle, heroDef, levelOf, move, newExpedition, recordBattle, rollPercent, starred } from '../src/core/world/world';
 import { battleLesson } from '../src/ui/tutorial';
 
 // Equipment (2D-2, docs/EXPEDITION_DESIGN.md "Equipment").
@@ -149,7 +149,7 @@ describe('drops', () => {
     else expect(b.event.type).toBe('victory');
   });
 });
-const memberHp = (s: ExpeditionState, id: string) => starred(heroDef(lookup, map, id)!, s.members[id]?.stars ?? 1, map, s.members[id]?.level ?? 1).maxHp;
+const memberHp = (s: ExpeditionState, id: string) => starred(heroDef(lookup, map, id)!, s.members[id]?.stars ?? 1, map, levelOf(map, s)).maxHp;
 
 describe('lobby: bag, equip, salvage, settle', () => {
   const withBag = (...items: Item[]) => ({ ...newProfile(map, 3), items, nextItem: 100 });

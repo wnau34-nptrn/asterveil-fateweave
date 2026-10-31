@@ -7,6 +7,8 @@ import { affixPool, setCounts } from '../../src/core/world/equipment';
 import { GEAR_SLOTS, SET_IDS, type Item } from '../../src/core/world/types';
 import { parseGame } from '../../src/core/save/expedition-save';
 import atlas from '../../src/game/visuals/equip/gear_items.json' with { type: 'json' };
+import { xpAt } from '../fixtures/camp-level';
+import { legacyEnvelope } from '../fixtures/legacy-save';
 
 test('equipment art: mixed loot and a matching full set at 390px', async ({ browser }, info) => {
   const context = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true, reducedMotion: 'reduce', deviceScaleFactor: 1 });
@@ -25,9 +27,7 @@ test('equipment art: mixed loot and a matching full set at 390px', async ({ brow
     affixes: affixPool(map.equipment, slot, extra.hero ?? 'guardian').slice(0, map.equipment.affixCount[rarity]),
     ...(rarity === 4 && !extra.boss ? { special: 'laststand' as const } : {}), ...extra,
   });
-  profile.members.guardian = { stars: 3, dupes: 0, level: 10, exp: 0,
-    gear: Object.fromEntries(GEAR_SLOTS.map(slot => [slot, item(slot, 3, { set: 'dawn' })])),
-  };
+  profile.members.guardian = { stars: 3, dupes: 0, gear: Object.fromEntries(GEAR_SLOTS.map(slot => [slot, item(slot, 3, { set: 'dawn' })]))}; profile.campXp = Math.max(profile.campXp, xpAt(10));
   const slots = ['head', 'body', 'gloves', 'boots', 'charm'] as const;
   profile.items = [
     ...[0, 2, 3].flatMap(rarity => slots.map(slot => item(slot, rarity))),
@@ -38,7 +38,7 @@ test('equipment art: mixed loot and a matching full set at 390px', async ({ brow
   ];
   profile.nextItem = uid;
   expect(setCounts(profile.members.guardian.gear).dawn).toBe(6);
-  const key = 'asterveil.fateweave.expedition.v1', raw = JSON.stringify({ version: 40, profile, run: null });
+  const key = 'asterveil.fateweave.expedition.v1', raw = JSON.stringify(legacyEnvelope({ version: 40, profile, run: null }));
   parseGame(raw, map, encounterById);
   await page.addInitScript(({ key, raw }) => localStorage.setItem(key, raw), { key, raw });
   await page.goto('./'); await page.locator('#continue').click();

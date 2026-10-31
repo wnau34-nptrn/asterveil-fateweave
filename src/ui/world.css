@@ -375,6 +375,16 @@ h1, h2, h3, .primary, .secondary { font-family: var(--font-heading); font-weight
 .lobby-content h3 .icon { width: 18px; height: 18px; }
 .lobby-content .team-grid { margin-bottom: 6px; }
 .team-grid.bench { grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); }
+/* P01: the shared camp level and the bench search, filters and archive. */
+.camp-level { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; margin: 0 0 8px; padding: 8px 10px; border: 1px solid #f2d59655; border-radius: 12px; background: #0a1626; font-size: 13px; color: var(--text-muted); }
+.camp-level b { color: var(--text); font: 600 15px var(--font-heading); }
+.camp-level small { flex-basis: 100%; font-size: 12px; }
+.bench-tools { display: grid; gap: 6px; margin-bottom: 6px; }
+.bench-search input { box-sizing: border-box; width: 100%; min-height: 44px; padding: 0 12px; border-radius: 10px; border: 1px solid #e8f5ff33; background: #0a1626; color: var(--text); font: 15px var(--font-body, inherit); }
+.bench-filters { display: flex; flex-wrap: wrap; gap: 6px; }
+.team-grid.bench .team-card[hidden] { display: none; }
+.reward-camp-team { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+.reward-camp-team .portrait { width: 28px; height: 28px; }
 .lobby-footer { display: flex; align-items: center; gap: 12px; }
 .lobby-save { flex: 1; font-size: 12px; color: var(--text-muted); }
 #lobby-depart { min-height: 52px; padding: 0 22px; display: inline-flex; align-items: center; gap: 8px; font-size: 17px; }

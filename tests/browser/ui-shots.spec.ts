@@ -5,6 +5,7 @@ import { depart, newProfile } from '../../src/core/world/profile';
 import { affixPool, GEAR_SPECIALS } from '../../src/core/world/equipment';
 import { parseGame } from '../../src/core/save/expedition-save';
 import { currentSave } from '../fixtures/current-save';
+import { xpAt } from '../fixtures/camp-level';
 
 // Review screenshots of the A7 character sheet for the owner (not a gameplay check).
 // Run with UI_SHOTS=<dir> npx playwright test tests/browser/ui-shots.spec.ts
@@ -13,11 +14,11 @@ const key = 'asterveil.fateweave.expedition.v1';
 async function open(page: Page) {
   const profile = newProfile(map, 123); profile.tutorialDone = true; profile.commander = { name: 'อารี', crest: 'star', color: 'gold', camp: 'ค่ายอารี' };
   const pool = (slot: 'weapon'|'body'|'head'|'gloves'|'boots'|'charm', hero = 'guardian') => affixPool(map.equipment, slot, slot === 'weapon' ? hero : undefined);
-  profile.members.guardian = { stars: 2, dupes: 0, level: 6, exp: 0, talents: { a1: 1, b1: 1 }, gear: {
+  profile.members.guardian = { stars: 2, dupes: 0, talents: { a1: 1, b1: 1 }, gear: {
     weapon: { uid: 1, slot: 'weapon', hero: 'guardian', rarity: 2, level: 5, plus: 2, affixes: pool('weapon').slice(0, 2), set: 'dawn' },
     body: { uid: 2, slot: 'body', rarity: 1, level: 4, affixes: pool('body').slice(0, 1) },
     head: { uid: 3, slot: 'head', rarity: 2, level: 5, affixes: pool('head').slice(0, 2), set: 'dawn' },
-    charm: { uid: 4, slot: 'charm', rarity: 3, level: 6, affixes: pool('charm').slice(0, 3) } } };
+    charm: { uid: 4, slot: 'charm', rarity: 3, level: 6, affixes: pool('charm').slice(0, 3) } } }; profile.campXp = Math.max(profile.campXp, xpAt(6));
   profile.nextItem = 5;
   const game = depart(profile, map, encounterById, 1234);
   game.run.found = [

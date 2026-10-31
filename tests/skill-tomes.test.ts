@@ -11,6 +11,8 @@ import { battleTomes, chestTomes, emptyTomes, partyLine, raiseSkill, skillLevelR
 import { memberDef } from '../src/core/world/world';
 import { parseGame, saveGame } from '../src/core/save/expedition-save';
 import type { Profile } from '../src/core/world/types';
+import { xpAt } from './fixtures/camp-level';
+import { legacyEnvelope } from './fixtures/legacy-save';
 
 // Skill tomes (docs/design/SKILL_TOMES_TH.md, owner-approved 2026-10-22): Lv1–5 per member's active skill, paid in the
 // class's tome line, gold and (Lv5) a rift core; the resolver reads the levels from the hero definition only.
@@ -39,7 +41,7 @@ describe('skill levels in battle', () => {
   });
   it('members carry their levels into battle through the world definition', () => {
     const p = newProfile(map, 3); p.members.guardian = { stars: 1, dupes: 0, skillLevels: { bash: 3 } };
-    expect(memberDef(lookup, map, p.members, 'guardian')!.skillLevels).toEqual({ bash: 3 });
+    expect(memberDef(lookup, map, p, 'guardian')!.skillLevels).toEqual({ bash: 3 });
   });
 });
 
@@ -111,7 +113,7 @@ describe('save v37', () => {
   it('round-trips skill levels, tomes, rift cores and run finds', () => {
     const p = open(); p.members.guardian!.skillLevels = { bash: 3, guard: 2 }; const { profile, run } = depart(p, map, lookup, 4);
     battleTomes(run, map, 'elite', run.roster.deployed); run.tomeWins = 2;
-    const text = raw({ profile, run }); expect(JSON.parse(text).version).toBe(43);
+    const text = raw({ profile, run }); expect(JSON.parse(text).version).toBe(44);
     expect(parseGame(text, map, lookup, MAPS)).toEqual({ profile, run });
   });
   it('rejects levels out of range or for another class’s skill, and tomes on a map without them', () => {
@@ -123,9 +125,9 @@ describe('save v37', () => {
     expect(() => parseGame(raw(ruins), MAPS[0]!, lookup, MAPS)).toThrow();
   });
   it('v36 refunds the release A classes’ small-tree ranks, grants their star skills and sends a changed run home', () => {
-    const p = newProfile(map, 3); p.members.tracer = { stars: 5, dupes: 0, level: 4, exp: 0 }; p.members.guardian = { stars: 1, dupes: 0, level: 4, exp: 0, talents: { a1: 2 } };
+    const p = newProfile(map, 3); p.members.tracer = { stars: 5, dupes: 0}; p.campXp = Math.max(p.campXp, xpAt(4)); p.members.guardian = { stars: 1, dupes: 0, talents: { a1: 2 } }; p.campXp = Math.max(p.campXp, xpAt(4));
     const { run } = depart(p, map, lookup, 5);
-    const old = JSON.parse(raw({ profile: p, run })); old.version = 36;
+    const old = legacyEnvelope(JSON.parse(raw({ profile: p, run }))); old.version = 36;
     old.profile.members.tracer.talents = { root: 1, a1: 2 }; old.run.members.tracer.talents = { root: 1, a1: 2 };
     const back = parseGame(JSON.stringify(old), map, lookup);
     expect(back.run).toBeNull(); expect(back.profile.members.tracer).toMatchObject({ stars: 5, grants: ['a4', 'b2'] });

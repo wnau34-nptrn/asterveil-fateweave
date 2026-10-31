@@ -4,6 +4,7 @@ import { chapterOne as map } from '../../src/content/world/chapter1';
 import { encounterById as lookup } from '../../src/content/encounters/catalog';
 import { newProfile } from '../../src/core/world/profile';
 import { parseGame, saveGame } from '../../src/core/save/expedition-save';
+import { xpAt } from '../fixtures/camp-level';
 
 test.skip(process.env.OI_CAPTURE !== '1', 'owner-review capture only');
 const out = process.env.OI_OUT ?? 'test-results/odran-isolde';
@@ -39,7 +40,7 @@ for (const id of ['thiran', 'wila']) test(`odran-isolde character page ${id}`, a
   test.setTimeout(60000);
   const p = newProfile(map, 193); p.tutorialDone = true; p.commander = { name: 'อารี', crest: 'star', color: 'gold', camp: 'ค่ายอารี' };
   p.cleared = ['ruined-border', 'deep-forest', 'veil-frontier'];
-  for (const m of ['metta', 'thiran', 'lalin', 'wila']) { p.company.push(m); p.members[m] = { stars: 1, dupes: 0, level: 10, exp: 0 }; }
+  for (const m of ['metta', 'thiran', 'lalin', 'wila']) { p.company.push(m); p.members[m] = { stars: 1, dupes: 0}; p.campXp = Math.max(p.campXp, xpAt(10)); }
   p.party = { deployed: ['thiran', 'metta', 'wila', 'lalin'], reserve: [] };
   let raw = ''; saveGame({ getItem: () => null, setItem: (_k, v) => { raw = v; } }, { profile: p, run: null }); parseGame(raw, map, lookup);
   const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true });

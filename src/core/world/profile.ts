@@ -5,7 +5,7 @@ import { memberTalentReason, talentsSpent } from './talents';
 import type { Lane, GuideDefinition, GuideKind, LobbyFeature, Commander, ShopItemId, SideQuestKind, ExpeditionState, Gear, GearSlot, Item, MapDefinition, PotionId, Potions, Profile, ProfileResult, RunOutcome, TalentNode } from './types';
 import { rollItem, salvageValue } from './equipment';
 import { addTomes, dismissTomes, emptyTomes, firstClearTomes, tomeCount } from './tomes';
-import { COMPANY_CAP, GEAR_SLOTS, PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS, SET_IDS } from './types';
+import { GEAR_SLOTS, PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS, SET_IDS } from './types';
 import { draftPick, heroCatalog, levelOf, loadoutReason, memberDef, newExpedition, recommendedLane, rollPercent, rosterIds, type EncounterLookup } from './world';
 import { laneReason, withLane } from './formation';
 import type { ActionId } from '../battle/types';
@@ -17,7 +17,7 @@ import type { ActionId } from '../battle/types';
 export function newProfile(map: MapDefinition, seed: number, first: readonly string[] = map.startingRoster): Profile {
   return {
     bossLoot:{}, hunt:{pity:{}}, seed: seed >>> 0, returns: 0, tutorialDone: false, commander: null,
-    company: [...first], members: Object.fromEntries(first.map(id => [id, { stars: 1, dupes: 0 }])),
+    company: [...first], members: Object.fromEntries(first.map(id => [id, { stars: 1, dupes: 0 }])), campXp: 0,
     party: { deployed: [...first], reserve: [] },
     forgeLevel: map.equipment.forge.itemLevel.baseCap, bank: { ore: 0, gold: 0, seal: 0, dust: 0 }, items: [], overflow:[],storageTier:0, nextItem: 1, forge: 0, potions: { salve: 0, tonic: 0, repel: 0 }, quests: {}, shop: {}, refreshes: 0, smelted: 0, taken: [], expeditions: 0, completes: 0, cleared: [], last: null,
   };
@@ -57,11 +57,13 @@ export function renameCamp(initial: Profile, camp: string): ProfileResult {
 
 // The board is derived from (seed, returns): reloads cannot re-roll it and it refreshes
 // every time an expedition comes home. Company members can be offered (duplicates).
+// Every character a company can still take on anew: the catalog without the parked ones (OD-14).
+export const hireable = (map: MapDefinition, lookup: EncounterLookup): string[] => heroCatalog(lookup, map).map(h => h.id).filter(id => !map.company.parked?.includes(id));
 export function boardOfferCount(map: MapDefinition, lookup: EncounterLookup, frozen = false): number {
-  return map.company.offers + (!frozen && map.company.featured?.some(id => heroCatalog(lookup, map).some(h => h.id === id)) ? 1 : 0);
+  return map.company.offers + (!frozen && map.company.featured?.some(id => hireable(map, lookup).includes(id)) ? 1 : 0);
 }
 export function boardOffers(profile: Profile, map: MapDefinition, lookup: EncounterLookup): string[] {
-  const catalog = heroCatalog(lookup, map).map(h => h.id);
+  const catalog = hireable(map, lookup);
   const featured = profile.boardPool ? [] : (map.company.featured ?? []).filter(id => catalog.includes(id));
   const pool = profile.boardPool ?? catalog.filter(id => !featured.includes(id)); const offers: string[] = [];
   // A paid refresh (4A) redraws the board; with no refresh it is the same board as before.
@@ -78,12 +80,10 @@ export function hireReason(profile: Profile, map: MapDefinition, lookup: Encount
   const id = boardOffers(profile, map, lookup)[index];
   if (!id || profile.taken.includes(index)) return 'taken';
   if (profile.bank.gold < map.company.hireCost) return 'gold';
-  if (profile.members[id]) return profile.members[id]!.stars >= map.company.maxStars ? 'maxed' : '';
-  return profile.company.length >= COMPANY_CAP ? 'full' : '';
+  return profile.members[id] && profile.members[id]!.stars >= map.company.maxStars ? 'maxed' : '';
 }
-// A new member starts `joinBehind` levels below the company's best (never below 1), so new recruits are worth bringing.
-export const joinLevel = (profile: Profile, map: MapDefinition): number => Math.max(1, Math.max(1, ...Object.values(profile.members).map(m => m.level ?? 1)) - map.progression.joinBehind);
-// Hiring someone already in the company stores a duplicate for star upgrades instead.
+// P01: the company holds every unique catalog ID (no cap, no paid slot) and every member fights at the camp level.
+// Hiring someone already in the company stores a duplicate for star upgrades instead (never a second ID).
 // A new mercenary joins the company and, if there is room, the reserve for the next trip.
 export function hire(initial: Profile, map: MapDefinition, lookup: EncounterLookup, index: number): ProfileResult {
   const reason = hireReason(initial, map, lookup, index); if (reason) return blocked(initial, reason);
@@ -92,7 +92,7 @@ export function hire(initial: Profile, map: MapDefinition, lookup: EncounterLook
   profile.bank.gold -= map.company.hireCost; profile.taken.push(index);
   if (duplicate) profile.members[id]!.dupes++;
   else {
-    profile.members[id] = { stars: 1, dupes: 0, ...(joinLevel(profile, map) > 1 ? { level: joinLevel(profile, map), exp: 0 } : {}) }; profile.company.push(id);
+    profile.members[id] = { stars: 1, dupes: 0 }; profile.company.push(id);
     if (profile.party.reserve.length < RESERVE_SLOTS) profile.party.reserve.push(id);
   }
   return { profile, event: { type: 'hired', heroId: id, duplicate } };
@@ -130,7 +130,7 @@ export function dismiss(initial: Profile, map: MapDefinition, id: string): Profi
   // Their equipment is preserved in the bag or the pending tray.
   for (const item of Object.values(profile.members[id]?.gear ?? {}).sort((a,b)=>Number(!!b?.locked)-Number(!!a?.locked))) if (item) stash(profile, map, item);
   if(profile.hunt?.target===id)delete profile.hunt.target;
-  profile.company = profile.company.filter(m => m !== id); delete profile.members[id];
+  profile.company = profile.company.filter(m => m !== id); delete profile.members[id]; unarchive(profile, id);
   profile.party.deployed = profile.party.deployed.filter(m => m !== id); profile.party.reserve = profile.party.reserve.filter(m => m !== id); if (profile.party.lanes) delete profile.party.lanes[id];
   profile.bank.gold += map.company.dismissRefund;
   // Half the tomes spent on their skill levels come back (docs/design/SKILL_TOMES_TH.md).
@@ -141,7 +141,7 @@ export function dismiss(initial: Profile, map: MapDefinition, id: string): Profi
 // Talent gates are shared with exploration spending; only the lobby can reset points.
 export { talentPoints, talentsSpent, talentOpen, talentsValid } from './talents';
 export function talentReason(profile: Profile, map: MapDefinition, id: string, node: TalentNode): string {
-  return memberTalentReason(map, id, profile.members[id], node);
+  return memberTalentReason(map, id, profile.members[id], node, levelOf(map, profile));
 }
 export function learnTalent(initial: Profile, map: MapDefinition, id: string, node: TalentNode): ProfileResult {
   const reason = talentReason(initial, map, id, node); if (reason) return blocked(initial, reason);
@@ -231,7 +231,26 @@ export function placeMember(initial: Profile, id: string, target: Group, other?:
     dst?.push(id);
   }
   if (!party.deployed.length) return blocked(initial, 'last');
+  // Bringing someone back into the team takes them out of the archive.
+  for (const m of [...party.deployed, ...party.reserve]) unarchive(profile, m);
   return { profile, event: { type: 'party' } };
+}
+// The camp archive (P01): a bench member can be put away so the team list stays short, and taken back at any time. It is
+// a visibility filter only: stars, duplicates, gear, talents, skill levels and rights stay as they are.
+function unarchive(profile: Profile, id: string): void {
+  if (!profile.archived?.includes(id)) return;
+  profile.archived = profile.archived.filter(x => x !== id); if (!profile.archived.length) delete profile.archived;
+}
+export function archiveReason(profile: Profile, id: string, archived: boolean): string {
+  if (!profile.company.includes(id)) return 'unknown';
+  if (archived === !!profile.archived?.includes(id)) return 'unchanged';
+  return archived && groupOf(profile, id) !== 'bench' ? 'busy' : '';
+}
+export function setArchived(initial: Profile, id: string, archived: boolean): ProfileResult {
+  const reason = archiveReason(initial, id, archived); if (reason) return blocked(initial, reason);
+  const profile = structuredClone(initial);
+  if (archived) (profile.archived ??= []).push(id); else unarchive(profile, id);
+  return { profile, event: { type: 'archived', heroId: id, archived } };
 }
 
 // Formation at the camp team page (owner 2026-10-22): a deployed member moves to the other column, or trades columns
@@ -258,23 +277,23 @@ export function depart(initial: Profile, map: MapDefinition, lookup: EncounterLo
   const profile = structuredClone(initial); const ids = [...profile.party.deployed, ...profile.party.reserve];
   const potions = Object.fromEntries(POTION_IDS.map(id => [id, Math.min(map.potions.carry, profile.potions[id])])) as Potions;
   for (const id of POTION_IDS) profile.potions[id] -= potions[id];
-  const run = newExpedition(map, lookup, seed, { roster: structuredClone(profile.party), members: Object.fromEntries(ids.map(id => [id, { ...profile.members[id]! }])), potions }, profile.tutorialDone);
+  const run = newExpedition(map, lookup, seed, { roster: structuredClone(profile.party), members: Object.fromEntries(ids.map(id => [id, { ...profile.members[id]! }])), potions, campXp: profile.campXp }, profile.tutorialDone);
   run.hunt=startHunt(profile);if(map.bossCharm)run.bossLoot=startBossPlan(profile,map);
   if (hard) run.hard = true;
   // Story recruits not yet in the company (owner 2026-10-23). Before the prologue they come along as guests in free
   // party slots and fight it with the team, with any prologue-only guests (world.ts `recruit` parts them after the win).
   // Past the prologue each waits for its own point (`arrivals`), a roster slot kept for it; the prologue's own recruit
-  // joins at once.
-  const level = joinLevel(profile, map); let free = PARTY_SLOTS + RESERVE_SLOTS - rosterIds(run).length;
+  // joins at once. Everyone joins at the camp level (P01).
+  let free = PARTY_SLOTS + RESERVE_SLOTS - rosterIds(run).length;
   const temporary = run.tutorialDone ? [] : (map.prologueGuests ?? []);
   for (const { hero: id, at } of [...map.recruits ?? [], ...temporary.map(hero => ({ hero, at: 'prologue' as const }))]) {
     if (profile.company.includes(id) || rosterIds(run).includes(id)) continue;
     if (temporary.includes(id) ? rosterIds(run).length >= PARTY_SLOTS + RESERVE_SLOTS : free <= 0) continue;
     if (!temporary.includes(id)) free--;
-    if (run.tutorialDone && at !== 'prologue') { (run.arrivals ??= {})[id] = level; continue; }
+    if (run.tutorialDone && at !== 'prologue') { (run.arrivals ??= []).push(id); continue; }
     const group = run.roster.deployed.length < PARTY_SLOTS ? 'deployed' : 'reserve';
-    run.roster[group].push(id); run.members[id] = { stars: 1, dupes: 0, ...(level > 1 ? { level, exp: 0 } : {}) };
-    run.hp[id] = memberDef(lookup, map, run.members, id)!.maxHp;
+    run.roster[group].push(id); run.members[id] = { stars: 1, dupes: 0 };
+    run.hp[id] = memberDef(lookup, map, run, id)!.maxHp;
     if (run.tutorialDone) (run.recruited ??= []).push(id); else (run.guests ??= []).push(id);
   }
   return { profile, run };
@@ -336,8 +355,10 @@ export function settle(initial: Profile, settled: ExpeditionState, outcome: RunO
   for (const found of run.found) if (kept.has(found)) { if (stash(profile, map, { ...found, uid: profile.nextItem++, ...(found.boss?{locked:true as const}:{}) })) items++; else salvaged++; }
   // Unused potions come home too, unless the team was wiped.
   if (outcome !== 'wiped') for (const id of POTION_IDS) profile.potions[id] += run.potions[id];
-  // Levels and EXP earned on the run are kept whatever the outcome (2D-1).
-  for (const [id, m] of Object.entries(run.members)) if (profile.members[id] && m.level) profile.members[id] = { ...profile.members[id]!, level: m.level, exp: m.exp ?? 0, ...(m.talents ? { talents: structuredClone(m.talents) } : {}) };
+  // The camp's EXP is kept whatever the outcome (2D-1, OD-10). It was added once per victory on the run; settling hands
+  // the run's value back and never adds to it (P01). Talents learnt on the map come home with their members.
+  profile.campXp = Math.max(profile.campXp, run.campXp);
+  for (const [id, m] of Object.entries(run.members)) if (profile.members[id] && m.talents) profile.members[id] = { ...profile.members[id]!, talents: structuredClone(m.talents) };
   // A loadout chosen on the map comes home with the member.
   for (const [id, m] of Object.entries(run.members)) if (profile.members[id] && m.loadout) profile.members[id]!.loadout = [...m.loadout];
   // 3D: side quests count what this run did (herbs are lost on a wipe), capped at each target.
@@ -475,7 +496,7 @@ export function buy(initial: Profile, map: MapDefinition, item: ShopItemId, hero
   if (item === 'repel') profile.potions.repel++;
   if (item === 'contract') { profile.members[heroId!]!.dupes++; return { profile, event: { type: 'bought', item, heroId: heroId! } }; }
   if (item === 'gearbox') {
-    const level = Math.max(...profile.company.map(id => levelOf(profile.members[id])));
+    const level = levelOf(map, profile);
     const piece = rollItem(map.equipment, () => rollPercent(profile.seed ^ 0x4f1bbcdc, profile.forge++), level, map.shop.gearboxWeights, profile.company, SET_IDS);
     const uid = profile.nextItem++; profile.items.push({ ...piece, uid });
     return { profile, event: { type: 'bought', item, uid } };

@@ -5,24 +5,26 @@ import { depart, newProfile, resetTalents, settle } from '../src/core/world/prof
 import { learnRunTalent, memberDef } from '../src/core/world/world';
 import { parseGame } from '../src/core/save/expedition-save';
 import type { TalentNode } from '../src/core/world/types';
+import { xpAt } from './fixtures/camp-level';
+import { legacyEnvelope } from './fixtures/legacy-save';
 
 function setup(level = 4) {
   const profile = newProfile(map, 77); profile.tutorialDone = true;
   profile.commander = { name: 'อารี', crest: 'star', color: 'gold', camp: 'ค่ายอารี' };
-  profile.members.tracer = { stars: 1, dupes: 0, level, exp: 0 };
+  profile.members.tracer = { stars: 1, dupes: 0 }; profile.campXp = xpAt(level);
   return depart(profile, map, lookup, 1234);
 }
 
 describe('passive points during exploration', () => {
   it('uses the same gates and budget as camp, without healing, walking or consuming RNG', () => {
     const game = setup(); game.run.hp.tracer = 11;
-    const original = structuredClone(game.run), oldHp = memberDef(lookup, map, original.members, 'tracer')!.maxHp;
+    const original = structuredClone(game.run), oldHp = memberDef(lookup, map, original, 'tracer')!.maxHp;
     // Big tree (release A): tier 2 opens at Lv5.
     expect(learnRunTalent(original, map, lookup, 'tracer', 'a2d').state).toBe(original);
     let run = learnRunTalent(original, map, lookup, 'tracer', 'a1').state;
     run = learnRunTalent(run, map, lookup, 'tracer', 'c1').state;
     run = learnRunTalent(run, map, lookup, 'tracer', 'c1').state;
-    expect(memberDef(lookup, map, run.members, 'tracer')!.maxHp).toBeGreaterThan(oldHp);
+    expect(memberDef(lookup, map, run, 'tracer')!.maxHp).toBeGreaterThan(oldHp);
     expect(run.hp.tracer).toBe(11);
     expect(learnRunTalent(run, map, lookup, 'tracer', 'b1').state).toBe(run);
     expect(learnRunTalent(run, map, lookup, 'tracer', 'a2d').state).toBe(run);
@@ -43,11 +45,11 @@ describe('passive points during exploration', () => {
   });
   it('round-trips existing v21 fields and keeps learned points on every return outcome, with free camp reset', () => {
     const game = setup();
-    const old = parseGame(JSON.stringify({ version: 21, ...game }), map, lookup);
+    const old = parseGame(JSON.stringify(legacyEnvelope({ version: 21, ...game })), map, lookup);
     expect(old.run!.members.tracer!.talents).toBeUndefined();
     // Release A trees (save v37) refund older duelist ranks, so learned points round-trip on the current version.
     const run = learnRunTalent(game.run, map, lookup, 'tracer', 'c1s').state;
-    const loaded = parseGame(JSON.stringify({ version: 43, profile: game.profile, run }), map, lookup);
+    const loaded = parseGame(JSON.stringify({ version: 44, profile: game.profile, run }), map, lookup);
     expect(loaded.run!.members.tracer!.talents).toEqual({ c1s: 1 });
     expect(learnRunTalent(loaded.run!, map, lookup, 'tracer', 'c1s').state).toBe(loaded.run);
     for (const outcome of ['withdrawn', 'complete', 'wiped'] as const) {

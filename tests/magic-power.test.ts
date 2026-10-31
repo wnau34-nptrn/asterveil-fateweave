@@ -9,6 +9,7 @@ import { parseGame, saveGame, type Game } from '../src/core/save/expedition-save
 import { characterSkillMetric } from '../src/ui/character-metrics';
 import { affixPool, itemStats } from '../src/core/world/equipment';
 import type { Item } from '../src/core/world/types';
+import { legacyEnvelope } from './fixtures/legacy-save';
 
 const hero = heroCatalog(lookup, map).find(h=>h.id==='weaver')!;
 const powers = (magic: number, physical: number) => withParty(veilSiege, [{...hero, skillBonus:magic, damageBonus:physical}]);
@@ -52,14 +53,14 @@ it('v40 preserves a mage weapon and all investment metadata, converts Attack to 
   const weapon:Item={uid:1,slot:'weapon',hero:'weaver',level:5,rarity:2,affixes:['attack','leech'],q:{main:113,affixes:[97,118]},plus:2,investment:{ore:9,dust:2},locked:true};
   p.members.weaver!.gear={weapon};p.nextItem=2;
   const game=depart(p,map,lookup,77);game.run.battle={kind:'random',encounterId:map.tutorialEncounterId,entry:{...game.run.hp},commands:[{heroId:'weaver',beat:0,action:'bolt',targetId:'f1'}]};
-  const old=JSON.parse(write(game));old.version=40;
+  const old=legacyEnvelope(JSON.parse(write(game)));old.version=40;
   const migrated=parseGame(JSON.stringify(old),map,lookup);
   const expected={...weapon,affixes:['support','leech']};
   expect(migrated.profile.members.weaver!.gear!.weapon).toEqual(expected);
   expect(migrated.run!.members.weaver!.gear!.weapon).toEqual(expected);
   expect(migrated.profile.bank).toEqual(game.profile.bank);expect(migrated.run!.resources).toEqual(game.run.resources);
   expect(migrated.run!.battle!.commands).toEqual([]);expect(migrated.run!.battle!.entry).toEqual(game.run.battle.entry);
-  expect(parseGame(write(migrated),map,lookup)).toEqual(migrated);
+  expect(parseGame(write(migrated),map,lookup)).toEqual({profile:migrated.profile,run:migrated.run});
   old.version=20;expect(parseGame(JSON.stringify(old),map,lookup).profile.members.weaver!.gear!.weapon).toEqual(expected);
 });
 
@@ -71,6 +72,6 @@ it('v41 preserves a real pending spell replay with magic gear instead of restart
  const result=resolveCommand(state,data,{heroId:'weaver',beat:state.beat,action:'bolt',targetId:targetOptions(state,data,'weaver','bolt').find(t=>t.valid)!.id});
  game.run.battle.commands=result.state.commands;expect(game.run.battle.commands).toHaveLength(1);
  expect(parseGame(write(game),map,lookup)).toEqual(game);
- const old=JSON.parse(write(game));old.version=40;old.profile.members.weaver.gear.weapon.affixes=['attack'];old.run.members.weaver.gear.weapon.affixes=['attack'];
+ const old=legacyEnvelope(JSON.parse(write(game)));old.version=40;old.profile.members.weaver.gear.weapon.affixes=['attack'];old.run.members.weaver.gear.weapon.affixes=['attack'];
  expect(parseGame(JSON.stringify(old),map,lookup).run!.battle!.commands).toEqual([]);
 });

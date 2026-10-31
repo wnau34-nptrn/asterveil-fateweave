@@ -17,7 +17,7 @@ export function markedSkillExample(action:ActionId,h:HeroDefinition,template:Enc
   const resolved=resolveCommand(state,data,{heroId:h.id,beat:state.beat,action,targetId:enemy.id});
   return resolved.turns.find(t=>t.side==='hero')?.events.filter(e=>e.type==='damage'&&e.sourceId===h.id&&e.targetId===enemy.id).reduce((n,e)=>n+(e.amount??0),0);
 }
-export type CharacterState = Pick<ExpeditionState,'members'|'hp'|'roster'>;
+export type CharacterState = Pick<ExpeditionState,'members'|'hp'|'roster'|'campXp'>;
 // Readonly UI projections. All growth, caps, gear/set totals and skill powers use the game helpers.
 export function characterStats(s: CharacterState, map: MapDefinition, h: HeroDefinition, template: EncounterDefinition): CharacterStat[] {
   const data = withParty(template, [h]), gear = gearTotals(map, s.members[h.id]?.gear);

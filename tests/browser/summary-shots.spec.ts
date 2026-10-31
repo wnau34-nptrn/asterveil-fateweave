@@ -5,6 +5,7 @@ import { depart, newProfile } from '../../src/core/world/profile';
 import { affixPool } from '../../src/core/world/equipment';
 import { findTiles, reveal } from '../../src/core/world/world';
 import { parseGame } from '../../src/core/save/expedition-save';
+import { xpAt } from '../fixtures/camp-level';
 
 // Review screenshots of the expedition summary for the owner (not a gameplay check).
 // Run with SUMMARY_SHOTS=<dir> npx playwright test tests/browser/summary-shots.spec.ts
@@ -13,7 +14,7 @@ const key = 'asterveil.fateweave.expedition.v1';
 test('summary shots 390x844', async ({ browser }) => {
   test.skip(!dir, 'set SUMMARY_SHOTS to a folder');
   const context = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true, reducedMotion: 'reduce', deviceScaleFactor: 2 }), page = await context.newPage();
-  const profile = newProfile(map, 123); profile.tutorialDone = true; profile.completes = 1;
+  const profile = newProfile(map, 123); profile.tutorialDone = true; profile.completes = 1; profile.cleared = [map.id];
   profile.commander = { name: 'อารี', crest: 'star', color: 'gold', camp: 'ค่ายอารี' };
   const game = depart(profile, map, encounterById, 1234), run = game.run;
   delete run.bossLoot;
@@ -28,9 +29,9 @@ test('summary shots 390x844', async ({ browser }) => {
     { uid: 0, slot: 'body', rarity: 1, level: 6, affixes: pool('body').slice(0, 1) },
     { uid: 0, slot: 'body', rarity: 0, level: 3, affixes: [] },
   ];
-  for (const member of Object.values(run.members)) { member.level = 6; member.exp = 0; }
+  run.campXp = xpAt(6);
   reveal(run, map);
-  const raw = JSON.stringify({ version: 21, ...game }); parseGame(raw, map, encounterById);
+  const raw = JSON.stringify({ version: 44, ...game }); parseGame(raw, map, encounterById);
   await page.addInitScript(({ key, raw }) => localStorage.setItem(key, raw), { key, raw });
   await page.goto('./'); await page.locator('#continue').click(); await page.locator('#move-up').click();
   await expect(page.locator('#summary-title')).toBeVisible(); await page.waitForTimeout(200);

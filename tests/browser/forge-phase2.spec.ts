@@ -1,15 +1,17 @@
 import { expect, test } from '@playwright/test';
 import { chapterOne as map } from '../../src/content/world/chapter1';
 import { newProfile } from '../../src/core/world/profile';
+import { xpAt } from '../fixtures/camp-level';
+import { legacyEnvelope } from '../fixtures/legacy-save';
 const key='asterveil.fateweave.expedition.v1';
 for(const [width,height,touch] of [[320,568,true],[390,844,true],[1366,768,false]] as const){
   test(`item Lv and manual fusion preserve capital at ${width}x${height}`,async({browser},info)=>{
     const context=await browser.newContext({viewport:{width,height},hasTouch:touch,isMobile:touch,reducedMotion:'reduce'}),page=await context.newPage(),errors:string[]=[];
     page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
     const profile=newProfile(map,17);profile.commander={name:'อารี',crest:'star',color:'gold', camp: 'ค่ายอารี'};profile.tutorialDone=true;profile.forgeLevel=6;profile.bank={ore:500,dust:50,gold:20,seal:1};
-    profile.members.guardian={stars:3,dupes:0,level:6,exp:0,gear:{weapon:{uid:1,slot:'weapon',hero:'guardian',rarity:0,level:1,affixes:[],plus:5,set:'dawn',q:{main:113,affixes:[]}}}};
+    profile.members.guardian={stars:3,dupes:0,gear:{weapon:{uid:1,slot:'weapon',hero:'guardian',rarity:0,level:1,affixes:[],plus:5,set:'dawn',q:{main:113,affixes:[]}}}}; profile.campXp = Math.max(profile.campXp, xpAt(6));
     profile.items=[{uid:2,slot:'weapon',hero:'guardian',rarity:0,level:3,affixes:[],plus:2,investment:{ore:9,dust:2},levelInvestment:{ore:20,dust:2}},{uid:3,slot:'weapon',hero:'guardian',rarity:0,level:1,affixes:[]},{uid:4,slot:'weapon',hero:'guardian',rarity:0,level:1,affixes:[],locked:true},{uid:5,slot:'weapon',hero:'guardian',rarity:0,level:1,affixes:[]}];profile.nextItem=6;
-    const raw=JSON.stringify({version:23,profile,run:null});
+    const raw=JSON.stringify(legacyEnvelope({version:23,profile,run:null}));
     await page.addInitScript(({key,raw})=>{if(!sessionStorage.getItem('phase2-seeded')){localStorage.setItem(key,raw);sessionStorage.setItem('phase2-seeded','1');}const w=window as unknown as {forgeWrites:number};w.forgeWrites=0;const set=Storage.prototype.setItem;Storage.prototype.setItem=function(k,v){if(k===key)w.forgeWrites++;set.call(this,k,v);};},{key,raw});
     await page.goto('./');await page.locator('#continue').click();
     const saved=()=>page.evaluate(k=>localStorage.getItem(k)!,key),writes=()=>page.evaluate(()=>(window as unknown as {forgeWrites:number}).forgeWrites);

@@ -2,6 +2,7 @@ import { test, expect, type Page } from '@playwright/test';
 import { chapterOne as map } from '../../src/content/world/chapter1';
 import { encounterById } from '../../src/content/encounters/catalog';
 import { newProfile, depart } from '../../src/core/world/profile';
+import { legacyEnvelope } from '../fixtures/legacy-save';
 
 // A8 Bolt vertical slice: the Astral Thread plays on real canvas and never changes the committed result.
 const key = 'asterveil.fateweave.expedition.v1';
@@ -10,7 +11,7 @@ async function toWeaver(page: Page, speed: 'normal' | 'fast', intensity: 'standa
   const p = newProfile(map, 17); p.commander = { name: 'จังหวะ', crest: 'star', color: 'gold', camp: 'ค่ายอารี' }; p.tutorialDone = true;
   const game = depart(p, map, encounterById, 1234); game.run.battle = { kind: 'random', encounterId: 'veil-siege', entry: { ...game.run.hp }, commands: [] };
   await page.addInitScript(({ key, raw, prefs }) => { if (!sessionStorage.getItem('bolt-seeded')) { localStorage.setItem(key, raw); localStorage.setItem('asterveil.fateweave.presentation.v1', prefs); sessionStorage.setItem('bolt-seeded', '1'); } },
-    { key, raw: JSON.stringify({ version: 35, ...game }), prefs: JSON.stringify({ speed, intensity }) });
+    { key, raw: JSON.stringify(legacyEnvelope({ version: 35, ...game })), prefs: JSON.stringify({ speed, intensity }) });
   await page.clock.install({ time: new Date('2026-10-22T00:00:00Z') }); await page.goto('./'); await page.locator('#continue').click();
   await expect(page.locator('#start')).toBeEnabled(); await page.locator('#start').click(); await page.clock.pauseAt(new Date('2026-10-22T01:00:00Z'));
   for (let i = 0; i < 6 && !(await page.locator('#action-bolt').isVisible()); i++) { await page.locator('#target-f1').click(); await page.clock.runFor(4000); }

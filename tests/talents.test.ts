@@ -11,6 +11,7 @@ import { isBigTree } from '../src/core/world/talents';
 import { learnTalent, newProfile, resetTalents, settle, talentReason, talentsValid } from '../src/core/world/profile';
 import { parseGame, saveGame, loadGame } from '../src/core/save/expedition-save';
 import type { Talents } from '../src/core/world/types';
+import { xpAt } from './fixtures/camp-level';
 
 // Passive talent trees (docs/EXPEDITION_DESIGN.md "Talent tree"). Members are built like the world builds
 // them (`starred` with talents) at ★1 and level 1, so the only difference is the talents.
@@ -68,7 +69,7 @@ describe('talent trees: content and stats', () => {
 });
 
 describe('talent points and reset (lobby)', () => {
-  const leveled = (level: number) => { const p = newProfile(map, 3); p.members.sefa = { stars: 1, dupes: 0, level, exp: 0 }; return p; };
+  const leveled = (level: number) => { const p = newProfile(map, 3); p.members.sefa = { stars: 1, dupes: 0 }; p.campXp = xpAt(level); return p; };
   it('one point per level above 1; a modifier needs its branch tier; resetting refunds everything', () => {
     expect(talentReason(leveled(1), map, 'sefa', 'a1')).toBe('points');
     let p = leveled(10);
@@ -84,8 +85,8 @@ describe('talent points and reset (lobby)', () => {
     p = learnTalent(p, map, 'sefa', 'b1').profile;
     const run = newExpedition(map, lookup, 1, { roster: p.party, members: structuredClone(p.members) });
     expect(run.members.sefa!.talents).toEqual({ a1: 1, b1: 1 });
-    run.members.sefa = { ...run.members.sefa!, level: 4, exp: 2 };
-    expect(settle(p, run, 'wiped', map).members.sefa).toEqual({ stars: 1, dupes: 0, level: 4, exp: 2, talents: { a1: 1, b1: 1 } });
+    run.members.sefa = { ...run.members.sefa!}; run.campXp = Math.max(run.campXp, xpAt(4));
+    const home = settle(p, run, 'wiped', map); expect(home.members.sefa).toEqual({ stars: 1, dupes: 0, talents: { a1: 1, b1: 1 } }); expect(home.campXp).toBe(xpAt(4));
   });
   it.each([
     ['too many points', 2, { a1: 2 }],
@@ -98,8 +99,8 @@ describe('talent points and reset (lobby)', () => {
 describe('save v8', () => {
   const memory = () => { const v = new Map<string, string>(); return { getItem: (k: string) => v.get(k) ?? null, setItem: (k: string, x: string) => { v.set(k, x); } }; };
   it('round-trips talents and loads v7 data unchanged', () => {
-    const profile = newProfile(map, 4); profile.members.tracer = { stars: 1, dupes: 0, level: 3, exp: 0, talents: { a1: 1, b1: 1 } };
-    const run = newExpedition(map, lookup, 2, { roster: profile.party, members: structuredClone(profile.members) });
+    const profile = newProfile(map, 4); profile.members.tracer = { stars: 1, dupes: 0, talents: { a1: 1, b1: 1 } }; profile.campXp = xpAt(3);
+    const run = newExpedition(map, lookup, 2, { roster: profile.party, members: structuredClone(profile.members), campXp: profile.campXp });
     const store = memory(); saveGame(store, { profile, run });
     const back = loadGame(store, map, lookup)!;
     expect(back.profile.members.tracer!.talents).toEqual({ a1: 1, b1: 1 });
@@ -115,15 +116,15 @@ describe('save v8', () => {
 
 describe('save v39 (recruit big trees)', () => {
   it('refunds the four classes’ small-tree ranks and grants the star skills and passives they had', () => {
-    const profile = newProfile(map, 4);
-    profile.members.sefa = { stars: 3, dupes: 0, level: 6, exp: 0, talents: { root: 1, a1: 2, a2: 2 } } as never;
-    profile.members.brann = { stars: 5, dupes: 0, level: 6, exp: 0, talents: { root: 1 } } as never;
-    profile.members.lio = { stars: 5, dupes: 0 }; profile.members.toma = { stars: 1, dupes: 0, level: 2, exp: 0, talents: { root: 1 } } as never;
-    profile.company.push('sefa', 'brann', 'lio', 'toma');
+    // A v38 company kept a level on every member: Seren's rank-two refund needs Lv6, Toma was still Lv2.
+    const legacy = (m: object, level: number) => ({ ...m, level, exp: 0 });
+    const profile = { ...newProfile(map, 4), members: { ...newProfile(map, 4).members, sefa: legacy({ stars: 3, dupes: 0, talents: { root: 1, a1: 2, a2: 2 } }, 6),
+      brann: legacy({ stars: 5, dupes: 0, talents: { root: 1 } }, 6), lio: { stars: 5, dupes: 0 }, toma: legacy({ stars: 1, dupes: 0, talents: { root: 1 } }, 2) } } as unknown as ReturnType<typeof newProfile>;
+    delete (profile as Partial<typeof profile>).campXp; profile.company.push('sefa', 'brann', 'lio', 'toma');
     const back = parseGame(JSON.stringify({ version: 38, profile, run: null }), map, lookup).profile;
-    expect(back.members.sefa).toEqual({ stars: 3, dupes: 0, level: 6, exp: 0, grants: ['a3'] });
+    expect(back.members.sefa).toEqual({ stars: 3, dupes: 0, grants: ['a3'] }); expect(back.campXp).toBe(xpAt(6));
     expect(back.members.brann!.grants).toEqual(['a4', 'b2']); expect(back.members.lio!.grants).toEqual(['a4', 'b3']);
-    expect(back.members.toma).toEqual({ stars: 1, dupes: 0, level: 2, exp: 0 });
+    expect(back.members.toma).toEqual({ stars: 1, dupes: 0 });
     // The granted nodes are live: a ★3 scout can take Backstab into battle.
     expect(heroDef(lookup, map, 'sefa') && starred(heroDef(lookup, map, 'sefa')!, 3, map, 6, {}, undefined, { grants: ['a3'], loadout: ['ambush', 'evade', 'backstab'] }).actions).toContain('backstab');
   });

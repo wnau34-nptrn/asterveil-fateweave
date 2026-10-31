@@ -2,8 +2,8 @@ import {bossPlanValid,startBossPlan} from '../world/boss-equipment';
 import {storageCap} from '../world/storage';
 import { entryReason, MAGIC_DAMAGE_SKILLS, withParty } from '../battle/engine';
 import type { ActionId, Command } from '../battle/types';
-import { COMPANY_CAP, PARTY_SLOTS, RESERVE_SLOTS, type ActiveBattle, type ExpeditionState, type MapDefinition, type Point, type Profile, type Lane, type Roster, type RunOutcome } from '../world/types';
-import { draftOffers, skillChoices, battleState, expToNext, findTiles, newExpedition, finishBattle, fullParty, heroCatalog, heroDef, memberDef, rosterIds, tileAt, type EncounterLookup } from '../world/world';
+import { PARTY_SLOTS, RESERVE_SLOTS, type ActiveBattle, type CampMigration, type ExpeditionState, type MapDefinition, type Point, type Profile, type Lane, type Roster, type RunOutcome } from '../world/types';
+import { campLevel, draftOffers, skillChoices, battleState, expToNext, findTiles, levelXp, maxCampXp, type Party, newExpedition, finishBattle, fullParty, heroCatalog, heroDef, memberDef, rosterIds, tileAt, type EncounterLookup } from '../world/world';
 import { affixPool, itemValid } from '../world/equipment';
 import { boulderAt, openPit, passableWall } from '../world/puzzles';
 import { boardOfferCount, commanderReason, defaultCamp, newProfile, settle, talentsValid } from '../world/profile';
@@ -15,6 +15,8 @@ import { GEAR_SLOTS, POTION_IDS, SHOP_ITEMS, type ShopItemId } from '../world/ty
 
 export interface StoragePort { getItem(key: string): string | null; setItem(key: string, value: string): void; removeItem?(key: string): void }
 export const expeditionKey = 'asterveil.fateweave.expedition.v1';
+// The raw save as it was before the v44 boundary, written once and never read by the game (recovery/export only).
+export const legacyBackupKey = (version: number): string => `${expeditionKey}.backup.v${version}`;
 // Practice-mode slots from the combat prototype. They are never read again.
 export const legacyKeys = ['asterveil.fateweave.battle.v1', 'asterveil.fateweave.battle.v1.rear-ambush', 'asterveil.fateweave.battle.v1.rift-warden', 'asterveil.fateweave.encounter.v1'];
 // v1 (phase 1) → v2 (phase 2A): adds resources, opened chests and the campfire flag.
@@ -85,12 +87,18 @@ export const legacyKeys = ['asterveil.fateweave.battle.v1', 'asterveil.fateweave
 // v41: Magic Power scaling; retain owned items and restart an in-progress battle from entry.
 // v43 (C12 batch 1): four optional roster members and personal talent branches. The original ten
 // retain their rules, talents and replays. Preserve the already-open hiring board until its next refresh.
-const SAVE_VERSION = 43;
+// v44 (P01 camp level): one level for the whole camp. The profile and a run gain `campXp`; members lose `level`/`exp`;
+// `arrivals` becomes a list and a starter pick no longer carries a level. The camp's EXP is that of the most advanced
+// owned member (never the sum); an expedition in progress carries on and a battle in progress restarts from its entry HP;
+// the original save is kept under `legacyBackupKey` and `Game.migrated` says what happened.
+// The profile may carry `archived` bench members.
+const SAVE_VERSION = 44;
 const BATCH_ONE_IDS = ['metta', 'thiran', 'lalin', 'wila'];
 // The classes whose big tree arrived in v37 (release A) and in v39 (the recruits).
 const RELEASE_A_TREES = ['tracer', 'weaver', 'healer', 'garran', 'mira'];
 const RECRUIT_TREES = ['toma', 'sefa', 'brann', 'lio'];
-export interface Game { profile: Profile; run: ExpeditionState | null }
+// `migrated`: what loading an older save across the v44 boundary did (shown once; never written back).
+export interface Game { profile: Profile; run: ExpeditionState | null; migrated?: CampMigration }
 const actions: readonly ActionId[] = ['attack', 'guard', 'bash', 'mark', 'execute', 'bolt', 'ward', 'heal', 'prayer', 'brace', 'pierce', 'hinder', 'volley', 'acid', 'haste', 'ambush', 'evade', 'taunt', 'slam', 'valor', 'mend',
   'rally', 'finisher', 'sigil', 'sanctuary', 'spearwall', 'weakshot', 'bomb', 'backstab', 'quake', 'finale', 'challenge', 'bulwark', 'rouse',
   'parry', 'lunge', 'sweep', 'storm', 'aegis', 'dispel', 'revive', 'halo', 'bless', 'hold', 'halt', 'warcry', 'disengage', 'pin', 'track',
@@ -151,23 +159,21 @@ function tomesOf(v: unknown): TomeBag {
   return structuredClone(b) as unknown as TomeBag;
 }
 const badProfile = (): never => { throw new Error('Invalid profile'); };
-function membersOf(v: unknown, map: MapDefinition, ids: readonly string[], lookup: EncounterLookup, run = false): Record<string, MemberProgress> {
+const campXpOf = (v: unknown, map: MapDefinition): number => { if (!isInt(v, 0, maxCampXp(map))) throw new Error('Invalid camp EXP'); return v; };
+// `level`: the camp level every member fights at (talent points and tree tiers).
+function membersOf(v: unknown, map: MapDefinition, ids: readonly string[], lookup: EncounterLookup, level: number, run = false): Record<string, MemberProgress> {
   const raw = obj(v);
   if (Object.keys(raw).length !== ids.length) throw new Error('Invalid members');
   return Object.fromEntries(ids.map(id => {
     const m = obj(raw[id]); const keys = Object.keys(m);
-    if (keys.some(k => !['stars', 'dupes', 'level', 'exp', 'talents', 'gear', 'wound', 'grants', 'loadout', 'skillLevels'].includes(k)) || ('level' in m) !== ('exp' in m)) throw new Error('Invalid members');
+    if (keys.some(k => !['stars', 'dupes', 'talents', 'gear', 'wound', 'grants', 'loadout', 'skillLevels'].includes(k))) throw new Error('Invalid members');
     if (!isInt(m.stars, 1, map.company.maxStars) || !isInt(m.dupes, 0, 99)) throw new Error('Invalid members');
     const out: MemberProgress = { stars: m.stars, dupes: m.dupes };
     if ('wound' in m) { if (!isInt(m.wound, 1, map.eventRules.maxWound)) throw new Error('Invalid members'); out.wound = m.wound; }
-    if ('level' in m) {
-      if (!isInt(m.level, 1, map.progression.levelCap) || !isInt(m.exp, 0, expToNext(map, m.level) - 1)) throw new Error('Invalid members');
-      Object.assign(out, { level: m.level, exp: m.exp });
-    }
     if ('grants' in m) { if (!grantsValid(map, id, m.grants)) throw new Error('Invalid talents'); out.grants = [...m.grants as string[]]; }
     if ('talents' in m) {
       const t = obj(m.talents) as Talents;
-      if (!Object.keys(t).length || !talentsValid(map, id, out.level ?? 1, t, out.stars, out.grants)) throw new Error('Invalid talents');
+      if (!Object.keys(t).length || !talentsValid(map, id, level, t, out.stars, out.grants)) throw new Error('Invalid talents');
       out.talents = { ...t };
     }
     // Skill levels (v37): Lv2–max for skills of the member's class (a forgotten tree skill keeps its level).
@@ -195,8 +201,8 @@ function membersOf(v: unknown, map: MapDefinition, ids: readonly string[], looku
     return [id, out];
   }));
 }
-function hpRecord(v: unknown, lookup: EncounterLookup, map: MapDefinition, ids: readonly string[], members: Record<string, MemberProgress>): Record<string, number> {
-  const raw = obj(v); const full = fullParty(lookup, map, ids, members);
+function hpRecord(v: unknown, lookup: EncounterLookup, map: MapDefinition, ids: readonly string[], party: Party): Record<string, number> {
+  const raw = obj(v); const full = fullParty(lookup, map, ids, party);
   if (Object.keys(raw).length !== Object.keys(full).length) throw new Error('Invalid party');
   return Object.fromEntries(Object.entries(full).map(([id, max]) => {
     if (!isInt(raw[id], 0, max)) throw new Error('Invalid party');
@@ -237,9 +243,9 @@ function idList(v: unknown, allowed: readonly string[]): string[] {
 class StaleRun extends Error { constructor(readonly run: ExpeditionState) { super('Stale run'); } }
 function staleRun(s: Record<string, unknown>, map: MapDefinition, lookup: EncounterLookup): ExpeditionState {
   const roster = rosterOf(s.roster, lookup, map); const ids = [...roster.deployed, ...roster.reserve];
-  const members = membersOf(s.members, map, ids, lookup, true); const r = obj(s.resources);
+  const campXp = campXpOf(s.campXp, map); const members = membersOf(s.members, map, ids, lookup, campLevel(map, campXp), true); const r = obj(s.resources);
   if (!isInt(r.ore, 0, 999999) || !isInt(r.seal, 0, 9999) || !isInt(s.steps) || !isInt(s.wins)) throw new Error('Invalid run');
-  const run = newExpedition(map, lookup, 0, { roster, members });
+  const run = newExpedition(map, lookup, 0, { roster, members, campXp });
   const travel = (v: unknown) => Array.isArray(v) ? v.filter((id): id is string => typeof id === 'string' && ids.includes(id)) : undefined;
   const guests = travel(s.guests), recruited = travel(s.recruited);
   return { ...run, ...(guests?.length ? { guests } : {}), ...(recruited?.length ? { recruited } : {}), resources: { ore: r.ore, gold: isInt(r.gold, 0, 999999) ? r.gold : 0, ember: 0, seal: r.seal }, steps: s.steps, wins: s.wins, found: foundOf(s.found, map, lookup), spare: spareOf(s.spare, map, lookup),
@@ -311,8 +317,9 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
   if (!isInt(s.seed, 0, 0xffffffff) || !isInt(s.rolls) || !isInt(s.steps) || !isInt(s.pressure, 0, 100) || !isInt(s.wins) || !isInt(s.defeats)) throw new Error('Invalid counters');
   const roster = rosterOf(s.roster, lookup, map);
   const ids = [...roster.deployed, ...roster.reserve];
-  const members = membersOf(s.members, map, ids, lookup, true);
-  const hp = hpRecord(s.hp, lookup, map, ids, members);
+  const campXp = campXpOf(s.campXp, map);
+  const members = membersOf(s.members, map, ids, lookup, campLevel(map, campXp), true); const party = { members, campXp };
+  const hp = hpRecord(s.hp, lookup, map, ids, party);
   const r = obj(s.resources);
   if (Object.keys(r).length !== 4 || !isInt(r.ore, 0, 999999) || !isInt(r.gold, 0, 999999) || !isInt(r.ember, 0, 9999) || !isInt(r.seal, 0, 9999)) throw new Error('Invalid resources');
   const chestIds = map.chests.map(c => c.id);
@@ -333,15 +340,15 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
     if (version < 41 && Array.isArray(b.commands) && b.commands.some(c => {
       const cmd = obj(c), id = cmd.heroId;
       if (typeof id !== 'string' || !roster.deployed.includes(id)) return false;
-      const h = memberDef(lookup, map, members, id);
+      const h = memberDef(lookup, map, party, id);
       return id === 'weaver' && (!!members[id]?.gear?.weapon || !!members[id]?.talents?.c1)
         || MAGIC_DAMAGE_SKILLS.includes(cmd.action as ActionId) && (h?.skillBonus ?? 0) !== (h?.damageBonus ?? 0);
     })) b.commands = [];
     if (version < 42 && Array.isArray(b.commands) && (b.commands.some(c => AUDIT_ACTIONS.includes(obj(c).action as ActionId)) || s.hard === true && b.kind === 'boss')) b.commands = [];
     if (!Array.isArray(b.commands) || b.commands.length > 5000) throw new Error('Invalid battle');
-    const entry = hpRecord(b.entry, lookup, map, roster.deployed, members);
-    // Validate against the encounter as fought by this run's deployed party (stars included).
-    if (entryReason(withParty(data, roster.deployed.map(id => memberDef(lookup, map, members, id)!)), { hp: entry })) throw new Error('Invalid entry');
+    const entry = hpRecord(b.entry, lookup, map, roster.deployed, party);
+    // Validate against the encounter as fought by this run's deployed party (stars and camp level included).
+    if (entryReason(withParty(data, roster.deployed.map(id => memberDef(lookup, map, party, id)!)), { hp: entry })) throw new Error('Invalid entry');
     if (b.level !== undefined && !isInt(b.level, 1, 99)) throw new Error('Invalid battle');
     if (b.percent !== undefined && !isInt(b.percent, 1, 1000)) throw new Error('Invalid battle');
     const lanes = b.lanes === undefined ? undefined : lanesOf(b.lanes, id => roster.deployed.includes(id));
@@ -356,11 +363,10 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
   };
   const guests = recruitIds(s.guests, map.prologueGuests ?? []), recruited = recruitIds(s.recruited, map.draft?.pool ?? []);
   // v38: recruits on their way are this map's recruits who are not on the roster.
-  let arrivals: Record<string, number> | undefined;
+  let arrivals: string[] | undefined;
   if (s.arrivals !== undefined) {
-    const a = obj(s.arrivals); const ids = Object.keys(a);
-    if (!ids.length || ids.some(id => !(map.recruits ?? []).some(r => r.hero === id && r.at !== 'prologue') || [...roster.deployed, ...roster.reserve].includes(id) || !isInt(a[id], 1, 99))) throw new Error('Invalid run');
-    arrivals = Object.fromEntries(ids.map(id => [id, a[id] as number]));
+    arrivals = idList(s.arrivals, (map.recruits ?? []).filter(r => r.at !== 'prologue' && !ids.includes(r.hero)).map(r => r.hero));
+    if (!arrivals.length) throw new Error('Invalid run');
   }
   if (s.hard !== undefined && s.hard !== true) throw new Error('Invalid run');
   // Skill tomes (v37): only a map that drops them carries them.
@@ -370,14 +376,14 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
   if (guests && recruited && guests.some(id => recruited.includes(id))) throw new Error('Invalid run');
   // v38: a starter recruitment in progress; its offers must be the ones this state deals.
   const d = s.draft === undefined ? undefined : obj(s.draft);
-  if (d && (!map.draft || !isInt(d.left, 1, map.draft.picks) || !isInt(d.level, 1, 99) || battle)) throw new Error('Invalid run');
+  if (d && (!map.draft || Object.keys(d).length !== 2 || !isInt(d.left, 1, map.draft.picks) || battle)) throw new Error('Invalid run');
   const state: ExpeditionState = {
     ...(guests ? { guests } : {}), ...(recruited ? { recruited } : {}), ...(arrivals ? { arrivals } : {}), ...(s.hard === true ? { hard: true as const } : {}),
     ...(runTomes ? { tomes: runTomes } : {}), ...(s.riftCore !== undefined ? { riftCore: s.riftCore as number } : {}), ...(s.tomeWins !== undefined ? { tomeWins: s.tomeWins as number } : {}),
     ...(s.bossLoot===undefined?{}:{bossLoot:bossPlanOf(s.bossLoot,map)}),
     ...(s.hunt===undefined?{}:{hunt:huntPlan(s.hunt,map,lookup)}),
     mapId: map.id, mapVersion: map.version, seed: s.seed as number, rolls: s.rolls as number, position: point(s.position, map, true),
-    steps: s.steps as number, pressure: s.pressure as number, revealed: s.revealed, roster, members, hp,
+    steps: s.steps as number, pressure: s.pressure as number, revealed: s.revealed, roster, members, hp, campXp,
     camp: s.camp === null ? null : point(s.camp, map),
     resources: { ore: r.ore as number, gold: r.gold as number, ember: r.ember as number, seal: r.seal as number }, openedChests: [...s.openedChests as string[]], restReady: s.restReady as boolean,
     tutorialDone: s.tutorialDone as boolean, bossDefeated: s.bossDefeated as boolean,
@@ -394,7 +400,7 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
   if (boulderAt(state, map, state.position) || openPit(state, map, state.position)) throw new Error('Invalid position');
   if (state.camp && tileAt(map, state.camp)?.kind !== 'camp') throw new Error('Invalid camp');
   if (d) {
-    state.draft = { left: d.left as number, level: d.level as number, offers: [] }; state.draft.offers = draftOffers(state, map);
+    state.draft = { left: d.left as number, offers: [] }; state.draft.offers = draftOffers(state, map);
     if (JSON.stringify(state.draft.offers) !== JSON.stringify(d.offers) || !state.draft.offers.length) throw new Error('Invalid run');
   }
   // v34 commands that no longer replay against the four-slot encounters restart the battle from its entry.
@@ -415,7 +421,8 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
   if(version<25)p.hunt={pity:{}};
   const hunt=huntProfile(p.hunt,map,lookup);
   const company = p.company;
-  if (!Array.isArray(company) || !company.length || company.length > COMPANY_CAP || new Set(company).size !== company.length
+  // P01: any set of unique catalog IDs (no company cap).
+  if (!Array.isArray(company) || !company.length || new Set(company).size !== company.length
     || company.some(id => typeof id !== 'string' || !heroDef(lookup, map, id))) throw new Error('Invalid company');
   // Snapshot only the legacy catalog in its original order. A new profile has no snapshot;
   // explicit refresh/return removes it, allowing newly added members onto the next board.
@@ -427,7 +434,11 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
   const party = rosterOf(p.party, lookup, map);
   if ([...party.deployed, ...party.reserve].some(id => !company.includes(id))) throw new Error('Invalid party');
   if(hunt.target&&!company.includes(hunt.target))throw new Error('Unowned hunt target');
-  const members = membersOf(p.members, map, company as string[], lookup);
+  const campXp = campXpOf(p.campXp, map);
+  const members = membersOf(p.members, map, company as string[], lookup, campLevel(map, campXp));
+  // The archive (P01) holds bench members only.
+  const archived = p.archived === undefined ? undefined : idList(p.archived, (company as string[]).filter(id => ![...party.deployed, ...party.reserve].includes(id)));
+  if (archived && !archived.length) throw new Error('Invalid archive');
   const bank = obj(p.bank); if (version < 9) bank.dust = 0; if (version < 14 && bank.gold === undefined) bank.gold = map.company.hireCost;
   if (Object.keys(bank).length !== 4 || !isInt(bank.gold, 0, 9999999) || !isInt(bank.ore, 0, 9999999) || !isInt(bank.seal, 0, 99999) || !isInt(bank.dust, 0, 9999999)) throw new Error('Invalid bank');
   if (version < 9) Object.assign(p, { items: [], nextItem: 1 });
@@ -476,7 +487,7 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
   const tomes = p.tomes === undefined ? undefined : tomesOf(p.tomes); const riftCore = p.riftCore === undefined ? undefined : isInt(p.riftCore, 0, 9999) ? p.riftCore : badProfile();
   const clearedHard = p.clearedHard === undefined ? undefined : clearedList(p.clearedHard, maps);
   if (clearedHard?.some(id => !cleared.includes(id))) throw new Error('Invalid profile');
-  return {...(boardPool ? { boardPool: [...boardPool as string[]] } : {}),...(tomes ? { tomes } : {}),...(riftCore !== undefined ? { riftCore } : {}),...(clearedHard ? { clearedHard } : {}),...(guides ? { guides } : {}),...(veteran ? { veteran: true as const } : {}),bossLoot,hunt,overflow,storageTier:p.storageTier as number, forgeLevel:p.forgeLevel as number, seed: p.seed, returns: p.returns, tutorialDone: p.tutorialDone, commander, company: [...company as string[]], members, party, cleared,
+  return {...(archived ? { archived } : {}),campXp,...(boardPool ? { boardPool: [...boardPool as string[]] } : {}),...(tomes ? { tomes } : {}),...(riftCore !== undefined ? { riftCore } : {}),...(clearedHard ? { clearedHard } : {}),...(guides ? { guides } : {}),...(veteran ? { veteran: true as const } : {}),bossLoot,hunt,overflow,storageTier:p.storageTier as number, forgeLevel:p.forgeLevel as number, seed: p.seed, returns: p.returns, tutorialDone: p.tutorialDone, commander, company: [...company as string[]], members, party, cleared,
     bank: { ore: bank.ore as number, gold: bank.gold as number, seal: bank.seal as number, dust: bank.dust as number }, items, nextItem: p.nextItem as number, forge: p.forge as number, potions: potionsOf(p.potions, 9999), quests, shop, refreshes: p.refreshes as number, smelted: p.smelted as number, taken: [...p.taken as number[]], expeditions: p.expeditions, completes: p.completes, last };
 }
 // Optional elite returns (4C): known optional elites only, 1..99 each.
@@ -587,6 +598,45 @@ function refundAuditTrees(envelope: Record<string, unknown>, maps: readonly MapD
     if (key === 'run' && changed) part.mapVersion = -1;
   }
 }
+// v43 → v44 (P01): members' own levels become one camp EXP, taken from the most advanced owned member (its total EXP:
+// the levels it climbed plus the EXP it had towards the next one, kept even at the cap) and never summed. A run's members
+// are the newer copies; guests and recruits still on their way are not owned and do not count; this run's recruits
+// join for good when it settles, so they do. A run in progress carries on at the camp level; a battle in progress whose
+// deployed members change level restarts from its recorded entry HP (its commands were chosen at each member's own level
+// and are not replayed with the new one), as v35/v40–v42 did.
+interface LegacyCamp { campXp: number; best?: string; battle: boolean }
+function migrateCampLevels(envelope: Record<string, unknown>, map: MapDefinition): LegacyCamp {
+  const total = (raw: unknown): number => {
+    const m = obj(raw); if (('level' in m) !== ('exp' in m)) throw new Error('Invalid members');
+    if (!('level' in m)) return 0;
+    if (!isInt(m.level, 1, map.progression.levelCap) || !isInt(m.exp, 0, expToNext(map, m.level) - 1)) throw new Error('Invalid members');
+    return levelXp(map, m.level) + m.exp;
+  };
+  // Members are missing before v3 (the starting roster at Lv1).
+  const each = (members: unknown): [string, unknown][] => members && typeof members === 'object' ? Object.entries(members) : [];
+  const strip = (members: unknown): void => { for (const [, m] of each(members)) { const x = obj(m); delete x.level; delete x.exp; } };
+  const p = envelope.profile && typeof envelope.profile === 'object' ? envelope.profile as Record<string, unknown> : undefined;
+  const r = (envelope.run ?? envelope.state) as Record<string, unknown> | null | undefined; const run = r && typeof r === 'object' ? r : undefined;
+  const owned = new Set<string>(p && Array.isArray(p.company) ? p.company as string[] : []);
+  const joining = run && Array.isArray(run.recruited) ? run.recruited as string[] : [];
+  const candidates: [string, unknown][] = [...p ? each(p.members) : [],
+    ...run ? each(run.members).filter(([id]) => !p || owned.has(id) || joining.includes(id)) : []];
+  let campXp = 0, best: string | undefined;
+  for (const [id, m] of candidates) { const xp = total(m); if (xp > campXp) { campXp = xp; best = id; } }
+  if (p) { strip(p.members); p.campXp = campXp; }
+  let battle = false;
+  if (run) {
+    // Members already at the camp level fight exactly as before; only a deployed member whose level changes restarts it.
+    const level = campLevel(map, campXp); const deployed = run.roster && typeof run.roster === 'object' && Array.isArray((run.roster as Record<string, unknown>).deployed) ? (run.roster as { deployed: unknown[] }).deployed : [];
+    const changed = each(run.members).some(([id, m]) => deployed.includes(id) && ((obj(m).level as number | undefined) ?? 1) !== level);
+    strip(run.members); run.campXp = campXp;
+    if (run.arrivals && typeof run.arrivals === 'object' && !Array.isArray(run.arrivals)) run.arrivals = Object.keys(run.arrivals);
+    if (run.draft && typeof run.draft === 'object') delete (run.draft as Record<string, unknown>).level;
+    const b = run.battle && typeof run.battle === 'object' ? run.battle as Record<string, unknown> : undefined;
+    if (b && changed && Array.isArray(b.commands) && b.commands.length) { b.commands = []; battle = true; }
+  }
+  return { campXp, ...(best ? { best } : {}), battle };
+}
 // `map` is the home map (the frontier); `maps` lists every map a run may have been started on.
 export function parseGame(raw: string, map: MapDefinition, lookup: EncounterLookup, maps: readonly MapDefinition[] = [map]): Game {
   const envelope = obj(JSON.parse(raw)); const version = envelope.version as number;
@@ -596,14 +646,16 @@ export function parseGame(raw: string, map: MapDefinition, lookup: EncounterLook
   else if (version < 37) migrateTrees(envelope, maps.length ? maps : [map], [...RELEASE_A_TREES, ...RECRUIT_TREES]);
   else if (version < 39) migrateTrees(envelope, maps.length ? maps : [map], RECRUIT_TREES);
   if (version < 42) refundAuditTrees(envelope, maps.length ? maps : [map]);
-  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
+  const legacy = version < 44 ? migrateCampLevels(envelope, map) : undefined;
+  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
+  const summary = (game: Game): Game => legacy ? { ...game, migrated: { from: version, level: campLevel(map, game.profile.campXp), campXp: game.profile.campXp, ...(legacy.best ? { best: legacy.best } : {}), ...(legacy.battle ? { battle: true } : {}) } } : game;
   const runMap = (v: unknown): MapDefinition => maps.find(m => m.id === obj(v).mapId) ?? map;
   if (version < 5) {
     const home = runMap(envelope.state); const run = parseRun(envelope.state, version, home, lookup);
     const profile = newProfile(map, (run.seed ^ 0x5bd1e995) >>> 0);
-    profile.company = rosterIds(run); profile.members = structuredClone(run.members); profile.party = structuredClone(run.roster);
+    profile.company = rosterIds(run); profile.members = structuredClone(run.members); profile.party = structuredClone(run.roster); profile.campXp = run.campXp;
     profile.tutorialDone = run.tutorialDone; profile.cleared = legacyCleared(run.tutorialDone, false, map, maps);
-    return settleFinished({ profile, run }, home);
+    return summary(settleFinished({ profile, run }, home));
   }
   const profile = parseProfile(envelope.profile, version, map, lookup, maps);
   const home = envelope.run === null ? map : runMap(envelope.run);
@@ -612,23 +664,40 @@ export function parseGame(raw: string, map: MapDefinition, lookup: EncounterLook
     if (!(e instanceof StaleRun)) throw e;
     if (rosterIds(e.run).some(id => !profile.company.includes(id) && !travelling(e.run, id))) throw new Error('Run member left the company', { cause: e });
     if (!ownItemsMatch(profile, e.run)) throw new Error('Run items do not match the company', { cause: e });
-    return { profile: settle(profile, e.run, 'withdrawn', home), run: null };
+    if (e.run.campXp < profile.campXp) throw new Error('Camp EXP mismatch', { cause: e });
+    return summary({ profile: settle(profile, e.run, 'withdrawn', home), run: null });
   }
+  // A run sets out with the camp's EXP and only adds to it.
+  if (run && run.campXp < profile.campXp) throw new Error('Camp EXP mismatch');
   if (run && rosterIds(run).some(id => !profile.company.includes(id) && !travelling(run, id))) throw new Error('Run member left the company');
-  if (run && [...run.guests ?? [], ...run.recruited ?? [], ...Object.keys(run.arrivals ?? {})].some(id => profile.company.includes(id))) throw new Error('Guest already in the company');
+  if (run && [...run.guests ?? [], ...run.recruited ?? [], ...run.arrivals ?? []].some(id => profile.company.includes(id))) throw new Error('Guest already in the company');
   if(run?.hunt&&run.hunt.target!==profile.hunt?.target)throw new Error('Hunt target mismatch');
   if(run?.hunt?.target&&!profile.company.includes(run.hunt.target))throw new Error('Unowned hunt target');
   if(run?.bossLoot){const before=startBossPlan(profile,home),now=run.bossLoot;
     if(now.target!==before.target||(!run.bossDefeated&&(now.misses!==before.misses||now.rewarded!==before.rewarded))||(run.bossDefeated&&(!now.rewarded||(now.misses!==0&&now.misses!==before.misses+1))))throw new Error('Boss progress mismatch');
   }
   if (run && !ownItemsMatch(profile, run)) throw new Error('Run items do not match the company');
-  return settleFinished({ profile, run }, home);
+  return summary(settleFinished({ profile, run }, home));
 }
 export function loadGame(storage: StoragePort | undefined, map: MapDefinition, lookup: EncounterLookup, maps: readonly MapDefinition[] = [map]): Game | undefined {
   try {
     const raw = storage?.getItem(expeditionKey);
-    return raw ? parseGame(raw, map, lookup, maps) : undefined;
+    if (!raw) return undefined;
+    const game = parseGame(raw, map, lookup, maps);
+    if (game.migrated) backupLegacySave(storage, raw, game.migrated.from);
+    return game;
   } catch { return undefined; }
+}
+// The first load across the v44 boundary keeps the original save, untouched, beside the new one. A later load of the same
+// old save (the new one was never written) keeps the first copy. A full storage leaves the original key as it was: nothing
+// is written until the next successful save.
+export function backupLegacySave(storage: StoragePort | undefined, raw: string, version: number): boolean {
+  try {
+    if (!storage) return false;
+    const key = legacyBackupKey(version);
+    if (storage.getItem(key) === null) storage.setItem(key, raw);
+    return true;
+  } catch { return false; }
 }
 
 function bossPlanOf(v:unknown,map:MapDefinition):NonNullable<ExpeditionState['bossLoot']> {

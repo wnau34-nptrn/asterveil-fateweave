@@ -3,7 +3,7 @@ import type { ActionId, EncounterDefinition, HeroDefinition } from '../core/batt
 import { AUTO_GOALS, planEquipment, type AutoEquipmentPlan, type AutoGoal, type EquipmentEntry } from '../core/world/auto-equipment';
 import { SET_IDS, type GearSlot, type MapDefinition, type SetId, type TalentNode, type TomeLine, type TomeSize } from '../core/world/types';
 import { talentPoints, talentsSpent } from '../core/world/talents';
-import { starred, wounded } from '../core/world/world';
+import { levelOf, starred, wounded } from '../core/world/world';
 import { characterEquipmentComparison, characterOverview, characterSkills, characterTabs, characterTalents, characterTabIcons, type CharacterTab, type SkillTomeView } from './character-view';
 import type { CharacterState } from './character-metrics';
 import { changeGearFilter, filteredEquipment, gearFilters, newGearFilters, type GearFilters } from './gear-inventory';
@@ -69,7 +69,7 @@ export class CharacterPanel {
   private content():HTMLElement{return this.dialog.querySelector<HTMLElement>(`#${this.id('character-content')}`)!;}
   private focus(id:string):void{this.dialog.querySelector<HTMLElement>(`#${id}`)?.focus({preventScroll:false});}
   private usable():boolean{return this.dialog.open&&!this.root.hidden&&!this.root.closest('[inert]')&&!!this.host.model();}
-  private hero(model:CharacterModel,id=this.heroId):HeroDefinition {const m=model.state.members[id]!,base=this.heroes.find(h=>h.id===id)!;return wounded(starred(base,m.stars,this.map,m.level??1,m.talents,m.gear,m),m.wound);}
+  private hero(model:CharacterModel,id=this.heroId):HeroDefinition {const m=model.state.members[id]!,base=this.heroes.find(h=>h.id===id)!;return wounded(starred(base,m.stars,this.map,levelOf(this.map,model.state),m.talents,m.gear,m),m.wound);}
   private discard():void{this.single=undefined;this.plan=undefined;}
   openFor(id:string,tab:CharacterTab,trigger:HTMLButtonElement,key?:string):void{
     const model=this.host.model();if(!model?.available||!model.ids.includes(id)||this.root.hidden||this.root.closest('[inert]'))return;
@@ -106,7 +106,7 @@ export class CharacterPanel {
     else if(action==='bag-compare'){const entry=model.entries.find(e=>e.key===b.dataset.key);if(entry&&(entry.item.slot!=='weapon'||entry.item.hero===this.heroId)){this.single={key:entry.key,item:entry.item};this.plan=undefined;this.render();this.content().scrollTop=0;this.focus(this.id('comparison-back'));}}
     else if(action==='auto-preview'){
       this.autoExpanded=true;
-      this.single=undefined;this.plan=planEquipment(this.map,this.template,this.heroes.find(h=>h.id===this.heroId)!,model.state.members[this.heroId]!,model.entries,this.goal,this.preferred);
+      this.single=undefined;this.plan=planEquipment(this.map,this.template,this.heroes.find(h=>h.id===this.heroId)!,model.state.members[this.heroId]!,model.entries,this.goal,this.preferred,levelOf(this.map,model.state));
       this.render();this.content().scrollTop=0;this.focus(this.id(this.plan.choices.length?'comparison-back':'auto-preview'));
     }else if(action==='comparison-equip'){
       const plan=this.plan,single=this.single;this.discard();
@@ -122,9 +122,9 @@ export class CharacterPanel {
     const model=this.host.model();if(!model||!model.ids.includes(this.heroId))return;
     if(this.source!==model.source){this.discard();this.source=model.source;}
     const id=this.heroId,h=this.hero(model),m=model.state.members[id]!,base=this.heroes.find(v=>v.id===id)!,focus=this.dialog.contains(document.activeElement)?(document.activeElement as HTMLElement).id:'',scroll=this.content().scrollTop;
-    this.dialog.querySelector(`#${this.id('character-title')}`)!.textContent=`${heroText[id]!.name} · Lv${m.level??1} · ★${m.stars}`;
+    this.dialog.querySelector(`#${this.id('character-title')}`)!.textContent=`${heroText[id]!.name} · Lv${levelOf(this.map,model.state)} · ★${m.stars}`;
     const picker=this.dialog.querySelector<HTMLElement>(`#${this.id('character-members')}`)!,left=picker.scrollLeft;
-    picker.innerHTML=this.ids(model.ids.map(c=>{const member=model.state.members[c]!,free=talentPoints(this.map,member,c)-talentsSpent(member.talents);return `<button id="character-member-${c}" data-world="character-member" data-hero="${c}" class="tree-member" aria-pressed="${c===id}" aria-label="${heroText[c]!.name} · แต้มเหลือ ${free}">${portrait(c)}<small>${heroText[c]!.name}</small>${free?`<i>+${free}</i>`:''}</button>`;}).join(''));picker.scrollLeft=left;
+    picker.innerHTML=this.ids(model.ids.map(c=>{const member=model.state.members[c]!,free=talentPoints(this.map,member,c,levelOf(this.map,model.state))-talentsSpent(member.talents);return `<button id="character-member-${c}" data-world="character-member" data-hero="${c}" class="tree-member" aria-pressed="${c===id}" aria-label="${heroText[c]!.name} · แต้มเหลือ ${free}">${portrait(c)}<small>${heroText[c]!.name}</small>${free?`<i>+${free}</i>`:''}</button>`;}).join(''));picker.scrollLeft=left;
     this.dialog.querySelector(`#${this.id('character-tabs')}`)!.innerHTML=this.ids(Object.entries(characterTabs).map(([tab,label])=>`<button id="character-tab-${tab}" data-world="character-tab" data-tab="${tab}" role="tab" aria-controls="character-content" aria-selected="${tab===this.tab}" tabindex="${tab===this.tab?0:-1}">${icon(characterTabIcons[tab as CharacterTab])}<span>${label}</span></button>`).join(''));
     const position=model.state.roster.deployed.includes(id)?`ตัวหลักช่อง ${model.state.roster.deployed.indexOf(id)+1}`:model.state.roster.reserve.includes(id)?'สำรอง':'ในค่าย';
     // A deployed member shows the lane it stands in (formation); others their class lane.

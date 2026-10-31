@@ -2,12 +2,13 @@ import {test,expect,type Page} from '@playwright/test';
 import {chapterOne as map} from '../../src/content/world/chapter1';
 import {encounterById} from '../../src/content/encounters/catalog';
 import {newProfile,depart} from '../../src/core/world/profile';
+import { legacyEnvelope } from '../fixtures/legacy-save';
 
 const key='asterveil.fateweave.expedition.v1';
 async function open(page:Page){
  const p=newProfile(map,17);p.commander={name:'จังหวะ',crest:'star',color:'gold', camp: 'ค่ายอารี'};p.tutorialDone=true;
  const game=depart(p,map,encounterById,1234);game.run.battle={kind:'random',encounterId:'veil-siege',entry:{...game.run.hp},commands:[]};
- await page.addInitScript(({key,raw})=>{if(!sessionStorage.getItem('presentation-seeded')){localStorage.setItem(key,raw);sessionStorage.setItem('presentation-seeded','1')}},{key,raw:JSON.stringify({version:27,...game})});
+ await page.addInitScript(({key,raw})=>{if(!sessionStorage.getItem('presentation-seeded')){localStorage.setItem(key,raw);sessionStorage.setItem('presentation-seeded','1')}},{key,raw:JSON.stringify(legacyEnvelope({version:27,...game}))});
  await page.clock.install({time:new Date('2026-10-21T00:00:00Z')});await page.goto('./');await page.locator('#continue').click();await expect(page.locator('#start')).toBeEnabled();await page.locator('#start').click();
  await page.clock.pauseAt(new Date('2026-10-21T01:00:00Z'));
 }

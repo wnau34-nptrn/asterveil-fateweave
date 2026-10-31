@@ -4,7 +4,7 @@ import type { Item, MapDefinition, MemberProgress, TalentNode, TalentNodeDef } f
 import { levelBarrier, skillCooldown, withParty } from '../core/battle/engine';
 import { skillLevelCost, skillLevelOf, tomeLine } from '../core/world/tomes';
 import { TOME_LINES, TOME_SIZES, type TomeBag, type TomeLine, type TomeSize } from '../core/world/types';
-import { expToNext, skillChoices } from '../core/world/world';
+import { campProgress, levelOf, skillChoices } from '../core/world/world';
 import { isBigTree, memberTalentReason, talentPoints, talentsSpent } from '../core/world/talents';
 import { icon, lineIcon } from './icons';
 import { heroArt, starRow } from './portraits';
@@ -22,9 +22,9 @@ const statIcons: Record<string, Parameters<typeof icon>[0]> = { hp: 'stat-hp', a
 // ART-UI-MODERN-001 overview: the hero in a lit ring with level and stars, an EXP bar, role chips, then stat chips
 // (each opens its explanation).
 export function characterOverview(s: CharacterState, map: MapDefinition, h: HeroDefinition, template?: EncounterDefinition): string {
-  const m = s.members[h.id]!, level = m.level ?? 1, max = level >= map.progression.levelCap, need = max ? 1 : expToNext(map, level), exp = max ? 1 : m.exp ?? 0;
+  const m = s.members[h.id]!, camp = campProgress(map, s.campXp), level = camp.level, max = !camp.need, need = max ? 1 : camp.need, exp = max ? 1 : camp.exp;
   return `<div class="overview-hero"><div class="hero-ring">${heroArt(h.id)}<span class="hero-badge">Lv${level} ${starRow(m.stars, map.company.maxStars)}</span></div>
-    <div class="exp-row"><span>${max ? 'เลเวลสูงสุด' : `EXP ${exp}/${need}`}</span>${m.wound ? `<span class="down">บาดแผล −${m.wound}% เลือดสูงสุด</span>` : ''}</div><div class="ui-meter" role="presentation"><i style="width:${Math.round(exp / need * 100)}%"></i></div>
+    <div class="exp-row"><span>${max ? 'เลเวลค่ายสูงสุด' : `เลเวลค่าย · EXP ${exp}/${need}`}</span>${m.wound ? `<span class="down">บาดแผล −${m.wound}% เลือดสูงสุด</span>` : ''}</div><div class="ui-meter" role="presentation"><i style="width:${Math.round(exp / need * 100)}%"></i></div>
     <div class="role-chips"><span class="ui-pill">${icon(h.lane === 'front' ? 'stat-armour' : 'stat-luck')}${h.lane === 'front' ? 'แนวหน้า' : 'แนวหลัง'}</span><span class="ui-pill">${heroText[h.id]!.role}</span></div></div>
     <p class="hero-help">${heroText[h.id]!.help}</p>${template ? `<div class="character-stat-list">${characterStats(s, map, h, template).map(v => `<details class="character-stat" id="character-stat-${v.id}"><summary><span>${statIcons[v.id] ? icon(statIcons[v.id]!) : ''}${v.name}</span><strong>${v.value}${v.unit}</strong></summary><p>${v.help}</p></details>`).join('')}</div><p class="camp-note">รวมเลเวล ดาว ความถนัด อุปกรณ์ และบาดแผล · แตะค่าเพื่ออ่านความหมาย</p>` : ''}`;
 }
@@ -111,11 +111,11 @@ export function characterEquipmentComparison(before: CharacterState, after: Char
 const statNodeIcon = { hp: 'stat-hp', attack: 'stat-attack', skill: 'stat-support', armour: 'stat-armour' } as const;
 function bigTalents(s: CharacterState, map: MapDefinition, id: string, data: EncounterDefinition, h: HeroDefinition, base: HeroDefinition, selected?: string): string {
   const m = s.members[id]!, nodes = map.talents[id]!, hd = withParty(data, [h]);
-  const points = talentPoints(map, m, id), free = points - talentsSpent(m.talents), names = bigBranches[id] ?? ['สาย A', 'สาย B', 'สาย C'];
+  const points = talentPoints(map, m, id, levelOf(map, s)), free = points - talentsSpent(m.talents), names = bigBranches[id] ?? ['สาย A', 'สาย B', 'สาย C'];
   const tiers = map.progression.treeTiers, branches = ['a', 'b', 'c'] as const;
   const why: Record<string, string> = { max: 'เต็มแล้ว', locked: 'ต้องลงชั้นก่อนหน้าในสายนี้', choice: 'เลือกอีกทางไว้แล้ว', points: 'แต้มไม่พอ', unknown: 'ไม่พบความถนัด' };
   const info = (def: TalentNodeDef) => {
-    const granted = !!m.grants?.includes(def.id), rank = granted ? def.max : m.talents?.[def.id] ?? 0, reason = memberTalentReason(map, id, m, def.id);
+    const granted = !!m.grants?.includes(def.id), rank = granted ? def.max : m.talents?.[def.id] ?? 0, reason = memberTalentReason(map, id, m, def.id, levelOf(map, s));
     const state = rank >= def.max ? 'full' : rank ? 'partial' : reason === 'locked' || reason === 'level' || reason === 'choice' ? 'locked' : 'open';
     const note = granted ? 'ได้ฟรีจากดาวเดิม' : reason === 'level' ? `เปิดที่ Lv${tiers[(def.tier ?? 1) - 1]}` : reason ? why[reason]! : 'ลงได้ 1 แต้ม';
     const kind = 'unlock' in def.effect ? 'skill' : def.choice ? 'choice' : def.tier === 4 ? 'capstone' : 'passive';
@@ -145,10 +145,10 @@ export function characterTalents(s: CharacterState, map: MapDefinition, id: stri
   const m = s.members[id]!, nodes = map.talents[id];
   if (!nodes) return '<p>ตัวละครนี้ไม่มีต้นไม้ความถนัด</p>';
   if (isBigTree(nodes) && h && base) return bigTalents(s, map, id, data, h, base, selected);
-  const points = talentPoints(map, m, id), free = points - talentsSpent(m.talents), branches = talentBranches[id] ?? ['สาย A', 'สาย B'];
+  const points = talentPoints(map, m, id, levelOf(map, s)), free = points - talentsSpent(m.talents), branches = talentBranches[id] ?? ['สาย A', 'สาย B'];
   const why: Record<string, string> = { max: 'เต็มแล้ว', locked: 'ต้องลงขั้นก่อนหน้า', points: 'แต้มไม่พอ', unknown: 'ไม่พบความถนัด' };
   const node = (n: TalentNode) => {
-    const def = nodes.find(v => v.id === n)!, rank = m.talents?.[n] ?? 0, reason = memberTalentReason(map, id, m, n);
+    const def = nodes.find(v => v.id === n)!, rank = m.talents?.[n] ?? 0, reason = memberTalentReason(map, id, m, n, levelOf(map, s));
     const state = rank >= def.max ? 'full' : rank ? 'partial' : reason === 'locked' ? 'locked' : 'open';
     return `<button id="character-talent-${n}" data-world="character-talent" data-node="${n}" class="talent-node${n.endsWith('3') ? ' capstone' : ''}" data-state="${state}" aria-disabled="${!!reason}" aria-label="${def.name} ขั้น ${rank}/${def.max} · ${talentHelp(def,data)}${reason?` · ${why[reason]}`:''}"><b>${def.name}</b><i>${rank}/${def.max}</i><small>${talentHelp(def, data)}</small><small>${reason ? why[reason] : 'แตะเพื่อลง 1 แต้ม'}</small></button>`;
   };

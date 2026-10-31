@@ -5,18 +5,20 @@ import {newProfile,depart} from '../../src/core/world/profile';
 import {battleData,battleState,newExpedition} from '../../src/core/world/world';
 import {currentHeroId,resolveCommand,targetOptions} from '../../src/core/battle/engine';
 import type {Profile} from '../../src/core/world/types';
+import { xpAt } from '../fixtures/camp-level';
+import { legacyEnvelope } from '../fixtures/legacy-save';
 const key='asterveil.fateweave.expedition.v1';
 function winningSave(p:Profile){
-  p=structuredClone(p);for(const m of Object.values(p.members)){m.stars=5;m.level=10;m.exp=0;}
+  p=structuredClone(p);for(const m of Object.values(p.members))m.stars=5;p.campXp=xpAt(10);
   const game=depart(p,map,lookup,77),run=game.run;run.dry=5;run.hunt!.misses=11;run.battle={kind:'random',encounterId:map.tutorialEncounterId,entry:{...run.hp},commands:[]};
   const data=battleData(run,map,lookup)!;let battle=battleState(run,map,lookup)!;for(let n=0;battle.outcome==='active'&&n<200;n++)battle=resolveCommand(battle,data,{beat:battle.beat,heroId:currentHeroId(battle,data)!,action:'attack',targetId:targetOptions(battle,data,currentHeroId(battle,data)!,'attack').find(t=>t.valid)!.id}).state;
-  if(battle.outcome!=='victory')throw Error('fixture did not win');const last=battle.commands.at(-1)!;run.battle.commands=battle.commands.slice(0,-1);return {raw:JSON.stringify({version:25,...game}),last};
+  if(battle.outcome!=='victory')throw Error('fixture did not win');const last=battle.commands.at(-1)!;run.battle.commands=battle.commands.slice(0,-1);return {raw:JSON.stringify(legacyEnvelope({version:25,...game})),last};
 }
 for(const [width,height,touch] of [[320,568,true],[390,844,true],[1366,768,false]] as const){
   test(`targeted farming, source guide and guaranteed weapon at ${width}x${height}`,async({browser},info)=>{
     const context=await browser.newContext({viewport:{width,height},hasTouch:touch,isMobile:touch,reducedMotion:'reduce'}),page=await context.newPage(),errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
     const p=newProfile(map,17);p.commander={name:'อารี',crest:'star',color:'gold', camp: 'ค่ายอารี'};p.tutorialDone=true;p.hunt={target:'guardian',pity:{guardian:11,tracer:3}};
-    const raw=JSON.stringify({version:25,profile:p,run:null});await page.addInitScript(({key,raw})=>{if(!sessionStorage.getItem('hunt-seed')){localStorage.setItem(key,raw);sessionStorage.setItem('hunt-seed','1');}const w=window as unknown as {huntWrites:number};w.huntWrites=0;const set=Storage.prototype.setItem;Storage.prototype.setItem=function(k,v){if(k===key)w.huntWrites++;set.call(this,k,v);};},{key,raw});await page.goto('./');await page.locator('#continue').click();
+    const raw=JSON.stringify(legacyEnvelope({version:25,profile:p,run:null}));await page.addInitScript(({key,raw})=>{if(!sessionStorage.getItem('hunt-seed')){localStorage.setItem(key,raw);sessionStorage.setItem('hunt-seed','1');}const w=window as unknown as {huntWrites:number};w.huntWrites=0;const set=Storage.prototype.setItem;Storage.prototype.setItem=function(k,v){if(k===key)w.huntWrites++;set.call(this,k,v);};},{key,raw});await page.goto('./');await page.locator('#continue').click();
     const saved=()=>page.evaluate(k=>localStorage.getItem(k)!,key),writes=()=>page.evaluate(()=>(window as unknown as {huntWrites:number}).huntWrites);const original=await saved();
     for(const id of ['team','hire','gear','hunt','forge','brew'])expect(await page.locator('#lobby-tab-'+id).evaluate(el=>{const r=el.getBoundingClientRect(),a=document.querySelector('#app')!.getBoundingClientRect();return r.width>=44&&r.height>=44&&r.left>=a.left&&r.right<=a.right+1;})).toBe(true);
     await page.locator('#lobby-tab-hunt').click();await expect(page.locator('.loot-progress')).toContainText('11/12');await page.locator('#hunt-target').selectOption('tracer');await expect(page.locator('.loot-progress')).toContainText('3/12');expect(await saved()).toBe(original);await page.locator('#hunt-apply').focus();await page.keyboard.press('Escape');await page.locator('#lobby-tab-hunt').click();await expect(page.locator('#hunt-target')).toHaveValue('guardian');await expect(page.locator('#hunt-apply')).toBeDisabled();

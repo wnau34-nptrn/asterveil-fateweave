@@ -8,7 +8,7 @@ import { applyCampEquipment, applyRunEquipment } from '../core/world/auto-equipm
 import { shortcutBlocked } from '../platform/keyboard';
 import type { BattleState, Outcome } from '../core/battle/types';
 import { clearLegacySaves, loadGame, saveGame, type Game } from '../core/save/expedition-save';
-import { setPartyLane, chooseLoadout, hardReason, claimGuide, renameCamp, createCommander, depart, mapUnlocked, brew, buy, claimQuest, refreshBoard, dismiss, equip, hire, learnTalent, newProfile, placeMember, resetTalents, salvage, settle, unequip, upgrade, canWithdraw } from '../core/world/profile';
+import { setArchived, setPartyLane, chooseLoadout, hardReason, claimGuide, renameCamp, createCommander, depart, mapUnlocked, brew, buy, claimQuest, refreshBoard, dismiss, equip, hire, learnTalent, newProfile, placeMember, resetTalents, salvage, settle, unequip, upgrade, canWithdraw } from '../core/world/profile';
 import type { Point, Direction, EventChoice, ExpeditionState, MapDefinition, PotionId, Profile, ProfileResult, RunOutcome, ShopItemId, WorldEvent } from '../core/world/types';
 import { draftPick, travel, tileAt, startPrologue, questDone, battleData, chooseEvent, finishBattle, heroCatalog, move, moveMember, openChest, recordBattle, usePotion, rest, revive, setLane, swapMembers, takeOff, wear, type EncounterLookup } from '../core/world/world';
 import { Music, type Track } from '../platform/music';
@@ -39,6 +39,8 @@ export class GameShell {
   private commander: CommanderUI;
   private replacing = false;
   private lobbyMessage = '';
+  // P01: what the move to camp levels did, said once on the map or in the lobby, whichever comes first.
+  private migrationNote = '';
   // The member who was just hired or upgraded cheers in the lobby scene.
   private lobbyCheer = '';
   private readonly storage = browserStorage();
@@ -71,6 +73,16 @@ export class GameShell {
     const map = home;
     clearLegacySaves(this.storage); sfx.init(this.storage);
     this.game = loadGame(this.storage, map, lookup, maps);
+    // P01: a save moved to camp levels says once what happened, then the new save replaces it (the old one is backed up).
+    const moved = this.game?.migrated;
+    if (moved && this.game) {
+      this.game = { profile: this.game.profile, run: this.game.run };
+      this.migrationNote = `ย้ายเซฟเป็นเลเวลค่ายแล้ว · ค่าย Lv${moved.level}${moved.best ? ` ตาม${heroText[moved.best]?.name ?? ''}ที่ก้าวหน้าที่สุด (ไม่รวม EXP ทุกคน)` : ''} · ทุกคนในค่ายใช้เลเวลนี้`
+        + (moved.battle ? ' · ศึกที่ค้างอยู่เริ่มใหม่จากเลือดตอนเริ่มศึก' : '')
+        + ' · สำเนาเซฟเดิมเก็บไว้ในเบราว์เซอร์นี้';
+      this.lobbyMessage = this.migrationNote;
+      this.persist();
+    }
     for (const id of this.game?.run?.recruited ?? []) this.recruitSeen.add(`${this.game!.run!.mapId}:${id}`);
     this.world = new WorldUI(views.world, this.map, heroCatalog(lookup, map), {
       travel: to => this.travelTo(to), move: dir => this.move(dir), rest: () => this.rest(), revive: id => this.revive(id), swap: (a, b) => this.roster(swapMembers(this.state!, a, b)), lane: (id, lane, other) => this.roster(setLane(this.state!, map, lookup, id, lane, other)), moveMember: id => this.roster(moveMember(this.state!, id)),
@@ -98,6 +110,7 @@ export class GameShell {
     this.lobby = new LobbyUI(views.lobby, map, lookup, heroCatalog(lookup, map), {
       hire: i => this.profileChange(hire(this.game!.profile, map, lookup, i)), refresh: () => this.profileChange(refreshBoard(this.game!.profile, map)),
       buy: (item, hero) => this.profileChange(buy(this.game!.profile, map, item, hero)), smelt: dust => this.profileChange(smelt(this.game!.profile, map, dust)), upgrade: id => this.profileChange(upgrade(this.game!.profile, map, id)),
+      archive: (id, archived) => this.profileChange(setArchived(this.game!.profile, id, archived)),
       dismiss: id => this.profileChange(dismiss(this.game!.profile, map, id)), place: (id, group, other) => this.profileChange(placeMember(this.game!.profile, id, group, other)),
       lane: (id, lane, other) => this.profileChange(setPartyLane(this.game!.profile, map, lookup, id, lane, other)),
       skillLevel: (id, action) => this.profileChange(raiseSkill(this.game!.profile, this.maps, map, lookup, id, action)),
@@ -229,6 +242,7 @@ export class GameShell {
     this.showLobby();
   }
   private showLobby(): void {
+    this.migrationNote = '';
     const entering = this.root.dataset.view !== 'lobby';
     this.show('lobby');
     this.lobby.render({ profile: this.game!.profile, message: this.lobbyMessage, cheer: this.lobbyCheer, saved: this.saved && !!this.storage, ...(this.npcCheer ? { npcCheer: this.npcCheer } : {}) });
@@ -255,7 +269,7 @@ export class GameShell {
     if (e.type === 'blocked') return;
     this.game = { ...this.game, profile: { ...result.profile, last: null } }; this.persist();
     this.lobbyMessage = e.type === 'hired' ? (e.duplicate ? `ได้ตัวซ้ำของ${name(e.heroId)} · ใช้อัปดาวในแท็บทีม` : `จ้าง${name(e.heroId)}แล้ว`)
-      : e.type==='bossTarget'?'บันทึกเป้าหมายบอสแล้ว':e.type==='huntTarget'?'บันทึกเป้าหมายฟาร์มแล้ว':e.type==='storageCollected'?`เก็บเข้าคลัง ${e.count} ชิ้นแล้ว`:e.type==='storageExpanded'?'ขยายคลังแล้ว': e.type === 'upgraded' ? `${name(e.heroId)}ขึ้นเป็น ★${e.stars} แล้ว` : e.type === 'dismissed' ? `เลิกจ้าง${name(e.heroId)}แล้ว · ได้เหรียญทองคืน ${this.map.company.dismissRefund}` : e.type === 'talent' || e.type === 'equipped' ? '' : e.type === 'skillLevel' ? `${name(e.heroId)} · ${this.lookup(this.map.tutorialEncounterId)!.skills[e.action].name} ขึ้นเป็น Lv${e.level}` : e.type === 'tomeTrade' ? `แลกได้ตำรา${tomeLineText[e.line]}${tomeSizeText[e.size]} 1 เล่ม` : e.type === 'salvaged' ? `แยกชิ้น ${e.count} ชิ้น · ได้แร่ดาว ${e.ore} ฝุ่นดาว ${e.dust}`
+      : e.type==='bossTarget'?'บันทึกเป้าหมายบอสแล้ว':e.type==='huntTarget'?'บันทึกเป้าหมายฟาร์มแล้ว':e.type==='storageCollected'?`เก็บเข้าคลัง ${e.count} ชิ้นแล้ว`:e.type==='storageExpanded'?'ขยายคลังแล้ว': e.type === 'upgraded' ? `${name(e.heroId)}ขึ้นเป็น ★${e.stars} แล้ว` : e.type === 'archived' ? (e.archived ? `เก็บ${name(e.heroId)}เข้าคลังสมาชิกแล้ว · ดาว ของ และความถนัดอยู่ครบ` : `นำ${name(e.heroId)}ออกจากคลังสมาชิกแล้ว`) : e.type === 'dismissed' ? `เลิกจ้าง${name(e.heroId)}แล้ว · ได้เหรียญทองคืน ${this.map.company.dismissRefund}` : e.type === 'talent' || e.type === 'equipped' ? '' : e.type === 'skillLevel' ? `${name(e.heroId)} · ${this.lookup(this.map.tutorialEncounterId)!.skills[e.action].name} ขึ้นเป็น Lv${e.level}` : e.type === 'tomeTrade' ? `แลกได้ตำรา${tomeLineText[e.line]}${tomeSizeText[e.size]} 1 เล่ม` : e.type === 'salvaged' ? `แยกชิ้น ${e.count} ชิ้น · ได้แร่ดาว ${e.ore} ฝุ่นดาว ${e.dust}`
       : e.type === 'equipmentLocked' ? `${e.locked?'ล็อก':'ปลดล็อก'}${itemName(findItem(result.profile,e.uid)!.item)}แล้ว` : e.type === 'forged' ? this.forgedText(result.profile, e.uid, e.action) : e.type === 'brewed' ? `ปรุง${potionText[e.potion].name}แล้ว · มีอยู่ ${result.profile.potions[e.potion]} ขวด`
       : e.type === 'smelted' ? `ลุงบอร์กหลอมแร่ดาวเป็นฝุ่นดาว ${e.dust} · มีฝุ่นดาว ${result.profile.bank.dust}`
       : e.type === 'refreshed' ? `พีโน่เปลี่ยนป้ายจ้างใหม่แล้ว · สุ่มได้อีก ${this.map.shop.refreshCosts.length - result.profile.refreshes} ครั้ง`
@@ -330,7 +344,7 @@ export class GameShell {
   private resume(): void {
     this.locked = false;
     if (this.state?.battle) { this.openBattle(); return; }
-    this.message = 'กลับมาเดินทางต่อจากจุดที่บันทึกไว้';
+    this.message = this.migrationNote || 'กลับมาเดินทางต่อจากจุดที่บันทึกไว้'; this.migrationNote = ''; this.lobbyMessage = '';
     this.banner = undefined;
     this.renderWorld();
     if (this.state?.draft) this.world.openDraft();

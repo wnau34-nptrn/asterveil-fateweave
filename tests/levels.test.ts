@@ -5,8 +5,9 @@ import { resolveCommand, withLevel } from '../src/core/battle/engine';
 import { loadGame, parseGame, saveGame } from '../src/core/save/expedition-save';
 import { newProfile, settle } from '../src/core/world/profile';
 import type { ExpeditionState } from '../src/core/world/types';
-import { battleData, battleState, expPercent, expToNext, finishBattle, memberDef, monsterLevelAt, move, newExpedition, recordBattle, tileAt } from '../src/core/world/world';
+import { campLevel, levelOf, battleData, battleState, expPercent, expToNext, finishBattle, memberDef, monsterLevelAt, move, newExpedition, recordBattle, tileAt } from '../src/core/world/world';
 import { battleLesson } from '../src/ui/tutorial';
+import { xpAt } from './fixtures/camp-level';
 
 const lookup = encounterById;
 const zoneRows = (zone: string) => map.rows.flatMap((row, y) => row.split('').some((_, x) => tileAt(map, { x, y })?.zoneId === zone) ? [y] : []);
@@ -53,18 +54,17 @@ describe('member levels and EXP', () => {
   it('EXP tapers when a member is far above the monster, never to zero, and rewards fighting up', () => {
     expect([-4, -3, 0, 2, 3, 4, 5, 6, 9].map(g => expPercent(5 + g, 5))).toEqual([110, 110, 100, 100, 75, 50, 25, 10, 10]);
   });
-  it('a victory gives every brought member EXP, level-ups raise max HP and standing HP', () => {
+  it('a victory gives the camp EXP once (P01), level-ups raise max HP and standing HP', () => {
     const s = randomBattle(); const level = s.battle!.level!; const foes = battleData(s, map, lookup)!.enemies; const pr = map.progression;
     // A7 step 2: EXP follows the foes' total HP, one foe's worth per `expFoeHp` grown by the monster level.
     const worth = foes.reduce((n, e) => n + e.maxHp, 0) / (pr.expFoeHp * (1 + (level - 1) * pr.monsterLevelPercent / 100));
     const r = win(s); expect(r.event.type).toBe('victory');
-    const exp = r.event.type === 'victory' ? r.event.exp! : {};
+    const exp = r.event.type === 'victory' ? r.event.exp! : undefined;
     const each = worth * (map.progression.expBase + map.progression.expPerLevel * level);
-    for (const id of [...s.roster.deployed, ...s.roster.reserve]) {
-      expect(exp[id]!.gained).toBe(Math.round(each * expPercent(1, level) / 100));
-      const m = r.state.members[id]!; expect(m.level).toBe(exp[id]!.level);
-      if (exp[id]!.levelsUp) expect(memberDef(lookup, map, r.state.members, id)!.maxHp).toBeGreaterThan(memberDef(lookup, map, s.members, id)!.maxHp);
-    }
+    expect(exp!.gained).toBe(Math.round(each * expPercent(1, level) / 100));
+    expect(r.state.campXp).toBe(s.campXp + exp!.gained); expect(levelOf(map, r.state)).toBe(exp!.level);
+    for (const id of [...s.roster.deployed, ...s.roster.reserve])
+      if (exp!.levelsUp) expect(memberDef(lookup, map, r.state, id)!.maxHp).toBeGreaterThan(memberDef(lookup, map, s, id)!.maxHp);
   });
   it('elites, the mini-boss and the boss fight at the map\'s fight level (4E), above their reference level', () => {
     for (const e of map.elites) {
@@ -78,26 +78,29 @@ describe('member levels and EXP', () => {
   });
   it('stops at the level cap and adds 3% stats per level', () => {
     const s = newExpedition(map, lookup, 1);
-    const at = (level: number) => memberDef(lookup, map, { guardian: { stars: 1, dupes: 0, level } }, 'guardian')!;
+    const at = (level: number) => memberDef(lookup, map, { members: { guardian: { stars: 1, dupes: 0 } }, campXp: xpAt(level) }, 'guardian')!;
     expect(at(10).maxHp).toBe(Math.round(at(1).maxHp * (100 + 9 * map.progression.levelStatPercent) / 100));
     expect(expToNext(map, 1)).toBe(65); expect(expToNext(map, 9)).toBe(425);
-    s.members.guardian = { stars: 1, dupes: 0, level: map.progression.levelCap, exp: 0 };
-    expect(s.members.guardian.level).toBe(10);
+    s.campXp = xpAt(map.progression.levelCap) + 5; expect(levelOf(map, s)).toBe(10);
+    expect(campLevel(map, 1e6)).toBe(map.progression.levelCap); expect(xpAt(2)).toBe(65); expect(xpAt(10)).toBe(2205);
   });
-  it('levels are kept in the profile whatever the outcome', () => {
-    const run = newExpedition(map, lookup, 1); run.members.guardian = { stars: 1, dupes: 0, level: 4, exp: 12 };
-    for (const outcome of ['complete', 'withdrawn', 'wiped'] as const) expect(settle(newProfile(map, 1), run, outcome, map).members.guardian).toEqual({ stars: 1, dupes: 0, level: 4, exp: 12 });
+  it('the camp level is kept in the profile whatever the outcome, handed back without adding', () => {
+    const run = newExpedition(map, lookup, 1); run.campXp = xpAt(4) + 12;
+    for (const outcome of ['complete', 'withdrawn', 'wiped'] as const) {
+      const p = settle(newProfile(map, 1), run, outcome, map); expect(p.campXp).toBe(xpAt(4) + 12); expect(p.members.guardian).toEqual({ stars: 1, dupes: 0 });
+      expect(settle(p, run, outcome, map).campXp).toBe(xpAt(4) + 12);
+    }
   });
 });
 
 describe('save v7', () => {
   const memory = () => { const v = new Map<string, string>(); return { getItem: (k: string) => v.get(k) ?? null, setItem: (k: string, x: string) => { v.set(k, x); } }; };
   it('round-trips member levels and the battle level; v6 data still loads', () => {
-    const run = randomBattle(); run.members.guardian = { stars: 1, dupes: 0, level: 3, exp: 5 };
-    const profile = { ...newProfile(map, 4), tutorialDone: true }; profile.members.guardian = { stars: 1, dupes: 0, level: 3, exp: 5 };
+    const run = randomBattle(); run.members.guardian = { stars: 1, dupes: 0}; run.campXp = Math.max(run.campXp, xpAt(3));
+    const profile = { ...newProfile(map, 4), tutorialDone: true }; profile.members.guardian = { stars: 1, dupes: 0}; profile.campXp = Math.max(profile.campXp, xpAt(3));
     const store = memory(); saveGame(store, { profile, run });
     const back = loadGame(store, map, lookup)!;
-    expect(back.run!.members.guardian).toEqual({ stars: 1, dupes: 0, level: 3, exp: 5 }); expect(back.run!.battle!.level).toBe(run.battle!.level);
+    expect(back.run!.members.guardian).toEqual({ stars: 1, dupes: 0 }); expect(back.run!.campXp).toBe(xpAt(3)); expect(back.profile.campXp).toBe(xpAt(3)); expect(back.run!.battle!.level).toBe(run.battle!.level);
     const v6 = JSON.stringify({ version: 6, profile: newProfile(map, 4), run: newExpedition(map, lookup, 2) });
     expect(parseGame(v6, map, lookup).profile.members.guardian).toEqual({ stars: 1, dupes: 0 });
   });

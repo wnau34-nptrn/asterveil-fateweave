@@ -10,11 +10,13 @@ import { boardOffers, depart, hire, hireReason, learnTalent, newProfile, placeMe
 import { battleData, battleState, heroCatalog, memberDef, recordBattle, skillChoices } from '../src/core/world/world';
 import { memberTalentReason, talentPoints, talentsValid } from '../src/core/world/talents';
 import type { MapDefinition, Profile } from '../src/core/world/types';
+import { xpAt } from './fixtures/camp-level';
+import { legacyEnvelope } from './fixtures/legacy-save';
 
 const added = ['metta', 'thiran', 'lalin', 'wila'];
 const legacyMap: MapDefinition = { ...map, mercenaries: map.mercenaries.filter(h => !added.includes(h.id)) };
 const write = (game: Game): string => { let raw = ''; saveGame({ getItem: () => null, setItem: (_key, value) => { raw = value; } }, game); return raw; };
-const oldEnvelope = (game: Game) => { const value = JSON.parse(write(game)); value.version = 42; return value; };
+const oldEnvelope = (game: Game) => { const value = legacyEnvelope(JSON.parse(write(game))); value.version = 42; return value; };
 function offerOf(profile: Profile, id: string): Profile {
   for (let seed = 0; seed < 2000; seed++) {
     const p = { ...profile, seed };
@@ -38,9 +40,10 @@ describe('C12 Batch 1 catalog and hiring', () => {
       expect(after).toHaveLength(4);
       expect(added).toContain(after[3]);
     }
+    // OD-14 (owner 2026-10-30): Odran and Isolde are parked, so only Corin and Cerise are offered anew.
     const seen = new Set<string>();
     for (let seed = 0; seed < 100; seed++) boardOffers(newProfile(map, seed), map, lookup).forEach(id => seen.add(id));
-    for (const id of added) expect(seen.has(id)).toBe(true);
+    for (const id of added) expect(seen.has(id)).toBe(!['thiran', 'wila'].includes(id));
   });
   it('hires to the bench when all four deployed and four reserve slots are occupied, preserving everyone', () => {
     let p = newProfile(map, 1);
@@ -84,20 +87,20 @@ describe('C12 Batch 1 catalog and hiring', () => {
 describe('C12 personal branches use existing talent budgets and validators', () => {
   for (const id of added) it(`${id}: pays for personal ranks, gates sequentially and round-trips choices`, () => {
     const p = newProfile(map, 2, [id]);
-    p.members[id] = { stars: 1, dupes: 0, level: 5, exp: 0 };
-    expect(talentPoints(map, p.members[id], id)).toBe(4);
-    expect(memberTalentReason(map, id, p.members[id], 'p2')).toBe('locked');
+    p.members[id] = { stars: 1, dupes: 0}; p.campXp = Math.max(p.campXp, xpAt(5));
+    expect(talentPoints(map, p.members[id], id, 5)).toBe(4);
+    expect(memberTalentReason(map, id, p.members[id], 'p2', 5)).toBe('locked');
     const first = learnTalent(p, map, id, 'p1').profile;
     expect(first.members[id]!.talents).toEqual({ p1: 1 });
     const second = learnTalent(first, map, id, 'p2').profile;
     expect(second.members[id]!.talents).toEqual({ p1: 1, p2: 1 });
-    expect(talentPoints(map, second.members[id], id)).toBe(4);
+    expect(talentPoints(map, second.members[id], id, 5)).toBe(4);
     expect(talentsValid(map, id, 5, { p1: 1, p2: 1 })).toBe(true);
     expect(talentsValid(map, id, 5, { p2: 1 })).toBe(false);
     expect(talentsValid(map, id, 5, { p1: 2 })).toBe(false);
     expect(talentsValid(map, id, 5, { p1: 1, p2: 1, a1: 2, b1: 1 })).toBe(false);
     expect(talentsValid(map, id, 5, { p1: 1, p2: 1, p3: 1 })).toBe(false);
-    expect(memberDef(lookup, map, second.members, id)!.speed).toBe(heroCatalog(lookup, map).find(h => h.id === id)!.speed);
+    expect(memberDef(lookup, map, second, id)!.speed).toBe(heroCatalog(lookup, map).find(h => h.id === id)!.speed);
     expect(parseGame(write({ profile: second, run: null }), map, lookup).profile).toEqual(second);
   });
   it('class choice pairs remain exclusive while personal points also consume the shared budget', () => {
@@ -113,25 +116,26 @@ describe('C12 personal branches use existing talent budgets and validators', () 
 describe('C12 v42 → v43 migration', () => {
   it('preserves the legacy paid board indexes and all member investment without inventing new recruits', () => {
     const p = newProfile(legacyMap, 37);
-    p.members.guardian = { stars: 3, dupes: 2, level: 5, exp: 1, talents: { a1: 2, c1s: 1 }, loadout: ['guard', 'rally'], skillLevels: { rally: 2 } };
+    p.members.guardian = { stars: 3, dupes: 2, talents: { a1: 2, c1s: 1 }, loadout: ['guard', 'rally'], skillLevels: { rally: 2 } }; p.campXp = Math.max(p.campXp, xpAt(5));
     p.bank = { gold: 99, ore: 87, seal: 3, dust: 11 };
     p.taken = [1]; p.refreshes = 1;
     p.tomes = { bulwark: { small: 4, medium: 2, large: 1 }, blade: { small: 1, medium: 0, large: 0 }, accord: { small: 0, medium: 0, large: 0 } };
     const old = oldEnvelope({ profile: p, run: null });
     const migrated = parseGame(JSON.stringify(old), map, lookup);
-    expect(migrated.profile).toEqual({ ...p, boardPool: heroCatalog(lookup, legacyMap).map(h => h.id) });
+    expect(migrated.profile).toEqual({ ...p, boardPool: heroCatalog(lookup, legacyMap).map(h => h.id) }); expect(migrated.migrated).toMatchObject({ from: 42, level: 5, best: 'guardian' });
     expect(boardOffers(migrated.profile, map, lookup)).toEqual(boardOffers(p, legacyMap, lookup));
     expect(migrated.profile.taken).toEqual([1]);
     expect(migrated.profile.company.some(id => added.includes(id))).toBe(false);
-    expect(JSON.parse(write(migrated)).version).toBe(43);
-    expect(parseGame(write(migrated), map, lookup)).toEqual(migrated);
+    expect(JSON.parse(write(migrated)).version).toBe(44);
+    expect(parseGame(write(migrated), map, lookup)).toEqual({ profile: migrated.profile, run: null });
     const refreshed = refreshBoard(migrated.profile, map).profile;
     expect(refreshed.boardPool).toBeUndefined();
     expect(refreshed.taken).toEqual([]);
   });
+  // P01 (v44): every member of this party was already at the camp level, so the replay is unchanged.
   it('keeps a v42 map run, entry HP and a genuine active replay unchanged for the original party', () => {
     const p = newProfile(legacyMap, 11);
-    p.members.guardian = { stars: 1, dupes: 0, level: 5, exp: 0, talents: { a1: 1 } };
+    p.members.guardian = { stars: 1, dupes: 0, talents: { a1: 1 } }; p.campXp = Math.max(p.campXp, xpAt(5));
     const game = depart(p, legacyMap, lookup, 91);
     game.run.hp.guardian = Math.min(game.run.hp.guardian!, 30);
     game.run.battle = { kind: 'random', encounterId: map.tutorialEncounterId, entry: { ...game.run.hp }, commands: [] };
@@ -144,7 +148,7 @@ describe('C12 v42 → v43 migration', () => {
     const migrated = parseGame(JSON.stringify(oldEnvelope(game)), map, lookup, MAPS);
     expect(migrated.run).toEqual(game.run);
     expect(migrated.run!.hp.guardian).toBe(30);
-    expect(migrated.profile.members).toEqual(game.profile.members);
+    expect(migrated.profile.members).toEqual(game.profile.members); expect(migrated.migrated).toEqual({ from: 42, level: 5, campXp: xpAt(5), best: 'guardian' });
     expect(battleState(migrated.run!, map, lookup)).toEqual(beforeBattle);
     const home = settle(migrated.profile, migrated.run!, 'withdrawn', map);
     expect(home.boardPool).toBeUndefined();
@@ -154,7 +158,7 @@ describe('C12 v42 → v43 migration', () => {
     { action: 'echofoot', cooldownTargetId: 'guardian' },
   ] as const) it(`round-trips ${selection.action} selected cooldown metadata and reproduces its result`, () => {
     const p = newProfile(map, 18, ['lalin', 'guardian', 'weaver']);
-    p.members.lalin = { stars: 1, dupes: 0, level: 5, exp: 0, talents: { p1: 1, p2: 1, c1s: 1, c2y: 1 }, loadout: ['duet', 'echofoot'] };
+    p.members.lalin = { stars: 1, dupes: 0, talents: { p1: 1, p2: 1, c1s: 1, c2y: 1 }, loadout: ['duet', 'echofoot'] }; p.campXp = Math.max(p.campXp, xpAt(5));
     const game = depart(p, map, lookup, 81);
     game.run.battle = { kind: 'random', encounterId: 'veil-siege', entry: { ...game.run.hp }, commands: [] };
     const data = battleData(game.run, map, lookup)!;
@@ -186,7 +190,7 @@ describe('C12 v42 → v43 migration', () => {
   });
   it('validates board snapshots, personal-rank injection and unknown skills rather than accepting corrupted v43 data', () => {
     const p = newProfile(map, 1, ['metta']);
-    p.members.metta = { stars: 1, dupes: 0, level: 5, exp: 0, talents: { p1: 1 } };
+    p.members.metta = { stars: 1, dupes: 0, talents: { p1: 1 } }; p.campXp = Math.max(p.campXp, xpAt(5));
     const base = JSON.parse(write({ profile: p, run: null }));
     for (const boardPool of [['metta'], ['guardian', 'guardian'], []]) {
       expect(() => parseGame(JSON.stringify({ ...base, profile: { ...base.profile, boardPool } }), map, lookup)).toThrow(/board pool/);

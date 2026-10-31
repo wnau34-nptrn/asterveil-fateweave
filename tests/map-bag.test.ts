@@ -21,7 +21,7 @@ const busy = (run: ExpeditionState): ExpeditionState => ({ ...run, battle: { kin
 
 describe('map bag', () => {
   it('a member wears a find anywhere; the own item it replaces waits in spare; weapons keep their class', () => {
-    const { run } = start(); const before = memberDef(lookup, map, run.members, 'guardian')!.maxHp;
+    const { run } = start(); const before = memberDef(lookup, map, run, 'guardian')!.maxHp;
     expect(wearReason(run, 'guardian', 'found', 1)).toBe('class');
     expect(wearReason(busy(run), 'guardian', 'found', 0)).toBe('busy');
     expect(wear(busy(run), map, lookup, 'guardian', 'found', 0).event.type).toBe('blocked');
@@ -30,7 +30,7 @@ describe('map bag', () => {
     expect(r.state.members.guardian!.gear!.body).toMatchObject({ uid: 0, rarity: 3 });
     expect(r.state.spare).toEqual([own]); expect(r.state.found).toHaveLength(1);
     // Gear never heals: the stronger body piece raises the maximum but not the current HP.
-    expect(memberDef(lookup, map, r.state.members, 'guardian')!.maxHp).toBeGreaterThan(before); expect(r.state.hp.guardian).toBe(run.hp.guardian);
+    expect(memberDef(lookup, map, r.state, 'guardian')!.maxHp).toBeGreaterThan(before); expect(r.state.hp.guardian).toBe(run.hp.guardian);
     // The tracer's weapon fits the tracer.
     expect(wear(r.state, map, lookup, 'tracer', 'found', 0).state.members.tracer!.gear!.weapon!.hero).toBe('tracer');
   });
@@ -38,7 +38,7 @@ describe('map bag', () => {
     const { run } = start();
     const off = takeOff(run, map, lookup, 'guardian', 'body');
     expect(off.state.members.guardian!.gear).toBeUndefined(); expect(off.state.spare).toEqual([own]);
-    expect(off.state.hp.guardian).toBe(memberDef(lookup, map, off.state.members, 'guardian')!.maxHp);
+    expect(off.state.hp.guardian).toBe(memberDef(lookup, map, off.state, 'guardian')!.maxHp);
     expect(off.state.hp.guardian).toBeLessThan(run.hp.guardian!);
     const back = wear(off.state, map, lookup, 'healer', 'spare', 0).state; expect(back.members.healer!.gear!.body!.uid).toBe(7); expect(back.spare).toEqual([]);
     const find = takeOff(wear(run, map, lookup, 'guardian', 'found', 0).state, map, lookup, 'guardian', 'body').state;

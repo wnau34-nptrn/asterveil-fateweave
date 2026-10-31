@@ -1,5 +1,13 @@
 # Codex → Claude handoff
 
+## 2026-10-31 — P01 เลเวลค่ายร่วม/ถือครอง/เซฟ v44 (Claude, สาขา `claude/p01-camp-level`)
+
+- กฎ: `Profile.campXp`/`ExpeditionState.campXp` เป็น EXP ค่ายเดียว (สมาชิกไม่มี level/exp), `levelXp`/`campLevel`/`levelOf`/`campProgress` ใน `core/world/world.ts`, `memberDef(lookup, map, party, id)` รับ profile/run, `talentPoints`/`memberTalentReason` รับ Lv ค่าย; ชนะ = EXP ค่ายครั้งเดียว ไม่คูณจำนวนคน, ไม่มี joinBehind/reserve/catch-up; `settle` คืนค่า (max) ไม่บวกซ้ำ
+- ถือครอง: ไม่มี COMPANY_CAP, `company.parked` (thiran/wila) ไม่ขึ้นบอร์ด/featured, `hireable()`, คลังสมาชิก `Profile.archived` + `setArchived`; UI จัดทีม: แถบเลเวลค่าย, ถือครอง n/N, ค้นหา/ตัวกรอง/คลัง
+- เซฟ v44: migration จาก max owned total EXP (ไม่ sum), เที่ยวค้างเดินต่อ, ศึกที่คนลงสนามเปลี่ยน Lv เริ่มใหม่จาก entry, backup `…expedition.v1.backup.v43`, `Game.migrated` แสดงครั้งเดียว; fixture เทสต์รูปเซฟเก่า `tests/fixtures/legacy-save.ts`, Lv ค่ายในเทสต์ `tests/fixtures/camp-level.ts`
+- เทสต์: typecheck/lint ผ่าน, vitest 1346 ผ่าน (ใหม่ `tests/camp-level.test.ts` 17 ข้อ), browser ใหม่ `tests/browser/camp-level.spec.ts`; sim 28/28 หลังย้ายค่าอ้างอิง gate (3 เซลล์ rush ยากลง มีคำอธิบาย + seed อิสระ 24 ตัวไม่ถดถอย) — รายละเอียด `docs/validation/p01/README_TH.md`
+- ค้าง/ถัดไป: P02 ทีม 5 + ศัตรู 1–5 + สำรองตามบท/ความเหนื่อยล้า (OD-05/OD-11); P04 แต้มจาก Lv ค่าย/เศษดาว
+
 ## 2026-10-31 — W8 ปิดแผน animation/VFX (Claude, PR #125 merged `9a36736`, เจ้าของอนุมัติ “อนุมัติ” 2026-10-31)
 
 - coverage จากโค้ด (`src/game/visuals/presentation-coverage.ts`, `npm run coverage:presentation` เขียน `docs/combat-presentation/COVERAGE_TH.md`/`coverage.json` + `docs/validation/w8-field-audit/BUDGET_TH.md`; เทสต์ล้มเมื่อค้าง) — แก้ registry/content/atlas แล้วต้องรันคำสั่งนี้
