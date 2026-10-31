@@ -6,9 +6,9 @@ const saved=(page:Page)=>page.evaluate(()=>localStorage.getItem('unit-a7-committ
 const saintClips={attack:'attack',saintstrike:'attack',vowstrike:'attack',saintarc:'arc',communion:'communion',sharewound:'communion',lastlight:'lastlight'} as Record<string,string>;
 // Anatomy-gated strips are absent (undefined): the body stays on the seed frame with the procedural motion.
 const clipOf:Record<A7Hero,Record<string,string|undefined>>={metta:saintClips,
- lalin:{cadence:'partner',duet:'partner',deepbeat:'partner',closingstep:'closing'}};
-const contactOf:Record<A7Hero,Record<string,number>>={metta:{attack:3,arc:9,communion:15,lastlight:22},lalin:{partner:4,closing:10}};
-const downFrame:Record<A7Hero,string>={metta:'34',lalin:'0'};
+ lalin:{attack:'attack',cadence:'partner',duet:'partner',deepbeat:'partner',rounddance:'circle',echofoot:'echo',closingstep:'closing'}};
+const contactOf:Record<A7Hero,Record<string,number>>={metta:{attack:3,arc:9,communion:15,lastlight:22},lalin:{partner:4,closing:10,attack:15,circle:21,echo:28}};
+const downFrame:Record<A7Hero,string>={metta:'34',lalin:'40'};
 async function ready(page:Page,query:string,hero:A7Hero='metta'){
  await page.goto(`tests/browser/fixtures/unit-a7.html?hero=${hero}&${query}`);
  await expect(page.locator('canvas')).toBeVisible();

@@ -1334,6 +1334,9 @@ The column a hero stands in is now its lane in the rules (owner 2026-10-22, plan
 - Resume with `PLAYWRIGHT_CHROMIUM_EXECUTABLE=/usr/bin/chromium npm run test:browser -- --grep 'new Veil Frontier foes'` where a local server is permitted. Inspect `foes-thicket.png` on desktop and a portrait phone; confirm the Matriarch and Mycon face left, allies face right, and selecting/attacking the Matriarch still works.
 - No merge or deployment performed by Codex.
 
+## 2026-10-30 — A7-002 เซรีส (`lalin`) นำเข้าแล้ว (รอเจ้าของอนุมัติ motion)
+
+Branch `claude/cerise-a7-002`: dance-strike/circle-spin/echo-closing-step + hit/block/down ของเซรีสเข้า atlas `lalin_a7` (41 เฟรม, lossless, เกินงบ 6.23 MiB / 2.18 MB — แจ้งเจ้าของ). **ไม่นำส่วน wila** (redesign, queue ข้อ 29). circle-spin 3–4 / down 4 วัดอัตโนมัติไม่ได้ ให้เจ้าของดูคลิป. คลิป/หลักฐาน `docs/combat-presentation/unit-a7-002-slice/README_TH.md`. หลัง merge: ปิด PR #117 พร้อมบันทึกว่า wila ไม่ใช้.
 
 ## 2026-10-30 — ART-VFX-SONG-SHADOW-002 R3 integrated (awaiting owner motion approval)
 

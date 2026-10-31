@@ -261,13 +261,13 @@
     "downloadBytes": 1372287
   },
   "lalin": {
-    "image": "lalin_a7.950000b43402.webp",
-    "atlas": "lalin_a7.1aeb9538ecf6.json",
-    "width": 1280,
-    "height": 396,
-    "frames": 13,
-    "decodedBytes": 2027520,
-    "downloadBytes": 625180
+    "image": "lalin_a7.3154c54936f2.webp",
+    "atlas": "lalin_a7.e8d3473f11c9.json",
+    "width": 800,
+    "height": 2040,
+    "frames": 41,
+    "decodedBytes": 6528000,
+    "downloadBytes": 2176220
   },
   "matriarch": {
     "image": "matriarch_a9.9aec248e0338.webp",

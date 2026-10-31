@@ -1,0 +1,58 @@
+{
+ "tolerance": 0.12,
+ "minInliers": 12,
+ "report": {
+  "wila-echo-closing-step": [
+   {
+    "frame": 0,
+    "height": 198,
+    "scale": 1.0,
+    "inliers": 885,
+    "idle": true,
+    "status": "idle"
+   },
+   {
+    "frame": 1,
+    "height": 248,
+    "scale": 1.124,
+    "inliers": 164,
+    "status": "drift"
+   },
+   {
+    "frame": 2,
+    "height": 246,
+    "scale": 1.131,
+    "inliers": 211,
+    "status": "drift"
+   },
+   {
+    "frame": 3,
+    "height": 250,
+    "scale": 1.146,
+    "inliers": 120,
+    "status": "drift"
+   },
+   {
+    "frame": 4,
+    "height": 296,
+    "scale": 1.163,
+    "inliers": 68,
+    "status": "drift"
+   },
+   {
+    "frame": 5,
+    "height": 249,
+    "scale": 1.118,
+    "inliers": 143,
+    "status": "ok"
+   },
+   {
+    "frame": 6,
+    "height": 249,
+    "scale": 1.114,
+    "inliers": 190,
+    "status": "ok"
+   }
+  ]
+ }
+}

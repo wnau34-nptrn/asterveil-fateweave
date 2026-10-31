@@ -1,0 +1,1 @@
+lalin-echo-closing-step: median head scale 1.132; drift [(1, 1.13), (2, 1.141), (3, 1.169), (5, 1.135), (6, 1.128)]; not measured []

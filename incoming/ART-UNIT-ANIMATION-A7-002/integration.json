@@ -1,0 +1,19 @@
+{
+  "image": "lalin_a7.3154c54936f2.webp",
+  "atlas": "lalin_a7.e8d3473f11c9.json",
+  "width": 800,
+  "height": 2040,
+  "frames": 41,
+  "decodedBytes": 6528000,
+  "downloadBytes": 2176220,
+  "clipStarts": {
+    "dance-strike": 13,
+    "circle-spin": 19,
+    "echo-closing-step": 25,
+    "hit": 31,
+    "block": 34,
+    "down": 37
+  },
+  "uniqueFrames": 36,
+  "wila": "not integrated (redesign)"
+}

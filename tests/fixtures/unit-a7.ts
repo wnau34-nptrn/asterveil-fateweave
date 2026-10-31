@@ -13,7 +13,7 @@ export const a7Actions=(hero:A7Hero|(typeof stillOnlyHeroes)[number]):readonly A
 // Dancer skills need an ally whose skill is cooling down: the dancer attacks and the allies use their own skills first.
 const needsCooldown:readonly ActionId[]=['cadence','duet','deepbeat','closingstep','rounddance','echofoot'];
 export const foeArt='foe_spore_puff' as const,foeIntent='Spore Dust';
-// scenario: normal (hero acts, foe hits the Knight) | hurt/down (foe hits the hero) | enemy-down (foe has 1 HP)
+// scenario: normal (hero acts, foe hits the Knight) | hurt/down (foe hits the hero) | block (foe's hit on the hero is fully absorbed: 0 damage) | enemy-down (foe has 1 HP)
 export function unitA7Fixture(hero:A7Hero|(typeof stillOnlyHeroes)[number],action:ActionId='attack',scenario='normal'){
  const from=encounters.find(d=>d.enemies.some(e=>e.art===foeArt&&d.intents.some(i=>i.sourceId===e.id&&i.name===foeIntent)))!;
  const foe=from.enemies.find(e=>e.art===foeArt&&from.intents.some(i=>i.sourceId===e.id&&i.name===foeIntent))!;
@@ -22,7 +22,7 @@ export function unitA7Fixture(hero:A7Hero|(typeof stillOnlyHeroes)[number],actio
  const data:EncounterDefinition={...structuredClone(thicketAmbush),
   heroes:[{...merc,speed:200,actions:[...a7Actions(hero)],lane:'front'},{...base.find(h=>h.id==='guardian')!,speed:60,actions:['attack','guard']},{...base.find(h=>h.id==='weaver')!,speed:50,actions:['attack','ward']}],
   enemies:[{...foe,id:'f1',row:'front',maxHp:scenario==='enemy-down'?1:foe.maxHp,speed:110}],
-  intents:[{...intent,sourceId:'f1',targetSlot:scenario==='hurt'||scenario==='down'?0:1}]};
+  intents:[{...intent,sourceId:'f1',targetSlot:scenario==='hurt'||scenario==='down'||scenario==='block'?0:1,...(scenario==='block'?{damage:0}:{})}]};
  const entry={hp:Object.fromEntries(data.heroes.map(h=>[h.id,h.id===hero?(scenario==='down'?1:h.maxHp):Math.ceil(h.maxHp*.5)]))};
  const begin=beginBattle(data,entry,true).state;
  const prelude:Command[]=[];let state=begin;

@@ -1,0 +1,4958 @@
+[
+  {
+    "file": "lalin-attack-block-normal-390.mp4",
+    "duration": 2.609778,
+    "capturedFrames": 98,
+    "maxFrameGap": 0.272,
+    "maxTimestampErrorMs": 0.0052,
+    "clickOffset": 0.374,
+    "rawCapture": "test-results/unit-a7-delivery/unit-a7-clips-unit-A7-clip-lalin-attack-block-normal",
+    "captureStartUTCSeconds": 1793377862.919263,
+    "impacts": [
+      {
+        "at": 0.629,
+        "remainingMs": 390,
+        "turn": {
+          "actorId": "lalin",
+          "side": "hero",
+          "beat": 1,
+          "round": 1,
+          "action": "attack",
+          "targetId": "f1",
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 0,
+            "name": "Spore Dust",
+            "damage": 0,
+            "kind": "energy",
+            "targetId": "lalin",
+            "beat": 1,
+            "round": 1
+          },
+          "state": {
+            "encounterId": "thicket-ambush",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "lalin",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "lalin",
+                "hp": 50,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 38,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 35,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 0,
+              "name": "Spore Dust",
+              "damage": 0,
+              "kind": "energy",
+              "targetId": "lalin",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "lalin",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "lalin",
+              "targetId": "f1",
+              "amount": 9,
+              "text": "Hero attacks."
+            }
+          ],
+          "before": {
+            "encounterId": "thicket-ambush",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "lalin",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "lalin",
+                "hp": 50,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 38,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 44,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 0,
+              "name": "Spore Dust",
+              "damage": 0,
+              "kind": "energy",
+              "targetId": "lalin",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": []
+          },
+          "after": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "lalin",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "lalin",
+                "hp": 50,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 38,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 35,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 0,
+              "name": "Spore Dust",
+              "damage": 0,
+              "kind": "energy",
+              "targetId": "lalin",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "lalin",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "at": 1.315,
+        "remainingMs": 520,
+        "turn": {
+          "actorId": "f1",
+          "side": "enemy",
+          "beat": 2,
+          "round": 1,
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 0,
+            "name": "Spore Dust",
+            "damage": 0,
+            "kind": "energy",
+            "targetId": "lalin",
+            "beat": 2,
+            "round": 1
+          },
+          "targetId": "lalin",
+          "state": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "lalin",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "lalin",
+                "hp": 50,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 38,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 35,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 0,
+              "name": "Spore Dust",
+              "damage": 0,
+              "kind": "energy",
+              "targetId": "lalin",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "lalin",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "f1",
+              "targetId": "lalin",
+              "amount": 0,
+              "absorbed": 0,
+              "text": "Enemy attacks on its own turn."
+            }
+          ],
+          "before": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "lalin",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "lalin",
+                "hp": 50,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 38,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 35,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 0,
+              "name": "Spore Dust",
+              "damage": 0,
+              "kind": "energy",
+              "targetId": "lalin",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "lalin",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "after": {
+            "encounterId": "thicket-ambush",
+            "beat": 3,
+            "round": 1,
+            "turnIndex": 2,
+            "order": [
+              "lalin",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "lalin",
+                "hp": 50,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 38,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 35,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 0,
+              "name": "Spore Dust",
+              "damage": 0,
+              "kind": "energy",
+              "targetId": "lalin",
+              "beat": 3,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "lalin",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "file": "lalin-attack-down-normal-390.mp4",
+    "duration": 2.543278,
+    "capturedFrames": 83,
+    "maxFrameGap": 0.296,
+    "maxTimestampErrorMs": 0.0062,
+    "clickOffset": 0.309,
+    "rawCapture": "test-results/unit-a7-delivery/unit-a7-clips-unit-A7-clip-lalin-attack-down-normal",
+    "captureStartUTCSeconds": 1793377833.341922,
+    "impacts": [
+      {
+        "at": 0.554,
+        "remainingMs": 390,
+        "turn": {
+          "actorId": "lalin",
+          "side": "hero",
+          "beat": 1,
+          "round": 1,
+          "action": "attack",
+          "targetId": "f1",
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 0,
+            "name": "Spore Dust",
+            "damage": 10,
+            "kind": "energy",
+            "targetId": "lalin",
+            "beat": 1,
+            "round": 1
+          },
+          "state": {
+            "encounterId": "thicket-ambush",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "lalin",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "lalin",
+                "hp": 1,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 38,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 35,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 0,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "lalin",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "lalin",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "lalin",
+              "targetId": "f1",
+              "amount": 9,
+              "text": "Hero attacks."
+            }
+          ],
+          "before": {
+            "encounterId": "thicket-ambush",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "lalin",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "lalin",
+                "hp": 1,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 38,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 44,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 0,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "lalin",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": []
+          },
+          "after": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "lalin",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "lalin",
+                "hp": 1,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 38,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 35,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 0,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "lalin",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "lalin",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "at": 1.256,
+        "remainingMs": 520,
+        "turn": {
+          "actorId": "f1",
+          "side": "enemy",
+          "beat": 2,
+          "round": 1,
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 0,
+            "name": "Spore Dust",
+            "damage": 10,
+            "kind": "energy",
+            "targetId": "lalin",
+            "beat": 2,
+            "round": 1
+          },
+          "targetId": "lalin",
+          "state": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "lalin",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "lalin",
+                "hp": 0,
+                "barrier": 0,
+                "cooldowns": {},
+                "fell": true
+              },
+              {
+                "id": "guardian",
+                "hp": 38,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 35,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 0,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "lalin",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "lalin",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "f1",
+              "targetId": "lalin",
+              "amount": 1,
+              "absorbed": 0,
+              "text": "Enemy attacks on its own turn."
+            },
+            {
+              "type": "down",
+              "targetId": "lalin",
+              "text": "Hero falls."
+            }
+          ],
+          "before": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "lalin",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "lalin",
+                "hp": 1,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 38,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 35,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 0,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "lalin",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "lalin",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "after": {
+            "encounterId": "thicket-ambush",
+            "beat": 3,
+            "round": 1,
+            "turnIndex": 2,
+            "order": [
+              "lalin",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "lalin",
+                "hp": 0,
+                "barrier": 0,
+                "cooldowns": {},
+                "fell": true
+              },
+              {
+                "id": "guardian",
+                "hp": 38,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 35,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 0,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 3,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "lalin",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "file": "lalin-attack-hurt-normal-390.mp4",
+    "duration": 2.575789,
+    "capturedFrames": 83,
+    "maxFrameGap": 0.307,
+    "maxTimestampErrorMs": 0.0061,
+    "clickOffset": 0.324,
+    "rawCapture": "test-results/unit-a7-delivery/unit-a7-clips-unit-A7-clip-lalin-attack-hurt-normal",
+    "captureStartUTCSeconds": 1793377825.699466,
+    "impacts": [
+      {
+        "at": 0.578,
+        "remainingMs": 390,
+        "turn": {
+          "actorId": "lalin",
+          "side": "hero",
+          "beat": 1,
+          "round": 1,
+          "action": "attack",
+          "targetId": "f1",
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 0,
+            "name": "Spore Dust",
+            "damage": 10,
+            "kind": "energy",
+            "targetId": "lalin",
+            "beat": 1,
+            "round": 1
+          },
+          "state": {
+            "encounterId": "thicket-ambush",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "lalin",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "lalin",
+                "hp": 50,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 38,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 35,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 0,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "lalin",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "lalin",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "lalin",
+              "targetId": "f1",
+              "amount": 9,
+              "text": "Hero attacks."
+            }
+          ],
+          "before": {
+            "encounterId": "thicket-ambush",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "lalin",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "lalin",
+                "hp": 50,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 38,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 44,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 0,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "lalin",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": []
+          },
+          "after": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "lalin",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "lalin",
+                "hp": 50,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 38,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 35,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 0,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "lalin",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "lalin",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "at": 1.267,
+        "remainingMs": 520,
+        "turn": {
+          "actorId": "f1",
+          "side": "enemy",
+          "beat": 2,
+          "round": 1,
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 0,
+            "name": "Spore Dust",
+            "damage": 10,
+            "kind": "energy",
+            "targetId": "lalin",
+            "beat": 2,
+            "round": 1
+          },
+          "targetId": "lalin",
+          "state": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "lalin",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "lalin",
+                "hp": 40,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 38,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 35,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 0,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "lalin",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "lalin",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "f1",
+              "targetId": "lalin",
+              "amount": 10,
+              "absorbed": 0,
+              "text": "Enemy attacks on its own turn."
+            }
+          ],
+          "before": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "lalin",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "lalin",
+                "hp": 50,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 38,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 35,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 0,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "lalin",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "lalin",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "after": {
+            "encounterId": "thicket-ambush",
+            "beat": 3,
+            "round": 1,
+            "turnIndex": 2,
+            "order": [
+              "lalin",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "lalin",
+                "hp": 40,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 38,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 35,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 0,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "lalin",
+              "beat": 3,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "lalin",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "file": "lalin-attack-normal-fast-390.mp4",
+    "duration": 2.0173,
+    "capturedFrames": 66,
+    "maxFrameGap": 0.291,
+    "maxTimestampErrorMs": 0.0051,
+    "clickOffset": 0.257,
+    "rawCapture": "test-results/unit-a7-delivery/unit-a7-clips-unit-A7-clip-lalin-attack-normal-fast",
+    "captureStartUTCSeconds": 1793377877.774031,
+    "impacts": [
+      {
+        "at": 0.427,
+        "remainingMs": 253,
+        "turn": {
+          "actorId": "lalin",
+          "side": "hero",
+          "beat": 1,
+          "round": 1,
+          "action": "attack",
+          "targetId": "f1",
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Spore Dust",
+            "damage": 10,
+            "kind": "energy",
+            "targetId": "guardian",
+            "beat": 1,
+            "round": 1
+          },
+          "state": {
+            "encounterId": "thicket-ambush",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "lalin",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "lalin",
+                "hp": 50,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 38,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 35,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "lalin",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "lalin",
+              "targetId": "f1",
+              "amount": 9,
+              "text": "Hero attacks."
+            }
+          ],
+          "before": {
+            "encounterId": "thicket-ambush",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "lalin",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "lalin",
+                "hp": 50,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 38,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 44,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": []
+          },
+          "after": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "lalin",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "lalin",
+                "hp": 50,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 38,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 35,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "lalin",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "at": 0.904,
+        "remainingMs": 338,
+        "turn": {
+          "actorId": "f1",
+          "side": "enemy",
+          "beat": 2,
+          "round": 1,
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Spore Dust",
+            "damage": 10,
+            "kind": "energy",
+            "targetId": "guardian",
+            "beat": 2,
+            "round": 1
+          },
+          "targetId": "guardian",
+          "state": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "lalin",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "lalin",
+                "hp": 50,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 28,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 35,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "lalin",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "f1",
+              "targetId": "guardian",
+              "amount": 10,
+              "absorbed": 0,
+              "text": "Enemy attacks on its own turn."
+            }
+          ],
+          "before": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "lalin",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "lalin",
+                "hp": 50,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 38,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 35,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "lalin",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "after": {
+            "encounterId": "thicket-ambush",
+            "beat": 3,
+            "round": 1,
+            "turnIndex": 2,
+            "order": [
+              "lalin",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "lalin",
+                "hp": 50,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 28,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 35,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 3,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "lalin",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "file": "lalin-attack-normal-normal-390.mp4",
+    "duration": 2.286322,
+    "capturedFrames": 66,
+    "maxFrameGap": 0.276,
+    "maxTimestampErrorMs": 0.0058,
+    "clickOffset": 0.019,
+    "rawCapture": "test-results/unit-a7-delivery/unit-a7-clips-unit-A7-clip-lalin-attack-normal-normal",
+    "captureStartUTCSeconds": 1793377817.701635,
+    "impacts": [
+      {
+        "at": 0.266,
+        "remainingMs": 390,
+        "turn": {
+          "actorId": "lalin",
+          "side": "hero",
+          "beat": 1,
+          "round": 1,
+          "action": "attack",
+          "targetId": "f1",
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Spore Dust",
+            "damage": 10,
+            "kind": "energy",
+            "targetId": "guardian",
+            "beat": 1,
+            "round": 1
+          },
+          "state": {
+            "encounterId": "thicket-ambush",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "lalin",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "lalin",
+                "hp": 50,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 38,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 35,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "lalin",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "lalin",
+              "targetId": "f1",
+              "amount": 9,
+              "text": "Hero attacks."
+            }
+          ],
+          "before": {
+            "encounterId": "thicket-ambush",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "lalin",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "lalin",
+                "hp": 50,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 38,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 44,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": []
+          },
+          "after": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "lalin",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "lalin",
+                "hp": 50,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 38,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 35,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "lalin",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "at": 0.979,
+        "remainingMs": 520,
+        "turn": {
+          "actorId": "f1",
+          "side": "enemy",
+          "beat": 2,
+          "round": 1,
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Spore Dust",
+            "damage": 10,
+            "kind": "energy",
+            "targetId": "guardian",
+            "beat": 2,
+            "round": 1
+          },
+          "targetId": "guardian",
+          "state": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "lalin",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "lalin",
+                "hp": 50,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 28,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 35,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "lalin",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "f1",
+              "targetId": "guardian",
+              "amount": 10,
+              "absorbed": 0,
+              "text": "Enemy attacks on its own turn."
+            }
+          ],
+          "before": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "lalin",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "lalin",
+                "hp": 50,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 38,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 35,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "lalin",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "after": {
+            "encounterId": "thicket-ambush",
+            "beat": 3,
+            "round": 1,
+            "turnIndex": 2,
+            "order": [
+              "lalin",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "lalin",
+                "hp": 50,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 28,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 35,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 3,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "lalin",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "file": "lalin-attack-normal-osreduce-390.mp4",
+    "duration": 2.196789,
+    "capturedFrames": 76,
+    "maxFrameGap": 0.266,
+    "maxTimestampErrorMs": 0.006,
+    "clickOffset": 0.338,
+    "rawCapture": "test-results/unit-a7-delivery/unit-a7-clips-unit-A7-clip-lalin-attack-normal-osreduce",
+    "captureStartUTCSeconds": 1793377884.538694,
+    "impacts": [
+      {
+        "at": 0.37,
+        "remainingMs": 600,
+        "turn": {
+          "actorId": "lalin",
+          "side": "hero",
+          "beat": 1,
+          "round": 1,
+          "action": "attack",
+          "targetId": "f1",
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Spore Dust",
+            "damage": 10,
+            "kind": "energy",
+            "targetId": "guardian",
+            "beat": 1,
+            "round": 1
+          },
+          "state": {
+            "encounterId": "thicket-ambush",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "lalin",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "lalin",
+                "hp": 50,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 38,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 35,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "lalin",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "lalin",
+              "targetId": "f1",
+              "amount": 9,
+              "text": "Hero attacks."
+            }
+          ],
+          "before": {
+            "encounterId": "thicket-ambush",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "lalin",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "lalin",
+                "hp": 50,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 38,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 44,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": []
+          },
+          "after": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "lalin",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "lalin",
+                "hp": 50,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 38,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 35,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "lalin",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "at": 0.993,
+        "remainingMs": 800,
+        "turn": {
+          "actorId": "f1",
+          "side": "enemy",
+          "beat": 2,
+          "round": 1,
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Spore Dust",
+            "damage": 10,
+            "kind": "energy",
+            "targetId": "guardian",
+            "beat": 2,
+            "round": 1
+          },
+          "targetId": "guardian",
+          "state": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "lalin",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "lalin",
+                "hp": 50,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 28,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 35,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "lalin",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "f1",
+              "targetId": "guardian",
+              "amount": 10,
+              "absorbed": 0,
+              "text": "Enemy attacks on its own turn."
+            }
+          ],
+          "before": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "lalin",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "lalin",
+                "hp": 50,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 38,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 35,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "lalin",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "after": {
+            "encounterId": "thicket-ambush",
+            "beat": 3,
+            "round": 1,
+            "turnIndex": 2,
+            "order": [
+              "lalin",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "lalin",
+                "hp": 50,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 28,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 35,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 3,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "lalin",
+                "action": "attack",
+                "targetId": "f1"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "file": "lalin-cadence-normal-normal-390.mp4",
+    "duration": 2.405844,
+    "capturedFrames": 79,
+    "maxFrameGap": 0.28,
+    "maxTimestampErrorMs": 0.0051,
+    "clickOffset": 0.157,
+    "rawCapture": "test-results/unit-a7-delivery/unit-a7-clips-unit-A7-clip-lalin-cadence-normal-normal",
+    "captureStartUTCSeconds": 1793377840.922517,
+    "impacts": [
+      {
+        "at": 0.452,
+        "remainingMs": 390,
+        "turn": {
+          "actorId": "lalin",
+          "side": "hero",
+          "beat": 5,
+          "round": 2,
+          "action": "cadence",
+          "targetId": "weaver",
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Spore Dust",
+            "damage": 10,
+            "kind": "energy",
+            "targetId": "guardian",
+            "beat": 5,
+            "round": 2
+          },
+          "state": {
+            "encounterId": "thicket-ambush",
+            "beat": 5,
+            "round": 2,
+            "turnIndex": 0,
+            "order": [
+              "lalin",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": {
+              "heroId": "guardian",
+              "targetId": "guardian",
+              "sourceId": "f1"
+            },
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "lalin",
+                "hp": 50,
+                "barrier": 14,
+                "cooldowns": {
+                  "cadence": 5
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 28,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 35,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 5,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "lalin",
+                "action": "attack",
+                "targetId": "f1"
+              },
+              {
+                "beat": 3,
+                "heroId": "guardian",
+                "action": "guard",
+                "targetId": "guardian"
+              },
+              {
+                "beat": 4,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "lalin"
+              },
+              {
+                "beat": 5,
+                "heroId": "lalin",
+                "action": "cadence",
+                "targetId": "weaver"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "cooldown",
+              "sourceId": "lalin",
+              "targetId": "weaver",
+              "action": "ward",
+              "amount": 1,
+              "text": "Cooldown recovered."
+            }
+          ],
+          "before": {
+            "encounterId": "thicket-ambush",
+            "beat": 5,
+            "round": 2,
+            "turnIndex": 0,
+            "order": [
+              "lalin",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": {
+              "heroId": "guardian",
+              "targetId": "guardian",
+              "sourceId": "f1"
+            },
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "lalin",
+                "hp": 50,
+                "barrier": 14,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 28,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {
+                  "ward": 3
+                }
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 35,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 5,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "lalin",
+                "action": "attack",
+                "targetId": "f1"
+              },
+              {
+                "beat": 3,
+                "heroId": "guardian",
+                "action": "guard",
+                "targetId": "guardian"
+              },
+              {
+                "beat": 4,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "lalin"
+              }
+            ]
+          },
+          "after": {
+            "encounterId": "thicket-ambush",
+            "beat": 6,
+            "round": 2,
+            "turnIndex": 1,
+            "order": [
+              "lalin",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": {
+              "heroId": "guardian",
+              "targetId": "guardian",
+              "sourceId": "f1"
+            },
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "lalin",
+                "hp": 50,
+                "barrier": 14,
+                "cooldowns": {
+                  "cadence": 5
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 28,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 35,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 6,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "lalin",
+                "action": "attack",
+                "targetId": "f1"
+              },
+              {
+                "beat": 3,
+                "heroId": "guardian",
+                "action": "guard",
+                "targetId": "guardian"
+              },
+              {
+                "beat": 4,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "lalin"
+              },
+              {
+                "beat": 5,
+                "heroId": "lalin",
+                "action": "cadence",
+                "targetId": "weaver"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "at": 1.143,
+        "remainingMs": 520,
+        "turn": {
+          "actorId": "f1",
+          "side": "enemy",
+          "beat": 6,
+          "round": 2,
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Spore Dust",
+            "damage": 10,
+            "kind": "energy",
+            "targetId": "guardian",
+            "beat": 6,
+            "round": 2
+          },
+          "targetId": "guardian",
+          "state": {
+            "encounterId": "thicket-ambush",
+            "beat": 6,
+            "round": 2,
+            "turnIndex": 1,
+            "order": [
+              "lalin",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "lalin",
+                "hp": 50,
+                "barrier": 14,
+                "cooldowns": {
+                  "cadence": 5
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 35,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 6,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "lalin",
+                "action": "attack",
+                "targetId": "f1"
+              },
+              {
+                "beat": 3,
+                "heroId": "guardian",
+                "action": "guard",
+                "targetId": "guardian"
+              },
+              {
+                "beat": 4,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "lalin"
+              },
+              {
+                "beat": 5,
+                "heroId": "lalin",
+                "action": "cadence",
+                "targetId": "weaver"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "f1",
+              "targetId": "guardian",
+              "amount": 4,
+              "absorbed": 0,
+              "text": "Enemy attacks on its own turn."
+            }
+          ],
+          "before": {
+            "encounterId": "thicket-ambush",
+            "beat": 6,
+            "round": 2,
+            "turnIndex": 1,
+            "order": [
+              "lalin",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": {
+              "heroId": "guardian",
+              "targetId": "guardian",
+              "sourceId": "f1"
+            },
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "lalin",
+                "hp": 50,
+                "barrier": 14,
+                "cooldowns": {
+                  "cadence": 5
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 28,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 35,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 6,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "lalin",
+                "action": "attack",
+                "targetId": "f1"
+              },
+              {
+                "beat": 3,
+                "heroId": "guardian",
+                "action": "guard",
+                "targetId": "guardian"
+              },
+              {
+                "beat": 4,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "lalin"
+              },
+              {
+                "beat": 5,
+                "heroId": "lalin",
+                "action": "cadence",
+                "targetId": "weaver"
+              }
+            ]
+          },
+          "after": {
+            "encounterId": "thicket-ambush",
+            "beat": 7,
+            "round": 2,
+            "turnIndex": 2,
+            "order": [
+              "lalin",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "lalin",
+                "hp": 50,
+                "barrier": 14,
+                "cooldowns": {
+                  "cadence": 5
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 35,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 7,
+              "round": 3
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "lalin",
+                "action": "attack",
+                "targetId": "f1"
+              },
+              {
+                "beat": 3,
+                "heroId": "guardian",
+                "action": "guard",
+                "targetId": "guardian"
+              },
+              {
+                "beat": 4,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "lalin"
+              },
+              {
+                "beat": 5,
+                "heroId": "lalin",
+                "action": "cadence",
+                "targetId": "weaver"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "file": "lalin-closingstep-normal-normal-390.mp4",
+    "duration": 2.616444,
+    "capturedFrames": 87,
+    "maxFrameGap": 0.238,
+    "maxTimestampErrorMs": 0.0051,
+    "clickOffset": 0.341,
+    "rawCapture": "test-results/unit-a7-delivery/unit-a7-clips-unit-A7-clip-lalin-closingstep-normal-normal",
+    "captureStartUTCSeconds": 1793377847.922227,
+    "impacts": [
+      {
+        "at": 0.724,
+        "remainingMs": 510,
+        "turn": {
+          "actorId": "lalin",
+          "side": "hero",
+          "beat": 5,
+          "round": 2,
+          "action": "closingstep",
+          "targetId": "weaver",
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Spore Dust",
+            "damage": 10,
+            "kind": "energy",
+            "targetId": "guardian",
+            "beat": 5,
+            "round": 2
+          },
+          "state": {
+            "encounterId": "thicket-ambush",
+            "beat": 5,
+            "round": 2,
+            "turnIndex": 0,
+            "order": [
+              "lalin",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": {
+              "heroId": "guardian",
+              "targetId": "guardian",
+              "sourceId": "f1"
+            },
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "lalin",
+                "hp": 50,
+                "barrier": 14,
+                "cooldowns": {
+                  "closingstep": 8
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 28,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 35,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 5,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "lalin",
+                "action": "attack",
+                "targetId": "f1"
+              },
+              {
+                "beat": 3,
+                "heroId": "guardian",
+                "action": "guard",
+                "targetId": "guardian"
+              },
+              {
+                "beat": 4,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "lalin"
+              },
+              {
+                "beat": 5,
+                "heroId": "lalin",
+                "action": "closingstep",
+                "targetId": "weaver"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "cooldown",
+              "sourceId": "lalin",
+              "targetId": "weaver",
+              "action": "ward",
+              "amount": 1,
+              "text": "Cooldown recovered."
+            }
+          ],
+          "before": {
+            "encounterId": "thicket-ambush",
+            "beat": 5,
+            "round": 2,
+            "turnIndex": 0,
+            "order": [
+              "lalin",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": {
+              "heroId": "guardian",
+              "targetId": "guardian",
+              "sourceId": "f1"
+            },
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "lalin",
+                "hp": 50,
+                "barrier": 14,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 28,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {
+                  "ward": 3
+                }
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 35,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 5,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "lalin",
+                "action": "attack",
+                "targetId": "f1"
+              },
+              {
+                "beat": 3,
+                "heroId": "guardian",
+                "action": "guard",
+                "targetId": "guardian"
+              },
+              {
+                "beat": 4,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "lalin"
+              }
+            ]
+          },
+          "after": {
+            "encounterId": "thicket-ambush",
+            "beat": 6,
+            "round": 2,
+            "turnIndex": 1,
+            "order": [
+              "lalin",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": {
+              "heroId": "guardian",
+              "targetId": "guardian",
+              "sourceId": "f1"
+            },
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "lalin",
+                "hp": 50,
+                "barrier": 14,
+                "cooldowns": {
+                  "closingstep": 8
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 28,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 35,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 6,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "lalin",
+                "action": "attack",
+                "targetId": "f1"
+              },
+              {
+                "beat": 3,
+                "heroId": "guardian",
+                "action": "guard",
+                "targetId": "guardian"
+              },
+              {
+                "beat": 4,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "lalin"
+              },
+              {
+                "beat": 5,
+                "heroId": "lalin",
+                "action": "closingstep",
+                "targetId": "weaver"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "at": 1.546,
+        "remainingMs": 520,
+        "turn": {
+          "actorId": "f1",
+          "side": "enemy",
+          "beat": 6,
+          "round": 2,
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Spore Dust",
+            "damage": 10,
+            "kind": "energy",
+            "targetId": "guardian",
+            "beat": 6,
+            "round": 2
+          },
+          "targetId": "guardian",
+          "state": {
+            "encounterId": "thicket-ambush",
+            "beat": 6,
+            "round": 2,
+            "turnIndex": 1,
+            "order": [
+              "lalin",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "lalin",
+                "hp": 50,
+                "barrier": 14,
+                "cooldowns": {
+                  "closingstep": 8
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 35,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 6,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "lalin",
+                "action": "attack",
+                "targetId": "f1"
+              },
+              {
+                "beat": 3,
+                "heroId": "guardian",
+                "action": "guard",
+                "targetId": "guardian"
+              },
+              {
+                "beat": 4,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "lalin"
+              },
+              {
+                "beat": 5,
+                "heroId": "lalin",
+                "action": "closingstep",
+                "targetId": "weaver"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "f1",
+              "targetId": "guardian",
+              "amount": 4,
+              "absorbed": 0,
+              "text": "Enemy attacks on its own turn."
+            }
+          ],
+          "before": {
+            "encounterId": "thicket-ambush",
+            "beat": 6,
+            "round": 2,
+            "turnIndex": 1,
+            "order": [
+              "lalin",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": {
+              "heroId": "guardian",
+              "targetId": "guardian",
+              "sourceId": "f1"
+            },
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "lalin",
+                "hp": 50,
+                "barrier": 14,
+                "cooldowns": {
+                  "closingstep": 8
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 28,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 35,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 6,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "lalin",
+                "action": "attack",
+                "targetId": "f1"
+              },
+              {
+                "beat": 3,
+                "heroId": "guardian",
+                "action": "guard",
+                "targetId": "guardian"
+              },
+              {
+                "beat": 4,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "lalin"
+              },
+              {
+                "beat": 5,
+                "heroId": "lalin",
+                "action": "closingstep",
+                "targetId": "weaver"
+              }
+            ]
+          },
+          "after": {
+            "encounterId": "thicket-ambush",
+            "beat": 7,
+            "round": 2,
+            "turnIndex": 2,
+            "order": [
+              "lalin",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "lalin",
+                "hp": 50,
+                "barrier": 14,
+                "cooldowns": {
+                  "closingstep": 8
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 35,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 7,
+              "round": 3
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "lalin",
+                "action": "attack",
+                "targetId": "f1"
+              },
+              {
+                "beat": 3,
+                "heroId": "guardian",
+                "action": "guard",
+                "targetId": "guardian"
+              },
+              {
+                "beat": 4,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "lalin"
+              },
+              {
+                "beat": 5,
+                "heroId": "lalin",
+                "action": "closingstep",
+                "targetId": "weaver"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "file": "lalin-echofoot-normal-normal-390.mp4",
+    "duration": 2.5074,
+    "capturedFrames": 89,
+    "maxFrameGap": 0.294,
+    "maxTimestampErrorMs": 0.0052,
+    "clickOffset": 0.276,
+    "rawCapture": "test-results/unit-a7-delivery/unit-a7-clips-unit-A7-clip-lalin-echofoot-normal-normal",
+    "captureStartUTCSeconds": 1793377870.323605,
+    "impacts": [
+      {
+        "at": 0.588,
+        "remainingMs": 520,
+        "turn": {
+          "actorId": "lalin",
+          "side": "hero",
+          "beat": 5,
+          "round": 2,
+          "action": "echofoot",
+          "targetId": "f1",
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Spore Dust",
+            "damage": 10,
+            "kind": "energy",
+            "targetId": "guardian",
+            "beat": 5,
+            "round": 2
+          },
+          "state": {
+            "encounterId": "thicket-ambush",
+            "beat": 5,
+            "round": 2,
+            "turnIndex": 0,
+            "order": [
+              "lalin",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": {
+              "heroId": "guardian",
+              "targetId": "guardian",
+              "sourceId": "f1"
+            },
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "lalin",
+                "hp": 50,
+                "barrier": 14,
+                "cooldowns": {
+                  "echofoot": 6
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 28,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 23,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 5,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "lalin",
+                "action": "attack",
+                "targetId": "f1"
+              },
+              {
+                "beat": 3,
+                "heroId": "guardian",
+                "action": "guard",
+                "targetId": "guardian"
+              },
+              {
+                "beat": 4,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "lalin"
+              },
+              {
+                "beat": 5,
+                "heroId": "lalin",
+                "action": "echofoot",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "lalin",
+              "targetId": "f1",
+              "amount": 12,
+              "text": "Hero attacks."
+            },
+            {
+              "type": "cooldown",
+              "sourceId": "lalin",
+              "targetId": "weaver",
+              "action": "ward",
+              "amount": 1,
+              "text": "Cooldown recovered."
+            }
+          ],
+          "before": {
+            "encounterId": "thicket-ambush",
+            "beat": 5,
+            "round": 2,
+            "turnIndex": 0,
+            "order": [
+              "lalin",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": {
+              "heroId": "guardian",
+              "targetId": "guardian",
+              "sourceId": "f1"
+            },
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "lalin",
+                "hp": 50,
+                "barrier": 14,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 28,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {
+                  "ward": 3
+                }
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 35,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 5,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "lalin",
+                "action": "attack",
+                "targetId": "f1"
+              },
+              {
+                "beat": 3,
+                "heroId": "guardian",
+                "action": "guard",
+                "targetId": "guardian"
+              },
+              {
+                "beat": 4,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "lalin"
+              }
+            ]
+          },
+          "after": {
+            "encounterId": "thicket-ambush",
+            "beat": 6,
+            "round": 2,
+            "turnIndex": 1,
+            "order": [
+              "lalin",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": {
+              "heroId": "guardian",
+              "targetId": "guardian",
+              "sourceId": "f1"
+            },
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "lalin",
+                "hp": 50,
+                "barrier": 14,
+                "cooldowns": {
+                  "echofoot": 6
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 28,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 23,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 6,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "lalin",
+                "action": "attack",
+                "targetId": "f1"
+              },
+              {
+                "beat": 3,
+                "heroId": "guardian",
+                "action": "guard",
+                "targetId": "guardian"
+              },
+              {
+                "beat": 4,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "lalin"
+              },
+              {
+                "beat": 5,
+                "heroId": "lalin",
+                "action": "echofoot",
+                "targetId": "f1"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "at": 1.41,
+        "remainingMs": 520,
+        "turn": {
+          "actorId": "f1",
+          "side": "enemy",
+          "beat": 6,
+          "round": 2,
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Spore Dust",
+            "damage": 10,
+            "kind": "energy",
+            "targetId": "guardian",
+            "beat": 6,
+            "round": 2
+          },
+          "targetId": "guardian",
+          "state": {
+            "encounterId": "thicket-ambush",
+            "beat": 6,
+            "round": 2,
+            "turnIndex": 1,
+            "order": [
+              "lalin",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "lalin",
+                "hp": 50,
+                "barrier": 14,
+                "cooldowns": {
+                  "echofoot": 6
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 23,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 6,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "lalin",
+                "action": "attack",
+                "targetId": "f1"
+              },
+              {
+                "beat": 3,
+                "heroId": "guardian",
+                "action": "guard",
+                "targetId": "guardian"
+              },
+              {
+                "beat": 4,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "lalin"
+              },
+              {
+                "beat": 5,
+                "heroId": "lalin",
+                "action": "echofoot",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "f1",
+              "targetId": "guardian",
+              "amount": 4,
+              "absorbed": 0,
+              "text": "Enemy attacks on its own turn."
+            }
+          ],
+          "before": {
+            "encounterId": "thicket-ambush",
+            "beat": 6,
+            "round": 2,
+            "turnIndex": 1,
+            "order": [
+              "lalin",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": {
+              "heroId": "guardian",
+              "targetId": "guardian",
+              "sourceId": "f1"
+            },
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "lalin",
+                "hp": 50,
+                "barrier": 14,
+                "cooldowns": {
+                  "echofoot": 6
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 28,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 23,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 6,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "lalin",
+                "action": "attack",
+                "targetId": "f1"
+              },
+              {
+                "beat": 3,
+                "heroId": "guardian",
+                "action": "guard",
+                "targetId": "guardian"
+              },
+              {
+                "beat": 4,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "lalin"
+              },
+              {
+                "beat": 5,
+                "heroId": "lalin",
+                "action": "echofoot",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "after": {
+            "encounterId": "thicket-ambush",
+            "beat": 7,
+            "round": 2,
+            "turnIndex": 2,
+            "order": [
+              "lalin",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "lalin",
+                "hp": 50,
+                "barrier": 14,
+                "cooldowns": {
+                  "echofoot": 6
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 23,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 7,
+              "round": 3
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "lalin",
+                "action": "attack",
+                "targetId": "f1"
+              },
+              {
+                "beat": 3,
+                "heroId": "guardian",
+                "action": "guard",
+                "targetId": "guardian"
+              },
+              {
+                "beat": 4,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "lalin"
+              },
+              {
+                "beat": 5,
+                "heroId": "lalin",
+                "action": "echofoot",
+                "targetId": "f1"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "file": "lalin-rounddance-normal-normal-390.mp4",
+    "duration": 2.559222,
+    "capturedFrames": 86,
+    "maxFrameGap": 0.285,
+    "maxTimestampErrorMs": 0.006,
+    "clickOffset": 0.26,
+    "rawCapture": "test-results/unit-a7-delivery/unit-a7-clips-unit-A7-clip-lalin-rounddance-normal-normal",
+    "captureStartUTCSeconds": 1793377855.353028,
+    "impacts": [
+      {
+        "at": 0.618,
+        "remainingMs": 480,
+        "turn": {
+          "actorId": "lalin",
+          "side": "hero",
+          "beat": 5,
+          "round": 2,
+          "action": "rounddance",
+          "targetId": "party",
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Spore Dust",
+            "damage": 10,
+            "kind": "energy",
+            "targetId": "guardian",
+            "beat": 5,
+            "round": 2
+          },
+          "state": {
+            "encounterId": "thicket-ambush",
+            "beat": 5,
+            "round": 2,
+            "turnIndex": 0,
+            "order": [
+              "lalin",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": {
+              "heroId": "guardian",
+              "targetId": "guardian",
+              "sourceId": "f1"
+            },
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "lalin",
+                "hp": 50,
+                "barrier": 14,
+                "cooldowns": {
+                  "rounddance": 7
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 28,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 35,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 5,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "lalin",
+                "action": "attack",
+                "targetId": "f1"
+              },
+              {
+                "beat": 3,
+                "heroId": "guardian",
+                "action": "guard",
+                "targetId": "guardian"
+              },
+              {
+                "beat": 4,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "lalin"
+              },
+              {
+                "beat": 5,
+                "heroId": "lalin",
+                "action": "rounddance",
+                "targetId": "party"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "cooldown",
+              "sourceId": "lalin",
+              "targetId": "weaver",
+              "action": "ward",
+              "amount": 1,
+              "text": "Cooldown recovered."
+            }
+          ],
+          "before": {
+            "encounterId": "thicket-ambush",
+            "beat": 5,
+            "round": 2,
+            "turnIndex": 0,
+            "order": [
+              "lalin",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": {
+              "heroId": "guardian",
+              "targetId": "guardian",
+              "sourceId": "f1"
+            },
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "lalin",
+                "hp": 50,
+                "barrier": 14,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 28,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {
+                  "ward": 3
+                }
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 35,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 5,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "lalin",
+                "action": "attack",
+                "targetId": "f1"
+              },
+              {
+                "beat": 3,
+                "heroId": "guardian",
+                "action": "guard",
+                "targetId": "guardian"
+              },
+              {
+                "beat": 4,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "lalin"
+              }
+            ]
+          },
+          "after": {
+            "encounterId": "thicket-ambush",
+            "beat": 6,
+            "round": 2,
+            "turnIndex": 1,
+            "order": [
+              "lalin",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": {
+              "heroId": "guardian",
+              "targetId": "guardian",
+              "sourceId": "f1"
+            },
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "lalin",
+                "hp": 50,
+                "barrier": 14,
+                "cooldowns": {
+                  "rounddance": 7
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 28,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 35,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 6,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "lalin",
+                "action": "attack",
+                "targetId": "f1"
+              },
+              {
+                "beat": 3,
+                "heroId": "guardian",
+                "action": "guard",
+                "targetId": "guardian"
+              },
+              {
+                "beat": 4,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "lalin"
+              },
+              {
+                "beat": 5,
+                "heroId": "lalin",
+                "action": "rounddance",
+                "targetId": "party"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "at": 1.412,
+        "remainingMs": 520,
+        "turn": {
+          "actorId": "f1",
+          "side": "enemy",
+          "beat": 6,
+          "round": 2,
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Spore Dust",
+            "damage": 10,
+            "kind": "energy",
+            "targetId": "guardian",
+            "beat": 6,
+            "round": 2
+          },
+          "targetId": "guardian",
+          "state": {
+            "encounterId": "thicket-ambush",
+            "beat": 6,
+            "round": 2,
+            "turnIndex": 1,
+            "order": [
+              "lalin",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "lalin",
+                "hp": 50,
+                "barrier": 14,
+                "cooldowns": {
+                  "rounddance": 7
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 35,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 6,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "lalin",
+                "action": "attack",
+                "targetId": "f1"
+              },
+              {
+                "beat": 3,
+                "heroId": "guardian",
+                "action": "guard",
+                "targetId": "guardian"
+              },
+              {
+                "beat": 4,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "lalin"
+              },
+              {
+                "beat": 5,
+                "heroId": "lalin",
+                "action": "rounddance",
+                "targetId": "party"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "f1",
+              "targetId": "guardian",
+              "amount": 4,
+              "absorbed": 0,
+              "text": "Enemy attacks on its own turn."
+            }
+          ],
+          "before": {
+            "encounterId": "thicket-ambush",
+            "beat": 6,
+            "round": 2,
+            "turnIndex": 1,
+            "order": [
+              "lalin",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": {
+              "heroId": "guardian",
+              "targetId": "guardian",
+              "sourceId": "f1"
+            },
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "lalin",
+                "hp": 50,
+                "barrier": 14,
+                "cooldowns": {
+                  "rounddance": 7
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 28,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 35,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 6,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "lalin",
+                "action": "attack",
+                "targetId": "f1"
+              },
+              {
+                "beat": 3,
+                "heroId": "guardian",
+                "action": "guard",
+                "targetId": "guardian"
+              },
+              {
+                "beat": 4,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "lalin"
+              },
+              {
+                "beat": 5,
+                "heroId": "lalin",
+                "action": "rounddance",
+                "targetId": "party"
+              }
+            ]
+          },
+          "after": {
+            "encounterId": "thicket-ambush",
+            "beat": 7,
+            "round": 2,
+            "turnIndex": 2,
+            "order": [
+              "lalin",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "lalin",
+                "hp": 50,
+                "barrier": 14,
+                "cooldowns": {
+                  "rounddance": 7
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 35,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 7,
+              "round": 3
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "lalin",
+                "action": "attack",
+                "targetId": "f1"
+              },
+              {
+                "beat": 3,
+                "heroId": "guardian",
+                "action": "guard",
+                "targetId": "guardian"
+              },
+              {
+                "beat": 4,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "lalin"
+              },
+              {
+                "beat": 5,
+                "heroId": "lalin",
+                "action": "rounddance",
+                "targetId": "party"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  }
+]
